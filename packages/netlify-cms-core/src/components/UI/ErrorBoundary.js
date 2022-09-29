@@ -5,9 +5,10 @@ import styled from '@emotion/styled';
 import yaml from 'yaml';
 import { truncate } from 'lodash';
 import copyToClipboard from 'copy-text-to-clipboard';
-import { localForage } from 'netlify-cms-lib-util';
-import { buttons, colors } from 'netlify-cms-ui-default';
 import cleanStack from 'clean-stack';
+
+import { buttons, colors } from '../../ui';
+import { localForage } from '../../lib/util';
 
 const ISSUE_URL = 'https://github.com/netlify/netlify-cms/issues/new?';
 
@@ -39,8 +40,6 @@ function buildIssueTemplate({ config }) {
   let version = '';
   if (typeof NETLIFY_CMS_VERSION === 'string') {
     version = `netlify-cms@${NETLIFY_CMS_VERSION}`;
-  } else if (typeof NETLIFY_CMS_APP_VERSION === 'string') {
-    version = `netlify-cms-app@${NETLIFY_CMS_APP_VERSION}`;
   }
   const template = getIssueTemplate({
     version,
@@ -63,7 +62,7 @@ function buildIssueUrl({ title, config }) {
 
     return `${ISSUE_URL}${params.toString()}`;
   } catch (e) {
-    console.log(e);
+    console.info(e);
     return `${ISSUE_URL}template=bug_report.md`;
   }
 }
@@ -111,7 +110,7 @@ const CopyButton = styled.button`
 `;
 
 function RecoveredEntry({ entry, t }) {
-  console.log(entry);
+  console.info(entry);
   return (
     <>
       <hr />
@@ -162,7 +161,7 @@ export class ErrorBoundary extends React.Component {
   async componentDidUpdate() {
     if (this.props.showBackup) {
       const backup = await localForage.getItem('backup');
-      backup && console.log(backup);
+      backup && console.info(backup);
       this.setState({ backup });
     }
   }

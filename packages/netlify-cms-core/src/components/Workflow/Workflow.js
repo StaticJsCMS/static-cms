@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import { OrderedMap } from 'immutable';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
+
 import {
   Dropdown,
   DropdownItem,
@@ -13,8 +14,7 @@ import {
   lengths,
   components,
   shadows,
-} from 'netlify-cms-ui-default';
-
+} from '../../ui';
 import { createNewEntry } from '../../actions/collections';
 import {
   loadUnpublishedEntries,
@@ -28,7 +28,7 @@ import WorkflowList from './WorkflowList';
 
 const WorkflowContainer = styled.div`
   padding: ${lengths.pageMargin} 0;
-  height: 100vh;
+  height: calc(100vh - 56px);
 `;
 
 const WorkflowTop = styled.div`

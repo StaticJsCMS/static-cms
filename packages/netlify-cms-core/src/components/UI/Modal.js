@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { css, Global, ClassNames } from '@emotion/react';
 import ReactModal from 'react-modal';
-import { transitions, shadows, lengths, zIndex } from 'netlify-cms-ui-default';
+
+import { transitions, shadows, lengths, zIndex } from '../../ui';
 
 function ReactModalGlobalStyles() {
   return (
@@ -31,7 +32,7 @@ const styleStrings = {
     }
   `,
   overlay: `
-    z-index: ${zIndex.zIndex99999};
+    z-index: ${zIndex.zIndex1002};
     position: fixed;
     top: 0;
     left: 0;

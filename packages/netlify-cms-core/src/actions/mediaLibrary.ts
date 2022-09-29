@@ -1,35 +1,34 @@
 import { Map } from 'immutable';
-import { actions as notifActions } from 'redux-notifications';
-import { basename, getBlobSHA } from 'netlify-cms-lib-util';
 
 import { currentBackend } from '../backend';
-import { createAssetProxy } from '../valueObjects/AssetProxy';
+import confirm from '../components/UI/Confirm';
+import { getIntegrationProvider } from '../integrations';
+import { sanitizeSlug } from '../lib/urlHelper';
+import { basename, getBlobSHA } from '../lib/util';
 import { selectIntegration } from '../reducers';
 import {
+  selectEditingDraft,
   selectMediaFilePath,
   selectMediaFilePublicPath,
-  selectEditingDraft,
 } from '../reducers/entries';
 import { selectMediaDisplayURL, selectMediaFiles } from '../reducers/mediaLibrary';
-import { getIntegrationProvider } from '../integrations';
-import { addAsset, removeAsset } from './media';
+import { addSnackbar } from '../store/slices/snackbars';
+import { createAssetProxy } from '../valueObjects/AssetProxy';
 import { addDraftEntryMediaFile, removeDraftEntryMediaFile } from './entries';
-import { sanitizeSlug } from '../lib/urlHelper';
+import { addAsset, removeAsset } from './media';
 import { waitUntilWithTimeout } from './waitUntil';
 
-import type {
-  State,
-  MediaFile,
-  DisplayURLState,
-  MediaLibraryInstance,
-  EntryField,
-} from '../types/redux';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
+import type { ImplementationMediaFile } from '../lib/util';
+import type {
+  DisplayURLState,
+  EntryField,
+  MediaFile,
+  MediaLibraryInstance,
+  State,
+} from '../types/redux';
 import type AssetProxy from '../valueObjects/AssetProxy';
-import type { ImplementationMediaFile } from 'netlify-cms-lib-util';
-
-const { notifSend } = notifActions;
 
 export const MEDIA_LIBRARY_OPEN = 'MEDIA_LIBRARY_OPEN';
 export const MEDIA_LIBRARY_CLOSE = 'MEDIA_LIBRARY_CLOSE';
@@ -169,7 +168,7 @@ export function loadMedia(
         .catch((error: { status?: number }) => {
           console.error(error);
           if (error.status === 404) {
-            console.log('This 404 was expected and handled appropriately.');
+            console.info('This 404 was expected and handled appropriately.');
             dispatch(mediaLoaded([]));
           } else {
             dispatch(mediaLoadFailed());
@@ -231,7 +230,16 @@ export function persistMedia(file: File, opts: MediaOptions = {}) {
      * may not be unique, so we forego this check.
      */
     if (!integration && existingFile) {
-      if (!window.confirm(`${existingFile.name} already exists. Do you want to replace it?`)) {
+      if (
+        !(await confirm({
+          title: 'mediaLibrary.mediaLibrary.alreadyExistsTitle',
+          body: {
+            key: 'mediaLibrary.mediaLibrary.alreadyExistsBody',
+            options: { filename: existingFile.name },
+          },
+          color: 'error',
+        }))
+      ) {
         return;
       } else {
         await dispatch(deleteMedia(existingFile, { privateUpload }));
@@ -299,10 +307,12 @@ export function persistMedia(file: File, opts: MediaOptions = {}) {
     } catch (error) {
       console.error(error);
       dispatch(
-        notifSend({
-          message: `Failed to persist media: ${error}`,
-          kind: 'danger',
-          dismissAfter: 8000,
+        addSnackbar({
+          type: 'error',
+          message: {
+            key: 'ui.toast.onFailToPersistMedia',
+            details: error,
+          },
         }),
       );
       return dispatch(mediaPersistFailed({ privateUpload }));
@@ -323,13 +333,15 @@ export function deleteMedia(file: MediaFile, opts: MediaOptions = {}) {
       try {
         await provider.delete(file.id);
         return dispatch(mediaDeleted(file, { privateUpload }));
-      } catch (error) {
+      } catch (error: any) {
         console.error(error);
         dispatch(
-          notifSend({
-            message: `Failed to delete media: ${error.message}`,
-            kind: 'danger',
-            dismissAfter: 8000,
+          addSnackbar({
+            type: 'error',
+            message: {
+              key: 'ui.toast.onFailToDeleteMedia',
+              details: error.message,
+            },
           }),
         );
         return dispatch(mediaDeleteFailed({ privateUpload }));
@@ -353,13 +365,15 @@ export function deleteMedia(file: MediaFile, opts: MediaOptions = {}) {
           dispatch(removeDraftEntryMediaFile({ id: file.id }));
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       dispatch(
-        notifSend({
-          message: `Failed to delete media: ${error.message}`,
-          kind: 'danger',
-          dismissAfter: 8000,
+        addSnackbar({
+          type: 'error',
+          message: {
+            key: 'ui.toast.onFailToDeleteMedia',
+            details: error.message,
+          },
         }),
       );
       return dispatch(mediaDeleteFailed());
@@ -401,7 +415,7 @@ export function loadMediaDisplayURL(file: MediaFile) {
       } else {
         throw new Error('No display URL was returned!');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       dispatch(mediaDisplayURLFailure(id, err));
     }

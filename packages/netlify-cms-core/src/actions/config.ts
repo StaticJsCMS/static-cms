@@ -14,8 +14,8 @@ import { FILES, FOLDER } from '../constants/collectionTypes';
 
 import type { ThunkDispatch } from 'redux-thunk';
 import type { AnyAction } from 'redux';
-import type {
-  CmsCollection,
+import type { State } from '../types/redux';
+import {
   CmsConfig,
   CmsField,
   CmsFieldBase,
@@ -24,8 +24,8 @@ import type {
   CmsI18nConfig,
   CmsPublishMode,
   CmsLocalBackend,
-  State,
-} from '../types/redux';
+  CmsCollection,
+} from '../interface';
 
 export const CONFIG_REQUEST = 'CONFIG_REQUEST';
 export const CONFIG_SUCCESS = 'CONFIG_SUCCESS';
@@ -64,7 +64,7 @@ function getConfigUrl() {
   };
   const configLinkEl = document.querySelector<HTMLLinkElement>('link[rel="cms-config-url"]');
   if (configLinkEl && validTypes[configLinkEl.type] && configLinkEl.href) {
-    console.log(`Using config file path: "${configLinkEl.href}"`);
+    console.info(`Using config file path: "${configLinkEl.href}"`);
     return configLinkEl.href;
   }
   return 'config.yml';
@@ -100,7 +100,7 @@ function setSnakeCaseConfig<T extends CmsField>(field: T) {
     console.warn(
       `Field ${field.name} is using a deprecated configuration '${camel}'. Please use '${snake}'`,
     );
-    return { [snake]: (field as Record<string, unknown>)[camel] };
+    return { [snake]: (field as unknown as Record<string, unknown>)[camel] };
   });
 
   return Object.assign({}, field, ...snakeValues) as T;
@@ -187,15 +187,6 @@ export function normalizeConfig(config: CmsConfig) {
         return { ...file, fields: normalizedFileFields };
       });
       normalizedCollection = { ...normalizedCollection, files: normalizedFiles };
-    }
-
-    if (normalizedCollection.sortableFields) {
-      const { sortableFields, ...rest } = normalizedCollection;
-      normalizedCollection = { ...rest, sortable_fields: sortableFields };
-
-      console.warn(
-        `Collection ${collection.name} is using a deprecated configuration 'sortableFields'. Please use 'sortable_fields'`,
-      );
     }
 
     return normalizedCollection;
@@ -332,12 +323,14 @@ export function applyDefaults(originalConfig: CmsConfig) {
       }
 
       if (!collection.sortable_fields) {
-        collection.sortable_fields = selectDefaultSortableFields(
-          // TODO remove fromJS when Immutable is removed from the collections state slice
-          fromJS(collection),
-          backend,
-          hasIntegration(config, collection),
-        );
+        collection.sortable_fields = {
+          fields: selectDefaultSortableFields(
+            // TODO remove fromJS when Immutable is removed from the collections state slice
+            fromJS(collection),
+            backend,
+            hasIntegration(config, collection),
+          ),
+        };
       }
 
       collection.view_filters = (view_filters || []).map(filter => {
@@ -388,7 +381,7 @@ async function getConfigYaml(file: string, hasManualConfig: boolean) {
   const contentType = response.headers.get('Content-Type') || 'Not-Found';
   const isYaml = contentType.indexOf('yaml') !== -1;
   if (!isYaml) {
-    console.log(`Response for ${file} was not yaml. (Content-Type: ${contentType})`);
+    console.info(`Response for ${file} was not yaml. (Content-Type: ${contentType})`);
     if (hasManualConfig) {
       return {};
     }
@@ -435,7 +428,7 @@ export async function detectProxyServer(localBackend?: boolean | CmsLocalBackend
       : localBackend.url || defaultUrl.replace('localhost', location.hostname);
 
   try {
-    console.log(`Looking for Netlify CMS Proxy Server at '${proxyUrl}'`);
+    console.info(`Looking for Netlify CMS Proxy Server at '${proxyUrl}'`);
     const res = await fetch(`${proxyUrl}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -447,14 +440,14 @@ export async function detectProxyServer(localBackend?: boolean | CmsLocalBackend
       type?: string;
     };
     if (typeof repo === 'string' && Array.isArray(publish_modes) && typeof type === 'string') {
-      console.log(`Detected Netlify CMS Proxy Server at '${proxyUrl}' with repo: '${repo}'`);
+      console.info(`Detected Netlify CMS Proxy Server at '${proxyUrl}' with repo: '${repo}'`);
       return { proxyUrl, publish_modes, type };
     } else {
-      console.log(`Netlify CMS Proxy Server not detected at '${proxyUrl}'`);
+      console.info(`Netlify CMS Proxy Server not detected at '${proxyUrl}'`);
       return {};
     }
   } catch {
-    console.log(`Netlify CMS Proxy Server not detected at '${proxyUrl}'`);
+    console.info(`Netlify CMS Proxy Server not detected at '${proxyUrl}'`);
     return {};
   }
 }
@@ -462,7 +455,7 @@ export async function detectProxyServer(localBackend?: boolean | CmsLocalBackend
 function getPublishMode(config: CmsConfig, publishModes?: CmsPublishMode[], backendType?: string) {
   if (config.publish_mode && publishModes && !publishModes.includes(config.publish_mode)) {
     const newPublishMode = publishModes[0];
-    console.log(
+    console.info(
       `'${config.publish_mode}' is not supported by '${backendType}' backend, switching to '${newPublishMode}'`,
     );
     return newPublishMode;
@@ -526,7 +519,7 @@ export function loadConfig(manualConfig: Partial<CmsConfig> = {}, onLoad: () => 
       if (typeof onLoad === 'function') {
         onLoad();
       }
-    } catch (err) {
+    } catch (err: any) {
       dispatch(configFailed(err));
       throw err;
     }

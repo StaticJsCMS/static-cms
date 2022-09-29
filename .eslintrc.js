@@ -39,7 +39,7 @@ module.exports = {
       },
     ],
     'no-duplicate-imports': 'error',
-    '@emotion/no-vanilla': 'error',
+    '@emotion/no-vanilla': 'off',
     '@emotion/import-from-emotion': 'error',
     '@emotion/styled-import': 'error',
     'require-atomic-updates': [0],
@@ -51,6 +51,7 @@ module.exports = {
       },
     ],
     'unicorn/prefer-string-slice': 'error',
+    'react/no-unknown-property': ['error', { ignore: ['css'] }],
   },
   plugins: ['babel', '@emotion', 'cypress', 'unicorn'],
   settings: {
@@ -62,7 +63,7 @@ module.exports = {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
     },
-    'import/core-modules': [...packages, 'netlify-cms-app/dist/esm'],
+    'import/core-modules': [...packages],
   },
   overrides: [
     {

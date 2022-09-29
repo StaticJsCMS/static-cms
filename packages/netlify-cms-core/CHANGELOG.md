@@ -3,6 +3,198 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.55.59](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.58...netlify-cms-core@2.55.59) (2022-09-29)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.58](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.57...netlify-cms-core@2.55.58) (2022-09-28)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.57](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.56...netlify-cms-core@2.55.57) (2022-09-28)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.56](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.55...netlify-cms-core@2.55.56) (2022-09-28)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.55](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.54...netlify-cms-core@2.55.55) (2022-09-28)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.54](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.53...netlify-cms-core@2.55.54) (2022-09-28)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.53](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.52...netlify-cms-core@2.55.53) (2022-09-28)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.52](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.51...netlify-cms-core@2.55.52) (2022-09-27)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.51](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.50...netlify-cms-core@2.55.51) (2022-09-27)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.50](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.49...netlify-cms-core@2.55.50) (2022-09-27)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.49](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.48...netlify-cms-core@2.55.49) (2022-09-26)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.48](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.47...netlify-cms-core@2.55.48) (2022-09-26)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.47](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.47...netlify-cms-core@2.55.47) (2022-09-26)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.47](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.46...netlify-cms-core@2.55.47) (2022-09-26)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.46](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.45...netlify-cms-core@2.55.46) (2022-09-26)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.45](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.44...netlify-cms-core@2.55.45) (2022-09-26)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.44](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.43...netlify-cms-core@2.55.44) (2022-09-26)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.43](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.42...netlify-cms-core@2.55.43) (2022-09-26)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.42](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.41...netlify-cms-core@2.55.42) (2022-09-26)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.41](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.40...netlify-cms-core@2.55.41) (2022-09-26)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.40](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.39...netlify-cms-core@2.55.40) (2022-09-26)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.39](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.38...netlify-cms-core@2.55.39) (2022-09-23)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.38](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.37...netlify-cms-core@2.55.38) (2022-09-23)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
+## [2.55.37](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.36...netlify-cms-core@2.55.37) (2022-09-23)
+
+**Note:** Version bump only for package netlify-cms-core
+
+
+
+
+
 ## [2.55.36](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.35...netlify-cms-core@2.55.36) (2022-09-22)
 
 **Note:** Version bump only for package netlify-cms-core
@@ -2229,7 +2421,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* **netlify-cms-widget-relation:** use react-select and add support for multiple entries ([#1936](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/issues/1936)) ([518f6fb](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/commit/518f6fb))
+* **relation-widget:** use react-select and add support for multiple entries ([#1936](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/issues/1936)) ([518f6fb](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/commit/518f6fb))
 
 
 
@@ -2269,7 +2461,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 * **config:** allow config.yml file load to be skipped ([#2053](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/issues/2053)) ([14f94a0](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/commit/14f94a0))
 * **netlify-cms-core:** expose loadEntry action to Widgets ([#2010](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/issues/2010)) ([5d8aef1](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/commit/5d8aef1))
-* **netlify-cms-widget-map:** add map widget ([#2051](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/issues/2051)) ([18f34d2](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/commit/18f34d2))
+* **map-widget:** add map widget ([#2051](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/issues/2051)) ([18f34d2](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/commit/18f34d2))
 * **widget-number:** add range validation ([#2049](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/issues/2049)) ([dc44cac](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/commit/dc44cac))
 * **workflow:** add deploy preview links ([#2028](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/issues/2028)) ([15d221d](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/commit/15d221d))
 
@@ -2333,7 +2525,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* **netlify-cms-widget-select:** add support for multiple selection ([#1901](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/issues/1901)) ([88bf287](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/commit/88bf287))
+* **select-widget:** add support for multiple selection ([#1901](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/issues/1901)) ([88bf287](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/commit/88bf287))
 * add cloudinary support ([#1932](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/issues/1932)) ([1fc2f50](https://github.com/netlify/netlify-cms/tree/master/packages/netlify-cms-core/commit/1fc2f50))
 
 

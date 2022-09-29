@@ -4,7 +4,7 @@ import {
   uniqueItemProperties,
   instanceof as instanceOf,
   prohibited,
-} from 'ajv-keywords/dist/keywords';
+} from 'ajv-keywords/keywords';
 import ajvErrors from 'ajv-errors';
 import uuid from 'uuid/v4';
 
@@ -249,16 +249,28 @@ function getConfigSchema() {
             },
             fields: fieldsConfig(),
             sortable_fields: {
-              type: 'array',
-              items: {
-                type: 'string',
+              type: 'object',
+              properties: {
+                default: {
+                  type: 'object',
+                  properties: {
+                    field: {
+                      type: 'string',
+                    },
+                    direction: {
+                      type: 'string',
+                    },
+                  },
+                  required: ['field'],
+                },
+                fields: {
+                  type: 'array',
+                  items: {
+                    type: 'string',
+                  },
+                },
               },
-            },
-            sortableFields: {
-              type: 'array',
-              items: {
-                type: 'string',
-              },
+              required: ['fields'],
             },
             view_filters: viewFilters,
             view_groups: viewGroups,
@@ -290,9 +302,6 @@ function getConfigSchema() {
           },
           required: ['name', 'label'],
           oneOf: [{ required: ['files'] }, { required: ['folder', 'fields'] }],
-          not: {
-            required: ['sortable_fields', 'sortableFields'],
-          },
           if: { required: ['extension'] },
           then: {
             // Cannot infer format from extension.
@@ -334,8 +343,8 @@ function getWidgetSchemas() {
 class ConfigError extends Error {
   constructor(errors, ...args) {
     const message = errors
-      .map(({ message, instancePath }) => {
-        const dotPath = instancePath
+      .map(({ message, dataPath }) => {
+        const dotPath = dataPath
           .slice(1)
           .split('/')
           .map(seg => (seg.match(/^\d+$/) ? `[${seg}]` : `.${seg}`))
@@ -360,7 +369,7 @@ class ConfigError extends Error {
  * the config that is passed in.
  */
 export function validateConfig(config) {
-  const ajv = new AJV({ allErrors: true, $data: true, strict: false });
+  const ajv = new AJV({ allErrors: true, $data: true });
   uniqueItemProperties(ajv);
   select(ajv);
   instanceOf(ajv);
@@ -373,7 +382,7 @@ export function validateConfig(config) {
       switch (e.keyword) {
         // TODO: remove after https://github.com/ajv-validator/ajv-keywords/pull/123 is merged
         case 'uniqueItemProperties': {
-          const path = e.instancePath || '';
+          const path = e.dataPath || '';
           let newError = e;
           if (path.endsWith('/fields')) {
             newError = { ...e, message: 'fields names must be unique' };
@@ -385,12 +394,12 @@ export function validateConfig(config) {
           return newError;
         }
         case 'instanceof': {
-          const path = e.instancePath || '';
+          const path = e.dataPath || '';
           let newError = e;
           if (/fields\/\d+\/pattern\/\d+/.test(path)) {
             newError = {
               ...e,
-              message: 'must be a regular expression',
+              message: 'should be a regular expression',
             };
           }
           return newError;

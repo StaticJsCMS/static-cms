@@ -1,13 +1,11 @@
 const path = require('path');
-const { extendDefaultPlugins } = require('svgo');
 
-const appVersion = require('./packages/netlify-cms-app/package.json').version;
 const coreVersion = require('./packages/netlify-cms-core/package.json').version;
 const isProduction = process.env.NODE_ENV === 'production';
 const isTest = process.env.NODE_ENV === 'test';
 const isESM = process.env.NODE_ENV === 'esm';
 
-console.log('Build Package:', path.basename(process.cwd()));
+console.info('Build Package:', path.basename(process.cwd()));
 
 const defaultPlugins = [
   'lodash',
@@ -28,12 +26,16 @@ const defaultPlugins = [
 ];
 
 const svgo = {
-  plugins: extendDefaultPlugins([
+  plugins: [
     {
-      name: 'removeViewBox',
-      active: false,
+      name: 'preset-default',
+      params: {
+        overrides: {
+          removeViewBox: false,
+        },
+      },
     },
-  ]),
+  ],
 };
 
 function presets() {
@@ -43,7 +45,7 @@ function presets() {
     [
       '@emotion/babel-preset-css-prop',
       {
-        autoLabel: "always",
+        autoLabel: 'always',
       },
     ],
     '@babel/typescript',
@@ -57,7 +59,6 @@ function plugins() {
       [
         'transform-define',
         {
-          NETLIFY_CMS_APP_VERSION: `${appVersion}`,
           NETLIFY_CMS_CORE_VERSION: `${coreVersion}`,
         },
       ],

@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const { flatMap } = require('lodash');
 
-const { toGlobalName, externals } = require('./externals');
+const { toGlobalName } = require('./externals');
 const pkg = require(path.join(process.cwd(), 'package.json'));
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -28,16 +28,27 @@ function rules() {
     css: () => [
       {
         test: /\.css$/,
-        include: ['ol', 'redux-notifications', 'react-datetime', 'codemirror'].map(
-          moduleNameToPath,
-        ),
+        include: ['ol', 'react-datetime', 'codemirror'].map(moduleNameToPath),
         use: ['to-string-loader', 'css-loader'],
       },
     ],
     svg: () => ({
       test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
       exclude: [/node_modules/],
-      use: 'svg-inline-loader',
+      use: [
+        {
+          loader: 'babel-loader',
+          options: {
+            rootMode: 'upward',
+          },
+        },
+        {
+          loader: 'react-svg-loader',
+          options: {
+            jsx: true, // true outputs JSX tags
+          },
+        },
+      ],
     }),
   };
 }
@@ -75,7 +86,7 @@ const umdDirPath = path.resolve(process.cwd(), 'dist/umd');
 const cjsPath = path.resolve(process.cwd(), 'dist/cjs');
 
 function targetOutputs() {
-  console.log(`Building [${pkg.name}, library: ${toGlobalName(pkg.name)}]`);
+  console.info(`Building [${pkg.name}, library: ${toGlobalName(pkg.name)}]`);
   return {
     umd: {
       path: umdPath,
@@ -104,12 +115,6 @@ function targetOutputs() {
   };
 }
 
-const umdExternals = Object.keys(pkg.peerDependencies || {}).reduce((previous, key) => {
-  if (!externals[key]) throw `Missing external [${key}]`;
-  previous[key] = externals[key] || null;
-  return previous;
-}, {});
-
 /**
  * Use [getConfig({ target:'umd' }), getConfig({ target:'cjs' })] for
  *  getting multiple configs and add the new output in targetOutputs if needed.
@@ -125,30 +130,15 @@ function baseConfig({ target = isProduction ? 'umd' : 'umddir' } = {}) {
       rules: flatMap(Object.values(rules()), rule => rule()),
     },
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.json'],
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
       alias: {
         moment$: 'moment/moment.js',
+        'react-dom': '@hot-loader/react-dom',
       },
     },
     plugins: Object.values(plugins()).map(plugin => plugin()),
     devtool: isTest ? '' : 'source-map',
     target: 'web',
-
-    /**
-     * Exclude peer dependencies from package bundles.
-     */
-    externals:
-      target.slice(0, 3) === 'umd'
-        ? umdExternals
-        : (context, request, cb) => {
-            const externals = Object.keys(pkg.peerDependencies || {});
-
-            function isPeerDep(dep) {
-              return new RegExp(`^${dep}($|/)`).test(request);
-            }
-
-            return externals.some(isPeerDep) ? cb(null, request) : cb();
-          },
     stats: stats(),
   };
 }

@@ -1,46 +1,36 @@
 import { fromJS, List, Map } from 'immutable';
 import { isEqual } from 'lodash';
-import { actions as notifActions } from 'redux-notifications';
-import { Cursor } from 'netlify-cms-lib-util';
 
-import { selectCollectionEntriesCursor } from '../reducers/cursors';
-import { selectFields, updateFieldByKey } from '../reducers/collections';
-import { selectIntegration, selectPublishedSlugs } from '../reducers';
-import { getIntegrationProvider } from '../integrations';
 import { currentBackend } from '../backend';
-import { serializeValues } from '../lib/serializeEntryValues';
-import { createEntry } from '../valueObjects/Entry';
-import { createAssetProxy } from '../valueObjects/AssetProxy';
 import ValidationErrorTypes from '../constants/validationErrorTypes';
-import { addAssets, getAsset } from './media';
-import { SortDirection } from '../types/redux';
-import { waitForMediaLibraryToLoad, loadMedia } from './mediaLibrary';
-import { waitUntil } from './waitUntil';
-import { selectIsFetching, selectEntriesSortFields, selectEntryByPath } from '../reducers/entries';
+import { getIntegrationProvider } from '../integrations';
+import { SortDirection } from '../interface';
+import { getProcessSegment } from '../lib/formatters';
+import { duplicateDefaultI18nFields, hasI18n, I18N, I18N_FIELD, serializeI18n } from '../lib/i18n';
+import { serializeValues } from '../lib/serializeEntryValues';
+import { Cursor } from '../lib/util';
+import { selectIntegration, selectPublishedSlugs } from '../reducers';
+import { selectFields, updateFieldByKey } from '../reducers/collections';
+import { selectCollectionEntriesCursor } from '../reducers/cursors';
+import { selectEntriesSortFields, selectEntryByPath, selectIsFetching } from '../reducers/entries';
 import { selectCustomPath } from '../reducers/entryDraft';
 import { navigateToEntry } from '../routing/history';
-import { getProcessSegment } from '../lib/formatters';
-import { hasI18n, duplicateDefaultI18nFields, serializeI18n, I18N, I18N_FIELD } from '../lib/i18n';
+import { addSnackbar } from '../store/slices/snackbars';
+import { createAssetProxy } from '../valueObjects/AssetProxy';
+import { createEntry } from '../valueObjects/Entry';
+import { addAssets, getAsset } from './media';
+import { loadMedia, waitForMediaLibraryToLoad } from './mediaLibrary';
+import { waitUntil } from './waitUntil';
 
-import type { ImplementationMediaFile } from 'netlify-cms-lib-util';
+import type { Set } from 'immutable';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type {
-  Collection,
-  EntryMap,
-  State,
-  EntryFields,
-  EntryField,
-  ViewFilter,
-  ViewGroup,
-  Entry,
-} from '../types/redux';
-import type { EntryValue } from '../valueObjects/Entry';
 import type { Backend } from '../backend';
+import type { ViewFilter, ViewGroup } from '../interface';
+import type { ImplementationMediaFile } from '../lib/util';
+import type { Collection, Entry, EntryField, EntryFields, EntryMap, State } from '../types/redux';
 import type AssetProxy from '../valueObjects/AssetProxy';
-import type { Set } from 'immutable';
-
-const { notifSend } = notifActions;
+import type { EntryValue } from '../valueObjects/Entry';
 
 /*
  * Constant Declarations
@@ -534,16 +524,15 @@ export function loadEntry(collection: Collection, slug: string) {
       const loadedEntry = await tryLoadEntry(getState(), collection, slug);
       dispatch(entryLoaded(collection, loadedEntry));
       dispatch(createDraftFromEntry(loadedEntry));
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       dispatch(
-        notifSend({
+        addSnackbar({
+          type: 'error',
           message: {
-            details: error.message,
             key: 'ui.toast.onFailToLoadEntries',
+            details: error.message,
           },
-          kind: 'danger',
-          dismissAfter: 8000,
         }),
       );
       dispatch(entryLoadError(error, collection, slug));
@@ -630,15 +619,14 @@ export function loadEntries(collection: Collection, page = 0) {
           append,
         ),
       );
-    } catch (err) {
+    } catch (err: any) {
       dispatch(
-        notifSend({
+        addSnackbar({
+          type: 'error',
           message: {
-            details: err,
             key: 'ui.toast.onFailToLoadEntries',
+            details: err,
           },
-          kind: 'danger',
-          dismissAfter: 8000,
         }),
       );
       return Promise.reject(dispatch(entriesFailed(collection, err)));
@@ -681,16 +669,15 @@ export function traverseCollectionCursor(collection: Collection, action: string)
       return dispatch(
         entriesLoaded(collection, entries, pagination, addAppendActionsToCursor(newCursor), append),
       );
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       dispatch(
-        notifSend({
+        addSnackbar({
+          type: 'error',
           message: {
-            details: err,
             key: 'ui.toast.onFailToLoadEntries',
+            details: err,
           },
-          kind: 'danger',
-          dismissAfter: 8000,
         }),
       );
       return Promise.reject(dispatch(entriesFailed(collection, err)));
@@ -894,12 +881,11 @@ export function persistEntry(collection: Collection) {
 
       if (hasPresenceErrors) {
         dispatch(
-          notifSend({
+          addSnackbar({
+            type: 'error',
             message: {
               key: 'ui.toast.missingRequiredField',
             },
-            kind: 'danger',
-            dismissAfter: 8000,
           }),
         );
       }
@@ -926,12 +912,11 @@ export function persistEntry(collection: Collection) {
       })
       .then(async (newSlug: string) => {
         dispatch(
-          notifSend({
+          addSnackbar({
+            type: 'success',
             message: {
               key: 'ui.toast.entrySaved',
             },
-            kind: 'success',
-            dismissAfter: 4000,
           }),
         );
 
@@ -951,13 +936,12 @@ export function persistEntry(collection: Collection) {
       .catch((error: Error) => {
         console.error(error);
         dispatch(
-          notifSend({
+          addSnackbar({
+            type: 'error',
             message: {
-              details: error,
               key: 'ui.toast.onFailToPersist',
+              details: error,
             },
-            kind: 'danger',
-            dismissAfter: 8000,
           }),
         );
         return Promise.reject(dispatch(entryPersistFail(collection, serializedEntry, error)));
@@ -978,13 +962,12 @@ export function deleteEntry(collection: Collection, slug: string) {
       })
       .catch((error: Error) => {
         dispatch(
-          notifSend({
+          addSnackbar({
+            type: 'error',
             message: {
-              details: error,
               key: 'ui.toast.onFailToDelete',
+              details: error,
             },
-            kind: 'danger',
-            dismissAfter: 8000,
           }),
         );
         console.error(error);

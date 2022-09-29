@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 import styled from '@emotion/styled';
 import { translate } from 'react-polyglot';
 import { partial } from 'lodash';
-import { Cursor } from 'netlify-cms-lib-util';
-import { colors } from 'netlify-cms-ui-default';
 
+import { colors } from '../../../ui';
+import { Cursor } from '../../../lib/util';
 import {
   loadEntries as actionLoadEntries,
   traverseCollectionCursor as actionTraverseCollectionCursor,
@@ -56,7 +56,7 @@ function withGroups(groups, entries, EntriesToRender, t) {
   });
 }
 
-export class EntriesCollection extends React.Component {
+class EntriesCollection extends React.Component {
   static propTypes = {
     collection: ImmutablePropTypes.map.isRequired,
     page: PropTypes.number,
