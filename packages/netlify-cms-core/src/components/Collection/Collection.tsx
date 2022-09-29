@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
@@ -84,6 +84,8 @@ const CollectionView = ({
   onChangeViewStyle,
   viewStyle,
 }: ReturnType<typeof mergeProps>) => {
+  const [readyToLoad, setReadyToLoad] = useState(false);
+
   const newEntryUrl = useMemo(() => {
     let url = collection.get('create') ? getNewEntryUrl(collectionName) : '';
     if (url && filterTerm) {
@@ -102,9 +104,9 @@ const CollectionView = ({
 
   const renderEntriesCollection = useCallback(() => {
     return (
-      <EntriesCollection collection={collection} viewStyle={viewStyle} filterTerm={filterTerm} />
+      <EntriesCollection collection={collection} viewStyle={viewStyle} filterTerm={filterTerm} readyToLoad={readyToLoad} />
     );
-  }, [collection, filterTerm, viewStyle]);
+  }, [collection, filterTerm, viewStyle, readyToLoad]);
 
   const renderEntriesSearch = useCallback(() => {
     return (
@@ -117,6 +119,7 @@ const CollectionView = ({
 
   useEffect(() => {
     if (sort?.first()?.get('key')) {
+      setReadyToLoad(true);
       return;
     }
 
@@ -125,10 +128,26 @@ const CollectionView = ({
       | undefined;
 
     if (!defaultSort || !defaultSort.get('field')) {
+      setReadyToLoad(true);
       return;
     }
 
-    onSortClick(defaultSort.get('field'), defaultSort.get('direction') ?? SortDirection.Ascending);
+    let alive = true;
+    const sortEntries = async () => {
+      await onSortClick(
+        defaultSort.get('field'),
+        defaultSort.get('direction') ?? SortDirection.Ascending,
+      );
+      if (alive) {
+        setReadyToLoad(true);
+      }
+    };
+
+    sortEntries();
+
+    return () => {
+      alive = false;
+    };
   }, [collection]);
 
   return (

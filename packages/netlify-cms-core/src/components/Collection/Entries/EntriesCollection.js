@@ -68,18 +68,19 @@ class EntriesCollection extends React.Component {
     loadEntries: PropTypes.func.isRequired,
     traverseCollectionCursor: PropTypes.func.isRequired,
     entriesLoaded: PropTypes.bool,
+    readyToLoad: PropTypes.bool,
   };
 
   componentDidMount() {
-    const { collection, entriesLoaded, loadEntries } = this.props;
-    if (collection && !entriesLoaded) {
+    const { collection, entriesLoaded, loadEntries, readyToLoad } = this.props;
+    if (collection && !entriesLoaded && readyToLoad) {
       loadEntries(collection);
     }
   }
 
   componentDidUpdate(prevProps) {
-    const { collection, entriesLoaded, loadEntries } = this.props;
-    if (collection !== prevProps.collection && !entriesLoaded) {
+    const { collection, entriesLoaded, loadEntries, readyToLoad } = this.props;
+    if (!entriesLoaded && readyToLoad && !prevProps.readyToLoad) {
       loadEntries(collection);
     }
   }

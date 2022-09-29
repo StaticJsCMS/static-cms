@@ -515,10 +515,12 @@ export function deleteLocalBackup(collection: Collection, slug: string) {
  * Exported Thunk Action Creators
  */
 
-export function loadEntry(collection: Collection, slug: string) {
+export function loadEntry(collection: Collection, slug: string, silent = false) {
   return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
     await waitForMediaLibraryToLoad(dispatch, getState());
-    dispatch(entryLoading(collection, slug));
+    if (!silent) {
+      dispatch(entryLoading(collection, slug));
+    }
 
     try {
       const loadedEntry = await tryLoadEntry(getState(), collection, slug);
@@ -931,6 +933,8 @@ export function persistEntry(collection: Collection) {
         if (entry.get('slug') !== newSlug) {
           await dispatch(loadEntry(collection, newSlug));
           navigateToEntry(collection.get('name'), newSlug);
+        } else {
+          await dispatch(loadEntry(collection, newSlug, true));
         }
       })
       .catch((error: Error) => {
