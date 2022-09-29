@@ -2,14 +2,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Map, List } from 'immutable';
-import { oneLine } from 'common-tags';
 
 import { getRemarkPlugins } from '../../../lib/registry';
 import ValidationErrorTypes from '../../../constants/validationErrorTypes';
-
-function truthy() {
-  return { error: false };
-}
 
 function isEmpty(value) {
   return (
@@ -23,7 +18,7 @@ function isEmpty(value) {
 
 export default class Widget extends Component {
   static propTypes = {
-    controlComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.object]).isRequired,
+    controlComponent: PropTypes.func.isRequired,
     validator: PropTypes.func,
     field: ImmutablePropTypes.map.isRequired,
     hasActiveStyle: PropTypes.bool,
@@ -308,6 +303,7 @@ export default class Widget extends Component {
       onRemoveInsertedMedia,
       getAsset,
       forID: uniqueFieldId,
+      ref: this.processInnerControlRef,
       validate: this.validate,
       classNameWrapper,
       classNameWidget,
