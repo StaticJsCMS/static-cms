@@ -1,6 +1,11 @@
-![Netlify CMS](cms.png)
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="simple-cms-logo.png" width="500px" />
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/netlify/netlify-cms/blob/master/LICENSE) [![Netlify Status](https://api.netlify.com/api/v1/badges/2cfc19a8-1216-4070-bbb4-4a1c38b57132/deploy-status)](https://app.netlify.com/sites/cms-demo/deploys) [![npm version](https://img.shields.io/npm/v/netlify-cms.svg?style=flat)](https://www.npmjs.com/package/netlify-cms) [![Build Status](https://github.com/netlify/netlify-cms/workflows/Node%20CI/badge.svg)](https://github.com/netlify/netlify-cms/actions?query=branch%3Amaster+workflow%3A%22Node+CI%22) ![FOSSA Status](https://app.fossa.com/api/projects/custom%2B17679%2Fgit%40github.com%3Anetlify%2Fnetlify-cms.git.svg?type=shield) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/netlify/netlify-cms/blob/master/CONTRIBUTING.md)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/SimpleCMS/simple-cms/blob/main/LICENSE)
+[![npm latest package](https://img.shields.io/npm/v/@simplecms/simple-cms-core/latest.svg)](https://www.npmjs.com/package/@simplecms/simple-cms-core)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/SimpleCMS/simple-cms/blob/main/CONTRIBUTING.md)
+
+</div>
 
 [netlifycms.org](https://www.netlifycms.org/) 
 
@@ -9,13 +14,9 @@ and add content to any site built with a static site generator.
 
 ## Community Chat
 
-<a href="https://netlifycms.org/chat">
-  <img alt="Join us on Slack" src="https://raw.githubusercontent.com/netlify/netlify-cms/master/website/static/img/slack.png" width="165"/>
-</a>
-
 ## How It Works
 
-Netlify CMS is a single-page app that you pull into the `/admin` part of your site.
+Simple CMS is a single-page app that you pull into the `/admin` part of your site.
 
 It presents a clean UI for editing content stored in a Git repository.
 
@@ -25,44 +26,103 @@ tweak the main layout of the CMS a bit to fit your own site.
 When a user navigates to `/admin/` they'll be prompted to log in, and once authenticated
 they'll be able to create new content or edit existing content.
 
-Read more about Netlify CMS [Core Concepts](https://www.netlifycms.org/docs/intro/).
+Read more about Simple CMS [Core Concepts](https://www.netlifycms.org/docs/intro/).
 
 # Installation and Configuration
 
-The Netlify CMS can be used in two different ways.
+The Simple CMS can be used in two different ways.
 
 * A Quick and easy install, that requires you to create a single HTML file and a configuration file. All the CMS JavaScript and CSS are loaded from a CDN.
   To learn more about this installation method, refer to the [Quick Start Guide](https://www.netlifycms.org/docs/quick-start/)
 * A complete, more complex install, that gives you more flexibility but requires that you use a static site builder with a build system that supports npm packages.
 
+# simple-cms-core
+
+## Setup
+
+```tsx
+import React from 'react';
+import {
+  AzureBackend,
+  BitbucketBackend,
+  BooleanWidget,
+  CodeWidget,
+  ColorStringWidget,
+  DateTimeWidget,
+  FileWidget,
+  GitGatewayBackend,
+  GitHubBackend,
+  GitLabBackend,
+  imageEditorComponent,
+  ImageWidget,
+  ListWidget,
+  MapWidget,
+  MarkdownWidget,
+  SimpleCmsCore as CMS,
+  NumberWidget,
+  ObjectWidget,
+  ProxyBackend,
+  RelationWidget,
+  SelectWidget,
+  StringWidget,
+  TestBackend,
+  TextWidget,
+  locales,
+  Icon,
+  images
+} from 'simple-cms-core';
+
+// Register all the things
+CMS.registerBackend('git-gateway', GitGatewayBackend);
+CMS.registerBackend('azure', AzureBackend);
+CMS.registerBackend('github', GitHubBackend);
+CMS.registerBackend('gitlab', GitLabBackend);
+CMS.registerBackend('bitbucket', BitbucketBackend);
+CMS.registerBackend('test-repo', TestBackend);
+CMS.registerBackend('proxy', ProxyBackend);
+CMS.registerWidget([
+  StringWidget.Widget(),
+  NumberWidget.Widget(),
+  TextWidget.Widget(),
+  ImageWidget.Widget(),
+  FileWidget.Widget(),
+  SelectWidget.Widget(),
+  MarkdownWidget.Widget(),
+  ListWidget.Widget(),
+  ObjectWidget.Widget(),
+  RelationWidget.Widget(),
+  BooleanWidget.Widget(),
+  MapWidget.Widget(),
+  DateTimeWidget.Widget(),
+  CodeWidget.Widget(),
+  ColorStringWidget.Widget(),
+]);
+CMS.registerEditorComponent(imageEditorComponent);
+CMS.registerEditorComponent({
+  id: 'code-block',
+  label: 'Code Block',
+  widget: 'code',
+  type: 'code-block',
+});
+CMS.registerLocale('en', locales.en);
+
+Object.keys(images).forEach(iconName => {
+  CMS.registerIcon(iconName, <Icon type={iconName} />);
+});
+```
+
 # Contributing
 
-New contributors are always welcome! Check out [CONTRIBUTING.md](https://github.com/netlify/netlify-cms/blob/master/CONTRIBUTING.md) to get involved.
+New contributors are always welcome! Check out [CONTRIBUTING.md](https://github.com/SimpleCMS/simple-cms/blob/main/CONTRIBUTING.md) to get involved.
 
 # Change Log
 
 This project adheres to [Semantic Versioning](http://semver.org/).
-Every release is documented on the Github [Releases](https://github.com/netlify/netlify-cms/releases) page.
+Every release is documented on the Github [Releases](https://github.com/SimpleCMS/simple-cms/releases) page.
 
 # License
 
-Netlify CMS is released under the [MIT License](LICENSE).
+Simple CMS is released under the [MIT License](LICENSE).
 Please make sure you understand its [implications and guarantees](https://writing.kemitchell.com/2016/09/21/MIT-License-Line-by-Line.html).
 
 # Thanks
-
-## Services
-These services support Netlify CMS development by providing free infrastructure.
-<p>
-  <a href="https://www.travis-ci.org">
-    <img src="https://raw.githubusercontent.com/netlify/netlify-cms/master/img/travis.png" height="38" alt="travis-ci" />
-  </a>
-  <img src="https://spacergif.org/spacer.gif" width="20"/>
-  <a href="https://www.browserstack.com">
-    <img src="https://raw.githubusercontent.com/netlify/netlify-cms/master/img/browserstack.png" height="38" alt="browserstack" />
-  </a>
-  <img src="https://spacergif.org/spacer.gif" width="20"/>
-  <a href="https://www.cypress.io">
-    <img src="https://raw.githubusercontent.com/netlify/netlify-cms/master/img/cypressio.png" height="38" alt="Cypress.io" />
-  </a>
-</p>
