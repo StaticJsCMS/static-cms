@@ -572,7 +572,7 @@ export enum SortDirection {
 
 export interface CmsSortableFieldsDefault {
   field: string;
-  direction: SortDirection;
+  direction?: SortDirection;
 }
 
 export interface CmsSortableFields {

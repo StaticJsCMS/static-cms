@@ -303,7 +303,7 @@ declare module 'netlify-cms-core' {
 
   export interface CmsSortableFieldsDefault {
     field: string;
-    direction: SortDirection;
+    direction?: SortDirection;
   }
   
   export interface CmsSortableFields {
