@@ -92,6 +92,7 @@ const CollectionView = ({
         url = `${newEntryUrl}?path=${filterTerm}`;
       }
     }
+    return url;
   }, [collection, collectionName, filterTerm]);
 
   const searchResultKey = useMemo(
