@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.55.60](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.36...netlify-cms-core@2.55.60) (2022-09-29)
+
+
+### Bug Fixes
+
+* collection new button not appearing ([f4d930d](https://github.com/netlify/netlify-cms/commit/f4d930df20fddf593f1a4e92c771c921d72e6010))
+
+
+
+
+
 ## [2.55.59](https://github.com/netlify/netlify-cms/compare/netlify-cms-core@2.55.58...netlify-cms-core@2.55.59) (2022-09-29)
 
 **Note:** Version bump only for package netlify-cms-core
