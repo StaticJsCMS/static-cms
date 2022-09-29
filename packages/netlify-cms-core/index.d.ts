@@ -827,13 +827,13 @@ declare module 'netlify-cms-core' {
     }>;
   }
 
-  export class AzureBackend extends Implementation {}
-  export class BitbucketBackend extends Implementation {}
-  export class GitGatewayBackend extends Implementation {}
-  export class GitHubBackend extends Implementation {}
-  export class GitLabBackend extends Implementation {}
-  export class ProxyBackend extends Implementation {}
-  export class TestBackend extends Implementation {}
+  export const AzureBackend: Implementation;
+  export const BitbucketBackend: Implementation;
+  export const GitGatewayBackend: Implementation;
+  export const GitHubBackend: Implementation;
+  export const GitLabBackend: Implementation;
+  export const ProxyBackend: Implementation;
+  export const TestBackend: Implementation;
 
   // Widgets
   export const BooleanWidget: {
