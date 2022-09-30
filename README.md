@@ -1,4 +1,4 @@
-<div style="display: flex; flex-direction: column; align-items: center;">
+<div align="center">
   <img src="simple-cms-logo.png" width="500px" />
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/SimpleCMS/simple-cms/blob/main/LICENSE)
