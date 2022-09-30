@@ -40,7 +40,7 @@ The Simple CMS can be used in two different ways.
 
 ## Installation
 
-`npm install @simplecms/simple-cms/core`
+`npm install @simplecms/simple-cms-core`
 
 ## Setup
 
