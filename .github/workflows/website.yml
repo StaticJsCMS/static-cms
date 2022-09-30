@@ -9,18 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Install
-        uses: borales/actions-yarn@v3.0.0
+      - uses: actions/checkout@v3
+      - uses: enriikke/gatsby-gh-pages-action@v2
         with:
-          cmd: --cwd website install # will run `yarn install` command
-      - name: Build
-        uses: borales/actions-yarn@v3.0.0
-        with:
-          cmd: --cwd website build # will run `yarn build` command
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.ACCESS_TOKEN }}
-          publish_dir: ./website/dist
+          access-token: ${{ secrets.ACCESS_TOKEN }}
+          working-dir: website
