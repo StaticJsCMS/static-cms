@@ -4,7 +4,7 @@
   "description": "Simple CMS documentation website built with Gatsby",
   "scripts": {
     "start": "gatsby develop",
-    "build": "gatsby build && rm -rf dist && mv public dist",
+    "build": "gatsby build --prefix-paths && rm -rf dist && mv public dist",
     "lint": "markdownlint 'content/docs/**/*.md'",
     "reset": "rm -rf .cache"
   },
