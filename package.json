@@ -1,6 +1,6 @@
 {
   "name": "@simplecms/simple-cms-core",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "MIT",
   "description": "Simple CMS core application.",
   "repository": "https://github.com/SimpleCMS/simple-cms",
@@ -23,6 +23,8 @@
     "lint:format": "prettier \"{{src,scripts,website}/**/,}*.{js,jsx,ts,tsx,css}\" --list-different",
     "lint:js": "eslint --color --ignore-path .gitignore \"{{src,scripts,website}/**/,}*.{js,jsx,ts,tsx}\"",
     "lint": "run-p -c --aggregate-output \"lint:*\"",
+    "publish": "npm publish",
+    "release": "run-s build publish",
     "start": "run-s clean develop"
   },
   "module": "dist/esm/index.js",
