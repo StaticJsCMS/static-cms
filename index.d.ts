@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-declare module 'simple-cms-core' {
+declare module '@simplecms/simple-cms-core' {
   import type { Iterable as ImmutableIterable, List, Map } from 'immutable';
   import type { ComponentType, FocusEventHandler, ReactNode } from 'react';
   import type { t } from 'react-polyglot';

@@ -125,4 +125,8 @@ Every release is documented on the Github [Releases](https://github.com/SimpleCM
 Simple CMS is released under the [MIT License](LICENSE).
 Please make sure you understand its [implications and guarantees](https://writing.kemitchell.com/2016/09/21/MIT-License-Line-by-Line.html).
 
+# Netlify CMS
+
+Simple CMS is a fork of Netlify CMS focusing on the core product over adding massive new features.
+
 # Thanks
