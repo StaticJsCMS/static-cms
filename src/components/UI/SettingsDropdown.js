@@ -64,7 +64,7 @@ function SettingsDropdown({ displayUrl, isTestRepo, imageUrl, onLogoutClick, t }
     <React.Fragment>
       {isTestRepo && (
         <AppHeaderTestRepoIndicator
-          href="https://www.netlifycms.org/docs/test-backend"
+          href="https://www.simplecms.github.io/simple-cms/docs/test-backend"
           target="_blank"
           rel="noopener noreferrer"
         >

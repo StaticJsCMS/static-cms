@@ -9,7 +9,7 @@
     "reset": "rm -rf .cache"
   },
   "author": "",
-  "homepage": "https://www.netlifycms.org/",
+  "homepage": "https://www.simplecms.github.io/simple-cms/",
   "license": "MIT",
   "dependencies": {
     "@emotion/cache": "^10.0.29",

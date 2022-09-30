@@ -32,7 +32,7 @@ media_library:
 
 Once you've finished updating your Simple CMS configuration, the Uploadcare widget will appear when using the image or file widgets.
 
-**Note:** You'll need to [register the media libraries yourself](https://www.netlifycms.org/blog/2019/07/netlify-cms-gatsby-plugin-4-0-0#using-media-libraries-with-netlify-cms-app).
+**Note:** You'll need to [register the media libraries yourself](https://www.simplecms.github.io/simple-cms/blog/2019/07/netlify-cms-gatsby-plugin-4-0-0#using-media-libraries-with-netlify-cms-app).
 
 ## Configuring the Uploadcare Widget
 

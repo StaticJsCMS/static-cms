@@ -29,7 +29,7 @@ If you are able to offer up a change to existing content, we welcome this. Once 
 While we work on building this page (and you can help!), here are some links with more information about getting involved:
 
 * [Setup instructions and Contribution Guidelines](https://github.com/SimpleCMS/simple-cms/blob/master/CONTRIBUTING.md)
-* [Join our Community Chat](https://netlifycms.org/chat)
+* [Join our Community Chat](https://simplecms.github.io/simple-cms/chat)
 * [Code of Conduct](https://github.com/SimpleCMS/simple-cms/blob/master/CODE_OF_CONDUCT.md)
 * [Project Milestones](https://github.com/SimpleCMS/simple-cms/milestones)
 * [Good First Issues](https://github.com/SimpleCMS/simple-cms/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22good+first+issue%22+-label%3Aclaimed)

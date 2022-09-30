@@ -20,5 +20,5 @@ At its core, Simple CMS is an open-source React app that acts as a wrapper for t
 - Get a feel for the UI in the [demo site](https://cms-demo.netlify.com). (No login required. Click the login button to go straight to the CMS editor UI.)
 - [Start with a template](../start-with-a-template/) to make a Simple CMS-enabled site of your own.
 - Configure your existing site by following a [tutorial](../add-to-your-site/) or checking [configuration options](../configuration-options).
-- Ask questions and share ideas in the Simple CMS [community chat](https://netlifycms.org/chat).
+- Ask questions and share ideas in the Simple CMS [community chat](https://simplecms.github.io/simple-cms/chat).
 - Get involved in new developments and become a [contributor](../contributor-guide/).
