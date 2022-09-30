@@ -1,6 +1,6 @@
 const path = require('path');
 
-const coreVersion = require('./packages/netlify-cms-core/package.json').version;
+const coreVersion = require('./package.json').version;
 const isProduction = process.env.NODE_ENV === 'production';
 const isTest = process.env.NODE_ENV === 'test';
 const isESM = process.env.NODE_ENV === 'esm';
@@ -59,7 +59,7 @@ function plugins() {
       [
         'transform-define',
         {
-          NETLIFY_CMS_CORE_VERSION: `${coreVersion}`,
+          SIMPLE_CMS_CORE_VERSION: `${coreVersion}`,
         },
       ],
       [

@@ -1,10 +1,5 @@
 const fs = require('fs');
 
-const packages = fs
-  .readdirSync(`${__dirname}/packages`, { withFileTypes: true })
-  .filter(dirent => dirent.isDirectory())
-  .map(dirent => dirent.name);
-
 module.exports = {
   parser: 'babel-eslint',
   extends: [
@@ -22,9 +17,7 @@ module.exports = {
     'cypress/globals': true,
   },
   globals: {
-    NETLIFY_CMS_VERSION: false,
-    NETLIFY_CMS_APP_VERSION: false,
-    NETLIFY_CMS_CORE_VERSION: false,
+    SIMPLE_CMS_CORE_VERSION: false,
     CMS_ENV: false,
   },
   rules: {
@@ -63,7 +56,7 @@ module.exports = {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
     },
-    'import/core-modules': [...packages],
+    'import/core-modules': ['src'],
   },
   overrides: [
     {
