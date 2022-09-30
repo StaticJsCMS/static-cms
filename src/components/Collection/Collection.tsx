@@ -104,7 +104,12 @@ const CollectionView = ({
 
   const renderEntriesCollection = useCallback(() => {
     return (
-      <EntriesCollection collection={collection} viewStyle={viewStyle} filterTerm={filterTerm} readyToLoad={readyToLoad} />
+      <EntriesCollection
+        collection={collection}
+        viewStyle={viewStyle}
+        filterTerm={filterTerm}
+        readyToLoad={readyToLoad}
+      />
     );
   }, [collection, filterTerm, viewStyle, readyToLoad]);
 

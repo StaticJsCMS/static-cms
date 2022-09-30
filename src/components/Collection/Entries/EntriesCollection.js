@@ -80,7 +80,7 @@ class EntriesCollection extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { collection, entriesLoaded, loadEntries, readyToLoad } = this.props;
-    if (!entriesLoaded && readyToLoad && !prevProps.readyToLoad) {
+    if (!entriesLoaded && readyToLoad && (!prevProps.readyToLoad || prevProps.collection !== collection)) {
       loadEntries(collection);
     }
   }

@@ -1,6 +1,6 @@
 {
   "name": "@simplecms/simple-cms-core",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "license": "MIT",
   "description": "Simple CMS core application.",
   "repository": "https://github.com/SimpleCMS/simple-cms",

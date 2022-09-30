@@ -571,7 +571,7 @@ Example usage:
 ```javascript
 CMS.registerEventListener({
   name: 'prePublish',
-  handler: ({ author, entry }) => console.log(JSON.stringify({ author, data: entry.get('data') })),
+  handler: ({ author, entry }) => console.info(JSON.stringify({ author, data: entry.get('data') })),
 });
 ```
 

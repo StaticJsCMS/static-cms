@@ -82,7 +82,7 @@ function EventBox({ title, cta }) {
         setLoading(false);
       })
       .catch(err => {
-        console.log(err); // eslint-disable-line no-console
+        console.error(err); // eslint-disable-line no-console
         // TODO: set state to show error message
 
         setLoading(false);
