@@ -20,4 +20,3 @@ coverage/
 .env
 .temp/
 *.tgz
-content
