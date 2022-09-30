@@ -12,6 +12,7 @@ module.exports = {
     siteUrl: pkg.homepage,
     menu: staticConfig.menu,
   },
+  pathPrefix: `/simple-cms`,
   plugins: [
     {
       resolve: 'gatsby-plugin-manifest',
