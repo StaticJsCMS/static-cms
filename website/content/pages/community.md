@@ -16,7 +16,7 @@ sections:
         url: https://github.com/SimpleCMS/simple-cms/issues
   - title: development
     channels:
-    - title: Priorities
-      description: Priority issues board on the Simple CMS GitHub repo.
-      url: https://github.com/SimpleCMS/simple-cms/projects/7
+    - title: Planning
+      description: Issues board on the Simple CMS GitHub repo.
+      url: https://github.com/orgs/SimpleCMS/projects/1
 ---
