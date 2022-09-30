@@ -11,14 +11,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
       - name: Install
-        uses: borales/actions-yarn@v3.0.0
-        with:
-          cmd: --cwd website install # will run `yarn install` command
+        working-directory: ./website
+        run: yarn install --immutable
       - name: Build
-        uses: borales/actions-yarn@v3.0.0
-        with:
-          cmd: --cwd website build # will run `yarn build` command
+        working-directory: ./website
+        run: yarn build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
