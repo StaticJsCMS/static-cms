@@ -305,12 +305,11 @@ declare module '@simplecms/simple-cms-core' {
     field: string;
     direction?: SortDirection;
   }
-  
+
   export interface CmsSortableFields {
     default?: CmsSortableFieldsDefault;
     fields: string[];
   }
-  
 
   export interface CmsCollection {
     name: string;
@@ -935,7 +934,36 @@ declare module '@simplecms/simple-cms-core' {
   export const imageEditorComponent: EditorComponentManualOptions;
 
   export const locales: {
+    cs: Record<string, any>;
+    da: Record<string, any>;
+    de: Record<string, any>;
     en: Record<string, any>;
+    es: Record<string, any>;
+    ca: Record<string, any>;
+    fr: Record<string, any>;
+    gr: Record<string, any>;
+    hu: Record<string, any>;
+    it: Record<string, any>;
+    lt: Record<string, any>;
+    ja: Record<string, any>;
+    nl: Record<string, any>;
+    nb_no: Record<string, any>;
+    nn_no: Record<string, any>;
+    pl: Record<string, any>;
+    pt: Record<string, any>;
+    ro: Record<string, any>;
+    ru: Record<string, any>;
+    sv: Record<string, any>;
+    th: Record<string, any>;
+    tr: Record<string, any>;
+    uk: Record<string, any>;
+    vi: Record<string, any>;
+    zh_Hant: Record<string, any>;
+    ko: Record<string, any>;
+    hr: Record<string, any>;
+    bg: Record<string, any>;
+    zh_Hans: Record<string, any>;
+    he: Record<string, any>;
   };
 
   class NetlifyAuthenticator {
