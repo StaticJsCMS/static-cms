@@ -6,7 +6,6 @@ import screenshotEditor from '../img/screenshot-editor.jpg';
 
 const VideoLink = styled.a`
   position: relative;
-  cursor: pointer;
   display: block;
 
   &:hover {
