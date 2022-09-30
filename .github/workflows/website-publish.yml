@@ -16,14 +16,15 @@ jobs:
         with:
           node-version: '16'
           cache: 'yarn'
+          cache-dependency-path: 'website/yarn.lock'
       - name: Install
-        working-directory: ./website
+        working-directory: website
         run: yarn install --immutable
       - name: Build
-        working-directory: ./website
+        working-directory: website
         run: yarn build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.ACCESS_TOKEN }}
-          publish_dir: ./website/dist
+          publish_dir: website/dist
