@@ -18,7 +18,7 @@ function WhatsNew({ updates }) {
       <Container>
         <Grid as="ol" cols={3}>
           {updates.slice(0, 3).map((item, idx) => (
-            <Release {...item} versionPrevious={updates[idx + 1].version} key={item.version} />
+            <Release {...item} versionPrevious={updates[idx + 1]?.version} key={item?.version} />
           ))}
         </Grid>
       </Container>

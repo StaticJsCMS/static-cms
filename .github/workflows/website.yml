@@ -9,8 +9,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: enriikke/gatsby-gh-pages-action@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install
+        uses: borales/actions-yarn@v3.0.0
+        working-directory: website
         with:
-          access-token: ${{ secrets.ACCESS_TOKEN }}
-          working-dir: 'website'
+          cmd: install # will run `yarn install` command
+      - name: Build
+        uses: borales/actions-yarn@v3.0.0
+        working-directory: website
+        with:
+          cmd: install # will run `yarn install` command
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.ACCESS_TOKEN }}
+          publish_dir: ./website/dist
