@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, graphql, StaticQuery } from 'gatsby';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
-import GitHubButton from 'react-github-btn';
 
+import GitHubStarButton from './github-button';
 import Container from './container';
 import Notifications from './notifications';
 import DocSearch from './docsearch';
@@ -214,14 +214,7 @@ function Header({ hasHeroBelow }) {
                       margin-top: 8px;
                     `}
                   >
-                    <GitHubButton
-                      href="https://github.com/SimpleCMS/simple-cms"
-                      data-icon="octicon-star"
-                      data-show-count="true"
-                      aria-label="Star SimpleCMS/simple-cms on GitHub"
-                    >
-                      Star
-                    </GitHubButton>
+                    <GitHubStarButton />
                   </MenuItem>
                   <MenuItem>
                     <NavLink to="/docs/intro/">Docs</NavLink>
