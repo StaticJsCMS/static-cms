@@ -16,7 +16,7 @@
     "noUnusedParameters": true,
     "baseUrl": "./",
     "paths": {
-      "simple-cms-core": ["./src"]
+      "@simplecms/simple-cms-core": ["./src"]
     }
   },
   "include": ["**/src/**/*", "dev-test/index.js"],

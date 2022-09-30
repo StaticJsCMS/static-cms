@@ -38,6 +38,10 @@ The Simple CMS can be used in two different ways.
 
 # simple-cms-core
 
+## Installation
+
+`npm install @simplecms/simple-cms/core`
+
 ## Setup
 
 ```tsx
@@ -70,7 +74,7 @@ import {
   locales,
   Icon,
   images
-} from 'simple-cms-core';
+} from '@simple-cms/simple-cms-core';
 
 // Register all the things
 CMS.registerBackend('git-gateway', GitGatewayBackend);
