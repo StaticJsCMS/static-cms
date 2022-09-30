@@ -1,0 +1,7 @@
+notifications:
+  - loud: true
+    message: We have a community chat - join now to ask questions and discuss the
+      project with other devs!
+    published: false
+    title: Chat shoutout
+    url: https://netlifycms.org/chat
