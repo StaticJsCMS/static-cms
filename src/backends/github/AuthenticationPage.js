@@ -9,19 +9,6 @@ const LoginButtonIcon = styled(Icon)`
   margin-right: 18px;
 `;
 
-const ForkApprovalContainer = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-around;
-  flex-grow: 0.2;
-`;
-const ForkButtonsContainer = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-around;
-  align-items: center;
-`;
-
 export default class GitHubAuthenticationPage extends React.Component {
   static propTypes = {
     onLogin: PropTypes.func.isRequired,
@@ -36,35 +23,6 @@ export default class GitHubAuthenticationPage extends React.Component {
 
   state = {};
 
-  getPermissionToFork = () => {
-    return new Promise((resolve, reject) => {
-      this.setState({
-        requestingFork: true,
-        approveFork: () => {
-          this.setState({ requestingFork: false });
-          resolve();
-        },
-        refuseFork: () => {
-          this.setState({ requestingFork: false });
-          reject();
-        },
-      });
-    });
-  };
-
-  loginWithOpenAuthoring(data) {
-    const { backend } = this.props;
-
-    this.setState({ findingFork: true });
-    return backend
-      .authenticateWithFork({ userData: data, getPermissionToFork: this.getPermissionToFork })
-      .catch(err => {
-        this.setState({ findingFork: false });
-        console.error(err);
-        throw err;
-      });
-  }
-
   handleLogin = e => {
     e.preventDefault();
     const cfg = {
@@ -77,17 +35,14 @@ export default class GitHubAuthenticationPage extends React.Component {
     };
     const auth = new NetlifyAuthenticator(cfg);
 
-    const { open_authoring: openAuthoring = false, auth_scope: authScope = '' } =
+    const { auth_scope: authScope = '' } =
       this.props.config.backend;
 
-    const scope = authScope || (openAuthoring ? 'public_repo' : 'repo');
+    const scope = authScope || 'repo';
     auth.authenticate({ provider: 'github', scope }, (err, data) => {
       if (err) {
         this.setState({ loginError: err.toString() });
         return;
-      }
-      if (openAuthoring) {
-        return this.loginWithOpenAuthoring(data).then(() => this.props.onLogin(data));
       }
       this.props.onLogin(data);
     });
@@ -95,7 +50,7 @@ export default class GitHubAuthenticationPage extends React.Component {
 
   renderLoginButton = () => {
     const { inProgress, t } = this.props;
-    return inProgress || this.state.findingFork ? (
+    return inProgress ? (
       t('auth.loggingIn')
     ) : (
       <React.Fragment>
@@ -106,28 +61,6 @@ export default class GitHubAuthenticationPage extends React.Component {
   };
 
   getAuthenticationPageRenderArgs() {
-    const { requestingFork } = this.state;
-
-    if (requestingFork) {
-      const { approveFork, refuseFork } = this.state;
-      return {
-        renderPageContent: ({ LoginButton, TextButton, showAbortButton }) => (
-          <ForkApprovalContainer>
-            <p>
-              Open Authoring is enabled: we need to use a fork on your github account. (If a fork
-              already exists, we&#39;ll use that.)
-            </p>
-            <ForkButtonsContainer>
-              <LoginButton onClick={approveFork}>Fork the repo</LoginButton>
-              {showAbortButton && (
-                <TextButton onClick={refuseFork}>Don&#39;t fork the repo</TextButton>
-              )}
-            </ForkButtonsContainer>
-          </ForkApprovalContainer>
-        ),
-      };
-    }
-
     return {
       renderButtonContent: this.renderLoginButton,
     };
@@ -135,12 +68,12 @@ export default class GitHubAuthenticationPage extends React.Component {
 
   render() {
     const { inProgress, config, t } = this.props;
-    const { loginError, requestingFork, findingFork } = this.state;
+    const { loginError } = this.state;
 
     return (
       <AuthenticationPage
         onLogin={this.handleLogin}
-        loginDisabled={inProgress || findingFork || requestingFork}
+        loginDisabled={inProgress}
         loginErrorMessage={loginError}
         logoUrl={config.logo_url}
         siteUrl={config.site_url}

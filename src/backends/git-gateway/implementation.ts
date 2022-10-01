@@ -1,43 +1,26 @@
 import GoTrue from 'gotrue-js';
-import jwtDecode from 'jwt-decode';
-import { get, pick, intersection } from 'lodash';
 import ini from 'ini';
+import jwtDecode from 'jwt-decode';
+import { get, intersection, pick } from 'lodash';
 
 import {
-  APIError,
-  unsentRequest,
-  basename,
-  entriesByFiles,
-  parsePointerFile,
-  getLargeMediaPatternsFromGitAttributesFile,
-  getPointerFileForMediaFileObj,
-  getLargeMediaFilteredMediaFiles,
-  AccessTokenError,
-  PreviewState,
+  AccessTokenError, APIError, basename,
+  entriesByFiles, getLargeMediaFilteredMediaFiles, getLargeMediaPatternsFromGitAttributesFile,
+  getPointerFileForMediaFileObj, parsePointerFile, unsentRequest
 } from '../../lib/util';
+import { API as BitBucketAPI, BitbucketBackend } from '../bitbucket';
 import { GitHubBackend } from '../github';
 import { GitLabBackend } from '../gitlab';
-import { BitbucketBackend, API as BitBucketAPI } from '../bitbucket';
+import AuthenticationPage from './AuthenticationPage';
 import GitHubAPI from './GitHubAPI';
 import GitLabAPI from './GitLabAPI';
-import AuthenticationPage from './AuthenticationPage';
 import { getClient } from './netlify-lfs-client';
 
-import type { Client } from './netlify-lfs-client';
 import type {
   ApiRequest,
-  AssetProxy,
-  PersistOptions,
-  Entry,
-  Cursor,
-  Implementation,
-  DisplayURL,
-  User,
-  Credentials,
-  Config,
-  ImplementationFile,
-  DisplayURLObject,
+  AssetProxy, Config, Credentials, Cursor, DisplayURL, DisplayURLObject, Entry, Implementation, ImplementationFile, PersistOptions, User
 } from '../../lib/util';
+import type { Client } from './netlify-lfs-client';
 
 const STATUS_PAGE = 'https://www.netlifystatus.com';
 const GIT_GATEWAY_STATUS_ENDPOINT = `${STATUS_PAGE}/api/v2/components.json`;
@@ -136,8 +119,6 @@ export default class GitGateway implements Implementation {
   config: Config;
   api?: GitHubAPI | GitLabAPI | BitBucketAPI;
   branch: string;
-  squashMerges: boolean;
-  cmsLabelPrefix: string;
   mediaFolder: string;
   transformImages: boolean;
   gatewayUrl: string;
@@ -153,19 +134,15 @@ export default class GitGateway implements Implementation {
   options: {
     proxied: boolean;
     API: GitHubAPI | GitLabAPI | BitBucketAPI | null;
-    initialWorkflowStatus: string;
   };
   constructor(config: Config, options = {}) {
     this.options = {
       proxied: true,
       API: null,
-      initialWorkflowStatus: '',
       ...options,
     };
     this.config = config;
     this.branch = config.backend.branch?.trim() || 'main';
-    this.squashMerges = config.backend.squash_merges || false;
-    this.cmsLabelPrefix = config.backend.cms_label_prefix || '';
     this.mediaFolder = config.media_folder;
     const { use_large_media_transforms_in_media_library: transformImages = true } = config.backend;
     this.transformImages = transformImages;
@@ -339,9 +316,6 @@ export default class GitGateway implements Implementation {
         tokenPromise: this.tokenPromise!,
         commitAuthor: pick(userData, ['name', 'email']),
         isLargeMedia: (filename: string) => this.isLargeMediaFile(filename),
-        squashMerges: this.squashMerges,
-        cmsLabelPrefix: this.cmsLabelPrefix,
-        initialWorkflowStatus: this.options.initialWorkflowStatus,
       };
 
       if (this.backendType === 'github') {

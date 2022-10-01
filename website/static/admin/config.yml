@@ -1,14 +1,10 @@
 backend:
   name: github
   repo: SimpleCMS/simple-cms
-  squash_merges: true
-  open_authoring: true
 
 local_backend: true
 
 site_url: https://www.netlifycms.org
-
-publish_mode: editorial_workflow
 
 media_folder: website/static/img
 public_folder: /img

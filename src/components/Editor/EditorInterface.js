@@ -213,14 +213,10 @@ class EditorInterface extends Component {
       user,
       hasChanged,
       displayUrl,
-      hasWorkflow,
-      useOpenAuthoring,
       isNewEntry,
       isModification,
       currentStatus,
       onLogoutClick,
-      loadDeployPreview,
-      deployPreview,
       draftKey,
       editorBackLink,
       scrollSyncEnabled,
@@ -318,14 +314,10 @@ class EditorInterface extends Component {
           hasChanged={hasChanged}
           displayUrl={displayUrl}
           collection={collection}
-          hasWorkflow={hasWorkflow}
-          useOpenAuthoring={useOpenAuthoring}
           isNewEntry={isNewEntry}
           isModification={isModification}
           currentStatus={currentStatus}
           onLogoutClick={onLogoutClick}
-          loadDeployPreview={loadDeployPreview}
-          deployPreview={deployPreview}
           editorBackLink={editorBackLink}
         />
         <Editor key={draftKey}>
@@ -389,14 +381,10 @@ EditorInterface.propTypes = {
   user: PropTypes.object,
   hasChanged: PropTypes.bool,
   displayUrl: PropTypes.string,
-  hasWorkflow: PropTypes.bool,
-  useOpenAuthoring: PropTypes.bool,
   isNewEntry: PropTypes.bool,
   isModification: PropTypes.bool,
   currentStatus: PropTypes.string,
   onLogoutClick: PropTypes.func.isRequired,
-  deployPreview: PropTypes.object,
-  loadDeployPreview: PropTypes.func.isRequired,
   draftKey: PropTypes.string.isRequired,
   toggleScroll: PropTypes.func.isRequired,
   scrollSyncEnabled: PropTypes.bool.isRequired,

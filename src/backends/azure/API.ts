@@ -1,29 +1,14 @@
 import { Base64 } from 'js-base64';
 import { partial, result, trim, trimStart } from 'lodash';
-import { dirname, basename } from 'path';
+import { basename, dirname } from 'path';
 
 import {
-  localForage,
-  APIError,
-  unsentRequest,
-  requestWithBackoff,
-  responseParser,
-  readFile,
-  DEFAULT_PR_BODY,
-  MERGE_COMMIT_MESSAGE,
-  generateContentKey,
-  parseContentKey,
-  labelToStatus,
-  isCMSLabel,
-  EditorialWorkflowError,
-  statusToLabel,
-  PreviewState,
-  readFileMetadata,
-  branchFromContentKey,
+  APIError, localForage, readFile, readFileMetadata, requestWithBackoff,
+  responseParser, unsentRequest
 } from '../../lib/util';
 
-import type { ApiRequest, AssetProxy, PersistOptions, DataFile } from '../../lib/util';
 import type { Map } from 'immutable';
+import type { ApiRequest, AssetProxy, DataFile, PersistOptions } from '../../lib/util';
 
 export const API_NAME = 'Azure DevOps';
 
@@ -41,32 +26,6 @@ type AzureGitItem = {
   objectId: string;
   gitObjectType: AzureObjectType;
   path: string;
-};
-
-// https://docs.microsoft.com/en-us/rest/api/azure/devops/git/pull%20requests/get%20pull%20request?view=azure-devops-rest-6.1#gitpullrequest
-type AzureWebApiTagDefinition = {
-  active: boolean;
-  id: string;
-  name: string;
-  url: string;
-};
-
-type AzurePullRequest = {
-  title: string;
-  artifactId: string;
-  closedDate: string;
-  creationDate: string;
-  isDraft: string;
-  status: AzurePullRequestStatus;
-  lastMergeSourceCommit: AzureGitChangeItem;
-  mergeStatus: AzureAsyncPullRequestStatus;
-  pullRequestId: number;
-  labels: AzureWebApiTagDefinition[];
-  sourceRefName: string;
-  createdBy?: {
-    displayName?: string;
-    uniqueName: string;
-  };
 };
 
 type AzurePullRequestCommit = { commitId: string };
@@ -102,20 +61,6 @@ enum AzureCommitChangeType {
 
 enum AzureItemContentType {
   BASE64 = 'base64encoded',
-}
-
-enum AzurePullRequestStatus {
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-  ABANDONED = 'abandoned',
-}
-
-enum AzureAsyncPullRequestStatus {
-  CONFLICTS = 'conflicts',
-  FAILURE = 'failure',
-  QUEUED = 'queued',
-  REJECTED = 'rejectedByPolicy',
-  SUCCEEDED = 'succeeded',
 }
 
 enum AzureObjectType {
@@ -212,9 +157,6 @@ interface AzureApiConfig {
   apiRoot: string;
   repo: { org: string; project: string; repoName: string };
   branch: string;
-  squashMerges: boolean;
-  initialWorkflowStatus: string;
-  cmsLabelPrefix: string;
   apiVersion: string;
 }
 
@@ -222,10 +164,7 @@ export default class API {
   apiVersion: string;
   token: string;
   branch: string;
-  mergeStrategy: string;
   endpointUrl: string;
-  initialWorkflowStatus: string;
-  cmsLabelPrefix: string;
 
   constructor(config: AzureApiConfig, token: string) {
     const { repo } = config;
@@ -233,10 +172,7 @@ export default class API {
     this.endpointUrl = `${apiRoot}/${repo.org}/${repo.project}/_apis/git/repositories/${repo.repoName}`;
     this.token = token;
     this.branch = config.branch;
-    this.mergeStrategy = config.squashMerges ? 'squash' : 'noFastForward';
-    this.initialWorkflowStatus = config.initialWorkflowStatus;
     this.apiVersion = config.apiVersion;
-    this.cmsLabelPrefix = config.cmsLabelPrefix;
   }
 
   withHeaders = (req: ApiRequest) => {
@@ -400,22 +336,6 @@ export default class API {
     return refs.find(b => b.name == this.branchToRef(branch))!;
   }
 
-  async deleteRef(ref: AzureRef): Promise<void> {
-    const deleteBranchPayload = [
-      {
-        name: ref.name,
-        oldObjectId: ref.objectId,
-        newObjectId: '0000000000000000000000000000000000000000',
-      },
-    ];
-
-    await this.requestJSON({
-      method: 'POST',
-      url: `${this.endpointUrl}/refs`,
-      body: JSON.stringify(deleteBranchPayload),
-    });
-  }
-
   async uploadAndCommit(
     items: AzureCommitItem[],
     comment: string,
@@ -443,32 +363,6 @@ export default class API {
       method: 'POST',
       body: JSON.stringify(push),
     });
-  }
-
-  async getPullRequestStatues(pullRequest: AzurePullRequest) {
-    const { value: commits } = await this.requestJSON<AzureArray<AzurePullRequestCommit>>({
-      url: `${this.endpointUrl}/pullrequests/${pullRequest.pullRequestId}/commits`,
-      params: {
-        $top: 1,
-      },
-    });
-    const { value: statuses } = await this.requestJSON<AzureArray<AzureCommitStatus>>({
-      url: `${this.endpointUrl}/commits/${commits[0].commitId}/statuses`,
-      params: { latestOnly: true },
-    });
-    return statuses;
-  }
-
-  async getStatuses(collection: string, slug: string) {
-    const contentKey = generateContentKey(collection, slug);
-    const branch = branchFromContentKey(contentKey);
-    const pullRequest = await this.getBranchPullRequest(branch);
-    const statuses = await this.getPullRequestStatues(pullRequest);
-    return statuses.map(({ context, state, targetUrl }) => ({
-      context: context.name,
-      state: state === AzureCommitStatusState.SUCCEEDED ? PreviewState.Success : PreviewState.Other,
-      target_url: targetUrl,
-    }));
   }
 
   async getCommitItems(files: { path: string; newPath?: string }[], branch: string) {
@@ -515,14 +409,9 @@ export default class API {
 
   async persistFiles(dataFiles: DataFile[], mediaFiles: AssetProxy[], options: PersistOptions) {
     const files = [...dataFiles, ...mediaFiles];
-    if (options.useWorkflow) {
-      const slug = dataFiles[0].slug;
-      return this.editorialWorkflowGit(files, slug, options);
-    } else {
-      const items = await this.getCommitItems(files, this.branch);
+    const items = await this.getCommitItems(files, this.branch);
 
-      return this.uploadAndCommit(items, options.commitMessage, this.branch, true);
-    }
+    return this.uploadAndCommit(items, options.commitMessage, this.branch, true);
   }
 
   async deleteFiles(paths: string[], comment: string) {
@@ -548,23 +437,6 @@ export default class API {
     });
   }
 
-  async getPullRequests(sourceBranch?: string) {
-    const { value: pullRequests } = await this.requestJSON<AzureArray<AzurePullRequest>>({
-      url: `${this.endpointUrl}/pullrequests`,
-      params: {
-        'searchCriteria.status': 'active',
-        'searchCriteria.targetRefName': this.branchToRef(this.branch),
-        'searchCriteria.includeLinks': false,
-        ...(sourceBranch ? { 'searchCriteria.sourceRefName': this.branchToRef(sourceBranch) } : {}),
-      },
-    });
-
-    const filtered = pullRequests.filter(pr => {
-      return pr.labels.some(label => isCMSLabel(label.name, this.cmsLabelPrefix));
-    });
-    return filtered;
-  }
-
   async isFileExists(path: string, branch: string) {
     try {
       await this.requestText({
@@ -579,128 +451,5 @@ export default class API {
       }
       throw error;
     }
-  }
-
-  async createPullRequest(branch: string, commitMessage: string, status: string) {
-    const pr = {
-      sourceRefName: this.branchToRef(branch),
-      targetRefName: this.branchToRef(this.branch),
-      title: commitMessage,
-      description: DEFAULT_PR_BODY,
-      labels: [
-        {
-          name: statusToLabel(status, this.cmsLabelPrefix),
-        },
-      ],
-    };
-
-    await this.requestJSON({
-      method: 'POST',
-      url: `${this.endpointUrl}/pullrequests`,
-      params: {
-        supportsIterations: false,
-      },
-      body: JSON.stringify(pr),
-    });
-  }
-
-  async getBranchPullRequest(branch: string) {
-    const pullRequests = await this.getPullRequests(branch);
-
-    if (pullRequests.length <= 0) {
-      throw new EditorialWorkflowError('content is not under editorial workflow', true);
-    }
-
-    return pullRequests[0];
-  }
-
-  async getDifferences(to: string) {
-    const result = await this.requestJSON<AzureGitCommitDiffs>({
-      url: `${this.endpointUrl}/diffs/commits`,
-      params: {
-        baseVersion: this.branch,
-        targetVersion: this.refToBranch(to),
-      },
-    });
-
-    return result.changes.filter(
-      d =>
-        d.item.gitObjectType === AzureObjectType.BLOB &&
-        Object.values(AzureCommitChangeType).includes(d.changeType),
-    );
-  }
-
-  async updatePullRequestLabels(pullRequest: AzurePullRequest, labels: string[]) {
-    const cmsLabels = pullRequest.labels.filter(l => isCMSLabel(l.name, this.cmsLabelPrefix));
-    await Promise.all(
-      cmsLabels.map(l => {
-        return this.requestText({
-          method: 'DELETE',
-          url: `${this.endpointUrl}/pullrequests/${encodeURIComponent(
-            pullRequest.pullRequestId,
-          )}/labels/${encodeURIComponent(l.id)}`,
-        });
-      }),
-    );
-
-    await Promise.all(
-      labels.map(l => {
-        return this.requestText({
-          method: 'POST',
-          url: `${this.endpointUrl}/pullrequests/${encodeURIComponent(
-            pullRequest.pullRequestId,
-          )}/labels`,
-          body: JSON.stringify({ name: l }),
-        });
-      }),
-    );
-  }
-
-  async completePullRequest(pullRequest: AzurePullRequest) {
-    const pullRequestCompletion = {
-      status: AzurePullRequestStatus.COMPLETED,
-      lastMergeSourceCommit: pullRequest.lastMergeSourceCommit,
-      completionOptions: {
-        deleteSourceBranch: true,
-        mergeCommitMessage: MERGE_COMMIT_MESSAGE,
-        mergeStrategy: this.mergeStrategy,
-      },
-    };
-
-    let response = await this.requestJSON<AzurePullRequest>({
-      method: 'PATCH',
-      url: `${this.endpointUrl}/pullrequests/${encodeURIComponent(pullRequest.pullRequestId)}`,
-      body: JSON.stringify(pullRequestCompletion),
-    });
-
-    // We need to wait for Azure to complete the pull request to actually complete
-    // Sometimes this is instant, but frequently it is 1-3 seconds
-    const DELAY_MILLISECONDS = 500;
-    const MAX_ATTEMPTS = 10;
-    let attempt = 1;
-    while (response.mergeStatus === AzureAsyncPullRequestStatus.QUEUED && attempt <= MAX_ATTEMPTS) {
-      await delay(DELAY_MILLISECONDS);
-      response = await this.requestJSON({
-        url: `${this.endpointUrl}/pullrequests/${encodeURIComponent(pullRequest.pullRequestId)}`,
-      });
-      attempt = attempt + 1;
-    }
-  }
-
-  async abandonPullRequest(pullRequest: AzurePullRequest) {
-    const pullRequestAbandon = {
-      status: AzurePullRequestStatus.ABANDONED,
-    };
-
-    await this.requestJSON({
-      method: 'PATCH',
-      url: `${this.endpointUrl}/pullrequests/${encodeURIComponent(pullRequest.pullRequestId)}`,
-      body: JSON.stringify(pullRequestAbandon),
-    });
-
-    await this.deleteRef({
-      name: pullRequest.sourceRefName,
-      objectId: pullRequest.lastMergeSourceCommit.commitId,
-    });
   }
 }

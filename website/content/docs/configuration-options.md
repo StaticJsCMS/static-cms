@@ -125,16 +125,6 @@ When a translation for the selected locale is missing the English one will be us
 
 > All locales are registered by default (so you only need to update your `config.yml`).
 
-## Show Preview Links
-
-[Deploy preview links](../deploy-preview-links) can be disabled by setting `show_preview_links` to `false`.
-
-**Example:**
-
-```yaml
-show_preview_links: false
-```
-
 ## Search
 
 The search functionally requires loading all collection(s) entries, which can exhaust rate limits on large repositories.
@@ -187,7 +177,6 @@ The `collections` setting is the heart of your Simple CMS configuration, as it d
 * `files` or `folder` (requires one of these): specifies the collection type and location; details in [Collection Types](../collection-types)
 * `filter`: optional filter for `folder` collections; details in [Collection Types](../collection-types)
 * `create`: for `folder` collections only; `true` allows users to create new items in the collection; defaults to `false`
-* `publish`: for `publish_mode: editorial_workflow` only; `false` hides UI publishing controls for a collection; defaults to `true`
 * `hide`: `true` hides a collection in the CMS UI; defaults to `false`. Useful when using the relation widget to hide referenced collections.
 * `delete`: `false` prevents users from deleting items in a collection; defaults to `true`
 * `extension`: see detailed description below
@@ -272,46 +261,6 @@ slug: "{{year}}-{{month}}-{{day}}_{{title}}_{{some_other_field}}"
 
 ```yaml
 slug: "{{year}}-{{month}}-{{day}}_{{fields.slug}}"
-```
-
-### `preview_path`
-
-A string representing the path where content in this collection can be found on the live site. This allows deploy preview links to direct to lead to a specific piece of content rather than the site root of a deploy preview.
-
-**Available template tags:**
-
-Template tags are the same as those for [slug](#slug), with the following exceptions:
-
-* `{{slug}}` is the entire slug for the current entry (not just the url-safe identifier, as is the case with [`slug` configuration](#slug))
-* The date based template tags, such as `{{year}}` and `{{month}}`, are pulled from a date field in your entry, and may require additional configuration - see [`preview_path_date_field`](#preview_path_date_field) for details. If a date template tag is used and no date can be found, `preview_path` will be ignored.
-* `{{dirname}}` The path to the file's parent directory, relative to the collection's `folder`.
-* `{{filename}}` The file name without the extension part.
-* `{{extension}}` The file extension.
-
-**Examples:**
-
-```yaml
-collections:
-  - name: posts
-    preview_path: "blog/{{year}}/{{month}}/{{slug}}"
-```
-
-```yaml
-collections:
-  - name: posts
-    preview_path: "blog/{{year}}/{{month}}/{{filename}}.{{extension}}"
-```
-
-### `preview_path_date_field`
-
-The name of a date field for parsing date-based template tags from `preview_path`. If this field is not provided and `preview_path` contains date-based template tags (eg. `{{year}}`), Simple CMS will attempt to infer a usable date field by checking for common date field names, such as `date`. If you find that you need to specify a date field, you can use `preview_path_date_field` to tell Simple CMS which field to use for preview path template tags.
-
-**Example:**
-
-```yaml
-collections:
-  - name: posts
-    preview_path_date_field: "updated_on"
 ```
 
 ### `fields`

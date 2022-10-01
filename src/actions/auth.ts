@@ -5,13 +5,11 @@ import type { Credentials, User } from '../lib/util';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { AnyAction } from 'redux';
 import type { State } from '../types/redux';
-import type { t } from 'react-polyglot';
 
 export const AUTH_REQUEST = 'AUTH_REQUEST';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
 export const AUTH_FAILURE = 'AUTH_FAILURE';
 export const AUTH_REQUEST_DONE = 'AUTH_REQUEST_DONE';
-export const USE_OPEN_AUTHORING = 'USE_OPEN_AUTHORING';
 export const LOGOUT = 'LOGOUT';
 
 export function authenticating() {
@@ -41,12 +39,6 @@ export function doneAuthenticating() {
   } as const;
 }
 
-export function useOpenAuthoring() {
-  return {
-    type: USE_OPEN_AUTHORING,
-  } as const;
-}
-
 export function logout() {
   return {
     type: LOGOUT,
@@ -62,9 +54,6 @@ export function authenticateUser() {
     return Promise.resolve(backend.currentUser())
       .then(user => {
         if (user) {
-          if (user.useOpenAuthoring) {
-            dispatch(useOpenAuthoring());
-          }
           dispatch(authenticate(user));
         } else {
           dispatch(doneAuthenticating());
@@ -86,9 +75,6 @@ export function loginUser(credentials: Credentials) {
     return backend
       .authenticate(credentials)
       .then(user => {
-        if (user.useOpenAuthoring) {
-          dispatch(useOpenAuthoring());
-        }
         dispatch(authenticate(user));
       })
       .catch((error: Error) => {

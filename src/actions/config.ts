@@ -4,7 +4,6 @@ import deepmerge from 'deepmerge';
 import { produce } from 'immer';
 import { trimStart, trim, isEmpty } from 'lodash';
 
-import { SIMPLE as SIMPLE_PUBLISH_MODE } from '../constants/publishModes';
 import { validateConfig } from '../constants/configSchema';
 import { selectDefaultSortableFields } from '../reducers/collections';
 import { getIntegrations, selectIntegration } from '../reducers/integrations';
@@ -15,14 +14,13 @@ import { FILES, FOLDER } from '../constants/collectionTypes';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { AnyAction } from 'redux';
 import type { State } from '../types/redux';
-import {
+import type {
   CmsConfig,
   CmsField,
   CmsFieldBase,
   CmsFieldObject,
   CmsFieldList,
   CmsI18nConfig,
-  CmsPublishMode,
   CmsLocalBackend,
   CmsCollection,
 } from '../interface';
@@ -197,7 +195,6 @@ export function normalizeConfig(config: CmsConfig) {
 
 export function applyDefaults(originalConfig: CmsConfig) {
   return produce(originalConfig, config => {
-    config.publish_mode = config.publish_mode || SIMPLE_PUBLISH_MODE;
     config.slug = config.slug || {};
     config.collections = config.collections || [];
 
@@ -434,14 +431,13 @@ export async function detectProxyServer(localBackend?: boolean | CmsLocalBackend
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'info' }),
     });
-    const { repo, publish_modes, type } = (await res.json()) as {
+    const { repo, type } = (await res.json()) as {
       repo?: string;
-      publish_modes?: CmsPublishMode[];
       type?: string;
     };
-    if (typeof repo === 'string' && Array.isArray(publish_modes) && typeof type === 'string') {
+    if (typeof repo === 'string' && typeof type === 'string') {
       console.info(`Detected Simple CMS Proxy Server at '${proxyUrl}' with repo: '${repo}'`);
-      return { proxyUrl, publish_modes, type };
+      return { proxyUrl, type };
     } else {
       console.info(`Simple CMS Proxy Server not detected at '${proxyUrl}'`);
       return {};
@@ -452,18 +448,6 @@ export async function detectProxyServer(localBackend?: boolean | CmsLocalBackend
   }
 }
 
-function getPublishMode(config: CmsConfig, publishModes?: CmsPublishMode[], backendType?: string) {
-  if (config.publish_mode && publishModes && !publishModes.includes(config.publish_mode)) {
-    const newPublishMode = publishModes[0];
-    console.info(
-      `'${config.publish_mode}' is not supported by '${backendType}' backend, switching to '${newPublishMode}'`,
-    );
-    return newPublishMode;
-  }
-
-  return config.publish_mode;
-}
-
 export async function handleLocalBackend(originalConfig: CmsConfig) {
   if (!originalConfig.local_backend) {
     return originalConfig;
@@ -471,7 +455,6 @@ export async function handleLocalBackend(originalConfig: CmsConfig) {
 
   const {
     proxyUrl,
-    publish_modes: publishModes,
     type: backendType,
   } = await detectProxyServer(originalConfig.local_backend);
 
@@ -482,10 +465,6 @@ export async function handleLocalBackend(originalConfig: CmsConfig) {
   return produce(originalConfig, config => {
     config.backend.name = 'proxy';
     config.backend.proxy_url = proxyUrl;
-
-    if (config.publish_mode) {
-      config.publish_mode = getPublishMode(config, publishModes, backendType);
-    }
   });
 }
 

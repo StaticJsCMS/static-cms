@@ -121,7 +121,6 @@ class Header extends React.Component {
     onCreateEntryClick: PropTypes.func.isRequired,
     onLogoutClick: PropTypes.func.isRequired,
     openMediaLibrary: PropTypes.func.isRequired,
-    hasWorkflow: PropTypes.bool.isRequired,
     displayUrl: PropTypes.string,
     isTestRepo: PropTypes.bool,
     t: PropTypes.func.isRequired,
@@ -153,7 +152,6 @@ class Header extends React.Component {
       collections,
       onLogoutClick,
       openMediaLibrary,
-      hasWorkflow,
       displayUrl,
       isTestRepo,
       t,
@@ -179,14 +177,6 @@ class Header extends React.Component {
                   {t('app.header.content')}
                 </AppHeaderNavLink>
               </li>
-              {hasWorkflow && (
-                <li>
-                  <AppHeaderNavLink to="/workflow" activeClassName="header-link-active">
-                    <Icon type="workflow" />
-                    {t('app.header.workflow')}
-                  </AppHeaderNavLink>
-                </li>
-              )}
               {showMediaButton && (
                 <li>
                   <AppHeaderButton onClick={openMediaLibrary}>

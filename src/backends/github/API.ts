@@ -1,57 +1,38 @@
 import { Base64 } from 'js-base64';
-import semaphore from 'semaphore';
-import { initial, last, partial, result, trimStart, trim } from 'lodash';
+import { initial, last, partial, result, trim, trimStart } from 'lodash';
 import { dirname } from 'path';
+import semaphore from 'semaphore';
 
 import {
-  getAllResponses,
   APIError,
-  EditorialWorkflowError,
-  localForage,
   basename,
-  readFileMetadata,
-  CMS_BRANCH_PREFIX,
   generateContentKey,
-  DEFAULT_PR_BODY,
-  MERGE_COMMIT_MESSAGE,
-  PreviewState,
+  getAllResponses,
+  localForage,
   parseContentKey,
-  branchFromContentKey,
-  isCMSLabel,
-  labelToStatus,
-  statusToLabel,
-  contentKeyFromBranch,
+  readFileMetadata,
   requestWithBackoff,
   unsentRequest,
-  throwOnConflictingBranches,
 } from '../../lib/util';
-import alert from '../../components/UI/Alert';
 
-import type { AssetProxy, DataFile, PersistOptions, FetchError, ApiRequest } from '../../lib/util';
-import type { Semaphore } from 'semaphore';
 import type { Octokit } from '@octokit/rest';
+import type { Semaphore } from 'semaphore';
+import type { ApiRequest, AssetProxy, DataFile, FetchError, PersistOptions } from '../../lib/util';
 
 type GitHubUser = Octokit.UsersGetAuthenticatedResponse;
 type GitCreateTreeParamsTree = Octokit.GitCreateTreeParamsTree;
 type GitHubCompareCommit = Octokit.ReposCompareCommitsResponseCommitsItem;
 type GitHubAuthor = Octokit.GitCreateCommitResponseAuthor;
 type GitHubCommitter = Octokit.GitCreateCommitResponseCommitter;
-type GitHubPull = Octokit.PullsListResponseItem;
 
 export const API_NAME = 'GitHub';
-
-export const MOCK_PULL_REQUEST = -1;
 
 export interface Config {
   apiRoot?: string;
   token?: string;
   branch?: string;
-  useOpenAuthoring?: boolean;
   repo?: string;
   originRepo?: string;
-  squashMerges: boolean;
-  initialWorkflowStatus: string;
-  cmsLabelPrefix: string;
 }
 
 interface TreeFile {
@@ -73,23 +54,6 @@ type GitHubCompareFile = Octokit.ReposCompareCommitsResponseFilesItem & {
 
 type GitHubCompareFiles = GitHubCompareFile[];
 
-enum GitHubCommitStatusState {
-  Error = 'error',
-  Failure = 'failure',
-  Pending = 'pending',
-  Success = 'success',
-}
-
-export enum PullRequestState {
-  Open = 'open',
-  Closed = 'closed',
-  All = 'all',
-}
-
-type GitHubCommitStatus = Octokit.ReposListStatusesForRefResponseItem & {
-  state: GitHubCommitStatusState;
-};
-
 interface MetaDataObjects {
   entry: { path: string; sha: string };
   files: MediaFile[];
@@ -100,10 +64,6 @@ export interface Metadata {
   objects: MetaDataObjects;
   branch: string;
   status: string;
-  pr?: {
-    number: number;
-    head: string | { sha: string };
-  };
   collection: string;
   commitMessage: string;
   version?: string;
@@ -128,34 +88,6 @@ type MediaFile = {
   path: string;
 };
 
-function withCmsLabel(pr: GitHubPull, cmsLabelPrefix: string) {
-  return pr.labels.some(l => isCMSLabel(l.name, cmsLabelPrefix));
-}
-
-function withoutCmsLabel(pr: GitHubPull, cmsLabelPrefix: string) {
-  return pr.labels.every(l => !isCMSLabel(l.name, cmsLabelPrefix));
-}
-
-function getTreeFiles(files: GitHubCompareFiles) {
-  const treeFiles = files.reduce((arr, file) => {
-    if (file.status === 'removed') {
-      // delete the file
-      arr.push({ sha: null, path: file.filename });
-    } else if (file.status === 'renamed') {
-      // delete the previous file
-      arr.push({ sha: null, path: file.previous_filename as string });
-      // add the renamed file
-      arr.push({ sha: file.sha, path: file.filename });
-    } else {
-      // add the  file
-      arr.push({ sha: file.sha, path: file.filename });
-    }
-    return arr;
-  }, [] as { sha: string | null; path: string }[]);
-
-  return treeFiles;
-}
-
 export type Diff = {
   path: string;
   newFile: boolean;
@@ -163,13 +95,10 @@ export type Diff = {
   binary: boolean;
 };
 
-let migrationNotified = false;
-
 export default class API {
   apiRoot: string;
   token: string;
   branch: string;
-  useOpenAuthoring?: boolean;
   repo: string;
   originRepo: string;
   repoOwner: string;
@@ -178,9 +107,6 @@ export default class API {
   originRepoName: string;
   repoURL: string;
   originRepoURL: string;
-  mergeMethod: string;
-  initialWorkflowStatus: string;
-  cmsLabelPrefix: string;
 
   _userPromise?: Promise<GitHubUser>;
   _metadataSemaphore?: Semaphore;
@@ -191,11 +117,9 @@ export default class API {
     this.apiRoot = config.apiRoot || 'https://api.github.com';
     this.token = config.token || '';
     this.branch = config.branch || 'main';
-    this.useOpenAuthoring = config.useOpenAuthoring;
     this.repo = config.repo || '';
     this.originRepo = config.originRepo || this.repo;
     this.repoURL = `/repos/${this.repo}`;
-    // when not in 'useOpenAuthoring' mode originRepoURL === repoURL
     this.originRepoURL = `/repos/${this.originRepo}`;
 
     const [repoParts, originRepoParts] = [this.repo.split('/'), this.originRepo.split('/')];
@@ -204,10 +128,6 @@ export default class API {
 
     this.originRepoOwner = originRepoParts[0];
     this.originRepoName = originRepoParts[1];
-
-    this.mergeMethod = config.squashMerges ? 'squash' : 'merge';
-    this.cmsLabelPrefix = config.cmsLabelPrefix;
-    this.initialWorkflowStatus = config.initialWorkflowStatus;
   }
 
   static DEFAULT_COMMIT_MESSAGE = 'Automatically generated by Simple CMS';
@@ -343,20 +263,11 @@ export default class API {
   }
 
   generateContentKey(collectionName: string, slug: string) {
-    const contentKey = generateContentKey(collectionName, slug);
-    if (!this.useOpenAuthoring) {
-      return contentKey;
-    }
-
-    return `${this.repo}/${contentKey}`;
+    return generateContentKey(collectionName, slug);
   }
 
   parseContentKey(contentKey: string) {
-    if (!this.useOpenAuthoring) {
-      return parseContentKey(contentKey);
-    }
-
-    return parseContentKey(contentKey.slice(this.repo.length + 1));
+    return parseContentKey(contentKey);
   }
 
   checkMetadataRef() {
@@ -458,124 +369,14 @@ export default class API {
       throw err;
     }
 
-    if (!this.useOpenAuthoring) {
-      const result = await this.request(
-        `${this.repoURL}/contents/${key}.json`,
-        metadataRequestOptions,
-      )
-        .then((response: string) => JSON.parse(response))
-        .catch(errorHandler);
-
-      return result;
-    }
-
-    const [user, repo] = key.split('/');
-    const result = this.request(
-      `/repos/${user}/${repo}/contents/${key}.json`,
+    const result = await this.request(
+      `${this.repoURL}/contents/${key}.json`,
       metadataRequestOptions,
     )
       .then((response: string) => JSON.parse(response))
       .catch(errorHandler);
+
     return result;
-  }
-
-  async getPullRequests(
-    head: string | undefined,
-    state: PullRequestState,
-    predicate: (pr: GitHubPull) => boolean,
-  ) {
-    const pullRequests: Octokit.PullsListResponse = await this.requestAllPages(
-      `${this.originRepoURL}/pulls`,
-      {
-        params: {
-          ...(head ? { head: await this.getHeadReference(head) } : {}),
-          base: this.branch,
-          state,
-          per_page: 100,
-        },
-      },
-    );
-
-    return pullRequests.filter(
-      pr => pr.head.ref.startsWith(`${CMS_BRANCH_PREFIX}/`) && predicate(pr),
-    );
-  }
-
-  async getOpenAuthoringPullRequest(branch: string, pullRequests: GitHubPull[]) {
-    // we can't use labels when using open authoring
-    // since the contributor doesn't have access to set labels
-    // a branch without a pr (or a closed pr) means a 'draft' entry
-    // a branch with an opened pr means a 'pending_review' entry
-    const data = await this.getBranch(branch).catch(() => {
-      throw new EditorialWorkflowError('content is not under editorial workflow', true);
-    });
-    // since we get all (open and closed) pull requests by branch name, make sure to filter by head sha
-    const pullRequest = pullRequests.filter(pr => pr.head.sha === data.commit.sha)[0];
-    // if no pull request is found for the branch we return a mocked one
-    if (!pullRequest) {
-      try {
-        return {
-          head: { sha: data.commit.sha },
-          number: MOCK_PULL_REQUEST,
-          labels: [{ name: statusToLabel(this.initialWorkflowStatus, this.cmsLabelPrefix) }],
-          state: PullRequestState.Open,
-        } as GitHubPull;
-      } catch (e) {
-        throw new EditorialWorkflowError('content is not under editorial workflow', true);
-      }
-    } else {
-      pullRequest.labels = pullRequest.labels.filter(l => !isCMSLabel(l.name, this.cmsLabelPrefix));
-      const cmsLabel =
-        pullRequest.state === PullRequestState.Closed
-          ? { name: statusToLabel(this.initialWorkflowStatus, this.cmsLabelPrefix) }
-          : { name: statusToLabel('pending_review', this.cmsLabelPrefix) };
-
-      pullRequest.labels.push(cmsLabel as Octokit.PullsGetResponseLabelsItem);
-      return pullRequest;
-    }
-  }
-
-  async getBranchPullRequest(branch: string) {
-    if (this.useOpenAuthoring) {
-      const pullRequests = await this.getPullRequests(branch, PullRequestState.All, () => true);
-      return this.getOpenAuthoringPullRequest(branch, pullRequests);
-    } else {
-      const pullRequests = await this.getPullRequests(branch, PullRequestState.Open, pr =>
-        withCmsLabel(pr, this.cmsLabelPrefix),
-      );
-      if (pullRequests.length <= 0) {
-        throw new EditorialWorkflowError('content is not under editorial workflow', true);
-      }
-      return pullRequests[0];
-    }
-  }
-
-  async getPullRequestCommits(number: number) {
-    if (number === MOCK_PULL_REQUEST) {
-      return [];
-    }
-    try {
-      const commits: Octokit.PullsListCommitsResponseItem[] = await this.request(
-        `${this.originRepoURL}/pulls/${number}/commits`,
-      );
-      return commits;
-    } catch (e) {
-      console.info(e);
-      return [];
-    }
-  }
-
-  async getPullRequestAuthor(pullRequest: Octokit.PullsListResponseItem) {
-    if (!pullRequest.user?.login) {
-      return;
-    }
-
-    try {
-      const user: GitHubUser = await this.request(`/users/${pullRequest.user.login}`);
-      return user.name || user.login;
-    } catch {
-      return;
-    }
   }
 
   async readFile(
@@ -677,160 +478,17 @@ export default class API {
     }
   }
 
-  filterOpenAuthoringBranches = async (branch: string) => {
-    try {
-      const pullRequest = await this.getBranchPullRequest(branch);
-      const { state: currentState, merged_at: mergedAt } = pullRequest;
-      if (
-        pullRequest.number !== MOCK_PULL_REQUEST &&
-        currentState === PullRequestState.Closed &&
-        mergedAt
-      ) {
-        // pr was merged, delete branch
-        await this.deleteBranch(branch);
-        return { branch, filter: false };
-      } else {
-        return { branch, filter: true };
-      }
-    } catch (e) {
-      return { branch, filter: false };
-    }
-  };
-
-  async migrateToVersion1(pullRequest: GitHubPull, metadata: Metadata) {
-    // hard code key/branch generation logic to ignore future changes
-    const oldContentKey = pullRequest.head.ref.slice(`cms/`.length);
-    const newContentKey = `${metadata.collection}/${oldContentKey}`;
-    const newBranchName = `cms/${newContentKey}`;
-
-    // retrieve or create new branch and pull request in new format
-    const branch = await this.getBranch(newBranchName).catch(() => undefined);
-    if (!branch) {
-      await this.createBranch(newBranchName, pullRequest.head.sha as string);
-    }
-
-    const pr =
-      (await this.getPullRequests(newBranchName, PullRequestState.All, () => true))[0] ||
-      (await this.createPR(pullRequest.title, newBranchName));
-
-    // store new metadata
-    const newMetadata = {
-      ...metadata,
-      pr: {
-        number: pr.number,
-        head: pr.head.sha,
-      },
-      branch: newBranchName,
-      version: '1',
-    };
-    await this.storeMetadata(newContentKey, newMetadata);
-
-    // remove old data
-    await this.closePR(pullRequest.number);
-    await this.deleteBranch(pullRequest.head.ref);
-    await this.deleteMetadata(oldContentKey);
-
-    return { metadata: newMetadata, pullRequest: pr };
-  }
-
-  async migrateToPullRequestLabels(pullRequest: GitHubPull, metadata: Metadata) {
-    await this.setPullRequestStatus(pullRequest, metadata.status);
-
-    const contentKey = pullRequest.head.ref.slice(`cms/`.length);
-    await this.deleteMetadata(contentKey);
-  }
-
-  async migratePullRequest(pullRequest: GitHubPull, countMessage: string) {
-    const { number } = pullRequest;
-    console.info(`Migrating Pull Request '${number}' (${countMessage})`);
-    const contentKey = contentKeyFromBranch(pullRequest.head.ref);
-    let metadata = await this.retrieveMetadataOld(contentKey).catch(() => undefined);
-
-    if (!metadata) {
-      console.info(`Skipped migrating Pull Request '${number}' (${countMessage})`);
-      return;
-    }
-
-    let newNumber = number;
-    if (!metadata.version) {
-      console.info(`Migrating Pull Request '${number}' to version 1`);
-      // migrate branch from cms/slug to cms/collection/slug
-      try {
-        ({ metadata, pullRequest } = await this.migrateToVersion1(pullRequest, metadata));
-      } catch (e) {
-        console.info(`Failed to migrate Pull Request '${number}' to version 1. See error below.`);
-        console.error(e);
-        return;
-      }
-      newNumber = pullRequest.number;
-      console.info(
-        `Done migrating Pull Request '${number}' to version 1. New pull request '${newNumber}' created.`,
-      );
-    }
-
-    if (metadata.version === '1') {
-      console.info(`Migrating Pull Request '${newNumber}' to labels`);
-      // migrate branch from using orphan ref to store metadata to pull requests label
-      await this.migrateToPullRequestLabels(pullRequest, metadata);
-      console.info(`Done migrating Pull Request '${newNumber}' to labels`);
-    }
-
-    console.info(
-      `Done migrating Pull Request '${
-        number === newNumber ? newNumber : `${number} => ${newNumber}`
-      }'`,
-    );
-  }
-
-  async getOpenAuthoringBranches() {
-    const cmsBranches = await this.requestAllPages<Octokit.GitListMatchingRefsResponseItem>(
-      `${this.repoURL}/git/refs/heads/cms/${this.repo}`,
-    ).catch(() => [] as Octokit.GitListMatchingRefsResponseItem[]);
-    return cmsBranches;
-  }
-
-  /**
-   * Retrieve statuses for a given SHA. Unrelated to the editorial workflow
-   * concept of entry "status". Useful for things like deploy preview links.
-   */
-  async getStatuses(collectionName: string, slug: string) {
-    const contentKey = this.generateContentKey(collectionName, slug);
-    const branch = branchFromContentKey(contentKey);
-    const pullRequest = await this.getBranchPullRequest(branch);
-    const sha = pullRequest.head.sha;
-    const resp: { statuses: GitHubCommitStatus[] } = await this.request(
-      `${this.originRepoURL}/commits/${sha}/status`,
-    );
-    return resp.statuses.map(s => ({
-      context: s.context,
-      target_url: s.target_url,
-      state:
-        s.state === GitHubCommitStatusState.Success ? PreviewState.Success : PreviewState.Other,
-    }));
-  }
-
   async persistFiles(dataFiles: DataFile[], mediaFiles: AssetProxy[], options: PersistOptions) {
     const files = mediaFiles.concat(dataFiles);
     const uploadPromises = files.map(file => this.uploadBlob(file));
     await Promise.all(uploadPromises);
 
-    if (!options.useWorkflow) {
-      return this.getDefaultBranch()
-        .then(branchData =>
-          this.updateTree(branchData.commit.sha, files as { sha: string; path: string }[]),
-        )
-        .then(changeTree => this.commit(options.commitMessage, changeTree))
-        .then(response => this.patchBranch(this.branch, response.sha));
-    } else {
-      const mediaFilesList = (mediaFiles as { sha: string; path: string }[]).map(
-        ({ sha, path }) => ({
-          path: trimStart(path, '/'),
-          sha,
-        }),
-      );
-      const slug = dataFiles[0].slug;
-      return this.editorialWorkflowGit(files as TreeFile[], slug, mediaFilesList, options);
-    }
+    return this.getDefaultBranch()
+      .then(branchData =>
+        this.updateTree(branchData.commit.sha, files as { sha: string; path: string }[]),
+      )
+      .then(changeTree => this.commit(options.commitMessage, changeTree))
+      .then(response => this.patchBranch(this.branch, response.sha));
   }
 
   async getFileSha(path: string, { repoURL = this.repoURL, branch = this.branch } = {}) {
@@ -856,84 +514,11 @@ export default class API {
   }
 
   async deleteFiles(paths: string[], message: string) {
-    if (this.useOpenAuthoring) {
-      return Promise.reject('Cannot delete published entries as an Open Authoring user!');
-    }
-
     const branchData = await this.getDefaultBranch();
     const files = paths.map(path => ({ path, sha: null }));
     const changeTree = await this.updateTree(branchData.commit.sha, files);
     const commit = await this.commit(message, changeTree);
     await this.patchBranch(this.branch, commit.sha);
-  }
-
-  async createBranchAndPullRequest(branchName: string, sha: string, commitMessage: string) {
-    await this.createBranch(branchName, sha);
-    return this.createPR(commitMessage, branchName);
-  }
-
-  async updatePullRequestLabels(number: number, labels: string[]) {
-    await this.request(`${this.repoURL}/issues/${number}/labels`, {
-      method: 'PUT',
-      body: JSON.stringify({ labels }),
-    });
-  }
-
-  // async since it is overridden in a child class
-  async diffFromFile(diff: Octokit.ReposCompareCommitsResponseFilesItem): Promise<Diff> {
-    return {
-      path: diff.filename,
-      newFile: diff.status === 'added',
-      sha: diff.sha,
-      // media files diffs don't have a patch attribute, except svg files
-      // renamed files don't have a patch attribute too
-      binary: (diff.status !== 'renamed' && !diff.patch) || diff.filename.endsWith('.svg'),
-    };
-  }
-
-  async getDifferences(from: string, to: string) {
-    // retry this as sometimes GitHub returns an initial 404 on cross repo compare
-    const attempts = this.useOpenAuthoring ? 10 : 1;
-    for (let i = 1; i <= attempts; i++) {
-      try {
-        const result: Octokit.ReposCompareCommitsResponse = await this.request(
-          `${this.originRepoURL}/compare/${from}...${to}`,
-        );
-        return result;
-      } catch (e) {
-        if (i === attempts) {
-          console.warn(`Reached maximum number of attempts '${attempts}' for getDifferences`);
-          throw e;
-        }
-        await new Promise(resolve => setTimeout(resolve, i * 500));
-      }
-    }
-    throw new APIError('Not Found', 404, API_NAME);
-  }
-
-  async rebaseSingleCommit(baseCommit: GitHubCompareCommit, commit: GitHubCompareCommit) {
-    // first get the diff between the commits
-    const result = await this.getDifferences(commit.parents[0].sha, commit.sha);
-    const files = getTreeFiles(result.files as GitHubCompareFiles);
-
-    // only update the tree if changes were detected
-    if (files.length > 0) {
-      // create a tree with baseCommit as the base with the diff applied
-      const tree = await this.updateTree(baseCommit.sha, files);
-      const { message, author, committer } = commit.commit;
-
-      // create a new commit from the updated tree
-      const newCommit = await this.createCommit(
-        message,
-        tree.sha,
-        [baseCommit.sha],
-        author,
-        committer,
-      );
-      return newCommit as unknown as GitHubCompareCommit;
-    } else {
-      return commit;
-    }
   }
 
   /**
@@ -980,16 +565,6 @@ export default class API {
     }
   }
 
-  async setPullRequestStatus(pullRequest: GitHubPull, newStatus: string) {
-    const labels = [
-      ...pullRequest.labels
-        .filter(label => !isCMSLabel(label.name, this.cmsLabelPrefix))
-        .map(l => l.name),
-      statusToLabel(newStatus, this.cmsLabelPrefix),
-    ];
-    await this.updatePullRequestLabels(pullRequest.number, labels);
-  }
-
   async createRef(type: string, name: string, sha: string) {
     const result: Octokit.GitCreateRefResponse = await this.request(`${this.repoURL}/git/refs`, {
       method: 'POST',
@@ -1016,63 +591,11 @@ export default class API {
     });
   }
 
-  async getBranch(branch: string) {
-    const result: Octokit.ReposGetBranchResponse = await this.request(
-      `${this.repoURL}/branches/${encodeURIComponent(branch)}`,
-    );
-    return result;
-  }
-
   async getDefaultBranch() {
     const result: Octokit.ReposGetBranchResponse = await this.request(
       `${this.originRepoURL}/branches/${encodeURIComponent(this.branch)}`,
     );
     return result;
-  }
-
-  async backupBranch(branchName: string) {
-    try {
-      const existingBranch = await this.getBranch(branchName);
-      await this.createBranch(
-        existingBranch.name.replace(
-          new RegExp(`${CMS_BRANCH_PREFIX}/`),
-          `${CMS_BRANCH_PREFIX}_${Date.now()}/`,
-        ),
-        existingBranch.commit.sha,
-      );
-    } catch (e) {
-      console.warn(e);
-    }
-  }
-
-  async createBranch(branchName: string, sha: string) {
-    try {
-      const result = await this.createRef('heads', branchName, sha);
-      return result;
-    } catch (e: any) {
-      const message = String(e.message || '');
-      if (message === 'Reference update failed') {
-        await throwOnConflictingBranches(branchName, name => this.getBranch(name), API_NAME);
-      } else if (
-        message === 'Reference already exists' &&
-        branchName.startsWith(`${CMS_BRANCH_PREFIX}/`)
-      ) {
-        try {
-          // this can happen if the branch wasn't deleted when the PR was merged
-          // we backup the existing branch just in case and patch it with the new sha
-          await this.backupBranch(branchName);
-          const result = await this.patchBranch(branchName, sha, { force: true });
-          return result;
-        } catch (e) {
-          console.error(e);
-        }
-      }
-      throw e;
-    }
-  }
-
-  assertCmsBranch(branchName: string) {
-    return branchName.startsWith(`${CMS_BRANCH_PREFIX}/`);
   }
 
   patchBranch(branchName: string, sha: string, opts: { force?: boolean } = {}) {
@@ -1081,19 +604,6 @@ export default class API {
       throw Error(`Only CMS branches can be force updated, cannot force update ${branchName}`);
     }
     return this.patchRef('heads', branchName, sha, { force });
-  }
-
-  deleteBranch(branchName: string) {
-    return this.deleteRef('heads', branchName).catch((err: Error) => {
-      // If the branch doesn't exist, then it has already been deleted -
-      // deletion should be idempotent, so we can consider this a
-      // success.
-      if (err.message === 'Reference does not exist') {
-        return Promise.resolve();
-      }
-      console.error(err);
-      return Promise.reject(err);
-    });
   }
 
   async getHeadReference(head: string) {
@@ -1112,76 +622,6 @@ export default class API {
     });
 
     return result;
-  }
-
-  async openPR(number: number) {
-    console.info('%c Re-opening PR', 'line-height: 30px;text-align: center;font-weight: bold');
-    const result: Octokit.PullsUpdateBranchResponse = await this.request(
-      `${this.originRepoURL}/pulls/${number}`,
-      {
-        method: 'PATCH',
-        body: JSON.stringify({
-          state: PullRequestState.Open,
-        }),
-      },
-    );
-    return result;
-  }
-
-  async closePR(number: number) {
-    console.info('%c Deleting PR', 'line-height: 30px;text-align: center;font-weight: bold');
-    const result: Octokit.PullsUpdateBranchResponse = await this.request(
-      `${this.originRepoURL}/pulls/${number}`,
-      {
-        method: 'PATCH',
-        body: JSON.stringify({
-          state: PullRequestState.Closed,
-        }),
-      },
-    );
-    return result;
-  }
-
-  async mergePR(pullrequest: GitHubPull) {
-    console.info('%c Merging PR', 'line-height: 30px;text-align: center;font-weight: bold');
-    try {
-      const result: Octokit.PullsMergeResponse = await this.request(
-        `${this.originRepoURL}/pulls/${pullrequest.number}/merge`,
-        {
-          method: 'PUT',
-          body: JSON.stringify({
-            commit_message: MERGE_COMMIT_MESSAGE,
-            sha: pullrequest.head.sha,
-            merge_method: this.mergeMethod,
-          }),
-        },
-      );
-      return result;
-    } catch (error) {
-      if (error instanceof APIError && error.status === 405) {
-        return this.forceMergePR(pullrequest);
-      } else {
-        throw error;
-      }
-    }
-  }
-
-  async forceMergePR(pullRequest: GitHubPull) {
-    const result = await this.getDifferences(pullRequest.base.sha, pullRequest.head.sha);
-    const files = getTreeFiles(result.files as GitHubCompareFiles);
-
-    let commitMessage = 'Automatically generated. Merged on Simple CMS\n\nForce merge of:';
-    files.forEach(file => {
-      commitMessage += `\n* "${file.path}"`;
-    });
-    console.info(
-      '%c Automatic merge not possible - Forcing merge.',
-      'line-height: 30px;text-align: center;font-weight: bold',
-    );
-    return this.getDefaultBranch()
-      .then(branchData => this.updateTree(branchData.commit.sha, files))
-      .then(changeTree => this.commit(commitMessage, changeTree))
-      .then(response => this.patchBranch(this.branch, response.sha));
   }
 
   toBase64(str: string) {

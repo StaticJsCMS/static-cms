@@ -1,25 +1,15 @@
-import { attempt, isError, take, unset, isEmpty } from 'lodash';
+import { attempt, isError, take, unset } from 'lodash';
+import { extname } from 'path';
 import uuid from 'uuid/v4';
-import { extname, dirname } from 'path';
 
 import {
-  EditorialWorkflowError,
-  Cursor,
-  CURSOR_COMPATIBILITY_SYMBOL,
-  basename,
+  basename, Cursor,
+  CURSOR_COMPATIBILITY_SYMBOL
 } from '../../lib/util';
 import AuthenticationPage from './AuthenticationPage';
 
 import type {
-  Implementation,
-  Entry,
-  ImplementationEntry,
-  AssetProxy,
-  PersistOptions,
-  User,
-  Config,
-  ImplementationFile,
-  DataFile,
+  AssetProxy, Config, Implementation, ImplementationEntry, ImplementationFile, User
 } from '../../lib/util';
 
 type RepoFile = { path: string; content: string | AssetProxy };
@@ -116,7 +106,7 @@ export function getFolderFiles(
 
 export default class TestBackend implements Implementation {
   mediaFolder: string;
-  options: { initialWorkflowStatus?: string };
+  options: {};
 
   constructor(config: Config, options = {}) {
     this.options = options;
@@ -274,9 +264,5 @@ export default class TestBackend implements Implementation {
     });
 
     return Promise.resolve();
-  }
-
-  async getDeployPreview() {
-    return null;
   }
 }

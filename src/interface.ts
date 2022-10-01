@@ -103,7 +103,6 @@ export type User = Credentials & {
   backendName?: string;
   login?: string;
   name: string;
-  useOpenAuthoring?: boolean;
 };
 
 export interface ImplementationEntry {
@@ -175,11 +174,6 @@ export interface Implementation {
   persistEntry: (entry: Entry, opts: PersistOptions) => Promise<void>;
   persistMedia: (file: AssetProxy, opts: PersistOptions) => Promise<ImplementationMediaFile>;
   deleteFiles: (paths: string[], commitMessage: string) => Promise<void>;
-
-  getDeployPreview: (
-    collectionName: string,
-    slug: string,
-  ) => Promise<{ url: string; status: string } | null>;
 
   allEntriesByFolder?: (
     folder: string,
@@ -264,8 +258,6 @@ export type CmsCollectionFormatType =
   | 'json-frontmatter';
 
 export type CmsAuthScope = 'repo' | 'public_repo';
-
-export type CmsPublishMode = 'simple' | 'editorial_workflow';
 
 export type CmsSlugEncoding = 'unicode' | 'ascii';
 
@@ -582,8 +574,6 @@ export interface CmsCollection {
 export interface CmsBackend {
   name: CmsBackendType;
   auth_scope?: CmsAuthScope;
-  open_authoring?: boolean;
-  always_fork?: boolean;
   repo?: string;
   branch?: string;
   api_root?: string;
@@ -592,8 +582,6 @@ export interface CmsBackend {
   auth_endpoint?: string;
   app_id?: string;
   auth_type?: 'implicit' | 'pkce';
-  cms_label_prefix?: string;
-  squash_merges?: boolean;
   proxy_url?: string;
   commit_messages?: {
     create?: string;
@@ -601,7 +589,6 @@ export interface CmsBackend {
     delete?: string;
     uploadMedia?: string;
     deleteMedia?: string;
-    openAuthoring?: string;
   };
 }
 
@@ -623,12 +610,10 @@ export interface CmsConfig {
   site_url?: string;
   display_url?: string;
   logo_url?: string;
-  show_preview_links?: boolean;
   media_folder?: string;
   public_folder?: string;
   media_folder_relative?: boolean;
   media_library?: CmsMediaLibrary;
-  publish_mode?: CmsPublishMode;
   load_config_file?: boolean;
   integrations?: {
     hooks: string[];

@@ -6,7 +6,6 @@ import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
 import { logoutUser } from '../../actions/auth';
-import { loadDeployPreview } from '../../actions/deploys';
 import {
   changeDraftField,
   changeDraftFieldValidation,
@@ -23,14 +22,12 @@ import {
   retrieveLocalBackup,
 } from '../../actions/entries';
 import { loadScroll, toggleScroll } from '../../actions/scroll';
-import { EDITORIAL_WORKFLOW } from '../../constants/publishModes';
-import { selectDeployPreview, selectEntry } from '../../reducers';
+import { selectEntry } from '../../reducers';
 import { selectFields } from '../../reducers/collections';
 import { history, navigateToCollection, navigateToNewEntry } from '../../routing/history';
 import { Loader } from '../../ui';
 import confirm from '../UI/Confirm';
 import EditorInterface from './EditorInterface';
-import withWorkflow from './withWorkflow';
 
 export class Editor extends React.Component {
   static propTypes = {
@@ -50,14 +47,10 @@ export class Editor extends React.Component {
     slug: PropTypes.string,
     newEntry: PropTypes.bool.isRequired,
     displayUrl: PropTypes.string,
-    hasWorkflow: PropTypes.bool,
-    useOpenAuthoring: PropTypes.bool,
     isModification: PropTypes.bool,
     collectionEntriesLoaded: PropTypes.bool,
     logoutUser: PropTypes.func.isRequired,
     loadEntries: PropTypes.func.isRequired,
-    deployPreview: PropTypes.object,
-    loadDeployPreview: PropTypes.func.isRequired,
     currentStatus: PropTypes.string,
     user: PropTypes.object,
     location: PropTypes.shape({
@@ -218,10 +211,6 @@ export class Editor extends React.Component {
     const {
       persistEntry,
       collection,
-      currentStatus,
-      hasWorkflow,
-      loadEntry,
-      slug,
       createDraftDuplicateFromEntry,
       entryDraft,
     } = this.props;
@@ -233,8 +222,6 @@ export class Editor extends React.Component {
     if (createNew) {
       navigateToNewEntry(collection.get('name'));
       duplicate && createDraftDuplicateFromEntry(entryDraft.get('entry'));
-    } else if (slug && hasWorkflow && !currentStatus) {
-      loadEntry(collection, slug);
     }
   };
 
@@ -288,24 +275,17 @@ export class Editor extends React.Component {
       user,
       hasChanged,
       displayUrl,
-      hasWorkflow,
-      useOpenAuthoring,
       newEntry,
       isModification,
       currentStatus,
       logoutUser,
-      deployPreview,
-      loadDeployPreview,
       draftKey,
-      slug,
       t,
       editorBackLink,
       toggleScroll,
       scrollSyncEnabled,
       loadScroll,
     } = this.props;
-
-    const isPublished = !newEntry;
 
     if (entry && entry.get('error')) {
       return (
@@ -340,14 +320,10 @@ export class Editor extends React.Component {
         user={user}
         hasChanged={hasChanged}
         displayUrl={displayUrl}
-        hasWorkflow={hasWorkflow}
-        useOpenAuthoring={useOpenAuthoring}
         isNewEntry={newEntry}
         isModification={isModification}
         currentStatus={currentStatus}
         onLogoutClick={logoutUser}
-        deployPreview={deployPreview}
-        loadDeployPreview={opts => loadDeployPreview(collection, slug, entry, isPublished, opts)}
         editorBackLink={editorBackLink}
         toggleScroll={toggleScroll}
         scrollSyncEnabled={scrollSyncEnabled}
@@ -359,7 +335,7 @@ export class Editor extends React.Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const { collections, entryDraft, auth, config, entries, globalUI, scroll } = state;
+  const { collections, entryDraft, auth, config, entries, scroll } = state;
   const slug = ownProps.match.params[0];
   const collection = collections.get(ownProps.match.params.name);
   const collectionName = collection.get('name');
@@ -369,19 +345,12 @@ function mapStateToProps(state, ownProps) {
   const user = auth.user;
   const hasChanged = entryDraft.get('hasChanged');
   const displayUrl = config.display_url;
-  const hasWorkflow = config.publish_mode === EDITORIAL_WORKFLOW;
-  const useOpenAuthoring = globalUI.useOpenAuthoring;
   const isModification = entryDraft.getIn(['entry', 'isModification']);
   const collectionEntriesLoaded = !!entries.getIn(['pages', collectionName]);
   const publishedEntry = selectEntry(state, collectionName, slug);
-  const deployPreview = selectDeployPreview(state, collectionName, slug);
   const localBackup = entryDraft.get('localBackup');
   const draftKey = entryDraft.get('key');
   let editorBackLink = `/collections/${collectionName}`;
-  if (new URLSearchParams(ownProps.location.search).get('ref') === 'workflow') {
-    editorBackLink = `/workflow`;
-  }
-
   if (collection.has('files') && collection.get('files').size === 1) {
     editorBackLink = '/';
   }
@@ -406,11 +375,8 @@ function mapStateToProps(state, ownProps) {
     user,
     hasChanged,
     displayUrl,
-    hasWorkflow,
-    useOpenAuthoring,
     isModification,
     collectionEntriesLoaded,
-    deployPreview,
     localBackup,
     draftKey,
     publishedEntry,
@@ -424,7 +390,6 @@ const mapDispatchToProps = {
   changeDraftFieldValidation,
   loadEntry,
   loadEntries,
-  loadDeployPreview,
   loadLocalBackup,
   retrieveLocalBackup,
   persistLocalBackup,
@@ -439,4 +404,4 @@ const mapDispatchToProps = {
   loadScroll,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withWorkflow(translate()(Editor)));
+export default connect(mapStateToProps, mapDispatchToProps)(translate()(Editor));

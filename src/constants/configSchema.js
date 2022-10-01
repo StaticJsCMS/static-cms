@@ -135,8 +135,6 @@ function getConfigSchema() {
             examples: ['repo', 'public_repo'],
             enum: ['repo', 'public_repo'],
           },
-          cms_label_prefix: { type: 'string', minLength: 1 },
-          open_authoring: { type: 'boolean', examples: [true] },
         },
         required: ['name'],
       },
@@ -161,7 +159,6 @@ function getConfigSchema() {
       site_url: { type: 'string', examples: ['https://example.com'] },
       display_url: { type: 'string', examples: ['https://example.com'] },
       logo_url: { type: 'string', examples: ['https://example.com/images/logo.svg'] },
-      show_preview_links: { type: 'boolean' },
       media_folder: { type: 'string', examples: ['assets/uploads'] },
       public_folder: { type: 'string', examples: ['/uploads'] },
       media_folder_relative: { type: 'boolean' },
@@ -172,11 +169,6 @@ function getConfigSchema() {
           config: { type: 'object' },
         },
         required: ['name'],
-      },
-      publish_mode: {
-        type: 'string',
-        enum: ['simple', 'editorial_workflow'],
-        examples: ['editorial_workflow'],
       },
       slug: {
         type: 'object',

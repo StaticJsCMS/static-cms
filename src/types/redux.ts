@@ -4,7 +4,6 @@ import type { MediaFile as BackendMediaFile } from '../backend';
 import type { formatExtensions } from '../formats/formats';
 import type { CmsConfig, CmsSortableFields, SortDirection, ViewFilter, ViewGroup } from '../interface';
 import type { Auth } from '../reducers/auth';
-import type { Deploys } from '../reducers/deploys';
 import type { GlobalUI } from '../reducers/globalUI';
 import type { Medias } from '../reducers/medias';
 import type { ScrollState } from '../reducers/scroll';
@@ -56,8 +55,6 @@ export type CmsCollectionFormatType =
   | 'json-frontmatter';
 
 export type CmsAuthScope = 'repo' | 'public_repo';
-
-export type CmsPublishMode = 'simple' | 'editorial_workflow';
 
 export type CmsSlugEncoding = 'unicode' | 'ascii';
 
@@ -295,15 +292,12 @@ export interface CmsCollectionFile {
 export interface CmsBackend {
   name: CmsBackendType;
   auth_scope?: CmsAuthScope;
-  open_authoring?: boolean;
   repo?: string;
   branch?: string;
   api_root?: string;
   site_domain?: string;
   base_url?: string;
   auth_endpoint?: string;
-  cms_label_prefix?: string;
-  squash_merges?: boolean;
   proxy_url?: string;
   commit_messages?: {
     create?: string;
@@ -311,7 +305,6 @@ export interface CmsBackend {
     delete?: string;
     uploadMedia?: string;
     deleteMedia?: string;
-    openAuthoring?: string;
   };
 }
 
@@ -342,10 +335,8 @@ export type SlugConfig = StaticallyTypedRecord<{
 type BackendObject = {
   name: string;
   repo?: string | null;
-  open_authoring?: boolean;
   branch?: string;
   api_root?: string;
-  squash_merges?: boolean;
   use_graphql?: boolean;
   preview_context?: string;
   identity_url?: string;
@@ -361,7 +352,6 @@ export type Config = StaticallyTypedRecord<{
   backend: Backend;
   media_folder: string;
   public_folder: string;
-  publish_mode?: string;
   media_library: StaticallyTypedRecord<{ name: string }> & { name: string };
   locale?: string;
   slug: SlugConfig;
@@ -369,7 +359,6 @@ export type Config = StaticallyTypedRecord<{
   base_url?: string;
   site_id?: string;
   site_url?: string;
-  show_preview_links?: boolean;
   isFetching?: boolean;
   integrations: List<Integration>;
   collections: List<StaticallyTypedRecord<{ name: string }>>;
@@ -413,11 +402,6 @@ export type Entries = StaticallyTypedRecord<{
   filter: Filter;
   group: Group;
   viewStyle: string;
-}>;
-
-export type EditorialWorkflow = StaticallyTypedRecord<{
-  pages: Pages & PagesObject;
-  entities: Entities & EntitiesObject;
 }>;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -590,9 +574,7 @@ export interface State {
   config: CmsConfig;
   cursors: Cursors;
   collections: Collections;
-  deploys: Deploys;
   globalUI: GlobalUI;
-  editorialWorkflow: EditorialWorkflow;
   entries: Entries;
   entryDraft: EntryDraft;
   integrations: Integrations;
@@ -688,25 +670,5 @@ export interface EntriesAction extends Action<string> {
     | EntryDeletePayload;
   meta: {
     collection: string;
-  };
-}
-
-export interface EditorialWorkflowAction extends Action<string> {
-  payload?: CmsConfig & {
-    collection: string;
-    entry: { slug: string };
-  } & {
-    collection: string;
-    slug: string;
-  } & {
-    pages: [];
-    entries: { collection: string; slug: string }[];
-  } & {
-    collection: string;
-    entry: StaticallyTypedRecord<{ slug: string }>;
-  } & {
-    collection: string;
-    slug: string;
-    newStatus: string;
   };
 }

@@ -129,21 +129,6 @@ export const branch = gql`
   ${fragments.branch}
 `;
 
-export const openAuthoringBranches = gql`
-  query openAuthoringBranches($owner: String!, $name: String!, $refPrefix: String!) {
-    repository(owner: $owner, name: $name) {
-      ...RepositoryParts
-      refs(refPrefix: $refPrefix, last: 100) {
-        nodes {
-          ...BranchParts
-        }
-      }
-    }
-  }
-  ${fragments.repository}
-  ${fragments.branch}
-`;
-
 export const repository = gql`
   query repository($owner: String!, $name: String!) {
     repository(owner: $owner, name: $name) {
@@ -151,52 +136,6 @@ export const repository = gql`
     }
   }
   ${fragments.repository}
-`;
-
-const pullRequestQueryPart = `
-pullRequest(number: $number) {
-  ...PullRequestParts
-}
-`;
-
-export const pullRequest = gql`
-  query pullRequest($owner: String!, $name: String!, $number: Int!) {
-    repository(owner: $owner, name: $name) {
-      id
-      ${pullRequestQueryPart}
-    }
-  }
-  ${fragments.pullRequest}
-`;
-
-export const pullRequests = gql`
-  query pullRequests($owner: String!, $name: String!, $head: String, $states: [PullRequestState!]) {
-    repository(owner: $owner, name: $name) {
-      id
-      pullRequests(last: 100, headRefName: $head, states: $states) {
-        nodes {
-          ...PullRequestParts
-        }
-      }
-    }
-  }
-  ${fragments.pullRequest}
-`;
-
-export const pullRequestAndBranch = gql`
-  query pullRequestAndBranch($owner: String!, $name: String!, $originRepoOwner: String!, $originRepoName: String!, $qualifiedName: String!, $number: Int!) {
-    repository(owner: $owner, name: $name) {
-      ...RepositoryParts
-      ${branchQueryPart}
-    }
-    origin: repository(owner: $originRepoOwner, name: $originRepoName) {
-      ...RepositoryParts
-      ${pullRequestQueryPart}
-    }
-  }
-  ${fragments.repository}
-  ${fragments.branch}
-  ${fragments.pullRequest}
 `;
 
 export const fileSha = gql`

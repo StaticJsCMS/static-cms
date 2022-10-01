@@ -1,40 +1,13 @@
 import { flow, get } from 'lodash';
 import { dirname } from 'path';
-import { oneLine } from 'common-tags';
-import { parse } from 'what-the-diff';
 
 import {
-  localForage,
-  unsentRequest,
-  responseParser,
-  then,
-  basename,
-  Cursor,
-  APIError,
-  readFile,
-  CMS_BRANCH_PREFIX,
-  generateContentKey,
-  labelToStatus,
-  isCMSLabel,
-  EditorialWorkflowError,
-  statusToLabel,
-  DEFAULT_PR_BODY,
-  MERGE_COMMIT_MESSAGE,
-  PreviewState,
-  parseContentKey,
-  branchFromContentKey,
-  requestWithBackoff,
-  readFileMetadata,
-  throwOnConflictingBranches,
+  APIError, basename,
+  Cursor, localForage, readFile, readFileMetadata, requestWithBackoff, responseParser,
+  then, throwOnConflictingBranches, unsentRequest
 } from '../../lib/util';
 
-import type {
-  ApiRequest,
-  AssetProxy,
-  PersistOptions,
-  FetchError,
-  DataFile,
-} from '../../lib/util';
+import type { ApiRequest, AssetProxy, DataFile, FetchError, PersistOptions } from '../../lib/util';
 
 interface Config {
   apiRoot?: string;
@@ -43,105 +16,12 @@ interface Config {
   repo?: string;
   requestFunction?: (req: ApiRequest) => Promise<Response>;
   hasWriteAccess?: () => Promise<boolean>;
-  squashMerges: boolean;
-  initialWorkflowStatus: string;
-  cmsLabelPrefix: string;
 }
 
 interface CommitAuthor {
   name: string;
   email: string;
 }
-
-enum BitBucketPullRequestState {
-  MERGED = 'MERGED',
-  SUPERSEDED = 'SUPERSEDED',
-  OPEN = 'OPEN',
-  DECLINED = 'DECLINED',
-}
-
-type BitBucketPullRequest = {
-  description: string;
-  id: number;
-  title: string;
-  state: BitBucketPullRequestState;
-  updated_on: string;
-  summary: {
-    raw: string;
-  };
-  source: {
-    commit: {
-      hash: string;
-    };
-    branch: {
-      name: string;
-    };
-  };
-  destination: {
-    commit: {
-      hash: string;
-    };
-    branch: {
-      name: string;
-    };
-  };
-  author: BitBucketUser;
-};
-
-type BitBucketPullRequests = {
-  size: number;
-  page: number;
-  pagelen: number;
-  next: string;
-  preview: string;
-  values: BitBucketPullRequest[];
-};
-
-type BitBucketPullComment = {
-  content: {
-    raw: string;
-  };
-};
-
-type BitBucketPullComments = {
-  size: number;
-  page: number;
-  pagelen: number;
-  next: string;
-  preview: string;
-  values: BitBucketPullComment[];
-};
-
-enum BitBucketPullRequestStatusState {
-  Successful = 'SUCCESSFUL',
-  Failed = 'FAILED',
-  InProgress = 'INPROGRESS',
-  Stopped = 'STOPPED',
-}
-
-type BitBucketPullRequestStatus = {
-  uuid: string;
-  name: string;
-  key: string;
-  refname: string;
-  url: string;
-  description: string;
-  state: BitBucketPullRequestStatusState;
-};
-
-type BitBucketPullRequestStatues = {
-  size: number;
-  page: number;
-  pagelen: number;
-  next: string;
-  preview: string;
-  values: BitBucketPullRequestStatus[];
-};
-
-type DeleteEntry = {
-  path: string;
-  delete: true;
-};
 
 type BitBucketFile = {
   id: string;
@@ -207,9 +87,6 @@ export default class API {
   requestFunction: (req: ApiRequest) => Promise<Response>;
   repoURL: string;
   commitAuthor?: CommitAuthor;
-  mergeStrategy: string;
-  initialWorkflowStatus: string;
-  cmsLabelPrefix: string;
 
   constructor(config: Config) {
     this.apiRoot = config.apiRoot || 'https://api.bitbucket.org/2.0';
@@ -219,9 +96,6 @@ export default class API {
     // Allow overriding this.hasWriteAccess
     this.hasWriteAccess = config.hasWriteAccess || this.hasWriteAccess;
     this.repoURL = this.repo ? `/repositories/${this.repo}` : '';
-    this.mergeStrategy = config.squashMerges ? 'squash' : 'merge_commit';
-    this.initialWorkflowStatus = config.initialWorkflowStatus;
-    this.cmsLabelPrefix = config.cmsLabelPrefix;
   }
 
   buildRequest = (req: ApiRequest) => {
@@ -508,87 +382,7 @@ export default class API {
 
   async persistFiles(dataFiles: DataFile[], mediaFiles: AssetProxy[], options: PersistOptions) {
     const files = [...dataFiles, ...mediaFiles];
-    if (options.useWorkflow) {
-      const slug = dataFiles[0].slug;
-      return this.editorialWorkflowGit(files, slug, options);
-    } else {
-      return this.uploadFiles(files, { commitMessage: options.commitMessage, branch: this.branch });
-    }
-  }
-
-  async addPullRequestComment(pullRequest: BitBucketPullRequest, comment: string) {
-    await this.requestJSON({
-      method: 'POST',
-      url: `${this.repoURL}/pullrequests/${pullRequest.id}/comments`,
-      headers: { 'Content-Type': APPLICATION_JSON },
-      body: JSON.stringify({
-        content: {
-          raw: comment,
-        },
-      }),
-    });
-  }
-
-  async getPullRequestLabel(id: number) {
-    const comments: BitBucketPullComments = await this.requestJSON({
-      url: `${this.repoURL}/pullrequests/${id}/comments`,
-      params: {
-        pagelen: 100,
-      },
-    });
-    return comments.values.map(c => c.content.raw)[comments.values.length - 1];
-  }
-
-  async createPullRequest(branch: string, commitMessage: string, status: string) {
-    const pullRequest: BitBucketPullRequest = await this.requestJSON({
-      method: 'POST',
-      url: `${this.repoURL}/pullrequests`,
-      headers: { 'Content-Type': APPLICATION_JSON },
-      body: JSON.stringify({
-        title: commitMessage,
-        source: {
-          branch: {
-            name: branch,
-          },
-        },
-        destination: {
-          branch: {
-            name: this.branch,
-          },
-        },
-        description: DEFAULT_PR_BODY,
-        close_source_branch: true,
-      }),
-    });
-    // use comments for status labels
-    await this.addPullRequestComment(pullRequest, statusToLabel(status, this.cmsLabelPrefix));
-  }
-
-  async getDifferences(source: string, destination: string = this.branch) {
-    if (source === destination) {
-      return [];
-    }
-    const rawDiff = await this.requestText({
-      url: `${this.repoURL}/diff/${source}..${destination}`,
-      params: {
-        binary: false,
-      },
-    });
-
-    const diffs = parse(rawDiff).map(d => {
-      const oldPath = d.oldPath?.replace(/b\//, '') || '';
-      const newPath = d.newPath?.replace(/b\//, '') || '';
-      const path = newPath || (oldPath as string);
-      return {
-        oldPath,
-        newPath,
-        status: d.status,
-        newFile: d.status === 'added',
-        path,
-        binary: d.binary || /.svg$/.test(path),
-      };
-    });
-    return diffs;
+    return this.uploadFiles(files, { commitMessage: options.commitMessage, branch: this.branch });
   }
 
   deleteFiles = (paths: string[], message: string) => {
@@ -608,80 +402,4 @@ export default class API {
       `${this.repoURL}/src`,
     );
   };
-
-  async getPullRequests(sourceBranch?: string) {
-    const sourceQuery = sourceBranch
-      ? `source.branch.name = "${sourceBranch}"`
-      : `source.branch.name ~ "${CMS_BRANCH_PREFIX}/"`;
-
-    const pullRequests: BitBucketPullRequests = await this.requestJSON({
-      url: `${this.repoURL}/pullrequests`,
-      params: {
-        pagelen: 50,
-        q: oneLine`
-        source.repository.full_name = "${this.repo}"
-        AND state = "${BitBucketPullRequestState.OPEN}"
-        AND destination.branch.name = "${this.branch}"
-        AND comment_count > 0
-        AND ${sourceQuery}
-        `,
-      },
-    });
-
-    const labels = await Promise.all(
-      pullRequests.values.map(pr => this.getPullRequestLabel(pr.id)),
-    );
-
-    return pullRequests.values.filter((_, index) => isCMSLabel(labels[index], this.cmsLabelPrefix));
-  }
-
-  async getBranchPullRequest(branch: string) {
-    const pullRequests = await this.getPullRequests(branch);
-    if (pullRequests.length <= 0) {
-      throw new EditorialWorkflowError('content is not under editorial workflow', true);
-    }
-
-    return pullRequests[0];
-  }
-
-  async declinePullRequest(pullRequest: BitBucketPullRequest) {
-    await this.requestJSON({
-      method: 'POST',
-      url: `${this.repoURL}/pullrequests/${pullRequest.id}/decline`,
-    });
-  }
-
-  async deleteBranch(branch: string) {
-    await this.request({
-      method: 'DELETE',
-      url: `${this.repoURL}/refs/branches/${branch}`,
-    });
-  }
-
-  async getPullRequestStatuses(pullRequest: BitBucketPullRequest) {
-    const statuses: BitBucketPullRequestStatues = await this.requestJSON({
-      url: `${this.repoURL}/pullrequests/${pullRequest.id}/statuses`,
-      params: {
-        pagelen: 100,
-      },
-    });
-
-    return statuses.values;
-  }
-
-  async getStatuses(collectionName: string, slug: string) {
-    const contentKey = generateContentKey(collectionName, slug);
-    const branch = branchFromContentKey(contentKey);
-    const pullRequest = await this.getBranchPullRequest(branch);
-    const statuses = await this.getPullRequestStatuses(pullRequest);
-
-    return statuses.map(({ key, state, url }) => ({
-      context: key,
-      state:
-        state === BitBucketPullRequestStatusState.Successful
-          ? PreviewState.Success
-          : PreviewState.Other,
-      target_url: url,
-    }));
-  }
 }

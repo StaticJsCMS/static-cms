@@ -28,7 +28,7 @@ local_backend: true
 4. Start your local development server (e.g. run `gatsby develop`).
 5. Open `http://localhost:<port>/admin` to verify that your can administer your content locally. Replace `<port>` with the port of your local development server. For example Gatsby's default port is `8000`
 
-**Note:** `netlify-cms-proxy-server` runs an unauthenticated express server. As any client can send requests to the server, it should only be used for local development. Also note that `editorial_workflow` is not supported in this environment.
+**Note:** `netlify-cms-proxy-server` runs an unauthenticated express server. As any client can send requests to the server, it should only be used for local development.
 
 ### Configure the Simple CMS proxy server port number
 
@@ -214,13 +214,6 @@ backend:
   # optional, defaults to 'https://gitlab.com/api/graphql'. Can be used to configure a self hosted GitLab instance.
   graphql_api_root: https://my-self-hosted-gitlab.com/api/graphql
 ```
-## Open Authoring
-
-When using the [GitHub backend](/docs/github-backend), you can use Simple CMS to accept contributions from GitHub users without giving them access to your repository. When they make changes in the CMS, the CMS forks your repository for them behind the scenes, and all the changes are made to the fork. When the contributor is ready to submit their changes, they can set their draft as ready for review in the CMS. This triggers a pull request to your repository, which you can merge using the GitHub UI.
-
-At the same time, any contributors who *do* have write access to the repository can continue to use Simple CMS normally.
-
-More details and setup instructions can be found on [the Open Authoring docs page](/docs/open-authoring).
 
 ## Folder Collections Path
 
@@ -479,7 +472,6 @@ backend:
     delete: Delete {{collection}} “{{slug}}”
     uploadMedia: Upload “{{path}}”
     deleteMedia: Delete “{{path}}”
-    openAuthoring: '{{message}}'
 ```
 
 Simple CMS generates the following commit types:
@@ -491,7 +483,6 @@ Simple CMS generates the following commit types:
 | `delete`        | An existing entry is deleted             | `slug`, `path`, `collection`, `author-login`, `author-name` |
 | `uploadMedia`   | A media file is uploaded                 | `path`, `author-login`, `author-name`                       |
 | `deleteMedia`   | A media file is deleted                  | `path`, `author-login`, `author-name`                       |
-| `openAuthoring` | A commit is made via a forked repository | `message`, `author-login`, `author-name`                    |
 
 Template tags produce the following output:
 

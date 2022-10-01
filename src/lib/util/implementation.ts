@@ -63,17 +63,13 @@ export type User = Credentials & {
   backendName?: string;
   login?: string;
   name: string;
-  useOpenAuthoring?: boolean;
 };
 
 export type Config = {
   backend: {
     repo?: string | null;
-    open_authoring?: boolean;
-    always_fork?: boolean;
     branch?: string;
     api_root?: string;
-    squash_merges?: boolean;
     use_graphql?: boolean;
     graphql_api_root?: string;
     preview_context?: string;
@@ -84,7 +80,6 @@ export type Config = {
     proxy_url?: string;
     auth_type?: string;
     app_id?: string;
-    cms_label_prefix?: string;
     api_version?: string;
   };
   media_folder: string;

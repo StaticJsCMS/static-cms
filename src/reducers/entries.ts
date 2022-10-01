@@ -799,8 +799,7 @@ export function selectMediaFilePublicPath(
 
 export function selectEditingDraft(state: EntryDraft) {
   const entry = state.get('entry');
-  const workflowDraft = entry && !entry.isEmpty();
-  return workflowDraft;
+  return entry && !entry.isEmpty();
 }
 
 export default entries;

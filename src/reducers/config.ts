@@ -1,12 +1,11 @@
 import { produce } from 'immer';
 
 import { CONFIG_FAILURE, CONFIG_REQUEST, CONFIG_SUCCESS } from '../actions/config';
-import { EDITORIAL_WORKFLOW } from '../constants/publishModes';
 
 import type { ConfigAction } from '../actions/config';
-import { CmsConfig } from '../interface';
+import type { CmsConfig } from '../interface';
 
-interface ConfigState extends Partial<CmsConfig> {
+export interface ConfigState extends Partial<CmsConfig> {
   isFetching: boolean;
   error?: string;
 }
@@ -34,10 +33,6 @@ const config = produce((state: ConfigState, action: ConfigAction) => {
 
 export function selectLocale(state: CmsConfig) {
   return state.locale || 'en';
-}
-
-export function selectUseWorkflow(state: CmsConfig) {
-  return state.publish_mode === EDITORIAL_WORKFLOW;
 }
 
 export default config;

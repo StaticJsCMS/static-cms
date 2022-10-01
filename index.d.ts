@@ -49,8 +49,6 @@ declare module '@simplecms/simple-cms-core' {
 
   export type CmsAuthScope = 'repo' | 'public_repo';
 
-  export type CmsPublishMode = 'simple' | 'editorial_workflow';
-
   export type CmsSlugEncoding = 'unicode' | 'ascii';
 
   export interface CmsI18nConfig {
@@ -277,8 +275,6 @@ declare module '@simplecms/simple-cms-core' {
     fields: CmsField[];
     label_singular?: string;
     description?: string;
-    preview_path?: string;
-    preview_path_date_field?: string;
     i18n?: boolean | CmsI18nConfig;
     media_folder?: string;
     public_folder?: string;
@@ -322,8 +318,6 @@ declare module '@simplecms/simple-cms-core' {
     identifier_field?: string;
     summary?: string;
     slug?: string;
-    preview_path?: string;
-    preview_path_date_field?: string;
     create?: boolean;
     delete?: boolean;
     hide?: boolean;
@@ -359,8 +353,6 @@ declare module '@simplecms/simple-cms-core' {
   export interface CmsBackend {
     name: CmsBackendType;
     auth_scope?: CmsAuthScope;
-    open_authoring?: boolean;
-    always_fork?: boolean;
     repo?: string;
     branch?: string;
     api_root?: string;
@@ -369,8 +361,6 @@ declare module '@simplecms/simple-cms-core' {
     auth_endpoint?: string;
     app_id?: string;
     auth_type?: 'implicit' | 'pkce';
-    cms_label_prefix?: string;
-    squash_merges?: boolean;
     proxy_url?: string;
     commit_messages?: {
       create?: string;
@@ -378,7 +368,6 @@ declare module '@simplecms/simple-cms-core' {
       delete?: string;
       uploadMedia?: string;
       deleteMedia?: string;
-      openAuthoring?: string;
     };
   }
 
@@ -400,12 +389,10 @@ declare module '@simplecms/simple-cms-core' {
     site_url?: string;
     display_url?: string;
     logo_url?: string;
-    show_preview_links?: boolean;
     media_folder?: string;
     public_folder?: string;
     media_folder_relative?: boolean;
     media_library?: CmsMediaLibrary;
-    publish_mode?: CmsPublishMode;
     load_config_file?: boolean;
     integrations?: {
       hooks: string[];
@@ -663,7 +650,6 @@ declare module '@simplecms/simple-cms-core' {
     backendName?: string;
     login?: string;
     name: string;
-    useOpenAuthoring?: boolean;
   };
 
   export interface ImplementationEntry {
@@ -756,11 +742,6 @@ declare module '@simplecms/simple-cms-core' {
     persistEntry: (entry: Entry, opts: PersistOptions) => Promise<void>;
     persistMedia: (file: AssetProxy, opts: PersistOptions) => Promise<ImplementationMediaFile>;
     deleteFiles: (paths: string[], commitMessage: string) => Promise<void>;
-
-    getDeployPreview: (
-      collectionName: string,
-      slug: string,
-    ) => Promise<{ url: string; status: string } | null>;
 
     allEntriesByFolder?: (
       folder: string,

@@ -1,52 +1,19 @@
-import semaphore from 'semaphore';
-import { trimStart } from 'lodash';
 import { stripIndent } from 'common-tags';
+import { trimStart } from 'lodash';
+import semaphore from 'semaphore';
 
-import {
-  CURSOR_COMPATIBILITY_SYMBOL,
-  filterByExtension,
-  unsentRequest,
-  basename,
-  getBlobSHA,
-  entriesByFolder,
-  entriesByFiles,
-  getMediaDisplayURL,
-  getMediaAsBlob,
-  runWithLock,
-  asyncLock,
-  getPreviewStatus,
-  getLargeMediaPatternsFromGitAttributesFile,
-  getPointerFileForMediaFileObj,
-  getLargeMediaFilteredMediaFiles,
-  blobToFileObj,
-  contentKeyFromBranch,
-  generateContentKey,
-  localForage,
-  allEntriesByFolder,
-  AccessTokenError,
-  branchFromContentKey,
-} from '../../lib/util';
 import { NetlifyAuthenticator } from '../../lib/auth';
-import AuthenticationPage from './AuthenticationPage';
+import {
+  AccessTokenError, allEntriesByFolder, asyncLock, basename, blobToFileObj, branchFromContentKey, CURSOR_COMPATIBILITY_SYMBOL, entriesByFiles, entriesByFolder, filterByExtension, generateContentKey, getBlobSHA, getLargeMediaFilteredMediaFiles, getLargeMediaPatternsFromGitAttributesFile, getMediaAsBlob, getMediaDisplayURL, getPointerFileForMediaFileObj, localForage, runWithLock, unsentRequest
+} from '../../lib/util';
 import API, { API_NAME } from './API';
+import AuthenticationPage from './AuthenticationPage';
 import { GitLfsClient } from './git-lfs-client';
 
-import type {
-  Entry,
-  ApiRequest,
-  Cursor,
-  AssetProxy,
-  PersistOptions,
-  DisplayURL,
-  Implementation,
-  User,
-  Credentials,
-  Config,
-  ImplementationFile,
-  AsyncLock,
-  FetchError,
-} from '../../lib/util';
 import type { Semaphore } from 'semaphore';
+import type {
+  ApiRequest, AssetProxy, AsyncLock, Config, Credentials, Cursor, DisplayURL, Entry, FetchError, Implementation, ImplementationFile, PersistOptions, User
+} from '../../lib/util';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 
@@ -68,7 +35,6 @@ export default class BitbucketBackend implements Implementation {
     proxied: boolean;
     API: API | null;
     updateUserCredentials: (args: { token: string; refresh_token: string }) => Promise<null>;
-    initialWorkflowStatus: string;
   };
   repo: string;
   branch: string;
@@ -81,9 +47,6 @@ export default class BitbucketBackend implements Implementation {
   refreshedTokenPromise?: Promise<string>;
   authenticator?: NetlifyAuthenticator;
   _mediaDisplayURLSem?: Semaphore;
-  squashMerges: boolean;
-  cmsLabelPrefix: string;
-  previewContext: string;
   largeMediaURL: string;
   _largeMediaClientPromise?: Promise<GitLfsClient>;
   authType: string;
@@ -93,7 +56,6 @@ export default class BitbucketBackend implements Implementation {
       proxied: false,
       API: null,
       updateUserCredentials: async () => null,
-      initialWorkflowStatus: '',
       ...options,
     };
 
@@ -117,9 +79,6 @@ export default class BitbucketBackend implements Implementation {
       config.backend.large_media_url || `https://bitbucket.org/${config.backend.repo}/info/lfs`;
     this.token = '';
     this.mediaFolder = config.media_folder;
-    this.squashMerges = config.backend.squash_merges || false;
-    this.cmsLabelPrefix = config.backend.cms_label_prefix || '';
-    this.previewContext = config.backend.preview_context || '';
     this.lock = asyncLock();
     this.authType = config.backend.auth_type || '';
   }
@@ -171,9 +130,6 @@ export default class BitbucketBackend implements Implementation {
       requestFunction: this.apiRequestFunction,
       branch: this.branch,
       repo: this.repo,
-      squashMerges: this.squashMerges,
-      cmsLabelPrefix: this.cmsLabelPrefix,
-      initialWorkflowStatus: this.options.initialWorkflowStatus,
     });
   }
 
@@ -195,9 +151,6 @@ export default class BitbucketBackend implements Implementation {
       branch: this.branch,
       repo: this.repo,
       apiRoot: this.apiRoot,
-      squashMerges: this.squashMerges,
-      cmsLabelPrefix: this.cmsLabelPrefix,
-      initialWorkflowStatus: this.options.initialWorkflowStatus,
     });
 
     const isCollab = await this.api.hasWriteAccess().catch(error => {
@@ -539,21 +492,5 @@ export default class BitbucketBackend implements Implementation {
     const contentKey = generateContentKey(collection, slug);
     const branch = branchFromContentKey(contentKey);
     return branch;
-  }
-
-  async getDeployPreview(collection: string, slug: string) {
-    try {
-      const statuses = await this.api!.getStatuses(collection, slug);
-      const deployStatus = getPreviewStatus(statuses, this.previewContext);
-
-      if (deployStatus) {
-        const { target_url: url, state } = deployStatus;
-        return { url, status: state };
-      } else {
-        return null;
-      }
-    } catch (e) {
-      return null;
-    }
   }
 }

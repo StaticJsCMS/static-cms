@@ -13,7 +13,6 @@ import { loginUser, logoutUser } from '../../actions/auth';
 import { createNewEntry } from '../../actions/collections';
 import { openMediaLibrary } from '../../actions/mediaLibrary';
 import { currentBackend } from '../../backend';
-import { EDITORIAL_WORKFLOW, SIMPLE } from '../../constants/publishModes';
 import { history } from '../../routing/history';
 import { colors, Loader } from '../../ui';
 import Collection from '../Collection/Collection';
@@ -23,7 +22,6 @@ import Page from '../page/Page';
 import Snackbars from '../snackbar/Snackbars';
 import { Alert } from '../UI/Alert';
 import { Confirm } from '../UI/Confirm';
-import Workflow from '../Workflow/Workflow';
 import Header from './Header';
 import NotFoundPage from './NotFoundPage';
 
@@ -142,7 +140,6 @@ class App extends React.Component {
     logoutUser: PropTypes.func.isRequired,
     user: PropTypes.object,
     isFetching: PropTypes.bool.isRequired,
-    publishMode: PropTypes.oneOf([SIMPLE, EDITORIAL_WORKFLOW]),
     siteId: PropTypes.string,
     useMediaLibrary: PropTypes.bool,
     openMediaLibrary: PropTypes.func.isRequired,
@@ -210,7 +207,6 @@ class App extends React.Component {
       collections,
       logoutUser,
       isFetching,
-      publishMode,
       useMediaLibrary,
       openMediaLibrary,
       t,
@@ -235,7 +231,6 @@ class App extends React.Component {
     }
 
     const defaultPath = getDefaultPath(collections);
-    const hasWorkflow = publishMode === EDITORIAL_WORKFLOW;
 
     return (
       <ScrollSync enabled={scrollSyncEnabled}>
@@ -248,7 +243,6 @@ class App extends React.Component {
               onCreateEntryClick={createNewEntry}
               onLogoutClick={logoutUser}
               openMediaLibrary={openMediaLibrary}
-              hasWorkflow={hasWorkflow}
               displayUrl={config.display_url}
               isTestRepo={config.backend.name === 'test-repo'}
               showMediaButton={showMediaButton}
@@ -270,7 +264,6 @@ class App extends React.Component {
                   from="/error=access_denied&error_description=Signups+not+allowed+for+this+instance"
                   to={defaultPath}
                 />
-                {hasWorkflow ? <Route path="/workflow" component={Workflow} /> : null}
                 <RouteInCollectionDefault
                   exact
                   collections={collections}
@@ -327,7 +320,6 @@ function mapStateToProps(state) {
   const { auth, config, collections, globalUI, mediaLibrary, scroll } = state;
   const user = auth.user;
   const isFetching = globalUI.isFetching;
-  const publishMode = config.publish_mode;
   const useMediaLibrary = !mediaLibrary.get('externalLibrary');
   const showMediaButton = mediaLibrary.get('showMediaButton');
   const scrollSyncEnabled = scroll.isScrolling;
@@ -337,7 +329,6 @@ function mapStateToProps(state) {
     collections,
     user,
     isFetching,
-    publishMode,
     showMediaButton,
     useMediaLibrary,
     scrollSyncEnabled,

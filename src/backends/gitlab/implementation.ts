@@ -1,44 +1,40 @@
+import { stripIndent } from 'common-tags';
+import { trim } from 'lodash';
 import trimStart from 'lodash/trimStart';
 import semaphore from 'semaphore';
-import { trim } from 'lodash';
-import { stripIndent } from 'common-tags';
 
 import {
-  CURSOR_COMPATIBILITY_SYMBOL,
-  basename,
-  entriesByFolder,
-  entriesByFiles,
-  getMediaDisplayURL,
-  getMediaAsBlob,
-  getPreviewStatus,
-  asyncLock,
-  runWithLock,
-  getBlobSHA,
-  blobToFileObj,
-  contentKeyFromBranch,
-  generateContentKey,
-  localForage,
   allEntriesByFolder,
+  asyncLock,
+  basename,
+  blobToFileObj,
+  CURSOR_COMPATIBILITY_SYMBOL,
+  entriesByFiles,
+  entriesByFolder,
   filterByExtension,
-  branchFromContentKey,
+  getBlobSHA,
+  getMediaAsBlob,
+  getMediaDisplayURL,
+  localForage,
+  runWithLock,
 } from '../../lib/util';
-import AuthenticationPage from './AuthenticationPage';
 import API, { API_NAME } from './API';
+import AuthenticationPage from './AuthenticationPage';
 
-import type {
-  Entry,
-  AssetProxy,
-  PersistOptions,
-  Cursor,
-  Implementation,
-  DisplayURL,
-  User,
-  Credentials,
-  Config,
-  ImplementationFile,
-  AsyncLock,
-} from '../../lib/util';
 import type { Semaphore } from 'semaphore';
+import type {
+  AssetProxy,
+  AsyncLock,
+  Config,
+  Credentials,
+  Cursor,
+  DisplayURL,
+  Entry,
+  Implementation,
+  ImplementationFile,
+  PersistOptions,
+  User,
+} from '../../lib/util';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 
@@ -48,16 +44,12 @@ export default class GitLab implements Implementation {
   options: {
     proxied: boolean;
     API: API | null;
-    initialWorkflowStatus: string;
   };
   repo: string;
   branch: string;
   apiRoot: string;
   token: string | null;
-  squashMerges: boolean;
-  cmsLabelPrefix: string;
   mediaFolder: string;
-  previewContext: string;
   useGraphQL: boolean;
   graphQLAPIRoot: string;
 
@@ -67,7 +59,6 @@ export default class GitLab implements Implementation {
     this.options = {
       proxied: false,
       API: null,
-      initialWorkflowStatus: '',
       ...options,
     };
 
@@ -84,10 +75,7 @@ export default class GitLab implements Implementation {
     this.branch = config.backend.branch || 'main';
     this.apiRoot = config.backend.api_root || 'https://gitlab.com/api/v4';
     this.token = '';
-    this.squashMerges = config.backend.squash_merges || false;
-    this.cmsLabelPrefix = config.backend.cms_label_prefix || '';
     this.mediaFolder = config.media_folder;
-    this.previewContext = config.backend.preview_context || '';
     this.useGraphQL = config.backend.use_graphql || false;
     this.graphQLAPIRoot = config.backend.graphql_api_root || 'https://gitlab.com/api/graphql';
     this.lock = asyncLock();
@@ -125,9 +113,6 @@ export default class GitLab implements Implementation {
       branch: this.branch,
       repo: this.repo,
       apiRoot: this.apiRoot,
-      squashMerges: this.squashMerges,
-      cmsLabelPrefix: this.cmsLabelPrefix,
-      initialWorkflowStatus: this.options.initialWorkflowStatus,
       useGraphQL: this.useGraphQL,
       graphQLAPIRoot: this.graphQLAPIRoot,
     });
@@ -213,7 +198,6 @@ export default class GitLab implements Implementation {
       getDefaultBranch: () =>
         this.api!.getDefaultBranch().then(b => ({ name: b.name, sha: b.commit.id })),
       isShaExistsInBranch: this.api!.isShaExistsInBranch.bind(this.api!),
-      getDifferences: (to, from) => this.api!.getDifferences(to, from),
       getFileId: path => this.api!.getFileId(path, this.branch),
       filterFile: file => this.filterFile(folder, file, extension, depth),
       customFetch: this.useGraphQL ? files => this.api!.readFilesGraphQL(files) : undefined,
@@ -331,27 +315,5 @@ export default class GitLab implements Implementation {
         cursor: newCursor,
       };
     });
-  }
-
-  getBranch(collection: string, slug: string) {
-    const contentKey = generateContentKey(collection, slug);
-    const branch = branchFromContentKey(contentKey);
-    return branch;
-  }
-
-  async getDeployPreview(collection: string, slug: string) {
-    try {
-      const statuses = await this.api!.getStatuses(collection, slug);
-      const deployStatus = getPreviewStatus(statuses, this.previewContext);
-
-      if (deployStatus) {
-        const { target_url: url, state } = deployStatus;
-        return { url, status: state };
-      } else {
-        return null;
-      }
-    } catch (e) {
-      return null;
-    }
   }
 }

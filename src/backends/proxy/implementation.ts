@@ -1,19 +1,12 @@
 import {
-  EditorialWorkflowError,
-  APIError,
-  unsentRequest,
-  blobToFileObj,
+  APIError, blobToFileObj, unsentRequest
 } from '../../lib/util';
 import AuthenticationPage from './AuthenticationPage';
 
 import type {
-  Entry,
-  AssetProxy,
-  PersistOptions,
-  User,
-  Config,
-  Implementation,
-  ImplementationFile
+  AssetProxy, Config, Entry, Implementation,
+  ImplementationFile, PersistOptions,
+  User
 } from '../../lib/util';
 
 async function serializeAsset(assetProxy: AssetProxy) {
@@ -49,9 +42,8 @@ function deserializeMediaFile({ id, content, encoding, path, name }: MediaFile) 
 export default class ProxyBackend implements Implementation {
   proxyUrl: string;
   mediaFolder: string;
-  options: { initialWorkflowStatus?: string };
+  options: {};
   branch: string;
-  cmsLabelPrefix?: string;
 
   constructor(config: Config, options = {}) {
     if (!config.backend.proxy_url) {
@@ -62,7 +54,6 @@ export default class ProxyBackend implements Implementation {
     this.proxyUrl = config.backend.proxy_url;
     this.mediaFolder = config.media_folder;
     this.options = options;
-    this.cmsLabelPrefix = config.backend.cms_label_prefix;
   }
 
   isGitBackend() {
@@ -138,8 +129,7 @@ export default class ProxyBackend implements Implementation {
         branch: this.branch,
         dataFiles: entry.dataFiles,
         assets,
-        options: { ...options, status: options.status || this.options.initialWorkflowStatus },
-        cmsLabelPrefix: this.cmsLabelPrefix,
+        options: { ...options },
       },
     });
   }
@@ -175,13 +165,6 @@ export default class ProxyBackend implements Implementation {
     return this.request({
       action: 'deleteFiles',
       params: { branch: this.branch, paths, options: { commitMessage } },
-    });
-  }
-
-  getDeployPreview(collection: string, slug: string) {
-    return this.request({
-      action: 'getDeployPreview',
-      params: { branch: this.branch, collection, slug },
     });
   }
 }
