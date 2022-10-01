@@ -7,7 +7,7 @@
 
 </div>
 
-[simplecms.github.io/simple-cms](https://www.simplecms.github.io/simple-cms/) 
+[simplecms.github.io/simple-cms](https://simplecms.github.io/simple-cms/) 
 
 A CMS for static site generators. Give users a simple way to edit
 and add content to any site built with a static site generator.
@@ -26,14 +26,14 @@ tweak the main layout of the CMS a bit to fit your own site.
 When a user navigates to `/admin/` they'll be prompted to log in, and once authenticated
 they'll be able to create new content or edit existing content.
 
-Read more about Simple CMS [Core Concepts](https://www.simplecms.github.io/simple-cms/docs/intro/).
+Read more about Simple CMS [Core Concepts](https://simplecms.github.io/simple-cms/docs/intro/).
 
 # Installation and Configuration
 
 The Simple CMS can be used in two different ways.
 
 * A Quick and easy install, that requires you to create a single HTML file and a configuration file. All the CMS JavaScript and CSS are loaded from a CDN.
-  To learn more about this installation method, refer to the [Quick Start Guide](https://www.simplecms.github.io/simple-cms/docs/quick-start/)
+  To learn more about this installation method, refer to the [Quick Start Guide](https://simplecms.github.io/simple-cms/docs/quick-start/)
 * A complete, more complex install, that gives you more flexibility but requires that you use a static site builder with a build system that supports npm packages.
 
 # simple-cms-core
