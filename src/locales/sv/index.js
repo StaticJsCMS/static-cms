@@ -106,10 +106,6 @@ const sv = {
       onDeleteWithUnsavedChanges:
         'Är du säker på att du vill radera det här publicerade inlägget, inklusive dina osparade ändringar från nuvarande session?',
       onDeletePublishedEntry: 'Är du säker på att du vill radera det här publicerade inlägget?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Du är på väg att radera alla opublicerade ändringar för det här inlägget, inklusive dina osparade ändringar från nuvarande session. Vill du fortfarande radera?',
-      onDeleteUnpublishedChanges:
-        'Alla opublicerade ändringar kommer raderas. Vill du fortfarande radera?',
       loadingEntry: 'Hämtar inlägg...',
       confirmLoadBackup: 'En lokal kopia hittades för det här inlägget, vill du använda den?',
     },
@@ -127,9 +123,6 @@ const sv = {
       unpublishing: 'Avpublicerar...',
       publishAndCreateNew: 'Publicera och skapa ny',
       publishAndDuplicate: 'Publicera och duplicera',
-      deleteUnpublishedChanges: 'Radera opublicerade ändringar',
-      deleteUnpublishedEntry: 'Radera opublicerat inlägg',
-      deletePublishedEntry: 'Radera publicerat inlägg',
       deleteEntry: 'Radera inlägg',
       saving: 'Sparar...',
       save: 'Spara',
@@ -258,11 +251,8 @@ const sv = {
         'Oops, du har missat ett obligatoriskt fält. Vänligen fyll i det innan du sparar.',
       entrySaved: 'Inlägg sparat',
       entryPublished: 'Inlägg publicerat',
-      entryUnpublished: 'Inlägg avpublicerat',
       onFailToPublishEntry: 'Kunde inte publicera: %{details}',
-      onFailToUnpublishEntry: 'Kunde inte avpublicera inlägg: %{details}',
       entryUpdated: 'Inläggsstatus uppdaterad',
-      onDeleteUnpublishedChanges: 'Opublicerade ändringar raderade',
       onFailToAuth: '%{details}',
       onLoggedOut:
         'Du har blivit utloggad, vänligen spara en kopia av eventuella ändringar och logga in på nytt',

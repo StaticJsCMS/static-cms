@@ -111,7 +111,7 @@ _____
 
 For field values of type string or integer, use normal style without quotation marks.
 
-Do: Set the value of `publish_mode` to editorial_workflow.
+Do: Set the value of `imagePullPolicy` to Always.
 
 Don't: Set the value of `imagePullPolicy` to "Always".
 _____

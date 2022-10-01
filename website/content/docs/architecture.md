@@ -63,16 +63,3 @@ The control component receives one (1) callback as a prop: `onChange`.
 Both control and preview widgets receive a `getAsset` selector via props. Displaying the media (or its URI) for the user should always be done via `getAsset`, as it returns an AssetProxy that can return the correct value for both medias already persisted on the server and cached media not yet uploaded.
 
 The actual persistence of the content and medias inserted into the control component is delegated to the backend implementation. The backend will be called with the updated values and a list of assetProxy objects for each field of the entry, and should return a promise that can resolve into the persisted entry object and the list of the persisted media URIs.
-
-
-## Editorial Workflow implementation
-
-Instead of adding logic to `CollectionPage` and `EntryPage`, the Editorial Workflow is implemented as Higher Order Components, adding UI and dispatching additional actions.
-
-Furthermore, all editorial workflow state is managed in Redux - there's an `actions/editorialWorkflow.js` file and a `reducers/editorialWorkflow.js` file.
-
-### About metadata
-
-Simple CMS embraces the idea of Git-as-backend for storing metadata. The first time it runs with the `editorial_workflow` setup, it creates a new ref called `meta/_simple_cms`, pointing to an empty, orphan tree.
-
-Actual data are stored in individual `json` files committed to this tree.

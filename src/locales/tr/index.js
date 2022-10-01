@@ -110,10 +110,6 @@ const tr = {
       onDeleteWithUnsavedChanges:
         'Bu oturumda kaydedilmiş değişikliklerin yanı sıra geçerli oturumdaki kaydedilmemiş değişikliklerinizi silmek istediğinize emin misiniz?',
       onDeletePublishedEntry: 'Bu yayınlanmış girdiyi silmek istediğinize emin misiniz?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Bu girdide yayınlanmamış tüm değişiklikleri ve geçerli oturumdaki kaydedilmemiş değişikliklerinizi siler. Hala silmek istiyor musun?',
-      onDeleteUnpublishedChanges:
-        'Bu girdide yayınlanmamış tüm değişiklikler silinecek. Hala silmek istiyor musun?',
       loadingEntry: 'Girdiler yükleniyor...',
       confirmLoadBackup: 'Bu girdi için yerel bir yedekleme kurtarıldı, kullanmak ister misiniz?',
     },
@@ -131,9 +127,6 @@ const tr = {
       unpublishing: 'Yayından kaldırılıyor...',
       publishAndCreateNew: 'Yayınla ve yeni oluştur',
       publishAndDuplicate: 'Yayınla ve kopya oluştur',
-      deleteUnpublishedChanges: 'Yayımlanmamış değişiklikleri sil',
-      deleteUnpublishedEntry: 'Yayımlanmamış girdiyi sil',
-      deletePublishedEntry: 'Yayınlanan girdiyi sil',
       deleteEntry: 'Girdiyi sil',
       saving: 'Kaydediliyor...',
       save: 'Kaydet',
@@ -269,11 +262,8 @@ const tr = {
       missingRequiredField: 'Gerekli bir alan eksik. Lütfen kaydetmeden önce tamamlayın.',
       entrySaved: 'Girdi kaydedildi',
       entryPublished: 'Girdi yayınlandı',
-      entryUnpublished: 'Girdi yayınlanmamış',
       onFailToPublishEntry: 'Yayınlanamadı: %{details}',
-      onFailToUnpublishEntry: 'Girdi yayından kaldırılamadı: %{details}',
       entryUpdated: 'Girdi durumu güncellendi',
-      onDeleteUnpublishedChanges: 'Yayımlanmamış değişiklikler silindi',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Çıkış yaptınız, lütfen tüm verileri yedekleyin ve tekrar giriş yapın',
       onBackendDown:

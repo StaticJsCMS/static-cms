@@ -1,22 +1,20 @@
 import * as fuzzy from 'fuzzy';
 import { fromJS, List, Set } from 'immutable';
-import { attempt, flatten, get, isError, set, sortBy, trim, uniq } from 'lodash';
+import { attempt, flatten, get, isError, set, trim, uniq } from 'lodash';
 import { basename, dirname, extname, join } from 'path';
 
 import { FILES, FOLDER } from './constants/collectionTypes';
-import { status } from './constants/publishModes';
 import { resolveFormat } from './formats/formats';
-import { commitMessageFormatter, previewUrlFormatter, slugFormatter } from './lib/formatters';
+import { commitMessageFormatter, slugFormatter } from './lib/formatters';
 import {
   formatI18nBackup,
   getFilePaths,
   getI18nBackup,
-  getI18nDataFiles,
   getI18nEntry,
   getI18nFiles,
   getI18nFilesDepth,
   groupEntries,
-  hasI18n,
+  hasI18n
 } from './lib/i18n';
 import { getBackend, invokeEvent } from './lib/registry';
 import { sanitizeChar } from './lib/urlHelper';
@@ -25,9 +23,8 @@ import {
   blobToFileObj,
   Cursor,
   CURSOR_COMPATIBILITY_SYMBOL,
-  EDITORIAL_WORKFLOW_ERROR,
   getPathDepth,
-  localForage,
+  localForage
 } from './lib/util';
 import { stringTemplate } from './lib/widgets';
 import {
@@ -40,36 +37,31 @@ import {
   selectFolderEntryExtension,
   selectHasMetaPath,
   selectInferedField,
-  selectMediaFolders,
+  selectMediaFolders
 } from './reducers/collections';
-import { selectUseWorkflow } from './reducers/config';
-import { selectEntry, selectMediaFilePath } from './reducers/entries';
+import { selectMediaFilePath } from './reducers/entries';
 import { selectCustomPath } from './reducers/entryDraft';
 import { selectIntegration } from './reducers/integrations';
 import { createEntry } from './valueObjects/Entry';
 
 import type { Map } from 'immutable';
-import type { CmsConfig } from './interface';
+import type { CmsConfig, ImplementationEntry } from './interface';
 import type {
   AsyncLock,
   Credentials,
   DataFile,
   DisplayURL,
   Implementation as BackendImplementation,
-  ImplementationEntry,
-  UnpublishedEntry,
-  UnpublishedEntryDiff,
-  User,
+  User
 } from './lib/util';
 import type {
   Collection,
   CollectionFile,
-  Collections,
   EntryDraft,
   EntryField,
   EntryMap,
   FilterRule,
-  State,
+  State
 } from './types/redux';
 import type AssetProxy from './valueObjects/AssetProxy';
 import type { EntryValue } from './valueObjects/Entry';
@@ -273,14 +265,11 @@ interface PersistArgs {
   entryDraft: EntryDraft;
   assetProxies: AssetProxy[];
   usedSlugs: List<string>;
-  unpublished?: boolean;
   status?: string;
 }
 
 interface ImplementationInitOptions {
-  useWorkflow: boolean;
   updateUserCredentials: (credentials: Credentials) => void;
-  initialWorkflowStatus: string;
 }
 
 type Implementation = BackendImplementation & {
@@ -320,9 +309,7 @@ export class Backend {
     this.deleteAnonymousBackup();
     this.config = config;
     this.implementation = implementation.init(this.config, {
-      useWorkflow: selectUseWorkflow(this.config),
       updateUserCredentials: this.updateUserCredentials,
-      initialWorkflowStatus: status.first(),
     });
     this.backendName = backendName;
     this.authStore = authStore;
@@ -411,20 +398,7 @@ export class Backend {
 
   getToken = () => this.implementation.getToken();
 
-  async entryExist(collection: Collection, path: string, slug: string, useWorkflow: boolean) {
-    const unpublishedEntry =
-      useWorkflow &&
-      (await this.implementation
-        .unpublishedEntry({ collection: collection.get('name'), slug })
-        .catch(error => {
-          if (error.name === EDITORIAL_WORKFLOW_ERROR && error.notUnderEditorialWorkflow) {
-            return Promise.resolve(false);
-          }
-          return Promise.reject(error);
-        }));
-
-    if (unpublishedEntry) return unpublishedEntry;
-
+  async entryExist(path: string) {
     const publishedEntry = await this.implementation
       .getEntry(path)
       .then(({ data }) => data)
@@ -455,12 +429,7 @@ export class Backend {
     // Check for duplicate slug in loaded entities store first before repo
     while (
       usedSlugs.includes(uniqueSlug) ||
-      (await this.entryExist(
-        collection,
-        selectEntryPath(collection, uniqueSlug) as string,
-        uniqueSlug,
-        selectUseWorkflow(config),
-      ))
+      (await this.entryExist(selectEntryPath(collection, uniqueSlug) as string))
     ) {
       uniqueSlug = `${slug}${sanitizeChar(' ', slugConfig)}${i++}`;
     }
@@ -840,111 +809,6 @@ export class Backend {
     };
   }
 
-  async processUnpublishedEntry(
-    collection: Collection,
-    entryData: UnpublishedEntry,
-    withMediaFiles: boolean,
-  ) {
-    const { slug } = entryData;
-    let extension: string;
-    if (collection.get('type') === FILES) {
-      const file = collection.get('files')!.find(f => f?.get('name') === slug);
-      extension = extname(file.get('file'));
-    } else {
-      extension = selectFolderEntryExtension(collection);
-    }
-
-    const mediaFiles: MediaFile[] = [];
-    if (withMediaFiles) {
-      const nonDataFiles = entryData.diffs.filter(d => !d.path.endsWith(extension));
-      const files = await Promise.all(
-        nonDataFiles.map(f =>
-          this.implementation!.unpublishedEntryMediaFile(
-            collection.get('name'),
-            slug,
-            f.path,
-            f.id,
-          ),
-        ),
-      );
-      mediaFiles.push(...files.map(f => ({ ...f, draft: true })));
-    }
-
-    const dataFiles = sortBy(
-      entryData.diffs.filter(d => d.path.endsWith(extension)),
-      f => f.path.length,
-    );
-
-    const formatData = (data: string, path: string, newFile: boolean) => {
-      const entry = createEntry(collection.get('name'), slug, path, {
-        raw: data,
-        isModification: !newFile,
-        label: collection && selectFileEntryLabel(collection, slug),
-        mediaFiles,
-        updatedOn: entryData.updatedAt,
-        author: entryData.pullRequestAuthor,
-        status: entryData.status,
-        meta: { path: prepareMetaPath(path, collection) },
-      });
-
-      const entryWithFormat = this.entryWithFormat(collection)(entry);
-      return entryWithFormat;
-    };
-
-    const readAndFormatDataFile = async (dataFile: UnpublishedEntryDiff) => {
-      const data = await this.implementation.unpublishedEntryDataFile(
-        collection.get('name'),
-        entryData.slug,
-        dataFile.path,
-        dataFile.id,
-      );
-      const entryWithFormat = formatData(data, dataFile.path, dataFile.newFile);
-      return entryWithFormat;
-    };
-
-    // if the unpublished entry has no diffs, return the original
-    if (dataFiles.length <= 0) {
-      const loadedEntry = await this.implementation.getEntry(
-        selectEntryPath(collection, slug) as string,
-      );
-      return formatData(loadedEntry.data, loadedEntry.file.path, false);
-    } else if (hasI18n(collection)) {
-      // we need to read all locales files and not just the changes
-      const path = selectEntryPath(collection, slug) as string;
-      const i18nFiles = getI18nDataFiles(collection, extension, path, slug, dataFiles);
-      let entries = await Promise.all(
-        i18nFiles.map(dataFile => readAndFormatDataFile(dataFile).catch(() => null)),
-      );
-      entries = entries.filter(Boolean);
-      const grouped = await groupEntries(collection, extension, entries as EntryValue[]);
-      return grouped[0];
-    } else {
-      const entryWithFormat = await readAndFormatDataFile(dataFiles[0]);
-      return entryWithFormat;
-    }
-  }
-
-  async unpublishedEntries(collections: Collections) {
-    const ids = await this.implementation.unpublishedEntries!();
-    const entries = (
-      await Promise.all(
-        ids.map(async id => {
-          const entryData = await this.implementation.unpublishedEntry({ id });
-          const collectionName = entryData.collection;
-          const collection = collections.find(c => c.get('name') === collectionName);
-          if (!collection) {
-            console.warn(`Missing collection '${collectionName}' for unpublished entry '${id}'`);
-            return null;
-          }
-          const entry = await this.processUnpublishedEntry(collection, entryData, false);
-          return entry;
-        }),
-      )
-    ).filter(Boolean) as EntryValue[];
-
-    return { pagination: 0, entries };
-  }
-
   async processEntry(state: State, collection: Collection, entry: EntryValue) {
     const integration = selectIntegration(state.integrations, null, 'assetStore');
     const mediaFolders = selectMediaFolders(state.config, collection, fromJS(entry));
@@ -960,106 +824,18 @@ export class Backend {
     return entry;
   }
 
-  async unpublishedEntry(state: State, collection: Collection, slug: string) {
-    const entryData = await this.implementation!.unpublishedEntry!({
-      collection: collection.get('name') as string,
-      slug,
-    });
-
-    let entry = await this.processUnpublishedEntry(collection, entryData, true);
-    entry = await this.processEntry(state, collection, entry);
-    return entry;
-  }
-
-  /**
-   * Creates a URL using `site_url` from the config and `preview_path` from the
-   * entry's collection. Does not currently make a request through the backend,
-   * but likely will in the future.
-   */
-  getDeploy(collection: Collection, slug: string, entry: EntryMap) {
-    /**
-     * If `site_url` is undefined or `show_preview_links` in the config is set to false, do nothing.
-     */
-
-    const baseUrl = this.config.site_url;
-
-    if (!baseUrl || this.config.show_preview_links === false) {
-      return;
-    }
-
-    return {
-      url: previewUrlFormatter(baseUrl, collection, slug, entry, this.config.slug),
-      status: 'SUCCESS',
-    };
-  }
-
-  /**
-   * Requests a base URL from the backend for previewing a specific entry.
-   * Supports polling via `maxAttempts` and `interval` options, as there is
-   * often a delay before a preview URL is available.
-   */
-  async getDeployPreview(
-    collection: Collection,
-    slug: string,
-    entry: EntryMap,
-    { maxAttempts = 1, interval = 5000 } = {},
-  ) {
-    /**
-     * If the registered backend does not provide a `getDeployPreview` method, or
-     * `show_preview_links` in the config is set to false, do nothing.
-     */
-    if (!this.implementation.getDeployPreview || this.config.show_preview_links === false) {
-      return;
-    }
-
-    /**
-     * Poll for the deploy preview URL (defaults to 1 attempt, so no polling by
-     * default).
-     */
-    let deployPreview,
-      count = 0;
-    while (!deployPreview && count < maxAttempts) {
-      count++;
-      deployPreview = await this.implementation.getDeployPreview(collection.get('name'), slug);
-      if (!deployPreview) {
-        await new Promise(resolve => setTimeout(() => resolve(undefined), interval));
-      }
-    }
-
-    /**
-     * If there's no deploy preview, do nothing.
-     */
-    if (!deployPreview) {
-      return;
-    }
-
-    return {
-      /**
-       * Create a URL using the collection `preview_path`, if provided.
-       */
-      url: previewUrlFormatter(deployPreview.url, collection, slug, entry, this.config.slug),
-      /**
-       * Always capitalize the status for consistency.
-       */
-      status: deployPreview.status ? deployPreview.status.toUpperCase() : '',
-    };
-  }
-
   async persistEntry({
     config,
     collection,
     entryDraft: draft,
     assetProxies,
     usedSlugs,
-    unpublished = false,
     status,
   }: PersistArgs) {
     const modifiedData = await this.invokePreSaveEvent(draft.get('entry'));
     const entryDraft = (modifiedData && draft.setIn(['entry', 'data'], modifiedData)) || draft;
 
     const newEntry = entryDraft.getIn(['entry', 'newRecord']) || false;
-
-    const useWorkflow = selectUseWorkflow(config);
 
     const customPath = selectCustomPath(collection, entryDraft);
 
@@ -1087,8 +863,7 @@ export class Backend {
       const slug = entryDraft.getIn(['entry', 'slug']);
       dataFile = {
         path: entryDraft.getIn(['entry', 'path']),
-        // for workflow entries we refresh the slug on publish
-        slug: customPath && !useWorkflow ? slugFromCustomPath(collection, customPath) : slug,
+        slug: customPath ? slugFromCustomPath(collection, customPath) : slug,
         raw: this.entryToRaw(collection, entryDraft.get('entry')),
         newPath: customPath,
       };
@@ -1111,33 +886,25 @@ export class Backend {
     }
 
     const user = (await this.currentUser()) as User;
-    const commitMessage = commitMessageFormatter(
-      newEntry ? 'create' : 'update',
-      config,
-      {
-        collection,
-        slug,
-        path,
-        authorLogin: user.login,
-        authorName: user.name,
-      },
-      user.useOpenAuthoring,
-    );
+    const commitMessage = commitMessageFormatter(newEntry ? 'create' : 'update', config, {
+      collection,
+      slug,
+      path,
+      authorLogin: user.login,
+      authorName: user.name,
+    });
 
     const collectionName = collection.get('name');
 
-    const updatedOptions = { unpublished, status };
+    const updatedOptions = { status };
     const opts = {
       newEntry,
       commitMessage,
       collectionName,
-      useWorkflow,
       ...updatedOptions,
     };
 
-    if (!useWorkflow) {
-      await this.invokePrePublishEvent(entryDraft.get('entry'));
-    }
+    await this.invokePrePublishEvent(entryDraft.get('entry'));
 
     await this.implementation.persistEntry(
       {
@@ -1148,10 +915,7 @@ export class Backend {
     );
 
     await this.invokePostSaveEvent(entryDraft.get('entry'));
-
-    if (!useWorkflow) {
-      await this.invokePostPublishEvent(entryDraft.get('entry'));
-    }
+    await this.invokePostPublishEvent(entryDraft.get('entry'));
 
     return slug;
   }
@@ -1169,14 +933,6 @@ export class Backend {
     await this.invokeEventWithEntry('postPublish', entry);
   }
 
-  async invokePreUnpublishEvent(entry: EntryMap) {
-    await this.invokeEventWithEntry('preUnpublish', entry);
-  }
-
-  async invokePostUnpublishEvent(entry: EntryMap) {
-    await this.invokeEventWithEntry('postUnpublish', entry);
-  }
-
   async invokePreSaveEvent(entry: EntryMap) {
     return await this.invokeEventWithEntry('preSave', entry);
   }
@@ -1188,16 +944,11 @@ export class Backend {
   async persistMedia(config: CmsConfig, file: AssetProxy) {
     const user = (await this.currentUser()) as User;
     const options = {
-      commitMessage: commitMessageFormatter(
-        'uploadMedia',
-        config,
-        {
-          path: file.path,
-          authorLogin: user.login,
-          authorName: user.name,
-        },
-        user.useOpenAuthoring,
-      ),
+      commitMessage: commitMessageFormatter('uploadMedia', config, {
+        path: file.path,
+        authorLogin: user.login,
+        authorName: user.name,
+      }),
     };
     return this.implementation.persistMedia(file, options);
   }
@@ -1212,64 +963,29 @@ export class Backend {
     }
 
     const user = (await this.currentUser()) as User;
-    const commitMessage = commitMessageFormatter(
-      'delete',
-      config,
-      {
-        collection,
-        slug,
-        path,
-        authorLogin: user.login,
-        authorName: user.name,
-      },
-      user.useOpenAuthoring,
-    );
+    const commitMessage = commitMessageFormatter('delete', config, {
+      collection,
+      slug,
+      path,
+      authorLogin: user.login,
+      authorName: user.name,
+    });
 
-    const entry = selectEntry(state.entries, collection.get('name'), slug);
-    await this.invokePreUnpublishEvent(entry);
     let paths = [path];
     if (hasI18n(collection)) {
       paths = getFilePaths(collection, extension, path, slug);
     }
     await this.implementation.deleteFiles(paths, commitMessage);
-
-    await this.invokePostUnpublishEvent(entry);
   }
 
   async deleteMedia(config: CmsConfig, path: string) {
     const user = (await this.currentUser()) as User;
-    const commitMessage = commitMessageFormatter(
-      'deleteMedia',
-      config,
-      {
-        path,
-        authorLogin: user.login,
-        authorName: user.name,
-      },
-      user.useOpenAuthoring,
-    );
+    const commitMessage = commitMessageFormatter('deleteMedia', config, {
+      path,
+      authorLogin: user.login,
+      authorName: user.name,
+    });
     return this.implementation.deleteFiles([path], commitMessage);
-  }
-
-  persistUnpublishedEntry(args: PersistArgs) {
-    return this.persistEntry({ ...args, unpublished: true });
-  }
-
-  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
-    return this.implementation.updateUnpublishedEntryStatus!(collection, slug, newStatus);
-  }
-
-  async publishUnpublishedEntry(entry: EntryMap) {
-    const collection = entry.get('collection');
-    const slug = entry.get('slug');
-
-    await this.invokePrePublishEvent(entry);
-    await this.implementation.publishUnpublishedEntry!(collection, slug);
-    await this.invokePostPublishEvent(entry);
-  }
-
-  deleteUnpublishedEntry(collection: string, slug: string) {
-    return this.implementation.deleteUnpublishedEntry!(collection, slug);
   }
 
   entryToRaw(collection: Collection, entry: EntryMap): string {

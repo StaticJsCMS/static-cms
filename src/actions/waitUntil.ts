@@ -17,17 +17,17 @@ export async function waitUntilWithTimeout<T>(
   dispatch: ThunkDispatch<State, {}, AnyAction>,
   waitActionArgs: (resolve: (value?: T) => void) => WaitActionArgs,
   timeout = 30000,
-): Promise<T | null> {
+): Promise<T | null | undefined | void> {
   let waitDone = false;
 
-  const waitPromise = new Promise<T>(resolve => {
+  const waitPromise = new Promise<T | undefined>(resolve => {
     dispatch(waitUntil(waitActionArgs(resolve)));
   });
 
-  const timeoutPromise = new Promise<T | null>(resolve => {
+  const timeoutPromise = new Promise<T | null | void>(resolve => {
     setTimeout(() => {
       if (waitDone) {
-        resolve();
+        resolve(null);
       } else {
         console.warn('Wait Action timed out');
         resolve(null);

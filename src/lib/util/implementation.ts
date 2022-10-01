@@ -4,7 +4,7 @@ import semaphore from 'semaphore';
 import { basename } from './path';
 
 import type { Semaphore } from 'semaphore';
-import type { Implementation as I } from '../../interface';
+import type { Implementation as I, ImplementationEntry } from '../../interface';
 import type { FileMetadata } from './API';
 import type { AsyncLock } from './asyncLock';
 
@@ -21,31 +21,6 @@ export interface ImplementationMediaFile {
   draft?: boolean;
   url?: string;
   file?: File;
-}
-
-export interface UnpublishedEntryMediaFile {
-  id: string;
-  path: string;
-}
-
-export interface ImplementationEntry {
-  data: string;
-  file: { path: string; label?: string; id?: string | null; author?: string; updatedOn?: string };
-}
-
-export interface UnpublishedEntryDiff {
-  id: string;
-  path: string;
-  newFile: boolean;
-}
-
-export interface UnpublishedEntry {
-  pullRequestAuthor?: string;
-  slug: string;
-  collection: string;
-  status: string;
-  diffs: UnpublishedEntryDiff[];
-  updatedAt: string;
 }
 
 export interface Map {
@@ -77,8 +52,6 @@ export type PersistOptions = {
   newEntry?: boolean;
   commitMessage: string;
   collectionName?: string;
-  useWorkflow?: boolean;
-  unpublished?: boolean;
   status?: string;
 };
 
@@ -90,17 +63,13 @@ export type User = Credentials & {
   backendName?: string;
   login?: string;
   name: string;
-  useOpenAuthoring?: boolean;
 };
 
 export type Config = {
   backend: {
     repo?: string | null;
-    open_authoring?: boolean;
-    always_fork?: boolean;
     branch?: string;
     api_root?: string;
-    squash_merges?: boolean;
     use_graphql?: boolean;
     graphql_api_root?: string;
     preview_context?: string;
@@ -111,7 +80,6 @@ export type Config = {
     proxy_url?: string;
     auth_type?: string;
     app_id?: string;
-    cms_label_prefix?: string;
     api_version?: string;
   };
   media_folder: string;
@@ -189,18 +157,6 @@ export async function entriesByFiles(
   apiName: string,
 ) {
   return fetchFiles(files, readFile, readFileMetadata, apiName);
-}
-
-export async function unpublishedEntries(listEntriesKeys: () => Promise<string[]>) {
-  try {
-    const keys = await listEntriesKeys();
-    return keys;
-  } catch (error: any) {
-    if (error.message === 'Not Found') {
-      return Promise.resolve([]);
-    }
-    throw error;
-  }
 }
 
 export function blobToFileObj(name: string, blob: Blob) {

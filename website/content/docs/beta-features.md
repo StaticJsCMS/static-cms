@@ -28,7 +28,7 @@ local_backend: true
 4. Start your local development server (e.g. run `gatsby develop`).
 5. Open `http://localhost:<port>/admin` to verify that your can administer your content locally. Replace `<port>` with the port of your local development server. For example Gatsby's default port is `8000`
 
-**Note:** `netlify-cms-proxy-server` runs an unauthenticated express server. As any client can send requests to the server, it should only be used for local development. Also note that `editorial_workflow` is not supported in this environment.
+**Note:** `netlify-cms-proxy-server` runs an unauthenticated express server. As any client can send requests to the server, it should only be used for local development.
 
 ### Configure the Simple CMS proxy server port number
 
@@ -50,16 +50,6 @@ local_backend:
   # when accessing the local site from a host other than 'localhost' or '127.0.0.1'
   allowed_hosts: ['192.168.0.1']
 ```
-
-## GitLab and BitBucket Editorial Workflow Support
-
-You can enable the Editorial Workflow with the following line in your Simple CMS `config.yml` file:
-
-```yaml
-publish_mode: editorial_workflow
-```
-
-In order to track unpublished entries statuses the GitLab implementation uses merge requests labels and the BitBucket implementation uses pull requests comments.
 
 ## i18n Support
 
@@ -224,13 +214,6 @@ backend:
   # optional, defaults to 'https://gitlab.com/api/graphql'. Can be used to configure a self hosted GitLab instance.
   graphql_api_root: https://my-self-hosted-gitlab.com/api/graphql
 ```
-## Open Authoring
-
-When using the [GitHub backend](/docs/github-backend), you can use Simple CMS to accept contributions from GitHub users without giving them access to your repository. When they make changes in the CMS, the CMS forks your repository for them behind the scenes, and all the changes are made to the fork. When the contributor is ready to submit their changes, they can set their draft as ready for review in the CMS. This triggers a pull request to your repository, which you can merge using the GitHub UI.
-
-At the same time, any contributors who *do* have write access to the repository can continue to use Simple CMS normally.
-
-More details and setup instructions can be found on [the Open Authoring docs page](/docs/open-authoring).
 
 ## Folder Collections Path
 
@@ -473,19 +456,6 @@ import styles from '!css-loader!sass-loader!../main.scss';
 CMS.registerPreviewStyle(styles.toString(), { raw: true });
 ```
 
-## Squash merge GitHub pull requests
-
-When using the [Editorial Workflow](../configuration-options/#publish-mode) with the `github` or GitHub-connected `git-gateway` backends, Simple CMS creates a pull request for each unpublished entry. Every time the unpublished entry is changed and saved, a new commit is added to the pull request. When the entry is published, the pull request is merged, and all of those commits are added to your project commit history in a merge commit.
-
-The squash merge option causes all commits to be "squashed" into a single commit when the pull request is merged, and the resulting commit is rebased onto the target branch, avoiding the merge commit altogether.
-
-To enable this feature, you can set the following option in your Simple CMS `config.yml`:
-
-```yaml
-backend:
-  squash_merges: true
-```
-
 ## Commit Message Templates
 
 You can customize the templates used by Simple CMS to generate commit messages by setting the `commit_messages` option under `backend` in your Simple CMS `config.yml`.
@@ -502,7 +472,6 @@ backend:
     delete: Delete {{collection}} “{{slug}}”
     uploadMedia: Upload “{{path}}”
     deleteMedia: Delete “{{path}}”
-    openAuthoring: '{{message}}'
 ```
 
 Simple CMS generates the following commit types:
@@ -514,7 +483,6 @@ Simple CMS generates the following commit types:
 | `delete`        | An existing entry is deleted             | `slug`, `path`, `collection`, `author-login`, `author-name` |
 | `uploadMedia`   | A media file is uploaded                 | `path`, `author-login`, `author-name`                       |
 | `deleteMedia`   | A media file is deleted                  | `path`, `author-login`, `author-name`                       |
-| `openAuthoring` | A commit is made via a forked repository | `message`, `author-login`, `author-name`                    |
 
 Template tags produce the following output:
 
@@ -575,7 +543,7 @@ CMS.registerEventListener({
 });
 ```
 
-Supported events are `prePublish`, `postPublish`, `preUnpublish`, `postUnpublish`, `preSave` and `postSave`. The `preSave` hook can be used to modify the entry data like so:
+Supported events are `prePublish`, `postPublish`, `preSave` and `postSave`. The `preSave` hook can be used to modify the entry data like so:
 
 ```javascript
 CMS.registerEventListener({

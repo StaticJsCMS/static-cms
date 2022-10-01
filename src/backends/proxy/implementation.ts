@@ -1,20 +1,12 @@
 import {
-  EditorialWorkflowError,
-  APIError,
-  unsentRequest,
-  blobToFileObj,
+  APIError, blobToFileObj, unsentRequest
 } from '../../lib/util';
 import AuthenticationPage from './AuthenticationPage';
 
 import type {
-  Entry,
-  AssetProxy,
-  PersistOptions,
-  User,
-  Config,
-  Implementation,
-  ImplementationFile,
-  UnpublishedEntry,
+  AssetProxy, Config, Entry, Implementation,
+  ImplementationFile, PersistOptions,
+  User
 } from '../../lib/util';
 
 async function serializeAsset(assetProxy: AssetProxy) {
@@ -50,9 +42,8 @@ function deserializeMediaFile({ id, content, encoding, path, name }: MediaFile) 
 export default class ProxyBackend implements Implementation {
   proxyUrl: string;
   mediaFolder: string;
-  options: { initialWorkflowStatus?: string };
+  options: {};
   branch: string;
-  cmsLabelPrefix?: string;
 
   constructor(config: Config, options = {}) {
     if (!config.backend.proxy_url) {
@@ -63,7 +54,6 @@ export default class ProxyBackend implements Implementation {
     this.proxyUrl = config.backend.proxy_url;
     this.mediaFolder = config.media_folder;
     this.options = options;
-    this.cmsLabelPrefix = config.backend.cms_label_prefix;
   }
 
   isGitBackend() {
@@ -131,60 +121,6 @@ export default class ProxyBackend implements Implementation {
     });
   }
 
-  unpublishedEntries() {
-    return this.request({
-      action: 'unpublishedEntries',
-      params: { branch: this.branch },
-    });
-  }
-
-  async unpublishedEntry({
-    id,
-    collection,
-    slug,
-  }: {
-    id?: string;
-    collection?: string;
-    slug?: string;
-  }) {
-    try {
-      const entry: UnpublishedEntry = await this.request({
-        action: 'unpublishedEntry',
-        params: { branch: this.branch, id, collection, slug, cmsLabelPrefix: this.cmsLabelPrefix },
-      });
-
-      return entry;
-    } catch (e: any) {
-      if (e.status === 404) {
-        throw new EditorialWorkflowError('content is not under editorial workflow', true);
-      }
-      throw e;
-    }
-  }
-
-  async unpublishedEntryDataFile(collection: string, slug: string, path: string, id: string) {
-    const { data } = await this.request({
-      action: 'unpublishedEntryDataFile',
-      params: { branch: this.branch, collection, slug, path, id },
-    });
-    return data;
-  }
-
-  async unpublishedEntryMediaFile(collection: string, slug: string, path: string, id: string) {
-    const file = await this.request({
-      action: 'unpublishedEntryMediaFile',
-      params: { branch: this.branch, collection, slug, path, id },
-    });
-    return deserializeMediaFile(file);
-  }
-
-  deleteUnpublishedEntry(collection: string, slug: string) {
-    return this.request({
-      action: 'deleteUnpublishedEntry',
-      params: { branch: this.branch, collection, slug },
-    });
-  }
-
   async persistEntry(entry: Entry, options: PersistOptions) {
     const assets = await Promise.all(entry.assets.map(serializeAsset));
     return this.request({
@@ -193,29 +129,8 @@ export default class ProxyBackend implements Implementation {
         branch: this.branch,
         dataFiles: entry.dataFiles,
         assets,
-        options: { ...options, status: options.status || this.options.initialWorkflowStatus },
-        cmsLabelPrefix: this.cmsLabelPrefix,
+        options: { ...options },
       },
-    });
-  }
-
-  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
-    return this.request({
-      action: 'updateUnpublishedEntryStatus',
-      params: {
-        branch: this.branch,
-        collection,
-        slug,
-        newStatus,
-        cmsLabelPrefix: this.cmsLabelPrefix,
-      },
-    });
-  }
-
-  publishUnpublishedEntry(collection: string, slug: string) {
-    return this.request({
-      action: 'publishUnpublishedEntry',
-      params: { branch: this.branch, collection, slug },
     });
   }
 
@@ -250,13 +165,6 @@ export default class ProxyBackend implements Implementation {
     return this.request({
       action: 'deleteFiles',
       params: { branch: this.branch, paths, options: { commitMessage } },
-    });
-  }
-
-  getDeployPreview(collection: string, slug: string) {
-    return this.request({
-      action: 'getDeployPreview',
-      params: { branch: this.branch, collection, slug },
     });
   }
 }

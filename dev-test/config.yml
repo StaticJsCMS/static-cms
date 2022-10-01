@@ -2,7 +2,6 @@ backend:
   name: test-repo
 site_url: 'https://example.com'
 media_folder: assets/uploads
-publish_mode: editorial_workflow
 collections:
   - name: posts
     label: Posts

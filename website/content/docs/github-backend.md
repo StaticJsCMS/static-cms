@@ -20,22 +20,6 @@ backend:
   # branch: main
 ```
 
-## Specifying a status for deploy previews
-
-The GitHub backend supports [deploy preview links](../deploy-preview-links). Simple CMS checks the
-`context` of a commit's [statuses](https://help.github.com/articles/about-status-checks/) and infers
-one that seems to represent a deploy preview. If you need to customize this behavior, you can
-specify which context to look for using `preview_context`:
-
-```yaml
-backend:
-  name: github
-  repo: my/repo
-  preview_context: my-provider/deployment
-```
-
-The above configuration would look for the status who's `"context"` is `"my-provider/deployment"`.
-
 ## Git Large File Storage (LFS)
 
 Please note that the GitHub backend **does not** support [git-lfs](https://git-lfs.github.com/), see [this issue](https://github.com/SimpleCMS/simple-cms/issues/1206) for more information.

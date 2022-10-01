@@ -1,32 +1,22 @@
-import { ApolloClient } from 'apollo-client';
 import {
-  InMemoryCache,
-  defaultDataIdFromObject,
-  IntrospectionFragmentMatcher,
+  InMemoryCache, IntrospectionFragmentMatcher
 } from 'apollo-cache-inmemory';
-import { createHttpLink } from 'apollo-link-http';
+import { ApolloClient } from 'apollo-client';
 import { setContext } from 'apollo-link-context';
+import { createHttpLink } from 'apollo-link-http';
 import { trim, trimStart } from 'lodash';
 
 import {
-  APIError,
-  readFile,
-  localForage,
-  DEFAULT_PR_BODY,
-  branchFromContentKey,
-  CMS_BRANCH_PREFIX,
-  throwOnConflictingBranches,
+  APIError, localForage, readFile, throwOnConflictingBranches
 } from '../../lib/util';
+import API, { API_NAME } from './API';
 import introspectionQueryResultData from './fragmentTypes';
-import API, { API_NAME, PullRequestState, MOCK_PULL_REQUEST } from './API';
-import * as queries from './queries';
 import * as mutations from './mutations';
+import * as queries from './queries';
 
-import type { Config, BlobArgs } from './API';
 import type { NormalizedCacheObject } from 'apollo-cache-inmemory';
-import type { QueryOptions, MutationOptions, OperationVariables } from 'apollo-client';
-import type { GraphQLError } from 'graphql';
-import type { Octokit } from '@octokit/rest';
+import type { MutationOptions, OperationVariables, QueryOptions } from 'apollo-client';
+import type { BlobArgs, Config } from './API';
 
 const NO_CACHE = 'no-cache';
 const CACHE_FIRST = 'cache-first';
@@ -54,44 +44,6 @@ interface TreeFile {
   type: string;
   name: string;
 }
-
-type GraphQLPullRequest = {
-  id: string;
-  baseRefName: string;
-  baseRefOid: string;
-  body: string;
-  headRefName: string;
-  headRefOid: string;
-  number: number;
-  state: string;
-  title: string;
-  mergedAt: string | null;
-  updatedAt: string | null;
-  labels: { nodes: { name: string }[] };
-  repository: {
-    id: string;
-    isFork: boolean;
-  };
-  user: GraphQLPullsListResponseItemUser;
-};
-
-type GraphQLPullsListResponseItemUser = {
-  avatar_url: string;
-  login: string;
-  url: string;
-  name: string;
-};
-
-function transformPullRequest(pr: GraphQLPullRequest) {
-  return {
-    ...pr,
-    labels: pr.labels.nodes,
-    head: { ref: pr.headRefName, sha: pr.headRefOid, repo: { fork: pr.repository.isFork } },
-    base: { ref: pr.baseRefName, sha: pr.baseRefOid },
-  };
-}
-
-type Error = GraphQLError & { type: string };
 
 export default class GraphQLAPI extends API {
   client: ApolloClient<NormalizedCacheObject>;
@@ -159,29 +111,6 @@ export default class GraphQLAPI extends API {
         const branchName = trimStart(refName, 'refs/heads/');
         if (branchName) {
           await throwOnConflictingBranches(branchName, name => this.getBranch(name), API_NAME);
-        }
-      } else if (
-        Array.isArray(errors) &&
-        errors.some(e =>
-          new RegExp(
-            `A ref named "refs/heads/${CMS_BRANCH_PREFIX}/.+?" already exists in the repository.`,
-          ).test(e.message),
-        )
-      ) {
-        const refName = options?.variables?.createRefInput?.name || '';
-        const sha = options?.variables?.createRefInput?.oid || '';
-        const branchName = trimStart(refName, 'refs/heads/');
-        if (branchName && branchName.startsWith(`${CMS_BRANCH_PREFIX}/`) && sha) {
-          try {
-            // this can happen if the branch wasn't deleted when the PR was merged
-            // we backup the existing branch just in case an re-run the mutation
-            await this.backupBranch(branchName);
-            await this.deleteBranch(branchName);
-            const result = await this.client.mutate(options);
-            return result;
-          } catch (e) {
-            console.error(e);
-          }
         }
       }
       throw new APIError(error.message, 500, 'GitHub');
@@ -280,81 +209,6 @@ export default class GraphQLAPI extends API {
     }
   }
 
-  async getPullRequestAuthor(pullRequest: Octokit.PullsListResponseItem) {
-    const user = pullRequest.user as unknown as GraphQLPullsListResponseItemUser;
-    return user?.name || user?.login;
-  }
-
-  async getPullRequests(
-    head: string | undefined,
-    state: PullRequestState,
-    predicate: (pr: Octokit.PullsListResponseItem) => boolean,
-  ) {
-    const { originRepoOwner: owner, originRepoName: name } = this;
-    let states;
-    if (state === PullRequestState.Open) {
-      states = ['OPEN'];
-    } else if (state === PullRequestState.Closed) {
-      states = ['CLOSED', 'MERGED'];
-    } else {
-      states = ['OPEN', 'CLOSED', 'MERGED'];
-    }
-    const { data } = await this.query({
-      query: queries.pullRequests,
-      variables: {
-        owner,
-        name,
-        ...(head ? { head } : {}),
-        states,
-      },
-    });
-    const {
-      pullRequests,
-    }: {
-      pullRequests: {
-        nodes: GraphQLPullRequest[];
-      };
-    } = data.repository;
-
-    const mapped = pullRequests.nodes.map(transformPullRequest);
-
-    return (mapped as unknown as Octokit.PullsListResponseItem[]).filter(
-      pr => pr.head.ref.startsWith(`${CMS_BRANCH_PREFIX}/`) && predicate(pr),
-    );
-  }
-
-  async getOpenAuthoringBranches() {
-    const { repoOwner: owner, repoName: name } = this;
-    const { data } = await this.query({
-      query: queries.openAuthoringBranches,
-      variables: {
-        owner,
-        name,
-        refPrefix: `refs/heads/cms/${this.repo}/`,
-      },
-    });
-
-    return data.repository.refs.nodes.map(({ name, prefix }: { name: string; prefix: string }) => ({
-      ref: `${prefix}${name}`,
-    }));
-  }
-
-  async getStatuses(collectionName: string, slug: string) {
-    const contentKey = this.generateContentKey(collectionName, slug);
-    const branch = branchFromContentKey(contentKey);
-    const pullRequest = await this.getBranchPullRequest(branch);
-    const sha = pullRequest.head.sha;
-    const { originRepoOwner: owner, originRepoName: name } = this;
-    const { data } = await this.query({ query: queries.statues, variables: { owner, name, sha } });
-    if (data.repository.object) {
-      const { status } = data.repository.object;
-      const { contexts } = status || { contexts: [] };
-      return contexts;
-    } else {
-      return [];
-    }
-  }
-
   getAllFiles(entries: TreeEntry[], path: string) {
     const allFiles: TreeFile[] = entries.reduce((acc, item) => {
       if (item.type === 'tree') {
@@ -427,271 +281,19 @@ export default class GraphQLAPI extends API {
     return data.repository.branch;
   }
 
-  async patchRef(type: string, name: string, sha: string, opts: { force?: boolean } = {}) {
+  async patchRef(type: string, name: string, sha: string) {
     if (type !== 'heads') {
-      return super.patchRef(type, name, sha, opts);
+      return super.patchRef(type, name, sha);
     }
-
-    const force = opts.force || false;
 
     const branch = await this.getBranch(name);
     const { data } = await this.mutate({
       mutation: mutations.updateBranch,
       variables: {
-        input: { oid: sha, refId: branch.id, force },
+        input: { oid: sha, refId: branch.id },
       },
     });
     return data!.updateRef.branch;
-  }
-
-  async deleteBranch(branchName: string) {
-    const branch = await this.getBranch(branchName);
-    const { data } = await this.mutate({
-      mutation: mutations.deleteBranch,
-      variables: {
-        deleteRefInput: { refId: branch.id },
-      },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      update: (store: any) => store.data.delete(defaultDataIdFromObject(branch)),
-    });
-
-    return data!.deleteRef;
-  }
-
-  getPullRequestQuery(number: number) {
-    const { originRepoOwner: owner, originRepoName: name } = this;
-
-    return {
-      query: queries.pullRequest,
-      variables: { owner, name, number },
-    };
-  }
-
-  async getPullRequest(number: number) {
-    const { data } = await this.query({
-      ...this.getPullRequestQuery(number),
-      fetchPolicy: CACHE_FIRST,
-    });
-
-    // https://developer.github.com/v4/enum/pullrequeststate/
-    // GraphQL state: [CLOSED, MERGED, OPEN]
-    // REST API state: [closed, open]
-    const state =
-      data.repository.pullRequest.state === 'OPEN'
-        ? PullRequestState.Open
-        : PullRequestState.Closed;
-    return {
-      ...data.repository.pullRequest,
-      state,
-    };
-  }
-
-  getPullRequestAndBranchQuery(branch: string, number: number) {
-    const { repoOwner: owner, repoName: name } = this;
-    const { originRepoOwner, originRepoName } = this;
-    return {
-      query: queries.pullRequestAndBranch,
-      variables: {
-        owner,
-        name,
-        originRepoOwner,
-        originRepoName,
-        number,
-        qualifiedName: this.getBranchQualifiedName(branch),
-      },
-    };
-  }
-
-  async getPullRequestAndBranch(branch: string, number: number) {
-    const { data } = await this.query({
-      ...this.getPullRequestAndBranchQuery(branch, number),
-      fetchPolicy: CACHE_FIRST,
-    });
-
-    const { repository, origin } = data;
-    return { branch: repository.branch, pullRequest: origin.pullRequest };
-  }
-
-  async openPR(number: number) {
-    const pullRequest = await this.getPullRequest(number);
-
-    const { data } = await this.mutate({
-      mutation: mutations.reopenPullRequest,
-      variables: {
-        reopenPullRequestInput: { pullRequestId: pullRequest.id },
-      },
-      update: (store, { data: mutationResult }) => {
-        const { pullRequest } = mutationResult!.reopenPullRequest;
-        const pullRequestData = { repository: { ...pullRequest.repository, pullRequest } };
-
-        store.writeQuery({
-          ...this.getPullRequestQuery(pullRequest.number),
-          data: pullRequestData,
-        });
-      },
-    });
-
-    return data!.reopenPullRequest;
-  }
-
-  async closePR(number: number) {
-    const pullRequest = await this.getPullRequest(number);
-
-    const { data } = await this.mutate({
-      mutation: mutations.closePullRequest,
-      variables: {
-        closePullRequestInput: { pullRequestId: pullRequest.id },
-      },
-      update: (store, { data: mutationResult }) => {
-        const { pullRequest } = mutationResult!.closePullRequest;
-        const pullRequestData = { repository: { ...pullRequest.repository, pullRequest } };
-
-        store.writeQuery({
-          ...this.getPullRequestQuery(pullRequest.number),
-          data: pullRequestData,
-        });
-      },
-    });
-
-    return data!.closePullRequest;
-  }
-
-  async deleteUnpublishedEntry(collectionName: string, slug: string) {
-    try {
-      const contentKey = this.generateContentKey(collectionName, slug);
-      const branchName = branchFromContentKey(contentKey);
-      const pr = await this.getBranchPullRequest(branchName);
-      if (pr.number !== MOCK_PULL_REQUEST) {
-        const { branch, pullRequest } = await this.getPullRequestAndBranch(branchName, pr.number);
-
-        const { data } = await this.mutate({
-          mutation: mutations.closePullRequestAndDeleteBranch,
-          variables: {
-            deleteRefInput: { refId: branch.id },
-            closePullRequestInput: { pullRequestId: pullRequest.id },
-          },
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          update: (store: any) => {
-            store.data.delete(defaultDataIdFromObject(branch));
-            store.data.delete(defaultDataIdFromObject(pullRequest));
-          },
-        });
-
-        return data!.closePullRequest;
-      } else {
-        return await this.deleteBranch(branchName);
-      }
-    } catch (e: any) {
-      const { graphQLErrors } = e;
-      if (graphQLErrors && graphQLErrors.length > 0) {
-        const branchNotFound = graphQLErrors.some((e: Error) => e.type === 'NOT_FOUND');
-        if (branchNotFound) {
-          return;
-        }
-      }
-      throw e;
-    }
-  }
-
-  async createPR(title: string, head: string) {
-    const [repository, headReference] = await Promise.all([
-      this.getRepository(this.originRepoOwner, this.originRepoName),
-      this.useOpenAuthoring ? `${(await this.user()).login}:${head}` : head,
-    ]);
-    const { data } = await this.mutate({
-      mutation: mutations.createPullRequest,
-      variables: {
-        createPullRequestInput: {
-          baseRefName: this.branch,
-          body: DEFAULT_PR_BODY,
-          title,
-          headRefName: headReference,
-          repositoryId: repository.id,
-        },
-      },
-      update: (store, { data: mutationResult }) => {
-        const { pullRequest } = mutationResult!.createPullRequest;
-        const pullRequestData = { repository: { ...pullRequest.repository, pullRequest } };
-
-        store.writeQuery({
-          ...this.getPullRequestQuery(pullRequest.number),
-          data: pullRequestData,
-        });
-      },
-    });
-    const { pullRequest } = data!.createPullRequest;
-    return { ...pullRequest, head: { sha: pullRequest.headRefOid } };
-  }
-
-  async createBranch(branchName: string, sha: string) {
-    const owner = this.repoOwner;
-    const name = this.repoName;
-    const repository = await this.getRepository(owner, name);
-    const { data } = await this.mutate({
-      mutation: mutations.createBranch,
-      variables: {
-        createRefInput: {
-          name: this.getBranchQualifiedName(branchName),
-          oid: sha,
-          repositoryId: repository.id,
-        },
-      },
-      update: (store, { data: mutationResult }) => {
-        const { branch } = mutationResult!.createRef;
-        const branchData = { repository: { ...branch.repository, branch } };
-
-        store.writeQuery({
-          ...this.getBranchQuery(branchName, owner, name),
-          data: branchData,
-        });
-      },
-    });
-    const { branch } = data!.createRef;
-    return { ...branch, ref: `${branch.prefix}${branch.name}` };
-  }
-
-  async createBranchAndPullRequest(branchName: string, sha: string, title: string) {
-    const owner = this.originRepoOwner;
-    const name = this.originRepoName;
-    const repository = await this.getRepository(owner, name);
-    const { data } = await this.mutate({
-      mutation: mutations.createBranchAndPullRequest,
-      variables: {
-        createRefInput: {
-          name: this.getBranchQualifiedName(branchName),
-          oid: sha,
-          repositoryId: repository.id,
-        },
-        createPullRequestInput: {
-          baseRefName: this.branch,
-          body: DEFAULT_PR_BODY,
-          title,
-          headRefName: branchName,
-          repositoryId: repository.id,
-        },
-      },
-      update: (store, { data: mutationResult }) => {
-        const { branch } = mutationResult!.createRef;
-        const { pullRequest } = mutationResult!.createPullRequest;
-        const branchData = { repository: { ...branch.repository, branch } };
-        const pullRequestData = {
-          repository: { ...pullRequest.repository, branch },
-          origin: { ...pullRequest.repository, pullRequest },
-        };
-
-        store.writeQuery({
-          ...this.getBranchQuery(branchName, owner, name),
-          data: branchData,
-        });
-
-        store.writeQuery({
-          ...this.getPullRequestAndBranchQuery(branchName, pullRequest.number),
-          data: pullRequestData,
-        });
-      },
-    });
-    const { pullRequest } = data!.createPullRequest;
-    return transformPullRequest(pullRequest) as unknown as Octokit.PullsCreateResponse;
   }
 
   async getFileSha(path: string, { repoURL = this.repoURL, branch = this.branch } = {}) {

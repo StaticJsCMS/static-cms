@@ -16,15 +16,9 @@ const en = {
         'Unable to access identity settings. When using git-gateway backend make sure to enable Identity service and Git Gateway.',
     },
   },
-  api: {
-    labelsMigrationTitle: 'Labels Migration',
-    labelsMigrationBody:
-      'Simple CMS is adding labels to %{pullRequests} of your Editorial Workflow entries. The "Workflow" tab will be unavailable during this migration. You may use other areas of the CMS during this time. Note that closing the CMS will pause the migration.',
-  },
   app: {
     header: {
       content: 'Contents',
-      workflow: 'Workflow',
       media: 'Media',
       quickAdd: 'Quick add',
     },
@@ -118,19 +112,11 @@ const en = {
         'You have unsaved changes, please save before publishing.',
       onPublishingTitle: 'Publish this entry?',
       onPublishingBody: 'Are you sure you want to publish this entry?',
-      onUnpublishingTitle: 'Unpublish this entry?',
-      onUnpublishingBody: 'Are you sure you want to unpublish this entry?',
       onDeleteWithUnsavedChangesTitle: 'Delete this published entry?',
       onDeleteWithUnsavedChangesBody:
         'Are you sure you want to delete this published entry, as well as your unsaved changes from the current session?',
       onDeletePublishedEntryTitle: 'Delete this published entry?',
       onDeletePublishedEntryBody: 'Are you sure you want to delete this published entry?',
-      onDeleteUnpublishedChangesWithUnsavedChangesTitle: 'Delete this entry?',
-      onDeleteUnpublishedChangesWithUnsavedChangesBody:
-        'This will delete all unpublished changes to this entry, as well as your unsaved changes from the current session. Do you still want to delete?',
-      onDeleteUnpublishedChangesTitle: 'Delete this entry?',
-      onDeleteUnpublishedChangesBody:
-        'All unpublished changes to this entry will be deleted. Do you still want to delete?',
       loadingEntry: 'Loading entry...',
       confirmLoadBackupTitle: 'Use local backup?',
       confirmLoadBackupBody:
@@ -145,14 +131,9 @@ const en = {
       publishing: 'Publishing...',
       publish: 'Publish',
       published: 'Published',
-      unpublish: 'Unpublish',
       duplicate: 'Duplicate',
-      unpublishing: 'Unpublishing...',
       publishAndCreateNew: 'Publish and create new',
       publishAndDuplicate: 'Publish and duplicate',
-      deleteUnpublishedChanges: 'Delete unpublished changes',
-      deleteUnpublishedEntry: 'Delete unpublished entry',
-      deletePublishedEntry: 'Delete published entry',
       deleteEntry: 'Delete entry',
       saving: 'Saving...',
       save: 'Save',
@@ -170,9 +151,6 @@ const en = {
       inReview: 'In review',
       ready: 'Ready',
       publishNow: 'Publish now',
-      deployPreviewPendingButtonLabel: 'Check for Preview',
-      deployPreviewButtonLabel: 'View Preview',
-      deployButtonLabel: 'View Live',
     },
     editorWidgets: {
       markdown: {
@@ -297,7 +275,6 @@ const en = {
     },
     toast: {
       onFailToLoadEntries: 'Failed to load entry: %{details}',
-      onFailToLoadDeployPreview: 'Failed to load preview: %{details}',
       onFailToPersist: 'Failed to persist entry: %{details}',
       onFailToPersistMedia: 'Failed to persist media: %{details}',
       onFailToDelete: 'Failed to delete entry: %{details}',
@@ -306,47 +283,12 @@ const en = {
       missingRequiredField: "Oops, you've missed a required field. Please complete before saving.",
       entrySaved: 'Entry saved',
       entryPublished: 'Entry published',
-      entryUnpublished: 'Entry unpublished',
       onFailToPublishEntry: 'Failed to publish: %{details}',
-      onFailToUnpublishEntry: 'Failed to unpublish entry: %{details}',
       entryUpdated: 'Entry status updated',
-      onDeleteUnpublishedChanges: 'Unpublished changes deleted',
       onFailToAuth: '%{details}',
       onLoggedOut: 'You have been logged out, please back up any data and login again',
       onBackendDown:
         'The backend service is experiencing an outage. See %{details} for more information',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Loading Editorial Workflow Entries',
-      workflowHeading: 'Editorial Workflow',
-      newPost: 'New Post',
-      description:
-        '%{smart_count} entry waiting for review, %{readyCount} ready to go live. |||| %{smart_count} entries waiting for review, %{readyCount} ready to go live. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} by %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'by %{author}',
-      deleteChanges: 'Delete changes',
-      deleteNewEntry: 'Delete new entry',
-      publishChanges: 'Publish changes',
-      publishNewEntry: 'Publish new entry',
-    },
-    workflowList: {
-      onDeleteEntryTitle: 'Delete this entry?',
-      onDeleteEntryBody: 'Are you sure you want to delete this entry?',
-      onPublishingNotReadyEntryTitle: 'Not ready to be published',
-      onPublishingNotReadyEntryBody:
-        'Only items with a "Ready" status can be published. Please drag the card to the "Ready" column to enable publishing.',
-      onPublishEntryTitle: 'Publish this entry?',
-      onPublishEntryBody: 'Are you sure you want to publish this entry?',
-      draftHeader: 'Drafts',
-      inReviewHeader: 'In Review',
-      readyHeader: 'Ready',
-      currentEntries: '%{smart_count} entry |||| %{smart_count} entries',
     },
   },
 };

@@ -96,10 +96,6 @@ const vi = {
       onDeleteWithUnsavedChanges:
         'Bạn có chắc rằng bạn muốn xoá mục đã được công bố này, cũng như là những thay đổi chưa lưu của bạn trong phiên làm việc này?',
       onDeletePublishedEntry: 'Bạn có chắc rằng bạn muốn xoá mục đã được công bố này?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Điều này sẽ xoá tất cả những thay đổi chưa được lưu trong mục này, cũng như là những thay đổi chưa được lưu của bạn trong phiên làm việc này. Bạn vẫn muốn xoá chứ?',
-      onDeleteUnpublishedChanges:
-        'Tất cả những thay đổi chưa được lưu trong mục này sẽ bị xoá. Bạn vẫn muốn xoá chứ?',
       loadingEntry: 'Đang tải...',
       confirmLoadBackup:
         'Một bản sao lưu trên máy đã được phục hồi cho mục này, bạn có muốn tải lên không?',
@@ -113,9 +109,6 @@ const vi = {
       unpublishing: 'Đang ngừng công bố...',
       publishAndCreateNew: 'Công bố và tạo mới',
       publishAndDuplicate: 'Công bố và sao chép',
-      deleteUnpublishedChanges: 'Xoá thay đổi chưa công bố này',
-      deleteUnpublishedEntry: 'Xoá mục chưa được công bố này',
-      deletePublishedEntry: 'Xoá mục đã được công bố này',
       deleteEntry: 'Xoá mục này',
       saving: 'Đang lưu...',
       save: 'Lưu',
@@ -221,11 +214,9 @@ const vi = {
       missingRequiredField: 'Bạn còn thiếu vài thông tin bắt buộc. Hãy hoàn thành trước khi lưu.',
       entrySaved: 'Mục đã được lưu',
       entryPublished: 'Mục đã được công bố',
-      entryUnpublished: 'Mục đã ngừng công bố',
       onFailToPublishEntry: 'Không thể công bố: %{details}',
       onFailToUnpublishEntry: 'Không thể ngừng công bố mục: %{details}',
       entryUpdated: 'Trạng thái của mục đã được cập nhật',
-      onDeleteUnpublishedChanges: 'Những thay đổi chưa được công bố đã được xoá',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Bạn đã đăng xuất, hãy sao lưu dữ liệu và đăng nhập lại',
       onBackendDown: 'Dịch vụ backend đang gặp trục trặc. Hãy xem {details} để biết thêm thông tin',

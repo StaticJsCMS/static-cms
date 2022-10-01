@@ -20,17 +20,6 @@ import {
   ADD_DRAFT_ENTRY_MEDIA_FILE,
   REMOVE_DRAFT_ENTRY_MEDIA_FILE,
 } from '../actions/entries';
-import {
-  UNPUBLISHED_ENTRY_PERSIST_REQUEST,
-  UNPUBLISHED_ENTRY_PERSIST_SUCCESS,
-  UNPUBLISHED_ENTRY_PERSIST_FAILURE,
-  UNPUBLISHED_ENTRY_STATUS_CHANGE_REQUEST,
-  UNPUBLISHED_ENTRY_STATUS_CHANGE_SUCCESS,
-  UNPUBLISHED_ENTRY_STATUS_CHANGE_FAILURE,
-  UNPUBLISHED_ENTRY_PUBLISH_REQUEST,
-  UNPUBLISHED_ENTRY_PUBLISH_SUCCESS,
-  UNPUBLISHED_ENTRY_PUBLISH_FAILURE,
-} from '../actions/editorialWorkflow';
 import { selectFolderEntryExtension, selectHasMetaPath } from './collections';
 import { getDataPath, duplicateI18nFields } from '../lib/i18n';
 
@@ -135,32 +124,15 @@ function entryDraftReducer(state = Map(), action) {
       return state.set('fieldsErrors', Map());
     }
 
-    case ENTRY_PERSIST_REQUEST:
-    case UNPUBLISHED_ENTRY_PERSIST_REQUEST: {
+    case ENTRY_PERSIST_REQUEST: {
       return state.setIn(['entry', 'isPersisting'], true);
     }
 
-    case ENTRY_PERSIST_FAILURE:
-    case UNPUBLISHED_ENTRY_PERSIST_FAILURE: {
+    case ENTRY_PERSIST_FAILURE:{
       return state.deleteIn(['entry', 'isPersisting']);
     }
 
-    case UNPUBLISHED_ENTRY_STATUS_CHANGE_REQUEST:
-      return state.setIn(['entry', 'isUpdatingStatus'], true);
-
-    case UNPUBLISHED_ENTRY_STATUS_CHANGE_FAILURE:
-    case UNPUBLISHED_ENTRY_STATUS_CHANGE_SUCCESS:
-      return state.deleteIn(['entry', 'isUpdatingStatus']);
-
-    case UNPUBLISHED_ENTRY_PUBLISH_REQUEST:
-      return state.setIn(['entry', 'isPublishing'], true);
-
-    case UNPUBLISHED_ENTRY_PUBLISH_SUCCESS:
-    case UNPUBLISHED_ENTRY_PUBLISH_FAILURE:
-      return state.deleteIn(['entry', 'isPublishing']);
-
     case ENTRY_PERSIST_SUCCESS:
-    case UNPUBLISHED_ENTRY_PERSIST_SUCCESS:
       return state.withMutations(state => {
         state.deleteIn(['entry', 'isPersisting']);
         state.set('hasChanged', false);

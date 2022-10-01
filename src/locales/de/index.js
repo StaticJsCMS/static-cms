@@ -106,14 +106,9 @@ const de = {
       onPublishingWithUnsavedChanges:
         'Es sind noch ungespeicherte Änderungen vorhanden. Bitte speicheren Sie vor dem Veröffentlichen.',
       onPublishing: 'Soll dieser Beitrag wirklich veröffentlicht werden?',
-      onUnpublishing: 'Soll die Veröffentlichung dieses Beitrags wirklich zurückgezogen werden?',
       onDeleteWithUnsavedChanges:
         'Möchten Sie diesen veröffentlichten Beitrag, sowie Ihre nicht gespeicherten Änderungen löschen?',
       onDeletePublishedEntry: 'Soll dieser veröffentlichte Beitrag wirklich gelöscht werden?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Möchten Sie diesen unveröffentlichten Beitrag, sowie Ihre nicht gespeicherten Änderungen löschen?',
-      onDeleteUnpublishedChanges:
-        'Alle unveröffentlichten Änderungen werden gelöscht. Möchten Sie wirklich löschen?',
       loadingEntry: 'Beitrag laden...',
       confirmLoadBackup:
         'Für diesen Beitrag ist ein lokales Backup vorhanden. Möchten Sie dieses benutzen?',
@@ -127,14 +122,9 @@ const de = {
       publishing: 'Veröffentlichen...',
       publish: 'Veröffentlichen',
       published: 'Veröffentlicht',
-      unpublish: 'Veröffentlichung zurückziehen',
       duplicate: 'Duplizieren',
-      unpublishing: 'Veröffentlichung wird zurückgezogen...',
       publishAndCreateNew: 'Veröffentlichen und neuen Beitrag erstellen',
       publishAndDuplicate: 'Veröffentlichen und Beitrag duplizieren',
-      deleteUnpublishedChanges: 'Unveröffentlichte Änderungen verwerfen',
-      deleteUnpublishedEntry: 'Lösche unveröffentlichten Beitrag',
-      deletePublishedEntry: 'Lösche veröffentlichten Beitrag',
       deleteEntry: 'Lösche Beitrag',
       saving: 'Speichern...',
       save: 'Speichern',
@@ -269,12 +259,8 @@ const de = {
       missingRequiredField: 'Oops, einige zwingend erforderliche Felder sind nicht ausgefüllt.',
       entrySaved: 'Beitrag gespeichert',
       entryPublished: 'Beitrag veröffentlicht',
-      entryUnpublished: 'Beitrag nicht mehr öffentlich',
       onFailToPublishEntry: 'Veröffentlichen fehlgeschlagen: %{details}',
-      onFailToUnpublishEntry:
-        'Veröffentlichung des Beitrags konnte nicht rückgängig gemacht werden: %{details}',
       entryUpdated: 'Beitragsstatus aktualisiert',
-      onDeleteUnpublishedChanges: 'Unveröffentlichte Änderungen verworfen',
       onFailToAuth: '%{details}',
       onLoggedOut:
         'Sie wurden ausgeloggt. Bitte sichern Sie Ihre Daten und melden Sie sich erneut an.',

@@ -23,7 +23,7 @@ Once you've gotten the hang of it, you can use the file to build whatever collec
 
 ### Render the content provided by Simple CMS as web pages
 
-Simple CMS manages your content, and provides editorial and admin features, but it doesn't deliver content. It only makes your content available through an API.
+Simple CMS manages your content, and provides admin features, but it doesn't deliver content. It only makes your content available through an API.
 
 It is up to developers to determine how to build the raw content into something useful and delightful on the frontend.
 

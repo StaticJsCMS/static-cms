@@ -88,10 +88,6 @@ const nb_no = {
       onDeleteWithUnsavedChanges:
         'Er du sikker på at du vil slette et publisert innlegg med tilhørende ulagrede endringer?',
       onDeletePublishedEntry: 'Er du sikker på at du vil slette dette publiserte innlegget?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Handlingen sletter endringer som ikke er publisert eller lagret enda. Er du sikker på du vil fortsette?',
-      onDeleteUnpublishedChanges:
-        'Alle endringer som ikke er publisert i dette innlegget vil gå tapt. Vil du fortsette?',
       loadingEntry: 'Laster innlegg...',
       confirmLoadBackup: 'Vil du gjenopprette tidligere endringer som ikke har blitt lagret?',
     },
@@ -104,9 +100,6 @@ const nb_no = {
       unpublishing: 'Avpubliserer...',
       publishAndCreateNew: 'Publiser og lag nytt',
       publishAndDuplicate: 'Publiser og dupliser',
-      deleteUnpublishedChanges: 'Slett upubliserte endringer',
-      deleteUnpublishedEntry: 'Slett upublisert innlegg',
-      deletePublishedEntry: 'Slett publisert innlegg',
       deleteEntry: 'Slett innlegg',
       saving: 'Lagrer...',
       save: 'Lagre',
@@ -213,11 +206,8 @@ const nb_no = {
         'Oisann, ser ut som du glemte et påkrevd felt. Du må fylle det ut før du kan fortsette.',
       entrySaved: 'Innlegg lagret',
       entryPublished: 'Innlegg publisert',
-      entryUnpublished: 'Innlegg avpublisert',
       onFailToPublishEntry: 'Kunne ikke publisere: %{details}',
-      onFailToUnpublishEntry: 'Kunne ikke avpublisere: %{details}',
       entryUpdated: 'Innleggsstatus oppdatert',
-      onDeleteUnpublishedChanges: 'Avpubliserte endringer slettet',
       onFailToAuth: '%{details}',
     },
   },

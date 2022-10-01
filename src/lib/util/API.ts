@@ -142,45 +142,6 @@ export async function readFileMetadata(
   return metadata;
 }
 
-/**
- * Keywords for inferring a status that will provide a deploy preview URL.
- */
-const PREVIEW_CONTEXT_KEYWORDS = ['deploy'];
-
-/**
- * Check a given status context string to determine if it provides a link to a
- * deploy preview. Checks for an exact match against `previewContext` if given,
- * otherwise checks for inclusion of a value from `PREVIEW_CONTEXT_KEYWORDS`.
- */
-export function isPreviewContext(context: string, previewContext: string) {
-  if (previewContext) {
-    return context === previewContext;
-  }
-  return PREVIEW_CONTEXT_KEYWORDS.some(keyword => context.includes(keyword));
-}
-
-export enum PreviewState {
-  Other = 'other',
-  Success = 'success',
-}
-
-/**
- * Retrieve a deploy preview URL from an array of statuses. By default, a
- * matching status is inferred via `isPreviewContext`.
- */
-export function getPreviewStatus(
-  statuses: {
-    context: string;
-    target_url: string;
-    state: PreviewState;
-  }[],
-  previewContext: string,
-) {
-  return statuses.find(({ context }) => {
-    return isPreviewContext(context, previewContext);
-  });
-}
-
 function getConflictingBranches(branchName: string) {
   // for cms/posts/post-1, conflicting branches are cms/posts, cms
   const parts = branchName.split('/');

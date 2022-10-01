@@ -104,10 +104,6 @@ const nl = {
       onDeleteWithUnsavedChanges:
         'Weet u zeker dat u dit gepubliceerde item en uw niet-opgeslagen wijzigingen uit de huidige sessie wilt verwijderen?',
       onDeletePublishedEntry: 'Weet u zeker dat u dit gepubliceerde item wilt verwijderen?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Alle niet-gepubliceerde wijzigingen in dit item worden verwijderd, evenals uw niet-opgeslagen wijzigingen uit de huidige sessie. Wilt u nog steeds verwijderen?',
-      onDeleteUnpublishedChanges:
-        'Alle niet-gepubliceerde wijzigingen in dit item worden verwijderd. Wilt u nog steeds verwijderen?',
       loadingEntry: 'Item laden...',
       confirmLoadBackup: 'Voor dit item is een lokale back-up hersteld, wilt u deze gebruiken?',
     },
@@ -125,9 +121,6 @@ const nl = {
       unpublishing: 'Publicatie ongedaan maken...',
       publishAndCreateNew: 'Publiceer en maak nieuw item aan',
       publishAndDuplicate: 'Publiceer en dupliceer item',
-      deleteUnpublishedChanges: 'Verwijder niet-gepubliceerde wijzigingen',
-      deleteUnpublishedEntry: 'Niet-gepubliceerd item verwijderen',
-      deletePublishedEntry: 'Gepubliceerd item verwijderen',
       deleteEntry: 'Item verwijderen',
       saving: 'Opslaan...',
       save: 'Opslaan',
@@ -258,11 +251,8 @@ const nl = {
       missingRequiredField: 'Oeps, sommige verplichte velden zijn niet ingevuld.',
       entrySaved: 'Item opgeslagen',
       entryPublished: 'Item gepubliceerd',
-      entryUnpublished: 'Publicatie teruggetrokken',
       onFailToPublishEntry: 'Kan item niet publiceren: %{details}',
-      onFailToUnpublishEntry: 'Kan item niet terugtrekken: %{details}',
       entryUpdated: 'Status van item geüpdatet',
-      onDeleteUnpublishedChanges: 'Niet-gepubliceerde wijzigingen verwijderd',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Je bent uitgelogd, back-up alstublieft uw data log daarna in',
       onBackendDown:

@@ -5,10 +5,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import React, { useCallback, useMemo, useState } from 'react';
-import { translate, TranslateProps } from 'react-polyglot';
+import { translate } from 'react-polyglot';
 
 import ConfirmEvent from '../../lib/util/events/ConfirmEvent';
 import { useWindowEvent } from '../../lib/util/window.util';
+
+import type { TranslateProps } from 'react-polyglot';
 
 interface ConfirmProps {
   title: string | { key: string; options?: any };

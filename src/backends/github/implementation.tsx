@@ -1,46 +1,41 @@
+import { stripIndent } from 'common-tags';
+import trimStart from 'lodash/trimStart';
 import * as React from 'react';
 import semaphore from 'semaphore';
-import trimStart from 'lodash/trimStart';
-import { stripIndent } from 'common-tags';
 
 import {
-  CURSOR_COMPATIBILITY_SYMBOL,
-  Cursor,
   asyncLock,
   basename,
-  getBlobSHA,
-  entriesByFolder,
-  entriesByFiles,
-  unpublishedEntries,
-  getMediaDisplayURL,
-  getMediaAsBlob,
-  filterByExtension,
-  getPreviewStatus,
-  runWithLock,
   blobToFileObj,
-  contentKeyFromBranch,
+  Cursor,
+  CURSOR_COMPATIBILITY_SYMBOL,
+  entriesByFiles,
+  entriesByFolder,
+  filterByExtension,
+  getBlobSHA,
+  getMediaAsBlob,
+  getMediaDisplayURL,
+  runWithLock,
   unsentRequest,
-  branchFromContentKey,
 } from '../../lib/util';
-import AuthenticationPage from './AuthenticationPage';
 import API, { API_NAME } from './API';
+import AuthenticationPage from './AuthenticationPage';
 import GraphQLAPI from './GraphQLAPI';
 
 import type { Octokit } from '@octokit/rest';
-import type {
-  AsyncLock,
-  Implementation,
-  AssetProxy,
-  PersistOptions,
-  DisplayURL,
-  User,
-  Credentials,
-  Config,
-  ImplementationFile,
-  UnpublishedEntryMediaFile,
-  Entry,
-} from '../../lib/util';
 import type { Semaphore } from 'semaphore';
+import type {
+  AssetProxy,
+  AsyncLock,
+  Config,
+  Credentials,
+  DisplayURL,
+  Entry,
+  Implementation,
+  ImplementationFile,
+  PersistOptions,
+  User,
+} from '../../lib/util';
 
 type GitHubUser = Octokit.UsersGetAuthenticatedResponse;
 
@@ -65,21 +60,13 @@ export default class GitHub implements Implementation {
   options: {
     proxied: boolean;
     API: API | null;
-    useWorkflow?: boolean;
-    initialWorkflowStatus: string;
   };
   originRepo: string;
   repo?: string;
-  openAuthoringEnabled: boolean;
-  useOpenAuthoring?: boolean;
-  alwaysForkEnabled: boolean;
   branch: string;
   apiRoot: string;
   mediaFolder: string;
-  previewContext: string;
   token: string | null;
-  squashMerges: boolean;
-  cmsLabelPrefix: string;
   useGraphql: boolean;
   _currentUserPromise?: Promise<GitHubUser>;
   _userIsOriginMaintainerPromises?: {
@@ -91,7 +78,6 @@ export default class GitHub implements Implementation {
     this.options = {
       proxied: false,
       API: null,
-      initialWorkflowStatus: '',
       ...options,
     };
 
@@ -103,27 +89,12 @@ export default class GitHub implements Implementation {
     }
 
     this.api = this.options.API || null;
-
-    this.openAuthoringEnabled = config.backend.open_authoring || false;
-    if (this.openAuthoringEnabled) {
-      if (!this.options.useWorkflow) {
-        throw new Error(
-          'backend.open_authoring is true but publish_mode is not set to editorial_workflow.',
-        );
-      }
-      this.originRepo = config.backend.repo || '';
-    } else {
-      this.repo = this.originRepo = config.backend.repo || '';
-    }
-    this.alwaysForkEnabled = config.backend.always_fork || false;
+    this.repo = this.originRepo = config.backend.repo || '';
     this.branch = config.backend.branch?.trim() || 'main';
     this.apiRoot = config.backend.api_root || 'https://api.github.com';
     this.token = '';
-    this.squashMerges = config.backend.squash_merges || false;
-    this.cmsLabelPrefix = config.backend.cms_label_prefix || '';
     this.useGraphql = config.backend.use_graphql || false;
     this.mediaFolder = config.media_folder;
-    this.previewContext = config.backend.preview_context || '';
     this.lock = asyncLock();
   }
 
@@ -173,35 +144,7 @@ export default class GitHub implements Implementation {
   }
 
   restoreUser(user: User) {
-    return this.openAuthoringEnabled
-      ? this.authenticateWithFork({ userData: user, getPermissionToFork: () => true }).then(() =>
-          this.authenticate(user),
-        )
-      : this.authenticate(user);
-  }
-
-  async pollUntilForkExists({ repo, token }: { repo: string; token: string }) {
-    const pollDelay = 250; // milliseconds
-    let repoExists = false;
-    while (!repoExists) {
-      repoExists = await fetch(`${this.apiRoot}/repos/${repo}`, {
-        headers: { Authorization: `token ${token}` },
-      })
-        .then(() => true)
-        .catch(err => {
-          if (err && err.status === 404) {
-            console.info('This 404 was expected and handled appropriately.');
-            return false;
-          } else {
-            return Promise.reject(err);
-          }
-        });
-      // wait between polls
-      if (!repoExists) {
-        await new Promise(resolve => setTimeout(resolve, pollDelay));
-      }
-    }
-    return Promise.resolve();
+    return this.authenticate(user);
   }
 
   async currentUser({ token }: { token: string }) {
@@ -239,65 +182,6 @@ export default class GitHub implements Implementation {
     return this._userIsOriginMaintainerPromises[username];
   }
 
-  async forkExists({ token }: { token: string }) {
-    try {
-      const currentUser = await this.currentUser({ token });
-      const repoName = this.originRepo.split('/')[1];
-      const repo = await fetch(`${this.apiRoot}/repos/${currentUser.login}/${repoName}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `token ${token}`,
-        },
-      }).then(res => res.json());
-
-      // https://developer.github.com/v3/repos/#get
-      // The parent and source objects are present when the repository is a fork.
-      // parent is the repository this repository was forked from, source is the ultimate source for the network.
-      const forkExists =
-        repo.fork === true &&
-        repo.parent &&
-        repo.parent.full_name.toLowerCase() === this.originRepo.toLowerCase();
-      return forkExists;
-    } catch {
-      return false;
-    }
-  }
-
-  async authenticateWithFork({
-    userData,
-    getPermissionToFork,
-  }: {
-    userData: User;
-    getPermissionToFork: () => Promise<boolean> | boolean;
-  }) {
-    if (!this.openAuthoringEnabled) {
-      throw new Error('Cannot authenticate with fork; Open Authoring is turned off.');
-    }
-    const token = userData.token as string;
-
-    // Origin maintainers should be able to use the CMS normally. If alwaysFork
-    // is enabled we always fork (and avoid the origin maintainer check)
-    if (!this.alwaysForkEnabled && (await this.userIsOriginMaintainer({ token }))) {
-      this.repo = this.originRepo;
-      this.useOpenAuthoring = false;
-      return Promise.resolve();
-    }
-
-    if (!(await this.forkExists({ token }))) {
-      await getPermissionToFork();
-    }
-
-    const fork = await fetch(`${this.apiRoot}/repos/${this.originRepo}/forks`, {
-      method: 'POST',
-      headers: {
-        Authorization: `token ${token}`,
-      },
-    }).then(res => res.json());
-    this.useOpenAuthoring = true;
-    this.repo = fork.full_name;
-    return this.pollUntilForkExists({ repo: fork.full_name, token });
-  }
-
   async authenticate(state: Credentials) {
     this.token = state.token as string;
     const apiCtor = this.useGraphql ? GraphQLAPI : API;
@@ -307,10 +191,6 @@ export default class GitHub implements Implementation {
       repo: this.repo,
       originRepo: this.originRepo,
       apiRoot: this.apiRoot,
-      squashMerges: this.squashMerges,
-      cmsLabelPrefix: this.cmsLabelPrefix,
-      useOpenAuthoring: this.useOpenAuthoring,
-      initialWorkflowStatus: this.options.initialWorkflowStatus,
     });
     const user = await this.api!.user();
     const isCollab = await this.api!.hasWriteAccess().catch(error => {
@@ -333,7 +213,7 @@ export default class GitHub implements Implementation {
     }
 
     // Authorized user
-    return { ...user, token: state.token as string, useOpenAuthoring: this.useOpenAuthoring };
+    return { ...user, token: state.token as string };
   }
 
   logout() {
@@ -425,7 +305,7 @@ export default class GitHub implements Implementation {
   }
 
   entriesByFiles(files: ImplementationFile[]) {
-    const repoURL = this.useOpenAuthoring ? this.api!.originRepoURL : this.api!.repoURL;
+    const repoURL = this.api!.repoURL;
 
     const readFile = (path: string, id: string | null | undefined) =>
       this.api!.readFile(path, id, { repoURL }).catch(() => '') as Promise<string>;
@@ -557,117 +437,5 @@ export default class GitHub implements Implementation {
       entries,
       cursor: result.cursor,
     };
-  }
-
-  async loadMediaFile(branch: string, file: UnpublishedEntryMediaFile) {
-    const readFile = (
-      path: string,
-      id: string | null | undefined,
-      { parseText }: { parseText: boolean },
-    ) => this.api!.readFile(path, id, { branch, parseText });
-
-    const blob = await getMediaAsBlob(file.path, file.id, readFile);
-    const name = basename(file.path);
-    const fileObj = blobToFileObj(name, blob);
-    return {
-      id: file.id,
-      displayURL: URL.createObjectURL(fileObj),
-      path: file.path,
-      name,
-      size: fileObj.size,
-      file: fileObj,
-    };
-  }
-
-  async unpublishedEntries() {
-    const listEntriesKeys = () =>
-      this.api!.listUnpublishedBranches().then(branches =>
-        branches.map(branch => contentKeyFromBranch(branch)),
-      );
-
-    const ids = await unpublishedEntries(listEntriesKeys);
-    return ids;
-  }
-
-  async unpublishedEntry({
-    id,
-    collection,
-    slug,
-  }: {
-    id?: string;
-    collection?: string;
-    slug?: string;
-  }) {
-    if (id) {
-      const data = await this.api!.retrieveUnpublishedEntryData(id);
-      return data;
-    } else if (collection && slug) {
-      const entryId = this.api!.generateContentKey(collection, slug);
-      const data = await this.api!.retrieveUnpublishedEntryData(entryId);
-      return data;
-    } else {
-      throw new Error('Missing unpublished entry id or collection and slug');
-    }
-  }
-
-  getBranch(collection: string, slug: string) {
-    const contentKey = this.api!.generateContentKey(collection, slug);
-    const branch = branchFromContentKey(contentKey);
-    return branch;
-  }
-
-  async unpublishedEntryDataFile(collection: string, slug: string, path: string, id: string) {
-    const branch = this.getBranch(collection, slug);
-    const data = (await this.api!.readFile(path, id, { branch })) as string;
-    return data;
-  }
-
-  async unpublishedEntryMediaFile(collection: string, slug: string, path: string, id: string) {
-    const branch = this.getBranch(collection, slug);
-    const mediaFile = await this.loadMediaFile(branch, { path, id });
-    return mediaFile;
-  }
-
-  async getDeployPreview(collection: string, slug: string) {
-    try {
-      const statuses = await this.api!.getStatuses(collection, slug);
-      const deployStatus = getPreviewStatus(statuses, this.previewContext);
-
-      if (deployStatus) {
-        const { target_url: url, state } = deployStatus;
-        return { url, status: state };
-      } else {
-        return null;
-      }
-    } catch (e) {
-      return null;
-    }
-  }
-
-  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
-    // updateUnpublishedEntryStatus is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.updateUnpublishedEntryStatus(collection, slug, newStatus),
-      'Failed to acquire update entry status lock',
-    );
-  }
-
-  deleteUnpublishedEntry(collection: string, slug: string) {
-    // deleteUnpublishedEntry is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.deleteUnpublishedEntry(collection, slug),
-      'Failed to acquire delete entry lock',
-    );
-  }
-
-  publishUnpublishedEntry(collection: string, slug: string) {
-    // publishUnpublishedEntry is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.publishUnpublishedEntry(collection, slug),
-      'Failed to acquire publish entry lock',
-    );
   }
 }

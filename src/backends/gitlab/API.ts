@@ -1,48 +1,33 @@
-import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { createHttpLink } from 'apollo-link-http';
+import { ApolloClient } from 'apollo-client';
 import { setContext } from 'apollo-link-context';
-import { Base64 } from 'js-base64';
+import { createHttpLink } from 'apollo-link-http';
 import { Map } from 'immutable';
+import { Base64 } from 'js-base64';
 import { flow, partial, result, trimStart } from 'lodash';
 import { dirname } from 'path';
 
-const NO_CACHE = 'no-cache';
-import * as queries from './queries';
 import {
-  localForage,
-  parseLinkHeader,
-  unsentRequest,
-  then,
-  APIError,
-  Cursor,
-  readFile,
-  CMS_BRANCH_PREFIX,
-  generateContentKey,
-  isCMSLabel,
-  EditorialWorkflowError,
-  labelToStatus,
-  statusToLabel,
-  DEFAULT_PR_BODY,
-  MERGE_COMMIT_MESSAGE,
-  responseParser,
-  PreviewState,
-  parseContentKey,
-  branchFromContentKey,
-  requestWithBackoff,
+  APIError, Cursor, localForage, parseLinkHeader, readFile,
   readFileMetadata,
+  requestWithBackoff,
+  responseParser, then,
   throwOnConflictingBranches,
+  unsentRequest
 } from '../../lib/util';
+import * as queries from './queries';
 
-import type { ApolloQueryResult } from 'apollo-client';
+const NO_CACHE = 'no-cache';
+
 import type { NormalizedCacheObject } from 'apollo-cache-inmemory';
+import type { ApolloQueryResult } from 'apollo-client';
 import type {
   ApiRequest,
-  DataFile,
   AssetProxy,
-  PersistOptions,
+  DataFile,
   FetchError,
   ImplementationFile,
+  PersistOptions
 } from '../../lib/util';
 
 export const API_NAME = 'GitLab';
@@ -53,9 +38,6 @@ export interface Config {
   token?: string;
   branch?: string;
   repo?: string;
-  squashMerges: boolean;
-  initialWorkflowStatus: string;
-  cmsLabelPrefix: string;
   useGraphQL?: boolean;
 }
 
@@ -101,55 +83,6 @@ type GitLabCommitDiff = {
   new_file: boolean;
   renamed_file: boolean;
   deleted_file: boolean;
-};
-
-enum GitLabCommitStatuses {
-  Pending = 'pending',
-  Running = 'running',
-  Success = 'success',
-  Failed = 'failed',
-  Canceled = 'canceled',
-}
-
-type GitLabCommitStatus = {
-  status: GitLabCommitStatuses;
-  name: string;
-  author: {
-    username: string;
-    name: string;
-  };
-  description: null;
-  sha: string;
-  ref: string;
-  target_url: string;
-};
-
-type GitLabMergeRebase = {
-  rebase_in_progress: boolean;
-  merge_error: string;
-};
-
-type GitLabMergeRequest = {
-  id: number;
-  iid: number;
-  title: string;
-  description: string;
-  state: string;
-  merged_by: {
-    name: string;
-    username: string;
-  };
-  merged_at: string;
-  created_at: string;
-  updated_at: string;
-  target_branch: string;
-  source_branch: string;
-  author: {
-    name: string;
-    username: string;
-  };
-  labels: string[];
-  sha: string;
 };
 
 type GitLabRepo = {
@@ -209,13 +142,9 @@ export default class API {
   graphQLAPIRoot: string;
   token: string | boolean;
   branch: string;
-  useOpenAuthoring?: boolean;
   repo: string;
   repoURL: string;
   commitAuthor?: CommitAuthor;
-  squashMerges: boolean;
-  initialWorkflowStatus: string;
-  cmsLabelPrefix: string;
 
   graphQLClient?: ApolloClient<NormalizedCacheObject>;
 
@@ -226,9 +155,6 @@ export default class API {
     this.branch = config.branch || 'main';
     this.repo = config.repo || '';
     this.repoURL = `/projects/${encodeURIComponent(this.repo)}`;
-    this.squashMerges = config.squashMerges;
-    this.initialWorkflowStatus = config.initialWorkflowStatus;
-    this.cmsLabelPrefix = config.cmsLabelPrefix;
     if (config.useGraphQL === true) {
       this.graphQLClient = this.getApolloClient();
     }
@@ -664,15 +590,10 @@ export default class API {
 
   async persistFiles(dataFiles: DataFile[], mediaFiles: AssetProxy[], options: PersistOptions) {
     const files = [...dataFiles, ...mediaFiles];
-    if (options.useWorkflow) {
-      const slug = dataFiles[0].slug;
-      return this.editorialWorkflowGit(files, slug, options);
-    } else {
-      const items = await this.getCommitItems(files, this.branch);
-      return this.uploadAndCommit(items, {
-        commitMessage: options.commitMessage,
-      });
-    }
+    const items = await this.getCommitItems(files, this.branch);
+    return this.uploadAndCommit(items, {
+      commitMessage: options.commitMessage,
+    });
   }
 
   deleteFiles = (paths: string[], commitMessage: string) => {
@@ -689,37 +610,6 @@ export default class API {
       commitMessage,
     });
   };
-
-  async getMergeRequests(sourceBranch?: string) {
-    const mergeRequests: GitLabMergeRequest[] = await this.requestJSON({
-      url: `${this.repoURL}/merge_requests`,
-      params: {
-        state: 'opened',
-        labels: 'Any',
-        per_page: 100,
-        target_branch: this.branch,
-        ...(sourceBranch ? { source_branch: sourceBranch } : {}),
-      },
-    });
-
-    return mergeRequests.filter(
-      mr =>
-        mr.source_branch.startsWith(CMS_BRANCH_PREFIX) &&
-        mr.labels.some(l => isCMSLabel(l, this.cmsLabelPrefix)),
-    );
-  }
-
-  async listUnpublishedBranches() {
-    console.info(
-      '%c Checking for Unpublished entries',
-      'line-height: 30px;text-align: center;font-weight: bold',
-    );
-
-    const mergeRequests = await this.getMergeRequests();
-    const branches = mergeRequests.map(mr => mr.source_branch);
-
-    return branches;
-  }
 
   async getFileId(path: string, branch: string) {
     const request = await this.request({
@@ -747,15 +637,6 @@ export default class API {
       });
 
     return fileExists;
-  }
-
-  async getBranchMergeRequest(branch: string) {
-    const mergeRequests = await this.getMergeRequests(branch);
-    if (mergeRequests.length <= 0) {
-      throw new EditorialWorkflowError('content is not under editorial workflow', true);
-    }
-
-    return mergeRequests[0];
   }
 
   async getDifferences(to: string, from = this.branch) {
@@ -794,169 +675,6 @@ export default class API {
     });
   }
 
-  async retrieveUnpublishedEntryData(contentKey: string) {
-    const { collection, slug } = parseContentKey(contentKey);
-    const branch = branchFromContentKey(contentKey);
-    const mergeRequest = await this.getBranchMergeRequest(branch);
-    const diffs = await this.getDifferences(mergeRequest.sha);
-    const diffsWithIds = await Promise.all(
-      diffs.map(async d => {
-        const { path, newFile } = d;
-        const id = await this.getFileId(path, branch);
-        return { id, path, newFile };
-      }),
-    );
-    const label = mergeRequest.labels.find(l => isCMSLabel(l, this.cmsLabelPrefix)) as string;
-    const status = labelToStatus(label, this.cmsLabelPrefix);
-    const updatedAt = mergeRequest.updated_at;
-    const pullRequestAuthor = mergeRequest.author.name;
-    return {
-      collection,
-      slug,
-      status,
-      diffs: diffsWithIds,
-      updatedAt,
-      pullRequestAuthor,
-    };
-  }
-
-  async rebaseMergeRequest(mergeRequest: GitLabMergeRequest) {
-    let rebase: GitLabMergeRebase = await this.requestJSON({
-      method: 'PUT',
-      url: `${this.repoURL}/merge_requests/${mergeRequest.iid}/rebase?skip_ci=true`,
-    });
-
-    let i = 1;
-    while (rebase.rebase_in_progress) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      rebase = await this.requestJSON({
-        url: `${this.repoURL}/merge_requests/${mergeRequest.iid}`,
-        params: {
-          include_rebase_in_progress: true,
-        },
-      });
-      if (!rebase.rebase_in_progress || i > 30) {
-        break;
-      }
-      i++;
-    }
-
-    if (rebase.rebase_in_progress) {
-      throw new APIError('Timed out rebasing merge request', null, API_NAME);
-    } else if (rebase.merge_error) {
-      throw new APIError(`Rebase error: ${rebase.merge_error}`, null, API_NAME);
-    }
-  }
-
-  async createMergeRequest(branch: string, commitMessage: string, status: string) {
-    await this.requestJSON({
-      method: 'POST',
-      url: `${this.repoURL}/merge_requests`,
-      params: {
-        source_branch: branch,
-        target_branch: this.branch,
-        title: commitMessage,
-        description: DEFAULT_PR_BODY,
-        labels: statusToLabel(status, this.cmsLabelPrefix),
-        remove_source_branch: true,
-        squash: this.squashMerges,
-      },
-    });
-  }
-
-  async editorialWorkflowGit(
-    files: (DataFile | AssetProxy)[],
-    slug: string,
-    options: PersistOptions,
-  ) {
-    const contentKey = generateContentKey(options.collectionName as string, slug);
-    const branch = branchFromContentKey(contentKey);
-    const unpublished = options.unpublished || false;
-    if (!unpublished) {
-      const items = await this.getCommitItems(files, this.branch);
-      await this.uploadAndCommit(items, {
-        commitMessage: options.commitMessage,
-        branch,
-        newBranch: true,
-      });
-      await this.createMergeRequest(
-        branch,
-        options.commitMessage,
-        options.status || this.initialWorkflowStatus,
-      );
-    } else {
-      const mergeRequest = await this.getBranchMergeRequest(branch);
-      await this.rebaseMergeRequest(mergeRequest);
-      const [items, diffs] = await Promise.all([
-        this.getCommitItems(files, branch),
-        this.getDifferences(branch),
-      ]);
-      // mark files for deletion
-      for (const diff of diffs.filter(d => d.binary)) {
-        if (!items.some(item => item.path === diff.path)) {
-          items.push({ action: CommitAction.DELETE, path: diff.newPath });
-        }
-      }
-
-      await this.uploadAndCommit(items, {
-        commitMessage: options.commitMessage,
-        branch,
-      });
-    }
-  }
-
-  async updateMergeRequestLabels(mergeRequest: GitLabMergeRequest, labels: string[]) {
-    await this.requestJSON({
-      method: 'PUT',
-      url: `${this.repoURL}/merge_requests/${mergeRequest.iid}`,
-      params: {
-        labels: labels.join(','),
-      },
-    });
-  }
-
-  async updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
-    const contentKey = generateContentKey(collection, slug);
-    const branch = branchFromContentKey(contentKey);
-    const mergeRequest = await this.getBranchMergeRequest(branch);
-
-    const labels = [
-      ...mergeRequest.labels.filter(label => !isCMSLabel(label, this.cmsLabelPrefix)),
-      statusToLabel(newStatus, this.cmsLabelPrefix),
-    ];
-    await this.updateMergeRequestLabels(mergeRequest, labels);
-  }
-
-  async mergeMergeRequest(mergeRequest: GitLabMergeRequest) {
-    await this.requestJSON({
-      method: 'PUT',
-      url: `${this.repoURL}/merge_requests/${mergeRequest.iid}/merge`,
-      params: {
-        merge_commit_message: MERGE_COMMIT_MESSAGE,
-        squash_commit_message: MERGE_COMMIT_MESSAGE,
-        squash: this.squashMerges,
-        should_remove_source_branch: true,
-      },
-    });
-  }
-
-  async publishUnpublishedEntry(collectionName: string, slug: string) {
-    const contentKey = generateContentKey(collectionName, slug);
-    const branch = branchFromContentKey(contentKey);
-    const mergeRequest = await this.getBranchMergeRequest(branch);
-    await this.mergeMergeRequest(mergeRequest);
-  }
-
-  async closeMergeRequest(mergeRequest: GitLabMergeRequest) {
-    await this.requestJSON({
-      method: 'PUT',
-      url: `${this.repoURL}/merge_requests/${mergeRequest.iid}`,
-      params: {
-        state_event: 'close',
-      },
-    });
-  }
-
   async getDefaultBranch() {
     const branch: GitLabBranch = await this.getBranch(this.branch);
     return branch;
@@ -970,49 +688,5 @@ export default class API {
       },
     });
     return refs.some(r => r.name === branch);
-  }
-
-  async deleteBranch(branch: string) {
-    await this.request({
-      method: 'DELETE',
-      url: `${this.repoURL}/repository/branches/${encodeURIComponent(branch)}`,
-    });
-  }
-
-  async deleteUnpublishedEntry(collectionName: string, slug: string) {
-    const contentKey = generateContentKey(collectionName, slug);
-    const branch = branchFromContentKey(contentKey);
-    const mergeRequest = await this.getBranchMergeRequest(branch);
-    await this.closeMergeRequest(mergeRequest);
-    await this.deleteBranch(branch);
-  }
-
-  async getMergeRequestStatues(mergeRequest: GitLabMergeRequest, branch: string) {
-    const statuses: GitLabCommitStatus[] = await this.requestJSON({
-      url: `${this.repoURL}/repository/commits/${mergeRequest.sha}/statuses`,
-      params: {
-        ref: branch,
-      },
-    });
-    return statuses;
-  }
-
-  async getStatuses(collectionName: string, slug: string) {
-    const contentKey = generateContentKey(collectionName, slug);
-    const branch = branchFromContentKey(contentKey);
-    const mergeRequest = await this.getBranchMergeRequest(branch);
-    const statuses: GitLabCommitStatus[] = await this.getMergeRequestStatues(mergeRequest, branch);
-    return statuses.map(({ name, status, target_url }) => ({
-      context: name,
-      state: status === GitLabCommitStatuses.Success ? PreviewState.Success : PreviewState.Other,
-      target_url,
-    }));
-  }
-
-  async getUnpublishedEntrySha(collection: string, slug: string) {
-    const contentKey = generateContentKey(collection, slug);
-    const branch = branchFromContentKey(contentKey);
-    const mergeRequest = await this.getBranchMergeRequest(branch);
-    return mergeRequest.sha;
   }
 }

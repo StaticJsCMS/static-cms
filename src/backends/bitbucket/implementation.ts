@@ -1,53 +1,48 @@
-import semaphore from 'semaphore';
-import { trimStart } from 'lodash';
 import { stripIndent } from 'common-tags';
+import { trimStart } from 'lodash';
+import semaphore from 'semaphore';
 
-import {
-  CURSOR_COMPATIBILITY_SYMBOL,
-  filterByExtension,
-  unsentRequest,
-  basename,
-  getBlobSHA,
-  entriesByFolder,
-  entriesByFiles,
-  getMediaDisplayURL,
-  getMediaAsBlob,
-  unpublishedEntries,
-  runWithLock,
-  asyncLock,
-  getPreviewStatus,
-  getLargeMediaPatternsFromGitAttributesFile,
-  getPointerFileForMediaFileObj,
-  getLargeMediaFilteredMediaFiles,
-  blobToFileObj,
-  contentKeyFromBranch,
-  generateContentKey,
-  localForage,
-  allEntriesByFolder,
-  AccessTokenError,
-  branchFromContentKey,
-} from '../../lib/util';
 import { NetlifyAuthenticator } from '../../lib/auth';
-import AuthenticationPage from './AuthenticationPage';
+import {
+  AccessTokenError,
+  allEntriesByFolder,
+  asyncLock,
+  basename,
+  blobToFileObj,
+  CURSOR_COMPATIBILITY_SYMBOL,
+  entriesByFiles,
+  entriesByFolder,
+  filterByExtension,
+  getBlobSHA,
+  getLargeMediaFilteredMediaFiles,
+  getLargeMediaPatternsFromGitAttributesFile,
+  getMediaAsBlob,
+  getMediaDisplayURL,
+  getPointerFileForMediaFileObj,
+  localForage,
+  runWithLock,
+  unsentRequest,
+} from '../../lib/util';
 import API, { API_NAME } from './API';
+import AuthenticationPage from './AuthenticationPage';
 import { GitLfsClient } from './git-lfs-client';
 
-import type {
-  Entry,
-  ApiRequest,
-  Cursor,
-  AssetProxy,
-  PersistOptions,
-  DisplayURL,
-  Implementation,
-  User,
-  Credentials,
-  Config,
-  ImplementationFile,
-  AsyncLock,
-  FetchError,
-} from '../../lib/util';
 import type { Semaphore } from 'semaphore';
+import type {
+  ApiRequest,
+  AssetProxy,
+  AsyncLock,
+  Config,
+  Credentials,
+  Cursor,
+  DisplayURL,
+  Entry,
+  FetchError,
+  Implementation,
+  ImplementationFile,
+  PersistOptions,
+  User,
+} from '../../lib/util';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 
@@ -69,7 +64,6 @@ export default class BitbucketBackend implements Implementation {
     proxied: boolean;
     API: API | null;
     updateUserCredentials: (args: { token: string; refresh_token: string }) => Promise<null>;
-    initialWorkflowStatus: string;
   };
   repo: string;
   branch: string;
@@ -82,9 +76,6 @@ export default class BitbucketBackend implements Implementation {
   refreshedTokenPromise?: Promise<string>;
   authenticator?: NetlifyAuthenticator;
   _mediaDisplayURLSem?: Semaphore;
-  squashMerges: boolean;
-  cmsLabelPrefix: string;
-  previewContext: string;
   largeMediaURL: string;
   _largeMediaClientPromise?: Promise<GitLfsClient>;
   authType: string;
@@ -94,7 +85,6 @@ export default class BitbucketBackend implements Implementation {
       proxied: false,
       API: null,
       updateUserCredentials: async () => null,
-      initialWorkflowStatus: '',
       ...options,
     };
 
@@ -118,9 +108,6 @@ export default class BitbucketBackend implements Implementation {
       config.backend.large_media_url || `https://bitbucket.org/${config.backend.repo}/info/lfs`;
     this.token = '';
     this.mediaFolder = config.media_folder;
-    this.squashMerges = config.backend.squash_merges || false;
-    this.cmsLabelPrefix = config.backend.cms_label_prefix || '';
-    this.previewContext = config.backend.preview_context || '';
     this.lock = asyncLock();
     this.authType = config.backend.auth_type || '';
   }
@@ -172,9 +159,6 @@ export default class BitbucketBackend implements Implementation {
       requestFunction: this.apiRequestFunction,
       branch: this.branch,
       repo: this.repo,
-      squashMerges: this.squashMerges,
-      cmsLabelPrefix: this.cmsLabelPrefix,
-      initialWorkflowStatus: this.options.initialWorkflowStatus,
     });
   }
 
@@ -196,9 +180,6 @@ export default class BitbucketBackend implements Implementation {
       branch: this.branch,
       repo: this.repo,
       apiRoot: this.apiRoot,
-      squashMerges: this.squashMerges,
-      cmsLabelPrefix: this.cmsLabelPrefix,
-      initialWorkflowStatus: this.options.initialWorkflowStatus,
     });
 
     const isCollab = await this.api.hasWriteAccess().catch(error => {
@@ -534,97 +515,5 @@ export default class BitbucketBackend implements Implementation {
       size: fileObj.size,
       file: fileObj,
     };
-  }
-
-  async unpublishedEntries() {
-    const listEntriesKeys = () =>
-      this.api!.listUnpublishedBranches().then(branches =>
-        branches.map(branch => contentKeyFromBranch(branch)),
-      );
-
-    const ids = await unpublishedEntries(listEntriesKeys);
-    return ids;
-  }
-
-  async unpublishedEntry({
-    id,
-    collection,
-    slug,
-  }: {
-    id?: string;
-    collection?: string;
-    slug?: string;
-  }) {
-    if (id) {
-      const data = await this.api!.retrieveUnpublishedEntryData(id);
-      return data;
-    } else if (collection && slug) {
-      const entryId = generateContentKey(collection, slug);
-      const data = await this.api!.retrieveUnpublishedEntryData(entryId);
-      return data;
-    } else {
-      throw new Error('Missing unpublished entry id or collection and slug');
-    }
-  }
-
-  getBranch(collection: string, slug: string) {
-    const contentKey = generateContentKey(collection, slug);
-    const branch = branchFromContentKey(contentKey);
-    return branch;
-  }
-
-  async unpublishedEntryDataFile(collection: string, slug: string, path: string, id: string) {
-    const branch = this.getBranch(collection, slug);
-    const data = (await this.api!.readFile(path, id, { branch })) as string;
-    return data;
-  }
-
-  async unpublishedEntryMediaFile(collection: string, slug: string, path: string, id: string) {
-    const branch = this.getBranch(collection, slug);
-    const mediaFile = await this.loadMediaFile(path, id, { branch });
-    return mediaFile;
-  }
-
-  async updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
-    // updateUnpublishedEntryStatus is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.updateUnpublishedEntryStatus(collection, slug, newStatus),
-      'Failed to acquire update entry status lock',
-    );
-  }
-
-  async deleteUnpublishedEntry(collection: string, slug: string) {
-    // deleteUnpublishedEntry is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.deleteUnpublishedEntry(collection, slug),
-      'Failed to acquire delete entry lock',
-    );
-  }
-
-  async publishUnpublishedEntry(collection: string, slug: string) {
-    // publishUnpublishedEntry is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.publishUnpublishedEntry(collection, slug),
-      'Failed to acquire publish entry lock',
-    );
-  }
-
-  async getDeployPreview(collection: string, slug: string) {
-    try {
-      const statuses = await this.api!.getStatuses(collection, slug);
-      const deployStatus = getPreviewStatus(statuses, this.previewContext);
-
-      if (deployStatus) {
-        const { target_url: url, state } = deployStatus;
-        return { url, status: state };
-      } else {
-        return null;
-      }
-    } catch (e) {
-      return null;
-    }
   }
 }

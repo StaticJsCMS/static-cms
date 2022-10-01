@@ -106,10 +106,6 @@ const ru = {
       onDeleteWithUnsavedChanges:
         'Вы уверены, что хотите удалить эту опубликованную запись, а также несохраненные изменения из текущего сеанса?',
       onDeletePublishedEntry: 'Вы уверены, что хотите удалить эту опубликованную запись?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Это удалит все неопубликованные изменения в этой записи, а также ваши несохраненные изменения из текущего сеанса. Вы все еще хотите удалить?',
-      onDeleteUnpublishedChanges:
-        'Все неопубликованные изменения в этой записи будут удалены. Вы все еще хотите удалить?',
       loadingEntry: 'Загрузка записи…',
       confirmLoadBackup:
         'Для этой записи была восстановлена локальная резервная копия, хотите ли вы ее использовать?',
@@ -123,9 +119,6 @@ const ru = {
       unpublishing: 'Отмена публикации…',
       publishAndCreateNew: 'Опубликовать и создать новую',
       publishAndDuplicate: 'Опубликовать и дублировать',
-      deleteUnpublishedChanges: 'Удалить неопубликованные изменения',
-      deleteUnpublishedEntry: 'Удалить неопубликованную запись',
-      deletePublishedEntry: 'Удалить опубликованную запись',
       deleteEntry: 'Удалить запись',
       saving: 'Сохранение…',
       save: 'Сохранить',
@@ -254,11 +247,8 @@ const ru = {
         'К сожалению, вы пропустили обязательное поле. Пожалуйста, заполните перед сохранением.',
       entrySaved: 'Запись сохранена',
       entryPublished: 'Запись опубликована',
-      entryUnpublished: 'Публикация записи отменена',
       onFailToPublishEntry: 'Не удалось опубликовать запись: %{details}',
-      onFailToUnpublishEntry: 'Не удалось отменить публикацию записи: %{details}',
       entryUpdated: 'Статус записи обновлен',
-      onDeleteUnpublishedChanges: 'Неопубликованные изменения удалены',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Вы вышли. Пожалуйста, сохраните все данные и войдите снова',
       onBackendDown: 'Происходят перебои в работе бекенда. См. %{details}',

@@ -1,43 +1,26 @@
 import GoTrue from 'gotrue-js';
-import jwtDecode from 'jwt-decode';
-import { get, pick, intersection } from 'lodash';
 import ini from 'ini';
+import jwtDecode from 'jwt-decode';
+import { get, intersection, pick } from 'lodash';
 
 import {
-  APIError,
-  unsentRequest,
-  basename,
-  entriesByFiles,
-  parsePointerFile,
-  getLargeMediaPatternsFromGitAttributesFile,
-  getPointerFileForMediaFileObj,
-  getLargeMediaFilteredMediaFiles,
-  AccessTokenError,
-  PreviewState,
+  AccessTokenError, APIError, basename,
+  entriesByFiles, getLargeMediaFilteredMediaFiles, getLargeMediaPatternsFromGitAttributesFile,
+  getPointerFileForMediaFileObj, parsePointerFile, unsentRequest
 } from '../../lib/util';
+import { API as BitBucketAPI, BitbucketBackend } from '../bitbucket';
 import { GitHubBackend } from '../github';
 import { GitLabBackend } from '../gitlab';
-import { BitbucketBackend, API as BitBucketAPI } from '../bitbucket';
+import AuthenticationPage from './AuthenticationPage';
 import GitHubAPI from './GitHubAPI';
 import GitLabAPI from './GitLabAPI';
-import AuthenticationPage from './AuthenticationPage';
 import { getClient } from './netlify-lfs-client';
 
-import type { Client } from './netlify-lfs-client';
 import type {
   ApiRequest,
-  AssetProxy,
-  PersistOptions,
-  Entry,
-  Cursor,
-  Implementation,
-  DisplayURL,
-  User,
-  Credentials,
-  Config,
-  ImplementationFile,
-  DisplayURLObject,
+  AssetProxy, Config, Credentials, Cursor, DisplayURL, DisplayURLObject, Entry, Implementation, ImplementationFile, PersistOptions, User
 } from '../../lib/util';
+import type { Client } from './netlify-lfs-client';
 
 const STATUS_PAGE = 'https://www.netlifystatus.com';
 const GIT_GATEWAY_STATUS_ENDPOINT = `${STATUS_PAGE}/api/v2/components.json`;
@@ -126,18 +109,10 @@ interface NetlifyUser extends Credentials {
   user_metadata: { full_name: string; avatar_url: string };
 }
 
-async function apiGet(path: string) {
-  const apiRoot = 'https://api.netlify.com/api/v1/sites';
-  const response = await fetch(`${apiRoot}/${path}`).then(res => res.json());
-  return response;
-}
-
 export default class GitGateway implements Implementation {
   config: Config;
   api?: GitHubAPI | GitLabAPI | BitBucketAPI;
   branch: string;
-  squashMerges: boolean;
-  cmsLabelPrefix: string;
   mediaFolder: string;
   transformImages: boolean;
   gatewayUrl: string;
@@ -153,19 +128,15 @@ export default class GitGateway implements Implementation {
   options: {
     proxied: boolean;
     API: GitHubAPI | GitLabAPI | BitBucketAPI | null;
-    initialWorkflowStatus: string;
   };
   constructor(config: Config, options = {}) {
     this.options = {
       proxied: true,
       API: null,
-      initialWorkflowStatus: '',
       ...options,
     };
     this.config = config;
     this.branch = config.backend.branch?.trim() || 'main';
-    this.squashMerges = config.backend.squash_merges || false;
-    this.cmsLabelPrefix = config.backend.cms_label_prefix || '';
     this.mediaFolder = config.media_folder;
     const { use_large_media_transforms_in_media_library: transformImages = true } = config.backend;
     this.transformImages = transformImages;
@@ -339,9 +310,6 @@ export default class GitGateway implements Implementation {
         tokenPromise: this.tokenPromise!,
         commitAuthor: pick(userData, ['name', 'email']),
         isLargeMedia: (filename: string) => this.isLargeMediaFile(filename),
-        squashMerges: this.squashMerges,
-        cmsLabelPrefix: this.cmsLabelPrefix,
-        initialWorkflowStatus: this.options.initialWorkflowStatus,
       };
 
       if (this.backendType === 'github') {
@@ -402,33 +370,9 @@ export default class GitGateway implements Implementation {
     return this.backend!.getEntry(path);
   }
 
-  async unpublishedEntryDataFile(collection: string, slug: string, path: string, id: string) {
-    return this.backend!.unpublishedEntryDataFile(collection, slug, path, id);
-  }
-
   async isLargeMediaFile(path: string) {
     const client = await this.getLargeMediaClient();
     return client.enabled && client.matchPath(path);
-  }
-
-  async unpublishedEntryMediaFile(collection: string, slug: string, path: string, id: string) {
-    const isLargeMedia = await this.isLargeMediaFile(path);
-    if (isLargeMedia) {
-      const branch = this.backend!.getBranch(collection, slug);
-      const { url, blob } = await this.getLargeMediaDisplayURL({ path, id }, branch);
-      const name = basename(path);
-      return {
-        id,
-        name,
-        path,
-        url,
-        displayURL: url,
-        file: new File([blob], name),
-        size: blob.size,
-      };
-    } else {
-      return this.backend!.unpublishedEntryMediaFile(collection, slug, path, id);
-    }
   }
 
   getMedia(mediaFolder = this.mediaFolder) {
@@ -577,49 +521,6 @@ export default class GitGateway implements Implementation {
   }
   deleteFiles(paths: string[], commitMessage: string) {
     return this.backend!.deleteFiles(paths, commitMessage);
-  }
-  async getDeployPreview(collection: string, slug: string) {
-    let preview = await this.backend!.getDeployPreview(collection, slug);
-    if (!preview) {
-      try {
-        // if the commit doesn't have a status, try to use Netlify API directly
-        // this is useful when builds are queue up in Netlify and don't have a commit status yet
-        // and only works with public logs at the moment
-        // TODO: get Netlify API Token and use it to access private logs
-        const siteId = new URL(localStorage.getItem('netlifySiteURL') || '').hostname;
-        const site = await apiGet(siteId);
-        const deploys: { state: string; commit_ref: string; deploy_url: string }[] = await apiGet(
-          `${site.id}/deploys?per_page=100`,
-        );
-        if (deploys.length > 0) {
-          const ref = await this.api!.getUnpublishedEntrySha(collection, slug);
-          const deploy = deploys.find(d => d.commit_ref === ref);
-          if (deploy) {
-            preview = {
-              status: deploy.state === 'ready' ? PreviewState.Success : PreviewState.Other,
-              url: deploy.deploy_url,
-            };
-          }
-        }
-        // eslint-disable-next-line no-empty
-      } catch (e) {}
-    }
-    return preview;
-  }
-  unpublishedEntries() {
-    return this.backend!.unpublishedEntries();
-  }
-  unpublishedEntry({ id, collection, slug }: { id?: string; collection?: string; slug?: string }) {
-    return this.backend!.unpublishedEntry({ id, collection, slug });
-  }
-  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
-    return this.backend!.updateUnpublishedEntryStatus(collection, slug, newStatus);
-  }
-  deleteUnpublishedEntry(collection: string, slug: string) {
-    return this.backend!.deleteUnpublishedEntry(collection, slug);
-  }
-  publishUnpublishedEntry(collection: string, slug: string) {
-    return this.backend!.publishUnpublishedEntry(collection, slug);
   }
   traverseCursor(cursor: Cursor, action: string) {
     return this.backend!.traverseCursor!(cursor, action);

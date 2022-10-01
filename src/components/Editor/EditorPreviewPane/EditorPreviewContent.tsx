@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 /* eslint-disable func-style */
 import styled from '@emotion/styled';
-import { CmsWidgetPreviewProps } from '../../../interface';
 import React, { ComponentType, ReactNode, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { ScrollSyncPane } from 'react-scroll-sync';
+
+import type { CmsWidgetPreviewProps } from '../../../interface';
 
 interface PreviewContentProps {
   previewComponent?:

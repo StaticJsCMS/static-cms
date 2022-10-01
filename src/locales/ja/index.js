@@ -105,10 +105,6 @@ const ja = {
       onDeleteWithUnsavedChanges:
         '保存されていない変更も削除されますが、この公開エントリを削除しますか？',
       onDeletePublishedEntry: 'この公開エントリを削除しますか？',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        '保存されていない変更も削除されますが、このエントリの未公開の変更を削除しますか？',
-      onDeleteUnpublishedChanges:
-        '公開されていない変更も削除されますが、このエントリを削除しますか？',
       loadingEntry: 'エントリの読込中...',
       confirmLoadBackup: 'ローカルのバックアップが復旧できました。利用しますか？',
     },
@@ -126,9 +122,6 @@ const ja = {
       unpublishing: '未公開にしています...',
       publishAndCreateNew: '公開して新規作成',
       publishAndDuplicate: '公開して複製する',
-      deleteUnpublishedChanges: '未公開の変更を削除',
-      deleteUnpublishedEntry: '未公開エントリを削除',
-      deletePublishedEntry: '公開エントリを削除',
       deleteEntry: 'エントリを削除',
       saving: '保存中...',
       save: '保存',
@@ -259,11 +252,8 @@ const ja = {
       missingRequiredField: 'すべての必須項目を入力してください。',
       entrySaved: '保存しました。',
       entryPublished: '公開しました。',
-      entryUnpublished: '未公開にしました。',
       onFailToPublishEntry: 'エントリの公開に失敗しました。%{details}',
-      onFailToUnpublishEntry: 'エントリを未公開にするのに失敗しました。%{details}',
       entryUpdated: 'エントリのステータスを更新しました。',
-      onDeleteUnpublishedChanges: '未公開の変更を削除しました。',
       onFailToAuth: '%{details}',
       onLoggedOut: 'ログアウトされています。データをバックアップし、再度ログインしてください。',
       onBackendDown: 'バックエンドのシステムが停止しています。%{details}',

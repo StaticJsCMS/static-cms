@@ -1,39 +1,18 @@
-import { trimStart, trim } from 'lodash';
+import { trim, trimStart } from 'lodash';
 import semaphore from 'semaphore';
 
 import {
-  basename,
-  getMediaDisplayURL,
-  generateContentKey,
-  getMediaAsBlob,
-  getPreviewStatus,
-  asyncLock,
-  runWithLock,
-  unpublishedEntries,
-  entriesByFiles,
-  filterByExtension,
-  branchFromContentKey,
-  entriesByFolder,
-  contentKeyFromBranch,
-  getBlobSHA,
+  asyncLock, basename, entriesByFiles, entriesByFolder, filterByExtension, getBlobSHA, getMediaAsBlob, getMediaDisplayURL
 } from '../../lib/util';
-import AuthenticationPage from './AuthenticationPage';
 import API, { API_NAME } from './API';
+import AuthenticationPage from './AuthenticationPage';
 
 import type { Semaphore } from 'semaphore';
 import type {
-  Credentials,
-  Implementation,
+  AssetProxy, AsyncLock, Config, Credentials, DisplayURL,
+  Entry, Implementation,
   ImplementationFile,
-  ImplementationMediaFile,
-  DisplayURL,
-  Entry,
-  AssetProxy,
-  PersistOptions,
-  Config,
-  AsyncLock,
-  User,
-  UnpublishedEntryMediaFile,
+  ImplementationMediaFile, PersistOptions, User
 } from '../../lib/util';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
@@ -61,9 +40,7 @@ function parseAzureRepo(config: Config) {
 export default class Azure implements Implementation {
   lock: AsyncLock;
   api?: API;
-  options: {
-    initialWorkflowStatus: string;
-  };
+  options: {};
   repo: {
     org: string;
     project: string;
@@ -73,16 +50,12 @@ export default class Azure implements Implementation {
   apiRoot: string;
   apiVersion: string;
   token: string | null;
-  squashMerges: boolean;
-  cmsLabelPrefix: string;
   mediaFolder: string;
-  previewContext: string;
 
   _mediaDisplayURLSem?: Semaphore;
 
   constructor(config: Config, options = {}) {
     this.options = {
-      initialWorkflowStatus: '',
       ...options,
     };
 
@@ -91,10 +64,7 @@ export default class Azure implements Implementation {
     this.apiRoot = config.backend.api_root || 'https://dev.azure.com';
     this.apiVersion = config.backend.api_version || '6.1-preview';
     this.token = '';
-    this.squashMerges = config.backend.squash_merges || false;
-    this.cmsLabelPrefix = config.backend.cms_label_prefix || '';
     this.mediaFolder = trim(config.media_folder, '/');
-    this.previewContext = config.backend.preview_context || '';
     this.lock = asyncLock();
   }
 
@@ -130,9 +100,6 @@ export default class Azure implements Implementation {
         apiVersion: this.apiVersion,
         repo: this.repo,
         branch: this.branch,
-        squashMerges: this.squashMerges,
-        cmsLabelPrefix: this.cmsLabelPrefix,
-        initialWorkflowStatus: this.options.initialWorkflowStatus,
       },
       this.token,
     );
@@ -261,123 +228,5 @@ export default class Azure implements Implementation {
 
   async deleteFiles(paths: string[], commitMessage: string) {
     await this.api!.deleteFiles(paths, commitMessage);
-  }
-
-  async loadMediaFile(branch: string, file: UnpublishedEntryMediaFile) {
-    const readFile = (
-      path: string,
-      id: string | null | undefined,
-      { parseText }: { parseText: boolean },
-    ) => this.api!.readFile(path, id, { branch, parseText });
-
-    const blob = await getMediaAsBlob(file.path, null, readFile);
-    const name = basename(file.path);
-    const fileObj = new File([blob], name);
-    return {
-      id: file.path,
-      displayURL: URL.createObjectURL(fileObj),
-      path: file.path,
-      name,
-      size: fileObj.size,
-      file: fileObj,
-    };
-  }
-
-  async loadEntryMediaFiles(branch: string, files: UnpublishedEntryMediaFile[]) {
-    const mediaFiles = await Promise.all(files.map(file => this.loadMediaFile(branch, file)));
-
-    return mediaFiles;
-  }
-
-  async unpublishedEntries() {
-    const listEntriesKeys = () =>
-      this.api!.listUnpublishedBranches().then(branches =>
-        branches.map(branch => contentKeyFromBranch(branch)),
-      );
-
-    const ids = await unpublishedEntries(listEntriesKeys);
-    return ids;
-  }
-
-  async unpublishedEntry({
-    id,
-    collection,
-    slug,
-  }: {
-    id?: string;
-    collection?: string;
-    slug?: string;
-  }) {
-    if (id) {
-      const data = await this.api!.retrieveUnpublishedEntryData(id);
-      return data;
-    } else if (collection && slug) {
-      const contentKey = generateContentKey(collection, slug);
-      const data = await this.api!.retrieveUnpublishedEntryData(contentKey);
-      return data;
-    } else {
-      throw new Error('Missing unpublished entry id or collection and slug');
-    }
-  }
-
-  getBranch(collection: string, slug: string) {
-    const contentKey = generateContentKey(collection, slug);
-    const branch = branchFromContentKey(contentKey);
-    return branch;
-  }
-
-  async unpublishedEntryMediaFile(collection: string, slug: string, path: string, id: string) {
-    const branch = this.getBranch(collection, slug);
-    const mediaFile = await this.loadMediaFile(branch, { path, id });
-    return mediaFile;
-  }
-
-  async unpublishedEntryDataFile(collection: string, slug: string, path: string, id: string) {
-    const branch = this.getBranch(collection, slug);
-    const data = (await this.api!.readFile(path, id, { branch })) as string;
-    return data;
-  }
-
-  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
-    // updateUnpublishedEntryStatus is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.updateUnpublishedEntryStatus(collection, slug, newStatus),
-      'Failed to acquire update entry status lock',
-    );
-  }
-
-  deleteUnpublishedEntry(collection: string, slug: string) {
-    // deleteUnpublishedEntry is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.deleteUnpublishedEntry(collection, slug),
-      'Failed to acquire delete entry lock',
-    );
-  }
-
-  publishUnpublishedEntry(collection: string, slug: string) {
-    // publishUnpublishedEntry is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.publishUnpublishedEntry(collection, slug),
-      'Failed to acquire publish entry lock',
-    );
-  }
-
-  async getDeployPreview(collection: string, slug: string) {
-    try {
-      const statuses = await this.api!.getStatuses(collection, slug);
-      const deployStatus = getPreviewStatus(statuses, this.previewContext);
-
-      if (deployStatus) {
-        const { target_url: url, state } = deployStatus;
-        return { url, status: state };
-      } else {
-        return null;
-      }
-    } catch (e) {
-      return null;
-    }
   }
 }

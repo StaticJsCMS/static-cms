@@ -1,3 +1,5 @@
+export {};
+
 declare global {
   import type { CmsConfig } from './interface';
 

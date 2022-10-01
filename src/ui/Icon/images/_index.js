@@ -43,7 +43,6 @@ import iconScroll from './scroll.svg';
 import iconSearch from './search.svg';
 import iconSettings from './settings.svg';
 import iconUser from './user.svg';
-import iconWorkflow from './workflow.svg';
 import iconWrite from './write.svg';
 
 const iconix = iconAdd;
@@ -94,7 +93,6 @@ const images = {
   search: iconSearch,
   settings: iconSettings,
   user: iconUser,
-  workflow: iconWorkflow,
   write: iconWrite,
 };
 

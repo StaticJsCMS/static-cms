@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 
 import { AuthenticationPage, Icon } from '../../ui';
-import { SimpleAuthenticator, ImplicitAuthenticator } from '../../lib/auth';
+import { NetlifyAuthenticator, ImplicitAuthenticator } from '../../lib/auth';
 
 const LoginButtonIcon = styled(Icon)`
   margin-right: 18px;

@@ -206,24 +206,17 @@ class EditorInterface extends Component {
       onChange,
       showDelete,
       onDelete,
-      onDeleteUnpublishedChanges,
       onChangeStatus,
       onPublish,
-      unPublish,
       onDuplicate,
       onValidate,
       user,
       hasChanged,
       displayUrl,
-      hasWorkflow,
-      useOpenAuthoring,
-      hasUnpublishedChanges,
       isNewEntry,
       isModification,
       currentStatus,
       onLogoutClick,
-      loadDeployPreview,
-      deployPreview,
       draftKey,
       editorBackLink,
       scrollSyncEnabled,
@@ -311,11 +304,9 @@ class EditorInterface extends Component {
           onPersistAndNew={() => this.handleOnPersist({ createNew: true })}
           onPersistAndDuplicate={() => this.handleOnPersist({ createNew: true, duplicate: true })}
           onDelete={onDelete}
-          onDeleteUnpublishedChanges={onDeleteUnpublishedChanges}
           onChangeStatus={onChangeStatus}
           showDelete={showDelete}
           onPublish={onPublish}
-          unPublish={unPublish}
           onDuplicate={onDuplicate}
           onPublishAndNew={() => this.handleOnPublish({ createNew: true })}
           onPublishAndDuplicate={() => this.handleOnPublish({ createNew: true, duplicate: true })}
@@ -323,15 +314,10 @@ class EditorInterface extends Component {
           hasChanged={hasChanged}
           displayUrl={displayUrl}
           collection={collection}
-          hasWorkflow={hasWorkflow}
-          useOpenAuthoring={useOpenAuthoring}
-          hasUnpublishedChanges={hasUnpublishedChanges}
           isNewEntry={isNewEntry}
           isModification={isModification}
           currentStatus={currentStatus}
           onLogoutClick={onLogoutClick}
-          loadDeployPreview={loadDeployPreview}
-          deployPreview={deployPreview}
           editorBackLink={editorBackLink}
         />
         <Editor key={draftKey}>
@@ -389,23 +375,16 @@ EditorInterface.propTypes = {
   onPersist: PropTypes.func.isRequired,
   showDelete: PropTypes.bool.isRequired,
   onDelete: PropTypes.func.isRequired,
-  onDeleteUnpublishedChanges: PropTypes.func.isRequired,
   onPublish: PropTypes.func.isRequired,
-  unPublish: PropTypes.func.isRequired,
   onDuplicate: PropTypes.func.isRequired,
   onChangeStatus: PropTypes.func.isRequired,
   user: PropTypes.object,
   hasChanged: PropTypes.bool,
   displayUrl: PropTypes.string,
-  hasWorkflow: PropTypes.bool,
-  useOpenAuthoring: PropTypes.bool,
-  hasUnpublishedChanges: PropTypes.bool,
   isNewEntry: PropTypes.bool,
   isModification: PropTypes.bool,
   currentStatus: PropTypes.string,
   onLogoutClick: PropTypes.func.isRequired,
-  deployPreview: PropTypes.object,
-  loadDeployPreview: PropTypes.func.isRequired,
   draftKey: PropTypes.string.isRequired,
   toggleScroll: PropTypes.func.isRequired,
   scrollSyncEnabled: PropTypes.bool.isRequired,

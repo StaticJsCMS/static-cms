@@ -4,9 +4,10 @@ import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
 import { getAdditionalLink } from '../../lib/registry';
-import { Collections, State } from '../../types/redux';
 import { lengths } from '../../ui';
 import Sidebar from '../Collection/Sidebar';
+
+import type { Collections, State } from '../../types/redux';
 
 const StylePage = styled('div')`
   margin: ${lengths.pageMargin};

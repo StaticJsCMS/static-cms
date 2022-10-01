@@ -60,10 +60,6 @@ const hu = {
       onDeleteWithUnsavedChanges:
         'Töröljük ezt a publikált bejegyzést, a többi mentetlen modositással együtt?',
       onDeletePublishedEntry: 'Töröljük ezt a publikált bejegyzést?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Ezzel törli a bejegyzés összes nem közzétett módosítását, valamint az aktuális munkamenetből nem mentett módosításokat. Még mindig törli?',
-      onDeleteUnpublishedChanges:
-        'A bejegyzés összes, nem közzétett módosítása törlődik. Még mindig törli?',
       loadingEntry: 'Bejegyzés betöltése...',
       confirmLoadBackup:
         'Helyi biztonsági másolat került helyre ehhez a bejegyzéshez, szeretné használni?',
@@ -77,9 +73,6 @@ const hu = {
       unpublishing: 'Publikálás visszavonása...',
       publishAndCreateNew: 'Publikálás és új létrehozása',
       publishAndDuplicate: 'Publikálás és duplikál',
-      deleteUnpublishedChanges: 'Nempublikált változtatások törlése',
-      deleteUnpublishedEntry: 'Nempublikált bejegyzés törlése',
-      deletePublishedEntry: 'Publikált bejegyzés törlése',
       deleteEntry: 'Bejegyzés törlése',
       saving: 'Mentés...',
       save: 'Mentés',
@@ -175,11 +168,8 @@ const hu = {
       missingRequiredField: 'Hoppá, kihagytál egy kötelező mezőt. Mentés előtt töltsd ki.',
       entrySaved: 'Bejegyzés elmentve',
       entryPublished: 'Bejegyzés publikálva',
-      entryUnpublished: 'Bejegyzés publikálása visszavonva',
       onFailToPublishEntry: 'Bejegyzés publikálása sikertelen: %{details}',
-      onFailToUnpublishEntry: 'Bejegyzés publikálásának visszavonása sikertelen: %{details}',
       entryUpdated: 'Bejegyzés állapota frissült',
-      onDeleteUnpublishedChanges: 'Unpublished changes deleted',
       onFailToAuth: '%{details}',
     },
   },

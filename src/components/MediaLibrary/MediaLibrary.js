@@ -217,7 +217,7 @@ class MediaLibrary extends React.Component {
    */
   handleDelete = async () => {
     const { selectedFile } = this.state;
-    const { files, deleteMedia, privateUpload, t } = this.props;
+    const { files, deleteMedia, privateUpload } = this.props;
     if (
       !(await confirm({
         title: 'mediaLibrary.mediaLibrary.onDeleteTitle',
