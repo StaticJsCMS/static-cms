@@ -23,7 +23,7 @@
     "lint:format": "prettier \"{{src,scripts,website}/**/,}*.{js,jsx,ts,tsx,css}\" --list-different",
     "lint:js": "eslint --color --ignore-path .gitignore \"{{src,scripts,website}/**/,}*.{js,jsx,ts,tsx}\"",
     "lint": "run-p -c --aggregate-output \"lint:*\"",
-    "prepublish": "build",
+    "prepare": "yarn build",
     "start": "run-s clean develop"
   },
   "module": "dist/esm/index.js",
