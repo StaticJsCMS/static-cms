@@ -5,7 +5,18 @@ import semaphore from 'semaphore';
 
 import {
   asyncLock,
-  basename, blobToFileObj, branchFromContentKey, Cursor, CURSOR_COMPATIBILITY_SYMBOL, entriesByFiles, entriesByFolder, filterByExtension, getBlobSHA, getMediaAsBlob, getMediaDisplayURL, runWithLock, unsentRequest
+  basename,
+  blobToFileObj,
+  Cursor,
+  CURSOR_COMPATIBILITY_SYMBOL,
+  entriesByFiles,
+  entriesByFolder,
+  filterByExtension,
+  getBlobSHA,
+  getMediaAsBlob,
+  getMediaDisplayURL,
+  runWithLock,
+  unsentRequest,
 } from '../../lib/util';
 import API, { API_NAME } from './API';
 import AuthenticationPage from './AuthenticationPage';
@@ -14,7 +25,16 @@ import GraphQLAPI from './GraphQLAPI';
 import type { Octokit } from '@octokit/rest';
 import type { Semaphore } from 'semaphore';
 import type {
-  AssetProxy, AsyncLock, Config, Credentials, DisplayURL, Entry, Implementation, ImplementationFile, PersistOptions, User
+  AssetProxy,
+  AsyncLock,
+  Config,
+  Credentials,
+  DisplayURL,
+  Entry,
+  Implementation,
+  ImplementationFile,
+  PersistOptions,
+  User,
 } from '../../lib/util';
 
 type GitHubUser = Octokit.UsersGetAuthenticatedResponse;
@@ -417,11 +437,5 @@ export default class GitHub implements Implementation {
       entries,
       cursor: result.cursor,
     };
-  }
-
-  getBranch(collection: string, slug: string) {
-    const contentKey = this.api!.generateContentKey(collection, slug);
-    const branch = branchFromContentKey(contentKey);
-    return branch;
   }
 }

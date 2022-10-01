@@ -521,50 +521,6 @@ export default class API {
     await this.patchBranch(this.branch, commit.sha);
   }
 
-  /**
-   * Rebase an array of commits one-by-one, starting from a given base SHA
-   */
-  async rebaseCommits(baseCommit: GitHubCompareCommit, commits: GitHubCompareCommits) {
-    /**
-     * If the parent of the first commit already matches the target base,
-     * return commits as is.
-     */
-    if (commits.length === 0 || commits[0].parents[0].sha === baseCommit.sha) {
-      const head = last(commits) as GitHubCompareCommit;
-      return head;
-    } else {
-      /**
-       * Re-create each commit over the new base, applying each to the previous,
-       * changing only the parent SHA and tree for each, but retaining all other
-       * info, such as the author/committer data.
-       */
-      const newHeadPromise = commits.reduce((lastCommitPromise, commit) => {
-        return lastCommitPromise.then(newParent => {
-          const parent = newParent;
-          const commitToRebase = commit;
-          return this.rebaseSingleCommit(parent, commitToRebase);
-        });
-      }, Promise.resolve(baseCommit));
-      return newHeadPromise;
-    }
-  }
-
-  async rebaseBranch(branch: string) {
-    try {
-      // Get the diff between the default branch the published branch
-      const { base_commit: baseCommit, commits } = await this.getDifferences(
-        this.branch,
-        await this.getHeadReference(branch),
-      );
-      // Rebase the branch based on the diff
-      const rebasedHead = await this.rebaseCommits(baseCommit, commits);
-      return rebasedHead;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
-
   async createRef(type: string, name: string, sha: string) {
     const result: Octokit.GitCreateRefResponse = await this.request(`${this.repoURL}/git/refs`, {
       method: 'POST',
@@ -573,13 +529,12 @@ export default class API {
     return result;
   }
 
-  async patchRef(type: string, name: string, sha: string, opts: { force?: boolean } = {}) {
-    const force = opts.force || false;
+  async patchRef(type: string, name: string, sha: string) {
     const result: Octokit.GitUpdateRefResponse = await this.request(
       `${this.repoURL}/git/refs/${type}/${encodeURIComponent(name)}`,
       {
         method: 'PATCH',
-        body: JSON.stringify({ sha, force }),
+        body: JSON.stringify({ sha }),
       },
     );
     return result;
@@ -598,30 +553,12 @@ export default class API {
     return result;
   }
 
-  patchBranch(branchName: string, sha: string, opts: { force?: boolean } = {}) {
-    const force = opts.force || false;
-    if (force && !this.assertCmsBranch(branchName)) {
-      throw Error(`Only CMS branches can be force updated, cannot force update ${branchName}`);
-    }
-    return this.patchRef('heads', branchName, sha, { force });
+  patchBranch(branchName: string, sha: string) {
+    return this.patchRef('heads', branchName, sha);
   }
 
   async getHeadReference(head: string) {
     return `${this.repoOwner}:${head}`;
-  }
-
-  async createPR(title: string, head: string) {
-    const result: Octokit.PullsCreateResponse = await this.request(`${this.originRepoURL}/pulls`, {
-      method: 'POST',
-      body: JSON.stringify({
-        title,
-        body: DEFAULT_PR_BODY,
-        head: await this.getHeadReference(head),
-        base: this.branch,
-      }),
-    });
-
-    return result;
   }
 
   toBase64(str: string) {

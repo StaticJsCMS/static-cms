@@ -152,7 +152,7 @@ export class Editor extends React.Component {
   }
 
   async checkLocalBackup(prevProps) {
-    const { t, hasChanged, localBackup, loadLocalBackup, entryDraft, collection } = this.props;
+    const { hasChanged, localBackup, loadLocalBackup, entryDraft, collection } = this.props;
 
     if (!prevProps.localBackup && localBackup) {
       const confirmLoadBackup = await confirm({

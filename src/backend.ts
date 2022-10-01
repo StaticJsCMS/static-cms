@@ -5,15 +5,16 @@ import { basename, dirname, extname, join } from 'path';
 
 import { FILES, FOLDER } from './constants/collectionTypes';
 import { resolveFormat } from './formats/formats';
-import { commitMessageFormatter, previewUrlFormatter, slugFormatter } from './lib/formatters';
+import { commitMessageFormatter, slugFormatter } from './lib/formatters';
 import {
   formatI18nBackup,
   getFilePaths,
+  getI18nBackup,
   getI18nEntry,
   getI18nFiles,
   getI18nFilesDepth,
   groupEntries,
-  hasI18n,
+  hasI18n
 } from './lib/i18n';
 import { getBackend, invokeEvent } from './lib/registry';
 import { sanitizeChar } from './lib/urlHelper';
@@ -23,7 +24,7 @@ import {
   Cursor,
   CURSOR_COMPATIBILITY_SYMBOL,
   getPathDepth,
-  localForage,
+  localForage
 } from './lib/util';
 import { stringTemplate } from './lib/widgets';
 import {
@@ -36,23 +37,22 @@ import {
   selectFolderEntryExtension,
   selectHasMetaPath,
   selectInferedField,
-  selectMediaFolders,
+  selectMediaFolders
 } from './reducers/collections';
-import { selectEntry, selectMediaFilePath } from './reducers/entries';
+import { selectMediaFilePath } from './reducers/entries';
 import { selectCustomPath } from './reducers/entryDraft';
 import { selectIntegration } from './reducers/integrations';
 import { createEntry } from './valueObjects/Entry';
 
 import type { Map } from 'immutable';
-import type { CmsConfig } from './interface';
+import type { CmsConfig, ImplementationEntry } from './interface';
 import type {
   AsyncLock,
   Credentials,
   DataFile,
   DisplayURL,
   Implementation as BackendImplementation,
-  ImplementationEntry,
-  User,
+  User
 } from './lib/util';
 import type {
   Collection,
@@ -61,7 +61,7 @@ import type {
   EntryField,
   EntryMap,
   FilterRule,
-  State,
+  State
 } from './types/redux';
 import type AssetProxy from './valueObjects/AssetProxy';
 import type { EntryValue } from './valueObjects/Entry';
@@ -886,17 +886,13 @@ export class Backend {
     }
 
     const user = (await this.currentUser()) as User;
-    const commitMessage = commitMessageFormatter(
-      newEntry ? 'create' : 'update',
-      config,
-      {
-        collection,
-        slug,
-        path,
-        authorLogin: user.login,
-        authorName: user.name,
-      },
-    );
+    const commitMessage = commitMessageFormatter(newEntry ? 'create' : 'update', config, {
+      collection,
+      slug,
+      path,
+      authorLogin: user.login,
+      authorName: user.name,
+    });
 
     const collectionName = collection.get('name');
 
@@ -948,15 +944,11 @@ export class Backend {
   async persistMedia(config: CmsConfig, file: AssetProxy) {
     const user = (await this.currentUser()) as User;
     const options = {
-      commitMessage: commitMessageFormatter(
-        'uploadMedia',
-        config,
-        {
-          path: file.path,
-          authorLogin: user.login,
-          authorName: user.name,
-        },
-      ),
+      commitMessage: commitMessageFormatter('uploadMedia', config, {
+        path: file.path,
+        authorLogin: user.login,
+        authorName: user.name,
+      }),
     };
     return this.implementation.persistMedia(file, options);
   }
@@ -971,17 +963,13 @@ export class Backend {
     }
 
     const user = (await this.currentUser()) as User;
-    const commitMessage = commitMessageFormatter(
-      'delete',
-      config,
-      {
-        collection,
-        slug,
-        path,
-        authorLogin: user.login,
-        authorName: user.name,
-      },
-    );
+    const commitMessage = commitMessageFormatter('delete', config, {
+      collection,
+      slug,
+      path,
+      authorLogin: user.login,
+      authorName: user.name,
+    });
 
     let paths = [path];
     if (hasI18n(collection)) {
@@ -992,15 +980,11 @@ export class Backend {
 
   async deleteMedia(config: CmsConfig, path: string) {
     const user = (await this.currentUser()) as User;
-    const commitMessage = commitMessageFormatter(
-      'deleteMedia',
-      config,
-      {
-        path,
-        authorLogin: user.login,
-        authorName: user.name,
-      },
-    );
+    const commitMessage = commitMessageFormatter('deleteMedia', config, {
+      path,
+      authorLogin: user.login,
+      authorName: user.name,
+    });
     return this.implementation.deleteFiles([path], commitMessage);
   }
 

@@ -2,27 +2,21 @@ import { attempt, isError, take, unset } from 'lodash';
 import { extname } from 'path';
 import uuid from 'uuid/v4';
 
-import {
-  basename, Cursor,
-  CURSOR_COMPATIBILITY_SYMBOL
-} from '../../lib/util';
+import { basename, Cursor, CURSOR_COMPATIBILITY_SYMBOL } from '../../lib/util';
 import AuthenticationPage from './AuthenticationPage';
 
+import type { ImplementationEntry } from '../../interface';
 import type {
-  AssetProxy, Config, Implementation, ImplementationEntry, ImplementationFile, User
+  AssetProxy,
+  Config,
+  Entry,
+  Implementation,
+  ImplementationFile,
+  User,
 } from '../../lib/util';
 
 type RepoFile = { path: string; content: string | AssetProxy };
 type RepoTree = { [key: string]: RepoFile | RepoTree };
-
-type Diff = {
-  id: string;
-  originalPath?: string;
-  path: string;
-  newFile: boolean;
-  status: string;
-  content: string | AssetProxy;
-};
 
 declare global {
   interface Window {
@@ -203,6 +197,17 @@ export default class TestBackend implements Implementation {
       file: { path, id: null },
       data: getFile(path, window.repoFiles).content as string,
     });
+  }
+
+  async persistEntry(entry: Entry) {
+    entry.dataFiles.forEach(dataFile => {
+      const { path, raw } = dataFile;
+      writeFile(path, raw, window.repoFiles);
+    });
+    entry.assets.forEach(a => {
+      writeFile(a.path, a, window.repoFiles);
+    });
+    return Promise.resolve();
   }
 
   getMedia(mediaFolder = this.mediaFolder) {

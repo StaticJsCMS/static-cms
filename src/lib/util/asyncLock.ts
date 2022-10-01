@@ -27,7 +27,7 @@ export function asyncLock(): AsyncLock {
     try {
       // suppress too many calls to leave error
       lock.leave();
-    } catch (e) {
+    } catch (e: any) {
       // calling 'leave' too many times might not be good behavior
       // but there is no reason to completely fail on it
       if (e.message !== 'leave called too many times.') {

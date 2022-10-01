@@ -83,7 +83,7 @@ function mediaLibrary(state = Map(defaultState), action: MediaLibraryAction) {
           replaceIndex,
         });
       }
-      return state.withMutations(map => {
+      return state.withMutations((map: Map<string, any>) => {
         map.set('isVisible', true);
         map.set('forImage', forImage);
         map.set('controlID', controlID);
@@ -151,7 +151,7 @@ function mediaLibrary(state = Map(defaultState), action: MediaLibraryAction) {
       }
 
       const filesWithKeys = files.map(file => ({ ...file, key: uuid() }));
-      return state.withMutations(map => {
+      return state.withMutations((map: Map<string, any>) => {
         map.set('isLoading', false);
         map.set('isPaginating', false);
         map.set('page', page);

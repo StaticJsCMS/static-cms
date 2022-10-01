@@ -1,9 +1,8 @@
 import { APIError } from '../../lib/util';
 import { API as GithubAPI } from '../github';
 
-import type { Config as GitHubConfig, Diff } from '../github/API';
 import type { FetchError } from '../../lib/util';
-import type { Octokit } from '@octokit/rest';
+import type { Config as GitHubConfig } from '../github/API';
 
 type Config = GitHubConfig & {
   apiRoot: string;
@@ -118,13 +117,5 @@ export default class API extends GithubAPI {
 
   nextUrlProcessor() {
     return (url: string) => url.replace(/^(?:[a-z]+:\/\/.+?\/.+?\/.+?\/)/, `${this.apiRoot}/`);
-  }
-
-  async diffFromFile(file: Octokit.ReposCompareCommitsResponseFilesItem): Promise<Diff> {
-    const diff = await super.diffFromFile(file);
-    return {
-      ...diff,
-      binary: diff.binary || (await this.isLargeMedia(file.filename)),
-    };
   }
 }

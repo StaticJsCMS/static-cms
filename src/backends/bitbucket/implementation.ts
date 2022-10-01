@@ -4,7 +4,24 @@ import semaphore from 'semaphore';
 
 import { NetlifyAuthenticator } from '../../lib/auth';
 import {
-  AccessTokenError, allEntriesByFolder, asyncLock, basename, blobToFileObj, branchFromContentKey, CURSOR_COMPATIBILITY_SYMBOL, entriesByFiles, entriesByFolder, filterByExtension, generateContentKey, getBlobSHA, getLargeMediaFilteredMediaFiles, getLargeMediaPatternsFromGitAttributesFile, getMediaAsBlob, getMediaDisplayURL, getPointerFileForMediaFileObj, localForage, runWithLock, unsentRequest
+  AccessTokenError,
+  allEntriesByFolder,
+  asyncLock,
+  basename,
+  blobToFileObj,
+  CURSOR_COMPATIBILITY_SYMBOL,
+  entriesByFiles,
+  entriesByFolder,
+  filterByExtension,
+  getBlobSHA,
+  getLargeMediaFilteredMediaFiles,
+  getLargeMediaPatternsFromGitAttributesFile,
+  getMediaAsBlob,
+  getMediaDisplayURL,
+  getPointerFileForMediaFileObj,
+  localForage,
+  runWithLock,
+  unsentRequest,
 } from '../../lib/util';
 import API, { API_NAME } from './API';
 import AuthenticationPage from './AuthenticationPage';
@@ -12,7 +29,19 @@ import { GitLfsClient } from './git-lfs-client';
 
 import type { Semaphore } from 'semaphore';
 import type {
-  ApiRequest, AssetProxy, AsyncLock, Config, Credentials, Cursor, DisplayURL, Entry, FetchError, Implementation, ImplementationFile, PersistOptions, User
+  ApiRequest,
+  AssetProxy,
+  AsyncLock,
+  Config,
+  Credentials,
+  Cursor,
+  DisplayURL,
+  Entry,
+  FetchError,
+  Implementation,
+  ImplementationFile,
+  PersistOptions,
+  User,
 } from '../../lib/util';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
@@ -486,11 +515,5 @@ export default class BitbucketBackend implements Implementation {
       size: fileObj.size,
       file: fileObj,
     };
-  }
-
-  getBranch(collection: string, slug: string) {
-    const contentKey = generateContentKey(collection, slug);
-    const branch = branchFromContentKey(contentKey);
-    return branch;
   }
 }

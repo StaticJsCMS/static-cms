@@ -1,4 +1,4 @@
-import { ConfirmDialogProps } from '../../../components/UI/Confirm';
+import type { ConfirmDialogProps } from '../../../components/UI/Confirm';
 
 export default class ConfirmEvent extends CustomEvent<ConfirmDialogProps> {
   constructor(detail: ConfirmDialogProps) {

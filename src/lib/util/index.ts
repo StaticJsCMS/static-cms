@@ -2,12 +2,8 @@ import AccessTokenError from './AccessTokenError';
 import { readFile, readFileMetadata, requestWithBackoff, throwOnConflictingBranches } from './API';
 import APIError from './APIError';
 import {
-  DEFAULT_PR_BODY,
   generateContentKey,
-  labelToStatus,
-  MERGE_COMMIT_MESSAGE,
-  parseContentKey,
-  statusToLabel,
+  parseContentKey
 } from './APIUtils';
 import { asyncLock } from './asyncLock';
 import {
@@ -16,7 +12,7 @@ import {
   getPathDepth,
   parseLinkHeader,
   parseResponse,
-  responseParser,
+  responseParser
 } from './backendUtil';
 import Cursor, { CURSOR_COMPATIBILITY_SYMBOL } from './Cursor';
 import getBlobSHA from './getBlobSHA';
@@ -25,7 +21,7 @@ import {
   getLargeMediaFilteredMediaFiles,
   getLargeMediaPatternsFromGitAttributesFile,
   getPointerFileForMediaFileObj,
-  parsePointerFile,
+  parsePointerFile
 } from './git-lfs';
 import {
   allEntriesByFolder,
@@ -34,7 +30,7 @@ import {
   entriesByFolder,
   getMediaAsBlob,
   getMediaDisplayURL,
-  runWithLock,
+  runWithLock
 } from './implementation';
 import loadScript from './loadScript';
 import localForage from './localForage';
@@ -58,7 +54,7 @@ import type {
   ImplementationFile as IF,
   ImplementationMediaFile as IMF,
   PersistOptions as PO,
-  User as U,
+  User as U
 } from './implementation';
 
 export type AsyncLock = AL;
@@ -104,10 +100,6 @@ export const SimpleCmsLibUtil = {
   readFile,
   readFileMetadata,
   generateContentKey,
-  labelToStatus,
-  statusToLabel,
-  DEFAULT_PR_BODY,
-  MERGE_COMMIT_MESSAGE,
   runWithLock,
   parseContentKey,
   createPointerFile,
@@ -151,10 +143,6 @@ export {
   readFile,
   readFileMetadata,
   generateContentKey,
-  labelToStatus,
-  statusToLabel,
-  DEFAULT_PR_BODY,
-  MERGE_COMMIT_MESSAGE,
   runWithLock,
   parseContentKey,
   createPointerFile,

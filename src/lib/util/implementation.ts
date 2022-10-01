@@ -4,7 +4,7 @@ import semaphore from 'semaphore';
 import { basename } from './path';
 
 import type { Semaphore } from 'semaphore';
-import type { Implementation as I } from '../../interface';
+import type { Implementation as I, ImplementationEntry } from '../../interface';
 import type { FileMetadata } from './API';
 import type { AsyncLock } from './asyncLock';
 

@@ -45,13 +45,6 @@ interface TreeFile {
   name: string;
 }
 
-type GraphQLPullsListResponseItemUser = {
-  avatar_url: string;
-  login: string;
-  url: string;
-  name: string;
-};
-
 export default class GraphQLAPI extends API {
   client: ApolloClient<NormalizedCacheObject>;
 
@@ -288,18 +281,16 @@ export default class GraphQLAPI extends API {
     return data.repository.branch;
   }
 
-  async patchRef(type: string, name: string, sha: string, opts: { force?: boolean } = {}) {
+  async patchRef(type: string, name: string, sha: string) {
     if (type !== 'heads') {
-      return super.patchRef(type, name, sha, opts);
+      return super.patchRef(type, name, sha);
     }
-
-    const force = opts.force || false;
 
     const branch = await this.getBranch(name);
     const { data } = await this.mutate({
       mutation: mutations.updateBranch,
       variables: {
-        input: { oid: sha, refId: branch.id, force },
+        input: { oid: sha, refId: branch.id },
       },
     });
     return data!.updateRef.branch;

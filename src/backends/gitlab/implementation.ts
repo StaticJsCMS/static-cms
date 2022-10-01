@@ -198,6 +198,7 @@ export default class GitLab implements Implementation {
       getDefaultBranch: () =>
         this.api!.getDefaultBranch().then(b => ({ name: b.name, sha: b.commit.id })),
       isShaExistsInBranch: this.api!.isShaExistsInBranch.bind(this.api!),
+      getDifferences: (to, from) => this.api!.getDifferences(to, from),
       getFileId: path => this.api!.getFileId(path, this.branch),
       filterFile: file => this.filterFile(folder, file, extension, depth),
       customFetch: this.useGraphQL ? files => this.api!.readFilesGraphQL(files) : undefined,

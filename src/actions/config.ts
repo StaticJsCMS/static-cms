@@ -454,8 +454,7 @@ export async function handleLocalBackend(originalConfig: CmsConfig) {
   }
 
   const {
-    proxyUrl,
-    type: backendType,
+    proxyUrl
   } = await detectProxyServer(originalConfig.local_backend);
 
   if (!proxyUrl) {

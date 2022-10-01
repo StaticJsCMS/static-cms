@@ -108,7 +108,7 @@ export default class ControlPane extends React.Component {
   };
 
   copyFromOtherLocale =
-    ({ targetLocale, t }) =>
+    ({ targetLocale }) =>
     async sourceLocale => {
       if (
         !(await confirm({

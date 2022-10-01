@@ -16,7 +16,7 @@ function catchFormatErrors(format: string, formatter: Formatter) {
   return (res: Response) => {
     try {
       return formatter(res);
-    } catch (err) {
+    } catch (err: any) {
       throw new Error(
         `Response cannot be parsed into the expected format (${format}): ${err.message}`,
       );
@@ -50,7 +50,7 @@ export async function parseResponse(
       throw new Error(`${format} is not a supported response format.`);
     }
     body = await formatter(res);
-  } catch (err) {
+  } catch (err: any) {
     throw new APIError(err.message, res.status, apiName);
   }
   if (expectingOk && !res.ok) {

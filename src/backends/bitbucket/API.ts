@@ -1,5 +1,6 @@
 import { flow, get } from 'lodash';
 import { dirname } from 'path';
+import { parse } from 'what-the-diff';
 
 import {
   APIError, basename,
@@ -68,8 +69,6 @@ type BitBucketCommit = {
 };
 
 export const API_NAME = 'Bitbucket';
-
-const APPLICATION_JSON = 'application/json; charset=utf-8';
 
 function replace404WithEmptyResponse(err: FetchError) {
   if (err && err.status === 404) {
@@ -383,6 +382,33 @@ export default class API {
   async persistFiles(dataFiles: DataFile[], mediaFiles: AssetProxy[], options: PersistOptions) {
     const files = [...dataFiles, ...mediaFiles];
     return this.uploadFiles(files, { commitMessage: options.commitMessage, branch: this.branch });
+  }
+
+  async getDifferences(source: string, destination: string = this.branch) {
+    if (source === destination) {
+      return [];
+    }
+    const rawDiff = await this.requestText({
+      url: `${this.repoURL}/diff/${source}..${destination}`,
+      params: {
+        binary: false,
+      },
+    });
+
+    const diffs = parse(rawDiff).map(d => {
+      const oldPath = d.oldPath?.replace(/b\//, '') || '';
+      const newPath = d.newPath?.replace(/b\//, '') || '';
+      const path = newPath || (oldPath as string);
+      return {
+        oldPath,
+        newPath,
+        status: d.status,
+        newFile: d.status === 'added',
+        path,
+        binary: d.binary || /.svg$/.test(path),
+      };
+    });
+    return diffs;
   }
 
   deleteFiles = (paths: string[], message: string) => {

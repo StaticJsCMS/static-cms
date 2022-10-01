@@ -9,7 +9,7 @@ import { store } from './store';
 import { configFailed } from './actions/config';
 import { createMediaLibrary, insertMedia } from './actions/mediaLibrary';
 
-import type { MediaLibraryInstance } from './types/redux';
+import type { MediaLibraryInstance, State } from './types/redux';
 
 type MediaLibraryOptions = {};
 
@@ -40,7 +40,7 @@ const initializeMediaLibrary = once(async function initializeMediaLibrary(name, 
 });
 
 store.subscribe(() => {
-  const state = store.getState();
+  const state = store.getState() as unknown as State;
   if (state) {
     const mediaLibraryName = state.config.media_library?.name;
     if (mediaLibraryName && !state.mediaLibrary.get('externalLibrary')) {

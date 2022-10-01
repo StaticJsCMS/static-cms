@@ -85,27 +85,6 @@ type GitLabCommitDiff = {
   deleted_file: boolean;
 };
 
-enum GitLabCommitStatuses {
-  Pending = 'pending',
-  Running = 'running',
-  Success = 'success',
-  Failed = 'failed',
-  Canceled = 'canceled',
-}
-
-type GitLabCommitStatus = {
-  status: GitLabCommitStatuses;
-  name: string;
-  author: {
-    username: string;
-    name: string;
-  };
-  description: null;
-  sha: string;
-  ref: string;
-  target_url: string;
-};
-
 type GitLabRepo = {
   shared_with_groups: { group_access_level: number }[] | null;
   permissions: {
@@ -658,6 +637,42 @@ export default class API {
       });
 
     return fileExists;
+  }
+
+  async getDifferences(to: string, from = this.branch) {
+    if (to === from) {
+      return [];
+    }
+    const result: { diffs: GitLabCommitDiff[] } = await this.requestJSON({
+      url: `${this.repoURL}/repository/compare`,
+      params: {
+        from,
+        to,
+      },
+    });
+
+    if (result.diffs.length >= 1000) {
+      throw new APIError('Diff limit reached', null, API_NAME);
+    }
+
+    return result.diffs.map(d => {
+      let status = 'modified';
+      if (d.new_file) {
+        status = 'added';
+      } else if (d.deleted_file) {
+        status = 'deleted';
+      } else if (d.renamed_file) {
+        status = 'renamed';
+      }
+      return {
+        status,
+        oldPath: d.old_path,
+        newPath: d.new_path,
+        newFile: d.new_file,
+        path: d.new_path || d.old_path,
+        binary: d.diff.startsWith('Binary') || /.svg$/.test(d.new_path),
+      };
+    });
   }
 
   async getDefaultBranch() {
