@@ -1,6 +1,8 @@
 import React from 'react';
 import { css, Global } from '@emotion/react';
 
+import type { CSSProperties } from 'react';
+
 export const quantifier = '.cms-wrapper';
 
 /**
@@ -432,48 +434,17 @@ const components = {
   `,
 };
 
-const reactSelectStyles = {
-  control: styles => ({
-    ...styles,
-    border: 0,
-    boxShadow: 'none',
-    padding: '9px 0 9px 12px',
-  }),
-  option: (styles, state) => ({
-    ...styles,
-    backgroundColor: state.isSelected
-      ? `${colors.active}`
-      : state.isFocused
-      ? `${colors.activeBackground}`
-      : 'transparent',
-    paddingLeft: '22px',
-  }),
-  menu: styles => ({ ...styles, right: 0, zIndex: zIndex.zIndex300 }),
-  container: styles => ({ ...styles, padding: '0 !important' }),
-  indicatorSeparator: (styles, state) =>
-    state.hasValue && state.selectProps.isClearable
-      ? { ...styles, backgroundColor: `${colors.textFieldBorder}` }
-      : { display: 'none' },
-  dropdownIndicator: styles => ({ ...styles, color: `${colors.controlLabel}` }),
-  clearIndicator: styles => ({ ...styles, color: `${colors.controlLabel}` }),
-  multiValue: styles => ({
-    ...styles,
-    backgroundColor: colors.background,
-  }),
-  multiValueLabel: styles => ({
-    ...styles,
-    color: colors.textLead,
-    fontWeight: 500,
-  }),
-  multiValueRemove: styles => ({
-    ...styles,
-    color: colors.controlLabel,
-    ':hover': {
-      color: colors.errorText,
-      backgroundColor: colors.errorBackground,
-    },
-  }),
-};
+interface OptionStyleState {
+  isSelected: boolean;
+  isFocused: boolean;
+}
+
+interface IndicatorSeparatorStyleState {
+  hasValue: boolean;
+  selectProps: {
+    isClearable: boolean;
+  };
+}
 
 const zIndex = {
   zIndex0: 0,
@@ -487,6 +458,49 @@ const zIndex = {
   zIndex1000: 1000,
   zIndex1001: 1001,
   zIndex1002: 1002,
+};
+
+const reactSelectStyles = {
+  control: (styles: CSSProperties) => ({
+    ...styles,
+    border: 0,
+    boxShadow: 'none',
+    padding: '9px 0 9px 12px',
+  }),
+  option: (styles: CSSProperties, state: OptionStyleState) => ({
+    ...styles,
+    backgroundColor: state.isSelected
+      ? `${colors.active}`
+      : state.isFocused
+      ? `${colors.activeBackground}`
+      : 'transparent',
+    paddingLeft: '22px',
+  }),
+  menu: (styles: CSSProperties) => ({ ...styles, right: 0, zIndex: zIndex.zIndex300 }),
+  container: (styles: CSSProperties) => ({ ...styles, padding: '0 !important' }),
+  indicatorSeparator: (styles: CSSProperties, state: IndicatorSeparatorStyleState) =>
+    state.hasValue && state.selectProps.isClearable
+      ? { ...styles, backgroundColor: `${colors.textFieldBorder}` }
+      : { display: 'none' },
+  dropdownIndicator: (styles: CSSProperties) => ({ ...styles, color: `${colors.controlLabel}` }),
+  clearIndicator: (styles: CSSProperties) => ({ ...styles, color: `${colors.controlLabel}` }),
+  multiValue: (styles: CSSProperties) => ({
+    ...styles,
+    backgroundColor: colors.background,
+  }),
+  multiValueLabel: (styles: CSSProperties) => ({
+    ...styles,
+    color: colors.textLead,
+    fontWeight: 500,
+  }),
+  multiValueRemove: (styles: CSSProperties) => ({
+    ...styles,
+    color: colors.controlLabel,
+    ':hover': {
+      color: colors.errorText,
+      backgroundColor: colors.errorBackground,
+    },
+  }),
 };
 
 function GlobalStyles() {

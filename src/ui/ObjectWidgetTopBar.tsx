@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
@@ -7,6 +7,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Icon from './Icon';
 import { colors, buttons } from './styles';
 import Dropdown, { StyledDropdownButton, DropdownItem } from './Dropdown';
+import { TranslatedProps } from '../interface';
+import { List } from 'immutable';
 
 const TopBarContainer = styled.div`
   align-items: center;
@@ -50,49 +52,58 @@ const AddButton = styled.button`
   }
 `;
 
-class ObjectWidgetTopBar extends React.Component {
-  static propTypes = {
-    allowAdd: PropTypes.bool,
-    types: ImmutablePropTypes.list,
-    onAdd: PropTypes.func,
-    onAddType: PropTypes.func,
-    onCollapseToggle: PropTypes.func,
-    collapsed: PropTypes.bool,
-    heading: PropTypes.node,
-    label: PropTypes.string,
-    t: PropTypes.func.isRequired,
-  };
+interface ObjectWidgetTopBarProps {
+  allowAdd: boolean;
+  types: List<Map<string, any>>;
+  onAdd: () => void;
+  onAddType: (name: string) => void;
+  onCollapseToggle: () => void;
+  collapsed: boolean;
+  heading: ReactNode;
+  label: string;
+}
 
-  renderAddUI() {
-    if (!this.props.allowAdd) {
-      return null;
-    }
-    if (this.props.types && this.props.types.size > 0) {
-      return this.renderTypesDropdown(this.props.types);
-    } else {
-      return this.renderAddButton();
-    }
-  }
-
-  renderTypesDropdown(types) {
+const ObjectWidgetTopBar = ({
+  allowAdd,
+  types,
+  onAdd,
+  onAddType,
+  onCollapseToggle,
+  collapsed,
+  heading,
+  label,
+  t
+}: TranslatedProps<ObjectWidgetTopBarProps>) => {
+  const renderTypesDropdown = useCallback((types: List<Map<string, any>>) => {
     return (
       <Dropdown
         renderButton={() => (
           <StyledDropdownButton>
-            {this.props.t('editor.editorWidgets.list.addType', { item: this.props.label })}
+            {t('editor.editorWidgets.list.addType', { item: this.props.label })}
           </StyledDropdownButton>
         )}
       >
-        {types.map((type, idx) => (
+        {types.toJS().map((type: Record<string, any>, idx: number) => (
           <DropdownItem
             key={idx}
-            label={type.get('label', type.get('name'))}
-            onClick={() => this.props.onAddType(type.get('name'))}
+            label={type.get('label', type.name)}
+            onClick={() => onAddType(type.name)}
           />
         ))}
       </Dropdown>
     );
-  }
+  }, [t, onAddType]);
+
+  const renderAddUI = useCallback(() => {
+    if (!allowAdd) {
+      return null;
+    }
+    if (types && types.size > 0) {
+      return renderTypesDropdown(types);
+    } else {
+      return renderAddButton();
+    }
+  }, [allowAdd, types, renderTypesDropdown, renderAddButton])
 
   renderAddButton() {
     return (
@@ -103,8 +114,6 @@ class ObjectWidgetTopBar extends React.Component {
     );
   }
 
-  render() {
-    const { onCollapseToggle, collapsed, heading = null } = this.props;
 
     return (
       <TopBarContainer>
@@ -117,7 +126,6 @@ class ObjectWidgetTopBar extends React.Component {
         {this.renderAddUI()}
       </TopBarContainer>
     );
-  }
 }
 
 export default ObjectWidgetTopBar;
