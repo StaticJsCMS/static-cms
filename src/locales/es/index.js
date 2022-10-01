@@ -90,10 +90,6 @@ const es = {
       onDeleteWithUnsavedChanges:
         '¿Está seguro de que desea eliminar esta entrada publicada, así como los cambios no guardados de la sesión actual?',
       onDeletePublishedEntry: '¿Estás seguro de que quieres borrar esta entrada publicada?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Esto eliminará todos los cambios no publicados de esta entrada, así como los cambios no guardados de la sesión actual. ¿Todavía quieres borrar?',
-      onDeleteUnpublishedChanges:
-        'Todos los cambios no publicados en esta entrada serán eliminados. ¿Todavía quieres borrar?',
       loadingEntry: 'Cargando entrada...',
       confirmLoadBackup:
         'Se recuperó una copia de seguridad local para esta entrada, ¿le gustaría utilizarla?',
@@ -107,9 +103,6 @@ const es = {
       unpublishing: 'Retirando...',
       publishAndCreateNew: 'Publicar y crear nuevo',
       publishAndDuplicate: 'Publicar y duplicar',
-      deleteUnpublishedChanges: 'Eliminar cambios no publicados',
-      deleteUnpublishedEntry: 'Eliminar entrada no publicada',
-      deletePublishedEntry: 'Eliminar entrada publicada',
       deleteEntry: 'Eliminar entrada',
       saving: 'Guardando...',
       save: 'Guardar',
@@ -217,11 +210,8 @@ const es = {
         'Oops, no ha rellenado un campo obligatorio. Por favor, rellénelo antes de guardar.',
       entrySaved: 'Entrada guardada',
       entryPublished: 'Entrada publicada',
-      entryUnpublished: 'Entrada retirada',
       onFailToPublishEntry: 'No se ha podido publicar: %{details}',
-      onFailToUnpublishEntry: 'No se ha podido retirar la entrada: %{details}',
       entryUpdated: 'Estado de entrada actualizado',
-      onDeleteUnpublishedChanges: 'Cambios no publicados eliminados',
       onFailToAuth: '%{details}',
     },
   },

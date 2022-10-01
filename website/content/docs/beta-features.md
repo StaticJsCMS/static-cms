@@ -51,16 +51,6 @@ local_backend:
   allowed_hosts: ['192.168.0.1']
 ```
 
-## GitLab and BitBucket Editorial Workflow Support
-
-You can enable the Editorial Workflow with the following line in your Simple CMS `config.yml` file:
-
-```yaml
-publish_mode: editorial_workflow
-```
-
-In order to track unpublished entries statuses the GitLab implementation uses merge requests labels and the BitBucket implementation uses pull requests comments.
-
 ## i18n Support
 
 The CMS can provide a side by side interface for authoring content in multiple languages.
@@ -473,19 +463,6 @@ import styles from '!css-loader!sass-loader!../main.scss';
 CMS.registerPreviewStyle(styles.toString(), { raw: true });
 ```
 
-## Squash merge GitHub pull requests
-
-When using the [Editorial Workflow](../configuration-options/#publish-mode) with the `github` or GitHub-connected `git-gateway` backends, Simple CMS creates a pull request for each unpublished entry. Every time the unpublished entry is changed and saved, a new commit is added to the pull request. When the entry is published, the pull request is merged, and all of those commits are added to your project commit history in a merge commit.
-
-The squash merge option causes all commits to be "squashed" into a single commit when the pull request is merged, and the resulting commit is rebased onto the target branch, avoiding the merge commit altogether.
-
-To enable this feature, you can set the following option in your Simple CMS `config.yml`:
-
-```yaml
-backend:
-  squash_merges: true
-```
-
 ## Commit Message Templates
 
 You can customize the templates used by Simple CMS to generate commit messages by setting the `commit_messages` option under `backend` in your Simple CMS `config.yml`.
@@ -575,7 +552,7 @@ CMS.registerEventListener({
 });
 ```
 
-Supported events are `prePublish`, `postPublish`, `preUnpublish`, `postUnpublish`, `preSave` and `postSave`. The `preSave` hook can be used to modify the entry data like so:
+Supported events are `prePublish`, `postPublish`, `preSave` and `postSave`. The `preSave` hook can be used to modify the entry data like so:
 
 ```javascript
 CMS.registerEventListener({

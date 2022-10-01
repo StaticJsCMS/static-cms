@@ -8,13 +8,10 @@ import {
   getMediaAsBlob,
   getPreviewStatus,
   asyncLock,
-  runWithLock,
-  unpublishedEntries,
   entriesByFiles,
   filterByExtension,
   branchFromContentKey,
   entriesByFolder,
-  contentKeyFromBranch,
   getBlobSHA,
 } from '../../lib/util';
 import AuthenticationPage from './AuthenticationPage';
@@ -33,7 +30,6 @@ import type {
   Config,
   AsyncLock,
   User,
-  UnpublishedEntryMediaFile,
 } from '../../lib/util';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
@@ -263,106 +259,10 @@ export default class Azure implements Implementation {
     await this.api!.deleteFiles(paths, commitMessage);
   }
 
-  async loadMediaFile(branch: string, file: UnpublishedEntryMediaFile) {
-    const readFile = (
-      path: string,
-      id: string | null | undefined,
-      { parseText }: { parseText: boolean },
-    ) => this.api!.readFile(path, id, { branch, parseText });
-
-    const blob = await getMediaAsBlob(file.path, null, readFile);
-    const name = basename(file.path);
-    const fileObj = new File([blob], name);
-    return {
-      id: file.path,
-      displayURL: URL.createObjectURL(fileObj),
-      path: file.path,
-      name,
-      size: fileObj.size,
-      file: fileObj,
-    };
-  }
-
-  async loadEntryMediaFiles(branch: string, files: UnpublishedEntryMediaFile[]) {
-    const mediaFiles = await Promise.all(files.map(file => this.loadMediaFile(branch, file)));
-
-    return mediaFiles;
-  }
-
-  async unpublishedEntries() {
-    const listEntriesKeys = () =>
-      this.api!.listUnpublishedBranches().then(branches =>
-        branches.map(branch => contentKeyFromBranch(branch)),
-      );
-
-    const ids = await unpublishedEntries(listEntriesKeys);
-    return ids;
-  }
-
-  async unpublishedEntry({
-    id,
-    collection,
-    slug,
-  }: {
-    id?: string;
-    collection?: string;
-    slug?: string;
-  }) {
-    if (id) {
-      const data = await this.api!.retrieveUnpublishedEntryData(id);
-      return data;
-    } else if (collection && slug) {
-      const contentKey = generateContentKey(collection, slug);
-      const data = await this.api!.retrieveUnpublishedEntryData(contentKey);
-      return data;
-    } else {
-      throw new Error('Missing unpublished entry id or collection and slug');
-    }
-  }
-
   getBranch(collection: string, slug: string) {
     const contentKey = generateContentKey(collection, slug);
     const branch = branchFromContentKey(contentKey);
     return branch;
-  }
-
-  async unpublishedEntryMediaFile(collection: string, slug: string, path: string, id: string) {
-    const branch = this.getBranch(collection, slug);
-    const mediaFile = await this.loadMediaFile(branch, { path, id });
-    return mediaFile;
-  }
-
-  async unpublishedEntryDataFile(collection: string, slug: string, path: string, id: string) {
-    const branch = this.getBranch(collection, slug);
-    const data = (await this.api!.readFile(path, id, { branch })) as string;
-    return data;
-  }
-
-  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
-    // updateUnpublishedEntryStatus is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.updateUnpublishedEntryStatus(collection, slug, newStatus),
-      'Failed to acquire update entry status lock',
-    );
-  }
-
-  deleteUnpublishedEntry(collection: string, slug: string) {
-    // deleteUnpublishedEntry is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.deleteUnpublishedEntry(collection, slug),
-      'Failed to acquire delete entry lock',
-    );
-  }
-
-  publishUnpublishedEntry(collection: string, slug: string) {
-    // publishUnpublishedEntry is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.publishUnpublishedEntry(collection, slug),
-      'Failed to acquire publish entry lock',
-    );
   }
 
   async getDeployPreview(collection: string, slug: string) {

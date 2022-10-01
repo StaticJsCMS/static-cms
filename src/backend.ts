@@ -57,14 +57,11 @@ import type {
   DisplayURL,
   Implementation as BackendImplementation,
   ImplementationEntry,
-  UnpublishedEntry,
-  UnpublishedEntryDiff,
   User,
 } from './lib/util';
 import type {
   Collection,
   CollectionFile,
-  Collections,
   EntryDraft,
   EntryField,
   EntryMap,
@@ -273,7 +270,6 @@ interface PersistArgs {
   entryDraft: EntryDraft;
   assetProxies: AssetProxy[];
   usedSlugs: List<string>;
-  unpublished?: boolean;
   status?: string;
 }
 
@@ -412,19 +408,6 @@ export class Backend {
   getToken = () => this.implementation.getToken();
 
   async entryExist(collection: Collection, path: string, slug: string, useWorkflow: boolean) {
-    const unpublishedEntry =
-      useWorkflow &&
-      (await this.implementation
-        .unpublishedEntry({ collection: collection.get('name'), slug })
-        .catch(error => {
-          if (error.name === EDITORIAL_WORKFLOW_ERROR && error.notUnderEditorialWorkflow) {
-            return Promise.resolve(false);
-          }
-          return Promise.reject(error);
-        }));
-
-    if (unpublishedEntry) return unpublishedEntry;
-
     const publishedEntry = await this.implementation
       .getEntry(path)
       .then(({ data }) => data)
@@ -840,111 +823,6 @@ export class Backend {
     };
   }
 
-  async processUnpublishedEntry(
-    collection: Collection,
-    entryData: UnpublishedEntry,
-    withMediaFiles: boolean,
-  ) {
-    const { slug } = entryData;
-    let extension: string;
-    if (collection.get('type') === FILES) {
-      const file = collection.get('files')!.find(f => f?.get('name') === slug);
-      extension = extname(file.get('file'));
-    } else {
-      extension = selectFolderEntryExtension(collection);
-    }
-
-    const mediaFiles: MediaFile[] = [];
-    if (withMediaFiles) {
-      const nonDataFiles = entryData.diffs.filter(d => !d.path.endsWith(extension));
-      const files = await Promise.all(
-        nonDataFiles.map(f =>
-          this.implementation!.unpublishedEntryMediaFile(
-            collection.get('name'),
-            slug,
-            f.path,
-            f.id,
-          ),
-        ),
-      );
-      mediaFiles.push(...files.map(f => ({ ...f, draft: true })));
-    }
-
-    const dataFiles = sortBy(
-      entryData.diffs.filter(d => d.path.endsWith(extension)),
-      f => f.path.length,
-    );
-
-    const formatData = (data: string, path: string, newFile: boolean) => {
-      const entry = createEntry(collection.get('name'), slug, path, {
-        raw: data,
-        isModification: !newFile,
-        label: collection && selectFileEntryLabel(collection, slug),
-        mediaFiles,
-        updatedOn: entryData.updatedAt,
-        author: entryData.pullRequestAuthor,
-        status: entryData.status,
-        meta: { path: prepareMetaPath(path, collection) },
-      });
-
-      const entryWithFormat = this.entryWithFormat(collection)(entry);
-      return entryWithFormat;
-    };
-
-    const readAndFormatDataFile = async (dataFile: UnpublishedEntryDiff) => {
-      const data = await this.implementation.unpublishedEntryDataFile(
-        collection.get('name'),
-        entryData.slug,
-        dataFile.path,
-        dataFile.id,
-      );
-      const entryWithFormat = formatData(data, dataFile.path, dataFile.newFile);
-      return entryWithFormat;
-    };
-
-    // if the unpublished entry has no diffs, return the original
-    if (dataFiles.length <= 0) {
-      const loadedEntry = await this.implementation.getEntry(
-        selectEntryPath(collection, slug) as string,
-      );
-      return formatData(loadedEntry.data, loadedEntry.file.path, false);
-    } else if (hasI18n(collection)) {
-      // we need to read all locales files and not just the changes
-      const path = selectEntryPath(collection, slug) as string;
-      const i18nFiles = getI18nDataFiles(collection, extension, path, slug, dataFiles);
-      let entries = await Promise.all(
-        i18nFiles.map(dataFile => readAndFormatDataFile(dataFile).catch(() => null)),
-      );
-      entries = entries.filter(Boolean);
-      const grouped = await groupEntries(collection, extension, entries as EntryValue[]);
-      return grouped[0];
-    } else {
-      const entryWithFormat = await readAndFormatDataFile(dataFiles[0]);
-      return entryWithFormat;
-    }
-  }
-
-  async unpublishedEntries(collections: Collections) {
-    const ids = await this.implementation.unpublishedEntries!();
-    const entries = (
-      await Promise.all(
-        ids.map(async id => {
-          const entryData = await this.implementation.unpublishedEntry({ id });
-          const collectionName = entryData.collection;
-          const collection = collections.find(c => c.get('name') === collectionName);
-          if (!collection) {
-            console.warn(`Missing collection '${collectionName}' for unpublished entry '${id}'`);
-            return null;
-          }
-          const entry = await this.processUnpublishedEntry(collection, entryData, false);
-          return entry;
-        }),
-      )
-    ).filter(Boolean) as EntryValue[];
-
-    return { pagination: 0, entries };
-  }
-
   async processEntry(state: State, collection: Collection, entry: EntryValue) {
     const integration = selectIntegration(state.integrations, null, 'assetStore');
     const mediaFolders = selectMediaFolders(state.config, collection, fromJS(entry));
@@ -957,17 +835,6 @@ export class Backend {
       entry.mediaFiles = entry.mediaFiles.concat(state.mediaLibrary.get('files') || []);
     }
 
-    return entry;
-  }
-
-  async unpublishedEntry(state: State, collection: Collection, slug: string) {
-    const entryData = await this.implementation!.unpublishedEntry!({
-      collection: collection.get('name') as string,
-      slug,
-    });
-
-    let entry = await this.processUnpublishedEntry(collection, entryData, true);
-    entry = await this.processEntry(state, collection, entry);
     return entry;
   }
 
@@ -1051,7 +918,6 @@ export class Backend {
     entryDraft: draft,
     assetProxies,
     usedSlugs,
-    unpublished = false,
     status,
   }: PersistArgs) {
     const modifiedData = await this.invokePreSaveEvent(draft.get('entry'));
@@ -1126,7 +992,7 @@ export class Backend {
 
     const collectionName = collection.get('name');
 
-    const updatedOptions = { unpublished, status };
+    const updatedOptions = { status };
     const opts = {
       newEntry,
       commitMessage,
@@ -1167,14 +1033,6 @@ export class Backend {
 
   async invokePostPublishEvent(entry: EntryMap) {
     await this.invokeEventWithEntry('postPublish', entry);
-  }
-
-  async invokePreUnpublishEvent(entry: EntryMap) {
-    await this.invokeEventWithEntry('preUnpublish', entry);
-  }
-
-  async invokePostUnpublishEvent(entry: EntryMap) {
-    await this.invokeEventWithEntry('postUnpublish', entry);
   }
 
   async invokePreSaveEvent(entry: EntryMap) {
@@ -1226,14 +1084,11 @@ export class Backend {
     );
 
     const entry = selectEntry(state.entries, collection.get('name'), slug);
-    await this.invokePreUnpublishEvent(entry);
     let paths = [path];
     if (hasI18n(collection)) {
       paths = getFilePaths(collection, extension, path, slug);
     }
     await this.implementation.deleteFiles(paths, commitMessage);
-
-    await this.invokePostUnpublishEvent(entry);
   }
 
   async deleteMedia(config: CmsConfig, path: string) {
@@ -1249,27 +1104,6 @@ export class Backend {
       user.useOpenAuthoring,
     );
     return this.implementation.deleteFiles([path], commitMessage);
-  }
-
-  persistUnpublishedEntry(args: PersistArgs) {
-    return this.persistEntry({ ...args, unpublished: true });
-  }
-
-  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
-    return this.implementation.updateUnpublishedEntryStatus!(collection, slug, newStatus);
-  }
-
-  async publishUnpublishedEntry(entry: EntryMap) {
-    const collection = entry.get('collection');
-    const slug = entry.get('slug');
-
-    await this.invokePrePublishEvent(entry);
-    await this.implementation.publishUnpublishedEntry!(collection, slug);
-    await this.invokePostPublishEvent(entry);
-  }
-
-  deleteUnpublishedEntry(collection: string, slug: string) {
-    return this.implementation.deleteUnpublishedEntry!(collection, slug);
   }
 
   entryToRaw(collection: Collection, entry: EntryMap): string {

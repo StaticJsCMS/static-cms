@@ -26,29 +26,6 @@ The `backend` option specifies how to access the content for your site, includin
 
 **Note**: no matter where you access Simple CMS — whether running locally, in a staging environment, or in your published site — it will always fetch and commit files in your hosted repository (for example, on GitHub), on the branch you configured in your Simple CMS config.yml file. This means that content fetched in the admin UI will match the content in the repository, which may be different from your locally running site. It also means that content saved using the admin UI will save directly to the hosted repository, even if you're running the UI locally or in staging. If you want to have your local CMS write to a local repository, try the `local_backend` setting, [currently in beta](/docs/beta-features/#working-with-a-local-git-repository).
 
-## Publish Mode
-
-By default, all entries created or edited in the Simple CMS are committed directly into the main repository branch.
-
-The `publish_mode` option allows you to enable "Editorial Workflow" mode for more control over the content publishing phases. All unpublished entries will be arranged in a board according to their status, and they can be further reviewed and edited before going live.
-
-**Note:** Editorial workflow works with GitHub repositories, and support for GitLab and Bitbucket is [in beta](/docs/beta-features/#gitlab-and-bitbucket-editorial-workflow-support).
-
-You can enable the Editorial Workflow with the following line in your Simple CMS `config.yml` file:
-
-```yaml
-# /admin/config.yml
-publish_mode: editorial_workflow
-```
-
-From a technical perspective, the workflow translates editor UI actions into common Git commands:
-
-| Actions in Simple CMS UI  | Perform these Git actions                                                                                         |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Save draft                | Commits to a new branch (named according to the pattern `cms/collectionName/entrySlug`), and opens a pull request |
-| Edit draft                | Pushes another commit to the draft branch/pull request                                                            |
-| Approve and publish draft | Merges pull request and deletes branch                                                                            |
-
 ## Media and Public Folders
 
 Simple CMS users can upload files to your repository using the Media Gallery. The following settings specify where these files are saved, and where they can be accessed on your built site.

@@ -515,7 +515,7 @@ declare module '@simplecms/simple-cms-core' {
   }
 
   export interface CmsEventListener {
-    name: 'prePublish' | 'postPublish' | 'preUnpublish' | 'postUnpublish' | 'preSave' | 'postSave';
+    name: 'prePublish' | 'postPublish' | 'preSave' | 'postSave';
     handler: ({
       entry,
       author,
@@ -652,8 +652,6 @@ declare module '@simplecms/simple-cms-core' {
     newEntry?: boolean;
     commitMessage: string;
     collectionName?: string;
-    useWorkflow?: boolean;
-    unpublished?: boolean;
     status?: string;
   };
 
@@ -687,26 +685,6 @@ declare module '@simplecms/simple-cms-core' {
     draft?: boolean;
     url?: string;
     file?: File;
-  }
-
-  export interface UnpublishedEntryMediaFile {
-    id: string;
-    path: string;
-  }
-
-  export interface UnpublishedEntryDiff {
-    id: string;
-    path: string;
-    newFile: boolean;
-  }
-
-  export interface UnpublishedEntry {
-    pullRequestAuthor?: string;
-    slug: string;
-    collection: string;
-    status: string;
-    diffs: UnpublishedEntryDiff[];
-    updatedAt: string;
   }
 
   export type CursorStoreObject = {
@@ -779,31 +757,6 @@ declare module '@simplecms/simple-cms-core' {
     persistMedia: (file: AssetProxy, opts: PersistOptions) => Promise<ImplementationMediaFile>;
     deleteFiles: (paths: string[], commitMessage: string) => Promise<void>;
 
-    unpublishedEntries: () => Promise<string[]>;
-    unpublishedEntry: (args: {
-      id?: string;
-      collection?: string;
-      slug?: string;
-    }) => Promise<UnpublishedEntry>;
-    unpublishedEntryDataFile: (
-      collection: string,
-      slug: string,
-      path: string,
-      id: string,
-    ) => Promise<string>;
-    unpublishedEntryMediaFile: (
-      collection: string,
-      slug: string,
-      path: string,
-      id: string,
-    ) => Promise<ImplementationMediaFile>;
-    updateUnpublishedEntryStatus: (
-      collection: string,
-      slug: string,
-      newStatus: string,
-    ) => Promise<void>;
-    publishUnpublishedEntry: (collection: string, slug: string) => Promise<void>;
-    deleteUnpublishedEntry: (collection: string, slug: string) => Promise<void>;
     getDeployPreview: (
       collectionName: string,
       slug: string,

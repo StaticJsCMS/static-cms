@@ -709,18 +709,6 @@ export default class API {
     );
   }
 
-  async listUnpublishedBranches() {
-    console.info(
-      '%c Checking for Unpublished entries',
-      'line-height: 30px;text-align: center;font-weight: bold',
-    );
-
-    const mergeRequests = await this.getMergeRequests();
-    const branches = mergeRequests.map(mr => mr.source_branch);
-
-    return branches;
-  }
-
   async getFileId(path: string, branch: string) {
     const request = await this.request({
       method: 'HEAD',
@@ -794,32 +782,6 @@ export default class API {
     });
   }
 
-  async retrieveUnpublishedEntryData(contentKey: string) {
-    const { collection, slug } = parseContentKey(contentKey);
-    const branch = branchFromContentKey(contentKey);
-    const mergeRequest = await this.getBranchMergeRequest(branch);
-    const diffs = await this.getDifferences(mergeRequest.sha);
-    const diffsWithIds = await Promise.all(
-      diffs.map(async d => {
-        const { path, newFile } = d;
-        const id = await this.getFileId(path, branch);
-        return { id, path, newFile };
-      }),
-    );
-    const label = mergeRequest.labels.find(l => isCMSLabel(l, this.cmsLabelPrefix)) as string;
-    const status = labelToStatus(label, this.cmsLabelPrefix);
-    const updatedAt = mergeRequest.updated_at;
-    const pullRequestAuthor = mergeRequest.author.name;
-    return {
-      collection,
-      slug,
-      status,
-      diffs: diffsWithIds,
-      updatedAt,
-      pullRequestAuthor,
-    };
-  }
-
   async rebaseMergeRequest(mergeRequest: GitLabMergeRequest) {
     let rebase: GitLabMergeRebase = await this.requestJSON({
       method: 'PUT',
@@ -864,47 +826,6 @@ export default class API {
     });
   }
 
-  async editorialWorkflowGit(
-    files: (DataFile | AssetProxy)[],
-    slug: string,
-    options: PersistOptions,
-  ) {
-    const contentKey = generateContentKey(options.collectionName as string, slug);
-    const branch = branchFromContentKey(contentKey);
-    const unpublished = options.unpublished || false;
-    if (!unpublished) {
-      const items = await this.getCommitItems(files, this.branch);
-      await this.uploadAndCommit(items, {
-        commitMessage: options.commitMessage,
-        branch,
-        newBranch: true,
-      });
-      await this.createMergeRequest(
-        branch,
-        options.commitMessage,
-        options.status || this.initialWorkflowStatus,
-      );
-    } else {
-      const mergeRequest = await this.getBranchMergeRequest(branch);
-      await this.rebaseMergeRequest(mergeRequest);
-      const [items, diffs] = await Promise.all([
-        this.getCommitItems(files, branch),
-        this.getDifferences(branch),
-      ]);
-      // mark files for deletion
-      for (const diff of diffs.filter(d => d.binary)) {
-        if (!items.some(item => item.path === diff.path)) {
-          items.push({ action: CommitAction.DELETE, path: diff.newPath });
-        }
-      }
-
-      await this.uploadAndCommit(items, {
-        commitMessage: options.commitMessage,
-        branch,
-      });
-    }
-  }
-
   async updateMergeRequestLabels(mergeRequest: GitLabMergeRequest, labels: string[]) {
     await this.requestJSON({
       method: 'PUT',
@@ -913,18 +834,6 @@ export default class API {
         labels: labels.join(','),
       },
     });
-  }
-
-  async updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
-    const contentKey = generateContentKey(collection, slug);
-    const branch = branchFromContentKey(contentKey);
-    const mergeRequest = await this.getBranchMergeRequest(branch);
-
-    const labels = [
-      ...mergeRequest.labels.filter(label => !isCMSLabel(label, this.cmsLabelPrefix)),
-      statusToLabel(newStatus, this.cmsLabelPrefix),
-    ];
-    await this.updateMergeRequestLabels(mergeRequest, labels);
   }
 
   async mergeMergeRequest(mergeRequest: GitLabMergeRequest) {
@@ -938,13 +847,6 @@ export default class API {
         should_remove_source_branch: true,
       },
     });
-  }
-
-  async publishUnpublishedEntry(collectionName: string, slug: string) {
-    const contentKey = generateContentKey(collectionName, slug);
-    const branch = branchFromContentKey(contentKey);
-    const mergeRequest = await this.getBranchMergeRequest(branch);
-    await this.mergeMergeRequest(mergeRequest);
   }
 
   async closeMergeRequest(mergeRequest: GitLabMergeRequest) {
@@ -979,14 +881,6 @@ export default class API {
     });
   }
 
-  async deleteUnpublishedEntry(collectionName: string, slug: string) {
-    const contentKey = generateContentKey(collectionName, slug);
-    const branch = branchFromContentKey(contentKey);
-    const mergeRequest = await this.getBranchMergeRequest(branch);
-    await this.closeMergeRequest(mergeRequest);
-    await this.deleteBranch(branch);
-  }
-
   async getMergeRequestStatues(mergeRequest: GitLabMergeRequest, branch: string) {
     const statuses: GitLabCommitStatus[] = await this.requestJSON({
       url: `${this.repoURL}/repository/commits/${mergeRequest.sha}/statuses`,
@@ -1007,12 +901,5 @@ export default class API {
       state: status === GitLabCommitStatuses.Success ? PreviewState.Success : PreviewState.Other,
       target_url,
     }));
-  }
-
-  async getUnpublishedEntrySha(collection: string, slug: string) {
-    const contentKey = generateContentKey(collection, slug);
-    const branch = branchFromContentKey(contentKey);
-    const mergeRequest = await this.getBranchMergeRequest(branch);
-    return mergeRequest.sha;
   }
 }

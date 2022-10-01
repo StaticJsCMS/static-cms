@@ -106,10 +106,6 @@ const pt = {
       onDeleteWithUnsavedChanges:
         'Tem certeza de que deseja excluir esta entrada publicada, bem como as alterações não salvas da sessão atual?',
       onDeletePublishedEntry: 'Tem certeza de que deseja excluir esta entrada publicada?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Isso excluirá todas as alterações não publicadas nesta entrada, bem como as alterações não salvas da sessão atual. Você ainda deseja excluir?',
-      onDeleteUnpublishedChanges:
-        'Todas as alterações não publicadas nesta entrada serão excluídas. Você ainda deseja excluir?',
       loadingEntry: 'Carregando entrada...',
       confirmLoadBackup: 'Um backup local foi recuperado para esta entrada. Deseja usá-lo?',
     },
@@ -127,9 +123,6 @@ const pt = {
       unpublishing: 'Despublicando...',
       publishAndCreateNew: 'Publicar e criar novo(a)',
       publishAndDuplicate: 'Publicar e duplicar',
-      deleteUnpublishedChanges: 'Excluir alterações não publicadas',
-      deleteUnpublishedEntry: 'Excluir entrada não publicada',
-      deletePublishedEntry: 'Excluir entrada publicada',
       deleteEntry: 'Excluir entrada',
       saving: 'Salvando...',
       save: 'Salvar',
@@ -266,11 +259,8 @@ const pt = {
         'Ops, você perdeu um campo obrigatório. Por favor, preencha antes de salvar.',
       entrySaved: 'Entrada salva',
       entryPublished: 'Entrada publicada',
-      entryUnpublished: 'Entrada despublicada',
       onFailToPublishEntry: 'Falha ao publicar: %{details}',
-      onFailToUnpublishEntry: 'Falha ao cancelar a publicação da entrada: %{details}',
       entryUpdated: 'Status da entrada atualizado',
-      onDeleteUnpublishedChanges: 'Alterações não publicadas excluídas',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Você foi desconectado. Por favor, salve as alterações e entre novamente',
       onBackendDown: 'O serviço de back-end está fora do ar. Veja %{details} para mais informações',

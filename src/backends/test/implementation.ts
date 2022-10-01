@@ -34,23 +34,13 @@ type Diff = {
   content: string | AssetProxy;
 };
 
-type UnpublishedRepoEntry = {
-  slug: string;
-  collection: string;
-  status: string;
-  diffs: Diff[];
-  updatedAt: string;
-};
-
 declare global {
   interface Window {
     repoFiles: RepoTree;
-    repoFilesUnpublished: { [key: string]: UnpublishedRepoEntry };
   }
 }
 
 window.repoFiles = window.repoFiles || {};
-window.repoFilesUnpublished = window.repoFilesUnpublished || [];
 
 function getFile(path: string, tree: RepoTree) {
   const segments = path.split('/');
@@ -223,144 +213,6 @@ export default class TestBackend implements Implementation {
       file: { path, id: null },
       data: getFile(path, window.repoFiles).content as string,
     });
-  }
-
-  unpublishedEntries() {
-    return Promise.resolve(Object.keys(window.repoFilesUnpublished));
-  }
-
-  unpublishedEntry({ id, collection, slug }: { id?: string; collection?: string; slug?: string }) {
-    if (id) {
-      const parts = id.split('/');
-      collection = parts[0];
-      slug = parts[1];
-    }
-    const entry = window.repoFilesUnpublished[`${collection}/${slug}`];
-    if (!entry) {
-      return Promise.reject(
-        new EditorialWorkflowError('content is not under editorial workflow', true),
-      );
-    }
-
-    return Promise.resolve(entry);
-  }
-
-  async unpublishedEntryDataFile(collection: string, slug: string, path: string) {
-    const entry = window.repoFilesUnpublished[`${collection}/${slug}`];
-    const file = entry.diffs.find(d => d.path === path);
-    return file?.content as string;
-  }
-
-  async unpublishedEntryMediaFile(collection: string, slug: string, path: string) {
-    const entry = window.repoFilesUnpublished[`${collection}/${slug}`];
-    const file = entry.diffs.find(d => d.path === path);
-    return this.normalizeAsset(file?.content as AssetProxy);
-  }
-
-  deleteUnpublishedEntry(collection: string, slug: string) {
-    delete window.repoFilesUnpublished[`${collection}/${slug}`];
-    return Promise.resolve();
-  }
-
-  async addOrUpdateUnpublishedEntry(
-    key: string,
-    dataFiles: DataFile[],
-    assetProxies: AssetProxy[],
-    slug: string,
-    collection: string,
-    status: string,
-  ) {
-    const diffs: Diff[] = [];
-    dataFiles.forEach(dataFile => {
-      const { path, newPath, raw } = dataFile;
-      const currentDataFile = window.repoFilesUnpublished[key]?.diffs.find(d => d.path === path);
-      const originalPath = currentDataFile ? currentDataFile.originalPath : path;
-      diffs.push({
-        originalPath,
-        id: newPath || path,
-        path: newPath || path,
-        newFile: isEmpty(getFile(originalPath as string, window.repoFiles)),
-        status: 'added',
-        content: raw,
-      });
-    });
-    assetProxies.forEach(a => {
-      const asset = this.normalizeAsset(a);
-      diffs.push({
-        id: asset.id,
-        path: asset.path,
-        newFile: true,
-        status: 'added',
-        content: asset,
-      });
-    });
-    window.repoFilesUnpublished[key] = {
-      slug,
-      collection,
-      status,
-      diffs,
-      updatedAt: new Date().toISOString(),
-    };
-  }
-
-  async persistEntry(entry: Entry, options: PersistOptions) {
-    if (options.useWorkflow) {
-      const slug = entry.dataFiles[0].slug;
-      const key = `${options.collectionName}/${slug}`;
-      const currentEntry = window.repoFilesUnpublished[key];
-      const status =
-        currentEntry?.status || options.status || (this.options.initialWorkflowStatus as string);
-
-      this.addOrUpdateUnpublishedEntry(
-        key,
-        entry.dataFiles,
-        entry.assets,
-        slug,
-        options.collectionName as string,
-        status,
-      );
-      return Promise.resolve();
-    }
-
-    entry.dataFiles.forEach(dataFile => {
-      const { path, raw } = dataFile;
-      writeFile(path, raw, window.repoFiles);
-    });
-    entry.assets.forEach(a => {
-      writeFile(a.path, a, window.repoFiles);
-    });
-    return Promise.resolve();
-  }
-
-  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
-    window.repoFilesUnpublished[`${collection}/${slug}`].status = newStatus;
-    return Promise.resolve();
-  }
-
-  publishUnpublishedEntry(collection: string, slug: string) {
-    const key = `${collection}/${slug}`;
-    const unpubEntry = window.repoFilesUnpublished[key];
-
-    delete window.repoFilesUnpublished[key];
-
-    const tree = window.repoFiles;
-    unpubEntry.diffs.forEach(d => {
-      if (d.originalPath && !d.newFile) {
-        const originalPath = d.originalPath;
-        const sourceDir = dirname(originalPath);
-        const destDir = dirname(d.path);
-        const toMove = getFolderFiles(tree, originalPath.split('/')[0], '', 100).filter(f =>
-          f.path.startsWith(sourceDir),
-        );
-        toMove.forEach(f => {
-          deleteFile(f.path, tree);
-          writeFile(f.path.replace(sourceDir, destDir), f.content, tree);
-        });
-      }
-      writeFile(d.path, d.content, tree);
-    });
-
-    return Promise.resolve();
   }
 
   getMedia(mediaFolder = this.mediaFolder) {

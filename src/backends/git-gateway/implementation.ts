@@ -402,33 +402,9 @@ export default class GitGateway implements Implementation {
     return this.backend!.getEntry(path);
   }
 
-  async unpublishedEntryDataFile(collection: string, slug: string, path: string, id: string) {
-    return this.backend!.unpublishedEntryDataFile(collection, slug, path, id);
-  }
-
   async isLargeMediaFile(path: string) {
     const client = await this.getLargeMediaClient();
     return client.enabled && client.matchPath(path);
-  }
-
-  async unpublishedEntryMediaFile(collection: string, slug: string, path: string, id: string) {
-    const isLargeMedia = await this.isLargeMediaFile(path);
-    if (isLargeMedia) {
-      const branch = this.backend!.getBranch(collection, slug);
-      const { url, blob } = await this.getLargeMediaDisplayURL({ path, id }, branch);
-      const name = basename(path);
-      return {
-        id,
-        name,
-        path,
-        url,
-        displayURL: url,
-        file: new File([blob], name),
-        size: blob.size,
-      };
-    } else {
-      return this.backend!.unpublishedEntryMediaFile(collection, slug, path, id);
-    }
   }
 
   getMedia(mediaFolder = this.mediaFolder) {
@@ -577,49 +553,6 @@ export default class GitGateway implements Implementation {
   }
   deleteFiles(paths: string[], commitMessage: string) {
     return this.backend!.deleteFiles(paths, commitMessage);
-  }
-  async getDeployPreview(collection: string, slug: string) {
-    let preview = await this.backend!.getDeployPreview(collection, slug);
-    if (!preview) {
-      try {
-        // if the commit doesn't have a status, try to use Netlify API directly
-        // this is useful when builds are queue up in Netlify and don't have a commit status yet
-        // and only works with public logs at the moment
-        // TODO: get Netlify API Token and use it to access private logs
-        const siteId = new URL(localStorage.getItem('netlifySiteURL') || '').hostname;
-        const site = await apiGet(siteId);
-        const deploys: { state: string; commit_ref: string; deploy_url: string }[] = await apiGet(
-          `${site.id}/deploys?per_page=100`,
-        );
-        if (deploys.length > 0) {
-          const ref = await this.api!.getUnpublishedEntrySha(collection, slug);
-          const deploy = deploys.find(d => d.commit_ref === ref);
-          if (deploy) {
-            preview = {
-              status: deploy.state === 'ready' ? PreviewState.Success : PreviewState.Other,
-              url: deploy.deploy_url,
-            };
-          }
-        }
-        // eslint-disable-next-line no-empty
-      } catch (e) {}
-    }
-    return preview;
-  }
-  unpublishedEntries() {
-    return this.backend!.unpublishedEntries();
-  }
-  unpublishedEntry({ id, collection, slug }: { id?: string; collection?: string; slug?: string }) {
-    return this.backend!.unpublishedEntry({ id, collection, slug });
-  }
-  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
-    return this.backend!.updateUnpublishedEntryStatus(collection, slug, newStatus);
-  }
-  deleteUnpublishedEntry(collection: string, slug: string) {
-    return this.backend!.deleteUnpublishedEntry(collection, slug);
-  }
-  publishUnpublishedEntry(collection: string, slug: string) {
-    return this.backend!.publishUnpublishedEntry(collection, slug);
   }
   traverseCursor(cursor: Cursor, action: string) {
     return this.backend!.traverseCursor!(cursor, action);

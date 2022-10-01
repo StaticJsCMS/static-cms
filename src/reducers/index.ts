@@ -65,18 +65,6 @@ export function selectDeployPreview(state: State, collection: string, slug: stri
   return fromDeploys.selectDeployPreview(state.deploys, collection, slug);
 }
 
-export function selectUnpublishedEntry(state: State, collection: string, slug: string) {
-  return fromEditorialWorkflow.selectUnpublishedEntry(state.editorialWorkflow, collection, slug);
-}
-
-export function selectUnpublishedEntriesByStatus(state: State, status: Status) {
-  return fromEditorialWorkflow.selectUnpublishedEntriesByStatus(state.editorialWorkflow, status);
-}
-
-export function selectUnpublishedSlugs(state: State, collection: string) {
-  return fromEditorialWorkflow.selectUnpublishedSlugs(state.editorialWorkflow, collection);
-}
-
 export function selectIntegration(state: State, collection: string | null, hook: string) {
   return fromIntegrations.selectIntegration(state.integrations, collection, hook);
 }

@@ -445,36 +445,6 @@ export default class API {
     });
   }
 
-  async retrieveUnpublishedEntryData(contentKey: string) {
-    const { collection, slug } = parseContentKey(contentKey);
-    const branch = branchFromContentKey(contentKey);
-    const pullRequest = await this.getBranchPullRequest(branch);
-    const diffs = await this.getDifferences(pullRequest.sourceRefName);
-    const diffsWithIds = await Promise.all(
-      diffs.map(async d => {
-        const path = trimStart(d.item.path, '/');
-        const newFile = d.changeType === AzureCommitChangeType.ADD;
-        const id = d.item.objectId;
-        return { id, path, newFile };
-      }),
-    );
-    const label = pullRequest.labels.find(l => isCMSLabel(l.name, this.cmsLabelPrefix));
-    const labelName = label && label.name ? label.name : this.cmsLabelPrefix;
-    const status = labelToStatus(labelName, this.cmsLabelPrefix);
-    // Uses creationDate, as we do not have direct access to the updated date
-    const updatedAt = pullRequest.closedDate ? pullRequest.closedDate : pullRequest.creationDate;
-    const pullRequestAuthor =
-      pullRequest.createdBy?.displayName || pullRequest.createdBy?.uniqueName;
-    return {
-      collection,
-      slug,
-      status,
-      diffs: diffsWithIds,
-      updatedAt,
-      pullRequestAuthor,
-    };
-  }
-
   async getPullRequestStatues(pullRequest: AzurePullRequest) {
     const { value: commits } = await this.requestJSON<AzureArray<AzurePullRequestCommit>>({
       url: `${this.endpointUrl}/pullrequests/${pullRequest.pullRequestId}/commits`,
@@ -595,12 +565,6 @@ export default class API {
     return filtered;
   }
 
-  async listUnpublishedBranches(): Promise<string[]> {
-    const pullRequests = await this.getPullRequests();
-    const branches = pullRequests.map(pr => this.refToBranch(pr.sourceRefName));
-    return branches;
-  }
-
   async isFileExists(path: string, branch: string) {
     try {
       await this.requestText({
@@ -664,58 +628,6 @@ export default class API {
         d.item.gitObjectType === AzureObjectType.BLOB &&
         Object.values(AzureCommitChangeType).includes(d.changeType),
     );
-  }
-
-  async editorialWorkflowGit(
-    files: (DataFile | AssetProxy)[],
-    slug: string,
-    options: PersistOptions,
-  ) {
-    const contentKey = generateContentKey(options.collectionName as string, slug);
-    const branch = branchFromContentKey(contentKey);
-    const unpublished = options.unpublished || false;
-
-    if (!unpublished) {
-      const items = await this.getCommitItems(files, this.branch);
-
-      await this.uploadAndCommit(items, options.commitMessage, branch, true);
-      await this.createPullRequest(
-        branch,
-        options.commitMessage,
-        options.status || this.initialWorkflowStatus,
-      );
-    } else {
-      const items = await this.getCommitItems(files, branch);
-      await this.uploadAndCommit(items, options.commitMessage, branch, false);
-    }
-  }
-
-  async updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
-    const contentKey = generateContentKey(collection, slug);
-    const branch = branchFromContentKey(contentKey);
-
-    const pullRequest = await this.getBranchPullRequest(branch);
-
-    const nonCmsLabels = pullRequest.labels
-      .filter(label => !isCMSLabel(label.name, this.cmsLabelPrefix))
-      .map(label => label.name);
-
-    const labels = [...nonCmsLabels, statusToLabel(newStatus, this.cmsLabelPrefix)];
-    await this.updatePullRequestLabels(pullRequest, labels);
-  }
-
-  async deleteUnpublishedEntry(collectionName: string, slug: string) {
-    const contentKey = generateContentKey(collectionName, slug);
-    const branch = branchFromContentKey(contentKey);
-    const pullRequest = await this.getBranchPullRequest(branch);
-    await this.abandonPullRequest(pullRequest);
-  }
-
-  async publishUnpublishedEntry(collectionName: string, slug: string) {
-    const contentKey = generateContentKey(collectionName, slug);
-    const branch = branchFromContentKey(contentKey);
-    const pullRequest = await this.getBranchPullRequest(branch);
-    await this.completePullRequest(pullRequest);
   }
 
   async updatePullRequestLabels(pullRequest: AzurePullRequest, labels: string[]) {

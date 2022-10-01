@@ -20,7 +20,6 @@ import { asyncLock } from './asyncLock';
 import {
   entriesByFiles,
   entriesByFolder,
-  unpublishedEntries,
   getMediaDisplayURL,
   getMediaAsBlob,
   runWithLock,
@@ -61,9 +60,6 @@ import type { PointerFile as PF } from './git-lfs';
 import type { FetchError as FE, ApiRequest as AR } from './API';
 import type {
   Implementation as I,
-  ImplementationEntry as IE,
-  UnpublishedEntryDiff as UED,
-  UnpublishedEntry as UE,
   ImplementationMediaFile as IMF,
   ImplementationFile as IF,
   DisplayURLObject as DUO,
@@ -74,16 +70,12 @@ import type {
   PersistOptions as PO,
   AssetProxy as AP,
   Config as C,
-  UnpublishedEntryMediaFile as UEMF,
   DataFile as DF,
 } from './implementation';
 import type { AsyncLock as AL } from './asyncLock';
 
 export type AsyncLock = AL;
 export type Implementation = I;
-export type ImplementationEntry = IE;
-export type UnpublishedEntryDiff = UED;
-export type UnpublishedEntry = UE;
 export type ImplementationMediaFile = IMF;
 export type ImplementationFile = IF;
 export type DisplayURL = DU;
@@ -91,7 +83,6 @@ export type DisplayURLObject = DUO;
 export type Credentials = Cred;
 export type User = U;
 export type Entry = E;
-export type UnpublishedEntryMediaFile = UEMF;
 export type PersistOptions = PO;
 export type AssetProxy = AP;
 export type ApiRequest = AR;
@@ -123,7 +114,6 @@ export const SimpleCmsLibUtil = {
   getPathDepth,
   entriesByFiles,
   entriesByFolder,
-  unpublishedEntries,
   getMediaDisplayURL,
   getMediaAsBlob,
   readFile,
@@ -180,7 +170,6 @@ export {
   getPathDepth,
   entriesByFiles,
   entriesByFolder,
-  unpublishedEntries,
   getMediaDisplayURL,
   getMediaAsBlob,
   readFile,

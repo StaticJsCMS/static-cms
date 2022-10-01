@@ -12,7 +12,6 @@ import {
   entriesByFiles,
   getMediaDisplayURL,
   getMediaAsBlob,
-  unpublishedEntries,
   runWithLock,
   asyncLock,
   getPreviewStatus,
@@ -536,80 +535,10 @@ export default class BitbucketBackend implements Implementation {
     };
   }
 
-  async unpublishedEntries() {
-    const listEntriesKeys = () =>
-      this.api!.listUnpublishedBranches().then(branches =>
-        branches.map(branch => contentKeyFromBranch(branch)),
-      );
-
-    const ids = await unpublishedEntries(listEntriesKeys);
-    return ids;
-  }
-
-  async unpublishedEntry({
-    id,
-    collection,
-    slug,
-  }: {
-    id?: string;
-    collection?: string;
-    slug?: string;
-  }) {
-    if (id) {
-      const data = await this.api!.retrieveUnpublishedEntryData(id);
-      return data;
-    } else if (collection && slug) {
-      const entryId = generateContentKey(collection, slug);
-      const data = await this.api!.retrieveUnpublishedEntryData(entryId);
-      return data;
-    } else {
-      throw new Error('Missing unpublished entry id or collection and slug');
-    }
-  }
-
   getBranch(collection: string, slug: string) {
     const contentKey = generateContentKey(collection, slug);
     const branch = branchFromContentKey(contentKey);
     return branch;
-  }
-
-  async unpublishedEntryDataFile(collection: string, slug: string, path: string, id: string) {
-    const branch = this.getBranch(collection, slug);
-    const data = (await this.api!.readFile(path, id, { branch })) as string;
-    return data;
-  }
-
-  async unpublishedEntryMediaFile(collection: string, slug: string, path: string, id: string) {
-    const branch = this.getBranch(collection, slug);
-    const mediaFile = await this.loadMediaFile(path, id, { branch });
-    return mediaFile;
-  }
-
-  async updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
-    // updateUnpublishedEntryStatus is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.updateUnpublishedEntryStatus(collection, slug, newStatus),
-      'Failed to acquire update entry status lock',
-    );
-  }
-
-  async deleteUnpublishedEntry(collection: string, slug: string) {
-    // deleteUnpublishedEntry is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.deleteUnpublishedEntry(collection, slug),
-      'Failed to acquire delete entry lock',
-    );
-  }
-
-  async publishUnpublishedEntry(collection: string, slug: string) {
-    // publishUnpublishedEntry is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.publishUnpublishedEntry(collection, slug),
-      'Failed to acquire publish entry lock',
-    );
   }
 
   async getDeployPreview(collection: string, slug: string) {

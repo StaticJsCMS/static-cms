@@ -101,15 +101,10 @@ const da = {
       onPublishingNotReady: 'Skift status til "Klar" inden publicering.',
       onPublishingWithUnsavedChanges: 'Du har ændringer der ikke er gemt, gem inden publicing.',
       onPublishing: 'Er du sikker på at du vil publicere dette dokument?',
-      onUnpublishing: 'Er du sikker på at du vil afpublicere dette dokument?',
       onDeleteWithUnsavedChanges:
         'Er du sikker på at du vil slette dette tidliere publiceret dokument, samt dine nuværende ugemte ændringer fra denne session?',
       onDeletePublishedEntry:
         'Er du sikker på at du vil slette dette tidliere publiceret dokument?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Alle ikke publicerede ændringer til dette dokument vil blive slettet ligesom dine nuværende ugemte ændringer fra denne session. Er du sikker på at du vil slette?',
-      onDeleteUnpublishedChanges:
-        'Alle ikke publicerede ændringer til dette dokument vil blive slettet. Er du sikker på at du vil slette?',
       loadingEntry: 'Indlæser dokument...',
       confirmLoadBackup:
         'En lokal sikkerhedskopi blev gendannet for dette dokument, vil du anvende denne?',
@@ -118,14 +113,9 @@ const da = {
       publishing: 'Publicerer...',
       publish: 'Publicer',
       published: 'Publiceret',
-      unpublish: 'Afpublicer',
       duplicate: 'Kopier',
-      unpublishing: 'Afpublicerer...',
       publishAndCreateNew: 'Publicer og opret ny',
       publishAndDuplicate: 'Publicer og kopier',
-      deleteUnpublishedChanges: 'Slet upublicerede ændringer',
-      deleteUnpublishedEntry: 'Slet upubliceret dokument',
-      deletePublishedEntry: 'Slet publiceret dokument',
       deleteEntry: 'Slet dokument',
       saving: 'Gemmer...',
       save: 'Gem',
@@ -242,11 +232,8 @@ const da = {
         'Ups, du mangler et påkrævet felt. Udfyld de påkrævede felter før dokumentet gemmes.',
       entrySaved: 'Dokumentet er gemt',
       entryPublished: 'Dokumentet er publiceret ',
-      entryUnpublished: 'Dokumentet er afpubliceret',
       onFailToPublishEntry: 'Kunne ikke publicere på grund af en fejl: %{details}',
-      onFailToUnpublishEntry: 'Kunne ikke afpublicere på grund af en fejl: %{details}',
       entryUpdated: 'Dokumentstatus er opdateret',
-      onDeleteUnpublishedChanges: 'Upublicerede ændringer blev slettet',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Du er blevet logget ind, gem venligst evt. ændringer og log på igen',
       onBackendDown:

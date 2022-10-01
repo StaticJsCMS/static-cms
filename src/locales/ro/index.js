@@ -106,10 +106,6 @@ const ro = {
       onDeleteWithUnsavedChanges:
         'Ești sigur/ă că dorești să ștergi această publicare, dar și modificările nesalvate din sesiunea curentă?',
       onDeletePublishedEntry: 'Ești sigur/ă că dorești să ștergi această publicare?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Se vor șterge toate modificările nepublicate din aceast articol și modificările nesalvate din sesiunea curentă. Continui cu ștergerea?',
-      onDeleteUnpublishedChanges:
-        'Toate modificările nepublicate din acest articol vor fi șterse. Continui cu ștergerea?',
       loadingEntry: 'Se încarcă...',
       confirmLoadBackup:
         'Un backup local a fost recuperat pentru această intrare, dorești să îl folosești?',
@@ -128,9 +124,6 @@ const ro = {
       unpublishing: 'Se anulează publicarea...',
       publishAndCreateNew: 'Publicare apoi crează altul',
       publishAndDuplicate: 'Publicare apoi duplifică',
-      deleteUnpublishedChanges: 'Șterge modificări nepublicate',
-      deleteUnpublishedEntry: 'Șterge intrarea nepublicată',
-      deletePublishedEntry: 'Șterge intrarea publicată',
       deleteEntry: 'Șterge intrare',
       saving: 'Se salvează...',
       save: 'Salvează',
@@ -257,11 +250,8 @@ const ro = {
       missingRequiredField: 'Oops, ai ratat un câmp obligatoriu. Completează-l pentru a salva.',
       entrySaved: 'Intrare salvată',
       entryPublished: 'Intrare publicată',
-      entryUnpublished: 'Publicare anulată',
       onFailToPublishEntry: 'A eșuat publicarea: %{details}',
-      onFailToUnpublishEntry: 'A eșuat anularea publicării: %{details}',
       entryUpdated: 'S-a actualizat status-ul intrării',
-      onDeleteUnpublishedChanges: 'Modificări nepublicate șterse',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Ai fost delogat, te rugăm salvează orice date și autentifică-te din nou.',
       onBackendDown: 'Există probleme la server. Vezi %{details} pentru mai multe informații.',

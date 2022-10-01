@@ -107,10 +107,6 @@ const lt = {
       onDeleteWithUnsavedChanges:
         'Tikrai norite panaikinti publikuotą įrašą ir Jūsų pakeiitmus iš dabartinės sesijos?',
       onDeletePublishedEntry: 'Tikrai norite ištrinti šį publikuotą įrašą?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Tai ištrins visus nepublikuotus pakeitimus įraše, taip pat neišsaugotus pakeitimus per dabartinę sesiją. Vis tiek norite trinti?',
-      onDeleteUnpublishedChanges:
-        'Visi Jūsų pakeitimai įraše bus panaikinti. Ar tikrai norite trinti jį?',
       loadingEntry: 'Kraunamas įrašas...',
       confirmLoadBackup:
         'Radome Jūsų įrenginyje išsaugota juodraštį šiam įrašui, ar norite jį atgaivinti ir naudoti?',
@@ -124,9 +120,6 @@ const lt = {
       unpublishing: 'Nebeskelbiama...',
       publishAndCreateNew: 'Publikuoti šitą, po to kurti kažką naujo',
       publishAndDuplicate: 'Publikuoti šitą, po to kurti šito dublį',
-      deleteUnpublishedChanges: 'Ištrinti publikuotus pakeitimus',
-      deleteUnpublishedEntry: 'Ištrinti nepaskelbtą įrašą',
-      deletePublishedEntry: 'Ištrinti paskelbtą įrašą',
       deleteEntry: 'Panaikinti įrašą',
       saving: 'Išsaugojama...',
       save: 'Išsaugoti',
@@ -244,11 +237,8 @@ const lt = {
         'Pasitikrinkite — kažkurio (ar kelių) laukelių neužpildėte. Tai padarius galėsite išsaugoti įrašą.',
       entrySaved: 'Įrašas išsaugotos',
       entryPublished: 'Įrašas publikuotas',
-      entryUnpublished: 'Įrašas nepublikuotas',
       onFailToPublishEntry: 'Nepavyko publikuoti: %{details}',
-      onFailToUnpublishEntry: 'Nepavyko panaikinti publikavimą: %{details}',
       entryUpdated: 'Įrašo statusas pakeistas',
-      onDeleteUnpublishedChanges: 'Nepublikuoti pakeitimai ištrinti',
       onFailToAuth: 'Nepavyko prisijungti: %{details}',
       onLoggedOut:
         'Mes jus atjungėme. Jeigu yra poreikis, sukurkite duomenų atsarginę kopiją. Galite tiesiog iš naujo prisijungti.',

@@ -59,10 +59,6 @@ const uk = {
       onDeleteWithUnsavedChanges:
         'Ви дійсно бажаєте видалити опублікований запис, як і всі незбережені зміни під час поточної сесії?',
       onDeletePublishedEntry: 'Ви дійсно бажаєте видалити опублікований запис?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Видаляться всі неопубліковані зміни до цього запису, а також всі незбережені зміни під час поточної сесії. Бажаєте продовжити?',
-      onDeleteUnpublishedChanges:
-        'Всі незбережені зміни до цього запису буде видалено. Бажаєте продовжити?',
       loadingEntry: 'Завантаження...',
       confirmLoadBackup: 'Відновлено резервну копію, бажаєте її використати?',
     },
@@ -71,9 +67,6 @@ const uk = {
       publish: 'Опублікувати',
       published: 'Опубліковано',
       publishAndCreateNew: 'Опублікувати і створити нову',
-      deleteUnpublishedChanges: 'Видалити неопубліковані зміни',
-      deleteUnpublishedEntry: 'Видалити неопубліковану сторінку',
-      deletePublishedEntry: 'Видалити опубліковану сторінку',
       deleteEntry: 'Видалити',
       saving: 'Збереження...',
       save: 'Зберегти',
@@ -168,7 +161,6 @@ const uk = {
       entryPublished: 'Опубліковано',
       onFailToPublishEntry: 'Помилка публікації: %{details}',
       entryUpdated: 'Статус оновлено',
-      onDeleteUnpublishedChanges: 'Видалено неопубліковані зміни',
       onFailToAuth: '%{details}',
     },
   },

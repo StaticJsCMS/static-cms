@@ -101,14 +101,9 @@ const ca = {
       onPublishingWithUnsavedChanges:
         "Tens canvis no guardats, si us plau, guarda'ls abans de publicar-los.",
       onPublishing: 'Estàs segur que vols publicar aquesta entrada?',
-      onUnpublishing: 'Estàs segur que vols esborrar aquesta entrada?',
       onDeleteWithUnsavedChanges:
         'Està segur que vol eliminar aquesta entrada publicada, així com els canvis no guardats de la sessió actual?',
       onDeletePublishedEntry: 'Està segur que vol eliminar aquesta entrada publicada?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        "Això eliminarà tots els canvis no publicats d'aquesta entrada així com els canvis no guardats de la sessió actual. Encara vol procedir?",
-      onDeleteUnpublishedChanges:
-        'Tots els canvis no publicats en aquesta entrada seràn esborrats. Encara els vol eliminar?',
       loadingEntry: 'Carregant entrada...',
       confirmLoadBackup:
         "S'ha recuperat una copia de seguretat local per aquesta entrada. La vol utilitzar?",
@@ -121,14 +116,9 @@ const ca = {
       publishing: 'Publicant...',
       publish: 'Publicar',
       published: 'Publicat',
-      unpublish: 'Despublicar',
       duplicate: 'Duplicar',
-      unpublishing: 'Despublicant...',
       publishAndCreateNew: 'Publicar i crear de nou',
       publishAndDuplicate: 'Publica i duplica',
-      deleteUnpublishedChanges: 'Eliminar canvis no publicats',
-      deleteUnpublishedEntry: 'Eliminar entrada no publicada',
-      deletePublishedEntry: 'Eliminar entrada publicada',
       deleteEntry: 'Eliminar entrada',
       saving: 'Guardant...',
       save: 'Guardar',
@@ -255,11 +245,8 @@ const ca = {
         "Ups, no ha omplert un camp obligatori. Si us plau,  ompli'l abans de guardar.",
       entrySaved: 'Entrada guardada',
       entryPublished: 'Entrada publicada',
-      entryUnpublished: 'Entrada despublicada',
       onFailToPublishEntry: "No s'ha pogut publicar: %{details}",
-      onFailToUnpublishEntry: "No s'ha pogut despublicar l'entrada: %{details}",
       entryUpdated: "Estat de l'entrada actualitzat",
-      onDeleteUnpublishedChanges: 'Canvis no publicats eliminats',
       onFailToAuth: '%{details}',
       onLoggedOut: 'La teva sessió ha estat tancada. Si us plau, torna a iniciar-la',
       onBackendDown: 'El servidor està patint problemes. Consulta %{details} per a més informació',

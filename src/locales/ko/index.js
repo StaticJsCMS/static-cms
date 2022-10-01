@@ -97,10 +97,6 @@ const ko = {
       onDeleteWithUnsavedChanges:
         '현재 세션에서의 저장되지 않은 변경사항과 이 게시된 항목을 삭제하시겠습니까?',
       onDeletePublishedEntry: '이 게시된 항목을 삭제하시겠습니까?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        '이 항목의 게시되지 않은 모든 변경사항과 현재 세션의 저장되지 않은 변경사항이 삭제됩니다. 정말로 삭제하시겠습니까?',
-      onDeleteUnpublishedChanges:
-        '이 항목에 대해 게시되지 않은 변경사항이 삭제됩니다. 정말로 삭제하시겠습니까?',
       loadingEntry: '항목 불러오는 중...',
       confirmLoadBackup:
         '이 항목에 대한 로컬 백업이 복구되었습니다, 복구된 것으로 사용하시겠습니까?',
@@ -114,9 +110,6 @@ const ko = {
       unpublishing: '게시 철회 중...',
       publishAndCreateNew: '게시하고 새로 만들기',
       publishAndDuplicate: '게시하고 복제',
-      deleteUnpublishedChanges: '게시 안된 변경사항 삭제',
-      deleteUnpublishedEntry: '게시 안된 항목 삭제',
-      deletePublishedEntry: '게시된 항목 삭제',
       deleteEntry: '항목 삭제',
       saving: '저장 중...',
       save: '저장',
@@ -223,11 +216,8 @@ const ko = {
       missingRequiredField: '이런! 필수 필드를 놓치셨습니다. 저장하기 전에 먼저 채우세요.',
       entrySaved: '항목 저장됨',
       entryPublished: '항목 게시됨',
-      entryUnpublished: '항목 게시 철회됨',
       onFailToPublishEntry: '게시 실패: %{details}',
-      onFailToUnpublishEntry: '항목 게시 철회 실해: %{details}',
       entryUpdated: '항목 상태 업데이트됨',
-      onDeleteUnpublishedChanges: '게시되지 않은 변경사항 삭제됨',
       onFailToAuth: '%{details}',
       onLoggedOut: '로그아웃 하셨습니다, 데티어를 백업하시고 다시 로그인 하세요.',
       onBackendDown:

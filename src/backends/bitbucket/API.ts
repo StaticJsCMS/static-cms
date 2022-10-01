@@ -591,43 +591,6 @@ export default class API {
     return diffs;
   }
 
-  async editorialWorkflowGit(
-    files: (DataFile | AssetProxy)[],
-    slug: string,
-    options: PersistOptions,
-  ) {
-    const contentKey = generateContentKey(options.collectionName as string, slug);
-    const branch = branchFromContentKey(contentKey);
-    const unpublished = options.unpublished || false;
-    if (!unpublished) {
-      const defaultBranchSha = await this.branchCommitSha(this.branch);
-      await this.uploadFiles(files, {
-        commitMessage: options.commitMessage,
-        branch,
-        parentSha: defaultBranchSha,
-      });
-      await this.createPullRequest(
-        branch,
-        options.commitMessage,
-        options.status || this.initialWorkflowStatus,
-      );
-    } else {
-      // mark files for deletion
-      const diffs = await this.getDifferences(branch);
-      const toDelete: DeleteEntry[] = [];
-      for (const diff of diffs.filter(d => d.binary && d.status !== 'deleted')) {
-        if (!files.some(file => file.path === diff.path)) {
-          toDelete.push({ path: diff.path, delete: true });
-        }
-      }
-
-      await this.uploadFiles([...files, ...toDelete], {
-        commitMessage: options.commitMessage,
-        branch,
-      });
-    }
-  }
-
   deleteFiles = (paths: string[], message: string) => {
     const body = new FormData();
     paths.forEach(path => {
@@ -681,69 +644,6 @@ export default class API {
     return pullRequests[0];
   }
 
-  async listUnpublishedBranches() {
-    console.info(
-      '%c Checking for Unpublished entries',
-      'line-height: 30px;text-align: center;font-weight: bold',
-    );
-
-    const pullRequests = await this.getPullRequests();
-    const branches = pullRequests.map(mr => mr.source.branch.name);
-
-    return branches;
-  }
-
-  async retrieveUnpublishedEntryData(contentKey: string) {
-    const { collection, slug } = parseContentKey(contentKey);
-    const branch = branchFromContentKey(contentKey);
-    const pullRequest = await this.getBranchPullRequest(branch);
-    const diffs = await this.getDifferences(branch);
-    const label = await this.getPullRequestLabel(pullRequest.id);
-    const status = labelToStatus(label, this.cmsLabelPrefix);
-    const updatedAt = pullRequest.updated_on;
-    const pullRequestAuthor = pullRequest.author.display_name;
-    return {
-      collection,
-      slug,
-      status,
-      // TODO: get real id
-      diffs: diffs
-        .filter(d => d.status !== 'deleted')
-        .map(d => ({ path: d.path, newFile: d.newFile, id: '' })),
-      updatedAt,
-      pullRequestAuthor,
-    };
-  }
-
-  async updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
-    const contentKey = generateContentKey(collection, slug);
-    const branch = branchFromContentKey(contentKey);
-    const pullRequest = await this.getBranchPullRequest(branch);
-
-    await this.addPullRequestComment(pullRequest, statusToLabel(newStatus, this.cmsLabelPrefix));
-  }
-
-  async mergePullRequest(pullRequest: BitBucketPullRequest) {
-    await this.requestJSON({
-      method: 'POST',
-      url: `${this.repoURL}/pullrequests/${pullRequest.id}/merge`,
-      headers: { 'Content-Type': APPLICATION_JSON },
-      body: JSON.stringify({
-        message: MERGE_COMMIT_MESSAGE,
-        close_source_branch: true,
-        merge_strategy: this.mergeStrategy,
-      }),
-    });
-  }
-
-  async publishUnpublishedEntry(collectionName: string, slug: string) {
-    const contentKey = generateContentKey(collectionName, slug);
-    const branch = branchFromContentKey(contentKey);
-    const pullRequest = await this.getBranchPullRequest(branch);
-
-    await this.mergePullRequest(pullRequest);
-  }
-
   async declinePullRequest(pullRequest: BitBucketPullRequest) {
     await this.requestJSON({
       method: 'POST',
@@ -756,15 +656,6 @@ export default class API {
       method: 'DELETE',
       url: `${this.repoURL}/refs/branches/${branch}`,
     });
-  }
-
-  async deleteUnpublishedEntry(collectionName: string, slug: string) {
-    const contentKey = generateContentKey(collectionName, slug);
-    const branch = branchFromContentKey(contentKey);
-    const pullRequest = await this.getBranchPullRequest(branch);
-
-    await this.declinePullRequest(pullRequest);
-    await this.deleteBranch(branch);
   }
 
   async getPullRequestStatuses(pullRequest: BitBucketPullRequest) {
@@ -792,12 +683,5 @@ export default class API {
           : PreviewState.Other,
       target_url: url,
     }));
-  }
-
-  async getUnpublishedEntrySha(collection: string, slug: string) {
-    const contentKey = generateContentKey(collection, slug);
-    const branch = branchFromContentKey(contentKey);
-    const pullRequest = await this.getBranchPullRequest(branch);
-    return pullRequest.destination.commit.hash;
   }
 }

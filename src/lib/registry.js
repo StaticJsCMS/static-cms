@@ -7,8 +7,6 @@ import EditorComponent from '../valueObjects/EditorComponent';
 const allowedEvents = [
   'prePublish',
   'postPublish',
-  'preUnpublish',
-  'postUnpublish',
   'preSave',
   'postSave',
 ];

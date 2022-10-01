@@ -106,10 +106,6 @@ const fr = {
       onDeleteWithUnsavedChanges:
         'Voulez-vous vraiment supprimer cette entrée publiée ainsi que vos modifications non enregistrées de cette session ?',
       onDeletePublishedEntry: 'Voulez-vous vraiment supprimer cette entrée publiée ?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Ceci supprimera toutes les modifications non publiées de cette entrée ainsi que vos modifications non enregistrées de cette session. Voulez-vous toujours supprimer ?',
-      onDeleteUnpublishedChanges:
-        'Toutes les modifications non publiées de cette entrée seront supprimées. Voulez-vous toujours supprimer ?',
       loadingEntry: "Chargement de l'entrée...",
       confirmLoadBackup:
         "Une sauvegarde locale a été trouvée pour cette entrée. Voulez-vous l'utiliser ?",
@@ -128,9 +124,6 @@ const fr = {
       unpublishing: 'Dépublication...',
       publishAndCreateNew: 'Publier et créer une nouvelle entrée',
       publishAndDuplicate: 'Publier et dupliquer',
-      deleteUnpublishedChanges: 'Supprimer les modications non publiées',
-      deleteUnpublishedEntry: "Supprimer l'entrée non publiée",
-      deletePublishedEntry: "Supprimer l'entrée publiée",
       deleteEntry: "Supprimer l'entrée",
       saving: 'Enregistrement...',
       save: 'Enregistrer',
@@ -263,11 +256,8 @@ const fr = {
         'Oops, il manque un champ requis. Veuillez le renseigner avant de soumettre.',
       entrySaved: 'Entrée enregistrée',
       entryPublished: 'Entrée publiée',
-      entryUnpublished: 'Entrée dépubliée',
       onFailToPublishEntry: 'Échec de la publication : %{details}',
-      onFailToUnpublishEntry: "Impossible de dépublier l'entrée : %{details}",
       entryUpdated: "Statut de l'entrée mis à jour",
-      onDeleteUnpublishedChanges: 'Modifications non publiées supprimées',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Vous avez été déconnecté, merci de sauvegarder les données et vous reconnecter',
       onBackendDown:

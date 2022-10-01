@@ -105,10 +105,6 @@ const pl = {
       onDeleteWithUnsavedChanges:
         'Czy na pewno chcesz usunąć tę opublikowaną pozycję, a także niezapisane zmiany z bieżącej sesji?',
       onDeletePublishedEntry: 'Czy na pewno chcesz usunąć tę opublikowaną pozycję?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Spowoduje to usunięcie wszystkich nieopublikowanych zmian tej pozycji, a także niezapisanych zmian z bieżącej sesji. Czy nadal chcesz usunąć?',
-      onDeleteUnpublishedChanges:
-        'Wszystkie nieopublikowane zmiany tej pozycji zostaną usunięte. Czy nadal chcesz usunąć?',
       loadingEntry: 'Ładowanie pozycji...',
       confirmLoadBackup: 'Odzyskano lokalną kopię zapasową tej pozycji, czy chcesz jej użyć?',
     },
@@ -126,9 +122,6 @@ const pl = {
       unpublishing: 'Cofanie publikacji...',
       publishAndCreateNew: 'Opublikuj i dodaj nowy',
       publishAndDuplicate: 'Opublikuj i zduplikuj',
-      deleteUnpublishedChanges: 'Usuń nieopublikowane zmiany',
-      deleteUnpublishedEntry: 'Usuń nieopublikowaną pozycję',
-      deletePublishedEntry: 'Usuń opublikowaną pozycję',
       deleteEntry: 'Usuń pozycję',
       saving: 'Zapisywanie...',
       save: 'Zapisz',
@@ -263,11 +256,8 @@ const pl = {
       missingRequiredField: 'Ups, przegapiłeś wymagane pole. Proszę uzupełnij przed zapisaniem.',
       entrySaved: 'Pozycja zapisana',
       entryPublished: 'Pozycja opublikowana',
-      entryUnpublished: 'Cofnięto publikację pozycji',
       onFailToPublishEntry: 'Nie udało się opublikować: %{details}',
-      onFailToUnpublishEntry: 'Nie udało się cofnąć publikacji pozycji: %{details}',
       entryUpdated: 'Zaktualizowano status pozycji',
-      onDeleteUnpublishedChanges: 'Nieopublikowane zmiany zostały usunięte',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Zostałeś wylogowany, utwórz kopię zapasową danych i zaloguj się ponownie.',
       onBackendDown: 'Usługa backendu uległa awarii. Zobacz więcej informacji: %{details}',

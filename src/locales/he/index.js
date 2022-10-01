@@ -104,10 +104,6 @@ const he = {
       onDeleteWithUnsavedChanges:
         'האם ברצונך למחוק את האייטם הזה לפני פרסומו, וכן את השינויים שבוצעו כעת וטרם נשמרו?',
       onDeletePublishedEntry: 'האם ברצונך למחוק את האייטם הזה לאחר פרסומו?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'פעולה זו תמחק את כל השינויים שבוצעו באייטם זה ולא פורסמו, וכן את השינויים שבוצעו כעת וטרם נשמרו. האם ברצונך למחוק?',
-      onDeleteUnpublishedChanges:
-        'כל השינויים שבוצעו באייטם זה ולא פורסמו יימחקו. האם ברצונך למחוק אותו?',
       loadingEntry: 'טעינת אייטם...',
       confirmLoadBackup: 'קיים עותק מקומי שמור של האייטם. האם ברצונך לטעון אותו?',
     },
@@ -125,9 +121,6 @@ const he = {
       unpublishing: 'ביטול הפרסום...',
       publishAndCreateNew: 'פרסום ויצירת אייטם חדש',
       publishAndDuplicate: 'פרסום ושכפול',
-      deleteUnpublishedChanges: 'מחיקת השינויים שלא פורסמו',
-      deleteUnpublishedEntry: 'מחיקת אייטם שטרם פורסם',
-      deletePublishedEntry: 'מחיקת אייטם שפורסם',
       deleteEntry: 'מחיקת האייטם',
       saving: 'שמירה...',
       save: 'שמירה',
@@ -262,11 +255,9 @@ const he = {
       missingRequiredField: 'אופס, שכחת למלא שדה חובה. נא להשלים את המידע החסר לפני השמירה',
       entrySaved: 'האייטם נשמר',
       entryPublished: 'האייטם פורסם',
-      entryUnpublished: 'האייטם הועבר לטיוטות',
       onFailToPublishEntry: 'פרסום האייטם %{details} נכשל',
       onFailToUnpublishEntry: 'ביטול פרסום האייטם %{details} נכשל',
       entryUpdated: 'מצב האייטם עודכן',
-      onDeleteUnpublishedChanges: 'השינויים שלא פורסמו נמחקו',
       onFailToAuth: '%{details}',
       onLoggedOut: 'נותקת מהמערכת. יש לגבות מידע לא שמור ולהתחבר שוב',
       onBackendDown: 'ה-backend המוגדר אינו זמין. ראו %{details} למידע נוסף',

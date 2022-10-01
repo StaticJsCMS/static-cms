@@ -578,30 +578,6 @@ export default class API {
     }
   }
 
-  async retrieveUnpublishedEntryData(contentKey: string) {
-    const { collection, slug } = this.parseContentKey(contentKey);
-    const branch = branchFromContentKey(contentKey);
-    const pullRequest = await this.getBranchPullRequest(branch);
-    const [{ files }, pullRequestAuthor] = await Promise.all([
-      this.getDifferences(this.branch, pullRequest.head.sha),
-      this.getPullRequestAuthor(pullRequest),
-    ]);
-    const diffs = await Promise.all(files.map(file => this.diffFromFile(file)));
-    const label = pullRequest.labels.find(l => isCMSLabel(l.name, this.cmsLabelPrefix)) as {
-      name: string;
-    };
-    const status = labelToStatus(label.name, this.cmsLabelPrefix);
-    const updatedAt = pullRequest.updated_at;
-    return {
-      collection,
-      slug,
-      status,
-      diffs: diffs.map(d => ({ path: d.path, newFile: d.newFile, id: d.sha })),
-      updatedAt,
-      pullRequestAuthor,
-    };
-  }
-
   async readFile(
     path: string,
     sha?: string | null,
@@ -813,54 +789,6 @@ export default class API {
     return cmsBranches;
   }
 
-  async listUnpublishedBranches() {
-    console.info(
-      '%c Checking for Unpublished entries',
-      'line-height: 30px;text-align: center;font-weight: bold',
-    );
-
-    let branches: string[];
-    if (this.useOpenAuthoring) {
-      // open authoring branches can exist without a pr
-      const cmsBranches: Octokit.GitListMatchingRefsResponse =
-        await this.getOpenAuthoringBranches();
-      branches = cmsBranches.map(b => b.ref.slice('refs/heads/'.length));
-      // filter irrelevant branches
-      const branchesWithFilter = await Promise.all(
-        branches.map(b => this.filterOpenAuthoringBranches(b)),
-      );
-      branches = branchesWithFilter.filter(b => b.filter).map(b => b.branch);
-    } else {
-      // backwards compatibility code, get relevant pull requests and migrate them
-      const pullRequests = await this.getPullRequests(
-        undefined,
-        PullRequestState.Open,
-        pr => !pr.head.repo.fork && withoutCmsLabel(pr, this.cmsLabelPrefix),
-      );
-      let prCount = 0;
-      for (const pr of pullRequests) {
-        if (!migrationNotified) {
-          migrationNotified = true;
-          alert({
-            title: 'api.labelsMigrationTitle',
-            body: {
-              key: 'api.labelsMigrationBody',
-              options: { pullRequests: pullRequests.length },
-            },
-          });
-        }
-        prCount = prCount + 1;
-        await this.migratePullRequest(pr, `${prCount} of ${pullRequests.length}`);
-      }
-      const cmsPullRequests = await this.getPullRequests(undefined, PullRequestState.Open, pr =>
-        withCmsLabel(pr, this.cmsLabelPrefix),
-      );
-      branches = cmsPullRequests.map(pr => pr.head.ref);
-    }
-
-    return branches;
-  }
-
   /**
    * Retrieve statuses for a given SHA. Unrelated to the editorial workflow
    * concept of entry "status". Useful for things like deploy preview links.
@@ -963,56 +891,6 @@ export default class API {
     };
   }
 
-  async editorialWorkflowGit(
-    files: TreeFile[],
-    slug: string,
-    mediaFilesList: MediaFile[],
-    options: PersistOptions,
-  ) {
-    const contentKey = this.generateContentKey(options.collectionName as string, slug);
-    const branch = branchFromContentKey(contentKey);
-    const unpublished = options.unpublished || false;
-    if (!unpublished) {
-      const branchData = await this.getDefaultBranch();
-      const changeTree = await this.updateTree(branchData.commit.sha, files);
-      const commitResponse = await this.commit(options.commitMessage, changeTree);
-
-      if (this.useOpenAuthoring) {
-        await this.createBranch(branch, commitResponse.sha);
-      } else {
-        const pr = await this.createBranchAndPullRequest(
-          branch,
-          commitResponse.sha,
-          options.commitMessage,
-        );
-        await this.setPullRequestStatus(pr, options.status || this.initialWorkflowStatus);
-      }
-    } else {
-      // Entry is already on editorial review workflow - commit to existing branch
-      const { files: diffFiles } = await this.getDifferences(
-        this.branch,
-        await this.getHeadReference(branch),
-      );
-
-      const diffs = await Promise.all(diffFiles.map(file => this.diffFromFile(file)));
-      // mark media files to remove
-      const mediaFilesToRemove: { path: string; sha: string | null }[] = [];
-      for (const diff of diffs.filter(d => d.binary)) {
-        if (!mediaFilesList.some(file => file.path === diff.path)) {
-          mediaFilesToRemove.push({ path: diff.path, sha: null });
-        }
-      }
-
-      // rebase the branch before applying new changes
-      const rebasedHead = await this.rebaseBranch(branch);
-      const treeFiles = mediaFilesToRemove.concat(files);
-      const changeTree = await this.updateTree(rebasedHead.sha, treeFiles, branch);
-      const commit = await this.commit(options.commitMessage, changeTree);
-
-      return this.patchBranch(branch, commit.sha, { force: true });
-    }
-  }
-
   async getDifferences(from: string, to: string) {
     // retry this as sometimes GitHub returns an initial 404 on cross repo compare
     const attempts = this.useOpenAuthoring ? 10 : 1;
@@ -1110,56 +988,6 @@ export default class API {
       statusToLabel(newStatus, this.cmsLabelPrefix),
     ];
     await this.updatePullRequestLabels(pullRequest.number, labels);
-  }
-
-  async updateUnpublishedEntryStatus(collectionName: string, slug: string, newStatus: string) {
-    const contentKey = this.generateContentKey(collectionName, slug);
-    const branch = branchFromContentKey(contentKey);
-    const pullRequest = await this.getBranchPullRequest(branch);
-
-    if (!this.useOpenAuthoring) {
-      await this.setPullRequestStatus(pullRequest, newStatus);
-    } else {
-      if (status === 'pending_publish') {
-        throw new Error('Open Authoring entries may not be set to the status "pending_publish".');
-      }
-
-      if (pullRequest.number !== MOCK_PULL_REQUEST) {
-        const { state } = pullRequest;
-        if (state === PullRequestState.Open && newStatus === 'draft') {
-          await this.closePR(pullRequest.number);
-        }
-        if (state === PullRequestState.Closed && newStatus === 'pending_review') {
-          await this.openPR(pullRequest.number);
-        }
-      } else if (newStatus === 'pending_review') {
-        const branch = branchFromContentKey(contentKey);
-        // get the first commit message as the pr title
-        const diff = await this.getDifferences(this.branch, await this.getHeadReference(branch));
-        const title = diff.commits[0]?.commit?.message || API.DEFAULT_COMMIT_MESSAGE;
-        await this.createPR(title, branch);
-      }
-    }
-  }
-
-  async deleteUnpublishedEntry(collectionName: string, slug: string) {
-    const contentKey = this.generateContentKey(collectionName, slug);
-    const branch = branchFromContentKey(contentKey);
-
-    const pullRequest = await this.getBranchPullRequest(branch);
-    if (pullRequest.number !== MOCK_PULL_REQUEST) {
-      await this.closePR(pullRequest.number);
-    }
-    await this.deleteBranch(branch);
-  }
-
-  async publishUnpublishedEntry(collectionName: string, slug: string) {
-    const contentKey = this.generateContentKey(collectionName, slug);
-    const branch = branchFromContentKey(contentKey);
-
-    const pullRequest = await this.getBranchPullRequest(branch);
-    await this.mergePR(pullRequest);
-    await this.deleteBranch(branch);
   }
 
   async createRef(type: string, name: string, sha: string) {
@@ -1454,12 +1282,5 @@ export default class API {
       },
     );
     return result;
-  }
-
-  async getUnpublishedEntrySha(collection: string, slug: string) {
-    const contentKey = this.generateContentKey(collection, slug);
-    const branch = branchFromContentKey(contentKey);
-    const pullRequest = await this.getBranchPullRequest(branch);
-    return pullRequest.head.sha;
   }
 }

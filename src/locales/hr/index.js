@@ -106,10 +106,6 @@ const hr = {
       onDeleteWithUnsavedChanges:
         'Jeste li sigurni da želite obrisati objavljeni unos, te nespremljene promjene u trenutnoj sesiji?',
       onDeletePublishedEntry: 'Jeste li sigurni da želite obrisati ovaj objavljeni unos?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Obrisat ćete sve neobjavljene promjene na ovom unosu, te sve nespremljene promjene u trenutnoj sesiji. Želite li i dalje obrisati?',
-      onDeleteUnpublishedChanges:
-        'Sve nespremljene promjene na ovom unosu će biti obrisane. Želite li i dalje obrisati?',
       loadingEntry: 'Učitavanje unosa...',
       confirmLoadBackup: 'Lokalna kopija je dohvaćena za ovaj unos, želite li ju koristiti?',
     },
@@ -122,9 +118,6 @@ const hr = {
       unpublishing: 'Brisanje iz objava...',
       publishAndCreateNew: 'Objavi i kreiraj novo',
       publishAndDuplicate: 'Objavi i dupliciraj',
-      deleteUnpublishedChanges: 'Obriši neobjavljene promjene',
-      deleteUnpublishedEntry: 'Obriši neobjavljene unose',
-      deletePublishedEntry: 'Obriši objavljeni unos',
       deleteEntry: 'Obriši unos',
       saving: 'Spremanje...',
       save: 'Spremi',
@@ -241,11 +234,9 @@ const hr = {
       missingRequiredField: 'Uups, preskočili ste obvezno polje. Molimo popunite prije spremanja.',
       entrySaved: 'Unos spremljen',
       entryPublished: 'Unos objavljen',
-      entryUnpublished: 'Unos obrisan',
       onFailToPublishEntry: 'Neuspjelo objavljivanje unosa: %{details}',
       onFailToUnpublishEntry: 'Neuspjelo brisanje unosa: %{details}',
       entryUpdated: 'Status unosa ažuriran',
-      onDeleteUnpublishedChanges: 'Otkrivene neobjavljene objave',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Odjavljeni ste, molimo spremite sve podatke i prijavite se ponovno',
       onBackendDown: 'Backend servis ima prekid rada. Pogledaj %{details} za više informacija',

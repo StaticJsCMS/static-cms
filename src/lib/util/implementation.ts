@@ -23,31 +23,6 @@ export interface ImplementationMediaFile {
   file?: File;
 }
 
-export interface UnpublishedEntryMediaFile {
-  id: string;
-  path: string;
-}
-
-export interface ImplementationEntry {
-  data: string;
-  file: { path: string; label?: string; id?: string | null; author?: string; updatedOn?: string };
-}
-
-export interface UnpublishedEntryDiff {
-  id: string;
-  path: string;
-  newFile: boolean;
-}
-
-export interface UnpublishedEntry {
-  pullRequestAuthor?: string;
-  slug: string;
-  collection: string;
-  status: string;
-  diffs: UnpublishedEntryDiff[];
-  updatedAt: string;
-}
-
 export interface Map {
   get: <T>(key: string, defaultValue?: T) => T;
   getIn: <T>(key: string[], defaultValue?: T) => T;
@@ -77,8 +52,6 @@ export type PersistOptions = {
   newEntry?: boolean;
   commitMessage: string;
   collectionName?: string;
-  useWorkflow?: boolean;
-  unpublished?: boolean;
   status?: string;
 };
 
@@ -189,18 +162,6 @@ export async function entriesByFiles(
   apiName: string,
 ) {
   return fetchFiles(files, readFile, readFileMetadata, apiName);
-}
-
-export async function unpublishedEntries(listEntriesKeys: () => Promise<string[]>) {
-  try {
-    const keys = await listEntriesKeys();
-    return keys;
-  } catch (error: any) {
-    if (error.message === 'Not Found') {
-      return Promise.resolve([]);
-    }
-    throw error;
-  }
 }
 
 export function blobToFileObj(name: string, blob: Blob) {

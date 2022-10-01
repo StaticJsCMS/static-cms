@@ -11,14 +11,12 @@ import {
   getBlobSHA,
   entriesByFolder,
   entriesByFiles,
-  unpublishedEntries,
   getMediaDisplayURL,
   getMediaAsBlob,
   filterByExtension,
   getPreviewStatus,
   runWithLock,
   blobToFileObj,
-  contentKeyFromBranch,
   unsentRequest,
   branchFromContentKey,
 } from '../../lib/util';
@@ -37,7 +35,6 @@ import type {
   Credentials,
   Config,
   ImplementationFile,
-  UnpublishedEntryMediaFile,
   Entry,
 } from '../../lib/util';
 import type { Semaphore } from 'semaphore';
@@ -559,73 +556,10 @@ export default class GitHub implements Implementation {
     };
   }
 
-  async loadMediaFile(branch: string, file: UnpublishedEntryMediaFile) {
-    const readFile = (
-      path: string,
-      id: string | null | undefined,
-      { parseText }: { parseText: boolean },
-    ) => this.api!.readFile(path, id, { branch, parseText });
-
-    const blob = await getMediaAsBlob(file.path, file.id, readFile);
-    const name = basename(file.path);
-    const fileObj = blobToFileObj(name, blob);
-    return {
-      id: file.id,
-      displayURL: URL.createObjectURL(fileObj),
-      path: file.path,
-      name,
-      size: fileObj.size,
-      file: fileObj,
-    };
-  }
-
-  async unpublishedEntries() {
-    const listEntriesKeys = () =>
-      this.api!.listUnpublishedBranches().then(branches =>
-        branches.map(branch => contentKeyFromBranch(branch)),
-      );
-
-    const ids = await unpublishedEntries(listEntriesKeys);
-    return ids;
-  }
-
-  async unpublishedEntry({
-    id,
-    collection,
-    slug,
-  }: {
-    id?: string;
-    collection?: string;
-    slug?: string;
-  }) {
-    if (id) {
-      const data = await this.api!.retrieveUnpublishedEntryData(id);
-      return data;
-    } else if (collection && slug) {
-      const entryId = this.api!.generateContentKey(collection, slug);
-      const data = await this.api!.retrieveUnpublishedEntryData(entryId);
-      return data;
-    } else {
-      throw new Error('Missing unpublished entry id or collection and slug');
-    }
-  }
-
   getBranch(collection: string, slug: string) {
     const contentKey = this.api!.generateContentKey(collection, slug);
     const branch = branchFromContentKey(contentKey);
     return branch;
-  }
-
-  async unpublishedEntryDataFile(collection: string, slug: string, path: string, id: string) {
-    const branch = this.getBranch(collection, slug);
-    const data = (await this.api!.readFile(path, id, { branch })) as string;
-    return data;
-  }
-
-  async unpublishedEntryMediaFile(collection: string, slug: string, path: string, id: string) {
-    const branch = this.getBranch(collection, slug);
-    const mediaFile = await this.loadMediaFile(branch, { path, id });
-    return mediaFile;
   }
 
   async getDeployPreview(collection: string, slug: string) {
@@ -642,32 +576,5 @@ export default class GitHub implements Implementation {
     } catch (e) {
       return null;
     }
-  }
-
-  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
-    // updateUnpublishedEntryStatus is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.updateUnpublishedEntryStatus(collection, slug, newStatus),
-      'Failed to acquire update entry status lock',
-    );
-  }
-
-  deleteUnpublishedEntry(collection: string, slug: string) {
-    // deleteUnpublishedEntry is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.deleteUnpublishedEntry(collection, slug),
-      'Failed to acquire delete entry lock',
-    );
-  }
-
-  publishUnpublishedEntry(collection: string, slug: string) {
-    // publishUnpublishedEntry is a transactional operation
-    return runWithLock(
-      this.lock,
-      () => this.api!.publishUnpublishedEntry(collection, slug),
-      'Failed to acquire publish entry lock',
-    );
   }
 }

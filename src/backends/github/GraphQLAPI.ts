@@ -556,43 +556,6 @@ export default class GraphQLAPI extends API {
     return data!.closePullRequest;
   }
 
-  async deleteUnpublishedEntry(collectionName: string, slug: string) {
-    try {
-      const contentKey = this.generateContentKey(collectionName, slug);
-      const branchName = branchFromContentKey(contentKey);
-      const pr = await this.getBranchPullRequest(branchName);
-      if (pr.number !== MOCK_PULL_REQUEST) {
-        const { branch, pullRequest } = await this.getPullRequestAndBranch(branchName, pr.number);
-
-        const { data } = await this.mutate({
-          mutation: mutations.closePullRequestAndDeleteBranch,
-          variables: {
-            deleteRefInput: { refId: branch.id },
-            closePullRequestInput: { pullRequestId: pullRequest.id },
-          },
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          update: (store: any) => {
-            store.data.delete(defaultDataIdFromObject(branch));
-            store.data.delete(defaultDataIdFromObject(pullRequest));
-          },
-        });
-
-        return data!.closePullRequest;
-      } else {
-        return await this.deleteBranch(branchName);
-      }
-    } catch (e: any) {
-      const { graphQLErrors } = e;
-      if (graphQLErrors && graphQLErrors.length > 0) {
-        const branchNotFound = graphQLErrors.some((e: Error) => e.type === 'NOT_FOUND');
-        if (branchNotFound) {
-          return;
-        }
-      }
-      throw e;
-    }
-  }
-
   async createPR(title: string, head: string) {
     const [repository, headReference] = await Promise.all([
       this.getRepository(this.originRepoOwner, this.originRepoName),

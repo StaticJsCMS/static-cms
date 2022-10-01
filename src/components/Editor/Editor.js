@@ -8,12 +8,6 @@ import { connect } from 'react-redux';
 import { logoutUser } from '../../actions/auth';
 import { loadDeployPreview } from '../../actions/deploys';
 import {
-  deleteUnpublishedEntry,
-  publishUnpublishedEntry,
-  unpublishPublishedEntry,
-  updateUnpublishedEntryStatus,
-} from '../../actions/editorialWorkflow';
-import {
   changeDraftField,
   changeDraftFieldValidation,
   createDraftDuplicateFromEntry,
@@ -29,12 +23,11 @@ import {
   retrieveLocalBackup,
 } from '../../actions/entries';
 import { loadScroll, toggleScroll } from '../../actions/scroll';
-import { EDITORIAL_WORKFLOW, status } from '../../constants/publishModes';
-import { selectDeployPreview, selectEntry, selectUnpublishedEntry } from '../../reducers';
+import { EDITORIAL_WORKFLOW } from '../../constants/publishModes';
+import { selectDeployPreview, selectEntry } from '../../reducers';
 import { selectFields } from '../../reducers/collections';
 import { history, navigateToCollection, navigateToNewEntry } from '../../routing/history';
 import { Loader } from '../../ui';
-import alert from '../UI/Alert';
 import confirm from '../UI/Confirm';
 import EditorInterface from './EditorInterface';
 import withWorkflow from './withWorkflow';
@@ -59,12 +52,8 @@ export class Editor extends React.Component {
     displayUrl: PropTypes.string,
     hasWorkflow: PropTypes.bool,
     useOpenAuthoring: PropTypes.bool,
-    unpublishedEntry: PropTypes.bool,
     isModification: PropTypes.bool,
     collectionEntriesLoaded: PropTypes.bool,
-    updateUnpublishedEntryStatus: PropTypes.func.isRequired,
-    publishUnpublishedEntry: PropTypes.func.isRequired,
-    deleteUnpublishedEntry: PropTypes.func.isRequired,
     logoutUser: PropTypes.func.isRequired,
     loadEntries: PropTypes.func.isRequired,
     deployPreview: PropTypes.object,
@@ -214,22 +203,8 @@ export class Editor extends React.Component {
   }, 2000);
 
   handleChangeDraftField = (field, value, metadata, i18n) => {
-    const entries = [this.props.unPublishedEntry, this.props.publishedEntry].filter(Boolean);
+    const entries = [this.props.publishedEntry].filter(Boolean);
     this.props.changeDraftField({ field, value, metadata, entries, i18n });
-  };
-
-  handleChangeStatus = newStatusName => {
-    const { entryDraft, updateUnpublishedEntryStatus, collection, slug, currentStatus } =
-      this.props;
-    if (entryDraft.get('hasChanged')) {
-      alert({
-        title: 'editor.editor.onUpdatingWithUnsavedChangesTitle',
-        body: 'editor.editor.onUpdatingWithUnsavedChangesBody',
-      });
-      return;
-    }
-    const newStatus = status.get(newStatusName);
-    updateUnpublishedEntryStatus(collection.get('name'), slug, currentStatus, newStatus);
   };
 
   deleteBackup() {
@@ -261,65 +236,6 @@ export class Editor extends React.Component {
     } else if (slug && hasWorkflow && !currentStatus) {
       loadEntry(collection, slug);
     }
-  };
-
-  handlePublishEntry = async (opts = {}) => {
-    const { createNew = false, duplicate = false } = opts;
-    const {
-      publishUnpublishedEntry,
-      createDraftDuplicateFromEntry,
-      entryDraft,
-      collection,
-      slug,
-      currentStatus,
-    } = this.props;
-    if (currentStatus !== status.last()) {
-      alert({
-        title: 'editor.editor.onPublishingNotReadyTitle',
-        body: 'editor.editor.onPublishingNotReadyBody',
-      });
-      return;
-    } else if (entryDraft.get('hasChanged')) {
-      alert({
-        title: 'editor.editor.onPublishingWithUnsavedChangesTitle',
-        body: 'editor.editor.onPublishingWithUnsavedChangesBody',
-      });
-      return;
-    } else if (
-      !(await confirm({
-        title: 'editor.editor.onPublishingTitle',
-        body: 'editor.editor.onPublishingBody',
-      }))
-    ) {
-      return;
-    }
-
-    await publishUnpublishedEntry(collection.get('name'), slug);
-
-    this.deleteBackup();
-
-    if (createNew) {
-      navigateToNewEntry(collection.get('name'));
-    }
-
-    duplicate && createDraftDuplicateFromEntry(entryDraft.get('entry'));
-  };
-
-  handleUnpublishEntry = async () => {
-    const { unpublishPublishedEntry, collection, slug } = this.props;
-    if (
-      !(await confirm({
-        title: 'editor.editor.onUnpublishingTitle',
-        body: 'editor.editor.onUnpublishingBody',
-        color: 'error',
-      }))
-    ) {
-      return;
-    }
-
-    await unpublishPublishedEntry(collection, slug);
-
-    return navigateToCollection(collection.get('name'));
   };
 
   handleDuplicateEntry = () => {
@@ -362,38 +278,6 @@ export class Editor extends React.Component {
     }, 0);
   };
 
-  handleDeleteUnpublishedChanges = async () => {
-    const { entryDraft, collection, slug, deleteUnpublishedEntry, loadEntry, isModification } =
-      this.props;
-    if (
-      entryDraft.get('hasChanged') &&
-      !(await confirm({
-        title: 'editor.editor.onDeleteUnpublishedChangesWithUnsavedChangesTitle',
-        body: 'editor.editor.onDeleteUnpublishedChangesWithUnsavedChangesBody',
-        color: 'error',
-      }))
-    ) {
-      return;
-    } else if (
-      !(await confirm({
-        title: 'editor.editor.onDeleteUnpublishedChangesTitle',
-        body: 'editor.editor.onDeleteUnpublishedChangesBody',
-        color: 'error',
-      }))
-    ) {
-      return;
-    }
-    await deleteUnpublishedEntry(collection.get('name'), slug);
-
-    this.deleteBackup();
-
-    if (isModification) {
-      loadEntry(collection, slug);
-    } else {
-      navigateToCollection(collection.get('name'));
-    }
-  };
-
   render() {
     const {
       entry,
@@ -406,7 +290,6 @@ export class Editor extends React.Component {
       displayUrl,
       hasWorkflow,
       useOpenAuthoring,
-      unpublishedEntry,
       newEntry,
       isModification,
       currentStatus,
@@ -422,7 +305,7 @@ export class Editor extends React.Component {
       loadScroll,
     } = this.props;
 
-    const isPublished = !newEntry && !unpublishedEntry;
+    const isPublished = !newEntry;
 
     if (entry && entry.get('error')) {
       return (
@@ -450,10 +333,8 @@ export class Editor extends React.Component {
         onValidate={changeDraftFieldValidation}
         onPersist={this.handlePersistEntry}
         onDelete={this.handleDeleteEntry}
-        onDeleteUnpublishedChanges={this.handleDeleteUnpublishedChanges}
         onChangeStatus={this.handleChangeStatus}
         onPublish={this.handlePublishEntry}
-        unPublish={this.handleUnpublishEntry}
         onDuplicate={this.handleDuplicateEntry}
         showDelete={this.props.showDelete}
         user={user}
@@ -461,7 +342,6 @@ export class Editor extends React.Component {
         displayUrl={displayUrl}
         hasWorkflow={hasWorkflow}
         useOpenAuthoring={useOpenAuthoring}
-        hasUnpublishedChanges={unpublishedEntry}
         isNewEntry={newEntry}
         isModification={isModification}
         currentStatus={currentStatus}
@@ -493,9 +373,7 @@ function mapStateToProps(state, ownProps) {
   const useOpenAuthoring = globalUI.useOpenAuthoring;
   const isModification = entryDraft.getIn(['entry', 'isModification']);
   const collectionEntriesLoaded = !!entries.getIn(['pages', collectionName]);
-  const unPublishedEntry = selectUnpublishedEntry(state, collectionName, slug);
   const publishedEntry = selectEntry(state, collectionName, slug);
-  const currentStatus = unPublishedEntry && unPublishedEntry.get('status');
   const deployPreview = selectDeployPreview(state, collectionName, slug);
   const localBackup = entryDraft.get('localBackup');
   const draftKey = entryDraft.get('key');
@@ -532,12 +410,10 @@ function mapStateToProps(state, ownProps) {
     useOpenAuthoring,
     isModification,
     collectionEntriesLoaded,
-    currentStatus,
     deployPreview,
     localBackup,
     draftKey,
     publishedEntry,
-    unPublishedEntry,
     editorBackLink,
     scrollSyncEnabled,
   };
@@ -558,10 +434,6 @@ const mapDispatchToProps = {
   discardDraft,
   persistEntry,
   deleteEntry,
-  updateUnpublishedEntryStatus,
-  publishUnpublishedEntry,
-  unpublishPublishedEntry,
-  deleteUnpublishedEntry,
   logoutUser,
   toggleScroll,
   loadScroll,

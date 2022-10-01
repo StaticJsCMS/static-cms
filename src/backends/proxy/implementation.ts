@@ -13,8 +13,7 @@ import type {
   User,
   Config,
   Implementation,
-  ImplementationFile,
-  UnpublishedEntry,
+  ImplementationFile
 } from '../../lib/util';
 
 async function serializeAsset(assetProxy: AssetProxy) {
@@ -131,60 +130,6 @@ export default class ProxyBackend implements Implementation {
     });
   }
 
-  unpublishedEntries() {
-    return this.request({
-      action: 'unpublishedEntries',
-      params: { branch: this.branch },
-    });
-  }
-
-  async unpublishedEntry({
-    id,
-    collection,
-    slug,
-  }: {
-    id?: string;
-    collection?: string;
-    slug?: string;
-  }) {
-    try {
-      const entry: UnpublishedEntry = await this.request({
-        action: 'unpublishedEntry',
-        params: { branch: this.branch, id, collection, slug, cmsLabelPrefix: this.cmsLabelPrefix },
-      });
-
-      return entry;
-    } catch (e: any) {
-      if (e.status === 404) {
-        throw new EditorialWorkflowError('content is not under editorial workflow', true);
-      }
-      throw e;
-    }
-  }
-
-  async unpublishedEntryDataFile(collection: string, slug: string, path: string, id: string) {
-    const { data } = await this.request({
-      action: 'unpublishedEntryDataFile',
-      params: { branch: this.branch, collection, slug, path, id },
-    });
-    return data;
-  }
-
-  async unpublishedEntryMediaFile(collection: string, slug: string, path: string, id: string) {
-    const file = await this.request({
-      action: 'unpublishedEntryMediaFile',
-      params: { branch: this.branch, collection, slug, path, id },
-    });
-    return deserializeMediaFile(file);
-  }
-
-  deleteUnpublishedEntry(collection: string, slug: string) {
-    return this.request({
-      action: 'deleteUnpublishedEntry',
-      params: { branch: this.branch, collection, slug },
-    });
-  }
-
   async persistEntry(entry: Entry, options: PersistOptions) {
     const assets = await Promise.all(entry.assets.map(serializeAsset));
     return this.request({
@@ -196,26 +141,6 @@ export default class ProxyBackend implements Implementation {
         options: { ...options, status: options.status || this.options.initialWorkflowStatus },
         cmsLabelPrefix: this.cmsLabelPrefix,
       },
-    });
-  }
-
-  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
-    return this.request({
-      action: 'updateUnpublishedEntryStatus',
-      params: {
-        branch: this.branch,
-        collection,
-        slug,
-        newStatus,
-        cmsLabelPrefix: this.cmsLabelPrefix,
-      },
-    });
-  }
-
-  publishUnpublishedEntry(collection: string, slug: string) {
-    return this.request({
-      action: 'publishUnpublishedEntry',
-      params: { branch: this.branch, collection, slug },
     });
   }
 

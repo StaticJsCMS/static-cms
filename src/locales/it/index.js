@@ -74,10 +74,6 @@ const it = {
       onDeleteWithUnsavedChanges:
         'Sei sicuro di voler cancellare questa voce pubblicata e tutte le modifiche non salvate della tua sessione corrente?',
       onDeletePublishedEntry: 'Sei sicuro di voler cancellare questa voce pubblicata?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
-        'Questo cancellerà tutte le modifiche non pubblicate di questa voce, come anche tutte le modifiche non salvate della sessione corrente. Vuoi ancora cancellarle?',
-      onDeleteUnpublishedChanges:
-        'Tutte le modifiche non pubblicate a questa voce saranno cancellate. Vuoi ancora cancellarle?',
       loadingEntry: 'Caricando la voce...',
       confirmLoadBackup: 'Un backup locale è stato recuperato per questa voce, vuoi utilizzarlo?',
     },
@@ -90,9 +86,6 @@ const it = {
       unpublishing: 'Rimuovendo dalla pubblicazione...',
       publishAndCreateNew: 'Pubblica e creane uno nuovo',
       publishAndDuplicate: 'Pubblica e duplica',
-      deleteUnpublishedChanges: 'Cancella le modifiche non pubblicate',
-      deleteUnpublishedEntry: 'Cancella le voci non pubblicate',
-      deletePublishedEntry: 'Cancella la voce pubblicata',
       deleteEntry: 'Cancella voce',
       saving: 'Salvando...',
       save: 'Salva',
@@ -187,11 +180,8 @@ const it = {
         'Oops, ti sei perso un campo obbligatorio. Per favore completalo prima di salvare.',
       entrySaved: 'Voce salvata',
       entryPublished: 'Voce pubblicata',
-      entryUnpublished: 'Voce rimossa dalla pubblicazione',
       onFailToPublishEntry: 'Pubblicazione fallita: %{details}',
-      onFailToUnpublishEntry: 'Rimozione della pubblicazione fallita: %{details}',
       entryUpdated: 'Status della voce aggiornato',
-      onDeleteUnpublishedChanges: 'Modifiche non pubblicate cancellate',
       onFailToAuth: '%{details}',
     },
   },
