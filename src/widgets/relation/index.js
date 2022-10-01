@@ -1,6 +1,11 @@
 import controlComponent from './RelationControl';
 import previewComponent from './RelationPreview';
 import schema from './schema';
+import { validations } from '../../lib/widgets';
+
+function isMultiple(field) {
+  return field.get('multiple', false);
+}
 
 function Widget(opts = {}) {
   return {
@@ -11,7 +16,7 @@ function Widget(opts = {}) {
       const min = field.get('min');
       const max = field.get('max');
 
-      if (!this.isMultiple()) {
+      if (!isMultiple(field)) {
         return { error: false };
       }
 

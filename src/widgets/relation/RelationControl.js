@@ -9,7 +9,7 @@ import { FixedSizeList } from 'react-window';
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 
 import { reactSelectStyles } from '../../ui';
-import { stringTemplate, validations } from '../../lib/widgets';
+import { stringTemplate } from '../../lib/widgets';
 
 function arrayMove(array, from, to) {
   const slicedArray = array.slice();

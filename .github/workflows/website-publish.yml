@@ -2,6 +2,8 @@ name: Website Publish
 
 on:
   push:
+    paths:
+      - website/**
     branches:
       - main
 

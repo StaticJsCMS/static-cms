@@ -21,13 +21,15 @@ const ROOT_ID = 'nc-root';
 
 function TranslatedApp({ locale, config }) {
   return (
-    <I18n locale={locale} messages={getPhrases(locale)}>
-      <ErrorBoundary showBackup config={config}>
-        <Router history={history}>
-          <App />
-        </Router>
-      </ErrorBoundary>
-    </I18n>
+    <div id="cms">
+      <I18n locale={locale} messages={getPhrases(locale)}>
+        <ErrorBoundary showBackup config={config}>
+          <Router history={history}>
+            <App />
+          </Router>
+        </ErrorBoundary>
+      </I18n>
+    </div>
   );
 }
 
