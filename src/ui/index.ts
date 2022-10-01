@@ -1,9 +1,3 @@
-import Dropdown, {
-  DropdownItem,
-  DropdownCheckedItem,
-  DropdownButton,
-  StyledDropdownButton,
-} from './Dropdown';
 import Icon from './Icon';
 import ListItemTopBar from './ListItemTopBar';
 import Loader from './Loader';
@@ -12,7 +6,7 @@ import IconButton from './IconButton';
 import Toggle from './Toggle';
 import AuthenticationPage from './AuthenticationPage';
 import WidgetPreviewContainer from './WidgetPreviewContainer';
-import ObjectWidgetTopBar from './ObjectWidgetTopBar';
+import ObjectWidgetTopBar from './ObjectWidgetTopBar.tsx';
 import GoBackButton from './GoBackButton';
 import images from './Icon/images/_index';
 import {
@@ -33,11 +27,6 @@ import {
 } from './styles';
 
 export const SimpleCmsUiDefault = {
-  Dropdown,
-  DropdownItem,
-  DropdownCheckedItem,
-  DropdownButton,
-  StyledDropdownButton,
   ListItemTopBar,
   FieldLabel,
   Icon,
@@ -64,11 +53,6 @@ export const SimpleCmsUiDefault = {
   images,
 };
 export {
-  Dropdown,
-  DropdownItem,
-  DropdownCheckedItem,
-  DropdownButton,
-  StyledDropdownButton,
   ListItemTopBar,
   FieldLabel,
   Icon,
