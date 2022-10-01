@@ -9,7 +9,7 @@ import ListItemTopBar from './ListItemTopBar';
 import Loader from './Loader';
 import FieldLabel from './FieldLabel';
 import IconButton from './IconButton';
-import Toggle, { ToggleContainer, ToggleBackground, ToggleHandle } from './Toggle';
+import Toggle from './Toggle';
 import AuthenticationPage from './AuthenticationPage';
 import WidgetPreviewContainer from './WidgetPreviewContainer';
 import ObjectWidgetTopBar from './ObjectWidgetTopBar';
@@ -44,9 +44,6 @@ export const SimpleCmsUiDefault = {
   IconButton,
   Loader,
   Toggle,
-  ToggleContainer,
-  ToggleBackground,
-  ToggleHandle,
   AuthenticationPage,
   WidgetPreviewContainer,
   ObjectWidgetTopBar,
@@ -78,9 +75,6 @@ export {
   IconButton,
   Loader,
   Toggle,
-  ToggleContainer,
-  ToggleBackground,
-  ToggleHandle,
   AuthenticationPage,
   WidgetPreviewContainer,
   ObjectWidgetTopBar,

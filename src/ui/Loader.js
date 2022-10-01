@@ -56,7 +56,7 @@ const LoaderItem = styled.div`
   transform: translateX(-50%);
 `;
 
-export class Loader extends React.Component {
+class Loader extends React.Component {
   static propTypes = {
     children: PropTypes.node,
     className: PropTypes.string,

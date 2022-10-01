@@ -662,6 +662,12 @@ export interface EditorComponentManualOptions {
   toPreview: (data: any) => string;
 }
 
+export function isEditorComponentWidgetOptions(
+  options: EditorComponentOptions,
+): options is EditorComponentWidgetOptions {
+  return 'widget' in options;
+}
+
 export type EditorComponentOptions = EditorComponentManualOptions | EditorComponentWidgetOptions;
 
 export interface CmsEventListener {

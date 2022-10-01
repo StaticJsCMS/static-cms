@@ -1,20 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { css } from '@emotion/react';
 
-import { Toggle, ToggleBackground, colors } from '../../ui';
-
-function BooleanBackground({ isActive, ...props }) {
-  return (
-    <ToggleBackground
-      css={css`
-        background-color: ${isActive ? colors.active : colors.textFieldBorder};
-      `}
-      {...props}
-    />
-  );
-}
+import { Toggle } from '../../ui';
 
 export default class BooleanControl extends React.Component {
   render() {
@@ -28,7 +16,6 @@ export default class BooleanControl extends React.Component {
           onChange={onChange}
           onFocus={setActiveStyle}
           onBlur={setInactiveStyle}
-          Background={BooleanBackground}
         />
       </div>
     );
