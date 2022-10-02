@@ -1,9 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
+import React from 'react';
 
-import icons from './Icon/icons';
 import { transientOptions } from '../lib';
+import icons from './Icon/icons';
 
 interface IconWrapperProps {
   $size: string;
@@ -39,6 +38,8 @@ const IconWrapper = styled(
   `,
 );
 
+const rotations = { right: 90, down: 180, left: 270, up: 360 };
+
 /**
  * Calculates rotation for icons that have a `direction` property configured
  * in the imported icon definition object. If no direction is configured, a
@@ -47,11 +48,10 @@ const IconWrapper = styled(
  * Returned value is a string of shape `${degrees}deg`, for use in a CSS
  * transform.
  */
-function getRotation(iconDirection, newDirection) {
+function getRotation(iconDirection?: keyof typeof rotations, newDirection?: keyof typeof rotations) {
   if (!iconDirection || !newDirection) {
     return '0deg';
   }
-  const rotations = { right: 90, down: 180, left: 270, up: 360 };
   const degrees = rotations[newDirection] - rotations[iconDirection];
   return `${degrees}deg`;
 }
@@ -63,25 +63,25 @@ const sizes = {
   large: '32px',
 };
 
-function Icon({ type, direction, size = 'medium', className }) {
+interface IconProps {
+  type: keyof typeof icons;
+  direction?: keyof typeof rotations;
+  size: keyof typeof sizes | string;
+  className?: string;
+}
+
+function Icon({ type, direction, size = 'medium', className }: IconProps) {
   const IconSvg = icons[type].image;
 
   return (
     <IconWrapper
       className={className}
-      size={sizes[size] || size}
-      rotation={getRotation(icons[type].direction, direction)}
+      $size={size in sizes ? sizes[size as keyof typeof sizes] : size}
+      $rotation={getRotation(icons[type].direction, direction)}
     >
       <IconSvg />
     </IconWrapper>
   );
 }
-
-Icon.propTypes = {
-  type: PropTypes.string.isRequired,
-  direction: PropTypes.oneOf(['right', 'down', 'left', 'up']),
-  size: PropTypes.string,
-  className: PropTypes.string,
-};
 
 export default styled(Icon)``;

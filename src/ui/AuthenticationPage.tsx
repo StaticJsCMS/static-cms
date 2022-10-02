@@ -31,7 +31,7 @@ const SimpleCmsIcon = styled(Icon)`
   bottom: 10px;
 `;
 
-function CustomLogoIcon({ url }) {
+function CustomLogoIcon({ url }: { url: string }) {
   return (
     <CustomIconWrapper>
       <img src={url} alt="Logo" />
@@ -39,7 +39,7 @@ function CustomLogoIcon({ url }) {
   );
 }
 
-function renderPageLogo(logoUrl) {
+function renderPageLogo(logoUrl: string) {
   if (logoUrl) {
     return <CustomLogoIcon url={logoUrl} />;
   }
@@ -73,6 +73,17 @@ const TextButton = styled.button`
   position: relative;
 `;
 
+export interface AuthenticationPageProps {
+  onLogin: PropTypes.func,
+  logoUrl: PropTypes.string,
+  siteUrl: PropTypes.string,
+  loginDisabled: PropTypes.bool,
+  loginErrorMessage: PropTypes.node,
+  renderButtonContent: PropTypes.func,
+  renderPageContent: PropTypes.func,
+  t: PropTypes.func.isRequired,
+}
+
 function AuthenticationPage({
   onLogin,
   loginDisabled,
@@ -100,16 +111,5 @@ function AuthenticationPage({
     </StyledAuthenticationPage>
   );
 }
-
-AuthenticationPage.propTypes = {
-  onLogin: PropTypes.func,
-  logoUrl: PropTypes.string,
-  siteUrl: PropTypes.string,
-  loginDisabled: PropTypes.bool,
-  loginErrorMessage: PropTypes.node,
-  renderButtonContent: PropTypes.func,
-  renderPageContent: PropTypes.func,
-  t: PropTypes.func.isRequired,
-};
 
 export default AuthenticationPage;
