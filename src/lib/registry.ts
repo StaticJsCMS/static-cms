@@ -1,24 +1,48 @@
 import { Map } from 'immutable';
-import produce from 'immer';
+import { produce } from 'immer';
 import { oneLine } from 'common-tags';
 
 import EditorComponent from '../valueObjects/EditorComponent';
 
-const allowedEvents = [
-  'prePublish',
-  'postPublish',
-  'preSave',
-  'postSave',
-];
-const eventHandlers = {};
-allowedEvents.forEach(e => {
-  eventHandlers[e] = [];
-});
+import type { EntryMap, MediaLibrary } from '../types/redux';
+import { CmsIcon, CmsLocalePhrasesRoot, CmsMediaLibrary, CmsMediaLibraryOptions } from '../interface';
+
+export const allowedEvents = ['prePublish', 'postPublish', 'preSave', 'postSave'] as const;
+export type AllowedEvent = typeof allowedEvents[number];
+
+const eventHandlers = allowedEvents.reduce(
+  (acc, e) => {
+    acc[e] = [];
+    return acc;
+  },
+  {} as Record<
+    AllowedEvent,
+    {
+      handler: EventHandler;
+      options: Record<string, unknown>;
+    }[]
+  >,
+);
+
+interface Registry {
+  backends: Record<string, any>;
+  templates: Record<string, any>;
+  previewStyles: any[];
+  widgets: Record<string, any>;
+  icons: Record<string, CustomIcon>;
+  additionalLinks: Record<string, AdditionalLink>;
+  editorComponents: Map<string, any>;
+  remarkPlugins: any[];
+  widgetValueSerializers: Record<string, any>;
+  mediaLibraries: any[];
+  locales: Record<string, LocalePhrasesRoot>;
+  eventHandlers: typeof eventHandlers;
+}
 
 /**
  * Global Registry Object
  */
-const registry = {
+const registry: Registry = {
   backends: {},
   templates: {},
   previewStyles: [],
@@ -61,7 +85,7 @@ export default {
   registerIcon,
   getIcon,
   registerAdditionalLink,
-  getAdditionalLinks
+  getAdditionalLinks,
 };
 
 /**
@@ -219,38 +243,41 @@ export function getBackend(name) {
 /**
  * Media Libraries
  */
-export function registerMediaLibrary(mediaLibrary, options) {
+export function registerMediaLibrary(mediaLibrary: CmsMediaLibrary, options?: CmsMediaLibraryOptions) {
   if (registry.mediaLibraries.find(ml => mediaLibrary.name === ml.name)) {
     throw new Error(`A media library named ${mediaLibrary.name} has already been registered.`);
   }
   registry.mediaLibraries.push({ ...mediaLibrary, options });
 }
 
-export function getMediaLibrary(name) {
+export function getMediaLibrary(name: string): CmsMediaLibrary {
   return registry.mediaLibraries.find(ml => ml.name === name);
 }
 
-export function getFiles(name) {
-  return registry.mediaLibraries.find(ml => ml.name === name);
-}
-
-function validateEventName(name) {
-  if (!allowedEvents.includes(name)) {
+/**
+ * Event Handlers
+ */
+function validateEventName(name: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (!allowedEvents.includes(name as any)) {
     throw new Error(`Invalid event name '${name}'`);
   }
 }
 
-export function getEventListeners(name) {
+export function getEventListeners(name: AllowedEvent) {
   validateEventName(name);
   return [...registry.eventHandlers[name]];
 }
 
-export function registerEventListener({ name, handler }, options = {}) {
+export function registerEventListener(
+  { name, handler }: { name: AllowedEvent; handler: EventHandler },
+  options: Record<string, unknown> = {},
+) {
   validateEventName(name);
   registry.eventHandlers[name].push({ handler, options });
 }
 
-export async function invokeEvent({ name, data }) {
+export async function invokeEvent({ name, data }: { name: AllowedEvent; data: EventData }) {
   validateEventName(name);
   const handlers = registry.eventHandlers[name];
 
@@ -265,7 +292,13 @@ export async function invokeEvent({ name, data }) {
   return _data.entry.get('data');
 }
 
-export function removeEventListener({ name, handler }) {
+export function removeEventListener({
+  name,
+  handler,
+}: {
+  name: AllowedEvent;
+  handler: EventHandler;
+}) {
   validateEventName(name);
   if (handler) {
     registry.eventHandlers[name] = registry.eventHandlers[name].filter(
@@ -279,7 +312,7 @@ export function removeEventListener({ name, handler }) {
 /**
  * Locales
  */
-export function registerLocale(locale, phrases) {
+export function registerLocale(locale: string, phrases: CmsLocalePhrasesRoot) {
   if (!locale || !phrases) {
     console.error("Locale parameters invalid. example: CMS.registerLocale('locale', phrases)");
   } else {
@@ -287,29 +320,41 @@ export function registerLocale(locale, phrases) {
   }
 }
 
-export function getLocale(locale) {
+export function getLocale(locale: string): CmsLocalePhrasesRoot | undefined {
   return registry.locales[locale];
 }
 
 /**
  * Icons
  */
-export function registerIcon(name, icon) {
+export function registerIcon(name: string, icon: CmsIcon) {
   registry.icons[name] = icon;
 }
-export function getIcon(name) {
-  return registry.icons[name];
+
+export function getIcon(name: string): CmsIcon | null {
+  return registry.icons[name] ?? null;
 }
 
 /**
- * Icons
+ * Additional Links
  */
-export function registerAdditionalLink(id, title, data, iconName) {
-  registry.additionalLinks[id] = { id, title, data, iconName };
+export interface AdditionalLink {
+  id: string;
+  title: string;
+  options?: {
+    href?: string;
+    iconName?: string;
+  };
 }
-export function getAdditionalLinks() {
+
+export function registerAdditionalLink(link: AdditionalLink) {
+  registry.additionalLinks[link.id] = link;
+}
+
+export function getAdditionalLinks(): Record<string, AdditionalLink> {
   return registry.additionalLinks;
 }
-export function getAdditionalLink(id) {
+
+export function getAdditionalLink(id: string): AdditionalLink | undefined {
   return registry.additionalLinks[id];
 }

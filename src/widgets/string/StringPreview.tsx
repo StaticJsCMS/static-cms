@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { CmsWidgetPreviewProps } from '../../interface';
 import { WidgetPreviewContainer } from '../../ui';
+
+import type { CmsWidgetPreviewProps } from '../../interface';
 
 function StringPreview({ value = '' }: CmsWidgetPreviewProps<string>) {
   return <WidgetPreviewContainer>{value}</WidgetPreviewContainer>;

@@ -67,7 +67,7 @@ const sizes = {
   large: '32px',
 };
 
-interface IconProps {
+export interface IconProps {
   type: IconType;
   direction?: Direction;
   size: keyof typeof sizes | string;

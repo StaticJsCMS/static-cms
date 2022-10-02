@@ -1,6 +1,7 @@
-import { CmsWidgetParam } from '../../interface';
 import controlComponent from './StringControl';
 import previewComponent from './StringPreview';
+
+import type { CmsWidgetParam } from '../../interface';
 
 function Widget(opts = {}): CmsWidgetParam<string> {
   return {

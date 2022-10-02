@@ -11,6 +11,8 @@ import * as locales from './locales';
 import * as lib from './lib';
 import * as ui from './ui';
 
+import type { CMSApi } from './interface';
+
 export * from './backends';
 export * from './widgets';
 export * from './media-libraries';
@@ -19,7 +21,7 @@ export * from './locales';
 export * from './lib';
 export * from './ui';
 
-export const CMS = {
+export const CMS: CMSApi = {
   ...Registry,
   ...backends,
   ...widgets,
