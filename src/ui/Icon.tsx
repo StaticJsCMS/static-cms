@@ -3,30 +3,41 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 
 import icons from './Icon/icons';
+import { transientOptions } from '../lib';
 
-const IconWrapper = styled.span`
-  display: inline-block;
-  line-height: 0;
-  width: ${props => props.size};
-  height: ${props => props.size};
-  transform: ${props => `rotate(${props.rotation})`};
+interface IconWrapperProps {
+  $size: string;
+  $rotation: string;
+}
 
-  & path:not(.no-fill),
-  & circle:not(.no-fill),
-  & polygon:not(.no-fill),
-  & rect:not(.no-fill) {
-    fill: currentColor;
-  }
+const IconWrapper = styled(
+  'span',
+  transientOptions,
+)<IconWrapperProps>(
+  ({ $size, $rotation }) => `
+    display: inline-block;
+    line-height: 0;
+    width: ${$size};
+    height: ${$size};
+    transform: rotate(${$rotation});
 
-  & path.clipped {
-    fill: transparent;
-  }
+    & path:not(.no-fill),
+    & circle:not(.no-fill),
+    & polygon:not(.no-fill),
+    & rect:not(.no-fill) {
+      fill: currentColor;
+    }
 
-  svg {
-    width: 100%;
-    height: 100%;
-  }
-`;
+    & path.clipped {
+      fill: transparent;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  `,
+);
 
 /**
  * Calculates rotation for icons that have a `direction` property configured

@@ -434,12 +434,12 @@ const components = {
   `,
 };
 
-interface OptionStyleState {
+export interface OptionStyleState {
   isSelected: boolean;
   isFocused: boolean;
 }
 
-interface IndicatorSeparatorStyleState {
+export interface IndicatorSeparatorStyleState {
   hasValue: boolean;
   selectProps: {
     isClearable: boolean;

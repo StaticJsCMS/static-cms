@@ -1,14 +1,16 @@
-import React, { ReactNode, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import React, { useCallback } from 'react';
 
+import { transientOptions } from '../lib';
 import Icon from './Icon';
-import { colors, buttons } from './styles';
-import Dropdown, { StyledDropdownButton, DropdownItem } from './Dropdown';
-import { TranslatedProps } from '../interface';
-import { List } from 'immutable';
+import { buttons, colors } from './styles';
+
+import type { List } from 'immutable';
+import type { ReactNode } from 'react';
+import type { TranslatedProps } from '../interface';
 
 const TopBarContainer = styled.div`
   align-items: center;
@@ -19,17 +21,28 @@ const TopBarContainer = styled.div`
   padding: 6px 13px;
 `;
 
-const ExpandButtonContainer = styled.div`
-  ${props =>
-    props.hasHeading &&
-    css`
-      display: flex;
-      align-items: center;
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 1;
-    `};
-`;
+interface ExpandButtonContainerProps {
+  $hasHeading: boolean;
+}
+
+const ExpandButtonContainer = styled(
+  'div',
+  transientOptions,
+)<ExpandButtonContainerProps>(
+  ({ $hasHeading }) => `
+    ${
+      $hasHeading
+        ? `
+          display: flex;
+          align-items: center;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 1;
+        `
+        : ''
+    }
+  `,
+);
 
 const ExpandButton = styled.button`
   ${buttons.button};
@@ -44,7 +57,6 @@ const ExpandButton = styled.button`
 
 const AddButton = styled.button`
   ${buttons.button}
-  ${buttons.widget}
   padding: 4px 12px;
 
   ${Icon} {
@@ -52,7 +64,7 @@ const AddButton = styled.button`
   }
 `;
 
-interface ObjectWidgetTopBarProps {
+export interface ObjectWidgetTopBarProps {
   allowAdd: boolean;
   types: List<Map<string, any>>;
   onAdd: () => void;
@@ -72,27 +84,61 @@ const ObjectWidgetTopBar = ({
   collapsed,
   heading,
   label,
-  t
+  t,
 }: TranslatedProps<ObjectWidgetTopBarProps>) => {
-  const renderTypesDropdown = useCallback((types: List<Map<string, any>>) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  }, []);
+  const handleClose = useCallback(() => {
+    setAnchorEl(null);
+  }, []);
+
+  const renderTypesDropdown = useCallback(
+    (types: List<Map<string, any>>) => {
+      return (
+        <div>
+          <Button
+            id="basic-button"
+            aria-controls={open ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleClick}
+          >
+            {t('editor.editorWidgets.list.addType', { item: label })}
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            {types.map((type, idx) =>
+              type ? (
+                <MenuItem key={idx} onClick={() => onAddType(type.get('name'))}>
+                  {type.get('label') ?? type.get('name')}
+                </MenuItem>
+              ) : null,
+            )}
+          </Menu>
+        </div>
+      );
+    },
+    [t, onAddType, label],
+  );
+
+  const renderAddButton = useCallback(() => {
     return (
-      <Dropdown
-        renderButton={() => (
-          <StyledDropdownButton>
-            {t('editor.editorWidgets.list.addType', { item: this.props.label })}
-          </StyledDropdownButton>
-        )}
-      >
-        {types.toJS().map((type: Record<string, any>, idx: number) => (
-          <DropdownItem
-            key={idx}
-            label={type.get('label', type.name)}
-            onClick={() => onAddType(type.name)}
-          />
-        ))}
-      </Dropdown>
+      <AddButton onClick={onAdd}>
+        {t('editor.editorWidgets.list.add', { item: label })}
+        <Icon type="add" size="xsmall" />
+      </AddButton>
     );
-  }, [t, onAddType]);
+  }, [t, label, onAdd]);
 
   const renderAddUI = useCallback(() => {
     if (!allowAdd) {
@@ -103,29 +149,19 @@ const ObjectWidgetTopBar = ({
     } else {
       return renderAddButton();
     }
-  }, [allowAdd, types, renderTypesDropdown, renderAddButton])
+  }, [allowAdd, types, renderTypesDropdown, renderAddButton]);
 
-  renderAddButton() {
-    return (
-      <AddButton onClick={this.props.onAdd}>
-        {this.props.t('editor.editorWidgets.list.add', { item: this.props.label })}
-        <Icon type="add" size="xsmall" />
-      </AddButton>
-    );
-  }
-
-
-    return (
-      <TopBarContainer>
-        <ExpandButtonContainer hasHeading={!!heading}>
-          <ExpandButton onClick={onCollapseToggle} data-testid="expand-button">
-            <Icon type="chevron" direction={collapsed ? 'right' : 'down'} size="small" />
-          </ExpandButton>
-          {heading}
-        </ExpandButtonContainer>
-        {this.renderAddUI()}
-      </TopBarContainer>
-    );
-}
+  return (
+    <TopBarContainer>
+      <ExpandButtonContainer $hasHeading={!!heading}>
+        <ExpandButton onClick={onCollapseToggle} data-testid="expand-button">
+          <Icon type="chevron" direction={collapsed ? 'right' : 'down'} size="small" />
+        </ExpandButton>
+        {heading}
+      </ExpandButtonContainer>
+      {renderAddUI()}
+    </TopBarContainer>
+  );
+};
 
 export default ObjectWidgetTopBar;

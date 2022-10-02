@@ -1,23 +1,33 @@
 import styled from '@emotion/styled';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 import { transientOptions } from '../lib/util';
 import Icon from './Icon';
 import { buttons, colors, lengths } from './styles';
 
+import type { ReactNode } from 'react';
+
+interface TopBarProps {
+  $isVariableTypesList: boolean;
+  $collapsed: boolean;
+}
+
 const TopBar = styled(
   'div',
   transientOptions,
-)(
+)<TopBarProps>(
   ({ $isVariableTypesList, $collapsed }) => `
     display: flex;
     justify-content: space-between;
     height: 32px!important;
     border-radius: ${
       !$isVariableTypesList
-        ? $collapsed ? lengths.borderRadius : `${lengths.borderRadius} ${lengths.borderRadius} 0 0`
-        : $collapsed ? `0 ${lengths.borderRadius} ${lengths.borderRadius} ${lengths.borderRadius}` : `0 ${lengths.borderRadius} 0 0`
+        ? $collapsed
+          ? lengths.borderRadius
+          : `${lengths.borderRadius} ${lengths.borderRadius} 0 0`
+        : $collapsed
+        ? `0 ${lengths.borderRadius} ${lengths.borderRadius} ${lengths.borderRadius}`
+        : `0 ${lengths.borderRadius} 0 0`
     }!important;
     position: relative;
   `,
@@ -55,13 +65,27 @@ const DragIconContainer = styled(TopBarButtonSpan)`
   cursor: move;
 `;
 
-function DragHandle({ dragHandleHOC }) {
+export interface DragHandleProps {
+  dragHandleHOC: (render: () => ReactNode) => () => JSX.Element;
+}
+
+function DragHandle({ dragHandleHOC }: DragHandleProps) {
   const Handle = dragHandleHOC(() => (
     <DragIconContainer>
       <Icon type="drag-handle" size="small" />
     </DragIconContainer>
   ));
   return <Handle />;
+}
+
+export interface ListItemTopBarProps {
+  className: string;
+  title?: ReactNode;
+  collapsed: boolean;
+  onCollapseToggle: () => void;
+  onRemove: () => void;
+  dragHandleHOC: (render: () => ReactNode) => () => JSX.Element;
+  isVariableTypesList: boolean;
 }
 
 function ListItemTopBar({
@@ -72,7 +96,7 @@ function ListItemTopBar({
   onRemove,
   dragHandleHOC,
   isVariableTypesList,
-}) {
+}: ListItemTopBarProps) {
   return (
     <TopBar className={className} $collapsed={collapsed} $isVariableTypesList={isVariableTypesList}>
       {onCollapseToggle ? (
@@ -90,15 +114,6 @@ function ListItemTopBar({
     </TopBar>
   );
 }
-
-ListItemTopBar.propTypes = {
-  className: PropTypes.string,
-  title: PropTypes.node,
-  collapsed: PropTypes.bool,
-  onCollapseToggle: PropTypes.func,
-  onRemove: PropTypes.func,
-  isVariableTypesList: PropTypes.bool,
-};
 
 const StyledListItemTopBar = styled(ListItemTopBar)`
   display: flex;

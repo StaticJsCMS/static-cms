@@ -1,12 +1,11 @@
 import Icon from './Icon';
 import ListItemTopBar from './ListItemTopBar';
-import Loader from './Loader';
 import FieldLabel from './FieldLabel';
 import IconButton from './IconButton';
 import Toggle from './Toggle';
 import AuthenticationPage from './AuthenticationPage';
 import WidgetPreviewContainer from './WidgetPreviewContainer';
-import ObjectWidgetTopBar from './ObjectWidgetTopBar.tsx';
+import ObjectWidgetTopBar from './ObjectWidgetTopBar';
 import GoBackButton from './GoBackButton';
 import images from './Icon/images/_index';
 import {
@@ -31,7 +30,6 @@ export const SimpleCmsUiDefault = {
   FieldLabel,
   Icon,
   IconButton,
-  Loader,
   Toggle,
   AuthenticationPage,
   WidgetPreviewContainer,
@@ -57,7 +55,6 @@ export {
   FieldLabel,
   Icon,
   IconButton,
-  Loader,
   Toggle,
   AuthenticationPage,
   WidgetPreviewContainer,
