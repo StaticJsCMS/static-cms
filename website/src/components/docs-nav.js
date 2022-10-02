@@ -80,7 +80,7 @@ function DocsNav({ items, location }) {
           <MenuSection key={item.title}>
             <SectionTitle>{item.title}</SectionTitle>
             <SectionList>
-              {item.group.edges.map(({ node }) => (
+              {item.group?.edges.map(({ node }) => (
                 <MenuItem key={node.fields.slug}>
                   <NavLink to={node.fields.slug} activeClassName="active">
                     {node.frontmatter.title}
