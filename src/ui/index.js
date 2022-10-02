@@ -32,7 +32,7 @@ import {
   GlobalStyles,
 } from './styles';
 
-export const SimpleCmsUiDefault = {
+export const StaticCmsUiDefault = {
   Dropdown,
   DropdownItem,
   DropdownCheckedItem,

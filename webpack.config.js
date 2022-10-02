@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 const isProduction = process.env.NODE_ENV === 'production';
-const devServerPort = parseInt(process.env.SIMPLE_CMS_DEV_SERVER_PORT || `${8080}`);
+const devServerPort = parseInt(process.env.STATIC_CMS_DEV_SERVER_PORT || `${8080}`);
 
 function moduleNameToPath(libName) {
   return path.resolve(__dirname, 'node_modules', libName);
@@ -66,9 +66,9 @@ module.exports = {
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'simple-cms-core.js',
+    filename: 'static-cms-core.js',
     library: {
-      name: 'SimpleCmsCore',
+      name: 'StaticCmsCore',
       type: 'umd',
     },
   },

@@ -5,7 +5,7 @@ weight: 20
 ---
 ## Introduction
 
-This guide will walk you through how to integrate Simple CMS with Hugo. This is a good place to start if you want to learn from the ground up how these two tools work together. If you want to get up-and-running quicker, you can use one of the pre-existing and amazing [starter templates](/docs/start-with-a-template/)!
+This guide will walk you through how to integrate Static CMS with Hugo. This is a good place to start if you want to learn from the ground up how these two tools work together. If you want to get up-and-running quicker, you can use one of the pre-existing and amazing [starter templates](/docs/start-with-a-template/)!
 
 ## Getting started with Hugo
 
@@ -56,13 +56,13 @@ You'll also add some files to the `content/` and `data/` directories to make sur
 touch content/.keep data/.keep
 ```
 
-This is as basic as you can get with a Hugo project. There's just enough here now for us to install Simple CMS.
+This is as basic as you can get with a Hugo project. There's just enough here now for us to install Static CMS.
 
-## Getting Started With Simple CMS
+## Getting Started With Static CMS
 
-### Add the Simple CMS files to Hugo
+### Add the Static CMS files to Hugo
 
-In Hugo, static files that don't need to be processed by the build commands live in the `static/` directory. You'll install the Simple CMS admin and config files there. Create a directory `admin/` and within it, create two files `index.html` and `config.yml`. In the `index.html`, add the following content:
+In Hugo, static files that don't need to be processed by the build commands live in the `static/` directory. You'll install the Static CMS admin and config files there. Create a directory `admin/` and within it, create two files `index.html` and `config.yml`. In the `index.html`, add the following content:
 
 ```html
 <!DOCTYPE html>
@@ -75,8 +75,8 @@ In Hugo, static files that don't need to be processed by the build commands live
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
   <body>
-    <!-- Include the script that builds the page and powers Simple CMS -->
-    <script src="https://unpkg.com/@simplecms/simple-cms-core@%5E0.1.0/dist/simple-cms-core.js"></script>
+    <!-- Include the script that builds the page and powers Static CMS -->
+    <script src="https://unpkg.com/@staticcms/core@%5E0.1.0/dist/static-cms-core.js"></script>
   </body>
 </html>
 ```
@@ -147,9 +147,9 @@ Back in your [Netlify dashboard](https://app.netlify.com/):
 
 Once you've reached this point, you should be able to access the CMS in your browser at `http://localhost:1313/admin`. You'll be prompted to add the URL of your Netlify site. Once you've added that URL, you can log in with an Identity account or with one of the External Providers you enabled in step 3 above. For the sake of this tutorial, you can create a blog post in the CMS, and publish it! Once you `git pull` in your project, the blog post will show up in the project at `content/blog/<slugified-blog-post-title>.md`.
 
-And that's it! From this point on, it's just a matter of following [the Hugo documentation](https://gohugo.io/templates/) for outputting the content from your `content/` directory into templates! For more information on configuring Simple CMS, feel free to check out the [Simple CMS configuration options documentation](/docs/configuration-options/).
+And that's it! From this point on, it's just a matter of following [the Hugo documentation](https://gohugo.io/templates/) for outputting the content from your `content/` directory into templates! For more information on configuring Static CMS, feel free to check out the [Static CMS configuration options documentation](/docs/configuration-options/).
 
-## Using Simple CMS content in Hugo
+## Using Static CMS content in Hugo
 
 ### Creating a list of posts
 
@@ -198,13 +198,13 @@ Create a file `layouts/blog/single.html`, and put the following content in there
 </html>
 ```
 
-You can see this basic template includes all the fields you've specified in your Simple CMS `config.yml` file. You can access any custom front-matter fields with `.Params.<field-name>`!
+You can see this basic template includes all the fields you've specified in your Static CMS `config.yml` file. You can access any custom front-matter fields with `.Params.<field-name>`!
 
 ### Using Hugo shortcodes in the Markdown Editor
 
 Using `registerEditorComponent` we can register a block level component for the Markdown editor. You can use it to add Hugo's inbuilt shortcodes like `gist`,`youtube` and others as block components to the markdown editor.
 
-You can refer to [registering editor components](https://www.simplecms.github.io/simple-cms/docs/custom-widgets/#registereditorcomponent) for a getting started guide or for creating your own editor components.
+You can refer to [registering editor components](https://www.staticjscms.github.io/static-cms/docs/custom-widgets/#registereditorcomponent) for a getting started guide or for creating your own editor components.
 
 **Example**
 

@@ -10,7 +10,7 @@ import cleanStack from 'clean-stack';
 import { buttons, colors } from '../../ui';
 import { localForage } from '../../lib/util';
 
-const ISSUE_URL = 'https://github.com/SimpleCMS/simple-cms/issues/new?';
+const ISSUE_URL = 'https://github.com/StaticJsCMS/static-cms/issues/new?';
 
 function getIssueTemplate({ version, provider, browser, config }) {
   return `
@@ -23,7 +23,7 @@ function getIssueTemplate({ version, provider, browser, config }) {
 **Screenshots**
 
 **Applicable Versions:**
- - Simple CMS version: \`${version}\`
+ - Static CMS version: \`${version}\`
  - Git provider: \`${provider}\`
  - Browser version: \`${browser}\`
 
@@ -38,8 +38,8 @@ ${config}
 
 function buildIssueTemplate({ config }) {
   let version = '';
-  if (typeof SIMPLE_CMS_CORE_VERSION === 'string') {
-    version = `simple-cms@${SIMPLE_CMS_CORE_VERSION}`;
+  if (typeof STATIC_CMS_CORE_VERSION === 'string') {
+    version = `static-cms@${STATIC_CMS_CORE_VERSION}`;
   }
   const template = getIssueTemplate({
     version,

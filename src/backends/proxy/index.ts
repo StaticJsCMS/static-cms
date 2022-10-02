@@ -1,7 +1,7 @@
 import ProxyBackend from './implementation';
 import AuthenticationPage from './AuthenticationPage';
 
-export const SimpleCmsBackendProxy = {
+export const StaticCmsBackendProxy = {
   ProxyBackend,
   AuthenticationPage,
 };

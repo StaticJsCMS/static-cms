@@ -15,11 +15,11 @@ function Blog({ data }) {
     <Layout>
       <Helmet>
         <title>Blog</title>
-        <meta name="description" content="Recent news and updates about Simple CMS." />
+        <meta name="description" content="Recent news and updates about Static CMS." />
       </Helmet>
       <Page>
         <Container size="sm">
-          <h1>Simple CMS Blog</h1>
+          <h1>Static CMS Blog</h1>
           {data.allMarkdownRemark.edges.map(({ node }) => (
             <article
               key={node.id}

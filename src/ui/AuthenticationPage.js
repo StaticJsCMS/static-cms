@@ -25,7 +25,7 @@ const SimpleLogoIcon = styled(Icon)`
   margin-top: -300px;
 `;
 
-const SimpleCmsIcon = styled(Icon)`
+const StaticCmsIcon = styled(Icon)`
   color: #c4c6d2;
   position: absolute;
   bottom: 10px;
@@ -43,7 +43,7 @@ function renderPageLogo(logoUrl) {
   if (logoUrl) {
     return <CustomLogoIcon url={logoUrl} />;
   }
-  return <SimpleLogoIcon size="300px" type="simple-cms" />;
+  return <SimpleLogoIcon size="300px" type="static-cms" />;
 }
 
 const LoginButton = styled.button`
@@ -96,7 +96,7 @@ function AuthenticationPage({
         </LoginButton>
       )}
       {siteUrl && <GoBackButton href={siteUrl} t={t} />}
-      {logoUrl ? <SimpleCmsIcon size="100px" type="simple-cms" /> : null}
+      {logoUrl ? <StaticCmsIcon size="100px" type="static-cms" /> : null}
     </StyledAuthenticationPage>
   );
 }

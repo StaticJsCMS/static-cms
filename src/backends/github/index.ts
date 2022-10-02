@@ -2,7 +2,7 @@ import GitHubBackend from './implementation';
 import API from './API';
 import AuthenticationPage from './AuthenticationPage';
 
-export const SimpleCmsBackendGithub = {
+export const StaticCmsBackendGithub = {
   GitHubBackend,
   API,
   AuthenticationPage,

@@ -3,7 +3,7 @@ group: Fields
 weight: 20
 title: Creating Custom Widgets
 ---
-The Simple CMS exposes a `window.CMS` a global object that you can use to register custom widgets, previews, and editor plugins. The same object is also the default export if you import Simple CMS as an npm module. The available widget extension methods are:
+The Static CMS exposes a `window.CMS` a global object that you can use to register custom widgets, previews, and editor plugins. The same object is also the default export if you import Static CMS as an npm module. The available widget extension methods are:
 
 * **registerWidget:** registers a custom widget.
 * **registerEditorComponent:** adds a block component to the Markdown editor.
@@ -12,7 +12,7 @@ The Simple CMS exposes a `window.CMS` a global object that you can use to regist
 
 The `registerWidget` requires you to provide a React component. If you have a build process in place for your project, it is possible to integrate with this build process.
 
-However, although possible, it may be cumbersome or even impractical to add a React build phase. For this reason, Simple CMS exposes two constructs globally to allow you to create components inline: ‘createClass’ and ‘h’ (alias for React.createElement).
+However, although possible, it may be cumbersome or even impractical to add a React build phase. For this reason, Static CMS exposes two constructs globally to allow you to create components inline: ‘createClass’ and ‘h’ (alias for React.createElement).
 
 ## `registerWidget`
 
@@ -23,7 +23,7 @@ Register a custom widget.
 CMS.registerWidget(name, control, [preview], [schema]);
 
 // Using npm module import
-import CMS from '@simplecms/simple-cms-core';
+import CMS from '@staticcms/core';
 CMS.registerWidget(name, control, [preview], [schema]);
 ```
 
@@ -41,7 +41,7 @@ CMS.registerWidget(name, control, [preview], [schema]);
 `admin/index.html`
 
 ```html
-<script src="https://unpkg.com/@simplecms/simple-cms-core@%5E0.1.0/dist/simple-cms-core.js"></script>
+<script src="https://unpkg.com/@staticcms/core@%5E0.1.0/dist/static-cms-core.js"></script>
 <script>
 var CategoriesControl = createClass({
   handleChange: function(e) {
@@ -116,7 +116,7 @@ CMS.registerEditorComponent(definition)
 **Example:**
 
 ```html
-<script src="https://unpkg.com/@simplecms/simple-cms-core@%5E0.1.0/dist/simple-cms-core.js"></script>
+<script src="https://unpkg.com/@staticcms/core@%5E0.1.0/dist/static-cms-core.js"></script>
 <script>
 CMS.registerEditorComponent({
   // Internal id of the component
@@ -240,7 +240,7 @@ You can also return a promise from `isValid`. While the promise is pending, the 
 
 ## Writing custom widgets as a separate package
 
-Widgets are inputs for the Simple CMS editor interface. It's a React component that receives user input and outputs a serialized value. Those are the only rules - the component can be extremely simple, like text input, or extremely complicated, like a full-blown markdown editor. They can make calls to external services, and generally do anything that JavaScript can do.
+Widgets are inputs for the Static CMS editor interface. It's a React component that receives user input and outputs a serialized value. Those are the only rules - the component can be extremely simple, like text input, or extremely complicated, like a full-blown markdown editor. They can make calls to external services, and generally do anything that JavaScript can do.
 
 For writing custom widgets as a separate package you should follow these steps:
 
@@ -263,7 +263,7 @@ For writing custom widgets as a separate package you should follow these steps:
 5. In order to build React components, we need to set up a build step. We'll be using Webpack. Please run the following commands to install the required dependencies:
 
 ```javascript
-   npm install --save-dev @simplecms/simple-cms-core babel-loader@7 babel-core babel-plugin-transform-class-properties babel-plugin-transform-export-extensions babel-plugin-transform-object-rest-spread babel-preset-env babel-preset-react cross-env css-loader html-webpack-plugin react source-map-loader style-loader webpack webpack-cli webpack-serve
+   npm install --save-dev @staticcms/core babel-loader@7 babel-core babel-plugin-transform-class-properties babel-plugin-transform-export-extensions babel-plugin-transform-object-rest-spread babel-preset-env babel-preset-react cross-env css-loader html-webpack-plugin react source-map-loader style-loader webpack webpack-cli webpack-serve
 ```
 
 ```javascript
@@ -276,23 +276,23 @@ Here is the content of `package.json` that you will have at the end:
 
 ```javascript
 {
-  "name": "simple-cms-widget-starter",
-  "description": "A boilerplate for creating Simple CMS widgets.",
+  "name": "static-cms-widget-starter",
+  "description": "A boilerplate for creating Static CMS widgets.",
   "author": "name of developer",
   "keywords": [
     "simple",
-    "simple-cms",
+    "static-cms",
     "cms",
     "widget",
     "starter",
     "boilerplate"
   ],
   "version": "0.0.1",
-  "homepage": "https://github.com/SimpleCMS/simple-cms-widget-starter",
+  "homepage": "https://github.com/StaticJsCMS/static-cms-widget-starter",
   "license": "MIT",
   "main": "dist/main.js",
   "devDependencies": {
-    "@simplecms/simple-cms-core": "^0.1.0",
+    "@staticcms/core": "^0.1.0",
     "babel-loader": "^7.1.4",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-export-extensions": "^6.22.0",
@@ -474,7 +474,7 @@ window.CMS_MANUAL_INIT = true
 
 ```javascript
 import './bootstrap.js'
-import CMS, { init } from '@simplecms/simple-cms-core'
+import CMS, { init } from '@staticcms/core'
 import { Control, Preview } from '../src'
 
 const config = {
@@ -502,9 +502,9 @@ CMS.registerWidget('test', Control, Preview)
 init({ config })
 ```
 
-### [](https://github.com/SimpleCMS/simple-cms-widget-starter#development)Development
+### [](https://github.com/StaticJsCMS/static-cms-widget-starter#development)Development
 
-To run a copy of Simple CMS with your widget for development, use the start script:
+To run a copy of Static CMS with your widget for development, use the start script:
 
 ```javascript
 npm start
@@ -512,7 +512,7 @@ npm start
 
 Your widget source is in the `src` directory, where there are separate files for the `Control` and `Preview` components.
 
-### [](https://github.com/SimpleCMS/simple-cms-widget-starter#production--publishing)Production & Publishing
+### [](https://github.com/StaticJsCMS/static-cms-widget-starter#production--publishing)Production & Publishing
 
 You'll want to take a few steps before publishing a production built package to npm:
 
@@ -520,12 +520,12 @@ You'll want to take a few steps before publishing a production built package to 
 
    ```json
    {
-     "name": "simple-cms-widget-starter",
-     "description": "A boilerplate for creating Simple CMS widgets.",
+     "name": "static-cms-widget-starter",
+     "description": "A boilerplate for creating Static CMS widgets.",
      "author": "name of developer",
      "keywords": [
        "simple",
-       "simple-cms",
+       "static-cms",
        "cms",
        "widget",
        "starter",
@@ -535,9 +535,9 @@ You'll want to take a few steps before publishing a production built package to 
      // ... rest
    }
    ```
-2. For discoverability, ensure that your package name follows the pattern `simple-cms-widget-<name>`.
+2. For discoverability, ensure that your package name follows the pattern `static-cms-widget-<name>`.
 3. Delete this `README.md`, rename `README_TEMPLATE.md` to `README.md`, and update the new file for your specific widget.
-4. Rename the exports in `src/index.js`. For example, if your widget is `simple-cms-widget-awesome`, you would do:
+4. Rename the exports in `src/index.js`. For example, if your widget is `static-cms-widget-awesome`, you would do:
 
 ```javascript
 if (typeof window !== 'undefined') {

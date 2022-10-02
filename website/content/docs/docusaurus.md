@@ -3,7 +3,7 @@ group: Guides
 weight: 80
 title: Docusaurus
 ---
-This guide instructs you on how to integrate Simple CMS with Docusaurus.
+This guide instructs you on how to integrate Static CMS with Docusaurus.
 
 ### Before you begin
 
@@ -33,7 +33,7 @@ The development server now serves your website at `http://localhost:3000`. As yo
 
 ## Push your project to GitHub
 
-Simple CMS requires a [backend](https://www.simplecms.github.io/simple-cms/docs/backends-overview/) to store content. Simple CMS supports using Git hosts, like GitHub or GitLab, as backends. This guide uses GitHub. 
+Static CMS requires a [backend](https://www.staticjscms.github.io/static-cms/docs/backends-overview/) to store content. Static CMS supports using Git hosts, like GitHub or GitLab, as backends. This guide uses GitHub. 
 
 ```bash
 # 1. Initialize your local Git repository.  
@@ -83,7 +83,7 @@ Choose the default option for everything else.
 
 Your website is now deployed. Netlify provides you with a randomly generated domain name. Run `netlify open --site` to view your deployed site.
 
-## Add Simple CMS to your project
+## Add Static CMS to your project
 
 ### Before you begin
 
@@ -161,13 +161,13 @@ touch index.html
   <title>Content Manager</title>
 </head>
 <body>
-  <!-- Include the script that builds the page and powers Simple CMS -->
-  <script src="https://unpkg.com/@simplecms/simple-cms-core@%5E0.1.0/dist/simple-cms-core.js"></script>
+  <!-- Include the script that builds the page and powers Static CMS -->
+  <script src="https://unpkg.com/@staticcms/core@%5E0.1.0/dist/static-cms-core.js"></script>
 </body>
 </html>
 ```
 
-`index.html` displays the Simple CMS admin interface. You'll use the admin interface to edit your blog posts.
+`index.html` displays the Static CMS admin interface. You'll use the admin interface to edit your blog posts.
 
 </li> 
 
@@ -209,7 +209,7 @@ collections:
         - { name: imageUrl, label: ImageURL, widget: string } 
 ```
 
-`config.yml` specifies what kind of content your blog posts have. The content specification enables Simple CMS to edit existing posts and create new ones with the same format. To learn more, read about Simple CMS' [](https://www.simplecms.github.io/simple-cms/docs/configuration-options/)[Configuration options](https://www.simplecms.github.io/simple-cms/docs/configuration-options/).
+`config.yml` specifies what kind of content your blog posts have. The content specification enables Static CMS to edit existing posts and create new ones with the same format. To learn more, read about Static CMS' [](https://www.staticjscms.github.io/static-cms/docs/configuration-options/)[Configuration options](https://www.staticjscms.github.io/static-cms/docs/configuration-options/).
 </li> 
 
 <li>
@@ -224,7 +224,7 @@ You can now view and edit `2021-11-15-first-blog-post.md` through the admin inte
 
 ```bash
 git add . 
-git commit -m "Add Simple CMS"
+git commit -m "Add Static CMS"
 git push
 ```
 
@@ -236,7 +236,7 @@ Netlify builds and deploys your new changes.
 
 ## Add GitHub as an authentication provider
 
-Before you can access `/admin/` through your Netlify domain, you need to set up an authentication provider. The authentication provider allows Simple CMS to determine whether users have read and write access to `/admin/`. This guide uses GitHub credentials for authentication. 
+Before you can access `/admin/` through your Netlify domain, you need to set up an authentication provider. The authentication provider allows Static CMS to determine whether users have read and write access to `/admin/`. This guide uses GitHub credentials for authentication. 
 
 ### Configure GitHub 
 

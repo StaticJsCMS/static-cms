@@ -9,7 +9,7 @@ We run new functionality in an open beta format from time to time. That means th
 
 ## Working with a Local Git Repository
 
-You can connect Simple CMS to a local Git repository, instead of working with a live repo.
+You can connect Static CMS to a local Git repository, instead of working with a live repo.
 
 1. Navigate to a local Git repository configured with the CMS.
 2. Add the top-level property `local_backend` configuration to your `config.yml`:
@@ -30,7 +30,7 @@ local_backend: true
 
 **Note:** `netlify-cms-proxy-server` runs an unauthenticated express server. As any client can send requests to the server, it should only be used for local development.
 
-### Configure the Simple CMS proxy server port number
+### Configure the Static CMS proxy server port number
 
 1. Create a `.env` file in the project's root folder and define the PORT you'd like the proxy server to use
 
@@ -292,7 +292,7 @@ Supports all of the [`slug` templates](/docs/configuration-options#slug) and:
 
 ## List Widget: Variable Types
 
-Before this feature, the [list widget](/docs/widgets/#list) allowed a set of fields to be repeated, but every list item had the same set of fields available. With variable types, multiple named sets of fields can be defined, which opens the door to highly flexible content authoring (even page building) in Simple CMS.
+Before this feature, the [list widget](/docs/widgets/#list) allowed a set of fields to be repeated, but every list item had the same set of fields available. With variable types, multiple named sets of fields can be defined, which opens the door to highly flexible content authoring (even page building) in Static CMS.
 
 **Note: this feature does not yet support default previews and requires [registering a preview template](/docs/customization#registerpreviewtemplate) in order to show up in the preview pane.**
 
@@ -372,13 +372,13 @@ sections:
 
 ## Custom Mount Element
 
-Simple CMS always creates its own DOM element for mounting the application, which means it always takes over the entire page, and is generally inflexible if you're trying to do something creative, like injecting it into a shared context.
+Static CMS always creates its own DOM element for mounting the application, which means it always takes over the entire page, and is generally inflexible if you're trying to do something creative, like injecting it into a shared context.
 
-You can now provide your own element for Simple CMS to mount in by setting the target element's ID as `nc-root`. If Simple CMS finds an element with this ID during initialization, it will mount within that element instead of creating its own.
+You can now provide your own element for Static CMS to mount in by setting the target element's ID as `nc-root`. If Static CMS finds an element with this ID during initialization, it will mount within that element instead of creating its own.
 
 ## Manual Initialization
 
-Simple CMS can now be manually initialized, rather than automatically loading up the moment you import it. The whole point of this at the moment is to inject configuration into Simple CMS before it loads, bypassing need for an actual Simple CMS `config.yml`. This is important, for example, when creating tight integrations with static site generators.
+Static CMS can now be manually initialized, rather than automatically loading up the moment you import it. The whole point of this at the moment is to inject configuration into Static CMS before it loads, bypassing need for an actual Static CMS `config.yml`. This is important, for example, when creating tight integrations with static site generators.
 
 Manual initialization works by setting `window.CMS_MANUAL_INIT = true` **before importing the CMS**:
 
@@ -386,12 +386,12 @@ Manual initialization works by setting `window.CMS_MANUAL_INIT = true` **before 
 // This global flag enables manual initialization.
 window.CMS_MANUAL_INIT = true
 // Usage with import from npm package
-import CMS, { init } from '@simplecms/simple-cms-core'
+import CMS, { init } from '@staticcms/core'
 // Usage with script tag
 const { CMS, initCMS: init } = window
 /**
  * Initialize without passing in config - equivalent to just importing
- * Simple CMS the old way.
+ * Static CMS the old way.
  */
 init()
 /**
@@ -451,18 +451,18 @@ CMS.registerPreviewTemplate(...);
  * Assumes a webpack project with `sass-loader` and `css-loader` installed.
  * Takes advantage of the `toString` method in the return value of `css-loader`.
  */
-import CMS from '@simplecms/simple-cms-core';
+import CMS from '@staticcms/core';
 import styles from '!css-loader!sass-loader!../main.scss';
 CMS.registerPreviewStyle(styles.toString(), { raw: true });
 ```
 
 ## Commit Message Templates
 
-You can customize the templates used by Simple CMS to generate commit messages by setting the `commit_messages` option under `backend` in your Simple CMS `config.yml`.
+You can customize the templates used by Static CMS to generate commit messages by setting the `commit_messages` option under `backend` in your Static CMS `config.yml`.
 
 Template tags wrapped in curly braces will be expanded to include information about the file changed by the commit. For example, `{{path}}` will include the full path to the file changed.
 
-Setting up your Simple CMS `config.yml` to recreate the default values would look like this:
+Setting up your Static CMS `config.yml` to recreate the default values would look like this:
 
 ```yaml
 backend:
@@ -474,7 +474,7 @@ backend:
     deleteMedia: Delete “{{path}}”
 ```
 
-Simple CMS generates the following commit types:
+Static CMS generates the following commit types:
 
 | Commit type     | When is it triggered?                    | Available template tags                                     |
 | --------------- | ---------------------------------------- | ----------------------------------------------------------- |

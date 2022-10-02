@@ -12,5 +12,5 @@ function Widget(opts = {}) {
   };
 }
 
-export const SimpleCmsWidgetDatetime = { Widget, controlComponent, previewComponent };
-export default SimpleCmsWidgetDatetime;
+export const StaticCmsWidgetDatetime = { Widget, controlComponent, previewComponent };
+export default StaticCmsWidgetDatetime;

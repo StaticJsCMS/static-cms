@@ -3,7 +3,7 @@ title: Middleman
 group: Guides
 weight: 60
 ---
-This guide will help you get started using Simple CMS and Middleman.
+This guide will help you get started using Static CMS and Middleman.
 
 ## Installation
 To get up and running with Middleman, you need both the Ruby language runtime and RubyGems installed on your computer. Check out the [Middleman installation docs](https://middlemanapp.com/basics/install/) for more details. If you already have your environment set up, use the following command to install Middleman:
@@ -77,7 +77,7 @@ Time to load our articles in `index.html.erb`.
 ```
 
 ### Add an article layout
-In the last step before we add Simple CMS, we add a layout for the article page. Create a new layout `source/layouts/blog-layout.html.erb`. For now we will get the title and the content:
+In the last step before we add Static CMS, we add a layout for the article page. Create a new layout `source/layouts/blog-layout.html.erb`. For now we will get the title and the content:
 ```ruby
 <h1>
   <%= current_page.data.title %>
@@ -86,9 +86,9 @@ In the last step before we add Simple CMS, we add a layout for the article page.
 <%= yield %>
 ```
 
-Now that we have a functioning blog, let's get started with Simple CMS!
+Now that we have a functioning blog, let's get started with Static CMS!
 
-## Add Simple CMS to your site
+## Add Static CMS to your site
 
 Create two files in a new folder called `admin`, `index.html` and `config.yml`. Also add an `upload` folder in the images directory that will function as our `media_folder`.
 ```bash
@@ -102,7 +102,7 @@ Create two files in a new folder called `admin`, `index.html` and `config.yml`. 
 ```
 
 
-In the newly created `index.html` we add scripts for Simple CMS and the Netlify Identity Widget:
+In the newly created `index.html` we add scripts for Static CMS and the Netlify Identity Widget:
 
 ```html
 <!doctype html>
@@ -111,11 +111,11 @@ In the newly created `index.html` we add scripts for Simple CMS and the Netlify 
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Simple CMS</title>
+    <title>Static CMS</title>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" type="text/javascript"></script>
   </head>
   <body>
-    <script src="https://unpkg.com/@simplecms/simple-cms-core@%5E0.1.0/dist/simple-cms-core.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/@staticcms/core@%5E0.1.0/dist/static-cms-core.js" type="text/javascript"></script>
   </body>
 </html>
 

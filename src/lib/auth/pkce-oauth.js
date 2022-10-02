@@ -30,7 +30,7 @@ async function createCodeChallenge(codeVerifier) {
   return btoa(sha).split('=')[0].replace(/\+/g, '-').replace(/\//g, '_');
 }
 
-const CODE_VERIFIER_STORAGE_KEY = 'simple-cms-pkce-verifier-code';
+const CODE_VERIFIER_STORAGE_KEY = 'static-cms-pkce-verifier-code';
 
 function createCodeVerifier() {
   const codeVerifier = generateVerifierCode();

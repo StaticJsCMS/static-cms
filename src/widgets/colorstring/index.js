@@ -10,5 +10,5 @@ function Widget(opts = {}) {
   };
 }
 
-export const SimpleCmsWidgetColorString = { Widget, controlComponent, previewComponent };
-export default SimpleCmsWidgetColorString;
+export const StaticCmsWidgetColorString = { Widget, controlComponent, previewComponent };
+export default StaticCmsWidgetColorString;

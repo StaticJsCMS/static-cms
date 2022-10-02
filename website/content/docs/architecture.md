@@ -5,7 +5,7 @@ group: Contributing
 weight: 200
 ---
 
-Simple CMS is a React application, using Redux for state management with immutable data structures (immutable.js).
+Static CMS is a React application, using Redux for state management with immutable data structures (immutable.js).
 
 The core abstractions for content editing are `collections`, `entries`, and `widgets`.
 

@@ -71,8 +71,8 @@ let append: boolean;
 let page: number;
 let slug: string;
 
-const storageSortKey = 'simple-cms.entries.sort';
-const viewStyleKey = 'simple-cms.entries.viewStyle';
+const storageSortKey = 'static-cms.entries.sort';
+const viewStyleKey = 'static-cms.entries.viewStyle';
 type StorageSortObject = SortObject & { index: number };
 type StorageSort = { [collection: string]: { [key: string]: StorageSortObject } };
 

@@ -74,7 +74,7 @@ export type FetchError = FE;
 export type PointerFile = PF;
 export type DataFile = DF;
 
-export const SimpleCmsLibUtil = {
+export const StaticCmsLibUtil = {
   APIError,
   Cursor,
   CURSOR_COMPATIBILITY_SYMBOL,

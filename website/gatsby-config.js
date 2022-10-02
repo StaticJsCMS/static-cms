@@ -7,18 +7,18 @@ const staticConfig = yaml.load(fs.readFileSync('./site.yml', 'utf8'));
 
 module.exports = {
   siteMetadata: {
-    title: 'Simple CMS | Open-Source Content Management System',
+    title: 'Static CMS | Open-Source Content Management System',
     description: 'Open source content management for your Git workflow',
     siteUrl: pkg.homepage,
     menu: staticConfig.menu,
   },
-  pathPrefix: `/simple-cms`,
+  pathPrefix: `/static-cms`,
   plugins: [
     {
       resolve: 'gatsby-plugin-manifest',
       options: {
-        name: 'SimpleCMS',
-        short_name: 'SimpleCMS',
+        name: 'StaticCms',
+        short_name: 'StaticCms',
         start_url: '/',
         background_color: '#ffffff',
         theme_color: '#ffffff',

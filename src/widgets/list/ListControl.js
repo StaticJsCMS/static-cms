@@ -16,7 +16,7 @@ import {
   FieldLabel,
 } from '../../ui';
 import { stringTemplate, validations } from '../../lib/widgets';
-import SimpleCmsWidgetObject from '../object';
+import StaticCmsWidgetObject from '../object';
 import {
   TYPES_KEY,
   getTypedFieldForValue,
@@ -24,7 +24,7 @@ import {
   getErrorMessageForTypedFieldAndValue,
 } from './typedListHelpers';
 
-const ObjectControl = SimpleCmsWidgetObject.controlComponent;
+const ObjectControl = StaticCmsWidgetObject.controlComponent;
 
 const ListItem = styled.div();
 

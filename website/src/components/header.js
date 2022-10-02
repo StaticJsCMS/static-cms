@@ -7,7 +7,7 @@ import GitHubStarButton from './github-button';
 import Container from './container';
 import Notifications from './notifications';
 import DocSearch from './docsearch';
-import logo from '../img/simple-cms-logo.svg';
+import logo from '../img/static-cms-logo.svg';
 import searchIcon from '../img/search.svg';
 import theme from '../theme';
 import { mq } from '../utils';
@@ -193,7 +193,7 @@ function Header({ hasHeroBelow }) {
             <HeaderContainer>
               <Logo>
                 <StyledLink to="/">
-                  <img src={logo} alt="Simple CMS logo" />
+                  <img src={logo} alt="Static CMS logo" />
                 </StyledLink>
               </Logo>
               <MenuActions>
