@@ -89,7 +89,7 @@ export function entryLoading(collection: Collection, slug: string) {
       collection: collection.get('name'),
       slug,
     },
-  };
+  } as const;
 }
 
 export function entryLoaded(collection: Collection, entry: EntryValue) {
@@ -99,7 +99,7 @@ export function entryLoaded(collection: Collection, entry: EntryValue) {
       collection: collection.get('name'),
       entry,
     },
-  };
+  } as const;
 }
 
 export function entryLoadError(error: Error, collection: Collection, slug: string) {
@@ -110,7 +110,7 @@ export function entryLoadError(error: Error, collection: Collection, slug: strin
       collection: collection.get('name'),
       slug,
     },
-  };
+  } as const;
 }
 
 export function entriesLoading(collection: Collection) {
@@ -119,7 +119,7 @@ export function entriesLoading(collection: Collection) {
     payload: {
       collection: collection.get('name'),
     },
-  };
+  } as const;
 }
 
 export function entriesLoaded(
@@ -138,7 +138,7 @@ export function entriesLoaded(
       cursor: Cursor.create(cursor),
       append,
     },
-  };
+  } as const;
 }
 
 export function entriesFailed(collection: Collection, error: Error) {
@@ -147,7 +147,7 @@ export function entriesFailed(collection: Collection, error: Error) {
     error: 'Failed to load entries',
     payload: error.toString(),
     meta: { collection: collection.get('name') },
-  };
+  } as const;
 }
 
 async function getAllEntries(state: State, collection: Collection) {
@@ -289,7 +289,7 @@ export function changeViewStyle(viewStyle: string) {
     payload: {
       style: viewStyle,
     },
-  };
+  } as const;
 }
 
 export function entryPersisting(collection: Collection, entry: EntryMap) {
@@ -299,7 +299,7 @@ export function entryPersisting(collection: Collection, entry: EntryMap) {
       collectionName: collection.get('name'),
       entrySlug: entry.get('slug'),
     },
-  };
+  } as const;
 }
 
 export function entryPersisted(collection: Collection, entry: EntryMap, slug: string) {
@@ -314,7 +314,7 @@ export function entryPersisted(collection: Collection, entry: EntryMap, slug: st
        */
       slug,
     },
-  };
+  } as const;
 }
 
 export function entryPersistFail(collection: Collection, entry: EntryMap, error: Error) {
@@ -326,7 +326,7 @@ export function entryPersistFail(collection: Collection, entry: EntryMap, error:
       entrySlug: entry.get('slug'),
       error: error.toString(),
     },
-  };
+  } as const;
 }
 
 export function entryDeleting(collection: Collection, slug: string) {
@@ -336,7 +336,7 @@ export function entryDeleting(collection: Collection, slug: string) {
       collectionName: collection.get('name'),
       entrySlug: slug,
     },
-  };
+  } as const;
 }
 
 export function entryDeleted(collection: Collection, slug: string) {
@@ -346,7 +346,7 @@ export function entryDeleted(collection: Collection, slug: string) {
       collectionName: collection.get('name'),
       entrySlug: slug,
     },
-  };
+  } as const;
 }
 
 export function entryDeleteFail(collection: Collection, slug: string, error: Error) {
@@ -357,14 +357,14 @@ export function entryDeleteFail(collection: Collection, slug: string, error: Err
       entrySlug: slug,
       error: error.toString(),
     },
-  };
+  } as const;
 }
 
 export function emptyDraftCreated(entry: EntryValue) {
   return {
     type: DRAFT_CREATE_EMPTY,
     payload: entry,
-  };
+  } as const;
 }
 /*
  * Exported simple Action Creators
@@ -373,7 +373,7 @@ export function createDraftFromEntry(entry: EntryValue) {
   return {
     type: DRAFT_CREATE_FROM_ENTRY,
     payload: { entry },
-  };
+  } as const;
 }
 
 export function draftDuplicateEntry(entry: EntryMap) {
@@ -383,11 +383,11 @@ export function draftDuplicateEntry(entry: EntryMap) {
       data: entry.get('data'),
       mediaFiles: entry.get('mediaFiles').toJS(),
     }),
-  };
+  } as const;
 }
 
 export function discardDraft() {
-  return { type: DRAFT_DISCARD };
+  return { type: DRAFT_DISCARD } as const;
 }
 
 export function changeDraftField({
@@ -410,7 +410,7 @@ export function changeDraftField({
   return {
     type: DRAFT_CHANGE_FIELD,
     payload: { field, value, metadata, entries, i18n },
-  };
+  } as const;
 }
 
 export function changeDraftFieldValidation(
@@ -420,32 +420,32 @@ export function changeDraftFieldValidation(
   return {
     type: DRAFT_VALIDATION_ERRORS,
     payload: { uniquefieldId, errors },
-  };
+  } as const;
 }
 
 export function clearFieldErrors() {
-  return { type: DRAFT_CLEAR_ERRORS };
+  return { type: DRAFT_CLEAR_ERRORS } as const;
 }
 
 export function localBackupRetrieved(entry: EntryValue) {
   return {
     type: DRAFT_LOCAL_BACKUP_RETRIEVED,
     payload: { entry },
-  };
+  } as const;
 }
 
 export function loadLocalBackup() {
   return {
     type: DRAFT_CREATE_FROM_LOCAL_BACKUP,
-  };
+  } as const;
 }
 
 export function addDraftEntryMediaFile(file: ImplementationMediaFile) {
-  return { type: ADD_DRAFT_ENTRY_MEDIA_FILE, payload: file };
+  return { type: ADD_DRAFT_ENTRY_MEDIA_FILE, payload: file } as const;
 }
 
 export function removeDraftEntryMediaFile({ id }: { id: string }) {
-  return { type: REMOVE_DRAFT_ENTRY_MEDIA_FILE, payload: { id } };
+  return { type: REMOVE_DRAFT_ENTRY_MEDIA_FILE, payload: { id } } as const;
 }
 
 export function persistLocalBackup(entry: EntryMap, collection: Collection) {
@@ -1029,3 +1029,30 @@ export function validateMetaField(
   }
   return { error: false };
 }
+
+export type EntriesAction = ReturnType<
+  | typeof entryLoading
+  | typeof entryLoaded
+  | typeof entryLoadError
+  | typeof entriesLoading
+  | typeof entriesLoaded
+  | typeof entriesFailed
+  | typeof changeViewStyle
+  | typeof entryPersisting
+  | typeof entryPersisted
+  | typeof entryPersistFail
+  | typeof entryDeleting
+  | typeof entryDeleted
+  | typeof entryDeleteFail
+  | typeof emptyDraftCreated
+  | typeof createDraftFromEntry
+  | typeof draftDuplicateEntry
+  | typeof discardDraft
+  | typeof changeDraftField
+  | typeof changeDraftFieldValidation
+  | typeof clearFieldErrors
+  | typeof localBackupRetrieved
+  | typeof loadLocalBackup
+  | typeof addDraftEntryMediaFile
+  | typeof removeDraftEntryMediaFile
+>;

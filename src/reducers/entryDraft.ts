@@ -1,27 +1,29 @@
-import { Map, List, fromJS } from 'immutable';
-import uuid from 'uuid/v4';
+import { fromJS, List, Map } from 'immutable';
 import { get } from 'lodash';
 import { join } from 'path';
+import uuid from 'uuid/v4';
 
 import {
-  DRAFT_CREATE_FROM_ENTRY,
-  DRAFT_CREATE_EMPTY,
-  DRAFT_DISCARD,
+  ADD_DRAFT_ENTRY_MEDIA_FILE,
   DRAFT_CHANGE_FIELD,
-  DRAFT_VALIDATION_ERRORS,
   DRAFT_CLEAR_ERRORS,
-  DRAFT_LOCAL_BACKUP_RETRIEVED,
-  DRAFT_CREATE_FROM_LOCAL_BACKUP,
   DRAFT_CREATE_DUPLICATE_FROM_ENTRY,
+  DRAFT_CREATE_EMPTY,
+  DRAFT_CREATE_FROM_ENTRY,
+  DRAFT_CREATE_FROM_LOCAL_BACKUP,
+  DRAFT_DISCARD,
+  DRAFT_LOCAL_BACKUP_RETRIEVED,
+  DRAFT_VALIDATION_ERRORS,
+  ENTRY_DELETE_SUCCESS,
+  ENTRY_PERSIST_FAILURE,
   ENTRY_PERSIST_REQUEST,
   ENTRY_PERSIST_SUCCESS,
-  ENTRY_PERSIST_FAILURE,
-  ENTRY_DELETE_SUCCESS,
-  ADD_DRAFT_ENTRY_MEDIA_FILE,
   REMOVE_DRAFT_ENTRY_MEDIA_FILE,
 } from '../actions/entries';
+import { duplicateI18nFields, getDataPath } from '../lib/i18n';
 import { selectFolderEntryExtension, selectHasMetaPath } from './collections';
-import { getDataPath, duplicateI18nFields } from '../lib/i18n';
+
+import type { EntriesAction } from '../actions/entries';
 
 const initialState = Map({
   entry: Map(),
@@ -31,7 +33,7 @@ const initialState = Map({
   key: '',
 });
 
-function entryDraftReducer(state = Map(), action) {
+function entryDraftReducer(state = Map(), action: EntriesAction) {
   switch (action.type) {
     case DRAFT_CREATE_FROM_ENTRY:
       // Existing Entry
@@ -80,7 +82,7 @@ function entryDraftReducer(state = Map(), action) {
       return initialState;
     case DRAFT_LOCAL_BACKUP_RETRIEVED: {
       const { entry } = action.payload;
-      const newState = new Map({
+      const newState = new Map<string, EntryValue>({
         entry: fromJS(entry),
       });
       return state.set('localBackup', newState);
@@ -108,8 +110,7 @@ function entryDraftReducer(state = Map(), action) {
         }
         state.set(
           'hasChanged',
-          !newData.equals(entries[0].get(...dataPath)) ||
-            !newMeta.equals(entries[0].get('meta')),
+          !newData.equals(entries[0].get(...dataPath)) || !newMeta.equals(entries[0].get('meta')),
         );
       });
     }
@@ -128,7 +129,7 @@ function entryDraftReducer(state = Map(), action) {
       return state.setIn(['entry', 'isPersisting'], true);
     }
 
-    case ENTRY_PERSIST_FAILURE:{
+    case ENTRY_PERSIST_FAILURE: {
       return state.deleteIn(['entry', 'isPersisting']);
     }
 
