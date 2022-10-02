@@ -4,6 +4,8 @@ import React from 'react';
 import { transientOptions } from '../lib';
 import icons from './Icon/icons';
 
+import type { IconType } from './Icon/icons';
+
 interface IconWrapperProps {
   $size: string;
   $rotation: string;
@@ -40,6 +42,8 @@ const IconWrapper = styled(
 
 const rotations = { right: 90, down: 180, left: 270, up: 360 };
 
+export type Direction = keyof typeof rotations;
+
 /**
  * Calculates rotation for icons that have a `direction` property configured
  * in the imported icon definition object. If no direction is configured, a
@@ -48,7 +52,7 @@ const rotations = { right: 90, down: 180, left: 270, up: 360 };
  * Returned value is a string of shape `${degrees}deg`, for use in a CSS
  * transform.
  */
-function getRotation(iconDirection?: keyof typeof rotations, newDirection?: keyof typeof rotations) {
+function getRotation(iconDirection?: Direction, newDirection?: Direction) {
   if (!iconDirection || !newDirection) {
     return '0deg';
   }
@@ -64,8 +68,8 @@ const sizes = {
 };
 
 interface IconProps {
-  type: keyof typeof icons;
-  direction?: keyof typeof rotations;
+  type: IconType;
+  direction?: Direction;
   size: keyof typeof sizes | string;
   className?: string;
 }

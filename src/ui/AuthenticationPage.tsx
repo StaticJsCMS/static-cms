@@ -1,10 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
+import React from 'react';
 
+import GoBackButton from './GoBackButton';
 import Icon from './Icon';
 import { buttons, shadows } from './styles';
-import GoBackButton from './GoBackButton';
+
+import type { MouseEventHandler, ReactNode } from 'react';
+import type { TranslatedProps } from '../interface';
 
 const StyledAuthenticationPage = styled.section`
   display: flex;
@@ -39,7 +41,7 @@ function CustomLogoIcon({ url }: { url: string }) {
   );
 }
 
-function renderPageLogo(logoUrl: string) {
+function renderPageLogo(logoUrl?: string) {
   if (logoUrl) {
     return <CustomLogoIcon url={logoUrl} />;
   }
@@ -74,14 +76,17 @@ const TextButton = styled.button`
 `;
 
 export interface AuthenticationPageProps {
-  onLogin: PropTypes.func,
-  logoUrl: PropTypes.string,
-  siteUrl: PropTypes.string,
-  loginDisabled: PropTypes.bool,
-  loginErrorMessage: PropTypes.node,
-  renderButtonContent: PropTypes.func,
-  renderPageContent: PropTypes.func,
-  t: PropTypes.func.isRequired,
+  onLogin: MouseEventHandler<HTMLButtonElement>;
+  logoUrl?: string;
+  siteUrl?: string;
+  loginDisabled: boolean;
+  loginErrorMessage: ReactNode;
+  renderButtonContent?: () => ReactNode;
+  renderPageContent?: (options: {
+    LoginButton: typeof LoginButton;
+    TextButton: typeof TextButton;
+    showAbortButton: boolean;
+  }) => ReactNode;
 }
 
 function AuthenticationPage({
@@ -93,7 +98,7 @@ function AuthenticationPage({
   logoUrl,
   siteUrl,
   t,
-}) {
+}: TranslatedProps<AuthenticationPageProps>) {
   return (
     <StyledAuthenticationPage>
       {renderPageLogo(logoUrl)}
@@ -106,7 +111,7 @@ function AuthenticationPage({
           {renderButtonContent()}
         </LoginButton>
       )}
-      {siteUrl && <GoBackButton href={siteUrl} t={t} />}
+      {siteUrl ? <GoBackButton href={siteUrl} t={t} /> : null}
       {logoUrl ? <SimpleCmsIcon size="100px" type="simple-cms" /> : null}
     </StyledAuthenticationPage>
   );
