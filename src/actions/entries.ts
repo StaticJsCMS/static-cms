@@ -26,9 +26,17 @@ import type { Set } from 'immutable';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { Backend } from '../backend';
-import type { ViewFilter, ViewGroup } from '../interface';
+import type {
+  Collection,
+  Entry,
+  EntryField,
+  EntryFields,
+  EntryMap,
+  State,
+  ViewFilter,
+  ViewGroup,
+} from '../interface';
 import type { ImplementationMediaFile } from '../lib/util';
-import type { Collection, Entry, EntryField, EntryFields, EntryMap, State } from '../types/redux';
 import type AssetProxy from '../valueObjects/AssetProxy';
 import type { EntryValue } from '../valueObjects/Entry';
 

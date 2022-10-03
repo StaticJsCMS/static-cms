@@ -1,38 +1,38 @@
-import { Map, List } from 'immutable';
-import uuid from 'uuid/v4';
+import { List, Map } from 'immutable';
 import { dirname } from 'path';
+import uuid from 'uuid/v4';
 
 import {
-  MEDIA_LIBRARY_OPEN,
-  MEDIA_LIBRARY_CLOSE,
-  MEDIA_LIBRARY_CREATE,
-  MEDIA_INSERT,
-  MEDIA_REMOVE_INSERTED,
-  MEDIA_LOAD_REQUEST,
-  MEDIA_LOAD_SUCCESS,
-  MEDIA_LOAD_FAILURE,
-  MEDIA_PERSIST_REQUEST,
-  MEDIA_PERSIST_SUCCESS,
-  MEDIA_PERSIST_FAILURE,
+  MEDIA_DELETE_FAILURE,
   MEDIA_DELETE_REQUEST,
   MEDIA_DELETE_SUCCESS,
-  MEDIA_DELETE_FAILURE,
+  MEDIA_DISPLAY_URL_FAILURE,
   MEDIA_DISPLAY_URL_REQUEST,
   MEDIA_DISPLAY_URL_SUCCESS,
-  MEDIA_DISPLAY_URL_FAILURE,
+  MEDIA_INSERT,
+  MEDIA_LIBRARY_CLOSE,
+  MEDIA_LIBRARY_CREATE,
+  MEDIA_LIBRARY_OPEN,
+  MEDIA_LOAD_FAILURE,
+  MEDIA_LOAD_REQUEST,
+  MEDIA_LOAD_SUCCESS,
+  MEDIA_PERSIST_FAILURE,
+  MEDIA_PERSIST_REQUEST,
+  MEDIA_PERSIST_SUCCESS,
+  MEDIA_REMOVE_INSERTED,
 } from '../actions/mediaLibrary';
-import { selectEditingDraft, selectMediaFolder } from './entries';
 import { selectIntegration } from './';
+import { selectEditingDraft, selectMediaFolder } from './entries';
 
 import type { MediaLibraryAction } from '../actions/mediaLibrary';
 import type {
-  State,
-  MediaLibraryInstance,
-  MediaFile,
-  MediaFileMap,
   DisplayURLState,
   EntryField,
-} from '../types/redux';
+  MediaFile,
+  MediaFileMap,
+  MediaLibraryInstance,
+  State,
+} from '../interface';
 
 const defaultState: {
   isVisible: boolean;

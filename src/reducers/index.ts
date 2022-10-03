@@ -14,7 +14,7 @@ import globalUI from './globalUI';
 import status from './status';
 import scroll from './scroll';
 
-import type { State, Collection } from '../types/redux';
+import type { State, Collection } from '../interface';
 
 const reducers = {
   auth,

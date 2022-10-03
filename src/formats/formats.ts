@@ -7,7 +7,7 @@ import jsonFormatter from './json';
 import { FrontmatterInfer, frontmatterJSON, frontmatterTOML, frontmatterYAML } from './frontmatter';
 
 import type { Delimiter } from './frontmatter';
-import type { Collection, EntryObject, Format } from '../types/redux';
+import type { Collection, EntryObject, Format } from '../interface';
 import type { EntryValue } from '../valueObjects/Entry';
 
 export const frontmatterFormats = ['yaml-frontmatter', 'toml-frontmatter', 'json-frontmatter'];

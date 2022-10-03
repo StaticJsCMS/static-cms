@@ -1042,52 +1042,11 @@ export interface CmsEventListener {
 
 export type CmsEventListenerOptions = Record<string, unknown>;
 
-export interface CMSApi {
-  getBackend: (name: string) => CmsRegistryBackend | undefined;
-  getEditorComponents: () => Map<string, ComponentType<any>>;
-  getRemarkPlugins: () => Array<Pluggable>;
-  getMediaLibrary: (name: string) => CmsMediaLibrary | undefined;
-  resolveWidget: (name: string) => CmsWidget | undefined;
-  getPreviewStyles: () => PreviewStyle[];
-  getPreviewTemplate: (name: string) => ComponentType<PreviewTemplateComponentProps> | undefined;
-  getWidget: (name: string) => CmsWidget | undefined;
-  getWidgetValueSerializer: (widgetName: string) => CmsWidgetValueSerializer | undefined;
-  init: (options?: InitOptions) => void;
-  registerBackend: <T extends CmsBackendClass>(name: string, backendClass: T) => void;
-  registerEditorComponent: (options: EditorComponentOptions) => void;
-  registerRemarkPlugin: (plugin: Pluggable) => void;
-  registerEventListener: (
-    eventListener: CmsEventListener,
-    options?: CmsEventListenerOptions,
-  ) => void;
-  registerMediaLibrary: (mediaLibrary: CmsMediaLibrary, options?: CmsMediaLibraryOptions) => void;
-  registerPreviewStyle: (filePath: string, options?: PreviewStyleOptions) => void;
-  registerPreviewTemplate: (
-    name: string,
-    component: ComponentType<PreviewTemplateComponentProps>,
-  ) => void;
-  registerWidget: (
-    widget: string | CmsWidgetParam | CmsWidgetParam[],
-    control?: ComponentType<CmsWidgetControlProps> | string,
-    preview?: ComponentType<CmsWidgetPreviewProps>,
-  ) => void;
-  registerWidgetValueSerializer: (widgetName: string, serializer: CmsWidgetValueSerializer) => void;
-  // Event Listeners
-  // Locales
-  getLocale: (locale: string) => CmsLocalePhrasesRoot | undefined;
-  registerLocale: (locale: string, phrases: CmsLocalePhrasesRoot) => void;
-  // Icons
-  registerIcon: (iconName: string, icon: CmsIcon) => void;
-  getIcon: (iconName: string) => CmsIcon;
-  // Additional Links
-  registerAdditionalLink: (
-    id: string,
-    title: string,
-    data: string | ComponentType,
-    iconName?: string,
-  ) => void;
-  getAdditionalLinks: () => { title: string; data: string | ComponentType; iconName?: string }[];
-  getAdditionalLink: (
-    id: string,
-  ) => { title: string; data: string | ComponentType; iconName?: string } | undefined;
+export interface AdditionalLink {
+  id: string;
+  title: string;
+  options?: {
+    data?: string | (() => JSX.Element);
+    iconName?: string;
+  };
 }

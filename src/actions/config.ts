@@ -1,28 +1,28 @@
-import yaml from 'yaml';
-import { fromJS } from 'immutable';
 import deepmerge from 'deepmerge';
 import { produce } from 'immer';
-import { trimStart, trim, isEmpty } from 'lodash';
+import { fromJS } from 'immutable';
+import { isEmpty, trim, trimStart } from 'lodash';
+import yaml from 'yaml';
 
+import { resolveBackend } from '../backend';
+import { FILES, FOLDER } from '../constants/collectionTypes';
 import { validateConfig } from '../constants/configSchema';
+import { I18N, I18N_FIELD, I18N_STRUCTURE } from '../lib/i18n';
 import { selectDefaultSortableFields } from '../reducers/collections';
 import { getIntegrations, selectIntegration } from '../reducers/integrations';
-import { resolveBackend } from '../backend';
-import { I18N, I18N_FIELD, I18N_STRUCTURE } from '../lib/i18n';
-import { FILES, FOLDER } from '../constants/collectionTypes';
 
-import type { ThunkDispatch } from 'redux-thunk';
 import type { AnyAction } from 'redux';
-import type { State } from '../types/redux';
+import type { ThunkDispatch } from 'redux-thunk';
 import type {
+  CmsCollection,
   CmsConfig,
   CmsField,
   CmsFieldBase,
-  CmsFieldObject,
   CmsFieldList,
+  CmsFieldObject,
   CmsI18nConfig,
   CmsLocalBackend,
-  CmsCollection,
+  State,
 } from '../interface';
 
 export const CONFIG_REQUEST = 'CONFIG_REQUEST';
@@ -453,9 +453,7 @@ export async function handleLocalBackend(originalConfig: CmsConfig) {
     return originalConfig;
   }
 
-  const {
-    proxyUrl
-  } = await detectProxyServer(originalConfig.local_backend);
+  const { proxyUrl } = await detectProxyServer(originalConfig.local_backend);
 
   if (!proxyUrl) {
     return originalConfig;

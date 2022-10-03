@@ -4,7 +4,7 @@ import diacritics from 'diacritics';
 import sanitizeFilename from 'sanitize-filename';
 import { isString, escapeRegExp, flow, partialRight } from 'lodash';
 
-import type { CmsSlug } from '../types/redux';
+import type { CmsSlug } from '../interface';
 
 function getUrl(urlString: string, direct?: boolean) {
   return `${direct ? '/#' : ''}${urlString}`;

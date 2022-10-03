@@ -14,7 +14,7 @@ import {
   getI18nFiles,
   getI18nFilesDepth,
   groupEntries,
-  hasI18n
+  hasI18n,
 } from './lib/i18n';
 import { getBackend, invokeEvent } from './lib/registry';
 import { sanitizeChar } from './lib/urlHelper';
@@ -24,7 +24,7 @@ import {
   Cursor,
   CURSOR_COMPATIBILITY_SYMBOL,
   getPathDepth,
-  localForage
+  localForage,
 } from './lib/util';
 import { stringTemplate } from './lib/widgets';
 import {
@@ -37,7 +37,7 @@ import {
   selectFolderEntryExtension,
   selectHasMetaPath,
   selectInferedField,
-  selectMediaFolders
+  selectMediaFolders,
 } from './reducers/collections';
 import { selectMediaFilePath } from './reducers/entries';
 import { selectCustomPath } from './reducers/entryDraft';
@@ -45,24 +45,25 @@ import { selectIntegration } from './reducers/integrations';
 import { createEntry } from './valueObjects/Entry';
 
 import type { Map } from 'immutable';
-import type { CmsConfig, ImplementationEntry } from './interface';
 import type {
-  AsyncLock,
-  Credentials,
-  DataFile,
-  DisplayURL,
-  Implementation as BackendImplementation,
-  User
-} from './lib/util';
-import type {
+  CmsConfig,
   Collection,
   CollectionFile,
   EntryDraft,
   EntryField,
   EntryMap,
   FilterRule,
-  State
-} from './types/redux';
+  ImplementationEntry,
+  State,
+} from './interface';
+import type {
+  AsyncLock,
+  Credentials,
+  DataFile,
+  DisplayURL,
+  Implementation as BackendImplementation,
+  User,
+} from './lib/util';
 import type AssetProxy from './valueObjects/AssetProxy';
 import type { EntryValue } from './valueObjects/Entry';
 

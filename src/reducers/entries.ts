@@ -30,9 +30,9 @@ import { basename, isAbsolutePath } from '../lib/util';
 import { stringTemplate } from '../lib/widgets';
 import { selectSortDataPath } from './collections';
 
-import type { CmsConfig } from '../interface';
 import type {
   ChangeViewStylePayload,
+  CmsConfig,
   Collection,
   CollectionFiles,
   Entries,
@@ -61,7 +61,7 @@ import type {
   Sort,
   SortMap,
   SortObject,
-} from '../types/redux';
+} from '../interface';
 
 const { keyToPathArray } = stringTemplate;
 

@@ -3,7 +3,6 @@ import { flow, partialRight, trimEnd, trimStart } from 'lodash';
 
 import { FILES } from '../constants/collectionTypes';
 import { COMMIT_AUTHOR, COMMIT_DATE } from '../constants/commitProps';
-import { stringTemplate } from './widgets';
 import {
   getFileFromSlug,
   selectField,
@@ -11,10 +10,10 @@ import {
   selectInferedField,
 } from '../reducers/collections';
 import { sanitizeSlug } from './urlHelper';
+import { stringTemplate } from './widgets';
 
 import type { Map } from 'immutable';
-import type { CmsConfig } from '../interface';
-import type { CmsSlug, Collection, EntryMap } from '../types/redux';
+import type { CmsConfig, CmsSlug, Collection, EntryMap } from '../interface';
 
 const {
   compileStringTemplate,

@@ -27,7 +27,7 @@ import type {
   MediaFile,
   MediaLibraryInstance,
   State,
-} from '../types/redux';
+} from '../interface';
 import type AssetProxy from '../valueObjects/AssetProxy';
 
 export const MEDIA_LIBRARY_OPEN = 'MEDIA_LIBRARY_OPEN';

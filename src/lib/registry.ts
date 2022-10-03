@@ -4,8 +4,14 @@ import { oneLine } from 'common-tags';
 
 import EditorComponent from '../valueObjects/EditorComponent';
 
-import type { EntryMap, MediaLibrary } from '../types/redux';
-import { CmsIcon, CmsLocalePhrasesRoot, CmsMediaLibrary, CmsMediaLibraryOptions } from '../interface';
+import type {
+  EntryMap,
+  MediaLibrary,
+  CmsIcon,
+  CmsLocalePhrasesRoot,
+  CmsMediaLibrary,
+  CmsMediaLibraryOptions,
+} from '../interface';
 
 export const allowedEvents = ['prePublish', 'postPublish', 'preSave', 'postSave'] as const;
 export type AllowedEvent = typeof allowedEvents[number];
@@ -35,7 +41,7 @@ interface Registry {
   remarkPlugins: any[];
   widgetValueSerializers: Record<string, any>;
   mediaLibraries: any[];
-  locales: Record<string, LocalePhrasesRoot>;
+  locales: Record<string, CmsLocalePhrasesRoot>;
   eventHandlers: typeof eventHandlers;
 }
 
@@ -243,7 +249,10 @@ export function getBackend(name) {
 /**
  * Media Libraries
  */
-export function registerMediaLibrary(mediaLibrary: CmsMediaLibrary, options?: CmsMediaLibraryOptions) {
+export function registerMediaLibrary(
+  mediaLibrary: CmsMediaLibrary,
+  options?: CmsMediaLibraryOptions,
+) {
   if (registry.mediaLibraries.find(ml => mediaLibrary.name === ml.name)) {
     throw new Error(`A media library named ${mediaLibrary.name} has already been registered.`);
   }
@@ -338,15 +347,6 @@ export function getIcon(name: string): CmsIcon | null {
 /**
  * Additional Links
  */
-export interface AdditionalLink {
-  id: string;
-  title: string;
-  options?: {
-    href?: string;
-    iconName?: string;
-  };
-}
-
 export function registerAdditionalLink(link: AdditionalLink) {
   registry.additionalLinks[link.id] = link;
 }

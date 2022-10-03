@@ -7,7 +7,7 @@ import { getAdditionalLink } from '../../lib/registry';
 import { lengths } from '../../ui';
 import Sidebar from '../Collection/Sidebar';
 
-import type { Collections, State } from '../../types/redux';
+import type { Collections, State } from '../../interface';
 
 const StylePage = styled('div')`
   margin: ${lengths.pageMargin};

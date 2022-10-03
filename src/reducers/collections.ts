@@ -13,14 +13,16 @@ import { selectMediaFolder } from './entries';
 
 import type { ConfigAction } from '../actions/config';
 import type { Backend } from '../backend';
-import type { CmsConfig, ViewFilter, ViewGroup } from '../interface';
 import type {
+  CmsConfig,
   Collection,
   CollectionFiles,
   Collections,
   EntryField,
   EntryMap,
-} from '../types/redux';
+  ViewFilter,
+  ViewGroup,
+} from '../interface';
 
 const { keyToPathArray } = stringTemplate;
 

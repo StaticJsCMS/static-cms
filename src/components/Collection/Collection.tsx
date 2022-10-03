@@ -27,11 +27,12 @@ import Sidebar from './Sidebar';
 import type { RouteComponentProps } from 'react-router-dom';
 import type {
   CmsSortableFieldsDefault,
+  Collection,
+  State,
   TranslatedProps,
   ViewFilter,
   ViewGroup,
 } from '../../interface';
-import type { Collection, State } from '../../types/redux';
 import type { StaticallyTypedRecord } from '../../types/immutable';
 
 const CollectionContainer = styled.div`

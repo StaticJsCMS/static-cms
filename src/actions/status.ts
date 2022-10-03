@@ -3,7 +3,7 @@ import { addSnackbar, removeSnackbarById } from '../store/slices/snackbars';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type { State } from '../types/redux';
+import type { State } from '../interface';
 
 export const STATUS_REQUEST = 'STATUS_REQUEST';
 export const STATUS_SUCCESS = 'STATUS_SUCCESS';

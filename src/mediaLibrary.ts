@@ -9,7 +9,7 @@ import { store } from './store';
 import { configFailed } from './actions/config';
 import { createMediaLibrary, insertMedia } from './actions/mediaLibrary';
 
-import type { MediaLibraryInstance, State } from './types/redux';
+import type { MediaLibraryInstance, State } from './interface';
 
 type MediaLibraryOptions = {};
 

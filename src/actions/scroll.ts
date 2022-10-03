@@ -1,6 +1,6 @@
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type { State } from '../types/redux';
+import type { State } from '../interface';
 
 export const SCROLL_SYNC_ENABLED = 'cms.scroll-sync-enabled';
 
