@@ -2,7 +2,7 @@ import AzureBackend from './implementation';
 import API from './API';
 import AuthenticationPage from './AuthenticationPage';
 
-export const SimpleCmsBackendAzure = {
+export const StaticCmsBackendAzure = {
   AzureBackend,
   API,
   AuthenticationPage,

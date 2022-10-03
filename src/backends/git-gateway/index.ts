@@ -1,7 +1,7 @@
 import GitGatewayBackend from './implementation';
 import AuthenticationPage from './AuthenticationPage';
 
-export const SimpleCmsBackendGitGateway = {
+export const StaticCmsBackendGitGateway = {
   GitGatewayBackend,
   AuthenticationPage,
 };

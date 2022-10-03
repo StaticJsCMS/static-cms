@@ -8,5 +8,5 @@ function Widget(opts = {}) {
   };
 }
 
-export const SimpleCmsWidgetBoolean = { Widget, controlComponent };
-export default SimpleCmsWidgetBoolean;
+export const StaticCmsWidgetBoolean = { Widget, controlComponent };
+export default StaticCmsWidgetBoolean;

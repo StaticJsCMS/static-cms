@@ -1,7 +1,7 @@
 {
-  "name": "simple-cms-site",
+  "name": "static-cms-site",
   "version": "1.0.0",
-  "description": "Simple CMS documentation website built with Gatsby",
+  "description": "Static CMS documentation website built with Gatsby",
   "scripts": {
     "start": "gatsby develop",
     "build": "gatsby build --prefix-paths && rm -rf dist && mv public dist",
@@ -9,7 +9,7 @@
     "reset": "rm -rf .cache"
   },
   "author": "",
-  "homepage": "https://www.simplecms.github.io/simple-cms/",
+  "homepage": "https://www.staticjscms.github.io/static-cms/",
   "license": "MIT",
   "dependencies": {
     "@emotion/cache": "^10.0.29",

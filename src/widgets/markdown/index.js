@@ -12,5 +12,5 @@ function Widget(opts = {}) {
   };
 }
 
-export const SimpleCmsWidgetMarkdown = { Widget, controlComponent, previewComponent };
-export default SimpleCmsWidgetMarkdown;
+export const StaticCmsWidgetMarkdown = { Widget, controlComponent, previewComponent };
+export default StaticCmsWidgetMarkdown;

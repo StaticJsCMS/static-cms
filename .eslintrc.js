@@ -17,7 +17,7 @@ module.exports = {
     'cypress/globals': true,
   },
   globals: {
-    SIMPLE_CMS_CORE_VERSION: false,
+    STATIC_CMS_CORE_VERSION: false,
     CMS_ENV: false,
   },
   rules: {

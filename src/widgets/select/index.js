@@ -30,5 +30,5 @@ function Widget(opts = {}) {
   };
 }
 
-export const SimpleCmsWidgetSelect = { Widget, controlComponent, previewComponent };
-export default SimpleCmsWidgetSelect;
+export const StaticCmsWidgetSelect = { Widget, controlComponent, previewComponent };
+export default StaticCmsWidgetSelect;

@@ -3,7 +3,7 @@ group: Guides
 weight: 50
 title: Nuxt
 ---
-This guide will walk you through how to integrate Simple CMS with Nuxt.
+This guide will walk you through how to integrate Static CMS with Nuxt.
 
 ## Starting With `create-nuxt-app`
 
@@ -15,11 +15,11 @@ cd <name-of-your-new-project>
 npm run dev
 ```
 
-## Setting Up Simple CMS
+## Setting Up Static CMS
 
-### Add the Simple CMS files to Nuxt
+### Add the Static CMS files to Nuxt
 
-In the `static/` directory, create a new directory `admin/`. Inside that directory you'll create two files, your `index.html` and a `config.yml`. Per the [Simple CMS documentation](/docs/add-to-your-site/), we'll set the content of `static/admin/index.html` to the following:
+In the `static/` directory, create a new directory `admin/`. Inside that directory you'll create two files, your `index.html` and a `config.yml`. Per the [Static CMS documentation](/docs/add-to-your-site/), we'll set the content of `static/admin/index.html` to the following:
 
 ```html
 <!DOCTYPE html>
@@ -32,8 +32,8 @@ In the `static/` directory, create a new directory `admin/`. Inside that directo
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
   <body>
-    <!-- Include the script that builds the page and powers Simple CMS -->
-    <script src="https://unpkg.com/@simplecms/simple-cms-core@%5E0.1.0/dist/simple-cms-core.js"></script>
+    <!-- Include the script that builds the page and powers Static CMS -->
+    <script src="https://unpkg.com/@staticcms/core@%5E0.1.0/dist/static-cms-core.js"></script>
   </body>
 </html>
 ```
@@ -135,7 +135,7 @@ Once you've reached this point, you should be able to access the CMS in your bro
 
 ## Using nuxt/content
 
-Simple CMS and [nuxt/content](https://content.nuxtjs.org) module click together and complement each other to give you best authoring experience and developer experience respectively.
+Static CMS and [nuxt/content](https://content.nuxtjs.org) module click together and complement each other to give you best authoring experience and developer experience respectively.
 
 Adding nuxt/content dependency
 

@@ -1,6 +1,6 @@
-# Simple CMS Website & Docs
+# Static CMS Website & Docs
 
-This directory builds simplecms.github.io/simple-cms. If you'd like to propose changes to the site or docs, you'll find the source files in here.
+This directory builds staticjscms.github.io/static-cms. If you'd like to propose changes to the site or docs, you'll find the source files in here.
 
 ## Local development
 

@@ -38,5 +38,5 @@ const image = {
   ],
 };
 
-export const SimpleCmsEditorComponentImage = image;
+export const StaticCmsEditorComponentImage = image;
 export default image;

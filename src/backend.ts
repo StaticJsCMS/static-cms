@@ -90,7 +90,7 @@ function updateAssetProxies(
 }
 
 export class LocalStorageAuthStore {
-  storageKey = 'simple-cms-user';
+  storageKey = 'static-cms-user';
 
   retrieve() {
     const data = window.localStorage.getItem(this.storageKey);

@@ -11,5 +11,5 @@ function Widget(opts = {}): CmsWidgetParam<string> {
   };
 }
 
-export const SimpleCmsWidgetString = { Widget, controlComponent, previewComponent };
-export default SimpleCmsWidgetString;
+export const StaticCmsWidgetString = { Widget, controlComponent, previewComponent };
+export default StaticCmsWidgetString;

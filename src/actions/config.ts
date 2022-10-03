@@ -425,7 +425,7 @@ export async function detectProxyServer(localBackend?: boolean | CmsLocalBackend
       : localBackend.url || defaultUrl.replace('localhost', location.hostname);
 
   try {
-    console.info(`Looking for Simple CMS Proxy Server at '${proxyUrl}'`);
+    console.info(`Looking for Static CMS Proxy Server at '${proxyUrl}'`);
     const res = await fetch(`${proxyUrl}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -436,14 +436,14 @@ export async function detectProxyServer(localBackend?: boolean | CmsLocalBackend
       type?: string;
     };
     if (typeof repo === 'string' && typeof type === 'string') {
-      console.info(`Detected Simple CMS Proxy Server at '${proxyUrl}' with repo: '${repo}'`);
+      console.info(`Detected Static CMS Proxy Server at '${proxyUrl}' with repo: '${repo}'`);
       return { proxyUrl, type };
     } else {
-      console.info(`Simple CMS Proxy Server not detected at '${proxyUrl}'`);
+      console.info(`Static CMS Proxy Server not detected at '${proxyUrl}'`);
       return {};
     }
   } catch {
-    console.info(`Simple CMS Proxy Server not detected at '${proxyUrl}'`);
+    console.info(`Static CMS Proxy Server not detected at '${proxyUrl}'`);
     return {};
   }
 }

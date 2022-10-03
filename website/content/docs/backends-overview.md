@@ -4,7 +4,7 @@ weight: 1
 title: Overview
 ---
 
-A backend is JavaScript code that allows Simple CMS to communicate with a service that stores content - typically a Git host like GitHub or GitLab. It provides functions that Simple CMS can use to do things like read and update files using API's provided by the service.
+A backend is JavaScript code that allows Static CMS to communicate with a service that stores content - typically a Git host like GitHub or GitLab. It provides functions that Static CMS can use to do things like read and update files using API's provided by the service.
 
 ## Backend Configuration
 
@@ -21,4 +21,4 @@ Individual backends should provide their own configuration documentation, but th
 
 ## Creating a New Backend
 
-Anyone can write a backend, but we don't yet have a finalized and documented API. If you would like to write your own backend for a service that does not have one currently, we recommend using the [GitHub backend](https://github.com/SimpleCMS/simple-cms/tree/main/src/backends/github) as a reference for API and best practices.
+Anyone can write a backend, but we don't yet have a finalized and documented API. If you would like to write your own backend for a service that does not have one currently, we recommend using the [GitHub backend](https://github.com/StaticJsCMS/static-cms/tree/main/src/backends/github) as a reference for API and best practices.

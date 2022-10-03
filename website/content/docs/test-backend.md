@@ -4,11 +4,11 @@ group: Accounts
 weight: 50
 ---
 
-You can use the `test-repo` backend to try out Simple CMS without connecting to a Git repo. With this backend, you can write and publish content normally, but any changes will disappear when you reload the page. This backend powers the Simple CMS [demo site](https://cms-demo.netlify.com/).
+You can use the `test-repo` backend to try out Static CMS without connecting to a Git repo. With this backend, you can write and publish content normally, but any changes will disappear when you reload the page. This backend powers the Static CMS [demo site](https://cms-demo.netlify.com/).
 
 **Note:** The `test-repo` backend can't access your local file system, nor does it connect to a Git repo, thus you won't see any existing files while using it.
 
-To enable this backend, add the following lines to your Simple CMS `config.yml` file:
+To enable this backend, add the following lines to your Static CMS `config.yml` file:
 
 ```yaml
 backend:

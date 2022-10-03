@@ -32,7 +32,7 @@ import iconMarkdown from './markdown.svg';
 import iconMedia from './media.svg';
 import iconMediaAlt from './media-alt.svg';
 import iconNetlify from './netlify.svg';
-import iconSimpleCms from './simple-cms-logo.svg';
+import iconStaticCms from './static-cms-logo.svg';
 import iconNewTab from './new-tab.svg';
 import iconPage from './page.svg';
 import iconPages from './pages.svg';
@@ -82,7 +82,7 @@ const images = {
   media: iconMedia,
   'media-alt': iconMediaAlt,
   netlify: iconNetlify,
-  'simple-cms': iconSimpleCms,
+  'static-cms': iconStaticCms,
   'new-tab': iconNewTab,
   page: iconPage,
   pages: iconPages,

@@ -83,7 +83,7 @@ function VideoEmbed() {
 
   // const embedcode = (
   //   <iframe
-  //     title="Simple CMS video"
+  //     title="Static CMS video"
   //     width={560}
   //     height={315}
   //     src="https://www.youtube-nocookie.com/embed/p6h-rYSVX90?rel=0&showinfo=0&autoplay=1"
@@ -93,7 +93,7 @@ function VideoEmbed() {
   //   />
   // );
 
-  const imgPlaceholder = <img src={screenshotEditor} alt="Simple CMS editor" />;
+  const imgPlaceholder = <img src={screenshotEditor} alt="Static CMS editor" />;
 
   return (
     <VideoLink /*onClick={toggleVideo}*/>

@@ -2,14 +2,14 @@ import uuid from 'uuid/v4';
 
 export function createNonce() {
   const nonce = uuid();
-  window.sessionStorage.setItem('simple-cms-auth', JSON.stringify({ nonce }));
+  window.sessionStorage.setItem('static-cms-auth', JSON.stringify({ nonce }));
   return nonce;
 }
 
 export function validateNonce(check) {
-  const auth = window.sessionStorage.getItem('simple-cms-auth');
+  const auth = window.sessionStorage.getItem('static-cms-auth');
   const valid = auth && JSON.parse(auth).nonce;
-  window.localStorage.removeItem('simple-cms-auth');
+  window.localStorage.removeItem('static-cms-auth');
   return check === valid;
 }
 
