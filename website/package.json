@@ -9,7 +9,7 @@
     "reset": "rm -rf .cache"
   },
   "author": "",
-  "homepage": "https://www.staticjscms.github.io/static-cms/",
+  "homepage": "https://staticjscms.github.io/static-cms/",
   "license": "MIT",
   "dependencies": {
     "@emotion/cache": "^10.0.29",

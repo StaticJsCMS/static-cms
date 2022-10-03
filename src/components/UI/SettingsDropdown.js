@@ -64,7 +64,7 @@ function SettingsDropdown({ displayUrl, isTestRepo, imageUrl, onLogoutClick, t }
     <React.Fragment>
       {isTestRepo && (
         <AppHeaderTestRepoIndicator
-          href="https://www.staticjscms.github.io/static-cms/docs/test-backend"
+          href="https://staticjscms.github.io/static-cms/docs/test-backend"
           target="_blank"
           rel="noopener noreferrer"
         >

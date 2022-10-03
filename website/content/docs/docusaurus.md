@@ -33,7 +33,7 @@ The development server now serves your website at `http://localhost:3000`. As yo
 
 ## Push your project to GitHub
 
-Static CMS requires a [backend](https://www.staticjscms.github.io/static-cms/docs/backends-overview/) to store content. Static CMS supports using Git hosts, like GitHub or GitLab, as backends. This guide uses GitHub. 
+Static CMS requires a [backend](https://staticjscms.github.io/static-cms/docs/backends-overview/) to store content. Static CMS supports using Git hosts, like GitHub or GitLab, as backends. This guide uses GitHub. 
 
 ```bash
 # 1. Initialize your local Git repository.  
@@ -209,7 +209,7 @@ collections:
         - { name: imageUrl, label: ImageURL, widget: string } 
 ```
 
-`config.yml` specifies what kind of content your blog posts have. The content specification enables Static CMS to edit existing posts and create new ones with the same format. To learn more, read about Static CMS' [](https://www.staticjscms.github.io/static-cms/docs/configuration-options/)[Configuration options](https://www.staticjscms.github.io/static-cms/docs/configuration-options/).
+`config.yml` specifies what kind of content your blog posts have. The content specification enables Static CMS to edit existing posts and create new ones with the same format. To learn more, read about Static CMS' [](https://staticjscms.github.io/static-cms/docs/configuration-options/)[Configuration options](https://staticjscms.github.io/static-cms/docs/configuration-options/).
 </li> 
 
 <li>
