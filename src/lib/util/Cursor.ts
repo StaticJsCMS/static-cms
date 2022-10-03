@@ -1,5 +1,3 @@
-import { statues } from '../../backends/github/queries';
-
 type CursorStore = {
   actions: Set<string>;
   data: Record<string, unknown>;
@@ -46,7 +44,7 @@ function createCursorStore(...args: unknown[]) {
     actions: new Set(...actions),
     // data and meta are Maps
     data,
-    meta: meta.update(filterUnknownMetaKeys),
+    meta: filterUnknownMetaKeys(meta),
   } as CursorStore;
 }
 
@@ -72,8 +70,6 @@ export default class Cursor {
     return new Cursor(...args);
   }
 
-  constructor(Cursor);
-  constructor(...args: {}[]);
   constructor(...args: {}[]) {
     if (args[0] instanceof Cursor) {
       return args[0] as Cursor;

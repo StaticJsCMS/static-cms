@@ -228,7 +228,7 @@ export default class BitbucketBackend implements CmsBackendClass {
     this.refreshedTokenPromise = this.authenticator!.refresh({
       provider: 'bitbucket',
       refresh_token: this.refreshToken as string,
-    }).then(({ token, refresh_token }: { token: string; refresh_token: string }) => {
+    })?.then(({ token, refresh_token }: { token: string; refresh_token: string }) => {
       this.token = token;
       this.refreshToken = refresh_token;
       this.refreshedTokenPromise = undefined;
@@ -472,7 +472,7 @@ export default class BitbucketBackend implements CmsBackendClass {
 
   traverseCursor(cursor: Cursor, action: string) {
     return this.api!.traverseCursor(cursor, action).then(async ({ entries, cursor: newCursor }) => {
-      const extension = cursor.meta?.extension;
+      const extension = cursor.meta?.extension as string | undefined;
       if (extension) {
         entries = entries.filter(e => filterByExtension(e, extension));
         newCursor = newCursor.mergeMeta({ extension });

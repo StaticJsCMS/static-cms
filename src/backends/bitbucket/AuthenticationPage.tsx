@@ -60,7 +60,7 @@ const BitbucketAuthenticationPage = ({
           auth_endpoint: authEndpoint,
         }),
         { provider: 'bitbucket', scope: 'repo' },
-      ];
+      ] as const;
     }
   }, [authEndpoint, base_url, clearHash, config.backend, onLogin, siteId]);
 

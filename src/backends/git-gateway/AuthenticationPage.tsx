@@ -60,7 +60,7 @@ function useNetlifyIdentifyEvent(
   }, [callback, eventName]);
 }
 
-interface GitGatewayAuthenticationPageProps extends TranslatedProps<AuthenticationPageProps> {
+export interface GitGatewayAuthenticationPageProps extends TranslatedProps<AuthenticationPageProps> {
   handleAuth: (email: string, password: string) => Promise<User | string>;
 }
 

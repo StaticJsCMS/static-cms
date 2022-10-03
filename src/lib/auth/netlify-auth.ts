@@ -51,7 +51,7 @@ class Authenticator {
   }
 
   handshakeCallback(
-    options: { provider: keyof typeof PROVIDERS },
+    options: { provider?: keyof typeof PROVIDERS },
     cb: (error: Error | NetlifyError | null, data?: User) => void,
   ) {
     const fn = (e: { data: string; origin: string }) => {
@@ -65,7 +65,7 @@ class Authenticator {
   }
 
   authorizeCallback(
-    options: { provider: keyof typeof PROVIDERS },
+    options: { provider?: keyof typeof PROVIDERS },
     cb: (error: Error | NetlifyError | null, data?: User) => void,
   ) {
     const fn = (e: { data: string; origin: string }) => {
@@ -105,7 +105,7 @@ class Authenticator {
 
   authenticate(
     options: {
-      provider: keyof typeof PROVIDERS;
+      provider?: keyof typeof PROVIDERS;
       scope?: string;
       login?: boolean;
       beta_invite?: string;
@@ -163,7 +163,7 @@ class Authenticator {
       provider: keyof typeof PROVIDERS;
       refresh_token?: string;
     },
-    cb: (error: Error | NetlifyError | null, data?: User) => void,
+    cb?: (error: Error | NetlifyError | null, data?: User) => void,
   ) {
     const { provider, refresh_token } = options;
     const siteID = this.getSiteID();

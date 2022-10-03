@@ -189,7 +189,7 @@ export default class API {
   }
 
   parseResponse(response: Response) {
-    const contentType = response.headers.Content-Type;
+    const contentType = response.headers.get('Content-Type');
     if (contentType && contentType.match(/json/)) {
       return this.parseJsonResponse(response);
     }

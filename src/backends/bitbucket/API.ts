@@ -286,7 +286,7 @@ export default class API {
         cursor: newCursor,
         entries: this.processFiles(entries),
       })),
-    ])(cursor.data!.getIn(['links', action]));
+    ])((cursor.data?.links as Record<string, unknown>)[action]);
 
   listAllFiles = async (path: string, depth: number, branch: string) => {
     const { cursor: initialCursor, entries: initialEntries } = await this.listFiles(
