@@ -1,46 +1,42 @@
-import { Map } from 'immutable';
-import { produce } from 'immer';
 import { oneLine } from 'common-tags';
+import { produce } from 'immer';
+import { Map } from 'immutable';
 
 import EditorComponent from '../valueObjects/EditorComponent';
 
 import type {
-  EntryMap,
-  MediaLibrary,
+  AdditionalLink,
+  CmsBackendClass,
+  CmsBackendInitializer,
+  CmsBackendInitializerOptions,
+  CmsConfig,
+  CmsEventListener,
   CmsIcon,
   CmsLocalePhrasesRoot,
   CmsMediaLibrary,
   CmsMediaLibraryOptions,
+  EventData,
 } from '../interface';
 
 export const allowedEvents = ['prePublish', 'postPublish', 'preSave', 'postSave'] as const;
 export type AllowedEvent = typeof allowedEvents[number];
 
-const eventHandlers = allowedEvents.reduce(
-  (acc, e) => {
-    acc[e] = [];
-    return acc;
-  },
-  {} as Record<
-    AllowedEvent,
-    {
-      handler: EventHandler;
-      options: Record<string, unknown>;
-    }[]
-  >,
-);
+const eventHandlers = allowedEvents.reduce((acc, e) => {
+  acc[e] = [];
+  return acc;
+}, {} as Record<AllowedEvent, { handler: CmsEventListener['handler']; options: Record<string, unknown> }[]>);
 
 interface Registry {
-  backends: Record<string, any>;
+  backends: Record<string, CmsBackendClassInit>;
   templates: Record<string, any>;
   previewStyles: any[];
   widgets: Record<string, any>;
-  icons: Record<string, CustomIcon>;
+  icons: Record<string, CmsIcon>;
   additionalLinks: Record<string, AdditionalLink>;
   editorComponents: Map<string, any>;
   remarkPlugins: any[];
   widgetValueSerializers: Record<string, any>;
-  mediaLibraries: any[];
+  mediaLibraries: (CmsMediaLibrary & { options: CmsMediaLibraryOptions })[];
   locales: Record<string, CmsLocalePhrasesRoot>;
   eventHandlers: typeof eventHandlers;
 }
@@ -226,9 +222,9 @@ export function getWidgetValueSerializer(widgetName) {
 }
 
 /**
- * Backend API
+ * Backends
  */
-export function registerBackend(name, BackendClass) {
+export function registerBackend(name: string, BackendClass: CmsBackendClass) {
   if (!name || !BackendClass) {
     console.error(
       "Backend parameters invalid. example: CMS.registerBackend('myBackend', BackendClass)",
@@ -237,12 +233,12 @@ export function registerBackend(name, BackendClass) {
     console.error(`Backend [${name}] already registered. Please choose a different name.`);
   } else {
     registry.backends[name] = {
-      init: (...args) => new BackendClass(...args),
+      init: (config: CmsConfig, options: CmsBackendInitializerOptions) => new BackendClass(config, options),
     };
   }
 }
 
-export function getBackend(name) {
+export function getBackend(name: string): CmsBackendInitializer {
   return registry.backends[name];
 }
 
@@ -251,7 +247,7 @@ export function getBackend(name) {
  */
 export function registerMediaLibrary(
   mediaLibrary: CmsMediaLibrary,
-  options?: CmsMediaLibraryOptions,
+  options: CmsMediaLibraryOptions = {},
 ) {
   if (registry.mediaLibraries.find(ml => mediaLibrary.name === ml.name)) {
     throw new Error(`A media library named ${mediaLibrary.name} has already been registered.`);
@@ -259,7 +255,9 @@ export function registerMediaLibrary(
   registry.mediaLibraries.push({ ...mediaLibrary, options });
 }
 
-export function getMediaLibrary(name: string): CmsMediaLibrary {
+export function getMediaLibrary(
+  name: string,
+): (CmsMediaLibrary & { options: CmsMediaLibraryOptions }) | undefined {
   return registry.mediaLibraries.find(ml => ml.name === name);
 }
 
@@ -279,7 +277,7 @@ export function getEventListeners(name: AllowedEvent) {
 }
 
 export function registerEventListener(
-  { name, handler }: { name: AllowedEvent; handler: EventHandler },
+  { name, handler }: CmsEventListener,
   options: Record<string, unknown> = {},
 ) {
   validateEventName(name);
@@ -301,13 +299,7 @@ export async function invokeEvent({ name, data }: { name: AllowedEvent; data: Ev
   return _data.entry.get('data');
 }
 
-export function removeEventListener({
-  name,
-  handler,
-}: {
-  name: AllowedEvent;
-  handler: EventHandler;
-}) {
+export function removeEventListener({ name, handler }: CmsEventListener) {
   validateEventName(name);
   if (handler) {
     registry.eventHandlers[name] = registry.eventHandlers[name].filter(

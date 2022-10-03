@@ -509,6 +509,8 @@ export type CursorStore = {
 };
 
 export interface Implementation {
+  constructor(config: CmsConfig, options: CmsBackendInitializerOptions)
+
   authComponent: () => void;
   restoreUser: (user: User) => Promise<User>;
 
@@ -529,7 +531,10 @@ export interface Implementation {
   getMediaFile: (path: string) => Promise<ImplementationMediaFile>;
 
   persistEntry: (entry: BackendEntry, opts: PersistOptions) => Promise<void>;
-  persistMedia: (file: AssetProxy, opts: PersistOptions) => Promise<ImplementationMediaFile>;
+  persistMedia: (
+    file: AssetProxy,
+    opts: PersistOptions,
+  ) => Promise<ImplementationMediaFile>;
   deleteFiles: (paths: string[], commitMessage: string) => Promise<void>;
 
   allEntriesByFolder?: (
@@ -560,7 +565,7 @@ export type CmsIcon = () => JSX.Element;
 
 export type CmsWidgetValueSerializer = any; // TODO: type properly
 
-export type CmsMediaLibraryOptions = any; // TODO: type properly
+export type CmsMediaLibraryOptions = Record<string, unknown>; // TODO: type properly
 
 export interface CmsMediaLibrary {
   name: string;
@@ -995,6 +1000,14 @@ export interface CmsConfig {
 export interface InitOptions {
   config: CmsConfig;
 }
+
+export interface CmsBackendInitializerOptions {
+  updateUserCredentials: (credentials: Credentials) => void;
+}
+
+export type CmsBackendInitializer = Implementation & {
+  init: (config: CmsConfig, options: CmsBackendInitializerOptions) => Implementation;
+};
 
 export type CmsBackendClass = Implementation;
 

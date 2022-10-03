@@ -44,8 +44,10 @@ import { selectCustomPath } from './reducers/entryDraft';
 import { selectIntegration } from './reducers/integrations';
 import { createEntry } from './valueObjects/Entry';
 
+import type { AllowedEvent } from './lib/registry';
 import type { Map } from 'immutable';
 import type {
+  CmsBackendInitializer,
   CmsConfig,
   Collection,
   CollectionFile,
@@ -53,17 +55,11 @@ import type {
   EntryField,
   EntryMap,
   FilterRule,
+  Implementation,
   ImplementationEntry,
   State,
 } from './interface';
-import type {
-  AsyncLock,
-  Credentials,
-  DataFile,
-  DisplayURL,
-  Implementation as BackendImplementation,
-  User,
-} from './lib/util';
+import type { AsyncLock, Credentials, DataFile, DisplayURL, User } from './lib/util';
 import type AssetProxy from './valueObjects/AssetProxy';
 import type { EntryValue } from './valueObjects/Entry';
 
@@ -269,14 +265,6 @@ interface PersistArgs {
   status?: string;
 }
 
-interface ImplementationInitOptions {
-  updateUserCredentials: (credentials: Credentials) => void;
-}
-
-type Implementation = BackendImplementation & {
-  init: (config: CmsConfig, options: ImplementationInitOptions) => Implementation;
-};
-
 function prepareMetaPath(path: string, collection: Collection) {
   if (!selectHasMetaPath(collection)) {
     return path;
@@ -305,7 +293,10 @@ export class Backend {
   user?: User | null;
   backupSync: AsyncLock;
 
-  constructor(implementation: Implementation, { backendName, authStore, config }: BackendOptions) {
+  constructor(
+    implementation: CmsBackendInitializer,
+    { backendName, authStore, config }: BackendOptions,
+  ) {
     // We can't reliably run this on exit, so we do cleanup on load.
     this.deleteAnonymousBackup();
     this.config = config;
@@ -921,7 +912,7 @@ export class Backend {
     return slug;
   }
 
-  async invokeEventWithEntry(event: string, entry: EntryMap) {
+  async invokeEventWithEntry(event: AllowedEvent, entry: EntryMap) {
     const { login, name } = (await this.currentUser()) as User;
     return await invokeEvent({ name: event, data: { entry, author: { login, name } } });
   }
