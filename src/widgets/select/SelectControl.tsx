@@ -5,7 +5,6 @@ import React from 'react';
 import { List } from 'immutable';
 
 import { validations } from '../../lib/widgets';
-import { isList } from '../../lib/util/immutable';
 
 import type { SelectChangeEvent } from '@mui/material/Select';
 import type { CmsWidgetControlProps } from '../../interface';
@@ -66,7 +65,7 @@ export default class SelectControl extends React.Component<
   componentDidMount() {
     const { field, onChange, value } = this.props;
     if (field.get('required') && field.get('multiple')) {
-      if (value && !isList(value)) {
+      if (value && !List.isList(value)) {
         onChange(List([value]));
       } else if (!value) {
         onChange(List());
@@ -98,7 +97,7 @@ export default class SelectControl extends React.Component<
       >
         <Select
           id={forID}
-          value={value ? (isList(value) ? value.toJS() as string[] : value) : isMultiple ? [] : ''}
+          value={value ? (List.isList(value) ? value.toJS() as string[] : value) : isMultiple ? [] : ''}
           onChange={event => this.handleChange(event)}
           multiple={isMultiple}
           onFocus={setActiveStyle}

@@ -17,11 +17,11 @@ import {
 
 import type { Octokit } from '@octokit/rest';
 import type { Semaphore } from 'semaphore';
-import type { ApiRequest, AssetProxy, DataFile, FetchError, PersistOptions } from '../../lib/util';
+import type { AssetProxy, DataFile, PersistOptions } from '../../interface';
+import type { ApiRequest, FetchError } from '../../lib/util';
 
 type GitHubUser = Octokit.UsersGetAuthenticatedResponse;
 type GitCreateTreeParamsTree = Octokit.GitCreateTreeParamsTree;
-type GitHubCompareCommit = Octokit.ReposCompareCommitsResponseCommitsItem;
 type GitHubAuthor = Octokit.GitCreateCommitResponseAuthor;
 type GitHubCommitter = Octokit.GitCreateCommitResponseCommitter;
 
@@ -45,14 +45,6 @@ interface TreeFile {
 type Override<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
 
 type TreeEntry = Override<GitCreateTreeParamsTree, { sha: string | null }>;
-
-type GitHubCompareCommits = GitHubCompareCommit[];
-
-type GitHubCompareFile = Octokit.ReposCompareCommitsResponseFilesItem & {
-  previous_filename?: string;
-};
-
-type GitHubCompareFiles = GitHubCompareFile[];
 
 interface MetaDataObjects {
   entry: { path: string; sha: string };

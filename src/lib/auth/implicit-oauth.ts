@@ -2,18 +2,29 @@ import { Map } from 'immutable';
 import trim from 'lodash/trim';
 import trimEnd from 'lodash/trimEnd';
 
-import { createNonce, validateNonce, isInsecureProtocol } from './utils';
+import { createNonce, isInsecureProtocol, validateNonce } from './utils';
+
+import type { User, AuthenticatorConfig } from '../../interface';
+import type { NetlifyError } from './netlify-auth';
 
 export default class ImplicitAuthenticator {
-  constructor(config = {}) {
+  private auth_url: string;
+  private appID: string;
+  private clearHash: () => void;
+
+  constructor(config: AuthenticatorConfig = {}) {
     const baseURL = trimEnd(config.base_url, '/');
     const authEndpoint = trim(config.auth_endpoint, '/');
     this.auth_url = `${baseURL}/${authEndpoint}`;
-    this.appID = config.app_id;
-    this.clearHash = config.clearHash;
+    this.appID = config.app_id ?? '';
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    this.clearHash = config.clearHash ?? (() => {});
   }
 
-  authenticate(options, cb) {
+  authenticate(
+    options: { scope: string; prompt?: string | null; resource?: string | null },
+    cb: (error: Error | NetlifyError | null, data?: User) => void,
+  ) {
     if (isInsecureProtocol()) {
       return cb(new Error('Cannot authenticate over insecure protocol!'));
     }
@@ -42,7 +53,9 @@ export default class ImplicitAuthenticator {
   /**
    * Complete authentication if we were redirected back to from the provider.
    */
-  completeAuth(cb) {
+  completeAuth(
+    cb: (error: Error | NetlifyError | null, data?: User) => void,
+  ) {
     const hashParams = new URLSearchParams(document.location.hash.replace(/^#?\/?/, ''));
     if (!hashParams.has('access_token') && !hashParams.has('error')) {
       return;
@@ -52,7 +65,7 @@ export default class ImplicitAuthenticator {
 
     const params = Map(hashParams.entries());
 
-    const { nonce } = JSON.parse(params.get('state'));
+    const { nonce } = JSON.parse(params.get('state') ?? '');
     const validNonce = validateNonce(nonce);
     if (!validNonce) {
       return cb(new Error('Invalid nonce'));
@@ -64,7 +77,7 @@ export default class ImplicitAuthenticator {
 
     if (params.has('access_token')) {
       const { access_token: token, ...data } = params.toJS();
-      cb(null, { token, ...data });
+      cb(null, { token, ...data } as User);
     }
   }
 }

@@ -4,7 +4,7 @@ import { isEqual } from 'lodash';
 import { currentBackend } from '../backend';
 import ValidationErrorTypes from '../constants/validationErrorTypes';
 import { getIntegrationProvider } from '../integrations';
-import { SortDirection } from '../interface';
+import { MediaFile, SortDirection } from '../interface';
 import { getProcessSegment } from '../lib/formatters';
 import { duplicateDefaultI18nFields, hasI18n, I18N, I18N_FIELD, serializeI18n } from '../lib/i18n';
 import { serializeValues } from '../lib/serializeEntryValues';
@@ -30,8 +30,8 @@ import type {
   Collection,
   Entry,
   EntryField,
-  EntryFields,
-  EntryMap,
+  EntryField,
+  Entry,
   State,
   ViewFilter,
   ViewGroup,
@@ -557,8 +557,8 @@ export async function tryLoadEntry(state: State, collection: Collection, slug: s
 }
 
 const appendActions = fromJS({
-  ['append_next']: { action: 'next', append: true },
-});
+  append_next: { action: 'next', append: true },
+}) as Map<string, Map<string, string | boolean>>;
 
 function addAppendActionsToCursor(cursor: Cursor) {
   return Cursor.create(cursor).updateStore('actions', (actions: Set<string>) => {
@@ -661,7 +661,7 @@ export function traverseCollectionCursor(collection: Collection, action: string)
     const backend = currentBackend(state.config);
 
     const { action: realAction, append } = appendActions.has(action)
-      ? appendActions.get(action).toJS()
+      ? (appendActions.get(action)!.toJS() as { action: string; append: boolean })
       : { action, append: false };
     const cursor = selectCollectionEntriesCursor(state.cursors, collection.get('name'));
 
@@ -715,11 +715,11 @@ function processValue(unsafe: string) {
   return escapeHtml(unsafe);
 }
 
-function getDataFields(fields: EntryFields) {
+function getDataFields(fields: EntryField[]) {
   return fields.filter(f => !f!.get('meta')).toList();
 }
 
-function getMetaFields(fields: EntryFields) {
+function getMetaFields(fields: EntryField[]) {
   return fields.filter(f => f!.get('meta') === true).toList();
 }
 
@@ -773,7 +773,7 @@ interface DraftEntryData {
 }
 
 export function createEmptyDraftData(
-  fields: EntryFields,
+  fields: EntryField[],
   skipField: (field: EntryField) => boolean = () => false,
 ) {
   return fields.reduce(
@@ -803,7 +803,7 @@ export function createEmptyDraftData(
           acc[name] = defaultValue;
         } else {
           const asList = List.isList(subfields)
-            ? (subfields as EntryFields)
+            ? (subfields as EntryField[])
             : List([subfields as EntryField]);
 
           const subDefaultValue = list
@@ -827,7 +827,7 @@ export function createEmptyDraftData(
   );
 }
 
-function createEmptyDraftI18nData(collection: Collection, dataFields: EntryFields) {
+function createEmptyDraftI18nData(collection: Collection, dataFields: EntryField[]) {
   if (!hasI18n(collection)) {
     return {};
   }
@@ -840,7 +840,7 @@ function createEmptyDraftI18nData(collection: Collection, dataFields: EntryField
   return duplicateDefaultI18nFields(collection, i18nData);
 }
 
-export function getMediaAssets({ entry }: { entry: EntryMap }) {
+export function getMediaAssets({ entry }: { entry: Entry }) {
   const filesArray = entry.get('mediaFiles').toArray();
   const assets = filesArray
     .filter(file => file.get('draft'))

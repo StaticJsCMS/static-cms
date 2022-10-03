@@ -8,7 +8,7 @@ import {
   LOGOUT,
 } from '../actions/auth';
 
-import type { User } from '../lib/util';
+import type { User } from '../interface';
 import type { AuthAction } from '../actions/auth';
 
 export type Auth = {

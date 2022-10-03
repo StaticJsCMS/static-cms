@@ -29,20 +29,17 @@ import { GitLfsClient } from './git-lfs-client';
 
 import type { Semaphore } from 'semaphore';
 import type {
-  ApiRequest,
   AssetProxy,
-  AsyncLock,
-  Config,
+  BackendEntry,
+  CmsBackendClass,
+  CmsConfig,
   Credentials,
-  Cursor,
   DisplayURL,
-  Entry,
-  FetchError,
-  Implementation,
   ImplementationFile,
   PersistOptions,
   User,
-} from '../../lib/util';
+} from '../../interface';
+import type { ApiRequest, AsyncLock, Cursor, FetchError } from '../../lib/util';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 
@@ -56,7 +53,7 @@ type BitbucketStatusComponent = {
 };
 
 // Implementation wrapper class
-export default class BitbucketBackend implements Implementation {
+export default class BitbucketBackend implements CmsBackendClass {
   lock: AsyncLock;
   api: API | null;
   updateUserCredentials: (args: { token: string; refresh_token: string }) => Promise<null>;
@@ -71,7 +68,7 @@ export default class BitbucketBackend implements Implementation {
   baseUrl: string;
   siteId: string;
   token: string | null;
-  mediaFolder: string;
+  mediaFolder?: string;
   refreshToken?: string;
   refreshedTokenPromise?: Promise<string>;
   authenticator?: NetlifyAuthenticator;
@@ -80,7 +77,7 @@ export default class BitbucketBackend implements Implementation {
   _largeMediaClientPromise?: Promise<GitLfsClient>;
   authType: string;
 
-  constructor(config: Config, options = {}) {
+  constructor(config: CmsConfig, options = {}) {
     this.options = {
       proxied: false,
       API: null,
@@ -231,7 +228,7 @@ export default class BitbucketBackend implements Implementation {
     this.refreshedTokenPromise = this.authenticator!.refresh({
       provider: 'bitbucket',
       refresh_token: this.refreshToken as string,
-    }).then(({ token, refresh_token }) => {
+    }).then(({ token, refresh_token }: { token: string; refresh_token: string }) => {
       this.token = token;
       this.refreshToken = refresh_token;
       this.refreshedTokenPromise = undefined;
@@ -354,7 +351,10 @@ export default class BitbucketBackend implements Implementation {
     }));
   }
 
-  getMedia(mediaFolder = this.mediaFolder) {
+  async getMedia(mediaFolder = this.mediaFolder) {
+    if (!mediaFolder) {
+      return [];
+    }
     return this.api!.listAllFiles(mediaFolder, 1, this.branch).then(files =>
       files.map(({ id, name, path }) => ({ id, name, path, displayURL: { id, path } })),
     );
@@ -412,7 +412,7 @@ export default class BitbucketBackend implements Implementation {
     };
   }
 
-  async persistEntry(entry: Entry, options: PersistOptions) {
+  async persistEntry(entry: BackendEntry, options: PersistOptions) {
     const client = await this.getLargeMediaClient();
     // persistEntry is a transactional operation
     return runWithLock(

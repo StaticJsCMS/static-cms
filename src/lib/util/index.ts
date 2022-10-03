@@ -42,37 +42,11 @@ import unsentRequest from './unsentRequest';
 import type { ApiRequest as AR, FetchError as FE } from './API';
 import type { AsyncLock as AL } from './asyncLock';
 import type { PointerFile as PF } from './git-lfs';
-import type {
-  AssetProxy as AP,
-  Config as C,
-  Credentials as Cred,
-  DataFile as DF,
-  DisplayURL as DU,
-  DisplayURLObject as DUO,
-  Entry as E,
-  Implementation as I,
-  ImplementationFile as IF,
-  ImplementationMediaFile as IMF,
-  PersistOptions as PO,
-  User as U
-} from './implementation';
 
 export type AsyncLock = AL;
-export type Implementation = I;
-export type ImplementationMediaFile = IMF;
-export type ImplementationFile = IF;
-export type DisplayURL = DU;
-export type DisplayURLObject = DUO;
-export type Credentials = Cred;
-export type User = U;
-export type Entry = E;
-export type PersistOptions = PO;
-export type AssetProxy = AP;
 export type ApiRequest = AR;
-export type Config = C;
 export type FetchError = FE;
 export type PointerFile = PF;
-export type DataFile = DF;
 
 export const StaticCmsLibUtil = {
   APIError,

@@ -3,12 +3,18 @@ import { partial, result, trim, trimStart } from 'lodash';
 import { basename, dirname } from 'path';
 
 import {
-  APIError, localForage, readFile, readFileMetadata, requestWithBackoff,
-  responseParser, unsentRequest
+  APIError,
+  localForage,
+  readFile,
+  readFileMetadata,
+  requestWithBackoff,
+  responseParser,
+  unsentRequest,
 } from '../../lib/util';
 
 import type { Map } from 'immutable';
-import type { ApiRequest, AssetProxy, DataFile, PersistOptions } from '../../lib/util';
+import type { AssetProxy, DataFile, PersistOptions } from '../../interface';
+import type { ApiRequest } from '../../lib/util';
 
 export const API_NAME = 'Azure DevOps';
 
@@ -26,23 +32,6 @@ type AzureGitItem = {
   objectId: string;
   gitObjectType: AzureObjectType;
   path: string;
-};
-
-type AzurePullRequestCommit = { commitId: string };
-
-enum AzureCommitStatusState {
-  ERROR = 'error',
-  FAILED = 'failed',
-  NOT_APPLICABLE = 'notApplicable',
-  NOT_SET = 'notSet',
-  PENDING = 'pending',
-  SUCCEEDED = 'succeeded',
-}
-
-type AzureCommitStatus = {
-  context: { genre?: string | null; name: string };
-  state: AzureCommitStatusState;
-  targetUrl: string;
 };
 
 // This does not match Azure documentation, but it is what comes back from some calls
@@ -68,30 +57,6 @@ enum AzureObjectType {
   TREE = 'tree',
 }
 
-// https://docs.microsoft.com/en-us/rest/api/azure/devops/git/diffs/get?view=azure-devops-rest-6.1#gitcommitdiffs
-interface AzureGitCommitDiffs {
-  changes: AzureGitChange[];
-}
-
-// https://docs.microsoft.com/en-us/rest/api/azure/devops/git/diffs/get?view=azure-devops-rest-6.1#gitchange
-interface AzureGitChange {
-  changeId: number;
-  item: AzureGitChangeItem;
-  changeType: AzureCommitChangeType;
-  originalPath: string;
-  url: string;
-}
-
-interface AzureGitChangeItem {
-  objectId: string;
-  originalObjectId: string;
-  gitObjectType: string;
-  commitId: string;
-  path: string;
-  isFolder: string;
-  url: string;
-}
-
 type AzureRef = {
   name: string;
   objectId: string;
@@ -104,10 +69,6 @@ type AzureCommit = {
     name: string;
   };
 };
-
-function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 function getChangeItem(item: AzureCommitItem) {
   switch (item.action) {

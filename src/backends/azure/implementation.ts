@@ -1,23 +1,39 @@
 import { trim, trimStart } from 'lodash';
 import semaphore from 'semaphore';
 
+import { CmsBackendClass } from '../../interface';
 import {
-  asyncLock, basename, entriesByFiles, entriesByFolder, filterByExtension, getBlobSHA, getMediaAsBlob, getMediaDisplayURL
+  asyncLock,
+  basename,
+  entriesByFiles,
+  entriesByFolder,
+  filterByExtension,
+  getBlobSHA,
+  getMediaAsBlob,
+  getMediaDisplayURL,
 } from '../../lib/util';
 import API, { API_NAME } from './API';
 import AuthenticationPage from './AuthenticationPage';
 
 import type { Semaphore } from 'semaphore';
 import type {
-  AssetProxy, AsyncLock, Config, Credentials, DisplayURL,
-  Entry, Implementation,
+  AssetProxy,
+  BackendEntry,
+  CmsBackendInitializerOptions,
+  CmsConfig,
+  Credentials,
+  DisplayURL,
+  ImplementationEntry,
   ImplementationFile,
-  ImplementationMediaFile, PersistOptions, User
-} from '../../lib/util';
+  ImplementationMediaFile,
+  PersistOptions,
+  User,
+} from '../../interface';
+import type { AsyncLock, Cursor } from '../../lib/util';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 
-function parseAzureRepo(config: Config) {
+function parseAzureRepo(config: CmsConfig) {
   const { repo } = config.backend;
 
   if (typeof repo !== 'string') {
@@ -37,10 +53,10 @@ function parseAzureRepo(config: Config) {
   };
 }
 
-export default class Azure implements Implementation {
+export default class Azure extends CmsBackendClass {
   lock: AsyncLock;
   api?: API;
-  options: {};
+  options: CmsBackendInitializerOptions;
   repo: {
     org: string;
     project: string;
@@ -54,7 +70,8 @@ export default class Azure implements Implementation {
 
   _mediaDisplayURLSem?: Semaphore;
 
-  constructor(config: Config, options = {}) {
+  constructor(config: CmsConfig, options: CmsBackendInitializerOptions) {
+    super(config, options);
     this.options = {
       ...options,
     };
@@ -72,7 +89,10 @@ export default class Azure implements Implementation {
     return true;
   }
 
-  async status() {
+  async status(): Promise<{
+    auth: { status: boolean };
+    api: { status: boolean; statusPage: string };
+  }> {
     const auth =
       (await this.api!.user()
         .then(user => !!user)
@@ -196,7 +216,7 @@ export default class Azure implements Implementation {
     };
   }
 
-  async persistEntry(entry: Entry, options: PersistOptions): Promise<void> {
+  async persistEntry(entry: BackendEntry, options: PersistOptions): Promise<void> {
     const mediaFiles: AssetProxy[] = entry.assets;
     await this.api!.persistFiles(entry.dataFiles, mediaFiles, options);
   }
@@ -228,5 +248,17 @@ export default class Azure implements Implementation {
 
   async deleteFiles(paths: string[], commitMessage: string) {
     await this.api!.deleteFiles(paths, commitMessage);
+  }
+
+  traverseCursor(): Promise<{ entries: ImplementationEntry[]; cursor: Cursor }> {
+    throw new Error('Not supported');
+  }
+
+  allEntriesByFolder(
+    _folder: string,
+    _extension: string,
+    _depth: number,
+  ): Promise<ImplementationEntry[]> {
+    throw new Error('Not supported');
   }
 }

@@ -8,29 +8,28 @@ import { flow, partial, result, trimStart } from 'lodash';
 import { dirname } from 'path';
 
 import {
-  APIError, Cursor, localForage, parseLinkHeader, readFile,
+  APIError,
+  Cursor,
+  localForage,
+  parseLinkHeader,
+  readFile,
   readFileMetadata,
   requestWithBackoff,
-  responseParser, then,
+  responseParser,
+  then,
   throwOnConflictingBranches,
-  unsentRequest
+  unsentRequest,
 } from '../../lib/util';
 import * as queries from './queries';
 
-const NO_CACHE = 'no-cache';
-
 import type { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import type { ApolloQueryResult } from 'apollo-client';
-import type {
-  ApiRequest,
-  AssetProxy,
-  DataFile,
-  FetchError,
-  ImplementationFile,
-  PersistOptions
-} from '../../lib/util';
+import type { ApiRequest, FetchError } from '../../lib/util';
+import type { AssetProxy, DataFile, ImplementationFile, PersistOptions } from '../../interface';
 
 export const API_NAME = 'GitLab';
+
+const NO_CACHE = 'no-cache';
 
 export interface Config {
   apiRoot?: string;
@@ -369,7 +368,7 @@ export default class API {
   };
 
   traverseCursor = async (cursor: Cursor, action: string) => {
-    const link = cursor.data!.getIn(['links', action]);
+    const link = cursor.data!.getIn(['links', action]) as ApiRequest;
     const { entries, cursor: newCursor } = await this.fetchCursorAndEntries(link);
     return {
       entries: entries.filter(({ type }) => type === 'blob'),
@@ -482,7 +481,7 @@ export default class API {
     });
     entries.push(...initialEntries);
     while (cursor && cursor.actions!.has('next')) {
-      const link = cursor.data!.getIn(['links', 'next']);
+      const link = cursor.data!.getIn(['links', 'next']) as ApiRequest;
       const { cursor: newCursor, entries: newEntries } = await this.fetchCursorAndEntries(link);
       entries.push(...newEntries);
       cursor = newCursor;

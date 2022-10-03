@@ -27,7 +27,7 @@ const eventHandlers = allowedEvents.reduce((acc, e) => {
 }, {} as Record<AllowedEvent, { handler: CmsEventListener['handler']; options: Record<string, unknown> }[]>);
 
 interface Registry {
-  backends: Record<string, CmsBackendClassInit>;
+  backends: Record<string, CmsBackendInitializer>;
   templates: Record<string, any>;
   previewStyles: any[];
   widgets: Record<string, any>;
@@ -224,7 +224,9 @@ export function getWidgetValueSerializer(widgetName) {
 /**
  * Backends
  */
-export function registerBackend(name: string, BackendClass: CmsBackendClass) {
+export function registerBackend<
+  T extends { new (config: CmsConfig, options: CmsBackendInitializerOptions): CmsBackendClass },
+>(name: string, BackendClass: T) {
   if (!name || !BackendClass) {
     console.error(
       "Backend parameters invalid. example: CMS.registerBackend('myBackend', BackendClass)",
@@ -233,7 +235,8 @@ export function registerBackend(name: string, BackendClass: CmsBackendClass) {
     console.error(`Backend [${name}] already registered. Please choose a different name.`);
   } else {
     registry.backends[name] = {
-      init: (config: CmsConfig, options: CmsBackendInitializerOptions) => new BackendClass(config, options),
+      init: (config: CmsConfig, options: CmsBackendInitializerOptions) =>
+        new BackendClass(config, options),
     };
   }
 }

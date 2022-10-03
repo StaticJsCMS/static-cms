@@ -76,11 +76,11 @@ const TextButton = styled.button`
 `;
 
 export interface AuthenticationPageProps {
-  onLogin: MouseEventHandler<HTMLButtonElement>;
+  onLogin?: MouseEventHandler<HTMLButtonElement>;
   logoUrl?: string;
   siteUrl?: string;
-  loginDisabled: boolean;
-  loginErrorMessage: ReactNode;
+  loginDisabled?: boolean;
+  loginErrorMessage?: ReactNode;
   renderButtonContent?: () => ReactNode;
   renderPageContent?: (options: {
     LoginButton: typeof LoginButton;

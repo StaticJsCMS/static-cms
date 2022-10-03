@@ -1,6 +1,6 @@
 export interface StaticallyTypedRecord<T> {
   get<K extends keyof T>(key: K, defaultValue?: T[K]): T[K];
-  set<K extends keyof T, V extends T[K]>(key: K, value: V): StaticallyTypedRecord<T> & T;
+  set<K extends keyof T, V extends T[K]>(key: K, value: V): StaticallyTypedRecord<T>;
   has<K extends keyof T>(key: K): boolean;
   delete<K extends keyof T>(key: K): StaticallyTypedRecord<T>;
   getIn<K1 extends keyof T, K2 extends keyof T[K1], V extends T[K1][K2]>(
@@ -21,7 +21,7 @@ export interface StaticallyTypedRecord<T> {
     keys: [K1, K2],
     value: V,
   ): StaticallyTypedRecord<T>;
-  setIn(keys: string[], value: unknown): StaticallyTypedRecord<T> & T;
+  setIn(keys: string[], value: unknown): StaticallyTypedRecord<T>;
   toJS(): T;
   isEmpty(): boolean;
   some<K extends keyof T>(predicate: (value: T[K], key: K, iter: this) => boolean): boolean;

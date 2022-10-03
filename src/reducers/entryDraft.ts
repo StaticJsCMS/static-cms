@@ -1,8 +1,7 @@
-import { fromJS, List, Map } from 'immutable';
-import { get } from 'lodash';
 import { join } from 'path';
-import uuid from 'uuid/v4';
-
+import { v4 as uuid } from 'uuid';
+import { Collection } from '..';
+import { getIn, mergeDeep, setIn } from '../../lib/util/objectUtil';
 import {
   ADD_DRAFT_ENTRY_MEDIA_FILE,
   DRAFT_CHANGE_FIELD,
@@ -18,160 +17,225 @@ import {
   ENTRY_PERSIST_FAILURE,
   ENTRY_PERSIST_REQUEST,
   ENTRY_PERSIST_SUCCESS,
-  REMOVE_DRAFT_ENTRY_MEDIA_FILE,
+  REMOVE_DRAFT_ENTRY_MEDIA_FILE
 } from '../actions/entries';
 import { duplicateI18nFields, getDataPath } from '../lib/i18n';
 import { selectFolderEntryExtension, selectHasMetaPath } from './collections';
 
-import type { EntriesAction } from '../actions/entries';
-
-const initialState = Map({
-  entry: Map(),
-  fieldsMetaData: Map(),
-  fieldsErrors: Map(),
+const initialState = {
+  entry: {},
+  fieldsMetaData: {},
+  fieldsErrors: {},
   hasChanged: false,
   key: '',
-});
+};
 
-function entryDraftReducer(state = Map(), action: EntriesAction) {
+export interface EntryDraftState {
+  entry: Record<string, any>;
+  fieldsMetaData: Record<string, any>;
+  fieldsErrors: Record<string, any>;
+  hasChanged: boolean;
+  key: string;
+  localBackup?: {
+    entry: Record<string, any>;
+  };
+}
+
+function entryDraftReducer(state: EntryDraftState = initialState, action: any) {
   switch (action.type) {
     case DRAFT_CREATE_FROM_ENTRY:
       // Existing Entry
-      return state.withMutations(state => {
-        state.set('entry', fromJS(action.payload.entry));
-        state.setIn(['entry', 'newRecord'], false);
-        state.set('fieldsMetaData', Map());
-        state.set('fieldsErrors', Map());
-        state.set('hasChanged', false);
-        state.set('key', uuid());
-      });
+      return {
+        ...state,
+        entry: {
+          ...action.payload.entry,
+          newRecord: false,
+        },
+        fieldsMetaData: {},
+        fieldsErrors: {},
+        hasChanged: false,
+        key: uuid(),
+      };
     case DRAFT_CREATE_EMPTY:
       // New Entry
-      return state.withMutations(state => {
-        state.set('entry', fromJS(action.payload));
-        state.setIn(['entry', 'newRecord'], true);
-        state.set('fieldsMetaData', Map());
-        state.set('fieldsErrors', Map());
-        state.set('hasChanged', false);
-        state.set('key', uuid());
-      });
+      return {
+        ...state,
+        entry: {
+          ...action.payload,
+          newRecord: true,
+        },
+        fieldsMetaData: {},
+        fieldsErrors: {},
+        hasChanged: false,
+        key: uuid(),
+      };
     case DRAFT_CREATE_FROM_LOCAL_BACKUP:
+      const backupDraftEntry = state.localBackup;
+      const backupEntry = backupDraftEntry?.['entry'];
+
+      const newState = { ...state };
+      delete newState.localBackup;
+
       // Local Backup
-      return state.withMutations(state => {
-        const backupDraftEntry = state.get('localBackup');
-        const backupEntry = backupDraftEntry.get('entry');
-        state.delete('localBackup');
-        state.set('entry', backupEntry);
-        state.setIn(['entry', 'newRecord'], !backupEntry.get('path'));
-        state.set('fieldsMetaData', Map());
-        state.set('fieldsErrors', Map());
-        state.set('hasChanged', true);
-        state.set('key', uuid());
-      });
+      return {
+        ...state,
+        entry: {
+          ...backupEntry,
+          newRecord: !backupEntry?.path,
+        },
+        fieldsMetaData: {},
+        fieldsErrors: {},
+        hasChanged: true,
+        key: uuid(),
+      };
     case DRAFT_CREATE_DUPLICATE_FROM_ENTRY:
       // Duplicate Entry
-      return state.withMutations(state => {
-        state.set('entry', fromJS(action.payload));
-        state.setIn(['entry', 'newRecord'], true);
-        state.set('mediaFiles', List());
-        state.set('fieldsMetaData', Map());
-        state.set('fieldsErrors', Map());
-        state.set('hasChanged', true);
-      });
+      return {
+        ...state,
+        entry: {
+          ...action.payload,
+          newRecord: true,
+        },
+        mediaFiles: [],
+        fieldsMetaData: {},
+        fieldsErrors: {},
+        hasChanged: true,
+      };
     case DRAFT_DISCARD:
       return initialState;
     case DRAFT_LOCAL_BACKUP_RETRIEVED: {
       const { entry } = action.payload;
-      const newState = new Map<string, EntryValue>({
-        entry: fromJS(entry),
-      });
-      return state.set('localBackup', newState);
+      const newState = {
+        entry,
+      };
+      return {
+        ...state,
+        localBackup: newState,
+      };
     }
     case DRAFT_CHANGE_FIELD: {
-      return state.withMutations(state => {
-        const { field, value, metadata, entries, i18n } = action.payload;
-        const name = field.get('name');
-        const meta = field.get('meta');
+      const { field, value, metadata, entries, i18n } = action.payload;
+      const name = field.name;
+      const meta = field.meta;
+      const dataPath = (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
 
-        const dataPath = (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
-        if (meta) {
-          state.setIn(['entry', 'meta', name], value);
-        } else {
-          state.setIn(['entry', ...dataPath, name], value);
-          if (i18n) {
-            state = duplicateI18nFields(state, field, i18n.locales, i18n.defaultLocale);
-          }
-        }
-        state.mergeDeepIn(['fieldsMetaData'], fromJS(metadata));
-        const newData = state.getIn(['entry', ...dataPath]);
-        const newMeta = state.getIn(['entry', 'meta']);
-        if (entries.length === 0) {
-          return;
-        }
-        state.set(
-          'hasChanged',
-          !newData.equals(entries[0].get(...dataPath)) || !newMeta.equals(entries[0].get('meta')),
-        );
-      });
-    }
-    case DRAFT_VALIDATION_ERRORS:
-      if (action.payload.errors.length === 0) {
-        return state.deleteIn(['fieldsErrors', action.payload.uniquefieldId]);
+      const newState = { ...state };
+      if (meta) {
+        newState.entry = {
+          ...newState.entry,
+          meta: {
+            ...newState.entry.meta,
+            [name]: value,
+          },
+        };
       } else {
-        return state.setIn(['fieldsErrors', action.payload.uniquefieldId], action.payload.errors);
+        setIn(newState.entry, ['entry', ...dataPath, name], value);
+        if (i18n) {
+          state = duplicateI18nFields(state, field, i18n.locales, i18n.defaultLocale);
+        }
       }
 
+      const fieldsMetaData = mergeDeep({ ...state.fieldsMetaData }, metadata);
+      const newData = getIn(state.entry, dataPath) ?? {};
+      const newMeta = state.entry.meta;
+
+      return {
+        ...state,
+        fieldsMetaData,
+        hasChanged:
+          !entries.find((e: any) => newData === getIn(e, dataPath)) ||
+          !entries.find((e: any) => newMeta === e.meta),
+      };
+    }
+    case DRAFT_VALIDATION_ERRORS:
+      const fieldErrors = { ...state.fieldsErrors };
+      if (action.payload.errors.length === 0) {
+        delete fieldErrors[action.payload.uniquefieldId];
+      } else {
+        fieldErrors[action.payload.uniquefieldId] = action.payload.errors;
+      }
+      return {
+        ...state,
+        fieldErrors,
+      };
+
     case DRAFT_CLEAR_ERRORS: {
-      return state.set('fieldsErrors', Map());
+      return {
+        ...state,
+        fieldsErrors: {},
+      };
     }
 
     case ENTRY_PERSIST_REQUEST: {
-      return state.setIn(['entry', 'isPersisting'], true);
+      return {
+        ...state,
+        entry: {
+          ...state.entry,
+          isPersisting: true,
+        },
+      };
     }
 
     case ENTRY_PERSIST_FAILURE: {
-      return state.deleteIn(['entry', 'isPersisting']);
+      return {
+        ...state,
+        entry: {
+          ...state.entry,
+          isPersisting: false,
+        },
+      };
     }
 
     case ENTRY_PERSIST_SUCCESS:
-      return state.withMutations(state => {
-        state.deleteIn(['entry', 'isPersisting']);
-        state.set('hasChanged', false);
-        if (!state.getIn(['entry', 'slug'])) {
-          state.setIn(['entry', 'slug'], action.payload.slug);
-        }
-      });
+      return {
+        ...state,
+        hasChanged: false,
+        entry: {
+          ...state.entry,
+          slug: action.payload.slug,
+          isPersisting: false,
+        },
+      };
 
     case ENTRY_DELETE_SUCCESS:
-      return state.withMutations(state => {
-        state.deleteIn(['entry', 'isPersisting']);
-        state.set('hasChanged', false);
-      });
+      return {
+        ...state,
+        hasChanged: false,
+        entry: {
+          ...state.entry,
+          isPersisting: false,
+        },
+      };
 
     case ADD_DRAFT_ENTRY_MEDIA_FILE: {
-      return state.withMutations(state => {
-        const mediaFiles = state.getIn(['entry', 'mediaFiles']);
+      const mediaFiles = state.entry.mediaFiles.filter(
+        (file: any) => file.id !== action.payload.id,
+      );
+      mediaFiles.unshift(action.payload);
 
-        state.setIn(
-          ['entry', 'mediaFiles'],
-          mediaFiles
-            .filterNot(file => file.get('id') === action.payload.id)
-            .insert(0, fromJS(action.payload)),
-        );
-        state.set('hasChanged', true);
-      });
+      return {
+        ...state,
+        hasChanged: true,
+        entry: {
+          ...state.entry,
+          mediaFiles,
+        },
+      };
     }
 
     case REMOVE_DRAFT_ENTRY_MEDIA_FILE: {
-      return state.withMutations(state => {
-        const mediaFiles = state.getIn(['entry', 'mediaFiles']);
+      const mediaFiles = state.entry.mediaFiles.filter(
+        (file: any) => file.id !== action.payload.id,
+      );
 
-        state.setIn(
-          ['entry', 'mediaFiles'],
-          mediaFiles.filterNot(file => file.get('id') === action.payload.id),
-        );
-        state.set('hasChanged', true);
-      });
+      return {
+        ...state,
+        hasChanged: true,
+        entry: {
+          ...state.entry,
+          mediaFiles,
+        },
+      };
     }
 
     default:
@@ -179,15 +243,18 @@ function entryDraftReducer(state = Map(), action: EntriesAction) {
   }
 }
 
-export function selectCustomPath(collection, entryDraft) {
+export function selectCustomPath(
+  collection: Collection,
+  entryDraft: { entry: { meta?: { path?: string } } },
+) {
   if (!selectHasMetaPath(collection)) {
     return;
   }
-  const meta = entryDraft.getIn(['entry', 'meta']);
-  const path = meta && meta.get('path');
-  const indexFile = get(collection.toJS(), ['meta', 'path', 'index_file']);
+  const meta = entryDraft.entry.meta;
+  const path = meta && meta.path;
+  const indexFile = collection.meta?.path?.index_file;
   const extension = selectFolderEntryExtension(collection);
-  const customPath = path && join(collection.get('folder'), path, `${indexFile}.${extension}`);
+  const customPath = path && join(collection.folder, path, `${indexFile}.${extension}`);
   return customPath;
 }
 

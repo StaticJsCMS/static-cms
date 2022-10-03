@@ -5,15 +5,16 @@ import uuid from 'uuid/v4';
 import { basename, Cursor, CURSOR_COMPATIBILITY_SYMBOL } from '../../lib/util';
 import AuthenticationPage from './AuthenticationPage';
 
-import type { ImplementationEntry } from '../../interface';
 import type {
   AssetProxy,
-  Config,
-  Entry,
-  Implementation,
+  BackendEntry,
+  CmsBackendClass,
+  CmsConfig,
+  DisplayURL,
+  ImplementationEntry,
   ImplementationFile,
   User,
-} from '../../lib/util';
+} from '../../interface';
 
 type RepoFile = { path: string; content: string | AssetProxy };
 type RepoTree = { [key: string]: RepoFile | RepoTree };
@@ -98,11 +99,11 @@ export function getFolderFiles(
   return files;
 }
 
-export default class TestBackend implements Implementation {
-  mediaFolder: string;
+export default class TestBackend implements CmsBackendClass {
+  mediaFolder?: string;
   options: {};
 
-  constructor(config: Config, options = {}) {
+  constructor(config: CmsConfig, options = {}) {
     this.options = options;
     this.mediaFolder = config.media_folder;
   }
@@ -199,7 +200,7 @@ export default class TestBackend implements Implementation {
     });
   }
 
-  async persistEntry(entry: Entry) {
+  async persistEntry(entry: BackendEntry) {
     entry.dataFiles.forEach(dataFile => {
       const { path, raw } = dataFile;
       writeFile(path, raw, window.repoFiles);
@@ -210,12 +211,14 @@ export default class TestBackend implements Implementation {
     return Promise.resolve();
   }
 
-  getMedia(mediaFolder = this.mediaFolder) {
+  async getMedia(mediaFolder = this.mediaFolder) {
+    if (!mediaFolder) {
+      return [];
+    }
     const files = getFolderFiles(window.repoFiles, mediaFolder.split('/')[0], '', 100).filter(f =>
       f.path.startsWith(mediaFolder),
     );
-    const assets = files.map(f => this.normalizeAsset(f.content as AssetProxy));
-    return Promise.resolve(assets);
+    return files.map(f => this.normalizeAsset(f.content as AssetProxy));
   }
 
   async getMediaFile(path: string) {
@@ -269,5 +272,17 @@ export default class TestBackend implements Implementation {
     });
 
     return Promise.resolve();
+  }
+
+  allEntriesByFolder(
+    _folder: string,
+    _extension: string,
+    _depth: number,
+  ): Promise<ImplementationEntry[]> {
+    throw new Error('Not supported');
+  }
+
+  getMediaDisplayURL(_displayURL: DisplayURL): Promise<string> {
+    throw new Error('Not supported');
   }
 }

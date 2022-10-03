@@ -4,98 +4,12 @@ import semaphore from 'semaphore';
 import { basename } from './path';
 
 import type { Semaphore } from 'semaphore';
-import type { Implementation as I, ImplementationEntry } from '../../interface';
+import type { DisplayURL, DisplayURLObject, ImplementationEntry, ImplementationFile } from '../../interface';
 import type { FileMetadata } from './API';
 import type { AsyncLock } from './asyncLock';
 
-export type DisplayURLObject = { id: string; path: string };
-
-export type DisplayURL = DisplayURLObject | string;
-
-export interface ImplementationMediaFile {
-  name: string;
-  id: string;
-  size?: number;
-  displayURL?: DisplayURL;
-  path: string;
-  draft?: boolean;
-  url?: string;
-  file?: File;
-}
-
-export interface Map {
-  get: <T>(key: string, defaultValue?: T) => T;
-  getIn: <T>(key: string[], defaultValue?: T) => T;
-  setIn: <T>(key: string[], value: T) => Map;
-  set: <T>(key: string, value: T) => Map;
-}
-
-export type DataFile = {
-  path: string;
-  slug: string;
-  raw: string;
-  newPath?: string;
-};
-
-export type AssetProxy = {
-  path: string;
-  fileObj?: File;
-  toBase64?: () => Promise<string>;
-};
-
-export type Entry = {
-  dataFiles: DataFile[];
-  assets: AssetProxy[];
-};
-
-export type PersistOptions = {
-  newEntry?: boolean;
-  commitMessage: string;
-  collectionName?: string;
-  status?: string;
-};
-
-export type DeleteOptions = {};
-
-export type Credentials = { token: string | {}; refresh_token?: string };
-
-export type User = Credentials & {
-  backendName?: string;
-  login?: string;
-  name: string;
-};
-
-export type Config = {
-  backend: {
-    repo?: string | null;
-    branch?: string;
-    api_root?: string;
-    use_graphql?: boolean;
-    graphql_api_root?: string;
-    preview_context?: string;
-    identity_url?: string;
-    gateway_url?: string;
-    large_media_url?: string;
-    use_large_media_transforms_in_media_library?: boolean;
-    proxy_url?: string;
-    auth_type?: string;
-    app_id?: string;
-    api_version?: string;
-  };
-  media_folder: string;
-  base_url?: string;
-  site_id?: string;
-};
-
-export type Implementation = I;
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
-
-export type ImplementationFile = {
-  id?: string | null | undefined;
-  label?: string;
-  path: string;
-};
 
 type ReadFile = (
   path: string,

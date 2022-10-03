@@ -34,7 +34,7 @@ import type {
   ChangeViewStylePayload,
   CmsConfig,
   Collection,
-  CollectionFiles,
+  CollectionFile,
   Entries,
   EntriesAction,
   EntriesFilterFailurePayload,
@@ -529,7 +529,7 @@ export function selectIsFetching(state: Entries, collection: string) {
 
 const DRAFT_MEDIA_FILES = 'DRAFT_MEDIA_FILES';
 
-function getFileField(collectionFiles: CollectionFiles, slug: string | undefined) {
+function getFileField(collectionFiles: CollectionFile[], slug: string | undefined) {
   const file = collectionFiles.find(f => f?.get('name') === slug);
   return file;
 }

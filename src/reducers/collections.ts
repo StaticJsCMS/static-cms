@@ -16,17 +16,17 @@ import type { Backend } from '../backend';
 import type {
   CmsConfig,
   Collection,
-  CollectionFiles,
+  CollectionFile,
   Collections,
   EntryField,
-  EntryMap,
+  Entry,
   ViewFilter,
   ViewGroup,
 } from '../interface';
 
 const { keyToPathArray } = stringTemplate;
 
-const defaultState: Collections = fromJS({});
+const defaultState = {} as Collections;
 
 function collections(state = defaultState, action: ConfigAction) {
   switch (action.type) {
@@ -91,7 +91,7 @@ const selectors = {
       return file && file.get('file');
     },
     entrySlug(collection: Collection, path: string) {
-      const file = (collection.get('files') as CollectionFiles)
+      const file = (collection.get('files') as CollectionFile[])
         .filter(f => f?.get('file') === path)
         .get(0);
       return file && file.get('name');
@@ -154,7 +154,7 @@ export function selectFieldsWithMediaFolders(collection: Collection, slug: strin
   return [];
 }
 
-export function selectMediaFolders(config: CmsConfig, collection: Collection, entry: EntryMap) {
+export function selectMediaFolders(config: CmsConfig, collection: Collection, entry: Entry) {
   const fields = selectFieldsWithMediaFolders(collection, entry.get('slug'));
   const folders = fields.map(f => selectMediaFolder(config, collection, entry, f));
   if (collection.has('files')) {
@@ -364,7 +364,7 @@ export function selectInferedField(collection: Collection, fieldName: string) {
   return null;
 }
 
-export function selectEntryCollectionTitle(collection: Collection, entry: EntryMap) {
+export function selectEntryCollectionTitle(collection: Collection, entry: Entry) {
   // prefer formatted summary over everything else
   const summaryTemplate = collection.get('summary');
   if (summaryTemplate) return summaryFormatter(summaryTemplate, entry, collection);
@@ -450,13 +450,15 @@ export function selectViewGroups(collection: Collection) {
   return viewGroups;
 }
 
-export function selectFieldsComments(collection: Collection, entryMap: EntryMap) {
+export function selectFieldsComments(collection: Collection, entryMap: Entry) {
   let fields: EntryField[] = [];
   if (collection.has('folder')) {
     fields = collection.get('fields').toArray();
   } else if (collection.has('files')) {
     const file = collection.get('files')!.find(f => f?.get('name') === entryMap.get('slug'));
-    fields = file.get('fields').toArray();
+    if (file) {
+      fields = file.get('fields').toArray();
+    }
   }
   const comments: Record<string, string> = {};
   const names = getFieldsNames(fields);

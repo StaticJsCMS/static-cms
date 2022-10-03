@@ -70,7 +70,7 @@ const sizes = {
 export interface IconProps {
   type: IconType;
   direction?: Direction;
-  size: keyof typeof sizes | string;
+  size?: keyof typeof sizes | string;
   className?: string;
 }
 

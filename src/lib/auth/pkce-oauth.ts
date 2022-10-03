@@ -1,9 +1,12 @@
 import trim from 'lodash/trim';
 import trimEnd from 'lodash/trimEnd';
 
-import { createNonce, validateNonce, isInsecureProtocol } from './utils';
+import { createNonce, isInsecureProtocol, validateNonce } from './utils';
 
-async function sha256(text) {
+import type { User, AuthenticatorConfig } from '../../interface';
+import type { NetlifyError } from './netlify-auth';
+
+async function sha256(text: string) {
   const encoder = new TextEncoder();
   const data = encoder.encode(text);
   const digest = await window.crypto.subtle.digest('SHA-256', data);
@@ -24,7 +27,7 @@ function generateVerifierCode() {
     .join('');
 }
 
-async function createCodeChallenge(codeVerifier) {
+async function createCodeChallenge(codeVerifier: string) {
   const sha = await sha256(codeVerifier);
   // https://tools.ietf.org/html/rfc7636#appendix-A
   return btoa(sha).split('=')[0].replace(/\+/g, '-').replace(/\//g, '_');
@@ -47,16 +50,23 @@ function clearCodeVerifier() {
 }
 
 export default class PkceAuthenticator {
-  constructor(config = {}) {
+  private auth_url: string;
+  private auth_token_url: string;
+  private appID: string;
+
+  constructor(config: AuthenticatorConfig = {}) {
     const baseURL = trimEnd(config.base_url, '/');
     const authEndpoint = trim(config.auth_endpoint, '/');
     const authTokenEndpoint = trim(config.auth_token_endpoint, '/');
     this.auth_url = `${baseURL}/${authEndpoint}`;
     this.auth_token_url = `${baseURL}/${authTokenEndpoint}`;
-    this.appID = config.app_id;
+    this.appID = config.app_id ?? '';
   }
 
-  async authenticate(options, cb) {
+  async authenticate(
+    options: { scope: string; prompt?: string | null; resource?: string | null },
+    cb: (error: Error | NetlifyError | null, data?: User) => void,
+  ) {
     if (isInsecureProtocol()) {
       return cb(new Error('Cannot authenticate over insecure protocol!'));
     }
@@ -82,7 +92,9 @@ export default class PkceAuthenticator {
   /**
    * Complete authentication if we were redirected back to from the provider.
    */
-  async completeAuth(cb) {
+  async completeAuth(
+    cb: (error: Error | NetlifyError | null, data?: User) => void,
+  ) {
     const params = new URLSearchParams(document.location.search);
 
     // Remove code from url
@@ -92,7 +104,7 @@ export default class PkceAuthenticator {
       return;
     }
 
-    const { nonce } = JSON.parse(params.get('state'));
+    const { nonce } = JSON.parse(params.get('state') ?? '');
     const validNonce = validateNonce(nonce);
     if (!validNonce) {
       return cb(new Error('Invalid nonce'));
@@ -106,13 +118,13 @@ export default class PkceAuthenticator {
       const code = params.get('code');
       const authURL = new URL(this.auth_token_url);
       authURL.searchParams.set('client_id', this.appID);
-      authURL.searchParams.set('code', code);
+      authURL.searchParams.set('code', code ?? '');
       authURL.searchParams.set('grant_type', 'authorization_code');
       authURL.searchParams.set(
         'redirect_uri',
         document.location.origin + document.location.pathname,
       );
-      authURL.searchParams.set('code_verifier', getCodeVerifier());
+      authURL.searchParams.set('code_verifier', getCodeVerifier() ?? '');
       //no need for verifier code so remove
       clearCodeVerifier();
 

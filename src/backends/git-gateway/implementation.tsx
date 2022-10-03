@@ -1,12 +1,19 @@
+import React, { useCallback } from 'react';
 import GoTrue from 'gotrue-js';
 import ini from 'ini';
 import jwtDecode from 'jwt-decode';
 import { get, intersection, pick } from 'lodash';
 
 import {
-  AccessTokenError, APIError, basename,
-  entriesByFiles, getLargeMediaFilteredMediaFiles, getLargeMediaPatternsFromGitAttributesFile,
-  getPointerFileForMediaFileObj, parsePointerFile, unsentRequest
+  AccessTokenError,
+  APIError,
+  basename,
+  entriesByFiles,
+  getLargeMediaFilteredMediaFiles,
+  getLargeMediaPatternsFromGitAttributesFile,
+  getPointerFileForMediaFileObj,
+  parsePointerFile,
+  unsentRequest,
 } from '../../lib/util';
 import { API as BitBucketAPI, BitbucketBackend } from '../bitbucket';
 import { GitHubBackend } from '../github';
@@ -16,10 +23,21 @@ import GitHubAPI from './GitHubAPI';
 import GitLabAPI from './GitLabAPI';
 import { getClient } from './netlify-lfs-client';
 
+import type { ApiRequest, Cursor } from '../../lib/util';
 import type {
-  ApiRequest,
-  AssetProxy, Config, Credentials, Cursor, DisplayURL, DisplayURLObject, Entry, Implementation, ImplementationFile, PersistOptions, User
-} from '../../lib/util';
+  AssetProxy,
+  CmsConfig,
+  Credentials,
+  DisplayURL,
+  DisplayURLObject,
+  BackendEntry,
+  CmsBackendClass,
+  ImplementationFile,
+  PersistOptions,
+  User,
+  TranslatedProps,
+  AuthenticationPageProps,
+} from '../../interface';
 import type { Client } from './netlify-lfs-client';
 
 const STATUS_PAGE = 'https://www.netlifystatus.com';
@@ -34,15 +52,20 @@ type GitGatewayStatus = {
 type NetlifyIdentity = {
   logout: () => void;
   currentUser: () => User;
-  on: (event: string, args: unknown) => void;
+  on: (
+    eventName: 'init' | 'login' | 'logout' | 'error',
+    callback: (input?: unknown) => void,
+  ) => void;
   init: () => void;
   store: { user: unknown; modal: { page: string }; saving: boolean };
+  open: () => void;
+  close: () => void;
 };
 
 type AuthClient = {
   logout: () => void;
   currentUser: () => unknown;
-  login?(email: string, password: string, remember?: boolean): Promise<unknown>;
+  login?: (email: string, password: string, remember?: boolean) => Promise<User>;
   clearStore: () => void;
 };
 
@@ -109,11 +132,11 @@ interface NetlifyUser extends Credentials {
   user_metadata: { full_name: string; avatar_url: string };
 }
 
-export default class GitGateway implements Implementation {
-  config: Config;
+export default class GitGateway implements CmsBackendClass {
+  config: CmsConfig;
   api?: GitHubAPI | GitLabAPI | BitBucketAPI;
   branch: string;
-  mediaFolder: string;
+  mediaFolder?: string;
   transformImages: boolean;
   gatewayUrl: string;
   netlifyLargeMediaURL: string;
@@ -129,7 +152,7 @@ export default class GitGateway implements Implementation {
     proxied: boolean;
     API: GitHubAPI | GitLabAPI | BitBucketAPI | null;
   };
-  constructor(config: Config, options = {}) {
+  constructor(config: CmsConfig, options = {}) {
     this.options = {
       proxied: true,
       API: null,
@@ -158,7 +181,6 @@ export default class GitGateway implements Implementation {
     }
 
     this.backend = null;
-    AuthenticationPage.authClient = () => this.getAuthClient();
   }
 
   isGitBackend() {
@@ -227,7 +249,6 @@ export default class GitGateway implements Implementation {
         clearStore: () => undefined,
       };
     }
-    return this.authClient;
   }
 
   requestFunction = (req: ApiRequest) =>
@@ -335,22 +356,50 @@ export default class GitGateway implements Implementation {
   }
   async restoreUser() {
     const client = await this.getAuthClient();
-    const user = client.currentUser();
-    if (!user) return Promise.reject();
+    const user = client?.currentUser();
+    if (!user) {
+      return Promise.reject();
+    }
     return this.authenticate(user as Credentials);
   }
+
   authComponent() {
-    return AuthenticationPage;
+    const WrappedAuthenticationPage = (props: TranslatedProps<AuthenticationPageProps>) => {
+      const handleAuth = useCallback(
+        async (email: string, password: string): Promise<User | string> => {
+          try {
+            const authClient = await this.getAuthClient();
+            if (!authClient) {
+              return 'Auth client not started';
+            }
+
+            if (!authClient.login) {
+              return 'Auth client login function not found';
+            }
+
+            return authClient.login(email, password, true);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          } catch (error: any) {
+            return error.description || error.msg || error;
+          }
+        },
+        [],
+      );
+
+      return <AuthenticationPage {...props} handleAuth={handleAuth} />;
+    };
+    WrappedAuthenticationPage.displayName = 'AuthenticationPage';
+    return WrappedAuthenticationPage;
   }
 
   async logout() {
     const client = await this.getAuthClient();
     try {
-      client.logout();
+      client?.logout();
     } catch (e) {
       // due to a bug in the identity widget (gotrue-js actually) the store is not reset if logout fails
       // TODO: remove after https://github.com/netlify/gotrue-js/pull/83 is merged
-      client.clearStore();
+      client?.clearStore();
     }
   }
   getToken() {
@@ -490,7 +539,7 @@ export default class GitGateway implements Implementation {
     return this.backend!.getMediaFile(path);
   }
 
-  async persistEntry(entry: Entry, options: PersistOptions) {
+  async persistEntry(entry: BackendEntry, options: PersistOptions) {
     const client = await this.getLargeMediaClient();
     if (client.enabled) {
       const assets = await getLargeMediaFilteredMediaFiles(client, entry.assets);

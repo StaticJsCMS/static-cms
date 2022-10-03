@@ -1,8 +1,6 @@
-import type { List, Map, OrderedMap, Set } from 'immutable';
 import type { ComponentType, FocusEventHandler } from 'react';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
 import type { Action } from 'redux';
-import type { Pluggable } from 'unified';
 import type { MediaFile as BackendMediaFile } from './backend';
 import type { CollectionType } from './constants/collectionTypes';
 import type { formatExtensions } from './formats/formats';
@@ -15,67 +13,30 @@ import type { ScrollState } from './reducers/scroll';
 import type { Search } from './reducers/search';
 import type { Status } from './reducers/status';
 import type { SnackbarState } from './store/slices/snackbars';
-import type { StaticallyTypedRecord } from './types/immutable';
 
-export type SlugConfig = StaticallyTypedRecord<{
+export type SlugConfig = {
   encoding: string;
   clean_accents: boolean;
   sanitize_replacement: string;
-}>;
-
-type BackendObject = {
-  name: string;
-  repo?: string | null;
-  branch?: string;
-  api_root?: string;
-  use_graphql?: boolean;
-  preview_context?: string;
-  identity_url?: string;
-  gateway_url?: string;
-  large_media_url?: string;
-  use_large_media_transforms_in_media_library?: boolean;
-  commit_messages: Map<string, string>;
 };
 
-type Backend = StaticallyTypedRecord<Backend> & BackendObject;
-
-export type Config = StaticallyTypedRecord<{
-  backend: Backend;
-  media_folder: string;
-  public_folder: string;
-  media_library: StaticallyTypedRecord<{ name: string }> & { name: string };
-  locale?: string;
-  slug: SlugConfig;
-  media_folder_relative?: boolean;
-  base_url?: string;
-  site_id?: string;
-  site_url?: string;
-  isFetching?: boolean;
-  integrations: List<Integration>;
-  collections: List<StaticallyTypedRecord<{ name: string }>>;
-}>;
-
-type PagesObject = {
-  [collection: string]: { isFetching: boolean; page: number; ids: List<string> };
+export type Pages = {
+  [collection: string]: { isFetching: boolean; page: number; ids: string[] };
 };
-
-type Pages = StaticallyTypedRecord<PagesObject>;
-
-type EntitiesObject = { [key: string]: EntryMap };
 
 export type SortObject = { key: string; direction: SortDirection };
 
-export type SortMap = OrderedMap<string, StaticallyTypedRecord<SortObject>>;
+export type SortMap = Record<string, SortObject>;
 
-export type Sort = Map<string, SortMap>;
+export type Sort = Record<string, SortMap>;
 
-export type FilterMap = StaticallyTypedRecord<ViewFilter & { active: boolean }>;
+export type FilterMap = ViewFilter & { active: boolean };
 
-export type GroupMap = StaticallyTypedRecord<ViewGroup & { active: boolean }>;
+export type GroupMap = ViewGroup & { active: boolean };
 
-export type Filter = Map<string, Map<string, FilterMap>>; // collection.field.active
+export type Filter = Record<string, Record<string, FilterMap>>; // collection.field.active
 
-export type Group = Map<string, Map<string, GroupMap>>; // collection.field.active
+export type Group = Record<string, Record<string, GroupMap>>; // collection.field.active
 
 export type GroupOfEntries = {
   id: string;
@@ -84,104 +45,98 @@ export type GroupOfEntries = {
   paths: Set<string>;
 };
 
-export type Entities = StaticallyTypedRecord<EntitiesObject>;
-
-export type Entries = StaticallyTypedRecord<{
-  pages: Pages & PagesObject;
-  entities: Entities & EntitiesObject;
+export type Entries = {
+  pages: Pages;
+  entities: Entities;
   sort: Sort;
   filter: Filter;
   group: Group;
   viewStyle: string;
-}>;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type EntryObject = {
-  path: string;
-  slug: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any;
-  collection: string;
-  mediaFiles: List<MediaFileMap>;
-  newRecord: boolean;
-  author?: string;
-  updatedOn?: string;
-  status: string;
-  meta: StaticallyTypedRecord<{ path: string }>;
 };
 
-export type EntryMap = StaticallyTypedRecord<EntryObject>;
+export interface EntryMeta {
+  path?: string;
+}
 
-export type Entry = EntryMap & EntryObject;
+export interface Entry {
+  collection: string;
+  slug: string;
+  path: string;
+  partial: boolean;
+  raw: string;
+  data: any;
+  label: string | null;
+  isModification: boolean | null;
+  mediaFiles: MediaFile[];
+  author: string;
+  updatedOn: string;
+  status?: string;
+  meta: { path?: string };
+  i18n?: {
+    [locale: string]: any;
+  };
+}
 
-export type FieldsErrors = StaticallyTypedRecord<{ [field: string]: { type: string }[] }>;
+export type Entities = Record<string, Entry>;
 
-export type EntryDraft = StaticallyTypedRecord<{
+export type FieldsErrors = { [field: string]: { type: string }[] };
+
+export type EntryDraft = {
   entry: Entry;
   fieldsErrors: FieldsErrors;
-  fieldsMetaData?: Map<string, Map<string, string>>;
-}>;
+  fieldsMetaData?: Record<string, Record<string, string>>;
+};
 
-export type EntryField = StaticallyTypedRecord<{
+export type EntryField = {
   field?: EntryField;
-  fields?: List<EntryField>;
-  types?: List<EntryField>;
+  fields?: EntryField[];
+  types?: EntryField[];
   widget: string;
   name: string;
-  default: string | null | boolean | List<unknown>;
+  default: string | null | boolean | unknown[];
   media_folder?: string;
   public_folder?: string;
   comment?: string;
   meta?: boolean;
   i18n: 'translate' | 'duplicate' | 'none';
-}>;
+};
 
-export type EntryFields = List<EntryField>;
-
-export type FilterRule = StaticallyTypedRecord<{
+export type FilterRule = {
   value: string;
   field: string;
-}>;
+};
 
-export type CollectionFile = StaticallyTypedRecord<{
+export type CollectionFile = {
   file: string;
   name: string;
-  fields: EntryFields;
+  fields: EntryField[];
   label: string;
   media_folder?: string;
   public_folder?: string;
   preview_path?: string;
   preview_path_date_field?: string;
-}>;
-
-export type CollectionFiles = List<CollectionFile>;
-
-type NestedObject = { depth: number };
-
-type Nested = StaticallyTypedRecord<NestedObject>;
-
-type PathObject = { label: string; widget: string; index_file: string };
-
-type MetaObject = {
-  path?: StaticallyTypedRecord<PathObject>;
 };
 
-type Meta = StaticallyTypedRecord<MetaObject>;
+type Nested = { depth: number };
 
-type i18n = StaticallyTypedRecord<{
+type Meta = {
+  path?: { label: string; widget: string; index_file: string };
+};
+
+type i18n = {
   structure: string;
   locales: string[];
   default_locale: string;
-}>;
+};
 
 export type Format = keyof typeof formatExtensions;
 
-type CollectionObject = {
+export type Collection = {
   name: string;
   icon?: string;
   folder?: string;
-  files?: CollectionFiles;
-  fields: EntryFields;
+  files?: CollectionFile[];
+  fields: EntryField[];
   isFetching: boolean;
   media_folder?: string;
   public_folder?: string;
@@ -192,7 +147,7 @@ type CollectionObject = {
   type: 'file_based_collection' | 'folder_based_collection';
   extension?: string;
   format?: Format;
-  frontmatter_delimiter?: List<string> | string | [string, string];
+  frontmatter_delimiter?: string[] | string | [string, string];
   create?: boolean;
   delete?: boolean;
   identifier_field?: string;
@@ -200,23 +155,21 @@ type CollectionObject = {
   slug?: string;
   label_singular?: string;
   label: string;
-  sortable_fields: StaticallyTypedRecord<CmsSortableFields>;
-  view_filters: List<StaticallyTypedRecord<ViewFilter>>;
-  view_groups: List<StaticallyTypedRecord<ViewGroup>>;
+  sortable_fields: CmsSortableFields;
+  view_filters: ViewFilter[];
+  view_groups: ViewGroup[];
   nested?: Nested;
   meta?: Meta;
   i18n: i18n;
 };
 
-export type Collection = StaticallyTypedRecord<CollectionObject>;
-
-export type Collections = StaticallyTypedRecord<{ [path: string]: Collection & CollectionObject }>;
+export type Collections = Record<string, Collection>;
 
 export interface MediaLibraryInstance {
   show: (args: {
     id?: string;
     value?: string;
-    config: StaticallyTypedRecord<{}>;
+    config: {};
     allowMultiple?: boolean;
     imagesOnly?: boolean;
   }) => void;
@@ -228,35 +181,29 @@ export interface MediaLibraryInstance {
 
 export type MediaFile = BackendMediaFile & { key?: string };
 
-export type MediaFileMap = StaticallyTypedRecord<MediaFile>;
-
-type DisplayURLStateObject = {
+export type DisplayURLState = {
   isFetching: boolean;
   url?: string;
   err?: Error;
 };
 
-export type DisplayURLState = StaticallyTypedRecord<DisplayURLStateObject>;
-
-interface DisplayURLsObject {
-  [id: string]: DisplayURLState;
-}
-
-export type MediaLibrary = StaticallyTypedRecord<{
+export type MediaLibrary = {
   externalLibrary?: MediaLibraryInstance;
   files: MediaFile[];
-  displayURLs: StaticallyTypedRecord<DisplayURLsObject> & DisplayURLsObject;
+  displayURLs: {
+    [id: string]: DisplayURLState;
+  };
   isLoading: boolean;
-}>;
+};
 
 export type Hook = string | boolean;
 
-export type Integrations = StaticallyTypedRecord<{
+export type Integrations = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   hooks: { [collectionOrHook: string]: any };
-}>;
+};
 
-export type Cursors = StaticallyTypedRecord<{}>;
+export type Cursors = {};
 
 export interface State {
   auth: Auth;
@@ -290,7 +237,7 @@ export interface EntryRequestPayload extends EntryPayload {
 }
 
 export interface EntrySuccessPayload extends EntryPayload {
-  entry: EntryObject;
+  entry: Entry;
 }
 
 export interface EntryFailurePayload extends EntryPayload {
@@ -306,7 +253,7 @@ export interface EntryDeletePayload {
 export type EntriesRequestPayload = EntryPayload;
 
 export interface EntriesSuccessPayload extends EntryPayload {
-  entries: EntryObject[];
+  entries: Entry[];
   append: boolean;
   page: number;
 }
@@ -346,7 +293,7 @@ export interface ChangeViewStylePayload {
 }
 
 export interface EntriesMoveSuccessPayload extends EntryPayload {
-  entries: EntryObject[];
+  entries: Entry[];
 }
 
 export interface EntriesAction extends Action<string> {
@@ -373,7 +320,7 @@ export type GetAssetFunction = (asset: string) => {
 
 export interface CmsWidgetControlProps<T = any> {
   value: T;
-  field: Map<string, any>;
+  field: Record<string, any>;
   onChange: (value: T) => void;
   forID: string;
   classNameWrapper: string;
@@ -384,11 +331,11 @@ export interface CmsWidgetControlProps<T = any> {
 
 export interface CmsWidgetPreviewProps<T = any> {
   value: T;
-  field: Map<string, any>;
-  metadata: Map<string, any>;
+  field: Record<string, any>;
+  metadata: Record<string, any>;
   getAsset: GetAssetFunction;
-  entry: Map<string, any>;
-  fieldsMetaData: Map<string, any>;
+  entry: Record<string, any>;
+  fieldsMetaData: Record<string, any>;
 }
 
 export interface CmsWidgetParam<T = any> {
@@ -396,7 +343,7 @@ export interface CmsWidgetParam<T = any> {
   controlComponent: ComponentType<CmsWidgetControlProps<T>>;
   previewComponent?: ComponentType<CmsWidgetPreviewProps<T>>;
   validator?: (props: {
-    field: Map<string, any>;
+    field: Record<string, any>;
     value: T | undefined | null;
     t: t;
   }) => boolean | { error: any } | Promise<boolean | { error: any }>;
@@ -410,39 +357,18 @@ export interface CmsWidget<T = any> {
 }
 
 export type PreviewTemplateComponentProps = {
-  entry: Map<string, any>;
-  collection: Map<string, any>;
+  entry: Record<string, any>;
+  collection: Record<string, any>;
   widgetFor: (name: any, fields?: any, values?: any, fieldsMetaData?: any) => JSX.Element | null;
   widgetsFor: (name: any) => any;
   getAsset: GetAssetFunction;
   boundGetAsset: (collection: any, path: any) => GetAssetFunction;
-  fieldsMetaData: Map<string, any>;
-  config: Map<string, any>;
-  fields: List<Map<string, any>>;
+  fieldsMetaData: Record<string, any>;
+  config: Record<string, any>;
+  fields: Record<string, any>[];
   isLoadingAsset: boolean;
   window: Window;
   document: Document;
-};
-export type DisplayURLObject = { id: string; path: string };
-
-export type DisplayURL = DisplayURLObject | string;
-
-export type DataFile = {
-  path: string;
-  slug: string;
-  raw: string;
-  newPath?: string;
-};
-
-export type AssetProxy = {
-  path: string;
-  fileObj?: File;
-  toBase64?: () => Promise<string>;
-};
-
-export type BackendEntry = {
-  dataFiles: DataFile[];
-  assets: AssetProxy[];
 };
 
 export type PersistOptions = {
@@ -452,41 +378,15 @@ export type PersistOptions = {
   status?: string;
 };
 
-export type DeleteOptions = {};
-
-export type Credentials = { token: string | {}; refresh_token?: string };
-
-export type User = Credentials & {
-  backendName?: string;
-  login?: string;
-  name: string;
-};
-
 export interface ImplementationEntry {
   data: string;
   file: { path: string; label?: string; id?: string | null; author?: string; updatedOn?: string };
 }
 
-export type ImplementationFile = {
-  id?: string | null | undefined;
-  label?: string;
-  path: string;
-};
-export interface ImplementationMediaFile {
-  name: string;
-  id: string;
-  size?: number;
-  displayURL?: DisplayURL;
-  path: string;
-  draft?: boolean;
-  url?: string;
-  file?: File;
-}
-
 export type CursorStoreObject = {
   actions: Set<string>;
-  data: Map<string, unknown>;
-  meta: Map<string, unknown>;
+  data: Record<string, unknown>;
+  meta: Record<string, unknown>;
 };
 
 export type CursorStore = {
@@ -508,54 +408,107 @@ export type CursorStore = {
   updateIn: (...args: any[]) => CursorStore;
 };
 
-export interface Implementation {
-  constructor(config: CmsConfig, options: CmsBackendInitializerOptions)
+export type DisplayURLObject = { id: string; path: string };
 
-  authComponent: () => void;
-  restoreUser: (user: User) => Promise<User>;
+export type DisplayURL = DisplayURLObject | string;
 
-  authenticate: (credentials: Credentials) => Promise<User>;
-  logout: () => Promise<void> | void | null;
-  getToken: () => Promise<string | null>;
+export interface ImplementationMediaFile {
+  name: string;
+  id: string;
+  size?: number;
+  displayURL?: DisplayURL;
+  path: string;
+  draft?: boolean;
+  url?: string;
+  file?: File;
+}
 
-  getEntry: (path: string) => Promise<ImplementationEntry>;
-  entriesByFolder: (
+export type DataFile = {
+  path: string;
+  slug: string;
+  raw: string;
+  newPath?: string;
+};
+
+export type AssetProxy = {
+  path: string;
+  fileObj?: File;
+  toBase64?: () => Promise<string>;
+};
+
+export type BackendEntry = {
+  dataFiles: DataFile[];
+  assets: AssetProxy[];
+};
+
+export type DeleteOptions = {};
+
+export type Credentials = { token: string | {}; refresh_token?: string };
+
+export type User = Credentials & {
+  backendName?: string;
+  login?: string;
+  name?: string;
+};
+
+export type ImplementationFile = {
+  id?: string | null | undefined;
+  label?: string;
+  path: string;
+};
+
+export interface AuthenticatorConfig {
+  site_id?: string;
+  base_url?: string;
+  auth_endpoint?: string;
+  auth_token_endpoint?: string;
+  auth_url?: string;
+  app_id?: string;
+  clearHash?: () => void;
+}
+
+export abstract class CmsBackendClass {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  constructor(_config: CmsConfig, _options: CmsBackendInitializerOptions) {}
+
+  abstract authComponent(): (props: TranslatedProps<AuthenticationPageProps>) => JSX.Element;
+  abstract restoreUser(user: User): Promise<User>;
+
+  abstract authenticate(credentials: Credentials): Promise<User>;
+  abstract logout(): Promise<void> | void | null;
+  abstract getToken(): Promise<string | null>;
+
+  abstract getEntry(path: string): Promise<ImplementationEntry>;
+  abstract entriesByFolder(
     folder: string,
     extension: string,
     depth: number,
-  ) => Promise<ImplementationEntry[]>;
-  entriesByFiles: (files: ImplementationFile[]) => Promise<ImplementationEntry[]>;
+  ): Promise<ImplementationEntry[]>;
+  abstract entriesByFiles(files: ImplementationFile[]): Promise<ImplementationEntry[]>;
 
-  getMediaDisplayURL?: (displayURL: DisplayURL) => Promise<string>;
-  getMedia: (folder?: string) => Promise<ImplementationMediaFile[]>;
-  getMediaFile: (path: string) => Promise<ImplementationMediaFile>;
+  abstract getMediaDisplayURL(displayURL: DisplayURL): Promise<string>;
+  abstract getMedia(folder?: string): Promise<ImplementationMediaFile[]>;
+  abstract getMediaFile(path: string): Promise<ImplementationMediaFile>;
 
-  persistEntry: (entry: BackendEntry, opts: PersistOptions) => Promise<void>;
-  persistMedia: (
-    file: AssetProxy,
-    opts: PersistOptions,
-  ) => Promise<ImplementationMediaFile>;
-  deleteFiles: (paths: string[], commitMessage: string) => Promise<void>;
+  abstract persistEntry(entry: BackendEntry, opts: PersistOptions): Promise<void>;
+  abstract persistMedia(file: AssetProxy, opts: PersistOptions): Promise<ImplementationMediaFile>;
+  abstract deleteFiles(paths: string[], commitMessage: string): Promise<void>;
 
-  allEntriesByFolder?: (
+  abstract allEntriesByFolder(
     folder: string,
     extension: string,
     depth: number,
-  ) => Promise<ImplementationEntry[]>;
-  traverseCursor?: (
+  ): Promise<ImplementationEntry[]>;
+  abstract traverseCursor(
     cursor: Cursor,
     action: string,
-  ) => Promise<{ entries: ImplementationEntry[]; cursor: Cursor }>;
+  ): Promise<{ entries: ImplementationEntry[]; cursor: Cursor }>;
 
-  isGitBackend?: () => boolean;
-  status: () => Promise<{
+  abstract isGitBackend(): boolean;
+  abstract status(): Promise<{
     auth: { status: boolean };
     api: { status: boolean; statusPage: string };
   }>;
-}
-
-export interface CmsRegistryBackend {
-  init: (args: any) => Implementation;
 }
 
 export type CmsLocalePhrasesRoot = { [property: string]: CmsLocalePhrases };
@@ -942,12 +895,21 @@ export interface CmsBackend {
   repo?: string;
   branch?: string;
   api_root?: string;
+  api_version?: string;
+  tenant_id?: string;
   site_domain?: string;
   base_url?: string;
   auth_endpoint?: string;
   app_id?: string;
   auth_type?: 'implicit' | 'pkce';
   proxy_url?: string;
+  large_media_url?: string;
+  login?: boolean;
+  use_graphql?: boolean;
+  graphql_api_root?: string;
+  use_large_media_transforms_in_media_library?: boolean;
+  identity_url?: string;
+  gateway_url?: string;
   commit_messages?: {
     create?: string;
     update?: string;
@@ -972,8 +934,10 @@ export interface CmsConfig {
   backend: CmsBackend;
   collections: CmsCollection[];
   locale?: string;
+  site_id?: string;
   site_url?: string;
   display_url?: string;
+  base_url?: string;
   logo_url?: string;
   media_folder?: string;
   public_folder?: string;
@@ -1005,11 +969,9 @@ export interface CmsBackendInitializerOptions {
   updateUserCredentials: (credentials: Credentials) => void;
 }
 
-export type CmsBackendInitializer = Implementation & {
-  init: (config: CmsConfig, options: CmsBackendInitializerOptions) => Implementation;
+export type CmsBackendInitializer = {
+  init: (config: CmsConfig, options: CmsBackendInitializerOptions) => CmsBackendClass;
 };
-
-export type CmsBackendClass = Implementation;
 
 export interface EditorComponentField {
   name: string;
@@ -1044,7 +1006,7 @@ export function isEditorComponentWidgetOptions(
 export type EditorComponentOptions = EditorComponentManualOptions | EditorComponentWidgetOptions;
 
 export interface EventData {
-  entry: EntryMap;
+  entry: Entry;
   author: { login: string | undefined; name: string };
 }
 
@@ -1062,4 +1024,14 @@ export interface AdditionalLink {
     data?: string | (() => JSX.Element);
     iconName?: string;
   };
+}
+
+export interface AuthenticationPageProps {
+  onLogin: (user: User) => void;
+  inProgress?: boolean;
+  base_url?: string;
+  siteId?: string;
+  authEndpoint?: string;
+  config: CmsConfig;
+  clearHash?: () => void;
 }

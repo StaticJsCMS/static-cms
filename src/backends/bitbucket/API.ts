@@ -3,12 +3,21 @@ import { dirname } from 'path';
 import { parse } from 'what-the-diff';
 
 import {
-  APIError, basename,
-  Cursor, localForage, readFile, readFileMetadata, requestWithBackoff, responseParser,
-  then, throwOnConflictingBranches, unsentRequest
+  APIError,
+  basename,
+  Cursor,
+  localForage,
+  readFile,
+  readFileMetadata,
+  requestWithBackoff,
+  responseParser,
+  then,
+  throwOnConflictingBranches,
+  unsentRequest,
 } from '../../lib/util';
 
-import type { ApiRequest, AssetProxy, DataFile, FetchError, PersistOptions } from '../../lib/util';
+import type { AssetProxy, DataFile, PersistOptions } from '../../interface';
+import type { ApiRequest, FetchError } from '../../lib/util';
 
 interface Config {
   apiRoot?: string;

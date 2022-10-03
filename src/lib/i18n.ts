@@ -1,10 +1,9 @@
-import { Map, List } from 'immutable';
 import { set, groupBy, escapeRegExp } from 'lodash';
 
 import { selectEntrySlug } from '../reducers/collections';
+import { getIn, setIn } from './util/objectUtil';
 
-import type { Collection, Entry, EntryDraft, EntryField, EntryMap } from '../interface';
-import type { EntryValue } from '../valueObjects/Entry';
+import type { Collection, Entry, EntryDraft, EntryField } from '../interface';
 
 export const I18N = 'i18n';
 
@@ -21,7 +20,7 @@ export enum I18N_FIELD {
 }
 
 export function hasI18n(collection: Collection) {
-  return collection.has(I18N);
+  return I18N in collection;
 }
 
 type I18nInfo = {
@@ -34,7 +33,7 @@ export function getI18nInfo(collection: Collection) {
   if (!hasI18n(collection)) {
     return {};
   }
-  const { structure, locales, default_locale: defaultLocale } = collection.get(I18N).toJS();
+  const { structure, locales, default_locale: defaultLocale } = collection.i18n;
   return { structure, locales, defaultLocale } as I18nInfo;
 }
 
@@ -47,17 +46,17 @@ export function getI18nFilesDepth(collection: Collection, depth: number) {
 }
 
 export function isFieldTranslatable(field: EntryField, locale: string, defaultLocale: string) {
-  const isTranslatable = locale !== defaultLocale && field.get(I18N) === I18N_FIELD.TRANSLATE;
+  const isTranslatable = locale !== defaultLocale && field.i18n === I18N_FIELD.TRANSLATE;
   return isTranslatable;
 }
 
 export function isFieldDuplicate(field: EntryField, locale: string, defaultLocale: string) {
-  const isDuplicate = locale !== defaultLocale && field.get(I18N) === I18N_FIELD.DUPLICATE;
+  const isDuplicate = locale !== defaultLocale && field.i18n === I18N_FIELD.DUPLICATE;
   return isDuplicate;
 }
 
 export function isFieldHidden(field: EntryField, locale: string, defaultLocale: string) {
-  const isHidden = locale !== defaultLocale && field.get(I18N) === I18N_FIELD.NONE;
+  const isHidden = locale !== defaultLocale && field.i18n === I18N_FIELD.NONE;
   return isHidden;
 }
 
@@ -141,8 +140,8 @@ export function normalizeFilePath(structure: I18N_STRUCTURE, path: string, local
 export function getI18nFiles(
   collection: Collection,
   extension: string,
-  entryDraft: EntryMap,
-  entryToRaw: (entryDraft: EntryMap) => string,
+  entryDraft: Entry,
+  entryToRaw: (entryDraft: Entry) => string,
   path: string,
   slug: string,
   newPath?: string,
@@ -152,15 +151,17 @@ export function getI18nFiles(
   if (structure === I18N_STRUCTURE.SINGLE_FILE) {
     const data = locales.reduce((map, locale) => {
       const dataPath = getDataPath(locale, defaultLocale);
-      return map.set(locale, entryDraft.getIn(dataPath));
-    }, Map<string, unknown>({}));
-    const draft = entryDraft.set('data', data);
+      map[locale] = getIn(entryDraft, dataPath);
+      return map;
+    }, {} as Record<string, unknown>);
+
+    entryDraft.data = data;
 
     return [
       {
         path: getFilePath(structure, extension, path, slug, locales[0]),
         slug,
-        raw: entryToRaw(draft),
+        raw: entryToRaw(entryDraft),
         ...(newPath && {
           newPath: getFilePath(structure, extension, newPath, slug, locales[0]),
         }),
@@ -171,11 +172,11 @@ export function getI18nFiles(
   const dataFiles = locales
     .map(locale => {
       const dataPath = getDataPath(locale, defaultLocale);
-      const draft = entryDraft.set('data', entryDraft.getIn(dataPath));
+      entryDraft.data = getIn(entryDraft, dataPath);
       return {
         path: getFilePath(structure, extension, path, slug, locale),
         slug,
-        raw: draft.get('data') ? entryToRaw(draft) : '',
+        raw: entryDraft.data ? entryToRaw(entryDraft) : '',
         ...(newPath && {
           newPath: getFilePath(structure, extension, newPath, slug, locale),
         }),
@@ -187,8 +188,8 @@ export function getI18nFiles(
 
 export function getI18nBackup(
   collection: Collection,
-  entry: EntryMap,
-  entryToRaw: (entry: EntryMap) => string,
+  entry: Entry,
+  entryToRaw: (entry: Entry) => string,
 ) {
   const { locales, defaultLocale } = getI18nInfo(collection) as I18nInfo;
 
@@ -196,12 +197,12 @@ export function getI18nBackup(
     .filter(l => l !== defaultLocale)
     .reduce((acc, locale) => {
       const dataPath = getDataPath(locale, defaultLocale);
-      const data = entry.getIn(dataPath);
+      const data = getIn(entry, dataPath);
       if (!data) {
         return acc;
       }
-      const draft = entry.set('data', data);
-      return { ...acc, [locale]: { raw: entryToRaw(draft) } };
+      entry.data = data;
+      return { ...acc, [locale]: { raw: entryToRaw(entry) } };
     }, {} as Record<string, { raw: string }>);
 
   return i18nBackup;
@@ -209,7 +210,7 @@ export function getI18nBackup(
 
 export function formatI18nBackup(
   i18nBackup: Record<string, { raw: string }>,
-  formatRawData: (raw: string) => EntryValue,
+  formatRawData: (raw: string) => Entry,
 ) {
   const i18n = Object.entries(i18nBackup).reduce((acc, [locale, { raw }]) => {
     const entry = formatRawData(raw);
@@ -223,7 +224,7 @@ function mergeValues(
   collection: Collection,
   structure: I18N_STRUCTURE,
   defaultLocale: string,
-  values: { locale: string; value: EntryValue }[],
+  values: { locale: string; value: Entry }[],
 ) {
   let defaultEntry = values.find(e => e.locale === defaultLocale);
   if (!defaultEntry) {
@@ -239,7 +240,7 @@ function mergeValues(
 
   const path = normalizeFilePath(structure, defaultEntry.value.path, defaultLocale);
   const slug = selectEntrySlug(collection, path) as string;
-  const entryValue: EntryValue = {
+  const entryValue: Entry = {
     ...defaultEntry.value,
     raw: '',
     ...i18n,
@@ -250,7 +251,7 @@ function mergeValues(
   return entryValue;
 }
 
-function mergeSingleFileValue(entryValue: EntryValue, defaultLocale: string, locales: string[]) {
+function mergeSingleFileValue(entryValue: Entry, defaultLocale: string, locales: string[]) {
   const data = entryValue.data[defaultLocale] || {};
   const i18n = locales
     .filter(l => l !== defaultLocale)
@@ -273,11 +274,11 @@ export async function getI18nEntry(
   extension: string,
   path: string,
   slug: string,
-  getEntryValue: (path: string) => Promise<EntryValue>,
+  getEntryValue: (path: string) => Promise<Entry>,
 ) {
   const { structure, locales, defaultLocale } = getI18nInfo(collection) as I18nInfo;
 
-  let entryValue: EntryValue;
+  let entryValue: Entry;
   if (structure === I18N_STRUCTURE.SINGLE_FILE) {
     entryValue = mergeSingleFileValue(await getEntryValue(path), defaultLocale, locales);
   } else {
@@ -290,7 +291,7 @@ export async function getI18nEntry(
     );
 
     const nonNullValues = entryValues.filter(e => e.value !== null) as {
-      value: EntryValue;
+      value: Entry;
       locale: string;
     }[];
 
@@ -300,7 +301,7 @@ export async function getI18nEntry(
   return entryValue;
 }
 
-export function groupEntries(collection: Collection, extension: string, entries: EntryValue[]) {
+export function groupEntries(collection: Collection, extension: string, entries: Entry[]) {
   const { structure, defaultLocale, locales } = getI18nInfo(collection) as I18nInfo;
   if (structure === I18N_STRUCTURE.SINGLE_FILE) {
     return entries.map(e => mergeSingleFileValue(e, defaultLocale, locales));
@@ -319,7 +320,7 @@ export function groupEntries(collection: Collection, extension: string, entries:
   const groupedEntries = Object.values(grouped).reduce((acc, values) => {
     const entryValue = mergeValues(collection, structure, defaultLocale, values);
     return [...acc, entryValue];
-  }, [] as EntryValue[]);
+  }, [] as Entry[]);
 
   return groupedEntries;
 }
@@ -366,34 +367,33 @@ export function duplicateI18nFields(
   field: EntryField,
   locales: string[],
   defaultLocale: string,
-  fieldPath: string[] = [field.get('name')],
+  fieldPath: string[] = [field.name],
 ) {
-  const value = entryDraft.getIn(['entry', 'data', ...fieldPath]);
-  if (field.get(I18N) === I18N_FIELD.DUPLICATE) {
+  const value = getIn(entryDraft, ['entry', 'data', ...fieldPath]);
+  if (field.i18n === I18N_FIELD.DUPLICATE) {
     locales
       .filter(l => l !== defaultLocale)
       .forEach(l => {
-        entryDraft = entryDraft.setIn(
+        entryDraft = setIn<EntryDraft>(
+          entryDraft,
           ['entry', ...getDataPath(l, defaultLocale), ...fieldPath],
           value,
         );
       });
   }
 
-  if (field.has('field') && !List.isList(value)) {
-    const fields = [field.get('field') as EntryField];
-    fields.forEach(field => {
-      entryDraft = duplicateI18nFields(entryDraft, field, locales, defaultLocale, [
+  if ('field' in field && !Array.isArray(value)) {
+    if (field.field) {
+      entryDraft = duplicateI18nFields(entryDraft, field.field, locales, defaultLocale, [
         ...fieldPath,
-        field.get('name'),
+        field.name,
       ]);
-    });
-  } else if (field.has('fields') && !List.isList(value)) {
-    const fields = field.get('fields')!.toArray() as EntryField[];
-    fields.forEach(field => {
+    }
+  } else if ('fields' in field && !Array.isArray(value)) {
+    field.fields?.forEach(field => {
       entryDraft = duplicateI18nFields(entryDraft, field, locales, defaultLocale, [
         ...fieldPath,
-        field.get('name'),
+        field.name,
       ]);
     });
   }
@@ -401,11 +401,11 @@ export function duplicateI18nFields(
   return entryDraft;
 }
 
-export function getPreviewEntry(entry: EntryMap, locale: string, defaultLocale: string) {
+export function getPreviewEntry(entry: Entry, locale: string, defaultLocale: string) {
   if (locale === defaultLocale) {
     return entry;
   }
-  return entry.set('data', entry.getIn([I18N, locale, 'data']));
+  return (entry.data = entry.i18n?.[locale]?.data);
 }
 
 export function serializeI18n(
@@ -420,7 +420,7 @@ export function serializeI18n(
     .filter(locale => locale !== defaultLocale)
     .forEach(locale => {
       const dataPath = getLocaleDataPath(locale);
-      entry = entry.setIn(dataPath, serializeValues(entry.getIn(dataPath)));
+      entry = setIn(entry, dataPath, serializeValues(getIn(entry, dataPath)));
     });
 
   return entry;

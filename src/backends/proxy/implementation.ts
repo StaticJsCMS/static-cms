@@ -1,13 +1,18 @@
-import {
-  APIError, blobToFileObj, unsentRequest
-} from '../../lib/util';
+import { APIError, blobToFileObj, unsentRequest } from '../../lib/util';
 import AuthenticationPage from './AuthenticationPage';
 
 import type {
-  AssetProxy, Config, Entry, Implementation,
-  ImplementationFile, PersistOptions,
-  User
-} from '../../lib/util';
+  AssetProxy,
+  BackendEntry,
+  CmsBackendClass,
+  CmsConfig,
+  DisplayURL,
+  ImplementationEntry,
+  ImplementationFile,
+  PersistOptions,
+  User,
+} from '../../interface';
+import type { Cursor } from '../../lib/util';
 
 async function serializeAsset(assetProxy: AssetProxy) {
   const base64content = await assetProxy.toBase64!();
@@ -39,13 +44,13 @@ function deserializeMediaFile({ id, content, encoding, path, name }: MediaFile) 
   return { id, name, path, file, size: file.size, url, displayURL: url };
 }
 
-export default class ProxyBackend implements Implementation {
+export default class ProxyBackend implements CmsBackendClass {
   proxyUrl: string;
-  mediaFolder: string;
+  mediaFolder?: string;
   options: {};
   branch: string;
 
-  constructor(config: Config, options = {}) {
+  constructor(config: CmsConfig, options = {}) {
     if (!config.backend.proxy_url) {
       throw new Error('The Proxy backend needs a "proxy_url" in the backend configuration.');
     }
@@ -121,7 +126,7 @@ export default class ProxyBackend implements Implementation {
     });
   }
 
-  async persistEntry(entry: Entry, options: PersistOptions) {
+  async persistEntry(entry: BackendEntry, options: PersistOptions) {
     const assets = await Promise.all(entry.assets.map(serializeAsset));
     return this.request({
       action: 'persistEntry',
@@ -166,5 +171,21 @@ export default class ProxyBackend implements Implementation {
       action: 'deleteFiles',
       params: { branch: this.branch, paths, options: { commitMessage } },
     });
+  }
+
+  traverseCursor(): Promise<{ entries: ImplementationEntry[]; cursor: Cursor }> {
+    throw new Error('Not supported');
+  }
+
+  allEntriesByFolder(
+    _folder: string,
+    _extension: string,
+    _depth: number,
+  ): Promise<ImplementationEntry[]> {
+    throw new Error('Not supported');
+  }
+
+  getMediaDisplayURL(_displayURL: DisplayURL): Promise<string> {
+    throw new Error('Not supported');
   }
 }

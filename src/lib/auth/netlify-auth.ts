@@ -1,13 +1,18 @@
 import trim from 'lodash/trim';
 import trimEnd from 'lodash/trimEnd';
 
+import type { User, AuthenticatorConfig } from '../../interface';
+
 const NETLIFY_API = 'https://api.netlify.com';
 const AUTH_ENDPOINT = 'auth';
 
-class NetlifyError {
-  constructor(err) {
+export class NetlifyError {
+  private err: Error;
+
+  constructor(err: Error) {
     this.err = err;
   }
+
   toString() {
     return this.err && this.err.message;
   }
@@ -30,46 +35,60 @@ const PROVIDERS = {
     width: 500,
     height: 400,
   },
-};
+} as const;
 
 class Authenticator {
-  constructor(config = {}) {
+  private site_id: string | null;
+  private base_url: string;
+  private auth_endpoint: string;
+  private authWindow: Window | null;
+
+  constructor(config: AuthenticatorConfig = {}) {
     this.site_id = config.site_id || null;
     this.base_url = trimEnd(config.base_url, '/') || NETLIFY_API;
     this.auth_endpoint = trim(config.auth_endpoint, '/') || AUTH_ENDPOINT;
+    this.authWindow = null;
   }
 
-  handshakeCallback(options, cb) {
-    const fn = e => {
+  handshakeCallback(
+    options: { provider: keyof typeof PROVIDERS },
+    cb: (error: Error | NetlifyError | null, data?: User) => void,
+  ) {
+    const fn = (e: { data: string; origin: string }) => {
       if (e.data === 'authorizing:' + options.provider && e.origin === this.base_url) {
         window.removeEventListener('message', fn, false);
         window.addEventListener('message', this.authorizeCallback(options, cb), false);
-        return this.authWindow.postMessage(e.data, e.origin);
+        return this.authWindow?.postMessage(e.data, e.origin);
       }
     };
     return fn;
   }
 
-  authorizeCallback(options, cb) {
-    const fn = e => {
+  authorizeCallback(
+    options: { provider: keyof typeof PROVIDERS },
+    cb: (error: Error | NetlifyError | null, data?: User) => void,
+  ) {
+    const fn = (e: { data: string; origin: string }) => {
       if (e.origin !== this.base_url) {
         return;
       }
 
       if (e.data.indexOf('authorization:' + options.provider + ':success:') === 0) {
         const data = JSON.parse(
-          e.data.match(new RegExp('^authorization:' + options.provider + ':success:(.+)$'))[1],
+          e.data.match(new RegExp('^authorization:' + options.provider + ':success:(.+)$'))?.[1] ??
+            '',
         );
         window.removeEventListener('message', fn, false);
-        this.authWindow.close();
+        this.authWindow?.close();
         cb(null, data);
       }
       if (e.data.indexOf('authorization:' + options.provider + ':error:') === 0) {
         const err = JSON.parse(
-          e.data.match(new RegExp('^authorization:' + options.provider + ':error:(.+)$'))[1],
+          e.data.match(new RegExp('^authorization:' + options.provider + ':error:(.+)$'))?.[1] ??
+            '',
         );
         window.removeEventListener('message', fn, false);
-        this.authWindow.close();
+        this.authWindow?.close();
         cb(new NetlifyError(err));
       }
     };
@@ -84,23 +103,33 @@ class Authenticator {
     return host === 'localhost' ? 'cms.netlify.com' : host;
   }
 
-  authenticate(options, cb) {
+  authenticate(
+    options: {
+      provider: keyof typeof PROVIDERS;
+      scope?: string;
+      login?: boolean;
+      beta_invite?: string;
+      invite_code?: string;
+    },
+    cb: (error: Error | NetlifyError | null, data?: User) => void,
+  ) {
     const { provider } = options;
     const siteID = this.getSiteID();
 
     if (!provider) {
       return cb(
-        new NetlifyError({
-          message: 'You must specify a provider when calling netlify.authenticate',
-        }),
+        new NetlifyError(
+          new Error('You must specify a provider when calling netlify.authenticate'),
+        ),
       );
     }
     if (!siteID) {
       return cb(
-        new NetlifyError({
-          message:
+        new NetlifyError(
+          new Error(
             "You must set a site_id with netlify.configure({site_id: 'your-site-id'}) to make authentication work from localhost",
-        }),
+          ),
+        ),
       );
     }
 
@@ -126,27 +155,34 @@ class Authenticator {
       'Netlify Authorization',
       `width=${conf.width}, height=${conf.height}, top=${top}, left=${left}`,
     );
-    this.authWindow.focus();
+    this.authWindow?.focus();
   }
 
-  refresh(options, cb) {
+  refresh(
+    options: {
+      provider: keyof typeof PROVIDERS;
+      refresh_token?: string;
+    },
+    cb: (error: Error | NetlifyError | null, data?: User) => void,
+  ) {
     const { provider, refresh_token } = options;
     const siteID = this.getSiteID();
     const onError = cb || Promise.reject.bind(Promise);
 
     if (!provider || !refresh_token) {
       return onError(
-        new NetlifyError({
-          message: 'You must specify a provider and refresh token when calling netlify.refresh',
-        }),
+        new NetlifyError(
+          new Error('You must specify a provider and refresh token when calling netlify.refresh'),
+        ),
       );
     }
     if (!siteID) {
       return onError(
-        new NetlifyError({
-          message:
+        new NetlifyError(
+          new Error(
             "You must set a site_id with netlify.configure({site_id: 'your-site-id'}) to make token refresh work from localhost",
-        }),
+          ),
+        ),
       );
     }
     const url = `${this.base_url}/${this.auth_endpoint}/refresh?provider=${provider}&site_id=${siteID}&refresh_token=${refresh_token}`;
