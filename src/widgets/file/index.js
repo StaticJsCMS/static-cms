@@ -14,5 +14,5 @@ function Widget(opts = {}) {
   };
 }
 
-export const SimpleCmsWidgetFile = { Widget, controlComponent, previewComponent, withFileControl };
-export default SimpleCmsWidgetFile;
+export const StaticCmsWidgetFile = { Widget, controlComponent, previewComponent, withFileControl };
+export default StaticCmsWidgetFile;

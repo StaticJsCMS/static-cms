@@ -8,7 +8,7 @@ weight: 4
 
 ## Update the CMS Version
 
-The update procedure for your CMS depends upon the method you used to install Simple CMS.
+The update procedure for your CMS depends upon the method you used to install Static CMS.
 
 ### Package Manager
 

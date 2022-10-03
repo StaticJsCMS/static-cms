@@ -1,8 +1,8 @@
-import SimpleCmsWidgetObject from '../object';
+import StaticCmsWidgetObject from '../object';
 import controlComponent from './ListControl';
 import schema from './schema';
 
-const previewComponent = SimpleCmsWidgetObject.previewComponent;
+const previewComponent = StaticCmsWidgetObject.previewComponent;
 
 function Widget(opts = {}) {
   return {
@@ -14,5 +14,5 @@ function Widget(opts = {}) {
   };
 }
 
-export const SimpleCmsWidgetList = { Widget, controlComponent, previewComponent };
-export default SimpleCmsWidgetList;
+export const StaticCmsWidgetList = { Widget, controlComponent, previewComponent };
+export default StaticCmsWidgetList;

@@ -1,7 +1,7 @@
 menu:
   docs:
     - name: Intro
-      title: Intro to Simple CMS
+      title: Intro to Static CMS
     - name: Accounts
       title: Account Settings
     - name: Configuration
@@ -17,6 +17,6 @@ menu:
     - name: Guides
       title: Platform Guides
     - name: Customization
-      title: Customizing Simple CMS
+      title: Customizing Static CMS
     - name: Contributing
       title: Community

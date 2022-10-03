@@ -5,7 +5,7 @@ import { Iterable } from 'immutable';
 window.UPLOADCARE_LIVE = false;
 window.UPLOADCARE_MANUAL_START = true;
 
-const USER_AGENT = 'SimpleCMS-Uploadcare-MediaLibrary';
+const USER_AGENT = 'StaticCms-Uploadcare-MediaLibrary';
 const CDN_BASE_URL = 'https://ucarecdn.com';
 
 /**
@@ -165,7 +165,7 @@ async function init({ options = { config: {}, settings: {} }, handleInsert } = {
 
     /**
      * Uploadcare doesn't provide a "media library" widget for viewing and
-     * selecting existing files, so we return `false` here so Simple CMS only
+     * selecting existing files, so we return `false` here so Static CMS only
      * opens the Uploadcare widget when called from an editor control. This
      * results in the "Media" button in the global nav being hidden.
      */
@@ -179,5 +179,5 @@ async function init({ options = { config: {}, settings: {} }, handleInsert } = {
  */
 const uploadcareMediaLibrary = { name: 'uploadcare', init };
 
-export const SimpleCmsMediaLibraryUploadcare = uploadcareMediaLibrary;
+export const StaticCmsMediaLibraryUploadcare = uploadcareMediaLibrary;
 export default uploadcareMediaLibrary;

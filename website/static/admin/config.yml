@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: SimpleCMS/simple-cms
+  repo: StaticJsCMS/static-cms
 
 local_backend: true
 

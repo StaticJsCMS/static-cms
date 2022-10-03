@@ -1,8 +1,8 @@
-import SimpleCmsWidgetFile from '../file';
+import StaticCmsWidgetFile from '../file';
 import previewComponent from './ImagePreview';
 import schema from './schema';
 
-const controlComponent = SimpleCmsWidgetFile.withFileControl({ forImage: true });
+const controlComponent = StaticCmsWidgetFile.withFileControl({ forImage: true });
 
 function Widget(opts = {}) {
   return {
@@ -14,5 +14,5 @@ function Widget(opts = {}) {
   };
 }
 
-export const SimpleCmsWidgetImage = { Widget, controlComponent, previewComponent };
-export default SimpleCmsWidgetImage;
+export const StaticCmsWidgetImage = { Widget, controlComponent, previewComponent };
+export default StaticCmsWidgetImage;

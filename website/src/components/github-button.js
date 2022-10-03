@@ -4,10 +4,10 @@ class GitHubStarButton extends PureComponent {
   render() {
     return (
       <a
-        href="https://github.com/SimpleCMS/simple-cms"
-        aria-label="Star SimpleCMS/simple-cms on GitHub"
+        href="https://github.com/StaticJsCMS/static-cms"
+        aria-label="Star StaticJsCMS/static-cms on GitHub"
       >
-        <img alt="Star SimpleCMS/simple-cms on GitHub" src="https://img.shields.io/github/stars/SimpleCMS/simple-cms?style=social" />
+        <img alt="Star StaticJsCMS/static-cms on GitHub" src="https://img.shields.io/github/stars/StaticJsCMS/static-cms?style=social" />
       </a>
     );
   }

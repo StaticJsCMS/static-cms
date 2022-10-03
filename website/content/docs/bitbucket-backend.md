@@ -8,7 +8,7 @@ For repositories stored on Bitbucket, the `bitbucket` backend allows CMS users t
 To enable it:
 
 1. Follow the authentication provider setup steps in the [Netlify docs](https://www.netlify.com/docs/authentication-providers/#using-an-authentication-provider).
-2. Add the following lines to your Simple CMS `config.yml` file:
+2. Add the following lines to your Static CMS `config.yml` file:
 
    ```yaml
    backend:
@@ -20,8 +20,8 @@ To enable it:
 
 With Bitbucket's Implicit Grant, users can authenticate with Bitbucket directly from the client. To do this:
 
-1. Follow the [Atlassian docs](https://confluence.atlassian.com/bitbucket/oauth-on-bitbucket-cloud-238027431.html) to create an OAuth consumer. Make sure you allow `Account/Read` and `Repository/Write` permissions. For the **Callback URL**, enter the address where you access Simple CMS, for example, `https://www.mysite.com/admin/`.
-2. Bitbucket gives you a **Key**. Copy this Key and enter it in your Simple CMS `config.yml` file, along with the following settings:
+1. Follow the [Atlassian docs](https://confluence.atlassian.com/bitbucket/oauth-on-bitbucket-cloud-238027431.html) to create an OAuth consumer. Make sure you allow `Account/Read` and `Repository/Write` permissions. For the **Callback URL**, enter the address where you access Static CMS, for example, `https://www.mysite.com/admin/`.
+2. Bitbucket gives you a **Key**. Copy this Key and enter it in your Static CMS `config.yml` file, along with the following settings:
 
    ```yaml
    backend:

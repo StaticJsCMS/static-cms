@@ -84,5 +84,5 @@ async function init({ options = {}, handleInsert } = {}) {
 
 const cloudinaryMediaLibrary = { name: 'cloudinary', init };
 
-export const SimpleCmsMediaLibraryCloudinary = cloudinaryMediaLibrary;
+export const StaticCmsMediaLibraryCloudinary = cloudinaryMediaLibrary;
 export default cloudinaryMediaLibrary;

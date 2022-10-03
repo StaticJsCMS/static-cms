@@ -1,6 +1,6 @@
 footer:
   buttons:
     - name: "Twitter"
-      url: "https://twitter.com/SimpleCMSOrg"
+      url: "https://twitter.com/StaticJsCMS"
     - name: "GitHub"
-      url: "https://github.com/SimpleCMS/simple-cms"
+      url: "https://github.com/StaticJsCMS/static-cms"

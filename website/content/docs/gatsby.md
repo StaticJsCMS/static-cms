@@ -3,7 +3,7 @@ title: Gatsby
 group: Guides
 weight: 10
 ---
-This guide will help you get started using Simple CMS and Gatsby.
+This guide will help you get started using Static CMS and Gatsby.
 
 To get up and running with Gatsby, you’ll need to have [Node.js](https://nodejs.org/) installed on your computer. *Note: Gatsby's minimum supported Node.js version is Node 8.*
 
@@ -34,14 +34,14 @@ Far far away, behind the word mountains, far from the countries Vokalia and
 Consonantia, there live the blind texts.
 ```
 
-We can see above that each blog post has a title, a date, a description and a body. Now, let's recreate this using Simple CMS.
+We can see above that each blog post has a title, a date, a description and a body. Now, let's recreate this using Static CMS.
 
-## Add Simple CMS to your site
+## Add Static CMS to your site
 
-First let's install some dependencies. We'll need `@simplecms/simple-cms-core` and `gatsby-plugin-netlify-cms`. Run the following command in the terminal at the root of your site:
+First let's install some dependencies. We'll need `@staticcms/core` and `gatsby-plugin-netlify-cms`. Run the following command in the terminal at the root of your site:
 
 ```bash
-npm install --save @simplecms/simple-cms-core gatsby-plugin-netlify-cms
+npm install --save @staticcms/core gatsby-plugin-netlify-cms
 ```
 
 ### Configuration

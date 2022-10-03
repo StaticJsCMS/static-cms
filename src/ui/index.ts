@@ -25,7 +25,7 @@ import {
   GlobalStyles,
 } from './styles';
 
-export const SimpleCmsUiDefault = {
+export const StaticCmsUiDefault = {
   ListItemTopBar,
   FieldLabel,
   Icon,

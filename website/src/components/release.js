@@ -29,7 +29,7 @@ const Version = styled.span`
 
 function Release({ version, versionPrevious, date, description, url }) {
   const displayDate = moment(date).format('MMMM D, YYYY');
-  const defaultUrl = `https://github.com/SimpleCMS/simple-cms/compare/simple-cms@${versionPrevious}...simple-cms@${version}`;
+  const defaultUrl = `https://github.com/StaticJsCMS/static-cms/compare/static-cms@${versionPrevious}...static-cms@${version}`;
 
   return (
     <li

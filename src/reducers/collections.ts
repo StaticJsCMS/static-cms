@@ -353,7 +353,7 @@ export function selectInferedField(collection: Collection, fieldName: string) {
   if (inferableField.showError) {
     consoleError(
       `The Field ${fieldName} is missing for the collection “${collection.get('name')}”`,
-      `Simple CMS tries to infer the entry ${fieldName} automatically, but one couldn't be found for entries of the collection “${collection.get(
+      `Static CMS tries to infer the entry ${fieldName} automatically, but one couldn't be found for entries of the collection “${collection.get(
         'name',
       )}”. Please check your site configuration.`,
     );

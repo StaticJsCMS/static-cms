@@ -8,12 +8,12 @@ group: Accounts
 
 ## Git Gateway with Netlify
 
-The [Netlify Identity](https://www.netlify.com/docs/identity/) service can handle the authentication and provides a simple interface for user management. The Simple CMS [featured templates](../start-with-a-template) are working examples of this backend.
+The [Netlify Identity](https://www.netlify.com/docs/identity/) service can handle the authentication and provides a simple interface for user management. The Static CMS [featured templates](../start-with-a-template) are working examples of this backend.
 
 To use it in your own project stored on GitHub or GitLab, follow these steps:
 
 1. Head over to the [Netlify Identity docs](https://www.netlify.com/docs/identity) and follow the steps to get started.
-2. Add the following lines to your Simple CMS `config.yml` file:
+2. Add the following lines to your Static CMS `config.yml` file:
 
 ```yaml
 backend:
@@ -28,4 +28,4 @@ If you change ownership on your repository, or convert a repository from public 
 
 You can use [Git Gateway](https://github.com/netlify/git-gateway) without Netlify by setting up your own Git Gateway server and connecting it with your own instance of [GoTrue](https://www.gotrueapi.org) (the open source microservice that powers Netlify Identity), or with any other identity service that can issue JSON Web Tokens (JWT).
 
-To configure in Simple CMS, use the same `backend` settings in your Simple CMS `config.yml` file as described in Step 2 of the [Git Gateway with Netlify Identity](#git-gateway-with-netlify-identity) instructions above.
+To configure in Static CMS, use the same `backend` settings in your Static CMS `config.yml` file as described in Step 2 of the [Git Gateway with Netlify Identity](#git-gateway-with-netlify-identity) instructions above.

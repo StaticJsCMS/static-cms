@@ -1,7 +1,7 @@
 import TestBackend from './implementation';
 import AuthenticationPage from './AuthenticationPage';
 
-export const SimpleCmsBackendTest = {
+export const StaticCmsBackendTest = {
   TestBackend,
   AuthenticationPage,
 };

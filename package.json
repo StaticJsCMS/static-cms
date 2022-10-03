@@ -1,10 +1,10 @@
 {
-  "name": "@simplecms/simple-cms-core",
-  "version": "0.2.0",
+  "name": "@staticcms/core",
+  "version": "0.3.2",
   "license": "MIT",
-  "description": "Simple CMS core application.",
-  "repository": "https://github.com/SimpleCMS/simple-cms",
-  "bugs": "https://github.com/SimpleCMS/simple-cms/issues",
+  "description": "Static CMS core application.",
+  "repository": "https://github.com/StaticJsCMS/static-cms",
+  "bugs": "https://github.com/StaticJsCMS/static-cms/issues",
   "keywords": [
     "simple",
     "cms",
@@ -27,7 +27,7 @@
     "start": "run-s clean develop"
   },
   "module": "dist/esm/index.js",
-  "main": "dist/simple-cms-core.js",
+  "main": "dist/static-cms-core.js",
   "files": [
     "src/",
     "dist/",

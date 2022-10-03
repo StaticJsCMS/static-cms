@@ -3,7 +3,7 @@ group: Intro
 weight: 2
 title: Start with a Template
 ---
-You can add Simple CMS [to an existing site](/docs/add-to-your-site/), but the quickest way to get started is with a template.  Found below, our featured templates deploy a bare-bones site and Simple CMS to Netlify, giving you a fully working CMS-enabled site with just a few clicks.
+You can add Static CMS [to an existing site](/docs/add-to-your-site/), but the quickest way to get started is with a template.  Found below, our featured templates deploy a bare-bones site and Static CMS to Netlify, giving you a fully working CMS-enabled site with just a few clicks.
 
 <div style="display: flex; justify-content: left; text-align: center; margin-bottom: 1.5em; flex-wrap: wrap;"stack=cms>
     <div style="flex-basis: 33%">
@@ -66,20 +66,20 @@ You can add Simple CMS [to an existing site](/docs/add-to-your-site/), but the q
 
 After clicking one of those buttons, authenticate with GitHub or GitLab and choose a repository name. Netlify then automatically creates a clone of the repository in your GitHub or GitLab account. Next, it builds and deploys the new site on Netlify, bringing you to the site dashboard after completing the build.
 
-**Note for Bitbucket users:** Simple CMS supports Bitbucket repositories, but Bitbucket's permissions won't work with the Deploy to Netlify buttons above. You can still set up a repository manually, or follow the [tutorial](/docs/add-to-your-site) for adding Simple CMS to an existing site.
+**Note for Bitbucket users:** Static CMS supports Bitbucket repositories, but Bitbucket's permissions won't work with the Deploy to Netlify buttons above. You can still set up a repository manually, or follow the [tutorial](/docs/add-to-your-site) for adding Static CMS to an existing site.
 
-## Access Simple CMS on your new site
+## Access Static CMS on your new site
 
 1. The template deploy process sends you an invitation to your new site, sent from `no-reply@netlify.com`.
-   ![Sample email subject line: You've been invited to join radiologist-amanda-53841.netlify.com](https://www.simplecms.github.io/simple-cms/img/email-subject.png?raw=true)
+   ![Sample email subject line: You've been invited to join radiologist-amanda-53841.netlify.com](https://staticjscms.github.io/static-cms/img/email-subject.png?raw=true)
 2. Wait for the deployment to complete, then click the link to accept the invite. Your site will open with a prompt to create a password.
-   !["Complete your signup" modal on the Kaldi coffee site](https://www.simplecms.github.io/simple-cms/img/create-password.png?raw=true)
+   !["Complete your signup" modal on the Kaldi coffee site](https://staticjscms.github.io/static-cms/img/create-password.png?raw=true)
 3. Enter a password, sign in, and you’ll go to the CMS. (For future visits, you can go straight to `<yoursiteaddress.com>/admin/`.)
 
 Try adding and editing posts, or changing the content of the Products page. When you save, the changes are pushed immediately to your Git repository, triggering a build on Netlify, and updating the content on your site. Check out the configuration code by visiting your site repo.
 
 ## More paths to explore
 
-* To see how to integrate Simple CMS into an existing project, go to [Add to your site](/docs/add-to-your-site/).
-* Check out other sites using Simple CMS (or share your own!) on the [Examples](/docs/examples/) page.
+* To see how to integrate Static CMS into an existing project, go to [Add to your site](/docs/add-to-your-site/).
+* Check out other sites using Static CMS (or share your own!) on the [Examples](/docs/examples/) page.
 * If you’d like to add more CMS editors or change how they log in to your site, read up on [Netlify Identity service](https://www.netlify.com/docs/identity).

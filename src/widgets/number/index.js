@@ -25,5 +25,5 @@ function Widget(opts = {}) {
   };
 }
 
-export const SimpleCmsWidgetNumber = { Widget, controlComponent, previewComponent };
-export default SimpleCmsWidgetNumber;
+export const StaticCmsWidgetNumber = { Widget, controlComponent, previewComponent };
+export default StaticCmsWidgetNumber;

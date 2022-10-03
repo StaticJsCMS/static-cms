@@ -59,7 +59,7 @@ function plugins() {
       [
         'transform-define',
         {
-          SIMPLE_CMS_CORE_VERSION: `${coreVersion}`,
+          STATIC_CMS_CORE_VERSION: `${coreVersion}`,
         },
       ],
       [

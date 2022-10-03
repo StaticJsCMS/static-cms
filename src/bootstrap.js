@@ -45,8 +45,8 @@ function bootstrap(opts = {}) {
   /**
    * Log the version number.
    */
-  if (typeof SIMPLE_CMS_CORE_VERSION === 'string') {
-    console.info(`simple-cms-core ${SIMPLE_CMS_CORE_VERSION}`);
+  if (typeof STATIC_CMS_CORE_VERSION === 'string') {
+    console.info(`static-cms-core ${STATIC_CMS_CORE_VERSION}`);
   }
 
   /**

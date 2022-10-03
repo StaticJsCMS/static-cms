@@ -1,10 +1,10 @@
 ---
 title: >-
-  Welcome to Simple CMS
+  Welcome to Static CMS
 author: Daniel Lautzenheiser
 description: >-
-  Announcing the release of Simple CMS v1.0.
-twitter_image: /img/simple-cms.png
+  Announcing the release of Static CMS v1.0.
+twitter_image: /img/static-cms.png
 date: 2022-10-30T12:00:00.000Z
 ---
-Today we’re releasing Simple CMS 1.0! 
+Today we’re releasing Static CMS 1.0! 

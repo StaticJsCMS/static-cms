@@ -3,7 +3,7 @@
 Contributions are always welcome, no matter how large or small. Before contributing,
 please read the [code of conduct](CODE_OF_CONDUCT.md).
 
-For details on contributing to documentation, see [Website Directory Readme](https://github.com/SimpleCMS/simple-cms/blob/main/website/README.md).
+For details on contributing to documentation, see [Website Directory Readme](https://github.com/StaticJsCMS/static-cms/blob/main/website/README.md).
 
 ## Setup
 
@@ -14,8 +14,8 @@ For details on contributing to documentation, see [Website Directory Readme](htt
 > Only required on the first run, subsequent runs can use `yarn start` to both bootstrap and run the development server.
 
 ```sh
-git clone https://github.com/SimpleCMS/simple-cms
-cd simple-cms
+git clone https://github.com/StaticJsCMS/static-cms
+cd static-cms
 yarn
 ```
 
@@ -45,7 +45,7 @@ yarn clean
 
 ### build
 
-Runs the `clean` script and builds the simple-cms-core.
+Runs the `clean` script and builds the static-cms-core.
 
 ```sh
 yarn build
@@ -65,7 +65,7 @@ We actively welcome your pull requests!
 
 If you need help with Git or our workflow, please ask. We want your contributions even if you're just learning Git. Our maintainers are happy to help!
 
-Simple CMS uses the [Forking Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/forking-workflow) + [Feature Branches](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow). Additionally, PR's should be [rebased](https://www.atlassian.com/git/tutorials/merging-vs-rebasing) on main when opened, and again before merging.
+Static CMS uses the [Forking Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/forking-workflow) + [Feature Branches](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow). Additionally, PR's should be [rebased](https://www.atlassian.com/git/tutorials/merging-vs-rebasing) on main when opened, and again before merging.
 
 1. Fork the repo.
 2. Create a branch from `main`. If you're addressing a specific issue, prefix your branch name with the issue number.
@@ -95,7 +95,7 @@ backend:
 
 When debugging the CMS with Git Gateway you must:
 
-1. Have a Netlify site with [Git Gateway](https://docs.netlify.com/visitor-access/git-gateway/) and [Netlify Identity](https://docs.netlify.com/visitor-access/identity/) enabled. An easy way to create such a site is to use a [template](https://www.simplecms.github.io/simple-cms/docs/start-with-a-template/), for example the [Gatsby template](https://app.netlify.com/start/deploy?repository=https://github.com/AustinGreen/gatsby-starter-netlify-cms&stack=cms)
+1. Have a Netlify site with [Git Gateway](https://docs.netlify.com/visitor-access/git-gateway/) and [Netlify Identity](https://docs.netlify.com/visitor-access/identity/) enabled. An easy way to create such a site is to use a [template](https://staticjscms.github.io/static-cms/docs/start-with-a-template/), for example the [Gatsby template](https://app.netlify.com/start/deploy?repository=https://github.com/AustinGreen/gatsby-starter-netlify-cms&stack=cms)
 2. Tell the CMS the URL of your Netlify site using a local storage item. To do so:
 
     1. Open `http://localhost:8080/` in the browser
@@ -106,4 +106,4 @@ When debugging the CMS with Git Gateway you must:
 
 ## License
 
-By contributing to Simple CMS, you agree that your contributions will be licensed under its [MIT license](LICENSE).
+By contributing to Static CMS, you agree that your contributions will be licensed under its [MIT license](LICENSE).
