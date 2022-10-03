@@ -115,7 +115,7 @@ export default class Widget extends Component {
     const field = this.props.field;
     const errors = [];
     const validations = [this.validatePresence, this.validatePattern];
-    if (field.get('meta')) {
+    if (field.meta) {
       validations.push(this.props.validateMetaField);
     }
     validations.forEach(func => {
@@ -140,7 +140,7 @@ export default class Widget extends Component {
         type: ValidationErrorTypes.PRESENCE,
         parentIds,
         message: t('editor.editorControlPane.widget.required', {
-          fieldLabel: field.get('label', field.get('name')),
+          fieldLabel: field.get('label', field.name),
         }),
       };
 
@@ -162,7 +162,7 @@ export default class Widget extends Component {
         type: ValidationErrorTypes.PATTERN,
         parentIds,
         message: t('editor.editorControlPane.widget.regexPattern', {
-          fieldLabel: field.get('label', field.get('name')),
+          fieldLabel: field.get('label', field.name),
           pattern: pattern.last(),
         }),
       };
@@ -189,7 +189,7 @@ export default class Widget extends Component {
           err => {
             const error = {
               type: ValidationErrorTypes.CUSTOM,
-              message: `${field.get('label', field.get('name'))} - ${err}.`,
+              message: `${field.get('label', field.name)} - ${err}.`,
             };
 
             this.validate({ error });
@@ -200,7 +200,7 @@ export default class Widget extends Component {
           type: ValidationErrorTypes.CUSTOM,
           parentIds,
           message: t('editor.editorControlPane.widget.processing', {
-            fieldLabel: field.get('label', field.get('name')),
+            fieldLabel: field.get('label', field.name),
           }),
         };
 
@@ -221,10 +221,10 @@ export default class Widget extends Component {
    * Change handler for fields that are nested within another field.
    */
   onChangeObject = (field, newValue, newMetadata) => {
-    const newObjectValue = this.getObjectValue().set(field.get('name'), newValue);
+    const newObjectValue = this.getObjectValue().set(field.name, newValue);
     return this.props.onChange(
       newObjectValue,
-      newMetadata && { [this.props.field.get('name')]: newMetadata },
+      newMetadata && { [this.props.field.name]: newMetadata },
     );
   };
 

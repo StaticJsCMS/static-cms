@@ -82,7 +82,7 @@ function updateAssetProxies(
     const newPath = selectMediaFilePath(
       config,
       collection,
-      entryDraft.get('entry').set('path', path),
+      entryDraft.entry.set('path', path),
       oldPath,
       asset.field,
     );
@@ -274,13 +274,12 @@ function prepareMetaPath(path: string, collection: Collection) {
     return path;
   }
   const dir = dirname(path);
-  return dir.slice(collection.get('folder')!.length + 1) || '/';
+  return dir.slice(collection.folder!.length + 1) || '/';
 }
 
 function collectionDepth(collection: Collection) {
   let depth;
-  depth =
-    collection.get('nested')?.get('depth') || getPathDepth(collection.get('path', '') as string);
+  depth = collection.nested?.depth || getPathDepth(collection.get('path', '') as string);
 
   if (hasI18n(collection)) {
     depth = getI18nFilesDepth(collection, depth);
@@ -435,7 +434,7 @@ export class Backend {
   processEntries(loadedEntries: ImplementationEntry[], collection: Collection) {
     const entries = loadedEntries.map(loadedEntry =>
       createEntry(
-        collection.get('name'),
+        collection.name,
         selectEntrySlug(collection, loadedEntry.file.path),
         loadedEntry.file.path,
         {
@@ -449,7 +448,7 @@ export class Backend {
     );
     const formattedEntries = entries.map(this.entryWithFormat(collection));
     // If this collection has a "filter" property, filter entries accordingly
-    const collectionFilter = collection.get('filter');
+    const collectionFilter = collection.filter;
     const filteredEntries = collectionFilter
       ? this.filterEntries({ entries: formattedEntries }, collectionFilter)
       : formattedEntries;
@@ -466,22 +465,17 @@ export class Backend {
   async listEntries(collection: Collection) {
     const extension = selectFolderEntryExtension(collection);
     let listMethod: () => Promise<ImplementationEntry[]>;
-    const collectionType = collection.get('type');
+    const collectionType = collection.type;
     if (collectionType === FOLDER) {
       listMethod = () => {
         const depth = collectionDepth(collection);
-        return this.implementation.entriesByFolder(
-          collection.get('folder') as string,
-          extension,
-          depth,
-        );
+        return this.implementation.entriesByFolder(collection.folder as string, extension, depth);
       };
     } else if (collectionType === FILES) {
       const files = collection
-        .get('files')!
-        .map(collectionFile => ({
-          path: collectionFile!.get('file'),
-          label: collectionFile!.get('label'),
+        .files!.map(collectionFile => ({
+          path: collectionFile!.file,
+          label: collectionFile!.label,
         }))
         .toArray();
       listMethod = () => this.implementation.entriesByFiles(files);
@@ -502,7 +496,7 @@ export class Backend {
     });
     return {
       entries: this.processEntries(loadedEntries, collection),
-      pagination: cursor.meta?.get('page'),
+      pagination: cursor.meta?.page,
       cursor,
     };
   }
@@ -513,11 +507,11 @@ export class Backend {
   // returns all the collected entries. Used to retrieve all entries
   // for local searches and queries.
   async listAllEntries(collection: Collection) {
-    if (collection.get('folder') && this.implementation.allEntriesByFolder) {
+    if (collection.folder && this.implementation.allEntriesByFolder) {
       const depth = collectionDepth(collection);
       const extension = selectFolderEntryExtension(collection);
       return this.implementation
-        .allEntriesByFolder(collection.get('folder') as string, extension, depth)
+        .allEntriesByFolder(collection.folder as string, extension, depth)
         .then(entries => this.processEntries(entries, collection));
     }
 
@@ -545,12 +539,9 @@ export class Backend {
         // TODO: pass search fields in as an argument
         let searchFields: (string | null | undefined)[] = [];
 
-        if (collection.get('type') === FILES) {
-          collection.get('files')?.forEach(f => {
-            const topLevelFields = f!
-              .get('fields')
-              .map(f => f!.get('name'))
-              .toArray();
+        if (collection.type === FILES) {
+          collection.files?.forEach(f => {
+            const topLevelFields = f!.fields.map(f => f!.name).toArray();
             searchFields = [...searchFields, ...topLevelFields];
           });
         } else {
@@ -628,7 +619,7 @@ export class Backend {
   traverseCursor(cursor: Cursor, action: string) {
     const [data, unwrappedCursor] = cursor.unwrapData();
     // TODO: stop assuming all cursors are for collections
-    const collection = data.get('collection') as Collection;
+    const collection = data.collection as Collection;
     return this.implementation.traverseCursor!(unwrappedCursor, action).then(
       async ({ entries, cursor: newCursor }) => ({
         entries: this.processEntries(entries, collection),
@@ -640,11 +631,14 @@ export class Backend {
     );
   }
 
-  async getLocalDraftBackup(collection: Collection, slug: string) {
-    const key = getEntryBackupKey(collection.get('name'), slug);
+  async getLocalDraftBackup(
+    collection: Collection,
+    slug: string,
+  ): Promise<{ entry: Entry | null }> {
+    const key = getEntryBackupKey(collection.name, slug);
     const backup = await localForage.getItem<BackupEntry>(key);
     if (!backup || !backup.raw.trim()) {
-      return {};
+      return { entry: null };
     }
     const { raw, path } = backup;
     let { mediaFiles = [] } = backup;
@@ -661,7 +655,7 @@ export class Backend {
 
     const formatRawData = (raw: string) => {
       return this.entryWithFormat(collection)(
-        createEntry(collection.get('name'), slug, path, {
+        createEntry(collection.name, slug, path, {
           raw,
           label,
           mediaFiles,
@@ -682,7 +676,7 @@ export class Backend {
   async persistLocalDraftBackup(entry: Entry, collection: Collection) {
     try {
       await this.backupSync.acquire();
-      const key = getEntryBackupKey(collection.get('name'), entry.get('slug'));
+      const key = getEntryBackupKey(collection.name, entry.slug);
       const raw = this.entryToRaw(collection, entry);
 
       if (!raw.trim()) {
@@ -690,7 +684,7 @@ export class Backend {
       }
 
       const mediaFiles = await Promise.all<MediaFile>(
-        (entry.get('mediaFiles').toJS() as MediaFile[]).map(async (file: MediaFile) => {
+        (entry.mediaFiles.toJS() as MediaFile[]).map(async (file: MediaFile) => {
           // make sure to serialize the file
           if (file.url?.startsWith('blob:')) {
             const blob = await fetch(file.url as string).then(res => res.blob());
@@ -707,7 +701,7 @@ export class Backend {
 
       await localForage.setItem<BackupEntry>(key, {
         raw,
-        path: entry.get('path'),
+        path: entry.path,
         mediaFiles,
         ...(i18n && { i18n }),
       });
@@ -723,9 +717,9 @@ export class Backend {
   async deleteLocalDraftBackup(collection: Collection, slug: string) {
     try {
       await this.backupSync.acquire();
-      await localForage.removeItem(getEntryBackupKey(collection.get('name'), slug));
+      await localForage.removeItem(getEntryBackupKey(collection.name, slug));
       // delete new entry backup if not deleted
-      slug && (await localForage.removeItem(getEntryBackupKey(collection.get('name'))));
+      slug && (await localForage.removeItem(getEntryBackupKey(collection.name)));
       const result = await this.deleteAnonymousBackup();
       return result;
     } catch (e) {
@@ -748,7 +742,7 @@ export class Backend {
 
     const getEntryValue = async (path: string) => {
       const loadedEntry = await this.implementation.getEntry(path);
-      let entry = createEntry(collection.get('name'), slug, loadedEntry.file.path, {
+      let entry = createEntry(collection.name, slug, loadedEntry.file.path, {
         raw: loadedEntry.data,
         label,
         mediaFiles: [],
@@ -811,7 +805,7 @@ export class Backend {
       );
       entry.mediaFiles = entry.mediaFiles.concat(...files);
     } else {
-      entry.mediaFiles = entry.mediaFiles.concat(state.mediaLibrary.get('files') || []);
+      entry.mediaFiles = entry.mediaFiles.concat(state.mediaLibrary.files || []);
     }
 
     return entry;
@@ -825,7 +819,7 @@ export class Backend {
     usedSlugs,
     status,
   }: PersistArgs) {
-    const modifiedData = await this.invokePreSaveEvent(draft.get('entry'));
+    const modifiedData = await this.invokePreSaveEvent(draft.entry);
     const entryDraft = (modifiedData && draft.setIn(['entry', 'data'], modifiedData)) || draft;
 
     const newEntry = entryDraft.getIn(['entry', 'newRecord']) || false;
@@ -848,7 +842,7 @@ export class Backend {
       dataFile = {
         path,
         slug,
-        raw: this.entryToRaw(collection, entryDraft.get('entry')),
+        raw: this.entryToRaw(collection, entryDraft.entry),
       };
 
       updateAssetProxies(assetProxies, config, collection, entryDraft, path);
@@ -857,7 +851,7 @@ export class Backend {
       dataFile = {
         path: entryDraft.getIn(['entry', 'path']),
         slug: customPath ? slugFromCustomPath(collection, customPath) : slug,
-        raw: this.entryToRaw(collection, entryDraft.get('entry')),
+        raw: this.entryToRaw(collection, entryDraft.entry),
         newPath: customPath,
       };
     }
@@ -870,7 +864,7 @@ export class Backend {
       dataFiles = getI18nFiles(
         collection,
         extension,
-        entryDraft.get('entry'),
+        entryDraft.entry,
         (draftData: Entry) => this.entryToRaw(collection, draftData),
         path,
         slug,
@@ -887,7 +881,7 @@ export class Backend {
       authorName: user.name,
     });
 
-    const collectionName = collection.get('name');
+    const collectionName = collection.name;
 
     const updatedOptions = { status };
     const opts = {
@@ -897,7 +891,7 @@ export class Backend {
       ...updatedOptions,
     };
 
-    await this.invokePrePublishEvent(entryDraft.get('entry'));
+    await this.invokePrePublishEvent(entryDraft.entry);
 
     await this.implementation.persistEntry(
       {
@@ -907,8 +901,8 @@ export class Backend {
       opts,
     );
 
-    await this.invokePostSaveEvent(entryDraft.get('entry'));
-    await this.invokePostPublishEvent(entryDraft.get('entry'));
+    await this.invokePostSaveEvent(entryDraft.entry);
+    await this.invokePostPublishEvent(entryDraft.entry);
 
     return slug;
   }
@@ -985,39 +979,31 @@ export class Backend {
     const format = resolveFormat(collection, entry.toJS());
     const fieldsOrder = this.fieldsOrder(collection, entry);
     const fieldsComments = selectFieldsComments(collection, entry);
-    return format && format.toFile(entry.get('data').toJS(), fieldsOrder, fieldsComments);
+    return format && format.toFile(entry.data.toJS(), fieldsOrder, fieldsComments);
   }
 
   fieldsOrder(collection: Collection, entry: Entry) {
-    const fields = collection.get('fields');
+    const fields = collection.fields;
     if (fields) {
-      return collection
-        .get('fields')
-        .map(f => f!.get('name'))
-        .toArray();
+      return collection.fields.map(f => f!.name).toArray();
     }
 
-    const files = collection.get('files');
-    const file = (files || List<CollectionFile>())
-      .filter(f => f!.get('name') === entry.get('slug'))
-      .get(0);
+    const files = collection.files;
+    const file = (files || List<CollectionFile>()).filter(f => f!.name === entry.slug).get(0);
 
     if (file == null) {
-      throw new Error(`No file found for ${entry.get('slug')} in ${collection.get('name')}`);
+      throw new Error(`No file found for ${entry.slug} in ${collection.name}`);
     }
-    return file
-      .get('fields')
-      .map(f => f!.get('name'))
-      .toArray();
+    return file.fields.map(f => f!.name).toArray();
   }
 
   filterEntries(collection: { entries: RawEntry[] }, filterRule: FilterRule) {
     return collection.entries.filter(entry => {
-      const fieldValue = entry.data[filterRule.get('field')];
+      const fieldValue = entry.data[filterRule.field];
       if (Array.isArray(fieldValue)) {
-        return fieldValue.includes(filterRule.get('value'));
+        return fieldValue.includes(filterRule.value);
       }
-      return fieldValue === filterRule.get('value');
+      return fieldValue === filterRule.value;
     });
   }
 }

@@ -79,7 +79,7 @@ class MediaLibraryCard extends React.Component {
       isViewableImage,
       isDraft,
     } = this.props;
-    const url = displayURL.get('url');
+    const url = displayURL.url;
     return (
       <Card
         isSelected={isSelected}
@@ -104,7 +104,7 @@ class MediaLibraryCard extends React.Component {
   }
   componentDidMount() {
     const { displayURL, loadDisplayURL } = this.props;
-    if (!displayURL.get('url')) {
+    if (!displayURL.url) {
       loadDisplayURL();
     }
   }

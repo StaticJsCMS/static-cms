@@ -56,7 +56,7 @@ function encodeParams(params) {
 }
 
 function toURL(req) {
-  return `${req.get('url')}${req.get('params') ? `?${encodeParams(req.get('params'))}` : ''}`;
+  return `${req.url}${req.params ? `?${encodeParams(req.params)}` : ''}`;
 }
 
 function toFetchArguments(req) {

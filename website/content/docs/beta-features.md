@@ -539,7 +539,7 @@ Example usage:
 ```javascript
 CMS.registerEventListener({
   name: 'prePublish',
-  handler: ({ author, entry }) => console.info(JSON.stringify({ author, data: entry.get('data') })),
+  handler: ({ author, entry }) => console.info(JSON.stringify({ author, data: entry.data })),
 });
 ```
 
@@ -549,7 +549,7 @@ Supported events are `prePublish`, `postPublish`, `preSave` and `postSave`. The 
 CMS.registerEventListener({
   name: 'preSave',
   handler: ({ entry }) => {
-    return entry.get('data').set('title', 'new title');
+    return entry.data.set('title', 'new title');
   },
 });
 ```

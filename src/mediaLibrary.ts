@@ -43,7 +43,7 @@ store.subscribe(() => {
   const state = store.getState() as unknown as State;
   if (state) {
     const mediaLibraryName = state.config.media_library?.name;
-    if (mediaLibraryName && !state.mediaLibrary.get('externalLibrary')) {
+    if (mediaLibraryName && !state.mediaLibrary.externalLibrary) {
       const mediaLibraryConfig = state.config.media_library;
       initializeMediaLibrary(mediaLibraryName, mediaLibraryConfig);
     }

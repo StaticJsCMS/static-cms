@@ -158,8 +158,8 @@ function valueListToArray(value) {
 
 const warnDeprecatedOptions = once(field =>
   console.warn(oneLine`
-  Static CMS config: ${field.get('name')} field: property "options" has been deprecated for the
-  ${field.get('widget')} widget and will be removed in the next major release. Rather than
+  Static CMS config: ${field.name} field: property "options" has been deprecated for the
+  ${field.widget} widget and will be removed in the next major release. Rather than
   \`field.options.media_library\`, apply media library options for this widget under
   \`field.media_library\`.
 `),
@@ -237,10 +237,10 @@ export default function withFileControl({ forImage } = {}) {
       return onOpenMediaLibrary({
         controlID: this.controlID,
         forImage,
-        privateUpload: field.get('private'),
+        privateUpload: field.private,
         value: valueListToArray(value),
         allowMultiple: !!mediaLibraryFieldOptions.get('allow_multiple', true),
-        config: mediaLibraryFieldOptions.get('config'),
+        config: mediaLibraryFieldOptions.config,
         field,
       });
     };
@@ -272,11 +272,11 @@ export default function withFileControl({ forImage } = {}) {
       return onOpenMediaLibrary({
         controlID: this.controlID,
         forImage,
-        privateUpload: field.get('private'),
+        privateUpload: field.private,
         value: valueListToArray(value),
         replaceIndex: index,
         allowMultiple: false,
-        config: mediaLibraryFieldOptions.get('config'),
+        config: mediaLibraryFieldOptions.config,
         field,
       });
     };
@@ -296,7 +296,7 @@ export default function withFileControl({ forImage } = {}) {
       const mediaLibraryFieldOptions = this.getMediaLibraryFieldOptions();
       return (
         mediaLibraryFieldOptions.get('config', false) &&
-        mediaLibraryFieldOptions.get('config').get('multiple', false)
+        mediaLibraryFieldOptions.config.get('multiple', false)
       );
     };
 

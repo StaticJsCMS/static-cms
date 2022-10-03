@@ -108,8 +108,8 @@ class Sidebar extends React.Component {
   };
 
   renderLink = (collection, filterTerm) => {
-    const collectionName = collection.get('name');
-    const iconName = collection.get('icon');
+    const collectionName = collection.name;
+    const iconName = collection.icon;
     let icon = <Icon type="write" />;
     if (iconName) {
       const storedIcon = getIcon(iconName);
@@ -136,7 +136,7 @@ class Sidebar extends React.Component {
           data-testid={collectionName}
         >
           {icon}
-          {collection.get('label')}
+          {collection.label}
         </SidebarNavLink>
       </li>
     );
@@ -174,8 +174,8 @@ class Sidebar extends React.Component {
   };
 
   renderLink = (collection, filterTerm) => {
-    const collectionName = collection.get('name');
-    const iconName = collection.get('icon');
+    const collectionName = collection.name;
+    const iconName = collection.icon;
     let icon = <Icon type="write" />;
     if (iconName) {
       const storedIcon = getIcon(iconName);
@@ -202,7 +202,7 @@ class Sidebar extends React.Component {
           data-testid={collectionName}
         >
           <IconWrapper>{icon}</IconWrapper>
-          {collection.get('label')}
+          {collection.label}
         </SidebarNavLink>
       </li>
     );
@@ -225,7 +225,7 @@ class Sidebar extends React.Component {
         <SidebarNavList>
           {collections
             .toList()
-            .filter(collection => collection.get('hide') !== true)
+            .filter(collection => collection.hide !== true)
             .map(collection => this.renderLink(collection, filterTerm))}
           {Object.values(additionalLinks).map(this.renderAdditionalLink)}
         </SidebarNavList>

@@ -1,44 +1,14 @@
-import { fromJS, Map, Set } from 'immutable';
+import { statues } from '../../backends/github/queries';
 
-type CursorStoreObject = {
+type CursorStore = {
   actions: Set<string>;
-  data: Map<string, unknown>;
-  meta: Map<string, unknown>;
-};
-
-export type CursorStore = {
-  get<K extends keyof CursorStoreObject>(
-    key: K,
-    defaultValue?: CursorStoreObject[K],
-  ): CursorStoreObject[K];
-  getIn<V>(path: string[]): V;
-  set<K extends keyof CursorStoreObject, V extends CursorStoreObject[K]>(
-    key: K,
-    value: V,
-  ): CursorStoreObject[K];
-  setIn(path: string[], value: unknown): CursorStore;
-  hasIn(path: string[]): boolean;
-  mergeIn(path: string[], value: unknown): CursorStore;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  update: (...args: any[]) => CursorStore;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  updateIn: (...args: any[]) => CursorStore;
+  data: Record<string, unknown>;
+  meta: Record<string, unknown>;
 };
 
 type ActionHandler = (action: string) => unknown;
 
-function jsToMap(obj: {}) {
-  if (obj === undefined) {
-    return Map();
-  }
-  const immutableObj = fromJS(obj);
-  if (!Map.isMap(immutableObj)) {
-    throw new Error('Object must be equivalent to a Map.');
-  }
-  return immutableObj;
-}
-
-const knownMetaKeys = Set([
+const knownMetaKeys = [
   'index',
   'page',
   'count',
@@ -48,10 +18,15 @@ const knownMetaKeys = Set([
   'extension',
   'folder',
   'depth',
-]);
+];
 
-function filterUnknownMetaKeys(meta: Map<string, string>) {
-  return meta.filter((_v, k) => knownMetaKeys.has(k as string));
+function filterUnknownMetaKeys(meta: Record<string, unknown>) {
+  return Object.keys(meta).reduce((acc, k) => {
+    if (knownMetaKeys.includes(k)) {
+      acc[k] = meta[k];
+    }
+    return acc;
+  }, {} as Record<string, unknown>);
 }
 
 /*
@@ -60,30 +35,29 @@ function filterUnknownMetaKeys(meta: Map<string, string>) {
   - (cursorMap: <object/Map with optional actions, data, and meta keys>) -> cursor
   - (actions: <array/List>, data: <object/Map>, meta: <optional object/Map>) -> cursor
 */
-function createCursorStore(...args: {}[]) {
+function createCursorStore(...args: unknown[]) {
   const { actions, data, meta } =
     args.length === 1
-      ? jsToMap(args[0]).toObject()
-      : { actions: args[0], data: args[1], meta: args[2] };
-  return Map({
-    // actions are a Set, rather than a List, to ensure an efficient .has
-    actions: Set(actions),
+      ? (args[0] as CursorStore)
+      : ({ actions: args[0], data: args[1], meta: args[2] } as CursorStore);
 
+  return {
+    // actions are a Set, rather than a List, to ensure an efficient .has
+    actions: new Set(...actions),
     // data and meta are Maps
-    data: jsToMap(data),
-    meta: jsToMap(meta).update(filterUnknownMetaKeys),
-  }) as CursorStore;
+    data,
+    meta: meta.update(filterUnknownMetaKeys),
+  } as CursorStore;
 }
 
 function hasAction(store: CursorStore, action: string) {
-  return store.hasIn(['actions', action]);
+  return store.actions.has(action);
 }
 
 function getActionHandlers(store: CursorStore, handler: ActionHandler) {
-  return store
-    .get('actions', Set<string>())
-    .toMap()
-    .map(action => handler(action as string));
+  for (const action in store.actions) {
+    handler(action);
+  }
 }
 
 // The cursor logic is entirely functional, so this class simply
@@ -91,82 +65,122 @@ function getActionHandlers(store: CursorStore, handler: ActionHandler) {
 export default class Cursor {
   store?: CursorStore;
   actions?: Set<string>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data?: Map<string, any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  meta?: Map<string, any>;
+  data?: Record<string, unknown>;
+  meta?: Record<string, unknown>;
 
   static create(...args: {}[]) {
     return new Cursor(...args);
   }
 
+  constructor(Cursor);
+  constructor(...args: {}[]);
   constructor(...args: {}[]) {
     if (args[0] instanceof Cursor) {
       return args[0] as Cursor;
     }
 
     this.store = createCursorStore(...args);
-    this.actions = this.store.get('actions');
-    this.data = this.store.get('data');
-    this.meta = this.store.get('meta');
+    this.actions = this.store.actions;
+    this.data = this.store.data;
+    this.meta = this.store.meta;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  updateStore(...args: any[]) {
-    return new Cursor(this.store!.update(...args));
-  }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  updateInStore(...args: any[]) {
-    return new Cursor(this.store!.updateIn(...args));
+  updateStore(update: (store: CursorStore) => CursorStore) {
+    return new Cursor(update(this.store!));
   }
 
   hasAction(action: string) {
     return hasAction(this.store!, action);
   }
+
   addAction(action: string) {
-    return this.updateStore('actions', (actions: Set<string>) => actions.add(action));
+    return this.updateStore(store => ({
+      ...store,
+      actions: new Set(...store.actions, action),
+    }));
   }
+
   removeAction(action: string) {
-    return this.updateStore('actions', (actions: Set<string>) => actions.delete(action));
+    return this.updateStore(store => {
+      const newActions = new Set(...store.actions);
+      newActions.delete(action);
+
+      return {
+        ...store,
+        actions: newActions,
+      };
+    });
   }
+
   setActions(actions: Iterable<string>) {
-    return this.updateStore((store: CursorStore) => store.set('actions', Set<string>(actions)));
+    return this.updateStore(store => ({
+      ...store,
+      actions: new Set(actions),
+    }));
   }
+
   mergeActions(actions: Set<string>) {
-    return this.updateStore('actions', (oldActions: Set<string>) => oldActions.union(actions));
+    return this.updateStore(store => ({
+      ...store,
+      actions: new Set({ ...store.actions, ...actions }),
+    }));
   }
+
   getActionHandlers(handler: ActionHandler) {
     return getActionHandlers(this.store!, handler);
   }
 
-  setData(data: {}) {
-    return new Cursor(this.store!.set('data', jsToMap(data)));
-  }
-  mergeData(data: {}) {
-    return new Cursor(this.store!.mergeIn(['data'], jsToMap(data)));
-  }
-  wrapData(data: {}) {
-    return this.updateStore('data', (oldData: Map<string, unknown>) =>
-      jsToMap(data).set('wrapped_cursor_data', oldData),
-    );
-  }
-  unwrapData() {
-    return [
-      this.store!.get('data').delete('wrapped_cursor_data'),
-      this.updateStore('data', (data: Map<string, unknown>) => data.get('wrapped_cursor_data')),
-    ] as [Map<string, unknown>, Cursor];
-  }
-  clearData() {
-    return this.updateStore('data', () => Map());
+  setData(data: Record<string, unknown>) {
+    return this.updateStore(store => ({
+      ...store,
+      data,
+    }));
   }
 
-  setMeta(meta: {}) {
-    return this.updateStore((store: CursorStore) => store.set('meta', jsToMap(meta)));
+  mergeData(data: Record<string, unknown>) {
+    return this.updateStore(store => ({
+      ...store,
+      data: { ...store.data, ...data },
+    }));
   }
-  mergeMeta(meta: {}) {
-    return this.updateStore((store: CursorStore) =>
-      store.update('meta', (oldMeta: Map<string, unknown>) => oldMeta.merge(jsToMap(meta))),
-    );
+
+  wrapData(data: Record<string, unknown>) {
+    return this.updateStore(store => ({
+      ...store,
+      data: {
+        ...data,
+        wrapped_cursor_data: store.data,
+      },
+    }));
+  }
+
+  unwrapData() {
+    return this.updateStore(store => ({
+      ...store,
+      data: store.data.wrapped_cursor_data as Record<string, unknown>,
+    }));
+  }
+
+  clearData() {
+    return this.updateStore(store => ({
+      ...store,
+      data: {},
+    }));
+  }
+
+  setMeta(meta: Record<string, unknown>) {
+    return this.updateStore(store => ({
+      ...store,
+      meta,
+    }));
+  }
+
+  mergeMeta(meta: Record<string, unknown>) {
+    return this.updateStore(store => ({
+      ...store,
+      meta: { ...store.meta, ...meta },
+    }));
   }
 }
 

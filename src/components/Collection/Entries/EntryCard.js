@@ -126,7 +126,7 @@ function EntryCard({
 
 function mapStateToProps(state, ownProps) {
   const { entry, inferedFields, collection } = ownProps;
-  const entryData = entry.get('data');
+  const entryData = entry.data;
   const summary = selectEntryCollectionTitle(collection, entry);
 
   let image = entryData.get(inferedFields.imageField);
@@ -138,11 +138,11 @@ function mapStateToProps(state, ownProps) {
 
   return {
     summary,
-    path: `/collections/${collection.get('name')}/entries/${entry.get('slug')}`,
+    path: `/collections/${collection.name}/entries/${entry.slug}`,
     image,
     imageFolder: collection
-      .get('fields')
-      ?.find(f => f.get('name') === inferedFields.imageField && f.get('widget') === 'image'),
+      .fields
+      ?.find(f => f.name === inferedFields.imageField && f.widget === 'image'),
     isLoadingAsset,
   };
 }

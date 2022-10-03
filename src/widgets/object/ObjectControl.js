@@ -71,11 +71,11 @@ export default class ObjectControl extends React.Component {
 
   validate = () => {
     const { field } = this.props;
-    let fields = field.get('field') || field.get('fields');
+    let fields = field.field || field.fields;
     fields = List.isList(fields) ? fields : List([fields]);
     fields.forEach(field => {
-      if (field.get('widget') === 'hidden') return;
-      this.componentValidate[field.get('name')]();
+      if (field.widget === 'hidden') return;
+      this.componentValidate[field.name]();
     });
   };
 
@@ -95,10 +95,10 @@ export default class ObjectControl extends React.Component {
       locale,
     } = this.props;
 
-    if (field.get('widget') === 'hidden') {
+    if (field.widget === 'hidden') {
       return null;
     }
-    const fieldName = field.get('name');
+    const fieldName = field.name;
     const fieldValue = value && Map.isMap(value) ? value.get(fieldName) : value;
 
     const isDuplicate = isFieldDuplicate && isFieldDuplicate(field);
@@ -139,16 +139,16 @@ export default class ObjectControl extends React.Component {
 
   objectLabel = () => {
     const { value, field } = this.props;
-    const label = field.get('label', field.get('name'));
-    const summary = field.get('summary');
+    const label = field.get('label', field.name);
+    const summary = field.summary;
     return summary ? stringTemplate.compileStringTemplate(summary, null, '', value) : label;
   };
 
   render() {
     const { field, forID, classNameWrapper, forList, hasError, t } = this.props;
     const collapsed = forList ? this.props.collapsed : this.state.collapsed;
-    const multiFields = field.get('fields');
-    const singleField = field.get('field');
+    const multiFields = field.fields;
+    const singleField = field.field;
 
     if (multiFields || singleField) {
       return (

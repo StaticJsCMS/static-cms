@@ -4,7 +4,6 @@ import { getWidgetValueSerializer } from './registry';
 import { isNullish } from './util/null.util';
 
 import type { EntryField } from '../interface';
-import { accordionActionsClasses } from '@mui/material';
 
 /**
  * Methods for serializing/deserializing entry field values. Most widgets don't
@@ -51,7 +50,7 @@ function runSerializer(
 
           return val;
         });
-        return accordionActionsClasses;
+        return acc;
       }
 
       // Call recursively for fields within objects

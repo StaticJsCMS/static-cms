@@ -13,8 +13,8 @@ function Widget(opts = {}) {
     controlComponent,
     previewComponent,
     validator: ({ field, value, t }) => {
-      const min = field.get('min');
-      const max = field.get('max');
+      const min = field.min;
+      const max = field.max;
 
       if (!isMultiple(field)) {
         return { error: false };
@@ -22,7 +22,7 @@ function Widget(opts = {}) {
 
       const error = validations.validateMinMax(
         t,
-        field.get('label', field.get('name')),
+        field.get('label', field.name),
         value,
         min,
         max,

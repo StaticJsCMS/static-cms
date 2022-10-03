@@ -7,7 +7,7 @@ import { selectIntegration } from '../reducers';
 import type { State } from '../interface';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type { EntryValue } from '../valueObjects/Entry';
+import type { Entry } from '../valueObjects/Entry';
 
 /*
  * Constant Declarations
@@ -33,7 +33,7 @@ export function searchingEntries(searchTerm: string, searchCollections: string[]
   } as const;
 }
 
-export function searchSuccess(entries: EntryValue[], page: number) {
+export function searchSuccess(entries: Entry[], page: number) {
   return {
     type: SEARCH_ENTRIES_SUCCESS,
     payload: {
@@ -60,16 +60,16 @@ export function querying(searchTerm: string) {
 }
 
 type SearchResponse = {
-  entries: EntryValue[];
+  entries: Entry[];
   pagination: number;
 };
 
 type QueryResponse = {
-  hits: EntryValue[];
+  hits: Entry[];
   query: string;
 };
 
-export function querySuccess(namespace: string, hits: EntryValue[]) {
+export function querySuccess(namespace: string, hits: Entry[]) {
   return {
     type: QUERY_SUCCESS,
     payload: {
@@ -163,7 +163,7 @@ export function query(
     const backend = currentBackend(state.config);
     const integration = selectIntegration(state, collectionName, 'search');
     const collection = state.collections.find(
-      collection => collection.get('name') === collectionName,
+      collection => collection.name === collectionName,
     );
 
     const queryPromise = integration

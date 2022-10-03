@@ -281,7 +281,7 @@ export default class GitGateway implements CmsBackendClass {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then(async res => {
-            const contentType = res.headers.get('Content-Type') || '';
+            const contentType = res.headers.Content-Type || '';
             if (!contentType.includes('application/json') && !contentType.includes('text/json')) {
               throw new APIError(
                 `Your Git Gateway backend is not returning valid settings. Please make sure it is enabled.`,

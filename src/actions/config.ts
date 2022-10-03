@@ -375,7 +375,7 @@ async function getConfigYaml(file: string, hasManualConfig: boolean) {
     const message = response instanceof Error ? response.message : response.status;
     throw new Error(`Failed to load config.yml (${message})`);
   }
-  const contentType = response.headers.get('Content-Type') || 'Not-Found';
+  const contentType = response.headers.Content-Type || 'Not-Found';
   const isYaml = contentType.indexOf('yaml') !== -1;
   if (!isYaml) {
     console.info(`Response for ${file} was not yaml. (Content-Type: ${contentType})`);

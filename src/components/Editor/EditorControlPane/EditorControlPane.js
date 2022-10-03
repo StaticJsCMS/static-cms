@@ -75,16 +75,16 @@ function LocaleDropdown({ locales, dropdownText, onLocaleChange }) {
 }
 
 function getFieldValue({ field, entry, isTranslatable, locale }) {
-  if (field.get('meta')) {
-    return entry.getIn(['meta', field.get('name')]);
+  if (field.meta) {
+    return entry.getIn(['meta', field.name]);
   }
 
   if (isTranslatable) {
     const dataPath = getLocaleDataPath(locale);
-    return entry.getIn([...dataPath, field.get('name')]);
+    return entry.getIn([...dataPath, field.name]);
   }
 
-  return entry.getIn(['data', field.get('name')]);
+  return entry.getIn(['data', field.name]);
 }
 
 export default class ControlPane extends React.Component {
@@ -96,7 +96,7 @@ export default class ControlPane extends React.Component {
 
   controlRef(field, wrappedControl) {
     if (!wrappedControl) return;
-    const name = field.get('name');
+    const name = field.name;
 
     this.componentValidate[name] =
       wrappedControl.innerWrappedControl?.validate || wrappedControl.validate;
@@ -146,8 +146,8 @@ export default class ControlPane extends React.Component {
 
   validate = async () => {
     this.props.fields.forEach(field => {
-      if (field.get('widget') === 'hidden') return;
-      this.componentValidate[field.get('name')]();
+      if (field.widget === 'hidden') return;
+      this.componentValidate[field.name]();
     });
   };
 
@@ -168,7 +168,7 @@ export default class ControlPane extends React.Component {
       return null;
     }
 
-    if (entry.size === 0 || entry.get('partial') === true) {
+    if (entry.size === 0 || entry.partial === true) {
       return null;
     }
 
@@ -199,7 +199,7 @@ export default class ControlPane extends React.Component {
           </LocaleRowWrapper>
         )}
         {fields
-          .filter(f => f.get('widget') !== 'hidden')
+          .filter(f => f.widget !== 'hidden')
           .map((field, i) => {
             const isTranslatable = isFieldTranslatable(field, locale, defaultLocale);
             const isDuplicate = isFieldDuplicate(field, locale, defaultLocale);

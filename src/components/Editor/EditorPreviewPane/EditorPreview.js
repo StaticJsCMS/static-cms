@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import styled from '@emotion/styled';
 
 function isVisible(field) {
-  return field.get('widget') !== 'hidden';
+  return field.widget !== 'hidden';
 }
 
 const PreviewContainer = styled.div`
@@ -28,7 +28,7 @@ export default class Preview extends React.Component {
     return (
         <PreviewContainer>
           {fields.filter(isVisible).map(field => (
-            <div key={field.get('name')}>{widgetFor(field.get('name'))}</div>
+            <div key={field.name}>{widgetFor(field.name)}</div>
           ))}
         </PreviewContainer>
     );

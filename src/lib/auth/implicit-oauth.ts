@@ -65,14 +65,14 @@ export default class ImplicitAuthenticator {
 
     const params = Map(hashParams.entries());
 
-    const { nonce } = JSON.parse(params.get('state') ?? '');
+    const { nonce } = JSON.parse(params.state ?? '');
     const validNonce = validateNonce(nonce);
     if (!validNonce) {
       return cb(new Error('Invalid nonce'));
     }
 
     if (params.has('error')) {
-      return cb(new Error(`${params.get('error')}: ${params.get('error_description')}`));
+      return cb(new Error(`${params.error}: ${params.error_description}`));
     }
 
     if (params.has('access_token')) {

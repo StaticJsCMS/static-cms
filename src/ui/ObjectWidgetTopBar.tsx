@@ -119,8 +119,8 @@ const ObjectWidgetTopBar = ({
           >
             {types.map((type, idx) =>
               type ? (
-                <MenuItem key={idx} onClick={() => onAddType(type.get('name'))}>
-                  {type.get('label') ?? type.get('name')}
+                <MenuItem key={idx} onClick={() => onAddType(type.name)}>
+                  {type.label ?? type.name}
                 </MenuItem>
               ) : null,
             )}

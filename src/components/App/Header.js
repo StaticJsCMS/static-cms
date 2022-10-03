@@ -159,7 +159,7 @@ class Header extends React.Component {
     } = this.props;
 
     const createableCollections = collections
-      .filter(collection => collection.get('create'))
+      .filter(collection => collection.create)
       .toList();
 
     return (
@@ -199,9 +199,9 @@ class Header extends React.Component {
               >
                 {createableCollections.map(collection => (
                   <DropdownItem
-                    key={collection.get('name')}
-                    label={collection.get('label_singular') || collection.get('label')}
-                    onClick={() => this.handleCreatePostClick(collection.get('name'))}
+                    key={collection.name}
+                    label={collection.label_singular || collection.label}
+                    onClick={() => this.handleCreatePostClick(collection.name)}
                   />
                 ))}
               </Dropdown>

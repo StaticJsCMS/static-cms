@@ -304,11 +304,11 @@ export default class API {
   }
 
   getCursorFromHeaders = (headers: Headers) => {
-    const page = parseInt(headers.get('X-Page') as string, 10);
-    const pageCount = parseInt(headers.get('X-Total-Pages') as string, 10);
-    const pageSize = parseInt(headers.get('X-Per-Page') as string, 10);
-    const count = parseInt(headers.get('X-Total') as string, 10);
-    const links = parseLinkHeader(headers.get('Link'));
+    const page = parseInt(headers.X-Page as string, 10);
+    const pageCount = parseInt(headers.X-Total-Pages as string, 10);
+    const pageSize = parseInt(headers.X-Per-Page as string, 10);
+    const count = parseInt(headers.X-Total as string, 10);
+    const links = parseLinkHeader(headers.Link);
     const actions = Map(links)
       .keySeq()
       .flatMap(key =>
@@ -617,7 +617,7 @@ export default class API {
       params: { ref: branch },
     });
 
-    const blobId = request.headers.get('X-Gitlab-Blob-Id') as string;
+    const blobId = request.headers.X-Gitlab-Blob-Id as string;
     return blobId;
   }
 

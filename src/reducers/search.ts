@@ -11,7 +11,7 @@ import {
 } from '../actions/search';
 
 import type { SearchAction } from '../actions/search';
-import type { EntryValue } from '../valueObjects/Entry';
+import type { Entry } from '../valueObjects/Entry';
 
 export type Search = {
   isFetching: boolean;
@@ -19,7 +19,7 @@ export type Search = {
   collections: string[];
   page: number;
   entryIds: { collection: string; slug: string }[];
-  queryHits: Record<string, EntryValue[]>;
+  queryHits: Record<string, Entry[]>;
   error: Error | undefined;
 };
 

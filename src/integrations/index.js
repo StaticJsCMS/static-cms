@@ -5,7 +5,7 @@ import AssetStore from './providers/assetStore/implementation';
 
 export function resolveIntegrations(interationsConfig, getToken) {
   let integrationInstances = Map({});
-  interationsConfig.get('providers').forEach((providerData, providerName) => {
+  interationsConfig.providers.forEach((providerData, providerName) => {
     switch (providerName) {
       case 'algolia':
         integrationInstances = integrationInstances.set('algolia', new Algolia(providerData));

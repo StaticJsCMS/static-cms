@@ -217,7 +217,7 @@ export class EditorToolbar extends React.Component {
 
   renderSimpleControls = () => {
     const { collection, hasChanged, isNewEntry, showDelete, onDelete, t } = this.props;
-    const canCreate = collection.get('create');
+    const canCreate = collection.create;
 
     return (
       <>
@@ -239,8 +239,8 @@ export class EditorToolbar extends React.Component {
     const { t, currentStatus } = this.props;
 
     const statusToLocaleKey = {
-      [status.get('DRAFT')]: 'statusInfoTooltipDraft',
-      [status.get('PENDING_REVIEW')]: 'statusInfoTooltipInReview',
+      [status.DRAFT]: 'statusInfoTooltipDraft',
+      [status.PENDING_REVIEW]: 'statusInfoTooltipInReview',
     };
 
     const statusKey = Object.keys(statusToLocaleKey).find(key => key === currentStatus);
@@ -341,7 +341,7 @@ export class EditorToolbar extends React.Component {
           <div>
             <BackCollection>
               {t('editor.editorToolbar.backCollection', {
-                collectionLabel: collection.get('label'),
+                collectionLabel: collection.label,
               })}
             </BackCollection>
             {hasChanged ? (

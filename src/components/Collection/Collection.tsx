@@ -88,7 +88,7 @@ const CollectionView = ({
   const [readyToLoad, setReadyToLoad] = useState(false);
 
   const newEntryUrl = useMemo(() => {
-    let url = collection.get('create') ? getNewEntryUrl(collectionName) : '';
+    let url = collection.create ? getNewEntryUrl(collectionName) : '';
     if (url && filterTerm) {
       url = getNewEntryUrl(collectionName);
       if (filterTerm) {
@@ -124,7 +124,7 @@ const CollectionView = ({
   }, [searchTerm, collections, collection, isSingleSearchResult]);
 
   useEffect(() => {
-    if (sort?.first()?.get('key')) {
+    if (sort?.first()?.key) {
       setReadyToLoad(true);
       return;
     }
@@ -133,7 +133,7 @@ const CollectionView = ({
       | StaticallyTypedRecord<CmsSortableFieldsDefault>
       | undefined;
 
-    if (!defaultSort || !defaultSort.get('field')) {
+    if (!defaultSort || !defaultSort.field) {
       setReadyToLoad(true);
       return;
     }
@@ -141,8 +141,8 @@ const CollectionView = ({
     let alive = true;
     const sortEntries = async () => {
       await onSortClick(
-        defaultSort.get('field'),
-        defaultSort.get('direction') ?? SortDirection.Ascending,
+        defaultSort.field,
+        defaultSort.direction ?? SortDirection.Ascending,
       );
       if (alive) {
         setReadyToLoad(true);
@@ -169,7 +169,7 @@ const CollectionView = ({
         {isSearchResults ? (
           <SearchResultContainer>
             <SearchResultHeading>
-              {t(searchResultKey, { searchTerm, collection: collection.get('label') })}
+              {t(searchResultKey, { searchTerm, collection: collection.label })}
             </SearchResultHeading>
           </SearchResultContainer>
         ) : (
@@ -203,12 +203,12 @@ function mapStateToProps(state: State, ownProps: TranslatedProps<CollectionViewP
   const { isSearchResults, match, t } = ownProps;
   const { name, searchTerm = '', filterTerm = '' } = match.params;
   const collection: Collection = name ? collections.get(name) : collections.first();
-  const sort = selectEntriesSort(state.entries, collection.get('name'));
+  const sort = selectEntriesSort(state.entries, collection.name);
   const sortableFields = selectSortableFields(collection, t);
   const viewFilters = selectViewFilters(collection);
   const viewGroups = selectViewGroups(collection);
-  const filter = selectEntriesFilter(state.entries, collection.get('name'));
-  const group = selectEntriesGroup(state.entries, collection.get('name'));
+  const filter = selectEntriesFilter(state.entries, collection.name);
+  const group = selectEntriesGroup(state.entries, collection.name);
   const viewStyle = selectViewStyle(state.entries);
 
   return {

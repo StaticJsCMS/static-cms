@@ -63,7 +63,7 @@ export async function requestWithBackoff(
       if (json.message.match('API rate limit exceeded')) {
         const now = new Date();
         const nextWindowInSeconds = response.headers.has('X-RateLimit-Reset')
-          ? parseInt(response.headers.get('X-RateLimit-Reset')!)
+          ? parseInt(response.headers.X-RateLimit-Reset!)
           : now.getTime() / 1000 + 60;
 
         throw new RateLimitError(json.message, nextWindowInSeconds);

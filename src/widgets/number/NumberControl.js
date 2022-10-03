@@ -16,7 +16,7 @@ export function validateMinMax(value, min, max, field, t) {
       error = {
         type: ValidationErrorTypes.RANGE,
         message: t('editor.editorControlPane.widget.range', {
-          fieldLabel: field.get('label', field.get('name')),
+          fieldLabel: field.get('label', field.name),
           minValue: min,
           maxValue: max,
         }),
@@ -26,7 +26,7 @@ export function validateMinMax(value, min, max, field, t) {
       error = {
         type: ValidationErrorTypes.RANGE,
         message: t('editor.editorControlPane.widget.min', {
-          fieldLabel: field.get('label', field.get('name')),
+          fieldLabel: field.get('label', field.name),
           minValue: min,
         }),
       };
@@ -35,7 +35,7 @@ export function validateMinMax(value, min, max, field, t) {
       error = {
         type: ValidationErrorTypes.RANGE,
         message: t('editor.editorControlPane.widget.max', {
-          fieldLabel: field.get('label', field.get('name')),
+          fieldLabel: field.get('label', field.name),
           maxValue: max,
         }),
       };
@@ -69,7 +69,7 @@ export default class NumberControl extends React.Component {
   };
 
   handleChange = e => {
-    const valueType = this.props.field.get('value_type');
+    const valueType = this.props.field.value_type;
     const { onChange } = this.props;
     const value = valueType === 'float' ? parseFloat(e.target.value) : parseInt(e.target.value, 10);
 
@@ -84,7 +84,7 @@ export default class NumberControl extends React.Component {
     const { field, value, classNameWrapper, forID, setActiveStyle, setInactiveStyle } = this.props;
     const min = field.get('min', '');
     const max = field.get('max', '');
-    const step = field.get('step', field.get('value_type') === 'int' ? 1 : '');
+    const step = field.get('step', field.value_type === 'int' ? 1 : '');
     return (
       <input
         type="number"

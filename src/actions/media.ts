@@ -5,7 +5,7 @@ import { selectMediaFileByPath } from '../reducers/mediaLibrary';
 import { getMediaFile, waitForMediaLibraryToLoad, getMediaDisplayURL } from './mediaLibrary';
 
 import type AssetProxy from '../valueObjects/AssetProxy';
-import type { Collection, State, EntryMap, EntryField } from '../interface';
+import type { Collection, State, Entry, EntryField } from '../interface';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { AnyAction } from 'redux';
 
@@ -67,7 +67,7 @@ export function loadAsset(resolvedPath: string) {
 
 interface GetAssetArgs {
   collection: Collection;
-  entry: EntryMap;
+  entry: Entry;
   path: string;
   field?: EntryField;
 }
@@ -82,7 +82,7 @@ const emptyAsset = createAssetProxy({
 export function boundGetAsset(
   dispatch: ThunkDispatch<State, {}, AnyAction>,
   collection: Collection,
-  entry: EntryMap,
+  entry: Entry,
 ) {
   function bound(path: string, field: EntryField) {
     const asset = dispatch(getAsset({ collection, entry, path, field }));

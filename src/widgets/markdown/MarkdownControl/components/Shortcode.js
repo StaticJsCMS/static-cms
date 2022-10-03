@@ -13,7 +13,7 @@ export default class Shortcode extends React.Component {
 
   componentDidMount() {
     const { node, typeOverload } = this.props;
-    const plugin = getEditorComponents().get(typeOverload || node.data.get('shortcode'));
+    const plugin = getEditorComponents().get(typeOverload || node.data.shortcode);
     const fieldKeys = ['id', 'fromBlock', 'toBlock', 'toPreview', 'pattern', 'icon'];
     const field = fromJS(omit(plugin, fieldKeys));
     this.setState({ field });
@@ -50,7 +50,7 @@ export default class Shortcode extends React.Component {
             field={field}
             onChange={handleChange}
             isEditorComponent={true}
-            isNewEditorComponent={node.data.get('shortcodeNew')}
+            isNewEditorComponent={node.data.shortcodeNew}
             isSelected={editor.isSelected(node)}
           />
         </div>

@@ -123,7 +123,7 @@ export default class CodeControl extends React.Component {
   getInitialLang = () => {
     const { value, field } = this.props;
     const lang =
-      (this.valueIsMap() && value && value.get(this.keys.lang)) || field.get('default_language');
+      (this.valueIsMap() && value && value.get(this.keys.lang)) || field.default_language;
     const langInfo = this.getLanguageByName(lang);
     if (lang && !langInfo) {
       this.setState({ unknownLang: lang });
@@ -135,7 +135,7 @@ export default class CodeControl extends React.Component {
   // its value.
   allowLanguageSelection =
     !this.props.field.has('allow_language_selection') ||
-    !!this.props.field.get('allow_language_selection');
+    !!this.props.field.allow_language_selection;
 
   toValue = this.valueIsMap()
     ? (type, value) => (this.props.value || Map()).set(this.keys[type], value)
@@ -161,7 +161,7 @@ export default class CodeControl extends React.Component {
   // value allows both the code string and the language to be persisted.
   valueIsMap() {
     const { field, isEditorComponent } = this.props;
-    return !field.get('output_code_only') || isEditorComponent;
+    return !field.output_code_only || isEditorComponent;
   }
 
   async handleChangeCodeMirrorProps(changedProps) {

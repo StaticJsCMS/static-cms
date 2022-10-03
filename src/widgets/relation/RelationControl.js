@@ -136,12 +136,12 @@ export default class RelationControl extends React.Component {
     // this is required since each search is limited by optionsLength so the selected value
     // might not show up on the search
     const { forID, field, value, query, onChange } = this.props;
-    const collection = field.get('collection');
-    const file = field.get('file');
+    const collection = field.collection;
+    const file = field.file;
     const initialSearchValues = value && (this.isMultiple() ? getSelectedOptions(value) : [value]);
     if (initialSearchValues && initialSearchValues.length > 0) {
       const metadata = {};
-      const searchFieldsArray = getSearchFieldArray(field.get('search_fields'));
+      const searchFieldsArray = getSearchFieldArray(field.search_fields);
       const { payload } = await query(forID, collection, searchFieldsArray, '', file);
       const hits = payload.hits || [];
       const options = this.parseHitOptions(hits);
@@ -158,8 +158,8 @@ export default class RelationControl extends React.Component {
       //set metadata
       this.mounted &&
         onChange(value, {
-          [field.get('name')]: {
-            [field.get('collection')]: metadata,
+          [field.name]: {
+            [field.collection]: metadata,
           },
         });
     }
@@ -177,8 +177,8 @@ export default class RelationControl extends React.Component {
       const newValue = arrayMove(value, oldIndex, newIndex);
       const metadata =
         (!isEmpty(options) && {
-          [field.get('name')]: {
-            [field.get('collection')]: {
+          [field.name]: {
+            [field.collection]: {
               [last(newValue)]: last(options).data,
             },
           },
@@ -196,8 +196,8 @@ export default class RelationControl extends React.Component {
       const value = options.map(optionToString);
       const metadata =
         (!isEmpty(options) && {
-          [field.get('name')]: {
-            [field.get('collection')]: {
+          [field.name]: {
+            [field.collection]: {
               [last(value)]: last(options).data,
             },
           },
@@ -208,8 +208,8 @@ export default class RelationControl extends React.Component {
       this.setState({ initialOptions: [selectedOption].filter(Boolean) });
       const value = optionToString(selectedOption);
       const metadata = selectedOption && {
-        [field.get('name')]: {
-          [field.get('collection')]: { [value]: selectedOption.data },
+        [field.name]: {
+          [field.collection]: { [value]: selectedOption.data },
         },
       };
       onChange(value, metadata);
@@ -238,8 +238,8 @@ export default class RelationControl extends React.Component {
 
   parseHitOptions = hits => {
     const { field } = this.props;
-    const valueField = field.get('value_field');
-    const displayField = field.get('display_fields') || List([field.get('value_field')]);
+    const valueField = field.value_field;
+    const displayField = field.display_fields || List([field.value_field]);
     const options = hits.reduce((acc, hit) => {
       const valuesPaths = stringTemplate.expandPath({ data: hit.data, path: valueField });
       for (let i = 0; i < valuesPaths.length; i++) {
@@ -262,10 +262,10 @@ export default class RelationControl extends React.Component {
 
   loadOptions = debounce((term, callback) => {
     const { field, query, forID } = this.props;
-    const collection = field.get('collection');
-    const optionsLength = field.get('options_length') || 20;
-    const searchFieldsArray = getSearchFieldArray(field.get('search_fields'));
-    const file = field.get('file');
+    const collection = field.collection;
+    const optionsLength = field.options_length || 20;
+    const searchFieldsArray = getSearchFieldArray(field.search_fields);
+    const file = field.file;
 
     query(forID, collection, searchFieldsArray, term, file, optionsLength).then(({ payload }) => {
       const hits = payload.hits || [];

@@ -27,16 +27,16 @@ export default class SelectControl extends React.Component<
 > {
   isValid = () => {
     const { field, value = '', t } = this.props;
-    const min = field.get('min');
-    const max = field.get('max');
+    const min = field.min;
+    const max = field.max;
 
-    if (!field.get('multiple')) {
+    if (!field.multiple) {
       return { error: false };
     }
 
     const error = validations.validateMinMax(
       t,
-      field.get('label') ?? field.get('name'),
+      field.label ?? field.name,
       value as List<string>,
       min,
       max,
@@ -48,10 +48,10 @@ export default class SelectControl extends React.Component<
   handleChange = (event: SelectChangeEvent<string | string[]>) => {
     const selectedOption = event.target.value as string | string[];
     const { onChange, field } = this.props;
-    const isMultiple: boolean = field.get('multiple') ?? false;
+    const isMultiple: boolean = field.multiple ?? false;
     const isEmpty = isMultiple && Array.isArray(selectedOption) ? !selectedOption?.length : !selectedOption;
 
-    if (field.get('required') && isEmpty && isMultiple) {
+    if (field.required && isEmpty && isMultiple) {
       onChange(List<string>());
     } else if (isEmpty) {
       onChange(null);
@@ -64,7 +64,7 @@ export default class SelectControl extends React.Component<
 
   componentDidMount() {
     const { field, onChange, value } = this.props;
-    if (field.get('required') && field.get('multiple')) {
+    if (field.required && field.multiple) {
       if (value && !List.isList(value)) {
         onChange(List([value]));
       } else if (!value) {
@@ -75,8 +75,8 @@ export default class SelectControl extends React.Component<
 
   render() {
     const { field, value, forID, setActiveStyle, setInactiveStyle } = this.props;
-    const fieldOptions: (string | Option)[] = field.get('options');
-    const isMultiple = field.get('multiple') ?? false;
+    const fieldOptions: (string | Option)[] = field.options;
+    const isMultiple = field.multiple ?? false;
 
     const options = [...(fieldOptions.map(convertToOption) as Option[])].filter(Boolean);
 

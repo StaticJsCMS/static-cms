@@ -48,13 +48,13 @@ export default class DateTimeControl extends React.Component {
 
   getFormats() {
     const { field } = this.props;
-    const format = field.get('format');
+    const format = field.format;
 
     // dateFormat and timeFormat are strictly for modifying
     // input field with the date/time pickers
-    const dateFormat = field.get('date_format');
+    const dateFormat = field.date_format;
     // show time-picker? false hides it, true shows it using default format
-    let timeFormat = field.get('time_format');
+    let timeFormat = field.time_format;
     if (typeof timeFormat === 'undefined') {
       timeFormat = true;
     }
@@ -68,13 +68,13 @@ export default class DateTimeControl extends React.Component {
 
   getDefaultValue() {
     const { field } = this.props;
-    const defaultValue = field.get('default');
+    const defaultValue = field.default;
     return defaultValue;
   }
 
   getPickerUtc() {
     const { field } = this.props;
-    const pickerUtc = field.get('picker_utc');
+    const pickerUtc = field.picker_utc;
     return pickerUtc;
   }
 

@@ -217,6 +217,7 @@ export function getRemarkPlugins() {
 export function registerWidgetValueSerializer(widgetName, serializer) {
   registry.widgetValueSerializers[widgetName] = serializer;
 }
+
 export function getWidgetValueSerializer(widgetName) {
   return registry.widgetValueSerializers[widgetName];
 }
@@ -299,7 +300,7 @@ export async function invokeEvent({ name, data }: { name: AllowedEvent; data: Ev
       _data = { ...data, entry };
     }
   }
-  return _data.entry.get('data');
+  return _data.entry.data;
 }
 
 export function removeEventListener({ name, handler }: CmsEventListener) {

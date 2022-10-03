@@ -116,7 +116,7 @@ export default class RawEditor extends React.Component {
         <EditorControlBar>
           <Toolbar
             onToggleMode={this.handleToggleMode}
-            buttons={field.get('buttons')}
+            buttons={field.buttons}
             disabled
             rawMode
             isShowModeToggle={isShowModeToggle}
@@ -129,7 +129,7 @@ export default class RawEditor extends React.Component {
               className={cx(
                 className,
                 css`
-                  ${rawEditorStyles({ minimal: field.get('minimal') })}
+                  ${rawEditorStyles({ minimal: field.minimal })}
                 `,
               )}
               value={this.state.value}

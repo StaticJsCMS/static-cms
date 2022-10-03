@@ -26,7 +26,7 @@ function catchFormatErrors(format: string, formatter: Formatter) {
 
 const responseFormatters = fromJS({
   json: async (res: Response) => {
-    const contentType = res.headers.get('Content-Type') || '';
+    const contentType = res.headers.Content-Type || '';
     if (!contentType.startsWith('application/json') && !contentType.startsWith('text/json')) {
       throw new Error(`${contentType} is not a valid JSON Content-Type`);
     }
@@ -102,7 +102,7 @@ export async function getAllResponses(
 
   while (req && responseCount < maxResponses) {
     const pageResponse = await unsentRequest.performRequest(req);
-    const linkHeader = pageResponse.headers.get('Link');
+    const linkHeader = pageResponse.headers.Link;
     const nextURL = linkHeader && parseLinkHeader(linkHeader)[linkHeaderRelName];
 
     const { headers = {} } = options;

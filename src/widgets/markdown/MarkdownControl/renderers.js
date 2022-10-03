@@ -230,16 +230,16 @@ function BulletedList(props) {
 
 function NumberedList(props) {
   return (
-    <StyledOl {...props.attributes} start={props.node.data.get('start') || 1}>
+    <StyledOl {...props.attributes} start={props.node.data.start || 1}>
       {props.children}
     </StyledOl>
   );
 }
 
 function Link(props) {
-  const data = props.node.get('data');
-  const url = data.get('url');
-  const title = data.get('title') || url;
+  const data = props.node.data;
+  const url = data.url;
+  const title = data.title || url;
 
   return (
     <StyledA href={url} title={title} {...props.attributes}>
@@ -249,11 +249,11 @@ function Link(props) {
 }
 
 function Image(props) {
-  const data = props.node.get('data');
-  const marks = data.get('marks');
-  const url = data.get('url');
-  const title = data.get('title');
-  const alt = data.get('alt');
+  const data = props.node.data;
+  const marks = data.marks;
+  const url = data.url;
+  const title = data.title;
+  const alt = data.alt;
   const image = <img src={url} title={title} alt={alt} {...props.attributes} />;
   const result = !marks
     ? image

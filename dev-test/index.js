@@ -55,7 +55,7 @@ const GeneralPreview = window.createClass({
     const entry = this.props.entry;
     const title = entry.getIn(['data', 'site_title']);
     const posts = entry.getIn(['data', 'posts']);
-    const thumb = posts && posts.get('thumb');
+    const thumb = posts && posts.thumb;
 
     return window.h(
       'div',
@@ -115,8 +115,8 @@ const RelationKitchenSinkPostPreview = window.createClass({
           'div',
           { style: style },
           window.h('h2', {}, 'Related Post'),
-          window.h('h3', {}, post.get('title')),
-          window.h('img', { src: post.get('image') }),
+          window.h('h3', {}, post.title),
+          window.h('img', { src: post.image }),
           window.h('p', {}, post.get('body', '').slice(0, 100) + '...'),
         )
       : null;

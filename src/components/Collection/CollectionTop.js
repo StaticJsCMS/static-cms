@@ -37,9 +37,9 @@ const CollectionTopDescription = styled.p`
 `;
 
 function getCollectionProps(collection) {
-  const collectionLabel = collection.get('label');
-  const collectionLabelSingular = collection.get('label_singular');
-  const collectionDescription = collection.get('description');
+  const collectionLabel = collection.label;
+  const collectionLabelSingular = collection.label_singular;
+  const collectionDescription = collection.description;
 
   return {
     collectionLabel,
