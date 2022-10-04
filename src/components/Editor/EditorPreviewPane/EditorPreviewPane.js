@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from '@emotion/styled';
-import { List, Map } from 'immutable';
+import { List, Record } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
@@ -35,7 +35,7 @@ export class PreviewPane extends React.Component {
     const { getAsset, entry } = props;
     const widget = resolveWidget(field.widget);
     const key = idx ? field.name + '_' + idx : field.name;
-    const valueIsInMap = value && !widget.allowMapValue && Map.isMap(value);
+    const valueIsInMap = value && !widget.allowMapValue && Record.isMap(value);
 
     /**
      * Use an HOC to provide conditional updates for all previews.
@@ -83,13 +83,13 @@ export class PreviewPane extends React.Component {
     // We retrieve the field by name so that this function can also be used in
     // custom preview templates, where the field object can't be passed in.
     let field = fields && fields.find(f => f.name === name);
-    let value = Map.isMap(values) && values.get(field.name);
+    let value = Record.isMap(values) && values.get(field.name);
     if (field.meta) {
       value = this.props.entry.getIn(['meta', field.name]);
     }
     const nestedFields = field.fields;
     const singleField = field.field;
-    const metadata = fieldsMetaData && fieldsMetaData.get(field.name, Map());
+    const metadata = fieldsMetaData && fieldsMetaData.get(field.name, Record());
 
     if (nestedFields) {
       field = field.set('fields', this.getNestedWidgets(nestedFields, value, metadata));
@@ -132,7 +132,7 @@ export class PreviewPane extends React.Component {
     if (List.isList(values)) {
       return values.map(value => this.widgetsForNestedFields(fields, value, fieldsMetaData));
     }
-    // Fields nested within an object field will be paired with a single Map of values.
+    // Fields nested within an object field will be paired with a single Record of values.
     return this.widgetsForNestedFields(fields, values, fieldsMetaData);
   };
 
@@ -163,27 +163,27 @@ export class PreviewPane extends React.Component {
     const field = fields.find(f => f.name === name);
     const nestedFields = field && field.fields;
     const value = entry.getIn(['data', field.name]);
-    const metadata = fieldsMetaData.get(field.name, Map());
+    const metadata = fieldsMetaData.get(field.name, Record());
 
     if (List.isList(value)) {
       return value.map(val => {
         const widgets =
           nestedFields &&
-          Map(
+          Record(
             nestedFields.map((f, i) => [
               f.name,
               <div key={i}>{this.getWidget(f, val, metadata.get(f.name), this.props)}</div>,
             ]),
           );
-        return Map({ data: val, widgets });
+        return Record({ data: val, widgets });
       });
     }
 
-    return Map({
+    return Record({
       data: value,
       widgets:
         nestedFields &&
-        Map(
+        Record(
           nestedFields.map(f => [
             f.name,
             this.getWidget(f, value, metadata.get(f.name), this.props),

@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { css } from '@emotion/react';
-import { Map, fromJS } from 'immutable';
+import { Record, fromJS } from 'immutable';
 import { omit } from 'lodash';
 
 import { getEditorControl, getEditorComponents } from '../index';
 
 export default class Shortcode extends React.Component {
   state = {
-    field: Map(),
+    field: Record(),
   };
 
   componentDidMount() {
@@ -27,7 +27,7 @@ export default class Shortcode extends React.Component {
 
     function handleChange(fieldName, value, metadata) {
       const dataValue = dataKey === false ? value : node.data.set('shortcodeData', value);
-      editor.setNodeByKey(node.key, { data: dataValue || Map(), metadata });
+      editor.setNodeByKey(node.key, { data: dataValue || Record(), metadata });
     }
 
     function handleFocus() {

@@ -1,4 +1,3 @@
-import { fromJS, List, Map } from 'immutable';
 import { isEqual } from 'lodash';
 
 import { currentBackend } from '../backend';
@@ -22,7 +21,7 @@ import { addAssets, getAsset } from './media';
 import { loadMedia, waitForMediaLibraryToLoad } from './mediaLibrary';
 import { waitUntil } from './waitUntil';
 
-import type { Set } from 'immutable';
+import { Set } from 'immutable';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { Backend } from '../backend';
@@ -563,13 +562,15 @@ const appendActions = {
 } as Record<string, AppendAction>;
 
 function addAppendActionsToCursor(cursor: Cursor) {
-  return Cursor.create(cursor).updateStore('actions', (actions: Set<string>) => {
-    return actions.union(
-      Object.entries(appendActions)
+  return Cursor.create(cursor).updateStore(store => ({
+    ...store,
+    actions: new Set(
+      ...store.actions,
+      ...(Object.entries(appendActions)
         .filter(([_k, v]) => actions.has(v.action as string))
-        .map(([k, _v]) => k),
-    );
-  });
+        .map(([k, _v]) => k) as string[]),
+    ),
+  }));
 }
 
 export function loadEntries(collection: Collection, page = 0) {
@@ -799,7 +800,7 @@ export function createEmptyDraftData(
         return [[{}], {}].some(e => isEqual(val, e));
       }
 
-      const hasSubfields = List.isList(subfields) || Map.isMap(subfields);
+      const hasSubfields = List.isList(subfields) || Record.isMap(subfields);
       if (hasSubfields) {
         if (list && List.isList(defaultValue)) {
           acc[name] = defaultValue;

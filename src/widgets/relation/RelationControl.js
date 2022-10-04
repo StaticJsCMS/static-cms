@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { components } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { debounce, find, get, isEmpty, last, uniqBy } from 'lodash';
-import { fromJS, List, Map } from 'immutable';
+import { fromJS, List, Record } from 'immutable';
 import { FixedSizeList } from 'react-window';
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 
@@ -64,7 +64,7 @@ function convertToOption(raw) {
   if (typeof raw === 'string') {
     return { label: raw, value: raw };
   }
-  return Map.isMap(raw) ? raw.toJS() : raw;
+  return Record.isMap(raw) ? raw.toJS() : raw;
 }
 
 function getSelectedOptions(value) {

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { Waypoint } from 'react-waypoint';
-import { Map } from 'immutable';
+import { Record } from 'immutable';
 import { FixedSizeGrid as Grid } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 
@@ -55,7 +55,7 @@ function CardWrapper(props) {
         height={cardHeight}
         margin={'0px'}
         isPrivate={isPrivate}
-        displayURL={displayURLs.get(file.id, file.url ? Map({ url: file.url }) : Map())}
+        displayURL={displayURLs.get(file.id, file.url ? Record({ url: file.url }) : Record())}
         loadDisplayURL={() => loadDisplayURL(file)}
         type={file.type}
         isViewableImage={file.isViewableImage}
@@ -129,7 +129,7 @@ function PaginatedGrid({
             height={cardHeight}
             margin={cardMargin}
             isPrivate={isPrivate}
-            displayURL={displayURLs.get(file.id, file.url ? Map({ url: file.url }) : Map())}
+            displayURL={displayURLs.get(file.id, file.url ? Record({ url: file.url }) : Record())}
             loadDisplayURL={() => loadDisplayURL(file)}
             type={file.type}
             isViewableImage={file.isViewableImage}
@@ -192,7 +192,7 @@ MediaLibraryCardGrid.propTypes = {
   cardMargin: PropTypes.string.isRequired,
   loadDisplayURL: PropTypes.func.isRequired,
   isPrivate: PropTypes.bool,
-  displayURLs: PropTypes.instanceOf(Map).isRequired,
+  displayURLs: PropTypes.instanceOf(Record).isRequired,
 };
 
 export default MediaLibraryCardGrid;

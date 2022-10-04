@@ -12,7 +12,7 @@ import {
   unsentRequest,
 } from '../../lib/util';
 
-import type { Map } from 'immutable';
+import type { Record } from 'immutable';
 import type { AssetProxy, DataFile, PersistOptions } from '../../interface';
 import type { ApiRequest } from '../../lib/util';
 
@@ -147,7 +147,7 @@ export default class API {
     return withHeaders;
   };
 
-  withAzureFeatures = (req: Map<string, Map<string, string>>) => {
+  withAzureFeatures = (req: Record<string, Record<string, string>>) => {
     if (req.hasIn(['params', API_VERSION])) {
       return req;
     }

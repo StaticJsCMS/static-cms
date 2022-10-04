@@ -12,7 +12,7 @@ import {
 import { sanitizeSlug } from './urlHelper';
 import { stringTemplate } from './widgets';
 
-import type { Map } from 'immutable';
+import type { Record } from 'immutable';
 import type { CmsConfig, CmsSlug, Collection, Entry } from '../interface';
 
 const {
@@ -91,7 +91,7 @@ export function getProcessSegment(slugConfig?: CmsSlug, ignoreValues?: string[])
 
 export function slugFormatter(
   collection: Collection,
-  entryData: Map<string, unknown>,
+  entryData: Record<string, unknown>,
   slugConfig?: CmsSlug,
 ) {
   const slugTemplate = collection.slug || '{{slug}}';
@@ -159,10 +159,10 @@ export function previewUrlFormatter(
     return baseUrl;
   }
 
-  let fields = entry.data as Map<string, string>;
+  let fields = entry.data as Record<string, string>;
   fields = addFileTemplateFields(entry.path, fields, collection.folder);
   const dateFieldName = getDateField() || selectInferedField(collection, 'date');
-  const date = parseDateFromEntry(entry as unknown as Map<string, unknown>, dateFieldName);
+  const date = parseDateFromEntry(entry as unknown as Record<string, unknown>, dateFieldName);
 
   // Prepare and sanitize slug variables only, leave the rest of the
   // `preview_path` template as is.
@@ -193,7 +193,7 @@ export function summaryFormatter(summaryTemplate: string, entry: Entry, collecti
   let entryData = entry.data;
   const date =
     parseDateFromEntry(
-      entry as unknown as Map<string, unknown>,
+      entry as unknown as Record<string, unknown>,
       selectInferedField(collection, 'date'),
     ) || null;
   const identifier = entryData.getIn(keyToPathArray(selectIdentifier(collection) as string));
@@ -222,12 +222,12 @@ export function folderFormatter(
     return folderTemplate;
   }
 
-  let fields = (entry.data as Map<string, string>).set(folderKey, defaultFolder);
+  let fields = (entry.data as Record<string, string>).set(folderKey, defaultFolder);
   fields = addFileTemplateFields(entry.path, fields, collection.folder);
 
   const date =
     parseDateFromEntry(
-      entry as unknown as Map<string, unknown>,
+      entry as unknown as Record<string, unknown>,
       selectInferedField(collection, 'date'),
     ) || null;
   const identifier = fields.getIn(keyToPathArray(selectIdentifier(collection) as string));

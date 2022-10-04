@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import { Map, List } from 'immutable';
+import { Record, List } from 'immutable';
 import { once } from 'lodash';
 import uuid from 'uuid/v4';
 import { oneLine } from 'common-tags';
@@ -286,10 +286,10 @@ export default function withFileControl({ forImage } = {}) {
 
       if (field.hasIn(['options', 'media_library'])) {
         warnDeprecatedOptions(field);
-        return field.getIn(['options', 'media_library'], Map());
+        return field.getIn(['options', 'media_library'], Record());
       }
 
-      return field.get('media_library', Map());
+      return field.get('media_library', Record());
     };
 
     allowsMultiple = () => {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { ClassNames } from '@emotion/react';
 import styled from '@emotion/styled';
-import { List, Map } from 'immutable';
+import { List, Record } from 'immutable';
 
 import { colors, lengths, ObjectWidgetTopBar } from '../../ui';
 import { stringTemplate } from '../../lib/widgets';
@@ -49,7 +49,7 @@ export default class ObjectControl extends React.Component {
   };
 
   static defaultProps = {
-    value: Map(),
+    value: Record(),
   };
 
   constructor(props) {
@@ -99,7 +99,7 @@ export default class ObjectControl extends React.Component {
       return null;
     }
     const fieldName = field.name;
-    const fieldValue = value && Map.isMap(value) ? value.get(fieldName) : value;
+    const fieldValue = value && Record.isMap(value) ? value.get(fieldName) : value;
 
     const isDuplicate = isFieldDuplicate && isFieldDuplicate(field);
     const isHidden = isFieldHidden && isFieldHidden(field);

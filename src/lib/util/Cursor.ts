@@ -30,8 +30,8 @@ function filterUnknownMetaKeys(meta: Record<string, unknown>) {
 /*
   createCursorMap takes one of three signatures:
   - () -> cursor with empty actions, data, and meta
-  - (cursorMap: <object/Map with optional actions, data, and meta keys>) -> cursor
-  - (actions: <array/List>, data: <object/Map>, meta: <optional object/Map>) -> cursor
+  - (cursorMap: <object/Record with optional actions, data, and meta keys>) -> cursor
+  - (actions: <array/List>, data: <object/Record>, meta: <optional object/Record>) -> cursor
 */
 function createCursorStore(...args: unknown[]) {
   const { actions, data, meta } =
@@ -151,11 +151,14 @@ export default class Cursor {
     }));
   }
 
-  unwrapData() {
-    return this.updateStore(store => ({
-      ...store,
-      data: store.data.wrapped_cursor_data as Record<string, unknown>,
-    }));
+  unwrapData(): [CursorStore['data'], Cursor] {
+    return [
+      this.store!.data,
+      this.updateStore(store => ({
+        ...store,
+        data: store.data.wrapped_cursor_data as Record<string, unknown>,
+      })),
+    ];
   }
 
   clearData() {

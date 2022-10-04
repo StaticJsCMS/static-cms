@@ -3,7 +3,7 @@ import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import styled from '@emotion/styled';
 import { Waypoint } from 'react-waypoint';
-import { Map } from 'immutable';
+import { Record } from 'immutable';
 
 import { selectFields, selectInferedField } from '../../../reducers/collections';
 import EntryCard from './EntryCard';
@@ -76,7 +76,7 @@ export default class EntryListing extends React.Component {
     return (
       <div>
         <CardsGrid>
-          {Map.isMap(collections)
+          {Record.isMap(collections)
             ? this.renderCardsForSingleCollection()
             : this.renderCardsForMultipleCollections()}
           {this.hasMore() && <Waypoint key={page} onEnter={this.handleLoadMore} />}

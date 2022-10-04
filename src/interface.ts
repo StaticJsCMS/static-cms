@@ -72,6 +72,7 @@ export interface Entry {
   updatedOn: string;
   status?: string;
   meta: { path?: string };
+  newRecord?: boolean;
   i18n?: {
     [locale: string]: any;
   };
@@ -131,13 +132,13 @@ type i18n = {
 
 export type Format = keyof typeof formatExtensions;
 
-export type Collection = {
+export interface Collection {
   name: string;
   icon?: string;
   folder?: string;
   files?: CollectionFile[];
   fields: EntryField[];
-  isFetching: boolean;
+  isFetching?: boolean;
   media_folder?: string;
   public_folder?: string;
   preview_path?: string;

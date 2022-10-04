@@ -1,5 +1,4 @@
 import * as fuzzy from 'fuzzy';
-import { fromJS, List, Set } from 'immutable';
 import { attempt, flatten, get, isError, set, trim, uniq } from 'lodash';
 import { basename, dirname, extname, join } from 'path';
 
@@ -44,8 +43,6 @@ import { selectCustomPath } from './reducers/entryDraft';
 import { selectIntegration } from './reducers/integrations';
 import { createEntry } from './valueObjects/Entry';
 
-import type { AllowedEvent } from './lib/registry';
-import type { Map } from 'immutable';
 import type {
   CmsBackendClass,
   CmsBackendInitializer,
@@ -55,15 +52,15 @@ import type {
   Credentials,
   DataFile,
   DisplayURL,
+  Entry,
   EntryDraft,
   EntryField,
-  Entry,
-  RawEntry,
   FilterRule,
   ImplementationEntry,
   State,
   User,
 } from './interface';
+import type { AllowedEvent } from './lib/registry';
 import type { AsyncLock } from './lib/util';
 import type AssetProxy from './valueObjects/AssetProxy';
 
@@ -79,13 +76,8 @@ function updateAssetProxies(
   assetProxies.map(asset => {
     // update media files path based on entry path
     const oldPath = asset.path;
-    const newPath = selectMediaFilePath(
-      config,
-      collection,
-      entryDraft.entry.set('path', path),
-      oldPath,
-      asset.field,
-    );
+    entryDraft.entry.path = path;
+    const newPath = selectMediaFilePath(config, collection, entryDraft.entry, oldPath, asset.field);
     asset.path = newPath;
   });
 }
@@ -116,15 +108,15 @@ function getEntryBackupKey(collectionName?: string, slug?: string) {
   return `${baseKey}.${collectionName}${suffix}`;
 }
 
-function getEntryField(field: string, entry: RawEntry) {
+function getEntryField(field: string, entry: Entry) {
   const value = get(entry.data, field);
   if (value) {
     return String(value);
   } else {
     const firstFieldPart = field.split('.')[0];
-    if (entry[firstFieldPart as keyof RawEntry]) {
+    if (entry[firstFieldPart as keyof Entry]) {
       // allows searching using entry.slug/entry.path etc.
-      return entry[firstFieldPart as keyof RawEntry];
+      return entry[firstFieldPart as keyof Entry];
     } else {
       return '';
     }
@@ -132,7 +124,7 @@ function getEntryField(field: string, entry: RawEntry) {
 }
 
 export function extractSearchFields(searchFields: string[]) {
-  return (entry: RawEntry) =>
+  return (entry: Entry) =>
     searchFields.reduce((acc, field) => {
       const value = getEntryField(field, entry);
       if (value) {
@@ -143,7 +135,7 @@ export function extractSearchFields(searchFields: string[]) {
     }, '');
 }
 
-export function expandSearchEntries(entries: RawEntry[], searchFields: string[]) {
+export function expandSearchEntries(entries: Entry[], searchFields: string[]) {
   // expand the entries for the purpose of the search
   const expandedEntries = entries.reduce((acc, e) => {
     const expandedFields = searchFields.reduce((acc, f) => {
@@ -157,12 +149,12 @@ export function expandSearchEntries(entries: RawEntry[], searchFields: string[])
     }
 
     return acc;
-  }, [] as (RawEntry & { field: string })[]);
+  }, [] as (Entry & { field: string })[]);
 
   return expandedEntries;
 }
 
-export function mergeExpandedEntries(entries: (RawEntry & { field: string })[]) {
+export function mergeExpandedEntries(entries: (Entry & { field: string })[]) {
   // merge the search results by slug and only keep data that matched the search
   const fields = entries.map(f => f.field);
   const arrayPaths: Record<string, Set<string>> = {};
@@ -172,7 +164,7 @@ export function mergeExpandedEntries(entries: (RawEntry & { field: string })[]) 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { field, ...rest } = e;
       acc[e.slug] = rest;
-      arrayPaths[e.slug] = Set();
+      arrayPaths[e.slug] = new Set();
     }
 
     const nestedFields = e.field.split('.');
@@ -186,13 +178,13 @@ export function mergeExpandedEntries(entries: (RawEntry & { field: string })[]) 
     }
 
     return acc;
-  }, {} as Record<string, RawEntry>);
+  }, {} as Record<string, Entry>);
 
   // this keeps the search score sorting order designated by the order in entries
   // and filters non matching items
   Object.keys(merged).forEach(slug => {
     const data = merged[slug].data;
-    for (const path of arrayPaths[slug].toArray()) {
+    for (const path of arrayPaths[slug]) {
       const array = get(data, path) as unknown[];
       const filtered = array.filter((_, index) => {
         return fields.some(f => `${f}.`.startsWith(`${path}.${index}.`));
@@ -216,14 +208,14 @@ export function mergeExpandedEntries(entries: (RawEntry & { field: string })[]) 
   return Object.values(merged);
 }
 
-function sortByScore(a: fuzzy.FilterResult<RawEntry>, b: fuzzy.FilterResult<RawEntry>) {
+function sortByScore(a: fuzzy.FilterResult<Entry>, b: fuzzy.FilterResult<Entry>) {
   if (a.score > b.score) return -1;
   if (a.score < b.score) return 1;
   return 0;
 }
 
 export function slugFromCustomPath(collection: Collection, customPath: string) {
-  const folderPath = collection.get('folder', '') as string;
+  const folderPath = collection.folder ?? '';
   const entryPath = customPath.toLowerCase().replace(folderPath.toLowerCase(), '');
   const slug = join(dirname(trim(entryPath, '/')), basename(entryPath, extname(customPath)));
   return slug;
@@ -265,7 +257,7 @@ interface PersistArgs {
   collection: Collection;
   entryDraft: EntryDraft;
   assetProxies: AssetProxy[];
-  usedSlugs: List<string>;
+  usedSlugs: string[];
   status?: string;
 }
 
@@ -279,7 +271,7 @@ function prepareMetaPath(path: string, collection: Collection) {
 
 function collectionDepth(collection: Collection) {
   let depth;
-  depth = collection.nested?.depth || getPathDepth(collection.get('path', '') as string);
+  depth = collection.nested?.depth || getPathDepth(collection.path ?? '');
 
   if (hasI18n(collection)) {
     depth = getI18nFilesDepth(collection, depth);
@@ -406,9 +398,9 @@ export class Backend {
 
   async generateUniqueSlug(
     collection: Collection,
-    entryData: Map<string, unknown>,
+    entryData: Record<string, unknown>,
     config: CmsConfig,
-    usedSlugs: List<string>,
+    usedSlugs: string[],
     customPath: string | undefined,
   ) {
     const slugConfig = config.slug;
@@ -472,12 +464,10 @@ export class Backend {
         return this.implementation.entriesByFolder(collection.folder as string, extension, depth);
       };
     } else if (collectionType === FILES) {
-      const files = collection
-        .files!.map(collectionFile => ({
-          path: collectionFile!.file,
-          label: collectionFile!.label,
-        }))
-        .toArray();
+      const files = collection.files!.map(collectionFile => ({
+        path: collectionFile!.file,
+        label: collectionFile!.label,
+      }));
       listMethod = () => this.implementation.entriesByFiles(files);
     } else {
       throw new Error(`Unknown collection type: ${collectionType}`);
@@ -518,7 +508,7 @@ export class Backend {
     const response = await this.listEntries(collection);
     const { entries } = response;
     let { cursor } = response;
-    while (cursor && cursor.actions!.includes('next')) {
+    while (cursor && cursor.actions?.has('next')) {
       const { entries: newEntries, cursor: newCursor } = await this.traverseCursor(cursor, 'next');
       entries.push(...newEntries);
       cursor = newCursor;
@@ -533,7 +523,7 @@ export class Backend {
     const errors: Error[] = [];
     const collectionEntriesRequests = collections
       .map(async collection => {
-        const summary = collection.get('summary', '') as string;
+        const summary = collection.summary ?? '';
         const summaryFields = extractTemplateVars(summary);
 
         // TODO: pass search fields in as an argument
@@ -541,7 +531,7 @@ export class Backend {
 
         if (collection.type === FILES) {
           collection.files?.forEach(f => {
-            const topLevelFields = f!.fields.map(f => f!.name).toArray();
+            const topLevelFields = f!.fields.map(f => f!.name);
             searchFields = [...searchFields, ...topLevelFields];
           });
         } else {
@@ -566,7 +556,7 @@ export class Backend {
       .map(p =>
         p.catch(err => {
           errors.push(err);
-          return [] as fuzzy.FilterResult<RawEntry>[];
+          return [] as fuzzy.FilterResult<Entry>[];
         }),
       );
 
@@ -579,9 +569,9 @@ export class Backend {
     }
 
     const hits = entries
-      .filter(({ score }: fuzzy.FilterResult<RawEntry>) => score > 5)
+      .filter(({ score }: fuzzy.FilterResult<Entry>) => score > 5)
       .sort(sortByScore)
-      .map((f: fuzzy.FilterResult<RawEntry>) => f.original);
+      .map((f: fuzzy.FilterResult<Entry>) => f.original);
     return { entries: hits };
   }
 
@@ -664,7 +654,7 @@ export class Backend {
       );
     };
 
-    const entry: RawEntry = formatRawData(raw);
+    const entry: Entry = formatRawData(raw);
     if (hasI18n(collection) && backup.i18n) {
       const i18n = formatI18nBackup(backup.i18n, formatRawData);
       entry.i18n = i18n;
@@ -684,7 +674,7 @@ export class Backend {
       }
 
       const mediaFiles = await Promise.all<MediaFile>(
-        (entry.mediaFiles.toJS() as MediaFile[]).map(async (file: MediaFile) => {
+        entry.mediaFiles.map(async (file: MediaFile) => {
           // make sure to serialize the file
           if (file.url?.startsWith('blob:')) {
             const blob = await fetch(file.url as string).then(res => res.blob());
@@ -755,7 +745,7 @@ export class Backend {
       return entry;
     };
 
-    let entryValue: RawEntry;
+    let entryValue: Entry;
     if (hasI18n(collection)) {
       entryValue = await getI18nEntry(collection, extension, path, slug, getEntryValue);
     } else {
@@ -785,7 +775,7 @@ export class Backend {
   }
 
   entryWithFormat(collection: Collection) {
-    return (entry: RawEntry): RawEntry => {
+    return (entry: Entry): Entry => {
       const format = resolveFormat(collection, entry);
       if (entry && entry.raw !== undefined) {
         const data = (format && attempt(format.fromFile.bind(format, entry.raw))) || {};
@@ -796,7 +786,7 @@ export class Backend {
     };
   }
 
-  async processEntry(state: State, collection: Collection, entry: RawEntry) {
+  async processEntry(state: State, collection: Collection, entry: Entry) {
     const integration = selectIntegration(state.integrations, null, 'assetStore');
     const mediaFolders = selectMediaFolders(state.config, collection, fromJS(entry));
     if (mediaFolders.length > 0 && !integration) {
@@ -820,9 +810,17 @@ export class Backend {
     status,
   }: PersistArgs) {
     const modifiedData = await this.invokePreSaveEvent(draft.entry);
-    const entryDraft = (modifiedData && draft.setIn(['entry', 'data'], modifiedData)) || draft;
+    const entryDraft = modifiedData
+      ? {
+          ...draft,
+          entry: {
+            ...draft.entry,
+            data: modifiedData,
+          },
+        }
+      : draft;
 
-    const newEntry = entryDraft.getIn(['entry', 'newRecord']) || false;
+    const newEntry = entryDraft.entry.newRecord ?? false;
 
     const customPath = selectCustomPath(collection, entryDraft);
 
@@ -833,7 +831,7 @@ export class Backend {
       }
       const slug = await this.generateUniqueSlug(
         collection,
-        entryDraft.getIn(['entry', 'data']),
+        entryDraft.entry.data,
         config,
         usedSlugs,
         customPath,
@@ -847,9 +845,9 @@ export class Backend {
 
       updateAssetProxies(assetProxies, config, collection, entryDraft, path);
     } else {
-      const slug = entryDraft.getIn(['entry', 'slug']);
+      const slug = entryDraft.entry.slug;
       dataFile = {
-        path: entryDraft.getIn(['entry', 'path']),
+        path: entryDraft.entry.path,
         slug: customPath ? slugFromCustomPath(collection, customPath) : slug,
         raw: this.entryToRaw(collection, entryDraft.entry),
         newPath: customPath,
@@ -908,7 +906,7 @@ export class Backend {
   }
 
   async invokeEventWithEntry(event: AllowedEvent, entry: Entry) {
-    const { login, name } = (await this.currentUser()) as User;
+    const { login, name = '' } = (await this.currentUser()) as User;
     return await invokeEvent({ name: event, data: { entry, author: { login, name } } });
   }
 
@@ -976,7 +974,7 @@ export class Backend {
   }
 
   entryToRaw(collection: Collection, entry: Entry): string {
-    const format = resolveFormat(collection, entry.toJS());
+    const format = resolveFormat(collection, entry);
     const fieldsOrder = this.fieldsOrder(collection, entry);
     const fieldsComments = selectFieldsComments(collection, entry);
     return format && format.toFile(entry.data.toJS(), fieldsOrder, fieldsComments);
@@ -985,19 +983,20 @@ export class Backend {
   fieldsOrder(collection: Collection, entry: Entry) {
     const fields = collection.fields;
     if (fields) {
-      return collection.fields.map(f => f!.name).toArray();
+      return collection.fields.map(f => f!.name);
     }
 
     const files = collection.files;
-    const file = (files || List<CollectionFile>()).filter(f => f!.name === entry.slug).get(0);
+    const file: CollectionFile | null =
+      (files ?? []).filter(f => f!.name === entry.slug)?.[0] ?? null;
 
     if (file == null) {
       throw new Error(`No file found for ${entry.slug} in ${collection.name}`);
     }
-    return file.fields.map(f => f!.name).toArray();
+    return file.fields.map(f => f.name);
   }
 
-  filterEntries(collection: { entries: RawEntry[] }, filterRule: FilterRule) {
+  filterEntries(collection: { entries: Entry[] }, filterRule: FilterRule) {
     return collection.entries.filter(entry => {
       const fieldValue = entry.data[filterRule.field];
       if (Array.isArray(fieldValue)) {

@@ -1,4 +1,4 @@
-import { Map } from 'immutable';
+import { Record } from 'immutable';
 
 import { currentBackend } from '../backend';
 import confirm from '../components/UI/Confirm';
@@ -86,7 +86,7 @@ export function openMediaLibrary(
     privateUpload?: boolean;
     value?: string;
     allowMultiple?: boolean;
-    config?: Map<string, unknown>;
+    config?: Record<string, unknown>;
     field?: EntryField;
   } = {},
 ) {
@@ -94,7 +94,7 @@ export function openMediaLibrary(
     const state = getState();
     const mediaLibrary = state.mediaLibrary.externalLibrary;
     if (mediaLibrary) {
-      const { controlID: id, value, config = Map(), allowMultiple, forImage } = payload;
+      const { controlID: id, value, config = Record(), allowMultiple, forImage } = payload;
       mediaLibrary.show({ id, value, config: config.toJS(), allowMultiple, imagesOnly: forImage });
     }
     dispatch(mediaLibraryOpened(payload));
@@ -429,7 +429,7 @@ function mediaLibraryOpened(payload: {
   value?: string;
   replaceIndex?: number;
   allowMultiple?: boolean;
-  config?: Map<string, unknown>;
+  config?: Record<string, unknown>;
   field?: EntryField;
 }) {
   return { type: MEDIA_LIBRARY_OPEN, payload } as const;

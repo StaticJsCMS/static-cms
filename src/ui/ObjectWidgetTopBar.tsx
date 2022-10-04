@@ -66,7 +66,7 @@ const AddButton = styled.button`
 
 export interface ObjectWidgetTopBarProps {
   allowAdd: boolean;
-  types: List<Map<string, any>>;
+  types: List<Record<string, any>>;
   onAdd: () => void;
   onAddType: (name: string) => void;
   onCollapseToggle: () => void;
@@ -96,7 +96,7 @@ const ObjectWidgetTopBar = ({
   }, []);
 
   const renderTypesDropdown = useCallback(
-    (types: List<Map<string, any>>) => {
+    (types: List<Record<string, any>>) => {
       return (
         <div>
           <Button

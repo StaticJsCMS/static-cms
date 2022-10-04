@@ -121,7 +121,7 @@ export function replaceWhen(matchPattern, replaceFn, text, invertMatchPattern) {
   }
 
   /**
-   * Map the data objects in the accumulator to their string values, modifying
+   * Record the data objects in the accumulator to their string values, modifying
    * matched strings with the replacement function. Modifies non-matches if
    * `invertMatchPattern` is truthy.
    */

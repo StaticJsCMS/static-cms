@@ -42,7 +42,7 @@ export interface IconTypeProps extends Partial<IconTypeConfig> {
 }
 
 /**
- * Map icon definition objects - imported object of images simply maps the icon
+ * Record icon definition objects - imported object of images simply maps the icon
  * name to the raw svg, so we move that to the `image` property of the
  * definition object and set any additional configured properties for each icon.
  */

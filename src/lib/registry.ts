@@ -1,6 +1,6 @@
 import { oneLine } from 'common-tags';
 import { produce } from 'immer';
-import { Map } from 'immutable';
+import { Record } from 'immutable';
 
 import EditorComponent from '../valueObjects/EditorComponent';
 
@@ -33,7 +33,7 @@ interface Registry {
   widgets: Record<string, any>;
   icons: Record<string, CmsIcon>;
   additionalLinks: Record<string, AdditionalLink>;
-  editorComponents: Map<string, any>;
+  editorComponents: Record<string, any>;
   remarkPlugins: any[];
   widgetValueSerializers: Record<string, any>;
   mediaLibraries: (CmsMediaLibrary & { options: CmsMediaLibraryOptions })[];
@@ -51,7 +51,7 @@ const registry: Registry = {
   widgets: {},
   icons: {},
   additionalLinks: {},
-  editorComponents: Map(),
+  editorComponents: Record(),
   remarkPlugins: [],
   widgetValueSerializers: {},
   mediaLibraries: [],

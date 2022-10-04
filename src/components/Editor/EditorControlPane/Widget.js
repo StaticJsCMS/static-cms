@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Map, List } from 'immutable';
+import { Record, List } from 'immutable';
 
 import { getRemarkPlugins } from '../../../lib/registry';
 import ValidationErrorTypes from '../../../constants/validationErrorTypes';
@@ -215,7 +215,7 @@ export default class Widget extends Component {
    * e.g. when debounced, always get the latest object value instead of using
    * `this.props.value` directly.
    */
-  getObjectValue = () => this.props.value || Map();
+  getObjectValue = () => this.props.value || Record();
 
   /**
    * Change handler for fields that are nested within another field.

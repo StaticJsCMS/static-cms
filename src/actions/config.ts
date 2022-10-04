@@ -1,6 +1,5 @@
 import deepmerge from 'deepmerge';
 import { produce } from 'immer';
-import { fromJS } from 'immutable';
 import { isEmpty, trim, trimStart } from 'lodash';
 import yaml from 'yaml';
 
@@ -162,7 +161,7 @@ function throwOnMissingDefaultLocale(i18n?: CmsI18nConfig) {
 
 function hasIntegration(config: CmsConfig, collection: CmsCollection) {
   // TODO remove fromJS when Immutable is removed from the integrations state slice
-  const integrations = getIntegrations(fromJS(config));
+  const integrations = getIntegrations(config);
   const integration = selectIntegration(integrations, collection.name, 'listEntries');
   return !!integration;
 }
@@ -322,8 +321,7 @@ export function applyDefaults(originalConfig: CmsConfig) {
       if (!collection.sortable_fields) {
         collection.sortable_fields = {
           fields: selectDefaultSortableFields(
-            // TODO remove fromJS when Immutable is removed from the collections state slice
-            fromJS(collection),
+            collection,
             backend,
             hasIntegration(config, collection),
           ),
@@ -375,7 +373,7 @@ async function getConfigYaml(file: string, hasManualConfig: boolean) {
     const message = response instanceof Error ? response.message : response.status;
     throw new Error(`Failed to load config.yml (${message})`);
   }
-  const contentType = response.headers.Content-Type || 'Not-Found';
+  const contentType = response.headers.get('Content-Type') ?? 'Not-Found';
   const isYaml = contentType.indexOf('yaml') !== -1;
   if (!isYaml) {
     console.info(`Response for ${file} was not yaml. (Content-Type: ${contentType})`);

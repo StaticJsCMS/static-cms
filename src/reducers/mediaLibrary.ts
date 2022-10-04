@@ -1,4 +1,4 @@
-import { List, Map } from 'immutable';
+import { List, Record } from 'immutable';
 import { dirname } from 'path';
 import uuid from 'uuid/v4';
 
@@ -37,25 +37,25 @@ import type {
 const defaultState: {
   isVisible: boolean;
   showMediaButton: boolean;
-  controlMedia: Map<string, string>;
-  displayURLs: Map<string, string>;
+  controlMedia: Record<string, string>;
+  displayURLs: Record<string, string>;
   externalLibrary?: MediaLibraryInstance;
   controlID?: string;
   page?: number;
   files?: MediaFile[];
-  config: Map<string, unknown>;
+  config: Record<string, unknown>;
   field?: EntryField;
   value?: string | string[];
   replaceIndex?: number;
 } = {
   isVisible: false,
   showMediaButton: true,
-  controlMedia: Map(),
-  displayURLs: Map(),
-  config: Map(),
+  controlMedia: Record(),
+  displayURLs: Record(),
+  config: Record(),
 };
 
-function mediaLibrary(state = Map(defaultState), action: MediaLibraryAction) {
+function mediaLibrary(state = Record(defaultState), action: MediaLibraryAction) {
   switch (action.type) {
     case MEDIA_LIBRARY_CREATE:
       return state.withMutations(map => {
@@ -66,24 +66,24 @@ function mediaLibrary(state = Map(defaultState), action: MediaLibraryAction) {
     case MEDIA_LIBRARY_OPEN: {
       const { controlID, forImage, privateUpload, config, field, value, replaceIndex } =
         action.payload;
-      const libConfig = config || Map();
+      const libConfig = config || Record();
       const privateUploadChanged = state.privateUpload !== privateUpload;
       if (privateUploadChanged) {
-        return Map({
+        return Record({
           isVisible: true,
           forImage,
           controlID,
           canInsert: !!controlID,
           privateUpload,
           config: libConfig,
-          controlMedia: Map(),
-          displayURLs: Map(),
+          controlMedia: Record(),
+          displayURLs: Record(),
           field,
           value,
           replaceIndex,
         });
       }
-      return state.withMutations((map: Map<string, any>) => {
+      return state.withMutations((map: Record<string, any>) => {
         map.set('isVisible', true);
         map.set('forImage', forImage);
         map.set('controlID', controlID);
@@ -151,7 +151,7 @@ function mediaLibrary(state = Map(defaultState), action: MediaLibraryAction) {
       }
 
       const filesWithKeys = files.map(file => ({ ...file, key: uuid() }));
-      return state.withMutations((map: Map<string, any>) => {
+      return state.withMutations((map: Record<string, any>) => {
         map.set('isLoading', false);
         map.set('isPaginating', false);
         map.set('page', page);
@@ -288,7 +288,7 @@ export function selectMediaFileByPath(state: State, path: string) {
 export function selectMediaDisplayURL(state: State, id: string) {
   const displayUrlState = state.mediaLibrary.getIn(
     ['displayURLs', id],
-    Map() as unknown as DisplayURLState,
+    Record() as unknown as DisplayURLState,
   );
   return displayUrlState;
 }

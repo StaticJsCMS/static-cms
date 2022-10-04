@@ -2,7 +2,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
 import { setContext } from 'apollo-link-context';
 import { createHttpLink } from 'apollo-link-http';
-import { Map } from 'immutable';
+import { Record } from 'immutable';
 import { Base64 } from 'js-base64';
 import { flow, partial, result, trimStart } from 'lodash';
 import { dirname } from 'path';
@@ -309,7 +309,7 @@ export default class API {
     const pageSize = parseInt(headers.get('X-Per-Page') as string, 10);
     const count = parseInt(headers.get('X-Total') as string, 10);
     const links = parseLinkHeader(headers.get('Link'));
-    const actions = Map(links)
+    const actions = Record(links)
       .keySeq()
       .flatMap(key =>
         (key === 'prev' && page > 1) ||

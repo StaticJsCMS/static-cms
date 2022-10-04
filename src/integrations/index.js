@@ -1,10 +1,10 @@
-import { Map } from 'immutable';
+import { Record } from 'immutable';
 
 import Algolia from './providers/algolia/implementation';
 import AssetStore from './providers/assetStore/implementation';
 
 export function resolveIntegrations(interationsConfig, getToken) {
-  let integrationInstances = Map({});
+  let integrationInstances = Record({});
   interationsConfig.providers.forEach((providerData, providerName) => {
     switch (providerName) {
       case 'algolia':

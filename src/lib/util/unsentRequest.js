@@ -1,4 +1,4 @@
-import { fromJS, List, Map } from 'immutable';
+import { fromJS, List, Record } from 'immutable';
 import curry from 'lodash/curry';
 import flow from 'lodash/flow';
 import isString from 'lodash/isString';
@@ -34,17 +34,17 @@ function fetchWithTimeout(input, init) {
 function decodeParams(paramsString) {
   return List(paramsString.split('&'))
     .map(s => List(s.split('=')).map(decodeURIComponent))
-    .update(Map);
+    .update(Record);
 }
 
 function fromURL(wholeURL) {
   const [url, allParamsString] = wholeURL.split('?');
-  return Map({ url, ...(allParamsString ? { params: decodeParams(allParamsString) } : {}) });
+  return Record({ url, ...(allParamsString ? { params: decodeParams(allParamsString) } : {}) });
 }
 
 function fromFetchArguments(wholeURL, options) {
   return fromURL(wholeURL).merge(
-    (options ? fromJS(options) : Map()).remove('url').remove('params'),
+    (options ? fromJS(options) : Record()).remove('url').remove('params'),
   );
 }
 
@@ -70,7 +70,7 @@ function maybeRequestArg(req) {
   if (req) {
     return fromJS(req);
   }
-  return Map();
+  return Record();
 }
 
 function ensureRequestArg(func) {
@@ -96,7 +96,7 @@ function getPropSetFunction(path) {
 }
 
 function getPropMergeFunction(path) {
-  return getCurriedRequestProcessor((obj, req) => req.updateIn(path, (p = Map()) => p.merge(obj)));
+  return getCurriedRequestProcessor((obj, req) => req.updateIn(path, (p = Record()) => p.merge(obj)));
 }
 
 const withMethod = getPropSetFunction(['method']);

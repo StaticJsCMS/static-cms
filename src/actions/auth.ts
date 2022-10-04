@@ -1,10 +1,9 @@
 import { currentBackend } from '../backend';
 import { addSnackbar } from '../store/slices/snackbars';
 
-import type { Credentials, User } from '../lib/util';
-import type { ThunkDispatch } from 'redux-thunk';
 import type { AnyAction } from 'redux';
-import type { State } from '../interface';
+import type { ThunkDispatch } from 'redux-thunk';
+import type { Credentials, State, User } from '../interface';
 
 export const AUTH_REQUEST = 'AUTH_REQUEST';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';

@@ -1,4 +1,4 @@
-import { Map } from 'immutable';
+import { Record } from 'immutable';
 import { get, trimEnd, truncate } from 'lodash';
 import moment from 'moment';
 import { basename, dirname, extname } from 'path';
@@ -74,7 +74,7 @@ export const dateParsers: Record<string, (date: Date) => string> = {
   second: (date: Date) => formatDate(date.getUTCSeconds()),
 };
 
-export function parseDateFromEntry(entry: Map<string, unknown>, dateFieldName?: string | null) {
+export function parseDateFromEntry(entry: Record<string, unknown>, dateFieldName?: string | null) {
   if (!dateFieldName) {
     return;
   }
@@ -151,7 +151,7 @@ export function expandPath({
 
 // Allow `fields.` prefix in placeholder to override built in replacements
 // like "slug" and "year" with values from fields of the same name.
-function getExplicitFieldReplacement(key: string, data: Map<string, unknown>) {
+function getExplicitFieldReplacement(key: string, data: Record<string, unknown>) {
   if (!key.startsWith(FIELD_PREFIX)) {
     return;
   }
@@ -182,7 +182,7 @@ export function compileStringTemplate(
   template: string,
   date: Date | undefined | null,
   identifier = '',
-  data = Map<string, unknown>(),
+  data = Record<string, unknown>(),
   processor?: (value: string) => string,
 ) {
   let missingRequiredDate;
@@ -250,7 +250,7 @@ export function extractTemplateVars(template: string) {
  *   eg: `addFileTemplateFields('foo/bar/baz.ext', fields, 'foo')`
  *       will result in: `{ dirname: 'bar', filename: 'baz', extension: 'ext' }`
  */
-export function addFileTemplateFields(entryPath: string, fields: Map<string, string>, folder = '') {
+export function addFileTemplateFields(entryPath: string, fields: Record<string, string>, folder = '') {
   if (!entryPath) {
     return fields;
   }

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ClassNames } from '@emotion/react';
 import olStyles from 'ol/ol.css';
-import Map from 'ol/Map.js';
+import Record from 'ol/Record.js';
 import View from 'ol/View.js';
 import GeoJSON from 'ol/format/GeoJSON';
 import Draw from 'ol/interaction/Draw.js';
@@ -21,7 +21,7 @@ function getDefaultFormat() {
 }
 
 function getDefaultMap(target, featuresLayer) {
-  return new Map({
+  return new Record({
     target,
     layers: [new TileLayer({ source: new OSMSource() }), featuresLayer],
     view: new View({ center: [0, 0], zoom: 2 }),

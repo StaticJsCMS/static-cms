@@ -1,4 +1,3 @@
-import { fromJS, List, OrderedMap, Set } from 'immutable';
 import { escapeRegExp, get } from 'lodash';
 
 import { CONFIG_SUCCESS } from '../actions/config';
@@ -22,6 +21,8 @@ import type {
   Entry,
   ViewFilter,
   ViewGroup,
+  CmsCollection,
+  CmsField,
 } from '../interface';
 
 const { keyToPathArray } = stringTemplate;
@@ -47,8 +48,7 @@ const selectors = {
   [FOLDER]: {
     entryExtension(collection: Collection) {
       return (
-        collection.extension ||
-        get(formatExtensions, collection.format || 'frontmatter')
+        collection.extension || get(formatExtensions, collection.format || 'frontmatter')
       ).replace(/^\./, '');
     },
     fields(collection: Collection) {
@@ -91,9 +91,7 @@ const selectors = {
       return file && file.file;
     },
     entrySlug(collection: Collection, path: string) {
-      const file = (collection.files as CollectionFile[])
-        .filter(f => f?.file === path)
-        .get(0);
+      const file = (collection.files as CollectionFile[]).filter(f => f?.file === path).get(0);
       return file && file.name;
     },
     entryLabel(collection: Collection, slug: string) {
@@ -136,10 +134,7 @@ function getFieldsWithMediaFolders(fields: EntryField[]) {
 }
 
 export function getFileFromSlug(collection: Collection, slug: string) {
-  return collection
-    .files
-    ?.toArray()
-    .find(f => f.name === slug);
+  return collection.files?.toArray().find(f => f.name === slug);
 }
 
 export function selectFieldsWithMediaFolders(collection: Collection, slug: string) {
@@ -204,18 +199,18 @@ export function selectTemplateName(collection: Collection, slug: string) {
   return selectors[collection.type].templateName(collection, slug);
 }
 
-export function getFieldsNames(fields: EntryField[], prefix = '') {
-  let names = fields.map(f => `${prefix}${f.name}`);
+export function getFieldsNames(fields: (EntryField | CmsField)[] | undefined, prefix = '') {
+  let names = fields?.map(f => `${prefix}${f.name}`) ?? [];
 
-  fields.forEach((f, index) => {
-    if (f.has('fields')) {
-      const fields = f.fields?.toArray() as EntryField[];
+  fields?.forEach((f, index) => {
+    if ('fields' in f) {
+      const fields = f.fields;
       names = [...names, ...getFieldsNames(fields, `${names[index]}.`)];
-    } else if (f.has('field')) {
-      const field = f.field as EntryField;
-      names = [...names, ...getFieldsNames([field], `${names[index]}.`)];
-    } else if (f.has('types')) {
-      const types = f.types?.toArray() as EntryField[];
+    } else if ('field' in f) {
+      const field = f.field;
+      names = [...names, ...(field ? getFieldsNames([field], `${names[index]}.`) : [])];
+    } else if ('types' in f) {
+      const types = f.types;
       names = [...names, ...getFieldsNames(types, `${names[index]}.`)];
     }
   });
@@ -227,15 +222,17 @@ export function selectField(collection: Collection, key: string) {
   const array = keyToPathArray(key);
   let name: string | undefined;
   let field;
-  let fields = collection.get('fields', List<EntryField>()).toArray();
+  let fields = collection.fields ?? [];
   while ((name = array.shift()) && fields) {
     field = fields.find(f => f.name === name);
-    if (field?.has('fields')) {
-      fields = field?.fields?.toArray() as EntryField[];
-    } else if (field?.has('field')) {
-      fields = [field?.field as EntryField];
-    } else if (field?.has('types')) {
-      fields = field?.types?.toArray() as EntryField[];
+    if (field) {
+      if ('fields' in field) {
+        fields = field?.fields ?? [];
+      } else if ('field' in field && field.field) {
+        fields = [field?.field];
+      } else if ('types' in field) {
+        fields = field?.types ?? [];
+      }
     }
   }
 
@@ -243,7 +240,7 @@ export function selectField(collection: Collection, key: string) {
 }
 
 export function traverseFields(
-  fields: List<EntryField>,
+  fields: EntryField[],
   updater: (field: EntryField) => EntryField,
   done = () => false,
 ) {
@@ -251,27 +248,23 @@ export function traverseFields(
     return fields;
   }
 
-  fields = fields
-    .map(f => {
-      const field = updater(f as EntryField);
-      if (done()) {
-        return field;
-      } else if (field.has('fields')) {
-        return field.set('fields', traverseFields(field.fields!, updater, done));
-      } else if (field.has('field')) {
-        return field.set(
-          'field',
-          traverseFields(List([field.field!]), updater, done).get(0),
-        );
-      } else if (field.has('types')) {
-        return field.set('types', traverseFields(field.types!, updater, done));
-      } else {
-        return field;
-      }
-    })
-    .toList() as List<EntryField>;
-
-  return fields;
+  return fields.map(f => {
+    const field = updater(f as EntryField);
+    if (done()) {
+      return field;
+    } else if ('fields' in field) {
+      field.fields = traverseFields(field.fields ?? [], updater, done);
+      return field;
+    } else if ('field' in field && field.field) {
+      field.field = traverseFields([field.field], updater, done)?.[0];
+      return field;
+    } else if ('types' in field) {
+      field.types = traverseFields(field.types!, updater, done);
+      return field;
+    } else {
+      return field;
+    }
+  });
 }
 
 export function updateFieldByKey(
@@ -296,24 +289,23 @@ export function updateFieldByKey(
     }
   }
 
-  collection = collection.set(
-    'fields',
-    traverseFields(collection.get('fields', List<EntryField>()), updateAndBreak, () => updated),
-  );
-
-  return collection;
+  return (collection.fields = traverseFields(
+    collection.fields ?? [],
+    updateAndBreak,
+    () => updated,
+  ));
 }
 
-export function selectIdentifier(collection: Collection) {
+export function selectIdentifier(collection: CmsCollection | Collection) {
   const identifier = collection.identifier_field;
   const identifierFields = identifier ? [identifier, ...IDENTIFIER_FIELDS] : [...IDENTIFIER_FIELDS];
-  const fieldNames = getFieldsNames(collection.get('fields', List()).toArray());
+  const fieldNames = getFieldsNames(collection.fields ?? []);
   return identifierFields.find(id =>
     fieldNames.find(name => name.toLowerCase().trim() === id.toLowerCase().trim()),
   );
 }
 
-export function selectInferedField(collection: Collection, fieldName: string) {
+export function selectInferedField(collection: CmsCollection | Collection, fieldName: string) {
   if (fieldName === 'title' && collection.identifier_field) {
     return selectIdentifier(collection);
   }
@@ -336,7 +328,7 @@ export function selectInferedField(collection: Collection, fieldName: string) {
   if (!fields || !inferableField) return null;
   // Try to return a field of the specified type with one of the synonyms
   const mainTypeFields = fields
-    .filter(f => f?.get('widget', 'string') === inferableField.type)
+    .filter((f: CmsField | EntryField) => (f.widget ?? 'string') === inferableField.type)
     .map(f => f?.name);
   field = mainTypeFields.filter(f => inferableField.synonyms.indexOf(f as string) !== -1);
   if (field && field.size > 0) return field.first();
@@ -389,7 +381,7 @@ export function selectEntryCollectionTitle(collection: Collection, entry: Entry)
 }
 
 export function selectDefaultSortableFields(
-  collection: Collection,
+  collection: CmsCollection | Collection,
   backend: Backend,
   hasIntegration: boolean,
 ) {
@@ -410,7 +402,7 @@ export function selectDefaultSortableFields(
   return defaultSortable as string[];
 }
 
-export function selectSortableFields(collection: Collection, t: (key: string) => string) {
+export function selectSortableFields(collection: CmsCollection, t: (key: string) => string) {
   const fields = (collection.getIn(['sortable_fields', 'fields']) as List<string>)
     .toArray()
     .map(key => {

@@ -1,4 +1,4 @@
-import { fromJS, List, Map, OrderedMap, Set } from 'immutable';
+import { fromJS, List, Record, OrderedMap, Set } from 'immutable';
 import { groupBy, once, orderBy, set, sortBy, trim } from 'lodash';
 import { dirname, join } from 'path';
 
@@ -81,7 +81,7 @@ const loadSort = once(() => {
   if (sortString) {
     try {
       const sort: StorageSort = JSON.parse(sortString);
-      let map = Map() as Sort;
+      let map = Record() as Sort;
       Object.entries(sort).forEach(([collection, sort]) => {
         let orderedMap = OrderedMap() as SortMap;
         sortBy(Object.values(sort), ['index']).forEach(value => {
@@ -92,10 +92,10 @@ const loadSort = once(() => {
       });
       return map;
     } catch (e) {
-      return Map() as Sort;
+      return Record() as Sort;
     }
   }
-  return Map() as Sort;
+  return Record() as Sort;
 });
 
 function clearSort() {
@@ -144,7 +144,7 @@ function persistViewStyle(viewStyle: string | undefined) {
 }
 
 function entries(
-  state = Map({ entities: Map(), pages: Map(), sort: loadSort(), viewStyle: loadViewStyle() }),
+  state = Record({ entities: Record(), pages: Record(), sort: loadSort(), viewStyle: loadViewStyle() }),
   action: EntriesAction,
 ) {
   switch (action.type) {
@@ -192,7 +192,7 @@ function entries(
         const ids = List(loadedEntries.map(entry => entry.slug));
         map.setIn(
           ['pages', collection],
-          Map({
+          Record({
             page,
             ids: append ? map.getIn(['pages', collection, 'ids'], List()).concat(ids) : ids,
           }),
@@ -240,7 +240,7 @@ function entries(
       const payload = action.payload as EntriesSortRequestPayload;
       const { collection, key, direction } = payload;
       const newState = state.withMutations(map => {
-        const sort = OrderedMap({ [key]: Map({ key, direction }) });
+        const sort = OrderedMap({ [key]: Record({ key, direction }) });
         map.setIn(['sort', collection], sort);
         map.setIn(['pages', collection, 'isFetching'], true);
         map.deleteIn(['pages', collection, 'page']);
@@ -266,7 +266,7 @@ function entries(
         const ids = List(loadedEntries.map(entry => entry.slug));
         map.setIn(
           ['pages', collection],
-          Map({
+          Record({
             page: 1,
             ids,
           }),
@@ -355,12 +355,12 @@ export function selectEntriesSort(entries: Entries, collection: string) {
 
 export function selectEntriesFilter(entries: Entries, collection: string) {
   const filter = entries.filter as Filter | undefined;
-  return filter?.get(collection) || Map();
+  return filter?.get(collection) || Record();
 }
 
 export function selectEntriesGroup(entries: Entries, collection: string) {
   const group = entries.group as Group | undefined;
-  return group?.get(collection) || Map();
+  return group?.get(collection) || Record();
 }
 
 export function selectEntriesGroupField(entries: Entries, collection: string) {
@@ -430,7 +430,7 @@ export function selectEntries(state: Entries, collection: Collection) {
         const allMatched = filters.every(f => {
           const pattern = f.pattern;
           const field = f.field;
-          const data = e!.data || Map();
+          const data = e!.data || Record();
           const toMatch = data.getIn(keyToPathArray(field));
           const matched =
             toMatch !== undefined && new RegExp(String(pattern)).test(String(toMatch));

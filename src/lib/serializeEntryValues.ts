@@ -1,4 +1,4 @@
-import { Map, List } from 'immutable';
+import { Record, List } from 'immutable';
 
 import { getWidgetValueSerializer } from './registry';
 import { isNullish } from './util/null.util';
@@ -24,7 +24,7 @@ import type { EntryField } from '../interface';
  * handlers run on persist.
  */
 function runSerializer(
-  values: Map<string, unknown>,
+  values: Record<string, unknown>,
   fields: EntryField[] | undefined,
   method: 'serialize' | 'deserialize',
 ) {
@@ -44,8 +44,8 @@ function runSerializer(
       // Call recursively for fields within lists
       if (nestedFields && List.isList(value)) {
         acc[fieldName] = value.map(val => {
-          if (Map.isMap(val)) {
-            runSerializer(val as Map<string, unknown>, nestedFields, method);
+          if (Record.isMap(val)) {
+            runSerializer(val as Record<string, unknown>, nestedFields, method);
           }
 
           return val;
@@ -54,8 +54,8 @@ function runSerializer(
       }
 
       // Call recursively for fields within objects
-      if (nestedFields && Map.isMap(value)) {
-        acc[fieldName] = runSerializer(value as Map<string, unknown>, nestedFields, method);
+      if (nestedFields && Record.isMap(value)) {
+        acc[fieldName] = runSerializer(value as Record<string, unknown>, nestedFields, method);
         return acc;
       }
 
@@ -80,10 +80,10 @@ function runSerializer(
   return serializedData;
 }
 
-export function serializeValues(values: Map<string, unknown>, fields: EntryField[] | undefined) {
+export function serializeValues(values: Record<string, unknown>, fields: EntryField[] | undefined) {
   return runSerializer(values, fields, 'serialize');
 }
 
-export function deserializeValues(values: Map<string, unknown>, fields: EntryField[] | undefined) {
+export function deserializeValues(values: Record<string, unknown>, fields: EntryField[] | undefined) {
   return runSerializer(values, fields, 'deserialize');
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { ClassNames } from '@emotion/react';
-import { Map } from 'immutable';
+import { Record } from 'immutable';
 import { uniq, isEqual, isEmpty } from 'lodash';
 import uuid from 'uuid/v4';
 import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
@@ -138,7 +138,7 @@ export default class CodeControl extends React.Component {
     !!this.props.field.allow_language_selection;
 
   toValue = this.valueIsMap()
-    ? (type, value) => (this.props.value || Map()).set(this.keys[type], value)
+    ? (type, value) => (this.props.value || Record()).set(this.keys[type], value)
     : (type, value) => (type === 'code' ? value : this.props.value);
 
   // If the value is a map, keys can be customized via config.
@@ -153,7 +153,7 @@ export default class CodeControl extends React.Component {
       return defaults;
     }
 
-    const keys = field.get('keys', Map()).toJS();
+    const keys = field.get('keys', Record()).toJS();
     return { ...defaults, ...keys };
   }
 

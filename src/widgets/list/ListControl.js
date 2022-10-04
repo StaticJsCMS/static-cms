@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import styled from '@emotion/styled';
 import { css, ClassNames } from '@emotion/react';
-import { List, Map, fromJS } from 'immutable';
+import { List, Record, fromJS } from 'immutable';
 import { partial, isEmpty, uniqueId } from 'lodash';
 import uuid from 'uuid/v4';
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
@@ -82,7 +82,7 @@ function handleSummary(summary, entry, label, item) {
 }
 
 function validateItem(field, item) {
-  if (!Map.isMap(item)) {
+  if (!Record.isMap(item)) {
     console.warn(
       `'${field.name}' field item value value should be a map but is a '${typeof item}'`,
     );
@@ -258,7 +258,7 @@ export default class ListControl extends React.Component {
         return acc;
       }
 
-      if (Map.isMap(subfields) && object) {
+      if (Record.isMap(subfields) && object) {
         const subDefaultValue = this.getFieldsDefault([subfields]);
         !isEmpty(subDefaultValue) && (acc[name] = subDefaultValue);
         return acc;
@@ -338,7 +338,7 @@ export default class ListControl extends React.Component {
    * e.g. when debounced, always get the latest object value instead of using
    * `this.props.value` directly.
    */
-  getObjectValue = idx => this.props.value.get(idx) || Map();
+  getObjectValue = idx => this.props.value.get(idx) || Record();
 
   handleChangeFor(index) {
     return (f, newValue, newMetadata) => {
