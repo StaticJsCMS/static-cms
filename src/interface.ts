@@ -7,6 +7,7 @@ import type { formatExtensions } from './formats/formats';
 import type { AllowedEvent } from './lib/registry';
 import type Cursor from './lib/util/Cursor';
 import type { Auth } from './reducers/auth';
+import type { EntriesState } from './reducers/entries';
 import type { GlobalUI } from './reducers/globalUI';
 import type { Medias } from './reducers/medias';
 import type { ScrollState } from './reducers/scroll';
@@ -21,7 +22,7 @@ export type SlugConfig = {
 };
 
 export type Pages = {
-  [collection: string]: { isFetching: boolean; page: number; ids: string[] };
+  [collection: string]: { isFetching?: boolean; page?: number; ids: string[] };
 };
 
 export type SortObject = { key: string; direction: SortDirection };
@@ -45,15 +46,6 @@ export type GroupOfEntries = {
   paths: Set<string>;
 };
 
-export type Entries = {
-  pages: Pages;
-  entities: Entities;
-  sort: Sort;
-  filter: Filter;
-  group: Group;
-  viewStyle: string;
-};
-
 export interface EntryMeta {
   path?: string;
 }
@@ -73,6 +65,7 @@ export interface Entry {
   status?: string;
   meta: { path?: string };
   newRecord?: boolean;
+  isFetching?: boolean;
   i18n?: {
     [locale: string]: any;
   };
@@ -162,7 +155,7 @@ export interface Collection {
   nested?: Nested;
   meta?: Meta;
   i18n: i18n;
-};
+}
 
 export type Collections = Record<string, Collection>;
 
@@ -212,7 +205,7 @@ export interface State {
   cursors: Cursors;
   collections: Collections;
   globalUI: GlobalUI;
-  entries: Entries;
+  entries: EntriesState;
   entryDraft: EntryDraft;
   integrations: Integrations;
   medias: Medias;
