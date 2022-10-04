@@ -76,7 +76,7 @@ class EntriesSearch extends React.Component {
 function mapStateToProps(state, ownProps) {
   const { searchTerm } = ownProps;
   const collections = ownProps.collections.toIndexedSeq();
-  const collectionNames = ownProps.collections.keySeq().toArray();
+  const collectionNames = ownProps.collections.keySeq()();
   const isFetching = state.search.isFetching;
   const page = state.search.page;
   const entries = selectSearchedEntries(state, collectionNames);

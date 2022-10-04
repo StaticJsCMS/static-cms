@@ -152,8 +152,8 @@ function sizeOfValue(value) {
   return value ? 1 : 0;
 }
 
-function valueListToArray(value) {
-  return List.isList(value) ? value.toArray() : value;
+function valueLis(value) {
+  return List.isList(value) ? value() : value;
 }
 
 const warnDeprecatedOptions = once(field =>
@@ -238,7 +238,7 @@ export default function withFileControl({ forImage } = {}) {
         controlID: this.controlID,
         forImage,
         privateUpload: field.private,
-        value: valueListToArray(value),
+        value: valueLis(value),
         allowMultiple: !!mediaLibraryFieldOptions.get('allow_multiple', true),
         config: mediaLibraryFieldOptions.config,
         field,
@@ -273,7 +273,7 @@ export default function withFileControl({ forImage } = {}) {
         controlID: this.controlID,
         forImage,
         privateUpload: field.private,
-        value: valueListToArray(value),
+        value: valueLis(value),
         replaceIndex: index,
         allowMultiple: false,
         config: mediaLibraryFieldOptions.config,

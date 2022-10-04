@@ -56,7 +56,7 @@ export function resolveFormat(collection: Collection, entry: EntryObject | Entry
   // Check for custom delimiter
   const frontmatter_delimiter = collection.frontmatter_delimiter;
   const customDelimiter = frontmatterDelimiterIsList(frontmatter_delimiter)
-    ? (frontmatter_delimiter.toArray() as [string, string])
+    ? (frontmatter_delimiter() as [string, string])
     : frontmatter_delimiter;
 
   // If the format is specified in the collection, use that format.

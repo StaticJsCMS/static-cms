@@ -65,7 +65,7 @@ export default class MarkdownControl extends React.Component {
     this.setState({ pendingFocus: false });
   };
 
-  getAllowedModes = () => this.props.field.get('modes', List(['rich_text', 'raw'])).toArray();
+  getAllowedModes = () => this.props.field.get('modes', List(['rich_text', 'raw']))();
 
   render() {
     const {

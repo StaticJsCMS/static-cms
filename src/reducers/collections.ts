@@ -33,11 +33,10 @@ function collections(state = defaultState, action: ConfigAction) {
   switch (action.type) {
     case CONFIG_SUCCESS: {
       const collections = action.payload.collections;
-      let newState = OrderedMap({});
-      collections.forEach(collection => {
-        newState = newState.set(collection.name, fromJS(collection));
-      });
-      return newState;
+      return collections.reduce((acc, collection) => {
+        acc[collection.name] = collection;
+        return acc;
+      }, {} as Record<string, CmsCollection>);
     }
     default:
       return state;
@@ -71,7 +70,7 @@ const selectors = {
       return collection.create;
     },
     allowDeletion(collection: Collection) {
-      return collection.get('delete', true);
+      return collection.delete ?? true;
     },
     templateName(collection: Collection) {
       return collection.name;
@@ -80,7 +79,7 @@ const selectors = {
   [FILES]: {
     fileForEntry(collection: Collection, slug: string) {
       const files = collection.files;
-      return files && files.filter(f => f?.name === slug).get(0);
+      return files && files.filter(f => f?.name === slug)?.[0];
     },
     fields(collection: Collection, slug: string) {
       const file = this.fileForEntry(collection, slug);
@@ -91,7 +90,7 @@ const selectors = {
       return file && file.file;
     },
     entrySlug(collection: Collection, path: string) {
-      const file = (collection.files as CollectionFile[]).filter(f => f?.file === path).get(0);
+      const file = (collection.files as CollectionFile[]).filter(f => f?.file === path)?.[0];
       return file && file.name;
     },
     entryLabel(collection: Collection, slug: string) {
@@ -102,7 +101,7 @@ const selectors = {
       return false;
     },
     allowDeletion(collection: Collection) {
-      return collection.get('delete', false);
+      return collection.delete ?? false;
     },
     templateName(_collection: Collection, slug: string) {
       return slug;
@@ -112,18 +111,18 @@ const selectors = {
 
 function getFieldsWithMediaFolders(fields: EntryField[]) {
   const fieldsWithMediaFolders = fields.reduce((acc, f) => {
-    if (f.has('media_folder')) {
+    if ('media_folder' in f) {
       acc = [...acc, f];
     }
 
-    if (f.has('fields')) {
-      const fields = f.fields?.toArray() as EntryField[];
+    if ('fields' in f) {
+      const fields = f.fields ?? [];
       acc = [...acc, ...getFieldsWithMediaFolders(fields)];
-    } else if (f.has('field')) {
+    } else if ('field' in f) {
       const field = f.field as EntryField;
       acc = [...acc, ...getFieldsWithMediaFolders([field])];
-    } else if (f.has('types')) {
-      const types = f.types?.toArray() as EntryField[];
+    } else if ('types' in f) {
+      const types = f.types ?? [];
       acc = [...acc, ...getFieldsWithMediaFolders(types)];
     }
 
@@ -134,15 +133,15 @@ function getFieldsWithMediaFolders(fields: EntryField[]) {
 }
 
 export function getFileFromSlug(collection: Collection, slug: string) {
-  return collection.files?.toArray().find(f => f.name === slug);
+  return collection.files?.find(f => f.name === slug);
 }
 
 export function selectFieldsWithMediaFolders(collection: Collection, slug: string) {
-  if (collection.has('folder')) {
-    const fields = collection.fields.toArray();
+  if ('folder' in collection) {
+    const fields = collection.fields;
     return getFieldsWithMediaFolders(fields);
-  } else if (collection.has('files')) {
-    const fields = getFileFromSlug(collection, slug)?.fields.toArray() || [];
+  } else if ('files' in collection) {
+    const fields = getFileFromSlug(collection, slug)?.fields || [];
     return getFieldsWithMediaFolders(fields);
   }
 
@@ -152,19 +151,20 @@ export function selectFieldsWithMediaFolders(collection: Collection, slug: strin
 export function selectMediaFolders(config: CmsConfig, collection: Collection, entry: Entry) {
   const fields = selectFieldsWithMediaFolders(collection, entry.slug);
   const folders = fields.map(f => selectMediaFolder(config, collection, entry, f));
-  if (collection.has('files')) {
+  if ('files' in collection) {
     const file = getFileFromSlug(collection, entry.slug);
     if (file) {
       folders.unshift(selectMediaFolder(config, collection, entry, undefined));
     }
   }
-  if (collection.has('media_folder')) {
+  if ('media_folder' in collection) {
     // stop evaluating media folders at collection level
-    collection = collection.delete('files');
-    folders.unshift(selectMediaFolder(config, collection, entry, undefined));
+    const newCollection = { ...collection };
+    delete newCollection.files;
+    folders.unshift(selectMediaFolder(config, newCollection, entry, undefined));
   }
 
-  return Set(folders).toArray();
+  return [...new Set(...folders)];
 }
 
 export function selectFields(collection: Collection, slug: string) {

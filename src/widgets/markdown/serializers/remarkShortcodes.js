@@ -58,7 +58,7 @@ function createShortcodeTokenizer({ plugins }) {
     // skip a plugin that occurs later in the plugin registry, but earlier
     // in the `value`.
     const [{ plugin, match } = {}] = plugins
-      .toArray()
+      ()
       .map(plugin => ({
         match: value.match(plugin.pattern) || matchFromLines({ trimmedLines, plugin }),
         plugin,

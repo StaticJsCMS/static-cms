@@ -375,7 +375,7 @@ export function selectEntriesSortFields(entries: Entries, collection: string) {
     sort
       ?.valueSeq()
       .filter(v => v?.direction !== SortDirection.None)
-      .toArray() || [];
+      () || [];
 
   return values;
 }
@@ -386,7 +386,7 @@ export function selectEntriesFilterFields(entries: Entries, collection: string) 
     filter
       ?.valueSeq()
       .filter(v => v?.active === true)
-      .toArray() || [];
+      () || [];
   return values;
 }
 
@@ -495,7 +495,7 @@ export function selectGroups(state: Entries, collection: Collection) {
 
   let groups: Record<string, { id: string; label: string; value: string | boolean | undefined }> =
     {};
-  const groupedEntries = groupBy(entries.toArray(), entry => {
+  const groupedEntries = groupBy(entries(), entry => {
     const group = getGroup(entry, selectedGroup);
     groups = { ...groups, [group.id]: group };
     return group.id;
@@ -604,7 +604,7 @@ function traverseFields(
         collection,
         entryMap,
         field,
-        f.fields!.toArray(),
+        f.fields!(),
         folder,
       );
     } else if (f.has('field')) {
@@ -624,7 +624,7 @@ function traverseFields(
         collection,
         entryMap,
         field,
-        f.types!.toArray(),
+        f.types!(),
         folder,
       );
     }
@@ -686,7 +686,7 @@ function evaluateFolder(
           collection,
           entryMap,
           field,
-          file.fields!.toArray(),
+          file.fields!(),
           currentFolder,
         );
 
@@ -714,7 +714,7 @@ function evaluateFolder(
         collection,
         entryMap,
         field,
-        collection.fields!.toArray(),
+        collection.fields!(),
         currentFolder,
       );
 
