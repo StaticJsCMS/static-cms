@@ -218,11 +218,11 @@ export function getFieldsNames(fields: (EntryField | CmsField)[] | undefined, pr
   return names;
 }
 
-export function selectField(collection: Collection, key: string) {
+export function selectField(collection: CmsCollection | Collection, key: string) {
   const array = keyToPathArray(key);
   let name: string | undefined;
   let field;
-  let fields = collection.fields ?? [];
+  let fields = (collection.fields ?? []) as (CmsField | EntryField)[];
   while ((name = array.shift()) && fields) {
     field = fields.find(f => f.name === name);
     if (field) {
@@ -321,35 +321,41 @@ export function selectInferedField(collection: CmsCollection | Collection, field
       }
     >
   )[fieldName];
-  const fields = collection.fields;
+  const fields = collection.fields as (CmsField | EntryField)[];
   let field;
 
   // If collection has no fields or fieldName is not defined within inferables list, return null
-  if (!fields || !inferableField) return null;
+  if (!fields || !inferableField) {
+    return null;
+  }
   // Try to return a field of the specified type with one of the synonyms
   const mainTypeFields = fields
     .filter((f: CmsField | EntryField) => (f.widget ?? 'string') === inferableField.type)
     .map(f => f?.name);
   field = mainTypeFields.filter(f => inferableField.synonyms.indexOf(f as string) !== -1);
-  if (field && field.size > 0) return field.first();
+  if (field && field.length > 0) {
+    return field[0];
+  }
 
   // Try to return a field for each of the specified secondary types
   const secondaryTypeFields = fields
-    .filter(f => inferableField.secondaryTypes.indexOf(f?.get('widget', 'string') as string) !== -1)
+    .filter(f => inferableField.secondaryTypes.indexOf(f.widget ?? 'string') !== -1)
     .map(f => f?.name);
   field = secondaryTypeFields.filter(f => inferableField.synonyms.indexOf(f as string) !== -1);
-  if (field && field.size > 0) return field.first();
+  if (field && field.length > 0) {
+    return field[0];
+  }
 
   // Try to return the first field of the specified type
-  if (inferableField.fallbackToFirstField && mainTypeFields.size > 0) return mainTypeFields.first();
+  if (inferableField.fallbackToFirstField && mainTypeFields.length > 0) {
+    return mainTypeFields[0];
+  }
 
   // Coundn't infer the field. Show error and return null.
   if (inferableField.showError) {
     consoleError(
       `The Field ${fieldName} is missing for the collection “${collection.name}”`,
-      `Static CMS tries to infer the entry ${fieldName} automatically, but one couldn't be found for entries of the collection “${collection.get(
-        'name',
-      )}”. Please check your site configuration.`,
+      `Static CMS tries to infer the entry ${fieldName} automatically, but one couldn't be found for entries of the collection “${collection.name}”. Please check your site configuration.`,
     );
   }
 
@@ -402,9 +408,11 @@ export function selectDefaultSortableFields(
   return defaultSortable as string[];
 }
 
-export function selectSortableFields(collection: CmsCollection, t: (key: string) => string) {
-  const fields = (collection.getIn(['sortable_fields', 'fields']) as List<string>)
-    .toArray()
+export function selectSortableFields(
+  collection: CmsCollection | Collection,
+  t: (key: string) => string,
+) {
+  const fields = (collection.sortable_fields?.fields ?? [])
     .map(key => {
       if (key === COMMIT_DATE) {
         return { key, field: { name: key, label: t('collection.defaultFields.updatedOn.label') } };
@@ -414,7 +422,7 @@ export function selectSortableFields(collection: CmsCollection, t: (key: string)
         return { key, field: { name: key, label: t('collection.defaultFields.author.label') } };
       }
 
-      return { key, field: field?.toJS() };
+      return { key, field };
     })
     .filter(item => !!item.field)
     .map(item => ({ ...item.field, key: item.key }));
@@ -433,30 +441,28 @@ export function selectSortDataPath(collection: Collection, key: string) {
 }
 
 export function selectViewFilters(collection: Collection) {
-  const viewFilters = collection.view_filters.toJS() as ViewFilter[];
-  return viewFilters;
+  return collection.view_filters;
 }
 
 export function selectViewGroups(collection: Collection) {
-  const viewGroups = collection.view_groups.toJS() as ViewGroup[];
-  return viewGroups;
+  return collection.view_groups;
 }
 
 export function selectFieldsComments(collection: Collection, entryMap: Entry) {
   let fields: EntryField[] = [];
-  if (collection.has('folder')) {
-    fields = collection.fields.toArray();
-  } else if (collection.has('files')) {
+  if ('folder' in collection) {
+    fields = collection.fields;
+  } else if ('files' in collection) {
     const file = collection.files!.find(f => f?.name === entryMap.slug);
     if (file) {
-      fields = file.fields.toArray();
+      fields = file.fields;
     }
   }
   const comments: Record<string, string> = {};
   const names = getFieldsNames(fields);
   names.forEach(name => {
     const field = selectField(collection, name);
-    if (field?.has('comment')) {
+    if (field && 'comment' in field) {
       comments[name] = field.comment!;
     }
   });
@@ -466,10 +472,10 @@ export function selectFieldsComments(collection: Collection, entryMap: Entry) {
 
 export function selectHasMetaPath(collection: Collection) {
   return (
-    collection.has('folder') &&
+    'folder' in collection &&
     collection.type === FOLDER &&
-    collection.has('meta') &&
-    collection.meta?.has('path')
+    'meta' in collection &&
+    'path' in (collection.meta ?? {})
   );
 }
 
