@@ -108,7 +108,7 @@ export default class API {
 
   buildRequest = (req: ApiRequest) => {
     const withRoot = unsentRequest.withRoot(this.apiRoot)(req);
-    if (withRoot.has('cache')) {
+    if ('cache' in withRoot) {
       return withRoot;
     } else {
       const withNoCache = unsentRequest.withNoCache(withRoot);
@@ -230,7 +230,7 @@ export default class API {
   async isShaExistsInBranch(branch: string, sha: string) {
     const { values }: { values: BitBucketCommit[] } = await this.requestJSON({
       url: `${this.repoURL}/commits`,
-      params: { include: branch, pagelen: 100 },
+      params: { include: branch, pagelen: '100' },
     }).catch(e => {
       console.info(`Failed getting commits for branch '${branch}'`, e);
       return [];
@@ -264,8 +264,8 @@ export default class API {
     const result: BitBucketSrcResult = await this.requestJSON({
       url: `${this.repoURL}/src/${node}/${path}`,
       params: {
-        max_depth: depth,
-        pagelen,
+        max_depth: `${depth}`,
+        pagelen: `${pagelen}`,
       },
     }).catch(replace404WithEmptyResponse);
     const { entries, cursor } = this.getEntriesAndCursor(result);
@@ -406,7 +406,7 @@ export default class API {
     const rawDiff = await this.requestText({
       url: `${this.repoURL}/diff/${source}..${destination}`,
       params: {
-        binary: false,
+        binary: 'false',
       },
     });
 
@@ -439,8 +439,9 @@ export default class API {
       const { name, email } = this.commitAuthor;
       body.append('author', `${name} <${email}>`);
     }
-    return flow([unsentRequest.withMethod('POST'), unsentRequest.withBody(body), this.request])(
-      `${this.repoURL}/src`,
+
+    return this.request(
+      unsentRequest.withBody(body, unsentRequest.withMethod('POST', `${this.repoURL}/src`)),
     );
   };
 }

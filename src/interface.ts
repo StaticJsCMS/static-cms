@@ -450,7 +450,7 @@ export abstract class CmsBackendClass {
 
   abstract persistEntry(entry: BackendEntry, opts: PersistOptions): Promise<void>;
   abstract persistMedia(file: AssetProxy, opts: PersistOptions): Promise<ImplementationMediaFile>;
-  abstract deleteFiles(paths: string[], commitMessage: string): Promise<void>;
+  abstract deleteFiles(paths: string[], commitMessage: string): Promise<unknown>;
 
   abstract allEntriesByFolder(
     folder: string,

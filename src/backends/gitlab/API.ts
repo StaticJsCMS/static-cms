@@ -2,9 +2,8 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
 import { setContext } from 'apollo-link-context';
 import { createHttpLink } from 'apollo-link-http';
-import { Record } from 'immutable';
 import { Base64 } from 'js-base64';
-import { flow, partial, result, trimStart } from 'lodash';
+import { partial, result, trimStart } from 'lodash';
 import { dirname } from 'path';
 
 import {
@@ -16,7 +15,6 @@ import {
   readFileMetadata,
   requestWithBackoff,
   responseParser,
-  then,
   throwOnConflictingBranches,
   unsentRequest,
 } from '../../lib/util';
@@ -24,8 +22,8 @@ import * as queries from './queries';
 
 import type { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import type { ApolloQueryResult } from 'apollo-client';
-import type { ApiRequest, FetchError } from '../../lib/util';
 import type { AssetProxy, DataFile, ImplementationFile, PersistOptions } from '../../interface';
+import type { ApiRequest, FetchError } from '../../lib/util';
 
 export const API_NAME = 'GitLab';
 
@@ -202,7 +200,7 @@ export default class API {
     const withRoot: ApiRequest = unsentRequest.withRoot(this.apiRoot)(req);
     const withAuthorizationHeaders = await this.withAuthorizationHeaders(withRoot);
 
-    if (withAuthorizationHeaders.has('cache')) {
+    if ('cache' in withAuthorizationHeaders) {
       return withAuthorizationHeaders;
     } else {
       const withNoCache: ApiRequest = unsentRequest.withNoCache(withAuthorizationHeaders);
@@ -213,8 +211,11 @@ export default class API {
   request = async (req: ApiRequest): Promise<Response> => {
     try {
       return requestWithBackoff(this, req);
-    } catch (err: any) {
-      throw new APIError(err.message, null, API_NAME);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new APIError(error.message, null, API_NAME);
+      }
+      throw error;
     }
   };
 
@@ -309,16 +310,14 @@ export default class API {
     const pageSize = parseInt(headers.get('X-Per-Page') as string, 10);
     const count = parseInt(headers.get('X-Total') as string, 10);
     const links = parseLinkHeader(headers.get('Link'));
-    const actions = Record(links)
-      .keySeq()
-      .flatMap(key =>
-        (key === 'prev' && page > 1) ||
-        (key === 'next' && page < pageCount) ||
-        (key === 'first' && page > 1) ||
-        (key === 'last' && page < pageCount)
-          ? [key]
-          : [],
-      );
+    const actions = Object.keys(links).flatMap(key =>
+      (key === 'prev' && page > 1) ||
+      (key === 'next' && page < pageCount) ||
+      (key === 'first' && page > 1) ||
+      (key === 'last' && page < pageCount)
+        ? [key]
+        : [],
+    );
     return Cursor.create({
       actions,
       meta: { page, count, pageSize, pageCount },
@@ -328,38 +327,34 @@ export default class API {
 
   getCursor = ({ headers }: { headers: Headers }) => this.getCursorFromHeaders(headers);
 
-  // Gets a cursor without retrieving the entries by using a HEAD
-  // request
+  // Gets a cursor without retrieving the entries by using a HEAD request
   fetchCursor = (req: ApiRequest) =>
-    flow([unsentRequest.withMethod('HEAD'), this.request, then(this.getCursor)])(req);
+    this.request(unsentRequest.withMethod('HEAD', req)).then(value => this.getCursor(value));
 
   fetchCursorAndEntries = (
     req: ApiRequest,
   ): Promise<{
     entries: FileEntry[];
     cursor: Cursor;
-  }> =>
-    flow([
-      unsentRequest.withMethod('GET'),
-      this.request,
-      p =>
-        Promise.all([
-          p.then(this.getCursor),
-          p.then(this.responseToJSON).catch((e: FetchError) => {
-            if (e.status === 404) {
-              return [];
-            } else {
-              throw e;
-            }
-          }),
-        ]),
-      then(([cursor, entries]: [Cursor, {}[]]) => ({ cursor, entries })),
-    ])(req);
+  }> => {
+    const request = this.request(unsentRequest.withMethod('GET', req));
+
+    return Promise.all([
+      request.then(this.getCursor),
+      request.then(this.responseToJSON).catch((e: FetchError) => {
+        if (e.status === 404) {
+          return [];
+        } else {
+          throw e;
+        }
+      }),
+    ]).then(([cursor, entries]) => ({ cursor, entries }));
+  };
 
   listFiles = async (path: string, recursive = false) => {
     const { entries, cursor } = await this.fetchCursorAndEntries({
       url: `${this.repoURL}/repository/tree`,
-      params: { path, ref: this.branch, recursive },
+      params: { path, ref: this.branch, recursive: `${recursive}` },
     });
     return {
       files: entries.filter(({ type }) => type === 'blob'),
@@ -477,7 +472,7 @@ export default class API {
     let { cursor, entries: initialEntries } = await this.fetchCursorAndEntries({
       url: `${this.repoURL}/repository/tree`,
       // Get the maximum number of entries per page
-      params: { path, ref: branch, per_page: 100, recursive },
+      params: { path, ref: branch, per_page: '100', recursive: `${recursive}` },
     });
     entries.push(...initialEntries);
     while (cursor && cursor.actions!.has('next')) {
@@ -532,10 +527,12 @@ export default class API {
         body: JSON.stringify(commitParams),
       });
       return result;
-    } catch (error: any) {
-      const message = error.message || '';
-      if (newBranch && message.includes(`Could not update ${branch}`)) {
-        await throwOnConflictingBranches(branch, name => this.getBranch(name), API_NAME);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        const message = error.message || '';
+        if (newBranch && message.includes(`Could not update ${branch}`)) {
+          await throwOnConflictingBranches(branch, name => this.getBranch(name), API_NAME);
+        }
       }
       throw error;
     }
@@ -617,7 +614,7 @@ export default class API {
       params: { ref: branch },
     });
 
-    const blobId = (request.headers.get('X - Gitlab - Blob - Id')) as string;
+    const blobId = request.headers.get('X - Gitlab - Blob - Id') as string;
     return blobId;
   }
 

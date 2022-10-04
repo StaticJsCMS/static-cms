@@ -114,7 +114,10 @@ const withWrapper = <K extends keyof ApiRequestObject>(key: K) => (value: ApiReq
   };
 };
 
-const widthMethod = withWrapper('method');
+const withRoot = (root: string) => (req: ApiRequest) => {
+  return withWrapper('url')(getAbsoluteRoot(root, typeof req === 'string' ? req : req.url), req);
+}
+const withMethod = withWrapper('method');
 const withBody = withWrapper('body');
 const withHeaders = withWrapper('headers');
 const withParams = withWrapper('params');
@@ -128,7 +131,8 @@ export default {
   fromFetchArguments,
   performRequest,
   getAbsoluteRoot,
-  widthMethod,
+  withRoot,
+  withMethod,
   withBody,
   withHeaders,
   withParams,

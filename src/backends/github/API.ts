@@ -229,10 +229,8 @@ export default class API {
       responseStatus = response.status;
       const parsedResponse = await parser(response);
       return parsedResponse;
-    } catch (error: unknown) {
-      if (error instanceof FetchError) {
-        return this.handleRequestError(error, responseStatus);
-      }
+    } catch (error: any) {
+      return this.handleRequestError(error, responseStatus);
     }
   }
 
