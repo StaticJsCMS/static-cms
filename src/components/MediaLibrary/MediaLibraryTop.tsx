@@ -1,16 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
+import React from 'react';
 
-import MediaLibrarySearch from './MediaLibrarySearch';
-import MediaLibraryHeader from './MediaLibraryHeader';
 import {
-  UploadButton,
+  CopyToClipBoardButton,
   DeleteButton,
   DownloadButton,
-  CopyToClipBoardButton,
   InsertButton,
+  UploadButton,
 } from './MediaLibraryButtons';
+import MediaLibraryHeader from './MediaLibraryHeader';
+import MediaLibrarySearch from './MediaLibrarySearch';
+
+import type { TranslatedProps } from '../../interface';
+import type { MediaLibraryFile } from './MediaLibraryModal';
 
 const LibraryTop = styled.div`
   position: relative;
@@ -26,6 +28,25 @@ const RowContainer = styled.div`
 const ButtonsContainer = styled.div`
   flex-shrink: 0;
 `;
+
+interface MediaLibraryTop {
+  onClose: () => void;
+  privateUpload?: boolean;
+  forImage?: boolean;
+  onDownload: () => void;
+  onUpload: () => void;
+  query?: string;
+  onSearchChange: () => void;
+  onSearchKeyDown: () => void;
+  searchDisabled: boolean;
+  onDelete: () => void;
+  canInsert?: boolean;
+  onInsert: () => void;
+  hasSelection: boolean;
+  isPersisting?: boolean;
+  isDeleting?: boolean;
+  selectedFile?: MediaLibraryFile;
+}
 
 function MediaLibraryTop({
   t,
@@ -45,7 +66,7 @@ function MediaLibraryTop({
   isPersisting,
   isDeleting,
   selectedFile,
-}) {
+}: TranslatedProps<MediaLibraryTop>) {
   const shouldShowButtonLoader = isPersisting || isDeleting;
   const uploadEnabled = !shouldShowButtonLoader;
   const deleteEnabled = !shouldShowButtonLoader && hasSelection;
@@ -74,9 +95,9 @@ function MediaLibraryTop({
         <ButtonsContainer>
           <CopyToClipBoardButton
             disabled={!hasSelection}
-            path={selectedFile.path}
-            name={selectedFile.name}
-            draft={selectedFile.draft}
+            path={selectedFile?.path}
+            name={selectedFile?.name}
+            draft={selectedFile?.draft}
             t={t}
           />
           <DownloadButton onClick={onDownload} disabled={!hasSelection}>
@@ -112,32 +133,5 @@ function MediaLibraryTop({
     </LibraryTop>
   );
 }
-
-MediaLibraryTop.propTypes = {
-  t: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
-  privateUpload: PropTypes.bool,
-  forImage: PropTypes.bool,
-  onDownload: PropTypes.func.isRequired,
-  onUpload: PropTypes.func.isRequired,
-  query: PropTypes.string,
-  onSearchChange: PropTypes.func.isRequired,
-  onSearchKeyDown: PropTypes.func.isRequired,
-  searchDisabled: PropTypes.bool.isRequired,
-  onDelete: PropTypes.func.isRequired,
-  canInsert: PropTypes.bool,
-  onInsert: PropTypes.func.isRequired,
-  hasSelection: PropTypes.bool.isRequired,
-  isPersisting: PropTypes.bool,
-  isDeleting: PropTypes.bool,
-  selectedFile: PropTypes.oneOfType([
-    PropTypes.shape({
-      path: PropTypes.string.isRequired,
-      draft: PropTypes.bool.isRequired,
-      name: PropTypes.string.isRequired,
-    }),
-    PropTypes.shape({}),
-  ]),
-};
 
 export default MediaLibraryTop;

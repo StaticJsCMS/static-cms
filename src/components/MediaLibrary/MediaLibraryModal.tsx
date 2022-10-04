@@ -1,15 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
-import { Record } from 'immutable';
+import Dialog from '@mui/material/Dialog';
 import isEmpty from 'lodash/isEmpty';
+import React from 'react';
 import { translate } from 'react-polyglot';
 
-import { colors } from '../../ui';
-import { Modal } from '../UI';
-import MediaLibraryTop from './MediaLibraryTop';
-import MediaLibraryCardGrid from './MediaLibraryCardGrid';
+import { transientOptions } from '../../lib';
+import { colors, colorsRaw } from '../../ui';
 import EmptyMessage from './EmptyMessage';
+import MediaLibraryCardGrid from './MediaLibraryCardGrid';
+import MediaLibraryTop from './MediaLibraryTop';
+
+import type { MediaFile, TranslatedProps } from '../../interface';
+import type { MediaLibraryCardItem } from './MediaLibraryCardGrid';
+import type { MediaLibraryState } from '../../reducers/mediaLibrary';
 
 /**
  * Responsive styling needs to be overhauled. Current setup requires specifying
@@ -25,11 +28,19 @@ const cardMargin = `10px`;
  */
 const cardOutsideWidth = `300px`;
 
-const StyledModal = styled(Modal)`
+interface StyledModalProps {
+  $isPrivate: boolean;
+}
+
+const StyledModal = styled(
+  Dialog,
+  transientOptions,
+)<StyledModalProps>(
+  ({ $isPrivate }) => `
   display: grid;
   grid-template-rows: 120px auto;
   width: calc(${cardOutsideWidth} + 20px);
-  background-color: ${props => props.isPrivate && colors.grayDark};
+  ${$isPrivate ? `background-color: ${colorsRaw.grayDark};` : ''}
 
   @media (min-width: 800px) {
     width: calc(${cardOutsideWidth} * 2 + 20px);
@@ -52,17 +63,50 @@ const StyledModal = styled(Modal)`
   }
 
   h1 {
-    color: ${props => props.isPrivate && colors.textFieldBorder};
+    ${$isPrivate && `color: ${colors.textFieldBorder};`}
   }
 
   button:disabled,
   label[disabled] {
-    background-color: ${props => props.isPrivate && `rgba(217, 217, 217, 0.15)`};
+    ${$isPrivate ? 'background-color: rgba(217, 217, 217, 0.15);' : ''}
   }
-`;
+`,
+);
+
+interface MediaLibraryModalProps {
+  isVisible?: boolean;
+  canInsert?: boolean;
+  files: MediaFile[];
+  dynamicSearch?: boolean;
+  dynamicSearchActive?: boolean;
+  forImage?: boolean;
+  isLoading?: boolean;
+  isPersisting?: boolean;
+  isDeleting?: boolean;
+  hasNextPage?: boolean;
+  isPaginating?: boolean;
+  privateUpload?: boolean;
+  query?: string;
+  selectedFile?: MediaFile;
+  handleFilter: (files: MediaFile[]) => MediaFile[];
+  handleQuery: (query: string, files: MediaFile[]) => MediaFile[];
+  toTableData: (files: MediaFile[]) => MediaLibraryCardItem[];
+  handleClose: () => void;
+  handleSearchChange: () => void;
+  handleSearchKeyDown: () => void;
+  handlePersist: () => void;
+  handleDelete: () => void;
+  handleInsert: () => void;
+  handleDownload: () => void;
+  setScrollContainerRef: () => void;
+  handleAssetClick: () => void;
+  handleLoadMore: () => void;
+  loadDisplayURL: () => void;
+  displayURLs: MediaLibraryState['displayURLs'];
+}
 
 function MediaLibraryModal({
-  isVisible,
+  isVisible = false,
   canInsert,
   files,
   dynamicSearch,
@@ -73,7 +117,7 @@ function MediaLibraryModal({
   isDeleting,
   hasNextPage,
   isPaginating,
-  privateUpload,
+  privateUpload = false,
   query,
   selectedFile,
   handleFilter,
@@ -92,7 +136,7 @@ function MediaLibraryModal({
   loadDisplayURL,
   displayURLs,
   t,
-}) {
+}: TranslatedProps<MediaLibraryModalProps>) {
   const filteredFiles = forImage ? handleFilter(files) : files;
   const queriedFiles = !dynamicSearch && query ? handleQuery(query, filteredFiles) : filteredFiles;
   const tableData = toTableData(queriedFiles);
@@ -106,12 +150,13 @@ function MediaLibraryModal({
     (dynamicSearchActive && t('mediaLibrary.mediaLibraryModal.noResults')) ||
     (!hasFiles && t('mediaLibrary.mediaLibraryModal.noAssetsFound')) ||
     (!hasFilteredFiles && t('mediaLibrary.mediaLibraryModal.noImagesFound')) ||
-    (!hasSearchResults && t('mediaLibrary.mediaLibraryModal.noResults'));
+    (!hasSearchResults && t('mediaLibrary.mediaLibraryModal.noResults')) ||
+    '';
 
   const hasSelection = hasMedia && !isEmpty(selectedFile);
 
   return (
-    <StyledModal isOpen={isVisible} onClose={handleClose} isPrivate={privateUpload}>
+    <StyledModal open={isVisible} onClose={handleClose} $isPrivate={privateUpload}>
       <MediaLibraryTop
         t={t}
         onClose={handleClose}
@@ -137,7 +182,7 @@ function MediaLibraryModal({
       <MediaLibraryCardGrid
         setScrollContainerRef={setScrollContainerRef}
         mediaItems={tableData}
-        isSelectedFile={file => selectedFile.key === file.key}
+        isSelectedFile={file => selectedFile?.key === file.key}
         onAssetClick={handleAssetClick}
         canLoadMore={hasNextPage}
         onLoadMore={handleLoadMore}
@@ -154,47 +199,5 @@ function MediaLibraryModal({
     </StyledModal>
   );
 }
-
-export const fileShape = {
-  displayURL: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-  id: PropTypes.string.isRequired,
-  key: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  queryOrder: PropTypes.number,
-  size: PropTypes.number,
-  path: PropTypes.string.isRequired,
-};
-
-MediaLibraryModal.propTypes = {
-  isVisible: PropTypes.bool,
-  canInsert: PropTypes.bool,
-  files: PropTypes.arrayOf(PropTypes.shape(fileShape)).isRequired,
-  dynamicSearch: PropTypes.bool,
-  dynamicSearchActive: PropTypes.bool,
-  forImage: PropTypes.bool,
-  isLoading: PropTypes.bool,
-  isPersisting: PropTypes.bool,
-  isDeleting: PropTypes.bool,
-  hasNextPage: PropTypes.bool,
-  isPaginating: PropTypes.bool,
-  privateUpload: PropTypes.bool,
-  query: PropTypes.string,
-  selectedFile: PropTypes.oneOfType([PropTypes.shape(fileShape), PropTypes.shape({})]),
-  handleFilter: PropTypes.func.isRequired,
-  handleQuery: PropTypes.func.isRequired,
-  toTableData: PropTypes.func.isRequired,
-  handleClose: PropTypes.func.isRequired,
-  handleSearchChange: PropTypes.func.isRequired,
-  handleSearchKeyDown: PropTypes.func.isRequired,
-  handlePersist: PropTypes.func.isRequired,
-  handleDelete: PropTypes.func.isRequired,
-  handleInsert: PropTypes.func.isRequired,
-  setScrollContainerRef: PropTypes.func.isRequired,
-  handleAssetClick: PropTypes.func.isRequired,
-  handleLoadMore: PropTypes.func.isRequired,
-  loadDisplayURL: PropTypes.func.isRequired,
-  t: PropTypes.func.isRequired,
-  displayURLs: PropTypes.instanceOf(Record).isRequired,
-};
 
 export default translate()(MediaLibraryModal);

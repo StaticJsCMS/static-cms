@@ -1,18 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { translate } from 'react-polyglot';
 import styled from '@emotion/styled';
-import yaml from 'yaml';
-import truncate from 'lodash/truncate';
-import copyToClipboard from 'copy-text-to-clipboard';
 import cleanStack from 'clean-stack';
+import copyToClipboard from 'copy-text-to-clipboard';
+import truncate from 'lodash/truncate';
+import React from 'react';
+import { translate } from 'react-polyglot';
+import yaml from 'yaml';
 
-import { buttons, colors } from '../../ui';
 import { localForage } from '../../lib/util';
+import { buttons, colors } from '../../ui';
+
+import type { ReactNode } from 'react';
+import type { CmsConfig, TranslatedProps } from '../../interface';
 
 const ISSUE_URL = 'https://github.com/StaticJsCMS/static-cms/issues/new?';
 
-function getIssueTemplate({ version, provider, browser, config }) {
+function getIssueTemplate(version: string, provider: string, browser: string, config: string) {
   return `
 **Describe the bug**
 
@@ -36,24 +38,24 @@ ${config}
 `;
 }
 
-function buildIssueTemplate({ config }) {
+function buildIssueTemplate(config: CmsConfig) {
   let version = '';
   if (typeof STATIC_CMS_CORE_VERSION === 'string') {
     version = `static-cms@${STATIC_CMS_CORE_VERSION}`;
   }
-  const template = getIssueTemplate({
+  const template = getIssueTemplate(
     version,
-    provider: config.backend.name,
-    browser: navigator.userAgent,
-    config: yaml.stringify(config),
-  });
+    config.backend.name,
+    navigator.userAgent,
+    yaml.stringify(config),
+  );
 
   return template;
 }
 
-function buildIssueUrl({ title, config }) {
+function buildIssueUrl(title: string, config: CmsConfig) {
   try {
-    const body = buildIssueTemplate({ config });
+    const body = buildIssueTemplate(config);
 
     const params = new URLSearchParams();
     params.append('title', truncate(title, { length: 100 }));
@@ -109,7 +111,11 @@ const CopyButton = styled.button`
   margin: 12px 0;
 `;
 
-function RecoveredEntry({ entry, t }) {
+interface RecoveredEntryProps {
+  entry: string;
+}
+
+function RecoveredEntry({ entry, t }: TranslatedProps<RecoveredEntryProps>) {
   console.info(entry);
   return (
     <>
@@ -126,21 +132,31 @@ function RecoveredEntry({ entry, t }) {
   );
 }
 
-export class ErrorBoundary extends React.Component {
-  static propTypes = {
-    children: PropTypes.node,
-    t: PropTypes.func.isRequired,
-    config: PropTypes.object.isRequired,
-  };
+interface ErrorBoundaryProps {
+  children: ReactNode;
+  config: CmsConfig;
+  showBackup?: boolean;
+}
 
-  state = {
+interface ErrorBoundaryState {
+  hasError: boolean;
+  errorMessage: string;
+  errorTitle: string;
+  backup: string;
+}
+
+export class ErrorBoundary extends React.Component<
+  TranslatedProps<ErrorBoundaryProps>,
+  ErrorBoundaryState
+> {
+  state: ErrorBoundaryState = {
     hasError: false,
     errorMessage: '',
     errorTitle: '',
     backup: '',
   };
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError(error: Error) {
     console.error(error);
     return {
       hasError: true,
@@ -149,7 +165,10 @@ export class ErrorBoundary extends React.Component {
     };
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(
+    _nextProps: TranslatedProps<ErrorBoundaryProps>,
+    nextState: ErrorBoundaryState,
+  ) {
     if (this.props.showBackup) {
       return (
         this.state.errorMessage !== nextState.errorMessage || this.state.backup !== nextState.backup
@@ -160,9 +179,11 @@ export class ErrorBoundary extends React.Component {
 
   async componentDidUpdate() {
     if (this.props.showBackup) {
-      const backup = await localForage.getItem('backup');
-      backup && console.info(backup);
-      this.setState({ backup });
+      const backup = await localForage.getItem<string>('backup');
+      if (backup) {
+        console.info(backup);
+        this.setState({ backup });
+      }
     }
   }
 
@@ -178,7 +199,7 @@ export class ErrorBoundary extends React.Component {
         <p>
           <span>{t('ui.errorBoundary.details')}</span>
           <a
-            href={buildIssueUrl({ title: errorTitle, config: this.props.config })}
+            href={buildIssueUrl(errorTitle, this.props.config)}
             target="_blank"
             rel="noopener noreferrer"
             data-testid="issue-url"

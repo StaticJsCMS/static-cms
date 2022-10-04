@@ -114,7 +114,7 @@ function getEntryBackupKey(collectionName?: string, slug?: string) {
   return `${baseKey}.${collectionName}${suffix}`;
 }
 
-function getEntryField(field: string, entry: Entry) {
+function getEntryField(field: string, entry: Entry): string {
   const value = get(entry.data, field);
   if (value) {
     return String(value);
@@ -122,7 +122,7 @@ function getEntryField(field: string, entry: Entry) {
     const firstFieldPart = field.split('.')[0];
     if (entry[firstFieldPart as keyof Entry]) {
       // allows searching using entry.slug/entry.path etc.
-      return entry[firstFieldPart as keyof Entry];
+      return String(entry[firstFieldPart as keyof Entry]);
     } else {
       return '';
     }
@@ -174,7 +174,7 @@ export function mergeExpandedEntries(entries: (Entry & { field: string })[]) {
     }
 
     const nestedFields = e.field.split('.');
-    let value = acc[e.slug].data;
+    let value = acc[e.slug].data as any;
     for (let i = 0; i < nestedFields.length; i++) {
       value = value[nestedFields[i]];
       if (Array.isArray(value)) {
@@ -429,7 +429,7 @@ export class Backend {
     return uniqueSlug;
   }
 
-  processEntries(loadedEntries: ImplementationEntry[], collection: Collection) {
+  processEntries(loadedEntries: ImplementationEntry[], collection: Collection): Entry[] {
     const entries = loadedEntries.map(loadedEntry =>
       createEntry(
         collection.name,
@@ -612,7 +612,7 @@ export class Backend {
     return { query: searchTerm, hits: merged };
   }
 
-  traverseCursor(cursor: Cursor, action: string) {
+  traverseCursor(cursor: Cursor, action: string): Promise<{ entries: Entry[]; cursor: Cursor }> {
     const [data, unwrappedCursor] = cursor.unwrapData();
     // TODO: stop assuming all cursors are for collections
     const collection = data.collection as Collection;
@@ -992,7 +992,7 @@ export class Backend {
     const format = resolveFormat(collection, entry);
     const fieldsOrder = this.fieldsOrder(collection, entry);
     const fieldsComments = selectFieldsComments(collection, entry);
-    return format && format.toFile(entry.data.toJS(), fieldsOrder, fieldsComments);
+    return format && format.toFile(entry.data, fieldsOrder, fieldsComments);
   }
 
   fieldsOrder(collection: Collection, entry: Entry) {

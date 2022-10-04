@@ -1,8 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
+import React from 'react';
 
-import { Icon, lengths, colors, zIndex } from '../../ui';
+import { colors, Icon, lengths, zIndex } from '../../ui';
+
+import type { ChangeEventHandler, KeyboardEventHandler } from 'react';
 
 const SearchContainer = styled.div`
   height: 37px;
@@ -36,7 +37,15 @@ const SearchIcon = styled(Icon)`
   transform: translate(0, -50%);
 `;
 
-function MediaLibrarySearch({ value, onChange, onKeyDown, placeholder, disabled }) {
+export interface MediaLibrarySearchProps {
+  value?: string;
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  onKeyDown: KeyboardEventHandler<HTMLInputElement>;
+  placeholder: string;
+  disabled?: boolean;
+}
+
+function MediaLibrarySearch({ value, onChange, onKeyDown, placeholder, disabled }: MediaLibrarySearchProps) {
   return (
     <SearchContainer>
       <SearchIcon type="search" size="small" />
@@ -50,13 +59,5 @@ function MediaLibrarySearch({ value, onChange, onKeyDown, placeholder, disabled 
     </SearchContainer>
   );
 }
-
-MediaLibrarySearch.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-  onKeyDown: PropTypes.func.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  disabled: PropTypes.bool,
-};
 
 export default MediaLibrarySearch;

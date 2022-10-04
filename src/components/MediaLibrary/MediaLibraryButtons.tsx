@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import copyToClipboard from 'copy-text-to-clipboard';
@@ -7,6 +6,8 @@ import copyToClipboard from 'copy-text-to-clipboard';
 import { buttons, shadows, zIndex } from '../../ui';
 import { isAbsolutePath } from '../../lib/util';
 import { FileUploadButton } from '../UI';
+
+import type { TranslatedProps } from '../../interface';
 
 const styles = {
   button: css`
@@ -71,33 +72,48 @@ const ActionButton = styled.button`
 
 export const DownloadButton = ActionButton;
 
-export class CopyToClipBoardButton extends React.Component {
-  mounted = false;
-  timeout;
+export interface CopyToClipBoardButtonProps {
+  disabled: boolean;
+  draft?: boolean;
+  path?: string;
+  name?: string;
+}
 
-  state = {
-    copied: false,
-  };
+export const CopyToClipBoardButton = ({
+  disabled,
+  draft,
+  path,
+  name,
+  t,
+}: TranslatedProps<CopyToClipBoardButtonProps>) => {
+  const [copied, setCopied] = useState(false);
 
-  componentDidMount() {
-    this.mounted = true;
-  }
+  useEffect(() => {
+    let alive = true;
 
-  componentWillUnmount() {
-    this.mounted = false;
-  }
+    const timer = setTimeout(() => {
+      if (alive) {
+        setCopied(false);
+      }
+    }, 1500);
 
-  handleCopy = () => {
-    clearTimeout(this.timeout);
-    const { path, draft, name } = this.props;
+    return () => {
+      alive = false;
+      clearTimeout(timer);
+    };
+  }, []);
+
+  const handleCopy = useCallback(() => {
+    if (!path || !name) {
+      return;
+    }
+
     copyToClipboard(isAbsolutePath(path) || !draft ? path : name);
-    this.setState({ copied: true });
-    this.timeout = setTimeout(() => this.mounted && this.setState({ copied: false }), 1500);
-  };
+    setCopied(true);
+  }, [draft, name, path]);
 
-  getTitle = () => {
-    const { t, path, draft } = this.props;
-    if (this.state.copied) {
+  const getTitle = useCallback(() => {
+    if (copied) {
       return t('mediaLibrary.mediaLibraryCard.copied');
     }
 
@@ -114,23 +130,11 @@ export class CopyToClipBoardButton extends React.Component {
     }
 
     return t('mediaLibrary.mediaLibraryCard.copyPath');
-  };
+  }, [copied, draft, path, t]);
 
-  render() {
-    const { disabled } = this.props;
-
-    return (
-      <ActionButton disabled={disabled} onClick={this.handleCopy}>
-        {this.getTitle()}
-      </ActionButton>
-    );
-  }
-}
-
-CopyToClipBoardButton.propTypes = {
-  disabled: PropTypes.bool.isRequired,
-  draft: PropTypes.bool,
-  path: PropTypes.string,
-  name: PropTypes.string,
-  t: PropTypes.func.isRequired,
+  return (
+    <ActionButton disabled={disabled} onClick={handleCopy}>
+      {getTitle()}
+    </ActionButton>
+  );
 };

@@ -254,8 +254,8 @@ function mergeValues(
   return entryValue;
 }
 
-function mergeSingleFileValue(entryValue: Entry, defaultLocale: string, locales: string[]) {
-  const data = entryValue.data[defaultLocale] || {};
+function mergeSingleFileValue(entryValue: Entry, defaultLocale: string, locales: string[]): Entry {
+  const data = (entryValue.data[defaultLocale] ?? {}) as Record<string, unknown>;
   const i18n = locales
     .filter(l => l !== defaultLocale)
     .map(l => ({ locale: l, value: entryValue.data[l] }))
@@ -304,7 +304,7 @@ export async function getI18nEntry(
   return entryValue;
 }
 
-export function groupEntries(collection: Collection, extension: string, entries: Entry[]) {
+export function groupEntries(collection: Collection, extension: string, entries: Entry[]): Entry[] {
   const { structure, defaultLocale, locales } = getI18nInfo(collection) as I18nInfo;
   if (structure === I18N_STRUCTURE.SINGLE_FILE) {
     return entries.map(e => mergeSingleFileValue(e, defaultLocale, locales));

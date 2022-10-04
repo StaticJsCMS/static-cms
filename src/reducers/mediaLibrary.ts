@@ -33,18 +33,17 @@ import type {
   State,
 } from '../interface';
 
+export interface MediaLibraryDisplayURL {
+  url?: string;
+  isFetching: boolean;
+  err?: unknown;
+}
+
 export type MediaLibraryState = {
   isVisible: boolean;
   showMediaButton: boolean;
-  controlMedia: Record<string, string>;
-  displayURLs: Record<
-    string,
-    {
-      url?: string;
-      isFetching: boolean;
-      err?: unknown;
-    }
-  >;
+  controlMedia: Record<string, string | string[]>;
+  displayURLs: Record<string, MediaLibraryDisplayURL>;
   externalLibrary?: MediaLibraryInstance;
   controlID?: string;
   page?: number;
@@ -53,9 +52,19 @@ export type MediaLibraryState = {
   field?: EntryField;
   value?: string | string[];
   replaceIndex?: number;
+  canInsert?: boolean;
   privateUpload?: boolean;
   isLoading?: boolean;
+  dynamicSearch?: boolean;
+  dynamicSearchActive?: boolean;
+  dynamicSearchQuery?: string;
+  forImage?: boolean;
+  isPersisting?: boolean;
+  isDeleting?: boolean;
+  hasNextPage?: boolean;
+  isPaginating?: boolean;
 };
+
 
 const defaultState: MediaLibraryState = {
   isVisible: false,
@@ -65,7 +74,7 @@ const defaultState: MediaLibraryState = {
   config: {},
 };
 
-function mediaLibrary(state: MediaLibraryState = defaultState, action: MediaLibraryAction) {
+function mediaLibrary(state: MediaLibraryState = defaultState, action: MediaLibraryAction): MediaLibraryState {
   switch (action.type) {
     case MEDIA_LIBRARY_CREATE:
       return {
@@ -85,7 +94,7 @@ function mediaLibrary(state: MediaLibraryState = defaultState, action: MediaLibr
           isVisible: true,
           forImage,
           controlID,
-          canInsert: !!controlID,
+          canInsert: Boolean(controlID),
           privateUpload,
           config: libConfig,
           controlMedia: {},
@@ -266,16 +275,16 @@ function mediaLibrary(state: MediaLibraryState = defaultState, action: MediaLibr
       const files = state.files as MediaFile[];
       const updatedFiles = files.filter(file => (key ? file.key !== key : file.id !== id));
 
-      const displayUrls = {
+      const displayURLs = {
         ...state.displayURLs,
       };
 
-      delete displayUrls[id];
+      delete displayURLs[id];
 
       return {
         ...state,
         files: updatedFiles,
-        displayUrls,
+        displayURLs,
         isDeleting: false,
       };
     }
