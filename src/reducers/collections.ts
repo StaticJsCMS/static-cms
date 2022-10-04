@@ -1,3 +1,5 @@
+import get from 'lodash/get';
+
 import { CONFIG_SUCCESS } from '../actions/config';
 import { FILES, FOLDER } from '../constants/collectionTypes';
 import { COMMIT_AUTHOR, COMMIT_DATE } from '../constants/commitProps';
@@ -27,14 +29,17 @@ export type CollectionsState = Collections;
 
 const defaultState: CollectionsState = {};
 
-function collections(state: CollectionsState = defaultState, action: ConfigAction) {
+function collections(
+  state: CollectionsState = defaultState,
+  action: ConfigAction,
+): CollectionsState {
   switch (action.type) {
     case CONFIG_SUCCESS: {
       const collections = action.payload.collections;
       return collections.reduce((acc, collection) => {
-        acc[collection.name] = collection;
+        acc[collection.name] = collection as Collection;
         return acc;
-      }, {} as Record<string, CmsCollection>);
+      }, {} as Record<string, Collection>);
     }
     default:
       return state;
@@ -373,11 +378,11 @@ export function selectEntryCollectionTitle(collection: Collection, entry: Entry)
   // try to infer a title field from the entry data
   const entryData = entry.data;
   const titleField = selectInferedField(collection, 'title');
-  const result = titleField && entryData.getIn(keyToPathArray(titleField));
+  const result = titleField && get(entryData, keyToPathArray(titleField));
 
   // if the custom field does not yield a result, fallback to 'title'
   if (!result && titleField !== 'title') {
-    return entryData.getIn(keyToPathArray('title'));
+    return get(entryData, keyToPathArray('title'));
   }
 
   return result;

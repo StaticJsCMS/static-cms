@@ -152,7 +152,7 @@ export type EntriesState = {
 function entries(
   state: EntriesState = { entities: {}, pages: {}, sort: loadSort(), viewStyle: loadViewStyle() },
   action: EntriesAction | SearchAction,
-) {
+): EntriesState {
   switch (action.type) {
     case ENTRY_REQUEST: {
       const payload = action.payload as EntryRequestPayload;

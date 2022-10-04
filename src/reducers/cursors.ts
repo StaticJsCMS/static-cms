@@ -18,7 +18,7 @@ export interface CursorsState {
 function cursors(
   state: CursorsState = { cursorsByType: { collectionEntries: {} } },
   action: EntriesAction,
-) {
+): CursorsState {
   switch (action.type) {
     case ENTRIES_SUCCESS: {
       return {

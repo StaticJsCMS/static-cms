@@ -44,7 +44,7 @@ const defaultState: IntegrationsState = { providers: {}, hooks: {} };
 function integrations(
   state: IntegrationsState = defaultState,
   action: ConfigAction,
-): IntegrationsState | null {
+): IntegrationsState {
   switch (action.type) {
     case CONFIG_SUCCESS: {
       return getIntegrations(action.payload);

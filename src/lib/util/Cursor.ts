@@ -2,7 +2,7 @@ export interface CursorStore {
   actions: Set<string>;
   data: Record<string, unknown>;
   meta: Record<string, unknown>;
-};
+}
 
 type ActionHandler = (action: string) => unknown;
 
@@ -61,10 +61,10 @@ function getActionHandlers(store: CursorStore, handler: ActionHandler) {
 // The cursor logic is entirely functional, so this class simply
 // provides a chainable interface
 export default class Cursor {
-  store?: CursorStore;
-  actions?: Set<string>;
-  data?: Record<string, unknown>;
-  meta?: Record<string, unknown>;
+  store: CursorStore;
+  actions: Set<string>;
+  data: Record<string, unknown>;
+  meta: Record<string, unknown>;
 
   static create(...args: {}[]) {
     return new Cursor(...args);
@@ -72,7 +72,11 @@ export default class Cursor {
 
   constructor(...args: {}[]) {
     if (args[0] instanceof Cursor) {
-      return args[0] as Cursor;
+      this.store = args[0].store;
+      this.actions = args[0].actions;
+      this.data = args[0].data;
+      this.meta = args[0].meta;
+      return;
     }
 
     this.store = createCursorStore(...args);
@@ -83,11 +87,11 @@ export default class Cursor {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateStore(update: (store: CursorStore) => CursorStore) {
-    return new Cursor(update(this.store!));
+    return new Cursor(update(this.store));
   }
 
   hasAction(action: string) {
-    return hasAction(this.store!, action);
+    return hasAction(this.store, action);
   }
 
   addAction(action: string) {
@@ -124,7 +128,7 @@ export default class Cursor {
   }
 
   getActionHandlers(handler: ActionHandler) {
-    return getActionHandlers(this.store!, handler);
+    return getActionHandlers(this.store, handler);
   }
 
   setData(data: Record<string, unknown>) {
@@ -153,7 +157,7 @@ export default class Cursor {
 
   unwrapData(): [CursorStore['data'], Cursor] {
     return [
-      this.store!.data,
+      this.store.data,
       this.updateStore(store => ({
         ...store,
         data: store.data.wrapped_cursor_data as Record<string, unknown>,

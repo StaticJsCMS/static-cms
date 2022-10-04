@@ -74,6 +74,8 @@ export interface Entry {
   meta: { path?: string };
   newRecord?: boolean;
   isFetching?: boolean;
+  isPersisting?: boolean;
+  error?: string;
   i18n?: {
     [locale: string]: any;
   };

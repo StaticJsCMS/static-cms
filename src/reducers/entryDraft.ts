@@ -45,7 +45,10 @@ const initialState: EntryDraftState = {
   key: '',
 };
 
-function entryDraftReducer(state: EntryDraftState = initialState, action: EntriesAction) {
+function entryDraftReducer(
+  state: EntryDraftState = initialState,
+  action: EntriesAction,
+): EntryDraftState {
   switch (action.type) {
     case DRAFT_CREATE_FROM_ENTRY:
       // Existing Entry
@@ -77,6 +80,10 @@ function entryDraftReducer(state: EntryDraftState = initialState, action: Entrie
 
     case DRAFT_CREATE_FROM_LOCAL_BACKUP: {
       const backupDraftEntry = state.localBackup;
+      if (!backupDraftEntry) {
+        return state;
+      }
+
       const backupEntry = backupDraftEntry?.['entry'];
 
       const newState = { ...state };
@@ -104,7 +111,6 @@ function entryDraftReducer(state: EntryDraftState = initialState, action: Entrie
           ...action.payload,
           newRecord: true,
         },
-        mediaFiles: [],
         fieldsMetaData: {},
         fieldsErrors: {},
         hasChanged: true,
@@ -162,15 +168,15 @@ function entryDraftReducer(state: EntryDraftState = initialState, action: Entrie
     }
 
     case DRAFT_VALIDATION_ERRORS: {
-      const fieldErrors = { ...state.fieldsErrors };
+      const fieldsErrors = { ...state.fieldsErrors };
       if (action.payload.errors.length === 0) {
-        delete fieldErrors[action.payload.uniquefieldId];
+        delete fieldsErrors[action.payload.uniquefieldId];
       } else {
-        fieldErrors[action.payload.uniquefieldId] = action.payload.errors;
+        fieldsErrors[action.payload.uniquefieldId] = action.payload.errors;
       }
       return {
         ...state,
-        fieldErrors,
+        fieldsErrors,
       };
     }
 
@@ -182,6 +188,10 @@ function entryDraftReducer(state: EntryDraftState = initialState, action: Entrie
     }
 
     case ENTRY_PERSIST_REQUEST: {
+      if (!state.entry) {
+        return state;
+      }
+
       return {
         ...state,
         entry: {
@@ -192,6 +202,10 @@ function entryDraftReducer(state: EntryDraftState = initialState, action: Entrie
     }
 
     case ENTRY_PERSIST_FAILURE: {
+      if (!state.entry) {
+        return state;
+      }
+
       return {
         ...state,
         entry: {
@@ -201,7 +215,11 @@ function entryDraftReducer(state: EntryDraftState = initialState, action: Entrie
       };
     }
 
-    case ENTRY_PERSIST_SUCCESS:
+    case ENTRY_PERSIST_SUCCESS: {
+      if (!state.entry) {
+        return state;
+      }
+
       return {
         ...state,
         hasChanged: false,
@@ -211,8 +229,13 @@ function entryDraftReducer(state: EntryDraftState = initialState, action: Entrie
           isPersisting: false,
         },
       };
+    }
 
-    case ENTRY_DELETE_SUCCESS:
+    case ENTRY_DELETE_SUCCESS: {
+      if (!state.entry) {
+        return state;
+      }
+
       return {
         ...state,
         hasChanged: false,
@@ -221,6 +244,7 @@ function entryDraftReducer(state: EntryDraftState = initialState, action: Entrie
           isPersisting: false,
         },
       };
+    }
 
     case ADD_DRAFT_ENTRY_MEDIA_FILE: {
       if (!state.entry) {
