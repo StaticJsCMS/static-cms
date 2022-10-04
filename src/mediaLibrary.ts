@@ -9,16 +9,7 @@ import { store } from './store';
 import { configFailed } from './actions/config';
 import { createMediaLibrary, insertMedia } from './actions/mediaLibrary';
 
-import type { MediaLibraryInstance, State } from './interface';
-
-type MediaLibraryOptions = {};
-
-interface MediaLibrary {
-  init: (args: {
-    options: MediaLibraryOptions;
-    handleInsert: (url: string) => void;
-  }) => MediaLibraryInstance;
-}
+import type { CmsMediaLibrary, State } from './interface';
 
 function handleInsert(url: string) {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -26,8 +17,8 @@ function handleInsert(url: string) {
   return store.dispatch(insertMedia(url, undefined));
 }
 
-const initializeMediaLibrary = once(async function initializeMediaLibrary(name, options) {
-  const lib = getMediaLibrary(name) as unknown as MediaLibrary | undefined;
+const initializeMediaLibrary = once(async function initializeMediaLibrary(name: string, options: CmsMediaLibrary | undefined) {
+  const lib = getMediaLibrary(name);
   if (!lib) {
     const err = new Error(
       `Missing external media library '${name}'. Please use 'registerMediaLibrary' to register it.`,

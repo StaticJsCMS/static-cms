@@ -482,9 +482,15 @@ export type CmsWidgetValueSerializer = any; // TODO: type properly
 
 export type CmsMediaLibraryOptions = Record<string, unknown>; // TODO: type properly
 
+export interface CmsMediaLibraryInitOptions {
+  options: CmsMediaLibrary | undefined;
+  handleInsert: (url: string | string[]) => void;
+}
+
 export interface CmsMediaLibrary {
   name: string;
   config?: CmsMediaLibraryOptions;
+  init: ({ options, handleInsert }: CmsMediaLibraryInitOptions) => MediaLibraryInstance;
 }
 
 export interface PreviewStyleOptions {
