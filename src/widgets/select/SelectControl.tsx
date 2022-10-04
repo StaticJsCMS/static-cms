@@ -23,7 +23,7 @@ function convertToOption(raw: string | Option | undefined): Option | undefined {
 }
 
 export default class SelectControl extends React.Component<
-  CmsWidgetControlProps<string | List<string> | null>
+  CmsWidgetControlProps<string | string[] | null>
 > {
   isValid = () => {
     const { field, value = '', t } = this.props;
@@ -37,7 +37,7 @@ export default class SelectControl extends React.Component<
     const error = validations.validateMinMax(
       t,
       field.label ?? field.name,
-      value as List<string>,
+      value as string[],
       min,
       max,
     );
@@ -52,7 +52,7 @@ export default class SelectControl extends React.Component<
     const isEmpty = isMultiple && Array.isArray(selectedOption) ? !selectedOption?.length : !selectedOption;
 
     if (field.required && isEmpty && isMultiple) {
-      onChange(List<string>());
+      onChange(string[]());
     } else if (isEmpty) {
       onChange(null);
     } else if (typeof selectedOption === 'string') {

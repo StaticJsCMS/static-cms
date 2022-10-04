@@ -271,7 +271,7 @@ export function updateFieldByKey(
   collection: Collection,
   key: string,
   updater: (field: EntryField) => EntryField,
-) {
+): Collection {
   const selected = selectField(collection, key);
   if (!selected) {
     return collection;
@@ -289,11 +289,9 @@ export function updateFieldByKey(
     }
   }
 
-  return (collection.fields = traverseFields(
-    collection.fields ?? [],
-    updateAndBreak,
-    () => updated,
-  ));
+  collection.fields = traverseFields(collection.fields ?? [], updateAndBreak, () => updated);
+
+  return collection;
 }
 
 export function selectIdentifier(collection: CmsCollection | Collection) {

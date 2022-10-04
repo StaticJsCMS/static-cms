@@ -3,7 +3,7 @@ import { isEqual } from 'lodash';
 import { currentBackend } from '../backend';
 import ValidationErrorTypes from '../constants/validationErrorTypes';
 import { getIntegrationProvider } from '../integrations';
-import { MediaFile, SortDirection } from '../interface';
+import { SortDirection } from '../interface';
 import { getProcessSegment } from '../lib/formatters';
 import { duplicateDefaultI18nFields, hasI18n, I18N, I18N_FIELD, serializeI18n } from '../lib/i18n';
 import { serializeValues } from '../lib/serializeEntryValues';
@@ -21,7 +21,6 @@ import { addAssets, getAsset } from './media';
 import { loadMedia, waitForMediaLibraryToLoad } from './mediaLibrary';
 import { waitUntil } from './waitUntil';
 
-import { Set } from 'immutable';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { Backend } from '../backend';
@@ -567,7 +566,7 @@ function addAppendActionsToCursor(cursor: Cursor) {
     actions: new Set(
       ...store.actions,
       ...(Object.entries(appendActions)
-        .filter(([_k, v]) => actions.has(v.action as string))
+        .filter(([_k, v]) => store.actions.has(v.action as string))
         .map(([k, _v]) => k) as string[]),
     ),
   }));
@@ -658,19 +657,17 @@ export function traverseCollectionCursor(collection: Collection, action: string)
   return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
     const state = getState();
     const collectionName = collection.name;
-    if (state.entries.getIn(['pages', `${collectionName}`, 'isFetching'])) {
+    if (state.entries.pages?.[collectionName]?.isFetching) {
       return;
     }
     const backend = currentBackend(state.config);
 
-    const { action: realAction, append } = appendActions.has(action)
-      ? (appendActions.get(action)!.toJS() as { action: string; append: boolean })
-      : { action, append: false };
+    const { action: realAction, append } =
+      action in appendActions ? appendActions[action] : { action, append: false };
     const cursor = selectCollectionEntriesCursor(state.cursors, collection.name);
 
-    // Handle cursors representing pages in the old, integer-based
-    // pagination API
-    if (cursor.meta!.get('usingOldPaginationAPI', false)) {
+    // Handle cursors representing pages in the old, integer-based pagination API
+    if (cursor.meta?.usingOldPaginationAPI ?? false) {
       return dispatch(loadEntries(collection, cursor.data!.nextPage as number));
     }
 
@@ -678,7 +675,7 @@ export function traverseCollectionCursor(collection: Collection, action: string)
       dispatch(entriesLoading(collection));
       const { entries, cursor: newCursor } = await traverseCursor(backend, cursor, realAction);
 
-      const pagination = newCursor.meta?.page;
+      const pagination = newCursor.meta?.page as number | null;
       return dispatch(
         entriesLoaded(collection, entries, pagination, addAppendActionsToCursor(newCursor), append),
       );
@@ -719,23 +716,24 @@ function processValue(unsafe: string) {
 }
 
 function getDataFields(fields: EntryField[]) {
-  return fields.filter(f => !f!.meta).toList();
+  return fields.filter(f => !f!.meta);
 }
 
 function getMetaFields(fields: EntryField[]) {
-  return fields.filter(f => f!.meta === true).toList();
+  return fields.filter(f => f!.meta === true);
 }
 
 export function createEmptyDraft(collection: Collection, search: string) {
   return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
     const params = new URLSearchParams(search);
     params.forEach((value, key) => {
-      collection = updateFieldByKey(collection, key, field =>
-        field.set('default', processValue(value)),
-      );
+      collection = updateFieldByKey(collection, key, field => {
+        field.default = processValue(value);
+        return field;
+      });
     });
 
-    const fields = collection.get('fields', List());
+    const fields = collection.fields ?? [];
 
     const dataFields = getDataFields(fields);
     const data = createEmptyDraftData(dataFields);
@@ -746,7 +744,7 @@ export function createEmptyDraft(collection: Collection, search: string) {
     const state = getState();
     const backend = currentBackend(state.config);
 
-    if (!collection.has('media_folder')) {
+    if (!('media_folder' in collection)) {
       await waitForMediaLibraryToLoad(dispatch, getState());
     }
 
@@ -769,10 +767,10 @@ interface DraftEntryData {
     | string
     | null
     | boolean
-    | List<unknown>
+    | unknown[]
     | DraftEntryData
     | DraftEntryData[]
-    | (string | DraftEntryData | boolean | List<unknown>)[];
+    | (string | DraftEntryData | boolean | unknown[])[];
 }
 
 export function createEmptyDraftData(
@@ -781,7 +779,7 @@ export function createEmptyDraftData(
 ) {
   return fields.reduce(
     (
-      reduction: DraftEntryData | string | undefined | boolean | List<unknown>,
+      reduction: DraftEntryData | string | undefined | boolean | unknown[],
       value: EntryField | undefined | boolean,
     ) => {
       const acc = reduction as DraftEntryData;
@@ -794,22 +792,19 @@ export function createEmptyDraftData(
       const subfields = item.field || item.fields;
       const list = item.widget == 'list';
       const name = item.name;
-      const defaultValue = item.get('default', null);
+      const defaultValue = item.default ?? null;
 
       function isEmptyDefaultValue(val: unknown) {
         return [[{}], {}].some(e => isEqual(val, e));
       }
 
-      const hasSubfields = List.isList(subfields) || Record.isMap(subfields);
-      if (hasSubfields) {
-        if (list && List.isList(defaultValue)) {
+      if (subfields) {
+        if (list && Array.isArray(defaultValue)) {
           acc[name] = defaultValue;
         } else {
-          const asList = List.isList(subfields)
-            ? (subfields as EntryField[])
-            : List([subfields as EntryField]);
+          const asList = Array.isArray(subfields) ? subfields : [subfields];
 
-          const subDefaultValue = list
+          const subDefaultValue = Array.isArray(subfields)
             ? [createEmptyDraftData(asList, skipField)]
             : createEmptyDraftData(asList, skipField);
 
@@ -836,7 +831,7 @@ function createEmptyDraftI18nData(collection: Collection, dataFields: EntryField
   }
 
   function skipField(field: EntryField) {
-    return field.get(I18N) !== I18N_FIELD.DUPLICATE && field.get(I18N) !== I18N_FIELD.TRANSLATE;
+    return field.i18n !== I18N_FIELD.DUPLICATE && field.i18n !== I18N_FIELD.TRANSLATE;
   }
 
   const i18nData = createEmptyDraftData(dataFields, skipField);
@@ -844,7 +839,7 @@ function createEmptyDraftI18nData(collection: Collection, dataFields: EntryField
 }
 
 export function getMediaAssets({ entry }: { entry: Entry }) {
-  const filesArray = entry.mediaFiles();
+  const filesArray = entry.mediaFiles;
   const assets = filesArray
     .filter(file => file.draft)
     .map(file =>
@@ -871,8 +866,10 @@ export function getSerializedEntry(collection: Collection, entry: Entry) {
     return serializeValues(data, fields);
   }
 
-  const serializedData = serializeData(entry.data);
-  let serializedEntry = entry.set('data', serializedData);
+  let serializedEntry = {
+    ...entry,
+    data: serializeData(entry.data),
+  };
   if (hasI18n(collection)) {
     serializedEntry = serializeI18n(collection, serializedEntry, serializeData);
   }
@@ -887,8 +884,8 @@ export function persistEntry(collection: Collection) {
     const usedSlugs = selectPublishedSlugs(state, collection.name);
 
     // Early return if draft contains validation errors
-    if (!fieldsErrors.isEmpty()) {
-      const hasPresenceErrors = fieldsErrors.some(errors =>
+    if (Object.keys(fieldsErrors).length > 0) {
+      const hasPresenceErrors = Object.values(fieldsErrors).find(errors =>
         errors.some(error => error.type && error.type === ValidationErrorTypes.PRESENCE),
       );
 
@@ -913,13 +910,16 @@ export function persistEntry(collection: Collection) {
     });
 
     const serializedEntry = getSerializedEntry(collection, entry);
-    const serializedEntryDraft = entryDraft.set('entry', serializedEntry);
+    const newEntryDraft = {
+      ...entryDraft,
+      entry: serializedEntry,
+    };
     dispatch(entryPersisting(collection, serializedEntry));
     return backend
       .persistEntry({
         config: state.config,
         collection,
-        entryDraft: serializedEntryDraft,
+        entryDraft: newEntryDraft,
         assetProxies,
         usedSlugs,
       })
@@ -938,7 +938,7 @@ export function persistEntry(collection: Collection) {
           await dispatch(loadMedia());
         }
         dispatch(entryPersisted(collection, serializedEntry, newSlug));
-        if (collection.has('nested')) {
+        if ('nested' in collection) {
           await dispatch(loadEntries(collection));
         }
         if (entry.slug !== newSlug) {
@@ -1026,13 +1026,13 @@ export function validateMetaField(
       return getPathError(value, 'invalidPath', t);
     }
 
-    const customPath = selectCustomPath(collection, fromJS({ entry: { meta: { path: value } } }));
+    const customPath = selectCustomPath(collection, { entry: { meta: { path: value } } });
     const existingEntry = customPath
       ? selectEntryByPath(state.entries, collection.name, customPath)
       : undefined;
 
     const existingEntryPath = existingEntry?.path;
-    const draftPath = state.entryDraft?.getIn(['entry', 'path']);
+    const draftPath = state.entryDraft?.entry?.path;
 
     if (existingEntryPath && existingEntryPath !== draftPath) {
       return getPathError(value, 'pathExists', t);

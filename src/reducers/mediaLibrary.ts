@@ -264,7 +264,7 @@ export function selectMediaFiles(state: State, field?: EntryField) {
   let files;
   if (editingDraft && !integration) {
     const entryFiles = entryDraft
-      .getIn(['entry', 'mediaFiles'], List<MediaFileMap>())
+      .getIn(['entry', 'mediaFiles'], MediaFileMap[]())
       .toJS() as MediaFile[];
     const entry = entryDraft.entry;
     const collection = state.collections.get(entry?.collection);

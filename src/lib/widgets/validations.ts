@@ -5,7 +5,7 @@ import type { List } from 'immutable';
 export function validateMinMax(
   t: (key: string, options: unknown) => string,
   fieldLabel: string,
-  value?: List<unknown>,
+  value?: unknown[],
   min?: number,
   max?: number,
 ) {

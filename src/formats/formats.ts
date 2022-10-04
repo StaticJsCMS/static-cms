@@ -47,8 +47,8 @@ function formatByName(name: Format, customDelimiter?: Delimiter) {
 }
 
 function frontmatterDelimiterIsList(
-  frontmatterDelimiter?: Delimiter | List<string>,
-): frontmatterDelimiter is List<string> {
+  frontmatterDelimiter?: Delimiter | string[],
+): frontmatterDelimiter is string[] {
   return List.isList(frontmatterDelimiter);
 }
 

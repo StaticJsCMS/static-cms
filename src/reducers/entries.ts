@@ -399,14 +399,14 @@ export function selectEntry(state: Entries, collection: string, slug: string) {
 }
 
 export function selectPublishedSlugs(state: Entries, collection: string) {
-  return state.getIn(['pages', collection, 'ids'], List<string>());
+  return state.getIn(['pages', collection, 'ids'], string[]());
 }
 
 function getPublishedEntries(state: Entries, collectionName: string) {
   const slugs = selectPublishedSlugs(state, collectionName);
   const entries =
     slugs &&
-    (slugs.map(slug => selectEntry(state, collectionName, slug as string)) as List<Entry>);
+    (slugs.map(slug => selectEntry(state, collectionName, slug as string)) as Entry[]);
   return entries;
 }
 
@@ -514,7 +514,7 @@ export function selectGroups(state: Entries, collection: Collection) {
 export function selectEntryByPath(state: Entries, collection: string, path: string) {
   const slugs = selectPublishedSlugs(state, collection);
   const entries =
-    slugs && (slugs.map(slug => selectEntry(state, collection, slug as string)) as List<Entry>);
+    slugs && (slugs.map(slug => selectEntry(state, collection, slug as string)) as Entry[]);
 
   return entries && entries.find(e => e?.path === path);
 }
