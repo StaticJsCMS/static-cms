@@ -11,19 +11,19 @@ import {
 import type { User } from '../interface';
 import type { AuthAction } from '../actions/auth';
 
-export type Auth = {
+export type AuthState = {
   isFetching: boolean;
   user: User | undefined;
   error: string | undefined;
 };
 
-export const defaultState: Auth = {
+export const defaultState: AuthState = {
   isFetching: false,
   user: undefined,
   error: undefined,
 };
 
-const auth = produce((state: Auth, action: AuthAction) => {
+const auth = produce((state: AuthState, action: AuthAction) => {
   switch (action.type) {
     case AUTH_REQUEST:
       state.isFetching = true;

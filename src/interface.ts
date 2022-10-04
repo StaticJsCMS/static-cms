@@ -6,9 +6,12 @@ import type { CollectionType } from './constants/collectionTypes';
 import type { formatExtensions } from './formats/formats';
 import type { AllowedEvent } from './lib/registry';
 import type Cursor from './lib/util/Cursor';
-import type { Auth } from './reducers/auth';
+import type { AuthState } from './reducers/auth';
+import type { CollectionsState } from './reducers/collections';
+import type { ConfigState } from './reducers/config';
 import type { EntriesState } from './reducers/entries';
 import type { GlobalUI } from './reducers/globalUI';
+import type { MediaLibraryState } from './reducers/mediaLibrary';
 import type { Medias } from './reducers/medias';
 import type { ScrollState } from './reducers/scroll';
 import type { Search } from './reducers/search';
@@ -31,9 +34,9 @@ export type SortMap = Record<string, SortObject>;
 
 export type Sort = Record<string, SortMap>;
 
-export type FilterMap = ViewFilter & { active: boolean };
+export type FilterMap = ViewFilter & { active?: boolean };
 
-export type GroupMap = ViewGroup & { active: boolean };
+export type GroupMap = ViewGroup & { active?: boolean };
 
 export type Filter = Record<string, Record<string, FilterMap>>; // collection.field.active
 
@@ -181,15 +184,6 @@ export type DisplayURLState = {
   err?: Error;
 };
 
-export type MediaLibrary = {
-  externalLibrary?: MediaLibraryInstance;
-  files: MediaFile[];
-  displayURLs: {
-    [id: string]: DisplayURLState;
-  };
-  isLoading: boolean;
-};
-
 export type Hook = string | boolean;
 
 export type Integrations = {
@@ -200,16 +194,16 @@ export type Integrations = {
 export type Cursors = {};
 
 export interface State {
-  auth: Auth;
-  config: CmsConfig;
+  auth: AuthState;
+  config: ConfigState;
   cursors: Cursors;
-  collections: Collections;
+  collections: CollectionsState;
   globalUI: GlobalUI;
   entries: EntriesState;
   entryDraft: EntryDraft;
   integrations: Integrations;
   medias: Medias;
-  mediaLibrary: MediaLibrary;
+  mediaLibrary: MediaLibraryState;
   search: Search;
   status: Status;
   scroll: ScrollState;

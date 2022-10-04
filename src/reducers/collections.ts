@@ -13,23 +13,23 @@ import { selectMediaFolder } from './entries';
 import type { ConfigAction } from '../actions/config';
 import type { Backend } from '../backend';
 import type {
+  CmsCollection,
   CmsConfig,
+  CmsField,
   Collection,
   CollectionFile,
   Collections,
-  EntryField,
   Entry,
-  ViewFilter,
-  ViewGroup,
-  CmsCollection,
-  CmsField,
+  EntryField,
 } from '../interface';
 
 const { keyToPathArray } = stringTemplate;
 
-const defaultState = {} as Collections;
+export type CollectionsState = Collections;
 
-function collections(state = defaultState, action: ConfigAction) {
+const defaultState: CollectionsState = {};
+
+function collections(state: CollectionsState = defaultState, action: ConfigAction) {
   switch (action.type) {
     case CONFIG_SUCCESS: {
       const collections = action.payload.collections;
