@@ -1,5 +1,7 @@
 import { List } from 'immutable';
-import { castArray, throttle, get } from 'lodash';
+import castArray from 'lodash/castArray';
+import throttle from 'lodash/throttle';
+import get from 'lodash/get';
 import { Range, Block } from 'slate';
 import isHotkey from 'is-hotkey';
 

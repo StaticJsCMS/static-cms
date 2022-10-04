@@ -1,4 +1,5 @@
-import { pickBy, trimEnd } from 'lodash';
+import pickBy from 'lodash/pickBy';
+import trimEnd from 'lodash/trimEnd';
 
 import { unsentRequest } from '../../../lib/util';
 import { addParams } from '../../../lib/urlHelper';
@@ -63,7 +64,7 @@ export default class AssetStore {
     const headers = this.requestHeaders(options.headers || {});
     const url = this.urlFor(path, options);
     const response = await fetch(url, { ...options, headers });
-    const contentType = response.headers.Content-Type;
+    const contentType = response.headers.get('Content-Type');
     const isJson = contentType && contentType.match(/json/);
     const content = isJson ? await this.parseJsonResponse(response) : response.text();
     return content;

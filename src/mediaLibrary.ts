@@ -2,7 +2,7 @@
  * This module is currently concerned only with external media libraries
  * registered via `registerMediaLibrary`.
  */
-import { once } from 'lodash';
+import once from 'lodash/once';
 
 import { getMediaLibrary } from './lib/registry';
 import { store } from './store';
@@ -41,10 +41,10 @@ const initializeMediaLibrary = once(async function initializeMediaLibrary(name, 
 
 store.subscribe(() => {
   const state = store.getState() as unknown as State;
-  if (state) {
-    const mediaLibraryName = state.config.media_library?.name;
+  if (state.config.config) {
+    const mediaLibraryName = state.config.config.media_library?.name;
     if (mediaLibraryName && !state.mediaLibrary.externalLibrary) {
-      const mediaLibraryConfig = state.config.media_library;
+      const mediaLibraryConfig = state.config.config.media_library;
       initializeMediaLibrary(mediaLibraryName, mediaLibraryConfig);
     }
   }

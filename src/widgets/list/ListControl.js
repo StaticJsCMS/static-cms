@@ -4,7 +4,9 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import styled from '@emotion/styled';
 import { css, ClassNames } from '@emotion/react';
 import { List, Record, fromJS } from 'immutable';
-import { partial, isEmpty, uniqueId } from 'lodash';
+import partial from 'lodash/partial';
+import isEqual from 'lodash/isEqual';
+import uniqueId from 'lodash/uniqueId';
 import uuid from 'uuid/v4';
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 

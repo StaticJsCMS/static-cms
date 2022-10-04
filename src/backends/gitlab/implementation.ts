@@ -1,5 +1,5 @@
 import { stripIndent } from 'common-tags';
-import { trim } from 'lodash';
+import trim from 'lodash/trim';
 import trimStart from 'lodash/trimStart';
 import semaphore from 'semaphore';
 

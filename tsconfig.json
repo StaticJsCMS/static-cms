@@ -17,6 +17,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "baseUrl": "./",
+    "lib": ["DOM", "ES2015"],
     "paths": {
       "@staticcms/core": ["./src"]
     }

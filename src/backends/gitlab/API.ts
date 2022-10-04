@@ -3,7 +3,9 @@ import { ApolloClient } from 'apollo-client';
 import { setContext } from 'apollo-link-context';
 import { createHttpLink } from 'apollo-link-http';
 import { Base64 } from 'js-base64';
-import { partial, result, trimStart } from 'lodash';
+import partial from 'lodash/partial';
+import result from 'lodash/result';
+import trimStart from 'lodash/trimStart';
 import { dirname } from 'path';
 
 import {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import styled from '@emotion/styled';
 import { ClassNames } from '@emotion/react';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import { Value } from 'slate';
 import { Editor as Slate, setEventTransfer } from 'slate-react';
 import Plain from 'slate-plain-serializer';

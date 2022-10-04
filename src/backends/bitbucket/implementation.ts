@@ -1,5 +1,5 @@
 import { stripIndent } from 'common-tags';
-import { trimStart } from 'lodash';
+import trimStart from 'lodash/trimStart';
 import semaphore from 'semaphore';
 
 import { NetlifyAuthenticator } from '../../lib/auth';

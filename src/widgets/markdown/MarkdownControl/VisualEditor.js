@@ -4,7 +4,9 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import styled from '@emotion/styled';
 import { css as coreCss, ClassNames } from '@emotion/react';
-import { get, isEmpty, debounce } from 'lodash';
+import get from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
+import debounce from 'lodash/debounce';
 import { Value, Document, Block, Text } from 'slate';
 import { Editor as Slate } from 'slate-react';
 

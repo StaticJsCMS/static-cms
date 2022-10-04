@@ -1,6 +1,8 @@
 import deepmerge from 'deepmerge';
 import { produce } from 'immer';
-import { isEmpty, trim, trimStart } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import trim from 'lodash/trim';
+import trimStart from 'lodash/trimStart';
 import yaml from 'yaml';
 
 import { resolveBackend } from '../backend';

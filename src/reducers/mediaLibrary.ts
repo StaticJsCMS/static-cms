@@ -1,3 +1,4 @@
+import get from 'lodash/get';
 import { dirname } from 'path';
 import { v4 as uuid } from 'uuid';
 
@@ -22,7 +23,6 @@ import {
 } from '../actions/mediaLibrary';
 import { selectIntegration } from './';
 import { selectEditingDraft, selectMediaFolder } from './entries';
-import { getIn } from '../lib/util/objectUtil';
 
 import type { MediaLibraryAction } from '../actions/mediaLibrary';
 import type {
@@ -348,7 +348,7 @@ export function selectMediaFiles(state: State, field?: EntryField): MediaFile[] 
 
   let files: MediaFile[] = [];
   if (editingDraft && !integration) {
-    const entryFiles = (getIn(entryDraft, ['entry', 'mediaFiles']) ?? []) as MediaFile[];
+    const entryFiles = (get(entryDraft, ['entry', 'mediaFiles']) ?? []) as MediaFile[];
     const entry = entryDraft['entry'];
     const collection = state.collections[entry?.collection];
     if (state.config.config) {
@@ -371,7 +371,7 @@ export function selectMediaFileByPath(state: State, path: string) {
 }
 
 export function selectMediaDisplayURL(state: State, id: string) {
-  const displayUrlState = (getIn(state.mediaLibrary, ['displayURLs', id]) ?? {}) as DisplayURLState;
+  const displayUrlState = (get(state.mediaLibrary, ['displayURLs', id]) ?? {}) as DisplayURLState;
   return displayUrlState;
 }
 

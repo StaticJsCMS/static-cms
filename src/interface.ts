@@ -64,7 +64,7 @@ export interface Entry {
   path: string;
   partial: boolean;
   raw: string;
-  data: any;
+  data: Record<string, unknown>;
   label: string | null;
   isModification: boolean | null;
   mediaFiles: MediaFile[];

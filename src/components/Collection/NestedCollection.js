@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 import { dirname, sep } from 'path';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 
 import { Icon, colors, components } from '../../ui';
 import { stringTemplate } from '../../lib/widgets';

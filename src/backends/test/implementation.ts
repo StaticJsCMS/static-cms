@@ -1,4 +1,7 @@
-import { attempt, isError, take, unset } from 'lodash';
+import attempt from 'lodash/attempt';
+import isError from 'lodash/isError';
+import take from 'lodash/take';
+import unset from 'lodash/unset';
 import { extname } from 'path';
 import uuid from 'uuid/v4';
 

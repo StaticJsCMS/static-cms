@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { Record, List } from 'immutable';
-import { once } from 'lodash';
+import once from 'lodash/once';
 import uuid from 'uuid/v4';
 import { oneLine } from 'common-tags';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';

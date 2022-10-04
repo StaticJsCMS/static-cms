@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import styled from '@emotion/styled';
 import { translate } from 'react-polyglot';
-import { partial } from 'lodash';
+import partial from 'lodash/partial';
 
 import { colors } from '../../../ui';
 import { Cursor } from '../../../lib/util';

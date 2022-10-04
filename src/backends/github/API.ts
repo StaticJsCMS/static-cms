@@ -1,5 +1,10 @@
 import { Base64 } from 'js-base64';
-import { initial, last, partial, result, trim, trimStart } from 'lodash';
+import initial from 'lodash/initial';
+import last from 'lodash/last';
+import partial from 'lodash/partial';
+import result from 'lodash/result';
+import trim from 'lodash/trim';
+import trimStart from 'lodash/trimStart';
 import { dirname } from 'path';
 import semaphore from 'semaphore';
 

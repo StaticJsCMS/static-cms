@@ -2,7 +2,9 @@ import React, { useCallback } from 'react';
 import GoTrue from 'gotrue-js';
 import ini from 'ini';
 import jwtDecode from 'jwt-decode';
-import { get, intersection, pick } from 'lodash';
+import get from 'lodash/get';
+import intersection from 'lodash/intersection';
+import pick from 'lodash/pick';
 
 import {
   AccessTokenError,

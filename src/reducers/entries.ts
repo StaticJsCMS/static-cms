@@ -1,4 +1,10 @@
-import { groupBy, once, orderBy, set, sortBy, trim } from 'lodash';
+import get from 'lodash/get';
+import groupBy from 'lodash/groupBy';
+import once from 'lodash/once';
+import orderBy from 'lodash/orderBy';
+import set from 'lodash/set';
+import sortBy from 'lodash/sortBy';
+import trim from 'lodash/trim';
 import { dirname, join } from 'path';
 
 import {
@@ -26,9 +32,10 @@ import { SortDirection } from '../interface';
 import { folderFormatter } from '../lib/formatters';
 import { joinUrlPath } from '../lib/urlHelper';
 import { basename, isAbsolutePath } from '../lib/util';
-import { getIn } from '../lib/util/objectUtil';
 import { selectSortDataPath } from './collections';
 
+import type { EntriesAction } from '../actions/entries';
+import type { SearchAction } from '../actions/search';
 import type {
   ChangeViewStylePayload,
   CmsConfig,
@@ -60,8 +67,6 @@ import type {
   SortObject,
 } from '../interface';
 import type { EntryDraftState } from './entryDraft';
-import type { EntriesAction } from '../actions/entries';
-import type { SearchAction } from '../actions/search';
 
 const storageSortKey = '../netlify-cms.entries.sort';
 const viewStyleKey = '../netlify-cms.entries.viewStyle';
@@ -651,7 +656,7 @@ export function selectEntries(state: EntriesState, collection: Collection) {
         const pattern = f.pattern;
         const field = f.field;
         const data = e!.data || {};
-        const toMatch = getIn(data, field);
+        const toMatch = get(data, field);
         const matched = toMatch !== undefined && new RegExp(String(pattern)).test(String(toMatch));
         return matched;
       });
@@ -666,7 +671,7 @@ function getGroup(entry: Entry, selectedGroup: GroupMap) {
   const label = selectedGroup.label;
   const field = selectedGroup.field;
 
-  const fieldData = getIn(entry.data, field);
+  const fieldData = get(entry.data, field);
   if (fieldData === undefined) {
     return {
       id: 'missing_value',

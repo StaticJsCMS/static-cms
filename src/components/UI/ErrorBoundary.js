@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-polyglot';
 import styled from '@emotion/styled';
 import yaml from 'yaml';
-import { truncate } from 'lodash';
+import truncate from 'lodash/truncate';
 import copyToClipboard from 'copy-text-to-clipboard';
 import cleanStack from 'clean-stack';
 

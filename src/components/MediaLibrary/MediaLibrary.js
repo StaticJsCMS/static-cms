@@ -1,5 +1,6 @@
 import fuzzy from 'fuzzy';
-import { map, orderBy } from 'lodash';
+import map from 'lodash/map';
+import orderBy from 'lodash/orderBy';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';

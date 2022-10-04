@@ -1,9 +1,11 @@
-import { set, groupBy, escapeRegExp } from 'lodash';
+import escapeRegExp from 'lodash/escapeRegExp';
+import get from 'lodash/get';
+import groupBy from 'lodash/groupBy';
+import set from 'lodash/set';
 
 import { selectEntrySlug } from '../reducers/collections';
-import { getIn, setIn } from './util/objectUtil';
 
-import type { Collection, Entry, EntryDraft, EntryField } from '../interface';
+import type { Collection, Entry, EntryField } from '../interface';
 import type { EntryDraftState } from '../reducers/entryDraft';
 
 export const I18N = 'i18n';
@@ -152,7 +154,7 @@ export function getI18nFiles(
   if (structure === I18N_STRUCTURE.SINGLE_FILE) {
     const data = locales.reduce((map, locale) => {
       const dataPath = getDataPath(locale, defaultLocale);
-      map[locale] = getIn(entryDraft, dataPath);
+      map[locale] = get(entryDraft, dataPath);
       return map;
     }, {} as Record<string, unknown>);
 
@@ -173,7 +175,7 @@ export function getI18nFiles(
   const dataFiles = locales
     .map(locale => {
       const dataPath = getDataPath(locale, defaultLocale);
-      entryDraft.data = getIn(entryDraft, dataPath);
+      entryDraft.data = get(entryDraft, dataPath);
       return {
         path: getFilePath(structure, extension, path, slug, locale),
         slug,
@@ -198,7 +200,7 @@ export function getI18nBackup(
     .filter(l => l !== defaultLocale)
     .reduce((acc, locale) => {
       const dataPath = getDataPath(locale, defaultLocale);
-      const data = getIn(entry, dataPath);
+      const data = get(entry, dataPath);
       if (!data) {
         return acc;
       }
@@ -370,12 +372,12 @@ export function duplicateI18nFields(
   defaultLocale: string,
   fieldPath: string[] = [field.name],
 ) {
-  const value = getIn(entryDraft, ['entry', 'data', ...fieldPath]);
+  const value = get(entryDraft, ['entry', 'data', ...fieldPath]);
   if (field.i18n === I18N_FIELD.DUPLICATE) {
     locales
       .filter(l => l !== defaultLocale)
       .forEach(l => {
-        entryDraft = setIn<EntryDraftState>(
+        entryDraft = get(
           entryDraft,
           ['entry', ...getDataPath(l, defaultLocale), ...fieldPath],
           value,
@@ -421,7 +423,7 @@ export function serializeI18n(
     .filter(locale => locale !== defaultLocale)
     .forEach(locale => {
       const dataPath = getLocaleDataPath(locale);
-      entry = setIn(entry, dataPath, serializeValues(getIn(entry, dataPath)));
+      entry = set(entry, dataPath, serializeValues(get(entry, dataPath)));
     });
 
   return entry;

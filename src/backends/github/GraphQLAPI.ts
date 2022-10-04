@@ -4,7 +4,8 @@ import {
 import { ApolloClient } from 'apollo-client';
 import { setContext } from 'apollo-link-context';
 import { createHttpLink } from 'apollo-link-http';
-import { trim, trimStart } from 'lodash';
+import trim from 'lodash/trim';
+import trimStart from 'lodash/trimStart';
 
 import {
   APIError, localForage, readFile, throwOnConflictingBranches

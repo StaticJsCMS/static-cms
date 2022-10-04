@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import flatten from 'lodash/flatten';
 
 import { unsentRequest } from '../../../lib/util';
 import { createEntry } from '../../../valueObjects/Entry';
@@ -71,7 +71,7 @@ export default class Algolia {
     const headers = this.requestHeaders(options.headers || {});
     const url = this.urlFor(path, options);
     return fetch(url, { ...options, headers }).then(response => {
-      const contentType = response.headers.Content-Type;
+      const contentType = response.headers.get('Content-Type');
       if (contentType && contentType.match(/json/)) {
         return this.parseJsonResponse(response);
       }
@@ -97,7 +97,7 @@ export default class Algolia {
         }),
       );
 
-      return { entries: _.flatten(entries), pagination: page };
+      return { entries: flatten(entries), pagination: page };
     });
   }
 

@@ -2,7 +2,7 @@
 import React from 'react';
 import { css } from '@emotion/react';
 import { Record, fromJS } from 'immutable';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 
 import { getEditorControl, getEditorComponents } from '../index';
 

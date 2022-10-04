@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { Record } from 'immutable';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { translate } from 'react-polyglot';
 
 import { colors } from '../../ui';

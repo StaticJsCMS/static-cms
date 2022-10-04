@@ -1,5 +1,11 @@
 import * as fuzzy from 'fuzzy';
-import { attempt, flatten, get, isError, set, trim, uniq } from 'lodash';
+import attempt from 'lodash/attempt';
+import flatten from 'lodash/flatten';
+import get from 'lodash/get';
+import isError from 'lodash/isError';
+import set from 'lodash/set';
+import trim from 'lodash/trim';
+import uniq from 'lodash/uniq';
 import { basename, dirname, extname, join } from 'path';
 
 import { FILES, FOLDER } from './constants/collectionTypes';

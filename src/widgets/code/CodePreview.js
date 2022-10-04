@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Record } from 'immutable';
-import { isString } from 'lodash';
+import isString from 'lodash/isString';
 
 import { WidgetPreviewContainer } from '../../ui';
 

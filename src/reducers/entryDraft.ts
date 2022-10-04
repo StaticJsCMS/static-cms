@@ -1,3 +1,6 @@
+import set from 'lodash/set';
+import get from 'lodash/get';
+import merge from 'lodash/merge';
 import { join } from 'path';
 import { v4 as uuid } from 'uuid';
 
@@ -19,7 +22,6 @@ import {
   REMOVE_DRAFT_ENTRY_MEDIA_FILE,
 } from '../actions/entries';
 import { duplicateI18nFields, getDataPath } from '../lib/i18n';
-import { getIn, mergeDeep, setIn } from '../lib/util/objectUtil';
 import { selectFolderEntryExtension, selectHasMetaPath } from './collections';
 
 import type { EntriesAction } from '../actions/entries';
@@ -140,21 +142,21 @@ function entryDraftReducer(state: EntryDraftState = initialState, action: Entrie
           },
         };
       } else {
-        setIn(newState.entry, ['entry', ...dataPath, name], value);
+        set(newState.entry, ['entry', ...dataPath, name], value);
         if (i18n) {
           newState = duplicateI18nFields(newState, field, i18n.locales, i18n.defaultLocale);
         }
       }
 
-      const fieldsMetaData = mergeDeep({ ...state.fieldsMetaData }, metadata);
-      const newData = getIn(newState.entry!, dataPath) ?? {};
+      const fieldsMetaData = merge({ ...state.fieldsMetaData }, metadata);
+      const newData = get(newState.entry!, dataPath) ?? {};
       const newMeta = newState.entry!.meta;
 
       return {
         ...state,
         fieldsMetaData,
         hasChanged:
-          !entries.find(e => newData === getIn(e, dataPath)) ||
+          !entries.find(e => newData === get(e, dataPath)) ||
           !entries.find(e => newMeta === e.meta),
       };
     }

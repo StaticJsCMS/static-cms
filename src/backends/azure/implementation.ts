@@ -1,4 +1,5 @@
-import { trim, trimStart } from 'lodash';
+import trim from 'lodash/trim';
+import trimStart from 'lodash/trimStart';
 import semaphore from 'semaphore';
 
 import { CmsBackendClass } from '../../interface';

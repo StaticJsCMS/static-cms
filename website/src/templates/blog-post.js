@@ -1,7 +1,8 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { graphql } from 'gatsby';
-import { trimStart, trimEnd } from 'lodash';
+import trimStart from 'lodash/trimStart';
+import trimEnd from 'lodash/trimEnd';
 
 import TwitterMeta from '../components/twitter-meta';
 import Layout from '../components/layout';

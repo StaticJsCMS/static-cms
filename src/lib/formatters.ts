@@ -1,5 +1,10 @@
 import { stripIndent } from 'common-tags';
-import { flow, partialRight, trimEnd, trimStart } from 'lodash';
+import flow from 'lodash/flow';
+import get from 'lodash/get';
+import set from 'lodash/set';
+import partialRight from 'lodash/partialRight';
+import trimEnd from 'lodash/trimEnd';
+import trimStart from 'lodash/trimStart';
 
 import { FILES } from '../constants/collectionTypes';
 import { COMMIT_AUTHOR, COMMIT_DATE } from '../constants/commitProps';
@@ -12,7 +17,6 @@ import {
 import { sanitizeSlug } from './urlHelper';
 import { stringTemplate } from './widgets';
 
-import type { Record } from 'immutable';
 import type { CmsConfig, CmsSlug, Collection, Entry } from '../interface';
 
 const {
@@ -96,7 +100,7 @@ export function slugFormatter(
 ) {
   const slugTemplate = collection.slug || '{{slug}}';
 
-  const identifier = entryData.getIn(keyToPathArray(selectIdentifier(collection) as string));
+  const identifier = get(entryData, keyToPathArray(selectIdentifier(collection)));
   if (!identifier) {
     throw new Error(
       'Collection must have a field name that is a valid entry identifier, or must have `identifier_field` set',
@@ -107,7 +111,7 @@ export function slugFormatter(
   const date = new Date();
   const slug = compileStringTemplate(slugTemplate, date, identifier, entryData, processSegment);
 
-  if (!collection.has('path')) {
+  if (!('path' in collection)) {
     return slug;
   } else {
     const pathTemplate = prepareSlug(collection.path as string);
@@ -196,15 +200,15 @@ export function summaryFormatter(summaryTemplate: string, entry: Entry, collecti
       entry as unknown as Record<string, unknown>,
       selectInferedField(collection, 'date'),
     ) || null;
-  const identifier = entryData.getIn(keyToPathArray(selectIdentifier(collection) as string));
+  const identifier = get(entryData, keyToPathArray(selectIdentifier(collection)));
 
   entryData = addFileTemplateFields(entry.path, entryData, collection.folder);
   // allow commit information in summary template
   if (entry.author && !selectField(collection, COMMIT_AUTHOR)) {
-    entryData = entryData.set(COMMIT_AUTHOR, entry.author);
+    entryData = set(entryData, COMMIT_AUTHOR, entry.author);
   }
   if (entry.updatedOn && !selectField(collection, COMMIT_DATE)) {
-    entryData = entryData.set(COMMIT_DATE, entry.updatedOn);
+    entryData = set(entryData, COMMIT_DATE, entry.updatedOn);
   }
   const summary = compileStringTemplate(summaryTemplate, date, identifier, entryData);
   return summary;
@@ -222,7 +226,7 @@ export function folderFormatter(
     return folderTemplate;
   }
 
-  let fields = (entry.data as Record<string, string>).set(folderKey, defaultFolder);
+  let fields = set(entry.data, folderKey, defaultFolder);
   fields = addFileTemplateFields(entry.path, fields, collection.folder);
 
   const date =
@@ -230,7 +234,7 @@ export function folderFormatter(
       entry as unknown as Record<string, unknown>,
       selectInferedField(collection, 'date'),
     ) || null;
-  const identifier = fields.getIn(keyToPathArray(selectIdentifier(collection) as string));
+  const identifier = get(fields, keyToPathArray(selectIdentifier(collection)));
   const processSegment = getProcessSegment(slugConfig, [defaultFolder, fields.dirname]);
 
   const mediaFolder = compileStringTemplate(
