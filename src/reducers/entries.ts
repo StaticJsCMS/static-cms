@@ -61,6 +61,7 @@ import type {
   SortMap,
   SortObject,
 } from '../interface';
+import { EntryDraftState } from './entryDraft';
 
 const storageSortKey = '../netlify-cms.entries.sort';
 const viewStyleKey = '../netlify-cms.entries.viewStyle';
@@ -1017,8 +1018,8 @@ export function selectMediaFilePublicPath(
   return join(publicFolder, basename(mediaPath));
 }
 
-export function selectEditingDraft(state: EntryDraft) {
-  return state['entry'];
+export function selectEditingDraft(state: EntryDraftState) {
+  return state.entry;
 }
 
 export default entries;

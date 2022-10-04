@@ -1,16 +1,11 @@
-import { fromJS } from 'immutable';
+import get from 'lodash/get';
 
 import { CONFIG_SUCCESS } from '../actions/config';
 
 import type { ConfigAction } from '../actions/config';
-import type { CmsConfig, Integrations } from '../interface';
+import type { CmsConfig } from '../interface';
 
-interface Acc {
-  providers: Record<string, {}>;
-  hooks: Record<string, string | Record<string, string>>;
-}
-
-export function getIntegrations(config: CmsConfig) {
+export function getIntegrations(config: CmsConfig): IntegrationsState {
   const integrations = config.integrations || [];
   const newState = integrations.reduce(
     (acc, integration) => {
@@ -33,14 +28,23 @@ export function getIntegrations(config: CmsConfig) {
       });
       return acc;
     },
-    { providers: {}, hooks: {} } as Acc,
+    { providers: {}, hooks: {} } as IntegrationsState,
   );
-  return fromJS(newState);
+
+  return newState;
 }
 
-const defaultState = fromJS({ providers: {}, hooks: {} });
+export interface IntegrationsState {
+  providers: Record<string, Record<string, unknown>>;
+  hooks: { [collectionOrHook: string]: string | Record<string, string> };
+}
 
-function integrations(state = defaultState, action: ConfigAction): Integrations | null {
+const defaultState: IntegrationsState = { providers: {}, hooks: {} };
+
+function integrations(
+  state: IntegrationsState = defaultState,
+  action: ConfigAction,
+): IntegrationsState | null {
   switch (action.type) {
     case CONFIG_SUCCESS: {
       return getIntegrations(action.payload);
@@ -50,10 +54,14 @@ function integrations(state = defaultState, action: ConfigAction): Integrations 
   }
 }
 
-export function selectIntegration(state: Integrations, collection: string | null, hook: string) {
+export function selectIntegration(
+  state: IntegrationsState,
+  collection: string | null,
+  hook: string,
+) {
   return collection
-    ? state.getIn(['hooks', collection, hook], false)
-    : state.getIn(['hooks', hook], false);
+    ? get(state, ['hooks', collection, hook], false)
+    : get(state, ['hooks', hook], false);
 }
 
 export default integrations;

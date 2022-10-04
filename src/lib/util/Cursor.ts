@@ -1,4 +1,4 @@
-type CursorStore = {
+export interface CursorStore {
   actions: Set<string>;
   data: Record<string, unknown>;
   meta: Record<string, unknown>;

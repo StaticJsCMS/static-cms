@@ -1,7 +1,6 @@
 import { join } from 'path';
 import { v4 as uuid } from 'uuid';
-import { Collection } from '..';
-import { getIn, mergeDeep, setIn } from '../../lib/util/objectUtil';
+
 import {
   ADD_DRAFT_ENTRY_MEDIA_FILE,
   DRAFT_CHANGE_FIELD,
@@ -17,31 +16,34 @@ import {
   ENTRY_PERSIST_FAILURE,
   ENTRY_PERSIST_REQUEST,
   ENTRY_PERSIST_SUCCESS,
-  REMOVE_DRAFT_ENTRY_MEDIA_FILE
+  REMOVE_DRAFT_ENTRY_MEDIA_FILE,
 } from '../actions/entries';
 import { duplicateI18nFields, getDataPath } from '../lib/i18n';
+import { getIn, mergeDeep, setIn } from '../lib/util/objectUtil';
 import { selectFolderEntryExtension, selectHasMetaPath } from './collections';
 
-const initialState = {
-  entry: {},
+import type { EntriesAction } from '../actions/entries';
+import type { Collection, Entry, FieldsErrors } from '../interface';
+
+export interface EntryDraftState {
+  entry?: Entry;
+  fieldsErrors: FieldsErrors;
+  fieldsMetaData: Record<string, Record<string, string>>;
+  hasChanged: boolean;
+  key: string;
+  localBackup?: {
+    entry: Entry;
+  };
+}
+
+const initialState: EntryDraftState = {
   fieldsMetaData: {},
   fieldsErrors: {},
   hasChanged: false,
   key: '',
 };
 
-export interface EntryDraftState {
-  entry: Record<string, any>;
-  fieldsMetaData: Record<string, any>;
-  fieldsErrors: Record<string, any>;
-  hasChanged: boolean;
-  key: string;
-  localBackup?: {
-    entry: Record<string, any>;
-  };
-}
-
-function entryDraftReducer(state: EntryDraftState = initialState, action: any) {
+function entryDraftReducer(state: EntryDraftState = initialState, action: EntriesAction) {
   switch (action.type) {
     case DRAFT_CREATE_FROM_ENTRY:
       // Existing Entry
@@ -56,6 +58,7 @@ function entryDraftReducer(state: EntryDraftState = initialState, action: any) {
         hasChanged: false,
         key: uuid(),
       };
+
     case DRAFT_CREATE_EMPTY:
       // New Entry
       return {
@@ -69,7 +72,8 @@ function entryDraftReducer(state: EntryDraftState = initialState, action: any) {
         hasChanged: false,
         key: uuid(),
       };
-    case DRAFT_CREATE_FROM_LOCAL_BACKUP:
+
+    case DRAFT_CREATE_FROM_LOCAL_BACKUP: {
       const backupDraftEntry = state.localBackup;
       const backupEntry = backupDraftEntry?.['entry'];
 
@@ -88,6 +92,8 @@ function entryDraftReducer(state: EntryDraftState = initialState, action: any) {
         hasChanged: true,
         key: uuid(),
       };
+    }
+
     case DRAFT_CREATE_DUPLICATE_FROM_ENTRY:
       // Duplicate Entry
       return {
@@ -113,13 +119,18 @@ function entryDraftReducer(state: EntryDraftState = initialState, action: any) {
         localBackup: newState,
       };
     }
+
     case DRAFT_CHANGE_FIELD: {
       const { field, value, metadata, entries, i18n } = action.payload;
       const name = field.name;
       const meta = field.meta;
       const dataPath = (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
 
-      const newState = { ...state };
+      let newState = { ...state };
+      if (!newState.entry) {
+        return state;
+      }
+
       if (meta) {
         newState.entry = {
           ...newState.entry,
@@ -131,23 +142,24 @@ function entryDraftReducer(state: EntryDraftState = initialState, action: any) {
       } else {
         setIn(newState.entry, ['entry', ...dataPath, name], value);
         if (i18n) {
-          state = duplicateI18nFields(state, field, i18n.locales, i18n.defaultLocale);
+          newState = duplicateI18nFields(newState, field, i18n.locales, i18n.defaultLocale);
         }
       }
 
       const fieldsMetaData = mergeDeep({ ...state.fieldsMetaData }, metadata);
-      const newData = getIn(state.entry, dataPath) ?? {};
-      const newMeta = state.entry.meta;
+      const newData = getIn(newState.entry!, dataPath) ?? {};
+      const newMeta = newState.entry!.meta;
 
       return {
         ...state,
         fieldsMetaData,
         hasChanged:
-          !entries.find((e: any) => newData === getIn(e, dataPath)) ||
-          !entries.find((e: any) => newMeta === e.meta),
+          !entries.find(e => newData === getIn(e, dataPath)) ||
+          !entries.find(e => newMeta === e.meta),
       };
     }
-    case DRAFT_VALIDATION_ERRORS:
+
+    case DRAFT_VALIDATION_ERRORS: {
       const fieldErrors = { ...state.fieldsErrors };
       if (action.payload.errors.length === 0) {
         delete fieldErrors[action.payload.uniquefieldId];
@@ -158,6 +170,7 @@ function entryDraftReducer(state: EntryDraftState = initialState, action: any) {
         ...state,
         fieldErrors,
       };
+    }
 
     case DRAFT_CLEAR_ERRORS: {
       return {
@@ -208,9 +221,11 @@ function entryDraftReducer(state: EntryDraftState = initialState, action: any) {
       };
 
     case ADD_DRAFT_ENTRY_MEDIA_FILE: {
-      const mediaFiles = state.entry.mediaFiles.filter(
-        (file: any) => file.id !== action.payload.id,
-      );
+      if (!state.entry) {
+        return state;
+      }
+
+      const mediaFiles = state.entry.mediaFiles.filter(file => file.id !== action.payload.id);
       mediaFiles.unshift(action.payload);
 
       return {
@@ -224,9 +239,11 @@ function entryDraftReducer(state: EntryDraftState = initialState, action: any) {
     }
 
     case REMOVE_DRAFT_ENTRY_MEDIA_FILE: {
-      const mediaFiles = state.entry.mediaFiles.filter(
-        (file: any) => file.id !== action.payload.id,
-      );
+      if (!state.entry) {
+        return state;
+      }
+
+      const mediaFiles = state.entry.mediaFiles.filter(file => file.id !== action.payload.id);
 
       return {
         ...state,
@@ -254,7 +271,7 @@ export function selectCustomPath(
   const path = meta && meta.path;
   const indexFile = collection.meta?.path?.index_file;
   const extension = selectFolderEntryExtension(collection);
-  const customPath = path && join(collection.folder, path, `${indexFile}.${extension}`);
+  const customPath = path && join(collection.folder ?? '', path, `${indexFile}.${extension}`);
   return customPath;
 }
 

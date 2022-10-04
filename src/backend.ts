@@ -787,8 +787,13 @@ export class Backend {
   }
 
   async processEntry(state: State, collection: Collection, entry: Entry) {
+    const configState = state.config;
+    if (!configState.config) {
+      throw new Error('Config not loaded');
+    }
+
     const integration = selectIntegration(state.integrations, null, 'assetStore');
-    const mediaFolders = selectMediaFolders(state.config, collection, fromJS(entry));
+    const mediaFolders = selectMediaFolders(configState.config, collection, entry);
     if (mediaFolders.length > 0 && !integration) {
       const files = await Promise.all(
         mediaFolders.map(folder => this.implementation.getMedia(folder)),
@@ -939,7 +944,11 @@ export class Backend {
   }
 
   async deleteEntry(state: State, collection: Collection, slug: string) {
-    const config = state.config;
+    const configState = state.config;
+    if (!configState.config) {
+      throw new Error('Config not loaded');
+    }
+
     const path = selectEntryPath(collection, slug) as string;
     const extension = selectFolderEntryExtension(collection) as string;
 
@@ -948,7 +957,7 @@ export class Backend {
     }
 
     const user = (await this.currentUser()) as User;
-    const commitMessage = commitMessageFormatter('delete', config, {
+    const commitMessage = commitMessageFormatter('delete', configState.config, {
       collection,
       slug,
       path,
@@ -1007,8 +1016,8 @@ export class Backend {
   }
 }
 
-export function resolveBackend(config: CmsConfig) {
-  if (!config.backend.name) {
+export function resolveBackend(config?: CmsConfig) {
+  if (!config?.backend.name) {
     throw new Error('No backend defined in configuration');
   }
 

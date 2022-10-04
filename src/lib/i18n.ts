@@ -4,6 +4,7 @@ import { selectEntrySlug } from '../reducers/collections';
 import { getIn, setIn } from './util/objectUtil';
 
 import type { Collection, Entry, EntryDraft, EntryField } from '../interface';
+import type { EntryDraftState } from '../reducers/entryDraft';
 
 export const I18N = 'i18n';
 
@@ -363,7 +364,7 @@ export function duplicateDefaultI18nFields(collection: Collection, dataFields: a
 }
 
 export function duplicateI18nFields(
-  entryDraft: EntryDraft,
+  entryDraft: EntryDraftState,
   field: EntryField,
   locales: string[],
   defaultLocale: string,
@@ -374,7 +375,7 @@ export function duplicateI18nFields(
     locales
       .filter(l => l !== defaultLocale)
       .forEach(l => {
-        entryDraft = setIn<EntryDraft>(
+        entryDraft = setIn<EntryDraftState>(
           entryDraft,
           ['entry', ...getDataPath(l, defaultLocale), ...fieldPath],
           value,

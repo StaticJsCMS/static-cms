@@ -1,5 +1,3 @@
-import { escapeRegExp, get } from 'lodash';
-
 import { CONFIG_SUCCESS } from '../actions/config';
 import { FILES, FOLDER } from '../constants/collectionTypes';
 import { COMMIT_AUTHOR, COMMIT_DATE } from '../constants/commitProps';
@@ -46,9 +44,10 @@ function collections(state: CollectionsState = defaultState, action: ConfigActio
 const selectors = {
   [FOLDER]: {
     entryExtension(collection: Collection) {
-      return (
-        collection.extension || get(formatExtensions, collection.format || 'frontmatter')
-      ).replace(/^\./, '');
+      return (collection.extension || formatExtensions[collection.format ?? 'frontmatter']).replace(
+        /^\./,
+        '',
+      );
     },
     fields(collection: Collection) {
       return collection.fields;
@@ -62,7 +61,7 @@ const selectors = {
       const slug = path
         .split(folder + '/')
         .pop()
-        ?.replace(new RegExp(`\\.${escapeRegExp(this.entryExtension(collection))}$`), '');
+        ?.replace(new RegExp(`\\.${this.entryExtension(collection)}$`), '');
 
       return slug;
     },

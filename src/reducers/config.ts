@@ -5,7 +5,8 @@ import { CONFIG_FAILURE, CONFIG_REQUEST, CONFIG_SUCCESS } from '../actions/confi
 import type { ConfigAction } from '../actions/config';
 import type { CmsConfig } from '../interface';
 
-export interface ConfigState extends Partial<CmsConfig> {
+export interface ConfigState {
+  config?: CmsConfig;
   isFetching: boolean;
   error?: string;
 }
@@ -21,7 +22,7 @@ const config = produce((state: ConfigState, action: ConfigAction) => {
       break;
     case CONFIG_SUCCESS:
       return {
-        ...action.payload,
+        config: action.payload,
         isFetching: false,
         error: undefined,
       };

@@ -1,6 +1,5 @@
 import type { ComponentType, FocusEventHandler } from 'react';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
-import type { Action } from 'redux';
 import type { MediaFile as BackendMediaFile } from './backend';
 import type { CollectionType } from './constants/collectionTypes';
 import type { formatExtensions } from './formats/formats';
@@ -9,8 +8,11 @@ import type Cursor from './lib/util/Cursor';
 import type { AuthState } from './reducers/auth';
 import type { CollectionsState } from './reducers/collections';
 import type { ConfigState } from './reducers/config';
+import type { CursorsState } from './reducers/cursors';
 import type { EntriesState } from './reducers/entries';
-import type { GlobalUI } from './reducers/globalUI';
+import type { EntryDraftState } from './reducers/entryDraft';
+import type { GlobalUIState } from './reducers/globalUI';
+import type { IntegrationsState } from './reducers/integrations';
 import type { MediaLibraryState } from './reducers/mediaLibrary';
 import type { Medias } from './reducers/medias';
 import type { ScrollState } from './reducers/scroll';
@@ -18,17 +20,20 @@ import type { Search } from './reducers/search';
 import type { Status } from './reducers/status';
 import type { SnackbarState } from './store/slices/snackbars';
 
-export type SlugConfig = {
+export interface SlugConfig {
   encoding: string;
   clean_accents: boolean;
   sanitize_replacement: string;
-};
+}
 
-export type Pages = {
+export interface Pages {
   [collection: string]: { isFetching?: boolean; page?: number; ids: string[] };
-};
+}
 
-export type SortObject = { key: string; direction: SortDirection };
+export interface SortObject {
+  key: string;
+  direction: SortDirection;
+}
 
 export type SortMap = Record<string, SortObject>;
 
@@ -42,12 +47,12 @@ export type Filter = Record<string, Record<string, FilterMap>>; // collection.fi
 
 export type Group = Record<string, Record<string, GroupMap>>; // collection.field.active
 
-export type GroupOfEntries = {
+export interface GroupOfEntries {
   id: string;
   label: string;
   value: string | boolean | undefined;
   paths: Set<string>;
-};
+}
 
 export interface EntryMeta {
   path?: string;
@@ -76,15 +81,17 @@ export interface Entry {
 
 export type Entities = Record<string, Entry>;
 
-export type FieldsErrors = { [field: string]: { type: string }[] };
+export interface FieldsErrors {
+  [field: string]: { type: string }[];
+}
 
-export type EntryDraft = {
+export interface EntryDraft {
   entry: Entry;
   fieldsErrors: FieldsErrors;
   fieldsMetaData?: Record<string, Record<string, string>>;
-};
+}
 
-export type EntryField = {
+export interface EntryField {
   field?: EntryField;
   fields?: EntryField[];
   types?: EntryField[];
@@ -96,14 +103,14 @@ export type EntryField = {
   comment?: string;
   meta?: boolean;
   i18n: 'translate' | 'duplicate' | 'none';
-};
+}
 
-export type FilterRule = {
+export interface FilterRule {
   value: string;
   field: string;
-};
+}
 
-export type CollectionFile = {
+export interface CollectionFile {
   file: string;
   name: string;
   fields: EntryField[];
@@ -112,19 +119,21 @@ export type CollectionFile = {
   public_folder?: string;
   preview_path?: string;
   preview_path_date_field?: string;
-};
+}
 
-type Nested = { depth: number };
+interface Nested {
+  depth: number;
+}
 
-type Meta = {
+interface Meta {
   path?: { label: string; widget: string; index_file: string };
-};
+}
 
-type i18n = {
+interface i18n {
   structure: string;
   locales: string[];
   default_locale: string;
-};
+}
 
 export type Format = keyof typeof formatExtensions;
 
@@ -178,30 +187,23 @@ export interface MediaLibraryInstance {
 
 export type MediaFile = BackendMediaFile & { key?: string };
 
-export type DisplayURLState = {
+export interface DisplayURLState {
   isFetching: boolean;
   url?: string;
   err?: Error;
-};
+}
 
 export type Hook = string | boolean;
-
-export type Integrations = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  hooks: { [collectionOrHook: string]: any };
-};
-
-export type Cursors = {};
 
 export interface State {
   auth: AuthState;
   config: ConfigState;
-  cursors: Cursors;
+  cursors: CursorsState;
   collections: CollectionsState;
-  globalUI: GlobalUI;
+  globalUI: GlobalUIState;
   entries: EntriesState;
-  entryDraft: EntryDraft;
-  integrations: Integrations;
+  entryDraft: EntryDraftState;
+  integrations: IntegrationsState;
   medias: Medias;
   mediaLibrary: MediaLibraryState;
   search: Search;
@@ -284,19 +286,6 @@ export interface EntriesMoveSuccessPayload extends EntryPayload {
   entries: Entry[];
 }
 
-export interface EntriesAction extends Action<string> {
-  payload:
-    | EntryRequestPayload
-    | EntrySuccessPayload
-    | EntryFailurePayload
-    | EntriesSuccessPayload
-    | EntriesRequestPayload
-    | EntryDeletePayload;
-  meta: {
-    collection: string;
-  };
-}
-
 export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
 export type GetAssetFunction = (asset: string) => {
@@ -344,11 +333,11 @@ export interface CmsWidget<T = any> {
   globalStyles?: any;
 }
 
-export type PreviewTemplateComponentProps = {
+export interface PreviewTemplateComponentProps {
   entry: Record<string, any>;
   collection: Record<string, any>;
-  widgetFor: (name: any, fields?: any, values?: any, fieldsMetaData?: any) => JSX.Element | null;
-  widgetsFor: (name: any) => any;
+  widgetFor: (name: string, fields?: any, values?: any, fieldsMetaData?: any) => JSX.Element | null;
+  widgetsFor: (name: string) => any;
   getAsset: GetAssetFunction;
   boundGetAsset: (collection: any, path: any) => GetAssetFunction;
   fieldsMetaData: Record<string, any>;
@@ -357,46 +346,24 @@ export type PreviewTemplateComponentProps = {
   isLoadingAsset: boolean;
   window: Window;
   document: Document;
-};
+}
 
-export type PersistOptions = {
+export interface PersistOptions {
   newEntry?: boolean;
   commitMessage: string;
   collectionName?: string;
   status?: string;
-};
+}
 
 export interface ImplementationEntry {
   data: string;
   file: { path: string; label?: string; id?: string | null; author?: string; updatedOn?: string };
 }
 
-export type CursorStoreObject = {
-  actions: Set<string>;
-  data: Record<string, unknown>;
-  meta: Record<string, unknown>;
-};
-
-export type CursorStore = {
-  get<K extends keyof CursorStoreObject>(
-    key: K,
-    defaultValue?: CursorStoreObject[K],
-  ): CursorStoreObject[K];
-  getIn<V>(path: string[]): V;
-  set<K extends keyof CursorStoreObject, V extends CursorStoreObject[K]>(
-    key: K,
-    value: V,
-  ): CursorStoreObject[K];
-  setIn(path: string[], value: unknown): CursorStore;
-  hasIn(path: string[]): boolean;
-  mergeIn(path: string[], value: unknown): CursorStore;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  update: (...args: any[]) => CursorStore;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  updateIn: (...args: any[]) => CursorStore;
-};
-
-export type DisplayURLObject = { id: string; path: string };
+export interface DisplayURLObject {
+  id: string;
+  path: string;
+}
 
 export type DisplayURL = DisplayURLObject | string;
 
@@ -411,27 +378,30 @@ export interface ImplementationMediaFile {
   file?: File;
 }
 
-export type DataFile = {
+export interface DataFile {
   path: string;
   slug: string;
   raw: string;
   newPath?: string;
-};
+}
 
-export type AssetProxy = {
+export interface AssetProxy {
   path: string;
   fileObj?: File;
   toBase64?: () => Promise<string>;
-};
+}
 
-export type BackendEntry = {
+export interface BackendEntry {
   dataFiles: DataFile[];
   assets: AssetProxy[];
-};
+}
 
 export type DeleteOptions = {};
 
-export type Credentials = { token: string | {}; refresh_token?: string };
+export interface Credentials {
+  token: string | {};
+  refresh_token?: string;
+}
 
 export type User = Credentials & {
   backendName?: string;
@@ -439,11 +409,11 @@ export type User = Credentials & {
   name?: string;
 };
 
-export type ImplementationFile = {
+export interface ImplementationFile {
   id?: string | null | undefined;
   label?: string;
   path: string;
-};
+}
 
 export interface AuthenticatorConfig {
   site_id?: string;
@@ -499,7 +469,9 @@ export abstract class CmsBackendClass {
   }>;
 }
 
-export type CmsLocalePhrasesRoot = { [property: string]: CmsLocalePhrases };
+export interface CmsLocalePhrasesRoot {
+  [property: string]: CmsLocalePhrases;
+}
 export type CmsLocalePhrases = string | { [property: string]: CmsLocalePhrases };
 
 export type CmsIcon = () => JSX.Element;
@@ -957,9 +929,9 @@ export interface CmsBackendInitializerOptions {
   updateUserCredentials: (credentials: Credentials) => void;
 }
 
-export type CmsBackendInitializer = {
+export interface CmsBackendInitializer {
   init: (config: CmsConfig, options: CmsBackendInitializerOptions) => CmsBackendClass;
-};
+}
 
 export interface EditorComponentField {
   name: string;

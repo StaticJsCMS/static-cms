@@ -336,9 +336,13 @@ function mediaLibrary(state: MediaLibraryState = defaultState, action: MediaLibr
   }
 }
 
-export function selectMediaFiles(state: State, field?: EntryField) {
+export function selectMediaFiles(state: State, field?: EntryField): MediaFile[] {
   const { mediaLibrary, entryDraft } = state;
-  const editingDraft = selectEditingDraft(state.entryDraft);
+  if (!entryDraft.entry) {
+    return [];
+  }
+
+  const editingDraft = selectEditingDraft(entryDraft);
   const integration = selectIntegration(state, null, 'assetStore');
 
   let files;

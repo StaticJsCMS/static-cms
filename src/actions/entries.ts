@@ -5,7 +5,7 @@ import ValidationErrorTypes from '../constants/validationErrorTypes';
 import { getIntegrationProvider } from '../integrations';
 import { SortDirection } from '../interface';
 import { getProcessSegment } from '../lib/formatters';
-import { duplicateDefaultI18nFields, hasI18n, I18N, I18N_FIELD, serializeI18n } from '../lib/i18n';
+import { duplicateDefaultI18nFields, hasI18n, I18N_FIELD, serializeI18n } from '../lib/i18n';
 import { serializeValues } from '../lib/serializeEntryValues';
 import { Cursor } from '../lib/util';
 import { selectIntegration, selectPublishedSlugs } from '../reducers';
@@ -28,10 +28,10 @@ import type {
   Collection,
   Entry,
   EntryField,
+  ImplementationMediaFile,
   State,
   ViewFilter,
   ViewGroup,
-  ImplementationMediaFile,
 } from '../interface';
 import type AssetProxy from '../valueObjects/AssetProxy';
 
@@ -125,6 +125,45 @@ export function entriesLoading(collection: Collection) {
   } as const;
 }
 
+export function filterEntriesSuccess(collection: Collection, filter: ViewFilter, entries: Entry[]) {
+  return {
+    type: FILTER_ENTRIES_SUCCESS,
+    payload: {
+      collection: collection.name,
+      filter,
+      entries,
+    },
+  } as const;
+}
+
+export function groupEntriesSuccess(collection: Collection, group: ViewGroup, entries: Entry[]) {
+  return {
+    type: GROUP_ENTRIES_SUCCESS,
+    payload: {
+      collection: collection.name,
+      group,
+      entries,
+    },
+  } as const;
+}
+
+export function sortEntriesSuccess(
+  collection: Collection,
+  key: string,
+  direction: SortDirection,
+  entries: Entry[],
+) {
+  return {
+    type: SORT_ENTRIES_SUCCESS,
+    payload: {
+      collection: collection.name,
+      key,
+      direction,
+      entries,
+    },
+  } as const;
+}
+
 export function entriesLoaded(
   collection: Collection,
   entries: Entry[],
@@ -154,7 +193,12 @@ export function entriesFailed(collection: Collection, error: Error) {
 }
 
 async function getAllEntries(state: State, collection: Collection) {
-  const backend = currentBackend(state.config);
+  const configState = state.config;
+  if (!configState.config) {
+    throw new Error('Config not loaded');
+  }
+
+  const backend = currentBackend(configState.config);
   const integration = selectIntegration(state, collection.name, 'listEntries');
   const provider: Backend = integration
     ? getIntegrationProvider(state.integrations, backend.getToken, integration)
@@ -186,15 +230,7 @@ export function sortByField(
 
     try {
       const entries = await getAllEntries(state, collection);
-      dispatch({
-        type: SORT_ENTRIES_SUCCESS,
-        payload: {
-          collection: collection.name,
-          key,
-          direction,
-          entries,
-        },
-      });
+      dispatch(sortEntriesSuccess(collection, key, direction, entries));
     } catch (error) {
       dispatch({
         type: SORT_ENTRIES_FAILURE,
@@ -227,14 +263,7 @@ export function filterByField(collection: Collection, filter: ViewFilter) {
 
     try {
       const entries = await getAllEntries(state, collection);
-      dispatch({
-        type: FILTER_ENTRIES_SUCCESS,
-        payload: {
-          collection: collection.name,
-          filter,
-          entries,
-        },
-      });
+      dispatch(filterEntriesSuccess(collection, filter, entries));
     } catch (error) {
       dispatch({
         type: FILTER_ENTRIES_FAILURE,
@@ -265,14 +294,7 @@ export function groupByField(collection: Collection, group: ViewGroup) {
 
     try {
       const entries = await getAllEntries(state, collection);
-      dispatch({
-        type: GROUP_ENTRIES_SUCCESS,
-        payload: {
-          collection: collection.name,
-          group,
-          entries,
-        },
-      });
+      dispatch(groupEntriesSuccess(collection, group, entries));
     } catch (error) {
       dispatch({
         type: GROUP_ENTRIES_FAILURE,
@@ -454,7 +476,12 @@ export function removeDraftEntryMediaFile({ id }: { id: string }) {
 export function persistLocalBackup(entry: Entry, collection: Collection) {
   return (_dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
     const state = getState();
-    const backend = currentBackend(state.config);
+    const configState = state.config;
+    if (!configState.config) {
+      throw new Error('Config not loaded');
+    }
+
+    const backend = currentBackend(configState.config);
 
     return backend.persistLocalDraftBackup(entry, collection);
   };
@@ -474,7 +501,12 @@ export function createDraftDuplicateFromEntry(entry: Entry) {
 export function retrieveLocalBackup(collection: Collection, slug: string) {
   return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
     const state = getState();
-    const backend = currentBackend(state.config);
+    const configState = state.config;
+    if (!configState.config) {
+      throw new Error('Config not loaded');
+    }
+
+    const backend = currentBackend(configState.config);
     const { entry } = await backend.getLocalDraftBackup(collection, slug);
 
     if (entry) {
@@ -509,7 +541,12 @@ export function retrieveLocalBackup(collection: Collection, slug: string) {
 export function deleteLocalBackup(collection: Collection, slug: string) {
   return (_dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
     const state = getState();
-    const backend = currentBackend(state.config);
+    const configState = state.config;
+    if (!configState.config) {
+      throw new Error('Config not loaded');
+    }
+
+    const backend = currentBackend(configState.config);
     return backend.deleteLocalDraftBackup(collection, slug);
   };
 }
@@ -546,7 +583,12 @@ export function loadEntry(collection: Collection, slug: string, silent = false) 
 }
 
 export async function tryLoadEntry(state: State, collection: Collection, slug: string) {
-  const backend = currentBackend(state.config);
+  const configState = state.config;
+  if (!configState.config) {
+    throw new Error('Config not loaded');
+  }
+
+  const backend = currentBackend(configState.config);
   const loadedEntry = await backend.getEntry(state, collection, slug);
   return loadedEntry;
 }
@@ -584,7 +626,12 @@ export function loadEntries(collection: Collection, page = 0) {
       return dispatch(sortByField(collection, field.key, field.direction));
     }
 
-    const backend = currentBackend(state.config);
+    const configState = state.config;
+    if (!configState.config) {
+      throw new Error('Config not loaded');
+    }
+
+    const backend = currentBackend(configState.config);
     const integration = selectIntegration(state, collection.name, 'listEntries');
     const provider = integration
       ? getIntegrationProvider(state.integrations, backend.getToken, integration)
@@ -660,7 +707,13 @@ export function traverseCollectionCursor(collection: Collection, action: string)
     if (state.entries.pages?.[collectionName]?.isFetching) {
       return;
     }
-    const backend = currentBackend(state.config);
+
+    const configState = state.config;
+    if (!configState.config) {
+      throw new Error('Config not loaded');
+    }
+
+    const backend = currentBackend(configState.config);
 
     const { action: realAction, append } =
       action in appendActions ? appendActions[action] : { action, append: false };
@@ -742,7 +795,12 @@ export function createEmptyDraft(collection: Collection, search: string) {
     const meta = createEmptyDraftData(metaFields);
 
     const state = getState();
-    const backend = currentBackend(state.config);
+    const configState = state.config;
+    if (!configState.config) {
+      throw new Error('Config not loaded');
+    }
+
+    const backend = currentBackend(configState.config);
 
     if (!('media_folder' in collection)) {
       await waitForMediaLibraryToLoad(dispatch, getState());
@@ -903,8 +961,17 @@ export function persistEntry(collection: Collection) {
       return Promise.reject();
     }
 
-    const backend = currentBackend(state.config);
+    const configState = state.config;
+    if (!configState.config) {
+      throw new Error('Config not loaded');
+    }
+
+    const backend = currentBackend(configState.config);
     const entry = entryDraft.entry;
+    if (!entry) {
+      return Promise.reject();
+    }
+
     const assetProxies = getMediaAssets({
       entry,
     });
@@ -917,7 +984,7 @@ export function persistEntry(collection: Collection) {
     dispatch(entryPersisting(collection, serializedEntry));
     return backend
       .persistEntry({
-        config: state.config,
+        config: configState.config,
         collection,
         entryDraft: newEntryDraft,
         assetProxies,
@@ -967,7 +1034,12 @@ export function persistEntry(collection: Collection) {
 export function deleteEntry(collection: Collection, slug: string) {
   return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
     const state = getState();
-    const backend = currentBackend(state.config);
+    const configState = state.config;
+    if (!configState.config) {
+      throw new Error('Config not loaded');
+    }
+
+    const backend = currentBackend(configState.config);
 
     dispatch(entryDeleting(collection, slug));
     return backend
@@ -1013,13 +1085,18 @@ export function validateMetaField(
   value: string | undefined,
   t: (key: string, args: Record<string, unknown>) => string,
 ) {
+  const configState = state.config;
+  if (!configState.config) {
+    throw new Error('Config not loaded');
+  }
+
   if (field.meta && field.name === 'path') {
     if (!value) {
       return getPathError(value, 'invalidPath', t);
     }
     const sanitizedPath = (value as string)
       .split('/')
-      .map(getProcessSegment(state.config.slug))
+      .map(getProcessSegment(configState.config.slug))
       .join('/');
 
     if (value !== sanitizedPath) {
@@ -1066,4 +1143,7 @@ export type EntriesAction = ReturnType<
   | typeof loadLocalBackup
   | typeof addDraftEntryMediaFile
   | typeof removeDraftEntryMediaFile
+  | typeof filterEntriesSuccess
+  | typeof groupEntriesSuccess
+  | typeof sortEntriesSuccess
 >;
