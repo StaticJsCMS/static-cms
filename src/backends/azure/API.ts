@@ -12,9 +12,9 @@ import {
   unsentRequest,
 } from '../../lib/util';
 
-import type { Record } from 'immutable';
 import type { AssetProxy, DataFile, PersistOptions } from '../../interface';
 import type { ApiRequest } from '../../lib/util';
+import type { ApiRequestObject } from '../../lib/util/API';
 
 export const API_NAME = 'Azure DevOps';
 
@@ -147,10 +147,11 @@ export default class API {
     return withHeaders;
   };
 
-  withAzureFeatures = (req: Record<string, Record<string, string>>) => {
-    if (req.hasIn(['params', API_VERSION])) {
+  withAzureFeatures = (req: ApiRequestObject) => {
+    if (API_VERSION in (req.params ?? {})) {
       return req;
     }
+
     const withParams = unsentRequest.withParams(
       {
         [API_VERSION]: `${this.apiVersion}`,
@@ -164,7 +165,7 @@ export default class API {
   buildRequest = (req: ApiRequest) => {
     const withHeaders = this.withHeaders(req);
     const withAzureFeatures = this.withAzureFeatures(withHeaders);
-    if (withAzureFeatures.has('cache')) {
+    if ('cache' in withAzureFeatures) {
       return withAzureFeatures;
     } else {
       const withNoCache = unsentRequest.withNoCache(withAzureFeatures);
@@ -175,8 +176,12 @@ export default class API {
   request = (req: ApiRequest): Promise<Response> => {
     try {
       return requestWithBackoff(this, req);
-    } catch (err: any) {
-      throw new APIError(err.message, null, API_NAME);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new APIError(error.message, null, API_NAME);
+      }
+
+      throw new APIError('Unknown api error', null, API_NAME);
     }
   };
 
@@ -222,7 +227,7 @@ export default class API {
           params: {
             'searchCriteria.itemPath': path,
             'searchCriteria.itemVersion.version': branch,
-            'searchCriteria.$top': 1,
+            'searchCriteria.$top': '1',
           },
         });
         const [commit] = value;

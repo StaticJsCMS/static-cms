@@ -4,8 +4,13 @@ import APIError from './APIError';
 
 import type { AsyncLock } from './asyncLock';
 
-export interface FetchError extends Error {
+export class FetchError extends Error {
   status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
+  }
 }
 
 interface API {
@@ -14,14 +19,12 @@ interface API {
   requestFunction?: (req: ApiRequest) => Promise<Response>;
 }
 
-export type ApiRequestObject = {
+export interface ApiRequestURL {
   url: string;
-  params?: Record<string, string | boolean | number>;
-  method?: 'POST' | 'PUT' | 'DELETE' | 'HEAD' | 'PATCH';
-  headers?: Record<string, string>;
-  body?: string | FormData;
-  cache?: 'no-store';
-};
+  params?: Record<string, string>;
+}
+
+export type ApiRequestObject = RequestInit & ApiRequestURL;
 
 export type ApiRequest = ApiRequestObject | string;
 
@@ -63,7 +66,7 @@ export async function requestWithBackoff(
       if (json.message.match('API rate limit exceeded')) {
         const now = new Date();
         const nextWindowInSeconds = response.headers.has('X-RateLimit-Reset')
-          ? parseInt(response.headers.X-RateLimit-Reset!)
+          ? parseInt(response.headers.get('X-RateLimit-Reset') ?? '0')
           : now.getTime() / 1000 + 60;
 
         throw new RateLimitError(json.message, nextWindowInSeconds);
@@ -71,28 +74,31 @@ export async function requestWithBackoff(
       response.json = () => Promise.resolve(json);
     }
     return response;
-  } catch (err: any) {
-    if (attempt > 5 || err.message === "Can't refresh access token when using implicit auth") {
-      throw err;
-    } else {
-      if (!api.rateLimiter) {
-        const timeout = err.resetSeconds || attempt * attempt;
-        console.info(
-          `Pausing requests for ${timeout} ${
-            attempt === 1 ? 'second' : 'seconds'
-          } due to fetch failures:`,
-          err.message,
-        );
-        api.rateLimiter = asyncLock();
-        api.rateLimiter.acquire();
-        setTimeout(() => {
-          api.rateLimiter?.release();
-          api.rateLimiter = undefined;
-          console.info(`Done pausing requests`);
-        }, 1000 * timeout);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (attempt > 5 || error.message === "Can't refresh access token when using implicit auth") {
+        throw error;
+      } else if (error instanceof RateLimitError) {
+        if (!api.rateLimiter) {
+          const timeout = error.resetSeconds || attempt * attempt;
+          console.info(
+            `Pausing requests for ${timeout} ${
+              attempt === 1 ? 'second' : 'seconds'
+            } due to fetch failures:`,
+            error.message,
+          );
+          api.rateLimiter = asyncLock();
+          api.rateLimiter.acquire();
+          setTimeout(() => {
+            api.rateLimiter?.release();
+            api.rateLimiter = undefined;
+            console.info(`Done pausing requests`);
+          }, 1000 * timeout);
+        }
+        return requestWithBackoff(api, req, attempt + 1);
       }
-      return requestWithBackoff(api, req, attempt + 1);
     }
+    throw error;
   }
 }
 

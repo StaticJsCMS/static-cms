@@ -4,10 +4,9 @@ import { currentBackend } from '../backend';
 import { getIntegrationProvider } from '../integrations';
 import { selectIntegration } from '../reducers';
 
-import type { State } from '../interface';
+import type { State, Entry } from '../interface';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type { Entry } from '../valueObjects/Entry';
 
 /*
  * Constant Declarations
@@ -103,8 +102,13 @@ export function searchEntries(searchTerm: string, searchCollections: string[], p
   return async (dispatch: ThunkDispatch<State, undefined, AnyAction>, getState: () => State) => {
     const state = getState();
     const { search } = state;
-    const backend = currentBackend(state.config);
-    const allCollections = searchCollections || state.collections.keySeq()();
+    const configState = state.config;
+    if (!configState.config) {
+      return;
+    }
+
+    const backend = currentBackend(configState.config);
+    const allCollections = searchCollections || Object.keys(state.collections);
     const collections = allCollections.filter(collection =>
       selectIntegration(state, collection, 'search'),
     );
@@ -130,18 +134,20 @@ export function searchEntries(searchTerm: string, searchCollections: string[], p
           page,
         )
       : backend.search(
-          state.collections
-            .filter((_, key: string) => allCollections.indexOf(key) !== -1)
-            .valueSeq()
-            (),
+          Object.entries(state.collections)
+            .filter(([key, _value]) => allCollections.indexOf(key) !== -1)
+            .map(([_key, value]) => value),
           searchTerm,
         );
 
     try {
       const response: SearchResponse = await searchPromise;
       return dispatch(searchSuccess(response.entries, response.pagination));
-    } catch (error: any) {
-      return dispatch(searchFailure(error));
+    } catch (error: unknown) {
+      console.error(error);
+      if (error instanceof Error) {
+        return dispatch(searchFailure(error));
+      }
     }
   };
 }
@@ -160,11 +166,17 @@ export function query(
     dispatch(querying(searchTerm));
 
     const state = getState();
-    const backend = currentBackend(state.config);
+    const configState = state.config;
+    if (!configState.config) {
+      return dispatch(queryFailure(new Error('Config not found')));
+    }
+
+    const backend = currentBackend(configState.config);
     const integration = selectIntegration(state, collectionName, 'search');
-    const collection = state.collections.find(
-      collection => collection.name === collectionName,
-    );
+    const collection = Object.values(state.collections).find(collection => collection.name === collectionName);
+    if (!collection) {
+      return dispatch(queryFailure(new Error('Collection not found')));
+    }
 
     const queryPromise = integration
       ? getIntegrationProvider(state.integrations, backend.getToken, integration).searchBy(
@@ -177,8 +189,11 @@ export function query(
     try {
       const response: QueryResponse = await queryPromise;
       return dispatch(querySuccess(namespace, response.hits));
-    } catch (error: any) {
-      return dispatch(queryFailure(error));
+    } catch (error: unknown) {
+      console.error(error);
+      if (error instanceof Error) {
+        return dispatch(queryFailure(error));
+      }
     }
   };
 }

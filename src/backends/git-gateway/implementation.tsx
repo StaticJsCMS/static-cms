@@ -265,8 +265,12 @@ export default class GitGateway implements CmsBackendClass {
         const func = user.jwt.bind(user);
         const token = await func();
         return token;
-      } catch (error: any) {
-        throw new AccessTokenError(`Failed getting access token: ${error.message}`);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new AccessTokenError(`Failed getting access token: ${error.message}`);
+        }
+        
+        throw new AccessTokenError('Failed getting access token');
       }
     };
     return this.tokenPromise!().then(async token => {

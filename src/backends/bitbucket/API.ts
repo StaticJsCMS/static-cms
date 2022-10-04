@@ -119,8 +119,12 @@ export default class API {
   request = (req: ApiRequest): Promise<Response> => {
     try {
       return requestWithBackoff(this, req);
-    } catch (err: any) {
-      throw new APIError(err.message, null, API_NAME);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new APIError(error.message, null, API_NAME);
+      }
+
+      throw new APIError('Unknown api error', null, API_NAME);
     }
   };
 
@@ -376,11 +380,13 @@ export default class API {
         method: 'POST',
         body: formData,
       });
-    } catch (error: any) {
-      const message = error.message || '';
-      // very descriptive message from Bitbucket
-      if (parentSha && message.includes('Something went wrong')) {
-        await throwOnConflictingBranches(branch, name => this.getBranch(name), API_NAME);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        const message = error.message || '';
+        // very descriptive message from Bitbucket
+        if (parentSha && message.includes('Something went wrong')) {
+          await throwOnConflictingBranches(branch, name => this.getBranch(name), API_NAME);
+        }
       }
       throw error;
     }

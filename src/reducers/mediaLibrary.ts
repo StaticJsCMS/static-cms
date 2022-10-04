@@ -42,7 +42,7 @@ export type MediaLibraryState = {
     {
       url?: string;
       isFetching: boolean;
-      err?: any;
+      err?: unknown;
     }
   >;
   externalLibrary?: MediaLibraryInstance;
@@ -54,6 +54,7 @@ export type MediaLibraryState = {
   value?: string | string[];
   replaceIndex?: number;
   privateUpload?: boolean;
+  isLoading?: boolean;
 };
 
 const defaultState: MediaLibraryState = {
@@ -345,15 +346,17 @@ export function selectMediaFiles(state: State, field?: EntryField): MediaFile[] 
   const editingDraft = selectEditingDraft(entryDraft);
   const integration = selectIntegration(state, null, 'assetStore');
 
-  let files;
+  let files: MediaFile[] = [];
   if (editingDraft && !integration) {
     const entryFiles = (getIn(entryDraft, ['entry', 'mediaFiles']) ?? []) as MediaFile[];
     const entry = entryDraft['entry'];
     const collection = state.collections[entry?.collection];
-    const mediaFolder = selectMediaFolder(state.config, collection, entry, field);
-    files = entryFiles
-      .filter(f => dirname(f.path) === mediaFolder)
-      .map(file => ({ key: file.id, ...file }));
+    if (state.config.config) {
+      const mediaFolder = selectMediaFolder(state.config.config, collection, entry, field);
+      files = entryFiles
+        .filter(f => dirname(f.path) === mediaFolder)
+        .map(file => ({ key: file.id, ...file }));
+    }
   } else {
     files = mediaLibrary.files || [];
   }

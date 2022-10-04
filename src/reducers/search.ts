@@ -11,9 +11,9 @@ import {
 } from '../actions/search';
 
 import type { SearchAction } from '../actions/search';
-import type { Entry } from '../valueObjects/Entry';
+import type { Entry } from '../interface';
 
-export type Search = {
+export interface SearchState {
   isFetching: boolean;
   term: string;
   collections: string[];
@@ -23,7 +23,7 @@ export type Search = {
   error: Error | undefined;
 };
 
-const defaultState: Search = {
+const defaultState: SearchState = {
   isFetching: false,
   term: '',
   collections: [],
@@ -33,7 +33,7 @@ const defaultState: Search = {
   error: undefined,
 };
 
-const search = produce((state: Search, action: SearchAction) => {
+const search = produce((state: SearchState, action: SearchAction) => {
   switch (action.type) {
     case SEARCH_CLEAR:
       return defaultState;

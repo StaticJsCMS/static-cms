@@ -58,7 +58,7 @@ export function selectIntegration(
   state: IntegrationsState,
   collection: string | null,
   hook: string,
-) {
+): string {
   return collection
     ? get(state, ['hooks', collection, hook], false)
     : get(state, ['hooks', hook], false);

@@ -35,7 +35,6 @@ import type {
   Collection,
   CollectionFile,
   Entities,
-  EntriesAction,
   EntriesFilterFailurePayload,
   EntriesFilterRequestPayload,
   EntriesGroupFailurePayload,
@@ -46,7 +45,6 @@ import type {
   EntriesSuccessPayload,
   Entry,
   EntryDeletePayload,
-  EntryDraft,
   EntryFailurePayload,
   EntryField,
   EntryRequestPayload,
@@ -61,7 +59,9 @@ import type {
   SortMap,
   SortObject,
 } from '../interface';
-import { EntryDraftState } from './entryDraft';
+import type { EntryDraftState } from './entryDraft';
+import type { EntriesAction } from '../actions/entries';
+import type { SearchAction } from '../actions/search';
 
 const storageSortKey = '../netlify-cms.entries.sort';
 const viewStyleKey = '../netlify-cms.entries.viewStyle';
@@ -83,7 +83,7 @@ const loadSort = once(() => {
         map[collection] = orderedMap;
       });
       return map;
-    } catch (e: any) {
+    } catch (e: unknown) {
       return {} as Sort;
     }
   }
@@ -146,7 +146,7 @@ export type EntriesState = {
 
 function entries(
   state: EntriesState = { entities: {}, pages: {}, sort: loadSort(), viewStyle: loadViewStyle() },
-  action: EntriesAction,
+  action: EntriesAction | SearchAction,
 ) {
   switch (action.type) {
     case ENTRY_REQUEST: {
@@ -685,7 +685,7 @@ function getGroup(entry: Entry, selectedGroup: GroupMap) {
       if (matched) {
         value = matched[0];
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.warn(`Invalid view group pattern '${pattern}' for field '${field}'`, e);
     }
     return {

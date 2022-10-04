@@ -59,8 +59,11 @@ export function loadAsset(resolvedPath: string) {
         dispatch(addAsset(asset));
       }
       dispatch(loadAssetSuccess(resolvedPath));
-    } catch (e: any) {
-      dispatch(loadAssetFailure(resolvedPath, e));
+    } catch (error: unknown) {
+      console.log(error);
+      if (error instanceof Error) {
+        dispatch(loadAssetFailure(resolvedPath, error));
+      }
     }
   };
 }
@@ -94,10 +97,16 @@ export function boundGetAsset(
 
 export function getAsset({ collection, entry, path, field }: GetAssetArgs) {
   return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
-    if (!path) return emptyAsset;
+    if (!path) {
+      return emptyAsset;
+    }
 
     const state = getState();
-    const resolvedPath = selectMediaFilePath(state.config, collection, entry, path, field);
+    if (!state.config.config) {
+      return emptyAsset;
+    }
+
+    const resolvedPath = selectMediaFilePath(state.config.config, collection, entry, path, field);
 
     let { asset, isLoading, error } = state.medias[resolvedPath] || {};
     if (isLoading) {

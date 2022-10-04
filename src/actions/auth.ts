@@ -48,7 +48,12 @@ export function logout() {
 export function authenticateUser() {
   return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
     const state = getState();
-    const backend = currentBackend(state.config);
+    if (!state.config.config) {
+      return;
+    }
+
+    const backend = currentBackend(state.config.config);
+
     dispatch(authenticating());
     return Promise.resolve(backend.currentUser())
       .then(user => {
@@ -68,7 +73,11 @@ export function authenticateUser() {
 export function loginUser(credentials: Credentials) {
   return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
     const state = getState();
-    const backend = currentBackend(state.config);
+    if (!state.config.config) {
+      return;
+    }
+
+    const backend = currentBackend(state.config.config);
 
     dispatch(authenticating());
     return backend
@@ -95,7 +104,11 @@ export function loginUser(credentials: Credentials) {
 export function logoutUser() {
   return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
     const state = getState();
-    const backend = currentBackend(state.config);
+    if (!state.config.config) {
+      return;
+    }
+
+    const backend = currentBackend(state.config.config);
     Promise.resolve(backend.logout()).then(() => {
       dispatch(logout());
     });

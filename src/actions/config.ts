@@ -493,9 +493,12 @@ export function loadConfig(manualConfig: Partial<CmsConfig> = {}, onLoad: () => 
       if (typeof onLoad === 'function') {
         onLoad();
       }
-    } catch (err: any) {
-      dispatch(configFailed(err));
-      throw err;
+    } catch (error: unknown) {
+      console.log(error);
+      if (error instanceof Error) {
+        dispatch(configFailed(error));
+      }
+      throw error;
     }
   };
 }

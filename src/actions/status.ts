@@ -36,12 +36,13 @@ export function checkBackendStatus() {
   return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
     try {
       const state = getState();
-      if (state.status.isFetching) {
+      const config = state.config.config;
+      if (state.status.isFetching || !config) {
         return;
       }
 
       dispatch(statusRequest());
-      const backend = currentBackend(state.config);
+      const backend = currentBackend(config);
       const status = await backend.status();
 
       const backendDownKey = 'ui.toast.onBackendDown';
@@ -81,8 +82,11 @@ export function checkBackendStatus() {
       }
 
       dispatch(statusSuccess(status));
-    } catch (error: any) {
-      dispatch(statusFailure(error));
+    } catch (error: unknown) {
+      console.log(error);
+      if (error instanceof Error) {
+        dispatch(statusFailure(error));
+      }
     }
   };
 }

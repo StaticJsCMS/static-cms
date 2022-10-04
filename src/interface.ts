@@ -14,10 +14,10 @@ import type { EntryDraftState } from './reducers/entryDraft';
 import type { GlobalUIState } from './reducers/globalUI';
 import type { IntegrationsState } from './reducers/integrations';
 import type { MediaLibraryState } from './reducers/mediaLibrary';
-import type { Medias } from './reducers/medias';
+import type { MediasState } from './reducers/medias';
 import type { ScrollState } from './reducers/scroll';
-import type { Search } from './reducers/search';
-import type { Status } from './reducers/status';
+import type { SearchState } from './reducers/search';
+import type { StatusState } from './reducers/status';
 import type { SnackbarState } from './store/slices/snackbars';
 
 export interface SlugConfig {
@@ -204,10 +204,10 @@ export interface State {
   entries: EntriesState;
   entryDraft: EntryDraftState;
   integrations: IntegrationsState;
-  medias: Medias;
+  medias: MediasState;
   mediaLibrary: MediaLibraryState;
-  search: Search;
-  status: Status;
+  search: SearchState;
+  status: StatusState;
   scroll: ScrollState;
   snackbar: SnackbarState;
 }

@@ -12,13 +12,13 @@ import {
 import type { MediasAction } from '../actions/media';
 import type AssetProxy from '../valueObjects/AssetProxy';
 
-export type Medias = {
+export interface MediasState {
   [path: string]: { asset: AssetProxy | undefined; isLoading: boolean; error: Error | null };
 };
 
-const defaultState: Medias = {};
+const defaultState: MediasState = {};
 
-const medias = produce((state: Medias, action: MediasAction) => {
+const medias = produce((state: MediasState, action: MediasAction) => {
   switch (action.type) {
     case ADD_ASSETS: {
       const assets = action.payload;
@@ -59,7 +59,7 @@ const medias = produce((state: Medias, action: MediasAction) => {
   }
 }, defaultState);
 
-export function selectIsLoadingAsset(state: Medias) {
+export function selectIsLoadingAsset(state: MediasState) {
   return Object.values(state).some(state => state.isLoading);
 }
 

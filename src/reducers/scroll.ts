@@ -4,7 +4,7 @@ import { SCROLL_SYNC_ENABLED, SET_SCROLL, TOGGLE_SCROLL } from '../actions/scrol
 
 import type { ScrollAction } from '../actions/scroll';
 
-export type ScrollState = {
+export interface ScrollState {
   isScrolling: boolean;
 };
 

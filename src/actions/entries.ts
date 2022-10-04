@@ -125,6 +125,16 @@ export function entriesLoading(collection: Collection) {
   } as const;
 }
 
+export function filterEntriesRequest(collection: Collection, filter: ViewFilter) {
+  return {
+    type: FILTER_ENTRIES_REQUEST,
+    payload: {
+      collection: collection.name,
+      filter,
+    },
+  } as const;
+}
+
 export function filterEntriesSuccess(collection: Collection, filter: ViewFilter, entries: Entry[]) {
   return {
     type: FILTER_ENTRIES_SUCCESS,
@@ -136,6 +146,27 @@ export function filterEntriesSuccess(collection: Collection, filter: ViewFilter,
   } as const;
 }
 
+export function filterEntriesFailure(collection: Collection, filter: ViewFilter, error: unknown) {
+  return {
+    type: FILTER_ENTRIES_FAILURE,
+    payload: {
+      collection: collection.name,
+      filter,
+      error,
+    },
+  } as const;
+}
+
+export function groupEntriesRequest(collection: Collection, group: ViewGroup) {
+  return {
+    type: GROUP_ENTRIES_REQUEST,
+    payload: {
+      collection: collection.name,
+      group,
+    },
+  } as const;
+}
+
 export function groupEntriesSuccess(collection: Collection, group: ViewGroup, entries: Entry[]) {
   return {
     type: GROUP_ENTRIES_SUCCESS,
@@ -143,6 +174,28 @@ export function groupEntriesSuccess(collection: Collection, group: ViewGroup, en
       collection: collection.name,
       group,
       entries,
+    },
+  } as const;
+}
+
+export function groupEntriesFailure(collection: Collection, group: ViewGroup, error: unknown) {
+  return {
+    type: GROUP_ENTRIES_FAILURE,
+    payload: {
+      collection: collection.name,
+      group,
+      error,
+    },
+  } as const;
+}
+
+export function sortEntriesRequest(collection: Collection, key: string, direction: SortDirection) {
+  return {
+    type: SORT_ENTRIES_REQUEST,
+    payload: {
+      collection: collection.name,
+      key,
+      direction,
     },
   } as const;
 }
@@ -160,6 +213,23 @@ export function sortEntriesSuccess(
       key,
       direction,
       entries,
+    },
+  } as const;
+}
+
+export function sortEntriesFailure(
+  collection: Collection,
+  key: string,
+  direction: SortDirection,
+  error: unknown,
+) {
+  return {
+    type: SORT_ENTRIES_FAILURE,
+    payload: {
+      collection: collection.name,
+      key,
+      direction,
+      error,
     },
   } as const;
 }
@@ -216,14 +286,7 @@ export function sortByField(
     const state = getState();
     // if we're already fetching we update the sort key, but skip loading entries
     const isFetching = selectIsFetching(state.entries, collection.name);
-    dispatch({
-      type: SORT_ENTRIES_REQUEST,
-      payload: {
-        collection: collection.name,
-        key,
-        direction,
-      },
-    });
+    dispatch(sortEntriesRequest(collection, key, direction));
     if (isFetching) {
       return;
     }
@@ -232,15 +295,7 @@ export function sortByField(
       const entries = await getAllEntries(state, collection);
       dispatch(sortEntriesSuccess(collection, key, direction, entries));
     } catch (error) {
-      dispatch({
-        type: SORT_ENTRIES_FAILURE,
-        payload: {
-          collection: collection.name,
-          key,
-          direction,
-          error,
-        },
-      });
+      dispatch(sortEntriesFailure(collection, key, direction, error));
     }
   };
 }
@@ -250,13 +305,7 @@ export function filterByField(collection: Collection, filter: ViewFilter) {
     const state = getState();
     // if we're already fetching we update the filter key, but skip loading entries
     const isFetching = selectIsFetching(state.entries, collection.name);
-    dispatch({
-      type: FILTER_ENTRIES_REQUEST,
-      payload: {
-        collection: collection.name,
-        filter,
-      },
-    });
+    dispatch(filterEntriesRequest(collection, filter));
     if (isFetching) {
       return;
     }
@@ -265,14 +314,7 @@ export function filterByField(collection: Collection, filter: ViewFilter) {
       const entries = await getAllEntries(state, collection);
       dispatch(filterEntriesSuccess(collection, filter, entries));
     } catch (error) {
-      dispatch({
-        type: FILTER_ENTRIES_FAILURE,
-        payload: {
-          collection: collection.name,
-          filter,
-          error,
-        },
-      });
+      dispatch(filterEntriesFailure(collection, filter, error));
     }
   };
 }
@@ -566,18 +608,20 @@ export function loadEntry(collection: Collection, slug: string, silent = false) 
       const loadedEntry = await tryLoadEntry(getState(), collection, slug);
       dispatch(entryLoaded(collection, loadedEntry));
       dispatch(createDraftFromEntry(loadedEntry));
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      dispatch(
-        addSnackbar({
-          type: 'error',
-          message: {
-            key: 'ui.toast.onFailToLoadEntries',
-            details: error.message,
-          },
-        }),
-      );
-      dispatch(entryLoadError(error, collection, slug));
+      if (error instanceof Error) {
+        dispatch(
+          addSnackbar({
+            type: 'error',
+            message: {
+              key: 'ui.toast.onFailToLoadEntries',
+              details: error.message,
+            },
+          }),
+        );
+        dispatch(entryLoadError(error, collection, slug));
+      }
     }
   };
 }
@@ -678,17 +722,22 @@ export function loadEntries(collection: Collection, page = 0) {
           append,
         ),
       );
-    } catch (err: any) {
-      dispatch(
-        addSnackbar({
-          type: 'error',
-          message: {
-            key: 'ui.toast.onFailToLoadEntries',
-            details: err,
-          },
-        }),
-      );
-      return Promise.reject(dispatch(entriesFailed(collection, err)));
+    } catch (error: unknown) {
+      console.error(error);
+      if (error instanceof Error) {
+        dispatch(
+          addSnackbar({
+            type: 'error',
+            message: {
+              key: 'ui.toast.onFailToLoadEntries',
+              details: error.message,
+            },
+          }),
+        );
+        return Promise.reject(dispatch(entriesFailed(collection, error)));
+      }
+
+      return Promise.reject();
     }
   };
 }
@@ -732,18 +781,22 @@ export function traverseCollectionCursor(collection: Collection, action: string)
       return dispatch(
         entriesLoaded(collection, entries, pagination, addAppendActionsToCursor(newCursor), append),
       );
-    } catch (err: any) {
-      console.error(err);
-      dispatch(
-        addSnackbar({
-          type: 'error',
-          message: {
-            key: 'ui.toast.onFailToLoadEntries',
-            details: err,
-          },
-        }),
-      );
-      return Promise.reject(dispatch(entriesFailed(collection, err)));
+    } catch (error: unknown) {
+      console.error(error);
+      if (error instanceof Error) {
+        dispatch(
+          addSnackbar({
+            type: 'error',
+            message: {
+              key: 'ui.toast.onFailToLoadEntries',
+              details: error.message,
+            },
+          }),
+        );
+        return Promise.reject(dispatch(entriesFailed(collection, error)));
+      }
+
+      return Promise.reject();
     }
   };
 }
@@ -1143,7 +1196,13 @@ export type EntriesAction = ReturnType<
   | typeof loadLocalBackup
   | typeof addDraftEntryMediaFile
   | typeof removeDraftEntryMediaFile
+  | typeof filterEntriesRequest
   | typeof filterEntriesSuccess
+  | typeof filterEntriesFailure
+  | typeof groupEntriesRequest
   | typeof groupEntriesSuccess
+  | typeof groupEntriesFailure
+  | typeof sortEntriesRequest
   | typeof sortEntriesSuccess
+  | typeof sortEntriesFailure
 >;
