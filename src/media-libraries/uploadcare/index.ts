@@ -1,6 +1,14 @@
 import uploadcare from 'uploadcare-widget';
 import uploadcareTabEffects from 'uploadcare-widget-tab-effects';
-import { Iterable } from 'immutable';
+import { CmsMediaLibraryInitOptions, MediaLibraryInstance } from '../../interface';
+
+declare global {
+  interface Window {
+    UPLOADCARE_PUBLIC_KEY: string;
+    UPLOADCARE_LIVE: boolean;
+    UPLOADCARE_MANUAL_START: boolean;
+  }
+}
 
 window.UPLOADCARE_LIVE = false;
 window.UPLOADCARE_MANUAL_START = true;
@@ -35,11 +43,11 @@ function isFileGroup(files) {
 /**
  * Returns a fileGroupInfo object wrapped in a promise-like object.
  */
-function getFileGroup(files) {
+function getFileGroup(files: string[]) {
   /**
    * Capture the group id from the first file in the files array.
    */
-  const groupId = new RegExp(`^.+/([^/]+~${files.length})/nth/`).exec(files[0])[1];
+  const groupId = new RegExp(`^.+/([^/]+~${files.length})/nth/`).exec(files[0])?.[1];
 
   /**
    * The `openDialog` method handles the jQuery promise object returned by
@@ -54,10 +62,9 @@ function getFileGroup(files) {
  * promises, or Uploadcare groups when possible. Output is wrapped in a promise
  * because the value we're returning may be a promise that we created.
  */
-function getFiles(value) {
-  if (Array.isArray(value) || Iterable.isIterable(value)) {
-    const arr = Array.isArray(value) ? value : value.toJS();
-    return isFileGroup(arr) ? getFileGroup(arr) : Promise.all(arr.map(val => getFile(val)));
+function getFiles(value: string[] | string) {
+  if (Array.isArray(value)) {
+    return isFileGroup(value) ? getFileGroup(value) : Promise.all(value.map(val => getFile(val)));
   }
   return value && typeof value === 'string' ? getFile(value) : null;
 }
@@ -67,7 +74,7 @@ function getFiles(value) {
  * object. Group urls that get passed here were not a part of a complete and
  * untouched group, so they'll be uploaded as new images (only way to do it).
  */
-function getFile(url) {
+function getFile(url: string) {
   const groupPattern = /~\d+\/nth\/\d+\//;
   const uploaded = url.startsWith(CDN_BASE_URL) && !groupPattern.test(url);
   return uploadcare.fileFrom(uploaded ? 'uploaded' : 'url', url);
@@ -117,8 +124,13 @@ function openDialog({ files, config, handleInsert, settings = {} }) {
  * Initialization function will only run once, returns an API object for Simple
  * CMS to call methods on.
  */
-async function init({ options = { config: {}, settings: {} }, handleInsert } = {}) {
-  const { publicKey, ...globalConfig } = options.config;
+async function init({
+  options = { config: {}, settings: {} },
+  handleInsert,
+}: CmsMediaLibraryInitOptions): Promise<MediaLibraryInstance> {
+  const { publicKey, ...globalConfig } = options.config as {
+    publicKey:string;
+  } & Record<string, unknown>;
   const baseConfig = { ...defaultConfig, ...globalConfig };
 
   window.UPLOADCARE_PUBLIC_KEY = publicKey;

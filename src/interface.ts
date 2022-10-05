@@ -177,13 +177,13 @@ export interface MediaLibraryInstance {
   show: (args: {
     id?: string;
     value?: string;
-    config: {};
+    config: Record<string, unknown>;
     allowMultiple?: boolean;
     imagesOnly?: boolean;
   }) => void;
-  hide: () => void;
-  onClearControl: (args: { id: string }) => void;
-  onRemoveControl: (args: { id: string }) => void;
+  hide?: () => void;
+  onClearControl?: (args: { id: string }) => void;
+  onRemoveControl?: (args: { id: string }) => void;
   enableStandalone: () => boolean;
 }
 
@@ -483,14 +483,14 @@ export type CmsWidgetValueSerializer = any; // TODO: type properly
 export type CmsMediaLibraryOptions = Record<string, unknown>; // TODO: type properly
 
 export interface CmsMediaLibraryInitOptions {
-  options: CmsMediaLibrary | undefined;
+  options: Record<string, unknown> | undefined;
   handleInsert: (url: string | string[]) => void;
 }
 
 export interface CmsMediaLibrary {
   name: string;
   config?: CmsMediaLibraryOptions;
-  init: ({ options, handleInsert }: CmsMediaLibraryInitOptions) => MediaLibraryInstance;
+  init: ({ options, handleInsert }: CmsMediaLibraryInitOptions) => Promise<MediaLibraryInstance>;
 }
 
 export interface PreviewStyleOptions {

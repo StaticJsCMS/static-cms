@@ -1,7 +1,8 @@
 import pick from 'lodash/pick';
-import { CmsMediaLibraryInitOptions } from '../../interface';
 
 import { loadScript } from '../../lib/util';
+
+import type { CmsMediaLibraryInitOptions, MediaLibraryInstance } from '../../interface';
 
 interface GetAssetOptions {
   use_secure_url: boolean;
@@ -32,18 +33,34 @@ const defaultConfig = {
 interface CloudinaryAsset {
   public_id: string;
   format: string;
-  derived?: [URL];
+  secure_url: string;
+  url: string;
+  derived?: [
+    {
+      secure_url: string;
+      url: string;
+    },
+  ];
 }
 
 declare global {
   interface Window {
     cloudinary: {
-      createMediaLibrary: (config: any, hadlers: { insertHandler: (url: string) => void })
-    }
+      createMediaLibrary: (
+        config: Record<string, unknown>,
+        hadlers: { insertHandler: (data: { assets: CloudinaryAsset[] }) => void },
+      ) => {
+        show: (config: Record<string, unknown>) => void;
+        hide: () => void;
+      };
+    };
   }
 }
 
-function getAssetUrl(asset, { use_secure_url, use_transformations, output_filename_only }: GetAssetOptions): string | string[] {
+function getAssetUrl(
+  asset: CloudinaryAsset,
+  { use_secure_url, use_transformations, output_filename_only }: GetAssetOptions,
+): string {
   /**
    * Allow output of the file name only, in which case the rest of the url (including)
    * transformations) can be handled by the static site generator.
@@ -67,12 +84,16 @@ function getAssetUrl(asset, { use_secure_url, use_transformations, output_filena
   return urlObject[urlKey];
 }
 
-async function init({ options, handleInsert }: CmsMediaLibraryInitOptions) {
+async function init({
+  options,
+  handleInsert,
+}: CmsMediaLibraryInitOptions): Promise<MediaLibraryInstance> {
   /**
    * Configuration is specific to Cloudinary, while options are specific to this
    * integration.
    */
-  const { config: providedConfig = {}, ...integrationOptions } = options ?? {};
+  const { config = {}, ...integrationOptions } = options ?? {};
+  const providedConfig = config as { multiple?: boolean };
   const resolvedOptions = { ...defaultOptions, ...integrationOptions };
   const cloudinaryConfig = { ...defaultConfig, ...providedConfig, ...enforcedConfig };
   const cloudinaryBehaviorConfigKeys = ['default_transformations', 'max_files', 'multiple'];
@@ -80,7 +101,7 @@ async function init({ options, handleInsert }: CmsMediaLibraryInitOptions) {
 
   await loadScript('https://media-library.cloudinary.com/global/all.js');
 
-  function insertHandler(data: { assets: CloudinaryAsset[]}) {
+  function insertHandler(data: { assets: CloudinaryAsset[] }) {
     const assets = data.assets.map(asset => getAssetUrl(asset, resolvedOptions));
     handleInsert(providedConfig.multiple || assets.length > 1 ? assets : assets[0]);
   }
@@ -88,7 +109,7 @@ async function init({ options, handleInsert }: CmsMediaLibraryInitOptions) {
   const mediaLibrary = window.cloudinary.createMediaLibrary(cloudinaryConfig, { insertHandler });
 
   return {
-    show: ({ config: instanceConfig = {}, allowMultiple } = {}) => {
+    show: ({ config: instanceConfig = {}, allowMultiple }) => {
       /**
        * Ensure multiple selection is not available if the field is configured
        * to disallow it.
