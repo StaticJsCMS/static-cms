@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual';
 
 import { currentBackend } from '../backend';
 import ValidationErrorTypes from '../constants/validationErrorTypes';
-import { getIntegrationProvider } from '../integrations';
+import { getSearchIntegration } from '../integrations';
 import { SortDirection } from '../interface';
 import { getProcessSegment } from '../lib/formatters';
 import { duplicateDefaultI18nFields, hasI18n, I18N_FIELD, serializeI18n } from '../lib/i18n';
@@ -21,6 +21,7 @@ import { addAssets, getAsset } from './media';
 import { loadMedia, waitForMediaLibraryToLoad } from './mediaLibrary';
 import { waitUntil } from './waitUntil';
 
+import type { CmsField } from 'netlify-cms-core';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { Backend } from '../backend';
@@ -270,9 +271,14 @@ async function getAllEntries(state: State, collection: Collection) {
 
   const backend = currentBackend(configState.config);
   const integration = selectIntegration(state, collection.name, 'listEntries');
-  const provider: Backend = integration
-    ? getIntegrationProvider(state.integrations, backend.getToken, integration)
+  const provider = integration
+    ? getSearchIntegration(state.integrations, backend.getToken, integration)
     : backend;
+
+  if (!provider) {
+    return [];
+  }
+
   const entries = await provider.listAllEntries(collection);
   return entries;
 }
@@ -678,23 +684,29 @@ export function loadEntries(collection: Collection, page = 0) {
     const backend = currentBackend(configState.config);
     const integration = selectIntegration(state, collection.name, 'listEntries');
     const provider = integration
-      ? getIntegrationProvider(state.integrations, backend.getToken, integration)
+      ? getSearchIntegration(state.integrations, backend.getToken, integration)
       : backend;
+
+    if (!provider) {
+      throw new Error('Provider not found');
+    }
+
     const append = !!(page && !isNaN(page) && page > 0);
     dispatch(entriesLoading(collection));
 
     try {
       const loadAllEntries = 'nested' in collection || hasI18n(collection);
 
-      let response: {
-        cursor: Cursor;
-        pagination: number;
+      const response: {
+        cursor?: Cursor;
+        pagination?: number;
         entries: Entry[];
       } = await (loadAllEntries
         ? // nested collections require all entries to construct the tree
           provider.listAllEntries(collection).then((entries: Entry[]) => ({ entries }))
         : provider.listEntries(collection, page));
-      response = {
+
+      const cleanResponse = {
         ...response,
         // The only existing backend using the pagination system is the
         // Algolia integration, which is also the only integration used
@@ -702,7 +714,7 @@ export function loadEntries(collection: Collection, page = 0) {
         // determine whether or not this is using the old integer-based
         // pagination API. Other backends will simply store an empty
         // cursor, which behaves identically to no cursor at all.
-        cursor: integration
+        cursor: !('cursor' in response && response.cursor)
           ? Cursor.create({
               actions: ['next'],
               meta: { usingOldPaginationAPI: true },
@@ -714,11 +726,11 @@ export function loadEntries(collection: Collection, page = 0) {
       dispatch(
         entriesLoaded(
           collection,
-          response.cursor.meta!.usingOldPaginationAPI
+          cleanResponse.cursor.meta.usingOldPaginationAPI
             ? response.entries.reverse()
             : response.entries,
-          response.pagination,
-          addAppendActionsToCursor(response.cursor),
+          response.pagination ?? 1,
+          addAppendActionsToCursor(cleanResponse.cursor),
           append,
         ),
       );
@@ -1134,7 +1146,7 @@ function getPathError(
 export function validateMetaField(
   state: State,
   collection: Collection,
-  field: EntryField,
+  field: CmsField,
   value: string | undefined,
   t: (key: string, args: Record<string, unknown>) => string,
 ) {
@@ -1143,7 +1155,7 @@ export function validateMetaField(
     throw new Error('Config not loaded');
   }
 
-  if (field.meta && field.name === 'path') {
+  if ('meta' in field && field.name === 'path') {
     if (!value) {
       return getPathError(value, 'invalidPath', t);
     }

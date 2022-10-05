@@ -137,7 +137,7 @@
     "stream-browserify": "3.0.0",
     "tomlify-j0.4": "3.0.0",
     "ts-loader": "9.4.1",
-    "unified": "7.1.0",
+    "unified": "9.2.2",
     "unist-builder": "1.0.4",
     "unist-util-visit-parents": "2.1.2",
     "uploadcare-widget": "3.19.0",

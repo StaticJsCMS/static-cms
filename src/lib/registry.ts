@@ -2,7 +2,7 @@ import { oneLine } from 'common-tags';
 
 import EditorComponent from '../valueObjects/EditorComponent';
 
-import type { Pluggable } from 'unified';
+import type { PluggableList } from 'react-markdown';
 import type {
   AdditionalLink,
   CmsBackendClass,
@@ -22,6 +22,7 @@ import type {
   EventData,
   RegisteredWidget,
 } from '../interface';
+import type { Pluggable, Settings } from 'unified';
 
 export const allowedEvents = ['prePublish', 'postPublish', 'preSave', 'postSave'] as const;
 export type AllowedEvent = typeof allowedEvents[number];
@@ -38,7 +39,7 @@ interface Registry {
   icons: Record<string, CmsIcon>;
   additionalLinks: Record<string, AdditionalLink>;
   editorComponents: Record<string, EditorComponentOptions>;
-  remarkPlugins: Pluggable[];
+  remarkPlugins: PluggableList;
   widgetValueSerializers: Record<string, CmsWidgetValueSerializer>;
   mediaLibraries: (CmsMediaLibrary & { options: CmsMediaLibraryOptions })[];
   locales: Record<string, CmsLocalePhrasesRoot>;
@@ -192,7 +193,7 @@ export function getWidgets(): ({
   );
 }
 
-export function resolveWidget<T = unknown>(name: string): RegisteredWidget<T> {
+export function resolveWidget<T = unknown>(name?: string): RegisteredWidget<T> {
   return getWidget(name || 'string') || getWidget('unknown');
 }
 
@@ -224,11 +225,12 @@ export function getEditorComponents(): Record<string, EditorComponentOptions> {
 /**
  * Remark plugins
  */
-export function registerRemarkPlugin(plugin: Pluggable) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function registerRemarkPlugin(plugin: Pluggable<any[], Settings>) {
   registry.remarkPlugins.push(plugin);
 }
 
-export function getRemarkPlugins(): Pluggable[] {
+export function getRemarkPlugins(): PluggableList {
   return registry.remarkPlugins;
 }
 

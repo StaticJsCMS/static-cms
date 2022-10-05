@@ -1,11 +1,11 @@
 import type { JSONSchemaType } from 'ajv';
-import type { ComponentType, FocusEventHandler } from 'react';
-import type { ReactNode } from 'react-markdown';
+import type { ComponentType, FocusEventHandler, ReactNode } from 'react';
+import type { PluggableList } from 'react-markdown';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
-import type { Pluggable } from 'unified';
 import type { MediaFile as BackendMediaFile } from './backend';
 import type { CollectionType } from './constants/collectionTypes';
 import type { formatExtensions } from './formats/formats';
+import type { I18N_STRUCTURE } from './lib/i18n';
 import type { AllowedEvent } from './lib/registry';
 import type Cursor from './lib/util/Cursor';
 import type { AuthState } from './reducers/auth';
@@ -97,7 +97,7 @@ export interface Entry {
 export type Entities = Record<string, Entry>;
 
 export interface FieldsErrors {
-  [field: string]: { type: string }[];
+  [field: string]: { type: string; parentIds: string; message?: string }[];
 }
 
 export interface EntryDraft {
@@ -145,7 +145,7 @@ interface Meta {
 }
 
 interface i18n {
-  structure: string;
+  structure: I18N_STRUCTURE;
   locales: string[];
   default_locale: string;
 }
@@ -323,9 +323,9 @@ export interface CmsWidgetPreviewProps<T = unknown> {
   metadata?: Record<string, unknown>;
   getAsset: GetAssetFunction;
   entry: Entry;
-  fieldsMetaData: Record<string, unknown>;
+  fieldsMetaData: Record<string, EntryMeta>;
   resolveWidget: <W = unknown>(name: string) => RegisteredWidget<W>;
-  getRemarkPlugins: () => Pluggable[];
+  getRemarkPlugins: () => PluggableList;
 }
 
 export type CmsWidgetPreviewComponent<T = unknown> =
@@ -365,6 +365,8 @@ export interface RegisteredWidget<T = unknown> extends Record<string, unknown> {
     t: t;
   }) => boolean | { error: unknown } | Promise<boolean | { error: unknown }>;
   schema?: JSONSchemaType<unknown>;
+  globalStyles?: string;
+  allowMapValue?: boolean;
 }
 
 export interface CmsWidgetParam<T = unknown> extends Record<string, unknown> {
@@ -373,26 +375,28 @@ export interface CmsWidgetParam<T = unknown> extends Record<string, unknown> {
   previewComponent: RegisteredWidget<T>['preview'];
   validator?: RegisteredWidget<T>['validator'];
   schema: RegisteredWidget<T>['schema'];
-  globalStyles?: unknown;
+  globalStyles?: string;
   allowMapValue?: boolean;
 }
 
-export interface CmsWidget<T = unknown> {
-  control: ComponentType<CmsWidgetControlProps<T>>;
-  preview?: CmsWidgetPreviewComponent<T>;
-  globalStyles?: unknown;
-}
-
 export interface PreviewTemplateComponentProps {
-  entry: Record<string, any>;
-  collection: Record<string, any>;
-  widgetFor: (name: string, fields?: any, values?: any, fieldsMetaData?: any) => JSX.Element | null;
-  widgetsFor: (name: string) => any;
+  entry: Entry;
+  collection: Collection;
+  widgetFor: (name: string) => ReactNode;
+  widgetsFor: (name: string) =>
+    | {
+        data: EntryData | null;
+        widgets: Record<string, React.ReactNode>;
+      }
+    | {
+        data: EntryData | null;
+        widgets: Record<string, React.ReactNode>;
+      }[];
   getAsset: GetAssetFunction;
-  boundGetAsset: (collection: any, path: any) => GetAssetFunction;
-  fieldsMetaData: Record<string, any>;
-  config: Record<string, any>;
-  fields: Record<string, any>[];
+  boundGetAsset: (collection: Collection, path: string) => GetAssetFunction;
+  fieldsMetaData: Record<string, EntryMeta>;
+  config: CmsConfig;
+  fields: CmsField[];
   isLoadingAsset: boolean;
   window: Window;
   document: Document;
@@ -547,6 +551,7 @@ export interface CmsMediaLibraryExternalLibrary {
 }
 
 export interface CmsMediaLibraryInternalOptions {
+  name: string;
   allow_multiple?: boolean;
 }
 
@@ -1058,6 +1063,7 @@ export interface AlgoliaIntegration extends AlgoliaConfig {
 }
 
 export interface AlgoliaConfig {
+  hooks: ['search' | 'listEntries'];
   applicationID: string;
   apiKey: string;
   indexPrefix?: string;

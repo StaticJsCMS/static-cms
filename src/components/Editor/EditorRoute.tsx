@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Navigate, useLocation, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 
 import Editor from './Editor';
 
@@ -19,9 +19,8 @@ interface EditorRouteProps {
   collections: Collections;
 }
 
-const EditorRoute = ({ newRecord, collections }: EditorRouteProps) => {
+const EditorRoute = ({ newRecord = false, collections }: EditorRouteProps) => {
   const { name, slug } = useParams();
-  const { search } = useLocation();
   const shouldRedirect = useMemo(() => {
     if (!name) {
       return false;
@@ -31,11 +30,11 @@ const EditorRoute = ({ newRecord, collections }: EditorRouteProps) => {
 
   const defaultPath = useMemo(() => getDefaultPath(collections), [collections]);
 
-  if (shouldRedirect) {
+  if (shouldRedirect || !name || !slug) {
     return <Navigate to={defaultPath} />;
   }
 
-  return <Editor name={name} slug={slug} newRecord={newRecord} search={search} />;
+  return <Editor name={name} slug={slug} newRecord={newRecord} />;
 };
 
 export default EditorRoute;

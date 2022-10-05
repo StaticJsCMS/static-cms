@@ -206,7 +206,6 @@ class EditorInterface extends Component {
       onChange,
       showDelete,
       onDelete,
-      onChangeStatus,
       onPublish,
       onDuplicate,
       onValidate,
@@ -215,7 +214,6 @@ class EditorInterface extends Component {
       displayUrl,
       isNewEntry,
       isModification,
-      currentStatus,
       onLogoutClick,
       draftKey,
       editorBackLink,
@@ -304,7 +302,6 @@ class EditorInterface extends Component {
           onPersistAndNew={() => this.handleOnPersist({ createNew: true })}
           onPersistAndDuplicate={() => this.handleOnPersist({ createNew: true, duplicate: true })}
           onDelete={onDelete}
-          onChangeStatus={onChangeStatus}
           showDelete={showDelete}
           onPublish={onPublish}
           onDuplicate={onDuplicate}
@@ -316,7 +313,6 @@ class EditorInterface extends Component {
           collection={collection}
           isNewEntry={isNewEntry}
           isModification={isModification}
-          currentStatus={currentStatus}
           onLogoutClick={onLogoutClick}
           editorBackLink={editorBackLink}
         />
@@ -377,13 +373,11 @@ EditorInterface.propTypes = {
   onDelete: PropTypes.func.isRequired,
   onPublish: PropTypes.func.isRequired,
   onDuplicate: PropTypes.func.isRequired,
-  onChangeStatus: PropTypes.func.isRequired,
   user: PropTypes.object,
   hasChanged: PropTypes.bool,
   displayUrl: PropTypes.string,
   isNewEntry: PropTypes.bool,
   isModification: PropTypes.bool,
-  currentStatus: PropTypes.string,
   onLogoutClick: PropTypes.func.isRequired,
   draftKey: PropTypes.string.isRequired,
   toggleScroll: PropTypes.func.isRequired,

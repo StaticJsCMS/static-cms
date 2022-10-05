@@ -10,6 +10,20 @@ import type {
   CmsSearchIntegrationProvider,
 } from '../interface';
 
+export interface IntegrationHooks {
+  search?: CmsSearchIntegrationProvider;
+  listEntries?: CmsSearchIntegrationProvider;
+}
+
+export interface IntegrationsState {
+  providers: {
+    algolia?: AlgoliaConfig;
+    'asset-store'?: AssetStoreConfig;
+  };
+  hooks: IntegrationHooks;
+  collectionHooks: Record<string, IntegrationHooks>;
+}
+
 export function getIntegrations(config: CmsConfig): IntegrationsState {
   const integrations = config.integrations || [];
   const newState = integrations.reduce(
@@ -22,12 +36,14 @@ export function getIntegrations(config: CmsConfig): IntegrationsState {
         acc.providers[providerData.provider] = providerData;
 
         if (!collections) {
-          acc.hooks.search = providerData.provider;
+          providerData.hooks.forEach(hook => (acc.hooks[hook] = providerData.provider));
           return acc;
         }
 
         integrationCollections?.forEach(collection => {
-          acc.collectionHooks[collection].search = providerData.provider;
+          providerData.hooks.forEach(
+            hook => (acc.collectionHooks[collection][hook] = providerData.provider),
+          );
         });
       } else if (providerData.provider === 'asset-store') {
         acc.providers[providerData.provider] = providerData;
@@ -38,19 +54,6 @@ export function getIntegrations(config: CmsConfig): IntegrationsState {
   );
 
   return newState;
-}
-
-export interface IntegrationHooks {
-  search?: CmsSearchIntegrationProvider;
-}
-
-export interface IntegrationsState {
-  providers: {
-    algolia?: AlgoliaConfig;
-    'asset-store'?: AssetStoreConfig;
-  };
-  hooks: IntegrationHooks;
-  collectionHooks: Record<string, IntegrationHooks>;
 }
 
 const defaultState: IntegrationsState = { providers: {}, hooks: {}, collectionHooks: {} };

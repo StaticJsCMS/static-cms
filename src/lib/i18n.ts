@@ -5,7 +5,7 @@ import set from 'lodash/set';
 
 import { selectEntrySlug } from '../reducers/collections';
 
-import type { Collection, Entry, EntryField } from '../interface';
+import type { Collection, Entry, EntryData, EntryField } from '../interface';
 import type { EntryDraftState } from '../reducers/entryDraft';
 
 export const I18N = 'i18n';
@@ -29,15 +29,15 @@ export function hasI18n(collection: Collection) {
 type I18nInfo = {
   locales: string[];
   defaultLocale: string;
-  structure: I18N_STRUCTURE;
+  structure?: I18N_STRUCTURE;
 };
 
-export function getI18nInfo(collection: Collection) {
+export function getI18nInfo(collection: Collection): I18nInfo | null {
   if (!hasI18n(collection)) {
-    return {};
+    return null;
   }
   const { structure, locales, default_locale: defaultLocale } = collection.i18n;
-  return { structure, locales, defaultLocale } as I18nInfo;
+  return { structure, locales, defaultLocale };
 }
 
 export function getI18nFilesDepth(collection: Collection, depth: number) {
@@ -149,14 +149,18 @@ export function getI18nFiles(
   slug: string,
   newPath?: string,
 ) {
-  const { structure, defaultLocale, locales } = getI18nInfo(collection) as I18nInfo;
+  const {
+    structure = I18N_STRUCTURE.SINGLE_FILE,
+    defaultLocale,
+    locales,
+  } = getI18nInfo(collection) as I18nInfo;
 
   if (structure === I18N_STRUCTURE.SINGLE_FILE) {
     const data = locales.reduce((map, locale) => {
       const dataPath = getDataPath(locale, defaultLocale);
       map[locale] = get(entryDraft, dataPath);
       return map;
-    }, {} as Record<string, unknown>);
+    }, {} as EntryData);
 
     entryDraft.data = data;
 
@@ -255,7 +259,7 @@ function mergeValues(
 }
 
 function mergeSingleFileValue(entryValue: Entry, defaultLocale: string, locales: string[]): Entry {
-  const data = (entryValue.data[defaultLocale] ?? {}) as Record<string, unknown>;
+  const data = (entryValue.data[defaultLocale] ?? {}) as EntryData;
   const i18n = locales
     .filter(l => l !== defaultLocale)
     .map(l => ({ locale: l, value: entryValue.data[l] }))
@@ -279,7 +283,11 @@ export async function getI18nEntry(
   slug: string,
   getEntryValue: (path: string) => Promise<Entry>,
 ) {
-  const { structure, locales, defaultLocale } = getI18nInfo(collection) as I18nInfo;
+  const {
+    structure = I18N_STRUCTURE.SINGLE_FILE,
+    locales,
+    defaultLocale,
+  } = getI18nInfo(collection) as I18nInfo;
 
   let entryValue: Entry;
   if (structure === I18N_STRUCTURE.SINGLE_FILE) {
@@ -305,7 +313,11 @@ export async function getI18nEntry(
 }
 
 export function groupEntries(collection: Collection, extension: string, entries: Entry[]): Entry[] {
-  const { structure, defaultLocale, locales } = getI18nInfo(collection) as I18nInfo;
+  const {
+    structure = I18N_STRUCTURE.SINGLE_FILE,
+    defaultLocale,
+    locales,
+  } = getI18nInfo(collection) as I18nInfo;
   if (structure === I18N_STRUCTURE.SINGLE_FILE) {
     return entries.map(e => mergeSingleFileValue(e, defaultLocale, locales));
   }
@@ -408,7 +420,8 @@ export function getPreviewEntry(entry: Entry, locale: string, defaultLocale: str
   if (locale === defaultLocale) {
     return entry;
   }
-  return (entry.data = entry.i18n?.[locale]?.data);
+  entry.data = entry.i18n?.[locale]?.data as EntryData;
+  return entry;
 }
 
 export function serializeI18n(
