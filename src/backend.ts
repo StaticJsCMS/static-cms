@@ -174,6 +174,7 @@ export function mergeExpandedEntries(entries: (Entry & { field: string })[]) {
     }
 
     const nestedFields = e.field.split('.');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let value = acc[e.slug].data as any;
     for (let i = 0; i < nestedFields.length; i++) {
       value = value[nestedFields[i]];
@@ -249,6 +250,9 @@ export interface MediaFile {
   url?: string;
   file?: File;
   field?: EntryField;
+  queryOrder?: unknown;
+  isViewableImage?: boolean;
+  type?: string;
 }
 
 interface BackupEntry {

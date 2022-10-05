@@ -1,6 +1,7 @@
 import uploadcare from 'uploadcare-widget';
 import uploadcareTabEffects from 'uploadcare-widget-tab-effects';
-import { CmsMediaLibraryInitOptions, MediaLibraryInstance } from '../../interface';
+
+import type { CmsMediaLibraryInitOptions, MediaLibraryInstance } from '../../interface';
 
 declare global {
   interface Window {
@@ -29,10 +30,10 @@ const defaultConfig = {
  * group urls. If they've been changed or any are missing, a new group will need
  * to be created to represent the current values.
  */
-function isFileGroup(files) {
+function isFileGroup(files: string[]) {
   const basePatternString = `~${files.length}/nth/`;
 
-  function mapExpression(val, idx) {
+  function mapExpression(_val: string, idx: number) {
     return new RegExp(`${basePatternString}${idx}/$`);
   }
 
@@ -40,10 +41,16 @@ function isFileGroup(files) {
   return expressions.every(exp => files.some(url => exp.test(url)));
 }
 
+export interface UploadcareFileGroupInfo {
+  cdnUrl: string;
+  name: string;
+  isImage: boolean;
+}
+
 /**
  * Returns a fileGroupInfo object wrapped in a promise-like object.
  */
-function getFileGroup(files: string[]) {
+function getFileGroup(files: string[]): Promise<UploadcareFileGroupInfo> {
   /**
    * Capture the group id from the first file in the files array.
    */
@@ -62,7 +69,9 @@ function getFileGroup(files: string[]) {
  * promises, or Uploadcare groups when possible. Output is wrapped in a promise
  * because the value we're returning may be a promise that we created.
  */
-function getFiles(value: string[] | string) {
+function getFiles(
+  value: string[] | string | undefined,
+): Promise<UploadcareFileGroupInfo | UploadcareFileGroupInfo[]> | null {
   if (Array.isArray(value)) {
     return isFileGroup(value) ? getFileGroup(value) : Promise.all(value.map(val => getFile(val)));
   }
@@ -74,24 +83,47 @@ function getFiles(value: string[] | string) {
  * object. Group urls that get passed here were not a part of a complete and
  * untouched group, so they'll be uploaded as new images (only way to do it).
  */
-function getFile(url: string) {
+function getFile(url: string): Promise<UploadcareFileGroupInfo> {
   const groupPattern = /~\d+\/nth\/\d+\//;
   const uploaded = url.startsWith(CDN_BASE_URL) && !groupPattern.test(url);
   return uploadcare.fileFrom(uploaded ? 'uploaded' : 'url', url);
+}
+
+interface OpenDialogOptions {
+  files:
+    | UploadcareFileGroupInfo
+    | UploadcareFileGroupInfo[]
+    | Promise<UploadcareFileGroupInfo | UploadcareFileGroupInfo[]>
+    | null;
+  config: {
+    multiple: boolean;
+    imagesOnly: boolean;
+    previewStep: boolean;
+    integration: string;
+  };
+  handleInsert: (url: string | string[]) => void;
+  settings: {
+    defaultOperations?: string;
+    autoFilename?: boolean;
+  };
 }
 
 /**
  * Open the standalone dialog. A single instance is created and destroyed for
  * each use.
  */
-function openDialog({ files, config, handleInsert, settings = {} }) {
+function openDialog({ files, config, handleInsert, settings = {} }: OpenDialogOptions) {
+  if (!files) {
+    return;
+  }
+
   if (settings.defaultOperations && !settings.defaultOperations.startsWith('/')) {
     console.warn(
       'Uploadcare default operations should start with `/`. Example: `/preview/-/resize/100x100/image.png`',
     );
   }
 
-  function buildUrl(fileInfo) {
+  function buildUrl(fileInfo: UploadcareFileGroupInfo) {
     const { cdnUrl, name, isImage } = fileInfo;
 
     let url =
@@ -129,7 +161,7 @@ async function init({
   handleInsert,
 }: CmsMediaLibraryInitOptions): Promise<MediaLibraryInstance> {
   const { publicKey, ...globalConfig } = options.config as {
-    publicKey:string;
+    publicKey: string;
   } & Record<string, unknown>;
   const baseConfig = { ...defaultConfig, ...globalConfig };
 
@@ -146,9 +178,14 @@ async function init({
      * On show, create a new widget, cache it in the widgets object, and open.
      * No hide method is provided because the widget doesn't provide it.
      */
-    show: ({ value, config: instanceConfig = {}, allowMultiple, imagesOnly = false } = {}) => {
-      const config = { ...baseConfig, imagesOnly, ...instanceConfig };
-      const multiple = allowMultiple === false ? false : !!config.multiple;
+    show: ({ value, config: instanceConfig = {}, allowMultiple, imagesOnly = false }) => {
+      const config = { ...baseConfig, imagesOnly, ...instanceConfig } as {
+        imagesOnly: boolean;
+        previewStep: boolean;
+        integration: string;
+        multiple?: boolean;
+      };
+      const multiple = allowMultiple === false ? false : Boolean(config.multiple);
       const resolvedConfig = { ...config, multiple };
       const files = getFiles(value);
 
@@ -156,12 +193,12 @@ async function init({
        * Resolve the promise only if it's ours. Only the jQuery promise objects
        * from the Uploadcare library will have a `state` method.
        */
-      if (files && !files.state) {
+      if (files && !('state' in files)) {
         return files.then(result =>
           openDialog({
             files: result,
             config: resolvedConfig,
-            settings: options.settings,
+            settings: options.settings as Record<string, unknown>,
             handleInsert,
           }),
         );
@@ -169,7 +206,7 @@ async function init({
         return openDialog({
           files,
           config: resolvedConfig,
-          settings: options.settings,
+          settings: options.settings as Record<string, unknown>,
           handleInsert,
         });
       }

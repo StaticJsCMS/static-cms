@@ -11,8 +11,8 @@ import {
 import MediaLibraryHeader from './MediaLibraryHeader';
 import MediaLibrarySearch from './MediaLibrarySearch';
 
-import type { TranslatedProps } from '../../interface';
-import type { MediaLibraryFile } from './MediaLibraryModal';
+import type { ChangeEvent, ChangeEventHandler, KeyboardEventHandler } from 'react';
+import type { MediaFile, TranslatedProps } from '../../interface';
 
 const LibraryTop = styled.div`
   position: relative;
@@ -34,10 +34,10 @@ interface MediaLibraryTop {
   privateUpload?: boolean;
   forImage?: boolean;
   onDownload: () => void;
-  onUpload: () => void;
+  onUpload: (event: ChangeEvent<HTMLInputElement> | DragEvent) => void;
   query?: string;
-  onSearchChange: () => void;
-  onSearchKeyDown: () => void;
+  onSearchChange: ChangeEventHandler<HTMLInputElement>;
+  onSearchKeyDown: KeyboardEventHandler<HTMLInputElement>;
   searchDisabled: boolean;
   onDelete: () => void;
   canInsert?: boolean;
@@ -45,7 +45,7 @@ interface MediaLibraryTop {
   hasSelection: boolean;
   isPersisting?: boolean;
   isDeleting?: boolean;
-  selectedFile?: MediaLibraryFile;
+  selectedFile?: MediaFile;
 }
 
 function MediaLibraryTop({

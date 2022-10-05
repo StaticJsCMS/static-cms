@@ -1,15 +1,17 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { translate } from 'react-polyglot';
-import PropTypes from 'prop-types';
 
 import { lengths } from '../../ui';
+
+import type { ComponentType } from 'react';
+import type { TranslateProps } from 'react-polyglot';
 
 const NotFoundContainer = styled.div`
   margin: ${lengths.pageMargin};
 `;
 
-function NotFoundPage({ t }) {
+function NotFoundPage({ t }: TranslateProps) {
   return (
     <NotFoundContainer>
       <h2>{t('app.notFoundPage.header')}</h2>
@@ -17,8 +19,4 @@ function NotFoundPage({ t }) {
   );
 }
 
-NotFoundPage.propTypes = {
-  t: PropTypes.func.isRequired,
-};
-
-export default translate()(NotFoundPage);
+export default translate()(NotFoundPage) as ComponentType<{}>;

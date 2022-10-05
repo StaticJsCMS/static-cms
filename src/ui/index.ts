@@ -1,78 +1,27 @@
-import Icon from './Icon';
-import ListItemTopBar from './ListItemTopBar';
-import FieldLabel from './FieldLabel';
-import IconButton from './IconButton';
-import Toggle from './Toggle';
-import AuthenticationPage from './AuthenticationPage';
-import WidgetPreviewContainer from './WidgetPreviewContainer';
-import ObjectWidgetTopBar from './ObjectWidgetTopBar';
-import GoBackButton from './GoBackButton';
-import images from './Icon/images/_index';
-import {
-  fonts,
-  colorsRaw,
-  colors,
-  lengths,
-  components,
-  buttons,
-  text,
-  shadows,
-  borders,
-  transitions,
-  effects,
-  zIndex,
-  reactSelectStyles,
-  GlobalStyles,
-} from './styles';
-
-export const StaticCmsUiDefault = {
-  ListItemTopBar,
-  FieldLabel,
-  Icon,
-  IconButton,
-  Toggle,
-  AuthenticationPage,
-  WidgetPreviewContainer,
-  ObjectWidgetTopBar,
-  fonts,
-  colorsRaw,
-  colors,
-  lengths,
-  components,
-  buttons,
-  shadows,
-  text,
-  borders,
-  transitions,
-  effects,
-  zIndex,
-  reactSelectStyles,
-  GlobalStyles,
-  images,
-};
+export { default as AuthenticationPage } from './AuthenticationPage';
+export { default as FieldLabel } from './FieldLabel';
+export { default as GoBackButton } from './GoBackButton';
+export { default as Icon } from './Icon';
+export { default as images } from './Icon/images/_index';
+export { default as IconButton } from './IconButton';
+export { default as ListItemTopBar } from './ListItemTopBar';
+export { default as Loader } from './Loader';
+export { default as ObjectWidgetTopBar } from './ObjectWidgetTopBar';
 export {
-  ListItemTopBar,
-  FieldLabel,
-  Icon,
-  IconButton,
-  Toggle,
-  AuthenticationPage,
-  WidgetPreviewContainer,
-  ObjectWidgetTopBar,
-  fonts,
-  colorsRaw,
-  colors,
-  lengths,
-  components,
+  borders,
   buttons,
+  colors,
+  colorsRaw,
+  components,
+  effects,
+  fonts,
+  GlobalStyles,
+  lengths,
+  reactSelectStyles,
   shadows,
   text,
-  borders,
   transitions,
-  effects,
   zIndex,
-  reactSelectStyles,
-  GlobalStyles,
-  GoBackButton,
-  images,
-};
+} from './styles';
+export { default as Toggle } from './Toggle';
+export { default as WidgetPreviewContainer } from './WidgetPreviewContainer';

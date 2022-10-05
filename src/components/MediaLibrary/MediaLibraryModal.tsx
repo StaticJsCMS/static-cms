@@ -10,8 +10,8 @@ import EmptyMessage from './EmptyMessage';
 import MediaLibraryCardGrid from './MediaLibraryCardGrid';
 import MediaLibraryTop from './MediaLibraryTop';
 
+import type { ChangeEvent, ChangeEventHandler, KeyboardEventHandler } from 'react';
 import type { MediaFile, TranslatedProps } from '../../interface';
-import type { MediaLibraryCardItem } from './MediaLibraryCardGrid';
 import type { MediaLibraryState } from '../../reducers/mediaLibrary';
 
 /**
@@ -90,18 +90,18 @@ interface MediaLibraryModalProps {
   selectedFile?: MediaFile;
   handleFilter: (files: MediaFile[]) => MediaFile[];
   handleQuery: (query: string, files: MediaFile[]) => MediaFile[];
-  toTableData: (files: MediaFile[]) => MediaLibraryCardItem[];
+  toTableData: (files: MediaFile[]) => MediaFile[];
   handleClose: () => void;
-  handleSearchChange: () => void;
-  handleSearchKeyDown: () => void;
-  handlePersist: () => void;
+  handleSearchChange: ChangeEventHandler<HTMLInputElement>;
+  handleSearchKeyDown: KeyboardEventHandler<HTMLInputElement>;
+  handlePersist: (event: ChangeEvent<HTMLInputElement> | DragEvent) => void;
   handleDelete: () => void;
   handleInsert: () => void;
   handleDownload: () => void;
   setScrollContainerRef: () => void;
-  handleAssetClick: () => void;
+  handleAssetClick: (asset: MediaFile) => void;
   handleLoadMore: () => void;
-  loadDisplayURL: () => void;
+  loadDisplayURL: (file: MediaFile) => void;
   displayURLs: MediaLibraryState['displayURLs'];
 }
 

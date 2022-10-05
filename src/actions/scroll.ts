@@ -21,7 +21,6 @@ export function loadScroll() {
 }
 
 export function toggleScroll() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return async (dispatch: ThunkDispatch<State, undefined, AnyAction>, _getState: () => State) => {
     return dispatch(togglingScroll());
   };

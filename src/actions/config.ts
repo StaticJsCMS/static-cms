@@ -162,7 +162,6 @@ function throwOnMissingDefaultLocale(i18n?: CmsI18nConfig) {
 }
 
 function hasIntegration(config: CmsConfig, collection: CmsCollection) {
-  // TODO remove fromJS when Immutable is removed from the integrations state slice
   const integrations = getIntegrations(config);
   const integration = selectIntegration(integrations, collection.name, 'listEntries');
   return !!integration;

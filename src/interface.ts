@@ -169,6 +169,7 @@ export interface Collection {
   nested?: Nested;
   meta?: Meta;
   i18n: i18n;
+  hide?: boolean;
 }
 
 export type Collections = Record<string, Collection>;
@@ -409,6 +410,7 @@ export type User = Credentials & {
   backendName?: string;
   login?: string;
   name?: string;
+  avatar_url?: string;
 };
 
 export interface ImplementationFile {
@@ -1001,5 +1003,6 @@ export interface AuthenticationPageProps {
   siteId?: string;
   authEndpoint?: string;
   config: CmsConfig;
+  error?: string | undefined;
   clearHash?: () => void;
 }

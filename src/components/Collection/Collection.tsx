@@ -24,16 +24,9 @@ import EntriesCollection from './Entries/EntriesCollection';
 import EntriesSearch from './Entries/EntriesSearch';
 import Sidebar from './Sidebar';
 
-import type { RouteComponentProps } from 'react-router-dom';
-import type {
-  CmsSortableFieldsDefault,
-  Collection,
-  State,
-  TranslatedProps,
-  ViewFilter,
-  ViewGroup,
-} from '../../interface';
-import type { StaticallyTypedRecord } from '../../types/immutable';
+import type { ComponentType } from 'react';
+import type { ConnectedProps } from 'react-redux';
+import type { Collection, State, TranslatedProps, ViewFilter, ViewGroup } from '../../interface';
 
 const CollectionContainer = styled.div`
   margin: ${lengths.pageMargin};
@@ -51,17 +44,6 @@ const SearchResultContainer = styled.div`
 const SearchResultHeading = styled.h1`
   ${components.cardTopHeading};
 `;
-
-interface CollectionRouterParams {
-  name: string;
-  searchTerm?: string;
-  filterTerm?: string;
-}
-
-interface CollectionViewProps extends RouteComponentProps<CollectionRouterParams> {
-  isSearchResults?: boolean;
-  isSingleSearchResult?: boolean;
-}
 
 const CollectionView = ({
   collection,
@@ -84,7 +66,7 @@ const CollectionView = ({
   group,
   onChangeViewStyle,
   viewStyle,
-}: ReturnType<typeof mergeProps>) => {
+}: CollectionViewProps) => {
   const [readyToLoad, setReadyToLoad] = useState(false);
 
   const newEntryUrl = useMemo(() => {
@@ -115,23 +97,27 @@ const CollectionView = ({
   }, [collection, filterTerm, viewStyle, readyToLoad]);
 
   const renderEntriesSearch = useCallback(() => {
-    return (
-      <EntriesSearch
-        collections={isSingleSearchResult ? collections.filter(c => c === collection) : collections}
-        searchTerm={searchTerm}
-      />
-    );
+    let searchCollections = collections;
+    if (isSingleSearchResult) {
+      const searchCollection = Object.values(collections).filter(c => c === collection);
+      if (searchCollection.length === 1) {
+        searchCollections = {
+          [searchCollection[0].name]: searchCollection[0],
+        };
+      }
+    }
+
+    return <EntriesSearch collections={searchCollections} searchTerm={searchTerm} />;
   }, [searchTerm, collections, collection, isSingleSearchResult]);
 
   useEffect(() => {
-    if (sort?.first()?.key) {
+    const sorts = Object.keys(sort ?? {});
+    if (sorts.length > 0) {
       setReadyToLoad(true);
       return;
     }
 
-    const defaultSort = collection.getIn(['sortable_fields', 'default']) as
-      | StaticallyTypedRecord<CmsSortableFieldsDefault>
-      | undefined;
+    const defaultSort = collection.sortable_fields.default;
 
     if (!defaultSort || !defaultSort.field) {
       setReadyToLoad(true);
@@ -140,10 +126,7 @@ const CollectionView = ({
 
     let alive = true;
     const sortEntries = async () => {
-      await onSortClick(
-        defaultSort.field,
-        defaultSort.direction ?? SortDirection.Ascending,
-      );
+      await onSortClick(defaultSort.field, defaultSort.direction ?? SortDirection.Ascending);
       if (alive) {
         setReadyToLoad(true);
       }
@@ -154,7 +137,7 @@ const CollectionView = ({
     return () => {
       alive = false;
     };
-  }, [collection]);
+  }, [collection, onSortClick, sort]);
 
   return (
     <CollectionContainer>
@@ -197,12 +180,19 @@ const CollectionView = ({
   );
 };
 
-function mapStateToProps(state: State, ownProps: TranslatedProps<CollectionViewProps>) {
+interface CollectionViewOwnProps {
+  isSearchResults?: boolean;
+  isSingleSearchResult?: boolean;
+  name: string;
+  searchTerm?: string;
+  filterTerm?: string;
+}
+
+function mapStateToProps(state: State, ownProps: TranslatedProps<CollectionViewOwnProps>) {
   const { collections } = state;
-  const isSearchEnabled = state.config && state.config.search != false;
-  const { isSearchResults, match, t } = ownProps;
-  const { name, searchTerm = '', filterTerm = '' } = match.params;
-  const collection: Collection = name ? collections.get(name) : collections.first();
+  const isSearchEnabled = state.config.config && state.config.config.search != false;
+  const { isSearchResults, name, searchTerm = '', filterTerm = '', t } = ownProps;
+  const collection: Collection = name ? collections[name] : collections[0];
   const sort = selectEntriesSort(state.entries, collection.name);
   const sortableFields = selectSortableFields(collection, t);
   const viewFilters = selectViewFilters(collection);
@@ -239,7 +229,7 @@ const mapDispatchToProps = {
 function mergeProps(
   stateProps: ReturnType<typeof mapStateToProps>,
   dispatchProps: typeof mapDispatchToProps,
-  ownProps: TranslatedProps<CollectionViewProps>,
+  ownProps: TranslatedProps<CollectionViewOwnProps>,
 ) {
   return {
     ...stateProps,
@@ -253,10 +243,7 @@ function mergeProps(
   };
 }
 
-const ConnectedCollection = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeProps,
-)(CollectionView);
+const connector = connect(mapStateToProps, mapDispatchToProps, mergeProps);
+export type CollectionViewProps = ConnectedProps<typeof connector> & CollectionViewOwnProps;
 
-export default translate()(ConnectedCollection);
+export default connector(translate()(CollectionView) as ComponentType<CollectionViewProps>);

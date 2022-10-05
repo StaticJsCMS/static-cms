@@ -29,7 +29,7 @@ import { Loader } from '../../ui';
 import confirm from '../UI/Confirm';
 import EditorInterface from './EditorInterface';
 
-export class Editor extends React.Component {
+class Editor extends React.Component {
   static propTypes = {
     changeDraftField: PropTypes.func.isRequired,
     changeDraftFieldValidation: PropTypes.func.isRequired,

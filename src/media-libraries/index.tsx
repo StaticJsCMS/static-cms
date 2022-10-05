@@ -1,4 +1,2 @@
-import MediaLibraryCloudinary from './cloudinary';
-import MediaLibraryUploadcare from './uploadcare';
-
-export { MediaLibraryCloudinary, MediaLibraryUploadcare };
+export { default as MediaLibraryCloudinary } from './cloudinary';
+export { default as MediaLibraryUploadcare } from './uploadcare';

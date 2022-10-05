@@ -1,7 +1,5 @@
 import fuzzy from 'fuzzy';
-import map from 'lodash/map';
-import orderBy from 'lodash/orderBy';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
@@ -19,6 +17,8 @@ import alert from '../UI/Alert';
 import confirm from '../UI/Confirm';
 import MediaLibraryModal from './MediaLibraryModal';
 
+import type { ChangeEvent, KeyboardEvent } from 'react';
+import type { ConnectedProps } from 'react-redux';
 import type { MediaFile, State, TranslatedProps } from '../../interface';
 
 /**
@@ -43,7 +43,7 @@ const MediaLibrary = ({
   loadMediaDisplayURL,
   displayURLs,
   canInsert,
-  files,
+  files = [],
   dynamicSearch,
   dynamicSearchActive,
   forImage,
@@ -52,7 +52,7 @@ const MediaLibrary = ({
   isDeleting,
   hasNextPage,
   isPaginating,
-  privateUpload,
+  privateUpload = false,
   config,
   loadMedia,
   dynamicSearchQuery,
@@ -64,8 +64,34 @@ const MediaLibrary = ({
   field,
   t,
 }: TranslatedProps<MediaLibraryProps>) => {
-  const [sortFields, setSortFields] = useState<unknown>();
   const [selectedFile, setSelectedFile] = useState<MediaFile | null>(null);
+  const [query, setQuery] = useState<string | undefined>(undefined);
+
+  const [prevIsVisible, setPrevIsVisible] = useState(false);
+  const [prevPrivateUpload, setPrevPrivateUpload] = useState(false);
+
+  useEffect(() => {
+    loadMedia();
+  }, [loadMedia]);
+
+  useEffect(() => {
+    if (!prevIsVisible && isVisible) {
+      setSelectedFile(null);
+      setQuery('');
+    }
+
+    setPrevIsVisible(isVisible);
+  }, [isVisible, prevIsVisible]);
+
+  useEffect(() => {
+    setPrevPrivateUpload(privateUpload);
+  }, [privateUpload]);
+
+  useEffect(() => {
+    if (!prevIsVisible && isVisible && !prevPrivateUpload && privateUpload) {
+      loadMedia({ privateUpload });
+    }
+  }, [isVisible, loadMedia, prevIsVisible, prevPrivateUpload, privateUpload]);
 
   const loadDisplayURL = useCallback(
     (file: MediaFile) => {
@@ -87,37 +113,36 @@ const MediaLibrary = ({
   /**
    * Transform file data for table display.
    */
-  const toTableData = useCallback(
-    (files: MediaFile[]) => {
-      const tableData =
-        files &&
-        files.map(({ key, name, id, size, path, queryOrder, displayURL, draft }) => {
-          const ext = fileExtension(name).toLowerCase();
-          return {
-            key,
-            id,
-            name,
-            path,
-            type: ext.toUpperCase(),
-            size,
-            queryOrder,
-            displayURL,
-            draft,
-            isImage: IMAGE_EXTENSIONS.includes(ext),
-            isViewableImage: IMAGE_EXTENSIONS_VIEWABLE.includes(ext),
-          };
-        });
+  const toTableData = useCallback((files: MediaFile[]) => {
+    const tableData =
+      files &&
+      files.map(({ key, name, id, size, path, queryOrder, displayURL, draft }) => {
+        const ext = fileExtension(name).toLowerCase();
+        return {
+          key,
+          id,
+          name,
+          path,
+          type: ext.toUpperCase(),
+          size,
+          queryOrder,
+          displayURL,
+          draft,
+          isImage: IMAGE_EXTENSIONS.includes(ext),
+          isViewableImage: IMAGE_EXTENSIONS_VIEWABLE.includes(ext),
+        };
+      });
 
-      /**
-       * Get the sort order for use with `lodash.orderBy`, and always add the
-       * `queryOrder` sort as the lowest priority sort order.
-       */
-      const fieldNames = map(sortFields, 'fieldName').concat('queryOrder');
-      const directions = map(sortFields, 'direction').concat('asc');
-      return orderBy(tableData, fieldNames, directions);
-    },
-    [sortFields],
-  );
+    /**
+     * Get the sort order for use with `lodash.orderBy`, and always add the
+     * `queryOrder` sort as the lowest priority sort order.
+     */
+    // TODO Sorting?
+    // const fieldNames = map(sortFields, 'fieldName').concat('queryOrder');
+    // const directions = map(sortFields, 'direction').concat('asc');
+    // return orderBy(tableData, fieldNames, directions);
+    return tableData;
+  }, []);
 
   const handleClose = useCallback(() => {
     closeMediaLibrary();
@@ -146,17 +171,28 @@ const MediaLibrary = ({
    * Upload a file.
    */
   const handlePersist = useCallback(
-    async (event: any) => {
+    async (event: ChangeEvent<HTMLInputElement> | DragEvent) => {
       /**
        * Stop the browser from automatically handling the file input click, and
        * get the file for upload, and retain the synthetic event for access after
        * the asynchronous persist operation.
        */
-      event.persist();
+
+      let fileList: FileList | null;
+      if ('dataTransfer' in event) {
+        fileList = event.dataTransfer?.files ?? null;
+      } else {
+        event.persist();
+        fileList = event.target.files;
+      }
+
+      if (!fileList) {
+        return;
+      }
+
       event.stopPropagation();
       event.preventDefault();
-      const { files: fileList } = event.dataTransfer || event.target;
-      const files = [...fileList];
+      const files = [...Array.from(fileList)];
       const file = files[0];
       const maxFileSize = typeof config.max_file_size === 'number' ? config.max_file_size : 512000;
 
@@ -173,12 +209,14 @@ const MediaLibrary = ({
       } else {
         await persistMedia(file, { privateUpload, field });
 
-        setSelectedFile(files[0]);
+        setSelectedFile(files[0] as unknown as MediaFile);
 
         scrollToTop();
       }
 
-      event.target.value = null;
+      if (!('dataTransfer' in event)) {
+        event.target.value = '';
+      }
     },
     [config.max_file_size, field, persistMedia, privateUpload],
   );
@@ -197,101 +235,100 @@ const MediaLibrary = ({
     handleClose();
   }, [field, handleClose, insertMedia, selectedFile]);
 
-  //   /**
-  //    * Removes the selected file from the backend.
-  //    */
-  //   handleDelete = async () => {
-  //     const { selectedFile } = this.state;
-  //     const { files, deleteMedia, privateUpload } = this.props;
-  //     if (
-  //       !(await confirm({
-  //         title: 'mediaLibrary.mediaLibrary.onDeleteTitle',
-  //         body: 'mediaLibrary.mediaLibrary.onDeleteBody',
-  //         color: 'error',
-  //       }))
-  //     ) {
-  //       return;
-  //     }
-  //     const file = files.find(file => selectedFile.key === file.key);
-  //     deleteMedia(file, { privateUpload }).then(() => {
-  //       this.setState({ selectedFile: {} });
-  //     });
-  //   };
+  /**
+   * Removes the selected file from the backend.
+   */
+  const handleDelete = useCallback(async () => {
+    if (
+      !(await confirm({
+        title: 'mediaLibrary.mediaLibrary.onDeleteTitle',
+        body: 'mediaLibrary.mediaLibrary.onDeleteBody',
+        color: 'error',
+      }))
+    ) {
+      return;
+    }
+    const file = files.find(file => selectedFile?.key === file.key);
+    if (file) {
+      deleteMedia(file, { privateUpload }).then(() => {
+        setSelectedFile(null);
+      });
+    }
+  }, [deleteMedia, files, privateUpload, selectedFile?.key]);
 
-  //   /**
-  //    * Downloads the selected file.
-  //    */
-  //   handleDownload = () => {
-  //     const { selectedFile } = this.state;
-  //     const { displayURLs } = this.props;
-  //     const url = displayURLs.getIn([selectedFile.id, 'url']) || selectedFile.url;
-  //     if (!url) {
-  //       return;
-  //     }
+  /**
+   * Downloads the selected file.
+   */
+  const handleDownload = useCallback(() => {
+    if (!selectedFile) {
+      return;
+    }
 
-  //     const filename = selectedFile.name;
+    const url = displayURLs[selectedFile.id]?.url ?? selectedFile.url;
+    if (!url) {
+      return;
+    }
 
-  //     const element = document.createElement('a');
-  //     element.setAttribute('href', url);
-  //     element.setAttribute('download', filename);
+    const filename = selectedFile.name;
 
-  //     element.style.display = 'none';
-  //     document.body.appendChild(element);
+    const element = document.createElement('a');
+    element.setAttribute('href', url);
+    element.setAttribute('download', filename);
 
-  //     element.click();
+    element.style.display = 'none';
+    document.body.appendChild(element);
 
-  //     document.body.removeChild(element);
-  //     this.setState({ selectedFile: {} });
-  //   };
+    element.click();
 
-  //   /**
-  //    *
-  //    */
+    document.body.removeChild(element);
+    setSelectedFile(null);
+  }, [displayURLs, selectedFile]);
 
-  //   handleLoadMore = () => {
-  //     const { loadMedia, dynamicSearchQuery, page, privateUpload } = this.props;
-  //     loadMedia({ query: dynamicSearchQuery, page: page + 1, privateUpload });
-  //   };
+  const handleLoadMore = useCallback(() => {
+    loadMedia({ query: dynamicSearchQuery, page: (page ?? 0) + 1, privateUpload });
+  }, [dynamicSearchQuery, loadMedia, page, privateUpload]);
 
-  //   /**
-  //    * Executes media library search for implementations that support dynamic
-  //    * search via request. For these implementations, the Enter key must be
-  //    * pressed to execute search. If assets are being stored directly through
-  //    * the GitHub backend, search is in-memory and occurs as the query is typed,
-  //    * so this handler has no impact.
-  //    */
-  //   handleSearchKeyDown = async event => {
-  //     const { dynamicSearch, loadMedia, privateUpload } = this.props;
-  //     if (event.key === 'Enter' && dynamicSearch) {
-  //       await loadMedia({ query: this.state.query, privateUpload });
-  //       this.scrollToTop();
-  //     }
-  //   };
+  /**
+   * Executes media library search for implementations that support dynamic
+   * search via request. For these implementations, the Enter key must be
+   * pressed to execute search. If assets are being stored directly through
+   * the GitHub backend, search is in-memory and occurs as the query is typed,
+   * so this handler has no impact.
+   */
+  const handleSearchKeyDown = useCallback(
+    async (event: KeyboardEvent) => {
+      if (event.key === 'Enter' && dynamicSearch) {
+        await loadMedia({ query, privateUpload });
+        scrollToTop();
+      }
+    },
+    [dynamicSearch, loadMedia, privateUpload, query],
+  );
 
-  //   /**
-  //    * Updates query state as the user types in the search field.
-  //    */
-  //   handleSearchChange = event => {
-  //     this.setState({ query: event.target.value });
-  //   };
+  /**
+   * Updates query state as the user types in the search field.
+   */
+  const handleSearchChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  }, []);
 
-  //   /**
-  //    * Filters files that do not match the query. Not used for dynamic search.
-  //    */
-  //   queryFilter = (query, files) => {
-  //     /**
-  //      * Because file names don't have spaces, typing a space eliminates all
-  //      * potential matches, so we strip them all out internally before running the
-  //      * query.
-  //      */
-  //     const strippedQuery = query.replace(/ /g, '');
-  //     const matches = fuzzy.filter(strippedQuery, files, { extract: file => file.name });
-  //     const matchFiles = matches.map((match, queryIndex) => {
-  //       const file = files[match.index];
-  //       return { ...file, queryIndex };
-  //     });
-  //     return matchFiles;
-  //   };
+  /**
+   * Filters files that do not match the query. Not used for dynamic search.
+   */
+  const queryFilter = useCallback((query: string, files: { name: string }[]) => {
+    /**
+     * Because file names don't have spaces, typing a space eliminates all
+     * potential matches, so we strip them all out internally before running the
+     * query.
+     */
+    const strippedQuery = query.replace(/ /g, '');
+    const matches = fuzzy.filter(strippedQuery, files, { extract: file => file.name });
+    const matchFiles = matches.map((match, queryIndex) => {
+      const file = files[match.index];
+      return { ...file, queryIndex };
+    });
+    return matchFiles;
+  }, []);
 
   return (
     <MediaLibraryModal
@@ -307,70 +344,27 @@ const MediaLibrary = ({
       hasNextPage={hasNextPage}
       isPaginating={isPaginating}
       privateUpload={privateUpload}
-      query={this.state.query}
-      selectedFile={this.state.selectedFile}
-      handleFilter={this.filterImages}
-      handleQuery={this.queryFilter}
-      toTableData={this.toTableData}
-      handleClose={this.handleClose}
-      handleSearchChange={this.handleSearchChange}
-      handleSearchKeyDown={this.handleSearchKeyDown}
-      handlePersist={this.handlePersist}
-      handleDelete={this.handleDelete}
-      handleInsert={this.handleInsert}
-      handleDownload={this.handleDownload}
+      query={query}
+      selectedFile={selectedFile}
+      handleFilter={filterImages}
+      handleQuery={queryFilter}
+      toTableData={toTableData}
+      handleClose={handleClose}
+      handleSearchChange={handleSearchChange}
+      handleSearchKeyDown={handleSearchKeyDown}
+      handlePersist={handlePersist}
+      handleDelete={handleDelete}
+      handleInsert={handleInsert}
+      handleDownload={handleDownload}
       setScrollContainerRef={scrollContainerRef}
-      handleAssetClick={this.handleAssetClick}
-      handleLoadMore={this.handleLoadMore}
+      handleAssetClick={handleAssetClick}
+      handleLoadMore={handleLoadMore}
       displayURLs={displayURLs}
-      loadDisplayURL={this.loadDisplayURL}
+      loadDisplayURL={loadDisplayURL}
       t={t}
     />
   );
-  F;
 };
-
-// class MediaLibrary extends React.Component {
-//   static propTypes = {
-//   };
-
-//   static defaultProps = {
-//     files: [],
-//   };
-
-//   /**
-//    * The currently selected file and query are tracked in component state as
-//    * they do not impact the rest of the application.
-//    */
-//   state = {
-//     selectedFile: {},
-//     query: '',
-//   };
-
-//   componentDidMount() {
-//     this.props.loadMedia();
-//   }
-
-//   UNSAFE_componentWillReceiveProps(nextProps) {
-//     /**
-//      * We clear old state from the media library when it's being re-opened
-//      * because, when doing so on close, the state is cleared while the media
-//      * library is still fading away.
-//      */
-//     const isOpening = !this.props.isVisible && nextProps.isVisible;
-//     if (isOpening) {
-//       this.setState({ selectedFile: {}, query: '' });
-//     }
-//   }
-
-//   componentDidUpdate(prevProps) {
-//     const isOpening = !prevProps.isVisible && this.props.isVisible;
-
-//     if (isOpening && prevProps.privateUpload !== this.props.privateUpload) {
-//       this.props.loadMedia({ privateUpload: this.props.privateUpload });
-//     }
-//   }
-// }
 
 function mapStateToProps(state: State) {
   const { mediaLibrary } = state;
@@ -406,6 +400,7 @@ const mapDispatchToProps = {
   closeMediaLibrary: closeMediaLibraryAction,
 };
 
-export type MediaLibraryProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+const connector = connect(mapStateToProps, mapDispatchToProps);
+export type MediaLibraryProps = ConnectedProps<typeof connector>;
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate()(MediaLibrary));
+export default connector(translate()(MediaLibrary));

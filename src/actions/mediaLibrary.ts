@@ -62,7 +62,7 @@ export function clearMediaControl(id: string) {
     const state = getState();
     const mediaLibrary = state.mediaLibrary.externalLibrary;
     if (mediaLibrary) {
-      mediaLibrary.onClearControl({ id });
+      mediaLibrary.onClearControl?.({ id });
     }
   };
 }
@@ -72,7 +72,7 @@ export function removeMediaControl(id: string) {
     const state = getState();
     const mediaLibrary = state.mediaLibrary.externalLibrary;
     if (mediaLibrary) {
-      mediaLibrary.onRemoveControl({ id });
+      mediaLibrary.onRemoveControl?.({ id });
     }
   };
 }
@@ -104,7 +104,7 @@ export function closeMediaLibrary() {
     const state = getState();
     const mediaLibrary = state.mediaLibrary.externalLibrary;
     if (mediaLibrary) {
-      mediaLibrary.hide();
+      mediaLibrary.hide?.();
     }
     dispatch(mediaLibraryClosed());
   };
@@ -494,7 +494,7 @@ export function mediaLoading(page: number) {
   } as const;
 }
 
-interface MediaOptions {
+export interface MediaOptions {
   privateUpload?: boolean;
   field?: EntryField;
   page?: number;

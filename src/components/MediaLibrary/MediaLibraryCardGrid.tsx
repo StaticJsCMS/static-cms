@@ -10,6 +10,7 @@ import MediaLibraryCard from './MediaLibraryCard';
 
 import type { GridChildComponentProps } from 'react-window';
 import type { MediaLibraryDisplayURL, MediaLibraryState } from '../../reducers/mediaLibrary';
+import type { MediaFile } from '../../interface';
 
 export interface MediaLibraryCardItem {
   displayURL?: MediaLibraryDisplayURL;
@@ -24,9 +25,9 @@ export interface MediaLibraryCardItem {
 
 export interface MediaLibraryCardGridProps {
   setScrollContainerRef: () => void;
-  mediaItems: MediaLibraryCardItem[];
-  isSelectedFile: (file: MediaLibraryCardItem) => boolean;
-  onAssetClick: (file: MediaLibraryCardItem) => void;
+  mediaItems: MediaFile[];
+  isSelectedFile: (file: MediaFile) => boolean;
+  onAssetClick: (asset: MediaFile) => void;
   canLoadMore?: boolean;
   onLoadMore: () => void;
   isPaginating?: boolean;
@@ -35,7 +36,7 @@ export interface MediaLibraryCardGridProps {
   cardWidth: string;
   cardHeight: string;
   cardMargin: string;
-  loadDisplayURL: (file: MediaLibraryCardItem) => void;
+  loadDisplayURL: (asset: MediaFile) => void;
   isPrivate?: boolean;
   displayURLs: MediaLibraryState['displayURLs'];
 }

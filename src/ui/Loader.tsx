@@ -60,7 +60,7 @@ const LoaderItem = styled.div`
 
 interface LoaderProps {
   children: ReactNode;
-  className: string;
+  className?: string;
 }
 
 const Loader = ({ className, children }: LoaderProps) => {

@@ -32,8 +32,8 @@ const config = produce((state: ConfigState, action: ConfigAction) => {
   }
 }, defaultState);
 
-export function selectLocale(state: CmsConfig) {
-  return state.locale || 'en';
+export function selectLocale(state?: CmsConfig) {
+  return state?.locale || 'en';
 }
 
 export default config;
