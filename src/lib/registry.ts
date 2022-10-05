@@ -1,9 +1,8 @@
 import { oneLine } from 'common-tags';
-import { produce } from 'immer';
-import { Record } from 'immutable';
 
 import EditorComponent from '../valueObjects/EditorComponent';
 
+import type { Pluggable } from 'unified';
 import type {
   AdditionalLink,
   CmsBackendClass,
@@ -15,7 +14,13 @@ import type {
   CmsLocalePhrasesRoot,
   CmsMediaLibrary,
   CmsMediaLibraryOptions,
+  CmsTemplatePreviewComponent,
+  CmsWidgetParam,
+  CmsWidgetValueSerializer,
+  EditorComponentOptions,
+  Entry,
   EventData,
+  RegisteredWidget,
 } from '../interface';
 
 export const allowedEvents = ['prePublish', 'postPublish', 'preSave', 'postSave'] as const;
@@ -28,14 +33,13 @@ const eventHandlers = allowedEvents.reduce((acc, e) => {
 
 interface Registry {
   backends: Record<string, CmsBackendInitializer>;
-  templates: Record<string, any>;
-  previewStyles: any[];
-  widgets: Record<string, any>;
+  templates: Record<string, CmsTemplatePreviewComponent>;
+  widgets: Record<string, RegisteredWidget>;
   icons: Record<string, CmsIcon>;
   additionalLinks: Record<string, AdditionalLink>;
-  editorComponents: Record<string, any>;
-  remarkPlugins: any[];
-  widgetValueSerializers: Record<string, any>;
+  editorComponents: Record<string, EditorComponentOptions>;
+  remarkPlugins: Pluggable[];
+  widgetValueSerializers: Record<string, CmsWidgetValueSerializer>;
   mediaLibraries: (CmsMediaLibrary & { options: CmsMediaLibraryOptions })[];
   locales: Record<string, CmsLocalePhrasesRoot>;
   eventHandlers: typeof eventHandlers;
@@ -47,11 +51,10 @@ interface Registry {
 const registry: Registry = {
   backends: {},
   templates: {},
-  previewStyles: [],
   widgets: {},
   icons: {},
   additionalLinks: {},
-  editorComponents: Record(),
+  editorComponents: {},
   remarkPlugins: [],
   widgetValueSerializers: {},
   mediaLibraries: [],
@@ -60,8 +63,6 @@ const registry: Registry = {
 };
 
 export default {
-  registerPreviewStyle,
-  getPreviewStyles,
   registerPreviewTemplate,
   getPreviewTemplate,
   registerWidget,
@@ -91,32 +92,35 @@ export default {
 };
 
 /**
- * Preview Styles
- *
- * Valid options:
- *  - raw {boolean} if `true`, `style` value is expected to be a CSS string
- */
-export function registerPreviewStyle(style, opts) {
-  registry.previewStyles.push({ ...opts, value: style });
-}
-export function getPreviewStyles() {
-  return registry.previewStyles;
-}
-
-/**
  * Preview Templates
  */
-export function registerPreviewTemplate(name, component) {
+export function registerPreviewTemplate(name: string, component: CmsTemplatePreviewComponent) {
   registry.templates[name] = component;
 }
-export function getPreviewTemplate(name) {
+
+export function getPreviewTemplate(name: string): CmsTemplatePreviewComponent {
   return registry.templates[name];
 }
 
 /**
  * Editor Widgets
  */
-export function registerWidget(name, control, preview, validtor = () => {}, schema = {}) {
+export function registerWidget(widgets: CmsWidgetParam[]): void;
+export function registerWidget(widget: CmsWidgetParam): void;
+export function registerWidget<T = unknown>(
+  name: string,
+  control: string | RegisteredWidget<T>['control'],
+  preview: RegisteredWidget<T>['preview'],
+  validator: RegisteredWidget<T>['validator'],
+  schema: RegisteredWidget<T>['schema'],
+): void;
+export function registerWidget<T = unknown>(
+  name: string | CmsWidgetParam<T> | CmsWidgetParam[],
+  control?: string | RegisteredWidget<T>['control'],
+  preview?: RegisteredWidget<T>['preview'],
+  validator: RegisteredWidget<T>['validator'] = () => true,
+  schema?: RegisteredWidget<T>['schema'],
+): void {
   if (Array.isArray(name)) {
     name.forEach(widget => {
       if (typeof widget !== 'object') {
@@ -128,15 +132,24 @@ export function registerWidget(name, control, preview, validtor = () => {}, sche
   } else if (typeof name === 'string') {
     // A registered widget control can be reused by a new widget, allowing
     // multiple copies with different previews.
-    const newControl = typeof control === 'string' ? registry.widgets[control].control : control;
-    registry.widgets[name] = { control: newControl, preview, validtor, schema };
+    const newControl = (
+      typeof control === 'string' ? registry.widgets[control].control : control
+    ) as RegisteredWidget['control'];
+    if (newControl) {
+      registry.widgets[name] = {
+        control: newControl,
+        preview: preview as RegisteredWidget['preview'],
+        validator: validator as RegisteredWidget['validator'],
+        schema,
+      };
+    }
   } else if (typeof name === 'object') {
     const {
       name: widgetName,
       controlComponent: control,
       previewComponent: preview,
-      validtor = () => {},
-      schema = {},
+      validator = () => true,
+      schema,
       allowMapValue,
       globalStyles,
       ...options
@@ -151,9 +164,9 @@ export function registerWidget(name, control, preview, validtor = () => {}, sche
       throw Error(`Widget "${widgetName}" registered without \`controlComponent\`.`);
     }
     registry.widgets[widgetName] = {
-      control,
-      preview,
-      validtor,
+      control: control as RegisteredWidget['control'],
+      preview: preview as RegisteredWidget['preview'],
+      validator: validator as RegisteredWidget['validator'],
       schema,
       globalStyles,
       allowMapValue,
@@ -163,62 +176,73 @@ export function registerWidget(name, control, preview, validtor = () => {}, sche
     console.error('`registerWidget` failed, called with incorrect arguments.');
   }
 }
-export function getWidget(name) {
-  return registry.widgets[name];
+
+export function getWidget<T = unknown>(name: string): RegisteredWidget<T> {
+  return registry.widgets[name] as RegisteredWidget<T>;
 }
-export function getWidgets() {
-  return produce(Object.entries(registry.widgets), draft => {
-    return draft.map(([key, value]) => ({ name: key, ...value }));
-  });
+
+export function getWidgets(): ({
+  name: string;
+} & RegisteredWidget<unknown>)[] {
+  return Object.entries(registry.widgets).map(
+    ([name, widget]: [string, RegisteredWidget<unknown>]) => ({
+      name,
+      ...widget,
+    }),
+  );
 }
-export function resolveWidget(name) {
+
+export function resolveWidget<T = unknown>(name: string): RegisteredWidget<T> {
   return getWidget(name || 'string') || getWidget('unknown');
 }
 
 /**
  * Markdown Editor Custom Components
  */
-export function registerEditorComponent(component) {
+export function registerEditorComponent(component: EditorComponentOptions) {
   const plugin = EditorComponent(component);
-  if (plugin.type === 'code-block') {
-    const codeBlock = registry.editorComponents.find(c => c.type === 'code-block');
+  if ('type' in plugin && plugin.type === 'code-block') {
+    const codeBlock = Object.values(registry.editorComponents).find(
+      c => 'type' in c && c.type === 'code-block',
+    );
 
     if (codeBlock) {
       console.warn(oneLine`
         Only one editor component of type "code-block" may be registered. Previously registered code
         block component(s) will be overwritten.
       `);
-      registry.editorComponents = registry.editorComponents.delete(codeBlock.id);
     }
   }
 
-  registry.editorComponents = registry.editorComponents.set(plugin.id, plugin);
+  registry.editorComponents[plugin.id] = plugin;
 }
-export function getEditorComponents() {
+
+export function getEditorComponents(): Record<string, EditorComponentOptions> {
   return registry.editorComponents;
 }
 
 /**
  * Remark plugins
  */
-/** @typedef {import('unified').Pluggable} RemarkPlugin */
-/** @type {(plugin: RemarkPlugin) => void} */
-export function registerRemarkPlugin(plugin) {
+export function registerRemarkPlugin(plugin: Pluggable) {
   registry.remarkPlugins.push(plugin);
 }
-/** @type {() => Array<RemarkPlugin>} */
-export function getRemarkPlugins() {
+
+export function getRemarkPlugins(): Pluggable[] {
   return registry.remarkPlugins;
 }
 
 /**
  * Widget Serializers
  */
-export function registerWidgetValueSerializer(widgetName, serializer) {
+export function registerWidgetValueSerializer(
+  widgetName: string,
+  serializer: CmsWidgetValueSerializer,
+) {
   registry.widgetValueSerializers[widgetName] = serializer;
 }
 
-export function getWidgetValueSerializer(widgetName) {
+export function getWidgetValueSerializer(widgetName: string): CmsWidgetValueSerializer | undefined {
   return registry.widgetValueSerializers[widgetName];
 }
 
@@ -296,7 +320,10 @@ export async function invokeEvent({ name, data }: { name: AllowedEvent; data: Ev
   for (const { handler, options } of handlers) {
     const result = await handler(_data, options);
     if (result !== undefined) {
-      const entry = _data.entry.set('data', result);
+      const entry = {
+        ..._data.entry,
+        data: result,
+      } as Entry;
       _data = { ...data, entry };
     }
   }

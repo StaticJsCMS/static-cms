@@ -1,9 +1,9 @@
-import { Record, List } from 'immutable';
+import merge from 'lodash/merge';
 
 import { getWidgetValueSerializer } from './registry';
 import { isNullish } from './util/null.util';
 
-import type { EntryField } from '../interface';
+import type { EntryData, EntryField } from '../interface';
 
 /**
  * Methods for serializing/deserializing entry field values. Most widgets don't
@@ -24,7 +24,7 @@ import type { EntryField } from '../interface';
  * handlers run on persist.
  */
 function runSerializer(
-  values: Record<string, unknown>,
+  values: EntryData,
   fields: EntryField[] | undefined,
   method: 'serialize' | 'deserialize',
 ) {
@@ -34,28 +34,29 @@ function runSerializer(
    * registered serializers.  If the field is a list or object, call recursively
    * for nested fields.
    */
-  let serializedData: Record<string, unknown> =
+  let serializedData =
     fields?.reduce((acc, field) => {
       const fieldName = field.name;
-      const value = values.get(fieldName);
+      const value = values[fieldName] as EntryData;
       const serializer = getWidgetValueSerializer(field.widget);
       const nestedFields = field.fields;
 
       // Call recursively for fields within lists
-      if (nestedFields && List.isList(value)) {
+      if (nestedFields && Array.isArray(value)) {
         acc[fieldName] = value.map(val => {
-          if (Record.isMap(val)) {
-            runSerializer(val as Record<string, unknown>, nestedFields, method);
+          if (typeof val === 'object') {
+            runSerializer(val as Record<string, EntryData>, nestedFields, method);
           }
 
           return val;
         });
+
         return acc;
       }
 
       // Call recursively for fields within objects
-      if (nestedFields && Record.isMap(value)) {
-        acc[fieldName] = runSerializer(value as Record<string, unknown>, nestedFields, method);
+      if (nestedFields && typeof value === 'object') {
+        acc[fieldName] = runSerializer(value as Record<string, EntryData>, nestedFields, method);
         return acc;
       }
 
@@ -72,18 +73,18 @@ function runSerializer(
       }
 
       return acc;
-    }, {} as Record<string, unknown>) ?? {};
+    }, {} as EntryData) ?? {};
 
   //preserve unknown fields value
-  serializedData = values.mergeDeep(serializedData);
+  serializedData = merge(values, serializedData);
 
   return serializedData;
 }
 
-export function serializeValues(values: Record<string, unknown>, fields: EntryField[] | undefined) {
+export function serializeValues(values: EntryData, fields: EntryField[] | undefined) {
   return runSerializer(values, fields, 'serialize');
 }
 
-export function deserializeValues(values: Record<string, unknown>, fields: EntryField[] | undefined) {
+export function deserializeValues(values: EntryData, fields: EntryField[] | undefined) {
   return runSerializer(values, fields, 'deserialize');
 }

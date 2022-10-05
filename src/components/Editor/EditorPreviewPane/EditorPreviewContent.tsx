@@ -1,17 +1,14 @@
-/* eslint-disable @typescript-eslint/consistent-type-imports */
-/* eslint-disable func-style */
 import styled from '@emotion/styled';
-import React, { ComponentType, ReactNode, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
-import type { CmsWidgetPreviewProps } from '../../../interface';
+import type { CmsTemplatePreviewComponent, CmsTemplatePreviewProps } from '../../../interface';
+import type { ReactNode } from 'react';
 
 interface PreviewContentProps {
-  previewComponent?:
-    | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
-    | ComponentType<CmsWidgetPreviewProps>;
-  previewProps: CmsWidgetPreviewProps;
+  previewComponent?: CmsTemplatePreviewComponent;
+  previewProps: CmsTemplatePreviewProps;
 }
 
 const StyledPreviewContent = styled.div`
@@ -45,7 +42,7 @@ const PreviewContent = ({ previewComponent, previewProps }: PreviewContentProps)
         <StyledPreviewContent className="preview-content">{children}</StyledPreviewContent>
       </ScrollSyncPane>,
       element,
-      'preview-content'
+      'preview-content',
     );
   }, [previewComponent, previewProps, element]);
 };

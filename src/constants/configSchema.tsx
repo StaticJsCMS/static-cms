@@ -1,16 +1,17 @@
 import AJV from 'ajv';
-import {
-  select,
-  uniqueItemProperties,
-  instanceof as instanceOf,
-  prohibited,
-} from 'ajv-keywords/keywords';
+import select from 'ajv-keywords/dist/keywords/select';
+import uniqueItemProperties from 'ajv-keywords/dist/keywords/uniqueItemProperties';
+import instanceOf from 'ajv-keywords/dist/keywords/instanceof';
+import prohibited from 'ajv-keywords/dist/keywords/prohibited';
 import ajvErrors from 'ajv-errors';
 import uuid from 'uuid/v4';
 
 import { formatExtensions, frontmatterFormats, extensionFormatters } from '../formats/formats';
 import { getWidgets } from '../lib/registry';
 import { I18N_STRUCTURE, I18N_FIELD } from '../lib/i18n';
+
+import type { ErrorObject } from 'ajv';
+import type { CmsConfig } from '../interface';
 
 const localeType = { type: 'string', minLength: 2, maxLength: 10, pattern: '^[a-zA-Z-_]+$' };
 
@@ -328,15 +329,18 @@ function getConfigSchema() {
 }
 
 function getWidgetSchemas() {
-  const schemas = getWidgets().map(widget => ({ [widget.name]: widget.schema }));
-  return Object.assign(...schemas);
+  const schemas = getWidgets().reduce((acc, widget) => {
+    acc[widget.name] = widget.schema ?? {};
+    return acc;
+  }, {} as Record<string, unknown>);
+  return { ...schemas };
 }
 
 class ConfigError extends Error {
-  constructor(errors, ...args) {
+  constructor(errors: ErrorObject<string, Record<string, unknown>, unknown>[]) {
     const message = errors
-      .map(({ message, dataPath }) => {
-        const dotPath = dataPath
+      .map(({ message, schemaPath }) => {
+        const dotPath = schemaPath
           .slice(1)
           .split('/')
           .map(seg => (seg.match(/^\d+$/) ? `[${seg}]` : `.${seg}`))
@@ -345,10 +349,8 @@ class ConfigError extends Error {
         return `${dotPath ? `'${dotPath}'` : 'config'} ${message}`;
       })
       .join('\n');
-    super(message, ...args);
 
-    this.errors = errors;
-    this.message = message;
+    super(message);
   }
 
   toString() {
@@ -360,7 +362,7 @@ class ConfigError extends Error {
  * `validateConfig` is a pure function. It does not mutate
  * the config that is passed in.
  */
-export function validateConfig(config) {
+export function validateConfig(config: CmsConfig) {
   const ajv = new AJV({ allErrors: true, $data: true });
   uniqueItemProperties(ajv);
   select(ajv);
@@ -370,11 +372,11 @@ export function validateConfig(config) {
 
   const valid = ajv.validate(getConfigSchema(), config);
   if (!valid) {
-    const errors = ajv.errors.map(e => {
+    const errors = ajv.errors?.map(e => {
       switch (e.keyword) {
         // TODO: remove after https://github.com/ajv-validator/ajv-keywords/pull/123 is merged
         case 'uniqueItemProperties': {
-          const path = e.dataPath || '';
+          const path = e.schemaPath || '';
           let newError = e;
           if (path.endsWith('/fields')) {
             newError = { ...e, message: 'fields names must be unique' };
@@ -386,7 +388,7 @@ export function validateConfig(config) {
           return newError;
         }
         case 'instanceof': {
-          const path = e.dataPath || '';
+          const path = e.schemaPath || '';
           let newError = e;
           if (/fields\/\d+\/pattern\/\d+/.test(path)) {
             newError = {
@@ -401,6 +403,6 @@ export function validateConfig(config) {
       }
     });
     console.error('Config Errors', errors);
-    throw new ConfigError(errors);
+    throw new ConfigError(errors ?? []);
   }
 }

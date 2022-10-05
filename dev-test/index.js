@@ -123,34 +123,9 @@ const RelationKitchenSinkPostPreview = window.createClass({
   },
 });
 
-const previewStyles = `
-  html,
-  body {
-    color: #444;
-    font-size: 14px;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  }
-
-  body {
-    padding: 20px;
-  }
-
-  h1 {
-    margin-top: 20px;
-    color: #666;
-    font-weight: bold;
-    font-size: 32px;
-  }
-
-  img {
-    max-width: 100%;
-  }
-`;
-
 window.CMS.registerPreviewTemplate('posts', PostPreview);
 window.CMS.registerPreviewTemplate('general', GeneralPreview);
 window.CMS.registerPreviewTemplate('authors', AuthorsPreview);
-window.CMS.registerPreviewStyle(previewStyles, { raw: true });
 // Pass the name of a registered control to reuse with a new widget preview.
 window.CMS.registerWidget('relationKitchenSinkPost', 'relation', RelationKitchenSinkPostPreview);
 window.CMS.registerAdditionalLink('example', 'Example.com', 'https://example.com', 'page');

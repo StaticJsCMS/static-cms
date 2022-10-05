@@ -1,6 +1,14 @@
 import React from 'react';
 
-const image = {
+import type { EditorComponentManualOptions } from '../../interface';
+
+interface ImageData {
+  alt: string;
+  image: string;
+  title: string;
+}
+
+const image: EditorComponentManualOptions<ImageData> = {
   label: 'Image',
   id: 'image',
   fromBlock: match =>
@@ -14,7 +22,7 @@ const image = {
   // eslint-disable-next-line react/display-name
   toPreview: ({ alt, image, title }, getAsset, fields) => {
     const imageField = fields?.find(f => f.widget === 'image');
-    const src = getAsset(image, imageField);
+    const src = getAsset(image, imageField).toString();
     return <img src={src || ''} alt={alt || ''} title={title || ''} />;
   },
   pattern: /^!\[(.*)\]\((.*?)(\s"(.*)")?\)$/,

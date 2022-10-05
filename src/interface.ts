@@ -1,5 +1,8 @@
+import type { JSONSchemaType } from 'ajv';
 import type { ComponentType, FocusEventHandler } from 'react';
+import type { ReactNode } from 'react-markdown';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
+import type { Pluggable } from 'unified';
 import type { MediaFile as BackendMediaFile } from './backend';
 import type { CollectionType } from './constants/collectionTypes';
 import type { formatExtensions } from './formats/formats';
@@ -54,9 +57,19 @@ export interface GroupOfEntries {
   paths: Set<string>;
 }
 
-export interface EntryMeta {
+export type ValueOrNestedValue =
+  | string
+  | number
+  | boolean
+  | ValueOrNestedValue[]
+  | {
+      [key: string]: ValueOrNestedValue;
+    };
+
+export type EntryData = Record<string, ValueOrNestedValue>;
+export type EntryMeta = {
   path?: string;
-}
+} & Record<string, ValueOrNestedValue>;
 
 export interface Entry {
   collection: string;
@@ -64,14 +77,14 @@ export interface Entry {
   path: string;
   partial: boolean;
   raw: string;
-  data: Record<string, unknown>;
+  data: EntryData;
   label: string | null;
   isModification: boolean | null;
   mediaFiles: MediaFile[];
   author: string;
   updatedOn: string;
   status?: string;
-  meta: { path?: string } & Record<string, unknown>;
+  meta: EntryMeta;
   newRecord?: boolean;
   isFetching?: boolean;
   isPersisting?: boolean;
@@ -291,16 +304,11 @@ export interface EntriesMoveSuccessPayload extends EntryPayload {
 
 export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
-export type GetAssetFunction = (asset: string) => {
-  url: string;
-  path: string;
-  field?: any;
-  fileObj: File;
-};
+export type GetAssetFunction = (path: string, field?: EntryField) => AssetProxy;
 
-export interface CmsWidgetControlProps<T = any> {
+export interface CmsWidgetControlProps<T = unknown> {
   value: T;
-  field: Record<string, any>;
+  field: CmsField;
   onChange: (value: T) => void;
   forID: string;
   classNameWrapper: string;
@@ -309,31 +317,70 @@ export interface CmsWidgetControlProps<T = any> {
   t: t;
 }
 
-export interface CmsWidgetPreviewProps<T = any> {
+export interface CmsWidgetPreviewProps<T = unknown> {
   value: T;
-  field: Record<string, any>;
-  metadata: Record<string, any>;
+  field: CmsField;
+  metadata?: Record<string, unknown>;
   getAsset: GetAssetFunction;
-  entry: Record<string, any>;
-  fieldsMetaData: Record<string, any>;
+  entry: Entry;
+  fieldsMetaData: Record<string, unknown>;
+  resolveWidget: <W = unknown>(name: string) => RegisteredWidget<W>;
+  getRemarkPlugins: () => Pluggable[];
 }
 
-export interface CmsWidgetParam<T = any> {
-  name: string;
-  controlComponent: ComponentType<CmsWidgetControlProps<T>>;
-  previewComponent?: ComponentType<CmsWidgetPreviewProps<T>>;
-  validator?: (props: {
-    field: Record<string, any>;
+export type CmsWidgetPreviewComponent<T = unknown> =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
+  | ComponentType<CmsWidgetPreviewProps<T>>;
+
+export interface CmsTemplatePreviewProps {
+  collection: Collection;
+  fields: CmsField[];
+  entry: Entry;
+  fieldsMetaData: Record<string, EntryMeta>;
+  getAsset: GetAssetFunction;
+  widgetFor: (name: string) => ReactNode;
+  widgetsFor: (name: string) =>
+    | {
+        data: EntryData | null;
+        widgets: Record<string, React.ReactNode>;
+      }
+    | {
+        data: EntryData | null;
+        widgets: Record<string, React.ReactNode>;
+      }[];
+}
+
+export type CmsTemplatePreviewComponent =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
+  | ComponentType<CmsTemplatePreviewProps>;
+
+export interface RegisteredWidget<T = unknown> extends Record<string, unknown> {
+  control: ComponentType<CmsWidgetControlProps<T>>;
+  preview?: CmsWidgetPreviewComponent<T>;
+  validator: (props: {
+    field: CmsField;
     value: T | undefined | null;
     t: t;
-  }) => boolean | { error: any } | Promise<boolean | { error: any }>;
-  globalStyles?: any;
+  }) => boolean | { error: unknown } | Promise<boolean | { error: unknown }>;
+  schema?: JSONSchemaType<unknown>;
 }
 
-export interface CmsWidget<T = any> {
+export interface CmsWidgetParam<T = unknown> extends Record<string, unknown> {
+  name: string;
+  controlComponent: RegisteredWidget<T>['control'];
+  previewComponent: RegisteredWidget<T>['preview'];
+  validator?: RegisteredWidget<T>['validator'];
+  schema: RegisteredWidget<T>['schema'];
+  globalStyles?: unknown;
+  allowMapValue?: boolean;
+}
+
+export interface CmsWidget<T = unknown> {
   control: ComponentType<CmsWidgetControlProps<T>>;
-  preview?: ComponentType<CmsWidgetPreviewProps<T>>;
-  globalStyles?: any;
+  preview?: CmsWidgetPreviewComponent<T>;
+  globalStyles?: unknown;
 }
 
 export interface PreviewTemplateComponentProps {
@@ -392,6 +439,7 @@ export interface AssetProxy {
   path: string;
   fileObj?: File;
   toBase64?: () => Promise<string>;
+  toString: () => string;
 }
 
 export interface BackendEntry {
@@ -480,28 +528,29 @@ export type CmsLocalePhrases = string | { [property: string]: CmsLocalePhrases }
 
 export type CmsIcon = () => JSX.Element;
 
-export type CmsWidgetValueSerializer = any; // TODO: type properly
+export type CmsWidgetValueSerializer = {
+  serialize: (value: EntryData) => EntryData;
+  deserialize: (value: EntryData) => EntryData;
+};
 
-export type CmsMediaLibraryOptions = Record<string, unknown>; // TODO: type properly
+export type CmsMediaLibraryOptions = Record<string, unknown>;
 
 export interface CmsMediaLibraryInitOptions {
   options: Record<string, unknown> | undefined;
   handleInsert: (url: string | string[]) => void;
 }
 
-export interface CmsMediaLibrary {
+export interface CmsMediaLibraryExternalLibrary {
   name: string;
   config?: CmsMediaLibraryOptions;
   init: ({ options, handleInsert }: CmsMediaLibraryInitOptions) => Promise<MediaLibraryInstance>;
 }
 
-export interface PreviewStyleOptions {
-  raw: boolean;
+export interface CmsMediaLibraryInternalOptions {
+  allow_multiple?: boolean;
 }
 
-export interface PreviewStyle extends PreviewStyleOptions {
-  value: string;
-}
+export type CmsMediaLibrary = CmsMediaLibraryExternalLibrary | CmsMediaLibraryInternalOptions;
 
 export type CmsBackendType =
   | 'azure'
@@ -943,12 +992,6 @@ export interface CmsBackendInitializer {
   init: (config: CmsConfig, options: CmsBackendInitializerOptions) => CmsBackendClass;
 }
 
-export interface EditorComponentField {
-  name: string;
-  label: string;
-  widget: string;
-}
-
 export interface EditorComponentWidgetOptions {
   id: string;
   label: string;
@@ -956,15 +999,15 @@ export interface EditorComponentWidgetOptions {
   type: string;
 }
 
-export interface EditorComponentManualOptions {
+export interface EditorComponentManualOptions<T = EntryData> {
   id: string;
   label: string;
-  fields: EditorComponentField[];
+  fields: CmsField[];
   pattern: RegExp;
   allow_add?: boolean;
-  fromBlock: (match: RegExpMatchArray) => any;
-  toBlock: (data: any) => string;
-  toPreview: (data: any) => string;
+  fromBlock: (match: RegExpMatchArray) => T;
+  toBlock: (data: T) => string;
+  toPreview: (data: T, getAsset: GetAssetFunction, fields: EntryField[]) => ReactNode;
 }
 
 export function isEditorComponentWidgetOptions(
@@ -982,7 +1025,10 @@ export interface EventData {
 
 export interface CmsEventListener {
   name: AllowedEvent;
-  handler: (data: EventData, options: Record<string, unknown>) => Promise<EventData | void>;
+  handler: (
+    data: EventData,
+    options: Record<string, unknown>,
+  ) => Promise<EntryData | undefined | null | void>;
 }
 
 export type CmsEventListenerOptions = Record<string, unknown>;

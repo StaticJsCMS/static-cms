@@ -10,7 +10,7 @@ export interface InferredField {
   type: string;
   secondaryTypes: string[];
   synonyms: string[];
-  defaultPreview: (value: ReactNode) => JSX.Element | ReactNode;
+  defaultPreview: (value: string | boolean | number) => JSX.Element | ReactNode;
   fallbackToFirstField: boolean;
   showError: boolean;
 }

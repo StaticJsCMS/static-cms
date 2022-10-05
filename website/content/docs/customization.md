@@ -6,49 +6,11 @@ group: Customization
 
 The Static CMS exposes a `window.CMS` global object that you can use to register custom widgets, previews and editor plugins. The available customization methods are:
 
-* **registerPreviewStyle:** Register a custom stylesheet to use on the preview pane.
 * **registerPreviewTemplate:** Registers a template for a collection.
 
 ### React Components inline interaction
 
 Static CMS is a collection of React components and exposes two constructs globally to allow you to create components inline: ‘createClass’ and ‘h’ (alias for React.createElement).
-
-## `registerPreviewStyle`
-
-Register a custom stylesheet to use on the preview pane.
-
-```js
-CMS.registerPreviewStyle(file);
-```
-
-**Params:**
-
-* **file:** css file path
-
-**Example:**
-
-```html
-// index.html
-<script src="https://unpkg.com/@staticcms/core@%5E0.1.0/dist/static-cms-core.js"></script>
-<script>
-  CMS.registerPreviewStyle("/example.css");
-</script>
-```
-
-```css
-/* example.css */
-
-html,
-body {
-  color: #444;
-  font-size: 14px;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-
-body {
-  padding: 20px;
-}
-```
 
 ## `registerPreviewTemplate`
 

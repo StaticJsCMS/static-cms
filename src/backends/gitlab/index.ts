@@ -1,10 +1,3 @@
-import GitLabBackend from './implementation';
-import API from './API';
-import AuthenticationPage from './AuthenticationPage';
-
-export const StaticCmsBackendGitlab = {
-  GitLabBackend,
-  API,
-  AuthenticationPage,
-};
-export { GitLabBackend, API, AuthenticationPage };
+export { default as GitLabBackend } from './implementation';
+export { default as API } from './API';
+export { default as AuthenticationPage } from './AuthenticationPage';

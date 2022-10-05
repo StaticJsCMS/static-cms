@@ -87,7 +87,7 @@ export function boundGetAsset(
   collection: Collection,
   entry: Entry,
 ) {
-  function bound(path: string, field: EntryField) {
+  function bound(path: string, field?: EntryField) {
     const asset = dispatch(getAsset({ collection, entry, path, field }));
     return asset;
   }

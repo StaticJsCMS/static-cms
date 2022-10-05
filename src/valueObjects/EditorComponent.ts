@@ -1,4 +1,3 @@
-import { fromJS } from 'immutable';
 import isFunction from 'lodash/isFunction';
 
 import { isEditorComponentWidgetOptions } from '../interface';
@@ -11,7 +10,7 @@ function bind(fn: unknown) {
   return isFunction(fn) && fn.bind(null);
 }
 
-export default function createEditorComponent(options: EditorComponentOptions) {
+export default function createEditorComponent(options: EditorComponentOptions): EditorComponentOptions {
   if (isEditorComponentWidgetOptions(options)) {
     const {
       id = null,
@@ -48,7 +47,7 @@ export default function createEditorComponent(options: EditorComponentOptions) {
     fromBlock: bind(fromBlock) || (() => ({})),
     toBlock: bind(toBlock) || (() => 'Plugin'),
     toPreview: bind(toPreview) || bind(toBlock) || (() => 'Plugin'),
-    fields: fromJS(fields),
+    fields,
     ...remainingConfig,
   };
 }
