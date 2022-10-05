@@ -5,7 +5,7 @@ import set from 'lodash/set';
 
 import { selectEntrySlug } from '../reducers/collections';
 
-import type { Collection, Entry, EntryData, EntryField } from '../interface';
+import type { CmsField, Collection, Entry, EntryData, EntryField } from '../interface';
 import type { EntryDraftState } from '../reducers/entryDraft';
 
 export const I18N = 'i18n';
@@ -48,7 +48,7 @@ export function getI18nFilesDepth(collection: Collection, depth: number) {
   return depth;
 }
 
-export function isFieldTranslatable(field: EntryField, locale: string, defaultLocale: string) {
+export function isFieldTranslatable(field: CmsField, locale: string, defaultLocale: string) {
   const isTranslatable = locale !== defaultLocale && field.i18n === I18N_FIELD.TRANSLATE;
   return isTranslatable;
 }

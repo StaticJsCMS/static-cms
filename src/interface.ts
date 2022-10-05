@@ -323,7 +323,7 @@ export interface CmsWidgetPreviewProps<T = unknown> {
   metadata?: Record<string, unknown>;
   getAsset: GetAssetFunction;
   entry: Entry;
-  fieldsMetaData: Record<string, EntryMeta>;
+  fieldsMetaData: EntryMeta;
   resolveWidget: <W = unknown>(name: string) => RegisteredWidget<W>;
   getRemarkPlugins: () => PluggableList;
 }
