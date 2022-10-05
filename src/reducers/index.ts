@@ -1,18 +1,19 @@
 import auth from './auth';
-import config from './config';
-import integrations, * as fromIntegrations from './integrations';
-import entries, * as fromEntries from './entries';
-import cursors from './cursors';
-import entryDraft from './entryDraft';
 import collections from './collections';
-import search from './search';
-import medias from './medias';
-import mediaLibrary from './mediaLibrary';
+import config from './config';
+import cursors from './cursors';
+import entries, * as fromEntries from './entries';
+import entryDraft from './entryDraft';
 import globalUI from './globalUI';
-import status from './status';
+import integrations, * as fromIntegrations from './integrations';
+import mediaLibrary from './mediaLibrary';
+import medias from './medias';
 import scroll from './scroll';
+import search from './search';
+import status from './status';
 
-import type { State, Collection } from '../interface';
+import type { Collection, State } from '../interface';
+import type { IntegrationHooks } from './integrations';
 
 const reducers = {
   auth,
@@ -54,6 +55,10 @@ export function selectSearchedEntries(state: State, availableCollections: string
     .map(entryId => fromEntries.selectEntry(state.entries, entryId!.collection, entryId!.slug));
 }
 
-export function selectIntegration(state: State, collection: string | null, hook: string) {
+export function selectIntegration<K extends keyof IntegrationHooks>(
+  state: State,
+  collection: string | null,
+  hook: string,
+): IntegrationHooks[K] | false {
   return fromIntegrations.selectIntegration(state.integrations, collection, hook);
 }

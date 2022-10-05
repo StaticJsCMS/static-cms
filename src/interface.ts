@@ -90,7 +90,7 @@ export interface Entry {
   isPersisting?: boolean;
   error?: string;
   i18n?: {
-    [locale: string]: any;
+    [locale: string]: CmsLocalePhrasesRoot;
   };
 }
 
@@ -963,14 +963,7 @@ export interface CmsConfig {
   media_folder_relative?: boolean;
   media_library?: CmsMediaLibrary;
   load_config_file?: boolean;
-  integrations?: {
-    hooks: string[];
-    provider: string;
-    collections?: '*' | string[];
-    applicationID?: string;
-    apiKey?: string;
-    getSignedFormURL?: string;
-  }[];
+  integrations?: CmsIntegration[];
   slug?: CmsSlug;
   i18n?: CmsI18nConfig;
   local_backend?: boolean | CmsLocalBackend;
@@ -1051,4 +1044,40 @@ export interface AuthenticationPageProps {
   config: CmsConfig;
   error?: string | undefined;
   clearHash?: () => void;
+}
+
+export type CmsIntegration = {
+  collections?: '*' | string[];
+} & (AlgoliaIntegration | AssetStoreIntegration);
+
+export type CmsIntegrationProvider = CmsIntegration['provider'];
+export type CmsSearchIntegrationProvider = 'algolia';
+
+export interface AlgoliaIntegration extends AlgoliaConfig {
+  provider: 'algolia';
+}
+
+export interface AlgoliaConfig {
+  applicationID: string;
+  apiKey: string;
+  indexPrefix?: string;
+}
+
+export interface AssetStoreIntegration extends AssetStoreConfig {
+  provider: 'asset-store';
+}
+
+export interface AssetStoreConfig {
+  shouldConfirmUpload?: boolean;
+  getSignedFormURL: string;
+}
+
+export interface SearchResponse {
+  entries: Entry[];
+  pagination: number;
+}
+
+export interface SearchQueryResponse {
+  hits: Entry[];
+  query: string;
 }

@@ -1,7 +1,7 @@
 import isBoolean from 'lodash/isBoolean';
 
 import type { MediaFile } from '../backend';
-import type { RawEntry } from '../interface';
+import type { Entry } from '../interface';
 
 interface Options {
   partial?: boolean;
@@ -22,7 +22,7 @@ interface Options {
 }
 
 export function createEntry(collection: string, slug = '', path = '', options: Options = {}) {
-  const returnObj: RawEntry = {
+  const returnObj: Entry = {
     collection,
     slug,
     path,

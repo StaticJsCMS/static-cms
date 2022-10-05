@@ -63,6 +63,8 @@ import type {
   EntryField,
   FilterRule,
   ImplementationEntry,
+  SearchQueryResponse,
+  SearchResponse,
   State,
   User,
 } from './interface';
@@ -526,7 +528,7 @@ export class Backend {
     return entries;
   }
 
-  async search(collections: Collection[], searchTerm: string) {
+  async search(collections: Collection[], searchTerm: string): Promise<SearchResponse> {
     // Perform a local search by requesting all entries. For each
     // collection, load it, search, and call onCollectionResults with
     // its results.
@@ -582,7 +584,7 @@ export class Backend {
       .filter(({ score }: fuzzy.FilterResult<Entry>) => score > 5)
       .sort(sortByScore)
       .map((f: fuzzy.FilterResult<Entry>) => f.original);
-    return { entries: hits };
+    return { entries: hits, pagination: 1 };
   }
 
   async query(
@@ -591,7 +593,7 @@ export class Backend {
     searchTerm: string,
     file?: string,
     limit?: number,
-  ) {
+  ): Promise<SearchQueryResponse> {
     let entries = await this.listAllEntries(collection);
     if (file) {
       entries = entries.filter(e => e.slug === file);
