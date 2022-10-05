@@ -71,7 +71,7 @@ export interface Entry {
   author: string;
   updatedOn: string;
   status?: string;
-  meta: { path?: string };
+  meta: { path?: string } & Record<string, unknown>;
   newRecord?: boolean;
   isFetching?: boolean;
   isPersisting?: boolean;
