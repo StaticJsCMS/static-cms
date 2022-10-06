@@ -1,4 +1,9 @@
-import React from 'react';
+import Check from '@mui/icons-material/Check';
+import Button from '@mui/material/Button';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
 import type { FilterMap, TranslatedProps, ViewFilter } from '../../interface';
@@ -17,14 +22,17 @@ const FilterControl = ({
 }: TranslatedProps<FilterControlProps>) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
+  }, []);
+  const handleClose = useCallback(() => {
     setAnchorEl(null);
-  };
+  }, []);
 
-  const hasActiveFilter = Object.values(filter).find(f => f.active === true);
+  const hasActiveFilter = useMemo(
+    () => Object.values(filter).find(f => f.active === true),
+    [filter],
+  );
 
   // TODO Fix active filter
   // <ControlButton active={hasActiveFilter} title={t('collection.collectionTop.filterBy')} />
@@ -37,7 +45,7 @@ const FilterControl = ({
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-        t('collection.collectionTop.filterBy')
+        {t('collection.collectionTop.filterBy')}
       </Button>
       <Menu
         id="basic-menu"
@@ -48,36 +56,21 @@ const FilterControl = ({
           'aria-labelledby': 'basic-button',
         }}
       >
-      {viewFilters.map(viewFilter => {
-        return (
-        <MenuItem onClick={() => onFilterClick(viewFilter)}>Profile</MenuItem>
-      })}
+        {viewFilters.map(viewFilter => {
+          const checked = filter[viewFilter.id]?.active ?? false;
+          return (
+            <MenuItem key={viewFilter.id} onClick={() => onFilterClick(viewFilter)}>
+              {checked ? (
+                <ListItemIcon>
+                  <Check />
+                </ListItemIcon>
+              ) : null}
+              {viewFilter.label}
+            </MenuItem>
+          );
+        })}
       </Menu>
     </div>
-
-
-
-    <Dropdown
-      renderButton={() => {
-        return (
-        );
-      }}
-      closeOnSelection={false}
-      dropdownTopOverlap="30px"
-      dropdownPosition="left"
-    >
-      {viewFilters.map(viewFilter => {
-        return (
-          <DropdownCheckedItem
-            key={viewFilter.id}
-            label={viewFilter.label}
-            id={viewFilter.id}
-            checked={filter.getIn([viewFilter.id, 'active'], false)}
-            onClick={() => onFilterClick(viewFilter)}
-          />
-        );
-      })}
-    </Dropdown>
   );
 };
 

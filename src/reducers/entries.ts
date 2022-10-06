@@ -36,26 +36,14 @@ import { selectSortDataPath } from './collections';
 
 import type { EntriesAction } from '../actions/entries';
 import type { SearchAction } from '../actions/search';
+import type { CollectionViewStyle } from '../constants/collectionViews';
 import type {
-  ChangeViewStylePayload,
   CmsConfig,
   Collection,
   CollectionFile,
   Entities,
-  EntriesFilterFailurePayload,
-  EntriesFilterRequestPayload,
-  EntriesGroupFailurePayload,
-  EntriesGroupRequestPayload,
-  EntriesRequestPayload,
-  EntriesSortFailurePayload,
-  EntriesSortRequestPayload,
-  EntriesSuccessPayload,
   Entry,
-  EntryDeletePayload,
-  EntryFailurePayload,
   EntryField,
-  EntryRequestPayload,
-  EntrySuccessPayload,
   Filter,
   FilterMap,
   Group,
@@ -119,7 +107,7 @@ function persistSort(sort: Sort | undefined) {
 }
 
 const loadViewStyle = once(() => {
-  const viewStyle = localStorage.getItem(viewStyleKey);
+  const viewStyle = localStorage.getItem(viewStyleKey) as CollectionViewStyle;
   if (viewStyle) {
     return viewStyle;
   }
@@ -146,7 +134,7 @@ export type EntriesState = {
   sort: Sort;
   filter?: Filter;
   group?: Group;
-  viewStyle: string;
+  viewStyle: CollectionViewStyle;
 };
 
 function entries(
@@ -155,7 +143,7 @@ function entries(
 ): EntriesState {
   switch (action.type) {
     case ENTRY_REQUEST: {
-      const payload = action.payload as EntryRequestPayload;
+      const payload = action.payload;
 
       const key = `${payload.collection}.${payload.slug}`;
       const newEntity: Entry = {
@@ -174,7 +162,7 @@ function entries(
     }
 
     case ENTRY_SUCCESS: {
-      const payload = action.payload as EntrySuccessPayload;
+      const payload = action.payload;
       const collection = payload.collection;
       const slug = payload.entry.slug;
 
@@ -207,7 +195,7 @@ function entries(
     }
 
     case ENTRIES_REQUEST: {
-      const payload = action.payload as EntriesRequestPayload;
+      const payload = action.payload;
 
       const pages = {
         ...state.pages,
@@ -227,7 +215,7 @@ function entries(
     }
 
     case ENTRIES_SUCCESS: {
-      const payload = action.payload as EntriesSuccessPayload;
+      const payload = action.payload;
       const loadedEntries = payload.entries;
       const page = payload.page;
 
@@ -244,7 +232,7 @@ function entries(
       };
 
       pages[payload.collection] = {
-        page,
+        page: page ?? undefined,
         ids: loadedEntries.map(entry => entry.slug),
       };
 
@@ -270,7 +258,7 @@ function entries(
     }
 
     case ENTRY_FAILURE: {
-      const payload = action.payload as EntryFailurePayload;
+      const payload = action.payload;
       const key = `${payload.collection}.${payload.slug}`;
 
       return {
@@ -287,7 +275,7 @@ function entries(
     }
 
     case SEARCH_ENTRIES_SUCCESS: {
-      const payload = action.payload as EntriesSuccessPayload;
+      const payload = action.payload;
       const loadedEntries = payload.entries;
 
       const entities = {
@@ -305,7 +293,7 @@ function entries(
     }
 
     case ENTRY_DELETE_SUCCESS: {
-      const payload = action.payload as EntryDeletePayload;
+      const payload = action.payload;
       const collection = payload.collectionName;
       const slug = payload.entrySlug;
 
@@ -341,7 +329,7 @@ function entries(
     }
 
     case SORT_ENTRIES_REQUEST: {
-      const payload = action.payload as EntriesSortRequestPayload;
+      const payload = action.payload;
       const { collection, key, direction } = payload;
 
       const sort = {
@@ -409,7 +397,7 @@ function entries(
     }
 
     case SORT_ENTRIES_FAILURE: {
-      const payload = action.payload as EntriesSortFailurePayload;
+      const payload = action.payload;
       const { collection, key } = payload;
 
       const sort = {
@@ -447,7 +435,7 @@ function entries(
     }
 
     case FILTER_ENTRIES_REQUEST: {
-      const payload = action.payload as EntriesFilterRequestPayload;
+      const payload = action.payload;
       const { collection, filter: viewFilter } = payload;
 
       const filter = {
@@ -476,7 +464,7 @@ function entries(
     }
 
     case FILTER_ENTRIES_FAILURE: {
-      const payload = action.payload as EntriesFilterFailurePayload;
+      const payload = action.payload;
       const { collection, filter: viewFilter } = payload;
 
       const filter = {
@@ -510,7 +498,7 @@ function entries(
     }
 
     case GROUP_ENTRIES_REQUEST: {
-      const payload = action.payload as EntriesGroupRequestPayload;
+      const payload = action.payload;
       const { collection, group: groupBy } = payload;
 
       const group = {
@@ -536,7 +524,7 @@ function entries(
     }
 
     case GROUP_ENTRIES_FAILURE: {
-      const payload = action.payload as EntriesGroupFailurePayload;
+      const payload = action.payload;
       const { collection, group: groupBy } = payload;
 
       const group = {
@@ -571,7 +559,7 @@ function entries(
     }
 
     case CHANGE_VIEW_STYLE: {
-      const payload = action.payload as unknown as ChangeViewStylePayload;
+      const payload = action.payload;
       const { style } = payload;
       persistViewStyle(style);
       return {
@@ -619,7 +607,7 @@ export function selectEntriesFilterFields(entries: EntriesState, collection: str
   return values;
 }
 
-export function selectViewStyle(entries: EntriesState) {
+export function selectViewStyle(entries: EntriesState): CollectionViewStyle {
   return entries.viewStyle;
 }
 

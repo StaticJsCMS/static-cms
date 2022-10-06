@@ -35,6 +35,7 @@ import type {
   ViewGroup,
 } from '../interface';
 import type AssetProxy from '../valueObjects/AssetProxy';
+import type { CollectionViewStyle } from '../constants/collectionViews';
 
 /*
  * Constant Declarations
@@ -356,7 +357,7 @@ export function groupByField(collection: Collection, group: ViewGroup) {
   };
 }
 
-export function changeViewStyle(viewStyle: string) {
+export function changeViewStyle(viewStyle: CollectionViewStyle) {
   return {
     type: CHANGE_VIEW_STYLE,
     payload: {

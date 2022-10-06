@@ -21,6 +21,7 @@ import type {
   Collections,
   Entry,
   EntryField,
+  SortableField,
 } from '../interface';
 
 const { keyToPathArray } = stringTemplate;
@@ -81,11 +82,14 @@ const selectors = {
     },
   },
   [FILES]: {
-    fileForEntry(collection: Collection, slug: string) {
+    fileForEntry(collection: Collection, slug?: string) {
       const files = collection.files;
+      if (!slug) {
+        return files?.[0];
+      }
       return files && files.filter(f => f?.name === slug)?.[0];
     },
-    fields(collection: Collection, slug: string) {
+    fields(collection: Collection, slug?: string) {
       const file = this.fileForEntry(collection, slug);
       return file && file.fields;
     },
@@ -171,7 +175,7 @@ export function selectMediaFolders(config: CmsConfig, collection: Collection, en
   return [...new Set(...folders)];
 }
 
-export function selectFields(collection: Collection, slug: string) {
+export function selectFields(collection: Collection, slug?: string) {
   return selectors[collection.type].fields(collection, slug);
 }
 
@@ -364,15 +368,19 @@ export function selectInferedField(collection: CmsCollection | Collection, field
   return null;
 }
 
-export function selectEntryCollectionTitle(collection: Collection, entry: Entry) {
+export function selectEntryCollectionTitle(collection: Collection, entry: Entry): string {
   // prefer formatted summary over everything else
   const summaryTemplate = collection.summary;
-  if (summaryTemplate) return summaryFormatter(summaryTemplate, entry, collection);
+  if (summaryTemplate) {
+    return summaryFormatter(summaryTemplate, entry, collection);
+  }
 
   // if the collection is a file collection return the label of the entry
   if (collection.type == FILES) {
     const label = selectFileEntryLabel(collection, entry.slug);
-    if (label) return label;
+    if (label) {
+      return label;
+    }
   }
 
   // try to infer a title field from the entry data
@@ -413,7 +421,7 @@ export function selectDefaultSortableFields(
 export function selectSortableFields(
   collection: CmsCollection | Collection,
   t: (key: string) => string,
-) {
+): SortableField[] {
   const fields = (collection.sortable_fields?.fields ?? [])
     .map(key => {
       if (key === COMMIT_DATE) {
@@ -427,7 +435,7 @@ export function selectSortableFields(
       return { key, field };
     })
     .filter(item => !!item.field)
-    .map(item => ({ ...item.field, key: item.key }));
+    .map(item => ({ ...item.field, key: item.key })) as SortableField[];
 
   return fields;
 }

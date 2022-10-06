@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { translate } from 'react-polyglot';
 
 import { stripProtocol } from '../../lib/urlHelper';
@@ -65,12 +65,12 @@ const SettingsDropdown = ({
 }: TranslatedProps<SettingsDropdownProps>) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
+  }, []);
+  const handleClose = useCallback(() => {
     setAnchorEl(null);
-  };
+  }, []);
 
   return (
     <div>

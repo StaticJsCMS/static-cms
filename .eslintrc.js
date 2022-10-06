@@ -22,7 +22,7 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
     'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
     'no-console': [0],
-    'react/prop-types': [0],
+    'react/prop-types': 'off',
     'import/no-named-as-default': 0,
     'import/order': [
       'error',

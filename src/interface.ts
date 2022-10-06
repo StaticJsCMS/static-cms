@@ -33,6 +33,16 @@ export interface Pages {
   [collection: string]: { isFetching?: boolean; page?: number; ids: string[] };
 }
 
+export type SortableField =
+  | {
+      key: string;
+      name: string;
+      label: string;
+    }
+  | ({
+      key: string;
+    } & CmsField);
+
 export interface SortObject {
   key: string;
   direction: SortDirection;
@@ -137,6 +147,7 @@ export interface CollectionFile {
 }
 
 interface Nested {
+  summary?: string;
   depth: number;
 }
 
@@ -232,74 +243,6 @@ export interface Integration {
   hooks: string[];
   collections?: string | string[];
   provider: string;
-}
-
-interface EntryPayload {
-  collection: string;
-}
-
-export interface EntryRequestPayload extends EntryPayload {
-  slug: string;
-}
-
-export interface EntrySuccessPayload extends EntryPayload {
-  entry: Entry;
-}
-
-export interface EntryFailurePayload extends EntryPayload {
-  slug: string;
-  error: Error;
-}
-
-export interface EntryDeletePayload {
-  entrySlug: string;
-  collectionName: string;
-}
-
-export type EntriesRequestPayload = EntryPayload;
-
-export interface EntriesSuccessPayload extends EntryPayload {
-  entries: Entry[];
-  append: boolean;
-  page: number;
-}
-export interface EntriesSortRequestPayload extends EntryPayload {
-  key: string;
-  direction: string;
-}
-
-export interface EntriesSortFailurePayload extends EntriesSortRequestPayload {
-  error: Error;
-}
-
-export interface EntriesFilterRequestPayload {
-  filter: ViewFilter;
-  collection: string;
-}
-
-export interface EntriesFilterFailurePayload {
-  filter: ViewFilter;
-  collection: string;
-  error: Error;
-}
-
-export interface EntriesGroupRequestPayload {
-  group: ViewGroup;
-  collection: string;
-}
-
-export interface EntriesGroupFailurePayload {
-  group: ViewGroup;
-  collection: string;
-  error: Error;
-}
-
-export interface ChangeViewStylePayload {
-  style: string;
-}
-
-export interface EntriesMoveSuccessPayload extends EntryPayload {
-  entries: Entry[];
 }
 
 export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
@@ -551,7 +494,6 @@ export interface CmsMediaLibraryExternalLibrary {
 }
 
 export interface CmsMediaLibraryInternalOptions {
-  name: string;
   allow_multiple?: boolean;
 }
 

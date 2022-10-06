@@ -204,7 +204,7 @@ const Sidebar = ({
           searchTerm={searchTerm}
           collections={collections}
           collection={collection}
-          onSubmit={(query: string, collection: string) => searchCollections(query, collection)}
+          onSubmit={(query: string, collection?: string) => searchCollections(query, collection)}
         />
       )}
       <SidebarNavList>

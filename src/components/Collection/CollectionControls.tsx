@@ -1,14 +1,23 @@
-import React from 'react';
 import styled from '@emotion/styled';
+import React from 'react';
 
 import { lengths } from '../../ui';
-import ViewStyleControl from './ViewStyleControl';
-import SortControl from './SortControl';
 import FilterControl from './FilterControl';
 import GroupControl from './GroupControl';
+import SortControl from './SortControl';
+import ViewStyleControl from './ViewStyleControl';
 
 import type { CollectionViewStyle } from '../../constants/collectionViews';
-import type { CmsField, FilterMap, Sort, SortDirection, TranslatedProps, ViewFilter, ViewGroup } from '../../interface';
+import type {
+  FilterMap,
+  GroupMap,
+  SortableField,
+  SortDirection,
+  SortMap,
+  TranslatedProps,
+  ViewFilter,
+  ViewGroup,
+} from '../../interface';
 
 const CollectionControlsContainer = styled.div`
   display: flex;
@@ -26,13 +35,13 @@ const CollectionControlsContainer = styled.div`
 interface CollectionControlsProps {
   viewStyle: CollectionViewStyle;
   onChangeViewStyle: (viewStyle: CollectionViewStyle) => void;
-  sortableFields: CmsField[];
+  sortableFields: SortableField[];
   onSortClick: (key: string, direction?: SortDirection) => Promise<void>;
-  sort: Sort;
+  sort: SortMap | undefined;
   filter: Record<string, FilterMap>;
   viewFilters: ViewFilter[];
   onFilterClick: (filter: ViewFilter) => void;
-  group: ViewGroup;
+  group: Record<string, GroupMap>;
   viewGroups: ViewGroup[];
   onGroupClick: (filter: ViewGroup) => void;
 }

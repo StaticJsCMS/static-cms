@@ -1,12 +1,12 @@
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
 import { SortDirection } from '../../interface';
 
-import type { CmsField, SortMap, TranslatedProps } from '../../interface';
+import type { SortableField, SortMap, TranslatedProps } from '../../interface';
 
 function nextSortDirection(direction: SortDirection) {
   switch (direction) {
@@ -33,23 +33,24 @@ function sortIconProps(sortDir: SortDirection) {
 }
 
 interface SortControlProps {
-  fields: CmsField[];
+  fields: SortableField[];
   onSortClick: (key: string, direction?: SortDirection) => Promise<void>;
-  sort?: SortMap;
+  sort: SortMap | undefined;
 }
 
 function SortControl({ t, fields, onSortClick, sort }: TranslatedProps<SortControlProps>) {
-  const hasActiveSort = Boolean(
-    Object.values(sort ?? {}).find(s => s.direction !== SortDirection.None),
-  );
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
+  }, []);
+  const handleClose = useCallback(() => {
     setAnchorEl(null);
-  };
+  }, []);
+  
+  const hasActiveSort = useMemo(() => Boolean(
+    Object.values(sort ?? {}).find(s => s.direction !== SortDirection.None),
+  ), [sort]);
 
   // TODO Fix button active
   // <ControlButton active={hasActiveSort} title={t('collection.collectionTop.sortBy')} />

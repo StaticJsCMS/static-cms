@@ -1,11 +1,13 @@
-import PropTypes from 'prop-types';
-import React from 'react';
 import styled from '@emotion/styled';
-import ImmutablePropTypes from 'react-immutable-proptypes';
+import React from 'react';
 import { translate } from 'react-polyglot';
 
-import { Loader, lengths } from '../../../ui';
+import { lengths, Loader } from '../../../ui';
 import EntryListing from './EntryListing';
+
+import type { CollectionViewStyle } from '../../../constants/collectionViews';
+import type { Collections, Entry, TranslatedProps } from '../../../interface';
+import type Cursor from '../../../lib/util/Cursor';
 
 const PaginationMessage = styled.div`
   width: ${lengths.topCardWidth};
@@ -17,7 +19,17 @@ const NoEntriesMessage = styled(PaginationMessage)`
   margin-top: 16px;
 `;
 
-function Entries({
+interface EntriesProps {
+  collections: Collections;
+  entries: Entry[];
+  page?: number;
+  isFetching: boolean;
+  viewStyle: CollectionViewStyle;
+  cursor: Cursor;
+  handleCursorActions: (action: string) => void;
+}
+
+const Entries = ({
   collections,
   entries,
   isFetching,
@@ -26,7 +38,7 @@ function Entries({
   handleCursorActions,
   t,
   page,
-}) {
+}: TranslatedProps<EntriesProps>) => {
   const loadingMessages = [
     t('collection.entries.loadingEntries'),
     t('collection.entries.cachingEntries'),
@@ -34,10 +46,10 @@ function Entries({
   ];
 
   if (isFetching && page === undefined) {
-    return <Loader active>{loadingMessages}</Loader>;
+    return <Loader $active>{loadingMessages}</Loader>;
   }
 
-  const hasEntries = (entries && entries.size > 0) || cursor?.actions?.has('append_next');
+  const hasEntries = (entries && entries.length > 0) || cursor?.actions?.has('append_next');
   if (hasEntries) {
     return (
       <>
@@ -49,7 +61,7 @@ function Entries({
           handleCursorActions={handleCursorActions}
           page={page}
         />
-        {isFetching && page !== undefined && entries.size > 0 ? (
+        {isFetching && page !== undefined && entries.length > 0 ? (
           <PaginationMessage>{t('collection.entries.loadingEntries')}</PaginationMessage>
         ) : null}
       </>
@@ -57,17 +69,6 @@ function Entries({
   }
 
   return <NoEntriesMessage>{t('collection.entries.noEntries')}</NoEntriesMessage>;
-}
-
-Entries.propTypes = {
-  collections: ImmutablePropTypes.iterable.isRequired,
-  entries: ImmutablePropTypes.list,
-  page: PropTypes.number,
-  isFetching: PropTypes.bool,
-  viewStyle: PropTypes.string,
-  cursor: PropTypes.any.isRequired,
-  handleCursorActions: PropTypes.func.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
 export default translate()(Entries);

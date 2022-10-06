@@ -60,11 +60,11 @@ const CollectionView = ({
   viewGroups,
   filterTerm,
   t,
-  onFilterClick,
-  onGroupClick,
+  filterByField,
+  groupByField,
   filter,
   group,
-  onChangeViewStyle,
+  changeViewStyle,
   viewStyle,
 }: CollectionViewProps) => {
   const [readyToLoad, setReadyToLoad] = useState(false);
@@ -110,9 +110,20 @@ const CollectionView = ({
     return <EntriesSearch collections={searchCollections} searchTerm={searchTerm} />;
   }, [searchTerm, collections, collection, isSingleSearchResult]);
 
-  const onSortClick = useCallback(async (key: string, direction?: SortDirection) => {
-    await sortByField(collection, key, direction);
-  }, [collection, sortByField]);
+  const onSortClick = useCallback(
+    async (key: string, direction?: SortDirection) => {
+      await sortByField(collection, key, direction);
+    },
+    [collection, sortByField],
+  );
+
+  const onFilterClick = useCallback(async (filter: ViewFilter) => {
+    await filterByField(collection, filter);
+  }, [collection, filterByField]);
+
+  const onGroupClick = useCallback(async (group: ViewGroup) => {
+    await groupByField(collection, group);
+  }, [collection, groupByField]);
 
   useEffect(() => {
     const sorts = Object.keys(sort ?? {});
@@ -164,7 +175,7 @@ const CollectionView = ({
             <CollectionTop collection={collection} newEntryUrl={newEntryUrl} />
             <CollectionControls
               viewStyle={viewStyle}
-              onChangeViewStyle={onChangeViewStyle}
+              onChangeViewStyle={changeViewStyle}
               sortableFields={sortableFields}
               onSortClick={onSortClick}
               sort={sort}
@@ -230,22 +241,6 @@ const mapDispatchToProps = {
   changeViewStyle,
   groupByField,
 };
-
-function mergeProps(
-  stateProps: ReturnType<typeof mapStateToProps>,
-  dispatchProps: typeof mapDispatchToProps,
-  ownProps: TranslatedProps<CollectionViewOwnProps>,
-) {
-  return {
-    ...stateProps,
-    ...dispatchProps,
-    ...ownProps,
-    onFilterClick: (filter: ViewFilter) =>
-      dispatchProps.filterByField(stateProps.collection, filter),
-    onGroupClick: (group: ViewGroup) => dispatchProps.groupByField(stateProps.collection, group),
-    onChangeViewStyle: (viewStyle: string) => dispatchProps.changeViewStyle(viewStyle),
-  };
-}
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export type CollectionViewProps = ConnectedProps<typeof connector>;

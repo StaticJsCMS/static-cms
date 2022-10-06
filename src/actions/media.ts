@@ -82,19 +82,6 @@ const emptyAsset = createAssetProxy({
   }),
 });
 
-export function boundGetAsset(
-  dispatch: ThunkDispatch<State, {}, AnyAction>,
-  collection: Collection,
-  entry: Entry,
-) {
-  function bound(path: string, field?: EntryField) {
-    const asset = dispatch(getAsset({ collection, entry, path, field }));
-    return asset;
-  }
-
-  return bound;
-}
-
 export function getAsset({ collection, entry, path, field }: GetAssetArgs) {
   return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
     if (!path) {
