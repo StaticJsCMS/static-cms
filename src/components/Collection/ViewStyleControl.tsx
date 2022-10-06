@@ -2,10 +2,10 @@ import React from 'react';
 import styled from '@emotion/styled';
 
 import { Icon, buttons, colors } from '../../ui';
-import { VIEW_STYLE_LIST, VIEW_STYLE_GRID } from '../../constants/collectionViews';
 import { transientOptions } from '../../lib';
+import { VIEW_STYLE_GRID, VIEW_STYLE_LIST } from '../../constants/collectionViews';
 
-import type { CollectionViews } from '../../constants/collectionViews';
+import type { CollectionViewStyle } from '../../constants/collectionViews';
 
 const ViewControlsSection = styled.div`
   display: flex;
@@ -41,8 +41,8 @@ const ViewControlsButton = styled(
 );
 
 interface ViewStyleControlPros {
-  viewStyle: CollectionViews;
-  onChangeViewStyle: (viewStyle: CollectionViews) => void;
+  viewStyle: CollectionViewStyle;
+  onChangeViewStyle: (viewStyle: CollectionViewStyle) => void;
 }
 
 function ViewStyleControl({ viewStyle, onChangeViewStyle }: ViewStyleControlPros) {

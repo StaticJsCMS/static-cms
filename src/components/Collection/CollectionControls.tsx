@@ -7,6 +7,9 @@ import SortControl from './SortControl';
 import FilterControl from './FilterControl';
 import GroupControl from './GroupControl';
 
+import type { CollectionViewStyle } from '../../constants/collectionViews';
+import type { CmsField, Sort, SortDirection, TranslatedProps, ViewFilter, ViewGroup } from '../../interface';
+
 const CollectionControlsContainer = styled.div`
   display: flex;
   align-items: center;
@@ -20,7 +23,21 @@ const CollectionControlsContainer = styled.div`
   }
 `;
 
-function CollectionControls({
+interface CollectionControlsProps {
+  viewStyle: CollectionViewStyle;
+  onChangeViewStyle: (viewStyle: CollectionViewStyle) => void;
+  sortableFields: CmsField[];
+  onSortClick: (key: string, direction?: SortDirection) => Promise<void>;
+  sort: Sort;
+  filter: ViewFilter;
+  viewFilters: ViewFilter[];
+  onFilterClick: (filter: ViewFilter) => void;
+  group: ViewGroup;
+  viewGroups: ViewGroup[];
+  onGroupClick: (filter: ViewGroup) => void;
+}
+
+const CollectionControls = ({
   viewStyle,
   onChangeViewStyle,
   sortableFields,
@@ -33,7 +50,7 @@ function CollectionControls({
   t,
   filter,
   group,
-}) {
+}: TranslatedProps<CollectionControlsProps>) => {
   return (
     <CollectionControlsContainer>
       <ViewStyleControl viewStyle={viewStyle} onChangeViewStyle={onChangeViewStyle} />
@@ -53,6 +70,6 @@ function CollectionControls({
       )}
     </CollectionControlsContainer>
   );
-}
+};
 
 export default CollectionControls;

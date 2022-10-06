@@ -54,7 +54,7 @@ const CollectionView = ({
   isSingleSearchResult,
   searchTerm,
   sortableFields,
-  onSortClick,
+  sortByField,
   sort,
   viewFilters,
   viewGroups,
@@ -109,6 +109,10 @@ const CollectionView = ({
 
     return <EntriesSearch collections={searchCollections} searchTerm={searchTerm} />;
   }, [searchTerm, collections, collection, isSingleSearchResult]);
+
+  const onSortClick = useCallback(async (key: string, direction?: SortDirection) => {
+    await sortByField(collection, key, direction);
+  }, [collection, sortByField]);
 
   useEffect(() => {
     const sorts = Object.keys(sort ?? {});
@@ -202,6 +206,7 @@ function mapStateToProps(state: State, ownProps: TranslatedProps<CollectionViewO
   const viewStyle = selectViewStyle(state.entries);
 
   return {
+    ...ownProps,
     collection,
     collections,
     collectionName: name,
@@ -233,9 +238,8 @@ function mergeProps(
 ) {
   return {
     ...stateProps,
+    ...dispatchProps,
     ...ownProps,
-    onSortClick: (key: string, direction: SortDirection) =>
-      dispatchProps.sortByField(stateProps.collection, key, direction),
     onFilterClick: (filter: ViewFilter) =>
       dispatchProps.filterByField(stateProps.collection, filter),
     onGroupClick: (group: ViewGroup) => dispatchProps.groupByField(stateProps.collection, group),
@@ -243,7 +247,7 @@ function mergeProps(
   };
 }
 
-const connector = connect(mapStateToProps, mapDispatchToProps, mergeProps);
-export type CollectionViewProps = ConnectedProps<typeof connector> & CollectionViewOwnProps;
+const connector = connect(mapStateToProps, mapDispatchToProps);
+export type CollectionViewProps = ConnectedProps<typeof connector>;
 
 export default connector(translate()(CollectionView) as ComponentType<CollectionViewProps>);
