@@ -20,8 +20,9 @@ import type {
   EditorComponentOptions,
   Entry,
   EventData,
-  RegisteredWidget,
-  RegisteredWidgetOptions,
+  Widget,
+  WidgetOptions,
+  ValueOrNestedValue,
 } from '../interface';
 import type { Pluggable, Settings } from 'unified';
 
@@ -36,7 +37,7 @@ const eventHandlers = allowedEvents.reduce((acc, e) => {
 interface Registry {
   backends: Record<string, CmsBackendInitializer>;
   templates: Record<string, CmsTemplatePreviewComponent>;
-  widgets: Record<string, RegisteredWidget>;
+  widgets: Record<string, Widget>;
   icons: Record<string, CmsIcon>;
   additionalLinks: Record<string, AdditionalLink>;
   editorComponents: Record<string, EditorComponentOptions>;
@@ -111,15 +112,15 @@ export function registerWidget(widgets: CmsWidgetParam[]): void;
 export function registerWidget(widget: CmsWidgetParam): void;
 export function registerWidget<T = unknown>(
   name: string,
-  control: string | RegisteredWidget<T>['control'],
-  preview: RegisteredWidget<T>['preview'],
-  options?: RegisteredWidgetOptions,
+  control: string | Widget<T>['control'],
+  preview: Widget<T>['preview'],
+  options?: WidgetOptions,
 ): void;
 export function registerWidget<T = unknown>(
   name: string | CmsWidgetParam<T> | CmsWidgetParam[],
-  control?: string | RegisteredWidget<T>['control'],
-  preview?: RegisteredWidget<T>['preview'],
-  { schema, validator, getValidValue }: RegisteredWidgetOptions = {},
+  control?: string | Widget<T>['control'],
+  preview?: Widget<T>['preview'],
+  { schema, validator, getValidValue }: WidgetOptions = {},
 ): void {
   if (Array.isArray(name)) {
     name.forEach(widget => {
@@ -134,13 +135,13 @@ export function registerWidget<T = unknown>(
     // multiple copies with different previews.
     const newControl = (
       typeof control === 'string' ? registry.widgets[control].control : control
-    ) as RegisteredWidget['control'];
+    ) as Widget['control'];
     if (newControl) {
       registry.widgets[name] = {
         control: newControl,
-        preview: preview as RegisteredWidget['preview'],
-        validator: validator as RegisteredWidget['validator'],
-        getValidValue: getValidValue as RegisteredWidget['getValidValue'],
+        preview: preview as Widget['preview'],
+        validator: validator as Widget['validator'],
+        getValidValue: getValidValue as Widget['getValidValue'],
         schema,
       };
     }
@@ -167,10 +168,10 @@ export function registerWidget<T = unknown>(
       throw Error(`Widget "${widgetName}" registered without \`controlComponent\`.`);
     }
     registry.widgets[widgetName] = {
-      control: control as RegisteredWidget['control'],
-      preview: preview as RegisteredWidget['preview'],
-      validator: validator as RegisteredWidget['validator'],
-      getValidValue: getValidValue as RegisteredWidget['getValidValue'],
+      control: control as Widget['control'],
+      preview: preview as Widget['preview'],
+      validator: validator as Widget['validator'],
+      getValidValue: getValidValue as Widget['getValidValue'],
       schema,
       globalStyles,
       allowMapValue
@@ -180,22 +181,22 @@ export function registerWidget<T = unknown>(
   }
 }
 
-export function getWidget<T = unknown>(name: string): RegisteredWidget<T> {
-  return registry.widgets[name] as RegisteredWidget<T>;
+export function getWidget<T = unknown>(name: string): Widget<T> {
+  return registry.widgets[name] as Widget<T>;
 }
 
 export function getWidgets(): ({
   name: string;
-} & RegisteredWidget<unknown>)[] {
+} & Widget<unknown>)[] {
   return Object.entries(registry.widgets).map(
-    ([name, widget]: [string, RegisteredWidget<unknown>]) => ({
+    ([name, widget]: [string, Widget<unknown>]) => ({
       name,
       ...widget,
     }),
   );
 }
 
-export function resolveWidget<T = unknown>(name?: string): RegisteredWidget<T> {
+export function resolveWidget<T = ValueOrNestedValue>(name?: string): Widget<T> {
   return getWidget(name || 'string') || getWidget('unknown');
 }
 

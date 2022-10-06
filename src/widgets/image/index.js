@@ -1,4 +1,4 @@
-import StaticCmsWidgetFile, { getValidateValue } from '../file';
+import StaticCmsWidgetFile, { getValidValue } from '../file';
 import previewComponent from './ImagePreview';
 import schema from './schema';
 
@@ -11,7 +11,7 @@ function Widget() {
     previewComponent,
     options: {
       schema,
-      getValidateValue,
+      getValidValue,
     },
   };
 }

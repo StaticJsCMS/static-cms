@@ -31,6 +31,7 @@ import type {
   Entry,
   EntryDraft,
   EntryMeta,
+  FieldErrors,
   I18nSettings,
   ImplementationMediaFile,
   State,
@@ -1148,7 +1149,7 @@ export function validateMetaField(
   field: CmsField,
   value: string | undefined,
   t: (key: string, args: Record<string, unknown>) => string,
-) {
+): { error: false | FieldErrors } {
   const configState = state.config;
   if (!configState.config) {
     throw new Error('Config not loaded');

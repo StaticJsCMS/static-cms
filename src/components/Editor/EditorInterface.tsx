@@ -247,6 +247,15 @@ const EditorInterface = ({
     }
   }, [collection]);
 
+  const validate = useCallback(async () => {
+    fields.forEach(field => {
+      if (field.widget === 'hidden') {
+        return;
+      }
+      this.componentValidate[field.get('name')]();
+    });
+  }, [fields]);
+
   const handleOnPersist = useCallback(
     async (opts: EditorPersistOptions = {}) => {
       const { createNew = false, duplicate = false } = opts;

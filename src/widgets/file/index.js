@@ -1,4 +1,4 @@
-import withFileControl, { getValidateValue } from './withFileControl';
+import withFileControl, { getValidValue } from './withFileControl';
 import previewComponent from './FilePreview';
 import schema from './schema';
 
@@ -11,7 +11,7 @@ function Widget() {
     previewComponent,
     options: {
       schema,
-      getValidateValue,
+      getValidValue,
     },
   };
 }

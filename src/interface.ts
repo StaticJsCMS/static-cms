@@ -3,6 +3,7 @@ import type { ComponentType, FocusEventHandler, ReactNode } from 'react';
 import type { PluggableList } from 'react-markdown';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
 import type { MediaFile as BackendMediaFile } from './backend';
+import type { EditorControlProps } from './components/Editor/EditorControlPane/EditorControl';
 import type { CollectionType } from './constants/collectionTypes';
 import type { formatExtensions } from './formats/formats';
 import type { I18N_STRUCTURE } from './lib/i18n';
@@ -71,6 +72,10 @@ export type ValueOrNestedValue =
   | string
   | number
   | boolean
+  | string[]
+  | number[]
+  | null
+  | undefined
   | ValueOrNestedValue[]
   | {
       [key: string]: ValueOrNestedValue;
@@ -107,9 +112,24 @@ export interface Entry {
 
 export type Entities = Record<string, Entry>;
 
-export interface FieldsErrors {
-  [field: string]: { type: string; parentIds: string[]; message?: string }[];
+export interface FieldErrors {
+  type: string;
+  parentIds?: string[];
+  message?: string;
 }
+
+export interface FieldsErrors {
+  [field: string]: FieldErrors[];
+}
+
+export type FieldValidationMethod = (
+  field: CmsField,
+  value: ValueOrNestedValue | null | undefined,
+  parentIds: string[],
+  t: t,
+) => {
+  error: false | FieldErrors;
+};
 
 export interface EntryDraft {
   entry: Entry;
@@ -253,16 +273,80 @@ export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
 export type GetAssetFunction = (path: string, field?: CmsField) => AssetProxy;
 
-export interface CmsWidgetControlProps<T = unknown> {
-  value: T;
+export interface BaseCmsWidgetControlProps<T = unknown> {
+  entry: Entry;
+  collection: Collection;
+  config: CmsConfig;
+  mediaPaths: Record<string, string | string[]>;
+  metadata: EntryMeta;
+  value: T | undefined | null;
   field: CmsField;
-  onChange: (value: T) => void;
   forID: string;
   classNameWrapper: string;
+  classNameWidget: string;
+  classNameWidgetActive: string;
   setActiveStyle: FocusEventHandler;
   setInactiveStyle: FocusEventHandler;
+  hasActiveStyle: boolean;
+  onOpenMediaLibrary: EditorControlProps['openMediaLibrary'];
+  onClearMediaControl: EditorControlProps['clearMediaControl'];
+  onRemoveMediaControl: EditorControlProps['removeMediaControl'];
+  onRemoveInsertedMedia: EditorControlProps['removeInsertedMedia'];
+  onPersistMedia: EditorControlProps['persistMedia'];
+  onAddAsset: EditorControlProps['addAsset'];
+  getAsset: GetAssetFunction;
+  validate: (newValue: T) => void;
+  query: EditorControlProps['query'];
+  loadEntry: EditorControlProps['loadEntry'];
+  queryHits: Entry[];
+  clearSearch: EditorControlProps['clearSearch'];
+  clearFieldErrors: EditorControlProps['clearFieldErrors'];
+  isFetching: boolean;
+  fieldsErrors: FieldsErrors;
+  isEditorComponent: boolean;
+  isNewEditorComponent: boolean;
+  parentIds: string[];
+  isDisabled: boolean;
+  isFieldDuplicate: EditorControlProps['isFieldDuplicate'];
+  isFieldHidden: EditorControlProps['isFieldHidden'];
+  locale: string | undefined;
   t: t;
 }
+
+export interface ObjectCmsWidgetControlProps<T extends Record<string, ValueOrNestedValue>>
+  extends BaseCmsWidgetControlProps<T> {
+  onChangeObject: <F extends CmsFieldBase, K extends keyof T & string>(
+    field: {
+      name: K;
+    } & Omit<F, 'name'>,
+    newValue: T[K] | undefined | null,
+    newMetadata?: EntryMeta,
+  ) => void;
+  onValidateObject: (uniqueFieldId: string, errors: FieldErrors[]) => void;
+}
+
+export interface ArrayCmsWidgetControlProps<T extends string[] | number[] | ValueOrNestedValue[]>
+  extends BaseCmsWidgetControlProps<T> {
+  onChange: (value: T | undefined | null, newMetadata?: EntryMeta) => void;
+  onValidateObject: (uniqueFieldId: string, errors: FieldErrors[]) => void;
+}
+
+export interface SimpleCmsWidgetControlProps<T extends string | number | boolean>
+  extends BaseCmsWidgetControlProps<T> {
+  onChange: (value: T | undefined | null, newMetadata?: EntryMeta) => void;
+}
+
+export interface UnknownCmsWidgetControlProps<T = unknown> extends BaseCmsWidgetControlProps<T> {
+  onChange: (value: T | undefined | null, newMetadata?: EntryMeta) => void;
+}
+
+export type CmsWidgetControlProps<T = unknown> = T extends Record<string, ValueOrNestedValue>
+  ? ObjectCmsWidgetControlProps<T>
+  : T extends string | number | boolean
+  ? SimpleCmsWidgetControlProps<T>
+  : T extends string[] | number[]
+  ? ArrayCmsWidgetControlProps<T>
+  : UnknownCmsWidgetControlProps<T>;
 
 export interface CmsWidgetPreviewProps<T = unknown> {
   value: T;
@@ -271,7 +355,7 @@ export interface CmsWidgetPreviewProps<T = unknown> {
   getAsset: GetAssetFunction;
   entry: Entry;
   fieldsMetaData: EntryMeta;
-  resolveWidget: <W = unknown>(name: string) => RegisteredWidget<W>;
+  resolveWidget: <W = unknown>(name: string) => Widget<W>;
   getRemarkPlugins: () => PluggableList;
 }
 
@@ -303,22 +387,22 @@ export type CmsTemplatePreviewComponent =
   | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
   | ComponentType<CmsTemplatePreviewProps>;
 
-export interface RegisteredWidgetOptions {
-  validator?: RegisteredWidget['validator'];
-  getValidValue?: RegisteredWidget['getValidValue'];
-  schema?: RegisteredWidget['schema'];
+export interface WidgetOptions {
+  validator?: Widget['validator'];
+  getValidValue?: Widget['getValidValue'];
+  schema?: Widget['schema'];
   globalStyles?: string;
   allowMapValue?: boolean;
 }
 
-export interface RegisteredWidget<T = unknown> {
+export interface Widget<T = unknown> {
   control: ComponentType<CmsWidgetControlProps<T>>;
   preview?: CmsWidgetPreviewComponent<T>;
   validator: (props: {
     field: CmsField;
     value: T | undefined | null;
     t: t;
-  }) => boolean | { error: unknown } | Promise<boolean | { error: unknown }>;
+  }) => false | { error: false | FieldErrors } | Promise<false | { error: false | FieldErrors }>;
   getValidValue: (value: T | undefined | null) => T | undefined | null;
   schema?: JSONSchemaType<unknown>;
   globalStyles?: string;
@@ -327,9 +411,9 @@ export interface RegisteredWidget<T = unknown> {
 
 export interface CmsWidgetParam<T = unknown> {
   name: string;
-  controlComponent: RegisteredWidget<T>['control'];
-  previewComponent: RegisteredWidget<T>['preview'];
-  options?: RegisteredWidgetOptions;
+  controlComponent: Widget<T>['control'];
+  previewComponent: Widget<T>['preview'];
+  options?: WidgetOptions;
 }
 
 export interface PreviewTemplateComponentProps {

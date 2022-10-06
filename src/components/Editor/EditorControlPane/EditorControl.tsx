@@ -22,7 +22,7 @@ import { transientOptions } from '../../../lib';
 import { getEditorComponents, resolveWidget } from '../../../lib/registry';
 import { selectIsLoadingAsset } from '../../../reducers/medias';
 import { borders, colors, FieldLabel, lengths, transitions } from '../../../ui';
-import Widget from './Widget';
+import WidgetControl from './WidgetControl';
 
 import type { ComponentType } from 'react';
 import type { PluggableList } from 'react-markdown';
@@ -33,11 +33,13 @@ import type {
   Collection,
   Entry,
   EntryMeta,
+  FieldErrors,
   FieldsErrors,
   GetAssetFunction,
   State,
   TranslatedProps,
   ValueOrNestedValue,
+  Widget,
 } from '../../../interface';
 
 /**
@@ -185,7 +187,7 @@ const EditorControl = ({
   const [styleActive, setActiveStyle] = useState(false);
 
   const widgetName = field.widget;
-  const widget = resolveWidget(widgetName);
+  const widget = resolveWidget(widgetName) as Widget<ValueOrNestedValue>;
   const fieldName = field.name;
   const fieldHint = field.hint;
   const isFieldOptional = field.required === false;
@@ -204,13 +206,15 @@ const EditorControl = ({
   const hasErrors = !!errors || childErrors;
 
   const handleGetAsset = useCallback(
-    (collection: Collection, entry: Entry): GetAssetFunction => (path: string, field?: CmsField) => {
-      return getAsset(collection, entry, path, field);
-    },
+    (collection: Collection, entry: Entry): GetAssetFunction =>
+      (path: string, field?: CmsField) => {
+        return getAsset(collection, entry, path, field);
+      },
     [getAsset],
   );
 
-  if (!collection || !entry) {
+  const cmsConfig = useMemo(() => config.config, [config.config]);
+  if (!collection || !entry || !cmsConfig) {
     return null;
   }
 
@@ -246,7 +250,7 @@ const EditorControl = ({
               isFieldOptional={isFieldOptional}
               t={t}
             />
-            <Widget
+            <WidgetControl
               classNameWrapper={cx(
                 css`
                   ${styleStrings.widget};
@@ -277,13 +281,13 @@ const EditorControl = ({
               validator={widget.validator}
               entry={entry}
               collection={collection}
-              config={config}
+              config={cmsConfig}
               field={field}
               uniqueFieldId={uniqueFieldId}
               value={value}
               mediaPaths={mediaPaths}
               metadata={metadata}
-              onChange={(newValue: ValueOrNestedValue, newMetadata: EntryMeta) =>
+              onChange={(newValue: ValueOrNestedValue, newMetadata?: EntryMeta) =>
                 onChange(field, newValue, newMetadata)
               }
               onValidate={onValidate && partial(onValidate, uniqueFieldId)}
@@ -300,7 +304,6 @@ const EditorControl = ({
               resolveWidget={resolveWidget}
               widget={widget}
               getEditorComponents={getEditorComponents}
-              editorControl={ConnectedEditorControl}
               query={query}
               loadEntry={loadEntry}
               queryHits={queryHits[uniqueFieldId] || []}
@@ -326,7 +329,7 @@ const EditorControl = ({
                   allowedElements={['a', 'strong', 'em', 'del']}
                   unwrapDisallowed={true}
                   components={{
-                    // eslint-disable-next-line no-unused-vars
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     a: ({ node, ...props }) => (
                       <a
                         {...props}
@@ -353,8 +356,8 @@ interface EditorControlOwnProps {
   field: CmsField;
   fieldsMetaData: Record<string, EntryMeta>;
   fieldsErrors: FieldsErrors;
-  onChange: (field: CmsField, newValue: ValueOrNestedValue, newMetadata: EntryMeta) => void;
-  onValidate: (uniqueFieldId: string, errors: FieldsErrors[]) => void;
+  onChange: (field: CmsField, newValue: ValueOrNestedValue, newMetadata?: EntryMeta) => void;
+  onValidate: (uniqueFieldId: string, errors: FieldErrors[]) => void;
   className?: string;
   isSelected?: boolean;
   isEditorComponent?: boolean;

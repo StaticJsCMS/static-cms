@@ -21,7 +21,7 @@ import {
 } from '../../ui';
 import { basename } from '../../lib/util';
 
-export const getValidateValue = (value) => {
+export const getValidValue = (value) => {
   if (value) {
     return isMultiple(value) ? value.map(v => basename(v)) : basename(value);
   }
