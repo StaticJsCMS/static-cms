@@ -1,11 +1,12 @@
 import React from 'react';
 import { translate } from 'react-polyglot';
 
-import { SortDirection } from '../../interface';
-import { Dropdown, DropdownItem } from '../../ui';
 import { ControlButton } from './ControlButton';
+import { SortDirection, TranslatedProps } from '../../interface';
 
-function nextSortDirection(direction) {
+import type { CmsField, Sort } from '../../interface';
+
+function nextSortDirection(direction: SortDirection) {
   switch (direction) {
     case SortDirection.Ascending:
       return SortDirection.Descending;
@@ -16,7 +17,7 @@ function nextSortDirection(direction) {
   }
 }
 
-function sortIconProps(sortDir) {
+function sortIconProps(sortDir: SortDirection) {
   return {
     icon: 'chevron',
     iconDirection: sortIconDirections[sortDir],
@@ -24,16 +25,19 @@ function sortIconProps(sortDir) {
   };
 }
 
-const sortIconDirections = {
+const sortIconDirections: Record<SortDirection, string> = {
   [SortDirection.Ascending]: 'up',
   [SortDirection.Descending]: 'down',
 };
 
-function SortControl({ t, fields, onSortClick, sort }) {
-  const hasActiveSort = sort
-    ?.valueSeq()
-    .toJS()
-    .some(s => s.direction !== SortDirection.None);
+interface SortControlProps {
+  fields: CmsField[];
+  onSortClick: () => void;
+  sort: Sort;
+}
+
+function SortControl({ t, fields, onSortClick, sort }: TranslatedProps<SortControlProps>) {
+  const hasActiveSort = Object.values(sort).find(s => s.direction !== SortDirection.None);
 
   return (
     <Dropdown
