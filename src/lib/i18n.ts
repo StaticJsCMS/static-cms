@@ -33,7 +33,7 @@ type I18nInfo = {
 };
 
 export function getI18nInfo(collection: Collection): I18nInfo | null {
-  if (!hasI18n(collection)) {
+  if (!hasI18n(collection) || typeof collection[I18N] !== 'object') {
     return null;
   }
   const { structure, locales, default_locale: defaultLocale } = collection.i18n;
@@ -48,17 +48,17 @@ export function getI18nFilesDepth(collection: Collection, depth: number) {
   return depth;
 }
 
-export function isFieldTranslatable(field: CmsField, locale: string, defaultLocale: string) {
+export function isFieldTranslatable(field: CmsField, locale: string, defaultLocale?: string) {
   const isTranslatable = locale !== defaultLocale && field.i18n === I18N_FIELD.TRANSLATE;
   return isTranslatable;
 }
 
-export function isFieldDuplicate(field: EntryField, locale: string, defaultLocale: string) {
+export function isFieldDuplicate(field: CmsField, locale: string, defaultLocale?: string) {
   const isDuplicate = locale !== defaultLocale && field.i18n === I18N_FIELD.DUPLICATE;
   return isDuplicate;
 }
 
-export function isFieldHidden(field: EntryField, locale: string, defaultLocale: string) {
+export function isFieldHidden(field: CmsField, locale: string, defaultLocale?: string) {
   const isHidden = locale !== defaultLocale && field.i18n === I18N_FIELD.NONE;
   return isHidden;
 }

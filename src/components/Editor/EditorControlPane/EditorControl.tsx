@@ -177,7 +177,7 @@ const EditorControl = ({
   t,
   validateMetaField,
   isDisabled,
-  isHidden,
+  isHidden = false,
   isFieldDuplicate,
   isFieldHidden,
   locale,
@@ -210,7 +210,7 @@ const EditorControl = ({
         <ControlContainer
           className={className}
           css={css`
-            ${isHidden && styleStrings.hidden};
+            ${isHidden ? styleStrings.hidden : ''};
           `}
         >
           <>
@@ -404,8 +404,8 @@ interface EditorControlOwnProps {
   parentIds?: string[];
   isDisabled?: boolean;
   isHidden?: boolean;
-  isFieldDuplicate?: boolean;
-  isFieldHidden?: boolean;
+  isFieldDuplicate?: (field: CmsField) => boolean;
+  isFieldHidden?: (field: CmsField) => boolean;
   locale?: string;
 }
 

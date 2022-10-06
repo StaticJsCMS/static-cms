@@ -1,22 +1,19 @@
-import React, { useCallback, useState } from 'react';
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import get from 'lodash/get';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import get from 'lodash/get';
+import React, { useCallback, useState } from 'react';
 
-import { buttons, colors, text } from '../../../ui';
-import EditorControl from './EditorControl';
+import confirm from '../../../components/UI/Confirm';
 import {
   getI18nInfo,
   getLocaleDataPath,
-  hasI18n,
   isFieldDuplicate,
   isFieldHidden,
   isFieldTranslatable,
 } from '../../../lib/i18n';
-import confirm from '../../../components/UI/Confirm';
+import EditorControl from './EditorControl';
 
 import type {
   CmsField,
@@ -113,9 +110,21 @@ interface ControlPaneProps {
   fields: CmsField[];
   fieldsMetaData: Record<string, EntryMeta>;
   fieldsErrors: FieldsErrors;
-  onChange: () => void;
+  onChange: (
+    field: CmsField,
+    value: ValueOrNestedValue,
+    metadata: EntryMeta | undefined,
+    i18n:
+      | {
+          currentLocale?: string;
+          locales: string[];
+          defaultLocale?: string;
+        }
+      | undefined,
+  ) => void;
   onValidate: () => void;
-  locale?: string;
+  locale: string;
+  onLocaleChange: (locale: string) => void;
 }
 
 const ControlPane = ({
@@ -130,7 +139,7 @@ const ControlPane = ({
   onLocaleChange,
   t,
 }: TranslatedProps<ControlPaneProps>) => {
-  const [selectedLocale, setSelectedLocale] = useState<string | undefined>(locale);
+  const [selectedLocale, setSelectedLocale] = useState<string>(locale);
 
   const { locales, defaultLocale } = getI18nInfo(collection) ?? {};
   const i18n = locales && {
@@ -148,8 +157,12 @@ const ControlPane = ({
   );
 
   const copyFromOtherLocale = useCallback(
-    ({ targetLocale }: { targetLocale: string }) =>
+    ({ targetLocale }: { targetLocale?: string }) =>
       async (sourceLocale: string) => {
+        if (!targetLocale) {
+          return;
+        }
+
         if (
           !(await confirm({
             title: 'editor.editorControlPane.i18n.copyFromLocaleConfirmTitle',
@@ -161,9 +174,9 @@ const ControlPane = ({
         ) {
           return;
         }
-        const { locales, defaultLocale } = getI18nInfo(collection);
+        const { locales, defaultLocale } = getI18nInfo(collection) ?? {};
 
-        const locale = this.state.selectedLocale;
+        const locale = selectedLocale;
         const i18n = locales && {
           currentLocale: locale,
           locales,
@@ -195,7 +208,7 @@ const ControlPane = ({
 
   return (
     <ControlPaneContainer>
-      {locales && (
+      {locales ? (
         <LocaleRowWrapper>
           <LocaleDropdown
             locales={locales}
@@ -207,10 +220,10 @@ const ControlPane = ({
           <LocaleDropdown
             locales={locales.filter(l => l !== locale)}
             dropdownText={t('editor.editorControlPane.i18n.copyFromLocale')}
-            onLocaleChange={this.copyFromOtherLocale({ targetLocale: locale, t })}
+            onLocaleChange={copyFromOtherLocale({ targetLocale: locale })}
           />
         </LocaleRowWrapper>
-      )}
+      ) : null}
       {fields
         .filter(f => f.widget !== 'hidden')
         .map((field, i) => {
@@ -230,10 +243,6 @@ const ControlPane = ({
                 onChange(field, newValue, newMetadata, i18n);
               }}
               onValidate={onValidate}
-              processControlRef={this.controlRef.bind(this)}
-              controlRef={this.controlRef}
-              entry={entry}
-              collection={collection}
               isDisabled={isDuplicate}
               isHidden={isHidden}
               isFieldDuplicate={field => isFieldDuplicate(field, locale, defaultLocale)}

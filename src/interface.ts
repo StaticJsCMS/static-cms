@@ -181,7 +181,7 @@ export interface Collection {
   view_groups: ViewGroup[];
   nested?: Nested;
   meta?: Meta;
-  i18n: i18n;
+  i18n?: boolean | i18n;
   hide?: boolean;
 }
 
