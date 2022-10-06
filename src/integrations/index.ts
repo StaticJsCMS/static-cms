@@ -1,18 +1,23 @@
 import Algolia from './providers/algolia/implementation';
 import AssetStore from './providers/assetStore/implementation';
 
-import type { AlgoliaConfig, AssetStoreConfig, CmsIntegrationProvider } from '../interface';
+import type {
+  AlgoliaConfig,
+  AssetStoreConfig,
+  CmsMediaIntegrationProvider,
+  CmsSearchIntegrationProvider,
+} from '../interface';
 
 interface IntegrationsConfig {
   providers?: {
     algolia?: AlgoliaConfig;
-    'asset-store'?: AssetStoreConfig;
+    assetStore?: AssetStoreConfig;
   };
 }
 
 interface Integrations {
   algolia?: Algolia;
-  'asset-store'?: AssetStore;
+  assetStore?: AssetStore;
 }
 
 export function resolveIntegrations(
@@ -25,20 +30,20 @@ export function resolveIntegrations(
     integrationInstances.algolia = new Algolia(config.providers.algolia);
   }
 
-  if (config?.providers?.['asset-store']) {
-    integrationInstances['asset-store'] = new AssetStore(config.providers['asset-store'], getToken);
+  if (config?.providers?.['assetStore']) {
+    integrationInstances['assetStore'] = new AssetStore(config.providers['assetStore'], getToken);
   }
 
   return integrationInstances;
 }
 
-export const getSearchIntegration = (function () {
+export const getSearchIntegrationProvider = (function () {
   let integrations: Integrations = {};
 
   return (
     config: IntegrationsConfig | undefined,
     getToken: () => Promise<string | null>,
-    provider: 'algolia',
+    provider: CmsSearchIntegrationProvider,
   ) => {
     if (provider in (config?.providers ?? {}))
       if (integrations) {
@@ -50,13 +55,13 @@ export const getSearchIntegration = (function () {
   };
 })();
 
-export const getIntegrationProvider = (function () {
+export const getMediaIntegrationProvider = (function () {
   let integrations: Integrations = {};
 
   return (
     config: IntegrationsConfig | undefined,
     getToken: () => Promise<string | null>,
-    provider: CmsIntegrationProvider,
+    provider: CmsMediaIntegrationProvider,
   ) => {
     if (provider in (config?.providers ?? {}))
       if (integrations) {

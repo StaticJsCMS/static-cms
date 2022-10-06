@@ -33,7 +33,7 @@ import type {
   Collection,
   Entry,
   EntryMeta,
-  FieldErrors,
+  FieldError,
   FieldsErrors,
   GetAssetFunction,
   State,
@@ -357,7 +357,7 @@ interface EditorControlOwnProps {
   fieldsMetaData: Record<string, EntryMeta>;
   fieldsErrors: FieldsErrors;
   onChange: (field: CmsField, newValue: ValueOrNestedValue, newMetadata?: EntryMeta) => void;
-  onValidate: (uniqueFieldId: string, errors: FieldErrors[]) => void;
+  onValidate: (uniqueFieldId: string, errors: FieldError[]) => void;
   className?: string;
   isSelected?: boolean;
   isEditorComponent?: boolean;

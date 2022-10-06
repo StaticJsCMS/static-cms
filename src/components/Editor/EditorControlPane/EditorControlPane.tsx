@@ -21,6 +21,7 @@ import type {
   Collection,
   Entry,
   EntryMeta,
+  FieldError,
   FieldsErrors,
   I18nSettings,
   TranslatedProps,
@@ -102,7 +103,7 @@ function getFieldValue(
   return entry.data[field.name];
 }
 
-interface ControlPaneProps {
+export interface EditorControlPaneProps {
   collection: Collection;
   entry: Entry;
   fields: CmsField[];
@@ -114,12 +115,12 @@ interface ControlPaneProps {
     metadata: EntryMeta | undefined,
     i18n: I18nSettings | undefined,
   ) => void;
-  onValidate: (uniqueFieldId: string, errors: FieldsErrors[]) => void;
+  onValidate: (uniqueFieldId: string, errors: FieldError[]) => void;
   locale?: string;
   onLocaleChange: (locale: string) => void;
 }
 
-const ControlPane = ({
+const EditorControlPane = ({
   collection,
   entry,
   fields,
@@ -130,7 +131,7 @@ const ControlPane = ({
   locale,
   onLocaleChange,
   t,
-}: TranslatedProps<ControlPaneProps>) => {
+}: TranslatedProps<EditorControlPaneProps>) => {
   const i18n = useMemo(() => {
     if (hasI18n(collection)) {
       const { locales, defaultLocale } = getI18nInfo(collection);
@@ -235,4 +236,4 @@ const ControlPane = ({
   );
 };
 
-export default ControlPane;
+export default EditorControlPane;

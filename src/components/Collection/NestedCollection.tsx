@@ -11,6 +11,7 @@ import { selectEntryCollectionTitle } from '../../reducers/collections';
 import { selectEntries } from '../../reducers/entries';
 import { colors, components, Icon } from '../../ui';
 
+import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import type { Collection, Entry, State } from '../../interface';
 
@@ -344,10 +345,10 @@ interface NestedCollectionOwnProps {
 function mapStateToProps(state: State, ownProps: NestedCollectionOwnProps) {
   const { collection } = ownProps;
   const entries = selectEntries(state.entries, collection) ?? [];
-  return { entries };
+  return { ...ownProps, entries };
 }
 
-const connector = connect(mapStateToProps, null);
+const connector = connect(mapStateToProps, {});
 export type NestedCollectionProps = ConnectedProps<typeof connector>;
 
 export default connector(NestedCollection);

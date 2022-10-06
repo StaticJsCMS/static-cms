@@ -24,6 +24,7 @@ const sortIconDirections: Record<string, string> = {
   [SortDirection.Descending]: 'down',
 };
 
+// TODO Remove?
 function sortIconProps(sortDir: SortDirection) {
   return {
     icon: 'chevron',

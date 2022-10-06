@@ -1,16 +1,16 @@
-import React, { Component, useCallback, useEffect, useMemo, useState } from 'react';
 import { css, Global } from '@emotion/react';
 import styled from '@emotion/styled';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ScrollSync, ScrollSyncPane } from 'react-scroll-sync';
 
-import { colors, colorsRaw, components, transitions, IconButton, zIndex } from '../../ui';
+import { FILES } from '../../constants/collectionTypes';
+import { transientOptions } from '../../lib';
+import { getI18nInfo, getPreviewEntry, hasI18n } from '../../lib/i18n';
+import { getFileFromSlug } from '../../reducers/collections';
+import { colors, colorsRaw, components, IconButton, transitions, zIndex } from '../../ui';
 import EditorControlPane from './EditorControlPane/EditorControlPane';
 import EditorPreviewPane from './EditorPreviewPane/EditorPreviewPane';
 import EditorToolbar from './EditorToolbar';
-import { hasI18n, getI18nInfo, getPreviewEntry } from '../../lib/i18n';
-import { FILES } from '../../constants/collectionTypes';
-import { getFileFromSlug } from '../../reducers/collections';
-import { transientOptions } from '../../lib';
 
 import type {
   CmsField,
@@ -18,11 +18,12 @@ import type {
   EditorPersistOptions,
   Entry,
   EntryMeta,
+  FieldError,
   FieldsErrors,
   I18nSettings,
+  TranslatedProps,
   User,
   ValueOrNestedValue,
-  TranslatedProps,
 } from '../../interface';
 
 const PREVIEW_VISIBLE = 'cms.preview-visible';
@@ -142,9 +143,9 @@ const ViewControls = styled.div`
 interface EditorContentProps {
   i18nVisible: boolean;
   previewVisible: boolean;
-  editor: JSX.Element
-  editorWithEditor: JSX.Element
-  editorWithPreview: JSX.Element
+  editor: JSX.Element;
+  editorWithEditor: JSX.Element;
+  editorWithPreview: JSX.Element;
 }
 
 function EditorContent({
@@ -187,7 +188,7 @@ interface EditorInterfaceProps {
     metadata: EntryMeta | undefined,
     i18n: I18nSettings | undefined,
   ) => void;
-  onValidate: (uniqueFieldId: string, errors: FieldsErrors[]) => void;
+  onValidate: (uniqueFieldId: string, errors: FieldError[]) => void;
   onPersist: (opts?: EditorPersistOptions) => Promise<void>;
   onDelete: () => Promise<void>;
   onDuplicate: () => void;
@@ -252,7 +253,8 @@ const EditorInterface = ({
       if (field.widget === 'hidden') {
         return;
       }
-      this.componentValidate[field.get('name')]();
+      // TODO Store validations
+      //this.componentValidate[field.get('name')]();
     });
   }, [fields]);
 
@@ -260,7 +262,8 @@ const EditorInterface = ({
     async (opts: EditorPersistOptions = {}) => {
       const { createNew = false, duplicate = false } = opts;
       await switchToDefaultLocale();
-      this.controlPaneRef.validate();
+      // TODO Trigger field validation on persist
+      // this.controlPaneRef.validate();
       onPersist({ createNew, duplicate });
     },
     [onPersist, switchToDefaultLocale],

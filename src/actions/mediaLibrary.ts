@@ -1,6 +1,6 @@
 import { currentBackend } from '../backend';
 import confirm from '../components/UI/Confirm';
-import { getIntegrationProvider } from '../integrations';
+import { getMediaIntegrationProvider } from '../integrations';
 import { sanitizeSlug } from '../lib/urlHelper';
 import { basename, getBlobSHA } from '../lib/util';
 import { selectIntegration } from '../reducers';
@@ -139,7 +139,7 @@ export function removeInsertedMedia(controlID: string) {
 export function loadMedia(
   opts: { delay?: number; query?: string; page?: number; privateUpload?: boolean } = {},
 ) {
-  const { delay = 0, query = '', page = 1, privateUpload } = opts;
+  const { delay = 0, query = '', page = 1, privateUpload = false } = opts;
   return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
     const state = getState();
     const config = state.config.config;
@@ -150,7 +150,15 @@ export function loadMedia(
     const backend = currentBackend(config);
     const integration = selectIntegration(state, null, 'assetStore');
     if (integration) {
-      const provider = getIntegrationProvider(state.integrations, backend.getToken, integration);
+      const provider = getMediaIntegrationProvider(
+        state.integrations,
+        backend.getToken,
+        integration,
+      );
+      if (!provider) {
+        throw new Error('Provider not found');
+      }
+
       dispatch(mediaLoading(page));
       try {
         const files = await provider.retrieve(query, page, privateUpload);
@@ -266,11 +274,15 @@ export function persistMedia(file: File, opts: MediaOptions = {}) {
       let assetProxy: AssetProxy;
       if (integration) {
         try {
-          const provider = getIntegrationProvider(
+          const provider = getMediaIntegrationProvider(
             state.integrations,
             backend.getToken,
             integration,
           );
+          if (!provider) {
+            throw new Error('Provider not found');
+          }
+
           const response = await provider.upload(file, privateUpload);
           assetProxy = createAssetProxy({
             url: response.asset.url,
@@ -348,7 +360,11 @@ export function deleteMedia(file: MediaFile, opts: MediaOptions = {}) {
     const backend = currentBackend(config);
     const integration = selectIntegration(state, null, 'assetStore');
     if (integration) {
-      const provider = getIntegrationProvider(state.integrations, backend.getToken, integration);
+      const provider = getMediaIntegrationProvider(state.integrations, backend.getToken, integration);
+      if (!provider) {
+        throw new Error('Provider not found');
+      }
+
       dispatch(mediaDeleting());
 
       try {

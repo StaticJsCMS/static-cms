@@ -300,7 +300,7 @@ const Editor = ({
       onPersist={handlePersistEntry}
       onDelete={handleDeleteEntry}
       onDuplicate={handleDuplicateEntry}
-      showDelete={showDelete}
+      showDelete={showDelete ?? true}
       user={user}
       hasChanged={hasChanged}
       displayUrl={displayUrl}
@@ -320,7 +320,7 @@ interface CollectionViewOwnProps {
   name: string;
   slug: string;
   newRecord: boolean;
-  showDelete: boolean;
+  showDelete?: boolean;
 }
 
 function mapStateToProps(state: State, ownProps: CollectionViewOwnProps) {

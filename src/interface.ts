@@ -112,14 +112,14 @@ export interface Entry {
 
 export type Entities = Record<string, Entry>;
 
-export interface FieldErrors {
+export interface FieldError {
   type: string;
   parentIds?: string[];
   message?: string;
 }
 
 export interface FieldsErrors {
-  [field: string]: FieldErrors[];
+  [field: string]: FieldError[];
 }
 
 export type FieldValidationMethod = (
@@ -128,7 +128,7 @@ export type FieldValidationMethod = (
   parentIds: string[],
   t: t,
 ) => {
-  error: false | FieldErrors;
+  error: false | FieldError;
 };
 
 export interface EntryDraft {
@@ -322,13 +322,13 @@ export interface ObjectCmsWidgetControlProps<T extends Record<string, ValueOrNes
     newValue: T[K] | undefined | null,
     newMetadata?: EntryMeta,
   ) => void;
-  onValidateObject: (uniqueFieldId: string, errors: FieldErrors[]) => void;
+  onValidateObject: (uniqueFieldId: string, errors: FieldError[]) => void;
 }
 
 export interface ArrayCmsWidgetControlProps<T extends string[] | number[] | ValueOrNestedValue[]>
   extends BaseCmsWidgetControlProps<T> {
   onChange: (value: T | undefined | null, newMetadata?: EntryMeta) => void;
-  onValidateObject: (uniqueFieldId: string, errors: FieldErrors[]) => void;
+  onValidateObject: (uniqueFieldId: string, errors: FieldError[]) => void;
 }
 
 export interface SimpleCmsWidgetControlProps<T extends string | number | boolean>
@@ -402,7 +402,7 @@ export interface Widget<T = unknown> {
     field: CmsField;
     value: T | undefined | null;
     t: t;
-  }) => false | { error: false | FieldErrors } | Promise<false | { error: false | FieldErrors }>;
+  }) => false | { error: false | FieldError } | Promise<false | { error: false | FieldError }>;
   getValidValue: (value: T | undefined | null) => T | undefined | null;
   schema?: JSONSchemaType<unknown>;
   globalStyles?: string;
@@ -1093,6 +1093,7 @@ export type CmsIntegration = {
 
 export type CmsIntegrationProvider = CmsIntegration['provider'];
 export type CmsSearchIntegrationProvider = 'algolia';
+export type CmsMediaIntegrationProvider = 'assetStore';
 
 export interface AlgoliaIntegration extends AlgoliaConfig {
   provider: 'algolia';
@@ -1106,10 +1107,11 @@ export interface AlgoliaConfig {
 }
 
 export interface AssetStoreIntegration extends AssetStoreConfig {
-  provider: 'asset-store';
+  provider: 'assetStore';
 }
 
 export interface AssetStoreConfig {
+  hooks: ['assetStore'];
   shouldConfirmUpload?: boolean;
   getSignedFormURL: string;
 }

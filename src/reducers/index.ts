@@ -58,7 +58,7 @@ export function selectSearchedEntries(state: State, availableCollections: string
 export function selectIntegration<K extends keyof IntegrationHooks>(
   state: State,
   collection: string | null,
-  hook: string,
+  hook: K,
 ): IntegrationHooks[K] | false {
   return fromIntegrations.selectIntegration(state.integrations, collection, hook);
 }

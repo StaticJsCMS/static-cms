@@ -12,7 +12,7 @@ import type {
   EditorComponentOptions,
   Entry,
   EntryMeta,
-  FieldErrors,
+  FieldError,
   FieldsErrors,
   FieldValidationMethod,
   GetAssetFunction,
@@ -37,7 +37,7 @@ function validatePresence(
   value: ValueOrNestedValue,
   parentIds: string[],
   t: t,
-): { error: false | FieldErrors } {
+): { error: false | FieldError } {
   const isRequired = field.required ?? true;
   if (isRequired && isEmpty(value)) {
     const error = {
@@ -59,7 +59,7 @@ function validatePattern(
   value: ValueOrNestedValue,
   parentIds: string[],
   t: t,
-): { error: false | FieldErrors } {
+): { error: false | FieldError } {
   const pattern = field.pattern ?? false;
 
   if (isEmpty(value)) {
@@ -89,12 +89,12 @@ function validate(
   validator: Widget<ValueOrNestedValue>['validator'],
   getValidValue: Widget<ValueOrNestedValue>['getValidValue'],
   validateMetaField: EditorControlProps['validateMetaField'],
-  onValidate: (errors: FieldErrors[]) => void,
+  onValidate: (errors: FieldError[]) => void,
   t: t,
-  skipWrapped: { error: false | FieldErrors } = { error: false },
+  skipWrapped: { error: false | FieldError } = { error: false },
 ) {
   const validValue = getValidValue(value);
-  const errors: FieldErrors[] = [];
+  const errors: FieldError[] = [];
   const validations: FieldValidationMethod[] = [validatePresence, validatePattern];
   validations.forEach(func => {
     const response = func(field, validValue, parentIds, t);
@@ -140,10 +140,10 @@ function validateWrappedControl(
   validator: Widget<ValueOrNestedValue>['validator'],
   getValidValue: Widget<ValueOrNestedValue>['getValidValue'],
   validateMetaField: EditorControlProps['validateMetaField'],
-  onValidate: (errors: FieldErrors[]) => void,
+  onValidate: (errors: FieldError[]) => void,
   t: t,
 ): {
-  error: false | FieldErrors;
+  error: false | FieldError;
 } {
   const response = validator({ value, field, t });
   if (response !== undefined) {
@@ -219,7 +219,7 @@ export interface WidgetProps {
   mediaPaths: Record<string, string | string[]>;
   metadata: EntryMeta;
   onChange: (newValue: ValueOrNestedValue, newMetadata?: EntryMeta) => void;
-  onValidate: (errors: FieldErrors[]) => void;
+  onValidate: (errors: FieldError[]) => void;
   onOpenMediaLibrary: EditorControlProps['openMediaLibrary'];
   onClearMediaControl: EditorControlProps['clearMediaControl'];
   onRemoveMediaControl: EditorControlProps['removeMediaControl'];
@@ -240,7 +240,7 @@ export interface WidgetProps {
   clearFieldErrors: EditorControlProps['clearFieldErrors'];
   isFetching: boolean;
   fieldsErrors: FieldsErrors;
-  onValidateObject: (uniqueFieldId: string, errors: FieldErrors[]) => void;
+  onValidateObject: (uniqueFieldId: string, errors: FieldError[]) => void;
   isEditorComponent: boolean;
   isNewEditorComponent: boolean;
   parentIds: string[];

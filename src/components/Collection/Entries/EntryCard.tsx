@@ -144,7 +144,7 @@ const EntryCard = ({
           </CardBody>
           {image && imageField ? (
             <CardImage
-              $src={getAsset({ collection, entry, path: image, field: imageField }).toString()}
+              $src={getAsset(collection, entry, image, imageField).toString()}
             />
           ) : null}
         </GridCardLink>

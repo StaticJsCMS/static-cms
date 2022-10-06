@@ -66,7 +66,7 @@ const CollectionView = ({
   group,
   changeViewStyle,
   viewStyle,
-}: CollectionViewProps) => {
+}: TranslatedProps<CollectionViewProps>) => {
   const [readyToLoad, setReadyToLoad] = useState(false);
 
   const newEntryUrl = useMemo(() => {
@@ -117,13 +117,19 @@ const CollectionView = ({
     [collection, sortByField],
   );
 
-  const onFilterClick = useCallback(async (filter: ViewFilter) => {
-    await filterByField(collection, filter);
-  }, [collection, filterByField]);
+  const onFilterClick = useCallback(
+    async (filter: ViewFilter) => {
+      await filterByField(collection, filter);
+    },
+    [collection, filterByField],
+  );
 
-  const onGroupClick = useCallback(async (group: ViewGroup) => {
-    await groupByField(collection, group);
-  }, [collection, groupByField]);
+  const onGroupClick = useCallback(
+    async (group: ViewGroup) => {
+      await groupByField(collection, group);
+    },
+    [collection, groupByField],
+  );
 
   useEffect(() => {
     const sorts = Object.keys(sort ?? {});
@@ -206,7 +212,14 @@ interface CollectionViewOwnProps {
 function mapStateToProps(state: State, ownProps: TranslatedProps<CollectionViewOwnProps>) {
   const { collections } = state;
   const isSearchEnabled = state.config.config && state.config.config.search != false;
-  const { isSearchResults, name, searchTerm = '', filterTerm = '', t } = ownProps;
+  const {
+    isSearchResults,
+    isSingleSearchResult,
+    name,
+    searchTerm = '',
+    filterTerm = '',
+    t,
+  } = ownProps;
   const collection: Collection = name ? collections[name] : collections[0];
   const sort = selectEntriesSort(state.entries, collection.name);
   const sortableFields = selectSortableFields(collection, t);
@@ -217,14 +230,15 @@ function mapStateToProps(state: State, ownProps: TranslatedProps<CollectionViewO
   const viewStyle = selectViewStyle(state.entries);
 
   return {
-    ...ownProps,
+    isSearchResults,
+    isSingleSearchResult,
+    name,
+    searchTerm,
+    filterTerm,
     collection,
     collections,
     collectionName: name,
     isSearchEnabled,
-    isSearchResults,
-    searchTerm,
-    filterTerm,
     sort,
     sortableFields,
     viewFilters,
@@ -245,4 +259,4 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export type CollectionViewProps = ConnectedProps<typeof connector>;
 
-export default connector(translate()(CollectionView) as ComponentType<CollectionViewProps>);
+export default translate()(connector(CollectionView)) as ComponentType<CollectionViewOwnProps>;

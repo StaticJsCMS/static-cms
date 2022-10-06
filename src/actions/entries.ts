@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual';
 
 import { currentBackend } from '../backend';
 import ValidationErrorTypes from '../constants/validationErrorTypes';
-import { getSearchIntegration } from '../integrations';
+import { getSearchIntegrationProvider } from '../integrations';
 import { SortDirection } from '../interface';
 import { getProcessSegment } from '../lib/formatters';
 import { duplicateDefaultI18nFields, hasI18n, I18N_FIELD, serializeI18n } from '../lib/i18n';
@@ -31,7 +31,7 @@ import type {
   Entry,
   EntryDraft,
   EntryMeta,
-  FieldErrors,
+  FieldError,
   I18nSettings,
   ImplementationMediaFile,
   State,
@@ -277,7 +277,7 @@ async function getAllEntries(state: State, collection: Collection) {
   const backend = currentBackend(configState.config);
   const integration = selectIntegration(state, collection.name, 'listEntries');
   const provider = integration
-    ? getSearchIntegration(state.integrations, backend.getToken, integration)
+    ? getSearchIntegrationProvider(state.integrations, backend.getToken, integration)
     : backend;
 
   if (!provider) {
@@ -489,7 +489,7 @@ export function changeDraftField({
 
 export function changeDraftFieldValidation(
   uniqueFieldId: string,
-  errors: { type: string; parentIds: string[]; message: string }[],
+  errors: FieldError[],
 ) {
   return {
     type: DRAFT_VALIDATION_ERRORS,
@@ -680,7 +680,7 @@ export function loadEntries(collection: Collection, page = 0) {
     const backend = currentBackend(configState.config);
     const integration = selectIntegration(state, collection.name, 'listEntries');
     const provider = integration
-      ? getSearchIntegration(state.integrations, backend.getToken, integration)
+      ? getSearchIntegrationProvider(state.integrations, backend.getToken, integration)
       : backend;
 
     if (!provider) {
@@ -1149,7 +1149,7 @@ export function validateMetaField(
   field: CmsField,
   value: string | undefined,
   t: (key: string, args: Record<string, unknown>) => string,
-): { error: false | FieldErrors } {
+): { error: false | FieldError } {
   const configState = state.config;
   if (!configState.config) {
     throw new Error('Config not loaded');

@@ -129,7 +129,7 @@ export default class GraphQLAPI extends API {
       // https://developer.github.com/v4/enum/repositorypermission/
       const { viewerPermission } = data.repository;
       return ['ADMIN', 'MAINTAIN', 'WRITE'].includes(viewerPermission);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Problem fetching repo data from GitHub');
       throw error;
     }

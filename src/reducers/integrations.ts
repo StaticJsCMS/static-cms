@@ -7,18 +7,20 @@ import type {
   AlgoliaConfig,
   AssetStoreConfig,
   CmsConfig,
+  CmsMediaIntegrationProvider,
   CmsSearchIntegrationProvider,
 } from '../interface';
 
 export interface IntegrationHooks {
   search?: CmsSearchIntegrationProvider;
   listEntries?: CmsSearchIntegrationProvider;
+  'assetStore'?: CmsMediaIntegrationProvider;
 }
 
 export interface IntegrationsState {
   providers: {
     algolia?: AlgoliaConfig;
-    'asset-store'?: AssetStoreConfig;
+    'assetStore'?: AssetStoreConfig;
   };
   hooks: IntegrationHooks;
   collectionHooks: Record<string, IntegrationHooks>;
@@ -45,7 +47,7 @@ export function getIntegrations(config: CmsConfig): IntegrationsState {
             hook => (acc.collectionHooks[collection][hook] = providerData.provider),
           );
         });
-      } else if (providerData.provider === 'asset-store') {
+      } else if (providerData.provider === 'assetStore') {
         acc.providers[providerData.provider] = providerData;
       }
       return acc;

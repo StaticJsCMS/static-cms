@@ -1,7 +1,7 @@
 import isEqual from 'lodash/isEqual';
 
 import { currentBackend } from '../backend';
-import { getSearchIntegration } from '../integrations';
+import { getSearchIntegrationProvider } from '../integrations';
 import { selectIntegration } from '../reducers';
 
 import type { AnyAction } from 'redux';
@@ -118,7 +118,7 @@ export function searchEntries(searchTerm: string, searchCollections: string[], p
     dispatch(searchingEntries(searchTerm, allCollections, page));
 
     const searchPromise = integration
-      ? getSearchIntegration(state.integrations, backend.getToken, integration)?.search(
+      ? getSearchIntegrationProvider(state.integrations, backend.getToken, integration)?.search(
           collections,
           searchTerm,
           page,
@@ -175,7 +175,7 @@ export function query(
     }
 
     const queryPromise = integration
-      ? getSearchIntegration(state.integrations, backend.getToken, integration)?.searchBy(
+      ? getSearchIntegrationProvider(state.integrations, backend.getToken, integration)?.searchBy(
           JSON.stringify(searchFields.map(f => `data.${f}`)),
           collectionName,
           searchTerm,
