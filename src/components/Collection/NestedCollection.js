@@ -238,7 +238,7 @@ export function updateNode(treeData, node, callback) {
   return updater([...treeData]);
 }
 
-export class NestedCollection extends React.Component {
+class NestedCollection extends React.Component {
   static propTypes = {
     collection: ImmutablePropTypes.map.isRequired,
     entries: ImmutablePropTypes.list.isRequired,

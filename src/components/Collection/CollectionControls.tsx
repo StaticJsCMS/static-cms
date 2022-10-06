@@ -8,7 +8,7 @@ import FilterControl from './FilterControl';
 import GroupControl from './GroupControl';
 
 import type { CollectionViewStyle } from '../../constants/collectionViews';
-import type { CmsField, Sort, SortDirection, TranslatedProps, ViewFilter, ViewGroup } from '../../interface';
+import type { CmsField, FilterMap, Sort, SortDirection, TranslatedProps, ViewFilter, ViewGroup } from '../../interface';
 
 const CollectionControlsContainer = styled.div`
   display: flex;
@@ -29,7 +29,7 @@ interface CollectionControlsProps {
   sortableFields: CmsField[];
   onSortClick: (key: string, direction?: SortDirection) => Promise<void>;
   sort: Sort;
-  filter: ViewFilter;
+  filter: Record<string, FilterMap>;
   viewFilters: ViewFilter[];
   onFilterClick: (filter: ViewFilter) => void;
   group: ViewGroup;
