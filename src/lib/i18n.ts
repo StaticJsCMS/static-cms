@@ -5,7 +5,14 @@ import set from 'lodash/set';
 
 import { selectEntrySlug } from '../reducers/collections';
 
-import type { CmsField, Collection, Entry, EntryData, EntryField } from '../interface';
+import type {
+  CmsField,
+  Collection,
+  Entry,
+  EntryData,
+  I18nInfo,
+  i18nCollection,
+} from '../interface';
 import type { EntryDraftState } from '../reducers/entryDraft';
 
 export const I18N = 'i18n';
@@ -22,16 +29,12 @@ export enum I18N_FIELD {
   NONE = 'none',
 }
 
-export function hasI18n(collection: Collection) {
+export function hasI18n(collection: Collection): collection is i18nCollection {
   return I18N in collection;
 }
 
-type I18nInfo = {
-  locales: string[];
-  defaultLocale: string;
-  structure?: I18N_STRUCTURE;
-};
-
+export function getI18nInfo(collection: i18nCollection): I18nInfo;
+export function getI18nInfo(collection: Collection): I18nInfo | null;
 export function getI18nInfo(collection: Collection): I18nInfo | null {
   if (!hasI18n(collection) || typeof collection[I18N] !== 'object') {
     return null;
@@ -48,17 +51,17 @@ export function getI18nFilesDepth(collection: Collection, depth: number) {
   return depth;
 }
 
-export function isFieldTranslatable(field: CmsField, locale: string, defaultLocale?: string) {
+export function isFieldTranslatable(field: CmsField, locale?: string, defaultLocale?: string) {
   const isTranslatable = locale !== defaultLocale && field.i18n === I18N_FIELD.TRANSLATE;
   return isTranslatable;
 }
 
-export function isFieldDuplicate(field: CmsField, locale: string, defaultLocale?: string) {
+export function isFieldDuplicate(field: CmsField, locale?: string, defaultLocale?: string) {
   const isDuplicate = locale !== defaultLocale && field.i18n === I18N_FIELD.DUPLICATE;
   return isDuplicate;
 }
 
-export function isFieldHidden(field: CmsField, locale: string, defaultLocale?: string) {
+export function isFieldHidden(field: CmsField, locale?: string, defaultLocale?: string) {
   const isHidden = locale !== defaultLocale && field.i18n === I18N_FIELD.NONE;
   return isHidden;
 }
@@ -379,7 +382,7 @@ export function duplicateDefaultI18nFields(collection: Collection, dataFields: a
 
 export function duplicateI18nFields(
   entryDraft: EntryDraftState,
-  field: EntryField,
+  field: CmsField,
   locales: string[],
   defaultLocale: string,
   fieldPath: string[] = [field.name],
@@ -416,8 +419,12 @@ export function duplicateI18nFields(
   return entryDraft;
 }
 
-export function getPreviewEntry(entry: Entry, locale: string, defaultLocale: string) {
-  if (locale === defaultLocale) {
+export function getPreviewEntry(
+  entry: Entry,
+  locale: string | undefined,
+  defaultLocale: string | undefined,
+) {
+  if (!locale || locale === defaultLocale) {
     return entry;
   }
   entry.data = entry.i18n?.[locale]?.data as EntryData;

@@ -3,7 +3,7 @@ import merge from 'lodash/merge';
 import { getWidgetValueSerializer } from './registry';
 import { isNullish } from './util/null.util';
 
-import type { EntryData, EntryField } from '../interface';
+import type { EntryData, CmsField } from '../interface';
 
 /**
  * Methods for serializing/deserializing entry field values. Most widgets don't
@@ -25,7 +25,7 @@ import type { EntryData, EntryField } from '../interface';
  */
 function runSerializer(
   values: EntryData,
-  fields: EntryField[] | undefined,
+  fields: CmsField[] | undefined,
   method: 'serialize' | 'deserialize',
 ) {
   /**
@@ -81,10 +81,10 @@ function runSerializer(
   return serializedData;
 }
 
-export function serializeValues(values: EntryData, fields: EntryField[] | undefined) {
+export function serializeValues(values: EntryData, fields: CmsField[] | undefined) {
   return runSerializer(values, fields, 'serialize');
 }
 
-export function deserializeValues(values: EntryData, fields: EntryField[] | undefined) {
+export function deserializeValues(values: EntryData, fields: CmsField[] | undefined) {
   return runSerializer(values, fields, 'deserialize');
 }

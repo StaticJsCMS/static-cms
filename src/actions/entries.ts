@@ -21,21 +21,24 @@ import { addAssets, getAsset } from './media';
 import { loadMedia, waitForMediaLibraryToLoad } from './mediaLibrary';
 import { waitUntil } from './waitUntil';
 
-import type { CmsField } from 'netlify-cms-core';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { Backend } from '../backend';
+import type { CollectionViewStyle } from '../constants/collectionViews';
 import type {
+  CmsField,
   Collection,
   Entry,
-  EntryField,
+  EntryDraft,
+  EntryMeta,
+  I18nSettings,
   ImplementationMediaFile,
   State,
+  ValueOrNestedValue,
   ViewFilter,
   ViewGroup,
 } from '../interface';
 import type AssetProxy from '../valueObjects/AssetProxy';
-import type { CollectionViewStyle } from '../constants/collectionViews';
 
 /*
  * Constant Declarations
@@ -471,15 +474,11 @@ export function changeDraftField({
   entries,
   i18n,
 }: {
-  field: EntryField;
-  value: string;
-  metadata: Record<string, unknown>;
+  field: CmsField;
+  value: ValueOrNestedValue;
+  metadata: EntryMeta;
   entries: Entry[];
-  i18n?: {
-    currentLocale: string;
-    defaultLocale: string;
-    locales: string[];
-  };
+  i18n?: I18nSettings;
 }) {
   return {
     type: DRAFT_CHANGE_FIELD,
@@ -488,12 +487,12 @@ export function changeDraftField({
 }
 
 export function changeDraftFieldValidation(
-  uniquefieldId: string,
+  uniqueFieldId: string,
   errors: { type: string; parentIds: string[]; message: string }[],
 ) {
   return {
     type: DRAFT_VALIDATION_ERRORS,
-    payload: { uniquefieldId, errors },
+    payload: { uniqueFieldId, errors },
   } as const;
 }
 
@@ -571,12 +570,7 @@ export function retrieveLocalBackup(collection: Collection, slug: string) {
               field: file.field,
             });
           } else {
-            return getAsset({
-              collection,
-              entry,
-              path: file.path,
-              field: file.field,
-            })(dispatch, getState);
+            return getAsset(collection, entry, file.path, file.field)(dispatch, getState);
           }
         }),
       );
@@ -834,12 +828,12 @@ function processValue(unsafe: string) {
   return escapeHtml(unsafe);
 }
 
-function getDataFields(fields: EntryField[]) {
-  return fields.filter(f => !f!.meta);
+function getDataFields(fields: CmsField[]) {
+  return fields.filter(f => !('meta' in f));
 }
 
-function getMetaFields(fields: EntryField[]) {
-  return fields.filter(f => f!.meta === true);
+function getMetaFields(fields: CmsField[]) {
+  return fields.filter(f => 'meta' in f && f.meta);
 }
 
 export function createEmptyDraft(collection: Collection, search: string) {
@@ -847,7 +841,9 @@ export function createEmptyDraft(collection: Collection, search: string) {
     const params = new URLSearchParams(search);
     params.forEach((value, key) => {
       collection = updateFieldByKey(collection, key, field => {
-        field.default = processValue(value);
+        if ('default' in field) {
+          field.default = processValue(value);
+        }
         return field;
       });
     });
@@ -898,27 +894,27 @@ interface DraftEntryData {
 }
 
 export function createEmptyDraftData(
-  fields: EntryField[],
-  skipField: (field: EntryField) => boolean = () => false,
+  fields: CmsField[],
+  skipField: (field: CmsField) => boolean = () => false,
 ) {
   return fields.reduce(
     (
       reduction: DraftEntryData | string | undefined | boolean | unknown[],
-      value: EntryField | undefined | boolean,
+      value: CmsField | undefined | boolean,
     ) => {
       const acc = reduction as DraftEntryData;
-      const item = value as EntryField;
+      const item = value as CmsField;
 
       if (skipField(item)) {
         return acc;
       }
 
-      const subfields = item.field || item.fields;
+      const subfields = ('field' in item && item.field) || ('fields' in item && item.fields);
       const list = item.widget == 'list';
       const name = item.name;
-      const defaultValue = item.default ?? null;
+      const defaultValue = ('default' in item ? item.default : null) ?? null;
 
-      function isEmptyDefaultValue(val: unknown) {
+      function isEmptyDefaultValue(val: DraftEntryData | DraftEntryData[]) {
         return [[{}], {}].some(e => isEqual(val, e));
       }
 
@@ -949,12 +945,12 @@ export function createEmptyDraftData(
   );
 }
 
-function createEmptyDraftI18nData(collection: Collection, dataFields: EntryField[]) {
+function createEmptyDraftI18nData(collection: Collection, dataFields: CmsField[]) {
   if (!hasI18n(collection)) {
     return {};
   }
 
-  function skipField(field: EntryField) {
+  function skipField(field: CmsField) {
     return field.i18n !== I18N_FIELD.DUPLICATE && field.i18n !== I18N_FIELD.TRANSLATE;
   }
 
@@ -978,7 +974,7 @@ export function getMediaAssets({ entry }: { entry: Entry }) {
   return assets;
 }
 
-export function getSerializedEntry(collection: Collection, entry: Entry) {
+export function getSerializedEntry(collection: Collection, entry: Entry): Entry {
   /**
    * Serialize the values of any fields with registered serializers, and
    * update the entry and entryDraft with the serialized values.
@@ -990,13 +986,15 @@ export function getSerializedEntry(collection: Collection, entry: Entry) {
     return serializeValues(data, fields);
   }
 
-  let serializedEntry = {
+  let serializedEntry: Entry = {
     ...entry,
     data: serializeData(entry.data),
   };
+
   if (hasI18n(collection)) {
     serializedEntry = serializeI18n(collection, serializedEntry, serializeData);
   }
+
   return serializedEntry;
 }
 
@@ -1043,8 +1041,8 @@ export function persistEntry(collection: Collection) {
     });
 
     const serializedEntry = getSerializedEntry(collection, entry);
-    const newEntryDraft = {
-      ...entryDraft,
+    const newEntryDraft: EntryDraft = {
+      ...(entryDraft as EntryDraft),
       entry: serializedEntry,
     };
     dispatch(entryPersisting(collection, serializedEntry));

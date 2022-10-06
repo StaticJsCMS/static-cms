@@ -22,7 +22,8 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
     'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
     'no-console': [0],
-    'react/prop-types': 'off',
+    'react/prop-types': [0],
+    'react/require-default-props': 0,
     'import/no-named-as-default': 0,
     'import/order': [
       'error',
@@ -87,6 +88,8 @@ module.exports = {
         },
       },
       rules: {
+        'react/prop-types': [0],
+        'react/require-default-props': 0,
         'no-duplicate-imports': [0], // handled by @typescript-eslint
         '@typescript-eslint/ban-types': [0], // TODO enable in future
         '@typescript-eslint/no-non-null-assertion': [0],

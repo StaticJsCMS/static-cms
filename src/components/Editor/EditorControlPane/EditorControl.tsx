@@ -396,7 +396,7 @@ interface EditorControlOwnProps {
   fieldsMetaData: Record<string, EntryMeta>;
   fieldsErrors: FieldsErrors;
   onChange: (field: CmsField, newValue: ValueOrNestedValue, newMetadata: EntryMeta) => void;
-  onValidate: (uniqueFieldId: string) => void;
+  onValidate: (uniqueFieldId: string, errors: FieldsErrors[]) => void;
   className?: string;
   isSelected?: boolean;
   isEditorComponent?: boolean;

@@ -25,12 +25,12 @@ import { duplicateI18nFields, getDataPath } from '../lib/i18n';
 import { selectFolderEntryExtension, selectHasMetaPath } from './collections';
 
 import type { EntriesAction } from '../actions/entries';
-import type { Collection, Entry, FieldsErrors } from '../interface';
+import type { Collection, Entry, EntryMeta, FieldsErrors } from '../interface';
 
 export interface EntryDraftState {
   entry?: Entry;
   fieldsErrors: FieldsErrors;
-  fieldsMetaData: Record<string, Record<string, string>>;
+  fieldsMetaData: Record<string, EntryMeta>;
   hasChanged: boolean;
   key: string;
   localBackup?: {
@@ -131,7 +131,6 @@ function entryDraftReducer(
     case DRAFT_CHANGE_FIELD: {
       const { field, value, metadata, entries, i18n } = action.payload;
       const name = field.name;
-      const meta = field.meta;
       const dataPath = (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
 
       let newState = { ...state };
@@ -139,7 +138,7 @@ function entryDraftReducer(
         return state;
       }
 
-      if (meta) {
+      if ('meta' in field && field.meta) {
         newState.entry = {
           ...newState.entry,
           meta: {
@@ -170,9 +169,9 @@ function entryDraftReducer(
     case DRAFT_VALIDATION_ERRORS: {
       const fieldsErrors = { ...state.fieldsErrors };
       if (action.payload.errors.length === 0) {
-        delete fieldsErrors[action.payload.uniquefieldId];
+        delete fieldsErrors[action.payload.uniqueFieldId];
       } else {
-        fieldsErrors[action.payload.uniquefieldId] = action.payload.errors;
+        fieldsErrors[action.payload.uniqueFieldId] = action.payload.errors;
       }
       return {
         ...state,

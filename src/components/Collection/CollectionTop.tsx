@@ -1,11 +1,11 @@
-import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 import styled from '@emotion/styled';
 import { translate } from 'react-polyglot';
 import { Link } from 'react-router-dom';
 
 import { components, buttons, shadows } from '../../ui';
+
+import type { Collection, TranslatedProps } from '../../interface';
 
 const CollectionTopContainer = styled.div`
   ${components.cardTop};
@@ -36,7 +36,7 @@ const CollectionTopDescription = styled.p`
   margin-bottom: 0;
 `;
 
-function getCollectionProps(collection) {
+function getCollectionProps(collection: Collection) {
   const collectionLabel = collection.label;
   const collectionLabelSingular = collection.label_singular;
   const collectionDescription = collection.description;
@@ -48,11 +48,14 @@ function getCollectionProps(collection) {
   };
 }
 
-function CollectionTop({ collection, newEntryUrl, t }) {
-  const { collectionLabel, collectionLabelSingular, collectionDescription } = getCollectionProps(
-    collection,
-    t,
-  );
+interface CollectionTopProps {
+  collection: Collection;
+  newEntryUrl?: string;
+}
+
+const CollectionTop = ({ collection, newEntryUrl, t }: TranslatedProps<CollectionTopProps>) => {
+  const { collectionLabel, collectionLabelSingular, collectionDescription } =
+    getCollectionProps(collection);
 
   return (
     <CollectionTopContainer>
@@ -71,12 +74,6 @@ function CollectionTop({ collection, newEntryUrl, t }) {
       ) : null}
     </CollectionTopContainer>
   );
-}
-
-CollectionTop.propTypes = {
-  collection: ImmutablePropTypes.map.isRequired,
-  newEntryUrl: PropTypes.string,
-  t: PropTypes.func.isRequired,
 };
 
 export default translate()(CollectionTop);

@@ -6,17 +6,7 @@ import styled from '@emotion/styled';
 import { translate } from 'react-polyglot';
 import { Link } from 'react-router-dom';
 
-import {
-  Icon,
-  Dropdown,
-  DropdownItem,
-  StyledDropdownButton,
-  colorsRaw,
-  colors,
-  components,
-  buttons,
-  zIndex,
-} from '../../ui';
+import { Icon, colorsRaw, colors, components, buttons, zIndex } from '../../ui';
 import { SettingsDropdown } from '../UI';
 
 const styles = {
@@ -187,7 +177,7 @@ const PublishButton = styled(DropdownButton)`
   background-color: ${colorsRaw.teal};
 `;
 
-export class EditorToolbar extends React.Component {
+class EditorToolbar extends React.Component {
   static propTypes = {
     isPersisting: PropTypes.bool,
     isPublishing: PropTypes.bool,
@@ -324,15 +314,8 @@ export class EditorToolbar extends React.Component {
   };
 
   render() {
-    const {
-      user,
-      hasChanged,
-      displayUrl,
-      collection,
-      onLogoutClick,
-      t,
-      editorBackLink,
-    } = this.props;
+    const { user, hasChanged, displayUrl, collection, onLogoutClick, t, editorBackLink } =
+      this.props;
 
     return (
       <ToolbarContainer>
@@ -345,16 +328,18 @@ export class EditorToolbar extends React.Component {
               })}
             </BackCollection>
             {hasChanged ? (
-              <BackStatusChanged key="back-changed">{t('editor.editorToolbar.unsavedChanges')}</BackStatusChanged>
+              <BackStatusChanged key="back-changed">
+                {t('editor.editorToolbar.unsavedChanges')}
+              </BackStatusChanged>
             ) : (
-              <BackStatusUnchanged key="back-unchanged">{t('editor.editorToolbar.changesSaved')}</BackStatusUnchanged>
+              <BackStatusUnchanged key="back-unchanged">
+                {t('editor.editorToolbar.changesSaved')}
+              </BackStatusUnchanged>
             )}
           </div>
         </ToolbarSectionBackLink>
         <ToolbarSectionMain>
-          <ToolbarSubSectionFirst>
-            {this.renderSimpleControls()}
-          </ToolbarSubSectionFirst>
+          <ToolbarSubSectionFirst>{this.renderSimpleControls()}</ToolbarSubSectionFirst>
         </ToolbarSectionMain>
         <ToolbarSectionMeta>
           <SettingsDropdown

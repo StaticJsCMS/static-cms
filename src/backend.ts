@@ -60,7 +60,7 @@ import type {
   DisplayURL,
   Entry,
   EntryDraft,
-  EntryField,
+  CmsField,
   FilterRule,
   ImplementationEntry,
   SearchQueryResponse,
@@ -251,7 +251,7 @@ export interface MediaFile {
   draft?: boolean;
   url?: string;
   file?: File;
-  field?: EntryField;
+  field?: CmsField;
   queryOrder?: unknown;
   isViewableImage?: boolean;
   type?: string;

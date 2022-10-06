@@ -12,7 +12,7 @@ import { colors, colorsRaw, components, lengths, zIndex } from '../../../ui';
 
 import type { ConnectedProps } from 'react-redux';
 import type { CollectionViewStyle } from '../../../constants/collectionViews';
-import type { Collection, Entry, EntryField, State } from '../../../interface';
+import type { Collection, Entry, CmsField, State } from '../../../interface';
 
 const ListCard = styled.li`
   ${components.card};
@@ -161,10 +161,10 @@ interface EntryCardOwnProps {
     titleField?: string | null | undefined;
     descriptionField?: string | null | undefined;
     imageField?: string | null | undefined;
-    remainingFields?: EntryField[] | undefined;
+    remainingFields?: CmsField[] | undefined;
   };
   collection: Collection;
-  imageField?: EntryField;
+  imageField?: CmsField;
   collectionLabel?: string;
   viewStyle?: CollectionViewStyle;
 }

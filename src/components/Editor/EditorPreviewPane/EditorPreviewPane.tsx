@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import React, { isValidElement, useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
 
-import { boundGetAsset } from '../../../actions/media';
+import { getAsset } from '../../../actions/media';
 import { INFERABLE_FIELDS } from '../../../constants/fieldInference';
 import { getPreviewTemplate, getRemarkPlugins, resolveWidget } from '../../../lib/registry';
 import { selectField, selectInferedField, selectTemplateName } from '../../../reducers/collections';
@@ -13,7 +13,6 @@ import EditorPreview from './EditorPreview';
 import EditorPreviewContent from './EditorPreviewContent';
 import PreviewHOC from './PreviewHOC';
 
-import type { Dispatch } from '@reduxjs/toolkit';
 import type { ReactFragment } from 'react';
 import type { ReactNode } from 'react-markdown';
 import type { ConnectedProps } from 'react-redux';
@@ -304,6 +303,10 @@ const PreviewPane = (props: EditorPreviewPaneProps) => {
     return iFields;
   }, [collection]);
 
+  const handleGetAsset = useCallback((path: string, field?: CmsField) => {
+    return getAsset(collection, entry, path, field);
+  }, [collection, entry, getAsset]);
+
   /**
    * This function exists entirely to expose nested widgets for object and list
    * fields to custom preview templates.
@@ -328,7 +331,7 @@ const PreviewPane = (props: EditorPreviewPaneProps) => {
         return value.map(val => {
           const widgets = nestedFields.reduce((acc, field, index) => {
             acc[field.name] = (
-              <div key={index}>{getWidget(field, val, metadata[field.name], entry, getAsset)}</div>
+              <div key={index}>{getWidget(field, val, metadata[field.name], entry, handleGetAsset)}</div>
             );
             return acc;
           }, {} as Record<string, ReactNode>);
@@ -340,20 +343,20 @@ const PreviewPane = (props: EditorPreviewPaneProps) => {
         data: value,
         widgets: nestedFields.reduce((acc, field, index) => {
           acc[field.name] = (
-            <div key={index}>{getWidget(field, value, metadata[field.name], entry, getAsset)}</div>
+            <div key={index}>{getWidget(field, value, metadata[field.name], entry, handleGetAsset)}</div>
           );
           return acc;
         }, {} as Record<string, ReactNode>),
       };
     },
-    [entry, fields, fieldsMetaData, getAsset],
+    [entry, fields, fieldsMetaData, handleGetAsset],
   );
 
   const widgetFor = useCallback(
     (name: string) => {
-      return getWidgetFor(collection, name, fields, entry, fieldsMetaData, inferedFields, getAsset);
+      return getWidgetFor(collection, name, fields, entry, fieldsMetaData, inferedFields, handleGetAsset);
     },
-    [collection, entry, fields, fieldsMetaData, getAsset, inferedFields],
+    [collection, entry, fields, fieldsMetaData, handleGetAsset, inferedFields],
   );
 
   if (!entry || !entry.data) {
@@ -365,6 +368,7 @@ const PreviewPane = (props: EditorPreviewPaneProps) => {
 
   const previewProps: CmsTemplatePreviewProps = {
     ...props,
+    getAsset: handleGetAsset,
     widgetFor,
     widgetsFor,
   };
@@ -389,35 +393,18 @@ export interface EditorPreviewPaneOwnProps {
   fields: CmsField[];
   entry: Entry;
   fieldsMetaData: Record<string, EntryMeta>;
-  getAsset: GetAssetFunction;
 }
 
-function mapStateToProps(state: State) {
+function mapStateToProps(state: State, ownProps: EditorPreviewPaneOwnProps) {
   const isLoadingAsset = selectIsLoadingAsset(state.medias);
-  return { isLoadingAsset, config: state.config };
+  return { ...ownProps, isLoadingAsset, config: state.config };
 }
 
-function mapDispatchToProps(dispatch: Dispatch) {
-  return {
-    boundGetAsset: (collection: Collection, entry: Entry) =>
-      boundGetAsset(dispatch, collection, entry),
-  };
-}
+const mapDispatchToProps = {
+  getAsset,
+};
 
-function mergeProps(
-  stateProps: ReturnType<typeof mapStateToProps>,
-  dispatchProps: ReturnType<typeof mapDispatchToProps>,
-  ownProps: EditorPreviewPaneOwnProps,
-) {
-  return {
-    ...stateProps,
-    ...dispatchProps,
-    ...ownProps,
-    getAsset: dispatchProps.boundGetAsset(ownProps.collection, ownProps.entry),
-  };
-}
-
-const connector = connect(mapStateToProps, mapDispatchToProps, mergeProps);
+const connector = connect(mapStateToProps, mapDispatchToProps);
 export type EditorPreviewPaneProps = ConnectedProps<typeof connector>;
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(PreviewPane);
+export default connector(PreviewPane);

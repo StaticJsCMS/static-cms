@@ -1,11 +1,12 @@
-import React from 'react';
 import styled from '@emotion/styled';
+import React from 'react';
 
+import { transientOptions } from '../lib';
 import Icon from './Icon';
 import { buttons, colors, colorsRaw, shadows } from './styles';
-import { transientOptions } from '../lib';
 
 import type { MouseEventHandler } from 'react';
+import type { IconType } from './Icon/icons';
 
 const sizes = {
   small: '28px',
@@ -39,9 +40,9 @@ const ButtonRound = styled(
 interface IconButtonProps {
   size: 'small' | 'large';
   isActive: boolean;
-  className: string;
+  className?: string;
   onClick: MouseEventHandler<HTMLButtonElement>;
-  type: string;
+  type: IconType;
   title: string;
 }
 

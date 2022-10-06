@@ -3,12 +3,13 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import get from 'lodash/get';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import confirm from '../../../components/UI/Confirm';
 import {
   getI18nInfo,
   getLocaleDataPath,
+  hasI18n,
   isFieldDuplicate,
   isFieldHidden,
   isFieldTranslatable,
@@ -21,6 +22,7 @@ import type {
   Entry,
   EntryMeta,
   FieldsErrors,
+  I18nSettings,
   TranslatedProps,
   ValueOrNestedValue,
 } from '../../../interface';
@@ -30,10 +32,6 @@ const ControlPaneContainer = styled.div`
   margin: 0 auto;
   padding-bottom: 16px;
   font-size: 16px;
-`;
-
-const LocaleButtonWrapper = styled.div`
-  display: flex;
 `;
 
 const LocaleRowWrapper = styled.div`
@@ -114,16 +112,10 @@ interface ControlPaneProps {
     field: CmsField,
     value: ValueOrNestedValue,
     metadata: EntryMeta | undefined,
-    i18n:
-      | {
-          currentLocale?: string;
-          locales: string[];
-          defaultLocale?: string;
-        }
-      | undefined,
+    i18n: I18nSettings | undefined,
   ) => void;
-  onValidate: () => void;
-  locale: string;
+  onValidate: (uniqueFieldId: string, errors: FieldsErrors[]) => void;
+  locale?: string;
   onLocaleChange: (locale: string) => void;
 }
 
@@ -139,22 +131,18 @@ const ControlPane = ({
   onLocaleChange,
   t,
 }: TranslatedProps<ControlPaneProps>) => {
-  const [selectedLocale, setSelectedLocale] = useState<string>(locale);
+  const i18n = useMemo(() => {
+    if (hasI18n(collection)) {
+      const { locales, defaultLocale } = getI18nInfo(collection);
+      return {
+        currentLocale: locale ?? locales[0],
+        locales,
+        defaultLocale,
+      } as I18nSettings;
+    }
 
-  const { locales, defaultLocale } = getI18nInfo(collection) ?? {};
-  const i18n = locales && {
-    currentLocale: locale,
-    locales,
-    defaultLocale,
-  };
-
-  const handleLocaleChange = useCallback(
-    (val: string) => {
-      setSelectedLocale(val);
-      onLocaleChange(val);
-    },
-    [onLocaleChange],
-  );
+    return undefined;
+  }, [collection, locale]);
 
   const copyFromOtherLocale = useCallback(
     ({ targetLocale }: { targetLocale?: string }) =>
@@ -174,28 +162,20 @@ const ControlPane = ({
         ) {
           return;
         }
-        const { locales, defaultLocale } = getI18nInfo(collection) ?? {};
-
-        const locale = selectedLocale;
-        const i18n = locales && {
-          currentLocale: locale,
-          locales,
-          defaultLocale,
-        };
 
         fields.forEach(field => {
           if (isFieldTranslatable(field, targetLocale, sourceLocale)) {
             const copyValue = getFieldValue(
               field,
               entry,
-              sourceLocale !== defaultLocale,
+              sourceLocale !== i18n?.defaultLocale,
               sourceLocale,
             );
             onChange(field, copyValue, undefined, i18n);
           }
         });
       },
-    [],
+    [fields, entry, onChange, i18n],
   );
 
   if (!collection || !fields) {
@@ -208,17 +188,17 @@ const ControlPane = ({
 
   return (
     <ControlPaneContainer>
-      {locales ? (
+      {i18n?.locales && locale ? (
         <LocaleRowWrapper>
           <LocaleDropdown
-            locales={locales}
+            locales={i18n.locales}
             dropdownText={t('editor.editorControlPane.i18n.writingInLocale', {
               locale: locale?.toUpperCase(),
             })}
-            onLocaleChange={handleLocaleChange}
+            onLocaleChange={onLocaleChange}
           />
           <LocaleDropdown
-            locales={locales.filter(l => l !== locale)}
+            locales={i18n.locales.filter(l => l !== locale)}
             dropdownText={t('editor.editorControlPane.i18n.copyFromLocale')}
             onLocaleChange={copyFromOtherLocale({ targetLocale: locale })}
           />
@@ -227,9 +207,9 @@ const ControlPane = ({
       {fields
         .filter(f => f.widget !== 'hidden')
         .map((field, i) => {
-          const isTranslatable = isFieldTranslatable(field, locale, defaultLocale);
-          const isDuplicate = isFieldDuplicate(field, locale, defaultLocale);
-          const isHidden = isFieldHidden(field, locale, defaultLocale);
+          const isTranslatable = isFieldTranslatable(field, locale, i18n?.defaultLocale);
+          const isDuplicate = isFieldDuplicate(field, locale, i18n?.defaultLocale);
+          const isHidden = isFieldHidden(field, locale, i18n?.defaultLocale);
           const key = i18n ? `${locale}_${i}` : i;
 
           return (
@@ -245,8 +225,8 @@ const ControlPane = ({
               onValidate={onValidate}
               isDisabled={isDuplicate}
               isHidden={isHidden}
-              isFieldDuplicate={field => isFieldDuplicate(field, locale, defaultLocale)}
-              isFieldHidden={field => isFieldHidden(field, locale, defaultLocale)}
+              isFieldDuplicate={field => isFieldDuplicate(field, locale, i18n?.defaultLocale)}
+              isFieldHidden={field => isFieldHidden(field, locale, i18n?.defaultLocale)}
               locale={locale}
             />
           );
@@ -255,34 +235,4 @@ const ControlPane = ({
   );
 };
 
-// export default class ControlPane extends React.Component {
-//   state = {
-//     selectedLocale: this.props.locale,
-//   };
-
-//   componentValidate = {};
-
-//   controlRef(field, wrappedControl) {
-//     if (!wrappedControl) return;
-//     const name = field.name;
-
-//     this.componentValidate[name] =
-//       wrappedControl.innerWrappedControl?.validate || wrappedControl.validate;
-//   }
-
-//   validate = async () => {
-//     this.props.fields.forEach(field => {
-//       if (field.widget === 'hidden') return;
-//       this.componentValidate[field.name]();
-//     });
-//   };
-
-//   switchToDefaultLocale = () => {
-//     if (hasI18n(this.props.collection)) {
-//       const { defaultLocale } = getI18nInfo(this.props.collection);
-//       return new Promise(resolve => this.setState({ selectedLocale: defaultLocale }, resolve));
-//     } else {
-//       return Promise.resolve();
-//     }
-//   };
-// }
+export default ControlPane;

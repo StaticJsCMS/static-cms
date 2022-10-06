@@ -1,7 +1,5 @@
 import debounce from 'lodash/debounce';
-import PropTypes from 'prop-types';
-import React, { useCallback, useMemo } from 'react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
@@ -29,14 +27,19 @@ import { Loader } from '../../ui';
 import confirm from '../UI/Confirm';
 import EditorInterface from './EditorInterface';
 
-import type { ConnectedProps } from 'react-redux';
+import type { TransitionPromptHook } from 'history';
 import type { ComponentType } from 'react';
-import type { State, TranslatedProps } from '../../interface';
-
-interface EditorPersistOptions {
-  createNew?: boolean;
-  duplicate?: boolean;
-}
+import type { ConnectedProps } from 'react-redux';
+import type {
+  CmsField,
+  EditorPersistOptions,
+  Entry,
+  EntryMeta,
+  I18nSettings,
+  State,
+  TranslatedProps,
+  ValueOrNestedValue,
+} from '../../interface';
 
 const Editor = ({
   entry,
@@ -59,6 +62,8 @@ const Editor = ({
   showDelete,
   slug,
   publishedEntry,
+  localBackup,
+  collectionEntriesLoaded,
 }: TranslatedProps<EditorProps>) => {
   const createBackup = useMemo(
     () =>
@@ -68,10 +73,13 @@ const Editor = ({
     [],
   );
 
-  const handleChangeDraftField = useCallback((field, value, metadata, i18n) => {
-    const entries = [publishedEntry].filter(Boolean);
-    changeDraftField({ field, value, metadata, entries, i18n });
-  }, []);
+  const handleChangeDraftField = useCallback(
+    (field: CmsField, value: ValueOrNestedValue, metadata: EntryMeta = {}, i18n: I18nSettings | undefined) => {
+      const entries = [publishedEntry].filter(Boolean);
+      changeDraftField({ field, value, metadata, entries, i18n });
+    },
+    [publishedEntry],
+  );
 
   const deleteBackup = useCallback(() => {
     createBackup.cancel();
@@ -139,6 +147,136 @@ const Editor = ({
     }, 0);
   }, [collection, deleteBackup, entryDraft.hasChanged, newEntry, slug]);
 
+  const [prevLocalBackup, setPrevLocalBackup] = useState<
+    | {
+        entry: Entry;
+      }
+    | undefined
+  >();
+
+  useEffect(() => {
+    let alive = true;
+
+    if (!prevLocalBackup && localBackup) {
+      const updateLocalBackup = async () => {
+        const confirmLoadBackup = await confirm({
+          title: 'editor.editor.confirmLoadBackupTitle',
+          body: 'editor.editor.confirmLoadBackupBody',
+        });
+
+        if (alive) {
+          if (confirmLoadBackup) {
+            loadLocalBackup();
+          } else {
+            deleteBackup();
+          }
+        }
+      };
+
+      updateLocalBackup();
+    }
+
+    setPrevLocalBackup(localBackup);
+    return () => {
+      alive = false;
+    };
+  }, [deleteBackup, localBackup, prevLocalBackup]);
+
+  useEffect(() => {
+    if (hasChanged) {
+      createBackup(entryDraft.entry, collection);
+    }
+  }, [collection, createBackup, entryDraft.entry, hasChanged]);
+
+  useEffect(() => {
+    if (newEntry) {
+      createEmptyDraft(collection, location.search);
+    }
+  }, [collection, newEntry]);
+
+  useEffect(() => {
+    retrieveLocalBackup(collection, slug);
+
+    if (newEntry) {
+      createEmptyDraft(collection, location.search);
+    } else {
+      loadEntry(collection, slug);
+    }
+
+    const leaveMessage = t('editor.editor.onLeavePage');
+
+    const exitBlocker = (event: BeforeUnloadEvent) => {
+      if (entryDraft.hasChanged) {
+        // This message is ignored in most browsers, but its presence
+        // triggers the confirmation dialog
+        event.returnValue = leaveMessage;
+        return leaveMessage;
+      }
+    };
+    window.addEventListener('beforeunload', exitBlocker);
+
+    const navigationBlocker: TransitionPromptHook = (location, action) => {
+      /**
+       * New entry being saved and redirected to it's new slug based url.
+       */
+      const isPersisting = entryDraft.entry?.isPersisting;
+      const newRecord = entryDraft.entry?.newRecord;
+      const newEntryPath = `/collections/${collection.name}/new`;
+      if (isPersisting && newRecord && location.pathname === newEntryPath && action === 'PUSH') {
+        return;
+      }
+
+      if (hasChanged) {
+        return leaveMessage;
+      }
+    };
+
+    const unblock = history.block(navigationBlocker);
+
+    /**
+     * This will run as soon as the location actually changes, unless creating
+     * a new post. The confirmation above will run first.
+     */
+    const unlisten = history.listen((location, action) => {
+      const newEntryPath = `/collections/${collection.name}/new`;
+      const entriesPath = `/collections/${collection.name}/entries/`;
+      const { pathname } = location;
+      if (
+        pathname.startsWith(newEntryPath) ||
+        (pathname.startsWith(entriesPath) && action === 'PUSH')
+      ) {
+        return;
+      }
+
+      deleteBackup();
+
+      unblock();
+      unlisten();
+    });
+
+    if (!collectionEntriesLoaded) {
+      loadEntries(collection);
+    }
+
+    return () => {
+      createBackup.flush();
+      discardDraft();
+      window.removeEventListener('beforeunload', exitBlocker);
+    };
+  }, [
+    collection,
+    collectionEntriesLoaded,
+    createBackup,
+    deleteBackup,
+    entryDraft.entry?.isPersisting,
+    entryDraft.entry?.newRecord,
+    entryDraft.hasChanged,
+    hasChanged,
+    newEntry,
+    slug,
+    t,
+  ]);
+
   if (entry && entry.error) {
     return (
       <div>
@@ -161,7 +299,6 @@ const Editor = ({
       onValidate={changeDraftFieldValidation}
       onPersist={handlePersistEntry}
       onDelete={handleDeleteEntry}
-      onPublish={handlePublishEntry}
       onDuplicate={handleDuplicateEntry}
       showDelete={showDelete}
       user={user}
@@ -179,173 +316,11 @@ const Editor = ({
   );
 };
 
-// class Editor extends React.Component {
-//   static propTypes = {
-//     changeDraftField: PropTypes.func.isRequired,
-//     changeDraftFieldValidation: PropTypes.func.isRequired,
-//     collection: ImmutablePropTypes.map.isRequired,
-//     createDraftDuplicateFromEntry: PropTypes.func.isRequired,
-//     createEmptyDraft: PropTypes.func.isRequired,
-//     discardDraft: PropTypes.func.isRequired,
-//     entry: ImmutablePropTypes.map,
-//     entryDraft: ImmutablePropTypes.map.isRequired,
-//     loadEntry: PropTypes.func.isRequired,
-//     persistEntry: PropTypes.func.isRequired,
-//     deleteEntry: PropTypes.func.isRequired,
-//     showDelete: PropTypes.bool.isRequired,
-//     fields: ImmutablePropTypes.list.isRequired,
-//     slug: PropTypes.string,
-//     newEntry: PropTypes.bool.isRequired,
-//     displayUrl: PropTypes.string,
-//     isModification: PropTypes.bool,
-//     collectionEntriesLoaded: PropTypes.bool,
-//     logoutUser: PropTypes.func.isRequired,
-//     loadEntries: PropTypes.func.isRequired,
-//     currentStatus: PropTypes.string,
-//     user: PropTypes.object,
-//     location: PropTypes.shape({
-//       pathname: PropTypes.string,
-//       search: PropTypes.string,
-//     }),
-//     hasChanged: PropTypes.bool,
-//     t: PropTypes.func.isRequired,
-//     retrieveLocalBackup: PropTypes.func.isRequired,
-//     localBackup: ImmutablePropTypes.map,
-//     loadLocalBackup: PropTypes.func,
-//     persistLocalBackup: PropTypes.func.isRequired,
-//     deleteLocalBackup: PropTypes.func,
-//     toggleScroll: PropTypes.func.isRequired,
-//     scrollSyncEnabled: PropTypes.bool.isRequired,
-//     loadScroll: PropTypes.func.isRequired,
-//   };
-
-//   componentDidMount() {
-//     const {
-//       newEntry,
-//       collection,
-//       slug,
-//       loadEntry,
-//       createEmptyDraft,
-//       loadEntries,
-//       retrieveLocalBackup,
-//       collectionEntriesLoaded,
-//       t,
-//     } = this.props;
-
-//     retrieveLocalBackup(collection, slug);
-
-//     if (newEntry) {
-//       createEmptyDraft(collection, this.props.location.search);
-//     } else {
-//       loadEntry(collection, slug);
-//     }
-
-//     const leaveMessage = t('editor.editor.onLeavePage');
-
-//     this.exitBlocker = event => {
-//       if (this.props.entryDraft.hasChanged) {
-//         // This message is ignored in most browsers, but its presence
-//         // triggers the confirmation dialog
-//         event.returnValue = leaveMessage;
-//         return leaveMessage;
-//       }
-//     };
-//     window.addEventListener('beforeunload', this.exitBlocker);
-
-//     const navigationBlocker = (location, action) => {
-//       /**
-//        * New entry being saved and redirected to it's new slug based url.
-//        */
-//       const isPersisting = this.props.entryDraft.getIn(['entry', 'isPersisting']);
-//       const newRecord = this.props.entryDraft.getIn(['entry', 'newRecord']);
-//       const newEntryPath = `/collections/${collection.name}/new`;
-//       if (
-//         isPersisting &&
-//         newRecord &&
-//         this.props.location.pathname === newEntryPath &&
-//         action === 'PUSH'
-//       ) {
-//         return;
-//       }
-
-//       if (this.props.hasChanged) {
-//         return leaveMessage;
-//       }
-//     };
-
-//     const unblock = history.block(navigationBlocker);
-
-//     /**
-//      * This will run as soon as the location actually changes, unless creating
-//      * a new post. The confirmation above will run first.
-//      */
-//     this.unlisten = history.listen((location, action) => {
-//       const newEntryPath = `/collections/${collection.name}/new`;
-//       const entriesPath = `/collections/${collection.name}/entries/`;
-//       const { pathname } = location;
-//       if (
-//         pathname.startsWith(newEntryPath) ||
-//         (pathname.startsWith(entriesPath) && action === 'PUSH')
-//       ) {
-//         return;
-//       }
-
-//       this.deleteBackup();
-
-//       unblock();
-//       this.unlisten();
-//     });
-
-//     if (!collectionEntriesLoaded) {
-//       loadEntries(collection);
-//     }
-//   }
-
-//   async checkLocalBackup(prevProps) {
-//     const { hasChanged, localBackup, loadLocalBackup, entryDraft, collection } = this.props;
-
-//     if (!prevProps.localBackup && localBackup) {
-//       const confirmLoadBackup = await confirm({
-//         title: 'editor.editor.confirmLoadBackupTitle',
-//         body: 'editor.editor.confirmLoadBackupBody',
-//       });
-//       if (confirmLoadBackup) {
-//         loadLocalBackup();
-//       } else {
-//         this.deleteBackup();
-//       }
-//     }
-
-//     if (hasChanged) {
-//       this.createBackup(entryDraft.entry, collection);
-//     }
-//   }
-
-//   componentDidUpdate(prevProps) {
-//     this.checkLocalBackup(prevProps);
-
-//     if (prevProps.entry === this.props.entry) {
-//       return;
-//     }
-
-//     const { newEntry, collection } = this.props;
-
-//     if (newEntry) {
-//       prevProps.createEmptyDraft(collection, this.props.location.search);
-//     }
-//   }
-
-//   componentWillUnmount() {
-//     this.createBackup.flush();
-//     this.props.discardDraft();
-//     window.removeEventListener('beforeunload', this.exitBlocker);
-//   }
-// }
-
 interface CollectionViewOwnProps {
   name: string;
   slug: string;
   newRecord: boolean;
+  showDelete: boolean;
 }
 
 function mapStateToProps(state: State, ownProps: CollectionViewOwnProps) {
@@ -379,12 +354,12 @@ function mapStateToProps(state: State, ownProps: CollectionViewOwnProps) {
   const scrollSyncEnabled = scroll.isScrolling;
 
   return {
+    ...ownProps,
     collection,
     collections,
     newEntry,
     entryDraft,
     fields,
-    slug,
     entry,
     user,
     hasChanged,

@@ -5,7 +5,7 @@ import { Waypoint } from 'react-waypoint';
 import { selectFields, selectInferedField } from '../../../reducers/collections';
 import EntryCard from './EntryCard';
 
-import type { Collection, Collections, Entry, EntryField } from '../../../interface';
+import type { Collection, Collections, Entry, CmsField } from '../../../interface';
 import type { CollectionViewStyle } from '../../../constants/collectionViews';
 import type Cursor from '../../../lib/util/Cursor';
 
@@ -65,7 +65,7 @@ const EntryListing = ({
       titleField?: string | null;
       descriptionField?: string | null;
       imageField?: string | null;
-      remainingFields?: EntryField[];
+      remainingFields?: CmsField[];
     } => {
       if (!collection) {
         return {};

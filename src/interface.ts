@@ -98,6 +98,7 @@ export interface Entry {
   newRecord?: boolean;
   isFetching?: boolean;
   isPersisting?: boolean;
+  isDeleting?: boolean;
   error?: string;
   i18n?: {
     [locale: string]: CmsLocalePhrasesRoot;
@@ -107,27 +108,13 @@ export interface Entry {
 export type Entities = Record<string, Entry>;
 
 export interface FieldsErrors {
-  [field: string]: { type: string; parentIds: string; message?: string }[];
+  [field: string]: { type: string; parentIds: string[]; message?: string }[];
 }
 
 export interface EntryDraft {
   entry: Entry;
   fieldsErrors: FieldsErrors;
   fieldsMetaData?: Record<string, Record<string, string>>;
-}
-
-export interface EntryField {
-  field?: EntryField;
-  fields?: EntryField[];
-  types?: EntryField[];
-  widget: string;
-  name: string;
-  default: string | null | boolean | unknown[];
-  media_folder?: string;
-  public_folder?: string;
-  comment?: string;
-  meta?: boolean;
-  i18n: 'translate' | 'duplicate' | 'none';
 }
 
 export interface FilterRule {
@@ -138,12 +125,15 @@ export interface FilterRule {
 export interface CollectionFile {
   file: string;
   name: string;
-  fields: EntryField[];
+  fields: CmsField[];
   label: string;
   media_folder?: string;
   public_folder?: string;
   preview_path?: string;
   preview_path_date_field?: string;
+  editor?: {
+    preview?: boolean;
+  }
 }
 
 interface Nested {
@@ -155,20 +145,25 @@ interface Meta {
   path?: { label: string; widget: string; index_file: string };
 }
 
-interface i18n {
-  structure: I18N_STRUCTURE;
+export interface I18nSettings {
+  currentLocale: string;
+  defaultLocale: string;
   locales: string[];
-  default_locale: string;
 }
 
 export type Format = keyof typeof formatExtensions;
 
+export interface i18nCollection extends Omit<Collection, 'i18n'> {
+  i18n: Required<Collection>['i18n'];
+}
+
 export interface Collection {
   name: string;
+  description?: string;
   icon?: string;
   folder?: string;
   files?: CollectionFile[];
-  fields: EntryField[];
+  fields: CmsField[];
   isFetching?: boolean;
   media_folder?: string;
   public_folder?: string;
@@ -192,8 +187,17 @@ export interface Collection {
   view_groups: ViewGroup[];
   nested?: Nested;
   meta?: Meta;
-  i18n?: boolean | i18n;
+  i18n?:
+    | boolean
+    | {
+        structure: I18N_STRUCTURE;
+        locales: string[];
+        default_locale: string;
+      };
   hide?: boolean;
+  editor?: {
+    preview?: boolean;
+  }
 }
 
 export type Collections = Record<string, Collection>;
@@ -247,7 +251,7 @@ export interface Integration {
 
 export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
-export type GetAssetFunction = (path: string, field?: EntryField) => AssetProxy;
+export type GetAssetFunction = (path: string, field?: CmsField) => AssetProxy;
 
 export interface CmsWidgetControlProps<T = unknown> {
   value: T;
@@ -947,7 +951,7 @@ export interface EditorComponentManualOptions<T = EntryData> {
   allow_add?: boolean;
   fromBlock: (match: RegExpMatchArray) => T;
   toBlock: (data: T) => string;
-  toPreview: (data: T, getAsset: GetAssetFunction, fields: EntryField[]) => ReactNode;
+  toPreview: (data: T, getAsset: GetAssetFunction, fields: CmsField[]) => ReactNode;
 }
 
 export function isEditorComponentWidgetOptions(
@@ -1029,3 +1033,14 @@ export interface SearchQueryResponse {
   hits: Entry[];
   query: string;
 }
+
+export interface EditorPersistOptions {
+  createNew?: boolean;
+  duplicate?: boolean;
+}
+
+export interface I18nInfo {
+  locales: string[];
+  defaultLocale: string;
+  structure?: I18N_STRUCTURE;
+};

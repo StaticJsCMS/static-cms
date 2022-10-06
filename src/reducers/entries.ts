@@ -43,7 +43,7 @@ import type {
   CollectionFile,
   Entities,
   Entry,
-  EntryField,
+  CmsField,
   Filter,
   FilterMap,
   Group,
@@ -749,7 +749,7 @@ function hasCustomFolder(
   folderKey: 'media_folder' | 'public_folder',
   collection: Collection | undefined | null,
   slug: string | undefined,
-  field: EntryField | undefined,
+  field: CmsField | undefined,
 ) {
   if (!collection) {
     return false;
@@ -778,8 +778,8 @@ function traverseFields(
   config: CmsConfig,
   collection: Collection,
   entryMap: Entry | undefined,
-  field: EntryField,
-  fields: EntryField[],
+  field: CmsField,
+  fields: CmsField[],
   currentFolder: string,
 ): string | null {
   const matchedField = fields.filter(f => f === field)[0];
@@ -853,7 +853,7 @@ function evaluateFolder(
   config: CmsConfig,
   c: Collection,
   entryMap: Entry | undefined,
-  field: EntryField | undefined,
+  field: CmsField | undefined,
 ) {
   let currentFolder = config[folderKey]!;
 
@@ -900,7 +900,7 @@ function evaluateFolder(
           collection,
           entryMap,
           field,
-          file.fields! as EntryField[],
+          file.fields! as CmsField[],
           currentFolder,
         );
 
@@ -928,7 +928,7 @@ function evaluateFolder(
         collection,
         entryMap,
         field,
-        collection.fields! as EntryField[],
+        collection.fields! as CmsField[],
         currentFolder,
       );
 
@@ -945,7 +945,7 @@ export function selectMediaFolder(
   config: CmsConfig,
   collection: Collection | undefined | null,
   entryMap: Entry | undefined,
-  field: EntryField | undefined,
+  field: CmsField | undefined,
 ) {
   const name = 'media_folder';
   let mediaFolder = config[name];
@@ -973,7 +973,7 @@ export function selectMediaFilePath(
   collection: Collection | null,
   entryMap: Entry | undefined,
   mediaPath: string,
-  field: EntryField | undefined,
+  field: CmsField | undefined,
 ) {
   if (isAbsolutePath(mediaPath)) {
     return mediaPath;
@@ -989,7 +989,7 @@ export function selectMediaFilePublicPath(
   collection: Collection | null,
   mediaPath: string,
   entryMap: Entry | undefined,
-  field: EntryField | undefined,
+  field: CmsField | undefined,
 ) {
   if (isAbsolutePath(mediaPath)) {
     return mediaPath;

@@ -5,7 +5,7 @@ import { selectMediaFileByPath } from '../reducers/mediaLibrary';
 import { getMediaFile, waitForMediaLibraryToLoad, getMediaDisplayURL } from './mediaLibrary';
 
 import type AssetProxy from '../valueObjects/AssetProxy';
-import type { Collection, State, Entry, EntryField } from '../interface';
+import type { Collection, State, Entry, CmsField } from '../interface';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { AnyAction } from 'redux';
 
@@ -68,13 +68,6 @@ export function loadAsset(resolvedPath: string) {
   };
 }
 
-interface GetAssetArgs {
-  collection: Collection;
-  entry: Entry;
-  path: string;
-  field?: EntryField;
-}
-
 const emptyAsset = createAssetProxy({
   path: 'empty.svg',
   file: new File([`<svg xmlns="http://www.w3.org/2000/svg"></svg>`], 'empty.svg', {
@@ -82,7 +75,7 @@ const emptyAsset = createAssetProxy({
   }),
 });
 
-export function getAsset({ collection, entry, path, field }: GetAssetArgs) {
+export function getAsset(collection: Collection, entry: Entry, path: string, field?: CmsField) {
   return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
     if (!path) {
       return emptyAsset;
