@@ -21,6 +21,14 @@ import {
 } from '../../ui';
 import { basename } from '../../lib/util';
 
+export const getValidateValue = (value) => {
+  if (value) {
+    return isMultiple(value) ? value.map(v => basename(v)) : basename(value);
+  }
+
+  return value;
+};
+
 const MAX_DISPLAY_LENGTH = 50;
 
 const ImageWrapper = styled.div`
@@ -304,15 +312,6 @@ export default function withFileControl({ forImage } = {}) {
       const { value } = this.props;
       const newValue = arrayMove(value, oldIndex, newIndex);
       return this.props.onChange(newValue);
-    };
-
-    getValidateValue = () => {
-      const { value } = this.props;
-      if (value) {
-        return isMultiple(value) ? value.map(v => basename(v)) : basename(value);
-      }
-
-      return value;
     };
 
     renderFileLink = value => {

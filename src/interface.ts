@@ -133,7 +133,7 @@ export interface CollectionFile {
   preview_path_date_field?: string;
   editor?: {
     preview?: boolean;
-  }
+  };
 }
 
 interface Nested {
@@ -197,7 +197,7 @@ export interface Collection {
   hide?: boolean;
   editor?: {
     preview?: boolean;
-  }
+  };
 }
 
 export type Collections = Record<string, Collection>;
@@ -303,7 +303,15 @@ export type CmsTemplatePreviewComponent =
   | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
   | ComponentType<CmsTemplatePreviewProps>;
 
-export interface RegisteredWidget<T = unknown> extends Record<string, unknown> {
+export interface RegisteredWidgetOptions {
+  validator?: RegisteredWidget['validator'];
+  getValidValue?: RegisteredWidget['getValidValue'];
+  schema?: RegisteredWidget['schema'];
+  globalStyles?: string;
+  allowMapValue?: boolean;
+}
+
+export interface RegisteredWidget<T = unknown> {
   control: ComponentType<CmsWidgetControlProps<T>>;
   preview?: CmsWidgetPreviewComponent<T>;
   validator: (props: {
@@ -311,19 +319,17 @@ export interface RegisteredWidget<T = unknown> extends Record<string, unknown> {
     value: T | undefined | null;
     t: t;
   }) => boolean | { error: unknown } | Promise<boolean | { error: unknown }>;
+  getValidValue: (value: T | undefined | null) => T | undefined | null;
   schema?: JSONSchemaType<unknown>;
   globalStyles?: string;
   allowMapValue?: boolean;
 }
 
-export interface CmsWidgetParam<T = unknown> extends Record<string, unknown> {
+export interface CmsWidgetParam<T = unknown> {
   name: string;
   controlComponent: RegisteredWidget<T>['control'];
   previewComponent: RegisteredWidget<T>['preview'];
-  validator?: RegisteredWidget<T>['validator'];
-  schema: RegisteredWidget<T>['schema'];
-  globalStyles?: string;
-  allowMapValue?: boolean;
+  options?: RegisteredWidgetOptions;
 }
 
 export interface PreviewTemplateComponentProps {
@@ -1043,4 +1049,4 @@ export interface I18nInfo {
   locales: string[];
   defaultLocale: string;
   structure?: I18N_STRUCTURE;
-};
+}

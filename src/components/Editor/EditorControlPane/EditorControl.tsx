@@ -2,15 +2,14 @@ import { ClassNames, css as coreCss, Global } from '@emotion/react';
 import styled from '@emotion/styled';
 import partial from 'lodash/partial';
 import uniqueId from 'lodash/uniqueId';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import gfm from 'remark-gfm';
 
 import { clearFieldErrors, tryLoadEntry, validateMetaField } from '../../../actions/entries';
-import { addAsset, boundGetAsset } from '../../../actions/media';
+import { addAsset, getAsset } from '../../../actions/media';
 import {
   clearMediaControl,
   openMediaLibrary,
@@ -25,7 +24,6 @@ import { selectIsLoadingAsset } from '../../../reducers/medias';
 import { borders, colors, FieldLabel, lengths, transitions } from '../../../ui';
 import Widget from './Widget';
 
-import type { Dispatch } from '@reduxjs/toolkit';
 import type { ComponentType } from 'react';
 import type { PluggableList } from 'react-markdown';
 import type { t, TranslateProps } from 'react-polyglot';
@@ -36,6 +34,7 @@ import type {
   Entry,
   EntryMeta,
   FieldsErrors,
+  GetAssetFunction,
   State,
   TranslatedProps,
   ValueOrNestedValue,
@@ -154,7 +153,7 @@ const EditorControl = ({
   fieldsMetaData,
   fieldsErrors,
   mediaPaths,
-  boundGetAsset,
+  getAsset,
   onChange,
   openMediaLibrary,
   clearMediaControl,
@@ -203,6 +202,17 @@ const EditorControl = ({
     return false;
   }, [fieldsErrors, uniqueFieldId]);
   const hasErrors = !!errors || childErrors;
+
+  const handleGetAsset = useCallback(
+    (collection: Collection, entry: Entry): GetAssetFunction => (path: string, field?: CmsField) => {
+      return getAsset(collection, entry, path, field);
+    },
+    [getAsset],
+  );
+
+  if (!collection || !entry) {
+    return null;
+  }
 
   return (
     <ClassNames>
@@ -283,7 +293,7 @@ const EditorControl = ({
               onRemoveInsertedMedia={removeInsertedMedia}
               onPersistMedia={persistMedia}
               onAddAsset={addAsset}
-              getAsset={boundGetAsset}
+              getAsset={handleGetAsset(collection, entry)}
               hasActiveStyle={isSelected || styleActive}
               setActiveStyle={() => setActiveStyle(true)}
               setInactiveStyle={() => setActiveStyle(false)}
@@ -299,12 +309,12 @@ const EditorControl = ({
               isFetching={isFetching}
               fieldsErrors={fieldsErrors}
               onValidateObject={onValidateObject}
-              isEditorComponent={isEditorComponent}
-              isNewEditorComponent={isNewEditorComponent}
+              isEditorComponent={isEditorComponent ?? false}
+              isNewEditorComponent={isNewEditorComponent ?? false}
               parentIds={parentIds}
               t={t}
               validateMetaField={validateMetaField}
-              isDisabled={isDisabled}
+              isDisabled={isDisabled ?? false}
               isFieldDuplicate={isFieldDuplicate}
               isFieldHidden={isFieldHidden}
               locale={locale}
@@ -338,58 +348,6 @@ const EditorControl = ({
   );
 };
 
-function mapStateToProps(state: State) {
-  const { collections, entryDraft } = state;
-  const entry = entryDraft.entry;
-  const collection = entryDraft.entry ? collections[entryDraft.entry.collection] : null;
-  const isLoadingAsset = selectIsLoadingAsset(state.medias);
-
-  async function loadEntry(collectionName: string, slug: string) {
-    const targetCollection = collections[collectionName];
-    if (targetCollection) {
-      const loadedEntry = await tryLoadEntry(state, targetCollection, slug);
-      return loadedEntry;
-    } else {
-      throw new Error(`Can't find collection '${collectionName}'`);
-    }
-  }
-
-  return {
-    mediaPaths: state.mediaLibrary.controlMedia,
-    isFetching: state.search.isFetching,
-    queryHits: state.search.queryHits,
-    config: state.config,
-    entry,
-    collection,
-    isLoadingAsset,
-    loadEntry,
-    validateMetaField: (field: CmsField, value: string | undefined, t: t) =>
-      collection && validateMetaField(state, collection, field, value, t),
-  };
-}
-
-function mapDispatchToProps(dispatch: Dispatch) {
-  const creators = bindActionCreators(
-    {
-      openMediaLibrary,
-      clearMediaControl,
-      removeMediaControl,
-      removeInsertedMedia,
-      persistMedia,
-      addAsset,
-      query,
-      clearSearch,
-      clearFieldErrors,
-    },
-    dispatch,
-  );
-  return {
-    ...creators,
-    boundGetAsset: (collection?: Collection | null, entry?: Entry) =>
-      collection && entry && boundGetAsset(dispatch, collection, entry),
-  };
-}
-
 interface EditorControlOwnProps {
   value: ValueOrNestedValue;
   field: CmsField;
@@ -409,20 +367,51 @@ interface EditorControlOwnProps {
   locale?: string;
 }
 
-function mergeProps(
-  stateProps: ReturnType<typeof mapStateToProps>,
-  dispatchProps: ReturnType<typeof mapDispatchToProps>,
-  ownProps: EditorControlOwnProps,
-) {
+function mapStateToProps(state: State, ownProps: EditorControlOwnProps) {
+  const { collections, entryDraft } = state;
+  const entry = entryDraft.entry;
+  const collection = entryDraft.entry ? collections[entryDraft.entry.collection] : null;
+  const isLoadingAsset = selectIsLoadingAsset(state.medias);
+
+  async function loadEntry(collectionName: string, slug: string) {
+    const targetCollection = collections[collectionName];
+    if (targetCollection) {
+      const loadedEntry = await tryLoadEntry(state, targetCollection, slug);
+      return loadedEntry;
+    } else {
+      throw new Error(`Can't find collection '${collectionName}'`);
+    }
+  }
+
   return {
-    ...stateProps,
-    ...dispatchProps,
     ...ownProps,
-    boundGetAsset: dispatchProps.boundGetAsset(stateProps.collection, stateProps.entry),
+    mediaPaths: state.mediaLibrary.controlMedia,
+    isFetching: state.search.isFetching,
+    queryHits: state.search.queryHits,
+    config: state.config,
+    entry,
+    collection,
+    isLoadingAsset,
+    loadEntry,
+    validateMetaField: (field: CmsField, value: string | undefined, t: t) =>
+      collection && validateMetaField(state, collection, field, value, t),
   };
 }
 
-const connector = connect(mapStateToProps, mapDispatchToProps, mergeProps);
+const mapDispatchToProps = {
+  openMediaLibrary,
+  clearMediaControl,
+  removeMediaControl,
+  removeInsertedMedia,
+  persistMedia,
+  addAsset,
+  query,
+  clearSearch,
+  clearFieldErrors,
+  getAsset,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
 export type EditorControlProps = ConnectedProps<typeof connector>;
 
 const ConnectedEditorControl = connector(

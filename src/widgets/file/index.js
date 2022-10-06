@@ -1,16 +1,18 @@
-import withFileControl from './withFileControl';
+import withFileControl, { getValidateValue } from './withFileControl';
 import previewComponent from './FilePreview';
 import schema from './schema';
 
 const controlComponent = withFileControl();
 
-function Widget(opts = {}) {
+function Widget() {
   return {
     name: 'file',
     controlComponent,
     previewComponent,
-    schema,
-    ...opts,
+    options: {
+      schema,
+      getValidateValue,
+    },
   };
 }
 

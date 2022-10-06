@@ -12,7 +12,7 @@ import type {
   CmsEventListener,
   CmsIcon,
   CmsLocalePhrasesRoot,
-  CmsMediaLibrary,
+  CmsMediaLibraryExternalLibrary,
   CmsMediaLibraryOptions,
   CmsTemplatePreviewComponent,
   CmsWidgetParam,
@@ -21,6 +21,7 @@ import type {
   Entry,
   EventData,
   RegisteredWidget,
+  RegisteredWidgetOptions,
 } from '../interface';
 import type { Pluggable, Settings } from 'unified';
 
@@ -41,7 +42,7 @@ interface Registry {
   editorComponents: Record<string, EditorComponentOptions>;
   remarkPlugins: PluggableList;
   widgetValueSerializers: Record<string, CmsWidgetValueSerializer>;
-  mediaLibraries: (CmsMediaLibrary & { options: CmsMediaLibraryOptions })[];
+  mediaLibraries: (CmsMediaLibraryExternalLibrary & { options: CmsMediaLibraryOptions })[];
   locales: Record<string, CmsLocalePhrasesRoot>;
   eventHandlers: typeof eventHandlers;
 }
@@ -112,15 +113,13 @@ export function registerWidget<T = unknown>(
   name: string,
   control: string | RegisteredWidget<T>['control'],
   preview: RegisteredWidget<T>['preview'],
-  validator: RegisteredWidget<T>['validator'],
-  schema: RegisteredWidget<T>['schema'],
+  options?: RegisteredWidgetOptions,
 ): void;
 export function registerWidget<T = unknown>(
   name: string | CmsWidgetParam<T> | CmsWidgetParam[],
   control?: string | RegisteredWidget<T>['control'],
   preview?: RegisteredWidget<T>['preview'],
-  validator: RegisteredWidget<T>['validator'] = () => true,
-  schema?: RegisteredWidget<T>['schema'],
+  { schema, validator, getValidValue }: RegisteredWidgetOptions = {},
 ): void {
   if (Array.isArray(name)) {
     name.forEach(widget => {
@@ -141,6 +140,7 @@ export function registerWidget<T = unknown>(
         control: newControl,
         preview: preview as RegisteredWidget['preview'],
         validator: validator as RegisteredWidget['validator'],
+        getValidValue: getValidValue as RegisteredWidget['getValidValue'],
         schema,
       };
     }
@@ -149,11 +149,13 @@ export function registerWidget<T = unknown>(
       name: widgetName,
       controlComponent: control,
       previewComponent: preview,
-      validator = () => true,
-      schema,
-      allowMapValue,
-      globalStyles,
-      ...options
+      options: {
+        validator = () => true,
+        getValidValue = (value: T | undefined | null) => value,
+        schema,
+        allowMapValue,
+        globalStyles,
+      } = {}
     } = name;
     if (registry.widgets[widgetName]) {
       console.warn(oneLine`
@@ -168,10 +170,10 @@ export function registerWidget<T = unknown>(
       control: control as RegisteredWidget['control'],
       preview: preview as RegisteredWidget['preview'],
       validator: validator as RegisteredWidget['validator'],
+      getValidValue: getValidValue as RegisteredWidget['getValidValue'],
       schema,
       globalStyles,
-      allowMapValue,
-      ...options,
+      allowMapValue
     };
   } else {
     console.error('`registerWidget` failed, called with incorrect arguments.');
@@ -276,7 +278,7 @@ export function getBackend(name: string): CmsBackendInitializer {
  * Media Libraries
  */
 export function registerMediaLibrary(
-  mediaLibrary: CmsMediaLibrary,
+  mediaLibrary: CmsMediaLibraryExternalLibrary,
   options: CmsMediaLibraryOptions = {},
 ) {
   if (registry.mediaLibraries.find(ml => mediaLibrary.name === ml.name)) {
@@ -287,7 +289,7 @@ export function registerMediaLibrary(
 
 export function getMediaLibrary(
   name: string,
-): (CmsMediaLibrary & { options: CmsMediaLibraryOptions }) | undefined {
+): (CmsMediaLibraryExternalLibrary & { options: CmsMediaLibraryOptions }) | undefined {
   return registry.mediaLibraries.find(ml => ml.name === name);
 }
 
