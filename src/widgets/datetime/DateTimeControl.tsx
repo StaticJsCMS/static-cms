@@ -8,7 +8,7 @@ import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import formatDate from 'date-fns/format';
 import formatISO from 'date-fns/formatISO';
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import type { CmsFieldDateTime, CmsWidgetControlProps, TranslatedProps } from '../../interface';
 
@@ -46,7 +46,8 @@ const DateTimeControl = ({
   setInactiveStyle,
   t,
   isDisabled,
-}: CmsWidgetControlProps<string | null, CmsFieldDateTime>) => {
+  onChange,
+}: CmsWidgetControlProps<string, CmsFieldDateTime>) => {
   const { format, dateFormat, timeFormat } = useMemo(() => {
     const format = field.format;
 
@@ -70,44 +71,41 @@ const DateTimeControl = ({
     return defaultValue;
   }, [field.default]);
 
-  const pickerUtc = useMemo(() => {
-    const pickerUtc = field.picker_utc;
-    return pickerUtc;
-  }, [field.picker_utc]);
+  const handleChange = useCallback(
+    (datetime: string | Date | null) => {
+      if (datetime === null) {
+        onChange(datetime);
+        return;
+      }
 
-  // componentDidMount() {
-  //   const { value } = this.props;
+      if (typeof datetime === 'string') {
+        return datetime;
+      }
 
-  //   /**
-  //    * Set the current date as default value if no value is provided and default is absent. An
-  //    * empty default string means the value is intentionally blank.
-  //    */
-  //   if (value === undefined) {
-  //     setTimeout(() => {
-  //       this.handleChange(this.defaultValue === undefined ? new Date() : this.defaultValue);
-  //     }, 0);
-  //   }
-  // }
+      /**
+       * Produce a formatted string only if a format is set in the config.
+       * Otherwise produce a date object.
+       */
+      if (format) {
+        onChange(formatDate(datetime, format));
+      } else {
+        onChange(formatISO(datetime));
+      }
+    },
+    [format, onChange],
+  );
 
-  // handleChange = (datetime: Date | null) => {
-  //   const { onChange } = this.props;
-  //   const { format } = this.formats;
-
-  //   if (datetime === null) {
-  //     onChange(datetime);
-  //     return;
-  //   }
-
-  //   /**
-  //    * Produce a formatted string only if a format is set in the config.
-  //    * Otherwise produce a date object.
-  //    */
-  //   if (format) {
-  //     onChange(formatDate(datetime, format));
-  //   } else {
-  //     onChange(formatISO(datetime));
-  //   }
-  // };
+  useEffect(() => {
+    /**
+     * Set the current date as default value if no value is provided and default is absent. An
+     * empty default string means the value is intentionally blank.
+     */
+    if (value === undefined) {
+      setTimeout(() => {
+        handleChange(defaultValue === undefined ? new Date() : defaultValue);
+      }, 0);
+    }
+  }, [defaultValue, handleChange, value]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -118,7 +116,7 @@ const DateTimeControl = ({
               typeof timeFormat === 'string' ? timeFormat : undefined
             }`}
             value={value}
-            onChange={this.handleChange}
+            onChange={handleChange}
             onOpen={setActiveStyle}
             onClose={setInactiveStyle}
             renderInput={params => (
@@ -143,7 +141,7 @@ const DateTimeControl = ({
         ) : (
           <TimePicker
             value={value}
-            onChange={this.handleChange}
+            onChange={handleChange}
             onOpen={setActiveStyle}
             onClose={setInactiveStyle}
             renderInput={params => <TextField id={forID} {...params} fullWidth />}
@@ -153,13 +151,15 @@ const DateTimeControl = ({
         <MobileDatePicker
           inputFormat={typeof dateFormat === 'string' ? dateFormat : undefined}
           value={value}
-          onChange={this.handleChange}
+          onChange={handleChange}
           onOpen={setActiveStyle}
           onClose={setInactiveStyle}
           renderInput={params => <TextField id={forID} {...params} fullWidth />}
         />
       )}
-      {!isDisabled && <NowButton t={t} handleChange={v => this.handleChange(v)} />}
+      {!isDisabled && <NowButton t={t} handleChange={v => handleChange(v)} />}
     </LocalizationProvider>
   );
 };
+
+export default DateTimeControl;

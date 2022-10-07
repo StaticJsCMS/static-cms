@@ -1,14 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { WidgetPreviewContainer } from '../../ui';
 
-function DatePreview({ value }) {
+import type { CmsFieldDateTime, CmsWidgetPreviewProps } from '../../interface';
+
+function DatePreview({ value }: CmsWidgetPreviewProps<string, CmsFieldDateTime>) {
   return <WidgetPreviewContainer>{value ? value.toString() : null}</WidgetPreviewContainer>;
 }
-
-DatePreview.propTypes = {
-  value: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
-};
 
 export default DatePreview;
