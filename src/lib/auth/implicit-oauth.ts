@@ -1,4 +1,3 @@
-import { Record } from 'immutable';
 import trim from 'lodash/trim';
 import trimEnd from 'lodash/trimEnd';
 
@@ -53,9 +52,7 @@ export default class ImplicitAuthenticator {
   /**
    * Complete authentication if we were redirected back to from the provider.
    */
-  completeAuth(
-    cb: (error: Error | NetlifyError | null, data?: User) => void,
-  ) {
+  completeAuth(cb: (error: Error | NetlifyError | null, data?: User) => void) {
     const hashParams = new URLSearchParams(document.location.hash.replace(/^#?\/?/, ''));
     if (!hashParams.has('access_token') && !hashParams.has('error')) {
       return;
@@ -63,7 +60,10 @@ export default class ImplicitAuthenticator {
     // Remove tokens from hash so that token does not remain in browser history.
     this.clearHash();
 
-    const params = Record(hashParams.entries());
+    const params = [...hashParams.entries()].reduce((acc, [key, value]) => {
+      acc[key] = value;
+      return acc;
+    }, {} as Record<string, string>);
 
     const { nonce } = JSON.parse(params.state ?? '');
     const validNonce = validateNonce(nonce);
@@ -71,12 +71,12 @@ export default class ImplicitAuthenticator {
       return cb(new Error('Invalid nonce'));
     }
 
-    if (params.has('error')) {
+    if ('error' in hashParams) {
       return cb(new Error(`${params.error}: ${params.error_description}`));
     }
 
-    if (params.has('access_token')) {
-      const { access_token: token, ...data } = params.toJS();
+    if ('access_token' in params) {
+      const { access_token: token, ...data } = params;
       cb(null, { token, ...data } as User);
     }
   }

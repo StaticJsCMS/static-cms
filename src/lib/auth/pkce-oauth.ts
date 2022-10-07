@@ -92,15 +92,18 @@ export default class PkceAuthenticator {
   /**
    * Complete authentication if we were redirected back to from the provider.
    */
-  async completeAuth(
-    cb: (error: Error | NetlifyError | null, data?: User) => void,
-  ) {
-    const params = new URLSearchParams(document.location.search);
+  async completeAuth(cb: (error: Error | NetlifyError | null, data?: User) => void) {
+    const searchParams = new URLSearchParams(document.location.search);
+
+    const params = [...searchParams.entries()].reduce((acc, [key, value]) => {
+      acc[key] = value;
+      return acc;
+    }, {} as Record<string, string>);
 
     // Remove code from url
     window.history.replaceState(null, '', document.location.pathname);
 
-    if (!params.has('code') && !params.has('error')) {
+    if (!('code' in params) && !('error' in params)) {
       return;
     }
 
@@ -110,11 +113,11 @@ export default class PkceAuthenticator {
       return cb(new Error('Invalid nonce'));
     }
 
-    if (params.has('error')) {
+    if ('error' in params) {
       return cb(new Error(`${params.error}: ${params.error_description}`));
     }
 
-    if (params.has('code')) {
+    if ('code' in params) {
       const code = params.code;
       const authURL = new URL(this.auth_token_url);
       authURL.searchParams.set('client_id', this.appID);

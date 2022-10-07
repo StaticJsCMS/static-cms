@@ -163,14 +163,13 @@ export function previewUrlFormatter(
     return baseUrl;
   }
 
-  let fields = entry.data as Record<string, string>;
-  fields = addFileTemplateFields(entry.path, fields, collection.folder);
+  const fields = addFileTemplateFields(entry.path, entry.data, collection.folder);
   const dateFieldName = getDateField() || selectInferedField(collection, 'date');
-  const date = parseDateFromEntry(entry as unknown as Record<string, unknown>, dateFieldName);
+  const date = parseDateFromEntry(entry, dateFieldName);
 
   // Prepare and sanitize slug variables only, leave the rest of the
   // `preview_path` template as is.
-  const processSegment = getProcessSegment(slugConfig, [fields.dirname]);
+  const processSegment = getProcessSegment(slugConfig, [fields.dirname as string]);
   let compiledPath;
 
   try {
@@ -197,7 +196,7 @@ export function summaryFormatter(summaryTemplate: string, entry: Entry, collecti
   let entryData = entry.data;
   const date =
     parseDateFromEntry(
-      entry as unknown as Record<string, unknown>,
+      entry,
       selectInferedField(collection, 'date'),
     ) || null;
   const identifier = get(entryData, keyToPathArray(selectIdentifier(collection)));
@@ -231,11 +230,11 @@ export function folderFormatter(
 
   const date =
     parseDateFromEntry(
-      entry as unknown as Record<string, unknown>,
+      entry,
       selectInferedField(collection, 'date'),
     ) || null;
   const identifier = get(fields, keyToPathArray(selectIdentifier(collection)));
-  const processSegment = getProcessSegment(slugConfig, [defaultFolder, fields.dirname]);
+  const processSegment = getProcessSegment(slugConfig, [defaultFolder, fields.dirname as string]);
 
   const mediaFolder = compileStringTemplate(
     folderTemplate,

@@ -1,4 +1,3 @@
-import { List } from 'immutable';
 import get from 'lodash/get';
 
 import yamlFormatter from './yaml';
@@ -7,8 +6,7 @@ import jsonFormatter from './json';
 import { FrontmatterInfer, frontmatterJSON, frontmatterTOML, frontmatterYAML } from './frontmatter';
 
 import type { Delimiter } from './frontmatter';
-import type { Collection, EntryObject, Format } from '../interface';
-import type { Entry } from '../valueObjects/Entry';
+import type { Collection, Entry, Format } from '../interface';
 
 export const frontmatterFormats = ['yaml-frontmatter', 'toml-frontmatter', 'json-frontmatter'];
 
@@ -46,23 +44,14 @@ function formatByName(name: Format, customDelimiter?: Delimiter) {
   }[name];
 }
 
-function frontmatterDelimiterIsList(
-  frontmatterDelimiter?: Delimiter | string[],
-): frontmatterDelimiter is string[] {
-  return List.isList(frontmatterDelimiter);
-}
-
-export function resolveFormat(collection: Collection, entry: EntryObject | Entry) {
+export function resolveFormat(collection: Collection, entry: Entry) {
   // Check for custom delimiter
   const frontmatter_delimiter = collection.frontmatter_delimiter;
-  const customDelimiter = frontmatterDelimiterIsList(frontmatter_delimiter)
-    ? (frontmatter_delimiter() as [string, string])
-    : frontmatter_delimiter;
 
   // If the format is specified in the collection, use that format.
   const formatSpecification = collection.format;
   if (formatSpecification) {
-    return formatByName(formatSpecification, customDelimiter);
+    return formatByName(formatSpecification, frontmatter_delimiter);
   }
 
   // If a file already exists, infer the format from its file extension.
@@ -82,5 +71,5 @@ export function resolveFormat(collection: Collection, entry: EntryObject | Entry
   }
 
   // If no format is specified and it cannot be inferred, return the default.
-  return formatByName('frontmatter', customDelimiter);
+  return formatByName('frontmatter', frontmatter_delimiter);
 }

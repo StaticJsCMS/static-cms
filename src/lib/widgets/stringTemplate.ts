@@ -4,7 +4,7 @@ import truncate from 'lodash/truncate';
 import moment from 'moment';
 import { basename, dirname, extname } from 'path';
 
-import type { Entry } from '../../interface';
+import type { Entry, EntryData } from '../../interface';
 
 const filters = [
   { pattern: /^upper$/, transform: (str: string) => str.toUpperCase() },
@@ -83,7 +83,8 @@ export function parseDateFromEntry(entry: Entry, dateFieldName?: string | null) 
   }
 
   const dateValue = entry.data[dateFieldName];
-  const dateMoment = dateValue ? moment(dateValue) : null;
+  const dateMoment =
+    typeof dateValue === 'string' || typeof dateValue === 'number' ? moment(dateValue) : null;
   if (dateMoment && dateMoment.isValid()) {
     return dateMoment.toDate();
   }
@@ -255,7 +256,7 @@ export function extractTemplateVars(template: string) {
  */
 export function addFileTemplateFields(
   entryPath: string,
-  fields: Record<string, string>,
+  fields: EntryData,
   folder = '',
 ) {
   if (!entryPath) {

@@ -194,7 +194,7 @@ export interface Collection {
   type: 'file_based_collection' | 'folder_based_collection';
   extension?: string;
   format?: Format;
-  frontmatter_delimiter?: string[] | string | [string, string];
+  frontmatter_delimiter?: string | [string, string];
   create?: boolean;
   delete?: boolean;
   identifier_field?: string;
@@ -570,8 +570,8 @@ export type CmsLocalePhrases = string | { [property: string]: CmsLocalePhrases }
 export type CmsIcon = () => JSX.Element;
 
 export type CmsWidgetValueSerializer = {
-  serialize: (value: EntryData) => EntryData;
-  deserialize: (value: EntryData) => EntryData;
+  serialize: (value: ValueOrNestedValue) => ValueOrNestedValue;
+  deserialize: (value: ValueOrNestedValue) => ValueOrNestedValue;
 };
 
 export type CmsMediaLibraryOptions = Record<string, unknown>;
@@ -735,7 +735,7 @@ export interface CmsFieldList {
   max?: number;
   min?: number;
   add_to_top?: boolean;
-  types?: (CmsFieldBase & CmsFieldObject)[];
+  types?: CmsField[];
 }
 
 export interface CmsFieldMap {

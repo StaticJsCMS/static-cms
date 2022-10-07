@@ -37,9 +37,9 @@ function runSerializer(
   let serializedData =
     fields?.reduce((acc, field) => {
       const fieldName = field.name;
-      const value = values[fieldName] as EntryData;
-      const serializer = getWidgetValueSerializer(field.widget);
-      const nestedFields = field.fields;
+      const value = values[fieldName];
+      const serializer = 'widget' in field && field.widget ? getWidgetValueSerializer(field.widget) : undefined;
+      const nestedFields = 'fields' in field ? field.fields : undefined;
 
       // Call recursively for fields within lists
       if (nestedFields && Array.isArray(value)) {

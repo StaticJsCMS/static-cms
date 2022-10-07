@@ -1,7 +1,5 @@
 import isNumber from 'lodash/isNumber';
 
-import type { List } from 'immutable';
-
 export function validateMinMax(
   t: (key: string, options: unknown) => string,
   fieldLabel: string,
@@ -21,11 +19,11 @@ export function validateMinMax(
     };
   }
 
-  if ([min, max, value?.size].every(isNumber) && (value!.size < min! || value!.size > max!)) {
+  if ([min, max, value?.length].every(isNumber) && (value!.length < min! || value!.length > max!)) {
     return minMaxError(min === max ? 'rangeCountExact' : 'rangeCount');
-  } else if (isNumber(min) && min > 0 && value?.size && value.size < min) {
+  } else if (isNumber(min) && min > 0 && value?.length && value.length < min) {
     return minMaxError('rangeMin');
-  } else if (isNumber(max) && value?.size && value.size > max) {
+  } else if (isNumber(max) && value?.length && value.length > max) {
     return minMaxError('rangeMax');
   }
 }
