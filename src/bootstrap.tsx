@@ -44,7 +44,7 @@ function mapDispatchToProps(state: State) {
 const connector = connect(mapDispatchToProps);
 export type AppRootProps = ConnectedProps<typeof connector>;
 
-const ConnectedTranslatedApp = connect(mapDispatchToProps)(TranslatedApp);
+const ConnectedTranslatedApp = connector(TranslatedApp);
 
 function bootstrap(opts: { config: CmsConfig }) {
   const { config } = opts;

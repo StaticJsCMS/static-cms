@@ -86,9 +86,19 @@ const styleStrings = {
   `,
 };
 
-const ControlContainer = styled.div`
-  margin-top: 16px;
-`;
+interface ControlContainerProps {
+  $isHidden: boolean;
+}
+
+const ControlContainer = styled(
+  'div',
+  transientOptions,
+)<ControlContainerProps>(
+  ({ $isHidden }) => `
+    margin-top: 16px;
+    ${$isHidden ? styleStrings.hidden : ''};
+  `,
+);
 
 const ControlErrorsList = styled.ul`
   list-style-type: none;
@@ -221,12 +231,7 @@ const EditorControl = ({
   return (
     <ClassNames>
       {({ css, cx }) => (
-        <ControlContainer
-          className={className}
-          css={css`
-            ${isHidden ? styleStrings.hidden : ''};
-          `}
-        >
+        <ControlContainer className={className} $isHidden={isHidden}>
           <>
             {widget.globalStyles && <Global styles={coreCss`${widget.globalStyles}`} />}
             {errors && (
@@ -417,8 +422,4 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export type EditorControlProps = ConnectedProps<typeof connector>;
 
-const ConnectedEditorControl = connector(
-  translate()(EditorControl) as ComponentType<EditorControlProps>,
-);
-
-export default ConnectedEditorControl;
+export default connector(translate()(EditorControl) as ComponentType<EditorControlProps>);

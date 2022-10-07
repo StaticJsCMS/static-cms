@@ -1070,8 +1070,8 @@ export type CmsEventListenerOptions = Record<string, unknown>;
 export interface AdditionalLink {
   id: string;
   title: string;
+  data: string | (() => JSX.Element);
   options?: {
-    data?: string | (() => JSX.Element);
     iconName?: string;
   };
 }

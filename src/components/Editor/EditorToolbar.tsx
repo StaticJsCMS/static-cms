@@ -1,13 +1,17 @@
-import React from 'react';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import React, { useCallback, useEffect, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { Link } from 'react-router-dom';
 
-import { Icon, colorsRaw, colors, components, buttons, zIndex } from '../../ui';
+import { buttons, colors, colorsRaw, components, zIndex } from '../../ui';
 import { SettingsDropdown } from '../UI';
 
-import type { Collection, EditorPersistOptions, User } from '../../interface';
+import type { MouseEvent } from 'react';
+import type { Collection, EditorPersistOptions, TranslatedProps, User } from '../../interface';
 
 const styles = {
   noOverflow: css`
@@ -29,40 +33,6 @@ const styles = {
     color: ${colorsRaw.teal};
   `,
 };
-
-const TooltipText = styled.div`
-  visibility: hidden;
-  width: 321px;
-  background-color: #555;
-  color: #fff;
-  text-align: unset;
-  border-radius: 6px;
-  padding: 5px;
-
-  /* Position the tooltip text */
-  position: absolute;
-  z-index: 1;
-  top: 145%;
-  left: 50%;
-  margin-left: -320px;
-
-  /* Fade in tooltip */
-  opacity: 0;
-  transition: opacity 0.3s;
-`;
-
-const Tooltip = styled.div`
-  position: relative;
-  display: inline-block;
-  &:hover + ${TooltipText} {
-    visibility: visible;
-    opacity: 0.9;
-  }
-`;
-
-const TooltipContainer = styled.div`
-  position: relative;
-`;
 
 const ToolbarContainer = styled.div`
   box-shadow: 0 2px 6px 0 rgba(68, 74, 87, 0.05), 0 1px 3px 0 rgba(68, 74, 87, 0.1),
@@ -150,11 +120,125 @@ const DeleteButton = styled(ToolbarButton)`
   ${buttons.lightRed};
 `;
 
-const PublishedButton = styled(ToolbarButton)`
-  ${styles.publishedButton}
-`;
+interface ExistingEntrySimplePublishControlsProps {
+  canCreate: boolean;
+  onDuplicate: () => void;
+}
 
-interface EditorToolbar {
+const ExistingEntrySimplePublishControls = ({
+  canCreate,
+  onDuplicate,
+  t,
+}: TranslatedProps<ExistingEntrySimplePublishControlsProps>) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      if (canCreate) {
+        setAnchorEl(event.currentTarget);
+      }
+    },
+    [canCreate],
+  );
+  const handleClose = useCallback(() => {
+    setAnchorEl(null);
+  }, []);
+
+  useEffect(() => {
+    if (!canCreate) {
+      setAnchorEl(null);
+    }
+  }, [canCreate]);
+
+  return (
+    <div>
+      <Button
+        id="existing-published-button"
+        aria-controls={open ? 'existing-published-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+        disabled={!canCreate}
+      >
+        {t('editor.editorToolbar.published')}
+      </Button>
+      <Menu
+        id="existing-published-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'existing-published-button',
+        }}
+      >
+        <MenuItem onClick={onDuplicate}>{t('editor.editorToolbar.duplicate')}</MenuItem>
+      </Menu>
+    </div>
+  );
+};
+
+export interface NewEntrySimplePublishControlsProps {
+  canCreate: boolean;
+  isPersisting?: boolean;
+  onPersist: (opts?: EditorPersistOptions) => Promise<void>;
+  onPersistAndNew: () => Promise<void>;
+  onPersistAndDuplicate: () => Promise<void>;
+}
+
+const NewEntrySimplePublishControls = ({
+  canCreate,
+  onPersist,
+  onPersistAndNew,
+  onPersistAndDuplicate,
+  isPersisting,
+  t,
+}: TranslatedProps<NewEntrySimplePublishControlsProps>) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  }, []);
+  const handleClose = useCallback(() => {
+    setAnchorEl(null);
+  }, []);
+
+  return (
+    <div>
+      <Button
+        id="new-published-button"
+        aria-controls={open ? 'new-published-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+      >
+        {isPersisting ? t('editor.editorToolbar.publishing') : t('editor.editorToolbar.publish')}
+      </Button>
+      <Menu
+        id="new-published-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'new-published-button',
+        }}
+      >
+        <MenuItem onClick={() => onPersist()}>{t('editor.editorToolbar.publishNow')}</MenuItem>
+        {canCreate ? (
+          <>
+            <MenuItem onClick={onPersistAndNew}>
+              {t('editor.editorToolbar.publishAndCreateNew')}
+            </MenuItem>
+            <MenuItem onClick={onPersistAndDuplicate}>
+              {t('editor.editorToolbar.publishAndDuplicate')}
+            </MenuItem>
+          </>
+        ) : null}
+      </Menu>
+    </div>
+  );
+};
+
+export interface EditorToolbar {
   isPersisting?: boolean;
   isDeleting?: boolean;
   onPersist: (opts?: EditorPersistOptions) => Promise<void>;
@@ -173,16 +257,42 @@ interface EditorToolbar {
   editorBackLink: string;
 }
 
-class EditorToolbar extends React.Component {
-  renderSimpleControls = () => {
-    const { collection, hasChanged, isNewEntry, showDelete, onDelete, t } = this.props;
-    const canCreate = collection.create;
+const EditorToolbar = ({
+  user,
+  hasChanged,
+  displayUrl,
+  collection,
+  onLogoutClick,
+  onDuplicate,
+  onPersist,
+  onPersistAndDuplicate,
+  onPersistAndNew,
+  isNewEntry,
+  showDelete,
+  onDelete,
+  t,
+  editorBackLink,
+}: TranslatedProps<EditorToolbar>) => {
+  const renderSimpleControls = useCallback(() => {
+    const canCreate = collection.create ?? false;
 
     return (
       <>
-        {!isNewEntry && !hasChanged
-          ? this.renderExistingEntrySimplePublishControls({ canCreate })
-          : this.renderNewEntrySimplePublishControls({ canCreate })}
+        {!isNewEntry && !hasChanged ? (
+          <ExistingEntrySimplePublishControls
+            canCreate={canCreate}
+            onDuplicate={onDuplicate}
+            t={t}
+          />
+        ) : (
+          <NewEntrySimplePublishControls
+            canCreate={canCreate}
+            onPersist={onPersist}
+            onPersistAndDuplicate={onPersistAndDuplicate}
+            onPersistAndNew={onPersistAndNew}
+            t={t}
+          />
+        )}
         <div>
           {showDelete ? (
             <DeleteButton key="delete-button" onClick={onDelete}>
@@ -192,134 +302,52 @@ class EditorToolbar extends React.Component {
         </div>
       </>
     );
-  };
+  }, [
+    collection.create,
+    hasChanged,
+    isNewEntry,
+    onDelete,
+    onDuplicate,
+    onPersist,
+    onPersistAndDuplicate,
+    onPersistAndNew,
+    showDelete,
+    t,
+  ]);
 
-  renderStatusInfoTooltip = () => {
-    const { t, currentStatus } = this.props;
-
-    const statusToLocaleKey = {
-      [status.DRAFT]: 'statusInfoTooltipDraft',
-      [status.PENDING_REVIEW]: 'statusInfoTooltipInReview',
-    };
-
-    const statusKey = Object.keys(statusToLocaleKey).find(key => key === currentStatus);
-    return (
-      <TooltipContainer>
-        <Tooltip>
-          <Icon type="info-circle" size="small" className="tooltip" />
-        </Tooltip>
-        {statusKey && (
-          <TooltipText key="status-tooltip">
-            {t(`editor.editorToolbar.${statusToLocaleKey[statusKey]}`)}
-          </TooltipText>
-        )}
-      </TooltipContainer>
-    );
-  };
-
-  renderExistingEntrySimplePublishControls = ({ canCreate }) => {
-    const { onDuplicate, t } = this.props;
-    return canCreate ? (
-      <ToolbarDropdown
-        key="simple-existing-publish-controls"
-        dropdownTopOverlap="40px"
-        dropdownWidth="150px"
-        renderButton={() => (
-          <PublishedToolbarButton>{t('editor.editorToolbar.published')}</PublishedToolbarButton>
-        )}
-      >
-        {
-          <DropdownItem
-            label={t('editor.editorToolbar.duplicate')}
-            icon="add"
-            onClick={onDuplicate}
-          />
-        }
-      </ToolbarDropdown>
-    ) : (
-      <PublishedButton>{t('editor.editorToolbar.published')}</PublishedButton>
-    );
-  };
-
-  renderNewEntrySimplePublishControls = ({ canCreate }) => {
-    const { onPersist, onPersistAndNew, onPersistAndDuplicate, isPersisting, t } = this.props;
-
-    return (
-      <div key="simple-new-publish-controls">
-        <ToolbarDropdown
-          dropdownTopOverlap="40px"
-          dropdownWidth="150px"
-          renderButton={() => (
-            <PublishButton>
-              {isPersisting
-                ? t('editor.editorToolbar.publishing')
-                : t('editor.editorToolbar.publish')}
-            </PublishButton>
+  return (
+    <ToolbarContainer>
+      <ToolbarSectionBackLink to={editorBackLink}>
+        <BackArrow>←</BackArrow>
+        <div>
+          <BackCollection>
+            {t('editor.editorToolbar.backCollection', {
+              collectionLabel: collection.label,
+            })}
+          </BackCollection>
+          {hasChanged ? (
+            <BackStatusChanged key="back-changed">
+              {t('editor.editorToolbar.unsavedChanges')}
+            </BackStatusChanged>
+          ) : (
+            <BackStatusUnchanged key="back-unchanged">
+              {t('editor.editorToolbar.changesSaved')}
+            </BackStatusUnchanged>
           )}
-        >
-          <DropdownItem
-            label={t('editor.editorToolbar.publishNow')}
-            icon="arrow"
-            iconDirection="right"
-            onClick={onPersist}
-          />
-          {canCreate ? (
-            <>
-              <DropdownItem
-                label={t('editor.editorToolbar.publishAndCreateNew')}
-                icon="add"
-                onClick={onPersistAndNew}
-              />
-              <DropdownItem
-                label={t('editor.editorToolbar.publishAndDuplicate')}
-                icon="add"
-                onClick={onPersistAndDuplicate}
-              />
-            </>
-          ) : null}
-        </ToolbarDropdown>
-      </div>
-    );
-  };
-
-  render() {
-    const { user, hasChanged, displayUrl, collection, onLogoutClick, t, editorBackLink } =
-      this.props;
-
-    return (
-      <ToolbarContainer>
-        <ToolbarSectionBackLink to={editorBackLink}>
-          <BackArrow>←</BackArrow>
-          <div>
-            <BackCollection>
-              {t('editor.editorToolbar.backCollection', {
-                collectionLabel: collection.label,
-              })}
-            </BackCollection>
-            {hasChanged ? (
-              <BackStatusChanged key="back-changed">
-                {t('editor.editorToolbar.unsavedChanges')}
-              </BackStatusChanged>
-            ) : (
-              <BackStatusUnchanged key="back-unchanged">
-                {t('editor.editorToolbar.changesSaved')}
-              </BackStatusUnchanged>
-            )}
-          </div>
-        </ToolbarSectionBackLink>
-        <ToolbarSectionMain>
-          <ToolbarSubSectionFirst>{this.renderSimpleControls()}</ToolbarSubSectionFirst>
-        </ToolbarSectionMain>
-        <ToolbarSectionMeta>
-          <SettingsDropdown
-            displayUrl={displayUrl}
-            imageUrl={user?.avatar_url}
-            onLogoutClick={onLogoutClick}
-          />
-        </ToolbarSectionMeta>
-      </ToolbarContainer>
-    );
-  }
-}
+        </div>
+      </ToolbarSectionBackLink>
+      <ToolbarSectionMain>
+        <ToolbarSubSectionFirst>{renderSimpleControls()}</ToolbarSubSectionFirst>
+      </ToolbarSectionMain>
+      <ToolbarSectionMeta>
+        <SettingsDropdown
+          displayUrl={displayUrl}
+          imageUrl={user?.avatar_url}
+          onLogoutClick={onLogoutClick}
+        />
+      </ToolbarSectionMeta>
+    </ToolbarContainer>
+  );
+};
 
 export default translate()(EditorToolbar);

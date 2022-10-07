@@ -162,7 +162,7 @@ const Sidebar = ({
   }, []);
 
   const renderAdditionalLink = useCallback(
-    ({ id, title, options: { data, iconName } = {} }: AdditionalLink) => {
+    ({ id, title, data, options: { iconName } = {} }: AdditionalLink) => {
       let icon: ReactNode = <Icon type="write" />;
       if (iconName) {
         const storedIcon = getIcon(iconName);
