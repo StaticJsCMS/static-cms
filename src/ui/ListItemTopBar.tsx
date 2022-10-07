@@ -5,7 +5,7 @@ import { transientOptions } from '../lib/util';
 import Icon from './Icon';
 import { buttons, colors, lengths } from './styles';
 
-import type { ReactNode } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
 
 interface TopBarProps {
   $isVariableTypesList: boolean;
@@ -82,7 +82,7 @@ export interface ListItemTopBarProps {
   className: string;
   title?: ReactNode;
   collapsed: boolean;
-  onCollapseToggle: () => void;
+  onCollapseToggle?: (event: MouseEvent) => void;
   onRemove: () => void;
   dragHandleHOC: (render: () => ReactNode) => () => JSX.Element;
   isVariableTypesList: boolean;

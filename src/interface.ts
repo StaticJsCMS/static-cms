@@ -662,6 +662,8 @@ export interface CmsFieldObject extends CmsFieldBase {
   fields: CmsField[];
 }
 
+export type ListValue = string | boolean | number | { [key: string]: ListValue };
+
 export interface CmsFieldList extends CmsFieldBase {
   widget: 'list';
   default?: unknown;
@@ -677,6 +679,7 @@ export interface CmsFieldList extends CmsFieldBase {
   min?: number;
   add_to_top?: boolean;
   types?: CmsField[];
+  typeKey?: string;
 }
 
 export interface CmsFieldMap extends CmsFieldBase {
