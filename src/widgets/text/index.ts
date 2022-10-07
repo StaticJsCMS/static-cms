@@ -1,16 +1,14 @@
 import controlComponent from './TextControl';
 import previewComponent from './TextPreview';
 
-import type { CmsWidgetParam } from '../../interface';
+import type { CmsFieldStringOrText, CmsWidgetParam } from '../../interface';
 
-function Widget(opts = {}): CmsWidgetParam<string> {
+const TextWidget = (): CmsWidgetParam<string, CmsFieldStringOrText> => {
   return {
     name: 'text',
     controlComponent,
     previewComponent,
-    ...opts,
   };
-}
+};
 
-export const NetlifyCmsWidgetText = { Widget, controlComponent, previewComponent };
-export default NetlifyCmsWidgetText;
+export default TextWidget;

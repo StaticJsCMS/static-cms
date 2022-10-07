@@ -48,7 +48,7 @@ interface MediaLibraryTop {
   selectedFile?: MediaFile;
 }
 
-function MediaLibraryTop({
+const MediaLibraryTop = ({
   t,
   onClose,
   privateUpload,
@@ -66,7 +66,7 @@ function MediaLibraryTop({
   isPersisting,
   isDeleting,
   selectedFile,
-}: TranslatedProps<MediaLibraryTop>) {
+}: TranslatedProps<MediaLibraryTop>) => {
   const shouldShowButtonLoader = isPersisting || isDeleting;
   const uploadEnabled = !shouldShowButtonLoader;
   const deleteEnabled = !shouldShowButtonLoader && hasSelection;
@@ -132,6 +132,6 @@ function MediaLibraryTop({
       </RowContainer>
     </LibraryTop>
   );
-}
+};
 
 export default MediaLibraryTop;

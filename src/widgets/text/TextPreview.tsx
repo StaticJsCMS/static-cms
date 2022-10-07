@@ -4,8 +4,8 @@ import { WidgetPreviewContainer } from '../../ui';
 
 import type { CmsWidgetPreviewProps } from '../../interface';
 
-function TextPreview({ value }: CmsWidgetPreviewProps<string>) {
+const TextPreview = ({ value }: CmsWidgetPreviewProps<string>) => {
   return <WidgetPreviewContainer>{value}</WidgetPreviewContainer>;
-}
+};
 
 export default TextPreview;

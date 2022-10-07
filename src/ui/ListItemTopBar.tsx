@@ -69,14 +69,14 @@ export interface DragHandleProps {
   dragHandleHOC: (render: () => ReactNode) => () => JSX.Element;
 }
 
-function DragHandle({ dragHandleHOC }: DragHandleProps) {
+const DragHandle = ({ dragHandleHOC }: DragHandleProps) => {
   const Handle = dragHandleHOC(() => (
     <DragIconContainer>
       <Icon type="drag-handle" size="small" />
     </DragIconContainer>
   ));
   return <Handle />;
-}
+};
 
 export interface ListItemTopBarProps {
   className: string;
@@ -88,7 +88,7 @@ export interface ListItemTopBarProps {
   isVariableTypesList: boolean;
 }
 
-function ListItemTopBar({
+const ListItemTopBar = ({
   className,
   title,
   collapsed,
@@ -96,7 +96,7 @@ function ListItemTopBar({
   onRemove,
   dragHandleHOC,
   isVariableTypesList,
-}: ListItemTopBarProps) {
+}: ListItemTopBarProps) => {
   return (
     <TopBar className={className} $collapsed={collapsed} $isVariableTypesList={isVariableTypesList}>
       {onCollapseToggle ? (
@@ -113,7 +113,7 @@ function ListItemTopBar({
       ) : null}
     </TopBar>
   );
-}
+};
 
 const StyledListItemTopBar = styled(ListItemTopBar)`
   display: flex;

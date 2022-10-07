@@ -22,7 +22,7 @@ import type { RootState } from './store';
 
 const ROOT_ID = 'nc-root';
 
-function TranslatedApp({ locale, config }: AppRootProps) {
+const TranslatedApp = ({ locale, config }: AppRootProps) => {
   if (!config) {
     return null;
   }
@@ -36,7 +36,7 @@ function TranslatedApp({ locale, config }: AppRootProps) {
       </ErrorBoundary>
     </I18n>
   );
-}
+};
 
 function mapDispatchToProps(state: RootState) {
   return { locale: selectLocale(state.config.config), config: state.config.config };

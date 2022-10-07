@@ -115,7 +115,7 @@ interface RecoveredEntryProps {
   entry: string;
 }
 
-function RecoveredEntry({ entry, t }: TranslatedProps<RecoveredEntryProps>) {
+const RecoveredEntry = ({ entry, t }: TranslatedProps<RecoveredEntryProps>) => {
   console.info(entry);
   return (
     <>
@@ -130,7 +130,7 @@ function RecoveredEntry({ entry, t }: TranslatedProps<RecoveredEntryProps>) {
       </pre>
     </>
   );
-}
+};
 
 interface ErrorBoundaryProps {
   children: ReactNode;

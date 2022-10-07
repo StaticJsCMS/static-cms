@@ -23,12 +23,12 @@ const StyledSettingsButton = styled.button`
   }
 `;
 
-function SettingsButton({ showClose, onClick }) {
+const SettingsButton = ({ showClose, onClick }) => {
   return (
     <StyledSettingsButton onClick={onClick}>
       <Icon type={showClose ? 'close' : 'settings'} size="small" />
     </StyledSettingsButton>
   );
-}
+};
 
 export default SettingsButton;

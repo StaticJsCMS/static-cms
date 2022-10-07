@@ -45,7 +45,7 @@ interface LocaleDropdownProps {
   onLocaleChange: (locale: string) => void;
 }
 
-function LocaleDropdown({ locales, dropdownText, onLocaleChange }: LocaleDropdownProps) {
+const LocaleDropdown = ({ locales, dropdownText, onLocaleChange }: LocaleDropdownProps) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
@@ -83,7 +83,7 @@ function LocaleDropdown({ locales, dropdownText, onLocaleChange }: LocaleDropdow
       </Menu>
     </div>
   );
-}
+};
 
 function getFieldValue(
   field: CmsField,

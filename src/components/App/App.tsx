@@ -79,64 +79,6 @@ function getDefaultPath(collections: Collections) {
   }
 }
 
-/**
- * Returns default collection name if only one collection
- */
-// function getDefaultCollectionPath(collection: Collection) {
-//   if ('files' in collection && collection.files?.length === 1) {
-//     return `/collections/${collection.name}/entries/${collection.files[0].name}`;
-//   }
-
-//   return null;
-// }
-
-// interface RouteInCollection {
-//   collections: Record<string, Collection>;
-//   render: (props: RouteProps) => JSX.Element;
-// }
-
-// function RouteInCollectionDefault({ collections, render, ...props }) {
-//   const defaultPath = getDefaultPath(collections);
-//   return (
-//     <Route
-//       {...props}
-//       render={routeProps => {
-//         const collectionExists = collections.get(routeProps.match.params.name);
-//         if (!collectionExists) {
-//           return <Redirect to={defaultPath} />;
-//         }
-
-//         const defaultCollectionPath = getDefaultCollectionPath(collectionExists);
-//         if (defaultCollectionPath !== null) {
-//           return <Redirect to={defaultCollectionPath} />;
-//         }
-
-//         return render(routeProps);
-//       }}
-//     />
-//   );
-// }
-
-// interface RouteInCollection extends RouteProps {
-//   collections: Record<string, Collection>;
-//   render: (props: RouteProps) => JSX.Element;
-// }
-
-// function RouteInCollection({ collections, render, ...props }: RouteInCollection) {
-//   const defaultPath = getDefaultPath(collections);
-//   return (
-//     <Route
-//       {...props}
-//       render={routeProps => {
-//         const collectionExists = Boolean(
-//           routeProps.match.params.name && collections[routeProps.match.params.name],
-//         );
-//         return collectionExists ? render(routeProps) : <Redirect to={defaultPath} />;
-//       }}
-//     />
-//   );
-// }
-
 function CollectionSearchRedirect() {
   const { name } = useParams();
   return <Navigate to={`/collections/${name}`} />;

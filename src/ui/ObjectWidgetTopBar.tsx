@@ -8,7 +8,6 @@ import { transientOptions } from '../lib';
 import Icon from './Icon';
 import { buttons, colors } from './styles';
 
-import type { List } from 'immutable';
 import type { ReactNode } from 'react';
 import type { TranslatedProps } from '../interface';
 
@@ -66,7 +65,7 @@ const AddButton = styled.button`
 
 export interface ObjectWidgetTopBarProps {
   allowAdd: boolean;
-  types: List<Record<string, any>>;
+  types: Record<string, any>[];
   onAdd: () => void;
   onAddType: (name: string) => void;
   onCollapseToggle: () => void;
@@ -96,7 +95,7 @@ const ObjectWidgetTopBar = ({
   }, []);
 
   const renderTypesDropdown = useCallback(
-    (types: List<Record<string, any>>) => {
+    (types: Record<string, any>[]) => {
       return (
         <div>
           <Button
@@ -128,7 +127,7 @@ const ObjectWidgetTopBar = ({
         </div>
       );
     },
-    [t, onAddType, label],
+    [open, handleClick, t, label, anchorEl, handleClose, onAddType],
   );
 
   const renderAddButton = useCallback(() => {
@@ -144,7 +143,7 @@ const ObjectWidgetTopBar = ({
     if (!allowAdd) {
       return null;
     }
-    if (types && types.size > 0) {
+    if (types && types.length > 0) {
       return renderTypesDropdown(types);
     } else {
       return renderAddButton();

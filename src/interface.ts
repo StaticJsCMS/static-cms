@@ -1,4 +1,4 @@
-import type { JSONSchemaType } from 'ajv';
+import type { PropertiesSchema } from 'ajv/dist/types/json-schema';
 import type { ComponentType, FocusEventHandler, ReactNode } from 'react';
 import type { PluggableList } from 'react-markdown';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
@@ -242,14 +242,14 @@ export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
 export type GetAssetFunction = (path: string, field?: CmsField) => AssetProxy;
 
-export interface BaseCmsWidgetControlProps<T = unknown> {
+export interface BaseCmsWidgetControlProps<T = unknown, F extends CmsField = CmsField> {
   entry: Entry;
   collection: Collection;
   config: CmsConfig;
   mediaPaths: Record<string, string | string[]>;
   metadata: EntryMeta;
   value: T | undefined | null;
-  field: CmsField;
+  field: F;
   forID: string;
   classNameWrapper: string;
   classNameWidget: string;
@@ -282,9 +282,11 @@ export interface BaseCmsWidgetControlProps<T = unknown> {
   t: t;
 }
 
-export interface ObjectCmsWidgetControlProps<T extends Record<string, ValueOrNestedValue>>
-  extends BaseCmsWidgetControlProps<T> {
-  onChangeObject: <F extends CmsFieldBase, K extends keyof T & string>(
+export interface ObjectCmsWidgetControlProps<
+  T extends Record<string, ValueOrNestedValue>,
+  F extends CmsField = CmsField,
+> extends BaseCmsWidgetControlProps<T, F> {
+  onChangeObject: <K extends keyof T & string>(
     field: {
       name: K;
     } & Omit<F, 'name'>,
@@ -294,44 +296,51 @@ export interface ObjectCmsWidgetControlProps<T extends Record<string, ValueOrNes
   onValidateObject: (uniqueFieldId: string, errors: FieldError[]) => void;
 }
 
-export interface ArrayCmsWidgetControlProps<T extends string[] | number[] | ValueOrNestedValue[]>
-  extends BaseCmsWidgetControlProps<T> {
+export interface ObjectArrayCmsWidgetControlProps<
+  T extends ValueOrNestedValue[],
+  F extends CmsField = CmsField,
+> extends BaseCmsWidgetControlProps<T, F> {
   onChange: (value: T | undefined | null, newMetadata?: EntryMeta) => void;
   onValidateObject: (uniqueFieldId: string, errors: FieldError[]) => void;
 }
 
-export interface SimpleCmsWidgetControlProps<T extends string | number | boolean>
-  extends BaseCmsWidgetControlProps<T> {
+export interface SimpleCmsWidgetControlProps<
+  T extends string | number | boolean | string[] | number[],
+  F extends CmsField = CmsField,
+> extends BaseCmsWidgetControlProps<T, F> {
   onChange: (value: T | undefined | null, newMetadata?: EntryMeta) => void;
 }
 
-export interface UnknownCmsWidgetControlProps<T = unknown> extends BaseCmsWidgetControlProps<T> {
+export interface UnknownCmsWidgetControlProps<T = unknown, F extends CmsField = CmsField>
+  extends BaseCmsWidgetControlProps<T, F> {
   onChange: (value: T | undefined | null, newMetadata?: EntryMeta) => void;
 }
 
-export type CmsWidgetControlProps<T = unknown> = T extends Record<string, ValueOrNestedValue>
-  ? ObjectCmsWidgetControlProps<T>
-  : T extends string | number | boolean
-  ? SimpleCmsWidgetControlProps<T>
-  : T extends string[] | number[]
-  ? ArrayCmsWidgetControlProps<T>
-  : UnknownCmsWidgetControlProps<T>;
+export type CmsWidgetControlProps<T = unknown, F extends CmsField = CmsField> = T extends boolean
+  ? SimpleCmsWidgetControlProps<boolean, F>
+  : T extends Record<string, ValueOrNestedValue>
+  ? ObjectCmsWidgetControlProps<T, F>
+  : T extends ValueOrNestedValue[]
+  ? ObjectArrayCmsWidgetControlProps<T, F>
+  : T extends string | number | boolean | string[] | number[]
+  ? SimpleCmsWidgetControlProps<T, F>
+  : UnknownCmsWidgetControlProps<T, F>;
 
-export interface CmsWidgetPreviewProps<T = unknown> {
+export interface CmsWidgetPreviewProps<T = unknown, F extends CmsField = CmsField> {
   value: T;
-  field: CmsField;
-  metadata?: Record<string, unknown>;
+  field: F;
+  metadata?: EntryMeta;
   getAsset: GetAssetFunction;
   entry: Entry;
   fieldsMetaData: EntryMeta;
-  resolveWidget: <W = unknown>(name: string) => Widget<W>;
+  resolveWidget: <W = unknown, WF extends CmsField = CmsField>(name: string) => Widget<W, WF>;
   getRemarkPlugins: () => PluggableList;
 }
 
-export type CmsWidgetPreviewComponent<T = unknown> =
+export type CmsWidgetPreviewComponent<T = unknown, F extends CmsField = CmsField> =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
-  | ComponentType<CmsWidgetPreviewProps<T>>;
+  | ComponentType<CmsWidgetPreviewProps<T, F>>;
 
 export interface CmsTemplatePreviewProps {
   collection: Collection;
@@ -356,33 +365,33 @@ export type CmsTemplatePreviewComponent =
   | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
   | ComponentType<CmsTemplatePreviewProps>;
 
-export interface WidgetOptions {
-  validator?: Widget['validator'];
-  getValidValue?: Widget['getValidValue'];
-  schema?: Widget['schema'];
+export interface WidgetOptions<T = unknown, F extends CmsField = CmsField> {
+  validator?: Widget<T, F>['validator'];
+  getValidValue?: Widget<T, F>['getValidValue'];
+  schema?: Widget<T, F>['schema'];
   globalStyles?: string;
   allowMapValue?: boolean;
 }
 
-export interface Widget<T = unknown> {
-  control: ComponentType<CmsWidgetControlProps<T>>;
-  preview?: CmsWidgetPreviewComponent<T>;
+export interface Widget<T = unknown, F extends CmsField = CmsField> {
+  control: ComponentType<CmsWidgetControlProps<T, F>>;
+  preview?: CmsWidgetPreviewComponent<T, F>;
   validator: (props: {
-    field: CmsField;
+    field: F;
     value: T | undefined | null;
     t: t;
   }) => false | { error: false | FieldError } | Promise<false | { error: false | FieldError }>;
   getValidValue: (value: T | undefined | null) => T | undefined | null;
-  schema?: JSONSchemaType<unknown>;
+  schema?: PropertiesSchema<unknown>;
   globalStyles?: string;
   allowMapValue?: boolean;
 }
 
-export interface CmsWidgetParam<T = unknown> {
+export interface CmsWidgetParam<T = unknown, F extends CmsField = CmsField> {
   name: string;
-  controlComponent: Widget<T>['control'];
-  previewComponent: Widget<T>['preview'];
-  options?: WidgetOptions;
+  controlComponent: Widget<T, F>['control'];
+  previewComponent?: Widget<T, F>['preview'];
+  options?: WidgetOptions<T, F>;
 }
 
 export interface PreviewTemplateComponentProps {
@@ -626,12 +635,12 @@ export interface CmsFieldBase {
   comment?: string;
 }
 
-export interface CmsFieldBoolean {
+export interface CmsFieldBoolean extends CmsFieldBase {
   widget: 'boolean';
   default?: boolean;
 }
 
-export interface CmsFieldCode {
+export interface CmsFieldCode extends CmsFieldBase {
   widget: 'code';
   default?: any;
 
@@ -641,7 +650,7 @@ export interface CmsFieldCode {
   output_code_only?: boolean;
 }
 
-export interface CmsFieldColor {
+export interface CmsFieldColor extends CmsFieldBase {
   widget: 'color';
   default?: string;
 
@@ -649,7 +658,7 @@ export interface CmsFieldColor {
   enableAlpha?: boolean;
 }
 
-export interface CmsFieldDateTime {
+export interface CmsFieldDateTime extends CmsFieldBase {
   widget: 'datetime';
   default?: string;
 
@@ -672,7 +681,7 @@ export interface CmsFieldDateTime {
   pickerUtc?: boolean;
 }
 
-export interface CmsFieldFileOrImage {
+export interface CmsFieldFileOrImage extends CmsFieldBase {
   widget: 'file' | 'image';
   default?: string;
 
@@ -681,7 +690,7 @@ export interface CmsFieldFileOrImage {
   config?: any;
 }
 
-export interface CmsFieldObject {
+export interface CmsFieldObject extends CmsFieldBase {
   widget: 'object';
   default?: any;
 
@@ -690,7 +699,7 @@ export interface CmsFieldObject {
   fields: CmsField[];
 }
 
-export interface CmsFieldList {
+export interface CmsFieldList extends CmsFieldBase {
   widget: 'list';
   default?: any;
 
@@ -707,7 +716,7 @@ export interface CmsFieldList {
   types?: CmsField[];
 }
 
-export interface CmsFieldMap {
+export interface CmsFieldMap extends CmsFieldBase {
   widget: 'map';
   default?: string;
 
@@ -715,7 +724,7 @@ export interface CmsFieldMap {
   type?: CmsMapWidgetType;
 }
 
-export interface CmsFieldMarkdown {
+export interface CmsFieldMarkdown extends CmsFieldBase {
   widget: 'markdown';
   default?: string;
 
@@ -730,7 +739,7 @@ export interface CmsFieldMarkdown {
   editorComponents?: string[];
 }
 
-export interface CmsFieldNumber {
+export interface CmsFieldNumber extends CmsFieldBase {
   widget: 'number';
   default?: string | number;
 
@@ -746,7 +755,7 @@ export interface CmsFieldNumber {
   valueType?: 'int' | 'float' | string;
 }
 
-export interface CmsFieldSelect {
+export interface CmsFieldSelect extends CmsFieldBase {
   widget: 'select';
   default?: string | string[];
 
@@ -756,7 +765,7 @@ export interface CmsFieldSelect {
   max?: number;
 }
 
-export interface CmsFieldRelation {
+export interface CmsFieldRelation extends CmsFieldBase {
   widget: 'relation';
   default?: string | string[];
 
@@ -786,18 +795,18 @@ export interface CmsFieldRelation {
   optionsLength?: number;
 }
 
-export interface CmsFieldHidden {
+export interface CmsFieldHidden extends CmsFieldBase {
   widget: 'hidden';
-  default?: any;
+  default?: unknown;
 }
 
-export interface CmsFieldStringOrText {
+export interface CmsFieldStringOrText extends CmsFieldBase {
   // This is the default widget, so declaring its type is optional.
   widget?: 'string' | 'text';
   default?: string;
 }
 
-export interface CmsFieldMeta {
+export interface CmsFieldMeta extends CmsFieldBase {
   name: string;
   label: string;
   widget: string;
@@ -806,24 +815,22 @@ export interface CmsFieldMeta {
   meta: boolean;
 }
 
-export type CmsField = CmsFieldBase &
-  (
-    | CmsFieldBoolean
-    | CmsFieldCode
-    | CmsFieldColor
-    | CmsFieldDateTime
-    | CmsFieldFileOrImage
-    | CmsFieldList
-    | CmsFieldMap
-    | CmsFieldMarkdown
-    | CmsFieldNumber
-    | CmsFieldObject
-    | CmsFieldRelation
-    | CmsFieldSelect
-    | CmsFieldHidden
-    | CmsFieldStringOrText
-    | CmsFieldMeta
-  );
+export type CmsField =
+  | CmsFieldBoolean
+  | CmsFieldCode
+  | CmsFieldColor
+  | CmsFieldDateTime
+  | CmsFieldFileOrImage
+  | CmsFieldList
+  | CmsFieldMap
+  | CmsFieldMarkdown
+  | CmsFieldNumber
+  | CmsFieldObject
+  | CmsFieldRelation
+  | CmsFieldSelect
+  | CmsFieldHidden
+  | CmsFieldStringOrText
+  | CmsFieldMeta;
 
 export interface CmsCollectionFile {
   name: string;

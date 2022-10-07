@@ -171,7 +171,7 @@ const PaginatingMessage = styled(
   `,
 );
 
-function PaginatedGrid({
+const PaginatedGrid = ({
   setScrollContainerRef,
   mediaItems,
   isSelectedFile,
@@ -187,7 +187,7 @@ function PaginatedGrid({
   onLoadMore,
   isPaginating,
   paginatingMessage,
-}: MediaLibraryCardGridProps) {
+}: MediaLibraryCardGridProps) => {
   return (
     <CardGridContainer ref={setScrollContainerRef}>
       <CardGrid>
@@ -216,7 +216,7 @@ function PaginatedGrid({
       )}
     </CardGridContainer>
   );
-}
+};
 
 function MediaLibraryCardGrid(props: MediaLibraryCardGridProps) {
   const { canLoadMore, isPaginating } = props;

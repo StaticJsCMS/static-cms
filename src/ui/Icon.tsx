@@ -74,7 +74,7 @@ export interface IconProps {
   className?: string;
 }
 
-function Icon({ type, direction, size = 'medium', className }: IconProps) {
+const Icon = ({ type, direction, size = 'medium', className }: IconProps) => {
   const IconSvg = icons[type].image;
 
   return (
@@ -86,6 +86,6 @@ function Icon({ type, direction, size = 'medium', className }: IconProps) {
       <IconSvg />
     </IconWrapper>
   );
-}
+};
 
 export default styled(Icon)``;

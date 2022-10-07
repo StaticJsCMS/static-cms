@@ -39,7 +39,7 @@ interface SortControlProps {
   sort: SortMap | undefined;
 }
 
-function SortControl({ t, fields, onSortClick, sort }: TranslatedProps<SortControlProps>) {
+const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortControlProps>) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
@@ -48,10 +48,11 @@ function SortControl({ t, fields, onSortClick, sort }: TranslatedProps<SortContr
   const handleClose = useCallback(() => {
     setAnchorEl(null);
   }, []);
-  
-  const hasActiveSort = useMemo(() => Boolean(
-    Object.values(sort ?? {}).find(s => s.direction !== SortDirection.None),
-  ), [sort]);
+
+  const hasActiveSort = useMemo(
+    () => Boolean(Object.values(sort ?? {}).find(s => s.direction !== SortDirection.None)),
+    [sort],
+  );
 
   // TODO Fix button active
   // <ControlButton active={hasActiveSort} title={t('collection.collectionTop.sortBy')} />
@@ -91,6 +92,6 @@ function SortControl({ t, fields, onSortClick, sort }: TranslatedProps<SortContr
       </Menu>
     </div>
   );
-}
+};
 
 export default translate()(SortControl);

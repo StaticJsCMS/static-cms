@@ -9,14 +9,17 @@ interface ToggleProps {
   onBlur?: React.FocusEventHandler<HTMLButtonElement> | undefined;
 }
 
-function Toggle({ id, active, onChange, onFocus, onBlur }: ToggleProps) {
-  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(event.target.checked);
-  }, []);
+const Toggle = ({ id, active, onChange, onFocus, onBlur }: ToggleProps) => {
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      onChange(event.target.checked);
+    },
+    [onChange],
+  );
 
   return (
     <Switch id={id} onFocus={onFocus} onBlur={onBlur} checked={active} onChange={handleChange} />
   );
-}
+};
 
 export default Toggle;

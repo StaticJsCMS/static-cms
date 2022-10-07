@@ -105,7 +105,7 @@ interface MediaLibraryModalProps {
   displayURLs: MediaLibraryState['displayURLs'];
 }
 
-function MediaLibraryModal({
+const MediaLibraryModal = ({
   isVisible = false,
   canInsert,
   files,
@@ -136,7 +136,7 @@ function MediaLibraryModal({
   loadDisplayURL,
   displayURLs,
   t,
-}: TranslatedProps<MediaLibraryModalProps>) {
+}: TranslatedProps<MediaLibraryModalProps>) => {
   const filteredFiles = forImage ? handleFilter(files) : files;
   const queriedFiles = !dynamicSearch && query ? handleQuery(query, filteredFiles) : filteredFiles;
   const tableData = toTableData(queriedFiles);
@@ -198,6 +198,6 @@ function MediaLibraryModal({
       />
     </StyledModal>
   );
-}
+};
 
 export default translate()(MediaLibraryModal);

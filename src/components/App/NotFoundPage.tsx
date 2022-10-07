@@ -11,12 +11,12 @@ const NotFoundContainer = styled.div`
   margin: ${lengths.pageMargin};
 `;
 
-function NotFoundPage({ t }: TranslateProps) {
+const NotFoundPage = ({ t }: TranslateProps) => {
   return (
     <NotFoundContainer>
       <h2>{t('app.notFoundPage.header')}</h2>
     </NotFoundContainer>
   );
-}
+};
 
 export default translate()(NotFoundPage) as ComponentType<{}>;

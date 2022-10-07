@@ -46,7 +46,7 @@ interface IconButtonProps {
   title: string;
 }
 
-function IconButton({ size, isActive, type, onClick, className, title }: IconButtonProps) {
+const IconButton = ({ size, isActive, type, onClick, className, title }: IconButtonProps) => {
   return (
     <ButtonRound
       $size={size}
@@ -58,6 +58,6 @@ function IconButton({ size, isActive, type, onClick, className, title }: IconBut
       <Icon type={type} size={size} />
     </ButtonRound>
   );
-}
+};
 
 export default IconButton;

@@ -3,7 +3,7 @@ import isNumber from 'lodash/isNumber';
 export function validateMinMax(
   t: (key: string, options: unknown) => string,
   fieldLabel: string,
-  value?: unknown[],
+  value?: unknown[] | null,
   min?: number,
   max?: number,
 ) {

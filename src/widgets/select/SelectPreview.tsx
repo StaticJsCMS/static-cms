@@ -8,7 +8,7 @@ interface ListPreviewProps {
   values: string[];
 }
 
-function ListPreview({ values }: ListPreviewProps) {
+const ListPreview = ({ values }: ListPreviewProps) => {
   return (
     <ul>
       {(values as string[]).map((value, idx) => (
@@ -16,9 +16,9 @@ function ListPreview({ values }: ListPreviewProps) {
       ))}
     </ul>
   );
-}
+};
 
-function SelectPreview({ value }: CmsWidgetPreviewProps<string | string[] | null>) {
+const SelectPreview = ({ value }: CmsWidgetPreviewProps<string | string[] | null>) => {
   if (!value) {
     return <WidgetPreviewContainer />;
   }
@@ -28,6 +28,6 @@ function SelectPreview({ value }: CmsWidgetPreviewProps<string | string[] | null
       {typeof value === 'string' ? value : <ListPreview values={value} />}
     </WidgetPreviewContainer>
   );
-}
+};
 
 export default SelectPreview;

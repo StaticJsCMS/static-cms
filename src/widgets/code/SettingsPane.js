@@ -39,7 +39,7 @@ const SettingsSectionTitle = styled.h3`
   }
 `;
 
-function SettingsSelect({ value, options, onChange, forID, type, autoFocus }) {
+const SettingsSelect = ({ value, options, onChange, forID, type, autoFocus }) => {
   return (
     <Select
       inputId={`${forID}-select-${type}`}
@@ -52,9 +52,9 @@ function SettingsSelect({ value, options, onChange, forID, type, autoFocus }) {
       autoFocus={autoFocus}
     />
   );
-}
+};
 
-function SettingsPane({
+const SettingsPane = ({
   hideSettings,
   forID,
   modes,
@@ -67,7 +67,7 @@ function SettingsPane({
   onChangeLang,
   onChangeTheme,
   onChangeKeyMap,
-}) {
+}) => {
   return (
     <SettingsPaneContainer onKeyDown={e => isHotkey('esc', e) && hideSettings()}>
       <SettingsButton onClick={hideSettings} showClose={true} />
@@ -111,6 +111,6 @@ function SettingsPane({
       </>
     </SettingsPaneContainer>
   );
-}
+};
 
 export default SettingsPane;

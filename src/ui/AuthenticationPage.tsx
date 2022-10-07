@@ -33,20 +33,20 @@ const StaticCmsIcon = styled(Icon)`
   bottom: 10px;
 `;
 
-function CustomLogoIcon({ url }: { url: string }) {
+const CustomLogoIcon = ({ url }: { url: string }) => {
   return (
     <CustomIconWrapper>
       <img src={url} alt="Logo" />
     </CustomIconWrapper>
   );
-}
+};
 
-function renderPageLogo(logoUrl?: string) {
+const renderPageLogo = (logoUrl?: string) => {
   if (logoUrl) {
     return <CustomLogoIcon url={logoUrl} />;
   }
   return <SimpleLogoIcon size="300px" type="static-cms" />;
-}
+};
 
 const LoginButton = styled.button`
   ${buttons.button};
@@ -89,7 +89,7 @@ export interface AuthenticationPageProps {
   }) => ReactNode;
 }
 
-function AuthenticationPage({
+const AuthenticationPage = ({
   onLogin,
   loginDisabled,
   loginErrorMessage,
@@ -98,7 +98,7 @@ function AuthenticationPage({
   logoUrl,
   siteUrl,
   t,
-}: TranslatedProps<AuthenticationPageProps>) {
+}: TranslatedProps<AuthenticationPageProps>) => {
   return (
     <StyledAuthenticationPage>
       {renderPageLogo(logoUrl)}
@@ -115,6 +115,6 @@ function AuthenticationPage({
       {logoUrl ? <StaticCmsIcon size="100px" type="static-cms" /> : null}
     </StyledAuthenticationPage>
   );
-}
+};
 
 export default AuthenticationPage;

@@ -148,13 +148,13 @@ interface EditorContentProps {
   editorWithPreview: JSX.Element;
 }
 
-function EditorContent({
+const EditorContent = ({
   i18nVisible,
   previewVisible,
   editor,
   editorWithEditor,
   editorWithPreview,
-}: EditorContentProps) {
+}: EditorContentProps) => {
   if (i18nVisible) {
     return editorWithEditor;
   } else if (previewVisible) {
@@ -162,7 +162,7 @@ function EditorContent({
   } else {
     return <NoPreviewContainer>{editor}</NoPreviewContainer>;
   }
-}
+};
 
 function isPreviewEnabled(collection: Collection, entry: Entry) {
   if (collection.type === FILES) {

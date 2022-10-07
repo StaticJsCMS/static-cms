@@ -45,7 +45,7 @@ interface ViewStyleControlPros {
   onChangeViewStyle: (viewStyle: CollectionViewStyle) => void;
 }
 
-function ViewStyleControl({ viewStyle, onChangeViewStyle }: ViewStyleControlPros) {
+const ViewStyleControl = ({ viewStyle, onChangeViewStyle }: ViewStyleControlPros) => {
   return (
     <ViewControlsSection>
       <ViewControlsButton
@@ -62,6 +62,6 @@ function ViewStyleControl({ viewStyle, onChangeViewStyle }: ViewStyleControlPros
       </ViewControlsButton>
     </ViewControlsSection>
   );
-}
+};
 
 export default ViewStyleControl;
