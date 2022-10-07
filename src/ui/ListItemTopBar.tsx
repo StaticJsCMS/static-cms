@@ -5,7 +5,7 @@ import { transientOptions } from '../lib/util';
 import Icon from './Icon';
 import { buttons, colors, lengths } from './styles';
 
-import type { MouseEvent, ReactNode } from 'react';
+import type { MouseEvent, ReactNode, ComponentClass } from 'react';
 
 interface TopBarProps {
   $isVariableTypesList: boolean;
@@ -66,7 +66,7 @@ const DragIconContainer = styled(TopBarButtonSpan)`
 `;
 
 export interface DragHandleProps {
-  dragHandleHOC: (render: () => ReactNode) => () => JSX.Element;
+  dragHandleHOC: (render: () => ReactNode) => ComponentClass;
 }
 
 const DragHandle = ({ dragHandleHOC }: DragHandleProps) => {
@@ -79,23 +79,23 @@ const DragHandle = ({ dragHandleHOC }: DragHandleProps) => {
 };
 
 export interface ListItemTopBarProps {
-  className: string;
+  className?: string;
   title?: ReactNode;
-  collapsed: boolean;
+  collapsed?: boolean;
   onCollapseToggle?: (event: MouseEvent) => void;
-  onRemove: () => void;
-  dragHandleHOC: (render: () => ReactNode) => () => JSX.Element;
-  isVariableTypesList: boolean;
+  onRemove: (event: MouseEvent) => void;
+  dragHandleHOC: (render: () => ReactNode) => ComponentClass;
+  isVariableTypesList?: boolean;
 }
 
 const ListItemTopBar = ({
   className,
   title,
-  collapsed,
+  collapsed = false,
   onCollapseToggle,
   onRemove,
   dragHandleHOC,
-  isVariableTypesList,
+  isVariableTypesList = false,
 }: ListItemTopBarProps) => {
   return (
     <TopBar className={className} $collapsed={collapsed} $isVariableTypesList={isVariableTypesList}>

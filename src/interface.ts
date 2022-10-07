@@ -241,11 +241,12 @@ export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 export type GetAssetFunction = (path: string, field?: CmsField) => AssetProxy;
 
 export interface CmsWidgetControlProps<T, F extends CmsField = CmsField> {
-  classNameWidget: string;
-  classNameWidgetActive: string;
+  classNameWidget?: string;
+  classNameWidgetActive?: string;
   classNameWrapper: string;
   clearFieldErrors: EditorControlProps['clearFieldErrors'];
   clearSearch: EditorControlProps['clearSearch'];
+  collapsed?: boolean;
   collection: Collection;
   config: CmsConfig;
   entry: Entry;

@@ -8,6 +8,7 @@ import { colors, lengths, ObjectWidgetTopBar } from '../../ui';
 
 import type {
   CmsField,
+  CmsFieldList,
   CmsFieldObject,
   CmsWidgetControlProps,
   EntryMeta,
@@ -54,7 +55,7 @@ const ObjectControl = ({
   {
     [key: string]: ValueOrNestedValue;
   },
-  CmsFieldObject
+  CmsFieldObject | CmsFieldList
 >) => {
   const [collapsed, setCollapsed] = useState(false);
 

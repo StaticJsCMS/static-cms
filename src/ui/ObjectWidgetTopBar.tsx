@@ -8,7 +8,7 @@ import { transientOptions } from '../lib';
 import Icon from './Icon';
 import { buttons, colors } from './styles';
 
-import type { ReactNode } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
 import type { CmsField, TranslatedProps } from '../interface';
 
 const TopBarContainer = styled.div`
@@ -66,9 +66,9 @@ const AddButton = styled.button`
 export interface ObjectWidgetTopBarProps {
   allowAdd?: boolean;
   types?: CmsField[];
-  onAdd?: () => void;
+  onAdd?: (event: MouseEvent) => void;
   onAddType?: (name: string) => void;
-  onCollapseToggle: () => void;
+  onCollapseToggle: (event: MouseEvent) => void;
   collapsed: boolean;
   heading: ReactNode;
   label?: string;
