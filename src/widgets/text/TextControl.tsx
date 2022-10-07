@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField';
 import React from 'react';
 
-import type { CmsWidgetControlProps } from '../../interface';
+import type { CmsFieldStringOrText, CmsWidgetControlProps } from '../../interface';
 
 const TextControl = ({
   forID,
@@ -9,7 +9,7 @@ const TextControl = ({
   onChange,
   setActiveStyle,
   setInactiveStyle,
-}: CmsWidgetControlProps<string>) => {
+}: CmsWidgetControlProps<string, CmsFieldStringOrText>) => {
   return (
     <TextField
       id={forID}

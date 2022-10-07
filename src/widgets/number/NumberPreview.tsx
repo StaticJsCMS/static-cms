@@ -1,14 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { WidgetPreviewContainer } from '../../ui';
 
-function NumberPreview({ value }) {
+import type { CmsFieldNumber, CmsWidgetPreviewProps } from '../../interface';
+
+function NumberPreview({ value }: CmsWidgetPreviewProps<string | number, CmsFieldNumber>) {
   return <WidgetPreviewContainer>{value}</WidgetPreviewContainer>;
 }
-
-NumberPreview.propTypes = {
-  value: PropTypes.node,
-};
 
 export default NumberPreview;

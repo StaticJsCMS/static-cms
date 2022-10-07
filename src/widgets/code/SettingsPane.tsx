@@ -1,11 +1,15 @@
-import React from 'react';
 import styled from '@emotion/styled';
-import Select from 'react-select';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import isHotkey from 'is-hotkey';
+import React from 'react';
 
-import { text, shadows, zIndex } from '../../ui';
+import { shadows, text, zIndex } from '../../ui';
 import SettingsButton from './SettingsButton';
-import languageSelectStyles from './languageSelectStyles';
+
+import type { SelectChangeEvent } from '@mui/material/Select';
 
 const SettingsPaneContainer = styled.div`
   position: absolute;
@@ -39,20 +43,68 @@ const SettingsSectionTitle = styled.h3`
   }
 `;
 
-const SettingsSelect = ({ value, options, onChange, forID, type, autoFocus }) => {
+interface SettingsSelectProps {
+  type: 'mode' | 'theme' | 'keymap';
+  forID: string;
+  value: {
+    value: string;
+    label: string;
+  };
+  options: {
+    value: string;
+    label: string;
+  }[];
+  onChange: (newValue: string) => void;
+}
+
+const SettingsSelect = ({ value, options, onChange, forID, type }: SettingsSelectProps) => {
+  const handleChange = (event: SelectChangeEvent<string>) => {
+    onChange(event.target.value);
+  };
+
   return (
-    <Select
-      inputId={`${forID}-select-${type}`}
-      styles={languageSelectStyles}
-      value={value}
-      options={options}
-      onChange={opt => onChange(opt.value)}
-      menuPlacement="auto"
-      captureMenuScroll={false}
-      autoFocus={autoFocus}
-    />
+    <FormControl fullWidth>
+      <InputLabel id={`${forID}-select-${type}-label`}>Age</InputLabel>
+      <Select
+        labelId={`${forID}-select-${type}-label`}
+        id={`${forID}-select-${type}`}
+        value={value.value}
+        label="Age"
+        onChange={handleChange}
+      >
+        {options.map(({ label, value }) => (
+          <MenuItem key={`${forID}-select-${type}-option-${value}`} value={value}>
+            {label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 };
+
+interface SettingsPaneProps {
+  hideSettings: () => void;
+  forID: string;
+  modes: {
+    value: string;
+    label: string;
+  }[];
+  mode: {
+    value: string;
+    label: string;
+  };
+  theme: string;
+  themes: string[];
+  keyMap: { value: string; label: string };
+  keyMaps: {
+    value: string;
+    label: string;
+  }[];
+  allowLanguageSelection: boolean;
+  onChangeLang: (lang: string) => void;
+  onChangeTheme: (theme: string) => void;
+  onChangeKeyMap: (keyMap: string) => void;
+}
 
 const SettingsPane = ({
   hideSettings,
@@ -67,7 +119,7 @@ const SettingsPane = ({
   onChangeLang,
   onChangeTheme,
   onChangeKeyMap,
-}) => {
+}: SettingsPaneProps) => {
   return (
     <SettingsPaneContainer onKeyDown={e => isHotkey('esc', e) && hideSettings()}>
       <SettingsButton onClick={hideSettings} showClose={true} />
@@ -81,7 +133,6 @@ const SettingsPane = ({
             value={mode}
             options={modes}
             onChange={onChangeLang}
-            autoFocus
           />
         </>
       )}
@@ -96,7 +147,6 @@ const SettingsPane = ({
               value={{ value: theme, label: theme }}
               options={themes.map(t => ({ value: t, label: t }))}
               onChange={onChangeTheme}
-              autoFocus={!allowLanguageSelection}
             />
           </>
         )}

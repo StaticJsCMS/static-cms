@@ -2,7 +2,7 @@ import React from 'react';
 
 import { WidgetPreviewContainer } from '../../ui';
 
-import type { CmsWidgetPreviewProps } from '../../interface';
+import type { CmsFieldSelect, CmsWidgetPreviewProps } from '../../interface';
 
 interface ListPreviewProps {
   values: string[];
@@ -18,7 +18,7 @@ const ListPreview = ({ values }: ListPreviewProps) => {
   );
 };
 
-const SelectPreview = ({ value }: CmsWidgetPreviewProps<string | string[] | null>) => {
+const SelectPreview = ({ value }: CmsWidgetPreviewProps<string | string[], CmsFieldSelect>) => {
   if (!value) {
     return <WidgetPreviewContainer />;
   }

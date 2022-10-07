@@ -3,19 +3,14 @@ import path from 'path';
 import yaml from 'js-yaml';
 import uniq from 'lodash/uniq';
 
+import type { ProcessedCodeLanguage } from '../../../interface';
+
 const rawDataPath = '../data/languages-raw.yml';
-const outputPath = '../data/languages.json';
+const outputPath = '../data/languages.ts';
 
 interface CodeLanguage {
   extensions: string[];
   aliases: string[];
-  codemirror_mode: string;
-  codemirror_mime_type: string;
-}
-
-interface ProcessedCodeLanguage {
-  label: string;
-  identifiers: string[];
   codemirror_mode: string;
   codemirror_mime_type: string;
 }
@@ -28,7 +23,15 @@ async function fetchData() {
 
 function outputData(data: ProcessedCodeLanguage[]) {
   const filePath = path.resolve(__dirname, outputPath);
-  return fs.writeJson(filePath, data);
+  return fs.writeFile(
+    filePath,
+    `import type { ProcessedCodeLanguage } from '../../../interface';
+
+const languages: ProcessedCodeLanguage[] = ${JSON.stringify(data, null, 2)};
+
+export default languages;
+`,
+  );
 }
 
 function transform(data: Record<string, CodeLanguage>) {

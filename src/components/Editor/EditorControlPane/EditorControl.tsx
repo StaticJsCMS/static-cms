@@ -41,6 +41,7 @@ import type {
   Widget
 } from '../../../interface';
 import type { RootState } from '../../../store';
+import type { EditorControlPaneProps } from './EditorControlPane';
 
 /**
  * This is a necessary bridge as we are still passing classnames to widgets
@@ -373,6 +374,7 @@ interface EditorControlOwnProps {
   isFieldDuplicate?: (field: CmsField) => boolean;
   isFieldHidden?: (field: CmsField) => boolean;
   locale?: string;
+  clearFieldErrors: EditorControlPaneProps['clearFieldErrors'];
 }
 
 function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {

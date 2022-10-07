@@ -2,7 +2,7 @@ import TextField from '@mui/material/TextField';
 import React, { useCallback } from 'react';
 
 import type { ChangeEvent } from 'react';
-import type { CmsWidgetControlProps } from '../../interface';
+import type { CmsFieldStringOrText, CmsWidgetControlProps } from '../../interface';
 
 const StringControl = ({
   forID,
@@ -10,7 +10,8 @@ const StringControl = ({
   setActiveStyle,
   setInactiveStyle,
   onChange,
-}: CmsWidgetControlProps<string>) => {
+}: CmsWidgetControlProps<string, CmsFieldStringOrText>) => {
+  // TODO Check if this is still needed
   // const [selection, setSelection] = useState<number | null>(0);
   // const element = useRef();
   // The selection to maintain for the input element

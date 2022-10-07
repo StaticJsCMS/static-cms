@@ -22,6 +22,7 @@ import type {
 } from '../../../interface';
 import type { resolveWidget as registryResolveWidget } from '../../../lib/registry';
 import type { EditorControlProps } from './EditorControl';
+import type { EditorControlPaneProps } from './EditorControlPane';
 
 function isEmpty(value: ValueOrNestedValue) {
   return (
@@ -237,7 +238,7 @@ export interface WidgetProps {
   loadEntry: EditorControlProps['loadEntry'];
   queryHits: Entry[];
   clearSearch: EditorControlProps['clearSearch'];
-  clearFieldErrors: EditorControlProps['clearFieldErrors'];
+  clearFieldErrors: EditorControlPaneProps['clearFieldErrors'];
   isFetching: boolean;
   fieldsErrors: FieldsErrors;
   onValidateObject: (uniqueFieldId: string, errors: FieldError[]) => void;

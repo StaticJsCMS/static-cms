@@ -9,7 +9,7 @@ import Icon from './Icon';
 import { buttons, colors } from './styles';
 
 import type { ReactNode } from 'react';
-import type { TranslatedProps } from '../interface';
+import type { CmsField, TranslatedProps } from '../interface';
 
 const TopBarContainer = styled.div`
   align-items: center;
@@ -64,14 +64,14 @@ const AddButton = styled.button`
 `;
 
 export interface ObjectWidgetTopBarProps {
-  allowAdd: boolean;
-  types: Record<string, any>[];
-  onAdd: () => void;
-  onAddType: (name: string) => void;
+  allowAdd?: boolean;
+  types?: CmsField[];
+  onAdd?: () => void;
+  onAddType?: (name: string) => void;
   onCollapseToggle: () => void;
   collapsed: boolean;
   heading: ReactNode;
-  label: string;
+  label?: string;
 }
 
 const ObjectWidgetTopBar = ({
@@ -95,7 +95,11 @@ const ObjectWidgetTopBar = ({
   }, []);
 
   const renderTypesDropdown = useCallback(
-    (types: Record<string, any>[]) => {
+    (types: CmsField[]) => {
+      if (!onAddType) {
+        return null;
+      }
+
       return (
         <div>
           <Button

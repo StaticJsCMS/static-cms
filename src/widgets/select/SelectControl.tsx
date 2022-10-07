@@ -35,13 +35,13 @@ const SelectControl = ({
         isMultiple && Array.isArray(selectedOption) ? !selectedOption?.length : !selectedOption;
 
       if (field.required && isEmpty && isMultiple) {
-        (onChange as CmsWidgetControlProps<string[]>['onChange'])([]);
+        onChange([]);
       } else if (isEmpty) {
         onChange(null);
       } else if (typeof selectedOption === 'string') {
-        (onChange as CmsWidgetControlProps<string>['onChange'])(selectedOption);
+        onChange(selectedOption);
       } else if (isMultiple) {
-        (onChange as CmsWidgetControlProps<string[]>['onChange'])(selectedOption);
+        onChange(selectedOption);
       }
     },
     [field, onChange],
@@ -50,9 +50,9 @@ const SelectControl = ({
   useEffect(() => {
     if (field.required && field.multiple) {
       if (value && !Array.isArray(value)) {
-        (onChange as CmsWidgetControlProps<string[]>['onChange'])([value]);
+        onChange([value]);
       } else if (!value) {
-        (onChange as CmsWidgetControlProps<string[]>['onChange'])([]);
+        onChange([]);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

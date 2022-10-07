@@ -1,5 +1,5 @@
 import type { PropertiesSchema } from 'ajv/dist/types/json-schema';
-import type { ComponentType, FocusEventHandler, ReactNode } from 'react';
+import type { ComponentType, FocusEvent, ReactNode } from 'react';
 import type { PluggableList } from 'react-markdown';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
 import type { MediaFile as BackendMediaFile } from './backend';
@@ -68,9 +68,7 @@ export type ValueOrNestedValue =
     };
 
 export type EntryData = Record<string, ValueOrNestedValue>;
-export type EntryMeta = {
-  path?: string;
-} & Record<string, ValueOrNestedValue>;
+export type EntryMeta = Record<string, ValueOrNestedValue>;
 
 export interface Entry {
   collection: string;
@@ -242,99 +240,60 @@ export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
 export type GetAssetFunction = (path: string, field?: CmsField) => AssetProxy;
 
-export interface BaseCmsWidgetControlProps<T = unknown, F extends CmsField = CmsField> {
-  entry: Entry;
-  collection: Collection;
-  config: CmsConfig;
-  mediaPaths: Record<string, string | string[]>;
-  metadata: EntryMeta;
-  value: T | undefined | null;
-  field: F;
-  forID: string;
-  classNameWrapper: string;
+export interface CmsWidgetControlProps<T, F extends CmsField = CmsField> {
   classNameWidget: string;
   classNameWidgetActive: string;
-  setActiveStyle: FocusEventHandler;
-  setInactiveStyle: FocusEventHandler;
-  hasActiveStyle: boolean;
-  onOpenMediaLibrary: EditorControlProps['openMediaLibrary'];
-  onClearMediaControl: EditorControlProps['clearMediaControl'];
-  onRemoveMediaControl: EditorControlProps['removeMediaControl'];
-  onRemoveInsertedMedia: EditorControlProps['removeInsertedMedia'];
-  onPersistMedia: EditorControlProps['persistMedia'];
-  onAddAsset: EditorControlProps['addAsset'];
-  getAsset: GetAssetFunction;
-  validate: (newValue: T) => void;
-  query: EditorControlProps['query'];
-  loadEntry: EditorControlProps['loadEntry'];
-  queryHits: Entry[];
-  clearSearch: EditorControlProps['clearSearch'];
+  classNameWrapper: string;
   clearFieldErrors: EditorControlProps['clearFieldErrors'];
-  isFetching: boolean;
+  clearSearch: EditorControlProps['clearSearch'];
+  collection: Collection;
+  config: CmsConfig;
+  entry: Entry;
+  field: F;
   fieldsErrors: FieldsErrors;
-  isEditorComponent: boolean;
-  isNewEditorComponent: boolean;
-  parentIds: string[];
+  forID: string;
+  forList?: boolean;
+  getAsset: GetAssetFunction;
+  hasActiveStyle: boolean;
+  hasError?: boolean;
   isDisabled: boolean;
+  isEditorComponent: boolean;
+  isFetching: boolean;
   isFieldDuplicate: EditorControlProps['isFieldDuplicate'];
   isFieldHidden: EditorControlProps['isFieldHidden'];
+  isNewEditorComponent: boolean;
+  loadEntry: EditorControlProps['loadEntry'];
   locale: string | undefined;
+  mediaPaths: Record<string, string | string[]>;
+  metadata: EntryMeta;
+  onAddAsset: EditorControlProps['addAsset'];
+  onChange: (value: T | undefined | null, newMetadata?: EntryMeta) => void;
+  onChangeObject: (field: CmsField, newValue: ValueOrNestedValue, newMetadata?: EntryMeta) => void;
+  onClearMediaControl: EditorControlProps['clearMediaControl'];
+  onOpenMediaLibrary: EditorControlProps['openMediaLibrary'];
+  onPersistMedia: EditorControlProps['persistMedia'];
+  onRemoveInsertedMedia: EditorControlProps['removeInsertedMedia'];
+  onRemoveMediaControl: EditorControlProps['removeMediaControl'];
+  onValidateObject: (uniqueFieldId: string, errors: FieldError[]) => void;
+  parentIds: string[];
+  query: EditorControlProps['query'];
+  queryHits: Entry[];
+  setActiveStyle: (event?: FocusEvent) => void;
+  setInactiveStyle: (event?: FocusEvent) => void;
   t: t;
+  validate: (newValue: T | undefined | null) => void;
+  value: T | undefined | null;
 }
-
-export interface ObjectCmsWidgetControlProps<
-  T extends Record<string, ValueOrNestedValue>,
-  F extends CmsField = CmsField,
-> extends BaseCmsWidgetControlProps<T, F> {
-  onChangeObject: <K extends keyof T & string>(
-    field: {
-      name: K;
-    } & Omit<F, 'name'>,
-    newValue: T[K] | undefined | null,
-    newMetadata?: EntryMeta,
-  ) => void;
-  onValidateObject: (uniqueFieldId: string, errors: FieldError[]) => void;
-}
-
-export interface ObjectArrayCmsWidgetControlProps<
-  T extends ValueOrNestedValue[],
-  F extends CmsField = CmsField,
-> extends BaseCmsWidgetControlProps<T, F> {
-  onChange: (value: T | undefined | null, newMetadata?: EntryMeta) => void;
-  onValidateObject: (uniqueFieldId: string, errors: FieldError[]) => void;
-}
-
-export interface SimpleCmsWidgetControlProps<
-  T extends string | number | boolean | string[] | number[],
-  F extends CmsField = CmsField,
-> extends BaseCmsWidgetControlProps<T, F> {
-  onChange: (value: T | undefined | null, newMetadata?: EntryMeta) => void;
-}
-
-export interface UnknownCmsWidgetControlProps<T = unknown, F extends CmsField = CmsField>
-  extends BaseCmsWidgetControlProps<T, F> {
-  onChange: (value: T | undefined | null, newMetadata?: EntryMeta) => void;
-}
-
-export type CmsWidgetControlProps<T = unknown, F extends CmsField = CmsField> = T extends boolean
-  ? SimpleCmsWidgetControlProps<boolean, F>
-  : T extends Record<string, ValueOrNestedValue>
-  ? ObjectCmsWidgetControlProps<T, F>
-  : T extends ValueOrNestedValue[]
-  ? ObjectArrayCmsWidgetControlProps<T, F>
-  : T extends string | number | boolean | string[] | number[]
-  ? SimpleCmsWidgetControlProps<T, F>
-  : UnknownCmsWidgetControlProps<T, F>;
 
 export interface CmsWidgetPreviewProps<T = unknown, F extends CmsField = CmsField> {
-  value: T | undefined | null;
-  field: F;
-  metadata?: EntryMeta;
-  getAsset: GetAssetFunction;
   entry: Entry;
+  field: F;
   fieldsMetaData: EntryMeta;
-  resolveWidget: <W = unknown, WF extends CmsField = CmsField>(name: string) => Widget<W, WF>;
+  getAsset: GetAssetFunction;
   getRemarkPlugins: () => PluggableList;
+  metadata?: EntryMeta;
+  resolveWidget: <W = unknown, WF extends CmsField = CmsField>(name: string) => Widget<W, WF>;
+  value: T | undefined | null;
 }
 
 export type CmsWidgetPreviewComponent<T = unknown, F extends CmsField = CmsField> =
@@ -600,7 +559,7 @@ export type CmsMarkdownWidgetButton =
 
 export interface CmsSelectWidgetOptionObject {
   label: string;
-  value: any;
+  value: string;
 }
 
 export type CmsCollectionFormatType =
@@ -642,12 +601,16 @@ export interface CmsFieldBoolean extends CmsFieldBase {
 
 export interface CmsFieldCode extends CmsFieldBase {
   widget: 'code';
-  default?: any;
+  default?: unknown;
 
   default_language?: string;
   allow_language_selection?: boolean;
   keys?: { code: string; lang: string };
   output_code_only?: boolean;
+
+  codeMirrorConfig: {
+    extraKeys?: Record<string, string>;
+  } & Record<string, unknown>;
 }
 
 export interface CmsFieldColor extends CmsFieldBase {
@@ -687,12 +650,12 @@ export interface CmsFieldFileOrImage extends CmsFieldBase {
 
   media_library?: CmsMediaLibrary;
   allow_multiple?: boolean;
-  config?: any;
+  config?: unknown;
 }
 
 export interface CmsFieldObject extends CmsFieldBase {
   widget: 'object';
-  default?: any;
+  default?: unknown;
 
   collapsed?: boolean;
   summary?: string;
@@ -701,7 +664,7 @@ export interface CmsFieldObject extends CmsFieldBase {
 
 export interface CmsFieldList extends CmsFieldBase {
   widget: 'list';
-  default?: any;
+  default?: unknown;
 
   allow_add?: boolean;
   collapsed?: boolean;
@@ -915,7 +878,7 @@ export interface CmsCollection {
 
   frontmatter_delimiter?: string[] | string;
   fields?: CmsField[];
-  filter?: { field: string; value: any };
+  filter?: { field: string; value: string };
   path?: string;
   media_folder?: string;
   public_folder?: string;
@@ -1111,4 +1074,11 @@ export interface I18nInfo {
   locales: string[];
   defaultLocale: string;
   structure?: I18N_STRUCTURE;
+}
+
+export interface ProcessedCodeLanguage {
+  label: string;
+  identifiers: string[];
+  codemirror_mode: string;
+  codemirror_mime_type: string;
 }

@@ -4,7 +4,9 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import get from 'lodash/get';
 import React, { useCallback, useMemo } from 'react';
+import { connect } from 'react-redux';
 
+import { clearFieldErrors } from '../../../actions/entries';
 import confirm from '../../../components/UI/Confirm';
 import {
   getI18nInfo,
@@ -16,6 +18,7 @@ import {
 } from '../../../lib/i18n';
 import EditorControl from './EditorControl';
 
+import type { ConnectedProps } from 'react-redux';
 import type {
   CmsField,
   Collection,
@@ -27,6 +30,7 @@ import type {
   TranslatedProps,
   ValueOrNestedValue,
 } from '../../../interface';
+import type { RootState } from '../../../store';
 
 const ControlPaneContainer = styled.div`
   max-width: 1200px;
@@ -103,23 +107,6 @@ function getFieldValue(
   return entry.data[field.name];
 }
 
-export interface EditorControlPaneProps {
-  collection: Collection;
-  entry: Entry;
-  fields: CmsField[];
-  fieldsMetaData: Record<string, EntryMeta>;
-  fieldsErrors: FieldsErrors;
-  onChange: (
-    field: CmsField,
-    value: ValueOrNestedValue,
-    metadata: EntryMeta | undefined,
-    i18n: I18nSettings | undefined,
-  ) => void;
-  onValidate: (uniqueFieldId: string, errors: FieldError[]) => void;
-  locale?: string;
-  onLocaleChange: (locale: string) => void;
-}
-
 const EditorControlPane = ({
   collection,
   entry,
@@ -130,6 +117,7 @@ const EditorControlPane = ({
   onValidate,
   locale,
   onLocaleChange,
+  clearFieldErrors,
   t,
 }: TranslatedProps<EditorControlPaneProps>) => {
   const i18n = useMemo(() => {
@@ -229,6 +217,7 @@ const EditorControlPane = ({
               isFieldDuplicate={field => isFieldDuplicate(field, locale, i18n?.defaultLocale)}
               isFieldHidden={field => isFieldHidden(field, locale, i18n?.defaultLocale)}
               locale={locale}
+              clearFieldErrors={clearFieldErrors}
             />
           );
         })}
@@ -236,4 +225,34 @@ const EditorControlPane = ({
   );
 };
 
-export default EditorControlPane;
+export interface EditorControlPaneOwnProps {
+  collection: Collection;
+  entry: Entry;
+  fields: CmsField[];
+  fieldsMetaData: Record<string, EntryMeta>;
+  fieldsErrors: FieldsErrors;
+  onChange: (
+    field: CmsField,
+    value: ValueOrNestedValue,
+    metadata: EntryMeta | undefined,
+    i18n: I18nSettings | undefined,
+  ) => void;
+  onValidate: (uniqueFieldId: string, errors: FieldError[]) => void;
+  locale?: string;
+  onLocaleChange: (locale: string) => void;
+}
+
+function mapStateToProps(_state: RootState, ownProps: EditorControlPaneOwnProps) {
+  return {
+    ...ownProps,
+  };
+}
+
+const mapDispatchToProps = {
+  clearFieldErrors,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+export type EditorControlPaneProps = ConnectedProps<typeof connector>;
+
+export default connector(EditorControlPane);

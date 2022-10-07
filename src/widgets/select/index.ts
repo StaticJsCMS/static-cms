@@ -5,7 +5,7 @@ import { validateMinMax } from '../../lib/widgets/validations';
 
 import type { CmsFieldSelect, CmsWidgetParam } from '../../interface';
 
-const SelectWidget = (): CmsWidgetParam<string, CmsFieldSelect> => {
+const SelectWidget = (): CmsWidgetParam<string | string[], CmsFieldSelect> => {
   return {
     name: 'select',
     controlComponent,

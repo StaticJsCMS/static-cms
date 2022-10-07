@@ -4,7 +4,7 @@ import truncate from 'lodash/truncate';
 import moment from 'moment';
 import { basename, dirname, extname } from 'path';
 
-import type { Entry, EntryData } from '../../interface';
+import type { Entry, EntryData, ValueOrNestedValue } from '../../interface';
 
 const filters = [
   { pattern: /^upper$/, transform: (str: string) => str.toUpperCase() },
@@ -155,7 +155,15 @@ export function expandPath({
 
 // Allow `fields.` prefix in placeholder to override built in replacements
 // like "slug" and "year" with values from fields of the same name.
-function getExplicitFieldReplacement(key: string, data: Record<string, unknown>) {
+function getExplicitFieldReplacement(
+  key: string,
+  data:
+    | {
+        [key: string]: ValueOrNestedValue;
+      }
+    | undefined
+    | null,
+) {
   if (!key.startsWith(FIELD_PREFIX)) {
     return;
   }
@@ -186,7 +194,12 @@ export function compileStringTemplate(
   template: string,
   date: Date | undefined | null,
   identifier = '',
-  data: Record<string, unknown> = {},
+  data:
+    | {
+        [key: string]: ValueOrNestedValue;
+      }
+    | undefined
+    | null = {},
   processor?: (value: string) => string,
 ) {
   let missingRequiredDate;
@@ -254,11 +267,7 @@ export function extractTemplateVars(template: string) {
  *   eg: `addFileTemplateFields('foo/bar/baz.ext', fields, 'foo')`
  *       will result in: `{ dirname: 'bar', filename: 'baz', extension: 'ext' }`
  */
-export function addFileTemplateFields(
-  entryPath: string,
-  fields: EntryData,
-  folder = '',
-) {
+export function addFileTemplateFields(entryPath: string, fields: EntryData, folder = '') {
   if (!entryPath) {
     return fields;
   }
