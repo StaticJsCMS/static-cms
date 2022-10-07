@@ -1,23 +1,37 @@
-const fs = require('fs-extra');
-const path = require('path');
-const yaml = require('js-yaml');
-const uniq = require('lodash/uniq');
+import fs from 'fs-extra';
+import path from 'path';
+import yaml from 'js-yaml';
+import uniq from 'lodash/uniq';
 
 const rawDataPath = '../data/languages-raw.yml';
 const outputPath = '../data/languages.json';
 
-async function fetchData() {
-  const filePath = path.resolve(__dirname, rawDataPath);
-  const fileContent = await fs.readFile(filePath);
-  return yaml.load(fileContent);
+interface CodeLanguage {
+  extensions: string[];
+  aliases: string[];
+  codemirror_mode: string;
+  codemirror_mime_type: string;
 }
 
-function outputData(data) {
+interface ProcessedCodeLanguage {
+  label: string;
+  identifiers: string[];
+  codemirror_mode: string;
+  codemirror_mime_type: string;
+}
+
+async function fetchData() {
+  const filePath = path.resolve(__dirname, rawDataPath);
+  const fileContent = await fs.readFile(filePath, 'utf-8');
+  return yaml.load(fileContent) as Record<string, CodeLanguage>;
+}
+
+function outputData(data: ProcessedCodeLanguage[]) {
   const filePath = path.resolve(__dirname, outputPath);
   return fs.writeJson(filePath, data);
 }
 
-function transform(data) {
+function transform(data: Record<string, CodeLanguage>) {
   return Object.entries(data).reduce((acc, [label, lang]) => {
     const { extensions = [], aliases = [], codemirror_mode, codemirror_mime_type } = lang;
     if (codemirror_mode) {
@@ -33,7 +47,7 @@ function transform(data) {
       acc.push({ label, identifiers, codemirror_mode, codemirror_mime_type });
     }
     return acc;
-  }, []);
+  }, [] as ProcessedCodeLanguage[]);
 }
 
 async function process() {

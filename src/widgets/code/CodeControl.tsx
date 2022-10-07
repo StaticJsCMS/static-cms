@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { ClassNames } from '@emotion/react';
@@ -18,6 +18,7 @@ import materialTheme from 'codemirror/theme/material.css';
 import SettingsPane from './SettingsPane';
 import SettingsButton from './SettingsButton';
 import languageData from './data/languages.json';
+import { CmsFieldCode, CmsWidgetControlProps } from '../../interface';
 
 // TODO: relocate as a utility function
 function getChangedProps(previous, next, keys) {
@@ -62,56 +63,78 @@ const settingsPersistKeys = {
   keyMap: 'cms.codemirror.keymap',
 };
 
-export default class CodeControl extends React.Component {
-  static propTypes = {
-    field: ImmutablePropTypes.map.isRequired,
-    onChange: PropTypes.func.isRequired,
-    value: PropTypes.node,
-    forID: PropTypes.string.isRequired,
-    classNameWrapper: PropTypes.string.isRequired,
-    widget: PropTypes.object.isRequired,
-  };
+const CodeControl = ({classNameWrapper, forID, isNewEditorComponent, field, value}: CmsWidgetControlProps<string | Record<string, string>, CmsFieldCode>) => {
+  const [isActive, setIsActive] = useState(false);
+  const [unknownLang, setUnknownLang] = useState<string | null>(null);
+  const [lang, setLang] = useState('');
+  const [keyMap, setKeyMap] = useState(localStorage.getItem(settingsPersistKeys['keyMap']) || 'default');
+  const [settingsVisibile, setSettingsVisible] = useState(false);
+  const [codeMirrorKey, setCodeMirrorKey] = useState(uuid());
+  const [theme, setTheme] = useState(localStorage.getItem(settingsPersistKeys['theme']) || themes[themes.length - 1]);
+  const [lastKnownValue, setLastKnownValue] = useState(value && typeof value === 'object' ? value[keys.code] : value);
 
-  keys = this.getKeys(this.props.field);
+  const keys = useMemo(() => getKeys(field), []);
 
-  state = {
-    isActive: false,
-    unknownLang: null,
-    lang: '',
-    keyMap: localStorage.getItem(settingsPersistKeys['keyMap']) || 'default',
-    settingsVisible: false,
-    codeMirrorKey: uuid(),
-    theme: localStorage.getItem(settingsPersistKeys['theme']) || themes[themes.length - 1],
-    lastKnownValue: this.valueIsMap() ? this.props.value?.get(this.keys.code) : this.props.value,
-  };
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return (
+  //     !isEqual(this.state, nextState) || this.props.classNameWrapper !== nextProps.classNameWrapper
+  //   );
+  // }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      !isEqual(this.state, nextState) || this.props.classNameWrapper !== nextProps.classNameWrapper
-    );
-  }
+  // componentDidMount() {
+  //   this.setState({
+  //     lang: this.getInitialLang() || '',
+  //   });
+  // }
 
-  componentDidMount() {
-    this.setState({
-      lang: this.getInitialLang() || '',
-    });
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   this.updateCodeMirrorProps(prevState);
+  // }
 
-  componentDidUpdate(prevProps, prevState) {
-    this.updateCodeMirrorProps(prevState);
-  }
+  const getLanguageByName = useCallback((name: string) => {
+    return languages.find(lang => lang.name === name);
+  }, []);
 
-  updateCodeMirrorProps(prevState) {
+  const handleChangeCodeMirrorProps = useCallback(async (changedProps: { lang: string | undefined }) => {
+    if (changedProps.lang) {
+      const { mode } = getLanguageByName(changedProps.lang) || {};
+      if (mode) {
+        require(`codemirror/mode/${mode}/${mode}.js`);
+      }
+    }
+
+    // Changing CodeMirror props requires re-initializing the
+    // detached/uncontrolled React CodeMirror component, so here we save and
+    // restore the selections and cursor position after the state change.
+    if (this.cm) {
+      const cursor = this.cm.doc.getCursor();
+      const selections = this.cm.doc.listSelections();
+      this.setState({ codeMirrorKey: uuid() }, () => {
+        this.cm.doc.setCursor(cursor);
+        this.cm.doc.setSelections(selections);
+      });
+    }
+
+    for (const key of ['theme', 'keyMap']) {
+      if (changedProps[key]) {
+        localStorage.setItem(settingsPersistKeys[key], changedProps[key]);
+      }
+    }
+
+    // Only persist the language change if supported - requires the value to be
+    // a map rather than just a code string.
+    if (changedProps.lang && this.valueIsMap()) {
+      onChange(this.toValue('lang', changedProps.lang));
+    }
+  }, []);
+
+  const updateCodeMirrorProps = useCallback((prevState) => {
     const keys = ['lang', 'theme', 'keyMap'];
     const changedProps = getChangedProps(prevState, this.state, keys);
     if (changedProps) {
       this.handleChangeCodeMirrorProps(changedProps);
     }
-  }
-
-  getLanguageByName = name => {
-    return languages.find(lang => lang.name === name);
-  };
+  }, []);
 
   getKeyMapOptions = () => {
     return Object.keys(CodeMirror.keyMap)
@@ -166,41 +189,6 @@ export default class CodeControl extends React.Component {
     return !field.output_code_only || isEditorComponent;
   }
 
-  async handleChangeCodeMirrorProps(changedProps) {
-    const { onChange } = this.props;
-
-    if (changedProps.lang) {
-      const { mode } = this.getLanguageByName(changedProps.lang) || {};
-      if (mode) {
-        require(`codemirror/mode/${mode}/${mode}.js`);
-      }
-    }
-
-    // Changing CodeMirror props requires re-initializing the
-    // detached/uncontrolled React CodeMirror component, so here we save and
-    // restore the selections and cursor position after the state change.
-    if (this.cm) {
-      const cursor = this.cm.doc.getCursor();
-      const selections = this.cm.doc.listSelections();
-      this.setState({ codeMirrorKey: uuid() }, () => {
-        this.cm.doc.setCursor(cursor);
-        this.cm.doc.setSelections(selections);
-      });
-    }
-
-    for (const key of ['theme', 'keyMap']) {
-      if (changedProps[key]) {
-        localStorage.setItem(settingsPersistKeys[key], changedProps[key]);
-      }
-    }
-
-    // Only persist the language change if supported - requires the value to be
-    // a map rather than just a code string.
-    if (changedProps.lang && this.valueIsMap()) {
-      onChange(this.toValue('lang', changedProps.lang));
-    }
-  }
-
   handleChange(newValue) {
     const cursor = this.cm.doc.getCursor();
     const selections = this.cm.doc.listSelections();
@@ -233,9 +221,6 @@ export default class CodeControl extends React.Component {
   setActive = () => this.setState({ isActive: true });
   setInactive = () => this.setState({ isActive: false });
 
-  render() {
-    const { classNameWrapper, forID, widget, isNewEditorComponent } = this.props;
-    const { lang, settingsVisible, keyMap, codeMirrorKey, theme, lastKnownValue } = this.state;
     const langInfo = this.getLanguageByName(lang);
     const mode = langInfo?.mimeType || langInfo?.mode;
 
@@ -316,5 +301,4 @@ export default class CodeControl extends React.Component {
         )}
       </ClassNames>
     );
-  }
 }

@@ -327,7 +327,7 @@ export type CmsWidgetControlProps<T = unknown, F extends CmsField = CmsField> = 
   : UnknownCmsWidgetControlProps<T, F>;
 
 export interface CmsWidgetPreviewProps<T = unknown, F extends CmsField = CmsField> {
-  value: T;
+  value: T | undefined | null;
   field: F;
   metadata?: EntryMeta;
   getAsset: GetAssetFunction;

@@ -3,6 +3,8 @@ import styled from '@emotion/styled';
 
 import { Icon, buttons, shadows, zIndex } from '../../ui';
 
+import type { MouseEvent } from 'react';
+
 const StyledSettingsButton = styled.button`
   ${buttons.button};
   ${buttons.default};
@@ -23,7 +25,12 @@ const StyledSettingsButton = styled.button`
   }
 `;
 
-const SettingsButton = ({ showClose, onClick }) => {
+interface SettingsButtonProps {
+  showClose: boolean;
+  onClick: (event: MouseEvent) => void;
+}
+
+const SettingsButton = ({ showClose, onClick }: SettingsButtonProps) => {
   return (
     <StyledSettingsButton onClick={onClick}>
       <Icon type={showClose ? 'close' : 'settings'} size="small" />
