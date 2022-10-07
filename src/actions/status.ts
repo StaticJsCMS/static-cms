@@ -3,7 +3,7 @@ import { addSnackbar, removeSnackbarById } from '../store/slices/snackbars';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type { State } from '../interface';
+import type { RootState } from '../store';
 
 export const STATUS_REQUEST = 'STATUS_REQUEST';
 export const STATUS_SUCCESS = 'STATUS_SUCCESS';
@@ -33,7 +33,7 @@ export function statusFailure(error: Error) {
 }
 
 export function checkBackendStatus() {
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     try {
       const state = getState();
       const config = state.config.config;

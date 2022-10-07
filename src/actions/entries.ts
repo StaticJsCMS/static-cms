@@ -34,11 +34,11 @@ import type {
   FieldError,
   I18nSettings,
   ImplementationMediaFile,
-  State,
   ValueOrNestedValue,
   ViewFilter,
   ViewGroup,
 } from '../interface';
+import type { RootState } from '../store';
 import type AssetProxy from '../valueObjects/AssetProxy';
 
 /*
@@ -268,7 +268,7 @@ export function entriesFailed(collection: Collection, error: Error) {
   } as const;
 }
 
-async function getAllEntries(state: State, collection: Collection) {
+async function getAllEntries(state: RootState, collection: Collection) {
   const configState = state.config;
   if (!configState.config) {
     throw new Error('Config not loaded');
@@ -293,7 +293,7 @@ export function sortByField(
   key: string,
   direction: SortDirection = SortDirection.Ascending,
 ) {
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     // if we're already fetching we update the sort key, but skip loading entries
     const isFetching = selectIsFetching(state.entries, collection.name);
@@ -312,7 +312,7 @@ export function sortByField(
 }
 
 export function filterByField(collection: Collection, filter: ViewFilter) {
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     // if we're already fetching we update the filter key, but skip loading entries
     const isFetching = selectIsFetching(state.entries, collection.name);
@@ -331,7 +331,7 @@ export function filterByField(collection: Collection, filter: ViewFilter) {
 }
 
 export function groupByField(collection: Collection, group: ViewGroup) {
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const isFetching = selectIsFetching(state.entries, collection.name);
     dispatch({
@@ -487,10 +487,7 @@ export function changeDraftField({
   } as const;
 }
 
-export function changeDraftFieldValidation(
-  uniqueFieldId: string,
-  errors: FieldError[],
-) {
+export function changeDraftFieldValidation(uniqueFieldId: string, errors: FieldError[]) {
   return {
     type: DRAFT_VALIDATION_ERRORS,
     payload: { uniqueFieldId, errors },
@@ -523,7 +520,7 @@ export function removeDraftEntryMediaFile({ id }: { id: string }) {
 }
 
 export function persistLocalBackup(entry: Entry, collection: Collection) {
-  return (_dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return (_dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const configState = state.config;
     if (!configState.config) {
@@ -537,7 +534,7 @@ export function persistLocalBackup(entry: Entry, collection: Collection) {
 }
 
 export function createDraftDuplicateFromEntry(entry: Entry) {
-  return (dispatch: ThunkDispatch<State, {}, AnyAction>) => {
+  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>) => {
     dispatch(
       waitUntil({
         predicate: ({ type }) => type === DRAFT_CREATE_EMPTY,
@@ -548,7 +545,7 @@ export function createDraftDuplicateFromEntry(entry: Entry) {
 }
 
 export function retrieveLocalBackup(collection: Collection, slug: string) {
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const configState = state.config;
     if (!configState.config) {
@@ -583,7 +580,7 @@ export function retrieveLocalBackup(collection: Collection, slug: string) {
 }
 
 export function deleteLocalBackup(collection: Collection, slug: string) {
-  return (_dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return (_dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const configState = state.config;
     if (!configState.config) {
@@ -600,7 +597,7 @@ export function deleteLocalBackup(collection: Collection, slug: string) {
  */
 
 export function loadEntry(collection: Collection, slug: string, silent = false) {
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     await waitForMediaLibraryToLoad(dispatch, getState());
     if (!silent) {
       dispatch(entryLoading(collection, slug));
@@ -628,7 +625,7 @@ export function loadEntry(collection: Collection, slug: string, silent = false) 
   };
 }
 
-export async function tryLoadEntry(state: State, collection: Collection, slug: string) {
+export async function tryLoadEntry(state: RootState, collection: Collection, slug: string) {
   const configState = state.config;
   if (!configState.config) {
     throw new Error('Config not loaded');
@@ -661,7 +658,7 @@ function addAppendActionsToCursor(cursor: Cursor) {
 }
 
 export function loadEntries(collection: Collection, page = 0) {
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     if (collection.isFetching) {
       return;
     }
@@ -758,7 +755,7 @@ function traverseCursor(backend: Backend, cursor: Cursor, action: string) {
 }
 
 export function traverseCollectionCursor(collection: Collection, action: string) {
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const collectionName = collection.name;
     if (state.entries.pages?.[collectionName]?.isFetching) {
@@ -838,7 +835,7 @@ function getMetaFields(fields: CmsField[]) {
 }
 
 export function createEmptyDraft(collection: Collection, search: string) {
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const params = new URLSearchParams(search);
     params.forEach((value, key) => {
       collection = updateFieldByKey(collection, key, field => {
@@ -1000,7 +997,7 @@ export function getSerializedEntry(collection: Collection, entry: Entry): Entry 
 }
 
 export function persistEntry(collection: Collection) {
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const entryDraft = state.entryDraft;
     const fieldsErrors = entryDraft.fieldsErrors;
@@ -1097,7 +1094,7 @@ export function persistEntry(collection: Collection) {
 }
 
 export function deleteEntry(collection: Collection, slug: string) {
-  return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const configState = state.config;
     if (!configState.config) {
@@ -1144,7 +1141,7 @@ function getPathError(
 }
 
 export function validateMetaField(
-  state: State,
+  state: RootState,
   collection: Collection,
   field: CmsField,
   value: string | undefined,

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import {
   loadEntries as actionLoadEntries,
-  traverseCollectionCursor as actionTraverseCollectionCursor,
+  traverseCollectionCursor as actionTraverseCollectionCursor
 } from '../../../actions/entries';
 import { Cursor } from '../../../lib/util';
 import { selectCollectionEntriesCursor } from '../../../reducers/cursors';
@@ -13,7 +13,7 @@ import {
   selectEntries,
   selectEntriesLoaded,
   selectGroups,
-  selectIsFetching,
+  selectIsFetching
 } from '../../../reducers/entries';
 import { colors } from '../../../ui';
 import Entries from './Entries';
@@ -22,7 +22,8 @@ import type { ComponentType } from 'react';
 import type { t } from 'react-polyglot';
 import type { ConnectedProps } from 'react-redux';
 import type { CollectionViewStyle } from '../../../constants/collectionViews';
-import type { Collection, Entry, GroupOfEntries, State, TranslatedProps } from '../../../interface';
+import type { Collection, Entry, GroupOfEntries, TranslatedProps } from '../../../interface';
+import type { RootState } from '../../../store';
 
 const GroupHeading = styled.h2`
   font-size: 23px;
@@ -158,7 +159,7 @@ interface EntriesCollectionOwnProps {
   filterTerm: string;
 }
 
-function mapStateToProps(state: State, ownProps: EntriesCollectionOwnProps) {
+function mapStateToProps(state: RootState, ownProps: EntriesCollectionOwnProps) {
   const { collection, viewStyle, filterTerm } = ownProps;
   const page = state.entries.pages[collection.name]?.page;
 

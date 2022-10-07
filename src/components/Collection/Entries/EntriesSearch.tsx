@@ -11,7 +11,8 @@ import { selectSearchedEntries } from '../../../reducers';
 import Entries from './Entries';
 
 import type { ConnectedProps } from 'react-redux';
-import type { Collections, State } from '../../../interface';
+import type { Collections } from '../../../interface';
+import type { RootState } from '../../../store';
 
 const EntriesSearch = ({
   collections,
@@ -79,7 +80,7 @@ interface EntriesSearchOwnProps {
   collections: Collections;
 }
 
-function mapStateToProps(state: State, ownProps: EntriesSearchOwnProps) {
+function mapStateToProps(state: RootState, ownProps: EntriesSearchOwnProps) {
   const { searchTerm } = ownProps;
   const collections = Object.values(ownProps.collections);
   const collectionNames = Object.keys(ownProps.collections);

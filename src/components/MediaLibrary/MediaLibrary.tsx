@@ -9,7 +9,7 @@ import {
   insertMedia as insertMediaAction,
   loadMedia as loadMediaAction,
   loadMediaDisplayURL as loadMediaDisplayURLAction,
-  persistMedia as persistMediaAction,
+  persistMedia as persistMediaAction
 } from '../../actions/mediaLibrary';
 import { fileExtension } from '../../lib/util';
 import { selectMediaFiles } from '../../reducers/mediaLibrary';
@@ -19,7 +19,8 @@ import MediaLibraryModal from './MediaLibraryModal';
 
 import type { ChangeEvent, KeyboardEvent } from 'react';
 import type { ConnectedProps } from 'react-redux';
-import type { MediaFile, State, TranslatedProps } from '../../interface';
+import type { MediaFile, TranslatedProps } from '../../interface';
+import type { RootState } from '../../store';
 
 /**
  * Extensions used to determine which files to show when the media library is
@@ -366,7 +367,7 @@ const MediaLibrary = ({
   );
 };
 
-function mapStateToProps(state: State) {
+function mapStateToProps(state: RootState) {
   const { mediaLibrary } = state;
   const field = mediaLibrary.field;
   const mediaLibraryProps = {

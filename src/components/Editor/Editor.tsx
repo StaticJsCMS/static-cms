@@ -17,7 +17,7 @@ import {
   loadLocalBackup,
   persistEntry,
   persistLocalBackup,
-  retrieveLocalBackup,
+  retrieveLocalBackup
 } from '../../actions/entries';
 import { loadScroll, toggleScroll } from '../../actions/scroll';
 import { selectEntry } from '../../reducers';
@@ -36,10 +36,10 @@ import type {
   Entry,
   EntryMeta,
   I18nSettings,
-  State,
   TranslatedProps,
-  ValueOrNestedValue,
+  ValueOrNestedValue
 } from '../../interface';
+import type { RootState } from '../../store';
 
 const Editor = ({
   entry,
@@ -323,7 +323,7 @@ interface CollectionViewOwnProps {
   showDelete?: boolean;
 }
 
-function mapStateToProps(state: State, ownProps: CollectionViewOwnProps) {
+function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
   const { collections, entryDraft, auth, config, entries, scroll } = state;
   const { name, slug, newRecord } = ownProps;
   const collection = collections[name];

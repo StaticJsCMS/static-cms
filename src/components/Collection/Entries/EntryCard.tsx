@@ -12,7 +12,8 @@ import { colors, colorsRaw, components, lengths, zIndex } from '../../../ui';
 
 import type { ConnectedProps } from 'react-redux';
 import type { CollectionViewStyle } from '../../../constants/collectionViews';
-import type { Collection, Entry, CmsField, State } from '../../../interface';
+import type { CmsField, Collection, Entry } from '../../../interface';
+import type { RootState } from '../../../store';
 
 const ListCard = styled.li`
   ${components.card};
@@ -169,7 +170,7 @@ interface EntryCardOwnProps {
   viewStyle?: CollectionViewStyle;
 }
 
-function mapStateToProps(state: State, ownProps: EntryCardOwnProps) {
+function mapStateToProps(state: RootState, ownProps: EntryCardOwnProps) {
   const { entry, inferedFields, collection } = ownProps;
   const entryData = entry.data;
   const summary = selectEntryCollectionTitle(collection, entry);

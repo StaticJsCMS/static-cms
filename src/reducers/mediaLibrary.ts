@@ -19,19 +19,17 @@ import {
   MEDIA_PERSIST_FAILURE,
   MEDIA_PERSIST_REQUEST,
   MEDIA_PERSIST_SUCCESS,
-  MEDIA_REMOVE_INSERTED,
+  MEDIA_REMOVE_INSERTED
 } from '../actions/mediaLibrary';
 import { selectIntegration } from './';
 import { selectEditingDraft, selectMediaFolder } from './entries';
 
 import type { MediaLibraryAction } from '../actions/mediaLibrary';
 import type {
-  DisplayURLState,
-  CmsField,
-  MediaFile,
-  MediaLibraryInstance,
-  State,
+  CmsField, DisplayURLState, MediaFile,
+  MediaLibraryInstance
 } from '../interface';
+import type { RootState } from '../store';
 
 export interface MediaLibraryDisplayURL {
   url?: string;
@@ -346,7 +344,7 @@ function mediaLibrary(state: MediaLibraryState = defaultState, action: MediaLibr
   }
 }
 
-export function selectMediaFiles(state: State, field?: CmsField): MediaFile[] {
+export function selectMediaFiles(state: RootState, field?: CmsField): MediaFile[] {
   const { mediaLibrary, entryDraft } = state;
   if (!entryDraft.entry) {
     return [];
@@ -373,13 +371,13 @@ export function selectMediaFiles(state: State, field?: CmsField): MediaFile[] {
   return files;
 }
 
-export function selectMediaFileByPath(state: State, path: string) {
+export function selectMediaFileByPath(state: RootState, path: string) {
   const files = selectMediaFiles(state);
   const file = files.find(file => file.path === path);
   return file;
 }
 
-export function selectMediaDisplayURL(state: State, id: string) {
+export function selectMediaDisplayURL(state: RootState, id: string) {
   const displayUrlState = (get(state.mediaLibrary, ['displayURLs', id]) ?? {}) as DisplayURLState;
   return displayUrlState;
 }

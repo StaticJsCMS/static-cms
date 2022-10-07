@@ -65,12 +65,12 @@ import type {
   ImplementationEntry,
   SearchQueryResponse,
   SearchResponse,
-  State,
   User,
 } from './interface';
 import type { AllowedEvent } from './lib/registry';
 import type { AsyncLock } from './lib/util';
 import type AssetProxy from './valueObjects/AssetProxy';
+import type { RootState } from './store';
 
 const { extractTemplateVars, dateParsers, expandPath } = stringTemplate;
 
@@ -737,7 +737,7 @@ export class Backend {
     return localForage.removeItem(getEntryBackupKey());
   }
 
-  async getEntry(state: State, collection: Collection, slug: string) {
+  async getEntry(state: RootState, collection: Collection, slug: string) {
     const path = selectEntryPath(collection, slug) as string;
     const label = selectFileEntryLabel(collection, slug);
     const extension = selectFolderEntryExtension(collection);
@@ -798,7 +798,7 @@ export class Backend {
     };
   }
 
-  async processEntry(state: State, collection: Collection, entry: Entry) {
+  async processEntry(state: RootState, collection: Collection, entry: Entry) {
     const configState = state.config;
     if (!configState.config) {
       throw new Error('Config not loaded');
@@ -955,7 +955,7 @@ export class Backend {
     return this.implementation.persistMedia(file, options);
   }
 
-  async deleteEntry(state: State, collection: Collection, slug: string) {
+  async deleteEntry(state: RootState, collection: Collection, slug: string) {
     const configState = state.config;
     if (!configState.config) {
       throw new Error('Config not loaded');

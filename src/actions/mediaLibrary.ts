@@ -19,13 +19,13 @@ import { waitUntilWithTimeout } from './waitUntil';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type {
-  DisplayURLState,
   CmsField,
+  DisplayURLState,
   ImplementationMediaFile,
   MediaFile,
   MediaLibraryInstance,
-  State,
 } from '../interface';
+import type { RootState } from '../store';
 import type AssetProxy from '../valueObjects/AssetProxy';
 
 export const MEDIA_LIBRARY_OPEN = 'MEDIA_LIBRARY_OPEN';
@@ -58,7 +58,7 @@ export function createMediaLibrary(instance: MediaLibraryInstance) {
 }
 
 export function clearMediaControl(id: string) {
-  return (_dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return (_dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const mediaLibrary = state.mediaLibrary.externalLibrary;
     if (mediaLibrary) {
@@ -68,7 +68,7 @@ export function clearMediaControl(id: string) {
 }
 
 export function removeMediaControl(id: string) {
-  return (_dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return (_dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const mediaLibrary = state.mediaLibrary.externalLibrary;
     if (mediaLibrary) {
@@ -88,7 +88,7 @@ export function openMediaLibrary(
     field?: CmsField;
   } = {},
 ) {
-  return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const mediaLibrary = state.mediaLibrary.externalLibrary;
     if (mediaLibrary) {
@@ -100,7 +100,7 @@ export function openMediaLibrary(
 }
 
 export function closeMediaLibrary() {
-  return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const mediaLibrary = state.mediaLibrary.externalLibrary;
     if (mediaLibrary) {
@@ -111,7 +111,7 @@ export function closeMediaLibrary() {
 }
 
 export function insertMedia(mediaPath: string | string[], field: CmsField | undefined) {
-  return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const config = state.config.config;
     const entry = state.entryDraft.entry;
@@ -140,7 +140,7 @@ export function loadMedia(
   opts: { delay?: number; query?: string; page?: number; privateUpload?: boolean } = {},
 ) {
   const { delay = 0, query = '', page = 1, privateUpload = false } = opts;
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const config = state.config.config;
     if (!config) {
@@ -228,7 +228,7 @@ function createMediaFileFromAsset({
 
 export function persistMedia(file: File, opts: MediaOptions = {}) {
   const { privateUpload, field } = opts;
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const config = state.config.config;
     if (!config) {
@@ -350,7 +350,7 @@ export function persistMedia(file: File, opts: MediaOptions = {}) {
 
 export function deleteMedia(file: MediaFile, opts: MediaOptions = {}) {
   const { privateUpload } = opts;
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const config = state.config.config;
     if (!config) {
@@ -360,7 +360,11 @@ export function deleteMedia(file: MediaFile, opts: MediaOptions = {}) {
     const backend = currentBackend(config);
     const integration = selectIntegration(state, null, 'assetStore');
     if (integration) {
-      const provider = getMediaIntegrationProvider(state.integrations, backend.getToken, integration);
+      const provider = getMediaIntegrationProvider(
+        state.integrations,
+        backend.getToken,
+        integration,
+      );
       if (!provider) {
         throw new Error('Provider not found');
       }
@@ -426,7 +430,7 @@ export function deleteMedia(file: MediaFile, opts: MediaOptions = {}) {
   };
 }
 
-export async function getMediaFile(state: State, path: string) {
+export async function getMediaFile(state: RootState, path: string) {
   const config = state.config.config;
   if (!config) {
     return { url: '' };
@@ -438,7 +442,7 @@ export async function getMediaFile(state: State, path: string) {
 }
 
 export function loadMediaDisplayURL(file: MediaFile) {
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const { displayURL, id } = file;
     const state = getState();
     const config = state.config.config;
@@ -584,8 +588,8 @@ export function mediaDisplayURLFailure(key: string, err: Error) {
 }
 
 export async function waitForMediaLibraryToLoad(
-  dispatch: ThunkDispatch<State, {}, AnyAction>,
-  state: State,
+  dispatch: ThunkDispatch<RootState, {}, AnyAction>,
+  state: RootState,
 ) {
   if (state.mediaLibrary.isLoading !== false && !state.mediaLibrary.externalLibrary) {
     await waitUntilWithTimeout(dispatch, resolve => ({
@@ -596,8 +600,8 @@ export async function waitForMediaLibraryToLoad(
 }
 
 export async function getMediaDisplayURL(
-  dispatch: ThunkDispatch<State, {}, AnyAction>,
-  state: State,
+  dispatch: ThunkDispatch<RootState, {}, AnyAction>,
+  state: RootState,
   file: MediaFile,
 ) {
   const displayURLState: DisplayURLState = selectMediaDisplayURL(state, file.id);

@@ -4,20 +4,24 @@
  */
 import once from 'lodash/once';
 
-import { getMediaLibrary } from './lib/registry';
-import { store } from './store';
 import { configFailed } from './actions/config';
 import { createMediaLibrary, insertMedia } from './actions/mediaLibrary';
+import { getMediaLibrary } from './lib/registry';
+import { store } from './store';
 
-import type { CmsMediaLibrary, State } from './interface';
+import type { CmsMediaLibrary, CmsMediaLibraryExternalLibrary } from './interface';
+import type { RootState } from './store';
 
-function handleInsert(url: string) {
+function handleInsert(url: string | string[]) {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return store.dispatch(insertMedia(url, undefined));
 }
 
-const initializeMediaLibrary = once(async function initializeMediaLibrary(name: string, options: CmsMediaLibrary | undefined) {
+const initializeMediaLibrary = once(async function initializeMediaLibrary(
+  name: string,
+  { config }: CmsMediaLibraryExternalLibrary,
+) {
   const lib = getMediaLibrary(name);
   if (!lib) {
     const err = new Error(
@@ -25,14 +29,20 @@ const initializeMediaLibrary = once(async function initializeMediaLibrary(name: 
     );
     store.dispatch(configFailed(err));
   } else {
-    const instance = await lib.init({ options, handleInsert });
+    const instance = await lib.init({ options: config, handleInsert });
     store.dispatch(createMediaLibrary(instance));
   }
 });
 
+function isExternalMediaLibraryConfig(
+  config: CmsMediaLibrary | undefined,
+): config is CmsMediaLibraryExternalLibrary {
+  return Boolean(config && 'name' in config);
+}
+
 store.subscribe(() => {
-  const state = store.getState() as unknown as State;
-  if (state.config.config) {
+  const state = store.getState() as unknown as RootState;
+  if (state.config.config && isExternalMediaLibraryConfig(state.config.config.media_library)) {
     const mediaLibraryName = state.config.config.media_library?.name;
     if (mediaLibraryName && !state.mediaLibrary.externalLibrary) {
       const mediaLibraryConfig = state.config.config.media_library;

@@ -12,7 +12,8 @@ import scroll from './scroll';
 import search from './search';
 import status from './status';
 
-import type { Collection, State } from '../interface';
+import type { Collection } from '../interface';
+import type { RootState } from '../store';
 import type { IntegrationHooks } from './integrations';
 
 const reducers = {
@@ -36,19 +37,19 @@ export default reducers;
 /*
  * Selectors
  */
-export function selectEntry(state: State, collection: string, slug: string) {
+export function selectEntry(state: RootState, collection: string, slug: string) {
   return fromEntries.selectEntry(state.entries, collection, slug);
 }
 
-export function selectEntries(state: State, collection: Collection) {
+export function selectEntries(state: RootState, collection: Collection) {
   return fromEntries.selectEntries(state.entries, collection);
 }
 
-export function selectPublishedSlugs(state: State, collection: string) {
+export function selectPublishedSlugs(state: RootState, collection: string) {
   return fromEntries.selectPublishedSlugs(state.entries, collection);
 }
 
-export function selectSearchedEntries(state: State, availableCollections: string[]) {
+export function selectSearchedEntries(state: RootState, availableCollections: string[]) {
   // only return search results for actually available collections
   return state.search.entryIds
     .filter(entryId => availableCollections.indexOf(entryId!.collection) !== -1)
@@ -56,7 +57,7 @@ export function selectSearchedEntries(state: State, availableCollections: string
 }
 
 export function selectIntegration<K extends keyof IntegrationHooks>(
-  state: State,
+  state: RootState,
   collection: string | null,
   hook: K,
 ): IntegrationHooks[K] | false {

@@ -9,13 +9,13 @@ import { getNewEntryUrl } from '../../lib/urlHelper';
 import {
   selectSortableFields,
   selectViewFilters,
-  selectViewGroups,
+  selectViewGroups
 } from '../../reducers/collections';
 import {
   selectEntriesFilter,
   selectEntriesGroup,
   selectEntriesSort,
-  selectViewStyle,
+  selectViewStyle
 } from '../../reducers/entries';
 import { components, lengths } from '../../ui';
 import CollectionControls from './CollectionControls';
@@ -26,7 +26,8 @@ import Sidebar from './Sidebar';
 
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
-import type { Collection, State, TranslatedProps, ViewFilter, ViewGroup } from '../../interface';
+import type { Collection, TranslatedProps, ViewFilter, ViewGroup } from '../../interface';
+import type { RootState } from '../../store';
 
 const CollectionContainer = styled.div`
   margin: ${lengths.pageMargin};
@@ -209,7 +210,7 @@ interface CollectionViewOwnProps {
   filterTerm?: string;
 }
 
-function mapStateToProps(state: State, ownProps: TranslatedProps<CollectionViewOwnProps>) {
+function mapStateToProps(state: RootState, ownProps: TranslatedProps<CollectionViewOwnProps>) {
   const { collections } = state;
   const isSearchEnabled = state.config.config && state.config.config.search != false;
   const {

@@ -24,9 +24,9 @@ import type {
   Entry,
   EntryData,
   EntryMeta,
-  GetAssetFunction,
-  State,
+  GetAssetFunction
 } from '../../../interface';
+import type { RootState } from '../../../store';
 
 const PreviewPaneFrame = styled.div`
   width: 100%;
@@ -395,7 +395,7 @@ export interface EditorPreviewPaneOwnProps {
   fieldsMetaData: Record<string, EntryMeta>;
 }
 
-function mapStateToProps(state: State, ownProps: EditorPreviewPaneOwnProps) {
+function mapStateToProps(state: RootState, ownProps: EditorPreviewPaneOwnProps) {
   const isLoadingAsset = selectIsLoadingAsset(state.medias);
   return { ...ownProps, isLoadingAsset, config: state.config };
 }

@@ -15,7 +15,7 @@ import {
   openMediaLibrary,
   persistMedia,
   removeInsertedMedia,
-  removeMediaControl,
+  removeMediaControl
 } from '../../../actions/mediaLibrary';
 import { clearSearch, query } from '../../../actions/search';
 import { transientOptions } from '../../../lib';
@@ -36,11 +36,11 @@ import type {
   FieldError,
   FieldsErrors,
   GetAssetFunction,
-  State,
   TranslatedProps,
   ValueOrNestedValue,
-  Widget,
+  Widget
 } from '../../../interface';
+import type { RootState } from '../../../store';
 
 /**
  * This is a necessary bridge as we are still passing classnames to widgets
@@ -375,7 +375,7 @@ interface EditorControlOwnProps {
   locale?: string;
 }
 
-function mapStateToProps(state: State, ownProps: EditorControlOwnProps) {
+function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
   const { collections, entryDraft } = state;
   const entry = entryDraft.entry;
   const collection = entryDraft.entry ? collections[entryDraft.entry.collection] : null;

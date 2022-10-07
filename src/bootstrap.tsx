@@ -17,7 +17,8 @@ import { store } from './store';
 
 import type { AnyAction } from '@reduxjs/toolkit';
 import type { ConnectedProps } from 'react-redux';
-import type { CmsConfig, State } from './interface';
+import type { CmsConfig } from './interface';
+import type { RootState } from './store';
 
 const ROOT_ID = 'nc-root';
 
@@ -37,7 +38,7 @@ function TranslatedApp({ locale, config }: AppRootProps) {
   );
 }
 
-function mapDispatchToProps(state: State) {
+function mapDispatchToProps(state: RootState) {
   return { locale: selectLocale(state.config.config), config: state.config.config };
 }
 

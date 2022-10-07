@@ -1,13 +1,14 @@
 import { isAbsolutePath } from '../lib/util';
-import { createAssetProxy } from '../valueObjects/AssetProxy';
 import { selectMediaFilePath } from '../reducers/entries';
 import { selectMediaFileByPath } from '../reducers/mediaLibrary';
-import { getMediaFile, waitForMediaLibraryToLoad, getMediaDisplayURL } from './mediaLibrary';
+import { createAssetProxy } from '../valueObjects/AssetProxy';
+import { getMediaDisplayURL, getMediaFile, waitForMediaLibraryToLoad } from './mediaLibrary';
 
-import type AssetProxy from '../valueObjects/AssetProxy';
-import type { Collection, State, Entry, CmsField } from '../interface';
-import type { ThunkDispatch } from 'redux-thunk';
 import type { AnyAction } from 'redux';
+import type { ThunkDispatch } from 'redux-thunk';
+import type { CmsField, Collection, Entry } from '../interface';
+import type { RootState } from '../store';
+import type AssetProxy from '../valueObjects/AssetProxy';
 
 export const ADD_ASSETS = 'ADD_ASSETS';
 export const ADD_ASSET = 'ADD_ASSET';
@@ -42,7 +43,7 @@ export function loadAssetFailure(path: string, error: Error) {
 }
 
 export function loadAsset(resolvedPath: string) {
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     try {
       dispatch(loadAssetRequest(resolvedPath));
       // load asset url from backend
@@ -76,7 +77,7 @@ const emptyAsset = createAssetProxy({
 });
 
 export function getAsset(collection: Collection, entry: Entry, path: string, field?: CmsField) {
-  return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     if (!path) {
       return emptyAsset;
     }

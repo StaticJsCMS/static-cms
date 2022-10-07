@@ -11,9 +11,9 @@ import { selectEntryCollectionTitle } from '../../reducers/collections';
 import { selectEntries } from '../../reducers/entries';
 import { colors, components, Icon } from '../../ui';
 
-import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
-import type { Collection, Entry, State } from '../../interface';
+import type { Collection, Entry } from '../../interface';
+import type { RootState } from '../../store';
 
 const { addFileTemplateFields } = stringTemplate;
 
@@ -342,7 +342,7 @@ interface NestedCollectionOwnProps {
   filterTerm: string;
 }
 
-function mapStateToProps(state: State, ownProps: NestedCollectionOwnProps) {
+function mapStateToProps(state: RootState, ownProps: NestedCollectionOwnProps) {
   const { collection } = ownProps;
   const entries = selectEntries(state.entries, collection) ?? [];
   return { ...ownProps, entries };

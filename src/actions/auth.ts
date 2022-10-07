@@ -3,7 +3,8 @@ import { addSnackbar } from '../store/slices/snackbars';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type { Credentials, State, User } from '../interface';
+import type { Credentials, User } from '../interface';
+import type { RootState } from '../store';
 
 export const AUTH_REQUEST = 'AUTH_REQUEST';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
@@ -46,7 +47,7 @@ export function logout() {
 
 // Check if user data token is cached and is valid
 export function authenticateUser() {
-  return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     if (!state.config.config) {
       return;
@@ -71,7 +72,7 @@ export function authenticateUser() {
 }
 
 export function loginUser(credentials: Credentials) {
-  return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     if (!state.config.config) {
       return;
@@ -102,7 +103,7 @@ export function loginUser(credentials: Credentials) {
 }
 
 export function logoutUser() {
-  return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     if (!state.config.config) {
       return;

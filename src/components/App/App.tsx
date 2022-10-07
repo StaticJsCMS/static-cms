@@ -24,7 +24,8 @@ import NotFoundPage from './NotFoundPage';
 
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
-import type { Collections, Credentials, State, TranslatedProps } from '../../interface';
+import type { Collections, Credentials, TranslatedProps } from '../../interface';
+import type { RootState } from '../../store';
 
 TopBarProgress.config({
   barColors: {
@@ -294,7 +295,7 @@ const App = ({
   );
 };
 
-function mapStateToProps(state: State) {
+function mapStateToProps(state: RootState) {
   const { auth, config, collections, globalUI, mediaLibrary, scroll } = state;
   const user = auth.user;
   const isFetching = globalUI.isFetching;

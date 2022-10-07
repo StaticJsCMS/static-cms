@@ -9,20 +9,6 @@ import type { formatExtensions } from './formats/formats';
 import type { I18N_STRUCTURE } from './lib/i18n';
 import type { AllowedEvent } from './lib/registry';
 import type Cursor from './lib/util/Cursor';
-import type { AuthState } from './reducers/auth';
-import type { CollectionsState } from './reducers/collections';
-import type { ConfigState } from './reducers/config';
-import type { CursorsState } from './reducers/cursors';
-import type { EntriesState } from './reducers/entries';
-import type { EntryDraftState } from './reducers/entryDraft';
-import type { GlobalUIState } from './reducers/globalUI';
-import type { IntegrationsState } from './reducers/integrations';
-import type { MediaLibraryState } from './reducers/mediaLibrary';
-import type { MediasState } from './reducers/medias';
-import type { ScrollState } from './reducers/scroll';
-import type { SearchState } from './reducers/search';
-import type { StatusState } from './reducers/status';
-import type { SnackbarState } from './store/slices/snackbars';
 
 export interface SlugConfig {
   encoding: string;
@@ -245,23 +231,6 @@ export interface DisplayURLState {
 }
 
 export type Hook = string | boolean;
-
-export interface State {
-  auth: AuthState;
-  config: ConfigState;
-  cursors: CursorsState;
-  collections: CollectionsState;
-  globalUI: GlobalUIState;
-  entries: EntriesState;
-  entryDraft: EntryDraftState;
-  integrations: IntegrationsState;
-  medias: MediasState;
-  mediaLibrary: MediaLibraryState;
-  search: SearchState;
-  status: StatusState;
-  scroll: ScrollState;
-  snackbar: SnackbarState;
-}
 
 export interface Integration {
   hooks: string[];

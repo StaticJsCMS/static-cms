@@ -23,8 +23,8 @@ import type {
   CmsFieldObject,
   CmsI18nConfig,
   CmsLocalBackend,
-  State,
 } from '../interface';
+import type { RootState } from '../store';
 
 export const CONFIG_REQUEST = 'CONFIG_REQUEST';
 export const CONFIG_SUCCESS = 'CONFIG_SUCCESS';
@@ -468,7 +468,7 @@ export function loadConfig(manualConfig: Partial<CmsConfig> = {}, onLoad: () => 
   if (window.CMS_CONFIG) {
     return configLoaded(window.CMS_CONFIG);
   }
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>) => {
     dispatch(configLoading());
 
     try {

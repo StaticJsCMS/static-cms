@@ -32,7 +32,7 @@ const Snackbars = ({ t }: TranslatedProps<SnackbarsProps>) => {
       // Close an active snack when a new one is added
       setOpen(false);
     }
-  }, [snackbars, messageInfo, open]);
+  }, [snackbars, messageInfo, open, dispatch]);
 
   const handleClose = useCallback((_event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {

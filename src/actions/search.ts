@@ -6,7 +6,8 @@ import { selectIntegration } from '../reducers';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type { Entry, SearchQueryResponse, State } from '../interface';
+import type { Entry, SearchQueryResponse } from '../interface';
+import type { RootState } from '../store';
 
 /*
  * Constant Declarations
@@ -89,7 +90,7 @@ export function clearSearch() {
 
 // SearchEntries will search for complete entries in all collections.
 export function searchEntries(searchTerm: string, searchCollections: string[], page = 0) {
-  return async (dispatch: ThunkDispatch<State, undefined, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, undefined, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const { search } = state;
     const configState = state.config;
@@ -156,7 +157,7 @@ export function query(
   file?: string,
   limit?: number,
 ) {
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     dispatch(querying(searchTerm));
 
     const state = getState();

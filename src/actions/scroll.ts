@@ -1,6 +1,6 @@
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type { State } from '../interface';
+import type { RootState } from '../store';
 
 export const SCROLL_SYNC_ENABLED = 'cms.scroll-sync-enabled';
 
@@ -21,7 +21,7 @@ export function loadScroll() {
 }
 
 export function toggleScroll() {
-  return async (dispatch: ThunkDispatch<State, undefined, AnyAction>, _getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, undefined, AnyAction>, _getState: () => RootState) => {
     return dispatch(togglingScroll());
   };
 }

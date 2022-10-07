@@ -10,7 +10,7 @@ import Sidebar from '../Collection/Sidebar';
 
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
-import type { State } from '../../interface';
+import type { RootState } from '../../store';
 
 const StylePage = styled('div')`
   margin: ${lengths.pageMargin};
@@ -64,7 +64,7 @@ const Page = ({ collections, isSearchEnabled, searchTerm, filterTerm }: PageProp
   );
 };
 
-function mapStateToProps(state: State) {
+function mapStateToProps(state: RootState) {
   const { collections } = state;
   const isSearchEnabled = state.config.config && state.config.config.search != false;
 
