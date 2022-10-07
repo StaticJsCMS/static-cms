@@ -19,7 +19,7 @@ export interface SearchState {
   collections: string[];
   page: number;
   entryIds: { collection: string; slug: string }[];
-  queryHits: Record<string, Entry[]>;
+  queryHits: Record<string, Entry>;
   error: Error | undefined;
 };
 

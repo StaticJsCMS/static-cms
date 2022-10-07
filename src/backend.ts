@@ -1019,7 +1019,7 @@ export class Backend {
 
   filterEntries(collection: { entries: Entry[] }, filterRule: FilterRule) {
     return collection.entries.filter(entry => {
-      const fieldValue = entry.data[filterRule.field];
+      const fieldValue = entry.data[filterRule.field] as string[];
       if (Array.isArray(fieldValue)) {
         return fieldValue.includes(filterRule.value);
       }
