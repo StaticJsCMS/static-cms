@@ -691,6 +691,7 @@ export interface CmsFieldMap extends CmsFieldBase {
 
   decimals?: number;
   type?: CmsMapWidgetType;
+  height?: string;
 }
 
 export interface CmsFieldMarkdown extends CmsFieldBase {
