@@ -194,17 +194,12 @@ const CodeControl = ({
         return;
       }
 
-      const cursor = codemirrorEditor.getDoc().getCursor();
-      const selections = codemirrorEditor.getDoc().listSelections();
       setLastKnownValue(newValue);
 
       if (valueIsMap) {
-        onChange(
-          { ...(typeof value !== 'string' ? value : {}), code: newValue },
-          { cursor, selections },
-        );
+        onChange({ ...(typeof value !== 'string' ? value : {}), code: newValue });
       }
-      onChange(newValue, { cursor, selections });
+      onChange(newValue);
     },
     [codemirrorEditor, onChange, value, valueIsMap],
   );

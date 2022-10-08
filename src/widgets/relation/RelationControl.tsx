@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import debounce from 'lodash/debounce';
@@ -7,13 +7,16 @@ import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import last from 'lodash/last';
 import uniqBy from 'lodash/uniqBy';
-import { FixedSizeList } from 'react-window';
+import { FixedSizeList, FixedSizeListProps, ListChildComponentProps } from 'react-window';
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 
 import { reactSelectStyles } from '../../ui';
 import { stringTemplate } from '../../lib/widgets';
 
-import type { CmsFieldRelation, CmsWidgetControlProps } from '../../interface';
+import type { CmsFieldRelation, CmsWidgetControlProps, Entry } from '../../interface';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import { QUERY_SUCCESS } from '../../actions/search';
 
 function arrayMove(array, from, to) {
   const slicedArray = array.slice();
@@ -36,29 +39,33 @@ const MultiValueLabel = SortableHandle(props => <components.MultiValueLabel {...
 
 const SortableSelect = SortableContainer(AsyncSelect);
 
-function Option({ index, style, data }) {
+function Option({ index, style, data }: ListChildComponentProps<{ options: React.ReactNode[] }>) {
   return <div style={style}>{data.options[index]}</div>;
 }
 
-function MenuList(props) {
-  if (props.isLoading || props.options.length <= 0 || !Array.isArray(props.children)) {
-    return props.children;
+interface MenuListProps {
+  isLoading: boolean;
+  children: ReactNode[];
+}
+
+const MenuList = ({ isLoading, children }: MenuListProps) => {
+  if (isLoading || props.options.length <= 0 || !Array.isArray(children)) {
+    return children;
   }
-  const rows = props.children;
   const itemSize = 30;
   return (
     <FixedSizeList
       style={{ width: '100%' }}
       width={300}
-      height={Math.min(300, rows.length * itemSize + itemSize / 3)}
-      itemCount={rows.length}
+      height={Math.min(300, children.length * itemSize + itemSize / 3)}
+      itemCount={children.length}
       itemSize={itemSize}
-      itemData={{ options: rows }}
+      itemData={{ options: children }}
     >
       {Option}
     </FixedSizeList>
   );
-}
+};
 
 function optionToString(option) {
   return option && option.value ? option.value : '';
@@ -89,7 +96,7 @@ function getSearchFieldArray(searchFields) {
   return List.isList(searchFields) ? searchFields.toJS() : [searchFields];
 }
 
-function getSelectedValue({ value, options, isMultiple }) {
+function getSelectedValue(value: string | string[], options, isMultiple) {
   if (isMultiple) {
     const selectedOptions = getSelectedOptions(value);
     if (selectedOptions === null) {
@@ -114,8 +121,12 @@ const RelationControl = ({
   setActiveStyle,
   setInactiveStyle,
   queryHits,
-}: CmsWidgetControlProps<string, CmsFieldRelation>) => {
+  query,
+  locale
+}: CmsWidgetControlProps<string | string[], CmsFieldRelation>) => {
   // mounted = false;
+
+  const [initialOptions, setInitialOptions] = useState([]);
 
   // state = {
   //   initialOptions: [],
@@ -228,100 +239,107 @@ const RelationControl = ({
   //   }
   // };
 
-  // parseNestedFields = (hit, field) => {
-  //   const { locale } = this.props;
-  //   const hitData =
-  //     locale != null && hit.i18n != null && hit.i18n[locale] != null
-  //       ? hit.i18n[locale].data
-  //       : hit.data;
-  //   const templateVars = stringTemplate.extractTemplateVars(field);
-  //   // return non template fields as is
-  //   if (templateVars.length <= 0) {
-  //     return get(hitData, field);
-  //   }
-  //   const data = stringTemplate.addFileTemplateFields(hit.path, fromJS(hitData));
-  //   const value = stringTemplate.compileStringTemplate(field, null, hit.slug, data);
-  //   return value;
-  // };
+  const parseNestedFields = useCallback((hit: Entry, field: string) => {
+    const hitData =
+      locale != null && hit.i18n != null && hit.i18n[locale] != null
+        ? hit.i18n[locale].data
+        : hit.data;
+    const templateVars = stringTemplate.extractTemplateVars(field);
+    // return non template fields as is
+    if (templateVars.length <= 0) {
+      return get(hitData, field);
+    }
+    const data = stringTemplate.addFileTemplateFields(hit.path, hitData);
+    const value = stringTemplate.compileStringTemplate(field, null, hit.slug, data);
+    return value;
+  }, [locale]);
 
   // isMultiple() {
   //   return this.props.field.get('multiple', false);
   // }
 
-  // parseHitOptions = hits => {
-  //   const { field } = this.props;
-  //   const valueField = field.value_field;
-  //   const displayField = field.display_fields || List([field.value_field]);
-  //   const options = hits.reduce((acc, hit) => {
-  //     const valuesPaths = stringTemplate.expandPath({ data: hit.data, path: valueField });
-  //     for (let i = 0; i < valuesPaths.length; i++) {
-  //       const label = displayField
-  //         .toJS()
-  //         .map(key => {
-  //           const displayPaths = stringTemplate.expandPath({ data: hit.data, path: key });
-  //           return this.parseNestedFields(hit, displayPaths[i] || displayPaths[0]);
-  //         })
-  //         .join(' ');
-  //       const value = this.parseNestedFields(hit, valuesPaths[i]);
-  //       acc.push({ data: hit.data, value, label });
-  //     }
+  const parseHitOptions = useCallback((hits: Entry[]) => {
+    const valueField = field.value_field;
+    const displayField = field.display_fields || [field.value_field];
+    const options = hits.reduce((acc, hit) => {
+      const valuesPaths = stringTemplate.expandPath({ data: hit.data, path: valueField });
+      for (let i = 0; i < valuesPaths.length; i++) {
+        const label = displayField
+          .map(key => {
+            const displayPaths = stringTemplate.expandPath({ data: hit.data, path: key });
+            return parseNestedFields(hit, displayPaths[i] || displayPaths[0]);
+          })
+          .join(' ');
+        const value = parseNestedFields(hit, valuesPaths[i]);
+        acc.push({ data: hit.data, value, label });
+      }
 
-  //     return acc;
-  //   }, []);
+      return acc;
+    }, []);
 
-  //   return options;
-  // };
+    return options;
+  }, []);
 
-  // loadOptions = debounce((term, callback) => {
-  //   const { field, query, forID } = this.props;
-  //   const collection = field.collection;
-  //   const optionsLength = field.options_length || 20;
-  //   const searchFieldsArray = getSearchFieldArray(field.search_fields);
-  //   const file = field.file;
+  const loadOptions = useCallback(
+    debounce((term, callback) => {
+      const collection = field.collection;
+      const optionsLength = field.options_length || 20;
+      const searchFieldsArray = getSearchFieldArray(field.search_fields);
+      const file = field.file;
 
-  //   query(forID, collection, searchFieldsArray, term, file, optionsLength).then(({ payload }) => {
-  //     const hits = payload.hits || [];
-  //     const options = this.parseHitOptions(hits);
-  //     const uniq = uniqOptions(this.state.initialOptions, options);
-  //     callback(uniq);
-  //   });
-  // }, 500);
+      query(forID, collection, searchFieldsArray, term, file, optionsLength).then(response => {
+        if (response?.type === QUERY_SUCCESS) {
+          const hits = response.payload.hits ?? [];
+          const options = parseHitOptions(hits);
+          const uniq = uniqOptions(this.state.initialOptions, options);
+          callback(uniq);
+        }
+      });
+    }, 500),
+    [],
+  );
 
   const isMultiple = this.isMultiple();
   const isClearable = !field.get('required', true) || isMultiple;
 
   const queryOptions = this.parseHitOptions(queryHits);
-  const options = uniqOptions(this.state.initialOptions, queryOptions);
-  const selectedValue = getSelectedValue({
-    options,
-    value,
-    isMultiple,
-  });
+  const options = uniqOptions(initialOptions, queryOptions);
+  const selectedValue = getSelectedValue(value, options, isMultiple);
 
   return (
-    <SortableSelect
-      useDragHandle
-      // react-sortable-hoc props:
-      axis="xy"
-      onSortEnd={this.onSortEnd(selectedValue)}
-      distance={4}
-      // small fix for https://github.com/clauderic/react-sortable-hoc/pull/352:
-      getHelperDimensions={({ node }) => node.getBoundingClientRect()}
-      // react-select props:
-      components={{ MenuList, MultiValue, MultiValueLabel }}
-      value={selectedValue}
-      inputId={forID}
-      cacheOptions
-      defaultOptions
-      loadOptions={this.loadOptions}
-      onChange={this.handleChange}
-      className={classNameWrapper}
-      onFocus={setActiveStyle}
-      onBlur={setInactiveStyle}
-      styles={reactSelectStyles}
-      isMulti={isMultiple}
-      isClearable={isClearable}
-      placeholder=""
+    <Autocomplete
+      disablePortal
+      id={forID}
+      options={options}
+      sx={{ width: 300 }}
+      renderInput={params => <TextField {...params} />}
     />
   );
+
+  // return (
+  //   <SortableSelect
+  //     useDragHandle
+  //     // react-sortable-hoc props:
+  //     axis="xy"
+  //     onSortEnd={this.onSortEnd(selectedValue)}
+  //     distance={4}
+  //     // small fix for https://github.com/clauderic/react-sortable-hoc/pull/352:
+  //     getHelperDimensions={({ node }) => node.getBoundingClientRect()}
+  //     // react-select props:
+  //     components={{ MenuList, MultiValue, MultiValueLabel }}
+  //     value={selectedValue}
+  //     inputId={forID}
+  //     cacheOptions
+  //     defaultOptions
+  //     loadOptions={this.loadOptions}
+  //     onChange={this.handleChange}
+  //     className={classNameWrapper}
+  //     onFocus={setActiveStyle}
+  //     onBlur={setInactiveStyle}
+  //     styles={reactSelectStyles}
+  //     isMulti={isMultiple}
+  //     isClearable={isClearable}
+  //     placeholder=""
+  //   />
+  // );
 };

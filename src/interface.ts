@@ -90,7 +90,9 @@ export interface Entry {
   isDeleting?: boolean;
   error?: string;
   i18n?: {
-    [locale: string]: CmsLocalePhrasesRoot;
+    [locale: string]: {
+      data: EntryData;
+    };
   };
 }
 
