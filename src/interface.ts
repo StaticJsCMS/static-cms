@@ -67,8 +67,8 @@ export type ValueOrNestedValue =
       [key: string]: ValueOrNestedValue;
     };
 
-export type EntryData = Record<string, ValueOrNestedValue>;
-export type EntryMeta = Record<string, ValueOrNestedValue>;
+export type EntryData = Record<string, ValueOrNestedValue> | undefined | null;
+export type EntryMeta = Record<string, ValueOrNestedValue> | undefined | null;
 
 export interface Entry {
   collection: string;
@@ -744,6 +744,8 @@ export interface CmsFieldRelation extends CmsFieldBase {
   file?: string;
   display_fields?: string[];
   multiple?: boolean;
+  min?: number;
+  max?: number;
   options_length?: number;
 
   /**

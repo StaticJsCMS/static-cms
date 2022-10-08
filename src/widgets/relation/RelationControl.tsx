@@ -1,115 +1,109 @@
-import React, { ReactNode, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import debounce from 'lodash/debounce';
+import Autocomplete from '@mui/material/Autocomplete';
+import CircularProgress from '@mui/material/CircularProgress';
+import TextField from '@mui/material/TextField';
 import find from 'lodash/find';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
-import last from 'lodash/last';
 import uniqBy from 'lodash/uniqBy';
-import { FixedSizeList, FixedSizeListProps, ListChildComponentProps } from 'react-window';
-import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { reactSelectStyles } from '../../ui';
+import { QUERY_SUCCESS } from '../../actions/search';
 import { stringTemplate } from '../../lib/widgets';
 
-import type { CmsFieldRelation, CmsWidgetControlProps, Entry } from '../../interface';
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import { QUERY_SUCCESS } from '../../actions/search';
+import type { ListChildComponentProps } from 'react-window';
+import type {
+  CmsFieldRelation,
+  CmsWidgetControlProps,
+  Entry,
+  EntryData,
+  EntryMeta,
+} from '../../interface';
 
-function arrayMove(array, from, to) {
-  const slicedArray = array.slice();
-  slicedArray.splice(to < 0 ? array.length + to : to, 0, slicedArray.splice(from, 1)[0]);
-  return slicedArray;
-}
-
-const MultiValue = SortableElement(props => {
-  // prevent the menu from being opened/closed when the user clicks on a value to begin dragging it
-  function onMouseDown(e) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
-
-  const innerProps = { ...props.innerProps, onMouseDown };
-  return <components.MultiValue {...props} innerProps={innerProps} />;
-});
-
-const MultiValueLabel = SortableHandle(props => <components.MultiValueLabel {...props} />);
-
-const SortableSelect = SortableContainer(AsyncSelect);
+// TODO Remove if sorting not needed
+// function arrayMove(array, from, to) {
+//   const slicedArray = array.slice();
+//   slicedArray.splice(to < 0 ? array.length + to : to, 0, slicedArray.splice(from, 1)[0]);
+//   return slicedArray;
+// }
 
 function Option({ index, style, data }: ListChildComponentProps<{ options: React.ReactNode[] }>) {
   return <div style={style}>{data.options[index]}</div>;
 }
 
-interface MenuListProps {
-  isLoading: boolean;
-  children: ReactNode[];
+export interface HitOption {
+  data: EntryData;
+  value: string;
+  label: string;
 }
 
-const MenuList = ({ isLoading, children }: MenuListProps) => {
-  if (isLoading || props.options.length <= 0 || !Array.isArray(children)) {
-    return children;
-  }
-  const itemSize = 30;
-  return (
-    <FixedSizeList
-      style={{ width: '100%' }}
-      width={300}
-      height={Math.min(300, children.length * itemSize + itemSize / 3)}
-      itemCount={children.length}
-      itemSize={itemSize}
-      itemData={{ options: children }}
-    >
-      {Option}
-    </FixedSizeList>
-  );
-};
+export interface Option {
+  value: string;
+  label: string;
+}
 
-function optionToString(option) {
+function optionToString(option: Option | HitOption | null): string {
   return option && option.value ? option.value : '';
 }
 
-function convertToOption(raw) {
+function convertToOption(raw: string | HitOption): HitOption;
+function convertToOption(raw: string | Option | HitOption): Option;
+function convertToOption(raw: string | HitOption | undefined): HitOption | undefined;
+function convertToOption(raw: string | Option | HitOption | undefined): Option | undefined;
+function convertToOption(raw: string | Option | HitOption | undefined): Option | undefined {
   if (typeof raw === 'string') {
     return { label: raw, value: raw };
   }
-  return Record.isMap(raw) ? raw.toJS() : raw;
+  return raw;
 }
 
-function getSelectedOptions(value) {
-  const selectedOptions = List.isList(value) ? value.toJS() : value;
-
-  if (!selectedOptions || !Array.isArray(selectedOptions)) {
+function getSelectedOptions(value: HitOption[] | undefined | null): HitOption[] | null;
+function getSelectedOptions(value: string[] | undefined | null): string[] | null;
+function getSelectedOptions(value: string[] | HitOption[] | undefined | null) {
+  if (!value || !Array.isArray(value)) {
     return null;
   }
 
-  return selectedOptions;
+  return value;
 }
 
-function uniqOptions(initial, current) {
+function uniqOptions(initial: HitOption[], current: HitOption[]): HitOption[] {
   return uniqBy(initial.concat(current), o => o.value);
 }
 
-function getSearchFieldArray(searchFields) {
-  return List.isList(searchFields) ? searchFields.toJS() : [searchFields];
-}
-
-function getSelectedValue(value: string | string[], options, isMultiple) {
-  if (isMultiple) {
+function getSelectedValue(
+  value: string,
+  options: HitOption[],
+  isMultiple: boolean,
+): HitOption | null;
+function getSelectedValue(
+  value: string[],
+  options: HitOption[],
+  isMultiple: boolean,
+): HitOption[] | null;
+function getSelectedValue(
+  value: string | string[] | null | undefined,
+  options: HitOption[],
+  isMultiple: boolean,
+): HitOption | HitOption[] | null;
+function getSelectedValue(
+  value: string | string[] | null | undefined,
+  options: HitOption[],
+  isMultiple: boolean,
+): HitOption | HitOption[] | null {
+  if (isMultiple && Array.isArray(value)) {
     const selectedOptions = getSelectedOptions(value);
     if (selectedOptions === null) {
       return null;
     }
 
     const selected = selectedOptions
-      .map(i => options.find(o => o.value === (i.value || i)))
+      .map(i => options.find(o => o.value === i))
       .filter(Boolean)
-      .map(convertToOption);
+      .map(convertToOption) as HitOption[];
+
     return selected;
   } else {
-    return find(options, ['value', value]) || null;
+    return find(options, ['value', value]) ?? null;
   }
 }
 
@@ -117,16 +111,16 @@ const RelationControl = ({
   value,
   field,
   forID,
-  classNameWrapper,
   setActiveStyle,
   setInactiveStyle,
+  onChange,
   queryHits,
   query,
-  locale
+  locale,
 }: CmsWidgetControlProps<string | string[], CmsFieldRelation>) => {
   // mounted = false;
 
-  const [initialOptions, setInitialOptions] = useState([]);
+  const [initialOptions, setInitialOptions] = useState<HitOption[]>([]);
 
   // state = {
   //   initialOptions: [],
@@ -153,46 +147,114 @@ const RelationControl = ({
   //   );
   // }
 
-  // async componentDidMount() {
-  //   this.mounted = true;
-  //   // if the field has a previous value perform an initial search based on the value field
-  //   // this is required since each search is limited by optionsLength so the selected value
-  //   // might not show up on the search
-  //   const { forID, field, value, query, onChange } = this.props;
-  //   const collection = field.collection;
-  //   const file = field.file;
-  //   const initialSearchValues = value && (this.isMultiple() ? getSelectedOptions(value) : [value]);
-  //   if (initialSearchValues && initialSearchValues.length > 0) {
-  //     const metadata = {};
-  //     const searchFieldsArray = getSearchFieldArray(field.search_fields);
-  //     const { payload } = await query(forID, collection, searchFieldsArray, '', file);
-  //     const hits = payload.hits || [];
-  //     const options = this.parseHitOptions(hits);
-  //     const initialOptions = initialSearchValues
-  //       .map(v => {
-  //         const selectedOption = options.find(o => o.value === v);
-  //         metadata[v] = selectedOption?.data;
-  //         return selectedOption;
-  //       })
-  //       .filter(Boolean);
+  const isMultiple = useMemo(() => {
+    return field.multiple ?? false;
+  }, [field.multiple]);
 
-  //     this.mounted && this.setState({ initialOptions });
+  const parseNestedFields = useCallback(
+    (hit: Entry, field: string): string => {
+      const hitData =
+        locale != null && hit.i18n != null && hit.i18n[locale] != null
+          ? hit.i18n[locale].data
+          : hit.data;
+      const templateVars = stringTemplate.extractTemplateVars(field);
+      // return non template fields as is
+      if (templateVars.length <= 0) {
+        return get(hitData, field) as string;
+      }
+      const data = stringTemplate.addFileTemplateFields(hit.path, hitData);
+      const value = stringTemplate.compileStringTemplate(field, null, hit.slug, data);
+      return value;
+    },
+    [locale],
+  );
 
-  //     //set metadata
-  //     this.mounted &&
-  //       onChange(value, {
-  //         [field.name]: {
-  //           [field.collection]: metadata,
-  //         },
-  //       });
-  //   }
-  // }
+  const parseHitOptions = useCallback(
+    (hits: Entry[]) => {
+      const valueField = field.value_field;
+      const displayField = field.display_fields || [field.value_field];
+      const options = hits.reduce((acc, hit) => {
+        const valuesPaths = stringTemplate.expandPath({ data: hit.data, path: valueField });
+        for (let i = 0; i < valuesPaths.length; i++) {
+          const label = displayField
+            .map(key => {
+              const displayPaths = stringTemplate.expandPath({ data: hit.data, path: key });
+              return parseNestedFields(hit, displayPaths[i] || displayPaths[0]);
+            })
+            .join(' ');
+          const value = parseNestedFields(hit, valuesPaths[i]) as string;
+          acc.push({ data: hit.data, value, label });
+        }
 
-  // componentWillUnmount() {
-  //   this.mounted = false;
-  // }
+        return acc;
+      }, [] as HitOption[]);
 
-  // onSortEnd =
+      return options;
+    },
+    [field.display_fields, field.value_field, parseNestedFields],
+  );
+
+  useEffect(() => {
+    let alive = true;
+
+    const initialSearch = async () => {
+      // if the field has a previous value perform an initial search based on the value field
+      // this is required since each search is limited by optionsLength so the selected value
+      // might not show up on the search
+      const collection = field.collection;
+      const file = field.file;
+      const initialSearchValues: string[] = value
+        ? typeof value !== 'string'
+          ? getSelectedOptions(value) ?? []
+          : [value]
+        : [];
+      if (initialSearchValues && initialSearchValues.length > 0) {
+        const metadata: Record<string, EntryMeta> = {};
+        const searchFieldsArray = field.search_fields;
+        const response = await query(forID, collection, searchFieldsArray, '', file);
+
+        if (alive) {
+          const hits = response?.type === QUERY_SUCCESS ? response.payload.hits : [];
+          const options = parseHitOptions(hits);
+          const initialOptions = initialSearchValues
+            .map(v => {
+              const selectedOption = options.find(o => o.value === v);
+              metadata[v] = selectedOption?.data;
+              return selectedOption;
+            })
+            .filter(Boolean) as HitOption[];
+
+          setInitialOptions(initialOptions);
+
+          //set metadata
+          onChange(value, {
+            [field.name]: {
+              [field.collection]: metadata,
+            },
+          });
+        }
+      }
+    };
+
+    initialSearch();
+
+    return () => {
+      alive = false;
+    };
+  }, [
+    field.collection,
+    field.file,
+    field.name,
+    field.search_fields,
+    forID,
+    onChange,
+    parseHitOptions,
+    query,
+    value,
+  ]);
+
+  // TODO Do we need sorting?
+  // const onSortEnd =
   //   options =>
   //   ({ oldIndex, newIndex }) => {
   //     const { onChange, field } = this.props;
@@ -210,112 +272,121 @@ const RelationControl = ({
   //     onChange(fromJS(newValue), metadata);
   //   };
 
-  // handleChange = selectedOption => {
-  //   const { onChange, field } = this.props;
-
-  //   if (this.isMultiple()) {
-  //     const options = selectedOption;
-  //     this.setState({ initialOptions: options.filter(Boolean) });
-  //     const value = options.map(optionToString);
-  //     const metadata =
-  //       (!isEmpty(options) && {
-  //         [field.name]: {
-  //           [field.collection]: {
-  //             [last(value)]: last(options).data,
-  //           },
-  //         },
-  //       }) ||
-  //       {};
-  //     onChange(fromJS(value), metadata);
-  //   } else {
-  //     this.setState({ initialOptions: [selectedOption].filter(Boolean) });
-  //     const value = optionToString(selectedOption);
-  //     const metadata = selectedOption && {
-  //       [field.name]: {
-  //         [field.collection]: { [value]: selectedOption.data },
-  //       },
-  //     };
-  //     onChange(value, metadata);
-  //   }
-  // };
-
-  const parseNestedFields = useCallback((hit: Entry, field: string) => {
-    const hitData =
-      locale != null && hit.i18n != null && hit.i18n[locale] != null
-        ? hit.i18n[locale].data
-        : hit.data;
-    const templateVars = stringTemplate.extractTemplateVars(field);
-    // return non template fields as is
-    if (templateVars.length <= 0) {
-      return get(hitData, field);
-    }
-    const data = stringTemplate.addFileTemplateFields(hit.path, hitData);
-    const value = stringTemplate.compileStringTemplate(field, null, hit.slug, data);
-    return value;
-  }, [locale]);
-
-  // isMultiple() {
-  //   return this.props.field.get('multiple', false);
-  // }
-
-  const parseHitOptions = useCallback((hits: Entry[]) => {
-    const valueField = field.value_field;
-    const displayField = field.display_fields || [field.value_field];
-    const options = hits.reduce((acc, hit) => {
-      const valuesPaths = stringTemplate.expandPath({ data: hit.data, path: valueField });
-      for (let i = 0; i < valuesPaths.length; i++) {
-        const label = displayField
-          .map(key => {
-            const displayPaths = stringTemplate.expandPath({ data: hit.data, path: key });
-            return parseNestedFields(hit, displayPaths[i] || displayPaths[0]);
-          })
-          .join(' ');
-        const value = parseNestedFields(hit, valuesPaths[i]);
-        acc.push({ data: hit.data, value, label });
+  const handleChange = useCallback(
+    (selectedOption: HitOption | HitOption[] | null) => {
+      if (Array.isArray(selectedOption)) {
+        const options = selectedOption;
+        setInitialOptions(options.filter(Boolean));
+        const value = options.map(optionToString);
+        const metadata =
+          (!isEmpty(options) && {
+            [field.name]: {
+              [field.collection]: {
+                [value[value.length - 1]]: options[options.length - 1].data,
+              },
+            },
+          }) ||
+          {};
+        onChange(value, metadata);
+      } else {
+        setInitialOptions([selectedOption].filter(Boolean) as HitOption[]);
+        const value = optionToString(selectedOption);
+        const metadata = selectedOption && {
+          [field.name]: {
+            [field.collection]: { [value]: selectedOption.data },
+          },
+        };
+        onChange(value, metadata);
       }
+    },
+    [field.collection, field.name, onChange],
+  );
 
-      return acc;
-    }, []);
+  const [options, setOptions] = useState<HitOption[]>([]);
+  const [open, setOpen] = React.useState(false);
+  const loading = useMemo(() => open && options.length === 0, [open, options.length]);
 
-    return options;
-  }, []);
+  React.useEffect(() => {
+    let alive = true;
 
-  const loadOptions = useCallback(
-    debounce((term, callback) => {
+    if (!loading) {
+      return undefined;
+    }
+
+    (async () => {
       const collection = field.collection;
       const optionsLength = field.options_length || 20;
-      const searchFieldsArray = getSearchFieldArray(field.search_fields);
+      const searchFieldsArray = field.search_fields;
       const file = field.file;
 
-      query(forID, collection, searchFieldsArray, term, file, optionsLength).then(response => {
+      const response = await query(forID, collection, searchFieldsArray, '', file, optionsLength);
+      if (alive) {
         if (response?.type === QUERY_SUCCESS) {
           const hits = response.payload.hits ?? [];
           const options = parseHitOptions(hits);
-          const uniq = uniqOptions(this.state.initialOptions, options);
-          callback(uniq);
+          setOptions(uniqOptions(initialOptions, options));
         }
-      });
-    }, 500),
-    [],
-  );
+      }
+    })();
 
-  const isMultiple = this.isMultiple();
-  const isClearable = !field.get('required', true) || isMultiple;
+    return () => {
+      alive = false;
+    };
+  }, [
+    field.collection,
+    field.file,
+    field.options_length,
+    field.search_fields,
+    forID,
+    initialOptions,
+    loading,
+    parseHitOptions,
+    query,
+  ]);
 
-  const queryOptions = this.parseHitOptions(queryHits);
-  const options = uniqOptions(initialOptions, queryOptions);
+  // TODO Remove? const isClearable = !(field.required ?? true) || isMultiple;
+
+  const queryOptions = parseHitOptions(queryHits);
+  const uniqueOptions = uniqOptions(initialOptions, queryOptions);
   const selectedValue = getSelectedValue(value, options, isMultiple);
 
   return (
     <Autocomplete
       disablePortal
       id={forID}
-      options={options}
+      options={uniqueOptions}
       sx={{ width: 300 }}
-      renderInput={params => <TextField {...params} />}
+      renderInput={params => (
+        <TextField
+          {...params}
+          label="Asynchronous"
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <React.Fragment>
+                {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                {params.InputProps.endAdornment}
+              </React.Fragment>
+            ),
+          }}
+        />
+      )}
+      value={selectedValue}
+      onChange={(_event, newValue) => handleChange(newValue)}
+      multiple={isMultiple}
+      onFocus={setActiveStyle}
+      onBlur={setInactiveStyle}
+      open={open}
+      onOpen={() => {
+        setOpen(true);
+      }}
+      onClose={() => {
+        setOpen(false);
+      }}
     />
   );
 
+  // TODO Remove after testing
   // return (
   //   <SortableSelect
   //     useDragHandle
@@ -343,3 +414,5 @@ const RelationControl = ({
   //   />
   // );
 };
+
+export default RelationControl;

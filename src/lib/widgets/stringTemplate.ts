@@ -82,7 +82,7 @@ export function parseDateFromEntry(entry: Entry, dateFieldName?: string | null) 
     return;
   }
 
-  const dateValue = entry.data[dateFieldName];
+  const dateValue = entry.data?.[dateFieldName];
   const dateMoment =
     typeof dateValue === 'string' || typeof dateValue === 'number' ? moment(dateValue) : null;
   if (dateMoment && dateMoment.isValid()) {
@@ -123,7 +123,7 @@ export function expandPath({
   path,
   paths = [],
 }: {
-  data: Record<string, unknown>;
+  data: EntryData;
   path: string;
   paths?: string[];
 }) {
