@@ -29,6 +29,7 @@ import type {
   CmsField,
   Collection,
   Entry,
+  EntryData,
   EntryDraft,
   EntryMeta,
   FieldError,
@@ -880,67 +881,47 @@ export function createEmptyDraft(collection: Collection, search: string) {
   };
 }
 
-interface DraftEntryData {
-  [name: string]:
-    | string
-    | null
-    | boolean
-    | unknown[]
-    | DraftEntryData
-    | DraftEntryData[]
-    | (string | DraftEntryData | boolean | unknown[])[];
-}
-
 export function createEmptyDraftData(
   fields: CmsField[],
   skipField: (field: CmsField) => boolean = () => false,
 ) {
-  return fields.reduce(
-    (
-      reduction: DraftEntryData | string | undefined | boolean | unknown[],
-      value: CmsField | undefined | boolean,
-    ) => {
-      const acc = reduction as DraftEntryData;
-      const item = value as CmsField;
-
-      if (skipField(item)) {
-        return acc;
-      }
-
-      const subfields = ('field' in item && item.field) || ('fields' in item && item.fields);
-      const list = item.widget == 'list';
-      const name = item.name;
-      const defaultValue = ('default' in item ? item.default : null) ?? null;
-
-      function isEmptyDefaultValue(val: DraftEntryData | DraftEntryData[]) {
-        return [[{}], {}].some(e => isEqual(val, e));
-      }
-
-      if (subfields) {
-        if (list && Array.isArray(defaultValue)) {
-          acc[name] = defaultValue;
-        } else {
-          const asList = Array.isArray(subfields) ? subfields : [subfields];
-
-          const subDefaultValue = Array.isArray(subfields)
-            ? [createEmptyDraftData(asList, skipField)]
-            : createEmptyDraftData(asList, skipField);
-
-          if (!isEmptyDefaultValue(subDefaultValue)) {
-            acc[name] = subDefaultValue;
-          }
-        }
-        return acc;
-      }
-
-      if (defaultValue !== null) {
-        acc[name] = defaultValue;
-      }
-
+  return fields.reduce((acc, item) => {
+    if (skipField(item)) {
       return acc;
-    },
-    {} as DraftEntryData,
-  );
+    }
+
+    const subfields = ('field' in item && item.field) || ('fields' in item && item.fields);
+    const list = item.widget == 'list';
+    const name = item.name;
+    const defaultValue = (('default' in item ? item.default : null) ?? null) as EntryData;
+
+    function isEmptyDefaultValue(val: EntryData | EntryData[]) {
+      return [[{}], {}].some(e => isEqual(val, e));
+    }
+
+    if (subfields) {
+      if (list && Array.isArray(defaultValue)) {
+        acc[name] = defaultValue;
+      } else {
+        const asList = Array.isArray(subfields) ? subfields : [subfields];
+
+        const subDefaultValue = Array.isArray(subfields)
+          ? [createEmptyDraftData(asList, skipField)]
+          : createEmptyDraftData(asList, skipField);
+
+        if (!isEmptyDefaultValue(subDefaultValue)) {
+          acc[name] = subDefaultValue;
+        }
+      }
+      return acc;
+    }
+
+    if (defaultValue !== null) {
+      acc[name] = defaultValue;
+    }
+
+    return acc;
+  }, {} as Record<string, ValueOrNestedValue>);
 }
 
 function createEmptyDraftI18nData(collection: Collection, dataFields: CmsField[]) {

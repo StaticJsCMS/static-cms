@@ -2,9 +2,11 @@ import withFileControl, { getValidValue } from './withFileControl';
 import previewComponent from './FilePreview';
 import schema from './schema';
 
+import type { CmsFieldFileOrImage, CmsWidgetParam } from '../../interface';
+
 const controlComponent = withFileControl();
 
-function Widget() {
+const FileWidget = (): CmsWidgetParam<string | string[], CmsFieldFileOrImage> => {
   return {
     name: 'file',
     controlComponent,
@@ -14,7 +16,6 @@ function Widget() {
       getValidValue,
     },
   };
-}
+};
 
-export const StaticCmsWidgetFile = { Widget, controlComponent, previewComponent, withFileControl };
-export default StaticCmsWidgetFile;
+export default FileWidget;

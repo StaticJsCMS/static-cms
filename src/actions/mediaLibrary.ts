@@ -82,8 +82,9 @@ export function openMediaLibrary(
     controlID?: string;
     forImage?: boolean;
     privateUpload?: boolean;
-    value?: string;
+    value?: string | string[];
     allowMultiple?: boolean;
+    replaceIndex?: number;
     config?: Record<string, unknown>;
     field?: CmsField;
   } = {},

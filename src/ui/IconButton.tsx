@@ -39,14 +39,21 @@ const ButtonRound = styled(
 
 interface IconButtonProps {
   size: 'small' | 'large';
-  isActive: boolean;
+  isActive?: boolean;
   className?: string;
   onClick: MouseEventHandler<HTMLButtonElement>;
   type: IconType;
-  title: string;
+  title?: string;
 }
 
-const IconButton = ({ size, isActive, type, onClick, className, title }: IconButtonProps) => {
+const IconButton = ({
+  size,
+  isActive = false,
+  type,
+  onClick,
+  className,
+  title,
+}: IconButtonProps) => {
   return (
     <ButtonRound
       $size={size}

@@ -529,6 +529,7 @@ export interface CmsMediaLibraryExternalLibrary {
 
 export interface CmsMediaLibraryInternalOptions {
   allow_multiple?: boolean;
+  choose_url?: boolean;
 }
 
 export type CmsMediaLibrary = CmsMediaLibraryExternalLibrary | CmsMediaLibraryInternalOptions;
@@ -652,8 +653,7 @@ export interface CmsFieldFileOrImage extends CmsFieldBase {
   default?: string;
 
   media_library?: CmsMediaLibrary;
-  allow_multiple?: boolean;
-  config?: unknown;
+  private?: boolean;
 }
 
 export interface CmsFieldObject extends CmsFieldBase {
