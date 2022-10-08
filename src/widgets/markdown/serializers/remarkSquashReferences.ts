@@ -1,11 +1,11 @@
-import without from 'lodash/without';
 import flatten from 'lodash/flatten';
-import u from 'unist-builder';
+import without from 'lodash/without';
 import { definitions } from 'mdast-util-definitions';
+import { u } from 'unist-builder';
 
-import type { Transformer } from 'unified';
-import type { Root, Content } from 'mdast';
+import type { Root } from 'mdast';
 import type { Definition } from 'mdast-util-definitions';
+import type { Transformer } from 'unified';
 
 /**
  * Raw markdown may contain image references or link references. Because there
@@ -28,14 +28,25 @@ import type { Definition } from 'mdast-util-definitions';
  * ```
  *
  */
+interface Node {
+  type: string;
+  identifier?: string;
+  alt?: string;
+  children?: Node[];
+}
+
 const remarkSquashReferences: () => Transformer<Root> = () => {
-  function transform(getDefinition: (identifier: string) => Definition | null, node: Root): Root {
+  function transform(
+    getDefinition: (identifier: string) => Definition | null,
+    node: Node,
+  ): Node | Node[] | null {
     /**
      * Bind the `getDefinition` function to `transform` and recursively map all
      * nodes.
      */
     const boundTransform = transform.bind(null, getDefinition);
     const children = node.children ? node.children.map(boundTransform) : node.children;
+    const filteredChildren = children ? (without(children, null) as Node[]) : undefined;
 
     /**
      * Combine reference and definition nodes into standard image and link
@@ -43,16 +54,20 @@ const remarkSquashReferences: () => Transformer<Root> = () => {
      */
     if (['imageReference', 'linkReference'].includes(node.type)) {
       const type = node.type === 'imageReference' ? 'image' : 'link';
-      const definition = getDefinition(node.identifier);
+      const definition = node.identifier ? getDefinition(node.identifier) : null;
 
       if (definition) {
         const { title, url } = definition;
-        return u(type, { title, url, alt: node.alt }, children);
+        return u(
+          type,
+          { title, url, alt: node.alt, identifier: node.identifier },
+          filteredChildren ?? [],
+        );
       }
 
-      const pre = u('text', node.type === 'imageReference' ? '![' : '[');
-      const post = u('text', ']');
-      const nodes = children || [u('text', node.alt)];
+      const pre = u('text', node.type === 'imageReference' ? '![' : '[') as Node;
+      const post = u('text', ']') as Node;
+      const nodes = (filteredChildren ?? []) || [u('text', node.alt ?? '')];
       return [pre, ...nodes, post];
     }
 
@@ -64,14 +79,12 @@ const remarkSquashReferences: () => Transformer<Root> = () => {
       return null;
     }
 
-    const filteredChildren = without(children, null) as Content[];
-
     return { ...node, children: flatten(filteredChildren) };
   }
 
   function getTransform(node: Root) {
-    const getDefinition = definitions(node);
-    return transform.call(null, getDefinition, node);
+    const getDefinition = definitions(node as Root);
+    return transform.call(null, getDefinition, node as Node) as Root;
   }
 
   return getTransform;

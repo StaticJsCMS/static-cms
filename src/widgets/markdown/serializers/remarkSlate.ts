@@ -5,6 +5,8 @@ import map from 'lodash/map';
 import flatten from 'lodash/flatten';
 import isEqual from 'lodash/isEqual';
 
+import type { Node} from 'remark-slate';
+
 /**
  * Map of MDAST node types to Slate node types.
  */
@@ -33,11 +35,11 @@ const markMap = {
   inlineCode: 'code',
 };
 
-function isInline(node) {
+function isInline(node: Node) {
   return node.object === 'inline';
 }
 
-function isText(node) {
+function isText(node: Node) {
   return node.object === 'text';
 }
 

@@ -13,7 +13,7 @@ import rehypePaperEmoji from './rehypePaperEmoji';
 import remarkAssertParents from './remarkAssertParents';
 import remarkPaddedLinks from './remarkPaddedLinks';
 import remarkWrapHtml from './remarkWrapHtml';
-import remarkToSlate from './remarkSlate';
+import remarkToSlate from './remarkSlate.ts';
 import remarkSquashReferences from './remarkSquashReferences';
 import { remarkParseShortcodes, createRemarkShortcodeStringifier } from './remarkShortcodes';
 import remarkEscapeMarkdownEntities from './remarkEscapeMarkdownEntities';
