@@ -1,16 +1,17 @@
-import React, { useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { useLayoutEffect, useMemo } from 'react';
 import { ClassNames } from '@emotion/react';
 import olStyles from 'ol/ol.css';
-import Record from 'ol/Record.js';
+import Map from 'ol/Map.js';
 import View from 'ol/View.js';
 import GeoJSON from 'ol/format/GeoJSON';
-import Draw from 'ol/interaction/Draw.js';
-import TileLayer from 'ol/layer/Tile.js';
-import VectorLayer from 'ol/layer/Vector.js';
-import OSMSource from 'ol/source/OSM.js';
-import VectorSource from 'ol/source/Vector.js';
-import { CmsFieldMap, CmsWidgetControlProps } from '../../interface';
+import Draw from 'ol/interaction/Draw';
+import TileLayer from 'ol/layer/Tile';
+import VectorLayer from 'ol/layer/Vector';
+import OSMSource from 'ol/source/OSM';
+import VectorSource from 'ol/source/Vector';
+
+import type { CmsFieldMap, CmsWidgetControlProps } from '../../interface';
+import type { Geometry } from 'ol/geom';
 
 const formatOptions = {
   dataProjection: 'EPSG:4326',
@@ -21,52 +22,65 @@ function getDefaultFormat() {
   return new GeoJSON(formatOptions);
 }
 
-function getDefaultMap(target, featuresLayer) {
-  return new Record({
+function getDefaultMap(target: HTMLDivElement, featuresLayer: VectorLayer<VectorSource<Geometry>>) {
+  return new Map({
     target,
     layers: [new TileLayer({ source: new OSMSource() }), featuresLayer],
     view: new View({ center: [0, 0], zoom: 2 }),
   });
 }
 
-export default function withMapControl({ getFormat, getMap } = {}) {
-  const MapControl = ({ value = '', field }: CmsWidgetControlProps<string, CmsFieldMap>) => {
+interface WithMapControlProps {
+  getFormat?: (field: CmsFieldMap) => GeoJSON;
+  getMap?: (target: HTMLDivElement, featuresLayer: VectorLayer<VectorSource<Geometry>>) => Map;
+}
+
+export default function withMapControl({ getFormat, getMap }: WithMapControlProps = {}) {
+  const MapControl = ({
+    value = '',
+    field,
+    onChange,
+    classNameWrapper,
+  }: CmsWidgetControlProps<string, CmsFieldMap>) => {
     const { height = '400px' } = field;
-    // constructor(props) {
-    //   super(props);
-    //   this.mapContainer = React.createRef();
-    // }
+    const mapContainer: React.LegacyRef<HTMLDivElement> = useMemo(() => React.createRef(), []);
 
-    // componentDidMount() {
-    //   const { field, onChange, value } = this.props;
-    //   const format = getFormat ? getFormat(field) : getDefaultFormat(field);
-    //   const features = value ? [format.readFeature(value)] : [];
+    useLayoutEffect(() => {
+      const format = getFormat ? getFormat(field) : getDefaultFormat();
+      const features = value ? [format.readFeature(value)] : [];
 
-    //   const featuresSource = new VectorSource({ features, wrapX: false });
-    //   const featuresLayer = new VectorLayer({ source: featuresSource });
+      const featuresSource = new VectorSource({ features, wrapX: false });
+      const featuresLayer = new VectorLayer({ source: featuresSource });
 
-    //   const target = this.mapContainer.current;
-    //   const map = getMap ? getMap(target, featuresLayer) : getDefaultMap(target, featuresLayer);
-    //   if (features.length > 0) {
-    //     map.getView().fit(featuresSource.getExtent(), { maxZoom: 16, padding: [80, 80, 80, 80] });
-    //   }
+      const target = mapContainer.current;
+      if (!target) {
+        return;
+      }
 
-    //   const draw = new Draw({ source: featuresSource, type: field.get('type', 'Point') });
-    //   map.addInteraction(draw);
+      const map = getMap ? getMap(target, featuresLayer) : getDefaultMap(target, featuresLayer);
+      if (features.length > 0) {
+        map.getView().fit(featuresSource.getExtent(), { maxZoom: 16, padding: [80, 80, 80, 80] });
+      }
 
-    //   const writeOptions = { decimals: field.get('decimals', 7) };
-    //   draw.on('drawend', ({ feature }) => {
-    //     featuresSource.clear();
-    //     onChange(format.writeGeometry(feature.getGeometry(), writeOptions));
-    //   });
-    // }
+      const draw = new Draw({ source: featuresSource, type: field.type ?? 'Point' });
+      map.addInteraction(draw);
+
+      const writeOptions = { decimals: field.decimals ?? 7 };
+      draw.on('drawend', ({ feature }) => {
+        featuresSource.clear();
+        const geometry = feature.getGeometry();
+        if (geometry) {
+          onChange(format.writeGeometry(geometry, writeOptions));
+        }
+      });
+    }, [field, mapContainer, onChange, value]);
 
     return (
       <ClassNames>
         {({ cx, css }) => (
           <div
             className={cx(
-              this.props.classNameWrapper,
+              classNameWrapper,
               css`
                 ${olStyles};
                 padding: 0;
@@ -74,7 +88,7 @@ export default function withMapControl({ getFormat, getMap } = {}) {
                 height: ${height};
               `,
             )}
-            ref={this.mapContainer}
+            ref={mapContainer}
           />
         )}
       </ClassNames>
