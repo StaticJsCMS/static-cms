@@ -1,5 +1,5 @@
 import trimEnd from 'lodash/trimEnd';
-import unified from 'unified';
+import { unified } from 'unified';
 import u from 'unist-builder';
 import markdownToRemarkPlugin from 'remark-parse';
 import remarkToMarkdownPlugin from 'remark-stringify';
@@ -21,6 +21,8 @@ import remarkStripTrailingBreaks from './remarkStripTrailingBreaks';
 import remarkAllowHtmlEntities from './remarkAllowHtmlEntities';
 import slateToRemark from './slateRemark';
 import { getEditorComponents } from '../MarkdownControl';
+
+import type { PluggableList } from 'unified';
 
 /**
  * This module contains all serializers for the Markdown widget.
@@ -59,9 +61,9 @@ import { getEditorComponents } from '../MarkdownControl';
 /**
  * Deserialize a Markdown string to an MDAST.
  */
-export function markdownToRemark(markdown, remarkPlugins) {
+export function markdownToRemark(markdown: string, remarkPlugins: PluggableList) {
   const processor = unified()
-    .use(markdownToRemarkPlugin, { fences: true, commonmark: true })
+    .use(markdownToRemarkPlugin)
     .use(markdownToRemarkRemoveTokenizers, { inlineTokenizers: ['url'] })
     .use(remarkParseShortcodes, { plugins: getEditorComponents() })
     .use(remarkAllowHtmlEntities)
@@ -94,7 +96,7 @@ function markdownToRemarkRemoveTokenizers({ inlineTokenizers }) {
 /**
  * Serialize an MDAST to a Markdown string.
  */
-export function remarkToMarkdown(obj, remarkPlugins) {
+export function remarkToMarkdown(obj, remarkPlugins: PluggableList) {
   /**
    * Rewrite the remark-stringify text visitor to simply return the text value,
    * without encoding or escaping any characters. This means we're completely

@@ -4,7 +4,7 @@ import last from 'lodash/last';
  * Joins an array of regular expressions into a single expression, without
  * altering the received expressions.
  */
-export function joinPatternSegments(patterns) {
+export function joinPatternSegments(patterns: RegExp[]) {
   return patterns.map(p => p.source).join('');
 }
 
@@ -13,8 +13,14 @@ export function joinPatternSegments(patterns) {
  * each in a non-capturing group and interposing alternation characters (|) so
  * that each expression is executed separately.
  */
-export function combinePatterns(patterns) {
+export function combinePatterns(patterns: RegExp[]) {
   return patterns.map(p => `(?:${p.source})`).join('|');
+}
+
+interface PatternMatch {
+  index: number;
+  text: string;
+  match?: boolean;
 }
 
 /**
@@ -29,7 +35,12 @@ export function combinePatterns(patterns) {
  * invertMatchPattern - boolean - if true, non-matching substrings are modified
  *   instead of matching substrings
  */
-export function replaceWhen(matchPattern, replaceFn, text, invertMatchPattern) {
+export function replaceWhen(
+  matchPattern: RegExp,
+  replaceFn: (text: string) => string,
+  text: string,
+  invertMatchPattern: boolean,
+): string {
   /**
    * Splits the string into an array of objects with the following shape:
    *
@@ -42,7 +53,7 @@ export function replaceWhen(matchPattern, replaceFn, text, invertMatchPattern) {
    * Loops through matches via recursion (`RegExp.exec` tracks the loop
    * internally).
    */
-  function split(exp, text, acc) {
+  function split(exp: RegExp, text: string, acc: PatternMatch[]): PatternMatch[] {
     /**
      * Get the next match starting from the end of the last match or start of
      * string.
@@ -53,7 +64,9 @@ export function replaceWhen(matchPattern, replaceFn, text, invertMatchPattern) {
     /**
      * `match` will be null if there are no matches.
      */
-    if (!match) return acc;
+    if (!match) {
+      return acc;
+    }
 
     /**
      * If the match is at the beginning of the input string, normalize to a data
@@ -99,7 +112,7 @@ export function replaceWhen(matchPattern, replaceFn, text, invertMatchPattern) {
    * Factory for converting substrings to data objects and adding to an output
    * array.
    */
-  function addSubstring(arr, index, text, match = false) {
+  function addSubstring(arr: PatternMatch[], index: number, text: string, match = false) {
     arr.push({ index, text, match });
   }
 
@@ -113,7 +126,9 @@ export function replaceWhen(matchPattern, replaceFn, text, invertMatchPattern) {
    * Process the trailing substring after the final match, if one exists.
    */
   const lastEntry = last(acc);
-  if (!lastEntry) return replaceFn(text);
+  if (!lastEntry) {
+    return replaceFn(text);
+  }
 
   const nextIndex = lastEntry.index + lastEntry.text.length;
   if (text.length > nextIndex) {

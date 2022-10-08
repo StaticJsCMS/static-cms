@@ -707,6 +707,7 @@ export interface CmsFieldMarkdown extends CmsFieldBase {
    * @deprecated Use editor_components instead
    */
   editorComponents?: string[];
+  sanitize_preview?: boolean;
 }
 
 export interface CmsFieldNumber extends CmsFieldBase {

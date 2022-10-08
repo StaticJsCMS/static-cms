@@ -1,4 +1,7 @@
-import mdastToString from 'mdast-util-to-string';
+import { toString } from 'mdast-util-to-string';
+
+import type { Transformer } from 'unified';
+import type { Parent, Node } from 'unist';
 
 /**
  * Removes break nodes that are at the end of a block.
@@ -9,10 +12,10 @@ import mdastToString from 'mdast-util-to-string';
  * however, may have such entities, and users of visual editors shouldn't see
  * these artifacts in resulting markdown.
  */
-export default function remarkStripTrailingBreaks() {
-  function transform(node) {
-    if (node.children) {
-      node.children = node.children
+const remarkStripTrailingBreaks: () => Transformer<Parent | Node> = () => {
+  function transform(node: Parent | Node) {
+    if ('children' in node && node.children) {
+      const rawChildren = node.children
         .map((child, idx, children) => {
           /**
            * Only touch break nodes. Convert all subsequent nodes to their text
@@ -28,7 +31,7 @@ export default function remarkStripTrailingBreaks() {
              * calls.
              */
             const fragment = { type: 'root', children: subsequentNodes };
-            const subsequentText = mdastToString(fragment);
+            const subsequentText = toString(fragment);
             return subsequentText.trim() ? child : null;
           }
 
@@ -42,15 +45,17 @@ export default function remarkStripTrailingBreaks() {
          * Because some break nodes may be excluded, we filter out the resulting
          * null values.
          */
-        .filter(child => child)
+        .filter(child => child) as (Parent | Node)[];
 
-        /**
-         * Recurse through the MDAST by transforming each individual child node.
-         */
-        .map(transform);
+      /**
+       * Recurse through the MDAST by transforming each individual child node.
+       */
+      node.children = rawChildren.map(transform);
     }
     return node;
   }
 
   return transform;
-}
+};
+
+export default remarkStripTrailingBreaks;
