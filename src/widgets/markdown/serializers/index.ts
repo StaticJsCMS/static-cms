@@ -24,7 +24,8 @@ import remarkWrapHtml from './remarkWrapHtml';
 import slateToRemark from './slateRemark';
 
 import type { Pluggable, PluggableList } from 'unified';
-import type { EditorComponentWidgetOptions, GetAssetFunction } from '../../../interface';
+import type { EditorComponentOptions, EditorComponentWidgetOptions, GetAssetFunction } from '../../../interface';
+import { resolveWidget } from '../../../lib/registry';
 
 /**
  * This module contains all serializers for the Markdown widget.
@@ -167,12 +168,12 @@ interface MarkdownToHtmlProps {
  */
 export function markdownToHtml(
   markdown: string,
-  { getAsset, remarkPlugins = [] }: MarkdownToHtmlProps = {},
+  { getAsset, remarkPlugins = [] }: MarkdownToHtmlProps,
 ) {
   const mdast = markdownToRemark(markdown, remarkPlugins);
 
   const hast = unified()
-    .use(remarkToRehypeShortcodes, { plugins: getEditorComponents(), getAsset, resolveWidget })
+    .use(remarkToRehypeShortcodes, { plugins: getEditorComponents(), getAsset })
     .use(remarkToRehype, { allowDangerousHTML: true })
     .runSync(mdast);
 
