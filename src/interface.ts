@@ -695,7 +695,6 @@ export interface CmsFieldMarkdown extends CmsFieldBase {
   minimal?: boolean;
   buttons?: CmsMarkdownWidgetButton[];
   editor_components?: string[];
-  modes?: ('raw' | 'rich_text')[];
 
   /**
    * @deprecated Use editor_components instead

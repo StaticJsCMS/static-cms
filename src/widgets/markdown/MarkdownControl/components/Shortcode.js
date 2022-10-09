@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { Record, fromJS } from 'immutable';
 import omit from 'lodash/omit';
 
-import { getEditorControl, getEditorComponents } from '../index';
+import { getEditorControl, getEditorComponents } from '../MarkdownControl';
 
 export default class Shortcode extends React.Component {
   state = {

@@ -9,7 +9,7 @@ import remarkToMarkdownPlugin from 'remark-stringify';
 import unified from 'unified';
 import u from 'unist-builder';
 
-import { getEditorComponents } from '../MarkdownControl';
+import { getEditorComponents } from '../MarkdownControl/MarkdownControl';
 import rehypePaperEmoji from './rehypePaperEmoji';
 import remarkAllowHtmlEntities from './remarkAllowHtmlEntities';
 import remarkAssertParents from './remarkAssertParents';
