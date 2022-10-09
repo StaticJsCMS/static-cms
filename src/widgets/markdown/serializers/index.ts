@@ -100,7 +100,7 @@ function markdownToRemarkRemoveTokenizers({ inlineTokenizers }: any) {
 /**
  * Serialize an MDAST to a Markdown string.
  */
-export function remarkToMarkdown(obj, remarkPlugins: PluggableList) {
+export function remarkToMarkdown(obj: any, remarkPlugins: PluggableList) {
   /**
    * Rewrite the remark-stringify text visitor to simply return the text value,
    * without encoding or escaping any characters. This means we're completely
@@ -173,7 +173,7 @@ export function markdownToHtml(
   const mdast = markdownToRemark(markdown, remarkPlugins);
 
   const hast = unified()
-    .use(remarkToRehypeShortcodes, { plugins: getEditorComponents(), getAsset })
+    .use(remarkToRehypeShortcodes as any, { plugins: getEditorComponents(), getAsset })
     .use(remarkToRehype, { allowDangerousHTML: true })
     .runSync(mdast);
 

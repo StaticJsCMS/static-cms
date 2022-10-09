@@ -5,7 +5,7 @@ import map from 'lodash/map';
 import flatten from 'lodash/flatten';
 import isEqual from 'lodash/isEqual';
 
-import type { Node} from 'remark-slate';
+import type { EditorComponentWidgetOptions } from '../../../interface';
 
 /**
  * Map of MDAST node types to Slate node types.
@@ -35,19 +35,19 @@ const markMap = {
   inlineCode: 'code',
 };
 
-function isInline(node: Node) {
+function isInline(node: any) {
   return node.object === 'inline';
 }
 
-function isText(node: Node) {
+function isText(node: any) {
   return node.object === 'text';
 }
 
-function isMarksEqual(node1, node2) {
+function isMarksEqual(node1: any, node2: any) {
   return isEqual(node1.marks, node2.marks);
 }
 
-export function wrapInlinesWithTexts(children) {
+export function wrapInlinesWithTexts(children: any) {
   if (children.length <= 0) {
     return children;
   }
@@ -80,7 +80,7 @@ export function wrapInlinesWithTexts(children) {
   return children;
 }
 
-export function mergeAdjacentTexts(children) {
+export function mergeAdjacentTexts(children: any) {
   if (children.length <= 0) {
     return children;
   }
@@ -117,10 +117,10 @@ export function mergeAdjacentTexts(children) {
  * A Remark plugin for converting an MDAST to Slate Raw AST. Remark plugins
  * return a `transformNode` function that receives the MDAST as it's first argument.
  */
-export default function remarkToSlate({ voidCodeBlock } = {}) {
-  return transformNode;
-
-  function transformNode(node) {
+export default function remarkToSlate({
+  voidCodeBlock,
+}: { voidCodeBlock?: EditorComponentWidgetOptions } = {}) {
+  function transformNode(node: any) {
     /**
      * Call `transformNode` recursively on child nodes.
      *
@@ -259,7 +259,7 @@ export default function remarkToSlate({ voidCodeBlock } = {}) {
    * that mimic the unist-builder function utilized in the slateRemark
    * transformer.
    */
-  function convertNode(node, nodes) {
+  function convertNode(node: any, nodes: any) {
     switch (node.type) {
       /**
        * General
@@ -450,4 +450,6 @@ export default function remarkToSlate({ voidCodeBlock } = {}) {
       }
     }
   }
+  
+  return transformNode;
 }

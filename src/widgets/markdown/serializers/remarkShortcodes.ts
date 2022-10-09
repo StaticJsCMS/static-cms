@@ -1,4 +1,12 @@
-export function remarkParseShortcodes({ plugins }) {
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import type { EditorComponentManualOptions, EditorComponentOptions } from '../../../interface';
+
+interface CreateShortcodeProps {
+  plugins: EditorComponentManualOptions[];
+}
+
+export function remarkParseShortcodes({ plugins }: CreateShortcodeProps) {
+  // @ts-ignore
   const Parser = this.Parser;
   const tokenizers = Parser.prototype.blockTokenizers;
   const methods = Parser.prototype.blockMethods;
@@ -8,12 +16,12 @@ export function remarkParseShortcodes({ plugins }) {
   methods.unshift('shortcode');
 }
 
-export function getLinesWithOffsets(value) {
+export function getLinesWithOffsets(value: any) {
   const SEPARATOR = '\n\n';
   const splitted = value.split(SEPARATOR);
   const trimmedLines = splitted
     .reduce(
-      (acc, line) => {
+      (acc: any, line: any) => {
         const { start: previousLineStart, originalLength: previousLineOriginalLength } =
           acc[acc.length - 1];
 
@@ -29,11 +37,17 @@ export function getLinesWithOffsets(value) {
       [{ start: -SEPARATOR.length, originalLength: 0 }],
     )
     .slice(1)
-    .map(({ line, start }) => ({ line, start }));
+    .map(({ line, start }: any) => ({ line, start }));
   return trimmedLines;
 }
 
-function matchFromLines({ trimmedLines, plugin }) {
+function matchFromLines({
+  trimmedLines,
+  plugin,
+}: {
+  trimmedLines: any;
+  plugin: EditorComponentManualOptions;
+}) {
   for (const { line, start } of trimmedLines) {
     const match = line.match(plugin.pattern);
     if (match) {
@@ -43,8 +57,8 @@ function matchFromLines({ trimmedLines, plugin }) {
   }
 }
 
-function createShortcodeTokenizer({ plugins }) {
-  return function tokenizeShortcode(eat, value, silent) {
+function createShortcodeTokenizer({ plugins }: CreateShortcodeProps) {
+  return function tokenizeShortcode(eat: any, value: any, silent: any) {
     // Plugin patterns may rely on `^` and `$` tokens, even if they don't
     // use the multiline flag. To support this, we fall back to searching
     // through each line individually, trimming trailing whitespace and
@@ -57,14 +71,14 @@ function createShortcodeTokenizer({ plugins }) {
     // select the first by its occurrence in `value`. This ensures we won't
     // skip a plugin that occurs later in the plugin registry, but earlier
     // in the `value`.
-    const [{ plugin, match } = {}] = plugins
-      ()
-      .map(plugin => ({
-        match: value.match(plugin.pattern) || matchFromLines({ trimmedLines, plugin }),
-        plugin,
-      }))
-      .filter(({ match }) => !!match)
-      .sort((a, b) => a.match.index - b.match.index);
+    const { plugin, match } =
+      plugins
+        .map(plugin => ({
+          match: value.match(plugin.pattern) || matchFromLines({ trimmedLines, plugin }),
+          plugin,
+        }))
+        .filter(({ match }) => !!match)
+        .sort((a, b) => a.match.index - b.match.index)[0] ?? {};
 
     if (match) {
       if (silent) {
@@ -90,17 +104,18 @@ function createShortcodeTokenizer({ plugins }) {
   };
 }
 
-export function createRemarkShortcodeStringifier({ plugins }) {
+export function createRemarkShortcodeStringifier({ plugins }: CreateShortcodeProps) {
   return function remarkStringifyShortcodes() {
+    // @ts-ignore
     const Compiler = this.Compiler;
     const visitors = Compiler.prototype.visitors;
 
     visitors.shortcode = shortcode;
 
-    function shortcode(node) {
+    function shortcode(node: any) {
       const { data } = node;
       const plugin = plugins.find(plugin => data.shortcode === plugin.id);
-      return plugin.toBlock(data.shortcodeData);
+      return plugin?.toBlock(data.shortcodeData);
     }
   };
 }
