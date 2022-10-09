@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { fromJS } from 'immutable';
 import styled from '@emotion/styled';
 import { css as coreCss, ClassNames } from '@emotion/react';
 import get from 'lodash/get';
@@ -17,22 +15,27 @@ import Toolbar from './Toolbar';
 import { renderBlock, renderInline, renderMark } from './renderers';
 import plugins from './plugins/visual';
 import schema from './schema';
+import { CmsFieldMarkdown, EditorComponentOptions } from '../../../interface';
 
-function visualEditorStyles({ minimal }) {
+interface VisualEditorStyles {
+  minimal: boolean;
+}
+
+function visualEditorStyles({ minimal }: VisualEditorStyles) {
   return `
-  position: relative;
-  overflow: auto;
-  font-family: ${fonts.primary};
-  min-height: ${minimal ? 'auto' : lengths.richTextEditorMinHeight};
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-top: 0;
-  margin-top: -${editorStyleVars.stickyDistanceBottom};
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  z-index: ${zIndex.zIndex100};
-`;
+    position: relative;
+    overflow: auto;
+    font-family: ${fonts.primary};
+    min-height: ${minimal ? 'auto' : lengths.richTextEditorMinHeight};
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: 0;
+    margin-top: -${editorStyleVars.stickyDistanceBottom};
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: ${zIndex.zIndex100};
+  `;
 }
 
 const InsertionPoint = styled.div`
@@ -53,22 +56,17 @@ function createSlateValue(rawValue, { voidCodeBlock, remarkPlugins }) {
   return Value.create({ document });
 }
 
-export function mergeMediaConfig(editorComponents, field) {
+export function mergeMediaConfig(editorComponents: Record<string, EditorComponentOptions>, field: CmsFieldMarkdown) {
   // merge editor media library config to image components
-  if (editorComponents.has('image')) {
+  if ('image' in editorComponents) {
     const imageComponent = editorComponents.image;
-    const fields = imageComponent?.fields;
-
-    if (fields) {
-      imageComponent.fields = fields.update(
-        fields.findIndex(f => f.widget === 'image'),
-        f => {
-          // merge `media_library` config
-          if (field.has('media_library')) {
-            f = f.set(
-              'media_library',
-              field.media_library.mergeDeep(f.media_library),
-            );
+    if ('fields' in imageComponent) {
+      const fields = imageComponent?.fields;
+      if (fields) {
+        const imageField = fields.find(f => f.widget === 'image');
+        if (imageField) {
+          if ('media_library' in imageField) {
+            f = f.set('media_library', field.media_library.mergeDeep(f.media_library));
           }
           // merge 'media_folder'
           if (field.has('media_folder') && !f.has('media_folder')) {
@@ -78,9 +76,9 @@ export function mergeMediaConfig(editorComponents, field) {
           if (field.has('public_folder') && !f.has('public_folder')) {
             f = f.set('public_folder', field.public_folder);
           }
-          return f;
-        },
-      );
+        }
+        imageComponent.fields = [
+        ];
     }
   }
 }

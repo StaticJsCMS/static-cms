@@ -6,6 +6,7 @@ import intersection from 'lodash/intersection';
 import omit from 'lodash/omit';
 import u from 'unist-builder';
 import mdastToString from 'mdast-util-to-string';
+import { Node } from 'slate';
 
 /**
  * Map of Slate node types to MDAST/Remark node types.
@@ -62,22 +63,22 @@ export default function slateToRemark(raw, { voidCodeBlock }) {
    * Slate nodes to MDAST nodes, and recursively calls itself to process child
    * nodes to arbitrary depth.
    */
-  function transform(node) {
+  function transform(node: any) {
     /**
      * Combine adjacent text and inline nodes before processing so they can
      * share marks.
      */
     const hasBlockChildren = node.nodes && node.nodes[0] && node.nodes[0].object === 'block';
     const children = hasBlockChildren
-      ? node.nodes.map(transform).filter(v => v)
+      ? node.nodes.map(transform).filter((v: any) => v)
       : convertInlineAndTextChildren(node.nodes);
 
     const output = convertBlockNode(node, children);
     return output;
   }
 
-  function removeMarkFromNodes(nodes, markType) {
-    return nodes.map(node => {
+  function removeMarkFromNodes(nodes: any, markType: any) {
+    return nodes.map((node: any) => {
       switch (node.type) {
         case 'link': {
           const updatedNodes = removeMarkFromNodes(node.nodes, markType);
@@ -96,13 +97,13 @@ export default function slateToRemark(raw, { voidCodeBlock }) {
         default:
           return {
             ...node,
-            marks: node.marks.filter(({ type }) => type !== markType),
+            marks: node.marks.filter(({ type }: any) => type !== markType),
           };
       }
     });
   }
 
-  function getNodeMarks(node) {
+  function getNodeMarks(node: any) {
     switch (node.type) {
       case 'link': {
         // Code marks can't always be condensed together. If all text in a link
