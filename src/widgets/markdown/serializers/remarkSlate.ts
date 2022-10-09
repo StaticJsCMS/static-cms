@@ -23,7 +23,7 @@ const typeMap = {
   link: 'link',
   image: 'image',
   shortcode: 'shortcode',
-};
+} as any;
 
 /**
  * Map of MDAST node types to Slate mark types.
@@ -33,7 +33,7 @@ const markMap = {
   emphasis: 'italic',
   delete: 'strikethrough',
   inlineCode: 'code',
-};
+} as any;
 
 function isInline(node: any) {
   return node.object === 'inline';
@@ -150,14 +150,14 @@ export default function remarkToSlate({
   /**
    * Add nodes to a parent node only if `nodes` is truthy.
    */
-  function addNodes(parent, nodes) {
+  function addNodes(parent: any, nodes: any) {
     return nodes ? { ...parent, nodes } : parent;
   }
 
   /**
    * Create a Slate Block node.
    */
-  function createBlock(type, nodes, props = {}) {
+  function createBlock(type: string, nodes?: any, props = {}) {
     if (!isArray(nodes)) {
       props = nodes;
       nodes = undefined;
@@ -172,7 +172,7 @@ export default function remarkToSlate({
   /**
    * Create a Slate Inline node.
    */
-  function createInline(type, props = {}, nodes) {
+  function createInline(type: string, props = {}, nodes = []) {
     const node = { object: 'inline', type, ...props };
 
     // Ensure inline nodes have at least one text child to conform to slate schema
@@ -183,7 +183,7 @@ export default function remarkToSlate({
   /**
    * Create a Slate Raw text node.
    */
-  function createText(node) {
+  function createText(node: any) {
     const newNode = { object: 'text' };
     if (typeof node === 'string') {
       return { ...newNode, text: node };
@@ -192,7 +192,7 @@ export default function remarkToSlate({
     return { ...newNode, text, marks };
   }
 
-  function processMarkChild(childNode, marks) {
+  function processMarkChild(childNode: any, marks: any): any {
     switch (childNode.type) {
       /**
        * If a text node is a direct child of the current node, it should be
@@ -209,7 +209,7 @@ export default function remarkToSlate({
        * first add the inline code mark to the marks array.
        */
       case 'inlineCode': {
-        const childMarks = [...marks, { type: markMap[childNode.type] }];
+        const childMarks = [...marks, { type: markMap[childNode.type] as string }];
         return { ...convertNode(childNode), marks: childMarks };
       }
 
@@ -239,7 +239,7 @@ export default function remarkToSlate({
     }
   }
 
-  function processMarkNode(node, parentMarks = []) {
+  function processMarkNode(node: any, parentMarks = []) {
     /**
      * Add the current node's mark type to the marks collected from parent
      * mark nodes, if any.
@@ -259,7 +259,7 @@ export default function remarkToSlate({
    * that mimic the unist-builder function utilized in the slateRemark
    * transformer.
    */
-  function convertNode(node: any, nodes: any) {
+  function convertNode(node: any, nodes?: any): any {
     switch (node.type) {
       /**
        * General
@@ -353,7 +353,7 @@ export default function remarkToSlate({
        * on the MDAST node depth.
        */
       case 'heading': {
-        const depthMap = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six' };
+        const depthMap = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six' } as any;
         const slateType = `heading-${depthMap[node.depth]}`;
         return createBlock(slateType, nodes);
       }

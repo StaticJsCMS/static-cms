@@ -29,7 +29,6 @@ import { GitLfsClient } from './git-lfs-client';
 
 import type { Semaphore } from 'semaphore';
 import type {
-  AssetProxy,
   BackendEntry,
   CmsBackendClass,
   CmsConfig,
@@ -40,6 +39,7 @@ import type {
   User,
 } from '../../interface';
 import type { ApiRequest, AsyncLock, Cursor, FetchError } from '../../lib/util';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 
@@ -429,7 +429,18 @@ export default class BitbucketBackend implements CmsBackendClass {
     );
   }
 
-  async persistMedia(mediaFile: AssetProxy, options: PersistOptions) {
+  async persistMedia(
+    mediaFile:
+      | {
+          fileObj: File;
+          size: number;
+          sha: string;
+          raw: string;
+          path: string;
+        }
+      | AssetProxy,
+    options: PersistOptions,
+  ) {
     const { fileObj, path } = mediaFile;
     const displayURL = URL.createObjectURL(fileObj as Blob);
     const client = await this.getLargeMediaClient();
@@ -445,7 +456,18 @@ export default class BitbucketBackend implements CmsBackendClass {
     };
   }
 
-  async _persistMedia(mediaFile: AssetProxy, options: PersistOptions) {
+  async _persistMedia(
+    mediaFile:
+      | {
+          fileObj: File;
+          size: number;
+          sha: string;
+          raw: string;
+          path: string;
+        }
+      | AssetProxy,
+    options: PersistOptions,
+  ) {
     const fileObj = mediaFile.fileObj as File;
 
     const [id] = await Promise.all([

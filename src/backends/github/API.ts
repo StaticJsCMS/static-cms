@@ -22,8 +22,9 @@ import {
 
 import type { Octokit } from '@octokit/rest';
 import type { Semaphore } from 'semaphore';
-import type { AssetProxy, DataFile, PersistOptions } from '../../interface';
+import type { DataFile, PersistOptions } from '../../interface';
 import type { ApiRequest, FetchError } from '../../lib/util';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 type GitHubUser = Octokit.UsersGetAuthenticatedResponse;
 type GitCreateTreeParamsTree = Octokit.GitCreateTreeParamsTree;
@@ -476,7 +477,7 @@ export default class API {
   }
 
   async persistFiles(dataFiles: DataFile[], mediaFiles: AssetProxy[], options: PersistOptions) {
-    const files = mediaFiles.concat(dataFiles);
+    const files: (DataFile | AssetProxy)[] = mediaFiles.concat(dataFiles);
     const uploadPromises = files.map(file => this.uploadBlob(file));
     await Promise.all(uploadPromises);
 

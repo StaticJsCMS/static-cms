@@ -15,9 +15,10 @@ import {
   unsentRequest,
 } from '../../lib/util';
 
-import type { AssetProxy, DataFile, PersistOptions } from '../../interface';
+import type { DataFile, PersistOptions } from '../../interface';
 import type { ApiRequest } from '../../lib/util';
 import type { ApiRequestObject } from '../../lib/util/API';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 export const API_NAME = 'Azure DevOps';
 

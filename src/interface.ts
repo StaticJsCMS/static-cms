@@ -9,6 +9,7 @@ import type { formatExtensions } from './formats/formats';
 import type { I18N_STRUCTURE } from './lib/i18n';
 import type { AllowedEvent } from './lib/registry';
 import type Cursor from './lib/util/Cursor';
+import type AssetProxy from './valueObjects/AssetProxy';
 
 export interface SlugConfig {
   encoding: string;
@@ -414,13 +415,6 @@ export interface DataFile {
   slug: string;
   raw: string;
   newPath?: string;
-}
-
-export interface AssetProxy {
-  path: string;
-  fileObj?: File;
-  toBase64?: () => Promise<string>;
-  toString: () => string;
 }
 
 export interface BackendEntry {
@@ -979,9 +973,9 @@ export interface CmsBackendInitializer {
 }
 
 export interface EditorComponentWidgetOptions {
-  id: string;
+  id?: string;
   label: string;
-  widget: string;
+  widget?: string;
   type: string;
 }
 

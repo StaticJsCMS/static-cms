@@ -24,7 +24,6 @@ import GraphQLAPI from './GraphQLAPI';
 import type { Octokit } from '@octokit/rest';
 import type { Semaphore } from 'semaphore';
 import type {
-  AssetProxy,
   BackendEntry,
   CmsBackendClass,
   CmsConfig,
@@ -35,6 +34,7 @@ import type {
   User,
 } from '../../interface';
 import type { AsyncLock } from '../../lib/util';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 type GitHubUser = Octokit.UsersGetAuthenticatedResponse;
 

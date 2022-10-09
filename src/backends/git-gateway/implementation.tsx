@@ -27,7 +27,6 @@ import { getClient } from './netlify-lfs-client';
 
 import type { ApiRequest, Cursor } from '../../lib/util';
 import type {
-  AssetProxy,
   CmsConfig,
   Credentials,
   DisplayURL,
@@ -41,6 +40,7 @@ import type {
   AuthenticationPageProps,
 } from '../../interface';
 import type { Client } from './netlify-lfs-client';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 const STATUS_PAGE = 'https://www.netlifystatus.com';
 const GIT_GATEWAY_STATUS_ENDPOINT = `${STATUS_PAGE}/api/v2/components.json`;

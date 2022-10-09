@@ -24,8 +24,9 @@ import * as queries from './queries';
 
 import type { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import type { ApolloQueryResult } from 'apollo-client';
-import type { AssetProxy, DataFile, ImplementationFile, PersistOptions } from '../../interface';
+import type { DataFile, ImplementationFile, PersistOptions } from '../../interface';
 import type { ApiRequest, FetchError } from '../../lib/util';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 export const API_NAME = 'GitLab';
 

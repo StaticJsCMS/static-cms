@@ -2,7 +2,6 @@ import { APIError, blobToFileObj, unsentRequest } from '../../lib/util';
 import AuthenticationPage from './AuthenticationPage';
 
 import type {
-  AssetProxy,
   BackendEntry,
   CmsBackendClass,
   CmsConfig,
@@ -13,6 +12,7 @@ import type {
   User,
 } from '../../interface';
 import type { Cursor } from '../../lib/util';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 async function serializeAsset(assetProxy: AssetProxy) {
   const base64content = await assetProxy.toBase64!();

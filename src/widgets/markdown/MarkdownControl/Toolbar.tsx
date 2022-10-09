@@ -10,9 +10,11 @@ import ToolbarButton from './ToolbarButton';
 import type { MouseEvent } from 'react';
 import type {
   CmsMarkdownWidgetButton,
-  EditorComponentOptions,
+  EditorComponentWidgetOptions,
+  GetAssetFunction,
   TranslatedProps,
 } from '../../../interface';
+import type AssetProxy from '../../../valueObjects/AssetProxy';
 
 const ToolbarContainer = styled.div`
   background-color: ${colors.textFieldBorder};
@@ -30,10 +32,13 @@ const ToolbarContainer = styled.div`
 interface ToolbarProps {
   buttons: CmsMarkdownWidgetButton[];
   editorComponents: string[];
-  plugins: Record<string, EditorComponentOptions>;
-  onSubmit: (plugin: EditorComponentOptions) => void;
-  onAddAsset: () => void;
-  getAsset: () => void;
+  plugins: EditorComponentWidgetOptions[] | undefined;
+  onSubmit: (plugin: EditorComponentWidgetOptions) => void;
+  onAddAsset: (assetProxy: AssetProxy) => {
+    type: 'ADD_ASSET';
+    payload: AssetProxy;
+  };
+  getAsset: GetAssetFunction;
   disabled: boolean;
   onMarkClick: (type: string) => void;
   onBlockClick: (type: string) => void;
@@ -92,16 +97,17 @@ const Toolbar = ({
   );
 
   function showPlugin(id: string) {
-    return editorComponents ? id in editorComponents : true;
+    return editorComponents ? editorComponents.includes(id) : true;
   }
 
   const pluginsList = plugins
-    ? Object.entries(plugins).reduce((acc, [key, value]) => {
-        if (showPlugin(key)) {
-          acc.push(value);
+    ? plugins.reduce((acc, plugin) => {
+        const { id, type } = plugin;
+        if (showPlugin(id ?? type)) {
+          acc.push(plugin);
         }
         return acc;
-      }, [] as EditorComponentOptions[])
+      }, [] as EditorComponentWidgetOptions[])
     : [];
 
   const headingOptions: Partial<Record<CmsMarkdownWidgetButton, string>> = {

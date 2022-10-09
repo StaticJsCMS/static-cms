@@ -287,7 +287,7 @@ function entryDraftReducer(
 
 export function selectCustomPath(
   collection: Collection,
-  entryDraft: { entry: { meta?: { path?: string } } },
+  entryDraft: { entry: { meta?: { path?: string | null } | null } },
 ) {
   if (!selectHasMetaPath(collection)) {
     return;

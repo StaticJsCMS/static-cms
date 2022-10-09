@@ -9,7 +9,6 @@ import { basename, Cursor, CURSOR_COMPATIBILITY_SYMBOL } from '../../lib/util';
 import AuthenticationPage from './AuthenticationPage';
 
 import type {
-  AssetProxy,
   BackendEntry,
   CmsBackendClass,
   CmsConfig,
@@ -18,6 +17,7 @@ import type {
   ImplementationFile,
   User,
 } from '../../interface';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 type RepoFile = { path: string; content: string | AssetProxy };
 type RepoTree = { [key: string]: RepoFile | RepoTree };

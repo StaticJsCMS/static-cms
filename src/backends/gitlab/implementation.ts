@@ -24,7 +24,6 @@ import AuthenticationPage from './AuthenticationPage';
 import type { Semaphore } from 'semaphore';
 import type { AsyncLock, Cursor } from '../../lib/util';
 import type {
-  AssetProxy,
   CmsConfig,
   Credentials,
   DisplayURL,
@@ -34,6 +33,7 @@ import type {
   PersistOptions,
   User,
 } from '../../interface';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 

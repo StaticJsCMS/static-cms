@@ -23,7 +23,7 @@ import remarkStripTrailingBreaks from './remarkStripTrailingBreaks';
 import remarkWrapHtml from './remarkWrapHtml';
 import slateToRemark from './slateRemark';
 
-import type { Pluggable, PluggableList } from 'unified';
+import type { Pluggable } from 'unified';
 import type { EditorComponentOptions, EditorComponentWidgetOptions, GetAssetFunction } from '../../../interface';
 import { resolveWidget } from '../../../lib/registry';
 
@@ -64,7 +64,7 @@ import { resolveWidget } from '../../../lib/registry';
 /**
  * Deserialize a Markdown string to an MDAST.
  */
-export function markdownToRemark(markdown: string, remarkPlugins: PluggableList) {
+export function markdownToRemark(markdown: string, remarkPlugins: Pluggable[]) {
   const processor = unified()
     .use(markdownToRemarkPlugin)
     .use(markdownToRemarkRemoveTokenizers, { inlineTokenizers: ['url'] })

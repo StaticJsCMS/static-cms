@@ -66,6 +66,7 @@ import type {
   SearchQueryResponse,
   SearchResponse,
   User,
+  EntryData,
 } from './interface';
 import type { AllowedEvent } from './lib/registry';
 import type { AsyncLock } from './lib/util';
@@ -192,7 +193,7 @@ export function mergeExpandedEntries(entries: (Entry & { field: string })[]) {
   // this keeps the search score sorting order designated by the order in entries
   // and filters non matching items
   Object.keys(merged).forEach(slug => {
-    const data = merged[slug].data;
+    const data = merged[slug].data ?? {};
     for (const path of arrayPaths[slug]) {
       const array = get(data, path) as unknown[];
       const filtered = array.filter((_, index) => {
@@ -410,7 +411,7 @@ export class Backend {
 
   async generateUniqueSlug(
     collection: Collection,
-    entryData: Record<string, unknown>,
+    entryData: EntryData,
     config: CmsConfig,
     usedSlugs: string[],
     customPath: string | undefined,
@@ -839,7 +840,7 @@ export class Backend {
 
     const newEntry = entryDraft.entry.newRecord ?? false;
 
-    const customPath = selectCustomPath(collection, entryDraft);
+    const customPath = selectCustomPath(collection, entryDraft) ?? '';
 
     let dataFile: DataFile;
     if (newEntry) {
@@ -1019,7 +1020,7 @@ export class Backend {
 
   filterEntries(collection: { entries: Entry[] }, filterRule: FilterRule) {
     return collection.entries.filter(entry => {
-      const fieldValue = entry.data[filterRule.field] as string[];
+      const fieldValue = entry.data?.[filterRule.field] as string[];
       if (Array.isArray(fieldValue)) {
         return fieldValue.includes(filterRule.value);
       }

@@ -17,7 +17,7 @@ import {
 import { sanitizeSlug } from './urlHelper';
 import { stringTemplate } from './widgets';
 
-import type { CmsConfig, CmsSlug, Collection, Entry } from '../interface';
+import type { CmsConfig, CmsSlug, Collection, Entry, EntryData } from '../interface';
 
 const {
   compileStringTemplate,
@@ -95,7 +95,7 @@ export function getProcessSegment(slugConfig?: CmsSlug, ignoreValues?: string[])
 
 export function slugFormatter(
   collection: Collection,
-  entryData: Record<string, unknown>,
+  entryData: EntryData,
   slugConfig?: CmsSlug,
 ) {
   const slugTemplate = collection.slug || '{{slug}}';
@@ -169,7 +169,7 @@ export function previewUrlFormatter(
 
   // Prepare and sanitize slug variables only, leave the rest of the
   // `preview_path` template as is.
-  const processSegment = getProcessSegment(slugConfig, [fields.dirname as string]);
+  const processSegment = getProcessSegment(slugConfig, [fields?.dirname as string]);
   let compiledPath;
 
   try {
@@ -201,7 +201,7 @@ export function summaryFormatter(summaryTemplate: string, entry: Entry, collecti
     ) || null;
   const identifier = get(entryData, keyToPathArray(selectIdentifier(collection)));
 
-  entryData = addFileTemplateFields(entry.path, entryData, collection.folder);
+  entryData = addFileTemplateFields(entry.path, entryData, collection.folder) ?? {};
   // allow commit information in summary template
   if (entry.author && !selectField(collection, COMMIT_AUTHOR)) {
     entryData = set(entryData, COMMIT_AUTHOR, entry.author);
@@ -225,7 +225,7 @@ export function folderFormatter(
     return folderTemplate;
   }
 
-  let fields = set(entry.data, folderKey, defaultFolder);
+  let fields = set(entry.data, folderKey, defaultFolder) as EntryData;
   fields = addFileTemplateFields(entry.path, fields, collection.folder);
 
   const date =
@@ -234,7 +234,7 @@ export function folderFormatter(
       selectInferedField(collection, 'date'),
     ) || null;
   const identifier = get(fields, keyToPathArray(selectIdentifier(collection)));
-  const processSegment = getProcessSegment(slugConfig, [defaultFolder, fields.dirname as string]);
+  const processSegment = getProcessSegment(slugConfig, [defaultFolder, fields?.dirname as string]);
 
   const mediaFolder = compileStringTemplate(
     folderTemplate,

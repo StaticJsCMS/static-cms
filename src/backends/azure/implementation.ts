@@ -18,7 +18,6 @@ import AuthenticationPage from './AuthenticationPage';
 
 import type { Semaphore } from 'semaphore';
 import type {
-  AssetProxy,
   BackendEntry,
   CmsBackendInitializerOptions,
   CmsConfig,
@@ -31,6 +30,7 @@ import type {
   User,
 } from '../../interface';
 import type { AsyncLock, Cursor } from '../../lib/util';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 

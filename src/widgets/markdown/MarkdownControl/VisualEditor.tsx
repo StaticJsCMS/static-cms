@@ -7,13 +7,16 @@ import isEmpty from 'lodash/isEmpty';
 import debounce from 'lodash/debounce';
 import { Value, Document, Block, Text } from 'slate';
 import { Editor as Slate } from 'slate-react';
+import merge from 'lodash/merge';
 
 import { lengths, fonts, zIndex } from '../../../ui';
 import { editorStyleVars, EditorControlBar } from '../styles';
 import { slateToMarkdown, markdownToSlate } from '../serializers';
 import Toolbar from './Toolbar';
 import { renderBlock as renderBlockFactory, renderInline, renderMark } from './renderers';
+import { getEditorComponents, getRemarkPlugins, resolveWidget } from '../../../lib/registry';
 import plugins from './plugins/visual';
+
 import schema from './schema';
 import {
   CmsFieldFileOrImage,
@@ -22,8 +25,6 @@ import {
   EditorComponentOptions,
   EditorComponentWidgetOptions,
 } from '../../../interface';
-import { merge } from 'lodash';
-import { getEditorComponents, getRemarkPlugins, resolveWidget } from '../../../lib/registry';
 
 interface VisualEditorStyles {
   minimal: boolean;
@@ -91,6 +92,7 @@ const VisualEditor = ({
   onAddAsset,
   getAsset,
   field,
+  onChange,
   t,
   isDisabled,
 }: CmsWidgetControlProps<string, CmsFieldMarkdown>) => {
@@ -123,7 +125,7 @@ const VisualEditor = ({
     [codeBlockComponent, rawEditorComponents],
   );
 
-  const remarkPlugins = useCallback(() => getRemarkPlugins(), []);
+  const remarkPlugins = useMemo(() => getRemarkPlugins(), []);
 
   useEffect(() => {
     // merge editor media library config to image components
@@ -314,7 +316,7 @@ const VisualEditor = ({
         });
         onChange(markdown);
       }, 150),
-    [],
+    [codeBlockComponent, onChange, remarkPlugins],
   );
 
   // handleChange = editor => {
@@ -331,11 +333,11 @@ const VisualEditor = ({
           onMarkClick={handleMarkClick}
           onBlockClick={handleBlockClick}
           onLinkClick={handleLinkClick}
-          plugins={editorComponents}
+          plugins={shortcodeComponents}
           onSubmit={handleInsertShortcode}
           onAddAsset={onAddAsset}
           getAsset={getAsset}
-          buttons={field.buttons}
+          buttons={field.buttons ?? []}
           editorComponents={field.editor_components ?? []}
           hasMark={hasMark}
           hasInline={hasInline}

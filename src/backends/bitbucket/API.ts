@@ -17,8 +17,9 @@ import {
   unsentRequest,
 } from '../../lib/util';
 
-import type { AssetProxy, DataFile, PersistOptions } from '../../interface';
+import type { DataFile, PersistOptions } from '../../interface';
 import type { ApiRequest, FetchError } from '../../lib/util';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 interface Config {
   apiRoot?: string;
@@ -395,7 +396,20 @@ export default class API {
     return files;
   }
 
-  async persistFiles(dataFiles: DataFile[], mediaFiles: AssetProxy[], options: PersistOptions) {
+  async persistFiles(
+    dataFiles: DataFile[],
+    mediaFiles: (
+      | {
+          fileObj: File;
+          size: number;
+          sha: string;
+          raw: string;
+          path: string;
+        }
+      | AssetProxy
+    )[],
+    options: PersistOptions,
+  ) {
     const files = [...dataFiles, ...mediaFiles];
     return this.uploadFiles(files, { commitMessage: options.commitMessage, branch: this.branch });
   }
