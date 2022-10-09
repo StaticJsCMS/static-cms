@@ -1,10 +1,16 @@
 import { Block } from 'slate';
 import isHotkey from 'is-hotkey';
 
+import type { KeyboardEvent } from 'react';
+
+interface QuoteBlockProps {
+  type: string;
+}
+
 /**
  * TODO: highlight a couple list items and hit the quote button. doesn't work.
  */
-function QuoteBlock({ type }) {
+function QuoteBlock({ type }: QuoteBlockProps) {
   return {
     commands: {
       /**
@@ -13,7 +19,7 @@ function QuoteBlock({ type }) {
        * quote, unwrap the quote (as within are only blocks), and if it's not, wrap all selected
        * blocks into a quote. Make sure text is wrapped into paragraphs.
        */
-      toggleQuoteBlock(editor) {
+      toggleQuoteBlock(editor: any) {
         const blockContainer = editor.getBlockContainer();
         if (['bulleted-list', 'numbered-list'].includes(blockContainer.type)) {
           const { nodes } = blockContainer;
@@ -28,12 +34,12 @@ function QuoteBlock({ type }) {
           } else {
             const blockContainerParent = editor.value.document.getParent(blockContainer.key);
             editor.withoutNormalizing(() => {
-              const selectedListItems = nodes.filter(node => editor.isSelected(node));
+              const selectedListItems = nodes.filter((node: any) => editor.isSelected(node));
               const newList = Block.create(blockContainer.type);
               editor.unwrapNodeByKey(selectedListItems.first());
               const offset = editor.getOffset(selectedListItems.first());
               editor.insertNodeByKey(blockContainerParent.key, offset + 1, newList);
-              selectedListItems.forEach(({ key }, idx) =>
+              selectedListItems.forEach(({ key }: any, idx: number) =>
                 editor.moveNodeByKey(key, newList.key, idx),
               );
               editor.wrapBlockByKey(newList.key, type);
@@ -53,7 +59,7 @@ function QuoteBlock({ type }) {
         }
       },
     },
-    onKeyDown(event, editor, next) {
+    onKeyDown(event: KeyboardEvent, editor: any, next: () => void) {
       if (!isHotkey('enter', event) && !isHotkey('backspace', event)) {
         return next();
       }

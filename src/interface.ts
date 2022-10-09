@@ -1,7 +1,7 @@
 import type { PropertiesSchema } from 'ajv/dist/types/json-schema';
 import type { ComponentType, FocusEvent, ReactNode } from 'react';
-import type { PluggableList } from 'react-markdown';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
+import type { Pluggable } from 'unified';
 import type { MediaFile as BackendMediaFile } from './backend';
 import type { EditorControlProps } from './components/Editor/EditorControlPane/EditorControl';
 import type { CollectionType } from './constants/collectionTypes';
@@ -293,7 +293,7 @@ export interface CmsWidgetPreviewProps<T = unknown, F extends CmsField = CmsFiel
   field: F;
   fieldsMetaData: EntryMeta;
   getAsset: GetAssetFunction;
-  getRemarkPlugins: () => PluggableList;
+  getRemarkPlugins: () => Pluggable[];
   metadata?: EntryMeta;
   resolveWidget: <W = unknown, WF extends CmsField = CmsField>(name: string) => Widget<W, WF>;
   value: T | undefined | null;
@@ -708,6 +708,9 @@ export interface CmsFieldMarkdown extends CmsFieldBase {
    */
   editorComponents?: string[];
   sanitize_preview?: boolean;
+  media_library?: CmsMediaLibrary;
+  media_folder?: string;
+  public_folder?: string;
 }
 
 export interface CmsFieldNumber extends CmsFieldBase {

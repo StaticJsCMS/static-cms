@@ -2,7 +2,7 @@ import { oneLine } from 'common-tags';
 
 import EditorComponent from '../valueObjects/EditorComponent';
 
-import type { PluggableList } from 'react-markdown';
+import type { Pluggable } from 'unified';
 import type {
   AdditionalLink,
   CmsBackendClass,
@@ -20,11 +20,10 @@ import type {
   EditorComponentOptions,
   Entry,
   EventData,
+  ValueOrNestedValue,
   Widget,
   WidgetOptions,
-  ValueOrNestedValue,
 } from '../interface';
-import type { Pluggable, Settings } from 'unified';
 
 export const allowedEvents = ['prePublish', 'postPublish', 'preSave', 'postSave'] as const;
 export type AllowedEvent = typeof allowedEvents[number];
@@ -41,7 +40,7 @@ interface Registry {
   icons: Record<string, CmsIcon>;
   additionalLinks: Record<string, AdditionalLink>;
   editorComponents: Record<string, EditorComponentOptions>;
-  remarkPlugins: PluggableList;
+  remarkPlugins: Pluggable[];
   widgetValueSerializers: Record<string, CmsWidgetValueSerializer>;
   mediaLibraries: (CmsMediaLibraryExternalLibrary & { options: CmsMediaLibraryOptions })[];
   locales: Record<string, CmsLocalePhrasesRoot>;
@@ -156,7 +155,7 @@ export function registerWidget<T = unknown>(
         schema,
         allowMapValue,
         globalStyles,
-      } = {}
+      } = {},
     } = name;
     if (registry.widgets[widgetName]) {
       console.warn(oneLine`
@@ -174,7 +173,7 @@ export function registerWidget<T = unknown>(
       getValidValue: getValidValue as Widget['getValidValue'],
       schema,
       globalStyles,
-      allowMapValue
+      allowMapValue,
     };
   } else {
     console.error('`registerWidget` failed, called with incorrect arguments.');
@@ -188,12 +187,10 @@ export function getWidget<T = unknown>(name: string): Widget<T> {
 export function getWidgets(): ({
   name: string;
 } & Widget<unknown>)[] {
-  return Object.entries(registry.widgets).map(
-    ([name, widget]: [string, Widget<unknown>]) => ({
-      name,
-      ...widget,
-    }),
-  );
+  return Object.entries(registry.widgets).map(([name, widget]: [string, Widget<unknown>]) => ({
+    name,
+    ...widget,
+  }));
 }
 
 export function resolveWidget<T = ValueOrNestedValue>(name?: string): Widget<T> {
@@ -229,11 +226,11 @@ export function getEditorComponents(): Record<string, EditorComponentOptions> {
  * Remark plugins
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function registerRemarkPlugin(plugin: Pluggable<any[], Settings>) {
+export function registerRemarkPlugin(plugin: Pluggable) {
   registry.remarkPlugins.push(plugin);
 }
 
-export function getRemarkPlugins(): PluggableList {
+export function getRemarkPlugins(): Pluggable[] {
   return registry.remarkPlugins;
 }
 

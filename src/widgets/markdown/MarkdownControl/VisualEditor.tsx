@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css as coreCss, ClassNames } from '@emotion/react';
@@ -12,10 +12,18 @@ import { lengths, fonts, zIndex } from '../../../ui';
 import { editorStyleVars, EditorControlBar } from '../styles';
 import { slateToMarkdown, markdownToSlate } from '../serializers';
 import Toolbar from './Toolbar';
-import { renderBlock, renderInline, renderMark } from './renderers';
+import { renderBlock as renderBlockFactory, renderInline, renderMark } from './renderers';
 import plugins from './plugins/visual';
 import schema from './schema';
-import { CmsFieldMarkdown, EditorComponentOptions } from '../../../interface';
+import {
+  CmsFieldFileOrImage,
+  CmsFieldMarkdown,
+  CmsWidgetControlProps,
+  EditorComponentOptions,
+  EditorComponentWidgetOptions,
+} from '../../../interface';
+import { merge } from 'lodash';
+import { getEditorComponents, getRemarkPlugins, resolveWidget } from '../../../lib/registry';
 
 interface VisualEditorStyles {
   minimal: boolean;
@@ -56,224 +64,316 @@ function createSlateValue(rawValue, { voidCodeBlock, remarkPlugins }) {
   return Value.create({ document });
 }
 
-export function mergeMediaConfig(editorComponents: Record<string, EditorComponentOptions>, field: CmsFieldMarkdown) {
-  // merge editor media library config to image components
-  if ('image' in editorComponents) {
-    const imageComponent = editorComponents.image;
-    if ('fields' in imageComponent) {
-      const fields = imageComponent?.fields;
-      if (fields) {
-        const imageField = fields.find(f => f.widget === 'image');
-        if (imageField) {
-          if ('media_library' in imageField) {
-            f = f.set('media_library', field.media_library.mergeDeep(f.media_library));
+const StyledVisualEditor = styled.div`
+  position: relative;
+`;
+
+interface Focusable {
+  focus: () => void;
+}
+
+export interface SlateEditor {
+  toggleMark(type: string): Focusable;
+  toggleBlock: (type: string) => Focusable;
+  toggleLink: (processor: (oldLink: string) => string | null) => void;
+  hasMark: (type: string) => boolean;
+  hasInline: (type: string) => boolean;
+  hasBlock: (type: string) => boolean;
+  hasQuote: (type: string) => boolean;
+  hasListItems: (type: string) => boolean;
+  insertShortcode: (plugin: EditorComponentOptions) => void;
+  moveToRangeOfDocument: () => void;
+  moveToEndOfDocument: () => void;
+  value: any;
+}
+
+const VisualEditor = ({
+  onAddAsset,
+  getAsset,
+  field,
+  t,
+  isDisabled,
+}: CmsWidgetControlProps<string, CmsFieldMarkdown>) => {
+  const rawEditorComponents = useMemo(() => getEditorComponents(), []);
+
+  const shortcodeComponents = useMemo(
+    () =>
+      Object.values(rawEditorComponents).filter(
+        options => 'type' in options && options.type === 'shortcode',
+      ) as EditorComponentWidgetOptions[],
+    [rawEditorComponents],
+  );
+
+  const codeBlockComponent = useMemo(
+    () =>
+      Object.values(rawEditorComponents).find(
+        options => 'type' in options && options.type === 'code-block',
+      ) as EditorComponentWidgetOptions,
+    [rawEditorComponents],
+  );
+
+  const editorComponents = useMemo(
+    () =>
+      codeBlockComponent || 'code-block' in rawEditorComponents
+        ? rawEditorComponents
+        : {
+            ...rawEditorComponents,
+            ['code-block']: { label: 'Code Block', type: 'code-block' },
+          },
+    [codeBlockComponent, rawEditorComponents],
+  );
+
+  const remarkPlugins = useCallback(() => getRemarkPlugins(), []);
+
+  useEffect(() => {
+    // merge editor media library config to image components
+    if ('image' in editorComponents) {
+      const imageComponent = editorComponents.image;
+      if ('fields' in imageComponent) {
+        const fields = imageComponent?.fields;
+        if (fields) {
+          const imageFieldIndex = fields.findIndex(f => f.widget === 'image');
+          let imageField = fields[imageFieldIndex] as CmsFieldFileOrImage;
+          if (imageField) {
+            // merge `media_library` config
+            if (field.media_library) {
+              imageField = {
+                ...imageField,
+                media_library: merge(field.media_library, imageField.media_library),
+              };
+            }
+
+            // merge 'media_folder'
+            if (field.media_folder && !imageField.media_folder) {
+              imageField = {
+                ...imageField,
+                media_folder: field.media_folder,
+              };
+            }
+
+            // merge 'public_folder'
+            if (field.public_folder && !imageField.public_folder) {
+              imageField = {
+                ...imageField,
+                public_folder: field.public_folder,
+              };
+            }
           }
-          // merge 'media_folder'
-          if (field.has('media_folder') && !f.has('media_folder')) {
-            f = f.set('media_folder', field.media_folder);
-          }
-          // merge 'public_folder'
-          if (field.has('public_folder') && !f.has('public_folder')) {
-            f = f.set('public_folder', field.public_folder);
-          }
+          imageComponent.fields = [...imageComponent.fields];
+          imageComponent.fields[imageFieldIndex] = imageField;
         }
-        imageComponent.fields = [
-        ];
+      }
     }
-  }
-}
+  }, [editorComponents, field.media_folder, field.media_library, field.public_folder]);
 
-export default class Editor extends React.Component {
-  constructor(props) {
-    super(props);
-    const editorComponents = props.getEditorComponents();
-    this.shortcodeComponents = editorComponents.filter(({ type }) => type === 'shortcode');
-    this.codeBlockComponent = fromJS(editorComponents.find(({ type }) => type === 'code-block'));
-    this.editorComponents =
-      this.codeBlockComponent || editorComponents.has('code-block')
-        ? editorComponents
-        : editorComponents.set('code-block', { label: 'Code Block', type: 'code-block' });
-
-    this.remarkPlugins = props.getRemarkPlugins();
-
-    mergeMediaConfig(this.editorComponents, this.props.field);
-    this.renderBlock = renderBlock({
-      classNameWrapper: props.className,
-      resolveWidget: props.resolveWidget,
-      codeBlockComponent: this.codeBlockComponent,
-    });
-    this.renderInline = renderInline();
-    this.renderMark = renderMark();
-    this.schema = schema({ voidCodeBlock: !!this.codeBlockComponent });
-    this.plugins = plugins({
-      getAsset: props.getAsset,
-      resolveWidget: props.resolveWidget,
-      t: props.t,
-      remarkPlugins: this.remarkPlugins,
-    });
-    this.state = {
-      value: createSlateValue(this.props.value, {
-        voidCodeBlock: !!this.codeBlockComponent,
-        remarkPlugins: this.remarkPlugins,
+  const renderBlock = useMemo(
+    () =>
+      renderBlockFactory({
+        codeBlockComponent,
       }),
-    };
-  }
+    [],
+  );
 
-  static propTypes = {
-    onAddAsset: PropTypes.func.isRequired,
-    getAsset: PropTypes.func.isRequired,
-    onChange: PropTypes.func.isRequired,
-    onMode: PropTypes.func.isRequired,
-    className: PropTypes.string.isRequired,
-    value: PropTypes.string,
-    field: ImmutablePropTypes.map.isRequired,
-    getEditorComponents: PropTypes.func.isRequired,
-    getRemarkPlugins: PropTypes.func.isRequired,
-    isShowModeToggle: PropTypes.bool.isRequired,
-    t: PropTypes.func.isRequired,
-  };
+  //   this.renderInline = renderInline();
+  //   this.renderMark = renderMark();
+  //   this.schema = schema({ voidCodeBlock: !!this.codeBlockComponent });
+  //   this.plugins = plugins({
+  //     getAsset: props.getAsset,
+  //     resolveWidget: props.resolveWidget,
+  //     t: props.t,
+  //     remarkPlugins: this.remarkPlugins,
+  //   });
+  //   this.state = {
+  //     value: createSlateValue(this.props.value, {
+  //       voidCodeBlock: !!this.codeBlockComponent,
+  //       remarkPlugins: this.remarkPlugins,
+  //     }),
+  //   };
+  // }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (!this.state.value.equals(nextState.value)) return true;
+  const [editor, setEditor] = useState<SlateEditor | null>(null);
+  const processRef = useCallback((ref: SlateEditor) => {
+    setEditor(ref);
+  }, []);
 
-    const raw = nextState.value.document.toJS();
-    const markdown = slateToMarkdown(raw, {
-      voidCodeBlock: this.codeBlockComponent,
-      remarkPlugins: this.remarkPlugins,
-    });
-    return nextProps.value !== markdown;
-  }
+  // static propTypes = {
+  //   onAddAsset: PropTypes.func.isRequired,
+  //   getAsset: PropTypes.func.isRequired,
+  //   onChange: PropTypes.func.isRequired,
+  //   className: PropTypes.string.isRequired,
+  //   value: PropTypes.string,
+  //   field: ImmutablePropTypes.map.isRequired,
+  //   getEditorComponents: PropTypes.func.isRequired,
+  //   getRemarkPlugins: PropTypes.func.isRequired,
+  //   t: PropTypes.func.isRequired,
+  // };
 
-  componentDidMount() {
-    if (this.props.pendingFocus) {
-      this.editor.focus();
-      this.props.pendingFocus();
-    }
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (!this.state.value.equals(nextState.value)) return true;
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.value !== this.props.value) {
-      this.setState({
-        value: createSlateValue(this.props.value, {
-          voidCodeBlock: !!this.codeBlockComponent,
-          remarkPlugins: this.remarkPlugins,
-        }),
-      });
-    }
-  }
+  //   const raw = nextState.value.document.toJS();
+  //   const markdown = slateToMarkdown(raw, {
+  //     voidCodeBlock: this.codeBlockComponent,
+  //     remarkPlugins: this.remarkPlugins,
+  //   });
+  //   return nextProps.value !== markdown;
+  // }
 
-  handleMarkClick = type => {
-    this.editor.toggleMark(type).focus();
-  };
+  // componentDidMount() {
+  //   if (this.props.pendingFocus) {
+  //     this.editor.focus();
+  //     this.props.pendingFocus();
+  //   }
+  // }
 
-  handleBlockClick = type => {
-    this.editor.toggleBlock(type).focus();
-  };
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.value !== this.props.value) {
+  //     this.setState({
+  //       value: createSlateValue(this.props.value, {
+  //         voidCodeBlock: !!this.codeBlockComponent,
+  //         remarkPlugins: this.remarkPlugins,
+  //       }),
+  //     });
+  //   }
+  // }
 
-  handleLinkClick = () => {
-    this.editor.toggleLink(oldUrl =>
-      window.prompt(this.props.t('editor.editorWidgets.markdown.linkPrompt'), oldUrl),
+  const handleMarkClick = useCallback(
+    (type: string) => {
+      editor?.toggleMark(type).focus();
+    },
+    [editor],
+  );
+
+  const handleBlockClick = useCallback(
+    (type: string) => {
+      editor?.toggleBlock(type).focus();
+    },
+    [editor],
+  );
+
+  const handleLinkClick = useCallback(() => {
+    // TODO Change to material dialog
+    editor?.toggleLink((oldUrl: string) =>
+      window.prompt(t('editor.editorWidgets.markdown.linkPrompt'), oldUrl),
     );
-  };
+  }, [editor, t]);
 
-  hasMark = type => this.editor && this.editor.hasMark(type);
-  hasInline = type => this.editor && this.editor.hasInline(type);
-  hasBlock = type => this.editor && this.editor.hasBlock(type);
-  hasQuote = type => this.editor && this.editor.hasQuote(type);
-  hasListItems = type => this.editor && this.editor.hasListItems(type);
+  const hasMark = useCallback(
+    (type: string) => {
+      return Boolean(editor && editor.hasMark(type));
+    },
+    [editor],
+  );
 
-  handleToggleMode = () => {
-    this.props.onMode('raw');
-  };
+  const hasInline = useCallback(
+    (type: string) => {
+      return Boolean(editor && editor.hasInline(type));
+    },
+    [editor],
+  );
 
-  handleInsertShortcode = pluginConfig => {
-    this.editor.insertShortcode(pluginConfig);
-  };
+  const hasBlock = useCallback(
+    (type: string) => {
+      return Boolean(editor && editor.hasBlock(type));
+    },
+    [editor],
+  );
 
-  handleClickBelowDocument = () => {
-    this.editor.moveToEndOfDocument();
-  };
+  const hasQuote = useCallback(
+    (type: string) => {
+      return Boolean(editor && editor.hasQuote(type));
+    },
+    [editor],
+  );
 
-  handleDocumentChange = debounce(editor => {
-    const { onChange } = this.props;
-    const raw = editor.value.document.toJS();
-    const markdown = slateToMarkdown(raw, {
-      voidCodeBlock: this.codeBlockComponent,
-      remarkPlugins: this.remarkPlugins,
-    });
-    onChange(markdown);
-  }, 150);
+  const hasListItems = useCallback(
+    (type: string) => {
+      return Boolean(editor && editor.hasListItems(type));
+    },
+    [editor],
+  );
 
-  handleChange = editor => {
-    if (!this.state.value.document.equals(editor.value.document)) {
-      this.handleDocumentChange(editor);
-    }
-    this.setState({ value: editor.value });
-  };
+  const handleInsertShortcode = useCallback(
+    (pluginConfig: EditorComponentWidgetOptions) => {
+      editor?.insertShortcode(pluginConfig);
+    },
+    [editor],
+  );
 
-  processRef = ref => {
-    this.editor = ref;
-  };
+  const handleClickBelowDocument = useCallback(() => {
+    editor?.moveToEndOfDocument();
+  }, [editor]);
 
-  render() {
-    const { onAddAsset, getAsset, className, field, isShowModeToggle, t, isDisabled } = this.props;
-    return (
-      <div
-        css={coreCss`
-          position: relative;
-        `}
-      >
-        <EditorControlBar>
-          <Toolbar
-            onMarkClick={this.handleMarkClick}
-            onBlockClick={this.handleBlockClick}
-            onLinkClick={this.handleLinkClick}
-            onToggleMode={this.handleToggleMode}
-            plugins={this.editorComponents}
-            onSubmit={this.handleInsertShortcode}
-            onAddAsset={onAddAsset}
-            getAsset={getAsset}
-            buttons={field.buttons}
-            editorComponents={field.editor_components}
-            hasMark={this.hasMark}
-            hasInline={this.hasInline}
-            hasBlock={this.hasBlock}
-            hasQuote={this.hasQuote}
-            hasListItems={this.hasListItems}
-            isShowModeToggle={isShowModeToggle}
-            t={t}
-            disabled={isDisabled}
-          />
-        </EditorControlBar>
-        <ClassNames>
-          {({ css, cx }) => (
-            <div
-              className={cx(
-                className,
-                css`
-                  ${visualEditorStyles({ minimal: field.minimal })}
-                `,
-              )}
-            >
-              <Slate
-                className={css`
-                  padding: 16px 20px 0;
-                `}
-                value={this.state.value}
-                renderBlock={this.renderBlock}
-                renderInline={this.renderInline}
-                renderMark={this.renderMark}
-                schema={this.schema}
-                plugins={this.plugins}
-                onChange={this.handleChange}
-                ref={this.processRef}
-                spellCheck
-              />
-              <InsertionPoint onClick={this.handleClickBelowDocument} />
-            </div>
-          )}
-        </ClassNames>
-      </div>
-    );
-  }
-}
+  const handleDocumentChange = useCallback(
+    () =>
+      debounce((editor: SlateEditor) => {
+        const raw = editor.value.document.toJS();
+        const markdown = slateToMarkdown(raw, {
+          voidCodeBlock: codeBlockComponent,
+          remarkPlugins,
+        });
+        onChange(markdown);
+      }, 150),
+    [],
+  );
+
+  // handleChange = editor => {
+  //   if (!this.state.value.document.equals(editor.value.document)) {
+  //     this.handleDocumentChange(editor);
+  //   }
+  //   this.setState({ value: editor.value });
+  // };
+
+  return (
+    <StyledVisualEditor>
+      <EditorControlBar>
+        <Toolbar
+          onMarkClick={handleMarkClick}
+          onBlockClick={handleBlockClick}
+          onLinkClick={handleLinkClick}
+          plugins={editorComponents}
+          onSubmit={handleInsertShortcode}
+          onAddAsset={onAddAsset}
+          getAsset={getAsset}
+          buttons={field.buttons}
+          editorComponents={field.editor_components ?? []}
+          hasMark={hasMark}
+          hasInline={hasInline}
+          hasBlock={hasBlock}
+          hasQuote={hasQuote}
+          hasListItems={hasListItems}
+          t={t}
+          disabled={isDisabled}
+        />
+      </EditorControlBar>
+      <ClassNames>
+        {({ css, cx }) => (
+          <div
+            className={cx(
+              className,
+              css`
+                ${visualEditorStyles({ minimal: field.minimal ?? false })}
+              `,
+            )}
+          >
+            <Slate
+              className={css`
+                padding: 16px 20px 0;
+              `}
+              value={this.state.value}
+              renderBlock={renderBlock}
+              renderInline={this.renderInline}
+              renderMark={this.renderMark}
+              schema={this.schema}
+              plugins={this.plugins}
+              onChange={this.handleChange}
+              ref={processRef}
+              spellCheck
+            />
+            <InsertionPoint onClick={this.handleClickBelowDocument} />
+          </div>
+        )}
+      </ClassNames>
+    </StyledVisualEditor>
+  );
+};

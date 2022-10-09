@@ -1,28 +1,30 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import trimEnd from 'lodash/trimEnd';
-import { unified } from 'unified';
-import u from 'unist-builder';
-import markdownToRemarkPlugin from 'remark-parse';
-import remarkToMarkdownPlugin from 'remark-stringify';
-import remarkToRehype from 'remark-rehype';
-import rehypeToHtml from 'rehype-stringify';
 import htmlToRehype from 'rehype-parse';
 import rehypeToRemark from 'rehype-remark';
+import rehypeToHtml from 'rehype-stringify';
+import markdownToRemarkPlugin from 'remark-parse';
+import remarkToRehype from 'remark-rehype';
+import remarkToMarkdownPlugin from 'remark-stringify';
+import unified from 'unified';
+import u from 'unist-builder';
 
-import remarkToRehypeShortcodes from './remarkRehypeShortcodes';
-import rehypePaperEmoji from './rehypePaperEmoji';
-import remarkAssertParents from './remarkAssertParents';
-import remarkPaddedLinks from './remarkPaddedLinks';
-import remarkWrapHtml from './remarkWrapHtml';
-import remarkToSlate from './remarkSlate.ts';
-import remarkSquashReferences from './remarkSquashReferences';
-import { remarkParseShortcodes, createRemarkShortcodeStringifier } from './remarkShortcodes';
-import remarkEscapeMarkdownEntities from './remarkEscapeMarkdownEntities';
-import remarkStripTrailingBreaks from './remarkStripTrailingBreaks';
-import remarkAllowHtmlEntities from './remarkAllowHtmlEntities';
-import slateToRemark from './slateRemark';
 import { getEditorComponents } from '../MarkdownControl';
+import rehypePaperEmoji from './rehypePaperEmoji';
+import remarkAllowHtmlEntities from './remarkAllowHtmlEntities';
+import remarkAssertParents from './remarkAssertParents';
+import remarkEscapeMarkdownEntities from './remarkEscapeMarkdownEntities';
+import remarkPaddedLinks from './remarkPaddedLinks';
+import remarkToRehypeShortcodes from './remarkRehypeShortcodes';
+import { createRemarkShortcodeStringifier, remarkParseShortcodes } from './remarkShortcodes';
+import remarkToSlate from './remarkSlate';
+import remarkSquashReferences from './remarkSquashReferences';
+import remarkStripTrailingBreaks from './remarkStripTrailingBreaks';
+import remarkWrapHtml from './remarkWrapHtml';
+import slateToRemark from './slateRemark';
 
-import type { PluggableList } from 'unified';
+import type { Pluggable, PluggableList } from 'unified';
+import type { EditorComponentWidgetOptions, GetAssetFunction } from '../../../interface';
 
 /**
  * This module contains all serializers for the Markdown widget.
@@ -86,9 +88,10 @@ export function markdownToRemark(markdown: string, remarkPlugins: PluggableList)
 /**
  * Remove named tokenizers from the parser, effectively deactivating them.
  */
-function markdownToRemarkRemoveTokenizers({ inlineTokenizers }) {
+function markdownToRemarkRemoveTokenizers({ inlineTokenizers }: any) {
   inlineTokenizers &&
-    inlineTokenizers.forEach(tokenizer => {
+    inlineTokenizers.forEach((tokenizer: any) => {
+      // @ts-ignore
       delete this.Parser.prototype.inlineTokenizers[tokenizer];
     });
 }
@@ -103,9 +106,10 @@ export function remarkToMarkdown(obj, remarkPlugins: PluggableList) {
    * trusting the markdown that we receive.
    */
   function remarkAllowAllText() {
+    // @ts-ignore
     const Compiler = this.Compiler;
     const visitors = Compiler.prototype.visitors;
-    visitors.text = node => node.value;
+    visitors.text = (node: any) => node.value;
   }
 
   /**
@@ -153,10 +157,18 @@ export function remarkToMarkdown(obj, remarkPlugins: PluggableList) {
   return trimEnd(markdown);
 }
 
+interface MarkdownToHtmlProps {
+  getAsset: GetAssetFunction;
+  remarkPlugins?: Pluggable[];
+}
+
 /**
  * Convert Markdown to HTML.
  */
-export function markdownToHtml(markdown, { getAsset, resolveWidget, remarkPlugins = [] } = {}) {
+export function markdownToHtml(
+  markdown: string,
+  { getAsset, remarkPlugins = [] }: MarkdownToHtmlProps = {},
+) {
   const mdast = markdownToRemark(markdown, remarkPlugins);
 
   const hast = unified()
@@ -221,7 +233,13 @@ export function markdownToSlate(markdown, { voidCodeBlock, remarkPlugins = [] } 
  * MDAST. The conversion is manual because Unified can only operate on Unist
  * trees.
  */
-export function slateToMarkdown(raw, { voidCodeBlock, remarkPlugins = [] } = {}) {
+export function slateToMarkdown(
+  raw: any,
+  {
+    voidCodeBlock,
+    remarkPlugins = [],
+  }: { voidCodeBlock?: EditorComponentWidgetOptions; remarkPlugins?: Pluggable[] } = {},
+) {
   const mdast = slateToRemark(raw, { voidCodeBlock });
   const markdown = remarkToMarkdown(mdast, remarkPlugins);
   return markdown;

@@ -7,6 +7,8 @@ import { colors, lengths } from '../../../ui';
 import VoidBlock from './components/VoidBlock';
 import Shortcode from './components/Shortcode';
 
+import type { EditorComponentWidgetOptions } from '../../../interface';
+
 const bottomMargin = '16px';
 
 const headerStyles = `
@@ -125,38 +127,38 @@ const StyledTd = styled.td`
 /**
  * Mark Components
  */
-function Bold(props) {
+function Bold(props: any) {
   return <strong>{props.children}</strong>;
 }
 
-function Italic(props) {
+function Italic(props: any) {
   return <em>{props.children}</em>;
 }
 
-function Strikethrough(props) {
+function Strikethrough(props: any) {
   return <s>{props.children}</s>;
 }
 
-function Code(props) {
+function Code(props: any) {
   return <StyledCode>{props.children}</StyledCode>;
 }
 
 /**
  * Node Components
  */
-function Paragraph(props) {
+function Paragraph(props: any) {
   return <StyledP {...props.attributes}>{props.children}</StyledP>;
 }
 
-function ListItem(props) {
+function ListItem(props: any) {
   return <StyledLi {...props.attributes}>{props.children}</StyledLi>;
 }
 
-function Quote(props) {
+function Quote(props: any) {
   return <StyledBlockQuote {...props.attributes}>{props.children}</StyledBlockQuote>;
 }
 
-function CodeBlock(props) {
+function CodeBlock(props: any) {
   return (
     <StyledPre>
       <StyledCode {...props.attributes}>{props.children}</StyledCode>
@@ -164,31 +166,31 @@ function CodeBlock(props) {
   );
 }
 
-function HeadingOne(props) {
+function HeadingOne(props: any) {
   return <StyledH1 {...props.attributes}>{props.children}</StyledH1>;
 }
 
-function HeadingTwo(props) {
+function HeadingTwo(props: any) {
   return <StyledH2 {...props.attributes}>{props.children}</StyledH2>;
 }
 
-function HeadingThree(props) {
+function HeadingThree(props: any) {
   return <StyledH3 {...props.attributes}>{props.children}</StyledH3>;
 }
 
-function HeadingFour(props) {
+function HeadingFour(props: any) {
   return <StyledH4 {...props.attributes}>{props.children}</StyledH4>;
 }
 
-function HeadingFive(props) {
+function HeadingFive(props: any) {
   return <StyledH5 {...props.attributes}>{props.children}</StyledH5>;
 }
 
-function HeadingSix(props) {
+function HeadingSix(props: any) {
   return <StyledH6 {...props.attributes}>{props.children}</StyledH6>;
 }
 
-function Table(props) {
+function Table(props: any) {
   return (
     <StyledTable>
       <tbody {...props.attributes}>{props.children}</tbody>
@@ -196,15 +198,15 @@ function Table(props) {
   );
 }
 
-function TableRow(props) {
+function TableRow(props: any) {
   return <tr {...props.attributes}>{props.children}</tr>;
 }
 
-function TableCell(props) {
+function TableCell(props: any) {
   return <StyledTd {...props.attributes}>{props.children}</StyledTd>;
 }
 
-function ThematicBreak(props) {
+function ThematicBreak(props: any) {
   return (
     <StyledHr
       {...props.attributes}
@@ -220,15 +222,15 @@ function ThematicBreak(props) {
   );
 }
 
-function Break(props) {
+function Break(props: any) {
   return <br {...props.attributes} />;
 }
 
-function BulletedList(props) {
+function BulletedList(props: any) {
   return <StyledUl {...props.attributes}>{props.children}</StyledUl>;
 }
 
-function NumberedList(props) {
+function NumberedList(props: any) {
   return (
     <StyledOl {...props.attributes} start={props.node.data.start || 1}>
       {props.children}
@@ -236,7 +238,7 @@ function NumberedList(props) {
   );
 }
 
-function Link(props) {
+function Link(props: any) {
   const data = props.node.data;
   const url = data.url;
   const title = data.title || url;
@@ -248,7 +250,7 @@ function Link(props) {
   );
 }
 
-function Image(props) {
+function Image(props: any) {
   const data = props.node.data;
   const marks = data.marks;
   const url = data.url;
@@ -257,14 +259,14 @@ function Image(props) {
   const image = <img src={url} title={title} alt={alt} {...props.attributes} />;
   const result = !marks
     ? image
-    : marks.reduce((acc, mark) => {
-        return renderMark({ mark, children: acc });
+    : marks.reduce((acc: any, mark: any) => {
+        return renderMark()({ mark, children: acc });
       }, image);
   return result;
 }
 
 export function renderMark() {
-  return props => {
+  return (props: any) => {
     switch (props.mark.type) {
       case 'bold':
         return <Bold {...props} />;
@@ -279,7 +281,7 @@ export function renderMark() {
 }
 
 export function renderInline() {
-  return props => {
+  return (props: any) => {
     switch (props.node.type) {
       case 'link':
         return <Link {...props} />;
@@ -291,8 +293,12 @@ export function renderInline() {
   };
 }
 
-export function renderBlock({ classNameWrapper, codeBlockComponent }) {
-  return props => {
+interface RenderBlockProps {
+  codeBlockComponent: EditorComponentWidgetOptions;
+}
+
+export function renderBlock({ codeBlockComponent }: RenderBlockProps) {
+  return (props: any) => {
     switch (props.node.type) {
       case 'paragraph':
         return <Paragraph {...props} />;
@@ -305,7 +311,6 @@ export function renderBlock({ classNameWrapper, codeBlockComponent }) {
           return (
             <VoidBlock {...props}>
               <Shortcode
-                classNameWrapper={classNameWrapper}
                 typeOverload="code-block"
                 dataKey={false}
                 {...props}
@@ -345,7 +350,7 @@ export function renderBlock({ classNameWrapper, codeBlockComponent }) {
       case 'shortcode':
         return (
           <VoidBlock {...props}>
-            <Shortcode classNameWrapper={classNameWrapper} {...props} />
+            <Shortcode {...props} />
           </VoidBlock>
         );
     }

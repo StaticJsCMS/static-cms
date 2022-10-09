@@ -1,6 +1,9 @@
 import { Text, Block } from 'slate';
 
-function createShortcodeBlock(shortcodeConfig) {
+import type { EditorComponentOptions, EditorComponentWidgetOptions } from '../../../../interface';
+import type { SlateEditor } from '../VisualEditor';
+
+function createShortcodeBlock(shortcodeConfig: EditorComponentWidgetOptions) {
   // Handle code block component
   if (shortcodeConfig.type === 'code-block') {
     return Block.create({ type: shortcodeConfig.type, data: { shortcodeNew: true } });
@@ -30,7 +33,7 @@ function createShortcodeBlock(shortcodeConfig) {
 function Shortcode({ defaultType }) {
   return {
     commands: {
-      insertShortcode(editor, shortcodeConfig) {
+      insertShortcode(editor: SlateEditor, shortcodeConfig: EditorComponentOptions) {
         const block = createShortcodeBlock(shortcodeConfig);
         const { focusBlock } = editor.value;
 
