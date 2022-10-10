@@ -1,20 +1,16 @@
 import { stripIndent } from 'common-tags';
 import flow from 'lodash/flow';
 import get from 'lodash/get';
-import set from 'lodash/set';
 import partialRight from 'lodash/partialRight';
+import set from 'lodash/set';
 import trimEnd from 'lodash/trimEnd';
 import trimStart from 'lodash/trimStart';
 
 import { FILES } from '../constants/collectionTypes';
 import { COMMIT_AUTHOR, COMMIT_DATE } from '../constants/commitProps';
-import {
-  getFileFromSlug,
-  selectField,
-  selectIdentifier,
-  selectInferedField,
-} from '../reducers/collections';
+import { getFileFromSlug, selectIdentifier, selectInferedField } from '../reducers/collections';
 import { sanitizeSlug } from './urlHelper';
+import { selectField } from './util/field.util';
 import { stringTemplate } from './widgets';
 
 import type { CmsConfig, CmsSlug, Collection, Entry, EntryData } from '../interface';
@@ -93,11 +89,7 @@ export function getProcessSegment(slugConfig?: CmsSlug, ignoreValues?: string[])
       : flow([value => String(value), prepareSlug, partialRight(sanitizeSlug, slugConfig)])(value);
 }
 
-export function slugFormatter(
-  collection: Collection,
-  entryData: EntryData,
-  slugConfig?: CmsSlug,
-) {
+export function slugFormatter(collection: Collection, entryData: EntryData, slugConfig?: CmsSlug) {
   const slugTemplate = collection.slug || '{{slug}}';
 
   const identifier = get(entryData, keyToPathArray(selectIdentifier(collection)));
@@ -194,11 +186,7 @@ export function previewUrlFormatter(
 
 export function summaryFormatter(summaryTemplate: string, entry: Entry, collection: Collection) {
   let entryData = entry.data;
-  const date =
-    parseDateFromEntry(
-      entry,
-      selectInferedField(collection, 'date'),
-    ) || null;
+  const date = parseDateFromEntry(entry, selectInferedField(collection, 'date')) || null;
   const identifier = get(entryData, keyToPathArray(selectIdentifier(collection)));
 
   entryData = addFileTemplateFields(entry.path, entryData, collection.folder) ?? {};
@@ -228,11 +216,7 @@ export function folderFormatter(
   let fields = set(entry.data, folderKey, defaultFolder) as EntryData;
   fields = addFileTemplateFields(entry.path, fields, collection.folder);
 
-  const date =
-    parseDateFromEntry(
-      entry,
-      selectInferedField(collection, 'date'),
-    ) || null;
+  const date = parseDateFromEntry(entry, selectInferedField(collection, 'date')) || null;
   const identifier = get(fields, keyToPathArray(selectIdentifier(collection)));
   const processSegment = getProcessSegment(slugConfig, [defaultFolder, fields?.dirname as string]);
 

@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { getAsset } from '../../../actions/media';
 import { INFERABLE_FIELDS } from '../../../constants/fieldInference';
 import { getPreviewTemplate, getRemarkPlugins, resolveWidget } from '../../../lib/registry';
-import { selectField, selectInferedField, selectTemplateName } from '../../../reducers/collections';
+import { selectField } from '../../../lib/util/field.util';
+import { selectInferedField, selectTemplateName } from '../../../reducers/collections';
 import { selectIsLoadingAsset } from '../../../reducers/medias';
 import { lengths } from '../../../ui';
 import { ErrorBoundary } from '../../UI';
@@ -13,8 +14,7 @@ import EditorPreview from './EditorPreview';
 import EditorPreviewContent from './EditorPreviewContent';
 import PreviewHOC from './PreviewHOC';
 
-import type { ReactFragment } from 'react';
-import type { ReactNode } from 'react-markdown';
+import type { ReactFragment, ReactNode } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import type { InferredField } from '../../../constants/fieldInference';
 import type {
@@ -24,7 +24,7 @@ import type {
   Entry,
   EntryData,
   EntryMeta,
-  GetAssetFunction
+  GetAssetFunction,
 } from '../../../interface';
 import type { RootState } from '../../../store';
 
@@ -62,9 +62,9 @@ function getWidgetFor(
     return null;
   }
 
-  let value = values[field.name];
+  let value = values?.[field.name];
   if ('meta' in field) {
-    value = entry.meta[field.name];
+    value = entry.meta?.[field.name];
   }
   const metadata = widgetFieldsMetaData && (widgetFieldsMetaData[field.name] ?? {});
 
@@ -303,9 +303,12 @@ const PreviewPane = (props: EditorPreviewPaneProps) => {
     return iFields;
   }, [collection]);
 
-  const handleGetAsset = useCallback((path: string, field?: CmsField) => {
-    return getAsset(collection, entry, path, field);
-  }, [collection, entry, getAsset]);
+  const handleGetAsset = useCallback(
+    (path: string, field?: CmsField) => {
+      return getAsset(collection, entry, path, field);
+    },
+    [collection, entry, getAsset],
+  );
 
   /**
    * This function exists entirely to expose nested widgets for object and list
@@ -324,14 +327,16 @@ const PreviewPane = (props: EditorPreviewPaneProps) => {
       }
 
       const nestedFields = field && 'fields' in field ? field.fields ?? [] : [];
-      const value = entry.data[field.name] as EntryData | EntryData[];
+      const value = entry.data?.[field.name] as EntryData | EntryData[];
       const metadata = (fieldsMetaData[field.name] = {}) as Record<string, EntryMeta>;
 
       if (Array.isArray(value)) {
         return value.map(val => {
           const widgets = nestedFields.reduce((acc, field, index) => {
             acc[field.name] = (
-              <div key={index}>{getWidget(field, val, metadata[field.name], entry, handleGetAsset)}</div>
+              <div key={index}>
+                {getWidget(field, val, metadata[field.name], entry, handleGetAsset)}
+              </div>
             );
             return acc;
           }, {} as Record<string, ReactNode>);
@@ -343,7 +348,9 @@ const PreviewPane = (props: EditorPreviewPaneProps) => {
         data: value,
         widgets: nestedFields.reduce((acc, field, index) => {
           acc[field.name] = (
-            <div key={index}>{getWidget(field, value, metadata[field.name], entry, handleGetAsset)}</div>
+            <div key={index}>
+              {getWidget(field, value, metadata[field.name], entry, handleGetAsset)}
+            </div>
           );
           return acc;
         }, {} as Record<string, ReactNode>),
@@ -354,7 +361,15 @@ const PreviewPane = (props: EditorPreviewPaneProps) => {
 
   const widgetFor = useCallback(
     (name: string) => {
-      return getWidgetFor(collection, name, fields, entry, fieldsMetaData, inferedFields, handleGetAsset);
+      return getWidgetFor(
+        collection,
+        name,
+        fields,
+        entry,
+        fieldsMetaData,
+        inferedFields,
+        handleGetAsset,
+      );
     },
     [collection, entry, fields, fieldsMetaData, handleGetAsset, inferedFields],
   );

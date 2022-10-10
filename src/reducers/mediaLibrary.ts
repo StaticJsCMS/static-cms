@@ -22,7 +22,8 @@ import {
   MEDIA_REMOVE_INSERTED
 } from '../actions/mediaLibrary';
 import { selectIntegration } from './';
-import { selectEditingDraft, selectMediaFolder } from './entries';
+import { selectEditingDraft } from './entries';
+import { selectMediaFolder } from '../lib/util/media';
 
 import type { MediaLibraryAction } from '../actions/mediaLibrary';
 import type {

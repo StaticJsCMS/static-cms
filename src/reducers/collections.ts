@@ -7,8 +7,9 @@ import { IDENTIFIER_FIELDS, INFERABLE_FIELDS, SORTABLE_FIELDS } from '../constan
 import { formatExtensions } from '../formats/formats';
 import consoleError from '../lib/consoleError';
 import { summaryFormatter } from '../lib/formatters';
+import { selectField } from '../lib/util/field.util';
+import { selectMediaFolder } from '../lib/util/media';
 import { stringTemplate } from '../lib/widgets';
-import { selectMediaFolder } from './entries';
 
 import type { ConfigAction } from '../actions/config';
 import type { Backend } from '../backend';
@@ -225,27 +226,6 @@ export function getFieldsNames(fields: (CmsField | CmsField)[] | undefined, pref
   return names;
 }
 
-export function selectField(collection: CmsCollection | Collection, key: string) {
-  const array = keyToPathArray(key);
-  let name: string | undefined;
-  let field;
-  let fields = (collection.fields ?? []) as (CmsField | CmsField)[];
-  while ((name = array.shift()) && fields) {
-    field = fields.find(f => f.name === name);
-    if (field) {
-      if ('fields' in field) {
-        fields = field?.fields ?? [];
-      } else if ('field' in field && field.field) {
-        fields = [field?.field];
-      } else if ('types' in field) {
-        fields = field?.types ?? [];
-      }
-    }
-  }
-
-  return field;
-}
-
 export function traverseFields(
   fields: CmsField[],
   updater: (field: CmsField) => CmsField,
@@ -437,16 +417,6 @@ export function selectSortableFields(
     .map(item => ({ ...item.field, key: item.key })) as SortableField[];
 
   return fields;
-}
-
-export function selectSortDataPath(collection: Collection, key: string) {
-  if (key === COMMIT_DATE) {
-    return 'updatedOn';
-  } else if (key === COMMIT_AUTHOR && !selectField(collection, key)) {
-    return 'author';
-  } else {
-    return `data.${key}`;
-  }
 }
 
 export function selectViewFilters(collection: Collection) {

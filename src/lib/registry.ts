@@ -10,6 +10,7 @@ import type {
   CmsBackendInitializerOptions,
   CmsConfig,
   CmsEventListener,
+  CmsField,
   CmsIcon,
   CmsLocalePhrasesRoot,
   CmsMediaLibraryExternalLibrary,
@@ -36,7 +37,7 @@ const eventHandlers = allowedEvents.reduce((acc, e) => {
 interface Registry {
   backends: Record<string, CmsBackendInitializer>;
   templates: Record<string, CmsTemplatePreviewComponent>;
-  widgets: Record<string, Widget>;
+  widgets: Record<string, Widget<T = unknown, F extends CmsField = CmsField>>;
   icons: Record<string, CmsIcon>;
   additionalLinks: Record<string, AdditionalLink>;
   editorComponents: Record<string, EditorComponentOptions>;
@@ -180,7 +181,7 @@ export function registerWidget<T = unknown>(
   }
 }
 
-export function getWidget<T = unknown>(name: string): Widget<T> {
+export function getWidget<T = unknown, F extends CmsField = CmsField>(name: string): Widget<T, F> {
   return registry.widgets[name] as Widget<T>;
 }
 
@@ -193,7 +194,9 @@ export function getWidgets(): ({
   }));
 }
 
-export function resolveWidget<T = ValueOrNestedValue>(name?: string): Widget<T> {
+export function resolveWidget<T = unknown, F extends CmsField = CmsField>(
+  name?: string,
+): Widget<T, F> {
   return getWidget(name || 'string') || getWidget('unknown');
 }
 

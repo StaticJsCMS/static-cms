@@ -118,34 +118,7 @@ const RelationControl = ({
   query,
   locale,
 }: CmsWidgetControlProps<string | string[], CmsFieldRelation>) => {
-  // mounted = false;
-
   const [initialOptions, setInitialOptions] = useState<HitOption[]>([]);
-
-  // state = {
-  //   initialOptions: [],
-  // };
-
-  // static propTypes = {
-  //   onChange: PropTypes.func.isRequired,
-  //   forID: PropTypes.string.isRequired,
-  //   value: PropTypes.node,
-  //   field: ImmutablePropTypes.map,
-  //   query: PropTypes.func.isRequired,
-  //   queryHits: PropTypes.array,
-  //   classNameWrapper: PropTypes.string.isRequired,
-  //   setActiveStyle: PropTypes.func.isRequired,
-  //   setInactiveStyle: PropTypes.func.isRequired,
-  //   locale: PropTypes.string,
-  // };
-
-  // shouldComponentUpdate(nextProps) {
-  //   return (
-  //     this.props.value !== nextProps.value ||
-  //     this.props.hasActiveStyle !== nextProps.hasActiveStyle ||
-  //     this.props.queryHits !== nextProps.queryHits
-  //   );
-  // }
 
   const isMultiple = useMemo(() => {
     return field.multiple ?? false;
