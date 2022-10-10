@@ -2,13 +2,16 @@ import controlComponent from './MarkdownControl/MarkdownControl';
 import previewComponent from './MarkdownPreview';
 import schema from './schema';
 
-function Widget(opts = {}) {
+import type { CmsFieldMarkdown, CmsWidgetParam } from '../../interface';
+
+function Widget(): CmsWidgetParam<string, CmsFieldMarkdown> {
   return {
     name: 'markdown',
     controlComponent,
     previewComponent,
-    schema,
-    ...opts,
+    options: {
+      schema,
+    },
   };
 }
 

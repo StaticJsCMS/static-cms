@@ -9,17 +9,17 @@ function moduleNameToPath(libName) {
 }
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/index.ts',
   mode: isProduction ? 'production' : 'development',
   module: {
     rules: [
       {
         test: /\.m?js$/,
-        enforce: "pre",
-        use: ["source-map-loader"],
+        enforce: 'pre',
+        use: ['source-map-loader'],
       },
       {
-        test: /\.(ts|js)x?$/,
+        test: /\.tsx?$/,
         use: 'babel-loader',
         exclude: /node_modules/,
       },
@@ -50,7 +50,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx'],
-    alias: { 'react-dom': '@hot-loader/react-dom'  },
+    alias: { 'react-dom': '@hot-loader/react-dom' },
     fallback: {
       path: require.resolve('path-browserify'),
       stream: require.resolve('stream-browserify'),

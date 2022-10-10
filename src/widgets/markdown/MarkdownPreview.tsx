@@ -13,13 +13,12 @@ const MarkdownPreview = ({
   field,
   getRemarkPlugins,
 }: CmsWidgetPreviewProps<string, CmsFieldMarkdown>) => {
-  if (value === null) {
+  if (!value) {
     return null;
   }
 
   const html = markdownToHtml(value, {
     getAsset,
-    resolveWidget,
     remarkPlugins: getRemarkPlugins(),
   });
   const toRender = field.sanitize_preview ?? false ? DOMPurify.sanitize(html) : html;

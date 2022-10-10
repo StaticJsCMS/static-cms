@@ -1,30 +1,30 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 export default function remarkAllowHtmlEntities() {
+  // @ts-ignore
   this.Parser.prototype.inlineTokenizers.text = text;
 
   /**
    * This is a port of the `remark-parse` text tokenizer, adapted to exclude
    * HTML entity decoding.
    */
-  function text(eat, value, silent) {
-    var self = this;
-    var methods;
-    var tokenizers;
-    var index;
-    var length;
-    var subvalue;
-    var position;
-    var tokenizer;
-    var name;
-    var min;
+  function text(eat: any, value: any, silent: any) {
+    // @ts-ignore
+    const self = this;
+    let index;
+    let position;
+    let tokenizer;
+    let name;
+    let min;
 
     /* istanbul ignore if - never used (yet) */
     if (silent) {
       return true;
     }
 
-    methods = self.inlineMethods;
-    length = methods.length;
-    tokenizers = self.inlineTokenizers;
+    const methods = self.inlineMethods;
+    const length = methods.length;
+    const tokenizers = self.inlineTokenizers;
     index = -1;
     min = value.length;
 
@@ -48,7 +48,7 @@ export default function remarkAllowHtmlEntities() {
       }
     }
 
-    subvalue = value.slice(0, min);
+    const subvalue = value.slice(0, min);
 
     eat(subvalue)({
       type: 'text',
