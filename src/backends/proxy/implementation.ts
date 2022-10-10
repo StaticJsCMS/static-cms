@@ -1,12 +1,15 @@
-import {
-  APIError, blobToFileObj, unsentRequest
-} from '../../lib/util';
+import { APIError, basename, blobToFileObj, unsentRequest } from '../../lib/util';
 import AuthenticationPage from './AuthenticationPage';
 
 import type {
-  AssetProxy, Config, Entry, Implementation,
-  ImplementationFile, PersistOptions,
-  User
+  AssetProxy,
+  Config,
+  Entry,
+  Implementation,
+  DisplayURL,
+  ImplementationFile,
+  PersistOptions,
+  User,
 } from '../../lib/util';
 
 async function serializeAsset(assetProxy: AssetProxy) {
@@ -135,12 +138,17 @@ export default class ProxyBackend implements Implementation {
   }
 
   async getMedia(mediaFolder = this.mediaFolder) {
-    const files: MediaFile[] = await this.request({
+    const files: { path: string; url: string }[] = await this.request({
       action: 'getMedia',
       params: { branch: this.branch, mediaFolder },
     });
 
-    return files.map(deserializeMediaFile);
+    return files.map(({ url, path }) => {
+      const id = url;
+      const name = basename(path);
+
+      return { id, name, displayURL: { id, path }, path };
+    });
   }
 
   async getMediaFile(path: string) {
@@ -149,6 +157,10 @@ export default class ProxyBackend implements Implementation {
       params: { branch: this.branch, path },
     });
     return deserializeMediaFile(file);
+  }
+
+  getMediaDisplayURL(displayURL: DisplayURL) {
+    return Promise.resolve(typeof displayURL === 'string' ? displayURL : displayURL.id);
   }
 
   async persistMedia(assetProxy: AssetProxy, options: PersistOptions) {
