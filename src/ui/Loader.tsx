@@ -1,35 +1,11 @@
 import { css, keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import React, { useCallback, useEffect, useState } from 'react';
-import { CSSTransition } from 'react-transition-group';
 
 import { transientOptions } from '../lib';
 import { colors, zIndex } from './styles';
 
 import type { ReactNode } from 'react';
-
-const styles = {
-  disabled: css`
-    display: none;
-  `,
-  active: css`
-    display: block;
-  `,
-  enter: css`
-    opacity: 0.01;
-  `,
-  enterActive: css`
-    opacity: 1;
-    transition: opacity 500ms ease-in;
-  `,
-  exit: css`
-    opacity: 1;
-  `,
-  exitActive: css`
-    opacity: 0.01;
-    transition: opacity 300ms ease-in;
-  `,
-};
 
 const animations = {
   loader: keyframes`
@@ -100,17 +76,7 @@ const Loader = ({ className, children }: LoaderProps) => {
       setAnimation(children);
       return (
         <LoaderText>
-          <CSSTransition
-            className={{
-              enter: styles.enter,
-              enterActive: styles.enterActive,
-              exit: styles.exit,
-              exitActive: styles.exitActive,
-            }}
-            timeout={500}
-          >
-            <LoaderItem key={currentItem}>{children[currentItem]}</LoaderItem>
-          </CSSTransition>
+          <LoaderItem key={currentItem}>{children[currentItem]}</LoaderItem>
         </LoaderText>
       );
     }

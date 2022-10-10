@@ -25,7 +25,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        include: ['ol', 'react-datetime', 'codemirror'].map(moduleNameToPath),
+        include: ['ol', 'react-datetime', 'codemirror', '@toast-ui'].map(moduleNameToPath),
         use: ['to-string-loader', 'css-loader'],
       },
       {
@@ -50,7 +50,6 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx'],
-    alias: { 'react-dom': '@hot-loader/react-dom' },
     fallback: {
       path: require.resolve('path-browserify'),
       stream: require.resolve('stream-browserify'),
