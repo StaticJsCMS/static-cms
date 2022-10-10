@@ -22,13 +22,13 @@ backend:
 local_backend: true
 ```
 
-3. Run `npx netlify-cms-proxy-server` from the root directory of the above repository.
+3. Run `npx @staticcms/proxy-server` from the root directory of the above repository.
 
-   * If the default port (8081) is in use, the proxy server won't start and you will see an error message. In this case, follow [these steps](#configure-the-netlify-cms-proxy-server-port-number) before proceeding.
+   * If the default port (8081) is in use, the proxy server won't start and you will see an error message. In this case, follow [these steps](#configure-the-@staticcms/proxy-server-port-number) before proceeding.
 4. Start your local development server (e.g. run `gatsby develop`).
 5. Open `http://localhost:<port>/admin` to verify that your can administer your content locally. Replace `<port>` with the port of your local development server. For example Gatsby's default port is `8000`
 
-**Note:** `netlify-cms-proxy-server` runs an unauthenticated express server. As any client can send requests to the server, it should only be used for local development.
+**Note:** `@staticcms/proxy-server` runs an unauthenticated express server. As any client can send requests to the server, it should only be used for local development.
 
 ### Configure the Static CMS proxy server port number
 
