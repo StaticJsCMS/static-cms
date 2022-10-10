@@ -332,6 +332,7 @@ export class EditorToolbar extends React.Component {
       onLogoutClick,
       t,
       editorBackLink,
+      isNewEntry
     } = this.props;
 
     return (
@@ -344,7 +345,7 @@ export class EditorToolbar extends React.Component {
                 collectionLabel: collection.get('label'),
               })}
             </BackCollection>
-            {hasChanged ? (
+            {isNewEntry || hasChanged ? (
               <BackStatusChanged key="back-changed">{t('editor.editorToolbar.unsavedChanges')}</BackStatusChanged>
             ) : (
               <BackStatusUnchanged key="back-unchanged">{t('editor.editorToolbar.changesSaved')}</BackStatusUnchanged>
