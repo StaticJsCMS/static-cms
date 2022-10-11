@@ -365,7 +365,7 @@ function mapStateToProps(state, ownProps) {
   const scrollSyncEnabled = scroll.isScrolling;
 
   return {
-    showDelete: !ownProps.newEntry && selectAllowDeletion(collection),
+    showDelete: !newEntry && selectAllowDeletion(collection),
     collection,
     collections,
     newEntry,
