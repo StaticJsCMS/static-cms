@@ -238,7 +238,7 @@ const NewEntrySimplePublishControls = ({
   );
 };
 
-export interface EditorToolbar {
+export interface EditorToolbarProps {
   isPersisting?: boolean;
   isDeleting?: boolean;
   onPersist: (opts?: EditorPersistOptions) => Promise<void>;
@@ -272,7 +272,7 @@ const EditorToolbar = ({
   onDelete,
   t,
   editorBackLink,
-}: TranslatedProps<EditorToolbar>) => {
+}: TranslatedProps<EditorToolbarProps>) => {
   const renderSimpleControls = useCallback(() => {
     const canCreate = collection.create ?? false;
 

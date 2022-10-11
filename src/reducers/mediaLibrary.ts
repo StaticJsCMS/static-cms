@@ -23,7 +23,7 @@ import {
 } from '../actions/mediaLibrary';
 import { selectIntegration } from './';
 import { selectEditingDraft } from './entries';
-import { selectMediaFolder } from '../lib/util/media';
+import { selectMediaFolder } from '../lib/util/media.util';
 
 import type { MediaLibraryAction } from '../actions/mediaLibrary';
 import type {

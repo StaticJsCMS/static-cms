@@ -9,13 +9,13 @@ import { getNewEntryUrl } from '../../lib/urlHelper';
 import {
   selectSortableFields,
   selectViewFilters,
-  selectViewGroups
-} from '../../reducers/collections';
+  selectViewGroups,
+} from '../../lib/util/collection.util';
 import {
   selectEntriesFilter,
   selectEntriesGroup,
   selectEntriesSort,
-  selectViewStyle
+  selectViewStyle,
 } from '../../reducers/entries';
 import { components, lengths } from '../../ui';
 import CollectionControls from './CollectionControls';

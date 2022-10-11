@@ -1,7 +1,6 @@
-import set from 'lodash/set';
 import get from 'lodash/get';
 import merge from 'lodash/merge';
-import { join } from 'path';
+import set from 'lodash/set';
 import { v4 as uuid } from 'uuid';
 
 import {
@@ -22,10 +21,9 @@ import {
   REMOVE_DRAFT_ENTRY_MEDIA_FILE,
 } from '../actions/entries';
 import { duplicateI18nFields, getDataPath } from '../lib/i18n';
-import { selectFolderEntryExtension, selectHasMetaPath } from './collections';
 
 import type { EntriesAction } from '../actions/entries';
-import type { Collection, Entry, EntryMeta, FieldsErrors } from '../interface';
+import type { Entry, EntryMeta, FieldsErrors } from '../interface';
 
 export interface EntryDraftState {
   entry?: Entry;
@@ -283,21 +281,6 @@ function entryDraftReducer(
     default:
       return state;
   }
-}
-
-export function selectCustomPath(
-  collection: Collection,
-  entryDraft: { entry: { meta?: { path?: string | null } | null } },
-) {
-  if (!selectHasMetaPath(collection)) {
-    return;
-  }
-  const meta = entryDraft.entry.meta;
-  const path = meta && meta.path;
-  const indexFile = collection.meta?.path?.index_file;
-  const extension = selectFolderEntryExtension(collection);
-  const customPath = path && join(collection.folder ?? '', path, `${indexFile}.${extension}`);
-  return customPath;
 }
 
 export default entryDraftReducer;

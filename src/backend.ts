@@ -31,10 +31,10 @@ import {
   getPathDepth,
   localForage,
 } from './lib/util';
-import { stringTemplate } from './lib/widgets';
 import {
   selectAllowDeletion,
   selectAllowNewEntries,
+  selectCustomPath,
   selectEntryPath,
   selectEntrySlug,
   selectFieldsComments,
@@ -43,35 +43,35 @@ import {
   selectHasMetaPath,
   selectInferedField,
   selectMediaFolders,
-} from './reducers/collections';
-import { selectCustomPath } from './reducers/entryDraft';
+} from './lib/util/collection.util';
+import { selectMediaFilePath } from './lib/util/media.util';
+import { stringTemplate } from './lib/widgets';
 import { selectIntegration } from './reducers/integrations';
 import { createEntry } from './valueObjects/Entry';
-import { selectMediaFilePath } from './lib/util/media';
 
 import type {
   CmsBackendClass,
   CmsBackendInitializer,
   CmsConfig,
+  CmsField,
   Collection,
   CollectionFile,
   Credentials,
   DataFile,
   DisplayURL,
   Entry,
+  EntryData,
   EntryDraft,
-  CmsField,
   FilterRule,
   ImplementationEntry,
   SearchQueryResponse,
   SearchResponse,
   User,
-  EntryData,
 } from './interface';
 import type { AllowedEvent } from './lib/registry';
 import type { AsyncLock } from './lib/util';
-import type AssetProxy from './valueObjects/AssetProxy';
 import type { RootState } from './store';
+import type AssetProxy from './valueObjects/AssetProxy';
 
 const { extractTemplateVars, dateParsers, expandPath } = stringTemplate;
 

@@ -6,8 +6,8 @@ import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import { transientOptions } from '../../lib';
+import { selectEntryCollectionTitle } from '../../lib/util/collection.util';
 import { stringTemplate } from '../../lib/widgets';
-import { selectEntryCollectionTitle } from '../../reducers/collections';
 import { selectEntries } from '../../reducers/entries';
 import { colors, components, Icon } from '../../ui';
 

@@ -1,7 +1,7 @@
 import flatten from 'lodash/flatten';
 
 import { unsentRequest } from '../../../lib/util';
-import { selectEntrySlug } from '../../../reducers/collections';
+import { selectEntrySlug } from '../../../lib/util/collection.util';
 import { createEntry } from '../../../valueObjects/Entry';
 
 import type { AlgoliaConfig, Collection, Entry, SearchResponse } from '../../../interface';

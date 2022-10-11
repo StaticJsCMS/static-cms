@@ -3,7 +3,7 @@ import get from 'lodash/get';
 import groupBy from 'lodash/groupBy';
 import set from 'lodash/set';
 
-import { selectEntrySlug } from '../reducers/collections';
+import { selectEntrySlug } from './util/collection.util';
 
 import type {
   CmsField,
@@ -161,7 +161,9 @@ export function getI18nFiles(
   if (structure === I18N_STRUCTURE.SINGLE_FILE) {
     const data = locales.reduce((map, locale) => {
       const dataPath = getDataPath(locale, defaultLocale);
-      map[locale] = get(entryDraft, dataPath);
+      if (map) {
+        map[locale] = get(entryDraft, dataPath);
+      }
       return map;
     }, {} as EntryData);
 
@@ -262,10 +264,10 @@ function mergeValues(
 }
 
 function mergeSingleFileValue(entryValue: Entry, defaultLocale: string, locales: string[]): Entry {
-  const data = (entryValue.data[defaultLocale] ?? {}) as EntryData;
+  const data = (entryValue.data?.[defaultLocale] ?? {}) as EntryData;
   const i18n = locales
     .filter(l => l !== defaultLocale)
-    .map(l => ({ locale: l, value: entryValue.data[l] }))
+    .map(l => ({ locale: l, value: entryValue.data?.[l] }))
     .filter(e => e.value)
     .reduce((acc, e) => {
       return { ...acc, [e.locale]: { data: e.value } };

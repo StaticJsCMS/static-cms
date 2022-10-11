@@ -13,7 +13,7 @@ import { createAssetProxy } from '../valueObjects/AssetProxy';
 import { addDraftEntryMediaFile, removeDraftEntryMediaFile } from './entries';
 import { addAsset, removeAsset } from './media';
 import { waitUntilWithTimeout } from './waitUntil';
-import { selectMediaFilePath, selectMediaFilePublicPath } from '../lib/util/media';
+import { selectMediaFilePath, selectMediaFilePublicPath } from '../lib/util/media.util';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';

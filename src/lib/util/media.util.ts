@@ -3,7 +3,7 @@ import trim from 'lodash/trim';
 
 import { folderFormatter } from '../formatters';
 import { joinUrlPath } from '../urlHelper';
-import { basename, isAbsolutePath } from '../util';
+import { basename, isAbsolutePath } from '.';
 
 import type { CmsConfig, CmsField, Collection, CollectionFile, Entry } from '../../interface';
 

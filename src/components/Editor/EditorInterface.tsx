@@ -6,11 +6,11 @@ import { ScrollSync, ScrollSyncPane } from 'react-scroll-sync';
 import { FILES } from '../../constants/collectionTypes';
 import { transientOptions } from '../../lib';
 import { getI18nInfo, getPreviewEntry, hasI18n } from '../../lib/i18n';
-import { getFileFromSlug } from '../../reducers/collections';
 import { colors, colorsRaw, components, IconButton, transitions, zIndex } from '../../ui';
 import EditorControlPane from './EditorControlPane/EditorControlPane';
 import EditorPreviewPane from './EditorPreviewPane/EditorPreviewPane';
 import EditorToolbar from './EditorToolbar';
+import { getFileFromSlug } from '../../lib/util/collection.util';
 
 import type {
   CmsField,

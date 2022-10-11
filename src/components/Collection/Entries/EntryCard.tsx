@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { getAsset } from '../../../actions/media';
 import { VIEW_STYLE_GRID, VIEW_STYLE_LIST } from '../../../constants/collectionViews';
 import { transientOptions } from '../../../lib';
-import { selectEntryCollectionTitle } from '../../../reducers/collections';
+import { selectEntryCollectionTitle } from '../../../lib/util/collection.util';
 import { selectIsLoadingAsset } from '../../../reducers/medias';
 import { colors, colorsRaw, components, lengths, zIndex } from '../../../ui';
 
@@ -144,9 +144,7 @@ const EntryCard = ({
             <CardHeading>{summary}</CardHeading>
           </CardBody>
           {image && imageField ? (
-            <CardImage
-              $src={getAsset(collection, entry, image, imageField).toString()}
-            />
+            <CardImage $src={getAsset(collection, entry, image, imageField).toString()} />
           ) : null}
         </GridCardLink>
       </GridCard>
@@ -176,7 +174,7 @@ function mapStateToProps(state: RootState, ownProps: EntryCardOwnProps) {
   const summary = selectEntryCollectionTitle(collection, entry);
 
   let image = inferedFields.imageField
-    ? (entryData[inferedFields.imageField] as string | undefined)
+    ? (entryData?.[inferedFields.imageField] as string | undefined)
     : undefined;
   if (image) {
     image = encodeURI(image);

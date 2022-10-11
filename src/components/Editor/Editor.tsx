@@ -17,11 +17,11 @@ import {
   loadLocalBackup,
   persistEntry,
   persistLocalBackup,
-  retrieveLocalBackup
+  retrieveLocalBackup,
 } from '../../actions/entries';
 import { loadScroll, toggleScroll } from '../../actions/scroll';
+import { selectFields } from '../../lib/util/collection.util';
 import { selectEntry } from '../../reducers';
-import { selectFields } from '../../reducers/collections';
 import { history, navigateToCollection, navigateToNewEntry } from '../../routing/history';
 import { Loader } from '../../ui';
 import confirm from '../UI/Confirm';
@@ -37,7 +37,7 @@ import type {
   EntryMeta,
   I18nSettings,
   TranslatedProps,
-  ValueOrNestedValue
+  ValueOrNestedValue,
 } from '../../interface';
 import type { RootState } from '../../store';
 
@@ -74,7 +74,12 @@ const Editor = ({
   );
 
   const handleChangeDraftField = useCallback(
-    (field: CmsField, value: ValueOrNestedValue, metadata: EntryMeta = {}, i18n: I18nSettings | undefined) => {
+    (
+      field: CmsField,
+      value: ValueOrNestedValue,
+      metadata: EntryMeta = {},
+      i18n: I18nSettings | undefined,
+    ) => {
       const entries = [publishedEntry].filter(Boolean);
       changeDraftField({ field, value, metadata, entries, i18n });
     },

@@ -1,12 +1,12 @@
-import React, { useCallback } from 'react';
 import styled from '@emotion/styled';
+import React, { useCallback } from 'react';
 import { Waypoint } from 'react-waypoint';
 
-import { selectFields, selectInferedField } from '../../../reducers/collections';
+import { selectFields, selectInferedField } from '../../../lib/util/collection.util';
 import EntryCard from './EntryCard';
 
-import type { Collection, Collections, Entry, CmsField } from '../../../interface';
 import type { CollectionViewStyle } from '../../../constants/collectionViews';
+import type { CmsField, Collection, Collections, Entry } from '../../../interface';
 import type Cursor from '../../../lib/util/Cursor';
 
 const CardsGrid = styled.ul`

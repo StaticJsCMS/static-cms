@@ -8,8 +8,8 @@ import trimStart from 'lodash/trimStart';
 
 import { FILES } from '../constants/collectionTypes';
 import { COMMIT_AUTHOR, COMMIT_DATE } from '../constants/commitProps';
-import { getFileFromSlug, selectIdentifier, selectInferedField } from '../reducers/collections';
 import { sanitizeSlug } from './urlHelper';
+import { getFileFromSlug, selectIdentifier, selectInferedField } from './util/collection.util';
 import { selectField } from './util/field.util';
 import { stringTemplate } from './widgets';
 
