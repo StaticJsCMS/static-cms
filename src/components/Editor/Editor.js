@@ -23,7 +23,7 @@ import {
 } from '../../actions/entries';
 import { loadScroll, toggleScroll } from '../../actions/scroll';
 import { selectEntry } from '../../reducers';
-import { selectFields } from '../../reducers/collections';
+import { selectFields, selectAllowDeletion } from '../../reducers/collections';
 import { history, navigateToCollection, navigateToNewEntry } from '../../routing/history';
 import { Loader } from '../../ui';
 import confirm from '../UI/Confirm';
@@ -365,6 +365,7 @@ function mapStateToProps(state, ownProps) {
   const scrollSyncEnabled = scroll.isScrolling;
 
   return {
+    showDelete: !ownProps.newEntry && selectAllowDeletion(collection),
     collection,
     collections,
     newEntry,
