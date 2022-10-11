@@ -10,6 +10,7 @@ import { loadConfig } from './actions/config';
 import App from './components/App/App';
 import './components/EditorWidgets';
 import { ErrorBoundary } from './components/UI';
+import { addExtensions } from './extensions';
 import { getPhrases } from './lib/phrases';
 import './mediaLibrary';
 import { selectLocale } from './reducers/config';
@@ -47,8 +48,8 @@ export type AppRootProps = ConnectedProps<typeof connector>;
 
 const ConnectedTranslatedApp = connector(TranslatedApp);
 
-function bootstrap(opts: { config: CmsConfig }) {
-  const { config } = opts;
+function bootstrap(opts?: { config?: CmsConfig; autoInitialize?: boolean }) {
+  const { config, autoInitialize = true } = opts ?? {};
 
   /**
    * Log the version number.
@@ -76,6 +77,10 @@ function bootstrap(opts: { config: CmsConfig }) {
     newRoot.id = ROOT_ID;
     document.body.appendChild(newRoot);
     return newRoot;
+  }
+
+  if (autoInitialize) {
+    addExtensions();
   }
 
   store.dispatch(

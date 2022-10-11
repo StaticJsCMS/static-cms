@@ -4,7 +4,7 @@ import schema from './schema';
 
 import type { CmsFieldMarkdown, CmsWidgetParam } from '../../interface';
 
-function Widget(): CmsWidgetParam<string, CmsFieldMarkdown> {
+const MarkdownWidget = (): CmsWidgetParam<string, CmsFieldMarkdown> => {
   return {
     name: 'markdown',
     controlComponent,
@@ -13,7 +13,6 @@ function Widget(): CmsWidgetParam<string, CmsFieldMarkdown> {
       schema,
     },
   };
-}
+};
 
-export const StaticCmsWidgetMarkdown = { Widget, controlComponent, previewComponent };
-export default StaticCmsWidgetMarkdown;
+export default MarkdownWidget;

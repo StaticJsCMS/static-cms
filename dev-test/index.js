@@ -1,35 +1,4 @@
 // Register all the things
-window.CMS.registerBackend('git-gateway', window.CMS.GitGatewayBackend);
-window.CMS.registerBackend('proxy', window.CMS.ProxyBackend);
-window.CMS.registerBackend('test-repo', window.CMS.TestBackend);
-window.CMS.registerWidget([
-  window.CMS.StringWidget.Widget(),
-  window.CMS.NumberWidget.Widget(),
-  window.CMS.TextWidget.Widget(),
-  window.CMS.ImageWidget.Widget(),
-  window.CMS.FileWidget.Widget(),
-  window.CMS.SelectWidget.Widget(),
-  window.CMS.MarkdownWidget.Widget(),
-  window.CMS.ListWidget.Widget(),
-  window.CMS.ObjectWidget.Widget(),
-  window.CMS.RelationWidget.Widget(),
-  window.CMS.BooleanWidget.Widget(),
-  window.CMS.DateTimeWidget.Widget(),
-  window.CMS.ColorStringWidget.Widget(),
-]);
-window.CMS.registerEditorComponent(window.CMS.imageEditorComponent);
-window.CMS.registerEditorComponent({
-  id: 'code-block',
-  label: 'Code Block',
-  widget: 'code',
-  type: 'code-block',
-});
-window.CMS.registerLocale('en', window.CMS.locales.en);
-
-Object.keys(window.CMS.images).forEach(iconName => {
-  window.CMS.registerIcon(iconName, window.h(window.CMS.Icon, { type: iconName }));
-});
-
 window.CMS.init();
 
 const PostPreview = window.createClass({

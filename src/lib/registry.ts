@@ -107,7 +107,8 @@ export function getPreviewTemplate(name: string): CmsTemplatePreviewComponent {
 /**
  * Editor Widgets
  */
-export function registerWidget(widgets: CmsWidgetParam[]): void;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function registerWidget(widgets: CmsWidgetParam<any, any>[]): void;
 export function registerWidget(widget: CmsWidgetParam): void;
 export function registerWidget<T = unknown>(
   name: string,
@@ -133,7 +134,7 @@ export function registerWidget<T = unknown>(
     // A registered widget control can be reused by a new widget, allowing
     // multiple copies with different previews.
     const newControl = (
-      typeof control === 'string' ? registry.widgets[control].control : control
+      typeof control === 'string' ? registry.widgets[control]?.control : control
     ) as Widget['control'];
     if (newControl) {
       registry.widgets[name] = {
@@ -202,7 +203,8 @@ export function resolveWidget<T = unknown, F extends CmsField = CmsField>(
 /**
  * Markdown Editor Custom Components
  */
-export function registerEditorComponent(component: EditorComponentOptions) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function registerEditorComponent(component: EditorComponentOptions<any>) {
   const plugin = EditorComponent(component);
   if ('type' in plugin && plugin.type === 'code-block') {
     const codeBlock = Object.values(registry.editorComponents).find(

@@ -1,6 +1,5 @@
 import deepmerge from 'deepmerge';
 import { produce } from 'immer';
-import isEmpty from 'lodash/isEmpty';
 import trim from 'lodash/trim';
 import trimStart from 'lodash/trimStart';
 import yaml from 'yaml';
@@ -362,15 +361,12 @@ export function parseConfig(data: string) {
       config[key] = config[window.CMS_ENV][key] as CmsConfig[keyof CmsConfig];
     }
   }
-  return config as Partial<CmsConfig>;
+  return config as CmsConfig;
 }
 
-async function getConfigYaml(file: string, hasManualConfig: boolean) {
+async function getConfigYaml(file: string): Promise<CmsConfig> {
   const response = await fetch(file, { credentials: 'same-origin' }).catch(error => error as Error);
   if (response instanceof Error || response.status !== 200) {
-    if (hasManualConfig) {
-      return {};
-    }
     const message = response instanceof Error ? response.message : response.status;
     throw new Error(`Failed to load config.yml (${message})`);
   }
@@ -378,9 +374,6 @@ async function getConfigYaml(file: string, hasManualConfig: boolean) {
   const isYaml = contentType.indexOf('yaml') !== -1;
   if (!isYaml) {
     console.info(`Response for ${file} was not yaml. (Content-Type: ${contentType})`);
-    if (hasManualConfig) {
-      return {};
-    }
   }
   return parseConfig(await response.text());
 }
@@ -464,7 +457,7 @@ export async function handleLocalBackend(originalConfig: CmsConfig) {
   });
 }
 
-export function loadConfig(manualConfig: Partial<CmsConfig> = {}, onLoad: () => unknown) {
+export function loadConfig(manualConfig: CmsConfig | undefined, onLoad: () => unknown) {
   if (window.CMS_CONFIG) {
     return configLoaded(window.CMS_CONFIG);
   }
@@ -473,14 +466,7 @@ export function loadConfig(manualConfig: Partial<CmsConfig> = {}, onLoad: () => 
 
     try {
       const configUrl = getConfigUrl();
-      const hasManualConfig = !isEmpty(manualConfig);
-      const configYaml =
-        manualConfig.load_config_file === false
-          ? {}
-          : await getConfigYaml(configUrl, hasManualConfig);
-
-      // Merge manual config into the config.yml one
-      const mergedConfig = deepmerge(configYaml, manualConfig);
+      const mergedConfig = manualConfig ? manualConfig : await getConfigYaml(configUrl);
 
       validateConfig(mergedConfig);
 

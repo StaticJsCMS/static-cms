@@ -995,7 +995,9 @@ export function isEditorComponentWidgetOptions(
   return 'widget' in options;
 }
 
-export type EditorComponentOptions = EditorComponentManualOptions | EditorComponentWidgetOptions;
+export type EditorComponentOptions<T = EntryData> =
+  | EditorComponentManualOptions<T>
+  | EditorComponentWidgetOptions;
 
 export interface EventData {
   entry: Entry;
