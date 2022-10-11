@@ -85,6 +85,10 @@ const CollectionView = ({
   viewStyle,
 }: ReturnType<typeof mergeProps>) => {
   const [readyToLoad, setReadyToLoad] = useState(false);
+  const [preCollection, setPreCollection] = useState(collection);
+  useEffect(() => {
+    setPreCollection(collection);
+  }, [collection]);
 
   const newEntryUrl = useMemo(() => {
     let url = collection.get('create') ? getNewEntryUrl(collectionName) : '';
@@ -108,7 +112,7 @@ const CollectionView = ({
         collection={collection}
         viewStyle={viewStyle}
         filterTerm={filterTerm}
-        readyToLoad={readyToLoad}
+        readyToLoad={readyToLoad && collection === preCollection}
       />
     );
   }, [collection, filterTerm, viewStyle, readyToLoad]);
@@ -123,29 +127,34 @@ const CollectionView = ({
   }, [searchTerm, collections, collection, isSingleSearchResult]);
 
   useEffect(() => {
-    if (sort?.first()?.get('key')) {
-      setReadyToLoad(true);
-      return;
-    }
-
-    const defaultSort = collection.getIn(['sortable_fields', 'default']) as
-      | StaticallyTypedRecord<CmsSortableFieldsDefault>
-      | undefined;
-
-    if (!defaultSort || !defaultSort.get('field')) {
-      setReadyToLoad(true);
-      return;
-    }
-
+    setReadyToLoad(false);
     let alive = true;
-    const sortEntries = async () => {
-      await onSortClick(
-        defaultSort.get('field'),
-        defaultSort.get('direction') ?? SortDirection.Ascending,
-      );
-      if (alive) {
-        setReadyToLoad(true);
-      }
+
+    const sortEntries = () => {
+      setTimeout(async () => {
+        if (sort?.first()?.get('key')) {
+          setReadyToLoad(true);
+          return;
+        }
+
+        const defaultSort = collection.getIn(['sortable_fields', 'default']) as
+          | StaticallyTypedRecord<CmsSortableFieldsDefault>
+          | undefined;
+
+        if (!defaultSort || !defaultSort.get('field')) {
+          setReadyToLoad(true);
+          return;
+        }
+
+        await onSortClick(
+          defaultSort.get('field'),
+          defaultSort.get('direction') ?? SortDirection.Ascending,
+        );
+
+        if (alive) {
+          setReadyToLoad(true);
+        }
+      });
     };
 
     sortEntries();
