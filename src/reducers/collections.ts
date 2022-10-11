@@ -4,7 +4,6 @@ import { CONFIG_SUCCESS } from '../actions/config';
 import { FILES, FOLDER } from '../constants/collectionTypes';
 import { COMMIT_AUTHOR, COMMIT_DATE } from '../constants/commitProps';
 import { IDENTIFIER_FIELDS, INFERABLE_FIELDS, SORTABLE_FIELDS } from '../constants/fieldInference';
-import { formatExtensions } from '../formats/formats';
 import consoleError from '../lib/consoleError';
 import { summaryFormatter } from '../lib/formatters';
 import { selectField } from '../lib/util/field.util';
@@ -46,77 +45,6 @@ function collections(
       return state;
   }
 }
-
-const selectors = {
-  [FOLDER]: {
-    entryExtension(collection: Collection) {
-      return (collection.extension || formatExtensions[collection.format ?? 'frontmatter']).replace(
-        /^\./,
-        '',
-      );
-    },
-    fields(collection: Collection) {
-      return collection.fields;
-    },
-    entryPath(collection: Collection, slug: string) {
-      const folder = (collection.folder as string).replace(/\/$/, '');
-      return `${folder}/${slug}.${this.entryExtension(collection)}`;
-    },
-    entrySlug(collection: Collection, path: string) {
-      const folder = (collection.folder as string).replace(/\/$/, '');
-      const slug = path
-        .split(folder + '/')
-        .pop()
-        ?.replace(new RegExp(`\\.${this.entryExtension(collection)}$`), '');
-
-      return slug;
-    },
-    allowNewEntries(collection: Collection) {
-      return collection.create;
-    },
-    allowDeletion(collection: Collection) {
-      return collection.delete ?? true;
-    },
-    templateName(collection: Collection) {
-      return collection.name;
-    },
-  },
-  [FILES]: {
-    fileForEntry(collection: Collection, slug?: string) {
-      const files = collection.files;
-      if (!slug) {
-        return files?.[0];
-      }
-      return files && files.filter(f => f?.name === slug)?.[0];
-    },
-    fields(collection: Collection, slug?: string) {
-      const file = this.fileForEntry(collection, slug);
-      return file && file.fields;
-    },
-    entryPath(collection: Collection, slug: string) {
-      const file = this.fileForEntry(collection, slug);
-      return file && file.file;
-    },
-    entrySlug(collection: Collection, path: string) {
-      const file = (collection.files as CollectionFile[]).filter(f => f?.file === path)?.[0];
-      return file && file.name;
-    },
-    entryLabel(collection: Collection, slug: string) {
-      const file = this.fileForEntry(collection, slug);
-      return file && file.label;
-    },
-    allowNewEntries() {
-      return false;
-    },
-    allowDeletion(collection: Collection) {
-      return collection.delete ?? false;
-    },
-    templateName(_collection: Collection, slug: string) {
-      return slug;
-    },
-  },
-};
-
 function getFieldsWithMediaFolders(fields: CmsField[]) {
   const fieldsWithMediaFolders = fields.reduce((acc, f) => {
     if ('media_folder' in f) {
@@ -447,15 +375,6 @@ export function selectFieldsComments(collection: Collection, entryMap: Entry) {
   });
 
   return comments;
-}
-
-export function selectHasMetaPath(collection: Collection) {
-  return (
-    'folder' in collection &&
-    collection.type === FOLDER &&
-    'meta' in collection &&
-    'path' in (collection.meta ?? {})
-  );
 }
 
 export default collections;

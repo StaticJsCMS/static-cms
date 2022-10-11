@@ -21,7 +21,6 @@ import type {
   EditorComponentOptions,
   Entry,
   EventData,
-  ValueOrNestedValue,
   Widget,
   WidgetOptions,
 } from '../interface';
@@ -37,7 +36,7 @@ const eventHandlers = allowedEvents.reduce((acc, e) => {
 interface Registry {
   backends: Record<string, CmsBackendInitializer>;
   templates: Record<string, CmsTemplatePreviewComponent>;
-  widgets: Record<string, Widget<T = unknown, F extends CmsField = CmsField>>;
+  widgets: Record<string, Widget>;
   icons: Record<string, CmsIcon>;
   additionalLinks: Record<string, AdditionalLink>;
   editorComponents: Record<string, EditorComponentOptions>;
@@ -182,7 +181,7 @@ export function registerWidget<T = unknown>(
 }
 
 export function getWidget<T = unknown, F extends CmsField = CmsField>(name: string): Widget<T, F> {
-  return registry.widgets[name] as Widget<T>;
+  return registry.widgets[name] as unknown as Widget<T, F>;
 }
 
 export function getWidgets(): ({

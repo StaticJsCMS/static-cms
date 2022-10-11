@@ -1,5 +1,5 @@
 import { isAbsolutePath } from '../lib/util';
-import { selectMediaFilePath } from '../reducers/entries';
+import { selectMediaFilePath } from '../lib/util/media';
 import { selectMediaFileByPath } from '../reducers/mediaLibrary';
 import { createAssetProxy } from '../valueObjects/AssetProxy';
 import { getMediaDisplayURL, getMediaFile, waitForMediaLibraryToLoad } from './mediaLibrary';

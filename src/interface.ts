@@ -212,7 +212,7 @@ export type Collections = Record<string, Collection>;
 export interface MediaLibraryInstance {
   show: (args: {
     id?: string;
-    value?: string;
+    value?: string | string[];
     config: Record<string, unknown>;
     allowMultiple?: boolean;
     imagesOnly?: boolean;
@@ -972,7 +972,7 @@ export interface CmsBackendInitializer {
 }
 
 export interface EditorComponentWidgetOptions {
-  id?: string;
+  id: string;
   label: string;
   widget?: string;
   type: string;

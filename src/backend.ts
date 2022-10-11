@@ -44,10 +44,10 @@ import {
   selectInferedField,
   selectMediaFolders,
 } from './reducers/collections';
-import { selectMediaFilePath } from './reducers/entries';
 import { selectCustomPath } from './reducers/entryDraft';
 import { selectIntegration } from './reducers/integrations';
 import { createEntry } from './valueObjects/Entry';
+import { selectMediaFilePath } from './lib/util/media';
 
 import type {
   CmsBackendClass,

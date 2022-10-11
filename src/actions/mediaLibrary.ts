@@ -6,8 +6,6 @@ import { basename, getBlobSHA } from '../lib/util';
 import { selectIntegration } from '../reducers';
 import {
   selectEditingDraft,
-  selectMediaFilePath,
-  selectMediaFilePublicPath,
 } from '../reducers/entries';
 import { selectMediaDisplayURL, selectMediaFiles } from '../reducers/mediaLibrary';
 import { addSnackbar } from '../store/slices/snackbars';
@@ -15,6 +13,7 @@ import { createAssetProxy } from '../valueObjects/AssetProxy';
 import { addDraftEntryMediaFile, removeDraftEntryMediaFile } from './entries';
 import { addAsset, removeAsset } from './media';
 import { waitUntilWithTimeout } from './waitUntil';
+import { selectMediaFilePath, selectMediaFilePublicPath } from '../lib/util/media';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
@@ -491,7 +490,7 @@ function mediaLibraryOpened(payload: {
   controlID?: string;
   forImage?: boolean;
   privateUpload?: boolean;
-  value?: string;
+  value?: string | string[];
   replaceIndex?: number;
   allowMultiple?: boolean;
   config?: Record<string, unknown>;
