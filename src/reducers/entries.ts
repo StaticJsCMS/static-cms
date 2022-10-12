@@ -498,7 +498,7 @@ function entries(
       };
 
       let newGroup: GroupMap;
-      if (groupBy.id in group[collection]) {
+      if (group[collection] && groupBy.id in group[collection]) {
         newGroup = { ...group[collection][groupBy.id] };
       } else {
         newGroup = { ...groupBy };

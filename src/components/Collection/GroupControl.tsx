@@ -1,11 +1,22 @@
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Button from '@mui/material/Button/Button';
+import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
+import CheckIcon from '@mui/icons-material/Check';
+import { styled } from '@mui/material/styles';
 
 import type { GroupMap, TranslatedProps, ViewGroup } from '../../interface';
+
+const StyledMenuIconWrapper = styled('div')`
+  width: 32px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+`;
 
 interface GroupControlProps {
   group: Record<string, GroupMap>;
@@ -13,7 +24,12 @@ interface GroupControlProps {
   onGroupClick: (viewGroup: ViewGroup) => void;
 }
 
-const GroupControl = ({ viewGroups, t, onGroupClick }: TranslatedProps<GroupControlProps>) => {
+const GroupControl = ({
+  viewGroups,
+  group,
+  t,
+  onGroupClick,
+}: TranslatedProps<GroupControlProps>) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
@@ -23,8 +39,7 @@ const GroupControl = ({ viewGroups, t, onGroupClick }: TranslatedProps<GroupCont
     setAnchorEl(null);
   }, []);
 
-  // TODO ACTIVE
-  // const hasActiveGroup = useMemo(() => Object.values(group).find(f => f.active === true), [group]);
+  const activeGroup = useMemo(() => Object.values(group).find(f => f.active === true), [group]);
 
   return (
     <div>
@@ -34,7 +49,7 @@ const GroupControl = ({ viewGroups, t, onGroupClick }: TranslatedProps<GroupCont
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
-        variant="outlined"
+        variant={activeGroup ? 'contained' : 'outlined'}
         endIcon={<KeyboardArrowDownIcon />}
       >
         {t('collection.collectionTop.groupBy')}
@@ -49,9 +64,11 @@ const GroupControl = ({ viewGroups, t, onGroupClick }: TranslatedProps<GroupCont
         }}
       >
         {viewGroups.map(viewGroup => (
-          /* TODO: isActive={group.getIn([viewGroup.id, 'active'], false)} */
           <MenuItem key={viewGroup.id} onClick={() => onGroupClick(viewGroup)}>
-            {viewGroup.label}
+            <ListItemText>{viewGroup.label}</ListItemText>
+            <StyledMenuIconWrapper>
+              {viewGroup.id === activeGroup?.id ? <CheckIcon fontSize="small" /> : null}
+            </StyledMenuIconWrapper>
           </MenuItem>
         ))}
       </Menu>
