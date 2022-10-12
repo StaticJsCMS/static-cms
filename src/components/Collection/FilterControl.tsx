@@ -5,7 +5,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
 import type { FilterMap, TranslatedProps, ViewFilter } from '../../interface';
@@ -31,6 +31,8 @@ const FilterControl = ({
     setAnchorEl(null);
   }, []);
 
+  const anyActive = useMemo(() => Object.keys(filter).some(key => filter[key]?.active), [filter]);
+
   return (
     <div>
       <Button
@@ -39,7 +41,7 @@ const FilterControl = ({
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
-        variant="outlined"
+        variant={anyActive ? 'contained' : 'outlined'}
         endIcon={<KeyboardArrowDownIcon />}
       >
         {t('collection.collectionTop.filterBy')}

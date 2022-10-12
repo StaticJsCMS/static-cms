@@ -226,6 +226,7 @@ function entries(
       pages[payload.collection] = {
         page: page ?? undefined,
         ids: loadedEntries.map(entry => entry.slug),
+        isFetching: false,
       };
 
       return { ...state, entities, pages };
@@ -380,6 +381,12 @@ function entries(
         ids,
         isFetching: false,
       };
+
+      console.log('new state', {
+        ...state,
+        entities,
+        pages,
+      });
 
       return {
         ...state,

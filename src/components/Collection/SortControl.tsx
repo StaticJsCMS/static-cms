@@ -47,8 +47,6 @@ const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortContr
     setAnchorEl(null);
   }, []);
 
-  console.log('SORT', sort);
-
   const selectedSort = useMemo(() => {
     if (!sort) {
       return { key: undefined, direction: undefined };
@@ -70,7 +68,7 @@ const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortContr
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
-        variant="outlined"
+        variant={selectedSort.key ? 'contained' : 'outlined'}
         endIcon={<KeyboardArrowDownIcon />}
       >
         {t('collection.collectionTop.sortBy')}

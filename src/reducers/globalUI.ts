@@ -1,5 +1,3 @@
-import { produce } from 'immer';
-
 import type { AnyAction } from 'redux';
 
 export type GlobalUIState = {
@@ -13,13 +11,20 @@ const defaultState: GlobalUIState = {
 /**
  * Reducer for some global UI state that we want to share between components
  */
-const globalUI = produce((state: GlobalUIState, action: AnyAction) => {
+const globalUI = (state: GlobalUIState = defaultState, action: AnyAction): GlobalUIState => {
+  console.log(action);
   // Generic, global loading indicator
   if (!action.type.includes('REQUEST')) {
-    state.isFetching = true;
+    return {
+      isFetching: true,
+    };
   } else if (action.type.includes('SUCCESS') || action.type.includes('FAILURE')) {
-    state.isFetching = false;
+    return {
+      isFetching: false,
+    };
   }
-}, defaultState);
+
+  return state;
+};
 
 export default globalUI;
