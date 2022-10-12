@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "declarationMap": true,
     "declarationDir": "dist",
+    "emitDeclarationOnly": true,
     "jsx": "react",
     "target": "esnext",
     "module": "esnext",
