@@ -93,8 +93,7 @@ const lengths = {
   borderRadius: '5px',
   richTextEditorMinHeight: '300px',
   borderWidth: '2px',
-  topCardWidth: '682px',
-  pageMargin: '28px 18px',
+  pageMargin: '24px',
   objectWidgetTopBarContainerPadding: '0 14px 0',
 };
 
@@ -361,7 +360,6 @@ const components = {
   cardTop: css`
     && {
       ${card};
-      width: ${lengths.topCardWidth};
       max-width: 100%;
       padding: 18px 20px;
       margin-bottom: 28px;
@@ -378,10 +376,9 @@ const components = {
   `,
   cardTopDescription: css`
     && {
-      max-width: 480px;
       color: ${colors.text};
       font-size: 14px;
-      margin-top: 8px;
+      margin-top: 16px;
     }
   `,
   objectWidgetTopBarContainer: css`
@@ -522,63 +519,8 @@ function GlobalStyles() {
           color: ${colors.text};
           margin: 0;
 
-          *,
-          *:before,
-          *:after {
-            box-sizing: border-box;
-          }
-
-          ul,
-          ol {
-            padding-left: 0;
-          }
-
-          h1,
-          h2,
-          h3,
-          h4,
-          h5,
-          h6,
-          p {
-            font-family: ${fonts.primary};
-            color: ${colors.textLead};
-            font-size: 15px;
-            line-height: 1.5;
-            margin-top: 0;
-          }
-
-          h1,
-          h2,
-          h3,
-          h4,
-          h5,
-          h6 {
-            font-weight: 500;
-          }
-
-          h1 {
-            font-size: 24px;
-            letter-spacing: 0.4px;
-            color: ${colors.textLead};
-          }
-
-          a,
-          button {
-            font-size: 14px;
-            font-weight: 500;
-          }
-
-          a {
-            color: ${colors.text};
-            text-decoration: none;
-          }
-
-          textarea {
-            resize: none;
-          }
-
           .ol-viewport {
-            position: absolute!important;
+            position: absolute !important;
             top: 0;
           }
         }

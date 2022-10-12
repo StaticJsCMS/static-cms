@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import {
   loadEntries as actionLoadEntries,
-  traverseCollectionCursor as actionTraverseCollectionCursor
+  traverseCollectionCursor as actionTraverseCollectionCursor,
 } from '../../../actions/entries';
 import { Cursor } from '../../../lib/util';
 import { selectCollectionEntriesCursor } from '../../../reducers/cursors';
@@ -13,7 +13,7 @@ import {
   selectEntries,
   selectEntriesLoaded,
   selectGroups,
-  selectIsFetching
+  selectIsFetching,
 } from '../../../reducers/entries';
 import { colors } from '../../../ui';
 import Entries from './Entries';
@@ -111,7 +111,7 @@ const EntriesCollection = ({
     ({ entries }: EntriesToRenderProps) => {
       return (
         <Entries
-          collections={collection}
+          collection={collection}
           entries={entries}
           isFetching={isFetching}
           collectionName={collection.label}

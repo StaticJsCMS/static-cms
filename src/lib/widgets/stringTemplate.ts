@@ -83,6 +83,10 @@ export function parseDateFromEntry(entry: Entry, dateFieldName?: string | null) 
   }
 
   const dateValue = entry.data?.[dateFieldName];
+  if (dateValue instanceof Date) {
+    return dateValue;
+  }
+
   const dateMoment =
     typeof dateValue === 'string' || typeof dateValue === 'number' ? moment(dateValue) : null;
   if (dateMoment && dateMoment.isValid()) {

@@ -61,7 +61,7 @@ export function loadAsset(resolvedPath: string) {
       }
       dispatch(loadAssetSuccess(resolvedPath));
     } catch (error: unknown) {
-      console.log(error);
+      console.error(error);
       if (error instanceof Error) {
         dispatch(loadAssetFailure(resolvedPath, error));
       }

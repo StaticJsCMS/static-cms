@@ -481,7 +481,7 @@ export function loadConfig(manualConfig: CmsConfig | undefined, onLoad: () => un
         onLoad();
       }
     } catch (error: unknown) {
-      console.log(error);
+      console.error(error);
       if (error instanceof Error) {
         dispatch(configFailed(error));
       }

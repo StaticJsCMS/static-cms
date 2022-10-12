@@ -1,4 +1,5 @@
 import Check from '@mui/icons-material/Check';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Button from '@mui/material/Button';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Menu from '@mui/material/Menu';
@@ -44,6 +45,8 @@ const FilterControl = ({
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        variant="outlined"
+        endIcon={<KeyboardArrowDownIcon />}
       >
         {t('collection.collectionTop.filterBy')}
       </Button>

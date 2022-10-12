@@ -2,15 +2,14 @@ import styled from '@emotion/styled';
 import React from 'react';
 import { translate } from 'react-polyglot';
 
-import { lengths, Loader } from '../../../ui';
+import { Loader } from '../../../ui';
 import EntryListing from './EntryListing';
 
 import type { CollectionViewStyle } from '../../../constants/collectionViews';
-import type { Collections, Entry, TranslatedProps } from '../../../interface';
+import type { Collection, Collections, Entry, TranslatedProps } from '../../../interface';
 import type Cursor from '../../../lib/util/Cursor';
 
 const PaginationMessage = styled.div`
-  width: ${lengths.topCardWidth};
   padding: 16px;
   text-align: center;
 `;
@@ -19,8 +18,7 @@ const NoEntriesMessage = styled(PaginationMessage)`
   margin-top: 16px;
 `;
 
-interface EntriesProps {
-  collections: Collections;
+export interface BaseEntriesProps {
   entries: Entry[];
   page?: number;
   isFetching: boolean;
@@ -29,8 +27,17 @@ interface EntriesProps {
   handleCursorActions: (action: string) => void;
 }
 
+export interface SingleCollectionEntriesProps extends BaseEntriesProps {
+  collection: Collection;
+}
+
+export interface MultipleCollectionEntriesProps extends BaseEntriesProps {
+  collections: Collections;
+}
+
+export type EntriesProps = SingleCollectionEntriesProps | MultipleCollectionEntriesProps;
+
 const Entries = ({
-  collections,
   entries,
   isFetching,
   viewStyle,
@@ -38,6 +45,7 @@ const Entries = ({
   handleCursorActions,
   t,
   page,
+  ...otherProps
 }: TranslatedProps<EntriesProps>) => {
   const loadingMessages = [
     t('collection.entries.loadingEntries'),
@@ -53,14 +61,25 @@ const Entries = ({
   if (hasEntries) {
     return (
       <>
-        <EntryListing
-          collections={collections}
-          entries={entries}
-          viewStyle={viewStyle}
-          cursor={cursor}
-          handleCursorActions={handleCursorActions}
-          page={page}
-        />
+        {'collection' in otherProps ? (
+          <EntryListing
+            collection={otherProps.collection}
+            entries={entries}
+            viewStyle={viewStyle}
+            cursor={cursor}
+            handleCursorActions={handleCursorActions}
+            page={page}
+          />
+        ) : (
+          <EntryListing
+            collections={otherProps.collections}
+            entries={entries}
+            viewStyle={viewStyle}
+            cursor={cursor}
+            handleCursorActions={handleCursorActions}
+            page={page}
+          />
+        )}
         {isFetching && page !== undefined && entries.length > 0 ? (
           <PaginationMessage>{t('collection.entries.loadingEntries')}</PaginationMessage>
         ) : null}

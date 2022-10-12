@@ -11,7 +11,7 @@ import type { NavLinkProps as RouterNavLinkProps } from 'react-router-dom';
 export type NavLinkBaseProps = RouterNavLinkProps & RefAttributes<HTMLAnchorElement>;
 
 export interface NavLinkProps extends RouterNavLinkProps {
-  activeClassName: string;
+  activeClassName?: string;
 }
 
 interface StyledNavLinkProps {
@@ -23,18 +23,36 @@ const StyledNavLinkWrapper = styled(
   transientOptions,
 )<StyledNavLinkProps>(
   ({ $activeClassName }) => `
+    position: relative;
+
     a {
       display: flex;
       align-items: center;
       gap: 2px;
+      text-decoration: none;
+      color: ${colors.inactive};
+
+      :hover {
+        color: ${colors.active};
+        
+        .MuiListItemIcon-root {
+          color: ${colors.active};
+        }
+      }
     }
 
-    & > .${$activeClassName} {
-      color: ${colors.active};
+    ${
+      $activeClassName
+        ? `
+          & > .${$activeClassName} {
+            color: ${colors.active};
 
-      ${Icon} {
-        color: ${colors.active};
-      }
+            ${Icon} {
+              color: ${colors.active};
+            }
+          }
+        `
+        : ''
     }
   `,
 );

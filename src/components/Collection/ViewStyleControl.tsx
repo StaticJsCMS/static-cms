@@ -1,44 +1,19 @@
-import React from 'react';
 import styled from '@emotion/styled';
+import GridViewSharpIcon from '@mui/icons-material/GridViewSharp';
+import ReorderSharpIcon from '@mui/icons-material/ReorderSharp';
+import IconButton from '@mui/material/IconButton';
+import React from 'react';
 
-import { Icon, buttons, colors } from '../../ui';
-import { transientOptions } from '../../lib';
 import { VIEW_STYLE_GRID, VIEW_STYLE_LIST } from '../../constants/collectionViews';
 
 import type { CollectionViewStyle } from '../../constants/collectionViews';
 
 const ViewControlsSection = styled.div`
+  margin-left: 24px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  max-width: 500px;
 `;
-
-interface ViewControlsButtonProps {
-  $isActive: boolean;
-}
-
-const ViewControlsButton = styled(
-  'button',
-  transientOptions,
-)<ViewControlsButtonProps>(
-  ({ $isActive }) => `
-    ${buttons.button};
-    color: ${$isActive ? colors.active : '#b3b9c4'};
-    background-color: transparent;
-    display: block;
-    padding: 0;
-    margin: 0 4px;
-
-    &:last-child {
-      margin-right: 0;
-    }
-
-    ${Icon} {
-      display: block;
-    }
-  `,
-);
 
 interface ViewStyleControlPros {
   viewStyle: CollectionViewStyle;
@@ -48,18 +23,20 @@ interface ViewStyleControlPros {
 const ViewStyleControl = ({ viewStyle, onChangeViewStyle }: ViewStyleControlPros) => {
   return (
     <ViewControlsSection>
-      <ViewControlsButton
-        $isActive={viewStyle === VIEW_STYLE_LIST}
+      <IconButton
+        color={viewStyle === VIEW_STYLE_LIST ? 'primary' : 'default'}
+        aria-label="list view"
         onClick={() => onChangeViewStyle(VIEW_STYLE_LIST)}
       >
-        <Icon type="list" />
-      </ViewControlsButton>
-      <ViewControlsButton
-        $isActive={viewStyle === VIEW_STYLE_GRID}
+        <ReorderSharpIcon />
+      </IconButton>
+      <IconButton
+        color={viewStyle === VIEW_STYLE_GRID ? 'primary' : 'default'}
+        aria-label="grid view"
         onClick={() => onChangeViewStyle(VIEW_STYLE_GRID)}
       >
-        <Icon type="grid" />
-      </ViewControlsButton>
+        <GridViewSharpIcon />
+      </IconButton>
     </ViewControlsSection>
   );
 };

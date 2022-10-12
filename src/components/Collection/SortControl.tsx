@@ -1,12 +1,24 @@
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { styled } from '@mui/material';
 import Button from '@mui/material/Button';
+import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
 import { SortDirection } from '../../interface';
 
 import type { SortableField, SortMap, TranslatedProps } from '../../interface';
+
+const StyledMenuIconWrapper = styled('div')`
+  width: 32px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+`;
 
 function nextSortDirection(direction: SortDirection) {
   switch (direction) {
@@ -18,20 +30,6 @@ function nextSortDirection(direction: SortDirection) {
       return SortDirection.Ascending;
   }
 }
-
-// const sortIconDirections: Record<string, string> = {
-//   [SortDirection.Ascending]: 'up',
-//   [SortDirection.Descending]: 'down',
-// };
-
-// TODO Remove?
-// function sortIconProps(sortDir: SortDirection) {
-//   return {
-//     icon: 'chevron',
-//     iconDirection: sortIconDirections[sortDir],
-//     iconSmall: true,
-//   };
-// }
 
 interface SortControlProps {
   fields: SortableField[];
@@ -49,13 +47,21 @@ const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortContr
     setAnchorEl(null);
   }, []);
 
-  // const hasActiveSort = useMemo(
-  //   () => Boolean(Object.values(sort ?? {}).find(s => s.direction !== SortDirection.None)),
-  //   [sort],
-  // );
+  console.log('SORT', sort);
 
-  // TODO Fix button active
-  // <ControlButton active={hasActiveSort} title={t('collection.collectionTop.sortBy')} />
+  const selectedSort = useMemo(() => {
+    if (!sort) {
+      return { key: undefined, direction: undefined };
+    }
+
+    const sortValues = Object.values(sort);
+    if (Object.values(sortValues).length < 1 || sortValues[0].direction === SortDirection.None) {
+      return { key: undefined, direction: undefined };
+    }
+
+    return sortValues[0];
+  }, [sort]);
+
   return (
     <div>
       <Button
@@ -64,6 +70,8 @@ const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortContr
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        variant="outlined"
+        endIcon={<KeyboardArrowDownIcon />}
       >
         {t('collection.collectionTop.sortBy')}
       </Button>
@@ -78,14 +86,23 @@ const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortContr
       >
         {fields.map(field => {
           const sortDir = sort?.[field.name]?.direction ?? SortDirection.None;
-          // const isActive = sortDir && sortDir !== SortDirection.None;
           const nextSortDir = nextSortDirection(sortDir);
-          // TODO Fix active
-          // isActive={isActive}
-          // {...(isActive && sortIconProps(sortDir))}
           return (
-            <MenuItem key={field.name} onClick={() => onSortClick(field.name, nextSortDir)}>
-              {field.label ?? field.name}
+            <MenuItem
+              key={field.name}
+              onClick={() => onSortClick(field.name, nextSortDir)}
+              selected={field.name === selectedSort.key}
+            >
+              <ListItemText>{field.label ?? field.name}</ListItemText>
+              <StyledMenuIconWrapper>
+                {field.name === selectedSort.key ? (
+                  selectedSort.direction === SortDirection.Ascending ? (
+                    <KeyboardArrowUpIcon fontSize="small" />
+                  ) : (
+                    <KeyboardArrowDownIcon fontSize="small" />
+                  )
+                ) : null}
+              </StyledMenuIconWrapper>
             </MenuItem>
           );
         })}

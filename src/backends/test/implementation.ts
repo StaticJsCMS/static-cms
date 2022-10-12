@@ -277,12 +277,12 @@ export default class TestBackend implements CmsBackendClass {
     return Promise.resolve();
   }
 
-  allEntriesByFolder(
-    _folder: string,
-    _extension: string,
-    _depth: number,
+  async allEntriesByFolder(
+    folder: string,
+    extension: string,
+    depth: number,
   ): Promise<ImplementationEntry[]> {
-    throw new Error('Not supported');
+    return this.entriesByFolder(folder, extension, depth);
   }
 
   getMediaDisplayURL(_displayURL: DisplayURL): Promise<string> {

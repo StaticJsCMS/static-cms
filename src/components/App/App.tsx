@@ -1,4 +1,6 @@
 import styled from '@emotion/styled';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import Fab from '@mui/material/Fab';
 import React, { useCallback } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
@@ -18,6 +20,7 @@ import MediaLibrary from '../MediaLibrary/MediaLibrary';
 import Snackbars from '../snackbar/Snackbars';
 import { Alert } from '../UI/Alert';
 import { Confirm } from '../UI/Confirm';
+import ScrollTop from '../UI/ScrollTop';
 import Header from './Header';
 import NotFoundPage from './NotFoundPage';
 
@@ -40,7 +43,6 @@ const AppRoot = styled.div`
   min-width: 1200px;
   height: 100vh;
   position: relative;
-  overflow-y: auto;
 `;
 
 const AppWrapper = styled.div`
@@ -49,10 +51,20 @@ const AppWrapper = styled.div`
   min-height: 100vh;
 `;
 
+const AppMainContainerWrapper = styled.div`
+  position: relative;
+  padding: 24px;
+  gap: 24px;
+  box-sizing: border-box;
+`;
+
 const AppMainContainer = styled.div`
   min-width: 1200px;
   max-width: 1440px;
   margin: 0 auto;
+  display: flex;
+  gap: 24px;
+  position: relative;
 `;
 
 const ErrorContainer = styled.div`
@@ -176,68 +188,85 @@ const App = ({
     <>
       <GlobalStyles />
       <ScrollSync enabled={scrollSyncEnabled}>
-        <AppRoot id="cms-root">
-          <AppWrapper className="cms-wrapper">
-            <Snackbars />
-            <Header
-              user={user}
-              collections={collections}
-              onCreateEntryClick={createNewEntry}
-              onLogoutClick={logoutUser}
-              openMediaLibrary={openMediaLibrary}
-              displayUrl={config.config.display_url}
-              isTestRepo={config.config.backend.name === 'test-repo'}
-              showMediaButton={showMediaButton}
-            />
-            <AppMainContainer>
-              {isFetching && <TopBarProgress />}
-              <Routes>
-                <Route path="/" element={<Navigate to={defaultPath} />} />
-                <Route path="/search" element={<Navigate to={defaultPath} />} />
-                <Route path="/collections/:name/search/" element={<CollectionSearchRedirect />} />
-                <Route
-                  path="/error=access_denied&error_description=Signups+not+allowed+for+this+instance"
-                  element={<Navigate to={defaultPath} />}
-                />
-                <Route
-                  path="/collections/:name"
-                  element={<CollectionRoute collections={collections} />}
-                />
-                <Route
-                  path="/collections/:name/new"
-                  element={<EditorRoute collections={collections} newRecord />}
-                />
-                <Route
-                  path="/collections/:name/entries/:slug"
-                  element={<EditorRoute collections={collections} />}
-                />
-                <Route
-                  path="/collections/:name/search/:searchTerm"
-                  element={
-                    <CollectionRoute
-                      collections={collections}
-                      isSearchResults
-                      isSingleSearchResult
+        <>
+          <div id="back-to-top-anchor" />
+          <AppRoot id="cms-root">
+            <AppWrapper className="cms-wrapper">
+              <Snackbars />
+              <Header
+                user={user}
+                collections={collections}
+                onCreateEntryClick={createNewEntry}
+                onLogoutClick={logoutUser}
+                openMediaLibrary={openMediaLibrary}
+                displayUrl={config.config.display_url}
+                isTestRepo={config.config.backend.name === 'test-repo'}
+                showMediaButton={showMediaButton}
+              />
+              <AppMainContainerWrapper>
+                <AppMainContainer>
+                  {isFetching && <TopBarProgress />}
+                  <Routes>
+                    <Route path="/" element={<Navigate to={defaultPath} />} />
+                    <Route path="/search" element={<Navigate to={defaultPath} />} />
+                    <Route
+                      path="/collections/:name/search/"
+                      element={<CollectionSearchRedirect />}
                     />
-                  }
-                />
-                <Route
-                  path="/collections/:name/filter/:filterTerm"
-                  element={<CollectionRoute collections={collections} />}
-                />
-                <Route
-                  path="/search/:searchTerm"
-                  element={<CollectionRoute collections={collections} isSearchResults />}
-                />
-                <Route path="/edit/:name/:entryName" element={<EditEntityRedirect />} />
-                <Route element={<NotFoundPage />} />
-              </Routes>
-              {useMediaLibrary ? <MediaLibrary /> : null}
-              <Alert />
-              <Confirm />
-            </AppMainContainer>
-          </AppWrapper>
-        </AppRoot>
+                    <Route
+                      path="/error=access_denied&error_description=Signups+not+allowed+for+this+instance"
+                      element={<Navigate to={defaultPath} />}
+                    />
+                    <Route
+                      path="/collections"
+                      element={<CollectionRoute collections={collections} />}
+                    />
+                    <Route
+                      path="/collections/:name"
+                      element={<CollectionRoute collections={collections} />}
+                    />
+                    <Route
+                      path="/collections/:name/new"
+                      element={<EditorRoute collections={collections} newRecord />}
+                    />
+                    <Route
+                      path="/collections/:name/entries/:slug"
+                      element={<EditorRoute collections={collections} />}
+                    />
+                    <Route
+                      path="/collections/:name/search/:searchTerm"
+                      element={
+                        <CollectionRoute
+                          collections={collections}
+                          isSearchResults
+                          isSingleSearchResult
+                        />
+                      }
+                    />
+                    <Route
+                      path="/collections/:name/filter/:filterTerm"
+                      element={<CollectionRoute collections={collections} />}
+                    />
+                    <Route
+                      path="/search/:searchTerm"
+                      element={<CollectionRoute collections={collections} isSearchResults />}
+                    />
+                    <Route path="/edit/:name/:entryName" element={<EditEntityRedirect />} />
+                    <Route element={<NotFoundPage />} />
+                  </Routes>
+                  {useMediaLibrary ? <MediaLibrary /> : null}
+                  <Alert />
+                  <Confirm />
+                </AppMainContainer>
+              </AppMainContainerWrapper>
+            </AppWrapper>
+          </AppRoot>
+          <ScrollTop>
+            <Fab size="small" aria-label="scroll back to top">
+              <KeyboardArrowUpIcon />
+            </Fab>
+          </ScrollTop>
+        </>
       </ScrollSync>
     </>
   );

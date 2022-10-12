@@ -1,109 +1,34 @@
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';
-import { NavLink } from 'react-router-dom';
 
 import { searchCollections } from '../../actions/collections';
-import { transientOptions } from '../../lib';
 import { getAdditionalLinks, getIcon } from '../../lib/registry';
-import { colors, components, Icon } from '../../ui';
+import { colors, Icon } from '../../ui';
+import NavLink from '../UI/NavLink';
 import CollectionSearch from './CollectionSearch';
 import NestedCollection from './NestedCollection';
 
 import type { ReactNode } from 'react';
 import type { Collection, Collections, TranslatedProps } from '../../interface';
 
-const styles = {
-  sidebarNavLinkActive: css`
-    color: ${colors.active};
-    background-color: ${colors.activeBackground};
-    border-left-color: #4863c6;
-  `,
-};
-
-const SidebarContainer = styled.aside`
-  ${components.card};
-  width: 250px;
-  padding: 8px 0 12px;
-  position: fixed;
-  max-height: calc(100vh - 112px);
-  display: flex;
-  flex-direction: column;
+const StyledSidebar = styled.div`
+  position: sticky;
+  top: 88px;
+  align-self: flex-start
 `;
 
-const SidebarHeading = styled.h2`
-  font-size: 23px;
-  font-weight: 600;
-  padding: 0;
-  margin: 18px 12px 12px;
-  color: ${colors.textLead};
-`;
-
-const SidebarNavList = styled.ul`
-  margin: 16px 0 0;
-  padding-left: 0;
-  list-style: none;
-  overflow: auto;
-`;
-
-interface SidebarNavLinkProps {
-  $activeClassName: string;
-}
-
-const SidebarNavLink = styled(
-  NavLink,
-  transientOptions,
-)<SidebarNavLinkProps>(
-  ({ $activeClassName }) => `
-    display: flex;
-    font-size: 14px;
-    font-weight: 500;
-    align-items: center;
-    padding: 8px 12px;
-    border-left: 2px solid #fff;
-    z-index: -1;
-
-    ${Icon} {
-      margin-right: 0;
-      flex-shrink: 0;
-    }
-
-    &:hover,
-    &:active,
-    &.${$activeClassName} {
-      ${styles.sidebarNavLinkActive};
-    }
-  `,
-);
-
-const StyledAdditionalLink = styled.a`
-  display: flex;
-  font-size: 14px;
-  font-weight: 500;
-  align-items: center;
-  padding: 8px 12px;
-  border-left: 2px solid #fff;
-  z-index: -1;
-
-  ${Icon} {
-    margin-right: 0;
-    flex-shrink: 0;
-  }
-
-  &:hover,
-  &:active {
-    ${styles.sidebarNavLinkActive};
-  }
-`;
-
-const IconWrapper = styled.div`
-  height: 24px;
-  width: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 8px;
+const StyledListItemIcon = styled(ListItemIcon)`
+  min-width: 0;
+  margin-right: 12px;
 `;
 
 interface SidebarProps {
@@ -138,7 +63,6 @@ const Sidebar = ({
           }
 
           if ('nested' in collection) {
-            console.log('nested collectionName', `'nested-${collectionName}'`);
             return (
               <li key={`nested-${collectionName}`}>
                 <NestedCollection
@@ -150,21 +74,19 @@ const Sidebar = ({
             );
           }
 
-          console.log('collectionName', `'${collectionName}'`);
-
           return (
-            <li key={collectionName}>
-              <SidebarNavLink
-                to={`/collections/${collectionName}`}
-                $activeClassName="sidebar-active"
-                data-testid={collectionName}
-              >
-                <>
-                  {icon}
-                  {collection.label}
-                </>
-              </SidebarNavLink>
-            </li>
+            <ListItem
+              key={collectionName}
+              to={`/collections/${collectionName}`}
+              component={NavLink}
+              disablePadding
+              activeClassName="sidebar-active"
+            >
+              <ListItemButton>
+                <StyledListItemIcon>{icon}</StyledListItemIcon>
+                <ListItemText primary={collection.label} />
+              </ListItemButton>
+            </ListItem>
           );
         }),
     [collections, filterTerm],
@@ -184,46 +106,70 @@ const Sidebar = ({
 
         const content = (
           <>
-            <IconWrapper>{icon}</IconWrapper>
-            {title}
+            <StyledListItemIcon>{icon}</StyledListItemIcon>
+            <ListItemText primary={title} />
           </>
         );
 
-        console.log('title', `'${title}'`, additionalLinks);
-
-        return (
-          <li key={title}>
-            {typeof data === 'string' ? (
-              <StyledAdditionalLink href={data} target="_blank" rel="noopener">
-                {content}
-              </StyledAdditionalLink>
-            ) : (
-              <SidebarNavLink to={`/page/${id}`} $activeClassName="sidebar-active">
-                {content}
-              </SidebarNavLink>
-            )}
-          </li>
+        return typeof data === 'string' ? (
+          <ListItem
+            key={title}
+            href={data}
+            component="a"
+            disablePadding
+            target="_blank"
+            rel="noopener"
+            sx={{
+              color: colors.inactive,
+              '&:hover': {
+                color: colors.active,
+                '.MuiListItemIcon-root': {
+                  color: colors.active,
+                },
+              },
+            }}
+          >
+            <ListItemButton>{content}</ListItemButton>
+          </ListItem>
+        ) : (
+          <ListItem
+            key={title}
+            to={`/page/${id}`}
+            component={NavLink}
+            disablePadding
+            activeClassName="sidebar-active"
+          >
+            <ListItemButton>{content}</ListItemButton>
+          </ListItem>
         );
       }),
     [additionalLinks],
   );
 
   return (
-    <SidebarContainer>
-      <SidebarHeading>{t('collection.sidebar.collections')}</SidebarHeading>
-      {isSearchEnabled && (
-        <CollectionSearch
-          searchTerm={searchTerm}
-          collections={collections}
-          collection={collection}
-          onSubmit={(query: string, collection?: string) => searchCollections(query, collection)}
-        />
-      )}
-      <SidebarNavList>
-        {collectionLinks}
-        {links}
-      </SidebarNavList>
-    </SidebarContainer>
+    <StyledSidebar>
+      <Card sx={{ minWidth: 275 }}>
+        <CardContent sx={{ paddingBottom: 0 }}>
+          <Typography gutterBottom variant="h5" component="div">
+            {t('collection.sidebar.collections')}
+          </Typography>
+          {isSearchEnabled && (
+            <CollectionSearch
+              searchTerm={searchTerm}
+              collections={collections}
+              collection={collection}
+              onSubmit={(query: string, collection?: string) =>
+                searchCollections(query, collection)
+              }
+            />
+          )}
+        </CardContent>
+        <List>
+          {collectionLinks}
+          {links}
+        </List>
+      </Card>
+    </StyledSidebar>
   );
 };
 

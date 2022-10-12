@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Waypoint } from 'react-waypoint';
 
+import { VIEW_STYLE_LIST } from '../../../constants/collectionViews';
+import { transientOptions } from '../../../lib';
 import { selectFields, selectInferedField } from '../../../lib/util/collection.util';
 import EntryCard from './EntryCard';
 
@@ -9,15 +11,31 @@ import type { CollectionViewStyle } from '../../../constants/collectionViews';
 import type { CmsField, Collection, Collections, Entry } from '../../../interface';
 import type Cursor from '../../../lib/util/Cursor';
 
-const CardsGrid = styled.ul`
-  display: flex;
-  flex-flow: row wrap;
-  list-style-type: none;
-  margin-left: -12px;
-  margin-top: 16px;
-  margin-bottom: 16px;
-  padding-left: 0;
-`;
+interface CardsGridProps {
+  $layout: CollectionViewStyle;
+}
+
+const CardsGrid = styled(
+  'div',
+  transientOptions,
+)<CardsGridProps>(
+  ({ $layout }) => `
+    ${
+      $layout === VIEW_STYLE_LIST
+        ? `
+          display: flex;
+          flex-direction: column;
+        `
+        : `
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        `
+    }
+    width: 100%;
+    margin-top: 16px;
+    gap: 16px;
+  `,
+);
 
 export interface BaseEntryListingProps {
   entries: Entry[];
@@ -82,50 +100,44 @@ const EntryListing = ({
     [],
   );
 
-  const renderCardsForSingleCollection = useCallback(
-    (collection: Collection) => {
-      const inferedFields = inferFields(collection);
+  const renderedCards = useMemo(() => {
+    if ('collection' in otherProps) {
+      const inferedFields = inferFields(otherProps.collection);
       return entries.map((entry, idx) => (
         <EntryCard
-          collection={collection}
+          collection={otherProps.collection}
           inferedFields={inferedFields}
           viewStyle={viewStyle}
           entry={entry}
           key={idx}
         />
       ));
-    },
-    [entries, inferFields, viewStyle],
-  );
+    }
 
-  const renderCardsForMultipleCollections = useCallback(
-    (collections: Collections) => {
-      const isSingleCollectionInList = Object.keys(collections).length === 1;
-      return entries.map((entry, idx) => {
-        const collectionName = entry.collection;
-        const collection = Object.values(collections).find(coll => coll.name === collectionName);
-        const collectionLabel = !isSingleCollectionInList ? collection?.label : undefined;
-        const inferedFields = inferFields(collection);
-        return collection ? (
-          <EntryCard
-            collection={collection}
-            entry={entry}
-            inferedFields={inferedFields}
-            collectionLabel={collectionLabel}
-            key={idx}
-          />
-        ) : null;
-      });
-    },
-    [entries, inferFields],
-  );
+    const isSingleCollectionInList = Object.keys(otherProps.collections).length === 1;
+    return entries.map((entry, idx) => {
+      const collectionName = entry.collection;
+      const collection = Object.values(otherProps.collections).find(
+        coll => coll.name === collectionName,
+      );
+      const collectionLabel = !isSingleCollectionInList ? collection?.label : undefined;
+      const inferedFields = inferFields(collection);
+      return collection ? (
+        <EntryCard
+          collection={collection}
+          entry={entry}
+          inferedFields={inferedFields}
+          collectionLabel={collectionLabel}
+          key={idx}
+        />
+      ) : null;
+    });
+  }, [entries, inferFields, otherProps, viewStyle]);
 
   return (
     <div>
-      <CardsGrid>
-        {'collection' in otherProps
-          ? renderCardsForSingleCollection(otherProps.collection)
-          : renderCardsForMultipleCollections(otherProps.collections)}
+      <CardsGrid $layout={viewStyle}>
+        {renderedCards}
         {hasMore() && <Waypoint key={page} onEnter={handleLoadMore} />}
       </CardsGrid>
     </div>

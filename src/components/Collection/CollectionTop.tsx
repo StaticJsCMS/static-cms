@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from '@emotion/styled';
 import { translate } from 'react-polyglot';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
 
 import { components, buttons, shadows } from '../../ui';
+import NavLink from '../UI/NavLink';
 
 import type { Collection, TranslatedProps } from '../../interface';
 
@@ -54,25 +58,35 @@ interface CollectionTopProps {
 }
 
 const CollectionTop = ({ collection, newEntryUrl, t }: TranslatedProps<CollectionTopProps>) => {
+  const navigate = useNavigate();
+
   const { collectionLabel, collectionLabelSingular, collectionDescription } =
     getCollectionProps(collection);
 
+  const onNewClick = useCallback(() => {
+    if (newEntryUrl) {
+      navigate(newEntryUrl);
+    }
+  }, [navigate, newEntryUrl]);
+
   return (
-    <CollectionTopContainer>
-      <CollectionTopRow>
-        <CollectionTopHeading>{collectionLabel}</CollectionTopHeading>
-        {newEntryUrl ? (
-          <CollectionTopNewButton to={newEntryUrl}>
-            {t('collection.collectionTop.newButton', {
-              collectionLabel: collectionLabelSingular || collectionLabel,
-            })}
-          </CollectionTopNewButton>
+    <Card>
+      <CardContent>
+        <CollectionTopRow>
+          <CollectionTopHeading>{collectionLabel}</CollectionTopHeading>
+          {newEntryUrl ? (
+            <Button onClick={onNewClick} variant="contained">
+              {t('collection.collectionTop.newButton', {
+                collectionLabel: collectionLabelSingular || collectionLabel,
+              })}
+            </Button>
+          ) : null}
+        </CollectionTopRow>
+        {collectionDescription ? (
+          <CollectionTopDescription>{collectionDescription}</CollectionTopDescription>
         ) : null}
-      </CollectionTopRow>
-      {collectionDescription ? (
-        <CollectionTopDescription>{collectionDescription}</CollectionTopDescription>
-      ) : null}
-    </CollectionTopContainer>
+      </CardContent>
+    </Card>
   );
 };
 

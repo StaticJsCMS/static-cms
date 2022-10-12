@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
-import { lengths } from '../../ui';
 import FilterControl from './FilterControl';
 import GroupControl from './GroupControl';
 import SortControl from './SortControl';
@@ -24,7 +23,6 @@ const CollectionControlsContainer = styled.div`
   align-items: center;
   flex-direction: row-reverse;
   margin-top: 22px;
-  width: ${lengths.topCardWidth};
   max-width: 100%;
 
   & > div {

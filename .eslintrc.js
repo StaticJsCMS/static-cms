@@ -25,6 +25,7 @@ module.exports = {
     'react/prop-types': [0],
     'react/require-default-props': 0,
     'import/no-named-as-default': 0,
+    "react/react-in-jsx-scope": "off",
     'import/order': [
       'error',
       {
@@ -88,6 +89,7 @@ module.exports = {
         },
       },
       rules: {
+        "react/react-in-jsx-scope": "off",
         'react/prop-types': [0],
         'react/require-default-props': 0,
         'no-duplicate-imports': [0], // handled by @typescript-eslint

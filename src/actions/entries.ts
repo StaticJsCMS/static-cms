@@ -306,6 +306,7 @@ export function sortByField(
       const entries = await getAllEntries(state, collection);
       dispatch(sortEntriesSuccess(collection, key, direction, entries));
     } catch (error) {
+      console.error(error);
       dispatch(sortEntriesFailure(collection, key, direction, error));
     }
   };

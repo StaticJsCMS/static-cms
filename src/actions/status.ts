@@ -83,7 +83,7 @@ export function checkBackendStatus() {
 
       dispatch(statusSuccess(status));
     } catch (error: unknown) {
-      console.log(error);
+      console.error(error);
       if (error instanceof Error) {
         dispatch(statusFailure(error));
       }

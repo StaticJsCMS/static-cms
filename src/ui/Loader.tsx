@@ -1,10 +1,23 @@
 import styled from '@emotion/styled';
 import React, { useCallback, useEffect, useState } from 'react';
+import { css, keyframes } from '@mui/material';
 
 import { transientOptions } from '../lib';
 import { colors, zIndex } from './styles';
 
 import type { ReactNode } from 'react';
+
+const animations = {
+  loader: keyframes`
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  `,
+};
 
 const LoaderText = styled.div`
   width: auto !important;
@@ -39,6 +52,7 @@ const Loader = ({ className, children }: LoaderProps) => {
   }, [intervalTimer]);
 
   const setAnimation = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (childArray: any[]) => {
       if (intervalTimer) {
         return;
@@ -80,7 +94,7 @@ const StyledLoader = styled(
   Loader,
   transientOptions,
 )<StyledLoaderProps>(
-  ({ $active }) => `
+  ({ $active }) => css`
     display: ${$active ? 'block' : 'none'};
     position: absolute;
     top: 50%;
@@ -111,6 +125,7 @@ const StyledLoader = styled(
 
     /* Active Shape */
     &:after {
+      animation: ${animations.loader} 0.6s linear;
       animation-iteration-count: infinite;
       border-color: ${colors.active} transparent transparent;
       box-shadow: 0 0 0 1px transparent;

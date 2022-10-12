@@ -4,7 +4,6 @@ import ImageIcon from '@mui/icons-material/Image';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
@@ -16,7 +15,7 @@ import { connect } from 'react-redux';
 
 import { checkBackendStatus } from '../../actions/status';
 import { stripProtocol } from '../../lib/urlHelper';
-import { buttons, colors, Icon, zIndex } from '../../ui';
+import { buttons, colors, Icon } from '../../ui';
 import NavLink from '../UI/NavLink';
 import SettingsDropdown from '../UI/SettingsDropdown';
 
@@ -26,7 +25,6 @@ import type { Collections, TranslatedProps, User } from '../../interface';
 
 const StyledAppBar = styled(AppBar)`
   background-color: ${colors.foreground};
-  z-index: ${zIndex.zIndex300};
 `;
 
 const StyledToolbar = styled(Toolbar)`
@@ -115,86 +113,84 @@ const Header = ({
   }, [checkBackendStatus]);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <StyledAppBar position="static">
-        <StyledToolbar>
-          <Link to="/collections" component={NavLink} activeClassName={'header-link-active'}>
-            <DescriptionIcon />
-            {t('app.header.content')}
-          </Link>
-          {showMediaButton ? (
-            <StyledButton onClick={openMediaLibrary}>
-              <ImageIcon />
-              {t('app.header.media')}
-            </StyledButton>
+    <StyledAppBar position="sticky">
+      <StyledToolbar>
+        <Link to="/collections" component={NavLink} activeClassName={'header-link-active'}>
+          <DescriptionIcon />
+          {t('app.header.content')}
+        </Link>
+        {showMediaButton ? (
+          <StyledButton onClick={openMediaLibrary}>
+            <ImageIcon />
+            {t('app.header.media')}
+          </StyledButton>
+        ) : null}
+        <StyledSpacer />
+        <StyledAppHeaderActions>
+          {createableCollections.length > 0 && (
+            <div key="quick-create">
+              <Button
+                id="quick-create-button"
+                aria-controls={open ? 'quick-create-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+                variant="contained"
+                endIcon={<KeyboardArrowDownIcon />}
+              >
+                {t('app.header.quickAdd')}
+              </Button>
+              <Menu
+                id="quick-create-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  'aria-labelledby': 'quick-create-button',
+                }}
+              >
+                {createableCollections.map(collection => (
+                  <MenuItem
+                    key={collection.name}
+                    onClick={() => handleCreatePostClick(collection.name)}
+                  >
+                    {collection.label_singular || collection.label}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </div>
+          )}
+          {isTestRepo && (
+            <Button
+              href="https://staticjscms.github.io/static-cms/docs/test-backend"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ textTransform: 'none' }}
+              endIcon={<OpenInNewIcon />}
+            >
+              Test Backend
+            </Button>
+          )}
+          {displayUrl ? (
+            <Button
+              href={displayUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ textTransform: 'none' }}
+              endIcon={<OpenInNewIcon />}
+            >
+              {stripProtocol(displayUrl)}
+            </Button>
           ) : null}
-          <StyledSpacer />
-          <StyledAppHeaderActions>
-            {createableCollections.length > 0 && (
-              <div key="quick-create">
-                <Button
-                  id="quick-create-button"
-                  aria-controls={open ? 'quick-create-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? 'true' : undefined}
-                  onClick={handleClick}
-                  variant="contained"
-                  endIcon={<KeyboardArrowDownIcon />}
-                >
-                  {t('app.header.quickAdd')}
-                </Button>
-                <Menu
-                  id="quick-create-menu"
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  MenuListProps={{
-                    'aria-labelledby': 'quick-create-button',
-                  }}
-                >
-                  {createableCollections.map(collection => (
-                    <MenuItem
-                      key={collection.name}
-                      onClick={() => handleCreatePostClick(collection.name)}
-                    >
-                      {collection.label_singular || collection.label}
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </div>
-            )}
-            {isTestRepo && (
-              <Button
-                href="https://staticjscms.github.io/static-cms/docs/test-backend"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{ textTransform: 'none' }}
-                endIcon={<OpenInNewIcon />}
-              >
-                Test Backend
-              </Button>
-            )}
-            {displayUrl ? (
-              <Button
-                href={displayUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{ textTransform: 'none' }}
-                endIcon={<OpenInNewIcon />}
-              >
-                {stripProtocol(displayUrl)}
-              </Button>
-            ) : null}
-            <SettingsDropdown
-              displayUrl={displayUrl}
-              isTestRepo={isTestRepo}
-              imageUrl={user?.avatar_url}
-              onLogoutClick={onLogoutClick}
-            />
-          </StyledAppHeaderActions>
-        </StyledToolbar>
-      </StyledAppBar>
-    </Box>
+          <SettingsDropdown
+            displayUrl={displayUrl}
+            isTestRepo={isTestRepo}
+            imageUrl={user?.avatar_url}
+            onLogoutClick={onLogoutClick}
+          />
+        </StyledAppHeaderActions>
+      </StyledToolbar>
+    </StyledAppBar>
   );
 };
 

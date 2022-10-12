@@ -1,3 +1,4 @@
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Button from '@mui/material/Button/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -12,11 +13,7 @@ interface GroupControlProps {
   onGroupClick: (viewGroup: ViewGroup) => void;
 }
 
-const GroupControl = ({
-  viewGroups,
-  t,
-  onGroupClick
-}: TranslatedProps<GroupControlProps>) => {
+const GroupControl = ({ viewGroups, t, onGroupClick }: TranslatedProps<GroupControlProps>) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
@@ -37,6 +34,8 @@ const GroupControl = ({
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        variant="outlined"
+        endIcon={<KeyboardArrowDownIcon />}
       >
         {t('collection.collectionTop.groupBy')}
       </Button>

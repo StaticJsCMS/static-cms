@@ -55,7 +55,7 @@ function bootstrap(opts?: { config?: CmsConfig; autoInitialize?: boolean }) {
    * Log the version number.
    */
   if (typeof STATIC_CMS_CORE_VERSION === 'string') {
-    console.log(`static-cms-core ${STATIC_CMS_CORE_VERSION}`);
+    console.info(`static-cms-core ${STATIC_CMS_CORE_VERSION}`);
   }
 
   /**

@@ -17,7 +17,7 @@ import {
   selectEntriesSort,
   selectViewStyle,
 } from '../../reducers/entries';
-import { components, lengths } from '../../ui';
+import { components } from '../../ui';
 import CollectionControls from './CollectionControls';
 import CollectionTop from './CollectionTop';
 import EntriesCollection from './Entries/EntriesCollection';
@@ -29,12 +29,8 @@ import type { ConnectedProps } from 'react-redux';
 import type { Collection, TranslatedProps, ViewFilter, ViewGroup } from '../../interface';
 import type { RootState } from '../../store';
 
-const CollectionContainer = styled.div`
-  margin: ${lengths.pageMargin};
-`;
-
 const CollectionMain = styled.main`
-  padding-left: 280px;
+  width: 100%;
 `;
 
 const SearchResultContainer = styled.div`
@@ -69,9 +65,10 @@ const CollectionView = ({
   viewStyle,
 }: TranslatedProps<CollectionViewProps>) => {
   const [readyToLoad, setReadyToLoad] = useState(false);
-  const [preCollection, setPreCollection] = useState(collection);
+  const [prevCollection, setPrevCollection] = useState(collection);
+
   useEffect(() => {
-    setPreCollection(collection);
+    setPrevCollection(collection);
   }, [collection]);
 
   const newEntryUrl = useMemo(() => {
@@ -90,30 +87,40 @@ const CollectionView = ({
     [isSingleSearchResult],
   );
 
-  const renderEntriesCollection = useCallback(() => {
+  const entries = useMemo(() => {
+    if (isSearchResults) {
+      let searchCollections = collections;
+      if (isSingleSearchResult) {
+        const searchCollection = Object.values(collections).filter(c => c === collection);
+        if (searchCollection.length === 1) {
+          searchCollections = {
+            [searchCollection[0].name]: searchCollection[0],
+          };
+        }
+      }
+
+      return <EntriesSearch collections={searchCollections} searchTerm={searchTerm} />;
+    }
+
     return (
       <EntriesCollection
         collection={collection}
         viewStyle={viewStyle}
         filterTerm={filterTerm}
-        readyToLoad={readyToLoad && collection === preCollection}
+        readyToLoad={readyToLoad && collection === prevCollection}
       />
     );
-  }, [collection, viewStyle, filterTerm, readyToLoad, preCollection]);
-
-  const renderEntriesSearch = useCallback(() => {
-    let searchCollections = collections;
-    if (isSingleSearchResult) {
-      const searchCollection = Object.values(collections).filter(c => c === collection);
-      if (searchCollection.length === 1) {
-        searchCollections = {
-          [searchCollection[0].name]: searchCollection[0],
-        };
-      }
-    }
-
-    return <EntriesSearch collections={searchCollections} searchTerm={searchTerm} />;
-  }, [searchTerm, collections, collection, isSingleSearchResult]);
+  }, [
+    collection,
+    collections,
+    filterTerm,
+    isSearchResults,
+    isSingleSearchResult,
+    prevCollection,
+    readyToLoad,
+    searchTerm,
+    viewStyle,
+  ]);
 
   const onSortClick = useCallback(
     async (key: string, direction?: SortDirection) => {
@@ -137,26 +144,35 @@ const CollectionView = ({
   );
 
   useEffect(() => {
+    if (prevCollection === collection) {
+      if (!readyToLoad) {
+        setReadyToLoad(true);
+      }
+      return;
+    }
+
+    if (sort?.[0]?.key) {
+      if (!readyToLoad) {
+        setReadyToLoad(true);
+      }
+      return;
+    }
+
+    const defaultSort = collection.sortable_fields.default;
+    if (!defaultSort || !defaultSort.field) {
+      if (!readyToLoad) {
+        setReadyToLoad(true);
+      }
+      return;
+    }
+
     setReadyToLoad(false);
+
     let alive = true;
 
     const sortEntries = () => {
       setTimeout(async () => {
-        if (sort?.[0]?.key) {
-          setReadyToLoad(true);
-          return;
-        }
-
-        const defaultSort = collection.sortable_fields.default;
-        if (!defaultSort || !defaultSort.field) {
-          setReadyToLoad(true);
-          return;
-        }
-
-        await onSortClick(
-          defaultSort.field,
-          defaultSort.direction ?? SortDirection.Ascending,
-        );
+        await onSortClick(defaultSort.field, defaultSort.direction ?? SortDirection.Ascending);
 
         if (alive) {
           setReadyToLoad(true);
@@ -169,10 +185,10 @@ const CollectionView = ({
     return () => {
       alive = false;
     };
-  }, [collection, onSortClick, sort]);
+  }, [collection, onSortClick, prevCollection, readyToLoad, sort]);
 
   return (
-    <CollectionContainer>
+    <>
       <Sidebar
         collections={collections}
         collection={(!isSearchResults || isSingleSearchResult) && collection}
@@ -180,35 +196,37 @@ const CollectionView = ({
         searchTerm={searchTerm}
         filterTerm={filterTerm}
       />
-      <CollectionMain>
-        {isSearchResults ? (
-          <SearchResultContainer>
-            <SearchResultHeading>
-              {t(searchResultKey, { searchTerm, collection: collection.label })}
-            </SearchResultHeading>
-          </SearchResultContainer>
-        ) : (
+        <CollectionMain>
           <>
-            <CollectionTop collection={collection} newEntryUrl={newEntryUrl} />
-            <CollectionControls
-              viewStyle={viewStyle}
-              onChangeViewStyle={changeViewStyle}
-              sortableFields={sortableFields}
-              onSortClick={onSortClick}
-              sort={sort}
-              viewFilters={viewFilters}
-              viewGroups={viewGroups}
-              t={t}
-              onFilterClick={onFilterClick}
-              onGroupClick={onGroupClick}
-              filter={filter}
-              group={group}
-            />
+            {isSearchResults ? (
+              <SearchResultContainer>
+                <SearchResultHeading>
+                  {t(searchResultKey, { searchTerm, collection: collection.label })}
+                </SearchResultHeading>
+              </SearchResultContainer>
+            ) : (
+              <>
+                <CollectionTop collection={collection} newEntryUrl={newEntryUrl} />
+                <CollectionControls
+                  viewStyle={viewStyle}
+                  onChangeViewStyle={changeViewStyle}
+                  sortableFields={sortableFields}
+                  onSortClick={onSortClick}
+                  sort={sort}
+                  viewFilters={viewFilters}
+                  viewGroups={viewGroups}
+                  t={t}
+                  onFilterClick={onFilterClick}
+                  onGroupClick={onGroupClick}
+                  filter={filter}
+                  group={group}
+                />
+              </>
+            )}
+            {entries}
           </>
-        )}
-        {isSearchResults ? renderEntriesSearch() : renderEntriesCollection()}
-      </CollectionMain>
-    </CollectionContainer>
+        </CollectionMain>
+    </>
   );
 };
 

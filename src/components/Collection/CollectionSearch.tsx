@@ -1,48 +1,18 @@
 import styled from '@emotion/styled';
+import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
 import React, { useCallback, useEffect, useState } from 'react';
 import { translate } from 'react-polyglot';
 
 import { transientOptions } from '../../lib';
-import { colors, colorsRaw, Icon, lengths, zIndex } from '../../ui';
+import { colors, colorsRaw, lengths, zIndex } from '../../ui';
 
 import type { KeyboardEvent, MouseEvent } from 'react';
 import type { Collection, Collections, TranslatedProps } from '../../interface';
 
 const SearchContainer = styled.div`
-  margin: 0 12px;
   position: relative;
-
-  ${Icon} {
-    position: absolute;
-    top: 0;
-    left: 6px;
-    z-index: ${zIndex.zIndex2};
-    height: 100%;
-    display: flex;
-    align-items: center;
-    pointer-events: none;
-  }
-`;
-
-const InputContainer = styled.div`
-  display: flex;
-  align-items: center;
-  position: relative;
-`;
-
-const SearchInput = styled.input`
-  background-color: #eff0f4;
-  border-radius: ${lengths.borderRadius};
-  font-size: 14px;
-  padding: 10px 6px 10px 32px;
-  width: 100%;
-  position: relative;
-  z-index: ${zIndex.zIndex1};
-
-  &:focus {
-    outline: none;
-    box-shadow: inset 0 0 0 2px ${colorsRaw.blue};
-  }
 `;
 
 const SuggestionsContainer = styled.div`
@@ -52,7 +22,7 @@ const SuggestionsContainer = styled.div`
 
 const Suggestions = styled.ul`
   position: absolute;
-  top: 6px;
+  top: 0px;
   left: 0;
   right: 0;
   padding: 10px 0;
@@ -207,20 +177,27 @@ const CollectionSearch = ({
   );
 
   return (
-    <SearchContainer
-      onBlur={() => toggleSuggestions(false)}
-      onFocus={() => toggleSuggestions(query !== '')}
-    >
-      <InputContainer>
-        <Icon type="search" />
-        <SearchInput
-          onChange={e => handleQueryChange(e.target.value)}
-          onKeyDown={handleKeyDown}
-          onClick={() => toggleSuggestions(true)}
-          placeholder={t('collection.sidebar.searchAll')}
-          value={query}
-        />
-      </InputContainer>
+    <SearchContainer>
+      <TextField
+        id="input-with-icon-textfield"
+        onKeyDown={handleKeyDown}
+        onClick={() => toggleSuggestions(true)}
+        placeholder={t('collection.sidebar.searchAll')}
+        onBlur={() => toggleSuggestions(false)}
+        onFocus={() => toggleSuggestions(query !== '')}
+        value={query}
+        onChange={e => handleQueryChange(e.target.value)}
+        variant="outlined"
+        size="small"
+        fullWidth
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
+      />
       {suggestionsVisible && (
         <SuggestionsContainer>
           <Suggestions>
