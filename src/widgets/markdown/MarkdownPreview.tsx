@@ -9,7 +9,6 @@ import type { CmsFieldMarkdown, CmsWidgetPreviewProps } from '../../interface';
 const MarkdownPreview = ({
   value,
   getAsset,
-  resolveWidget,
   field,
   getRemarkPlugins,
 }: CmsWidgetPreviewProps<string, CmsFieldMarkdown>) => {

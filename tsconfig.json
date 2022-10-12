@@ -20,7 +20,8 @@
     "lib": ["DOM", "ES2015"],
     "paths": {
       "@staticcms/core": ["./src"]
-    }
+    },
+    "types": ["@emotion/react/types/css-prop"]
   },
   "include": ["**/src/**/*", "dev-test/index.js"],
   "exclude": ["node_modules", "**/*.spec.ts"]

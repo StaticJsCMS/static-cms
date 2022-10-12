@@ -56,7 +56,7 @@ export function markdownToRemark(markdown: string, remarkPlugins: Pluggable[]) {
     .use(markdownToRemarkRemoveTokenizers, { inlineTokenizers: ['url'] })
     .use(remarkParseShortcodes as any, { plugins: getEditorComponents() })
     .use(remarkAllowHtmlEntities)
-    .use(remarkSquashReferences)
+    .use(remarkSquashReferences as any)
     .use(remarkPlugins);
 
   /**

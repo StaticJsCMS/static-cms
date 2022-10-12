@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { translate } from 'react-polyglot';
 
 import type { FilterMap, TranslatedProps, ViewFilter } from '../../interface';
@@ -29,10 +29,10 @@ const FilterControl = ({
     setAnchorEl(null);
   }, []);
 
-  const hasActiveFilter = useMemo(
-    () => Object.values(filter).find(f => f.active === true),
-    [filter],
-  );
+  // const hasActiveFilter = useMemo(
+  //   () => Object.values(filter).find(f => f.active === true),
+  //   [filter],
+  // );
 
   // TODO Fix active filter
   // <ControlButton active={hasActiveFilter} title={t('collection.collectionTop.filterBy')} />

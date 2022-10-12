@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { translate } from 'react-polyglot';
 
 import type { GroupMap, TranslatedProps, ViewGroup } from '../../interface';
@@ -15,8 +15,7 @@ interface GroupControlProps {
 const GroupControl = ({
   viewGroups,
   t,
-  onGroupClick,
-  group,
+  onGroupClick
 }: TranslatedProps<GroupControlProps>) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -27,7 +26,8 @@ const GroupControl = ({
     setAnchorEl(null);
   }, []);
 
-  const hasActiveGroup = useMemo(() => Object.values(group).find(f => f.active === true), [group]);
+  // TODO ACTIVE
+  // const hasActiveGroup = useMemo(() => Object.values(group).find(f => f.active === true), [group]);
 
   return (
     <div>

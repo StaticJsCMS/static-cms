@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import type { EditorComponentManualOptions, EditorComponentOptions } from '../../../interface';
+import type { EditorComponentManualOptions } from '../../../interface';
 
 interface CreateShortcodeProps {
   plugins: EditorComponentManualOptions[];

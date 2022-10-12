@@ -25,7 +25,6 @@ import { borders, colors, FieldLabel, lengths, transitions } from '../../../ui';
 import WidgetControl from './WidgetControl';
 
 import type { ComponentType } from 'react';
-import type { PluggableList } from 'react-markdown';
 import type { t, TranslateProps } from 'react-polyglot';
 import type { ConnectedProps } from 'react-redux';
 import type {
@@ -331,7 +330,7 @@ const EditorControl = ({
             {fieldHint && (
               <ControlHint $active={isSelected || styleActive} $error={hasErrors}>
                 <ReactMarkdown
-                  remarkPlugins={[gfm] as PluggableList}
+                  remarkPlugins={[gfm]}
                   allowedElements={['a', 'strong', 'em', 'del']}
                   unwrapDisallowed={true}
                   components={{

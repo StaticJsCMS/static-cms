@@ -3,7 +3,7 @@ import merge from 'lodash/merge';
 import { getWidgetValueSerializer } from './registry';
 import { isNullish } from './util/null.util';
 
-import type { EntryData, CmsField } from '../interface';
+import type { EntryData, CmsField, ValueOrNestedValue } from '../interface';
 
 /**
  * Methods for serializing/deserializing entry field values. Most widgets don't
@@ -37,7 +37,7 @@ function runSerializer(
   let serializedData =
     fields?.reduce((acc, field) => {
       const fieldName = field.name;
-      const value = values[fieldName];
+      const value = values?.[fieldName];
       const serializer = 'widget' in field && field.widget ? getWidgetValueSerializer(field.widget) : undefined;
       const nestedFields = 'fields' in field ? field.fields : undefined;
 
@@ -73,7 +73,7 @@ function runSerializer(
       }
 
       return acc;
-    }, {} as EntryData) ?? {};
+    }, {} as Record<string, ValueOrNestedValue>) ?? {};
 
   //preserve unknown fields value
   serializedData = merge(values, serializedData);

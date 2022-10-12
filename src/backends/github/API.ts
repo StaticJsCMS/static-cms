@@ -477,13 +477,13 @@ export default class API {
   }
 
   async persistFiles(dataFiles: DataFile[], mediaFiles: AssetProxy[], options: PersistOptions) {
-    const files: (DataFile | AssetProxy)[] = mediaFiles.concat(dataFiles);
+    const files: (DataFile | AssetProxy)[] = mediaFiles.concat(dataFiles as any);
     const uploadPromises = files.map(file => this.uploadBlob(file));
     await Promise.all(uploadPromises);
 
     return this.getDefaultBranch()
       .then(branchData =>
-        this.updateTree(branchData.commit.sha, files as { sha: string; path: string }[]),
+        this.updateTree(branchData.commit.sha, files as any),
       )
       .then(changeTree => this.commit(options.commitMessage, changeTree))
       .then(response => this.patchBranch(this.branch, response.sha));

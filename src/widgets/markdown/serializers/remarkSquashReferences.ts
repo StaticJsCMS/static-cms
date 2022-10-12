@@ -4,8 +4,6 @@ import { definitions } from 'mdast-util-definitions';
 import { u } from 'unist-builder';
 
 import type { Root } from 'mdast';
-import type { Definition } from 'mdast-util-definitions';
-import type { Transformer } from 'unified';
 
 /**
  * Raw markdown may contain image references or link references. Because there
@@ -35,9 +33,9 @@ interface Node {
   children?: Node[];
 }
 
-const remarkSquashReferences: () => Transformer<Root> = () => {
+const remarkSquashReferences = () => {
   function transform(
-    getDefinition: (identifier: string) => Definition | null,
+    getDefinition: (identifier: string) => any | null,
     node: Node,
   ): Node | Node[] | null {
     /**

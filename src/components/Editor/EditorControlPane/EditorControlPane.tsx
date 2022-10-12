@@ -96,7 +96,7 @@ function getFieldValue(
   locale: string | undefined,
 ): ValueOrNestedValue {
   if ('meta' in field && field.meta) {
-    return entry.meta[field.name];
+    return entry.meta?.[field.name];
   }
 
   if (isTranslatable && locale) {
@@ -104,7 +104,7 @@ function getFieldValue(
     return get(entry, [...dataPath, field.name]);
   }
 
-  return entry.data[field.name];
+  return entry.data?.[field.name];
 }
 
 const EditorControlPane = ({

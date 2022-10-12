@@ -271,7 +271,7 @@ export default class GitGateway implements CmsBackendClass {
         if (error instanceof Error) {
           throw new AccessTokenError(`Failed getting access token: ${error.message}`);
         }
-        
+
         throw new AccessTokenError('Failed getting access token');
       }
     };
@@ -548,7 +548,7 @@ export default class GitGateway implements CmsBackendClass {
   async persistEntry(entry: BackendEntry, options: PersistOptions) {
     const client = await this.getLargeMediaClient();
     if (client.enabled) {
-      const assets = await getLargeMediaFilteredMediaFiles(client, entry.assets);
+      const assets = await getLargeMediaFilteredMediaFiles(client, entry.assets) as any;
       return this.backend!.persistEntry({ ...entry, assets }, options);
     } else {
       return this.backend!.persistEntry(entry, options);
@@ -566,7 +566,7 @@ export default class GitGateway implements CmsBackendClass {
         client,
         fileObj as File,
         path,
-      );
+      ) as any;
       return {
         ...(await this.backend!.persistMedia(persistMediaArgument, options)),
         displayURL,

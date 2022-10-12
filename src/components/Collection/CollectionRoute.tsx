@@ -1,8 +1,6 @@
 import React, { useMemo } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
-import Collection from './Collection';
-
 import type { Collections } from '../../interface';
 
 function getDefaultPath(collections: Collections) {
@@ -21,11 +19,12 @@ interface CollectionRouteProps {
 }
 
 const CollectionRoute = ({
-  isSearchResults,
-  isSingleSearchResult,
+  // isSearchResults,
+  // isSingleSearchResult,
   collections,
 }: CollectionRouteProps) => {
-  const { name, searchTerm, filterTerm } = useParams();
+  // const { name, searchTerm, filterTerm } = useParams();
+  const { name } = useParams();
   const collection = useMemo(() => {
     if (!name) {
       return false;
@@ -44,13 +43,14 @@ const CollectionRoute = ({
   }
 
   return (
-    <Collection
-      name={name}
-      searchTerm={searchTerm}
-      filterTerm={filterTerm}
-      isSearchResults={isSearchResults}
-      isSingleSearchResult={isSingleSearchResult}
-    />
+    null
+    // <Collection
+    //   name={name}
+    //   searchTerm={searchTerm}
+    //   filterTerm={filterTerm}
+    //   isSearchResults={isSearchResults}
+    //   isSingleSearchResult={isSingleSearchResult}
+    // />
   );
 };
 

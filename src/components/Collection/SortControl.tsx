@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { translate } from 'react-polyglot';
 
 import { SortDirection } from '../../interface';
@@ -19,19 +19,19 @@ function nextSortDirection(direction: SortDirection) {
   }
 }
 
-const sortIconDirections: Record<string, string> = {
-  [SortDirection.Ascending]: 'up',
-  [SortDirection.Descending]: 'down',
-};
+// const sortIconDirections: Record<string, string> = {
+//   [SortDirection.Ascending]: 'up',
+//   [SortDirection.Descending]: 'down',
+// };
 
 // TODO Remove?
-function sortIconProps(sortDir: SortDirection) {
-  return {
-    icon: 'chevron',
-    iconDirection: sortIconDirections[sortDir],
-    iconSmall: true,
-  };
-}
+// function sortIconProps(sortDir: SortDirection) {
+//   return {
+//     icon: 'chevron',
+//     iconDirection: sortIconDirections[sortDir],
+//     iconSmall: true,
+//   };
+// }
 
 interface SortControlProps {
   fields: SortableField[];
@@ -49,10 +49,10 @@ const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortContr
     setAnchorEl(null);
   }, []);
 
-  const hasActiveSort = useMemo(
-    () => Boolean(Object.values(sort ?? {}).find(s => s.direction !== SortDirection.None)),
-    [sort],
-  );
+  // const hasActiveSort = useMemo(
+  //   () => Boolean(Object.values(sort ?? {}).find(s => s.direction !== SortDirection.None)),
+  //   [sort],
+  // );
 
   // TODO Fix button active
   // <ControlButton active={hasActiveSort} title={t('collection.collectionTop.sortBy')} />
@@ -78,7 +78,7 @@ const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortContr
       >
         {fields.map(field => {
           const sortDir = sort?.[field.name]?.direction ?? SortDirection.None;
-          const isActive = sortDir && sortDir !== SortDirection.None;
+          // const isActive = sortDir && sortDir !== SortDirection.None;
           const nextSortDir = nextSortDirection(sortDir);
           // TODO Fix active
           // isActive={isActive}
