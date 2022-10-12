@@ -69,6 +69,10 @@ const CollectionView = ({
   viewStyle,
 }: TranslatedProps<CollectionViewProps>) => {
   const [readyToLoad, setReadyToLoad] = useState(false);
+  const [preCollection, setPreCollection] = useState(collection);
+  useEffect(() => {
+    setPreCollection(collection);
+  }, [collection]);
 
   const newEntryUrl = useMemo(() => {
     let url = collection.create ? getNewEntryUrl(collectionName) : '';
@@ -92,10 +96,10 @@ const CollectionView = ({
         collection={collection}
         viewStyle={viewStyle}
         filterTerm={filterTerm}
-        readyToLoad={readyToLoad}
+        readyToLoad={readyToLoad && collection === preCollection}
       />
     );
-  }, [collection, filterTerm, viewStyle, readyToLoad]);
+  }, [collection, viewStyle, filterTerm, readyToLoad, preCollection]);
 
   const renderEntriesSearch = useCallback(() => {
     let searchCollections = collections;
@@ -133,25 +137,31 @@ const CollectionView = ({
   );
 
   useEffect(() => {
-    const sorts = Object.keys(sort ?? {});
-    if (sorts.length > 0) {
-      setReadyToLoad(true);
-      return;
-    }
-
-    const defaultSort = collection.sortable_fields.default;
-
-    if (!defaultSort || !defaultSort.field) {
-      setReadyToLoad(true);
-      return;
-    }
-
+    setReadyToLoad(false);
     let alive = true;
-    const sortEntries = async () => {
-      await onSortClick(defaultSort.field, defaultSort.direction ?? SortDirection.Ascending);
-      if (alive) {
-        setReadyToLoad(true);
-      }
+
+    const sortEntries = () => {
+      setTimeout(async () => {
+        if (sort?.[0]?.key) {
+          setReadyToLoad(true);
+          return;
+        }
+
+        const defaultSort = collection.sortable_fields.default;
+        if (!defaultSort || !defaultSort.field) {
+          setReadyToLoad(true);
+          return;
+        }
+
+        await onSortClick(
+          defaultSort.field,
+          defaultSort.direction ?? SortDirection.Ascending,
+        );
+
+        if (alive) {
+          setReadyToLoad(true);
+        }
+      });
     };
 
     sortEntries();

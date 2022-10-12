@@ -1,4 +1,4 @@
-import { APIError, blobToFileObj, unsentRequest } from '../../lib/util';
+import { APIError, basename, blobToFileObj, unsentRequest } from '../../lib/util';
 import AuthenticationPage from './AuthenticationPage';
 
 import type {
@@ -140,12 +140,17 @@ export default class ProxyBackend implements CmsBackendClass {
   }
 
   async getMedia(mediaFolder = this.mediaFolder) {
-    const files: MediaFile[] = await this.request({
+    const files: { path: string; url: string }[] = await this.request({
       action: 'getMedia',
       params: { branch: this.branch, mediaFolder },
     });
 
-    return files.map(deserializeMediaFile);
+    return files.map(({ url, path }) => {
+      const id = url;
+      const name = basename(path);
+
+      return { id, name, displayURL: { id, path }, path };
+    });
   }
 
   async getMediaFile(path: string) {
@@ -154,6 +159,10 @@ export default class ProxyBackend implements CmsBackendClass {
       params: { branch: this.branch, path },
     });
     return deserializeMediaFile(file);
+  }
+
+  getMediaDisplayURL(displayURL: DisplayURL) {
+    return Promise.resolve(typeof displayURL === 'string' ? displayURL : displayURL.id);
   }
 
   async persistMedia(assetProxy: AssetProxy, options: PersistOptions) {
@@ -182,10 +191,6 @@ export default class ProxyBackend implements CmsBackendClass {
     _extension: string,
     _depth: number,
   ): Promise<ImplementationEntry[]> {
-    throw new Error('Not supported');
-  }
-
-  getMediaDisplayURL(_displayURL: DisplayURL): Promise<string> {
     throw new Error('Not supported');
   }
 }
