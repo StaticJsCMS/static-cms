@@ -135,7 +135,7 @@ const Sidebar = ({
 
     if ('nested' in collection) {
       return (
-        <li key={collectionName}>
+        <li key={`nested-${collectionName}`}>
           <NestedCollection
             collection={collection}
             filterTerm={filterTerm}

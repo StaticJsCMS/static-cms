@@ -1,4 +1,3 @@
-import { css, keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -6,18 +5,6 @@ import { transientOptions } from '../lib';
 import { colors, zIndex } from './styles';
 
 import type { ReactNode } from 'react';
-
-const animations = {
-  loader: keyframes`
-    from {
-      transform: rotate(0deg);
-    }
-
-    to {
-      transform: rotate(360deg);
-    }
-  `,
-};
 
 const LoaderText = styled.div`
   width: auto !important;
@@ -124,7 +111,6 @@ const StyledLoader = styled(
 
     /* Active Shape */
     &:after {
-      animation: ${animations.loader} 0.6s linear;
       animation-iteration-count: infinite;
       border-color: ${colors.active} transparent transparent;
       box-shadow: 0 0 0 1px transparent;

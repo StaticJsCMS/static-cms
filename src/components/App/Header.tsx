@@ -179,7 +179,7 @@ const Header = ({
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
               >
-                {t('app.header.quickadd')}
+                {t('app.header.quickAdd')}
               </Button>
               <Menu
                 id="quick-create-menu"

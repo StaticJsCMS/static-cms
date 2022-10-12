@@ -36,7 +36,7 @@ function filterUnknownMetaKeys(meta: Record<string, unknown>) {
 function createCursorStore(...args: unknown[]) {
   const { actions, data, meta } =
     args.length === 1
-      ? (args[0] as CursorStore)
+      ? ((args[0] ?? { actions: new Set<string>(), data: {}, meta: {} }) as CursorStore)
       : ({ actions: args[0], data: args[1], meta: args[2] } as CursorStore);
 
   return {

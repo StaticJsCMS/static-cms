@@ -77,7 +77,7 @@ const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortContr
         }}
       >
         {fields.map(field => {
-          const sortDir = sort?.[field.name].direction ?? SortDirection.None;
+          const sortDir = sort?.[field.name]?.direction ?? SortDirection.None;
           const isActive = sortDir && sortDir !== SortDirection.None;
           const nextSortDir = nextSortDirection(sortDir);
           // TODO Fix active

@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import React, { useCallback } from 'react';
-import { hot } from 'react-hot-loader';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import { Navigate, Route, Routes, useParams } from 'react-router-dom';
@@ -265,4 +264,4 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export type AppProps = ConnectedProps<typeof connector>;
 
-export default hot(module)(connector(translate()(App) as ComponentType<AppProps>));
+export default connector(translate()(App) as ComponentType<AppProps>);
