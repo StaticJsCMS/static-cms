@@ -21,7 +21,7 @@ module.exports = {
       },
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: 'babel-loader',
         exclude: /node_modules/,
       },
       {
@@ -34,6 +34,12 @@ module.exports = {
         exclude: [/node_modules/],
         use: [
           {
+            loader: 'babel-loader',
+            options: {
+              rootMode: 'upward',
+            },
+          },
+          {
             loader: 'react-svg-loader',
             options: {
               jsx: true, // true outputs JSX tags
@@ -44,7 +50,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts'],
+    extensions: ['.tsx', '.ts', '.jsx', '.js'],
     fallback: {
       path: require.resolve('path-browserify'),
       stream: require.resolve('stream-browserify'),
