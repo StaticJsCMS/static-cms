@@ -14,7 +14,7 @@
     "build:esm": "cross-env NODE_ENV=esm babel src --out-dir dist/esm --ignore **/__tests__ --extensions \".js,.jsx,.ts,.tsx\"",
     "build:webpack": "webpack",
     "build:types": "tsc",
-    "build": "cross-env NODE_ENV=production run-s build:esm build:webpack",
+    "build": "cross-env NODE_ENV=production run-s build:esm build:webpack build:types",
     "clean": "rimraf dist dev-test/dist",
     "develop": "webpack serve",
     "format:prettier": "prettier \"{{src,scripts,website}/**/,}*.{js,jsx,ts,tsx,css}\"",
