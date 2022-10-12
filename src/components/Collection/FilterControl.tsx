@@ -1,7 +1,8 @@
-import Check from '@mui/icons-material/Check';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import React, { useCallback } from 'react';
@@ -30,13 +31,6 @@ const FilterControl = ({
     setAnchorEl(null);
   }, []);
 
-  // const hasActiveFilter = useMemo(
-  //   () => Object.values(filter).find(f => f.active === true),
-  //   [filter],
-  // );
-
-  // TODO Fix active filter
-  // <ControlButton active={hasActiveFilter} title={t('collection.collectionTop.filterBy')} />
   return (
     <div>
       <Button
@@ -61,14 +55,23 @@ const FilterControl = ({
       >
         {viewFilters.map(viewFilter => {
           const checked = filter[viewFilter.id]?.active ?? false;
+          const labelId = `filter-list-label-${viewFilter.label}`;
           return (
-            <MenuItem key={viewFilter.id} onClick={() => onFilterClick(viewFilter)}>
-              {checked ? (
-                <ListItemIcon>
-                  <Check />
-                </ListItemIcon>
-              ) : null}
-              {viewFilter.label}
+            <MenuItem
+              key={viewFilter.id}
+              onClick={() => onFilterClick(viewFilter)}
+              sx={{ height: '36px' }}
+            >
+              <ListItemIcon>
+                <Checkbox
+                  edge="start"
+                  checked={checked}
+                  tabIndex={-1}
+                  disableRipple
+                  inputProps={{ 'aria-labelledby': labelId }}
+                />
+              </ListItemIcon>
+              <ListItemText id={labelId} primary={viewFilter.label} />
             </MenuItem>
           );
         })}
