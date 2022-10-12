@@ -1,18 +1,18 @@
-import React, { useCallback, useMemo } from 'react';
-import styled from '@emotion/styled';
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
+import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';
 import { NavLink } from 'react-router-dom';
 
-import { Icon, components, colors } from '../../ui';
 import { searchCollections } from '../../actions/collections';
+import { transientOptions } from '../../lib';
+import { getAdditionalLinks, getIcon } from '../../lib/registry';
+import { colors, components, Icon } from '../../ui';
 import CollectionSearch from './CollectionSearch';
 import NestedCollection from './NestedCollection';
-import { getAdditionalLinks, getIcon } from '../../lib/registry';
-import { transientOptions } from '../../lib';
 
 import type { ReactNode } from 'react';
-import type { AdditionalLink, Collection, Collections, TranslatedProps } from '../../interface';
+import type { Collection, Collections, TranslatedProps } from '../../interface';
 
 const styles = {
   sidebarNavLinkActive: css`
@@ -122,80 +122,92 @@ const Sidebar = ({
   t,
   filterTerm,
 }: TranslatedProps<SidebarProps>) => {
-  const renderLink = useCallback((collection: Collection, filterTerm: string) => {
-    const collectionName = collection.name;
-    const iconName = collection.icon;
-    let icon: ReactNode = <Icon type="write" />;
-    if (iconName) {
-      const storedIcon = getIcon(iconName);
-      if (storedIcon) {
-        icon = storedIcon();
-      }
-    }
+  const collectionLinks = useMemo(
+    () =>
+      Object.values(collections)
+        .filter(collection => collection.hide !== true)
+        .map(collection => {
+          const collectionName = collection.name;
+          const iconName = collection.icon;
+          let icon: ReactNode = <Icon type="write" />;
+          if (iconName) {
+            const storedIcon = getIcon(iconName);
+            if (storedIcon) {
+              icon = storedIcon();
+            }
+          }
 
-    if ('nested' in collection) {
-      return (
-        <li key={`nested-${collectionName}`}>
-          <NestedCollection
-            collection={collection}
-            filterTerm={filterTerm}
-            data-testid={collectionName}
-          />
-        </li>
-      );
-    }
+          if ('nested' in collection) {
+            console.log('nested collectionName', `'nested-${collectionName}'`);
+            return (
+              <li key={`nested-${collectionName}`}>
+                <NestedCollection
+                  collection={collection}
+                  filterTerm={filterTerm}
+                  data-testid={collectionName}
+                />
+              </li>
+            );
+          }
 
-    return (
-      <li key={collectionName}>
-        <SidebarNavLink
-          to={`/collections/${collectionName}`}
-          $activeClassName="sidebar-active"
-          data-testid={collectionName}
-        >
-          <>
-            {icon}
-            {collection.label}
-          </>
-        </SidebarNavLink>
-      </li>
-    );
-  }, []);
+          console.log('collectionName', `'${collectionName}'`);
 
-  const renderAdditionalLink = useCallback(
-    ({ id, title, data, options: { iconName } = {} }: AdditionalLink) => {
-      let icon: ReactNode = <Icon type="write" />;
-      if (iconName) {
-        const storedIcon = getIcon(iconName);
-        if (storedIcon) {
-          icon = storedIcon();
-        }
-      }
-
-      const content = (
-        <>
-          <IconWrapper>{icon}</IconWrapper>
-          {title}
-        </>
-      );
-
-      return (
-        <li key={title}>
-          {typeof data === 'string' ? (
-            <StyledAdditionalLink href={data} target="_blank" rel="noopener">
-              {content}
-            </StyledAdditionalLink>
-          ) : (
-            <SidebarNavLink to={`/page/${id}`} $activeClassName="sidebar-active">
-              {content}
-            </SidebarNavLink>
-          )}
-        </li>
-      );
-    },
-    [],
+          return (
+            <li key={collectionName}>
+              <SidebarNavLink
+                to={`/collections/${collectionName}`}
+                $activeClassName="sidebar-active"
+                data-testid={collectionName}
+              >
+                <>
+                  {icon}
+                  {collection.label}
+                </>
+              </SidebarNavLink>
+            </li>
+          );
+        }),
+    [collections, filterTerm],
   );
 
   const additionalLinks = useMemo(() => getAdditionalLinks(), []);
+  const links = useMemo(
+    () =>
+      Object.values(additionalLinks).map(({ id, title, data, options: { iconName } = {} }) => {
+        let icon: ReactNode = <Icon type="write" />;
+        if (iconName) {
+          const storedIcon = getIcon(iconName);
+          if (storedIcon) {
+            icon = storedIcon();
+          }
+        }
+
+        const content = (
+          <>
+            <IconWrapper>{icon}</IconWrapper>
+            {title}
+          </>
+        );
+
+        console.log('title', `'${title}'`, additionalLinks);
+
+        return (
+          <li key={title}>
+            {typeof data === 'string' ? (
+              <StyledAdditionalLink href={data} target="_blank" rel="noopener">
+                {content}
+              </StyledAdditionalLink>
+            ) : (
+              <SidebarNavLink to={`/page/${id}`} $activeClassName="sidebar-active">
+                {content}
+              </SidebarNavLink>
+            )}
+          </li>
+        );
+      }),
+    [additionalLinks],
+  );
+
   return (
     <SidebarContainer>
       <SidebarHeading>{t('collection.sidebar.collections')}</SidebarHeading>
@@ -208,10 +220,8 @@ const Sidebar = ({
         />
       )}
       <SidebarNavList>
-        {Object.values(collections)
-          .filter(collection => collection.hide !== true)
-          .map(collection => renderLink(collection, filterTerm))}
-        {Object.values(additionalLinks).map(renderAdditionalLink)}
+        {collectionLinks}
+        {links}
       </SidebarNavList>
     </SidebarContainer>
   );

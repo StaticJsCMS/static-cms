@@ -17,7 +17,7 @@ module.exports = {
         test: /\.m?js$/,
         enforce: 'pre',
         use: ['source-map-loader'],
-        exclude: /(node_modules)/,
+        exclude: /(node_modules\/@toast-ui\/editor\/dist)/
       },
       {
         test: /\.tsx?$/,

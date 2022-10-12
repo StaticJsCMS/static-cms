@@ -97,4 +97,11 @@ window.CMS.registerPreviewTemplate('general', GeneralPreview);
 window.CMS.registerPreviewTemplate('authors', AuthorsPreview);
 // Pass the name of a registered control to reuse with a new widget preview.
 window.CMS.registerWidget('relationKitchenSinkPost', 'relation', RelationKitchenSinkPostPreview);
-window.CMS.registerAdditionalLink('example', 'Example.com', 'https://example.com', 'page');
+window.CMS.registerAdditionalLink({
+  id: 'example',
+  title: 'Example.com',
+  data: 'https://example.com',
+  options: {
+    icon: 'page',
+  },
+});
