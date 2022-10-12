@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devServerPort = parseInt(process.env.STATIC_CMS_DEV_SERVER_PORT || `${8080}`);
@@ -17,11 +18,18 @@ module.exports = {
         test: /\.m?js$/,
         enforce: 'pre',
         use: ['source-map-loader'],
-        exclude: /(node_modules\/@toast-ui\/editor\/dist)/
+        exclude: /(node_modules[\\/]@toast-ui[\\/]editor[\\/]dist)/,
       },
       {
         test: /\.tsx?$/,
-        use: 'babel-loader',
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              plugins: [!isProduction && 'react-refresh/babel'].filter(Boolean),
+            },
+          },
+        ],
         exclude: /node_modules/,
       },
       {
@@ -58,12 +66,13 @@ module.exports = {
     },
   },
   plugins: [
+    !isProduction && new ReactRefreshWebpackPlugin(),
     new webpack.IgnorePlugin({ resourceRegExp: /^esprima$/ }),
     new webpack.IgnorePlugin({ resourceRegExp: /moment\/locale\// }),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
     }),
-  ],
+  ].filter(Boolean),
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'static-cms-core.js',
@@ -78,5 +87,6 @@ module.exports = {
     },
     host: '0.0.0.0',
     port: devServerPort,
+    hot: true,
   },
 };

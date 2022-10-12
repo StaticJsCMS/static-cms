@@ -1,102 +1,72 @@
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import DescriptionIcon from '@mui/icons-material/Description';
+import ImageIcon from '@mui/icons-material/Image';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Link from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Toolbar from '@mui/material/Toolbar';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
 
 import { checkBackendStatus } from '../../actions/status';
-import { transientOptions } from '../../lib';
-import { buttons, colors, Icon, lengths, shadows, zIndex } from '../../ui';
-import { SettingsDropdown } from '../UI';
+import { stripProtocol } from '../../lib/urlHelper';
+import { buttons, colors, Icon, zIndex } from '../../ui';
+import NavLink from '../UI/NavLink';
+import SettingsDropdown from '../UI/SettingsDropdown';
 
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import type { Collections, TranslatedProps, User } from '../../interface';
 
-const styles = {
-  buttonActive: css`
-    color: ${colors.active};
-  `,
-};
-
-const AppHeader = styled.header`
-  ${shadows.dropMain};
-  position: sticky;
-  width: 100%;
-  top: 0;
+const StyledAppBar = styled(AppBar)`
   background-color: ${colors.foreground};
   z-index: ${zIndex.zIndex300};
-  height: ${lengths.topBarHeight};
 `;
 
-const AppHeaderContent = styled.div`
-  display: flex;
-  justify-content: space-between;
-  min-width: 1200px;
-  max-width: 1440px;
-  padding: 0 12px;
-  margin: 0 auto;
+const StyledToolbar = styled(Toolbar)`
+  gap: 12px;
 `;
 
-interface AppHeaderButtonProps {
-  $activeClassName?: string;
-}
+const StyledButton = styled(Button)`
+  ${buttons.button};
+  background: none;
+  color: #7b8290;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: none;
+  gap: 2px;
 
-const AppHeaderButton = styled(
-  'button',
-  transientOptions,
-)<AppHeaderButtonProps>(
-  ({ $activeClassName }) => `
-    ${buttons.button};
-    background: none;
-    color: #7b8290;
-    font-family: inherit;
-    font-size: 16px;
-    font-weight: 500;
-    display: inline-flex;
-    padding: 16px 20px;
-    align-items: center;
+  ${Icon} {
+    margin-right: 4px;
+    color: #b3b9c4;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: ${colors.active};
 
     ${Icon} {
-      margin-right: 4px;
-      color: #b3b9c4;
+      color: ${colors.active};
     }
-
-    &:hover,
-    &:active,
-    &:focus {
-      ${styles.buttonActive};
-
-      ${Icon} {
-        ${styles.buttonActive};
-      }
-    }
-
-      &.${$activeClassName} {
-        ${styles.buttonActive};
-
-        ${Icon} {
-          ${styles.buttonActive};
-        }
-      }
-  `,
-);
-
-const AppHeaderNavLink = AppHeaderButton.withComponent(NavLink);
-
-const AppHeaderActions = styled.div`
-  display: inline-flex;
-  align-items: center;
+  }
 `;
 
-const AppHeaderNavList = styled.ul`
-  display: flex;
-  margin: 0;
-  list-style: none;
+const StyledSpacer = styled.div`
+  flex-grow: 1;
+`;
+
+const StyledAppHeaderActions = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 `;
 
 const Header = ({
@@ -145,71 +115,86 @@ const Header = ({
   }, [checkBackendStatus]);
 
   return (
-    <AppHeader>
-      <AppHeaderContent>
-        <nav>
-          <AppHeaderNavList>
-            <li>
-              <AppHeaderNavLink
-                to="/collections"
-                $activeClassName="header-link-active"
-                className={navData => (navData.isActive ? 'header-link-active' : '')}
-              >
-                <Icon type="page" />
-                {t('app.header.content')}
-              </AppHeaderNavLink>
-            </li>
-            {showMediaButton && (
-              <li>
-                <AppHeaderButton onClick={openMediaLibrary}>
-                  <Icon type="media-alt" />
-                  {t('app.header.media')}
-                </AppHeaderButton>
-              </li>
+    <Box sx={{ flexGrow: 1 }}>
+      <StyledAppBar position="static">
+        <StyledToolbar>
+          <Link to="/collections" component={NavLink} activeClassName={'header-link-active'}>
+            <DescriptionIcon />
+            {t('app.header.content')}
+          </Link>
+          {showMediaButton ? (
+            <StyledButton onClick={openMediaLibrary}>
+              <ImageIcon />
+              {t('app.header.media')}
+            </StyledButton>
+          ) : null}
+          <StyledSpacer />
+          <StyledAppHeaderActions>
+            {createableCollections.length > 0 && (
+              <div key="quick-create">
+                <Button
+                  id="quick-create-button"
+                  aria-controls={open ? 'quick-create-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                  onClick={handleClick}
+                  variant="contained"
+                  endIcon={<KeyboardArrowDownIcon />}
+                >
+                  {t('app.header.quickAdd')}
+                </Button>
+                <Menu
+                  id="quick-create-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    'aria-labelledby': 'quick-create-button',
+                  }}
+                >
+                  {createableCollections.map(collection => (
+                    <MenuItem
+                      key={collection.name}
+                      onClick={() => handleCreatePostClick(collection.name)}
+                    >
+                      {collection.label_singular || collection.label}
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </div>
             )}
-          </AppHeaderNavList>
-        </nav>
-        <AppHeaderActions>
-          {createableCollections.length > 0 && (
-            <div key="quick-create">
+            {isTestRepo && (
               <Button
-                id="quick-create-button"
-                aria-controls={open ? 'quick-create-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
+                href="https://staticjscms.github.io/static-cms/docs/test-backend"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ textTransform: 'none' }}
+                endIcon={<OpenInNewIcon />}
               >
-                {t('app.header.quickAdd')}
+                Test Backend
               </Button>
-              <Menu
-                id="quick-create-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  'aria-labelledby': 'quick-create-button',
-                }}
+            )}
+            {displayUrl ? (
+              <Button
+                href={displayUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ textTransform: 'none' }}
+                endIcon={<OpenInNewIcon />}
               >
-                {createableCollections.map(collection => (
-                  <MenuItem
-                    key={collection.name}
-                    onClick={() => handleCreatePostClick(collection.name)}
-                  >
-                    {collection.label_singular || collection.label}
-                  </MenuItem>
-                ))}
-              </Menu>
-            </div>
-          )}
-          <SettingsDropdown
-            displayUrl={displayUrl}
-            isTestRepo={isTestRepo}
-            imageUrl={user?.avatar_url}
-            onLogoutClick={onLogoutClick}
-          />
-        </AppHeaderActions>
-      </AppHeaderContent>
-    </AppHeader>
+                {stripProtocol(displayUrl)}
+              </Button>
+            ) : null}
+            <SettingsDropdown
+              displayUrl={displayUrl}
+              isTestRepo={isTestRepo}
+              imageUrl={user?.avatar_url}
+              onLogoutClick={onLogoutClick}
+            />
+          </StyledAppHeaderActions>
+        </StyledToolbar>
+      </StyledAppBar>
+    </Box>
   );
 };
 
