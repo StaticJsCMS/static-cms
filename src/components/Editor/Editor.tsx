@@ -3,23 +3,26 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
-import { logoutUser } from '../../actions/auth';
+import { logoutUser as logoutUserAction } from '../../actions/auth';
 import {
-  changeDraftField,
-  changeDraftFieldValidation,
-  createDraftDuplicateFromEntry,
-  createEmptyDraft,
-  deleteEntry,
-  deleteLocalBackup,
-  discardDraft,
-  loadEntries,
-  loadEntry,
-  loadLocalBackup,
-  persistEntry,
-  persistLocalBackup,
-  retrieveLocalBackup,
+  changeDraftField as changeDraftFieldAction,
+  changeDraftFieldValidation as changeDraftFieldValidationAction,
+  createDraftDuplicateFromEntry as createDraftDuplicateFromEntryAction,
+  createEmptyDraft as createEmptyDraftAction,
+  deleteEntry as deleteEntryAction,
+  deleteLocalBackup as deleteLocalBackupAction,
+  discardDraft as discardDraftAction,
+  loadEntries as loadEntriesAction,
+  loadEntry as loadEntryAction,
+  loadLocalBackup as loadLocalBackupAction,
+  persistEntry as persistEntryAction,
+  persistLocalBackup as persistLocalBackupAction,
+  retrieveLocalBackup as retrieveLocalBackupAction,
 } from '../../actions/entries';
-import { loadScroll, toggleScroll } from '../../actions/scroll';
+import {
+  loadScroll as loadScrollAction,
+  toggleScroll as toggleScrollAction,
+} from '../../actions/scroll';
 import { selectFields } from '../../lib/util/collection.util';
 import { selectEntry } from '../../reducers';
 import { history, navigateToCollection, navigateToNewEntry } from '../../routing/history';
@@ -64,13 +67,25 @@ const Editor = ({
   publishedEntry,
   localBackup,
   collectionEntriesLoaded,
+  persistLocalBackup,
+  changeDraftField,
+  loadEntries,
+  loadEntry,
+  persistEntry,
+  deleteEntry,
+  loadLocalBackup,
+  retrieveLocalBackup,
+  deleteLocalBackup,
+  createDraftDuplicateFromEntry,
+  createEmptyDraft,
+  discardDraft,
 }: TranslatedProps<EditorProps>) => {
   const createBackup = useMemo(
     () =>
       debounce(function (entry, collection) {
         persistLocalBackup(entry, collection);
       }, 2000),
-    [],
+    [persistLocalBackup],
   );
 
   const handleChangeDraftField = useCallback(
@@ -83,7 +98,7 @@ const Editor = ({
       const entries = [publishedEntry].filter(Boolean);
       changeDraftField({ field, value, metadata, entries, i18n });
     },
-    [publishedEntry],
+    [changeDraftField, publishedEntry],
   );
 
   const deleteBackup = useCallback(() => {
@@ -91,7 +106,7 @@ const Editor = ({
     if (!newEntry) {
       deleteLocalBackup(collection, slug);
     }
-  }, [collection, createBackup, newEntry, slug]);
+  }, [collection, createBackup, deleteLocalBackup, newEntry, slug]);
 
   const handlePersistEntry = useCallback(
     async (opts: EditorPersistOptions = {}) => {
@@ -108,7 +123,7 @@ const Editor = ({
         }
       }
     },
-    [collection, deleteBackup, entryDraft.entry],
+    [collection, createDraftDuplicateFromEntry, deleteBackup, entryDraft.entry, persistEntry],
   );
 
   const handleDuplicateEntry = useCallback(() => {
@@ -118,7 +133,7 @@ const Editor = ({
 
     navigateToNewEntry(collection.name);
     createDraftDuplicateFromEntry(entryDraft.entry);
-  }, [collection.name, entryDraft.entry]);
+  }, [collection.name, createDraftDuplicateFromEntry, entryDraft.entry]);
 
   const handleDeleteEntry = useCallback(async () => {
     if (entryDraft.hasChanged) {
@@ -150,7 +165,7 @@ const Editor = ({
       deleteBackup();
       return navigateToCollection(collection.name);
     }, 0);
-  }, [collection, deleteBackup, entryDraft.hasChanged, newEntry, slug]);
+  }, [collection, deleteBackup, deleteEntry, entryDraft.hasChanged, newEntry, slug]);
 
   const [prevLocalBackup, setPrevLocalBackup] = useState<
     | {
@@ -185,7 +200,7 @@ const Editor = ({
     return () => {
       alive = false;
     };
-  }, [deleteBackup, localBackup, prevLocalBackup]);
+  }, [deleteBackup, loadLocalBackup, localBackup, prevLocalBackup]);
 
   useEffect(() => {
     if (hasChanged) {
@@ -197,90 +212,120 @@ const Editor = ({
     if (newEntry) {
       createEmptyDraft(collection, location.search);
     }
-  }, [collection, newEntry]);
+  }, [collection, createEmptyDraft, newEntry]);
 
+  const [prevCollection, setPrevCollection] = useState(collection);
+  const [preSlug, setPrevSlug] = useState(slug);
   useEffect(() => {
-    retrieveLocalBackup(collection, slug);
-
-    if (newEntry) {
+    if (!entryDraft.entry && newEntry) {
       createEmptyDraft(collection, location.search);
-    } else {
+    } else if (!entryDraft.entry || prevCollection !== collection || preSlug !== slug) {
+      console.log('loading!', collection, slug);
       loadEntry(collection, slug);
     }
 
-    const leaveMessage = t('editor.editor.onLeavePage');
-
-    const exitBlocker = (event: BeforeUnloadEvent) => {
-      if (entryDraft.hasChanged) {
-        // This message is ignored in most browsers, but its presence
-        // triggers the confirmation dialog
-        event.returnValue = leaveMessage;
-        return leaveMessage;
-      }
-    };
-    window.addEventListener('beforeunload', exitBlocker);
-
-    const navigationBlocker: TransitionPromptHook = (location, action) => {
-      /**
-       * New entry being saved and redirected to it's new slug based url.
-       */
-      const isPersisting = entryDraft.entry?.isPersisting;
-      const newRecord = entryDraft.entry?.newRecord;
-      const newEntryPath = `/collections/${collection.name}/new`;
-      if (isPersisting && newRecord && location.pathname === newEntryPath && action === 'PUSH') {
-        return;
-      }
-
-      if (hasChanged) {
-        return leaveMessage;
-      }
-    };
-
-    const unblock = history.block(navigationBlocker);
-
-    /**
-     * This will run as soon as the location actually changes, unless creating
-     * a new post. The confirmation above will run first.
-     */
-    const unlisten = history.listen((location, action) => {
-      const newEntryPath = `/collections/${collection.name}/new`;
-      const entriesPath = `/collections/${collection.name}/entries/`;
-      const { pathname } = location;
-      if (
-        pathname.startsWith(newEntryPath) ||
-        (pathname.startsWith(entriesPath) && action === 'PUSH')
-      ) {
-        return;
-      }
-
-      deleteBackup();
-
-      unblock();
-      unlisten();
-    });
-
-    if (!collectionEntriesLoaded) {
-      loadEntries(collection);
-    }
-
-    return () => {
-      createBackup.flush();
-      discardDraft();
-      window.removeEventListener('beforeunload', exitBlocker);
-    };
+    setPrevCollection(collection);
+    setPrevSlug(slug);
   }, [
     collection,
-    collectionEntriesLoaded,
-    createBackup,
-    deleteBackup,
-    entryDraft.entry?.isPersisting,
-    entryDraft.entry?.newRecord,
-    entryDraft.hasChanged,
-    hasChanged,
+    createEmptyDraft,
+    entryDraft.entry,
+    loadEntry,
     newEntry,
+    preSlug,
+    prevCollection,
     slug,
-    t,
   ]);
+
+  // useEffect(() => {
+  //   retrieveLocalBackup(collection, slug);
+
+  //   console.log('new entry?', newEntry);
+  //   if (newEntry) {
+  //     createEmptyDraft(collection, location.search);
+  //   } else {
+  //     console.log('loading!', collection, slug);
+  //     loadEntry(collection, slug);
+  //   }
+
+  //   const leaveMessage = t('editor.editor.onLeavePage');
+
+  //   const exitBlocker = (event: BeforeUnloadEvent) => {
+  //     if (entryDraft.hasChanged) {
+  //       // This message is ignored in most browsers, but its presence
+  //       // triggers the confirmation dialog
+  //       event.returnValue = leaveMessage;
+  //       return leaveMessage;
+  //     }
+  //   };
+  //   window.addEventListener('beforeunload', exitBlocker);
+
+  //   const navigationBlocker: TransitionPromptHook = (location, action) => {
+  //     /**
+  //      * New entry being saved and redirected to it's new slug based url.
+  //      */
+  //     const isPersisting = entryDraft.entry?.isPersisting;
+  //     const newRecord = entryDraft.entry?.newRecord;
+  //     const newEntryPath = `/collections/${collection.name}/new`;
+  //     if (isPersisting && newRecord && location.pathname === newEntryPath && action === 'PUSH') {
+  //       return;
+  //     }
+
+  //     if (hasChanged) {
+  //       return leaveMessage;
+  //     }
+  //   };
+
+  //   const unblock = history.block(navigationBlocker);
+
+  //   /**
+  //    * This will run as soon as the location actually changes, unless creating
+  //    * a new post. The confirmation above will run first.
+  //    */
+  //   const unlisten = history.listen((location, action) => {
+  //     const newEntryPath = `/collections/${collection.name}/new`;
+  //     const entriesPath = `/collections/${collection.name}/entries/`;
+  //     const { pathname } = location;
+  //     if (
+  //       pathname.startsWith(newEntryPath) ||
+  //       (pathname.startsWith(entriesPath) && action === 'PUSH')
+  //     ) {
+  //       return;
+  //     }
+
+  //     deleteBackup();
+
+  //     unblock();
+  //     unlisten();
+  //   });
+
+  //   if (!collectionEntriesLoaded) {
+  //     loadEntries(collection);
+  //   }
+
+  //   return () => {
+  //     createBackup.flush();
+  //     discardDraft();
+  //     window.removeEventListener('beforeunload', exitBlocker);
+  //   };
+  // }, [
+  //   collection,
+  //   collectionEntriesLoaded,
+  //   createBackup,
+  //   createEmptyDraft,
+  //   deleteBackup,
+  //   discardDraft,
+  //   entryDraft.entry?.isPersisting,
+  //   entryDraft.entry?.newRecord,
+  //   entryDraft.hasChanged,
+  //   hasChanged,
+  //   loadEntries,
+  //   loadEntry,
+  //   newEntry,
+  //   retrieveLocalBackup,
+  //   slug,
+  //   t,
+  // ]);
 
   if (entry && entry.error) {
     return (
@@ -380,22 +425,22 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
 }
 
 const mapDispatchToProps = {
-  changeDraftField,
-  changeDraftFieldValidation,
-  loadEntry,
-  loadEntries,
-  loadLocalBackup,
-  retrieveLocalBackup,
-  persistLocalBackup,
-  deleteLocalBackup,
-  createDraftDuplicateFromEntry,
-  createEmptyDraft,
-  discardDraft,
-  persistEntry,
-  deleteEntry,
-  logoutUser,
-  toggleScroll,
-  loadScroll,
+  changeDraftField: changeDraftFieldAction,
+  changeDraftFieldValidation: changeDraftFieldValidationAction,
+  loadEntry: loadEntryAction,
+  loadEntries: loadEntriesAction,
+  loadLocalBackup: loadLocalBackupAction,
+  retrieveLocalBackup: retrieveLocalBackupAction,
+  persistLocalBackup: persistLocalBackupAction,
+  deleteLocalBackup: deleteLocalBackupAction,
+  createDraftDuplicateFromEntry: createDraftDuplicateFromEntryAction,
+  createEmptyDraft: createEmptyDraftAction,
+  discardDraft: discardDraftAction,
+  persistEntry: persistEntryAction,
+  deleteEntry: deleteEntryAction,
+  logoutUser: logoutUserAction,
+  toggleScroll: toggleScrollAction,
+  loadScroll: loadScrollAction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

@@ -598,15 +598,21 @@ export function deleteLocalBackup(collection: Collection, slug: string) {
  */
 
 export function loadEntry(collection: Collection, slug: string, silent = false) {
+  console.log('well we are here...')
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
+    console.log('waiting for media library to load...')
     await waitForMediaLibraryToLoad(dispatch, getState());
     if (!silent) {
+      console.log('entry loading!')
       dispatch(entryLoading(collection, slug));
     }
 
     try {
+      console.log('trying to load entry')
       const loadedEntry = await tryLoadEntry(getState(), collection, slug);
+      console.log('entry loaded!')
       dispatch(entryLoaded(collection, loadedEntry));
+      console.log('making draft!')
       dispatch(createDraftFromEntry(loadedEntry));
     } catch (error: unknown) {
       console.error(error);

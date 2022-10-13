@@ -85,7 +85,7 @@ function CommunityPreview({ entry }) {
 function DocsPreview({ entry, widgetFor }) {
   return (
     <PreviewContainer highlight={true}>
-      <DocsTemplate title={entry.getIn(['data', 'title'])} body={widgetFor('body')} />
+      <DocsTemplate title={entry.data.title} body={widgetFor('body')} />
     </PreviewContainer>
   );
 }
@@ -102,8 +102,7 @@ function ReleasePreview({ entry }) {
   return (
     <PreviewContainer highlight={true}>
       <WhatsNew
-        updates={entry
-          .getIn(['data', 'updates'])
+        updates={entry.data.updates
           .map(release => ({
             version: release.version,
             date: dayjs(release.date).format('MMMM D, YYYY'),
@@ -118,8 +117,7 @@ function ReleasePreview({ entry }) {
 function NotificationPreview({ entry }) {
   return (
     <PreviewContainer>
-      {entry
-        .getIn(['data', 'notifications'])
+      {entry.data.notifications
         .filter(notif => notif.published)
         .map((notif, idx) => (
           <Notification key={idx} url={notif.url} loud={notif.loud}>

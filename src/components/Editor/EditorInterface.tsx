@@ -1,16 +1,20 @@
 import { css, Global } from '@emotion/react';
 import styled from '@emotion/styled';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import Fab from '@mui/material/Fab';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ScrollSync, ScrollSyncPane } from 'react-scroll-sync';
+import HeightIcon from '@mui/icons-material/Height';
+import LanguageIcon from '@mui/icons-material/Language';
 
 import { FILES } from '../../constants/collectionTypes';
 import { transientOptions } from '../../lib';
 import { getI18nInfo, getPreviewEntry, hasI18n } from '../../lib/i18n';
+import { getFileFromSlug } from '../../lib/util/collection.util';
 import { colors, colorsRaw, components, IconButton, transitions, zIndex } from '../../ui';
 import EditorControlPane from './EditorControlPane/EditorControlPane';
 import EditorPreviewPane from './EditorPreviewPane/EditorPreviewPane';
 import EditorToolbar from './EditorToolbar';
-import { getFileFromSlug } from '../../lib/util/collection.util';
 
 import type {
   CmsField,
@@ -79,7 +83,7 @@ const StyledSplitPane = styled.div`
   grid-template-columns: min(864px, 50%) auto;
   height: 100%;
 
-  > div:nth-child(2)::before {
+  > div:nth-of-type(2)::before {
     content: '';
     width: 2px;
     height: 100%;
@@ -133,11 +137,14 @@ const ControlPaneContainer = styled(PreviewPaneContainer)`
   overflow-x: hidden;
 `;
 
-const ViewControls = styled.div`
+const StyledViewControls = styled.div`
   position: fixed;
-  bottom: 3px;
-  right: 12px;
+  bottom: 4px;
+  right: 8px;
   z-index: ${zIndex.zIndex299};
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 `;
 
 interface EditorContentProps {
@@ -253,8 +260,8 @@ const EditorInterface = ({
   //     if (field.widget === 'hidden') {
   //       return;
   //     }
-      // TODO Store validations
-      //this.componentValidate[field.get('name')]();
+  // TODO Store validations
+  //this.componentValidate[field.get('name')]();
   //   });
   // }, [fields]);
 
@@ -385,35 +392,41 @@ const EditorInterface = ({
         editorBackLink={editorBackLink}
       />
       <Editor key={draftKey}>
-        <ViewControls>
+        <StyledViewControls>
           {collectionI18nEnabled && (
-            <EditorToggle
-              isActive={finalI18nVisible}
+            <Fab
+              size="small"
+              color={finalI18nVisible ? 'primary' : 'default'}
+              aria-label="add"
               onClick={handleToggleI18n}
-              size="large"
-              type="page"
               title={t('editor.editorInterface.toggleI18n')}
-            />
+            >
+              <LanguageIcon />
+            </Fab>
           )}
           {previewEnabled && (
-            <EditorToggle
-              isActive={finalPreviewVisible}
+            <Fab
+              size="small"
+              color={finalPreviewVisible ? 'primary' : 'default'}
+              aria-label="add"
               onClick={handleTogglePreview}
-              size="large"
-              type="eye"
               title={t('editor.editorInterface.togglePreview')}
-            />
+            >
+              <VisibilityIcon />
+            </Fab>
           )}
           {scrollSyncVisible && (
-            <EditorToggle
-              isActive={scrollSyncEnabled}
+            <Fab
+              size="small"
+              color={scrollSyncEnabled ? 'primary' : 'default'}
+              aria-label="add"
               onClick={handleToggleScrollSync}
-              size="large"
-              type="scroll"
               title={t('editor.editorInterface.toggleScrollSync')}
-            />
+            >
+              <HeightIcon />
+            </Fab>
           )}
-        </ViewControls>
+        </StyledViewControls>
         <EditorContent
           i18nVisible={finalI18nVisible}
           previewVisible={finalPreviewVisible}
