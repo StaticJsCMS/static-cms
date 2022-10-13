@@ -1,11 +1,14 @@
 import styled from '@emotion/styled';
+import CloseIcon from '@mui/icons-material/Close';
+import PhotoIcon from '@mui/icons-material/Photo';
+import IconButton from '@mui/material/IconButton';
 import { arrayMoveImmutable as arrayMove } from 'array-move';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import uuid from 'uuid/v4';
 
 import { basename, transientOptions } from '../../lib/util';
-import { borders, buttons, components, effects, IconButton, lengths, shadows } from '../../ui';
+import { borders, buttons, components, effects, lengths, shadows } from '../../ui';
 
 import type { MouseEvent, MouseEventHandler } from 'react';
 import type { CmsFieldFileOrImage, CmsWidgetControlProps, GetAssetFunction } from '../../interface';
@@ -66,8 +69,12 @@ interface SortableImageButtonsProps {
 const SortableImageButtons = ({ onRemove, onReplace }: SortableImageButtonsProps) => {
   return (
     <SortableImageButtonsWrapper>
-      <IconButton size="small" type="media" onClick={onReplace}></IconButton>
-      <IconButton size="small" type="close" onClick={onRemove}></IconButton>
+      <IconButton onClick={onReplace}>
+        <PhotoIcon />
+      </IconButton>
+      <IconButton onClick={onRemove}>
+        <CloseIcon />
+      </IconButton>
     </SortableImageButtonsWrapper>
   );
 };

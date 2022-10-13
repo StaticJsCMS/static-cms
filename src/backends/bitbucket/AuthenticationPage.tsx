@@ -1,8 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react';
 import styled from '@emotion/styled';
+import React, { useCallback, useMemo, useState } from 'react';
 
-import { AuthenticationPage, Icon } from '../../ui';
-import { NetlifyAuthenticator, ImplicitAuthenticator } from '../../lib/auth';
+import Icon from '../../components/UI/Icon';
+import { ImplicitAuthenticator, NetlifyAuthenticator } from '../../lib/auth';
+import { AuthenticationPage } from '../../ui';
 
 import type { MouseEvent } from 'react';
 import type { AuthenticationPageProps, TranslatedProps } from '../../interface';

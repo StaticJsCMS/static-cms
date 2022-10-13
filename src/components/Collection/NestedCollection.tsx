@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import ArticleIcon from '@mui/icons-material/Article';
 import sortBy from 'lodash/sortBy';
 import { dirname, sep } from 'path';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -9,7 +10,7 @@ import { transientOptions } from '../../lib';
 import { selectEntryCollectionTitle } from '../../lib/util/collection.util';
 import { stringTemplate } from '../../lib/widgets';
 import { selectEntries } from '../../reducers/entries';
-import { colors, components, Icon } from '../../ui';
+import { colors, components } from '../../ui';
 
 import type { ConnectedProps } from 'react-redux';
 import type { Collection, Entry } from '../../interface';
@@ -60,11 +61,6 @@ const TreeNavLink = styled(
     padding: 8px;
     padding-left: ${$depth * 20 + 12}px;
     border-left: 2px solid #fff;
-
-    ${Icon} {
-      margin-right: 8px;
-      flex-shrink: 0;
-    }
 
     &:hover,
     &:active,
@@ -132,7 +128,7 @@ const TreeNode = ({ collection, treeData, depth = 0, onToggle }: TreeNodeProps) 
               $depth={depth}
               data-testid={node.path}
             >
-              <Icon type="write" />
+              <ArticleIcon />
               <NodeTitleContainer>
                 <NodeTitle>{title}</NodeTitle>
                 {hasChildren && (node.expanded ? <CaretDown /> : <CaretRight />)}

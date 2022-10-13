@@ -1,12 +1,13 @@
 import styled from '@emotion/styled';
+import AddIcon from '@mui/icons-material/Add';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import React, { useCallback } from 'react';
 
 import { transientOptions } from '../lib';
-import Icon from './Icon';
-import { buttons, colors } from './styles';
+import { buttons, colors, transitions } from './styles';
 
 import type { MouseEvent, ReactNode } from 'react';
 import type { CmsField, TranslatedProps } from '../interface';
@@ -57,10 +58,6 @@ const ExpandButton = styled.button`
 const AddButton = styled.button`
   ${buttons.button}
   padding: 4px 12px;
-
-  ${Icon} {
-    margin-left: 6px;
-  }
 `;
 
 export interface ObjectWidgetTopBarProps {
@@ -138,7 +135,7 @@ const ObjectWidgetTopBar = ({
     return (
       <AddButton onClick={onAdd}>
         {t('editor.editorWidgets.list.add', { item: label })}
-        <Icon type="add" size="xsmall" />
+        <AddIcon />
       </AddButton>
     );
   }, [t, label, onAdd]);
@@ -158,7 +155,12 @@ const ObjectWidgetTopBar = ({
     <TopBarContainer>
       <ExpandButtonContainer $hasHeading={!!heading}>
         <ExpandButton onClick={onCollapseToggle} data-testid="expand-button">
-          <Icon type="chevron" direction={collapsed ? 'right' : 'down'} size="small" />
+          <ExpandMoreIcon
+            sx={{
+              transform: `rotateX(${collapsed ? '-90deg' : '0deg'})`,
+              transition: `transform ${transitions.main};`,
+            }}
+          />
         </ExpandButton>
         {heading}
       </ExpandButtonContainer>

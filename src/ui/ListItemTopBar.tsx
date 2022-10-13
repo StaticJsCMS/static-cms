@@ -1,11 +1,13 @@
 import styled from '@emotion/styled';
+import CloseIcon from '@mui/icons-material/Close';
+import DragHandleIcon from '@mui/icons-material/DragHandle';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import React from 'react';
 
 import { transientOptions } from '../lib/util';
-import Icon from './Icon';
-import { buttons, colors, lengths } from './styles';
+import { buttons, colors, lengths, transitions } from './styles';
 
-import type { MouseEvent, ReactNode, ComponentClass } from 'react';
+import type { ComponentClass, MouseEvent, ReactNode } from 'react';
 
 interface TopBarProps {
   $isVariableTypesList: boolean;
@@ -72,7 +74,7 @@ export interface DragHandleProps {
 const DragHandle = ({ dragHandleHOC }: DragHandleProps) => {
   const Handle = dragHandleHOC(() => (
     <DragIconContainer>
-      <Icon type="drag-handle" size="small" />
+      <DragHandleIcon />
     </DragIconContainer>
   ));
   return <Handle />;
@@ -101,14 +103,19 @@ const ListItemTopBar = ({
     <TopBar className={className} $collapsed={collapsed} $isVariableTypesList={isVariableTypesList}>
       {onCollapseToggle ? (
         <TopBarButton onClick={onCollapseToggle}>
-          <Icon type="chevron" size="small" direction={collapsed ? 'right' : 'down'} />
+          <ExpandMoreIcon
+            sx={{
+              transform: `rotateX(${collapsed ? '-90deg' : '0deg'})`,
+              transition: `transform ${transitions.main};`,
+            }}
+          />
         </TopBarButton>
       ) : null}
       {title ? <StyledTitle onClick={onCollapseToggle}>{title}</StyledTitle> : null}
       {dragHandleHOC ? <DragHandle dragHandleHOC={dragHandleHOC} /> : null}
       {onRemove ? (
         <TopBarButton onClick={onRemove}>
-          <Icon type="close" size="small" />
+          <CloseIcon />
         </TopBarButton>
       ) : null}
     </TopBar>

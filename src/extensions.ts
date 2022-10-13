@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {
   AzureBackend,
   BitbucketBackend,
@@ -13,12 +11,10 @@ import { imageEditorComponent } from './editor-components';
 import {
   registerBackend,
   registerEditorComponent,
-  registerIcon,
   registerLocale,
   registerWidget,
 } from './lib/registry';
 import { locales } from './locales';
-import { Icon, images } from './ui';
 import {
   BooleanWidget,
   CodeWidget,
@@ -36,8 +32,6 @@ import {
   StringWidget,
   TextWidget,
 } from './widgets';
-
-import type { IconType } from './ui/Icon/icons';
 
 export function addExtensions() {
   // Register all the things
@@ -73,8 +67,4 @@ export function addExtensions() {
     type: 'code-block',
   });
   registerLocale('en', locales.en);
-
-  (Object.keys(images) as IconType[]).forEach(iconName => {
-    registerIcon(iconName, () => <Icon type={iconName} />);
-  });
 }

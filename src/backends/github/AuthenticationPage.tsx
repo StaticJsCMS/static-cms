@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
 import React, { useCallback, useState } from 'react';
 
+import Icon from '../../components/UI/Icon';
 import { NetlifyAuthenticator } from '../../lib/auth';
-import { AuthenticationPage, Icon } from '../../ui';
+import { AuthenticationPage } from '../../ui';
 
 import type { MouseEvent } from 'react';
 import type { AuthenticationPageProps, TranslatedProps } from '../../interface';

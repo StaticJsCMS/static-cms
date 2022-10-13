@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import SettingsIcon from '@mui/icons-material/Settings';
+import CloseIcon from '@mui/icons-material/Close';
 
-import { Icon, buttons, shadows, zIndex } from '../../ui';
+import { buttons, shadows, zIndex } from '../../ui';
 
 import type { MouseEvent } from 'react';
 
@@ -18,11 +20,6 @@ const StyledSettingsButton = styled.button`
   padding: 2px 4px;
   line-height: 1;
   height: auto;
-
-  ${Icon} {
-    position: relative;
-    top: 1px;
-  }
 `;
 
 interface SettingsButtonProps {
@@ -33,7 +30,7 @@ interface SettingsButtonProps {
 const SettingsButton = ({ showClose = false, onClick }: SettingsButtonProps) => {
   return (
     <StyledSettingsButton onClick={onClick}>
-      <Icon type={showClose ? 'close' : 'settings'} size="small" />
+      {showClose ? <CloseIcon /> : <SettingsIcon />}
     </StyledSettingsButton>
   );
 };

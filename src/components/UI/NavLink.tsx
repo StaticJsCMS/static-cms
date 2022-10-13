@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import { NavLink as NavLinkBase } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 
-import { Icon, colors } from '../../ui';
+import { colors } from '../../ui';
 import { transientOptions } from '../../lib';
 
 import type { RefAttributes } from 'react';
@@ -46,10 +46,6 @@ const StyledNavLinkWrapper = styled(
         ? `
           & > .${$activeClassName} {
             color: ${colors.active};
-
-            ${Icon} {
-              color: ${colors.active};
-            }
           }
         `
         : ''

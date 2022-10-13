@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import ArticleIcon from '@mui/icons-material/Article';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import List from '@mui/material/List';
@@ -12,7 +13,7 @@ import { translate } from 'react-polyglot';
 
 import { searchCollections } from '../../actions/collections';
 import { getAdditionalLinks, getIcon } from '../../lib/registry';
-import { colors, Icon } from '../../ui';
+import { colors } from '../../ui';
 import NavLink from '../UI/NavLink';
 import CollectionSearch from './CollectionSearch';
 import NestedCollection from './NestedCollection';
@@ -23,7 +24,7 @@ import type { Collection, Collections, TranslatedProps } from '../../interface';
 const StyledSidebar = styled.div`
   position: sticky;
   top: 88px;
-  align-self: flex-start
+  align-self: flex-start;
 `;
 
 const StyledListItemIcon = styled(ListItemIcon)`
@@ -54,7 +55,7 @@ const Sidebar = ({
         .map(collection => {
           const collectionName = collection.name;
           const iconName = collection.icon;
-          let icon: ReactNode = <Icon type="write" />;
+          let icon: ReactNode = <ArticleIcon />;
           if (iconName) {
             const storedIcon = getIcon(iconName);
             if (storedIcon) {
@@ -96,7 +97,7 @@ const Sidebar = ({
   const links = useMemo(
     () =>
       Object.values(additionalLinks).map(({ id, title, data, options: { iconName } = {} }) => {
-        let icon: ReactNode = <Icon type="write" />;
+        let icon: ReactNode = <ArticleIcon />;
         if (iconName) {
           const storedIcon = getIcon(iconName);
           if (storedIcon) {

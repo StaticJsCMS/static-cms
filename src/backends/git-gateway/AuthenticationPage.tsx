@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 
 import { AuthenticationPage, buttons, shadows, colors, colorsRaw, lengths, zIndex } from '../../ui';
 
-import type { FormEvent,ChangeEvent } from 'react';
+import type { FormEvent, ChangeEvent } from 'react';
 import type { User, AuthenticationPageProps, TranslatedProps } from '../../interface';
 
 const LoginButton = styled.button`
@@ -60,7 +60,8 @@ function useNetlifyIdentifyEvent(
   }, [callback, eventName]);
 }
 
-export interface GitGatewayAuthenticationPageProps extends TranslatedProps<AuthenticationPageProps> {
+export interface GitGatewayAuthenticationPageProps
+  extends TranslatedProps<AuthenticationPageProps> {
   handleAuth: (email: string, password: string) => Promise<User | string>;
 }
 

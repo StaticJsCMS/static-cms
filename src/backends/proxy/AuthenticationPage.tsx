@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 import React, { useCallback } from 'react';
 
-import { buttons, GoBackButton, Icon, shadows } from '../../ui';
+import { buttons, GoBackButton, shadows } from '../../ui';
+import Icon from '../../components/UI/Icon';
 
 import type { MouseEvent } from 'react';
 import type { AuthenticationPageProps, TranslatedProps } from '../../interface';

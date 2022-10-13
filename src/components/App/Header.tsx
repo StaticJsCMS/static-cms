@@ -18,7 +18,7 @@ import { createNewEntry } from '../../actions/collections';
 import { openMediaLibrary as openMediaLibraryAction } from '../../actions/mediaLibrary';
 import { checkBackendStatus as checkBackendStatusAction } from '../../actions/status';
 import { stripProtocol } from '../../lib/urlHelper';
-import { buttons, colors, Icon } from '../../ui';
+import { buttons, colors } from '../../ui';
 import NavLink from '../UI/NavLink';
 import SettingsDropdown from '../UI/SettingsDropdown';
 
@@ -45,19 +45,10 @@ const StyledButton = styled(Button)`
   text-transform: none;
   gap: 2px;
 
-  ${Icon} {
-    margin-right: 4px;
-    color: #b3b9c4;
-  }
-
   &:hover,
   &:active,
   &:focus {
     color: ${colors.active};
-
-    ${Icon} {
-      color: ${colors.active};
-    }
   }
 `;
 

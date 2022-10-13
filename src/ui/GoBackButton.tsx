@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import React from 'react';
 
-import Icon from './Icon';
 import { colorsRaw } from './styles';
 
 import type { TranslatedProps } from '../interface';
@@ -28,10 +28,10 @@ interface GoBackButtonProps {
 const GoBackButton = ({ href, t }: TranslatedProps<GoBackButtonProps>) => {
   return (
     <GoBackButtonStyle href={href}>
-      <Icon type="arrow" size="small" />
+      <ArrowBackIcon />
       <ButtonText>{t('ui.default.goBackToSite')}</ButtonText>
     </GoBackButtonStyle>
   );
-}
+};
 
 export default GoBackButton;

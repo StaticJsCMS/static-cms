@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from '@emotion/styled';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { AuthenticationPage, Icon } from '../../ui';
-import { ImplicitAuthenticator } from '../../lib/auth';
 import alert from '../../components/UI/Alert';
+import Icon from '../../components/UI/Icon';
+import { ImplicitAuthenticator } from '../../lib/auth';
+import { AuthenticationPage } from '../../ui';
 
 import type { MouseEvent } from 'react';
 import type { AuthenticationPageProps, TranslatedProps } from '../../interface';
@@ -47,23 +48,26 @@ const AzureAuthenticationPage = ({
     });
   }, [auth, onLogin]);
 
-  const handleLogin = useCallback((e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    auth.authenticate(
-      {
-        scope: 'vso.code_full,user.read',
-        resource: '499b84ac-1321-427f-aa17-267ca6975798',
-        prompt: 'select_account',
-      },
-      (err, data) => {
-        if (err) {
-          setLoginError(err.toString());
-        } else if (data) {
-          onLogin(data);
-        }
-      },
-    );
-  }, [auth, onLogin]);
+  const handleLogin = useCallback(
+    (e: MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      auth.authenticate(
+        {
+          scope: 'vso.code_full,user.read',
+          resource: '499b84ac-1321-427f-aa17-267ca6975798',
+          prompt: 'select_account',
+        },
+        (err, data) => {
+          if (err) {
+            setLoginError(err.toString());
+          } else if (data) {
+            onLogin(data);
+          }
+        },
+      );
+    },
+    [auth, onLogin],
+  );
 
   return (
     <AuthenticationPage
