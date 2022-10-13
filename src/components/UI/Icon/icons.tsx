@@ -22,21 +22,6 @@ interface IconTypeConfig {
   direction: Direction;
 }
 
-/**
- * Configuration for individual icons.
- */
-const config: Partial<Record<IconType, IconTypeConfig>> = {
-  arrow: {
-    direction: 'left',
-  },
-  chevron: {
-    direction: 'down',
-  },
-  'chevron-double': {
-    direction: 'down',
-  },
-};
-
 export interface IconTypeProps extends Partial<IconTypeConfig> {
   image: () => JSX.Element;
 }
@@ -48,10 +33,8 @@ export interface IconTypeProps extends Partial<IconTypeConfig> {
  */
 const icons = (Object.keys(images) as IconType[]).reduce((acc, name) => {
   const image = images[name];
-  const props = config[name] || {};
   acc[name] = {
     image,
-    ...props,
   };
   return acc;
 }, {} as Record<IconType, IconTypeProps>);

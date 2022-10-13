@@ -2,8 +2,8 @@ import styled from '@emotion/styled';
 import React from 'react';
 
 import GoBackButton from './GoBackButton';
-import Icon from './Icon';
 import { buttons, shadows } from './styles';
+import Icon from '../components/UI/Icon';
 
 import type { MouseEventHandler, ReactNode } from 'react';
 import type { TranslatedProps } from '../interface';

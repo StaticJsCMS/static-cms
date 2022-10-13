@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
-import { transientOptions } from '../lib';
 import icons from './Icon/icons';
+import transientOptions from '../../lib/util/transientOptions';
 
 import type { IconType } from './Icon/icons';
 
