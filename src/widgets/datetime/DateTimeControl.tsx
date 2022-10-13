@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import TodayIcon from '@mui/icons-material/Today';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -10,27 +11,34 @@ import formatDate from 'date-fns/format';
 import formatISO from 'date-fns/formatISO';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import type { MouseEvent } from 'react';
 import type { CmsFieldDateTime, CmsWidgetControlProps, TranslatedProps } from '../../interface';
 
 const StyledNowButton = styled.div`
-  position: absolute;
-  right: 20px;
-  transform: translateY(-40px);
   width: fit-content;
-  z-index: 1;
 `;
 
 interface NowButtonProps {
   handleChange: (value: Date) => void;
+  disabled: boolean;
 }
 
-function NowButton({ t, handleChange }: TranslatedProps<NowButtonProps>) {
+function NowButton({ t, handleChange, disabled }: TranslatedProps<NowButtonProps>) {
+  const handleClick = useCallback(
+    (event: MouseEvent) => {
+      event.stopPropagation();
+      handleChange(new Date());
+    },
+    [handleChange],
+  );
+
   return (
     <StyledNowButton>
       <Button
-        onClick={() => {
-          handleChange(new Date());
-        }}
+        onClick={handleClick}
+        disabled={disabled}
+        startIcon={<TodayIcon />}
+        variant="outlined"
       >
         {t('editor.editorWidgets.datetime.now')}
       </Button>
@@ -41,6 +49,7 @@ function NowButton({ t, handleChange }: TranslatedProps<NowButtonProps>) {
 const DateTimeControl = ({
   path,
   field,
+  label,
   value,
   t,
   isDisabled,
@@ -119,42 +128,58 @@ const DateTimeControl = ({
             inputFormat={`${typeof dateFormat === 'string' ? dateFormat : undefined} ${
               typeof timeFormat === 'string' ? timeFormat : undefined
             }`}
+            label={label}
             value={internalValue}
             onChange={handleChange}
             renderInput={params => (
               <TextField
                 {...params}
                 fullWidth
-                sx={{
-                  '.MuiInputBase-root': {
-                    borderTopLeftRadius: 0,
-                    '.MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#dfdfe3',
-                    },
-                    '&:not(.Mui-focused):hover .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#dfdfe3',
-                    },
-                  },
+                InputProps={{
+                  endAdornment: (
+                    <NowButton t={t} handleChange={v => handleChange(v)} disabled={isDisabled} />
+                  ),
                 }}
               />
             )}
           />
         ) : (
           <TimePicker
+            label={label}
             value={internalValue}
             onChange={handleChange}
-            renderInput={params => <TextField {...params} fullWidth />}
+            renderInput={params => (
+              <TextField
+                {...params}
+                fullWidth
+                InputProps={{
+                  endAdornment: (
+                    <NowButton t={t} handleChange={v => handleChange(v)} disabled={isDisabled} />
+                  ),
+                }}
+              />
+            )}
           />
         )
       ) : (
         <MobileDatePicker
           inputFormat={typeof dateFormat === 'string' ? dateFormat : undefined}
+          label={label}
           value={internalValue}
           onChange={handleChange}
-          renderInput={params => <TextField {...params} fullWidth />}
+          renderInput={params => (
+            <TextField
+              {...params}
+              fullWidth
+              InputProps={{
+                endAdornment: (
+                  <NowButton t={t} handleChange={v => handleChange(v)} disabled={isDisabled} />
+                ),
+              }}
+            />
+          )}
         />
       )}
-      {!isDisabled && <NowButton t={t} handleChange={v => handleChange(v)} />}
     </LocalizationProvider>
   );
 };

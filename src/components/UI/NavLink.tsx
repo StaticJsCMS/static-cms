@@ -34,7 +34,7 @@ const StyledNavLinkWrapper = styled(
 
       :hover {
         color: ${colors.active};
-        
+
         .MuiListItemIcon-root {
           color: ${colors.active};
         }
@@ -46,6 +46,10 @@ const StyledNavLinkWrapper = styled(
         ? `
           & > .${$activeClassName} {
             color: ${colors.active};
+
+            .MuiListItemIcon-root {
+              color: ${colors.active};
+            }
           }
         `
         : ''

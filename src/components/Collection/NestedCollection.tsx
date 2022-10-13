@@ -68,6 +68,10 @@ const TreeNavLink = styled(
       color: ${colors.active};
       background-color: ${colors.activeBackground};
       border-left-color: #4863c6;
+
+      .MuiListItemIcon-root {
+        color: ${colors.active};
+      }
     }
   `,
 );
