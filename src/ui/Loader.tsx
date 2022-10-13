@@ -1,7 +1,16 @@
-import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import React, { useEffect, useMemo, useState } from 'react';
+
+const StyledLoader = styled('div')`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+`;
 
 export interface LoaderProps {
   children: string | string[] | undefined;
@@ -36,10 +45,10 @@ const Loader = ({ children }: LoaderProps) => {
   }, [children, currentItem]);
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <StyledLoader>
       <CircularProgress />
       <Typography>{text}</Typography>
-    </Box>
+    </StyledLoader>
   );
 };
 
