@@ -39,6 +39,7 @@ function NowButton({ t, handleChange }: TranslatedProps<NowButtonProps>) {
 }
 
 const DateTimeControl = ({
+  path,
   field,
   value,
   t,
@@ -73,7 +74,7 @@ const DateTimeControl = ({
   const handleChange = useCallback(
     (datetime: string | Date | null) => {
       if (datetime === null) {
-        onChange(datetime);
+        onChange(path, field, datetime);
         return;
       }
 
@@ -93,9 +94,9 @@ const DateTimeControl = ({
       }
 
       setInternalValue(newValue);
-      onChange(newValue);
+      onChange(path, field, newValue);
     },
-    [format, onChange],
+    [field, format, onChange, path],
   );
 
   useEffect(() => {

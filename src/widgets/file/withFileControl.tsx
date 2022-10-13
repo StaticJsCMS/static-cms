@@ -183,6 +183,7 @@ interface WithImageOptions {
 
 export default function withFileControl({ forImage = false }: WithImageOptions = {}) {
   const FileControl = ({
+    path,
     value,
     field,
     onChange,
@@ -199,11 +200,11 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
     useEffect(() => {
       const mediaPath = mediaPaths[controlID];
       if (mediaPath && mediaPath !== value) {
-        onChange(mediaPath);
+        onChange(path, field, mediaPath);
       } else if (mediaPath && mediaPath === value) {
         onRemoveInsertedMedia(controlID);
       }
-    }, [controlID, mediaPaths, onChange, onRemoveInsertedMedia, value]);
+    }, [controlID, field, mediaPaths, onChange, onRemoveInsertedMedia, path, value]);
 
     useEffect(() => {
       return () => {
@@ -256,28 +257,28 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
 
         const url = window.prompt(t(`editor.editorWidgets.${subject}.promptUrl`));
 
-        return onChange(url);
+        return onChange(path, field, url);
       },
-      [onChange, t],
+      [field, onChange, path, t],
     );
 
     const handleRemove = useCallback(
       (e: MouseEvent) => {
         e.preventDefault();
         onClearMediaControl(controlID);
-        return onChange('');
+        return onChange(path, field, '');
       },
-      [controlID, onChange, onClearMediaControl],
+      [controlID, field, onChange, onClearMediaControl, path],
     );
 
     const onRemoveOne = useCallback(
       (index: number) => () => {
         if (Array.isArray(value)) {
           value.splice(index, 1);
-          return onChange(sizeOfValue(value) > 0 ? [...value] : null);
+          return onChange(path, field, sizeOfValue(value) > 0 ? [...value] : null);
         }
       },
-      [onChange, value],
+      [field, onChange, path, value],
     );
 
     const onReplaceOne = useCallback(
@@ -300,10 +301,10 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
       ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
         if (Array.isArray(value)) {
           const newValue = arrayMove(value, oldIndex, newIndex);
-          return onChange(newValue);
+          return onChange(path, field, newValue);
         }
       },
-      [onChange, value],
+      [field, onChange, path, value],
     );
 
     const renderFileLink = useCallback((value: string | undefined | null) => {

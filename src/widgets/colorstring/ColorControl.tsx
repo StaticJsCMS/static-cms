@@ -91,9 +91,9 @@ const ClickOutsideDiv = styled.div`
 `;
 
 const ColorControl = ({
+  path,
   field,
   onChange,
-  onBlur,
   ...otherProps
 }: CmsWidgetControlProps<string, CmsFieldColor>) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
@@ -105,8 +105,8 @@ const ColorControl = ({
   }, [showColorPicker]);
 
   const handleClear = useCallback(() => {
-    onChange('');
-  }, [onChange]);
+    onChange(path, field, '');
+  }, [field, onChange, path]);
 
   const handleClose = useCallback(() => {
     setShowColorPicker(false);
@@ -118,9 +118,9 @@ const ColorControl = ({
         (color.rgb?.a ?? 1) < 1
           ? `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`
           : color.hex;
-      onChange(formattedColor);
+      onChange(path, field, formattedColor);
     },
-    [onChange],
+    [field, onChange, path],
   );
 
   const allowInput = field.allowInput ?? false;
@@ -160,7 +160,7 @@ const ColorControl = ({
         // text input with padding left for the color swatch
         type="text"
         value={value || ''}
-        onChange={e => onChange(e.target.value)}
+        onChange={e => onChange(path, field, e.target.value)}
         style={{
           paddingLeft: '75px',
           paddingRight: '70px',
@@ -168,7 +168,6 @@ const ColorControl = ({
         }}
         // make readonly and open color picker on click if set to allowInput: false
         onClick={!allowInput ? handleClick : undefined}
-        onBlur={onBlur}
         readOnly={!allowInput}
       />
     </>

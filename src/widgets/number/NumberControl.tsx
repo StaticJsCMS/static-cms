@@ -1,5 +1,5 @@
 import TextField from '@mui/material/TextField';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import type { t } from 'react-polyglot';
 import type { CmsFieldNumber, CmsWidgetControlProps } from '../../interface';
@@ -59,11 +59,13 @@ export function validateMinMax(
 }
 
 const NumberControl = ({
+  path,
   field,
-  value = '',
+  value,
   onChange,
-  onBlur,
 }: CmsWidgetControlProps<string | number, CmsFieldNumber>) => {
+  const [internalValue, setInternalValue] = useState(value ?? '');
+
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const valueType = field.value_type;
@@ -71,12 +73,14 @@ const NumberControl = ({
         valueType === 'float' ? parseFloat(e.target.value) : parseInt(e.target.value, 10);
 
       if (!isNaN(value)) {
-        onChange(value);
+        onChange(path, field, value);
+        setInternalValue(value);
       } else {
-        onChange('');
+        onChange(path, field, '');
+        setInternalValue('');
       }
     },
-    [field.value_type, onChange],
+    [field, onChange, path],
   );
 
   const min = field.min ?? '';
@@ -86,9 +90,8 @@ const NumberControl = ({
     <TextField
       variant="outlined"
       type="number"
-      value={value || (value === 0 ? value : '')}
+      value={internalValue}
       onChange={handleChange}
-      onBlur={onBlur}
       inputProps={{
         step,
         min,

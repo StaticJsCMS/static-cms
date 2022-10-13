@@ -7,16 +7,17 @@ import type { RefObject } from 'react';
 import type { CmsFieldMarkdown, CmsWidgetControlProps } from '../../../interface';
 
 const MarkdownControl = ({
+  path,
+  field,
   value,
   onChange,
-  onBlur
 }: CmsWidgetControlProps<string, CmsFieldMarkdown>) => {
   const editorRef = useMemo(() => React.createRef(), []) as RefObject<Editor>;
 
   const handleOnChange = useCallback(() => {
     const newValue = editorRef.current?.getInstance().getMarkdown();
-    onChange(newValue ?? '');
-  }, [editorRef, onChange]);
+    onChange(path, field, newValue ?? '');
+  }, [editorRef, field, onChange, path]);
 
   return (
     <Editor
@@ -26,7 +27,6 @@ const MarkdownControl = ({
       initialEditType="markdown"
       useCommandShortcut={true}
       onChange={handleOnChange}
-      onBlur={() => onBlur()}
       ref={editorRef}
     />
   );

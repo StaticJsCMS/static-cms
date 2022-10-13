@@ -55,12 +55,12 @@ const settingsPersistKeys = {
 };
 
 const CodeControl = ({
+  path,
   isEditorComponent,
   isNewEditorComponent,
   field,
   value,
   onChange,
-  onBlur
 }: CmsWidgetControlProps<string | { [key: string]: string }, CmsFieldCode>) => {
   // If the value is a map, keys can be customized via config.
   const getKeys = useCallback(
@@ -145,10 +145,13 @@ const CodeControl = ({
       // Only persist the language change if supported - requires the value to be
       // a map rather than just a code string.
       if (changedProps.lang && valueIsMap) {
-        onChange({ ...(typeof value !== 'string' ? value : {}), lang: changedProps.lang });
+        onChange(path, field, {
+          ...(typeof value !== 'string' ? value : {}),
+          lang: changedProps.lang,
+        });
       }
     },
-    [codemirrorEditor, getLanguageByName, onChange, value, valueIsMap],
+    [codemirrorEditor, field, getLanguageByName, onChange, path, value, valueIsMap],
   );
 
   const [prevLang, setPrevLang] = useState<string | undefined>();
@@ -194,11 +197,11 @@ const CodeControl = ({
       setLastKnownValue(newValue);
 
       if (valueIsMap) {
-        onChange({ ...(typeof value !== 'string' ? value : {}), code: newValue });
+        onChange(path, field, { ...(typeof value !== 'string' ? value : {}), code: newValue });
       }
-      onChange(newValue);
+      onChange(path, field, newValue);
     },
-    [codemirrorEditor, onChange, value, valueIsMap],
+    [codemirrorEditor, field, onChange, path, value, valueIsMap],
   );
 
   const showSettings = useCallback(() => {
@@ -290,7 +293,6 @@ const CodeControl = ({
             value={lastKnownValue}
             onChange={(_editor, _data, newValue) => handleChange(newValue)}
             onFocus={handleFocus}
-            onBlur={() => onBlur()}
           />
         </div>
       )}

@@ -20,10 +20,10 @@ function convertToOption(raw: string | Option | undefined): Option | undefined {
 }
 
 const SelectControl = ({
+  path,
   field,
   value,
   onChange,
-  onBlur,
 }: CmsWidgetControlProps<string | string[], CmsFieldSelect>) => {
   const handleChange = useCallback(
     (event: SelectChangeEvent<string | string[]>) => {
@@ -33,28 +33,28 @@ const SelectControl = ({
         isMultiple && Array.isArray(selectedOption) ? !selectedOption?.length : !selectedOption;
 
       if (field.required && isEmpty && isMultiple) {
-        onChange([]);
+        onChange(path, field, []);
       } else if (isEmpty) {
-        onChange(null);
+        onChange(path, field, null);
       } else if (typeof selectedOption === 'string') {
-        onChange(selectedOption);
+        onChange(path, field, selectedOption);
       } else if (isMultiple) {
-        onChange(selectedOption);
+        onChange(path, field, selectedOption);
       }
     },
-    [field, onChange],
+    [field, onChange, path],
   );
 
   useEffect(() => {
     if (field.required && field.multiple) {
       if (value && !Array.isArray(value)) {
-        onChange([value]);
+        onChange(path, field, [value]);
       } else if (!value) {
-        onChange([]);
+        onChange(path, field, []);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [field.multiple, field.required, onChange]);
+  }, [field, field.multiple, field.required, onChange, path]);
 
   const fieldOptions: (string | Option)[] = field.options;
   const isMultiple = field.multiple ?? false;
@@ -80,7 +80,6 @@ const SelectControl = ({
         value={(value ?? isMultiple ? [] : '') as string | string[]}
         onChange={handleChange}
         multiple={isMultiple}
-        onBlur={onBlur}
       >
         {options.map(option => (
           <MenuItem key={`option-${option.value}`} value={option.value}>

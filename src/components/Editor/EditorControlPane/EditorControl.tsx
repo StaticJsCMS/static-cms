@@ -7,10 +7,7 @@ import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import gfm from 'remark-gfm';
 
-import {
-  clearFieldErrors as clearFieldErrorsAction,
-  tryLoadEntry,
-} from '../../../actions/entries';
+import { clearFieldErrors as clearFieldErrorsAction, tryLoadEntry } from '../../../actions/entries';
 import { addAsset as addAssetAction, getAsset as getAssetAction } from '../../../actions/media';
 import {
   clearMediaControl as clearMediaControlAction,
@@ -122,8 +119,8 @@ export const ControlHint = styled(
   transientOptions,
 )<ControlHintProps>(
   ({ $error }) => `
-    margin-bottom: 0;
-    padding: 3px 0;
+    margin: 8px 0;
+    padding: 0 8px;
     font-size: 12px;
     color: ${$error ? colors.errorText : colors.controlLabel};
     transition: color ${transitions.main};
@@ -189,7 +186,10 @@ const EditorControl = ({
     [getAsset],
   );
 
-  const path = useMemo(() => `${parentPath}.${field.name}`, [field.name, parentPath]);
+  const path = useMemo(
+    () => (parentPath.length > 0 ? `${parentPath}.${field.name}` : field.name),
+    [field.name, parentPath],
+  );
 
   const cmsConfig = useMemo(() => config.config, [config.config]);
   if (!collection || !entry || !cmsConfig) {

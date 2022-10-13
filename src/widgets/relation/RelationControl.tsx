@@ -101,10 +101,10 @@ function getSelectedValue(
 }
 
 const RelationControl = ({
+  path,
   value,
   field,
   onChange,
-  onBlur,
   queryHits,
   query,
   locale,
@@ -232,14 +232,14 @@ const RelationControl = ({
         const options = selectedOption;
         setInitialOptions(options.filter(Boolean));
         const value = options.map(optionToString);
-        onChange(value);
+        onChange(path, field, value);
       } else {
         setInitialOptions([selectedOption].filter(Boolean) as HitOption[]);
         const value = optionToString(selectedOption);
-        onChange(value);
+        onChange(path, field, value);
       }
     },
-    [onChange],
+    [field, onChange, path],
   );
 
   const [options, setOptions] = useState<HitOption[]>([]);
@@ -312,7 +312,6 @@ const RelationControl = ({
       value={selectedValue}
       onChange={(_event, newValue) => handleChange(newValue)}
       multiple={isMultiple}
-      onBlur={onBlur}
       open={open}
       onOpen={() => {
         setOpen(true);

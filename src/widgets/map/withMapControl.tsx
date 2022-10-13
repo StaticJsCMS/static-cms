@@ -37,7 +37,8 @@ interface WithMapControlProps {
 
 export default function withMapControl({ getFormat, getMap }: WithMapControlProps = {}) {
   const MapControl = ({
-    value = '',
+    path,
+    value,
     field,
     onChange,
   }: CmsWidgetControlProps<string, CmsFieldMap>) => {
@@ -69,10 +70,10 @@ export default function withMapControl({ getFormat, getMap }: WithMapControlProp
         featuresSource.clear();
         const geometry = feature.getGeometry();
         if (geometry) {
-          onChange(format.writeGeometry(geometry, writeOptions));
+          onChange(path, field, format.writeGeometry(geometry, writeOptions));
         }
       });
-    }, [field, mapContainer, onChange, value]);
+    }, [field, mapContainer, onChange, path, value]);
 
     return (
       <ClassNames>
