@@ -8,9 +8,8 @@ import type { CmsFieldMarkdown, CmsWidgetControlProps } from '../../../interface
 
 const MarkdownControl = ({
   value,
-  setActiveStyle,
   onChange,
-  setInactiveStyle,
+  onBlur
 }: CmsWidgetControlProps<string, CmsFieldMarkdown>) => {
   const editorRef = useMemo(() => React.createRef(), []) as RefObject<Editor>;
 
@@ -26,9 +25,8 @@ const MarkdownControl = ({
       height="600px"
       initialEditType="markdown"
       useCommandShortcut={true}
-      onFocus={() => setActiveStyle()}
-      onBlur={() => setInactiveStyle()}
       onChange={handleOnChange}
+      onBlur={() => onBlur()}
       ref={editorRef}
     />
   );

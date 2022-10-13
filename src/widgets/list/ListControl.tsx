@@ -8,6 +8,7 @@ import { SortableContainer, SortableElement, SortableHandle } from 'react-sortab
 import uuid from 'uuid/v4';
 
 import { transientOptions } from '../../lib';
+import { getFieldLabel } from '../../lib/util/field.util';
 import { stringTemplate } from '../../lib/widgets';
 import { colors, FieldLabel, lengths, ListItemTopBar, ObjectWidgetTopBar } from '../../ui';
 import ObjectControl from '../object/ObjectControl';
@@ -18,7 +19,7 @@ import {
   TYPES_KEY,
 } from './typedListHelpers';
 
-import type { ChangeEvent, FocusEvent, MouseEvent } from 'react';
+import type { ChangeEvent, MouseEvent } from 'react';
 import type { t } from 'react-polyglot';
 import type {
   CmsField,
@@ -26,7 +27,6 @@ import type {
   CmsWidgetControlProps,
   Entry,
   EntryData,
-  EntryMeta,
   ListValue,
   ValueOrNestedValue,
 } from '../../interface';
@@ -181,14 +181,10 @@ function getFieldsDefault(
 const ListControl = ({
   parentIds = [],
   field,
-  setActiveStyle,
-  setInactiveStyle,
   forID,
-  classNameWrapper,
   onChange,
   t,
   onValidateObject,
-  metadata,
   clearFieldErrors,
   fieldsErrors,
   entry,
@@ -213,6 +209,7 @@ const ListControl = ({
   onRemoveMediaControl,
   query,
   queryHits,
+  onBlur,
   ...otherProps
 }: CmsWidgetControlProps<ListValue[], CmsFieldList>) => {
   const initialValue = useMemo(() => otherProps.value ?? [], [otherProps.value]);
@@ -319,22 +316,18 @@ const ListControl = ({
     [onChange, value, valueToString],
   );
 
-  const handleFocus = useCallback(() => {
-    setActiveStyle();
-  }, [setActiveStyle]);
+  // TODO Fix
+  // const handleBlur = useCallback(
+  //   (e: FocusEvent<HTMLInputElement>) => {
+  //     const listValue = e.target.value
+  //       .split(',')
+  //       .map(el => el.trim())
+  //       .filter(el => el);
 
-  const handleBlur = useCallback(
-    (e: FocusEvent<HTMLInputElement>) => {
-      const listValue = e.target.value
-        .split(',')
-        .map(el => el.trim())
-        .filter(el => el);
-
-      setValue(valueToString(listValue));
-      setInactiveStyle();
-    },
-    [setInactiveStyle, valueToString],
-  );
+  //     setValue(valueToString(listValue));
+  //   },
+  //   [valueToString],
+  // );
 
   const singleDefault = useCallback(() => {
     return (field.field && 'default' in field.field ? field.field.default : '') as ListValue;
@@ -412,8 +405,7 @@ const ListControl = ({
 
   const handleChangeFor = useCallback(
     (index: number) => {
-      return (f: CmsField, newValue: ValueOrNestedValue, newMetadata?: EntryMeta) => {
-        const collectionName = field.name;
+      return (f: CmsField, newValue: ValueOrNestedValue) => {
         const listFieldObjectWidget = field.field?.widget === 'object';
         const withNameKey =
           getValueType() !== valueTypes.SINGLE ||
@@ -425,42 +417,18 @@ const ListControl = ({
               [f.name]: newValue,
             }
           : newValue;
-        const parsedMetadata = {
-          [collectionName]: Object.assign(metadata ? metadata : {}, newMetadata || {}),
-        };
 
         const newValues = [...initialValue];
         newValues[index] = newObjectValue as ListValue;
-        onChange(newValues, parsedMetadata);
+        onChange(newValues);
       };
     },
-    [
-      field.field?.widget,
-      field.name,
-      getObjectValue,
-      getValueType,
-      initialValue,
-      metadata,
-      onChange,
-    ],
+    [field.field?.widget, getObjectValue, getValueType, initialValue, onChange],
   );
 
   const handleRemove = useCallback(
     (index: number, event: MouseEvent) => {
       event.preventDefault();
-      // TODO Figure out what this does
-      // const collectionName = field.name;
-      // const isSingleField = getValueType() === valueTypes.SINGLE;
-      //
-      // const metadataRemovePath = isSingleField
-      //   ? initialValue[index]
-      //   : Object.values(initialValue[index]);
-      //
-      // const parsedMetadata =
-      //   metadata && !isEmpty(metadata)
-      //     ? { [collectionName]: metadata.removeIn(metadataRemovePath) }
-      //     : metadata;
-
       itemsCollapsed.splice(index, 1);
 
       // TODO clear validations
@@ -472,10 +440,10 @@ const ListControl = ({
       const newValue = [...initialValue];
       newValue.splice(index, 1);
 
-      onChange(newValue, metadata);
+      onChange(newValue);
       clearFieldErrors();
     },
-    [clearFieldErrors, initialValue, itemsCollapsed, metadata, onChange],
+    [clearFieldErrors, initialValue, itemsCollapsed, onChange],
   );
 
   const handleItemCollapseToggle = useCallback(
@@ -692,69 +660,55 @@ const ListControl = ({
             <NestedObjectLabel $collapsed={collapsed} $error={hasError}>
               {getObjectLabel(item)}
             </NestedObjectLabel>
-            <ClassNames>
-              {({ css, cx }) => (
-                <ObjectControl
-                  classNameWrapper={cx(classNameWrapper, {
-                    [css`
-                      ${styleStrings.collapsedObjectControl};
-                    `]: collapsed,
-                  })}
-                  value={item as Record<string, ListValue>}
-                  field={field}
-                  onChangeObject={handleChangeFor(index)}
-                  metadata={metadata}
-                  forList
-                  onValidateObject={onValidateObject}
-                  clearFieldErrors={clearFieldErrors}
-                  fieldsErrors={fieldsErrors}
-                  // TODO validation! validationKey={key}
-                  collapsed={collapsed}
-                  data-testid={`object-control-${key}`}
-                  hasError={hasError}
-                  parentIds={[...parentIds, forID, key]}
-                  clearSearch={clearSearch}
-                  collection={collection}
-                  config={config}
-                  entry={entry}
-                  forID={forID}
-                  getAsset={getAsset}
-                  hasActiveStyle={false}
-                  isDisabled={isDisabled}
-                  isEditorComponent={isEditorComponent}
-                  isFetching={isFetching}
-                  isFieldDuplicate={isFieldDuplicate}
-                  isFieldHidden={isFieldHidden}
-                  isNewEditorComponent={isNewEditorComponent}
-                  loadEntry={loadEntry}
-                  locale={locale}
-                  mediaPaths={mediaPaths}
-                  onAddAsset={onAddAsset}
-                  // eslint-disable-next-line @typescript-eslint/no-empty-function
-                  onChange={() => {}}
-                  onClearMediaControl={onClearMediaControl}
-                  onOpenMediaLibrary={onOpenMediaLibrary}
-                  onPersistMedia={onPersistMedia}
-                  onRemoveInsertedMedia={onRemoveInsertedMedia}
-                  onRemoveMediaControl={onRemoveMediaControl}
-                  query={query}
-                  queryHits={queryHits}
-                  // eslint-disable-next-line @typescript-eslint/no-empty-function
-                  setActiveStyle={() => {}}
-                  // eslint-disable-next-line @typescript-eslint/no-empty-function
-                  setInactiveStyle={() => {}}
-                  t={t}
-                  // eslint-disable-next-line @typescript-eslint/no-empty-function
-                  validate={() => {}}
-                />
-              )}
-            </ClassNames>
+            <ObjectControl
+              value={item as Record<string, ListValue>}
+              field={field}
+              onChangeObject={handleChangeFor(index)}
+              forList
+              onValidateObject={onValidateObject}
+              clearFieldErrors={clearFieldErrors}
+              fieldsErrors={fieldsErrors}
+              // TODO validation! validationKey={key}
+              collapsed={collapsed}
+              data-testid={`object-control-${key}`}
+              hasError={hasError}
+              parentIds={[...parentIds, forID, key]}
+              clearSearch={clearSearch}
+              collection={collection}
+              config={config}
+              entry={entry}
+              forID={forID}
+              getAsset={getAsset}
+              isDisabled={isDisabled}
+              isEditorComponent={isEditorComponent}
+              isFetching={isFetching}
+              isFieldDuplicate={isFieldDuplicate}
+              isFieldHidden={isFieldHidden}
+              isNewEditorComponent={isNewEditorComponent}
+              loadEntry={loadEntry}
+              locale={locale}
+              mediaPaths={mediaPaths}
+              onAddAsset={onAddAsset}
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
+              onChange={() => {}}
+              onClearMediaControl={onClearMediaControl}
+              onOpenMediaLibrary={onOpenMediaLibrary}
+              onPersistMedia={onPersistMedia}
+              onRemoveInsertedMedia={onRemoveInsertedMedia}
+              onRemoveMediaControl={onRemoveMediaControl}
+              onBlur={onBlur}
+              query={query}
+              queryHits={queryHits}
+              t={t}
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
+              validate={() => {}}
+              label={getFieldLabel(field, t)}
+            />
           </>
         </SortableListItem>
       );
     },
     [
-      classNameWrapper,
       clearFieldErrors,
       clearSearch,
       collection,
@@ -781,8 +735,8 @@ const ListControl = ({
       loadEntry,
       locale,
       mediaPaths,
-      metadata,
       onAddAsset,
+      onBlur,
       onClearMediaControl,
       onOpenMediaLibrary,
       onPersistMedia,
@@ -813,7 +767,6 @@ const ListControl = ({
           <div
             id={forID}
             className={cx(
-              classNameWrapper,
               css`
                 ${styleStrings.objectWidgetTopBarContainer}
               `,
@@ -844,7 +797,6 @@ const ListControl = ({
       </ClassNames>
     );
   }, [
-    classNameWrapper,
     field,
     forID,
     handleAdd,
@@ -859,18 +811,8 @@ const ListControl = ({
   ]);
 
   const renderInput = useCallback(() => {
-    return (
-      <input
-        type="text"
-        id={forID}
-        value={value}
-        onChange={handleChange}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        className={classNameWrapper}
-      />
-    );
-  }, [classNameWrapper, forID, handleBlur, handleChange, handleFocus, value]);
+    return <input type="text" id={forID} value={value} onChange={handleChange} />;
+  }, [forID, handleChange, value]);
 
   if (getValueType() !== null) {
     return renderListControl();

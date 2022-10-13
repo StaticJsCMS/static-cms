@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
+import MainView from '../App/MainView';
 import Collection from './Collection';
 
 import type { Collections } from '../../interface';
@@ -44,13 +45,15 @@ const CollectionRoute = ({
   }
 
   return (
-    <Collection
-      name={name}
-      searchTerm={searchTerm}
-      filterTerm={filterTerm}
-      isSearchResults={isSearchResults}
-      isSingleSearchResult={isSingleSearchResult}
-    />
+    <MainView>
+      <Collection
+        name={name}
+        searchTerm={searchTerm}
+        filterTerm={filterTerm}
+        isSearchResults={isSearchResults}
+        isSingleSearchResult={isSingleSearchResult}
+      />
+    </MainView>
   );
 };
 

@@ -8,18 +8,15 @@ const BooleanControl = ({
   value,
   forID,
   onChange,
-  classNameWrapper,
-  setActiveStyle,
-  setInactiveStyle,
+  onBlur
 }: CmsWidgetControlProps<boolean, CmsFieldBoolean>) => {
   return (
-    <div className={classNameWrapper}>
+    <div>
       <Toggle
         id={forID}
         active={value ?? false}
         onChange={onChange}
-        onFocus={setActiveStyle}
-        onBlur={setInactiveStyle}
+        onBlur={onBlur}
       />
     </div>
   );

@@ -2,7 +2,6 @@ import get from 'lodash/get';
 import groupBy from 'lodash/groupBy';
 import once from 'lodash/once';
 import orderBy from 'lodash/orderBy';
-import set from 'lodash/set';
 import sortBy from 'lodash/sortBy';
 
 import {
@@ -27,6 +26,7 @@ import {
 import { SEARCH_ENTRIES_SUCCESS } from '../actions/search';
 import { VIEW_STYLE_LIST } from '../constants/collectionViews';
 import { SortDirection } from '../interface';
+import { set } from '../lib/util/object.util';
 import { selectSortDataPath } from '../lib/util/sort.util';
 
 import type { EntriesAction } from '../actions/entries';
@@ -381,12 +381,6 @@ function entries(
         ids,
         isFetching: false,
       };
-
-      console.log('new state', {
-        ...state,
-        entities,
-        pages,
-      });
 
       return {
         ...state,

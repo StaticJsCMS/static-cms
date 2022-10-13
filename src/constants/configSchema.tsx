@@ -275,22 +275,6 @@ function getConfigSchema() {
               },
               required: ['depth'],
             },
-            meta: {
-              type: 'object',
-              properties: {
-                path: {
-                  type: 'object',
-                  properties: {
-                    label: { type: 'string' },
-                    widget: { type: 'string' },
-                    index_file: { type: 'string' },
-                  },
-                  required: ['label', 'widget', 'index_file'],
-                },
-              },
-              additionalProperties: false,
-              minProperties: 1,
-            },
             i18n: i18nCollection,
           },
           required: ['name', 'label'],

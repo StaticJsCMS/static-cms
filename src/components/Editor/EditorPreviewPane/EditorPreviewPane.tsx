@@ -23,7 +23,6 @@ import type {
   Collection,
   Entry,
   EntryData,
-  EntryMeta,
   GetAssetFunction,
 } from '../../../interface';
 import type { RootState } from '../../../store';
@@ -48,12 +47,10 @@ function getWidgetFor(
   name: string,
   fields: CmsField[],
   entry: Entry,
-  fieldsMetaData: Record<string, EntryMeta>,
   inferedFields: Record<string, InferredField>,
   getAsset: GetAssetFunction,
   widgetFields: CmsField[] = fields,
   values: EntryData = entry.data,
-  widgetFieldsMetaData: Record<string, EntryMeta> = fieldsMetaData,
 ): ReactNode {
   // We retrieve the field by name so that this function can also be used in
   // custom preview templates, where the field object can't be passed in.
@@ -62,12 +59,7 @@ function getWidgetFor(
     return null;
   }
 
-  let value = values?.[field.name];
-  if ('meta' in field) {
-    value = entry.meta?.[field.name];
-  }
-  const metadata = widgetFieldsMetaData && (widgetFieldsMetaData[field.name] ?? {});
-
+  const value = values?.[field.name];
   let fieldWithWidgets: Omit<CmsField, 'fields' | 'field'> & {
     fields?: ReactNode[];
     field?: ReactNode;
@@ -85,12 +77,10 @@ function getWidgetFor(
         collection,
         fields,
         entry,
-        fieldsMetaData,
         inferedFields,
         getAsset,
         field.fields,
         value as EntryData | EntryData[],
-        metadata as Record<string, EntryMeta>,
       ),
     };
   } else if ('field' in field && field.field) {
@@ -101,7 +91,6 @@ function getWidgetFor(
         getAsset,
         field.field,
         value as EntryData | EntryData[],
-        metadata as Record<string, EntryMeta>,
       ),
     };
   }
@@ -132,7 +121,7 @@ function getWidgetFor(
     );
   }
 
-  return renderedValue ? getWidget(field, renderedValue, metadata, entry, getAsset) : null;
+  return renderedValue ? getWidget(field, renderedValue, entry, getAsset) : null;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -152,7 +141,6 @@ function isReactFragment(value: any): value is ReactFragment {
 function getWidget(
   field: CmsField,
   value: EntryData | ReactNode,
-  metadata: EntryMeta,
   entry: Entry,
   getAsset: GetAssetFunction,
   idx: number | null = null,
@@ -183,7 +171,6 @@ function getWidget(
           : value
       }
       entry={entry}
-      fieldsMetaData={metadata}
       resolveWidget={resolveWidget}
       getRemarkPlugins={getRemarkPlugins}
     />
@@ -197,12 +184,10 @@ function widgetsForNestedFields(
   collection: Collection,
   fields: CmsField[],
   entry: Entry,
-  fieldsMetaData: Record<string, EntryMeta>,
   inferedFields: Record<string, InferredField>,
   getAsset: GetAssetFunction,
   widgetFields: CmsField[],
   values: EntryData,
-  widgetFieldsMetaData: Record<string, EntryMeta>,
 ) {
   return widgetFields
     .map(field =>
@@ -211,12 +196,10 @@ function widgetsForNestedFields(
         field.name,
         fields,
         entry,
-        fieldsMetaData,
         inferedFields,
         getAsset,
         widgetFields,
         values,
-        widgetFieldsMetaData,
       ),
     )
     .filter(widget => Boolean(widget)) as JSX.Element[];
@@ -229,12 +212,10 @@ function getNestedWidgets(
   collection: Collection,
   fields: CmsField[],
   entry: Entry,
-  fieldsMetaData: Record<string, EntryMeta>,
   inferedFields: Record<string, InferredField>,
   getAsset: GetAssetFunction,
   widgetFields: CmsField[],
   values: EntryData | EntryData[],
-  widgetFieldsMetaData: Record<string, EntryMeta>,
 ) {
   // Fields nested within a list field will be paired with a List of value Maps.
   if (Array.isArray(values)) {
@@ -243,12 +224,10 @@ function getNestedWidgets(
         collection,
         fields,
         entry,
-        fieldsMetaData,
         inferedFields,
         getAsset,
         widgetFields,
         value,
-        widgetFieldsMetaData,
       ),
     );
   }
@@ -258,12 +237,10 @@ function getNestedWidgets(
     collection,
     fields,
     entry,
-    fieldsMetaData,
     inferedFields,
     getAsset,
     widgetFields,
     values,
-    widgetFieldsMetaData,
   );
 }
 
@@ -272,18 +249,15 @@ function getSingleNested(
   getAsset: GetAssetFunction,
   widgetField: CmsField,
   values: EntryData | EntryData[],
-  widgetFieldsMetaData: Record<string, EntryMeta>,
 ): ReactNode {
   if (Array.isArray(values)) {
-    return values.map((value, idx) =>
-      getWidget(widgetField, value, widgetFieldsMetaData[widgetField.name], entry, getAsset, idx),
-    );
+    return values.map((value, idx) => getWidget(widgetField, value, entry, getAsset, idx));
   }
-  return getWidget(widgetField, values, widgetFieldsMetaData[widgetField.name], entry, getAsset);
+  return getWidget(widgetField, values, entry, getAsset);
 }
 
 const PreviewPane = (props: EditorPreviewPaneProps) => {
-  const { entry, collection, config, fields, fieldsMetaData, getAsset } = props;
+  const { entry, collection, config, fields, getAsset } = props;
 
   const inferedFields = useMemo(() => {
     const titleField = selectInferedField(collection, 'title');
@@ -328,16 +302,11 @@ const PreviewPane = (props: EditorPreviewPaneProps) => {
 
       const nestedFields = field && 'fields' in field ? field.fields ?? [] : [];
       const value = entry.data?.[field.name] as EntryData | EntryData[];
-      const metadata = (fieldsMetaData[field.name] = {}) as Record<string, EntryMeta>;
 
       if (Array.isArray(value)) {
         return value.map(val => {
           const widgets = nestedFields.reduce((acc, field, index) => {
-            acc[field.name] = (
-              <div key={index}>
-                {getWidget(field, val, metadata[field.name], entry, handleGetAsset)}
-              </div>
-            );
+            acc[field.name] = <div key={index}>{getWidget(field, val, entry, handleGetAsset)}</div>;
             return acc;
           }, {} as Record<string, ReactNode>);
           return { data: val, widgets };
@@ -347,31 +316,19 @@ const PreviewPane = (props: EditorPreviewPaneProps) => {
       return {
         data: value,
         widgets: nestedFields.reduce((acc, field, index) => {
-          acc[field.name] = (
-            <div key={index}>
-              {getWidget(field, value, metadata[field.name], entry, handleGetAsset)}
-            </div>
-          );
+          acc[field.name] = <div key={index}>{getWidget(field, value, entry, handleGetAsset)}</div>;
           return acc;
         }, {} as Record<string, ReactNode>),
       };
     },
-    [entry, fields, fieldsMetaData, handleGetAsset],
+    [entry, fields, handleGetAsset],
   );
 
   const widgetFor = useCallback(
     (name: string) => {
-      return getWidgetFor(
-        collection,
-        name,
-        fields,
-        entry,
-        fieldsMetaData,
-        inferedFields,
-        handleGetAsset,
-      );
+      return getWidgetFor(collection, name, fields, entry, inferedFields, handleGetAsset);
     },
-    [collection, entry, fields, fieldsMetaData, handleGetAsset, inferedFields],
+    [collection, entry, fields, handleGetAsset, inferedFields],
   );
 
   if (!entry || !entry.data) {
@@ -407,7 +364,6 @@ export interface EditorPreviewPaneOwnProps {
   collection: Collection;
   fields: CmsField[];
   entry: Entry;
-  fieldsMetaData: Record<string, EntryMeta>;
 }
 
 function mapStateToProps(state: RootState, ownProps: EditorPreviewPaneOwnProps) {

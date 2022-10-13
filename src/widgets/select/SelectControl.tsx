@@ -23,9 +23,8 @@ const SelectControl = ({
   field,
   value,
   forID,
-  setActiveStyle,
-  setInactiveStyle,
   onChange,
+  onBlur,
 }: CmsWidgetControlProps<string | string[], CmsFieldSelect>) => {
   const handleChange = useCallback(
     (event: SelectChangeEvent<string | string[]>) => {
@@ -83,8 +82,7 @@ const SelectControl = ({
         value={(value ?? isMultiple ? [] : '') as string | string[]}
         onChange={handleChange}
         multiple={isMultiple}
-        onFocus={setActiveStyle}
-        onBlur={setInactiveStyle}
+        onBlur={onBlur}
       >
         {options.map(option => (
           <MenuItem key={`option-${option.value}`} value={option.value}>

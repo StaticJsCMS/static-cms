@@ -12,7 +12,6 @@ import Toolbar from '@mui/material/Toolbar';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
-import { useLocation } from 'react-router-dom';
 
 import { logoutUser as logoutUserAction } from '../../actions/auth';
 import { createNewEntry } from '../../actions/collections';
@@ -20,7 +19,6 @@ import { openMediaLibrary as openMediaLibraryAction } from '../../actions/mediaL
 import { checkBackendStatus as checkBackendStatusAction } from '../../actions/status';
 import { stripProtocol } from '../../lib/urlHelper';
 import { buttons, colors, Icon } from '../../ui';
-import EditorToolbar from '../Editor/EditorToolbar';
 import NavLink from '../UI/NavLink';
 import SettingsDropdown from '../UI/SettingsDropdown';
 
@@ -115,11 +113,6 @@ const Header = ({
   const handleMediaClick = useCallback(() => {
     openMediaLibrary();
   }, [openMediaLibrary]);
-
-  const { pathname } = useLocation();
-  if (pathname.includes('entries') || pathname.endsWith('new')) {
-    return <EditorToolbar />;
-  }
 
   return (
     <StyledAppBar position="sticky">

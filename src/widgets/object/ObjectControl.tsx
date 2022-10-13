@@ -11,7 +11,6 @@ import type {
   CmsFieldList,
   CmsFieldObject,
   CmsWidgetControlProps,
-  EntryMeta,
   ValueOrNestedValue,
 } from '../../interface';
 
@@ -38,13 +37,11 @@ const ObjectControl = ({
   value = {},
   field,
   forID,
-  classNameWrapper,
   forList,
   hasError,
   onChangeObject,
   onValidateObject,
   clearFieldErrors,
-  metadata,
   fieldsErrors,
   parentIds,
   isFieldDuplicate,
@@ -90,7 +87,6 @@ const ObjectControl = ({
           value={fieldValue}
           onChange={onChangeObject}
           clearFieldErrors={clearFieldErrors}
-          fieldsMetaData={metadata as Record<string, EntryMeta>}
           fieldsErrors={fieldsErrors}
           onValidate={onValidateObject}
           parentIds={parentIds}
@@ -108,7 +104,6 @@ const ObjectControl = ({
       isFieldDuplicate,
       isFieldHidden,
       locale,
-      metadata,
       onChangeObject,
       onValidateObject,
       parentIds,
@@ -145,7 +140,6 @@ const ObjectControl = ({
           <div
             id={forID}
             className={cx(
-              classNameWrapper,
               css`
                 ${styleStrings.objectWidgetTopBarContainer}
               `,

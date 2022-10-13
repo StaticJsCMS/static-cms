@@ -250,7 +250,7 @@ export function applyDefaults(originalConfig: CmsConfig) {
         collection.fields = setI18nDefaultsForFields(collection.fields, Boolean(collectionI18n));
       }
 
-      const { folder, files, view_filters, view_groups, meta } = collection;
+      const { folder, files, view_filters, view_groups } = collection;
 
       if (folder) {
         collection.type = FOLDER;
@@ -269,16 +269,6 @@ export function applyDefaults(originalConfig: CmsConfig) {
         }
 
         collection.folder = trim(folder, '/');
-
-        if (meta && meta.path) {
-          const metaField = {
-            name: 'path',
-            meta: true,
-            required: true,
-            ...meta.path,
-          };
-          collection.fields = [metaField, ...(collection.fields || [])];
-        }
       }
 
       if (files) {
@@ -287,7 +277,6 @@ export function applyDefaults(originalConfig: CmsConfig) {
         throwOnInvalidFileCollectionStructure(collectionI18n);
 
         delete collection.nested;
-        delete collection.meta;
 
         for (const file of files) {
           file.file = trimStart(file.file, '/');

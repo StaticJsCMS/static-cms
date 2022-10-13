@@ -1,5 +1,4 @@
 import get from 'lodash/get';
-import { join } from 'path';
 
 import { FILES, FOLDER } from '../../constants/collectionTypes';
 import { COMMIT_AUTHOR, COMMIT_DATE } from '../../constants/commitProps';
@@ -95,30 +94,6 @@ const selectors = {
     },
   },
 };
-
-export function selectHasMetaPath(collection: Collection) {
-  return (
-    'folder' in collection &&
-    collection.type === FOLDER &&
-    'meta' in collection &&
-    'path' in (collection.meta ?? {})
-  );
-}
-
-export function selectCustomPath(
-  collection: Collection,
-  entryDraft: { entry: { meta?: { path?: string | null } | null } },
-) {
-  if (!selectHasMetaPath(collection)) {
-    return;
-  }
-  const meta = entryDraft.entry.meta;
-  const path = meta && meta.path;
-  const indexFile = collection.meta?.path?.index_file;
-  const extension = selectFolderEntryExtension(collection);
-  const customPath = path && join(collection.folder ?? '', path, `${indexFile}.${extension}`);
-  return customPath;
-}
 
 export function selectFields(collection: Collection, slug?: string) {
   return selectors[collection.type].fields(collection, slug);

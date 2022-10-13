@@ -19,7 +19,6 @@ import Snackbars from '../snackbar/Snackbars';
 import { Alert } from '../UI/Alert';
 import { Confirm } from '../UI/Confirm';
 import ScrollTop from '../UI/ScrollTop';
-import Header from './Header';
 import NotFoundPage from './NotFoundPage';
 
 import type { ComponentType } from 'react';
@@ -47,22 +46,6 @@ const AppWrapper = styled.div`
   width: 100%;
   min-width: 1200px;
   min-height: 100vh;
-`;
-
-const AppMainContainerWrapper = styled.div`
-  position: relative;
-  padding: 24px;
-  gap: 24px;
-  box-sizing: border-box;
-`;
-
-const AppMainContainer = styled.div`
-  min-width: 1200px;
-  max-width: 1440px;
-  margin: 0 auto;
-  display: flex;
-  gap: 24px;
-  position: relative;
 `;
 
 const ErrorContainer = styled.div`
@@ -188,63 +171,55 @@ const App = ({
           <AppRoot id="cms-root">
             <AppWrapper className="cms-wrapper">
               <Snackbars />
-              <Header />
-              <AppMainContainerWrapper>
-                <AppMainContainer>
-                  {isFetching && <TopBarProgress />}
-                  <Routes>
-                    <Route path="/" element={<Navigate to={defaultPath} />} />
-                    <Route path="/search" element={<Navigate to={defaultPath} />} />
-                    <Route
-                      path="/collections/:name/search/"
-                      element={<CollectionSearchRedirect />}
+              {isFetching && <TopBarProgress />}
+              <Routes>
+                <Route path="/" element={<Navigate to={defaultPath} />} />
+                <Route path="/search" element={<Navigate to={defaultPath} />} />
+                <Route path="/collections/:name/search/" element={<CollectionSearchRedirect />} />
+                <Route
+                  path="/error=access_denied&error_description=Signups+not+allowed+for+this+instance"
+                  element={<Navigate to={defaultPath} />}
+                />
+                <Route
+                  path="/collections"
+                  element={<CollectionRoute collections={collections} />}
+                />
+                <Route
+                  path="/collections/:name"
+                  element={<CollectionRoute collections={collections} />}
+                />
+                <Route
+                  path="/collections/:name/new"
+                  element={<EditorRoute collections={collections} newRecord />}
+                />
+                <Route
+                  path="/collections/:name/entries/:slug"
+                  element={<EditorRoute collections={collections} />}
+                />
+                <Route
+                  path="/collections/:name/search/:searchTerm"
+                  element={
+                    <CollectionRoute
+                      collections={collections}
+                      isSearchResults
+                      isSingleSearchResult
                     />
-                    <Route
-                      path="/error=access_denied&error_description=Signups+not+allowed+for+this+instance"
-                      element={<Navigate to={defaultPath} />}
-                    />
-                    <Route
-                      path="/collections"
-                      element={<CollectionRoute collections={collections} />}
-                    />
-                    <Route
-                      path="/collections/:name"
-                      element={<CollectionRoute collections={collections} />}
-                    />
-                    <Route
-                      path="/collections/:name/new"
-                      element={<EditorRoute collections={collections} newRecord />}
-                    />
-                    <Route
-                      path="/collections/:name/entries/:slug"
-                      element={<EditorRoute collections={collections} />}
-                    />
-                    <Route
-                      path="/collections/:name/search/:searchTerm"
-                      element={
-                        <CollectionRoute
-                          collections={collections}
-                          isSearchResults
-                          isSingleSearchResult
-                        />
-                      }
-                    />
-                    <Route
-                      path="/collections/:name/filter/:filterTerm"
-                      element={<CollectionRoute collections={collections} />}
-                    />
-                    <Route
-                      path="/search/:searchTerm"
-                      element={<CollectionRoute collections={collections} isSearchResults />}
-                    />
-                    <Route path="/edit/:name/:entryName" element={<EditEntityRedirect />} />
-                    <Route element={<NotFoundPage />} />
-                  </Routes>
-                  {useMediaLibrary ? <MediaLibrary /> : null}
-                  <Alert />
-                  <Confirm />
-                </AppMainContainer>
-              </AppMainContainerWrapper>
+                  }
+                />
+                <Route
+                  path="/collections/:name/filter/:filterTerm"
+                  element={<CollectionRoute collections={collections} />}
+                />
+                <Route
+                  path="/search/:searchTerm"
+                  element={<CollectionRoute collections={collections} isSearchResults />}
+                />
+                <Route path="/edit/:name/:entryName" element={<EditEntityRedirect />} />
+                <Route element={<NotFoundPage />} />
+              </Routes>
+              {useMediaLibrary ? <MediaLibrary /> : null}
+              <Alert />
+              <Confirm />
             </AppWrapper>
           </AppRoot>
           <ScrollTop>

@@ -8,7 +8,7 @@ import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import formatDate from 'date-fns/format';
 import formatISO from 'date-fns/formatISO';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { CmsFieldDateTime, CmsWidgetControlProps, TranslatedProps } from '../../interface';
 
@@ -42,12 +42,12 @@ const DateTimeControl = ({
   field,
   forID,
   value,
-  setActiveStyle,
-  setInactiveStyle,
   t,
   isDisabled,
   onChange,
 }: CmsWidgetControlProps<string, CmsFieldDateTime>) => {
+  const [internalValue, setInternalValue] = useState(value);
+
   const { format, dateFormat, timeFormat } = useMemo(() => {
     const format = field.format;
 
@@ -86,11 +86,15 @@ const DateTimeControl = ({
        * Produce a formatted string only if a format is set in the config.
        * Otherwise produce a date object.
        */
+      let newValue: string;
       if (format) {
-        onChange(formatDate(datetime, format));
+        newValue = formatDate(datetime, format);
       } else {
-        onChange(formatISO(datetime));
+        newValue = formatISO(datetime);
       }
+
+      setInternalValue(newValue);
+      onChange(newValue);
     },
     [format, onChange],
   );
@@ -100,12 +104,12 @@ const DateTimeControl = ({
      * Set the current date as default value if no value is provided and default is absent. An
      * empty default string means the value is intentionally blank.
      */
-    if (value === undefined) {
+    if (internalValue === undefined) {
       setTimeout(() => {
         handleChange(defaultValue === undefined ? new Date() : defaultValue);
       }, 0);
     }
-  }, [defaultValue, handleChange, value]);
+  }, [defaultValue, handleChange, internalValue]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -115,10 +119,8 @@ const DateTimeControl = ({
             inputFormat={`${typeof dateFormat === 'string' ? dateFormat : undefined} ${
               typeof timeFormat === 'string' ? timeFormat : undefined
             }`}
-            value={value}
+            value={internalValue}
             onChange={handleChange}
-            onOpen={setActiveStyle}
-            onClose={setInactiveStyle}
             renderInput={params => (
               <TextField
                 id={forID}
@@ -140,20 +142,16 @@ const DateTimeControl = ({
           />
         ) : (
           <TimePicker
-            value={value}
+            value={internalValue}
             onChange={handleChange}
-            onOpen={setActiveStyle}
-            onClose={setInactiveStyle}
             renderInput={params => <TextField id={forID} {...params} fullWidth />}
           />
         )
       ) : (
         <MobileDatePicker
           inputFormat={typeof dateFormat === 'string' ? dateFormat : undefined}
-          value={value}
+          value={internalValue}
           onChange={handleChange}
-          onOpen={setActiveStyle}
-          onClose={setInactiveStyle}
           renderInput={params => <TextField id={forID} {...params} fullWidth />}
         />
       )}

@@ -1,6 +1,5 @@
 import get from 'lodash/get';
-import merge from 'lodash/merge';
-import set from 'lodash/set';
+import isEqual from 'lodash/isEqual';
 import { v4 as uuid } from 'uuid';
 
 import {
@@ -21,14 +20,14 @@ import {
   REMOVE_DRAFT_ENTRY_MEDIA_FILE,
 } from '../actions/entries';
 import { duplicateI18nFields, getDataPath } from '../lib/i18n';
+import { set } from '../lib/util/object.util';
 
 import type { EntriesAction } from '../actions/entries';
-import type { Entry, EntryMeta, FieldsErrors } from '../interface';
+import type { Entry, FieldsErrors } from '../interface';
 
 export interface EntryDraftState {
   entry?: Entry;
   fieldsErrors: FieldsErrors;
-  fieldsMetaData: Record<string, EntryMeta>;
   hasChanged: boolean;
   key: string;
   localBackup?: {
@@ -37,7 +36,6 @@ export interface EntryDraftState {
 }
 
 const initialState: EntryDraftState = {
-  fieldsMetaData: {},
   fieldsErrors: {},
   hasChanged: false,
   key: '',
@@ -56,7 +54,6 @@ function entryDraftReducer(
           ...action.payload.entry,
           newRecord: false,
         },
-        fieldsMetaData: {},
         fieldsErrors: {},
         hasChanged: false,
         key: uuid(),
@@ -70,7 +67,6 @@ function entryDraftReducer(
           ...action.payload,
           newRecord: true,
         },
-        fieldsMetaData: {},
         fieldsErrors: {},
         hasChanged: false,
         key: uuid(),
@@ -94,7 +90,6 @@ function entryDraftReducer(
           ...backupEntry,
           newRecord: !backupEntry?.path,
         },
-        fieldsMetaData: {},
         fieldsErrors: {},
         hasChanged: true,
         key: uuid(),
@@ -109,7 +104,6 @@ function entryDraftReducer(
           ...action.payload,
           newRecord: true,
         },
-        fieldsMetaData: {},
         fieldsErrors: {},
         hasChanged: true,
       };
@@ -127,38 +121,30 @@ function entryDraftReducer(
     }
 
     case DRAFT_CHANGE_FIELD: {
-      const { field, value, metadata, entry, i18n } = action.payload;
-      const name = field.name;
-      const dataPath = (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
-
       let newState = { ...state };
       if (!newState.entry) {
         return state;
       }
 
-      if ('meta' in field && field.meta) {
-        newState.entry = {
-          ...newState.entry,
-          meta: {
-            ...newState.entry.meta,
-            [name]: value,
-          },
-        };
-      } else {
-        set(newState.entry, ['entry', ...dataPath, name], value);
-        if (i18n) {
-          newState = duplicateI18nFields(newState, field, i18n.locales, i18n.defaultLocale);
-        }
+      const { field, value, entry, i18n } = action.payload;
+      const name = field.name;
+      const dataPath = (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
+
+      newState = {
+        ...newState,
+        entry: set(newState.entry, [...dataPath, name], value),
+      };
+
+      if (i18n) {
+        newState = duplicateI18nFields(newState, field, i18n.locales, i18n.defaultLocale);
       }
 
-      const fieldsMetaData = merge({ ...state.fieldsMetaData }, metadata);
-      const newData = get(newState.entry!, dataPath) ?? {};
-      const newMeta = newState.entry!.meta;
+      const newData = get(newState.entry, dataPath) ?? {};
 
       return {
-        ...state,
-        fieldsMetaData,
-        hasChanged: !entry || newData !== get(entry, dataPath) || newMeta !== entry.meta,
+        ...newState,
+        hasChanged:
+          !entry || !isEqual(newData, get(entry, dataPath)),
       };
     }
 

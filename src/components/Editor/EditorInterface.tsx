@@ -21,7 +21,6 @@ import type {
   Collection,
   EditorPersistOptions,
   Entry,
-  EntryMeta,
   FieldError,
   FieldsErrors,
   I18nSettings,
@@ -183,12 +182,10 @@ interface EditorInterfaceProps {
   entry: Entry;
   collection: Collection;
   fields: CmsField[] | undefined;
-  fieldsMetaData: Record<string, EntryMeta>;
   fieldsErrors: FieldsErrors;
   onChange: (
     field: CmsField,
     value: ValueOrNestedValue,
-    metadata: EntryMeta | undefined,
     i18n: I18nSettings | undefined,
   ) => void;
   onValidate: (uniqueFieldId: string, errors: FieldError[]) => void;
@@ -212,7 +209,6 @@ const EditorInterface = ({
   collection,
   entry,
   fields = [],
-  fieldsMetaData,
   fieldsErrors,
   onChange,
   showDelete,
@@ -302,7 +298,6 @@ const EditorInterface = ({
         collection={collection}
         entry={entry}
         fields={fields}
-        fieldsMetaData={fieldsMetaData}
         fieldsErrors={fieldsErrors}
         onChange={onChange}
         onValidate={onValidate}
@@ -320,7 +315,6 @@ const EditorInterface = ({
         collection={collection}
         entry={entry}
         fields={fields}
-        fieldsMetaData={fieldsMetaData}
         fieldsErrors={fieldsErrors}
         onChange={onChange}
         onValidate={onValidate}
@@ -345,7 +339,6 @@ const EditorInterface = ({
             collection={collection}
             entry={previewEntry}
             fields={fields}
-            fieldsMetaData={fieldsMetaData}
           />
         </PreviewPaneContainer>
       </StyledSplitPane>

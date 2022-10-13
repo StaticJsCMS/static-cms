@@ -36,9 +36,9 @@ import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import type {
   CmsField,
+  Collection,
   EditorPersistOptions,
   Entry,
-  EntryMeta,
   I18nSettings,
   TranslatedProps,
   ValueOrNestedValue,
@@ -79,6 +79,8 @@ const Editor = ({
   createEmptyDraft,
   discardDraft,
 }: TranslatedProps<EditorProps>) => {
+  const [version, setVersion] = useState(0);
+
   const createBackup = useMemo(
     () =>
       debounce(function (entry, collection) {
@@ -91,10 +93,9 @@ const Editor = ({
     (
       field: CmsField,
       value: ValueOrNestedValue,
-      metadata: EntryMeta = {},
       i18n: I18nSettings | undefined,
     ) => {
-      changeDraftField({ field, value, metadata, entry, i18n });
+      changeDraftField({ field, value, entry, i18n });
     },
     [changeDraftField, entry],
   );
@@ -111,6 +112,7 @@ const Editor = ({
       const { createNew = false, duplicate = false } = opts;
 
       await persistEntry(collection);
+      setVersion(version + 1);
 
       deleteBackup();
 
@@ -121,7 +123,14 @@ const Editor = ({
         }
       }
     },
-    [collection, createDraftDuplicateFromEntry, deleteBackup, entryDraft.entry, persistEntry],
+    [
+      collection,
+      createDraftDuplicateFromEntry,
+      deleteBackup,
+      entryDraft.entry,
+      persistEntry,
+      version,
+    ],
   );
 
   const handleDuplicateEntry = useCallback(() => {
@@ -173,8 +182,6 @@ const Editor = ({
   >();
 
   useEffect(() => {
-    let alive = true;
-
     if (!prevLocalBackup && localBackup) {
       const updateLocalBackup = async () => {
         const confirmLoadBackup = await confirm({
@@ -182,12 +189,11 @@ const Editor = ({
           body: 'editor.editor.confirmLoadBackupBody',
         });
 
-        if (alive) {
-          if (confirmLoadBackup) {
-            loadLocalBackup();
-          } else {
-            deleteBackup();
-          }
+        if (confirmLoadBackup) {
+          loadLocalBackup();
+          setVersion(version + 1);
+        } else {
+          deleteBackup();
         }
       };
 
@@ -195,10 +201,7 @@ const Editor = ({
     }
 
     setPrevLocalBackup(localBackup);
-    return () => {
-      alive = false;
-    };
-  }, [deleteBackup, loadLocalBackup, localBackup, prevLocalBackup]);
+  }, [deleteBackup, loadLocalBackup, localBackup, prevLocalBackup, version]);
 
   useEffect(() => {
     if (hasChanged) {
@@ -216,15 +219,18 @@ const Editor = ({
     }
   }, [collection, createEmptyDraft, slug]);
 
-  const [prevCollection, setPrevCollection] = useState(collection);
-  const [preSlug, setPrevSlug] = useState(slug);
+  const [prevCollection, setPrevCollection] = useState<Collection | null>(null);
+  const [preSlug, setPrevSlug] = useState<string | undefined | null>(null);
   useEffect(() => {
-    if (!slug && (!entryDraft.entry || preSlug !== slug)) {
-      createEmptyDraft(collection, location.search);
-    } else if (slug && (!entryDraft.entry || prevCollection !== collection || preSlug !== slug)) {
-      retrieveLocalBackup(collection, slug);
-      loadEntry(collection, slug);
-      discardDraft();
+    if (!slug && preSlug !== slug) {
+      setTimeout(() => {
+        createEmptyDraft(collection, location.search);
+      });
+    } else if (slug && (prevCollection !== collection || preSlug !== slug)) {
+      setTimeout(() => {
+        retrieveLocalBackup(collection, slug);
+        loadEntry(collection, slug);
+      });
     }
 
     setPrevCollection(collection);
@@ -284,31 +290,10 @@ const Editor = ({
   useEffect(() => {
     const unblock = history.block(navigationBlocker);
 
-    // TODO Is this needed?
-    //   /**
-    //    * This will run as soon as the location actually changes, unless creating
-    //    * a new post. The confirmation above will run first.
-    //    */
-    //   const unlisten = history.listen((location, action) => {
-    //     const newEntryPath = `/collections/${collection.name}/new`;
-    //     const entriesPath = `/collections/${collection.name}/entries/`;
-    //     const { pathname } = location;
-    //     if (
-    //       pathname.startsWith(newEntryPath) ||
-    //       (pathname.startsWith(entriesPath) && action === 'PUSH')
-    //     ) {
-    //       return;
-    //     }
-
-    //     deleteBackup();
-
-    //     unlisten();
-    //   });
-
     return () => {
       unblock();
     };
-  }, [navigationBlocker]);
+  }, [collection.name, deleteBackup, discardDraft, navigationBlocker]);
 
   // TODO Is this needed?
   //   if (!collectionEntriesLoaded) {
@@ -327,11 +312,11 @@ const Editor = ({
 
   return (
     <EditorInterface
+      key={`editor-${version}`}
       draftKey={draftKey}
       entry={entryDraft.entry}
       collection={collection}
       fields={fields}
-      fieldsMetaData={entryDraft.fieldsMetaData}
       fieldsErrors={entryDraft.fieldsErrors}
       onChange={handleChangeDraftField}
       onValidate={changeDraftFieldValidation}

@@ -3,10 +3,7 @@ import attempt from 'lodash/attempt';
 import flatten from 'lodash/flatten';
 import get from 'lodash/get';
 import isError from 'lodash/isError';
-import set from 'lodash/set';
-import trim from 'lodash/trim';
 import uniq from 'lodash/uniq';
-import { basename, dirname, extname, join } from 'path';
 
 import { FILES, FOLDER } from './constants/collectionTypes';
 import { resolveFormat } from './formats/formats';
@@ -34,17 +31,16 @@ import {
 import {
   selectAllowDeletion,
   selectAllowNewEntries,
-  selectCustomPath,
   selectEntryPath,
   selectEntrySlug,
   selectFieldsComments,
   selectFileEntryLabel,
   selectFolderEntryExtension,
-  selectHasMetaPath,
   selectInferedField,
   selectMediaFolders,
 } from './lib/util/collection.util';
 import { selectMediaFilePath } from './lib/util/media.util';
+import { set } from './lib/util/object.util';
 import { stringTemplate } from './lib/widgets';
 import { selectIntegration } from './reducers/integrations';
 import { createEntry } from './valueObjects/Entry';
@@ -193,7 +189,7 @@ export function mergeExpandedEntries(entries: (Entry & { field: string })[]) {
   // this keeps the search score sorting order designated by the order in entries
   // and filters non matching items
   Object.keys(merged).forEach(slug => {
-    const data = merged[slug].data ?? {};
+    let data = merged[slug].data ?? {};
     for (const path of arrayPaths[slug]) {
       const array = get(data, path) as unknown[];
       const filtered = array.filter((_, index) => {
@@ -211,7 +207,7 @@ export function mergeExpandedEntries(entries: (Entry & { field: string })[]) {
         return matchingFieldIndexA - matchingFieldIndexB;
       });
 
-      set(data, path, filtered);
+      data = set(data, path, filtered);
     }
   });
 
@@ -222,13 +218,6 @@ function sortByScore(a: fuzzy.FilterResult<Entry>, b: fuzzy.FilterResult<Entry>)
   if (a.score > b.score) return -1;
   if (a.score < b.score) return 1;
   return 0;
-}
-
-export function slugFromCustomPath(collection: Collection, customPath: string) {
-  const folderPath = collection.folder ?? '';
-  const entryPath = customPath.toLowerCase().replace(folderPath.toLowerCase(), '');
-  const slug = join(dirname(trim(entryPath, '/')), basename(entryPath, extname(customPath)));
-  return slug;
 }
 
 interface AuthStore {
@@ -272,14 +261,6 @@ interface PersistArgs {
   assetProxies: AssetProxy[];
   usedSlugs: string[];
   status?: string;
-}
-
-function prepareMetaPath(path: string, collection: Collection) {
-  if (!selectHasMetaPath(collection)) {
-    return path;
-  }
-  const dir = dirname(path);
-  return dir.slice(collection.folder!.length + 1) || '/';
 }
 
 function collectionDepth(collection: Collection) {
@@ -414,15 +395,9 @@ export class Backend {
     entryData: EntryData,
     config: CmsConfig,
     usedSlugs: string[],
-    customPath: string | undefined,
   ) {
     const slugConfig = config.slug;
-    let slug: string;
-    if (customPath) {
-      slug = slugFromCustomPath(collection, customPath);
-    } else {
-      slug = slugFormatter(collection, entryData, slugConfig);
-    }
+    const slug = slugFormatter(collection, entryData, slugConfig);
     let i = 1;
     let uniqueSlug = slug;
 
@@ -447,7 +422,6 @@ export class Backend {
           label: loadedEntry.file.label,
           author: loadedEntry.file.author,
           updatedOn: loadedEntry.file.updatedOn,
-          meta: { path: prepareMetaPath(loadedEntry.file.path, collection) },
         },
       ),
     );
@@ -662,7 +636,6 @@ export class Backend {
           raw,
           label,
           mediaFiles,
-          meta: { path: prepareMetaPath(path, collection) },
         }),
       );
     };
@@ -749,7 +722,6 @@ export class Backend {
         raw: loadedEntry.data,
         label,
         mediaFiles: [],
-        meta: { path: prepareMetaPath(loadedEntry.file.path, collection) },
       });
 
       entry = this.entryWithFormat(collection)(entry);
@@ -840,8 +812,6 @@ export class Backend {
 
     const newEntry = entryDraft.entry.newRecord ?? false;
 
-    const customPath = selectCustomPath(collection, entryDraft) ?? '';
-
     let dataFile: DataFile;
     if (newEntry) {
       if (!selectAllowNewEntries(collection)) {
@@ -852,9 +822,8 @@ export class Backend {
         entryDraft.entry.data,
         config,
         usedSlugs,
-        customPath,
       );
-      const path = customPath || (selectEntryPath(collection, slug) as string);
+      const path = selectEntryPath(collection, slug) ?? '';
       dataFile = {
         path,
         slug,
@@ -866,9 +835,8 @@ export class Backend {
       const slug = entryDraft.entry.slug;
       dataFile = {
         path: entryDraft.entry.path,
-        slug: customPath ? slugFromCustomPath(collection, customPath) : slug,
+        slug,
         raw: this.entryToRaw(collection, entryDraft.entry),
-        newPath: customPath,
       };
     }
 

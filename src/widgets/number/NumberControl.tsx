@@ -62,9 +62,8 @@ const NumberControl = ({
   field,
   value = '',
   forID,
-  setActiveStyle,
-  setInactiveStyle,
   onChange,
+  onBlur,
 }: CmsWidgetControlProps<string | number, CmsFieldNumber>) => {
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -91,8 +90,7 @@ const NumberControl = ({
       type="number"
       value={value || (value === 0 ? value : '')}
       onChange={handleChange}
-      onFocus={setActiveStyle}
-      onBlur={setInactiveStyle}
+      onBlur={onBlur}
       inputProps={{
         step,
         min,

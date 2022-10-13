@@ -55,15 +55,13 @@ const settingsPersistKeys = {
 };
 
 const CodeControl = ({
-  classNameWrapper,
   forID,
   isEditorComponent,
   isNewEditorComponent,
   field,
   value,
   onChange,
-  setActiveStyle,
-  setInactiveStyle,
+  onBlur
 }: CmsWidgetControlProps<string | { [key: string]: string }, CmsFieldCode>) => {
   // If the value is a map, keys can be customized via config.
   const getKeys = useCallback(
@@ -217,12 +215,7 @@ const CodeControl = ({
 
   const handleFocus = useCallback(() => {
     hideSettings();
-    setActiveStyle();
-  }, [hideSettings, setActiveStyle]);
-
-  const handleBlur = useCallback(() => {
-    setInactiveStyle();
-  }, [setInactiveStyle]);
+  }, [hideSettings]);
 
   const langInfo = useMemo(() => getLanguageByName(lang), [getLanguageByName, lang]);
   const mode = langInfo?.mimeType || langInfo?.mode;
@@ -232,7 +225,6 @@ const CodeControl = ({
       {({ css, cx }) => (
         <div
           className={cx(
-            classNameWrapper,
             css`
               ${codeMirrorStyles};
               ${materialTheme};
@@ -297,7 +289,7 @@ const CodeControl = ({
             value={lastKnownValue}
             onChange={(_editor, _data, newValue) => handleChange(newValue)}
             onFocus={handleFocus}
-            onBlur={handleBlur}
+            onBlur={() => onBlur()}
           />
         </div>
       )}

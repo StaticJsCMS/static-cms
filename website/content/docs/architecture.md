@@ -22,7 +22,7 @@ Entries are loaded and persisted through a `backend` that will typically represe
 
 **Config:** Holds the environment configuration (backend type, available collections and fields).
 
-**Collections:** List of available collections, their fields and metadata information.
+**Collections:** List of available collections and their fields information.
 
 **Entries:** Entries for each field.
 

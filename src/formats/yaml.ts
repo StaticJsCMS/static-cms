@@ -20,28 +20,12 @@ function addComments(items: Array<Pair>, comments: Record<string, string>, prefi
   });
 }
 
-const timestampTag = {
-  identify: (value: unknown) => value instanceof Date,
-  default: true,
-  tag: '!timestamp',
-  test: RegExp(
-    '^' +
-      '([0-9]{4})-([0-9]{2})-([0-9]{2})' + // YYYY-MM-DD
-      'T' + // T
-      '([0-9]{2}):([0-9]{2}):([0-9]{2}(\\.[0-9]+)?)' + // HH:MM:SS(.ss)?
-      'Z' + // Z
-      '$',
-  ),
-  resolve: (str: string) => new Date(str),
-  stringify: (value: Node) => (value as Date).toISOString(),
-} as const;
-
 export default {
   fromFile(content: string) {
     if (content && content.trim().endsWith('---')) {
       content = content.trim().slice(0, -3);
     }
-    return yaml.parse(content, { customTags: [timestampTag] });
+    return yaml.parse(content);
   },
 
   toFile(data: object, sortedKeys: string[] = [], comments: Record<string, string> = {}) {

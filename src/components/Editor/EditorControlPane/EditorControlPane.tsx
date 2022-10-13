@@ -23,7 +23,6 @@ import type {
   CmsField,
   Collection,
   Entry,
-  EntryMeta,
   FieldError,
   FieldsErrors,
   I18nSettings,
@@ -95,10 +94,6 @@ function getFieldValue(
   isTranslatable: boolean,
   locale: string | undefined,
 ): ValueOrNestedValue {
-  if ('meta' in field && field.meta) {
-    return entry.meta?.[field.name];
-  }
-
   if (isTranslatable && locale) {
     const dataPath = getLocaleDataPath(locale);
     return get(entry, [...dataPath, field.name]);
@@ -111,7 +106,6 @@ const EditorControlPane = ({
   collection,
   entry,
   fields,
-  fieldsMetaData,
   fieldsErrors,
   onChange,
   onValidate,
@@ -160,7 +154,7 @@ const EditorControlPane = ({
               sourceLocale !== i18n?.defaultLocale,
               sourceLocale,
             );
-            onChange(field, copyValue, undefined, i18n);
+            onChange(field, copyValue, i18n);
           }
         });
       },
@@ -206,10 +200,9 @@ const EditorControlPane = ({
               key={key}
               field={field}
               value={getFieldValue(field, entry, isTranslatable, locale)}
-              fieldsMetaData={fieldsMetaData}
               fieldsErrors={fieldsErrors}
-              onChange={(field, newValue, newMetadata) => {
-                onChange(field, newValue, newMetadata, i18n);
+              onChange={(field, newValue) => {
+                onChange(field, newValue, i18n);
               }}
               onValidate={onValidate}
               isDisabled={isDuplicate}
@@ -229,12 +222,10 @@ export interface EditorControlPaneOwnProps {
   collection: Collection;
   entry: Entry;
   fields: CmsField[];
-  fieldsMetaData: Record<string, EntryMeta>;
   fieldsErrors: FieldsErrors;
   onChange: (
     field: CmsField,
     value: ValueOrNestedValue,
-    metadata: EntryMeta | undefined,
     i18n: I18nSettings | undefined,
   ) => void;
   onValidate: (uniqueFieldId: string, errors: FieldError[]) => void;

@@ -7,8 +7,7 @@ const TextControl = ({
   forID,
   value = '',
   onChange,
-  setActiveStyle,
-  setInactiveStyle,
+  onBlur
 }: CmsWidgetControlProps<string, CmsFieldStringOrText>) => {
   return (
     <TextField
@@ -16,8 +15,7 @@ const TextControl = ({
       variant="outlined"
       value={value || ''}
       onChange={e => onChange(e.target.value)}
-      onFocus={setActiveStyle}
-      onBlur={setInactiveStyle}
+      onBlur={onBlur}
       multiline
       minRows={4}
       fullWidth

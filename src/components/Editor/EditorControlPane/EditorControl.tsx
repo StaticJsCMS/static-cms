@@ -1,14 +1,14 @@
-import { ClassNames, css as coreCss, Global } from '@emotion/react';
+import { css as coreCss, Global } from '@emotion/react';
 import styled from '@emotion/styled';
 import partial from 'lodash/partial';
 import uniqueId from 'lodash/uniqueId';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import gfm from 'remark-gfm';
 
-import { clearFieldErrors, tryLoadEntry, validateMetaField } from '../../../actions/entries';
+import { clearFieldErrors, tryLoadEntry } from '../../../actions/entries';
 import { addAsset, getAsset } from '../../../actions/media';
 import {
   clearMediaControl,
@@ -20,18 +20,18 @@ import {
 import { clearSearch, query } from '../../../actions/search';
 import { transientOptions } from '../../../lib';
 import { getEditorComponents, resolveWidget } from '../../../lib/registry';
+import { getFieldLabel } from '../../../lib/util/field.util';
 import { selectIsLoadingAsset } from '../../../reducers/medias';
-import { borders, colors, FieldLabel, lengths, transitions } from '../../../ui';
+import { borders, colors, lengths, transitions } from '../../../ui';
 import WidgetControl from './WidgetControl';
 
 import type { ComponentType } from 'react';
-import type { t, TranslateProps } from 'react-polyglot';
+import type { t } from 'react-polyglot';
 import type { ConnectedProps } from 'react-redux';
 import type {
   CmsField,
   Collection,
   Entry,
-  EntryMeta,
   FieldError,
   FieldsErrors,
   GetAssetFunction,
@@ -114,95 +114,61 @@ const ControlErrorsList = styled.ul`
 
 interface ControlHintProps {
   $error: boolean;
-  $active: boolean;
 }
 
 export const ControlHint = styled(
   'p',
   transientOptions,
 )<ControlHintProps>(
-  ({ $error, $active }) => `
+  ({ $error }) => `
     margin-bottom: 0;
     padding: 3px 0;
     font-size: 12px;
-    color: ${$error ? colors.errorText : $active ? colors.active : colors.controlLabel};
+    color: ${$error ? colors.errorText : colors.controlLabel};
     transition: color ${transitions.main};
   `,
 );
 
-interface LabelComponentProps extends TranslateProps {
-  field: CmsField;
-  isActive: boolean;
-  hasErrors: boolean;
-  uniqueFieldId: string;
-  isFieldOptional: boolean;
-}
-
-const LabelComponent = ({
-  field,
-  isActive,
-  hasErrors,
-  uniqueFieldId,
-  isFieldOptional,
-  t,
-}: LabelComponentProps) => {
-  const label = `${field.label ?? field.name}`;
-  const labelComponent = (
-    <FieldLabel $isActive={isActive} $hasErrors={hasErrors} htmlFor={uniqueFieldId}>
-      {label} {`${isFieldOptional ? ` (${t('editor.editorControl.field.optional')})` : ''}`}
-    </FieldLabel>
-  );
-
-  return labelComponent;
-};
-
 const EditorControl = ({
-  value,
-  entry,
+  addAsset,
+  className,
+  clearFieldErrors,
+  clearMediaControl,
+  clearSearch,
   collection,
   config,
+  entry,
   field,
-  fieldsMetaData,
   fieldsErrors,
-  mediaPaths,
   getAsset,
-  onChange,
-  openMediaLibrary,
-  clearMediaControl,
-  removeMediaControl,
-  addAsset,
-  removeInsertedMedia,
-  persistMedia,
-  onValidate,
-  query,
-  queryHits,
-  isFetching,
-  clearSearch,
-  clearFieldErrors,
-  loadEntry,
-  className,
-  isSelected,
-  isEditorComponent,
-  isNewEditorComponent,
-  parentIds = [],
-  t,
-  validateMetaField,
   isDisabled,
-  isHidden = false,
+  isEditorComponent,
+  isFetching,
   isFieldDuplicate,
   isFieldHidden,
+  isHidden = false,
+  isNewEditorComponent,
+  loadEntry,
   locale,
+  mediaPaths,
+  onChange,
+  onValidate,
+  openMediaLibrary,
+  parentIds = [],
+  persistMedia,
+  query,
+  queryHits,
+  removeInsertedMedia,
+  removeMediaControl,
+  t,
+  value,
 }: TranslatedProps<EditorControlProps>) => {
   const uniqueFieldId = useMemo(() => uniqueId(`${field.name}-field-`), [field.name]);
-  const [styleActive, setActiveStyle] = useState(false);
 
   const widgetName = field.widget;
   const widget = resolveWidget(widgetName) as Widget<ValueOrNestedValue>;
-  const fieldName = field.name;
   const fieldHint = field.hint;
-  const isFieldOptional = field.required === false;
   const onValidateObject = onValidate;
-  const metadata = fieldsMetaData && fieldsMetaData[fieldName];
   const errors = fieldsErrors && fieldsErrors[uniqueFieldId];
 
   const childErrors = useMemo(() => {
@@ -229,142 +195,94 @@ const EditorControl = ({
   }
 
   return (
-    <ClassNames>
-      {({ css, cx }) => (
-        <ControlContainer className={className} $isHidden={isHidden}>
-          <>
-            {widget.globalStyles && <Global styles={coreCss`${widget.globalStyles}`} />}
-            {errors && (
-              <ControlErrorsList>
-                {errors.map(
-                  error =>
-                    error.message &&
-                    typeof error.message === 'string' && (
-                      <li key={error.message.trim().replace(/[^a-z0-9]+/gi, '-')}>
-                        {error.message}
-                      </li>
-                    ),
-                )}
-              </ControlErrorsList>
+    <ControlContainer className={className} $isHidden={isHidden}>
+      <>
+        {widget.globalStyles && <Global styles={coreCss`${widget.globalStyles}`} />}
+        {errors && (
+          <ControlErrorsList>
+            {errors.map(
+              error =>
+                error.message &&
+                typeof error.message === 'string' && (
+                  <li key={error.message.trim().replace(/[^a-z0-9]+/gi, '-')}>{error.message}</li>
+                ),
             )}
-            <LabelComponent
-              field={field}
-              isActive={isSelected || styleActive}
-              hasErrors={hasErrors}
-              uniqueFieldId={uniqueFieldId}
-              isFieldOptional={isFieldOptional}
-              t={t}
-            />
-            <WidgetControl
-              classNameWrapper={cx(
-                css`
-                  ${styleStrings.widget};
-                `,
-                {
-                  [css`
-                    ${styleStrings.widgetActive};
-                  `]: isSelected || styleActive,
-                },
-                {
-                  [css`
-                    ${styleStrings.widgetError};
-                  `]: hasErrors,
-                },
-                {
-                  [css`
-                    ${styleStrings.disabled}
-                  `]: isDisabled,
-                },
-              )}
-              classNameWidget={css`
-                ${styleStrings.widget};
-              `}
-              classNameWidgetActive={css`
-                ${styleStrings.widgetActive};
-              `}
-              controlComponent={widget.control}
-              validator={widget.validator}
-              entry={entry}
-              collection={collection}
-              config={cmsConfig}
-              field={field}
-              uniqueFieldId={uniqueFieldId}
-              value={value}
-              mediaPaths={mediaPaths}
-              metadata={metadata}
-              onChange={(newValue: ValueOrNestedValue, newMetadata?: EntryMeta) =>
-                onChange(field, newValue, newMetadata)
-              }
-              onValidate={onValidate && partial(onValidate, uniqueFieldId)}
-              onOpenMediaLibrary={openMediaLibrary}
-              onClearMediaControl={clearMediaControl}
-              onRemoveMediaControl={removeMediaControl}
-              onRemoveInsertedMedia={removeInsertedMedia}
-              onPersistMedia={persistMedia}
-              onAddAsset={addAsset}
-              getAsset={handleGetAsset(collection, entry)}
-              hasActiveStyle={isSelected || styleActive}
-              setActiveStyle={() => setActiveStyle(true)}
-              setInactiveStyle={() => setActiveStyle(false)}
-              resolveWidget={resolveWidget}
-              widget={widget}
-              getEditorComponents={getEditorComponents}
-              query={query}
-              loadEntry={loadEntry}
-              queryHits={queryHits[uniqueFieldId] || []}
-              clearSearch={clearSearch}
-              clearFieldErrors={clearFieldErrors}
-              isFetching={isFetching}
-              fieldsErrors={fieldsErrors}
-              onValidateObject={onValidateObject}
-              isEditorComponent={isEditorComponent ?? false}
-              isNewEditorComponent={isNewEditorComponent ?? false}
-              parentIds={parentIds}
-              t={t}
-              validateMetaField={validateMetaField}
-              isDisabled={isDisabled ?? false}
-              isFieldDuplicate={isFieldDuplicate}
-              isFieldHidden={isFieldHidden}
-              locale={locale}
-            />
-            {fieldHint && (
-              <ControlHint $active={isSelected || styleActive} $error={hasErrors}>
-                <ReactMarkdown
-                  remarkPlugins={[gfm]}
-                  allowedElements={['a', 'strong', 'em', 'del']}
-                  unwrapDisallowed={true}
-                  components={{
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    a: ({ node, ...props }) => (
-                      <a
-                        {...props}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: 'inherit' }}
-                      />
-                    ),
-                  }}
-                >
-                  {fieldHint}
-                </ReactMarkdown>
-              </ControlHint>
-            )}
-          </>
-        </ControlContainer>
-      )}
-    </ClassNames>
+          </ControlErrorsList>
+        )}
+        <WidgetControl
+          clearFieldErrors={clearFieldErrors}
+          clearSearch={clearSearch}
+          collection={collection}
+          config={cmsConfig}
+          controlComponent={widget.control}
+          entry={entry}
+          field={field}
+          fieldsErrors={fieldsErrors}
+          getAsset={handleGetAsset(collection, entry)}
+          getEditorComponents={getEditorComponents}
+          isDisabled={isDisabled ?? false}
+          isEditorComponent={isEditorComponent ?? false}
+          isFetching={isFetching}
+          isFieldDuplicate={isFieldDuplicate}
+          isFieldHidden={isFieldHidden}
+          isNewEditorComponent={isNewEditorComponent ?? false}
+          label={getFieldLabel(field, t)}
+          loadEntry={loadEntry}
+          locale={locale}
+          mediaPaths={mediaPaths}
+          onAddAsset={addAsset}
+          onChange={(newValue: ValueOrNestedValue) => onChange(field, newValue)}
+          onClearMediaControl={clearMediaControl}
+          onOpenMediaLibrary={openMediaLibrary}
+          onPersistMedia={persistMedia}
+          onRemoveInsertedMedia={removeInsertedMedia}
+          onRemoveMediaControl={removeMediaControl}
+          onValidate={onValidate && partial(onValidate, uniqueFieldId)}
+          onValidateObject={onValidateObject}
+          parentIds={parentIds}
+          query={query}
+          queryHits={queryHits[uniqueFieldId] || []}
+          resolveWidget={resolveWidget}
+          t={t}
+          uniqueFieldId={uniqueFieldId}
+          validator={widget.validator}
+          value={value}
+          widget={widget}
+        />
+        {fieldHint && (
+          <ControlHint $error={hasErrors}>
+            <ReactMarkdown
+              remarkPlugins={[gfm]}
+              allowedElements={['a', 'strong', 'em', 'del']}
+              unwrapDisallowed={true}
+              components={{
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                a: ({ node, ...props }) => (
+                  <a
+                    {...props}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: 'inherit' }}
+                  />
+                ),
+              }}
+            >
+              {fieldHint}
+            </ReactMarkdown>
+          </ControlHint>
+        )}
+      </>
+    </ControlContainer>
   );
 };
 
 interface EditorControlOwnProps {
   value: ValueOrNestedValue;
   field: CmsField;
-  fieldsMetaData: Record<string, EntryMeta>;
   fieldsErrors: FieldsErrors;
-  onChange: (field: CmsField, newValue: ValueOrNestedValue, newMetadata?: EntryMeta) => void;
+  onChange: (field: CmsField, newValue: ValueOrNestedValue) => void;
   onValidate: (uniqueFieldId: string, errors: FieldError[]) => void;
   className?: string;
-  isSelected?: boolean;
   isEditorComponent?: boolean;
   isNewEditorComponent?: boolean;
   parentIds?: string[];
@@ -401,9 +319,7 @@ function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
     entry,
     collection,
     isLoadingAsset,
-    loadEntry,
-    validateMetaField: (field: CmsField, value: string | undefined, t: t) =>
-      collection && validateMetaField(state, collection, field, value, t),
+    loadEntry
   };
 }
 

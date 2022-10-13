@@ -3,6 +3,7 @@ import unsentRequest from './unsentRequest';
 import APIError from './APIError';
 
 import type { AsyncLock } from './asyncLock';
+import type { FileMetadata } from '../../interface';
 
 export class FetchError extends Error {
   status: number;
@@ -120,11 +121,6 @@ export async function readFile(
   }
   return content;
 }
-
-export type FileMetadata = {
-  author: string;
-  updatedOn: string;
-};
 
 function getFileMetadataKey(id: string) {
   return `gh.${id}.meta`;

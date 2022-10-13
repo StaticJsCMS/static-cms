@@ -94,9 +94,7 @@ const ColorControl = ({
   forID,
   field,
   onChange,
-  classNameWrapper,
-  setActiveStyle,
-  setInactiveStyle,
+  onBlur,
   ...otherProps
 }: CmsWidgetControlProps<string, CmsFieldColor>) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
@@ -163,11 +161,8 @@ const ColorControl = ({
         // text input with padding left for the color swatch
         type="text"
         id={forID}
-        className={classNameWrapper}
         value={value || ''}
         onChange={e => onChange(e.target.value)}
-        onFocus={setActiveStyle}
-        onBlur={setInactiveStyle}
         style={{
           paddingLeft: '75px',
           paddingRight: '70px',
@@ -175,6 +170,7 @@ const ColorControl = ({
         }}
         // make readonly and open color picker on click if set to allowInput: false
         onClick={!allowInput ? handleClick : undefined}
+        onBlur={onBlur}
         readOnly={!allowInput}
       />
     </>

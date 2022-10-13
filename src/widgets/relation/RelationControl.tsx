@@ -3,7 +3,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import TextField from '@mui/material/TextField';
 import find from 'lodash/find';
 import get from 'lodash/get';
-import isEmpty from 'lodash/isEmpty';
 import uniqBy from 'lodash/uniqBy';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -11,13 +10,7 @@ import { QUERY_SUCCESS } from '../../actions/search';
 import { stringTemplate } from '../../lib/widgets';
 
 import type { ListChildComponentProps } from 'react-window';
-import type {
-  CmsFieldRelation,
-  CmsWidgetControlProps,
-  Entry,
-  EntryData,
-  EntryMeta,
-} from '../../interface';
+import type { CmsFieldRelation, CmsWidgetControlProps, Entry, EntryData } from '../../interface';
 
 // TODO Remove if sorting not needed
 // function arrayMove(array, from, to) {
@@ -111,9 +104,8 @@ const RelationControl = ({
   value,
   field,
   forID,
-  setActiveStyle,
-  setInactiveStyle,
   onChange,
+  onBlur,
   queryHits,
   query,
   locale,
@@ -182,7 +174,6 @@ const RelationControl = ({
           : [value]
         : [];
       if (initialSearchValues && initialSearchValues.length > 0) {
-        const metadata: Record<string, EntryMeta> = {};
         const searchFieldsArray = field.search_fields;
         const response = await query(forID, collection, searchFieldsArray, '', file);
 
@@ -192,19 +183,11 @@ const RelationControl = ({
           const initialOptions = initialSearchValues
             .map(v => {
               const selectedOption = options.find(o => o.value === v);
-              metadata[v] = selectedOption?.data;
               return selectedOption;
             })
             .filter(Boolean) as HitOption[];
 
           setInitialOptions(initialOptions);
-
-          //set metadata
-          onChange(value, {
-            [field.name]: {
-              [field.collection]: metadata,
-            },
-          });
         }
       }
     };
@@ -251,28 +234,14 @@ const RelationControl = ({
         const options = selectedOption;
         setInitialOptions(options.filter(Boolean));
         const value = options.map(optionToString);
-        const metadata =
-          (!isEmpty(options) && {
-            [field.name]: {
-              [field.collection]: {
-                [value[value.length - 1]]: options[options.length - 1].data,
-              },
-            },
-          }) ||
-          {};
-        onChange(value, metadata);
+        onChange(value);
       } else {
         setInitialOptions([selectedOption].filter(Boolean) as HitOption[]);
         const value = optionToString(selectedOption);
-        const metadata = selectedOption && {
-          [field.name]: {
-            [field.collection]: { [value]: selectedOption.data },
-          },
-        };
-        onChange(value, metadata);
+        onChange(value);
       }
     },
-    [field.collection, field.name, onChange],
+    [onChange],
   );
 
   const [options, setOptions] = useState<HitOption[]>([]);
@@ -347,8 +316,7 @@ const RelationControl = ({
       value={selectedValue}
       onChange={(_event, newValue) => handleChange(newValue)}
       multiple={isMultiple}
-      onFocus={setActiveStyle}
-      onBlur={setInactiveStyle}
+      onBlur={onBlur}
       open={open}
       onOpen={() => {
         setOpen(true);
@@ -377,7 +345,6 @@ const RelationControl = ({
   //     defaultOptions
   //     loadOptions={this.loadOptions}
   //     onChange={this.handleChange}
-  //     className={classNameWrapper}
   //     onFocus={setActiveStyle}
   //     onBlur={setInactiveStyle}
   //     styles={reactSelectStyles}

@@ -11,7 +11,6 @@ import type {
   Collection,
   EditorComponentOptions,
   Entry,
-  EntryMeta,
   FieldError,
   FieldsErrors,
   FieldValidationMethod,
@@ -89,7 +88,6 @@ function validate(
   value: ValueOrNestedValue,
   validator: Widget<ValueOrNestedValue>['validator'],
   getValidValue: Widget<ValueOrNestedValue>['getValidValue'],
-  validateMetaField: EditorControlProps['validateMetaField'],
   onValidate: (errors: FieldError[]) => void,
   t: t,
   skipWrapped: { error: false | FieldError } = { error: false },
@@ -104,13 +102,6 @@ function validate(
     }
   });
 
-  if ('meta' in field && field.meta) {
-    const response = validateMetaField(field, validValue as string | undefined, t);
-    if (response?.error) {
-      errors.push(response.error);
-    }
-  }
-
   if (skipWrapped) {
     if (skipWrapped.error) {
       errors.push(skipWrapped.error);
@@ -122,7 +113,6 @@ function validate(
       value,
       validator,
       getValidValue,
-      validateMetaField,
       onValidate,
       t,
     );
@@ -140,7 +130,6 @@ function validateWrappedControl(
   value: ValueOrNestedValue,
   validator: Widget<ValueOrNestedValue>['validator'],
   getValidValue: Widget<ValueOrNestedValue>['getValidValue'],
-  validateMetaField: EditorControlProps['validateMetaField'],
   onValidate: (errors: FieldError[]) => void,
   t: t,
 ): {
@@ -159,7 +148,6 @@ function validateWrappedControl(
             value,
             validator,
             getValidValue,
-            validateMetaField,
             onValidate,
             t,
             {
@@ -179,7 +167,6 @@ function validateWrappedControl(
             value,
             validator,
             getValidValue,
-            validateMetaField,
             onValidate,
             t,
             {
@@ -206,95 +193,82 @@ function validateWrappedControl(
 }
 
 export interface WidgetProps {
-  classNameWrapper: string;
-  classNameWidget: string;
-  classNameWidgetActive: string;
-  controlComponent: React.ComponentType<CmsWidgetControlProps<ValueOrNestedValue>>;
-  validator: Widget<ValueOrNestedValue>['validator'];
-  entry: Entry;
+  clearFieldErrors: EditorControlPaneProps['clearFieldErrors'];
+  clearSearch: EditorControlProps['clearSearch'];
   collection: Collection;
   config: CmsConfig;
+  controlComponent: React.ComponentType<CmsWidgetControlProps<ValueOrNestedValue>>;
+  entry: Entry;
   field: CmsField;
-  uniqueFieldId: string;
-  value: ValueOrNestedValue;
-  mediaPaths: Record<string, string | string[]>;
-  metadata: EntryMeta;
-  onChange: (newValue: ValueOrNestedValue, newMetadata?: EntryMeta) => void;
-  onValidate: (errors: FieldError[]) => void;
-  onOpenMediaLibrary: EditorControlProps['openMediaLibrary'];
-  onClearMediaControl: EditorControlProps['clearMediaControl'];
-  onRemoveMediaControl: EditorControlProps['removeMediaControl'];
-  onRemoveInsertedMedia: EditorControlProps['removeInsertedMedia'];
-  onPersistMedia: EditorControlProps['persistMedia'];
-  onAddAsset: EditorControlProps['addAsset'];
-  getAsset: GetAssetFunction;
-  hasActiveStyle: boolean;
-  setActiveStyle: () => void;
-  setInactiveStyle: () => void;
-  resolveWidget: typeof registryResolveWidget;
-  widget: Widget<ValueOrNestedValue>;
-  getEditorComponents: () => Record<string, EditorComponentOptions>;
-  query: EditorControlProps['query'];
-  loadEntry: EditorControlProps['loadEntry'];
-  queryHits: Entry[];
-  clearSearch: EditorControlProps['clearSearch'];
-  clearFieldErrors: EditorControlPaneProps['clearFieldErrors'];
-  isFetching: boolean;
   fieldsErrors: FieldsErrors;
-  onValidateObject: (uniqueFieldId: string, errors: FieldError[]) => void;
-  isEditorComponent: boolean;
-  isNewEditorComponent: boolean;
-  parentIds: string[];
-  validateMetaField: EditorControlProps['validateMetaField'];
+  getAsset: GetAssetFunction;
+  getEditorComponents: () => Record<string, EditorComponentOptions>;
   isDisabled: boolean;
+  isEditorComponent: boolean;
+  isFetching: boolean;
   isFieldDuplicate: EditorControlProps['isFieldDuplicate'];
   isFieldHidden: EditorControlProps['isFieldHidden'];
+  isNewEditorComponent: boolean;
+  label: string;
+  loadEntry: EditorControlProps['loadEntry'];
   locale: string | undefined;
+  mediaPaths: Record<string, string | string[]>;
+  onAddAsset: EditorControlProps['addAsset'];
+  onChange: (newValue: ValueOrNestedValue) => void;
+  onClearMediaControl: EditorControlProps['clearMediaControl'];
+  onOpenMediaLibrary: EditorControlProps['openMediaLibrary'];
+  onPersistMedia: EditorControlProps['persistMedia'];
+  onRemoveInsertedMedia: EditorControlProps['removeInsertedMedia'];
+  onRemoveMediaControl: EditorControlProps['removeMediaControl'];
+  onValidate: (errors: FieldError[]) => void;
+  onValidateObject: (uniqueFieldId: string, errors: FieldError[]) => void;
+  parentIds: string[];
+  query: EditorControlProps['query'];
+  queryHits: Entry[];
+  resolveWidget: typeof registryResolveWidget;
+  uniqueFieldId: string;
+  validator: Widget<ValueOrNestedValue>['validator'];
+  value: ValueOrNestedValue;
+  widget: Widget<ValueOrNestedValue>;
 }
 
 const WidgetControl = ({
-  controlComponent,
-  entry,
+  clearFieldErrors,
+  clearSearch,
   collection,
   config,
+  controlComponent,
+  entry,
   field,
-  value,
-  mediaPaths,
-  metadata,
-  onChange,
-  onValidateObject,
-  onOpenMediaLibrary,
-  onRemoveMediaControl,
-  onPersistMedia,
-  onClearMediaControl,
-  onAddAsset,
-  onRemoveInsertedMedia,
-  getAsset,
-  classNameWrapper,
-  classNameWidget,
-  classNameWidgetActive,
-  setActiveStyle,
-  hasActiveStyle,
-  uniqueFieldId,
-  widget,
-  query,
-  queryHits,
-  clearSearch,
-  clearFieldErrors,
-  isFetching,
-  loadEntry,
   fieldsErrors,
-  isEditorComponent,
-  isNewEditorComponent,
-  parentIds,
-  t,
+  getAsset,
   isDisabled,
+  isEditorComponent,
+  isFetching,
   isFieldDuplicate,
   isFieldHidden,
+  isNewEditorComponent,
+  label,
+  loadEntry,
   locale,
-  validateMetaField,
-  validator,
+  mediaPaths,
+  onAddAsset,
+  onChange,
+  onClearMediaControl,
+  onOpenMediaLibrary,
+  onPersistMedia,
+  onRemoveInsertedMedia,
+  onRemoveMediaControl,
   onValidate,
+  onValidateObject,
+  parentIds,
+  query,
+  queryHits,
+  t,
+  uniqueFieldId,
+  validator,
+  value,
+  widget,
 }: TranslatedProps<WidgetProps>) => {
   // shouldComponentUpdate(nextProps) {
   //   /**
@@ -304,9 +278,7 @@ const WidgetControl = ({
   //     return this.wrappedControlShouldComponentUpdate(nextProps);
   //   }
   //   return (
-  //     this.props.value !== nextProps.value ||
-  //     this.props.classNameWrapper !== nextProps.classNameWrapper ||
-  //     this.props.hasActiveStyle !== nextProps.hasActiveStyle
+  //     this.props.value !== nextProps.value
   //   );
   // }
 
@@ -347,10 +319,10 @@ const WidgetControl = ({
    * Change handler for fields that are nested within another field.
    */
   const onChangeObject = useCallback(
-    (field: CmsField, newValue: ValueOrNestedValue, newMetadata?: EntryMeta) => {
+    (field: CmsField, newValue: ValueOrNestedValue) => {
       const newObjectValue = getObjectValue(value as Record<string, ValueOrNestedValue>);
       newObjectValue[field.name] = newValue;
-      return onChange(newObjectValue, newMetadata && { [field.name]: newMetadata });
+      return onChange(newObjectValue);
     },
     [getObjectValue, onChange, value],
   );
@@ -363,16 +335,14 @@ const WidgetControl = ({
         newValue,
         validator,
         getValidValue,
-        validateMetaField,
         onValidate,
         t,
       );
     },
-    [field, getValidValue, onValidate, parentIds, t, validateMetaField, validator],
+    [field, getValidValue, onValidate, parentIds, t, validator],
   );
 
-  const setInactiveStyle = useCallback(() => {
-    setInactiveStyle();
+  const handleOnBlur = useCallback(() => {
     if ('pattern' in field && !isEmpty(getValidValue())) {
       handleValidate(value);
     }
@@ -380,46 +350,41 @@ const WidgetControl = ({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return React.createElement(controlComponent as ComponentType<CmsWidgetControlProps<any>>, {
-    entry,
+    clearFieldErrors,
+    clearSearch,
     collection,
     config,
+    entry,
     field,
-    mediaPaths,
-    metadata,
-    onOpenMediaLibrary,
-    onClearMediaControl,
-    onRemoveMediaControl,
-    onPersistMedia,
-    onAddAsset,
-    onRemoveInsertedMedia,
-    getAsset,
-    forID: uniqueFieldId,
-    validate: handleValidate,
-    classNameWrapper,
-    classNameWidget,
-    classNameWidgetActive,
-    setActiveStyle,
-    setInactiveStyle,
-    hasActiveStyle,
-    query,
-    queryHits,
-    clearSearch,
-    clearFieldErrors,
-    isFetching,
-    loadEntry,
-    isEditorComponent,
-    isNewEditorComponent,
     fieldsErrors,
-    parentIds,
-    t,
+    forID: uniqueFieldId,
+    getAsset,
     isDisabled,
+    isEditorComponent,
+    isFetching,
     isFieldDuplicate,
     isFieldHidden,
+    isNewEditorComponent,
+    label,
+    loadEntry,
     locale,
+    mediaPaths,
+    onAddAsset,
+    onBlur: handleOnBlur,
     onChange,
     onChangeObject,
+    onClearMediaControl,
+    onOpenMediaLibrary,
+    onPersistMedia,
+    onRemoveInsertedMedia,
+    onRemoveMediaControl,
     onValidateObject,
-    value: value as ValueOrNestedValue,
+    parentIds,
+    query,
+    queryHits,
+    t,
+    validate: handleValidate,
+    value,
   });
 };
 

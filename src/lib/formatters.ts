@@ -2,7 +2,6 @@ import { stripIndent } from 'common-tags';
 import flow from 'lodash/flow';
 import get from 'lodash/get';
 import partialRight from 'lodash/partialRight';
-import set from 'lodash/set';
 import trimEnd from 'lodash/trimEnd';
 import trimStart from 'lodash/trimStart';
 
@@ -11,6 +10,7 @@ import { COMMIT_AUTHOR, COMMIT_DATE } from '../constants/commitProps';
 import { sanitizeSlug } from './urlHelper';
 import { getFileFromSlug, selectIdentifier, selectInferedField } from './util/collection.util';
 import { selectField } from './util/field.util';
+import { set } from './util/object.util';
 import { stringTemplate } from './widgets';
 
 import type { CmsConfig, CmsSlug, Collection, Entry, EntryData } from '../interface';

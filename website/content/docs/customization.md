@@ -145,23 +145,3 @@ Registers a template for a folder collection or an individual file in a file col
     CMS.registerPreviewTemplate('general', GeneralPreview);
   </script>
   ```
-
-  ### Accessing Metadata
-
-  Preview Components also receive an additional prop: `fieldsMetaData`. It contains aditional information (besides the plain textual value of each field) that can be useful for preview purposes. For example, the Relation widget passes the whole selected relation data in `fieldsMetaData`.
-
-  ```js
-  export default class ArticlePreview extends React.Component {
-    render() {
-      const { entry, fieldsMetaData } = this.props;
-      const author = fieldsMetaData.authors[data.author];
-
-      return (
-        <article>
-          <h2>{entry.data.title}</h2>
-          {author && <AuthorBio author={author.toJS()} />}
-        </article>
-      );
-    }
-  }
-  ```

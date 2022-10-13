@@ -69,7 +69,6 @@ export type ValueOrNestedValue =
     };
 
 export type EntryData = Record<string, ValueOrNestedValue> | undefined | null;
-export type EntryMeta = Record<string, ValueOrNestedValue> | undefined | null;
 
 export interface Entry {
   collection: string;
@@ -84,7 +83,6 @@ export interface Entry {
   author: string;
   updatedOn: string;
   status?: string;
-  meta: EntryMeta;
   newRecord?: boolean;
   isFetching?: boolean;
   isPersisting?: boolean;
@@ -121,7 +119,6 @@ export type FieldValidationMethod = (
 export interface EntryDraft {
   entry: Entry;
   fieldsErrors: FieldsErrors;
-  fieldsMetaData?: Record<string, Record<string, string>>;
 }
 
 export interface FilterRule {
@@ -146,10 +143,6 @@ export interface CollectionFile {
 interface Nested {
   summary?: string;
   depth: number;
-}
-
-interface Meta {
-  path?: { label: string; widget: string; index_file: string };
 }
 
 export interface I18nSettings {
@@ -193,7 +186,6 @@ export interface Collection {
   view_filters: ViewFilter[];
   view_groups: ViewGroup[];
   nested?: Nested;
-  meta?: Meta;
   i18n?:
     | boolean
     | {
@@ -244,9 +236,6 @@ export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 export type GetAssetFunction = (path: string, field?: CmsField) => AssetProxy;
 
 export interface CmsWidgetControlProps<T, F extends CmsField = CmsField> {
-  classNameWidget?: string;
-  classNameWidgetActive?: string;
-  classNameWrapper: string;
   clearFieldErrors: EditorControlProps['clearFieldErrors'];
   clearSearch: EditorControlProps['clearSearch'];
   collapsed?: boolean;
@@ -258,7 +247,6 @@ export interface CmsWidgetControlProps<T, F extends CmsField = CmsField> {
   forID: string;
   forList?: boolean;
   getAsset: GetAssetFunction;
-  hasActiveStyle: boolean;
   hasError?: boolean;
   isDisabled: boolean;
   isEditorComponent: boolean;
@@ -266,13 +254,14 @@ export interface CmsWidgetControlProps<T, F extends CmsField = CmsField> {
   isFieldDuplicate: EditorControlProps['isFieldDuplicate'];
   isFieldHidden: EditorControlProps['isFieldHidden'];
   isNewEditorComponent: boolean;
+  label: string;
   loadEntry: EditorControlProps['loadEntry'];
   locale: string | undefined;
   mediaPaths: Record<string, string | string[]>;
-  metadata: EntryMeta;
   onAddAsset: EditorControlProps['addAsset'];
-  onChange: (value: T | undefined | null, newMetadata?: EntryMeta) => void;
-  onChangeObject: (field: CmsField, newValue: ValueOrNestedValue, newMetadata?: EntryMeta) => void;
+  onBlur: (event?: FocusEvent) => void;
+  onChange: (value: T | undefined | null) => void;
+  onChangeObject: (field: CmsField, newValue: ValueOrNestedValue) => void;
   onClearMediaControl: EditorControlProps['clearMediaControl'];
   onOpenMediaLibrary: EditorControlProps['openMediaLibrary'];
   onPersistMedia: EditorControlProps['persistMedia'];
@@ -282,8 +271,6 @@ export interface CmsWidgetControlProps<T, F extends CmsField = CmsField> {
   parentIds: string[];
   query: EditorControlProps['query'];
   queryHits: Entry[];
-  setActiveStyle: (event?: FocusEvent) => void;
-  setInactiveStyle: (event?: FocusEvent) => void;
   t: t;
   validate: (newValue: T | undefined | null) => void;
   value: T | undefined | null;
@@ -292,10 +279,8 @@ export interface CmsWidgetControlProps<T, F extends CmsField = CmsField> {
 export interface CmsWidgetPreviewProps<T = unknown, F extends CmsField = CmsField> {
   entry: Entry;
   field: F;
-  fieldsMetaData: EntryMeta;
   getAsset: GetAssetFunction;
   getRemarkPlugins: () => Pluggable[];
-  metadata?: EntryMeta;
   resolveWidget: <W = unknown, WF extends CmsField = CmsField>(name: string) => Widget<W, WF>;
   value: T | undefined | null;
 }
@@ -309,7 +294,6 @@ export interface CmsTemplatePreviewProps {
   collection: Collection;
   fields: CmsField[];
   entry: Entry;
-  fieldsMetaData: Record<string, EntryMeta>;
   getAsset: GetAssetFunction;
   widgetFor: (name: string) => ReactNode;
   widgetsFor: (name: string) =>
@@ -372,7 +356,6 @@ export interface PreviewTemplateComponentProps {
       }[];
   getAsset: GetAssetFunction;
   boundGetAsset: (collection: Collection, path: string) => GetAssetFunction;
-  fieldsMetaData: Record<string, EntryMeta>;
   config: CmsConfig;
   fields: CmsField[];
   isLoadingAsset: boolean;
@@ -775,15 +758,6 @@ export interface CmsFieldStringOrText extends CmsFieldBase {
   default?: string;
 }
 
-export interface CmsFieldMeta extends CmsFieldBase {
-  name: string;
-  label: string;
-  widget: string;
-  required: boolean;
-  index_file: string;
-  meta: boolean;
-}
-
 export type CmsField =
   | CmsFieldBoolean
   | CmsFieldCode
@@ -798,8 +772,7 @@ export type CmsField =
   | CmsFieldRelation
   | CmsFieldSelect
   | CmsFieldHidden
-  | CmsFieldStringOrText
-  | CmsFieldMeta;
+  | CmsFieldStringOrText;
 
 export interface CmsCollectionFile {
   name: string;
@@ -872,7 +845,6 @@ export interface CmsCollection {
   nested?: {
     depth: number;
   };
-  meta?: { path?: { label: string; widget: string; index_file: string } };
 
   /**
    * It accepts the following values: yml, yaml, toml, json, md, markdown, html
@@ -1090,3 +1062,8 @@ export interface ProcessedCodeLanguage {
   codemirror_mode: string;
   codemirror_mime_type: string;
 }
+
+export type FileMetadata = {
+  author: string;
+  updatedOn: string;
+};

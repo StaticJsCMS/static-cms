@@ -40,7 +40,6 @@ export default function withMapControl({ getFormat, getMap }: WithMapControlProp
     value = '',
     field,
     onChange,
-    classNameWrapper,
   }: CmsWidgetControlProps<string, CmsFieldMap>) => {
     const { height = '400px' } = field;
     const mapContainer: React.LegacyRef<HTMLDivElement> = useMemo(() => React.createRef(), []);
@@ -80,7 +79,6 @@ export default function withMapControl({ getFormat, getMap }: WithMapControlProp
         {({ cx, css }) => (
           <div
             className={cx(
-              classNameWrapper,
               css`
                 ${olStyles};
                 padding: 0;

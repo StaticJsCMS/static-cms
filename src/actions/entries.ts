@@ -4,14 +4,13 @@ import { currentBackend } from '../backend';
 import ValidationErrorTypes from '../constants/validationErrorTypes';
 import { getSearchIntegrationProvider } from '../integrations';
 import { SortDirection } from '../interface';
-import { getProcessSegment } from '../lib/formatters';
 import { duplicateDefaultI18nFields, hasI18n, I18N_FIELD, serializeI18n } from '../lib/i18n';
 import { serializeValues } from '../lib/serializeEntryValues';
 import { Cursor } from '../lib/util';
-import { selectCustomPath, selectFields, updateFieldByKey } from '../lib/util/collection.util';
+import { selectFields, updateFieldByKey } from '../lib/util/collection.util';
 import { selectIntegration, selectPublishedSlugs } from '../reducers';
 import { selectCollectionEntriesCursor } from '../reducers/cursors';
-import { selectEntriesSortFields, selectEntryByPath, selectIsFetching } from '../reducers/entries';
+import { selectEntriesSortFields, selectIsFetching } from '../reducers/entries';
 import { navigateToEntry } from '../routing/history';
 import { addSnackbar } from '../store/slices/snackbars';
 import { createAssetProxy } from '../valueObjects/AssetProxy';
@@ -30,7 +29,6 @@ import type {
   Entry,
   EntryData,
   EntryDraft,
-  EntryMeta,
   FieldError,
   I18nSettings,
   ImplementationMediaFile,
@@ -263,8 +261,10 @@ export function entriesFailed(collection: Collection, error: Error) {
   return {
     type: ENTRIES_FAILURE,
     error: 'Failed to load entries',
+    meta: {
+      collection: collection.name,
+    },
     payload: error.toString(),
-    meta: { collection: collection.name },
   } as const;
 }
 
@@ -472,19 +472,17 @@ export function discardDraft() {
 export function changeDraftField({
   field,
   value,
-  metadata,
   entry,
   i18n,
 }: {
   field: CmsField;
   value: ValueOrNestedValue;
-  metadata: EntryMeta;
   entry?: Entry | null;
   i18n?: I18nSettings;
 }) {
   return {
     type: DRAFT_CHANGE_FIELD,
-    payload: { field, value, metadata, entry, i18n },
+    payload: { field, value, entry, i18n },
   } as const;
 }
 
@@ -598,21 +596,15 @@ export function deleteLocalBackup(collection: Collection, slug: string) {
  */
 
 export function loadEntry(collection: Collection, slug: string, silent = false) {
-  console.log('well we are here...')
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
-    console.log('waiting for media library to load...')
     await waitForMediaLibraryToLoad(dispatch, getState());
     if (!silent) {
-      console.log('entry loading!')
       dispatch(entryLoading(collection, slug));
     }
 
     try {
-      console.log('trying to load entry')
       const loadedEntry = await tryLoadEntry(getState(), collection, slug);
-      console.log('entry loaded!')
       dispatch(entryLoaded(collection, loadedEntry));
-      console.log('making draft!')
       dispatch(createDraftFromEntry(loadedEntry));
     } catch (error: unknown) {
       console.error(error);
@@ -833,14 +825,6 @@ function processValue(unsafe: string) {
   return escapeHtml(unsafe);
 }
 
-function getDataFields(fields: CmsField[]) {
-  return fields.filter(f => !('meta' in f));
-}
-
-function getMetaFields(fields: CmsField[]) {
-  return fields.filter(f => 'meta' in f && f.meta);
-}
-
 export function createEmptyDraft(collection: Collection, search: string) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const params = new URLSearchParams(search);
@@ -854,12 +838,7 @@ export function createEmptyDraft(collection: Collection, search: string) {
     });
 
     const fields = collection.fields ?? [];
-
-    const dataFields = getDataFields(fields);
-    const data = createEmptyDraftData(dataFields);
-
-    const metaFields = getMetaFields(fields);
-    const meta = createEmptyDraftData(metaFields);
+    const data = createEmptyDraftData(fields);
 
     const state = getState();
     const configState = state.config;
@@ -873,14 +852,12 @@ export function createEmptyDraft(collection: Collection, search: string) {
       await waitForMediaLibraryToLoad(dispatch, getState());
     }
 
-    const i18nFields = createEmptyDraftI18nData(collection, dataFields);
+    const i18nFields = createEmptyDraftI18nData(collection, fields);
 
     let newEntry = createEntry(collection.name, '', '', {
       data,
       i18n: i18nFields,
       mediaFiles: [],
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      meta: meta as any,
     });
     newEntry = await backend.processEntry(state, collection, newEntry);
     dispatch(emptyDraftCreated(newEntry));
@@ -1110,61 +1087,6 @@ export function deleteEntry(collection: Collection, slug: string) {
         return Promise.reject(dispatch(entryDeleteFail(collection, slug, error)));
       });
   };
-}
-
-function getPathError(
-  path: string | undefined,
-  key: string,
-  t: (key: string, args: Record<string, unknown>) => string,
-) {
-  return {
-    error: {
-      type: ValidationErrorTypes.CUSTOM,
-      message: t(`editor.editorControlPane.widget.${key}`, {
-        path,
-      }),
-    },
-  };
-}
-
-export function validateMetaField(
-  state: RootState,
-  collection: Collection,
-  field: CmsField,
-  value: string | undefined,
-  t: (key: string, args: Record<string, unknown>) => string,
-): { error: false | FieldError } {
-  const configState = state.config;
-  if (!configState.config) {
-    throw new Error('Config not loaded');
-  }
-
-  if ('meta' in field && field.name === 'path') {
-    if (!value) {
-      return getPathError(value, 'invalidPath', t);
-    }
-    const sanitizedPath = (value as string)
-      .split('/')
-      .map(getProcessSegment(configState.config.slug))
-      .join('/');
-
-    if (value !== sanitizedPath) {
-      return getPathError(value, 'invalidPath', t);
-    }
-
-    const customPath = selectCustomPath(collection, { entry: { meta: { path: value } } });
-    const existingEntry = customPath
-      ? selectEntryByPath(state.entries, collection.name, customPath)
-      : undefined;
-
-    const existingEntryPath = existingEntry?.path;
-    const draftPath = state.entryDraft?.entry?.path;
-
-    if (existingEntryPath && existingEntryPath !== draftPath) {
-      return getPathError(value, 'pathExists', t);
-    }
-  }
-  return { error: false };
 }
 
 export type EntriesAction = ReturnType<

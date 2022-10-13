@@ -5,10 +5,14 @@ import semaphore from 'semaphore';
 import { basename } from './path';
 
 import type { Semaphore } from 'semaphore';
-import type { DisplayURL, DisplayURLObject, ImplementationEntry, ImplementationFile } from '../../interface';
-import type { FileMetadata } from './API';
+import type {
+  DisplayURL,
+  DisplayURLObject,
+  FileMetadata,
+  ImplementationEntry,
+  ImplementationFile,
+} from '../../interface';
 import type { AsyncLock } from './asyncLock';
-
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 

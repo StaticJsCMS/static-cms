@@ -184,7 +184,6 @@ interface WithImageOptions {
 export default function withFileControl({ forImage = false }: WithImageOptions = {}) {
   const FileControl = ({
     value,
-    classNameWrapper,
     field,
     onChange,
     onOpenMediaLibrary,
@@ -424,7 +423,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
     const subject = forImage ? 'image' : 'file';
 
     return (
-      <div className={classNameWrapper}>
+      <div>
         <span>{value ? renderSelection(subject) : renderNoSelection(subject)}</span>
       </div>
     );
