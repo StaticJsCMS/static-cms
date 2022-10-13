@@ -14,7 +14,7 @@ export interface MediaLibrarySearchProps {
 }
 
 const MediaLibrarySearch = ({
-  value,
+  value = '',
   onChange,
   onKeyDown,
   placeholder,

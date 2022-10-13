@@ -50,27 +50,34 @@ const StyledModal = styled(
       display: flex;
       flex-direction: column;
       overflow: visible;
+      height: 80%;
       width: calc(${cardOutsideWidth} + 20px);
+      max-width: calc(${cardOutsideWidth} + 20px);
       ${$isPrivate ? `background-color: ${colorsRaw.grayDark};` : ''}
 
       @media (min-width: 800px) {
         width: calc(${cardOutsideWidth} * 2 + 20px);
+        max-width: calc(${cardOutsideWidth} * 2 + 20px);
       }
 
       @media (min-width: 1120px) {
         width: calc(${cardOutsideWidth} * 3 + 20px);
+        max-width: calc(${cardOutsideWidth} * 3 + 20px);
       }
 
       @media (min-width: 1440px) {
         width: calc(${cardOutsideWidth} * 4 + 20px);
+        max-width: calc(${cardOutsideWidth} * 4 + 20px);
       }
 
       @media (min-width: 1760px) {
         width: calc(${cardOutsideWidth} * 5 + 20px);
+        max-width: calc(${cardOutsideWidth} * 5 + 20px);
       }
 
       @media (min-width: 2080px) {
         width: calc(${cardOutsideWidth} * 6 + 20px);
+        max-width: calc(${cardOutsideWidth} * 6 + 20px);
       }
 
       h1 {
