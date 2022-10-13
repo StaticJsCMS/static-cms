@@ -175,7 +175,7 @@ const App = ({
   }
 
   if (config.isFetching) {
-    return <Loader $active>{t('app.app.loadingConfig')}</Loader>;
+    return <Loader>{t('app.app.loadingConfig')}</Loader>;
   }
 
   if (!user) {

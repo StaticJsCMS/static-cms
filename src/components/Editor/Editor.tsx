@@ -289,7 +289,7 @@ const Editor = ({
       </div>
     );
   } else if (entryDraft == null || entryDraft.entry === undefined || (entry && entry.isFetching)) {
-    return <Loader $active>{t('editor.editor.loadingEntry')}</Loader>;
+    return <Loader>{t('editor.editor.loadingEntry')}</Loader>;
   }
 
   return (

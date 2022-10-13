@@ -54,7 +54,7 @@ const Entries = ({
   ];
 
   if (isFetching && page === undefined) {
-    return <Loader $active>{loadingMessages}</Loader>;
+    return <Loader>{loadingMessages}</Loader>;
   }
 
   const hasEntries = (entries && entries.length > 0) || cursor?.actions?.has('append_next');
