@@ -1,24 +1,33 @@
-import React from 'react';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import React, { useCallback, useState } from 'react';
 
-import { Toggle } from '../../ui';
-
+import type { ChangeEvent } from 'react';
 import type { CmsFieldBoolean, CmsWidgetControlProps } from '../../interface';
 
 const BooleanControl = ({
   value,
-  forID,
+  label,
   onChange,
-  onBlur
+  onBlur,
 }: CmsWidgetControlProps<boolean, CmsFieldBoolean>) => {
+  const [internalValue, setInternalValue] = useState(value ?? false);
+
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setInternalValue(event.target.checked);
+      onChange(event.target.checked);
+    },
+    [onChange],
+  );
+
   return (
-    <div>
-      <Toggle
-        id={forID}
-        active={value ?? false}
-        onChange={onChange}
-        onBlur={onBlur}
-      />
-    </div>
+    <FormControlLabel
+      control={
+        <Switch defaultChecked checked={internalValue} onChange={handleChange} onBlur={onBlur} />
+      }
+      label={label}
+    />
   );
 };
 

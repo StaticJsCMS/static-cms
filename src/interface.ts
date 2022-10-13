@@ -1,5 +1,5 @@
 import type { PropertiesSchema } from 'ajv/dist/types/json-schema';
-import type { ComponentType, FocusEvent, ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
 import type { Pluggable } from 'unified';
 import type { MediaFile as BackendMediaFile } from './backend';
@@ -244,7 +244,6 @@ export interface CmsWidgetControlProps<T, F extends CmsField = CmsField> {
   entry: Entry;
   field: F;
   fieldsErrors: FieldsErrors;
-  forID: string;
   forList?: boolean;
   getAsset: GetAssetFunction;
   hasError?: boolean;
@@ -259,20 +258,17 @@ export interface CmsWidgetControlProps<T, F extends CmsField = CmsField> {
   locale: string | undefined;
   mediaPaths: Record<string, string | string[]>;
   onAddAsset: EditorControlProps['addAsset'];
-  onBlur: (event?: FocusEvent) => void;
-  onChange: (value: T | undefined | null) => void;
-  onChangeObject: (field: CmsField, newValue: ValueOrNestedValue) => void;
+  onChange: (parentPath: string[], field: CmsField, newValue: ValueOrNestedValue) => void;
   onClearMediaControl: EditorControlProps['clearMediaControl'];
   onOpenMediaLibrary: EditorControlProps['openMediaLibrary'];
   onPersistMedia: EditorControlProps['persistMedia'];
   onRemoveInsertedMedia: EditorControlProps['removeInsertedMedia'];
   onRemoveMediaControl: EditorControlProps['removeMediaControl'];
-  onValidateObject: (uniqueFieldId: string, errors: FieldError[]) => void;
-  parentIds: string[];
+  onValidate: EditorControlProps['onValidate'];
+  parentPath: (string | number)[];
   query: EditorControlProps['query'];
   queryHits: Entry[];
   t: t;
-  validate: (newValue: T | undefined | null) => void;
   value: T | undefined | null;
 }
 

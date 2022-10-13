@@ -1,6 +1,5 @@
 import { css as coreCss, Global } from '@emotion/react';
 import styled from '@emotion/styled';
-import partial from 'lodash/partial';
 import uniqueId from 'lodash/uniqueId';
 import React, { useCallback, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -26,7 +25,6 @@ import { borders, colors, lengths, transitions } from '../../../ui';
 import WidgetControl from './WidgetControl';
 
 import type { ComponentType } from 'react';
-import type { t } from 'react-polyglot';
 import type { ConnectedProps } from 'react-redux';
 import type {
   CmsField,
@@ -154,7 +152,7 @@ const EditorControl = ({
   onChange,
   onValidate,
   openMediaLibrary,
-  parentIds = [],
+  parentPaths = [],
   persistMedia,
   query,
   queryHits,
@@ -168,7 +166,6 @@ const EditorControl = ({
   const widgetName = field.widget;
   const widget = resolveWidget(widgetName) as Widget<ValueOrNestedValue>;
   const fieldHint = field.hint;
-  const onValidateObject = onValidate;
   const errors = fieldsErrors && fieldsErrors[uniqueFieldId];
 
   const childErrors = useMemo(() => {
@@ -188,6 +185,8 @@ const EditorControl = ({
       },
     [getAsset],
   );
+
+  const path = useMemo(() => [...parentPaths, field.name], [field.name, parentPaths]);
 
   const cmsConfig = useMemo(() => config.config, [config.config]);
   if (!collection || !entry || !cmsConfig) {
@@ -231,23 +230,19 @@ const EditorControl = ({
           locale={locale}
           mediaPaths={mediaPaths}
           onAddAsset={addAsset}
-          onChange={(newValue: ValueOrNestedValue) => onChange(field, newValue)}
+          onChange={onChange}
           onClearMediaControl={clearMediaControl}
           onOpenMediaLibrary={openMediaLibrary}
           onPersistMedia={persistMedia}
           onRemoveInsertedMedia={removeInsertedMedia}
           onRemoveMediaControl={removeMediaControl}
-          onValidate={onValidate && partial(onValidate, uniqueFieldId)}
-          onValidateObject={onValidateObject}
-          parentIds={parentIds}
+          onValidate={onValidate}
+          parentPath={path}
           query={query}
           queryHits={queryHits[uniqueFieldId] || []}
           resolveWidget={resolveWidget}
           t={t}
-          uniqueFieldId={uniqueFieldId}
-          validator={widget.validator}
           value={value}
-          widget={widget}
         />
         {fieldHint && (
           <ControlHint $error={hasErrors}>
@@ -277,21 +272,21 @@ const EditorControl = ({
 };
 
 interface EditorControlOwnProps {
-  value: ValueOrNestedValue;
+  className?: string;
+  clearFieldErrors: EditorControlPaneProps['clearFieldErrors'];
   field: CmsField;
   fieldsErrors: FieldsErrors;
-  onChange: (field: CmsField, newValue: ValueOrNestedValue) => void;
-  onValidate: (uniqueFieldId: string, errors: FieldError[]) => void;
-  className?: string;
-  isEditorComponent?: boolean;
-  isNewEditorComponent?: boolean;
-  parentIds?: string[];
   isDisabled?: boolean;
-  isHidden?: boolean;
+  isEditorComponent?: boolean;
   isFieldDuplicate?: (field: CmsField) => boolean;
   isFieldHidden?: (field: CmsField) => boolean;
+  isHidden?: boolean;
+  isNewEditorComponent?: boolean;
   locale?: string;
-  clearFieldErrors: EditorControlPaneProps['clearFieldErrors'];
+  onChange: (parentPath: string[], field: CmsField, newValue: ValueOrNestedValue) => void;
+  onValidate: (parentPath: string[], errors: FieldError[]) => void;
+  parentPaths?: string[];
+  value: ValueOrNestedValue;
 }
 
 function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {

@@ -475,6 +475,7 @@ export function changeDraftField({
   entry,
   i18n,
 }: {
+  path: string[];
   field: CmsField;
   value: ValueOrNestedValue;
   entry?: Entry | null;

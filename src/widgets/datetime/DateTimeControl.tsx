@@ -40,7 +40,6 @@ function NowButton({ t, handleChange }: TranslatedProps<NowButtonProps>) {
 
 const DateTimeControl = ({
   field,
-  forID,
   value,
   t,
   isDisabled,
@@ -123,7 +122,6 @@ const DateTimeControl = ({
             onChange={handleChange}
             renderInput={params => (
               <TextField
-                id={forID}
                 {...params}
                 fullWidth
                 sx={{
@@ -144,7 +142,7 @@ const DateTimeControl = ({
           <TimePicker
             value={internalValue}
             onChange={handleChange}
-            renderInput={params => <TextField id={forID} {...params} fullWidth />}
+            renderInput={params => <TextField {...params} fullWidth />}
           />
         )
       ) : (
@@ -152,7 +150,7 @@ const DateTimeControl = ({
           inputFormat={typeof dateFormat === 'string' ? dateFormat : undefined}
           value={internalValue}
           onChange={handleChange}
-          renderInput={params => <TextField id={forID} {...params} fullWidth />}
+          renderInput={params => <TextField {...params} fullWidth />}
         />
       )}
       {!isDisabled && <NowButton t={t} handleChange={v => handleChange(v)} />}

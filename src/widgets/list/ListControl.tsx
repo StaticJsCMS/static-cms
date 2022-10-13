@@ -179,18 +179,13 @@ function getFieldsDefault(
 }
 
 const ListControl = ({
-  parentIds = [],
-  field,
-  forID,
-  onChange,
-  t,
-  onValidateObject,
   clearFieldErrors,
-  fieldsErrors,
-  entry,
   clearSearch,
   collection,
   config,
+  entry,
+  field,
+  fieldsErrors,
   getAsset,
   isDisabled,
   isEditorComponent,
@@ -202,14 +197,17 @@ const ListControl = ({
   locale,
   mediaPaths,
   onAddAsset,
+  onChange,
   onClearMediaControl,
   onOpenMediaLibrary,
   onPersistMedia,
   onRemoveInsertedMedia,
   onRemoveMediaControl,
+  onValidate,
+  parentPath,
   query,
   queryHits,
-  onBlur,
+  t,
   ...otherProps
 }: CmsWidgetControlProps<ListValue[], CmsFieldList>) => {
   const initialValue = useMemo(() => otherProps.value ?? [], [otherProps.value]);
@@ -618,6 +616,10 @@ const ListControl = ({
     [field, handleRemove],
   );
 
+  const handleOnChange = useCallback((index: number) => (value: unknown) => {
+
+  }, []);
+
   const renderItem = useCallback(
     (item: ListValue, index: number) => {
       const collapsed = itemsCollapsed[index];
@@ -661,48 +663,41 @@ const ListControl = ({
               {getObjectLabel(item)}
             </NestedObjectLabel>
             <ObjectControl
-              value={item as Record<string, ListValue>}
-              field={field}
-              onChangeObject={handleChangeFor(index)}
-              forList
-              onValidateObject={onValidateObject}
               clearFieldErrors={clearFieldErrors}
-              fieldsErrors={fieldsErrors}
-              // TODO validation! validationKey={key}
-              collapsed={collapsed}
-              data-testid={`object-control-${key}`}
-              hasError={hasError}
-              parentIds={[...parentIds, forID, key]}
               clearSearch={clearSearch}
+              collapsed={collapsed}
               collection={collection}
               config={config}
+              data-testid={`object-control-${key}`}
               entry={entry}
-              forID={forID}
+              field={field}
+              fieldsErrors={fieldsErrors}
+              forList
               getAsset={getAsset}
+              hasError={hasError}
               isDisabled={isDisabled}
               isEditorComponent={isEditorComponent}
               isFetching={isFetching}
               isFieldDuplicate={isFieldDuplicate}
               isFieldHidden={isFieldHidden}
               isNewEditorComponent={isNewEditorComponent}
+              label={getFieldLabel(field, t)}
               loadEntry={loadEntry}
               locale={locale}
               mediaPaths={mediaPaths}
               onAddAsset={onAddAsset}
-              // eslint-disable-next-line @typescript-eslint/no-empty-function
-              onChange={() => {}}
+              onChange={onChange}
               onClearMediaControl={onClearMediaControl}
               onOpenMediaLibrary={onOpenMediaLibrary}
               onPersistMedia={onPersistMedia}
               onRemoveInsertedMedia={onRemoveInsertedMedia}
               onRemoveMediaControl={onRemoveMediaControl}
-              onBlur={onBlur}
+              onValidate={onValidate}
+              parentPath={[...parentPath, field.name, index]}
               query={query}
               queryHits={queryHits}
               t={t}
-              // eslint-disable-next-line @typescript-eslint/no-empty-function
-              validate={() => {}}
-              label={getFieldLabel(field, t)}
+              value={item as Record<string, ListValue>}
             />
           </>
         </SortableListItem>
@@ -716,11 +711,9 @@ const ListControl = ({
       entry,
       field,
       fieldsErrors,
-      forID,
       getAsset,
       getObjectLabel,
       getValueType,
-      handleChangeFor,
       handleItemCollapseToggle,
       handleRemove,
       hasErrors,
@@ -736,14 +729,14 @@ const ListControl = ({
       locale,
       mediaPaths,
       onAddAsset,
-      onBlur,
+      onChange,
       onClearMediaControl,
       onOpenMediaLibrary,
       onPersistMedia,
       onRemoveInsertedMedia,
       onRemoveMediaControl,
-      onValidateObject,
-      parentIds,
+      onValidate,
+      parentPath,
       query,
       queryHits,
       renderErroneousTypedItem,
@@ -765,7 +758,6 @@ const ListControl = ({
       <ClassNames>
         {({ cx, css }) => (
           <div
-            id={forID}
             className={cx(
               css`
                 ${styleStrings.objectWidgetTopBarContainer}
@@ -798,7 +790,6 @@ const ListControl = ({
     );
   }, [
     field,
-    forID,
     handleAdd,
     handleAddType,
     handleCollapseAllToggle,
@@ -811,8 +802,8 @@ const ListControl = ({
   ]);
 
   const renderInput = useCallback(() => {
-    return <input type="text" id={forID} value={value} onChange={handleChange} />;
-  }, [forID, handleChange, value]);
+    return <input type="text" value={value} onChange={handleChange} />;
+  }, [handleChange, value]);
 
   if (getValueType() !== null) {
     return renderListControl();

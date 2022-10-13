@@ -55,7 +55,6 @@ const settingsPersistKeys = {
 };
 
 const CodeControl = ({
-  forID,
   isEditorComponent,
   isNewEditorComponent,
   field,
@@ -220,6 +219,8 @@ const CodeControl = ({
   const langInfo = useMemo(() => getLanguageByName(lang), [getLanguageByName, lang]);
   const mode = langInfo?.mimeType || langInfo?.mode;
 
+  const uniqueId = useMemo(() => uuid(), []);
+
   return (
     <ClassNames>
       {({ css, cx }) => (
@@ -236,7 +237,7 @@ const CodeControl = ({
           {settingsVisible && (
             <SettingsPane
               hideSettings={hideSettings}
-              forID={forID}
+              uniqueId={uniqueId}
               modes={modes}
               mode={valueToOption(langInfo || defaultLang)}
               theme={themes.find(t => t === theme) ?? themes[0]}

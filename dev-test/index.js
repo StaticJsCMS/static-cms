@@ -13,7 +13,7 @@ const PostPreview = window.createClass({
         window.h('h1', {}, entry.data.title),
         this.props.widgetFor('image'),
       ),
-      window.h('p', {}, window.h('small', {}, 'Written ' + entry.data.data)),
+      window.h('p', {}, window.h('small', {}, 'Written ' + entry.data.date)),
       window.h('div', { className: 'text' }, this.props.widgetFor('body')),
     );
   },

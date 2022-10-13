@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import ValidationErrorTypes from '../../../constants/validationErrorTypes';
 
@@ -142,18 +142,9 @@ function validateWrappedControl(
     } else if (response instanceof Promise) {
       response.then(
         () => {
-          validate(
-            field,
-            parentIds,
-            value,
-            validator,
-            getValidValue,
-            onValidate,
-            t,
-            {
-              error: false,
-            },
-          );
+          validate(field, parentIds, value, validator, getValidValue, onValidate, t, {
+            error: false,
+          });
         },
         err => {
           const error = {
@@ -161,18 +152,9 @@ function validateWrappedControl(
             message: `${field.label ?? field.name} - ${err}.`,
           };
 
-          validate(
-            field,
-            parentIds,
-            value,
-            validator,
-            getValidValue,
-            onValidate,
-            t,
-            {
-              error,
-            },
-          );
+          validate(field, parentIds, value, validator, getValidValue, onValidate, t, {
+            error,
+          });
         },
       );
 
@@ -214,22 +196,18 @@ export interface WidgetProps {
   locale: string | undefined;
   mediaPaths: Record<string, string | string[]>;
   onAddAsset: EditorControlProps['addAsset'];
-  onChange: (newValue: ValueOrNestedValue) => void;
+  onChange: (parentPath: string[], field: CmsField, newValue: ValueOrNestedValue) => void;
   onClearMediaControl: EditorControlProps['clearMediaControl'];
   onOpenMediaLibrary: EditorControlProps['openMediaLibrary'];
   onPersistMedia: EditorControlProps['persistMedia'];
   onRemoveInsertedMedia: EditorControlProps['removeInsertedMedia'];
   onRemoveMediaControl: EditorControlProps['removeMediaControl'];
-  onValidate: (errors: FieldError[]) => void;
-  onValidateObject: (uniqueFieldId: string, errors: FieldError[]) => void;
-  parentIds: string[];
+  onValidate: EditorControlProps['onValidate'];
+  parentPath: string[];
   query: EditorControlProps['query'];
   queryHits: Entry[];
   resolveWidget: typeof registryResolveWidget;
-  uniqueFieldId: string;
-  validator: Widget<ValueOrNestedValue>['validator'];
   value: ValueOrNestedValue;
-  widget: Widget<ValueOrNestedValue>;
 }
 
 const WidgetControl = ({
@@ -260,94 +238,12 @@ const WidgetControl = ({
   onRemoveInsertedMedia,
   onRemoveMediaControl,
   onValidate,
-  onValidateObject,
-  parentIds,
+  parentPath,
   query,
   queryHits,
   t,
-  uniqueFieldId,
-  validator,
   value,
-  widget,
 }: TranslatedProps<WidgetProps>) => {
-  // shouldComponentUpdate(nextProps) {
-  //   /**
-  //    * Allow widgets to provide their own `shouldComponentUpdate` method.
-  //    */
-  //   if (this.wrappedControlShouldComponentUpdate) {
-  //     return this.wrappedControlShouldComponentUpdate(nextProps);
-  //   }
-  //   return (
-  //     this.props.value !== nextProps.value
-  //   );
-  // }
-
-  // processInnerControlRef = ref => {
-  //   if (!ref) return;
-
-  //   /**
-  //    * If the widget is a container that receives state updates from the store,
-  //    * we'll need to get the ref of the actual control via the `react-redux`
-  //    * `getWrappedInstance` method. Note that connected widgets must pass
-  //    * `withRef: true` to `connect` in the options object.
-  //    */
-  //   this.innerWrappedControl = ref.getWrappedInstance ? ref.getWrappedInstance() : ref;
-
-  //   /**
-  //    * Get the `shouldComponentUpdate` method from the wrapped control, and
-  //    * provide the control instance is the `this` binding.
-  //    */
-  //   const { shouldComponentUpdate: scu } = this.innerWrappedControl;
-  //   this.wrappedControlShouldComponentUpdate = scu && scu.bind(this.innerWrappedControl);
-  // };
-
-  const getValidValue = useCallback(() => {
-    return widget.getValidValue(value) ?? value;
-  }, [value, widget]);
-
-  /**
-   * In case the `onChangeObject` function is frozen by a child widget implementation,
-   * e.g. when debounced, always get the latest object value instead of using
-   * `this.props.value` directly.
-   */
-  const getObjectValue = useCallback(
-    (objectValue: Record<string, ValueOrNestedValue>) => objectValue || {},
-    [],
-  );
-
-  /**
-   * Change handler for fields that are nested within another field.
-   */
-  const onChangeObject = useCallback(
-    (field: CmsField, newValue: ValueOrNestedValue) => {
-      const newObjectValue = getObjectValue(value as Record<string, ValueOrNestedValue>);
-      newObjectValue[field.name] = newValue;
-      return onChange(newObjectValue);
-    },
-    [getObjectValue, onChange, value],
-  );
-
-  const handleValidate = useCallback(
-    (newValue: ValueOrNestedValue) => {
-      validate(
-        field,
-        parentIds,
-        newValue,
-        validator,
-        getValidValue,
-        onValidate,
-        t,
-      );
-    },
-    [field, getValidValue, onValidate, parentIds, t, validator],
-  );
-
-  const handleOnBlur = useCallback(() => {
-    if ('pattern' in field && !isEmpty(getValidValue())) {
-      handleValidate(value);
-    }
-  }, [field, getValidValue, handleValidate, value]);
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return React.createElement(controlComponent as ComponentType<CmsWidgetControlProps<any>>, {
     clearFieldErrors,
@@ -357,7 +253,6 @@ const WidgetControl = ({
     entry,
     field,
     fieldsErrors,
-    forID: uniqueFieldId,
     getAsset,
     isDisabled,
     isEditorComponent,
@@ -370,20 +265,17 @@ const WidgetControl = ({
     locale,
     mediaPaths,
     onAddAsset,
-    onBlur: handleOnBlur,
     onChange,
-    onChangeObject,
     onClearMediaControl,
     onOpenMediaLibrary,
     onPersistMedia,
     onRemoveInsertedMedia,
     onRemoveMediaControl,
-    onValidateObject,
-    parentIds,
+    onValidate,
+    parentPath,
     query,
     queryHits,
     t,
-    validate: handleValidate,
     value,
   });
 };

@@ -5,12 +5,12 @@ import type { ChangeEvent } from 'react';
 import type { CmsFieldStringOrText, CmsWidgetControlProps } from '../../interface';
 
 const StringControl = ({
-  forID,
-  value = '',
+  value,
   label,
-  onChange
+  onChange,
+  onBlur
 }: CmsWidgetControlProps<string, CmsFieldStringOrText>) => {
-  const [internalValue, setInternalValue] = useState(value);
+  const [internalValue, setInternalValue] = useState(value ?? '');
 
   const handleChange = useCallback(
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -22,11 +22,11 @@ const StringControl = ({
 
   return (
     <TextField
-      id={forID}
       label={label}
       variant="outlined"
       value={internalValue}
       onChange={handleChange}
+      onBlur={onBlur}
       fullWidth
     />
   );

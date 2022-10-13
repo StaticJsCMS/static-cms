@@ -103,7 +103,6 @@ function getSelectedValue(
 const RelationControl = ({
   value,
   field,
-  forID,
   onChange,
   onBlur,
   queryHits,
@@ -175,7 +174,7 @@ const RelationControl = ({
         : [];
       if (initialSearchValues && initialSearchValues.length > 0) {
         const searchFieldsArray = field.search_fields;
-        const response = await query(forID, collection, searchFieldsArray, '', file);
+        const response = await query('', collection, searchFieldsArray, '', file); // TODO Fix this query(forID, collection, searchFieldsArray, '', file)
 
         if (alive) {
           const hits = response?.type === QUERY_SUCCESS ? response.payload.hits : [];
@@ -202,7 +201,6 @@ const RelationControl = ({
     field.file,
     field.name,
     field.search_fields,
-    forID,
     onChange,
     parseHitOptions,
     query,
@@ -261,7 +259,7 @@ const RelationControl = ({
       const searchFieldsArray = field.search_fields;
       const file = field.file;
 
-      const response = await query(forID, collection, searchFieldsArray, '', file, optionsLength);
+      const response = await query('', collection, searchFieldsArray, '', file, optionsLength); // TODO Fix this query(forID, collection, searchFieldsArray, '', file, optionsLength)
       if (alive) {
         if (response?.type === QUERY_SUCCESS) {
           const hits = response.payload.hits ?? [];
@@ -279,7 +277,6 @@ const RelationControl = ({
     field.file,
     field.options_length,
     field.search_fields,
-    forID,
     initialOptions,
     loading,
     parseHitOptions,
@@ -295,7 +292,6 @@ const RelationControl = ({
   return (
     <Autocomplete
       disablePortal
-      id={forID}
       options={uniqueOptions}
       sx={{ width: 300 }}
       renderInput={params => (
@@ -340,7 +336,6 @@ const RelationControl = ({
   //     // react-select props:
   //     components={{ MenuList, MultiValue, MultiValueLabel }}
   //     value={selectedValue}
-  //     inputId={forID}
   //     cacheOptions
   //     defaultOptions
   //     loadOptions={this.loadOptions}

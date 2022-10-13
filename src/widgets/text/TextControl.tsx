@@ -1,20 +1,29 @@
 import TextField from '@mui/material/TextField';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import type { CmsFieldStringOrText, CmsWidgetControlProps } from '../../interface';
+import type { ChangeEvent } from 'react';
 
 const TextControl = ({
-  forID,
-  value = '',
+  value,
   onChange,
-  onBlur
+  onBlur,
 }: CmsWidgetControlProps<string, CmsFieldStringOrText>) => {
+  const [internalValue, setInternalValue] = useState(value ?? '');
+
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setInternalValue(event.target.value);
+      onChange(event.target.value);
+    },
+    [onChange],
+  );
+
   return (
     <TextField
-      id={forID}
       variant="outlined"
-      value={value || ''}
-      onChange={e => onChange(e.target.value)}
+      value={internalValue || ''}
+      onChange={handleChange}
       onBlur={onBlur}
       multiline
       minRows={4}

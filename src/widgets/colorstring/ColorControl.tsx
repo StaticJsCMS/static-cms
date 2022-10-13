@@ -91,7 +91,6 @@ const ClickOutsideDiv = styled.div`
 `;
 
 const ColorControl = ({
-  forID,
   field,
   onChange,
   onBlur,
@@ -160,7 +159,6 @@ const ColorControl = ({
       <input
         // text input with padding left for the color swatch
         type="text"
-        id={forID}
         value={value || ''}
         onChange={e => onChange(e.target.value)}
         style={{

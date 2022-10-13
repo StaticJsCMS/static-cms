@@ -36,11 +36,9 @@ const StyledFieldsBox = styled.div`
 const ObjectControl = ({
   value = {},
   field,
-  forID,
   forList,
   hasError,
   onChangeObject,
-  onValidateObject,
   clearFieldErrors,
   fieldsErrors,
   parentIds,
@@ -88,7 +86,8 @@ const ObjectControl = ({
           onChange={onChangeObject}
           clearFieldErrors={clearFieldErrors}
           fieldsErrors={fieldsErrors}
-          onValidate={onValidateObject}
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          onValidate={() => {}} // TODO Fix validation
           parentIds={parentIds}
           isDisabled={isDuplicate}
           isHidden={isHidden}
@@ -105,7 +104,6 @@ const ObjectControl = ({
       isFieldHidden,
       locale,
       onChangeObject,
-      onValidateObject,
       parentIds,
       value,
     ],
@@ -138,7 +136,6 @@ const ObjectControl = ({
       <ClassNames>
         {({ css, cx }) => (
           <div
-            id={forID}
             className={cx(
               css`
                 ${styleStrings.objectWidgetTopBarContainer}

@@ -201,8 +201,8 @@ const EditorControlPane = ({
               field={field}
               value={getFieldValue(field, entry, isTranslatable, locale)}
               fieldsErrors={fieldsErrors}
-              onChange={(field, newValue) => {
-                onChange(field, newValue, i18n);
+              onChange={(path, field, newValue) => {
+                onChange(path, field, newValue, i18n);
               }}
               onValidate={onValidate}
               isDisabled={isDuplicate}
@@ -224,6 +224,7 @@ export interface EditorControlPaneOwnProps {
   fields: CmsField[];
   fieldsErrors: FieldsErrors;
   onChange: (
+    path: string[],
     field: CmsField,
     value: ValueOrNestedValue,
     i18n: I18nSettings | undefined,

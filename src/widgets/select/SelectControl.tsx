@@ -22,7 +22,6 @@ function convertToOption(raw: string | Option | undefined): Option | undefined {
 const SelectControl = ({
   field,
   value,
-  forID,
   onChange,
   onBlur,
 }: CmsWidgetControlProps<string | string[], CmsFieldSelect>) => {
@@ -78,7 +77,6 @@ const SelectControl = ({
       }}
     >
       <Select
-        id={forID}
         value={(value ?? isMultiple ? [] : '') as string | string[]}
         onChange={handleChange}
         multiple={isMultiple}

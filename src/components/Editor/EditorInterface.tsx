@@ -184,6 +184,7 @@ interface EditorInterfaceProps {
   fields: CmsField[] | undefined;
   fieldsErrors: FieldsErrors;
   onChange: (
+    path: string[],
     field: CmsField,
     value: ValueOrNestedValue,
     i18n: I18nSettings | undefined,

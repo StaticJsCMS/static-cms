@@ -61,7 +61,6 @@ export function validateMinMax(
 const NumberControl = ({
   field,
   value = '',
-  forID,
   onChange,
   onBlur,
 }: CmsWidgetControlProps<string | number, CmsFieldNumber>) => {
@@ -85,7 +84,6 @@ const NumberControl = ({
   const step = field.step ?? (field.value_type === 'int' ? 1 : '');
   return (
     <TextField
-      id={forID}
       variant="outlined"
       type="number"
       value={value || (value === 0 ? value : '')}

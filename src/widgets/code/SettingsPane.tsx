@@ -45,7 +45,7 @@ const SettingsSectionTitle = styled.h3`
 
 interface SettingsSelectProps {
   type: 'mode' | 'theme' | 'keymap';
-  forID: string;
+  uniqueId: string;
   value: {
     value: string;
     label: string;
@@ -57,23 +57,23 @@ interface SettingsSelectProps {
   onChange: (newValue: string) => void;
 }
 
-const SettingsSelect = ({ value, options, onChange, forID, type }: SettingsSelectProps) => {
+const SettingsSelect = ({ value, options, onChange, uniqueId, type }: SettingsSelectProps) => {
   const handleChange = (event: SelectChangeEvent<string>) => {
     onChange(event.target.value);
   };
 
   return (
     <FormControl fullWidth>
-      <InputLabel id={`${forID}-select-${type}-label`}>Age</InputLabel>
+      <InputLabel id={`${uniqueId}-select-${type}-label`}>Age</InputLabel>
       <Select
-        labelId={`${forID}-select-${type}-label`}
-        id={`${forID}-select-${type}`}
+        labelId={`${uniqueId}-select-${type}-label`}
+        id={`${uniqueId}-select-${type}`}
         value={value.value}
         label="Age"
         onChange={handleChange}
       >
         {options.map(({ label, value }) => (
-          <MenuItem key={`${forID}-select-${type}-option-${value}`} value={value}>
+          <MenuItem key={`${uniqueId}-select-${type}-option-${value}`} value={value}>
             {label}
           </MenuItem>
         ))}
@@ -84,7 +84,7 @@ const SettingsSelect = ({ value, options, onChange, forID, type }: SettingsSelec
 
 interface SettingsPaneProps {
   hideSettings: () => void;
-  forID: string;
+  uniqueId: string;
   modes: {
     value: string;
     label: string;
@@ -108,7 +108,7 @@ interface SettingsPaneProps {
 
 const SettingsPane = ({
   hideSettings,
-  forID,
+  uniqueId,
   modes,
   mode,
   theme,
@@ -126,10 +126,10 @@ const SettingsPane = ({
       {allowLanguageSelection && (
         <>
           <SettingsSectionTitle>Field Settings</SettingsSectionTitle>
-          <SettingsFieldLabel htmlFor={`${forID}-select-mode`}>Mode</SettingsFieldLabel>
+          <SettingsFieldLabel htmlFor={`${uniqueId}-select-mode`}>Mode</SettingsFieldLabel>
           <SettingsSelect
             type="mode"
-            forID={forID}
+            uniqueId={uniqueId}
             value={mode}
             options={modes}
             onChange={onChangeLang}
@@ -140,20 +140,20 @@ const SettingsPane = ({
         <SettingsSectionTitle>Global Settings</SettingsSectionTitle>
         {themes && (
           <>
-            <SettingsFieldLabel htmlFor={`${forID}-select-theme`}>Theme</SettingsFieldLabel>
+            <SettingsFieldLabel htmlFor={`${uniqueId}-select-theme`}>Theme</SettingsFieldLabel>
             <SettingsSelect
               type="theme"
-              forID={forID}
+              uniqueId={uniqueId}
               value={{ value: theme, label: theme }}
               options={themes.map(t => ({ value: t, label: t }))}
               onChange={onChangeTheme}
             />
           </>
         )}
-        <SettingsFieldLabel htmlFor={`${forID}-select-keymap`}>KeyMap</SettingsFieldLabel>
+        <SettingsFieldLabel htmlFor={`${uniqueId}-select-keymap`}>KeyMap</SettingsFieldLabel>
         <SettingsSelect
           type="keymap"
-          forID={forID}
+          uniqueId={uniqueId}
           value={keyMap}
           options={keyMaps}
           onChange={onChangeKeyMap}
