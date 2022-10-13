@@ -1,5 +1,8 @@
 import styled from '@emotion/styled';
+import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import Fab from '@mui/material/Fab';
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
 import { translate } from 'react-polyglot';
@@ -13,6 +16,12 @@ import MediaLibraryTop from './MediaLibraryTop';
 import type { ChangeEvent, ChangeEventHandler, KeyboardEventHandler } from 'react';
 import type { MediaFile, TranslatedProps } from '../../interface';
 import type { MediaLibraryState } from '../../reducers/mediaLibrary';
+
+const StyledFab = styled(Fab)`
+  position: absolute;
+  top: -20px;
+  left: -20px;
+`;
 
 /**
  * Responsive styling needs to be overhauled. Current setup requires specifying
@@ -37,40 +46,43 @@ const StyledModal = styled(
   transientOptions,
 )<StyledModalProps>(
   ({ $isPrivate }) => `
-  display: grid;
-  grid-template-rows: 120px auto;
-  width: calc(${cardOutsideWidth} + 20px);
-  ${$isPrivate ? `background-color: ${colorsRaw.grayDark};` : ''}
+    .MuiDialog-paper {
+      display: flex;
+      flex-direction: column;
+      overflow: visible;
+      width: calc(${cardOutsideWidth} + 20px);
+      ${$isPrivate ? `background-color: ${colorsRaw.grayDark};` : ''}
 
-  @media (min-width: 800px) {
-    width: calc(${cardOutsideWidth} * 2 + 20px);
-  }
+      @media (min-width: 800px) {
+        width: calc(${cardOutsideWidth} * 2 + 20px);
+      }
 
-  @media (min-width: 1120px) {
-    width: calc(${cardOutsideWidth} * 3 + 20px);
-  }
+      @media (min-width: 1120px) {
+        width: calc(${cardOutsideWidth} * 3 + 20px);
+      }
 
-  @media (min-width: 1440px) {
-    width: calc(${cardOutsideWidth} * 4 + 20px);
-  }
+      @media (min-width: 1440px) {
+        width: calc(${cardOutsideWidth} * 4 + 20px);
+      }
 
-  @media (min-width: 1760px) {
-    width: calc(${cardOutsideWidth} * 5 + 20px);
-  }
+      @media (min-width: 1760px) {
+        width: calc(${cardOutsideWidth} * 5 + 20px);
+      }
 
-  @media (min-width: 2080px) {
-    width: calc(${cardOutsideWidth} * 6 + 20px);
-  }
+      @media (min-width: 2080px) {
+        width: calc(${cardOutsideWidth} * 6 + 20px);
+      }
 
-  h1 {
-    ${$isPrivate && `color: ${colors.textFieldBorder};`}
-  }
+      h1 {
+        ${$isPrivate && `color: ${colors.textFieldBorder};`}
+      }
 
-  button:disabled,
-  label[disabled] {
-    ${$isPrivate ? 'background-color: rgba(217, 217, 217, 0.15);' : ''}
-  }
-`,
+      button:disabled,
+      label[disabled] {
+        ${$isPrivate ? 'background-color: rgba(217, 217, 217, 0.15);' : ''}
+      }
+    }
+  `,
 );
 
 interface MediaLibraryModalProps {
@@ -157,6 +169,9 @@ const MediaLibraryModal = ({
 
   return (
     <StyledModal open={isVisible} onClose={handleClose} $isPrivate={privateUpload}>
+      <StyledFab color="default" aria-label="add" onClick={handleClose} size="small">
+        <CloseIcon />
+      </StyledFab>
       <MediaLibraryTop
         t={t}
         onClose={handleClose}
@@ -176,26 +191,28 @@ const MediaLibraryModal = ({
         isDeleting={isDeleting}
         selectedFile={selectedFile}
       />
-      {!shouldShowEmptyMessage ? null : (
-        <EmptyMessage content={emptyMessage} isPrivate={privateUpload} />
-      )}
-      <MediaLibraryCardGrid
-        setScrollContainerRef={setScrollContainerRef}
-        mediaItems={tableData}
-        isSelectedFile={file => selectedFile?.key === file.key}
-        onAssetClick={handleAssetClick}
-        canLoadMore={hasNextPage}
-        onLoadMore={handleLoadMore}
-        isPaginating={isPaginating}
-        paginatingMessage={t('mediaLibrary.mediaLibraryModal.loading')}
-        cardDraftText={t('mediaLibrary.mediaLibraryCard.draft')}
-        cardWidth={cardWidth}
-        cardHeight={cardHeight}
-        cardMargin={cardMargin}
-        isPrivate={privateUpload}
-        loadDisplayURL={loadDisplayURL}
-        displayURLs={displayURLs}
-      />
+      <DialogContent>
+        {!shouldShowEmptyMessage ? null : (
+          <EmptyMessage content={emptyMessage} isPrivate={privateUpload} />
+        )}
+        <MediaLibraryCardGrid
+          setScrollContainerRef={setScrollContainerRef}
+          mediaItems={tableData}
+          isSelectedFile={file => selectedFile?.key === file.key}
+          onAssetClick={handleAssetClick}
+          canLoadMore={hasNextPage}
+          onLoadMore={handleLoadMore}
+          isPaginating={isPaginating}
+          paginatingMessage={t('mediaLibrary.mediaLibraryModal.loading')}
+          cardDraftText={t('mediaLibrary.mediaLibraryCard.draft')}
+          cardWidth={cardWidth}
+          cardHeight={cardHeight}
+          cardMargin={cardMargin}
+          isPrivate={privateUpload}
+          loadDisplayURL={loadDisplayURL}
+          displayURLs={displayURLs}
+        />
+      </DialogContent>
     </StyledModal>
   );
 };

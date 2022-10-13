@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import copyToClipboard from 'copy-text-to-clipboard';
+import Button from '@mui/material/Button';
 
 import { buttons, shadows, zIndex } from '../../ui';
 import { isAbsolutePath } from '../../lib/util';
@@ -60,17 +61,6 @@ export const InsertButton = styled.button`
   ${styles.button};
   ${buttons.green};
 `;
-
-const ActionButton = styled.button`
-  ${styles.button};
-  ${props =>
-    !props.disabled &&
-    css`
-      ${buttons.gray}
-    `}
-`;
-
-export const DownloadButton = ActionButton;
 
 export interface CopyToClipBoardButtonProps {
   disabled: boolean;
@@ -133,8 +123,8 @@ export const CopyToClipBoardButton = ({
   }, [copied, draft, path, t]);
 
   return (
-    <ActionButton disabled={disabled} onClick={handleCopy}>
+    <Button color="inherit" variant="contained" onClick={handleCopy} disabled={disabled}>
       {getTitle()}
-    </ActionButton>
+    </Button>
   );
 };

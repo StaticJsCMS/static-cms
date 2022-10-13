@@ -1,14 +1,14 @@
 import styled from '@emotion/styled';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
 import React from 'react';
 
 import {
   CopyToClipBoardButton,
   DeleteButton,
-  DownloadButton,
   InsertButton,
-  UploadButton,
+  UploadButton
 } from './MediaLibraryButtons';
-import MediaLibraryHeader from './MediaLibraryHeader';
 import MediaLibrarySearch from './MediaLibrarySearch';
 
 import type { ChangeEvent, ChangeEventHandler, KeyboardEventHandler } from 'react';
@@ -20,16 +20,19 @@ const LibraryTop = styled.div`
   flex-direction: column;
 `;
 
-const RowContainer = styled.div`
+const StyledButtonsContainer = styled.div`
+  flex-shrink: 0;
+  display: flex;
+  gap: 8px;
+`;
+
+const StyledDialogTitle = styled(DialogTitle)`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
-const ButtonsContainer = styled.div`
-  flex-shrink: 0;
-`;
-
-interface MediaLibraryTop {
+export interface MediaLibraryTopProps {
   onClose: () => void;
   privateUpload?: boolean;
   forImage?: boolean;
@@ -50,8 +53,6 @@ interface MediaLibraryTop {
 
 const MediaLibraryTop = ({
   t,
-  onClose,
-  privateUpload,
   forImage,
   onDownload,
   onUpload,
@@ -66,7 +67,8 @@ const MediaLibraryTop = ({
   isPersisting,
   isDeleting,
   selectedFile,
-}: TranslatedProps<MediaLibraryTop>) => {
+  privateUpload,
+}: TranslatedProps<MediaLibraryTopProps>) => {
   const shouldShowButtonLoader = isPersisting || isDeleting;
   const uploadEnabled = !shouldShowButtonLoader;
   const deleteEnabled = !shouldShowButtonLoader && hasSelection;
@@ -82,17 +84,13 @@ const MediaLibraryTop = ({
 
   return (
     <LibraryTop>
-      <RowContainer>
-        <MediaLibraryHeader
-          onClose={onClose}
-          title={`${privateUpload ? t('mediaLibrary.mediaLibraryModal.private') : ''}${
-            forImage
-              ? t('mediaLibrary.mediaLibraryModal.images')
-              : t('mediaLibrary.mediaLibraryModal.mediaAssets')
-          }`}
-          isPrivate={privateUpload}
-        />
-        <ButtonsContainer>
+      <StyledDialogTitle>
+        {`${privateUpload ? t('mediaLibrary.mediaLibraryModal.private') : ''}${
+          forImage
+            ? t('mediaLibrary.mediaLibraryModal.images')
+            : t('mediaLibrary.mediaLibraryModal.mediaAssets')
+        }`}
+        <StyledButtonsContainer>
           <CopyToClipBoardButton
             disabled={!hasSelection}
             path={selectedFile?.path}
@@ -100,18 +98,18 @@ const MediaLibraryTop = ({
             draft={selectedFile?.draft}
             t={t}
           />
-          <DownloadButton onClick={onDownload} disabled={!hasSelection}>
+          <Button color="inherit" variant="contained" onClick={onDownload} disabled={!hasSelection}>
             {downloadButtonLabel}
-          </DownloadButton>
+          </Button>
           <UploadButton
             label={uploadButtonLabel}
             imagesOnly={forImage}
             onChange={onUpload}
             disabled={!uploadEnabled}
           />
-        </ButtonsContainer>
-      </RowContainer>
-      <RowContainer>
+        </StyledButtonsContainer>
+      </StyledDialogTitle>
+      <StyledDialogTitle>
         <MediaLibrarySearch
           value={query}
           onChange={onSearchChange}
@@ -119,17 +117,17 @@ const MediaLibraryTop = ({
           placeholder={t('mediaLibrary.mediaLibraryModal.search')}
           disabled={searchDisabled}
         />
-        <ButtonsContainer>
-          <DeleteButton onClick={onDelete} disabled={!deleteEnabled}>
+        <StyledButtonsContainer>
+          <Button color="error" variant="contained" onClick={onDelete} disabled={!deleteEnabled}>
             {deleteButtonLabel}
-          </DeleteButton>
+          </Button>
           {!canInsert ? null : (
-            <InsertButton onClick={onInsert} disabled={!hasSelection}>
+            <Button color="success" variant="contained" onClick={onInsert} disabled={!hasSelection}>
               {insertButtonLabel}
-            </InsertButton>
+            </Button>
           )}
-        </ButtonsContainer>
-      </RowContainer>
+        </StyledButtonsContainer>
+      </StyledDialogTitle>
     </LibraryTop>
   );
 };

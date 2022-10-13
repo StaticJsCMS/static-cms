@@ -179,7 +179,6 @@ const CollectionSearch = ({
   return (
     <SearchContainer>
       <TextField
-        id="input-with-icon-textfield"
         onKeyDown={handleKeyDown}
         onClick={() => toggleSuggestions(true)}
         placeholder={t('collection.sidebar.searchAll')}

@@ -1,30 +1,26 @@
+import Button from '@mui/material/Button';
 import React from 'react';
 
 export interface FileUploadButtonProps {
-  className?: string;
   label: string;
   imagesOnly?: boolean;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
   disabled?: boolean;
 }
 
-const FileUploadButton = ({
-  label,
-  imagesOnly,
-  onChange,
-  disabled,
-  className,
-}: FileUploadButtonProps) => {
+const FileUploadButton = ({ label, imagesOnly, onChange, disabled }: FileUploadButtonProps) => {
   return (
-    <label className={`nc-fileUploadButton ${className || ''}`}>
-      <span>{label}</span>
+    <Button variant="contained" component="label">
+      {label}
       <input
+        hidden
+        multiple
         type="file"
         accept={imagesOnly ? 'image/*' : '*/*'}
         onChange={onChange}
         disabled={disabled}
       />
-    </label>
+    </Button>
   );
 };
 
