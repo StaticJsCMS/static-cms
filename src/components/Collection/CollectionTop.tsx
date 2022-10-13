@@ -1,20 +1,14 @@
-import React, { useCallback } from 'react';
 import styled from '@emotion/styled';
-import { translate } from 'react-polyglot';
-import { Link, useNavigate } from 'react-router-dom';
-import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import React, { useCallback } from 'react';
+import { translate } from 'react-polyglot';
+import { useNavigate } from 'react-router-dom';
 
-import { components, buttons, shadows } from '../../ui';
-import NavLink from '../UI/NavLink';
+import { components } from '../../ui';
 
 import type { Collection, TranslatedProps } from '../../interface';
-
-const CollectionTopContainer = styled.div`
-  ${components.cardTop};
-  margin-bottom: 22px;
-`;
 
 const CollectionTopRow = styled.div`
   display: flex;
@@ -24,15 +18,6 @@ const CollectionTopRow = styled.div`
 
 const CollectionTopHeading = styled.h1`
   ${components.cardTopHeading};
-`;
-
-const CollectionTopNewButton = styled(Link)`
-  ${buttons.button};
-  ${shadows.dropDeep};
-  ${buttons.default};
-  ${buttons.gray};
-
-  padding: 0 30px;
 `;
 
 const CollectionTopDescription = styled.p`

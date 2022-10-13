@@ -24,6 +24,7 @@ import {
   toggleScroll as toggleScrollAction,
 } from '../../actions/scroll';
 import { selectFields } from '../../lib/util/collection.util';
+import { useWindowEvent } from '../../lib/util/window.util';
 import { selectEntry } from '../../reducers';
 import { history, navigateToCollection, navigateToNewEntry } from '../../routing/history';
 import { Loader } from '../../ui';
@@ -53,7 +54,6 @@ const Editor = ({
   user,
   hasChanged,
   displayUrl,
-  newEntry,
   isModification,
   logoutUser,
   draftKey,
@@ -64,7 +64,6 @@ const Editor = ({
   loadScroll,
   showDelete,
   slug,
-  publishedEntry,
   localBackup,
   collectionEntriesLoaded,
   persistLocalBackup,
@@ -95,18 +94,17 @@ const Editor = ({
       metadata: EntryMeta = {},
       i18n: I18nSettings | undefined,
     ) => {
-      const entries = [publishedEntry].filter(Boolean);
-      changeDraftField({ field, value, metadata, entries, i18n });
+      changeDraftField({ field, value, metadata, entry, i18n });
     },
-    [changeDraftField, publishedEntry],
+    [changeDraftField, entry],
   );
 
   const deleteBackup = useCallback(() => {
     createBackup.cancel();
-    if (!newEntry) {
+    if (slug) {
       deleteLocalBackup(collection, slug);
     }
-  }, [collection, createBackup, deleteLocalBackup, newEntry, slug]);
+  }, [collection, createBackup, deleteLocalBackup, slug]);
 
   const handlePersistEntry = useCallback(
     async (opts: EditorPersistOptions = {}) => {
@@ -156,7 +154,7 @@ const Editor = ({
       return;
     }
 
-    if (newEntry) {
+    if (!slug) {
       return navigateToCollection(collection.name);
     }
 
@@ -165,7 +163,7 @@ const Editor = ({
       deleteBackup();
       return navigateToCollection(collection.name);
     }, 0);
-  }, [collection, deleteBackup, deleteEntry, entryDraft.hasChanged, newEntry, slug]);
+  }, [collection, deleteBackup, deleteEntry, entryDraft.hasChanged, slug]);
 
   const [prevLocalBackup, setPrevLocalBackup] = useState<
     | {
@@ -206,22 +204,27 @@ const Editor = ({
     if (hasChanged) {
       createBackup(entryDraft.entry, collection);
     }
+
+    return () => {
+      createBackup.flush();
+    };
   }, [collection, createBackup, entryDraft.entry, hasChanged]);
 
   useEffect(() => {
-    if (newEntry) {
+    if (!slug) {
       createEmptyDraft(collection, location.search);
     }
-  }, [collection, createEmptyDraft, newEntry]);
+  }, [collection, createEmptyDraft, slug]);
 
   const [prevCollection, setPrevCollection] = useState(collection);
   const [preSlug, setPrevSlug] = useState(slug);
   useEffect(() => {
-    if (!entryDraft.entry && newEntry) {
+    if (!slug && (!entryDraft.entry || preSlug !== slug)) {
       createEmptyDraft(collection, location.search);
-    } else if (!entryDraft.entry || prevCollection !== collection || preSlug !== slug) {
-      console.log('loading!', collection, slug);
+    } else if (slug && (!entryDraft.entry || prevCollection !== collection || preSlug !== slug)) {
+      retrieveLocalBackup(collection, slug);
       loadEntry(collection, slug);
+      discardDraft();
     }
 
     setPrevCollection(collection);
@@ -229,103 +232,88 @@ const Editor = ({
   }, [
     collection,
     createEmptyDraft,
+    discardDraft,
     entryDraft.entry,
     loadEntry,
-    newEntry,
     preSlug,
     prevCollection,
+    retrieveLocalBackup,
     slug,
   ]);
 
-  // useEffect(() => {
-  //   retrieveLocalBackup(collection, slug);
+  const leaveMessage = useMemo(() => t('editor.editor.onLeavePage'), [t]);
 
-  //   console.log('new entry?', newEntry);
-  //   if (newEntry) {
-  //     createEmptyDraft(collection, location.search);
-  //   } else {
-  //     console.log('loading!', collection, slug);
-  //     loadEntry(collection, slug);
-  //   }
+  const exitBlocker = useCallback(
+    (event: BeforeUnloadEvent) => {
+      if (entryDraft.hasChanged) {
+        // This message is ignored in most browsers, but its presence triggers the confirmation dialog
+        event.returnValue = leaveMessage;
+        return leaveMessage;
+      }
+    },
+    [entryDraft.hasChanged, leaveMessage],
+  );
 
-  //   const leaveMessage = t('editor.editor.onLeavePage');
+  useWindowEvent('beforeunload', exitBlocker);
 
-  //   const exitBlocker = (event: BeforeUnloadEvent) => {
-  //     if (entryDraft.hasChanged) {
-  //       // This message is ignored in most browsers, but its presence
-  //       // triggers the confirmation dialog
-  //       event.returnValue = leaveMessage;
-  //       return leaveMessage;
-  //     }
-  //   };
-  //   window.addEventListener('beforeunload', exitBlocker);
+  const navigationBlocker: TransitionPromptHook = useCallback(
+    (location, action) => {
+      /**
+       * New entry being saved and redirected to it's new slug based url.
+       */
+      const isPersisting = entryDraft.entry?.isPersisting;
+      const newRecord = entryDraft.entry?.newRecord;
+      const newEntryPath = `/collections/${collection.name}/new`;
+      if (isPersisting && newRecord && location.pathname === newEntryPath && action === 'PUSH') {
+        return;
+      }
 
-  //   const navigationBlocker: TransitionPromptHook = (location, action) => {
-  //     /**
-  //      * New entry being saved and redirected to it's new slug based url.
-  //      */
-  //     const isPersisting = entryDraft.entry?.isPersisting;
-  //     const newRecord = entryDraft.entry?.newRecord;
-  //     const newEntryPath = `/collections/${collection.name}/new`;
-  //     if (isPersisting && newRecord && location.pathname === newEntryPath && action === 'PUSH') {
-  //       return;
-  //     }
+      if (hasChanged) {
+        return leaveMessage;
+      }
+    },
+    [
+      collection.name,
+      entryDraft.entry?.isPersisting,
+      entryDraft.entry?.newRecord,
+      hasChanged,
+      leaveMessage,
+    ],
+  );
 
-  //     if (hasChanged) {
-  //       return leaveMessage;
-  //     }
-  //   };
+  useEffect(() => {
+    const unblock = history.block(navigationBlocker);
 
-  //   const unblock = history.block(navigationBlocker);
+    // TODO Is this needed?
+    //   /**
+    //    * This will run as soon as the location actually changes, unless creating
+    //    * a new post. The confirmation above will run first.
+    //    */
+    //   const unlisten = history.listen((location, action) => {
+    //     const newEntryPath = `/collections/${collection.name}/new`;
+    //     const entriesPath = `/collections/${collection.name}/entries/`;
+    //     const { pathname } = location;
+    //     if (
+    //       pathname.startsWith(newEntryPath) ||
+    //       (pathname.startsWith(entriesPath) && action === 'PUSH')
+    //     ) {
+    //       return;
+    //     }
 
-  //   /**
-  //    * This will run as soon as the location actually changes, unless creating
-  //    * a new post. The confirmation above will run first.
-  //    */
-  //   const unlisten = history.listen((location, action) => {
-  //     const newEntryPath = `/collections/${collection.name}/new`;
-  //     const entriesPath = `/collections/${collection.name}/entries/`;
-  //     const { pathname } = location;
-  //     if (
-  //       pathname.startsWith(newEntryPath) ||
-  //       (pathname.startsWith(entriesPath) && action === 'PUSH')
-  //     ) {
-  //       return;
-  //     }
+    //     deleteBackup();
 
-  //     deleteBackup();
+    //     unlisten();
+    //   });
 
-  //     unblock();
-  //     unlisten();
-  //   });
+    return () => {
+      unblock();
+    };
+  }, [navigationBlocker]);
 
+  // TODO Is this needed?
   //   if (!collectionEntriesLoaded) {
   //     loadEntries(collection);
   //   }
-
-  //   return () => {
-  //     createBackup.flush();
-  //     discardDraft();
-  //     window.removeEventListener('beforeunload', exitBlocker);
-  //   };
-  // }, [
-  //   collection,
-  //   collectionEntriesLoaded,
-  //   createBackup,
-  //   createEmptyDraft,
-  //   deleteBackup,
-  //   discardDraft,
-  //   entryDraft.entry?.isPersisting,
-  //   entryDraft.entry?.newRecord,
-  //   entryDraft.hasChanged,
-  //   hasChanged,
-  //   loadEntries,
-  //   loadEntry,
-  //   newEntry,
-  //   retrieveLocalBackup,
-  //   slug,
-  //   t,
-  // ]);
 
   if (entry && entry.error) {
     return (
@@ -354,7 +342,7 @@ const Editor = ({
       user={user}
       hasChanged={hasChanged}
       displayUrl={displayUrl}
-      isNewEntry={newEntry}
+      isNewEntry={!slug}
       isModification={isModification}
       onLogoutClick={logoutUser}
       editorBackLink={editorBackLink}
@@ -368,25 +356,23 @@ const Editor = ({
 
 interface CollectionViewOwnProps {
   name: string;
-  slug: string;
+  slug?: string;
   newRecord: boolean;
   showDelete?: boolean;
 }
 
 function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
   const { collections, entryDraft, auth, config, entries, scroll } = state;
-  const { name, slug, newRecord } = ownProps;
+  const { name, slug } = ownProps;
   const collection = collections[name];
   const collectionName = collection.name;
-  const newEntry = newRecord === true;
   const fields = selectFields(collection, slug);
-  const entry = newEntry ? null : selectEntry(state, collectionName, slug);
+  const entry = !slug ? null : selectEntry(state, collectionName, slug);
   const user = auth.user;
   const hasChanged = entryDraft.hasChanged;
   const displayUrl = config.config?.display_url;
   const isModification = entryDraft.entry?.isModification ?? false;
   const collectionEntriesLoaded = Boolean(entries.pages[collectionName]);
-  const publishedEntry = selectEntry(state, collectionName, slug);
   const localBackup = entryDraft.localBackup;
   const draftKey = entryDraft.key;
   let editorBackLink = `/collections/${collectionName}`;
@@ -407,7 +393,6 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
     ...ownProps,
     collection,
     collections,
-    newEntry,
     entryDraft,
     fields,
     entry,
@@ -418,7 +403,6 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
     collectionEntriesLoaded,
     localBackup,
     draftKey,
-    publishedEntry,
     editorBackLink,
     scrollSyncEnabled,
   };

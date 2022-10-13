@@ -473,18 +473,18 @@ export function changeDraftField({
   field,
   value,
   metadata,
-  entries,
+  entry,
   i18n,
 }: {
   field: CmsField;
   value: ValueOrNestedValue;
   metadata: EntryMeta;
-  entries: Entry[];
+  entry?: Entry | null;
   i18n?: I18nSettings;
 }) {
   return {
     type: DRAFT_CHANGE_FIELD,
-    payload: { field, value, metadata, entries, i18n },
+    payload: { field, value, metadata, entry, i18n },
   } as const;
 }
 

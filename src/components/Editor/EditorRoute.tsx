@@ -30,7 +30,7 @@ const EditorRoute = ({ newRecord = false, collections }: EditorRouteProps) => {
 
   const defaultPath = useMemo(() => getDefaultPath(collections), [collections]);
 
-  if (shouldRedirect || !name || !slug) {
+  if (shouldRedirect || !name || (!newRecord && !slug)) {
     return <Navigate to={defaultPath} />;
   }
 

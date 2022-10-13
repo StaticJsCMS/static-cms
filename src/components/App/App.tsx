@@ -1,16 +1,14 @@
 import styled from '@emotion/styled';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Fab from '@mui/material/Fab';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import { Navigate, Route, Routes, useParams } from 'react-router-dom';
 import { ScrollSync } from 'react-scroll-sync';
 import TopBarProgress from 'react-topbar-progress-indicator';
 
-import { loginUser, logoutUser } from '../../actions/auth';
-import { createNewEntry } from '../../actions/collections';
-import { openMediaLibrary } from '../../actions/mediaLibrary';
+import { loginUser as loginUserAction } from '../../actions/auth';
 import { currentBackend } from '../../backend';
 import { history } from '../../routing/history';
 import { colors, GlobalStyles, Loader } from '../../ui';
@@ -105,13 +103,10 @@ const App = ({
   user,
   config,
   collections,
-  logoutUser,
   loginUser,
   isFetching,
   useMediaLibrary,
-  openMediaLibrary,
   t,
-  showMediaButton,
   scrollSyncEnabled,
 }: TranslatedProps<AppProps>) => {
   const configError = useCallback(() => {
@@ -166,6 +161,8 @@ const App = ({
     );
   }, [auth.error, auth.isFetching, config.config, handleLogin, t]);
 
+  const defaultPath = useMemo(() => getDefaultPath(collections), [collections]);
+
   if (!config.config) {
     return null;
   }
@@ -182,8 +179,6 @@ const App = ({
     return authenticating();
   }
 
-  const defaultPath = getDefaultPath(collections);
-
   return (
     <>
       <GlobalStyles />
@@ -193,16 +188,7 @@ const App = ({
           <AppRoot id="cms-root">
             <AppWrapper className="cms-wrapper">
               <Snackbars />
-              <Header
-                user={user}
-                collections={collections}
-                onCreateEntryClick={createNewEntry}
-                onLogoutClick={logoutUser}
-                openMediaLibrary={openMediaLibrary}
-                displayUrl={config.config.display_url}
-                isTestRepo={config.config.backend.name === 'test-repo'}
-                showMediaButton={showMediaButton}
-              />
+              <Header />
               <AppMainContainerWrapper>
                 <AppMainContainer>
                   {isFetching && <TopBarProgress />}
@@ -277,7 +263,6 @@ function mapStateToProps(state: RootState) {
   const user = auth.user;
   const isFetching = globalUI.isFetching;
   const useMediaLibrary = !mediaLibrary.externalLibrary;
-  const showMediaButton = mediaLibrary.showMediaButton;
   const scrollSyncEnabled = scroll.isScrolling;
   return {
     auth,
@@ -285,16 +270,13 @@ function mapStateToProps(state: RootState) {
     collections,
     user,
     isFetching,
-    showMediaButton,
     useMediaLibrary,
     scrollSyncEnabled,
   };
 }
 
 const mapDispatchToProps = {
-  openMediaLibrary,
-  loginUser,
-  logoutUser,
+  loginUser: loginUserAction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

@@ -127,7 +127,7 @@ function entryDraftReducer(
     }
 
     case DRAFT_CHANGE_FIELD: {
-      const { field, value, metadata, entries, i18n } = action.payload;
+      const { field, value, metadata, entry, i18n } = action.payload;
       const name = field.name;
       const dataPath = (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
 
@@ -158,9 +158,7 @@ function entryDraftReducer(
       return {
         ...state,
         fieldsMetaData,
-        hasChanged:
-          !entries.find(e => newData === get(e, dataPath)) ||
-          !entries.find(e => newMeta === e.meta),
+        hasChanged: !entry || newData !== get(entry, dataPath) || newMeta !== entry.meta,
       };
     }
 

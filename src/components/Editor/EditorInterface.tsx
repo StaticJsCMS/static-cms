@@ -11,7 +11,7 @@ import { FILES } from '../../constants/collectionTypes';
 import { transientOptions } from '../../lib';
 import { getI18nInfo, getPreviewEntry, hasI18n } from '../../lib/i18n';
 import { getFileFromSlug } from '../../lib/util/collection.util';
-import { colors, colorsRaw, components, IconButton, transitions, zIndex } from '../../ui';
+import { colors, colorsRaw, components, transitions, zIndex } from '../../ui';
 import EditorControlPane from './EditorControlPane/EditorControlPane';
 import EditorPreviewPane from './EditorPreviewPane/EditorPreviewPane';
 import EditorToolbar from './EditorToolbar';
@@ -43,10 +43,6 @@ const styles = {
     height: 100%;
   `,
 };
-
-const EditorToggle = styled(IconButton)`
-  margin-bottom: 12px;
-`;
 
 function ReactSplitPaneGlobalStyles() {
   return (

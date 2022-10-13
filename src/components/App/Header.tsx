@@ -12,16 +12,22 @@ import Toolbar from '@mui/material/Toolbar';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
-import { checkBackendStatus } from '../../actions/status';
+import { logoutUser as logoutUserAction } from '../../actions/auth';
+import { createNewEntry } from '../../actions/collections';
+import { openMediaLibrary as openMediaLibraryAction } from '../../actions/mediaLibrary';
+import { checkBackendStatus as checkBackendStatusAction } from '../../actions/status';
 import { stripProtocol } from '../../lib/urlHelper';
 import { buttons, colors, Icon } from '../../ui';
+import EditorToolbar from '../Editor/EditorToolbar';
 import NavLink from '../UI/NavLink';
 import SettingsDropdown from '../UI/SettingsDropdown';
 
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
-import type { Collections, TranslatedProps, User } from '../../interface';
+import type { TranslatedProps } from '../../interface';
+import type { RootState } from '../../store';
 
 const StyledAppBar = styled(AppBar)`
   background-color: ${colors.foreground};
@@ -70,13 +76,12 @@ const StyledAppHeaderActions = styled.div`
 const Header = ({
   user,
   collections,
-  onLogoutClick,
+  logoutUser,
   openMediaLibrary,
   displayUrl,
   isTestRepo,
   t,
   showMediaButton,
-  onCreateEntryClick,
   checkBackendStatus,
 }: TranslatedProps<HeaderProps>) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -88,14 +93,9 @@ const Header = ({
     setAnchorEl(null);
   }, []);
 
-  const handleCreatePostClick = useCallback(
-    (collectionName: string) => {
-      if (onCreateEntryClick) {
-        onCreateEntryClick(collectionName);
-      }
-    },
-    [onCreateEntryClick],
-  );
+  const handleCreatePostClick = useCallback((collectionName: string) => {
+    createNewEntry(collectionName);
+  }, []);
 
   const createableCollections = useMemo(
     () => Object.values(collections).filter(collection => collection.create),
@@ -112,6 +112,15 @@ const Header = ({
     };
   }, [checkBackendStatus]);
 
+  const handleMediaClick = useCallback(() => {
+    openMediaLibrary();
+  }, [openMediaLibrary]);
+
+  const { pathname } = useLocation();
+  if (pathname.includes('entries') || pathname.endsWith('new')) {
+    return <EditorToolbar />;
+  }
+
   return (
     <StyledAppBar position="sticky">
       <StyledToolbar>
@@ -120,7 +129,7 @@ const Header = ({
           {t('app.header.content')}
         </Link>
         {showMediaButton ? (
-          <StyledButton onClick={openMediaLibrary}>
+          <StyledButton onClick={handleMediaClick}>
             <ImageIcon />
             {t('app.header.media')}
           </StyledButton>
@@ -186,7 +195,7 @@ const Header = ({
             displayUrl={displayUrl}
             isTestRepo={isTestRepo}
             imageUrl={user?.avatar_url}
-            onLogoutClick={onLogoutClick}
+            onLogoutClick={logoutUser}
           />
         </StyledAppHeaderActions>
       </StyledToolbar>
@@ -194,22 +203,26 @@ const Header = ({
   );
 };
 
-const mapDispatchToProps = {
-  checkBackendStatus,
-};
-
-export interface HeaderOwnProps {
-  user: User;
-  collections: Collections;
-  onCreateEntryClick: (collectionName: string) => void;
-  onLogoutClick: () => void;
-  openMediaLibrary: () => void;
-  displayUrl?: string;
-  isTestRepo?: boolean;
-  showMediaButton?: boolean;
+function mapStateToProps(state: RootState) {
+  const { auth, config, collections, mediaLibrary } = state;
+  const user = auth.user;
+  const showMediaButton = mediaLibrary.showMediaButton;
+  return {
+    user,
+    collections,
+    displayUrl: config.config?.display_url,
+    isTestRepo: config.config?.backend.name === 'test-repo',
+    showMediaButton,
+  };
 }
 
-const connector = connect(null, mapDispatchToProps);
-export type HeaderProps = HeaderOwnProps & ConnectedProps<typeof connector>;
+const mapDispatchToProps = {
+  checkBackendStatus: checkBackendStatusAction,
+  openMediaLibrary: openMediaLibraryAction,
+  logoutUser: logoutUserAction,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+export type HeaderProps = ConnectedProps<typeof connector>;
 
 export default connector(translate()(Header) as ComponentType<HeaderProps>);
