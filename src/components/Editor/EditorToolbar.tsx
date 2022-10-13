@@ -11,7 +11,7 @@ import Toolbar from '@mui/material/Toolbar';
 import React, { useCallback, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 
-import { colors, components } from '../../ui';
+import { colors, components, zIndex } from '../../ui';
 import { SettingsDropdown } from '../UI';
 import NavLink from '../UI/NavLink';
 
@@ -20,6 +20,7 @@ import type { Collection, EditorPersistOptions, TranslatedProps, User } from '..
 
 const StyledAppBar = styled(AppBar)`
   background-color: ${colors.foreground};
+  z-index: ${zIndex.zIndex100};
 `;
 
 const StyledToolbar = styled(Toolbar)`
@@ -215,7 +216,7 @@ const EditorToolbar = ({
   );
 
   return (
-    <StyledAppBar>
+    <StyledAppBar position="relative">
       <StyledToolbar>
         <StyledToolbarSectionBackLink>
           <Button component={NavLink} to={editorBackLink}>

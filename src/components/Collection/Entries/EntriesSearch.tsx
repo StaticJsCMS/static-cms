@@ -3,8 +3,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
 import {
-  clearSearch as actionClearSearch,
-  searchEntries as actionSearchEntries,
+  clearSearch as clearSearchAction,
+  searchEntries as searchEntriesAction,
 } from '../../../actions/search';
 import { Cursor } from '../../../lib/util';
 import { selectSearchedEntries } from '../../../reducers';
@@ -91,8 +91,8 @@ function mapStateToProps(state: RootState, ownProps: EntriesSearchOwnProps) {
 }
 
 const mapDispatchToProps = {
-  searchEntries: actionSearchEntries,
-  clearSearch: actionClearSearch,
+  searchEntries: searchEntriesAction,
+  clearSearch: clearSearchAction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

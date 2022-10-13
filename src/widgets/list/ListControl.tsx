@@ -19,7 +19,7 @@ import {
   TYPES_KEY,
 } from './typedListHelpers';
 
-import type { ChangeEvent, MouseEvent } from 'react';
+import type { MouseEvent } from 'react';
 import type { t } from 'react-polyglot';
 import type {
   CmsField,
@@ -28,7 +28,6 @@ import type {
   Entry,
   EntryData,
   ListValue,
-  ValueOrNestedValue,
 } from '../../interface';
 
 const ListItem = styled.div();
@@ -204,42 +203,17 @@ const ListControl = ({
   onRemoveInsertedMedia,
   onRemoveMediaControl,
   onValidate,
-  parentPath,
+  path,
   query,
   queryHits,
   t,
   ...otherProps
 }: CmsWidgetControlProps<ListValue[], CmsFieldList>) => {
-  const initialValue = useMemo(() => otherProps.value ?? [], [otherProps.value]);
+  const value = useMemo(() => otherProps.value ?? [], [otherProps.value]);
 
-  const valueToString = useCallback(
-    (value?: ListValue[] | null) => {
-      if (!value) {
-        return '';
-      }
-
-      let stringValue;
-      if (Array.isArray(value)) {
-        stringValue = value.join(',');
-      } else {
-        console.warn(
-          `Expected List value to be an array but received '${value}' with type of '${typeof value}'. Please check the value provided to the '${
-            field.name
-          }' field`,
-        );
-        stringValue = String(value);
-      }
-      return stringValue.replace(/,([^\s]|$)/g, ', $1');
-    },
-    [field.name],
-  );
-
-  const [value, setValue] = useState(valueToString(initialValue));
   const [listCollapsed, setListCollapsed] = useState(field.collapsed ?? true);
-  const [itemsCollapsed, setItemsCollapsed] = useState(
-    value ? Array(value.length).fill(listCollapsed) : [],
-  );
-  const [keys, setKeys] = useState(value ? Array.from({ length: value.length }, () => uuid()) : []);
+  const [itemsCollapsed, setItemsCollapsed] = useState(Array(value.length).fill(listCollapsed));
+  const [keys, setKeys] = useState(Array.from({ length: value.length }, () => uuid()));
 
   // TODO Implement list validation
   // validations = [];
@@ -284,7 +258,7 @@ const ListControl = ({
   //   return error ? [error] : [];
   // };
 
-  const getValueType = useCallback(() => {
+  const valueType = useMemo(() => {
     if ('fields' in field) {
       return valueTypes.MULTIPLE;
     } else if ('field' in field) {
@@ -299,33 +273,11 @@ const ListControl = ({
   const uniqueFieldId = useMemo(() => uniqueId(`${field.name}-field-`), [field.name]);
 
   const handleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const oldValue = value;
-      const newValue = e.target.value.trim();
-      const listValue = newValue ? newValue.split(',') : [];
-      if (newValue.match(/,$/) && oldValue.match(/, $/)) {
-        listValue.pop();
-      }
-
-      const parsedValue = valueToString(listValue);
-      setValue(parsedValue);
-      onChange(listValue.map(val => val.trim()));
+    (newValue: ListValue[]) => {
+      onChange(path, field, newValue);
     },
-    [onChange, value, valueToString],
+    [field, onChange, path],
   );
-
-  // TODO Fix
-  // const handleBlur = useCallback(
-  //   (e: FocusEvent<HTMLInputElement>) => {
-  //     const listValue = e.target.value
-  //       .split(',')
-  //       .map(el => el.trim())
-  //       .filter(el => el);
-
-  //     setValue(valueToString(listValue));
-  //   },
-  //   [valueToString],
-  // );
 
   const singleDefault = useCallback(() => {
     return (field.field && 'default' in field.field ? field.field.default : '') as ListValue;
@@ -363,16 +315,16 @@ const ListControl = ({
       setItemsCollapsed(addToTop ? [false, ...itemsCollapsed] : [...itemsCollapsed, false]);
       setKeys(addToTop ? [itemKey, ...keys] : [...keys, itemKey]);
 
-      const listValue = initialValue;
+      const listValue = value;
       if (addToTop) {
         listValue.unshift(parsedValue);
-        onChange(listValue);
+        handleChange(listValue);
       } else {
         listValue.push(parsedValue);
-        onChange(listValue);
+        handleChange(listValue);
       }
     },
-    [field.add_to_top, initialValue, itemsCollapsed, keys, onChange],
+    [field.add_to_top, handleChange, value, itemsCollapsed, keys],
   );
 
   const handleAdd = useCallback(
@@ -394,36 +346,6 @@ const ListControl = ({
     [addItem, mixedDefault],
   );
 
-  // /**
-  //  * In case the `onChangeObject` function is frozen by a child widget implementation,
-  //  * e.g. when debounced, always get the latest object value instead of using
-  //  * `this.props.value` directly.
-  //  */
-  const getObjectValue = useCallback((idx: number) => initialValue[idx] ?? {}, [initialValue]);
-
-  const handleChangeFor = useCallback(
-    (index: number) => {
-      return (f: CmsField, newValue: ValueOrNestedValue) => {
-        const listFieldObjectWidget = field.field?.widget === 'object';
-        const withNameKey =
-          getValueType() !== valueTypes.SINGLE ||
-          (getValueType() === valueTypes.SINGLE && listFieldObjectWidget);
-
-        const newObjectValue = withNameKey
-          ? {
-              ...(getObjectValue(index) as Record<string, ListValue>),
-              [f.name]: newValue,
-            }
-          : newValue;
-
-        const newValues = [...initialValue];
-        newValues[index] = newObjectValue as ListValue;
-        onChange(newValues);
-      };
-    },
-    [field.field?.widget, getObjectValue, getValueType, initialValue, onChange],
-  );
-
   const handleRemove = useCallback(
     (index: number, event: MouseEvent) => {
       event.preventDefault();
@@ -433,15 +355,15 @@ const ListControl = ({
       // this.validations = [];
 
       setItemsCollapsed([...itemsCollapsed]);
-      setKeys(Array.from({ length: initialValue.length - 1 }, () => uuid()));
+      setKeys(Array.from({ length: value.length - 1 }, () => uuid()));
 
-      const newValue = [...initialValue];
+      const newValue = [...value];
       newValue.splice(index, 1);
 
-      onChange(newValue);
+      handleChange(newValue);
       clearFieldErrors();
     },
-    [clearFieldErrors, initialValue, itemsCollapsed, onChange],
+    [clearFieldErrors, handleChange, value, itemsCollapsed],
   );
 
   const handleItemCollapseToggle = useCallback(
@@ -470,20 +392,19 @@ const ListControl = ({
         let updatedItemsCollapsed = itemsCollapsed;
         // Only allow collapsing all items in this mode but not opening all at once
         if (!listCollapsed || !listCollapsedByDefault) {
-          updatedItemsCollapsed = Array(initialValue.length).fill(!listCollapsed);
+          updatedItemsCollapsed = Array(value.length).fill(!listCollapsed);
         }
         setListCollapsed(!listCollapsed);
         setItemsCollapsed(updatedItemsCollapsed);
       } else {
-        setItemsCollapsed(Array(initialValue.length).fill(!allItemsCollapsed));
+        setItemsCollapsed(Array(value.length).fill(!allItemsCollapsed));
       }
     },
-    [field.collapsed, field.minimize_collapsed, initialValue.length, itemsCollapsed, listCollapsed],
+    [field.collapsed, field.minimize_collapsed, value.length, itemsCollapsed, listCollapsed],
   );
 
   const getObjectLabel = useCallback(
     (item: ListValue): string | undefined => {
-      const valueType = getValueType();
       switch (valueType) {
         case valueTypes.MIXED: {
           if (!validateItem(field, item)) {
@@ -535,17 +456,17 @@ const ListControl = ({
       }
       return '';
     },
-    [entry, field, getValueType],
+    [entry, field, valueType],
   );
 
   const onSortEnd = useCallback(
     ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
       // Update value
-      const item = initialValue[oldIndex];
-      const newValue: ListValue[] = [...initialValue];
+      const item = value[oldIndex];
+      const newValue: ListValue[] = [...value];
       newValue.splice(oldIndex, 1);
       newValue.splice(newIndex, 0, item);
-      onChange(newValue);
+      handleChange(newValue);
 
       // Update collapsing
       const collapsed = itemsCollapsed[oldIndex];
@@ -570,7 +491,7 @@ const ListControl = ({
       // TODO Remove old validations
       // this.validations = this.validations.filter(item => updatedKeys.includes(item.key));
     },
-    [clearFieldErrors, initialValue, itemsCollapsed, keys, onChange],
+    [clearFieldErrors, handleChange, value, itemsCollapsed, keys],
   );
 
   const hasErrors = useCallback(
@@ -616,16 +537,12 @@ const ListControl = ({
     [field, handleRemove],
   );
 
-  const handleOnChange = useCallback((index: number) => (value: unknown) => {
-
-  }, []);
-
   const renderItem = useCallback(
     (item: ListValue, index: number) => {
       const collapsed = itemsCollapsed[index];
       const key = keys[index];
       const hasError = hasErrors(index);
-      const isVariableTypesList = getValueType() === valueTypes.MIXED;
+      const isVariableTypesList = valueType === valueTypes.MIXED;
       let itemField: CmsField | undefined = field;
       if (isVariableTypesList) {
         itemField = getTypedFieldForValue(field, item as Record<string, ListValue>);
@@ -693,7 +610,7 @@ const ListControl = ({
               onRemoveInsertedMedia={onRemoveInsertedMedia}
               onRemoveMediaControl={onRemoveMediaControl}
               onValidate={onValidate}
-              parentPath={[...parentPath, field.name, index]}
+              path={`${path}.${index}`}
               query={query}
               queryHits={queryHits}
               t={t}
@@ -713,7 +630,7 @@ const ListControl = ({
       fieldsErrors,
       getAsset,
       getObjectLabel,
-      getValueType,
+      valueType,
       handleItemCollapseToggle,
       handleRemove,
       hasErrors,
@@ -736,7 +653,7 @@ const ListControl = ({
       onRemoveInsertedMedia,
       onRemoveMediaControl,
       onValidate,
-      parentPath,
+      path,
       query,
       queryHits,
       renderErroneousTypedItem,
@@ -746,10 +663,9 @@ const ListControl = ({
   );
 
   const renderListControl = useCallback(() => {
-    const items = initialValue;
     const label = field.label ?? field.name;
     const labelSingular = field.label_singular ? field.label_singular : field.label ?? field.name;
-    const listLabel = items.length === 1 ? labelSingular.toLowerCase() : label.toLowerCase();
+    const listLabel = value.length === 1 ? labelSingular.toLowerCase() : label.toLowerCase();
     const minimizeCollapsedItems = field.minimize_collapsed ?? false;
     const allItemsCollapsed = itemsCollapsed.every(val => val === true);
     const selfCollapsed = allItemsCollapsed && (listCollapsed || !minimizeCollapsedItems);
@@ -769,7 +685,7 @@ const ListControl = ({
               onAdd={handleAdd}
               types={field[TYPES_KEY] ?? []}
               onAddType={type => handleAddType(type, resolveFieldKeyType(field))}
-              heading={`${items.length} ${listLabel}`}
+              heading={`${value.length} ${listLabel}`}
               label={labelSingular.toLowerCase()}
               onCollapseToggle={handleCollapseAllToggle}
               collapsed={selfCollapsed}
@@ -777,7 +693,7 @@ const ListControl = ({
             />
             {(!selfCollapsed || !minimizeCollapsedItems) && (
               <SortableList
-                items={items}
+                items={value}
                 renderItem={renderItem}
                 onSortEnd={onSortEnd}
                 useDragHandle
@@ -793,7 +709,7 @@ const ListControl = ({
     handleAdd,
     handleAddType,
     handleCollapseAllToggle,
-    initialValue,
+    value,
     itemsCollapsed,
     listCollapsed,
     onSortEnd,
@@ -801,15 +717,11 @@ const ListControl = ({
     t,
   ]);
 
-  const renderInput = useCallback(() => {
-    return <input type="text" value={value} onChange={handleChange} />;
-  }, [handleChange, value]);
-
-  if (getValueType() !== null) {
-    return renderListControl();
-  } else {
-    return renderInput();
+  if (valueType === null) {
+    return null;
   }
+
+  return renderListControl();
 };
 
 export default ListControl;

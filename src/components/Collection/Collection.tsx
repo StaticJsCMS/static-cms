@@ -3,7 +3,12 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
-import { changeViewStyle, filterByField, groupByField, sortByField } from '../../actions/entries';
+import {
+  changeViewStyle as changeViewStyleAction,
+  filterByField as filterByFieldAction,
+  groupByField as groupByFieldAction,
+  sortByField as sortByFieldAction
+} from '../../actions/entries';
 import { SortDirection } from '../../interface';
 import { getNewEntryUrl } from '../../lib/urlHelper';
 import {
@@ -279,10 +284,10 @@ function mapStateToProps(state: RootState, ownProps: TranslatedProps<CollectionV
 }
 
 const mapDispatchToProps = {
-  sortByField,
-  filterByField,
-  changeViewStyle,
-  groupByField,
+  sortByField: sortByFieldAction,
+  filterByField: filterByFieldAction,
+  changeViewStyle: changeViewStyleAction,
+  groupByField: groupByFieldAction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

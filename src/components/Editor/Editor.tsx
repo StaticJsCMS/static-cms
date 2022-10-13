@@ -91,7 +91,7 @@ const Editor = ({
 
   const handleChangeDraftField = useCallback(
     (
-      path: string[],
+      path: string,
       field: CmsField,
       value: ValueOrNestedValue,
       i18n: I18nSettings | undefined,

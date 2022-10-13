@@ -34,18 +34,18 @@ const StyledFieldsBox = styled.div`
 `;
 
 const ObjectControl = ({
-  value = {},
+  clearFieldErrors,
   field,
+  fieldsErrors,
   forList,
   hasError,
-  onChangeObject,
-  clearFieldErrors,
-  fieldsErrors,
-  parentIds,
   isFieldDuplicate,
   isFieldHidden,
   locale,
+  onChange,
+  path,
   t,
+  value = {},
 }: CmsWidgetControlProps<
   {
     [key: string]: ValueOrNestedValue;
@@ -83,12 +83,12 @@ const ObjectControl = ({
           key={key}
           field={field}
           value={fieldValue}
-          onChange={onChangeObject}
+          onChange={onChange}
           clearFieldErrors={clearFieldErrors}
           fieldsErrors={fieldsErrors}
           // eslint-disable-next-line @typescript-eslint/no-empty-function
           onValidate={() => {}} // TODO Fix validation
-          parentIds={parentIds}
+          parentPath={path}
           isDisabled={isDuplicate}
           isHidden={isHidden}
           isFieldDuplicate={isFieldDuplicate}
@@ -103,8 +103,8 @@ const ObjectControl = ({
       isFieldDuplicate,
       isFieldHidden,
       locale,
-      onChangeObject,
-      parentIds,
+      onChange,
+      path,
       value,
     ],
   );

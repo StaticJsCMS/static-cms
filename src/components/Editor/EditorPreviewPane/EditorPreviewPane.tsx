@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import React, { isValidElement, useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
 
-import { getAsset } from '../../../actions/media';
+import { getAsset as getAssetAction } from '../../../actions/media';
 import { INFERABLE_FIELDS } from '../../../constants/fieldInference';
 import { getPreviewTemplate, getRemarkPlugins, resolveWidget } from '../../../lib/registry';
 import { selectInferedField, selectTemplateName } from '../../../lib/util/collection.util';
@@ -86,12 +86,7 @@ function getWidgetFor(
   } else if ('field' in field && field.field) {
     fieldWithWidgets = {
       ...fieldWithWidgets,
-      field: getSingleNested(
-        entry,
-        getAsset,
-        field.field,
-        value as EntryData | EntryData[],
-      ),
+      field: getSingleNested(entry, getAsset, field.field, value as EntryData | EntryData[]),
     };
   }
 
@@ -372,7 +367,7 @@ function mapStateToProps(state: RootState, ownProps: EditorPreviewPaneOwnProps) 
 }
 
 const mapDispatchToProps = {
-  getAsset,
+  getAsset: getAssetAction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

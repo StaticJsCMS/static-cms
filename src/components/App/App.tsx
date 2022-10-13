@@ -81,6 +81,10 @@ function EditEntityRedirect() {
   return <Navigate to={`/collections/${name}/entries/${entryName}`} />;
 }
 
+history.listen((e) => {
+  console.log(e);
+});
+
 const App = ({
   auth,
   user,

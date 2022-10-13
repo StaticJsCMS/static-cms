@@ -18,7 +18,7 @@ function setIn(target: any, path: (string | number)[], value: unknown): any {
       return localTarget;
     }
 
-    localTarget[index] = setIn(localTarget[index], restOfPath, value)
+    localTarget[index] = setIn(localTarget[index], restOfPath, value);
     return localTarget;
   }
 
@@ -29,19 +29,17 @@ function setIn(target: any, path: (string | number)[], value: unknown): any {
   };
 }
 
-export function set<T>(target: T, path: string | (string | number)[], value: unknown): T;
-export function set(target: any, path: string | (string | number)[], value: unknown): any {
+export function set<T>(target: T, path: string | undefined | null, value: unknown): T;
+export function set(target: any, path: string | undefined | null, value: unknown): any {
   return setIn(
     target,
-    typeof path === 'string'
-      ? path.split('.').map(part => {
-          if (Number.isNaN(+part)) {
-            return part;
-          }
+    (path ?? '').split('.').map(part => {
+      if (Number.isNaN(+part)) {
+        return part;
+      }
 
-          return +part;
-        })
-      : path,
+      return +part;
+    }),
     value,
   );
 }

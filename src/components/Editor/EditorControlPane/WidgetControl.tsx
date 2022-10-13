@@ -196,14 +196,14 @@ export interface WidgetProps {
   locale: string | undefined;
   mediaPaths: Record<string, string | string[]>;
   onAddAsset: EditorControlProps['addAsset'];
-  onChange: (parentPath: string[], field: CmsField, newValue: ValueOrNestedValue) => void;
+  onChange: EditorControlProps['onChange'];
   onClearMediaControl: EditorControlProps['clearMediaControl'];
   onOpenMediaLibrary: EditorControlProps['openMediaLibrary'];
   onPersistMedia: EditorControlProps['persistMedia'];
   onRemoveInsertedMedia: EditorControlProps['removeInsertedMedia'];
   onRemoveMediaControl: EditorControlProps['removeMediaControl'];
   onValidate: EditorControlProps['onValidate'];
-  parentPath: string[];
+  path: string;
   query: EditorControlProps['query'];
   queryHits: Entry[];
   resolveWidget: typeof registryResolveWidget;
@@ -238,7 +238,7 @@ const WidgetControl = ({
   onRemoveInsertedMedia,
   onRemoveMediaControl,
   onValidate,
-  parentPath,
+  path,
   query,
   queryHits,
   t,
@@ -272,7 +272,7 @@ const WidgetControl = ({
     onRemoveInsertedMedia,
     onRemoveMediaControl,
     onValidate,
-    parentPath,
+    path,
     query,
     queryHits,
     t,

@@ -7,7 +7,7 @@ import React, { useMemo } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { getAsset } from '../../../actions/media';
+import { getAsset as getAssetAction } from '../../../actions/media';
 import { VIEW_STYLE_GRID, VIEW_STYLE_LIST } from '../../../constants/collectionViews';
 import { selectEntryCollectionTitle } from '../../../lib/util/collection.util';
 import { selectIsLoadingAsset } from '../../../reducers/medias';
@@ -92,11 +92,9 @@ function mapStateToProps(state: RootState, ownProps: EntryCardOwnProps) {
   };
 }
 
-function mapDispatchToProps() {
-  return {
-    getAsset,
-  };
-}
+const mapDispatchToProps = {
+  getAsset: getAssetAction,
+};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export type NestedCollectionProps = ConnectedProps<typeof connector>;

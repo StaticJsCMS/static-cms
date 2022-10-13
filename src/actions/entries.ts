@@ -470,12 +470,13 @@ export function discardDraft() {
 }
 
 export function changeDraftField({
+  path,
   field,
   value,
   entry,
   i18n,
 }: {
-  path: string[];
+  path: string;
   field: CmsField;
   value: ValueOrNestedValue;
   entry?: Entry | null;
@@ -483,14 +484,14 @@ export function changeDraftField({
 }) {
   return {
     type: DRAFT_CHANGE_FIELD,
-    payload: { field, value, entry, i18n },
+    payload: { path, field, value, entry, i18n },
   } as const;
 }
 
-export function changeDraftFieldValidation(uniqueFieldId: string, errors: FieldError[]) {
+export function changeDraftFieldValidation(path: string, errors: FieldError[]) {
   return {
     type: DRAFT_VALIDATION_ERRORS,
-    payload: { uniqueFieldId, errors },
+    payload: { path, errors },
   } as const;
 }
 

@@ -23,5 +23,4 @@ export {
   transitions,
   zIndex,
 } from './styles';
-export { default as Toggle } from './Toggle';
 export { default as WidgetPreviewContainer } from './WidgetPreviewContainer';

@@ -247,7 +247,7 @@ function mergeValues(
     .filter(e => e.locale !== defaultEntry!.locale)
     .reduce((acc, { locale, value }) => {
       const dataPath = getLocaleDataPath(locale);
-      return set(acc, dataPath, value.data);
+      return set(acc, dataPath.join('.'), value.data);
     }, {});
 
   const path = normalizeFilePath(structure, defaultEntry.value.path, defaultLocale);
@@ -445,7 +445,7 @@ export function serializeI18n(
     .filter(locale => locale !== defaultLocale)
     .forEach(locale => {
       const dataPath = getLocaleDataPath(locale);
-      entry = set(entry, dataPath, serializeValues(get(entry, dataPath)));
+      entry = set(entry, dataPath.join('.'), serializeValues(get(entry, dataPath)));
     });
 
   return entry;

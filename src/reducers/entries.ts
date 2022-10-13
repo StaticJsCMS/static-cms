@@ -89,7 +89,7 @@ function persistSort(sort: Sort | undefined) {
       ).map((value, index) => ({ ...value, index }));
 
       sortObjects.forEach(value => {
-        set(storageSort, [collection, value.key], value);
+        set(storageSort, `${collection}.${value.key}`, value);
       });
     });
     localStorage.setItem(storageSortKey, JSON.stringify(storageSort));

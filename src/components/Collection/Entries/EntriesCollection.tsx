@@ -4,8 +4,8 @@ import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
 import {
-  loadEntries as actionLoadEntries,
-  traverseCollectionCursor as actionTraverseCollectionCursor,
+  loadEntries as loadEntriesAction,
+  traverseCollectionCursor as traverseCollectionCursorAction,
 } from '../../../actions/entries';
 import { Cursor } from '../../../lib/util';
 import { selectCollectionEntriesCursor } from '../../../reducers/cursors';
@@ -181,8 +181,8 @@ function mapStateToProps(state: RootState, ownProps: EntriesCollectionOwnProps) 
 }
 
 const mapDispatchToProps = {
-  loadEntries: actionLoadEntries,
-  traverseCollectionCursor: actionTraverseCollectionCursor,
+  loadEntries: loadEntriesAction,
+  traverseCollectionCursor: traverseCollectionCursorAction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

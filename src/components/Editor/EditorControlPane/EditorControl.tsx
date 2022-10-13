@@ -7,16 +7,19 @@ import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import gfm from 'remark-gfm';
 
-import { clearFieldErrors, tryLoadEntry } from '../../../actions/entries';
-import { addAsset, getAsset } from '../../../actions/media';
 import {
-  clearMediaControl,
-  openMediaLibrary,
-  persistMedia,
-  removeInsertedMedia,
-  removeMediaControl
+  clearFieldErrors as clearFieldErrorsAction,
+  tryLoadEntry,
+} from '../../../actions/entries';
+import { addAsset as addAssetAction, getAsset as getAssetAction } from '../../../actions/media';
+import {
+  clearMediaControl as clearMediaControlAction,
+  openMediaLibrary as openMediaLibraryAction,
+  persistMedia as persistMediaAction,
+  removeInsertedMedia as removeInsertedMediaAction,
+  removeMediaControl as removeMediaControlAction,
 } from '../../../actions/mediaLibrary';
-import { clearSearch, query } from '../../../actions/search';
+import { clearSearch as clearSearchAction, query as queryAction } from '../../../actions/search';
 import { transientOptions } from '../../../lib';
 import { getEditorComponents, resolveWidget } from '../../../lib/registry';
 import { getFieldLabel } from '../../../lib/util/field.util';
@@ -35,7 +38,7 @@ import type {
   GetAssetFunction,
   TranslatedProps,
   ValueOrNestedValue,
-  Widget
+  Widget,
 } from '../../../interface';
 import type { RootState } from '../../../store';
 import type { EditorControlPaneProps } from './EditorControlPane';
@@ -152,7 +155,7 @@ const EditorControl = ({
   onChange,
   onValidate,
   openMediaLibrary,
-  parentPaths = [],
+  parentPath,
   persistMedia,
   query,
   queryHits,
@@ -186,7 +189,7 @@ const EditorControl = ({
     [getAsset],
   );
 
-  const path = useMemo(() => [...parentPaths, field.name], [field.name, parentPaths]);
+  const path = useMemo(() => `${parentPath}.${field.name}`, [field.name, parentPath]);
 
   const cmsConfig = useMemo(() => config.config, [config.config]);
   if (!collection || !entry || !cmsConfig) {
@@ -237,7 +240,7 @@ const EditorControl = ({
           onRemoveInsertedMedia={removeInsertedMedia}
           onRemoveMediaControl={removeMediaControl}
           onValidate={onValidate}
-          parentPath={path}
+          path={path}
           query={query}
           queryHits={queryHits[uniqueFieldId] || []}
           resolveWidget={resolveWidget}
@@ -283,9 +286,9 @@ interface EditorControlOwnProps {
   isHidden?: boolean;
   isNewEditorComponent?: boolean;
   locale?: string;
-  onChange: (parentPath: string[], field: CmsField, newValue: ValueOrNestedValue) => void;
-  onValidate: (parentPath: string[], errors: FieldError[]) => void;
-  parentPaths?: string[];
+  onChange: (path: string, field: CmsField, newValue: ValueOrNestedValue) => void;
+  onValidate: (path: string, errors: FieldError[]) => void;
+  parentPath: string;
   value: ValueOrNestedValue;
 }
 
@@ -314,21 +317,21 @@ function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
     entry,
     collection,
     isLoadingAsset,
-    loadEntry
+    loadEntry,
   };
 }
 
 const mapDispatchToProps = {
-  openMediaLibrary,
-  clearMediaControl,
-  removeMediaControl,
-  removeInsertedMedia,
-  persistMedia,
-  addAsset,
-  query,
-  clearSearch,
-  clearFieldErrors,
-  getAsset,
+  openMediaLibrary: openMediaLibraryAction,
+  clearMediaControl: clearMediaControlAction,
+  removeMediaControl: removeMediaControlAction,
+  removeInsertedMedia: removeInsertedMediaAction,
+  persistMedia: persistMediaAction,
+  addAsset: addAssetAction,
+  query: queryAction,
+  clearSearch: clearSearchAction,
+  clearFieldErrors: clearFieldErrorsAction,
+  getAsset: getAssetAction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

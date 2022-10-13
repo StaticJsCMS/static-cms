@@ -126,13 +126,12 @@ function entryDraftReducer(
         return state;
       }
 
-      const { field, value, entry, i18n } = action.payload;
-      const name = field.name;
+      const { path, field, value, entry, i18n } = action.payload;
       const dataPath = (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
 
       newState = {
         ...newState,
-        entry: set(newState.entry, [...dataPath, name], value),
+        entry: set(newState.entry, `${dataPath.join('.')}.${path}`, value),
       };
 
       if (i18n) {
@@ -149,11 +148,12 @@ function entryDraftReducer(
     }
 
     case DRAFT_VALIDATION_ERRORS: {
+      const { path, errors } = action.payload;
       const fieldsErrors = { ...state.fieldsErrors };
-      if (action.payload.errors.length === 0) {
-        delete fieldsErrors[action.payload.uniqueFieldId];
+      if (errors.length === 0) {
+        delete fieldsErrors[path];
       } else {
-        fieldsErrors[action.payload.uniqueFieldId] = action.payload.errors;
+        fieldsErrors[path] = action.payload.errors;
       }
       return {
         ...state,

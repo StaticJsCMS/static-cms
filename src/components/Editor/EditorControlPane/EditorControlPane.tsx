@@ -6,7 +6,7 @@ import get from 'lodash/get';
 import React, { useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
 
-import { clearFieldErrors } from '../../../actions/entries';
+import { clearFieldErrors as clearFieldErrorsAction } from '../../../actions/entries';
 import confirm from '../../../components/UI/Confirm';
 import {
   getI18nInfo,
@@ -154,11 +154,11 @@ const EditorControlPane = ({
               sourceLocale !== i18n?.defaultLocale,
               sourceLocale,
             );
-            onChange(field, copyValue, i18n);
+            onChange(field.name, field, copyValue, i18n);
           }
         });
       },
-    [fields, entry, onChange, i18n],
+    [fields, entry, i18n, onChange],
   );
 
   if (!collection || !fields) {
@@ -211,6 +211,7 @@ const EditorControlPane = ({
               isFieldHidden={field => isFieldHidden(field, locale, i18n?.defaultLocale)}
               locale={locale}
               clearFieldErrors={clearFieldErrors}
+              parentPath=""
             />
           );
         })}
@@ -224,12 +225,12 @@ export interface EditorControlPaneOwnProps {
   fields: CmsField[];
   fieldsErrors: FieldsErrors;
   onChange: (
-    path: string[],
+    path: string,
     field: CmsField,
     value: ValueOrNestedValue,
     i18n: I18nSettings | undefined,
   ) => void;
-  onValidate: (uniqueFieldId: string, errors: FieldError[]) => void;
+  onValidate: (path: string, errors: FieldError[]) => void;
   locale?: string;
   onLocaleChange: (locale: string) => void;
 }
@@ -241,7 +242,7 @@ function mapStateToProps(_state: RootState, ownProps: EditorControlPaneOwnProps)
 }
 
 const mapDispatchToProps = {
-  clearFieldErrors,
+  clearFieldErrors: clearFieldErrorsAction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

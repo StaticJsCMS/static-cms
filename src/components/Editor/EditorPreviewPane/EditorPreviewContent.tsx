@@ -13,10 +13,10 @@ interface PreviewContentProps {
 
 const StyledPreviewContent = styled.div`
   width: calc(100% - min(864px, 50%));
-  top: 66px;
+  top: 64px;
   right: 0;
   position: absolute;
-  height: calc(100% - 66px);
+  height: calc(100vh - 64px);
   overflow-y: auto;
 `;
 

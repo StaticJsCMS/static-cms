@@ -95,12 +95,11 @@ const NoPreviewContainer = styled.div`
 const EditorContainer = styled.div`
   width: 100%;
   min-width: 1200px;
-  height: 100%;
+  height: 100vh;
   position: absolute;
   top: 0;
   left: 0;
   overflow: hidden;
-  padding-top: 66px;
 `;
 
 const Editor = styled.div`
@@ -127,7 +126,7 @@ const PreviewPaneContainer = styled(
 );
 
 const ControlPaneContainer = styled(PreviewPaneContainer)`
-  padding: 0 16px;
+  padding: 8px 16px;
   position: relative;
   overflow-x: hidden;
 `;
@@ -184,12 +183,12 @@ interface EditorInterfaceProps {
   fields: CmsField[] | undefined;
   fieldsErrors: FieldsErrors;
   onChange: (
-    path: string[],
+    path: string,
     field: CmsField,
     value: ValueOrNestedValue,
     i18n: I18nSettings | undefined,
   ) => void;
-  onValidate: (uniqueFieldId: string, errors: FieldError[]) => void;
+  onValidate: (path: string, errors: FieldError[]) => void;
   onPersist: (opts?: EditorPersistOptions) => Promise<void>;
   onDelete: () => Promise<void>;
   onDuplicate: () => void;
