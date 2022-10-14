@@ -24,7 +24,10 @@ export function resolveFieldKeyType(field: FieldList) {
   return (TYPE_KEY in field && field[TYPE_KEY]) || DEFAULT_TYPE_KEY;
 }
 
-export function getErrorMessageForTypedFieldAndValue(field: FieldList, value: ObjectValue | undefined | null) {
+export function getErrorMessageForTypedFieldAndValue(
+  field: FieldList,
+  value: ObjectValue | undefined | null,
+) {
   const keyType = resolveFieldKeyType(field);
   const type = value?.[keyType] ?? {};
   let errorMessage;

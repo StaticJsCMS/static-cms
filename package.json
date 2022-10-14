@@ -25,7 +25,8 @@
     "lint:js": "eslint --color --ignore-path .gitignore \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint": "run-p -c --aggregate-output \"lint:*\"",
     "prepublishOnly": "yarn build",
-    "start": "run-s clean develop"
+    "start": "run-s clean develop",
+    "type-check": "tsc --watch"
   },
   "module": "dist/esm/index.js",
   "main": "dist/static-cms-core.js",

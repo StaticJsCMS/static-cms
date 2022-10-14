@@ -24,14 +24,15 @@ import type { ThunkDispatch } from 'redux-thunk';
 import type { Backend } from '../backend';
 import type { CollectionViewStyle } from '../constants/collectionViews';
 import type {
-  Field,
   Collection,
   Entry,
   EntryData,
   EntryDraft,
+  Field,
   FieldError,
   I18nSettings,
   ImplementationMediaFile,
+  ObjectValue,
   ValueOrNestedValue,
   ViewFilter,
   ViewGroup,

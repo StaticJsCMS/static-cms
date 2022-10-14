@@ -54,6 +54,10 @@ export interface GroupOfEntries {
   paths: Set<string>;
 }
 
+export type ObjectValue = {
+  [key: string]: ValueOrNestedValue;
+};
+
 export type ValueOrNestedValue =
   | string
   | number
@@ -63,11 +67,9 @@ export type ValueOrNestedValue =
   | null
   | undefined
   | ValueOrNestedValue[]
-  | {
-      [key: string]: ValueOrNestedValue;
-    };
+  | ObjectValue;
 
-export type EntryData = Record<string, ValueOrNestedValue> | undefined | null;
+export type EntryData = ObjectValue | undefined | null;
 
 export interface Entry {
   collection: string;
@@ -609,8 +611,6 @@ export interface FieldObject extends FieldBase {
   summary?: string;
   fields: Field[];
 }
-
-export type ListValue = string | boolean | number | { [key: string]: ListValue };
 
 export interface FieldList extends FieldBase {
   widget: 'list';
