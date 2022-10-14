@@ -11,8 +11,8 @@ import type {
   Field,
   FieldList,
   FieldObject,
-  WidgetControlProps,
   ValueOrNestedValue,
+  WidgetControlProps,
 } from '../../interface';
 
 const styleStrings = {

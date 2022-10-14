@@ -14,7 +14,7 @@ import type AssetProxy from '../valueObjects/AssetProxy';
 
 export interface MediasState {
   [path: string]: { asset: AssetProxy | undefined; isLoading: boolean; error: Error | null };
-};
+}
 
 const defaultState: MediasState = {};
 

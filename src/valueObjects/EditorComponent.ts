@@ -10,7 +10,9 @@ function bind(fn: unknown) {
   return isFunction(fn) && fn.bind(null);
 }
 
-export default function createEditorComponent(options: EditorComponentOptions): EditorComponentOptions {
+export default function createEditorComponent(
+  options: EditorComponentOptions,
+): EditorComponentOptions {
   if (isEditorComponentWidgetOptions(options)) {
     const {
       id = null,

@@ -142,8 +142,7 @@ function entryDraftReducer(
 
       return {
         ...newState,
-        hasChanged:
-          !entry || !isEqual(newData, get(entry, dataPath)),
+        hasChanged: !entry || !isEqual(newData, get(entry, dataPath)),
       };
     }
 

@@ -6,7 +6,7 @@ import type { ScrollAction } from '../actions/scroll';
 
 export interface ScrollState {
   isScrolling: boolean;
-};
+}
 
 const defaultState: ScrollState = {
   isScrolling: true,

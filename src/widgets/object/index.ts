@@ -2,12 +2,7 @@ import controlComponent from './ObjectControl';
 import previewComponent from './ObjectPreview';
 import schema from './schema';
 
-import type {
-  FieldList,
-  FieldObject,
-  WidgetParam,
-  ValueOrNestedValue,
-} from '../../interface';
+import type { FieldList, FieldObject, WidgetParam, ValueOrNestedValue } from '../../interface';
 
 const ObjectWidget = (): WidgetParam<
   {

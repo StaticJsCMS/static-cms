@@ -21,7 +21,10 @@ export function loadScroll() {
 }
 
 export function toggleScroll() {
-  return async (dispatch: ThunkDispatch<RootState, undefined, AnyAction>, _getState: () => RootState) => {
+  return async (
+    dispatch: ThunkDispatch<RootState, undefined, AnyAction>,
+    _getState: () => RootState,
+  ) => {
     return dispatch(togglingScroll());
   };
 }

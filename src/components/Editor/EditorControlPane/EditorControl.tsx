@@ -14,7 +14,7 @@ import {
   openMediaLibrary as openMediaLibraryAction,
   persistMedia as persistMediaAction,
   removeInsertedMedia as removeInsertedMediaAction,
-  removeMediaControl as removeMediaControlAction
+  removeMediaControl as removeMediaControlAction,
 } from '../../../actions/mediaLibrary';
 import { clearSearch as clearSearchAction, query as queryAction } from '../../../actions/search';
 import { borders, colors, lengths, transitions } from '../../../components/UI/styles';
@@ -35,7 +35,7 @@ import type {
   GetAssetFunction,
   TranslatedProps,
   ValueOrNestedValue,
-  Widget
+  Widget,
 } from '../../../interface';
 import type { RootState } from '../../../store';
 import type { EditorControlPaneProps } from './EditorControlPane';

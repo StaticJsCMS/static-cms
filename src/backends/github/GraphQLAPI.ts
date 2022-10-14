@@ -1,15 +1,11 @@
-import {
-  InMemoryCache, IntrospectionFragmentMatcher
-} from 'apollo-cache-inmemory';
+import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
 import { setContext } from 'apollo-link-context';
 import { createHttpLink } from 'apollo-link-http';
 import trim from 'lodash/trim';
 import trimStart from 'lodash/trimStart';
 
-import {
-  APIError, localForage, readFile, throwOnConflictingBranches
-} from '../../lib/util';
+import { APIError, localForage, readFile, throwOnConflictingBranches } from '../../lib/util';
 import API, { API_NAME } from './API';
 import introspectionQueryResultData from './fragmentTypes';
 import * as mutations from './mutations';

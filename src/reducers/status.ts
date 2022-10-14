@@ -11,7 +11,7 @@ export interface StatusState {
     api: { status: boolean; statusPage: string };
   };
   error: Error | undefined;
-};
+}
 
 const defaultState: StatusState = {
   isFetching: false,

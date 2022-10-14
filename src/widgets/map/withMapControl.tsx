@@ -36,12 +36,7 @@ interface WithMapControlProps {
 }
 
 export default function withMapControl({ getFormat, getMap }: WithMapControlProps = {}) {
-  const MapControl = ({
-    path,
-    value,
-    field,
-    onChange,
-  }: WidgetControlProps<string, FieldMap>) => {
+  const MapControl = ({ path, value, field, onChange }: WidgetControlProps<string, FieldMap>) => {
     const { height = '400px' } = field;
     const mapContainer: React.LegacyRef<HTMLDivElement> = useMemo(() => React.createRef(), []);
 

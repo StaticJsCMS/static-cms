@@ -90,7 +90,10 @@ export function clearSearch() {
 
 // SearchEntries will search for complete entries in all collections.
 export function searchEntries(searchTerm: string, searchCollections: string[], page = 0) {
-  return async (dispatch: ThunkDispatch<RootState, undefined, AnyAction>, getState: () => RootState) => {
+  return async (
+    dispatch: ThunkDispatch<RootState, undefined, AnyAction>,
+    getState: () => RootState,
+  ) => {
     const state = getState();
     const { search } = state;
     const configState = state.config;

@@ -402,15 +402,15 @@ export default class GitHub implements BackendClass {
         break;
       }
       case 'last': {
-        result = this.getCursorAndFiles(files, meta?.['pageCount'] as number ?? 1);
+        result = this.getCursorAndFiles(files, (meta?.['pageCount'] as number) ?? 1);
         break;
       }
       case 'next': {
-        result = this.getCursorAndFiles(files, meta?.['page'] as number + 1 ?? 1);
+        result = this.getCursorAndFiles(files, (meta?.['page'] as number) + 1 ?? 1);
         break;
       }
       case 'prev': {
-        result = this.getCursorAndFiles(files, meta?.['page'] as number - 1 ?? 1);
+        result = this.getCursorAndFiles(files, (meta?.['page'] as number) - 1 ?? 1);
         break;
       }
       default: {

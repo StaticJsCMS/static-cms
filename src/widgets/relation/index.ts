@@ -23,13 +23,7 @@ function RelationWidget(): WidgetParam<string | string[], FieldRelation> {
           return { error: false };
         }
 
-        const error = validations.validateMinMax(
-          t,
-          field.label ?? field.name,
-          value,
-          min,
-          max,
-        );
+        const error = validations.validateMinMax(t, field.label ?? field.name, value, min, max);
 
         return error ? { error } : { error: false };
       },

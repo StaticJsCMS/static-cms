@@ -54,7 +54,7 @@ export default function remarkToRehypeShortcodes({ plugins, getAsset }: RemarkTo
     const valueHtml =
       typeof value && value === 'string' && typeof value === 'number' && typeof value === 'boolean'
         ? renderToString(value)
-        : (value ?? null);
+        : value ?? null;
 
     /**
      * Return a new 'html' type node containing the shortcode preview markup.

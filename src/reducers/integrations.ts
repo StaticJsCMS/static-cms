@@ -14,13 +14,13 @@ import type {
 export interface IntegrationHooks {
   search?: SearchIntegrationProvider;
   listEntries?: SearchIntegrationProvider;
-  'assetStore'?: MediaIntegrationProvider;
+  assetStore?: MediaIntegrationProvider;
 }
 
 export interface IntegrationsState {
   providers: {
     algolia?: AlgoliaConfig;
-    'assetStore'?: AssetStoreConfig;
+    assetStore?: AssetStoreConfig;
   };
   hooks: IntegrationHooks;
   collectionHooks: Record<string, IntegrationHooks>;

@@ -548,7 +548,7 @@ export default class GitGateway implements BackendClass {
   async persistEntry(entry: BackendEntry, options: PersistOptions) {
     const client = await this.getLargeMediaClient();
     if (client.enabled) {
-      const assets = await getLargeMediaFilteredMediaFiles(client, entry.assets) as any;
+      const assets = (await getLargeMediaFilteredMediaFiles(client, entry.assets)) as any;
       return this.backend!.persistEntry({ ...entry, assets }, options);
     } else {
       return this.backend!.persistEntry(entry, options);
@@ -562,11 +562,11 @@ export default class GitGateway implements BackendClass {
     const fixedPath = path.startsWith('/') ? path.slice(1) : path;
     const isLargeMedia = await this.isLargeMediaFile(fixedPath);
     if (isLargeMedia) {
-      const persistMediaArgument = await getPointerFileForMediaFileObj(
+      const persistMediaArgument = (await getPointerFileForMediaFileObj(
         client,
         fileObj as File,
         path,
-      ) as any;
+      )) as any;
       return {
         ...(await this.backend!.persistMedia(persistMediaArgument, options)),
         displayURL,

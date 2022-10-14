@@ -9,7 +9,7 @@ const StringControl = ({
   field,
   value,
   label,
-  onChange
+  onChange,
 }: WidgetControlProps<string, FieldStringOrText>) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
 

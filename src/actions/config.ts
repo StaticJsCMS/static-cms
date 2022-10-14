@@ -113,10 +113,7 @@ function setI18nField<T extends Field>(field: T) {
   return field;
 }
 
-function getI18nDefaults(
-  collectionOrFileI18n: boolean | I18nInfo,
-  defaultI18n: I18nInfo,
-) {
+function getI18nDefaults(collectionOrFileI18n: boolean | I18nInfo, defaultI18n: I18nInfo) {
   if (typeof collectionOrFileI18n === 'boolean') {
     return defaultI18n;
   } else {

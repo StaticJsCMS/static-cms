@@ -35,10 +35,10 @@ import type { TransitionPromptHook } from 'history';
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import type {
-  Field,
   Collection,
   EditorPersistOptions,
   Entry,
+  Field,
   I18nSettings,
   TranslatedProps,
   ValueOrNestedValue,

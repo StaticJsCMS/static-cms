@@ -186,9 +186,7 @@ export interface Collection {
   view_filters: ViewFilter[];
   view_groups: ViewGroup[];
   nested?: Nested;
-  i18n?:
-    | boolean
-    | I18nInfo;
+  i18n?: boolean | I18nInfo;
   hide?: boolean;
   editor?: {
     preview?: boolean;

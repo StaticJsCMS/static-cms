@@ -8,7 +8,7 @@ export function createNonce() {
 
 export function validateNonce(check: string) {
   const auth = window.sessionStorage.getItem('static-cms-auth');
-  const valid = auth && JSON.parse(auth).nonce as string;
+  const valid = auth && (JSON.parse(auth).nonce as string);
   window.localStorage.removeItem('static-cms-auth');
   return check === valid;
 }

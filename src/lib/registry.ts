@@ -194,9 +194,7 @@ export function getWidgets(): ({
   }));
 }
 
-export function resolveWidget<T = unknown, F extends Field = Field>(
-  name?: string,
-): Widget<T, F> {
+export function resolveWidget<T = unknown, F extends Field = Field>(name?: string): Widget<T, F> {
   return getWidget(name || 'string') || getWidget('unknown');
 }
 

@@ -5,14 +5,7 @@ import groupBy from 'lodash/groupBy';
 import { selectEntrySlug } from './util/collection.util';
 import { set } from './util/object.util';
 
-import type {
-  Field,
-  Collection,
-  Entry,
-  EntryData,
-  i18nCollection,
-  I18nInfo,
-} from '../interface';
+import type { Field, Collection, Entry, EntryData, i18nCollection, I18nInfo } from '../interface';
 import type { EntryDraftState } from '../reducers/entryDraft';
 
 export const I18N = 'i18n';

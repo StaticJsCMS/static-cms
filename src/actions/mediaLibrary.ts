@@ -4,9 +4,7 @@ import { getMediaIntegrationProvider } from '../integrations';
 import { sanitizeSlug } from '../lib/urlHelper';
 import { basename, getBlobSHA } from '../lib/util';
 import { selectIntegration } from '../reducers';
-import {
-  selectEditingDraft,
-} from '../reducers/entries';
+import { selectEditingDraft } from '../reducers/entries';
 import { selectMediaDisplayURL, selectMediaFiles } from '../reducers/mediaLibrary';
 import { addSnackbar } from '../store/slices/snackbars';
 import { createAssetProxy } from '../valueObjects/AssetProxy';

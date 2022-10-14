@@ -9,7 +9,7 @@ import {
   insertMedia as insertMediaAction,
   loadMedia as loadMediaAction,
   loadMediaDisplayURL as loadMediaDisplayURLAction,
-  persistMedia as persistMediaAction
+  persistMedia as persistMediaAction,
 } from '../../actions/mediaLibrary';
 import { fileExtension } from '../../lib/util';
 import { selectMediaFiles } from '../../reducers/mediaLibrary';

@@ -13,7 +13,7 @@ import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
 import { colors, lengths } from '../../components/UI/styles';
 import { transientOptions } from '../../lib';
 import { getFieldLabel } from '../../lib/util/field.util';
-import { compileStringTemplate, addFileTemplateFields } from '../../lib/widgets/stringTemplate';
+import { addFileTemplateFields, compileStringTemplate } from '../../lib/widgets/stringTemplate';
 import ObjectControl from '../object/ObjectControl';
 import {
   getErrorMessageForTypedFieldAndValue,
@@ -25,12 +25,12 @@ import {
 import type { MouseEvent } from 'react';
 import type { t } from 'react-polyglot';
 import type {
-  Field,
-  FieldList,
-  WidgetControlProps,
   Entry,
   EntryData,
+  Field,
+  FieldList,
   ListValue,
+  WidgetControlProps,
 } from '../../interface';
 
 const ListItem = styled.div();

@@ -103,20 +103,22 @@ const getAbsoluteRoot = (root: string, url: string) => {
     : `${root}${url}`;
 };
 
-const withWrapper = <K extends keyof ApiRequestObject>(key: K) => (value: ApiRequestObject[K], req: ApiRequest): ApiRequestObject => {
-  if (typeof req === 'string') {
-    return fromFetchArguments(req, { [key]: value });
-  }
+const withWrapper =
+  <K extends keyof ApiRequestObject>(key: K) =>
+  (value: ApiRequestObject[K], req: ApiRequest): ApiRequestObject => {
+    if (typeof req === 'string') {
+      return fromFetchArguments(req, { [key]: value });
+    }
 
-  return {
-    ...req,
-    [key]: value,
+    return {
+      ...req,
+      [key]: value,
+    };
   };
-};
 
 const withRoot = (root: string) => (req: ApiRequest) => {
   return withWrapper('url')(getAbsoluteRoot(root, typeof req === 'string' ? req : req.url), req);
-}
+};
 const withMethod = withWrapper('method');
 const withBody = withWrapper('body');
 const withHeaders = withWrapper('headers');
@@ -136,5 +138,5 @@ export default {
   withBody,
   withHeaders,
   withParams,
-  withNoCache
+  withNoCache,
 };

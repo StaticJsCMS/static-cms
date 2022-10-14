@@ -19,17 +19,14 @@ import {
   MEDIA_PERSIST_FAILURE,
   MEDIA_PERSIST_REQUEST,
   MEDIA_PERSIST_SUCCESS,
-  MEDIA_REMOVE_INSERTED
+  MEDIA_REMOVE_INSERTED,
 } from '../actions/mediaLibrary';
 import { selectIntegration } from './';
 import { selectEditingDraft } from './entries';
 import { selectMediaFolder } from '../lib/util/media.util';
 
 import type { MediaLibraryAction } from '../actions/mediaLibrary';
-import type {
-  Field, DisplayURLState, MediaFile,
-  MediaLibraryInstance
-} from '../interface';
+import type { Field, DisplayURLState, MediaFile, MediaLibraryInstance } from '../interface';
 import type { RootState } from '../store';
 
 export interface MediaLibraryDisplayURL {
@@ -64,7 +61,6 @@ export type MediaLibraryState = {
   isPaginating?: boolean;
 };
 
-
 const defaultState: MediaLibraryState = {
   isVisible: false,
   showMediaButton: true,
@@ -73,7 +69,10 @@ const defaultState: MediaLibraryState = {
   config: {},
 };
 
-function mediaLibrary(state: MediaLibraryState = defaultState, action: MediaLibraryAction): MediaLibraryState {
+function mediaLibrary(
+  state: MediaLibraryState = defaultState,
+  action: MediaLibraryAction,
+): MediaLibraryState {
   switch (action.type) {
     case MEDIA_LIBRARY_CREATE:
       return {
