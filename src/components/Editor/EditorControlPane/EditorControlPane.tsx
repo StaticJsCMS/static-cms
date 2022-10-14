@@ -33,9 +33,10 @@ import type { RootState } from '../../../store';
 
 const ControlPaneContainer = styled.div`
   max-width: 1200px;
-  margin: 0 auto;
-  padding-bottom: 16px;
   font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 `;
 
 const LocaleRowWrapper = styled.div`

@@ -91,7 +91,6 @@ const ControlContainer = styled(
   transientOptions,
 )<ControlContainerProps>(
   ({ $isHidden }) => `
-    margin-top: 16px;
     ${$isHidden ? styleStrings.hidden : ''};
   `,
 );

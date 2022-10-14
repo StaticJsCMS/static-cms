@@ -3,7 +3,7 @@ import { Editor } from '@toast-ui/react-editor';
 import React, { useCallback, useMemo, useState } from 'react';
 
 import FieldLabel from '../../components/UI/FieldLabel';
-import { transientOptions } from '../../lib';
+import Outline from '../../components/UI/Outline';
 
 import type { RefObject } from 'react';
 import type { FieldMarkdown, WidgetControlProps } from '../../interface';
@@ -29,40 +29,6 @@ const StyledEditorWrapper = styled('div')`
     border: none;
   }
 `;
-
-interface StyledOutlineProps {
-  $isActive: boolean;
-}
-
-const StyledOutline = styled(
-  'div',
-  transientOptions,
-)<StyledOutlineProps>(
-  ({ $isActive }) => `
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    top: 22px;
-    left: 0;
-    margin: 0;
-    padding: 0 8px;
-    pointer-events: none;
-    border-radius: 4px;
-    border-style: solid;
-    border-width: 1px;
-    overflow: hidden;
-    min-width: 0%;
-    border-color: rgba(0, 0, 0, 0.23);
-    ${
-      $isActive
-        ? `
-          border-color: #1976d2;
-          border-width: 2px;
-        `
-        : ''
-    }
-  `,
-);
 
 const MarkdownControl = ({
   label,
@@ -119,7 +85,7 @@ const MarkdownControl = ({
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
       />
-      <StyledOutline $isActive={hasFocus} />
+      <Outline active={hasFocus} hasLabel />
     </StyledEditorWrapper>
   );
 };

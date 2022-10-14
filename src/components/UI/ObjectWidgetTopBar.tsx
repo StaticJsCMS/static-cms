@@ -19,7 +19,7 @@ const TopBarContainer = styled.div`
   background-color: ${colors.textFieldBorder};
   display: flex;
   justify-content: space-between;
-  padding: 6px 12px;
+  padding: 2px 8px;
 `;
 
 interface ExpandButtonContainerProps {

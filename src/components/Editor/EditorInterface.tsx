@@ -104,7 +104,6 @@ const EditorContainer = styled.div`
 
 const Editor = styled.div`
   height: 100%;
-  margin: 0 auto;
   position: relative;
   background-color: ${colorsRaw.white};
 `;
@@ -126,7 +125,7 @@ const PreviewPaneContainer = styled(
 );
 
 const ControlPaneContainer = styled(PreviewPaneContainer)`
-  padding: 8px 16px;
+  padding: 24px 16px 16px;
   position: relative;
   overflow-x: hidden;
 `;

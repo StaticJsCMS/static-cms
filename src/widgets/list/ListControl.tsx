@@ -6,7 +6,7 @@ import uuid from 'uuid/v4';
 
 import FieldLabel from '../../components/UI/FieldLabel';
 import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
-import { transientOptions } from '../../lib';
+import Outline from '../../components/UI/Outline';
 import { getFieldLabel } from '../../lib/util/field.util';
 import ListItem from './ListItem';
 import { resolveFieldKeyType, TYPES_KEY } from './typedListHelpers';
@@ -17,40 +17,6 @@ import type { Field, FieldList, ObjectValue, WidgetControlProps } from '../../in
 const StyledListWrapper = styled('div')`
   position: relative;
 `;
-
-interface StyledOutlineProps {
-  $isActive: boolean;
-}
-
-const StyledOutline = styled(
-  'div',
-  transientOptions,
-)<StyledOutlineProps>(
-  ({ $isActive }) => `
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    top: 22px;
-    left: 0;
-    margin: 0;
-    padding: 0 8px;
-    pointer-events: none;
-    border-radius: 4px;
-    border-style: solid;
-    border-width: 1px;
-    overflow: hidden;
-    min-width: 0%;
-    border-color: rgba(0, 0, 0, 0.23);
-    ${
-      $isActive
-        ? `
-          border-color: #1976d2;
-          border-width: 2px;
-        `
-        : ''
-    }
-  `,
-);
 
 const StyledSortableList = styled('div')`
   display: flex;
@@ -429,7 +395,7 @@ const ListControl = ({
           lockAxis="y"
         />
       ) : null}
-      <StyledOutline $isActive={false} />
+      <Outline hasLabel />
     </StyledListWrapper>
   );
 };

@@ -5,6 +5,7 @@ import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 
 import FieldLabel from '../../components/UI/FieldLabel';
 import ListItemTopBar from '../../components/UI/ListItemTopBar';
+import Outline from '../../components/UI/Outline';
 import { colors, lengths } from '../../components/UI/styles';
 import { transientOptions } from '../../lib';
 import { getFieldLabel } from '../../lib/util/field.util';
@@ -24,7 +25,9 @@ import type {
   WidgetControlProps,
 } from '../../interface';
 
-const StyledListItem = styled.div();
+const StyledListItem = styled('div')`
+  position: relative;
+`;
 
 const SortableStyledListItem = SortableElement<{ children: JSX.Element }>(StyledListItem);
 
@@ -133,27 +136,6 @@ const ListItem = ({
   key,
   value,
 }: ListItemProps) => {
-  const renderErroneousTypedItem = useCallback(
-    (index: number, item: ObjectValue | undefined | null) => {
-      const errorMessage = getErrorMessageForTypedFieldAndValue(field, item);
-      const key = `item-${index}`;
-      return (
-        <SortableStyledListItem index={index} key={key}>
-          <>
-            <StyledListItemTopBar
-              onRemove={partial(handleRemove, index)}
-              dragHandleHOC={SortableHandle}
-            />
-            <NestedObjectLabel $collapsed={true} $error={true}>
-              {errorMessage}
-            </NestedObjectLabel>
-          </>
-        </SortableStyledListItem>
-      );
-    },
-    [field, handleRemove],
-  );
-
   const objectLabel = useMemo(() => {
     if (!value) {
       return '';
@@ -223,9 +205,6 @@ const ListItem = ({
   let itemField: Field | undefined = field;
   if (isVariableTypesList) {
     itemField = getTypedFieldForValue(field, value);
-    if (!itemField) {
-      return renderErroneousTypedItem(index, value);
-    }
   }
 
   return (
@@ -250,44 +229,51 @@ const ListItem = ({
           isVariableTypesList={isVariableTypesList}
         />
         {!collapsed ? (
-          <ObjectControl
-            clearFieldErrors={clearFieldErrors}
-            clearSearch={clearSearch}
-            collapsed={collapsed}
-            collection={collection}
-            config={config}
-            data-testid={`object-control-${key}`}
-            entry={entry}
-            field={field}
-            fieldsErrors={fieldsErrors}
-            forList
-            getAsset={getAsset}
-            hasError={hasError}
-            isDisabled={isDisabled}
-            isEditorComponent={isEditorComponent}
-            isFetching={isFetching}
-            isFieldDuplicate={isFieldDuplicate}
-            isFieldHidden={isFieldHidden}
-            isNewEditorComponent={isNewEditorComponent}
-            label={getFieldLabel(field, t)}
-            loadEntry={loadEntry}
-            locale={locale}
-            mediaPaths={mediaPaths}
-            onAddAsset={onAddAsset}
-            onChange={onChange}
-            onClearMediaControl={onClearMediaControl}
-            onOpenMediaLibrary={onOpenMediaLibrary}
-            onPersistMedia={onPersistMedia}
-            onRemoveInsertedMedia={onRemoveInsertedMedia}
-            onRemoveMediaControl={onRemoveMediaControl}
-            onValidate={onValidate}
-            path={`${path}.${index}`}
-            query={query}
-            queryHits={queryHits}
-            t={t}
-            value={value}
-          />
+          !itemField ? (
+            <NestedObjectLabel $collapsed={true} $error={true}>
+              {getErrorMessageForTypedFieldAndValue(field, value)}
+            </NestedObjectLabel>
+          ) : (
+            <ObjectControl
+              clearFieldErrors={clearFieldErrors}
+              clearSearch={clearSearch}
+              collapsed={collapsed}
+              collection={collection}
+              config={config}
+              data-testid={`object-control-${key}`}
+              entry={entry}
+              field={field}
+              fieldsErrors={fieldsErrors}
+              forList
+              getAsset={getAsset}
+              hasError={hasError}
+              isDisabled={isDisabled}
+              isEditorComponent={isEditorComponent}
+              isFetching={isFetching}
+              isFieldDuplicate={isFieldDuplicate}
+              isFieldHidden={isFieldHidden}
+              isNewEditorComponent={isNewEditorComponent}
+              label={getFieldLabel(field, t)}
+              loadEntry={loadEntry}
+              locale={locale}
+              mediaPaths={mediaPaths}
+              onAddAsset={onAddAsset}
+              onChange={onChange}
+              onClearMediaControl={onClearMediaControl}
+              onOpenMediaLibrary={onOpenMediaLibrary}
+              onPersistMedia={onPersistMedia}
+              onRemoveInsertedMedia={onRemoveInsertedMedia}
+              onRemoveMediaControl={onRemoveMediaControl}
+              onValidate={onValidate}
+              path={`${path}.${index}`}
+              query={query}
+              queryHits={queryHits}
+              t={t}
+              value={value}
+            />
+          )
         ) : null}
+        <Outline />
       </>
     </SortableStyledListItem>
   );

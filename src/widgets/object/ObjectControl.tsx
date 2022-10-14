@@ -1,10 +1,9 @@
-import { ClassNames } from '@emotion/react';
 import styled from '@emotion/styled';
 import React, { useCallback, useState } from 'react';
 
 import EditorControl from '../../components/Editor/EditorControlPane/EditorControl';
 import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
-import { colors, lengths } from '../../components/UI/styles';
+import Outline from '../../components/UI/Outline';
 import { compileStringTemplate } from '../../lib/widgets/stringTemplate';
 
 import type {
@@ -15,23 +14,16 @@ import type {
   WidgetControlProps,
 } from '../../interface';
 
-const styleStrings = {
-  nestedObjectControl: `
-    padding: 6px 14px 0;
-    border-top: 0;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  `,
-  objectWidgetTopBarContainer: `
-    padding: ${lengths.objectWidgetTopBarContainerPadding};
-  `,
-  collapsedObjectControl: `
-    display: none;
-  `,
-};
+const StyledObjectControlWrapper = styled('div')`
+  position: relative;
+  background: white;
+`;
 
 const StyledFieldsBox = styled.div`
-  padding-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 16px;
 `;
 
 const ObjectControl = ({
@@ -117,45 +109,18 @@ const ObjectControl = ({
 
   if (multiFields) {
     return (
-      <ClassNames>
-        {({ css, cx }) => (
-          <div
-            className={cx(
-              css`
-                ${styleStrings.objectWidgetTopBarContainer}
-              `,
-              {
-                [css`
-                  ${styleStrings.nestedObjectControl}
-                `]: forList,
-              },
-              {
-                [css`
-                  border-color: ${colors.textFieldBorder};
-                `]: forList ? !hasError : false,
-              },
-            )}
-          >
-            {forList ? null : (
-              <ObjectWidgetTopBar
-                collapsed={isCollapsed}
-                onCollapseToggle={handleCollapseToggle}
-                heading={isCollapsed && getObjectLabel()}
-                t={t}
-              />
-            )}
-            <StyledFieldsBox
-              className={cx({
-                [css`
-                  ${styleStrings.collapsedObjectControl}
-                `]: isCollapsed,
-              })}
-            >
-              {renderFields(multiFields)}
-            </StyledFieldsBox>
-          </div>
+      <StyledObjectControlWrapper>
+        {forList ? null : (
+          <ObjectWidgetTopBar
+            collapsed={isCollapsed}
+            onCollapseToggle={handleCollapseToggle}
+            heading={isCollapsed && getObjectLabel()}
+            t={t}
+          />
         )}
-      </ClassNames>
+        <StyledFieldsBox>{renderFields(multiFields)}</StyledFieldsBox>
+        {forList ? null : <Outline hasError={hasError} />}
+      </StyledObjectControlWrapper>
     );
   }
 
