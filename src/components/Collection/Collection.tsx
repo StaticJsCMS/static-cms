@@ -7,8 +7,9 @@ import {
   changeViewStyle as changeViewStyleAction,
   filterByField as filterByFieldAction,
   groupByField as groupByFieldAction,
-  sortByField as sortByFieldAction
+  sortByField as sortByFieldAction,
 } from '../../actions/entries';
+import { components } from '../../components/UI/styles';
 import { SortDirection } from '../../interface';
 import { getNewEntryUrl } from '../../lib/urlHelper';
 import {
@@ -22,7 +23,6 @@ import {
   selectEntriesSort,
   selectViewStyle,
 } from '../../reducers/entries';
-import { components } from '../../ui';
 import CollectionControls from './CollectionControls';
 import CollectionTop from './CollectionTop';
 import EntriesCollection from './Entries/EntriesCollection';
@@ -201,36 +201,36 @@ const CollectionView = ({
         searchTerm={searchTerm}
         filterTerm={filterTerm}
       />
-        <CollectionMain>
-          <>
-            {isSearchResults ? (
-              <SearchResultContainer>
-                <SearchResultHeading>
-                  {t(searchResultKey, { searchTerm, collection: collection.label })}
-                </SearchResultHeading>
-              </SearchResultContainer>
-            ) : (
-              <>
-                <CollectionTop collection={collection} newEntryUrl={newEntryUrl} />
-                <CollectionControls
-                  viewStyle={viewStyle}
-                  onChangeViewStyle={changeViewStyle}
-                  sortableFields={sortableFields}
-                  onSortClick={onSortClick}
-                  sort={sort}
-                  viewFilters={viewFilters}
-                  viewGroups={viewGroups}
-                  t={t}
-                  onFilterClick={onFilterClick}
-                  onGroupClick={onGroupClick}
-                  filter={filter}
-                  group={group}
-                />
-              </>
-            )}
-            {entries}
-          </>
-        </CollectionMain>
+      <CollectionMain>
+        <>
+          {isSearchResults ? (
+            <SearchResultContainer>
+              <SearchResultHeading>
+                {t(searchResultKey, { searchTerm, collection: collection.label })}
+              </SearchResultHeading>
+            </SearchResultContainer>
+          ) : (
+            <>
+              <CollectionTop collection={collection} newEntryUrl={newEntryUrl} />
+              <CollectionControls
+                viewStyle={viewStyle}
+                onChangeViewStyle={changeViewStyle}
+                sortableFields={sortableFields}
+                onSortClick={onSortClick}
+                sort={sort}
+                viewFilters={viewFilters}
+                viewGroups={viewGroups}
+                t={t}
+                onFilterClick={onFilterClick}
+                onGroupClick={onGroupClick}
+                filter={filter}
+                group={group}
+              />
+            </>
+          )}
+          {entries}
+        </>
+      </CollectionMain>
     </>
   );
 };

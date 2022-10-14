@@ -3,13 +3,13 @@ import previewComponent from './RelationPreview';
 import schema from './schema';
 import { validations } from '../../lib/widgets';
 
-import type { CmsFieldRelation, CmsWidgetParam } from '../../interface';
+import type { FieldRelation, WidgetParam } from '../../interface';
 
-function isMultiple(field: CmsFieldRelation) {
+function isMultiple(field: FieldRelation) {
   return field.multiple ?? false;
 }
 
-function RelationWidget(): CmsWidgetParam<string | string[], CmsFieldRelation> {
+function RelationWidget(): WidgetParam<string | string[], FieldRelation> {
   return {
     name: 'relation',
     controlComponent,

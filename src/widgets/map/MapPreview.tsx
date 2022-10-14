@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { WidgetPreviewContainer } from '../../ui';
+import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { CmsFieldMap, CmsWidgetPreviewProps } from '../../interface';
+import type { FieldMap, WidgetPreviewProps } from '../../interface';
 
-const MapPreview = ({ value }: CmsWidgetPreviewProps<string, CmsFieldMap>) => {
+const MapPreview = ({ value }: WidgetPreviewProps<string, FieldMap>) => {
   return <WidgetPreviewContainer>{value ? value.toString() : null}</WidgetPreviewContainer>;
 };
 

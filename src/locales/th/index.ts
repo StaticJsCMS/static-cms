@@ -1,6 +1,6 @@
-import type { CmsLocalePhrasesRoot } from '../../interface';
+import type { LocalePhrasesRoot } from '../../interface';
 
-const th: CmsLocalePhrasesRoot = {
+const th: LocalePhrasesRoot = {
   auth: {
     login: 'เข้าสู่ระบบ',
     loggingIn: 'กำลังเข้าสู่ระบบ...',

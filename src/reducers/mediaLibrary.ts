@@ -27,7 +27,7 @@ import { selectMediaFolder } from '../lib/util/media.util';
 
 import type { MediaLibraryAction } from '../actions/mediaLibrary';
 import type {
-  CmsField, DisplayURLState, MediaFile,
+  Field, DisplayURLState, MediaFile,
   MediaLibraryInstance
 } from '../interface';
 import type { RootState } from '../store';
@@ -48,7 +48,7 @@ export type MediaLibraryState = {
   page?: number;
   files?: MediaFile[];
   config: Record<string, unknown>;
-  field?: CmsField;
+  field?: Field;
   value?: string | string[];
   replaceIndex?: number;
   canInsert?: boolean;
@@ -345,7 +345,7 @@ function mediaLibrary(state: MediaLibraryState = defaultState, action: MediaLibr
   }
 }
 
-export function selectMediaFiles(state: RootState, field?: CmsField): MediaFile[] {
+export function selectMediaFiles(state: RootState, field?: Field): MediaFile[] {
   const { mediaLibrary, entryDraft } = state;
   if (!entryDraft.entry) {
     return [];

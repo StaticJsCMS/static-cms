@@ -4,7 +4,7 @@ import DragHandleIcon from '@mui/icons-material/DragHandle';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import React from 'react';
 
-import { transientOptions } from '../lib/util';
+import { transientOptions } from '../../lib/util';
 import { buttons, colors, lengths, transitions } from './styles';
 
 import type { ComponentClass, MouseEvent, ReactNode } from 'react';

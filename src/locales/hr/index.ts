@@ -1,6 +1,6 @@
-import type { CmsLocalePhrasesRoot } from '../../interface';
+import type { LocalePhrasesRoot } from '../../interface';
 
-const hr: CmsLocalePhrasesRoot = {
+const hr: LocalePhrasesRoot = {
   auth: {
     login: 'Prijava',
     loggingIn: 'Prijava u tijeku...',

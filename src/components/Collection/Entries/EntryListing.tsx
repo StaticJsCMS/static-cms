@@ -8,7 +8,7 @@ import { selectFields, selectInferedField } from '../../../lib/util/collection.u
 import EntryCard from './EntryCard';
 
 import type { CollectionViewStyle } from '../../../constants/collectionViews';
-import type { CmsField, Collection, Collections, Entry } from '../../../interface';
+import type { Field, Collection, Collections, Entry } from '../../../interface';
 import type Cursor from '../../../lib/util/Cursor';
 
 interface CardsGridProps {
@@ -83,7 +83,7 @@ const EntryListing = ({
       titleField?: string | null;
       descriptionField?: string | null;
       imageField?: string | null;
-      remainingFields?: CmsField[];
+      remainingFields?: Field[];
     } => {
       if (!collection) {
         return {};

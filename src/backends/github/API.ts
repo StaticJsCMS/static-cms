@@ -6,7 +6,6 @@ import result from 'lodash/result';
 import trim from 'lodash/trim';
 import trimStart from 'lodash/trimStart';
 import { dirname } from 'path';
-import semaphore from 'semaphore';
 
 import {
   APIError,
@@ -39,13 +38,6 @@ export interface Config {
   branch?: string;
   repo?: string;
   originRepo?: string;
-}
-
-interface TreeFile {
-  type: 'blob' | 'tree';
-  sha: string;
-  path: string;
-  raw?: string;
 }
 
 type Override<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
@@ -373,9 +365,7 @@ export default class API {
     await Promise.all(uploadPromises);
 
     return this.getDefaultBranch()
-      .then(branchData =>
-        this.updateTree(branchData.commit.sha, files as any),
-      )
+      .then(branchData => this.updateTree(branchData.commit.sha, files as any))
       .then(changeTree => this.commit(options.commitMessage, changeTree))
       .then(response => this.patchBranch(this.branch, response.sha));
   }

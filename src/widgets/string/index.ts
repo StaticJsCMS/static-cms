@@ -1,9 +1,9 @@
 import controlComponent from './StringControl';
 import previewComponent from './StringPreview';
 
-import type { CmsFieldStringOrText, CmsWidgetParam } from '../../interface';
+import type { FieldStringOrText, WidgetParam } from '../../interface';
 
-const StringWidget = (): CmsWidgetParam<string, CmsFieldStringOrText> => {
+const StringWidget = (): WidgetParam<string, FieldStringOrText> => {
   return {
     name: 'string',
     controlComponent,

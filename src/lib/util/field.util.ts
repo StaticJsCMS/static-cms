@@ -1,9 +1,9 @@
 import { keyToPathArray } from '../widgets/stringTemplate';
 
 import type { t } from 'react-polyglot';
-import type { CmsCollection, CmsField, Collection } from '../../interface';
+import type { Collection, Field } from '../../interface';
 
-export function selectField(collection: CmsCollection | Collection, key: string) {
+export function selectField(collection: Collection, key: string) {
   const array = keyToPathArray(key);
   let name: string | undefined;
   let field;
@@ -24,7 +24,7 @@ export function selectField(collection: CmsCollection | Collection, key: string)
   return field;
 }
 
-export function getFieldLabel(field: CmsField, t: t) {
+export function getFieldLabel(field: Field, t: t) {
   return `${field.label ?? field.name} ${`${
     !field.required ? ` (${t('editor.editorControl.field.optional')})` : ''
   }`}`;

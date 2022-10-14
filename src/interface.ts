@@ -4,7 +4,6 @@ import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-pol
 import type { Pluggable } from 'unified';
 import type { MediaFile as BackendMediaFile } from './backend';
 import type { EditorControlProps } from './components/Editor/EditorControlPane/EditorControl';
-import type { CollectionType } from './constants/collectionTypes';
 import type { formatExtensions } from './formats/formats';
 import type { I18N_STRUCTURE } from './lib/i18n';
 import type { AllowedEvent } from './lib/registry';
@@ -29,7 +28,7 @@ export type SortableField =
     }
   | ({
       key: string;
-    } & CmsField);
+    } & Field);
 
 export interface SortObject {
   key: string;
@@ -108,7 +107,7 @@ export interface FieldsErrors {
 }
 
 export type FieldValidationMethod = (
-  field: CmsField,
+  field: Field,
   value: ValueOrNestedValue | null | undefined,
   parentIds: string[],
   t: t,
@@ -127,14 +126,15 @@ export interface FilterRule {
 }
 
 export interface CollectionFile {
-  file: string;
   name: string;
-  fields: CmsField[];
   label: string;
+  file: string;
+  fields: Field[];
+  label_singular?: string;
+  description?: string;
   media_folder?: string;
   public_folder?: string;
-  preview_path?: string;
-  preview_path_date_field?: string;
+  i18n?: boolean | I18nInfo;
   editor?: {
     preview?: boolean;
   };
@@ -163,7 +163,7 @@ export interface Collection {
   icon?: string;
   folder?: string;
   files?: CollectionFile[];
-  fields: CmsField[];
+  fields: Field[];
   isFetching?: boolean;
   media_folder?: string;
   public_folder?: string;
@@ -182,17 +182,13 @@ export interface Collection {
   slug?: string;
   label_singular?: string;
   label: string;
-  sortable_fields: CmsSortableFields;
+  sortable_fields: SortableFields;
   view_filters: ViewFilter[];
   view_groups: ViewGroup[];
   nested?: Nested;
   i18n?:
     | boolean
-    | {
-        structure: I18N_STRUCTURE;
-        locales: string[];
-        default_locale: string;
-      };
+    | I18nInfo;
   hide?: boolean;
   editor?: {
     preview?: boolean;
@@ -225,22 +221,16 @@ export interface DisplayURLState {
 
 export type Hook = string | boolean;
 
-export interface Integration {
-  hooks: string[];
-  collections?: string | string[];
-  provider: string;
-}
-
 export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
-export type GetAssetFunction = (path: string, field?: CmsField) => AssetProxy;
+export type GetAssetFunction = (path: string, field?: Field) => AssetProxy;
 
-export interface CmsWidgetControlProps<T, F extends CmsField = CmsField> {
+export interface WidgetControlProps<T, F extends Field = Field> {
   clearFieldErrors: EditorControlProps['clearFieldErrors'];
   clearSearch: EditorControlProps['clearSearch'];
   collapsed?: boolean;
   collection: Collection;
-  config: CmsConfig;
+  config: Config;
   entry: Entry;
   field: F;
   fieldsErrors: FieldsErrors;
@@ -272,23 +262,23 @@ export interface CmsWidgetControlProps<T, F extends CmsField = CmsField> {
   value: T | undefined | null;
 }
 
-export interface CmsWidgetPreviewProps<T = unknown, F extends CmsField = CmsField> {
+export interface WidgetPreviewProps<T = unknown, F extends Field = Field> {
   entry: Entry;
   field: F;
   getAsset: GetAssetFunction;
   getRemarkPlugins: () => Pluggable[];
-  resolveWidget: <W = unknown, WF extends CmsField = CmsField>(name: string) => Widget<W, WF>;
+  resolveWidget: <W = unknown, WF extends Field = Field>(name: string) => Widget<W, WF>;
   value: T | undefined | null;
 }
 
-export type CmsWidgetPreviewComponent<T = unknown, F extends CmsField = CmsField> =
+export type WidgetPreviewComponent<T = unknown, F extends Field = Field> =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
-  | ComponentType<CmsWidgetPreviewProps<T, F>>;
+  | ComponentType<WidgetPreviewProps<T, F>>;
 
-export interface CmsTemplatePreviewProps {
+export interface TemplatePreviewProps {
   collection: Collection;
-  fields: CmsField[];
+  fields: Field[];
   entry: Entry;
   getAsset: GetAssetFunction;
   widgetFor: (name: string) => ReactNode;
@@ -303,12 +293,12 @@ export interface CmsTemplatePreviewProps {
       }[];
 }
 
-export type CmsTemplatePreviewComponent =
+export type TemplatePreviewComponent =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
-  | ComponentType<CmsTemplatePreviewProps>;
+  | ComponentType<TemplatePreviewProps>;
 
-export interface WidgetOptions<T = unknown, F extends CmsField = CmsField> {
+export interface WidgetOptions<T = unknown, F extends Field = Field> {
   validator?: Widget<T, F>['validator'];
   getValidValue?: Widget<T, F>['getValidValue'];
   schema?: Widget<T, F>['schema'];
@@ -316,9 +306,9 @@ export interface WidgetOptions<T = unknown, F extends CmsField = CmsField> {
   allowMapValue?: boolean;
 }
 
-export interface Widget<T = unknown, F extends CmsField = CmsField> {
-  control: ComponentType<CmsWidgetControlProps<T, F>>;
-  preview?: CmsWidgetPreviewComponent<T, F>;
+export interface Widget<T = unknown, F extends Field = Field> {
+  control: ComponentType<WidgetControlProps<T, F>>;
+  preview?: WidgetPreviewComponent<T, F>;
   validator: (props: {
     field: F;
     value: T | undefined | null;
@@ -330,7 +320,7 @@ export interface Widget<T = unknown, F extends CmsField = CmsField> {
   allowMapValue?: boolean;
 }
 
-export interface CmsWidgetParam<T = unknown, F extends CmsField = CmsField> {
+export interface WidgetParam<T = unknown, F extends Field = Field> {
   name: string;
   controlComponent: Widget<T, F>['control'];
   previewComponent?: Widget<T, F>['preview'];
@@ -352,8 +342,8 @@ export interface PreviewTemplateComponentProps {
       }[];
   getAsset: GetAssetFunction;
   boundGetAsset: (collection: Collection, path: string) => GetAssetFunction;
-  config: CmsConfig;
-  fields: CmsField[];
+  config: Config;
+  fields: Field[];
   isLoadingAsset: boolean;
   window: Window;
   document: Document;
@@ -431,9 +421,9 @@ export interface AuthenticatorConfig {
   clearHash?: () => void;
 }
 
-export abstract class CmsBackendClass {
+export abstract class BackendClass {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor(_config: CmsConfig, _options: CmsBackendInitializerOptions) {}
+  constructor(_config: Config, _options: BackendInitializerOptions) {}
 
   abstract authComponent(): (props: TranslatedProps<AuthenticationPageProps>) => JSX.Element;
   abstract restoreUser(user: User): Promise<User>;
@@ -475,39 +465,39 @@ export abstract class CmsBackendClass {
   }>;
 }
 
-export interface CmsLocalePhrasesRoot {
-  [property: string]: CmsLocalePhrases;
+export interface LocalePhrasesRoot {
+  [property: string]: LocalePhrases;
 }
-export type CmsLocalePhrases = string | { [property: string]: CmsLocalePhrases };
+export type LocalePhrases = string | { [property: string]: LocalePhrases };
 
-export type CmsIcon = () => JSX.Element;
+export type CustomIcon = () => JSX.Element;
 
-export type CmsWidgetValueSerializer = {
+export type WidgetValueSerializer = {
   serialize: (value: ValueOrNestedValue) => ValueOrNestedValue;
   deserialize: (value: ValueOrNestedValue) => ValueOrNestedValue;
 };
 
-export type CmsMediaLibraryOptions = Record<string, unknown>;
+export type MediaLibraryOptions = Record<string, unknown>;
 
-export interface CmsMediaLibraryInitOptions {
+export interface MediaLibraryInitOptions {
   options: Record<string, unknown> | undefined;
   handleInsert: (url: string | string[]) => void;
 }
 
-export interface CmsMediaLibraryExternalLibrary {
+export interface MediaLibraryExternalLibrary {
   name: string;
-  config?: CmsMediaLibraryOptions;
-  init: ({ options, handleInsert }: CmsMediaLibraryInitOptions) => Promise<MediaLibraryInstance>;
+  config?: MediaLibraryOptions;
+  init: ({ options, handleInsert }: MediaLibraryInitOptions) => Promise<MediaLibraryInstance>;
 }
 
-export interface CmsMediaLibraryInternalOptions {
+export interface MediaLibraryInternalOptions {
   allow_multiple?: boolean;
   choose_url?: boolean;
 }
 
-export type CmsMediaLibrary = CmsMediaLibraryExternalLibrary | CmsMediaLibraryInternalOptions;
+export type MediaLibrary = MediaLibraryExternalLibrary | MediaLibraryInternalOptions;
 
-export type CmsBackendType =
+export type BackendType =
   | 'azure'
   | 'git-gateway'
   | 'github'
@@ -516,9 +506,9 @@ export type CmsBackendType =
   | 'test-repo'
   | 'proxy';
 
-export type CmsMapWidgetType = 'Point' | 'LineString' | 'Polygon';
+export type MapWidgetType = 'Point' | 'LineString' | 'Polygon';
 
-export type CmsMarkdownWidgetButton =
+export type MarkdownWidgetButton =
   | 'bold'
   | 'italic'
   | 'code'
@@ -534,32 +524,16 @@ export type CmsMarkdownWidgetButton =
   | 'bulleted-list'
   | 'numbered-list';
 
-export interface CmsSelectWidgetOptionObject {
+export interface SelectWidgetOptionObject {
   label: string;
   value: string;
 }
 
-export type CmsCollectionFormatType =
-  | 'yml'
-  | 'yaml'
-  | 'toml'
-  | 'json'
-  | 'frontmatter'
-  | 'yaml-frontmatter'
-  | 'toml-frontmatter'
-  | 'json-frontmatter';
+export type AuthScope = 'repo' | 'public_repo';
 
-export type CmsAuthScope = 'repo' | 'public_repo';
+export type SlugEncoding = 'unicode' | 'ascii';
 
-export type CmsSlugEncoding = 'unicode' | 'ascii';
-
-export interface CmsI18nConfig {
-  structure: 'multiple_folders' | 'multiple_files' | 'single_file';
-  locales: string[];
-  default_locale?: string;
-}
-
-export interface CmsFieldBase {
+export interface FieldBase {
   name: string;
   label?: string;
   required?: boolean;
@@ -571,12 +545,12 @@ export interface CmsFieldBase {
   comment?: string;
 }
 
-export interface CmsFieldBoolean extends CmsFieldBase {
+export interface FieldBoolean extends FieldBase {
   widget: 'boolean';
   default?: boolean;
 }
 
-export interface CmsFieldCode extends CmsFieldBase {
+export interface FieldCode extends FieldBase {
   widget: 'code';
   default?: unknown;
 
@@ -590,7 +564,7 @@ export interface CmsFieldCode extends CmsFieldBase {
   } & Record<string, unknown>;
 }
 
-export interface CmsFieldColor extends CmsFieldBase {
+export interface FieldColor extends FieldBase {
   widget: 'color';
   default?: string;
 
@@ -598,7 +572,7 @@ export interface CmsFieldColor extends CmsFieldBase {
   enableAlpha?: boolean;
 }
 
-export interface CmsFieldDateTime extends CmsFieldBase {
+export interface FieldDateTime extends FieldBase {
   widget: 'datetime';
   default?: string;
 
@@ -621,26 +595,26 @@ export interface CmsFieldDateTime extends CmsFieldBase {
   pickerUtc?: boolean;
 }
 
-export interface CmsFieldFileOrImage extends CmsFieldBase {
+export interface FieldFileOrImage extends FieldBase {
   widget: 'file' | 'image';
   default?: string;
 
-  media_library?: CmsMediaLibrary;
+  media_library?: MediaLibrary;
   private?: boolean;
 }
 
-export interface CmsFieldObject extends CmsFieldBase {
+export interface FieldObject extends FieldBase {
   widget: 'object';
   default?: unknown;
 
   collapsed?: boolean;
   summary?: string;
-  fields: CmsField[];
+  fields: Field[];
 }
 
 export type ListValue = string | boolean | number | { [key: string]: ListValue };
 
-export interface CmsFieldList extends CmsFieldBase {
+export interface FieldList extends FieldBase {
   widget: 'list';
   default?: unknown;
 
@@ -649,30 +623,30 @@ export interface CmsFieldList extends CmsFieldBase {
   summary?: string;
   minimize_collapsed?: boolean;
   label_singular?: string;
-  field?: CmsField;
-  fields?: CmsField[];
+  field?: Field;
+  fields?: Field[];
   max?: number;
   min?: number;
   add_to_top?: boolean;
-  types?: CmsField[];
+  types?: Field[];
   typeKey?: string;
 }
 
-export interface CmsFieldMap extends CmsFieldBase {
+export interface FieldMap extends FieldBase {
   widget: 'map';
   default?: string;
 
   decimals?: number;
-  type?: CmsMapWidgetType;
+  type?: MapWidgetType;
   height?: string;
 }
 
-export interface CmsFieldMarkdown extends CmsFieldBase {
+export interface FieldMarkdown extends FieldBase {
   widget: 'markdown';
   default?: string;
 
   minimal?: boolean;
-  buttons?: CmsMarkdownWidgetButton[];
+  buttons?: MarkdownWidgetButton[];
   editor_components?: string[];
 
   /**
@@ -680,12 +654,12 @@ export interface CmsFieldMarkdown extends CmsFieldBase {
    */
   editorComponents?: string[];
   sanitize_preview?: boolean;
-  media_library?: CmsMediaLibrary;
+  media_library?: MediaLibrary;
   media_folder?: string;
   public_folder?: string;
 }
 
-export interface CmsFieldNumber extends CmsFieldBase {
+export interface FieldNumber extends FieldBase {
   widget: 'number';
   default?: string | number;
 
@@ -701,17 +675,17 @@ export interface CmsFieldNumber extends CmsFieldBase {
   valueType?: 'int' | 'float' | string;
 }
 
-export interface CmsFieldSelect extends CmsFieldBase {
+export interface FieldSelect extends FieldBase {
   widget: 'select';
   default?: string | string[];
 
-  options: string[] | CmsSelectWidgetOptionObject[];
+  options: string[] | SelectWidgetOptionObject[];
   multiple?: boolean;
   min?: number;
   max?: number;
 }
 
-export interface CmsFieldRelation extends CmsFieldBase {
+export interface FieldRelation extends FieldBase {
   widget: 'relation';
   default?: string | string[];
 
@@ -743,49 +717,32 @@ export interface CmsFieldRelation extends CmsFieldBase {
   optionsLength?: number;
 }
 
-export interface CmsFieldHidden extends CmsFieldBase {
+export interface FieldHidden extends FieldBase {
   widget: 'hidden';
   default?: unknown;
 }
 
-export interface CmsFieldStringOrText extends CmsFieldBase {
+export interface FieldStringOrText extends FieldBase {
   // This is the default widget, so declaring its type is optional.
   widget?: 'string' | 'text';
   default?: string;
 }
 
-export type CmsField =
-  | CmsFieldBoolean
-  | CmsFieldCode
-  | CmsFieldColor
-  | CmsFieldDateTime
-  | CmsFieldFileOrImage
-  | CmsFieldList
-  | CmsFieldMap
-  | CmsFieldMarkdown
-  | CmsFieldNumber
-  | CmsFieldObject
-  | CmsFieldRelation
-  | CmsFieldSelect
-  | CmsFieldHidden
-  | CmsFieldStringOrText;
-
-export interface CmsCollectionFile {
-  name: string;
-  label: string;
-  file: string;
-  fields: CmsField[];
-  label_singular?: string;
-  description?: string;
-  preview_path?: string;
-  preview_path_date_field?: string;
-  i18n?: boolean | CmsI18nConfig;
-  media_folder?: string;
-  public_folder?: string;
-  editor?: {
-    preview?: boolean;
-  };
-}
+export type Field =
+  | FieldBoolean
+  | FieldCode
+  | FieldColor
+  | FieldDateTime
+  | FieldFileOrImage
+  | FieldList
+  | FieldMap
+  | FieldMarkdown
+  | FieldNumber
+  | FieldObject
+  | FieldRelation
+  | FieldSelect
+  | FieldHidden
+  | FieldStringOrText;
 
 export interface ViewFilter {
   id: string;
@@ -807,64 +764,19 @@ export enum SortDirection {
   None = 'None',
 }
 
-export interface CmsSortableFieldsDefault {
+export interface SortableFieldsDefault {
   field: string;
   direction?: SortDirection;
 }
 
-export interface CmsSortableFields {
-  default?: CmsSortableFieldsDefault;
+export interface SortableFields {
+  default?: SortableFieldsDefault;
   fields: string[];
 }
 
-export interface CmsCollection {
-  name: string;
-  type?: CollectionType;
-  icon?: string;
-  label: string;
-  label_singular?: string;
-  description?: string;
-  folder?: string;
-  files?: CmsCollectionFile[];
-  identifier_field?: string;
-  summary?: string;
-  slug?: string;
-  preview_path?: string;
-  preview_path_date_field?: string;
-  create?: boolean;
-  delete?: boolean;
-  hide?: boolean;
-  editor?: {
-    preview?: boolean;
-  };
-  publish?: boolean;
-  nested?: {
-    depth: number;
-  };
-
-  /**
-   * It accepts the following values: yml, yaml, toml, json, md, markdown, html
-   *
-   * You may also specify a custom extension not included in the list above, by specifying the format value.
-   */
-  extension?: string;
-  format?: CmsCollectionFormatType;
-
-  frontmatter_delimiter?: string[] | string;
-  fields?: CmsField[];
-  filter?: { field: string; value: string };
-  path?: string;
-  media_folder?: string;
-  public_folder?: string;
-  sortable_fields?: CmsSortableFields;
-  view_filters?: ViewFilter[];
-  view_groups?: ViewGroup[];
-  i18n?: boolean | CmsI18nConfig;
-}
-
-export interface CmsBackend {
-  name: CmsBackendType;
-  auth_scope?: CmsAuthScope;
+export interface Backend {
+  name: BackendType;
+  auth_scope?: AuthScope;
   repo?: string;
   branch?: string;
   api_root?: string;
@@ -892,20 +804,20 @@ export interface CmsBackend {
   };
 }
 
-export interface CmsSlug {
-  encoding?: CmsSlugEncoding;
+export interface Slug {
+  encoding?: SlugEncoding;
   clean_accents?: boolean;
   sanitize_replacement?: string;
 }
 
-export interface CmsLocalBackend {
+export interface LocalBackend {
   url?: string;
   allowed_hosts?: string[];
 }
 
-export interface CmsConfig {
-  backend: CmsBackend;
-  collections: CmsCollection[];
+export interface Config {
+  backend: Backend;
+  collections: Collection[];
   locale?: string;
   site_id?: string;
   site_url?: string;
@@ -915,12 +827,12 @@ export interface CmsConfig {
   media_folder?: string;
   public_folder?: string;
   media_folder_relative?: boolean;
-  media_library?: CmsMediaLibrary;
+  media_library?: MediaLibrary;
   load_config_file?: boolean;
-  integrations?: CmsIntegration[];
-  slug?: CmsSlug;
-  i18n?: CmsI18nConfig;
-  local_backend?: boolean | CmsLocalBackend;
+  integrations?: Integration[];
+  slug?: Slug;
+  i18n?: I18nInfo;
+  local_backend?: boolean | LocalBackend;
   editor?: {
     preview?: boolean;
   };
@@ -928,15 +840,15 @@ export interface CmsConfig {
 }
 
 export interface InitOptions {
-  config: CmsConfig;
+  config: Config;
 }
 
-export interface CmsBackendInitializerOptions {
+export interface BackendInitializerOptions {
   updateUserCredentials: (credentials: Credentials) => void;
 }
 
-export interface CmsBackendInitializer {
-  init: (config: CmsConfig, options: CmsBackendInitializerOptions) => CmsBackendClass;
+export interface BackendInitializer {
+  init: (config: Config, options: BackendInitializerOptions) => BackendClass;
 }
 
 export interface EditorComponentWidgetOptions {
@@ -949,12 +861,12 @@ export interface EditorComponentWidgetOptions {
 export interface EditorComponentManualOptions<T = EntryData> {
   id: string;
   label: string;
-  fields: CmsField[];
+  fields: Field[];
   pattern: RegExp;
   allow_add?: boolean;
   fromBlock: (match: RegExpMatchArray) => T;
   toBlock: (data: T) => string;
-  toPreview: (data: T, getAsset: GetAssetFunction, fields: CmsField[]) => ReactNode;
+  toPreview: (data: T, getAsset: GetAssetFunction, fields: Field[]) => ReactNode;
 }
 
 export function isEditorComponentWidgetOptions(
@@ -972,7 +884,7 @@ export interface EventData {
   author: { login: string | undefined; name: string };
 }
 
-export interface CmsEventListener {
+export interface EventListener {
   name: AllowedEvent;
   handler: (
     data: EventData,
@@ -980,7 +892,7 @@ export interface CmsEventListener {
   ) => Promise<EntryData | undefined | null | void>;
 }
 
-export type CmsEventListenerOptions = Record<string, unknown>;
+export type EventListenerOptions = Record<string, unknown>;
 
 export interface AdditionalLink {
   id: string;
@@ -997,18 +909,18 @@ export interface AuthenticationPageProps {
   base_url?: string;
   siteId?: string;
   authEndpoint?: string;
-  config: CmsConfig;
+  config: Config;
   error?: string | undefined;
   clearHash?: () => void;
 }
 
-export type CmsIntegration = {
+export type Integration = {
   collections?: '*' | string[];
 } & (AlgoliaIntegration | AssetStoreIntegration);
 
-export type CmsIntegrationProvider = CmsIntegration['provider'];
-export type CmsSearchIntegrationProvider = 'algolia';
-export type CmsMediaIntegrationProvider = 'assetStore';
+export type IntegrationProvider = Integration['provider'];
+export type SearchIntegrationProvider = 'algolia';
+export type MediaIntegrationProvider = 'assetStore';
 
 export interface AlgoliaIntegration extends AlgoliaConfig {
   provider: 'algolia';

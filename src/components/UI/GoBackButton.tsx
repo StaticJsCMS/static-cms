@@ -4,7 +4,7 @@ import React from 'react';
 
 import { colorsRaw } from './styles';
 
-import type { TranslatedProps } from '../interface';
+import type { TranslatedProps } from '../../interface';
 
 const GoBackButtonStyle = styled.a`
   display: flex;

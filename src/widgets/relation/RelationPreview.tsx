@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { WidgetPreviewContainer } from '../../ui';
+import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { CmsFieldRelation, CmsWidgetPreviewProps } from '../../interface';
+import type { FieldRelation, WidgetPreviewProps } from '../../interface';
 
-function RelationPreview({ value }: CmsWidgetPreviewProps<string | string[], CmsFieldRelation>) {
+function RelationPreview({ value }: WidgetPreviewProps<string | string[], FieldRelation>) {
   return <WidgetPreviewContainer>{value}</WidgetPreviewContainer>;
 }
 

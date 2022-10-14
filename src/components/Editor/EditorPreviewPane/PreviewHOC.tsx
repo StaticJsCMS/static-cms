@@ -1,11 +1,11 @@
 import React from 'react';
 
-import type { CmsWidgetPreviewComponent, CmsWidgetPreviewProps } from '../../../interface';
+import type { WidgetPreviewComponent, WidgetPreviewProps } from '../../../interface';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-interface PreviewHOCProps extends CmsWidgetPreviewProps {
+interface PreviewHOCProps extends WidgetPreviewProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  previewComponent: CmsWidgetPreviewComponent;
+  previewComponent: WidgetPreviewComponent;
 }
 
 const PreviewHOC = ({ previewComponent, ...props }: PreviewHOCProps) => {

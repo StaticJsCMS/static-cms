@@ -24,11 +24,11 @@ import AuthenticationPage from './AuthenticationPage';
 import type { Semaphore } from 'semaphore';
 import type { AsyncLock, Cursor } from '../../lib/util';
 import type {
-  CmsConfig,
+  Config,
   Credentials,
   DisplayURL,
   BackendEntry,
-  CmsBackendClass,
+  BackendClass,
   ImplementationFile,
   PersistOptions,
   User,
@@ -37,7 +37,7 @@ import type AssetProxy from '../../valueObjects/AssetProxy';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 
-export default class GitLab implements CmsBackendClass {
+export default class GitLab implements BackendClass {
   lock: AsyncLock;
   api: API | null;
   options: {
@@ -54,7 +54,7 @@ export default class GitLab implements CmsBackendClass {
 
   _mediaDisplayURLSem?: Semaphore;
 
-  constructor(config: CmsConfig, options = {}) {
+  constructor(config: Config, options = {}) {
     this.options = {
       proxied: false,
       API: null,

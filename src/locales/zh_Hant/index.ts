@@ -1,6 +1,6 @@
-import type { CmsLocalePhrasesRoot } from '../../interface';
+import type { LocalePhrasesRoot } from '../../interface';
 
-const zh_Hant: CmsLocalePhrasesRoot = {
+const zh_Hant: LocalePhrasesRoot = {
   auth: {
     login: '登入',
     loggingIn: '正在登入...',

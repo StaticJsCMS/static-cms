@@ -5,7 +5,7 @@ import { folderFormatter } from '../formatters';
 import { joinUrlPath } from '../urlHelper';
 import { basename, isAbsolutePath } from '.';
 
-import type { CmsConfig, CmsField, Collection, CollectionFile, Entry } from '../../interface';
+import type { Config, Field, Collection, CollectionFile, Entry } from '../../interface';
 
 export const DRAFT_MEDIA_FILES = 'DRAFT_MEDIA_FILES';
 
@@ -18,7 +18,7 @@ function hasCustomFolder(
   folderKey: 'media_folder' | 'public_folder',
   collection: Collection | undefined | null,
   slug: string | undefined,
-  field: CmsField | undefined,
+  field: Field | undefined,
 ) {
   if (!collection) {
     return false;
@@ -44,10 +44,10 @@ function hasCustomFolder(
 
 function evaluateFolder(
   folderKey: 'media_folder' | 'public_folder',
-  config: CmsConfig,
+  config: Config,
   c: Collection,
   entryMap: Entry | undefined,
-  field: CmsField | undefined,
+  field: Field | undefined,
 ) {
   let currentFolder = config[folderKey]!;
 
@@ -94,7 +94,7 @@ function evaluateFolder(
           collection,
           entryMap,
           field,
-          file.fields! as CmsField[],
+          file.fields! as Field[],
           currentFolder,
         );
 
@@ -122,7 +122,7 @@ function evaluateFolder(
         collection,
         entryMap,
         field,
-        collection.fields! as CmsField[],
+        collection.fields! as Field[],
         currentFolder,
       );
 
@@ -137,11 +137,11 @@ function evaluateFolder(
 
 function traverseFields(
   folderKey: 'media_folder' | 'public_folder',
-  config: CmsConfig,
+  config: Config,
   collection: Collection,
   entryMap: Entry | undefined,
-  field: CmsField,
-  fields: CmsField[],
+  field: Field,
+  fields: Field[],
   currentFolder: string,
 ): string | null {
   const matchedField = fields.filter(f => f === field)[0];
@@ -211,10 +211,10 @@ function traverseFields(
 }
 
 export function selectMediaFolder(
-  config: CmsConfig,
+  config: Config,
   collection: Collection | undefined | null,
   entryMap: Entry | undefined,
-  field: CmsField | undefined,
+  field: Field | undefined,
 ) {
   const name = 'media_folder';
   let mediaFolder = config[name];
@@ -238,11 +238,11 @@ export function selectMediaFolder(
 }
 
 export function selectMediaFilePublicPath(
-  config: CmsConfig,
+  config: Config,
   collection: Collection | null,
   mediaPath: string,
   entryMap: Entry | undefined,
-  field: CmsField | undefined,
+  field: Field | undefined,
 ) {
   if (isAbsolutePath(mediaPath)) {
     return mediaPath;
@@ -265,11 +265,11 @@ export function selectMediaFilePublicPath(
 }
 
 export function selectMediaFilePath(
-  config: CmsConfig,
+  config: Config,
   collection: Collection | null,
   entryMap: Entry | undefined,
   mediaPath: string,
-  field: CmsField | undefined,
+  field: Field | undefined,
 ) {
   if (isAbsolutePath(mediaPath)) {
     return mediaPath;

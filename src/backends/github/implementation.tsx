@@ -25,8 +25,8 @@ import type { Octokit } from '@octokit/rest';
 import type { Semaphore } from 'semaphore';
 import type {
   BackendEntry,
-  CmsBackendClass,
-  CmsConfig,
+  BackendClass,
+  Config,
   Credentials,
   DisplayURL,
   ImplementationFile,
@@ -53,7 +53,7 @@ type GitHubStatusComponent = {
   status: string;
 };
 
-export default class GitHub implements CmsBackendClass {
+export default class GitHub implements BackendClass {
   lock: AsyncLock;
   api: API | null;
   options: {
@@ -73,7 +73,7 @@ export default class GitHub implements CmsBackendClass {
   };
   _mediaDisplayURLSem?: Semaphore;
 
-  constructor(config: CmsConfig, options = {}) {
+  constructor(config: Config, options = {}) {
     this.options = {
       proxied: false,
       API: null,

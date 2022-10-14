@@ -10,8 +10,8 @@ import AuthenticationPage from './AuthenticationPage';
 
 import type {
   BackendEntry,
-  CmsBackendClass,
-  CmsConfig,
+  BackendClass,
+  Config,
   DisplayURL,
   ImplementationEntry,
   ImplementationFile,
@@ -102,11 +102,11 @@ export function getFolderFiles(
   return files;
 }
 
-export default class TestBackend implements CmsBackendClass {
+export default class TestBackend implements BackendClass {
   mediaFolder?: string;
   options: {};
 
-  constructor(config: CmsConfig, options = {}) {
+  constructor(config: Config, options = {}) {
     this.options = options;
     this.mediaFolder = config.media_folder;
   }

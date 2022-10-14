@@ -1,8 +1,8 @@
 import controlComponent from './BooleanControl';
 
-import type { CmsFieldBoolean, CmsWidgetParam } from '../../interface';
+import type { FieldBoolean, WidgetParam } from '../../interface';
 
-const BooleanWidget = (): CmsWidgetParam<boolean, CmsFieldBoolean> => {
+const BooleanWidget = (): WidgetParam<boolean, FieldBoolean> => {
   return {
     name: 'boolean',
     controlComponent,

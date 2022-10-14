@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { buttons, shadows, zIndex } from '../../ui';
+import { buttons, shadows, zIndex } from '../../components/UI/styles';
 
 import type { MouseEvent } from 'react';
 

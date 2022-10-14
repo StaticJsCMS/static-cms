@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { WidgetPreviewContainer } from '../../ui';
+import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { CmsFieldColor, CmsWidgetPreviewProps } from '../../interface';
+import type { FieldColor, WidgetPreviewProps } from '../../interface';
 
-const ColorPreview = ({ value }: CmsWidgetPreviewProps<string, CmsFieldColor>) => {
+const ColorPreview = ({ value }: WidgetPreviewProps<string, FieldColor>) => {
   return <WidgetPreviewContainer>{value}</WidgetPreviewContainer>;
 };
 

@@ -6,11 +6,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
+import { colors, components } from '../../components/UI/styles';
 import { transientOptions } from '../../lib';
 import { selectEntryCollectionTitle } from '../../lib/util/collection.util';
 import { stringTemplate } from '../../lib/widgets';
 import { selectEntries } from '../../reducers/entries';
-import { colors, components } from '../../ui';
 
 import type { ConnectedProps } from 'react-redux';
 import type { Collection, Entry } from '../../interface';

@@ -3,17 +3,17 @@ import previewComponent from './ObjectPreview';
 import schema from './schema';
 
 import type {
-  CmsFieldList,
-  CmsFieldObject,
-  CmsWidgetParam,
+  FieldList,
+  FieldObject,
+  WidgetParam,
   ValueOrNestedValue,
 } from '../../interface';
 
-const ObjectWidget = (): CmsWidgetParam<
+const ObjectWidget = (): WidgetParam<
   {
     [key: string]: ValueOrNestedValue;
   },
-  CmsFieldObject | CmsFieldList
+  FieldObject | FieldList
 > => {
   return {
     name: 'object',

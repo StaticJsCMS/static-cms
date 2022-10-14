@@ -8,7 +8,7 @@ import React from 'react';
 import { translate } from 'react-polyglot';
 
 import { transientOptions } from '../../lib';
-import { colors, colorsRaw } from '../../ui';
+import { colors, colorsRaw } from '../../components/UI/styles';
 import EmptyMessage from './EmptyMessage';
 import MediaLibraryCardGrid from './MediaLibraryCardGrid';
 import MediaLibraryTop from './MediaLibraryTop';

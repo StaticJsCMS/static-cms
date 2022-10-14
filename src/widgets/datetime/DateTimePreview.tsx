@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { WidgetPreviewContainer } from '../../ui';
+import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { CmsFieldDateTime, CmsWidgetPreviewProps } from '../../interface';
+import type { FieldDateTime, WidgetPreviewProps } from '../../interface';
 
-function DatePreview({ value }: CmsWidgetPreviewProps<string, CmsFieldDateTime>) {
+function DatePreview({ value }: WidgetPreviewProps<string, FieldDateTime>) {
   return <WidgetPreviewContainer>{value ? value.toString() : null}</WidgetPreviewContainer>;
 }
 

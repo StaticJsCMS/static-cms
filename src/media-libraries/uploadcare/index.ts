@@ -1,7 +1,7 @@
 import uploadcare from 'uploadcare-widget';
 import uploadcareTabEffects from 'uploadcare-widget-tab-effects';
 
-import type { CmsMediaLibraryInitOptions, MediaLibraryInstance } from '../../interface';
+import type { MediaLibraryInitOptions, MediaLibraryInstance } from '../../interface';
 
 declare global {
   interface Window {
@@ -159,7 +159,7 @@ function openDialog({ files, config, handleInsert, settings = {} }: OpenDialogOp
 async function init({
   options = { config: {}, settings: {} },
   handleInsert,
-}: CmsMediaLibraryInitOptions): Promise<MediaLibraryInstance> {
+}: MediaLibraryInitOptions): Promise<MediaLibraryInstance> {
   const { publicKey, ...globalConfig } = options.config as {
     publicKey: string;
   } & Record<string, unknown>;
@@ -228,5 +228,5 @@ async function init({
  */
 const uploadcareMediaLibrary = { name: 'uploadcare', init };
 
-export const StaticCmsMediaLibraryUploadcare = uploadcareMediaLibrary;
+export const StaticMediaLibraryUploadcare = uploadcareMediaLibrary;
 export default uploadcareMediaLibrary;

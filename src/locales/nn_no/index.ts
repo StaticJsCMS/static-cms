@@ -1,6 +1,6 @@
-import type { CmsLocalePhrasesRoot } from '../../interface';
+import type { LocalePhrasesRoot } from '../../interface';
 
-const nn_no: CmsLocalePhrasesRoot = {
+const nn_no: LocalePhrasesRoot = {
   auth: {
     login: 'Logg inn',
     loggingIn: 'Loggar inn..',

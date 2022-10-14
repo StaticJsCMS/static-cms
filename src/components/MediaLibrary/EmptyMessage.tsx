@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
+import { colors } from '../../components/UI/styles';
 import { transientOptions } from '../../lib';
-import { colors } from '../../ui';
 
 interface EmptyMessageContainerProps {
   $isPrivate: boolean;

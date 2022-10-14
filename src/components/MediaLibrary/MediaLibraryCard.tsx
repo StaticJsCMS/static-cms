@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import React, { useEffect, useMemo } from 'react';
 
 import { transientOptions } from '../../lib';
-import { borders, colors, effects, lengths, shadows } from '../../ui';
+import { borders, colors, effects, lengths, shadows } from '../../components/UI/styles';
 
 import type { MediaLibraryDisplayURL } from '../../reducers/mediaLibrary';
 

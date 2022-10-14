@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { WidgetPreviewContainer } from '../../ui';
+import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { CmsFieldStringOrText, CmsWidgetPreviewProps } from '../../interface';
+import type { FieldStringOrText, WidgetPreviewProps } from '../../interface';
 
-const TextPreview = ({ value }: CmsWidgetPreviewProps<string, CmsFieldStringOrText>) => {
+const TextPreview = ({ value }: WidgetPreviewProps<string, FieldStringOrText>) => {
   return <WidgetPreviewContainer>{value}</WidgetPreviewContainer>;
 };
 

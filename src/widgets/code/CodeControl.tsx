@@ -13,7 +13,7 @@ import SettingsButton from './SettingsButton';
 import SettingsPane from './SettingsPane';
 
 import type { Editor } from 'codemirror';
-import type { CmsFieldCode, CmsWidgetControlProps } from '../../interface';
+import type { FieldCode, WidgetControlProps } from '../../interface';
 
 interface CodeLanguage {
   label: string;
@@ -61,10 +61,10 @@ const CodeControl = ({
   field,
   value,
   onChange,
-}: CmsWidgetControlProps<string | { [key: string]: string }, CmsFieldCode>) => {
+}: WidgetControlProps<string | { [key: string]: string }, FieldCode>) => {
   // If the value is a map, keys can be customized via config.
   const getKeys = useCallback(
-    (field: CmsFieldCode) => {
+    (field: FieldCode) => {
       const defaults = {
         code: 'code',
         lang: 'lang',

@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
 import React, { useCallback, useEffect } from 'react';
 
-import { buttons, GoBackButton, shadows } from '../../ui';
+import GoBackButton from '../../components/UI/GoBackButton';
 import Icon from '../../components/UI/Icon';
+import { buttons, shadows } from '../../components/UI/styles';
 
 import type { MouseEvent } from 'react';
 import type { AuthenticationPageProps, TranslatedProps } from '../../interface';
@@ -53,10 +54,13 @@ const AuthenticationPage = ({
     }
   }, [config.backend.login, onLogin]);
 
-  const handleLogin = useCallback((e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    onLogin({ token: 'fake_token' });
-  }, [onLogin]);
+  const handleLogin = useCallback(
+    (e: MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      onLogin({ token: 'fake_token' });
+    },
+    [onLogin],
+  );
 
   return (
     <StyledAuthenticationPage>

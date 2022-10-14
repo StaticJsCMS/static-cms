@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import { transientOptions } from '../lib';
+import { transientOptions } from '../../lib';
 import { colors, colorsRaw, transitions, text } from './styles';
 
 const stateColors = {

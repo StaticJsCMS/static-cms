@@ -4,8 +4,8 @@ import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
+import { lengths } from '../../components/UI/styles';
 import { getAdditionalLink } from '../../lib/registry';
-import { lengths } from '../../ui';
 import Sidebar from '../Collection/Sidebar';
 
 import type { ComponentType } from 'react';

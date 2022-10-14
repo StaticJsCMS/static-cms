@@ -24,7 +24,7 @@ import type { ThunkDispatch } from 'redux-thunk';
 import type { Backend } from '../backend';
 import type { CollectionViewStyle } from '../constants/collectionViews';
 import type {
-  CmsField,
+  Field,
   Collection,
   Entry,
   EntryData,
@@ -477,7 +477,7 @@ export function changeDraftField({
   i18n,
 }: {
   path: string;
-  field: CmsField;
+  field: Field;
   value: ValueOrNestedValue;
   entry?: Entry | null;
   i18n?: I18nSettings;
@@ -867,8 +867,8 @@ export function createEmptyDraft(collection: Collection, search: string) {
 }
 
 export function createEmptyDraftData(
-  fields: CmsField[],
-  skipField: (field: CmsField) => boolean = () => false,
+  fields: Field[],
+  skipField: (field: Field) => boolean = () => false,
 ) {
   return fields.reduce((acc, item) => {
     if (skipField(item)) {
@@ -909,12 +909,12 @@ export function createEmptyDraftData(
   }, {} as Record<string, ValueOrNestedValue>);
 }
 
-function createEmptyDraftI18nData(collection: Collection, dataFields: CmsField[]) {
+function createEmptyDraftI18nData(collection: Collection, dataFields: Field[]) {
   if (!hasI18n(collection)) {
     return {};
   }
 
-  function skipField(field: CmsField) {
+  function skipField(field: Field) {
     return field.i18n !== I18N_FIELD.DUPLICATE && field.i18n !== I18N_FIELD.TRANSLATE;
   }
 

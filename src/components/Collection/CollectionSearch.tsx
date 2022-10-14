@@ -6,7 +6,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { translate } from 'react-polyglot';
 
 import { transientOptions } from '../../lib';
-import { colors, colorsRaw, lengths, zIndex } from '../../ui';
+import { colors, colorsRaw, lengths, zIndex } from '../../components/UI/styles';
 
 import type { KeyboardEvent, MouseEvent } from 'react';
 import type { Collection, Collections, TranslatedProps } from '../../interface';

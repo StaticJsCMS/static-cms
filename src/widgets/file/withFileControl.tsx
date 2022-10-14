@@ -7,11 +7,18 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import uuid from 'uuid/v4';
 
+import {
+  borders,
+  buttons,
+  components,
+  effects,
+  lengths,
+  shadows,
+} from '../../components/UI/styles';
 import { basename, transientOptions } from '../../lib/util';
-import { borders, buttons, components, effects, lengths, shadows } from '../../ui';
 
 import type { MouseEvent, MouseEventHandler } from 'react';
-import type { CmsFieldFileOrImage, CmsWidgetControlProps, GetAssetFunction } from '../../interface';
+import type { FieldFileOrImage, WidgetControlProps, GetAssetFunction } from '../../interface';
 
 const MAX_DISPLAY_LENGTH = 50;
 
@@ -82,7 +89,7 @@ const SortableImageButtons = ({ onRemove, onReplace }: SortableImageButtonsProps
 interface SortableImageProps {
   itemValue: string;
   getAsset: GetAssetFunction;
-  field: CmsFieldFileOrImage;
+  field: FieldFileOrImage;
   onRemove: MouseEventHandler;
   onReplace: MouseEventHandler;
 }
@@ -108,7 +115,7 @@ const StyledSortableMultiImageWrapper = styled.div`
 interface SortableMultiImageWrapperProps {
   items: string[];
   getAsset: GetAssetFunction;
-  field: CmsFieldFileOrImage;
+  field: FieldFileOrImage;
   onRemoveOne: (index: number) => MouseEventHandler;
   onReplaceOne: (index: number) => MouseEventHandler;
 }
@@ -201,7 +208,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
     getAsset,
     mediaPaths,
     t,
-  }: CmsWidgetControlProps<string | string[], CmsFieldFileOrImage>) => {
+  }: WidgetControlProps<string | string[], FieldFileOrImage>) => {
     const controlID = useMemo(() => uuid(), []);
 
     useEffect(() => {

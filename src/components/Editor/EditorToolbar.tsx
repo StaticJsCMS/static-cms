@@ -11,7 +11,7 @@ import Toolbar from '@mui/material/Toolbar';
 import React, { useCallback, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 
-import { colors, components, zIndex } from '../../ui';
+import { colors, components, zIndex } from '../../components/UI/styles';
 import { SettingsDropdown } from '../UI';
 import NavLink from '../UI/NavLink';
 

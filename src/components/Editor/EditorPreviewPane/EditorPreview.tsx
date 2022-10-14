@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
-import type { CmsField, CmsTemplatePreviewProps } from '../../../interface';
+import type { Field, TemplatePreviewProps } from '../../../interface';
 
-function isVisible(field: CmsField) {
+function isVisible(field: Field) {
   return field.widget !== 'hidden';
 }
 
@@ -15,7 +15,7 @@ const PreviewContainer = styled.div`
   font-family: Roboto, 'Helvetica Neue', HelveticaNeue, Helvetica, Arial, sans-serif;
 `;
 
-const Preview = ({ collection, fields, widgetFor }: CmsTemplatePreviewProps) => {
+const Preview = ({ collection, fields, widgetFor }: TemplatePreviewProps) => {
   if (!collection || !fields) {
     return null;
   }

@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import copyToClipboard from 'copy-text-to-clipboard';
 import Button from '@mui/material/Button';
 
-import { buttons, shadows, zIndex } from '../../ui';
+import { buttons, shadows, zIndex } from '../../components/UI/styles';
 import { isAbsolutePath } from '../../lib/util';
 import { FileUploadButton } from '../UI';
 

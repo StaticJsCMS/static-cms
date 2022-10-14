@@ -3,10 +3,10 @@ import { produce } from 'immer';
 import { CONFIG_FAILURE, CONFIG_REQUEST, CONFIG_SUCCESS } from '../actions/config';
 
 import type { ConfigAction } from '../actions/config';
-import type { CmsConfig } from '../interface';
+import type { Config } from '../interface';
 
 export interface ConfigState {
-  config?: CmsConfig;
+  config?: Config;
   isFetching: boolean;
   error?: string;
 }
@@ -32,7 +32,7 @@ const config = produce((state: ConfigState, action: ConfigAction) => {
   }
 }, defaultState);
 
-export function selectLocale(state?: CmsConfig) {
+export function selectLocale(state?: Config) {
   return state?.locale || 'en';
 }
 

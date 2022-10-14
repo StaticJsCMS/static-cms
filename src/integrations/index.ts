@@ -4,8 +4,8 @@ import AssetStore from './providers/assetStore/implementation';
 import type {
   AlgoliaConfig,
   AssetStoreConfig,
-  CmsMediaIntegrationProvider,
-  CmsSearchIntegrationProvider,
+  MediaIntegrationProvider,
+  SearchIntegrationProvider,
 } from '../interface';
 
 interface IntegrationsConfig {
@@ -43,7 +43,7 @@ export const getSearchIntegrationProvider = (function () {
   return (
     config: IntegrationsConfig | undefined,
     getToken: () => Promise<string | null>,
-    provider: CmsSearchIntegrationProvider,
+    provider: SearchIntegrationProvider,
   ) => {
     if (provider in (config?.providers ?? {}))
       if (integrations) {
@@ -61,7 +61,7 @@ export const getMediaIntegrationProvider = (function () {
   return (
     config: IntegrationsConfig | undefined,
     getToken: () => Promise<string | null>,
-    provider: CmsMediaIntegrationProvider,
+    provider: MediaIntegrationProvider,
   ) => {
     if (provider in (config?.providers ?? {}))
       if (integrations) {

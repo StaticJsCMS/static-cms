@@ -2,7 +2,7 @@ import TextField from '@mui/material/TextField';
 import React, { useCallback, useState } from 'react';
 
 import type { t } from 'react-polyglot';
-import type { CmsFieldNumber, CmsWidgetControlProps } from '../../interface';
+import type { FieldNumber, WidgetControlProps } from '../../interface';
 import type { ChangeEvent } from 'react';
 
 const ValidationErrorTypes = {
@@ -16,7 +16,7 @@ export function validateMinMax(
   value: string | number,
   min: number | false,
   max: number | false,
-  field: CmsFieldNumber,
+  field: FieldNumber,
   t: t,
 ) {
   let error;
@@ -63,7 +63,7 @@ const NumberControl = ({
   field,
   value,
   onChange,
-}: CmsWidgetControlProps<string | number, CmsFieldNumber>) => {
+}: WidgetControlProps<string | number, FieldNumber>) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
 
   const handleChange = useCallback(

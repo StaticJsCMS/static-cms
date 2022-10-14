@@ -18,7 +18,7 @@ import { selectMediaFilePath, selectMediaFilePublicPath } from '../lib/util/medi
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type {
-  CmsField,
+  Field,
   DisplayURLState,
   ImplementationMediaFile,
   MediaFile,
@@ -85,7 +85,7 @@ export function openMediaLibrary(
     allowMultiple?: boolean;
     replaceIndex?: number;
     config?: Record<string, unknown>;
-    field?: CmsField;
+    field?: Field;
   } = {},
 ) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
@@ -110,7 +110,7 @@ export function closeMediaLibrary() {
   };
 }
 
-export function insertMedia(mediaPath: string | string[], field: CmsField | undefined) {
+export function insertMedia(mediaPath: string | string[], field: Field | undefined) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const config = state.config.config;
@@ -494,7 +494,7 @@ function mediaLibraryOpened(payload: {
   replaceIndex?: number;
   allowMultiple?: boolean;
   config?: Record<string, unknown>;
-  field?: CmsField;
+  field?: Field;
 }) {
   return { type: MEDIA_LIBRARY_OPEN, payload } as const;
 }
@@ -516,7 +516,7 @@ export function mediaLoading(page: number) {
 
 export interface MediaOptions {
   privateUpload?: boolean;
-  field?: CmsField;
+  field?: Field;
   page?: number;
   canPaginate?: boolean;
   dynamicSearch?: boolean;

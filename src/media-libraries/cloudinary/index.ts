@@ -2,7 +2,7 @@ import pick from 'lodash/pick';
 
 import { loadScript } from '../../lib/util';
 
-import type { CmsMediaLibraryInitOptions, MediaLibraryInstance } from '../../interface';
+import type { MediaLibraryInitOptions, MediaLibraryInstance } from '../../interface';
 
 interface GetAssetOptions {
   use_secure_url: boolean;
@@ -87,7 +87,7 @@ function getAssetUrl(
 async function init({
   options,
   handleInsert,
-}: CmsMediaLibraryInitOptions): Promise<MediaLibraryInstance> {
+}: MediaLibraryInitOptions): Promise<MediaLibraryInstance> {
   /**
    * Configuration is specific to Cloudinary, while options are specific to this
    * integration.
@@ -126,5 +126,5 @@ async function init({
 
 const cloudinaryMediaLibrary = { name: 'cloudinary', init };
 
-export const StaticCmsMediaLibraryCloudinary = cloudinaryMediaLibrary;
+export const StaticMediaLibraryCloudinary = cloudinaryMediaLibrary;
 export default cloudinaryMediaLibrary;

@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
-import { WidgetPreviewContainer } from '../../ui';
+import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { CmsFieldFileOrImage, CmsWidgetPreviewProps, GetAssetFunction } from '../../interface';
+import type { FieldFileOrImage, WidgetPreviewProps, GetAssetFunction } from '../../interface';
 
 interface StyledImageProps {
   src: string;
@@ -20,7 +20,7 @@ const StyledImage = styled(({ src }: StyledImageProps) => (
 interface StyledImageAsset {
   getAsset: GetAssetFunction;
   value: string;
-  field: CmsFieldFileOrImage;
+  field: FieldFileOrImage;
 }
 
 function StyledImageAsset({ getAsset, value, field }: StyledImageAsset) {
@@ -31,7 +31,7 @@ function ImagePreviewContent({
   value,
   getAsset,
   field,
-}: CmsWidgetPreviewProps<string | string[], CmsFieldFileOrImage>) {
+}: WidgetPreviewProps<string | string[], FieldFileOrImage>) {
   if (!value) {
     return null;
   }
@@ -49,7 +49,7 @@ function ImagePreviewContent({
   return <StyledImageAsset value={value} getAsset={getAsset} field={field} />;
 }
 
-function ImagePreview(props: CmsWidgetPreviewProps<string | string[], CmsFieldFileOrImage>) {
+function ImagePreview(props: WidgetPreviewProps<string | string[], FieldFileOrImage>) {
   return (
     <WidgetPreviewContainer>
       {props.value ? <ImagePreviewContent {...props} /> : null}

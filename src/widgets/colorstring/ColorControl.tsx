@@ -4,10 +4,10 @@ import { ChromePicker } from 'react-color';
 import validateColor from 'validate-color';
 
 import { transientOptions } from '../../lib';
-import { zIndex } from '../../ui';
+import { zIndex } from '../../components/UI/styles';
 
 import type { ColorResult } from 'react-color';
-import type { CmsFieldColor, CmsWidgetControlProps } from '../../interface';
+import type { FieldColor, WidgetControlProps } from '../../interface';
 
 function ClearIcon() {
   return (
@@ -95,7 +95,7 @@ const ColorControl = ({
   field,
   onChange,
   ...otherProps
-}: CmsWidgetControlProps<string, CmsFieldColor>) => {
+}: WidgetControlProps<string, FieldColor>) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const value = otherProps.value ?? '';
 

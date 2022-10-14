@@ -1,23 +1,23 @@
 import { css, Global } from '@emotion/react';
 import styled from '@emotion/styled';
+import HeightIcon from '@mui/icons-material/Height';
+import LanguageIcon from '@mui/icons-material/Language';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Fab from '@mui/material/Fab';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ScrollSync, ScrollSyncPane } from 'react-scroll-sync';
-import HeightIcon from '@mui/icons-material/Height';
-import LanguageIcon from '@mui/icons-material/Language';
 
+import { colors, colorsRaw, components, transitions, zIndex } from '../../components/UI/styles';
 import { FILES } from '../../constants/collectionTypes';
 import { transientOptions } from '../../lib';
 import { getI18nInfo, getPreviewEntry, hasI18n } from '../../lib/i18n';
 import { getFileFromSlug } from '../../lib/util/collection.util';
-import { colors, colorsRaw, components, transitions, zIndex } from '../../ui';
 import EditorControlPane from './EditorControlPane/EditorControlPane';
 import EditorPreviewPane from './EditorPreviewPane/EditorPreviewPane';
 import EditorToolbar from './EditorToolbar';
 
 import type {
-  CmsField,
+  Field,
   Collection,
   EditorPersistOptions,
   Entry,
@@ -180,11 +180,11 @@ interface EditorInterfaceProps {
   draftKey: string;
   entry: Entry;
   collection: Collection;
-  fields: CmsField[] | undefined;
+  fields: Field[] | undefined;
   fieldsErrors: FieldsErrors;
   onChange: (
     path: string,
-    field: CmsField,
+    field: Field,
     value: ValueOrNestedValue,
     i18n: I18nSettings | undefined,
   ) => void;
@@ -335,11 +335,7 @@ const EditorInterface = ({
       <StyledSplitPane>
         <ScrollSyncPane>{editor}</ScrollSyncPane>
         <PreviewPaneContainer>
-          <EditorPreviewPane
-            collection={collection}
-            entry={previewEntry}
-            fields={fields}
-          />
+          <EditorPreviewPane collection={collection} entry={previewEntry} fields={fields} />
         </PreviewPaneContainer>
       </StyledSplitPane>
     </>

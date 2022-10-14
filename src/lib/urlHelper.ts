@@ -7,7 +7,7 @@ import escapeRegExp from 'lodash/escapeRegExp';
 import flow from 'lodash/flow';
 import partialRight from 'lodash/partialRight';
 
-import type { CmsSlug } from '../interface';
+import type { Slug } from '../interface';
 
 function getUrl(urlString: string, direct?: boolean) {
   return `${direct ? '/#' : ''}${urlString}`;
@@ -72,7 +72,7 @@ export function getCharReplacer(encoding: string, replacement: string) {
 // `sanitizeURI` does not actually URI-encode the chars (that is the browser's and server's job), just removes the ones that are not allowed.
 export function sanitizeURI(
   str: string,
-  options?: { replacement: CmsSlug['sanitize_replacement']; encoding: CmsSlug['encoding'] },
+  options?: { replacement: Slug['sanitize_replacement']; encoding: Slug['encoding'] },
 ) {
   const { replacement = '', encoding = 'unicode' } = options || {};
 
@@ -88,12 +88,12 @@ export function sanitizeURI(
   return Array.from(str).map(getCharReplacer(encoding, replacement)).join('');
 }
 
-export function sanitizeChar(char: string, options?: CmsSlug) {
+export function sanitizeChar(char: string, options?: Slug) {
   const { encoding = 'unicode', sanitize_replacement: replacement = '' } = options || {};
   return getCharReplacer(encoding, replacement)(char);
 }
 
-export function sanitizeSlug(str: string, options?: CmsSlug) {
+export function sanitizeSlug(str: string, options?: Slug) {
   if (!isString(str)) {
     throw new Error('The input slug must be a string.');
   }

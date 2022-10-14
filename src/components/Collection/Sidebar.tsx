@@ -12,8 +12,8 @@ import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
 import { searchCollections } from '../../actions/collections';
+import { colors } from '../../components/UI/styles';
 import { getAdditionalLinks, getIcon } from '../../lib/registry';
-import { colors } from '../../ui';
 import NavLink from '../UI/NavLink';
 import CollectionSearch from './CollectionSearch';
 import NestedCollection from './NestedCollection';

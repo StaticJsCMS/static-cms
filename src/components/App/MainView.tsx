@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import React from 'react';
 import TopBarProgress from 'react-topbar-progress-indicator';
 
-import { colors } from '../../ui';
+import { colors } from '../../components/UI/styles';
 import Header from './Header';
 
 import type { ReactNode } from 'react';
@@ -36,9 +36,7 @@ interface MainViewProps {
   children: ReactNode;
 }
 
-const MainView = ({
-  children,
-}: MainViewProps) => {
+const MainView = ({ children }: MainViewProps) => {
   return (
     <>
       <Header />

@@ -3,14 +3,15 @@ import styled from '@emotion/styled';
 import React, { useCallback, useState } from 'react';
 
 import EditorControl from '../../components/Editor/EditorControlPane/EditorControl';
-import { stringTemplate } from '../../lib/widgets';
-import { colors, lengths, ObjectWidgetTopBar } from '../../ui';
+import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
+import { colors, lengths } from '../../components/UI/styles';
+import { compileStringTemplate } from '../../lib/widgets/stringTemplate';
 
 import type {
-  CmsField,
-  CmsFieldList,
-  CmsFieldObject,
-  CmsWidgetControlProps,
+  Field,
+  FieldList,
+  FieldObject,
+  WidgetControlProps,
   ValueOrNestedValue,
 } from '../../interface';
 
@@ -46,11 +47,11 @@ const ObjectControl = ({
   path,
   t,
   value = {},
-}: CmsWidgetControlProps<
+}: WidgetControlProps<
   {
     [key: string]: ValueOrNestedValue;
   },
-  CmsFieldObject | CmsFieldList
+  FieldObject | FieldList
 >) => {
   const [collapsed, setCollapsed] = useState(false);
 
@@ -68,7 +69,7 @@ const ObjectControl = ({
   // };
 
   const controlFor = useCallback(
-    (field: CmsField, key: number) => {
+    (field: Field, key: number) => {
       if (field.widget === 'hidden') {
         return null;
       }
@@ -114,7 +115,7 @@ const ObjectControl = ({
   }, [collapsed]);
 
   const renderFields = useCallback(
-    (multiFields: CmsField[]) => {
+    (multiFields: Field[]) => {
       if (multiFields) {
         return multiFields.map((f, idx) => controlFor(f, idx));
       }
@@ -125,7 +126,7 @@ const ObjectControl = ({
   const getObjectLabel = useCallback(() => {
     const label = field.label ?? field.name;
     const summary = field.summary;
-    return summary ? stringTemplate.compileStringTemplate(summary, null, '', value) : label;
+    return summary ? compileStringTemplate(summary, null, '', value) : label;
   }, [field.label, field.name, field.summary, value]);
 
   const isCollapsed = forList ? collapsed : collapsed;

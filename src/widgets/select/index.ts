@@ -3,9 +3,9 @@ import previewComponent from './SelectPreview';
 import schema from './schema';
 import { validateMinMax } from '../../lib/widgets/validations';
 
-import type { CmsFieldSelect, CmsWidgetParam } from '../../interface';
+import type { FieldSelect, WidgetParam } from '../../interface';
 
-const SelectWidget = (): CmsWidgetParam<string | string[], CmsFieldSelect> => {
+const SelectWidget = (): WidgetParam<string | string[], FieldSelect> => {
   return {
     name: 'select',
     controlComponent,

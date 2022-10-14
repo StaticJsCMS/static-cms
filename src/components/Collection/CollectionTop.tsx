@@ -6,7 +6,7 @@ import React, { useCallback } from 'react';
 import { translate } from 'react-polyglot';
 import { useNavigate } from 'react-router-dom';
 
-import { components } from '../../ui';
+import { components } from '../../components/UI/styles';
 
 import type { Collection, TranslatedProps } from '../../interface';
 

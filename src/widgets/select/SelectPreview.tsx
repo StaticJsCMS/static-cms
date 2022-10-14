@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { WidgetPreviewContainer } from '../../ui';
+import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { CmsFieldSelect, CmsWidgetPreviewProps } from '../../interface';
+import type { FieldSelect, WidgetPreviewProps } from '../../interface';
 
 interface ListPreviewProps {
   values: string[];
@@ -18,7 +18,7 @@ const ListPreview = ({ values }: ListPreviewProps) => {
   );
 };
 
-const SelectPreview = ({ value }: CmsWidgetPreviewProps<string | string[], CmsFieldSelect>) => {
+const SelectPreview = ({ value }: WidgetPreviewProps<string | string[], FieldSelect>) => {
   if (!value) {
     return <WidgetPreviewContainer />;
   }

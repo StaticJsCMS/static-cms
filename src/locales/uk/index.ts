@@ -1,6 +1,6 @@
-import type { CmsLocalePhrasesRoot } from '../../interface';
+import type { LocalePhrasesRoot } from '../../interface';
 
-const uk: CmsLocalePhrasesRoot = {
+const uk: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Зміст',

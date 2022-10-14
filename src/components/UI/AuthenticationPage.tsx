@@ -3,10 +3,10 @@ import React from 'react';
 
 import GoBackButton from './GoBackButton';
 import { buttons, shadows } from './styles';
-import Icon from '../components/UI/Icon';
+import Icon from './Icon';
 
 import type { MouseEventHandler, ReactNode } from 'react';
-import type { TranslatedProps } from '../interface';
+import type { TranslatedProps } from '../../interface';
 
 const StyledAuthenticationPage = styled.section`
   display: flex;
@@ -27,7 +27,7 @@ const SimpleLogoIcon = styled(Icon)`
   margin-top: -300px;
 `;
 
-const StaticCmsIcon = styled(Icon)`
+const StaticCustomIcon = styled(Icon)`
   color: #c4c6d2;
   position: absolute;
   bottom: 10px;
@@ -112,7 +112,7 @@ const AuthenticationPage = ({
         </LoginButton>
       )}
       {siteUrl ? <GoBackButton href={siteUrl} t={t} /> : null}
-      {logoUrl ? <StaticCmsIcon size="100px" type="static-cms" /> : null}
+      {logoUrl ? <StaticCustomIcon size="100px" type="static-cms" /> : null}
     </StyledAuthenticationPage>
   );
 };

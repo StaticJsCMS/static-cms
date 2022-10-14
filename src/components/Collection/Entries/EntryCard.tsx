@@ -14,7 +14,7 @@ import { selectIsLoadingAsset } from '../../../reducers/medias';
 
 import type { ConnectedProps } from 'react-redux';
 import type { CollectionViewStyle } from '../../../constants/collectionViews';
-import type { CmsField, Collection, Entry } from '../../../interface';
+import type { Field, Collection, Entry } from '../../../interface';
 import type { RootState } from '../../../store';
 
 const EntryCard = ({
@@ -60,10 +60,10 @@ interface EntryCardOwnProps {
     titleField?: string | null | undefined;
     descriptionField?: string | null | undefined;
     imageField?: string | null | undefined;
-    remainingFields?: CmsField[] | undefined;
+    remainingFields?: Field[] | undefined;
   };
   collection: Collection;
-  imageField?: CmsField;
+  imageField?: Field;
   collectionLabel?: string;
   viewStyle?: CollectionViewStyle;
 }

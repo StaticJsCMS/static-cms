@@ -41,23 +41,23 @@ import {
 } from './lib/util/collection.util';
 import { selectMediaFilePath } from './lib/util/media.util';
 import { set } from './lib/util/object.util';
-import { stringTemplate } from './lib/widgets';
 import { selectIntegration } from './reducers/integrations';
 import { createEntry } from './valueObjects/Entry';
+import { dateParsers, expandPath, extractTemplateVars } from './lib/widgets/stringTemplate';
 
 import type {
-  CmsBackendClass,
-  CmsBackendInitializer,
-  CmsConfig,
-  CmsField,
+  BackendClass,
+  BackendInitializer,
   Collection,
   CollectionFile,
+  Config,
   Credentials,
   DataFile,
   DisplayURL,
   Entry,
   EntryData,
   EntryDraft,
+  Field,
   FilterRule,
   ImplementationEntry,
   SearchQueryResponse,
@@ -69,11 +69,9 @@ import type { AsyncLock } from './lib/util';
 import type { RootState } from './store';
 import type AssetProxy from './valueObjects/AssetProxy';
 
-const { extractTemplateVars, dateParsers, expandPath } = stringTemplate;
-
 function updateAssetProxies(
   assetProxies: AssetProxy[],
-  config: CmsConfig,
+  config: Config,
   collection: Collection,
   entryDraft: EntryDraft,
   path: string,
@@ -228,7 +226,7 @@ interface AuthStore {
 
 interface BackendOptions {
   backendName: string;
-  config: CmsConfig;
+  config: Config;
   authStore?: AuthStore;
 }
 
@@ -241,7 +239,7 @@ export interface MediaFile {
   draft?: boolean;
   url?: string;
   file?: File;
-  field?: CmsField;
+  field?: Field;
   queryOrder?: unknown;
   isViewableImage?: boolean;
   type?: string;
@@ -255,7 +253,7 @@ interface BackupEntry {
 }
 
 interface PersistArgs {
-  config: CmsConfig;
+  config: Config;
   collection: Collection;
   entryDraft: EntryDraft;
   assetProxies: AssetProxy[];
@@ -275,15 +273,15 @@ function collectionDepth(collection: Collection) {
 }
 
 export class Backend {
-  implementation: CmsBackendClass;
+  implementation: BackendClass;
   backendName: string;
-  config: CmsConfig;
+  config: Config;
   authStore?: AuthStore;
   user?: User | null;
   backupSync: AsyncLock;
 
   constructor(
-    implementation: CmsBackendInitializer,
+    implementation: BackendInitializer,
     { backendName, authStore, config }: BackendOptions,
   ) {
     // We can't reliably run this on exit, so we do cleanup on load.
@@ -393,7 +391,7 @@ export class Backend {
   async generateUniqueSlug(
     collection: Collection,
     entryData: EntryData,
-    config: CmsConfig,
+    config: Config,
     usedSlugs: string[],
   ) {
     const slugConfig = config.slug;
@@ -912,7 +910,7 @@ export class Backend {
     await this.invokeEventWithEntry('postSave', entry);
   }
 
-  async persistMedia(config: CmsConfig, file: AssetProxy) {
+  async persistMedia(config: Config, file: AssetProxy) {
     const user = (await this.currentUser()) as User;
     const options = {
       commitMessage: commitMessageFormatter('uploadMedia', config, {
@@ -953,7 +951,7 @@ export class Backend {
     await this.implementation.deleteFiles(paths, commitMessage);
   }
 
-  async deleteMedia(config: CmsConfig, path: string) {
+  async deleteMedia(config: Config, path: string) {
     const user = (await this.currentUser()) as User;
     const commitMessage = commitMessageFormatter('deleteMedia', config, {
       path,
@@ -997,7 +995,7 @@ export class Backend {
   }
 }
 
-export function resolveBackend(config?: CmsConfig) {
+export function resolveBackend(config?: Config) {
   if (!config?.backend.name) {
     throw new Error('No backend defined in configuration');
   }
@@ -1016,7 +1014,7 @@ export function resolveBackend(config?: CmsConfig) {
 export const currentBackend = (function () {
   let backend: Backend;
 
-  return (config: CmsConfig) => {
+  return (config: Config) => {
     if (backend) {
       return backend;
     }

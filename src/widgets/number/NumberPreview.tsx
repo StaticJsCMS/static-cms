@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { WidgetPreviewContainer } from '../../ui';
+import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { CmsFieldNumber, CmsWidgetPreviewProps } from '../../interface';
+import type { FieldNumber, WidgetPreviewProps } from '../../interface';
 
-function NumberPreview({ value }: CmsWidgetPreviewProps<string | number, CmsFieldNumber>) {
+function NumberPreview({ value }: WidgetPreviewProps<string | number, FieldNumber>) {
   return <WidgetPreviewContainer>{value}</WidgetPreviewContainer>;
 }
 

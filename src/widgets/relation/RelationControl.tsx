@@ -7,10 +7,15 @@ import uniqBy from 'lodash/uniqBy';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { QUERY_SUCCESS } from '../../actions/search';
-import { stringTemplate } from '../../lib/widgets';
+import {
+  addFileTemplateFields,
+  compileStringTemplate,
+  expandPath,
+  extractTemplateVars,
+} from '../../lib/widgets/stringTemplate';
 
 import type { ListChildComponentProps } from 'react-window';
-import type { CmsFieldRelation, CmsWidgetControlProps, Entry, EntryData } from '../../interface';
+import type { Entry, EntryData, FieldRelation, WidgetControlProps } from '../../interface';
 
 // TODO Remove if sorting not needed
 // function arrayMove(array, from, to) {
@@ -108,7 +113,7 @@ const RelationControl = ({
   queryHits,
   query,
   locale,
-}: CmsWidgetControlProps<string | string[], CmsFieldRelation>) => {
+}: WidgetControlProps<string | string[], FieldRelation>) => {
   const [initialOptions, setInitialOptions] = useState<HitOption[]>([]);
 
   const isMultiple = useMemo(() => {
@@ -121,13 +126,13 @@ const RelationControl = ({
         locale != null && hit.i18n != null && hit.i18n[locale] != null
           ? hit.i18n[locale].data
           : hit.data;
-      const templateVars = stringTemplate.extractTemplateVars(field);
+      const templateVars = extractTemplateVars(field);
       // return non template fields as is
       if (templateVars.length <= 0) {
         return get(hitData, field) as string;
       }
-      const data = stringTemplate.addFileTemplateFields(hit.path, hitData);
-      const value = stringTemplate.compileStringTemplate(field, null, hit.slug, data);
+      const data = addFileTemplateFields(hit.path, hitData);
+      const value = compileStringTemplate(field, null, hit.slug, data);
       return value;
     },
     [locale],
@@ -138,11 +143,11 @@ const RelationControl = ({
       const valueField = field.value_field;
       const displayField = field.display_fields || [field.value_field];
       const options = hits.reduce((acc, hit) => {
-        const valuesPaths = stringTemplate.expandPath({ data: hit.data, path: valueField });
+        const valuesPaths = expandPath({ data: hit.data, path: valueField });
         for (let i = 0; i < valuesPaths.length; i++) {
           const label = displayField
             .map(key => {
-              const displayPaths = stringTemplate.expandPath({ data: hit.data, path: key });
+              const displayPaths = expandPath({ data: hit.data, path: key });
               return parseNestedFields(hit, displayPaths[i] || displayPaths[0]);
             })
             .join(' ');

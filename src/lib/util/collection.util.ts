@@ -16,12 +16,11 @@ import { selectMediaFolder } from './media.util';
 
 import type { Backend } from '../../backend';
 import type {
-  CmsCollection,
-  CmsConfig,
-  CmsField,
   Collection,
   CollectionFile,
+  Config,
   Entry,
+  Field,
   SortableField,
 } from '../../interface';
 
@@ -156,7 +155,7 @@ export function selectEntryCollectionTitle(collection: Collection, entry: Entry)
 }
 
 export function selectDefaultSortableFields(
-  collection: CmsCollection | Collection,
+  collection: Collection,
   backend: Backend,
   hasIntegration: boolean,
 ) {
@@ -178,7 +177,7 @@ export function selectDefaultSortableFields(
 }
 
 export function selectSortableFields(
-  collection: CmsCollection | Collection,
+  collection: Collection,
   t: (key: string) => string,
 ): SortableField[] {
   const fields = (collection.sortable_fields?.fields ?? [])
@@ -208,7 +207,7 @@ export function selectViewGroups(collection: Collection) {
 }
 
 export function selectFieldsComments(collection: Collection, entryMap: Entry) {
-  let fields: CmsField[] = [];
+  let fields: Field[] = [];
   if ('folder' in collection) {
     fields = collection.fields;
   } else if ('files' in collection) {
@@ -228,7 +227,7 @@ export function selectFieldsComments(collection: Collection, entryMap: Entry) {
 
   return comments;
 }
-function getFieldsWithMediaFolders(fields: CmsField[]) {
+function getFieldsWithMediaFolders(fields: Field[]) {
   const fieldsWithMediaFolders = fields.reduce((acc, f) => {
     if ('media_folder' in f) {
       acc = [...acc, f];
@@ -238,7 +237,7 @@ function getFieldsWithMediaFolders(fields: CmsField[]) {
       const fields = f.fields ?? [];
       acc = [...acc, ...getFieldsWithMediaFolders(fields)];
     } else if ('field' in f) {
-      const field = f.field as CmsField;
+      const field = f.field as Field;
       acc = [...acc, ...getFieldsWithMediaFolders([field])];
     } else if ('types' in f) {
       const types = f.types ?? [];
@@ -246,7 +245,7 @@ function getFieldsWithMediaFolders(fields: CmsField[]) {
     }
 
     return acc;
-  }, [] as CmsField[]);
+  }, [] as Field[]);
 
   return fieldsWithMediaFolders;
 }
@@ -267,7 +266,7 @@ export function selectFieldsWithMediaFolders(collection: Collection, slug: strin
   return [];
 }
 
-export function selectMediaFolders(config: CmsConfig, collection: Collection, entry: Entry) {
+export function selectMediaFolders(config: Config, collection: Collection, entry: Entry) {
   const fields = selectFieldsWithMediaFolders(collection, entry.slug);
   const folders = fields.map(f => selectMediaFolder(config, collection, entry, f));
   if ('files' in collection) {
@@ -285,7 +284,7 @@ export function selectMediaFolders(config: CmsConfig, collection: Collection, en
 
   return [...new Set(...folders)];
 }
-export function getFieldsNames(fields: (CmsField | CmsField)[] | undefined, prefix = '') {
+export function getFieldsNames(fields: (Field | Field)[] | undefined, prefix = '') {
   let names = fields?.map(f => `${prefix}${f.name}`) ?? [];
 
   fields?.forEach((f, index) => {
@@ -305,8 +304,8 @@ export function getFieldsNames(fields: (CmsField | CmsField)[] | undefined, pref
 }
 
 export function traverseFields(
-  fields: CmsField[],
-  updater: (field: CmsField) => CmsField,
+  fields: Field[],
+  updater: (field: Field) => Field,
   done = () => false,
 ) {
   if (done()) {
@@ -314,7 +313,7 @@ export function traverseFields(
   }
 
   return fields.map(f => {
-    const field = updater(f as CmsField);
+    const field = updater(f as Field);
     if (done()) {
       return field;
     } else if ('fields' in field) {
@@ -335,7 +334,7 @@ export function traverseFields(
 export function updateFieldByKey(
   collection: Collection,
   key: string,
-  updater: (field: CmsField) => CmsField,
+  updater: (field: Field) => Field,
 ): Collection {
   const selected = selectField(collection, key);
   if (!selected) {
@@ -344,8 +343,8 @@ export function updateFieldByKey(
 
   let updated = false;
 
-  function updateAndBreak(f: CmsField) {
-    const field = f as CmsField;
+  function updateAndBreak(f: Field) {
+    const field = f as Field;
     if (field === selected) {
       updated = true;
       return updater(field);
@@ -359,7 +358,7 @@ export function updateFieldByKey(
   return collection;
 }
 
-export function selectIdentifier(collection: CmsCollection | Collection) {
+export function selectIdentifier(collection: Collection) {
   const identifier = collection.identifier_field;
   const identifierFields = identifier ? [identifier, ...IDENTIFIER_FIELDS] : [...IDENTIFIER_FIELDS];
   const fieldNames = getFieldsNames(collection.fields ?? []);
@@ -368,7 +367,7 @@ export function selectIdentifier(collection: CmsCollection | Collection) {
   );
 }
 
-export function selectInferedField(collection: CmsCollection | Collection, fieldName: string) {
+export function selectInferedField(collection: Collection, fieldName: string) {
   if (fieldName === 'title' && collection.identifier_field) {
     return selectIdentifier(collection);
   }
@@ -384,7 +383,7 @@ export function selectInferedField(collection: CmsCollection | Collection, field
       }
     >
   )[fieldName];
-  const fields = collection.fields as (CmsField | CmsField)[];
+  const fields = collection.fields as (Field | Field)[];
   let field;
 
   // If collection has no fields or fieldName is not defined within inferables list, return null
@@ -393,7 +392,7 @@ export function selectInferedField(collection: CmsCollection | Collection, field
   }
   // Try to return a field of the specified type with one of the synonyms
   const mainTypeFields = fields
-    .filter((f: CmsField | CmsField) => (f.widget ?? 'string') === inferableField.type)
+    .filter((f: Field | Field) => (f.widget ?? 'string') === inferableField.type)
     .map(f => f?.name);
   field = mainTypeFields.filter(f => inferableField.synonyms.indexOf(f as string) !== -1);
   if (field && field.length > 0) {

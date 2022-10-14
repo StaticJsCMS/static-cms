@@ -3,12 +3,7 @@ import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import React from 'react';
 
-import {
-  CopyToClipBoardButton,
-  DeleteButton,
-  InsertButton,
-  UploadButton
-} from './MediaLibraryButtons';
+import { CopyToClipBoardButton, UploadButton } from './MediaLibraryButtons';
 import MediaLibrarySearch from './MediaLibrarySearch';
 
 import type { ChangeEvent, ChangeEventHandler, KeyboardEventHandler } from 'react';

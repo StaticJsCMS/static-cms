@@ -17,8 +17,8 @@ import { logoutUser as logoutUserAction } from '../../actions/auth';
 import { createNewEntry } from '../../actions/collections';
 import { openMediaLibrary as openMediaLibraryAction } from '../../actions/mediaLibrary';
 import { checkBackendStatus as checkBackendStatusAction } from '../../actions/status';
+import { buttons, colors } from '../../components/UI/styles';
 import { stripProtocol } from '../../lib/urlHelper';
-import { buttons, colors } from '../../ui';
 import NavLink from '../UI/NavLink';
 import SettingsDropdown from '../UI/SettingsDropdown';
 

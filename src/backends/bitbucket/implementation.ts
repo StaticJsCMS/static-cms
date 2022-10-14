@@ -30,8 +30,8 @@ import { GitLfsClient } from './git-lfs-client';
 import type { Semaphore } from 'semaphore';
 import type {
   BackendEntry,
-  CmsBackendClass,
-  CmsConfig,
+  BackendClass,
+  Config,
   Credentials,
   DisplayURL,
   ImplementationFile,
@@ -53,7 +53,7 @@ type BitbucketStatusComponent = {
 };
 
 // Implementation wrapper class
-export default class BitbucketBackend implements CmsBackendClass {
+export default class BitbucketBackend implements BackendClass {
   lock: AsyncLock;
   api: API | null;
   updateUserCredentials: (args: { token: string; refresh_token: string }) => Promise<null>;
@@ -77,7 +77,7 @@ export default class BitbucketBackend implements CmsBackendClass {
   _largeMediaClientPromise?: Promise<GitLfsClient>;
   authType: string;
 
-  constructor(config: CmsConfig, options = {}) {
+  constructor(config: Config, options = {}) {
     this.options = {
       proxied: false,
       API: null,

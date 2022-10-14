@@ -1,8 +1,8 @@
-import React from 'react';
 import styled from '@emotion/styled';
+import React from 'react';
 import { translate } from 'react-polyglot';
 
-import { lengths } from '../../ui';
+import { lengths } from '../../components/UI/styles';
 
 import type { ComponentType } from 'react';
 import type { TranslateProps } from 'react-polyglot';

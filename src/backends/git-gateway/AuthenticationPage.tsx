@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import { AuthenticationPage, buttons, shadows, colors, colorsRaw, lengths, zIndex } from '../../ui';
+import AuthenticationPage from '../../components/UI/AuthenticationPage';
+import { buttons, colors, colorsRaw, lengths, shadows, zIndex } from '../../components/UI/styles';
 
-import type { FormEvent, ChangeEvent } from 'react';
-import type { User, AuthenticationPageProps, TranslatedProps } from '../../interface';
+import type { ChangeEvent, FormEvent } from 'react';
+import type { AuthenticationPageProps, TranslatedProps, User } from '../../interface';
 
 const LoginButton = styled.button`
   ${buttons.button};

@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
-import { WidgetPreviewContainer } from '../../ui';
+import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { CmsFieldFileOrImage, CmsWidgetPreviewProps, GetAssetFunction } from '../../interface';
+import type { FieldFileOrImage, WidgetPreviewProps, GetAssetFunction } from '../../interface';
 
 interface FileLinkProps {
   href: string;
@@ -21,7 +21,7 @@ const FileLink = styled(({ href, path }: FileLinkProps) => (
 interface FileLinkListProps {
   values: string[];
   getAsset: GetAssetFunction;
-  field: CmsFieldFileOrImage;
+  field: FieldFileOrImage;
 }
 
 function FileLinkList({ values, getAsset, field }: FileLinkListProps) {
@@ -38,7 +38,7 @@ function FileContent({
   value,
   getAsset,
   field,
-}: CmsWidgetPreviewProps<string | string[], CmsFieldFileOrImage>) {
+}: WidgetPreviewProps<string | string[], FieldFileOrImage>) {
   if (!value) {
     return null;
   }
@@ -50,7 +50,7 @@ function FileContent({
   return <FileLink key={value} path={value} href={getAsset(value, field).toString()} />;
 }
 
-function FilePreview(props: CmsWidgetPreviewProps<string | string[], CmsFieldFileOrImage>) {
+function FilePreview(props: WidgetPreviewProps<string | string[], FieldFileOrImage>) {
   return (
     <WidgetPreviewContainer>
       {props.value ? <FileContent {...props} /> : null}

@@ -6,15 +6,15 @@ import type { ConfigAction } from '../actions/config';
 import type {
   AlgoliaConfig,
   AssetStoreConfig,
-  CmsConfig,
-  CmsMediaIntegrationProvider,
-  CmsSearchIntegrationProvider,
+  Config,
+  MediaIntegrationProvider,
+  SearchIntegrationProvider,
 } from '../interface';
 
 export interface IntegrationHooks {
-  search?: CmsSearchIntegrationProvider;
-  listEntries?: CmsSearchIntegrationProvider;
-  'assetStore'?: CmsMediaIntegrationProvider;
+  search?: SearchIntegrationProvider;
+  listEntries?: SearchIntegrationProvider;
+  'assetStore'?: MediaIntegrationProvider;
 }
 
 export interface IntegrationsState {
@@ -26,7 +26,7 @@ export interface IntegrationsState {
   collectionHooks: Record<string, IntegrationHooks>;
 }
 
-export function getIntegrations(config: CmsConfig): IntegrationsState {
+export function getIntegrations(config: Config): IntegrationsState {
   const integrations = config.integrations || [];
   const newState = integrations.reduce(
     (acc, integration) => {

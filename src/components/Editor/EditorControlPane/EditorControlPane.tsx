@@ -20,7 +20,7 @@ import EditorControl from './EditorControl';
 
 import type { ConnectedProps } from 'react-redux';
 import type {
-  CmsField,
+  Field,
   Collection,
   Entry,
   FieldError,
@@ -89,7 +89,7 @@ const LocaleDropdown = ({ locales, dropdownText, onLocaleChange }: LocaleDropdow
 };
 
 function getFieldValue(
-  field: CmsField,
+  field: Field,
   entry: Entry,
   isTranslatable: boolean,
   locale: string | undefined,
@@ -222,11 +222,11 @@ const EditorControlPane = ({
 export interface EditorControlPaneOwnProps {
   collection: Collection;
   entry: Entry;
-  fields: CmsField[];
+  fields: Field[];
   fieldsErrors: FieldsErrors;
   onChange: (
     path: string,
-    field: CmsField,
+    field: Field,
     value: ValueOrNestedValue,
     i18n: I18nSettings | undefined,
   ) => void;

@@ -6,7 +6,7 @@ import Select from '@mui/material/Select';
 import isHotkey from 'is-hotkey';
 import React from 'react';
 
-import { shadows, text, zIndex } from '../../ui';
+import { shadows, text, zIndex } from '../../components/UI/styles';
 import SettingsButton from './SettingsButton';
 
 import type { SelectChangeEvent } from '@mui/material/Select';

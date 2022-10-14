@@ -9,7 +9,7 @@ import { createMediaLibrary, insertMedia } from './actions/mediaLibrary';
 import { getMediaLibrary } from './lib/registry';
 import { store } from './store';
 
-import type { CmsMediaLibrary, CmsMediaLibraryExternalLibrary } from './interface';
+import type { MediaLibrary, MediaLibraryExternalLibrary } from './interface';
 import type { RootState } from './store';
 
 function handleInsert(url: string | string[]) {
@@ -20,7 +20,7 @@ function handleInsert(url: string | string[]) {
 
 const initializeMediaLibrary = once(async function initializeMediaLibrary(
   name: string,
-  { config }: CmsMediaLibraryExternalLibrary,
+  { config }: MediaLibraryExternalLibrary,
 ) {
   const lib = getMediaLibrary(name);
   if (!lib) {
@@ -35,8 +35,8 @@ const initializeMediaLibrary = once(async function initializeMediaLibrary(
 });
 
 function isExternalMediaLibraryConfig(
-  config: CmsMediaLibrary | undefined,
-): config is CmsMediaLibraryExternalLibrary {
+  config: MediaLibrary | undefined,
+): config is MediaLibraryExternalLibrary {
   return Boolean(config && 'name' in config);
 }
 

@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import React from 'react';
 import { translate } from 'react-polyglot';
 
-import { Loader } from '../../../ui';
+import Loader from '../../UI/Loader';
 import EntryListing from './EntryListing';
 
 import type { CollectionViewStyle } from '../../../constants/collectionViews';

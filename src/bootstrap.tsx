@@ -18,7 +18,7 @@ import { store } from './store';
 
 import type { AnyAction } from '@reduxjs/toolkit';
 import type { ConnectedProps } from 'react-redux';
-import type { CmsConfig } from './interface';
+import type { Config } from './interface';
 import type { RootState } from './store';
 
 const ROOT_ID = 'nc-root';
@@ -48,7 +48,7 @@ export type AppRootProps = ConnectedProps<typeof connector>;
 
 const ConnectedTranslatedApp = connector(TranslatedApp);
 
-function bootstrap(opts?: { config?: CmsConfig; autoInitialize?: boolean }) {
+function bootstrap(opts?: { config?: Config; autoInitialize?: boolean }) {
   const { config, autoInitialize = true } = opts ?? {};
 
   /**

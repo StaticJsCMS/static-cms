@@ -1,27 +1,20 @@
-import { stripIndent } from 'common-tags';
 import flow from 'lodash/flow';
 import get from 'lodash/get';
 import partialRight from 'lodash/partialRight';
-import trimEnd from 'lodash/trimEnd';
-import trimStart from 'lodash/trimStart';
 
-import { FILES } from '../constants/collectionTypes';
 import { COMMIT_AUTHOR, COMMIT_DATE } from '../constants/commitProps';
 import { sanitizeSlug } from './urlHelper';
-import { getFileFromSlug, selectIdentifier, selectInferedField } from './util/collection.util';
+import { selectIdentifier, selectInferedField } from './util/collection.util';
 import { selectField } from './util/field.util';
 import { set } from './util/object.util';
-import { stringTemplate } from './widgets';
-
-import type { CmsConfig, CmsSlug, Collection, Entry, EntryData } from '../interface';
-
-const {
-  compileStringTemplate,
-  parseDateFromEntry,
-  SLUG_MISSING_REQUIRED_DATE,
-  keyToPathArray,
+import {
   addFileTemplateFields,
-} = stringTemplate;
+  compileStringTemplate,
+  keyToPathArray,
+  parseDateFromEntry,
+} from './widgets/stringTemplate';
+
+import type { Collection, Config, Entry, EntryData, Slug } from '../interface';
 
 const commitMessageTemplates = {
   create: 'Create {{collection}} “{{slug}}”',
@@ -43,7 +36,7 @@ type Options = {
 
 export function commitMessageFormatter(
   type: keyof typeof commitMessageTemplates,
-  config: CmsConfig,
+  config: Config,
   { slug, path, collection, authorLogin, authorName }: Options,
 ) {
   const templates = { ...commitMessageTemplates, ...(config.backend.commit_messages || {}) };
@@ -82,14 +75,14 @@ export function prepareSlug(slug: string) {
   );
 }
 
-export function getProcessSegment(slugConfig?: CmsSlug, ignoreValues?: string[]) {
+export function getProcessSegment(slugConfig?: Slug, ignoreValues?: string[]) {
   return (value: string) =>
     ignoreValues && ignoreValues.includes(value)
       ? value
       : flow([value => String(value), prepareSlug, partialRight(sanitizeSlug, slugConfig)])(value);
 }
 
-export function slugFormatter(collection: Collection, entryData: EntryData, slugConfig?: CmsSlug) {
+export function slugFormatter(collection: Collection, entryData: EntryData, slugConfig?: Slug) {
   const slugTemplate = collection.slug || '{{slug}}';
 
   const identifier = get(entryData, keyToPathArray(selectIdentifier(collection)));
@@ -111,77 +104,6 @@ export function slugFormatter(collection: Collection, entryData: EntryData, slug
       value === slug ? value : processSegment(value),
     );
   }
-}
-
-export function previewUrlFormatter(
-  baseUrl: string,
-  collection: Collection,
-  slug: string,
-  entry: Entry,
-  slugConfig?: CmsSlug,
-) {
-  /**
-   * Preview URL can't be created without `baseUrl`. This makes preview URLs
-   * optional for backends that don't support them.
-   */
-  if (!baseUrl) {
-    return;
-  }
-
-  const basePath = trimEnd(baseUrl, '/');
-
-  const isFileCollection = collection.type === FILES;
-  const file = isFileCollection ? getFileFromSlug(collection, entry.slug) : undefined;
-
-  function getPathTemplate() {
-    return file?.preview_path ?? collection.preview_path;
-  }
-
-  function getDateField() {
-    return file?.preview_path_date_field ?? collection.preview_path_date_field;
-  }
-
-  /**
-   * If a `previewPath` is provided for the collection/file, use it to construct the
-   * URL path.
-   */
-  const pathTemplate = getPathTemplate();
-
-  /**
-   * Without a `previewPath` for the collection/file (via config), the preview URL
-   * will be the URL provided by the backend.
-   */
-  if (!pathTemplate) {
-    return baseUrl;
-  }
-
-  const fields = addFileTemplateFields(entry.path, entry.data, collection.folder);
-  const dateFieldName = getDateField() || selectInferedField(collection, 'date');
-  const date = parseDateFromEntry(entry, dateFieldName);
-
-  // Prepare and sanitize slug variables only, leave the rest of the
-  // `preview_path` template as is.
-  const processSegment = getProcessSegment(slugConfig, [fields?.dirname as string]);
-  let compiledPath;
-
-  try {
-    compiledPath = compileStringTemplate(pathTemplate, date, slug, fields, processSegment);
-  } catch (err: any) {
-    // Print an error and ignore `preview_path` if both:
-    //   1. Date is invalid (according to Moment), and
-    //   2. A date expression (eg. `{{year}}`) is used in `preview_path`
-    if (err.name === SLUG_MISSING_REQUIRED_DATE) {
-      console.error(stripIndent`
-        Collection "${collection.name}" configuration error:
-          \`preview_path_date_field\` must be a field with a valid date. Ignoring \`preview_path\`.
-      `);
-      return basePath;
-    }
-    throw err;
-  }
-
-  const previewPath = trimStart(compiledPath, ' /');
-  return `${basePath}/${previewPath}`;
 }
 
 export function summaryFormatter(summaryTemplate: string, entry: Entry, collection: Collection) {
@@ -207,7 +129,7 @@ export function folderFormatter(
   collection: Collection,
   defaultFolder: string,
   folderKey: string,
-  slugConfig?: CmsSlug,
+  slugConfig?: Slug,
 ) {
   if (!entry || !entry.data) {
     return folderTemplate;

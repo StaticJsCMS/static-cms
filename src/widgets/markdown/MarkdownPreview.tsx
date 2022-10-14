@@ -1,17 +1,17 @@
 import DOMPurify from 'dompurify';
 import React from 'react';
 
-import { WidgetPreviewContainer } from '../../ui';
+import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 import { markdownToHtml } from './serializers';
 
-import type { CmsFieldMarkdown, CmsWidgetPreviewProps } from '../../interface';
+import type { FieldMarkdown, WidgetPreviewProps } from '../../interface';
 
 const MarkdownPreview = ({
   value,
   getAsset,
   field,
   getRemarkPlugins,
-}: CmsWidgetPreviewProps<string, CmsFieldMarkdown>) => {
+}: WidgetPreviewProps<string, FieldMarkdown>) => {
   if (!value) {
     return null;
   }

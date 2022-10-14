@@ -6,7 +6,7 @@ import { getMediaDisplayURL, getMediaFile, waitForMediaLibraryToLoad } from './m
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type { CmsField, Collection, Entry } from '../interface';
+import type { Field, Collection, Entry } from '../interface';
 import type { RootState } from '../store';
 import type AssetProxy from '../valueObjects/AssetProxy';
 
@@ -76,7 +76,7 @@ const emptyAsset = createAssetProxy({
   }),
 });
 
-export function getAsset(collection: Collection, entry: Entry, path: string, field?: CmsField) {
+export function getAsset(collection: Collection, entry: Entry, path: string, field?: Field) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     if (!path) {
       return emptyAsset;

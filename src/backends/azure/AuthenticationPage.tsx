@@ -2,9 +2,9 @@ import styled from '@emotion/styled';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import alert from '../../components/UI/Alert';
+import AuthenticationPage from '../../components/UI/AuthenticationPage';
 import Icon from '../../components/UI/Icon';
 import { ImplicitAuthenticator } from '../../lib/auth';
-import { AuthenticationPage } from '../../ui';
 
 import type { MouseEvent } from 'react';
 import type { AuthenticationPageProps, TranslatedProps } from '../../interface';

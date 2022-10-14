@@ -3,8 +3,8 @@ import AuthenticationPage from './AuthenticationPage';
 
 import type {
   BackendEntry,
-  CmsBackendClass,
-  CmsConfig,
+  BackendClass,
+  Config,
   DisplayURL,
   ImplementationEntry,
   ImplementationFile,
@@ -44,13 +44,13 @@ function deserializeMediaFile({ id, content, encoding, path, name }: MediaFile) 
   return { id, name, path, file, size: file.size, url, displayURL: url };
 }
 
-export default class ProxyBackend implements CmsBackendClass {
+export default class ProxyBackend implements BackendClass {
   proxyUrl: string;
   mediaFolder?: string;
   options: {};
   branch: string;
 
-  constructor(config: CmsConfig, options = {}) {
+  constructor(config: Config, options = {}) {
     if (!config.backend.proxy_url) {
       throw new Error('The Proxy backend needs a "proxy_url" in the backend configuration.');
     }

@@ -27,12 +27,12 @@ import { getClient } from './netlify-lfs-client';
 
 import type { ApiRequest, Cursor } from '../../lib/util';
 import type {
-  CmsConfig,
+  Config,
   Credentials,
   DisplayURL,
   DisplayURLObject,
   BackendEntry,
-  CmsBackendClass,
+  BackendClass,
   ImplementationFile,
   PersistOptions,
   User,
@@ -134,8 +134,8 @@ interface NetlifyUser extends Credentials {
   user_metadata: { full_name: string; avatar_url: string };
 }
 
-export default class GitGateway implements CmsBackendClass {
-  config: CmsConfig;
+export default class GitGateway implements BackendClass {
+  config: Config;
   api?: GitHubAPI | GitLabAPI | BitBucketAPI;
   branch: string;
   mediaFolder?: string;
@@ -154,7 +154,7 @@ export default class GitGateway implements CmsBackendClass {
     proxied: boolean;
     API: GitHubAPI | GitLabAPI | BitBucketAPI | null;
   };
-  constructor(config: CmsConfig, options = {}) {
+  constructor(config: Config, options = {}) {
     this.options = {
       proxied: true,
       API: null,

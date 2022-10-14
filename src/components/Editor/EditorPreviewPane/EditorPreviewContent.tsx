@@ -3,12 +3,12 @@ import React, { useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
-import type { CmsTemplatePreviewComponent, CmsTemplatePreviewProps } from '../../../interface';
+import type { TemplatePreviewComponent, TemplatePreviewProps } from '../../../interface';
 import type { ReactNode } from 'react';
 
 interface PreviewContentProps {
-  previewComponent?: CmsTemplatePreviewComponent;
-  previewProps: CmsTemplatePreviewProps;
+  previewComponent?: TemplatePreviewComponent;
+  previewProps: TemplatePreviewProps;
 }
 
 const StyledPreviewContent = styled.div`

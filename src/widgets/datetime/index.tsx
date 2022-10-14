@@ -2,9 +2,9 @@ import controlComponent from './DateTimeControl';
 import previewComponent from './DateTimePreview';
 import schema from './schema';
 
-import type { CmsFieldDateTime, CmsWidgetParam } from '../../interface';
+import type { FieldDateTime, WidgetParam } from '../../interface';
 
-const DateTimeWidget = (): CmsWidgetParam<string, CmsFieldDateTime> => {
+const DateTimeWidget = (): WidgetParam<string, FieldDateTime> => {
   return {
     name: 'datetime',
     controlComponent,

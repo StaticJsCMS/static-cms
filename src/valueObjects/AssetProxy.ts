@@ -1,17 +1,17 @@
-import type { CmsField } from '../interface';
+import type { Field } from '../interface';
 
 interface AssetProxyArgs {
   path: string;
   url?: string;
   file?: File;
-  field?: CmsField;
+  field?: Field;
 }
 
 export default class AssetProxy {
   url: string;
   fileObj?: File;
   path: string;
-  field?: CmsField;
+  field?: Field;
 
   constructor({ url, file, path, field }: AssetProxyArgs) {
     this.url = url ? url : window.URL.createObjectURL(file as Blob);

@@ -6,7 +6,7 @@ import { selectEntrySlug } from './util/collection.util';
 import { set } from './util/object.util';
 
 import type {
-  CmsField,
+  Field,
   Collection,
   Entry,
   EntryData,
@@ -39,8 +39,7 @@ export function getI18nInfo(collection: Collection): I18nInfo | null {
   if (!hasI18n(collection) || typeof collection[I18N] !== 'object') {
     return null;
   }
-  const { structure, locales, default_locale: defaultLocale } = collection.i18n;
-  return { structure, locales, defaultLocale };
+  return collection.i18n;
 }
 
 export function getI18nFilesDepth(collection: Collection, depth: number) {
@@ -51,17 +50,17 @@ export function getI18nFilesDepth(collection: Collection, depth: number) {
   return depth;
 }
 
-export function isFieldTranslatable(field: CmsField, locale?: string, defaultLocale?: string) {
+export function isFieldTranslatable(field: Field, locale?: string, defaultLocale?: string) {
   const isTranslatable = locale !== defaultLocale && field.i18n === I18N_FIELD.TRANSLATE;
   return isTranslatable;
 }
 
-export function isFieldDuplicate(field: CmsField, locale?: string, defaultLocale?: string) {
+export function isFieldDuplicate(field: Field, locale?: string, defaultLocale?: string) {
   const isDuplicate = locale !== defaultLocale && field.i18n === I18N_FIELD.DUPLICATE;
   return isDuplicate;
 }
 
-export function isFieldHidden(field: CmsField, locale?: string, defaultLocale?: string) {
+export function isFieldHidden(field: Field, locale?: string, defaultLocale?: string) {
   const isHidden = locale !== defaultLocale && field.i18n === I18N_FIELD.NONE;
   return isHidden;
 }
@@ -384,7 +383,7 @@ export function duplicateDefaultI18nFields(collection: Collection, dataFields: a
 
 export function duplicateI18nFields(
   entryDraft: EntryDraftState,
-  field: CmsField,
+  field: Field,
   locales: string[],
   defaultLocale: string,
   fieldPath: string[] = [field.name],

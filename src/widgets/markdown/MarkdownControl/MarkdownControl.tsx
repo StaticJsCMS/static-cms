@@ -4,14 +4,14 @@ import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 
 import type { RefObject } from 'react';
-import type { CmsFieldMarkdown, CmsWidgetControlProps } from '../../../interface';
+import type { FieldMarkdown, WidgetControlProps } from '../../../interface';
 
 const MarkdownControl = ({
   path,
   field,
   value,
   onChange,
-}: CmsWidgetControlProps<string, CmsFieldMarkdown>) => {
+}: WidgetControlProps<string, FieldMarkdown>) => {
   const editorRef = useMemo(() => React.createRef(), []) as RefObject<Editor>;
 
   const handleOnChange = useCallback(() => {

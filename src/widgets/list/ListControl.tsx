@@ -7,10 +7,13 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 import uuid from 'uuid/v4';
 
+import FieldLabel from '../../components/UI/FieldLabel';
+import ListItemTopBar from '../../components/UI/ListItemTopBar';
+import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
+import { colors, lengths } from '../../components/UI/styles';
 import { transientOptions } from '../../lib';
 import { getFieldLabel } from '../../lib/util/field.util';
-import { stringTemplate } from '../../lib/widgets';
-import { colors, FieldLabel, lengths, ListItemTopBar, ObjectWidgetTopBar } from '../../ui';
+import { compileStringTemplate, addFileTemplateFields } from '../../lib/widgets/stringTemplate';
 import ObjectControl from '../object/ObjectControl';
 import {
   getErrorMessageForTypedFieldAndValue,
@@ -22,9 +25,9 @@ import {
 import type { MouseEvent } from 'react';
 import type { t } from 'react-polyglot';
 import type {
-  CmsField,
-  CmsFieldList,
-  CmsWidgetControlProps,
+  Field,
+  FieldList,
+  WidgetControlProps,
   Entry,
   EntryData,
   ListValue,
@@ -108,11 +111,11 @@ function handleSummary(
       label,
     },
   };
-  const data = stringTemplate.addFileTemplateFields(entry.path, labeledItem);
-  return stringTemplate.compileStringTemplate(summary, null, '', data);
+  const data = addFileTemplateFields(entry.path, labeledItem);
+  return compileStringTemplate(summary, null, '', data);
 }
 
-function validateItem(field: CmsFieldList, item: ListValue) {
+function validateItem(field: FieldList, item: ListValue) {
   if (!(typeof item === 'object')) {
     console.warn(
       `'${field.name}' field item value value should be an object but is a '${typeof item}'`,
@@ -124,7 +127,7 @@ function validateItem(field: CmsFieldList, item: ListValue) {
 }
 
 interface LabelComponentProps {
-  field: CmsFieldList;
+  field: FieldList;
   isActive: boolean;
   hasErrors: boolean;
   uniqueFieldId: string;
@@ -149,7 +152,7 @@ function LabelComponent({
 }
 
 function getFieldsDefault(
-  fields: CmsField[],
+  fields: Field[],
   initialValue: Record<string, ListValue> = {},
 ): Record<string, ListValue> {
   return fields.reduce((acc, item) => {
@@ -208,7 +211,7 @@ const ListControl = ({
   queryHits,
   t,
   ...otherProps
-}: CmsWidgetControlProps<ListValue[], CmsFieldList>) => {
+}: WidgetControlProps<ListValue[], FieldList>) => {
   const value = useMemo(() => otherProps.value ?? [], [otherProps.value]);
 
   const [listCollapsed, setListCollapsed] = useState(field.collapsed ?? true);
@@ -283,7 +286,7 @@ const ListControl = ({
     return (field.field && 'default' in field.field ? field.field.default : '') as ListValue;
   }, [field.field]);
 
-  const multipleDefault = useCallback((fields: CmsField[]) => {
+  const multipleDefault = useCallback((fields: Field[]) => {
     return getFieldsDefault(fields);
   }, []);
 
@@ -294,7 +297,7 @@ const ListControl = ({
         return {};
       }
 
-      const fields: CmsField[] =
+      const fields: Field[] =
         'fields' in selectedType
           ? selectedType.fields ?? []
           : selectedType.field
@@ -543,7 +546,7 @@ const ListControl = ({
       const key = keys[index];
       const hasError = hasErrors(index);
       const isVariableTypesList = valueType === valueTypes.MIXED;
-      let itemField: CmsField | undefined = field;
+      let itemField: Field | undefined = field;
       if (isVariableTypesList) {
         itemField = getTypedFieldForValue(field, item as Record<string, ListValue>);
         if (!itemField) {

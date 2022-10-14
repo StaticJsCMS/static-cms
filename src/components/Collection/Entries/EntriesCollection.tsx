@@ -7,6 +7,7 @@ import {
   loadEntries as loadEntriesAction,
   traverseCollectionCursor as traverseCollectionCursorAction,
 } from '../../../actions/entries';
+import { colors } from '../../../components/UI/styles';
 import { Cursor } from '../../../lib/util';
 import { selectCollectionEntriesCursor } from '../../../reducers/cursors';
 import {
@@ -15,7 +16,6 @@ import {
   selectGroups,
   selectIsFetching,
 } from '../../../reducers/entries';
-import { colors } from '../../../ui';
 import Entries from './Entries';
 
 import type { ComponentType } from 'react';

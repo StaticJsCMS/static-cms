@@ -6,11 +6,11 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import React, { useCallback } from 'react';
 
-import { transientOptions } from '../lib';
+import { transientOptions } from '../../lib';
 import { buttons, colors, transitions } from './styles';
 
 import type { MouseEvent, ReactNode } from 'react';
-import type { CmsField, TranslatedProps } from '../interface';
+import type { Field, TranslatedProps } from '../../interface';
 
 const TopBarContainer = styled.div`
   align-items: center;
@@ -62,7 +62,7 @@ const AddButton = styled.button`
 
 export interface ObjectWidgetTopBarProps {
   allowAdd?: boolean;
-  types?: CmsField[];
+  types?: Field[];
   onAdd?: (event: MouseEvent) => void;
   onAddType?: (name: string) => void;
   onCollapseToggle: (event: MouseEvent) => void;
@@ -92,7 +92,7 @@ const ObjectWidgetTopBar = ({
   }, []);
 
   const renderTypesDropdown = useCallback(
-    (types: CmsField[]) => {
+    (types: Field[]) => {
       if (!onAddType) {
         return null;
       }

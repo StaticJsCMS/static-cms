@@ -1,9 +1,9 @@
 import controlComponent from './ColorControl';
 import previewComponent from './ColorPreview';
 
-import type { CmsFieldColor, CmsWidgetParam } from '../../interface';
+import type { FieldColor, WidgetParam } from '../../interface';
 
-const ColorWidget = (): CmsWidgetParam<string, CmsFieldColor> => {
+const ColorWidget = (): WidgetParam<string, FieldColor> => {
   return {
     name: 'color',
     controlComponent,

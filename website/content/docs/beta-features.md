@@ -71,7 +71,7 @@ i18n:
 
   # Optional, defaults to the first item in locales.
   # The locale to be used for fields validation and as a baseline for the entry.
-  default_locale: en
+  defaultLocale: en
 ```
 
 ### Collection level configuration

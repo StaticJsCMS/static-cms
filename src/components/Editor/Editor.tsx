@@ -27,15 +27,15 @@ import { selectFields } from '../../lib/util/collection.util';
 import { useWindowEvent } from '../../lib/util/window.util';
 import { selectEntry } from '../../reducers';
 import { history, navigateToCollection, navigateToNewEntry } from '../../routing/history';
-import { Loader } from '../../ui';
 import confirm from '../UI/Confirm';
+import Loader from '../UI/Loader';
 import EditorInterface from './EditorInterface';
 
 import type { TransitionPromptHook } from 'history';
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import type {
-  CmsField,
+  Field,
   Collection,
   EditorPersistOptions,
   Entry,
@@ -65,10 +65,8 @@ const Editor = ({
   showDelete,
   slug,
   localBackup,
-  collectionEntriesLoaded,
   persistLocalBackup,
   changeDraftField,
-  loadEntries,
   loadEntry,
   persistEntry,
   deleteEntry,
@@ -90,12 +88,7 @@ const Editor = ({
   );
 
   const handleChangeDraftField = useCallback(
-    (
-      path: string,
-      field: CmsField,
-      value: ValueOrNestedValue,
-      i18n: I18nSettings | undefined,
-    ) => {
+    (path: string, field: Field, value: ValueOrNestedValue, i18n: I18nSettings | undefined) => {
       changeDraftField({ path, field, value, entry, i18n });
     },
     [changeDraftField, entry],

@@ -2,9 +2,9 @@ import controlComponent from './CodeControl';
 import previewComponent from './CodePreview';
 import schema from './schema';
 
-import type { CmsFieldCode, CmsWidgetParam } from '../../interface';
+import type { FieldCode, WidgetParam } from '../../interface';
 
-const CodeWidget = (): CmsWidgetParam<string | { [key: string]: string }, CmsFieldCode> => {
+const CodeWidget = (): WidgetParam<string | { [key: string]: string }, FieldCode> => {
   return {
     name: 'code',
     controlComponent,

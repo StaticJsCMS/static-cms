@@ -1,23 +1,23 @@
 import React from 'react';
 
-import { WidgetPreviewContainer } from '../../ui';
+import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
 import type {
-  CmsWidgetPreviewProps,
-  CmsFieldObject,
+  WidgetPreviewProps,
+  FieldObject,
   ValueOrNestedValue,
-  CmsFieldList,
+  FieldList,
   ListValue,
 } from '../../interface';
 
 function ObjectPreview({
   value,
-}: CmsWidgetPreviewProps<
+}: WidgetPreviewProps<
   | {
       [key: string]: ValueOrNestedValue;
     }
   | ListValue[],
-  CmsFieldObject | CmsFieldList
+  FieldObject | FieldList
 >) {
   return <WidgetPreviewContainer>{JSON.stringify(value, null, 2)}</WidgetPreviewContainer>;
 }

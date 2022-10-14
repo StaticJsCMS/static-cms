@@ -14,14 +14,14 @@ import { getIntegrations, selectIntegration } from '../reducers/integrations';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type {
-  CmsCollection,
-  CmsConfig,
-  CmsField,
-  CmsFieldBase,
-  CmsFieldList,
-  CmsFieldObject,
-  CmsI18nConfig,
-  CmsLocalBackend,
+  Collection,
+  Config,
+  Field,
+  FieldBase,
+  FieldList,
+  FieldObject,
+  I18nInfo,
+  LocalBackend,
 } from '../interface';
 import type { RootState } from '../store';
 
@@ -29,18 +29,18 @@ export const CONFIG_REQUEST = 'CONFIG_REQUEST';
 export const CONFIG_SUCCESS = 'CONFIG_SUCCESS';
 export const CONFIG_FAILURE = 'CONFIG_FAILURE';
 
-function isObjectField(field: CmsField): field is CmsFieldBase & CmsFieldObject {
-  return 'fields' in (field as CmsFieldObject);
+function isObjectField(field: Field): field is FieldBase & FieldObject {
+  return 'fields' in (field as FieldObject);
 }
 
-function isFieldList(field: CmsField): field is CmsFieldBase & CmsFieldList {
-  return 'types' in (field as CmsFieldList) || 'field' in (field as CmsFieldList);
+function isFieldList(field: Field): field is FieldBase & FieldList {
+  return 'types' in (field as FieldList) || 'field' in (field as FieldList);
 }
 
-function traverseFieldsJS<Field extends CmsField>(
-  fields: Field[],
-  updater: <T extends CmsField>(field: T) => T,
-): Field[] {
+function traverseFieldsJS<F extends Field>(
+  fields: F[],
+  updater: <T extends Field>(field: T) => T,
+): F[] {
   return fields.map(field => {
     const newField = updater(field);
     if (isObjectField(newField)) {
@@ -68,7 +68,7 @@ function getConfigUrl() {
   return 'config.yml';
 }
 
-function setDefaultPublicFolderForField<T extends CmsField>(field: T) {
+function setDefaultPublicFolderForField<T extends Field>(field: T) {
   if ('media_folder' in field && !('public_folder' in field)) {
     return { ...field, public_folder: field.media_folder };
   }
@@ -88,7 +88,7 @@ const WIDGET_KEY_MAP = {
   optionsLength: 'options_length',
 } as const;
 
-function setSnakeCaseConfig<T extends CmsField>(field: T) {
+function setSnakeCaseConfig<T extends Field>(field: T) {
   const deprecatedKeys = Object.keys(WIDGET_KEY_MAP).filter(
     camel => camel in field,
   ) as ReadonlyArray<keyof typeof WIDGET_KEY_MAP>;
@@ -104,7 +104,7 @@ function setSnakeCaseConfig<T extends CmsField>(field: T) {
   return Object.assign({}, field, ...snakeValues) as T;
 }
 
-function setI18nField<T extends CmsField>(field: T) {
+function setI18nField<T extends Field>(field: T) {
   if (field[I18N] === true) {
     return { ...field, [I18N]: I18N_FIELD.TRANSLATE };
   } else if (field[I18N] === false || !field[I18N]) {
@@ -114,23 +114,23 @@ function setI18nField<T extends CmsField>(field: T) {
 }
 
 function getI18nDefaults(
-  collectionOrFileI18n: boolean | CmsI18nConfig,
-  defaultI18n: CmsI18nConfig,
+  collectionOrFileI18n: boolean | I18nInfo,
+  defaultI18n: I18nInfo,
 ) {
   if (typeof collectionOrFileI18n === 'boolean') {
     return defaultI18n;
   } else {
     const locales = collectionOrFileI18n.locales || defaultI18n.locales;
-    const defaultLocale = collectionOrFileI18n.default_locale || locales[0];
-    const mergedI18n: CmsI18nConfig = deepmerge(defaultI18n, collectionOrFileI18n);
+    const defaultLocale = collectionOrFileI18n.defaultLocale || locales[0];
+    const mergedI18n: I18nInfo = deepmerge(defaultI18n, collectionOrFileI18n);
     mergedI18n.locales = locales;
-    mergedI18n.default_locale = defaultLocale;
+    mergedI18n.defaultLocale = defaultLocale;
     throwOnMissingDefaultLocale(mergedI18n);
     return mergedI18n;
   }
 }
 
-function setI18nDefaultsForFields(collectionOrFileFields: CmsField[], hasI18n: boolean) {
+function setI18nDefaultsForFields(collectionOrFileFields: Field[], hasI18n: boolean) {
   if (hasI18n) {
     return traverseFieldsJS(collectionOrFileFields, setI18nField);
   } else {
@@ -142,7 +142,7 @@ function setI18nDefaultsForFields(collectionOrFileFields: CmsField[], hasI18n: b
   }
 }
 
-function throwOnInvalidFileCollectionStructure(i18n?: CmsI18nConfig) {
+function throwOnInvalidFileCollectionStructure(i18n?: I18nInfo) {
   if (i18n && i18n.structure !== I18N_STRUCTURE.SINGLE_FILE) {
     throw new Error(
       `i18n configuration for files collections is limited to ${I18N_STRUCTURE.SINGLE_FILE} structure`,
@@ -150,23 +150,23 @@ function throwOnInvalidFileCollectionStructure(i18n?: CmsI18nConfig) {
   }
 }
 
-function throwOnMissingDefaultLocale(i18n?: CmsI18nConfig) {
-  if (i18n && i18n.default_locale && !i18n.locales.includes(i18n.default_locale)) {
+function throwOnMissingDefaultLocale(i18n?: I18nInfo) {
+  if (i18n && i18n.defaultLocale && !i18n.locales.includes(i18n.defaultLocale)) {
     throw new Error(
       `i18n locales '${i18n.locales.join(', ')}' are missing the default locale ${
-        i18n.default_locale
+        i18n.defaultLocale
       }`,
     );
   }
 }
 
-function hasIntegration(config: CmsConfig, collection: CmsCollection) {
+function hasIntegration(config: Config, collection: Collection) {
   const integrations = getIntegrations(config);
   const integration = selectIntegration(integrations, collection.name, 'listEntries');
   return !!integration;
 }
 
-export function normalizeConfig(config: CmsConfig) {
+export function normalizeConfig(config: Config) {
   const { collections = [] } = config;
 
   const normalizedCollections = collections.map(collection => {
@@ -192,7 +192,7 @@ export function normalizeConfig(config: CmsConfig) {
   return { ...config, collections: normalizedCollections };
 }
 
-export function applyDefaults(originalConfig: CmsConfig) {
+export function applyDefaults(originalConfig: Config) {
   return produce(originalConfig, config => {
     config.slug = config.slug || {};
     config.collections = config.collections || [];
@@ -224,7 +224,7 @@ export function applyDefaults(originalConfig: CmsConfig) {
     const i18n = config[I18N];
 
     if (i18n) {
-      i18n.default_locale = i18n.default_locale || i18n.locales[0];
+      i18n.defaultLocale = i18n.defaultLocale || i18n.locales[0];
     }
 
     throwOnMissingDefaultLocale(i18n);
@@ -232,10 +232,6 @@ export function applyDefaults(originalConfig: CmsConfig) {
     const backend = resolveBackend(config);
 
     for (const collection of config.collections) {
-      if (!('publish' in collection)) {
-        collection.publish = true;
-      }
-
       let collectionI18n = collection[I18N];
 
       if (i18n && collectionI18n) {
@@ -345,15 +341,15 @@ export function parseConfig(data: string) {
     typeof window.CMS_ENV === 'string' &&
     config[window.CMS_ENV]
   ) {
-    const configKeys = Object.keys(config[window.CMS_ENV]) as ReadonlyArray<keyof CmsConfig>;
+    const configKeys = Object.keys(config[window.CMS_ENV]) as ReadonlyArray<keyof Config>;
     for (const key of configKeys) {
-      config[key] = config[window.CMS_ENV][key] as CmsConfig[keyof CmsConfig];
+      config[key] = config[window.CMS_ENV][key] as Config[keyof Config];
     }
   }
-  return config as CmsConfig;
+  return config as Config;
 }
 
-async function getConfigYaml(file: string): Promise<CmsConfig> {
+async function getConfigYaml(file: string): Promise<Config> {
   const response = await fetch(file, { credentials: 'same-origin' }).catch(error => error as Error);
   if (response instanceof Error || response.status !== 200) {
     const message = response instanceof Error ? response.message : response.status;
@@ -367,7 +363,7 @@ async function getConfigYaml(file: string): Promise<CmsConfig> {
   return parseConfig(await response.text());
 }
 
-export function configLoaded(config: CmsConfig) {
+export function configLoaded(config: Config) {
   return {
     type: CONFIG_SUCCESS,
     payload: config,
@@ -388,7 +384,7 @@ export function configFailed(err: Error) {
   } as const;
 }
 
-export async function detectProxyServer(localBackend?: boolean | CmsLocalBackend) {
+export async function detectProxyServer(localBackend?: boolean | LocalBackend) {
   const allowedHosts = [
     'localhost',
     '127.0.0.1',
@@ -429,7 +425,7 @@ export async function detectProxyServer(localBackend?: boolean | CmsLocalBackend
   }
 }
 
-export async function handleLocalBackend(originalConfig: CmsConfig) {
+export async function handleLocalBackend(originalConfig: Config) {
   if (!originalConfig.local_backend) {
     return originalConfig;
   }
@@ -446,7 +442,7 @@ export async function handleLocalBackend(originalConfig: CmsConfig) {
   });
 }
 
-export function loadConfig(manualConfig: CmsConfig | undefined, onLoad: () => unknown) {
+export function loadConfig(manualConfig: Config | undefined, onLoad: () => unknown) {
   if (window.CMS_CONFIG) {
     return configLoaded(window.CMS_CONFIG);
   }

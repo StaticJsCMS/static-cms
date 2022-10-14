@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import React, { useCallback, useMemo, useState } from 'react';
 
+import AuthenticationPage from '../../components/UI/AuthenticationPage';
 import Icon from '../../components/UI/Icon';
 import { ImplicitAuthenticator, NetlifyAuthenticator, PkceAuthenticator } from '../../lib/auth';
 import { isNotEmpty } from '../../lib/util/string.util';
-import { AuthenticationPage } from '../../ui';
 
 import type { MouseEvent } from 'react';
 import type {

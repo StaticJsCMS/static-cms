@@ -11,7 +11,7 @@ import { getWidgets } from '../lib/registry';
 import { I18N_STRUCTURE, I18N_FIELD } from '../lib/i18n';
 
 import type { ErrorObject } from 'ajv';
-import type { CmsConfig } from '../interface';
+import type { Config } from '../interface';
 
 const localeType = { type: 'string', minLength: 2, maxLength: 10, pattern: '^[a-zA-Z-_]+$' };
 
@@ -25,7 +25,7 @@ const i18n = {
       items: localeType,
       uniqueItems: true,
     },
-    default_locale: localeType,
+    defaultLocale: localeType,
   },
 };
 
@@ -346,7 +346,7 @@ class ConfigError extends Error {
  * `validateConfig` is a pure function. It does not mutate
  * the config that is passed in.
  */
-export function validateConfig(config: CmsConfig) {
+export function validateConfig(config: Config) {
   const ajv = new AJV({ allErrors: true, $data: true });
   uniqueItemProperties(ajv);
   select(ajv);

@@ -14,20 +14,20 @@ import {
   openMediaLibrary as openMediaLibraryAction,
   persistMedia as persistMediaAction,
   removeInsertedMedia as removeInsertedMediaAction,
-  removeMediaControl as removeMediaControlAction,
+  removeMediaControl as removeMediaControlAction
 } from '../../../actions/mediaLibrary';
 import { clearSearch as clearSearchAction, query as queryAction } from '../../../actions/search';
+import { borders, colors, lengths, transitions } from '../../../components/UI/styles';
 import { transientOptions } from '../../../lib';
 import { getEditorComponents, resolveWidget } from '../../../lib/registry';
 import { getFieldLabel } from '../../../lib/util/field.util';
 import { selectIsLoadingAsset } from '../../../reducers/medias';
-import { borders, colors, lengths, transitions } from '../../../ui';
 import WidgetControl from './WidgetControl';
 
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import type {
-  CmsField,
+  Field,
   Collection,
   Entry,
   FieldError,
@@ -35,7 +35,7 @@ import type {
   GetAssetFunction,
   TranslatedProps,
   ValueOrNestedValue,
-  Widget,
+  Widget
 } from '../../../interface';
 import type { RootState } from '../../../store';
 import type { EditorControlPaneProps } from './EditorControlPane';
@@ -180,7 +180,7 @@ const EditorControl = ({
 
   const handleGetAsset = useCallback(
     (collection: Collection, entry: Entry): GetAssetFunction =>
-      (path: string, field?: CmsField) => {
+      (path: string, field?: Field) => {
         return getAsset(collection, entry, path, field);
       },
     [getAsset],
@@ -191,8 +191,8 @@ const EditorControl = ({
     [field.name, parentPath],
   );
 
-  const cmsConfig = useMemo(() => config.config, [config.config]);
-  if (!collection || !entry || !cmsConfig) {
+  const Config = useMemo(() => config.config, [config.config]);
+  if (!collection || !entry || !Config) {
     return null;
   }
 
@@ -215,7 +215,7 @@ const EditorControl = ({
           clearFieldErrors={clearFieldErrors}
           clearSearch={clearSearch}
           collection={collection}
-          config={cmsConfig}
+          config={Config}
           controlComponent={widget.control}
           entry={entry}
           field={field}
@@ -277,16 +277,16 @@ const EditorControl = ({
 interface EditorControlOwnProps {
   className?: string;
   clearFieldErrors: EditorControlPaneProps['clearFieldErrors'];
-  field: CmsField;
+  field: Field;
   fieldsErrors: FieldsErrors;
   isDisabled?: boolean;
   isEditorComponent?: boolean;
-  isFieldDuplicate?: (field: CmsField) => boolean;
-  isFieldHidden?: (field: CmsField) => boolean;
+  isFieldDuplicate?: (field: Field) => boolean;
+  isFieldHidden?: (field: Field) => boolean;
   isHidden?: boolean;
   isNewEditorComponent?: boolean;
   locale?: string;
-  onChange: (path: string, field: CmsField, newValue: ValueOrNestedValue) => void;
+  onChange: (path: string, field: Field, newValue: ValueOrNestedValue) => void;
   onValidate: (path: string, errors: FieldError[]) => void;
   parentPath: string;
   value: ValueOrNestedValue;

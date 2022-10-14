@@ -5,9 +5,9 @@ import ValidationErrorTypes from '../../../constants/validationErrorTypes';
 import type { ComponentType } from 'react';
 import type { t } from 'react-polyglot';
 import type {
-  CmsConfig,
-  CmsField,
-  CmsWidgetControlProps,
+  Config,
+  Field,
+  WidgetControlProps,
   Collection,
   EditorComponentOptions,
   Entry,
@@ -33,7 +33,7 @@ function isEmpty(value: ValueOrNestedValue) {
 }
 
 function validatePresence(
-  field: CmsField,
+  field: Field,
   value: ValueOrNestedValue,
   parentIds: string[],
   t: t,
@@ -55,7 +55,7 @@ function validatePresence(
 }
 
 function validatePattern(
-  field: CmsField,
+  field: Field,
   value: ValueOrNestedValue,
   parentIds: string[],
   t: t,
@@ -83,7 +83,7 @@ function validatePattern(
 }
 
 function validate(
-  field: CmsField,
+  field: Field,
   parentIds: string[],
   value: ValueOrNestedValue,
   validator: Widget<ValueOrNestedValue>['validator'],
@@ -125,7 +125,7 @@ function validate(
 }
 
 function validateWrappedControl(
-  field: CmsField,
+  field: Field,
   parentIds: string[],
   value: ValueOrNestedValue,
   validator: Widget<ValueOrNestedValue>['validator'],
@@ -178,10 +178,10 @@ export interface WidgetProps {
   clearFieldErrors: EditorControlPaneProps['clearFieldErrors'];
   clearSearch: EditorControlProps['clearSearch'];
   collection: Collection;
-  config: CmsConfig;
-  controlComponent: React.ComponentType<CmsWidgetControlProps<ValueOrNestedValue>>;
+  config: Config;
+  controlComponent: React.ComponentType<WidgetControlProps<ValueOrNestedValue>>;
   entry: Entry;
-  field: CmsField;
+  field: Field;
   fieldsErrors: FieldsErrors;
   getAsset: GetAssetFunction;
   getEditorComponents: () => Record<string, EditorComponentOptions>;
@@ -245,7 +245,7 @@ const WidgetControl = ({
   value,
 }: TranslatedProps<WidgetProps>) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return React.createElement(controlComponent as ComponentType<CmsWidgetControlProps<any>>, {
+  return React.createElement(controlComponent as ComponentType<WidgetControlProps<any>>, {
     clearFieldErrors,
     clearSearch,
     collection,

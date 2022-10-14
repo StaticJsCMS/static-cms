@@ -5,19 +5,19 @@ import EditorComponent from '../valueObjects/EditorComponent';
 import type { Pluggable } from 'unified';
 import type {
   AdditionalLink,
-  CmsBackendClass,
-  CmsBackendInitializer,
-  CmsBackendInitializerOptions,
-  CmsConfig,
-  CmsEventListener,
-  CmsField,
-  CmsIcon,
-  CmsLocalePhrasesRoot,
-  CmsMediaLibraryExternalLibrary,
-  CmsMediaLibraryOptions,
-  CmsTemplatePreviewComponent,
-  CmsWidgetParam,
-  CmsWidgetValueSerializer,
+  BackendClass,
+  BackendInitializer,
+  BackendInitializerOptions,
+  Config,
+  EventListener,
+  Field,
+  CustomIcon,
+  LocalePhrasesRoot,
+  MediaLibraryExternalLibrary,
+  MediaLibraryOptions,
+  TemplatePreviewComponent,
+  WidgetParam,
+  WidgetValueSerializer,
   EditorComponentOptions,
   Entry,
   EventData,
@@ -31,19 +31,19 @@ export type AllowedEvent = typeof allowedEvents[number];
 const eventHandlers = allowedEvents.reduce((acc, e) => {
   acc[e] = [];
   return acc;
-}, {} as Record<AllowedEvent, { handler: CmsEventListener['handler']; options: Record<string, unknown> }[]>);
+}, {} as Record<AllowedEvent, { handler: EventListener['handler']; options: Record<string, unknown> }[]>);
 
 interface Registry {
-  backends: Record<string, CmsBackendInitializer>;
-  templates: Record<string, CmsTemplatePreviewComponent>;
+  backends: Record<string, BackendInitializer>;
+  templates: Record<string, TemplatePreviewComponent>;
   widgets: Record<string, Widget>;
-  icons: Record<string, CmsIcon>;
+  icons: Record<string, CustomIcon>;
   additionalLinks: Record<string, AdditionalLink>;
   editorComponents: Record<string, EditorComponentOptions>;
   remarkPlugins: Pluggable[];
-  widgetValueSerializers: Record<string, CmsWidgetValueSerializer>;
-  mediaLibraries: (CmsMediaLibraryExternalLibrary & { options: CmsMediaLibraryOptions })[];
-  locales: Record<string, CmsLocalePhrasesRoot>;
+  widgetValueSerializers: Record<string, WidgetValueSerializer>;
+  mediaLibraries: (MediaLibraryExternalLibrary & { options: MediaLibraryOptions })[];
+  locales: Record<string, LocalePhrasesRoot>;
   eventHandlers: typeof eventHandlers;
 }
 
@@ -96,11 +96,11 @@ export default {
 /**
  * Preview Templates
  */
-export function registerPreviewTemplate(name: string, component: CmsTemplatePreviewComponent) {
+export function registerPreviewTemplate(name: string, component: TemplatePreviewComponent) {
   registry.templates[name] = component;
 }
 
-export function getPreviewTemplate(name: string): CmsTemplatePreviewComponent {
+export function getPreviewTemplate(name: string): TemplatePreviewComponent {
   return registry.templates[name];
 }
 
@@ -108,8 +108,8 @@ export function getPreviewTemplate(name: string): CmsTemplatePreviewComponent {
  * Editor Widgets
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function registerWidget(widgets: CmsWidgetParam<any, any>[]): void;
-export function registerWidget(widget: CmsWidgetParam): void;
+export function registerWidget(widgets: WidgetParam<any, any>[]): void;
+export function registerWidget(widget: WidgetParam): void;
 export function registerWidget<T = unknown>(
   name: string,
   control: string | Widget<T>['control'],
@@ -117,7 +117,7 @@ export function registerWidget<T = unknown>(
   options?: WidgetOptions,
 ): void;
 export function registerWidget<T = unknown>(
-  name: string | CmsWidgetParam<T> | CmsWidgetParam[],
+  name: string | WidgetParam<T> | WidgetParam[],
   control?: string | Widget<T>['control'],
   preview?: Widget<T>['preview'],
   { schema, validator, getValidValue }: WidgetOptions = {},
@@ -181,7 +181,7 @@ export function registerWidget<T = unknown>(
   }
 }
 
-export function getWidget<T = unknown, F extends CmsField = CmsField>(name: string): Widget<T, F> {
+export function getWidget<T = unknown, F extends Field = Field>(name: string): Widget<T, F> {
   return registry.widgets[name] as unknown as Widget<T, F>;
 }
 
@@ -194,7 +194,7 @@ export function getWidgets(): ({
   }));
 }
 
-export function resolveWidget<T = unknown, F extends CmsField = CmsField>(
+export function resolveWidget<T = unknown, F extends Field = Field>(
   name?: string,
 ): Widget<T, F> {
   return getWidget(name || 'string') || getWidget('unknown');
@@ -243,12 +243,12 @@ export function getRemarkPlugins(): Pluggable[] {
  */
 export function registerWidgetValueSerializer(
   widgetName: string,
-  serializer: CmsWidgetValueSerializer,
+  serializer: WidgetValueSerializer,
 ) {
   registry.widgetValueSerializers[widgetName] = serializer;
 }
 
-export function getWidgetValueSerializer(widgetName: string): CmsWidgetValueSerializer | undefined {
+export function getWidgetValueSerializer(widgetName: string): WidgetValueSerializer | undefined {
   return registry.widgetValueSerializers[widgetName];
 }
 
@@ -256,7 +256,7 @@ export function getWidgetValueSerializer(widgetName: string): CmsWidgetValueSeri
  * Backends
  */
 export function registerBackend<
-  T extends { new (config: CmsConfig, options: CmsBackendInitializerOptions): CmsBackendClass },
+  T extends { new (config: Config, options: BackendInitializerOptions): BackendClass },
 >(name: string, BackendClass: T) {
   if (!name || !BackendClass) {
     console.error(
@@ -266,13 +266,13 @@ export function registerBackend<
     console.error(`Backend [${name}] already registered. Please choose a different name.`);
   } else {
     registry.backends[name] = {
-      init: (config: CmsConfig, options: CmsBackendInitializerOptions) =>
+      init: (config: Config, options: BackendInitializerOptions) =>
         new BackendClass(config, options),
     };
   }
 }
 
-export function getBackend(name: string): CmsBackendInitializer {
+export function getBackend(name: string): BackendInitializer {
   return registry.backends[name];
 }
 
@@ -280,8 +280,8 @@ export function getBackend(name: string): CmsBackendInitializer {
  * Media Libraries
  */
 export function registerMediaLibrary(
-  mediaLibrary: CmsMediaLibraryExternalLibrary,
-  options: CmsMediaLibraryOptions = {},
+  mediaLibrary: MediaLibraryExternalLibrary,
+  options: MediaLibraryOptions = {},
 ) {
   if (registry.mediaLibraries.find(ml => mediaLibrary.name === ml.name)) {
     throw new Error(`A media library named ${mediaLibrary.name} has already been registered.`);
@@ -291,7 +291,7 @@ export function registerMediaLibrary(
 
 export function getMediaLibrary(
   name: string,
-): (CmsMediaLibraryExternalLibrary & { options: CmsMediaLibraryOptions }) | undefined {
+): (MediaLibraryExternalLibrary & { options: MediaLibraryOptions }) | undefined {
   return registry.mediaLibraries.find(ml => ml.name === name);
 }
 
@@ -311,7 +311,7 @@ export function getEventListeners(name: AllowedEvent) {
 }
 
 export function registerEventListener(
-  { name, handler }: CmsEventListener,
+  { name, handler }: EventListener,
   options: Record<string, unknown> = {},
 ) {
   validateEventName(name);
@@ -336,7 +336,7 @@ export async function invokeEvent({ name, data }: { name: AllowedEvent; data: Ev
   return _data.entry.data;
 }
 
-export function removeEventListener({ name, handler }: CmsEventListener) {
+export function removeEventListener({ name, handler }: EventListener) {
   validateEventName(name);
   if (handler) {
     registry.eventHandlers[name] = registry.eventHandlers[name].filter(
@@ -350,7 +350,7 @@ export function removeEventListener({ name, handler }: CmsEventListener) {
 /**
  * Locales
  */
-export function registerLocale(locale: string, phrases: CmsLocalePhrasesRoot) {
+export function registerLocale(locale: string, phrases: LocalePhrasesRoot) {
   if (!locale || !phrases) {
     console.error("Locale parameters invalid. example: CMS.registerLocale('locale', phrases)");
   } else {
@@ -358,18 +358,18 @@ export function registerLocale(locale: string, phrases: CmsLocalePhrasesRoot) {
   }
 }
 
-export function getLocale(locale: string): CmsLocalePhrasesRoot | undefined {
+export function getLocale(locale: string): LocalePhrasesRoot | undefined {
   return registry.locales[locale];
 }
 
 /**
  * Icons
  */
-export function registerIcon(name: string, icon: CmsIcon) {
+export function registerIcon(name: string, icon: CustomIcon) {
   registry.icons[name] = icon;
 }
 
-export function getIcon(name: string): CmsIcon | null {
+export function getIcon(name: string): CustomIcon | null {
   return registry.icons[name] ?? null;
 }
 

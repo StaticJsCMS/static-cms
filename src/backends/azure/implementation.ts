@@ -2,7 +2,7 @@ import trim from 'lodash/trim';
 import trimStart from 'lodash/trimStart';
 import semaphore from 'semaphore';
 
-import { CmsBackendClass } from '../../interface';
+import { BackendClass } from '../../interface';
 import {
   asyncLock,
   basename,
@@ -19,8 +19,8 @@ import AuthenticationPage from './AuthenticationPage';
 import type { Semaphore } from 'semaphore';
 import type {
   BackendEntry,
-  CmsBackendInitializerOptions,
-  CmsConfig,
+  BackendInitializerOptions,
+  Config,
   Credentials,
   DisplayURL,
   ImplementationEntry,
@@ -34,7 +34,7 @@ import type AssetProxy from '../../valueObjects/AssetProxy';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 
-function parseAzureRepo(config: CmsConfig) {
+function parseAzureRepo(config: Config) {
   const { repo } = config.backend;
 
   if (typeof repo !== 'string') {
@@ -54,10 +54,10 @@ function parseAzureRepo(config: CmsConfig) {
   };
 }
 
-export default class Azure extends CmsBackendClass {
+export default class Azure extends BackendClass {
   lock: AsyncLock;
   api?: API;
-  options: CmsBackendInitializerOptions;
+  options: BackendInitializerOptions;
   repo: {
     org: string;
     project: string;
@@ -71,7 +71,7 @@ export default class Azure extends CmsBackendClass {
 
   _mediaDisplayURLSem?: Semaphore;
 
-  constructor(config: CmsConfig, options: CmsBackendInitializerOptions) {
+  constructor(config: Config, options: BackendInitializerOptions) {
     super(config, options);
     this.options = {
       ...options,

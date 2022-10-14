@@ -3,12 +3,12 @@ import React, { isValidElement, useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
 
 import { getAsset as getAssetAction } from '../../../actions/media';
+import { lengths } from '../../../components/UI/styles';
 import { INFERABLE_FIELDS } from '../../../constants/fieldInference';
 import { getPreviewTemplate, getRemarkPlugins, resolveWidget } from '../../../lib/registry';
 import { selectInferedField, selectTemplateName } from '../../../lib/util/collection.util';
 import { selectField } from '../../../lib/util/field.util';
 import { selectIsLoadingAsset } from '../../../reducers/medias';
-import { lengths } from '../../../ui';
 import { ErrorBoundary } from '../../UI';
 import EditorPreview from './EditorPreview';
 import EditorPreviewContent from './EditorPreviewContent';
@@ -18,8 +18,8 @@ import type { ReactFragment, ReactNode } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import type { InferredField } from '../../../constants/fieldInference';
 import type {
-  CmsField,
-  CmsTemplatePreviewProps,
+  Field,
+  TemplatePreviewProps,
   Collection,
   Entry,
   EntryData,
@@ -45,11 +45,11 @@ const PreviewPaneFrame = styled.div`
 function getWidgetFor(
   collection: Collection,
   name: string,
-  fields: CmsField[],
+  fields: Field[],
   entry: Entry,
   inferedFields: Record<string, InferredField>,
   getAsset: GetAssetFunction,
-  widgetFields: CmsField[] = fields,
+  widgetFields: Field[] = fields,
   values: EntryData = entry.data,
 ): ReactNode {
   // We retrieve the field by name so that this function can also be used in
@@ -60,7 +60,7 @@ function getWidgetFor(
   }
 
   const value = values?.[field.name];
-  let fieldWithWidgets: Omit<CmsField, 'fields' | 'field'> & {
+  let fieldWithWidgets: Omit<Field, 'fields' | 'field'> & {
     fields?: ReactNode[];
     field?: ReactNode;
   } = Object.entries(field).reduce((acc, [key, fieldValue]) => {
@@ -68,7 +68,7 @@ function getWidgetFor(
       acc[key] = fieldValue;
     }
     return acc;
-  }, {} as Record<string, unknown>) as Omit<CmsField, 'fields' | 'field'>;
+  }, {} as Record<string, unknown>) as Omit<Field, 'fields' | 'field'>;
 
   if ('fields' in field && field.fields) {
     fieldWithWidgets = {
@@ -134,7 +134,7 @@ function isReactFragment(value: any): value is ReactFragment {
 }
 
 function getWidget(
-  field: CmsField,
+  field: Field,
   value: EntryData | ReactNode,
   entry: Entry,
   getAsset: GetAssetFunction,
@@ -177,11 +177,11 @@ function getWidget(
  */
 function widgetsForNestedFields(
   collection: Collection,
-  fields: CmsField[],
+  fields: Field[],
   entry: Entry,
   inferedFields: Record<string, InferredField>,
   getAsset: GetAssetFunction,
-  widgetFields: CmsField[],
+  widgetFields: Field[],
   values: EntryData,
 ) {
   return widgetFields
@@ -205,11 +205,11 @@ function widgetsForNestedFields(
  */
 function getNestedWidgets(
   collection: Collection,
-  fields: CmsField[],
+  fields: Field[],
   entry: Entry,
   inferedFields: Record<string, InferredField>,
   getAsset: GetAssetFunction,
-  widgetFields: CmsField[],
+  widgetFields: Field[],
   values: EntryData | EntryData[],
 ) {
   // Fields nested within a list field will be paired with a List of value Maps.
@@ -242,7 +242,7 @@ function getNestedWidgets(
 function getSingleNested(
   entry: Entry,
   getAsset: GetAssetFunction,
-  widgetField: CmsField,
+  widgetField: Field,
   values: EntryData | EntryData[],
 ): ReactNode {
   if (Array.isArray(values)) {
@@ -273,7 +273,7 @@ const PreviewPane = (props: EditorPreviewPaneProps) => {
   }, [collection]);
 
   const handleGetAsset = useCallback(
-    (path: string, field?: CmsField) => {
+    (path: string, field?: Field) => {
       return getAsset(collection, entry, path, field);
     },
     [collection, entry, getAsset],
@@ -333,7 +333,7 @@ const PreviewPane = (props: EditorPreviewPaneProps) => {
   const previewComponent =
     getPreviewTemplate(selectTemplateName(collection, entry.slug)) ?? EditorPreview;
 
-  const previewProps: CmsTemplatePreviewProps = {
+  const previewProps: TemplatePreviewProps = {
     ...props,
     getAsset: handleGetAsset,
     widgetFor,
@@ -357,7 +357,7 @@ const PreviewPane = (props: EditorPreviewPaneProps) => {
 
 export interface EditorPreviewPaneOwnProps {
   collection: Collection;
-  fields: CmsField[];
+  fields: Field[];
   entry: Entry;
 }
 

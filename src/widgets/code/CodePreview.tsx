@@ -1,11 +1,11 @@
 import React from 'react';
 import isString from 'lodash/isString';
 
-import { WidgetPreviewContainer } from '../../ui';
+import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { CmsFieldCode, CmsWidgetPreviewProps } from '../../interface';
+import type { FieldCode, WidgetPreviewProps } from '../../interface';
 
-function toValue(value: string | Record<string, string> | undefined | null, field: CmsFieldCode) {
+function toValue(value: string | Record<string, string> | undefined | null, field: FieldCode) {
   if (isString(value)) {
     return value;
   }
@@ -20,7 +20,7 @@ function toValue(value: string | Record<string, string> | undefined | null, fiel
 const CodePreview = ({
   value,
   field,
-}: CmsWidgetPreviewProps<string | Record<string, string>, CmsFieldCode>) => {
+}: WidgetPreviewProps<string | Record<string, string>, FieldCode>) => {
   return (
     <WidgetPreviewContainer>
       <pre>

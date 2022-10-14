@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField';
 import React, { useCallback, useState } from 'react';
 
-import type { CmsFieldStringOrText, CmsWidgetControlProps } from '../../interface';
+import type { FieldStringOrText, WidgetControlProps } from '../../interface';
 import type { ChangeEvent } from 'react';
 
 const TextControl = ({
@@ -9,7 +9,7 @@ const TextControl = ({
   field,
   value,
   onChange,
-}: CmsWidgetControlProps<string, CmsFieldStringOrText>) => {
+}: WidgetControlProps<string, FieldStringOrText>) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
 
   const handleChange = useCallback(

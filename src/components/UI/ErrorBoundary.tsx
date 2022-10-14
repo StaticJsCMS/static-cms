@@ -7,10 +7,10 @@ import { translate } from 'react-polyglot';
 import yaml from 'yaml';
 
 import { localForage } from '../../lib/util';
-import { buttons, colors } from '../../ui';
+import { buttons, colors } from '../../components/UI/styles';
 
 import type { ReactNode } from 'react';
-import type { CmsConfig, TranslatedProps } from '../../interface';
+import type { Config, TranslatedProps } from '../../interface';
 
 const ISSUE_URL = 'https://github.com/StaticJsCMS/static-cms/issues/new?';
 
@@ -38,7 +38,7 @@ ${config}
 `;
 }
 
-function buildIssueTemplate(config: CmsConfig) {
+function buildIssueTemplate(config: Config) {
   let version = '';
   if (typeof STATIC_CMS_CORE_VERSION === 'string') {
     version = `static-cms@${STATIC_CMS_CORE_VERSION}`;
@@ -53,7 +53,7 @@ function buildIssueTemplate(config: CmsConfig) {
   return template;
 }
 
-function buildIssueUrl(title: string, config: CmsConfig) {
+function buildIssueUrl(title: string, config: Config) {
   try {
     const body = buildIssueTemplate(config);
 
@@ -134,7 +134,7 @@ const RecoveredEntry = ({ entry, t }: TranslatedProps<RecoveredEntryProps>) => {
 
 interface ErrorBoundaryProps {
   children: ReactNode;
-  config: CmsConfig;
+  config: Config;
   showBackup?: boolean;
 }
 

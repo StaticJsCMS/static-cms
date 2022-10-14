@@ -4,7 +4,7 @@ import Select from '@mui/material/Select';
 import React, { useCallback, useEffect } from 'react';
 
 import type { SelectChangeEvent } from '@mui/material/Select';
-import type { CmsFieldSelect, CmsWidgetControlProps } from '../../interface';
+import type { FieldSelect, WidgetControlProps } from '../../interface';
 
 interface Option {
   label: string;
@@ -24,7 +24,7 @@ const SelectControl = ({
   field,
   value,
   onChange,
-}: CmsWidgetControlProps<string | string[], CmsFieldSelect>) => {
+}: WidgetControlProps<string | string[], FieldSelect>) => {
   const handleChange = useCallback(
     (event: SelectChangeEvent<string | string[]>) => {
       const selectedOption = event.target.value;

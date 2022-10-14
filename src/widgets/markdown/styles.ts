@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import { zIndex } from '../../ui';
+import { zIndex } from '../../components/UI/styles';
 
 export const editorStyleVars = {
   stickyDistanceBottom: '100px',

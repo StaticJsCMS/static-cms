@@ -10,14 +10,15 @@ import TopBarProgress from 'react-topbar-progress-indicator';
 
 import { loginUser as loginUserAction } from '../../actions/auth';
 import { currentBackend } from '../../backend';
+import { colors, GlobalStyles } from '../../components/UI/styles';
 import { history } from '../../routing/history';
-import { colors, GlobalStyles, Loader } from '../../ui';
 import CollectionRoute from '../Collection/CollectionRoute';
 import EditorRoute from '../Editor/EditorRoute';
 import MediaLibrary from '../MediaLibrary/MediaLibrary';
 import Snackbars from '../snackbar/Snackbars';
 import { Alert } from '../UI/Alert';
 import { Confirm } from '../UI/Confirm';
+import Loader from '../UI/Loader';
 import ScrollTop from '../UI/ScrollTop';
 import NotFoundPage from './NotFoundPage';
 
@@ -25,7 +26,6 @@ import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import type { Collections, Credentials, TranslatedProps } from '../../interface';
 import type { RootState } from '../../store';
-
 TopBarProgress.config({
   barColors: {
     0: colors.active,
@@ -81,7 +81,7 @@ function EditEntityRedirect() {
   return <Navigate to={`/collections/${name}/entries/${entryName}`} />;
 }
 
-history.listen((e) => {
+history.listen(e => {
   console.log(e);
 });
 

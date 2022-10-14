@@ -5,7 +5,7 @@ import { Waypoint } from 'react-waypoint';
 import { FixedSizeGrid as Grid } from 'react-window';
 
 import { transientOptions } from '../../lib';
-import { colors } from '../../ui';
+import { colors } from '../../components/UI/styles';
 import MediaLibraryCard from './MediaLibraryCard';
 
 import type { GridChildComponentProps } from 'react-window';

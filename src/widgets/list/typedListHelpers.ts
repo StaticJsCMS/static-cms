@@ -1,17 +1,17 @@
-import type { CmsFieldList, ListValue } from '../../interface';
+import type { FieldList, ListValue } from '../../interface';
 
 export const TYPES_KEY = 'types';
 export const TYPE_KEY = 'typeKey';
 export const DEFAULT_TYPE_KEY = 'type';
 
-export function getTypedFieldForValue(field: CmsFieldList, value: Record<string, ListValue>) {
+export function getTypedFieldForValue(field: FieldList, value: Record<string, ListValue>) {
   const typeKey = resolveFieldKeyType(field);
   const types = field[TYPES_KEY] ?? [];
   const valueType = value[typeKey];
   return types.find(type => type.name === valueType);
 }
 
-export function resolveFunctionForTypedField(field: CmsFieldList) {
+export function resolveFunctionForTypedField(field: FieldList) {
   const typeKey = resolveFieldKeyType(field);
   const types = field[TYPES_KEY] ?? [];
   return (value: Record<string, ListValue>) => {
@@ -20,12 +20,12 @@ export function resolveFunctionForTypedField(field: CmsFieldList) {
   };
 }
 
-export function resolveFieldKeyType(field: CmsFieldList) {
+export function resolveFieldKeyType(field: FieldList) {
   return (TYPE_KEY in field && field[TYPE_KEY]) || DEFAULT_TYPE_KEY;
 }
 
 export function getErrorMessageForTypedFieldAndValue(
-  field: CmsFieldList,
+  field: FieldList,
   value: Record<string, ListValue>,
 ) {
   const keyType = resolveFieldKeyType(field);

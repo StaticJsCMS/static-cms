@@ -1,6 +1,6 @@
-import type { CmsLocalePhrasesRoot } from '../../interface';
+import type { LocalePhrasesRoot } from '../../interface';
 
-const vi: CmsLocalePhrasesRoot = {
+const vi: LocalePhrasesRoot = {
   auth: {
     login: 'Đăng nhập',
     loggingIn: 'Đang đăng nhập...',
