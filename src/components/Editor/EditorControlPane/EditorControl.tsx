@@ -2,10 +2,8 @@ import { css as coreCss, Global } from '@emotion/react';
 import styled from '@emotion/styled';
 import uniqueId from 'lodash/uniqueId';
 import React, { useCallback, useMemo } from 'react';
-import ReactMarkdown from 'react-markdown';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
-import gfm from 'remark-gfm';
 
 import { clearFieldErrors as clearFieldErrorsAction, tryLoadEntry } from '../../../actions/entries';
 import { addAsset as addAssetAction, getAsset as getAssetAction } from '../../../actions/media';
@@ -247,28 +245,7 @@ const EditorControl = ({
           t={t}
           value={value}
         />
-        {fieldHint && (
-          <ControlHint $error={hasErrors}>
-            <ReactMarkdown
-              remarkPlugins={[gfm]}
-              allowedElements={['a', 'strong', 'em', 'del']}
-              unwrapDisallowed={true}
-              components={{
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                a: ({ node, ...props }) => (
-                  <a
-                    {...props}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: 'inherit' }}
-                  />
-                ),
-              }}
-            >
-              {fieldHint}
-            </ReactMarkdown>
-          </ControlHint>
-        )}
+        {fieldHint && <ControlHint $error={hasErrors}>{fieldHint}</ControlHint>}
       </>
     </ControlContainer>
   );

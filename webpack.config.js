@@ -21,6 +21,12 @@ module.exports = {
         exclude: /(node_modules[\\/]@toast-ui[\\/]editor[\\/]dist)/,
       },
       {
+        test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false, // disable the behavior
+        },
+      },
+      {
         test: /\.tsx?$/,
         use: [
           {
@@ -77,6 +83,7 @@ module.exports = {
     new webpack.IgnorePlugin({ resourceRegExp: /^esprima$/ }),
     new webpack.IgnorePlugin({ resourceRegExp: /moment\/locale\// }),
     new webpack.ProvidePlugin({
+      process: 'process/browser',
       Buffer: ['buffer', 'Buffer'],
     }),
   ].filter(Boolean),

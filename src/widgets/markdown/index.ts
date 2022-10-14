@@ -1,4 +1,4 @@
-import controlComponent from './MarkdownControl/MarkdownControl';
+import controlComponent from './MarkdownControl';
 import previewComponent from './MarkdownPreview';
 import schema from './schema';
 
