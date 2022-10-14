@@ -34,8 +34,15 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        include: ['ol', 'react-datetime', 'codemirror', '@toast-ui'].map(moduleNameToPath),
-        use: ['to-string-loader', 'css-loader'],
+        include: ['ol', 'codemirror', '@toast-ui'].map(moduleNameToPath),
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+          },
+        ],
       },
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,

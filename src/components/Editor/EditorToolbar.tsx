@@ -31,14 +31,12 @@ const StyledToolbarSectionBackLink = styled('div')`
   display: flex;
   margin: -32px -24px;
   height: 64px;
-  box-sizing: border-box;
 
   a {
     display: flex;
     height: 100%;
     padding: 16px;
     align-items: center;
-    box-sizing: border-box;
   }
 `;
 

@@ -19,7 +19,6 @@ const StyledPreviewContent = styled.div`
   height: calc(100vh - 64px);
   overflow-y: auto;
   padding: 16px;
-  box-sizing: border-box;
 `;
 
 const PreviewContent = ({ previewComponent, previewProps }: PreviewContentProps) => {

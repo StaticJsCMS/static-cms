@@ -512,6 +512,12 @@ function GlobalStyles() {
           max-width: 100%;
         }
 
+        *,
+        *:before,
+        *:after {
+          box-sizing: border-box;
+        }
+
         ${quantifier} {
           font-family: ${fonts.primary};
           font-weight: normal;

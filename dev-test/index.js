@@ -3,6 +3,7 @@ window.CMS.init();
 
 const PostPreview = window.createClass({
   render: function () {
+    console.log('hello?', this.props.widgetFor('body'));
     var entry = this.props.entry;
     return window.h(
       'div',

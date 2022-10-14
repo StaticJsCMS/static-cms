@@ -20,7 +20,6 @@ const StyledMainContainerWrapper = styled.div`
   position: relative;
   padding: 24px;
   gap: 24px;
-  box-sizing: border-box;
 `;
 
 const StyledMainContainer = styled.div`

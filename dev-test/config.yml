@@ -55,7 +55,7 @@ collections:
         required: false
       - label: Body
         name: body
-        widget: text
+        widget: markdown
         hint: Main content goes here.
   - name: faq
     label: FAQ

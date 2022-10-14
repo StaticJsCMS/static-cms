@@ -76,12 +76,12 @@ function ReactSplitPaneGlobalStyles() {
 const StyledSplitPane = styled.div`
   display: grid;
   grid-template-columns: min(864px, 50%) auto;
-  height: 100%;
+  height: calc(100vh - 64px);
 
   > div:nth-of-type(2)::before {
     content: '';
     width: 2px;
-    height: 100%;
+    height: calc(100vh - 64px);
     position: relative;
     background-color: rgb(223, 223, 227);
     display: block;

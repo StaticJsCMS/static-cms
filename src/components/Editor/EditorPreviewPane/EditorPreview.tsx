@@ -11,7 +11,6 @@ const PreviewContainer = styled.div`
   overflow-y: auto;
   height: 100%;
   padding: 24px;
-  box-sizing: border-box;
   font-family: Roboto, 'Helvetica Neue', HelveticaNeue, Helvetica, Arial, sans-serif;
 `;
 

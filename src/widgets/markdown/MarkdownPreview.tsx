@@ -12,6 +12,7 @@ const MarkdownPreview = ({
   field,
   getRemarkPlugins,
 }: WidgetPreviewProps<string, FieldMarkdown>) => {
+  console.log('hello?');
   if (!value) {
     return null;
   }
@@ -21,6 +22,7 @@ const MarkdownPreview = ({
     remarkPlugins: getRemarkPlugins(),
   });
   const toRender = field.sanitize_preview ?? false ? DOMPurify.sanitize(html) : html;
+  console.log('HTML', html);
 
   return <WidgetPreviewContainer dangerouslySetInnerHTML={{ __html: toRender }} />;
 };

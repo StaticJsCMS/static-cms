@@ -238,6 +238,7 @@
     "simple-git": "3.14.1",
     "slate-hyperscript": "0.13.9",
     "source-map-loader": "4.0.0",
+    "style-loader": "^3.3.1",
     "stylelint": "14.12.1",
     "stylelint-config-standard-scss": "3.0.0",
     "stylelint-config-styled-components": "0.1.1",
