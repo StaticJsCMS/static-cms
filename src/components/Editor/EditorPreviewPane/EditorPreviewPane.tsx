@@ -55,11 +55,13 @@ function getWidgetFor(
   // We retrieve the field by name so that this function can also be used in
   // custom preview templates, where the field object can't be passed in.
   const field = widgetFields && widgetFields.find(f => f.name === name);
+  console.log('field', field);
   if (!field) {
     return null;
   }
 
   const value = values?.[field.name];
+  console.log('value', value);
   let fieldWithWidgets: Omit<Field, 'fields' | 'field'> & {
     fields?: ReactNode[];
     field?: ReactNode;
@@ -89,6 +91,7 @@ function getWidgetFor(
       field: getSingleNested(entry, getAsset, field.field, value as EntryData | EntryData[]),
     };
   }
+  console.log('fieldWithWidgets', fieldWithWidgets);
 
   const labelledWidgets = ['string', 'text', 'number'];
   const inferedField = Object.entries(inferedFields)
@@ -97,16 +100,19 @@ function getWidgetFor(
       return fieldToMatch === fieldWithWidgets;
     })
     .map(([, value]) => value)[0];
+  console.log('inferedField', inferedField);
 
   let renderedValue: ReactNode;
   if (inferedField) {
     renderedValue = inferedField.defaultPreview(String(value));
+    console.log('inferedField preview');
   } else if (
     value &&
     fieldWithWidgets.widget &&
     labelledWidgets.indexOf(fieldWithWidgets.widget) !== -1 &&
     value.toString().length < 50
   ) {
+    console.log('default preview');
     renderedValue = (
       <div>
         <>
@@ -115,7 +121,7 @@ function getWidgetFor(
       </div>
     );
   }
-
+  console.log('renderedValue', renderedValue);
   return renderedValue ? getWidget(field, renderedValue, entry, getAsset) : null;
 }
 
