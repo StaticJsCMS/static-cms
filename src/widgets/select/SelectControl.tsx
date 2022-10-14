@@ -68,10 +68,10 @@ const SelectControl = ({
         '.MuiInputBase-root': {
           borderTopLeftRadius: 0,
           '.MuiOutlinedInput-notchedOutline': {
-            borderColor: '#dfdfe3',
+            borderColor: '#f7f9fc',
           },
           '&:not(.Mui-focused):hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: '#dfdfe3',
+            borderColor: '#f7f9fc',
           },
         },
       }}

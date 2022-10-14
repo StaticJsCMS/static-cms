@@ -1,164 +1,89 @@
-import { ClassNames, css } from '@emotion/react';
 import styled from '@emotion/styled';
 import isEmpty from 'lodash/isEmpty';
-import partial from 'lodash/partial';
-import uniqueId from 'lodash/uniqueId';
 import React, { useCallback, useMemo, useState } from 'react';
-import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
+import { SortableContainer } from 'react-sortable-hoc';
 import uuid from 'uuid/v4';
 
 import FieldLabel from '../../components/UI/FieldLabel';
-import ListItemTopBar from '../../components/UI/ListItemTopBar';
 import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
-import { colors, lengths } from '../../components/UI/styles';
 import { transientOptions } from '../../lib';
 import { getFieldLabel } from '../../lib/util/field.util';
-import { addFileTemplateFields, compileStringTemplate } from '../../lib/widgets/stringTemplate';
-import ObjectControl from '../object/ObjectControl';
-import {
-  getErrorMessageForTypedFieldAndValue,
-  getTypedFieldForValue,
-  resolveFieldKeyType,
-  TYPES_KEY,
-} from './typedListHelpers';
+import ListItem from './ListItem';
+import { resolveFieldKeyType, TYPES_KEY } from './typedListHelpers';
 
 import type { MouseEvent } from 'react';
-import type { t } from 'react-polyglot';
-import type {
-  Entry,
-  EntryData,
-  Field,
-  FieldList,
-  ListValue,
-  WidgetControlProps,
-} from '../../interface';
+import type { Field, FieldList, ObjectValue, WidgetControlProps } from '../../interface';
 
-const ListItem = styled.div();
-
-const SortableListItem = SortableElement<{ children: JSX.Element }>(ListItem);
-
-const StyledListItemTopBar = styled(ListItemTopBar)`
-  background-color: ${colors.textFieldBorder};
+const StyledListWrapper = styled('div')`
+  position: relative;
 `;
 
-interface NestedObjectLabelProps {
-  $collapsed: boolean;
-  $error: boolean;
+interface StyledOutlineProps {
+  $isActive: boolean;
 }
 
-const NestedObjectLabel = styled(
+const StyledOutline = styled(
   'div',
   transientOptions,
-)<NestedObjectLabelProps>(
-  ({ $collapsed, $error }) => `
-    display: ${$collapsed ? 'block' : 'none'};
-    border-top: 0;
-    color: ${$error ? colors.errorText : 'inherit'};
-    background-color: ${colors.textFieldBorder};
-    padding: 6px 13px;
-    border-radius: 0 0 ${lengths.borderRadius} ${lengths.borderRadius};
+)<StyledOutlineProps>(
+  ({ $isActive }) => `
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    top: 22px;
+    left: 0;
+    margin: 0;
+    padding: 0 8px;
+    pointer-events: none;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    overflow: hidden;
+    min-width: 0%;
+    border-color: rgba(0, 0, 0, 0.23);
+    ${
+      $isActive
+        ? `
+          border-color: #1976d2;
+          border-width: 2px;
+        `
+        : ''
+    }
   `,
 );
 
-const styleStrings = {
-  collapsedObjectControl: `
-    display: none;
-  `,
-  objectWidgetTopBarContainer: `
-    padding: ${lengths.objectWidgetTopBarContainerPadding};
-  `,
-};
-
-const styles = {
-  listControlItem: css`
-    margin-top: 18px;
-
-    &:last-of-type {
-      margin-bottom: 14px;
-    }
-  `,
-  listControlItemCollapsed: css`
-    padding-bottom: 0;
-  `,
-};
+const StyledSortableList = styled('div')`
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 16px;
+`;
 
 interface SortableListProps {
-  items: ListValue[];
-  renderItem: (item: ListValue, index: number) => JSX.Element;
+  items: ObjectValue[];
+  renderItem: (item: ObjectValue, index: number) => JSX.Element;
 }
 
 const SortableList = SortableContainer<SortableListProps>(
   ({ items, renderItem }: SortableListProps) => {
-    return <div>{items.map(renderItem)}</div>;
+    return <StyledSortableList>{items.map(renderItem)}</StyledSortableList>;
   },
 );
 
-const valueTypes = {
-  SINGLE: 'SINGLE',
-  MULTIPLE: 'MULTIPLE',
-  MIXED: 'MIXED',
-};
-
-function handleSummary(
-  summary: string,
-  entry: Entry,
-  label: string,
-  item: Record<string, ListValue>,
-) {
-  const labeledItem: EntryData = {
-    ...item,
-    fields: {
-      label,
-    },
-  };
-  const data = addFileTemplateFields(entry.path, labeledItem);
-  return compileStringTemplate(summary, null, '', data);
-}
-
-function validateItem(field: FieldList, item: ListValue) {
-  if (!(typeof item === 'object')) {
-    console.warn(
-      `'${field.name}' field item value value should be an object but is a '${typeof item}'`,
-    );
-    return false;
-  }
-
-  return true;
-}
-
-interface LabelComponentProps {
-  field: FieldList;
-  isActive: boolean;
-  hasErrors: boolean;
-  uniqueFieldId: string;
-  isFieldOptional: boolean;
-  t: t;
-}
-
-function LabelComponent({
-  field,
-  isActive,
-  hasErrors,
-  uniqueFieldId,
-  isFieldOptional,
-  t,
-}: LabelComponentProps) {
-  const label = `${field.label ?? field.name}`;
-  return (
-    <FieldLabel $isActive={isActive} $hasErrors={hasErrors} htmlFor={uniqueFieldId}>
-      {label} {`${isFieldOptional ? ` (${t('editor.editorControl.field.optional')})` : ''}`}
-    </FieldLabel>
-  );
+export enum ListValueType {
+  SINGLE,
+  MULTIPLE,
+  MIXED,
 }
 
 function getFieldsDefault(
   fields: Field[],
-  initialValue: Record<string, ListValue> = {},
-): Record<string, ListValue> {
+  initialValue: Record<string, ObjectValue> = {},
+): Record<string, ObjectValue> {
   return fields.reduce((acc, item) => {
     const subfields = ('field' in item && item.field) || ('fields' in item && item.fields);
     const name = item.name;
-    const defaultValue = (('default' in item && item.default) ?? null) as ListValue;
+    const defaultValue = (('default' in item && item.default) ?? null) as ObjectValue;
 
     if (Array.isArray(subfields)) {
       const subDefaultValue = getFieldsDefault(subfields);
@@ -211,79 +136,34 @@ const ListControl = ({
   queryHits,
   t,
   ...otherProps
-}: WidgetControlProps<ListValue[], FieldList>) => {
+}: WidgetControlProps<ObjectValue[], FieldList>) => {
   const value = useMemo(() => otherProps.value ?? [], [otherProps.value]);
 
   const [listCollapsed, setListCollapsed] = useState(field.collapsed ?? true);
   const [itemsCollapsed, setItemsCollapsed] = useState(Array(value.length).fill(listCollapsed));
   const [keys, setKeys] = useState(Array.from({ length: value.length }, () => uuid()));
 
-  // TODO Implement list validation
-  // validations = [];
-  // processControlRef = ref => {
-  //   if (!ref) return;
-  //   const {
-  //     validate,
-  //     props: { validationKey: key },
-  //   } = ref;
-  //   this.validations.push({ key, validate });
-  // };
-  //
-  // validate = () => {
-  //   if (this.getValueType()) {
-  //     this.validations.forEach(item => {
-  //       item.validate();
-  //     });
-  //   } else {
-  //     this.props.validate();
-  //   }
-  //   this.props.onValidateObject(this.props.forID, this.validateSize());
-  // };
-  //
-  // validateSize = () => {
-  //   const { field, value, t } = this.props;
-  //   const min = field.min;
-  //   const max = field.max;
-  //   const required = field.get('required', true);
-  //
-  //   if (!required && !value?.size) {
-  //     return [];
-  //   }
-  //
-  //   const error = validations.validateMinMax(
-  //     t,
-  //     field.get('label', field.name),
-  //     value,
-  //     min,
-  //     max,
-  //   );
-  //
-  //   return error ? [error] : [];
-  // };
-
   const valueType = useMemo(() => {
     if ('fields' in field) {
-      return valueTypes.MULTIPLE;
+      return ListValueType.MULTIPLE;
     } else if ('field' in field) {
-      return valueTypes.SINGLE;
+      return ListValueType.SINGLE;
     } else if ('types' in field) {
-      return valueTypes.MIXED;
+      return ListValueType.MIXED;
     } else {
       return null;
     }
   }, [field]);
 
-  const uniqueFieldId = useMemo(() => uniqueId(`${field.name}-field-`), [field.name]);
-
   const handleChange = useCallback(
-    (newValue: ListValue[]) => {
+    (newValue: ObjectValue[]) => {
       onChange(path, field, newValue);
     },
     [field, onChange, path],
   );
 
   const singleDefault = useCallback(() => {
-    return (field.field && 'default' in field.field ? field.field.default : '') as ListValue;
+    return (field.field && 'default' in field.field ? field.field.default : '') as ObjectValue;
   }, [field.field]);
 
   const multipleDefault = useCallback((fields: Field[]) => {
@@ -291,7 +171,7 @@ const ListControl = ({
   }, []);
 
   const mixedDefault = useCallback(
-    (typeKey: string, type: string): Record<string, ListValue> => {
+    (typeKey: string, type: string): Record<string, ObjectValue> => {
       const selectedType = 'types' in field && field.types?.find(f => f.name === type);
       if (!selectedType || (!('fields' in selectedType) && !('field' in selectedType))) {
         return {};
@@ -304,13 +184,13 @@ const ListControl = ({
           ? [selectedType.field]
           : [];
 
-      return getFieldsDefault(fields, { [typeKey]: type });
+      return getFieldsDefault(fields, { [typeKey]: { type } });
     },
     [field],
   );
 
   const addItem = useCallback(
-    (parsedValue: ListValue) => {
+    (parsedValue: ObjectValue) => {
       const addToTop = field.add_to_top ?? false;
 
       const itemKey = uuid();
@@ -369,21 +249,6 @@ const ListControl = ({
     [clearFieldErrors, handleChange, value, itemsCollapsed],
   );
 
-  const handleItemCollapseToggle = useCallback(
-    (index: number, event: MouseEvent) => {
-      event.preventDefault();
-      const newItemsCollapsed = itemsCollapsed.map((collapsed, itemIndex) => {
-        if (index === itemIndex) {
-          return !collapsed;
-        }
-        return collapsed;
-      });
-
-      setItemsCollapsed(newItemsCollapsed);
-    },
-    [itemsCollapsed],
-  );
-
   const handleCollapseAllToggle = useCallback(
     (e: MouseEvent) => {
       e.preventDefault();
@@ -406,67 +271,11 @@ const ListControl = ({
     [field.collapsed, field.minimize_collapsed, value.length, itemsCollapsed, listCollapsed],
   );
 
-  const getObjectLabel = useCallback(
-    (item: ListValue): string | undefined => {
-      switch (valueType) {
-        case valueTypes.MIXED: {
-          if (!validateItem(field, item)) {
-            return;
-          }
-
-          const itemType = getTypedFieldForValue(field, item as Record<string, ListValue>);
-          if (!itemType) {
-            return;
-          }
-
-          const label = itemType.label ?? itemType.name;
-          // each type can have its own summary, but default to the list summary if exists
-          const summary = ('summary' in itemType && itemType.summary) ?? field.summary;
-          const labelReturn = summary
-            ? handleSummary(summary, entry, label, item as Record<string, ListValue>)
-            : label;
-          return labelReturn;
-        }
-        case valueTypes.SINGLE: {
-          const singleField = field.field;
-          if (!singleField) {
-            return;
-          }
-
-          const label = singleField.label ?? singleField.name;
-          const summary = field.summary;
-          const data = { [singleField.name]: item };
-          const labelReturn = summary ? handleSummary(summary, entry, label, data) : label;
-          return labelReturn;
-        }
-        case valueTypes.MULTIPLE: {
-          if (!validateItem(field, item)) {
-            return;
-          }
-          const multiFields = field.fields;
-          const labelField = multiFields && multiFields[0];
-          if (!labelField) {
-            return;
-          }
-
-          const value = (item as Record<string, ListValue>)[labelField.name];
-          const summary = field.summary;
-          const labelReturn = summary
-            ? handleSummary(summary, entry, value as string, item as Record<string, ListValue>)
-            : value;
-          return (labelReturn || `No ${labelField.name}`).toString();
-        }
-      }
-      return '';
-    },
-    [entry, field, valueType],
-  );
-
   const onSortEnd = useCallback(
     ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
       // Update value
       const item = value[oldIndex];
-      const newValue: ListValue[] = [...value];
+      const newValue: ObjectValue[] = [...value];
       newValue.splice(oldIndex, 1);
       newValue.splice(newIndex, 0, item);
       handleChange(newValue);
@@ -497,130 +306,55 @@ const ListControl = ({
     [clearFieldErrors, handleChange, value, itemsCollapsed, keys],
   );
 
-  const hasErrors = useCallback(
-    (index: number) => {
-      if (!fieldsErrors) {
-        return false;
-      }
-
-      const errors = Object.values(fieldsErrors);
-      if (errors.length == 0) {
-        return false;
-      }
-
-      return errors.some(arr =>
-        arr.some(err => err.parentIds && err.parentIds.includes(keys[index])),
-      );
-    },
-    [fieldsErrors, keys],
-  );
-
-  const renderErroneousTypedItem = useCallback(
-    (index: number, item: Record<string, ListValue>) => {
-      const errorMessage = getErrorMessageForTypedFieldAndValue(field, item);
-      const key = `item-${index}`;
-      return (
-        <SortableListItem
-          css={[styles.listControlItem, styles.listControlItemCollapsed]}
-          index={index}
-          key={key}
-        >
-          <>
-            <StyledListItemTopBar
-              onRemove={partial(handleRemove, index)}
-              dragHandleHOC={SortableHandle}
-            />
-            <NestedObjectLabel $collapsed={true} $error={true}>
-              {errorMessage}
-            </NestedObjectLabel>
-          </>
-        </SortableListItem>
-      );
-    },
-    [field, handleRemove],
-  );
-
   const renderItem = useCallback(
-    (item: ListValue, index: number) => {
+    (item: ObjectValue, index: number) => {
       const collapsed = itemsCollapsed[index];
       const key = keys[index];
-      const hasError = hasErrors(index);
-      const isVariableTypesList = valueType === valueTypes.MIXED;
-      let itemField: Field | undefined = field;
-      if (isVariableTypesList) {
-        itemField = getTypedFieldForValue(field, item as Record<string, ListValue>);
-        if (!itemField) {
-          return renderErroneousTypedItem(index, item as Record<string, ListValue>);
-        }
+      if (!valueType) {
+        return <div />;
       }
+
       return (
-        <SortableListItem
-          css={[styles.listControlItem, collapsed && styles.listControlItemCollapsed]}
+        <ListItem
           index={index}
           key={key}
-        >
-          <>
-            {isVariableTypesList ? (
-              <LabelComponent
-                field={field}
-                isActive={false}
-                hasErrors={hasError}
-                uniqueFieldId={uniqueFieldId}
-                isFieldOptional={field.required === false}
-                t={t}
-              />
-            ) : null}
-            <StyledListItemTopBar
-              collapsed={collapsed}
-              onCollapseToggle={partial(handleItemCollapseToggle, index)}
-              onRemove={partial(handleRemove, index)}
-              dragHandleHOC={SortableHandle}
-              data-testid={`styled-list-item-top-bar-${key}`}
-              title={collapsed ? getObjectLabel(item) : null}
-              isVariableTypesList={isVariableTypesList}
-            />
-            <NestedObjectLabel $collapsed={collapsed} $error={hasError}>
-              {getObjectLabel(item)}
-            </NestedObjectLabel>
-            <ObjectControl
-              clearFieldErrors={clearFieldErrors}
-              clearSearch={clearSearch}
-              collapsed={collapsed}
-              collection={collection}
-              config={config}
-              data-testid={`object-control-${key}`}
-              entry={entry}
-              field={field}
-              fieldsErrors={fieldsErrors}
-              forList
-              getAsset={getAsset}
-              hasError={hasError}
-              isDisabled={isDisabled}
-              isEditorComponent={isEditorComponent}
-              isFetching={isFetching}
-              isFieldDuplicate={isFieldDuplicate}
-              isFieldHidden={isFieldHidden}
-              isNewEditorComponent={isNewEditorComponent}
-              label={getFieldLabel(field, t)}
-              loadEntry={loadEntry}
-              locale={locale}
-              mediaPaths={mediaPaths}
-              onAddAsset={onAddAsset}
-              onChange={onChange}
-              onClearMediaControl={onClearMediaControl}
-              onOpenMediaLibrary={onOpenMediaLibrary}
-              onPersistMedia={onPersistMedia}
-              onRemoveInsertedMedia={onRemoveInsertedMedia}
-              onRemoveMediaControl={onRemoveMediaControl}
-              onValidate={onValidate}
-              path={`${path}.${index}`}
-              query={query}
-              queryHits={queryHits}
-              t={t}
-              value={item as Record<string, ListValue>}
-            />
-          </>
-        </SortableListItem>
+          valueType={valueType}
+          handleRemove={handleRemove}
+          clearFieldErrors={clearFieldErrors}
+          clearSearch={clearSearch}
+          collapsed={collapsed}
+          collection={collection}
+          config={config}
+          data-testid={`object-control-${key}`}
+          entry={entry}
+          field={field}
+          fieldsErrors={fieldsErrors}
+          forList
+          getAsset={getAsset}
+          isDisabled={isDisabled}
+          isEditorComponent={isEditorComponent}
+          isFetching={isFetching}
+          isFieldDuplicate={isFieldDuplicate}
+          isFieldHidden={isFieldHidden}
+          isNewEditorComponent={isNewEditorComponent}
+          label={getFieldLabel(field, t)}
+          loadEntry={loadEntry}
+          locale={locale}
+          mediaPaths={mediaPaths}
+          onAddAsset={onAddAsset}
+          onChange={onChange}
+          onClearMediaControl={onClearMediaControl}
+          onOpenMediaLibrary={onOpenMediaLibrary}
+          onPersistMedia={onPersistMedia}
+          onRemoveInsertedMedia={onRemoveInsertedMedia}
+          onRemoveMediaControl={onRemoveMediaControl}
+          onValidate={onValidate}
+          path={`${path}.${index}`}
+          query={query}
+          queryHits={queryHits}
+          t={t}
+          value={item as Record<string, ObjectValue>}
+        />
       );
     },
     [
@@ -632,11 +366,7 @@ const ListControl = ({
       field,
       fieldsErrors,
       getAsset,
-      getObjectLabel,
-      valueType,
-      handleItemCollapseToggle,
       handleRemove,
-      hasErrors,
       isDisabled,
       isEditorComponent,
       isFetching,
@@ -659,72 +389,49 @@ const ListControl = ({
       path,
       query,
       queryHits,
-      renderErroneousTypedItem,
       t,
-      uniqueFieldId,
+      valueType,
     ],
   );
-
-  const renderListControl = useCallback(() => {
-    const label = field.label ?? field.name;
-    const labelSingular = field.label_singular ? field.label_singular : field.label ?? field.name;
-    const listLabel = value.length === 1 ? labelSingular.toLowerCase() : label.toLowerCase();
-    const minimizeCollapsedItems = field.minimize_collapsed ?? false;
-    const allItemsCollapsed = itemsCollapsed.every(val => val === true);
-    const selfCollapsed = allItemsCollapsed && (listCollapsed || !minimizeCollapsedItems);
-
-    return (
-      <ClassNames>
-        {({ cx, css }) => (
-          <div
-            className={cx(
-              css`
-                ${styleStrings.objectWidgetTopBarContainer}
-              `,
-            )}
-          >
-            <ObjectWidgetTopBar
-              allowAdd={field.allow_add ?? true}
-              onAdd={handleAdd}
-              types={field[TYPES_KEY] ?? []}
-              onAddType={type => handleAddType(type, resolveFieldKeyType(field))}
-              heading={`${value.length} ${listLabel}`}
-              label={labelSingular.toLowerCase()}
-              onCollapseToggle={handleCollapseAllToggle}
-              collapsed={selfCollapsed}
-              t={t}
-            />
-            {(!selfCollapsed || !minimizeCollapsedItems) && (
-              <SortableList
-                items={value}
-                renderItem={renderItem}
-                onSortEnd={onSortEnd}
-                useDragHandle
-                lockAxis="y"
-              />
-            )}
-          </div>
-        )}
-      </ClassNames>
-    );
-  }, [
-    field,
-    handleAdd,
-    handleAddType,
-    handleCollapseAllToggle,
-    value,
-    itemsCollapsed,
-    listCollapsed,
-    onSortEnd,
-    renderItem,
-    t,
-  ]);
 
   if (valueType === null) {
     return null;
   }
 
-  return renderListControl();
+  const label = field.label ?? field.name;
+  const labelSingular = field.label_singular ? field.label_singular : field.label ?? field.name;
+  const listLabel = value.length === 1 ? labelSingular.toLowerCase() : label.toLowerCase();
+  const minimizeCollapsedItems = field.minimize_collapsed ?? false;
+  const allItemsCollapsed = itemsCollapsed.every(val => val === true);
+  const selfCollapsed = allItemsCollapsed && (listCollapsed || !minimizeCollapsedItems);
+  console.log(selfCollapsed, minimizeCollapsedItems);
+
+  return (
+    <StyledListWrapper>
+      <FieldLabel>{label}</FieldLabel>
+      <ObjectWidgetTopBar
+        allowAdd={field.allow_add ?? true}
+        onAdd={handleAdd}
+        types={field[TYPES_KEY] ?? []}
+        onAddType={type => handleAddType(type, resolveFieldKeyType(field))}
+        heading={`${value.length} ${listLabel}`}
+        label={labelSingular.toLowerCase()}
+        onCollapseToggle={handleCollapseAllToggle}
+        collapsed={selfCollapsed}
+        t={t}
+      />
+      {!selfCollapsed && !minimizeCollapsedItems ? (
+        <SortableList
+          items={value}
+          renderItem={renderItem}
+          onSortEnd={onSortEnd}
+          useDragHandle
+          lockAxis="y"
+        />
+      ) : null}
+      <StyledOutline $isActive={false} />
+    </StyledListWrapper>
+  );
 };
 
 export default ListControl;

@@ -207,12 +207,6 @@ const Editor = ({
     };
   }, [collection, createBackup, entryDraft.entry, hasChanged]);
 
-  useEffect(() => {
-    if (!slug) {
-      createEmptyDraft(collection, location.search);
-    }
-  }, [collection, createEmptyDraft, slug]);
-
   const [prevCollection, setPrevCollection] = useState<Collection | null>(null);
   const [preSlug, setPrevSlug] = useState<string | undefined | null>(null);
   useEffect(() => {

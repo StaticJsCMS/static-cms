@@ -282,8 +282,6 @@ const PreviewPane = (props: EditorPreviewPaneProps) => {
   /**
    * This function exists entirely to expose nested widgets for object and list
    * fields to custom preview templates.
-   *
-   * TODO: see if getWidgetFor can now provide this functionality for preview templates
    */
   const widgetsFor = useCallback(
     (name: string) => {

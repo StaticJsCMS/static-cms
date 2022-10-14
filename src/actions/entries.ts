@@ -906,7 +906,7 @@ export function createEmptyDraftData(
     }
 
     return acc;
-  }, {} as Record<string, ValueOrNestedValue>);
+  }, {} as ObjectValue);
 }
 
 function createEmptyDraftI18nData(collection: Collection, dataFields: Field[]) {

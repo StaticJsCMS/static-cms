@@ -1,74 +1,68 @@
-import styled from '@emotion/styled';
+import Typography from '@mui/material/Typography';
+import React from 'react';
 
-import { transientOptions } from '../../lib';
-import { colors, colorsRaw, transitions, text } from './styles';
+import { colors, colorsRaw } from './styles';
+
+import type { MouseEventHandler } from 'react';
 
 const stateColors = {
   default: {
-    background: colors.textFieldBorder,
     text: colors.controlLabel,
   },
   active: {
-    background: colors.active,
-    text: colors.textLight,
+    text: '#1976d2',
   },
   error: {
-    background: colors.errorText,
     text: colorsRaw.white,
   },
 };
 
-export interface FieldLabelProps {
-  $hasErrors?: boolean;
-  $isActive?: boolean;
+export interface StyledLabelProps {
+  hasErrors: boolean;
+  isActive: boolean;
 }
 
-function getStateColors({ $isActive, $hasErrors }: FieldLabelProps) {
-  if ($hasErrors) {
+function getStateColors({ isActive, hasErrors }: StyledLabelProps) {
+  if (hasErrors) {
     return stateColors.error;
   }
-  if ($isActive) {
+
+  if (isActive) {
     return stateColors.active;
   }
+
   return stateColors.default;
 }
 
-const FieldLabel = styled(
-  'label',
-  transientOptions,
-)<FieldLabelProps>(
-  props => `
-    ${text.fieldLabel};
-    color: ${getStateColors(props).text};
-    background-color: ${getStateColors(props).background};
-    display: inline-block;
-    border: 0;
-    border-radius: 3px 3px 0 0;
-    padding: 3px 6px 2px;
-    margin: 0;
-    transition: all ${transitions.main};
-    position: relative;
+interface FieldLabelProps {
+  children: string | string[];
+  htmlFor?: string;
+  hasErrors?: boolean;
+  isActive?: boolean;
+  onClick?: MouseEventHandler<HTMLLabelElement>;
+}
 
-    /**
-     * Faux outside curve into top of input
-     */
-    &:before,
-    &:after {
-      content: '';
-      display: block;
-      position: absolute;
-      top: 0;
-      right: -4px;
-      height: 100%;
-      width: 4px;
-      background-color: inherit;
-    }
-
-    &:after {
-      border-bottom-left-radius: 3px;
-      background-color: #fff;
-    }
-  `,
-);
+const FieldLabel = ({
+  children,
+  htmlFor,
+  onClick,
+  hasErrors = false,
+  isActive = false,
+}: FieldLabelProps) => {
+  return (
+    <Typography
+      variant="body2"
+      component="label"
+      htmlFor={htmlFor}
+      onClick={onClick}
+      sx={{
+        color: getStateColors({ hasErrors, isActive }).text,
+        marginLeft: '4px',
+      }}
+    >
+      {children}
+    </Typography>
+  );
+};
 
 export default FieldLabel;

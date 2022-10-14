@@ -7,7 +7,7 @@ import type {
   FieldObject,
   ValueOrNestedValue,
   FieldList,
-  ListValue,
+  ObjectValue,
 } from '../../interface';
 
 function ObjectPreview({
@@ -16,7 +16,7 @@ function ObjectPreview({
   | {
       [key: string]: ValueOrNestedValue;
     }
-  | ListValue[],
+  | ObjectValue[],
   FieldObject | FieldList
 >) {
   return <WidgetPreviewContainer>{JSON.stringify(value, null, 2)}</WidgetPreviewContainer>;

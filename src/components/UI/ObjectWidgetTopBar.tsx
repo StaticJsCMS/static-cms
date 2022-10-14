@@ -2,23 +2,24 @@ import styled from '@emotion/styled';
 import AddIcon from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import React, { useCallback } from 'react';
 
 import { transientOptions } from '../../lib';
-import { buttons, colors, transitions } from './styles';
+import { colors, transitions } from './styles';
 
 import type { MouseEvent, ReactNode } from 'react';
 import type { Field, TranslatedProps } from '../../interface';
 
 const TopBarContainer = styled.div`
+  position: relative;
   align-items: center;
   background-color: ${colors.textFieldBorder};
   display: flex;
   justify-content: space-between;
-  margin: 0 -14px;
-  padding: 6px 13px;
+  padding: 6px 12px;
 `;
 
 interface ExpandButtonContainerProps {
@@ -43,22 +44,6 @@ const ExpandButtonContainer = styled(
     }
   `,
 );
-
-const ExpandButton = styled.button`
-  ${buttons.button};
-  padding: 4px;
-  background-color: transparent;
-  color: inherit;
-
-  &:last-of-type {
-    margin-right: 4px;
-  }
-`;
-
-const AddButton = styled.button`
-  ${buttons.button}
-  padding: 4px 12px;
-`;
 
 export interface ObjectWidgetTopBarProps {
   allowAdd?: boolean;
@@ -133,10 +118,14 @@ const ObjectWidgetTopBar = ({
 
   const renderAddButton = useCallback(() => {
     return (
-      <AddButton onClick={onAdd}>
+      <Button
+        onClick={onAdd}
+        endIcon={<AddIcon fontSize="small" />}
+        size="small"
+        variant="outlined"
+      >
         {t('editor.editorWidgets.list.add', { item: label })}
-        <AddIcon />
-      </AddButton>
+      </Button>
     );
   }, [t, label, onAdd]);
 
@@ -154,14 +143,14 @@ const ObjectWidgetTopBar = ({
   return (
     <TopBarContainer>
       <ExpandButtonContainer $hasHeading={!!heading}>
-        <ExpandButton onClick={onCollapseToggle} data-testid="expand-button">
+        <IconButton onClick={onCollapseToggle} data-testid="expand-button">
           <ExpandMoreIcon
             sx={{
-              transform: `rotateX(${collapsed ? '-90deg' : '0deg'})`,
+              transform: `rotateZ(${collapsed ? '-90deg' : '0deg'})`,
               transition: `transform ${transitions.main};`,
             }}
           />
-        </ExpandButton>
+        </IconButton>
         {heading}
       </ExpandButtonContainer>
       {renderAddUI()}

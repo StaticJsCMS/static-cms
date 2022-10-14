@@ -11,7 +11,7 @@ import type {
   Field,
   FieldList,
   FieldObject,
-  ValueOrNestedValue,
+  ObjectValue,
   WidgetControlProps,
 } from '../../interface';
 
@@ -44,29 +44,12 @@ const ObjectControl = ({
   isFieldHidden,
   locale,
   onChange,
+  onValidate,
   path,
   t,
   value = {},
-}: WidgetControlProps<
-  {
-    [key: string]: ValueOrNestedValue;
-  },
-  FieldObject | FieldList
->) => {
+}: WidgetControlProps<ObjectValue, FieldObject | FieldList>) => {
   const [collapsed, setCollapsed] = useState(false);
-
-  // TODO Implement object validation
-  // componentValidate = {};
-
-  // validate = () => {
-  //   const { field } = this.props;
-  //   let fields = field.field || field.fields;
-  //   fields = List.isList(fields) ? fields : List([fields]);
-  //   fields.forEach(field => {
-  //     if (field.widget === 'hidden') return;
-  //     this.componentValidate[field.name]();
-  //   });
-  // };
 
   const controlFor = useCallback(
     (field: Field, key: number) => {
@@ -87,8 +70,7 @@ const ObjectControl = ({
           onChange={onChange}
           clearFieldErrors={clearFieldErrors}
           fieldsErrors={fieldsErrors}
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          onValidate={() => {}} // TODO Fix validation
+          onValidate={onValidate}
           parentPath={path}
           isDisabled={isDuplicate}
           isHidden={isHidden}
@@ -105,6 +87,7 @@ const ObjectControl = ({
       isFieldHidden,
       locale,
       onChange,
+      onValidate,
       path,
       value,
     ],

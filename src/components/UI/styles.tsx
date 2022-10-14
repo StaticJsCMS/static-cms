@@ -79,7 +79,7 @@ const colors = {
   warnBackground: colorsRaw.yellow,
   errorText: colorsRaw.red,
   errorBackground: colorsRaw.redLight,
-  textFieldBorder: '#dfdfe3',
+  textFieldBorder: '#f7f9fc',
   controlLabel: '#7a8291',
   checkerboardLight: '#f2f2f2',
   checkerboardDark: '#e6e6e6',

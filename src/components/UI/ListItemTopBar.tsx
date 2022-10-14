@@ -105,7 +105,7 @@ const ListItemTopBar = ({
         <TopBarButton onClick={onCollapseToggle}>
           <ExpandMoreIcon
             sx={{
-              transform: `rotateX(${collapsed ? '-90deg' : '0deg'})`,
+              transform: `rotateZ(${collapsed ? '-90deg' : '0deg'})`,
               transition: `transform ${transitions.main};`,
             }}
           />

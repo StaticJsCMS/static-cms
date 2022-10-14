@@ -67,7 +67,7 @@ collections:
         widget: string
       - label: Answer
         name: body
-        widget: text
+        widget: markdown
       - name: posts
         label: Posts
         label_singular: Post
