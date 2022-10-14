@@ -4,7 +4,7 @@ import truncate from 'lodash/truncate';
 import moment from 'moment';
 import { basename, dirname, extname } from 'path';
 
-import type { Entry, EntryData, ValueOrNestedValue } from '../../interface';
+import type { Entry, EntryData, ObjectValue } from '../../interface';
 
 const filters = [
   { pattern: /^upper$/, transform: (str: string) => str.toUpperCase() },
@@ -159,15 +159,7 @@ export function expandPath({
 
 // Allow `fields.` prefix in placeholder to override built in replacements
 // like "slug" and "year" with values from fields of the same name.
-function getExplicitFieldReplacement(
-  key: string,
-  data:
-    | {
-        [key: string]: ValueOrNestedValue;
-      }
-    | undefined
-    | null,
-) {
+function getExplicitFieldReplacement(key: string, data: ObjectValue | undefined | null) {
   if (!key.startsWith(FIELD_PREFIX)) {
     return;
   }
@@ -198,12 +190,7 @@ export function compileStringTemplate(
   template: string,
   date: Date | undefined | null,
   identifier = '',
-  data:
-    | {
-        [key: string]: ValueOrNestedValue;
-      }
-    | undefined
-    | null = {},
+  data: ObjectValue | undefined | null = {},
   processor?: (value: string) => string,
 ) {
   let missingRequiredDate;
