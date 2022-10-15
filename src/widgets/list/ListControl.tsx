@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useMemo, useState } from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
-import uuid from 'uuid/v4';
 
 import FieldLabel from '../../components/UI/FieldLabel';
 import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
@@ -99,15 +98,12 @@ const ListControl = ({
   onValidate,
   path,
   query,
-  queryHits,
   t,
   ...otherProps
 }: WidgetControlProps<ObjectValue[], FieldList>) => {
   const value = useMemo(() => otherProps.value ?? [], [otherProps.value]);
 
   const [listCollapsed, setListCollapsed] = useState(field.collapsed ?? true);
-  const [itemsCollapsed, setItemsCollapsed] = useState(Array(value.length).fill(listCollapsed));
-  const [keys, setKeys] = useState(Array.from({ length: value.length }, () => uuid()));
 
   const valueType = useMemo(() => {
     if ('fields' in field) {
@@ -159,11 +155,6 @@ const ListControl = ({
     (parsedValue: ObjectValue) => {
       const addToTop = field.add_to_top ?? false;
 
-      const itemKey = uuid();
-
-      setItemsCollapsed(addToTop ? [false, ...itemsCollapsed] : [...itemsCollapsed, false]);
-      setKeys(addToTop ? [itemKey, ...keys] : [...keys, itemKey]);
-
       const listValue = value;
       if (addToTop) {
         listValue.unshift(parsedValue);
@@ -173,7 +164,7 @@ const ListControl = ({
         handleChange(listValue);
       }
     },
-    [field.add_to_top, handleChange, value, itemsCollapsed, keys],
+    [field.add_to_top, handleChange, value],
   );
 
   const handleAdd = useCallback(
@@ -198,13 +189,6 @@ const ListControl = ({
   const handleRemove = useCallback(
     (index: number, event: MouseEvent) => {
       event.preventDefault();
-      itemsCollapsed.splice(index, 1);
-
-      // TODO clear validations
-      // this.validations = [];
-
-      setItemsCollapsed([...itemsCollapsed]);
-      setKeys(Array.from({ length: value.length - 1 }, () => uuid()));
 
       const newValue = [...value];
       newValue.splice(index, 1);
@@ -212,29 +196,15 @@ const ListControl = ({
       handleChange(newValue);
       clearFieldErrors();
     },
-    [clearFieldErrors, handleChange, value, itemsCollapsed],
+    [clearFieldErrors, handleChange, value],
   );
 
   const handleCollapseAllToggle = useCallback(
     (e: MouseEvent) => {
       e.preventDefault();
-      const minimizeCollapsedItems = field.minimize_collapsed ?? false;
-      const listCollapsedByDefault = field.collapsed ?? true;
-      const allItemsCollapsed = itemsCollapsed.every(val => val === true);
-
-      if (minimizeCollapsedItems) {
-        let updatedItemsCollapsed = itemsCollapsed;
-        // Only allow collapsing all items in this mode but not opening all at once
-        if (!listCollapsed || !listCollapsedByDefault) {
-          updatedItemsCollapsed = Array(value.length).fill(!listCollapsed);
-        }
-        setListCollapsed(!listCollapsed);
-        setItemsCollapsed(updatedItemsCollapsed);
-      } else {
-        setItemsCollapsed(Array(value.length).fill(!allItemsCollapsed));
-      }
+      setListCollapsed(!listCollapsed);
     },
-    [field.collapsed, field.minimize_collapsed, value.length, itemsCollapsed, listCollapsed],
+    [listCollapsed],
   );
 
   const onSortEnd = useCallback(
@@ -246,36 +216,14 @@ const ListControl = ({
       newValue.splice(newIndex, 0, item);
       handleChange(newValue);
 
-      // Update collapsing
-      const collapsed = itemsCollapsed[oldIndex];
-      itemsCollapsed.splice(oldIndex, 1);
-      const updatedItemsCollapsed = [...itemsCollapsed];
-      updatedItemsCollapsed.splice(newIndex, 0, collapsed);
-
-      // Reset item to ensure updated state
-      const updatedKeys = keys.map((key, keyIndex) => {
-        if (keyIndex === oldIndex || keyIndex === newIndex) {
-          return uuid();
-        }
-        return key;
-      });
-
-      setItemsCollapsed(updatedItemsCollapsed);
-      setKeys(updatedKeys);
-
       //clear error fields and remove old validations
       clearFieldErrors();
-
-      // TODO Remove old validations
-      // this.validations = this.validations.filter(item => updatedKeys.includes(item.key));
     },
-    [clearFieldErrors, handleChange, value, itemsCollapsed, keys],
+    [clearFieldErrors, handleChange, value],
   );
 
   const renderItem = useCallback(
     (item: ObjectValue, index: number) => {
-      const collapsed = itemsCollapsed[index];
-      const key = keys[index];
       if (!valueType) {
         return <div />;
       }
@@ -283,15 +231,14 @@ const ListControl = ({
       return (
         <ListItem
           index={index}
-          key={key}
+          key={`item-${index}`}
           valueType={valueType}
           handleRemove={handleRemove}
           clearFieldErrors={clearFieldErrors}
           clearSearch={clearSearch}
-          collapsed={collapsed}
           collection={collection}
           config={config}
-          data-testid={`object-control-${key}`}
+          data-testid={`object-control-${index}`}
           entry={entry}
           field={field}
           fieldsErrors={fieldsErrors}
@@ -315,9 +262,8 @@ const ListControl = ({
           onRemoveInsertedMedia={onRemoveInsertedMedia}
           onRemoveMediaControl={onRemoveMediaControl}
           onValidate={onValidate}
-          path={`${path}.${index}`}
+          path={path}
           query={query}
-          queryHits={queryHits}
           t={t}
           value={item as Record<string, ObjectValue>}
         />
@@ -339,8 +285,6 @@ const ListControl = ({
       isFieldDuplicate,
       isFieldHidden,
       isNewEditorComponent,
-      itemsCollapsed,
-      keys,
       loadEntry,
       locale,
       mediaPaths,
@@ -354,7 +298,6 @@ const ListControl = ({
       onValidate,
       path,
       query,
-      queryHits,
       t,
       valueType,
     ],
@@ -367,10 +310,6 @@ const ListControl = ({
   const label = field.label ?? field.name;
   const labelSingular = field.label_singular ? field.label_singular : field.label ?? field.name;
   const listLabel = value.length === 1 ? labelSingular.toLowerCase() : label.toLowerCase();
-  const minimizeCollapsedItems = field.minimize_collapsed ?? false;
-  const allItemsCollapsed = itemsCollapsed.every(val => val === true);
-  const selfCollapsed = allItemsCollapsed && (listCollapsed || !minimizeCollapsedItems);
-  console.log(selfCollapsed, minimizeCollapsedItems);
 
   return (
     <StyledListWrapper>
@@ -383,10 +322,10 @@ const ListControl = ({
         heading={`${value.length} ${listLabel}`}
         label={labelSingular.toLowerCase()}
         onCollapseToggle={handleCollapseAllToggle}
-        collapsed={selfCollapsed}
+        collapsed={listCollapsed}
         t={t}
       />
-      {!selfCollapsed && !minimizeCollapsedItems ? (
+      {!listCollapsed ? (
         <SortableList
           items={value}
           renderItem={renderItem}

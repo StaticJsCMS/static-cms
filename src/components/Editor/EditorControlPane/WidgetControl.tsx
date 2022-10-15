@@ -205,7 +205,6 @@ export interface WidgetProps {
   onValidate: EditorControlProps['onValidate'];
   path: string;
   query: EditorControlProps['query'];
-  queryHits: Entry[];
   resolveWidget: typeof registryResolveWidget;
   value: ValueOrNestedValue;
 }
@@ -240,7 +239,6 @@ const WidgetControl = ({
   onValidate,
   path,
   query,
-  queryHits,
   t,
   value,
 }: TranslatedProps<WidgetProps>) => {
@@ -274,7 +272,6 @@ const WidgetControl = ({
     onValidate,
     path,
     query,
-    queryHits,
     t,
     value,
   });

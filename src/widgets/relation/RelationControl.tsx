@@ -110,10 +110,10 @@ const RelationControl = ({
   value,
   field,
   onChange,
-  queryHits,
   query,
   locale,
 }: WidgetControlProps<string | string[], FieldRelation>) => {
+  const [internalValue, setInternalValue] = useState(value);
   const [initialOptions, setInitialOptions] = useState<HitOption[]>([]);
 
   const isMultiple = useMemo(() => {
@@ -132,8 +132,7 @@ const RelationControl = ({
         return get(hitData, field) as string;
       }
       const data = addFileTemplateFields(hit.path, hitData);
-      const value = compileStringTemplate(field, null, hit.slug, data);
-      return value;
+      return compileStringTemplate(field, null, hit.slug, data);
     },
     [locale],
   );
@@ -163,55 +162,6 @@ const RelationControl = ({
     [field.display_fields, field.value_field, parseNestedFields],
   );
 
-  useEffect(() => {
-    let alive = true;
-
-    const initialSearch = async () => {
-      // if the field has a previous value perform an initial search based on the value field
-      // this is required since each search is limited by optionsLength so the selected value
-      // might not show up on the search
-      const collection = field.collection;
-      const file = field.file;
-      const initialSearchValues: string[] = value
-        ? typeof value !== 'string'
-          ? getSelectedOptions(value) ?? []
-          : [value]
-        : [];
-      if (initialSearchValues && initialSearchValues.length > 0) {
-        const searchFieldsArray = field.search_fields;
-        const response = await query('', collection, searchFieldsArray, '', file); // TODO Fix this query(forID, collection, searchFieldsArray, '', file)
-
-        if (alive) {
-          const hits = response?.type === QUERY_SUCCESS ? response.payload.hits : [];
-          const options = parseHitOptions(hits);
-          const initialOptions = initialSearchValues
-            .map(v => {
-              const selectedOption = options.find(o => o.value === v);
-              return selectedOption;
-            })
-            .filter(Boolean) as HitOption[];
-
-          setInitialOptions(initialOptions);
-        }
-      }
-    };
-
-    initialSearch();
-
-    return () => {
-      alive = false;
-    };
-  }, [
-    field.collection,
-    field.file,
-    field.name,
-    field.search_fields,
-    onChange,
-    parseHitOptions,
-    query,
-    value,
-  ]);
-
   // TODO Do we need sorting?
   // const onSortEnd =
   //   options =>
@@ -236,24 +186,28 @@ const RelationControl = ({
       if (Array.isArray(selectedOption)) {
         const options = selectedOption;
         setInitialOptions(options.filter(Boolean));
-        const value = options.map(optionToString);
-        onChange(path, field, value);
+        const newValue = options.map(optionToString);
+        setInternalValue(newValue);
+        onChange(path, field, newValue);
       } else {
         setInitialOptions([selectedOption].filter(Boolean) as HitOption[]);
-        const value = optionToString(selectedOption);
-        onChange(path, field, value);
+        const newValue = optionToString(selectedOption);
+        setInternalValue(newValue);
+        onChange(path, field, newValue);
       }
     },
     [field, onChange, path],
   );
 
   const [options, setOptions] = useState<HitOption[]>([]);
+  console.log('options', options);
   const [open, setOpen] = React.useState(false);
   const loading = useMemo(() => open && options.length === 0, [open, options.length]);
 
   useEffect(() => {
     let alive = true;
 
+    console.log('loading', loading);
     if (!loading) {
       return undefined;
     }
@@ -264,7 +218,8 @@ const RelationControl = ({
       const searchFieldsArray = field.search_fields;
       const file = field.file;
 
-      const response = await query('', collection, searchFieldsArray, '', file, optionsLength); // TODO Fix this query(forID, collection, searchFieldsArray, '', file, optionsLength)
+      const response = await query(path, collection, searchFieldsArray, '', file, optionsLength);
+      console.log('query response', response);
       if (alive) {
         if (response?.type === QUERY_SUCCESS) {
           const hits = response.payload.hits ?? [];
@@ -277,22 +232,12 @@ const RelationControl = ({
     return () => {
       alive = false;
     };
-  }, [
-    field.collection,
-    field.file,
-    field.options_length,
-    field.search_fields,
-    initialOptions,
-    loading,
-    parseHitOptions,
-    query,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [field.collection, field.file, field.options_length, field.search_fields, loading]);
 
-  // TODO Remove? const isClearable = !(field.required ?? true) || isMultiple;
-
-  const queryOptions = parseHitOptions(queryHits);
-  const uniqueOptions = uniqOptions(initialOptions, queryOptions);
-  const selectedValue = getSelectedValue(value, options, isMultiple);
+  const uniqueOptions = uniqOptions(initialOptions, options);
+  console.log('uniqueOptions', uniqueOptions);
+  const selectedValue = getSelectedValue(internalValue, uniqueOptions, isMultiple);
 
   return (
     <Autocomplete
@@ -326,32 +271,6 @@ const RelationControl = ({
       }}
     />
   );
-
-  // TODO Remove after testing
-  // return (
-  //   <SortableSelect
-  //     useDragHandle
-  //     // react-sortable-hoc props:
-  //     axis="xy"
-  //     onSortEnd={this.onSortEnd(selectedValue)}
-  //     distance={4}
-  //     // small fix for https://github.com/clauderic/react-sortable-hoc/pull/352:
-  //     getHelperDimensions={({ node }) => node.getBoundingClientRect()}
-  //     // react-select props:
-  //     components={{ MenuList, MultiValue, MultiValueLabel }}
-  //     value={selectedValue}
-  //     cacheOptions
-  //     defaultOptions
-  //     loadOptions={this.loadOptions}
-  //     onChange={this.handleChange}
-  //     onFocus={setActiveStyle}
-  //     onBlur={setInactiveStyle}
-  //     styles={reactSelectStyles}
-  //     isMulti={isMultiple}
-  //     isClearable={isClearable}
-  //     placeholder=""
-  //   />
-  // );
 };
 
 export default RelationControl;

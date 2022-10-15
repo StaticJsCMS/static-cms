@@ -152,7 +152,6 @@ const EditorControl = ({
   parentPath,
   persistMedia,
   query,
-  queryHits,
   removeInsertedMedia,
   removeMediaControl,
   t,
@@ -239,7 +238,6 @@ const EditorControl = ({
           onValidate={onValidate}
           path={path}
           query={query}
-          queryHits={queryHits[uniqueFieldId] || []}
           resolveWidget={resolveWidget}
           t={t}
           value={value}
@@ -288,7 +286,6 @@ function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
     ...ownProps,
     mediaPaths: state.mediaLibrary.controlMedia,
     isFetching: state.search.isFetching,
-    queryHits: state.search.queryHits,
     config: state.config,
     entry,
     collection,

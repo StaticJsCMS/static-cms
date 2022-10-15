@@ -228,7 +228,6 @@ export type GetAssetFunction = (path: string, field?: Field) => AssetProxy;
 export interface WidgetControlProps<T, F extends Field = Field> {
   clearFieldErrors: EditorControlProps['clearFieldErrors'];
   clearSearch: EditorControlProps['clearSearch'];
-  collapsed?: boolean;
   collection: Collection;
   config: Config;
   entry: Entry;
@@ -257,7 +256,6 @@ export interface WidgetControlProps<T, F extends Field = Field> {
   onValidate: EditorControlProps['onValidate'];
   path: string;
   query: EditorControlProps['query'];
-  queryHits: Entry[];
   t: t;
   value: T | undefined | null;
 }

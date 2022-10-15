@@ -9,7 +9,6 @@ import {
 } from '../actions/search';
 
 import type { SearchAction } from '../actions/search';
-import type { Entry } from '../interface';
 
 export interface SearchState {
   isFetching: boolean;
@@ -17,9 +16,6 @@ export interface SearchState {
   collections: string[];
   page: number;
   entryIds: { collection: string; slug: string }[];
-  queryHits: {
-    [namespace: string]: Entry[];
-  };
   error: Error | undefined;
 }
 
@@ -29,7 +25,6 @@ const defaultState: SearchState = {
   collections: [],
   page: 0,
   entryIds: [],
-  queryHits: {},
   error: undefined,
 };
 
@@ -80,14 +75,9 @@ const search = (state: SearchState = defaultState, action: SearchAction): Search
     }
 
     case QUERY_SUCCESS: {
-      const { namespace, hits } = action.payload;
       return {
         ...state,
         isFetching: false,
-        queryHits: {
-          ...state.queryHits,
-          [namespace]: hits,
-        },
       };
     }
   }

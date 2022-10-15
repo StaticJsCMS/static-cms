@@ -96,7 +96,6 @@ function LabelComponent({ field, isActive, hasErrors, isFieldOptional, t }: Labe
 interface ListItemProps extends WidgetControlProps<ObjectValue, FieldList> {
   valueType: ListValueType;
   index: number;
-  key: string;
   handleRemove: (index: number, event: MouseEvent) => void;
 }
 
@@ -129,11 +128,9 @@ const ListItem = ({
   onValidate,
   path,
   query,
-  queryHits,
   t,
   valueType,
   handleRemove,
-  key,
   value,
 }: ListItemProps) => {
   const objectLabel = useMemo(() => {
@@ -208,7 +205,7 @@ const ListItem = ({
   }
 
   return (
-    <SortableStyledListItem index={index} key={key}>
+    <SortableStyledListItem index={index} key={index}>
       <>
         {isVariableTypesList ? (
           <LabelComponent
@@ -224,7 +221,7 @@ const ListItem = ({
           onCollapseToggle={handleCollapseToggle}
           onRemove={partial(handleRemove, index)}
           dragHandleHOC={SortableHandle}
-          data-testid={`styled-list-item-top-bar-${key}`}
+          data-testid={`styled-list-item-top-bar-${index}`}
           title={collapsed ? objectLabel : null}
           isVariableTypesList={isVariableTypesList}
         />
@@ -237,10 +234,9 @@ const ListItem = ({
             <ObjectControl
               clearFieldErrors={clearFieldErrors}
               clearSearch={clearSearch}
-              collapsed={collapsed}
               collection={collection}
               config={config}
-              data-testid={`object-control-${key}`}
+              data-testid={`object-control-${index}`}
               entry={entry}
               field={field}
               fieldsErrors={fieldsErrors}
@@ -267,7 +263,6 @@ const ListItem = ({
               onValidate={onValidate}
               path={`${path}.${index}`}
               query={query}
-              queryHits={queryHits}
               t={t}
               value={value}
             />
