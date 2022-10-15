@@ -100,9 +100,11 @@ const CardWrapper = ({
   );
 };
 
-const CardGridContainer = styled.div`
+const StyledCardGridContainer = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
+  width: 100%;
+  height: 100%;
 `;
 
 const CardGrid = styled.div`
@@ -121,9 +123,10 @@ const VirtualizedGrid = (props: MediaLibraryCardGridProps) => {
     mediaItems,
     setScrollContainerRef,
   } = props;
+  console.log(mediaItems);
 
   return (
-    <CardGridContainer ref={setScrollContainerRef}>
+    <StyledCardGridContainer ref={setScrollContainerRef}>
       <AutoSizer>
         {({ height, width }) => {
           const cardWidth = parseInt(inputCardWidth, 10);
@@ -133,6 +136,8 @@ const VirtualizedGrid = (props: MediaLibraryCardGridProps) => {
           const rowHeight = cardHeight + gutter;
           const columnCount = Math.floor(width / columnWidth);
           const rowCount = Math.ceil(mediaItems.length / columnCount);
+
+          console.log(height, width);
           return (
             <Grid
               columnCount={columnCount}
@@ -154,7 +159,7 @@ const VirtualizedGrid = (props: MediaLibraryCardGridProps) => {
           );
         }}
       </AutoSizer>
-    </CardGridContainer>
+    </StyledCardGridContainer>
   );
 };
 
@@ -189,7 +194,7 @@ const PaginatedGrid = ({
   paginatingMessage,
 }: MediaLibraryCardGridProps) => {
   return (
-    <CardGridContainer ref={setScrollContainerRef}>
+    <StyledCardGridContainer ref={setScrollContainerRef}>
       <CardGrid>
         {mediaItems.map(file => (
           <MediaLibraryCard
@@ -214,7 +219,7 @@ const PaginatedGrid = ({
       {!isPaginating ? null : (
         <PaginatingMessage $isPrivate={isPrivate}>{paginatingMessage}</PaginatingMessage>
       )}
-    </CardGridContainer>
+    </StyledCardGridContainer>
   );
 };
 

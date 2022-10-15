@@ -24,7 +24,7 @@ const StyledFab = styled(Fab)`
 `;
 
 /**
- * Responsive styling needs to be overhauled. Current setup requires specifying
+ * TODO Responsive styling needs to be overhauled. Current setup requires specifying
  * widths per breakpoint.
  */
 const cardWidth = `280px`;
