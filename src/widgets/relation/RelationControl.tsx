@@ -251,7 +251,7 @@ const RelationControl = ({
   const [open, setOpen] = React.useState(false);
   const loading = useMemo(() => open && options.length === 0, [open, options.length]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let alive = true;
 
     if (!loading) {
