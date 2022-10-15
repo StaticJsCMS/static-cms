@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useMemo, useState } from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
+import { arrayMoveImmutable } from 'array-move';
 
 import FieldLabel from '../../components/UI/FieldLabel';
 import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
@@ -99,10 +100,9 @@ const ListControl = ({
   path,
   query,
   t,
-  ...otherProps
+  value,
 }: WidgetControlProps<ObjectValue[], FieldList>) => {
-  const value = useMemo(() => otherProps.value ?? [], [otherProps.value]);
-
+  const internalValue = useMemo(() => value ?? [], [value]);
   const [listCollapsed, setListCollapsed] = useState(field.collapsed ?? true);
 
   const valueType = useMemo(() => {
@@ -119,6 +119,7 @@ const ListControl = ({
 
   const handleChange = useCallback(
     (newValue: ObjectValue[]) => {
+      console.log('newValue', newValue);
       onChange(path, field, newValue);
     },
     [field, onChange, path],
@@ -155,7 +156,7 @@ const ListControl = ({
     (parsedValue: ObjectValue) => {
       const addToTop = field.add_to_top ?? false;
 
-      const listValue = value;
+      const listValue = internalValue;
       if (addToTop) {
         listValue.unshift(parsedValue);
         handleChange(listValue);
@@ -164,7 +165,7 @@ const ListControl = ({
         handleChange(listValue);
       }
     },
-    [field.add_to_top, handleChange, value],
+    [field.add_to_top, handleChange, internalValue],
   );
 
   const handleAdd = useCallback(
@@ -190,13 +191,13 @@ const ListControl = ({
     (index: number, event: MouseEvent) => {
       event.preventDefault();
 
-      const newValue = [...value];
+      const newValue = [...internalValue];
       newValue.splice(index, 1);
 
       handleChange(newValue);
       clearFieldErrors();
     },
-    [clearFieldErrors, handleChange, value],
+    [clearFieldErrors, handleChange, internalValue],
   );
 
   const handleCollapseAllToggle = useCallback(
@@ -210,17 +211,14 @@ const ListControl = ({
   const onSortEnd = useCallback(
     ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
       // Update value
-      const item = value[oldIndex];
-      const newValue: ObjectValue[] = [...value];
-      newValue.splice(oldIndex, 1);
-      newValue.splice(newIndex, 0, item);
-      handleChange(newValue);
+      handleChange(arrayMoveImmutable(internalValue, oldIndex, newIndex));
 
       //clear error fields and remove old validations
       clearFieldErrors();
     },
-    [clearFieldErrors, handleChange, value],
+    [clearFieldErrors, handleChange, internalValue],
   );
+  console.log('internalValue', internalValue);
 
   const renderItem = useCallback(
     (item: ObjectValue, index: number) => {
@@ -309,7 +307,7 @@ const ListControl = ({
 
   const label = field.label ?? field.name;
   const labelSingular = field.label_singular ? field.label_singular : field.label ?? field.name;
-  const listLabel = value.length === 1 ? labelSingular.toLowerCase() : label.toLowerCase();
+  const listLabel = internalValue.length === 1 ? labelSingular.toLowerCase() : label.toLowerCase();
 
   return (
     <StyledListWrapper>
@@ -319,7 +317,7 @@ const ListControl = ({
         onAdd={handleAdd}
         types={field[TYPES_KEY] ?? []}
         onAddType={type => handleAddType(type, resolveFieldKeyType(field))}
-        heading={`${value.length} ${listLabel}`}
+        heading={`${internalValue.length} ${listLabel}`}
         label={labelSingular.toLowerCase()}
         onCollapseToggle={handleCollapseAllToggle}
         collapsed={listCollapsed}
@@ -327,7 +325,7 @@ const ListControl = ({
       />
       {!listCollapsed ? (
         <SortableList
-          items={value}
+          items={internalValue}
           renderItem={renderItem}
           onSortEnd={onSortEnd}
           useDragHandle
