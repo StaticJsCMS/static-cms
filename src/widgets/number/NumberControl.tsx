@@ -59,6 +59,7 @@ export function validateMinMax(
 }
 
 const NumberControl = ({
+  label,
   path,
   field,
   value,
@@ -99,17 +100,7 @@ const NumberControl = ({
         max,
       }}
       fullWidth
-      sx={{
-        '.MuiInputBase-root': {
-          borderTopLeftRadius: 0,
-          '.MuiOutlinedInput-notchedOutline': {
-            borderColor: '#f7f9fc',
-          },
-          '&:not(.Mui-focused):hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: '#f7f9fc',
-          },
-        },
-      }}
+      label={label}
       InputLabelProps={{
         shrink: true,
       }}

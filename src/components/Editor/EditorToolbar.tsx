@@ -110,14 +110,9 @@ const EditorToolbar = ({
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = useCallback(
-    (event: MouseEvent<HTMLButtonElement>) => {
-      if (canCreate) {
-        setAnchorEl(event.currentTarget);
-      }
-    },
-    [canCreate],
-  );
+  const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  }, []);
   const handleClose = useCallback(() => {
     setAnchorEl(null);
   }, []);
@@ -133,7 +128,6 @@ const EditorToolbar = ({
               aria-haspopup="true"
               aria-expanded={open ? 'true' : undefined}
               onClick={handleClick}
-              disabled={!canCreate}
               variant="contained"
               color={isPublished ? 'success' : 'primary'}
               endIcon={<KeyboardArrowDownIcon />}
