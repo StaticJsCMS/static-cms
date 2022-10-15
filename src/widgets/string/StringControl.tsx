@@ -23,6 +23,7 @@ const StringControl = ({
 
   return (
     <TextField
+      key="string-control-input"
       label={label}
       variant="outlined"
       value={internalValue}

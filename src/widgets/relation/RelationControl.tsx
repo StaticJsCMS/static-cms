@@ -199,8 +199,11 @@ const RelationControl = ({
     [field, onChange, path],
   );
 
+  useEffect(() => {
+    console.log('relation control mounted!');
+  }, []);
+
   const [options, setOptions] = useState<HitOption[]>([]);
-  console.log('options', options);
   const [open, setOpen] = React.useState(false);
   const loading = useMemo(() => open && options.length === 0, [open, options.length]);
 
@@ -236,16 +239,18 @@ const RelationControl = ({
   }, [field.collection, field.file, field.options_length, field.search_fields, loading]);
 
   const uniqueOptions = uniqOptions(initialOptions, options);
-  console.log('uniqueOptions', uniqueOptions);
+  console.log('uniqueOptions', uniqueOptions, 'initialOptions', initialOptions, 'options', options);
   const selectedValue = getSelectedValue(internalValue, uniqueOptions, isMultiple);
 
   return (
     <Autocomplete
+      key="relation-control-autocomplete"
       disablePortal
       options={uniqueOptions}
       sx={{ width: 300 }}
       renderInput={params => (
         <TextField
+          key="relation-control-input"
           {...params}
           label="Asynchronous"
           InputProps={{

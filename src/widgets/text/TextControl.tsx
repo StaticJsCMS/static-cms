@@ -22,6 +22,7 @@ const TextControl = ({
 
   return (
     <TextField
+      key="text-control-input"
       variant="outlined"
       value={internalValue || ''}
       onChange={handleChange}

@@ -33,11 +33,12 @@ function NowButton({ t, handleChange, disabled }: TranslatedProps<NowButtonProps
   );
 
   return (
-    <StyledNowButton>
+    <StyledNowButton key="now-button-wrapper">
       <Button
+        key="now-button"
         onClick={handleClick}
         disabled={disabled}
-        startIcon={<TodayIcon />}
+        startIcon={<TodayIcon key="today-icon" />}
         variant="outlined"
       >
         {t('editor.editorWidgets.datetime.now')}
@@ -121,10 +122,11 @@ const DateTimeControl = ({
   }, [defaultValue, handleChange, internalValue]);
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider key="localization-provider" dateAdapter={AdapterDateFns}>
       {timeFormat ? (
         dateFormat ? (
           <MobileDateTimePicker
+            key="mobile-date-time-picker"
             inputFormat={`${typeof dateFormat === 'string' ? dateFormat : undefined} ${
               typeof timeFormat === 'string' ? timeFormat : undefined
             }`}
@@ -133,11 +135,17 @@ const DateTimeControl = ({
             onChange={handleChange}
             renderInput={params => (
               <TextField
+                key="mobile-date-time-input"
                 {...params}
                 fullWidth
                 InputProps={{
                   endAdornment: (
-                    <NowButton t={t} handleChange={v => handleChange(v)} disabled={isDisabled} />
+                    <NowButton
+                      key="mobile-date-time-now"
+                      t={t}
+                      handleChange={v => handleChange(v)}
+                      disabled={isDisabled}
+                    />
                   ),
                 }}
               />
@@ -145,16 +153,23 @@ const DateTimeControl = ({
           />
         ) : (
           <TimePicker
+            key="time-picker"
             label={label}
             value={internalValue}
             onChange={handleChange}
             renderInput={params => (
               <TextField
+                key="time-input"
                 {...params}
                 fullWidth
                 InputProps={{
                   endAdornment: (
-                    <NowButton t={t} handleChange={v => handleChange(v)} disabled={isDisabled} />
+                    <NowButton
+                      key="time-now"
+                      t={t}
+                      handleChange={v => handleChange(v)}
+                      disabled={isDisabled}
+                    />
                   ),
                 }}
               />
@@ -163,17 +178,24 @@ const DateTimeControl = ({
         )
       ) : (
         <MobileDatePicker
+          key="mobile-date-picker"
           inputFormat={typeof dateFormat === 'string' ? dateFormat : undefined}
           label={label}
           value={internalValue}
           onChange={handleChange}
           renderInput={params => (
             <TextField
+              key="mobile-date-input"
               {...params}
               fullWidth
               InputProps={{
                 endAdornment: (
-                  <NowButton t={t} handleChange={v => handleChange(v)} disabled={isDisabled} />
+                  <NowButton
+                    key="mobile-date-now"
+                    t={t}
+                    handleChange={v => handleChange(v)}
+                    disabled={isDisabled}
+                  />
                 ),
               }}
             />

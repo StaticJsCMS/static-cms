@@ -88,6 +88,7 @@ const NumberControl = ({
   const step = field.step ?? (field.value_type === 'int' ? 1 : '');
   return (
     <TextField
+      key="number-control-input"
       variant="outlined"
       type="number"
       value={internalValue}

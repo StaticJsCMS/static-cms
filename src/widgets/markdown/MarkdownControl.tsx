@@ -63,11 +63,17 @@ const MarkdownControl = ({
   }, [editorRef]);
 
   return (
-    <StyledEditorWrapper>
-      <FieldLabel isActive={hasFocus} hasErrors={errors.length > 0} onClick={handleLabelClick}>
+    <StyledEditorWrapper key="markdown-control-wrapper">
+      <FieldLabel
+        key="markdown-control-label"
+        isActive={hasFocus}
+        hasErrors={errors.length > 0}
+        onClick={handleLabelClick}
+      >
         {label}
       </FieldLabel>
       <Editor
+        key="markdown-control-editor"
         initialValue={internalValue}
         previewStyle="vertical"
         height="600px"
@@ -85,7 +91,7 @@ const MarkdownControl = ({
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
       />
-      <Outline active={hasFocus} hasLabel />
+      <Outline key="markdown-control-outline" active={hasFocus} hasLabel />
     </StyledEditorWrapper>
   );
 };

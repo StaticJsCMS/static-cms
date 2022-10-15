@@ -130,16 +130,16 @@ const ColorControl = ({
 
   return (
     <>
-      {' '}
       {showClearButton && (
-        <ClearButtonWrapper>
-          <ClearButton onClick={handleClear}>
-            <ClearIcon />
+        <ClearButtonWrapper key="clear-button-wrapper">
+          <ClearButton key="clear-button" onClick={handleClear}>
+            <ClearIcon key="clear-button-icon" />
           </ClearButton>
         </ClearButtonWrapper>
       )}
       <ColorSwatchBackground />
       <ColorSwatch
+        key="color-swatch"
         $background={validateColor(value) ? value : '#fff'}
         $color={validateColor(value) ? 'rgba(255, 255, 255, 0)' : 'rgb(223, 223, 227)'}
         onClick={handleClick}
@@ -147,9 +147,10 @@ const ColorControl = ({
         ?
       </ColorSwatch>
       {showColorPicker && (
-        <ColorPickerContainer>
-          <ClickOutsideDiv onClick={handleClose} />
+        <ColorPickerContainer key="color-swatch-wrapper">
+          <ClickOutsideDiv key="click-outside" onClick={handleClose} />
           <ChromePicker
+            key="color-picker"
             color={value || ''}
             onChange={handleChange}
             disableAlpha={!(field.enableAlpha ?? false)}
@@ -157,6 +158,7 @@ const ColorControl = ({
         </ColorPickerContainer>
       )}
       <input
+        key="color-picker-input"
         // text input with padding left for the color swatch
         type="text"
         value={value || ''}

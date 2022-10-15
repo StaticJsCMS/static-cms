@@ -51,6 +51,7 @@ const FieldLabel = ({
 }: FieldLabelProps) => {
   return (
     <Typography
+      key="field-label"
       variant="body2"
       component="label"
       htmlFor={htmlFor}

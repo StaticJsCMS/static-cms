@@ -87,7 +87,7 @@ interface LabelComponentProps {
 function LabelComponent({ field, isActive, hasErrors, isFieldOptional, t }: LabelComponentProps) {
   const label = `${field.label ?? field.name}`;
   return (
-    <FieldLabel isActive={isActive} hasErrors={hasErrors}>
+    <FieldLabel key="list-item-field-label" isActive={isActive} hasErrors={hasErrors}>
       {label} {`${isFieldOptional ? ` (${t('editor.editorControl.field.optional')})` : ''}`}
     </FieldLabel>
   );
@@ -205,10 +205,11 @@ const ListItem = ({
   }
 
   return (
-    <SortableStyledListItem index={index} key={index}>
+    <SortableStyledListItem key="sortable-list-item" index={index}>
       <>
         {isVariableTypesList ? (
           <LabelComponent
+            key="variable-list-label"
             field={field}
             isActive={false}
             hasErrors={hasError}
@@ -217,6 +218,7 @@ const ListItem = ({
           />
         ) : null}
         <StyledListItemTopBar
+          key="list-item-top-bar"
           collapsed={collapsed}
           onCollapseToggle={handleCollapseToggle}
           onRemove={partial(handleRemove, index)}
@@ -227,11 +229,12 @@ const ListItem = ({
         />
         {!collapsed ? (
           !itemField ? (
-            <NestedObjectLabel $collapsed={true} $error={true}>
+            <NestedObjectLabel key="type-field-error-message" $collapsed={true} $error={true}>
               {getErrorMessageForTypedFieldAndValue(field, value)}
             </NestedObjectLabel>
           ) : (
             <ObjectControl
+              key="object-control"
               clearFieldErrors={clearFieldErrors}
               clearSearch={clearSearch}
               collection={collection}
@@ -268,7 +271,7 @@ const ListItem = ({
             />
           )
         ) : null}
-        <Outline />
+        <Outline key="outline" />
       </>
     </SortableStyledListItem>
   );

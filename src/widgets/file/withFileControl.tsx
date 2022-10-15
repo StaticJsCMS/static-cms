@@ -65,7 +65,7 @@ interface ImageProps {
 }
 
 const Image = ({ src }: ImageProps) => {
-  return <StyledImage role="presentation" src={src} />;
+  return <StyledImage key="image" role="presentation" src={src} />;
 };
 
 interface SortableImageButtonsProps {
@@ -75,12 +75,12 @@ interface SortableImageButtonsProps {
 
 const SortableImageButtons = ({ onRemove, onReplace }: SortableImageButtonsProps) => {
   return (
-    <SortableImageButtonsWrapper>
-      <IconButton onClick={onReplace}>
-        <PhotoIcon />
+    <SortableImageButtonsWrapper key="image-buttons-wrapper">
+      <IconButton key="image-replace" onClick={onReplace}>
+        <PhotoIcon key="image-replace-icon" />
       </IconButton>
-      <IconButton onClick={onRemove}>
-        <CloseIcon />
+      <IconButton key="image-remove" onClick={onRemove}>
+        <CloseIcon key="image-remove-icon" />
       </IconButton>
     </SortableImageButtonsWrapper>
   );
@@ -98,10 +98,14 @@ const SortableImage = SortableElement<SortableImageProps>(
   ({ itemValue, getAsset, field, onRemove, onReplace }: SortableImageProps) => {
     return (
       <div>
-        <ImageWrapper $sortable>
-          <Image src={getAsset(itemValue, field)?.toString() ?? ''} />
+        <ImageWrapper key="image-wrapper" $sortable>
+          <Image key="image" src={getAsset(itemValue, field)?.toString() ?? ''} />
         </ImageWrapper>
-        <SortableImageButtons onRemove={onRemove} onReplace={onReplace}></SortableImageButtons>
+        <SortableImageButtons
+          key="image-buttons"
+          onRemove={onRemove}
+          onReplace={onReplace}
+        ></SortableImageButtons>
       </div>
     );
   },
@@ -123,7 +127,7 @@ interface SortableMultiImageWrapperProps {
 const SortableMultiImageWrapper = SortableContainer<SortableMultiImageWrapperProps>(
   ({ items, getAsset, field, onRemoveOne, onReplaceOne }: SortableMultiImageWrapperProps) => {
     return (
-      <StyledSortableMultiImageWrapper>
+      <StyledSortableMultiImageWrapper key="multi-image-wrapper">
         {items.map((itemValue, index) => (
           <SortableImage
             key={`item-${itemValue}`}
@@ -328,7 +332,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
       }
       const text = `${value.slice(0, size / 2)}\u2026${value.slice(-(size / 2) + 1)}`;
       return (
-        <FileLink href={value} rel="noopener" target="_blank">
+        <FileLink key={`file-link-${text}`} href={value} rel="noopener" target="_blank">
           {text}
         </FileLink>
       );
@@ -337,8 +341,8 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
     const renderFileLinks = useCallback(() => {
       if (isMultiple(value)) {
         return (
-          <FileLinks>
-            <FileLinkList>
+          <FileLinks key="mulitple-file-links">
+            <FileLinkList key="file-links-list">
               {value.map(val => (
                 <li key={val}>{renderFileLink(val)}</li>
               ))}
@@ -347,7 +351,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
         );
       }
 
-      return <FileLinks>{renderFileLink(value)}</FileLinks>;
+      return <FileLinks key="single-file-links">{renderFileLink(value)}</FileLinks>;
     }, [renderFileLink, value]);
 
     const renderImages = useCallback(() => {
@@ -358,6 +362,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
       if (isMultiple(value)) {
         return (
           <SortableMultiImageWrapper
+            key="mulitple-image-wrapper"
             items={value}
             onSortEnd={onSortEnd}
             onRemoveOne={onRemoveOne}
@@ -373,8 +378,8 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
 
       const src = getAsset(value, field)?.toString() ?? '';
       return (
-        <ImageWrapper>
-          <Image src={src || ''} />
+        <ImageWrapper key="single-image-wrapper">
+          <Image key="single-image" src={src || ''} />
         </ImageWrapper>
       );
     }, [field, getAsset, onRemoveOne, onReplaceOne, onSortEnd, value]);
@@ -382,11 +387,11 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
     const renderSelection = useCallback(
       (subject: 'image' | 'file') => {
         return (
-          <div>
+          <div key="selection">
             {forImage ? renderImages() : null}
-            <div>
+            <div key="controls">
               {forImage ? null : renderFileLinks()}
-              <FileWidgetButton onClick={handleChange}>
+              <FileWidgetButton key="add-replace" onClick={handleChange}>
                 {t(
                   `editor.editorWidgets.${subject}.${
                     allowsMultiple ? 'addMore' : 'chooseDifferent'
@@ -394,11 +399,11 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
                 )}
               </FileWidgetButton>
               {chooseUrl && !allowsMultiple ? (
-                <FileWidgetButton onClick={handleUrl(subject)}>
+                <FileWidgetButton key="replace-url" onClick={handleUrl(subject)}>
                   {t(`editor.editorWidgets.${subject}.replaceUrl`)}
                 </FileWidgetButton>
               ) : null}
-              <FileWidgetButtonRemove onClick={handleRemove}>
+              <FileWidgetButtonRemove key="remove" onClick={handleRemove}>
                 {t(`editor.editorWidgets.${subject}.remove${allowsMultiple ? 'All' : ''}`)}
               </FileWidgetButtonRemove>
             </div>
@@ -421,11 +426,11 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
       (subject: 'image' | 'file') => {
         return (
           <>
-            <FileWidgetButton onClick={handleChange}>
+            <FileWidgetButton key="upload" onClick={handleChange}>
               {t(`editor.editorWidgets.${subject}.choose${allowsMultiple ? 'Multiple' : ''}`)}
             </FileWidgetButton>
             {chooseUrl ? (
-              <FileWidgetButton onClick={handleUrl(subject)}>
+              <FileWidgetButton key="choose-url" onClick={handleUrl(subject)}>
                 {t(`editor.editorWidgets.${subject}.chooseUrl`)}
               </FileWidgetButton>
             ) : null}
@@ -438,8 +443,10 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
     const subject = forImage ? 'image' : 'file';
 
     return (
-      <div>
-        <span>{value ? renderSelection(subject) : renderNoSelection(subject)}</span>
+      <div key="file-control-wrapper">
+        <span key="file-control">
+          {value ? renderSelection(subject) : renderNoSelection(subject)}
+        </span>
       </div>
     );
   };

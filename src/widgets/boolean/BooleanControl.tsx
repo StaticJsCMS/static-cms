@@ -24,7 +24,8 @@ const BooleanControl = ({
 
   return (
     <FormControlLabel
-      control={<Switch checked={internalValue} onChange={handleChange} />}
+      key="boolean-field-label"
+      control={<Switch key="boolean-input" checked={internalValue} onChange={handleChange} />}
       label={label}
     />
   );
