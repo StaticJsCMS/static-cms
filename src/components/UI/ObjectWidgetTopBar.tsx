@@ -77,6 +77,7 @@ const ObjectWidgetTopBar = ({
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
+            variant="outlined"
           >
             {t('editor.editorWidgets.list.addType', { item: label })}
           </Button>
