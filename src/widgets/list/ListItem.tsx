@@ -19,6 +19,7 @@ import type {
   EntryData,
   Field,
   FieldList,
+  FieldObject,
   ObjectValue,
   WidgetControlProps,
 } from '../../interface';
@@ -147,21 +148,21 @@ const ListItem = ({
   handleRemove,
   value,
 }: ListItemProps) => {
-  const objectLabel = useMemo(() => {
+  const [objectLabel, objectField] = useMemo((): [string, FieldList | FieldObject] => {
     const base = field.label ?? field.name;
     if (!value) {
-      return base;
+      return [base, field];
     }
 
     switch (valueType) {
       case ListValueType.MIXED: {
         if (!validateItem(field, value)) {
-          return base;
+          return [base, field];
         }
 
         const itemType = getTypedFieldForValue(field, value);
         if (!itemType) {
-          return base;
+          return [base, field];
         }
 
         const label = itemType.label ?? itemType.name;
@@ -170,12 +171,12 @@ const ListItem = ({
         const labelReturn = summary
           ? `${label} - ${handleSummary(summary, entry, label, value)}`
           : label;
-        return labelReturn;
+        return [labelReturn, itemType];
       }
       case ListValueType.SINGLE: {
         const singleField = field.field;
         if (!singleField) {
-          return base;
+          return [base, field];
         }
 
         const label = singleField.label ?? singleField.name;
@@ -184,16 +185,16 @@ const ListItem = ({
         const labelReturn = summary
           ? `${label} - ${handleSummary(summary, entry, label, data)}`
           : label;
-        return labelReturn;
+        return [labelReturn, field];
       }
       case ListValueType.MULTIPLE: {
         if (!validateItem(field, value)) {
-          return base;
+          return [base, field];
         }
         const multiFields = field.fields;
         const labelField = multiFields && multiFields[0];
         if (!labelField) {
-          return base;
+          return [base, field];
         }
 
         const labelFieldValue = value[labelField.name];
@@ -203,7 +204,7 @@ const ListItem = ({
           ? handleSummary(summary, entry, String(labelFieldValue), value)
           : labelFieldValue;
         console.log('object label', summary, labelReturn);
-        return (labelReturn || `No ${labelField.name}`).toString();
+        return [(labelReturn || `No ${labelField.name}`).toString(), field];
       }
     }
   }, [entry, field, value, valueType]);
@@ -224,6 +225,9 @@ const ListItem = ({
   if (isVariableTypesList) {
     itemField = getTypedFieldForValue(field, value);
   }
+
+  const fieldLabel = useMemo(() => getFieldLabel(field, t), [field, t]);
+  console.log('field', field);
 
   return (
     <SortableStyledListItem key="sortable-list-item" index={index}>
@@ -252,7 +256,7 @@ const ListItem = ({
               config={config}
               data-testid={`object-control-${index}`}
               entry={entry}
-              field={field}
+              field={objectField}
               fieldsErrors={fieldsErrors}
               forList
               getAsset={getAsset}
@@ -263,7 +267,7 @@ const ListItem = ({
               isFieldDuplicate={isFieldDuplicate}
               isFieldHidden={isFieldHidden}
               isNewEditorComponent={isNewEditorComponent}
-              label={getFieldLabel(field, t)}
+              label={fieldLabel}
               loadEntry={loadEntry}
               locale={locale}
               mediaPaths={mediaPaths}

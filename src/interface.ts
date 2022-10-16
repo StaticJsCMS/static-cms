@@ -624,7 +624,7 @@ export interface FieldList extends FieldBase {
   max?: number;
   min?: number;
   add_to_top?: boolean;
-  types?: Field[];
+  types?: FieldObject[];
   typeKey?: string;
 }
 

@@ -1,10 +1,13 @@
-import type { FieldList, ObjectValue } from '../../interface';
+import type { FieldList, FieldObject, ObjectValue } from '../../interface';
 
 export const TYPES_KEY = 'types';
 export const TYPE_KEY = 'typeKey';
 export const DEFAULT_TYPE_KEY = 'type';
 
-export function getTypedFieldForValue(field: FieldList, value: ObjectValue | undefined | null) {
+export function getTypedFieldForValue(
+  field: FieldList,
+  value: ObjectValue | undefined | null,
+): FieldObject | undefined {
   const typeKey = resolveFieldKeyType(field);
   const types = field[TYPES_KEY] ?? [];
   const valueType = value?.[typeKey] ?? {};
