@@ -134,54 +134,58 @@ const ListItem = ({
   value,
 }: ListItemProps) => {
   const objectLabel = useMemo(() => {
+    const base = field.label ?? field.name;
     if (!value) {
-      return '';
+      return base;
     }
 
     switch (valueType) {
       case ListValueType.MIXED: {
         if (!validateItem(field, value)) {
-          return '';
+          return base;
         }
 
         const itemType = getTypedFieldForValue(field, value);
         if (!itemType) {
-          return '';
+          return base;
         }
 
         const label = itemType.label ?? itemType.name;
         // each type can have its own summary, but default to the list summary if exists
         const summary = ('summary' in itemType && itemType.summary) ?? field.summary;
-        const labelReturn = summary ? handleSummary(summary, entry, label, value) : label;
+        const labelReturn = summary
+          ? `${label} - ${handleSummary(summary, entry, label, value)}`
+          : label;
         return labelReturn;
       }
       case ListValueType.SINGLE: {
         const singleField = field.field;
         if (!singleField) {
-          return '';
+          return base;
         }
 
         const label = singleField.label ?? singleField.name;
         const summary = field.summary;
         const data = { [singleField.name]: value };
-        const labelReturn = summary ? handleSummary(summary, entry, label, data) : label;
+        const labelReturn = summary
+          ? `${label} - ${handleSummary(summary, entry, label, data)}`
+          : label;
         return labelReturn;
       }
       case ListValueType.MULTIPLE: {
         if (!validateItem(field, value)) {
-          return '';
+          return base;
         }
         const multiFields = field.fields;
         const labelField = multiFields && multiFields[0];
         if (!labelField) {
-          return '';
+          return base;
         }
 
-        const fieldValue = value[labelField.name];
         const summary = field.summary;
         const labelReturn = summary
-          ? handleSummary(summary, entry, String(fieldValue), fieldValue as ObjectValue)
-          : fieldValue;
+          ? handleSummary(summary, entry, String(value), value)
+          : value;
         return (labelReturn || `No ${labelField.name}`).toString();
       }
     }
@@ -224,7 +228,7 @@ const ListItem = ({
           onRemove={partial(handleRemove, index)}
           dragHandleHOC={SortableHandle}
           data-testid={`styled-list-item-top-bar-${index}`}
-          title={collapsed ? objectLabel : null}
+          title={objectLabel}
           isVariableTypesList={isVariableTypesList}
         />
         {!collapsed ? (

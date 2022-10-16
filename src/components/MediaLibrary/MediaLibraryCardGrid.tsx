@@ -130,7 +130,6 @@ const VirtualizedGrid = (props: MediaLibraryCardGridProps) => {
     mediaItems,
     setScrollContainerRef,
   } = props;
-  console.log(mediaItems);
 
   return (
     <AutoSizer>
@@ -143,7 +142,6 @@ const VirtualizedGrid = (props: MediaLibraryCardGridProps) => {
         const columnCount = Math.floor(width / columnWidth);
         const rowCount = Math.ceil(mediaItems.length / columnCount);
 
-        console.log(height, width);
         return (
           <StyledCardGridContainer $width={width} $height={height} ref={setScrollContainerRef}>
             <Grid

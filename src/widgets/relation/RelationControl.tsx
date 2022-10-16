@@ -209,8 +209,6 @@ const RelationControl = ({
 
   useEffect(() => {
     let alive = true;
-
-    console.log('loading', loading);
     if (!loading) {
       return undefined;
     }
@@ -222,7 +220,6 @@ const RelationControl = ({
       const file = field.file;
 
       const response = await query(path, collection, searchFieldsArray, '', file, optionsLength);
-      console.log('query response', response);
       if (alive) {
         if (response?.type === QUERY_SUCCESS) {
           const hits = response.payload.hits ?? [];
@@ -239,7 +236,6 @@ const RelationControl = ({
   }, [field.collection, field.file, field.options_length, field.search_fields, loading]);
 
   const uniqueOptions = uniqOptions(initialOptions, options);
-  console.log('uniqueOptions', uniqueOptions, 'initialOptions', initialOptions, 'options', options);
   const selectedValue = getSelectedValue(internalValue, uniqueOptions, isMultiple);
 
   return (

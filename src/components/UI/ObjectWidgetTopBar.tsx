@@ -7,7 +7,6 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import React, { useCallback } from 'react';
 
-import { transientOptions } from '../../lib';
 import { colors, transitions } from './styles';
 
 import type { MouseEvent, ReactNode } from 'react';
@@ -22,28 +21,16 @@ const TopBarContainer = styled.div`
   padding: 2px 8px;
 `;
 
-interface ExpandButtonContainerProps {
-  $hasHeading: boolean;
-}
-
-const ExpandButtonContainer = styled(
-  'div',
-  transientOptions,
-)<ExpandButtonContainerProps>(
-  ({ $hasHeading }) => `
-    ${
-      $hasHeading
-        ? `
-          display: flex;
-          align-items: center;
-          font-size: 14px;
-          font-weight: 500;
-          line-height: 1;
-        `
-        : ''
-    }
-  `,
-);
+const ExpandButtonContainer = styled('div')`
+  display: flex;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.6);
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.4375em;
+  letter-spacing: 0.00938em;]
+`;
 
 export interface ObjectWidgetTopBarProps {
   allowAdd?: boolean;
@@ -142,7 +129,7 @@ const ObjectWidgetTopBar = ({
 
   return (
     <TopBarContainer>
-      <ExpandButtonContainer $hasHeading={!!heading}>
+      <ExpandButtonContainer>
         <IconButton onClick={onCollapseToggle} data-testid="expand-button">
           <ExpandMoreIcon
             sx={{

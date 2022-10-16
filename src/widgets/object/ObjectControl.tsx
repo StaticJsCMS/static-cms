@@ -41,10 +41,10 @@ const ObjectControl = ({
     setCollapsed(!collapsed);
   }, [collapsed]);
 
-  const getObjectLabel = useCallback(() => {
+  const objectLabel = useMemo(() => {
     const label = field.label ?? field.name;
     const summary = field.summary;
-    return summary ? compileStringTemplate(summary, null, '', value) : label;
+    return summary ? `${label} - ${compileStringTemplate(summary, null, '', value)}` : label;
   }, [field.label, field.name, field.summary, value]);
 
   const multiFields = useMemo(() => field.fields, [field.fields]);
@@ -101,11 +101,13 @@ const ObjectControl = ({
             key="object-control-top-bar"
             collapsed={collapsed}
             onCollapseToggle={handleCollapseToggle}
-            heading={collapsed && getObjectLabel()}
+            heading={objectLabel}
             t={t}
           />
         )}
-        <StyledFieldsBox key="object-control-fields">{renderedField}</StyledFieldsBox>
+        {!collapsed ? (
+          <StyledFieldsBox key="object-control-fields">{renderedField}</StyledFieldsBox>
+        ) : null}
         {forList ? null : <Outline key="object-control-outline" hasError={hasError} />}
       </StyledObjectControlWrapper>
     );

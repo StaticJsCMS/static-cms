@@ -168,6 +168,7 @@ const ListControl = ({
       }
       setKeys(newKeys);
       handleChange(newValue);
+      setListCollapsed(false);
     },
     [field.add_to_top, handleChange, internalValue, keys],
   );
@@ -329,7 +330,7 @@ const ListControl = ({
         collapsed={listCollapsed}
         t={t}
       />
-      {!listCollapsed ? (
+      {!listCollapsed && internalValue.length > 0 ? (
         <SortableList
           items={internalValue}
           renderItem={renderItem}
