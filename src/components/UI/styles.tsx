@@ -474,7 +474,7 @@ const reactSelectStyles = {
     paddingLeft: '22px',
   }),
   menu: (styles: CSSProperties) => ({ ...styles, right: 0, zIndex: zIndex.zIndex300 }),
-  container: (styles: CSSProperties) => ({ ...styles, padding: '0 !important' }),
+  container: (styles: CSSProperties) => ({ ...styles, padding: '0' }),
   indicatorSeparator: (styles: CSSProperties, state: IndicatorSeparatorStyleState) =>
     state.hasValue && state.selectProps.isClearable
       ? { ...styles, backgroundColor: `${colors.textFieldBorder}` }

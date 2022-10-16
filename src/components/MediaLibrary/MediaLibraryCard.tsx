@@ -66,7 +66,7 @@ const CardText = styled.p`
   padding: 8px;
   margin-top: 20px;
   overflow-wrap: break-word;
-  line-height: 1.3 !important;
+  line-height: 1.3;
 `;
 
 const DraftText = styled.p`

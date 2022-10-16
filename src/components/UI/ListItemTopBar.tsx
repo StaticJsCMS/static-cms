@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import CloseIcon from '@mui/icons-material/Close';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import IconButton from '@mui/material/IconButton';
 import React from 'react';
 
 import { transientOptions } from '../../lib/util';
@@ -20,8 +21,10 @@ const TopBar = styled(
 )<TopBarProps>(
   ({ $isVariableTypesList, $collapsed }) => `
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    height: 32px!important;
+    height: 44px;
+    padding: 2px 8px;
     border-radius: ${
       !$isVariableTypesList
         ? $collapsed
@@ -30,7 +33,7 @@ const TopBar = styled(
         : $collapsed
         ? `0 ${lengths.borderRadius} ${lengths.borderRadius} ${lengths.borderRadius}`
         : `0 ${lengths.borderRadius} 0 0`
-    }!important;
+    };
     position: relative;
   `,
 );
@@ -53,10 +56,13 @@ const TopBarButton = styled.button`
 
 const StyledTitle = styled.div`
   position: absolute;
-  left: 36px;
-  line-height: 30px;
+  top: 0;
+  left: 48px;
+  line-height: 40px;
   white-space: nowrap;
   cursor: pointer;
+  display: flex;
+  align-items: center;
   z-index: 1;
 `;
 
@@ -82,7 +88,7 @@ const DragHandle = ({ dragHandleHOC }: DragHandleProps) => {
 
 export interface ListItemTopBarProps {
   className?: string;
-  title?: ReactNode;
+  title: ReactNode;
   collapsed?: boolean;
   onCollapseToggle?: (event: MouseEvent) => void;
   onRemove: (event: MouseEvent) => void;
@@ -102,16 +108,16 @@ const ListItemTopBar = ({
   return (
     <TopBar className={className} $collapsed={collapsed} $isVariableTypesList={isVariableTypesList}>
       {onCollapseToggle ? (
-        <TopBarButton onClick={onCollapseToggle}>
+        <IconButton onClick={onCollapseToggle} data-testid="expand-button">
           <ExpandMoreIcon
             sx={{
               transform: `rotateZ(${collapsed ? '-90deg' : '0deg'})`,
               transition: `transform ${transitions.main};`,
             }}
           />
-        </TopBarButton>
+        </IconButton>
       ) : null}
-      {title ? <StyledTitle onClick={onCollapseToggle}>{title}</StyledTitle> : null}
+      <StyledTitle key="title" onClick={onCollapseToggle}>{title}</StyledTitle>
       {dragHandleHOC ? <DragHandle dragHandleHOC={dragHandleHOC} /> : null}
       {onRemove ? (
         <TopBarButton onClick={onRemove}>
@@ -122,13 +128,4 @@ const ListItemTopBar = ({
   );
 };
 
-const StyledListItemTopBar = styled(ListItemTopBar)`
-  display: flex;
-  justify-content: space-between;
-  height: 26px;
-  border-radius: ${lengths.borderRadius} ${lengths.borderRadius} 0 0;
-  position: relative;
-  border-top-left-radius: 0;
-`;
-
-export default StyledListItemTopBar;
+export default ListItemTopBar;

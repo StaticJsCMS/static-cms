@@ -3,7 +3,6 @@ import partial from 'lodash/partial';
 import React, { useCallback, useMemo, useState } from 'react';
 import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 
-import FieldLabel from '../../components/UI/FieldLabel';
 import ListItemTopBar from '../../components/UI/ListItemTopBar';
 import Outline from '../../components/UI/Outline';
 import { colors, lengths } from '../../components/UI/styles';
@@ -15,7 +14,6 @@ import { ListValueType } from './ListControl';
 import { getErrorMessageForTypedFieldAndValue, getTypedFieldForValue } from './typedListHelpers';
 
 import type { MouseEvent } from 'react';
-import type { t } from 'react-polyglot';
 import type {
   Entry,
   EntryData,
@@ -109,23 +107,6 @@ function validateItem(field: FieldList, item: ObjectValue) {
   return true;
 }
 
-interface LabelComponentProps {
-  field: FieldList;
-  isActive: boolean;
-  hasErrors: boolean;
-  isFieldOptional: boolean;
-  t: t;
-}
-
-function LabelComponent({ field, isActive, hasErrors, isFieldOptional, t }: LabelComponentProps) {
-  const label = `${field.label ?? field.name}`;
-  return (
-    <FieldLabel key="list-item-field-label" isActive={isActive} hasErrors={hasErrors}>
-      {label} {`${isFieldOptional ? ` (${t('editor.editorControl.field.optional')})` : ''}`}
-    </FieldLabel>
-  );
-}
-
 interface ListItemProps extends WidgetControlProps<ObjectValue, FieldList> {
   valueType: ListValueType;
   index: number;
@@ -215,8 +196,13 @@ const ListItem = ({
           return base;
         }
 
+        const labelFieldValue = value[labelField.name];
+
         const summary = field.summary;
-        const labelReturn = summary ? handleSummary(summary, entry, String(value), value) : value;
+        const labelReturn = summary
+          ? handleSummary(summary, entry, String(labelFieldValue), value)
+          : labelFieldValue;
+        console.log('object label', summary, labelReturn);
         return (labelReturn || `No ${labelField.name}`).toString();
       }
     }
@@ -242,16 +228,6 @@ const ListItem = ({
   return (
     <SortableStyledListItem key="sortable-list-item" index={index}>
       <>
-        {isVariableTypesList ? (
-          <LabelComponent
-            key="variable-list-label"
-            field={field}
-            isActive={false}
-            hasErrors={hasError}
-            isFieldOptional={field.required === false}
-            t={t}
-          />
-        ) : null}
         <StyledListItemTopBar
           key="list-item-top-bar"
           collapsed={collapsed}

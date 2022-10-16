@@ -40,6 +40,12 @@ const StyledFieldsBox = styled(
   `,
 );
 
+const StyledNoFieldsMessage = styled('div')`
+  display: flex;
+  padding: 16px;
+  width: 100%;
+`;
+
 const ObjectControl = ({
   clearFieldErrors,
   field,
@@ -133,7 +139,11 @@ const ObjectControl = ({
     );
   }
 
-  return <h3>No field(s) defined for this widget</h3>;
+  return (
+    <StyledNoFieldsMessage key="no-fields-found">
+      No field(s) defined for this widget
+    </StyledNoFieldsMessage>
+  );
 };
 
 export default ObjectControl;
