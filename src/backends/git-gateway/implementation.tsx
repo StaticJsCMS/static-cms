@@ -403,9 +403,7 @@ export default class GitGateway implements BackendClass {
     try {
       client?.logout();
     } catch (e) {
-      // due to a bug in the identity widget (gotrue-js actually) the store is not reset if logout fails
-      // TODO: remove after https://github.com/netlify/gotrue-js/pull/83 is merged
-      client?.clearStore();
+      console.error(e);
     }
   }
   getToken() {

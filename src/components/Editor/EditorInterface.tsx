@@ -96,16 +96,14 @@ const EditorContainer = styled.div`
   width: 100%;
   min-width: 1200px;
   height: 100vh;
-  position: absolute;
-  top: 0;
-  left: 0;
   overflow: hidden;
 `;
 
 const Editor = styled.div`
-  height: 100%;
+  height: calc(100vh - 64px);
   position: relative;
   background-color: ${colorsRaw.white};
+  overflow-y: auto;
 `;
 
 interface PreviewPaneContainerProps {
@@ -144,7 +142,7 @@ interface EditorContentProps {
   i18nVisible: boolean;
   previewVisible: boolean;
   editor: JSX.Element;
-  editorWithEditor: JSX.Element;
+  editorSideBySideLocale: JSX.Element;
   editorWithPreview: JSX.Element;
 }
 
@@ -152,11 +150,11 @@ const EditorContent = ({
   i18nVisible,
   previewVisible,
   editor,
-  editorWithEditor,
+  editorSideBySideLocale,
   editorWithPreview,
 }: EditorContentProps) => {
   if (i18nVisible) {
-    return editorWithEditor;
+    return editorSideBySideLocale;
   } else if (previewVisible) {
     return editorWithPreview;
   } else {
@@ -298,7 +296,7 @@ const EditorInterface = ({
     </ControlPaneContainer>
   );
 
-  const editor2 = (
+  const editorLocale = (
     <ControlPaneContainer $overFlow={!scrollSyncEnabled}>
       <EditorControlPane
         collection={collection}
@@ -330,12 +328,12 @@ const EditorInterface = ({
     </>
   );
 
-  const editorWithEditor = (
+  const editorSideBySideLocale = (
     <ScrollSync enabled={scrollSyncEnabled}>
       <div>
         <StyledSplitPane>
           <ScrollSyncPane>{editor}</ScrollSyncPane>
-          <ScrollSyncPane>{editor2}</ScrollSyncPane>
+          <ScrollSyncPane>{editorLocale}</ScrollSyncPane>
         </StyledSplitPane>
       </div>
     </ScrollSync>
@@ -405,7 +403,7 @@ const EditorInterface = ({
           i18nVisible={finalI18nVisible}
           previewVisible={finalPreviewVisible}
           editor={editor}
-          editorWithEditor={editorWithEditor}
+          editorSideBySideLocale={editorSideBySideLocale}
           editorWithPreview={editorWithPreview}
         />
       </Editor>

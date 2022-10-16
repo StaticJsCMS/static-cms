@@ -48,8 +48,7 @@ async function resourceExists(
     return false;
   }
 
-  // TODO: what kind of error to throw here? APIError doesn't seem
-  // to fit
+  // TODO: what kind of error to throw here? APIError doesn't seem to fit
 }
 
 function getTransofrmationsParams(t: boolean | ImageTransformations) {
