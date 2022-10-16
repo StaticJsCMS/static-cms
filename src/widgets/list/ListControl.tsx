@@ -11,6 +11,7 @@ import Outline from '../../components/UI/Outline';
 import { getFieldLabel } from '../../lib/util/field.util';
 import ListItem from './ListItem';
 import { resolveFieldKeyType, TYPES_KEY } from './typedListHelpers';
+import transientOptions from '../../lib/util/transientOptions';
 
 import type { MouseEvent } from 'react';
 import type { Field, FieldList, ObjectValue, WidgetControlProps } from '../../interface';
@@ -19,21 +20,41 @@ const StyledListWrapper = styled('div')`
   position: relative;
 `;
 
-const StyledSortableList = styled('div')`
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-  gap: 16px;
-`;
+interface StyledSortableListProps {
+  $collapsed: boolean;
+}
+
+const StyledSortableList = styled(
+  'div',
+  transientOptions,
+)<StyledSortableListProps>(
+  ({ $collapsed }) => `
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    ${
+      $collapsed
+        ? `
+          visibility: hidden;
+          height: 0;
+          width: 0;
+        `
+        : `
+          padding: 16px;
+        `
+    }
+  `,
+);
 
 interface SortableListProps {
   items: ObjectValue[];
+  collapsed: boolean;
   renderItem: (item: ObjectValue, index: number) => JSX.Element;
 }
 
 const SortableList = SortableContainer<SortableListProps>(
-  ({ items, renderItem }: SortableListProps) => {
-    return <StyledSortableList>{items.map(renderItem)}</StyledSortableList>;
+  ({ items, collapsed, renderItem }: SortableListProps) => {
+    return <StyledSortableList $collapsed={collapsed}>{items.map(renderItem)}</StyledSortableList>;
   },
 );
 
@@ -104,7 +125,7 @@ const ListControl = ({
   value,
 }: WidgetControlProps<ObjectValue[], FieldList>) => {
   const internalValue = useMemo(() => value ?? [], [value]);
-  const [listCollapsed, setListCollapsed] = useState(field.collapsed ?? true);
+  const [collapsed, setCollapsed] = useState(field.collapsed ?? true);
   const [keys, setKeys] = useState(Array.from({ length: internalValue.length }, () => uuid()));
 
   const valueType = useMemo(() => {
@@ -168,7 +189,7 @@ const ListControl = ({
       }
       setKeys(newKeys);
       handleChange(newValue);
-      setListCollapsed(false);
+      setCollapsed(false);
     },
     [field.add_to_top, handleChange, internalValue, keys],
   );
@@ -211,9 +232,9 @@ const ListControl = ({
   const handleCollapseAllToggle = useCallback(
     (e: MouseEvent) => {
       e.preventDefault();
-      setListCollapsed(!listCollapsed);
+      setCollapsed(!collapsed);
     },
-    [listCollapsed],
+    [collapsed],
   );
 
   const onSortEnd = useCallback(
@@ -327,11 +348,12 @@ const ListControl = ({
         heading={`${internalValue.length} ${listLabel}`}
         label={labelSingular.toLowerCase()}
         onCollapseToggle={handleCollapseAllToggle}
-        collapsed={listCollapsed}
+        collapsed={collapsed}
         t={t}
       />
-      {!listCollapsed && internalValue.length > 0 ? (
+      {internalValue.length > 0 ? (
         <SortableList
+          collapsed={collapsed}
           items={internalValue}
           renderItem={renderItem}
           onSortEnd={onSortEnd}

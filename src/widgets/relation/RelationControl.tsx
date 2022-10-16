@@ -199,10 +199,6 @@ const RelationControl = ({
     [field, onChange, path],
   );
 
-  useEffect(() => {
-    console.log('relation control mounted!');
-  }, []);
-
   const [options, setOptions] = useState<HitOption[]>([]);
   const [open, setOpen] = React.useState(false);
   const loading = useMemo(() => open && options.length === 0, [open, options.length]);
@@ -243,7 +239,7 @@ const RelationControl = ({
       key="relation-control-autocomplete"
       disablePortal
       options={uniqueOptions}
-      sx={{ width: 300 }}
+      fullWidth
       renderInput={params => (
         <TextField
           key="relation-control-input"

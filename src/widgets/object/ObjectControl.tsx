@@ -4,6 +4,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import EditorControl from '../../components/Editor/EditorControlPane/EditorControl';
 import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
 import Outline from '../../components/UI/Outline';
+import { transientOptions } from '../../lib';
 import { compileStringTemplate } from '../../lib/widgets/stringTemplate';
 
 import type { FieldList, FieldObject, ObjectValue, WidgetControlProps } from '../../interface';
@@ -13,12 +14,30 @@ const StyledObjectControlWrapper = styled('div')`
   background: white;
 `;
 
-const StyledFieldsBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-  gap: 16px;
-`;
+interface StyledFieldsBoxProps {
+  $collapsed: boolean;
+}
+
+const StyledFieldsBox = styled(
+  'div',
+  transientOptions,
+)<StyledFieldsBoxProps>(
+  ({ $collapsed }) => `
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+    ${
+      $collapsed
+        ? `
+        visibility: hidden;
+        height: 0;
+        width: 0;
+        `
+        : ''
+    }
+  `,
+);
 
 const ObjectControl = ({
   clearFieldErrors,
@@ -105,9 +124,9 @@ const ObjectControl = ({
             t={t}
           />
         )}
-        {!collapsed ? (
-          <StyledFieldsBox key="object-control-fields">{renderedField}</StyledFieldsBox>
-        ) : null}
+        <StyledFieldsBox $collapsed={collapsed} key="object-control-fields">
+          {renderedField}
+        </StyledFieldsBox>
         {forList ? null : <Outline key="object-control-outline" hasError={hasError} />}
       </StyledObjectControlWrapper>
     );

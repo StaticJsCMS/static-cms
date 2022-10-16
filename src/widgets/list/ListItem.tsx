@@ -45,12 +45,45 @@ const NestedObjectLabel = styled(
   transientOptions,
 )<NestedObjectLabelProps>(
   ({ $collapsed, $error }) => `
-    display: ${$collapsed ? 'block' : 'none'};
+    display: flex;
     border-top: 0;
     color: ${$error ? colors.errorText : 'inherit'};
     background-color: ${colors.textFieldBorder};
     padding: 6px 13px;
     border-radius: 0 0 ${lengths.borderRadius} ${lengths.borderRadius};
+    ${
+      $collapsed
+        ? `
+        visibility: hidden;
+        height: 0;
+        width: 0;
+        `
+        : ''
+    }
+  `,
+);
+
+interface StyledObjectFieldWrapperProps {
+  $collapsed: boolean;
+}
+
+const StyledObjectFieldWrapper = styled(
+  'div',
+  transientOptions,
+)<StyledObjectFieldWrapperProps>(
+  ({ $collapsed }) => `
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    ${
+      $collapsed
+        ? `
+        visibility: hidden;
+        height: 0;
+        width: 0;
+        `
+        : ''
+    }
   `,
 );
 
@@ -183,9 +216,7 @@ const ListItem = ({
         }
 
         const summary = field.summary;
-        const labelReturn = summary
-          ? handleSummary(summary, entry, String(value), value)
-          : value;
+        const labelReturn = summary ? handleSummary(summary, entry, String(value), value) : value;
         return (labelReturn || `No ${labelField.name}`).toString();
       }
     }
@@ -231,12 +262,12 @@ const ListItem = ({
           title={objectLabel}
           isVariableTypesList={isVariableTypesList}
         />
-        {!collapsed ? (
-          !itemField ? (
-            <NestedObjectLabel key="type-field-error-message" $collapsed={true} $error={true}>
-              {getErrorMessageForTypedFieldAndValue(field, value)}
-            </NestedObjectLabel>
-          ) : (
+        {!itemField ? (
+          <NestedObjectLabel key="type-field-error-message" $collapsed={collapsed} $error={true}>
+            {getErrorMessageForTypedFieldAndValue(field, value)}
+          </NestedObjectLabel>
+        ) : (
+          <StyledObjectFieldWrapper $collapsed={collapsed}>
             <ObjectControl
               key="object-control"
               clearFieldErrors={clearFieldErrors}
@@ -273,8 +304,8 @@ const ListItem = ({
               t={t}
               value={value}
             />
-          )
-        ) : null}
+          </StyledObjectFieldWrapper>
+        )}
         <Outline key="outline" />
       </>
     </SortableStyledListItem>
