@@ -158,18 +158,11 @@ const ListControl = ({
   const mixedDefault = useCallback(
     (typeKey: string, type: string): Record<string, ObjectValue> => {
       const selectedType = 'types' in field && field.types?.find(f => f.name === type);
-      if (!selectedType || (!('fields' in selectedType) && !('field' in selectedType))) {
+      if (!selectedType) {
         return {};
       }
 
-      const fields: Field[] =
-        'fields' in selectedType
-          ? selectedType.fields ?? []
-          : selectedType.field
-          ? [selectedType.field]
-          : [];
-
-      return getFieldsDefault(fields, { [typeKey]: { type } });
+      return getFieldsDefault(selectedType.fields ?? [], { [typeKey]: { type } });
     },
     [field],
   );
