@@ -113,7 +113,7 @@ const MediaLibraryTop = ({
           disabled={searchDisabled}
         />
         <StyledButtonsContainer>
-          <Button color="error" variant="contained" onClick={onDelete} disabled={!deleteEnabled}>
+          <Button color="error" variant="outlined" onClick={onDelete} disabled={!deleteEnabled}>
             {deleteButtonLabel}
           </Button>
           {!canInsert ? null : (

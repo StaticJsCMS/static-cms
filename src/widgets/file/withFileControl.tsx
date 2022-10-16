@@ -1,24 +1,18 @@
 import styled from '@emotion/styled';
 import CloseIcon from '@mui/icons-material/Close';
 import PhotoIcon from '@mui/icons-material/Photo';
+import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { arrayMoveImmutable as arrayMove } from 'array-move';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import uuid from 'uuid/v4';
 
-import {
-  borders,
-  buttons,
-  components,
-  effects,
-  lengths,
-  shadows,
-} from '../../components/UI/styles';
+import { borders, effects, lengths, shadows } from '../../components/UI/styles';
 import { basename, transientOptions } from '../../lib/util';
 
 import type { MouseEvent, MouseEventHandler } from 'react';
-import type { FieldFileOrImage, WidgetControlProps, GetAssetFunction } from '../../interface';
+import type { FieldFileOrImage, GetAssetFunction, WidgetControlProps } from '../../interface';
 
 const MAX_DISPLAY_LENGTH = 50;
 
@@ -162,17 +156,6 @@ const FileLinks = styled.div`
 
 const FileLinkList = styled.ul`
   list-style-type: none;
-`;
-
-const FileWidgetButton = styled.button`
-  ${buttons.button};
-  ${components.badge};
-  margin-bottom: 12px;
-`;
-
-const FileWidgetButtonRemove = styled.button`
-  ${buttons.button};
-  ${components.badgeDanger};
 `;
 
 function isMultiple(value: string | string[] | null | undefined): value is string[] {
@@ -391,21 +374,26 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
             {forImage ? renderImages() : null}
             <div key="controls">
               {forImage ? null : renderFileLinks()}
-              <FileWidgetButton key="add-replace" onClick={handleChange}>
+              <Button color="primary" variant="outlined" key="add-replace" onClick={handleChange}>
                 {t(
                   `editor.editorWidgets.${subject}.${
                     allowsMultiple ? 'addMore' : 'chooseDifferent'
                   }`,
                 )}
-              </FileWidgetButton>
+              </Button>
               {chooseUrl && !allowsMultiple ? (
-                <FileWidgetButton key="replace-url" onClick={handleUrl(subject)}>
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  key="replace-url"
+                  onClick={handleUrl(subject)}
+                >
                   {t(`editor.editorWidgets.${subject}.replaceUrl`)}
-                </FileWidgetButton>
+                </Button>
               ) : null}
-              <FileWidgetButtonRemove key="remove" onClick={handleRemove}>
+              <Button color="error" variant="outlined" key="remove" onClick={handleRemove}>
                 {t(`editor.editorWidgets.${subject}.remove${allowsMultiple ? 'All' : ''}`)}
-              </FileWidgetButtonRemove>
+              </Button>
             </div>
           </div>
         );
@@ -426,13 +414,18 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
       (subject: 'image' | 'file') => {
         return (
           <>
-            <FileWidgetButton key="upload" onClick={handleChange}>
+            <Button color="primary" variant="outlined" key="upload" onClick={handleChange}>
               {t(`editor.editorWidgets.${subject}.choose${allowsMultiple ? 'Multiple' : ''}`)}
-            </FileWidgetButton>
+            </Button>
             {chooseUrl ? (
-              <FileWidgetButton key="choose-url" onClick={handleUrl(subject)}>
+              <Button
+                color="primary"
+                variant="outlined"
+                key="choose-url"
+                onClick={handleUrl(subject)}
+              >
                 {t(`editor.editorWidgets.${subject}.chooseUrl`)}
-              </FileWidgetButton>
+              </Button>
             ) : null}
           </>
         );

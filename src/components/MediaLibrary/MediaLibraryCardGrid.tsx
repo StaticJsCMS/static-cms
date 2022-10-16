@@ -100,12 +100,19 @@ const CardWrapper = ({
   );
 };
 
-const StyledCardGridContainer = styled.div`
-  overflow-y: auto;
-  overflow-x: hidden;
-  width: 100%;
-  height: 100%;
-`;
+interface StyledCardGridContainerProps {
+  $width?: number;
+  $height?: number;
+}
+
+const StyledCardGridContainer = styled.div<StyledCardGridContainerProps>(
+  ({ $width, $height }) => `
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: ${$width ? `${$width}px` : '100%'};
+    height: ${$height ? `${$height}px` : '100%'};ƒ
+  `,
+);
 
 const CardGrid = styled.div`
   display: flex;
@@ -126,19 +133,19 @@ const VirtualizedGrid = (props: MediaLibraryCardGridProps) => {
   console.log(mediaItems);
 
   return (
-    <StyledCardGridContainer ref={setScrollContainerRef}>
-      <AutoSizer>
-        {({ height, width }) => {
-          const cardWidth = parseInt(inputCardWidth, 10);
-          const cardHeight = parseInt(inputCardHeight, 10);
-          const gutter = parseInt(cardMargin, 10);
-          const columnWidth = cardWidth + gutter;
-          const rowHeight = cardHeight + gutter;
-          const columnCount = Math.floor(width / columnWidth);
-          const rowCount = Math.ceil(mediaItems.length / columnCount);
+    <AutoSizer>
+      {({ height, width }) => {
+        const cardWidth = parseInt(inputCardWidth, 10);
+        const cardHeight = parseInt(inputCardHeight, 10);
+        const gutter = parseInt(cardMargin, 10);
+        const columnWidth = cardWidth + gutter;
+        const rowHeight = cardHeight + gutter;
+        const columnCount = Math.floor(width / columnWidth);
+        const rowCount = Math.ceil(mediaItems.length / columnCount);
 
-          console.log(height, width);
-          return (
+        console.log(height, width);
+        return (
+          <StyledCardGridContainer $width={width} $height={height} ref={setScrollContainerRef}>
             <Grid
               columnCount={columnCount}
               columnWidth={columnWidth}
@@ -156,10 +163,10 @@ const VirtualizedGrid = (props: MediaLibraryCardGridProps) => {
             >
               {CardWrapper}
             </Grid>
-          );
-        }}
-      </AutoSizer>
-    </StyledCardGridContainer>
+          </StyledCardGridContainer>
+        );
+      }}
+    </AutoSizer>
   );
 };
 
