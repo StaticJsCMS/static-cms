@@ -4,17 +4,56 @@ import PhotoIcon from '@mui/icons-material/Photo';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { arrayMoveImmutable as arrayMove } from 'array-move';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import uuid from 'uuid/v4';
 
 import { borders, effects, lengths, shadows } from '../../components/UI/styles';
 import { basename, transientOptions } from '../../lib/util';
+import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
+import Outline from '../../components/UI/Outline';
 
 import type { MouseEvent, MouseEventHandler } from 'react';
 import type { FieldFileOrImage, GetAssetFunction, WidgetControlProps } from '../../interface';
 
 const MAX_DISPLAY_LENGTH = 50;
+
+const StyledFileControlWrapper = styled('div')`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+`;
+
+interface StyledFileControlContentProps {
+  $collapsed: boolean;
+}
+
+const StyledFileControlContent = styled(
+  'div',
+  transientOptions,
+)<StyledFileControlContentProps>(
+  ({ $collapsed }) => `
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    ${
+      $collapsed
+        ? `
+          visibility: hidden;
+          height: 0;
+          width: 0;
+        `
+        : `
+          padding: 16px;
+        `
+    }
+  `,
+);
+
+const StyledButtonWrapper = styled('div')`
+  display: flex;
+  gap: 16px;
+`;
 
 interface ImageWrapperProps {
   $sortable?: boolean;
@@ -197,6 +236,11 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
     t,
   }: WidgetControlProps<string | string[], FieldFileOrImage>) => {
     const controlID = useMemo(() => uuid(), []);
+    const [collapsed, setCollapsed] = useState(false);
+
+    const handleCollapseToggle = useCallback(() => {
+      setCollapsed(!collapsed);
+    }, [collapsed]);
 
     useEffect(() => {
       const mediaPath = mediaPaths[controlID];
@@ -367,53 +411,12 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
       );
     }, [field, getAsset, onRemoveOne, onReplaceOne, onSortEnd, value]);
 
-    const renderSelection = useCallback(
-      (subject: 'image' | 'file') => {
-        return (
-          <div key="selection">
-            {forImage ? renderImages() : null}
-            <div key="controls">
-              {forImage ? null : renderFileLinks()}
-              <Button color="primary" variant="outlined" key="add-replace" onClick={handleChange}>
-                {t(
-                  `editor.editorWidgets.${subject}.${
-                    allowsMultiple ? 'addMore' : 'chooseDifferent'
-                  }`,
-                )}
-              </Button>
-              {chooseUrl && !allowsMultiple ? (
-                <Button
-                  color="primary"
-                  variant="outlined"
-                  key="replace-url"
-                  onClick={handleUrl(subject)}
-                >
-                  {t(`editor.editorWidgets.${subject}.replaceUrl`)}
-                </Button>
-              ) : null}
-              <Button color="error" variant="outlined" key="remove" onClick={handleRemove}>
-                {t(`editor.editorWidgets.${subject}.remove${allowsMultiple ? 'All' : ''}`)}
-              </Button>
-            </div>
-          </div>
-        );
-      },
-      [
-        allowsMultiple,
-        chooseUrl,
-        handleChange,
-        handleRemove,
-        handleUrl,
-        renderFileLinks,
-        renderImages,
-        t,
-      ],
-    );
+    const content = useMemo(() => {
+      const subject = forImage ? 'image' : 'file';
 
-    const renderNoSelection = useCallback(
-      (subject: 'image' | 'file') => {
+      if (!value) {
         return (
-          <>
+          <StyledButtonWrapper>
             <Button color="primary" variant="outlined" key="upload" onClick={handleChange}>
               {t(`editor.editorWidgets.${subject}.choose${allowsMultiple ? 'Multiple' : ''}`)}
             </Button>
@@ -427,20 +430,60 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
                 {t(`editor.editorWidgets.${subject}.chooseUrl`)}
               </Button>
             ) : null}
-          </>
+          </StyledButtonWrapper>
         );
-      },
-      [allowsMultiple, chooseUrl, handleChange, handleUrl, t],
-    );
+      }
 
-    const subject = forImage ? 'image' : 'file';
+      return (
+        <div key="selection">
+          {forImage ? renderImages() : null}
+          <StyledButtonWrapper key="controls">
+            {forImage ? null : renderFileLinks()}
+            <Button color="primary" variant="outlined" key="add-replace" onClick={handleChange}>
+              {t(
+                `editor.editorWidgets.${subject}.${allowsMultiple ? 'addMore' : 'chooseDifferent'}`,
+              )}
+            </Button>
+            {chooseUrl && !allowsMultiple ? (
+              <Button
+                color="primary"
+                variant="outlined"
+                key="replace-url"
+                onClick={handleUrl(subject)}
+              >
+                {t(`editor.editorWidgets.${subject}.replaceUrl`)}
+              </Button>
+            ) : null}
+            <Button color="error" variant="outlined" key="remove" onClick={handleRemove}>
+              {t(`editor.editorWidgets.${subject}.remove${allowsMultiple ? 'All' : ''}`)}
+            </Button>
+          </StyledButtonWrapper>
+        </div>
+      );
+    }, [
+      allowsMultiple,
+      chooseUrl,
+      handleChange,
+      handleRemove,
+      handleUrl,
+      renderFileLinks,
+      renderImages,
+      t,
+      value,
+    ]);
 
     return (
-      <div key="file-control-wrapper">
-        <span key="file-control">
-          {value ? renderSelection(subject) : renderNoSelection(subject)}
-        </span>
-      </div>
+      <StyledFileControlWrapper key="file-control-wrapper">
+        <ObjectWidgetTopBar
+          key="file-control-top-bar"
+          collapsed={collapsed}
+          onCollapseToggle={handleCollapseToggle}
+          heading={field.label ?? field.name}
+          t={t}
+        />
+        <StyledFileControlContent $collapsed={collapsed}>{content}</StyledFileControlContent>
+        <Outline />
+      </StyledFileControlWrapper>
     );
   };
 

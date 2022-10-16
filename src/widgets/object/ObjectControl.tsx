@@ -25,16 +25,17 @@ const StyledFieldsBox = styled(
   ({ $collapsed }) => `
     display: flex;
     flex-direction: column;
-    padding: 16px;
     gap: 16px;
     ${
       $collapsed
         ? `
-        visibility: hidden;
-        height: 0;
-        width: 0;
+          visibility: hidden;
+          height: 0;
+          width: 0;
         `
-        : ''
+        : `
+          padding: 16px;
+        `
     }
   `,
 );

@@ -5,6 +5,7 @@ import type { FieldStringOrText, WidgetControlProps } from '../../interface';
 import type { ChangeEvent } from 'react';
 
 const TextControl = ({
+  label,
   path,
   field,
   value,
@@ -29,17 +30,7 @@ const TextControl = ({
       multiline
       minRows={4}
       fullWidth
-      sx={{
-        '.MuiInputBase-root': {
-          borderTopLeftRadius: 0,
-          '.MuiOutlinedInput-notchedOutline': {
-            borderColor: '#f7f9fc',
-          },
-          '&:not(.Mui-focused):hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: '#f7f9fc',
-          },
-        },
-      }}
+      label={label}
     />
   );
 };

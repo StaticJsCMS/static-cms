@@ -27,6 +27,8 @@ const BooleanControl = ({
       key="boolean-field-label"
       control={<Switch key="boolean-input" checked={internalValue} onChange={handleChange} />}
       label={label}
+      labelPlacement="start"
+      sx={{ marginLeft: '4px' }}
     />
   );
 };

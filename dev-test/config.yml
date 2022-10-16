@@ -173,12 +173,9 @@ collections:
         hint: To infinity and beyond!
       - label: Markdown
         name: markdown
-        widget: string
+        widget: markdown
       - label: Datetime
         name: datetime
-        widget: datetime
-      - label: Date
-        name: date
         widget: datetime
       - label: Color
         name: color
@@ -251,12 +248,9 @@ collections:
             widget: number
           - label: Markdown
             name: markdown
-            widget: text
+            widget: markdown
           - label: Datetime
             name: datetime
-            widget: datetime
-          - label: Date
-            name: date
             widget: datetime
           - label: Image
             name: image
@@ -289,12 +283,9 @@ collections:
             widget: number
           - label: Markdown
             name: markdown
-            widget: text
+            widget: markdown
           - label: Datetime
             name: datetime
-            widget: datetime
-          - label: Date
-            name: date
             widget: datetime
           - label: Image
             name: image
@@ -327,12 +318,9 @@ collections:
                 widget: number
               - label: Markdown
                 name: markdown
-                widget: text
+                widget: markdown
               - label: Datetime
                 name: datetime
-                widget: datetime
-              - label: Date
-                name: date
                 widget: datetime
               - label: Image
                 name: image
@@ -377,9 +365,6 @@ collections:
                   - label: Datetime
                     name: datetime
                     widget: datetime
-                  - label: Date
-                    name: date
-                    widget: datetime
                   - label: Image
                     name: image
                     widget: image
@@ -418,9 +403,6 @@ collections:
                         widget: text
                       - label: Datetime
                         name: datetime
-                        widget: datetime
-                      - label: Date
-                        name: date
                         widget: datetime
                       - label: Image
                         name: image
@@ -476,9 +458,6 @@ collections:
             name: type_3_object
             widget: object
             fields:
-              - label: Date
-                name: date
-                widget: datetime
               - label: Image
                 name: image
                 widget: image

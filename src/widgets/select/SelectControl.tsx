@@ -1,4 +1,5 @@
 import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import React, { useCallback, useEffect } from 'react';
@@ -20,6 +21,7 @@ function convertToOption(raw: string | Option | undefined): Option | undefined {
 }
 
 const SelectControl = ({
+  label,
   path,
   field,
   value,
@@ -62,24 +64,13 @@ const SelectControl = ({
   const options = [...(fieldOptions.map(convertToOption) as Option[])].filter(Boolean);
 
   return (
-    <FormControl
-      fullWidth
-      sx={{
-        '.MuiInputBase-root': {
-          borderTopLeftRadius: 0,
-          '.MuiOutlinedInput-notchedOutline': {
-            borderColor: '#f7f9fc',
-          },
-          '&:not(.Mui-focused):hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: '#f7f9fc',
-          },
-        },
-      }}
-    >
+    <FormControl fullWidth>
+      <InputLabel id="demo-simple-select-label">{label}</InputLabel>
       <Select
         value={(value ?? isMultiple ? [] : '') as string | string[]}
         onChange={handleChange}
         multiple={isMultiple}
+        label={label}
       >
         {options.map(option => (
           <MenuItem key={`option-${option.value}`} value={option.value}>

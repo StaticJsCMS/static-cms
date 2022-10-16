@@ -1,37 +1,50 @@
 import styled from '@emotion/styled';
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
 import React, { useCallback, useState } from 'react';
 import { ChromePicker } from 'react-color';
 import validateColor from 'validate-color';
 
-import { transientOptions } from '../../lib';
+import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
+import Outline from '../../components/UI/Outline';
 import { zIndex } from '../../components/UI/styles';
+import { transientOptions } from '../../lib';
 
+import type { ChangeEvent, MouseEvent } from 'react';
 import type { ColorResult } from 'react-color';
 import type { FieldColor, WidgetControlProps } from '../../interface';
 
-function ClearIcon() {
-  return (
-    <svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-      <path
-        fill="rgb(122, 130, 145)"
-        d="M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z"
-      ></path>
-    </svg>
-  );
+const StyledColorControlWrapper = styled('div')`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+`;
+
+interface StyledColorControlContentProps {
+  $collapsed: boolean;
 }
 
-const ClearButton = styled.div`
-  position: absolute;
-  right: 6px;
-  z-index: ${zIndex.zIndex1000};
-  padding: 8px;
-  margin-top: 11px;
-`;
-
-const ClearButtonWrapper = styled.div`
-  position: relative;
-  width: 100%;
-`;
+const StyledColorControlContent = styled(
+  'div',
+  transientOptions,
+)<StyledColorControlContentProps>(
+  ({ $collapsed }) => `
+    display: flex;
+    ${
+      $collapsed
+        ? `
+          visibility: hidden;
+          height: 0;
+          width: 0;
+        `
+        : `
+          padding: 16px;
+        `
+    }
+  `,
+);
 
 // color swatch background with checkerboard to display behind transparent colors
 const ColorSwatchBackground = styled.div`
@@ -94,31 +107,52 @@ const ColorControl = ({
   path,
   field,
   onChange,
-  ...otherProps
+  value,
+  t,
 }: WidgetControlProps<string, FieldColor>) => {
+  const [collapsed, setCollapsed] = useState(false);
+
+  const handleCollapseToggle = useCallback(() => {
+    setCollapsed(!collapsed);
+  }, [collapsed]);
+
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const value = otherProps.value ?? '';
+  const [internalValue, setInternalValue] = useState(value ?? '');
 
   // show/hide color picker
   const handleClick = useCallback(() => {
     setShowColorPicker(!showColorPicker);
   }, [showColorPicker]);
 
-  const handleClear = useCallback(() => {
-    onChange(path, field, '');
-  }, [field, onChange, path]);
+  const handleClear = useCallback(
+    (event: MouseEvent) => {
+      event.stopPropagation();
+      setInternalValue('');
+      onChange(path, field, '');
+    },
+    [field, onChange, path],
+  );
 
   const handleClose = useCallback(() => {
     setShowColorPicker(false);
   }, []);
 
-  const handleChange = useCallback(
+  const handlePickerChange = useCallback(
     (color: ColorResult) => {
       const formattedColor =
         (color.rgb?.a ?? 1) < 1
           ? `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`
           : color.hex;
+      setInternalValue(formattedColor);
       onChange(path, field, formattedColor);
+    },
+    [field, onChange, path],
+  );
+
+  const handleInputChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setInternalValue(event.target.value);
+      onChange(path, field, event.target.value);
     },
     [field, onChange, path],
   );
@@ -126,53 +160,65 @@ const ColorControl = ({
   const allowInput = field.allowInput ?? false;
 
   // clear button is not displayed if allowInput: true
-  const showClearButton = !allowInput && value;
+  const showClearButton = !allowInput && internalValue;
 
   return (
-    <>
-      {showClearButton && (
-        <ClearButtonWrapper key="clear-button-wrapper">
-          <ClearButton key="clear-button" onClick={handleClear}>
-            <ClearIcon key="clear-button-icon" />
-          </ClearButton>
-        </ClearButtonWrapper>
-      )}
-      <ColorSwatchBackground />
-      <ColorSwatch
-        key="color-swatch"
-        $background={validateColor(value) ? value : '#fff'}
-        $color={validateColor(value) ? 'rgba(255, 255, 255, 0)' : 'rgb(223, 223, 227)'}
-        onClick={handleClick}
-      >
-        ?
-      </ColorSwatch>
-      {showColorPicker && (
-        <ColorPickerContainer key="color-swatch-wrapper">
-          <ClickOutsideDiv key="click-outside" onClick={handleClose} />
-          <ChromePicker
-            key="color-picker"
-            color={value || ''}
-            onChange={handleChange}
-            disableAlpha={!(field.enableAlpha ?? false)}
-          />
-        </ColorPickerContainer>
-      )}
-      <input
-        key="color-picker-input"
-        // text input with padding left for the color swatch
-        type="text"
-        value={value || ''}
-        onChange={e => onChange(path, field, e.target.value)}
-        style={{
-          paddingLeft: '75px',
-          paddingRight: '70px',
-          color: !allowInput ? '#bbb' : undefined,
-        }}
-        // make readonly and open color picker on click if set to allowInput: false
-        onClick={!allowInput ? handleClick : undefined}
-        readOnly={!allowInput}
+    <StyledColorControlWrapper>
+      <ObjectWidgetTopBar
+        key="file-control-top-bar"
+        collapsed={collapsed}
+        onCollapseToggle={handleCollapseToggle}
+        heading={field.label ?? field.name}
+        t={t}
       />
-    </>
+      <StyledColorControlContent $collapsed={collapsed}>
+        <ColorSwatchBackground />
+        <ColorSwatch
+          key="color-swatch"
+          $background={validateColor(internalValue) ? internalValue : '#fff'}
+          $color={validateColor(internalValue) ? 'rgba(255, 255, 255, 0)' : 'rgb(223, 223, 227)'}
+          onClick={handleClick}
+        >
+          ?
+        </ColorSwatch>
+        {showColorPicker && (
+          <ColorPickerContainer key="color-swatch-wrapper">
+            <ClickOutsideDiv key="click-outside" onClick={handleClose} />
+            <ChromePicker
+              key="color-picker"
+              color={internalValue}
+              onChange={handlePickerChange}
+              disableAlpha={!(field.enableAlpha ?? false)}
+            />
+          </ColorPickerContainer>
+        )}
+        <TextField
+          key="color-picker-input"
+          value={internalValue}
+          onChange={handleInputChange}
+          sx={{
+            color: !allowInput ? '#bbb' : undefined,
+            '.MuiInputBase-input': {
+              paddingLeft: '75px',
+            },
+          }}
+          // make readonly and open color picker on click if set to allowInput: false
+          onClick={!allowInput ? handleClick : undefined}
+          disabled={!allowInput}
+          fullWidth
+          InputProps={{
+            endAdornment: showClearButton ? (
+              <InputAdornment position="start">
+                <IconButton onClick={handleClear} aria-label="clear">
+                  <CloseIcon />
+                </IconButton>
+              </InputAdornment>
+            ) : undefined,
+          }}
+        />
+      </StyledColorControlContent>
+      <Outline />
+    </StyledColorControlWrapper>
   );
 };
 

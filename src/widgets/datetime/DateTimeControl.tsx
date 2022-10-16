@@ -56,7 +56,7 @@ const DateTimeControl = ({
   isDisabled,
   onChange,
 }: WidgetControlProps<string, FieldDateTime>) => {
-  const [internalValue, setInternalValue] = useState(value);
+  const [internalValue, setInternalValue] = useState(value ?? '');
 
   const { format, dateFormat, timeFormat } = useMemo(() => {
     const format = field.format;
@@ -121,65 +121,12 @@ const DateTimeControl = ({
     }
   }, [defaultValue, handleChange, internalValue]);
 
-  return (
-    <LocalizationProvider key="localization-provider" dateAdapter={AdapterDateFns}>
-      {timeFormat ? (
-        dateFormat ? (
-          <MobileDateTimePicker
-            key="mobile-date-time-picker"
-            inputFormat={`${typeof dateFormat === 'string' ? dateFormat : undefined} ${
-              typeof timeFormat === 'string' ? timeFormat : undefined
-            }`}
-            label={label}
-            value={internalValue}
-            onChange={handleChange}
-            renderInput={params => (
-              <TextField
-                key="mobile-date-time-input"
-                {...params}
-                fullWidth
-                InputProps={{
-                  endAdornment: (
-                    <NowButton
-                      key="mobile-date-time-now"
-                      t={t}
-                      handleChange={v => handleChange(v)}
-                      disabled={isDisabled}
-                    />
-                  ),
-                }}
-              />
-            )}
-          />
-        ) : (
-          <TimePicker
-            key="time-picker"
-            label={label}
-            value={internalValue}
-            onChange={handleChange}
-            renderInput={params => (
-              <TextField
-                key="time-input"
-                {...params}
-                fullWidth
-                InputProps={{
-                  endAdornment: (
-                    <NowButton
-                      key="time-now"
-                      t={t}
-                      handleChange={v => handleChange(v)}
-                      disabled={isDisabled}
-                    />
-                  ),
-                }}
-              />
-            )}
-          />
-        )
-      ) : (
+  const dateTimePicker = useMemo(() => {
+    if (dateFormat && !timeFormat) {
+      return (
         <MobileDatePicker
           key="mobile-date-picker"
-          inputFormat={typeof dateFormat === 'string' ? dateFormat : undefined}
+          inputFormat={typeof dateFormat === 'string' ? dateFormat : 'MMM d, yyyy'}
           label={label}
           value={internalValue}
           onChange={handleChange}
@@ -201,7 +148,83 @@ const DateTimeControl = ({
             />
           )}
         />
-      )}
+      );
+    }
+
+    if (!dateFormat && timeFormat) {
+      return (
+        <TimePicker
+          key="time-picker"
+          label={label}
+          inputFormat={typeof timeFormat === 'string' ? timeFormat : 'H:mm'}
+          value={internalValue}
+          onChange={handleChange}
+          renderInput={params => (
+            <TextField
+              key="time-input"
+              {...params}
+              fullWidth
+              InputProps={{
+                endAdornment: (
+                  <NowButton
+                    key="time-now"
+                    t={t}
+                    handleChange={v => handleChange(v)}
+                    disabled={isDisabled}
+                  />
+                ),
+              }}
+            />
+          )}
+        />
+      );
+    }
+
+    let inputFormat = 'MMM d, yyyy H:mm';
+    if (dateFormat || timeFormat) {
+      const formatParts: string[] = [];
+      if (typeof dateFormat === 'string') {
+        formatParts.push(dateFormat);
+      }
+
+      if (typeof timeFormat === 'string') {
+        formatParts.push(timeFormat);
+      }
+
+      inputFormat = formatParts.join(' ');
+    }
+
+    return (
+      <MobileDateTimePicker
+        key="mobile-date-time-picker"
+        inputFormat={inputFormat}
+        label={label}
+        value={internalValue}
+        onChange={handleChange}
+        renderInput={params => (
+          <TextField
+            key="mobile-date-time-input"
+            {...params}
+            fullWidth
+            InputProps={{
+              endAdornment: (
+                <NowButton
+                  key="mobile-date-time-now"
+                  t={t}
+                  handleChange={v => handleChange(v)}
+                  disabled={isDisabled}
+                />
+              ),
+            }}
+          />
+        )}
+      />
+    );
+  }, [dateFormat, handleChange, internalValue, isDisabled, label, t, timeFormat]);
+
+  return (
+    <LocalizationProvider key="localization-provider" dateAdapter={AdapterDateFns}>
+      {dateTimePicker}
     </LocalizationProvider>
   );
 };
