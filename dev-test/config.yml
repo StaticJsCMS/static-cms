@@ -72,7 +72,7 @@ collections:
         label: Posts
         label_singular: Post
         widget: list
-        summary: '{{fields.post | split(''|'', ''$1'')}}'
+        summary: "{{fields.post | split('|', '$1')}}"
         fields:
           - label: Related Post
             name: post
@@ -93,8 +93,22 @@ collections:
     files:
       - name: number
         label: Number
+        file: _validations/number.json
+        description: Number validations
         fields:
-          - name:
+          - name: min
+            label: Min
+            widget: number
+            min: 5
+          - name: max
+            label: Max
+            widget: number
+            max: 10
+          - name: min_and_max
+            label: 'Min and Max'
+            widget: number
+            min: 5
+            max: 10
   - name: settings
     label: Settings
     delete: false

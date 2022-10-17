@@ -1,3 +1,5 @@
+import 'symbol-observable';
+
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { I18n } from 'react-polyglot';

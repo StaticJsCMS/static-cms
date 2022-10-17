@@ -575,20 +575,7 @@ export interface DateTimeField extends BaseField {
   format?: string;
   date_format?: boolean | string;
   time_format?: boolean | string;
-  picker_utc?: boolean;
-
-  /**
-   * @deprecated Use date_format instead
-   */
-  dateFormat?: boolean | string;
-  /**
-   * @deprecated Use time_format instead
-   */
-  timeFormat?: boolean | string;
-  /**
-   * @deprecated Use picker_utc instead
-   */
-  pickerUtc?: boolean;
+  picker_utc?: boolean; // TODO Reimplement
 }
 
 export interface FileOrImageField extends BaseField {
@@ -643,10 +630,6 @@ export interface MarkdownField extends BaseField {
   buttons?: MarkdownWidgetButton[];
   editor_components?: string[];
 
-  /**
-   * @deprecated Use editor_components instead
-   */
-  editorComponents?: string[];
   sanitize_preview?: boolean;
   media_library?: MediaLibrary;
   media_folder?: string;
@@ -662,11 +645,6 @@ export interface NumberField extends BaseField {
   max?: number;
 
   step?: number;
-
-  /**
-   * @deprecated Use valueType instead
-   */
-  valueType?: 'int' | 'float' | string;
 }
 
 export interface SelectField extends BaseField {
@@ -692,23 +670,6 @@ export interface RelationField extends BaseField {
   min?: number;
   max?: number;
   options_length?: number;
-
-  /**
-   * @deprecated Use value_field instead
-   */
-  valueField?: string;
-  /**
-   * @deprecated Use search_fields instead
-   */
-  searchFields?: string[];
-  /**
-   * @deprecated Use display_fields instead
-   */
-  displayFields?: string[];
-  /**
-   * @deprecated Use options_length instead
-   */
-  optionsLength?: number;
 }
 
 export interface HiddenField extends BaseField {

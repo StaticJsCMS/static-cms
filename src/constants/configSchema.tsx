@@ -65,6 +65,7 @@ function fieldsConfig() {
         pattern: {
           type: 'array',
           minItems: 2,
+          maxItems: 2,
           items: [{ oneOf: [{ type: 'string' }, { instanceof: 'RegExp' }] }, { type: 'string' }],
         },
         field: { $ref: `field_${id}` },
@@ -347,7 +348,7 @@ class ConfigError extends Error {
  * the config that is passed in.
  */
 export function validateConfig(config: Config) {
-  const ajv = new AJV({ allErrors: true, $data: true });
+  const ajv = new AJV({ allErrors: true, allowUnionTypes: true, $data: true });
   uniqueItemProperties(ajv);
   select(ajv);
   instanceOf(ajv);
