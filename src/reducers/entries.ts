@@ -155,26 +155,6 @@ function entries(
 
     case ENTRY_SUCCESS: {
       const payload = action.payload;
-      const collection = payload.collection;
-      const slug = payload.entry.slug;
-
-      const pages = {
-        ...state.pages,
-      };
-
-      const newPagesCollection = {
-        ...(pages[collection] ?? {}),
-      };
-
-      if (!newPagesCollection.ids) {
-        newPagesCollection.ids = [];
-      }
-
-      if (!newPagesCollection.ids.includes(slug)) {
-        newPagesCollection.ids.unshift(slug);
-      }
-
-      pages[collection] = newPagesCollection;
 
       return {
         ...state,
@@ -182,7 +162,6 @@ function entries(
           ...state.entities,
           [`${payload.collection}.${payload.entry.slug}`]: payload.entry,
         },
-        pages,
       };
     }
 

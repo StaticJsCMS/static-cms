@@ -70,7 +70,7 @@ const CollectionView = ({
   viewStyle,
 }: TranslatedProps<CollectionViewProps>) => {
   const [readyToLoad, setReadyToLoad] = useState(false);
-  const [prevCollection, setPrevCollection] = useState(collection);
+  const [prevCollection, setPrevCollection] = useState<Collection | null>();
 
   useEffect(() => {
     setPrevCollection(collection);
