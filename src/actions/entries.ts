@@ -70,6 +70,7 @@ export const DRAFT_CHANGE_FIELD = 'DRAFT_CHANGE_FIELD';
 export const DRAFT_VALIDATION_ERRORS = 'DRAFT_VALIDATION_ERRORS';
 export const DRAFT_CLEAR_ERRORS = 'DRAFT_CLEAR_ERRORS';
 export const DRAFT_LOCAL_BACKUP_RETRIEVED = 'DRAFT_LOCAL_BACKUP_RETRIEVED';
+export const DRAFT_LOCAL_BACKUP_DELETE = 'DRAFT_LOCAL_BACKUP_DELETE';
 export const DRAFT_CREATE_FROM_LOCAL_BACKUP = 'DRAFT_CREATE_FROM_LOCAL_BACKUP';
 export const DRAFT_CREATE_DUPLICATE_FROM_ENTRY = 'DRAFT_CREATE_DUPLICATE_FROM_ENTRY';
 
@@ -510,6 +511,12 @@ export function localBackupRetrieved(entry: Entry) {
 export function loadLocalBackup() {
   return {
     type: DRAFT_CREATE_FROM_LOCAL_BACKUP,
+  } as const;
+}
+
+export function deleteDraftLocalBackup() {
+  return {
+    type: DRAFT_LOCAL_BACKUP_DELETE,
   } as const;
 }
 
@@ -1115,6 +1122,7 @@ export type EntriesAction = ReturnType<
   | typeof clearFieldErrors
   | typeof localBackupRetrieved
   | typeof loadLocalBackup
+  | typeof deleteDraftLocalBackup
   | typeof addDraftEntryMediaFile
   | typeof removeDraftEntryMediaFile
   | typeof filterEntriesRequest

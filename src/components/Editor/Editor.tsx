@@ -15,6 +15,7 @@ import {
   loadEntries as loadEntriesAction,
   loadEntry as loadEntryAction,
   loadLocalBackup as loadLocalBackupAction,
+  deleteDraftLocalBackup as deleteDraftLocalBackupAction,
   persistEntry as persistEntryAction,
   persistLocalBackup as persistLocalBackupAction,
   retrieveLocalBackup as retrieveLocalBackupAction,
@@ -73,6 +74,7 @@ const Editor = ({
   loadLocalBackup,
   retrieveLocalBackup,
   deleteLocalBackup,
+  deleteDraftLocalBackup,
   createDraftDuplicateFromEntry,
   createEmptyDraft,
   discardDraft,
@@ -81,7 +83,7 @@ const Editor = ({
 
   const createBackup = useMemo(
     () =>
-      debounce(function (entry, collection) {
+      debounce(function (entry: Entry, collection: Collection) {
         persistLocalBackup(entry, collection);
       }, 2000),
     [persistLocalBackup],
@@ -99,7 +101,8 @@ const Editor = ({
     if (slug) {
       deleteLocalBackup(collection, slug);
     }
-  }, [collection, createBackup, deleteLocalBackup, slug]);
+    deleteDraftLocalBackup();
+  }, [collection, createBackup, deleteDraftLocalBackup, deleteLocalBackup, slug]);
 
   const handlePersistEntry = useCallback(
     async (opts: EditorPersistOptions = {}) => {
@@ -198,7 +201,7 @@ const Editor = ({
   }, [deleteBackup, loadLocalBackup, localBackup, prevLocalBackup, version]);
 
   useEffect(() => {
-    if (hasChanged) {
+    if (hasChanged && entryDraft.entry) {
       createBackup(entryDraft.entry, collection);
     }
 
@@ -387,6 +390,7 @@ const mapDispatchToProps = {
   loadEntry: loadEntryAction,
   loadEntries: loadEntriesAction,
   loadLocalBackup: loadLocalBackupAction,
+  deleteDraftLocalBackup: deleteDraftLocalBackupAction,
   retrieveLocalBackup: retrieveLocalBackupAction,
   persistLocalBackup: persistLocalBackupAction,
   deleteLocalBackup: deleteLocalBackupAction,

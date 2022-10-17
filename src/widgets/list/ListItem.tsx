@@ -203,7 +203,6 @@ const ListItem = ({
         const labelReturn = summary
           ? handleSummary(summary, entry, String(labelFieldValue), value)
           : labelFieldValue;
-        console.log('object label', summary, labelReturn);
         return [(labelReturn || `No ${labelField.name}`).toString(), field];
       }
     }
@@ -227,7 +226,6 @@ const ListItem = ({
   }
 
   const fieldLabel = useMemo(() => getFieldLabel(field, t), [field, t]);
-  console.log('field', field);
 
   return (
     <SortableStyledListItem key="sortable-list-item" index={index}>

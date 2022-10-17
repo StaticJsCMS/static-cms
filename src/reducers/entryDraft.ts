@@ -11,6 +11,7 @@ import {
   DRAFT_CREATE_FROM_ENTRY,
   DRAFT_CREATE_FROM_LOCAL_BACKUP,
   DRAFT_DISCARD,
+  DRAFT_LOCAL_BACKUP_DELETE,
   DRAFT_LOCAL_BACKUP_RETRIEVED,
   DRAFT_VALIDATION_ERRORS,
   ENTRY_DELETE_SUCCESS,
@@ -46,10 +47,13 @@ function entryDraftReducer(
   action: EntriesAction,
 ): EntryDraftState {
   switch (action.type) {
-    case DRAFT_CREATE_FROM_ENTRY:
+    case DRAFT_CREATE_FROM_ENTRY: {
+      const newState = { ...state };
+      delete newState.localBackup;
+
       // Existing Entry
       return {
-        ...state,
+        ...newState,
         entry: {
           ...action.payload.entry,
           newRecord: false,
@@ -58,11 +62,14 @@ function entryDraftReducer(
         hasChanged: false,
         key: uuid(),
       };
+    }
+    case DRAFT_CREATE_EMPTY: {
+      const newState = { ...state };
+      delete newState.localBackup;
 
-    case DRAFT_CREATE_EMPTY:
       // New Entry
       return {
-        ...state,
+        ...newState,
         entry: {
           ...action.payload,
           newRecord: true,
@@ -71,7 +78,7 @@ function entryDraftReducer(
         hasChanged: false,
         key: uuid(),
       };
-
+    }
     case DRAFT_CREATE_FROM_LOCAL_BACKUP: {
       const backupDraftEntry = state.localBackup;
       if (!backupDraftEntry) {
@@ -96,10 +103,13 @@ function entryDraftReducer(
       };
     }
 
-    case DRAFT_CREATE_DUPLICATE_FROM_ENTRY:
+    case DRAFT_CREATE_DUPLICATE_FROM_ENTRY: {
+      const newState = { ...state };
+      delete newState.localBackup;
+
       // Duplicate Entry
       return {
-        ...state,
+        ...newState,
         entry: {
           ...action.payload,
           newRecord: true,
@@ -107,6 +117,7 @@ function entryDraftReducer(
         fieldsErrors: {},
         hasChanged: true,
       };
+    }
     case DRAFT_DISCARD:
       return initialState;
     case DRAFT_LOCAL_BACKUP_RETRIEVED: {
@@ -118,6 +129,12 @@ function entryDraftReducer(
         ...state,
         localBackup: newState,
       };
+    }
+
+    case DRAFT_LOCAL_BACKUP_DELETE: {
+      const newState = { ...state };
+      delete newState.localBackup;
+      return newState;
     }
 
     case DRAFT_CHANGE_FIELD: {
@@ -200,8 +217,11 @@ function entryDraftReducer(
         return state;
       }
 
+      const newState = { ...state };
+      delete newState.localBackup;
+
       return {
-        ...state,
+        ...newState,
         hasChanged: false,
         entry: {
           ...state.entry,
@@ -216,8 +236,11 @@ function entryDraftReducer(
         return state;
       }
 
+      const newState = { ...state };
+      delete newState.localBackup;
+
       return {
-        ...state,
+        ...newState,
         hasChanged: false,
         entry: {
           ...state.entry,
