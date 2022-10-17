@@ -155,7 +155,6 @@ export function registerWidget<T = unknown>(
         getValidValue = (value: T | undefined | null) => value,
         schema,
         allowMapValue,
-        globalStyles,
       } = {},
     } = name;
     if (registry.widgets[widgetName]) {
@@ -173,7 +172,6 @@ export function registerWidget<T = unknown>(
       validator: validator as Widget['validator'],
       getValidValue: getValidValue as Widget['getValidValue'],
       schema,
-      globalStyles,
       allowMapValue,
     };
   } else {

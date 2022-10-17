@@ -1,13 +1,12 @@
-import { css, Global } from '@emotion/react';
-import { styled } from '@mui/material/styles';
 import HeightIcon from '@mui/icons-material/Height';
 import LanguageIcon from '@mui/icons-material/Language';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Fab from '@mui/material/Fab';
+import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ScrollSync, ScrollSyncPane } from 'react-scroll-sync';
 
-import { colors, colorsRaw, components, transitions, zIndex } from '../../components/UI/styles';
+import { colorsRaw, components, zIndex } from '../../components/UI/styles';
 import { FILES } from '../../constants/collectionTypes';
 import { transientOptions } from '../../lib';
 import { getI18nInfo, getPreviewEntry, hasI18n } from '../../lib/i18n';
@@ -17,10 +16,10 @@ import EditorPreviewPane from './EditorPreviewPane/EditorPreviewPane';
 import EditorToolbar from './EditorToolbar';
 
 import type {
-  Field,
   Collection,
   EditorPersistOptions,
   Entry,
+  Field,
   FieldError,
   FieldsErrors,
   I18nSettings,
@@ -31,47 +30,6 @@ import type {
 
 const PREVIEW_VISIBLE = 'cms.preview-visible';
 const I18N_VISIBLE = 'cms.i18n-visible';
-
-const styles = {
-  splitPane: css`
-    ${components.card};
-    border-radius: 0;
-    height: 100%;
-  `,
-  pane: css`
-    height: 100%;
-  `,
-};
-
-function ReactSplitPaneGlobalStyles() {
-  return (
-    <Global
-      styles={css`
-        .Resizer.vertical {
-          width: 21px;
-          cursor: col-resize;
-          position: relative;
-          transition: background-color ${transitions.main};
-
-          &:before {
-            content: '';
-            width: 2px;
-            height: 100%;
-            position: relative;
-            left: 10px;
-            background-color: ${colors.textFieldBorder};
-            display: block;
-          }
-
-          &:hover,
-          &:active {
-            background-color: ${colorsRaw.grayLight};
-          }
-        }
-      `}
-    />
-  );
-}
 
 const StyledSplitPane = styled('div')`
   display: grid;
@@ -89,7 +47,9 @@ const StyledSplitPane = styled('div')`
 `;
 
 const NoPreviewContainer = styled('div')`
-  ${styles.splitPane};
+  ${components.card};
+  border-radius: 0;
+  height: 100%;
 `;
 
 const EditorContainer = styled('div')`
@@ -321,7 +281,6 @@ const EditorInterface = ({
 
   const editorWithPreview = (
     <>
-      <ReactSplitPaneGlobalStyles />
       <StyledSplitPane>
         <ScrollSyncPane>{editor}</ScrollSyncPane>
         <PreviewPaneContainer>

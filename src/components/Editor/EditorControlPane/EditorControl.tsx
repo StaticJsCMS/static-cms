@@ -1,4 +1,3 @@
-import { css as coreCss, Global } from '@emotion/react';
 import { styled } from '@mui/material/styles';
 import uniqueId from 'lodash/uniqueId';
 import React, { useCallback, useMemo } from 'react';
@@ -25,9 +24,9 @@ import WidgetControl from './WidgetControl';
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import type {
-  Field,
   Collection,
   Entry,
+  Field,
   FieldError,
   FieldsErrors,
   GetAssetFunction,
@@ -195,7 +194,6 @@ const EditorControl = ({
   return (
     <ControlContainer className={className} $isHidden={isHidden}>
       <>
-        {widget.globalStyles && <Global styles={coreCss`${widget.globalStyles}`} />}
         {errors && (
           <ControlErrorsList>
             {errors.map(

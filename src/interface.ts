@@ -300,7 +300,6 @@ export interface WidgetOptions<T = unknown, F extends Field = Field> {
   validator?: Widget<T, F>['validator'];
   getValidValue?: Widget<T, F>['getValidValue'];
   schema?: Widget<T, F>['schema'];
-  globalStyles?: string;
   allowMapValue?: boolean;
 }
 
@@ -314,7 +313,6 @@ export interface Widget<T = unknown, F extends Field = Field> {
   }) => false | { error: false | FieldError } | Promise<false | { error: false | FieldError }>;
   getValidValue: (value: T | undefined | null) => T | undefined | null;
   schema?: PropertiesSchema<unknown>;
-  globalStyles?: string;
   allowMapValue?: boolean;
 }
 
