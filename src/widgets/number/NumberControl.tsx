@@ -64,8 +64,20 @@ const NumberControl = ({
   field,
   value,
   onChange,
+  onValidate,
+  t,
 }: WidgetControlProps<string | number, NumberField>) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
+  const [hasErrors, setHasErrors] = useState(false);
+
+  const validate = useCallback(
+    (newValue: string | number) => {
+      const error = validateMinMax(newValue, field.min ?? false, field.max ?? false, field, t);
+      setHasErrors(Boolean(error));
+      onValidate(path, error ? [error] : []);
+    },
+    [field, onValidate, path, t],
+  );
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -73,15 +85,17 @@ const NumberControl = ({
       const value =
         valueType === 'float' ? parseFloat(e.target.value) : parseInt(e.target.value, 10);
 
+      let newValue: string | number;
       if (!isNaN(value)) {
-        onChange(path, field, value);
-        setInternalValue(value);
+        newValue = value;
       } else {
-        onChange(path, field, '');
-        setInternalValue('');
+        newValue = '';
       }
+      onChange(path, field, newValue);
+      setInternalValue(newValue);
+      validate(newValue);
     },
-    [field, onChange, path],
+    [field, onChange, path, validate],
   );
 
   const min = field.min ?? '';
@@ -101,6 +115,7 @@ const NumberControl = ({
       }}
       fullWidth
       label={label}
+      error={hasErrors}
       InputLabelProps={{
         shrink: true,
       }}
