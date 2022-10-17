@@ -35,7 +35,7 @@ Read more about Static CMS [Core Concepts](https://staticjscms.github.io/static-
 The Static CMS can be used in two different ways.
 
 * A Quick and easy install, that requires you to create a single HTML file and a configuration file. All the CMS JavaScript and CSS are loaded from a CDN.
-  To learn more about this installation method, refer to the [Quick Start Guide](https://staticjscms.github.io/static-cms/docs/quick-start/)
+  To learn more about this installation method, refer to the [Quick Start Guide](https://staticjscms.github.io/static-cms/docs/start-with-a-template/)
 * A complete, more complex install, that gives you more flexibility but requires that you use a static site builder with a build system that supports npm packages.
 
 # static-cms-core
