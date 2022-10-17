@@ -7,7 +7,8 @@ import transientOptions from '../../lib/util/transientOptions';
 import type { IconType } from './Icon/icons';
 
 interface IconWrapperProps {
-  $size: string;
+  $width: number;
+  $height: number;
   $rotation: string;
 }
 
@@ -15,11 +16,11 @@ const IconWrapper = styled(
   'span',
   transientOptions,
 )<IconWrapperProps>(
-  ({ $size, $rotation }) => `
+  ({ $width, $height, $rotation }) => `
     display: inline-block;
     line-height: 0;
-    width: ${$size};
-    height: ${$size};
+    width: ${$width}px;
+    height: ${$height}px;
     transform: rotate(${$rotation});
 
     & path:not(.no-fill),
@@ -61,26 +62,31 @@ function getRotation(iconDirection?: Direction, newDirection?: Direction) {
 }
 
 const sizes = {
-  xsmall: '12px',
-  small: '18px',
-  medium: '24px',
-  large: '32px',
+  xsmall: 12,
+  small: 18,
+  medium: 24,
+  large: 32,
 };
 
 export interface IconProps {
   type: IconType;
   direction?: Direction;
-  size?: keyof typeof sizes | string;
+  width?: number;
+  height?: number;
+  size?: keyof typeof sizes;
   className?: string;
 }
 
-const Icon = ({ type, direction, size = 'medium', className }: IconProps) => {
+const Icon = ({ type, direction, width, height, size = 'medium', className }: IconProps) => {
   const IconSvg = icons[type].image;
 
   return (
     <IconWrapper
       className={className}
-      $size={size in sizes ? sizes[size as keyof typeof sizes] : size}
+      $width={width ? width : size in sizes ? sizes[size as keyof typeof sizes] : sizes['medium']}
+      $height={
+        height ? height : size in sizes ? sizes[size as keyof typeof sizes] : sizes['medium']
+      }
       $rotation={getRotation(icons[type].direction, direction)}
     >
       <IconSvg />
