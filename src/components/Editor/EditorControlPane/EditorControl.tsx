@@ -1,5 +1,4 @@
 import { styled } from '@mui/material/styles';
-import uniqueId from 'lodash/uniqueId';
 import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
@@ -156,22 +155,17 @@ const EditorControl = ({
   t,
   value,
 }: TranslatedProps<EditorControlProps>) => {
-  const uniqueFieldId = useMemo(() => uniqueId(`${field.name}-field-`), [field.name]);
-
   const widgetName = field.widget;
   const widget = resolveWidget(widgetName) as Widget<ValueOrNestedValue>;
   const fieldHint = field.hint;
-  const errors = fieldsErrors && fieldsErrors[uniqueFieldId];
 
-  const childErrors = useMemo(() => {
-    if (fieldsErrors && Object.keys(fieldsErrors).length > 0) {
-      return Object.values(fieldsErrors).some(arr =>
-        arr.some(err => err.parentIds && err.parentIds.includes(uniqueFieldId)),
-      );
-    }
-    return false;
-  }, [fieldsErrors, uniqueFieldId]);
-  const hasErrors = !!errors || childErrors;
+  const path = useMemo(
+    () => (parentPath.length > 0 ? `${parentPath}.${field.name}` : field.name),
+    [field.name, parentPath],
+  );
+
+  const errors = fieldsErrors && fieldsErrors[path];
+  const hasErrors = Boolean(errors);
 
   const handleGetAsset = useCallback(
     (collection: Collection, entry: Entry): GetAssetFunction =>
@@ -179,11 +173,6 @@ const EditorControl = ({
         return getAsset(collection, entry, path, field);
       },
     [getAsset],
-  );
-
-  const path = useMemo(
-    () => (parentPath.length > 0 ? `${parentPath}.${field.name}` : field.name),
-    [field.name, parentPath],
   );
 
   const Config = useMemo(() => config.config, [config.config]);
@@ -210,7 +199,6 @@ const EditorControl = ({
           clearSearch={clearSearch}
           collection={collection}
           config={Config}
-          controlComponent={widget.control}
           entry={entry}
           field={field}
           fieldsErrors={fieldsErrors}
@@ -239,6 +227,7 @@ const EditorControl = ({
           resolveWidget={resolveWidget}
           t={t}
           value={value}
+          widget={widget}
         />
         {fieldHint && <ControlHint $error={hasErrors}>{fieldHint}</ControlHint>}
       </>

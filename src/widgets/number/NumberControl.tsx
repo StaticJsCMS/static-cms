@@ -1,9 +1,11 @@
 import TextField from '@mui/material/TextField';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import type { t } from 'react-polyglot';
-import type { NumberField, WidgetControlProps } from '../../interface';
+import { validate } from '../../lib/util/validation.util';
+
 import type { ChangeEvent } from 'react';
+import type { t } from 'react-polyglot';
+import type { FieldError, NumberField, WidgetControlProps } from '../../interface';
 
 const ValidationErrorTypes = {
   PRESENCE: 'PRESENCE',
@@ -18,8 +20,8 @@ export function validateMinMax(
   max: number | false,
   field: NumberField,
   t: t,
-) {
-  let error;
+): FieldError | false {
+  let error: FieldError | false;
 
   switch (true) {
     case value !== '' && min !== false && max !== false && (value < min || value > max):
@@ -51,7 +53,7 @@ export function validateMinMax(
       };
       break;
     default:
-      error = null;
+      error = false;
       break;
   }
 
@@ -65,19 +67,28 @@ const NumberControl = ({
   value,
   onChange,
   onValidate,
+  widget,
   t,
 }: WidgetControlProps<string | number, NumberField>) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
   const [hasErrors, setHasErrors] = useState(false);
 
-  const validate = useCallback(
-    (newValue: string | number) => {
-      const error = validateMinMax(newValue, field.min ?? false, field.max ?? false, field, t);
-      setHasErrors(Boolean(error));
-      onValidate(path, error ? [error] : []);
-    },
-    [field, onValidate, path, t],
-  );
+  useEffect(() => {
+    let alive = true;
+
+    const validateValue = async () => {
+      const errors = await validate(path, field, internalValue, widget, onValidate, t);
+      if (alive) {
+        setHasErrors(errors.length > 0);
+      }
+    };
+
+    validateValue();
+
+    return () => {
+      alive = false;
+    };
+  }, [field, internalValue, onValidate, path, t, widget]);
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -93,9 +104,8 @@ const NumberControl = ({
       }
       onChange(path, field, newValue);
       setInternalValue(newValue);
-      validate(newValue);
     },
-    [field, onChange, path, validate],
+    [field, onChange, path],
   );
 
   const min = field.min ?? '';

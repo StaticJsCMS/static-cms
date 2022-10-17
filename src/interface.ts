@@ -100,7 +100,6 @@ export type Entities = Record<string, Entry>;
 
 export interface FieldError {
   type: string;
-  parentIds?: string[];
   message?: string;
 }
 
@@ -108,14 +107,15 @@ export interface FieldsErrors {
   [field: string]: FieldError[];
 }
 
-export type FieldValidationMethod = (
-  field: Field,
-  value: ValueOrNestedValue | null | undefined,
-  parentIds: string[],
-  t: t,
-) => {
-  error: false | FieldError;
-};
+export interface FieldValidationMethodProps<T = unknown, F extends Field = Field> {
+  field: F;
+  value: T | undefined | null;
+  t: t;
+}
+
+export type FieldValidationMethod<T = unknown, F extends Field = Field> = (
+  props: FieldValidationMethodProps<T, F>,
+) => false | FieldError | Promise<false | FieldError>;
 
 export interface EntryDraft {
   entry: Entry;
@@ -258,6 +258,7 @@ export interface WidgetControlProps<T, F extends Field = Field> {
   query: EditorControlProps['query'];
   t: t;
   value: T | undefined | null;
+  widget: Widget<T, F>;
 }
 
 export interface WidgetPreviewProps<T = unknown, F extends Field = Field> {
@@ -306,11 +307,7 @@ export interface WidgetOptions<T = unknown, F extends Field = Field> {
 export interface Widget<T = unknown, F extends Field = Field> {
   control: ComponentType<WidgetControlProps<T, F>>;
   preview?: WidgetPreviewComponent<T, F>;
-  validator: (props: {
-    field: F;
-    value: T | undefined | null;
-    t: t;
-  }) => false | { error: false | FieldError } | Promise<false | { error: false | FieldError }>;
+  validator: FieldValidationMethod<T, F>;
   getValidValue: (value: T | undefined | null) => T | undefined | null;
   schema?: PropertiesSchema<unknown>;
   allowMapValue?: boolean;

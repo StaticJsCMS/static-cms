@@ -983,6 +983,8 @@ export function persistEntry(collection: Collection) {
         errors.some(error => error.type && error.type === ValidationErrorTypes.PRESENCE),
       );
 
+      console.log(fieldsErrors);
+
       if (hasPresenceErrors) {
         dispatch(
           addSnackbar({
@@ -992,6 +994,19 @@ export function persistEntry(collection: Collection) {
             },
           }),
         );
+      } else {
+        const firstErrorMessage = Object.values(fieldsErrors).flatMap(errors =>
+          errors.map(error => error.message),
+        )[0];
+
+        if (firstErrorMessage) {
+          dispatch(
+            addSnackbar({
+              type: 'error',
+              message: firstErrorMessage,
+            }),
+          );
+        }
       }
 
       return Promise.reject();

@@ -108,17 +108,20 @@ const Editor = ({
     async (opts: EditorPersistOptions = {}) => {
       const { createNew = false, duplicate = false } = opts;
 
-      await persistEntry(collection);
-      setVersion(version + 1);
+      try {
+        await persistEntry(collection);
+        setVersion(version + 1);
 
-      deleteBackup();
+        deleteBackup();
 
-      if (createNew) {
-        navigateToNewEntry(collection.name);
-        if (duplicate && entryDraft.entry) {
-          createDraftDuplicateFromEntry(entryDraft.entry);
+        if (createNew) {
+          navigateToNewEntry(collection.name);
+          if (duplicate && entryDraft.entry) {
+            createDraftDuplicateFromEntry(entryDraft.entry);
+          }
         }
-      }
+        // eslint-disable-next-line no-empty
+      } catch (e) {}
     },
     [
       collection,

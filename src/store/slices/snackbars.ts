@@ -9,7 +9,7 @@ type MessageType = 'error' | 'warning' | 'info' | 'success';
 export interface SnackbarMessage {
   id: string;
   type: MessageType;
-  message: {
+  message: string | {
     key: string;
   } & Record<string, unknown>;
 }
