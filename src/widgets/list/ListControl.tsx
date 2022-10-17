@@ -111,13 +111,13 @@ const ListControl = ({
   loadEntry,
   locale,
   mediaPaths,
-  onAddAsset,
+  addAsset,
   onChange,
-  onClearMediaControl,
-  onOpenMediaLibrary,
-  onPersistMedia,
-  onRemoveInsertedMedia,
-  onRemoveMediaControl,
+  clearMediaControl,
+  openMediaLibrary,
+  persistMedia,
+  removeInsertedMedia,
+  removeMediaControl,
   onValidate,
   path,
   query,
@@ -272,13 +272,13 @@ const ListControl = ({
           loadEntry={loadEntry}
           locale={locale}
           mediaPaths={mediaPaths}
-          onAddAsset={onAddAsset}
+          addAsset={addAsset}
           onChange={onChange}
-          onClearMediaControl={onClearMediaControl}
-          onOpenMediaLibrary={onOpenMediaLibrary}
-          onPersistMedia={onPersistMedia}
-          onRemoveInsertedMedia={onRemoveInsertedMedia}
-          onRemoveMediaControl={onRemoveMediaControl}
+          clearMediaControl={clearMediaControl}
+          openMediaLibrary={openMediaLibrary}
+          persistMedia={persistMedia}
+          removeInsertedMedia={removeInsertedMedia}
+          removeMediaControl={removeMediaControl}
           onValidate={onValidate}
           path={path}
           query={query}
@@ -307,13 +307,13 @@ const ListControl = ({
       loadEntry,
       locale,
       mediaPaths,
-      onAddAsset,
+      addAsset,
       onChange,
-      onClearMediaControl,
-      onOpenMediaLibrary,
-      onPersistMedia,
-      onRemoveInsertedMedia,
-      onRemoveMediaControl,
+      clearMediaControl,
+      openMediaLibrary,
+      persistMedia,
+      removeInsertedMedia,
+      removeMediaControl,
       onValidate,
       path,
       query,

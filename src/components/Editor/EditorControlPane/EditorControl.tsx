@@ -15,10 +15,9 @@ import {
 import { clearSearch as clearSearchAction, query as queryAction } from '../../../actions/search';
 import { borders, colors, lengths, transitions } from '../../../components/UI/styles';
 import { transientOptions } from '../../../lib';
-import { getEditorComponents, resolveWidget } from '../../../lib/registry';
+import { resolveWidget } from '../../../lib/registry';
 import { getFieldLabel } from '../../../lib/util/field.util';
 import { selectIsLoadingAsset } from '../../../reducers/medias';
-import WidgetControl from './WidgetControl';
 
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
@@ -129,7 +128,7 @@ const EditorControl = ({
   clearMediaControl,
   clearSearch,
   collection,
-  config,
+  config: configState,
   entry,
   field,
   fieldsErrors,
@@ -175,8 +174,8 @@ const EditorControl = ({
     [getAsset],
   );
 
-  const Config = useMemo(() => config.config, [config.config]);
-  if (!collection || !entry || !Config) {
+  const config = useMemo(() => configState.config, [configState.config]);
+  if (!collection || !entry || !config) {
     return null;
   }
 
@@ -194,41 +193,39 @@ const EditorControl = ({
             )}
           </ControlErrorsList>
         )}
-        <WidgetControl
-          clearFieldErrors={clearFieldErrors}
-          clearSearch={clearSearch}
-          collection={collection}
-          config={Config}
-          entry={entry}
-          field={field}
-          fieldsErrors={fieldsErrors}
-          getAsset={handleGetAsset(collection, entry)}
-          getEditorComponents={getEditorComponents}
-          isDisabled={isDisabled ?? false}
-          isEditorComponent={isEditorComponent ?? false}
-          isFetching={isFetching}
-          isFieldDuplicate={isFieldDuplicate}
-          isFieldHidden={isFieldHidden}
-          isNewEditorComponent={isNewEditorComponent ?? false}
-          label={getFieldLabel(field, t)}
-          loadEntry={loadEntry}
-          locale={locale}
-          mediaPaths={mediaPaths}
-          onAddAsset={addAsset}
-          onChange={onChange}
-          onClearMediaControl={clearMediaControl}
-          onOpenMediaLibrary={openMediaLibrary}
-          onPersistMedia={persistMedia}
-          onRemoveInsertedMedia={removeInsertedMedia}
-          onRemoveMediaControl={removeMediaControl}
-          onValidate={onValidate}
-          path={path}
-          query={query}
-          resolveWidget={resolveWidget}
-          t={t}
-          value={value}
-          widget={widget}
-        />
+        {React.createElement(widget.control, {
+          clearFieldErrors,
+          clearSearch,
+          collection,
+          config,
+          entry,
+          field,
+          fieldsErrors,
+          getAsset: handleGetAsset(collection, entry),
+          isDisabled: isDisabled ?? false,
+          isEditorComponent: isEditorComponent ?? false,
+          isFetching,
+          isFieldDuplicate,
+          isFieldHidden,
+          isNewEditorComponent: isNewEditorComponent ?? false,
+          label: getFieldLabel(field, t),
+          loadEntry,
+          locale,
+          mediaPaths,
+          addAsset,
+          onChange,
+          clearMediaControl,
+          openMediaLibrary,
+          persistMedia,
+          removeInsertedMedia,
+          removeMediaControl,
+          onValidate,
+          path,
+          query,
+          t,
+          value,
+          widget,
+        })}
         {fieldHint && <ControlHint $error={hasErrors}>{fieldHint}</ControlHint>}
       </>
     </ControlContainer>

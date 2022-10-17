@@ -227,10 +227,10 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
     value,
     field,
     onChange,
-    onOpenMediaLibrary,
-    onClearMediaControl,
-    onRemoveInsertedMedia,
-    onRemoveMediaControl,
+    openMediaLibrary,
+    clearMediaControl,
+    removeInsertedMedia,
+    removeMediaControl,
     getAsset,
     mediaPaths,
     t,
@@ -247,13 +247,13 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
       if (mediaPath && mediaPath !== value) {
         onChange(path, field, mediaPath);
       } else if (mediaPath && mediaPath === value) {
-        onRemoveInsertedMedia(controlID);
+        removeInsertedMedia(controlID);
       }
-    }, [controlID, field, mediaPaths, onChange, onRemoveInsertedMedia, path, value]);
+    }, [controlID, field, mediaPaths, onChange, removeInsertedMedia, path, value]);
 
     useEffect(() => {
       return () => {
-        onRemoveMediaControl(controlID);
+        removeMediaControl(controlID);
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -280,7 +280,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
     const handleChange = useCallback(
       (e: MouseEvent) => {
         e.preventDefault();
-        return onOpenMediaLibrary({
+        return openMediaLibrary({
           controlID,
           forImage,
           privateUpload: field.private,
@@ -293,7 +293,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
           field,
         });
       },
-      [config, controlID, field, mediaLibraryFieldOptions, onOpenMediaLibrary, value],
+      [config, controlID, field, mediaLibraryFieldOptions, openMediaLibrary, value],
     );
 
     const handleUrl = useCallback(
@@ -310,10 +310,10 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
     const handleRemove = useCallback(
       (e: MouseEvent) => {
         e.preventDefault();
-        onClearMediaControl(controlID);
+        clearMediaControl(controlID);
         return onChange(path, field, '');
       },
-      [controlID, field, onChange, onClearMediaControl, path],
+      [controlID, field, onChange, clearMediaControl, path],
     );
 
     const onRemoveOne = useCallback(
@@ -328,7 +328,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
 
     const onReplaceOne = useCallback(
       (index: number) => () => {
-        return onOpenMediaLibrary({
+        return openMediaLibrary({
           controlID,
           forImage,
           privateUpload: field.private,
@@ -339,7 +339,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
           field,
         });
       },
-      [config, controlID, field, onOpenMediaLibrary, value],
+      [config, controlID, field, openMediaLibrary, value],
     );
 
     const onSortEnd = useCallback(
