@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import ArticleIcon from '@mui/icons-material/Article';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -21,7 +21,7 @@ import NestedCollection from './NestedCollection';
 import type { ReactNode } from 'react';
 import type { Collection, Collections, TranslatedProps } from '../../interface';
 
-const StyledSidebar = styled.div`
+const StyledSidebar = styled('div')`
   position: sticky;
   top: 88px;
   align-self: flex-start;

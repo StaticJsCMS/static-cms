@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 
 import GoBackButton from './GoBackButton';
@@ -8,7 +8,7 @@ import Icon from './Icon';
 import type { MouseEventHandler, ReactNode } from 'react';
 import type { TranslatedProps } from '../../interface';
 
-const StyledAuthenticationPage = styled.section`
+const StyledAuthenticationPage = styled('section')`
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
@@ -16,7 +16,7 @@ const StyledAuthenticationPage = styled.section`
   height: 100vh;
 `;
 
-const CustomIconWrapper = styled.span`
+const CustomIconWrapper = styled('span')`
   width: 300px;
   height: 200px;
   margin-top: -150px;
@@ -48,7 +48,7 @@ const renderPageLogo = (logoUrl?: string) => {
   return <SimpleLogoIcon size="300px" type="static-cms" />;
 };
 
-const LoginButton = styled.button`
+const LoginButton = styled('button')`
   ${buttons.button};
   ${shadows.dropDeep};
   ${buttons.default};
@@ -64,7 +64,7 @@ const LoginButton = styled.button`
   position: relative;
 `;
 
-const TextButton = styled.button`
+const TextButton = styled('button')`
   ${buttons.button};
   ${buttons.default};
   ${buttons.grayText};

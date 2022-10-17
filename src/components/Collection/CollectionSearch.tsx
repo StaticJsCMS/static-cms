@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
@@ -11,16 +11,16 @@ import { colors, colorsRaw, lengths, zIndex } from '../../components/UI/styles';
 import type { KeyboardEvent, MouseEvent } from 'react';
 import type { Collection, Collections, TranslatedProps } from '../../interface';
 
-const SearchContainer = styled.div`
+const SearchContainer = styled('div')`
   position: relative;
 `;
 
-const SuggestionsContainer = styled.div`
+const SuggestionsContainer = styled('div')`
   position: relative;
   width: 100%;
 `;
 
-const Suggestions = styled.ul`
+const Suggestions = styled('ul')`
   position: absolute;
   top: 0px;
   left: 0;
@@ -34,7 +34,7 @@ const Suggestions = styled.ul`
   z-index: ${zIndex.zIndex1};
 `;
 
-const SuggestionHeader = styled.li`
+const SuggestionHeader = styled('li')`
   padding: 0 6px 6px 32px;
   font-size: 12px;
   color: ${colors.text};
@@ -62,7 +62,7 @@ const SuggestionItem = styled(
   `,
 );
 
-const SuggestionDivider = styled.div`
+const SuggestionDivider = styled('div')`
   width: 100%;
 `;
 

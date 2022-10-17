@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -38,7 +38,7 @@ const TopBar = styled(
   `,
 );
 
-const TopBarButton = styled.button`
+const TopBarButton = styled('button')`
   ${buttons.button};
   color: ${colors.controlLabel};
   background: transparent;
@@ -54,7 +54,7 @@ const TopBarButton = styled.button`
   position: relative;
 `;
 
-const StyledTitle = styled.div`
+const StyledTitle = styled('div')`
   position: absolute;
   top: 0;
   left: 48px;

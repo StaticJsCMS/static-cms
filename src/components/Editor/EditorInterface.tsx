@@ -1,5 +1,5 @@
 import { css, Global } from '@emotion/react';
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import HeightIcon from '@mui/icons-material/Height';
 import LanguageIcon from '@mui/icons-material/Language';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -73,7 +73,7 @@ function ReactSplitPaneGlobalStyles() {
   );
 }
 
-const StyledSplitPane = styled.div`
+const StyledSplitPane = styled('div')`
   display: grid;
   grid-template-columns: min(864px, 50%) auto;
   height: calc(100vh - 64px);
@@ -88,18 +88,18 @@ const StyledSplitPane = styled.div`
   }
 `;
 
-const NoPreviewContainer = styled.div`
+const NoPreviewContainer = styled('div')`
   ${styles.splitPane};
 `;
 
-const EditorContainer = styled.div`
+const EditorContainer = styled('div')`
   width: 100%;
   min-width: 1200px;
   height: 100vh;
   overflow: hidden;
 `;
 
-const Editor = styled.div`
+const Editor = styled('div')`
   height: calc(100vh - 64px);
   position: relative;
   background-color: ${colorsRaw.white};
@@ -126,9 +126,12 @@ const ControlPaneContainer = styled(PreviewPaneContainer)`
   padding: 24px 16px 16px;
   position: relative;
   overflow-x: hidden;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 `;
 
-const StyledViewControls = styled.div`
+const StyledViewControls = styled('div')`
   position: fixed;
   bottom: 4px;
   right: 8px;

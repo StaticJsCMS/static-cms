@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import React, { isValidElement, useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
 
@@ -28,7 +28,7 @@ import type {
 } from '../../../interface';
 import type { RootState } from '../../../store';
 
-const PreviewPaneFrame = styled.div`
+const PreviewPaneFrame = styled('div')`
   width: 100%;
   height: 100%;
   border: none;

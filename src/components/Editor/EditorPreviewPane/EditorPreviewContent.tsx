@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import React, { useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { ScrollSyncPane } from 'react-scroll-sync';
@@ -11,7 +11,7 @@ interface PreviewContentProps {
   previewProps: TemplatePreviewProps;
 }
 
-const StyledPreviewContent = styled.div`
+const StyledPreviewContent = styled('div')`
   width: calc(100% - min(864px, 50%));
   top: 64px;
   right: 0;

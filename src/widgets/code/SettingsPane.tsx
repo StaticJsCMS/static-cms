@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -11,7 +11,7 @@ import SettingsButton from './SettingsButton';
 
 import type { SelectChangeEvent } from '@mui/material/Select';
 
-const SettingsPaneContainer = styled.div`
+const SettingsPaneContainer = styled('div')`
   position: absolute;
   right: 0;
   width: 200px;
@@ -25,7 +25,7 @@ const SettingsPaneContainer = styled.div`
   ${shadows.drop};
 `;
 
-const SettingsFieldLabel = styled.label`
+const SettingsFieldLabel = styled('label')`
   ${text.fieldLabel};
   font-size: 11px;
   display: block;
@@ -33,7 +33,7 @@ const SettingsFieldLabel = styled.label`
   margin-bottom: 2px;
 `;
 
-const SettingsSectionTitle = styled.h3`
+const SettingsSectionTitle = styled('h3')`
   font-size: 14px;
   margin-top: 14px;
   margin-bottom: 0;

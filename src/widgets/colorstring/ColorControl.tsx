@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -47,7 +47,7 @@ const StyledColorControlContent = styled(
 );
 
 // color swatch background with checkerboard to display behind transparent colors
-const ColorSwatchBackground = styled.div`
+const ColorSwatchBackground = styled('div')`
   position: absolute;
   z-index: ${zIndex.zIndex1};
   background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMUlEQVQ4T2NkYGAQYcAP3uCTZhw1gGGYhAGBZIA/nYDCgBDAm9BGDWAAJyRCgLaBCAAgXwixzAS0pgAAAABJRU5ErkJggg==');
@@ -87,7 +87,7 @@ const ColorSwatch = styled(
   `,
 );
 
-const ColorPickerContainer = styled.div`
+const ColorPickerContainer = styled('div')`
   position: absolute;
   z-index: ${zIndex.zIndex1000};
   margin-top: 48px;
@@ -95,7 +95,7 @@ const ColorPickerContainer = styled.div`
 `;
 
 // fullscreen div to close color picker when clicking outside of picker
-const ClickOutsideDiv = styled.div`
+const ClickOutsideDiv = styled('div')`
   position: fixed;
   top: 0;
   right: 0;

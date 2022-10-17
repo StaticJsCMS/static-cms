@@ -1,5 +1,5 @@
 import { css as coreCss, Global } from '@emotion/react';
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import uniqueId from 'lodash/uniqueId';
 import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
@@ -95,7 +95,7 @@ const ControlContainer = styled(
   `,
 );
 
-const ControlErrorsList = styled.ul`
+const ControlErrorsList = styled('ul')`
   list-style-type: none;
   font-size: 12px;
   color: ${colors.errorText};

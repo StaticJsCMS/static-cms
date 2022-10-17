@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import TopBarProgress from 'react-topbar-progress-indicator';
 
@@ -16,13 +16,13 @@ TopBarProgress.config({
   barThickness: 2,
 });
 
-const StyledMainContainerWrapper = styled.div`
+const StyledMainContainerWrapper = styled('div')`
   position: relative;
   padding: 24px;
   gap: 24px;
 `;
 
-const StyledMainContainer = styled.div`
+const StyledMainContainer = styled('div')`
   min-width: 1200px;
   max-width: 1440px;
   margin: 0 auto;

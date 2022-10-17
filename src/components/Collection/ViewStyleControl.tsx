@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import GridViewSharpIcon from '@mui/icons-material/GridViewSharp';
 import ReorderSharpIcon from '@mui/icons-material/ReorderSharp';
 import IconButton from '@mui/material/IconButton';
@@ -8,7 +8,7 @@ import { VIEW_STYLE_GRID, VIEW_STYLE_LIST } from '../../constants/collectionView
 
 import type { CollectionViewStyle } from '../../constants/collectionViews';
 
-const ViewControlsSection = styled.div`
+const ViewControlsSection = styled('div')`
   margin-left: 24px;
   display: flex;
   align-items: center;

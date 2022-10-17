@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import TodayIcon from '@mui/icons-material/Today';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -14,7 +14,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import type { MouseEvent } from 'react';
 import type { FieldDateTime, WidgetControlProps, TranslatedProps } from '../../interface';
 
-const StyledNowButton = styled.div`
+const StyledNowButton = styled('div')`
   width: fit-content;
 `;
 

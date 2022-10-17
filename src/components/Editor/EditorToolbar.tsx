@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import AppBar from '@mui/material/AppBar';
@@ -40,7 +40,7 @@ const StyledToolbarSectionBackLink = styled('div')`
   }
 `;
 
-const StyledToolbarSectionMain = styled.div`
+const StyledToolbarSectionMain = styled('div')`
   flex-grow: 1;
   display: flex;
   gap: 8px;
@@ -48,12 +48,12 @@ const StyledToolbarSectionMain = styled.div`
   margin-left: 24px;
 `;
 
-const StyledBackCollection = styled.div`
+const StyledBackCollection = styled('div')`
   color: ${colors.textLead};
   font-size: 14px;
 `;
 
-const StyledBackStatus = styled.div`
+const StyledBackStatus = styled('div')`
   margin-top: 6px;
 `;
 

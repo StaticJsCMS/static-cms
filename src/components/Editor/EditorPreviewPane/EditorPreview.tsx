@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 
 import type { Field, TemplatePreviewProps } from '../../../interface';
 
@@ -7,7 +7,7 @@ function isVisible(field: Field) {
   return field.widget !== 'hidden';
 }
 
-const PreviewContainer = styled.div`
+const PreviewContainer = styled('div')`
   overflow-y: auto;
   height: 100%;
   padding: 24px;

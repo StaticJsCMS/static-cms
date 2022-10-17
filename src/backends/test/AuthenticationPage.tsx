@@ -1,6 +1,6 @@
-import styled from '@emotion/styled';
-import React, { useCallback, useEffect } from 'react';
 import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import React, { useCallback, useEffect } from 'react';
 
 import GoBackButton from '../../components/UI/GoBackButton';
 import Icon from '../../components/UI/Icon';
@@ -8,7 +8,7 @@ import Icon from '../../components/UI/Icon';
 import type { MouseEvent } from 'react';
 import type { AuthenticationPageProps, TranslatedProps } from '../../interface';
 
-const StyledAuthenticationPage = styled.section`
+const StyledAuthenticationPage = styled('section')`
   display: flex;
   flex-direction: column;
   align-items: center;

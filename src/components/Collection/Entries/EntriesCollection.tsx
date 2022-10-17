@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
@@ -25,13 +25,13 @@ import type { CollectionViewStyle } from '../../../constants/collectionViews';
 import type { Collection, Entry, GroupOfEntries, TranslatedProps } from '../../../interface';
 import type { RootState } from '../../../store';
 
-const GroupHeading = styled.h2`
+const GroupHeading = styled('h2')`
   font-size: 23px;
   font-weight: 600;
   color: ${colors.textLead};
 `;
 
-const GroupContainer = styled.div``;
+const GroupContainer = styled('div')``;
 
 function getGroupEntries(entries: Entry[], paths: Set<string>) {
   return entries.filter(entry => paths.has(entry.path));

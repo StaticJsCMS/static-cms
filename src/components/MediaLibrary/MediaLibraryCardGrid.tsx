@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { Waypoint } from 'react-waypoint';
@@ -105,7 +105,7 @@ interface StyledCardGridContainerProps {
   $height?: number;
 }
 
-const StyledCardGridContainer = styled.div<StyledCardGridContainerProps>(
+const StyledCardGridContainer = styled('div')<StyledCardGridContainerProps>(
   ({ $width, $height }) => `
     overflow-y: auto;
     overflow-x: hidden;
@@ -114,7 +114,7 @@ const StyledCardGridContainer = styled.div<StyledCardGridContainerProps>(
   `,
 );
 
-const CardGrid = styled.div`
+const CardGrid = styled('div')`
   display: flex;
   flex-wrap: wrap;
 

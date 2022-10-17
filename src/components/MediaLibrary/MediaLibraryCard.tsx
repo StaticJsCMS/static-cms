@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useMemo } from 'react';
 
 import { transientOptions } from '../../lib';
@@ -37,7 +37,7 @@ const Card = styled(
   `,
 );
 
-const CardImageWrapper = styled.div`
+const CardImageWrapper = styled('div')`
   height: ${IMAGE_HEIGHT + 2}px;
   ${effects.checkerboard};
   ${shadows.inset};
@@ -45,14 +45,14 @@ const CardImageWrapper = styled.div`
   position: relative;
 `;
 
-const CardImage = styled.img`
+const CardImage = styled('img')`
   width: 100%;
   height: ${IMAGE_HEIGHT}px;
   object-fit: contain;
   border-radius: 2px 2px 0 0;
 `;
 
-const CardFileIcon = styled.div`
+const CardFileIcon = styled('div')`
   width: 100%;
   height: 160px;
   object-fit: cover;
@@ -61,7 +61,7 @@ const CardFileIcon = styled.div`
   font-size: 3em;
 `;
 
-const CardText = styled.p`
+const CardText = styled('p')`
   color: ${colors.text};
   padding: 8px;
   margin-top: 20px;
@@ -69,7 +69,7 @@ const CardText = styled.p`
   line-height: 1.3;
 `;
 
-const DraftText = styled.p`
+const DraftText = styled('p')`
   color: ${colors.mediaDraftText};
   background-color: ${colors.mediaDraftBackground};
   position: absolute;

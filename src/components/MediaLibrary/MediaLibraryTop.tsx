@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import React from 'react';
@@ -9,13 +9,13 @@ import MediaLibrarySearch from './MediaLibrarySearch';
 import type { ChangeEvent, ChangeEventHandler, KeyboardEventHandler } from 'react';
 import type { MediaFile, TranslatedProps } from '../../interface';
 
-const LibraryTop = styled.div`
+const LibraryTop = styled('div')`
   position: relative;
   display: flex;
   flex-direction: column;
 `;
 
-const StyledButtonsContainer = styled.div`
+const StyledButtonsContainer = styled('div')`
   flex-shrink: 0;
   display: flex;
   gap: 8px;

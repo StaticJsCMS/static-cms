@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import ArticleIcon from '@mui/icons-material/Article';
 import sortBy from 'lodash/sortBy';
 import { dirname, sep } from 'path';
@@ -18,17 +18,17 @@ import type { RootState } from '../../store';
 
 const { addFileTemplateFields } = stringTemplate;
 
-const NodeTitleContainer = styled.div`
+const NodeTitleContainer = styled('div')`
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const NodeTitle = styled.div`
+const NodeTitle = styled('div')`
   margin-right: 4px;
 `;
 
-const Caret = styled.div`
+const Caret = styled('div')`
   position: relative;
   top: 2px;
 `;

@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ImageIcon from '@mui/icons-material/Image';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -52,11 +52,11 @@ const StyledButton = styled(Button)`
   }
 `;
 
-const StyledSpacer = styled.div`
+const StyledSpacer = styled('div')`
   flex-grow: 1;
 `;
 
-const StyledAppHeaderActions = styled.div`
+const StyledAppHeaderActions = styled('div')`
   display: inline-flex;
   align-items: center;
   gap: 8px;

@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -31,15 +31,16 @@ import type {
 } from '../../../interface';
 import type { RootState } from '../../../store';
 
-const ControlPaneContainer = styled.div`
-  max-width: 1200px;
+const ControlPaneContainer = styled('div')`
+  max-width: 1000px;
+  width: 100%;
   font-size: 16px;
   display: flex;
   flex-direction: column;
   gap: 16px;
 `;
 
-const LocaleRowWrapper = styled.div`
+const LocaleRowWrapper = styled('div')`
   display: flex;
 `;
 

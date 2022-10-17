@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -7,7 +7,7 @@ import { buttons, shadows, zIndex } from '../../components/UI/styles';
 
 import type { MouseEvent } from 'react';
 
-const StyledSettingsButton = styled.button`
+const StyledSettingsButton = styled('button')`
   ${buttons.button};
   ${buttons.default};
   ${shadows.drop};

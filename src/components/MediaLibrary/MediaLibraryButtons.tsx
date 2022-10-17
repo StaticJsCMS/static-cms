@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { css } from '@emotion/react';
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import copyToClipboard from 'copy-text-to-clipboard';
 import Button from '@mui/material/Button';
 
@@ -52,12 +52,12 @@ export const UploadButton = styled(FileUploadButton)`
   }
 `;
 
-export const DeleteButton = styled.button`
+export const DeleteButton = styled('button')`
   ${styles.button};
   ${buttons.lightRed};
 `;
 
-export const InsertButton = styled.button`
+export const InsertButton = styled('button')`
   ${styles.button};
   ${buttons.green};
 `;

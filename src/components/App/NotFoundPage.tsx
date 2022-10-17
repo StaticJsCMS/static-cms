@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { translate } from 'react-polyglot';
 
@@ -7,7 +7,7 @@ import { lengths } from '../../components/UI/styles';
 import type { ComponentType } from 'react';
 import type { TranslateProps } from 'react-polyglot';
 
-const NotFoundContainer = styled.div`
+const NotFoundContainer = styled('div')`
   margin: ${lengths.pageMargin};
 `;
 

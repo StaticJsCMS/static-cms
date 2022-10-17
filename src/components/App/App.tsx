@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Fab from '@mui/material/Fab';
 import React, { useCallback, useMemo } from 'react';
@@ -35,24 +35,24 @@ TopBarProgress.config({
   barThickness: 2,
 });
 
-const AppRoot = styled.div`
+const AppRoot = styled('div')`
   width: 100%;
   min-width: 1200px;
   height: 100vh;
   position: relative;
 `;
 
-const AppWrapper = styled.div`
+const AppWrapper = styled('div')`
   width: 100%;
   min-width: 1200px;
   min-height: 100vh;
 `;
 
-const ErrorContainer = styled.div`
+const ErrorContainer = styled('div')`
   margin: 20px;
 `;
 
-const ErrorCodeBlock = styled.pre`
+const ErrorCodeBlock = styled('pre')`
   margin-left: 20px;
   font-size: 15px;
   line-height: 1.5;

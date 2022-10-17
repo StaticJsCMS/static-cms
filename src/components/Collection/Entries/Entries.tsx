@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { translate } from 'react-polyglot';
 
@@ -9,7 +9,7 @@ import type { CollectionViewStyle } from '../../../constants/collectionViews';
 import type { Collection, Collections, Entry, TranslatedProps } from '../../../interface';
 import type Cursor from '../../../lib/util/Cursor';
 
-const PaginationMessage = styled.div`
+const PaginationMessage = styled('div')`
   padding: 16px;
   text-align: center;
 `;

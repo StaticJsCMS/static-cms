@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import PhotoIcon from '@mui/icons-material/Photo';
 import Button from '@mui/material/Button';
@@ -78,7 +78,7 @@ const ImageWrapper = styled(
   `,
 );
 
-const SortableImageButtonsWrapper = styled.div`
+const SortableImageButtonsWrapper = styled('div')`
   display: flex;
   justify-content: center;
   column-gap: 10px;
@@ -87,7 +87,7 @@ const SortableImageButtonsWrapper = styled.div`
   margin-bottom: 10px;
 `;
 
-const StyledImage = styled.img`
+const StyledImage = styled('img')`
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -144,7 +144,7 @@ const SortableImage = SortableElement<SortableImageProps>(
   },
 );
 
-const StyledSortableMultiImageWrapper = styled.div`
+const StyledSortableMultiImageWrapper = styled('div')`
   display: flex;
   flex-wrap: wrap;
 `;
@@ -177,7 +177,7 @@ const SortableMultiImageWrapper = SortableContainer<SortableMultiImageWrapperPro
   },
 );
 
-const FileLink = styled.a`
+const FileLink = styled('a')`
   margin-bottom: 20px;
   font-weight: normal;
   color: inherit;
@@ -189,11 +189,11 @@ const FileLink = styled.a`
   }
 `;
 
-const FileLinks = styled.div`
+const FileLinks = styled('div')`
   margin-bottom: 12px;
 `;
 
-const FileLinkList = styled.ul`
+const FileLinkList = styled('ul')`
   list-style-type: none;
 `;
 

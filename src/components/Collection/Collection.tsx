@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
@@ -34,16 +34,16 @@ import type { ConnectedProps } from 'react-redux';
 import type { Collection, TranslatedProps, ViewFilter, ViewGroup } from '../../interface';
 import type { RootState } from '../../store';
 
-const CollectionMain = styled.main`
+const CollectionMain = styled('main')`
   width: 100%;
 `;
 
-const SearchResultContainer = styled.div`
+const SearchResultContainer = styled('div')`
   ${components.cardTop};
   margin-bottom: 22px;
 `;
 
-const SearchResultHeading = styled.h1`
+const SearchResultHeading = styled('h1')`
   ${components.cardTopHeading};
 `;
 

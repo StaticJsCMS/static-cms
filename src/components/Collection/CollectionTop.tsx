@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -10,17 +10,17 @@ import { components } from '../../components/UI/styles';
 
 import type { Collection, TranslatedProps } from '../../interface';
 
-const CollectionTopRow = styled.div`
+const CollectionTopRow = styled('div')`
   display: flex;
   align-items: center;
   justify-content: space-between;
 `;
 
-const CollectionTopHeading = styled.h1`
+const CollectionTopHeading = styled('h1')`
   ${components.cardTopHeading};
 `;
 
-const CollectionTopDescription = styled.p`
+const CollectionTopDescription = styled('p')`
   ${components.cardTopDescription};
   margin-bottom: 0;
 `;

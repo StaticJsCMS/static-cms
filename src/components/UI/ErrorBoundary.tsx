@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import cleanStack from 'clean-stack';
 import copyToClipboard from 'copy-text-to-clipboard';
 import truncate from 'lodash/truncate';
@@ -69,7 +69,7 @@ function buildIssueUrl(title: string, config: Config) {
   }
 }
 
-const ErrorBoundaryContainer = styled.div`
+const ErrorBoundaryContainer = styled('div')`
   padding: 40px;
 
   h1 {
@@ -99,11 +99,11 @@ const ErrorBoundaryContainer = styled.div`
   }
 `;
 
-const PrivacyWarning = styled.span`
+const PrivacyWarning = styled('span')`
   color: ${colors.text};
 `;
 
-const CopyButton = styled.button`
+const CopyButton = styled('button')`
   ${buttons.button};
   ${buttons.default};
   ${buttons.gray};

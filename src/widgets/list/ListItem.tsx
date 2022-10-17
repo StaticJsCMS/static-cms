@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import partial from 'lodash/partial';
 import React, { useCallback, useMemo, useState } from 'react';
 import { SortableElement, SortableHandle } from 'react-sortable-hoc';

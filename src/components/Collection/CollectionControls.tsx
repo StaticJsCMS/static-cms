@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 
 import FilterControl from './FilterControl';
@@ -18,7 +18,7 @@ import type {
   ViewGroup,
 } from '../../interface';
 
-const CollectionControlsContainer = styled.div`
+const CollectionControlsContainer = styled('div')`
   display: flex;
   align-items: center;
   flex-direction: row-reverse;

@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
@@ -12,7 +12,7 @@ import { colors, transitions } from './styles';
 import type { MouseEvent, ReactNode } from 'react';
 import type { Field, TranslatedProps } from '../../interface';
 
-const TopBarContainer = styled.div`
+const TopBarContainer = styled('div')`
   position: relative;
   align-items: center;
   background-color: ${colors.textFieldBorder};

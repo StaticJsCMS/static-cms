@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import React, { useCallback } from 'react';
 
 import GoBackButton from '../../components/UI/GoBackButton';
@@ -8,7 +8,7 @@ import { buttons, shadows } from '../../components/UI/styles';
 import type { MouseEvent } from 'react';
 import type { AuthenticationPageProps, TranslatedProps } from '../../interface';
 
-const StyledAuthenticationPage = styled.section`
+const StyledAuthenticationPage = styled('section')`
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
@@ -21,7 +21,7 @@ const PageLogoIcon = styled(Icon)`
   margin-top: -300px;
 `;
 
-const LoginButton = styled.button`
+const LoginButton = styled('button')`
   ${buttons.button};
   ${shadows.dropDeep};
   ${buttons.default};

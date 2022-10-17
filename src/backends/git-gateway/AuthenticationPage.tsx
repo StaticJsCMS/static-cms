@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import AuthenticationPage from '../../components/UI/AuthenticationPage';
@@ -7,7 +7,7 @@ import { buttons, colors, colorsRaw, lengths, shadows, zIndex } from '../../comp
 import type { ChangeEvent, FormEvent } from 'react';
 import type { AuthenticationPageProps, TranslatedProps, User } from '../../interface';
 
-const LoginButton = styled.button`
+const LoginButton = styled('button')`
   ${buttons.button};
   ${shadows.dropDeep};
   ${buttons.default};
@@ -19,12 +19,12 @@ const LoginButton = styled.button`
   margin-left: auto;
 `;
 
-const AuthForm = styled.form`
+const AuthForm = styled('form')`
   width: 350px;
   margin-top: -80px;
 `;
 
-const AuthInput = styled.input`
+const AuthInput = styled('input')`
   background-color: ${colorsRaw.white};
   border-radius: ${lengths.borderRadius};
 
@@ -44,7 +44,7 @@ const AuthInput = styled.input`
   }
 `;
 
-const ErrorMessage = styled.p`
+const ErrorMessage = styled('p')`
   color: ${colors.errorText};
 `;
 
