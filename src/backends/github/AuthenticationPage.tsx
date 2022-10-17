@@ -47,17 +47,6 @@ const GitHubAuthenticationPage = ({
     [authEndpoint, base_url, config.backend, onLogin, siteId],
   );
 
-  const renderLoginButton = useCallback(() => {
-    return inProgress ? (
-      t('auth.loggingIn')
-    ) : (
-      <React.Fragment>
-        <LoginButtonIcon type="github" />
-        {t('auth.loginWithGitHub')}
-      </React.Fragment>
-    );
-  }, [inProgress, t]);
-
   return (
     <AuthenticationPage
       onLogin={handleLogin}
@@ -65,7 +54,8 @@ const GitHubAuthenticationPage = ({
       loginErrorMessage={loginError}
       logoUrl={config.logo_url}
       siteUrl={config.site_url}
-      renderButtonContent={renderLoginButton}
+      icon={<LoginButtonIcon type="github" />}
+      buttonContent={t('auth.loginWithGitHub')}
       t={t}
     />
   );

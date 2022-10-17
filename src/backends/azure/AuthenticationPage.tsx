@@ -1,4 +1,3 @@
-import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import alert from '../../components/UI/Alert';
@@ -8,10 +7,6 @@ import { ImplicitAuthenticator } from '../../lib/auth';
 
 import type { MouseEvent } from 'react';
 import type { AuthenticationPageProps, TranslatedProps } from '../../interface';
-
-const LoginButtonIcon = styled(Icon)`
-  margin-right: 18px;
-`;
 
 const AzureAuthenticationPage = ({
   inProgress = false,
@@ -75,12 +70,8 @@ const AzureAuthenticationPage = ({
       loginDisabled={inProgress}
       loginErrorMessage={loginError}
       logoUrl={config.logo_url}
-      renderButtonContent={() => (
-        <React.Fragment>
-          <LoginButtonIcon type="azure" />
-          {inProgress ? t('auth.loggingIn') : t('auth.loginWithAzure')}
-        </React.Fragment>
-      )}
+      icon={<Icon type="azure" />}
+      buttonContent={inProgress ? t('auth.loggingIn') : t('auth.loginWithAzure')}
       t={t}
     />
   );

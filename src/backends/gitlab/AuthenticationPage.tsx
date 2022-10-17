@@ -10,7 +10,7 @@ import type { MouseEvent } from 'react';
 import type {
   AuthenticationPageProps,
   AuthenticatorConfig,
-  TranslatedProps,
+  TranslatedProps
 } from '../../interface';
 
 const LoginButtonIcon = styled(Icon)`
@@ -90,12 +90,8 @@ const GitLabAuthenticationPage = ({
       loginErrorMessage={loginError}
       logoUrl={config.logo_url}
       siteUrl={config.site_url}
-      renderButtonContent={() => (
-        <React.Fragment>
-          <LoginButtonIcon type="gitlab" />{' '}
-          {inProgress ? t('auth.loggingIn') : t('auth.loginWithGitLab')}
-        </React.Fragment>
-      )}
+      icon={<LoginButtonIcon type="gitlab" />}
+      buttonContent={inProgress ? t('auth.loggingIn') : t('auth.loginWithGitLab')}
       t={t}
     />
   );

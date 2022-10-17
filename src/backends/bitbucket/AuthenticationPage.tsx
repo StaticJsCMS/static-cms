@@ -86,12 +86,8 @@ const BitbucketAuthenticationPage = ({
       loginErrorMessage={loginError}
       logoUrl={config.logo_url}
       siteUrl={config.site_url}
-      renderButtonContent={() => (
-        <React.Fragment>
-          <LoginButtonIcon type="bitbucket" />
-          {inProgress ? t('auth.loggingIn') : t('auth.loginWithBitbucket')}
-        </React.Fragment>
-      )}
+      icon={<LoginButtonIcon type="bitbucket" />}
+      buttonContent={inProgress ? t('auth.loggingIn') : t('auth.loginWithBitbucket')}
       t={t}
     />
   );

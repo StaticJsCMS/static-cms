@@ -1,8 +1,8 @@
+import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import React from 'react';
 
 import GoBackButton from './GoBackButton';
-import { buttons, shadows } from './styles';
 import Icon from './Icon';
 
 import type { MouseEventHandler, ReactNode } from 'react';
@@ -10,7 +10,7 @@ import type { TranslatedProps } from '../../interface';
 
 const StyledAuthenticationPage = styled('section')`
   display: flex;
-  flex-flow: column nowrap;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
@@ -18,19 +18,16 @@ const StyledAuthenticationPage = styled('section')`
 
 const CustomIconWrapper = styled('span')`
   width: 300px;
-  height: 200px;
+  height: 15∏0px;
   margin-top: -150px;
 `;
 
 const SimpleLogoIcon = styled(Icon)`
   color: #c4c6d2;
-  margin-top: -300px;
 `;
 
 const StaticCustomIcon = styled(Icon)`
   color: #c4c6d2;
-  position: absolute;
-  bottom: 10px;
 `;
 
 const CustomLogoIcon = ({ url }: { url: string }) => {
@@ -45,35 +42,8 @@ const renderPageLogo = (logoUrl?: string) => {
   if (logoUrl) {
     return <CustomLogoIcon url={logoUrl} />;
   }
-  return <SimpleLogoIcon size="300px" type="static-cms" />;
+  return <SimpleLogoIcon width={300} height={150} type="static-cms" />;
 };
-
-const LoginButton = styled('button')`
-  ${buttons.button};
-  ${shadows.dropDeep};
-  ${buttons.default};
-  ${buttons.gray};
-  &[disabled] {
-    ${buttons.disabled};
-  }
-
-  padding: 0 12px;
-  margin-top: -40px;
-  display: flex;
-  align-items: center;
-  position: relative;
-`;
-
-const TextButton = styled('button')`
-  ${buttons.button};
-  ${buttons.default};
-  ${buttons.grayText};
-
-  margin-top: 40px;
-  display: flex;
-  align-items: center;
-  position: relative;
-`;
 
 export interface AuthenticationPageProps {
   onLogin?: MouseEventHandler<HTMLButtonElement>;
@@ -81,20 +51,18 @@ export interface AuthenticationPageProps {
   siteUrl?: string;
   loginDisabled?: boolean;
   loginErrorMessage?: ReactNode;
-  renderButtonContent?: () => ReactNode;
-  renderPageContent?: (options: {
-    LoginButton: typeof LoginButton;
-    TextButton: typeof TextButton;
-    showAbortButton: boolean;
-  }) => ReactNode;
+  icon?: ReactNode;
+  buttonContent?: ReactNode;
+  pageContent?: ReactNode;
 }
 
 const AuthenticationPage = ({
   onLogin,
   loginDisabled,
   loginErrorMessage,
-  renderButtonContent,
-  renderPageContent,
+  icon,
+  buttonContent,
+  pageContent,
   logoUrl,
   siteUrl,
   t,
@@ -103,16 +71,14 @@ const AuthenticationPage = ({
     <StyledAuthenticationPage>
       {renderPageLogo(logoUrl)}
       {loginErrorMessage ? <p>{loginErrorMessage}</p> : null}
-      {!renderPageContent
-        ? null
-        : renderPageContent({ LoginButton, TextButton, showAbortButton: !siteUrl })}
-      {!renderButtonContent ? null : (
-        <LoginButton disabled={loginDisabled} onClick={onLogin}>
-          {renderButtonContent()}
-        </LoginButton>
-      )}
+      {pageContent ?? null}
+      {buttonContent ? (
+        <Button variant="contained" disabled={loginDisabled} onClick={onLogin} startIcon={icon}>
+          {buttonContent}
+        </Button>
+      ) : null}
       {siteUrl ? <GoBackButton href={siteUrl} t={t} /> : null}
-      {logoUrl ? <StaticCustomIcon size="100px" type="static-cms" /> : null}
+      {logoUrl ? <StaticCustomIcon width={100} height={100} type="static-cms" /> : null}
     </StyledAuthenticationPage>
   );
 };
