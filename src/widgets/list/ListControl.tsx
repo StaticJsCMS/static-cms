@@ -14,7 +14,7 @@ import { resolveFieldKeyType, TYPES_KEY } from './typedListHelpers';
 import transientOptions from '../../lib/util/transientOptions';
 
 import type { MouseEvent } from 'react';
-import type { Field, FieldList, ObjectValue, WidgetControlProps } from '../../interface';
+import type { Field, ListField, ObjectValue, WidgetControlProps } from '../../interface';
 
 const StyledListWrapper = styled('div')`
   position: relative;
@@ -123,7 +123,7 @@ const ListControl = ({
   query,
   t,
   value,
-}: WidgetControlProps<ObjectValue[], FieldList>) => {
+}: WidgetControlProps<ObjectValue[], ListField>) => {
   const internalValue = useMemo(() => value ?? [], [value]);
   const [collapsed, setCollapsed] = useState(field.collapsed ?? true);
   const [keys, setKeys] = useState(Array.from({ length: internalValue.length }, () => uuid()));

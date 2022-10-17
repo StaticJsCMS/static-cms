@@ -14,7 +14,7 @@ import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
 import Outline from '../../components/UI/Outline';
 
 import type { MouseEvent, MouseEventHandler } from 'react';
-import type { FieldFileOrImage, GetAssetFunction, WidgetControlProps } from '../../interface';
+import type { FileOrImageField, GetAssetFunction, WidgetControlProps } from '../../interface';
 
 const MAX_DISPLAY_LENGTH = 50;
 
@@ -122,7 +122,7 @@ const SortableImageButtons = ({ onRemove, onReplace }: SortableImageButtonsProps
 interface SortableImageProps {
   itemValue: string;
   getAsset: GetAssetFunction;
-  field: FieldFileOrImage;
+  field: FileOrImageField;
   onRemove: MouseEventHandler;
   onReplace: MouseEventHandler;
 }
@@ -152,7 +152,7 @@ const StyledSortableMultiImageWrapper = styled('div')`
 interface SortableMultiImageWrapperProps {
   items: string[];
   getAsset: GetAssetFunction;
-  field: FieldFileOrImage;
+  field: FileOrImageField;
   onRemoveOne: (index: number) => MouseEventHandler;
   onReplaceOne: (index: number) => MouseEventHandler;
 }
@@ -234,7 +234,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
     getAsset,
     mediaPaths,
     t,
-  }: WidgetControlProps<string | string[], FieldFileOrImage>) => {
+  }: WidgetControlProps<string | string[], FileOrImageField>) => {
     const controlID = useMemo(() => uuid(), []);
     const [collapsed, setCollapsed] = useState(false);
 

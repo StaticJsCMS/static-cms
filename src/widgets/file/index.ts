@@ -2,11 +2,11 @@ import withFileControl, { getValidValue } from './withFileControl';
 import previewComponent from './FilePreview';
 import schema from './schema';
 
-import type { FieldFileOrImage, WidgetParam } from '../../interface';
+import type { FileOrImageField, WidgetParam } from '../../interface';
 
 const controlComponent = withFileControl();
 
-const FileWidget = (): WidgetParam<string | string[], FieldFileOrImage> => {
+const FileWidget = (): WidgetParam<string | string[], FileOrImageField> => {
   return {
     name: 'file',
     controlComponent,

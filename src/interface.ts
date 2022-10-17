@@ -529,7 +529,7 @@ export type AuthScope = 'repo' | 'public_repo';
 
 export type SlugEncoding = 'unicode' | 'ascii';
 
-export interface FieldBase {
+export interface BaseField {
   name: string;
   label?: string;
   required?: boolean;
@@ -541,12 +541,12 @@ export interface FieldBase {
   comment?: string;
 }
 
-export interface FieldBoolean extends FieldBase {
+export interface BooleanField extends BaseField {
   widget: 'boolean';
   default?: boolean;
 }
 
-export interface FieldCode extends FieldBase {
+export interface CodeField extends BaseField {
   widget: 'code';
   default?: unknown;
 
@@ -560,7 +560,7 @@ export interface FieldCode extends FieldBase {
   } & Record<string, unknown>;
 }
 
-export interface FieldColor extends FieldBase {
+export interface ColorField extends BaseField {
   widget: 'color';
   default?: string;
 
@@ -568,7 +568,7 @@ export interface FieldColor extends FieldBase {
   enableAlpha?: boolean;
 }
 
-export interface FieldDateTime extends FieldBase {
+export interface DateTimeField extends BaseField {
   widget: 'datetime';
   default?: string;
 
@@ -591,7 +591,7 @@ export interface FieldDateTime extends FieldBase {
   pickerUtc?: boolean;
 }
 
-export interface FieldFileOrImage extends FieldBase {
+export interface FileOrImageField extends BaseField {
   widget: 'file' | 'image';
   default?: string;
 
@@ -599,7 +599,7 @@ export interface FieldFileOrImage extends FieldBase {
   private?: boolean;
 }
 
-export interface FieldObject extends FieldBase {
+export interface ObjectField extends BaseField {
   widget: 'object';
   default?: unknown;
 
@@ -608,7 +608,7 @@ export interface FieldObject extends FieldBase {
   fields: Field[];
 }
 
-export interface FieldList extends FieldBase {
+export interface ListField extends BaseField {
   widget: 'list';
   default?: unknown;
 
@@ -622,11 +622,11 @@ export interface FieldList extends FieldBase {
   max?: number;
   min?: number;
   add_to_top?: boolean;
-  types?: FieldObject[];
+  types?: ObjectField[];
   typeKey?: string;
 }
 
-export interface FieldMap extends FieldBase {
+export interface MapField extends BaseField {
   widget: 'map';
   default?: string;
 
@@ -635,7 +635,7 @@ export interface FieldMap extends FieldBase {
   height?: string;
 }
 
-export interface FieldMarkdown extends FieldBase {
+export interface MarkdownField extends BaseField {
   widget: 'markdown';
   default?: string;
 
@@ -653,7 +653,7 @@ export interface FieldMarkdown extends FieldBase {
   public_folder?: string;
 }
 
-export interface FieldNumber extends FieldBase {
+export interface NumberField extends BaseField {
   widget: 'number';
   default?: string | number;
 
@@ -669,7 +669,7 @@ export interface FieldNumber extends FieldBase {
   valueType?: 'int' | 'float' | string;
 }
 
-export interface FieldSelect extends FieldBase {
+export interface SelectField extends BaseField {
   widget: 'select';
   default?: string | string[];
 
@@ -679,7 +679,7 @@ export interface FieldSelect extends FieldBase {
   max?: number;
 }
 
-export interface FieldRelation extends FieldBase {
+export interface RelationField extends BaseField {
   widget: 'relation';
   default?: string | string[];
 
@@ -711,32 +711,32 @@ export interface FieldRelation extends FieldBase {
   optionsLength?: number;
 }
 
-export interface FieldHidden extends FieldBase {
+export interface HiddenField extends BaseField {
   widget: 'hidden';
   default?: unknown;
 }
 
-export interface FieldStringOrText extends FieldBase {
+export interface StringOrTextField extends BaseField {
   // This is the default widget, so declaring its type is optional.
   widget?: 'string' | 'text';
   default?: string;
 }
 
 export type Field =
-  | FieldBoolean
-  | FieldCode
-  | FieldColor
-  | FieldDateTime
-  | FieldFileOrImage
-  | FieldList
-  | FieldMap
-  | FieldMarkdown
-  | FieldNumber
-  | FieldObject
-  | FieldRelation
-  | FieldSelect
-  | FieldHidden
-  | FieldStringOrText;
+  | BooleanField
+  | CodeField
+  | ColorField
+  | DateTimeField
+  | FileOrImageField
+  | ListField
+  | MapField
+  | MarkdownField
+  | NumberField
+  | ObjectField
+  | RelationField
+  | SelectField
+  | HiddenField
+  | StringOrTextField;
 
 export interface ViewFilter {
   id: string;

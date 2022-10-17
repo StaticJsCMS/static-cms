@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 
 import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { FieldFileOrImage, WidgetPreviewProps, GetAssetFunction } from '../../interface';
+import type { FileOrImageField, WidgetPreviewProps, GetAssetFunction } from '../../interface';
 
 interface StyledImageProps {
   src: string;
@@ -20,7 +20,7 @@ const StyledImage = styled(({ src }: StyledImageProps) => (
 interface StyledImageAsset {
   getAsset: GetAssetFunction;
   value: string;
-  field: FieldFileOrImage;
+  field: FileOrImageField;
 }
 
 function StyledImageAsset({ getAsset, value, field }: StyledImageAsset) {
@@ -31,7 +31,7 @@ function ImagePreviewContent({
   value,
   getAsset,
   field,
-}: WidgetPreviewProps<string | string[], FieldFileOrImage>) {
+}: WidgetPreviewProps<string | string[], FileOrImageField>) {
   if (!value) {
     return null;
   }
@@ -49,7 +49,7 @@ function ImagePreviewContent({
   return <StyledImageAsset value={value} getAsset={getAsset} field={field} />;
 }
 
-function ImagePreview(props: WidgetPreviewProps<string | string[], FieldFileOrImage>) {
+function ImagePreview(props: WidgetPreviewProps<string | string[], FileOrImageField>) {
   return (
     <WidgetPreviewContainer>
       {props.value ? <ImagePreviewContent {...props} /> : null}

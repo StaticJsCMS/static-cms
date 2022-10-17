@@ -18,8 +18,8 @@ import type {
   Entry,
   EntryData,
   Field,
-  FieldList,
-  FieldObject,
+  ListField,
+  ObjectField,
   ObjectValue,
   WidgetControlProps,
 } from '../../interface';
@@ -97,7 +97,7 @@ function handleSummary(summary: string, entry: Entry, label: string, item: Objec
   return compileStringTemplate(summary, null, '', data);
 }
 
-function validateItem(field: FieldList, item: ObjectValue) {
+function validateItem(field: ListField, item: ObjectValue) {
   if (!(typeof item === 'object')) {
     console.warn(
       `'${field.name}' field item value value should be an object but is a '${typeof item}'`,
@@ -108,7 +108,7 @@ function validateItem(field: FieldList, item: ObjectValue) {
   return true;
 }
 
-interface ListItemProps extends WidgetControlProps<ObjectValue, FieldList> {
+interface ListItemProps extends WidgetControlProps<ObjectValue, ListField> {
   valueType: ListValueType;
   index: number;
   handleRemove: (index: number, event: MouseEvent) => void;
@@ -148,7 +148,7 @@ const ListItem = ({
   handleRemove,
   value,
 }: ListItemProps) => {
-  const [objectLabel, objectField] = useMemo((): [string, FieldList | FieldObject] => {
+  const [objectLabel, objectField] = useMemo((): [string, ListField | ObjectField] => {
     const base = field.label ?? field.name;
     if (!value) {
       return [base, field];

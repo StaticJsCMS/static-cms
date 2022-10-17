@@ -14,7 +14,7 @@ import { transientOptions } from '../../lib';
 
 import type { ChangeEvent, MouseEvent } from 'react';
 import type { ColorResult } from 'react-color';
-import type { FieldColor, WidgetControlProps } from '../../interface';
+import type { ColorField, WidgetControlProps } from '../../interface';
 
 const StyledColorControlWrapper = styled('div')`
   display: flex;
@@ -109,7 +109,7 @@ const ColorControl = ({
   onChange,
   value,
   t,
-}: WidgetControlProps<string, FieldColor>) => {
+}: WidgetControlProps<string, ColorField>) => {
   const [collapsed, setCollapsed] = useState(false);
 
   const handleCollapseToggle = useCallback(() => {

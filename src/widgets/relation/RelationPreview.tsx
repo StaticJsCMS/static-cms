@@ -2,9 +2,9 @@ import React from 'react';
 
 import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { FieldRelation, WidgetPreviewProps } from '../../interface';
+import type { RelationField, WidgetPreviewProps } from '../../interface';
 
-function RelationPreview({ value }: WidgetPreviewProps<string | string[], FieldRelation>) {
+function RelationPreview({ value }: WidgetPreviewProps<string | string[], RelationField>) {
   return <WidgetPreviewContainer>{value}</WidgetPreviewContainer>;
 }
 

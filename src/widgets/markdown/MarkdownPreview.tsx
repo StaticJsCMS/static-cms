@@ -4,14 +4,14 @@ import React from 'react';
 import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 import { markdownToHtml } from './serializers';
 
-import type { FieldMarkdown, WidgetPreviewProps } from '../../interface';
+import type { MarkdownField, WidgetPreviewProps } from '../../interface';
 
 const MarkdownPreview = ({
   value,
   getAsset,
   field,
   getRemarkPlugins,
-}: WidgetPreviewProps<string, FieldMarkdown>) => {
+}: WidgetPreviewProps<string, MarkdownField>) => {
   if (!value) {
     return null;
   }

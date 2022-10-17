@@ -2,9 +2,9 @@ import controlComponent from './MarkdownControl';
 import previewComponent from './MarkdownPreview';
 import schema from './schema';
 
-import type { FieldMarkdown, WidgetParam } from '../../interface';
+import type { MarkdownField, WidgetParam } from '../../interface';
 
-const MarkdownWidget = (): WidgetParam<string, FieldMarkdown> => {
+const MarkdownWidget = (): WidgetParam<string, MarkdownField> => {
   return {
     name: 'markdown',
     controlComponent,

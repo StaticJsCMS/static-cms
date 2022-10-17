@@ -2,9 +2,9 @@ import React from 'react';
 
 import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { FieldColor, WidgetPreviewProps } from '../../interface';
+import type { ColorField, WidgetPreviewProps } from '../../interface';
 
-const ColorPreview = ({ value }: WidgetPreviewProps<string, FieldColor>) => {
+const ColorPreview = ({ value }: WidgetPreviewProps<string, ColorField>) => {
   return <WidgetPreviewContainer>{value}</WidgetPreviewContainer>;
 };
 

@@ -2,9 +2,9 @@ import controlComponent, { validateMinMax } from './NumberControl';
 import previewComponent from './NumberPreview';
 import schema from './schema';
 
-import type { FieldNumber, WidgetParam } from '../../interface';
+import type { NumberField, WidgetParam } from '../../interface';
 
-const NumberWidget = (): WidgetParam<string | number, FieldNumber> => {
+const NumberWidget = (): WidgetParam<string | number, NumberField> => {
   return {
     name: 'number',
     controlComponent,

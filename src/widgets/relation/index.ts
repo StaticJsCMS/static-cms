@@ -3,13 +3,13 @@ import previewComponent from './RelationPreview';
 import schema from './schema';
 import { validations } from '../../lib/widgets';
 
-import type { FieldRelation, WidgetParam } from '../../interface';
+import type { RelationField, WidgetParam } from '../../interface';
 
-function isMultiple(field: FieldRelation) {
+function isMultiple(field: RelationField) {
   return field.multiple ?? false;
 }
 
-function RelationWidget(): WidgetParam<string | string[], FieldRelation> {
+function RelationWidget(): WidgetParam<string | string[], RelationField> {
   return {
     name: 'relation',
     controlComponent,

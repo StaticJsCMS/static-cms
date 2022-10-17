@@ -1,20 +1,20 @@
-import type { FieldList, FieldObject, ObjectValue } from '../../interface';
+import type { ListField, ObjectField, ObjectValue } from '../../interface';
 
 export const TYPES_KEY = 'types';
 export const TYPE_KEY = 'typeKey';
 export const DEFAULT_TYPE_KEY = 'type';
 
 export function getTypedFieldForValue(
-  field: FieldList,
+  field: ListField,
   value: ObjectValue | undefined | null,
-): FieldObject | undefined {
+): ObjectField | undefined {
   const typeKey = resolveFieldKeyType(field);
   const types = field[TYPES_KEY] ?? [];
   const valueType = value?.[typeKey] ?? {};
   return types.find(type => type.name === valueType);
 }
 
-export function resolveFunctionForTypedField(field: FieldList) {
+export function resolveFunctionForTypedField(field: ListField) {
   const typeKey = resolveFieldKeyType(field);
   const types = field[TYPES_KEY] ?? [];
   return (value: ObjectValue) => {
@@ -23,12 +23,12 @@ export function resolveFunctionForTypedField(field: FieldList) {
   };
 }
 
-export function resolveFieldKeyType(field: FieldList) {
+export function resolveFieldKeyType(field: ListField) {
   return (TYPE_KEY in field && field[TYPE_KEY]) || DEFAULT_TYPE_KEY;
 }
 
 export function getErrorMessageForTypedFieldAndValue(
-  field: FieldList,
+  field: ListField,
   value: ObjectValue | undefined | null,
 ) {
   const keyType = resolveFieldKeyType(field);

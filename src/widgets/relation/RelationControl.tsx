@@ -15,7 +15,7 @@ import {
 } from '../../lib/widgets/stringTemplate';
 
 import type { ListChildComponentProps } from 'react-window';
-import type { Entry, EntryData, FieldRelation, WidgetControlProps } from '../../interface';
+import type { Entry, EntryData, RelationField, WidgetControlProps } from '../../interface';
 
 // TODO Remove if sorting not needed
 // function arrayMove(array, from, to) {
@@ -112,7 +112,7 @@ const RelationControl = ({
   onChange,
   query,
   locale,
-}: WidgetControlProps<string | string[], FieldRelation>) => {
+}: WidgetControlProps<string | string[], RelationField>) => {
   const [internalValue, setInternalValue] = useState(value);
   const [initialOptions, setInitialOptions] = useState<HitOption[]>([]);
 

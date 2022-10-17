@@ -1,9 +1,9 @@
 import controlComponent from './TextControl';
 import previewComponent from './TextPreview';
 
-import type { FieldStringOrText, WidgetParam } from '../../interface';
+import type { StringOrTextField, WidgetParam } from '../../interface';
 
-const TextWidget = (): WidgetParam<string, FieldStringOrText> => {
+const TextWidget = (): WidgetParam<string, StringOrTextField> => {
   return {
     name: 'text',
     controlComponent,

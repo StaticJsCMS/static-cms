@@ -85,6 +85,16 @@ collections:
               - title
               - body
             value_field: '{{title}}|{{date}}'
+  - name: validations
+    label: Validations
+    delete: false
+    editor:
+      preview: false
+    files:
+      - name: number
+        label: Number
+        fields:
+          - name:
   - name: settings
     label: Settings
     delete: false

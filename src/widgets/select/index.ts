@@ -3,9 +3,9 @@ import previewComponent from './SelectPreview';
 import schema from './schema';
 import { validateMinMax } from '../../lib/widgets/validations';
 
-import type { FieldSelect, WidgetParam } from '../../interface';
+import type { SelectField, WidgetParam } from '../../interface';
 
-const SelectWidget = (): WidgetParam<string | string[], FieldSelect> => {
+const SelectWidget = (): WidgetParam<string | string[], SelectField> => {
   return {
     name: 'select',
     controlComponent,

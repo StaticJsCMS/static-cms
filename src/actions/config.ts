@@ -17,9 +17,9 @@ import type {
   Collection,
   Config,
   Field,
-  FieldBase,
-  FieldList,
-  FieldObject,
+  BaseField,
+  ListField,
+  ObjectField,
   I18nInfo,
   LocalBackend,
 } from '../interface';
@@ -29,12 +29,12 @@ export const CONFIG_REQUEST = 'CONFIG_REQUEST';
 export const CONFIG_SUCCESS = 'CONFIG_SUCCESS';
 export const CONFIG_FAILURE = 'CONFIG_FAILURE';
 
-function isObjectField(field: Field): field is FieldBase & FieldObject {
-  return 'fields' in (field as FieldObject);
+function isObjectField(field: Field): field is BaseField & ObjectField {
+  return 'fields' in (field as ObjectField);
 }
 
-function isFieldList(field: Field): field is FieldBase & FieldList {
-  return 'types' in (field as FieldList) || 'field' in (field as FieldList);
+function isFieldList(field: Field): field is BaseField & ListField {
+  return 'types' in (field as ListField) || 'field' in (field as ListField);
 }
 
 function traverseFieldsJS<F extends Field>(

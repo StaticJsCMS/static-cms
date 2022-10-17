@@ -5,7 +5,7 @@ import Select from '@mui/material/Select';
 import React, { useCallback, useEffect } from 'react';
 
 import type { SelectChangeEvent } from '@mui/material/Select';
-import type { FieldSelect, WidgetControlProps } from '../../interface';
+import type { SelectField, WidgetControlProps } from '../../interface';
 
 interface Option {
   label: string;
@@ -26,7 +26,7 @@ const SelectControl = ({
   field,
   value,
   onChange,
-}: WidgetControlProps<string | string[], FieldSelect>) => {
+}: WidgetControlProps<string | string[], SelectField>) => {
   const handleChange = useCallback(
     (event: SelectChangeEvent<string | string[]>) => {
       const selectedOption = event.target.value;

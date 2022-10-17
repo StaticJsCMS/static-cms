@@ -2,11 +2,11 @@ import previewComponent from './MapPreview';
 import schema from './schema';
 import withMapControl from './withMapControl';
 
-import type { FieldMap, WidgetParam } from '../../interface';
+import type { MapField, WidgetParam } from '../../interface';
 
 const controlComponent = withMapControl();
 
-const MapWidget = (): WidgetParam<string, FieldMap> => {
+const MapWidget = (): WidgetParam<string, MapField> => {
   return {
     name: 'map',
     controlComponent,

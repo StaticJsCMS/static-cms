@@ -2,7 +2,7 @@ import TextField from '@mui/material/TextField';
 import React, { useCallback, useState } from 'react';
 
 import type { ChangeEvent } from 'react';
-import type { FieldStringOrText, WidgetControlProps } from '../../interface';
+import type { StringOrTextField, WidgetControlProps } from '../../interface';
 
 const StringControl = ({
   path,
@@ -10,7 +10,7 @@ const StringControl = ({
   value,
   label,
   onChange,
-}: WidgetControlProps<string, FieldStringOrText>) => {
+}: WidgetControlProps<string, StringOrTextField>) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
 
   const handleChange = useCallback(

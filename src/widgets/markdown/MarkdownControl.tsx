@@ -6,7 +6,7 @@ import FieldLabel from '../../components/UI/FieldLabel';
 import Outline from '../../components/UI/Outline';
 
 import type { RefObject } from 'react';
-import type { FieldMarkdown, WidgetControlProps } from '../../interface';
+import type { MarkdownField, WidgetControlProps } from '../../interface';
 
 import '@toast-ui/editor/dist/toastui-editor.css';
 
@@ -37,7 +37,7 @@ const MarkdownControl = ({
   value,
   fieldsErrors,
   onChange,
-}: WidgetControlProps<string, FieldMarkdown>) => {
+}: WidgetControlProps<string, MarkdownField>) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
   const editorRef = useMemo(() => React.createRef(), []) as RefObject<Editor>;
   const [hasFocus, setHasFocus] = useState(false);

@@ -12,7 +12,7 @@ import formatISO from 'date-fns/formatISO';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { MouseEvent } from 'react';
-import type { FieldDateTime, WidgetControlProps, TranslatedProps } from '../../interface';
+import type { DateTimeField, WidgetControlProps, TranslatedProps } from '../../interface';
 
 const StyledNowButton = styled('div')`
   width: fit-content;
@@ -55,7 +55,7 @@ const DateTimeControl = ({
   t,
   isDisabled,
   onChange,
-}: WidgetControlProps<string, FieldDateTime>) => {
+}: WidgetControlProps<string, DateTimeField>) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
 
   const { format, dateFormat, timeFormat } = useMemo(() => {

@@ -2,9 +2,9 @@ import React from 'react';
 
 import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { FieldDateTime, WidgetPreviewProps } from '../../interface';
+import type { DateTimeField, WidgetPreviewProps } from '../../interface';
 
-function DatePreview({ value }: WidgetPreviewProps<string, FieldDateTime>) {
+function DatePreview({ value }: WidgetPreviewProps<string, DateTimeField>) {
   return <WidgetPreviewContainer>{value ? value.toString() : null}</WidgetPreviewContainer>;
 }
 

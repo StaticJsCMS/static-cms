@@ -3,9 +3,9 @@ import isString from 'lodash/isString';
 
 import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { FieldCode, WidgetPreviewProps } from '../../interface';
+import type { CodeField, WidgetPreviewProps } from '../../interface';
 
-function toValue(value: string | Record<string, string> | undefined | null, field: FieldCode) {
+function toValue(value: string | Record<string, string> | undefined | null, field: CodeField) {
   if (isString(value)) {
     return value;
   }
@@ -20,7 +20,7 @@ function toValue(value: string | Record<string, string> | undefined | null, fiel
 const CodePreview = ({
   value,
   field,
-}: WidgetPreviewProps<string | Record<string, string>, FieldCode>) => {
+}: WidgetPreviewProps<string | Record<string, string>, CodeField>) => {
   return (
     <WidgetPreviewContainer>
       <pre>

@@ -2,9 +2,9 @@ import controlComponent from './DateTimeControl';
 import previewComponent from './DateTimePreview';
 import schema from './schema';
 
-import type { FieldDateTime, WidgetParam } from '../../interface';
+import type { DateTimeField, WidgetParam } from '../../interface';
 
-const DateTimeWidget = (): WidgetParam<string, FieldDateTime> => {
+const DateTimeWidget = (): WidgetParam<string, DateTimeField> => {
   return {
     name: 'datetime',
     controlComponent,

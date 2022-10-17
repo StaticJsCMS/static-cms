@@ -10,7 +10,7 @@ import VectorLayer from 'ol/layer/Vector';
 import OSMSource from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 
-import type { FieldMap, WidgetControlProps } from '../../interface';
+import type { MapField, WidgetControlProps } from '../../interface';
 import type { Geometry } from 'ol/geom';
 
 const formatOptions = {
@@ -31,12 +31,12 @@ function getDefaultMap(target: HTMLDivElement, featuresLayer: VectorLayer<Vector
 }
 
 interface WithMapControlProps {
-  getFormat?: (field: FieldMap) => GeoJSON;
+  getFormat?: (field: MapField) => GeoJSON;
   getMap?: (target: HTMLDivElement, featuresLayer: VectorLayer<VectorSource<Geometry>>) => Map;
 }
 
 export default function withMapControl({ getFormat, getMap }: WithMapControlProps = {}) {
-  const MapControl = ({ path, value, field, onChange }: WidgetControlProps<string, FieldMap>) => {
+  const MapControl = ({ path, value, field, onChange }: WidgetControlProps<string, MapField>) => {
     const { height = '400px' } = field;
     const mapContainer: React.LegacyRef<HTMLDivElement> = useMemo(() => React.createRef(), []);
 

@@ -2,9 +2,9 @@ import controlComponent from './ObjectControl';
 import previewComponent from './ObjectPreview';
 import schema from './schema';
 
-import type { FieldList, FieldObject, WidgetParam, ObjectValue } from '../../interface';
+import type { ListField, ObjectField, WidgetParam, ObjectValue } from '../../interface';
 
-const ObjectWidget = (): WidgetParam<ObjectValue, FieldObject | FieldList> => {
+const ObjectWidget = (): WidgetParam<ObjectValue, ObjectField | ListField> => {
   return {
     name: 'object',
     controlComponent,

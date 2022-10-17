@@ -2,7 +2,7 @@ import React from 'react';
 
 import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { FieldSelect, WidgetPreviewProps } from '../../interface';
+import type { SelectField, WidgetPreviewProps } from '../../interface';
 
 interface ListPreviewProps {
   values: string[];
@@ -18,7 +18,7 @@ const ListPreview = ({ values }: ListPreviewProps) => {
   );
 };
 
-const SelectPreview = ({ value }: WidgetPreviewProps<string | string[], FieldSelect>) => {
+const SelectPreview = ({ value }: WidgetPreviewProps<string | string[], SelectField>) => {
   if (!value) {
     return <WidgetPreviewContainer />;
   }

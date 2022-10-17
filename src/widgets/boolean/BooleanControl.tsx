@@ -3,7 +3,7 @@ import Switch from '@mui/material/Switch';
 import React, { useCallback, useState } from 'react';
 
 import type { ChangeEvent } from 'react';
-import type { FieldBoolean, WidgetControlProps } from '../../interface';
+import type { BooleanField, WidgetControlProps } from '../../interface';
 
 const BooleanControl = ({
   path,
@@ -11,7 +11,7 @@ const BooleanControl = ({
   value,
   label,
   onChange,
-}: WidgetControlProps<boolean, FieldBoolean>) => {
+}: WidgetControlProps<boolean, BooleanField>) => {
   const [internalValue, setInternalValue] = useState(value ?? false);
 
   const handleChange = useCallback(
