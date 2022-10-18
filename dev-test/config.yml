@@ -99,6 +99,7 @@ collections:
           - name: required
             label: Required
             widget: code
+            allow_language_selection: true
           - name: pattern
             label: 'Pattern'
             widget: code

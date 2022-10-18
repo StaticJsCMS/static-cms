@@ -208,26 +208,35 @@ const CodeControl = ({
   const [prevLang, setPrevLang] = useState<string | undefined>();
   useEffect(() => {
     if (prevLang !== lang) {
-      handleChangeCodemirrorProps({ lang });
+      setPrevLang(lang);
+      setTimeout(() => {
+        handleChangeCodemirrorProps({ lang });
+      });
     }
-    setPrevLang(lang);
-  }, [handleChangeCodemirrorProps, lang, prevLang]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lang]);
 
   const [prevTheme, setPrevTheme] = useState<string | undefined>();
   useEffect(() => {
     if (prevTheme !== theme) {
-      handleChangeCodemirrorProps({ theme });
+      setPrevTheme(theme);
+      setTimeout(() => {
+        handleChangeCodemirrorProps({ theme });
+      });
     }
-    setPrevTheme(theme);
-  }, [handleChangeCodemirrorProps, theme, prevTheme]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [theme]);
 
   const [prevKeyMap, setPrevKeyMap] = useState<string | undefined>();
   useEffect(() => {
     if (prevKeyMap !== keyMap) {
-      handleChangeCodemirrorProps({ keyMap });
+      setPrevKeyMap(keyMap);
+      setTimeout(() => {
+        handleChangeCodemirrorProps({ keyMap });
+      });
     }
-    setPrevKeyMap(keyMap);
-  }, [handleChangeCodemirrorProps, keyMap, prevKeyMap]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [keyMap]);
 
   const getKeyMapOptions = useCallback(() => {
     return ['emacs', 'vim', 'sublime', 'default'].map(keyMap => ({ value: keyMap, label: keyMap }));

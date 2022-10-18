@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import React from 'react';
 
 import { zIndex } from '../../components/UI/styles';
+import { transientOptions } from '../../lib';
 
 import type { MouseEvent } from 'react';
 
@@ -12,7 +13,10 @@ interface StyledSettingsButtonProps {
   $showClose: boolean;
 }
 
-const StyledSettingsButton = styled(IconButton)<StyledSettingsButtonProps>(
+const StyledSettingsButton = styled(
+  IconButton,
+  transientOptions,
+)<StyledSettingsButtonProps>(
   ({ $showClose }) => `
     position: absolute;
     z-index: ${zIndex.zIndex100};
