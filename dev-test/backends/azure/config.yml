@@ -188,8 +188,8 @@ collections:
       - label: Color string editable and alpha enabled
         name: colorEditable
         widget: color
-        enableAlpha: true
-        allowInput: true
+        enable_alpha: true
+        allow_input: true
       - label: Image
         name: image
         widget: image

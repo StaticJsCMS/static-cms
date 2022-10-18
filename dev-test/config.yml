@@ -104,7 +104,7 @@ collections:
             label: 'Pattern'
             widget: code
             pattern: ['.{12,}', 'Must have at least 12 characters']
-            allowInput: true
+            allow_input: true
             required: false
       - name: color
         label: Color
@@ -118,7 +118,7 @@ collections:
             label: 'Pattern'
             widget: color
             pattern: ['^#([0-9a-fA-F]{3})(?:[0-9a-fA-F]{3})?$', 'Must be a valid hex code']
-            allowInput: true
+            allow_input: true
             required: false
       - name: number
         label: Number
@@ -273,8 +273,8 @@ collections:
       - label: Color string editable and alpha enabled
         name: colorEditable
         widget: color
-        enableAlpha: true
-        allowInput: true
+        enable_alpha: true
+        allow_input: true
       - label: Image
         name: image
         widget: image

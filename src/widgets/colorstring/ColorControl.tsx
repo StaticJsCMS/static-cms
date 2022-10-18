@@ -158,9 +158,9 @@ const ColorControl = ({
     [onChange],
   );
 
-  const allowInput = field.allowInput ?? false;
+  const allowInput = field.allow_input ?? false;
 
-  // clear button is not displayed if allowInput: true
+  // clear button is not displayed if allow_input: true
   const showClearButton = !allowInput && internalValue;
 
   return (
@@ -189,7 +189,7 @@ const ColorControl = ({
               key="color-picker"
               color={internalValue}
               onChange={handlePickerChange}
-              disableAlpha={!(field.enableAlpha ?? false)}
+              disableAlpha={!(field.enable_alpha ?? false)}
             />
           </ColorPickerContainer>
         )}
@@ -203,7 +203,7 @@ const ColorControl = ({
               paddingLeft: '75px',
             },
           }}
-          // make readonly and open color picker on click if set to allowInput: false
+          // make readonly and open color picker on click if set to allow_input: false
           onClick={!allowInput ? handleClick : undefined}
           disabled={!allowInput}
           fullWidth

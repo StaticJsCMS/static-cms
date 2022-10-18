@@ -551,8 +551,8 @@ export interface CodeField extends BaseField {
   keys?: { code: string; lang: string };
   output_code_only?: boolean;
 
-  codeMirrorConfig: {
-    extraKeys?: Record<string, string>;
+  code_mirror_config: {
+    extra_keys?: Record<string, string>;
   } & Record<string, unknown>;
 }
 
@@ -560,8 +560,8 @@ export interface ColorField extends BaseField {
   widget: 'color';
   default?: string;
 
-  allowInput?: boolean;
-  enableAlpha?: boolean;
+  allow_input?: boolean;
+  enable_alpha?: boolean;
 }
 
 export interface DateTimeField extends BaseField {

@@ -347,11 +347,11 @@ const CodeControl = ({
                 `}
                 options={{
                   lineNumbers: true,
-                  ...field.codeMirrorConfig,
+                  ...field.code_mirror_config,
                   extraKeys: {
                     'Shift-Tab': 'indentLess',
                     Tab: 'indentMore',
-                    ...(field.codeMirrorConfig?.extraKeys ?? {}),
+                    ...(field.code_mirror_config?.extra_keys ?? {}),
                   },
                   theme,
                   mode,
