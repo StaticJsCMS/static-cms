@@ -91,6 +91,19 @@ collections:
     editor:
       preview: false
     files:
+      - name: boolean
+        label: Boolean
+        file: _validations/boolean.json
+        description: Boolean validations
+        fields:
+          - name: required
+            label: Required
+            widget: boolean
+          - name: pattern
+            label: 'Pattern'
+            widget: boolean
+            pattern: ['true', 'Must be true']
+            required: false
       - name: code
         label: Code
         file: _validations/code.json
