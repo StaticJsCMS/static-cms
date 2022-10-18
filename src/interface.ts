@@ -254,6 +254,7 @@ export interface WidgetControlProps<T, F extends Field = Field> {
   removeInsertedMedia: EditorControlProps['removeInsertedMedia'];
   removeMediaControl: EditorControlProps['removeMediaControl'];
   i18n: I18nSettings | undefined;
+  hasErrors: boolean;
   path: string;
   query: EditorControlProps['query'];
   t: t;

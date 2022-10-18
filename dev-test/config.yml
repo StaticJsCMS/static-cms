@@ -91,6 +91,20 @@ collections:
     editor:
       preview: false
     files:
+      - name: color
+        label: Color
+        file: _validations/color.json
+        description: Color validations
+        fields:
+          - name: required
+            label: Required
+            widget: color
+          - name: pattern
+            label: 'Pattern'
+            widget: color
+            pattern: ['^#([0-9a-fA-F]{3})(?:[0-9a-fA-F]{3})?$', 'Must be a valid hex code']
+            allowInput: true
+            required: false
       - name: number
         label: Number
         file: _validations/number.json
@@ -118,7 +132,7 @@ collections:
           - name: pattern
             label: 'Pattern'
             widget: number
-            pattern: ['[0-9]{3,}', "Must be at least 3 digits"]
+            pattern: ['[0-9]{3,}', 'Must be at least 3 digits']
             required: false
       - name: string
         label: String
@@ -131,7 +145,7 @@ collections:
           - name: pattern
             label: 'Pattern'
             widget: string
-            pattern: ['.{12,}', "Must have at least 12 characters"]
+            pattern: ['.{12,}', 'Must have at least 12 characters']
             required: false
       - name: text
         label: Text
@@ -144,7 +158,7 @@ collections:
           - name: pattern
             label: 'Pattern'
             widget: text
-            pattern: ['.{12,}', "Must have at least 12 characters"]
+            pattern: ['.{12,}', 'Must have at least 12 characters']
             required: false
   - name: settings
     label: Settings

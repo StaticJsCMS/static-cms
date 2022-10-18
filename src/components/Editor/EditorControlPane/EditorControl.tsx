@@ -180,7 +180,8 @@ const EditorControl = ({
 
   const [dirty, setDirty] = useState(!isEmpty(value));
   const [errors, setErrors] = useState<FieldError[]>([]);
-  const hasErrors = Boolean(errors);
+  const hasErrors = Boolean(errors.length);
+  console.log('ERRORS', errors);
 
   const handleGetAsset = useCallback(
     (collection: Collection, entry: Entry): GetAssetFunction =>
@@ -259,6 +260,7 @@ const EditorControl = ({
           value,
           forList,
           i18n,
+          hasErrors,
         })}
         {fieldHint && <ControlHint $error={hasErrors}>{fieldHint}</ControlHint>}
         {errors ? (

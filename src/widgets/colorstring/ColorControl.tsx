@@ -20,6 +20,7 @@ const StyledColorControlWrapper = styled('div')`
   display: flex;
   flex-direction: column;
   position: relative;
+  width: 100%;
 `;
 
 interface StyledColorControlContentProps {
@@ -103,7 +104,13 @@ const ClickOutsideDiv = styled('div')`
   left: 0;
 `;
 
-const ColorControl = ({ field, onChange, value, t }: WidgetControlProps<string, ColorField>) => {
+const ColorControl = ({
+  field,
+  onChange,
+  value,
+  hasErrors,
+  t,
+}: WidgetControlProps<string, ColorField>) => {
   const [collapsed, setCollapsed] = useState(false);
 
   const handleCollapseToggle = useCallback(() => {
@@ -211,7 +218,7 @@ const ColorControl = ({ field, onChange, value, t }: WidgetControlProps<string, 
           }}
         />
       </StyledColorControlContent>
-      <Outline />
+      <Outline hasError={hasErrors} />
     </StyledColorControlWrapper>
   );
 };
