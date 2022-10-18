@@ -179,7 +179,6 @@ const EditorControl = ({
 
   const [dirty, setDirty] = useState(!isEmpty(value));
   const errors = useMemo(() => fieldsErrors[path] ?? [], [fieldsErrors, path]);
-  console.log('ERRORS!', field.name, errors);
   const hasErrors = Boolean(errors.length);
 
   const handleGetAsset = useCallback(

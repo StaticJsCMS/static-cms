@@ -296,8 +296,6 @@ const Editor = ({
     return <Loader>{t('editor.editor.loadingEntry')}</Loader>;
   }
 
-  console.log('ERRORS!', 'field errors', entryDraft.fieldsErrors);
-
   return (
     <EditorInterface
       key={`editor-${version}`}

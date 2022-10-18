@@ -30,7 +30,6 @@ export function validatePresence({
   t,
 }: FieldValidationMethodProps<ValueOrNestedValue>): false | FieldError {
   const isRequired = field.required ?? true;
-  console.log('REQUIRED CHECK', field.name, value, isRequired);
   if (isRequired && isEmpty(value)) {
     const error = {
       type: ValidationErrorTypes.PRESENCE,
