@@ -4,7 +4,7 @@ const en: LocalePhrasesRoot = {
   auth: {
     login: 'Login',
     loggingIn: 'Logging in...',
-    loginWithSimpleIdentity: 'Login with Simple Identity',
+    loginWithNetlifyIdentity: 'Login with Netlify Identity',
     loginWithAzure: 'Login with Azure',
     loginWithBitbucket: 'Login with Bitbucket',
     loginWithGitHub: 'Login with GitHub',

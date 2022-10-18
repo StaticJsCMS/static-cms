@@ -47,7 +47,7 @@ export function checkBackendStatus() {
 
       const backendDownKey = 'ui.toast.onBackendDown';
       const previousBackendDownNotifs = state.snackbar.messages.filter(
-        n => n.message?.key === backendDownKey,
+        n => typeof n.message !== 'string' && n.message.key === backendDownKey,
       );
 
       if (status.api.status === false) {
@@ -70,7 +70,9 @@ export function checkBackendStatus() {
       const authError = status.auth.status === false;
       if (authError) {
         const key = 'ui.toast.onLoggedOut';
-        const existingNotification = state.snackbar.messages.find(n => n.message?.key === key);
+        const existingNotification = state.snackbar.messages.find(
+          n => typeof n.message !== 'string' && n.message.key === key,
+        );
         if (!existingNotification) {
           dispatch(
             addSnackbar({

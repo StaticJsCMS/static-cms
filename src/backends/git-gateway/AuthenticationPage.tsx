@@ -1,50 +1,22 @@
+import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import AuthenticationPage from '../../components/UI/AuthenticationPage';
-import { buttons, colors, colorsRaw, lengths, shadows, zIndex } from '../../components/UI/styles';
+import { colors } from '../../components/UI/styles';
 
 import type { ChangeEvent, FormEvent } from 'react';
 import type { AuthenticationPageProps, TranslatedProps, User } from '../../interface';
 
-const LoginButton = styled('button')`
-  ${buttons.button};
-  ${shadows.dropDeep};
-  ${buttons.default};
-  ${buttons.gray};
-
-  padding: 0 30px;
-  display: block;
-  margin-top: 20px;
-  margin-left: auto;
-`;
-
-const AuthForm = styled('form')`
+const StyledAuthForm = styled('form')`
   width: 350px;
-  margin-top: -80px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 `;
 
-const AuthInput = styled('input')`
-  background-color: ${colorsRaw.white};
-  border-radius: ${lengths.borderRadius};
-
-  font-size: 14px;
-  padding: 10px;
-  margin-bottom: 15px;
-  margin-top: 6px;
-  width: 100%;
-  position: relative;
-  z-index: ${zIndex.zIndex1};
-  border: 1px solid ${colorsRaw.gray};
-
-  &:focus {
-    outline: none;
-    box-shadow: inset 0 0 0 2px ${colors.active};
-    border: 1px solid transparent;
-  }
-`;
-
-const ErrorMessage = styled('p')`
+const ErrorMessage = styled('div')`
   color: ${colors.errorText};
 `;
 
@@ -152,7 +124,17 @@ const GitGatewayAuthenticationPage = ({
         return;
       }
 
-      const response = await handleAuth(email, password);
+      let response: User | string;
+      try {
+        response = await handleAuth(email, password);
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          response = e.message;
+        } else {
+          response = 'Unknown authentication error';
+        }
+      }
+
       if (typeof response === 'string') {
         setErrors({ server: response });
         setLoggedIn(false);
@@ -171,7 +153,7 @@ const GitGatewayAuthenticationPage = ({
           logoUrl={config.logo_url}
           siteUrl={config.site_url}
           onLogin={handleIdentity}
-          renderPageContent={() => (
+          pageContent={
             <a
               href="https://docs.netlify.com/visitor-access/git-gateway/#setup-and-settings"
               target="_blank"
@@ -179,7 +161,7 @@ const GitGatewayAuthenticationPage = ({
             >
               {errors.identity}
             </a>
-          )}
+          }
           t={t}
         />
       );
@@ -189,7 +171,7 @@ const GitGatewayAuthenticationPage = ({
           logoUrl={config.logo_url}
           siteUrl={config.site_url}
           onLogin={handleIdentity}
-          renderButtonContent={() => t('auth.loginWithNetlifyIdentity')}
+          buttonContent={t('auth.loginWithNetlifyIdentity')}
           t={t}
         />
       );
@@ -200,31 +182,41 @@ const GitGatewayAuthenticationPage = ({
     <AuthenticationPage
       logoUrl={config.logo_url}
       siteUrl={config.site_url}
-      renderPageContent={() => (
-        <AuthForm onSubmit={handleLogin}>
-          {/* {!error ? null : <ErrorMessage>{error}</ErrorMessage>} */}
+      pageContent={
+        <StyledAuthForm onSubmit={handleLogin}>
           {!errors.server ? null : <ErrorMessage>{String(errors.server)}</ErrorMessage>}
-          <ErrorMessage>{errors.email || null}</ErrorMessage>
-          <AuthInput
+          <TextField
             type="text"
             name="email"
-            placeholder="Email"
+            label="Email"
             value={email}
             onChange={handleEmailChange}
+            fullWidth
+            variant="outlined"
+            error={Boolean(errors.email)}
+            helperText={errors.email ?? undefined}
           />
-          <ErrorMessage>{errors.password || null}</ErrorMessage>
-          <AuthInput
+          <TextField
             type="password"
             name="password"
-            placeholder="Password"
+            label="Password"
             value={password}
             onChange={handlePasswordChange}
+            fullWidth
+            variant="outlined"
+            error={Boolean(errors.password)}
+            helperText={errors.password ?? undefined}
           />
-          <LoginButton disabled={inProgress}>
+          <Button
+            variant="contained"
+            type="submit"
+            disabled={inProgress}
+            sx={{ width: 120, alignSelf: 'center' }}
+          >
             {inProgress ? t('auth.loggingIn') : t('auth.login')}
-          </LoginButton>
-        </AuthForm>
-      )}
+          </Button>
+        </StyledAuthForm>
+      }
       t={t}
     />
   );
