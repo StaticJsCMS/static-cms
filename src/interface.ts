@@ -235,7 +235,6 @@ export interface WidgetControlProps<T, F extends Field = Field> {
   fieldsErrors: FieldsErrors;
   forList: boolean;
   getAsset: GetAssetFunction;
-  hasError?: boolean;
   isDisabled: boolean;
   isEditorComponent: boolean;
   isFetching: boolean;

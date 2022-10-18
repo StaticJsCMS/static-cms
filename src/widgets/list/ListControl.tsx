@@ -257,6 +257,18 @@ const ListControl = ({
     ],
   );
 
+  const hasChildErrors = useMemo(
+    () =>
+      Object.keys(fieldsErrors).some(key => {
+        if (key.startsWith(path)) {
+          return fieldsErrors[key].length > 0;
+        }
+
+        return false;
+      }),
+    [fieldsErrors, path],
+  );
+
   if (valueType === null) {
     return null;
   }
@@ -289,7 +301,7 @@ const ListControl = ({
           lockAxis="y"
         />
       ) : null}
-      <Outline hasLabel />
+      <Outline hasLabel hasError={hasChildErrors} />
     </StyledListWrapper>
   );
 };

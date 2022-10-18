@@ -8,6 +8,7 @@ const StringControl = ({
   value,
   label,
   onChange,
+  hasErrors,
 }: WidgetControlProps<string, StringOrTextField>) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
 
@@ -27,6 +28,7 @@ const StringControl = ({
       value={internalValue}
       onChange={handleChange}
       fullWidth
+      error={hasErrors}
     />
   );
 };

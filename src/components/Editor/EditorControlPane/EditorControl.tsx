@@ -181,7 +181,6 @@ const EditorControl = ({
   const [dirty, setDirty] = useState(!isEmpty(value));
   const [errors, setErrors] = useState<FieldError[]>([]);
   const hasErrors = Boolean(errors.length);
-  console.log('ERRORS', errors);
 
   const handleGetAsset = useCallback(
     (collection: Collection, entry: Entry): GetAssetFunction =>
