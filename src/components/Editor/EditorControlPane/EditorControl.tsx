@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
+import isEmpty from 'lodash/isEmpty';
 
 import {
   changeDraftFieldValidation as changeDraftFieldValidationAction,
@@ -173,6 +174,7 @@ const EditorControl = ({
     [field.name, parentPath],
   );
 
+  const [dirty, setDirty] = useState(!isEmpty(value));
   const [errors, setErrors] = useState<FieldError[]>([]);
   const hasErrors = Boolean(errors);
   console.log(path, errors, hasErrors);
@@ -185,10 +187,16 @@ const EditorControl = ({
     [getAsset],
   );
 
+  console.log('DIRTY', dirty, field.name);
+
   useEffect(() => {
     let alive = true;
 
     const validateValue = async () => {
+      if (!dirty) {
+        return;
+      }
+
       const errors = await validate(path, field, value, widget, changeDraftFieldValidation, t);
       if (alive) {
         setErrors(errors);
@@ -200,7 +208,15 @@ const EditorControl = ({
     return () => {
       alive = false;
     };
-  }, [field, value, changeDraftFieldValidation, path, t, widget]);
+  }, [field, value, changeDraftFieldValidation, path, t, widget, dirty]);
+
+  const handleOnChange = useCallback(
+    (path: string, field: Field, newValue: ValueOrNestedValue) => {
+      setDirty(true);
+      onChange(path, field, newValue);
+    },
+    [onChange],
+  );
 
   const config = useMemo(() => configState.config, [configState.config]);
   if (!collection || !entry || !config) {
@@ -230,7 +246,7 @@ const EditorControl = ({
           locale,
           mediaPaths,
           addAsset,
-          onChange,
+          onChange: handleOnChange,
           clearMediaControl,
           openMediaLibrary,
           persistMedia,

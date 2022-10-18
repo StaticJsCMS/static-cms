@@ -75,13 +75,10 @@ const NumberControl = ({
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const valueType = field.value_type;
-      const value =
+      let newValue: string | number =
         valueType === 'float' ? parseFloat(e.target.value) : parseInt(e.target.value, 10);
 
-      let newValue: string | number;
-      if (!isNaN(value)) {
-        newValue = value;
-      } else {
+      if (isNaN(newValue)) {
         newValue = '';
       }
       onChange(path, field, newValue);

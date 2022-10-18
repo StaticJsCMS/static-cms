@@ -99,20 +99,22 @@ collections:
           - name: required
             label: Required
             widget: number
-            required: true
           - name: min
             label: Min
             widget: number
             min: 5
+            required: false
           - name: max
             label: Max
             widget: number
             max: 10
+            required: false
           - name: min_and_max
             label: 'Min and Max'
             widget: number
             min: 5
             max: 10
+            required: false
   - name: settings
     label: Settings
     delete: false
