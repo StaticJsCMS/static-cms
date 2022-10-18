@@ -26,6 +26,6 @@ export function selectField(collection: Collection, key: string) {
 
 export function getFieldLabel(field: Field, t: t) {
   return `${field.label ?? field.name} ${`${
-    !field.required ? ` (${t('editor.editorControl.field.optional')})` : ''
+    field.required === false ? ` (${t('editor.editorControl.field.optional')})` : ''
   }`}`;
 }

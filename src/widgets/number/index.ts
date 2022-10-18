@@ -22,7 +22,7 @@ const NumberWidget = (): WidgetParam<string | number, NumberField> => {
         const max = field.max ?? false;
 
         const error = validateMinMax(value, min, max, field, t);
-        return error ? { error } : false;
+        return error ?? false;
       },
       schema,
     },

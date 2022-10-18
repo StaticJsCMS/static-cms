@@ -16,7 +16,8 @@ export function isEmpty(value: ValueOrNestedValue) {
     value === null ||
     value === undefined ||
     (Array.isArray(value) && value.length === 0) ||
-    (value.constructor === Object && Object.keys(value).length === 0)
+    (value.constructor === Object && Object.keys(value).length === 0) ||
+    (typeof value === 'string' && value === '')
   );
 }
 
@@ -26,6 +27,7 @@ export function validatePresence({
   t,
 }: FieldValidationMethodProps<ValueOrNestedValue>): false | FieldError {
   const isRequired = field.required ?? true;
+  console.log('REQUIRED CHECK!', field.name, isRequired, isEmpty(value), `"${value}"`);
   if (isRequired && isEmpty(value)) {
     const error = {
       type: ValidationErrorTypes.PRESENCE,
@@ -90,6 +92,7 @@ export async function validate(
     }
   }
 
+  console.log('errors', errors);
   onValidate(path, errors);
   return errors;
 }

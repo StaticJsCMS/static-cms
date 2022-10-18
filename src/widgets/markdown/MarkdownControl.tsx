@@ -12,6 +12,7 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 
 const StyledEditorWrapper = styled('div')`
   position: relative;
+  width: 100%;
 
   .toastui-editor-main .toastui-editor-md-vertical-style .toastui-editor {
     width: 100%;

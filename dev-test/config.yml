@@ -96,6 +96,10 @@ collections:
         file: _validations/number.json
         description: Number validations
         fields:
+          - name: required
+            label: Required
+            widget: number
+            required: true
           - name: min
             label: Min
             widget: number

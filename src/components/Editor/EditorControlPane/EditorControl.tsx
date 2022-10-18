@@ -88,6 +88,11 @@ const ControlContainer = styled(
   transientOptions,
 )<ControlContainerProps>(
   ({ $isHidden }) => `
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+    width: 100%;
     ${$isHidden ? styleStrings.hidden : ''};
   `,
 );
@@ -96,12 +101,12 @@ const ControlErrorsList = styled('ul')`
   list-style-type: none;
   font-size: 12px;
   color: ${colors.errorText};
-  margin-bottom: 5px;
-  text-align: right;
-  text-transform: uppercase;
   position: relative;
   font-weight: 600;
-  top: 20px;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 4px 8px;
 `;
 
 interface ControlHintProps {
@@ -113,8 +118,8 @@ export const ControlHint = styled(
   transientOptions,
 )<ControlHintProps>(
   ({ $error }) => `
-    margin: 8px 0;
-    padding: 0 8px;
+    margin: 0;
+    padding: 0;
     font-size: 12px;
     color: ${$error ? colors.errorText : colors.controlLabel};
     transition: color ${transitions.main};
@@ -165,6 +170,7 @@ const EditorControl = ({
 
   const errors = fieldsErrors && fieldsErrors[path];
   const hasErrors = Boolean(errors);
+  console.log(path, errors, hasErrors);
 
   const handleGetAsset = useCallback(
     (collection: Collection, entry: Entry): GetAssetFunction =>
@@ -182,17 +188,6 @@ const EditorControl = ({
   return (
     <ControlContainer className={className} $isHidden={isHidden}>
       <>
-        {errors && (
-          <ControlErrorsList>
-            {errors.map(
-              error =>
-                error.message &&
-                typeof error.message === 'string' && (
-                  <li key={error.message.trim().replace(/[^a-z0-9]+/gi, '-')}>{error.message}</li>
-                ),
-            )}
-          </ControlErrorsList>
-        )}
         {React.createElement(widget.control, {
           clearFieldErrors,
           clearSearch,
@@ -227,6 +222,19 @@ const EditorControl = ({
           widget,
         })}
         {fieldHint && <ControlHint $error={hasErrors}>{fieldHint}</ControlHint>}
+        {errors ? (
+          <ControlErrorsList>
+            {errors.map(error => {
+              console.log('ERROR', error, error.message && typeof error.message === 'string');
+              return (
+                error.message &&
+                typeof error.message === 'string' && (
+                  <li key={error.message.trim().replace(/[^a-z0-9]+/gi, '-')}>{error.message}</li>
+                )
+              );
+            })}
+          </ControlErrorsList>
+        ) : null}
       </>
     </ControlContainer>
   );
