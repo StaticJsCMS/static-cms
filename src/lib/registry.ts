@@ -151,7 +151,7 @@ export function registerWidget<T = unknown>(
       controlComponent: control,
       previewComponent: preview,
       options: {
-        validator = () => true,
+        validator = () => false,
         getValidValue = (value: T | undefined | null) => value,
         schema,
         allowMapValue,

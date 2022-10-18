@@ -84,7 +84,7 @@ export async function validate(
   widget: Widget<any, any>,
   onValidate: (path: string, errors: FieldError[]) => void,
   t: t,
-) {
+): Promise<FieldError[]> {
   const validValue = widget.getValidValue(value);
   const errors: FieldError[] = [];
   const validations: FieldValidationMethod<ValueOrNestedValue>[] = [
