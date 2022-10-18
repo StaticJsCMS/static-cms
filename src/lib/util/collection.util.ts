@@ -21,6 +21,7 @@ import type {
   Config,
   Entry,
   Field,
+  ObjectField,
   SortableField,
 } from '../../interface';
 
@@ -323,7 +324,7 @@ export function traverseFields(
       field.field = traverseFields([field.field], updater, done)?.[0];
       return field;
     } else if ('types' in field) {
-      field.types = traverseFields(field.types ?? [], updater, done);
+      field.types = traverseFields(field.types ?? [], updater, done) as ObjectField[];
       return field;
     } else {
       return field;

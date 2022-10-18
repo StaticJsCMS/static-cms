@@ -20,7 +20,6 @@ import type {
   EditorPersistOptions,
   Entry,
   Field,
-  FieldError,
   FieldsErrors,
   I18nSettings,
   TranslatedProps,
@@ -148,7 +147,6 @@ interface EditorInterfaceProps {
     value: ValueOrNestedValue,
     i18n: I18nSettings | undefined,
   ) => void;
-  onValidate: (path: string, errors: FieldError[]) => void;
   onPersist: (opts?: EditorPersistOptions) => Promise<void>;
   onDelete: () => Promise<void>;
   onDuplicate: () => void;
@@ -174,7 +172,6 @@ const EditorInterface = ({
   showDelete,
   onDelete,
   onDuplicate,
-  onValidate,
   onPersist,
   user,
   hasChanged,
@@ -250,7 +247,6 @@ const EditorInterface = ({
         fields={fields}
         fieldsErrors={fieldsErrors}
         onChange={onChange}
-        onValidate={onValidate}
         locale={selectedLocale}
         onLocaleChange={handleLocaleChange}
         // TODO ref={c => (this.controlPaneRef = c)}
@@ -267,7 +263,6 @@ const EditorInterface = ({
         fields={fields}
         fieldsErrors={fieldsErrors}
         onChange={onChange}
-        onValidate={onValidate}
         locale={locales?.[1]}
         onLocaleChange={handleLocaleChange}
         t={t}

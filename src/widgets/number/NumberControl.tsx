@@ -1,7 +1,5 @@
 import TextField from '@mui/material/TextField';
-import React, { useCallback, useEffect, useState } from 'react';
-
-import { validate } from '../../lib/util/validation.util';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import type { ChangeEvent } from 'react';
 import type { t } from 'react-polyglot';
@@ -66,29 +64,13 @@ const NumberControl = ({
   field,
   value,
   onChange,
-  onValidate,
-  widget,
-  t,
+  fieldsErrors,
 }: WidgetControlProps<string | number, NumberField>) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
-  const [hasErrors, setHasErrors] = useState(false);
-
-  useEffect(() => {
-    let alive = true;
-
-    const validateValue = async () => {
-      const errors = await validate(path, field, internalValue, widget, onValidate, t);
-      if (alive) {
-        setHasErrors(errors.length > 0);
-      }
-    };
-
-    validateValue();
-
-    return () => {
-      alive = false;
-    };
-  }, [field, internalValue, onValidate, path, t, widget]);
+  const hasErrors = useMemo(
+    () => path in fieldsErrors && (fieldsErrors[path]?.length ?? 0) > 0,
+    [fieldsErrors, path],
+  );
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

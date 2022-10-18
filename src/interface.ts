@@ -253,12 +253,10 @@ export interface WidgetControlProps<T, F extends Field = Field> {
   persistMedia: EditorControlProps['persistMedia'];
   removeInsertedMedia: EditorControlProps['removeInsertedMedia'];
   removeMediaControl: EditorControlProps['removeMediaControl'];
-  onValidate: EditorControlProps['onValidate'];
   path: string;
   query: EditorControlProps['query'];
   t: t;
   value: T | undefined | null;
-  widget: Widget<T, F>;
 }
 
 export interface WidgetPreviewProps<T = unknown, F extends Field = Field> {

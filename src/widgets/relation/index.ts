@@ -20,12 +20,12 @@ function RelationWidget(): WidgetParam<string | string[], RelationField> {
         const max = field.max;
 
         if (!isMultiple(field)) {
-          return { error: false };
+          return false;
         }
 
         const error = validations.validateMinMax(t, field.label ?? field.name, value, min, max);
 
-        return error ? { error } : { error: false };
+        return error ? error : false;
       },
       schema,
     },

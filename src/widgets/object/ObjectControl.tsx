@@ -56,7 +56,6 @@ const ObjectControl = ({
   isFieldHidden,
   locale,
   onChange,
-  onValidate,
   path,
   t,
   value = {},
@@ -92,7 +91,6 @@ const ObjectControl = ({
             onChange={onChange}
             clearFieldErrors={clearFieldErrors}
             fieldsErrors={fieldsErrors}
-            onValidate={onValidate}
             parentPath={path}
             isDisabled={isDuplicate}
             isHidden={isHidden}
@@ -111,7 +109,6 @@ const ObjectControl = ({
     locale,
     multiFields,
     onChange,
-    onValidate,
     path,
     value,
   ]);

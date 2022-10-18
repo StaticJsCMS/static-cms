@@ -1,7 +1,7 @@
-import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { styled } from '@mui/material/styles';
 import get from 'lodash/get';
 import React, { useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
@@ -20,10 +20,9 @@ import EditorControl from './EditorControl';
 
 import type { ConnectedProps } from 'react-redux';
 import type {
-  Field,
   Collection,
   Entry,
-  FieldError,
+  Field,
   FieldsErrors,
   I18nSettings,
   TranslatedProps,
@@ -110,7 +109,6 @@ const EditorControlPane = ({
   fields,
   fieldsErrors,
   onChange,
-  onValidate,
   locale,
   onLocaleChange,
   clearFieldErrors,
@@ -206,7 +204,6 @@ const EditorControlPane = ({
               onChange={(path, field, newValue) => {
                 onChange(path, field, newValue, i18n);
               }}
-              onValidate={onValidate}
               isDisabled={isDuplicate}
               isHidden={isHidden}
               isFieldDuplicate={field => isFieldDuplicate(field, locale, i18n?.defaultLocale)}
@@ -232,7 +229,6 @@ export interface EditorControlPaneOwnProps {
     value: ValueOrNestedValue,
     i18n: I18nSettings | undefined,
   ) => void;
-  onValidate: (path: string, errors: FieldError[]) => void;
   locale?: string;
   onLocaleChange: (locale: string) => void;
 }

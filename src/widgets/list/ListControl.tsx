@@ -9,9 +9,9 @@ import FieldLabel from '../../components/UI/FieldLabel';
 import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
 import Outline from '../../components/UI/Outline';
 import { getFieldLabel } from '../../lib/util/field.util';
+import transientOptions from '../../lib/util/transientOptions';
 import ListItem from './ListItem';
 import { resolveFieldKeyType, TYPES_KEY } from './typedListHelpers';
-import transientOptions from '../../lib/util/transientOptions';
 
 import type { MouseEvent } from 'react';
 import type { Field, ListField, ObjectValue, WidgetControlProps } from '../../interface';
@@ -118,7 +118,6 @@ const ListControl = ({
   persistMedia,
   removeInsertedMedia,
   removeMediaControl,
-  onValidate,
   path,
   query,
   t,
@@ -279,7 +278,6 @@ const ListControl = ({
           persistMedia={persistMedia}
           removeInsertedMedia={removeInsertedMedia}
           removeMediaControl={removeMediaControl}
-          onValidate={onValidate}
           path={path}
           query={query}
           t={t}
@@ -288,6 +286,9 @@ const ListControl = ({
       );
     },
     [
+      keys,
+      valueType,
+      handleRemove,
       clearFieldErrors,
       clearSearch,
       collection,
@@ -296,14 +297,13 @@ const ListControl = ({
       field,
       fieldsErrors,
       getAsset,
-      handleRemove,
       isDisabled,
       isEditorComponent,
       isFetching,
       isFieldDuplicate,
       isFieldHidden,
       isNewEditorComponent,
-      keys,
+      t,
       loadEntry,
       locale,
       mediaPaths,
@@ -314,11 +314,8 @@ const ListControl = ({
       persistMedia,
       removeInsertedMedia,
       removeMediaControl,
-      onValidate,
       path,
       query,
-      t,
-      valueType,
     ],
   );
 

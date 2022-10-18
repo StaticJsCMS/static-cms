@@ -16,12 +16,12 @@ const SelectWidget = (): WidgetParam<string | string[], SelectField> => {
         const max = field.max;
 
         if (!field.multiple || typeof value === 'string') {
-          return { error: false };
+          return false;
         }
 
         const error = validateMinMax(t, field.label ?? field.name, value, min, max);
 
-        return error ? { error } : { error: false };
+        return error ? error : false;
       },
       schema,
     },

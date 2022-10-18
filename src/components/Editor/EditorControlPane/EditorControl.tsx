@@ -1,9 +1,13 @@
 import { styled } from '@mui/material/styles';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
-import { clearFieldErrors as clearFieldErrorsAction, tryLoadEntry } from '../../../actions/entries';
+import {
+  changeDraftFieldValidation as changeDraftFieldValidationAction,
+  clearFieldErrors as clearFieldErrorsAction,
+  tryLoadEntry,
+} from '../../../actions/entries';
 import { addAsset as addAssetAction, getAsset as getAssetAction } from '../../../actions/media';
 import {
   clearMediaControl as clearMediaControlAction,
@@ -17,6 +21,7 @@ import { borders, colors, lengths, transitions } from '../../../components/UI/st
 import { transientOptions } from '../../../lib';
 import { resolveWidget } from '../../../lib/registry';
 import { getFieldLabel } from '../../../lib/util/field.util';
+import { validate } from '../../../lib/util/validation.util';
 import { selectIsLoadingAsset } from '../../../reducers/medias';
 
 import type { ComponentType } from 'react';
@@ -149,7 +154,7 @@ const EditorControl = ({
   locale,
   mediaPaths,
   onChange,
-  onValidate,
+  changeDraftFieldValidation,
   openMediaLibrary,
   parentPath,
   persistMedia,
@@ -168,7 +173,7 @@ const EditorControl = ({
     [field.name, parentPath],
   );
 
-  const errors = fieldsErrors && fieldsErrors[path];
+  const [errors, setErrors] = useState<FieldError[]>([]);
   const hasErrors = Boolean(errors);
   console.log(path, errors, hasErrors);
 
@@ -179,6 +184,23 @@ const EditorControl = ({
       },
     [getAsset],
   );
+
+  useEffect(() => {
+    let alive = true;
+
+    const validateValue = async () => {
+      const errors = await validate(path, field, value, widget, changeDraftFieldValidation, t);
+      if (alive) {
+        setErrors(errors);
+      }
+    };
+
+    validateValue();
+
+    return () => {
+      alive = false;
+    };
+  }, [field, value, changeDraftFieldValidation, path, t, widget]);
 
   const config = useMemo(() => configState.config, [configState.config]);
   if (!collection || !entry || !config) {
@@ -214,12 +236,10 @@ const EditorControl = ({
           persistMedia,
           removeInsertedMedia,
           removeMediaControl,
-          onValidate,
           path,
           query,
           t,
           value,
-          widget,
         })}
         {fieldHint && <ControlHint $error={hasErrors}>{fieldHint}</ControlHint>}
         {errors ? (
@@ -253,7 +273,6 @@ interface EditorControlOwnProps {
   isNewEditorComponent?: boolean;
   locale?: string;
   onChange: (path: string, field: Field, newValue: ValueOrNestedValue) => void;
-  onValidate: (path: string, errors: FieldError[]) => void;
   parentPath: string;
   value: ValueOrNestedValue;
 }
@@ -287,6 +306,7 @@ function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
 }
 
 const mapDispatchToProps = {
+  changeDraftFieldValidation: changeDraftFieldValidationAction,
   openMediaLibrary: openMediaLibraryAction,
   clearMediaControl: clearMediaControlAction,
   removeMediaControl: removeMediaControlAction,

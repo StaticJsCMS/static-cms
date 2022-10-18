@@ -21,7 +21,7 @@ import type {
   ListField,
   ObjectField,
   ObjectValue,
-  WidgetControlProps,
+  WidgetControlProps
 } from '../../interface';
 
 const StyledListItem = styled('div')`
@@ -140,7 +140,6 @@ const ListItem = ({
   persistMedia,
   removeInsertedMedia,
   removeMediaControl,
-  onValidate,
   path,
   query,
   t,
@@ -276,7 +275,6 @@ const ListItem = ({
               persistMedia={persistMedia}
               removeInsertedMedia={removeInsertedMedia}
               removeMediaControl={removeMediaControl}
-              onValidate={onValidate}
               path={`${path}.${index}`}
               query={query}
               t={t}

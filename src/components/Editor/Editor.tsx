@@ -5,24 +5,19 @@ import { connect } from 'react-redux';
 
 import { logoutUser as logoutUserAction } from '../../actions/auth';
 import {
-  changeDraftField as changeDraftFieldAction,
-  changeDraftFieldValidation as changeDraftFieldValidationAction,
-  createDraftDuplicateFromEntry as createDraftDuplicateFromEntryAction,
-  createEmptyDraft as createEmptyDraftAction,
-  deleteEntry as deleteEntryAction,
+  changeDraftField as changeDraftFieldAction, createDraftDuplicateFromEntry as createDraftDuplicateFromEntryAction,
+  createEmptyDraft as createEmptyDraftAction, deleteDraftLocalBackup as deleteDraftLocalBackupAction, deleteEntry as deleteEntryAction,
   deleteLocalBackup as deleteLocalBackupAction,
   discardDraft as discardDraftAction,
   loadEntries as loadEntriesAction,
   loadEntry as loadEntryAction,
-  loadLocalBackup as loadLocalBackupAction,
-  deleteDraftLocalBackup as deleteDraftLocalBackupAction,
-  persistEntry as persistEntryAction,
+  loadLocalBackup as loadLocalBackupAction, persistEntry as persistEntryAction,
   persistLocalBackup as persistLocalBackupAction,
-  retrieveLocalBackup as retrieveLocalBackupAction,
+  retrieveLocalBackup as retrieveLocalBackupAction
 } from '../../actions/entries';
 import {
   loadScroll as loadScrollAction,
-  toggleScroll as toggleScrollAction,
+  toggleScroll as toggleScrollAction
 } from '../../actions/scroll';
 import { selectFields } from '../../lib/util/collection.util';
 import { useWindowEvent } from '../../lib/util/window.util';
@@ -42,7 +37,7 @@ import type {
   Field,
   I18nSettings,
   TranslatedProps,
-  ValueOrNestedValue,
+  ValueOrNestedValue
 } from '../../interface';
 import type { RootState } from '../../store';
 
@@ -51,7 +46,6 @@ const Editor = ({
   entryDraft,
   fields,
   collection,
-  changeDraftFieldValidation,
   user,
   hasChanged,
   displayUrl,
@@ -313,7 +307,6 @@ const Editor = ({
       fields={fields}
       fieldsErrors={entryDraft.fieldsErrors}
       onChange={handleChangeDraftField}
-      onValidate={changeDraftFieldValidation}
       onPersist={handlePersistEntry}
       onDelete={handleDeleteEntry}
       onDuplicate={handleDuplicateEntry}
@@ -389,7 +382,6 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
 
 const mapDispatchToProps = {
   changeDraftField: changeDraftFieldAction,
-  changeDraftFieldValidation: changeDraftFieldValidationAction,
   loadEntry: loadEntryAction,
   loadEntries: loadEntriesAction,
   loadLocalBackup: loadLocalBackupAction,
