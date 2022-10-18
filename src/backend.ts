@@ -988,10 +988,11 @@ export class Backend {
 
   filterEntries(collection: { entries: Entry[] }, filterRule: FilterRule) {
     return collection.entries.filter(entry => {
-      const fieldValue = entry.data?.[filterRule.field] as string[];
-      if (Array.isArray(fieldValue)) {
-        return fieldValue.includes(filterRule.value);
-      }
+      const fieldValue = entry.data?.[filterRule.field];
+      // TODO Investigate when the value could be a string array
+      // if (Array.isArray(fieldValue)) {
+      //   return fieldValue.includes(filterRule.value);
+      // }
       return fieldValue === filterRule.value;
     });
   }

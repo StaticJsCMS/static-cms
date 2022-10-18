@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ValidationErrorTypes from '../../constants/validationErrorTypes';
+import { getTypedFieldForValue } from '../../widgets/list/typedListHelpers';
+import { resolveWidget } from '../registry';
 
+import type { t } from 'react-polyglot';
 import type {
+  Entry,
   Field,
   FieldError,
   FieldValidationMethod,
@@ -9,7 +13,6 @@ import type {
   ValueOrNestedValue,
   Widget,
 } from '../../interface';
-import type { t } from 'react-polyglot';
 
 export function isEmpty(value: ValueOrNestedValue) {
   return (
@@ -27,6 +30,7 @@ export function validatePresence({
   t,
 }: FieldValidationMethodProps<ValueOrNestedValue>): false | FieldError {
   const isRequired = field.required ?? true;
+  console.log('REQUIRED CHECK', field.name, value, isRequired);
   if (isRequired && isEmpty(value)) {
     const error = {
       type: ValidationErrorTypes.PRESENCE,
@@ -102,4 +106,73 @@ export async function validate(
 
   onValidate(path, errors);
   return errors;
+}
+
+async function validateFieldAndChildren(
+  path: string,
+  field: Field,
+  value: ValueOrNestedValue,
+  widget: Widget<any, any>,
+  onValidate: (path: string, errors: FieldError[]) => void,
+  t: t,
+) {
+  if ('fields' in field && field.fields) {
+    for (const childField of field.fields) {
+      await validateFieldAndChildren(
+        `${path}.${childField.name}`,
+        childField,
+        !Array.isArray(value) && typeof value === 'object' ? value?.[field.name] : undefined,
+        resolveWidget(childField.widget),
+        onValidate,
+        t,
+      );
+    }
+  }
+
+  if ('field' in field && field.field) {
+    await validateFieldAndChildren(
+      `${path}.${field.field.name}`,
+      field.field,
+      !Array.isArray(value) && typeof value === 'object' ? value?.[field.name] : undefined,
+      resolveWidget(field.field.widget),
+      onValidate,
+      t,
+    );
+  }
+
+  if ('types' in field && field.types && Array.isArray(value)) {
+    for (const childValue of value) {
+      const itemType = getTypedFieldForValue(field, childValue);
+      if (itemType) {
+        await validateFieldAndChildren(
+          `${path}.${itemType.name}`,
+          itemType,
+          !Array.isArray(value) && typeof value === 'object' ? value?.[field.name] : undefined,
+          resolveWidget(itemType.widget),
+          onValidate,
+          t,
+        );
+      }
+    }
+  }
+
+  await validate(path, field, value, widget, onValidate, t);
+}
+
+export async function validateAll(
+  fields: Field[],
+  entry: Entry,
+  onValidate: (path: string, errors: FieldError[]) => void,
+  t: t,
+) {
+  for (const field of fields) {
+    await validateFieldAndChildren(
+      field.name,
+      field,
+      entry.data?.[field.name] ?? undefined,
+      resolveWidget(field.widget),
+      onValidate,
+      t,
+    );
+  }
 }

@@ -32,7 +32,6 @@ import type {
   Collection,
   Entry,
   Field,
-  FieldError,
   FieldsErrors,
   GetAssetFunction,
   I18nSettings,
@@ -179,7 +178,8 @@ const EditorControl = ({
   );
 
   const [dirty, setDirty] = useState(!isEmpty(value));
-  const [errors, setErrors] = useState<FieldError[]>([]);
+  const errors = useMemo(() => fieldsErrors[path] ?? [], [fieldsErrors, path]);
+  console.log('ERRORS!', field.name, errors);
   const hasErrors = Boolean(errors.length);
 
   const handleGetAsset = useCallback(
@@ -191,24 +191,15 @@ const EditorControl = ({
   );
 
   useEffect(() => {
-    let alive = true;
-
     const validateValue = async () => {
       if (!dirty) {
         return;
       }
 
-      const errors = await validate(path, field, value, widget, changeDraftFieldValidation, t);
-      if (alive) {
-        setErrors(errors);
-      }
+      await validate(path, field, value, widget, changeDraftFieldValidation, t);
     };
 
     validateValue();
-
-    return () => {
-      alive = false;
-    };
   }, [field, value, changeDraftFieldValidation, path, t, widget, dirty]);
 
   const handleChangeDraftField = useCallback(

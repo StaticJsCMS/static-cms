@@ -133,6 +133,22 @@ collections:
             pattern: ['^#([0-9a-fA-F]{3})(?:[0-9a-fA-F]{3})?$', 'Must be a valid hex code']
             allow_input: true
             required: false
+      - name: datetime
+        label: DateTime
+        file: _validations/datetime.json
+        description: DateTime validations
+        fields:
+          - name: required
+            label: Required
+            widget: datetime
+          - name: pattern
+            label: 'Pattern'
+            widget: datetime
+            format: 'MMM d, yyyy h:mm aaa'
+            date_format: 'MMM d, yyyy'
+            time_format: 'h:mm aaa'
+            pattern: ['pm', 'Must be in the afternoon']
+            required: false
       - name: number
         label: Number
         file: _validations/number.json

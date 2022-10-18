@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import { logoutUser as logoutUserAction } from '../../actions/auth';
 import {
+  changeDraftFieldValidation as changeDraftFieldValidationAction,
   createDraftDuplicateFromEntry as createDraftDuplicateFromEntryAction,
   createEmptyDraft as createEmptyDraftAction,
   deleteDraftLocalBackup as deleteDraftLocalBackupAction,
@@ -23,6 +24,7 @@ import {
   toggleScroll as toggleScrollAction,
 } from '../../actions/scroll';
 import { selectFields } from '../../lib/util/collection.util';
+import { validateAll } from '../../lib/util/validation.util';
 import { useWindowEvent } from '../../lib/util/window.util';
 import { selectEntry } from '../../reducers';
 import { history, navigateToCollection, navigateToNewEntry } from '../../routing/history';
@@ -63,6 +65,7 @@ const Editor = ({
   retrieveLocalBackup,
   deleteLocalBackup,
   deleteDraftLocalBackup,
+  changeDraftFieldValidation,
   createDraftDuplicateFromEntry,
   createEmptyDraft,
   discardDraft,
@@ -89,7 +92,12 @@ const Editor = ({
     async (opts: EditorPersistOptions = {}) => {
       const { createNew = false, duplicate = false } = opts;
 
+      if (!entryDraft.entry) {
+        return;
+      }
+
       try {
+        await validateAll(fields ?? [], entryDraft.entry, changeDraftFieldValidation, t);
         await persistEntry(collection);
         setVersion(version + 1);
 
@@ -105,11 +113,14 @@ const Editor = ({
       } catch (e) {}
     },
     [
+      changeDraftFieldValidation,
       collection,
       createDraftDuplicateFromEntry,
       deleteBackup,
       entryDraft.entry,
+      fields,
       persistEntry,
+      t,
       version,
     ],
   );
@@ -285,6 +296,8 @@ const Editor = ({
     return <Loader>{t('editor.editor.loadingEntry')}</Loader>;
   }
 
+  console.log('ERRORS!', 'field errors', entryDraft.fieldsErrors);
+
   return (
     <EditorInterface
       key={`editor-${version}`}
@@ -374,6 +387,7 @@ const mapDispatchToProps = {
   retrieveLocalBackup: retrieveLocalBackupAction,
   persistLocalBackup: persistLocalBackupAction,
   deleteLocalBackup: deleteLocalBackupAction,
+  changeDraftFieldValidation: changeDraftFieldValidationAction,
   createDraftDuplicateFromEntry: createDraftDuplicateFromEntryAction,
   createEmptyDraft: createEmptyDraftAction,
   discardDraft: discardDraftAction,

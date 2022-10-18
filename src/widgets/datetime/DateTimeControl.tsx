@@ -9,6 +9,8 @@ import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import formatDate from 'date-fns/format';
 import formatISO from 'date-fns/formatISO';
+import parse from 'date-fns/parse';
+import parseISO from 'date-fns/parseISO';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { MouseEvent } from 'react';
@@ -54,6 +56,7 @@ const DateTimeControl = ({
   t,
   isDisabled,
   onChange,
+  hasErrors,
 }: WidgetControlProps<string, DateTimeField>) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
 
@@ -75,20 +78,28 @@ const DateTimeControl = ({
     };
   }, [field.date_format, field.format, field.time_format]);
 
-  const defaultValue = useMemo(() => {
-    const defaultValue = field.default;
-    return defaultValue;
-  }, [field.default]);
+  const defaultValue = useMemo(
+    () =>
+      field.default === undefined
+        ? format
+          ? formatDate(new Date(), format)
+          : formatISO(new Date())
+        : field.default,
+    [field.default, format],
+  );
 
   const handleChange = useCallback(
     (datetime: string | Date | null) => {
       if (datetime === null) {
-        onChange(datetime);
+        setInternalValue(defaultValue);
+        onChange(defaultValue);
         return;
       }
 
       if (typeof datetime === 'string') {
-        return datetime;
+        setInternalValue(datetime);
+        onChange(datetime);
+        return;
       }
 
       /**
@@ -105,7 +116,7 @@ const DateTimeControl = ({
       setInternalValue(newValue);
       onChange(newValue);
     },
-    [format, onChange],
+    [defaultValue, format, onChange],
   );
 
   useEffect(() => {
@@ -115,10 +126,15 @@ const DateTimeControl = ({
      */
     if (internalValue === undefined) {
       setTimeout(() => {
-        handleChange(defaultValue === undefined ? new Date() : defaultValue);
+        handleChange(defaultValue);
       }, 0);
     }
   }, [defaultValue, handleChange, internalValue]);
+
+  const dateValue = useMemo(
+    () => (format ? parse(internalValue, format, new Date()) : parseISO(internalValue)),
+    [format, internalValue],
+  );
 
   const dateTimePicker = useMemo(() => {
     if (dateFormat && !timeFormat) {
@@ -127,12 +143,13 @@ const DateTimeControl = ({
           key="mobile-date-picker"
           inputFormat={typeof dateFormat === 'string' ? dateFormat : 'MMM d, yyyy'}
           label={label}
-          value={internalValue}
+          value={dateValue}
           onChange={handleChange}
           renderInput={params => (
             <TextField
               key="mobile-date-input"
               {...params}
+              error={hasErrors}
               fullWidth
               InputProps={{
                 endAdornment: (
@@ -156,12 +173,13 @@ const DateTimeControl = ({
           key="time-picker"
           label={label}
           inputFormat={typeof timeFormat === 'string' ? timeFormat : 'H:mm'}
-          value={internalValue}
+          value={dateValue}
           onChange={handleChange}
           renderInput={params => (
             <TextField
               key="time-input"
               {...params}
+              error={hasErrors}
               fullWidth
               InputProps={{
                 endAdornment: (
@@ -198,12 +216,13 @@ const DateTimeControl = ({
         key="mobile-date-time-picker"
         inputFormat={inputFormat}
         label={label}
-        value={internalValue}
+        value={dateValue}
         onChange={handleChange}
         renderInput={params => (
           <TextField
             key="mobile-date-time-input"
             {...params}
+            error={hasErrors}
             fullWidth
             InputProps={{
               endAdornment: (
@@ -219,7 +238,7 @@ const DateTimeControl = ({
         )}
       />
     );
-  }, [dateFormat, handleChange, internalValue, isDisabled, label, t, timeFormat]);
+  }, [dateFormat, dateValue, handleChange, hasErrors, isDisabled, label, t, timeFormat]);
 
   return (
     <LocalizationProvider key="localization-provider" dateAdapter={AdapterDateFns}>

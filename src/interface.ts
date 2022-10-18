@@ -62,12 +62,10 @@ export type ValueOrNestedValue =
   | string
   | number
   | boolean
-  | string[]
-  | number[]
   | null
   | undefined
-  | ValueOrNestedValue[]
-  | ObjectValue;
+  | ObjectValue
+  | ObjectValue[];
 
 export type EntryData = ObjectValue | undefined | null;
 
