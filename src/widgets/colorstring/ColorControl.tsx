@@ -1,7 +1,7 @@
-import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
+import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import React, { useCallback, useState } from 'react';
 import { ChromePicker } from 'react-color';
@@ -103,13 +103,7 @@ const ClickOutsideDiv = styled('div')`
   left: 0;
 `;
 
-const ColorControl = ({
-  path,
-  field,
-  onChange,
-  value,
-  t,
-}: WidgetControlProps<string, ColorField>) => {
+const ColorControl = ({ field, onChange, value, t }: WidgetControlProps<string, ColorField>) => {
   const [collapsed, setCollapsed] = useState(false);
 
   const handleCollapseToggle = useCallback(() => {
@@ -128,9 +122,9 @@ const ColorControl = ({
     (event: MouseEvent) => {
       event.stopPropagation();
       setInternalValue('');
-      onChange(path, field, '');
+      onChange('');
     },
-    [field, onChange, path],
+    [onChange],
   );
 
   const handleClose = useCallback(() => {
@@ -144,17 +138,17 @@ const ColorControl = ({
           ? `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`
           : color.hex;
       setInternalValue(formattedColor);
-      onChange(path, field, formattedColor);
+      onChange(formattedColor);
     },
-    [field, onChange, path],
+    [onChange],
   );
 
   const handleInputChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       setInternalValue(event.target.value);
-      onChange(path, field, event.target.value);
+      onChange(event.target.value);
     },
-    [field, onChange, path],
+    [onChange],
   );
 
   const allowInput = field.allowInput ?? false;

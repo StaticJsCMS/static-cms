@@ -65,7 +65,7 @@ export default function withMapControl({ getFormat, getMap }: WithMapControlProp
         featuresSource.clear();
         const geometry = feature.getGeometry();
         if (geometry) {
-          onChange(path, field, format.writeGeometry(geometry, writeOptions));
+          onChange(format.writeGeometry(geometry, writeOptions));
         }
       });
     }, [field, mapContainer, onChange, path, value]);

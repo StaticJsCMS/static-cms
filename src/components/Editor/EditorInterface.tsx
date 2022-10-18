@@ -20,11 +20,8 @@ import type {
   EditorPersistOptions,
   Entry,
   Field,
-  FieldsErrors,
-  I18nSettings,
-  TranslatedProps,
-  User,
-  ValueOrNestedValue,
+  FieldsErrors, TranslatedProps,
+  User
 } from '../../interface';
 
 const PREVIEW_VISIBLE = 'cms.preview-visible';
@@ -141,12 +138,6 @@ interface EditorInterfaceProps {
   collection: Collection;
   fields: Field[] | undefined;
   fieldsErrors: FieldsErrors;
-  onChange: (
-    path: string,
-    field: Field,
-    value: ValueOrNestedValue,
-    i18n: I18nSettings | undefined,
-  ) => void;
   onPersist: (opts?: EditorPersistOptions) => Promise<void>;
   onDelete: () => Promise<void>;
   onDuplicate: () => void;
@@ -168,7 +159,6 @@ const EditorInterface = ({
   entry,
   fields = [],
   fieldsErrors,
-  onChange,
   showDelete,
   onDelete,
   onDuplicate,
@@ -246,7 +236,6 @@ const EditorInterface = ({
         entry={entry}
         fields={fields}
         fieldsErrors={fieldsErrors}
-        onChange={onChange}
         locale={selectedLocale}
         onLocaleChange={handleLocaleChange}
         // TODO ref={c => (this.controlPaneRef = c)}
@@ -262,7 +251,6 @@ const EditorInterface = ({
         entry={entry}
         fields={fields}
         fieldsErrors={fieldsErrors}
-        onChange={onChange}
         locale={locales?.[1]}
         onLocaleChange={handleLocaleChange}
         t={t}

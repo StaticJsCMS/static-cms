@@ -115,6 +115,37 @@ collections:
             min: 5
             max: 10
             required: false
+          - name: pattern
+            label: 'Pattern'
+            widget: number
+            pattern: ['[0-9]{3,}', "Must be at least 3 digits"]
+            required: false
+      - name: string
+        label: String
+        file: _validations/string.json
+        description: String validations
+        fields:
+          - name: required
+            label: Required
+            widget: string
+          - name: pattern
+            label: 'Pattern'
+            widget: string
+            pattern: ['.{12,}', "Must have at least 12 characters"]
+            required: false
+      - name: text
+        label: Text
+        file: _validations/text.json
+        description: Text validations
+        fields:
+          - name: required
+            label: Required
+            widget: text
+          - name: pattern
+            label: 'Pattern'
+            widget: text
+            pattern: ['.{12,}', "Must have at least 12 characters"]
+            required: false
   - name: settings
     label: Settings
     delete: false

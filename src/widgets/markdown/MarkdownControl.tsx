@@ -34,7 +34,6 @@ const StyledEditorWrapper = styled('div')`
 const MarkdownControl = ({
   label,
   path,
-  field,
   value,
   fieldsErrors,
   onChange,
@@ -54,8 +53,8 @@ const MarkdownControl = ({
   const handleOnChange = useCallback(() => {
     const newValue = editorRef.current?.getInstance().getMarkdown() ?? '';
     setInternalValue(newValue);
-    onChange(path, field, newValue);
-  }, [editorRef, field, onChange, path]);
+    onChange(newValue);
+  }, [editorRef, onChange]);
 
   const errors = useMemo(() => fieldsErrors[path] ?? [], [fieldsErrors, path]);
 

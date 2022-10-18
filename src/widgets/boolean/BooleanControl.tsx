@@ -5,21 +5,15 @@ import React, { useCallback, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import type { BooleanField, WidgetControlProps } from '../../interface';
 
-const BooleanControl = ({
-  path,
-  field,
-  value,
-  label,
-  onChange,
-}: WidgetControlProps<boolean, BooleanField>) => {
+const BooleanControl = ({ value, label, onChange }: WidgetControlProps<boolean, BooleanField>) => {
   const [internalValue, setInternalValue] = useState(value ?? false);
 
   const handleChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       setInternalValue(event.target.checked);
-      onChange(path, field, event.target.checked);
+      onChange(event.target.checked);
     },
-    [field, onChange, path],
+    [onChange],
   );
 
   return (

@@ -5,19 +5,22 @@ import { connect } from 'react-redux';
 
 import { logoutUser as logoutUserAction } from '../../actions/auth';
 import {
-  changeDraftField as changeDraftFieldAction, createDraftDuplicateFromEntry as createDraftDuplicateFromEntryAction,
-  createEmptyDraft as createEmptyDraftAction, deleteDraftLocalBackup as deleteDraftLocalBackupAction, deleteEntry as deleteEntryAction,
+  createDraftDuplicateFromEntry as createDraftDuplicateFromEntryAction,
+  createEmptyDraft as createEmptyDraftAction,
+  deleteDraftLocalBackup as deleteDraftLocalBackupAction,
+  deleteEntry as deleteEntryAction,
   deleteLocalBackup as deleteLocalBackupAction,
   discardDraft as discardDraftAction,
   loadEntries as loadEntriesAction,
   loadEntry as loadEntryAction,
-  loadLocalBackup as loadLocalBackupAction, persistEntry as persistEntryAction,
+  loadLocalBackup as loadLocalBackupAction,
+  persistEntry as persistEntryAction,
   persistLocalBackup as persistLocalBackupAction,
-  retrieveLocalBackup as retrieveLocalBackupAction
+  retrieveLocalBackup as retrieveLocalBackupAction,
 } from '../../actions/entries';
 import {
   loadScroll as loadScrollAction,
-  toggleScroll as toggleScrollAction
+  toggleScroll as toggleScrollAction,
 } from '../../actions/scroll';
 import { selectFields } from '../../lib/util/collection.util';
 import { useWindowEvent } from '../../lib/util/window.util';
@@ -30,15 +33,7 @@ import EditorInterface from './EditorInterface';
 import type { TransitionPromptHook } from 'history';
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
-import type {
-  Collection,
-  EditorPersistOptions,
-  Entry,
-  Field,
-  I18nSettings,
-  TranslatedProps,
-  ValueOrNestedValue
-} from '../../interface';
+import type { Collection, EditorPersistOptions, Entry, TranslatedProps } from '../../interface';
 import type { RootState } from '../../store';
 
 const Editor = ({
@@ -61,7 +56,6 @@ const Editor = ({
   slug,
   localBackup,
   persistLocalBackup,
-  changeDraftField,
   loadEntry,
   persistEntry,
   deleteEntry,
@@ -81,13 +75,6 @@ const Editor = ({
         persistLocalBackup(entry, collection);
       }, 2000),
     [persistLocalBackup],
-  );
-
-  const handleChangeDraftField = useCallback(
-    (path: string, field: Field, value: ValueOrNestedValue, i18n: I18nSettings | undefined) => {
-      changeDraftField({ path, field, value, entry, i18n });
-    },
-    [changeDraftField, entry],
   );
 
   const deleteBackup = useCallback(() => {
@@ -306,7 +293,6 @@ const Editor = ({
       collection={collection}
       fields={fields}
       fieldsErrors={entryDraft.fieldsErrors}
-      onChange={handleChangeDraftField}
       onPersist={handlePersistEntry}
       onDelete={handleDeleteEntry}
       onDuplicate={handleDuplicateEntry}
@@ -381,7 +367,6 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
 }
 
 const mapDispatchToProps = {
-  changeDraftField: changeDraftFieldAction,
   loadEntry: loadEntryAction,
   loadEntries: loadEntriesAction,
   loadLocalBackup: loadLocalBackupAction,

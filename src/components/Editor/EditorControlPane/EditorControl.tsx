@@ -1,10 +1,11 @@
 import { styled } from '@mui/material/styles';
+import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
-import isEmpty from 'lodash/isEmpty';
 
 import {
+  changeDraftField as changeDraftFieldAction,
   changeDraftFieldValidation as changeDraftFieldValidationAction,
   clearFieldErrors as clearFieldErrorsAction,
   tryLoadEntry,
@@ -34,6 +35,7 @@ import type {
   FieldError,
   FieldsErrors,
   GetAssetFunction,
+  I18nSettings,
   TranslatedProps,
   ValueOrNestedValue,
   Widget,
@@ -154,7 +156,6 @@ const EditorControl = ({
   loadEntry,
   locale,
   mediaPaths,
-  onChange,
   changeDraftFieldValidation,
   openMediaLibrary,
   parentPath,
@@ -164,6 +165,9 @@ const EditorControl = ({
   removeMediaControl,
   t,
   value,
+  forList = false,
+  changeDraftField,
+  i18n,
 }: TranslatedProps<EditorControlProps>) => {
   const widgetName = field.widget;
   const widget = resolveWidget(widgetName) as Widget<ValueOrNestedValue>;
@@ -177,7 +181,6 @@ const EditorControl = ({
   const [dirty, setDirty] = useState(!isEmpty(value));
   const [errors, setErrors] = useState<FieldError[]>([]);
   const hasErrors = Boolean(errors);
-  console.log(path, errors, hasErrors);
 
   const handleGetAsset = useCallback(
     (collection: Collection, entry: Entry): GetAssetFunction =>
@@ -186,8 +189,6 @@ const EditorControl = ({
       },
     [getAsset],
   );
-
-  console.log('DIRTY', dirty, field.name);
 
   useEffect(() => {
     let alive = true;
@@ -210,12 +211,12 @@ const EditorControl = ({
     };
   }, [field, value, changeDraftFieldValidation, path, t, widget, dirty]);
 
-  const handleOnChange = useCallback(
-    (path: string, field: Field, newValue: ValueOrNestedValue) => {
+  const handleChangeDraftField = useCallback(
+    (value: ValueOrNestedValue) => {
       setDirty(true);
-      onChange(path, field, newValue);
+      changeDraftField({ path, field, value, entry, i18n });
     },
-    [onChange],
+    [changeDraftField, entry, field, i18n, path],
   );
 
   const config = useMemo(() => configState.config, [configState.config]);
@@ -246,7 +247,7 @@ const EditorControl = ({
           locale,
           mediaPaths,
           addAsset,
-          onChange: handleOnChange,
+          onChange: handleChangeDraftField,
           clearMediaControl,
           openMediaLibrary,
           persistMedia,
@@ -256,12 +257,13 @@ const EditorControl = ({
           query,
           t,
           value,
+          forList,
+          i18n,
         })}
         {fieldHint && <ControlHint $error={hasErrors}>{fieldHint}</ControlHint>}
         {errors ? (
           <ControlErrorsList>
             {errors.map(error => {
-              console.log('ERROR', error, error.message && typeof error.message === 'string');
               return (
                 error.message &&
                 typeof error.message === 'string' && (
@@ -288,9 +290,10 @@ interface EditorControlOwnProps {
   isHidden?: boolean;
   isNewEditorComponent?: boolean;
   locale?: string;
-  onChange: (path: string, field: Field, newValue: ValueOrNestedValue) => void;
   parentPath: string;
   value: ValueOrNestedValue;
+  forList?: boolean;
+  i18n: I18nSettings | undefined;
 }
 
 function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
@@ -322,6 +325,7 @@ function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
 }
 
 const mapDispatchToProps = {
+  changeDraftField: changeDraftFieldAction,
   changeDraftFieldValidation: changeDraftFieldValidationAction,
   openMediaLibrary: openMediaLibraryAction,
   clearMediaControl: clearMediaControlAction,

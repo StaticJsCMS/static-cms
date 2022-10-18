@@ -1,6 +1,6 @@
-import { styled } from '@mui/material/styles';
 import TodayIcon from '@mui/icons-material/Today';
 import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -12,7 +12,7 @@ import formatISO from 'date-fns/formatISO';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { MouseEvent } from 'react';
-import type { DateTimeField, WidgetControlProps, TranslatedProps } from '../../interface';
+import type { DateTimeField, TranslatedProps, WidgetControlProps } from '../../interface';
 
 const StyledNowButton = styled('div')`
   width: fit-content;
@@ -48,7 +48,6 @@ function NowButton({ t, handleChange, disabled }: TranslatedProps<NowButtonProps
 }
 
 const DateTimeControl = ({
-  path,
   field,
   label,
   value,
@@ -84,7 +83,7 @@ const DateTimeControl = ({
   const handleChange = useCallback(
     (datetime: string | Date | null) => {
       if (datetime === null) {
-        onChange(path, field, datetime);
+        onChange(datetime);
         return;
       }
 
@@ -104,9 +103,9 @@ const DateTimeControl = ({
       }
 
       setInternalValue(newValue);
-      onChange(path, field, newValue);
+      onChange(newValue);
     },
-    [field, format, onChange, path],
+    [format, onChange],
   );
 
   useEffect(() => {

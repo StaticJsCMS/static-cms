@@ -233,7 +233,7 @@ export interface WidgetControlProps<T, F extends Field = Field> {
   entry: Entry;
   field: F;
   fieldsErrors: FieldsErrors;
-  forList?: boolean;
+  forList: boolean;
   getAsset: GetAssetFunction;
   hasError?: boolean;
   isDisabled: boolean;
@@ -247,12 +247,13 @@ export interface WidgetControlProps<T, F extends Field = Field> {
   locale: string | undefined;
   mediaPaths: Record<string, string | string[]>;
   addAsset: EditorControlProps['addAsset'];
-  onChange: EditorControlProps['onChange'];
+  onChange: (value: T | null | undefined) => void;
   clearMediaControl: EditorControlProps['clearMediaControl'];
   openMediaLibrary: EditorControlProps['openMediaLibrary'];
   persistMedia: EditorControlProps['persistMedia'];
   removeInsertedMedia: EditorControlProps['removeInsertedMedia'];
   removeMediaControl: EditorControlProps['removeMediaControl'];
+  i18n: I18nSettings | undefined;
   path: string;
   query: EditorControlProps['query'];
   t: t;

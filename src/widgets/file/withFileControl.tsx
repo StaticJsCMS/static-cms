@@ -1,17 +1,17 @@
-import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import PhotoIcon from '@mui/icons-material/Photo';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import { styled } from '@mui/material/styles';
 import { arrayMoveImmutable as arrayMove } from 'array-move';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import uuid from 'uuid/v4';
 
-import { borders, effects, lengths, shadows } from '../../components/UI/styles';
-import { basename, transientOptions } from '../../lib/util';
 import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
 import Outline from '../../components/UI/Outline';
+import { borders, effects, lengths, shadows } from '../../components/UI/styles';
+import { basename, transientOptions } from '../../lib/util';
 
 import type { MouseEvent, MouseEventHandler } from 'react';
 import type { FileOrImageField, GetAssetFunction, WidgetControlProps } from '../../interface';
@@ -246,7 +246,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
     useEffect(() => {
       const mediaPath = mediaPaths[controlID];
       if (mediaPath && mediaPath !== value) {
-        onChange(path, field, mediaPath);
+        onChange(mediaPath);
       } else if (mediaPath && mediaPath === value) {
         removeInsertedMedia(controlID);
       }
@@ -303,28 +303,28 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
 
         const url = window.prompt(t(`editor.editorWidgets.${subject}.promptUrl`));
 
-        return onChange(path, field, url);
+        return onChange(url);
       },
-      [field, onChange, path, t],
+      [onChange, t],
     );
 
     const handleRemove = useCallback(
       (e: MouseEvent) => {
         e.preventDefault();
         clearMediaControl(controlID);
-        return onChange(path, field, '');
+        return onChange('');
       },
-      [controlID, field, onChange, clearMediaControl, path],
+      [controlID, onChange, clearMediaControl],
     );
 
     const onRemoveOne = useCallback(
       (index: number) => () => {
         if (Array.isArray(value)) {
           value.splice(index, 1);
-          return onChange(path, field, sizeOfValue(value) > 0 ? [...value] : null);
+          return onChange(sizeOfValue(value) > 0 ? [...value] : null);
         }
       },
-      [field, onChange, path, value],
+      [onChange, value],
     );
 
     const onReplaceOne = useCallback(
@@ -347,10 +347,10 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
       ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
         if (Array.isArray(value)) {
           const newValue = arrayMove(value, oldIndex, newIndex);
-          return onChange(path, field, newValue);
+          return onChange(newValue);
         }
       },
-      [field, onChange, path, value],
+      [onChange, value],
     );
 
     const renderFileLink = useCallback((value: string | undefined | null) => {

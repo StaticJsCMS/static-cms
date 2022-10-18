@@ -3,13 +3,12 @@ import partial from 'lodash/partial';
 import React, { useCallback, useMemo, useState } from 'react';
 import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 
+import EditorControl from '../../components/Editor/EditorControlPane/EditorControl';
 import ListItemTopBar from '../../components/UI/ListItemTopBar';
 import Outline from '../../components/UI/Outline';
 import { colors, lengths } from '../../components/UI/styles';
 import { transientOptions } from '../../lib';
-import { getFieldLabel } from '../../lib/util/field.util';
 import { addFileTemplateFields, compileStringTemplate } from '../../lib/widgets/stringTemplate';
-import ObjectControl from '../object/ObjectControl';
 import { ListValueType } from './ListControl';
 import { getErrorMessageForTypedFieldAndValue, getTypedFieldForValue } from './typedListHelpers';
 
@@ -21,7 +20,7 @@ import type {
   ListField,
   ObjectField,
   ObjectValue,
-  WidgetControlProps
+  WidgetControlProps,
 } from '../../interface';
 
 const StyledListItem = styled('div')`
@@ -108,7 +107,20 @@ function validateItem(field: ListField, item: ObjectValue) {
   return true;
 }
 
-interface ListItemProps extends WidgetControlProps<ObjectValue, ListField> {
+interface ListItemProps
+  extends Pick<
+    WidgetControlProps<ObjectValue, ListField>,
+    | 'clearFieldErrors'
+    | 'entry'
+    | 'field'
+    | 'fieldsErrors'
+    | 'isFieldDuplicate'
+    | 'isFieldHidden'
+    | 'locale'
+    | 'path'
+    | 'value'
+    | 'i18n'
+  > {
   valueType: ListValueType;
   index: number;
   handleRemove: (index: number, event: MouseEvent) => void;
@@ -117,35 +129,17 @@ interface ListItemProps extends WidgetControlProps<ObjectValue, ListField> {
 const ListItem = ({
   index,
   clearFieldErrors,
-  clearSearch,
-  collection,
-  config,
   entry,
   field,
   fieldsErrors,
-  getAsset,
-  isDisabled,
-  isEditorComponent,
-  isFetching,
   isFieldDuplicate,
   isFieldHidden,
-  isNewEditorComponent,
-  loadEntry,
   locale,
-  mediaPaths,
-  addAsset,
-  onChange,
-  clearMediaControl,
-  openMediaLibrary,
-  persistMedia,
-  removeInsertedMedia,
-  removeMediaControl,
   path,
-  query,
-  t,
   valueType,
   handleRemove,
   value,
+  i18n,
 }: ListItemProps) => {
   const [objectLabel, objectField] = useMemo((): [string, ListField | ObjectField] => {
     const base = field.label ?? field.name;
@@ -216,15 +210,17 @@ const ListItem = ({
     [collapsed],
   );
 
-  const errors = useMemo(() => fieldsErrors[path], [fieldsErrors, path]);
-  const hasError = useMemo(() => errors?.length > 0, [errors?.length]);
   const isVariableTypesList = valueType === ListValueType.MIXED;
   let itemField: Field | undefined = field;
   if (isVariableTypesList) {
     itemField = getTypedFieldForValue(field, value);
   }
 
-  const fieldLabel = useMemo(() => getFieldLabel(field, t), [field, t]);
+  const fieldName = field.name;
+  const fieldValue = value && value[fieldName];
+
+  const isDuplicate = isFieldDuplicate && isFieldDuplicate(field);
+  const isHidden = isFieldHidden && isFieldHidden(field);
 
   return (
     <SortableStyledListItem key="sortable-list-item" index={index}>
@@ -245,40 +241,20 @@ const ListItem = ({
           </NestedObjectLabel>
         ) : (
           <StyledObjectFieldWrapper $collapsed={collapsed}>
-            <ObjectControl
-              key="object-control"
-              clearFieldErrors={clearFieldErrors}
-              clearSearch={clearSearch}
-              collection={collection}
-              config={config}
-              data-testid={`object-control-${index}`}
-              entry={entry}
+            <EditorControl
+              key={index}
               field={objectField}
+              value={fieldValue}
+              clearFieldErrors={clearFieldErrors}
               fieldsErrors={fieldsErrors}
-              forList
-              getAsset={getAsset}
-              hasError={hasError}
-              isDisabled={isDisabled}
-              isEditorComponent={isEditorComponent}
-              isFetching={isFetching}
+              parentPath={path}
+              isDisabled={isDuplicate}
+              isHidden={isHidden}
               isFieldDuplicate={isFieldDuplicate}
               isFieldHidden={isFieldHidden}
-              isNewEditorComponent={isNewEditorComponent}
-              label={fieldLabel}
-              loadEntry={loadEntry}
               locale={locale}
-              mediaPaths={mediaPaths}
-              addAsset={addAsset}
-              onChange={onChange}
-              clearMediaControl={clearMediaControl}
-              openMediaLibrary={openMediaLibrary}
-              persistMedia={persistMedia}
-              removeInsertedMedia={removeInsertedMedia}
-              removeMediaControl={removeMediaControl}
-              path={`${path}.${index}`}
-              query={query}
-              t={t}
-              value={value}
+              i18n={i18n}
+              forList
             />
           </StyledObjectFieldWrapper>
         )}

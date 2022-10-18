@@ -81,10 +81,10 @@ const NumberControl = ({
       if (isNaN(newValue)) {
         newValue = '';
       }
-      onChange(path, field, newValue);
+      onChange(newValue);
       setInternalValue(newValue);
     },
-    [field, onChange, path],
+    [field, onChange],
   );
 
   const min = field.min ?? '';

@@ -983,8 +983,6 @@ export function persistEntry(collection: Collection) {
         errors.some(error => error.type && error.type === ValidationErrorTypes.PRESENCE),
       );
 
-      console.log(fieldsErrors);
-
       if (hasPresenceErrors) {
         dispatch(
           addSnackbar({

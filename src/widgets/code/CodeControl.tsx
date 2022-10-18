@@ -55,7 +55,6 @@ const settingsPersistKeys = {
 };
 
 const CodeControl = ({
-  path,
   isEditorComponent,
   isNewEditorComponent,
   field,
@@ -145,13 +144,13 @@ const CodeControl = ({
       // Only persist the language change if supported - requires the value to be
       // a map rather than just a code string.
       if (changedProps.lang && valueIsMap) {
-        onChange(path, field, {
+        onChange({
           ...(typeof value !== 'string' ? value : {}),
           lang: changedProps.lang,
         });
       }
     },
-    [codemirrorEditor, field, getLanguageByName, onChange, path, value, valueIsMap],
+    [codemirrorEditor, getLanguageByName, onChange, value, valueIsMap],
   );
 
   const [prevLang, setPrevLang] = useState<string | undefined>();
@@ -197,11 +196,11 @@ const CodeControl = ({
       setLastKnownValue(newValue);
 
       if (valueIsMap) {
-        onChange(path, field, { ...(typeof value !== 'string' ? value : {}), code: newValue });
+        onChange({ ...(typeof value !== 'string' ? value : {}), code: newValue });
       }
-      onChange(path, field, newValue);
+      onChange(newValue);
     },
-    [codemirrorEditor, field, onChange, path, value, valueIsMap],
+    [codemirrorEditor, onChange, value, valueIsMap],
   );
 
   const showSettings = useCallback(() => {

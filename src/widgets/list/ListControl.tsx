@@ -8,7 +8,6 @@ import uuid from 'uuid';
 import FieldLabel from '../../components/UI/FieldLabel';
 import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
 import Outline from '../../components/UI/Outline';
-import { getFieldLabel } from '../../lib/util/field.util';
 import transientOptions from '../../lib/util/transientOptions';
 import ListItem from './ListItem';
 import { resolveFieldKeyType, TYPES_KEY } from './typedListHelpers';
@@ -95,33 +94,17 @@ function getFieldsDefault(
 
 const ListControl = ({
   clearFieldErrors,
-  clearSearch,
-  collection,
-  config,
   entry,
   field,
   fieldsErrors,
-  getAsset,
-  isDisabled,
-  isEditorComponent,
-  isFetching,
   isFieldDuplicate,
   isFieldHidden,
-  isNewEditorComponent,
-  loadEntry,
   locale,
-  mediaPaths,
-  addAsset,
   onChange,
-  clearMediaControl,
-  openMediaLibrary,
-  persistMedia,
-  removeInsertedMedia,
-  removeMediaControl,
   path,
-  query,
   t,
   value,
+  i18n,
 }: WidgetControlProps<ObjectValue[], ListField>) => {
   const internalValue = useMemo(() => value ?? [], [value]);
   const [collapsed, setCollapsed] = useState(field.collapsed ?? true);
@@ -138,13 +121,6 @@ const ListControl = ({
       return null;
     }
   }, [field]);
-
-  const handleChange = useCallback(
-    (newValue: ObjectValue[]) => {
-      onChange(path, field, newValue);
-    },
-    [field, onChange, path],
-  );
 
   const singleDefault = useCallback(() => {
     return (field.field && 'default' in field.field ? field.field.default : '') as ObjectValue;
@@ -180,10 +156,10 @@ const ListControl = ({
         newValue.push(parsedValue);
       }
       setKeys(newKeys);
-      handleChange(newValue);
+      onChange(newValue);
       setCollapsed(false);
     },
-    [field.add_to_top, handleChange, internalValue, keys],
+    [field.add_to_top, onChange, internalValue, keys],
   );
 
   const handleAdd = useCallback(
@@ -216,9 +192,9 @@ const ListControl = ({
       newValue.splice(index, 1);
 
       setKeys(newKeys);
-      handleChange(newValue);
+      onChange(newValue);
     },
-    [handleChange, internalValue, keys],
+    [onChange, internalValue, keys],
   );
 
   const handleCollapseAllToggle = useCallback(
@@ -233,9 +209,9 @@ const ListControl = ({
     ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
       // Update value
       setKeys(arrayMoveImmutable(keys, oldIndex, newIndex));
-      handleChange(arrayMoveImmutable(internalValue, oldIndex, newIndex));
+      onChange(arrayMoveImmutable(internalValue, oldIndex, newIndex));
     },
-    [handleChange, internalValue, keys],
+    [onChange, internalValue, keys],
   );
 
   const renderItem = useCallback(
@@ -252,36 +228,16 @@ const ListControl = ({
           valueType={valueType}
           handleRemove={handleRemove}
           clearFieldErrors={clearFieldErrors}
-          clearSearch={clearSearch}
-          collection={collection}
-          config={config}
           data-testid={`object-control-${index}`}
           entry={entry}
           field={field}
           fieldsErrors={fieldsErrors}
-          forList
-          getAsset={getAsset}
-          isDisabled={isDisabled}
-          isEditorComponent={isEditorComponent}
-          isFetching={isFetching}
           isFieldDuplicate={isFieldDuplicate}
           isFieldHidden={isFieldHidden}
-          isNewEditorComponent={isNewEditorComponent}
-          label={getFieldLabel(field, t)}
-          loadEntry={loadEntry}
           locale={locale}
-          mediaPaths={mediaPaths}
-          addAsset={addAsset}
-          onChange={onChange}
-          clearMediaControl={clearMediaControl}
-          openMediaLibrary={openMediaLibrary}
-          persistMedia={persistMedia}
-          removeInsertedMedia={removeInsertedMedia}
-          removeMediaControl={removeMediaControl}
           path={path}
-          query={query}
-          t={t}
           value={item as Record<string, ObjectValue>}
+          i18n={i18n}
         />
       );
     },
@@ -290,32 +246,14 @@ const ListControl = ({
       valueType,
       handleRemove,
       clearFieldErrors,
-      clearSearch,
-      collection,
-      config,
       entry,
       field,
       fieldsErrors,
-      getAsset,
-      isDisabled,
-      isEditorComponent,
-      isFetching,
       isFieldDuplicate,
       isFieldHidden,
-      isNewEditorComponent,
-      t,
-      loadEntry,
       locale,
-      mediaPaths,
-      addAsset,
-      onChange,
-      clearMediaControl,
-      openMediaLibrary,
-      persistMedia,
-      removeInsertedMedia,
-      removeMediaControl,
       path,
-      query,
+      i18n,
     ],
   );
 

@@ -35,24 +35,24 @@ const SelectControl = ({
         isMultiple && Array.isArray(selectedOption) ? !selectedOption?.length : !selectedOption;
 
       if (field.required && isEmpty && isMultiple) {
-        onChange(path, field, []);
+        onChange([]);
       } else if (isEmpty) {
-        onChange(path, field, null);
+        onChange('');
       } else if (typeof selectedOption === 'string') {
-        onChange(path, field, selectedOption);
+        onChange(selectedOption);
       } else if (isMultiple) {
-        onChange(path, field, selectedOption);
+        onChange(selectedOption);
       }
     },
-    [field, onChange, path],
+    [field, onChange],
   );
 
   useEffect(() => {
     if (field.required && field.multiple) {
       if (value && !Array.isArray(value)) {
-        onChange(path, field, [value]);
+        onChange([value]);
       } else if (!value) {
-        onChange(path, field, []);
+        onChange([]);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

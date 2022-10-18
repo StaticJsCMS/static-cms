@@ -5,8 +5,6 @@ import type { ChangeEvent } from 'react';
 import type { StringOrTextField, WidgetControlProps } from '../../interface';
 
 const StringControl = ({
-  path,
-  field,
   value,
   label,
   onChange,
@@ -16,9 +14,9 @@ const StringControl = ({
   const handleChange = useCallback(
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setInternalValue(event.target.value);
-      onChange(path, field, event.target.value);
+      onChange(event.target.value);
     },
-    [field, onChange, path],
+    [onChange],
   );
 
   return (

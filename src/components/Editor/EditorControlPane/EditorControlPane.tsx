@@ -6,7 +6,10 @@ import get from 'lodash/get';
 import React, { useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
 
-import { clearFieldErrors as clearFieldErrorsAction } from '../../../actions/entries';
+import {
+  changeDraftField as changeDraftFieldAction,
+  clearFieldErrors as clearFieldErrorsAction,
+} from '../../../actions/entries';
 import confirm from '../../../components/UI/Confirm';
 import {
   getI18nInfo,
@@ -108,7 +111,7 @@ const EditorControlPane = ({
   entry,
   fields,
   fieldsErrors,
-  onChange,
+  changeDraftField,
   locale,
   onLocaleChange,
   clearFieldErrors,
@@ -154,11 +157,11 @@ const EditorControlPane = ({
               sourceLocale !== i18n?.defaultLocale,
               sourceLocale,
             );
-            onChange(field.name, field, copyValue, i18n);
+            changeDraftField({ path: field.name, field, value: copyValue, entry, i18n });
           }
         });
       },
-    [fields, entry, i18n, onChange],
+    [fields, entry, i18n, changeDraftField],
   );
 
   if (!collection || !fields) {
@@ -201,9 +204,6 @@ const EditorControlPane = ({
               field={field}
               value={getFieldValue(field, entry, isTranslatable, locale)}
               fieldsErrors={fieldsErrors}
-              onChange={(path, field, newValue) => {
-                onChange(path, field, newValue, i18n);
-              }}
               isDisabled={isDuplicate}
               isHidden={isHidden}
               isFieldDuplicate={field => isFieldDuplicate(field, locale, i18n?.defaultLocale)}
@@ -211,6 +211,7 @@ const EditorControlPane = ({
               locale={locale}
               clearFieldErrors={clearFieldErrors}
               parentPath=""
+              i18n={i18n}
             />
           );
         })}
@@ -223,12 +224,6 @@ export interface EditorControlPaneOwnProps {
   entry: Entry;
   fields: Field[];
   fieldsErrors: FieldsErrors;
-  onChange: (
-    path: string,
-    field: Field,
-    value: ValueOrNestedValue,
-    i18n: I18nSettings | undefined,
-  ) => void;
   locale?: string;
   onLocaleChange: (locale: string) => void;
 }
@@ -240,6 +235,7 @@ function mapStateToProps(_state: RootState, ownProps: EditorControlPaneOwnProps)
 }
 
 const mapDispatchToProps = {
+  changeDraftField: changeDraftFieldAction,
   clearFieldErrors: clearFieldErrorsAction,
 };
 

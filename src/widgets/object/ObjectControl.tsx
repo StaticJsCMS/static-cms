@@ -55,9 +55,9 @@ const ObjectControl = ({
   isFieldDuplicate,
   isFieldHidden,
   locale,
-  onChange,
   path,
   t,
+  i18n,
   value = {},
 }: WidgetControlProps<ObjectValue, ObjectField | ListField>) => {
   const [collapsed, setCollapsed] = useState(false);
@@ -88,7 +88,6 @@ const ObjectControl = ({
             key={index}
             field={field}
             value={fieldValue}
-            onChange={onChange}
             clearFieldErrors={clearFieldErrors}
             fieldsErrors={fieldsErrors}
             parentPath={path}
@@ -97,6 +96,7 @@ const ObjectControl = ({
             isFieldDuplicate={isFieldDuplicate}
             isFieldHidden={isFieldHidden}
             locale={locale}
+            i18n={i18n}
           />
         );
       }) ?? null
@@ -104,11 +104,11 @@ const ObjectControl = ({
   }, [
     clearFieldErrors,
     fieldsErrors,
+    i18n,
     isFieldDuplicate,
     isFieldHidden,
     locale,
     multiFields,
-    onChange,
     path,
     value,
   ]);

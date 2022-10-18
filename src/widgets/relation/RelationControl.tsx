@@ -11,7 +11,7 @@ import {
   addFileTemplateFields,
   compileStringTemplate,
   expandPath,
-  extractTemplateVars,
+  extractTemplateVars
 } from '../../lib/widgets/stringTemplate';
 
 import type { ListChildComponentProps } from 'react-window';
@@ -188,15 +188,15 @@ const RelationControl = ({
         setInitialOptions(options.filter(Boolean));
         const newValue = options.map(optionToString);
         setInternalValue(newValue);
-        onChange(path, field, newValue);
+        onChange(newValue);
       } else {
         setInitialOptions([selectedOption].filter(Boolean) as HitOption[]);
         const newValue = optionToString(selectedOption);
         setInternalValue(newValue);
-        onChange(path, field, newValue);
+        onChange(newValue);
       }
     },
-    [field, onChange, path],
+    [onChange],
   );
 
   const [options, setOptions] = useState<HitOption[]>([]);

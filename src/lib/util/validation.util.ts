@@ -27,7 +27,6 @@ export function validatePresence({
   t,
 }: FieldValidationMethodProps<ValueOrNestedValue>): false | FieldError {
   const isRequired = field.required ?? true;
-  console.log('REQUIRED CHECK!', field.name, isRequired, isEmpty(value), `"${value}"`);
   if (isRequired && isEmpty(value)) {
     const error = {
       type: ValidationErrorTypes.PRESENCE,
@@ -53,7 +52,16 @@ export function validatePattern({
     return false;
   }
 
-  if (pattern && typeof value === 'string' && !RegExp(pattern[0]).test(value)) {
+  let valueToCheck: string;
+  if (typeof value === 'string') {
+    valueToCheck = value;
+  } else if (typeof value === 'number' || typeof value === 'boolean') {
+    valueToCheck = `${value}`;
+  } else {
+    valueToCheck = JSON.stringify(value);
+  }
+
+  if (pattern && !isEmpty(valueToCheck) && !RegExp(pattern[0]).test(valueToCheck)) {
     const error = {
       type: ValidationErrorTypes.PATTERN,
       message: t('editor.editorControlPane.widget.regexPattern', {
@@ -92,7 +100,6 @@ export async function validate(
     }
   }
 
-  console.log('errors', errors);
   onValidate(path, errors);
   return errors;
 }
