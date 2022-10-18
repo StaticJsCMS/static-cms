@@ -91,6 +91,20 @@ collections:
     editor:
       preview: false
     files:
+      - name: code
+        label: Code
+        file: _validations/code.json
+        description: Code validations
+        fields:
+          - name: required
+            label: Required
+            widget: code
+          - name: pattern
+            label: 'Pattern'
+            widget: code
+            pattern: ['.{12,}', 'Must have at least 12 characters']
+            allowInput: true
+            required: false
       - name: color
         label: Color
         file: _validations/color.json

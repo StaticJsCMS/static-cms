@@ -1,4 +1,5 @@
 import { ClassNames } from '@emotion/react';
+import { styled } from '@mui/material/styles';
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/sublime';
 import 'codemirror/keymap/vim';
@@ -8,12 +9,44 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
 import uuid from 'uuid/v4';
 
+import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
+import Outline from '../../components/UI/Outline';
+import transientOptions from '../../lib/util/transientOptions';
 import languageData from './data/languages';
 import SettingsButton from './SettingsButton';
 import SettingsPane from './SettingsPane';
 
 import type { Editor } from 'codemirror';
 import type { CodeField, WidgetControlProps } from '../../interface';
+
+const StyledCodeControlWrapper = styled('div')`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+`;
+
+interface StyledCodeControlContentProps {
+  $collapsed: boolean;
+}
+
+const StyledCodeControlContent = styled(
+  'div',
+  transientOptions,
+)<StyledCodeControlContentProps>(
+  ({ $collapsed }) => `
+    display: flex;
+    ${
+      $collapsed
+        ? `
+          visibility: hidden;
+          height: 0;
+          width: 0;
+        `
+        : ''
+    }
+  `,
+);
 
 interface CodeLanguage {
   label: string;
@@ -58,9 +91,26 @@ const CodeControl = ({
   isEditorComponent,
   isNewEditorComponent,
   field,
-  value,
   onChange,
+  hasErrors,
+  value,
+  t,
 }: WidgetControlProps<string | { [key: string]: string }, CodeField>) => {
+  const [internalValue, setInternalValue] = useState(value ?? '');
+  const [collapsed, setCollapsed] = useState(false);
+
+  const handleCollapseToggle = useCallback(() => {
+    setCollapsed(!collapsed);
+  }, [collapsed]);
+
+  const handleOnChange = useCallback(
+    (newValue: string | { [key: string]: string } | null | undefined) => {
+      setInternalValue(newValue ?? '');
+      onChange(newValue ?? '');
+    },
+    [onChange],
+  );
+
   // If the value is a map, keys can be customized via config.
   const getKeys = useCallback(
     (field: CodeField) => {
@@ -90,10 +140,10 @@ const CodeControl = ({
 
   // This widget is not fully controlled, it only takes a value through props upon initialization.
   const getInitialLang = useCallback(() => {
-    return valueIsMap && typeof value !== 'string'
-      ? value && value[keys.lang]
+    return valueIsMap && typeof internalValue !== 'string'
+      ? internalValue && internalValue[keys.lang]
       : field.default_language;
-  }, [field.default_language, keys.lang, value, valueIsMap]);
+  }, [field.default_language, keys.lang, internalValue, valueIsMap]);
 
   const [codemirrorEditor, setCodemirrorEditor] = useState<Editor | null>(null);
   const [lang, setLang] = useState(getInitialLang() ?? '');
@@ -106,7 +156,9 @@ const CodeControl = ({
     localStorage.getItem(settingsPersistKeys['theme']) || themes[themes.length - 1],
   );
   const [lastKnownValue, setLastKnownValue] = useState<string>(
-    (value && typeof value === 'object' ? value[keys.code] : value) ?? '',
+    (internalValue && typeof internalValue === 'object'
+      ? internalValue[keys.code]
+      : internalValue) ?? '',
   );
 
   const getLanguageByName = useCallback((name: string) => {
@@ -144,13 +196,13 @@ const CodeControl = ({
       // Only persist the language change if supported - requires the value to be
       // a map rather than just a code string.
       if (changedProps.lang && valueIsMap) {
-        onChange({
-          ...(typeof value !== 'string' ? value : {}),
+        handleOnChange({
+          ...(typeof internalValue !== 'string' ? internalValue : {}),
           lang: changedProps.lang,
         });
       }
     },
-    [codemirrorEditor, getLanguageByName, onChange, value, valueIsMap],
+    [codemirrorEditor, getLanguageByName, handleOnChange, internalValue, valueIsMap],
   );
 
   const [prevLang, setPrevLang] = useState<string | undefined>();
@@ -196,11 +248,14 @@ const CodeControl = ({
       setLastKnownValue(newValue);
 
       if (valueIsMap) {
-        onChange({ ...(typeof value !== 'string' ? value : {}), code: newValue });
+        handleOnChange({
+          ...(typeof internalValue !== 'string' ? internalValue : {}),
+          code: newValue,
+        });
       }
-      onChange(newValue);
+      handleOnChange(newValue);
     },
-    [codemirrorEditor, onChange, value, valueIsMap],
+    [codemirrorEditor, handleOnChange, internalValue, valueIsMap],
   );
 
   const showSettings = useCallback(() => {
@@ -224,78 +279,93 @@ const CodeControl = ({
   const uniqueId = useMemo(() => uuid(), []);
 
   return (
-    <ClassNames>
-      {({ css, cx }) => (
-        <div
-          className={cx(
-            css`
-              ${codeMirrorStyles};
-              ${materialTheme};
-              ${styleString};
-            `,
-          )}
-        >
-          {!settingsVisible && <SettingsButton onClick={showSettings} />}
-          {settingsVisible && (
-            <SettingsPane
-              hideSettings={hideSettings}
-              uniqueId={uniqueId}
-              modes={modes}
-              mode={valueToOption(langInfo || defaultLang)}
-              theme={themes.find(t => t === theme) ?? themes[0]}
-              themes={themes}
-              keyMap={{ value: keyMap, label: keyMap }}
-              keyMaps={getKeyMapOptions()}
-              allowLanguageSelection={allowLanguageSelection}
-              onChangeLang={newLang => setLang(newLang)}
-              onChangeTheme={newTheme => setTheme(newTheme)}
-              onChangeKeyMap={newKeyMap => setKeyMap(newKeyMap)}
-            />
-          )}
-          <ReactCodeMirror
-            key={codemirrorKey}
-            className={css`
-              height: 100%;
-              border-radius: 0 3px 3px;
-              overflow: hidden;
+    <StyledCodeControlWrapper>
+      <ObjectWidgetTopBar
+        key="file-control-top-bar"
+        collapsed={collapsed}
+        onCollapseToggle={handleCollapseToggle}
+        heading={field.label ?? field.name}
+        t={t}
+      />
+      <StyledCodeControlContent $collapsed={collapsed}>
+        <ClassNames>
+          {({ css, cx }) => (
+            <div
+              className={cx(
+                css`
+                  ${codeMirrorStyles};
+                  ${materialTheme};
+                  ${styleString};
 
-              .CodeMirror {
-                height: auto !important;
-                cursor: text;
-                min-height: 300px;
-              }
+                  width: 100%;
+                  position: relative;
+                `,
+              )}
+            >
+              {!settingsVisible && <SettingsButton onClick={showSettings} />}
+              {settingsVisible && (
+                <SettingsPane
+                  hideSettings={hideSettings}
+                  uniqueId={uniqueId}
+                  modes={modes}
+                  mode={valueToOption(langInfo || defaultLang)}
+                  theme={themes.find(t => t === theme) ?? themes[0]}
+                  themes={themes}
+                  keyMap={{ value: keyMap, label: keyMap }}
+                  keyMaps={getKeyMapOptions()}
+                  allowLanguageSelection={allowLanguageSelection}
+                  onChangeLang={newLang => setLang(newLang)}
+                  onChangeTheme={newTheme => setTheme(newTheme)}
+                  onChangeKeyMap={newKeyMap => setKeyMap(newKeyMap)}
+                />
+              )}
+              <ReactCodeMirror
+                key={codemirrorKey}
+                className={css`
+                  height: 100%;
+                  border-radius: 0 3px 3px;
+                  overflow: hidden;
 
-              .CodeMirror-scroll {
-                min-height: 300px;
-              }
-            `}
-            options={{
-              lineNumbers: true,
-              ...field.codeMirrorConfig,
-              extraKeys: {
-                'Shift-Tab': 'indentLess',
-                Tab: 'indentMore',
-                ...(field.codeMirrorConfig.extraKeys || {}),
-              },
-              theme,
-              mode,
-              keyMap,
-              viewportMargin: Infinity,
-            }}
-            detach={true}
-            editorDidMount={cm => {
-              setCodemirrorEditor(cm);
-              if (isNewEditorComponent) {
-                handleFocus();
-              }
-            }}
-            value={lastKnownValue}
-            onChange={(_editor, _data, newValue) => handleChange(newValue)}
-            onFocus={handleFocus}
-          />
-        </div>
-      )}
-    </ClassNames>
+                  .CodeMirror {
+                    height: auto !important;
+                    cursor: text;
+                    min-height: 300px;
+                  }
+
+                  .CodeMirror-scroll {
+                    min-height: 300px;
+                  }
+                `}
+                options={{
+                  lineNumbers: true,
+                  ...field.codeMirrorConfig,
+                  extraKeys: {
+                    'Shift-Tab': 'indentLess',
+                    Tab: 'indentMore',
+                    ...(field.codeMirrorConfig?.extraKeys ?? {}),
+                  },
+                  theme,
+                  mode,
+                  keyMap,
+                  viewportMargin: Infinity,
+                }}
+                detach={true}
+                editorDidMount={cm => {
+                  setCodemirrorEditor(cm);
+                  if (isNewEditorComponent) {
+                    handleFocus();
+                  }
+                }}
+                value={lastKnownValue}
+                onChange={(_editor, _data, newValue) => handleChange(newValue)}
+                onFocus={handleFocus}
+              />
+            </div>
+          )}
+        </ClassNames>
+      </StyledCodeControlContent>
+      <Outline hasError={hasErrors} />
+    </StyledCodeControlWrapper>
   );
 };
 
