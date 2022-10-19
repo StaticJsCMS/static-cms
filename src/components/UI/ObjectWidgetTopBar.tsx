@@ -85,22 +85,24 @@ const ObjectWidgetTopBar = ({
       return (
         <div>
           <Button
-            id="basic-button"
-            aria-controls={open ? 'basic-menu' : undefined}
+            id="types-button"
+            aria-controls={open ? 'types-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
             variant="outlined"
+            size="small"
+            endIcon={<AddIcon fontSize="small" />}
           >
             {t('editor.editorWidgets.list.addType', { item: label })}
           </Button>
           <Menu
-            id="basic-menu"
+            id="types-menu"
             anchorEl={anchorEl}
             open={open}
             onClose={handleClose}
             MenuListProps={{
-              'aria-labelledby': 'basic-button',
+              'aria-labelledby': 'types-button',
             }}
           >
             {types.map((type, idx) =>

@@ -190,12 +190,6 @@ collections:
             widget: file
             pattern: ['\.pdf', 'Must be a pdf']
             required: false
-          - name: multiple
-            label: Multiple
-            widget: file
-            required: false
-            media_library:
-              allow_multiple: true
           - name: choose_url
             label: 'Choose URL'
             widget: file
@@ -215,18 +209,82 @@ collections:
             widget: image
             pattern: ['\.png', 'Must be a png']
             required: false
-          - name: multiple
-            label: Multiple
-            widget: image
-            required: false
-            media_library:
-              allow_multiple: true
           - name: choose_url
             label: 'Choose URL'
             widget: image
             required: false
             media_library:
               choose_url: true
+      - name: list
+        label: List
+        file: _widgets/list.yml
+        description: List widget
+        fields:
+          - name: single
+            label: 'Single Field'
+            widget: list
+            field:
+              label: Tag
+              name: tag
+              widget: string
+          - name: multiple
+            label: 'Multiple Fields'
+            widget: list
+            fields:
+              - label: Name
+                name: name
+                widget: string
+                hint: First and Last
+              - label: Description
+                name: description
+                widget: text
+          - name: typed_list
+            label: Typed List
+            widget: list
+            types:
+              - label: Type 1 Object
+                name: type_1_object
+                widget: object
+                fields:
+                  - label: String
+                    name: string
+                    widget: string
+                  - label: Boolean
+                    name: boolean
+                    widget: boolean
+                  - label: Text
+                    name: text
+                    widget: text
+              - label: Type 2 Object
+                name: type_2_object
+                widget: object
+                fields:
+                  - label: Number
+                    name: number
+                    widget: number
+                  - label: Select
+                    name: select
+                    widget: select
+                    options:
+                      - a
+                      - b
+                      - c
+                  - label: Datetime
+                    name: datetime
+                    widget: datetime
+                  - label: Markdown
+                    name: markdown
+                    widget: text
+              - label: Type 3 Object
+                name: type_3_object
+                widget: object
+                fields:
+                  - label: Image
+                    name: image
+                    widget: image
+                  - label: File
+                    name: file
+                    widget: file
       - name: map
         label: Map
         file: _widgets/map.json

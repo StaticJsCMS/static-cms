@@ -17,6 +17,7 @@ import type { Field, ListField, ObjectValue, WidgetControlProps } from '../../in
 
 const StyledListWrapper = styled('div')`
   position: relative;
+  width: 100%;
 `;
 
 interface StyledSortableListProps {

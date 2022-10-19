@@ -284,8 +284,6 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
       [mediaLibraryFieldOptions],
     );
 
-    console.log('mediaLibraryFieldOptions', mediaLibraryFieldOptions);
-
     const handleChange = useCallback(
       (e: MouseEvent) => {
         e.preventDefault();
