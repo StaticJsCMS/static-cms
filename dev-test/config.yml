@@ -161,7 +161,19 @@ collections:
             label: 'Pattern'
             widget: map
             pattern: ['\[-([7-9][0-9]|1[0-2][0-9])\.', 'Must be between latitude -70 and -129']
-            allow_input: true
+            required: false
+      - name: markdown
+        label: Markdown
+        file: _validations/markdown.json
+        description: Markdown validations
+        fields:
+          - name: required
+            label: Required
+            widget: markdown
+          - name: pattern
+            label: 'Pattern'
+            widget: markdown
+            pattern: ['# [a-zA-Z0-9]+', 'Must have a header']
             required: false
       - name: number
         label: Number

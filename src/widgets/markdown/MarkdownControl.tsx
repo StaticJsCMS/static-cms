@@ -37,6 +37,7 @@ const MarkdownControl = ({
   value,
   fieldsErrors,
   onChange,
+  hasErrors,
 }: WidgetControlProps<string, MarkdownField>) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
   const editorRef = useMemo(() => React.createRef(), []) as RefObject<Editor>;
@@ -91,7 +92,7 @@ const MarkdownControl = ({
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
       />
-      <Outline key="markdown-control-outline" active={hasFocus} hasLabel />
+      <Outline key="markdown-control-outline" hasLabel hasError={hasErrors} />
     </StyledEditorWrapper>
   );
 };

@@ -1,4 +1,4 @@
-import { styled } from '@mui/material/styles';
+import { css, styled } from '@mui/material/styles';
 import GeoJSON from 'ol/format/GeoJSON';
 import Draw from 'ol/interaction/Draw';
 import TileLayer from 'ol/layer/Tile';
@@ -52,7 +52,9 @@ const StyledMapControlContent = styled(
 const StyledMap = styled('div')`
   width: 100%;
   position: relative;
-  ${olStyles}
+  ${css`
+    ${olStyles}
+  `}
 `;
 
 const formatOptions = {
