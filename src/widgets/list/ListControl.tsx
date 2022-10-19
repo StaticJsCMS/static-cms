@@ -13,7 +13,13 @@ import ListItem from './ListItem';
 import { resolveFieldKeyType, TYPES_KEY } from './typedListHelpers';
 
 import type { MouseEvent } from 'react';
-import type { Field, ListField, ObjectValue, WidgetControlProps } from '../../interface';
+import type {
+  Field,
+  ListField,
+  ObjectValue,
+  ValueOrNestedValue,
+  WidgetControlProps,
+} from '../../interface';
 
 const StyledListWrapper = styled('div')`
   position: relative;
@@ -65,14 +71,13 @@ export enum ListValueType {
   MIXED,
 }
 
-function getFieldsDefault(
-  fields: Field[],
-  initialValue: Record<string, ObjectValue> = {},
-): Record<string, ObjectValue> {
+function getFieldsDefault(fields: Field[], initialValue: ObjectValue = {}): ObjectValue {
   return fields.reduce((acc, item) => {
     const subfields = ('field' in item && item.field) || ('fields' in item && item.fields);
     const name = item.name;
-    const defaultValue = (('default' in item && item.default) ?? null) as ObjectValue;
+    const defaultValue: ValueOrNestedValue | null =
+      'default' in item && item.default ? item.default : null;
+    console.log('DEFAULT VALUE', name, defaultValue, item, item.default);
 
     if (Array.isArray(subfields)) {
       const subDefaultValue = getFieldsDefault(subfields);
@@ -125,8 +130,14 @@ const ListControl = ({
     }
   }, [field]);
 
-  const singleDefault = useCallback(() => {
-    return (field.field && 'default' in field.field ? field.field.default : '') as ObjectValue;
+  const singleDefault = useCallback((): ObjectValue => {
+    if (!field.field) {
+      return {};
+    }
+
+    return 'default' in field.field
+      ? { [field.field.name]: field.field.default }
+      : { [field.field.name]: '' };
   }, [field.field]);
 
   const multipleDefault = useCallback((fields: Field[]) => {
@@ -134,7 +145,7 @@ const ListControl = ({
   }, []);
 
   const mixedDefault = useCallback(
-    (typeKey: string, type: string): Record<string, ObjectValue> => {
+    (typeKey: string, type: string): ObjectValue => {
       const selectedType = 'types' in field && field.types?.find(f => f.name === type);
       if (!selectedType) {
         return {};
@@ -170,6 +181,8 @@ const ListControl = ({
       e.preventDefault();
       const parsedValue =
         'fields' in field && field.fields ? multipleDefault(field.fields) : singleDefault();
+
+      console.log('parsedValue', parsedValue);
 
       addItem(parsedValue);
     },
@@ -220,8 +233,8 @@ const ListControl = ({
   const renderItem = useCallback(
     (item: ObjectValue, index: number) => {
       const key = keys[index];
-      if (!valueType) {
-        return <div />;
+      if (valueType === null) {
+        return <div key={key} />;
       }
 
       return (
@@ -281,9 +294,10 @@ const ListControl = ({
   const listLabel = internalValue.length === 1 ? labelSingular.toLowerCase() : label.toLowerCase();
 
   return (
-    <StyledListWrapper>
-      <FieldLabel>{label}</FieldLabel>
+    <StyledListWrapper key="list-widget">
+      <FieldLabel key="label">{label}</FieldLabel>
       <ObjectWidgetTopBar
+        key="header"
         allowAdd={field.allow_add ?? true}
         onAdd={handleAdd}
         types={field[TYPES_KEY] ?? []}
@@ -297,6 +311,7 @@ const ListControl = ({
       />
       {internalValue.length > 0 ? (
         <SortableList
+          key="sortable-list"
           collapsed={collapsed}
           items={internalValue}
           renderItem={renderItem}
@@ -305,7 +320,7 @@ const ListControl = ({
           lockAxis="y"
         />
       ) : null}
-      <Outline hasLabel hasError={hasChildErrors} />
+      <Outline key="outline" hasLabel hasError={hasChildErrors} />
     </StyledListWrapper>
   );
 };

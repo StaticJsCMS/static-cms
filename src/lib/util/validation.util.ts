@@ -141,6 +141,9 @@ async function validateFieldAndChildren(
 
   if ('types' in field && field.types && Array.isArray(value)) {
     for (const childValue of value) {
+      if (typeof childValue === 'string') {
+        continue;
+      }
       const itemType = getTypedFieldForValue(field, childValue);
       if (itemType) {
         await validateFieldAndChildren(

@@ -44,14 +44,11 @@ function runSerializer(
 
       // Call recursively for fields within lists
       if (nestedFields && Array.isArray(value)) {
-        acc[fieldName] = value.map(val => {
+        for (const val of value) {
           if (typeof val === 'object') {
-            runSerializer(val as Record<string, EntryData>, nestedFields, method);
+            acc[fieldName] = runSerializer(val as Record<string, EntryData>, nestedFields, method);
           }
-
-          return val;
-        });
-
+        }
         return acc;
       }
 

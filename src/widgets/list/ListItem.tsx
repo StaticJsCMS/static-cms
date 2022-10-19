@@ -142,18 +142,28 @@ const ListItem = ({
   i18n,
 }: ListItemProps) => {
   const [objectLabel, objectField] = useMemo((): [string, ListField | ObjectField] => {
+    const childObjectField: ObjectField = {
+      name: `${index}`,
+      label: field.label,
+      summary: field.summary,
+      widget: 'object',
+      fields: [],
+    };
+
     const base = field.label ?? field.name;
-    if (!value) {
-      return [base, field];
+    if (valueType === null) {
+      return [base, childObjectField];
     }
+
+    const objectValue = value ?? {};
 
     switch (valueType) {
       case ListValueType.MIXED: {
-        if (!validateItem(field, value)) {
+        if (!validateItem(field, objectValue)) {
           return [base, field];
         }
 
-        const itemType = getTypedFieldForValue(field, value);
+        const itemType = getTypedFieldForValue(field, objectValue);
         if (!itemType) {
           return [base, field];
         }
@@ -162,49 +172,49 @@ const ListItem = ({
         // each type can have its own summary, but default to the list summary if exists
         const summary = ('summary' in itemType && itemType.summary) ?? field.summary;
         const labelReturn = summary
-          ? `${label} - ${handleSummary(summary, entry, label, value)}`
+          ? `${label} - ${handleSummary(summary, entry, label, objectValue)}`
           : label;
         return [labelReturn, itemType];
       }
       case ListValueType.SINGLE: {
         const singleField = field.field;
         if (!singleField) {
-          return [base, field];
+          return [base, childObjectField];
         }
+
+        childObjectField.fields = [singleField];
 
         const label = singleField.label ?? singleField.name;
         const summary = field.summary;
-        const data = { [singleField.name]: value };
+        const data = { [singleField.name]: objectValue };
         const labelReturn = summary
           ? `${label} - ${handleSummary(summary, entry, label, data)}`
           : label;
-        return [labelReturn, field];
+        return [labelReturn, childObjectField];
       }
       case ListValueType.MULTIPLE: {
-        const childObject: ObjectField = {
-          ...field,
-          widget: 'object',
-          fields: field.fields ?? [],
-        };
-        if (!validateItem(field, value)) {
-          return [base, childObject];
+        childObjectField.fields = field.fields ?? [];
+
+        if (!validateItem(field, objectValue)) {
+          return [base, childObjectField];
         }
+
         const multiFields = field.fields;
         const labelField = multiFields && multiFields[0];
         if (!labelField) {
-          return [base, childObject];
+          return [base, childObjectField];
         }
 
-        const labelFieldValue = value[labelField.name];
+        const labelFieldValue = objectValue[labelField.name];
 
         const summary = field.summary;
         const labelReturn = summary
-          ? handleSummary(summary, entry, String(labelFieldValue), value)
+          ? handleSummary(summary, entry, String(labelFieldValue), objectValue)
           : labelFieldValue;
-        return [(labelReturn || `No ${labelField.name}`).toString(), childObject];
+        return [(labelReturn || `No ${labelField.name}`).toString(), childObjectField];
       }
     }
-  }, [entry, field, value, valueType]);
+  }, [entry, field, index, value, valueType]);
 
   const [collapsed, setCollapsed] = useState(false);
   const handleCollapseToggle = useCallback(
@@ -221,13 +231,8 @@ const ListItem = ({
     itemField = getTypedFieldForValue(field, value);
   }
 
-  const fieldName = field.name;
-  const fieldValue = value && value[fieldName];
-
   const isDuplicate = isFieldDuplicate && isFieldDuplicate(field);
   const isHidden = isFieldHidden && isFieldHidden(field);
-
-  console.log('object field', objectField);
 
   return (
     <SortableStyledListItem key="sortable-list-item" index={index}>
@@ -251,7 +256,7 @@ const ListItem = ({
             <EditorControl
               key={index}
               field={objectField}
-              value={fieldValue}
+              value={value}
               clearFieldErrors={clearFieldErrors}
               fieldsErrors={fieldsErrors}
               parentPath={path}

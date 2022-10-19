@@ -62,6 +62,7 @@ export type ValueOrNestedValue =
   | string
   | number
   | boolean
+  | string[]
   | null
   | undefined
   | ObjectValue
@@ -542,7 +543,7 @@ export interface BooleanField extends BaseField {
 
 export interface CodeField extends BaseField {
   widget: 'code';
-  default?: unknown;
+  default?: string | { [key: string]: string };
 
   default_language?: string;
   allow_language_selection?: boolean;
@@ -582,7 +583,7 @@ export interface FileOrImageField extends BaseField {
 
 export interface ObjectField extends BaseField {
   widget: 'object';
-  default?: unknown;
+  default?: ObjectValue;
 
   collapsed?: boolean;
   summary?: string;
@@ -591,7 +592,7 @@ export interface ObjectField extends BaseField {
 
 export interface ListField extends BaseField {
   widget: 'list';
-  default?: unknown;
+  default?: ObjectValue[];
 
   allow_add?: boolean;
   collapsed?: boolean;
@@ -668,7 +669,7 @@ export interface RelationField extends BaseField {
 
 export interface HiddenField extends BaseField {
   widget: 'hidden';
-  default?: unknown;
+  default?: ValueOrNestedValue;
 }
 
 export interface StringOrTextField extends BaseField {
