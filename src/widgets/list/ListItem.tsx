@@ -181,13 +181,18 @@ const ListItem = ({
         return [labelReturn, field];
       }
       case ListValueType.MULTIPLE: {
+        const childObject: ObjectField = {
+          ...field,
+          widget: 'object',
+          fields: field.fields ?? [],
+        };
         if (!validateItem(field, value)) {
-          return [base, field];
+          return [base, childObject];
         }
         const multiFields = field.fields;
         const labelField = multiFields && multiFields[0];
         if (!labelField) {
-          return [base, field];
+          return [base, childObject];
         }
 
         const labelFieldValue = value[labelField.name];
@@ -196,7 +201,7 @@ const ListItem = ({
         const labelReturn = summary
           ? handleSummary(summary, entry, String(labelFieldValue), value)
           : labelFieldValue;
-        return [(labelReturn || `No ${labelField.name}`).toString(), field];
+        return [(labelReturn || `No ${labelField.name}`).toString(), childObject];
       }
     }
   }, [entry, field, value, valueType]);
@@ -221,6 +226,8 @@ const ListItem = ({
 
   const isDuplicate = isFieldDuplicate && isFieldDuplicate(field);
   const isHidden = isFieldHidden && isFieldHidden(field);
+
+  console.log('object field', objectField);
 
   return (
     <SortableStyledListItem key="sortable-list-item" index={index}>

@@ -32,6 +32,7 @@ const StyledSortableList = styled(
     display: flex;
     flex-direction: column;
     gap: 16px;
+    width: 100%;
     ${
       $collapsed
         ? `

@@ -12,6 +12,7 @@ import type { ListField, ObjectField, ObjectValue, WidgetControlProps } from '..
 const StyledObjectControlWrapper = styled('div')`
   position: relative;
   background: white;
+  width: 100%;
 `;
 
 interface StyledFieldsBoxProps {
@@ -26,6 +27,7 @@ const StyledFieldsBox = styled(
     display: flex;
     flex-direction: column;
     gap: 16px;
+    width: 100%;
     ${
       $collapsed
         ? `
