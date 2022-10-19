@@ -112,12 +112,16 @@ collections:
           - name: required
             label: 'Required Validation'
             widget: code
-            allow_language_selection: true
           - name: pattern
             label: 'Pattern Validation'
             widget: code
             pattern: ['.{12,}', 'Must have at least 12 characters']
             allow_input: true
+            required: false
+          - name: language
+            label: 'Language Selection'
+            widget: code
+            allow_language_selection: true
             required: false
       - name: color
         label: Color

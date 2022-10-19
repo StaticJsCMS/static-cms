@@ -66,7 +66,7 @@ const SettingsSelect = ({
   };
 
   return (
-    <FormControl fullWidth>
+    <FormControl fullWidth size="small">
       <InputLabel id={`${uniqueId}-select-${type}-label`}>{label}</InputLabel>
       <Select
         labelId={`${uniqueId}-select-${type}-label`}
@@ -74,7 +74,6 @@ const SettingsSelect = ({
         value={value.value}
         label={label}
         onChange={handleChange}
-        size="small"
       >
         {options.map(({ label, value }) =>
           value ? (
