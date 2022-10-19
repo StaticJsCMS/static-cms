@@ -202,6 +202,31 @@ collections:
             required: false
             media_library:
               choose_url: true
+      - name: image
+        label: Image
+        file: _widgets/image.json
+        description: Image widget
+        fields:
+          - name: required
+            label: 'Required Validation'
+            widget: image
+          - name: pattern
+            label: 'Pattern Validation'
+            widget: image
+            pattern: ['\.png', 'Must be a png']
+            required: false
+          - name: multiple
+            label: Multiple
+            widget: image
+            required: false
+            media_library:
+              allow_multiple: true
+          - name: choose_url
+            label: 'Choose URL'
+            widget: image
+            required: false
+            media_library:
+              choose_url: true
       - name: map
         label: Map
         file: _widgets/map.json
