@@ -1,17 +1,59 @@
-import React, { useLayoutEffect, useMemo } from 'react';
-import { ClassNames } from '@emotion/react';
-import olStyles from 'ol/ol.css';
-import Map from 'ol/Map.js';
-import View from 'ol/View.js';
+import { styled } from '@mui/material/styles';
 import GeoJSON from 'ol/format/GeoJSON';
 import Draw from 'ol/interaction/Draw';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
+import Map from 'ol/Map.js';
+import olStyles from 'ol/ol.css';
 import OSMSource from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
+import View from 'ol/View.js';
+import React, { useCallback, useLayoutEffect, useMemo, useState } from 'react';
 
-import type { MapField, WidgetControlProps } from '../../interface';
+import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
+import Outline from '../../components/UI/Outline';
+import transientOptions from '../../lib/util/transientOptions';
+
 import type { Geometry } from 'ol/geom';
+import type { MapField, WidgetControlProps } from '../../interface';
+
+const StyledMapControlWrapper = styled('div')`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+`;
+
+interface StyledMapControlContentProps {
+  $collapsed: boolean;
+  $height: string;
+}
+
+const StyledMapControlContent = styled(
+  'div',
+  transientOptions,
+)<StyledMapControlContentProps>(
+  ({ $collapsed, $height }) => `
+    display: flex;
+    postion: relative;
+    height: ${$height}
+    ${
+      $collapsed
+        ? `
+          visibility: hidden;
+          height: 0;
+          width: 0;
+        `
+        : ''
+    }
+  `,
+);
+
+const StyledMap = styled('div')`
+  width: 100%;
+  position: relative;
+  ${olStyles}
+`;
 
 const formatOptions = {
   dataProjection: 'EPSG:4326',
@@ -36,8 +78,22 @@ interface WithMapControlProps {
 }
 
 export default function withMapControl({ getFormat, getMap }: WithMapControlProps = {}) {
-  const MapControl = ({ path, value, field, onChange }: WidgetControlProps<string, MapField>) => {
+  const MapControl = ({
+    path,
+    value,
+    field,
+    onChange,
+    hasErrors,
+    label,
+    t,
+  }: WidgetControlProps<string, MapField>) => {
+    const [collapsed, setCollapsed] = useState(false);
+
+    const handleCollapseToggle = useCallback(() => {
+      setCollapsed(!collapsed);
+    }, [collapsed]);
     const { height = '400px' } = field;
+
     const mapContainer: React.LegacyRef<HTMLDivElement> = useMemo(() => React.createRef(), []);
 
     useLayoutEffect(() => {
@@ -71,21 +127,19 @@ export default function withMapControl({ getFormat, getMap }: WithMapControlProp
     }, [field, mapContainer, onChange, path, value]);
 
     return (
-      <ClassNames>
-        {({ cx, css }) => (
-          <div
-            className={cx(
-              css`
-                ${olStyles};
-                padding: 0;
-                overflow: hidden;
-                height: ${height};
-              `,
-            )}
-            ref={mapContainer}
-          />
-        )}
-      </ClassNames>
+      <StyledMapControlWrapper>
+        <ObjectWidgetTopBar
+          key="file-control-top-bar"
+          collapsed={collapsed}
+          onCollapseToggle={handleCollapseToggle}
+          heading={label}
+          t={t}
+        />
+        <StyledMapControlContent $collapsed={collapsed} $height={height}>
+          <StyledMap ref={mapContainer} />
+        </StyledMapControlContent>
+        <Outline hasError={hasErrors} />
+      </StyledMapControlWrapper>
     );
   };
 

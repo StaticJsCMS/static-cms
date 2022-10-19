@@ -149,6 +149,20 @@ collections:
             time_format: 'h:mm aaa'
             pattern: ['pm', 'Must be in the afternoon']
             required: false
+      - name: map
+        label: Map
+        file: _validations/map.json
+        description: Map validations
+        fields:
+          - name: required
+            label: Required
+            widget: map
+          - name: pattern
+            label: 'Pattern'
+            widget: map
+            pattern: ['\[-([7-9][0-9]|1[0-2][0-9])\.', 'Must be between latitude -70 and -129']
+            allow_input: true
+            required: false
       - name: number
         label: Number
         file: _validations/number.json
