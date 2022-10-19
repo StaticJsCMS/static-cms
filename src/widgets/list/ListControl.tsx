@@ -66,14 +66,13 @@ const SortableList = SortableContainer<SortableListProps>(
 );
 
 export enum ListValueType {
-  SINGLE,
   MULTIPLE,
   MIXED,
 }
 
 function getFieldsDefault(fields: Field[], initialValue: ObjectValue = {}): ObjectValue {
   return fields.reduce((acc, item) => {
-    const subfields = ('field' in item && item.field) || ('fields' in item && item.fields);
+    const subfields = 'fields' in item && item.fields;
     const name = item.name;
     const defaultValue: ValueOrNestedValue | null =
       'default' in item && item.default ? item.default : null;
@@ -121,24 +120,12 @@ const ListControl = ({
   const valueType = useMemo(() => {
     if ('fields' in field) {
       return ListValueType.MULTIPLE;
-    } else if ('field' in field) {
-      return ListValueType.SINGLE;
     } else if ('types' in field) {
       return ListValueType.MIXED;
     } else {
       return null;
     }
   }, [field]);
-
-  const singleDefault = useCallback((): ObjectValue => {
-    if (!field.field) {
-      return {};
-    }
-
-    return 'default' in field.field
-      ? { [field.field.name]: field.field.default }
-      : { [field.field.name]: '' };
-  }, [field.field]);
 
   const multipleDefault = useCallback((fields: Field[]) => {
     return getFieldsDefault(fields);
@@ -179,14 +166,13 @@ const ListControl = ({
   const handleAdd = useCallback(
     (e: MouseEvent) => {
       e.preventDefault();
-      const parsedValue =
-        'fields' in field && field.fields ? multipleDefault(field.fields) : singleDefault();
+      const parsedValue = 'fields' in field && field.fields ? multipleDefault(field.fields) : {};
 
       console.log('parsedValue', parsedValue);
 
       addItem(parsedValue);
     },
-    [addItem, field, multipleDefault, singleDefault],
+    [addItem, field, multipleDefault],
   );
 
   const handleAddType = useCallback(

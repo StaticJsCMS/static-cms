@@ -176,22 +176,6 @@ const ListItem = ({
           : label;
         return [labelReturn, itemType];
       }
-      case ListValueType.SINGLE: {
-        const singleField = field.field;
-        if (!singleField) {
-          return [base, childObjectField];
-        }
-
-        childObjectField.fields = [singleField];
-
-        const label = singleField.label ?? singleField.name;
-        const summary = field.summary;
-        const data = { [singleField.name]: objectValue };
-        const labelReturn = summary
-          ? `${label} - ${handleSummary(summary, entry, label, data)}`
-          : label;
-        return [labelReturn, childObjectField];
-      }
       case ListValueType.MULTIPLE: {
         childObjectField.fields = field.fields ?? [];
 

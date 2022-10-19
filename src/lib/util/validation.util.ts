@@ -115,42 +115,48 @@ async function validateFieldAndChildren(
   onValidate: (path: string, errors: FieldError[]) => void,
   t: t,
 ) {
-  if ('fields' in field && field.fields) {
-    for (const childField of field.fields) {
-      await validateFieldAndChildren(
-        `${path}.${childField.name}`,
-        childField,
-        !Array.isArray(value) && typeof value === 'object' ? value?.[field.name] : undefined,
-        resolveWidget(childField.widget),
-        onValidate,
-        t,
-      );
+  if (field.widget === 'list') {
+    if ('fields' in field && field.fields) {
+      for (const childField of field.fields) {
+        await validateFieldAndChildren(
+          `${path}.${childField.name}`,
+          childField,
+          !Array.isArray(value) && typeof value === 'object' ? value?.[field.name] : undefined,
+          resolveWidget(childField.widget),
+          onValidate,
+          t,
+        );
+      }
+    }
+
+    if ('types' in field && field.types && Array.isArray(value)) {
+      for (const childValue of value) {
+        if (typeof childValue === 'string') {
+          continue;
+        }
+        const itemType = getTypedFieldForValue(field, childValue);
+        if (itemType) {
+          await validateFieldAndChildren(
+            `${path}.${itemType.name}`,
+            itemType,
+            !Array.isArray(value) && typeof value === 'object' ? value?.[field.name] : undefined,
+            resolveWidget(itemType.widget),
+            onValidate,
+            t,
+          );
+        }
+      }
     }
   }
 
-  if ('field' in field && field.field) {
-    await validateFieldAndChildren(
-      `${path}.${field.field.name}`,
-      field.field,
-      !Array.isArray(value) && typeof value === 'object' ? value?.[field.name] : undefined,
-      resolveWidget(field.field.widget),
-      onValidate,
-      t,
-    );
-  }
-
-  if ('types' in field && field.types && Array.isArray(value)) {
-    for (const childValue of value) {
-      if (typeof childValue === 'string') {
-        continue;
-      }
-      const itemType = getTypedFieldForValue(field, childValue);
-      if (itemType) {
+  if (field.widget === 'object') {
+    if ('fields' in field && field.fields) {
+      for (const childField of field.fields) {
         await validateFieldAndChildren(
-          `${path}.${itemType.name}`,
-          itemType,
+          `${path}.${childField.name}`,
+          childField,
           !Array.isArray(value) && typeof value === 'object' ? value?.[field.name] : undefined,
-          resolveWidget(itemType.widget),
+          resolveWidget(childField.widget),
           onValidate,
           t,
         );

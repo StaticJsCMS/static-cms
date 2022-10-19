@@ -599,7 +599,6 @@ export interface ListField extends BaseField {
   summary?: string;
   minimize_collapsed?: boolean;
   label_singular?: string;
-  field?: Field;
   fields?: Field[];
   max?: number;
   min?: number;
