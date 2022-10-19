@@ -170,6 +170,7 @@ const ColorControl = ({
         collapsed={collapsed}
         onCollapseToggle={handleCollapseToggle}
         heading={field.label ?? field.name}
+        hasError={hasErrors}
         t={t}
       />
       <StyledColorControlContent $collapsed={collapsed}>

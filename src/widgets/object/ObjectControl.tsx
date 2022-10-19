@@ -57,6 +57,7 @@ const ObjectControl = ({
   path,
   t,
   i18n,
+  hasErrors,
   value = {},
 }: WidgetControlProps<ObjectValue, ObjectField | ListField>) => {
   const [collapsed, setCollapsed] = useState(false);
@@ -132,6 +133,7 @@ const ObjectControl = ({
             collapsed={collapsed}
             onCollapseToggle={handleCollapseToggle}
             heading={objectLabel}
+            hasError={hasErrors}
             t={t}
           />
         )}

@@ -135,6 +135,7 @@ export default function withMapControl({ getFormat, getMap }: WithMapControlProp
           collapsed={collapsed}
           onCollapseToggle={handleCollapseToggle}
           heading={label}
+          hasError={hasErrors}
           t={t}
         />
         <StyledMapControlContent $collapsed={collapsed} $height={height}>

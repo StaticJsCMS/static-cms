@@ -234,6 +234,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
     removeMediaControl,
     getAsset,
     mediaPaths,
+    hasErrors,
     t,
   }: WidgetControlProps<string | string[], FileOrImageField>) => {
     const controlID = useMemo(() => uuid(), []);
@@ -480,6 +481,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
           collapsed={collapsed}
           onCollapseToggle={handleCollapseToggle}
           heading={field.label ?? field.name}
+          hasError={hasErrors}
           t={t}
         />
         <StyledFileControlContent $collapsed={collapsed}>{content}</StyledFileControlContent>

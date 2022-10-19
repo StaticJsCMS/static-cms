@@ -1,13 +1,14 @@
-import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { styled } from '@mui/material/styles';
 import React, { useCallback } from 'react';
 
-import { colors, transitions } from './styles';
+import { transientOptions } from '../../lib';
+import { colors, colorsRaw, transitions } from './styles';
 
 import type { MouseEvent, ReactNode } from 'react';
 import type { Field, TranslatedProps } from '../../interface';
@@ -21,16 +22,26 @@ const TopBarContainer = styled('div')`
   padding: 2px 8px;
 `;
 
-const ExpandButtonContainer = styled('div')`
-  display: flex;
-  align-items: center;
-  color: rgba(0, 0, 0, 0.6);
-  font-family: "Roboto","Helvetica","Arial",sans-serif;
-  font-weight: 400;
-  font-size: 1rem;
-  line-height: 1.4375em;
-  letter-spacing: 0.00938em;]
-`;
+interface ExpandButtonContainerProps {
+  $hasError: boolean;
+}
+
+const ExpandButtonContainer = styled(
+  'div',
+  transientOptions,
+)<ExpandButtonContainerProps>(
+  ({ $hasError }) => `
+    display: flex;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.6);
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.4375em;
+    letter-spacing: 0.00938em;
+    ${$hasError ? `color: ${colorsRaw.red}` : ''}
+  `,
+);
 
 export interface ObjectWidgetTopBarProps {
   allowAdd?: boolean;
@@ -41,6 +52,7 @@ export interface ObjectWidgetTopBarProps {
   collapsed: boolean;
   heading: ReactNode;
   label?: string;
+  hasError?: boolean;
 }
 
 const ObjectWidgetTopBar = ({
@@ -52,6 +64,7 @@ const ObjectWidgetTopBar = ({
   collapsed,
   heading,
   label,
+  hasError = false,
   t,
 }: TranslatedProps<ObjectWidgetTopBarProps>) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -130,12 +143,13 @@ const ObjectWidgetTopBar = ({
 
   return (
     <TopBarContainer>
-      <ExpandButtonContainer>
+      <ExpandButtonContainer $hasError={hasError}>
         <IconButton onClick={onCollapseToggle} data-testid="expand-button">
           <ExpandMoreIcon
             sx={{
               transform: `rotateZ(${collapsed ? '-90deg' : '0deg'})`,
               transition: `transform ${transitions.main};`,
+              color: hasError ? colorsRaw.red : undefined,
             }}
           />
         </IconButton>

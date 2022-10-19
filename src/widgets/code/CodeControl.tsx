@@ -294,6 +294,7 @@ const CodeControl = ({
         collapsed={collapsed}
         onCollapseToggle={handleCollapseToggle}
         heading={field.label ?? field.name}
+        hasError={hasErrors}
         t={t}
       />
       <StyledCodeControlContent $collapsed={collapsed}>

@@ -105,6 +105,7 @@ const ListControl = ({
   t,
   value,
   i18n,
+  hasErrors,
 }: WidgetControlProps<ObjectValue[], ListField>) => {
   const internalValue = useMemo(() => value ?? [], [value]);
   const [collapsed, setCollapsed] = useState(field.collapsed ?? true);
@@ -289,6 +290,7 @@ const ListControl = ({
         label={labelSingular.toLowerCase()}
         onCollapseToggle={handleCollapseAllToggle}
         collapsed={collapsed}
+        hasError={hasErrors}
         t={t}
       />
       {internalValue.length > 0 ? (
