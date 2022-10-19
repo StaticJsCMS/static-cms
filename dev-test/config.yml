@@ -85,64 +85,64 @@ collections:
               - title
               - body
             value_field: '{{title}}|{{date}}'
-  - name: validations
-    label: Validations
+  - name: widgets
+    label: Widgets
     delete: false
     editor:
       preview: false
     files:
       - name: boolean
         label: Boolean
-        file: _validations/boolean.json
-        description: Boolean validations
+        file: _widgets/boolean.json
+        description: Boolean widget
         fields:
           - name: required
-            label: Required
+            label: 'Required Validation'
             widget: boolean
           - name: pattern
-            label: 'Pattern'
+            label: 'Pattern Validation'
             widget: boolean
             pattern: ['true', 'Must be true']
             required: false
       - name: code
         label: Code
-        file: _validations/code.json
-        description: Code validations
+        file: _widgets/code.json
+        description: Code widget
         fields:
           - name: required
-            label: Required
+            label: 'Required Validation'
             widget: code
             allow_language_selection: true
           - name: pattern
-            label: 'Pattern'
+            label: 'Pattern Validation'
             widget: code
             pattern: ['.{12,}', 'Must have at least 12 characters']
             allow_input: true
             required: false
       - name: color
         label: Color
-        file: _validations/color.json
-        description: Color validations
+        file: _widgets/color.json
+        description: Color widget
         fields:
           - name: required
-            label: Required
+            label: 'Required Validation'
             widget: color
           - name: pattern
-            label: 'Pattern'
+            label: 'Pattern Validation'
             widget: color
             pattern: ['^#([0-9a-fA-F]{3})(?:[0-9a-fA-F]{3})?$', 'Must be a valid hex code']
             allow_input: true
             required: false
       - name: datetime
         label: DateTime
-        file: _validations/datetime.json
-        description: DateTime validations
+        file: _widgets/datetime.json
+        description: DateTime widget
         fields:
           - name: required
-            label: Required
+            label: 'Required Validation'
             widget: datetime
           - name: pattern
-            label: 'Pattern'
+            label: 'Pattern Validation'
             widget: datetime
             format: 'MMM d, yyyy h:mm aaa'
             date_format: 'MMM d, yyyy'
@@ -151,82 +151,82 @@ collections:
             required: false
       - name: map
         label: Map
-        file: _validations/map.json
-        description: Map validations
+        file: _widgets/map.json
+        description: Map widget
         fields:
           - name: required
-            label: Required
+            label: 'Required Validation'
             widget: map
           - name: pattern
-            label: 'Pattern'
+            label: 'Pattern Validation'
             widget: map
             pattern: ['\[-([7-9][0-9]|1[0-2][0-9])\.', 'Must be between latitude -70 and -129']
             required: false
       - name: markdown
         label: Markdown
-        file: _validations/markdown.json
-        description: Markdown validations
+        file: _widgets/markdown.json
+        description: Markdown widget
         fields:
           - name: required
-            label: Required
+            label: 'Required Validation'
             widget: markdown
           - name: pattern
-            label: 'Pattern'
+            label: 'Pattern Validation'
             widget: markdown
             pattern: ['# [a-zA-Z0-9]+', 'Must have a header']
             required: false
       - name: number
         label: Number
-        file: _validations/number.json
-        description: Number validations
+        file: _widgets/number.json
+        description: Number widget
         fields:
           - name: required
-            label: Required
+            label: 'Required Validation'
             widget: number
           - name: min
-            label: Min
+            label: 'Min Validation'
             widget: number
             min: 5
             required: false
           - name: max
-            label: Max
+            label: 'Max Validation'
             widget: number
             max: 10
             required: false
           - name: min_and_max
-            label: 'Min and Max'
+            label: 'Min and Max Validation'
             widget: number
             min: 5
             max: 10
             required: false
           - name: pattern
-            label: 'Pattern'
+            label: 'Pattern Validation'
             widget: number
             pattern: ['[0-9]{3,}', 'Must be at least 3 digits']
             required: false
       - name: string
         label: String
-        file: _validations/string.json
-        description: String validations
+        file: _widgets/string.json
+        description: String widget
         fields:
           - name: required
-            label: Required
+            label: 'Required Validation'
             widget: string
           - name: pattern
-            label: 'Pattern'
+            label: 'Pattern Validation'
             widget: string
             pattern: ['.{12,}', 'Must have at least 12 characters']
             required: false
       - name: text
         label: Text
-        file: _validations/text.json
-        description: Text validations
+        file: _widgets/text.json
+        description: Text widget
         fields:
           - name: required
-            label: Required
+            label: 'Required Validation'
             widget: text
           - name: pattern
-            label: 'Pattern'
+            label: 'Pattern Validation'
             widget: text
             pattern: ['.{12,}', 'Must have at least 12 characters']
             required: false
