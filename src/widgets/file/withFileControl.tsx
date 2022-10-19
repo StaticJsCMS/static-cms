@@ -51,6 +51,11 @@ const StyledFileControlContent = styled(
   `,
 );
 
+const StyledSelection = styled('div')`
+  display: flex;
+  flex-direction: column;
+`;
+
 const StyledButtonWrapper = styled('div')`
   display: flex;
   gap: 16px;
@@ -279,6 +284,8 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
       [mediaLibraryFieldOptions],
     );
 
+    console.log('mediaLibraryFieldOptions', mediaLibraryFieldOptions);
+
     const handleChange = useCallback(
       (e: MouseEvent) => {
         e.preventDefault();
@@ -437,10 +444,9 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
       }
 
       return (
-        <div key="selection">
-          {forImage ? renderImages() : null}
+        <StyledSelection key="selection">
+          {forImage ? renderImages() : renderFileLinks()}
           <StyledButtonWrapper key="controls">
-            {forImage ? null : renderFileLinks()}
             <Button color="primary" variant="outlined" key="add-replace" onClick={handleChange}>
               {t(
                 `editor.editorWidgets.${subject}.${allowsMultiple ? 'addMore' : 'chooseDifferent'}`,
@@ -460,7 +466,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
               {t(`editor.editorWidgets.${subject}.remove${allowsMultiple ? 'All' : ''}`)}
             </Button>
           </StyledButtonWrapper>
-        </div>
+        </StyledSelection>
       );
     }, [
       allowsMultiple,
@@ -485,7 +491,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
           t={t}
         />
         <StyledFileControlContent $collapsed={collapsed}>{content}</StyledFileControlContent>
-        <Outline />
+        <Outline hasError={hasErrors} />
       </StyledFileControlWrapper>
     );
   };

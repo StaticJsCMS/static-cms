@@ -133,6 +133,11 @@ collections:
             pattern: ['^#([0-9a-fA-F]{3})(?:[0-9a-fA-F]{3})?$', 'Must be a valid hex code']
             allow_input: true
             required: false
+          - name: alpha
+            label: Alpha
+            widget: color
+            enable_alpha: true
+            required: false
       - name: datetime
         label: DateTime
         file: _widgets/datetime.json
@@ -149,6 +154,50 @@ collections:
             time_format: 'h:mm aaa'
             pattern: ['pm', 'Must be in the afternoon']
             required: false
+          - name: date_and_time
+            label: Date and Time
+            widget: datetime
+            format: 'MMM d, yyyy h:mm aaa'
+            date_format: 'MMM d, yyyy'
+            time_format: 'h:mm aaa'
+            required: false
+          - name: date
+            label: Date
+            widget: datetime
+            format: 'MMM d, yyyy'
+            date_format: 'MMM d, yyyy'
+            required: false
+          - name: time
+            label: Time
+            widget: datetime
+            format: 'h:mm aaa'
+            time_format: 'h:mm aaa'
+            required: false
+      - name: file
+        label: File
+        file: _widgets/file.json
+        description: File widget
+        fields:
+          - name: required
+            label: 'Required Validation'
+            widget: file
+          - name: pattern
+            label: 'Pattern Validation'
+            widget: file
+            pattern: ['\.pdf', 'Must be a pdf']
+            required: false
+          - name: multiple
+            label: Multiple
+            widget: file
+            required: false
+            media_library:
+              allow_multiple: true
+          - name: choose_url
+            label: 'Choose URL'
+            widget: file
+            required: false
+            media_library:
+              choose_url: true
       - name: map
         label: Map
         file: _widgets/map.json
