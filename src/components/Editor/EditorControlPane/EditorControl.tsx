@@ -182,7 +182,6 @@ const EditorControl = ({
   const [dirty, setDirty] = useState(!isEmpty(value));
   const errors = useMemo(() => fieldsErrors[path] ?? [], [fieldsErrors, path]);
   const hasErrors = (submitted || dirty) && Boolean(errors.length);
-  console.log('WIDGET', path, errors, hasErrors, value);
 
   const handleGetAsset = useCallback(
     (collection: Collection, entry: Entry): GetAssetFunction =>

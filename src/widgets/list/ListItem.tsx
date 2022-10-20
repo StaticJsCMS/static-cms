@@ -6,17 +6,16 @@ import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 import EditorControl from '../../components/Editor/EditorControlPane/EditorControl';
 import ListItemTopBar from '../../components/UI/ListItemTopBar';
 import Outline from '../../components/UI/Outline';
-import { colors, lengths } from '../../components/UI/styles';
+import { colors } from '../../components/UI/styles';
 import { transientOptions } from '../../lib';
 import { addFileTemplateFields, compileStringTemplate } from '../../lib/widgets/stringTemplate';
 import { ListValueType } from './ListControl';
-import { getErrorMessageForTypedFieldAndValue, getTypedFieldForValue } from './typedListHelpers';
+import { getTypedFieldForValue } from './typedListHelpers';
 
 import type { MouseEvent } from 'react';
 import type {
   Entry,
   EntryData,
-  Field,
   ListField,
   ObjectField,
   ObjectValue,
@@ -32,34 +31,6 @@ const SortableStyledListItem = SortableElement<{ children: JSX.Element }>(Styled
 const StyledListItemTopBar = styled(ListItemTopBar)`
   background-color: ${colors.textFieldBorder};
 `;
-
-interface NestedObjectLabelProps {
-  $collapsed: boolean;
-  $error: boolean;
-}
-
-const NestedObjectLabel = styled(
-  'div',
-  transientOptions,
-)<NestedObjectLabelProps>(
-  ({ $collapsed, $error }) => `
-    display: flex;
-    border-top: 0;
-    color: ${$error ? colors.errorText : 'inherit'};
-    background-color: ${colors.textFieldBorder};
-    padding: 6px 13px;
-    border-radius: 0 0 ${lengths.borderRadius} ${lengths.borderRadius};
-    ${
-      $collapsed
-        ? `
-        visibility: hidden;
-        height: 0;
-        width: 0;
-        `
-        : ''
-    }
-  `,
-);
 
 interface StyledObjectFieldWrapperProps {
   $collapsed: boolean;
@@ -162,12 +133,12 @@ const ListItem = ({
     switch (valueType) {
       case ListValueType.MIXED: {
         if (!validateItem(field, objectValue)) {
-          return [base, field];
+          return [base, childObjectField];
         }
 
-        const itemType = getTypedFieldForValue(field, objectValue);
+        const itemType = getTypedFieldForValue(field, objectValue, index);
         if (!itemType) {
-          return [base, field];
+          return [base, childObjectField];
         }
 
         const label = itemType.label ?? itemType.name;
@@ -211,12 +182,6 @@ const ListItem = ({
     [collapsed],
   );
 
-  const isVariableTypesList = valueType === ListValueType.MIXED;
-  let itemField: Field | undefined = field;
-  if (isVariableTypesList) {
-    itemField = getTypedFieldForValue(field, value);
-  }
-
   const isDuplicate = isFieldDuplicate && isFieldDuplicate(field);
   const isHidden = isFieldHidden && isFieldHidden(field);
 
@@ -231,32 +196,26 @@ const ListItem = ({
           dragHandleHOC={SortableHandle}
           data-testid={`styled-list-item-top-bar-${index}`}
           title={objectLabel}
-          isVariableTypesList={isVariableTypesList}
+          isVariableTypesList={valueType === ListValueType.MIXED}
         />
-        {!itemField ? (
-          <NestedObjectLabel key="type-field-error-message" $collapsed={collapsed} $error={true}>
-            {getErrorMessageForTypedFieldAndValue(field, value)}
-          </NestedObjectLabel>
-        ) : (
-          <StyledObjectFieldWrapper $collapsed={collapsed}>
-            <EditorControl
-              key={index}
-              field={objectField}
-              value={value}
-              clearFieldErrors={clearFieldErrors}
-              fieldsErrors={fieldsErrors}
-              submitted={submitted}
-              parentPath={path}
-              isDisabled={isDuplicate}
-              isHidden={isHidden}
-              isFieldDuplicate={isFieldDuplicate}
-              isFieldHidden={isFieldHidden}
-              locale={locale}
-              i18n={i18n}
-              forList
-            />
-          </StyledObjectFieldWrapper>
-        )}
+        <StyledObjectFieldWrapper $collapsed={collapsed}>
+          <EditorControl
+            key={index}
+            field={objectField}
+            value={value}
+            clearFieldErrors={clearFieldErrors}
+            fieldsErrors={fieldsErrors}
+            submitted={submitted}
+            parentPath={path}
+            isDisabled={isDuplicate}
+            isHidden={isHidden}
+            isFieldDuplicate={isFieldDuplicate}
+            isFieldHidden={isFieldHidden}
+            locale={locale}
+            i18n={i18n}
+            forList
+          />
+        </StyledObjectFieldWrapper>
         <Outline key="outline" />
       </>
     </SortableStyledListItem>

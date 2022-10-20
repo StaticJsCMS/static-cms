@@ -7,11 +7,20 @@ export const DEFAULT_TYPE_KEY = 'type';
 export function getTypedFieldForValue(
   field: ListField,
   value: ObjectValue | undefined | null,
+  index: number,
 ): ObjectField | undefined {
   const typeKey = resolveFieldKeyType(field);
   const types = field[TYPES_KEY] ?? [];
   const valueType = value?.[typeKey] ?? {};
-  return types.find(type => type.name === valueType);
+  const typeField = types.find(type => type.name === valueType);
+  if (!typeField) {
+    return typeField;
+  }
+
+  return {
+    ...typeField,
+    name: `${index}`,
+  };
 }
 
 export function resolveFunctionForTypedField(field: ListField) {

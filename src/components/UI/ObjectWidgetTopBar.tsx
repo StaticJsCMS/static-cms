@@ -11,7 +11,7 @@ import { transientOptions } from '../../lib';
 import { colors, colorsRaw, transitions } from './styles';
 
 import type { MouseEvent, ReactNode } from 'react';
-import type { Field, TranslatedProps } from '../../interface';
+import type { ObjectField, TranslatedProps } from '../../interface';
 
 const TopBarContainer = styled('div')`
   position: relative;
@@ -45,7 +45,7 @@ const ExpandButtonContainer = styled(
 
 export interface ObjectWidgetTopBarProps {
   allowAdd?: boolean;
-  types?: Field[];
+  types?: ObjectField[];
   onAdd?: (event: MouseEvent) => void;
   onAddType?: (name: string) => void;
   onCollapseToggle: (event: MouseEvent) => void;
@@ -75,13 +75,16 @@ const ObjectWidgetTopBar = ({
   const handleClose = useCallback(() => {
     setAnchorEl(null);
   }, []);
+  const handleAddType = useCallback(
+    (type: ObjectField) => () => {
+      handleClose();
+      onAddType?.(type.name);
+    },
+    [handleClose, onAddType],
+  );
 
   const renderTypesDropdown = useCallback(
-    (types: Field[]) => {
-      if (!onAddType) {
-        return null;
-      }
-
+    (types: ObjectField[]) => {
       return (
         <div>
           <Button
@@ -107,7 +110,7 @@ const ObjectWidgetTopBar = ({
           >
             {types.map((type, idx) =>
               type ? (
-                <MenuItem key={idx} onClick={() => onAddType(type.name)}>
+                <MenuItem key={idx} onClick={handleAddType(type)}>
                   {type.label ?? type.name}
                 </MenuItem>
               ) : null,
@@ -116,7 +119,7 @@ const ObjectWidgetTopBar = ({
         </div>
       );
     },
-    [open, handleClick, t, label, anchorEl, handleClose, onAddType],
+    [open, handleClick, t, label, anchorEl, handleClose, handleAddType],
   );
 
   const renderAddButton = useCallback(() => {
