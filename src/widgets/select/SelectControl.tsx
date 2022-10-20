@@ -39,20 +39,15 @@ const SelectControl = ({
       const isEmpty =
         isMultiple && Array.isArray(selectedOption) ? !selectedOption?.length : !selectedOption;
 
-      console.log('[value]', selectedOption, field.required, isEmpty, isMultiple);
-
       if (field.required && isEmpty && isMultiple) {
         setInternalValue([]);
         onChange([]);
-        console.log('emtpy array!');
       } else if (isEmpty) {
         setInternalValue('');
         onChange('');
-        console.log('emtpy string!');
       } else if (typeof selectedOption === 'string' || isMultiple) {
         setInternalValue(selectedOption);
         onChange(selectedOption);
-        console.log('valid value!', selectedOption);
       }
     },
     [field, onChange],
@@ -85,8 +80,8 @@ const SelectControl = ({
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
               {selectValues.map(selectValue => {
                 const label = optionsByValue[selectValue]?.label ?? selectValue;
-                return <Chip key={selectValue} label={label} />
-        })}
+                return <Chip key={selectValue} label={label} />;
+              })}
             </Box>
           ) : (
             selectValues

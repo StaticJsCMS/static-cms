@@ -10,7 +10,7 @@ import type { MouseEvent } from 'react';
 import type {
   AuthenticationPageProps,
   AuthenticatorConfig,
-  TranslatedProps
+  TranslatedProps,
 } from '../../interface';
 
 const LoginButtonIcon = styled(Icon)`

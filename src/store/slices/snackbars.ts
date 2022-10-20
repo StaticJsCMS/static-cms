@@ -9,9 +9,11 @@ type MessageType = 'error' | 'warning' | 'info' | 'success';
 export interface SnackbarMessage {
   id: string;
   type: MessageType;
-  message: string | {
-    key: string;
-  } & Record<string, unknown>;
+  message:
+    | string
+    | ({
+        key: string;
+      } & Record<string, unknown>);
 }
 
 // Define a type for the slice state

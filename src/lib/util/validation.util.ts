@@ -8,7 +8,7 @@ import type {
   FieldValidationMethod,
   FieldValidationMethodProps,
   ValueOrNestedValue,
-  Widget
+  Widget,
 } from '../../interface';
 
 export function isEmpty(value: ValueOrNestedValue) {

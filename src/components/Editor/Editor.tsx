@@ -195,12 +195,14 @@ const Editor = ({
   useEffect(() => {
     if (hasChanged && entryDraft.entry) {
       createBackup(entryDraft.entry, collection);
+    } else if (localBackup) {
+      deleteBackup();
     }
 
     return () => {
       createBackup.flush();
     };
-  }, [collection, createBackup, entryDraft.entry, hasChanged]);
+  }, [collection, createBackup, deleteBackup, entryDraft.entry, hasChanged, localBackup]);
 
   const [prevCollection, setPrevCollection] = useState<Collection | null>(null);
   const [preSlug, setPrevSlug] = useState<string | undefined | null>(null);
