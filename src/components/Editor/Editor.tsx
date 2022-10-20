@@ -24,7 +24,6 @@ import {
   toggleScroll as toggleScrollAction,
 } from '../../actions/scroll';
 import { selectFields } from '../../lib/util/collection.util';
-import { validateAll } from '../../lib/util/validation.util';
 import { useWindowEvent } from '../../lib/util/window.util';
 import { selectEntry } from '../../reducers';
 import { history, navigateToCollection, navigateToNewEntry } from '../../routing/history';
@@ -65,7 +64,6 @@ const Editor = ({
   retrieveLocalBackup,
   deleteLocalBackup,
   deleteDraftLocalBackup,
-  changeDraftFieldValidation,
   createDraftDuplicateFromEntry,
   createEmptyDraft,
   discardDraft,
@@ -88,6 +86,7 @@ const Editor = ({
     deleteDraftLocalBackup();
   }, [collection, createBackup, deleteDraftLocalBackup, deleteLocalBackup, slug]);
 
+  const [submitted, setSubmitted] = useState(false);
   const handlePersistEntry = useCallback(
     async (opts: EditorPersistOptions = {}) => {
       const { createNew = false, duplicate = false } = opts;
@@ -97,7 +96,6 @@ const Editor = ({
       }
 
       try {
-        await validateAll(fields ?? [], entryDraft.entry, changeDraftFieldValidation, t);
         await persistEntry(collection);
         setVersion(version + 1);
 
@@ -111,16 +109,15 @@ const Editor = ({
         }
         // eslint-disable-next-line no-empty
       } catch (e) {}
+
+      setSubmitted(true);
     },
     [
-      changeDraftFieldValidation,
       collection,
       createDraftDuplicateFromEntry,
       deleteBackup,
       entryDraft.entry,
-      fields,
       persistEntry,
-      t,
       version,
     ],
   );
@@ -318,6 +315,7 @@ const Editor = ({
       toggleScroll={toggleScroll}
       scrollSyncEnabled={scrollSyncEnabled}
       loadScroll={loadScroll}
+      submitted={submitted}
       t={t}
     />
   );

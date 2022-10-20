@@ -232,6 +232,7 @@ export interface WidgetControlProps<T, F extends Field = Field> {
   entry: Entry;
   field: F;
   fieldsErrors: FieldsErrors;
+  submitted: boolean;
   forList: boolean;
   getAsset: GetAssetFunction;
   isDisabled: boolean;

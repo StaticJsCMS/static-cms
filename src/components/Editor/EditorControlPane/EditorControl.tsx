@@ -126,6 +126,7 @@ export const ControlHint = styled(
 )<ControlHintProps>(
   ({ $error }) => `
     margin: 0;
+    margin-left: 8px;
     padding: 0;
     font-size: 12px;
     color: ${$error ? colors.errorText : colors.controlLabel};
@@ -144,6 +145,7 @@ const EditorControl = ({
   entry,
   field,
   fieldsErrors,
+  submitted,
   getAsset,
   isDisabled,
   isEditorComponent,
@@ -179,7 +181,7 @@ const EditorControl = ({
 
   const [dirty, setDirty] = useState(!isEmpty(value));
   const errors = useMemo(() => fieldsErrors[path] ?? [], [fieldsErrors, path]);
-  const hasErrors = Boolean(errors.length);
+  const hasErrors = (submitted || dirty) && Boolean(errors.length);
   console.log('WIDGET', path, errors, hasErrors, value);
 
   const handleGetAsset = useCallback(
@@ -192,10 +194,6 @@ const EditorControl = ({
 
   useEffect(() => {
     const validateValue = async () => {
-      if (!dirty) {
-        return;
-      }
-
       await validate(path, field, value, widget, changeDraftFieldValidation, t);
     };
 
@@ -226,6 +224,7 @@ const EditorControl = ({
           entry,
           field,
           fieldsErrors,
+          submitted,
           getAsset: handleGetAsset(collection, entry),
           isDisabled: isDisabled ?? false,
           isEditorComponent: isEditorComponent ?? false,
@@ -253,7 +252,7 @@ const EditorControl = ({
           hasErrors,
         })}
         {fieldHint && <ControlHint $error={hasErrors}>{fieldHint}</ControlHint>}
-        {errors.length ? (
+        {hasErrors ? (
           <ControlErrorsList>
             {errors.map(error => {
               return (
@@ -275,6 +274,7 @@ interface EditorControlOwnProps {
   clearFieldErrors: EditorControlPaneProps['clearFieldErrors'];
   field: Field;
   fieldsErrors: FieldsErrors;
+  submitted: boolean;
   isDisabled?: boolean;
   isEditorComponent?: boolean;
   isFieldDuplicate?: (field: Field) => boolean;

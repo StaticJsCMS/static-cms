@@ -33,9 +33,7 @@ const StyledEditorWrapper = styled('div')`
 
 const MarkdownControl = ({
   label,
-  path,
   value,
-  fieldsErrors,
   onChange,
   hasErrors,
 }: WidgetControlProps<string, MarkdownField>) => {
@@ -57,8 +55,6 @@ const MarkdownControl = ({
     onChange(newValue);
   }, [editorRef, onChange]);
 
-  const errors = useMemo(() => fieldsErrors[path] ?? [], [fieldsErrors, path]);
-
   const handleLabelClick = useCallback(() => {
     editorRef.current?.getInstance().focus();
   }, [editorRef]);
@@ -68,7 +64,7 @@ const MarkdownControl = ({
       <FieldLabel
         key="markdown-control-label"
         isActive={hasFocus}
-        hasErrors={errors.length > 0}
+        hasErrors={hasErrors}
         onClick={handleLabelClick}
       >
         {label}

@@ -181,16 +181,6 @@ function traverseFields(
         field.fields,
         folder,
       );
-    } else if ('field' in field && field.field) {
-      fieldFolder = traverseFields(
-        folderKey,
-        config,
-        collection,
-        entryMap,
-        field,
-        [field.field],
-        folder,
-      );
     } else if ('types' in field && field.types) {
       fieldFolder = traverseFields(
         folderKey,

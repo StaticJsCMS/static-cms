@@ -20,8 +20,9 @@ import type {
   EditorPersistOptions,
   Entry,
   Field,
-  FieldsErrors, TranslatedProps,
-  User
+  FieldsErrors,
+  TranslatedProps,
+  User,
 } from '../../interface';
 
 const PREVIEW_VISIBLE = 'cms.preview-visible';
@@ -152,6 +153,7 @@ interface EditorInterfaceProps {
   toggleScroll: () => Promise<{ readonly type: 'TOGGLE_SCROLL' }>;
   scrollSyncEnabled: boolean;
   loadScroll: () => void;
+  submitted: boolean;
 }
 
 const EditorInterface = ({
@@ -175,6 +177,7 @@ const EditorInterface = ({
   t,
   loadScroll,
   toggleScroll,
+  submitted,
 }: TranslatedProps<EditorInterfaceProps>) => {
   const [previewVisible, setPreviewVisible] = useState(
     localStorage.getItem(PREVIEW_VISIBLE) !== 'false',
@@ -238,7 +241,7 @@ const EditorInterface = ({
         fieldsErrors={fieldsErrors}
         locale={selectedLocale}
         onLocaleChange={handleLocaleChange}
-        // TODO ref={c => (this.controlPaneRef = c)}
+        submitted={submitted}
         t={t}
       />
     </ControlPaneContainer>
@@ -253,6 +256,7 @@ const EditorInterface = ({
         fieldsErrors={fieldsErrors}
         locale={locales?.[1]}
         onLocaleChange={handleLocaleChange}
+        submitted={submitted}
         t={t}
       />
     </ControlPaneContainer>

@@ -45,8 +45,6 @@ function traverseFieldsJS<F extends Field>(
     const newField = updater(field);
     if (isObjectField(newField)) {
       return { ...newField, fields: traverseFieldsJS(newField.fields, updater) };
-    } else if (isFieldList(newField) && newField.field) {
-      return { ...newField, field: traverseFieldsJS([newField.field], updater)[0] };
     } else if (isFieldList(newField) && newField.types) {
       return { ...newField, types: traverseFieldsJS(newField.types, updater) };
     }

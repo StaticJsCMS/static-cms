@@ -114,6 +114,7 @@ interface ListItemProps
     | 'entry'
     | 'field'
     | 'fieldsErrors'
+    | 'submitted'
     | 'isFieldDuplicate'
     | 'isFieldHidden'
     | 'locale'
@@ -132,6 +133,7 @@ const ListItem = ({
   entry,
   field,
   fieldsErrors,
+  submitted,
   isFieldDuplicate,
   isFieldHidden,
   locale,
@@ -243,6 +245,7 @@ const ListItem = ({
               value={value}
               clearFieldErrors={clearFieldErrors}
               fieldsErrors={fieldsErrors}
+              submitted={submitted}
               parentPath={path}
               isDisabled={isDuplicate}
               isHidden={isHidden}

@@ -237,9 +237,6 @@ function getFieldsWithMediaFolders(fields: Field[]) {
     if ('fields' in f) {
       const fields = f.fields ?? [];
       acc = [...acc, ...getFieldsWithMediaFolders(fields)];
-    } else if ('field' in f) {
-      const field = f.field as Field;
-      acc = [...acc, ...getFieldsWithMediaFolders([field])];
     } else if ('types' in f) {
       const types = f.types ?? [];
       acc = [...acc, ...getFieldsWithMediaFolders(types)];
@@ -292,9 +289,6 @@ export function getFieldsNames(fields: (Field | Field)[] | undefined, prefix = '
     if ('fields' in f) {
       const fields = f.fields;
       names = [...names, ...getFieldsNames(fields, `${names[index]}.`)];
-    } else if ('field' in f) {
-      const field = f.field;
-      names = [...names, ...(field ? getFieldsNames([field], `${names[index]}.`) : [])];
     } else if ('types' in f) {
       const types = f.types;
       names = [...names, ...getFieldsNames(types, `${names[index]}.`)];
@@ -319,9 +313,6 @@ export function traverseFields(
       return field;
     } else if ('fields' in field) {
       field.fields = traverseFields(field.fields ?? [], updater, done);
-      return field;
-    } else if ('field' in field && field.field) {
-      field.field = traverseFields([field.field], updater, done)?.[0];
       return field;
     } else if ('types' in field) {
       field.types = traverseFields(field.types ?? [], updater, done) as ObjectField[];

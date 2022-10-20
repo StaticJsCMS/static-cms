@@ -13,8 +13,6 @@ export function selectField(collection: Collection, key: string) {
     if (field) {
       if ('fields' in field) {
         fields = field?.fields ?? [];
-      } else if ('field' in field && field.field) {
-        fields = [field?.field];
       } else if ('types' in field) {
         fields = field?.types ?? [];
       }

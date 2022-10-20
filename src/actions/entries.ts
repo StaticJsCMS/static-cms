@@ -883,7 +883,7 @@ export function createEmptyDraftData(
       return acc;
     }
 
-    const subfields = ('field' in item && item.field) || ('fields' in item && item.fields);
+    const subfields = 'fields' in item && item.fields;
     const list = item.widget == 'list';
     const name = item.name;
     const defaultValue = (('default' in item ? item.default : null) ?? null) as EntryData;

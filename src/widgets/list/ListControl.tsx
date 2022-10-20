@@ -76,7 +76,6 @@ function getFieldsDefault(fields: Field[], initialValue: ObjectValue = {}): Obje
     const name = item.name;
     const defaultValue: ValueOrNestedValue | null =
       'default' in item && item.default ? item.default : null;
-    console.log('DEFAULT VALUE', name, defaultValue, item, item.default);
 
     if (Array.isArray(subfields)) {
       const subDefaultValue = getFieldsDefault(subfields);
@@ -103,6 +102,7 @@ const ListControl = ({
   entry,
   field,
   fieldsErrors,
+  submitted,
   isFieldDuplicate,
   isFieldHidden,
   locale,
@@ -166,11 +166,7 @@ const ListControl = ({
   const handleAdd = useCallback(
     (e: MouseEvent) => {
       e.preventDefault();
-      const parsedValue = 'fields' in field && field.fields ? multipleDefault(field.fields) : {};
-
-      console.log('parsedValue', parsedValue);
-
-      addItem(parsedValue);
+      addItem('fields' in field && field.fields ? multipleDefault(field.fields) : {});
     },
     [addItem, field, multipleDefault],
   );
@@ -234,6 +230,7 @@ const ListControl = ({
           entry={entry}
           field={field}
           fieldsErrors={fieldsErrors}
+          submitted={submitted}
           isFieldDuplicate={isFieldDuplicate}
           isFieldHidden={isFieldHidden}
           locale={locale}
@@ -251,6 +248,7 @@ const ListControl = ({
       entry,
       field,
       fieldsErrors,
+      submitted,
       isFieldDuplicate,
       isFieldHidden,
       locale,

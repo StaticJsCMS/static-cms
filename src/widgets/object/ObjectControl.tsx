@@ -52,6 +52,7 @@ const ObjectControl = ({
   clearFieldErrors,
   field,
   fieldsErrors,
+  submitted,
   forList,
   isFieldDuplicate,
   isFieldHidden,
@@ -103,6 +104,7 @@ const ObjectControl = ({
             value={fieldValue}
             clearFieldErrors={clearFieldErrors}
             fieldsErrors={fieldsErrors}
+            submitted={submitted}
             parentPath={path}
             isDisabled={isDuplicate}
             isHidden={isHidden}
@@ -123,6 +125,7 @@ const ObjectControl = ({
     locale,
     multiFields,
     path,
+    submitted,
     value,
   ]);
 

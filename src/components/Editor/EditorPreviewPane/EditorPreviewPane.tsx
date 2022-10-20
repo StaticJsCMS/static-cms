@@ -84,11 +84,6 @@ function getWidgetFor(
         value as EntryData | EntryData[],
       ),
     };
-  } else if ('field' in field && field.field) {
-    fieldWithWidgets = {
-      ...fieldWithWidgets,
-      field: getSingleNested(entry, getAsset, field.field, value as EntryData | EntryData[]),
-    };
   }
 
   const labelledWidgets = ['string', 'text', 'number'];
@@ -237,18 +232,6 @@ function getNestedWidgets(
     widgetFields,
     values,
   );
-}
-
-function getSingleNested(
-  entry: Entry,
-  getAsset: GetAssetFunction,
-  widgetField: Field,
-  values: EntryData | EntryData[],
-): ReactNode {
-  if (Array.isArray(values)) {
-    return values.map((value, idx) => getWidget(widgetField, value, entry, getAsset, idx));
-  }
-  return getWidget(widgetField, values, entry, getAsset);
 }
 
 const PreviewPane = (props: EditorPreviewPaneProps) => {

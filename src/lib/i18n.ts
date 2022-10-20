@@ -394,14 +394,7 @@ export function duplicateI18nFields(
       });
   }
 
-  if ('field' in field && !Array.isArray(value)) {
-    if (field.field) {
-      entryDraft = duplicateI18nFields(entryDraft, field.field, locales, defaultLocale, [
-        ...fieldPath,
-        field.name,
-      ]);
-    }
-  } else if ('fields' in field && !Array.isArray(value)) {
+  if ('fields' in field && !Array.isArray(value)) {
     field.fields?.forEach(field => {
       entryDraft = duplicateI18nFields(entryDraft, field, locales, defaultLocale, [
         ...fieldPath,

@@ -111,6 +111,7 @@ const EditorControlPane = ({
   entry,
   fields,
   fieldsErrors,
+  submitted,
   changeDraftField,
   locale,
   onLocaleChange,
@@ -204,6 +205,7 @@ const EditorControlPane = ({
               field={field}
               value={getFieldValue(field, entry, isTranslatable, locale)}
               fieldsErrors={fieldsErrors}
+              submitted={submitted}
               isDisabled={isDuplicate}
               isHidden={isHidden}
               isFieldDuplicate={field => isFieldDuplicate(field, locale, i18n?.defaultLocale)}
@@ -224,6 +226,7 @@ export interface EditorControlPaneOwnProps {
   entry: Entry;
   fields: Field[];
   fieldsErrors: FieldsErrors;
+  submitted: boolean;
   locale?: string;
   onLocaleChange: (locale: string) => void;
 }

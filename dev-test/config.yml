@@ -220,15 +220,8 @@ collections:
         file: _widgets/list.yml
         description: List widget
         fields:
-          - name: single
-            label: 'Single Field'
-            widget: list
-            field:
-              label: Tag
-              name: tag
-              widget: string
-          - name: multiple
-            label: 'Multiple Fields'
+          - name: list
+            label: List
             widget: list
             fields:
               - label: Name
