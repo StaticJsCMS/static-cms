@@ -7,7 +7,10 @@ class GitHubStarButton extends PureComponent {
         href="https://github.com/StaticJsCMS/static-cms"
         aria-label="Star StaticJsCMS/static-cms on GitHub"
       >
-        <img alt="Star StaticJsCMS/static-cms on GitHub" src="https://img.shields.io/github/stars/StaticJsCMS/static-cms?style=social" />
+        <img
+          alt="Star StaticJsCMS/static-cms on GitHub"
+          src="https://img.shields.io/github/stars/StaticJsCMS/static-cms?style=social"
+        />
       </a>
     );
   }

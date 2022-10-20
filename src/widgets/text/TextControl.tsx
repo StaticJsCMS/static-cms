@@ -4,7 +4,12 @@ import React, { useCallback, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import type { StringOrTextField, WidgetControlProps } from '../../interface';
 
-const TextControl = ({ label, value, onChange, hasErrors }: WidgetControlProps<string, StringOrTextField>) => {
+const TextControl = ({
+  label,
+  value,
+  onChange,
+  hasErrors,
+}: WidgetControlProps<string, StringOrTextField>) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
 
   const handleChange = useCallback(

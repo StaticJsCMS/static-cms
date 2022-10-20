@@ -117,7 +117,9 @@ const ListItemTopBar = ({
           />
         </IconButton>
       ) : null}
-      <StyledTitle key="title" onClick={onCollapseToggle}>{title}</StyledTitle>
+      <StyledTitle key="title" onClick={onCollapseToggle}>
+        {title}
+      </StyledTitle>
       {dragHandleHOC ? <DragHandle dragHandleHOC={dragHandleHOC} /> : null}
       {onRemove ? (
         <TopBarButton onClick={onRemove}>
