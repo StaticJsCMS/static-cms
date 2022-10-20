@@ -1,6 +1,8 @@
 import { styled } from '@mui/material/styles';
 import { Editor } from '@toast-ui/react-editor';
+import mime from 'mime-types';
 import React, { useCallback, useMemo, useState } from 'react';
+import uuid from 'uuid';
 
 import FieldLabel from '../../components/UI/FieldLabel';
 import Outline from '../../components/UI/Outline';
@@ -12,7 +14,6 @@ import type { RefObject } from 'react';
 import type { MarkdownField, WidgetControlProps } from '../../interface';
 
 import '@toast-ui/editor/dist/toastui-editor.css';
-import uuid from 'uuid';
 
 const StyledEditorWrapper = styled('div')`
   position: relative;
@@ -42,6 +43,7 @@ const MarkdownControl = ({
   hasErrors,
   field,
   addAsset,
+  addDraftEntryMediaFile,
   config,
   collection,
   entry,
@@ -68,28 +70,42 @@ const MarkdownControl = ({
     editorRef.current?.getInstance().focus();
   }, [editorRef]);
 
-  const [imageInsertCallback, setImageInsertCallback] = useState<
-    ((url: string, text?: string) => void) | null
-  >(null);
   const imageUpload = useCallback(
     (blob: Blob | File, callback: (url: string, text?: string) => void) => {
+      let file: File;
       if (blob instanceof Blob) {
-        blob = new File(blob, uuid());
+        blob.type;
+        file = new File([blob], `${uuid()}.${mime.extension(blob.type)}`);
+      } else {
+        file = blob;
       }
-      const fileName = sanitizeSlug(blob.name.toLowerCase(), config.slug);
+      const fileName = sanitizeSlug(file.name.toLowerCase(), config.slug);
       const path = selectMediaFilePath(config, collection, entry, fileName, field);
+      const blobUrl = URL.createObjectURL(file);
       addAsset(
         createAssetProxy({
-          url: URL.createObjectURL(blob),
-          file: blob as File,
+          url: blobUrl,
+          file,
           path,
           field,
         }),
       );
+      addDraftEntryMediaFile({
+        name: file.name,
+        id: file.name,
+        size: file.size,
+        displayURL: blobUrl,
+        path,
+        draft: true,
+        url: blobUrl,
+        file,
+        field,
+      });
       console.log(blob);
-      setImageInsertCallback(callback);
+      callback(path);
+      handleOnChange();
     },
-    [addAsset, collection, config, entry, field],
+    [addAsset, addDraftEntryMediaFile, collection, config, entry, field, handleOnChange],
   );
 
   return (

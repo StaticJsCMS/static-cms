@@ -247,6 +247,7 @@ export interface WidgetControlProps<T, F extends Field = Field> {
   mediaPaths: Record<string, string | string[]>;
   onChange: (value: T | null | undefined) => void;
   addAsset: EditorControlProps['addAsset'];
+  addDraftEntryMediaFile: EditorControlProps['addDraftEntryMediaFile'];
   clearMediaControl: EditorControlProps['clearMediaControl'];
   openMediaLibrary: EditorControlProps['openMediaLibrary'];
   removeInsertedMedia: EditorControlProps['removeInsertedMedia'];
@@ -368,6 +369,7 @@ export interface ImplementationMediaFile {
   draft?: boolean;
   url?: string;
   file?: File;
+  field?: Field;
 }
 
 export interface DataFile {

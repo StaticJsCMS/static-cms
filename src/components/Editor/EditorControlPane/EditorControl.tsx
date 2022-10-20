@@ -5,6 +5,7 @@ import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
 import {
+  addDraftEntryMediaFile as addDraftEntryMediaFileAction,
   changeDraftField as changeDraftFieldAction,
   changeDraftFieldValidation as changeDraftFieldValidationAction,
   clearFieldErrors as clearFieldErrorsAction,
@@ -157,6 +158,7 @@ const EditorControl = ({
   mediaPaths,
   changeDraftFieldValidation,
   addAsset,
+  addDraftEntryMediaFile,
   openMediaLibrary,
   parentPath,
   query,
@@ -236,6 +238,7 @@ const EditorControl = ({
           onChange: handleChangeDraftField,
           clearMediaControl,
           addAsset,
+          addDraftEntryMediaFile,
           openMediaLibrary,
           removeInsertedMedia,
           removeMediaControl,
@@ -316,6 +319,7 @@ const mapDispatchToProps = {
   changeDraftField: changeDraftFieldAction,
   changeDraftFieldValidation: changeDraftFieldValidationAction,
   addAsset: addAssetAction,
+  addDraftEntryMediaFile: addDraftEntryMediaFileAction,
   openMediaLibrary: openMediaLibraryAction,
   clearMediaControl: clearMediaControlAction,
   removeMediaControl: removeMediaControlAction,
