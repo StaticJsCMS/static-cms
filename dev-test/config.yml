@@ -368,6 +368,34 @@ collections:
                 name: thumb
                 widget: image
                 required: false
+      - name: relation
+        label: Relation
+        file: _widgets/relation.json
+        description: Relation widget
+        fields:
+          - label: Required Validation
+            name: required
+            widget: relation
+            collection: posts
+            display_fields:
+              - title
+              - date
+            search_fields:
+              - title
+              - body
+            value_field: title
+          - label: Optional Validation
+            name: optional
+            widget: relation
+            required: false
+            collection: posts
+            display_fields:
+              - title
+              - date
+            search_fields:
+              - title
+              - body
+            value_field: title
       - name: select
         label: Select
         file: _widgets/select.json
