@@ -333,6 +333,93 @@ collections:
             widget: number
             pattern: ['[0-9]{3,}', 'Must be at least 3 digits']
             required: false
+      - name: object
+        label: Object
+        file: _widgets/object.json
+        description: Object widget
+        fields:
+          - label: Required Validation
+            name: required
+            widget: object
+            fields:
+              - label: Number of posts on frontpage
+                name: front_limit
+                widget: number
+              - label: Default Author
+                name: author
+                widget: string
+              - label: Default Thumbnail
+                name: thumb
+                widget: image
+          - label: Optional Validation
+            name: optional
+            widget: object
+            required: false
+            fields:
+              - label: Number of posts on frontpage
+                name: front_limit
+                widget: number
+                required: false
+              - label: Default Author
+                name: author
+                widget: string
+                required: false
+              - label: Default Thumbnail
+                name: thumb
+                widget: image
+                required: false
+      - name: select
+        label: Select
+        file: _widgets/select.json
+        description: Select widget
+        fields:
+          - label: Required Validation
+            name: required
+            widget: select
+            options:
+              - a
+              - b
+              - c
+          - label: Pattern Validation
+            name: pattern
+            widget: select
+            options:
+              - a
+              - b
+              - c
+            pattern: ['[a-b]', 'Must be a or b']
+            required: false
+          - label: Value and Label
+            name: value_and_label
+            widget: select
+            options:
+              - value: a
+                label: A fancy label
+              - value: b
+                label: Another fancy label
+              - value: c
+                label: And one more fancy label
+          - label: Multiple
+            name: multiple
+            widget: select
+            options:
+              - a
+              - b
+              - c
+            pattern: ['[a-b]', 'Must be a or b']
+            multiple: true
+            required: false
+          - label: Value and Label Multiple
+            name: value_and_label_multiple
+            widget: select
+            multiple: true
+            options:
+              - value: a
+                label: A fancy label
+              - value: b
+                label: Another fancy label
+              - value: c
+                label: And one more fancy label
       - name: string
         label: String
         file: _widgets/string.json

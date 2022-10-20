@@ -76,17 +76,6 @@ const ObjectControl = ({
   }, [field.label, field.name, field.summary, value]);
 
   const multiFields = useMemo(() => field.fields, [field.fields]);
-  const hasChildErrors = useMemo(
-    () =>
-      Object.keys(fieldsErrors).some(key => {
-        if (key.startsWith(path)) {
-          return fieldsErrors[key].length > 0;
-        }
-
-        return false;
-      }),
-    [fieldsErrors, path],
-  );
 
   const renderedField = useMemo(() => {
     return (
@@ -145,7 +134,7 @@ const ObjectControl = ({
         <StyledFieldsBox $collapsed={collapsed} key="object-control-fields">
           {renderedField}
         </StyledFieldsBox>
-        {forList ? null : <Outline key="object-control-outline" hasError={hasChildErrors} />}
+        {forList ? null : <Outline key="object-control-outline" hasError={hasErrors} />}
       </StyledObjectControlWrapper>
     );
   }
