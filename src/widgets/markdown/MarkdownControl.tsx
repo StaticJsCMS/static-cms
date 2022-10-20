@@ -12,6 +12,7 @@ import { doesUrlFileExist } from '../../lib/util/fetch.util';
 import { isNotNullish } from '../../lib/util/null.util';
 import { isNotEmpty } from '../../lib/util/string.util';
 
+import type { HTMLToken, LinkMdNode, MdNode } from '@toast-ui/editor/types/toastmark';
 import type { RefObject } from 'react';
 import type { MarkdownField, MediaLibrary, WidgetControlProps } from '../../interface';
 
@@ -89,10 +90,8 @@ const MarkdownControl = ({
     [controlID, field, mediaLibraryFieldOptions, openMediaLibrary],
   );
 
-  const [imagePlugin, imageToolbarButton] = useImagePlugin({
+  const imageToolbarButton = useImagePlugin({
     openMediaLibrary: handleOpenMedialLibrary,
-    getAsset,
-    field,
   });
 
   const getMedia = useCallback(
@@ -172,7 +171,6 @@ const MarkdownControl = ({
         initialEditType="markdown"
         useCommandShortcut={true}
         onChange={handleOnChange}
-        plugins={[imagePlugin]}
         toolbarItems={[
           ['heading', 'bold', 'italic', 'strike'],
           ['hr', 'quote'],
@@ -184,6 +182,39 @@ const MarkdownControl = ({
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
         autofocus={false}
+        customHTMLRenderer={{
+          img: (node: MdNode) => {
+            if ('destination' in node) {
+              const destination = (node as LinkMdNode).destination;
+              if (destination) {
+                console.log('IMAGE NODE!', node, [
+                  { type: 'openTag', tagName: 'img', outerNewLine: true },
+                  {
+                    type: 'html',
+                    content: `<img src="${getAsset(
+                      destination,
+                      field,
+                    )}" contenteditable="false" />`,
+                  },
+                  { type: 'closeTag', tagName: 'div', outerNewLine: true },
+                ]);
+                return [
+                  { type: 'openTag', tagName: 'img', outerNewLine: true },
+                  {
+                    type: 'html',
+                    content: `<img src="${getAsset(
+                      destination,
+                      field,
+                    )}" contenteditable="false" />`,
+                  },
+                  { type: 'closeTag', tagName: 'div', outerNewLine: true },
+                ] as HTMLToken[];
+              }
+            }
+
+            return null;
+          },
+        }}
       />
       <Outline key="markdown-control-outline" hasLabel hasError={hasErrors} />
     </StyledEditorWrapper>
