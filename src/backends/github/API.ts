@@ -1,7 +1,11 @@
 import { Base64 } from 'js-base64';
-import { initial, last, partial, result, trim, trimStart } from 'lodash';
+import initial from 'lodash/initial';
+import last from 'lodash/last';
+import partial from 'lodash/partial';
+import result from 'lodash/result';
+import trim from 'lodash/trim';
+import trimStart from 'lodash/trimStart';
 import { dirname } from 'path';
-import semaphore from 'semaphore';
 
 import {
   APIError,
@@ -17,11 +21,12 @@ import {
 
 import type { Octokit } from '@octokit/rest';
 import type { Semaphore } from 'semaphore';
-import type { ApiRequest, AssetProxy, DataFile, FetchError, PersistOptions } from '../../lib/util';
+import type { DataFile, PersistOptions } from '../../interface';
+import type { ApiRequest, FetchError } from '../../lib/util';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 type GitHubUser = Octokit.UsersGetAuthenticatedResponse;
 type GitCreateTreeParamsTree = Octokit.GitCreateTreeParamsTree;
-type GitHubCompareCommit = Octokit.ReposCompareCommitsResponseCommitsItem;
 type GitHubAuthor = Octokit.GitCreateCommitResponseAuthor;
 type GitHubCommitter = Octokit.GitCreateCommitResponseCommitter;
 
@@ -35,24 +40,9 @@ export interface Config {
   originRepo?: string;
 }
 
-interface TreeFile {
-  type: 'blob' | 'tree';
-  sha: string;
-  path: string;
-  raw?: string;
-}
-
 type Override<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
 
 type TreeEntry = Override<GitCreateTreeParamsTree, { sha: string | null }>;
-
-type GitHubCompareCommits = GitHubCompareCommit[];
-
-type GitHubCompareFile = Octokit.ReposCompareCommitsResponseFilesItem & {
-  previous_filename?: string;
-};
-
-type GitHubCompareFiles = GitHubCompareFile[];
 
 interface MetaDataObjects {
   entry: { path: string; sha: string };
@@ -270,115 +260,6 @@ export default class API {
     return parseContentKey(contentKey);
   }
 
-  checkMetadataRef() {
-    return this.request(`${this.repoURL}/git/refs/meta/_static_cms`)
-      .then(response => response.object)
-      .catch(() => {
-        // Meta ref doesn't exist
-        const readme = {
-          raw: '# Static CMS\n\nThis tree is used by the Static CMS to store metadata information for specific files and branches.',
-        };
-
-        return this.uploadBlob(readme)
-          .then(item =>
-            this.request(`${this.repoURL}/git/trees`, {
-              method: 'POST',
-              body: JSON.stringify({
-                tree: [{ path: 'README.md', mode: '100644', type: 'blob', sha: item.sha }],
-              }),
-            }),
-          )
-          .then(tree => this.commit('First Commit', tree))
-          .then(response => this.createRef('meta', '_static_cms', response.sha))
-          .then(response => response.object);
-      });
-  }
-
-  async storeMetadata(key: string, data: Metadata) {
-    // semaphore ensures metadata updates are always ordered, even if
-    // calls to storeMetadata are not. concurrent metadata updates
-    // will result in the metadata branch being unable to update.
-    if (!this._metadataSemaphore) {
-      this._metadataSemaphore = semaphore(1);
-    }
-    return new Promise<void>((resolve, reject) =>
-      this._metadataSemaphore?.take(async () => {
-        try {
-          const branchData = await this.checkMetadataRef();
-          const file = { path: `${key}.json`, raw: JSON.stringify(data) };
-
-          await this.uploadBlob(file);
-          const changeTree = await this.updateTree(branchData.sha, [file as TreeFile]);
-          const { sha } = await this.commit(`Updating “${key}” metadata`, changeTree);
-          await this.patchRef('meta', '_static_cms', sha);
-          await localForage.setItem(`gh.meta.${key}`, {
-            expires: Date.now() + 300000, // In 5 minutes
-            data,
-          });
-          this._metadataSemaphore?.leave();
-          resolve();
-        } catch (err) {
-          reject(err);
-        }
-      }),
-    );
-  }
-
-  deleteMetadata(key: string) {
-    if (!this._metadataSemaphore) {
-      this._metadataSemaphore = semaphore(1);
-    }
-    return new Promise<void>(resolve =>
-      this._metadataSemaphore?.take(async () => {
-        try {
-          const branchData = await this.checkMetadataRef();
-          const file = { path: `${key}.json`, sha: null };
-
-          const changeTree = await this.updateTree(branchData.sha, [file]);
-          const { sha } = await this.commit(`Deleting “${key}” metadata`, changeTree);
-          await this.patchRef('meta', '_static_cms', sha);
-          this._metadataSemaphore?.leave();
-          resolve();
-        } catch (err) {
-          this._metadataSemaphore?.leave();
-          resolve();
-        }
-      }),
-    );
-  }
-
-  async retrieveMetadataOld(key: string): Promise<Metadata> {
-    console.info(
-      '%c Checking for MetaData files',
-      'line-height: 30px;text-align: center;font-weight: bold',
-    );
-
-    const metadataRequestOptions = {
-      params: { ref: 'refs/meta/_static_cms' },
-      headers: { Accept: 'application/vnd.github.v3.raw' },
-    };
-
-    function errorHandler(err: Error) {
-      if (err.message === 'Not Found') {
-        console.info(
-          '%c %s does not have metadata',
-          'line-height: 30px;text-align: center;font-weight: bold',
-          key,
-        );
-      }
-      throw err;
-    }
-
-    const result = await this.request(
-      `${this.repoURL}/contents/${key}.json`,
-      metadataRequestOptions,
-    )
-      .then((response: string) => JSON.parse(response))
-      .catch(errorHandler);
-
-    return result;
-  }
-
   async readFile(
     path: string,
     sha?: string | null,
@@ -479,14 +360,12 @@ export default class API {
   }
 
   async persistFiles(dataFiles: DataFile[], mediaFiles: AssetProxy[], options: PersistOptions) {
-    const files = mediaFiles.concat(dataFiles);
+    const files: (DataFile | AssetProxy)[] = mediaFiles.concat(dataFiles as any);
     const uploadPromises = files.map(file => this.uploadBlob(file));
     await Promise.all(uploadPromises);
 
     return this.getDefaultBranch()
-      .then(branchData =>
-        this.updateTree(branchData.commit.sha, files as { sha: string; path: string }[]),
-      )
+      .then(branchData => this.updateTree(branchData.commit.sha, files as any))
       .then(changeTree => this.commit(options.commitMessage, changeTree))
       .then(response => this.patchBranch(this.branch, response.sha));
   }

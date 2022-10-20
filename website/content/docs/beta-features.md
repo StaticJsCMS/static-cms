@@ -71,7 +71,7 @@ i18n:
 
   # Optional, defaults to the first item in locales.
   # The locale to be used for fields validation and as a baseline for the entry.
-  default_locale: en
+  defaultLocale: en
 ```
 
 ### Collection level configuration
@@ -442,20 +442,6 @@ init({
 CMS.registerPreviewTemplate(...);
 ```
 
-## Raw CSS in `registerPreviewStyle`
-
-`registerPreviewStyle` can now accept a CSS string, in addition to accepting a url. The feature is activated by passing in an object as the second argument, with `raw` set to a truthy value. This is critical for integrating with modern build tooling. Here's an example using webpack:
-
-```js
-/**
- * Assumes a webpack project with `sass-loader` and `css-loader` installed.
- * Takes advantage of the `toString` method in the return value of `css-loader`.
- */
-import CMS from '@staticcms/core';
-import styles from '!css-loader!sass-loader!../main.scss';
-CMS.registerPreviewStyle(styles.toString(), { raw: true });
-```
-
 ## Commit Message Templates
 
 You can customize the templates used by Static CMS to generate commit messages by setting the `commit_messages` option under `backend` in your Static CMS `config.yml`.
@@ -539,7 +525,7 @@ Example usage:
 ```javascript
 CMS.registerEventListener({
   name: 'prePublish',
-  handler: ({ author, entry }) => console.info(JSON.stringify({ author, data: entry.get('data') })),
+  handler: ({ author, entry }) => console.info(JSON.stringify({ author, data: entry.data })),
 });
 ```
 
@@ -549,7 +535,7 @@ Supported events are `prePublish`, `postPublish`, `preSave` and `postSave`. The 
 CMS.registerEventListener({
   name: 'preSave',
   handler: ({ entry }) => {
-    return entry.get('data').set('title', 'new title');
+    return entry.data.set('title', 'new title');
   },
 });
 ```
@@ -613,9 +599,6 @@ collections:
       - label: Body
         name: body
         widget: markdown
-    # adding a meta object with a path property allows editing the path of entries
-    # moving an existing entry will move the entire sub tree of the entry to the new location
-    meta: { path: { widget: string, label: 'Path', index_file: 'index' } }
 ```
 
 Nested collections expect the following directory structure:

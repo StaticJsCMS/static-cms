@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "declaration": true,
+    "declarationDir": "dist",
+    "emitDeclarationOnly": false,
     "jsx": "react",
     "target": "esnext",
     "module": "esnext",
@@ -15,10 +17,12 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "baseUrl": "./",
+    "lib": ["DOM", "es6", "ES2015"],
     "paths": {
       "@staticcms/core": ["./src"]
-    }
+    },
+    "types": ["@emotion/react/types/css-prop", "@types/jest"]
   },
-  "include": ["**/src/**/*", "dev-test/index.js"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

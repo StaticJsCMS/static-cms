@@ -1,116 +1,148 @@
-import { Map, List } from 'immutable';
-import uuid from 'uuid/v4';
+import get from 'lodash/get';
 import { dirname } from 'path';
+import { v4 as uuid } from 'uuid';
 
 import {
-  MEDIA_LIBRARY_OPEN,
-  MEDIA_LIBRARY_CLOSE,
-  MEDIA_LIBRARY_CREATE,
-  MEDIA_INSERT,
-  MEDIA_REMOVE_INSERTED,
-  MEDIA_LOAD_REQUEST,
-  MEDIA_LOAD_SUCCESS,
-  MEDIA_LOAD_FAILURE,
-  MEDIA_PERSIST_REQUEST,
-  MEDIA_PERSIST_SUCCESS,
-  MEDIA_PERSIST_FAILURE,
+  MEDIA_DELETE_FAILURE,
   MEDIA_DELETE_REQUEST,
   MEDIA_DELETE_SUCCESS,
-  MEDIA_DELETE_FAILURE,
+  MEDIA_DISPLAY_URL_FAILURE,
   MEDIA_DISPLAY_URL_REQUEST,
   MEDIA_DISPLAY_URL_SUCCESS,
-  MEDIA_DISPLAY_URL_FAILURE,
+  MEDIA_INSERT,
+  MEDIA_LIBRARY_CLOSE,
+  MEDIA_LIBRARY_CREATE,
+  MEDIA_LIBRARY_OPEN,
+  MEDIA_LOAD_FAILURE,
+  MEDIA_LOAD_REQUEST,
+  MEDIA_LOAD_SUCCESS,
+  MEDIA_PERSIST_FAILURE,
+  MEDIA_PERSIST_REQUEST,
+  MEDIA_PERSIST_SUCCESS,
+  MEDIA_REMOVE_INSERTED,
 } from '../actions/mediaLibrary';
-import { selectEditingDraft, selectMediaFolder } from './entries';
 import { selectIntegration } from './';
+import { selectEditingDraft } from './entries';
+import { selectMediaFolder } from '../lib/util/media.util';
 
 import type { MediaLibraryAction } from '../actions/mediaLibrary';
-import type {
-  State,
-  MediaLibraryInstance,
-  MediaFile,
-  MediaFileMap,
-  DisplayURLState,
-  EntryField,
-} from '../types/redux';
+import type { Field, DisplayURLState, MediaFile, MediaLibraryInstance } from '../interface';
+import type { RootState } from '../store';
 
-const defaultState: {
+export interface MediaLibraryDisplayURL {
+  url?: string;
+  isFetching: boolean;
+  err?: unknown;
+}
+
+export type MediaLibraryState = {
   isVisible: boolean;
   showMediaButton: boolean;
-  controlMedia: Map<string, string>;
-  displayURLs: Map<string, string>;
+  controlMedia: Record<string, string | string[]>;
+  displayURLs: Record<string, MediaLibraryDisplayURL>;
   externalLibrary?: MediaLibraryInstance;
   controlID?: string;
   page?: number;
   files?: MediaFile[];
-  config: Map<string, unknown>;
-  field?: EntryField;
+  config: Record<string, unknown>;
+  field?: Field;
   value?: string | string[];
   replaceIndex?: number;
-} = {
-  isVisible: false,
-  showMediaButton: true,
-  controlMedia: Map(),
-  displayURLs: Map(),
-  config: Map(),
+  canInsert?: boolean;
+  privateUpload?: boolean;
+  isLoading?: boolean;
+  dynamicSearch?: boolean;
+  dynamicSearchActive?: boolean;
+  dynamicSearchQuery?: string;
+  forImage?: boolean;
+  isPersisting?: boolean;
+  isDeleting?: boolean;
+  hasNextPage?: boolean;
+  isPaginating?: boolean;
 };
 
-function mediaLibrary(state = Map(defaultState), action: MediaLibraryAction) {
+const defaultState: MediaLibraryState = {
+  isVisible: false,
+  showMediaButton: true,
+  controlMedia: {},
+  displayURLs: {},
+  config: {},
+};
+
+function mediaLibrary(
+  state: MediaLibraryState = defaultState,
+  action: MediaLibraryAction,
+): MediaLibraryState {
   switch (action.type) {
     case MEDIA_LIBRARY_CREATE:
-      return state.withMutations(map => {
-        map.set('externalLibrary', action.payload);
-        map.set('showMediaButton', action.payload.enableStandalone());
-      });
+      return {
+        ...state,
+        externalLibrary: action.payload,
+        showMediaButton: action.payload.enableStandalone(),
+      };
 
     case MEDIA_LIBRARY_OPEN: {
       const { controlID, forImage, privateUpload, config, field, value, replaceIndex } =
         action.payload;
-      const libConfig = config || Map();
-      const privateUploadChanged = state.get('privateUpload') !== privateUpload;
+      const libConfig = config || {};
+      const privateUploadChanged = state.privateUpload !== privateUpload;
       if (privateUploadChanged) {
-        return Map({
+        return {
+          ...state,
           isVisible: true,
           forImage,
           controlID,
-          canInsert: !!controlID,
+          canInsert: Boolean(controlID),
           privateUpload,
           config: libConfig,
-          controlMedia: Map(),
-          displayURLs: Map(),
+          controlMedia: {},
+          displayURLs: {},
           field,
           value,
           replaceIndex,
-        });
+        };
       }
-      return state.withMutations((map: Map<string, any>) => {
-        map.set('isVisible', true);
-        map.set('forImage', forImage);
-        map.set('controlID', controlID);
-        map.set('canInsert', !!controlID);
-        map.set('privateUpload', privateUpload);
-        map.set('config', libConfig);
-        map.set('field', field);
-        map.set('value', value);
-        map.set('replaceIndex', replaceIndex);
-      });
+
+      return {
+        ...state,
+        isVisible: true,
+        forImage: Boolean(forImage),
+        controlID,
+        canInsert: !!controlID,
+        privateUpload: Boolean(privateUpload),
+        config: libConfig,
+        field,
+        value,
+        replaceIndex,
+      };
     }
 
     case MEDIA_LIBRARY_CLOSE:
-      return state.set('isVisible', false);
+      return {
+        ...state,
+        isVisible: false,
+      };
 
     case MEDIA_INSERT: {
       const { mediaPath } = action.payload;
-      const controlID = state.get('controlID');
-      const value = state.get('value');
-
-      if (!Array.isArray(value)) {
-        return state.withMutations(map => {
-          map.setIn(['controlMedia', controlID], mediaPath);
-        });
+      const controlID = state.controlID;
+      if (!controlID) {
+        return state;
       }
 
-      const replaceIndex = state.get('replaceIndex');
+      const value = state.value;
+
+      if (!Array.isArray(value)) {
+        return {
+          ...state,
+          controlMedia: {
+            ...state.controlMedia,
+            [controlID]: mediaPath,
+          },
+        };
+      }
+
+      const replaceIndex = state.replaceIndex;
       const mediaArray = Array.isArray(mediaPath) ? mediaPath : [mediaPath];
       const valueArray = value as string[];
       if (typeof replaceIndex == 'number') {
@@ -119,21 +151,33 @@ function mediaLibrary(state = Map(defaultState), action: MediaLibraryAction) {
         valueArray.push(...mediaArray);
       }
 
-      return state.withMutations(map => {
-        map.setIn(['controlMedia', controlID], valueArray);
-      });
+      return {
+        ...state,
+        controlMedia: {
+          ...state.controlMedia,
+          [controlID]: valueArray,
+        },
+      };
     }
 
     case MEDIA_REMOVE_INSERTED: {
       const controlID = action.payload.controlID;
-      return state.setIn(['controlMedia', controlID], '');
+
+      return {
+        ...state,
+        controlMedia: {
+          ...state.controlMedia,
+          [controlID]: '',
+        },
+      };
     }
 
     case MEDIA_LOAD_REQUEST:
-      return state.withMutations(map => {
-        map.set('isLoading', true);
-        map.set('isPaginating', action.payload.page > 1);
-      });
+      return {
+        ...state,
+        isLoading: true,
+        isPaginating: action.payload.page > 1,
+      };
 
     case MEDIA_LOAD_SUCCESS: {
       const {
@@ -144,111 +188,155 @@ function mediaLibrary(state = Map(defaultState), action: MediaLibraryAction) {
         dynamicSearchQuery,
         privateUpload,
       } = action.payload;
-      const privateUploadChanged = state.get('privateUpload') !== privateUpload;
+      const privateUploadChanged = state.privateUpload !== privateUpload;
 
       if (privateUploadChanged) {
         return state;
       }
 
       const filesWithKeys = files.map(file => ({ ...file, key: uuid() }));
-      return state.withMutations((map: Map<string, any>) => {
-        map.set('isLoading', false);
-        map.set('isPaginating', false);
-        map.set('page', page);
-        map.set('hasNextPage', canPaginate && files.length > 0);
-        map.set('dynamicSearch', dynamicSearch);
-        map.set('dynamicSearchQuery', dynamicSearchQuery);
-        map.set('dynamicSearchActive', !!dynamicSearchQuery);
-        if (page && page > 1) {
-          const updatedFiles = (map.get('files') as MediaFile[]).concat(filesWithKeys);
-          map.set('files', updatedFiles);
-        } else {
-          map.set('files', filesWithKeys);
-        }
-      });
+      return {
+        ...state,
+        isLoading: false,
+        isPaginating: false,
+        page: page ?? 1,
+        hasNextPage: Boolean(canPaginate && files.length > 0),
+        dynamicSearch: Boolean(dynamicSearch),
+        dynamicSearchQuery: dynamicSearchQuery ?? '',
+        dynamicSearchActive: !!dynamicSearchQuery,
+        files:
+          page && page > 1 ? (state.files as MediaFile[]).concat(filesWithKeys) : filesWithKeys,
+      };
     }
 
     case MEDIA_LOAD_FAILURE: {
-      const privateUploadChanged = state.get('privateUpload') !== action.payload.privateUpload;
+      const privateUploadChanged = state.privateUpload !== action.payload.privateUpload;
       if (privateUploadChanged) {
         return state;
       }
-      return state.set('isLoading', false);
+
+      return {
+        ...state,
+        isLoading: false,
+      };
     }
 
     case MEDIA_PERSIST_REQUEST:
-      return state.set('isPersisting', true);
+      return {
+        ...state,
+        isPersisting: true,
+      };
 
     case MEDIA_PERSIST_SUCCESS: {
       const { file, privateUpload } = action.payload;
-      const privateUploadChanged = state.get('privateUpload') !== privateUpload;
+      const privateUploadChanged = state.privateUpload !== privateUpload;
       if (privateUploadChanged) {
         return state;
       }
-      return state.withMutations(map => {
-        const fileWithKey = { ...file, key: uuid() };
-        const files = map.get('files') as MediaFile[];
-        const updatedFiles = [fileWithKey, ...files];
-        map.set('files', updatedFiles);
-        map.set('isPersisting', false);
-      });
+
+      const fileWithKey = { ...file, key: uuid() };
+      const files = state.files as MediaFile[];
+      const updatedFiles = [fileWithKey, ...files];
+      return {
+        ...state,
+        files: updatedFiles,
+        isPersisting: false,
+      };
     }
 
     case MEDIA_PERSIST_FAILURE: {
-      const privateUploadChanged = state.get('privateUpload') !== action.payload.privateUpload;
+      const privateUploadChanged = state.privateUpload !== action.payload.privateUpload;
       if (privateUploadChanged) {
         return state;
       }
-      return state.set('isPersisting', false);
+
+      return {
+        ...state,
+        isPersisting: false,
+      };
     }
 
     case MEDIA_DELETE_REQUEST:
-      return state.set('isDeleting', true);
+      return {
+        ...state,
+        isDeleting: true,
+      };
 
     case MEDIA_DELETE_SUCCESS: {
       const { file, privateUpload } = action.payload;
       const { key, id } = file;
-      const privateUploadChanged = state.get('privateUpload') !== privateUpload;
+      const privateUploadChanged = state.privateUpload !== privateUpload;
       if (privateUploadChanged) {
         return state;
       }
-      return state.withMutations(map => {
-        const files = map.get('files') as MediaFile[];
-        const updatedFiles = files.filter(file => (key ? file.key !== key : file.id !== id));
-        map.set('files', updatedFiles);
-        map.deleteIn(['displayURLs', id]);
-        map.set('isDeleting', false);
-      });
+
+      const files = state.files as MediaFile[];
+      const updatedFiles = files.filter(file => (key ? file.key !== key : file.id !== id));
+
+      const displayURLs = {
+        ...state.displayURLs,
+      };
+
+      delete displayURLs[id];
+
+      return {
+        ...state,
+        files: updatedFiles,
+        displayURLs,
+        isDeleting: false,
+      };
     }
 
     case MEDIA_DELETE_FAILURE: {
-      const privateUploadChanged = state.get('privateUpload') !== action.payload.privateUpload;
+      const privateUploadChanged = state.privateUpload !== action.payload.privateUpload;
       if (privateUploadChanged) {
         return state;
       }
-      return state.set('isDeleting', false);
+
+      return {
+        ...state,
+        isDeleting: false,
+      };
     }
 
     case MEDIA_DISPLAY_URL_REQUEST:
-      return state.setIn(['displayURLs', action.payload.key, 'isFetching'], true);
+      return {
+        ...state,
+        displayURLs: {
+          ...state.displayURLs,
+          [action.payload.key]: {
+            ...state.displayURLs[action.payload.key],
+            isFetching: true,
+          },
+        },
+      };
 
     case MEDIA_DISPLAY_URL_SUCCESS: {
-      const displayURLPath = ['displayURLs', action.payload.key];
-      return state
-        .setIn([...displayURLPath, 'isFetching'], false)
-        .setIn([...displayURLPath, 'url'], action.payload.url);
+      return {
+        ...state,
+        displayURLs: {
+          ...state.displayURLs,
+          [action.payload.key]: {
+            url: action.payload.url,
+            isFetching: false,
+          },
+        },
+      };
     }
 
     case MEDIA_DISPLAY_URL_FAILURE: {
-      const displayURLPath = ['displayURLs', action.payload.key];
-      return (
-        state
-          .setIn([...displayURLPath, 'isFetching'], false)
-          // make sure that err is set so the CMS won't attempt to load
-          // the image again
-          .setIn([...displayURLPath, 'err'], action.payload.err || true)
-          .deleteIn([...displayURLPath, 'url'])
-      );
+      const displayUrl = { ...state.displayURLs[action.payload.key] };
+      delete displayUrl.url;
+      displayUrl.isFetching = false;
+      displayUrl.err = action.payload.err ?? true;
+
+      return {
+        ...state,
+        displayURLs: {
+          ...state.displayURLs,
+          [action.payload.key]: displayUrl,
+        },
+      };
     }
 
     default:
@@ -256,40 +344,41 @@ function mediaLibrary(state = Map(defaultState), action: MediaLibraryAction) {
   }
 }
 
-export function selectMediaFiles(state: State, field?: EntryField) {
+export function selectMediaFiles(state: RootState, field?: Field): MediaFile[] {
   const { mediaLibrary, entryDraft } = state;
-  const editingDraft = selectEditingDraft(state.entryDraft);
+  if (!entryDraft.entry) {
+    return [];
+  }
+
+  const editingDraft = selectEditingDraft(entryDraft);
   const integration = selectIntegration(state, null, 'assetStore');
 
-  let files;
+  let files: MediaFile[] = [];
   if (editingDraft && !integration) {
-    const entryFiles = entryDraft
-      .getIn(['entry', 'mediaFiles'], List<MediaFileMap>())
-      .toJS() as MediaFile[];
-    const entry = entryDraft.get('entry');
-    const collection = state.collections.get(entry?.get('collection'));
-    const mediaFolder = selectMediaFolder(state.config, collection, entry, field);
-    files = entryFiles
-      .filter(f => dirname(f.path) === mediaFolder)
-      .map(file => ({ key: file.id, ...file }));
+    const entryFiles = (get(entryDraft, ['entry', 'mediaFiles']) ?? []) as MediaFile[];
+    const entry = entryDraft['entry'];
+    const collection = state.collections[entry?.collection];
+    if (state.config.config) {
+      const mediaFolder = selectMediaFolder(state.config.config, collection, entry, field);
+      files = entryFiles
+        .filter(f => dirname(f.path) === mediaFolder)
+        .map(file => ({ key: file.id, ...file }));
+    }
   } else {
-    files = mediaLibrary.get('files') || [];
+    files = mediaLibrary.files || [];
   }
 
   return files;
 }
 
-export function selectMediaFileByPath(state: State, path: string) {
+export function selectMediaFileByPath(state: RootState, path: string) {
   const files = selectMediaFiles(state);
   const file = files.find(file => file.path === path);
   return file;
 }
 
-export function selectMediaDisplayURL(state: State, id: string) {
-  const displayUrlState = state.mediaLibrary.getIn(
-    ['displayURLs', id],
-    Map() as unknown as DisplayURLState,
-  );
+export function selectMediaDisplayURL(state: RootState, id: string) {
+  const displayUrlState = (get(state.mediaLibrary, ['displayURLs', id]) ?? {}) as DisplayURLState;
   return displayUrlState;
 }
 

@@ -1,13 +1,14 @@
 import { isAbsolutePath } from '../lib/util';
-import { createAssetProxy } from '../valueObjects/AssetProxy';
-import { selectMediaFilePath } from '../reducers/entries';
+import { selectMediaFilePath } from '../lib/util/media.util';
 import { selectMediaFileByPath } from '../reducers/mediaLibrary';
-import { getMediaFile, waitForMediaLibraryToLoad, getMediaDisplayURL } from './mediaLibrary';
+import { createAssetProxy } from '../valueObjects/AssetProxy';
+import { getMediaDisplayURL, getMediaFile, waitForMediaLibraryToLoad } from './mediaLibrary';
 
-import type AssetProxy from '../valueObjects/AssetProxy';
-import type { Collection, State, EntryMap, EntryField } from '../types/redux';
-import type { ThunkDispatch } from 'redux-thunk';
 import type { AnyAction } from 'redux';
+import type { ThunkDispatch } from 'redux-thunk';
+import type { Field, Collection, Entry } from '../interface';
+import type { RootState } from '../store';
+import type AssetProxy from '../valueObjects/AssetProxy';
 
 export const ADD_ASSETS = 'ADD_ASSETS';
 export const ADD_ASSET = 'ADD_ASSET';
@@ -42,7 +43,7 @@ export function loadAssetFailure(path: string, error: Error) {
 }
 
 export function loadAsset(resolvedPath: string) {
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     try {
       dispatch(loadAssetRequest(resolvedPath));
       // load asset url from backend
@@ -59,17 +60,13 @@ export function loadAsset(resolvedPath: string) {
         dispatch(addAsset(asset));
       }
       dispatch(loadAssetSuccess(resolvedPath));
-    } catch (e: any) {
-      dispatch(loadAssetFailure(resolvedPath, e));
+    } catch (error: unknown) {
+      console.error(error);
+      if (error instanceof Error) {
+        dispatch(loadAssetFailure(resolvedPath, error));
+      }
     }
   };
-}
-
-interface GetAssetArgs {
-  collection: Collection;
-  entry: EntryMap;
-  path: string;
-  field?: EntryField;
 }
 
 const emptyAsset = createAssetProxy({
@@ -79,25 +76,18 @@ const emptyAsset = createAssetProxy({
   }),
 });
 
-export function boundGetAsset(
-  dispatch: ThunkDispatch<State, {}, AnyAction>,
-  collection: Collection,
-  entry: EntryMap,
-) {
-  function bound(path: string, field: EntryField) {
-    const asset = dispatch(getAsset({ collection, entry, path, field }));
-    return asset;
-  }
-
-  return bound;
-}
-
-export function getAsset({ collection, entry, path, field }: GetAssetArgs) {
-  return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
-    if (!path) return emptyAsset;
+export function getAsset(collection: Collection, entry: Entry, path: string, field?: Field) {
+  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
+    if (!path) {
+      return emptyAsset;
+    }
 
     const state = getState();
-    const resolvedPath = selectMediaFilePath(state.config, collection, entry, path, field);
+    if (!state.config.config) {
+      return emptyAsset;
+    }
+
+    const resolvedPath = selectMediaFilePath(state.config.config, collection, entry, path, field);
 
     let { asset, isLoading, error } = state.medias[resolvedPath] || {};
     if (isLoading) {

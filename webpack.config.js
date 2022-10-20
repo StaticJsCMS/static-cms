@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devServerPort = parseInt(process.env.STATIC_CMS_DEV_SERVER_PORT || `${8080}`);
@@ -9,24 +10,45 @@ function moduleNameToPath(libName) {
 }
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/index.ts',
   mode: isProduction ? 'production' : 'development',
   module: {
     rules: [
       {
         test: /\.m?js$/,
-        enforce: "pre",
-        use: ["source-map-loader"],
+        enforce: 'pre',
+        use: ['source-map-loader'],
+        exclude: /(node_modules[\\/]@toast-ui[\\/]editor[\\/]dist)/,
       },
       {
-        test: /\.(ts|js)x?$/,
-        use: 'babel-loader',
+        test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false, // disable the behavior
+        },
+      },
+      {
+        test: /\.tsx?$/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              plugins: [!isProduction && 'react-refresh/babel'].filter(Boolean),
+            },
+          },
+        ],
         exclude: /node_modules/,
       },
       {
         test: /\.css$/,
-        include: ['ol', 'react-datetime', 'codemirror'].map(moduleNameToPath),
-        use: ['to-string-loader', 'css-loader'],
+        include: ['ol', 'codemirror', '@toast-ui'].map(moduleNameToPath),
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+          },
+        ],
       },
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
@@ -49,8 +71,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.jsx'],
-    alias: { 'react-dom': '@hot-loader/react-dom'  },
+    extensions: ['.tsx', '.ts', '.jsx', '.js'],
     fallback: {
       path: require.resolve('path-browserify'),
       stream: require.resolve('stream-browserify'),
@@ -58,12 +79,14 @@ module.exports = {
     },
   },
   plugins: [
+    !isProduction && new ReactRefreshWebpackPlugin(),
     new webpack.IgnorePlugin({ resourceRegExp: /^esprima$/ }),
     new webpack.IgnorePlugin({ resourceRegExp: /moment\/locale\// }),
     new webpack.ProvidePlugin({
+      process: 'process/browser',
       Buffer: ['buffer', 'Buffer'],
     }),
-  ],
+  ].filter(Boolean),
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'static-cms-core.js',
@@ -78,5 +101,6 @@ module.exports = {
     },
     host: '0.0.0.0',
     port: devServerPort,
+    hot: true,
   },
 };

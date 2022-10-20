@@ -1,17 +1,7 @@
-import { AzureBackend } from './azure';
-import { BitbucketBackend } from './bitbucket';
-import { GitGatewayBackend } from './git-gateway';
-import { GitHubBackend } from './github';
-import { GitLabBackend } from './gitlab';
-import { ProxyBackend } from './proxy';
-import { TestBackend } from './test';
-
-export {
-  AzureBackend,
-  BitbucketBackend,
-  GitGatewayBackend,
-  GitHubBackend,
-  GitLabBackend,
-  ProxyBackend,
-  TestBackend,
-};
+export { AzureBackend } from './azure';
+export { BitbucketBackend } from './bitbucket';
+export { GitGatewayBackend } from './git-gateway';
+export { GitHubBackend } from './github';
+export { GitLabBackend } from './gitlab';
+export { ProxyBackend } from './proxy';
+export { TestBackend } from './test';

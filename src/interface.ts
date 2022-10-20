@@ -1,120 +1,365 @@
-import type { List, Map } from 'immutable';
-import type { ComponentType, FocusEventHandler, ReactNode } from 'react';
+import type { PropertiesSchema } from 'ajv/dist/types/json-schema';
+import type { ComponentType, ReactNode } from 'react';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
 import type { Pluggable } from 'unified';
+import type { MediaFile as BackendMediaFile } from './backend';
+import type { EditorControlProps } from './components/Editor/EditorControlPane/EditorControl';
+import type { formatExtensions } from './formats/formats';
+import type { I18N_STRUCTURE } from './lib/i18n';
+import type { AllowedEvent } from './lib/registry';
 import type Cursor from './lib/util/Cursor';
-import type { CollectionType } from './constants/collectionTypes';
+import type AssetProxy from './valueObjects/AssetProxy';
 
-export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
+export interface SlugConfig {
+  encoding: string;
+  clean_accents: boolean;
+  sanitize_replacement: string;
+}
 
-export type GetAssetFunction = (asset: string) => {
-  url: string;
-  path: string;
-  field?: any;
-  fileObj: File;
+export interface Pages {
+  [collection: string]: { isFetching?: boolean; page?: number; ids: string[] };
+}
+
+export type SortableField =
+  | {
+      key: string;
+      name: string;
+      label: string;
+    }
+  | ({
+      key: string;
+    } & Field);
+
+export interface SortObject {
+  key: string;
+  direction: SortDirection;
+}
+
+export type SortMap = Record<string, SortObject>;
+
+export type Sort = Record<string, SortMap>;
+
+export type FilterMap = ViewFilter & { active?: boolean };
+
+export type GroupMap = ViewGroup & { active?: boolean };
+
+export type Filter = Record<string, Record<string, FilterMap>>; // collection.field.active
+
+export type Group = Record<string, Record<string, GroupMap>>; // collection.field.active
+
+export interface GroupOfEntries {
+  id: string;
+  label: string;
+  value: string | boolean | undefined;
+  paths: Set<string>;
+}
+
+export type ObjectValue = {
+  [key: string]: ValueOrNestedValue;
 };
 
-export interface CmsWidgetControlProps<T = any> {
-  value: T;
-  field: Map<string, any>;
-  onChange: (value: T) => void;
-  forID: string;
-  classNameWrapper: string;
-  setActiveStyle: FocusEventHandler;
-  setInactiveStyle: FocusEventHandler;
+export type ValueOrNestedValue =
+  | string
+  | number
+  | boolean
+  | string[]
+  | null
+  | undefined
+  | ObjectValue
+  | ObjectValue[];
+
+export type EntryData = ObjectValue | undefined | null;
+
+export interface Entry {
+  collection: string;
+  slug: string;
+  path: string;
+  partial: boolean;
+  raw: string;
+  data: EntryData;
+  label: string | null;
+  isModification: boolean | null;
+  mediaFiles: MediaFile[];
+  author: string;
+  updatedOn: string;
+  status?: string;
+  newRecord?: boolean;
+  isFetching?: boolean;
+  isPersisting?: boolean;
+  isDeleting?: boolean;
+  error?: string;
+  i18n?: {
+    [locale: string]: {
+      data: EntryData;
+    };
+  };
+}
+
+export type Entities = Record<string, Entry>;
+
+export interface FieldError {
+  type: string;
+  message?: string;
+}
+
+export interface FieldsErrors {
+  [field: string]: FieldError[];
+}
+
+export interface FieldValidationMethodProps<T = unknown, F extends Field = Field> {
+  field: F;
+  value: T | undefined | null;
   t: t;
 }
 
-export interface CmsWidgetPreviewProps<T = any> {
-  value: T;
-  field: Map<string, any>;
-  metadata: Map<string, any>;
-  getAsset: GetAssetFunction;
-  entry: Map<string, any>;
-  fieldsMetaData: Map<string, any>;
+export type FieldValidationMethod<T = unknown, F extends Field = Field> = (
+  props: FieldValidationMethodProps<T, F>,
+) => false | FieldError | Promise<false | FieldError>;
+
+export interface EntryDraft {
+  entry: Entry;
+  fieldsErrors: FieldsErrors;
 }
 
-export interface CmsWidgetParam<T = any> {
+export interface FilterRule {
+  value: string;
+  field: string;
+}
+
+export interface CollectionFile {
   name: string;
-  controlComponent: ComponentType<CmsWidgetControlProps<T>>;
-  previewComponent?: ComponentType<CmsWidgetPreviewProps<T>>;
-  validator?: (props: {
-    field: Map<string, any>;
-    value: T | undefined | null;
-    t: t;
-  }) => boolean | { error: any } | Promise<boolean | { error: any }>;
-  globalStyles?: any;
+  label: string;
+  file: string;
+  fields: Field[];
+  label_singular?: string;
+  description?: string;
+  media_folder?: string;
+  public_folder?: string;
+  i18n?: boolean | I18nInfo;
+  editor?: {
+    preview?: boolean;
+  };
 }
 
-export interface CmsWidget<T = any> {
-  control: ComponentType<CmsWidgetControlProps<T>>;
-  preview?: ComponentType<CmsWidgetPreviewProps<T>>;
-  globalStyles?: any;
+interface Nested {
+  summary?: string;
+  depth: number;
 }
 
-export type PreviewTemplateComponentProps = {
-  entry: Map<string, any>;
-  collection: Map<string, any>;
-  widgetFor: (name: any, fields?: any, values?: any, fieldsMetaData?: any) => JSX.Element | null;
-  widgetsFor: (name: any) => any;
+export interface I18nSettings {
+  currentLocale: string;
+  defaultLocale: string;
+  locales: string[];
+}
+
+export type Format = keyof typeof formatExtensions;
+
+export interface i18nCollection extends Omit<Collection, 'i18n'> {
+  i18n: Required<Collection>['i18n'];
+}
+
+export interface Collection {
+  name: string;
+  description?: string;
+  icon?: string;
+  folder?: string;
+  files?: CollectionFile[];
+  fields: Field[];
+  isFetching?: boolean;
+  media_folder?: string;
+  public_folder?: string;
+  preview_path?: string;
+  preview_path_date_field?: string;
+  summary?: string;
+  filter?: FilterRule;
+  type: 'file_based_collection' | 'folder_based_collection';
+  extension?: string;
+  format?: Format;
+  frontmatter_delimiter?: string | [string, string];
+  create?: boolean;
+  delete?: boolean;
+  identifier_field?: string;
+  path?: string;
+  slug?: string;
+  label_singular?: string;
+  label: string;
+  sortable_fields: SortableFields;
+  view_filters: ViewFilter[];
+  view_groups: ViewGroup[];
+  nested?: Nested;
+  i18n?: boolean | I18nInfo;
+  hide?: boolean;
+  editor?: {
+    preview?: boolean;
+  };
+}
+
+export type Collections = Record<string, Collection>;
+
+export interface MediaLibraryInstance {
+  show: (args: {
+    id?: string;
+    value?: string | string[];
+    config: Record<string, unknown>;
+    allowMultiple?: boolean;
+    imagesOnly?: boolean;
+  }) => void;
+  hide?: () => void;
+  onClearControl?: (args: { id: string }) => void;
+  onRemoveControl?: (args: { id: string }) => void;
+  enableStandalone: () => boolean;
+}
+
+export type MediaFile = BackendMediaFile & { key?: string };
+
+export interface DisplayURLState {
+  isFetching: boolean;
+  url?: string;
+  err?: Error;
+}
+
+export type Hook = string | boolean;
+
+export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
+
+export type GetAssetFunction = (path: string, field?: Field) => AssetProxy;
+
+export interface WidgetControlProps<T, F extends Field = Field> {
+  clearFieldErrors: EditorControlProps['clearFieldErrors'];
+  clearSearch: EditorControlProps['clearSearch'];
+  collection: Collection;
+  config: Config;
+  entry: Entry;
+  field: F;
+  fieldsErrors: FieldsErrors;
+  submitted: boolean;
+  forList: boolean;
   getAsset: GetAssetFunction;
-  boundGetAsset: (collection: any, path: any) => GetAssetFunction;
-  fieldsMetaData: Map<string, any>;
-  config: Map<string, any>;
-  fields: List<Map<string, any>>;
+  isDisabled: boolean;
+  isEditorComponent: boolean;
+  isFetching: boolean;
+  isFieldDuplicate: EditorControlProps['isFieldDuplicate'];
+  isFieldHidden: EditorControlProps['isFieldHidden'];
+  isNewEditorComponent: boolean;
+  label: string;
+  loadEntry: EditorControlProps['loadEntry'];
+  locale: string | undefined;
+  mediaPaths: Record<string, string | string[]>;
+  onChange: (value: T | null | undefined) => void;
+  addAsset: EditorControlProps['addAsset'];
+  addDraftEntryMediaFile: EditorControlProps['addDraftEntryMediaFile'];
+  clearMediaControl: EditorControlProps['clearMediaControl'];
+  openMediaLibrary: EditorControlProps['openMediaLibrary'];
+  removeInsertedMedia: EditorControlProps['removeInsertedMedia'];
+  removeMediaControl: EditorControlProps['removeMediaControl'];
+  i18n: I18nSettings | undefined;
+  hasErrors: boolean;
+  path: string;
+  query: EditorControlProps['query'];
+  t: t;
+  value: T | undefined | null;
+}
+
+export interface WidgetPreviewProps<T = unknown, F extends Field = Field> {
+  entry: Entry;
+  field: F;
+  getAsset: GetAssetFunction;
+  getRemarkPlugins: () => Pluggable[];
+  resolveWidget: <W = unknown, WF extends Field = Field>(name: string) => Widget<W, WF>;
+  value: T | undefined | null;
+}
+
+export type WidgetPreviewComponent<T = unknown, F extends Field = Field> =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
+  | ComponentType<WidgetPreviewProps<T, F>>;
+
+export interface TemplatePreviewProps {
+  collection: Collection;
+  fields: Field[];
+  entry: Entry;
+  getAsset: GetAssetFunction;
+  widgetFor: (name: string) => ReactNode;
+  widgetsFor: (name: string) =>
+    | {
+        data: EntryData | null;
+        widgets: Record<string, React.ReactNode>;
+      }
+    | {
+        data: EntryData | null;
+        widgets: Record<string, React.ReactNode>;
+      }[];
+}
+
+export type TemplatePreviewComponent =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
+  | ComponentType<TemplatePreviewProps>;
+
+export interface WidgetOptions<T = unknown, F extends Field = Field> {
+  validator?: Widget<T, F>['validator'];
+  getValidValue?: Widget<T, F>['getValidValue'];
+  schema?: Widget<T, F>['schema'];
+  allowMapValue?: boolean;
+}
+
+export interface Widget<T = unknown, F extends Field = Field> {
+  control: ComponentType<WidgetControlProps<T, F>>;
+  preview?: WidgetPreviewComponent<T, F>;
+  validator: FieldValidationMethod<T, F>;
+  getValidValue: (value: T | undefined | null) => T | undefined | null;
+  schema?: PropertiesSchema<unknown>;
+  allowMapValue?: boolean;
+}
+
+export interface WidgetParam<T = unknown, F extends Field = Field> {
+  name: string;
+  controlComponent: Widget<T, F>['control'];
+  previewComponent?: Widget<T, F>['preview'];
+  options?: WidgetOptions<T, F>;
+}
+
+export interface PreviewTemplateComponentProps {
+  entry: Entry;
+  collection: Collection;
+  widgetFor: (name: string) => ReactNode;
+  widgetsFor: (name: string) =>
+    | {
+        data: EntryData | null;
+        widgets: Record<string, React.ReactNode>;
+      }
+    | {
+        data: EntryData | null;
+        widgets: Record<string, React.ReactNode>;
+      }[];
+  getAsset: GetAssetFunction;
+  boundGetAsset: (collection: Collection, path: string) => GetAssetFunction;
+  config: Config;
+  fields: Field[];
   isLoadingAsset: boolean;
   window: Window;
   document: Document;
-};
-export type DisplayURLObject = { id: string; path: string };
+}
 
-export type DisplayURL = DisplayURLObject | string;
-
-export type DataFile = {
-  path: string;
-  slug: string;
-  raw: string;
-  newPath?: string;
-};
-
-export type AssetProxy = {
-  path: string;
-  fileObj?: File;
-  toBase64?: () => Promise<string>;
-};
-
-export type Entry = {
-  dataFiles: DataFile[];
-  assets: AssetProxy[];
-};
-
-export type PersistOptions = {
+export interface PersistOptions {
   newEntry?: boolean;
   commitMessage: string;
   collectionName?: string;
   status?: string;
-};
-
-export type DeleteOptions = {};
-
-export type Credentials = { token: string | {}; refresh_token?: string };
-
-export type User = Credentials & {
-  backendName?: string;
-  login?: string;
-  name: string;
-};
+}
 
 export interface ImplementationEntry {
   data: string;
   file: { path: string; label?: string; id?: string | null; author?: string; updatedOn?: string };
 }
 
-export type ImplementationFile = {
-  id?: string | null | undefined;
-  label?: string;
+export interface DisplayURLObject {
+  id: string;
   path: string;
-};
+}
+
+export type DisplayURL = DisplayURLObject | string;
+
 export interface ImplementationMediaFile {
   name: string;
   id: string;
@@ -124,98 +369,128 @@ export interface ImplementationMediaFile {
   draft?: boolean;
   url?: string;
   file?: File;
+  field?: Field;
 }
 
-export type CursorStoreObject = {
-  actions: Set<string>;
-  data: Map<string, unknown>;
-  meta: Map<string, unknown>;
+export interface DataFile {
+  path: string;
+  slug: string;
+  raw: string;
+  newPath?: string;
+}
+
+export interface BackendEntry {
+  dataFiles: DataFile[];
+  assets: AssetProxy[];
+}
+
+export type DeleteOptions = {};
+
+export interface Credentials {
+  token: string | {};
+  refresh_token?: string;
+}
+
+export type User = Credentials & {
+  backendName?: string;
+  login?: string;
+  name?: string;
+  avatar_url?: string;
 };
 
-export type CursorStore = {
-  get<K extends keyof CursorStoreObject>(
-    key: K,
-    defaultValue?: CursorStoreObject[K],
-  ): CursorStoreObject[K];
-  getIn<V>(path: string[]): V;
-  set<K extends keyof CursorStoreObject, V extends CursorStoreObject[K]>(
-    key: K,
-    value: V,
-  ): CursorStoreObject[K];
-  setIn(path: string[], value: unknown): CursorStore;
-  hasIn(path: string[]): boolean;
-  mergeIn(path: string[], value: unknown): CursorStore;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  update: (...args: any[]) => CursorStore;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  updateIn: (...args: any[]) => CursorStore;
-};
+export interface ImplementationFile {
+  id?: string | null | undefined;
+  label?: string;
+  path: string;
+}
 
-export interface Implementation {
-  authComponent: () => void;
-  restoreUser: (user: User) => Promise<User>;
+export interface AuthenticatorConfig {
+  site_id?: string;
+  base_url?: string;
+  auth_endpoint?: string;
+  auth_token_endpoint?: string;
+  auth_url?: string;
+  app_id?: string;
+  clearHash?: () => void;
+}
 
-  authenticate: (credentials: Credentials) => Promise<User>;
-  logout: () => Promise<void> | void | null;
-  getToken: () => Promise<string | null>;
+export abstract class BackendClass {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  constructor(_config: Config, _options: BackendInitializerOptions) {}
 
-  getEntry: (path: string) => Promise<ImplementationEntry>;
-  entriesByFolder: (
+  abstract authComponent(): (props: TranslatedProps<AuthenticationPageProps>) => JSX.Element;
+  abstract restoreUser(user: User): Promise<User>;
+
+  abstract authenticate(credentials: Credentials): Promise<User>;
+  abstract logout(): Promise<void> | void | null;
+  abstract getToken(): Promise<string | null>;
+
+  abstract getEntry(path: string): Promise<ImplementationEntry>;
+  abstract entriesByFolder(
     folder: string,
     extension: string,
     depth: number,
-  ) => Promise<ImplementationEntry[]>;
-  entriesByFiles: (files: ImplementationFile[]) => Promise<ImplementationEntry[]>;
+  ): Promise<ImplementationEntry[]>;
+  abstract entriesByFiles(files: ImplementationFile[]): Promise<ImplementationEntry[]>;
 
-  getMediaDisplayURL?: (displayURL: DisplayURL) => Promise<string>;
-  getMedia: (folder?: string) => Promise<ImplementationMediaFile[]>;
-  getMediaFile: (path: string) => Promise<ImplementationMediaFile>;
+  abstract getMediaDisplayURL(displayURL: DisplayURL): Promise<string>;
+  abstract getMedia(folder?: string): Promise<ImplementationMediaFile[]>;
+  abstract getMediaFile(path: string): Promise<ImplementationMediaFile>;
 
-  persistEntry: (entry: Entry, opts: PersistOptions) => Promise<void>;
-  persistMedia: (file: AssetProxy, opts: PersistOptions) => Promise<ImplementationMediaFile>;
-  deleteFiles: (paths: string[], commitMessage: string) => Promise<void>;
+  abstract persistEntry(entry: BackendEntry, opts: PersistOptions): Promise<void>;
+  abstract persistMedia(file: AssetProxy, opts: PersistOptions): Promise<ImplementationMediaFile>;
+  abstract deleteFiles(paths: string[], commitMessage: string): Promise<unknown>;
 
-  allEntriesByFolder?: (
+  abstract allEntriesByFolder(
     folder: string,
     extension: string,
     depth: number,
-  ) => Promise<ImplementationEntry[]>;
-  traverseCursor?: (
+  ): Promise<ImplementationEntry[]>;
+  abstract traverseCursor(
     cursor: Cursor,
     action: string,
-  ) => Promise<{ entries: ImplementationEntry[]; cursor: Cursor }>;
+  ): Promise<{ entries: ImplementationEntry[]; cursor: Cursor }>;
 
-  isGitBackend?: () => boolean;
-  status: () => Promise<{
+  abstract isGitBackend(): boolean;
+  abstract status(): Promise<{
     auth: { status: boolean };
     api: { status: boolean; statusPage: string };
   }>;
 }
 
-export interface CmsRegistryBackend {
-  init: (args: any) => Implementation;
+export interface LocalePhrasesRoot {
+  [property: string]: LocalePhrases;
+}
+export type LocalePhrases = string | { [property: string]: LocalePhrases };
+
+export type CustomIcon = () => JSX.Element;
+
+export type WidgetValueSerializer = {
+  serialize: (value: ValueOrNestedValue) => ValueOrNestedValue;
+  deserialize: (value: ValueOrNestedValue) => ValueOrNestedValue;
+};
+
+export type MediaLibraryOptions = Record<string, unknown>;
+
+export interface MediaLibraryInitOptions {
+  options: Record<string, unknown> | undefined;
+  handleInsert: (url: string | string[]) => void;
 }
 
-export type CmsLocalePhrases = Record<string, any>; // TODO: type properly
-
-export type CmsWidgetValueSerializer = any; // TODO: type properly
-
-export type CmsMediaLibraryOptions = any; // TODO: type properly
-
-export interface CmsMediaLibrary {
+export interface MediaLibraryExternalLibrary {
   name: string;
-  config?: CmsMediaLibraryOptions;
+  config?: MediaLibraryOptions;
+  init: ({ options, handleInsert }: MediaLibraryInitOptions) => Promise<MediaLibraryInstance>;
 }
 
-export interface PreviewStyleOptions {
-  raw: boolean;
+export interface MediaLibraryInternalOptions {
+  allow_multiple?: boolean;
+  choose_url?: boolean;
 }
 
-export interface PreviewStyle extends PreviewStyleOptions {
-  value: string;
-}
+export type MediaLibrary = MediaLibraryExternalLibrary | MediaLibraryInternalOptions;
 
-export type CmsBackendType =
+export type BackendType =
   | 'azure'
   | 'git-gateway'
   | 'github'
@@ -224,9 +499,9 @@ export type CmsBackendType =
   | 'test-repo'
   | 'proxy';
 
-export type CmsMapWidgetType = 'Point' | 'LineString' | 'Polygon';
+export type MapWidgetType = 'Point' | 'LineString' | 'Polygon';
 
-export type CmsMarkdownWidgetButton =
+export type MarkdownWidgetButton =
   | 'bold'
   | 'italic'
   | 'code'
@@ -242,32 +517,16 @@ export type CmsMarkdownWidgetButton =
   | 'bulleted-list'
   | 'numbered-list';
 
-export interface CmsSelectWidgetOptionObject {
+export interface SelectWidgetOptionObject {
   label: string;
-  value: any;
+  value: string;
 }
 
-export type CmsCollectionFormatType =
-  | 'yml'
-  | 'yaml'
-  | 'toml'
-  | 'json'
-  | 'frontmatter'
-  | 'yaml-frontmatter'
-  | 'toml-frontmatter'
-  | 'json-frontmatter';
+export type AuthScope = 'repo' | 'public_repo';
 
-export type CmsAuthScope = 'repo' | 'public_repo';
+export type SlugEncoding = 'unicode' | 'ascii';
 
-export type CmsSlugEncoding = 'unicode' | 'ascii';
-
-export interface CmsI18nConfig {
-  structure: 'multiple_folders' | 'multiple_files' | 'single_file';
-  locales: string[];
-  default_locale?: string;
-}
-
-export interface CmsFieldBase {
+export interface BaseField {
   name: string;
   label?: string;
   required?: boolean;
@@ -279,111 +538,101 @@ export interface CmsFieldBase {
   comment?: string;
 }
 
-export interface CmsFieldBoolean {
+export interface BooleanField extends BaseField {
   widget: 'boolean';
   default?: boolean;
 }
 
-export interface CmsFieldCode {
+export interface CodeField extends BaseField {
   widget: 'code';
-  default?: any;
+  default?: string | { [key: string]: string };
 
   default_language?: string;
   allow_language_selection?: boolean;
   keys?: { code: string; lang: string };
   output_code_only?: boolean;
+
+  code_mirror_config: {
+    extra_keys?: Record<string, string>;
+  } & Record<string, unknown>;
 }
 
-export interface CmsFieldColor {
+export interface ColorField extends BaseField {
   widget: 'color';
   default?: string;
 
-  allowInput?: boolean;
-  enableAlpha?: boolean;
+  allow_input?: boolean;
+  enable_alpha?: boolean;
 }
 
-export interface CmsFieldDateTime {
+export interface DateTimeField extends BaseField {
   widget: 'datetime';
   default?: string;
 
   format?: string;
   date_format?: boolean | string;
   time_format?: boolean | string;
-  picker_utc?: boolean;
-
-  /**
-   * @deprecated Use date_format instead
-   */
-  dateFormat?: boolean | string;
-  /**
-   * @deprecated Use time_format instead
-   */
-  timeFormat?: boolean | string;
-  /**
-   * @deprecated Use picker_utc instead
-   */
-  pickerUtc?: boolean;
+  picker_utc?: boolean; // TODO Reimplement
 }
 
-export interface CmsFieldFileOrImage {
+export interface FileOrImageField extends BaseField {
   widget: 'file' | 'image';
   default?: string;
 
-  media_library?: CmsMediaLibrary;
-  allow_multiple?: boolean;
-  config?: any;
+  media_library?: MediaLibrary;
+  private?: boolean;
 }
 
-export interface CmsFieldObject {
+export interface ObjectField extends BaseField {
   widget: 'object';
-  default?: any;
+  default?: ObjectValue;
 
   collapsed?: boolean;
   summary?: string;
-  fields: CmsField[];
+  fields: Field[];
 }
 
-export interface CmsFieldList {
+export interface ListField extends BaseField {
   widget: 'list';
-  default?: any;
+  default?: ObjectValue[];
 
   allow_add?: boolean;
   collapsed?: boolean;
   summary?: string;
   minimize_collapsed?: boolean;
   label_singular?: string;
-  field?: CmsField;
-  fields?: CmsField[];
+  fields?: Field[];
   max?: number;
   min?: number;
   add_to_top?: boolean;
-  types?: (CmsFieldBase & CmsFieldObject)[];
+  types?: ObjectField[];
+  typeKey?: string;
 }
 
-export interface CmsFieldMap {
+export interface MapField extends BaseField {
   widget: 'map';
   default?: string;
 
   decimals?: number;
-  type?: CmsMapWidgetType;
+  type?: MapWidgetType;
+  height?: string;
 }
 
-export interface CmsFieldMarkdown {
+export interface MarkdownField extends BaseField {
   widget: 'markdown';
   default?: string;
 
   minimal?: boolean;
-  buttons?: CmsMarkdownWidgetButton[];
+  buttons?: MarkdownWidgetButton[];
   editor_components?: string[];
-  modes?: ('raw' | 'rich_text')[];
 
-  /**
-   * @deprecated Use editor_components instead
-   */
-  editorComponents?: string[];
+  sanitize_preview?: boolean;
+  media_library?: MediaLibrary;
+  media_folder?: string;
+  public_folder?: string;
 }
 
-export interface CmsFieldNumber {
+export interface NumberField extends BaseField {
   widget: 'number';
   default?: string | number;
 
@@ -392,24 +641,19 @@ export interface CmsFieldNumber {
   max?: number;
 
   step?: number;
-
-  /**
-   * @deprecated Use valueType instead
-   */
-  valueType?: 'int' | 'float' | string;
 }
 
-export interface CmsFieldSelect {
+export interface SelectField extends BaseField {
   widget: 'select';
   default?: string | string[];
 
-  options: string[] | CmsSelectWidgetOptionObject[];
+  options: string[] | SelectWidgetOptionObject[];
   multiple?: boolean;
   min?: number;
   max?: number;
 }
 
-export interface CmsFieldRelation {
+export interface RelationField extends BaseField {
   widget: 'relation';
   default?: string | string[];
 
@@ -419,81 +663,37 @@ export interface CmsFieldRelation {
   file?: string;
   display_fields?: string[];
   multiple?: boolean;
+  min?: number;
+  max?: number;
   options_length?: number;
-
-  /**
-   * @deprecated Use value_field instead
-   */
-  valueField?: string;
-  /**
-   * @deprecated Use search_fields instead
-   */
-  searchFields?: string[];
-  /**
-   * @deprecated Use display_fields instead
-   */
-  displayFields?: string[];
-  /**
-   * @deprecated Use options_length instead
-   */
-  optionsLength?: number;
 }
 
-export interface CmsFieldHidden {
+export interface HiddenField extends BaseField {
   widget: 'hidden';
-  default?: any;
+  default?: ValueOrNestedValue;
 }
 
-export interface CmsFieldStringOrText {
+export interface StringOrTextField extends BaseField {
   // This is the default widget, so declaring its type is optional.
   widget?: 'string' | 'text';
   default?: string;
 }
 
-export interface CmsFieldMeta {
-  name: string;
-  label: string;
-  widget: string;
-  required: boolean;
-  index_file: string;
-  meta: boolean;
-}
-
-export type CmsField = CmsFieldBase &
-  (
-    | CmsFieldBoolean
-    | CmsFieldCode
-    | CmsFieldColor
-    | CmsFieldDateTime
-    | CmsFieldFileOrImage
-    | CmsFieldList
-    | CmsFieldMap
-    | CmsFieldMarkdown
-    | CmsFieldNumber
-    | CmsFieldObject
-    | CmsFieldRelation
-    | CmsFieldSelect
-    | CmsFieldHidden
-    | CmsFieldStringOrText
-    | CmsFieldMeta
-  );
-
-export interface CmsCollectionFile {
-  name: string;
-  label: string;
-  file: string;
-  fields: CmsField[];
-  label_singular?: string;
-  description?: string;
-  preview_path?: string;
-  preview_path_date_field?: string;
-  i18n?: boolean | CmsI18nConfig;
-  media_folder?: string;
-  public_folder?: string;
-  editor?: {
-    preview?: boolean;
-  };
-}
+export type Field =
+  | BooleanField
+  | CodeField
+  | ColorField
+  | DateTimeField
+  | FileOrImageField
+  | ListField
+  | MapField
+  | MarkdownField
+  | NumberField
+  | ObjectField
+  | RelationField
+  | SelectField
+  | HiddenField
+  | StringOrTextField;
 
 export interface ViewFilter {
   id: string;
@@ -515,74 +715,37 @@ export enum SortDirection {
   None = 'None',
 }
 
-export interface CmsSortableFieldsDefault {
+export interface SortableFieldsDefault {
   field: string;
   direction?: SortDirection;
 }
 
-export interface CmsSortableFields {
-  default?: CmsSortableFieldsDefault;
+export interface SortableFields {
+  default?: SortableFieldsDefault;
   fields: string[];
 }
 
-export interface CmsCollection {
-  name: string;
-  type?: CollectionType;
-  icon?: string;
-  label: string;
-  label_singular?: string;
-  description?: string;
-  folder?: string;
-  files?: CmsCollectionFile[];
-  identifier_field?: string;
-  summary?: string;
-  slug?: string;
-  preview_path?: string;
-  preview_path_date_field?: string;
-  create?: boolean;
-  delete?: boolean;
-  hide?: boolean;
-  editor?: {
-    preview?: boolean;
-  };
-  publish?: boolean;
-  nested?: {
-    depth: number;
-  };
-  meta?: { path?: { label: string; widget: string; index_file: string } };
-
-  /**
-   * It accepts the following values: yml, yaml, toml, json, md, markdown, html
-   *
-   * You may also specify a custom extension not included in the list above, by specifying the format value.
-   */
-  extension?: string;
-  format?: CmsCollectionFormatType;
-
-  frontmatter_delimiter?: string[] | string;
-  fields?: CmsField[];
-  filter?: { field: string; value: any };
-  path?: string;
-  media_folder?: string;
-  public_folder?: string;
-  sortable_fields?: CmsSortableFields;
-  view_filters?: ViewFilter[];
-  view_groups?: ViewGroup[];
-  i18n?: boolean | CmsI18nConfig;
-}
-
-export interface CmsBackend {
-  name: CmsBackendType;
-  auth_scope?: CmsAuthScope;
+export interface Backend {
+  name: BackendType;
+  auth_scope?: AuthScope;
   repo?: string;
   branch?: string;
   api_root?: string;
+  api_version?: string;
+  tenant_id?: string;
   site_domain?: string;
   base_url?: string;
   auth_endpoint?: string;
   app_id?: string;
   auth_type?: 'implicit' | 'pkce';
   proxy_url?: string;
+  large_media_url?: string;
+  login?: boolean;
+  use_graphql?: boolean;
+  graphql_api_root?: string;
+  use_large_media_transforms_in_media_library?: boolean;
+  identity_url?: string;
+  gateway_url?: string;
   commit_messages?: {
     create?: string;
     update?: string;
@@ -592,40 +755,35 @@ export interface CmsBackend {
   };
 }
 
-export interface CmsSlug {
-  encoding?: CmsSlugEncoding;
+export interface Slug {
+  encoding?: SlugEncoding;
   clean_accents?: boolean;
   sanitize_replacement?: string;
 }
 
-export interface CmsLocalBackend {
+export interface LocalBackend {
   url?: string;
   allowed_hosts?: string[];
 }
 
-export interface CmsConfig {
-  backend: CmsBackend;
-  collections: CmsCollection[];
+export interface Config {
+  backend: Backend;
+  collections: Collection[];
   locale?: string;
+  site_id?: string;
   site_url?: string;
   display_url?: string;
+  base_url?: string;
   logo_url?: string;
   media_folder?: string;
   public_folder?: string;
   media_folder_relative?: boolean;
-  media_library?: CmsMediaLibrary;
+  media_library?: MediaLibrary;
   load_config_file?: boolean;
-  integrations?: {
-    hooks: string[];
-    provider: string;
-    collections?: '*' | string[];
-    applicationID?: string;
-    apiKey?: string;
-    getSignedFormURL?: string;
-  }[];
-  slug?: CmsSlug;
-  i18n?: CmsI18nConfig;
-  local_backend?: boolean | CmsLocalBackend;
+  integrations?: Integration[];
+  slug?: Slug;
+  i18n?: I18nInfo;
+  local_backend?: boolean | LocalBackend;
   editor?: {
     preview?: boolean;
   };
@@ -633,84 +791,138 @@ export interface CmsConfig {
 }
 
 export interface InitOptions {
-  config: CmsConfig;
+  config: Config;
 }
 
-export type CmsBackendClass = Implementation;
+export interface BackendInitializerOptions {
+  updateUserCredentials: (credentials: Credentials) => void;
+}
 
-export interface EditorComponentField {
-  name: string;
-  label: string;
-  widget: string;
+export interface BackendInitializer {
+  init: (config: Config, options: BackendInitializerOptions) => BackendClass;
 }
 
 export interface EditorComponentWidgetOptions {
   id: string;
   label: string;
-  widget: string;
+  widget?: string;
   type: string;
 }
 
-export interface EditorComponentManualOptions {
+export interface EditorComponentManualOptions<T = EntryData> {
   id: string;
   label: string;
-  fields: EditorComponentField[];
+  fields: Field[];
   pattern: RegExp;
   allow_add?: boolean;
-  fromBlock: (match: RegExpMatchArray) => any;
-  toBlock: (data: any) => string;
-  toPreview: (data: any) => string;
+  fromBlock: (match: RegExpMatchArray) => T;
+  toBlock: (data: T) => string;
+  toPreview: (data: T, getAsset: GetAssetFunction, fields: Field[]) => ReactNode;
 }
 
-export type EditorComponentOptions = EditorComponentManualOptions | EditorComponentWidgetOptions;
-
-export interface CmsEventListener {
-  name: 'prePublish' | 'postPublish' | 'preSave' | 'postSave';
-  handler: ({
-    entry,
-    author,
-  }: {
-    entry: Map<string, any>;
-    author: { login: string; name: string };
-  }) => any;
+export function isEditorComponentWidgetOptions(
+  options: EditorComponentOptions,
+): options is EditorComponentWidgetOptions {
+  return 'widget' in options;
 }
 
-export type CmsEventListenerOptions = any; // TODO: type properly
+export type EditorComponentOptions<T = EntryData> =
+  | EditorComponentManualOptions<T>
+  | EditorComponentWidgetOptions;
 
-export interface CMSApi {
-  getBackend: (name: string) => CmsRegistryBackend | undefined;
-  getEditorComponents: () => Map<string, ComponentType<any>>;
-  getRemarkPlugins: () => Array<Pluggable>;
-  getLocale: (locale: string) => CmsLocalePhrases | undefined;
-  getMediaLibrary: (name: string) => CmsMediaLibrary | undefined;
-  resolveWidget: (name: string) => CmsWidget | undefined;
-  getPreviewStyles: () => PreviewStyle[];
-  getPreviewTemplate: (name: string) => ComponentType<PreviewTemplateComponentProps> | undefined;
-  getWidget: (name: string) => CmsWidget | undefined;
-  getWidgetValueSerializer: (widgetName: string) => CmsWidgetValueSerializer | undefined;
-  init: (options?: InitOptions) => void;
-  registerBackend: <T extends CmsBackendClass>(name: string, backendClass: T) => void;
-  registerEditorComponent: (options: EditorComponentOptions) => void;
-  registerRemarkPlugin: (plugin: Pluggable) => void;
-  registerEventListener: (
-    eventListener: CmsEventListener,
-    options?: CmsEventListenerOptions,
-  ) => void;
-  registerLocale: (locale: string, phrases: CmsLocalePhrases) => void;
-  registerMediaLibrary: (mediaLibrary: CmsMediaLibrary, options?: CmsMediaLibraryOptions) => void;
-  registerPreviewStyle: (filePath: string, options?: PreviewStyleOptions) => void;
-  registerPreviewTemplate: (
-    name: string,
-    component: ComponentType<PreviewTemplateComponentProps>,
-  ) => void;
-  registerWidget: (
-    widget: string | CmsWidgetParam | CmsWidgetParam[],
-    control?: ComponentType<CmsWidgetControlProps> | string,
-    preview?: ComponentType<CmsWidgetPreviewProps>,
-  ) => void;
-  registerWidgetValueSerializer: (widgetName: string, serializer: CmsWidgetValueSerializer) => void;
-  registerIcon: (iconName: string, icon: ReactNode) => void;
-  getIcon: (iconName: string) => ReactNode;
-  registerAdditionalLink: (id: string, title: string, link: string, iconName?: string) => void;
-  getAdditionalLinks: () => { title: string; link: string; iconName?: string }[];
+export interface EventData {
+  entry: Entry;
+  author: { login: string | undefined; name: string };
 }
+
+export interface EventListener {
+  name: AllowedEvent;
+  handler: (
+    data: EventData,
+    options: Record<string, unknown>,
+  ) => Promise<EntryData | undefined | null | void>;
+}
+
+export type EventListenerOptions = Record<string, unknown>;
+
+export interface AdditionalLink {
+  id: string;
+  title: string;
+  data: string | (() => JSX.Element);
+  options?: {
+    iconName?: string;
+  };
+}
+
+export interface AuthenticationPageProps {
+  onLogin: (user: User) => void;
+  inProgress?: boolean;
+  base_url?: string;
+  siteId?: string;
+  authEndpoint?: string;
+  config: Config;
+  error?: string | undefined;
+  clearHash?: () => void;
+}
+
+export type Integration = {
+  collections?: '*' | string[];
+} & (AlgoliaIntegration | AssetStoreIntegration);
+
+export type IntegrationProvider = Integration['provider'];
+export type SearchIntegrationProvider = 'algolia';
+export type MediaIntegrationProvider = 'assetStore';
+
+export interface AlgoliaIntegration extends AlgoliaConfig {
+  provider: 'algolia';
+}
+
+export interface AlgoliaConfig {
+  hooks: ['search' | 'listEntries'];
+  applicationID: string;
+  apiKey: string;
+  indexPrefix?: string;
+}
+
+export interface AssetStoreIntegration extends AssetStoreConfig {
+  provider: 'assetStore';
+}
+
+export interface AssetStoreConfig {
+  hooks: ['assetStore'];
+  shouldConfirmUpload?: boolean;
+  getSignedFormURL: string;
+}
+
+export interface SearchResponse {
+  entries: Entry[];
+  pagination: number;
+}
+
+export interface SearchQueryResponse {
+  hits: Entry[];
+  query: string;
+}
+
+export interface EditorPersistOptions {
+  createNew?: boolean;
+  duplicate?: boolean;
+}
+
+export interface I18nInfo {
+  locales: string[];
+  defaultLocale: string;
+  structure?: I18N_STRUCTURE;
+}
+
+export interface ProcessedCodeLanguage {
+  label: string;
+  identifiers: string[];
+  codemirror_mode: string;
+  codemirror_mime_type: string;
+}
+
+export type FileMetadata = {
+  author: string;
+  updatedOn: string;
+};

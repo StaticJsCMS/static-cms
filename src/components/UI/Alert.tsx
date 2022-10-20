@@ -13,9 +13,9 @@ import { useWindowEvent } from '../../lib/util/window.util';
 import type { TranslateProps } from 'react-polyglot';
 
 interface AlertProps {
-  title: string | { key: string; options?: any };
-  body: string | { key: string; options?: any };
-  okay?: string | { key: string; options?: any };
+  title: string | { key: string; options?: Record<string, unknown> };
+  body: string | { key: string; options?: Record<string, unknown> };
+  okay?: string | { key: string; options?: Record<string, unknown> };
   color?: 'success' | 'error' | 'primary';
 }
 
@@ -49,18 +49,18 @@ const AlertDialog = ({ t }: TranslateProps) => {
       return '';
     }
     return typeof rawTitle === 'string' ? t(rawTitle) : t(rawTitle.key, rawTitle.options);
-  }, [rawTitle]);
+  }, [rawTitle, t]);
 
   const body = useMemo(() => {
     if (!rawBody) {
       return '';
     }
     return typeof rawBody === 'string' ? t(rawBody) : t(rawBody.key, rawBody.options);
-  }, [rawBody]);
+  }, [rawBody, t]);
 
   const okay = useMemo(
     () => (typeof rawOkay === 'string' ? t(rawOkay) : t(rawOkay.key, rawOkay.options)),
-    [rawOkay],
+    [rawOkay, t],
   );
 
   if (!detail) {
@@ -75,7 +75,7 @@ const AlertDialog = ({ t }: TranslateProps) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{t(title)}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">{body}</DialogContentText>
         </DialogContent>

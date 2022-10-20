@@ -3,7 +3,7 @@ import { addSnackbar, removeSnackbarById } from '../store/slices/snackbars';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type { State } from '../types/redux';
+import type { RootState } from '../store';
 
 export const STATUS_REQUEST = 'STATUS_REQUEST';
 export const STATUS_SUCCESS = 'STATUS_SUCCESS';
@@ -33,20 +33,21 @@ export function statusFailure(error: Error) {
 }
 
 export function checkBackendStatus() {
-  return async (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     try {
       const state = getState();
-      if (state.status.isFetching) {
+      const config = state.config.config;
+      if (state.status.isFetching || !config) {
         return;
       }
 
       dispatch(statusRequest());
-      const backend = currentBackend(state.config);
+      const backend = currentBackend(config);
       const status = await backend.status();
 
       const backendDownKey = 'ui.toast.onBackendDown';
       const previousBackendDownNotifs = state.snackbar.messages.filter(
-        n => n.message?.key === backendDownKey,
+        n => typeof n.message !== 'string' && n.message.key === backendDownKey,
       );
 
       if (status.api.status === false) {
@@ -69,7 +70,9 @@ export function checkBackendStatus() {
       const authError = status.auth.status === false;
       if (authError) {
         const key = 'ui.toast.onLoggedOut';
-        const existingNotification = state.snackbar.messages.find(n => n.message?.key === key);
+        const existingNotification = state.snackbar.messages.find(
+          n => typeof n.message !== 'string' && n.message.key === key,
+        );
         if (!existingNotification) {
           dispatch(
             addSnackbar({
@@ -81,8 +84,11 @@ export function checkBackendStatus() {
       }
 
       dispatch(statusSuccess(status));
-    } catch (error: any) {
-      dispatch(statusFailure(error));
+    } catch (error: unknown) {
+      console.error(error);
+      if (error instanceof Error) {
+        dispatch(statusFailure(error));
+      }
     }
   };
 }

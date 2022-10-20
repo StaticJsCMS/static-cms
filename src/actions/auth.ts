@@ -1,10 +1,10 @@
 import { currentBackend } from '../backend';
 import { addSnackbar } from '../store/slices/snackbars';
 
-import type { Credentials, User } from '../lib/util';
-import type { ThunkDispatch } from 'redux-thunk';
 import type { AnyAction } from 'redux';
-import type { State } from '../types/redux';
+import type { ThunkDispatch } from 'redux-thunk';
+import type { Credentials, User } from '../interface';
+import type { RootState } from '../store';
 
 export const AUTH_REQUEST = 'AUTH_REQUEST';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
@@ -47,9 +47,14 @@ export function logout() {
 
 // Check if user data token is cached and is valid
 export function authenticateUser() {
-  return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
-    const backend = currentBackend(state.config);
+    if (!state.config.config) {
+      return;
+    }
+
+    const backend = currentBackend(state.config.config);
+
     dispatch(authenticating());
     return Promise.resolve(backend.currentUser())
       .then(user => {
@@ -67,9 +72,13 @@ export function authenticateUser() {
 }
 
 export function loginUser(credentials: Credentials) {
-  return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
-    const backend = currentBackend(state.config);
+    if (!state.config.config) {
+      return;
+    }
+
+    const backend = currentBackend(state.config.config);
 
     dispatch(authenticating());
     return backend
@@ -94,9 +103,13 @@ export function loginUser(credentials: Credentials) {
 }
 
 export function logoutUser() {
-  return (dispatch: ThunkDispatch<State, {}, AnyAction>, getState: () => State) => {
+  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
-    const backend = currentBackend(state.config);
+    if (!state.config.config) {
+      return;
+    }
+
+    const backend = currentBackend(state.config.config);
     Promise.resolve(backend.logout()).then(() => {
       dispatch(logout());
     });

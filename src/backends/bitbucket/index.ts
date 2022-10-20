@@ -1,10 +1,3 @@
-import BitbucketBackend from './implementation';
-import API from './API';
-import AuthenticationPage from './AuthenticationPage';
-
-export const StaticCmsBackendBitbucket = {
-  BitbucketBackend,
-  API,
-  AuthenticationPage,
-};
-export { BitbucketBackend, API, AuthenticationPage };
+export { default as BitbucketBackend } from './implementation';
+export { default as API } from './API';
+export { default as AuthenticationPage } from './AuthenticationPage';

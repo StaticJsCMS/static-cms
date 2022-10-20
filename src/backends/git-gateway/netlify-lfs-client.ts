@@ -1,5 +1,6 @@
 import { flow, fromPairs, map } from 'lodash/fp';
-import { isPlainObject, isEmpty } from 'lodash';
+import isPlainObject from 'lodash/isPlainObject';
+import isEmpty from 'lodash/isEmpty';
 import minimatch from 'minimatch';
 
 import { unsentRequest } from '../../lib/util';
@@ -47,8 +48,7 @@ async function resourceExists(
     return false;
   }
 
-  // TODO: what kind of error to throw here? APIError doesn't seem
-  // to fit
+  // TODO: what kind of error to throw here? APIError doesn't seem to fit
 }
 
 function getTransofrmationsParams(t: boolean | ImageTransformations) {

@@ -1,10 +1,3 @@
-import GitHubBackend from './implementation';
-import API from './API';
-import AuthenticationPage from './AuthenticationPage';
-
-export const StaticCmsBackendGithub = {
-  GitHubBackend,
-  API,
-  AuthenticationPage,
-};
-export { GitHubBackend, API, AuthenticationPage };
+export { default as GitHubBackend } from './implementation';
+export { default as API } from './API';
+export { default as AuthenticationPage } from './AuthenticationPage';

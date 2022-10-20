@@ -1,5 +1,5 @@
 import { stripIndent } from 'common-tags';
-import { trimStart } from 'lodash';
+import trimStart from 'lodash/trimStart';
 import semaphore from 'semaphore';
 
 import { NetlifyAuthenticator } from '../../lib/auth';
@@ -29,20 +29,17 @@ import { GitLfsClient } from './git-lfs-client';
 
 import type { Semaphore } from 'semaphore';
 import type {
-  ApiRequest,
-  AssetProxy,
-  AsyncLock,
+  BackendEntry,
+  BackendClass,
   Config,
   Credentials,
-  Cursor,
   DisplayURL,
-  Entry,
-  FetchError,
-  Implementation,
   ImplementationFile,
   PersistOptions,
   User,
-} from '../../lib/util';
+} from '../../interface';
+import type { ApiRequest, AsyncLock, Cursor, FetchError } from '../../lib/util';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 
@@ -56,7 +53,7 @@ type BitbucketStatusComponent = {
 };
 
 // Implementation wrapper class
-export default class BitbucketBackend implements Implementation {
+export default class BitbucketBackend implements BackendClass {
   lock: AsyncLock;
   api: API | null;
   updateUserCredentials: (args: { token: string; refresh_token: string }) => Promise<null>;
@@ -71,7 +68,7 @@ export default class BitbucketBackend implements Implementation {
   baseUrl: string;
   siteId: string;
   token: string | null;
-  mediaFolder: string;
+  mediaFolder?: string;
   refreshToken?: string;
   refreshedTokenPromise?: Promise<string>;
   authenticator?: NetlifyAuthenticator;
@@ -231,7 +228,7 @@ export default class BitbucketBackend implements Implementation {
     this.refreshedTokenPromise = this.authenticator!.refresh({
       provider: 'bitbucket',
       refresh_token: this.refreshToken as string,
-    }).then(({ token, refresh_token }) => {
+    })?.then(({ token, refresh_token }: { token: string; refresh_token: string }) => {
       this.token = token;
       this.refreshToken = refresh_token;
       this.refreshedTokenPromise = undefined;
@@ -354,7 +351,10 @@ export default class BitbucketBackend implements Implementation {
     }));
   }
 
-  getMedia(mediaFolder = this.mediaFolder) {
+  async getMedia(mediaFolder = this.mediaFolder) {
+    if (!mediaFolder) {
+      return [];
+    }
     return this.api!.listAllFiles(mediaFolder, 1, this.branch).then(files =>
       files.map(({ id, name, path }) => ({ id, name, path, displayURL: { id, path } })),
     );
@@ -412,7 +412,7 @@ export default class BitbucketBackend implements Implementation {
     };
   }
 
-  async persistEntry(entry: Entry, options: PersistOptions) {
+  async persistEntry(entry: BackendEntry, options: PersistOptions) {
     const client = await this.getLargeMediaClient();
     // persistEntry is a transactional operation
     return runWithLock(
@@ -429,7 +429,18 @@ export default class BitbucketBackend implements Implementation {
     );
   }
 
-  async persistMedia(mediaFile: AssetProxy, options: PersistOptions) {
+  async persistMedia(
+    mediaFile:
+      | {
+          fileObj: File;
+          size: number;
+          sha: string;
+          raw: string;
+          path: string;
+        }
+      | AssetProxy,
+    options: PersistOptions,
+  ) {
     const { fileObj, path } = mediaFile;
     const displayURL = URL.createObjectURL(fileObj as Blob);
     const client = await this.getLargeMediaClient();
@@ -445,7 +456,18 @@ export default class BitbucketBackend implements Implementation {
     };
   }
 
-  async _persistMedia(mediaFile: AssetProxy, options: PersistOptions) {
+  async _persistMedia(
+    mediaFile:
+      | {
+          fileObj: File;
+          size: number;
+          sha: string;
+          raw: string;
+          path: string;
+        }
+      | AssetProxy,
+    options: PersistOptions,
+  ) {
     const fileObj = mediaFile.fileObj as File;
 
     const [id] = await Promise.all([
@@ -472,7 +494,7 @@ export default class BitbucketBackend implements Implementation {
 
   traverseCursor(cursor: Cursor, action: string) {
     return this.api!.traverseCursor(cursor, action).then(async ({ entries, cursor: newCursor }) => {
-      const extension = cursor.meta?.get('extension');
+      const extension = cursor.meta?.extension as string | undefined;
       if (extension) {
         entries = entries.filter(e => filterByExtension(e, extension));
         newCursor = newCursor.mergeMeta({ extension });

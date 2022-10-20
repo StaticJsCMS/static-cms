@@ -22,7 +22,7 @@ Entries are loaded and persisted through a `backend` that will typically represe
 
 **Config:** Holds the environment configuration (backend type, available collections and fields).
 
-**Collections:** List of available collections, their fields and metadata information.
+**Collections:** List of available collections and their fields information.
 
 **Entries:** Entries for each field.
 
@@ -58,7 +58,7 @@ For either updating an existing entry or creating a new one, the `EntryEditor` i
 The control component receives one (1) callback as a prop: `onChange`.
 
 * onChange (required): Should be called when the users changes the current value. It will ultimately end up updating the EntryDraft object in the Redux Store, thus updating the preview component.
-* onAddAsset & onRemoveAsset (optionals): Should be invoked with an `AssetProxy` value object if the field accepts file uploads for media (images, for example). `onAddAsset` will get the current media stored in the Redux state tree while `onRemoveAsset` will remove it. AssetProxy objects are stored in the `Medias` object and referenced in the `EntryDraft` object on the state tree.
+* addAsset & onRemoveAsset (optionals): Should be invoked with an `AssetProxy` value object if the field accepts file uploads for media (images, for example). `addAsset` will get the current media stored in the Redux state tree while `onRemoveAsset` will remove it. AssetProxy objects are stored in the `Medias` object and referenced in the `EntryDraft` object on the state tree.
 
 Both control and preview widgets receive a `getAsset` selector via props. Displaying the media (or its URI) for the user should always be done via `getAsset`, as it returns an AssetProxy that can return the correct value for both medias already persisted on the server and cached media not yet uploaded.
 

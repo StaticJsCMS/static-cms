@@ -1,19 +1,23 @@
-import { attempt, isError, take, unset } from 'lodash';
+import attempt from 'lodash/attempt';
+import isError from 'lodash/isError';
+import take from 'lodash/take';
+import unset from 'lodash/unset';
 import { extname } from 'path';
 import uuid from 'uuid/v4';
 
 import { basename, Cursor, CURSOR_COMPATIBILITY_SYMBOL } from '../../lib/util';
 import AuthenticationPage from './AuthenticationPage';
 
-import type { ImplementationEntry } from '../../interface';
 import type {
-  AssetProxy,
+  BackendEntry,
+  BackendClass,
   Config,
-  Entry,
-  Implementation,
+  DisplayURL,
+  ImplementationEntry,
   ImplementationFile,
   User,
-} from '../../lib/util';
+} from '../../interface';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 type RepoFile = { path: string; content: string | AssetProxy };
 type RepoTree = { [key: string]: RepoFile | RepoTree };
@@ -98,8 +102,8 @@ export function getFolderFiles(
   return files;
 }
 
-export default class TestBackend implements Implementation {
-  mediaFolder: string;
+export default class TestBackend implements BackendClass {
+  mediaFolder?: string;
   options: {};
 
   constructor(config: Config, options = {}) {
@@ -136,7 +140,7 @@ export default class TestBackend implements Implementation {
   }
 
   traverseCursor(cursor: Cursor, action: string) {
-    const { folder, extension, index, pageCount, depth } = cursor.data!.toObject() as {
+    const { folder, extension, index, pageCount, depth } = cursor.data as {
       folder: string;
       extension: string;
       index: number;
@@ -177,6 +181,7 @@ export default class TestBackend implements Implementation {
     }));
     const cursor = getCursor(folder, extension, entries, 0, depth);
     const ret = take(entries, pageSize);
+    // TODO Remove
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     ret[CURSOR_COMPATIBILITY_SYMBOL] = cursor;
@@ -199,7 +204,7 @@ export default class TestBackend implements Implementation {
     });
   }
 
-  async persistEntry(entry: Entry) {
+  async persistEntry(entry: BackendEntry) {
     entry.dataFiles.forEach(dataFile => {
       const { path, raw } = dataFile;
       writeFile(path, raw, window.repoFiles);
@@ -210,12 +215,14 @@ export default class TestBackend implements Implementation {
     return Promise.resolve();
   }
 
-  getMedia(mediaFolder = this.mediaFolder) {
+  async getMedia(mediaFolder = this.mediaFolder) {
+    if (!mediaFolder) {
+      return [];
+    }
     const files = getFolderFiles(window.repoFiles, mediaFolder.split('/')[0], '', 100).filter(f =>
       f.path.startsWith(mediaFolder),
     );
-    const assets = files.map(f => this.normalizeAsset(f.content as AssetProxy));
-    return Promise.resolve(assets);
+    return files.map(f => this.normalizeAsset(f.content as AssetProxy));
   }
 
   async getMediaFile(path: string) {
@@ -269,5 +276,17 @@ export default class TestBackend implements Implementation {
     });
 
     return Promise.resolve();
+  }
+
+  async allEntriesByFolder(
+    folder: string,
+    extension: string,
+    depth: number,
+  ): Promise<ImplementationEntry[]> {
+    return this.entriesByFolder(folder, extension, depth);
+  }
+
+  getMediaDisplayURL(_displayURL: DisplayURL): Promise<string> {
+    throw new Error('Not supported');
   }
 }

@@ -60,13 +60,13 @@ class Highlight extends React.Component {
 }
 
 function BlogPostPreview({ entry, widgetFor }) {
-  const data = entry.get('data');
+  const data = entry.data;
   return (
     <PreviewContainer highlight={true}>
       <BlogPostTemplate
-        title={data.get('title')}
-        author={data.get('author')}
-        date={dayjs(data.get('date')).format('MMMM D, YYYY')}
+        title={data.title}
+        author={data.author}
+        date={dayjs(data.date).format('MMMM D, YYYY')}
         body={widgetFor('body')}
       />
     </PreviewContainer>
@@ -74,7 +74,7 @@ function BlogPostPreview({ entry, widgetFor }) {
 }
 
 function CommunityPreview({ entry }) {
-  const { title, headline, subhead, sections } = entry.get('data').toJS();
+  const { title, headline, subhead, sections } = entry.data.toJS();
   return (
     <PreviewContainer>
       <Community title={title} headline={headline} subhead={subhead} sections={sections} />
@@ -85,7 +85,7 @@ function CommunityPreview({ entry }) {
 function DocsPreview({ entry, widgetFor }) {
   return (
     <PreviewContainer highlight={true}>
-      <DocsTemplate title={entry.getIn(['data', 'title'])} body={widgetFor('body')} />
+      <DocsTemplate title={entry.data.title} body={widgetFor('body')} />
     </PreviewContainer>
   );
 }
@@ -93,7 +93,7 @@ function DocsPreview({ entry, widgetFor }) {
 function WidgetDocPreview({ entry, widgetFor }) {
   return (
     <PreviewContainer highlight={true}>
-      <WidgetDoc visible={true} label={entry.get('label')} body={widgetFor('body')} />
+      <WidgetDoc visible={true} label={entry.label} body={widgetFor('body')} />
     </PreviewContainer>
   );
 }
@@ -102,12 +102,11 @@ function ReleasePreview({ entry }) {
   return (
     <PreviewContainer highlight={true}>
       <WhatsNew
-        updates={entry
-          .getIn(['data', 'updates'])
+        updates={entry.data.updates
           .map(release => ({
-            version: release.get('version'),
-            date: dayjs(release.get('date')).format('MMMM D, YYYY'),
-            description: release.get('description'),
+            version: release.version,
+            date: dayjs(release.date).format('MMMM D, YYYY'),
+            description: release.description,
           }))
           .toJS()}
       />
@@ -118,12 +117,11 @@ function ReleasePreview({ entry }) {
 function NotificationPreview({ entry }) {
   return (
     <PreviewContainer>
-      {entry
-        .getIn(['data', 'notifications'])
-        .filter(notif => notif.get('published'))
+      {entry.data.notifications
+        .filter(notif => notif.published)
         .map((notif, idx) => (
-          <Notification key={idx} url={notif.get('url')} loud={notif.get('loud')}>
-            {notif.get('message')}
+          <Notification key={idx} url={notif.url} loud={notif.loud}>
+            {notif.message}
           </Notification>
         ))}
     </PreviewContainer>

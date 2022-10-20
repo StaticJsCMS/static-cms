@@ -1,50 +1,36 @@
-import React from 'react';
+import TextField from '@mui/material/TextField';
+import React, { useCallback, useState } from 'react';
 
 import type { ChangeEvent } from 'react';
-import type { CmsWidgetControlProps } from '../../interface';
+import type { StringOrTextField, WidgetControlProps } from '../../interface';
 
-export default class StringControl extends React.Component<CmsWidgetControlProps<string>> {
-  // The selection to maintain for the input element
-  private _sel: number | null = 0;
+const StringControl = ({
+  value,
+  label,
+  onChange,
+  hasErrors,
+}: WidgetControlProps<string, StringOrTextField>) => {
+  const [internalValue, setInternalValue] = useState(value ?? '');
 
-  // The input element ref
-  private _el: HTMLInputElement | null = null;
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setInternalValue(event.target.value);
+      onChange(event.target.value);
+    },
+    [onChange],
+  );
 
-  // NOTE: This prevents the cursor from jumping to the end of the text for
-  // nested inputs. In other words, this is not an issue on top-level text
-  // fields such as the `title` of a collection post. However, it becomes an
-  // issue on fields nested within other components, namely widgets nested
-  // within a `markdown` widget. For example, the alt text on a block image
-  // within markdown.
-  // SEE: https://github.com/netlify/netlify-cms/issues/4539
-  // SEE: https://github.com/netlify/netlify-cms/issues/3578
-  componentDidUpdate() {
-    if (this._el && this._el.selectionStart !== this._sel) {
-      this._el.setSelectionRange(this._sel, this._sel);
-    }
-  }
+  return (
+    <TextField
+      key="string-control-input"
+      label={label}
+      variant="outlined"
+      value={internalValue}
+      onChange={handleChange}
+      fullWidth
+      error={hasErrors}
+    />
+  );
+};
 
-  handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    this._sel = e.target.selectionStart;
-    this.props.onChange(e.target.value);
-  };
-
-  render() {
-    const { forID, value, classNameWrapper, setActiveStyle, setInactiveStyle } = this.props;
-
-    return (
-      <input
-        ref={el => {
-          this._el = el;
-        }}
-        type="text"
-        id={forID}
-        className={classNameWrapper}
-        value={value || ''}
-        onChange={this.handleChange}
-        onFocus={setActiveStyle}
-        onBlur={setInactiveStyle}
-      />
-    );
-  }
-}
+export default StringControl;

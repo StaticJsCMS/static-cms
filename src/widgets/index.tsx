@@ -1,33 +1,15 @@
-import BooleanWidget from './boolean';
-import CodeWidget from './code';
-import ColorStringWidget from './colorstring';
-import DateTimeWidget from './datetime';
-import FileWidget from './file';
-import ImageWidget from './image';
-import ListWidget from './list';
-import MapWidget from './map';
-import MarkdownWidget from './markdown';
-import NumberWidget from './number';
-import ObjectWidget from './object';
-import RelationWidget from './relation';
-import SelectWidget from './select';
-import StringWidget from './string';
-import TextWidget from './text';
-
-export {
-  BooleanWidget,
-  CodeWidget,
-  ColorStringWidget,
-  DateTimeWidget,
-  FileWidget,
-  ImageWidget,
-  ListWidget,
-  MapWidget,
-  MarkdownWidget,
-  NumberWidget,
-  ObjectWidget,
-  RelationWidget,
-  SelectWidget,
-  StringWidget,
-  TextWidget,
-};
+export { default as BooleanWidget } from './boolean';
+export { default as CodeWidget } from './code';
+export { default as ColorStringWidget } from './colorstring';
+export { default as DateTimeWidget } from './datetime';
+export { default as FileWidget } from './file';
+export { default as ImageWidget } from './image';
+export { default as ListWidget } from './list';
+export { default as MapWidget } from './map';
+export { default as MarkdownWidget } from './markdown';
+export { default as NumberWidget } from './number';
+export { default as ObjectWidget } from './object';
+export { default as RelationWidget } from './relation';
+export { default as SelectWidget } from './select';
+export { default as StringWidget } from './string';
+export { default as TextWidget } from './text';

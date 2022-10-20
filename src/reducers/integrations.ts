@@ -1,47 +1,69 @@
-import { fromJS } from 'immutable';
+import get from 'lodash/get';
 
 import { CONFIG_SUCCESS } from '../actions/config';
 
 import type { ConfigAction } from '../actions/config';
-import type { CmsConfig } from '../interface';
-import type { Integrations } from '../types/redux';
+import type {
+  AlgoliaConfig,
+  AssetStoreConfig,
+  Config,
+  MediaIntegrationProvider,
+  SearchIntegrationProvider,
+} from '../interface';
 
-interface Acc {
-  providers: Record<string, {}>;
-  hooks: Record<string, string | Record<string, string>>;
+export interface IntegrationHooks {
+  search?: SearchIntegrationProvider;
+  listEntries?: SearchIntegrationProvider;
+  assetStore?: MediaIntegrationProvider;
 }
 
-export function getIntegrations(config: CmsConfig) {
+export interface IntegrationsState {
+  providers: {
+    algolia?: AlgoliaConfig;
+    assetStore?: AssetStoreConfig;
+  };
+  hooks: IntegrationHooks;
+  collectionHooks: Record<string, IntegrationHooks>;
+}
+
+export function getIntegrations(config: Config): IntegrationsState {
   const integrations = config.integrations || [];
   const newState = integrations.reduce(
     (acc, integration) => {
-      const { hooks, collections, provider, ...providerData } = integration;
-      acc.providers[provider] = { ...providerData };
-      if (!collections) {
-        hooks.forEach(hook => {
-          acc.hooks[hook] = provider;
-        });
-        return acc;
-      }
+      const { collections, ...providerData } = integration;
       const integrationCollections =
         collections === '*' ? config.collections.map(collection => collection.name) : collections;
-      integrationCollections.forEach(collection => {
-        hooks.forEach(hook => {
-          acc.hooks[collection]
-            ? ((acc.hooks[collection] as Record<string, string>)[hook] = provider)
-            : (acc.hooks[collection] = { [hook]: provider });
+
+      if (providerData.provider === 'algolia') {
+        acc.providers[providerData.provider] = providerData;
+
+        if (!collections) {
+          providerData.hooks.forEach(hook => (acc.hooks[hook] = providerData.provider));
+          return acc;
+        }
+
+        integrationCollections?.forEach(collection => {
+          providerData.hooks.forEach(
+            hook => (acc.collectionHooks[collection][hook] = providerData.provider),
+          );
         });
-      });
+      } else if (providerData.provider === 'assetStore') {
+        acc.providers[providerData.provider] = providerData;
+      }
       return acc;
     },
-    { providers: {}, hooks: {} } as Acc,
+    { providers: {}, hooks: {} } as IntegrationsState,
   );
-  return fromJS(newState);
+
+  return newState;
 }
 
-const defaultState = fromJS({ providers: {}, hooks: {} });
+const defaultState: IntegrationsState = { providers: {}, hooks: {}, collectionHooks: {} };
 
-function integrations(state = defaultState, action: ConfigAction): Integrations | null {
+function integrations(
+  state: IntegrationsState = defaultState,
+  action: ConfigAction,
+): IntegrationsState {
   switch (action.type) {
     case CONFIG_SUCCESS: {
       return getIntegrations(action.payload);
@@ -51,10 +73,14 @@ function integrations(state = defaultState, action: ConfigAction): Integrations 
   }
 }
 
-export function selectIntegration(state: Integrations, collection: string | null, hook: string) {
+export function selectIntegration<K extends keyof IntegrationHooks>(
+  state: IntegrationsState,
+  collection: string | null,
+  hook: string,
+): IntegrationHooks[K] | false {
   return collection
-    ? state.getIn(['hooks', collection, hook], false)
-    : state.getIn(['hooks', hook], false);
+    ? get(state, ['collectionHooks', collection, hook], false)
+    : get(state, ['hooks', hook], false);
 }
 
 export default integrations;

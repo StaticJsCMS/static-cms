@@ -1,30 +1,16 @@
-import { flow, fromPairs } from 'lodash';
+import flow from 'lodash/flow';
+import fromPairs from 'lodash/fromPairs';
 import { map } from 'lodash/fp';
-import { fromJS } from 'immutable';
 
 import unsentRequest from './unsentRequest';
 import APIError from './APIError';
-
-type Formatter = (res: Response) => Promise<string | Blob | unknown>;
 
 export function filterByExtension(file: { path: string }, extension: string) {
   const path = file?.path || '';
   return path.endsWith(extension.startsWith('.') ? extension : `.${extension}`);
 }
 
-function catchFormatErrors(format: string, formatter: Formatter) {
-  return (res: Response) => {
-    try {
-      return formatter(res);
-    } catch (err: any) {
-      throw new Error(
-        `Response cannot be parsed into the expected format (${format}): ${err.message}`,
-      );
-    }
-  };
-}
-
-const responseFormatters = fromJS({
+const formatters = {
   json: async (res: Response) => {
     const contentType = res.headers.get('Content-Type') || '';
     if (!contentType.startsWith('application/json') && !contentType.startsWith('text/json')) {
@@ -34,18 +20,52 @@ const responseFormatters = fromJS({
   },
   text: async (res: Response) => res.text(),
   blob: async (res: Response) => res.blob(),
-}).mapEntries(([format, formatter]: [string, Formatter]) => [
-  format,
-  catchFormatErrors(format, formatter),
-]);
+} as const;
 
-export async function parseResponse(
-  res: Response,
-  { expectingOk = true, format = 'text', apiName = '' },
+function catchFormatErrors<T extends keyof typeof formatters>(
+  format: T,
+  formatter: typeof formatters[T],
 ) {
-  let body;
+  return (res: Response) => {
+    try {
+      return formatter(res) as ReturnType<typeof formatters[T]>;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(
+          `Response cannot be parsed into the expected format (${format}): ${error.message}`,
+        );
+      }
+
+      throw error;
+    }
+  };
+}
+
+const responseFormatters = {
+  json: catchFormatErrors('json', async (res: Response) => {
+    const contentType = res.headers.get('Content-Type') || '';
+    if (!contentType.startsWith('application/json') && !contentType.startsWith('text/json')) {
+      throw new Error(`${contentType} is not a valid JSON Content-Type`);
+    }
+    return res.json();
+  }),
+  text: catchFormatErrors('text', async (res: Response) => res.text()),
+  blob: catchFormatErrors('blob', async (res: Response) => res.blob()),
+} as const;
+
+interface ParseResponseOptions {
+  expectingOk?: boolean;
+  format?: keyof typeof responseFormatters;
+  apiName?: string;
+}
+
+export async function parseResponse<T extends keyof typeof responseFormatters = 'text'>(
+  res: Response,
+  { expectingOk = true, format = 'text', apiName = '' }: ParseResponseOptions,
+): Promise<Awaited<ReturnType<typeof responseFormatters[T]>>> {
+  let body: Awaited<ReturnType<typeof responseFormatters[T]>>;
   try {
-    const formatter = responseFormatters.get(format, false);
+    const formatter = responseFormatters[format] ?? false;
     if (!formatter) {
       throw new Error(`${format} is not a supported response format.`);
     }
@@ -53,20 +73,22 @@ export async function parseResponse(
   } catch (err: any) {
     throw new APIError(err.message, res.status, apiName);
   }
+
   if (expectingOk && !res.ok) {
     const isJSON = format === 'json';
     const message = isJSON ? body.message || body.msg || body.error?.message : body;
     throw new APIError(isJSON && message ? message : body, res.status, apiName);
   }
+
   return body;
 }
 
-export function responseParser(options: {
+export function responseParser<T extends keyof typeof responseFormatters = 'text'>(options: {
   expectingOk?: boolean;
-  format: string;
+  format: T;
   apiName: string;
 }) {
-  return (res: Response) => parseResponse(res, options);
+  return (res: Response) => parseResponse<T>(res, options);
 }
 
 export function parseLinkHeader(header: string | null) {

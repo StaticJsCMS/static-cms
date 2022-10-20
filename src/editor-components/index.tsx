@@ -1,3 +1,1 @@
-import imageEditorComponent from './image';
-
-export { imageEditorComponent };
+export { default as imageEditorComponent } from './image';

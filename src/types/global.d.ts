@@ -1,10 +1,16 @@
 export {};
 
-declare global {
-  import type { CmsConfig } from './interface';
+import type { Config } from '../interface';
+import type CmsAPI from '../index';
+import type createReactClass from 'create-react-class';
+import type { createElement } from 'react';
 
+declare global {
   interface Window {
-    CMS_CONFIG?: CmsConfig;
+    CMS?: CmsAPI;
+    CMS_CONFIG?: Config;
     CMS_ENV?: string;
+    createClass: createReactClass;
+    h: createElement;
   }
 }

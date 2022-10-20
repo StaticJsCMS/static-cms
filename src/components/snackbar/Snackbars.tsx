@@ -32,7 +32,7 @@ const Snackbars = ({ t }: TranslatedProps<SnackbarsProps>) => {
       // Close an active snack when a new one is added
       setOpen(false);
     }
-  }, [snackbars, messageInfo, open]);
+  }, [snackbars, messageInfo, open, dispatch]);
 
   const handleClose = useCallback((_event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -48,14 +48,19 @@ const Snackbars = ({ t }: TranslatedProps<SnackbarsProps>) => {
 
   const renderAlert = useCallback(
     (data: SnackbarMessage) => {
-      const {
-        type,
-        message: { key, ...options },
-      } = data;
+      const { type, message } = data;
+
+      let renderedMessage: string;
+      if (typeof message === 'string') {
+        renderedMessage = message;
+      } else {
+        const { key, options } = message;
+        renderedMessage = t(key, options);
+      }
 
       return (
         <Alert key="message" onClose={handleClose} severity={type} sx={{ width: '100%' }}>
-          {t(key, options)}
+          {renderedMessage}
         </Alert>
       );
     },

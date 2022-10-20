@@ -1,6 +1,5 @@
 import { stripIndent } from 'common-tags';
 import trimStart from 'lodash/trimStart';
-import * as React from 'react';
 import semaphore from 'semaphore';
 
 import {
@@ -25,17 +24,17 @@ import GraphQLAPI from './GraphQLAPI';
 import type { Octokit } from '@octokit/rest';
 import type { Semaphore } from 'semaphore';
 import type {
-  AssetProxy,
-  AsyncLock,
+  BackendEntry,
+  BackendClass,
   Config,
   Credentials,
   DisplayURL,
-  Entry,
-  Implementation,
   ImplementationFile,
   PersistOptions,
   User,
-} from '../../lib/util';
+} from '../../interface';
+import type { AsyncLock } from '../../lib/util';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 type GitHubUser = Octokit.UsersGetAuthenticatedResponse;
 
@@ -54,7 +53,7 @@ type GitHubStatusComponent = {
   status: string;
 };
 
-export default class GitHub implements Implementation {
+export default class GitHub implements BackendClass {
   lock: AsyncLock;
   api: API | null;
   options: {
@@ -65,7 +64,7 @@ export default class GitHub implements Implementation {
   repo?: string;
   branch: string;
   apiRoot: string;
-  mediaFolder: string;
+  mediaFolder?: string;
   token: string | null;
   useGraphql: boolean;
   _currentUserPromise?: Promise<GitHubUser>;
@@ -136,11 +135,7 @@ export default class GitHub implements Implementation {
   }
 
   authComponent() {
-    const wrappedAuthenticationPage = (props: Record<string, unknown>) => (
-      <AuthenticationPage {...props} backend={this} />
-    );
-    wrappedAuthenticationPage.displayName = 'AuthenticationPage';
-    return wrappedAuthenticationPage;
+    return AuthenticationPage;
   }
 
   restoreUser(user: User) {
@@ -324,7 +319,10 @@ export default class GitHub implements Implementation {
       .catch(() => ({ file: { path, id: null }, data: '' }));
   }
 
-  getMedia(mediaFolder = this.mediaFolder) {
+  async getMedia(mediaFolder = this.mediaFolder) {
+    if (!mediaFolder) {
+      return [];
+    }
     return this.api!.listFiles(mediaFolder).then(files =>
       files.map(({ id, name, size, path }) => {
         // load media using getMediaDisplayURL to avoid token expiration with GitHub raw content urls
@@ -362,7 +360,7 @@ export default class GitHub implements Implementation {
     );
   }
 
-  persistEntry(entry: Entry, options: PersistOptions) {
+  persistEntry(entry: BackendEntry, options: PersistOptions) {
     // persistEntry is a transactional operation
     return runWithLock(
       this.lock,
@@ -394,8 +392,8 @@ export default class GitHub implements Implementation {
   }
 
   async traverseCursor(cursor: Cursor, action: string) {
-    const meta = cursor.meta!;
-    const files = cursor.data!.get('files')!.toJS() as ApiFile[];
+    const meta = cursor.meta;
+    const files = (cursor.data?.files ?? []) as ApiFile[];
 
     let result: { cursor: Cursor; files: ApiFile[] };
     switch (action) {
@@ -404,15 +402,15 @@ export default class GitHub implements Implementation {
         break;
       }
       case 'last': {
-        result = this.getCursorAndFiles(files, meta.get('pageCount'));
+        result = this.getCursorAndFiles(files, (meta?.['pageCount'] as number) ?? 1);
         break;
       }
       case 'next': {
-        result = this.getCursorAndFiles(files, meta.get('page') + 1);
+        result = this.getCursorAndFiles(files, (meta?.['page'] as number) + 1 ?? 1);
         break;
       }
       case 'prev': {
-        result = this.getCursorAndFiles(files, meta.get('page') - 1);
+        result = this.getCursorAndFiles(files, (meta?.['page'] as number) - 1 ?? 1);
         break;
       }
       default: {

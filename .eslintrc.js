@@ -1,5 +1,3 @@
-const fs = require('fs');
-
 module.exports = {
   parser: 'babel-eslint',
   extends: [
@@ -21,9 +19,13 @@ module.exports = {
     CMS_ENV: false,
   },
   rules: {
+    'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
+    'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
     'no-console': [0],
     'react/prop-types': [0],
+    'react/require-default-props': 0,
     'import/no-named-as-default': 0,
+    "react/react-in-jsx-scope": "off",
     'import/order': [
       'error',
       {
@@ -45,8 +47,16 @@ module.exports = {
     ],
     'unicorn/prefer-string-slice': 'error',
     'react/no-unknown-property': ['error', { ignore: ['css'] }],
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      },
+    ],
   },
-  plugins: ['babel', '@emotion', 'cypress', 'unicorn'],
+  plugins: ['babel', '@emotion', 'cypress', 'unicorn', 'react-hooks'],
   settings: {
     react: {
       version: 'detect',
@@ -79,6 +89,9 @@ module.exports = {
         },
       },
       rules: {
+        "react/react-in-jsx-scope": "off",
+        'react/prop-types': [0],
+        'react/require-default-props': 0,
         'no-duplicate-imports': [0], // handled by @typescript-eslint
         '@typescript-eslint/ban-types': [0], // TODO enable in future
         '@typescript-eslint/no-non-null-assertion': [0],

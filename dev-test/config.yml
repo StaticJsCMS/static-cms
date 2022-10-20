@@ -55,7 +55,7 @@ collections:
         required: false
       - label: Body
         name: body
-        widget: text
+        widget: markdown
         hint: Main content goes here.
   - name: faq
     label: FAQ
@@ -67,12 +67,12 @@ collections:
         widget: string
       - label: Answer
         name: body
-        widget: text
+        widget: markdown
       - name: posts
         label: Posts
         label_singular: Post
         widget: list
-        summary: '{{fields.post | split(''|'', ''$1'')}}'
+        summary: "{{fields.post | split('|', '$1')}}"
         fields:
           - label: Related Post
             name: post
@@ -85,6 +85,408 @@ collections:
               - title
               - body
             value_field: '{{title}}|{{date}}'
+  - name: widgets
+    label: Widgets
+    delete: false
+    editor:
+      preview: false
+    files:
+      - name: boolean
+        label: Boolean
+        file: _widgets/boolean.json
+        description: Boolean widget
+        fields:
+          - name: required
+            label: 'Required Validation'
+            widget: boolean
+          - name: pattern
+            label: 'Pattern Validation'
+            widget: boolean
+            pattern: ['true', 'Must be true']
+            required: false
+      - name: code
+        label: Code
+        file: _widgets/code.json
+        description: Code widget
+        fields:
+          - name: required
+            label: 'Required Validation'
+            widget: code
+          - name: pattern
+            label: 'Pattern Validation'
+            widget: code
+            pattern: ['.{12,}', 'Must have at least 12 characters']
+            allow_input: true
+            required: false
+          - name: language
+            label: 'Language Selection'
+            widget: code
+            allow_language_selection: true
+            required: false
+      - name: color
+        label: Color
+        file: _widgets/color.json
+        description: Color widget
+        fields:
+          - name: required
+            label: 'Required Validation'
+            widget: color
+          - name: pattern
+            label: 'Pattern Validation'
+            widget: color
+            pattern: ['^#([0-9a-fA-F]{3})(?:[0-9a-fA-F]{3})?$', 'Must be a valid hex code']
+            allow_input: true
+            required: false
+          - name: alpha
+            label: Alpha
+            widget: color
+            enable_alpha: true
+            required: false
+      - name: datetime
+        label: DateTime
+        file: _widgets/datetime.json
+        description: DateTime widget
+        fields:
+          - name: required
+            label: 'Required Validation'
+            widget: datetime
+          - name: pattern
+            label: 'Pattern Validation'
+            widget: datetime
+            format: 'MMM d, yyyy h:mm aaa'
+            date_format: 'MMM d, yyyy'
+            time_format: 'h:mm aaa'
+            pattern: ['pm', 'Must be in the afternoon']
+            required: false
+          - name: date_and_time
+            label: Date and Time
+            widget: datetime
+            format: 'MMM d, yyyy h:mm aaa'
+            date_format: 'MMM d, yyyy'
+            time_format: 'h:mm aaa'
+            required: false
+          - name: date
+            label: Date
+            widget: datetime
+            format: 'MMM d, yyyy'
+            date_format: 'MMM d, yyyy'
+            required: false
+          - name: time
+            label: Time
+            widget: datetime
+            format: 'h:mm aaa'
+            time_format: 'h:mm aaa'
+            required: false
+      - name: file
+        label: File
+        file: _widgets/file.json
+        description: File widget
+        fields:
+          - name: required
+            label: 'Required Validation'
+            widget: file
+          - name: pattern
+            label: 'Pattern Validation'
+            widget: file
+            pattern: ['\.pdf', 'Must be a pdf']
+            required: false
+          - name: choose_url
+            label: 'Choose URL'
+            widget: file
+            required: false
+            media_library:
+              choose_url: true
+      - name: image
+        label: Image
+        file: _widgets/image.json
+        description: Image widget
+        fields:
+          - name: required
+            label: 'Required Validation'
+            widget: image
+          - name: pattern
+            label: 'Pattern Validation'
+            widget: image
+            pattern: ['\.png', 'Must be a png']
+            required: false
+          - name: choose_url
+            label: 'Choose URL'
+            widget: image
+            required: false
+            media_library:
+              choose_url: true
+      - name: list
+        label: List
+        file: _widgets/list.yml
+        description: List widget
+        fields:
+          - name: list
+            label: List
+            widget: list
+            fields:
+              - label: Name
+                name: name
+                widget: string
+                hint: First and Last
+              - label: Description
+                name: description
+                widget: text
+          - name: typed_list
+            label: Typed List
+            widget: list
+            types:
+              - label: Type 1 Object
+                name: type_1_object
+                widget: object
+                fields:
+                  - label: String
+                    name: string
+                    widget: string
+                  - label: Boolean
+                    name: boolean
+                    widget: boolean
+                  - label: Text
+                    name: text
+                    widget: text
+              - label: Type 2 Object
+                name: type_2_object
+                widget: object
+                fields:
+                  - label: Number
+                    name: number
+                    widget: number
+                  - label: Select
+                    name: select
+                    widget: select
+                    options:
+                      - a
+                      - b
+                      - c
+                  - label: Datetime
+                    name: datetime
+                    widget: datetime
+                  - label: Markdown
+                    name: markdown
+                    widget: text
+              - label: Type 3 Object
+                name: type_3_object
+                widget: object
+                fields:
+                  - label: Image
+                    name: image
+                    widget: image
+                  - label: File
+                    name: file
+                    widget: file
+      - name: map
+        label: Map
+        file: _widgets/map.json
+        description: Map widget
+        fields:
+          - name: required
+            label: 'Required Validation'
+            widget: map
+          - name: pattern
+            label: 'Pattern Validation'
+            widget: map
+            pattern: ['\[-([7-9][0-9]|1[0-2][0-9])\.', 'Must be between latitude -70 and -129']
+            required: false
+      - name: markdown
+        label: Markdown
+        file: _widgets/markdown.json
+        description: Markdown widget
+        fields:
+          - name: required
+            label: 'Required Validation'
+            widget: markdown
+          - name: pattern
+            label: 'Pattern Validation'
+            widget: markdown
+            pattern: ['# [a-zA-Z0-9]+', 'Must have a header']
+            required: false
+      - name: number
+        label: Number
+        file: _widgets/number.json
+        description: Number widget
+        fields:
+          - name: required
+            label: 'Required Validation'
+            widget: number
+          - name: min
+            label: 'Min Validation'
+            widget: number
+            min: 5
+            required: false
+          - name: max
+            label: 'Max Validation'
+            widget: number
+            max: 10
+            required: false
+          - name: min_and_max
+            label: 'Min and Max Validation'
+            widget: number
+            min: 5
+            max: 10
+            required: false
+          - name: pattern
+            label: 'Pattern Validation'
+            widget: number
+            pattern: ['[0-9]{3,}', 'Must be at least 3 digits']
+            required: false
+      - name: object
+        label: Object
+        file: _widgets/object.json
+        description: Object widget
+        fields:
+          - label: Required Validation
+            name: required
+            widget: object
+            fields:
+              - label: Number of posts on frontpage
+                name: front_limit
+                widget: number
+              - label: Default Author
+                name: author
+                widget: string
+              - label: Default Thumbnail
+                name: thumb
+                widget: image
+          - label: Optional Validation
+            name: optional
+            widget: object
+            required: false
+            fields:
+              - label: Number of posts on frontpage
+                name: front_limit
+                widget: number
+                required: false
+              - label: Default Author
+                name: author
+                widget: string
+                required: false
+              - label: Default Thumbnail
+                name: thumb
+                widget: image
+                required: false
+      - name: relation
+        label: Relation
+        file: _widgets/relation.json
+        description: Relation widget
+        fields:
+          - label: Required Validation
+            name: required
+            widget: relation
+            collection: posts
+            display_fields:
+              - title
+              - date
+            search_fields:
+              - title
+              - body
+            value_field: title
+          - label: Optional Validation
+            name: optional
+            widget: relation
+            required: false
+            collection: posts
+            display_fields:
+              - title
+              - date
+            search_fields:
+              - title
+              - body
+            value_field: title
+          - label: Multiple
+            name: multiple
+            widget: relation
+            multiple: true
+            required: false
+            collection: posts
+            display_fields:
+              - title
+              - date
+            search_fields:
+              - title
+              - body
+            value_field: title
+      - name: select
+        label: Select
+        file: _widgets/select.json
+        description: Select widget
+        fields:
+          - label: Required Validation
+            name: required
+            widget: select
+            options:
+              - a
+              - b
+              - c
+          - label: Pattern Validation
+            name: pattern
+            widget: select
+            options:
+              - a
+              - b
+              - c
+            pattern: ['[a-b]', 'Must be a or b']
+            required: false
+          - label: Value and Label
+            name: value_and_label
+            widget: select
+            options:
+              - value: a
+                label: A fancy label
+              - value: b
+                label: Another fancy label
+              - value: c
+                label: And one more fancy label
+          - label: Multiple
+            name: multiple
+            widget: select
+            options:
+              - a
+              - b
+              - c
+            pattern: ['[a-b]', 'Must be a or b']
+            multiple: true
+            required: false
+          - label: Value and Label Multiple
+            name: value_and_label_multiple
+            widget: select
+            multiple: true
+            options:
+              - value: a
+                label: A fancy label
+              - value: b
+                label: Another fancy label
+              - value: c
+                label: And one more fancy label
+      - name: string
+        label: String
+        file: _widgets/string.json
+        description: String widget
+        fields:
+          - name: required
+            label: 'Required Validation'
+            widget: string
+          - name: pattern
+            label: 'Pattern Validation'
+            widget: string
+            pattern: ['.{12,}', 'Must have at least 12 characters']
+            required: false
+      - name: text
+        label: Text
+        file: _widgets/text.json
+        description: Text widget
+        fields:
+          - name: required
+            label: 'Required Validation'
+            widget: text
+          - name: pattern
+            label: 'Pattern Validation'
+            widget: text
+            pattern: ['.{12,}', 'Must have at least 12 characters']
+            required: false
   - name: settings
     label: Settings
     delete: false
@@ -173,12 +575,9 @@ collections:
         hint: To infinity and beyond!
       - label: Markdown
         name: markdown
-        widget: string
+        widget: markdown
       - label: Datetime
         name: datetime
-        widget: datetime
-      - label: Date
-        name: date
         widget: datetime
       - label: Color
         name: color
@@ -186,8 +585,8 @@ collections:
       - label: Color string editable and alpha enabled
         name: colorEditable
         widget: color
-        enableAlpha: true
-        allowInput: true
+        enable_alpha: true
+        allow_input: true
       - label: Image
         name: image
         widget: image
@@ -251,12 +650,9 @@ collections:
             widget: number
           - label: Markdown
             name: markdown
-            widget: text
+            widget: markdown
           - label: Datetime
             name: datetime
-            widget: datetime
-          - label: Date
-            name: date
             widget: datetime
           - label: Image
             name: image
@@ -289,12 +685,9 @@ collections:
             widget: number
           - label: Markdown
             name: markdown
-            widget: text
+            widget: markdown
           - label: Datetime
             name: datetime
-            widget: datetime
-          - label: Date
-            name: date
             widget: datetime
           - label: Image
             name: image
@@ -327,12 +720,9 @@ collections:
                 widget: number
               - label: Markdown
                 name: markdown
-                widget: text
+                widget: markdown
               - label: Datetime
                 name: datetime
-                widget: datetime
-              - label: Date
-                name: date
                 widget: datetime
               - label: Image
                 name: image
@@ -377,9 +767,6 @@ collections:
                   - label: Datetime
                     name: datetime
                     widget: datetime
-                  - label: Date
-                    name: date
-                    widget: datetime
                   - label: Image
                     name: image
                     widget: image
@@ -418,9 +805,6 @@ collections:
                         widget: text
                       - label: Datetime
                         name: datetime
-                        widget: datetime
-                      - label: Date
-                        name: date
                         widget: datetime
                       - label: Image
                         name: image
@@ -476,9 +860,6 @@ collections:
             name: type_3_object
             widget: object
             fields:
-              - label: Date
-                name: date
-                widget: datetime
               - label: Image
                 name: image
                 widget: image

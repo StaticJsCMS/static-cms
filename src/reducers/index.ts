@@ -1,20 +1,20 @@
-import { List } from 'immutable';
-
 import auth from './auth';
-import config from './config';
-import integrations, * as fromIntegrations from './integrations';
-import entries, * as fromEntries from './entries';
-import cursors from './cursors';
-import entryDraft from './entryDraft';
 import collections from './collections';
-import search from './search';
-import medias from './medias';
-import mediaLibrary from './mediaLibrary';
+import config from './config';
+import cursors from './cursors';
+import entries, * as fromEntries from './entries';
+import entryDraft from './entryDraft';
 import globalUI from './globalUI';
-import status from './status';
+import integrations, * as fromIntegrations from './integrations';
+import mediaLibrary from './mediaLibrary';
+import medias from './medias';
 import scroll from './scroll';
+import search from './search';
+import status from './status';
 
-import type { State, Collection } from '../types/redux';
+import type { Collection } from '../interface';
+import type { RootState } from '../store';
+import type { IntegrationHooks } from './integrations';
 
 const reducers = {
   auth,
@@ -37,25 +37,29 @@ export default reducers;
 /*
  * Selectors
  */
-export function selectEntry(state: State, collection: string, slug: string) {
+export function selectEntry(state: RootState, collection: string, slug: string) {
   return fromEntries.selectEntry(state.entries, collection, slug);
 }
 
-export function selectEntries(state: State, collection: Collection) {
+export function selectEntries(state: RootState, collection: Collection) {
   return fromEntries.selectEntries(state.entries, collection);
 }
 
-export function selectPublishedSlugs(state: State, collection: string) {
+export function selectPublishedSlugs(state: RootState, collection: string) {
   return fromEntries.selectPublishedSlugs(state.entries, collection);
 }
 
-export function selectSearchedEntries(state: State, availableCollections: string[]) {
+export function selectSearchedEntries(state: RootState, availableCollections: string[]) {
   // only return search results for actually available collections
-  return List(state.search.entryIds)
+  return state.search.entryIds
     .filter(entryId => availableCollections.indexOf(entryId!.collection) !== -1)
     .map(entryId => fromEntries.selectEntry(state.entries, entryId!.collection, entryId!.slug));
 }
 
-export function selectIntegration(state: State, collection: string | null, hook: string) {
+export function selectIntegration<K extends keyof IntegrationHooks>(
+  state: RootState,
+  collection: string | null,
+  hook: K,
+): IntegrationHooks[K] | false {
   return fromIntegrations.selectIntegration(state.integrations, collection, hook);
 }

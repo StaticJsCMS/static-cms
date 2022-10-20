@@ -1,8 +1,2 @@
-import GitGatewayBackend from './implementation';
-import AuthenticationPage from './AuthenticationPage';
-
-export const StaticCmsBackendGitGateway = {
-  GitGatewayBackend,
-  AuthenticationPage,
-};
-export { GitGatewayBackend, AuthenticationPage };
+export { default as GitGatewayBackend } from './implementation';
+export { default as AuthenticationPage } from './AuthenticationPage';

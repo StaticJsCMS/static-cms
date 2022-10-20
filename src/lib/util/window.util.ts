@@ -26,5 +26,5 @@ export function useWindowEvent(
     return () => {
       window.removeEventListener(eventName, callback);
     };
-  }, []);
+  }, [callback, eventName]);
 }

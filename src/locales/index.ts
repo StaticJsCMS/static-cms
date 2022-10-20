@@ -29,7 +29,9 @@ import bg from './bg';
 import zh_Hans from './zh_Hans';
 import he from './he';
 
-export const locales: Record<string, Record<string, any>> = {
+import type { LocalePhrasesRoot } from '../interface';
+
+export const locales: Record<string, LocalePhrasesRoot> = {
   cs,
   da,
   de,

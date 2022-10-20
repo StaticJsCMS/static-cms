@@ -3,9 +3,10 @@ import { produce } from 'immer';
 import { CONFIG_FAILURE, CONFIG_REQUEST, CONFIG_SUCCESS } from '../actions/config';
 
 import type { ConfigAction } from '../actions/config';
-import type { CmsConfig } from '../interface';
+import type { Config } from '../interface';
 
-export interface ConfigState extends Partial<CmsConfig> {
+export interface ConfigState {
+  config?: Config;
   isFetching: boolean;
   error?: string;
 }
@@ -21,7 +22,7 @@ const config = produce((state: ConfigState, action: ConfigAction) => {
       break;
     case CONFIG_SUCCESS:
       return {
-        ...action.payload,
+        config: action.payload,
         isFetching: false,
         error: undefined,
       };
@@ -31,8 +32,8 @@ const config = produce((state: ConfigState, action: ConfigAction) => {
   }
 }, defaultState);
 
-export function selectLocale(state: CmsConfig) {
-  return state.locale || 'en';
+export function selectLocale(state?: Config) {
+  return state?.locale || 'en';
 }
 
 export default config;

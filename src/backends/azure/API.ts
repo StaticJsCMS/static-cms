@@ -1,14 +1,24 @@
 import { Base64 } from 'js-base64';
-import { partial, result, trim, trimStart } from 'lodash';
+import partial from 'lodash/partial';
+import result from 'lodash/result';
+import trim from 'lodash/trim';
+import trimStart from 'lodash/trimStart';
 import { basename, dirname } from 'path';
 
 import {
-  APIError, localForage, readFile, readFileMetadata, requestWithBackoff,
-  responseParser, unsentRequest
+  APIError,
+  localForage,
+  readFile,
+  readFileMetadata,
+  requestWithBackoff,
+  responseParser,
+  unsentRequest,
 } from '../../lib/util';
 
-import type { Map } from 'immutable';
-import type { ApiRequest, AssetProxy, DataFile, PersistOptions } from '../../lib/util';
+import type { DataFile, PersistOptions } from '../../interface';
+import type { ApiRequest } from '../../lib/util';
+import type { ApiRequestObject } from '../../lib/util/API';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 export const API_NAME = 'Azure DevOps';
 
@@ -26,23 +36,6 @@ type AzureGitItem = {
   objectId: string;
   gitObjectType: AzureObjectType;
   path: string;
-};
-
-type AzurePullRequestCommit = { commitId: string };
-
-enum AzureCommitStatusState {
-  ERROR = 'error',
-  FAILED = 'failed',
-  NOT_APPLICABLE = 'notApplicable',
-  NOT_SET = 'notSet',
-  PENDING = 'pending',
-  SUCCEEDED = 'succeeded',
-}
-
-type AzureCommitStatus = {
-  context: { genre?: string | null; name: string };
-  state: AzureCommitStatusState;
-  targetUrl: string;
 };
 
 // This does not match Azure documentation, but it is what comes back from some calls
@@ -68,30 +61,6 @@ enum AzureObjectType {
   TREE = 'tree',
 }
 
-// https://docs.microsoft.com/en-us/rest/api/azure/devops/git/diffs/get?view=azure-devops-rest-6.1#gitcommitdiffs
-interface AzureGitCommitDiffs {
-  changes: AzureGitChange[];
-}
-
-// https://docs.microsoft.com/en-us/rest/api/azure/devops/git/diffs/get?view=azure-devops-rest-6.1#gitchange
-interface AzureGitChange {
-  changeId: number;
-  item: AzureGitChangeItem;
-  changeType: AzureCommitChangeType;
-  originalPath: string;
-  url: string;
-}
-
-interface AzureGitChangeItem {
-  objectId: string;
-  originalObjectId: string;
-  gitObjectType: string;
-  commitId: string;
-  path: string;
-  isFolder: string;
-  url: string;
-}
-
 type AzureRef = {
   name: string;
   objectId: string;
@@ -104,10 +73,6 @@ type AzureCommit = {
     name: string;
   };
 };
-
-function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 function getChangeItem(item: AzureCommitItem) {
   switch (item.action) {
@@ -186,10 +151,11 @@ export default class API {
     return withHeaders;
   };
 
-  withAzureFeatures = (req: Map<string, Map<string, string>>) => {
-    if (req.hasIn(['params', API_VERSION])) {
+  withAzureFeatures = (req: ApiRequestObject) => {
+    if (API_VERSION in (req.params ?? {})) {
       return req;
     }
+
     const withParams = unsentRequest.withParams(
       {
         [API_VERSION]: `${this.apiVersion}`,
@@ -203,7 +169,7 @@ export default class API {
   buildRequest = (req: ApiRequest) => {
     const withHeaders = this.withHeaders(req);
     const withAzureFeatures = this.withAzureFeatures(withHeaders);
-    if (withAzureFeatures.has('cache')) {
+    if ('cache' in withAzureFeatures) {
       return withAzureFeatures;
     } else {
       const withNoCache = unsentRequest.withNoCache(withAzureFeatures);
@@ -214,8 +180,12 @@ export default class API {
   request = (req: ApiRequest): Promise<Response> => {
     try {
       return requestWithBackoff(this, req);
-    } catch (err: any) {
-      throw new APIError(err.message, null, API_NAME);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new APIError(error.message, null, API_NAME);
+      }
+
+      throw new APIError('Unknown api error', null, API_NAME);
     }
   };
 
@@ -261,7 +231,7 @@ export default class API {
           params: {
             'searchCriteria.itemPath': path,
             'searchCriteria.itemVersion.version': branch,
-            'searchCriteria.$top': 1,
+            'searchCriteria.$top': '1',
           },
         });
         const [commit] = value;

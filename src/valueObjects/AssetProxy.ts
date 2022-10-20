@@ -1,17 +1,17 @@
-import type { EntryField } from '../types/redux';
+import type { Field } from '../interface';
 
 interface AssetProxyArgs {
   path: string;
   url?: string;
   file?: File;
-  field?: EntryField;
+  field?: Field;
 }
 
 export default class AssetProxy {
   url: string;
   fileObj?: File;
   path: string;
-  field?: EntryField;
+  field?: Field;
 
   constructor({ url, file, path, field }: AssetProxyArgs) {
     this.url = url ? url : window.URL.createObjectURL(file as Blob);

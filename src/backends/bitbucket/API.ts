@@ -1,14 +1,25 @@
-import { flow, get } from 'lodash';
+import flow from 'lodash/flow';
+import get from 'lodash/get';
 import { dirname } from 'path';
 import { parse } from 'what-the-diff';
 
 import {
-  APIError, basename,
-  Cursor, localForage, readFile, readFileMetadata, requestWithBackoff, responseParser,
-  then, throwOnConflictingBranches, unsentRequest
+  APIError,
+  basename,
+  Cursor,
+  localForage,
+  readFile,
+  readFileMetadata,
+  requestWithBackoff,
+  responseParser,
+  then,
+  throwOnConflictingBranches,
+  unsentRequest,
 } from '../../lib/util';
 
-import type { ApiRequest, AssetProxy, DataFile, FetchError, PersistOptions } from '../../lib/util';
+import type { DataFile, PersistOptions } from '../../interface';
+import type { ApiRequest, FetchError } from '../../lib/util';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 interface Config {
   apiRoot?: string;
@@ -99,7 +110,7 @@ export default class API {
 
   buildRequest = (req: ApiRequest) => {
     const withRoot = unsentRequest.withRoot(this.apiRoot)(req);
-    if (withRoot.has('cache')) {
+    if ('cache' in withRoot) {
       return withRoot;
     } else {
       const withNoCache = unsentRequest.withNoCache(withRoot);
@@ -110,8 +121,12 @@ export default class API {
   request = (req: ApiRequest): Promise<Response> => {
     try {
       return requestWithBackoff(this, req);
-    } catch (err: any) {
-      throw new APIError(err.message, null, API_NAME);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new APIError(error.message, null, API_NAME);
+      }
+
+      throw new APIError('Unknown api error', null, API_NAME);
     }
   };
 
@@ -217,7 +232,7 @@ export default class API {
   async isShaExistsInBranch(branch: string, sha: string) {
     const { values }: { values: BitBucketCommit[] } = await this.requestJSON({
       url: `${this.repoURL}/commits`,
-      params: { include: branch, pagelen: 100 },
+      params: { include: branch, pagelen: '100' },
     }).catch(e => {
       console.info(`Failed getting commits for branch '${branch}'`, e);
       return [];
@@ -251,8 +266,8 @@ export default class API {
     const result: BitBucketSrcResult = await this.requestJSON({
       url: `${this.repoURL}/src/${node}/${path}`,
       params: {
-        max_depth: depth,
-        pagelen,
+        max_depth: `${depth}`,
+        pagelen: `${pagelen}`,
       },
     }).catch(replace404WithEmptyResponse);
     const { entries, cursor } = this.getEntriesAndCursor(result);
@@ -277,7 +292,7 @@ export default class API {
         cursor: newCursor,
         entries: this.processFiles(entries),
       })),
-    ])(cursor.data!.getIn(['links', action]));
+    ])((cursor.data?.links as Record<string, unknown>)[action]);
 
   listAllFiles = async (path: string, depth: number, branch: string) => {
     const { cursor: initialCursor, entries: initialEntries } = await this.listFiles(
@@ -367,11 +382,13 @@ export default class API {
         method: 'POST',
         body: formData,
       });
-    } catch (error: any) {
-      const message = error.message || '';
-      // very descriptive message from Bitbucket
-      if (parentSha && message.includes('Something went wrong')) {
-        await throwOnConflictingBranches(branch, name => this.getBranch(name), API_NAME);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        const message = error.message || '';
+        // very descriptive message from Bitbucket
+        if (parentSha && message.includes('Something went wrong')) {
+          await throwOnConflictingBranches(branch, name => this.getBranch(name), API_NAME);
+        }
       }
       throw error;
     }
@@ -379,7 +396,20 @@ export default class API {
     return files;
   }
 
-  async persistFiles(dataFiles: DataFile[], mediaFiles: AssetProxy[], options: PersistOptions) {
+  async persistFiles(
+    dataFiles: DataFile[],
+    mediaFiles: (
+      | {
+          fileObj: File;
+          size: number;
+          sha: string;
+          raw: string;
+          path: string;
+        }
+      | AssetProxy
+    )[],
+    options: PersistOptions,
+  ) {
     const files = [...dataFiles, ...mediaFiles];
     return this.uploadFiles(files, { commitMessage: options.commitMessage, branch: this.branch });
   }
@@ -391,7 +421,7 @@ export default class API {
     const rawDiff = await this.requestText({
       url: `${this.repoURL}/diff/${source}..${destination}`,
       params: {
-        binary: false,
+        binary: 'false',
       },
     });
 
@@ -424,8 +454,9 @@ export default class API {
       const { name, email } = this.commitAuthor;
       body.append('author', `${name} <${email}>`);
     }
-    return flow([unsentRequest.withMethod('POST'), unsentRequest.withBody(body), this.request])(
-      `${this.repoURL}/src`,
+
+    return this.request(
+      unsentRequest.withBody(body, unsentRequest.withMethod('POST', `${this.repoURL}/src`)),
     );
   };
 }

@@ -9,9 +9,9 @@ type MessageType = 'error' | 'warning' | 'info' | 'success';
 export interface SnackbarMessage {
   id: string;
   type: MessageType;
-  message: {
-    key: string,
-  } & Record<string, any>;
+  message: string | {
+    key: string;
+  } & Record<string, unknown>;
 }
 
 // Define a type for the slice state
@@ -30,17 +30,13 @@ export const SnackbarSlice = createSlice({
   initialState,
   reducers: {
     addSnackbar: (state, action: PayloadAction<Omit<SnackbarMessage, 'id'>>) => {
-      const messages = [...state.messages];
-      messages.push({
+      state.messages.push({
         id: uuid(),
         ...action.payload,
       });
-      return { ...state, messages };
     },
     removeSnackbarById: (state, action: PayloadAction<string>) => {
-      const messages = [...state.messages];
-      const filteredMessages = messages.filter(message => message.id !== action.payload);
-      return { ...state, messages: filteredMessages };
+      state.messages = state.messages.filter(message => message.id !== action.payload);
     },
   },
 });

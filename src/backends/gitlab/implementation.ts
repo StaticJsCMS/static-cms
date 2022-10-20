@@ -1,5 +1,5 @@
 import { stripIndent } from 'common-tags';
-import { trim } from 'lodash';
+import trim from 'lodash/trim';
 import trimStart from 'lodash/trimStart';
 import semaphore from 'semaphore';
 
@@ -22,23 +22,22 @@ import API, { API_NAME } from './API';
 import AuthenticationPage from './AuthenticationPage';
 
 import type { Semaphore } from 'semaphore';
+import type { AsyncLock, Cursor } from '../../lib/util';
 import type {
-  AssetProxy,
-  AsyncLock,
   Config,
   Credentials,
-  Cursor,
   DisplayURL,
-  Entry,
-  Implementation,
+  BackendEntry,
+  BackendClass,
   ImplementationFile,
   PersistOptions,
   User,
-} from '../../lib/util';
+} from '../../interface';
+import type AssetProxy from '../../valueObjects/AssetProxy';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 
-export default class GitLab implements Implementation {
+export default class GitLab implements BackendClass {
   lock: AsyncLock;
   api: API | null;
   options: {
@@ -49,7 +48,7 @@ export default class GitLab implements Implementation {
   branch: string;
   apiRoot: string;
   token: string | null;
-  mediaFolder: string;
+  mediaFolder?: string;
   useGraphQL: boolean;
   graphQLAPIRoot: string;
 
@@ -224,7 +223,10 @@ export default class GitLab implements Implementation {
     }));
   }
 
-  getMedia(mediaFolder = this.mediaFolder) {
+  async getMedia(mediaFolder = this.mediaFolder) {
+    if (!mediaFolder) {
+      return [];
+    }
     return this.api!.listAllFiles(mediaFolder).then(files =>
       files.map(({ id, name, path }) => {
         return { id, name, path, displayURL: { id, name, path } };
@@ -259,7 +261,7 @@ export default class GitLab implements Implementation {
     };
   }
 
-  async persistEntry(entry: Entry, options: PersistOptions) {
+  async persistEntry(entry: BackendEntry, options: PersistOptions) {
     // persistEntry is a transactional operation
     return runWithLock(
       this.lock,
@@ -297,9 +299,9 @@ export default class GitLab implements Implementation {
   traverseCursor(cursor: Cursor, action: string) {
     return this.api!.traverseCursor(cursor, action).then(async ({ entries, cursor: newCursor }) => {
       const [folder, depth, extension] = [
-        cursor.meta?.get('folder') as string,
-        cursor.meta?.get('depth') as number,
-        cursor.meta?.get('extension') as string,
+        cursor.meta?.folder as string,
+        cursor.meta?.depth as number,
+        cursor.meta?.extension as string,
       ];
       if (folder && depth && extension) {
         entries = entries.filter(f => this.filterFile(folder, f, extension, depth));

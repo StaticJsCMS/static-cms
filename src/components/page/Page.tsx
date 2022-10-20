@@ -2,12 +2,15 @@ import { styled } from '@mui/material/styles';
 import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
+import { lengths } from '../../components/UI/styles';
 import { getAdditionalLink } from '../../lib/registry';
-import { lengths } from '../../ui';
 import Sidebar from '../Collection/Sidebar';
 
-import type { Collections, State } from '../../types/redux';
+import type { ComponentType } from 'react';
+import type { ConnectedProps } from 'react-redux';
+import type { RootState } from '../../store';
 
 const StylePage = styled('div')`
   margin: ${lengths.pageMargin};
@@ -20,33 +23,20 @@ const StyledPageContent = styled('div')`
   justify-content: center;
 `;
 
-interface PageProps {
-  match: any;
-}
-
-interface ConnectedPageProps extends PageProps {
-  collections: Collections;
-  isSearchEnabled: boolean;
-  searchTerm: string;
-  filterTerm: string;
-}
-
-const Page = ({
-  match,
-  collections,
-  isSearchEnabled,
-  searchTerm,
-  filterTerm,
-}: ConnectedPageProps) => {
-  const { id } = match.params;
+const Page = ({ collections, isSearchEnabled, searchTerm, filterTerm }: PageProps) => {
+  const { id } = useParams();
   const Content = useMemo(() => {
+    if (!id) {
+      return '';
+    }
+
     const page = getAdditionalLink(id);
     if (!page) {
       return '';
     }
 
     return page.data;
-  }, []);
+  }, [id]);
 
   const pageContent = useMemo(() => {
     if (!Content) {
@@ -74,34 +64,21 @@ const Page = ({
   );
 };
 
-function mapStateToProps(state: State, ownProps: PageProps) {
+function mapStateToProps(state: RootState) {
   const { collections } = state;
-  const isSearchEnabled = state.config && state.config.search != false;
-  const { match } = ownProps;
-  const { searchTerm = '', filterTerm = '' } = match.params;
+  const isSearchEnabled = state.config.config && state.config.config.search != false;
 
   return {
     collections,
     isSearchEnabled,
-    searchTerm,
-    filterTerm,
+    searchTerm: '',
+    filterTerm: '',
   };
 }
 
 const mapDispatchToProps = {};
 
-function mergeProps(
-  stateProps: ReturnType<typeof mapStateToProps>,
-  dispatchProps: typeof mapDispatchToProps,
-  ownProps: PageProps,
-) {
-  return {
-    ...stateProps,
-    ...dispatchProps,
-    ...ownProps,
-  };
-}
+const connector = connect(mapStateToProps, mapDispatchToProps);
+export type PageProps = ConnectedProps<typeof connector>;
 
-const ConnectedPage = connect(mapStateToProps, mapDispatchToProps, mergeProps)(Page);
-
-export default translate()(ConnectedPage);
+export default connector(translate()(Page) as ComponentType<PageProps>);

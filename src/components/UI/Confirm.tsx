@@ -13,10 +13,10 @@ import { useWindowEvent } from '../../lib/util/window.util';
 import type { TranslateProps } from 'react-polyglot';
 
 interface ConfirmProps {
-  title: string | { key: string; options?: any };
-  body: string | { key: string; options?: any };
-  cancel?: string | { key: string; options?: any };
-  confirm?: string | { key: string; options?: any };
+  title: string | { key: string; options?: Record<string, unknown> };
+  body: string | { key: string; options?: Record<string, unknown> };
+  cancel?: string | { key: string; options?: Record<string, unknown> };
+  confirm?: string | { key: string; options?: Record<string, unknown> };
   color?: 'success' | 'error' | 'primary';
 }
 
@@ -60,23 +60,23 @@ const ConfirmDialog = ({ t }: TranslateProps) => {
       return '';
     }
     return typeof rawTitle === 'string' ? t(rawTitle) : t(rawTitle.key, rawTitle.options);
-  }, [rawTitle]);
+  }, [rawTitle, t]);
 
   const body = useMemo(() => {
     if (!rawBody) {
       return '';
     }
     return typeof rawBody === 'string' ? t(rawBody) : t(rawBody.key, rawBody.options);
-  }, [rawBody]);
+  }, [rawBody, t]);
 
   const cancel = useMemo(
     () => (typeof rawCancel === 'string' ? t(rawCancel) : t(rawCancel.key, rawCancel.options)),
-    [rawCancel],
+    [rawCancel, t],
   );
 
   const confirm = useMemo(
     () => (typeof rawConfirm === 'string' ? t(rawConfirm) : t(rawConfirm.key, rawConfirm.options)),
-    [rawConfirm],
+    [rawConfirm, t],
   );
 
   if (!detail) {
