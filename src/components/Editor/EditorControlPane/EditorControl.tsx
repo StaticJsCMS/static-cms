@@ -5,13 +5,12 @@ import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
 import {
-  addDraftEntryMediaFile as addDraftEntryMediaFileAction,
   changeDraftField as changeDraftFieldAction,
   changeDraftFieldValidation as changeDraftFieldValidationAction,
   clearFieldErrors as clearFieldErrorsAction,
   tryLoadEntry,
 } from '../../../actions/entries';
-import { addAsset as addAssetAction, getAsset as getAssetAction } from '../../../actions/media';
+import { getAsset as getAssetAction } from '../../../actions/media';
 import {
   clearMediaControl as clearMediaControlAction,
   openMediaLibrary as openMediaLibraryAction,
@@ -157,8 +156,6 @@ const EditorControl = ({
   locale,
   mediaPaths,
   changeDraftFieldValidation,
-  addAsset,
-  addDraftEntryMediaFile,
   openMediaLibrary,
   parentPath,
   query,
@@ -237,8 +234,6 @@ const EditorControl = ({
           mediaPaths,
           onChange: handleChangeDraftField,
           clearMediaControl,
-          addAsset,
-          addDraftEntryMediaFile,
           openMediaLibrary,
           removeInsertedMedia,
           removeMediaControl,
@@ -318,8 +313,6 @@ function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
 const mapDispatchToProps = {
   changeDraftField: changeDraftFieldAction,
   changeDraftFieldValidation: changeDraftFieldValidationAction,
-  addAsset: addAssetAction,
-  addDraftEntryMediaFile: addDraftEntryMediaFileAction,
   openMediaLibrary: openMediaLibraryAction,
   clearMediaControl: clearMediaControlAction,
   removeMediaControl: removeMediaControlAction,

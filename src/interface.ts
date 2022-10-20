@@ -246,8 +246,6 @@ export interface WidgetControlProps<T, F extends Field = Field> {
   locale: string | undefined;
   mediaPaths: Record<string, string | string[]>;
   onChange: (value: T | null | undefined) => void;
-  addAsset: EditorControlProps['addAsset'];
-  addDraftEntryMediaFile: EditorControlProps['addDraftEntryMediaFile'];
   clearMediaControl: EditorControlProps['clearMediaControl'];
   openMediaLibrary: EditorControlProps['openMediaLibrary'];
   removeInsertedMedia: EditorControlProps['removeInsertedMedia'];

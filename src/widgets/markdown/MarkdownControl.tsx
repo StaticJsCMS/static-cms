@@ -1,23 +1,21 @@
 import { styled } from '@mui/material/styles';
 import { Editor } from '@toast-ui/react-editor';
-import mime from 'mime-types';
+import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import uuid from 'uuid';
 
 import FieldLabel from '../../components/UI/FieldLabel';
 import Outline from '../../components/UI/Outline';
+import { IMAGE_EXTENSION_REGEX } from '../../constants/files';
 import useImagePlugin from '../../editor-components/editorPlugin';
-import { sanitizeSlug } from '../../lib/urlHelper';
-import { selectMediaFilePath } from '../../lib/util/media.util';
-import { createAssetProxy } from '../../valueObjects/AssetProxy';
+import { doesUrlFileExist } from '../../lib/util/fetch.util';
+import { isNotNullish } from '../../lib/util/null.util';
+import { isNotEmpty } from '../../lib/util/string.util';
 
 import type { RefObject } from 'react';
 import type { MarkdownField, MediaLibrary, WidgetControlProps } from '../../interface';
 
 import '@toast-ui/editor/dist/toastui-editor.css';
-import isEmpty from 'lodash/isEmpty';
-import { doesUrlFileExist } from '../../lib/util/fetch.util';
-import { isNotNullish } from '../../lib/util/null.util';
 
 const StyledEditorWrapper = styled('div')`
   position: relative;
@@ -46,14 +44,9 @@ const MarkdownControl = ({
   onChange,
   hasErrors,
   field,
-  addAsset,
-  addDraftEntryMediaFile,
   openMediaLibrary,
-  config,
-  collection,
-  entry,
   mediaPaths,
-  getAsset
+  getAsset,
 }: WidgetControlProps<string, MarkdownField>) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
   const editorRef = useMemo(() => React.createRef(), []) as RefObject<Editor>;
@@ -96,7 +89,9 @@ const MarkdownControl = ({
     [controlID, field, mediaLibraryFieldOptions, openMediaLibrary],
   );
 
-  const [imagePlugin, imageToolbarButton] = useImagePlugin({ openMediaLibrary: handleOpenMedialLibrary });
+  const [imagePlugin, imageToolbarButton] = useImagePlugin({
+    openMediaLibrary: handleOpenMedialLibrary,
+  });
 
   const getMedia = useCallback(
     async (path: string) => {
@@ -107,14 +102,14 @@ const MarkdownControl = ({
           return {
             type: IMAGE_EXTENSION_REGEX.test(path) ? 'image' : 'file',
             exists: false,
-            url: asset.toString()
+            url: asset.toString(),
           };
         }
       }
 
       return { url: path, type, exists };
     },
-    [field, getAsset]
+    [field, getAsset],
   );
 
   const mediaPath = mediaPaths[controlID];
@@ -124,27 +119,32 @@ const MarkdownControl = ({
     }
 
     const addMedia = async () => {
-      const { type, exists, url } = await getMedia(mediaPath);
+      const { type } = await getMedia(mediaPath);
       let content: string | undefined;
       if (type.startsWith('image')) {
-        if (exists) {
-          content = `<img src="${mediaPath}" />`;
-        } else {
-          content = `<img data-asset="${mediaPath}" src="${url}" />`;
-        }
+        content = `![](${mediaPath})`;
       } else {
-        const name = mediaPath.split('/').pop();
-        if (exists) {
-          content = `<a target="_blank" href="${mediaPath}">${name}</a>`;
-        } else {
-          content = `<a data-asset="${mediaPath}" target="_blank" href="${url}">${name}</a>`;
-        }
+        content = `[${name}](${mediaPath})`;
       }
 
       if (isNotEmpty(content)) {
-        editorRef.current.focus();
-        editorRef.current.selection.setContent(content);
-        onChange(editorRef.current.getContent());
+        const editorInstance = editorRef.current?.getInstance();
+        if (!editorInstance) {
+          return;
+        }
+
+        editorInstance.focus();
+        const isOnMarkdown = editorInstance.isMarkdownMode();
+        if (!isOnMarkdown) {
+          editorInstance.changeMode('markdown');
+        }
+        editorInstance.insertText(content);
+        if (!isOnMarkdown) {
+          editorInstance.changeMode('wysiwyg');
+        }
+        setTimeout(() => {
+          handleOnChange();
+        });
       }
     };
 
