@@ -12,11 +12,12 @@ import { doesUrlFileExist } from '../../lib/util/fetch.util';
 import { isNotNullish } from '../../lib/util/null.util';
 import { isNotEmpty } from '../../lib/util/string.util';
 
-import type { HTMLToken, LinkMdNode, MdNode } from '@toast-ui/editor/types/toastmark';
 import type { RefObject } from 'react';
 import type { MarkdownField, MediaLibrary, WidgetControlProps } from '../../interface';
 
 import '@toast-ui/editor/dist/toastui-editor.css';
+
+const imageFilePattern = /(!)?\[([^\]]*)\]\(([^)]+)\)/;
 
 const StyledEditorWrapper = styled('div')`
   position: relative;
@@ -122,8 +123,9 @@ const MarkdownControl = ({
     const addMedia = async () => {
       const { type } = await getMedia(mediaPath);
       let content: string | undefined;
+      const name = mediaPath.split('/').pop();
       if (type.startsWith('image')) {
-        content = `![](${mediaPath})`;
+        content = `![${name}](${mediaPath})`;
       } else {
         content = `[${name}](${mediaPath})`;
       }
@@ -182,39 +184,35 @@ const MarkdownControl = ({
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
         autofocus={false}
-        customHTMLRenderer={{
-          img: (node: MdNode) => {
-            if ('destination' in node) {
-              const destination = (node as LinkMdNode).destination;
-              if (destination) {
-                console.log('IMAGE NODE!', node, [
-                  { type: 'openTag', tagName: 'img', outerNewLine: true },
-                  {
-                    type: 'html',
-                    content: `<img src="${getAsset(
-                      destination,
-                      field,
-                    )}" contenteditable="false" />`,
-                  },
-                  { type: 'closeTag', tagName: 'div', outerNewLine: true },
-                ]);
-                return [
-                  { type: 'openTag', tagName: 'img', outerNewLine: true },
-                  {
-                    type: 'html',
-                    content: `<img src="${getAsset(
-                      destination,
-                      field,
-                    )}" contenteditable="false" />`,
-                  },
-                  { type: 'closeTag', tagName: 'div', outerNewLine: true },
-                ] as HTMLToken[];
-              }
-            }
+        widgetRules={[
+          {
+            rule: imageFilePattern,
+            toDOM(text) {
+              const rule = imageFilePattern;
+              const matched = text.match(rule);
 
-            return null;
+              if (matched) {
+                if (matched?.length === 4) {
+                  // Image
+                  const img = document.createElement('img');
+                  img.setAttribute('src', getAsset(matched[3], field).url);
+                  img.setAttribute('style', 'width: 100%;');
+                  img.innerHTML = 'test';
+                  return img;
+                } else {
+                  // File
+                  const a = document.createElement('a');
+                  a.setAttribute('target', '_blank');
+                  a.setAttribute('href', matched[2]);
+                  a.innerHTML = matched[1];
+                  return a;
+                }
+              }
+
+              return document.createElement('div');
+            },
           },
-        }}
+        ]}
       />
       <Outline key="markdown-control-outline" hasLabel hasError={hasErrors} />
     </StyledEditorWrapper>
