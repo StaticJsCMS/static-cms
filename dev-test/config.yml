@@ -396,6 +396,19 @@ collections:
               - title
               - body
             value_field: title
+          - label: Multiple
+            name: multiple
+            widget: relation
+            multiple: true
+            required: false
+            collection: posts
+            display_fields:
+              - title
+              - date
+            search_fields:
+              - title
+              - body
+            value_field: title
       - name: select
         label: Select
         file: _widgets/select.json

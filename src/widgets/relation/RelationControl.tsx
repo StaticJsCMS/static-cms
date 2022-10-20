@@ -11,7 +11,7 @@ import {
   addFileTemplateFields,
   compileStringTemplate,
   expandPath,
-  extractTemplateVars
+  extractTemplateVars,
 } from '../../lib/widgets/stringTemplate';
 
 import type { ListChildComponentProps } from 'react-window';
@@ -112,6 +112,7 @@ const RelationControl = ({
   onChange,
   query,
   locale,
+  label,
 }: WidgetControlProps<string | string[], RelationField>) => {
   const [internalValue, setInternalValue] = useState(value);
   const [initialOptions, setInitialOptions] = useState<HitOption[]>([]);
@@ -161,25 +162,6 @@ const RelationControl = ({
     },
     [field.display_fields, field.value_field, parseNestedFields],
   );
-
-  // TODO Do we need sorting?
-  // const onSortEnd =
-  //   options =>
-  //   ({ oldIndex, newIndex }) => {
-  //     const { onChange, field } = this.props;
-  //     const value = options.map(optionToString);
-  //     const newValue = arrayMove(value, oldIndex, newIndex);
-  //     const metadata =
-  //       (!isEmpty(options) && {
-  //         [field.name]: {
-  //           [field.collection]: {
-  //             [last(newValue)]: last(options).data,
-  //           },
-  //         },
-  //       }) ||
-  //       {};
-  //     onChange(fromJS(newValue), metadata);
-  //   };
 
   const handleChange = useCallback(
     (selectedOption: HitOption | HitOption[] | null) => {
@@ -244,7 +226,7 @@ const RelationControl = ({
         <TextField
           key="relation-control-input"
           {...params}
-          label="Asynchronous"
+          label={label}
           InputProps={{
             ...params.InputProps,
             endAdornment: (
@@ -256,7 +238,7 @@ const RelationControl = ({
           }}
         />
       )}
-      value={selectedValue}
+      value={selectedValue ? selectedValue : isMultiple ? [] : null}
       onChange={(_event, newValue) => handleChange(newValue)}
       multiple={isMultiple}
       open={open}
