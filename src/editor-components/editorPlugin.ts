@@ -2,9 +2,13 @@ import { useCallback, useEffect, useMemo } from 'react';
 
 import type { PluginContext } from '@toast-ui/editor';
 import type { EditorPlugin } from '@toast-ui/editor/types/editor';
+import type { HTMLToken, MdNode } from '@toast-ui/editor/types/toastmark';
 import type { ToolbarItemOptions } from '@toast-ui/editor/types/ui';
+import type { GetAssetFunction, MarkdownField } from '../interface';
 export interface ImagePluginProps {
   openMediaLibrary: (forImages: boolean) => void;
+  getAsset: GetAssetFunction;
+  field: MarkdownField;
 }
 
 const PREFIX = 'toastui-editor-';
@@ -45,7 +49,18 @@ const useImagePlugin = ({
   const plugin: EditorPlugin = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (_context: PluginContext, _options?: any) => {
-      return {};
+      return {
+        toHTMLRenderers: {
+          image: (node: MdNode) => {
+            console.log('IMAGE NODE!', node.type, node.firstChild);
+            return [
+              { type: 'openTag', tagName: 'div', outerNewLine: true },
+              { type: 'text', content: node.literal },
+              { type: 'closeTag', tagName: 'div', outerNewLine: true },
+            ] as HTMLToken[];
+          },
+        },
+      };
     },
     [],
   );

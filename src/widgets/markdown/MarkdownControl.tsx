@@ -91,6 +91,8 @@ const MarkdownControl = ({
 
   const [imagePlugin, imageToolbarButton] = useImagePlugin({
     openMediaLibrary: handleOpenMedialLibrary,
+    getAsset,
+    field,
   });
 
   const getMedia = useCallback(
