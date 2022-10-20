@@ -14,7 +14,6 @@ import { addAsset as addAssetAction, getAsset as getAssetAction } from '../../..
 import {
   clearMediaControl as clearMediaControlAction,
   openMediaLibrary as openMediaLibraryAction,
-  persistMedia as persistMediaAction,
   removeInsertedMedia as removeInsertedMediaAction,
   removeMediaControl as removeMediaControlAction,
 } from '../../../actions/mediaLibrary';
@@ -135,7 +134,6 @@ export const ControlHint = styled(
 );
 
 const EditorControl = ({
-  addAsset,
   className,
   clearFieldErrors,
   clearMediaControl,
@@ -158,9 +156,9 @@ const EditorControl = ({
   locale,
   mediaPaths,
   changeDraftFieldValidation,
+  addAsset,
   openMediaLibrary,
   parentPath,
-  persistMedia,
   query,
   removeInsertedMedia,
   removeMediaControl,
@@ -235,11 +233,10 @@ const EditorControl = ({
           loadEntry,
           locale,
           mediaPaths,
-          addAsset,
           onChange: handleChangeDraftField,
           clearMediaControl,
+          addAsset,
           openMediaLibrary,
-          persistMedia,
           removeInsertedMedia,
           removeMediaControl,
           path,
@@ -318,12 +315,11 @@ function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
 const mapDispatchToProps = {
   changeDraftField: changeDraftFieldAction,
   changeDraftFieldValidation: changeDraftFieldValidationAction,
+  addAsset: addAssetAction,
   openMediaLibrary: openMediaLibraryAction,
   clearMediaControl: clearMediaControlAction,
   removeMediaControl: removeMediaControlAction,
   removeInsertedMedia: removeInsertedMediaAction,
-  persistMedia: persistMediaAction,
-  addAsset: addAssetAction,
   query: queryAction,
   clearSearch: clearSearchAction,
   clearFieldErrors: clearFieldErrorsAction,

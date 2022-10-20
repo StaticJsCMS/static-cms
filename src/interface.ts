@@ -245,11 +245,10 @@ export interface WidgetControlProps<T, F extends Field = Field> {
   loadEntry: EditorControlProps['loadEntry'];
   locale: string | undefined;
   mediaPaths: Record<string, string | string[]>;
-  addAsset: EditorControlProps['addAsset'];
   onChange: (value: T | null | undefined) => void;
+  addAsset: EditorControlProps['addAsset'];
   clearMediaControl: EditorControlProps['clearMediaControl'];
   openMediaLibrary: EditorControlProps['openMediaLibrary'];
-  persistMedia: EditorControlProps['persistMedia'];
   removeInsertedMedia: EditorControlProps['removeInsertedMedia'];
   removeMediaControl: EditorControlProps['removeMediaControl'];
   i18n: I18nSettings | undefined;

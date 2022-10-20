@@ -4,11 +4,15 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import FieldLabel from '../../components/UI/FieldLabel';
 import Outline from '../../components/UI/Outline';
+import { sanitizeSlug } from '../../lib/urlHelper';
+import { selectMediaFilePath } from '../../lib/util/media.util';
+import { createAssetProxy } from '../../valueObjects/AssetProxy';
 
 import type { RefObject } from 'react';
 import type { MarkdownField, WidgetControlProps } from '../../interface';
 
 import '@toast-ui/editor/dist/toastui-editor.css';
+import uuid from 'uuid';
 
 const StyledEditorWrapper = styled('div')`
   position: relative;
@@ -36,6 +40,11 @@ const MarkdownControl = ({
   value,
   onChange,
   hasErrors,
+  field,
+  addAsset,
+  config,
+  collection,
+  entry,
 }: WidgetControlProps<string, MarkdownField>) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
   const editorRef = useMemo(() => React.createRef(), []) as RefObject<Editor>;
@@ -59,6 +68,30 @@ const MarkdownControl = ({
     editorRef.current?.getInstance().focus();
   }, [editorRef]);
 
+  const [imageInsertCallback, setImageInsertCallback] = useState<
+    ((url: string, text?: string) => void) | null
+  >(null);
+  const imageUpload = useCallback(
+    (blob: Blob | File, callback: (url: string, text?: string) => void) => {
+      if (blob instanceof Blob) {
+        blob = new File(blob, uuid());
+      }
+      const fileName = sanitizeSlug(blob.name.toLowerCase(), config.slug);
+      const path = selectMediaFilePath(config, collection, entry, fileName, field);
+      addAsset(
+        createAssetProxy({
+          url: URL.createObjectURL(blob),
+          file: blob as File,
+          path,
+          field,
+        }),
+      );
+      console.log(blob);
+      setImageInsertCallback(callback);
+    },
+    [addAsset, collection, config, entry, field],
+  );
+
   return (
     <StyledEditorWrapper key="markdown-control-wrapper">
       <FieldLabel
@@ -81,12 +114,16 @@ const MarkdownControl = ({
           ['heading', 'bold', 'italic', 'strike'],
           ['hr', 'quote'],
           ['ul', 'ol', 'task', 'indent', 'outdent'],
-          ['table', 'link'],
+          ['table', 'image', 'link'],
           ['code', 'codeblock'],
         ]}
         ref={editorRef}
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
+        hooks={{
+          addImageBlobHook: imageUpload,
+        }}
+        autofocus={false}
       />
       <Outline key="markdown-control-outline" hasLabel hasError={hasErrors} />
     </StyledEditorWrapper>
