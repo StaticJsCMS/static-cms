@@ -1,26 +1,72 @@
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import AppBar from '@mui/material/AppBar';
+import IconButton from '@mui/material/IconButton';
+import { styled } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
+import Toolbar from '@mui/material/Toolbar';
+import Image from 'next/image';
+import Link from 'next/link';
+import SearchIcon from '@mui/icons-material/Search';
+
+const StyledToolbar = styled(Toolbar)`
+  gap: 16px;
+`;
+
+const StyledMenuButton = styled(IconButton)(
+  ({ theme }) => `
+    ${theme.breakpoints.up('md')} {
+      visibility: hidden;
+      height: 0;
+      width: 0;
+      padding: 0;
+    }
+  `,
+);
+
+const StyledGap = styled('div')`
+  flex-grow: 1;
+`;
+
+const StyledSearchBox = styled(TextField)`
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+
+  .MuiSvgIcon-root {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .MuiInputBase-root {
+    color: white;
+  }
+
+  .MuiOutlinedInput-notchedOutline {
+    border: none;
+  }
+`;
 
 const Header = () => {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
-          </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
-    </Box>
+    <AppBar position="sticky">
+      <StyledToolbar>
+        <StyledMenuButton size="large" edge="start" color="inherit" aria-label="menu">
+          <MenuIcon fontSize="large" />
+        </StyledMenuButton>
+        <Image src="/static-cms-logo.svg" width={182} height={72} />
+        <StyledSearchBox
+          placeholder="Search the docs"
+          variant="outlined"
+          size="small"
+          InputProps={{
+            startAdornment: <SearchIcon />,
+          }}
+        />
+        <StyledGap />
+        <Link href="/docs/intro">Docs</Link>
+        <Link href="/docs/contributor-guide">Contributing</Link>
+        <Link href="/community">Docs</Link>
+        <Link href="/blog">Blog</Link>
+      </StyledToolbar>
+    </AppBar>
   );
 };
 
