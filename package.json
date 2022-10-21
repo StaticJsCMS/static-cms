@@ -52,7 +52,7 @@
     "@emotion/styled": "11.10.4",
     "@iarna/toml": "2.2.5",
     "@mui/icons-material": "5.10.6",
-    "@mui/material": "5.10.6",
+    "@mui/material": "5.10.10",
     "@mui/x-date-pickers": "5.0.4",
     "@reduxjs/toolkit": "1.8.5",
     "@toast-ui/react-editor": "3.2.2",
