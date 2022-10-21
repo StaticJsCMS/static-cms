@@ -3,7 +3,6 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:cypress/recommended',
     'prettier',
     'plugin:import/recommended',
   ],
@@ -12,7 +11,6 @@ module.exports = {
     browser: true,
     node: true,
     jest: true,
-    'cypress/globals': true,
   },
   globals: {
     STATIC_CMS_CORE_VERSION: false,
@@ -56,7 +54,7 @@ module.exports = {
       },
     ],
   },
-  plugins: ['babel', '@emotion', 'cypress', 'unicorn', 'react-hooks'],
+  plugins: ['babel', '@emotion', 'unicorn', 'react-hooks'],
   settings: {
     react: {
       version: 'detect',
@@ -75,7 +73,6 @@ module.exports = {
       extends: [
         'eslint:recommended',
         'plugin:react/recommended',
-        'plugin:cypress/recommended',
         'plugin:@typescript-eslint/recommended',
         'prettier',
         'plugin:import/recommended',

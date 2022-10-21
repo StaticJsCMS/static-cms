@@ -8,9 +8,12 @@ import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
 import Image from 'next/image';
 import Link from 'next/link';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 import type { ButtonTypeMap } from '@mui/material/Button';
 import type { ExtendButtonBase } from '@mui/material/ButtonBase';
+import type { PaletteMode } from '@mui/material';
 
 const StyledToolbar = styled(Toolbar)`
   gap: 16px;
@@ -56,7 +59,12 @@ const StyledLink = styled(Button)`
   }
 ` as ExtendButtonBase<ButtonTypeMap<{}, 'a'>>;
 
-const Header = () => {
+interface HeaderProps {
+  mode: PaletteMode;
+  toggleColorMode: () => void;
+}
+
+const Header = ({ mode, toggleColorMode }: HeaderProps) => {
   return (
     <AppBar position="sticky">
       <StyledToolbar>
@@ -72,6 +80,9 @@ const Header = () => {
             startAdornment: <SearchIcon />,
           }}
         />
+        <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
+          {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton>
         <StyledGap />
         <Link href="/docs/intro">
           <StyledLink component="a">Docs</StyledLink>

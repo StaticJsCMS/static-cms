@@ -1,0 +1,16 @@
+{
+  "features": [
+    {
+      "title": "Static + content management = ♥",
+      "description": "Get the speed, security, and scalability of a static site, while still providing a convenient editing interface for content."
+    },
+    {
+      "title": "An integrated part of your Git workflow",
+      "description": "Content is stored in your Git repository alongside your code for easier versioning, multi-channel publishing, and the option to handle content updates directly in Git."
+    },
+    {
+      "title": "An extensible CMS built on React",
+      "description": "Static CMS is built as a single-page React app. Create custom-styled previews, UI widgets, and editor plugins or add backends to support different Git platform APIs."
+    }
+  ]
+}
