@@ -17,7 +17,7 @@ const Home: NextPage = () => {
         </Head>
 
         <main className={styles.main}>
-          <h1 className={styles.title}>Open source content management for your Git workflo6</h1>
+          <h1 className={styles.title}>Open source content management for your Git workflow</h1>
 
           <p className={styles.description}>
             Get started by editing <code className={styles.code}>pages/index.tsx</code>
