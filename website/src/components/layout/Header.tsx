@@ -1,12 +1,16 @@
 import MenuIcon from '@mui/icons-material/Menu';
+import SearchIcon from '@mui/icons-material/Search';
 import AppBar from '@mui/material/AppBar';
+import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
 import Image from 'next/image';
 import Link from 'next/link';
-import SearchIcon from '@mui/icons-material/Search';
+
+import type { ButtonTypeMap } from '@mui/material/Button';
+import type { ExtendButtonBase } from '@mui/material/ButtonBase';
 
 const StyledToolbar = styled(Toolbar)`
   gap: 16px;
@@ -44,6 +48,14 @@ const StyledSearchBox = styled(TextField)`
   }
 `;
 
+const StyledLink = styled(Button)`
+  color: white;
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.6);
+  }
+` as ExtendButtonBase<ButtonTypeMap<{}, 'a'>>;
+
 const Header = () => {
   return (
     <AppBar position="sticky">
@@ -61,10 +73,18 @@ const Header = () => {
           }}
         />
         <StyledGap />
-        <Link href="/docs/intro">Docs</Link>
-        <Link href="/docs/contributor-guide">Contributing</Link>
-        <Link href="/community">Docs</Link>
-        <Link href="/blog">Blog</Link>
+        <Link href="/docs/intro">
+          <StyledLink component="a">Docs</StyledLink>
+        </Link>
+        <Link href="/docs/contributor-guide">
+          <StyledLink component="a">Contributing</StyledLink>
+        </Link>
+        <Link href="/community">
+          <StyledLink component="a">Community</StyledLink>
+        </Link>
+        <Link href="/blog">
+          <StyledLink component="a">Blog</StyledLink>
+        </Link>
       </StyledToolbar>
     </AppBar>
   );
