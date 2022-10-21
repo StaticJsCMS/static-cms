@@ -8,6 +8,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import SearchIcon from '@mui/icons-material/Search';
 
+import { PATH_PREFIX } from '../../contants';
+
 const StyledToolbar = styled(Toolbar)`
   gap: 16px;
 `;
@@ -51,7 +53,7 @@ const Header = () => {
         <StyledMenuButton size="large" edge="start" color="inherit" aria-label="menu">
           <MenuIcon fontSize="large" />
         </StyledMenuButton>
-        <Image src="/static-cms-logo.svg" width={182} height={72} />
+        <Image src={`${PATH_PREFIX}/static-cms-logo.svg`} width={182} height={72} />
         <StyledSearchBox
           placeholder="Search the docs"
           variant="outlined"
