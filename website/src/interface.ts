@@ -1,3 +1,11 @@
+import type { GrayMatterFile } from 'gray-matter';
+
+export interface FileMatter {
+  readonly fileName: string;
+  readonly fullPath: string;
+  readonly matterResult: GrayMatterFile<string>;
+}
+
 export interface FooterLink {
   readonly text: string;
   readonly url: string;
@@ -59,4 +67,18 @@ export interface Release {
   readonly date: string;
   readonly version: string;
   readonly description: string;
+}
+
+export interface DocsData {
+  readonly group: string;
+  readonly title: string;
+  readonly weight: number;
+  readonly slug: string;
+}
+
+export interface DocsPage {
+  readonly fullPath: string;
+  readonly summary: string;
+  readonly content: string;
+  readonly data: DocsData;
 }
