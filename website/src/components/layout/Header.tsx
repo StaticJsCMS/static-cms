@@ -19,6 +19,10 @@ const StyledToolbar = styled(Toolbar)`
   gap: 16px;
 `;
 
+const StyledGithubLink = styled('a')`
+  display: flex;
+`;
+
 const StyledMenuButton = styled(IconButton)(
   ({ theme }) => `
     ${theme.breakpoints.up('md')} {
@@ -84,6 +88,15 @@ const Header = ({ mode, toggleColorMode }: HeaderProps) => {
           {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
         </IconButton>
         <StyledGap />
+        <StyledGithubLink
+          href="https://github.com/StaticJsCMS/static-cms"
+          aria-label="Star StaticJsCMS/static-cms on GitHub"
+        >
+          <img
+            alt="Star StaticJsCMS/static-cms on GitHub"
+            src="https://img.shields.io/github/stars/StaticJsCMS/static-cms?style=social"
+          />
+        </StyledGithubLink>
         <Link href="/docs/intro">
           <StyledLink component="a">Docs</StyledLink>
         </Link>

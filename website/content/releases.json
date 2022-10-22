@@ -1,0 +1,9 @@
+{
+  "releases": [
+    {
+      "date": "2022-11-30T00:00:00.000Z",
+      "version": "1.0.0",
+      "description": "The first major release of Static CMS with an all-new UI, revamped documentation and much more."
+    }
+  ]
+}

@@ -11,7 +11,10 @@ const useCreateTheme = (mode: PaletteMode) => {
             palette: {
               mode,
               primary: {
-                main: '#3A69C7',
+                main: '#3764be',
+              },
+              secondary: {
+                main: '#3764be',
               },
             },
             typography: {
@@ -19,8 +22,7 @@ const useCreateTheme = (mode: PaletteMode) => {
                 "'Roboto', -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif",
               h1: {
                 fontSize: '42px',
-                fontWeight: 'bold',
-                color: '#3A69C7',
+                fontWeight: 'bold'
               },
             },
           })
@@ -30,14 +32,16 @@ const useCreateTheme = (mode: PaletteMode) => {
               primary: {
                 main: '#3A69C7',
               },
+              secondary: {
+                main: '#5ecffb',
+              },
             },
             typography: {
               fontFamily:
                 "'Roboto', -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif",
               h1: {
                 fontSize: '42px',
-                fontWeight: 'bold',
-                color: '#4bc9fa',
+                fontWeight: 'bold'
               },
             },
           }),
