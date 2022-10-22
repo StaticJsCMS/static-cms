@@ -5,3 +5,12 @@ export interface SiteConfig {
   readonly site_image: string;
   readonly site_keywords: string[];
 }
+
+export interface Feature {
+  title: string;
+  description: string;
+}
+
+export interface HomepageData {
+  readonly features: Feature[];
+}
