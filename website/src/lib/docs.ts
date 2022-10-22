@@ -10,9 +10,9 @@ import type { FileMatter, DocsPage, DocsData } from '../interface';
 const docsDirectory = path.join(process.cwd(), 'content/docs');
 
 let docsMatterCache: FileMatter[];
-let docsCache: Record<string, DocsPage[]>;
+let docsCache: [DocsPage[], Record<string, DocsPage[]>];
 
-export function fetchPostMatter(): FileMatter[] {
+export function fetchDocsMatter(): FileMatter[] {
   if (docsMatterCache && process.env.NODE_ENV !== 'development') {
     return docsMatterCache;
   }
@@ -25,7 +25,7 @@ export function fetchPostMatter(): FileMatter[] {
       const fullPath = path.join(docsDirectory, fileName);
       const fileContents = fs.readFileSync(fullPath, 'utf8');
 
-      // Use gray-matter to parse the post metadata section
+      // Use gray-matter to parse the doc metadata section
       const matterResult = matter(fileContents, {
         engines: {
           yaml: s => yaml.load(s, { schema: yaml.JSON_SCHEMA }) as object,
@@ -48,12 +48,12 @@ export function fetchPostMatter(): FileMatter[] {
   return docsMatterCache;
 }
 
-export function fetchPostContent(): Record<string, DocsPage[]> {
+export function fetchDocsContent(): [DocsPage[], Record<string, DocsPage[]>] {
   if (docsCache && process.env.NODE_ENV !== 'development') {
     return docsCache;
   }
 
-  const allDocsData: DocsPage[] = fetchPostMatter().map(
+  const allDocsData: DocsPage[] = fetchDocsMatter().map(
     ({ fileName, fullPath, matterResult: { data, content } }) => {
       const slug = fileName.replace(/\.mdx$/, '');
 
@@ -82,16 +82,19 @@ export function fetchPostContent(): Record<string, DocsPage[]> {
     },
   );
 
-  docsCache = allDocsData.reduce((acc, doc) => {
-    if (!(doc.data.group in acc)) {
-      acc[doc.data.group] = [];
-    }
-    acc[doc.data.group].push(doc);
-    return acc;
-  }, {} as Record<string, DocsPage[]>);
+  docsCache = [
+    allDocsData,
+    allDocsData.reduce((acc, doc) => {
+      if (!(doc.data.group in acc)) {
+        acc[doc.data.group] = [];
+      }
+      acc[doc.data.group].push(doc);
+      return acc;
+    }, {} as Record<string, DocsPage[]>),
+  ];
 
-  for (const group in docsCache) {
-    docsCache[group].sort((a, b) => a.data.weight - b.data.weight);
+  for (const group in docsCache[1]) {
+    docsCache[1][group].sort((a, b) => a.data.weight - b.data.weight);
   }
 
   return docsCache;

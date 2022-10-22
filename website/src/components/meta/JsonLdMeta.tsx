@@ -10,7 +10,7 @@ interface JsonLdMetaProps {
   url: string;
   title?: string;
   keywords?: string[];
-  date: Date;
+  date?: Date;
   image?: string;
   description?: string;
 }

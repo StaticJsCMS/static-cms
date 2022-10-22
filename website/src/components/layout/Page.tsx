@@ -31,7 +31,7 @@ export interface PageProps {
   description?: string;
   children: ReactNode;
   pageDetails?: {
-    date: Date;
+    date?: Date;
     image?: string;
   };
   fullWidth?: boolean;
