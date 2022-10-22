@@ -4,16 +4,20 @@ import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import Container from '../components/layout/Container';
 import Page from '../components/layout/Page';
 import homepageData from '../lib/homepage';
 
+import Card from '@mui/material/Card';
 import type { NextPage } from 'next';
 
 const StyledHomagePageContent = styled('div')`
-  padding-top: 64px;
+  width: 100%;
+  padding-top: 72px;
   display: flex;
   flex-direction: column;
   gap: 88px;
+  align-items: center;
 `;
 
 const StyleIntroSection = styled('div')`
@@ -46,38 +50,59 @@ const StyledImageWrapper = styled('div')`
   position: relative;
 `;
 
+const StyledCallToActionSection = styled('div')``;
+
+const StyledCard = styled(Card)``;
+
+const StyledReleasesSection = styled('div')`
+  width: 100%;
+  background: #51555d;
+  padding: 64px 0;
+`;
+
 const Home: NextPage = () => {
   return (
-    <Page url="/">
+    <Page url="/" fullWidth>
       <StyledHomagePageContent>
-        <StyleIntroSection>
-          <Typography variant="h1">Open source content management for your Git workflow</Typography>
-          <Typography variant="h5" component="h2" color="text.primary">
-            Use Static CMS with any static site generator for a faster and more flexible web project
-          </Typography>
-          <Link href="/docs/start-with-a-template">
-            <Button component="a" variant="contained" size="large">
-              Get Started
-            </Button>
-          </Link>
-        </StyleIntroSection>
-        <StyledFeaturesSection>
-          <StyledFeaturesList>
-            {homepageData.features.map(feature => (
-              <StyledFeature key={feature.title}>
-                <Typography variant="h6" component="h3" color="text.primary">
-                  {feature.title}
-                </Typography>
-                <Typography variant="body1" color="text.secondary">
-                  {feature.description}
-                </Typography>
-              </StyledFeature>
-            ))}
-          </StyledFeaturesList>
-          <StyledImageWrapper>
-            <Image layout="fill" src="/img/screenshot-editor.webp" />
-          </StyledImageWrapper>
-        </StyledFeaturesSection>
+        <Container>
+          <StyleIntroSection>
+            <Typography variant="h1">{homepageData.title}</Typography>
+            <Typography variant="h5" component="h2" color="text.primary">
+              {homepageData.subtitle}
+            </Typography>
+            <Link href={homepageData.get_started.url}>
+              <Button component="a" variant="contained" size="large">
+                {homepageData.get_started.title}
+              </Button>
+            </Link>
+          </StyleIntroSection>
+        </Container>
+        <Container>
+          <StyledFeaturesSection>
+            <StyledFeaturesList>
+              {homepageData.features.map(feature => (
+                <StyledFeature key={feature.title}>
+                  <Typography variant="h6" component="h3" color="text.primary">
+                    {feature.title}
+                  </Typography>
+                  <Typography variant="body1" color="text.secondary">
+                    {feature.description}
+                  </Typography>
+                </StyledFeature>
+              ))}
+            </StyledFeaturesList>
+            <StyledImageWrapper>
+              <Image layout="fill" src="/img/screenshot-editor.webp" />
+            </StyledImageWrapper>
+          </StyledFeaturesSection>
+        </Container>
+        <div />
+        <StyledCallToActionSection>
+          <Container>
+            <StyledCard>Test</StyledCard>
+          </Container>
+        </StyledCallToActionSection>
+        <StyledReleasesSection />
       </StyledHomagePageContent>
     </Page>
   );

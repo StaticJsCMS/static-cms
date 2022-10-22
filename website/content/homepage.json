@@ -1,4 +1,10 @@
 {
+  "title": "Open source content management for your Git workflow",
+  "subtitle": "Use Static CMS with any static site generator for a faster and more flexible web project",
+  "get_started": {
+    "title": "Get Started",
+    "url": "/docs/start-with-a-template/"
+  },
   "features": [
     {
       "title": "Static + content management = ♥",
@@ -12,5 +18,10 @@
       "title": "An extensible CMS built on React",
       "description": "Static CMS is built as a single-page React app. Create custom-styled previews, UI widgets, and editor plugins or add backends to support different Git platform APIs."
     }
-  ]
+  ],
+  "call_to_action": {
+    "title": "Getting started is simple and free.",
+    "subtitle": "Choose a template that’s pre-configured with a static site generator and deploys to a global CDN in one click.",
+    "url": "/docs/start-with-a-template/"
+  }
 }
