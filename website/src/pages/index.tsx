@@ -104,7 +104,7 @@ const StyledReleasesSection = styled('section')(
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: ${theme.palette.mode === 'light' ? '#dddee2' : '#51555d'};
+    background: ${theme.palette.mode === 'light' ? '#dddee2' : '#242424'};
     padding: 64px 0;
   `,
 );

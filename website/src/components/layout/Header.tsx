@@ -84,7 +84,12 @@ const Header = ({ mode, toggleColorMode }: HeaderProps) => {
             startAdornment: <SearchIcon />,
           }}
         />
-        <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
+        <IconButton
+          sx={{ ml: 1 }}
+          onClick={toggleColorMode}
+          color="inherit"
+          title={mode === 'dark' ? 'Turn on the light' : 'Turn off the light'}
+        >
           {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
         </IconButton>
         <StyledGap />

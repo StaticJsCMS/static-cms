@@ -20,7 +20,7 @@ const StyledPageContentWrapper = styled('div')(
     align-items: center;
     min-height: calc(100vh - 72px);
     width: 100%;
-    background-color: ${theme.palette.mode === 'light' ? '#f9f9f9' : '#3a404c'}
+    background-color: ${theme.palette.mode === 'light' ? '#f9f9f9' : '#3a3c42'}
   `,
 );
 
