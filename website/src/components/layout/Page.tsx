@@ -13,16 +13,13 @@ import Header from './Header';
 
 import type { ReactNode } from 'react';
 
-const StyledPageContentWrapper = styled('div')(
-  ({ theme }) => `
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: calc(100vh - 72px);
-    width: 100%;
-    background-color: ${theme.palette.mode === 'light' ? '#f9f9f9' : '#3a3c42'}
-  `,
-);
+const StyledPageContentWrapper = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: calc(100vh - 72px);
+  width: 100%;
+`;
 
 export interface PageProps {
   title?: string;

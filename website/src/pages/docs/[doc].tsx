@@ -14,17 +14,18 @@ const StyledDocsView = styled('div')`
 `;
 
 interface DocsProps {
+  groupedDocPages: Record<string, DocsPage[]>;
   title: string;
   slug: string;
   description?: string;
   content: string;
 }
 
-const Docs = ({ title, slug, description = '', content }: DocsProps) => {
+const Docs = ({ groupedDocPages, title, slug, description = '', content }: DocsProps) => {
   return (
     <Page title={title} url={`/docs/${slug}`} description={description} fullWidth>
       <StyledDocsView>
-        <DocsLeftNav />
+        <DocsLeftNav groupedDocPages={groupedDocPages} />
         <div
           dangerouslySetInnerHTML={{
             __html: content,
@@ -53,18 +54,21 @@ const buildSlugToDocsContent = (docsContents: DocsPage[]) => {
 };
 
 let slugToDocsContent = buildSlugToDocsContent(fetchDocsContent()[0]);
+let groupedDocPages = fetchDocsContent()[1];
 
 export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ props: DocsProps }> => {
   const slug = params?.doc as string;
 
   if (process.env.NODE_ENV === 'development') {
     slugToDocsContent = buildSlugToDocsContent(fetchDocsContent()[0]);
+    groupedDocPages = fetchDocsContent()[1];
   }
 
   const { content, data } = slugToDocsContent[slug];
 
   return {
     props: {
+      groupedDocPages,
       title: data.title,
       slug: data.slug,
       description: '',

@@ -15,6 +15,10 @@ import type { ButtonTypeMap } from '@mui/material/Button';
 import type { ExtendButtonBase } from '@mui/material/ButtonBase';
 import type { PaletteMode } from '@mui/material';
 
+const StyledAppBar = styled(AppBar)`
+  background: #121212;
+`;
+
 const StyledToolbar = styled(Toolbar)`
   gap: 16px;
 `;
@@ -63,6 +67,10 @@ const StyledLink = styled(Button)`
   }
 ` as ExtendButtonBase<ButtonTypeMap<{}, 'a'>>;
 
+const StyledImage = styled(Image)`
+  cursor: pointer;
+`;
+
 interface HeaderProps {
   mode: PaletteMode;
   toggleColorMode: () => void;
@@ -70,12 +78,14 @@ interface HeaderProps {
 
 const Header = ({ mode, toggleColorMode }: HeaderProps) => {
   return (
-    <AppBar position="sticky">
+    <StyledAppBar position="sticky">
       <StyledToolbar>
         <StyledMenuButton size="large" edge="start" color="inherit" aria-label="menu">
           <MenuIcon fontSize="large" />
         </StyledMenuButton>
-        <Image src="/static-cms-logo.svg" width={182} height={72} />
+        <Link href="/">
+          <StyledImage src="/static-cms-logo.svg" width={182} height={72} />
+        </Link>
         <StyledSearchBox
           placeholder="Search the docs"
           variant="outlined"
@@ -115,7 +125,7 @@ const Header = ({ mode, toggleColorMode }: HeaderProps) => {
           <StyledLink component="a">Blog</StyledLink>
         </Link>
       </StyledToolbar>
-    </AppBar>
+    </StyledAppBar>
   );
 };
 

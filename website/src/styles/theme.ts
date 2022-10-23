@@ -1,3 +1,4 @@
+import darkScrollbar from '@mui/material/darkScrollbar';
 import { createTheme } from '@mui/material/styles';
 import { useMemo } from 'react';
 
@@ -16,17 +17,28 @@ const useCreateTheme = (mode: PaletteMode) => {
               secondary: {
                 main: '#3764be',
               },
+              background: {
+                default: '#f9f9f9',
+                paper: '#f9f9f9',
+              },
             },
             typography: {
               fontFamily:
                 "'Roboto', -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif",
               h1: {
                 fontSize: '42px',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
               },
             },
           })
         : createTheme({
+            components: {
+              MuiCssBaseline: {
+                styleOverrides: {
+                  body: darkScrollbar(),
+                },
+              },
+            },
             palette: {
               mode,
               primary: {
@@ -35,13 +47,17 @@ const useCreateTheme = (mode: PaletteMode) => {
               secondary: {
                 main: '#5ecffb',
               },
+              background: {
+                default: '#2e3034',
+                paper: '#2e3034',
+              },
             },
             typography: {
               fontFamily:
                 "'Roboto', -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif",
               h1: {
                 fontSize: '42px',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
               },
             },
           }),
