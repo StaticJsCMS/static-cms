@@ -1,8 +1,17 @@
+import { styled } from '@mui/material/styles';
+
 import Page from '../../components/layout/Page';
 import { fetchDocsContent } from '../../lib/docs';
+import DocsLeftNav from '../../components/docs/DocsLeftNav';
+import DocsRightNav from '../../components/docs/DocsRightNav';
 
 import type { GetStaticPaths, GetStaticProps } from 'next/types';
 import type { DocsPage } from '../../interface';
+
+const StyledDocsView = styled('div')`
+  display: grid;
+  grid-template-columns: 300px auto 200px;
+`;
 
 interface DocsProps {
   title: string;
@@ -13,12 +22,16 @@ interface DocsProps {
 
 const Docs = ({ title, slug, description = '', content }: DocsProps) => {
   return (
-    <Page title={title} url={`/docs/${slug}`} description={description}>
-      <div
-        dangerouslySetInnerHTML={{
-          __html: content,
-        }}
-      />
+    <Page title={title} url={`/docs/${slug}`} description={description} fullWidth>
+      <StyledDocsView>
+        <DocsLeftNav />
+        <div
+          dangerouslySetInnerHTML={{
+            __html: content,
+          }}
+        />
+        <DocsRightNav />
+      </StyledDocsView>
     </Page>
   );
 };
@@ -26,7 +39,7 @@ const Docs = ({ title, slug, description = '', content }: DocsProps) => {
 export default Docs;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = fetchDocsContent()[0].map(docs => `/news/${docs.data.slug}`);
+  const paths = fetchDocsContent()[0].map(docs => `/docs/${docs.data.slug}`);
   return {
     paths,
     fallback: false,

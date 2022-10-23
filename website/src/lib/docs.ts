@@ -19,7 +19,7 @@ export function fetchDocsMatter(): FileMatter[] {
   // Get file names under /docs
   const fileNames = fs.readdirSync(docsDirectory);
   const allDocsMatter = fileNames
-    .filter(it => it.endsWith('.mdx'))
+    .filter(it => it.endsWith('.md'))
     .map(fileName => {
       // Read file as string
       const fullPath = path.join(docsDirectory, fileName);
@@ -55,7 +55,7 @@ export function fetchDocsContent(): [DocsPage[], Record<string, DocsPage[]>] {
 
   const allDocsData: DocsPage[] = fetchDocsMatter().map(
     ({ fileName, fullPath, matterResult: { data, content } }) => {
-      const slug = fileName.replace(/\.mdx$/, '');
+      const slug = fileName.replace(/\.md$/, '');
 
       const summaryRegex = /^<p>([\w\W]+?)<\/p>/i;
       let summaryMatch = summaryRegex.exec(content);
