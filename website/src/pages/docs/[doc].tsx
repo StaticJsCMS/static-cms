@@ -1,10 +1,13 @@
 import { styled } from '@mui/material/styles';
+import { MDXRemote } from 'next-mdx-remote';
+import { serialize } from 'next-mdx-remote/serialize';
 
-import Page from '../../components/layout/Page';
-import { fetchDocsContent } from '../../lib/docs';
 import DocsLeftNav from '../../components/docs/DocsLeftNav';
 import DocsRightNav from '../../components/docs/DocsRightNav';
+import Page from '../../components/layout/Page';
+import { fetchDocsContent } from '../../lib/docs';
 
+import type { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import type { GetStaticPaths, GetStaticProps } from 'next/types';
 import type { DocsPage } from '../../interface';
 
@@ -13,24 +16,24 @@ const StyledDocsView = styled('div')`
   grid-template-columns: 300px auto 200px;
 `;
 
+const StyledDocsContent = styled('div')``;
+
 interface DocsProps {
   groupedDocPages: Record<string, DocsPage[]>;
   title: string;
   slug: string;
   description?: string;
-  content: string;
+  source: MDXRemoteSerializeResult;
 }
 
-const Docs = ({ groupedDocPages, title, slug, description = '', content }: DocsProps) => {
+const Docs = ({ groupedDocPages, title, slug, description = '', source }: DocsProps) => {
   return (
     <Page title={title} url={`/docs/${slug}`} description={description} fullWidth>
       <StyledDocsView>
         <DocsLeftNav groupedDocPages={groupedDocPages} />
-        <div
-          dangerouslySetInnerHTML={{
-            __html: content,
-          }}
-        />
+        <StyledDocsContent>
+          <MDXRemote {...source} />
+        </StyledDocsContent>
         <DocsRightNav />
       </StyledDocsView>
     </Page>
@@ -65,6 +68,7 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ prop
   }
 
   const { content, data } = slugToDocsContent[slug];
+  const source = await serialize(content);
 
   return {
     props: {
@@ -72,7 +76,7 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ prop
       title: data.title,
       slug: data.slug,
       description: '',
-      content,
+      source,
     },
   };
 };
