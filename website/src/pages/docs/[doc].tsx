@@ -13,10 +13,20 @@ import type { DocsPage } from '../../interface';
 
 const StyledDocsView = styled('div')`
   display: grid;
-  grid-template-columns: 300px auto 200px;
+  grid-template-columns: auto 200px;
+  margin-left: 360px;
 `;
 
-const StyledDocsContent = styled('div')``;
+const StyledDocsContentWrapper = styled('div')`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const StyledDocsContent = styled('div')`
+  width: 80%;
+`;
 
 interface DocsProps {
   groupedDocPages: Record<string, DocsPage[]>;
@@ -29,11 +39,13 @@ interface DocsProps {
 const Docs = ({ groupedDocPages, title, slug, description = '', source }: DocsProps) => {
   return (
     <Page title={title} url={`/docs/${slug}`} description={description} fullWidth>
+      <DocsLeftNav groupedDocPages={groupedDocPages} />
       <StyledDocsView>
-        <DocsLeftNav groupedDocPages={groupedDocPages} />
-        <StyledDocsContent>
-          <MDXRemote {...source} />
-        </StyledDocsContent>
+        <StyledDocsContentWrapper>
+          <StyledDocsContent>
+            <MDXRemote {...source} />
+          </StyledDocsContent>
+        </StyledDocsContentWrapper>
         <DocsRightNav />
       </StyledDocsView>
     </Page>

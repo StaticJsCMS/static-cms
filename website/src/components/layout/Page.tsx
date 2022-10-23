@@ -19,6 +19,7 @@ const StyledPageContentWrapper = styled('div')`
   align-items: center;
   min-height: calc(100vh - 72px);
   width: 100%;
+  position: relative;
 `;
 
 export interface PageProps {

@@ -11,10 +11,17 @@ export interface DocsLeftNavProps {
 const DocsLeftNav = ({ groupedDocPages }: DocsLeftNavProps) => {
   return (
     <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
       component="nav"
-      aria-labelledby="docs-left-nav
-      "
+      aria-labelledby="docs-left-nav"
+      sx={{
+        width: '100%',
+        maxWidth: 360,
+        bgcolor: 'background.paper',
+        position: 'absolute',
+        left: 0,
+        height: '100%',
+        overflowY: 'auto',
+      }}
     >
       {Object.keys(groupedDocPages).map(group => (
         <DocsLeftNavGroup key={group} name={group} docPages={groupedDocPages[group]} />
