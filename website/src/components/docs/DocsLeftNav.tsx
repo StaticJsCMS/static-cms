@@ -17,9 +17,10 @@ const DocsLeftNav = ({ groupedDocPages }: DocsLeftNavProps) => {
         width: '100%',
         maxWidth: 360,
         bgcolor: 'background.paper',
-        position: 'absolute',
+        position: 'fixed',
         left: 0,
-        height: '100%',
+        top: '72px',
+        bottom: 0,
         overflowY: 'auto',
       }}
     >

@@ -78,7 +78,7 @@ interface HeaderProps {
 
 const Header = ({ mode, toggleColorMode }: HeaderProps) => {
   return (
-    <StyledAppBar position="sticky">
+    <StyledAppBar position="fixed">
       <StyledToolbar>
         <StyledMenuButton size="large" edge="start" color="inherit" aria-label="menu">
           <MenuIcon fontSize="large" />

@@ -35,15 +35,9 @@ export function fetchDocsMatter(): FileMatter[] {
     });
 
   // Sort docs by date
-  docsMatterCache = allDocsMatter.sort((a, b) => {
-    if (
-      new Date(a.matterResult.data.date).getTime() < new Date(b.matterResult.data.date).getTime()
-    ) {
-      return 1;
-    } else {
-      return -1;
-    }
-  });
+  docsMatterCache = allDocsMatter.sort(
+    (a, b) => a.matterResult.data.weight - b.matterResult.data.weight,
+  );
 
   return docsMatterCache;
 }
@@ -92,10 +86,6 @@ export function fetchDocsContent(): [DocsPage[], Record<string, DocsPage[]>] {
       return acc;
     }, {} as Record<string, DocsPage[]>),
   ];
-
-  for (const group in docsCache[1]) {
-    docsCache[1][group].sort((a, b) => a.data.weight - b.data.weight);
-  }
 
   return docsCache;
 }

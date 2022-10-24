@@ -8,7 +8,6 @@ import JsonLdMeta from '../meta/JsonLdMeta';
 import OpenGraphMeta from '../meta/OpenGraphMeta';
 import TwitterCardMeta from '../meta/TwitterCardMeta';
 import Container from './Container';
-import Footer from './Footer';
 import Header from './Header';
 
 import type { ReactNode } from 'react';
@@ -20,6 +19,7 @@ const StyledPageContentWrapper = styled('div')`
   min-height: calc(100vh - 72px);
   width: 100%;
   position: relative;
+  top: 72px;
 `;
 
 export interface PageProps {
@@ -88,7 +88,6 @@ const Page = ({
       ) : null}
       <Header mode={theme.palette.mode} toggleColorMode={toggleColorMode} />
       <StyledPageContentWrapper>{content}</StyledPageContentWrapper>
-      <Footer />
     </ThemeProvider>
   );
 };

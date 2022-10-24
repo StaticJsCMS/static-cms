@@ -39,7 +39,7 @@ const DocsLeftNavGroup = ({ name, docPages }: DocsLeftNavGroupProps) => {
               href={`/docs/${docPage.data.slug}`}
               sx={{ pl: 4 }}
             >
-              <ListItemText primary={docPage.data.title} />
+              <ListItemText secondary={docPage.data.title} />
             </ListItemButton>
           ))}
         </List>
