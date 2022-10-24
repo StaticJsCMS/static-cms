@@ -92,6 +92,7 @@ const StyledCallToActionCardContent = styled(CardContent)`
   align-items: flex-start;
   padding: 24px 40px;
   line-height: 30px;
+  gap: 24px;
 `;
 
 const StyledCallToActionText = styled('div')`
@@ -219,7 +220,12 @@ const Home: NextPage = () => {
                   </Typography>
                 </StyledCallToActionText>
                 <Link href={homepageData.call_to_action.url}>
-                  <Button component="a" variant="contained" size="large" sx={{ width: '188px' }}>
+                  <Button
+                    component="a"
+                    variant="contained"
+                    size="large"
+                    sx={{ width: '188px', whiteSpace: 'nowrap' }}
+                  >
                     {homepageData.call_to_action.button_text}
                   </Button>
                 </Link>
@@ -273,7 +279,12 @@ const Home: NextPage = () => {
               >
                 {homepageData.features_intro.title}
               </Typography>
-              <Typography variant="subtitle1" component="div" color="text.secondary" sx={{ textAlign: 'center' }}>
+              <Typography
+                variant="subtitle1"
+                component="div"
+                color="text.secondary"
+                sx={{ textAlign: 'center' }}
+              >
                 {homepageData.features_intro.subtitle1}
                 <br />
                 {homepageData.features_intro.subtitle2}

@@ -67,6 +67,11 @@ const StyledLink = styled(Button)`
   }
 ` as ExtendButtonBase<ButtonTypeMap<{}, 'a'>>;
 
+const StyledImageLink = styled('a')`
+  display: flex;
+  align-items: center;
+`;
+
 const StyledImage = styled(Image)`
   cursor: pointer;
 `;
@@ -84,7 +89,9 @@ const Header = ({ mode, toggleColorMode }: HeaderProps) => {
           <MenuIcon fontSize="large" />
         </StyledMenuButton>
         <Link href="/">
-          <StyledImage src="/static-cms-logo.svg" width={182} height={72} />
+          <StyledImageLink>
+            <StyledImage src="/static-cms-logo.svg" width={182} height={72} />
+          </StyledImageLink>
         </Link>
         <StyledSearchBox
           placeholder="Search the docs"

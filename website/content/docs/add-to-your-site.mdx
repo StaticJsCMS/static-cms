@@ -3,6 +3,7 @@ group: Intro
 weight: 3
 title: Add to Your Site
 ---
+
 You can adapt Static CMS to a wide variety of projects. It works with any content written in markdown, JSON, YAML, or TOML files, stored in a repo on [GitHub](https://github.com/), [GitLab](https://about.gitlab.com/), or [Bitbucket](https://bitbucket.org). You can also create your own custom backend.
 
 This tutorial guides you through the steps for adding Static CMS to a site that's built with a common [static site generator](https://www.staticgen.com/), like Jekyll, Hugo, Hexo, or Gatsby. Alternatively, you can [start from a template](../start-with-a-template) or dive right into [configuration options](../configuration-options).
@@ -38,20 +39,20 @@ admin
 
 The first file, `admin/index.html`, is the entry point for the Static CMS admin interface. This means that users navigate to `yoursite.com/admin/` to access it. On the code side, it's a basic HTML starter page that loads the Static CMS JavaScript file. The second file, `admin/config.yml`, is the heart of your Static CMS installation, and a bit more complex. The [Configuration](#configuration) section covers the details.
 
-In this example, we pull the `admin/index.html` file from a public CDN. 
+In this example, we pull the `admin/index.html` file from a public CDN.
 
 ```html
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Content Manager</title>
-</head>
-<body>
-  <!-- Include the script that builds the page and powers Static CMS -->
-  <script src="https://unpkg.com/@staticcms/core@%5E0.1.0/dist/static-cms-core.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Content Manager</title>
+  </head>
+  <body>
+    <!-- Include the script that builds the page and powers Static CMS -->
+    <script src="https://unpkg.com/@staticcms/core@%5E0.1.0/dist/static-cms-core.js"></script>
+  </body>
 </html>
 ```
 
@@ -68,16 +69,16 @@ npm install @staticcms/core --save
 Then import it (assuming your project has tooling for imports):
 
 ```js
-import CMS from '@staticcms/core'
+import CMS from '@staticcms/core';
 // Initialize the CMS object
-CMS.init()
+CMS.init();
 // Now the registry is available via the CMS object.
-CMS.registerPreviewTemplate('my-template', MyTemplate)
+CMS.registerPreviewTemplate('my-template', MyTemplate);
 ```
 
 ## Configuration
 
-Configuration is different for every site, so we'll break it down into parts.  Add all the code snippets in this section to your `admin/config.yml` file.
+Configuration is different for every site, so we'll break it down into parts. Add all the code snippets in this section to your `admin/config.yml` file.
 
 ### Backend
 
@@ -91,7 +92,7 @@ backend:
   branch: master # Branch to update (optional; defaults to master)
 ```
 
-*(For Bitbucket repositories, use the [Bitbucket backend](/docs/bitbucket-backend) instructions instead.)*
+_(For Bitbucket repositories, use the [Bitbucket backend](/docs/bitbucket-backend) instructions instead.)_
 
 The configuration above specifies your backend protocol and your publication branch. Git Gateway is an open source API that acts as a proxy between authenticated users of your site and your site repo. (We'll get to the details of that in the [Authentication section](#authentication) below.) If you leave out the `branch` declaration, it defaults to `master`.
 
@@ -101,7 +102,7 @@ Static CMS allows users to upload images directly within the editor. For this to
 
 ```yaml
 # This line should *not* be indented
-media_folder: "images/uploads" # Media files will be stored in the repo under images/uploads
+media_folder: 'images/uploads' # Media files will be stored in the repo under images/uploads
 ```
 
 If you're creating a new folder for uploaded media, you'll need to know where your static site generator expects static files. You can refer to the paths outlined above in [App File Structure](#app-file-structure), and put your media folder in the same location where you put the `admin` folder.
@@ -110,13 +111,13 @@ Note that the`media_folder` file path is relative to the project root, so the ex
 
 ```yaml
 # These lines should *not* be indented
-media_folder: "static/images/uploads" # Media files will be stored in the repo under static/images/uploads
-public_folder: "/images/uploads" # The src attribute for uploaded media will begin with /images/uploads
+media_folder: 'static/images/uploads' # Media files will be stored in the repo under static/images/uploads
+public_folder: '/images/uploads' # The src attribute for uploaded media will begin with /images/uploads
 ```
 
 The configuration above adds a new setting, `public_folder`. While `media_folder` specifies where uploaded files are saved in the repo, `public_folder` indicates where they are found in the published site. Image `src` attributes use this path, which is relative to the file where it's called. For this reason, we usually start the path at the site root, using the opening `/`.
 
-*If `public_folder` is not set, Static CMS defaults to the same value as `media_folder`, adding an opening `/` if one is not included.*
+_If `public_folder` is not set, Static CMS defaults to the same value as `media_folder`, adding an opening `/` if one is not included._
 
 ### Collections
 
@@ -129,10 +130,9 @@ Let's say your site has a blog, with the posts stored in `_posts/blog`, and file
 layout: blog
 title: "Let's Party"
 date: 1999-12-31 11:59:59 -0800
-thumbnail: "/images/prince.jpg"
+thumbnail: '/images/prince.jpg'
 rating: 5
 ---
-
 This is the post body, where I write about our last chance to party before the Y2K bug destroys us all.
 ```
 
@@ -140,57 +140,30 @@ Given this example, our `collections` settings would look like this in your Stat
 
 ```yaml
 collections:
-  - name: "blog" # Used in routes, e.g., /admin/collections/blog
-    label: "Blog" # Used in the UI
-    folder: "_posts/blog" # The path to the folder where the documents are stored
+  - name: 'blog' # Used in routes, e.g., /admin/collections/blog
+    label: 'Blog' # Used in the UI
+    folder: '_posts/blog' # The path to the folder where the documents are stored
     create: true # Allow users to create new documents in this collection
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}" # Filename template, e.g., YYYY-MM-DD-title.md
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}' # Filename template, e.g., YYYY-MM-DD-title.md
     fields: # The fields for each document, usually in front matter
-      - {label: "Layout", name: "layout", widget: "hidden", default: "blog"}
-      - {label: "Title", name: "title", widget: "string"}
-      - {label: "Publish Date", name: "date", widget: "datetime"}
-      - {label: "Featured Image", name: "thumbnail", widget: "image"}
-      - {label: "Rating (scale of 1-5)", name: "rating", widget: "number"}
-      - {label: "Body", name: "body", widget: "markdown"}
+      - { label: 'Layout', name: 'layout', widget: 'hidden', default: 'blog' }
+      - { label: 'Title', name: 'title', widget: 'string' }
+      - { label: 'Publish Date', name: 'date', widget: 'datetime' }
+      - { label: 'Featured Image', name: 'thumbnail', widget: 'image' }
+      - { label: 'Rating (scale of 1-5)', name: 'rating', widget: 'number' }
+      - { label: 'Body', name: 'body', widget: 'markdown' }
 ```
 
 Let's break that down:
 
-<table>
-  <tr>
-    <td><code>name</code></td>
-    <td>Post type identifier, used in routes. Must be unique.</td>
-  </tr>
-  <tr>
-    <td><code>label</code></td>
-    <td>What the admin UI calls the post type.</td>
-  </tr>
-  <tr>
-    <td><code>folder</code></td>
-    <td>Where files of this type are stored, relative to the repo root.</td>
-  </tr>
-  <tr>
-    <td><code>create</code></td>
-    <td>Set to <code>true</code> to allow users to create new files in this collection.
-</td>
-  </tr>
-  <tr>
-    <td><code>slug</code></td>
-    <td>Template for filenames. <code>{{year}}</code>, <code>{{month}}</code>, and <code>{{day}}</code> pulls from the post's <code>date</code> field or save date. <code>{{slug}}</code> is a url-safe version of the post's <code>title</code>. Default is simply <code>{{slug}}</code>.
-</td>
-  </tr>
-  <tr>
-    <td><code>fields</code></td>
-    <td>Fields listed here are shown as fields in the content editor, then saved as front matter at the beginning of the document (except for <code>body</code>, which follows the front matter). Each field contains the following properties:
-      <ul>
-        <li><code>label</code>: Field label in the editor UI.</li>
-        <li><code>name</code>: Field name in the document front matter.</li>
-        <li><code>widget</code>: Determines UI style and value data type (details below).</li>
-        <li><code>default</code> (optional): Sets a default value for the field.</li>
-      </ul>
-    </td>
-  </tr>
-</table>
+|Field|Description|
+| ---- | --------------------- |
+|name|Post type identifier, used in routes. Must be unique.|
+|label|What the admin UI calls the post type.|
+|folder|Where files of this type are stored, relative to the repo root.|
+|create|Set to `true` to allow users to create new files in this collection.|
+|slug|Template for filenames. `{{ year }}`, `{{ month }}`, and `{{ day }}` pulls from the post's `date` field or save date. `{{ slug }}` is a url-safe version of the post's `title`. Default is simply `{{ slug }}`.|
+|fields|Fields listed here are shown as fields in the content editor, then saved as front matter at the beginning of the document (except for `body`, which follows the front matter).|
 
 As described above, the `widget` property specifies a built-in or custom UI widget for a given field. When a content editor enters a value into a widget, that value is saved in the document front matter as the value for the `name` specified for that field. A full listing of available widgets can be found in the [Widgets doc](../widgets).
 
@@ -202,14 +175,14 @@ The entries for any collection can be filtered based on the value of a single fi
 
 ```yaml
 collections:
-  - name: "posts"
-    label: "Post"
-    folder: "_posts"
+  - name: 'posts'
+    label: 'Post'
+    folder: '_posts'
     filter:
       field: language
       value: en
     fields:
-      - {label: "Language", name: "language"}
+      - { label: 'Language', name: 'language' }
 ```
 
 ## Authentication
@@ -244,10 +217,10 @@ When a user logs in with the Netlify Identity widget, an access token directs to
 ```html
 <script>
   if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("init", user => {
+    window.netlifyIdentity.on('init', user => {
       if (!user) {
-        window.netlifyIdentity.on("login", () => {
-          document.location.href = "/admin/";
+        window.netlifyIdentity.on('login', () => {
+          document.location.href = '/admin/';
         });
       }
     });

@@ -1,10 +1,11 @@
 module.exports = {
-  parser: 'babel-eslint',
+  parser: '@typescript-eslint/parser',
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
     'prettier',
     'plugin:import/recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
   env: {
     es6: true,
@@ -17,6 +18,24 @@ module.exports = {
     CMS_ENV: false,
   },
   rules: {
+    'no-restricted-imports': 'off',
+    '@typescript-eslint/no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['@mui/*/*/*', '!@mui/material/test-utils/*'],
+            message: 'Do not import material imports as 3rd level imports',
+            allowTypeImports: true,
+          },
+          {
+            group: ['@mui/material', '!@mui/material/'],
+            message: 'Please import material imports as defaults or 2nd level imports',
+            allowTypeImports: true,
+          },
+        ],
+      },
+    ],
     'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
     'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
     'no-console': [0],
@@ -54,7 +73,7 @@ module.exports = {
       },
     ],
   },
-  plugins: ['babel', '@emotion', 'unicorn', 'react-hooks'],
+  plugins: ['babel', '@emotion', 'unicorn', 'react-hooks', '@typescript-eslint'],
   settings: {
     react: {
       version: 'detect',

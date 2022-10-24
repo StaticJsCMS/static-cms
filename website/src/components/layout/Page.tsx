@@ -1,8 +1,8 @@
 import CssBaseline from '@mui/material/CssBaseline';
-import { styled, ThemeProvider } from '@mui/material/styles';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { styled, ThemeProvider, useTheme } from '@mui/material/styles';
+import { useContext, useMemo } from 'react';
 
-import useCreateTheme from '../../styles/theme';
+import ColorModeContext from '../context/ColorModeContext';
 import BasicMeta from '../meta/BasicMeta';
 import JsonLdMeta from '../meta/JsonLdMeta';
 import OpenGraphMeta from '../meta/OpenGraphMeta';
@@ -16,10 +16,11 @@ const StyledPageContentWrapper = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: calc(100vh - 72px);
+  height: calc(100vh - 88px);
   width: 100%;
   position: relative;
-  top: 72px;
+  top: 88px;
+  overflow-y: auto;
 `;
 
 export interface PageProps {
@@ -44,18 +45,8 @@ const Page = ({
   pageDetails,
   fullWidth = false,
 }: PageProps) => {
-  const [mode, setMode] = useState<'light' | 'dark'>('dark');
-  const toggleColorMode = useCallback(() => {
-    const newMode = mode === 'light' ? 'dark' : 'light';
-    setMode(newMode);
-    localStorage.setItem('palette-mode', newMode);
-  }, [mode]);
-
-  const theme = useCreateTheme(mode);
-
-  useEffect(() => {
-    setMode(localStorage?.getItem('palette-mode') === 'light' ? 'light' : 'dark');
-  }, []);
+  const theme = useTheme();
+  const colorMode = useContext(ColorModeContext);
 
   const content = useMemo(() => {
     if (fullWidth) {
@@ -86,7 +77,7 @@ const Page = ({
           description={description}
         />
       ) : null}
-      <Header mode={theme.palette.mode} toggleColorMode={toggleColorMode} />
+      <Header mode={theme.palette.mode} toggleColorMode={colorMode.toggleColorMode} />
       <StyledPageContentWrapper>{content}</StyledPageContentWrapper>
     </ThemeProvider>
   );

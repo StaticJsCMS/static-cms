@@ -1,0 +1,98 @@
+/* PrismJS 1.29.0
+https://prismjs.com/download.html#themes=prism-tomorrow&languages=markup+css+clike+javascript+json+toml+typescript+yaml */
+.dark code[class*='language-'],
+.dark pre[class*='language-'] {
+  color: #ccc;
+  background: 0 0;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 1em;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+.dark pre[class*='language-'] {
+  padding: 1em;
+  margin: 0.5em 0;
+  overflow: auto;
+}
+.dark :not(pre) > code[class*='language-'],
+.dark pre[class*='language-'] {
+  background: #2d2d2d;
+}
+.dark :not(pre) > code[class*='language-'] {
+  padding: 0.1em;
+  border-radius: 0.3em;
+  white-space: normal;
+}
+.dark .token.block-comment,
+.dark .token.cdata,
+.dark .token.comment,
+.dark .token.doctype,
+.dark .token.prolog {
+  color: #999;
+}
+.dark .token.punctuation {
+  color: #ccc;
+}
+.dark .token.attr-name,
+.dark .token.deleted,
+.dark .token.namespace,
+.dark .token.tag {
+  color: #e2777a;
+}
+.dark .token.function-name {
+  color: #6196cc;
+}
+.dark .token.boolean,
+.dark .token.function,
+.dark .token.number {
+  color: #f08d49;
+}
+.dark .token.class-name,
+.dark .token.constant,
+.dark .token.property,
+.dark .token.symbol {
+  color: #f8c555;
+}
+.dark .token.atrule,
+.dark .token.builtin,
+.dark .token.important,
+.dark .token.keyword,
+.dark .token.selector {
+  color: #cc99cd;
+}
+.dark .token.attr-value,
+.dark .token.char,
+.dark .token.regex,
+.dark .token.string,
+.dark .token.variable {
+  color: #7ec699;
+}
+.dark .token.entity,
+.dark .token.operator,
+.dark .token.url {
+  color: #67cdcc;
+}
+.dark .token.bold,
+.dark .token.important {
+  font-weight: 700;
+}
+.dark .token.italic {
+  font-style: italic;
+}
+.dark .token.entity {
+  cursor: help;
+}
+.dark .token.inserted {
+  color: green;
+}

@@ -2,13 +2,16 @@ import darkScrollbar from '@mui/material/darkScrollbar';
 import { createTheme } from '@mui/material/styles';
 import { useMemo } from 'react';
 
-import type { PaletteMode } from '@mui/material';
+import type { PaletteMode, ThemeOptions } from '@mui/material';
+
+const commonThemeProps: ThemeOptions = {};
 
 const useCreateTheme = (mode: PaletteMode) => {
   return useMemo(
     () =>
       mode === 'light'
         ? createTheme({
+            ...commonThemeProps,
             palette: {
               mode,
               primary: {
@@ -32,6 +35,7 @@ const useCreateTheme = (mode: PaletteMode) => {
             },
           })
         : createTheme({
+            ...commonThemeProps,
             components: {
               MuiCssBaseline: {
                 styleOverrides: {

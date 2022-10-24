@@ -6,7 +6,7 @@ import path from 'path';
 import { SUMMARY_MIN_PARAGRAPH_LENGTH } from '../constants';
 import menu from './menu';
 
-import type { FileMatter, DocsPage, DocsData, DocsGroup } from '../interface';
+import type { FileMatter, DocsPage, DocsData, DocsGroup, DocsGroupLink } from '../interface';
 
 const docsDirectory = path.join(process.cwd(), 'content/docs');
 
@@ -77,17 +77,20 @@ export function fetchDocsContent(): [DocsPage[], DocsGroup[]] {
     },
   );
 
-  const pagesByGroup = allDocsData.reduce((acc, doc) => {
+  const pagesByGroup: Record<string, DocsGroupLink[]> = allDocsData.reduce((acc, doc) => {
     if (!(doc.data.group in acc)) {
       acc[doc.data.group] = [];
     }
-    acc[doc.data.group].push(doc);
+    acc[doc.data.group].push({
+      title: doc.data.title,
+      slug: doc.data.slug,
+    });
     return acc;
-  }, {} as Record<string, DocsPage[]>);
+  }, {} as Record<string, DocsGroupLink[]>);
 
   const docsGroups: DocsGroup[] = menu.docs.map(group => ({
     ...group,
-    pages: pagesByGroup[group.name] ?? [],
+    links: pagesByGroup[group.name] ?? [],
   }));
 
   docsCache = [allDocsData, docsGroups];

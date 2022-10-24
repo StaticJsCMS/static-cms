@@ -3,7 +3,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import AuthenticationPage from '../../components/UI/AuthenticationPage';
 import Icon from '../../components/UI/Icon';
-import { ImplicitAuthenticator, NetlifyAuthenticator, PkceAuthenticator } from '../../lib/auth';
+import { NetlifyAuthenticator, PkceAuthenticator } from '../../lib/auth';
 import { isNotEmpty } from '../../lib/util/string.util';
 
 import type { MouseEvent } from 'react';
@@ -19,7 +19,6 @@ const LoginButtonIcon = styled(Icon)`
 
 const clientSideAuthenticators = {
   pkce: (config: AuthenticatorConfig) => new PkceAuthenticator(config),
-  implicit: (config: AuthenticatorConfig) => new ImplicitAuthenticator(config),
 } as const;
 
 const GitLabAuthenticationPage = ({

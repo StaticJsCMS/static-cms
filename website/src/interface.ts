@@ -83,10 +83,15 @@ export interface DocsPage {
   readonly data: DocsData;
 }
 
+export interface DocsGroupLink {
+  readonly title: string;
+  readonly slug: string;
+}
+
 export interface DocsGroup {
   readonly name: string;
   readonly title: string;
-  readonly pages: DocsPage[];
+  readonly links: DocsGroupLink[];
 }
 
 export interface MenuGroup {

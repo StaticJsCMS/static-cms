@@ -1,5 +1,7 @@
+import DocsTableOfContents from './table_of_contents/DocsTableOfContents';
+
 const DocsRightNav = () => {
-  return <div />;
+  return <DocsTableOfContents />;
 };
 
 export default DocsRightNav;

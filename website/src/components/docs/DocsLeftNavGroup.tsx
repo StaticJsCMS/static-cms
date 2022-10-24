@@ -4,16 +4,17 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { useTheme } from '@mui/material/styles';
+import Link from 'next/link';
 import { useState } from 'react';
 
-import type { DocsPage } from '../../interface';
+import type { DocsGroupLink } from '../../interface';
 
 export interface DocsLeftNavGroupProps {
   name: string;
-  docPages: DocsPage[];
+  links: DocsGroupLink[];
 }
 
-const DocsLeftNavGroup = ({ name, docPages }: DocsLeftNavGroupProps) => {
+const DocsLeftNavGroup = ({ name, links }: DocsLeftNavGroupProps) => {
   const theme = useTheme();
   const [open, setOpen] = useState(true);
 
@@ -32,15 +33,16 @@ const DocsLeftNavGroup = ({ name, docPages }: DocsLeftNavGroupProps) => {
         />
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {docPages.map(docPage => (
-            <ListItemButton
-              key={docPage.data.slug}
-              href={`/docs/${docPage.data.slug}`}
-              sx={{ pl: 4 }}
-            >
-              <ListItemText secondary={docPage.data.title} />
-            </ListItemButton>
+        <List component="div" disablePadding dense>
+          {links.map(link => (
+            <Link key={link.slug} href={`/docs/${link.slug}`}>
+              <ListItemButton href={`/docs/${link.slug}`} sx={{ pl: 4 }}>
+                <ListItemText
+                  primaryTypographyProps={{ color: 'text.secondary' }}
+                  primary={link.title}
+                />
+              </ListItemButton>
+            </Link>
           ))}
         </List>
       </Collapse>

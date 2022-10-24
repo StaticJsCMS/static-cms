@@ -1,10 +1,14 @@
-import { Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 import { MDXRemote } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
+import remarkGfm from 'remark-gfm';
 
+import DocsContent from '../../components/docs/DocsContent';
 import DocsLeftNav from '../../components/docs/DocsLeftNav';
 import DocsRightNav from '../../components/docs/DocsRightNav';
+import Header2 from '../../components/docs/Header2';
+import Header3 from '../../components/docs/Header3';
 import Page from '../../components/layout/Page';
 import { fetchDocsContent } from '../../lib/docs';
 
@@ -12,22 +16,26 @@ import type { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import type { GetStaticPaths, GetStaticProps } from 'next/types';
 import type { DocsGroup, DocsPage } from '../../interface';
 
-const StyledDocsView = styled('div')`
-  display: grid;
-  grid-template-columns: auto 200px;
-  margin-left: 360px;
-`;
+const StyledDocsView = styled('div')(
+  ({ theme }) => `
+    display: grid;
+    grid-template-columns: calc(100% - 240px) 240px;
+    margin-left: 280px;
+    width: calc(100% - 280px);
 
-const StyledDocsContentWrapper = styled('div')`
+    ${theme.breakpoints.down('lg')} {
+      grid-template-columns: unset
+    }
+  `,
+);
+
+const StyledDocsContentWrapper = styled('main')`
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 40px 0;
-`;
-
-const StyledDocsContent = styled('div')`
-  width: 80%;
+  margin: 0;
+  margin-bottom: 40px;
 `;
 
 interface DocsProps {
@@ -39,15 +47,17 @@ interface DocsProps {
 }
 
 const Docs = ({ docsGroups, title, slug, description = '', source }: DocsProps) => {
+  const theme = useTheme();
+
   return (
     <Page title={title} url={`/docs/${slug}`} description={description} fullWidth>
       <DocsLeftNav docsGroups={docsGroups} />
-      <StyledDocsView>
+      <StyledDocsView className={theme.palette.mode}>
         <StyledDocsContentWrapper>
-          <StyledDocsContent>
+          <DocsContent>
             <Typography variant="h1">{title}</Typography>
-            <MDXRemote {...source} />
-          </StyledDocsContent>
+            <MDXRemote {...source} components={{ h2: Header2, h3: Header3 }} />
+          </DocsContent>
         </StyledDocsContentWrapper>
         <DocsRightNav />
       </StyledDocsView>
@@ -83,7 +93,11 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ prop
   }
 
   const { content, data } = slugToDocsContent[slug];
-  const source = await serialize(content);
+  const source = await serialize(content, {
+    mdxOptions: {
+      remarkPlugins: [remarkGfm],
+    },
+  });
 
   return {
     props: {

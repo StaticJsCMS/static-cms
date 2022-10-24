@@ -15,17 +15,18 @@ const DocsLeftNav = ({ docsGroups }: DocsLeftNavProps) => {
       aria-labelledby="docs-left-nav"
       sx={{
         width: '100%',
-        maxWidth: 360,
+        maxWidth: 280,
         bgcolor: 'background.paper',
         position: 'fixed',
         left: 0,
         top: '72px',
         bottom: 0,
-        overflowY: 'auto',
+        overflowY: 'auto'
       }}
+      dense
     >
       {docsGroups.map(group => (
-        <DocsLeftNavGroup key={group.name} name={group.title} docPages={group.pages} />
+        <DocsLeftNavGroup key={group.name} name={group.title} links={group.links} />
       ))}
     </List>
   );
