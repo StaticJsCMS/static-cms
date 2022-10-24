@@ -194,7 +194,7 @@ CMS.registerEditorComponent({
 
 ## Advanced field validation
 
-All widget fields, including those for built-in widgets, [include basic validation](../widgets/#common-widget-options) capability using the `required` and `pattern` options.
+All widget fields, including those for built-in widgets, [include basic validation](/docs/widgets/#common-widget-options) capability using the `required` and `pattern` options.
 
 With custom widgets, the widget control can also optionally implement an `isValid` method to perform custom validations, in addition to presence and pattern. The `isValid` method will be automatically called, and it can return either a boolean value, an object with an error message or a promise. Examples:
 
@@ -244,12 +244,12 @@ Widgets are inputs for the Static CMS editor interface. It's a React component t
 
 For writing custom widgets as a separate package you should follow these steps:
 
-1. Create a directory 
+1. Create a directory
 
    ```javascript
    mkdir my-custom-widget
    ```
-2. Navigate to the directory 
+2. Navigate to the directory
 
    ```javascript
    cd my-custom-widget
@@ -475,7 +475,7 @@ window.CMS_MANUAL_INIT = true
 ```javascript
 import './bootstrap.js'
 import CMS, { init } from '@staticcms/core'
-import { Control, Preview } from '../src'
+import { Control, Preview } from '/docs/src'
 
 const config = {
 backend: {
