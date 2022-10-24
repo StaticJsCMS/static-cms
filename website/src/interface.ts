@@ -82,3 +82,18 @@ export interface DocsPage {
   readonly content: string;
   readonly data: DocsData;
 }
+
+export interface DocsGroup {
+  readonly name: string;
+  readonly title: string;
+  readonly pages: DocsPage[];
+}
+
+export interface MenuGroup {
+  readonly name: string;
+  readonly title: string;
+}
+
+export interface Menu {
+  readonly docs: MenuGroup[];
+}

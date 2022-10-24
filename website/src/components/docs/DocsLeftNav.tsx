@@ -2,13 +2,13 @@ import List from '@mui/material/List';
 
 import DocsLeftNavGroup from './DocsLeftNavGroup';
 
-import type { DocsPage } from '../../interface';
+import type { DocsGroup } from '../../interface';
 
 export interface DocsLeftNavProps {
-  groupedDocPages: Record<string, DocsPage[]>;
+  docsGroups: DocsGroup[];
 }
 
-const DocsLeftNav = ({ groupedDocPages }: DocsLeftNavProps) => {
+const DocsLeftNav = ({ docsGroups }: DocsLeftNavProps) => {
   return (
     <List
       component="nav"
@@ -24,8 +24,8 @@ const DocsLeftNav = ({ groupedDocPages }: DocsLeftNavProps) => {
         overflowY: 'auto',
       }}
     >
-      {Object.keys(groupedDocPages).map(group => (
-        <DocsLeftNavGroup key={group} name={group} docPages={groupedDocPages[group]} />
+      {docsGroups.map(group => (
+        <DocsLeftNavGroup key={group.name} name={group.title} docPages={group.pages} />
       ))}
     </List>
   );

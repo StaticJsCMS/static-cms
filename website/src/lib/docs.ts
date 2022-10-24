@@ -4,13 +4,14 @@ import yaml from 'js-yaml';
 import path from 'path';
 
 import { SUMMARY_MIN_PARAGRAPH_LENGTH } from '../constants';
+import menu from './menu';
 
-import type { FileMatter, DocsPage, DocsData } from '../interface';
+import type { FileMatter, DocsPage, DocsData, DocsGroup } from '../interface';
 
 const docsDirectory = path.join(process.cwd(), 'content/docs');
 
 let docsMatterCache: FileMatter[];
-let docsCache: [DocsPage[], Record<string, DocsPage[]>];
+let docsCache: [DocsPage[], DocsGroup[]];
 
 export function fetchDocsMatter(): FileMatter[] {
   if (docsMatterCache && process.env.NODE_ENV !== 'development') {
@@ -19,7 +20,7 @@ export function fetchDocsMatter(): FileMatter[] {
   // Get file names under /docs
   const fileNames = fs.readdirSync(docsDirectory);
   const allDocsMatter = fileNames
-    .filter(it => it.endsWith('.md'))
+    .filter(it => it.endsWith('.mdx'))
     .map(fileName => {
       // Read file as string
       const fullPath = path.join(docsDirectory, fileName);
@@ -42,14 +43,14 @@ export function fetchDocsMatter(): FileMatter[] {
   return docsMatterCache;
 }
 
-export function fetchDocsContent(): [DocsPage[], Record<string, DocsPage[]>] {
+export function fetchDocsContent(): [DocsPage[], DocsGroup[]] {
   if (docsCache && process.env.NODE_ENV !== 'development') {
     return docsCache;
   }
 
   const allDocsData: DocsPage[] = fetchDocsMatter().map(
     ({ fileName, fullPath, matterResult: { data, content } }) => {
-      const slug = fileName.replace(/\.md$/, '');
+      const slug = fileName.replace(/\.mdx$/, '');
 
       const summaryRegex = /^<p>([\w\W]+?)<\/p>/i;
       let summaryMatch = summaryRegex.exec(content);
@@ -76,16 +77,20 @@ export function fetchDocsContent(): [DocsPage[], Record<string, DocsPage[]>] {
     },
   );
 
-  docsCache = [
-    allDocsData,
-    allDocsData.reduce((acc, doc) => {
-      if (!(doc.data.group in acc)) {
-        acc[doc.data.group] = [];
-      }
-      acc[doc.data.group].push(doc);
-      return acc;
-    }, {} as Record<string, DocsPage[]>),
-  ];
+  const pagesByGroup = allDocsData.reduce((acc, doc) => {
+    if (!(doc.data.group in acc)) {
+      acc[doc.data.group] = [];
+    }
+    acc[doc.data.group].push(doc);
+    return acc;
+  }, {} as Record<string, DocsPage[]>);
+
+  const docsGroups: DocsGroup[] = menu.docs.map(group => ({
+    ...group,
+    pages: pagesByGroup[group.name] ?? [],
+  }));
+
+  docsCache = [allDocsData, docsGroups];
 
   return docsCache;
 }
