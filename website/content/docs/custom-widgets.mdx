@@ -1,7 +1,7 @@
 ---
-group: Fields
-weight: 20
+group: Widgets
 title: Creating Custom Widgets
+weight: 50
 ---
 The Static CMS exposes a `window.CMS` a global object that you can use to register custom widgets, previews, and editor plugins. The same object is also the default export if you import Static CMS as an npm module. The available widget extension methods are:
 
@@ -54,7 +54,7 @@ var CategoriesControl = createClass({
     var value = this.props.value;
     return h('input', {
       id: this.props.forID,
-      className: this.props.classNameWrapper,
+      classtitle: this.props.classNameWrapper,
       type: 'text',
       value: value ? value.join(separator) : '',
       onChange: this.handleChange,
@@ -86,14 +86,14 @@ CMS.registerWidget('categories', CategoriesControl, CategoriesPreview, schema);
 
 ```yml
 collections:
-  - name: posts
+  - title: posts
     label: Posts
     folder: content/posts
     fields:
-      - name: title
+      - title: title
         label: Title
         widget: string
-      - name: categories
+      - title: categories
         label: Categories
         widget: categories
         separator: __
@@ -126,12 +126,12 @@ CMS.registerEditorComponent({
   // Fields the user need to fill out when adding an instance of the component
   fields: [
     {
-      name: 'summary',
+      title: 'summary',
       label: 'Summary',
       widget: 'string'
     },
     {
-      name: 'details',
+      title: 'details',
       label: 'Details',
       widget: 'markdown'
     }
@@ -479,19 +479,19 @@ import { Control, Preview } from '../src'
 
 const config = {
 backend: {
- name: 'test-repo',
+ title: 'test-repo',
  login: false,
 },
 media_folder: 'assets',
 collections: [{
- name: 'test',
+ title: 'test',
  label: 'Test',
  files: [{
    file: 'test.yml',
-   name: 'test',
+   title: 'test',
    label: 'Test',
    fields: [
-     { name: 'test_widget', label: 'Test Widget', widget: 'test'},
+     { title: 'test_widget', label: 'Test Widget', widget: 'test'},
    ],
  }],
 }],

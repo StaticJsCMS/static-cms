@@ -739,8 +739,6 @@ export interface Backend {
   proxy_url?: string;
   large_media_url?: string;
   login?: boolean;
-  use_graphql?: boolean;
-  graphql_api_root?: string;
   use_large_media_transforms_in_media_library?: boolean;
   identity_url?: string;
   gateway_url?: string;

@@ -1,6 +1,7 @@
 ---
-title: list
-label: List
+group: Widgets
+title: List
+weight: 17
 ---
 The list widget allows you to create a repeatable item in the UI which saves as a list of widget values. map a user-provided string with a comma delimiter into a list. You can choose any widget as a child of a list widget—even other lists.
 
@@ -27,7 +28,7 @@ The list widget allows you to create a repeatable item in the UI which saves as 
 
 ```yaml
 - label: "Tags"
-  name: "tags"
+  title: "tags"
   widget: "list"
   default: ["news"]
 ```
@@ -36,7 +37,7 @@ The list widget allows you to create a repeatable item in the UI which saves as 
 
 ```yaml
 - label: "Tags"
-  name: "tags"
+  title: "tags"
   widget: "list"
   allow_add: false
   default: ["news"]
@@ -46,38 +47,38 @@ The list widget allows you to create a repeatable item in the UI which saves as 
 
 ```yaml
 - label: "Gallery"
-  name: "galleryImages"
+  title: "galleryImages"
   widget: "list"
   summary: '{{fields.image}}'
-  field: {label: Image, name: image, widget: image}
+  field: {label: Image, title: image, widget: image}
 ```
 
 * **Example** (with `fields`):
 
 ```yaml
 - label: "Testimonials"
-  name: "testimonials"
+  title: "testimonials"
   widget: "list"
   summary: '{{fields.quote}} - {{fields.author.name}}'
   fields:
-    - {label: Quote, name: quote, widget: string, default: "Everything is awesome!"}
+    - {label: Quote, title: quote, widget: string, default: "Everything is awesome!"}
     - label: Author
-      name: author
+      title: author
       widget: object
       fields:
-        - {label: Name, name: name, widget: string, default: "Emmet"}
-        - {label: Avatar, name: avatar, widget: image, default: "/img/emmet.jpg"}
+        - {label: Name, title: name, widget: string, default: "Emmet"}
+        - {label: Avatar, title: avatar, widget: image, default: "/img/emmet.jpg"}
 ```
 
 * **Example** (with `default`):
 
 ```yaml
 - label: "Gallery"
-  name: "galleryImages"
+  title: "galleryImages"
   widget: "list"
   fields:
-    - { label: "Source", name: "src", widget: "string" }
-    - { label: "Alt Text", name: "alt", widget: "string" }
+    - { label: "Source", title: "src", widget: "string" }
+    - { label: "Alt Text", title: "alt", widget: "string" }
   default:
     - { src: "/img/tennis.jpg", alt: "Tennis" }
     - { src: "/img/footbar.jpg", alt: "Football" }
@@ -87,31 +88,31 @@ The list widget allows you to create a repeatable item in the UI which saves as 
 
 ```yaml
 - label: "Testimonials"
-  name: "testimonials"
+  title: "testimonials"
   collapsed: false
   widget: "list"
   fields:
-    - {label: Quote, name: quote, widget: string, default: "Everything is awesome!"}
-    - {label: Author, name: author, widget: string }
+    - {label: Quote, title: quote, widget: string, default: "Everything is awesome!"}
+    - {label: Author, title: author, widget: string }
 ```
 
 * **Example** (`minimize_collapsed` marked `true`):
 
 ```yaml
 - label: "Testimonials"
-  name: "testimonials"
+  title: "testimonials"
   minimize_collapsed: true
   widget: "list"
   fields:
-    - {label: Quote, name: quote, widget: string, default: "Everything is awesome!"}
-    - {label: Author, name: author, widget: string }
+    - {label: Quote, title: quote, widget: string, default: "Everything is awesome!"}
+    - {label: Author, title: author, widget: string }
 ```
 
 * **Example** (with `max` & `min`):
 
 ```yaml
 - label: "Tags"
-  name: "tags"
+  title: "tags"
   widget: "list"
   max: 3
   min: 1
@@ -122,7 +123,7 @@ The list widget allows you to create a repeatable item in the UI which saves as 
 
 ```yaml
 - label: "Tags"
-  name: "tags"
+  title: "tags"
   widget: "list"
   add_to_top: true
 ```

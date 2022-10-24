@@ -1,6 +1,6 @@
 ---
-title: Cloudinary
 group: Media
+title: Cloudinary
 weight: 10
 ---
 Cloudinary is a digital asset management platform with a broad feature set, including support for responsive image generation and url based image transformation. They also provide a powerful media library UI for managing assets, and tools for organizing your assets into a hierarchy.
@@ -11,7 +11,7 @@ The Cloudinary media library integration for Static CMS uses Cloudinary's own me
 
 You can [sign up for Cloudinary](https://cloudinary.com/users/register/free) for free. Once you're logged in, you'll need to retrieve your Cloud name and API key from the upper left corner of the Cloudinary console.
 
-![Cloudinary console screenshot](/img/cloudinary-console-details.png)
+![Cloudinary console screenshot](/img/cloudinary-console-details.webp)
 
 ## Connecting Cloudinary to Static CMS
 
@@ -19,9 +19,9 @@ To use the Cloudinary media library within Static CMS, you'll need to update you
 
 ```yaml
 media_library:
-  name: cloudinary
+  title: cloudinary
   config:
-    cloud_name: your_cloud_name
+    cloud_title: your_cloud_name
     api_key: your_api_key
 ```
 
@@ -73,7 +73,7 @@ instance of the Cloudinary widget.
 ```yaml
 # global
 media_library:
-  name: cloudinary
+  title: cloudinary
   output_filename_only: false
   config:
     default_transformations:
@@ -93,10 +93,10 @@ For example:
 # field
 fields: # The fields each document in this collection have
 - label: 'Cover Image'
-  name: 'image'
+  title: 'image'
   widget: 'image'
   required: false
-  tagname: ''
+  tagtitle: ''
   media_library:
     config:
       default_transformations:
@@ -116,11 +116,11 @@ If you prefer to provide direction so that images are transformed in a specific 
 ```yaml
 # global
 media_library:
-  name: cloudinary
+  title: cloudinary
   output_filename_only: true
 # field
 media_library:
-  name: cloudinary
+  title: cloudinary
   output_filename_only: true
 ```
 

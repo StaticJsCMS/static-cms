@@ -1,6 +1,7 @@
 ---
-title: select
-label: Select
+group: Widgets
+title: Select
+weight: 23
 ---
 The select widget allows you to pick a string value from a dropdown menu.
 
@@ -25,7 +26,7 @@ The select widget allows you to pick a string value from a dropdown menu.
 
 ```yaml
 - label: "Align Content"
-  name: "align"
+  title: "align"
   widget: "select"
   options: ["left", "center", "right"]
 ```
@@ -40,7 +41,7 @@ align: "center"
 
 ```yaml
 - label: "City"
-  name: "airport-code"
+  title: "airport-code"
   widget: "select"
   options:
     - { label: "Chicago", value: "ORD" }
@@ -58,7 +59,7 @@ airport-code: "ORD"
 
 ```yaml
 - label: "Tags"
-  name: "tags"
+  title: "tags"
   widget: "select"
   multiple: true
   options: ["Design", "UX", "Dev"]
@@ -69,7 +70,7 @@ airport-code: "ORD"
 
 ```yaml
 - label: "Tags"
-  name: "tags"
+  title: "tags"
   widget: "select"
   multiple: true
   min: 1

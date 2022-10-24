@@ -60,10 +60,12 @@ const Page = ({
   }, [children, fullWidth]);
 
   useEffect(() => {
-    scrollableArea.current?.scrollTo({
-      top: 0,
-      behavior: 'auto',
-    });
+    if (!asPath.includes('#')) {
+      scrollableArea.current?.scrollTo({
+        top: 0,
+        behavior: 'auto',
+      });
+    }
   }, [asPath]);
 
   return (

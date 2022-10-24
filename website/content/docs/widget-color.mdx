@@ -1,6 +1,7 @@
 ---
-label: 'Color'
-title: color
+group: Widgets
+title: Color
+weight: 12
 ---
 
 The color widget translates a color picker to a color string.
@@ -14,9 +15,9 @@ The color widget translates a color picker to a color string.
   - `enable_alpha`: accepts a boolean, defaults to `false`. Enables Alpha editing
 - **Example:**
   ```yaml
-  - { label: 'Color', name: 'color', widget: 'color' }
+  - { label: 'Color', title: 'color', widget: 'color' }
   ```
 - **Example:**
   ```yaml
-  - { label: 'Color', name: 'color', widget: 'color', enable_alpha: true, allow_input: true }
+  - { label: 'Color', title: 'color', widget: 'color', enable_alpha: true, allow_input: true }
   ```

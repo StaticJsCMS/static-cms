@@ -1,6 +1,7 @@
 ---
-label: "Hidden"
-title: hidden
+group: Widgets
+title: Hidden
+weight: 15
 ---
 
 Hidden widgets do not display in the UI. In folder collections that allow users to create new items, you will often want to set a default for hidden fields, so they will be set without requiring an input.
@@ -12,5 +13,5 @@ Hidden widgets do not display in the UI. In folder collections that allow users 
   - `default`: accepts any valid data type; recommended for collections that allow adding new items
 - **Example:**
     ```yaml
-    - {label: "Layout", name: "layout", widget: "hidden", default: "blog"}
+    - {label: "Layout", title: "layout", widget: "hidden", default: "blog"}
     ```

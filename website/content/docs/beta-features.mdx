@@ -1,7 +1,7 @@
 ---
 group: Configuration
-weight: 200
 title: Beta Features!
+weight: 200
 ---
 We run new functionality in an open beta format from time to time. That means that this functionality is totally available for use, and we *think* it might be ready for primetime, but it could break or change without notice.
 
@@ -16,7 +16,7 @@ You can connect Static CMS to a local Git repository, instead of working with a 
 
 ```yaml
 backend:
-  name: git-gateway
+  title: git-gateway
 
 # when using the default proxy server port
 local_backend: true
@@ -42,7 +42,7 @@ PORT=8082
 
 ```yaml
 backend:
-  name: git-gateway
+  title: git-gateway
 
 local_backend:
   # when using a custom proxy server port
@@ -78,7 +78,7 @@ i18n:
 
 ```yaml
 collections:
-  - name: i18n_content
+  - title: i18n_content
     # same as the top level, but all fields are optional and defaults to the top level
     # can also be a boolean to accept the top level defaults
     i18n: true
@@ -88,20 +88,20 @@ When using a file collection, you must also enable i18n for each individual file
 
 ```yaml
 collections:
-  - name: pages
+  - title: pages
     label: Pages
     # Configure i18n for this collection.
     i18n:
       structure: single_file
       locales: [en, de, fr]
     files:
-      - name: about
+      - title: about
         label: About Page
         file: site/content/about.yml
         # Enable i18n for this file.
         i18n: true
         fields:
-          - { label: Title, name: title, widget: string, i18n: true }
+          - { label: Title, title: title, widget: string, i18n: true }
 ```
 
 ### Field level configuration
@@ -109,17 +109,17 @@ collections:
 ```yaml
 fields:
   - label: Title
-    name: title
+    title: title
     widget: string
     # same as 'i18n: translate'. Allows translation of the title field
     i18n: true
   - label: Date
-    name: date
+    title: date
     widget: datetime
     # The date field will be duplicated from the default locale.
     i18n: duplicate
   - label: Body
-    name: body
+    title: body
     # The markdown field will be omitted from the translation.
     widget: markdown
 ```
@@ -132,22 +132,22 @@ i18n:
   locales: [en, de, fr]
 
 collections:
-  - name: posts
+  - title: posts
     label: Posts
     folder: content/posts
     create: true
     i18n: true
     fields:
       - label: Title
-        name: title
+        title: title
         widget: string
         i18n: true
       - label: Date
-        name: date
+        title: date
         widget: datetime
         i18n: duplicate
       - label: Body
-        name: body
+        title: body
         widget: markdown
 ```
 
@@ -159,60 +159,20 @@ collections:
 
 ```yaml
 - label: 'Object'
-  name: 'object'
+  title: 'object'
   widget: 'object'
   i18n: true
   fields:
-    - { label: 'String', name: 'string', widget: 'string', i18n: true }
-    - { label: 'Date', name: 'date', widget: 'datetime', i18n: duplicate }
-    - { label: 'Boolean', name: 'boolean', widget: 'boolean', i18n: duplicate }
+    - { label: 'String', title: 'string', widget: 'string', i18n: true }
+    - { label: 'Date', title: 'date', widget: 'datetime', i18n: duplicate }
+    - { label: 'Boolean', title: 'boolean', widget: 'boolean', i18n: duplicate }
     - {
         label: 'Object',
-        name: 'object',
+        title: 'object',
         widget: 'object',
         i18n: true,
-        field: { label: 'String', name: 'string', widget: 'string', i18n: duplicate },
+        field: { label: 'String', title: 'string', widget: 'string', i18n: duplicate },
       }
-```
-
-## GitHub GraphQL API
-
-Experimental support for GitHub's [GraphQL API](https://developer.github.com/v4/) is now available for the GitHub backend.
-
-**Note: not compatible with Git Gateway.**
-
-GraphQL allows to retrieve data using less individual API requests compared to a REST API. GitHub's GraphQL API still does not support all mutations necessary to completely replace their REST API, so this feature only calls the new GraphQL API where possible.
-
-You can use the GraphQL API for the GitHub backend by setting `backend.use_graphql` to `true` in your CMS config:
-
-```yml
-backend:
-  name: github
-  repo: owner/repo # replace this with your repo info
-  use_graphql: true
-```
-
-Learn more about the benefits of GraphQL in the [GraphQL docs](https://graphql.org).
-
-## GitLab GraphQL API
-
-Experimental support for GitLab's [GraphQL API](https://docs.gitlab.com/ee/api/graphql/) is now available for the GitLab backend.
-
-**Note: not compatible with Git Gateway.**
-
-GraphQL allows to retrieve data using less individual API requests compared to a REST API.
-The current implementation uses the GraphQL API in specific cases, where using the REST API can be slow and lead to exceeding GitLab's rate limits. As we receive feedback and extend the feature, we'll migrate more functionality to the GraphQL API.
-
-You can enable the GraphQL API for the GitLab backend by setting `backend.use_graphql` to `true` in your CMS config:
-
-```yml
-backend:
-  name: gitlab
-  repo: owner/repo # replace this with your repo info
-  use_graphql: true
-
-  # optional, defaults to 'https://gitlab.com/api/graphql'. Can be used to configure a self hosted GitLab instance.
-  graphql_api_root: https://my-self-hosted-gitlab.com/api/graphql
 ```
 
 ## Folder Collections Path
@@ -250,7 +210,7 @@ For example, the following configuration will result in media files being saved 
 media_folder: static/media
 public_folder: /media
 collections:
-  - name: posts
+  - title: posts
     label: Posts
     label_singular: 'Post'
     folder: content/posts
@@ -259,10 +219,10 @@ collections:
     public_folder: ''
     fields:
       - label: Title
-        name: title
+        title: title
         widget: string
       - label: 'Cover Image'
-        name: 'image'
+        title: 'image'
         widget: 'image'
 ```
 
@@ -315,27 +275,27 @@ either a "carousel" or a "spotlight". Each type has a unique name and set of fie
 
 ```yaml
 - label: 'Home Section'
-  name: 'sections'
+  title: 'sections'
   widget: 'list'
   types:
     - label: 'Carousel'
-      name: 'carousel'
+      title: 'carousel'
       widget: object
       summary: '{{fields.header}}'
       fields:
-        - { label: Header, name: header, widget: string, default: 'Image Gallery' }
-        - { label: Template, name: template, widget: string, default: 'carousel.html' }
+        - { label: Header, title: header, widget: string, default: 'Image Gallery' }
+        - { label: Template, title: template, widget: string, default: 'carousel.html' }
         - label: Images
-          name: images
+          title: images
           widget: list
-          field: { label: Image, name: image, widget: image }
+          field: { label: Image, title: image, widget: image }
     - label: 'Spotlight'
-      name: 'spotlight'
+      title: 'spotlight'
       widget: object
       fields:
-        - { label: Header, name: header, widget: string, default: 'Spotlight' }
-        - { label: Template, name: template, widget: string, default: 'spotlight.html' }
-        - { label: Text, name: text, widget: text, default: 'Hello World' }
+        - { label: Header, title: header, widget: string, default: 'Spotlight' }
+        - { label: Template, title: template, widget: string, default: 'spotlight.html' }
+        - { label: Text, title: text, widget: text, default: 'Hello World' }
 ```
 
 ### Example Output
@@ -407,7 +367,7 @@ init()
 init({
   config: {
     backend: {
-      name: 'git-gateway',
+      title: 'git-gateway',
     },
   },
 })
@@ -423,17 +383,17 @@ init({
 init({
   config: {
     backend: {
-      name: 'git-gateway',
+      title: 'git-gateway',
     },
     load_config_file: false,
     media_folder: "static/images/uploads",
     public_folder: "/images/uploads",
     collections: [
-      { label: "Blog", name: "blog", folder: "_posts/blog", create: true, fields: [
-        { label: "Title", name: "title", widget: "string" },
-        { label: "Publish Date", name: "date", widget: "datetime" },
-        { label: "Featured Image", name: "thumbnail", widget: "image" },
-        { label: "Body", name: "body", widget: "markdown" },
+      { label: "Blog", title: "blog", folder: "_posts/blog", create: true, fields: [
+        { label: "Title", title: "title", widget: "string" },
+        { label: "Publish Date", title: "date", widget: "datetime" },
+        { label: "Featured Image", title: "thumbnail", widget: "image" },
+        { label: "Body", title: "body", widget: "markdown" },
       ]},
     ],
   },
@@ -487,7 +447,7 @@ Example config:
 
 ```yaml
 - label: 'Featured Image'
-  name: 'thumbnail'
+  title: 'thumbnail'
   widget: 'image'
   default: '/uploads/chocolate-dogecoin.jpg'
   media_library:
@@ -503,14 +463,14 @@ Example config:
 
 ```yaml
 collections:
-  - name: 'posts'
+  - title: 'posts'
     label: 'Posts'
     folder: '_posts'
     summary: "{{title | upper}} - {{date | date('YYYY-MM-DD')}} – {{body | truncate(20, '***')}}"
     fields:
-      - { label: 'Title', name: 'title', widget: 'string' }
-      - { label: 'Publish Date', name: 'date', widget: 'datetime' }
-      - { label: 'Body', name: 'body', widget: 'markdown' }
+      - { label: 'Title', title: 'title', widget: 'string' }
+      - { label: 'Publish Date', title: 'date', widget: 'datetime' }
+      - { label: 'Body', title: 'body', widget: 'markdown' }
 ```
 
 The above config will transform the title field to uppercase and format the date field using `YYYY-MM-DD` format.
@@ -524,7 +484,7 @@ Example usage:
 
 ```javascript
 CMS.registerEventListener({
-  name: 'prePublish',
+  title: 'prePublish',
   handler: ({ author, entry }) => console.info(JSON.stringify({ author, data: entry.data })),
 });
 ```
@@ -533,7 +493,7 @@ Supported events are `prePublish`, `postPublish`, `preSave` and `postSave`. The 
 
 ```javascript
 CMS.registerEventListener({
-  name: 'preSave',
+  title: 'preSave',
   handler: ({ entry }) => {
     return entry.data.set('title', 'new title');
   },
@@ -548,23 +508,23 @@ For example given the configuration:
 
 ```yaml
 collections:
-  - name: posts
+  - title: posts
     label: Posts
     folder: content/posts
     create: true
     fields:
       - label: Title
-        name: title
+        title: title
         widget: string
       - label: Object
-        name: object
+        title: object
         widget: object
         fields:
           - label: Title
-            name: title
+            title: title
             widget: string
       - label: body
-        name: body
+        title: body
         widget: markdown
 ```
 
@@ -583,7 +543,7 @@ Example configuration:
 
 ```yaml
 collections:
-  - name: pages
+  - title: pages
     label: Pages
     label_singular: 'Page'
     folder: content/pages
@@ -594,10 +554,10 @@ collections:
       summary: '{{title}}' # optional summary for a tree node, defaults to the inferred title field
     fields:
       - label: Title
-        name: title
+        title: title
         widget: string
       - label: Body
-        name: body
+        title: body
         widget: markdown
 ```
 
@@ -616,17 +576,3 @@ content
         │   └── index.md
         └── index.md
 ```
-
-## Remark plugins
-
-You can register plugins to customize [`remark`](https://github.com/remarkjs/remark), the library used by the richtext editor for serializing and deserializing markdown.
-
-```js
-// register a plugin
-CMS.registerRemarkPlugin(plugin);
-
-// provide global settings to all plugins, e.g. for customizing `remark-stringify`
-CMS.registerRemarkPlugin({ settings: { bullet: '-' } });
-```
-
-Note that the `markdown` currently uses `remark@10`, so you should check a plugin's compatibility first.

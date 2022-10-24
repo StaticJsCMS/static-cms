@@ -1,7 +1,7 @@
 ---
 group: Guides
-weight: 40
 title: NextJS
+weight: 40
 ---
 This guide will help you get started using Static CMS with NextJS.
 
@@ -61,11 +61,11 @@ title: Awesome kitties
 date: 2019-03-17T19:31:20.591Z
 cats:
   - description: 'Maru is a Scottish Fold from Japan, and he loves boxes.'
-    name: Maru (まる)
+    title: Maru (まる)
   - description: Lil Bub is an American celebrity cat known for her unique appearance.
-    name: Lil Bub
+    title: Lil Bub
   - description: 'Grumpy cat is an American celebrity cat known for her grumpy appearance.'
-    name: Grumpy cat (Tardar Sauce)
+    title: Grumpy cat (Tardar Sauce)
 ---
 Welcome to my awesome page about cats of the internet.
 
@@ -166,27 +166,27 @@ Paste the following configuration into your `public/admin/config.yml` file:
 
 ```yaml
 backend:
-  name: git-gateway
+  title: git-gateway
   branch: main # Branch to update (optional; defaults to master)
 media_folder: public/img
 public_folder: img
 collections:
-  - name: "pages"
+  - title: "pages"
     label: "Pages"
     files:
     - label: "Home"
-      name: "home"
+      title: "home"
       file: "content/home.md"
       fields:
-        - { label: "Title", name: "title", widget: "string"}
-        - { label: "Publish Date", name: "date", widget: "datetime" }
-        - { label: "Body", name: "body", widget: "markdown"}
+        - { label: "Title", title: "title", widget: "string"}
+        - { label: "Publish Date", title: "date", widget: "datetime" }
+        - { label: "Body", title: "body", widget: "markdown"}
         - label: 'Cats'
-          name: "cats"
+          title: "cats"
           widget: list
           fields:
-            - { label: "Name", name: "name", widget: "string"}
-            - { label: "Description", name: "description", widget: "text"}
+            - { label: "Name", title: "name", widget: "string"}
+            - { label: "Description", title: "description", widget: "text"}
 ```
 
 Awesome! Static CMS should now be available at `localhost:3000/admin/index.html`. Unfortunately we can't edit our content just yet. First we need to move our code into a git repository, and create a new Netlify site.

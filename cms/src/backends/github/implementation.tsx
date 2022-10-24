@@ -19,7 +19,6 @@ import {
 } from '../../lib/util';
 import API, { API_NAME } from './API';
 import AuthenticationPage from './AuthenticationPage';
-import GraphQLAPI from './GraphQLAPI';
 
 import type { Octokit } from '@octokit/rest';
 import type { Semaphore } from 'semaphore';
@@ -66,7 +65,6 @@ export default class GitHub implements BackendClass {
   apiRoot: string;
   mediaFolder?: string;
   token: string | null;
-  useGraphql: boolean;
   _currentUserPromise?: Promise<GitHubUser>;
   _userIsOriginMaintainerPromises?: {
     [key: string]: Promise<boolean>;
@@ -92,7 +90,6 @@ export default class GitHub implements BackendClass {
     this.branch = config.backend.branch?.trim() || 'main';
     this.apiRoot = config.backend.api_root || 'https://api.github.com';
     this.token = '';
-    this.useGraphql = config.backend.use_graphql || false;
     this.mediaFolder = config.media_folder;
     this.lock = asyncLock();
   }
@@ -179,7 +176,7 @@ export default class GitHub implements BackendClass {
 
   async authenticate(state: Credentials) {
     this.token = state.token as string;
-    const apiCtor = this.useGraphql ? GraphQLAPI : API;
+    const apiCtor = API;
     this.api = new apiCtor({
       token: this.token,
       branch: this.branch,

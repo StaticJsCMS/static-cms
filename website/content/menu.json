@@ -14,16 +14,16 @@
         "title": "Configuring your Site"
       },
       {
-        "name": "Media",
-        "title": "Media"
-      },
-      {
         "name": "Collections",
         "title": "Collections"
       },
       {
-        "name": "Fields",
-        "title": "Fields"
+        "name": "Widgets",
+        "title": "Widgets"
+      },
+      {
+        "name": "Media",
+        "title": "Media"
       },
       {
         "name": "Guides",

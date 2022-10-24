@@ -6,6 +6,8 @@ const DocsContent = styled('div')(
     font-weight: 200;
     width: 100%;
     padding: 0 40px 0 56px;
+    display: flex;
+    flex-direction: column;
 
     & time {
       color: #9b9b9b;
@@ -192,17 +194,22 @@ const DocsContent = styled('div')(
     }
 
     & blockquote {
-      margin: 0 1rem;
+      margin: 8px 1rem;
+    }
+
+    & blockquote > p {
+      margin: 0;
     }
 
     & blockquote::before {
+      border-left: 4px solid ${theme.palette.text.secondary};
       position: absolute;
-      content: '\\201C';
+      content: '';
       font-size: 6em;
       font-family: roboto, serif;
       line-height: 1.5rem;
-      margin-top: 0.1em;
       margin-left: -0.2em;
+      height: 1.5rem;
       z-index: -1;
       color: ${theme.palette.text.secondary};
     }
@@ -304,6 +311,11 @@ const DocsContent = styled('div')(
     & b,
     & strong {
       font-weight: 700;
+    }
+
+    & hr {
+      display: flex;
+      width: 100%;
     }
   `,
 );

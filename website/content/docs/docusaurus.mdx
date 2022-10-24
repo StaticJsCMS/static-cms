@@ -1,7 +1,7 @@
 ---
 group: Guides
-weight: 80
 title: Docusaurus
+weight: 80
 ---
 This guide instructs you on how to integrate Static CMS with Docusaurus.
 
@@ -115,7 +115,7 @@ tags:
   - foo
   - bar
 authors:
-  - name: Garrison McMullen
+  - title: Garrison McMullen
     title: Instruction Writer
     url: https://github.com/garrison0
     image_url: https://avatars.githubusercontent.com/u/4089393?v=4
@@ -175,7 +175,7 @@ touch index.html
 
 ```yaml
 backend:
-  name: github
+  title: github
   branch: main 
   repo: <your-github>/my-website
 
@@ -184,7 +184,7 @@ media_folder: "static/img" # Media files will be stored in the repo under static
 public_folder: "/img/" # The src attribute for uploaded media will begin with /images/uploads
 
 collections:
-- name: blog
+- title: blog
   label: "blog"
   folder: blog
   identifier_field: title
@@ -193,20 +193,20 @@ collections:
   create: true
   slug: "{{year}}-{{month}}-{{day}}-{{slug}}" # Filename template, e.g., YYYY-MM-DD-title.md
   fields:
-    - { name: title, label: Title, widget: string }
-    - { name: body, label: Body, widget: markdown }
-    - { name: slug, label: Slug, widget: string }
+    - { title: title, label: Title, widget: string }
+    - { title: body, label: Body, widget: markdown }
+    - { title: slug, label: Slug, widget: string }
     - label: "Tags"
-      name: "tags"
+      title: "tags"
       widget: "list"
     - label: "Authors"
-      name: "authors" 
+      title: "authors" 
       widget: "list"
       fields:
-        - { name: name, label: Name, widget: string }
-        - { name: title, label: Title, widget: string } 
-        - { name: url, label: URL, widget: string } 
-        - { name: imageUrl, label: ImageURL, widget: string } 
+        - { title: name, label: Name, widget: string }
+        - { title: title, label: Title, widget: string } 
+        - { title: url, label: URL, widget: string } 
+        - { title: imageUrl, label: ImageURL, widget: string } 
 ```
 
 `config.yml` specifies what kind of content your blog posts have. The content specification enables Static CMS to edit existing posts and create new ones with the same format. To learn more, read about Static CMS' [](https://staticjscms.github.io/static-cms/docs/configuration-options/)[Configuration options](https://staticjscms.github.io/static-cms/docs/configuration-options/).

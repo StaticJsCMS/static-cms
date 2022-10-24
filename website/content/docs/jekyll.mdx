@@ -1,7 +1,7 @@
 ---
 group: Guides
-weight: 30
 title: Jekyll
+weight: 30
 ---
 ## Introduction
 
@@ -49,15 +49,15 @@ Create a file `admin/config.yml` in the root of your repo - it should look like 
 # config.yml
 
 backend:
-  name: git-gateway
+  title: git-gateway
   branch: main # Branch to update (optional; defaults to master)
 media_folder: 'assets/uploads'
 collections:
-  - name: 'blog'
+  - title: 'blog'
     label: 'Blog'
     folder: '_posts/'
     fields:
-      - { name: Title }
+      - { title: Title }
 ```
 
 ### Enable authentication for CMS users
@@ -74,7 +74,7 @@ We'll start by updating the `blog` collection. Blogging is baked into Jekyll, an
 
 ```yaml
 collections:
-  - name: 'blog'
+  - title: 'blog'
     label: 'Blog'
     folder: '_posts/'
     create: true
@@ -82,10 +82,10 @@ collections:
     editor:
       preview: false
     fields:
-      - { label: 'Layout', name: 'layout', widget: 'hidden', default: 'post' }
-      - { label: 'Title', name: 'title', widget: 'string' }
-      - { label: 'Publish Date', name: 'date', widget: 'datetime' }
-      - { label: 'Body', name: 'body', widget: 'markdown' }
+      - { label: 'Layout', title: 'layout', widget: 'hidden', default: 'post' }
+      - { label: 'Title', title: 'title', widget: 'string' }
+      - { label: 'Publish Date', title: 'date', widget: 'datetime' }
+      - { label: 'Body', title: 'body', widget: 'markdown' }
 ```
 
 A few things to note.
@@ -104,16 +104,16 @@ A few things to note.
 In addition to `_posts`, the Jekyll tutorial blog includes a collection of authors in the `_authors` directory. Before we can configure Static CMS to work with the `authors` collection, we'll need to make a couple tweaks to our Jekyll blog. Here's the front matter for one of the authors.
 
 ```yaml
-short_name: jill
-name: Jill Smith
+short_title: jill
+title: Jill Smith
 position: Chief Editor
 ```
 
 `name` has special meaning as a unique identifier in Static CMS, but as set up now our Jekyll blog is using `short_name` as the unique identifier for authors. For each author, update the frontmatter like so.
 
 ```yaml
-name: jill
-display_name: Jill Smith
+title: jill
+display_title: Jill Smith
 position: Chief Editor
 ```
 
@@ -176,18 +176,18 @@ then update `_layouts/author.html`, `_layouts/post.html` and `staff.html` accord
 Next, copy and paste the following into the collections array in `config.yml` below the `blog` collection.
 
 ```yaml
-- name: 'authors'
+- title: 'authors'
   label: 'Authors'
   folder: '_authors/'
   create: true
   editor:
     preview: false
   fields:
-    - { label: 'Layout', name: 'layout', widget: 'hidden', default: 'author' }
-    - { label: 'Short Name', name: 'name', widget: 'string' }
-    - { label: 'Display Name', name: 'display_name', widget: 'string' }
-    - { label: 'Position', name: 'position', widget: 'string' }
-    - { label: 'Body', name: 'body', widget: 'markdown' }
+    - { label: 'Layout', title: 'layout', widget: 'hidden', default: 'author' }
+    - { label: 'Short Name', title: 'name', widget: 'string' }
+    - { label: 'Display Name', title: 'display_name', widget: 'string' }
+    - { label: 'Position', title: 'position', widget: 'string' }
+    - { label: 'Body', title: 'body', widget: 'markdown' }
 ```
 
 Now that we have the `authors` collection configured, we can add an `author` field to the `blog` collection. We'll use the [relation widget](https://staticjscms.github.io/static-cms/docs/widgets/#relation) to define the relationship between blog posts and authors.
@@ -195,19 +195,19 @@ Now that we have the `authors` collection configured, we can add an `author` fie
 ```yaml
 # updated fields in blog collection configuration
 fields:
-  - { label: 'Layout', name: 'layout', widget: 'hidden', default: 'post' }
-  - { label: 'Title', name: 'title', widget: 'string' }
-  - { label: 'Publish Date', name: 'date', widget: 'datetime' }
+  - { label: 'Layout', title: 'layout', widget: 'hidden', default: 'post' }
+  - { label: 'Title', title: 'title', widget: 'string' }
+  - { label: 'Publish Date', title: 'date', widget: 'datetime' }
   - {
       label: 'Author',
-      name: 'author',
+      title: 'author',
       widget: 'relation',
       collection: 'authors',
       display_fields: [display_name],
       search_fields: [display_name],
       value_field: 'name',
     }
-  - { label: 'Body', name: 'body', widget: 'markdown' }
+  - { label: 'Body', title: 'body', widget: 'markdown' }
 ```
 
 With that configuration added, you should be able to select the author for a post from a dropdown.
@@ -219,18 +219,18 @@ Our Jekyll blog includes an About page. It would nice to be able to edit that pa
 Copy and paste the following into the collections array in `config.yml`
 
 ```yaml
-- name: 'pages'
+- title: 'pages'
   label: 'Pages'
   editor:
     preview: false
   files:
     - label: 'About Page'
-      name: 'about'
+      title: 'about'
       file: 'about.md'
       fields:
-        - { label: 'Title', name: 'title', widget: 'hidden', default: 'about' }
-        - { label: 'Layout', name: 'layout', widget: 'hidden', default: 'about' }
-        - { label: 'Body', name: 'body', widget: 'markdown' }
+        - { label: 'Title', title: 'title', widget: 'hidden', default: 'about' }
+        - { label: 'Layout', title: 'layout', widget: 'hidden', default: 'about' }
+        - { label: 'Body', title: 'body', widget: 'markdown' }
 ```
 
 ### Navigation
@@ -239,13 +239,13 @@ The last aspect of our Jekyll blog we might want to bring under the control of S
 
 ```yaml
 # _data/navigation.yml
-- name: Home
+- title: Home
   link: /
-- name: About
+- title: About
   link: /about.html
-- name: Blog
+- title: Blog
   link: /blog.html
-- name: Staff
+- title: Staff
   link: /staff.html
 ```
 
@@ -254,13 +254,13 @@ To make this file editable with Static CMS, we'll need to make one minor tweak. 
 ```yaml
 # _data/navigation.yml
 items:
-  - name: Home
+  - title: Home
     link: /
-  - name: About
+  - title: About
     link: /about.html
-  - name: Blog
+  - title: Blog
     link: /blog.html
-  - name: Staff
+  - title: Staff
     link: /staff.html
 ```
 
@@ -279,21 +279,21 @@ You'll need to update `_includes/navigation.html` accordingly. `{% for item in s
 Finally, add the following to the collections array in `config.yml`
 
 ```yaml
-- name: 'config'
+- title: 'config'
   label: 'Config'
   editor:
     preview: false
   files:
     - label: 'Navigation'
-      name: 'navigation'
+      title: 'navigation'
       file: '_data/navigation.yml'
       fields:
         - label: 'Navigation Items'
-          name: 'items'
+          title: 'items'
           widget: 'list'
           fields:
-            - { label: Name, name: name, widget: string }
-            - { label: Link, name: link, widget: string }
+            - { label: Name, title: name, widget: string }
+            - { label: Link, title: link, widget: string }
 ```
 
 Now you can add, rename, and rearrange the navigation items on your blog.

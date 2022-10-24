@@ -1,6 +1,7 @@
 ---
-title: relation
-label: Relation
+group: Widgets
+title: Relation
+weight: 22
 ---
 The relation widget allows you to reference items from another collection. It provides a search input with a list of entries from the collection you're referencing, and the list automatically updates with matched entries based on what you've typed.
 
@@ -23,7 +24,7 @@ The relation widget allows you to reference items from another collection. It pr
 
 ```yaml
 - label: "Post Author"
-  name: "author"
+  title: "author"
   widget: "relation"
   collection: "authors"
   search_fields: ["name.first", "twitterHandle"]
@@ -37,7 +38,7 @@ The generated UI input will search the authors collection by name and twitterHan
 
 ```yaml
 - label: "Post Author"
-  name: "author"
+  title: "author"
   widget: "relation"
   collection: "authors"
   search_fields: ['name.first']
@@ -51,7 +52,7 @@ The generated UI input will search the authors collection by name, and display e
 
 ```yaml
 - label: "City"
-  name: "city"
+  title: "city"
   widget: "relation"
   collection: "relation_files"
   file: "cities"

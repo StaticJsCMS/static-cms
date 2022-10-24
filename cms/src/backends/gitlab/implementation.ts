@@ -49,8 +49,6 @@ export default class GitLab implements BackendClass {
   apiRoot: string;
   token: string | null;
   mediaFolder?: string;
-  useGraphQL: boolean;
-  graphQLAPIRoot: string;
 
   _mediaDisplayURLSem?: Semaphore;
 
@@ -75,8 +73,6 @@ export default class GitLab implements BackendClass {
     this.apiRoot = config.backend.api_root || 'https://gitlab.com/api/v4';
     this.token = '';
     this.mediaFolder = config.media_folder;
-    this.useGraphQL = config.backend.use_graphql || false;
-    this.graphQLAPIRoot = config.backend.graphql_api_root || 'https://gitlab.com/api/graphql';
     this.lock = asyncLock();
   }
 
@@ -112,8 +108,6 @@ export default class GitLab implements BackendClass {
       branch: this.branch,
       repo: this.repo,
       apiRoot: this.apiRoot,
-      useGraphQL: this.useGraphQL,
-      graphQLAPIRoot: this.graphQLAPIRoot,
     });
     const user = await this.api.user();
     const isCollab = await this.api.hasWriteAccess().catch((error: Error) => {
@@ -200,7 +194,7 @@ export default class GitLab implements BackendClass {
       getDifferences: (to, from) => this.api!.getDifferences(to, from),
       getFileId: path => this.api!.getFileId(path, this.branch),
       filterFile: file => this.filterFile(folder, file, extension, depth),
-      customFetch: this.useGraphQL ? files => this.api!.readFilesGraphQL(files) : undefined,
+      customFetch: undefined,
     });
 
     return files;

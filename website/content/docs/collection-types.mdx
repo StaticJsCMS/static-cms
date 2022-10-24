@@ -1,7 +1,7 @@
 ---
 group: Collections
-weight: 10
 title: Collection Types
+weight: 10
 ---
 All editable content types are defined in the `collections` field of your `config.yml` file, and display in the left sidebar of the Content page of the editor UI.
 
@@ -20,29 +20,29 @@ Example:
 ```yaml
 collections:
   - label: "Blog"
-    name: "blog"
+    title: "blog"
     folder: "_posts/blog"
     create: true
     fields:
-      - {label: "Title", name: "title", widget: "string"}
-      - {label: "Publish Date", name: "date", widget: "datetime"}
-      - {label: "Featured Image", name: "thumbnail", widget: "image"}
-      - {label: "Body", name: "body", widget: "markdown"}
+      - {label: "Title", title: "title", widget: "string"}
+      - {label: "Publish Date", title: "date", widget: "datetime"}
+      - {label: "Featured Image", title: "thumbnail", widget: "image"}
+      - {label: "Body", title: "body", widget: "markdown"}
 ```
 
 With `identifier_field`:
 
 ```yaml
 - label: "Blog"
-  name: "blog"
+  title: "blog"
   folder: "_posts/blog"
   create: true
   identifier_field: name
   fields:
-    - {label: "Name", name: "name", widget: "string"}
-    - {label: "Publish Date", name: "date", widget: "datetime"}
-    - {label: "Featured Image", name: "thumbnail", widget: "image"}
-    - {label: "Body", name: "body", widget: "markdown"}
+    - {label: "Name", title: "name", widget: "string"}
+    - {label: "Publish Date", title: "date", widget: "datetime"}
+    - {label: "Featured Image", title: "thumbnail", widget: "image"}
+    - {label: "Body", title: "body", widget: "markdown"}
 ```
 
 ### Filtered folder collections
@@ -59,23 +59,23 @@ The example below creates two collections in the same folder, filtered by the `l
 ```yaml
 collections:
   - label: "Blog in English"
-    name: "english_posts"
+    title: "english_posts"
     folder: "_posts"
     create: true
     filter: {field: "language", value: "en"}
     fields:
-      - {label: "Language", name: "language", widget: "select", options: ["en", "es"]}
-      - {label: "Title", name: "title", widget: "string"}
-      - {label: "Content", name: "body", widget: "markdown"}
+      - {label: "Language", title: "language", widget: "select", options: ["en", "es"]}
+      - {label: "Title", title: "title", widget: "string"}
+      - {label: "Content", title: "body", widget: "markdown"}
   - label: "Blog en Español"
-    name: "spanish_posts"
+    title: "spanish_posts"
     folder: "_posts"
     create: true
     filter: {field: "language", value: "es"}
     fields:
-      - {label: "Lenguaje", name: "language", widget: "select", options: ["en", "es"]}
-      - {label: "Titulo", name: "title", widget: "string"}
-      - {label: "Contenido", name: "body", widget: "markdown"}
+      - {label: "Lenguaje", title: "language", widget: "select", options: ["en", "es"]}
+      - {label: "Titulo", title: "title", widget: "string"}
+      - {label: "Contenido", title: "body", widget: "markdown"}
 ```
 
 ### Nested collections (beta)
@@ -95,31 +95,31 @@ Example:
 ```yaml
 collections:
   - label: "Pages"
-    name: "pages"
+    title: "pages"
     files:
       - label: "About Page"
-        name: "about"
+        title: "about"
         file: "site/content/about.yml"
         fields:
-          - {label: Title, name: title, widget: string}
-          - {label: Intro, name: intro, widget: markdown}
+          - {label: Title, title: title, widget: string}
+          - {label: Intro, title: intro, widget: markdown}
           - label: Team
-            name: team
+            title: team
             widget: list
             fields:
-              - {label: Name, name: name, widget: string}
-              - {label: Position, name: position, widget: string}
-              - {label: Photo, name: photo, widget: image}
+              - {label: Name, title: name, widget: string}
+              - {label: Position, title: position, widget: string}
+              - {label: Photo, title: photo, widget: image}
       - label: "Locations Page"
-        name: "locations"
+        title: "locations"
         file: "site/content/locations.yml"
         fields:
-          - {label: Title, name: title, widget: string}
-          - {label: Intro, name: intro, widget: markdown}
+          - {label: Title, title: title, widget: string}
+          - {label: Intro, title: intro, widget: markdown}
           - label: Locations
-            name: locations
+            title: locations
             widget: list
             fields:
-              - {label: Name, name: name, widget: string}
-              - {label: Address, name: address, widget: string}
+              - {label: Name, title: name, widget: string}
+              - {label: Address, title: address, widget: string}
 ```

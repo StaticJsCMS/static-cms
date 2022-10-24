@@ -1,7 +1,7 @@
 ---
 group: Configuration
-weight: 10
 title: Configuration Options
+weight: 10
 ---
 ## Configuration File
 
@@ -60,7 +60,7 @@ Media library integrations are configured via the `media_library` property, and 
 
 ```yaml
 media_library:
-  name: uploadcare
+  title: uploadcare
   config:
     publicKey: demopublickey
 ```
@@ -202,7 +202,7 @@ Static CMS expects every entry to provide a field named `"title"` that serves as
 
 ```yaml
 collections:
-  - name: posts
+  - title: posts
     identifier_field: name
 ```
 
@@ -284,12 +284,12 @@ In files with frontmatter, one field should be named `body`. This special field 
 ```yaml
 fields:
   - label: "Title"
-    name: "title"
+    title: "title"
     widget: "string"
     pattern: ['.{20,}', "Must have at least 20 characters"]
-  - {label: "Layout", name: "layout", widget: "hidden", default: "blog"}
-  - {label: "Featured Image", name: "thumbnail", widget: "image", required: false}
-  - {label: "Body", name: "body", widget: "markdown"}
+  - {label: "Layout", title: "layout", widget: "hidden", default: "blog"}
+  - {label: "Featured Image", title: "thumbnail", widget: "image", required: false}
+  - {label: "Body", title: "body", widget: "markdown"}
     comment: 'This is a multiline\ncomment'
 ```
 
