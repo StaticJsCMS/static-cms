@@ -1,6 +1,7 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import { styled, ThemeProvider, useTheme } from '@mui/material/styles';
-import { useContext, useMemo } from 'react';
+import { useRouter } from 'next/router';
+import { useContext, useEffect, useMemo, useRef } from 'react';
 
 import ColorModeContext from '../context/ColorModeContext';
 import BasicMeta from '../meta/BasicMeta';
@@ -45,8 +46,10 @@ const Page = ({
   pageDetails,
   fullWidth = false,
 }: PageProps) => {
+  const scrollableArea = useRef<HTMLDivElement | null>(null);
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
+  const { asPath } = useRouter();
 
   const content = useMemo(() => {
     if (fullWidth) {
@@ -55,6 +58,13 @@ const Page = ({
 
     return <Container>{children}</Container>;
   }, [children, fullWidth]);
+
+  useEffect(() => {
+    scrollableArea.current?.scrollTo({
+      top: 0,
+      behavior: 'auto',
+    });
+  }, [asPath]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -78,7 +88,7 @@ const Page = ({
         />
       ) : null}
       <Header mode={theme.palette.mode} toggleColorMode={colorMode.toggleColorMode} />
-      <StyledPageContentWrapper>{content}</StyledPageContentWrapper>
+      <StyledPageContentWrapper ref={scrollableArea}>{content}</StyledPageContentWrapper>
     </ThemeProvider>
   );
 };

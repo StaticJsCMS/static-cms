@@ -21,7 +21,8 @@ const DocsLeftNav = ({ docsGroups }: DocsLeftNavProps) => {
         left: 0,
         top: '72px',
         bottom: 0,
-        overflowY: 'auto'
+        overflowY: 'auto',
+        paddingBottom: '24px',
       }}
       dense
     >

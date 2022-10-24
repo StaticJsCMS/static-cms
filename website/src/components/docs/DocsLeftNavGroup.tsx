@@ -5,6 +5,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { useTheme } from '@mui/material/styles';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import type { DocsGroupLink } from '../../interface';
@@ -17,6 +18,7 @@ export interface DocsLeftNavGroupProps {
 const DocsLeftNavGroup = ({ name, links }: DocsLeftNavGroupProps) => {
   const theme = useTheme();
   const [open, setOpen] = useState(true);
+  const { asPath } = useRouter();
 
   const handleClick = () => {
     setOpen(!open);
@@ -34,16 +36,29 @@ const DocsLeftNavGroup = ({ name, links }: DocsLeftNavGroupProps) => {
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding dense>
-          {links.map(link => (
-            <Link key={link.slug} href={`/docs/${link.slug}`}>
-              <ListItemButton href={`/docs/${link.slug}`} sx={{ pl: 4 }}>
-                <ListItemText
-                  primaryTypographyProps={{ color: 'text.secondary' }}
-                  primary={link.title}
-                />
-              </ListItemButton>
-            </Link>
-          ))}
+          {links.map(link => {
+            const url = `/docs/${link.slug}`;
+            const selected = asPath === url;
+            return (
+              <Link key={link.slug} href={url}>
+                <ListItemButton
+                  href={url}
+                  sx={{
+                    pl: 4,
+                  }}
+                  selected={selected}
+                >
+                  <ListItemText
+                    primaryTypographyProps={{
+                      color: selected ? theme.palette.secondary.main : theme.palette.text.secondary,
+                      fontWeight: selected ? 600 : 400,
+                    }}
+                    primary={link.title}
+                  />
+                </ListItemButton>
+              </Link>
+            );
+          })}
         </List>
       </Collapse>
     </>

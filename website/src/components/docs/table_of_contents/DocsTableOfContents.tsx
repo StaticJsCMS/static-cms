@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 
 import DocsHeadings from './DocsHeadings';
@@ -33,6 +34,7 @@ const getNestedHeadings = (headingElements: HTMLHeadingElement[]) => {
 
 const useHeadingsData = () => {
   const [nestedHeadings, setNestedHeadings] = useState<NestedHeading[]>([]);
+  const { asPath } = useRouter();
 
   useEffect(() => {
     const headingElements = Array.from(
@@ -42,17 +44,23 @@ const useHeadingsData = () => {
     // Created a list of headings, with H3s nested
     const newNestedHeadings = getNestedHeadings(headingElements);
     setNestedHeadings(newNestedHeadings);
-  }, []);
+  }, [asPath]);
 
   return { nestedHeadings };
 };
 
 const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
   const headingElementsRef = useRef({});
+  const { asPath } = useRouter();
   useEffect(() => {
     const headingElements = Array.from(document.querySelectorAll('h2, h3'));
 
+    if (headingElementsRef.current) {
+      headingElementsRef.current = {};
+    }
+
     const callback: IntersectionObserverCallback = headings => {
+      console.log('headings', headings);
       headingElementsRef.current = headings.reduce((map, headingElement) => {
         map[headingElement.target.id] = headingElement;
         return map;
@@ -64,12 +72,15 @@ const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
         const headingElement = (
           headingElementsRef.current as Record<string, IntersectionObserverEntry>
         )[key];
-        if (headingElement.isIntersecting) visibleHeadings.push(headingElement);
+        if (headingElement.isIntersecting) {
+          visibleHeadings.push(headingElement);
+        }
       });
 
       const getIndexFromId = (id: string) =>
         headingElements.findIndex(heading => heading.id === id);
 
+      console.log('visibleHeadings', visibleHeadings);
       // If there is only one visible heading, this is our "active" heading
       if (visibleHeadings.length === 1) {
         setActiveId(visibleHeadings[0].target.id);
@@ -85,13 +96,15 @@ const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
     };
 
     const observer = new IntersectionObserver(callback, {
-      rootMargin: '0px 0px -72px 0px',
+      rootMargin: '0px 0px -36px 0px',
     });
 
     headingElements.forEach(element => observer.observe(element));
 
-    return () => observer.disconnect();
-  }, [setActiveId]);
+    return () => {
+      observer.disconnect();
+    };
+  }, [setActiveId, asPath]);
 };
 
 const StyledNav = styled('nav')`

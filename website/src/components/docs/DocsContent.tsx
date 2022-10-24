@@ -231,7 +231,6 @@ const DocsContent = styled('div')(
     & table thead td {
       font-weight: 700;
       height: 56px;
-      padding: 8px 16px;
       box-sizing: border-box;
       text-align: left;
     }
@@ -239,7 +238,7 @@ const DocsContent = styled('div')(
     & table th,
     & table thead td,
     & table td {
-      padding: 0.5em 1em;
+      padding: 8px 16px;
     }
 
     & table tr:not(:first-of-type) th,
@@ -254,7 +253,6 @@ const DocsContent = styled('div')(
 
     & table tbody tr td {
       height: 52px;
-      padding: 0 16px;
       box-sizing: border-box;
     }
 
