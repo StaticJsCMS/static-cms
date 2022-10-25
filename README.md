@@ -3,6 +3,7 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/StaticJsCMS/static-cms/blob/main/LICENSE)
 [![npm latest package](https://img.shields.io/npm/v/@staticcms/core/latest.svg)](https://www.npmjs.com/package/@staticcms/core)
+[![npm next package](https://img.shields.io/npm/v/@staticcms/core/next.svg)](https://www.npmjs.com/package/@staticcms/core/v/next)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/StaticJsCMS/static-cms/blob/main/CONTRIBUTING.md)
 
 </div>
@@ -13,6 +14,8 @@ A CMS for static site generators. Give users a simple way to edit
 and add content to any site built with a static site generator.
 
 > **DISCLAIMER**: This package/repository is under heavy development and as such is very unstable at current. A stable release is targeted for the end of Novemeber and will be labeled `1.0.0`. Documentation may not be completely accurate prior to the `1.0.0` release.
+>
+> An alpha build for the stable release is available under the `@next` tack on npm.
 
 ## Community Chat
 
@@ -35,87 +38,9 @@ Read more about Static CMS [Core Concepts](https://staticjscms.github.io/static-
 The Static CMS can be used in two different ways.
 
 * A Quick and easy install, that requires you to create a single HTML file and a configuration file. All the CMS JavaScript and CSS are loaded from a CDN.
-  To learn more about this installation method, refer to the [Quick Start Guide](https://staticjscms.github.io/static-cms/docs/start-with-a-template/)
+  To learn more about this installation method, refer to the [CDN Hosting Guide](https://staticjscms.github.io/static-cms/docs/add-to-your-site-cdn/)
 * A complete, more complex install, that gives you more flexibility but requires that you use a static site builder with a build system that supports npm packages.
-
-# static-cms-core
-
-## Installation
-
-`npm install @staticcms/core`
-
-## Setup
-
-```tsx
-import React from 'react';
-import {
-  AzureBackend,
-  BitbucketBackend,
-  BooleanWidget,
-  CodeWidget,
-  ColorStringWidget,
-  DateTimeWidget,
-  FileWidget,
-  GitGatewayBackend,
-  GitHubBackend,
-  GitLabBackend,
-  imageEditorComponent,
-  ImageWidget,
-  ListWidget,
-  MapWidget,
-  MarkdownWidget,
-  StaticCmsCore as CMS,
-  NumberWidget,
-  ObjectWidget,
-  ProxyBackend,
-  RelationWidget,
-  SelectWidget,
-  StringWidget,
-  TestBackend,
-  TextWidget,
-  locales,
-  Icon,
-  images
-} from '@static-cms/static-cms-core';
-
-// Register all the things
-CMS.registerBackend('git-gateway', GitGatewayBackend);
-CMS.registerBackend('azure', AzureBackend);
-CMS.registerBackend('github', GitHubBackend);
-CMS.registerBackend('gitlab', GitLabBackend);
-CMS.registerBackend('bitbucket', BitbucketBackend);
-CMS.registerBackend('test-repo', TestBackend);
-CMS.registerBackend('proxy', ProxyBackend);
-CMS.registerWidget([
-  StringWidget.Widget(),
-  NumberWidget.Widget(),
-  TextWidget.Widget(),
-  ImageWidget.Widget(),
-  FileWidget.Widget(),
-  SelectWidget.Widget(),
-  MarkdownWidget.Widget(),
-  ListWidget.Widget(),
-  ObjectWidget.Widget(),
-  RelationWidget.Widget(),
-  BooleanWidget.Widget(),
-  MapWidget.Widget(),
-  DateTimeWidget.Widget(),
-  CodeWidget.Widget(),
-  ColorStringWidget.Widget(),
-]);
-CMS.registerEditorComponent(imageEditorComponent);
-CMS.registerEditorComponent({
-  id: 'code-block',
-  label: 'Code Block',
-  widget: 'code',
-  type: 'code-block',
-});
-CMS.registerLocale('en', locales.en);
-
-Object.keys(images).forEach(iconName => {
-  CMS.registerIcon(iconName, <Icon type={iconName} />);
-});
-```
+  To learn more about this installation method, refer to the [Bundling Guide](https://staticjscms.github.io/static-cms/docs/add-to-your-site-bundling/)
 
 # Contributing
 
@@ -133,6 +58,6 @@ Please make sure you understand its [implications and guarantees](https://writin
 
 # Netlify CMS
 
-Static CMS is a fork of Netlify CMS focusing on the core product over adding massive new features.
+Static CMS is a fork of Netlify CMS focusing on the core product over adding massive, scope expanding, new features.
 
 # Thanks
