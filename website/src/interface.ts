@@ -102,3 +102,20 @@ export interface MenuGroup {
 export interface Menu {
   readonly docs: MenuGroup[];
 }
+
+export interface CommunityLink {
+  readonly title: string;
+  readonly description: string;
+  readonly url: string;
+}
+
+export interface CommunityLinksSection {
+  readonly title: string;
+  readonly links: CommunityLink[];
+}
+
+export interface CommunityData {
+  readonly title: string;
+  readonly subtitle: string;
+  readonly sections: CommunityLinksSection[];
+}

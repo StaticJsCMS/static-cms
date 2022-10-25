@@ -51,21 +51,17 @@ const Blockquote = ({ children = '' }: BlockquoteProps) => {
   const color = useMemo(() => {
     const text = getNodeText(children).trim();
     if (text === '') {
-      console.log('[COLOR]', 'default', `"${text}"`);
       return 'default';
     }
 
     if (text.startsWith('Do: ')) {
-      console.log('[COLOR]', 'success', `"${text}"`);
       return 'success';
     }
 
     if (text.startsWith("Don't: ")) {
-      console.log('[COLOR]', 'error', `"${text}"`);
       return 'error';
     }
 
-    console.log('[COLOR]', 'default', `"${text}"`);
     return 'default';
   }, [children]);
 

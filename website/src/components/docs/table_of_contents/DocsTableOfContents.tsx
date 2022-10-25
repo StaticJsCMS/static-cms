@@ -113,7 +113,7 @@ const StyledNav = styled('nav')`
   top: 0;
   max-height: calc(100vh - 72px);
   overflow-y: auto;
-  top: 0;
+  top: 16px;
 `;
 
 const DocsTableOfContents = () => {

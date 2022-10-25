@@ -17,10 +17,10 @@ const StyledPageContentWrapper = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: calc(100vh - 88px);
+  height: calc(100vh - 72px);
   width: 100%;
   position: relative;
-  top: 88px;
+  top: 72px;
   overflow-y: auto;
 `;
 

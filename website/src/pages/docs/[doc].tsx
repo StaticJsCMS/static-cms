@@ -23,6 +23,7 @@ const StyledDocsView = styled('div')(
     grid-template-columns: calc(100% - 240px) 240px;
     margin-left: 280px;
     width: calc(100% - 280px);
+    padding-top: 16px;
 
     ${theme.breakpoints.down('lg')} {
       grid-template-columns: unset

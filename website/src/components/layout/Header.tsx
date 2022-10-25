@@ -15,9 +15,11 @@ import type { ButtonTypeMap } from '@mui/material/Button';
 import type { ExtendButtonBase } from '@mui/material/ButtonBase';
 import type { PaletteMode } from '@mui/material';
 
-const StyledAppBar = styled(AppBar)`
-  background: #121212;
-`;
+const StyledAppBar = styled(AppBar)(
+  ({ theme }) => `
+    background: ${theme.palette.mode === 'light' ? theme.palette.primary.main : '#121212'};
+  `,
+);
 
 const StyledToolbar = styled(Toolbar)`
   gap: 16px;
@@ -128,9 +130,9 @@ const Header = ({ mode, toggleColorMode }: HeaderProps) => {
         <Link href="/community">
           <StyledLink component="a">Community</StyledLink>
         </Link>
-        <Link href="/blog">
+        {/* <Link href="/blog">
           <StyledLink component="a">Blog</StyledLink>
-        </Link>
+        </Link> */}
       </StyledToolbar>
     </StyledAppBar>
   );
