@@ -60,7 +60,6 @@ const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
     }
 
     const callback: IntersectionObserverCallback = headings => {
-      console.log('headings', headings);
       headingElementsRef.current = headings.reduce((map, headingElement) => {
         map[headingElement.target.id] = headingElement;
         return map;
@@ -80,7 +79,6 @@ const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
       const getIndexFromId = (id: string) =>
         headingElements.findIndex(heading => heading.id === id);
 
-      console.log('visibleHeadings', visibleHeadings);
       // If there is only one visible heading, this is our "active" heading
       if (visibleHeadings.length === 1) {
         setActiveId(visibleHeadings[0].target.id);

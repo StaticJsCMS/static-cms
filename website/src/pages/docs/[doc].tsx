@@ -4,11 +4,12 @@ import { MDXRemote } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import remarkGfm from 'remark-gfm';
 
+import Blockquote from '../../components/docs/components/Blockquote';
+import Header2 from '../../components/docs/components/Header2';
+import Header3 from '../../components/docs/components/Header3';
 import DocsContent from '../../components/docs/DocsContent';
 import DocsLeftNav from '../../components/docs/DocsLeftNav';
 import DocsRightNav from '../../components/docs/DocsRightNav';
-import Header2 from '../../components/docs/Header2';
-import Header3 from '../../components/docs/Header3';
 import Page from '../../components/layout/Page';
 import { fetchDocsContent } from '../../lib/docs';
 
@@ -56,7 +57,10 @@ const Docs = ({ docsGroups, title, slug, description = '', source }: DocsProps) 
         <StyledDocsContentWrapper>
           <DocsContent>
             <Typography variant="h1">{title}</Typography>
-            <MDXRemote {...source} components={{ h2: Header2, h3: Header3 }} />
+            <MDXRemote
+              {...source}
+              components={{ h2: Header2, h3: Header3, blockquote: Blockquote }}
+            />
           </DocsContent>
         </StyledDocsContentWrapper>
         <DocsRightNav />

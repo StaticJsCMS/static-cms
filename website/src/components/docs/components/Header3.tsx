@@ -22,11 +22,11 @@ function getAnchor(text: string) {
     .replace(/[ ]/g, '-');
 }
 
-interface Header2Props {
+interface Header3Props {
   children?: ReactNode;
 }
 
-const Header3 = ({ children = '' }: Header2Props) => {
+const Header3 = ({ children = '' }: Header3Props) => {
   const anchor = getAnchor(String(children));
   const link = `#${anchor}`;
   return (

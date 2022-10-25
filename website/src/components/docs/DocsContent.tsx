@@ -211,7 +211,6 @@ const DocsContent = styled('div')(
       margin-left: -0.2em;
       height: 1.5rem;
       z-index: -1;
-      color: ${theme.palette.text.secondary};
     }
 
     & table {
