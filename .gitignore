@@ -20,3 +20,5 @@ coverage/
 .temp/
 *.tgz
 old-website
+website/public/sw.js
+website/public/workbox*.js
