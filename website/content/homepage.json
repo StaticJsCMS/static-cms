@@ -1,0 +1,45 @@
+{
+  "title": "Open source content management for your Git workflow",
+  "subtitle": "Use Static CMS with any static site generator for a faster and more flexible web project",
+  "get_started": {
+    "title": "Get Started",
+    "url": "/docs/start-with-a-template/"
+  },
+  "overviews": [
+    {
+      "title": "Static + content management = ♥",
+      "description": "Get the speed, security, and scalability of a static site, while still providing a convenient editing interface for content."
+    },
+    {
+      "title": "An integrated part of your Git workflow",
+      "description": "Content is stored in your Git repository alongside your code for easier versioning, multi-channel publishing, and the option to handle content updates directly in Git."
+    },
+    {
+      "title": "An extensible CMS built on React",
+      "description": "Static CMS is built as a single-page React app. Create custom-styled previews, UI widgets, and editor plugins or add backends to support different Git platform APIs."
+    }
+  ],
+  "call_to_action": {
+    "title": "Getting started is simple and free.",
+    "subtitle": "Choose a template that’s pre-configured with a static site generator and deploys to a global CDN in one click.",
+    "button_text": "Get Started",
+    "url": "/docs/start-with-a-template/"
+  },
+  "features_intro": {
+    "title": "A CMS that developers and content editors can agree on",
+    "subtitle1": "You get to implement modern front end tools to deliver a faster, safer, and more scalable site.",
+    "subtitle2": "Editors get a friendly UI and intuitive workflow that meets their content management requirements."
+  },
+  "features": [
+    {
+      "image": "/img/editor-friendly-user-interface.svg",
+      "title": "Editor-friendly user interface",
+      "description": "Get the speed, security, and scalability of a static site, while still providing a convenient editing interface for content."
+    },
+    {
+      "image": "/img/instant-access-without-github-account.svg",
+      "title": "Instant access without GitHub account",
+      "description": "With Git Gateway, you can add CMS access for any team member — even if they don’t have a GitHub account."
+    }
+  ]
+}

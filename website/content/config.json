@@ -1,0 +1,30 @@
+{
+  "base_url": "https://static-cms.netlify.app/",
+  "repo_url": "https://github.com/StaticJsCMS/static-cms",
+  "site_title": "Static CMS | Open Source Content Management System",
+  "site_description": "Open source content management for your Git workflow. Use Static CMS with any static site generator for a faster and more flexible web project.",
+  "site_image": "/static-cms-logo.svg",
+  "site_keywords": ["static", "cms", "staticcms", "netlify"],
+  "footer": {
+    "buttons": [
+      {
+        "text": "Twitter",
+        "url": "https://twitter.com/StaticJsCMS"
+      },
+      {
+        "text": "GitHub",
+        "url": "https://github.com/StaticJsCMS/static-cms"
+      }
+    ],
+    "links": [
+      {
+        "text": "Distributed under MIT License",
+        "url": "https://github.com/StaticJsCMS/static-cms/blob/main/LICENSE"
+      },
+      {
+        "text": "Code of Conduct",
+        "url": "https://github.com/StaticJsCMS/static-cms/blob/main/CODE_OF_CONDUCT.md"
+      }
+    ]
+  }
+}

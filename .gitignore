@@ -1,6 +1,5 @@
 dist/
 bin/
-public/
 node_modules/
 npm-debug.log
 .DS_Store
@@ -20,3 +19,4 @@ coverage/
 .env
 .temp/
 *.tgz
+old-website

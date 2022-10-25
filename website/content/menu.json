@@ -1,0 +1,42 @@
+{
+  "menu": {
+    "docs": [
+      {
+        "name": "Intro",
+        "title": "Intro to Static CMS"
+      },
+      {
+        "name": "Accounts",
+        "title": "Account Settings"
+      },
+      {
+        "name": "Configuration",
+        "title": "Configuring your Site"
+      },
+      {
+        "name": "Collections",
+        "title": "Collections"
+      },
+      {
+        "name": "Widgets",
+        "title": "Widgets"
+      },
+      {
+        "name": "Media",
+        "title": "Media"
+      },
+      {
+        "name": "Guides",
+        "title": "Platform Guides"
+      },
+      {
+        "name": "Customization",
+        "title": "Customizing Static CMS"
+      },
+      {
+        "name": "Contributing",
+        "title": "Community"
+      }
+    ]
+  }
+}
