@@ -8,7 +8,7 @@
 
 </div>
 
-[staticjscms.github.io/static-cms](https://staticjscms.github.io/static-cms/) 
+[staticjscms.netlify.app](https://staticjscms.netlify.app/) 
 
 A CMS for static site generators. Give users a simple way to edit
 and add content to any site built with a static site generator.
@@ -31,16 +31,16 @@ tweak the main layout of the CMS a bit to fit your own site.
 When a user navigates to `/admin/` they'll be prompted to log in, and once authenticated
 they'll be able to create new content or edit existing content.
 
-Read more about Static CMS [Core Concepts](https://staticjscms.github.io/static-cms/docs/intro/).
+Read more about Static CMS [Core Concepts](https://staticjscms.netlify.app/docs/intro/).
 
 # Installation and Configuration
 
 The Static CMS can be used in two different ways.
 
 * A Quick and easy install, that requires you to create a single HTML file and a configuration file. All the CMS JavaScript and CSS are loaded from a CDN.
-  To learn more about this installation method, refer to the [CDN Hosting Guide](https://staticjscms.github.io/static-cms/docs/add-to-your-site-cdn/)
+  To learn more about this installation method, refer to the [CDN Hosting Guide](https://staticjscms.netlify.app/docs/add-to-your-site-cdn/)
 * A complete, more complex install, that gives you more flexibility but requires that you use a static site builder with a build system that supports npm packages.
-  To learn more about this installation method, refer to the [Bundling Guide](https://staticjscms.github.io/static-cms/docs/add-to-your-site-bundling/)
+  To learn more about this installation method, refer to the [Bundling Guide](https://staticjscms.netlify.app/docs/add-to-your-site-bundling/)
 
 # Contributing
 

@@ -155,7 +155,7 @@ const Header = ({
           )}
           {isTestRepo && (
             <Button
-              href="https://staticjscms.github.io/static-cms/docs/test-backend"
+              href="https://staticjscms.netlify.app/docs/test-backend"
               target="_blank"
               rel="noopener noreferrer"
               sx={{ textTransform: 'none' }}
