@@ -12,7 +12,7 @@
     },
     {
       "title": "An integrated part of your Git workflow",
-      "description": "Content is stored in your Git repository alongside your code for easier versioning, multi-channel publishing, and the option to handle content updates directly in Git."
+      "description": "Content is stored in your Git repository alongside your code for easier versioning and the option to handle content updates directly in Git."
     },
     {
       "title": "An extensible CMS built on React",
@@ -21,7 +21,7 @@
   ],
   "call_to_action": {
     "title": "Getting started is simple and free.",
-    "subtitle": "Choose a template that’s pre-configured with a static site generator and deploys to a global CDN in one click.",
+    "subtitle": "Choose a template that's pre-configured with a static site generator and deploys to a global CDN in one click.",
     "button_text": "Get Started",
     "url": "/docs/start-with-a-template/"
   },
@@ -34,12 +34,17 @@
     {
       "image": "/img/editor-friendly-user-interface.svg",
       "title": "Editor-friendly user interface",
-      "description": "Get the speed, security, and scalability of a static site, while still providing a convenient editing interface for content."
+      "description": "The web-based app includes rich-text editing, real-time previews, and drag-and-drop media uploads."
+    },
+    {
+      "image": "/img/your-content-your-way.webp",
+      "title": "Your content, your way",
+      "description": "Static CMS can integrate with most major static site generators and git repository providers."
     },
     {
       "image": "/img/instant-access-without-github-account.svg",
       "title": "Instant access without GitHub account",
-      "description": "With Git Gateway, you can add CMS access for any team member — even if they don’t have a GitHub account."
+      "description": "With Git Gateway, you can add CMS access for any team member — even if they don't have a GitHub account."
     }
   ]
 }
