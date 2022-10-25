@@ -30,6 +30,7 @@
     "@babel/core": "7.19.6",
     "@emotion/eslint-plugin": "11.10.0",
     "@next/bundle-analyzer": "12.3.1",
+    "@next/eslint-plugin-next": "12.3.1",
     "@types/js-yaml": "4.0.5",
     "@types/node": "18.11.3",
     "@types/prismjs": "1.26.0",
@@ -44,6 +45,7 @@
     "eslint-plugin-babel": "5.3.1",
     "eslint-plugin-unicorn": "44.0.2",
     "prettier": "2.7.1",
-    "typescript": "4.8.4"
+    "typescript": "4.8.4",
+    "webpack": "5.74.0"
   }
 }

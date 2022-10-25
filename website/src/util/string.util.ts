@@ -9,7 +9,7 @@ export function isNotEmpty(value: string | null | undefined): value is string {
 }
 
 export function toTitleCase(str: string): string {
-  return str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 
 export function toTitleCaseFromKey(str: string) {

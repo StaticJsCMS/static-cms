@@ -293,6 +293,7 @@ const Home: NextPage = () => {
             <StyledFeaturesSectionContent>
               {homepageData.features.map(feature => (
                 <StyledFeature key={feature.title}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={feature.image} width="100%" height="auto" />
                   <StyledFeatureText>
                     <Typography

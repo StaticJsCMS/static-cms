@@ -5,3 +5,221 @@
 img {
   max-width: 100%;
 }
+
+/* PrismJS 1.29.0 (Dark)
+https://prismjs.com/download.html#themes=prism-tomorrow&languages=markup+css+clike+javascript+json+toml+typescript+yaml */
+.dark code[class*='language-'],
+.dark pre[class*='language-'] {
+  color: #ccc;
+  background: 0 0;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 1em;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+.dark pre[class*='language-'] {
+  padding: 1em;
+  margin: 0.5em 0;
+  overflow: auto;
+}
+.dark :not(pre) > code[class*='language-'],
+.dark pre[class*='language-'] {
+  background: #2d2d2d;
+}
+.dark :not(pre) > code[class*='language-'] {
+  padding: 0.1em;
+  border-radius: 0.3em;
+  white-space: normal;
+}
+.dark .token.block-comment,
+.dark .token.cdata,
+.dark .token.comment,
+.dark .token.doctype,
+.dark .token.prolog {
+  color: #999;
+}
+.dark .token.punctuation {
+  color: #ccc;
+}
+.dark .token.attr-name,
+.dark .token.deleted,
+.dark .token.namespace,
+.dark .token.tag {
+  color: #e2777a;
+}
+.dark .token.function-name {
+  color: #6196cc;
+}
+.dark .token.boolean,
+.dark .token.function,
+.dark .token.number {
+  color: #f08d49;
+}
+.dark .token.class-name,
+.dark .token.constant,
+.dark .token.property,
+.dark .token.symbol {
+  color: #f8c555;
+}
+.dark .token.atrule,
+.dark .token.builtin,
+.dark .token.important,
+.dark .token.keyword,
+.dark .token.selector {
+  color: #cc99cd;
+}
+.dark .token.attr-value,
+.dark .token.char,
+.dark .token.regex,
+.dark .token.string,
+.dark .token.variable {
+  color: #7ec699;
+}
+.dark .token.entity,
+.dark .token.operator,
+.dark .token.url {
+  color: #67cdcc;
+}
+.dark .token.bold,
+.dark .token.important {
+  font-weight: 700;
+}
+.dark .token.italic {
+  font-style: italic;
+}
+.dark .token.entity {
+  cursor: help;
+}
+.dark .token.inserted {
+  color: green;
+}
+
+/* PrismJS 1.29.0 (Light)
+https://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascript+json+toml+typescript+yaml */
+.light code[class*='language-'],
+.light pre[class*='language-'] {
+  color: #000;
+  background: 0 0;
+  text-shadow: 0 1px #fff;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 1em;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+.light code[class*='language-'] ::-moz-selection,
+.light code[class*='language-']::-moz-selection,
+.light pre[class*='language-'] ::-moz-selection,
+.light pre[class*='language-']::-moz-selection {
+  text-shadow: none;
+  background: #b3d4fc;
+}
+.light code[class*='language-'] ::selection,
+.light code[class*='language-']::selection,
+.light pre[class*='language-'] ::selection,
+.light pre[class*='language-']::selection {
+  text-shadow: none;
+  background: #b3d4fc;
+}
+@media print {
+  .light code[class*='language-'],
+  .light pre[class*='language-'] {
+    text-shadow: none;
+  }
+}
+.light pre[class*='language-'] {
+  padding: 1em;
+  margin: 0.5em 0;
+  overflow: auto;
+}
+.light :not(pre) > code[class*='language-'],
+.light pre[class*='language-'] {
+  background: #f5f2f0;
+}
+.light :not(pre) > code[class*='language-'] {
+  padding: 0.1em;
+  border-radius: 0.3em;
+  white-space: normal;
+}
+.light .token.cdata,
+.light .token.comment,
+.light .token.doctype,
+.light .token.prolog {
+  color: #708090;
+}
+.light .token.punctuation {
+  color: #999;
+}
+.light .token.namespace {
+  opacity: 0.7;
+}
+.light .token.boolean,
+.light .token.constant,
+.light .token.deleted,
+.light .token.number,
+.light .token.property,
+.light .token.symbol,
+.light .token.tag {
+  color: #905;
+}
+.light .token.attr-name,
+.light .token.builtin,
+.light .token.char,
+.light .token.inserted,
+.light .token.selector,
+.light .token.string {
+  color: #690;
+}
+.light .language-css .token.string,
+.light .style .token.string,
+.light .token.entity,
+.light .token.operator,
+.light .token.url {
+  color: #9a6e3a;
+  background: hsla(0, 0%, 100%, 0.5);
+}
+.light .token.atrule,
+.light .token.attr-value,
+.light .token.keyword {
+  color: #07a;
+}
+.light .token.class-name,
+.light .token.function {
+  color: #dd4a68;
+}
+.light .token.important,
+.light .token.regex,
+.light .token.variable {
+  color: #e90;
+}
+.light .token.bold,
+.light .token.important {
+  font-weight: 700;
+}
+.light .token.italic {
+  font-style: italic;
+}
+.light .token.entity {
+  cursor: help;
+}

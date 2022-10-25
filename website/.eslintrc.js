@@ -6,6 +6,7 @@ module.exports = {
     'prettier',
     'plugin:import/recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:@next/next/recommended'
   ],
   env: {
     es6: true,
