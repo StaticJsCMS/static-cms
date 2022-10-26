@@ -11,9 +11,10 @@ export interface SnackbarMessage {
   type: MessageType;
   message:
     | string
-    | ({
+    | {
         key: string;
-      } & Record<string, unknown>);
+        options?: Record<string, unknown>;
+      };
 }
 
 // Define a type for the slice state

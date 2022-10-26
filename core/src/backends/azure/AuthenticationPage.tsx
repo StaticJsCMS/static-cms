@@ -34,7 +34,7 @@ const AzureAuthenticationPage = ({
       if (err) {
         alert({
           title: 'auth.errors.authTitle',
-          body: { key: 'auth.errors.authBody', options: { details: err } },
+          body: { key: 'auth.errors.authBody', options: { details: err.toString() } },
         });
         return;
       } else if (data) {

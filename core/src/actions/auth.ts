@@ -86,18 +86,22 @@ export function loginUser(credentials: Credentials) {
       .then(user => {
         dispatch(authenticate(user));
       })
-      .catch((error: Error) => {
+      .catch((error: unknown) => {
         console.error(error);
-        dispatch(
-          addSnackbar({
-            type: 'warning',
-            message: {
-              key: 'ui.toast.onFailToAuth',
-              message: error.message,
-            },
-          }),
-        );
-        dispatch(authError(error));
+        if (error instanceof Error) {
+          dispatch(
+            addSnackbar({
+              type: 'warning',
+              message: {
+                key: 'ui.toast.onFailToAuth',
+                options: {
+                  details: error.message,
+                },
+              },
+            }),
+          );
+          dispatch(authError(error));
+        }
       });
   };
 }

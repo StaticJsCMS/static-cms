@@ -55,7 +55,10 @@ export function checkBackendStatus() {
           dispatch(
             addSnackbar({
               type: 'error',
-              message: { key: 'ui.toast.onBackendDown', details: status.api.statusPage },
+              message: {
+                key: 'ui.toast.onBackendDown',
+                options: { details: status.api.statusPage },
+              },
             }),
           );
         }

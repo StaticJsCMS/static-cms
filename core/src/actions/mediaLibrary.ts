@@ -337,7 +337,9 @@ export function persistMedia(file: File, opts: MediaOptions = {}) {
           type: 'error',
           message: {
             key: 'ui.toast.onFailToPersistMedia',
-            details: error,
+            options: {
+              details: error,
+            },
           },
         }),
       );
@@ -381,7 +383,9 @@ export function deleteMedia(file: MediaFile, opts: MediaOptions = {}) {
               type: 'error',
               message: {
                 key: 'ui.toast.onFailToDeleteMedia',
-                details: error.message,
+                options: {
+                  details: error.message,
+                },
               },
             }),
           );
@@ -417,7 +421,9 @@ export function deleteMedia(file: MediaFile, opts: MediaOptions = {}) {
             type: 'error',
             message: {
               key: 'ui.toast.onFailToDeleteMedia',
-              details: error.message,
+              options: {
+                details: error.message,
+              },
             },
           }),
         );

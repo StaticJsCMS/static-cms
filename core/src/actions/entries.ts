@@ -624,7 +624,9 @@ export function loadEntry(collection: Collection, slug: string, silent = false) 
             type: 'error',
             message: {
               key: 'ui.toast.onFailToLoadEntries',
-              details: error.message,
+              options: {
+                details: error.message,
+              },
             },
           }),
         );
@@ -744,7 +746,9 @@ export function loadEntries(collection: Collection, page = 0) {
             type: 'error',
             message: {
               key: 'ui.toast.onFailToLoadEntries',
-              details: error.message,
+              options: {
+                details: error.message,
+              },
             },
           }),
         );
@@ -803,7 +807,9 @@ export function traverseCollectionCursor(collection: Collection, action: string)
             type: 'error',
             message: {
               key: 'ui.toast.onFailToLoadEntries',
-              details: error.message,
+              options: {
+                details: error.message,
+              },
             },
           }),
         );
@@ -1071,7 +1077,9 @@ export function persistEntry(collection: Collection) {
             type: 'error',
             message: {
               key: 'ui.toast.onFailToPersist',
-              details: error,
+              options: {
+                details: error,
+              },
             },
           }),
         );
@@ -1102,7 +1110,9 @@ export function deleteEntry(collection: Collection, slug: string) {
             type: 'error',
             message: {
               key: 'ui.toast.onFailToDelete',
-              details: error,
+              options: {
+                details: error,
+              },
             },
           }),
         );
