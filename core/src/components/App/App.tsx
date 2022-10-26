@@ -1,6 +1,6 @@
-import { styled } from '@mui/material/styles';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Fab from '@mui/material/Fab';
+import { styled } from '@mui/material/styles';
 import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
@@ -92,18 +92,21 @@ const App = ({
   t,
   scrollSyncEnabled,
 }: TranslatedProps<AppProps>) => {
-  const configError = useCallback(() => {
-    return (
-      <ErrorContainer>
-        <h1>{t('app.app.errorHeader')}</h1>
-        <div>
-          <strong>{t('app.app.configErrors')}:</strong>
-          <ErrorCodeBlock>{config.error}</ErrorCodeBlock>
-          <span>{t('app.app.checkConfigYml')}</span>
-        </div>
-      </ErrorContainer>
-    );
-  }, [config.error, t]);
+  const configError = useCallback(
+    (error?: string) => {
+      return (
+        <ErrorContainer>
+          <h1>{t('app.app.errorHeader')}</h1>
+          <div>
+            <strong>{t('app.app.configErrors')}:</strong>
+            <ErrorCodeBlock>{error ?? config.error}</ErrorCodeBlock>
+            <span>{t('app.app.checkConfigYml')}</span>
+          </div>
+        </ErrorContainer>
+      );
+    },
+    [config.error, t],
+  );
 
   const handleLogin = useCallback(
     (credentials: Credentials) => {
@@ -154,8 +157,59 @@ const App = ({
 
   const defaultPath = useMemo(() => getDefaultPath(collections), [collections]);
 
+  const content = useMemo(() => {
+    if (!user) {
+      return authenticationPage;
+    }
+
+    return (
+      <>
+        {isFetching && <TopBarProgress />}
+        <Routes>
+          <Route path="/" element={<Navigate to={defaultPath} />} />
+          <Route path="/search" element={<Navigate to={defaultPath} />} />
+          <Route path="/collections/:name/search/" element={<CollectionSearchRedirect />} />
+          <Route
+            path="/error=access_denied&error_description=Signups+not+allowed+for+this+instance"
+            element={<Navigate to={defaultPath} />}
+          />
+          <Route path="/collections" element={<CollectionRoute collections={collections} />} />
+          <Route
+            path="/collections/:name"
+            element={<CollectionRoute collections={collections} />}
+          />
+          <Route
+            path="/collections/:name/new"
+            element={<EditorRoute collections={collections} newRecord />}
+          />
+          <Route
+            path="/collections/:name/entries/:slug"
+            element={<EditorRoute collections={collections} />}
+          />
+          <Route
+            path="/collections/:name/search/:searchTerm"
+            element={
+              <CollectionRoute collections={collections} isSearchResults isSingleSearchResult />
+            }
+          />
+          <Route
+            path="/collections/:name/filter/:filterTerm"
+            element={<CollectionRoute collections={collections} />}
+          />
+          <Route
+            path="/search/:searchTerm"
+            element={<CollectionRoute collections={collections} isSearchResults />}
+          />
+          <Route path="/edit/:name/:entryName" element={<EditEntityRedirect />} />
+          <Route element={<NotFoundPage />} />
+        </Routes>
+        {useMediaLibrary ? <MediaLibrary /> : null}
+      </>
+    );
+  }, [authenticationPage, collections, defaultPath, isFetching, useMediaLibrary, user]);
+
   if (!config.config) {
-    return null;
+    return configError(t('app.app.configNotFound'));
   }
 
   if (config.error) {
@@ -166,71 +220,21 @@ const App = ({
     return <Loader>{t('app.app.loadingConfig')}</Loader>;
   }
 
-  if (!user) {
-    return authenticationPage;
-  }
-
   return (
     <>
-      <GlobalStyles />
-      <ScrollSync enabled={scrollSyncEnabled}>
+      <GlobalStyles key="global-styles" />
+      <ScrollSync key="scroll-sync" enabled={scrollSyncEnabled}>
         <>
-          <div id="back-to-top-anchor" />
-          <AppRoot id="cms-root">
-            <AppWrapper className="cms-wrapper">
-              <Snackbars />
-              {isFetching && <TopBarProgress />}
-              <Routes>
-                <Route path="/" element={<Navigate to={defaultPath} />} />
-                <Route path="/search" element={<Navigate to={defaultPath} />} />
-                <Route path="/collections/:name/search/" element={<CollectionSearchRedirect />} />
-                <Route
-                  path="/error=access_denied&error_description=Signups+not+allowed+for+this+instance"
-                  element={<Navigate to={defaultPath} />}
-                />
-                <Route
-                  path="/collections"
-                  element={<CollectionRoute collections={collections} />}
-                />
-                <Route
-                  path="/collections/:name"
-                  element={<CollectionRoute collections={collections} />}
-                />
-                <Route
-                  path="/collections/:name/new"
-                  element={<EditorRoute collections={collections} newRecord />}
-                />
-                <Route
-                  path="/collections/:name/entries/:slug"
-                  element={<EditorRoute collections={collections} />}
-                />
-                <Route
-                  path="/collections/:name/search/:searchTerm"
-                  element={
-                    <CollectionRoute
-                      collections={collections}
-                      isSearchResults
-                      isSingleSearchResult
-                    />
-                  }
-                />
-                <Route
-                  path="/collections/:name/filter/:filterTerm"
-                  element={<CollectionRoute collections={collections} />}
-                />
-                <Route
-                  path="/search/:searchTerm"
-                  element={<CollectionRoute collections={collections} isSearchResults />}
-                />
-                <Route path="/edit/:name/:entryName" element={<EditEntityRedirect />} />
-                <Route element={<NotFoundPage />} />
-              </Routes>
-              {useMediaLibrary ? <MediaLibrary /> : null}
-              <Alert />
-              <Confirm />
+          <div key="back-to-top-anchor" id="back-to-top-anchor" />
+          <AppRoot key="cms-root" id="cms-root">
+            <AppWrapper key="cms-wrapper" className="cms-wrapper">
+              <Snackbars key="snackbars" />
+              {content}
+              <Alert key="alert" />
+              <Confirm key="confirm" />
             </AppWrapper>
           </AppRoot>
-          <ScrollTop>
+          <ScrollTop key="scroll-to-top">
             <Fab size="small" aria-label="scroll back to top">
               <KeyboardArrowUpIcon />
             </Fab>

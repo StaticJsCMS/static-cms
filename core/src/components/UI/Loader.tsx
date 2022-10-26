@@ -4,8 +4,12 @@ import Typography from '@mui/material/Typography';
 import React, { useEffect, useMemo, useState } from 'react';
 
 const StyledLoader = styled('div')`
+  position: fixed;
   display: flex;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
   flex-direction: column;
   align-items: center;
   justify-content: center;

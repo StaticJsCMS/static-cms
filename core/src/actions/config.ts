@@ -14,14 +14,14 @@ import { getIntegrations, selectIntegration } from '../reducers/integrations';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type {
+  BaseField,
   Collection,
   Config,
   Field,
-  BaseField,
-  ListField,
-  ObjectField,
   I18nInfo,
+  ListField,
   LocalBackend,
+  ObjectField,
 } from '../interface';
 import type { RootState } from '../store';
 
@@ -71,35 +71,6 @@ function setDefaultPublicFolderForField<T extends Field>(field: T) {
     return { ...field, public_folder: field.media_folder };
   }
   return field;
-}
-
-// Mapping between existing camelCase and its snake_case counterpart
-const WIDGET_KEY_MAP = {
-  dateFormat: 'date_format',
-  timeFormat: 'time_format',
-  pickerUtc: 'picker_utc',
-  editorComponents: 'editor_components',
-  valueType: 'value_type',
-  valueField: 'value_field',
-  searchFields: 'search_fields',
-  displayFields: 'display_fields',
-  optionsLength: 'options_length',
-} as const;
-
-function setSnakeCaseConfig<T extends Field>(field: T) {
-  const deprecatedKeys = Object.keys(WIDGET_KEY_MAP).filter(
-    camel => camel in field,
-  ) as ReadonlyArray<keyof typeof WIDGET_KEY_MAP>;
-
-  const snakeValues = deprecatedKeys.map(camel => {
-    const snake = WIDGET_KEY_MAP[camel];
-    console.warn(
-      `Field ${field.name} is using a deprecated configuration '${camel}'. Please use '${snake}'`,
-    );
-    return { [snake]: (field as unknown as Record<string, unknown>)[camel] };
-  });
-
-  return Object.assign({}, field, ...snakeValues) as T;
 }
 
 function setI18nField<T extends Field>(field: T) {
@@ -159,32 +130,6 @@ function hasIntegration(config: Config, collection: Collection) {
   const integrations = getIntegrations(config);
   const integration = selectIntegration(integrations, collection.name, 'listEntries');
   return !!integration;
-}
-
-export function normalizeConfig(config: Config) {
-  const { collections = [] } = config;
-
-  const normalizedCollections = collections.map(collection => {
-    const { fields, files } = collection;
-
-    let normalizedCollection = collection;
-    if (fields) {
-      const normalizedFields = traverseFieldsJS(fields, setSnakeCaseConfig);
-      normalizedCollection = { ...normalizedCollection, fields: normalizedFields };
-    }
-
-    if (files) {
-      const normalizedFiles = files.map(file => {
-        const normalizedFileFields = traverseFieldsJS(file.fields, setSnakeCaseConfig);
-        return { ...file, fields: normalizedFileFields };
-      });
-      normalizedCollection = { ...normalizedCollection, files: normalizedFiles };
-    }
-
-    return normalizedCollection;
-  });
-
-  return { ...config, collections: normalizedCollections };
 }
 
 export function applyDefaults(originalConfig: Config) {
@@ -451,9 +396,7 @@ export function loadConfig(manualConfig: Config | undefined, onLoad: () => unkno
       validateConfig(mergedConfig);
 
       const withLocalBackend = await handleLocalBackend(mergedConfig);
-      const normalizedConfig = normalizeConfig(withLocalBackend);
-
-      const config = applyDefaults(normalizedConfig);
+      const config = applyDefaults(withLocalBackend);
 
       dispatch(configLoaded(config));
 

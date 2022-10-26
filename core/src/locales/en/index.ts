@@ -27,6 +27,7 @@ const en: LocalePhrasesRoot = {
     app: {
       errorHeader: 'Error loading the CMS configuration',
       configErrors: 'Config Errors',
+      configNotFound: 'Config not found',
       checkConfigYml: 'Check your config.yml file.',
       loadingConfig: 'Loading configuration...',
       waitingBackend: 'Waiting for backend...',

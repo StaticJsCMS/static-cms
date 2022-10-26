@@ -3,7 +3,6 @@ import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import alert from '../../components/UI/Alert';
 import AuthenticationPage from '../../components/UI/AuthenticationPage';
 import { colors } from '../../components/UI/styles';
 
@@ -57,37 +56,17 @@ const GitGatewayAuthenticationPage = ({
   }>({});
 
   useEffect(() => {
-    try {
-      if (!loggedIn && window.netlifyIdentity && window.netlifyIdentity.currentUser()) {
-        onLogin(window.netlifyIdentity.currentUser());
-        window.netlifyIdentity.close();
-      }
-    } catch (e: unknown) {
-      console.error(e);
-      if (e instanceof Error) {
-        alert({
-          title: 'auth.errors.authTitle',
-          body: { key: 'auth.errors.authBody', options: { details: e.message } },
-        });
-      }
+    if (!loggedIn && window.netlifyIdentity && window.netlifyIdentity.currentUser()) {
+      onLogin(window.netlifyIdentity.currentUser());
+      window.netlifyIdentity.close();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleIdentityLogin = useCallback(
     (user: User) => {
-      try {
-        onLogin(user);
-        window.netlifyIdentity?.close();
-      } catch (e: unknown) {
-        console.error(e);
-        if (e instanceof Error) {
-          alert({
-            title: 'auth.errors.authTitle',
-            body: { key: 'auth.errors.authBody', options: { details: e.message } },
-          });
-        }
-      }
+      onLogin(user);
+      window.netlifyIdentity?.close();
     },
     [onLogin],
   );
@@ -113,21 +92,11 @@ const GitGatewayAuthenticationPage = ({
   useNetlifyIdentifyEvent('error', handleIdentityError);
 
   const handleIdentity = useCallback(() => {
-    try {
-      const user = window.netlifyIdentity?.currentUser();
-      if (user) {
-        onLogin(user);
-      } else {
-        window.netlifyIdentity?.open();
-      }
-    } catch (e: unknown) {
-      console.error(e);
-      if (e instanceof Error) {
-        alert({
-          title: 'auth.errors.authTitle',
-          body: { key: 'auth.errors.authBody', options: { details: e.message } },
-        });
-      }
+    const user = window.netlifyIdentity?.currentUser();
+    if (user) {
+      onLogin(user);
+    } else {
+      window.netlifyIdentity?.open();
     }
   }, [onLogin]);
 
@@ -173,17 +142,7 @@ const GitGatewayAuthenticationPage = ({
         return;
       }
 
-      try {
-        onLogin(response);
-      } catch (e: unknown) {
-        console.error(e);
-        if (e instanceof Error) {
-          alert({
-            title: 'auth.errors.authTitle',
-            body: { key: 'auth.errors.authBody', options: { details: e.message } },
-          });
-        }
-      }
+      onLogin(response);
     },
     [email, handleAuth, onLogin, password, t],
   );
