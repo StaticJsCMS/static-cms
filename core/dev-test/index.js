@@ -1,66 +1,66 @@
 // Register all the things
-window.CMS.init();
+CMS.init();
 
-const PostPreview = window.createClass({
+const PostPreview = createClass({
   render: function () {
     var entry = this.props.entry;
-    return window.h(
+    return h(
       'div',
       {},
-      window.h(
+      h(
         'div',
         { className: 'cover' },
-        window.h('h1', {}, entry.data.title),
+        h('h1', {}, entry.data.title),
         this.props.widgetFor('image'),
       ),
-      window.h('p', {}, window.h('small', {}, 'Written ' + entry.data.date)),
-      window.h('div', { className: 'text' }, this.props.widgetFor('body')),
+      h('p', {}, h('small', {}, 'Written ' + entry.data.date)),
+      h('div', { className: 'text' }, this.props.widgetFor('body')),
     );
   },
 });
 
-const GeneralPreview = window.createClass({
+const GeneralPreview = createClass({
   render: function () {
     const entry = this.props.entry;
     const title = entry.data.site_title;
     const posts = entry.data.posts;
     const thumb = posts && posts.thumb;
 
-    return window.h(
+    return h(
       'div',
       {},
-      window.h('h1', {}, title),
-      window.h(
+      h('h1', {}, title),
+      h(
         'dl',
         {},
-        window.h('dt', {}, 'Posts on Frontpage'),
-        window.h('dd', {}, this.props.widgetsFor('posts').widgets.front_limit || 0),
+        h('dt', {}, 'Posts on Frontpage'),
+        h('dd', {}, this.props.widgetsFor('posts').widgets.front_limit || 0),
 
-        window.h('dt', {}, 'Default Author'),
-        window.h('dd', {}, this.props.widgetsFor('posts').data.author || 'None'),
+        h('dt', {}, 'Default Author'),
+        h('dd', {}, this.props.widgetsFor('posts').data.author || 'None'),
 
-        window.h('dt', {}, 'Default Thumbnail'),
-        window.h(
+        h('dt', {}, 'Default Thumbnail'),
+        h(
           'dd',
           {},
-          thumb && window.h('img', { src: this.props.getAsset(thumb).toString() }),
+          thumb && h('img', { src: this.props.getAsset(thumb).toString() }),
         ),
       ),
     );
   },
 });
-const AuthorsPreview = window.createClass({
+const AuthorsPreview = createClass({
   render: function () {
-    return window.h(
+    return h(
       'div',
       {},
-      window.h('h1', {}, 'Authors'),
+      h('h1', {}, 'Authors'),
       this.props.widgetsFor('authors').map(function (author, index) {
-        return window.h(
+        return h(
           'div',
           { key: index },
-          window.h('hr', {}),
-          window.h('strong', {}, author.data.name),
+          h('hr', {}),
+          h('strong', {}, author.data.name),
           author.widgets.description,
         );
       }),
@@ -68,7 +68,7 @@ const AuthorsPreview = window.createClass({
   },
 });
 
-const RelationKitchenSinkPostPreview = window.createClass({
+const RelationKitchenSinkPostPreview = createClass({
   render: function () {
     // When a post is selected from the relation field, all of it's data
     // will be available in the field's metadata nested under the collection
@@ -80,24 +80,24 @@ const RelationKitchenSinkPostPreview = window.createClass({
     const post = fieldsMetaData && fieldsMetaData.posts.value;
     const style = { border: '2px solid #ccc', borderRadius: '8px', padding: '20px' };
     return post
-      ? window.h(
+      ? h(
           'div',
           { style: style },
-          window.h('h2', {}, 'Related Post'),
-          window.h('h3', {}, post.title),
-          window.h('img', { src: post.image }),
-          window.h('p', {}, (post.body ?? '').slice(0, 100) + '...'),
+          h('h2', {}, 'Related Post'),
+          h('h3', {}, post.title),
+          h('img', { src: post.image }),
+          h('p', {}, (post.body ?? '').slice(0, 100) + '...'),
         )
       : null;
   },
 });
 
-window.CMS.registerPreviewTemplate('posts', PostPreview);
-window.CMS.registerPreviewTemplate('general', GeneralPreview);
-window.CMS.registerPreviewTemplate('authors', AuthorsPreview);
+CMS.registerPreviewTemplate('posts', PostPreview);
+CMS.registerPreviewTemplate('general', GeneralPreview);
+CMS.registerPreviewTemplate('authors', AuthorsPreview);
 // Pass the name of a registered control to reuse with a new widget preview.
-window.CMS.registerWidget('relationKitchenSinkPost', 'relation', RelationKitchenSinkPostPreview);
-window.CMS.registerAdditionalLink({
+CMS.registerWidget('relationKitchenSinkPost', 'relation', RelationKitchenSinkPostPreview);
+CMS.registerAdditionalLink({
   id: 'example',
   title: 'Example.com',
   data: 'https://example.com',
