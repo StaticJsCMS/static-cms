@@ -1,4 +1,3 @@
-import { styled } from '@mui/material/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import AppBar from '@mui/material/AppBar';
@@ -7,11 +6,13 @@ import CircularProgress from '@mui/material/CircularProgress';
 import green from '@mui/material/colors/green';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import React, { useCallback, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 
 import { colors, components, zIndex } from '../../components/UI/styles';
+import { selectAllowDeletion } from '../../lib/util/collection.util';
 import { SettingsDropdown } from '../UI';
 import NavLink from '../UI/NavLink';
 
@@ -106,6 +107,7 @@ const EditorToolbar = ({
   editorBackLink,
 }: TranslatedProps<EditorToolbarProps>) => {
   const canCreate = useMemo(() => collection.create ?? false, [collection.create]);
+  const canDelete = useMemo(() => selectAllowDeletion(collection), [collection]);
   const isPublished = useMemo(() => !isNewEntry && !hasChanged, [hasChanged, isNewEntry]);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -116,6 +118,74 @@ const EditorToolbar = ({
   const handleClose = useCallback(() => {
     setAnchorEl(null);
   }, []);
+
+  const handleMenuOptionClick = useCallback(
+    (callback: () => Promise<void> | void) => () => {
+      handleClose();
+      callback();
+    },
+    [handleClose],
+  );
+
+  const handlePersistAndNew = useMemo(
+    () => handleMenuOptionClick(onPersistAndNew),
+    [handleMenuOptionClick, onPersistAndNew],
+  );
+  const handlePersistAndDuplicate = useMemo(
+    () => handleMenuOptionClick(onPersistAndDuplicate),
+    [handleMenuOptionClick, onPersistAndDuplicate],
+  );
+  const handleDuplicate = useMemo(
+    () => handleMenuOptionClick(onDuplicate),
+    [handleMenuOptionClick, onDuplicate],
+  );
+  const handlePersist = useMemo(
+    () => handleMenuOptionClick(() => onPersist()),
+    [handleMenuOptionClick, onPersist],
+  );
+  const handleDelete = useMemo(
+    () => handleMenuOptionClick(onDelete),
+    [handleMenuOptionClick, onDelete],
+  );
+
+  const menuItems = useMemo(() => {
+    const items: JSX.Element[] = [];
+
+    if (!isPublished) {
+      items.push(
+        <MenuItem key="publishNow" onClick={handlePersist}>
+          {t('editor.editorToolbar.publishNow')}
+        </MenuItem>,
+      );
+
+      if (canCreate) {
+        items.push(
+          <MenuItem key="publishAndCreateNew" onClick={handlePersistAndNew}>
+            {t('editor.editorToolbar.publishAndCreateNew')}
+          </MenuItem>,
+          <MenuItem key="publishAndDuplicate" onClick={handlePersistAndDuplicate}>
+            {t('editor.editorToolbar.publishAndDuplicate')}
+          </MenuItem>,
+        );
+      }
+    }
+
+    if (canCreate) {
+      items.push(
+        <MenuItem key="duplicate" onClick={handleDuplicate}>{t('editor.editorToolbar.duplicate')}</MenuItem>,
+      );
+    }
+
+    return items;
+  }, [
+    canCreate,
+    handleDuplicate,
+    handlePersist,
+    handlePersistAndDuplicate,
+    handlePersistAndNew,
+    isPublished,
+    t,
+  ]);
 
   const controls = useMemo(
     () => (
@@ -131,6 +201,7 @@ const EditorToolbar = ({
               variant="contained"
               color={isPublished ? 'success' : 'primary'}
               endIcon={<KeyboardArrowDownIcon />}
+              disabled={menuItems.length === 0 || isPersisting}
             >
               {isPublished
                 ? t('editor.editorToolbar.published')
@@ -161,29 +232,11 @@ const EditorToolbar = ({
               'aria-labelledby': 'existing-published-button',
             }}
           >
-            {!isPublished ? (
-              [
-                <MenuItem key="publishNow" onClick={() => onPersist()}>
-                  {t('editor.editorToolbar.publishNow')}
-                </MenuItem>,
-                ...(canCreate
-                  ? [
-                      <MenuItem key="publishAndCreateNew" onClick={onPersistAndNew}>
-                        {t('editor.editorToolbar.publishAndCreateNew')}
-                      </MenuItem>,
-                      <MenuItem key="publishAndDuplicate" onClick={onPersistAndDuplicate}>
-                        {t('editor.editorToolbar.publishAndDuplicate')}
-                      </MenuItem>,
-                    ]
-                  : []),
-              ]
-            ) : (
-              <MenuItem onClick={onDuplicate}>{t('editor.editorToolbar.duplicate')}</MenuItem>
-            )}
+            {menuItems}
           </Menu>
         </div>
-        {showDelete ? (
-          <Button variant="outlined" color="error" key="delete-button" onClick={onDelete}>
+        {showDelete && canDelete ? (
+          <Button variant="outlined" color="error" key="delete-button" onClick={handleDelete}>
             {t('editor.editorToolbar.deleteEntry')}
           </Button>
         ) : null}
@@ -191,16 +244,13 @@ const EditorToolbar = ({
     ),
     [
       anchorEl,
-      canCreate,
+      canDelete,
       handleClick,
       handleClose,
+      handleDelete,
       isPersisting,
       isPublished,
-      onDelete,
-      onDuplicate,
-      onPersist,
-      onPersistAndDuplicate,
-      onPersistAndNew,
+      menuItems,
       open,
       showDelete,
       t,
