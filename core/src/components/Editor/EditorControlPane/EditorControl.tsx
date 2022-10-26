@@ -211,6 +211,7 @@ const EditorControl = ({
     <ControlContainer className={className} $isHidden={isHidden}>
       <>
         {React.createElement(widget.control, {
+          key: `field_${path}`,
           clearFieldErrors,
           clearSearch,
           collection,
@@ -241,9 +242,9 @@ const EditorControl = ({
           i18n,
           hasErrors,
         })}
-        {fieldHint && <ControlHint $error={hasErrors}>{fieldHint}</ControlHint>}
+        {fieldHint ? <ControlHint key="hint" $error={hasErrors}>{fieldHint}</ControlHint> : null}
         {hasErrors ? (
-          <ControlErrorsList>
+          <ControlErrorsList key="errors">
             {errors.map(error => {
               return (
                 error.message &&

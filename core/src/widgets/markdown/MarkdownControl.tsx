@@ -155,34 +155,52 @@ const MarkdownControl = ({
   const widgetRules = useWidgetRules(markdownEditorOptions.widgetRules, { getAsset, field });
   const toolbarItems = useToolbarItems(markdownEditorOptions.toolbarItems, handleOpenMedialLibrary);
 
-  return (
-    <StyledEditorWrapper key="markdown-control-wrapper">
-      <FieldLabel
-        key="markdown-control-label"
-        isActive={hasFocus}
-        hasErrors={hasErrors}
-        onClick={handleLabelClick}
-      >
-        {label}
-      </FieldLabel>
-      <Editor
-        key="markdown-control-editor"
-        initialValue={internalValue}
-        previewStyle="vertical"
-        height={height}
-        initialEditType={initialEditType}
-        useCommandShortcut={true}
-        onChange={handleOnChange}
-        toolbarItems={toolbarItems}
-        ref={editorRef}
-        onFocus={handleOnFocus}
-        onBlur={handleOnBlur}
-        autofocus={false}
-        widgetRules={widgetRules}
-        plugins={plugins}
-      />
-      <Outline key="markdown-control-outline" hasLabel hasError={hasErrors} />
-    </StyledEditorWrapper>
+  return useMemo(
+    () => (
+      <StyledEditorWrapper key="markdown-control-wrapper">
+        <FieldLabel
+          key="markdown-control-label"
+          isActive={hasFocus}
+          hasErrors={hasErrors}
+          onClick={handleLabelClick}
+        >
+          {label}
+        </FieldLabel>
+        <Editor
+          key="markdown-control-editor"
+          initialValue={internalValue}
+          previewStyle="vertical"
+          height={height}
+          initialEditType={initialEditType}
+          useCommandShortcut={true}
+          onChange={handleOnChange}
+          toolbarItems={toolbarItems}
+          ref={editorRef}
+          onFocus={handleOnFocus}
+          onBlur={handleOnBlur}
+          autofocus={false}
+          widgetRules={widgetRules}
+          plugins={plugins}
+        />
+        <Outline key="markdown-control-outline" hasLabel hasError={hasErrors} />
+      </StyledEditorWrapper>
+    ),
+    [
+      editorRef,
+      handleLabelClick,
+      handleOnBlur,
+      handleOnChange,
+      handleOnFocus,
+      hasErrors,
+      hasFocus,
+      height,
+      initialEditType,
+      internalValue,
+      label,
+      plugins,
+      toolbarItems,
+      widgetRules,
+    ],
   );
 };
 
