@@ -146,12 +146,10 @@ const EditorControl = ({
   submitted,
   getAsset,
   isDisabled,
-  isEditorComponent,
   isFetching,
   isFieldDuplicate,
   isFieldHidden,
   isHidden = false,
-  isNewEditorComponent,
   loadEntry,
   locale,
   mediaPaths,
@@ -223,11 +221,9 @@ const EditorControl = ({
           submitted,
           getAsset: handleGetAsset(collection, entry),
           isDisabled: isDisabled ?? false,
-          isEditorComponent: isEditorComponent ?? false,
           isFetching,
           isFieldDuplicate,
           isFieldHidden,
-          isNewEditorComponent: isNewEditorComponent ?? false,
           label: getFieldLabel(field, t),
           loadEntry,
           locale,
@@ -270,11 +266,9 @@ interface EditorControlOwnProps {
   fieldsErrors: FieldsErrors;
   submitted: boolean;
   isDisabled?: boolean;
-  isEditorComponent?: boolean;
   isFieldDuplicate?: (field: Field) => boolean;
   isFieldHidden?: (field: Field) => boolean;
   isHidden?: boolean;
-  isNewEditorComponent?: boolean;
   locale?: string;
   parentPath: string;
   value: ValueOrNestedValue;

@@ -1,11 +1,15 @@
 import { styled } from '@mui/material/styles';
 import React, { isValidElement, useCallback, useMemo } from 'react';
+import ReactDOM from 'react-dom';
+import Frame, { FrameContextConsumer } from 'react-frame-component';
+import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
+import { ScrollSyncPane } from 'react-scroll-sync';
 
 import { getAsset as getAssetAction } from '../../../actions/media';
 import { lengths } from '../../../components/UI/styles';
 import { INFERABLE_FIELDS } from '../../../constants/fieldInference';
-import { getPreviewTemplate, getRemarkPlugins, resolveWidget } from '../../../lib/registry';
+import { getPreviewStyles, getPreviewTemplate, resolveWidget } from '../../../lib/registry';
 import { selectInferedField, selectTemplateName } from '../../../lib/util/collection.util';
 import { selectField } from '../../../lib/util/field.util';
 import { selectIsLoadingAsset } from '../../../reducers/medias';
@@ -14,27 +18,47 @@ import EditorPreview from './EditorPreview';
 import EditorPreviewContent from './EditorPreviewContent';
 import PreviewHOC from './PreviewHOC';
 
-import type { ReactFragment, ReactNode } from 'react';
+import type { ComponentType, ReactFragment, ReactNode } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import type { InferredField } from '../../../constants/fieldInference';
 import type {
-  Field,
-  TemplatePreviewProps,
   Collection,
   Entry,
   EntryData,
+  Field,
   GetAssetFunction,
+  TemplatePreviewProps,
+  TranslatedProps,
   ValueOrNestedValue,
 } from '../../../interface';
 import type { RootState } from '../../../store';
 
-const PreviewPaneFrame = styled('div')`
+const PreviewPaneFrame = styled(Frame)`
   width: 100%;
   height: 100%;
   border: none;
   background: #fff;
   border-radius: ${lengths.borderRadius};
   overflow: auto;
+`;
+
+const PreviewPaneWrapper = styled('div')`
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+  border-radius: ${lengths.borderRadius};
+  overflow: auto;
+`;
+
+const StyledPreviewContent = styled('div')`
+  width: calc(100% - min(864px, 50%));
+  top: 64px;
+  right: 0;
+  position: absolute;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  padding: 16px;
 `;
 
 /**
@@ -162,7 +186,6 @@ function getWidget(
       }
       entry={entry}
       resolveWidget={resolveWidget}
-      getRemarkPlugins={getRemarkPlugins}
     />
   );
 }
@@ -234,8 +257,8 @@ function getNestedWidgets(
   );
 }
 
-const PreviewPane = (props: EditorPreviewPaneProps) => {
-  const { entry, collection, config, fields, getAsset } = props;
+const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
+  const { entry, collection, config, fields, previewInFrame, getAsset, t } = props;
 
   const inferedFields = useMemo(() => {
     const titleField = selectInferedField(collection, 'title');
@@ -307,39 +330,120 @@ const PreviewPane = (props: EditorPreviewPaneProps) => {
     [collection, entry, fields, handleGetAsset, inferedFields],
   );
 
-  if (!entry || !entry.data) {
-    return null;
-  }
-
-  const previewComponent =
-    getPreviewTemplate(selectTemplateName(collection, entry.slug)) ?? EditorPreview;
-
-  const previewProps: TemplatePreviewProps = {
-    ...props,
-    getAsset: handleGetAsset,
-    widgetFor,
-    widgetsFor,
-  };
-
-  if (!collection) {
-    <PreviewPaneFrame id="preview-pane" />;
-  }
-
-  return (
-    <ErrorBoundary config={config}>
-      <PreviewPaneFrame id="preview-pane">
-        <EditorPreviewContent
-          {...{ previewComponent, previewProps: { ...previewProps, document, window } }}
-        />
-      </PreviewPaneFrame>
-    </ErrorBoundary>
+  const previewStyles = useMemo(
+    () =>
+      getPreviewStyles().map((style, i) => {
+        if (style.raw) {
+          return <style key={i}>{style.value}</style>;
+        }
+        return <link key={i} href={style.value} type="text/css" rel="stylesheet" />;
+      }),
+    [],
   );
+
+  const previewComponent = useMemo(
+    () => getPreviewTemplate(selectTemplateName(collection, entry.slug)) ?? EditorPreview,
+    [collection, entry.slug],
+  );
+
+  const initialFrameContent = useMemo(
+    () => `
+      <!DOCTYPE html>
+      <html>
+        <head><base target="_blank"/></head>
+        <body><div></div></body>
+      </html>
+    `,
+    [],
+  );
+
+  const element = useMemo(() => document.getElementById('cms-root'), []);
+
+  const previewProps: Omit<TemplatePreviewProps, 'document' | 'window'> = useMemo(
+    () => ({
+      ...props,
+      getAsset: handleGetAsset,
+      widgetFor,
+      widgetsFor,
+    }),
+    [handleGetAsset, props, widgetFor, widgetsFor],
+  );
+
+  return useMemo(() => {
+    if (!element) {
+      return null;
+    }
+
+    return ReactDOM.createPortal(
+      <ScrollSyncPane>
+        <StyledPreviewContent className="preview-content">
+          {!entry || !entry.data ? null : (
+            <ErrorBoundary config={config}>
+              {previewInFrame ? (
+                <PreviewPaneFrame
+                  key="preview-frame"
+                  id="preview-pane"
+                  head={previewStyles}
+                  initialContent={initialFrameContent}
+                >
+                  {!collection ? (
+                    t('collection.notFound')
+                  ) : (
+                    <FrameContextConsumer>
+                      {({ document, window }) => {
+                        return (
+                          <EditorPreviewContent
+                            key="preview-frame-content"
+                            previewComponent={previewComponent}
+                            previewProps={{ ...previewProps, document, window }}
+                          />
+                        );
+                      }}
+                    </FrameContextConsumer>
+                  )}
+                </PreviewPaneFrame>
+              ) : (
+                <PreviewPaneWrapper key="preview-wrapper" id="preview-pane">
+                  {!collection ? (
+                    t('collection.notFound')
+                  ) : (
+                    <>
+                      {previewStyles}
+                      <EditorPreviewContent
+                        key="preview-wrapper-content"
+                        previewComponent={previewComponent}
+                        previewProps={{ ...previewProps, document, window }}
+                      />
+                    </>
+                  )}
+                </PreviewPaneWrapper>
+              )}
+            </ErrorBoundary>
+          )}
+        </StyledPreviewContent>
+      </ScrollSyncPane>,
+      element,
+      'preview-content',
+    );
+  }, [
+    collection,
+    config,
+    element,
+    entry,
+    initialFrameContent,
+    previewComponent,
+    previewInFrame,
+    previewProps,
+    previewStyles,
+    t,
+  ]);
 };
 
 export interface EditorPreviewPaneOwnProps {
   collection: Collection;
   fields: Field[];
   entry: Entry;
+  previewInFrame: boolean;
 }
 
 function mapStateToProps(state: RootState, ownProps: EditorPreviewPaneOwnProps) {
@@ -354,4 +458,4 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export type EditorPreviewPaneProps = ConnectedProps<typeof connector>;
 
-export default connector(PreviewPane);
+export default connector(translate()(PreviewPane) as ComponentType<EditorPreviewPaneProps>);

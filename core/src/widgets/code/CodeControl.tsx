@@ -88,8 +88,6 @@ const settingsPersistKeys = {
 };
 
 const CodeControl = ({
-  isEditorComponent,
-  isNewEditorComponent,
   field,
   onChange,
   hasErrors,
@@ -112,31 +110,20 @@ const CodeControl = ({
   );
 
   // If the value is a map, keys can be customized via config.
-  const getKeys = useCallback(
-    (field: CodeField) => {
-      const defaults = {
-        code: 'code',
-        lang: 'lang',
-      };
+  const getKeys = useCallback((field: CodeField) => {
+    const defaults = {
+      code: 'code',
+      lang: 'lang',
+    };
 
-      // Force default keys if widget is an editor component code block.
-      if (isEditorComponent) {
-        return defaults;
-      }
-
-      const keys = field.keys ?? {};
-      return { ...defaults, ...keys };
-    },
-    [isEditorComponent],
-  );
+    const keys = field.keys ?? {};
+    return { ...defaults, ...keys };
+  }, []);
 
   const keys = useMemo(() => getKeys(field), [field, getKeys]);
 
   // Determine if the persisted value is a map rather than a plain string. A map value allows both the code string and the language to be persisted.
-  const valueIsMap = useMemo(
-    () => Boolean(!field.output_code_only || isEditorComponent),
-    [field.output_code_only, isEditorComponent],
-  );
+  const valueIsMap = useMemo(() => Boolean(!field.output_code_only), [field.output_code_only]);
 
   // This widget is not fully controlled, it only takes a value through props upon initialization.
   const getInitialLang = useCallback(() => {
@@ -362,9 +349,6 @@ const CodeControl = ({
                 detach={true}
                 editorDidMount={cm => {
                   setCodemirrorEditor(cm);
-                  if (isNewEditorComponent) {
-                    handleFocus();
-                  }
                 }}
                 value={lastKnownValue}
                 onChange={(_editor, _data, newValue) => handleChange(newValue)}

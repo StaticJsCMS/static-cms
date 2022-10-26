@@ -1,28 +1,27 @@
 import { oneLine } from 'common-tags';
 
-import EditorComponent from '../valueObjects/EditorComponent';
-
-import type { Pluggable } from 'unified';
 import type {
   AdditionalLink,
   BackendClass,
   BackendInitializer,
   BackendInitializerOptions,
   Config,
-  EventListener,
-  Field,
   CustomIcon,
-  LocalePhrasesRoot,
-  MediaLibraryExternalLibrary,
-  MediaLibraryOptions,
-  TemplatePreviewComponent,
-  WidgetParam,
-  WidgetValueSerializer,
-  EditorComponentOptions,
   Entry,
   EventData,
+  EventListener,
+  Field,
+  LocalePhrasesRoot,
+  MarkdownEditorOptions,
+  MediaLibraryExternalLibrary,
+  MediaLibraryOptions,
+  PreviewStyle,
+  PreviewStyleOptions,
+  TemplatePreviewComponent,
   Widget,
   WidgetOptions,
+  WidgetParam,
+  WidgetValueSerializer,
 } from '../interface';
 
 export const allowedEvents = ['prePublish', 'postPublish', 'preSave', 'postSave'] as const;
@@ -39,12 +38,14 @@ interface Registry {
   widgets: Record<string, Widget>;
   icons: Record<string, CustomIcon>;
   additionalLinks: Record<string, AdditionalLink>;
-  editorComponents: Record<string, EditorComponentOptions>;
-  remarkPlugins: Pluggable[];
   widgetValueSerializers: Record<string, WidgetValueSerializer>;
   mediaLibraries: (MediaLibraryExternalLibrary & { options: MediaLibraryOptions })[];
   locales: Record<string, LocalePhrasesRoot>;
   eventHandlers: typeof eventHandlers;
+  previewStyles: PreviewStyle[];
+
+  /** Markdown editor */
+  markdownEditorConfig: MarkdownEditorOptions;
 }
 
 /**
@@ -56,12 +57,12 @@ const registry: Registry = {
   widgets: {},
   icons: {},
   additionalLinks: {},
-  editorComponents: {},
-  remarkPlugins: [],
   widgetValueSerializers: {},
   mediaLibraries: [],
   locales: {},
   eventHandlers,
+  previewStyles: [],
+  markdownEditorConfig: {},
 };
 
 export default {
@@ -71,10 +72,6 @@ export default {
   getWidget,
   getWidgets,
   resolveWidget,
-  registerEditorComponent,
-  getEditorComponents,
-  registerRemarkPlugin,
-  getRemarkPlugins,
   registerWidgetValueSerializer,
   getWidgetValueSerializer,
   registerBackend,
@@ -91,7 +88,23 @@ export default {
   getIcon,
   registerAdditionalLink,
   getAdditionalLinks,
+  registerPreviewStyle,
+  getPreviewStyles,
 };
+
+/**
+ * Preview Styles
+ *
+ * Valid options:
+ *  - raw {boolean} if `true`, `style` value is expected to be a CSS string
+ */
+export function registerPreviewStyle(style: string, { raw = false }: PreviewStyleOptions = {}) {
+  registry.previewStyles.push({ value: style, raw });
+}
+
+export function getPreviewStyles() {
+  return registry.previewStyles;
+}
 
 /**
  * Preview Templates
@@ -194,44 +207,6 @@ export function getWidgets(): ({
 
 export function resolveWidget<T = unknown, F extends Field = Field>(name?: string): Widget<T, F> {
   return getWidget(name || 'string') || getWidget('unknown');
-}
-
-/**
- * Markdown Editor Custom Components
- */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function registerEditorComponent(component: EditorComponentOptions<any>) {
-  const plugin = EditorComponent(component);
-  if ('type' in plugin && plugin.type === 'code-block') {
-    const codeBlock = Object.values(registry.editorComponents).find(
-      c => 'type' in c && c.type === 'code-block',
-    );
-
-    if (codeBlock) {
-      console.warn(oneLine`
-        Only one editor component of type "code-block" may be registered. Previously registered code
-        block component(s) will be overwritten.
-      `);
-    }
-  }
-
-  registry.editorComponents[plugin.id] = plugin;
-}
-
-export function getEditorComponents(): Record<string, EditorComponentOptions> {
-  return registry.editorComponents;
-}
-
-/**
- * Remark plugins
- */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function registerRemarkPlugin(plugin: Pluggable) {
-  registry.remarkPlugins.push(plugin);
-}
-
-export function getRemarkPlugins(): Pluggable[] {
-  return registry.remarkPlugins;
 }
 
 /**
@@ -382,4 +357,15 @@ export function getAdditionalLinks(): Record<string, AdditionalLink> {
 
 export function getAdditionalLink(id: string): AdditionalLink | undefined {
   return registry.additionalLinks[id];
+}
+
+/**
+ * Markdown editor options
+ */
+export function setMarkdownEditorOptions(options: MarkdownEditorOptions) {
+  registry.markdownEditorConfig = options;
+}
+
+export function getMarkdownEditorOptions(): MarkdownEditorOptions {
+  return registry.markdownEditorConfig;
 }

@@ -122,17 +122,6 @@ const EditorContent = ({
   }
 };
 
-function isPreviewEnabled(collection: Collection, entry: Entry) {
-  if (collection.type === FILES) {
-    const file = getFileFromSlug(collection, entry.slug);
-    const previewEnabled = file?.editor?.preview ?? false;
-    if (previewEnabled) {
-      return previewEnabled;
-    }
-  }
-  return collection.editor?.preview ?? true;
-}
-
 interface EditorInterfaceProps {
   draftKey: string;
   entry: Entry;
@@ -228,7 +217,23 @@ const EditorInterface = ({
     setSelectedLocale(locale);
   }, []);
 
-  const previewEnabled = isPreviewEnabled(collection, entry);
+  const [previewEnabled, previewInFrame] = useMemo(() => {
+    let preview = collection.editor?.preview ?? true;
+    let frame = collection.editor?.frame ?? true;
+
+    if (collection.type === FILES) {
+      const file = getFileFromSlug(collection, entry.slug);
+      if (file?.editor?.preview !== undefined) {
+        preview = file.editor.preview;
+      }
+
+      if (file?.editor?.frame !== undefined) {
+        frame = file.editor.frame;
+      }
+    }
+
+    return [preview, frame];
+  }, [collection, entry.slug]);
 
   const collectionI18nEnabled = hasI18n(collection);
 
@@ -271,7 +276,12 @@ const EditorInterface = ({
       <StyledSplitPane>
         <ScrollSyncPane>{editor}</ScrollSyncPane>
         <PreviewPaneContainer>
-          <EditorPreviewPane collection={collection} entry={previewEntry} fields={fields} />
+          <EditorPreviewPane
+            collection={collection}
+            previewInFrame={previewInFrame}
+            entry={previewEntry}
+            fields={fields}
+          />
         </PreviewPaneContainer>
       </StyledSplitPane>
     </>

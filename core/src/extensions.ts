@@ -7,10 +7,8 @@ import {
   ProxyBackend,
   TestBackend,
 } from './backends';
-import { imageEditorComponent } from './editor-components';
 import {
   registerBackend,
-  registerEditorComponent,
   registerLocale,
   registerWidget,
 } from './lib/registry';
@@ -59,12 +57,5 @@ export function addExtensions() {
     CodeWidget(),
     ColorStringWidget(),
   ]);
-  registerEditorComponent(imageEditorComponent);
-  registerEditorComponent({
-    id: 'code-block',
-    label: 'Code Block',
-    widget: 'code',
-    type: 'code-block',
-  });
   registerLocale('en', locales.en);
 }

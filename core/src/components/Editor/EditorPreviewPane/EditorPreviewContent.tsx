@@ -1,34 +1,15 @@
-import { styled } from '@mui/material/styles';
 import React, { useMemo } from 'react';
-import ReactDOM from 'react-dom';
-import { ScrollSyncPane } from 'react-scroll-sync';
 
-import type { TemplatePreviewComponent, TemplatePreviewProps } from '../../../interface';
 import type { ReactNode } from 'react';
+import type { TemplatePreviewComponent, TemplatePreviewProps } from '../../../interface';
 
 interface PreviewContentProps {
   previewComponent?: TemplatePreviewComponent;
   previewProps: TemplatePreviewProps;
 }
 
-const StyledPreviewContent = styled('div')`
-  width: calc(100% - min(864px, 50%));
-  top: 64px;
-  right: 0;
-  position: absolute;
-  height: calc(100vh - 64px);
-  overflow-y: auto;
-  padding: 16px;
-`;
-
 const PreviewContent = ({ previewComponent, previewProps }: PreviewContentProps) => {
-  const element = useMemo(() => document.getElementById('cms-root'), []);
-
   return useMemo(() => {
-    if (!element) {
-      return null;
-    }
-
     let children: ReactNode;
     if (!previewComponent) {
       children = null;
@@ -38,14 +19,8 @@ const PreviewContent = ({ previewComponent, previewProps }: PreviewContentProps)
       children = React.createElement(previewComponent, previewProps);
     }
 
-    return ReactDOM.createPortal(
-      <ScrollSyncPane>
-        <StyledPreviewContent className="preview-content">{children}</StyledPreviewContent>
-      </ScrollSyncPane>,
-      element,
-      'preview-content',
-    );
-  }, [previewComponent, previewProps, element]);
+    return children;
+  }, [previewComponent, previewProps]);
 };
 
 export default PreviewContent;

@@ -40,11 +40,7 @@ const GeneralPreview = createClass({
         h('dd', {}, this.props.widgetsFor('posts').data.author || 'None'),
 
         h('dt', {}, 'Default Thumbnail'),
-        h(
-          'dd',
-          {},
-          thumb && h('img', { src: this.props.getAsset(thumb).toString() }),
-        ),
+        h('dd', {}, thumb && h('img', { src: this.props.getAsset(thumb).toString() })),
       ),
     );
   },
@@ -92,6 +88,7 @@ const RelationKitchenSinkPostPreview = createClass({
   },
 });
 
+CMS.registerPreviewStyle('.toastui-editor-contents h1 { color: blue }', { raw: true });
 CMS.registerPreviewTemplate('posts', PostPreview);
 CMS.registerPreviewTemplate('general', GeneralPreview);
 CMS.registerPreviewTemplate('authors', AuthorsPreview);

@@ -61,6 +61,8 @@ collections:
     label: FAQ
     folder: _faqs
     create: true
+    editor:
+      frame: false
     fields:
       - label: Question
         name: title

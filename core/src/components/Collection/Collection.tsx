@@ -293,4 +293,4 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export type CollectionViewProps = ConnectedProps<typeof connector>;
 
-export default translate()(connector(CollectionView)) as ComponentType<CollectionViewOwnProps>;
+export default connector(translate()(CollectionView) as ComponentType<CollectionViewProps>);

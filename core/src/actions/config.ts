@@ -174,6 +174,10 @@ export function applyDefaults(originalConfig: Config) {
     for (const collection of config.collections) {
       let collectionI18n = collection[I18N];
 
+      if (config.editor && !collection.editor) {
+        collection.editor = { preview: config.editor.preview, frame: config.editor.frame };
+      }
+
       if (i18n && collectionI18n) {
         collectionI18n = getI18nDefaults(collectionI18n, i18n);
         collection[I18N] = collectionI18n;
@@ -240,6 +244,10 @@ export function applyDefaults(originalConfig: Config) {
           if (file.fields) {
             file.fields = setI18nDefaultsForFields(file.fields, Boolean(fileI18n));
           }
+
+          if (collection.editor && !file.editor) {
+            file.editor = { preview: collection.editor.preview, frame: collection.editor.frame };
+          }
         }
       }
 
@@ -266,10 +274,6 @@ export function applyDefaults(originalConfig: Config) {
           id: `${group.field}__${group.pattern}`,
         };
       });
-
-      if (config.editor && !collection.editor) {
-        collection.editor = { preview: config.editor.preview };
-      }
     }
   });
 }

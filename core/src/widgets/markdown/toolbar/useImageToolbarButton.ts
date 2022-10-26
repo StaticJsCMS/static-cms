@@ -7,7 +7,7 @@ export interface ImagePluginProps {
 
 const PREFIX = 'toastui-editor-';
 
-const useImagePlugin = ({ openMediaLibrary }: ImagePluginProps): ToolbarItemOptions => {
+const useImageToolbarButton = ({ openMediaLibrary }: ImagePluginProps): ToolbarItemOptions => {
   const toolbarButton = useMemo(() => {
     const btn = document.createElement('button');
     btn.type = 'button';
@@ -41,4 +41,4 @@ const useImagePlugin = ({ openMediaLibrary }: ImagePluginProps): ToolbarItemOpti
   return toolbarItem;
 };
 
-export default useImagePlugin;
+export default useImageToolbarButton;

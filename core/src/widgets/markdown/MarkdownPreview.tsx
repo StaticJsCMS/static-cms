@@ -1,28 +1,28 @@
-import DOMPurify from 'dompurify';
-import React from 'react';
+import { Viewer } from '@toast-ui/react-editor';
+import React, { useEffect, useRef } from 'react';
 
 import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
-import { markdownToHtml } from './serializers';
+import useEditorOptions from './hooks/useEditorOptions';
 
 import type { MarkdownField, WidgetPreviewProps } from '../../interface';
 
-const MarkdownPreview = ({
-  value,
-  getAsset,
-  field,
-  getRemarkPlugins,
-}: WidgetPreviewProps<string, MarkdownField>) => {
+const MarkdownPreview = ({ value }: WidgetPreviewProps<string, MarkdownField>) => {
+  const { plugins } = useEditorOptions();
+  const viewer = useRef<Viewer | null>(null);
+
+  useEffect(() => {
+    viewer.current?.getInstance().setMarkdown(value ?? '');
+  }, [value]);
+
   if (!value) {
     return null;
   }
 
-  const html = markdownToHtml(value, {
-    getAsset,
-    remarkPlugins: getRemarkPlugins(),
-  });
-  const toRender = field.sanitize_preview ?? false ? DOMPurify.sanitize(html) : html;
-
-  return <WidgetPreviewContainer dangerouslySetInnerHTML={{ __html: toRender }} />;
+  return (
+    <WidgetPreviewContainer>
+      <Viewer ref={viewer} initialValue={value} plugins={plugins} />
+    </WidgetPreviewContainer>
+  );
 };
 
 export default MarkdownPreview;

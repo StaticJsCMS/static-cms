@@ -1,7 +1,8 @@
+import type { EditorPlugin, EditorType, WidgetRule } from '@toast-ui/editor/types/editor';
+import type { ToolbarItemOptions } from '@toast-ui/editor/types/ui';
 import type { PropertiesSchema } from 'ajv/dist/types/json-schema';
 import type { ComponentType, ReactNode } from 'react';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
-import type { Pluggable } from 'unified';
 import type { MediaFile as BackendMediaFile } from './backend';
 import type { EditorControlProps } from './components/Editor/EditorControlPane/EditorControl';
 import type { formatExtensions } from './formats/formats';
@@ -126,6 +127,11 @@ export interface FilterRule {
   field: string;
 }
 
+export interface EditorConfig {
+  preview?: boolean;
+  frame?: boolean;
+}
+
 export interface CollectionFile {
   name: string;
   label: string;
@@ -136,9 +142,7 @@ export interface CollectionFile {
   media_folder?: string;
   public_folder?: string;
   i18n?: boolean | I18nInfo;
-  editor?: {
-    preview?: boolean;
-  };
+  editor?: EditorConfig;
 }
 
 interface Nested {
@@ -189,9 +193,7 @@ export interface Collection {
   nested?: Nested;
   i18n?: boolean | I18nInfo;
   hide?: boolean;
-  editor?: {
-    preview?: boolean;
-  };
+  editor?: EditorConfig;
 }
 
 export type Collections = Record<string, Collection>;
@@ -236,11 +238,9 @@ export interface WidgetControlProps<T, F extends Field = Field> {
   forList: boolean;
   getAsset: GetAssetFunction;
   isDisabled: boolean;
-  isEditorComponent: boolean;
   isFetching: boolean;
   isFieldDuplicate: EditorControlProps['isFieldDuplicate'];
   isFieldHidden: EditorControlProps['isFieldHidden'];
-  isNewEditorComponent: boolean;
   label: string;
   loadEntry: EditorControlProps['loadEntry'];
   locale: string | undefined;
@@ -262,7 +262,6 @@ export interface WidgetPreviewProps<T = unknown, F extends Field = Field> {
   entry: Entry;
   field: F;
   getAsset: GetAssetFunction;
-  getRemarkPlugins: () => Pluggable[];
   resolveWidget: <W = unknown, WF extends Field = Field>(name: string) => Widget<W, WF>;
   value: T | undefined | null;
 }
@@ -276,6 +275,8 @@ export interface TemplatePreviewProps {
   collection: Collection;
   fields: Field[];
   entry: Entry;
+  document: Document | undefined | null;
+  window: Window | undefined | null;
   getAsset: GetAssetFunction;
   widgetFor: (name: string) => ReactNode;
   widgetsFor: (name: string) =>
@@ -780,9 +781,7 @@ export interface Config {
   slug?: Slug;
   i18n?: I18nInfo;
   local_backend?: boolean | LocalBackend;
-  editor?: {
-    preview?: boolean;
-  };
+  editor?: EditorConfig;
   search?: boolean;
 }
 
@@ -797,34 +796,6 @@ export interface BackendInitializerOptions {
 export interface BackendInitializer {
   init: (config: Config, options: BackendInitializerOptions) => BackendClass;
 }
-
-export interface EditorComponentWidgetOptions {
-  id: string;
-  label: string;
-  widget?: string;
-  type: string;
-}
-
-export interface EditorComponentManualOptions<T = EntryData> {
-  id: string;
-  label: string;
-  fields: Field[];
-  pattern: RegExp;
-  allow_add?: boolean;
-  fromBlock: (match: RegExpMatchArray) => T;
-  toBlock: (data: T) => string;
-  toPreview: (data: T, getAsset: GetAssetFunction, fields: Field[]) => ReactNode;
-}
-
-export function isEditorComponentWidgetOptions(
-  options: EditorComponentOptions,
-): options is EditorComponentWidgetOptions {
-  return 'widget' in options;
-}
-
-export type EditorComponentOptions<T = EntryData> =
-  | EditorComponentManualOptions<T>
-  | EditorComponentWidgetOptions;
 
 export interface EventData {
   entry: Entry;
@@ -918,7 +889,39 @@ export interface ProcessedCodeLanguage {
   codemirror_mime_type: string;
 }
 
-export type FileMetadata = {
+export interface FileMetadata {
   author: string;
   updatedOn: string;
-};
+}
+
+export interface PreviewStyleOptions {
+  raw?: boolean;
+}
+
+export interface PreviewStyle {
+  value: string;
+  raw: boolean;
+}
+
+export interface WidgetRulesFactoryProps {
+  getAsset: GetAssetFunction;
+  field: MarkdownField;
+}
+
+export type WidgetRulesFactory = (props: WidgetRulesFactoryProps) => WidgetRule[];
+
+export interface ToolbarItemsFactoryProps {
+  imageToolbarButton: ToolbarItemOptions;
+}
+
+export type ToolbarItemsFactory = (
+  props: ToolbarItemsFactoryProps,
+) => (string | ToolbarItemOptions)[][];
+
+export interface MarkdownEditorOptions {
+  widgetRules?: WidgetRulesFactory;
+  initialEditType?: EditorType;
+  height?: string;
+  toolbarItems?: ToolbarItemsFactory;
+  plugins?: EditorPlugin[];
+}

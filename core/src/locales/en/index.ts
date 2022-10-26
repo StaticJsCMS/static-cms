@@ -72,6 +72,7 @@ const en: LocalePhrasesRoot = {
         label: 'Updated On',
       },
     },
+    notFound: 'Collection not found',
   },
   editor: {
     editorControl: {

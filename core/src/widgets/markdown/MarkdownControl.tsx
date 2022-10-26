@@ -7,17 +7,17 @@ import uuid from 'uuid';
 import FieldLabel from '../../components/UI/FieldLabel';
 import Outline from '../../components/UI/Outline';
 import { IMAGE_EXTENSION_REGEX } from '../../constants/files';
-import useImagePlugin from '../../editor-components/editorPlugin';
 import { doesUrlFileExist } from '../../lib/util/fetch.util';
 import { isNotNullish } from '../../lib/util/null.util';
 import { isNotEmpty } from '../../lib/util/string.util';
+import useEditorOptions from './hooks/useEditorOptions';
+import useToolbarItems from './hooks/useToolbarItems';
+import useWidgetRules from './hooks/useWidgetRules';
 
 import type { RefObject } from 'react';
 import type { MarkdownField, MediaLibrary, WidgetControlProps } from '../../interface';
 
 import '@toast-ui/editor/dist/toastui-editor.css';
-
-const imageFilePattern = /(!)?\[([^\]]*)\]\(([^)]+)\)/;
 
 const StyledEditorWrapper = styled('div')`
   position: relative;
@@ -91,10 +91,6 @@ const MarkdownControl = ({
     [controlID, field, mediaLibraryFieldOptions, openMediaLibrary],
   );
 
-  const imageToolbarButton = useImagePlugin({
-    openMediaLibrary: handleOpenMedialLibrary,
-  });
-
   const getMedia = useCallback(
     async (path: string) => {
       const { type, exists } = await doesUrlFileExist(path);
@@ -155,6 +151,10 @@ const MarkdownControl = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [field, mediaPath]);
 
+  const { initialEditType, height, plugins, ...markdownEditorOptions } = useEditorOptions();
+  const widgetRules = useWidgetRules(markdownEditorOptions.widgetRules, { getAsset, field });
+  const toolbarItems = useToolbarItems(markdownEditorOptions.toolbarItems, handleOpenMedialLibrary);
+
   return (
     <StyledEditorWrapper key="markdown-control-wrapper">
       <FieldLabel
@@ -169,50 +169,17 @@ const MarkdownControl = ({
         key="markdown-control-editor"
         initialValue={internalValue}
         previewStyle="vertical"
-        height="600px"
-        initialEditType="markdown"
+        height={height}
+        initialEditType={initialEditType}
         useCommandShortcut={true}
         onChange={handleOnChange}
-        toolbarItems={[
-          ['heading', 'bold', 'italic', 'strike'],
-          ['hr', 'quote'],
-          ['ul', 'ol', 'task', 'indent', 'outdent'],
-          ['table', imageToolbarButton, 'link'],
-          ['code', 'codeblock'],
-        ]}
+        toolbarItems={toolbarItems}
         ref={editorRef}
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
         autofocus={false}
-        widgetRules={[
-          {
-            rule: imageFilePattern,
-            toDOM(text) {
-              const rule = imageFilePattern;
-              const matched = text.match(rule);
-
-              if (matched) {
-                if (matched?.length === 4) {
-                  // Image
-                  const img = document.createElement('img');
-                  img.setAttribute('src', getAsset(matched[3], field).url);
-                  img.setAttribute('style', 'width: 100%;');
-                  img.innerHTML = 'test';
-                  return img;
-                } else {
-                  // File
-                  const a = document.createElement('a');
-                  a.setAttribute('target', '_blank');
-                  a.setAttribute('href', matched[2]);
-                  a.innerHTML = matched[1];
-                  return a;
-                }
-              }
-
-              return document.createElement('div');
-            },
-          },
-        ]}
+        widgetRules={widgetRules}
+        plugins={plugins}
       />
       <Outline key="markdown-control-outline" hasLabel hasError={hasErrors} />
     </StyledEditorWrapper>
