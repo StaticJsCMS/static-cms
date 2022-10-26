@@ -13,16 +13,16 @@ const defaultWidgetRules: WidgetRulesFactory = ({ getAsset, field }) => [
         if (matched?.length === 4) {
           // Image
           const img = document.createElement('img');
-          img.setAttribute('src', getAsset(matched[3], field).url);
+          img.setAttribute('src', getAsset(matched[3] ?? '', field).url);
           img.setAttribute('style', 'width: 100%;');
-          img.innerHTML = 'test';
+          img.innerHTML = matched[2] ?? '';
           return img;
         } else {
           // File
           const a = document.createElement('a');
           a.setAttribute('target', '_blank');
-          a.setAttribute('href', matched[2]);
-          a.innerHTML = matched[1];
+          a.setAttribute('href', matched[2] ?? '');
+          a.innerHTML = matched[1] ?? '';
           return a;
         }
       }
