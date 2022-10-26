@@ -621,11 +621,6 @@ export interface MarkdownField extends BaseField {
   widget: 'markdown';
   default?: string;
 
-  minimal?: boolean;
-  buttons?: MarkdownWidgetButton[];
-  editor_components?: string[];
-
-  sanitize_preview?: boolean;
   media_library?: MediaLibrary;
   media_folder?: string;
   public_folder?: string;
