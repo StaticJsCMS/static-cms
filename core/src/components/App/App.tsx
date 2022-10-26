@@ -81,10 +81,6 @@ function EditEntityRedirect() {
   return <Navigate to={`/collections/${name}/entries/${entryName}`} />;
 }
 
-history.listen(e => {
-  console.log(e);
-});
-
 const App = ({
   auth,
   user,
@@ -116,14 +112,21 @@ const App = ({
     [loginUser],
   );
 
-  const authenticating = useCallback(() => {
+  const AuthComponent = useMemo(() => {
     if (!config.config) {
       return null;
     }
 
     const backend = currentBackend(config.config);
+    return backend?.authComponent();
+  }, [config.config]);
 
-    if (backend == null) {
+  const authenticationPage = useMemo(() => {
+    if (!config.config) {
+      return null;
+    }
+
+    if (AuthComponent == null) {
       return (
         <div>
           <h1>{t('app.app.waitingBackend')}</h1>
@@ -132,21 +135,22 @@ const App = ({
     }
 
     return (
-      <div>
-        {React.createElement(backend.authComponent(), {
-          onLogin: handleLogin,
-          error: auth.error,
-          inProgress: auth.isFetching,
-          siteId: config.config.backend.site_domain,
-          base_url: config.config.backend.base_url,
-          authEndpoint: config.config.backend.auth_endpoint,
-          config: config.config,
-          clearHash: () => history.replace('/'),
-          t,
-        })}
+      <div key="auth-page-wrapper">
+        <AuthComponent
+          key="auth-page"
+          onLogin={handleLogin}
+          error={auth.error}
+          inProgress={auth.isFetching}
+          siteId={config.config.backend.site_domain}
+          base_url={config.config.backend.base_url}
+          authEndpoint={config.config.backend.auth_endpoint}
+          config={config.config}
+          clearHash={() => history.replace('/')}
+          t={t}
+        />
       </div>
     );
-  }, [auth.error, auth.isFetching, config.config, handleLogin, t]);
+  }, [AuthComponent, auth.error, auth.isFetching, config.config, handleLogin, t]);
 
   const defaultPath = useMemo(() => getDefaultPath(collections), [collections]);
 
@@ -163,7 +167,7 @@ const App = ({
   }
 
   if (!user) {
-    return authenticating();
+    return authenticationPage;
   }
 
   return (

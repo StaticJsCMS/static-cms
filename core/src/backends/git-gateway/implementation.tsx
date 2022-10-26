@@ -360,6 +360,7 @@ export default class GitGateway implements BackendClass {
       return { name: userData.name, login: userData.email } as User;
     });
   }
+
   async restoreUser() {
     const client = await this.getAuthClient();
     const user = client?.currentUser();
