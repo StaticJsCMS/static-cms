@@ -60,7 +60,8 @@ const GitGatewayAuthenticationPage = ({
       onLogin(window.netlifyIdentity.currentUser());
       window.netlifyIdentity.close();
     }
-  }, [loggedIn, onLogin]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleIdentityLogin = useCallback(
     (user: User) => {
