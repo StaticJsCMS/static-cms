@@ -90,8 +90,6 @@ collections:
   - name: widgets
     label: Widgets
     delete: false
-    editor:
-      preview: false
     files:
       - name: boolean
         label: Boolean

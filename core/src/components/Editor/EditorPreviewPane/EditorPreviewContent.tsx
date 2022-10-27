@@ -3,12 +3,12 @@ import React, { useMemo } from 'react';
 import type { ReactNode } from 'react';
 import type { TemplatePreviewComponent, TemplatePreviewProps } from '../../../interface';
 
-interface PreviewContentProps {
+interface EditorPreviewContentProps {
   previewComponent?: TemplatePreviewComponent;
   previewProps: TemplatePreviewProps;
 }
 
-const PreviewContent = ({ previewComponent, previewProps }: PreviewContentProps) => {
+const EditorPreviewContent = ({ previewComponent, previewProps }: EditorPreviewContentProps) => {
   return useMemo(() => {
     let children: ReactNode;
     if (!previewComponent) {
@@ -23,4 +23,4 @@ const PreviewContent = ({ previewComponent, previewProps }: PreviewContentProps)
   }, [previewComponent, previewProps]);
 };
 
-export default PreviewContent;
+export default EditorPreviewContent;

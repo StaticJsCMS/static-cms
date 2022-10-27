@@ -27,3 +27,38 @@ export function getFieldLabel(field: Field, t: t) {
     field.required === false ? ` (${t('editor.editorControl.field.optional')})` : ''
   }`}`;
 }
+
+function findField(field: Field | undefined, path: string[]): Field | null {
+  if (!field) {
+    return null;
+  }
+
+  if (path.length === 0) {
+    return field;
+  }
+
+  if (!('fields' in field && field.fields)) {
+    return null;
+  }
+
+  const name = path.slice(0, 1)[0];
+  const rest = path.slice(1);
+
+  return findField(
+    field.fields.find(f => f.name === name),
+    rest,
+  );
+}
+
+export function getField(field: Field | Field[], path: string): Field | null {
+  return findField(
+    Array.isArray(field)
+      ? {
+          widget: 'object',
+          name: 'root',
+          fields: field,
+        }
+      : field,
+    path.split('.'),
+  );
+}

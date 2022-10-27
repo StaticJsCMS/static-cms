@@ -3,7 +3,7 @@ import React from 'react';
 import type { WidgetPreviewComponent, WidgetPreviewProps } from '../../../interface';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-interface PreviewHOCProps extends WidgetPreviewProps {
+interface PreviewHOCProps extends Omit<WidgetPreviewProps, 'widgetFor'> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   previewComponent: WidgetPreviewComponent;
 }

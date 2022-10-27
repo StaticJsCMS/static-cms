@@ -17,14 +17,15 @@ const StyledImage = styled(({ src }: StyledImageProps) => (
   height: auto;
 `;
 
-interface StyledImageAsset {
+interface ImageAssetProps {
   getAsset: GetAssetFunction;
   value: string;
   field: FileOrImageField;
 }
 
-function StyledImageAsset({ getAsset, value, field }: StyledImageAsset) {
+function ImageAsset({ getAsset, value, field }: ImageAssetProps) {
   const [assetSource, setAssetSource] = useState('');
+  console.log('value', `"${value}"`, 'assetSource', `"${assetSource}"`);
   useEffect(() => {
     setAssetSource(getAsset(value, field)?.toString() ?? '');
   }, [field, getAsset, value]);
@@ -37,6 +38,7 @@ function ImagePreviewContent({
   getAsset,
   field,
 }: WidgetPreviewProps<string | string[], FileOrImageField>) {
+  console.log('[ImagePreviewContent] value', `"${value}"`);
   if (!value) {
     return null;
   }
@@ -45,16 +47,17 @@ function ImagePreviewContent({
     return (
       <>
         {value.map(val => (
-          <StyledImageAsset key={val} value={val} getAsset={getAsset} field={field} />
+          <ImageAsset key={val} value={val} getAsset={getAsset} field={field} />
         ))}
       </>
     );
   }
 
-  return <StyledImageAsset value={value} getAsset={getAsset} field={field} />;
+  return <ImageAsset value={value} getAsset={getAsset} field={field} />;
 }
 
 function ImagePreview(props: WidgetPreviewProps<string | string[], FileOrImageField>) {
+  console.log('[ImagePreview] value', `"${props.value}"`);
   return (
     <WidgetPreviewContainer>
       {props.value ? <ImagePreviewContent {...props} /> : null}

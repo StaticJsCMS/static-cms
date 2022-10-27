@@ -5,9 +5,9 @@ import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 import type { WidgetPreviewProps, ObjectField, ListField, ObjectValue } from '../../interface';
 
 function ObjectPreview({
-  value,
+  field,
 }: WidgetPreviewProps<ObjectValue | ObjectValue[], ObjectField | ListField>) {
-  return <WidgetPreviewContainer>{JSON.stringify(value, null, 2)}</WidgetPreviewContainer>;
+  return <WidgetPreviewContainer>{field.fields ?? null}</WidgetPreviewContainer>;
 }
 
 export default ObjectPreview;

@@ -63,9 +63,6 @@ const SelectControl = ({
   const handleChange = useCallback(
     (event: SelectChangeEvent<string | string[]>) => {
       const selectedValue = event.target.value;
-      console.log('selectedValue', typeof selectedValue, selectedValue);
-      console.log('optionsByValue', optionsByValue);
-
       const isMultiple = field.multiple ?? false;
       const isEmpty =
         isMultiple && Array.isArray(selectedValue)
@@ -81,7 +78,6 @@ const SelectControl = ({
       } else if (typeof selectedValue === 'string') {
         const selectedOption = optionsByValue[selectedValue];
         const optionValue = selectedOption?.value ?? '';
-        console.log('optionValue', typeof optionValue, optionValue);
         setInternalValue(optionValue);
         onChange(optionValue);
       } else if (isMultiple) {

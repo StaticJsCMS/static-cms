@@ -262,8 +262,9 @@ export interface WidgetControlProps<T, F extends Field = Field> {
 }
 
 export interface WidgetPreviewProps<T = unknown, F extends Field = Field> {
+  collection: Collection;
   entry: Entry;
-  field: F;
+  field: RenderedField<F>;
   getAsset: GetAssetFunction;
   resolveWidget: <W = unknown, WF extends Field = Field>(name: string) => Widget<W, WF>;
   value: T | undefined | null;
@@ -527,6 +528,10 @@ export interface SelectWidgetOptionObject {
 export type AuthScope = 'repo' | 'public_repo';
 
 export type SlugEncoding = 'unicode' | 'ascii';
+
+export type RenderedField<T extends Field = Field> = Omit<T, 'fields'> & {
+  fields?: ReactNode[];
+}
 
 export interface BaseField {
   name: string;
