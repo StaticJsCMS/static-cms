@@ -5,27 +5,33 @@ import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 import type { SelectField, WidgetPreviewProps } from '../../interface';
 
 interface ListPreviewProps {
-  values: string[];
+  values: (string | number)[];
 }
 
 const ListPreview = ({ values }: ListPreviewProps) => {
   return (
     <ul>
-      {(values as string[]).map((value, idx) => (
+      {values.map((value, idx) => (
         <li key={idx}>{value}</li>
       ))}
     </ul>
   );
 };
 
-const SelectPreview = ({ value }: WidgetPreviewProps<string | string[], SelectField>) => {
+const SelectPreview = ({
+  value,
+}: WidgetPreviewProps<string | number | (string | number)[], SelectField>) => {
   if (!value) {
     return <WidgetPreviewContainer />;
   }
 
   return (
     <WidgetPreviewContainer>
-      {typeof value === 'string' ? value : <ListPreview values={value} />}
+      {typeof value === 'string' || typeof value === 'number' ? (
+        value
+      ) : (
+        <ListPreview values={value} />
+      )}
     </WidgetPreviewContainer>
   );
 };

@@ -3,7 +3,7 @@ import isNumber from 'lodash/isNumber';
 export function validateMinMax(
   t: (key: string, options: unknown) => string,
   fieldLabel: string,
-  value?: string | string[] | undefined | null,
+  value?: string | number | (string | number)[] | undefined | null,
   min?: number,
   max?: number,
 ) {
@@ -19,11 +19,17 @@ export function validateMinMax(
     };
   }
 
-  if ([min, max, value?.length].every(isNumber) && (value!.length < min! || value!.length > max!)) {
+  if (typeof value === 'string' || typeof value === 'number') {
+    return false;
+  }
+
+  const length = value?.length ?? 0;
+
+  if ([min, max, length].every(isNumber) && (length < min! || length > max!)) {
     return minMaxError(min === max ? 'rangeCountExact' : 'rangeCount');
-  } else if (isNumber(min) && min > 0 && value?.length && value.length < min) {
+  } else if (isNumber(min) && min > 0 && length < min) {
     return minMaxError('rangeMin');
-  } else if (isNumber(max) && value?.length && value.length > max) {
+  } else if (isNumber(max) && length > max) {
     return minMaxError('rangeMax');
   }
 }

@@ -1,20 +1,34 @@
-import React from 'react';
 import { styled } from '@mui/material/styles';
+import React, { useEffect, useState } from 'react';
 
 import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { FileOrImageField, WidgetPreviewProps, GetAssetFunction } from '../../interface';
+import type { FileOrImageField, GetAssetFunction, WidgetPreviewProps } from '../../interface';
 
 interface FileLinkProps {
-  href: string;
-  path: string;
+  value: string;
+  getAsset: GetAssetFunction;
+  field: FileOrImageField;
 }
 
-const FileLink = styled(({ href, path }: FileLinkProps) => (
-  <a href={href} rel="noopener noreferrer" target="_blank">
-    {path}
-  </a>
-))`
+const FileLink = ({ value, getAsset, field }: FileLinkProps) => {
+  const [assetSource, setAssetSource] = useState('');
+  useEffect(() => {
+    if (!value || Array.isArray(value)) {
+      return;
+    }
+
+    setAssetSource(getAsset(value, field)?.toString() ?? '');
+  }, [field, getAsset, value]);
+
+  return (
+    <a href={assetSource} rel="noopener noreferrer" target="_blank">
+      {value}
+    </a>
+  );
+};
+
+const StyledFileLink = styled(FileLink)`
   display: block;
 `;
 
@@ -28,7 +42,7 @@ function FileLinkList({ values, getAsset, field }: FileLinkListProps) {
   return (
     <div>
       {values.map(value => (
-        <FileLink key={value} path={value} href={getAsset(value, field).toString()} />
+        <StyledFileLink key={value} value={value} getAsset={getAsset} field={field} />
       ))}
     </div>
   );
@@ -47,7 +61,7 @@ function FileContent({
     return <FileLinkList values={value} getAsset={getAsset} field={field} />;
   }
 
-  return <FileLink key={value} path={value} href={getAsset(value, field).toString()} />;
+  return <StyledFileLink key={value} value={value} getAsset={getAsset} field={field} />;
 }
 
 function FilePreview(props: WidgetPreviewProps<string | string[], FileOrImageField>) {

@@ -1,9 +1,9 @@
-import React from 'react';
 import { styled } from '@mui/material/styles';
+import React, { useEffect, useState } from 'react';
 
 import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { FileOrImageField, WidgetPreviewProps, GetAssetFunction } from '../../interface';
+import type { FileOrImageField, GetAssetFunction, WidgetPreviewProps } from '../../interface';
 
 interface StyledImageProps {
   src: string;
@@ -24,7 +24,12 @@ interface StyledImageAsset {
 }
 
 function StyledImageAsset({ getAsset, value, field }: StyledImageAsset) {
-  return <StyledImage src={getAsset(value, field).toString()} />;
+  const [assetSource, setAssetSource] = useState('');
+  useEffect(() => {
+    setAssetSource(getAsset(value, field)?.toString() ?? '');
+  }, [field, getAsset, value]);
+
+  return <StyledImage src={assetSource} />;
 }
 
 function ImagePreviewContent({

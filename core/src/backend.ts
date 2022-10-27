@@ -320,12 +320,10 @@ export class Backend {
   }
 
   currentUser() {
-    console.error('user', this.user);
     if (this.user) {
       return this.user;
     }
     const stored = this.authStore!.retrieve();
-    console.error('stored user', stored);
     if (stored && stored.backendName === this.backendName) {
       return Promise.resolve(this.implementation.restoreUser(stored)).then(user => {
         this.user = { ...user, backendName: this.backendName };

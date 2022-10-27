@@ -620,6 +620,16 @@ collections:
             value: 2
           - label: Three
             value: 3
+      - label: Select mixed string and numeric
+        name: select_mixed_string_numeric
+        widget: select
+        options:
+          - label: One
+            value: "One"
+          - label: Two
+            value: 2
+          - label: Three
+            value: 3
       - label: Hidden
         name: hidden
         widget: hidden

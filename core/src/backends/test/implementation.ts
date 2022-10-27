@@ -228,7 +228,7 @@ export default class TestBackend implements BackendClass {
   async getMediaFile(path: string) {
     const asset = getFile(path, window.repoFiles).content as AssetProxy;
 
-    const url = asset.toString();
+    const url = asset?.toString() ?? '';
     const name = basename(path);
     const blob = await fetch(url).then(res => res.blob());
     const fileObj = new File([blob], name);

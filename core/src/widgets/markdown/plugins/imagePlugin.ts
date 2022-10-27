@@ -19,9 +19,12 @@ const toHTMLRenderers: (props: MarkdownPluginFactoryProps) => CustomHTMLRenderer
         tagName: 'img',
         outerNewLine: true,
         attributes: {
-          src: node.destination
-            ? getAsset(node.destination, field)?.toString() ?? node.destination
-            : '',
+          src: node.destination,
+          onerror: `this.onerror=null; this.src='${
+            node.destination
+              ? getAsset(node.destination, field)?.toString() ?? node.destination
+              : ''
+          }'`,
         },
         selfClose: true,
       };

@@ -133,10 +133,15 @@ interface SortableImageProps {
 
 const SortableImage = SortableElement<SortableImageProps>(
   ({ itemValue, getAsset, field, onRemove, onReplace }: SortableImageProps) => {
+    const [assetSource, setAssetSource] = useState('');
+    useEffect(() => {
+      setAssetSource(getAsset(itemValue, field)?.toString() ?? '');
+    }, [field, getAsset, itemValue]);
+
     return (
       <div>
         <ImageWrapper key="image-wrapper" $sortable>
-          <Image key="image" src={getAsset(itemValue, field)?.toString() ?? ''} />
+          <Image key="image" src={assetSource} />
         </ImageWrapper>
         <SortableImageButtons
           key="image-buttons"
@@ -386,6 +391,15 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
       return <FileLinks key="single-file-links">{renderFileLink(value)}</FileLinks>;
     }, [renderFileLink, value]);
 
+    const [assetSource, setAssetSource] = useState('');
+    useEffect(() => {
+      if (!value || Array.isArray(value)) {
+        return;
+      }
+
+      setAssetSource(getAsset(value, field)?.toString() ?? '');
+    }, [field, getAsset, value]);
+
     const renderImages = useCallback(() => {
       if (!value) {
         return null;
@@ -408,13 +422,12 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
         );
       }
 
-      const src = getAsset(value, field)?.toString() ?? '';
       return (
         <ImageWrapper key="single-image-wrapper">
-          <Image key="single-image" src={src || ''} />
+          <Image key="single-image" src={assetSource} />
         </ImageWrapper>
       );
-    }, [field, getAsset, onRemoveOne, onReplaceOne, onSortEnd, value]);
+    }, [assetSource, field, getAsset, onRemoveOne, onReplaceOne, onSortEnd, value]);
 
     const content = useMemo(() => {
       const subject = forImage ? 'image' : 'file';

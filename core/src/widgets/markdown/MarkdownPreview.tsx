@@ -14,6 +14,7 @@ const MarkdownPreview = ({ value, getAsset, field }: WidgetPreviewProps<string, 
   const viewer = useRef<Viewer | null>(null);
 
   useEffect(() => {
+    console.log('updating markdown', value ?? '');
     viewer.current?.getInstance().setMarkdown(value ?? '');
   }, [value]);
 
