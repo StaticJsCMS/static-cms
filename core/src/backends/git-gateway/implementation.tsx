@@ -1,10 +1,9 @@
-import React, { useCallback } from 'react';
-import GoTrue from 'gotrue-js';
 import ini from 'ini';
 import jwtDecode from 'jwt-decode';
 import get from 'lodash/get';
 import intersection from 'lodash/intersection';
 import pick from 'lodash/pick';
+import React, { useCallback } from 'react';
 
 import {
   AccessTokenError,
@@ -25,22 +24,22 @@ import GitHubAPI from './GitHubAPI';
 import GitLabAPI from './GitLabAPI';
 import { getClient } from './netlify-lfs-client';
 
-import type { ApiRequest, Cursor } from '../../lib/util';
 import type {
+  AuthenticationPageProps,
+  BackendClass,
+  BackendEntry,
   Config,
   Credentials,
   DisplayURL,
   DisplayURLObject,
-  BackendEntry,
-  BackendClass,
   ImplementationFile,
   PersistOptions,
-  User,
   TranslatedProps,
-  AuthenticationPageProps,
+  User,
 } from '../../interface';
-import type { Client } from './netlify-lfs-client';
+import type { ApiRequest, Cursor } from '../../lib/util';
 import type AssetProxy from '../../valueObjects/AssetProxy';
+import type { Client } from './netlify-lfs-client';
 
 const STATUS_PAGE = 'https://www.netlifystatus.com';
 const GIT_GATEWAY_STATUS_ENDPOINT = `${STATUS_PAGE}/api/v2/components.json`;
@@ -224,33 +223,18 @@ export default class GitGateway implements BackendClass {
       return this.authClient;
     }
     await initPromise;
-    if (window.netlifyIdentity) {
-      this.authClient = {
-        logout: () => window.netlifyIdentity?.logout(),
-        currentUser: () => window.netlifyIdentity?.currentUser(),
-        clearStore: () => {
-          const store = window.netlifyIdentity?.store;
-          if (store) {
-            store.user = null;
-            store.modal.page = 'login';
-            store.saving = false;
-          }
-        },
-      };
-    } else {
-      const goTrue = new GoTrue({ APIUrl: this.apiUrl });
-      this.authClient = {
-        logout: () => {
-          const user = goTrue.currentUser();
-          if (user) {
-            return user.logout();
-          }
-        },
-        currentUser: () => goTrue.currentUser(),
-        login: goTrue.login.bind(goTrue),
-        clearStore: () => undefined,
-      };
-    }
+    this.authClient = {
+      logout: () => window.netlifyIdentity?.logout(),
+      currentUser: () => window.netlifyIdentity?.currentUser(),
+      clearStore: () => {
+        const store = window.netlifyIdentity?.store;
+        if (store) {
+          store.user = null;
+          store.modal.page = 'login';
+          store.saving = false;
+        }
+      },
+    };
   }
 
   requestFunction = (req: ApiRequest) =>
