@@ -282,7 +282,8 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
     (path: string, field?: Field) => {
       return getAsset(collection, entry, path, field);
     },
-    [collection, entry, getAsset],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [collection],
   );
 
   /**

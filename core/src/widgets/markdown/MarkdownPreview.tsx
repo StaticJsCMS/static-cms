@@ -3,11 +3,14 @@ import React, { useEffect, useRef } from 'react';
 
 import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 import useEditorOptions from './hooks/useEditorOptions';
+import usePlugins from './hooks/usePlugins';
 
 import type { MarkdownField, WidgetPreviewProps } from '../../interface';
 
-const MarkdownPreview = ({ value }: WidgetPreviewProps<string, MarkdownField>) => {
-  const { plugins } = useEditorOptions();
+const MarkdownPreview = ({ value, getAsset, field }: WidgetPreviewProps<string, MarkdownField>) => {
+  const options = useEditorOptions();
+  const plugins = usePlugins(options.plugins, { getAsset, field, mode: 'preview' });
+
   const viewer = useRef<Viewer | null>(null);
 
   useEffect(() => {
@@ -20,7 +23,12 @@ const MarkdownPreview = ({ value }: WidgetPreviewProps<string, MarkdownField>) =
 
   return (
     <WidgetPreviewContainer>
-      <Viewer ref={viewer} initialValue={value} plugins={plugins} />
+      <Viewer
+        ref={viewer}
+        initialValue={value}
+        customHTMLSanitizer={(content: string) => content}
+        plugins={plugins}
+      />
     </WidgetPreviewContainer>
   );
 };

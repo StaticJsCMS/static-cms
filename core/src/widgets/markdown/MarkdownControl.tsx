@@ -11,8 +11,8 @@ import { doesUrlFileExist } from '../../lib/util/fetch.util';
 import { isNotNullish } from '../../lib/util/null.util';
 import { isNotEmpty } from '../../lib/util/string.util';
 import useEditorOptions from './hooks/useEditorOptions';
+import usePlugins from './hooks/usePlugins';
 import useToolbarItems from './hooks/useToolbarItems';
-import useWidgetRules from './hooks/useWidgetRules';
 
 import type { RefObject } from 'react';
 import type { MarkdownField, MediaLibrary, WidgetControlProps } from '../../interface';
@@ -151,8 +151,8 @@ const MarkdownControl = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [field, mediaPath]);
 
-  const { initialEditType, height, plugins, ...markdownEditorOptions } = useEditorOptions();
-  const widgetRules = useWidgetRules(markdownEditorOptions.widgetRules, { getAsset, field });
+  const { initialEditType, height, ...markdownEditorOptions } = useEditorOptions();
+  const plugins = usePlugins(markdownEditorOptions.plugins, { getAsset, field, mode: 'editor' });
   const toolbarItems = useToolbarItems(markdownEditorOptions.toolbarItems, handleOpenMedialLibrary);
 
   return useMemo(
@@ -179,7 +179,6 @@ const MarkdownControl = ({
           onFocus={handleOnFocus}
           onBlur={handleOnBlur}
           autofocus={false}
-          widgetRules={widgetRules}
           plugins={plugins}
         />
         <Outline key="markdown-control-outline" hasLabel hasError={hasErrors} />
@@ -199,7 +198,6 @@ const MarkdownControl = ({
       label,
       plugins,
       toolbarItems,
-      widgetRules,
     ],
   );
 };

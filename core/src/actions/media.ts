@@ -76,9 +76,14 @@ const emptyAsset = createAssetProxy({
   }),
 });
 
-export function getAsset(collection: Collection, entry: Entry, path: string, field?: Field) {
+export function getAsset(
+  collection: Collection | null | undefined,
+  entry: Entry | null | undefined,
+  path: string,
+  field?: Field,
+) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
-    if (!path) {
+    if (!collection || !entry || !path) {
       return emptyAsset;
     }
 
