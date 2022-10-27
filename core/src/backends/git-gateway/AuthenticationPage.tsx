@@ -27,6 +27,7 @@ const GitGatewayAuthenticationPage = ({
   onLogin,
   t,
 }: GitGatewayAuthenticationPageProps) => {
+  const [loggingIn, setLoggingIn] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [errors, setErrors] = useState<{
     identity?: string;
@@ -37,20 +38,28 @@ const GitGatewayAuthenticationPage = ({
 
   useEffect(() => {
     if (!loggedIn && window.netlifyIdentity && window.netlifyIdentity.currentUser()) {
-      console.log('current user', window.netlifyIdentity.currentUser());
-      onLogin(window.netlifyIdentity.currentUser());
-      setLoggedIn(true);
-      window.netlifyIdentity.close();
+      setLoggingIn(true);
+      setTimeout(() => {
+        if (!window.netlifyIdentity) {
+          setLoggingIn(false);
+          return;
+        }
+        onLogin(window.netlifyIdentity.currentUser());
+        setLoggedIn(true);
+        window.netlifyIdentity.close();
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleIdentityLogin = useCallback(
     (user: User) => {
-      console.log('handleIdentityLogin', user);
-      onLogin(user);
-      setLoggedIn(true);
-      window.netlifyIdentity?.close();
+      setLoggingIn(true);
+      setTimeout(() => {
+        onLogin(user);
+        setLoggedIn(true);
+        window.netlifyIdentity?.close();
+      });
     },
     [onLogin],
   );
@@ -77,10 +86,12 @@ const GitGatewayAuthenticationPage = ({
 
   const handleIdentity = useCallback(() => {
     const user = window.netlifyIdentity?.currentUser();
-    console.log('handleIdentity', user);
     if (user) {
-      onLogin(user);
-      setLoggedIn(true);
+      setLoggingIn(true);
+      setTimeout(() => {
+        onLogin(user);
+        setLoggedIn(true);
+      });
     } else {
       window.netlifyIdentity?.open();
     }
@@ -114,6 +125,7 @@ const GitGatewayAuthenticationPage = ({
       onLogin={handleIdentity}
       buttonContent={t('auth.loginWithNetlifyIdentity')}
       pageContent={pageContent}
+      loginDisabled={loggingIn}
       t={t}
     />
   );

@@ -94,12 +94,10 @@ export class LocalStorageAuthStore {
   }
 
   store(userData: unknown) {
-    console.log('userData', userData);
     window.localStorage.setItem(this.storageKey, JSON.stringify(userData));
   }
 
   logout() {
-    console.log('removing key!', this.retrieve());
     window.localStorage.removeItem(this.storageKey);
   }
 }
@@ -367,7 +365,6 @@ export class Backend {
   }
 
   async logout() {
-    console.log('backend logout!');
     try {
       await this.implementation.logout();
     } catch (e: any) {

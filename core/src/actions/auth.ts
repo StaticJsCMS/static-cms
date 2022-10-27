@@ -40,7 +40,6 @@ export function doneAuthenticating() {
 }
 
 export function logout() {
-  console.log('LOGOUT!');
   return {
     type: LOGOUT,
   } as const;
@@ -111,7 +110,6 @@ export function loginUser(credentials: Credentials) {
 }
 
 export function logoutUser() {
-  console.log('logoutUser!');
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     if (!state.config.config) {

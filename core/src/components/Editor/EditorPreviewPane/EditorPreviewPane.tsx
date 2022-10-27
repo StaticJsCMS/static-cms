@@ -42,6 +42,20 @@ const PreviewPaneFrame = styled(Frame)`
   overflow: auto;
 `;
 
+const FrameGlobalStyles = `
+  body {
+    margin: 0;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  .frame-content {
+    padding: 16px;
+  }
+`;
+
 const PreviewPaneWrapper = styled('div')`
   width: 100%;
   height: 100%;
@@ -49,6 +63,7 @@ const PreviewPaneWrapper = styled('div')`
   background: #fff;
   border-radius: ${lengths.borderRadius};
   overflow: auto;
+  padding: 16px;
 `;
 
 const StyledPreviewContent = styled('div')`
@@ -57,8 +72,7 @@ const StyledPreviewContent = styled('div')`
   right: 0;
   position: absolute;
   height: calc(100vh - 64px);
-  overflow-y: auto;
-  padding: 16px;
+  overflow: hidden;
 `;
 
 /**
@@ -332,13 +346,15 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
   );
 
   const previewStyles = useMemo(
-    () =>
-      getPreviewStyles().map((style, i) => {
+    () => [
+      ...getPreviewStyles().map((style, i) => {
         if (style.raw) {
           return <style key={i}>{style.value}</style>;
         }
         return <link key={i} href={style.value} type="text/css" rel="stylesheet" />;
       }),
+      <style key="global">{FrameGlobalStyles}</style>,
+    ],
     [],
   );
 

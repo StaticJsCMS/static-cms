@@ -36,9 +36,7 @@ const StyledColorControlContent = styled(
     ${
       $collapsed
         ? `
-          visibility: hidden;
-          height: 0;
-          width: 0;
+          display: none;
         `
         : `
           padding: 16px;
