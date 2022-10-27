@@ -1,5 +1,8 @@
-import type { EditorPlugin, EditorType, WidgetRule } from '@toast-ui/editor/types/editor';
-import type { ToolbarItemOptions } from '@toast-ui/editor/types/ui';
+import type {
+  EditorPlugin as MarkdownPlugin,
+  EditorType as MarkdownEditorType,
+} from '@toast-ui/editor/types/editor';
+import type { ToolbarItemOptions as MarkdownToolbarItemOptions } from '@toast-ui/editor/types/ui';
 import type { PropertiesSchema } from 'ajv/dist/types/json-schema';
 import type { ComponentType, ReactNode } from 'react';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
@@ -259,8 +262,9 @@ export interface WidgetControlProps<T, F extends Field = Field> {
 }
 
 export interface WidgetPreviewProps<T = unknown, F extends Field = Field> {
+  collection: Collection;
   entry: Entry;
-  field: F;
+  field: RenderedField<F>;
   getAsset: GetAssetFunction;
   resolveWidget: <W = unknown, WF extends Field = Field>(name: string) => Widget<W, WF>;
   value: T | undefined | null;
@@ -524,6 +528,10 @@ export interface SelectWidgetOptionObject {
 export type AuthScope = 'repo' | 'public_repo';
 
 export type SlugEncoding = 'unicode' | 'ascii';
+
+export type RenderedField<T extends Field = Field> = Omit<T, 'fields'> & {
+  fields?: ReactNode[];
+};
 
 export interface BaseField {
   name: string;
@@ -898,25 +906,25 @@ export interface PreviewStyle {
   raw: boolean;
 }
 
-export interface WidgetRulesFactoryProps {
+export interface MarkdownPluginFactoryProps {
   getAsset: GetAssetFunction;
   field: MarkdownField;
+  mode: 'editor' | 'preview';
 }
 
-export type WidgetRulesFactory = (props: WidgetRulesFactoryProps) => WidgetRule[];
+export type MarkdownPluginFactory = (props: MarkdownPluginFactoryProps) => MarkdownPlugin;
 
-export interface ToolbarItemsFactoryProps {
-  imageToolbarButton: ToolbarItemOptions;
+export interface MarkdownToolbarItemsFactoryProps {
+  imageToolbarButton: MarkdownToolbarItemOptions;
 }
 
-export type ToolbarItemsFactory = (
-  props: ToolbarItemsFactoryProps,
-) => (string | ToolbarItemOptions)[][];
+export type MarkdownToolbarItemsFactory = (
+  props: MarkdownToolbarItemsFactoryProps,
+) => (string | MarkdownToolbarItemOptions)[][];
 
 export interface MarkdownEditorOptions {
-  widgetRules?: WidgetRulesFactory;
-  initialEditType?: EditorType;
+  initialEditType?: MarkdownEditorType;
   height?: string;
-  toolbarItems?: ToolbarItemsFactory;
-  plugins?: EditorPlugin[];
+  toolbarItems?: MarkdownToolbarItemsFactory;
+  plugins?: MarkdownPluginFactory[];
 }

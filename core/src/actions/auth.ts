@@ -64,8 +64,11 @@ export function authenticateUser() {
           dispatch(doneAuthenticating());
         }
       })
-      .catch((error: Error) => {
-        dispatch(authError(error));
+      .catch((error: unknown) => {
+        console.error(error);
+        if (error instanceof Error) {
+          dispatch(authError(error));
+        }
         dispatch(logoutUser());
       });
   };

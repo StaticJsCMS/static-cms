@@ -1,4 +1,5 @@
 import get from 'lodash/get';
+import { useMemo } from 'react';
 
 import { FILES, FOLDER } from '../../constants/collectionTypes';
 import { COMMIT_AUTHOR, COMMIT_DATE } from '../../constants/commitProps';
@@ -15,6 +16,7 @@ import { selectField } from './field.util';
 import { selectMediaFolder } from './media.util';
 
 import type { Backend } from '../../backend';
+import type { InferredField } from '../../constants/fieldInference';
 import type {
   Collection,
   CollectionFile,
@@ -414,4 +416,24 @@ export function selectInferedField(collection: Collection, fieldName: string) {
   }
 
   return null;
+}
+
+export function useInferedFields(collection: Collection) {
+  return useMemo(() => {
+    const titleField = selectInferedField(collection, 'title');
+    const shortTitleField = selectInferedField(collection, 'shortTitle');
+    const authorField = selectInferedField(collection, 'author');
+
+    const iFields: Record<string, InferredField> = {};
+    if (titleField) {
+      iFields[titleField] = INFERABLE_FIELDS.title;
+    }
+    if (shortTitleField) {
+      iFields[shortTitleField] = INFERABLE_FIELDS.shortTitle;
+    }
+    if (authorField) {
+      iFields[authorField] = INFERABLE_FIELDS.author;
+    }
+    return iFields;
+  }, [collection]);
 }

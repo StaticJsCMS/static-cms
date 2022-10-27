@@ -133,7 +133,11 @@ export function registerWidget<T = unknown>(
   name: string | WidgetParam<T> | WidgetParam[],
   control?: string | Widget<T>['control'],
   preview?: Widget<T>['preview'],
-  { schema, validator, getValidValue }: WidgetOptions = {},
+  {
+    schema,
+    validator = () => false,
+    getValidValue = (value: unknown) => value,
+  }: WidgetOptions = {},
 ): void {
   if (Array.isArray(name)) {
     name.forEach(widget => {

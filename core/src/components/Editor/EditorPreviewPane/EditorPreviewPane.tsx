@@ -8,11 +8,11 @@ import { ScrollSyncPane } from 'react-scroll-sync';
 
 import { getAsset as getAssetAction } from '../../../actions/media';
 import { lengths } from '../../../components/UI/styles';
-import { INFERABLE_FIELDS } from '../../../constants/fieldInference';
 import { getPreviewStyles, getPreviewTemplate, resolveWidget } from '../../../lib/registry';
-import { selectInferedField, selectTemplateName } from '../../../lib/util/collection.util';
+import { selectTemplateName, useInferedFields } from '../../../lib/util/collection.util';
 import { selectField } from '../../../lib/util/field.util';
 import { selectIsLoadingAsset } from '../../../reducers/medias';
+import { getTypedFieldForValue } from '../../../widgets/list/typedListHelpers';
 import { ErrorBoundary } from '../../UI';
 import EditorPreview from './EditorPreview';
 import EditorPreviewContent from './EditorPreviewContent';
@@ -27,6 +27,8 @@ import type {
   EntryData,
   Field,
   GetAssetFunction,
+  ListField,
+  RenderedField,
   TemplatePreviewProps,
   TranslatedProps,
   ValueOrNestedValue,
@@ -42,6 +44,20 @@ const PreviewPaneFrame = styled(Frame)`
   overflow: auto;
 `;
 
+const FrameGlobalStyles = `
+  body {
+    margin: 0;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  .frame-content {
+    padding: 16px;
+  }
+`;
+
 const PreviewPaneWrapper = styled('div')`
   width: 100%;
   height: 100%;
@@ -49,6 +65,7 @@ const PreviewPaneWrapper = styled('div')`
   background: #fff;
   border-radius: ${lengths.borderRadius};
   overflow: auto;
+  padding: 16px;
 `;
 
 const StyledPreviewContent = styled('div')`
@@ -57,8 +74,7 @@ const StyledPreviewContent = styled('div')`
   right: 0;
   position: absolute;
   height: calc(100vh - 64px);
-  overflow-y: auto;
-  padding: 16px;
+  overflow: hidden;
 `;
 
 /**
@@ -85,10 +101,7 @@ function getWidgetFor(
   }
 
   const value = values?.[field.name];
-  let fieldWithWidgets: Omit<Field, 'fields' | 'field'> & {
-    fields?: ReactNode[];
-    field?: ReactNode;
-  } = Object.entries(field).reduce((acc, [key, fieldValue]) => {
+  let fieldWithWidgets: RenderedField = Object.entries(field).reduce((acc, [key, fieldValue]) => {
     if (!['fields', 'fields'].includes(key)) {
       acc[key] = fieldValue;
     }
@@ -106,6 +119,18 @@ function getWidgetFor(
         getAsset,
         field.fields,
         value as EntryData | EntryData[],
+      ),
+    };
+  } else if ('types' in field && field.types) {
+    fieldWithWidgets = {
+      ...fieldWithWidgets,
+      fields: getTypedNestedWidgets(
+        collection,
+        field,
+        entry,
+        inferedFields,
+        getAsset,
+        value as EntryData[],
       ),
     };
   }
@@ -135,7 +160,9 @@ function getWidgetFor(
       </div>
     );
   }
-  return renderedValue ? getWidget(field, renderedValue, entry, getAsset) : null;
+  return renderedValue
+    ? getWidget(fieldWithWidgets, collection, renderedValue, entry, getAsset)
+    : null;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -153,7 +180,8 @@ function isReactFragment(value: any): value is ReactFragment {
 }
 
 function getWidget(
-  field: Field,
+  field: RenderedField,
+  collection: Collection,
   value: ValueOrNestedValue | ReactNode,
   entry: Entry,
   getAsset: GetAssetFunction,
@@ -175,6 +203,7 @@ function getWidget(
       key={key}
       field={field}
       getAsset={getAsset}
+      collection={collection}
       value={
         value &&
         !widget.allowMapValue &&
@@ -221,6 +250,37 @@ function widgetsForNestedFields(
 /**
  * Retrieves widgets for nested fields (children of object/list fields)
  */
+function getTypedNestedWidgets(
+  collection: Collection,
+  field: ListField,
+  entry: Entry,
+  inferedFields: Record<string, InferredField>,
+  getAsset: GetAssetFunction,
+  values: EntryData[],
+) {
+  return values
+    .flatMap((value, index) => {
+      const itemType = getTypedFieldForValue(field, value ?? {}, index);
+      if (!itemType) {
+        return null;
+      }
+
+      return widgetsForNestedFields(
+        collection,
+        itemType.fields,
+        entry,
+        inferedFields,
+        getAsset,
+        itemType.fields,
+        value,
+      );
+    })
+    .filter(Boolean);
+}
+
+/**
+ * Retrieves widgets for nested fields (children of object/list fields)
+ */
 function getNestedWidgets(
   collection: Collection,
   fields: Field[],
@@ -260,29 +320,21 @@ function getNestedWidgets(
 const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
   const { entry, collection, config, fields, previewInFrame, getAsset, t } = props;
 
-  const inferedFields = useMemo(() => {
-    const titleField = selectInferedField(collection, 'title');
-    const shortTitleField = selectInferedField(collection, 'shortTitle');
-    const authorField = selectInferedField(collection, 'author');
-
-    const iFields: Record<string, InferredField> = {};
-    if (titleField) {
-      iFields[titleField] = INFERABLE_FIELDS.title;
-    }
-    if (shortTitleField) {
-      iFields[shortTitleField] = INFERABLE_FIELDS.shortTitle;
-    }
-    if (authorField) {
-      iFields[authorField] = INFERABLE_FIELDS.author;
-    }
-    return iFields;
-  }, [collection]);
+  const inferedFields = useInferedFields(collection);
 
   const handleGetAsset = useCallback(
     (path: string, field?: Field) => {
       return getAsset(collection, entry, path, field);
     },
-    [collection, entry, getAsset],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [collection],
+  );
+
+  const widgetFor = useCallback(
+    (name: string) => {
+      return getWidgetFor(collection, name, fields, entry, inferedFields, handleGetAsset);
+    },
+    [collection, entry, fields, handleGetAsset, inferedFields],
   );
 
   /**
@@ -305,7 +357,7 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
       if (Array.isArray(value)) {
         return value.map(val => {
           const widgets = nestedFields.reduce((acc, field, index) => {
-            acc[field.name] = <div key={index}>{getWidget(field, val, entry, handleGetAsset)}</div>;
+            acc[field.name] = <div key={index}>{widgetFor(field.name)}</div>;
             return acc;
           }, {} as Record<string, ReactNode>);
           return { data: val, widgets };
@@ -315,29 +367,24 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
       return {
         data: value,
         widgets: nestedFields.reduce((acc, field, index) => {
-          acc[field.name] = <div key={index}>{getWidget(field, value, entry, handleGetAsset)}</div>;
+          acc[field.name] = <div key={index}>{widgetFor(field.name)}</div>;
           return acc;
         }, {} as Record<string, ReactNode>),
       };
     },
-    [entry, fields, handleGetAsset],
-  );
-
-  const widgetFor = useCallback(
-    (name: string) => {
-      return getWidgetFor(collection, name, fields, entry, inferedFields, handleGetAsset);
-    },
-    [collection, entry, fields, handleGetAsset, inferedFields],
+    [entry.data, fields, widgetFor],
   );
 
   const previewStyles = useMemo(
-    () =>
-      getPreviewStyles().map((style, i) => {
+    () => [
+      ...getPreviewStyles().map((style, i) => {
         if (style.raw) {
           return <style key={i}>{style.value}</style>;
         }
         return <link key={i} href={style.value} type="text/css" rel="stylesheet" />;
       }),
+      <style key="global">{FrameGlobalStyles}</style>,
+    ],
     [],
   );
 

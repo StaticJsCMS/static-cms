@@ -28,8 +28,6 @@ import { selectIsLoadingAsset } from '../../../reducers/medias';
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import type {
-  Collection,
-  Entry,
   Field,
   FieldsErrors,
   GetAssetFunction,
@@ -178,12 +176,12 @@ const EditorControl = ({
   const errors = useMemo(() => fieldsErrors[path] ?? [], [fieldsErrors, path]);
   const hasErrors = (submitted || dirty) && Boolean(errors.length);
 
-  const handleGetAsset = useCallback(
-    (collection: Collection, entry: Entry): GetAssetFunction =>
-      (path: string, field?: Field) => {
-        return getAsset(collection, entry, path, field);
-      },
-    [getAsset],
+  const handleGetAsset: GetAssetFunction = useMemo(
+    () => (path: string, field?: Field) => {
+      return getAsset(collection, entry, path, field);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [collection],
   );
 
   useEffect(() => {
@@ -211,6 +209,7 @@ const EditorControl = ({
     <ControlContainer className={className} $isHidden={isHidden}>
       <>
         {React.createElement(widget.control, {
+          key: `field_${path}`,
           clearFieldErrors,
           clearSearch,
           collection,
@@ -219,7 +218,7 @@ const EditorControl = ({
           field,
           fieldsErrors,
           submitted,
-          getAsset: handleGetAsset(collection, entry),
+          getAsset: handleGetAsset,
           isDisabled: isDisabled ?? false,
           isFetching,
           isFieldDuplicate,
@@ -241,9 +240,13 @@ const EditorControl = ({
           i18n,
           hasErrors,
         })}
-        {fieldHint && <ControlHint $error={hasErrors}>{fieldHint}</ControlHint>}
+        {fieldHint ? (
+          <ControlHint key="hint" $error={hasErrors}>
+            {fieldHint}
+          </ControlHint>
+        ) : null}
         {hasErrors ? (
-          <ControlErrorsList>
+          <ControlErrorsList key="errors">
             {errors.map(error => {
               return (
                 error.message &&

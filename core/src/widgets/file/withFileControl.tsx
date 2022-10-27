@@ -3,8 +3,8 @@ import PhotoIcon from '@mui/icons-material/Photo';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
-import { arrayMoveImmutable as arrayMove } from 'array-move';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { arrayMoveImmutable } from 'array-move';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import uuid from 'uuid/v4';
 
@@ -12,6 +12,7 @@ import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
 import Outline from '../../components/UI/Outline';
 import { borders, effects, lengths, shadows } from '../../components/UI/styles';
 import { basename, transientOptions } from '../../lib/util';
+import { isEmpty } from '../../lib/util/string.util';
 
 import type { MouseEvent, MouseEventHandler } from 'react';
 import type { FileOrImageField, GetAssetFunction, WidgetControlProps } from '../../interface';
@@ -40,9 +41,7 @@ const StyledFileControlContent = styled(
     ${
       $collapsed
         ? `
-          visibility: hidden;
-          height: 0;
-          width: 0;
+          display: none;
         `
         : `
           padding: 16px;
@@ -135,10 +134,15 @@ interface SortableImageProps {
 
 const SortableImage = SortableElement<SortableImageProps>(
   ({ itemValue, getAsset, field, onRemove, onReplace }: SortableImageProps) => {
+    const [assetSource, setAssetSource] = useState('');
+    useEffect(() => {
+      setAssetSource(getAsset(itemValue, field)?.toString() ?? '');
+    }, [field, getAsset, itemValue]);
+
     return (
       <div>
         <ImageWrapper key="image-wrapper" $sortable>
-          <Image key="image" src={getAsset(itemValue, field)?.toString() ?? ''} />
+          <Image key="image" src={assetSource} />
         </ImageWrapper>
         <SortableImageButtons
           key="image-buttons"
@@ -215,35 +219,41 @@ export function getValidValue(value: string | string[] | null | undefined) {
   return value;
 }
 
-function sizeOfValue(value: string | string[] | null | undefined) {
-  if (Array.isArray(value)) {
-    return value.length;
-  }
-
-  return value ? 1 : 0;
-}
-
 interface WithImageOptions {
   forImage?: boolean;
 }
 
 export default function withFileControl({ forImage = false }: WithImageOptions = {}) {
-  const FileControl = ({
-    path,
-    value,
-    field,
-    onChange,
-    openMediaLibrary,
-    clearMediaControl,
-    removeInsertedMedia,
-    removeMediaControl,
-    getAsset,
-    mediaPaths,
-    hasErrors,
-    t,
-  }: WidgetControlProps<string | string[], FileOrImageField>) => {
+  const FileControl = memo((props: WidgetControlProps<string | string[], FileOrImageField>) => {
+    const {
+      value,
+      field,
+      onChange,
+      openMediaLibrary,
+      clearMediaControl,
+      removeInsertedMedia,
+      removeMediaControl,
+      getAsset,
+      mediaPaths,
+      hasErrors,
+      t,
+    } = props;
+
     const controlID = useMemo(() => uuid(), []);
     const [collapsed, setCollapsed] = useState(false);
+    const [internalValue, setInternalValue] = useState(value ?? '');
+
+    const handleOnChange = useCallback(
+      (newValue: string | string[]) => {
+        if (newValue !== internalValue) {
+          setInternalValue(newValue);
+          setTimeout(() => {
+            onChange(newValue);
+          });
+        }
+      },
+      [internalValue, onChange],
+    );
 
     const handleCollapseToggle = useCallback(() => {
       setCollapsed(!collapsed);
@@ -251,12 +261,12 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
 
     useEffect(() => {
       const mediaPath = mediaPaths[controlID];
-      if (mediaPath && mediaPath !== value) {
-        onChange(mediaPath);
-      } else if (mediaPath && mediaPath === value) {
+      if (mediaPath && mediaPath !== internalValue) {
+        handleOnChange(mediaPath);
+      } else if (mediaPath && mediaPath === internalValue) {
         removeInsertedMedia(controlID);
       }
-    }, [controlID, field, mediaPaths, onChange, removeInsertedMedia, path, value]);
+    }, [controlID, handleOnChange, internalValue, mediaPaths, removeInsertedMedia]);
 
     useEffect(() => {
       return () => {
@@ -291,7 +301,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
           controlID,
           forImage,
           privateUpload: field.private,
-          value: value ?? '',
+          value: internalValue,
           allowMultiple:
             'allow_multiple' in mediaLibraryFieldOptions
               ? mediaLibraryFieldOptions.allow_multiple ?? true
@@ -300,7 +310,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
           field,
         });
       },
-      [config, controlID, field, mediaLibraryFieldOptions, openMediaLibrary, value],
+      [config, controlID, field, mediaLibraryFieldOptions, openMediaLibrary, internalValue],
     );
 
     const handleUrl = useCallback(
@@ -309,28 +319,29 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
 
         const url = window.prompt(t(`editor.editorWidgets.${subject}.promptUrl`));
 
-        return onChange(url);
+        handleOnChange(url ?? '');
       },
-      [onChange, t],
+      [handleOnChange, t],
     );
 
     const handleRemove = useCallback(
       (e: MouseEvent) => {
         e.preventDefault();
         clearMediaControl(controlID);
-        return onChange('');
+        handleOnChange('');
       },
-      [controlID, onChange, clearMediaControl],
+      [clearMediaControl, controlID, handleOnChange],
     );
 
     const onRemoveOne = useCallback(
       (index: number) => () => {
-        if (Array.isArray(value)) {
-          value.splice(index, 1);
-          return onChange(sizeOfValue(value) > 0 ? [...value] : null);
+        if (Array.isArray(internalValue)) {
+          const newValue = [...internalValue];
+          newValue.splice(index, 1);
+          handleOnChange(newValue);
         }
       },
-      [onChange, value],
+      [handleOnChange, internalValue],
     );
 
     const onReplaceOne = useCallback(
@@ -339,45 +350,86 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
           controlID,
           forImage,
           privateUpload: field.private,
-          value: value ?? '',
+          value: internalValue,
           replaceIndex: index,
           allowMultiple: false,
           config,
           field,
         });
       },
-      [config, controlID, field, openMediaLibrary, value],
+      [config, controlID, field, openMediaLibrary, internalValue],
     );
 
     const onSortEnd = useCallback(
       ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
-        if (Array.isArray(value)) {
-          const newValue = arrayMove(value, oldIndex, newIndex);
-          return onChange(newValue);
+        if (Array.isArray(internalValue)) {
+          const newValue = arrayMoveImmutable(internalValue, oldIndex, newIndex);
+          handleOnChange(newValue);
         }
       },
-      [onChange, value],
+      [handleOnChange, internalValue],
     );
 
-    const renderFileLink = useCallback((value: string | undefined | null) => {
+    const renderFileLink = useCallback((link: string | undefined | null) => {
       const size = MAX_DISPLAY_LENGTH;
-      if (!value || value.length <= size) {
-        return value;
+      if (!link || link.length <= size) {
+        return link;
       }
-      const text = `${value.slice(0, size / 2)}\u2026${value.slice(-(size / 2) + 1)}`;
+      const text = `${link.slice(0, size / 2)}\u2026${link.slice(-(size / 2) + 1)}`;
       return (
-        <FileLink key={`file-link-${text}`} href={value} rel="noopener" target="_blank">
+        <FileLink key={`file-link-${text}`} href={link} rel="noopener" target="_blank">
           {text}
         </FileLink>
       );
     }, []);
 
-    const renderFileLinks = useCallback(() => {
-      if (isMultiple(value)) {
+    const [assetSource, setAssetSource] = useState('');
+    useEffect(() => {
+      if (Array.isArray(internalValue)) {
+        return;
+      }
+
+      const newValue = getAsset(internalValue, field)?.toString() ?? '';
+      if (newValue !== internalValue) {
+        setAssetSource(newValue);
+      }
+    }, [field, getAsset, internalValue]);
+
+    const renderedImagesLinks = useMemo(() => {
+      if (forImage) {
+        if (!internalValue) {
+          return null;
+        }
+
+        if (isMultiple(internalValue)) {
+          return (
+            <SortableMultiImageWrapper
+              key="mulitple-image-wrapper"
+              items={internalValue}
+              onSortEnd={onSortEnd}
+              onRemoveOne={onRemoveOne}
+              onReplaceOne={onReplaceOne}
+              distance={4}
+              getAsset={getAsset}
+              field={field}
+              axis="xy"
+              lockToContainerEdges={true}
+            ></SortableMultiImageWrapper>
+          );
+        }
+
+        return (
+          <ImageWrapper key="single-image-wrapper">
+            <Image key="single-image" src={assetSource} />
+          </ImageWrapper>
+        );
+      }
+
+      if (isMultiple(internalValue)) {
         return (
           <FileLinks key="mulitple-file-links">
             <FileLinkList key="file-links-list">
-              {value.map(val => (
+              {internalValue.map(val => (
                 <li key={val}>{renderFileLink(val)}</li>
               ))}
             </FileLinkList>
@@ -385,43 +437,22 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
         );
       }
 
-      return <FileLinks key="single-file-links">{renderFileLink(value)}</FileLinks>;
-    }, [renderFileLink, value]);
-
-    const renderImages = useCallback(() => {
-      if (!value) {
-        return null;
-      }
-
-      if (isMultiple(value)) {
-        return (
-          <SortableMultiImageWrapper
-            key="mulitple-image-wrapper"
-            items={value}
-            onSortEnd={onSortEnd}
-            onRemoveOne={onRemoveOne}
-            onReplaceOne={onReplaceOne}
-            distance={4}
-            getAsset={getAsset}
-            field={field}
-            axis="xy"
-            lockToContainerEdges={true}
-          ></SortableMultiImageWrapper>
-        );
-      }
-
-      const src = getAsset(value, field)?.toString() ?? '';
-      return (
-        <ImageWrapper key="single-image-wrapper">
-          <Image key="single-image" src={src || ''} />
-        </ImageWrapper>
-      );
-    }, [field, getAsset, onRemoveOne, onReplaceOne, onSortEnd, value]);
+      return <FileLinks key="single-file-links">{renderFileLink(internalValue)}</FileLinks>;
+    }, [
+      assetSource,
+      field,
+      getAsset,
+      internalValue,
+      onRemoveOne,
+      onReplaceOne,
+      onSortEnd,
+      renderFileLink,
+    ]);
 
     const content = useMemo(() => {
       const subject = forImage ? 'image' : 'file';
 
-      if (!value) {
+      if (Array.isArray(internalValue) ? internalValue.length === 0 : isEmpty(internalValue)) {
         return (
           <StyledButtonWrapper>
             <Button color="primary" variant="outlined" key="upload" onClick={handleChange}>
@@ -443,7 +474,7 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
 
       return (
         <StyledSelection key="selection">
-          {forImage ? renderImages() : renderFileLinks()}
+          {renderedImagesLinks}
           <StyledButtonWrapper key="controls">
             <Button color="primary" variant="outlined" key="add-replace" onClick={handleChange}>
               {t(
@@ -467,32 +498,34 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
         </StyledSelection>
       );
     }, [
+      internalValue,
+      renderedImagesLinks,
+      handleChange,
+      t,
       allowsMultiple,
       chooseUrl,
-      handleChange,
-      handleRemove,
       handleUrl,
-      renderFileLinks,
-      renderImages,
-      t,
-      value,
+      handleRemove,
     ]);
 
-    return (
-      <StyledFileControlWrapper key="file-control-wrapper">
-        <ObjectWidgetTopBar
-          key="file-control-top-bar"
-          collapsed={collapsed}
-          onCollapseToggle={handleCollapseToggle}
-          heading={field.label ?? field.name}
-          hasError={hasErrors}
-          t={t}
-        />
-        <StyledFileControlContent $collapsed={collapsed}>{content}</StyledFileControlContent>
-        <Outline hasError={hasErrors} />
-      </StyledFileControlWrapper>
+    return useMemo(
+      () => (
+        <StyledFileControlWrapper key="file-control-wrapper">
+          <ObjectWidgetTopBar
+            key="file-control-top-bar"
+            collapsed={collapsed}
+            onCollapseToggle={handleCollapseToggle}
+            heading={field.label ?? field.name}
+            hasError={hasErrors}
+            t={t}
+          />
+          <StyledFileControlContent $collapsed={collapsed}>{content}</StyledFileControlContent>
+          <Outline hasError={hasErrors} />
+        </StyledFileControlWrapper>
+      ),
+      [collapsed, content, field.label, field.name, handleCollapseToggle, hasErrors, t],
     );
-  };
+  });
 
   FileControl.displayName = 'FileControl';
 

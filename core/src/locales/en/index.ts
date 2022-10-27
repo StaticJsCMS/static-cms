@@ -14,6 +14,7 @@ const en: LocalePhrasesRoot = {
       password: 'Please enter your password.',
       authTitle: 'Error logging in',
       authBody: '%{details}',
+      netlifyIdentityNotFound: 'Netlify Identity plugin not found',
       identitySettings:
         'Unable to access identity settings. When using git-gateway backend make sure to enable Identity service and Git Gateway.',
     },

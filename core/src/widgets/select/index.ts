@@ -5,7 +5,7 @@ import { validateMinMax } from '../../lib/widgets/validations';
 
 import type { SelectField, WidgetParam } from '../../interface';
 
-const SelectWidget = (): WidgetParam<string | string[], SelectField> => {
+const SelectWidget = (): WidgetParam<string | number | (string | number)[], SelectField> => {
   return {
     name: 'select',
     controlComponent,

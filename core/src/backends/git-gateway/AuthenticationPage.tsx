@@ -1,24 +1,8 @@
-import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import AuthenticationPage from '../../components/UI/AuthenticationPage';
-import { colors } from '../../components/UI/styles';
 
-import type { ChangeEvent, FormEvent } from 'react';
 import type { AuthenticationPageProps, TranslatedProps, User } from '../../interface';
-
-const StyledAuthForm = styled('form')`
-  width: 350px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const ErrorMessage = styled('div')`
-  color: ${colors.errorText};
-`;
 
 function useNetlifyIdentifyEvent(eventName: 'login', callback: (login: User) => void): void;
 function useNetlifyIdentifyEvent(eventName: 'logout', callback: () => void): void;
@@ -39,15 +23,12 @@ export interface GitGatewayAuthenticationPageProps
 }
 
 const GitGatewayAuthenticationPage = ({
-  inProgress = false,
   config,
   onLogin,
-  handleAuth,
   t,
 }: GitGatewayAuthenticationPageProps) => {
+  const [loggingIn, setLoggingIn] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{
     identity?: string;
     server?: string;
@@ -57,16 +38,28 @@ const GitGatewayAuthenticationPage = ({
 
   useEffect(() => {
     if (!loggedIn && window.netlifyIdentity && window.netlifyIdentity.currentUser()) {
-      onLogin(window.netlifyIdentity.currentUser());
-      window.netlifyIdentity.close();
+      setLoggingIn(true);
+      setTimeout(() => {
+        if (!window.netlifyIdentity) {
+          setLoggingIn(false);
+          return;
+        }
+        onLogin(window.netlifyIdentity.currentUser());
+        setLoggedIn(true);
+        window.netlifyIdentity.close();
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleIdentityLogin = useCallback(
     (user: User) => {
-      onLogin(user);
-      window.netlifyIdentity?.close();
+      setLoggingIn(true);
+      setTimeout(() => {
+        onLogin(user);
+        setLoggedIn(true);
+        window.netlifyIdentity?.close();
+      });
     },
     [onLogin],
   );
@@ -94,130 +87,45 @@ const GitGatewayAuthenticationPage = ({
   const handleIdentity = useCallback(() => {
     const user = window.netlifyIdentity?.currentUser();
     if (user) {
-      onLogin(user);
+      setLoggingIn(true);
+      setTimeout(() => {
+        onLogin(user);
+        setLoggedIn(true);
+      });
     } else {
       window.netlifyIdentity?.open();
     }
   }, [onLogin]);
 
-  const handleEmailChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  }, []);
+  const pageContent = useMemo(() => {
+    if (!window.netlifyIdentity) {
+      return t('auth.errors.netlifyIdentityNotFound');
+    }
 
-  const handlePasswordChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  }, []);
-
-  const handleLogin = useCallback(
-    async (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-
-      const validationErrors: typeof errors = {};
-      if (!email) {
-        validationErrors.email = t('auth.errors.email');
-      }
-      if (!password) {
-        validationErrors.password = t('auth.errors.password');
-      }
-
-      if (Object.keys(validationErrors).length > 0) {
-        setErrors(validationErrors);
-        return;
-      }
-
-      let response: User | string;
-      try {
-        response = await handleAuth(email, password);
-      } catch (e: unknown) {
-        if (e instanceof Error) {
-          response = e.message;
-        } else {
-          response = 'Unknown authentication error';
-        }
-      }
-
-      if (typeof response === 'string') {
-        setErrors({ server: response });
-        setLoggedIn(false);
-        return;
-      }
-
-      onLogin(response);
-    },
-    [email, handleAuth, onLogin, password, t],
-  );
-
-  if (window.netlifyIdentity) {
     if (errors.identity) {
       return (
-        <AuthenticationPage
-          logoUrl={config.logo_url}
-          siteUrl={config.site_url}
-          onLogin={handleIdentity}
-          pageContent={
-            <a
-              href="https://docs.netlify.com/visitor-access/git-gateway/#setup-and-settings"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {errors.identity}
-            </a>
-          }
-          t={t}
-        />
-      );
-    } else {
-      return (
-        <AuthenticationPage
-          logoUrl={config.logo_url}
-          siteUrl={config.site_url}
-          onLogin={handleIdentity}
-          buttonContent={t('auth.loginWithNetlifyIdentity')}
-          t={t}
-        />
+        <a
+          href="https://docs.netlify.com/visitor-access/git-gateway/#setup-and-settings"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {errors.identity}
+        </a>
       );
     }
-  }
+
+    return null;
+  }, [errors.identity, t]);
 
   return (
     <AuthenticationPage
+      key="git-gateway-auth"
       logoUrl={config.logo_url}
       siteUrl={config.site_url}
-      pageContent={
-        <StyledAuthForm onSubmit={handleLogin}>
-          {!errors.server ? null : <ErrorMessage>{String(errors.server)}</ErrorMessage>}
-          <TextField
-            type="text"
-            name="email"
-            label="Email"
-            value={email}
-            onChange={handleEmailChange}
-            fullWidth
-            variant="outlined"
-            error={Boolean(errors.email)}
-            helperText={errors.email ?? undefined}
-          />
-          <TextField
-            type="password"
-            name="password"
-            label="Password"
-            value={password}
-            onChange={handlePasswordChange}
-            fullWidth
-            variant="outlined"
-            error={Boolean(errors.password)}
-            helperText={errors.password ?? undefined}
-          />
-          <Button
-            variant="contained"
-            type="submit"
-            disabled={inProgress}
-            sx={{ width: 120, alignSelf: 'center' }}
-          >
-            {inProgress ? t('auth.loggingIn') : t('auth.login')}
-          </Button>
-        </StyledAuthForm>
-      }
+      onLogin={handleIdentity}
+      buttonContent={t('auth.loginWithNetlifyIdentity')}
+      pageContent={pageContent}
+      loginDisabled={loggingIn}
       t={t}
     />
   );

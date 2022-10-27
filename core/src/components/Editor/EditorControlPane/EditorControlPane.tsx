@@ -193,11 +193,11 @@ const EditorControlPane = ({
       ) : null}
       {fields
         .filter(f => f.widget !== 'hidden')
-        .map((field, i) => {
+        .map(field => {
           const isTranslatable = isFieldTranslatable(field, locale, i18n?.defaultLocale);
           const isDuplicate = isFieldDuplicate(field, locale, i18n?.defaultLocale);
           const isHidden = isFieldHidden(field, locale, i18n?.defaultLocale);
-          const key = i18n ? `${locale}_${i}` : i;
+          const key = i18n ? `field-${locale}_${field.name}` : `field-${field.name}`;
 
           return (
             <EditorControl

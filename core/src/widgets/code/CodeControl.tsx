@@ -39,9 +39,7 @@ const StyledCodeControlContent = styled(
     ${
       $collapsed
         ? `
-          visibility: hidden;
-          height: 0;
-          width: 0;
+          display: none;
         `
         : ''
     }

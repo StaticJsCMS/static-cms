@@ -1,9 +1,9 @@
-import React from 'react';
 import { styled } from '@mui/material/styles';
+import React, { useEffect, useState } from 'react';
 
 import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { FileOrImageField, WidgetPreviewProps, GetAssetFunction } from '../../interface';
+import type { FileOrImageField, GetAssetFunction, WidgetPreviewProps } from '../../interface';
 
 interface StyledImageProps {
   src: string;
@@ -17,14 +17,19 @@ const StyledImage = styled(({ src }: StyledImageProps) => (
   height: auto;
 `;
 
-interface StyledImageAsset {
+interface ImageAssetProps {
   getAsset: GetAssetFunction;
   value: string;
   field: FileOrImageField;
 }
 
-function StyledImageAsset({ getAsset, value, field }: StyledImageAsset) {
-  return <StyledImage src={getAsset(value, field).toString()} />;
+function ImageAsset({ getAsset, value, field }: ImageAssetProps) {
+  const [assetSource, setAssetSource] = useState('');
+  useEffect(() => {
+    setAssetSource(getAsset(value, field)?.toString() ?? '');
+  }, [field, getAsset, value]);
+
+  return <StyledImage src={assetSource} />;
 }
 
 function ImagePreviewContent({
@@ -40,13 +45,13 @@ function ImagePreviewContent({
     return (
       <>
         {value.map(val => (
-          <StyledImageAsset key={val} value={val} getAsset={getAsset} field={field} />
+          <ImageAsset key={val} value={val} getAsset={getAsset} field={field} />
         ))}
       </>
     );
   }
 
-  return <StyledImageAsset value={value} getAsset={getAsset} field={field} />;
+  return <ImageAsset value={value} getAsset={getAsset} field={field} />;
 }
 
 function ImagePreview(props: WidgetPreviewProps<string | string[], FileOrImageField>) {

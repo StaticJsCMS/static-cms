@@ -11,8 +11,8 @@ import { doesUrlFileExist } from '../../lib/util/fetch.util';
 import { isNotNullish } from '../../lib/util/null.util';
 import { isNotEmpty } from '../../lib/util/string.util';
 import useEditorOptions from './hooks/useEditorOptions';
+import usePlugins from './hooks/usePlugins';
 import useToolbarItems from './hooks/useToolbarItems';
-import useWidgetRules from './hooks/useWidgetRules';
 
 import type { RefObject } from 'react';
 import type { MarkdownField, MediaLibrary, WidgetControlProps } from '../../interface';
@@ -151,38 +151,54 @@ const MarkdownControl = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [field, mediaPath]);
 
-  const { initialEditType, height, plugins, ...markdownEditorOptions } = useEditorOptions();
-  const widgetRules = useWidgetRules(markdownEditorOptions.widgetRules, { getAsset, field });
+  const { initialEditType, height, ...markdownEditorOptions } = useEditorOptions();
+  const plugins = usePlugins(markdownEditorOptions.plugins, { getAsset, field, mode: 'editor' });
   const toolbarItems = useToolbarItems(markdownEditorOptions.toolbarItems, handleOpenMedialLibrary);
 
-  return (
-    <StyledEditorWrapper key="markdown-control-wrapper">
-      <FieldLabel
-        key="markdown-control-label"
-        isActive={hasFocus}
-        hasErrors={hasErrors}
-        onClick={handleLabelClick}
-      >
-        {label}
-      </FieldLabel>
-      <Editor
-        key="markdown-control-editor"
-        initialValue={internalValue}
-        previewStyle="vertical"
-        height={height}
-        initialEditType={initialEditType}
-        useCommandShortcut={true}
-        onChange={handleOnChange}
-        toolbarItems={toolbarItems}
-        ref={editorRef}
-        onFocus={handleOnFocus}
-        onBlur={handleOnBlur}
-        autofocus={false}
-        widgetRules={widgetRules}
-        plugins={plugins}
-      />
-      <Outline key="markdown-control-outline" hasLabel hasError={hasErrors} />
-    </StyledEditorWrapper>
+  return useMemo(
+    () => (
+      <StyledEditorWrapper key="markdown-control-wrapper">
+        <FieldLabel
+          key="markdown-control-label"
+          isActive={hasFocus}
+          hasErrors={hasErrors}
+          onClick={handleLabelClick}
+        >
+          {label}
+        </FieldLabel>
+        <Editor
+          key="markdown-control-editor"
+          initialValue={internalValue}
+          previewStyle="vertical"
+          height={height}
+          initialEditType={initialEditType}
+          useCommandShortcut={true}
+          onChange={handleOnChange}
+          toolbarItems={toolbarItems}
+          ref={editorRef}
+          onFocus={handleOnFocus}
+          onBlur={handleOnBlur}
+          autofocus={false}
+          plugins={plugins}
+        />
+        <Outline key="markdown-control-outline" hasLabel hasError={hasErrors} />
+      </StyledEditorWrapper>
+    ),
+    [
+      editorRef,
+      handleLabelClick,
+      handleOnBlur,
+      handleOnChange,
+      handleOnFocus,
+      hasErrors,
+      hasFocus,
+      height,
+      initialEditType,
+      internalValue,
+      label,
+      plugins,
+      toolbarItems,
+    ],
   );
 };
 

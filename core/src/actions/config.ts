@@ -386,7 +386,7 @@ export async function handleLocalBackend(originalConfig: Config) {
   });
 }
 
-export function loadConfig(manualConfig: Config | undefined, onLoad: () => unknown) {
+export function loadConfig(manualConfig: Config | undefined, onLoad: (config: Config) => unknown) {
   if (window.CMS_CONFIG) {
     return configLoaded(window.CMS_CONFIG);
   }
@@ -405,7 +405,7 @@ export function loadConfig(manualConfig: Config | undefined, onLoad: () => unkno
       dispatch(configLoaded(config));
 
       if (typeof onLoad === 'function') {
-        onLoad();
+        onLoad(config);
       }
     } catch (error: unknown) {
       console.error(error);

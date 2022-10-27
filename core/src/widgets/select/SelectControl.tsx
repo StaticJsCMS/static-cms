@@ -7,17 +7,19 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Select from '@mui/material/Select';
 import React, { useCallback, useMemo, useState } from 'react';
 
+import { isNullish } from '../../lib/util/null.util';
+
 import type { SelectChangeEvent } from '@mui/material/Select';
 import type { SelectField, WidgetControlProps } from '../../interface';
 
 interface Option {
   label: string;
-  value: string;
+  value: string | number;
 }
 
-function convertToOption(raw: string | Option | undefined): Option | undefined {
-  if (typeof raw === 'string') {
-    return { label: raw, value: raw };
+function convertToOption(raw: string | number | Option | undefined): Option | undefined {
+  if (typeof raw === 'string' || typeof raw === 'number') {
+    return { label: `${raw}`, value: raw };
   }
 
   return raw;
@@ -29,15 +31,43 @@ const SelectControl = ({
   value,
   hasErrors,
   onChange,
-}: WidgetControlProps<string | string[], SelectField>) => {
+}: WidgetControlProps<string | number | (string | number)[], SelectField>) => {
   const [internalValue, setInternalValue] = useState(value);
+
+  const fieldOptions: (string | Option)[] = useMemo(() => field.options, [field.options]);
+  const isMultiple = useMemo(() => field.multiple ?? false, [field.multiple]);
+
+  const options = useMemo(
+    () => fieldOptions.map(convertToOption).filter(Boolean) as Option[],
+    [fieldOptions],
+  );
+
+  const optionsByValue = useMemo(
+    () =>
+      options.reduce((acc, option) => {
+        acc[`${option.value}`] = option;
+        return acc;
+      }, {} as Record<string, Option>),
+    [options],
+  );
+
+  const stringValueOptions = useMemo(
+    () =>
+      options.map(option => ({
+        label: option.label,
+        value: `${option.value}`,
+      })),
+    [options],
+  );
 
   const handleChange = useCallback(
     (event: SelectChangeEvent<string | string[]>) => {
-      const selectedOption = event.target.value;
+      const selectedValue = event.target.value;
       const isMultiple = field.multiple ?? false;
       const isEmpty =
-        isMultiple && Array.isArray(selectedOption) ? !selectedOption?.length : !selectedOption;
+        isMultiple && Array.isArray(selectedValue)
+          ? !selectedValue?.length
+          : isNullish(selectedValue);
 
       if (field.required && isEmpty && isMultiple) {
         setInternalValue([]);
@@ -45,53 +75,63 @@ const SelectControl = ({
       } else if (isEmpty) {
         setInternalValue('');
         onChange('');
-      } else if (typeof selectedOption === 'string' || isMultiple) {
-        setInternalValue(selectedOption);
-        onChange(selectedOption);
+      } else if (typeof selectedValue === 'string') {
+        const selectedOption = optionsByValue[selectedValue];
+        const optionValue = selectedOption?.value ?? '';
+        setInternalValue(optionValue);
+        onChange(optionValue);
+      } else if (isMultiple) {
+        const optionValues = selectedValue.map(v => {
+          const selectedOption = optionsByValue[v];
+          return selectedOption?.value ?? '';
+        });
+        setInternalValue(optionValues);
+        onChange(optionValues);
       }
     },
-    [field, onChange],
+    [field.multiple, field.required, onChange, optionsByValue],
   );
 
-  const fieldOptions: (string | Option)[] = field.options;
-  const isMultiple = field.multiple ?? false;
+  const stringValue = useMemo(() => {
+    if (!internalValue) {
+      return isMultiple ? [] : '';
+    }
 
-  const options = useMemo(
-    () => [...(fieldOptions.map(convertToOption) as Option[])].filter(Boolean),
-    [fieldOptions],
-  );
+    if (Array.isArray(internalValue)) {
+      return internalValue.map(v => `${v}`);
+    }
 
-  const optionsByValue = options.reduce((acc, option) => {
-    acc[option.value] = option;
-    return acc;
-  }, {} as Record<string, Option>);
+    return `${internalValue}`;
+  }, [isMultiple, internalValue]);
 
   return (
     <FormControl fullWidth error={hasErrors}>
       <InputLabel id="demo-simple-select-label">{label}</InputLabel>
       <Select
-        value={(internalValue ? internalValue : isMultiple ? [] : '') as string | string[]}
+        value={stringValue}
         onChange={handleChange}
         multiple={isMultiple}
         label={label}
         input={isMultiple ? <OutlinedInput id="select-multiple-chip" label={label} /> : undefined}
-        renderValue={selectValues =>
-          Array.isArray(selectValues) ? (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selectValues.map(selectValue => {
-                const label = optionsByValue[selectValue]?.label ?? selectValue;
-                return <Chip key={selectValue} label={label} />;
-              })}
-            </Box>
-          ) : (
-            selectValues
-          )
-        }
+        renderValue={selectValues => {
+          if (Array.isArray(selectValues)) {
+            return (
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                {selectValues.map(selectValue => {
+                  const label = optionsByValue[selectValue]?.label ?? selectValue;
+                  return <Chip key={selectValue} label={label} />;
+                })}
+              </Box>
+            );
+          }
+
+          return optionsByValue[selectValues]?.label ?? selectValues;
+        }}
       >
         <MenuItem key={`empty-option`} value="">
           &nbsp;
         </MenuItem>
-        {options.map(option => (
+        {stringValueOptions.map(option => (
           <MenuItem key={`option-${option.value}`} value={option.value}>
             {option.label}
           </MenuItem>
