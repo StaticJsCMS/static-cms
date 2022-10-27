@@ -172,7 +172,9 @@ const EditorToolbar = ({
 
     if (canCreate) {
       items.push(
-        <MenuItem key="duplicate" onClick={handleDuplicate}>{t('editor.editorToolbar.duplicate')}</MenuItem>,
+        <MenuItem key="duplicate" onClick={handleDuplicate}>
+          {t('editor.editorToolbar.duplicate')}
+        </MenuItem>,
       );
     }
 

@@ -531,7 +531,7 @@ export type SlugEncoding = 'unicode' | 'ascii';
 
 export type RenderedField<T extends Field = Field> = Omit<T, 'fields'> & {
   fields?: ReactNode[];
-}
+};
 
 export interface BaseField {
   name: string;

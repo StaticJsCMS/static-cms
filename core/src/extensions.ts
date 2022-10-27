@@ -7,11 +7,7 @@ import {
   ProxyBackend,
   TestBackend,
 } from './backends';
-import {
-  registerBackend,
-  registerLocale,
-  registerWidget,
-} from './lib/registry';
+import { registerBackend, registerLocale, registerWidget } from './lib/registry';
 import { locales } from './locales';
 import {
   BooleanWidget,

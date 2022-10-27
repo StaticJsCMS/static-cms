@@ -25,7 +25,6 @@ interface ImageAssetProps {
 
 function ImageAsset({ getAsset, value, field }: ImageAssetProps) {
   const [assetSource, setAssetSource] = useState('');
-  console.log('value', `"${value}"`, 'assetSource', `"${assetSource}"`);
   useEffect(() => {
     setAssetSource(getAsset(value, field)?.toString() ?? '');
   }, [field, getAsset, value]);
@@ -38,7 +37,6 @@ function ImagePreviewContent({
   getAsset,
   field,
 }: WidgetPreviewProps<string | string[], FileOrImageField>) {
-  console.log('[ImagePreviewContent] value', `"${value}"`);
   if (!value) {
     return null;
   }
@@ -57,7 +55,6 @@ function ImagePreviewContent({
 }
 
 function ImagePreview(props: WidgetPreviewProps<string | string[], FileOrImageField>) {
-  console.log('[ImagePreview] value', `"${props.value}"`);
   return (
     <WidgetPreviewContainer>
       {props.value ? <ImagePreviewContent {...props} /> : null}
