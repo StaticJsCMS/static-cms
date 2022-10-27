@@ -86,8 +86,10 @@ function bootstrap(opts?: { config?: Config; autoInitialize?: boolean }) {
   }
 
   store.dispatch(
-    loadConfig(config, function onLoad() {
-      store.dispatch(authenticateUser() as unknown as AnyAction);
+    loadConfig(config, function onLoad(config) {
+      if (config.backend.name !== 'git-gateway') {
+        store.dispatch(authenticateUser() as unknown as AnyAction);
+      }
     }) as AnyAction,
   );
 
