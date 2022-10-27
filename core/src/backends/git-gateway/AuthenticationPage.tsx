@@ -45,7 +45,7 @@ const GitGatewayAuthenticationPage = ({
   handleAuth,
   t,
 }: GitGatewayAuthenticationPageProps) => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  // const [loggedIn, setLoggedIn] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{
@@ -55,16 +55,18 @@ const GitGatewayAuthenticationPage = ({
     password?: string;
   }>({});
 
-  useEffect(() => {
-    if (!loggedIn && window.netlifyIdentity && window.netlifyIdentity.currentUser()) {
-      onLogin(window.netlifyIdentity.currentUser());
-      window.netlifyIdentity.close();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   if (!loggedIn && window.netlifyIdentity && window.netlifyIdentity.currentUser()) {
+  //     console.log('current user', window.netlifyIdentity.currentUser());
+  //     onLogin(window.netlifyIdentity.currentUser());
+  //     window.netlifyIdentity.close();
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   const handleIdentityLogin = useCallback(
     (user: User) => {
+      console.log('handleIdentityLogin', user);
       onLogin(user);
       window.netlifyIdentity?.close();
     },
@@ -93,6 +95,7 @@ const GitGatewayAuthenticationPage = ({
 
   const handleIdentity = useCallback(() => {
     const user = window.netlifyIdentity?.currentUser();
+    console.log('handleIdentity', user);
     if (user) {
       onLogin(user);
     } else {
@@ -138,10 +141,11 @@ const GitGatewayAuthenticationPage = ({
 
       if (typeof response === 'string') {
         setErrors({ server: response });
-        setLoggedIn(false);
+        // setLoggedIn(false);
         return;
       }
 
+      console.log('handleLogin', response);
       onLogin(response);
     },
     [email, handleAuth, onLogin, password, t],

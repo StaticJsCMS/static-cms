@@ -262,6 +262,7 @@ export default class GitGateway implements BackendClass {
 
   authenticate(credentials: Credentials) {
     const user = credentials as NetlifyUser;
+    console.log('user', user);
     this.tokenPromise = async () => {
       try {
         const func = user.jwt.bind(user);
@@ -364,6 +365,7 @@ export default class GitGateway implements BackendClass {
   async restoreUser() {
     const client = await this.getAuthClient();
     const user = client?.currentUser();
+    console.log('restore user!', user);
     if (!user) {
       return Promise.reject();
     }

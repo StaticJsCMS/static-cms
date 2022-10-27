@@ -94,10 +94,12 @@ export class LocalStorageAuthStore {
   }
 
   store(userData: unknown) {
+    console.log('userData', userData);
     window.localStorage.setItem(this.storageKey, JSON.stringify(userData));
   }
 
   logout() {
+    console.log('removing key!', this.retrieve());
     window.localStorage.removeItem(this.storageKey);
   }
 }
@@ -320,10 +322,12 @@ export class Backend {
   }
 
   currentUser() {
+    console.error('user', this.user);
     if (this.user) {
       return this.user;
     }
     const stored = this.authStore!.retrieve();
+    console.error('stored user', stored);
     if (stored && stored.backendName === this.backendName) {
       return Promise.resolve(this.implementation.restoreUser(stored)).then(user => {
         this.user = { ...user, backendName: this.backendName };
@@ -363,6 +367,7 @@ export class Backend {
   }
 
   async logout() {
+    console.log('backend logout!');
     try {
       await this.implementation.logout();
     } catch (e: any) {
