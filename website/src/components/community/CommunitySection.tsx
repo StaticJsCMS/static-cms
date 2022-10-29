@@ -23,7 +23,7 @@ interface CommunitySectionProps {
 const CommunitySection = ({ section }: CommunitySectionProps) => {
   return (
     <StyledCommunitySection>
-      <Typography variant="h5" component="h3">
+      <Typography variant="h3">
         {section.title}
       </Typography>
       <List sx={{ width: '100%', bgcolor: 'background.paper' }}>

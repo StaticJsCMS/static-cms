@@ -1,19 +1,19 @@
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
 import Image from 'next/image';
 import Link from 'next/link';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
 
+import Search from './Search';
+
+import type { PaletteMode } from '@mui/material';
 import type { ButtonTypeMap } from '@mui/material/Button';
 import type { ExtendButtonBase } from '@mui/material/ButtonBase';
-import type { PaletteMode } from '@mui/material';
 
 const StyledAppBar = styled(AppBar)(
   ({ theme }) => `
@@ -21,13 +21,25 @@ const StyledAppBar = styled(AppBar)(
   `,
 );
 
-const StyledToolbar = styled(Toolbar)`
-  gap: 16px;
-`;
+const StyledToolbar = styled(Toolbar)(
+  ({ theme }) => `
+    gap: 16px;
 
-const StyledGithubLink = styled('a')`
-  display: flex;
-`;
+    ${theme.breakpoints.down('md')} {
+      justify-content: space-between;
+    }
+  `,
+);
+
+const StyledGithubLink = styled('a')(
+  ({ theme }) => `
+    display: flex;
+
+    ${theme.breakpoints.down('md')} {
+      display: none;
+    }
+  `,
+);
 
 const StyledMenuButton = styled(IconButton)(
   ({ theme }) => `
@@ -40,34 +52,29 @@ const StyledMenuButton = styled(IconButton)(
   `,
 );
 
-const StyledGap = styled('div')`
-  flex-grow: 1;
-`;
+const StyledDesktopGap = styled('div')(
+  ({ theme }) => `
+    flex-grow: 1;
 
-const StyledSearchBox = styled(TextField)`
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+    ${theme.breakpoints.down('md')} {
+      display: none;
+    }
+  `,
+);
 
-  .MuiSvgIcon-root {
-    color: rgba(255, 255, 255, 0.8);
-  }
-
-  .MuiInputBase-root {
+const StyledDesktopLink = styled(Button)(
+  ({ theme }) => `
     color: white;
-  }
 
-  .MuiOutlinedInput-notchedOutline {
-    border: none;
-  }
-`;
+    &:hover {
+      color: rgba(255, 255, 255, 0.6);
+    }
 
-const StyledLink = styled(Button)`
-  color: white;
-
-  &:hover {
-    color: rgba(255, 255, 255, 0.6);
-  }
-` as ExtendButtonBase<ButtonTypeMap<{}, 'a'>>;
+    ${theme.breakpoints.down('md')} {
+      display: none;
+    }
+  `,
+) as ExtendButtonBase<ButtonTypeMap<{}, 'a'>>;
 
 const StyledImageLink = styled('a')`
   display: flex;
@@ -95,14 +102,7 @@ const Header = ({ mode, toggleColorMode }: HeaderProps) => {
             <StyledImage src="/static-cms-logo.svg" width={182} height={72} />
           </StyledImageLink>
         </Link>
-        <StyledSearchBox
-          placeholder="Search the docs"
-          variant="outlined"
-          size="small"
-          InputProps={{
-            startAdornment: <SearchIcon />,
-          }}
-        />
+        <Search />
         <IconButton
           sx={{ ml: 1 }}
           onClick={toggleColorMode}
@@ -111,7 +111,7 @@ const Header = ({ mode, toggleColorMode }: HeaderProps) => {
         >
           {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
         </IconButton>
-        <StyledGap />
+        <StyledDesktopGap />
         <StyledGithubLink
           href="https://github.com/StaticJsCMS/static-cms"
           aria-label="Star StaticJsCMS/static-cms on GitHub"
@@ -123,13 +123,13 @@ const Header = ({ mode, toggleColorMode }: HeaderProps) => {
           />
         </StyledGithubLink>
         <Link href="/docs/intro">
-          <StyledLink component="a">Docs</StyledLink>
+          <StyledDesktopLink component="a">Docs</StyledDesktopLink>
         </Link>
         <Link href="/docs/contributor-guide">
-          <StyledLink component="a">Contributing</StyledLink>
+          <StyledDesktopLink component="a">Contributing</StyledDesktopLink>
         </Link>
         <Link href="/community">
-          <StyledLink component="a">Community</StyledLink>
+          <StyledDesktopLink component="a">Community</StyledDesktopLink>
         </Link>
         {/* <Link href="/blog">
           <StyledLink component="a">Blog</StyledLink>

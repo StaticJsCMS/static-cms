@@ -52,7 +52,7 @@ const Community = () => {
             <Typography variant="h1" color="secondary">
               {communityData.title}
             </Typography>
-            <Typography variant="h5" component="h2" color="text.primary">
+            <Typography variant="h2" color="text.primary">
               {communityData.subtitle}
             </Typography>
           </StyledTitle>
