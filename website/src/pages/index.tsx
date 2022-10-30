@@ -5,10 +5,9 @@ import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import { styled, useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import format from 'date-fns/format';
-import parseISO from 'date-fns/parseISO';
 import Link from 'next/link';
 
+import DateDisplay from '../components/DateDisplay';
 import Container from '../components/layout/Container';
 import Page from '../components/layout/Page';
 import config from '../lib/config';
@@ -341,7 +340,7 @@ const Home = ({ docsGroups }: DocsMenuProps) => {
                       >
                         <>
                           <Chip label={release.version} color="secondary" />
-                          {format(parseISO(release.date), 'MMMM dd, yyyy')}
+                          <DateDisplay date={release.date} format="MMMM dd, yyyy" />
                         </>
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
