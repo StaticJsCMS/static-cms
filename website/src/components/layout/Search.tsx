@@ -19,7 +19,7 @@ const StyledSearchBox = styled(TextField)(
       border: none;
     }
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('lg')} {
       display: none;
     }
   `,

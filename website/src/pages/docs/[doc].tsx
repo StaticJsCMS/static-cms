@@ -26,25 +26,40 @@ const StyledDocsView = styled('div')(
     padding-top: 16px;
 
     ${theme.breakpoints.down('lg')} {
-      grid-template-columns: 1fr
+      margin-left: 0;
+      padding-top: 24px;
+      overflow-x: hidden;
+      width: 100vw;
     }
 
     ${theme.breakpoints.down('md')} {
-      margin-left: 0;
-      width: 100%;
-      padding-top: 24px;
+      grid-template-columns: 1fr;
     }
   `,
 );
 
-const StyledDocsContentWrapper = styled('main')`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0;
-  margin-bottom: 40px;
-`;
+const StyledDocsContentWrapper = styled('main')(
+  ({ theme }) => `
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    margin-bottom: 40px;
+
+    ${theme.breakpoints.between('md', 'lg')} {
+      width: calc(100vw - 250px);
+    }
+
+    ${theme.breakpoints.down('lg')} {
+      margin-bottom: 32px;
+    }
+
+    ${theme.breakpoints.down('md')} {
+      width: 100vw;
+    }
+  `,
+);
 
 interface DocsProps {
   docsGroups: DocsGroup[];

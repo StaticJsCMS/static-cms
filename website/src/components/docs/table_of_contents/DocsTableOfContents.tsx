@@ -115,7 +115,12 @@ const StyledNav = styled('nav')(
     max-height: calc(100vh - 72px);
     overflow-y: auto;
     top: 16px;
-    ${theme.breakpoints.down('lg')} {
+    
+    ${theme.breakpoints.between('md', 'lg')} {
+      top: 0;
+    }
+
+    ${theme.breakpoints.down('md')} {
       display: none;
     }
   `,

@@ -28,7 +28,7 @@ const StyledToolbar = styled(Toolbar)(
   ({ theme }) => `
     gap: 16px;
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('lg')} {
       justify-content: space-between;
     }
   `,
@@ -38,7 +38,7 @@ const StyledGithubLink = styled('a')(
   ({ theme }) => `
     display: flex;
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('lg')} {
       display: none;
     }
   `,
@@ -46,7 +46,7 @@ const StyledGithubLink = styled('a')(
 
 const StyledMenuButton = styled(IconButton)(
   ({ theme }) => `
-    ${theme.breakpoints.up('md')} {
+    ${theme.breakpoints.up('lg')} {
       visibility: hidden;
       height: 0;
       width: 0;
@@ -59,7 +59,7 @@ const StyledDesktopGap = styled('div')(
   ({ theme }) => `
     flex-grow: 1;
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('lg')} {
       display: none;
     }
   `,
@@ -73,7 +73,7 @@ const StyledDesktopLink = styled(Button)(
       color: rgba(255, 255, 255, 0.6);
     }
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('lg')} {
       display: none;
     }
   `,
@@ -96,6 +96,7 @@ const Header = ({ mode, docsGroups, toggleColorMode }: HeaderProps) => {
     () => [
       {
         title: 'Docs',
+        path: '/docs',
         groups: docsGroups.map(group => ({
           title: group.title,
           links: group.links.map(link => ({
@@ -151,19 +152,16 @@ const Header = ({ mode, docsGroups, toggleColorMode }: HeaderProps) => {
             />
           </StyledGithubLink>
           {items.map(item => {
-            console.log('item', item, 'url' in item);
             let url = '#';
             if ('url' in item) {
               url = item.url;
             } else if (item.groups.length > 0 && item.groups[0].links.length > 0) {
               url = item.groups[0].links[0].url;
-            } else {
-              console.log(item);
             }
 
             return (
               <Link key={`desktop-${item.title}-${url}`} href={url}>
-                <StyledDesktopLink component="a">Docs</StyledDesktopLink>
+                <StyledDesktopLink component="a">{item.title}</StyledDesktopLink>
               </Link>
             );
           })}

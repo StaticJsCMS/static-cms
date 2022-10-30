@@ -26,7 +26,7 @@ const DocsLeftNav = ({ docsGroups }: DocsLeftNavProps) => {
         bottom: 0,
         overflowY: 'auto',
         paddingBottom: '24px',
-        [theme.breakpoints.down('md')]: {
+        [theme.breakpoints.down('lg')]: {
           display: 'none',
         },
       }}

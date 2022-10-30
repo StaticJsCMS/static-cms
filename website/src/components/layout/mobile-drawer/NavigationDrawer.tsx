@@ -37,12 +37,12 @@ const NavigationDrawer = ({ items, mobileOpen, onMobileOpenToggle }: NavigationD
 
   const drawer = useMemo(
     () => (
-      <StyledDrawerContents onClick={onMobileOpenToggle}>
-        <StyledLogoWrapper>
-          <Logo />
+      <StyledDrawerContents key="drawer-nav-contents" onClick={onMobileOpenToggle}>
+        <StyledLogoWrapper key="drawer-nav-logo-wrapper">
+          <Logo key="drawer-nav-logo" />
         </StyledLogoWrapper>
-        <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.8)', pt: 2 }} />
-        <List>
+        <Divider key="drawer-nav-divider" sx={{ borderColor: 'rgba(255, 255, 255, 0.8)', pt: 2 }} />
+        <List key="drawer-nav-list">
           {items.map(item => (
             <MobileNavItem key={`drawer-nav-item-${item.title}`} item={item} />
           ))}
@@ -59,6 +59,7 @@ const NavigationDrawer = ({ items, mobileOpen, onMobileOpenToggle }: NavigationD
 
   return (
     <SwipeableDrawer
+      key="swipable-drawer"
       disableBackdropTransition={!iOS}
       disableDiscovery={iOS}
       container={container}
@@ -71,7 +72,7 @@ const NavigationDrawer = ({ items, mobileOpen, onMobileOpenToggle }: NavigationD
       }}
       sx={{
         display: 'none',
-        [theme.breakpoints.down('md')]: {
+        [theme.breakpoints.down('lg')]: {
           display: 'block',
         },
         width: '80%',

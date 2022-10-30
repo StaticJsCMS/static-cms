@@ -10,11 +10,11 @@ const DocsContent = styled('div')(
     display: flex;
     flex-direction: column;
 
-    ${theme.breakpoints.between('md', 'lg')} {
+    ${theme.breakpoints.between('sm', 'lg')} {
       padding: 0 40px;
     }
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('sm')} {
       padding: 0 32px;
     }
 

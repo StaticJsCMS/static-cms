@@ -250,8 +250,6 @@ const StyledFeatureText = styled('div')`
 const Home = ({ docsGroups }: DocsMenuProps) => {
   const theme = useTheme();
 
-  console.log('docsGroups', docsGroups)
-
   return (
     <Page url="/" docsGroups={docsGroups} fullWidth>
       <StyledHomagePageContent>

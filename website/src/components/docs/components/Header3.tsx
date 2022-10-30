@@ -12,7 +12,12 @@ const StyledLink = styled('a')(
     top: 0;
     font-weight: 300;
     color: ${theme.palette.text.primary};
-    transform: rotateZ(-45deg)
+    transform: rotateZ(-45deg);
+
+    ${theme.breakpoints.down('sm')} {
+      margin-left: -22px;
+      top: -1px;
+    }
   `,
 );
 

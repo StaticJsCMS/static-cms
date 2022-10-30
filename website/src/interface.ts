@@ -132,6 +132,7 @@ export interface MenuLinkSubGroup {
 
 export interface MenuLinkGroup {
   readonly title: string;
+  readonly path: string;
   readonly groups: MenuLinkSubGroup[];
 }
 

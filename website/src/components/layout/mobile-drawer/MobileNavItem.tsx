@@ -7,6 +7,7 @@ import { useTheme } from '@mui/material/styles';
 import Link from 'next/link';
 import { useCallback, useMemo, useState } from 'react';
 import ListSubheader from '@mui/material/ListSubheader';
+import { useRouter } from 'next/router';
 
 import MobileNavLink from './MobileNavLink';
 
@@ -23,8 +24,17 @@ function isMenuLinkGroup(link: MenuItem): link is MenuLinkGroup {
 
 const MobileNavItem = ({ item }: MobileNavItemProps) => {
   const theme = useTheme();
+  const { asPath } = useRouter();
 
-  const [open, setOpen] = useState(false);
+  const selected = useMemo(() => {
+    if ('url' in item) {
+      return asPath === item.url;
+    }
+
+    return asPath.startsWith(item.path);
+  }, [asPath, item]);
+
+  const [open, setOpen] = useState(selected);
 
   const handleOnClick = useCallback(
     (link: MenuItem | MenuLink) => (event: MouseEvent) => {
@@ -33,8 +43,6 @@ const MobileNavItem = ({ item }: MobileNavItemProps) => {
         setOpen(!open);
         return;
       }
-
-      setOpen(false);
     },
     [open],
   );
@@ -49,7 +57,11 @@ const MobileNavItem = ({ item }: MobileNavItemProps) => {
 
   const wrappedLink = useMemo(() => {
     const button = (
-      <ListItemButton key={`drawer-nav-item-${item.title}`} onClick={handleOnClick(item)}>
+      <ListItemButton
+        key={`drawer-nav-item-${item.title}`}
+        onClick={handleOnClick(item)}
+        selected={selected}
+      >
         <ListItemText primary={item.title} />
         {isMenuLinkGroup(item) ? (
           <ExpandLessIcon
@@ -71,7 +83,7 @@ const MobileNavItem = ({ item }: MobileNavItemProps) => {
         {button}
       </Link>
     );
-  }, [handleOnClick, item, open, theme.transitions, url]);
+  }, [handleOnClick, item, open, selected, theme.transitions, url]);
 
   return (
     <>

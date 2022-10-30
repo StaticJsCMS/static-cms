@@ -9,10 +9,14 @@ const StyledLink = styled('a')(
   ({ theme }) => `
     position: absolute;
     margin-left: -28px;
-    top: 0;
+    top: -1px;
     font-weight: 300;
     color: ${theme.palette.secondary.main};
-    transform: rotateZ(-45deg)
+    transform: rotateZ(-45deg);
+
+    ${theme.breakpoints.down('sm')} {
+      margin-left: -22px;
+    }
   `,
 );
 
@@ -50,7 +54,7 @@ const Header2 = ({ children = '' }: Header2Props) => {
                 fontSize: '20px',
                 height: '20px',
                 width: '20px',
-                marginTop: '2px'
+                marginTop: '2px',
               },
             }}
           />
