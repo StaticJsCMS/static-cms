@@ -36,7 +36,7 @@ export interface PageProps {
     image?: string;
   };
   fullWidth?: boolean;
-  groups: DocsGroup[];
+  docsGroups: DocsGroup[];
 }
 
 const Page = ({
@@ -47,7 +47,7 @@ const Page = ({
   description,
   pageDetails,
   fullWidth = false,
-  groups,
+  docsGroups,
 }: PageProps) => {
   const scrollableArea = useRef<HTMLDivElement | null>(null);
   const theme = useTheme();
@@ -94,7 +94,7 @@ const Page = ({
       ) : null}
       <Header
         mode={theme.palette.mode}
-        groups={groups}
+        docsGroups={docsGroups}
         toggleColorMode={colorMode.toggleColorMode}
       />
       <StyledPageContentWrapper ref={scrollableArea}>{content}</StyledPageContentWrapper>

@@ -12,10 +12,11 @@ import Link from 'next/link';
 import Container from '../components/layout/Container';
 import Page from '../components/layout/Page';
 import config from '../lib/config';
+import { getDocsMenuStaticProps } from '../lib/docs';
 import homepageData from '../lib/homepage';
 import releases from '../lib/releases';
 
-import type { NextPage } from 'next';
+import type { DocsMenuProps } from '../lib/docs';
 
 const StyledHomagePageContent = styled('div')(
   ({ theme }) => `
@@ -246,11 +247,13 @@ const StyledFeatureText = styled('div')`
   padding: 0 16px;
 `;
 
-const Home: NextPage = () => {
+const Home = ({ docsGroups }: DocsMenuProps) => {
   const theme = useTheme();
 
+  console.log('docsGroups', docsGroups)
+
   return (
-    <Page url="/" fullWidth>
+    <Page url="/" docsGroups={docsGroups} fullWidth>
       <StyledHomagePageContent>
         <StyledIntroSection>
           <Container>
@@ -413,3 +416,5 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export const getStaticProps = getDocsMenuStaticProps;

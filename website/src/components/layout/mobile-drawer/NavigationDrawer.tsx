@@ -71,10 +71,13 @@ const NavigationDrawer = ({ items, mobileOpen, onMobileOpenToggle }: NavigationD
           width: '100%',
         },
         '& .MuiDrawer-paper': {
-          backgroundColor: '#bc2f3b',
           boxSizing: 'border-box',
           width: '80%',
           maxWidth: DRAWER_WIDTH,
+          background: '#2e3034',
+        },
+        '& .MuiListSubheader-root': {
+          textAlign: 'left',
         },
       }}
     >

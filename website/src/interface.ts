@@ -125,9 +125,14 @@ export interface MenuLink {
   readonly url: string;
 }
 
+export interface MenuLinkSubGroup {
+  readonly title: string;
+  readonly links: MenuLink[];
+}
+
 export interface MenuLinkGroup {
   readonly title: string;
-  readonly menuLinks: MenuLink[];
+  readonly groups: MenuLinkSubGroup[];
 }
 
 export type MenuItem = MenuLinkGroup | MenuLink;

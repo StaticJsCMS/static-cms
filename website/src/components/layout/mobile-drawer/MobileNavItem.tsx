@@ -1,11 +1,12 @@
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import Collapse from '@mui/material/Collapse';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import { useTheme } from '@mui/material/styles';
 import Link from 'next/link';
 import { useCallback, useMemo, useState } from 'react';
+import ListSubheader from '@mui/material/ListSubheader';
 
 import MobileNavLink from './MobileNavLink';
 
@@ -17,10 +18,12 @@ interface MobileNavItemProps {
 }
 
 function isMenuLinkGroup(link: MenuItem): link is MenuLinkGroup {
-  return 'menuLinks' in link;
+  return 'groups' in link;
 }
 
 const MobileNavItem = ({ item }: MobileNavItemProps) => {
+  const theme = useTheme();
+
   const [open, setOpen] = useState(false);
 
   const handleOnClick = useCallback(
@@ -48,11 +51,17 @@ const MobileNavItem = ({ item }: MobileNavItemProps) => {
     const button = (
       <ListItemButton
         key={`drawer-nav-item-${item.title}`}
-        sx={{ color: '#fde7a5', textTransform: 'uppercase', '&:hover': { color: '#fde7a5' } }}
         onClick={handleOnClick(item)}
       >
         <ListItemText primary={item.title} />
-        {isMenuLinkGroup(item) ? open ? <ExpandLess /> : <ExpandMore /> : null}
+        {isMenuLinkGroup(item) ? (
+          <ExpandLessIcon
+            sx={{
+              transform: `rotateZ(${open ? 0 : 90}deg)`,
+              transition: theme.transitions.create(['transform']),
+            }}
+          />
+        ) : null}
       </ListItemButton>
     );
 
@@ -65,22 +74,33 @@ const MobileNavItem = ({ item }: MobileNavItemProps) => {
         {button}
       </Link>
     );
-  }, [handleOnClick, item, open, url]);
+  }, [handleOnClick, item, open, theme.transitions, url]);
 
   return (
     <>
       {wrappedLink}
       {isMenuLinkGroup(item) ? (
         <Collapse in={open} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            {item.menuLinks.map(link => (
-              <MobileNavLink
-                key={`drawer-nav-item-${item.title}-sub-item-${link.title}`}
-                link={link}
-                onClick={handleOnClick(link)}
-              />
-            ))}
-          </List>
+          {item.groups.map(group => (
+            <List
+              key={group.title}
+              component="div"
+              subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                  {group.title}
+                </ListSubheader>
+              }
+              disablePadding
+            >
+              {group.links.map(link => (
+                <MobileNavLink
+                  key={`drawer-nav-item-${item.title}-sub-item-${link.title}`}
+                  link={link}
+                  onClick={handleOnClick(link)}
+                />
+              ))}
+            </List>
+          ))}
         </Collapse>
       ) : null}
     </>

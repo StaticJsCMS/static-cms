@@ -52,7 +52,13 @@ const Docs = ({ docsGroups, title, slug, description = '', source }: DocsProps) 
   const theme = useTheme();
 
   return (
-    <Page title={title} url={`/docs/${slug}`} description={description} fullWidth>
+    <Page
+      title={title}
+      url={`/docs/${slug}`}
+      description={description}
+      docsGroups={docsGroups}
+      fullWidth
+    >
       <DocsLeftNav docsGroups={docsGroups} />
       <StyledDocsView className={theme.palette.mode}>
         <StyledDocsContentWrapper>

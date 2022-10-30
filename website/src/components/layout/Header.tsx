@@ -7,11 +7,11 @@ import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Image from 'next/image';
-import { useCallback, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useCallback, useMemo, useState } from 'react';
 
-import Search from './Search';
 import NavigationDrawer from './mobile-drawer/NavigationDrawer';
+import Search from './Search';
 
 import type { PaletteMode } from '@mui/material';
 import type { ButtonTypeMap } from '@mui/material/Button';
@@ -90,39 +90,39 @@ const StyledImage = styled(Image)`
 
 interface HeaderProps {
   mode: PaletteMode;
-  groups: DocsGroup[];
+  docsGroups: DocsGroup[];
   toggleColorMode: () => void;
 }
 
-const Header = ({ mode, groups, toggleColorMode }: HeaderProps) => {
+const Header = ({ mode, docsGroups, toggleColorMode }: HeaderProps) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = useCallback(() => {
     setMobileOpen(!mobileOpen);
   }, [mobileOpen]);
 
-  const items = useMemo(
-    () =>
-      [
-        {
-          title: 'Docs',
-          menuItems: groups.flatMap(group =>
-            group.links.map(link => ({
-              title: link.title,
-              url: `/docs/${link.slug}`,
-            })),
-          ),
-        },
-        {
-          title: 'Contributing',
-          url: '/docs/contributor-guide',
-        },
-        {
-          title: 'Community',
-          url: '/community',
-        },
-      ] as MenuItem[],
-    [groups],
+  const items: MenuItem[] = useMemo(
+    () => [
+      {
+        title: 'Docs',
+        groups: docsGroups.map(group => ({
+          title: group.title,
+          links: group.links.map(link => ({
+            title: link.title,
+            url: `/docs/${link.slug}`,
+          })),
+        })),
+      },
+      {
+        title: 'Contributing',
+        url: '/docs/contributor-guide',
+      },
+      {
+        title: 'Community',
+        url: '/community',
+      },
+    ],
+    [docsGroups],
   );
 
   return (
@@ -158,8 +158,16 @@ const Header = ({ mode, groups, toggleColorMode }: HeaderProps) => {
             />
           </StyledGithubLink>
           {items.map(item => {
-            const url =
-              'url' in item ? item.url : item.menuLinks.length > 0 ? item.menuLinks[0].url : '#';
+            console.log('item', item, 'url' in item);
+            let url = '#';
+            if ('url' in item) {
+              url = item.url;
+            } else if (item.groups.length > 0 && item.groups[0].links.length > 0) {
+              url = item.groups[0].links[0].url;
+            } else {
+              console.log(item);
+            }
+
             return (
               <Link key={`desktop-${item.title}-${url}`} href={url}>
                 <StyledDesktopLink component="a">Docs</StyledDesktopLink>
