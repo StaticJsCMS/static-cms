@@ -12,6 +12,7 @@ import Container from './Container';
 import Header from './Header';
 
 import type { ReactNode } from 'react';
+import type { DocsGroup } from '../../interface';
 
 const StyledPageContentWrapper = styled('div')`
   display: flex;
@@ -35,6 +36,7 @@ export interface PageProps {
     image?: string;
   };
   fullWidth?: boolean;
+  groups: DocsGroup[];
 }
 
 const Page = ({
@@ -45,6 +47,7 @@ const Page = ({
   description,
   pageDetails,
   fullWidth = false,
+  groups,
 }: PageProps) => {
   const scrollableArea = useRef<HTMLDivElement | null>(null);
   const theme = useTheme();
@@ -89,7 +92,11 @@ const Page = ({
           description={description}
         />
       ) : null}
-      <Header mode={theme.palette.mode} toggleColorMode={colorMode.toggleColorMode} />
+      <Header
+        mode={theme.palette.mode}
+        groups={groups}
+        toggleColorMode={colorMode.toggleColorMode}
+      />
       <StyledPageContentWrapper ref={scrollableArea}>{content}</StyledPageContentWrapper>
     </ThemeProvider>
   );

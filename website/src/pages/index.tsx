@@ -3,11 +3,10 @@ import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
-import Image from 'next/image';
 import Link from 'next/link';
 
 import Container from '../components/layout/Container';
@@ -161,7 +160,7 @@ const StyledReleasesSection = styled('section')(
     align-items: center;
     background: ${theme.palette.mode === 'light' ? '#dddee2' : '#242424'};
     padding: 64px 0;
-    
+
     ${theme.breakpoints.down('md')} {
       padding: 48px 0;
     }
@@ -188,29 +187,48 @@ const StyledReleaseCardContent = styled(CardContent)`
   gap: 8px;
 `;
 
-const StyledFeaturesSection = styled('section')`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-bottom: 80px;
-`;
+const StyledFeaturesSection = styled('section')(
+  ({ theme }) => `
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 80px;
 
-const StyledFeaturesSectionContent = styled('div')`
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 48px;
-`;
+    ${theme.breakpoints.down('md')} {
+      height: auto;
+      margin-top: 48px;
+    }
+  `,
+);
 
-const StyledFeaturesSectionIntro = styled('div')`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 32px 0 104px;
-`;
+const StyledFeaturesSectionIntro = styled('div')(
+  ({ theme }) => `
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 32px 0 104px;
+
+    ${theme.breakpoints.down('md')} {
+      padding: 32px 0 48px;
+    }
+  `,
+);
+
+const StyledFeaturesSectionContent = styled('div')(
+  ({ theme }) => `
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 48px;
+
+    ${theme.breakpoints.down('md')} {
+      grid-template-columns: 1fr;
+    }
+  `,
+);
 
 const StyledFeature = styled('div')`
   width: 100%;
@@ -229,6 +247,8 @@ const StyledFeatureText = styled('div')`
 `;
 
 const Home: NextPage = () => {
+  const theme = useTheme();
+
   return (
     <Page url="/" fullWidth>
       <StyledHomagePageContent>
@@ -337,10 +357,16 @@ const Home: NextPage = () => {
           <Container>
             <StyledFeaturesSectionIntro>
               <Typography
-                variant="h4"
-                component="h3"
+                variant="h2"
                 color="text.primary"
-                sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  [theme.breakpoints.down('md')]: {
+                    textAlign: 'center',
+                  },
+                }}
               >
                 {homepageData.features_intro.title}
               </Typography>
@@ -348,11 +374,15 @@ const Home: NextPage = () => {
                 variant="subtitle1"
                 component="div"
                 color="text.secondary"
-                sx={{ textAlign: 'center' }}
+                sx={{
+                  textAlign: 'center',
+                  [theme.breakpoints.down('md')]: {
+                    textAlign: 'center',
+                    marginTop: '24px',
+                  },
+                }}
               >
-                {homepageData.features_intro.subtitle1}
-                <br />
-                {homepageData.features_intro.subtitle2}
+                {homepageData.features_intro.subtitle1} {homepageData.features_intro.subtitle2}
               </Typography>
             </StyledFeaturesSectionIntro>
             <StyledFeaturesSectionContent>
