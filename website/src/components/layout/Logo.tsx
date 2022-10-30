@@ -2,10 +2,18 @@ import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const StyledImageLink = styled('a')`
-  display: flex;
-  align-items: center;
-`;
+const StyledImageLink = styled('a')(
+  ({ theme }) => `
+    display: flex;
+    align-items: center;
+
+    ${theme.breakpoints.down('lg')} {
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
+  `,
+);
 
 const StyledImage = styled(Image)`
   cursor: pointer;

@@ -28,6 +28,7 @@ const StyledAppBar = styled(AppBar)(
 const StyledToolbar = styled(Toolbar)(
   ({ theme }) => `
     gap: 16px;
+    height: 72px;
 
     ${theme.breakpoints.down('lg')} {
       justify-content: space-between;
@@ -35,14 +36,22 @@ const StyledToolbar = styled(Toolbar)(
   `,
 );
 
-const StyledIconsWrapper = styled('div')`
-  display: flex;
-  justify-content: center;
-`;
+const StyledIconsWrapper = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ${theme.breakpoints.up('lg')} {
+      flex-grow: 1;
+    }
+  `,
+);
 
 const StyledGithubLink = styled('a')(
   ({ theme }) => `
     display: flex;
+    align-items: center;
     color: ${theme.palette.text.primary}
   `,
 );
