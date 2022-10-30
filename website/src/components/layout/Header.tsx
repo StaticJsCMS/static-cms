@@ -6,10 +6,10 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useMemo, useState } from 'react';
 
+import Logo from './Logo';
 import NavigationDrawer from './mobile-drawer/NavigationDrawer';
 import Search from './Search';
 
@@ -79,15 +79,6 @@ const StyledDesktopLink = styled(Button)(
   `,
 ) as ExtendButtonBase<ButtonTypeMap<{}, 'a'>>;
 
-const StyledImageLink = styled('a')`
-  display: flex;
-  align-items: center;
-`;
-
-const StyledImage = styled(Image)`
-  cursor: pointer;
-`;
-
 interface HeaderProps {
   mode: PaletteMode;
   docsGroups: DocsGroup[];
@@ -129,14 +120,16 @@ const Header = ({ mode, docsGroups, toggleColorMode }: HeaderProps) => {
     <>
       <StyledAppBar position="fixed">
         <StyledToolbar>
-          <StyledMenuButton size="large" edge="start" color="inherit" aria-label="menu" onClick={handleDrawerToggle}>
+          <StyledMenuButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={handleDrawerToggle}
+          >
             <MenuIcon fontSize="large" />
           </StyledMenuButton>
-          <Link href="/">
-            <StyledImageLink>
-              <StyledImage src="/static-cms-logo.svg" width={182} height={72} />
-            </StyledImageLink>
-          </Link>
+          <Logo />
           <Search />
           <IconButton
             sx={{ ml: 1 }}

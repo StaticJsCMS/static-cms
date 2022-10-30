@@ -49,10 +49,7 @@ const MobileNavItem = ({ item }: MobileNavItemProps) => {
 
   const wrappedLink = useMemo(() => {
     const button = (
-      <ListItemButton
-        key={`drawer-nav-item-${item.title}`}
-        onClick={handleOnClick(item)}
-      >
+      <ListItemButton key={`drawer-nav-item-${item.title}`} onClick={handleOnClick(item)}>
         <ListItemText primary={item.title} />
         {isMenuLinkGroup(item) ? (
           <ExpandLessIcon
@@ -86,11 +83,25 @@ const MobileNavItem = ({ item }: MobileNavItemProps) => {
               key={group.title}
               component="div"
               subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
+                <ListSubheader
+                  component="div"
+                  id="nested-list-subheader"
+                  sx={{
+                    lineHeight: '32px',
+                    textTransform: 'uppercase',
+                    top: '-1px',
+                  }}
+                >
                   {group.title}
                 </ListSubheader>
               }
               disablePadding
+              sx={{
+                marginTop: '8px',
+                '&:not(:first-child)': {
+                  marginTop: '20px',
+                },
+              }}
             >
               {group.links.map(link => (
                 <MobileNavLink

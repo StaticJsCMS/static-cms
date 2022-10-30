@@ -15,7 +15,10 @@ const MobileNavLink = ({ link, onClick }: MobileNavLinkProps) => {
 
   return (
     <Link href={url} target={url.startsWith('http') ? '_blank' : undefined}>
-      <ListItemButton sx={{ pl: 4, pt: '4px', pb: '4px' }} onClick={onClick}>
+      <ListItemButton
+        sx={{ paddingLeft: '24px', paddingTop: '4px', paddingBottom: '4px' }}
+        onClick={onClick}
+      >
         <ListItemText primary={title} />
       </ListItemButton>
     </Link>

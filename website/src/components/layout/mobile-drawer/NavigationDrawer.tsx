@@ -5,14 +5,20 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import { useMemo } from 'react';
 
 import MobileNavItem from './MobileNavItem';
+import Logo from '../Logo';
 
 import type { MenuItem } from '../../../interface';
 
-const DRAWER_WIDTH = 240;
+const DRAWER_WIDTH = 300;
 
 const StyledDrawerContents = styled('div')`
   padding-top: 16px;
   text-align: center;
+`;
+
+const StyledLogoWrapper = styled('div')`
+  display: flex;
+  justify-content: center;
 `;
 
 interface NavigationDrawerProps {
@@ -32,6 +38,9 @@ const NavigationDrawer = ({ items, mobileOpen, onMobileOpenToggle }: NavigationD
   const drawer = useMemo(
     () => (
       <StyledDrawerContents onClick={onMobileOpenToggle}>
+        <StyledLogoWrapper>
+          <Logo />
+        </StyledLogoWrapper>
         <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.8)', pt: 2 }} />
         <List>
           {items.map(item => (
