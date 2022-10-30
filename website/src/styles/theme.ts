@@ -63,6 +63,7 @@ const useCreateTheme = (mode: PaletteMode) => {
             fontSize: '42px',
             fontWeight: 'bold',
             lineHeight: 1.3,
+            marginBottom: '16px',
             [theme.breakpoints.down('md')]: {
               fontSize: '30px',
             },
@@ -70,6 +71,7 @@ const useCreateTheme = (mode: PaletteMode) => {
           h2: {
             fontSize: '24px',
             lineHeight: 1.3,
+            position: 'relative',
             [theme.breakpoints.down('md')]: {
               fontSize: '20px',
             },
@@ -77,6 +79,7 @@ const useCreateTheme = (mode: PaletteMode) => {
           h3: {
             fontSize: '20px',
             lineHeight: 1.3,
+            position: 'relative',
             [theme.breakpoints.down('md')]: {
               fontSize: '18px',
             },

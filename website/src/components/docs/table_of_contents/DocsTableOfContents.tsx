@@ -105,16 +105,21 @@ const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
   }, [setActiveId, asPath]);
 };
 
-const StyledNav = styled('nav')`
-  width: 100%;
-  padding: 0 16px 16px 0;
-  align-self: flex-start;
-  position: sticky;
-  top: 0;
-  max-height: calc(100vh - 72px);
-  overflow-y: auto;
-  top: 16px;
-`;
+const StyledNav = styled('nav')(
+  ({ theme }) => `
+    width: 100%;
+    padding: 0 16px 16px 0;
+    align-self: flex-start;
+    position: sticky;
+    top: 0;
+    max-height: calc(100vh - 72px);
+    overflow-y: auto;
+    top: 16px;
+    ${theme.breakpoints.down('lg')} {
+      display: none;
+    }
+  `,
+);
 
 const DocsTableOfContents = () => {
   const [activeId, setActiveId] = useState<string>();

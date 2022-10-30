@@ -129,7 +129,7 @@ const Header = ({ mode, docsGroups, toggleColorMode }: HeaderProps) => {
     <>
       <StyledAppBar position="fixed">
         <StyledToolbar>
-          <StyledMenuButton size="large" edge="start" color="inherit" aria-label="menu">
+          <StyledMenuButton size="large" edge="start" color="inherit" aria-label="menu" onClick={handleDrawerToggle}>
             <MenuIcon fontSize="large" />
           </StyledMenuButton>
           <Link href="/">

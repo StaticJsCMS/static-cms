@@ -26,7 +26,13 @@ const StyledDocsView = styled('div')(
     padding-top: 16px;
 
     ${theme.breakpoints.down('lg')} {
-      grid-template-columns: unset
+      grid-template-columns: 1fr
+    }
+
+    ${theme.breakpoints.down('md')} {
+      margin-left: 0;
+      width: 100%;
+      padding-top: 24px;
     }
   `,
 );

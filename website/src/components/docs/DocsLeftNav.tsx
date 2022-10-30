@@ -1,4 +1,5 @@
 import List from '@mui/material/List';
+import { useTheme } from '@mui/material/styles';
 
 import DocsLeftNavGroup from './DocsLeftNavGroup';
 
@@ -9,6 +10,8 @@ export interface DocsLeftNavProps {
 }
 
 const DocsLeftNav = ({ docsGroups }: DocsLeftNavProps) => {
+  const theme = useTheme();
+
   return (
     <List
       component="nav"
@@ -23,6 +26,9 @@ const DocsLeftNav = ({ docsGroups }: DocsLeftNavProps) => {
         bottom: 0,
         overflowY: 'auto',
         paddingBottom: '24px',
+        [theme.breakpoints.down('md')]: {
+          display: 'none',
+        },
       }}
       dense
     >
