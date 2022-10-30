@@ -110,7 +110,7 @@ const MobileNavItem = ({ item }: MobileNavItemProps) => {
               disablePadding
               sx={{
                 marginTop: '8px',
-                '&:not(:first-child)': {
+                '&:not(:first-of-type)': {
                   marginTop: '20px',
                 },
               }}
