@@ -52,13 +52,6 @@ const StyledGithubLink = styled('a')(
   ({ theme }) => `
     display: flex;
     align-items: center;
-    color: ${theme.palette.text.primary}
-  `,
-);
-
-const StyledGithubImage = styled('img')(
-  ({ theme }) => `
-    display: flex;
 
     ${theme.breakpoints.down('lg')} {
       display: none;
@@ -66,15 +59,9 @@ const StyledGithubImage = styled('img')(
   `,
 );
 
-const StyledGithubIcon = styled(GitHubIcon)(
-  ({ theme }) => `
-    display: none;
-
-    ${theme.breakpoints.down('lg')} {
-      display: flex;
-    }
-  `,
-);
+const StyledGithubImage = styled('img')`
+  display: flex;
+`;
 
 const StyledMenuButton = styled(IconButton)(
   ({ theme }) => `
@@ -183,8 +170,13 @@ const Header = ({ mode, docsGroups, toggleColorMode }: HeaderProps) => {
                 alt="Star StaticJsCMS/static-cms on GitHub"
                 src="https://img.shields.io/github/stars/StaticJsCMS/static-cms?style=social"
               />
-              <StyledGithubIcon />
             </StyledGithubLink>
+            <IconButton
+              href="https://github.com/StaticJsCMS/static-cms"
+              color="inherit"
+            >
+              <GitHubIcon />
+            </IconButton>
           </StyledIconsWrapper>
           {items.map(item => {
             let url = '#';

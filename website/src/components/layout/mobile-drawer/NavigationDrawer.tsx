@@ -39,7 +39,7 @@ const NavigationDrawer = ({ items, mobileOpen, onMobileOpenToggle }: NavigationD
     () => (
       <StyledDrawerContents key="drawer-nav-contents" onClick={onMobileOpenToggle}>
         <StyledLogoWrapper key="drawer-nav-logo-wrapper">
-          <Logo key="drawer-nav-logo" />
+          <Logo key="drawer-nav-logo" inDrawer />
         </StyledLogoWrapper>
         <Divider key="drawer-nav-divider" sx={{ borderColor: 'rgba(255, 255, 255, 0.8)', pt: 2 }} />
         <List key="drawer-nav-list">
