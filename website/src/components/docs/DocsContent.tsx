@@ -10,6 +10,14 @@ const DocsContent = styled('div')(
     display: flex;
     flex-direction: column;
 
+    ${theme.breakpoints.between('sm', 'lg')} {
+      padding: 0 40px;
+    }
+
+    ${theme.breakpoints.down('sm')} {
+      padding: 0 32px;
+    }
+
     & time {
       color: #9b9b9b;
     }
@@ -54,7 +62,7 @@ const DocsContent = styled('div')(
       color: ${theme.palette.text.primary};
     }
 
-    @media (min-width: 1200px) {
+    ${theme.breakpoints.up('lg')} {
       & h1 {
         margin-top: 16px;
         margin-bottom: 16px;
@@ -66,13 +74,13 @@ const DocsContent = styled('div')(
       line-height: 36px;
     }
 
-    @media (min-width: 600px) and (max-width: 1200px) {
+    ${theme.breakpoints.between('sm', 'lg')} {
       & h1 {
         font-size: 26px;
       }
     }
 
-    @media (max-width: 600px) {
+    ${theme.breakpoints.down('sm')} {
       & h1 {
         font-size: 24px;
       }
@@ -84,13 +92,13 @@ const DocsContent = styled('div')(
       line-height: 26px;
     }
 
-    @media (min-width: 600px) and (max-width: 1200px) {
+    ${theme.breakpoints.between('sm', 'lg')} {
       & h2 {
         font-size: 20px;
       }
     }
 
-    @media (max-width: 600px) {
+    ${theme.breakpoints.down('sm')} {
       & h2 {
         font-size: 18px;
       }
@@ -102,13 +110,13 @@ const DocsContent = styled('div')(
       line-height: 24px;
     }
 
-    @media (min-width: 600px) and (max-width: 1200px) {
+    ${theme.breakpoints.between('sm', 'lg')} {
       & h3 {
         font-size: 18px;
       }
     }
 
-    @media (max-width: 600px) {
+    ${theme.breakpoints.down('sm')} {
       & h3 {
         font-size: 17px;
       }
@@ -119,7 +127,7 @@ const DocsContent = styled('div')(
       line-height: 20px;
     }
 
-    @media (max-width: 1200px) {
+    ${theme.breakpoints.down('lg')} {
       & h4 {
         font-size: 16px;
       }
@@ -130,7 +138,7 @@ const DocsContent = styled('div')(
       line-height: 19px;
     }
 
-    @media (max-width: 1200px) {
+    ${theme.breakpoints.down('lg')} {
       & h5 {
         font-size: 15px;
       }
@@ -141,7 +149,7 @@ const DocsContent = styled('div')(
       line-height: 18px;
     }
 
-    @media (max-width: 1200px) {
+    ${theme.breakpoints.down('lg')} {
       & h6 {
         font-size: 14px;
       }
@@ -295,7 +303,7 @@ const DocsContent = styled('div')(
       max-width: 100%;
     }
 
-    @media (min-width: 800px) {
+    ${theme.breakpoints.down('md')} {
       & h2,
       & h3,
       & h4,

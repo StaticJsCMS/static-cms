@@ -6,7 +6,12 @@ import path from 'path';
 import { SUMMARY_MIN_PARAGRAPH_LENGTH } from '../constants';
 import menu from './menu';
 
-import type { FileMatter, DocsPage, DocsData, DocsGroup, DocsGroupLink } from '../interface';
+import type { GetStaticProps } from 'next';
+import type { DocsData, DocsGroup, DocsGroupLink, DocsPage, FileMatter } from '../interface';
+
+export interface DocsMenuProps {
+  docsGroups: DocsGroup[];
+}
 
 const docsDirectory = path.join(process.cwd(), 'content/docs');
 
@@ -97,3 +102,11 @@ export function fetchDocsContent(): [DocsPage[], DocsGroup[]] {
 
   return docsCache;
 }
+
+export const getDocsMenuStaticProps: GetStaticProps = (): { props: DocsMenuProps } => {
+  return {
+    props: {
+      docsGroups: fetchDocsContent()[1],
+    },
+  };
+};

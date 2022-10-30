@@ -2,12 +2,18 @@ import { styled } from '@mui/material/styles';
 
 import type { NestedHeading } from './DocsTableOfContents';
 
-const StyledList = styled('ul')`
-  display: flex;
-  flex-direction: column;
-  list-style-type: none;
-  padding: 0;
-`;
+const StyledList = styled('ul')(
+  ({ theme }) => `
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    padding: 0;
+      
+    ${theme.breakpoints.down('lg')} {
+      margin-top: 0;
+    }
+  `,
+);
 
 const StyledListItem = styled('li')(
   ({ theme }) => `

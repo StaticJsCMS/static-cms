@@ -1,5 +1,6 @@
 import LinkIcon from '@mui/icons-material/Link';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 
 import type { ReactNode } from 'react';
@@ -11,7 +12,12 @@ const StyledLink = styled('a')(
     top: 0;
     font-weight: 300;
     color: ${theme.palette.text.primary};
-    transform: rotateZ(-45deg)
+    transform: rotateZ(-45deg);
+
+    ${theme.breakpoints.down('sm')} {
+      margin-left: -22px;
+      top: -1px;
+    }
   `,
 );
 
@@ -29,15 +35,34 @@ interface Header3Props {
 const Header3 = ({ children = '' }: Header3Props) => {
   const anchor = getAnchor(String(children));
   const link = `#${anchor}`;
+  const theme = useTheme();
   return (
-    <h3 id={anchor}>
+    <Typography
+      variant="h3"
+      id={anchor}
+      sx={{
+        [theme.breakpoints.down('sm')]: {
+          marginLeft: '8px',
+        },
+      }}
+    >
       <Link href={link} className="anchor-link">
         <StyledLink href={link}>
-          <LinkIcon fontSize="small" />
+          <LinkIcon
+            fontSize="small"
+            sx={{
+              [theme.breakpoints.down('sm')]: {
+                fontSize: '20px',
+                height: '20px',
+                width: '20px',
+                marginTop: '2px',
+              },
+            }}
+          />
         </StyledLink>
       </Link>
       {children}
-    </h3>
+    </Typography>
   );
 };
 

@@ -38,8 +38,8 @@ const useHeadingsData = () => {
 
   useEffect(() => {
     const headingElements = Array.from(
-      document.querySelectorAll('main h2, main h3'),
-    ) as HTMLHeadingElement[];
+      document.querySelectorAll<HTMLHeadingElement>('main h2, main h3'),
+    );
 
     // Created a list of headings, with H3s nested
     const newNestedHeadings = getNestedHeadings(headingElements);
@@ -50,10 +50,10 @@ const useHeadingsData = () => {
 };
 
 const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
-  const headingElementsRef = useRef({});
+  const headingElementsRef = useRef<Record<string, IntersectionObserverEntry>>({});
   const { asPath } = useRouter();
   useEffect(() => {
-    const headingElements = Array.from(document.querySelectorAll('h2, h3'));
+    const headingElements = Array.from(document.querySelectorAll<HTMLHeadingElement>('h2, h3'));
 
     if (headingElementsRef.current) {
       headingElementsRef.current = {};
@@ -105,16 +105,26 @@ const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
   }, [setActiveId, asPath]);
 };
 
-const StyledNav = styled('nav')`
-  width: 100%;
-  padding: 0 16px 16px 0;
-  align-self: flex-start;
-  position: sticky;
-  top: 0;
-  max-height: calc(100vh - 72px);
-  overflow-y: auto;
-  top: 16px;
-`;
+const StyledNav = styled('nav')(
+  ({ theme }) => `
+    width: 100%;
+    padding: 0 16px 16px 0;
+    align-self: flex-start;
+    position: sticky;
+    top: 0;
+    max-height: calc(100vh - 72px);
+    overflow-y: auto;
+    top: 16px;
+    
+    ${theme.breakpoints.between('md', 'lg')} {
+      top: 0;
+    }
+
+    ${theme.breakpoints.down('md')} {
+      display: none;
+    }
+  `,
+);
 
 const DocsTableOfContents = () => {
   const [activeId, setActiveId] = useState<string>();

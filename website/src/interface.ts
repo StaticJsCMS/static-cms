@@ -119,3 +119,21 @@ export interface CommunityData {
   readonly subtitle: string;
   readonly sections: CommunityLinksSection[];
 }
+
+export interface MenuLink {
+  readonly title: string;
+  readonly url: string;
+}
+
+export interface MenuLinkSubGroup {
+  readonly title: string;
+  readonly links: MenuLink[];
+}
+
+export interface MenuLinkGroup {
+  readonly title: string;
+  readonly path: string;
+  readonly groups: MenuLinkSubGroup[];
+}
+
+export type MenuItem = MenuLinkGroup | MenuLink;
