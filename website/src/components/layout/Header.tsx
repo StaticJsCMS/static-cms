@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Link from 'next/link';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import { useCallback, useMemo, useState } from 'react';
 
 import Logo from './Logo';
@@ -34,12 +35,34 @@ const StyledToolbar = styled(Toolbar)(
   `,
 );
 
+const StyledIconsWrapper = styled('div')`
+  display: flex;
+  justify-content: center;
+`;
+
 const StyledGithubLink = styled('a')(
+  ({ theme }) => `
+    display: flex;
+    color: ${theme.palette.text.primary}
+  `,
+);
+
+const StyledGithubImage = styled('img')(
   ({ theme }) => `
     display: flex;
 
     ${theme.breakpoints.down('lg')} {
       display: none;
+    }
+  `,
+);
+
+const StyledGithubIcon = styled(GitHubIcon)(
+  ({ theme }) => `
+    display: none;
+
+    ${theme.breakpoints.down('lg')} {
+      display: flex;
     }
   `,
 );
@@ -132,25 +155,28 @@ const Header = ({ mode, docsGroups, toggleColorMode }: HeaderProps) => {
           </StyledMenuButton>
           <Logo />
           <Search />
-          <IconButton
-            sx={{ ml: 1 }}
-            onClick={toggleColorMode}
-            color="inherit"
-            title={mode === 'dark' ? 'Turn on the light' : 'Turn off the light'}
-          >
-            {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-          </IconButton>
-          <StyledDesktopGap />
-          <StyledGithubLink
-            href="https://github.com/StaticJsCMS/static-cms"
-            aria-label="Star StaticJsCMS/static-cms on GitHub"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              alt="Star StaticJsCMS/static-cms on GitHub"
-              src="https://img.shields.io/github/stars/StaticJsCMS/static-cms?style=social"
-            />
-          </StyledGithubLink>
+          <StyledIconsWrapper>
+            <IconButton
+              sx={{ ml: 1 }}
+              onClick={toggleColorMode}
+              color="inherit"
+              title={mode === 'dark' ? 'Turn on the light' : 'Turn off the light'}
+            >
+              {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+            </IconButton>
+            <StyledDesktopGap />
+            <StyledGithubLink
+              href="https://github.com/StaticJsCMS/static-cms"
+              aria-label="Star StaticJsCMS/static-cms on GitHub"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <StyledGithubImage
+                alt="Star StaticJsCMS/static-cms on GitHub"
+                src="https://img.shields.io/github/stars/StaticJsCMS/static-cms?style=social"
+              />
+              <StyledGithubIcon />
+            </StyledGithubLink>
+          </StyledIconsWrapper>
           {items.map(item => {
             let url = '#';
             if ('url' in item) {
