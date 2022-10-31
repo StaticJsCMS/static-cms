@@ -1,6 +1,6 @@
 {
   "name": "@staticcms/core",
-  "version": "1.0.0-alpha26",
+  "version": "1.0.0-alpha27",
   "license": "MIT",
   "description": "Static CMS core application.",
   "repository": "https://github.com/StaticJsCMS/static-cms",
@@ -11,10 +11,9 @@
     "core"
   ],
   "scripts": {
-    "build:esm": "cross-env NODE_ENV=esm babel src --out-dir dist/esm --ignore **/__tests__ --extensions \".js,.jsx,.ts,.tsx\"",
     "build:webpack": "webpack",
     "build:types": "tsc",
-    "build": "cross-env NODE_ENV=production run-s build:esm build:webpack build:types",
+    "build": "cross-env NODE_ENV=production run-s build:webpack build:types",
     "clean": "rimraf dist dev-test/dist",
     "develop": "webpack serve",
     "format:prettier": "prettier \"{{src,scripts,website}/**/,}*.{js,jsx,ts,tsx,css}\"",
@@ -27,7 +26,6 @@
     "start": "run-s clean develop",
     "type-check": "tsc --watch"
   },
-  "module": "dist/esm/index.js",
   "main": "dist/static-cms-core.js",
   "files": [
     "src/",
