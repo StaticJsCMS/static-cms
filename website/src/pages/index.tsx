@@ -5,6 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import { styled, useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import DateDisplay from '../components/DateDisplay';
@@ -407,6 +408,37 @@ const Home = ({ docsGroups }: DocsMenuProps) => {
             </StyledFeaturesSectionContent>
           </Container>
         </StyledFeaturesSection>
+        <footer>
+          {theme.palette.mode === 'light' ? (
+            <a
+              key="netlify-logo-light"
+              href="https://www.netlify.com"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Image
+                width={114}
+                height={51}
+                src="/img/netlify-color-bg.svg"
+                alt="Deploys by Netlify"
+              />
+            </a>
+          ) : (
+            <a
+              key="netlify-logo-dark"
+              href="https://www.netlify.com"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Image
+                width={114}
+                height={51}
+                src="/img/netlify-color-accent.svg"
+                alt="Deploys by Netlify"
+              />
+            </a>
+          )}
+        </footer>
       </StyledHomagePageContent>
     </Page>
   );
