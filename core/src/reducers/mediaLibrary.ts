@@ -346,18 +346,14 @@ function mediaLibrary(
 
 export function selectMediaFiles(state: RootState, field?: Field): MediaFile[] {
   const { mediaLibrary, entryDraft } = state;
-  if (!entryDraft.entry) {
-    return [];
-  }
-
   const editingDraft = selectEditingDraft(entryDraft);
   const integration = selectIntegration(state, null, 'assetStore');
 
   let files: MediaFile[] = [];
   if (editingDraft && !integration) {
-    const entryFiles = (get(entryDraft, ['entry', 'mediaFiles']) ?? []) as MediaFile[];
+    const entryFiles = entryDraft?.entry?.mediaFiles ?? [];
     const entry = entryDraft['entry'];
-    const collection = state.collections[entry?.collection];
+    const collection = entry?.collection ? state.collections[entry.collection] : null;
     if (state.config.config) {
       const mediaFolder = selectMediaFolder(state.config.config, collection, entry, field);
       files = entryFiles

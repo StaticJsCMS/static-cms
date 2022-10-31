@@ -293,14 +293,11 @@ export function persistMedia(file: File, opts: MediaOptions = {}) {
           });
         }
       } else if (privateUpload) {
+        console.error('The Private Upload option is only available for Asset Store Integration')
         throw new Error('The Private Upload option is only available for Asset Store Integration');
       } else {
         const entry = state.entryDraft.entry;
-        if (!entry?.collection) {
-          return;
-        }
-
-        const collection = state.collections[entry?.collection];
+        const collection = entry?.collection ? state.collections[entry.collection] : null;
         const path = selectMediaFilePath(config, collection, entry, fileName, field);
         assetProxy = createAssetProxy({
           file,
