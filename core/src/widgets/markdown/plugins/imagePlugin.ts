@@ -6,13 +6,15 @@ function isLinkNode(node: MdNode): node is LinkMdNode {
   return 'destination' in node;
 }
 
-const toHTMLRenderers: (props: MarkdownPluginFactoryProps) => CustomHTMLRenderer = ({
-  getAsset,
-  field,
-}) => ({
+const toHTMLRenderer: (props: MarkdownPluginFactoryProps) => CustomHTMLRenderer = ({ media }) => ({
   image: (node: MdNode, { entering, skipChildren }) => {
     if (entering && isLinkNode(node)) {
       skipChildren();
+
+      let imageUrl = node.destination ?? '';
+      if (node.destination) {
+        imageUrl = media.getMedia(node.destination)?.toString() ?? node.destination;
+      }
 
       return {
         type: 'openTag',
@@ -20,11 +22,7 @@ const toHTMLRenderers: (props: MarkdownPluginFactoryProps) => CustomHTMLRenderer
         outerNewLine: true,
         attributes: {
           src: node.destination,
-          onerror: `this.onerror=null; this.src='${
-            node.destination
-              ? getAsset(node.destination, field)?.toString() ?? node.destination
-              : ''
-          }'`,
+          onerror: `this.onerror=null; this.src='${imageUrl}'`,
         },
         selfClose: true,
       };
@@ -36,7 +34,7 @@ const toHTMLRenderers: (props: MarkdownPluginFactoryProps) => CustomHTMLRenderer
 
 const imagePlugin: MarkdownPluginFactory = props => {
   return () => ({
-    toHTMLRenderers: toHTMLRenderers(props),
+    toHTMLRenderers: toHTMLRenderer(props),
   });
 };
 

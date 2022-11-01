@@ -6,7 +6,7 @@ import { getMediaDisplayURL, getMediaFile, waitForMediaLibraryToLoad } from './m
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type { Field, Collection, Entry } from '../interface';
+import type { Collection, Entry, Field } from '../interface';
 import type { RootState } from '../store';
 import type AssetProxy from '../valueObjects/AssetProxy';
 
@@ -42,33 +42,6 @@ export function loadAssetFailure(path: string, error: Error) {
   return { type: LOAD_ASSET_FAILURE, payload: { path, error } } as const;
 }
 
-export function loadAsset(resolvedPath: string) {
-  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
-    try {
-      dispatch(loadAssetRequest(resolvedPath));
-      // load asset url from backend
-      await waitForMediaLibraryToLoad(dispatch, getState());
-      const file = selectMediaFileByPath(getState(), resolvedPath);
-
-      if (file) {
-        const url = await getMediaDisplayURL(dispatch, getState(), file);
-        const asset = createAssetProxy({ path: resolvedPath, url: url || resolvedPath });
-        dispatch(addAsset(asset));
-      } else {
-        const { url } = await getMediaFile(getState(), resolvedPath);
-        const asset = createAssetProxy({ path: resolvedPath, url });
-        dispatch(addAsset(asset));
-      }
-      dispatch(loadAssetSuccess(resolvedPath));
-    } catch (error: unknown) {
-      console.error(error);
-      if (error instanceof Error) {
-        dispatch(loadAssetFailure(resolvedPath, error));
-      }
-    }
-  };
-}
-
 const emptyAsset = createAssetProxy({
   path: 'empty.svg',
   file: new File([`<svg xmlns="http://www.w3.org/2000/svg"></svg>`], 'empty.svg', {
@@ -76,50 +49,93 @@ const emptyAsset = createAssetProxy({
   }),
 });
 
+async function loadAsset(
+  resolvedPath: string,
+  dispatch: ThunkDispatch<RootState, {}, AnyAction>,
+  getState: () => RootState,
+): Promise<AssetProxy> {
+  try {
+    dispatch(loadAssetRequest(resolvedPath));
+    // load asset url from backend
+    await waitForMediaLibraryToLoad(dispatch, getState());
+    const file = selectMediaFileByPath(getState(), resolvedPath);
+
+    let asset: AssetProxy;
+    if (file) {
+      const url = await getMediaDisplayURL(dispatch, getState(), file);
+      asset = createAssetProxy({ path: resolvedPath, url: url || resolvedPath });
+      dispatch(addAsset(asset));
+    } else {
+      const { url } = await getMediaFile(getState(), resolvedPath);
+      asset = createAssetProxy({ path: resolvedPath, url });
+      dispatch(addAsset(asset));
+    }
+    dispatch(loadAssetSuccess(resolvedPath));
+    return asset;
+  } catch (error: unknown) {
+    console.error(error);
+    if (error instanceof Error) {
+      dispatch(loadAssetFailure(resolvedPath, error));
+    }
+    return emptyAsset;
+  }
+}
+
+const promiseCache: Record<string, Promise<AssetProxy>> = {};
+
 export function getAsset(
   collection: Collection | null | undefined,
   entry: Entry | null | undefined,
   path: string,
   field?: Field,
 ) {
-  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
+  return (
+    dispatch: ThunkDispatch<RootState, {}, AnyAction>,
+    getState: () => RootState,
+  ): Promise<AssetProxy> => {
     if (!collection || !entry || !path) {
-      return emptyAsset;
+      return Promise.resolve(emptyAsset);
     }
 
     const state = getState();
     if (!state.config.config) {
-      return emptyAsset;
+      return Promise.resolve(emptyAsset);
     }
 
     const resolvedPath = selectMediaFilePath(state.config.config, collection, entry, path, field);
-    console.log('resolvedPath', resolvedPath)
     let { asset, isLoading, error } = state.medias[resolvedPath] || {};
     if (isLoading) {
-      return emptyAsset;
+      return promiseCache[resolvedPath];
     }
 
     if (asset) {
       // There is already an AssetProxy in memory for this path. Use it.
-      return asset;
+      return Promise.resolve(asset);
     }
 
-    if (isAbsolutePath(resolvedPath)) {
-      // asset path is a public url so we can just use it as is
-      asset = createAssetProxy({ path: resolvedPath, url: path });
-      dispatch(addAsset(asset));
-    } else {
-      if (error) {
-        // on load error default back to original path
+    const p = new Promise<AssetProxy>(resolve => {
+      if (isAbsolutePath(resolvedPath)) {
+        // asset path is a public url so we can just use it as is
         asset = createAssetProxy({ path: resolvedPath, url: path });
         dispatch(addAsset(asset));
+        resolve(asset);
       } else {
-        dispatch(loadAsset(resolvedPath));
-        asset = emptyAsset;
+        if (error) {
+          // on load error default back to original path
+          asset = createAssetProxy({ path: resolvedPath, url: path });
+          dispatch(addAsset(asset));
+          resolve(asset);
+        } else {
+          loadAsset(resolvedPath, dispatch, getState).then(asset => {
+            resolve(asset);
+          });
+        }
       }
-    }
+    });
 
-    return asset;
+    promiseCache[resolvedPath] = p;
+
+    return p;
   };
 }
 

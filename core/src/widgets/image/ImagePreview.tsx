@@ -26,9 +26,14 @@ interface ImageAssetProps {
 function ImageAsset({ getAsset, value, field }: ImageAssetProps) {
   const [assetSource, setAssetSource] = useState('');
   useEffect(() => {
-    setAssetSource(getAsset(value, field)?.toString() ?? '');
-    console.log('asset', value, getAsset(value, field)?.toString() ?? '');
-  }, [field, getAsset, value]);
+    const getImage = async() => {
+      const asset = (await getAsset(value, field))?.toString() ?? '';
+      setAssetSource(asset);
+    };
+
+    getImage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
   return <StyledImage src={assetSource} />;
 }
@@ -41,8 +46,6 @@ function ImagePreviewContent({
   if (!value) {
     return null;
   }
-
-  console.log('value', value);
 
   if (Array.isArray(value)) {
     return (

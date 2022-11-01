@@ -11,6 +11,7 @@ import { doesUrlFileExist } from '../../lib/util/fetch.util';
 import { isNotNullish } from '../../lib/util/null.util';
 import { isNotEmpty } from '../../lib/util/string.util';
 import useEditorOptions from './hooks/useEditorOptions';
+import useMedia, { MediaHolder } from './hooks/useMedia';
 import usePlugins from './hooks/usePlugins';
 import useToolbarItems from './hooks/useToolbarItems';
 
@@ -49,6 +50,7 @@ const MarkdownControl = ({
   openMediaLibrary,
   mediaPaths,
   getAsset,
+  config,
 }: WidgetControlProps<string, MarkdownField>) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
   const editorRef = useMemo(() => React.createRef(), []) as RefObject<Editor>;
@@ -95,7 +97,7 @@ const MarkdownControl = ({
     async (path: string) => {
       const { type, exists } = await doesUrlFileExist(path);
       if (!exists) {
-        const asset = getAsset(path, field);
+        const asset = await getAsset(path, field);
         if (isNotNullish(asset)) {
           return {
             type: IMAGE_EXTENSION_REGEX.test(path) ? 'image' : 'file',
@@ -152,7 +154,22 @@ const MarkdownControl = ({
   }, [field, mediaPath]);
 
   const { initialEditType, height, ...markdownEditorOptions } = useEditorOptions();
-  const plugins = usePlugins(markdownEditorOptions.plugins, { getAsset, field, mode: 'editor' });
+
+  const media = useMedia({ value, getAsset, field });
+  const mediaHolder = useMemo(() => new MediaHolder(), []);
+
+  useEffect(() => {
+    mediaHolder.setBulkMedia(media);
+    editorRef.current?.getInstance().setMarkdown(internalValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [media]);
+
+  const plugins = usePlugins(markdownEditorOptions.plugins, {
+    media: mediaHolder,
+    config,
+    field,
+    mode: 'editor',
+  });
   const toolbarItems = useToolbarItems(markdownEditorOptions.toolbarItems, handleOpenMedialLibrary);
 
   return useMemo(

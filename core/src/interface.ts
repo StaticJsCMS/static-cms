@@ -13,6 +13,7 @@ import type { I18N_STRUCTURE } from './lib/i18n';
 import type { AllowedEvent } from './lib/registry';
 import type Cursor from './lib/util/Cursor';
 import type AssetProxy from './valueObjects/AssetProxy';
+import type { MediaHolder } from './widgets/markdown/hooks/useMedia';
 
 export interface SlugConfig {
   encoding: string;
@@ -227,7 +228,7 @@ export type Hook = string | boolean;
 
 export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
-export type GetAssetFunction = (path: string, field?: Field) => AssetProxy;
+export type GetAssetFunction = (path: string, field?: Field) => Promise<AssetProxy>;
 
 export interface WidgetControlProps<T, F extends Field = Field> {
   clearFieldErrors: EditorControlProps['clearFieldErrors'];
@@ -262,6 +263,7 @@ export interface WidgetControlProps<T, F extends Field = Field> {
 }
 
 export interface WidgetPreviewProps<T = unknown, F extends Field = Field> {
+  config: Config;
   collection: Collection;
   entry: Entry;
   field: RenderedField<F>;
@@ -320,28 +322,6 @@ export interface WidgetParam<T = unknown, F extends Field = Field> {
   controlComponent: Widget<T, F>['control'];
   previewComponent?: Widget<T, F>['preview'];
   options?: WidgetOptions<T, F>;
-}
-
-export interface PreviewTemplateComponentProps {
-  entry: Entry;
-  collection: Collection;
-  widgetFor: (name: string) => ReactNode;
-  widgetsFor: (name: string) =>
-    | {
-        data: EntryData | null;
-        widgets: Record<string, React.ReactNode>;
-      }
-    | {
-        data: EntryData | null;
-        widgets: Record<string, React.ReactNode>;
-      }[];
-  getAsset: GetAssetFunction;
-  boundGetAsset: (collection: Collection, path: string) => GetAssetFunction;
-  config: Config;
-  fields: Field[];
-  isLoadingAsset: boolean;
-  window: Window;
-  document: Document;
 }
 
 export interface PersistOptions {
@@ -907,8 +887,9 @@ export interface PreviewStyle {
 }
 
 export interface MarkdownPluginFactoryProps {
-  getAsset: GetAssetFunction;
+  config: Config;
   field: MarkdownField;
+  media: MediaHolder;
   mode: 'editor' | 'preview';
 }
 

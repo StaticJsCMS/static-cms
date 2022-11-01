@@ -19,6 +19,7 @@ const PostPreview = createClass({
   },
 });
 
+// TODO Hook this back up, getAsset returns a promise now
 const GeneralPreview = createClass({
   render: function () {
     const entry = this.props.entry;
@@ -45,6 +46,7 @@ const GeneralPreview = createClass({
     );
   },
 });
+
 const AuthorsPreview = createClass({
   render: function () {
     return h(
@@ -90,7 +92,7 @@ const RelationKitchenSinkPostPreview = createClass({
 
 CMS.registerPreviewStyle('.toastui-editor-contents h1 { color: blue }', { raw: true });
 CMS.registerPreviewTemplate('posts', PostPreview);
-CMS.registerPreviewTemplate('general', GeneralPreview);
+// CMS.registerPreviewTemplate('general', GeneralPreview);
 CMS.registerPreviewTemplate('authors', AuthorsPreview);
 // Pass the name of a registered control to reuse with a new widget preview.
 CMS.registerWidget('relationKitchenSinkPost', 'relation', RelationKitchenSinkPostPreview);
