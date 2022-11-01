@@ -1,6 +1,6 @@
 {
   "name": "@staticcms/core",
-  "version": "1.0.0-alpha28",
+  "version": "1.0.0-alpha29",
   "license": "MIT",
   "description": "Static CMS core application.",
   "repository": "https://github.com/StaticJsCMS/static-cms",
@@ -138,8 +138,8 @@
     "@babel/preset-react": "7.18.6",
     "@babel/preset-typescript": "7.18.6",
     "@emotion/eslint-plugin": "11.10.0",
-    "@octokit/rest": "16.43.2",
     "@octokit/core": "4.1.0",
+    "@octokit/rest": "16.43.2",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.8",
     "@types/codemirror": "5.60.5",
     "@types/common-tags": "1.8.0",
