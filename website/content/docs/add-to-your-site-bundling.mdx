@@ -41,12 +41,12 @@ For GitHub and GitLab repositories, you can start your Static CMS `config.yml` f
 ```yaml
 backend:
   title: git-gateway
-  branch: master # Branch to update (optional; defaults to master)
+  branch: main # Branch to update (optional; defaults to main)
 ```
 
 _(For Bitbucket repositories, use the [Bitbucket backend](/docs/bitbucket-backend) instructions instead.)_
 
-The configuration above specifies your backend protocol and your publication branch. Git Gateway is an open source API that acts as a proxy between authenticated users of your site and your site repo. (We'll get to the details of that in the [Authentication section](#authentication) below.) If you leave out the `branch` declaration, it defaults to `master`.
+The configuration above specifies your backend protocol and your publication branch. Git Gateway is an open source API that acts as a proxy between authenticated users of your site and your site repo. (We'll get to the details of that in the [Authentication section](#authentication) below.) If you leave out the `branch` declaration, it defaults to `main`.
 
 ### Media and Public Folders
 

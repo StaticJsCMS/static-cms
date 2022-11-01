@@ -1,7 +1,7 @@
 backend:
   name: bitbucket
-  branch: master
-  repo: owner/repo
+  branch: main
+  repo: staticcms/static-cms-bitbucket
 
 media_folder: static/media
 public_folder: /media
