@@ -93,7 +93,7 @@ export function getAsset(
     }
 
     const resolvedPath = selectMediaFilePath(state.config.config, collection, entry, path, field);
-
+    console.log('resolvedPath', resolvedPath)
     let { asset, isLoading, error } = state.medias[resolvedPath] || {};
     if (isLoading) {
       return emptyAsset;
