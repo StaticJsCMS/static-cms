@@ -7,29 +7,7 @@ For repositories stored on GitLab, the `gitlab` backend allows CMS users to log 
 
 **Note:** GitLab default branch is protected by default, thus typically requires `maintainer` permissions in order for users to have push access.
 
-The GitLab API allows for three types of OAuth2 flows:
-
-* [Authorization Code Flow](https://docs.gitlab.com/ce/api/oauth2.html#authorization-code-flow), which works much like the GitHub OAuth flow described above.
-* [Authorization Code with PKCE Flow](https://docs.gitlab.com/ce/api/oauth2.html#authorization-code-with-proof-key-for-code-exchange-pkce), which operates *without* the need for an authentication server.
-
-## Authorization Code Flow with Netlify
-
-When using GitLab's Authorization Code Flow for authentication, you can use Netlify to handle the server-side authentication requests.
-
-To enable it:
-
-1. Follow the [GitLab docs](https://docs.gitlab.com/ee/integration/oauth_provider.html#adding-an-application-through-the-profile) to add your Static CMS instance as an OAuth application. For the **Redirect URI**, enter `https://api.netlify.com/auth/done`, and check the box for `api` scope.
-2. Follow the [Netlify docs](https://www.netlify.com/docs/authentication-providers/#using-an-authentication-provider) to add your new GitLab Application ID and Secret to your Netlify site dashboard.
-3. In your repository, add the following lines to your Static CMS `config.yml` file:
-
-```yaml
-backend:
-  title: gitlab
-  repo: owner-name/repo-name # Path to your GitLab repository
-```
-
-
-## Client-Side PKCE Authorization
+## Authorization
 
 With GitLab's PKCE authorization, users can authenticate with GitLab directly from the client. To do this:
 
