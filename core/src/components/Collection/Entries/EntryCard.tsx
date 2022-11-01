@@ -3,7 +3,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -29,15 +29,24 @@ const EntryCard = ({
 }: NestedCollectionProps) => {
   const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
 
+  const [imageUrl, setImageUrl] = useState<string>();
+  useEffect(() => {
+    if (!image) {
+      return;
+    }
+
+    const getImage = async () => {
+      setImageUrl((await getAsset(collection, entry, image, imageField)).toString());
+    };
+
+    getImage();
+  }, [collection, entry, getAsset, image, imageField]);
+
   return (
     <Card>
       <CardActionArea component={Link} to={path}>
         {viewStyle === VIEW_STYLE_GRID && image && imageField ? (
-          <CardMedia
-            component="img"
-            height="140"
-            image={getAsset(collection, entry, image, imageField).toString()}
-          />
+          <CardMedia component="img" height="140" image={imageUrl} />
         ) : null}
         <CardContent>
           {collectionLabel ? (

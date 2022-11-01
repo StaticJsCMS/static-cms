@@ -1,10 +1,12 @@
 backend:
   name: gitlab
-  branch: master
-  repo: owner/repo
+  branch: main
+  repo: static-cms/static-cms-gitlab
+  auth_type: pkce
+  app_id: 91cc479ec663625098d456850c4dc4943fd8462064ebd9693b330e66f9d8f11a
 
-media_folder: static/media
-public_folder: /media
+media_folder: assets/upload
+public_folder: /assets/upload
 collections:
   - name: posts
     label: Posts
@@ -92,7 +94,8 @@ collections:
     label: Settings
     delete: false
     editor:
-      preview: false
+      preview: true
+      frame: false
     files:
       - name: general
         label: Site Settings

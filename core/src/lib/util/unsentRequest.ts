@@ -57,7 +57,7 @@ function fromFetchArguments(wholeURL: string, options?: RequestInit): ApiRequest
 
 function encodeParams(params: Required<ApiRequestURL>['params']): string {
   return Object.entries(params)
-    .map(([v, k]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+    .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
     .join('&');
 }
 
@@ -70,7 +70,6 @@ function toFetchArguments(req: ApiRequestObject): {
   init?: RequestInit | undefined;
 } {
   const { url, params, ...rest } = req;
-
   return { input: toURL({ url, params }), init: rest };
 }
 
@@ -110,9 +109,17 @@ const withWrapper =
       return fromFetchArguments(req, { [key]: value });
     }
 
+    let finalValue = value;
+    if (key === 'headers') {
+      finalValue = {
+        ...(req.headers ?? {}),
+        ...(value as HeadersInit),
+      } as ApiRequestObject[K];
+    }
+
     return {
       ...req,
-      [key]: value,
+      [key]: finalValue,
     };
   };
 

@@ -18,8 +18,14 @@ const FileLink = ({ value, getAsset, field }: FileLinkProps) => {
       return;
     }
 
-    setAssetSource(getAsset(value, field)?.toString() ?? '');
-  }, [field, getAsset, value]);
+    const getImage = async() => {
+      const asset = (await getAsset(value, field))?.toString() ?? '';
+      setAssetSource(asset);
+    };
+
+    getImage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
   return (
     <a href={assetSource} rel="noopener noreferrer" target="_blank">

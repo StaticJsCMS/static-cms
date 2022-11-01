@@ -6,17 +6,19 @@ import type { MarkdownEditorOptions, MarkdownPluginFactoryProps } from '../../..
 
 const usePlugins = (
   editorPlugins: MarkdownEditorOptions['plugins'] = [],
-  { getAsset, field, mode }: MarkdownPluginFactoryProps,
+  { config, media, field, mode }: MarkdownPluginFactoryProps,
 ) => {
   return useMemo(() => {
-    const plugins = [imagePlugin({ getAsset, field, mode })];
+    const plugins = [imagePlugin({ config, media, field, mode })];
 
     if (plugins) {
-      plugins.push(...editorPlugins.map(editorPlugin => editorPlugin({ getAsset, field, mode })));
+      plugins.push(
+        ...editorPlugins.map(editorPlugin => editorPlugin({ config, media, field, mode })),
+      );
     }
 
     return plugins;
-  }, [editorPlugins, field, getAsset, mode]);
+  }, [config, editorPlugins, field, media, mode]);
 };
 
 export default usePlugins;

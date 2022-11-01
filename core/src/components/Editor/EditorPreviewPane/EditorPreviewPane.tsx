@@ -23,6 +23,7 @@ import type { ConnectedProps } from 'react-redux';
 import type { InferredField } from '../../../constants/fieldInference';
 import type {
   Collection,
+  Config,
   Entry,
   EntryData,
   Field,
@@ -84,6 +85,7 @@ const StyledPreviewContent = styled('div')`
  * exposed for use in custom preview templates.
  */
 function getWidgetFor(
+  config: Config,
   collection: Collection,
   name: string,
   fields: Field[],
@@ -112,6 +114,7 @@ function getWidgetFor(
     fieldWithWidgets = {
       ...fieldWithWidgets,
       fields: getNestedWidgets(
+        config,
         collection,
         fields,
         entry,
@@ -125,6 +128,7 @@ function getWidgetFor(
     fieldWithWidgets = {
       ...fieldWithWidgets,
       fields: getTypedNestedWidgets(
+        config,
         collection,
         field,
         entry,
@@ -161,7 +165,7 @@ function getWidgetFor(
     );
   }
   return renderedValue
-    ? getWidget(fieldWithWidgets, collection, renderedValue, entry, getAsset)
+    ? getWidget(config, fieldWithWidgets, collection, renderedValue, entry, getAsset)
     : null;
 }
 
@@ -180,6 +184,7 @@ function isReactFragment(value: any): value is ReactFragment {
 }
 
 function getWidget(
+  config: Config,
   field: RenderedField,
   collection: Collection,
   value: ValueOrNestedValue | ReactNode,
@@ -203,6 +208,7 @@ function getWidget(
       key={key}
       field={field}
       getAsset={getAsset}
+      config={config}
       collection={collection}
       value={
         value &&
@@ -223,6 +229,7 @@ function getWidget(
  * Use getWidgetFor as a mapping function for recursive widget retrieval
  */
 function widgetsForNestedFields(
+  config: Config,
   collection: Collection,
   fields: Field[],
   entry: Entry,
@@ -234,6 +241,7 @@ function widgetsForNestedFields(
   return widgetFields
     .map(field =>
       getWidgetFor(
+        config,
         collection,
         field.name,
         fields,
@@ -251,6 +259,7 @@ function widgetsForNestedFields(
  * Retrieves widgets for nested fields (children of object/list fields)
  */
 function getTypedNestedWidgets(
+  config: Config,
   collection: Collection,
   field: ListField,
   entry: Entry,
@@ -259,13 +268,14 @@ function getTypedNestedWidgets(
   values: EntryData[],
 ) {
   return values
-    .flatMap((value, index) => {
+    ?.flatMap((value, index) => {
       const itemType = getTypedFieldForValue(field, value ?? {}, index);
       if (!itemType) {
         return null;
       }
 
       return widgetsForNestedFields(
+        config,
         collection,
         itemType.fields,
         entry,
@@ -282,6 +292,7 @@ function getTypedNestedWidgets(
  * Retrieves widgets for nested fields (children of object/list fields)
  */
 function getNestedWidgets(
+  config: Config,
   collection: Collection,
   fields: Field[],
   entry: Entry,
@@ -294,6 +305,7 @@ function getNestedWidgets(
   if (Array.isArray(values)) {
     return values.flatMap(value =>
       widgetsForNestedFields(
+        config,
         collection,
         fields,
         entry,
@@ -307,6 +319,7 @@ function getNestedWidgets(
 
   // Fields nested within an object field will be paired with a single Record of values.
   return widgetsForNestedFields(
+    config,
     collection,
     fields,
     entry,
@@ -332,9 +345,20 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
 
   const widgetFor = useCallback(
     (name: string) => {
-      return getWidgetFor(collection, name, fields, entry, inferedFields, handleGetAsset);
+      if (!config.config) {
+        return null;
+      }
+      return getWidgetFor(
+        config.config,
+        collection,
+        name,
+        fields,
+        entry,
+        inferedFields,
+        handleGetAsset,
+      );
     },
-    [collection, entry, fields, handleGetAsset, inferedFields],
+    [collection, config, entry, fields, handleGetAsset, inferedFields],
   );
 
   /**
@@ -422,34 +446,41 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
     }
 
     return ReactDOM.createPortal(
-      <ScrollSyncPane>
-        <StyledPreviewContent className="preview-content">
-          {!entry || !entry.data ? null : (
-            <ErrorBoundary config={config}>
-              {previewInFrame ? (
-                <PreviewPaneFrame
-                  key="preview-frame"
-                  id="preview-pane"
-                  head={previewStyles}
-                  initialContent={initialFrameContent}
-                >
-                  {!collection ? (
-                    t('collection.notFound')
-                  ) : (
-                    <FrameContextConsumer>
-                      {({ document, window }) => {
-                        return (
+      <StyledPreviewContent className="preview-content">
+        {!entry || !entry.data ? null : (
+          <ErrorBoundary config={config}>
+            {previewInFrame ? (
+              <PreviewPaneFrame
+                key="preview-frame"
+                id="preview-pane"
+                head={previewStyles}
+                initialContent={initialFrameContent}
+              >
+                {!collection ? (
+                  t('collection.notFound')
+                ) : (
+                  <FrameContextConsumer>
+                    {({ document, window }) => {
+                      return (
+                        <ScrollSyncPane
+                          key="preview-frame-scroll-sync"
+                          attachTo={
+                            (document?.scrollingElement ?? undefined) as HTMLElement | undefined
+                          }
+                        >
                           <EditorPreviewContent
                             key="preview-frame-content"
                             previewComponent={previewComponent}
                             previewProps={{ ...previewProps, document, window }}
                           />
-                        );
-                      }}
-                    </FrameContextConsumer>
-                  )}
-                </PreviewPaneFrame>
-              ) : (
+                        </ScrollSyncPane>
+                      );
+                    }}
+                  </FrameContextConsumer>
+                )}
+              </PreviewPaneFrame>
+            ) : (
+              <ScrollSyncPane key="preview-wrapper-scroll-sync">
                 <PreviewPaneWrapper key="preview-wrapper" id="preview-pane">
                   {!collection ? (
                     t('collection.notFound')
@@ -464,11 +495,11 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
                     </>
                   )}
                 </PreviewPaneWrapper>
-              )}
-            </ErrorBoundary>
-          )}
-        </StyledPreviewContent>
-      </ScrollSyncPane>,
+              </ScrollSyncPane>
+            )}
+          </ErrorBoundary>
+        )}
+      </StyledPreviewContent>,
       element,
       'preview-content',
     );
