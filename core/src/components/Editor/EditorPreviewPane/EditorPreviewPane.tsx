@@ -94,6 +94,7 @@ function getWidgetFor(
   getAsset: GetAssetFunction,
   widgetFields: Field[] = fields,
   values: EntryData = entry.data,
+  idx: number | null = null,
 ): ReactNode {
   // We retrieve the field by name so that this function can also be used in
   // custom preview templates, where the field object can't be passed in.
@@ -157,7 +158,7 @@ function getWidgetFor(
     value.toString().length < 50
   ) {
     renderedValue = (
-      <div>
+      <div key={field.name}>
         <>
           <strong>{field.label ?? field.name}:</strong> {value}
         </>
@@ -165,7 +166,7 @@ function getWidgetFor(
     );
   }
   return renderedValue
-    ? getWidget(config, fieldWithWidgets, collection, renderedValue, entry, getAsset)
+    ? getWidget(config, fieldWithWidgets, collection, renderedValue, entry, getAsset, idx)
     : null;
 }
 
@@ -237,6 +238,7 @@ function widgetsForNestedFields(
   getAsset: GetAssetFunction,
   widgetFields: Field[],
   values: EntryData,
+  idx: number | null = null,
 ) {
   return widgetFields
     .map(field =>
@@ -250,6 +252,7 @@ function widgetsForNestedFields(
         getAsset,
         widgetFields,
         values,
+        idx,
       ),
     )
     .filter(widget => Boolean(widget)) as JSX.Element[];
@@ -283,6 +286,7 @@ function getTypedNestedWidgets(
         getAsset,
         itemType.fields,
         value,
+        index,
       );
     })
     .filter(Boolean);

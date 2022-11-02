@@ -113,6 +113,7 @@ const RelationControl = ({
   query,
   locale,
   label,
+  hasErrors
 }: WidgetControlProps<string | string[], RelationField>) => {
   const [internalValue, setInternalValue] = useState(value);
   const [initialOptions, setInitialOptions] = useState<HitOption[]>([]);
@@ -227,6 +228,7 @@ const RelationControl = ({
           key="relation-control-input"
           {...params}
           label={label}
+          error={hasErrors}
           InputProps={{
             ...params.InputProps,
             endAdornment: (
