@@ -49,7 +49,6 @@ function entryDraftReducer(
   switch (action.type) {
     case DRAFT_CREATE_FROM_ENTRY: {
       const newState = { ...state };
-      delete newState.localBackup;
 
       // Existing Entry
       return {

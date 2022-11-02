@@ -1,8 +1,9 @@
 import matter from 'gray-matter';
 
-import tomlFormatter from './toml';
-import yamlFormatter from './yaml';
-import jsonFormatter from './json';
+import TomlFormatter from './TomlFormatter';
+import YamlFormatter from './YamlFormatter';
+import JsonFormatter from './JsonFormatter';
+import { FileFormatter } from './FileFormatter';
 
 const Languages = {
   YAML: 'yaml',
@@ -17,10 +18,10 @@ type Format = { language: Language; delimiters: Delimiter };
 
 const parsers = {
   toml: {
-    parse: (input: string) => tomlFormatter.fromFile(input),
+    parse: (input: string) => TomlFormatter.fromFile(input),
     stringify: (metadata: object, opts?: { sortedKeys?: string[] }) => {
       const { sortedKeys } = opts || {};
-      return tomlFormatter.toFile(metadata, sortedKeys);
+      return TomlFormatter.toFile(metadata, sortedKeys);
     },
   },
   json: {
@@ -30,10 +31,10 @@ const parsers = {
       if (JSONinput.slice(0, 1) !== '{') {
         JSONinput = '{' + JSONinput + '}';
       }
-      return jsonFormatter.fromFile(JSONinput);
+      return JsonFormatter.fromFile(JSONinput);
     },
     stringify: (metadata: object) => {
-      let JSONoutput = jsonFormatter.toFile(metadata).trim();
+      let JSONoutput = JsonFormatter.toFile(metadata).trim();
       // Trim leading and trailing brackets.
       if (JSONoutput.slice(0, 1) === '{' && JSONoutput.slice(-1) === '}') {
         JSONoutput = JSONoutput.slice(1, -1);
@@ -42,13 +43,13 @@ const parsers = {
     },
   },
   yaml: {
-    parse: (input: string) => yamlFormatter.fromFile(input),
+    parse: (input: string) => YamlFormatter.fromFile(input),
     stringify: (
       metadata: object,
       opts?: { sortedKeys?: string[]; comments?: Record<string, string> },
     ) => {
       const { sortedKeys, comments } = opts || {};
-      return yamlFormatter.toFile(metadata, sortedKeys, comments);
+      return YamlFormatter.toFile(metadata, sortedKeys, comments);
     },
   },
 };
@@ -91,10 +92,11 @@ export function getFormatOpts(format?: Language, customDelimiter?: Delimiter) {
   };
 }
 
-export class FrontmatterFormatter {
+export class FrontmatterFormatter extends FileFormatter {
   format?: Format;
 
   constructor(format?: Language, customDelimiter?: Delimiter) {
+    super();
     this.format = getFormatOpts(format, customDelimiter);
   }
 

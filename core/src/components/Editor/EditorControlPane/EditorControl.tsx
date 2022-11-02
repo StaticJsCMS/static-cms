@@ -117,7 +117,7 @@ interface ControlHintProps {
   $error: boolean;
 }
 
-export const ControlHint = styled(
+const ControlHint = styled(
   'p',
   transientOptions,
 )<ControlHintProps>(

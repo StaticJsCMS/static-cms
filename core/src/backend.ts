@@ -767,7 +767,8 @@ export class Backend {
         }
         return Object.assign(entry, { data: isError(data) ? {} : data });
       }
-      return format.fromFile(entry);
+
+      return entry;
     };
   }
 
@@ -967,7 +968,7 @@ export class Backend {
     const format = resolveFormat(collection, entry);
     const fieldsOrder = this.fieldsOrder(collection, entry);
     const fieldsComments = selectFieldsComments(collection, entry);
-    return format && format.toFile(entry.data, fieldsOrder, fieldsComments);
+    return format ? format.toFile(entry.data ?? {}, fieldsOrder, fieldsComments) : '';
   }
 
   fieldsOrder(collection: Collection, entry: Entry) {

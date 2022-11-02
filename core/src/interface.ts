@@ -75,13 +75,13 @@ export type ValueOrNestedValue =
 
 export type EntryData = ObjectValue | undefined | null;
 
-export interface Entry {
+export interface Entry<T = ObjectValue> {
   collection: string;
   slug: string;
   path: string;
   partial: boolean;
   raw: string;
-  data: EntryData;
+  data: T | undefined | null;
   label: string | null;
   isModification: boolean | null;
   mediaFiles: MediaFile[];
@@ -277,10 +277,10 @@ export type WidgetPreviewComponent<T = unknown, F extends Field = Field> =
   | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
   | ComponentType<WidgetPreviewProps<T, F>>;
 
-export interface TemplatePreviewProps {
+export interface TemplatePreviewProps<T = unknown> {
   collection: Collection;
   fields: Field[];
-  entry: Entry;
+  entry: Entry<T>;
   document: Document | undefined | null;
   window: Window | undefined | null;
   getAsset: GetAssetFunction;

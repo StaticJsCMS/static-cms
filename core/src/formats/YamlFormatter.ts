@@ -1,6 +1,7 @@
 import yaml from 'yaml';
 
 import { sortKeys } from './helpers';
+import { FileFormatter } from './FileFormatter';
 
 import type { Pair, YAMLMap, YAMLSeq } from 'yaml/types';
 
@@ -20,13 +21,13 @@ function addComments(items: Array<Pair>, comments: Record<string, string>, prefi
   });
 }
 
-export default {
+class YamlFormatter extends FileFormatter {
   fromFile(content: string) {
     if (content && content.trim().endsWith('---')) {
       content = content.trim().slice(0, -3);
     }
     return yaml.parse(content);
-  },
+  }
 
   toFile(data: object, sortedKeys: string[] = [], comments: Record<string, string> = {}) {
     const contents = yaml.createNode(data) as YAMLMap | YAMLSeq;
@@ -38,5 +39,7 @@ export default {
     doc.contents = contents;
 
     return doc.toString();
-  },
-};
+  }
+}
+
+export default new YamlFormatter();

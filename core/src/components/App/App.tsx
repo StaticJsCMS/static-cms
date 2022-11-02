@@ -4,11 +4,12 @@ import { styled } from '@mui/material/styles';
 import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
-import { Navigate, Route, Routes, useParams } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { ScrollSync } from 'react-scroll-sync';
 import TopBarProgress from 'react-topbar-progress-indicator';
 
 import { loginUser as loginUserAction } from '../../actions/auth';
+import { discardDraft as discardDraftAction } from '../../actions/entries';
 import { currentBackend } from '../../backend';
 import { colors, GlobalStyles } from '../../components/UI/styles';
 import { history } from '../../routing/history';
@@ -26,6 +27,7 @@ import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import type { Collections, Credentials, TranslatedProps } from '../../interface';
 import type { RootState } from '../../store';
+
 TopBarProgress.config({
   barColors: {
     0: colors.active,
@@ -91,6 +93,7 @@ const App = ({
   useMediaLibrary,
   t,
   scrollSyncEnabled,
+  discardDraft,
 }: TranslatedProps<AppProps>) => {
   const configError = useCallback(
     (error?: string) => {
@@ -156,6 +159,14 @@ const App = ({
   }, [AuthComponent, auth.error, auth.isFetching, config.config, handleLogin, t]);
 
   const defaultPath = useMemo(() => getDefaultPath(collections), [collections]);
+
+  const { pathname } = useLocation();
+  React.useEffect(() => {
+    if (!/\/collections\/[a-zA-Z0-9_-]+\/entries\/[a-zA-Z0-9_-]+/g.test(pathname)) {
+      discardDraft();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   const content = useMemo(() => {
     if (!user) {
@@ -264,6 +275,7 @@ function mapStateToProps(state: RootState) {
 
 const mapDispatchToProps = {
   loginUser: loginUserAction,
+  discardDraft: discardDraftAction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

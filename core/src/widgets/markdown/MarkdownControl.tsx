@@ -66,9 +66,11 @@ const MarkdownControl = ({
 
   const handleOnChange = useCallback(() => {
     const newValue = editorRef.current?.getInstance().getMarkdown() ?? '';
-    setInternalValue(newValue);
-    onChange(newValue);
-  }, [editorRef, onChange]);
+    if (newValue !== internalValue) {
+      setInternalValue(newValue);
+      onChange(newValue);
+    }
+  }, [editorRef, internalValue, onChange]);
 
   const handleLabelClick = useCallback(() => {
     editorRef.current?.getInstance().focus();
@@ -151,7 +153,7 @@ const MarkdownControl = ({
 
     addMedia();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [field, mediaPath]);
+  }, [mediaPath]);
 
   const { initialEditType, height, ...markdownEditorOptions } = useEditorOptions();
 
