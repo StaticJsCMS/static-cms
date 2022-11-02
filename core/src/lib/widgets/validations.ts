@@ -32,4 +32,6 @@ export function validateMinMax(
   } else if (isNumber(max) && length > max) {
     return minMaxError('rangeMax');
   }
+
+  return false;
 }

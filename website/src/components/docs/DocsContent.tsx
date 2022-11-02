@@ -32,7 +32,7 @@ const DocsContent = styled('div')(
 
     & div,
     & p:not(:first-of-type) {
-      margin-top: 16px;
+      margin-top: 8px;
     }
 
     & :not(h1,h2,h3,h4,h5,h6) a {
@@ -155,6 +155,10 @@ const DocsContent = styled('div')(
       }
     }
 
+    & h1 + h2 {
+      margin-top: 0;
+    }
+
     & table thead tr th,
     & table thead tr td {
       white-space: nowrap;
@@ -250,6 +254,10 @@ const DocsContent = styled('div')(
     & li ol,
     & li ul {
       margin: 0;
+    }
+
+    & ul + p {
+      margin-top: 16px;
     }
 
     & abbr[title] {

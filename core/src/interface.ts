@@ -586,14 +586,13 @@ export interface ListField extends BaseField {
   allow_add?: boolean;
   collapsed?: boolean;
   summary?: string;
-  minimize_collapsed?: boolean;
   label_singular?: string;
   fields?: Field[];
   max?: number;
   min?: number;
   add_to_top?: boolean;
   types?: ObjectField[];
-  typeKey?: string;
+  type_key?: string;
 }
 
 export interface MapField extends BaseField {

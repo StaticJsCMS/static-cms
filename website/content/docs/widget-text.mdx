@@ -4,14 +4,26 @@ title: Text
 weight: 25
 ---
 
-The text widget takes a multiline text field and saves it as a string. For shorter text inputs, use the string widget.
+## Overview
 
 - **Name:** `text`
-- **UI:** HTML textarea
-- **Data type:** string
-- **Options:**
-  - `default`: accepts a string; defaults to an empty string
-- **Example:**
-    ```yaml
-    - {label: "Description", title: "description", widget: "text"}
-    ```
+- **UI:** Textarea
+- **Data type:** `string`
+
+The text widget takes a multiline text field and saves it as a string. For shorter text inputs, use the string widget.
+
+## Widget options
+
+For common options, see [Common widget options](/docs/widgets#common-widget-options).
+
+| Name    | Type   | Default | Description                                                   |
+| ------- | ------ | ------- | ------------------------------------------------------------- |
+| default | string | `''`    | _Optional_. The default value for the field. Accepts a string |
+
+## Example
+
+```yaml
+name: description
+label: Description
+widget: text
+```

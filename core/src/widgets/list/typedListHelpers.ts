@@ -1,7 +1,7 @@
 import type { ListField, ObjectField, ObjectValue } from '../../interface';
 
 export const TYPES_KEY = 'types';
-export const TYPE_KEY = 'typeKey';
+export const TYPE_KEY = 'type_key';
 export const DEFAULT_TYPE_KEY = 'type';
 
 export function getTypedFieldForValue(

@@ -3,24 +3,35 @@ group: Widgets
 title: Markdown
 weight: 19
 ---
-The markdown widget provides a full fledged text editor allowing users to format text with features such as headings and blockquotes. Users can change their editing view with a handy toggle button. 
 
-*Please note:* If you want to use your markdown editor to fill a markdown file contents after its frontmatter, you'll have to name the field `body` so the CMS recognizes it and saves the file accordingly.
+## Overview
 
-* **Name:** `markdown`
-* **UI:** full text editor
-* **Data type:** markdown
-* **Options:**
+- **Name:** `markdown`
+- **UI:** [Toast UI Editor](https://ui.toast.com/tui-editor)
+- **Data type:** `markdown string`
 
-  * `default`: accepts markdown content
-* **Example:**
+The markdown widget provides a full fledged text editor allowing users to format text with features such as headings and blockquotes. Users can change their editing view with a handy toggle button.
 
-  ```yaml
-  - { label: 'Blog post content', title: 'body', widget: 'markdown' }
-  ```
+_Please note:_ If you want to use your markdown editor to fill a markdown file contents after its frontmatter, you'll have to name the field `body` so the CMS recognizes it and saves the file accordingly.
+
+## Widget options
+
+For common options, see [Common widget options](/docs/widgets#common-widget-options).
+
+| Name    | Type   | Default | Description                                                           |
+| ------- | ------ | ------- | --------------------------------------------------------------------- |
+| default | string | `''`    | _Optional_. The default value for the field. Accepts markdown content |
+
+## Example
+
+```yaml
+name: body
+label: Blog post content
+widget: markdown
+```
 
 This would render as:
 
 ![Markdown widget example](/img/widgets-markdown.webp)
 
-*Please note:* The markdown widget outputs a raw markdown string. Your static site generator may or may not render the markdown to HTML automatically. Consult with your static site generator's documentation for more information about rendering markdown.
+_Please note:_ The markdown widget outputs a raw markdown string. Your static site generator may or may not render the markdown to HTML automatically. Consult with your static site generator's documentation for more information about rendering markdown.

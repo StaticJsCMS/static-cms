@@ -145,6 +145,8 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ prop
     },
   });
 
+  console.log(docsGroups.flatMap(group => group.links.flatMap(link => link.title)));
+
   return {
     props: {
       docsGroups,

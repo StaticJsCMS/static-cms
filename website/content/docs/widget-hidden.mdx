@@ -3,15 +3,27 @@ group: Widgets
 title: Hidden
 weight: 15
 ---
+## Overview
+
+- **Name:** `hidden`
+- **UI:** None
+- **Data type:** Any valid data type
 
 Hidden widgets do not display in the UI. In folder collections that allow users to create new items, you will often want to set a default for hidden fields, so they will be set without requiring an input.
 
-- **Name:** `hidden`
-- **UI:** none
-- **Data type:** any valid data type
-- **Options:** 
-  - `default`: accepts any valid data type; recommended for collections that allow adding new items
-- **Example:**
-    ```yaml
-    - {label: "Layout", title: "layout", widget: "hidden", default: "blog"}
-    ```
+## Widget options
+
+For common options, see [Common widget options](/docs/widgets#common-widget-options).
+
+| Name    | Type   | Default | Description                                                                                                                        |
+| ------- | ------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| default | string | `null`  | _Optional_. The default value for the field. Accepts any valid data type. Recommended for collections that allow adding new items. |
+
+## Example
+
+```yaml
+name: layout
+label: Layout
+widget: hidden
+default: blog
+```

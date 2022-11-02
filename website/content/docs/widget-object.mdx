@@ -3,38 +3,59 @@ group: Widgets
 title: Object
 weight: 21
 ---
-The object widget allows you to group multiple widgets together, nested under a single field. You can choose any widget as a child of an object widget—even other objects.
 
-* **Name:** `object`
-* **UI:** a field containing one or more child widgets
-* **Data type:** list of child widget values
-* **Options:**
+## Overview
 
-  * `default`: you can set defaults within each sub-field's configuration
-  * `collapsed`: if added and labeled `true`, collapse the widget's content by default
-  * `summary`: specify the label displayed when the object is collapsed
-  * `fields`: (**required**) a nested list of widget fields to include in your widget
-* **Example:**
+- **Name:** `object`
+- **UI:** a field containing one or more child widgets
+- **Data type:** Object of child widget values
 
-  ```yaml
-  - label: "Profile"
-    title: "profile"
-    widget: "object"
-    summary: '{{fields.name}}: {{fields.birthdate}}'
+The object widget allows you to group multiple widgets together, nested under a single field. You can choose any widget as a child of an object widget, even other object widgets.
+
+## Widget options
+
+For common options, see [Common widget options](/docs/widgets#common-widget-options).
+
+| Name      | Type    | Default | Description                                                  |
+| --------- | ------- | ------- | ------------------------------------------------------------ |
+| fields    | boolean | `false` | A nested list of widget fields to include in your widget     |
+| collapsed | boolean | `false` | _Optional_. Collapse the widget's content by default         |
+| summary   | string  | `value` | _Optional_. The label displayed when the object is collapsed |
+
+_Please note:_ A default value cannot be set directly on an object widget. Instead you can set defaults within each sub-field's configuration
+
+## Example
+
+```yaml
+name: 'profile'
+label: 'Profile'
+widget: 'object'
+summary: '{{fields.name}}: {{fields.birthdate}}'
+fields:
+  - name: public
+    label: Public
+    widget: boolean
+    default: true
+  - name: name
+    label: Name
+    widget: string
+  - name: 'birthdate'
+    label: 'Birthdate'
+    widget: 'date'
+    default: ''
+    format: 'MM/DD/YYYY'
+  - name: 'address'
+    label: 'Address'
+    widget: 'object'
+    collapsed: true
     fields:
-      - {label: "Public", title: "public", widget: "boolean", default: true}
-      - {label: "Name", title: "name", widget: "string"}
-      - label: "Birthdate"
-        title: "birthdate"
-        widget: "date"
-        default: ""
-        format: "MM/DD/YYYY"
-      - label: "Address"
-        title: "address"
-        widget: "object"
-        collapsed: true
-        fields: 
-          - {label: "Street Address", title: "street", widget: "string"}
-          - {label: "City", title: "city", widget: "string"}
-          - {label: "Postal Code", title: "post-code", widget: "string"}
-  ```
+      - name: street
+        label: Street Address
+        widget: string
+      - name: city
+        label: City
+        widget: string
+      - name: post-code
+        label: Postal Code
+        widget: string
+```
