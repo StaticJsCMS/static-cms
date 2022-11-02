@@ -6,23 +6,49 @@ weight: 13
 
 The datetime widget translates a datetime picker to a datetime string.
 
-- **Name:** `datetime`
-- **UI:** datetime picker
-- **Data type:** Moment.js-formatted datetime string
-- **Options:**
-  - `default`: accepts a datetime string, or an empty string to accept blank input; otherwise defaults to current datetime
-  - `format`: sets storage format; accepts Moment.js [tokens](https://momentjs.com/docs/#/parsing/string-format/); defaults to raw Date object (if supported by output format)
-  - `date_format`: sets date display format in UI; boolean or Moment.js [tokens](https://momentjs.com/docs/#/parsing/string-format/). If `true` use default locale format.
-  - `time_format`: sets time display format in UI; boolean or Moment.js [tokens](https://momentjs.com/docs/#/parsing/string-format/). If `true` use default locale format, `false` hides time-picker.
-  - `picker_utc`: _(default: `false`)_ when set to `true`, the datetime picker will display times in UTC. When `false`, the datetime picker will display times in the user's local timezone. When using date-only formats, it can be helpful to set this to `true` so users in all timezones will see the same date in the datetime picker.
-- **Example:**
-    ```yaml
-    - label: "Start time"
-      title: "start"
-      widget: "datetime"
-      default: ""
-      date_format: "DD.MM.YYYY" # e.g. 24.12.2021
-      time_format: "HH:mm" # e.g. 21:07
-      format: "LLL"
-      picker_utc: false
-    ```
+## Widget options
+
+For common options, see [Common widget options](/docs/widgets#common-widget-options).
+
+| Name        | Type                   | Default                        | Description                                                                                                                                                                                                                                                                                                              |
+| ----------- | ---------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| default     | string                 | `Current Date and Time`        | _Optional_. The default value for the field. Accepts a datetime string, or an empty string to accept blank input.                                                                                                                                                                                                        |
+| format      | string                 | `yyyy-MM-dd'T'HH:mm:ss.SSSXXX` | _Optional_. Sets storage format. Accepts [date-fns tokens](https://date-fns.org/v2.29.3/docs/format)                                                                                                                                                                                                                     |
+| date_format | string<br />\| boolean | `true`                         | _Optional_. Sets date display format in UI.<ul><li>`string` - Accepts [date-fns tokens](https://date-fns.org/v2.29.3/docs/format)</li><li>`true` - Uses default locale format</li><li>`false` - If `time_format` is `true` or a string, then date picker is hidden</li></ul>                                             |
+| time_format | string<br />\| boolean | `true`                         | _Optional_. Sets time display format in UI.<ul><li>`string` - Accepts [date-fns tokens](https://date-fns.org/v2.29.3/docs/format)</li><li>`true` - Uses default locale format</li><li>`false` - Hides the time picker</li></ul>                                                                                          |
+| picker_utc  | boolean                | `false`                        | _Optional_. <ul><li>`true` - The datetime picker will display times in UTC</li><li>`false` - The datetime picker will display times in the user's local timezone</li></ul> When using date-only formats, it can be helpful to set this to `true` so users in all timezones will see the same date in the datetime picker |
+
+## Examples
+
+### Date Time Picker
+
+```yaml
+name: 'datetime'
+label: 'Datetime'
+widget: 'datetime'
+date_format: 'dd.MM.yyyy' # e.g. 24.12.2022
+time_format: 'HH:mm' # e.g. 21:07
+format: 'yyyy-MM-dd HH:mm' # e.g. 2022-12-24 21:07
+```
+
+### Date Picker
+
+```yaml
+name: 'date'
+label: 'Date'
+widget: 'datetime'
+date_format: 'dd.MM.yyyy' # e.g. 24.12.2022
+time_format: false
+format: 'yyyy-MM-dd' # e.g. 2022-12-24
+```
+
+### Time Picker
+
+```yaml
+name: 'date'
+label: 'Date'
+widget: 'datetime'
+date_format: false
+time_format: 'HH:mm' # e.g. 21:07
+format: 'HH:mm' # e.g. 21:07
+```

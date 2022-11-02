@@ -5,7 +5,17 @@ import { folderFormatter } from '../formatters';
 import { joinUrlPath } from '../urlHelper';
 import { basename, isAbsolutePath } from '.';
 
-import type { Config, Field, Collection, CollectionFile, Entry } from '../../interface';
+import type {
+  Config,
+  Field,
+  Collection,
+  CollectionFile,
+  Entry,
+  FileOrImageField,
+  MarkdownField,
+  ListField,
+  ObjectField,
+} from '../../interface';
 
 export const DRAFT_MEDIA_FILES = 'DRAFT_MEDIA_FILES';
 
@@ -14,17 +24,28 @@ function getFileField(collectionFiles: CollectionFile[], slug: string | undefine
   return file;
 }
 
+function isMediaField(
+  folderKey: 'media_folder' | 'public_folder',
+  field: Field | undefined,
+): field is FileOrImageField | MarkdownField {
+  return Boolean(field && folderKey in field);
+}
+
 function hasCustomFolder(
   folderKey: 'media_folder' | 'public_folder',
   collection: Collection | undefined | null,
   slug: string | undefined,
   field: Field | undefined,
-) {
+): field is FileOrImageField | MarkdownField {
   if (!collection) {
     return false;
   }
 
-  if (field && field[folderKey]) {
+  if (!isMediaField(folderKey, field)) {
+    return false;
+  }
+
+  if (field[folderKey]) {
     return true;
   }
 
@@ -47,7 +68,7 @@ function evaluateFolder(
   config: Config,
   c: Collection,
   entryMap: Entry | undefined,
-  field: Field | undefined,
+  field: FileOrImageField | MarkdownField,
 ) {
   let currentFolder = config[folderKey]!;
 
@@ -140,12 +161,17 @@ function traverseFields(
   config: Config,
   collection: Collection,
   entryMap: Entry | undefined,
-  field: Field,
+  field: FileOrImageField | MarkdownField | ListField | ObjectField,
   fields: Field[],
   currentFolder: string,
 ): string | null {
-  const matchedField = fields.filter(f => f === field)[0];
-  if (matchedField) {
+  const matchedField = fields.filter(f => f === field)[0] as
+    | FileOrImageField
+    | MarkdownField
+    | ListField
+    | ObjectField
+    | undefined;
+  if (matchedField && isMediaField(folderKey, matchedField)) {
     return folderFormatter(
       matchedField[folderKey] ? matchedField[folderKey]! : `{{${folderKey}}}`,
       entryMap,
@@ -157,13 +183,13 @@ function traverseFields(
   }
 
   for (const f of fields) {
-    const field = { ...f };
-    if (!field[folderKey]) {
+    const childField: Field = { ...f };
+    if (isMediaField(folderKey, childField) && !childField[folderKey]) {
       // add identity template if doesn't exist
-      field[folderKey] = `{{${folderKey}}}`;
+      childField[folderKey] = `{{${folderKey}}}`;
     }
     const folder = folderFormatter(
-      field[folderKey]!,
+      isMediaField(folderKey, childField) ? childField[folderKey] ?? '' : '',
       entryMap,
       collection,
       currentFolder,
@@ -171,24 +197,24 @@ function traverseFields(
       config.slug,
     );
     let fieldFolder = null;
-    if ('fields' in field && field.fields) {
+    if ('fields' in childField && childField.fields) {
       fieldFolder = traverseFields(
         folderKey,
         config,
         collection,
         entryMap,
-        field,
-        field.fields,
+        childField,
+        childField.fields,
         folder,
       );
-    } else if ('types' in field && field.types) {
+    } else if ('types' in childField && childField.types) {
       fieldFolder = traverseFields(
         folderKey,
         config,
         collection,
         entryMap,
-        field,
-        field.types,
+        childField,
+        childField.types,
         folder,
       );
     }
@@ -209,9 +235,7 @@ export function selectMediaFolder(
   const name = 'media_folder';
   let mediaFolder = config[name];
 
-  const customFolder = hasCustomFolder(name, collection, entryMap?.slug, field);
-
-  if (customFolder) {
+  if (hasCustomFolder(name, collection, entryMap?.slug, field)) {
     const folder = evaluateFolder(name, config, collection!, entryMap, field);
     if (folder.startsWith('/')) {
       // return absolute paths as is

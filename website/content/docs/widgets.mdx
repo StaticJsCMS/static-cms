@@ -4,23 +4,34 @@ title: Overview
 weight: 0
 ---
 
-Widgets define the data type and interface for entry fields. Static CMS comes with several built-in widgets. Click the widget names in the sidebar to jump to specific widget details. We're always adding new widgets, and you can also [create your own](/docs/custom-widgets)!
+Widgets define the data type and interface for entry fields. Static CMS comes with several built-in widgets. Click the widget names in the sidebar to jump to specific widget details. You can also [create your own](/docs/custom-widgets)!
 
 Widgets are specified as collection fields in the Static CMS `config.yml` file. Note that [YAML syntax](https://en.wikipedia.org/wiki/YAML#Basic_components) allows lists and objects to be written in block or inline style, and the code samples below include a mix of both.
 
-To see working examples of all of the built-in widgets, try making a 'Kitchen Sink' collection item on the [CMS demo site](https://cms-demo.netlify.com). (No login required: click the login button and the CMS will open.) You can refer to the demo [configuration code](https://github.com/StaticJsCMS/static-cms/blob/main/dev-test/config.yml) to see how each field was configured.
+To see working examples of all of the built-in widgets, try making a 'Kitchen Sink' collection item on the [CMS demo site](https://static-cms-demo.netlify.com). (No login required: click the login button and the CMS will open.) You can refer to the demo [configuration code](https://github.com/StaticJsCMS/static-cms/blob/main/dev-test/config.yml) to see how each field was configured.
 
 ## Common widget options
 
 The following options are available on all fields:
 
-- `required`: specify as `false` to make a field optional; defaults to `true`
-- `hint`: optionally add helper text directly below a widget. Useful for including instructions. Accepts markdown for bold, italic, strikethrough, and links.
-- `pattern`: add field validation by specifying a list with a [regex pattern](https://regexr.com/) and an error message; more extensive validation can be achieved with [custom widgets](/docs/custom-widgets/#advanced-field-validation)
-- **Example:**
-  ```yaml
-    label: "Title"
-    title: "title"
-    widget: "string"
-    pattern: ['.{12,}', "Must have at least 12 characters"]
-  ```
+| Name          | Type                                                        | Default    | Description                                                                                                                                                                                                                                                                                                                                   |
+| ------------- | ----------------------------------------------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| name          | string                                                      |            | The name of the field                                                                                                                                                                                                                                                                                                                         |
+| widget        | string                                                      | `'string'` | _Optional_. The type of widget to render for the field                                                                                                                                                                                                                                                                                        |
+| label         | string                                                      | `name`     | _Optional_. The display name of the field                                                                                                                                                                                                                                                                                                     |
+| required      | boolean                                                     | `true`     | _Optional_. Specify as `false` to make a field optional                                                                                                                                                                                                                                                                                       |
+| hint          | string                                                      |            | _Optional_. Adds helper text directly below a widget. Useful for including instructions. Accepts markdown for bold, italic, strikethrough, and links.                                                                                                                                                                                         |
+| pattern       | string                                                      |            | _Optional_. Adds field validation by specifying a list with a [regex pattern](https://regexr.com/) and an error message; more extensive validation can be achieved with [custom widgets](/docs/custom-widgets/#advanced-field-validation)                                                                                                     |
+| i18n          | boolean<br />\|'translate'<br />\|'duplicate'<br />\|'none' |            | _Optional_. <img src="https://img.shields.io/badge/-Beta%20Feature-blue" alt="Beta Feature" /><ul><li>`translate` - Allows translation of the field</li><li>`duplicate` - Duplicates the value from the default locale</li><li>`true` - Accept parent values as default</li><li>`none` or `false` - Exclude field from translations</li></ul> |
+| media_folder  | string                                                      |            | _Optional_. Specifies the folder path where uploaded files should be saved, relative to the base of the repo                                                                                                                                                                                                                                  |
+| public_folder | string                                                      |            | _Optional_. Specifies the folder path where the files uploaded by the media library will be accessed, relative to the base of the built site                                                                                                                                                                                                  |
+| comment       | string                                                      |            | _Optional_. Adds comment before the field (only supported for yaml)                                                                                                                                                                                                                                                                           |
+
+### Example
+
+```yaml
+name: title
+label: Title
+widget: string
+pattern: ['.{12,}', 'Must have at least 12 characters']
+```

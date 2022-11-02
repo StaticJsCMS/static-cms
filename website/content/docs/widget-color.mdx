@@ -6,18 +6,31 @@ weight: 12
 
 The color widget translates a color picker to a color string.
 
-- **Name:** `color`
-- **UI:** color picker
-- **Data type:** string
-- **Options:**
-  - `default`: accepts a string; defaults to an empty string. Sets the default value
-  - `allow_input`: accepts a boolean, defaults to `false`. Allows manual editing of the color input value
-  - `enable_alpha`: accepts a boolean, defaults to `false`. Enables Alpha editing
-- **Example:**
-  ```yaml
-  - { label: 'Color', title: 'color', widget: 'color' }
-  ```
-- **Example:**
-  ```yaml
-  - { label: 'Color', title: 'color', widget: 'color', enable_alpha: true, allow_input: true }
-  ```
+## Widget options
+
+For common options, see [Common widget options](/docs/widgets#common-widget-options).
+
+| Name         | Type    | Default | Description                                                |
+| ------------ | ------- | ------- | ---------------------------------------------------------- |
+| default      | string  | `''`    | _Optional_. The default value for the field                |
+| allow_input  | boolean | `false` | _Optional_. Allows manual editing of the color input value |
+| enable_alpha | boolean | `false` | _Optional_. Enables Alpha editing                          |
+
+## Examples
+
+### Basic
+```yaml
+name: color
+label: Color
+widget: color
+```
+
+### Kitchen Sink
+
+```yaml
+name: color
+label: Color
+widget: color
+enable_alpha: true
+allow_input: true
+```

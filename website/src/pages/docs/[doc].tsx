@@ -7,6 +7,11 @@ import remarkGfm from 'remark-gfm';
 import Blockquote from '../../components/docs/components/Blockquote';
 import Header2 from '../../components/docs/components/Header2';
 import Header3 from '../../components/docs/components/Header3';
+import DocsTable from '../../components/docs/components/table/Table';
+import TableBody from '../../components/docs/components/table/TableBody';
+import TableBodyCell from '../../components/docs/components/table/TableBodyCell';
+import TableHead from '../../components/docs/components/table/TableHead';
+import TableHeaderCell from '../../components/docs/components/table/TableHeaderCell';
 import DocsContent from '../../components/docs/DocsContent';
 import DocsLeftNav from '../../components/docs/DocsLeftNav';
 import DocsRightNav from '../../components/docs/DocsRightNav';
@@ -87,7 +92,16 @@ const Docs = ({ docsGroups, title, slug, description = '', source }: DocsProps) 
             <Typography variant="h1">{title}</Typography>
             <MDXRemote
               {...source}
-              components={{ h2: Header2, h3: Header3, blockquote: Blockquote }}
+              components={{
+                h2: Header2,
+                h3: Header3,
+                blockquote: Blockquote,
+                table: DocsTable,
+                thead: TableHead,
+                tbody: TableBody,
+                th: TableHeaderCell,
+                td: TableBodyCell,
+              }}
             />
           </DocsContent>
         </StyledDocsContentWrapper>

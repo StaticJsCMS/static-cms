@@ -520,8 +520,6 @@ export interface BaseField {
   hint?: string;
   pattern?: [string, string];
   i18n?: boolean | 'translate' | 'duplicate' | 'none';
-  media_folder?: string;
-  public_folder?: string;
   comment?: string;
 }
 
@@ -559,7 +557,7 @@ export interface DateTimeField extends BaseField {
   format?: string;
   date_format?: boolean | string;
   time_format?: boolean | string;
-  picker_utc?: boolean; // TODO Reimplement
+  picker_utc?: boolean;
 }
 
 export interface FileOrImageField extends BaseField {
@@ -567,6 +565,8 @@ export interface FileOrImageField extends BaseField {
   default?: string;
 
   media_library?: MediaLibrary;
+  media_folder?: string;
+  public_folder?: string;
   private?: boolean;
 }
 

@@ -64,12 +64,9 @@ const DateTimeControl = ({
     const format = field.format;
 
     // dateFormat and timeFormat are strictly for modifying input field with the date/time pickers
-    const dateFormat: string | boolean = field.date_format ?? false;
+    const dateFormat: string | boolean = field.date_format ?? true;
     // show time-picker? false hides it, true shows it using default format
-    let timeFormat: string | boolean = field.time_format ?? false;
-    if (typeof timeFormat === 'undefined') {
-      timeFormat = true;
-    }
+    const timeFormat: string | boolean = field.time_format ?? true;
 
     return {
       format,

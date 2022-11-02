@@ -6,18 +6,21 @@ weight: 11
 
 The code widget provides a code editor (powered by [Codemirror](https://codemirror.net)) with optional syntax awareness. Can output the raw code value or an object with the selected language and the raw code value.
 
-- **Name:** `code`
-- **UI:** code editor
-- **Data type:** string
-- **Options:**
-  - `default_language`: optional; default language to use
-  - `allow_language_selection`: optional; defaults to `false`: allows syntax to be changed
-  - `keys`: optional; sets key names for code and lang if outputting an object; defaults to `{ code: 'code', lang: 'lang' }`
-  - `output_code_only`: set to `true` to output the string value only, defaults to `false`
+## Widget options
 
-- **Example:**
-  ```yaml
-  - label: 'Code'
-    title: 'code'
-    widget: 'code'
-  ```
+For common options, see [Common widget options](/docs/widgets#common-widget-options).
+
+| Name                     | Type    | Default                          | Description                                                          |
+| ------------------------ | ------- | -------------------------------- | -------------------------------------------------------------------- |
+| default_language         | string  |                                  | _Optional_. Default language to use                                  |
+| allow_language_selection | boolean | `false`                          | _Optional_. Allows language syntax to be changed                     |
+| keys                     | boolean | `{ code: 'code', lang: 'lang' }` | _Optional_. Sets key names for code and lang if outputting an object |
+| output_code_only         | string  | `true`                           | _Optional_. Set to `true` to output the string value only            |
+
+## Example
+
+```yaml
+name: code
+label: Code
+widget: code
+```

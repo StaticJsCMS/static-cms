@@ -155,6 +155,19 @@ const DocsContent = styled('div')(
       }
     }
 
+    & table thead tr th,
+    & table thead tr td {
+      white-space: nowrap;
+    }
+
+    & table tbody tr td {
+      white-space: nowrap;
+    }
+
+    & table tbody tr td:last-child {
+      white-space: normal;
+    }
+
     & pre {
       display: block;
       line-height: 1.25rem;
@@ -197,8 +210,9 @@ const DocsContent = styled('div')(
       padding: 0.2em 0.4em;
       margin: 0;
       border-radius: 3px;
+      color: ${theme.palette.text.primary};
       background-color: ${
-        theme.palette.mode === 'light' ? 'rgba(175,184,193,0.2)' : 'rgba(110,118,129,0.4)'
+        theme.palette.mode === 'light' ? 'rgba(175,184,193,0.2)' : 'rgba(110,118,129,0.75)'
       };
     }
 
@@ -220,59 +234,6 @@ const DocsContent = styled('div')(
       margin-left: -0.2em;
       height: 1.5rem;
       z-index: -1;
-    }
-
-    & table {
-      width: 100%;
-      max-width: 100%;
-      border-spacing: 0;
-      margin: 24px 0;
-      border: 1px solid ${theme.palette.text.secondary};
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    &.editor table {
-      border: none;
-      border-radius: 0;
-      overflow: visible;
-    }
-
-    & table thead {
-      background: ${theme.palette.background.paper};
-    }
-
-    & table th,
-    & table thead td {
-      font-weight: 700;
-      height: 56px;
-      box-sizing: border-box;
-      text-align: left;
-    }
-
-    & table th,
-    & table thead td,
-    & table td {
-      padding: 8px 16px;
-    }
-
-    & table tr:not(:first-of-type) th,
-    & table tr:not(:first-of-type) thead td,
-    & table tbody tr td {
-      border-top: 1px solid ${theme.palette.text.secondary};
-    }
-
-    & table tr td {
-      background-color: ${theme.palette.background.paper};
-    }
-
-    & table tbody tr td {
-      height: 52px;
-      box-sizing: border-box;
-    }
-
-    & table tbody tr:hover td {
-      background-color: ${theme.palette.background.paper};
     }
 
     & ol,

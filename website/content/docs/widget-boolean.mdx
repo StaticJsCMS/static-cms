@@ -6,12 +6,19 @@ weight: 10
 
 The boolean widget translates a toggle switch input to a true/false value.
 
-- **Name:** `boolean`
-- **UI:** toggle switch
-- **Data type:** boolean
-- **Options:**
-  - `default`: accepts `true` or `false`; defaults to `false` when `required` is set to `false`
-- **Example:**
-    ```yaml
-    - {label: "Draft", title: "draft", widget: "boolean", default: true}
-    ```
+## Widget options
+
+For common options, see [Common widget options](/docs/widgets#common-widget-options).
+
+|Name|Type|Default|Description|
+|----|----|-------|-----------|
+|default|boolean|`false`|_Optional_. The default value for the field|
+
+## Example
+
+```yaml
+name: draft
+label: Draft
+widget: boolean
+default: true
+```
