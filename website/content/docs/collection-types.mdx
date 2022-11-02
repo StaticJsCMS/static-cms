@@ -3,6 +3,7 @@ group: Collections
 title: Collection Types
 weight: 10
 ---
+
 All editable content types are defined in the `collections` field of your `config.yml` file, and display in the left sidebar of the Content page of the editor UI.
 
 Collections come in two main types: `folder` and `files`.
@@ -15,34 +16,52 @@ Unlike file collections, folder collections have the option to allow editors to 
 
 **Note:** Folder collections must have at least one field with the name `title` for creating new entry slugs. That field should use the default `string` widget. The `label` for the field can be any string value. If you wish to use a different field as your identifier, set `identifier_field` to the field name. See the [Collections reference doc](/docs/configuration-options/#collections) for details on how collections and fields are configured. If you forget to add this field, you will get an error that your collection "must have a field that is a valid entry identifier".
 
-Example:
+### Examples
+
+#### Basic
 
 ```yaml
 collections:
-  - label: "Blog"
-    title: "blog"
-    folder: "_posts/blog"
+  - name: blog
+    label: Blog
+    folder: _posts/blog
     create: true
     fields:
-      - {label: "Title", title: "title", widget: "string"}
-      - {label: "Publish Date", title: "date", widget: "datetime"}
-      - {label: "Featured Image", title: "thumbnail", widget: "image"}
-      - {label: "Body", title: "body", widget: "markdown"}
+      - name: title
+        label: Title
+        widget: string
+      - name: date
+        label: Publish Date
+        widget: datetime
+      - name: thumbnail
+        label: Featured Image
+        widget: image
+      - name: body
+        label: Body
+        widget: 'markdown
 ```
 
-With `identifier_field`:
+#### With Identifier Field
 
 ```yaml
-- label: "Blog"
-  title: "blog"
-  folder: "_posts/blog"
+- name: 'blog'
+  label: 'Blog'
+  folder: '_posts/blog'
   create: true
   identifier_field: name
   fields:
-    - {label: "Name", title: "name", widget: "string"}
-    - {label: "Publish Date", title: "date", widget: "datetime"}
-    - {label: "Featured Image", title: "thumbnail", widget: "image"}
-    - {label: "Body", title: "body", widget: "markdown"}
+    - name: name
+      label: Name
+      widget: string
+    - name: date
+      label: Publish Date
+      widget: datetime
+    - name: thumbnail
+      label: Featured Image
+      widget: image
+    - name: body
+      label: Body
+      widget: markdown
 ```
 
 ### Filtered folder collections
@@ -51,38 +70,56 @@ The entries for any folder collection can be filtered based on the value of a si
 
 The `filter` option requires two fields:
 
-* `field`: The name of the collection field to filter on.
-* `value`: The desired field value.
+- `field`: The name of the collection field to filter on.
+- `value`: The desired field value.
 
 The example below creates two collections in the same folder, filtered by the `language` field. The first collection includes posts with `language: en`, and the second, with `language: es`.
 
 ```yaml
 collections:
-  - label: "Blog in English"
-    title: "english_posts"
-    folder: "_posts"
+  - name: 'english_posts'
+    label: 'Blog in English'
+    folder: '_posts'
     create: true
-    filter: {field: "language", value: "en"}
+    filter:
+      field: language
+      value: en
     fields:
-      - {label: "Language", title: "language", widget: "select", options: ["en", "es"]}
-      - {label: "Title", title: "title", widget: "string"}
-      - {label: "Content", title: "body", widget: "markdown"}
-  - label: "Blog en Español"
-    title: "spanish_posts"
-    folder: "_posts"
+      - name: language
+        label: Language
+        widget: select
+        options: ['en', 'es']
+      - name: title
+        label: Title
+        widget: string
+      - name: body
+        label: Content
+        widget: markdown
+  - name: spanish_posts
+    label: Blog en Español
+    folder: _posts
     create: true
-    filter: {field: "language", value: "es"}
+    filter:
+      field: language
+      value: es
     fields:
-      - {label: "Lenguaje", title: "language", widget: "select", options: ["en", "es"]}
-      - {label: "Titulo", title: "title", widget: "string"}
-      - {label: "Contenido", title: "body", widget: "markdown"}
+      - name: language
+        label: Lenguaje
+        widget: select
+        options: ['en', 'es']
+      - name: title
+        label: Titulo
+        widget: string
+      - name: body
+        label: Contenido
+        widget: markdown
 ```
 
-### Nested collections (beta)
+### Nested Collections (Beta)
 
 [Nested collections](/docs/beta-features/#nested-collections) is a beta feature that allows a folder collection to show a nested structure of entries and edit the locations of the entries. This feature is useful when you have a complex folder structure and may not want to create separate collections for every directory. As it is in beta, please use with discretion.
 
-## File collections
+## File Collections
 
 A `files` collection contains one or more uniquely configured files. Unlike items in `folder` collections, which repeat the same configuration over all files in the folder, each item in a `files` collection has an explicitly set path, filename, and configuration. This can be useful for unique files with a custom set of fields, like a settings file or a custom landing page with a unique content structure.
 
@@ -90,36 +127,54 @@ When configuring a `files` collection, configure each file in the collection sep
 
 **Note:** Files listed in a file collection must already exist in the hosted repository branch set in your Static CMS [backend configuration](/docs/backends-overview). Files must also have a valid value for the file type. For example, an empty file works as valid YAML, but a JSON file must have a non-empty value to be valid, such as an empty object.
 
-Example:
+### Example
 
 ```yaml
 collections:
-  - label: "Pages"
-    title: "pages"
+  - name: pages
+    label: Pages
     files:
-      - label: "About Page"
-        title: "about"
-        file: "site/content/about.yml"
+      - name: about
+        label: About Page
+        file: site/content/about.yml
         fields:
-          - {label: Title, title: title, widget: string}
-          - {label: Intro, title: intro, widget: markdown}
-          - label: Team
-            title: team
+          - name: title
+            label: Title
+            widget: string 
+          - name: intro
+            label: Intro
+            widget: markdown
+          - name: team
+            label: Team
             widget: list
             fields:
-              - {label: Name, title: name, widget: string}
-              - {label: Position, title: position, widget: string}
-              - {label: Photo, title: photo, widget: image}
-      - label: "Locations Page"
-        title: "locations"
-        file: "site/content/locations.yml"
+              - name: name
+                label: Name
+                widget: string
+              - name: position
+                label: Position
+                widget: string
+              - name: photo
+                label: Photo
+                widget: image
+      - name: locations
+        label: Locations Page
+        file: site/content/locations.yml
         fields:
-          - {label: Title, title: title, widget: string}
-          - {label: Intro, title: intro, widget: markdown}
-          - label: Locations
-            title: locations
+          - name: title
+            label: Title
+            widget: string
+          - name: intro
+            label: Intro
+            widget: markdown
+          - name: locations
+            label: Locations
             widget: list
             fields:
-              - {label: Name, title: name, widget: string}
-              - {label: Address, title: address, widget: string}
+              - name: name
+                label: Name
+                widget: string
+              - name: address
+                label: Address
+                widget: string
 ```
