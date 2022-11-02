@@ -73,6 +73,7 @@ const Editor = ({
   const createBackup = useMemo(
     () =>
       debounce(function (entry: Entry, collection: Collection) {
+        console.log('BACKUP!', entry);
         persistLocalBackup(entry, collection);
       }, 2000),
     [persistLocalBackup],
@@ -194,6 +195,7 @@ const Editor = ({
 
   useEffect(() => {
     if (hasChanged && entryDraft.entry) {
+      console.log('createBackup start', entryDraft.entry, collection);
       createBackup(entryDraft.entry, collection);
     } else if (localBackup) {
       deleteBackup();
@@ -280,11 +282,6 @@ const Editor = ({
     };
   }, [collection.name, deleteBackup, discardDraft, navigationBlocker]);
 
-  // TODO Is this needed?
-  //   if (!collectionEntriesLoaded) {
-  //     loadEntries(collection);
-  //   }
-
   if (entry && entry.error) {
     return (
       <div>
@@ -294,6 +291,8 @@ const Editor = ({
   } else if (entryDraft == null || entryDraft.entry === undefined || (entry && entry.isFetching)) {
     return <Loader>{t('editor.editor.loadingEntry')}</Loader>;
   }
+
+  console.log(version, entryDraft.entry.data);
 
   return (
     <EditorInterface

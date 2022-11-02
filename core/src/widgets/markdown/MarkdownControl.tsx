@@ -52,6 +52,7 @@ const MarkdownControl = ({
   getAsset,
   config,
 }: WidgetControlProps<string, MarkdownField>) => {
+  console.log(value);
   const [internalValue, setInternalValue] = useState(value ?? '');
   const editorRef = useMemo(() => React.createRef(), []) as RefObject<Editor>;
   const [hasFocus, setHasFocus] = useState(false);

@@ -1,9 +1,10 @@
 import toml from '@iarna/toml';
-import tomlify from 'tomlify-j0.4';
 import moment from 'moment';
+import tomlify from 'tomlify-j0.4';
 
 import AssetProxy from '../valueObjects/AssetProxy';
 import { sortKeys } from './helpers';
+import { FileFormatter } from './FileFormatter';
 
 function outputReplacer(_key: string, value: unknown) {
   if (moment.isMoment(value)) {
@@ -22,12 +23,14 @@ function outputReplacer(_key: string, value: unknown) {
   return false;
 }
 
-export default {
+class TomlFormatter extends FileFormatter {
   fromFile(content: string) {
     return toml.parse(content);
-  },
+  }
 
-  toFile(data: object, sortedKeys: string[] = []) {
-    return tomlify.toToml(data, { replace: outputReplacer, sort: sortKeys(sortedKeys) });
-  },
-};
+  toFile(data: object, sortedKeys: string[] = []): string {
+    return tomlify.toToml(data as object, { replace: outputReplacer, sort: sortKeys(sortedKeys) });
+  }
+}
+
+export default new TomlFormatter();

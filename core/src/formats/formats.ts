@@ -1,12 +1,11 @@
-import get from 'lodash/get';
-
-import yamlFormatter from './yaml';
-import tomlFormatter from './toml';
-import jsonFormatter from './json';
+import YamlFormatter from './YamlFormatter';
+import TomlFormatter from './TomlFormatter';
+import JsonFormatter from './JsonFormatter';
 import { FrontmatterInfer, frontmatterJSON, frontmatterTOML, frontmatterYAML } from './frontmatter';
 
 import type { Delimiter } from './frontmatter';
 import type { Collection, Entry, Format } from '../interface';
+import type { FileFormatter } from './FileFormatter';
 
 export const frontmatterFormats = ['yaml-frontmatter', 'toml-frontmatter', 'json-frontmatter'];
 
@@ -21,30 +20,32 @@ export const formatExtensions = {
   'yaml-frontmatter': 'md',
 };
 
-export const extensionFormatters = {
-  yml: yamlFormatter,
-  yaml: yamlFormatter,
-  toml: tomlFormatter,
-  json: jsonFormatter,
+export const extensionFormatters: Record<string, FileFormatter> = {
+  yml: YamlFormatter,
+  yaml: YamlFormatter,
+  toml: TomlFormatter,
+  json: JsonFormatter,
   md: FrontmatterInfer,
   markdown: FrontmatterInfer,
   html: FrontmatterInfer,
 };
 
-function formatByName(name: Format, customDelimiter?: Delimiter) {
-  return {
-    yml: yamlFormatter,
-    yaml: yamlFormatter,
-    toml: tomlFormatter,
-    json: jsonFormatter,
+function formatByName(name: Format, customDelimiter?: Delimiter): FileFormatter {
+  const fileFormatter: Record<string, FileFormatter> = {
+    yml: YamlFormatter,
+    yaml: YamlFormatter,
+    toml: TomlFormatter,
+    json: JsonFormatter,
     frontmatter: FrontmatterInfer,
     'json-frontmatter': frontmatterJSON(customDelimiter),
     'toml-frontmatter': frontmatterTOML(customDelimiter),
     'yaml-frontmatter': frontmatterYAML(customDelimiter),
-  }[name];
+  };
+
+  return fileFormatter[name];
 }
 
-export function resolveFormat(collection: Collection, entry: Entry) {
+export function resolveFormat(collection: Collection, entry: Entry): FileFormatter | undefined {
   // Check for custom delimiter
   const frontmatter_delimiter = collection.frontmatter_delimiter;
 
@@ -59,7 +60,7 @@ export function resolveFormat(collection: Collection, entry: Entry) {
   if (filePath) {
     const fileExtension = filePath.split('.').pop();
     if (fileExtension) {
-      return get(extensionFormatters, fileExtension);
+      return extensionFormatters[fileExtension];
     }
   }
 
@@ -67,7 +68,7 @@ export function resolveFormat(collection: Collection, entry: Entry) {
   //   collection config, infer the format from that extension.
   const extension = collection.extension;
   if (extension) {
-    return get(extensionFormatters, extension);
+    return extensionFormatters[extension];
   }
 
   // If no format is specified and it cannot be inferred, return the default.
