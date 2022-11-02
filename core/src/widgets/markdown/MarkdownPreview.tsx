@@ -19,8 +19,11 @@ const MarkdownPreview = ({
   const mediaHolder = useMemo(() => new MediaHolder(), []);
   const media = useMedia({ value, getAsset, field });
 
+  const viewer = useRef<Viewer | null>(null);
+
   useEffect(() => {
     mediaHolder.setBulkMedia(media);
+    viewer.current?.getInstance().setMarkdown(value ?? '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [media]);
 
@@ -30,12 +33,6 @@ const MarkdownPreview = ({
     field,
     mode: 'preview',
   });
-
-  const viewer = useRef<Viewer | null>(null);
-
-  useEffect(() => {
-    viewer.current?.getInstance().setMarkdown(value ?? '');
-  }, [value, media]);
 
   return useMemo(() => {
     if (!value) {

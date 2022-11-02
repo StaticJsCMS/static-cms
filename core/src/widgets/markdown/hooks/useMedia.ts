@@ -48,7 +48,7 @@ const useMedia = ({ value, getAsset, field }: UseMediaProps) => {
       }
 
       const uniqueMediaToLoad = mediaToLoad.filter(
-        (value, index, self) => self.indexOf(value) === index,
+        (value, index, self) => self.indexOf(value) === index && !(value in media),
       );
 
       for (const url of uniqueMediaToLoad) {
