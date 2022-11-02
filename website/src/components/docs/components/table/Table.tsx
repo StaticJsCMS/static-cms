@@ -14,6 +14,10 @@ const StyledTableContainer = styled(TableContainer)(
       color:
         ${theme.palette.mode === 'light' ? '#751365' : '#ffb6ec'};
     }
+
+    & td:last-of-type {
+      min-width: 200px;
+    }
   `,
 );
 
