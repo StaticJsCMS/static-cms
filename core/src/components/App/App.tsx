@@ -163,7 +163,6 @@ const App = ({
   const { pathname } = useLocation();
   React.useEffect(() => {
     if (!/\/collections\/[a-zA-Z0-9_-]+\/entries\/[a-zA-Z0-9_-]+/g.test(pathname)) {
-      console.log('not an entry!', pathname);
       discardDraft();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

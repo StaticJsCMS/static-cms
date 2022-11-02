@@ -652,7 +652,6 @@ export class Backend {
       await this.backupSync.acquire();
       const key = getEntryBackupKey(collection.name, entry.slug);
       const raw = this.entryToRaw(collection, entry);
-      console.log('raw', raw, entry.data);
 
       if (!raw.trim()) {
         return;

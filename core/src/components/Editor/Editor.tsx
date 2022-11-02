@@ -73,10 +73,10 @@ const Editor = ({
   const createBackup = useMemo(
     () =>
       debounce(function (entry: Entry, collection: Collection) {
-        console.log('BACKUP!', entry);
         persistLocalBackup(entry, collection);
       }, 2000),
-    [persistLocalBackup],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
 
   const deleteBackup = useCallback(() => {
@@ -85,7 +85,8 @@ const Editor = ({
       deleteLocalBackup(collection, slug);
     }
     deleteDraftLocalBackup();
-  }, [collection, createBackup, deleteDraftLocalBackup, deleteLocalBackup, slug]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collection, createBackup, slug]);
 
   const [submitted, setSubmitted] = useState(false);
   const handlePersistEntry = useCallback(
@@ -195,16 +196,13 @@ const Editor = ({
 
   useEffect(() => {
     if (hasChanged && entryDraft.entry) {
-      console.log('createBackup start', entryDraft.entry, collection);
       createBackup(entryDraft.entry, collection);
-    } else if (localBackup) {
-      deleteBackup();
     }
 
     return () => {
       createBackup.flush();
     };
-  }, [collection, createBackup, deleteBackup, entryDraft.entry, hasChanged, localBackup]);
+  }, [collection, createBackup, entryDraft.entry, hasChanged]);
 
   const [prevCollection, setPrevCollection] = useState<Collection | null>(null);
   const [preSlug, setPrevSlug] = useState<string | undefined | null>(null);
@@ -291,8 +289,6 @@ const Editor = ({
   } else if (entryDraft == null || entryDraft.entry === undefined || (entry && entry.isFetching)) {
     return <Loader>{t('editor.editor.loadingEntry')}</Loader>;
   }
-
-  console.log(version, entryDraft.entry.data);
 
   return (
     <EditorInterface
