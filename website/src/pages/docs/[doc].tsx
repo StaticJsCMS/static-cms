@@ -4,6 +4,7 @@ import { MDXRemote } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import remarkGfm from 'remark-gfm';
 
+import Anchor from '../../components/docs/components/Anchor';
 import Blockquote from '../../components/docs/components/Blockquote';
 import Header2 from '../../components/docs/components/Header2';
 import Header3 from '../../components/docs/components/Header3';
@@ -101,6 +102,7 @@ const Docs = ({ docsGroups, title, slug, description = '', source }: DocsProps) 
                 tbody: TableBody,
                 th: TableHeaderCell,
                 td: TableBodyCell,
+                a: Anchor,
               }}
             />
           </DocsContent>

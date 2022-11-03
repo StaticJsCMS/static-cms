@@ -3,6 +3,8 @@ import { styled, useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 
+import { getNodeText } from '../../../util/node.util';
+
 import type { ReactNode } from 'react';
 
 const StyledLink = styled('a')(
@@ -24,7 +26,7 @@ const StyledLink = styled('a')(
 function getAnchor(text: string) {
   return text
     .toLowerCase()
-    .replace(/[^a-z0-9 ]/g, '')
+    .replace(/[^a-z0-9_\- ]/g, '')
     .replace(/[ ]/g, '-');
 }
 
@@ -33,7 +35,8 @@ interface Header3Props {
 }
 
 const Header3 = ({ children = '' }: Header3Props) => {
-  const anchor = getAnchor(String(children));
+  const textContent = getNodeText(children);
+  const anchor = getAnchor(String(textContent));
   const link = `#${anchor}`;
   const theme = useTheme();
   return (

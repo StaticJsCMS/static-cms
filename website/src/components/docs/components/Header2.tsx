@@ -3,6 +3,8 @@ import { styled, useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 
+import { getNodeText } from '../../../util/node.util';
+
 import type { ReactNode } from 'react';
 
 const StyledLink = styled('a')(
@@ -32,7 +34,8 @@ interface Header2Props {
 }
 
 const Header2 = ({ children = '' }: Header2Props) => {
-  const anchor = getAnchor(String(children));
+  const textContent = getNodeText(children);
+  const anchor = getAnchor(textContent);
   const link = `#${anchor}`;
   const theme = useTheme();
   return (

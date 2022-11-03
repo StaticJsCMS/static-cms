@@ -171,8 +171,6 @@ export interface Collection {
   isFetching?: boolean;
   media_folder?: string;
   public_folder?: string;
-  preview_path?: string;
-  preview_path_date_field?: string;
   summary?: string;
   filter?: FilterRule;
   type: 'file_based_collection' | 'folder_based_collection';

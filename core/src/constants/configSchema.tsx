@@ -202,8 +202,6 @@ function getConfigSchema() {
                   label_singular: { type: 'string' },
                   description: { type: 'string' },
                   file: { type: 'string' },
-                  preview_path: { type: 'string' },
-                  preview_path_date_field: { type: 'string' },
                   editor: {
                     type: 'object',
                     properties: {
@@ -220,8 +218,6 @@ function getConfigSchema() {
             summary: { type: 'string' },
             slug: { type: 'string' },
             path: { type: 'string' },
-            preview_path: { type: 'string' },
-            preview_path_date_field: { type: 'string' },
             create: { type: 'boolean' },
             publish: { type: 'boolean' },
             hide: { type: 'boolean' },
