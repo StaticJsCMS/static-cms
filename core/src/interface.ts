@@ -68,6 +68,7 @@ export type ValueOrNestedValue =
   | number
   | boolean
   | string[]
+  | (string | number)[]
   | null
   | undefined
   | ObjectValue
@@ -572,7 +573,6 @@ export interface FileOrImageField extends BaseField {
 
 export interface ObjectField extends BaseField {
   widget: 'object';
-  default?: ObjectValue;
 
   collapsed?: boolean;
   summary?: string;
@@ -626,9 +626,9 @@ export interface NumberField extends BaseField {
 
 export interface SelectField extends BaseField {
   widget: 'select';
-  default?: string | string[];
+  default?: string | number | (string | number)[];
 
-  options: string[] | SelectWidgetOptionObject[];
+  options: (string | number)[] | SelectWidgetOptionObject[];
   multiple?: boolean;
   min?: number;
   max?: number;
