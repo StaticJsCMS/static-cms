@@ -175,7 +175,6 @@ const vi: LocalePhrasesRoot = {
       noResults: 'Không có kết quả.',
       noAssetsFound: 'Không tìm thấy tập tin nào.',
       noImagesFound: 'Không tìm thấy hình nào.',
-      private: 'Riêng tư ',
       images: 'Hình ảnh',
       mediaAssets: 'Tập tin',
       search: 'Tìm kiếm...',

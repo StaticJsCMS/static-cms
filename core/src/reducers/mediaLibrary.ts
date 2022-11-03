@@ -21,12 +21,11 @@ import {
   MEDIA_PERSIST_SUCCESS,
   MEDIA_REMOVE_INSERTED,
 } from '../actions/mediaLibrary';
-import { selectIntegration } from './';
-import { selectEditingDraft } from './entries';
 import { selectMediaFolder } from '../lib/util/media.util';
+import { selectEditingDraft } from './entries';
 
 import type { MediaLibraryAction } from '../actions/mediaLibrary';
-import type { Field, DisplayURLState, MediaFile, MediaLibraryInstance } from '../interface';
+import type { DisplayURLState, Field, MediaFile, MediaLibraryInstance } from '../interface';
 import type { RootState } from '../store';
 
 export interface MediaLibraryDisplayURL {
@@ -49,7 +48,6 @@ export type MediaLibraryState = {
   value?: string | string[];
   replaceIndex?: number;
   canInsert?: boolean;
-  privateUpload?: boolean;
   isLoading?: boolean;
   dynamicSearch?: boolean;
   dynamicSearchActive?: boolean;
@@ -82,26 +80,8 @@ function mediaLibrary(
       };
 
     case MEDIA_LIBRARY_OPEN: {
-      const { controlID, forImage, privateUpload, config, field, value, replaceIndex } =
-        action.payload;
+      const { controlID, forImage, config, field, value, replaceIndex } = action.payload;
       const libConfig = config || {};
-      const privateUploadChanged = state.privateUpload !== privateUpload;
-      if (privateUploadChanged) {
-        return {
-          ...state,
-          isVisible: true,
-          forImage,
-          controlID,
-          canInsert: Boolean(controlID),
-          privateUpload,
-          config: libConfig,
-          controlMedia: {},
-          displayURLs: {},
-          field,
-          value,
-          replaceIndex,
-        };
-      }
 
       return {
         ...state,
@@ -109,7 +89,6 @@ function mediaLibrary(
         forImage: Boolean(forImage),
         controlID,
         canInsert: !!controlID,
-        privateUpload: Boolean(privateUpload),
         config: libConfig,
         field,
         value,
@@ -180,19 +159,7 @@ function mediaLibrary(
       };
 
     case MEDIA_LOAD_SUCCESS: {
-      const {
-        files = [],
-        page,
-        canPaginate,
-        dynamicSearch,
-        dynamicSearchQuery,
-        privateUpload,
-      } = action.payload;
-      const privateUploadChanged = state.privateUpload !== privateUpload;
-
-      if (privateUploadChanged) {
-        return state;
-      }
+      const { files = [], page, canPaginate, dynamicSearch, dynamicSearchQuery } = action.payload;
 
       const filesWithKeys = files.map(file => ({ ...file, key: uuid() }));
       return {
@@ -210,11 +177,6 @@ function mediaLibrary(
     }
 
     case MEDIA_LOAD_FAILURE: {
-      const privateUploadChanged = state.privateUpload !== action.payload.privateUpload;
-      if (privateUploadChanged) {
-        return state;
-      }
-
       return {
         ...state,
         isLoading: false,
@@ -228,12 +190,7 @@ function mediaLibrary(
       };
 
     case MEDIA_PERSIST_SUCCESS: {
-      const { file, privateUpload } = action.payload;
-      const privateUploadChanged = state.privateUpload !== privateUpload;
-      if (privateUploadChanged) {
-        return state;
-      }
-
+      const { file } = action.payload;
       const fileWithKey = { ...file, key: uuid() };
       const files = state.files as MediaFile[];
       const updatedFiles = [fileWithKey, ...files];
@@ -245,11 +202,6 @@ function mediaLibrary(
     }
 
     case MEDIA_PERSIST_FAILURE: {
-      const privateUploadChanged = state.privateUpload !== action.payload.privateUpload;
-      if (privateUploadChanged) {
-        return state;
-      }
-
       return {
         ...state,
         isPersisting: false,
@@ -263,12 +215,8 @@ function mediaLibrary(
       };
 
     case MEDIA_DELETE_SUCCESS: {
-      const { file, privateUpload } = action.payload;
+      const { file } = action.payload;
       const { key, id } = file;
-      const privateUploadChanged = state.privateUpload !== privateUpload;
-      if (privateUploadChanged) {
-        return state;
-      }
 
       const files = state.files as MediaFile[];
       const updatedFiles = files.filter(file => (key ? file.key !== key : file.id !== id));
@@ -288,11 +236,6 @@ function mediaLibrary(
     }
 
     case MEDIA_DELETE_FAILURE: {
-      const privateUploadChanged = state.privateUpload !== action.payload.privateUpload;
-      if (privateUploadChanged) {
-        return state;
-      }
-
       return {
         ...state,
         isDeleting: false,
@@ -347,10 +290,9 @@ function mediaLibrary(
 export function selectMediaFiles(state: RootState, field?: Field): MediaFile[] {
   const { mediaLibrary, entryDraft } = state;
   const editingDraft = selectEditingDraft(entryDraft);
-  const integration = selectIntegration(state, null, 'assetStore');
 
   let files: MediaFile[] = [];
-  if (editingDraft && !integration) {
+  if (editingDraft) {
     const entryFiles = entryDraft?.entry?.mediaFiles ?? [];
     const entry = entryDraft['entry'];
     const collection = entry?.collection ? state.collections[entry.collection] : null;

@@ -178,7 +178,6 @@ const th: LocalePhrasesRoot = {
       noResults: 'ไม่มีผลลัพธ์',
       noAssetsFound: 'ไม่พบข้อมูล',
       noImagesFound: 'ไม่พบรูปภาพ',
-      private: 'ส่วนตัว ',
       images: 'รูปภาพ',
       mediaAssets: 'ข้อมูลมีเดีย',
       search: 'ค้นหา...',

@@ -170,7 +170,6 @@ const es: LocalePhrasesRoot = {
       noResults: 'Sin resultados.',
       noAssetsFound: 'Archivos no encontrados.',
       noImagesFound: 'Imágenes no encontradas.',
-      private: 'Privado ',
       images: 'Imágenes',
       mediaAssets: 'Archivos multimedia',
       search: 'Buscar...',

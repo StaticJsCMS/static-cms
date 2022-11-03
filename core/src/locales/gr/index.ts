@@ -149,7 +149,6 @@ const gr: LocalePhrasesRoot = {
       noResults: 'Χωρίς αποτελέσματα.',
       noAssetsFound: 'Δεν βρέθηκαν αρχεία.',
       noImagesFound: 'Δεν βρέθηκαν εικόνες.',
-      private: 'Ιδιωτικό',
       images: 'Εικόνες',
       mediaAssets: 'Αρχεία πολυμέσων',
       search: 'Αναζήτηση...',

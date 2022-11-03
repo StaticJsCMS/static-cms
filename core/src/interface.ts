@@ -15,12 +15,6 @@ import type Cursor from './lib/util/Cursor';
 import type AssetProxy from './valueObjects/AssetProxy';
 import type { MediaHolder } from './widgets/markdown/hooks/useMedia';
 
-export interface SlugConfig {
-  encoding: string;
-  clean_accents: boolean;
-  sanitize_replacement: string;
-}
-
 export interface Pages {
   [collection: string]: { isFetching?: boolean; page?: number; ids: string[] };
 }
@@ -225,8 +219,6 @@ export interface DisplayURLState {
   err?: Error;
 }
 
-export type Hook = string | boolean;
-
 export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
 export type GetAssetFunction = (path: string, field?: Field) => Promise<AssetProxy>;
@@ -368,8 +360,6 @@ export interface BackendEntry {
   assets: AssetProxy[];
 }
 
-export type DeleteOptions = {};
-
 export interface Credentials {
   token: string | {};
   refresh_token?: string;
@@ -475,7 +465,6 @@ export interface MediaLibraryInternalOptions {
 export type MediaLibrary = MediaLibraryExternalLibrary | MediaLibraryInternalOptions;
 
 export type BackendType =
-  | 'azure'
   | 'git-gateway'
   | 'github'
   | 'gitlab'
@@ -484,22 +473,6 @@ export type BackendType =
   | 'proxy';
 
 export type MapWidgetType = 'Point' | 'LineString' | 'Polygon';
-
-export type MarkdownWidgetButton =
-  | 'bold'
-  | 'italic'
-  | 'code'
-  | 'link'
-  | 'heading-one'
-  | 'heading-two'
-  | 'heading-three'
-  | 'heading-four'
-  | 'heading-five'
-  | 'heading-six'
-  | 'quote'
-  | 'code-block'
-  | 'bulleted-list'
-  | 'numbered-list';
 
 export interface SelectWidgetOptionObject {
   label: string;
@@ -568,7 +541,6 @@ export interface FileOrImageField extends BaseField {
   media_library?: MediaLibrary;
   media_folder?: string;
   public_folder?: string;
-  private?: boolean;
 }
 
 export interface ObjectField extends BaseField {
@@ -784,15 +756,17 @@ export interface EventData {
   author: { login: string | undefined; name: string };
 }
 
+export type EventListenerOptions = Record<string, unknown>;
+
+export type EventListenerHandler = (
+  data: EventData,
+  options: EventListenerOptions,
+) => Promise<EntryData | undefined | null | void>;
+
 export interface EventListener {
   name: AllowedEvent;
-  handler: (
-    data: EventData,
-    options: Record<string, unknown>,
-  ) => Promise<EntryData | undefined | null | void>;
+  handler: EventListenerHandler;
 }
-
-export type EventListenerOptions = Record<string, unknown>;
 
 export interface AdditionalLink {
   id: string;
@@ -816,11 +790,9 @@ export interface AuthenticationPageProps {
 
 export type Integration = {
   collections?: '*' | string[];
-} & (AlgoliaIntegration | AssetStoreIntegration);
+} & AlgoliaIntegration;
 
-export type IntegrationProvider = Integration['provider'];
 export type SearchIntegrationProvider = 'algolia';
-export type MediaIntegrationProvider = 'assetStore';
 
 export interface AlgoliaIntegration extends AlgoliaConfig {
   provider: 'algolia';
@@ -831,16 +803,6 @@ export interface AlgoliaConfig {
   applicationID: string;
   apiKey: string;
   indexPrefix?: string;
-}
-
-export interface AssetStoreIntegration extends AssetStoreConfig {
-  provider: 'assetStore';
-}
-
-export interface AssetStoreConfig {
-  hooks: ['assetStore'];
-  shouldConfirmUpload?: boolean;
-  getSignedFormURL: string;
 }
 
 export interface SearchResponse {

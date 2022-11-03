@@ -279,7 +279,7 @@ async function getAllEntries(state: RootState, collection: Collection) {
   const backend = currentBackend(configState.config);
   const integration = selectIntegration(state, collection.name, 'listEntries');
   const provider = integration
-    ? getSearchIntegrationProvider(state.integrations, backend.getToken, integration)
+    ? getSearchIntegrationProvider(state.integrations, integration)
     : backend;
 
   if (!provider) {
@@ -688,7 +688,7 @@ export function loadEntries(collection: Collection, page = 0) {
     const backend = currentBackend(configState.config);
     const integration = selectIntegration(state, collection.name, 'listEntries');
     const provider = integration
-      ? getSearchIntegrationProvider(state.integrations, backend.getToken, integration)
+      ? getSearchIntegrationProvider(state.integrations, integration)
       : backend;
 
     if (!provider) {

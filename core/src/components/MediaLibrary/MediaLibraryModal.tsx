@@ -1,14 +1,12 @@
-import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import Fab from '@mui/material/Fab';
+import { styled } from '@mui/material/styles';
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
 import { translate } from 'react-polyglot';
 
-import { transientOptions } from '../../lib';
-import { colors, colorsRaw } from '../../components/UI/styles';
 import EmptyMessage from './EmptyMessage';
 import MediaLibraryCardGrid from './MediaLibraryCardGrid';
 import MediaLibraryTop from './MediaLibraryTop';
@@ -37,60 +35,41 @@ const cardMargin = `10px`;
  */
 const cardOutsideWidth = `300px`;
 
-interface StyledModalProps {
-  $isPrivate: boolean;
-}
+const StyledModal = styled(Dialog)`
+  .MuiDialog-paper {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+    height: 80%;
+    width: calc(${cardOutsideWidth} + 20px);
+    max-width: calc(${cardOutsideWidth} + 20px);
 
-const StyledModal = styled(
-  Dialog,
-  transientOptions,
-)<StyledModalProps>(
-  ({ $isPrivate }) => `
-    .MuiDialog-paper {
-      display: flex;
-      flex-direction: column;
-      overflow: visible;
-      height: 80%;
-      width: calc(${cardOutsideWidth} + 20px);
-      max-width: calc(${cardOutsideWidth} + 20px);
-      ${$isPrivate ? `background-color: ${colorsRaw.grayDark};` : ''}
-
-      @media (min-width: 800px) {
-        width: calc(${cardOutsideWidth} * 2 + 20px);
-        max-width: calc(${cardOutsideWidth} * 2 + 20px);
-      }
-
-      @media (min-width: 1120px) {
-        width: calc(${cardOutsideWidth} * 3 + 20px);
-        max-width: calc(${cardOutsideWidth} * 3 + 20px);
-      }
-
-      @media (min-width: 1440px) {
-        width: calc(${cardOutsideWidth} * 4 + 20px);
-        max-width: calc(${cardOutsideWidth} * 4 + 20px);
-      }
-
-      @media (min-width: 1760px) {
-        width: calc(${cardOutsideWidth} * 5 + 20px);
-        max-width: calc(${cardOutsideWidth} * 5 + 20px);
-      }
-
-      @media (min-width: 2080px) {
-        width: calc(${cardOutsideWidth} * 6 + 20px);
-        max-width: calc(${cardOutsideWidth} * 6 + 20px);
-      }
-
-      h1 {
-        ${$isPrivate && `color: ${colors.textFieldBorder};`}
-      }
-
-      button:disabled,
-      label[disabled] {
-        ${$isPrivate ? 'background-color: rgba(217, 217, 217, 0.15);' : ''}
-      }
+    @media (min-width: 800px) {
+      width: calc(${cardOutsideWidth} * 2 + 20px);
+      max-width: calc(${cardOutsideWidth} * 2 + 20px);
     }
-  `,
-);
+
+    @media (min-width: 1120px) {
+      width: calc(${cardOutsideWidth} * 3 + 20px);
+      max-width: calc(${cardOutsideWidth} * 3 + 20px);
+    }
+
+    @media (min-width: 1440px) {
+      width: calc(${cardOutsideWidth} * 4 + 20px);
+      max-width: calc(${cardOutsideWidth} * 4 + 20px);
+    }
+
+    @media (min-width: 1760px) {
+      width: calc(${cardOutsideWidth} * 5 + 20px);
+      max-width: calc(${cardOutsideWidth} * 5 + 20px);
+    }
+
+    @media (min-width: 2080px) {
+      width: calc(${cardOutsideWidth} * 6 + 20px);
+      max-width: calc(${cardOutsideWidth} * 6 + 20px);
+    }
+  }
+`;
 
 interface MediaLibraryModalProps {
   isVisible?: boolean;
@@ -104,7 +83,6 @@ interface MediaLibraryModalProps {
   isDeleting?: boolean;
   hasNextPage?: boolean;
   isPaginating?: boolean;
-  privateUpload?: boolean;
   query?: string;
   selectedFile?: MediaFile;
   handleFilter: (files: MediaFile[]) => MediaFile[];
@@ -136,7 +114,6 @@ const MediaLibraryModal = ({
   isDeleting,
   hasNextPage,
   isPaginating,
-  privateUpload = false,
   query,
   selectedFile,
   handleFilter,
@@ -175,14 +152,13 @@ const MediaLibraryModal = ({
   const hasSelection = hasMedia && !isEmpty(selectedFile);
 
   return (
-    <StyledModal open={isVisible} onClose={handleClose} $isPrivate={privateUpload}>
+    <StyledModal open={isVisible} onClose={handleClose}>
       <StyledFab color="default" aria-label="add" onClick={handleClose} size="small">
         <CloseIcon />
       </StyledFab>
       <MediaLibraryTop
         t={t}
         onClose={handleClose}
-        privateUpload={privateUpload}
         forImage={forImage}
         onDownload={handleDownload}
         onUpload={handlePersist}
@@ -199,9 +175,7 @@ const MediaLibraryModal = ({
         selectedFile={selectedFile}
       />
       <DialogContent>
-        {!shouldShowEmptyMessage ? null : (
-          <EmptyMessage content={emptyMessage} isPrivate={privateUpload} />
-        )}
+        {!shouldShowEmptyMessage ? null : <EmptyMessage content={emptyMessage} />}
         <MediaLibraryCardGrid
           setScrollContainerRef={setScrollContainerRef}
           mediaItems={tableData}
@@ -215,7 +189,6 @@ const MediaLibraryModal = ({
           cardWidth={cardWidth}
           cardHeight={cardHeight}
           cardMargin={cardMargin}
-          isPrivate={privateUpload}
           loadDisplayURL={loadDisplayURL}
           displayURLs={displayURLs}
         />

@@ -4,13 +4,11 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import { Waypoint } from 'react-waypoint';
 import { FixedSizeGrid as Grid } from 'react-window';
 
-import { transientOptions } from '../../lib';
-import { colors } from '../../components/UI/styles';
 import MediaLibraryCard from './MediaLibraryCard';
 
 import type { GridChildComponentProps } from 'react-window';
-import type { MediaLibraryDisplayURL, MediaLibraryState } from '../../reducers/mediaLibrary';
 import type { MediaFile } from '../../interface';
+import type { MediaLibraryDisplayURL, MediaLibraryState } from '../../reducers/mediaLibrary';
 
 export interface MediaLibraryCardItem {
   displayURL?: MediaLibraryDisplayURL;
@@ -37,7 +35,6 @@ export interface MediaLibraryCardGridProps {
   cardHeight: string;
   cardMargin: string;
   loadDisplayURL: (asset: MediaFile) => void;
-  isPrivate?: boolean;
   displayURLs: MediaLibraryState['displayURLs'];
 }
 
@@ -57,7 +54,6 @@ const CardWrapper = ({
     cardDraftText,
     cardWidth,
     cardHeight,
-    isPrivate,
     displayURLs,
     loadDisplayURL,
     columnCount,
@@ -90,7 +86,6 @@ const CardWrapper = ({
         width={cardWidth}
         height={cardHeight}
         margin={'0px'}
-        isPrivate={isPrivate}
         displayURL={displayURLs[file.id] ?? (file.url ? { url: file.url } : {})}
         loadDisplayURL={() => loadDisplayURL(file)}
         type={file.type}
@@ -168,19 +163,6 @@ const VirtualizedGrid = (props: MediaLibraryCardGridProps) => {
   );
 };
 
-interface PaginatingMessageProps {
-  $isPrivate: boolean;
-}
-
-const PaginatingMessage = styled(
-  'h1',
-  transientOptions,
-)<PaginatingMessageProps>(
-  ({ $isPrivate }) => `
-    ${$isPrivate ? `color: ${colors.textFieldBorder};` : ''}
-  `,
-);
-
 const PaginatedGrid = ({
   setScrollContainerRef,
   mediaItems,
@@ -190,7 +172,6 @@ const PaginatedGrid = ({
   cardWidth,
   cardHeight,
   cardMargin,
-  isPrivate = false,
   displayURLs,
   loadDisplayURL,
   canLoadMore,
@@ -212,7 +193,6 @@ const PaginatedGrid = ({
             width={cardWidth}
             height={cardHeight}
             margin={cardMargin}
-            isPrivate={isPrivate}
             displayURL={displayURLs[file.id] ?? (file.url ? { url: file.url } : {})}
             loadDisplayURL={() => loadDisplayURL(file)}
             type={file.type}
@@ -221,9 +201,7 @@ const PaginatedGrid = ({
         ))}
         {!canLoadMore ? null : <Waypoint onEnter={onLoadMore} />}
       </CardGrid>
-      {!isPaginating ? null : (
-        <PaginatingMessage $isPrivate={isPrivate}>{paginatingMessage}</PaginatingMessage>
-      )}
+      {!isPaginating ? null : <h1>{paginatingMessage}</h1>}
     </StyledCardGridContainer>
   );
 };

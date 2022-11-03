@@ -53,7 +53,6 @@ const MediaLibrary = ({
   isDeleting,
   hasNextPage,
   isPaginating,
-  privateUpload = false,
   config,
   loadMedia,
   dynamicSearchQuery,
@@ -69,7 +68,6 @@ const MediaLibrary = ({
   const [query, setQuery] = useState<string | undefined>(undefined);
 
   const [prevIsVisible, setPrevIsVisible] = useState(false);
-  const [prevPrivateUpload, setPrevPrivateUpload] = useState(false);
 
   useEffect(() => {
     loadMedia();
@@ -85,14 +83,10 @@ const MediaLibrary = ({
   }, [isVisible, prevIsVisible]);
 
   useEffect(() => {
-    setPrevPrivateUpload(privateUpload);
-  }, [privateUpload]);
-
-  useEffect(() => {
-    if (!prevIsVisible && isVisible && !prevPrivateUpload && privateUpload) {
-      loadMedia({ privateUpload });
+    if (!prevIsVisible && isVisible) {
+      loadMedia();
     }
-  }, [isVisible, loadMedia, prevIsVisible, prevPrivateUpload, privateUpload]);
+  }, [isVisible, loadMedia, prevIsVisible]);
 
   const loadDisplayURL = useCallback(
     (file: MediaFile) => {
@@ -208,7 +202,7 @@ const MediaLibrary = ({
           },
         });
       } else {
-        await persistMedia(file, { privateUpload, field });
+        await persistMedia(file, { field });
 
         setSelectedFile(files[0] as unknown as MediaFile);
 
@@ -219,7 +213,7 @@ const MediaLibrary = ({
         event.target.value = '';
       }
     },
-    [config.max_file_size, field, persistMedia, privateUpload],
+    [config.max_file_size, field, persistMedia],
   );
 
   /**
@@ -251,11 +245,11 @@ const MediaLibrary = ({
     }
     const file = files.find(file => selectedFile?.key === file.key);
     if (file) {
-      deleteMedia(file, { privateUpload }).then(() => {
+      deleteMedia(file).then(() => {
         setSelectedFile(null);
       });
     }
-  }, [deleteMedia, files, privateUpload, selectedFile?.key]);
+  }, [deleteMedia, files, selectedFile?.key]);
 
   /**
    * Downloads the selected file.
@@ -286,8 +280,8 @@ const MediaLibrary = ({
   }, [displayURLs, selectedFile]);
 
   const handleLoadMore = useCallback(() => {
-    loadMedia({ query: dynamicSearchQuery, page: (page ?? 0) + 1, privateUpload });
-  }, [dynamicSearchQuery, loadMedia, page, privateUpload]);
+    loadMedia({ query: dynamicSearchQuery, page: (page ?? 0) + 1 });
+  }, [dynamicSearchQuery, loadMedia, page]);
 
   /**
    * Executes media library search for implementations that support dynamic
@@ -299,11 +293,11 @@ const MediaLibrary = ({
   const handleSearchKeyDown = useCallback(
     async (event: KeyboardEvent) => {
       if (event.key === 'Enter' && dynamicSearch) {
-        await loadMedia({ query, privateUpload });
+        await loadMedia({ query });
         scrollToTop();
       }
     },
-    [dynamicSearch, loadMedia, privateUpload, query],
+    [dynamicSearch, loadMedia, query],
   );
 
   /**
@@ -344,7 +338,6 @@ const MediaLibrary = ({
       isDeleting={isDeleting}
       hasNextPage={hasNextPage}
       isPaginating={isPaginating}
-      privateUpload={privateUpload}
       query={query}
       selectedFile={selectedFile}
       handleFilter={filterImages}
@@ -382,7 +375,6 @@ function mapStateToProps(state: RootState) {
     isLoading: mediaLibrary.isLoading,
     isPersisting: mediaLibrary.isPersisting,
     isDeleting: mediaLibrary.isDeleting,
-    privateUpload: mediaLibrary.privateUpload,
     config: mediaLibrary.config,
     page: mediaLibrary.page,
     hasNextPage: mediaLibrary.hasNextPage,

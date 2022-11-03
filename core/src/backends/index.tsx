@@ -1,4 +1,3 @@
-export { AzureBackend } from './azure';
 export { BitbucketBackend } from './bitbucket';
 export { GitGatewayBackend } from './git-gateway';
 export { GitHubBackend } from './github';

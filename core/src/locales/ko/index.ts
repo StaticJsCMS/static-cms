@@ -177,7 +177,6 @@ const ko: LocalePhrasesRoot = {
       noResults: '일치 항목 없음.',
       noAssetsFound: '발견된 에셋 없음.',
       noImagesFound: '발견된 이미지 없음.',
-      private: '개인 ',
       images: '이미지',
       mediaAssets: '미디어 에셋',
       search: '검색...',

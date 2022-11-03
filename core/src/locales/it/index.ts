@@ -146,7 +146,6 @@ const it: LocalePhrasesRoot = {
       noResults: 'Nessun risultato.',
       noAssetsFound: 'Nessun assets trovato.',
       noImagesFound: 'Nessuna immagine trovata.',
-      private: 'Privato ',
       images: 'Immagini',
       mediaAssets: 'Media assets',
       search: 'Cerca...',

@@ -206,7 +206,6 @@ const ca: LocalePhrasesRoot = {
       noResults: 'Sense resultats.',
       noAssetsFound: 'Arxius no trobats.',
       noImagesFound: 'Imatges no trobades.',
-      private: 'Privat',
       images: 'Imatges',
       mediaAssets: 'Arxius multimèdia',
       search: 'Buscar...',

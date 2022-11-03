@@ -125,7 +125,6 @@ const uk: LocalePhrasesRoot = {
       noResults: 'Результати відсутні.',
       noAssetsFound: 'Матеріали відсутні.',
       noImagesFound: 'Зображення відсутні.',
-      private: 'Private ',
       images: 'Зображення',
       mediaAssets: 'Медіа матеріали',
       search: 'Пошук...',

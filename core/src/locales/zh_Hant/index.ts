@@ -185,7 +185,6 @@ const zh_Hant: LocalePhrasesRoot = {
       noResults: '沒有結果',
       noAssetsFound: '沒有發現媒體資產。',
       noImagesFound: '沒有發現影像。',
-      private: '私人',
       images: '影像',
       mediaAssets: '媒體資產',
       search: '搜尋中...',
