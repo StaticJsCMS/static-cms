@@ -16,10 +16,10 @@ weight: 9
 | label_singular        | string                                                                                                                             | `label`   | _Optional_. singular label for certain elements in the editor                                                                                 |
 | description           | string                                                                                                                             |           | _Optional_. Text displayed below the label when viewing a collection                                                                          |
 | files or folder       | [Collection Files](/docs/collection-types#file-collections)<br />\| [Collection Folder](/docs/collection-types#folder-collections) |           | **Requires one of these**: Specifies the collection type and location; details in [Collection Types](/docs/collection-types)                  |
-| filter                | string                                                                                                                             |           | _Optional_. Filter for `folder` collections; details in [Collection Types](/docs/collection-types#filtered-folder-collections)                |
-| create                | string                                                                                                                             |           | **For `folder` collections only**<br /><ul><li>`true` - Allows users to create new items in the collection; defaults to `false`                                 |
-| hide                  | string                                                                                                                             |           | `true` hides a collection in the CMS UI; defaults to `false`. Useful when using the relation widget to hide referenced collections.           |
-| delete                | string                                                                                                                             |           | `false` prevents users from deleting items in a collection; defaults to `true`                                                                |
+| filter                | string                                                                                                                             |           | _Optional_. Filter for [Folder Collections](/docs/collection-types#folder-collections)                                                        |
+| create                | string                                                                                                                             | `false`   | **For [Folder Collections](/docs/collection-types#folder-collections) only**<br />`true` - Allows users to create new items in the collection |
+| hide                  | string                                                                                                                             | `false`   | `true` hides a collection in the CMS UI. Useful when using the relation widget to hide referenced collections                                 |
+| delete                | string                                                                                                                             | `true`    | `false` prevents users from deleting items in a collection                                                                                    |
 | extension             | string                                                                                                                             |           | See [extension](#extension-and-format) below                                                                                                  |
 | format                | string                                                                                                                             |           | See [format](#extension-and-format) below                                                                                                     |
 | frontmatter_delimiter | string                                                                                                                             |           | See [frontmatter_delimiter](#frontmatter_delimiter) below                                                                                     |
@@ -104,15 +104,7 @@ slug: '{{year}}-{{month}}-{{day}}_{{fields.slug}}'
 
 The `fields` option maps editor UI widgets to field-value pairs in the saved file. The order of the fields in your Static CMS `config.yml` file determines their order in the editor UI and in the saved file.
 
-`fields` accepts a list of collection objects, each with the following options:
-
-- `name` (required): unique identifier for the field, used as the key when referenced in other contexts (like the [relation widget](/docs/widgets/#relation))
-- `label`: label for the field in the editor UI; defaults to the value of `name`
-- `widget`: defines editor UI and inputs and file field data types; details in [Widgets](/docs/widgets)
-- `default`: specify a default value for a field; available for most widget types (see [Widgets](/docs/widgets) for details on each widget type). Please note that field default value only works for folder collection type.
-- `required`: specify as `false` to make a field optional; defaults to `true`
-- `pattern`: add field validation by specifying a list with a regex pattern and an error message; more extensive validation can be achieved with [custom widgets](/docs/custom-widgets/#advanced-field-validation)
-- `comment`: optional comment to add before the field (only supported for `yaml`)
+`fields` accepts a list of widgets. See [widgets](/docs/widgets) for more details.
 
 In files with frontmatter, one field should be named `body`. This special field represents the section of the document (usually markdown) that comes after the frontmatter.
 
@@ -132,15 +124,19 @@ fields:
 
 ### `editor`
 
-This setting changes options for the editor view of a collection or a file inside a files collection. It has one option so far:
+This setting changes options for the editor view of a collection or a file inside a files collection. It has the following options:
 
-- `preview`: set to `false` to disable the preview pane for this collection or file; defaults to `true`
+| Name    | Type    | Default | Description                                                                                                  |
+| ------- | ------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| preview | boolean | `true`  | Set to `false` to disable the preview pane for this collection or file                                       |
+| frame   | boolean | `true`  | <ul><li>`true` - Previews render in a frame</li><li>`false` - Previews render directly in your app</li></ul> |
 
 **Example:**
 
 ```yaml
 editor:
   preview: false
+  frame: false
 ```
 
 **Note**: Setting this as a top level configuration will set the default for all collections
