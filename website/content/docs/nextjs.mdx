@@ -166,27 +166,27 @@ Paste the following configuration into your `public/admin/config.yml` file:
 
 ```yaml
 backend:
-  title: git-gateway
+  name: git-gateway
   branch: main # Branch to update (optional; defaults to main)
 media_folder: public/img
 public_folder: img
 collections:
-  - title: "pages"
+  - name: "pages"
     label: "Pages"
     files:
     - label: "Home"
-      title: "home"
+      name: "home"
       file: "content/home.md"
       fields:
-        - { label: "Title", title: "title", widget: "string"}
-        - { label: "Publish Date", title: "date", widget: "datetime" }
-        - { label: "Body", title: "body", widget: "markdown"}
+        - { label: "Title", name: "title", widget: "string"}
+        - { label: "Publish Date", name: "date", widget: "datetime" }
+        - { label: "Body", name: "body", widget: "markdown"}
         - label: 'Cats'
-          title: "cats"
+          name: "cats"
           widget: list
           fields:
-            - { label: "Name", title: "name", widget: "string"}
-            - { label: "Description", title: "description", widget: "text"}
+            - { label: "Name", name: "name", widget: "string"}
+            - { label: "Description", name: "description", widget: "text"}
 ```
 
 Awesome! Static CMS should now be available at `localhost:3000/admin/index.html`. Unfortunately we can't edit our content just yet. First we need to move our code into a git repository, and create a new Netlify site.

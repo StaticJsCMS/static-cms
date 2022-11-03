@@ -19,9 +19,9 @@ To use the Cloudinary media library within Static CMS, you'll need to update you
 
 ```yaml
 media_library:
-  title: cloudinary
+  name: cloudinary
   config:
-    cloud_title: your_cloud_name
+    cloud_name: your_cloud_name
     api_key: your_api_key
 ```
 
@@ -73,7 +73,7 @@ instance of the Cloudinary widget.
 ```yaml
 # global
 media_library:
-  title: cloudinary
+  name: cloudinary
   output_filename_only: false
   config:
     default_transformations:
@@ -93,7 +93,7 @@ For example:
 # field
 fields: # The fields each document in this collection have
 - label: 'Cover Image'
-  title: 'image'
+  name: 'image'
   widget: 'image'
   required: false
   tagtitle: ''
@@ -116,11 +116,11 @@ If you prefer to provide direction so that images are transformed in a specific 
 ```yaml
 # global
 media_library:
-  title: cloudinary
+  name: cloudinary
   output_filename_only: true
 # field
 media_library:
-  title: cloudinary
+  name: cloudinary
   output_filename_only: true
 ```
 

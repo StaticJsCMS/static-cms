@@ -16,7 +16,7 @@ You can connect Static CMS to a local Git repository, instead of working with a 
 
 ```yaml
 backend:
-  title: git-gateway
+  name: git-gateway
 
 # when using the default proxy server port
 local_backend: true
@@ -42,7 +42,7 @@ PORT=8082
 
 ```yaml
 backend:
-  title: git-gateway
+  name: git-gateway
 
 local_backend:
   # when using a custom proxy server port
@@ -78,7 +78,7 @@ i18n:
 
 ```yaml
 collections:
-  - title: i18n_content
+  - name: i18n_content
     # same as the top level, but all fields are optional and defaults to the top level
     # can also be a boolean to accept the top level defaults
     i18n: true
@@ -88,20 +88,20 @@ When using a file collection, you must also enable i18n for each individual file
 
 ```yaml
 collections:
-  - title: pages
+  - name: pages
     label: Pages
     # Configure i18n for this collection.
     i18n:
       structure: single_file
       locales: [en, de, fr]
     files:
-      - title: about
+      - name: about
         label: About Page
         file: site/content/about.yml
         # Enable i18n for this file.
         i18n: true
         fields:
-          - { label: Title, title: title, widget: string, i18n: true }
+          - { label: Title, name: title, widget: string, i18n: true }
 ```
 
 ### Field level configuration
@@ -109,17 +109,17 @@ collections:
 ```yaml
 fields:
   - label: Title
-    title: title
+    name: title
     widget: string
     # same as 'i18n: translate'. Allows translation of the title field
     i18n: true
   - label: Date
-    title: date
+    name: date
     widget: datetime
     # The date field will be duplicated from the default locale.
     i18n: duplicate
   - label: Body
-    title: body
+    name: body
     # The markdown field will be omitted from the translation.
     widget: markdown
 ```
@@ -132,22 +132,22 @@ i18n:
   locales: [en, de, fr]
 
 collections:
-  - title: posts
+  - name: posts
     label: Posts
     folder: content/posts
     create: true
     i18n: true
     fields:
       - label: Title
-        title: title
+        name: title
         widget: string
         i18n: true
       - label: Date
-        title: date
+        name: date
         widget: datetime
         i18n: duplicate
       - label: Body
-        title: body
+        name: body
         widget: markdown
 ```
 
@@ -159,19 +159,19 @@ collections:
 
 ```yaml
 - label: 'Object'
-  title: 'object'
+  name: 'object'
   widget: 'object'
   i18n: true
   fields:
-    - { label: 'String', title: 'string', widget: 'string', i18n: true }
-    - { label: 'Date', title: 'date', widget: 'datetime', i18n: duplicate }
-    - { label: 'Boolean', title: 'boolean', widget: 'boolean', i18n: duplicate }
+    - { label: 'String', name: 'string', widget: 'string', i18n: true }
+    - { label: 'Date', name: 'date', widget: 'datetime', i18n: duplicate }
+    - { label: 'Boolean', name: 'boolean', widget: 'boolean', i18n: duplicate }
     - {
         label: 'Object',
-        title: 'object',
+        name: 'object',
         widget: 'object',
         i18n: true,
-        field: { label: 'String', title: 'string', widget: 'string', i18n: duplicate },
+        field: { label: 'String', name: 'string', widget: 'string', i18n: duplicate },
       }
 ```
 
@@ -210,7 +210,7 @@ For example, the following configuration will result in media files being saved 
 media_folder: static/media
 public_folder: /media
 collections:
-  - title: posts
+  - name: posts
     label: Posts
     label_singular: 'Post'
     folder: content/posts
@@ -219,10 +219,10 @@ collections:
     public_folder: ''
     fields:
       - label: Title
-        title: title
+        name: title
         widget: string
       - label: 'Cover Image'
-        title: 'image'
+        name: 'image'
         widget: 'image'
 ```
 
@@ -275,27 +275,27 @@ either a "carousel" or a "spotlight". Each type has a unique name and set of fie
 
 ```yaml
 - label: 'Home Section'
-  title: 'sections'
+  name: 'sections'
   widget: 'list'
   types:
     - label: 'Carousel'
-      title: 'carousel'
+      name: 'carousel'
       widget: object
       summary: '{{fields.header}}'
       fields:
-        - { label: Header, title: header, widget: string, default: 'Image Gallery' }
-        - { label: Template, title: template, widget: string, default: 'carousel.html' }
+        - { label: Header, name: header, widget: string, default: 'Image Gallery' }
+        - { label: Template, name: template, widget: string, default: 'carousel.html' }
         - label: Images
-          title: images
+          name: images
           widget: list
-          field: { label: Image, title: image, widget: image }
+          field: { label: Image, name: image, widget: image }
     - label: 'Spotlight'
-      title: 'spotlight'
+      name: 'spotlight'
       widget: object
       fields:
-        - { label: Header, title: header, widget: string, default: 'Spotlight' }
-        - { label: Template, title: template, widget: string, default: 'spotlight.html' }
-        - { label: Text, title: text, widget: text, default: 'Hello World' }
+        - { label: Header, name: header, widget: string, default: 'Spotlight' }
+        - { label: Template, name: template, widget: string, default: 'spotlight.html' }
+        - { label: Text, name: text, widget: text, default: 'Hello World' }
 ```
 
 ### Example Output
@@ -367,7 +367,7 @@ init()
 init({
   config: {
     backend: {
-      title: 'git-gateway',
+      name: 'git-gateway',
     },
   },
 })
@@ -383,17 +383,17 @@ init({
 init({
   config: {
     backend: {
-      title: 'git-gateway',
+      name: 'git-gateway',
     },
     load_config_file: false,
     media_folder: "static/images/uploads",
     public_folder: "/images/uploads",
     collections: [
-      { label: "Blog", title: "blog", folder: "_posts/blog", create: true, fields: [
-        { label: "Title", title: "title", widget: "string" },
-        { label: "Publish Date", title: "date", widget: "datetime" },
-        { label: "Featured Image", title: "thumbnail", widget: "image" },
-        { label: "Body", title: "body", widget: "markdown" },
+      { label: "Blog", name: "blog", folder: "_posts/blog", create: true, fields: [
+        { label: "Title", name: "title", widget: "string" },
+        { label: "Publish Date", name: "date", widget: "datetime" },
+        { label: "Featured Image", name: "thumbnail", widget: "image" },
+        { label: "Body", name: "body", widget: "markdown" },
       ]},
     ],
   },
@@ -447,7 +447,7 @@ Example config:
 
 ```yaml
 - label: 'Featured Image'
-  title: 'thumbnail'
+  name: 'thumbnail'
   widget: 'image'
   default: '/uploads/chocolate-dogecoin.jpg'
   media_library:
@@ -463,14 +463,14 @@ Example config:
 
 ```yaml
 collections:
-  - title: 'posts'
+  - name: 'posts'
     label: 'Posts'
     folder: '_posts'
     summary: "{{title | upper}} - {{date | date('YYYY-MM-DD')}} – {{body | truncate(20, '***')}}"
     fields:
-      - { label: 'Title', title: 'title', widget: 'string' }
-      - { label: 'Publish Date', title: 'date', widget: 'datetime' }
-      - { label: 'Body', title: 'body', widget: 'markdown' }
+      - { label: 'Title', name: 'title', widget: 'string' }
+      - { label: 'Publish Date', name: 'date', widget: 'datetime' }
+      - { label: 'Body', name: 'body', widget: 'markdown' }
 ```
 
 The above config will transform the title field to uppercase and format the date field using `YYYY-MM-DD` format.
@@ -484,7 +484,7 @@ Example usage:
 
 ```javascript
 CMS.registerEventListener({
-  title: 'prePublish',
+  name: 'prePublish',
   handler: ({ author, entry }) => console.info(JSON.stringify({ author, data: entry.data })),
 });
 ```
@@ -493,7 +493,7 @@ Supported events are `prePublish`, `postPublish`, `preSave` and `postSave`. The 
 
 ```javascript
 CMS.registerEventListener({
-  title: 'preSave',
+  name: 'preSave',
   handler: ({ entry }) => {
     return entry.data.set('title', 'new title');
   },
@@ -508,23 +508,23 @@ For example given the configuration:
 
 ```yaml
 collections:
-  - title: posts
+  - name: posts
     label: Posts
     folder: content/posts
     create: true
     fields:
       - label: Title
-        title: title
+        name: title
         widget: string
       - label: Object
-        title: object
+        name: object
         widget: object
         fields:
           - label: Title
-            title: title
+            name: title
             widget: string
       - label: body
-        title: body
+        name: body
         widget: markdown
 ```
 
@@ -543,7 +543,7 @@ Example configuration:
 
 ```yaml
 collections:
-  - title: pages
+  - name: pages
     label: Pages
     label_singular: 'Page'
     folder: content/pages
@@ -554,10 +554,10 @@ collections:
       summary: '{{title}}' # optional summary for a tree node, defaults to the inferred title field
     fields:
       - label: Title
-        title: title
+        name: title
         widget: string
       - label: Body
-        title: body
+        name: body
         widget: markdown
 ```
 

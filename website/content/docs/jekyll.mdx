@@ -49,15 +49,15 @@ Create a file `admin/config.yml` in the root of your repo - it should look like 
 # config.yml
 
 backend:
-  title: git-gateway
+  name: git-gateway
   branch: main # Branch to update (optional; defaults to main)
 media_folder: 'assets/uploads'
 collections:
-  - title: 'blog'
+  - name: 'blog'
     label: 'Blog'
     folder: '_posts/'
     fields:
-      - { title: Title }
+      - { name: Title }
 ```
 
 ### Enable authentication for CMS users
@@ -74,7 +74,7 @@ We'll start by updating the `blog` collection. Blogging is baked into Jekyll, an
 
 ```yaml
 collections:
-  - title: 'blog'
+  - name: 'blog'
     label: 'Blog'
     folder: '_posts/'
     create: true
@@ -82,10 +82,10 @@ collections:
     editor:
       preview: false
     fields:
-      - { label: 'Layout', title: 'layout', widget: 'hidden', default: 'post' }
-      - { label: 'Title', title: 'title', widget: 'string' }
-      - { label: 'Publish Date', title: 'date', widget: 'datetime' }
-      - { label: 'Body', title: 'body', widget: 'markdown' }
+      - { label: 'Layout', name: 'layout', widget: 'hidden', default: 'post' }
+      - { label: 'Title', name: 'title', widget: 'string' }
+      - { label: 'Publish Date', name: 'date', widget: 'datetime' }
+      - { label: 'Body', name: 'body', widget: 'markdown' }
 ```
 
 A few things to note.
@@ -176,18 +176,18 @@ then update `_layouts/author.html`, `_layouts/post.html` and `staff.html` accord
 Next, copy and paste the following into the collections array in `config.yml` below the `blog` collection.
 
 ```yaml
-- title: 'authors'
+- name: 'authors'
   label: 'Authors'
   folder: '_authors/'
   create: true
   editor:
     preview: false
   fields:
-    - { label: 'Layout', title: 'layout', widget: 'hidden', default: 'author' }
-    - { label: 'Short Name', title: 'name', widget: 'string' }
-    - { label: 'Display Name', title: 'display_name', widget: 'string' }
-    - { label: 'Position', title: 'position', widget: 'string' }
-    - { label: 'Body', title: 'body', widget: 'markdown' }
+    - { label: 'Layout', name: 'layout', widget: 'hidden', default: 'author' }
+    - { label: 'Short Name', name: 'name', widget: 'string' }
+    - { label: 'Display Name', name: 'display_name', widget: 'string' }
+    - { label: 'Position', name: 'position', widget: 'string' }
+    - { label: 'Body', name: 'body', widget: 'markdown' }
 ```
 
 Now that we have the `authors` collection configured, we can add an `author` field to the `blog` collection. We'll use the [relation widget](/docs/widgets/#relation) to define the relationship between blog posts and authors.
@@ -195,19 +195,19 @@ Now that we have the `authors` collection configured, we can add an `author` fie
 ```yaml
 # updated fields in blog collection configuration
 fields:
-  - { label: 'Layout', title: 'layout', widget: 'hidden', default: 'post' }
-  - { label: 'Title', title: 'title', widget: 'string' }
-  - { label: 'Publish Date', title: 'date', widget: 'datetime' }
+  - { label: 'Layout', name: 'layout', widget: 'hidden', default: 'post' }
+  - { label: 'Title', name: 'title', widget: 'string' }
+  - { label: 'Publish Date', name: 'date', widget: 'datetime' }
   - {
       label: 'Author',
-      title: 'author',
+      name: 'author',
       widget: 'relation',
       collection: 'authors',
       display_fields: [display_name],
       search_fields: [display_name],
       value_field: 'name',
     }
-  - { label: 'Body', title: 'body', widget: 'markdown' }
+  - { label: 'Body', name: 'body', widget: 'markdown' }
 ```
 
 With that configuration added, you should be able to select the author for a post from a dropdown.
@@ -219,18 +219,18 @@ Our Jekyll blog includes an About page. It would nice to be able to edit that pa
 Copy and paste the following into the collections array in `config.yml`
 
 ```yaml
-- title: 'pages'
+- name: 'pages'
   label: 'Pages'
   editor:
     preview: false
   files:
     - label: 'About Page'
-      title: 'about'
+      name: 'about'
       file: 'about.md'
       fields:
-        - { label: 'Title', title: 'title', widget: 'hidden', default: 'about' }
-        - { label: 'Layout', title: 'layout', widget: 'hidden', default: 'about' }
-        - { label: 'Body', title: 'body', widget: 'markdown' }
+        - { label: 'Title', name: 'title', widget: 'hidden', default: 'about' }
+        - { label: 'Layout', name: 'layout', widget: 'hidden', default: 'about' }
+        - { label: 'Body', name: 'body', widget: 'markdown' }
 ```
 
 ### Navigation
@@ -279,21 +279,21 @@ You'll need to update `_includes/navigation.html` accordingly. `{% for item in s
 Finally, add the following to the collections array in `config.yml`
 
 ```yaml
-- title: 'config'
+- name: 'config'
   label: 'Config'
   editor:
     preview: false
   files:
     - label: 'Navigation'
-      title: 'navigation'
+      name: 'navigation'
       file: '_data/navigation.yml'
       fields:
         - label: 'Navigation Items'
-          title: 'items'
+          name: 'items'
           widget: 'list'
           fields:
-            - { label: Name, title: name, widget: string }
-            - { label: Link, title: link, widget: string }
+            - { label: Name, name: name, widget: string }
+            - { label: Link, name: link, widget: string }
 ```
 
 Now you can add, rename, and rearrange the navigation items on your blog.

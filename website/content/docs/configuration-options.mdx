@@ -14,7 +14,7 @@ Alternatively, you can specify a custom config file using a link tag:
 <link href="path/to/config.yml" type="text/yaml" rel="cms-config-url">
 ```
 
-To see working configuration examples, you can [start from a template](/docs/start-with-a-template) or check out the [CMS demo site](https://cms-demo.netlify.com). (No login required: click the login button and the CMS will open.) You can refer to the demo [configuration code](https://github.com/StaticJsCMS/static-cms/blob/main/dev-test/config.yml) to see how each option was configured.
+To see working configuration examples, you can [start from a template](/docs/start-with-a-template) or check out the [CMS demo site](https://static-cms-demo.netlify.app). (No login required: click the login button and the CMS will open.) You can refer to the demo [configuration code](https://github.com/StaticJsCMS/static-cms/blob/main/dev-test/config.yml) to see how each option was configured.
 
 You can find details about all configuration options below. Note that [YAML syntax](https://en.wikipedia.org/wiki/YAML#Basic_components) allows lists and objects to be written in block or inline style, and the code samples below include a mix of both.
 
@@ -60,7 +60,7 @@ Media library integrations are configured via the `media_library` property, and 
 
 ```yaml
 media_library:
-  title: uploadcare
+  name: uploadcare
   config:
     publicKey: demopublickey
 ```
@@ -202,7 +202,7 @@ Static CMS expects every entry to provide a field named `"title"` that serves as
 
 ```yaml
 collections:
-  - title: posts
+  - name: posts
     identifier_field: name
 ```
 
@@ -284,12 +284,12 @@ In files with frontmatter, one field should be named `body`. This special field 
 ```yaml
 fields:
   - label: "Title"
-    title: "title"
+    name: "title"
     widget: "string"
     pattern: ['.{20,}', "Must have at least 20 characters"]
-  - {label: "Layout", title: "layout", widget: "hidden", default: "blog"}
-  - {label: "Featured Image", title: "thumbnail", widget: "image", required: false}
-  - {label: "Body", title: "body", widget: "markdown"}
+  - {label: "Layout", name: "layout", widget: "hidden", default: "blog"}
+  - {label: "Featured Image", name: "thumbnail", widget: "image", required: false}
+  - {label: "Body", name: "body", widget: "markdown"}
     comment: 'This is a multiline\ncomment'
 ```
 

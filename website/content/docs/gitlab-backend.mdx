@@ -1,8 +1,13 @@
 ---
-group: Accounts
+group: Backends
 title: GitLab
 weight: 40
 ---
+
+## Overview
+
+- **Name**: `gitlab`
+
 For repositories stored on GitLab, the `gitlab` backend allows CMS users to log in directly with their GitLab account. Note that all users must have push access to your content repository for this to work.
 
 **Note:** GitLab default branch is protected by default, thus typically requires `maintainer` permissions in order for users to have push access.
@@ -14,23 +19,40 @@ With GitLab's PKCE authorization, users can authenticate with GitLab directly fr
 1. Follow the [GitLab docs](https://docs.gitlab.com/ee/integration/oauth_provider.html#adding-an-application-through-the-profile) to add your Static CMS instance as an OAuth application and uncheck the **Confidential** checkbox. For the **Redirect URI**, enter the address where you access Static CMS, for example, `https://www.mysite.com/admin/`. For scope, select `api`.
 2. GitLab gives you an **Application ID**. Copy this ID and enter it in your Static CMS `config.yml` file, along with the following settings:
 
-   ```yaml
-   backend:
-     title: gitlab
-     repo: owner-name/repo-name # Path to your GitLab repository
-     auth_type: pkce # Required for pkce
-     app_id: your-app-id # Application ID from your GitLab settings
-   ```
+| Name      | Type   | Default | Description                              |
+| --------- | ------ | ------- | ---------------------------------------- |
+| auth_type | 'pkce' |         | The authorization method                 |
+| app_id    | string |         | Application ID from your GitLab settings |
 
-   You can also use PKCE Authorization with a self-hosted GitLab instance. This requires adding `api_root`, `base_url`, and `auth_endpoint` fields:
+### Example
 
-   ```yaml
-   backend:
-     title: gitlab
-     repo: owner-name/repo-name # Path to your GitLab repository
-     auth_type: pkce # Required for pkce
-     app_id: your-app-id # Application ID from your GitLab settings
-     api_root: https://my-hosted-gitlab-instance.com/api/v4
-     base_url: https://my-hosted-gitlab-instance.com
-     auth_endpoint: oauth/authorize
-   ```
+```yaml
+backend:
+  name: gitlab
+  repo: owner-name/repo-name # Path to your GitLab repository
+  auth_type: pkce # Required for pkce
+  app_id: your-app-id # Application ID from your GitLab settings
+```
+
+### Self-Hosted GitLab Instance
+
+You can also use PKCE Authorization with a self-hosted GitLab instance. This requires adding `api_root`, `base_url`, and `auth_endpoint` fields:
+
+| Name          | Type   | Default | Description                           |
+| ------------- | ------ | ------- | ------------------------------------- |
+| api_root      | string |         | Root API url for self-hosted instance |
+| base_url      | string |         | Root url for self-hosted instance     |
+| auth_endpoint | string |         | Auth endpoint on self-hosted instance |
+
+#### Example
+
+```yaml
+backend:
+  name: gitlab
+  repo: owner-name/repo-name # Path to your GitLab repository
+  auth_type: pkce # Required for pkce
+  app_id: your-app-id # Application ID from your GitLab settings
+  api_root: https://my-hosted-gitlab-instance.com/api/v4
+  base_url: https://my-hosted-gitlab-instance.com
+  auth_endpoint: oauth/authorize
+```

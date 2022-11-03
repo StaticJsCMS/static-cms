@@ -134,7 +134,7 @@ media_folder: source/images/uploads
 public_folder: /images/uploads
 
 collections:
-  - title: blog
+  - name: blog
     label: Blog
     folder: source/posts/
     extension: .html.md
@@ -142,9 +142,9 @@ collections:
     create: true
     slug: '{{year}}-{{month}}-{{day}}-{{title}}'
     fields:
-      - {label: Title, title: title, widget: string}
-      - {label: Publish Date, title: date, widget: datetime}
-      - {label: Body, title: body, widget: markdown}
+      - {label: Title, name: title, widget: string}
+      - {label: Publish Date, name: date, widget: datetime}
+      - {label: Body, name: body, widget: markdown}
 ```
 
 ### Push to GitHub

@@ -86,14 +86,14 @@ CMS.registerWidget('categories', CategoriesControl, CategoriesPreview, schema);
 
 ```yml
 collections:
-  - title: posts
+  - name: posts
     label: Posts
     folder: content/posts
     fields:
-      - title: title
+      - name: title
         label: Title
         widget: string
-      - title: categories
+      - name: categories
         label: Categories
         widget: categories
         separator: __
@@ -126,12 +126,12 @@ CMS.registerEditorComponent({
   // Fields the user need to fill out when adding an instance of the component
   fields: [
     {
-      title: 'summary',
+      name: 'summary',
       label: 'Summary',
       widget: 'string'
     },
     {
-      title: 'details',
+      name: 'details',
       label: 'Details',
       widget: 'markdown'
     }
@@ -479,19 +479,19 @@ import { Control, Preview } from '/docs/src'
 
 const config = {
 backend: {
- title: 'test-repo',
+ name: 'test-repo',
  login: false,
 },
 media_folder: 'assets',
 collections: [{
- title: 'test',
+ name: 'test',
  label: 'Test',
  files: [{
    file: 'test.yml',
-   title: 'test',
+   name: 'test',
    label: 'Test',
    fields: [
-     { title: 'test_widget', label: 'Test Widget', widget: 'test'},
+     { name: 'test_widget', label: 'Test Widget', widget: 'test'},
    ],
  }],
 }],

@@ -680,12 +680,9 @@ export interface SortableFields {
 
 export interface Backend {
   name: BackendType;
-  auth_scope?: AuthScope;
   repo?: string;
   branch?: string;
   api_root?: string;
-  api_version?: string;
-  tenant_id?: string;
   site_domain?: string;
   base_url?: string;
   auth_endpoint?: string;
@@ -697,6 +694,7 @@ export interface Backend {
   use_large_media_transforms_in_media_library?: boolean;
   identity_url?: string;
   gateway_url?: string;
+  auth_scope?: AuthScope;
   commit_messages?: {
     create?: string;
     update?: string;
