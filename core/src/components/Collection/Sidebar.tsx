@@ -57,9 +57,9 @@ const Sidebar = ({
           const iconName = collection.icon;
           let icon: ReactNode = <ArticleIcon />;
           if (iconName) {
-            const storedIcon = getIcon(iconName);
-            if (storedIcon) {
-              icon = storedIcon();
+            const StoredIcon = getIcon(iconName);
+            if (StoredIcon) {
+              icon = <StoredIcon />;
             }
           }
 
@@ -99,9 +99,9 @@ const Sidebar = ({
       Object.values(additionalLinks).map(({ id, title, data, options: { iconName } = {} }) => {
         let icon: ReactNode = <ArticleIcon />;
         if (iconName) {
-          const storedIcon = getIcon(iconName);
-          if (storedIcon) {
-            icon = storedIcon();
+          const StoredIcon = getIcon(iconName);
+          if (StoredIcon) {
+            icon = <StoredIcon />;
           }
         }
 

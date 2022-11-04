@@ -4,7 +4,7 @@ import type {
 } from '@toast-ui/editor/types/editor';
 import type { ToolbarItemOptions as MarkdownToolbarItemOptions } from '@toast-ui/editor/types/ui';
 import type { PropertiesSchema } from 'ajv/dist/types/json-schema';
-import type { ComponentType, ReactNode } from 'react';
+import type { FunctionComponent, ComponentType, ReactNode } from 'react';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
 import type { MediaFile as BackendMediaFile } from './backend';
 import type { EditorControlProps } from './components/Editor/EditorControlPane/EditorControl';
@@ -428,7 +428,7 @@ export interface LocalePhrasesRoot {
 }
 export type LocalePhrases = string | { [property: string]: LocalePhrases };
 
-export type CustomIcon = () => JSX.Element;
+export type CustomIcon = FunctionComponent;
 
 export type WidgetValueSerializer = {
   serialize: (value: ValueOrNestedValue) => ValueOrNestedValue;
@@ -751,13 +751,15 @@ export interface EventListener {
   handler: EventListenerHandler;
 }
 
+export interface AdditionalLinkOptions {
+  iconName?: string;
+}
+
 export interface AdditionalLink {
   id: string;
   title: string;
-  data: string | (() => JSX.Element);
-  options?: {
-    iconName?: string;
-  };
+  data: string | FunctionComponent;
+  options?: AdditionalLinkOptions;
 }
 
 export interface AuthenticationPageProps {
