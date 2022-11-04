@@ -94,4 +94,4 @@ const Icon = ({ type, direction, width, height, size = 'medium', className }: Ic
   );
 };
 
-export default styled(Icon)``;
+export default Icon;

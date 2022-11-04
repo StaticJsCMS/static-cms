@@ -3,8 +3,10 @@ import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import React from 'react';
 
-import { CopyToClipBoardButton, UploadButton } from './MediaLibraryButtons';
+import { CopyToClipBoardButton } from './MediaLibraryButtons';
 import MediaLibrarySearch from './MediaLibrarySearch';
+import { buttons, shadows, zIndex } from '../../components/UI/styles';
+import FileUploadButton from '../UI/FileUploadButton';
 
 import type { ChangeEvent, ChangeEventHandler, KeyboardEventHandler } from 'react';
 import type { MediaFile, TranslatedProps } from '../../interface';
@@ -25,6 +27,43 @@ const StyledDialogTitle = styled(DialogTitle)`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`;
+
+const UploadButton = styled(FileUploadButton)`
+  ${buttons.button};
+  ${buttons.default};
+  display: inline-block;
+  margin-left: 15px;
+  margin-right: 2px;
+
+  &[disabled] {
+    ${buttons.disabled};
+    cursor: default;
+  }
+
+  ${buttons.gray};
+  ${shadows.dropMain};
+  margin-bottom: 0;
+
+  span {
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  input {
+    height: 0.1px;
+    width: 0.1px;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: ${zIndex.zIndex0};
+    outline: none;
+  }
 `;
 
 export interface MediaLibraryTopProps {
