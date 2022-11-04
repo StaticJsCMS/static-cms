@@ -12,49 +12,61 @@ The Static CMS exposes a `window.CMS` global object that you can use to register
 
 The `registerPreviewTemplate` requires you to provide a React component. If you have a build process in place for your project, it is possible to integrate with this build process.
 
-However, although possible, it may be cumbersome or even impractical to add a React build phase. For this reason, Static CMS exposes two constructs globally to allow you to create components inline: `createClass` and `h` (alias for React.createElement).
+However, although possible, it may be cumbersome or even impractical to add a React build phase. For this reason, Static CMS exposes some constructs globally to allow you to create components inline: `h` (alias for React.createElement) as well some basic hooks (`useState`, `useMemo`, `useEffect`, `useCallback`).
+
+**NOTE**: `createClass` is still provided, allowing for the creation of react class components. However it has now been deprecated and will be removed in `v2.0.0`.
 
 ## Params
 
-| Param           | Type            | Description                                                                                                                                                                                                                          |
-| --------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| name            | string          | The name of the collection (or file for file collections) which this preview component will be used for<br /><ul><li>Folder collections: Use the name of the collection</li><li>File collections: Use the name of the file</li></ul> |
-| react_component | React.Component | A React component that renders the collection data. Six props will be passed to your component during render                                                                                                                         |
-| entry           | object          | Object with a `data` field that contains the current value of all widgets in the editor                                                                                                                                              |
-| document        | Document        | The document object the preview is within. If rendered with a frame, it will be the frame's document                                                                                                                                 |
-| window          | Window          | The window object the preview is within. If rendered with a frame, it will be the frame's window                                                                                                                                     |
-| getAsset        | Async function  | Function that given a url returns (as a promise) a loaded asset                                                                                                                                                                      |
-| widgetFor       | Function        | Given a field name, returns the rendered preview of that field's widget and value                                                                                                                                                    |
-| widgetsFor      | Function        | Given a field name, returns the rendered previews of that field's nested child widgets and values                                                                                                                                    |
+| Param           | Type     | Description                                                                                                                                                                                                                          |
+| --------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| name            | string   | The name of the collection (or file for file collections) which this preview component will be used for<br /><ul><li>Folder collections: Use the name of the collection</li><li>File collections: Use the name of the file</li></ul> |
+| react_component | React.FC | A React functional component that renders the collection data.                                                                                                                                                                       |
+
+The following parameters will be passed to your `react_component` during render:
+
+| Param      | Type           | Description                                                                                          |
+| ---------- | -------------- | ---------------------------------------------------------------------------------------------------- |
+| entry      | object         | Object with a `data` field that contains the current value of all widgets in the editor              |
+| document   | Document       | The document object the preview is within. If rendered with a frame, it will be the frame's document |
+| window     | Window         | The window object the preview is within. If rendered with a frame, it will be the frame's window     |
+| getAsset   | Async function | Function that given a url returns (as a promise) a loaded asset                                      |
+| widgetFor  | Function       | Given a field name, returns the rendered preview of that field's widget and value                    |
+| widgetsFor | Function       | Given a field name, returns the rendered previews of that field's nested child widgets and values    |
 
 ### Example
 
 ```html
-<script src="https://unpkg.com/@staticcms/core@%5E0.1.0/dist/static-cms-core.js"></script>
+<script src="https://unpkg.com/@staticcms/core@%5E1.0.0/dist/static-cms-core.js"></script>
 <script>
-  var PostPreview = createClass({
-    constructor() {
-      super();
-      this.state = { imageUrl: '' };
-    }
+  const PostPreview = ({ widgetFor, getAsset, entry }) => {
+    const [imageUrl, setImageUrl] = useState('');
+    const image = useMemo(() => entry.data.image, [entry.data.image]);
 
-    componentDidMount() {
-      var entry = this.props.entry;
-      var image = entry.data.image;
-      this.props.getAsset(image)
-        .then(asset => this.setState({ imageUrl: asset.toString() }));
-    }
+    useEffect(() => {
+      let alive = true;
 
-    render: function () {
-      var imageUrl = this.state.imageUrl;
-      return h(
-        'div',
-        {},
-        h('h1', {}, entry.data.title),
-        h('img', { src: imageUrl }),
-        h('div', { classtitle: 'text' }, this.props.widgetFor('body')),
-      );
-    },
+      const loadImage = async () => {
+        const imageAsset = await getAsset(image);
+        if (alive) {
+          setImageUrl(imageAsset.toString());
+        }
+      };
+
+      loadImage();
+
+      return () => {
+        alive = false;
+      };
+    }, [image]);
+
+    return h(
+      'div',
+      {},
+      h('h1', {}, entry.data.title),
+      h('img', { src: imageUrl }),
+      h('div', { classtitle: 'text' }, widgetFor('body')),
+    );
   });
 
   CMS.registerPreviewTemplate('posts', PostPreview);
@@ -69,45 +81,43 @@ The API for accessing the individual fields of list- and object-type entries is 
 
 ```html
 <script>
-  var AuthorsPreview = createClass({
-    // For list fields, the widgetFor function returns an array of objects
-    // that you can map over in your template. If our field is a list of
-    // authors containing two entries, with fields `name` and `description`,
-    // the return value of `widgetsFor` would look like this:
-    //
-    // [{
-    //   data: { title: 'Mathias', description: 'Co-Founder'},
-    //   widgets: { title: (<WidgetComponent>), description: (WidgetComponent>)}
-    // },
-    // {
-    //   data: { title: 'Chris', description: 'Co-Founder'},
-    //   widgets: { title: (<WidgetComponent>), description: (WidgetComponent>)}
-    // }]
-    //
-    // Templating would look something like this:
+  // For list fields, the widgetFor function returns an array of objects
+  // that you can map over in your template. If our field is a list of
+  // authors containing two entries, with fields `name` and `description`,
+  // the return value of `widgetsFor` would look like this:
+  //
+  // [{
+  //   data: { title: 'Mathias', description: 'Co-Founder'},
+  //   widgets: { title: (<WidgetComponent>), description: (WidgetComponent>)}
+  // },
+  // {
+  //   data: { title: 'Chris', description: 'Co-Founder'},
+  //   widgets: { title: (<WidgetComponent>), description: (WidgetComponent>)}
+  // }]
+  //
+  // Templating would look something like this:
+  const AuthorsPreview = ({ widgetsFor }) => {
+    return h(
+      'div',
+      {},
 
-    render: function () {
-      return h(
-        'div',
-        {},
+      // This is a static header that would only be rendered once for the entire list
+      h('h1', {}, 'Authors'),
 
-        // This is a static header that would only be rendered once for the entire list
-        h('h1', {}, 'Authors'),
+      // Here we provide a simple mapping function that will be applied to each
+      // object in the array of authors
+      widgetsFor('authors').map(function (author, index) {
+        return h(
+          'div',
+          { key: index },
+          h('hr', {}),
+          h('strong', {}, author.data.name),
+          author.widgets.description,
+        );
+      }),
+    );
+  };
 
-        // Here we provide a simple mapping function that will be applied to each
-        // object in the array of authors
-        this.props.widgetsFor('authors').map(function (author, index) {
-          return h(
-            'div',
-            { key: index },
-            h('hr', {}),
-            h('strong', {}, author.data.name),
-            author.widgets.description,
-          );
-        }),
-      );
-    },
-  });
   CMS.registerPreviewTemplate('authors', AuthorsPreview);
 </script>
 ```
@@ -116,36 +126,33 @@ The API for accessing the individual fields of list- and object-type entries is 
 
 ```html
 <script>
-  var GeneralPreview = createClass({
-    // Object fields are simpler than lists - instead of `widgetsFor` returning
-    // an array of objects, it returns a single object. Accessing the shape of
-    // that object is the same as the shape of objects returned for list fields:
-    //
-    // {
-    //   data: { front_limit: 0, author: 'Chris' },
-    //   widgets: { front_limit: (<WidgetComponent>), author: (WidgetComponent>)}
-    // }
-    render: function () {
-      var entry = this.props.entry;
-      var title = entry.data.site_title;
-      var posts = entry.data.posts;
+  // Object fields are simpler than lists - instead of `widgetsFor` returning
+  // an array of objects, it returns a single object. Accessing the shape of
+  // that object is the same as the shape of objects returned for list fields:
+  //
+  // {
+  //   data: { front_limit: 0, author: 'Chris' },
+  //   widgets: { front_limit: (<WidgetComponent>), author: (WidgetComponent>)}
+  // }
+  const GeneralPreview = ({ entry, widgetsFor }) => {
+    const title = entry.data.site_title;
+    const posts = entry.data.posts;
 
-      return h(
-        'div',
+    return h(
+      'div',
+      {},
+      h('h1', {}, title),
+      h(
+        'dl',
         {},
-        h('h1', {}, title),
-        h(
-          'dl',
-          {},
-          h('dt', {}, 'Posts on Frontpage'),
-          h('dd', {}, this.props.widgetsFor('posts').widgets.front_limit || 0),
+        h('dt', {}, 'Posts on Frontpage'),
+        h('dd', {}, widgetsFor('posts').widgets.front_limit || 0),
 
-          h('dt', {}, 'Default Author'),
-          h('dd', {}, this.props.widgetsFor('posts').data.author || 'None'),
-        ),
-      );
-    },
-  });
+        h('dt', {}, 'Default Author'),
+        h('dd', {}, widgetsFor('posts').data.author || 'None'),
+      ),
+    );
+  };
 
   CMS.registerPreviewTemplate('general', GeneralPreview);
 </script>

@@ -10,9 +10,11 @@ The Static CMS exposes a `window.CMS` a global object that you can use to regist
 
 ### React Components Inline
 
-The `registerWidget` requires you to provide a React component. If you have a build process in place for your project, it is possible to integrate with this build process.
+The `registerPreviewTemplate` requires you to provide a React component. If you have a build process in place for your project, it is possible to integrate with this build process.
 
-However, although possible, it may be cumbersome or even impractical to add a React build phase. For this reason, Static CMS exposes two constructs globally to allow you to create components inline: `createClass` and `h` (alias for React.createElement).
+However, although possible, it may be cumbersome or even impractical to add a React build phase. For this reason, Static CMS exposes some constructs globally to allow you to create components inline: `h` (alias for React.createElement) as well some basic hooks (`useState`, `useMemo`, `useEffect`, `useCallback`).
+
+**NOTE**: `createClass` is still provided, allowing for the creation of react class components. However it has now been deprecated and will be removed in `v2.0.0`.
 
 ## Register Widget
 
@@ -125,37 +127,35 @@ Register widget takes an optional object of options. These options include:
 ```html
 <script src="https://unpkg.com/@staticcms/core@%5E1.0.0/dist/static-cms-core.js"></script>
 <script>
-  var CategoriesControl = createClass({
-    handleChange: function (e) {
-      const separator = this.props.field.separator ?? ', ';
-      this.props.onChange(e.target.value.split(separator).map(e => e.trim()));
-    },
+  const CategoriesControl = ({ label, value, field, onChange }) => {
+    const separator = useMemo(() => field.separator ?? ', ', [field.separator]);
 
-    render: function () {
-      const separator = this.props.field.separator ?? ', ';
-      var value = this.props.value;
-      return h('input', {
-        id: this.props.forID,
+    const handleChange = useCallback((e) => {
+      onChange(e.target.value.split(separator).map(e => e.trim()));
+    }, [separator, onChange]);
+
+    return h('div', {}, {
+      h('label', { for: 'inputId' }, label),
+      h('input', {
+        id: 'inputId',
         type: 'text',
         value: value ? value.join(separator) : '',
         onChange: this.handleChange,
-      });
-    },
-  });
+      })
+    });
+  };
 
-  var CategoriesPreview = createClass({
-    render: function () {
-      return h(
-        'ul',
-        {},
-        this.props.value.map(function (val, index) {
-          return h('li', { key: index }, val);
-        }),
-      );
-    },
-  });
+  const CategoriesPreview = ({ value }) => {
+    return h(
+      'ul',
+      {},
+      value.map(function (val, index) {
+        return h('li', { key: index }, val);
+      }),
+    );
+  };
 
-  var schema = {
+  const schema = {
     properties: {
       separator: { type: 'string' },
     },

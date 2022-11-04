@@ -21,6 +21,7 @@ if (typeof window !== 'undefined') {
   window.useState = window.useState || React.useState;
   window.useMemo = window.useMemo || React.useMemo;
   window.useEffect = window.useEffect || React.useEffect;
+  window.useCallback = window.useCallback || React.useCallback;
   window.h = window.h || React.createElement;
 }
 

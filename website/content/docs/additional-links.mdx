@@ -1,6 +1,6 @@
 ---
 group: Customization
-title: External Links
+title: Custom Links & Pages
 weight: 60
 ---
 
@@ -8,16 +8,24 @@ weight: 60
 
 The Static CMS exposes a `window.CMS` global object that you can use to register external links or links custom pages, via `registerAdditionalLink`. The links are displayed at the bottom of the navigation menu in the order they are registered.
 
+### React Components Inline
+
+The `registerPreviewTemplate` requires you to provide a React component. If you have a build process in place for your project, it is possible to integrate with this build process.
+
+However, although possible, it may be cumbersome or even impractical to add a React build phase. For this reason, Static CMS exposes some constructs globally to allow you to create components inline: `h` (alias for React.createElement) as well some basic hooks (`useState`, `useMemo`, `useEffect`, `useCallback`).
+
+**NOTE**: `createClass` is still provided, allowing for the creation of react class components. However it has now been deprecated and will be removed in `v2.0.0`.
+
 ## Params
 
 `registerAdditionalLink` takes an `AdditionalLink` object with the following properties:
 
-| Param   | Type                      | Description                         |
-| ------- | ------------------------- | ----------------------------------- |
-| id      | string                    | Unique identifier for the link      |
-| title   | string                    | Display text for the link           |
-| data    | string or React.Component | Display text for the link           |
-| options | object                    | _Optional_. See [Options](#options) |
+| Param   | Type               | Description                                                                                                                   |
+| ------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| id      | string             | Unique identifier for the link                                                                                                |
+| title   | string             | Display text for the link                                                                                                     |
+| data    | string or React.FC | <ul><li>`string` - The href for the link</li><li>`React.FC` - A react component to render on the route `/page/[id]`</li></ul> |
+| options | object             | _Optional_. See [Options](#options)                                                                                           |
 
 ### Options
 
@@ -26,3 +34,35 @@ Available options for each additional link are:
 | Param    | Type   | Description                                                                             |
 | -------- | ------ | --------------------------------------------------------------------------------------- |
 | iconName | string | The name of a custom registered icon to display. See [Custom Icons](/docs/custom-icons) |
+
+## Examples
+
+### External Links
+
+```js
+CMS.registerAdditionalLink({
+  id: 'example',
+  title: 'Example.com',
+  data: 'https://example.com',
+  options: {
+    icon: 'page',
+  },
+});
+```
+
+### Custom Page
+
+```js
+const CustomPage = () => {
+  return h('div', {}, 'I am a custom page!');
+};
+
+CMS.registerAdditionalLink({
+  id: 'custom-page',
+  title: 'Custom Page',
+  data: CustomPage,
+  options: {
+    icon: 'page',
+  },
+});
+```

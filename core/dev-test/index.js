@@ -92,6 +92,10 @@ const RelationKitchenSinkPostPreview = ({ fieldsMetaData }) => {
     : null;
 };
 
+const CustomPage = () => {
+  return h('div', {}, 'I am a custom page!');
+};
+
 CMS.registerPreviewStyle('.toastui-editor-contents h1 { color: blue }', { raw: true });
 CMS.registerPreviewTemplate('posts', PostPreview);
 CMS.registerPreviewTemplate('general', GeneralPreview);
@@ -102,6 +106,14 @@ CMS.registerAdditionalLink({
   id: 'example',
   title: 'Example.com',
   data: 'https://example.com',
+  options: {
+    icon: 'page',
+  },
+});
+CMS.registerAdditionalLink({
+  id: 'custom-page',
+  title: 'Custom Page',
+  data: CustomPage,
   options: {
     icon: 'page',
   },

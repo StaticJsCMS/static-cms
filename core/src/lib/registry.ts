@@ -358,6 +358,7 @@ export function getAdditionalLinks(): Record<string, AdditionalLink> {
 }
 
 export function getAdditionalLink(id: string): AdditionalLink | undefined {
+  console.log('additionalLinks', registry.additionalLinks);
   return registry.additionalLinks[id];
 }
 
