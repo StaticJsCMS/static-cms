@@ -10,7 +10,7 @@ const StyledTableContainer = styled(TableContainer)(
       color: ${theme.palette.text.secondary};
     }
 
-    & td:nth-of-type(2) {
+    & td:nth-of-type(2):not(:last-of-type) {
       color:
         ${theme.palette.mode === 'light' ? '#751365' : '#ffb6ec'};
     }
