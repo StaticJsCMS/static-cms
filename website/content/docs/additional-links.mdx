@@ -20,12 +20,12 @@ However, although possible, it may be cumbersome or even impractical to add a Re
 
 `registerAdditionalLink` takes an `AdditionalLink` object with the following properties:
 
-| Param   | Type               | Description                                                                                                                   |
-| ------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| id      | string             | Unique identifier for the link                                                                                                |
-| title   | string             | Display text for the link                                                                                                     |
-| data    | string or React.FC | <ul><li>`string` - The href for the link</li><li>`React.FC` - A react component to render on the route `/page/[id]`</li></ul> |
-| options | object             | _Optional_. See [Options](#options)                                                                                           |
+| Param   | Type                                                                                          | Description                                                                                                                                   |
+| ------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| id      | string                                                                                        | Unique identifier for the link                                                                                                                |
+| title   | string                                                                                        | Display text for the link                                                                                                                     |
+| data    | string<br />\| [React Function Component](https://reactjs.org/docs/components-and-props.html) | <ul><li>`string` - The href for the link</li><li>`React Function Component` - A react component to render on the route `/page/[id]`</li></ul> |
+| options | object                                                                                        | _Optional_. See [Options](#options)                                                                                                           |
 
 ### Options
 
