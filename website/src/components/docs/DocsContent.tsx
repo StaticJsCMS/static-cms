@@ -53,13 +53,17 @@ const DocsContent = styled('div')(
       font-weight: 500;
       margin-top: 28px;
       margin-bottom: 12px;
+      position: relative;
     }
 
-    & h3,
+    & h3 {
+      color: ${theme.palette.text.primary};
+    }
+
     & h4,
     & h5,
     & h6 {
-      color: ${theme.palette.text.primary};
+      color: ${theme.palette.text.secondary};
     }
 
     ${theme.breakpoints.up('lg')} {
@@ -273,13 +277,6 @@ const DocsContent = styled('div')(
     }
 
     ${theme.breakpoints.down('md')} {
-      & h2,
-      & h3,
-      & h4,
-      & h5 {
-        position: relative;
-      }
-
       & h2::before {
         display: block;
       }

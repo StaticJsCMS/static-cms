@@ -3,18 +3,20 @@ group: Customization
 title: Creating Custom Widgets
 weight: 40
 ---
-The Static CMS exposes a `window.CMS` a global object that you can use to register custom widgets, previews, and editor plugins. The same object is also the default export if you import Static CMS as an npm module. The available widget extension methods are:
 
-* **registerWidget:** registers a custom widget.
-* **registerEditorComponent:** adds a block component to the Markdown editor.
+## Overview
 
-### Writing React Components inline
+The Static CMS exposes a `window.CMS` a global object that you can use to register custom widgets. The same object is also the default export if you import Static CMS as an npm module. The available widget extension methods are:
+
+- **registerWidget:** registers a custom widget.
+
+### React Components Inline
 
 The `registerWidget` requires you to provide a React component. If you have a build process in place for your project, it is possible to integrate with this build process.
 
 However, although possible, it may be cumbersome or even impractical to add a React build phase. For this reason, Static CMS exposes two constructs globally to allow you to create components inline: `createClass` and `h` (alias for React.createElement).
 
-## `registerWidget`
+## Register Widget
 
 Register a custom widget.
 
@@ -27,58 +29,118 @@ import CMS from '@staticcms/core';
 CMS.registerWidget(name, control, [preview], [schema]);
 ```
 
-**Params:**
+### Params
 
-| Param       | Type                           | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| ----------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`      | `string`                       | Widget name, allows this widget to be used via the field `widget` property in config                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| `control`   | `React.Component` or `string`  | <ul><li>React component that renders the control, receives the following props: <ul><li>**value:** Current field value</li><li>**field:** Immutable map of current field configuration</li><li>**forID:** Unique identifier for the field</li><li>**classNameWrapper:** class name to apply CMS styling to the field</li><li>**onChange:** Callback function to update the field value</li></ul></li><li>Name of a registered widget whose control should be used (includes built in widgets).</li></ul> |
-| [`preview`] | `React.Component`, optional    | Renders the widget preview, receives the following props: <ul><li>**value:** Current preview value</li><li>**field:** Immutable map of current field configuration</li><li>**getAsset:** Function for retrieving an asset url for image/file fields</li><li>**entry:** Immutable Record of all entry data</li></ul>                              |
-| [`schema`]  | `JSON Schema object`, optional | Enforces a schema for the widget's field configuration                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| Param   | Type                           | Description                                                                                                                                                                                                                                                                                                                     |
+| ------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| name    | string                         | Widget name, allows this widget to be used via the field `widget` property in config                                                                                                                                                                                                                                            |
+| control | React.Component<br />\| string | <ul><li>`React.Component` - The react component that renders the control. See [Control Component](#control-component)</li><li>`string` - Name of a registered widget whose control should be used (includes built in widgets).</li></ul>                                                                                        |
+| preview | React.Component                | _Optional_. Renders the widget preview, receives the following props: <ul><li>**value:** Current preview value</li><li>**field:** Immutable map of current field configuration</li><li>**getAsset:** Function for retrieving an asset url for image/file fields</li><li>**entry:** Immutable Record of all entry data</li></ul> |
+| options | object                         | _Optional_. Widget options. See [Options](#options)                                                                                                                                                                                                                                                                             |
 
-**Example:**
+### Control Component
+
+The react component that renders the control. It receives the following props:
+
+| Param               | Type                     | Description                                                                                               |
+| ------------------- | ------------------------ | --------------------------------------------------------------------------------------------------------- |
+| label               | string                   | The label for the widget                                                                                  |
+| value               | An valid widget value    | The current value of the widget                                                                           |
+| onChange            | function                 | Function to be called when the value changes. Accepts a valid widget value                                |
+| field               | object                   | The field configuration for the current widget. See [Widget Options](/docs/widgets#common-widget-options) |
+| collection          | object                   | The collection configuration for the current widget. See [Collections](/docs/collection-overview)         |
+| config              | object                   | The current Static CMS config. See [configuration options](/docs/configuration-options)                   |
+| entry               | object                   | Object with a `data` field that contains the current value of all widgets in the editor                   |
+| path                | string                   | `.` separated string donating the path to the current widget within the entry                             |
+| hasErrors           | boolean                  | Specifies if there are validation errors with the current widget                                          |
+| fieldsErrors        | object                   | Key/value object of field names mapping to validation errors                                              |
+| isDisabled          | boolean                  | Specifies if the widget control should be disabled                                                        |
+| submitted           | boolean                  | Specifies if a save attempt has been made in the editor session                                           |
+| forList             | boolean                  | Specifices if the widget is within a `list` widget                                                        |
+| isFieldDuplicate    | function                 | Function that given a field configuration, returns if that field is a duplicate                           |
+| isFieldHidden       | function                 | Function that given a field configuration, returns if that field is hidden                                |
+| getAsset            | Async function           | Function that given a url returns (as a promise) a loaded asset                                           |
+| locale              | string<br />\| undefined | The current locale of the editor                                                                          |
+| mediaPaths          | object                   | Key/value object of control IDs (passed to the media library) mapping to media paths                      |
+| clearMediaControl   | function                 | Clears a control ID's value from the internal store                                                       |
+| openMediaLibrary    | function                 | Opens the media library popup. See [Open Media Library](#open-media-library)                              |
+| removeInsertedMedia | function                 | Removes draft media for a give control ID                                                                 |
+| removeMediaControl  | function                 | Clears a control ID completely from the internal store                                                    |
+| query               | function                 | Runs a search on another collection. See [Query](#query)                                                  |
+| i18n                | object                   | The current i18n settings                                                                                 |
+| t                   | function                 | Translates a given key to the current locale                                                              |
+
+#### Open Media Library
+
+`openMediaLibrary` allows you to open up the media library popup. It accepts the following props:
+
+| Param         | Type                        | Default | Description                                                                                                              |
+| ------------- | --------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------ |
+| controlID     | string                      |         | _Optional_ A unique identifier to which the uploaded media will be linked                                                |
+| forImage      | boolean                     | `false` | _Optional_ If `true`, restricts upload to image files only                                                               |
+| value         | string<br />list of strings |         | _Optional_ The current selected media value                                                                              |
+| allowMultiple | boolean                     |         | _Optional_ Allow multiple files or images to be uploaded at once. Only used on media libraries that support multi upload |
+| replaceIndex  | number                      |         | _Optional_ The index of the image in an list. Ignored if ` allowMultiple` is `false`                                     |
+| config        | object                      |         | _Optional_ Media library config options. Available options depend on the media library being used                        |
+| field         | object                      |         | _Optional_ The current field configuration                                                                               |
+
+#### Query
+
+`query` allows you to search the entries of a given collection. It accepts the following props:
+
+| Param          | Type            | Default | Description                                                                            |
+| -------------- | --------------- | ------- | -------------------------------------------------------------------------------------- |
+| namespace      | string          |         | Unique identifier for search                                                           |
+| collectionName | string          |         | The collection to be searched                                                          |
+| searchFields   | list of strings |         | The Fields to be searched within the target collection                                 |
+| searchTerm     | string          |         | The term to search with                                                                |
+| file           | string          |         | _Optional_ The file in a file collection to search. Ignored on folder collections      |
+| limit          | string          |         | _Optional_ The number of results to return. If not specified, all results are returned |
+
+### Example
 
 `admin/index.html`
 
 ```html
-<script src="https://unpkg.com/@staticcms/core@%5E0.1.0/dist/static-cms-core.js"></script>
+<script src="https://unpkg.com/@staticcms/core@%5E1.0.0/dist/static-cms-core.js"></script>
 <script>
-var CategoriesControl = createClass({
-  handleChange: function(e) {
-    const separator = this.props.field.get('separator', ', ')
-    this.props.onChange(e.target.value.split(separator).map((e) => e.trim()));
-  },
+  var CategoriesControl = createClass({
+    handleChange: function (e) {
+      const separator = this.props.field.separator ?? ', ';
+      this.props.onChange(e.target.value.split(separator).map(e => e.trim()));
+    },
 
-  render: function() {
-    const separator = this.props.field.get('separator', ', ');
-    var value = this.props.value;
-    return h('input', {
-      id: this.props.forID,
-      classtitle: this.props.classNameWrapper,
-      type: 'text',
-      value: value ? value.join(separator) : '',
-      onChange: this.handleChange,
-    });
-  },
-});
+    render: function () {
+      const separator = this.props.field.separator ?? ', ';
+      var value = this.props.value;
+      return h('input', {
+        id: this.props.forID,
+        type: 'text',
+        value: value ? value.join(separator) : '',
+        onChange: this.handleChange,
+      });
+    },
+  });
 
-var CategoriesPreview = createClass({
-  render: function() {
-    return h('ul', {},
-      this.props.value.map(function(val, index) {
-        return h('li', {key: index}, val);
-      })
-    );
-  }
-});
+  var CategoriesPreview = createClass({
+    render: function () {
+      return h(
+        'ul',
+        {},
+        this.props.value.map(function (val, index) {
+          return h('li', { key: index }, val);
+        }),
+      );
+    },
+  });
 
-var schema = {
-  properties: {
-    separator: { type: 'string' },
-  },
-}
+  var schema = {
+    properties: {
+      separator: { type: 'string' },
+    },
+  };
 
-CMS.registerWidget('categories', CategoriesControl, CategoriesPreview, schema);
+  CMS.registerWidget('categories', CategoriesControl, CategoriesPreview, options: { schema });
 </script>
 ```
 
@@ -99,465 +161,68 @@ collections:
         separator: __
 ```
 
-## `registerEditorComponent`
+### Options
 
-Register a block level component for the Markdown editor:
+Register widget takes an optional object of options. These options include:
 
-```js
-CMS.registerEditorComponent(definition)
-```
-
-**Params**
-
-* **definition:** The component definition; must specify: id, label, fields, patterns, fromBlock, toBlock, toPreview
-
-> Additional properties are optional and will be passed to the underlying widget control (object widget by default). For example, adding a `collapsed: true` property will collapse the widget by default.
-
-**Example:**
-
-```html
-<script src="https://unpkg.com/@staticcms/core@%5E0.1.0/dist/static-cms-core.js"></script>
-<script>
-CMS.registerEditorComponent({
-  // Internal id of the component
-  id: "collapsible-note",
-  // Visible label
-  label: "Collapsible Note",
-  // Fields the user need to fill out when adding an instance of the component
-  fields: [
-    {
-      name: 'summary',
-      label: 'Summary',
-      widget: 'string'
-    },
-    {
-      name: 'details',
-      label: 'Details',
-      widget: 'markdown'
-    }
-  ],
-  // Regex pattern used to search for instances of this block in the markdown document.
-  // Patterns are run in a multline environment (against the entire markdown document),
-  // and so generally should make use of the multiline flag (`m`). If you need to capture
-  // newlines in your capturing groups, you can either use something like
-  // `([\S\s]*)`, or you can additionally enable the "dot all" flag (`s`),
-  // which will cause `(.*)` to match newlines as well.
-  //
-  // Additionally, it's recommended that you use non-greedy capturing groups (e.g.
-  // `(.*?)` vs `(.*)`), especially if matching against newline characters.
-  pattern: /^<details>$\s*?<summary>(.*?)<\/summary>\n\n(.*?)\n^<\/details>$/ms,
-  // Given a RegExp Match object
-  // (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match#return_value),
-  // return an object with one property for each field defined in `fields`.
-  //
-  // This is used to populate the custom widget in the markdown editor in the CMS.
-  fromBlock: function(match) {
-    return {
-      summary: match[1],
-      detail: match[2]
-    };
-  },
-  // Given an object with one property for each field defined in `fields`,
-  // return the string you wish to be inserted into your markdown.
-  //
-  // This is used to serialize the data from the custom widget to the
-  // markdown document
-  toBlock: function(data) {
-    return `
-<details>
-  <summary>${data.summary}</summary>
-
-  ${data.detail}
-
-</details>
-`;
-  },
-  // Preview output for this component. Can either be a string or a React component
-  // (component gives better render performance)
-  toPreview: function(data) {
-    return `
-<details>
-  <summary>${data.summary}</summary>
-
-  ${data.detail}
-
-</details>
-`;
-  }
-});
-</script>
-```
-
-**Result:**
-
-![youtube-widget](/img/youtube-widget.webp)
+| Param         | Type               | Description                                                                                                             |
+| ------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| validator     | function           | _Optional_. Validates the value of the widget                                                                           |
+| getValidValue | string             | _Optional_. Given the current value, returns a valid value. See [Advanced field validation](#advanced-field-validation) |
+| schema        | JSON Schema object | _Optional_. Enforces a schema for the widget's field configuration                                                      |
 
 ## Advanced field validation
 
 All widget fields, including those for built-in widgets, [include basic validation](/docs/widgets/#common-widget-options) capability using the `required` and `pattern` options.
 
-With custom widgets, the widget control can also optionally implement an `isValid` method to perform custom validations, in addition to presence and pattern. The `isValid` method will be automatically called, and it can return either a boolean value, an object with an error message or a promise. Examples:
+With custom widgets, the widget can also optionally pass in a `validator` method to perform custom validations, in addition to presence and pattern. The `validator` function will be automatically called, and it can return either a `boolean` value, an `object` with a type and error message or a promise.
 
-**Boolean**
-No errors:
+### Examples
 
-```javascript
-  isValid = () => {
-    // Do internal validation
-    return true;
-  };
-```
-
-Existing error:
+#### No Errors
 
 ```javascript
-  isValid = () => {
-    // Do internal validation
-    return false;
-  };
-```
-
-**Object with `error` (useful for returning custom error messages)**
-Existing error:
-
-```javascript
-  isValid = () => {
-    // Do internal validation
-    return { error: { message: 'Your error message.' } };
-  };
-```
-
-**Promise**
-You can also return a promise from `isValid`. While the promise is pending, the widget will be marked as "in error". When the promise resolves, the error is automatically cleared.
-
-```javascript
-  isValid = () => {
-    return this.existingPromise;
-  };
-```
-
-**Note:** Do not create a promise inside `isValid` - `isValid` is called right before trying to persist. This means that even if a previous promise was already resolved, when the user hits 'save', `isValid` will be called again. If it returns a new promise, it will be immediately marked as "in error" until the new promise resolves.
-
-## Writing custom widgets as a separate package
-
-Widgets are inputs for the Static CMS editor interface. It's a React component that receives user input and outputs a serialized value. Those are the only rules - the component can be extremely simple, like text input, or extremely complicated, like a full-blown markdown editor. They can make calls to external services, and generally do anything that JavaScript can do.
-
-For writing custom widgets as a separate package you should follow these steps:
-
-1. Create a directory
-
-   ```javascript
-   mkdir my-custom-widget
-   ```
-2. Navigate to the directory
-
-   ```javascript
-   cd my-custom-widget
-   ```
-3. For setting up a new npm package run this command:
-
-   ```javascript
-   npm init
-   ```
-4. Answer the questions in the command line questionnaire.
-5. In order to build React components, we need to set up a build step. We'll be using Webpack. Please run the following commands to install the required dependencies:
-
-```javascript
-   npm install --save-dev @staticcms/core babel-loader@7 babel-core babel-plugin-transform-class-properties babel-plugin-transform-export-extensions babel-plugin-transform-object-rest-spread babel-preset-env babel-preset-react cross-env css-loader html-webpack-plugin react source-map-loader style-loader webpack webpack-cli webpack-serve
-```
-
-```javascript
-   npm install --save prop-types
-```
-
-And you should manually add "**peerDependencies**" and "**scripts**" as shown below.
-
-Here is the content of `package.json` that you will have at the end:
-
-```javascript
-{
-  "name": "static-cms-widget-starter",
-  "description": "A boilerplate for creating Static CMS widgets.",
-  "author": "name of developer",
-  "keywords": [
-    "simple",
-    "static-cms",
-    "cms",
-    "widget",
-    "starter",
-    "boilerplate"
-  ],
-  "version": "0.0.1",
-  "homepage": "https://github.com/StaticJsCMS/static-cms-widget-starter",
-  "license": "MIT",
-  "main": "dist/main.js",
-  "devDependencies": {
-    "@staticcms/core": "^0.1.0",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-export-extensions": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
-    "cross-env": "^5.1.4",
-    "css-loader": "^0.28.11",
-    "html-webpack-plugin": "^3.2.0",
-    "react": "^16.3.2",
-    "source-map-loader": "^0.2.3",
-    "style-loader": "^0.20.3",
-    "webpack": "^4.6.0",
-    "webpack-cli": "^2.0.14",
-    "webpack-serve": "^0.3.1"
-  },
-  "dependencies": {
-    "prop-types": "^15.6.1"
-  },
-  "peerDependencies": {
-    "react": "^16"
-  },
-  "scripts": {
-    "start": "webpack-serve --static public --open"
-  }
-}
-```
-
-5. Create a Webpack configuration file with this content:
-
-   `webpack.config.js`
-
-   ```javascript
-   const path = require('path')
-   const HtmlWebpackPlugin = require('html-webpack-plugin')
-
-   const developmentConfig = {
-     mode: 'development',
-     entry: './dev/index.js',
-     output: {
-       path: path.resolve(__dirname, 'public'),
-     },
-     optimization: { minimize: false },
-     module: {
-       rules: [
-         {
-           test: /\.js$/,
-           loader: 'source-map-loader',
-           enforce: 'pre',
-         },
-         {
-           test: /\.jsx?$/,
-           exclude: /node_modules/,
-           loader: 'babel-loader',
-         },
-         {
-           test: /\.css$/,
-           use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
-         },
-       ],
-     },
-     plugins: [
-       new HtmlWebpackPlugin(),
-     ],
-     devtool: 'eval-source-map',
-   }
-
-   const productionConfig = {
-     mode: 'production',
-     module: {
-       rules: [
-         {
-           test: /\.jsx?$/,
-           loader: 'babel-loader',
-         },
-       ],
-     },
-     devtool: 'source-map',
-   }
-
-   module.exports = process.env.NODE_ENV === 'production' ? productionConfig : developmentConfig
-   ```
-6. The `.babelrc` file is our local configuration for our code in the project. You should create it under the root of the application repo. It will affect all files that Babel processes. So, create a `.babelrc` file under the main project with this content:
-
-```javascript
-{
-  "presets": [
-    "react",
-    "env",
-  ],
-  "plugins": [
-    "transform-export-extensions",
-    "transform-class-properties",
-    "transform-object-rest-spread",
-  ],
-}
-```
-
-7. Create a `src` directory with the files `Control.js`, `Preview.js` and `index.js`
-
-`src/Control.js`
-
-```javascript
- import PropTypes from 'prop-types';
- import React from 'react';
-
- export default class Control extends React.Component {
-   static propTypes = {
-     onChange: PropTypes.func.isRequired,
-     forID: PropTypes.string,
-     value: PropTypes.node,
-     classNameWrapper: PropTypes.string.isRequired,
-   }
-
-   static defaultProps = {
-     value: '',
-   }
-
-   render() {
-     const {
-       forID,
-       value,
-       onChange,
-       classNameWrapper,
-     } = this.props;
-
-     return (
-       <input
-         type="text"
-         id={forID}
-         className={classNameWrapper}
-         value={value || ''}
-         onChange={e => onChange(e.target.value)}
-       />
-     );
-   }
- }
-```
-
-`src/Preview.js`
-
-```javascript
-import PropTypes from 'prop-types';
-import React from 'react';
-
-export default function Preview({ value }) {
-  return <div>{ value }</div>;
-}
-
-Preview.propTypes = {
-  value: PropTypes.node,
+const validator = () => {
+  // Do internal validation
+  return true;
 };
 ```
 
-`src/index.js`
+#### Has Error
 
 ```javascript
-import Control from './Control'
-import Preview from './Preview'
-
-if (typeof window !== 'undefined') {
-  window.Control = Control
-  window.Preview = Preview
-}
-
-export { Control, Preview }
+const validator = () => {
+  // Do internal validation
+  return false;
+};
 ```
 
-8. Now you need to set up the locale example site.
-   Under the main project, create a `dev` directory with the files `bootstrap.js` and `index.js`
-
-`bootstrap.js`
+#### Error With Type
 
 ```javascript
-window.CMS_MANUAL_INIT = true
+const validator = () => {
+  // Do internal validation
+  return { type: 'custom-error' };
+};
 ```
 
-`index.js`
+#### Error With Type and Message
+
+_Useful for returning custom error messages_
 
 ```javascript
-import './bootstrap.js'
-import CMS, { init } from '@staticcms/core'
-import { Control, Preview } from '/docs/src'
-
-const config = {
-backend: {
- name: 'test-repo',
- login: false,
-},
-media_folder: 'assets',
-collections: [{
- name: 'test',
- label: 'Test',
- files: [{
-   file: 'test.yml',
-   name: 'test',
-   label: 'Test',
-   fields: [
-     { name: 'test_widget', label: 'Test Widget', widget: 'test'},
-   ],
- }],
-}],
-}
-
-CMS.registerWidget('test', Control, Preview)
-
-init({ config })
+const validator = () => {
+  // Do internal validation
+  return { type: 'custom-error', message: 'Your error message.' };
+};
 ```
 
-### [](https://github.com/StaticJsCMS/static-cms-widget-starter#development)Development
+#### Promise
 
-To run a copy of Static CMS with your widget for development, use the start script:
-
-```javascript
-npm start
-```
-
-Your widget source is in the `src` directory, where there are separate files for the `Control` and `Preview` components.
-
-### [](https://github.com/StaticJsCMS/static-cms-widget-starter#production--publishing)Production & Publishing
-
-You'll want to take a few steps before publishing a production built package to npm:
-
-1. Customize `package.json` with details for your specific widget, e.g. name, description, author, version, etc.
-
-   ```json
-   {
-     "name": "static-cms-widget-starter",
-     "description": "A boilerplate for creating Static CMS widgets.",
-     "author": "name of developer",
-     "keywords": [
-       "simple",
-       "static-cms",
-       "cms",
-       "widget",
-       "starter",
-       "boilerplate"
-     ],
-     "version": "0.0.1",
-     // ... rest
-   }
-   ```
-2. For discoverability, ensure that your package name follows the pattern `static-cms-widget-<name>`.
-3. Delete this `README.md`, rename `README_TEMPLATE.md` to `README.md`, and update the new file for your specific widget.
-4. Rename the exports in `src/index.js`. For example, if your widget is `static-cms-widget-awesome`, you would do:
+You can also return a promise from `validator`. The promise can return `boolean` value, an `object` with a type and error message or a promise.
 
 ```javascript
-if (typeof window !== 'undefined') {
-  window.AwesomeControl = Control
-  window.AwesomePreview = Preview
-}
-
-export { Control as AwesomeControl, Preview as AwesomePreview }
-```
-
-5. Optional: customize the component and file names in `src`.
-6. If you haven't already, push your repo to your GitHub account so the source available to other developers.
-7. Create a production build, which will be output to `dist`:
-
-```javascript
-npm run build
-```
-
-8. Finally, if you're sure things are tested and working, publish!
-
-```javascript
-npm publish
+const validator = () => {
+  return this.existingPromise;
+};
 ```

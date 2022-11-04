@@ -68,7 +68,6 @@ export const DRAFT_CREATE_EMPTY = 'DRAFT_CREATE_EMPTY';
 export const DRAFT_DISCARD = 'DRAFT_DISCARD';
 export const DRAFT_CHANGE_FIELD = 'DRAFT_CHANGE_FIELD';
 export const DRAFT_VALIDATION_ERRORS = 'DRAFT_VALIDATION_ERRORS';
-export const DRAFT_CLEAR_ERRORS = 'DRAFT_CLEAR_ERRORS';
 export const DRAFT_LOCAL_BACKUP_RETRIEVED = 'DRAFT_LOCAL_BACKUP_RETRIEVED';
 export const DRAFT_LOCAL_BACKUP_DELETE = 'DRAFT_LOCAL_BACKUP_DELETE';
 export const DRAFT_CREATE_FROM_LOCAL_BACKUP = 'DRAFT_CREATE_FROM_LOCAL_BACKUP';
@@ -495,10 +494,6 @@ export function changeDraftFieldValidation(path: string, errors: FieldError[]) {
     type: DRAFT_VALIDATION_ERRORS,
     payload: { path, errors },
   } as const;
-}
-
-export function clearFieldErrors() {
-  return { type: DRAFT_CLEAR_ERRORS } as const;
 }
 
 export function localBackupRetrieved(entry: Entry) {
@@ -1142,7 +1137,6 @@ export type EntriesAction = ReturnType<
   | typeof discardDraft
   | typeof changeDraftField
   | typeof changeDraftFieldValidation
-  | typeof clearFieldErrors
   | typeof localBackupRetrieved
   | typeof loadLocalBackup
   | typeof deleteDraftLocalBackup

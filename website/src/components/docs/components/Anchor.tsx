@@ -15,8 +15,6 @@ interface AnchorProps
 }
 
 const Anchor = ({ href = '', children = '' }: AnchorProps) => {
-  console.log('href', `"${href}"`);
-
   const type: LinkType = useMemo(() => {
     if (href.startsWith('#')) {
       return LinkType.SAME_PAGE;

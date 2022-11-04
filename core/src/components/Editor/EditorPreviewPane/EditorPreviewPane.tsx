@@ -213,7 +213,6 @@ function getWidget(
       collection={collection}
       value={
         value &&
-        !widget.allowMapValue &&
         typeof value === 'object' &&
         !isJsxElement(value) &&
         !isReactFragment(value)

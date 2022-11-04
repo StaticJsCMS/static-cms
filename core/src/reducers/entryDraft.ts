@@ -5,7 +5,6 @@ import { v4 as uuid } from 'uuid';
 import {
   ADD_DRAFT_ENTRY_MEDIA_FILE,
   DRAFT_CHANGE_FIELD,
-  DRAFT_CLEAR_ERRORS,
   DRAFT_CREATE_DUPLICATE_FROM_ENTRY,
   DRAFT_CREATE_EMPTY,
   DRAFT_CREATE_FROM_ENTRY,
@@ -173,13 +172,6 @@ function entryDraftReducer(
       return {
         ...state,
         fieldsErrors,
-      };
-    }
-
-    case DRAFT_CLEAR_ERRORS: {
-      return {
-        ...state,
-        fieldsErrors: {},
       };
     }
 

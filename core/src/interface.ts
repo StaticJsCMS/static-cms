@@ -222,8 +222,6 @@ export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 export type GetAssetFunction = (path: string, field?: Field) => Promise<AssetProxy>;
 
 export interface WidgetControlProps<T, F extends Field = Field> {
-  clearFieldErrors: EditorControlProps['clearFieldErrors'];
-  clearSearch: EditorControlProps['clearSearch'];
   collection: Collection;
   config: Config;
   entry: Entry;
@@ -233,11 +231,9 @@ export interface WidgetControlProps<T, F extends Field = Field> {
   forList: boolean;
   getAsset: GetAssetFunction;
   isDisabled: boolean;
-  isFetching: boolean;
   isFieldDuplicate: EditorControlProps['isFieldDuplicate'];
   isFieldHidden: EditorControlProps['isFieldHidden'];
   label: string;
-  loadEntry: EditorControlProps['loadEntry'];
   locale: string | undefined;
   mediaPaths: Record<string, string | string[]>;
   onChange: (value: T | null | undefined) => void;
@@ -296,7 +292,6 @@ export interface WidgetOptions<T = unknown, F extends Field = Field> {
   validator?: Widget<T, F>['validator'];
   getValidValue?: Widget<T, F>['getValidValue'];
   schema?: Widget<T, F>['schema'];
-  allowMapValue?: boolean;
 }
 
 export interface Widget<T = unknown, F extends Field = Field> {
@@ -305,7 +300,6 @@ export interface Widget<T = unknown, F extends Field = Field> {
   validator: FieldValidationMethod<T, F>;
   getValidValue: (value: T | undefined | null) => T | undefined | null;
   schema?: PropertiesSchema<unknown>;
-  allowMapValue?: boolean;
 }
 
 export interface WidgetParam<T = unknown, F extends Field = Field> {
@@ -462,13 +456,7 @@ export interface MediaLibraryInternalOptions {
 
 export type MediaLibrary = MediaLibraryExternalLibrary | MediaLibraryInternalOptions;
 
-export type BackendType =
-  | 'git-gateway'
-  | 'github'
-  | 'gitlab'
-  | 'bitbucket'
-  | 'test-repo'
-  | 'proxy';
+export type BackendType = 'git-gateway' | 'github' | 'gitlab' | 'bitbucket' | 'test-repo' | 'proxy';
 
 export type MapWidgetType = 'Point' | 'LineString' | 'Polygon';
 

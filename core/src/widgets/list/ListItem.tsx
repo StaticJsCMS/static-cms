@@ -79,7 +79,6 @@ function validateItem(field: ListField, item: ObjectValue) {
 interface ListItemProps
   extends Pick<
     WidgetControlProps<ObjectValue, ListField>,
-    | 'clearFieldErrors'
     | 'entry'
     | 'field'
     | 'fieldsErrors'
@@ -98,7 +97,6 @@ interface ListItemProps
 
 const ListItem = ({
   index,
-  clearFieldErrors,
   entry,
   field,
   fieldsErrors,
@@ -201,7 +199,6 @@ const ListItem = ({
             key={index}
             field={objectField}
             value={value}
-            clearFieldErrors={clearFieldErrors}
             fieldsErrors={fieldsErrors}
             submitted={submitted}
             parentPath={path}

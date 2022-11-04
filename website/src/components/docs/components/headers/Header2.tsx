@@ -1,66 +1,13 @@
-import LinkIcon from '@mui/icons-material/Link';
-import { styled, useTheme } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import Link from 'next/link';
-import { useMemo } from 'react';
-
-import { useNodeText } from '../../../../util/node.util';
-import useAnchor from './hooks/useAnchor';
+import LinkedHeader from './components/LinkedHeader';
 
 import type { ReactNode } from 'react';
-
-const StyledLink = styled('a')(
-  ({ theme }) => `
-    position: absolute;
-    margin-left: -28px;
-    top: -1px;
-    font-weight: 300;
-    color: ${theme.palette.secondary.main};
-    transform: rotateZ(-45deg);
-
-    ${theme.breakpoints.down('sm')} {
-      margin-left: -22px;
-    }
-  `,
-);
 
 interface Header2Props {
   children?: ReactNode;
 }
 
-const Header2 = ({ children = '' }: Header2Props) => {
-  const textContent = useNodeText(children);
-  const anchor = useAnchor(textContent);
-  const link = useMemo(() => `#${anchor}`, [anchor]);
-  const theme = useTheme();
-  return (
-    <Typography
-      variant="h2"
-      id={anchor}
-      sx={{
-        [theme.breakpoints.down('sm')]: {
-          marginLeft: '8px',
-        },
-      }}
-    >
-      <Link href={link} className="anchor-link">
-        <StyledLink href={link}>
-          <LinkIcon
-            fontSize="medium"
-            sx={{
-              [theme.breakpoints.down('sm')]: {
-                fontSize: '20px',
-                height: '20px',
-                width: '20px',
-                marginTop: '2px',
-              },
-            }}
-          />
-        </StyledLink>
-      </Link>
-      {children}
-    </Typography>
-  );
+const Header2 = ({ children }: Header2Props) => {
+  return <LinkedHeader variant="h2">{children}</LinkedHeader>;
 };
 
 export default Header2;

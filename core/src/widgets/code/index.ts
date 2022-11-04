@@ -11,7 +11,6 @@ const CodeWidget = (): WidgetParam<string | { [key: string]: string }, CodeField
     previewComponent,
     options: {
       schema,
-      allowMapValue: true,
     },
   };
 };
