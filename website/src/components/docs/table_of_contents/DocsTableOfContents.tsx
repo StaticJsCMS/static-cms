@@ -20,7 +20,7 @@ const getNestedHeadings = (headingElements: HTMLHeadingElement[]) => {
   headingElements.forEach(heading => {
     const { innerText: title, id } = heading;
 
-    if (heading.nodeName === 'H2') {
+    if (heading.nodeName === 'H1' || heading.nodeName === 'H2') {
       nestedHeadings.push({ id, title, items: [] });
     } else if (heading.nodeName === 'H3' && nestedHeadings.length > 0) {
       nestedHeadings[nestedHeadings.length - 1].items.push({
@@ -39,7 +39,7 @@ const useHeadingsData = () => {
 
   useEffect(() => {
     const headingElements = Array.from(
-      document.querySelectorAll<HTMLHeadingElement>('main h2, main h3'),
+      document.querySelectorAll<HTMLHeadingElement>('main h1, main h2, main h3'),
     );
 
     // Created a list of headings, with H3s nested
@@ -54,7 +54,9 @@ const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
   const headingElementsRef = useRef<Record<string, IntersectionObserverEntry>>({});
   const { asPath } = useRouter();
   useEffect(() => {
-    const headingElements = Array.from(document.querySelectorAll<HTMLHeadingElement>('h2, h3'));
+    const headingElements = Array.from(
+      document.querySelectorAll<HTMLHeadingElement>('main h1, main h2, main h3'),
+    );
 
     if (headingElementsRef.current) {
       headingElementsRef.current = {};
