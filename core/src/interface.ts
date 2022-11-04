@@ -4,7 +4,7 @@ import type {
 } from '@toast-ui/editor/types/editor';
 import type { ToolbarItemOptions as MarkdownToolbarItemOptions } from '@toast-ui/editor/types/ui';
 import type { PropertiesSchema } from 'ajv/dist/types/json-schema';
-import type { ComponentType, ReactNode } from 'react';
+import type { FunctionComponent, ComponentType, ReactNode } from 'react';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
 import type { MediaFile as BackendMediaFile } from './backend';
 import type { EditorControlProps } from './components/Editor/EditorControlPane/EditorControl';
@@ -14,12 +14,6 @@ import type { AllowedEvent } from './lib/registry';
 import type Cursor from './lib/util/Cursor';
 import type AssetProxy from './valueObjects/AssetProxy';
 import type { MediaHolder } from './widgets/markdown/hooks/useMedia';
-
-export interface SlugConfig {
-  encoding: string;
-  clean_accents: boolean;
-  sanitize_replacement: string;
-}
 
 export interface Pages {
   [collection: string]: { isFetching?: boolean; page?: number; ids: string[] };
@@ -68,6 +62,7 @@ export type ValueOrNestedValue =
   | number
   | boolean
   | string[]
+  | (string | number)[]
   | null
   | undefined
   | ObjectValue
@@ -176,8 +171,6 @@ export interface Collection {
   isFetching?: boolean;
   media_folder?: string;
   public_folder?: string;
-  preview_path?: string;
-  preview_path_date_field?: string;
   summary?: string;
   filter?: FilterRule;
   type: 'file_based_collection' | 'folder_based_collection';
@@ -224,15 +217,11 @@ export interface DisplayURLState {
   err?: Error;
 }
 
-export type Hook = string | boolean;
-
 export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
 export type GetAssetFunction = (path: string, field?: Field) => Promise<AssetProxy>;
 
 export interface WidgetControlProps<T, F extends Field = Field> {
-  clearFieldErrors: EditorControlProps['clearFieldErrors'];
-  clearSearch: EditorControlProps['clearSearch'];
   collection: Collection;
   config: Config;
   entry: Entry;
@@ -242,11 +231,9 @@ export interface WidgetControlProps<T, F extends Field = Field> {
   forList: boolean;
   getAsset: GetAssetFunction;
   isDisabled: boolean;
-  isFetching: boolean;
   isFieldDuplicate: EditorControlProps['isFieldDuplicate'];
   isFieldHidden: EditorControlProps['isFieldHidden'];
   label: string;
-  loadEntry: EditorControlProps['loadEntry'];
   locale: string | undefined;
   mediaPaths: Record<string, string | string[]>;
   onChange: (value: T | null | undefined) => void;
@@ -268,7 +255,6 @@ export interface WidgetPreviewProps<T = unknown, F extends Field = Field> {
   entry: Entry;
   field: RenderedField<F>;
   getAsset: GetAssetFunction;
-  resolveWidget: <W = unknown, WF extends Field = Field>(name: string) => Widget<W, WF>;
   value: T | undefined | null;
 }
 
@@ -305,7 +291,6 @@ export interface WidgetOptions<T = unknown, F extends Field = Field> {
   validator?: Widget<T, F>['validator'];
   getValidValue?: Widget<T, F>['getValidValue'];
   schema?: Widget<T, F>['schema'];
-  allowMapValue?: boolean;
 }
 
 export interface Widget<T = unknown, F extends Field = Field> {
@@ -314,7 +299,6 @@ export interface Widget<T = unknown, F extends Field = Field> {
   validator: FieldValidationMethod<T, F>;
   getValidValue: (value: T | undefined | null) => T | undefined | null;
   schema?: PropertiesSchema<unknown>;
-  allowMapValue?: boolean;
 }
 
 export interface WidgetParam<T = unknown, F extends Field = Field> {
@@ -366,8 +350,6 @@ export interface BackendEntry {
   dataFiles: DataFile[];
   assets: AssetProxy[];
 }
-
-export type DeleteOptions = {};
 
 export interface Credentials {
   token: string | {};
@@ -446,7 +428,7 @@ export interface LocalePhrasesRoot {
 }
 export type LocalePhrases = string | { [property: string]: LocalePhrases };
 
-export type CustomIcon = () => JSX.Element;
+export type CustomIcon = FunctionComponent;
 
 export type WidgetValueSerializer = {
   serialize: (value: ValueOrNestedValue) => ValueOrNestedValue;
@@ -473,32 +455,9 @@ export interface MediaLibraryInternalOptions {
 
 export type MediaLibrary = MediaLibraryExternalLibrary | MediaLibraryInternalOptions;
 
-export type BackendType =
-  | 'azure'
-  | 'git-gateway'
-  | 'github'
-  | 'gitlab'
-  | 'bitbucket'
-  | 'test-repo'
-  | 'proxy';
+export type BackendType = 'git-gateway' | 'github' | 'gitlab' | 'bitbucket' | 'test-repo' | 'proxy';
 
 export type MapWidgetType = 'Point' | 'LineString' | 'Polygon';
-
-export type MarkdownWidgetButton =
-  | 'bold'
-  | 'italic'
-  | 'code'
-  | 'link'
-  | 'heading-one'
-  | 'heading-two'
-  | 'heading-three'
-  | 'heading-four'
-  | 'heading-five'
-  | 'heading-six'
-  | 'quote'
-  | 'code-block'
-  | 'bulleted-list'
-  | 'numbered-list';
 
 export interface SelectWidgetOptionObject {
   label: string;
@@ -567,12 +526,10 @@ export interface FileOrImageField extends BaseField {
   media_library?: MediaLibrary;
   media_folder?: string;
   public_folder?: string;
-  private?: boolean;
 }
 
 export interface ObjectField extends BaseField {
   widget: 'object';
-  default?: ObjectValue;
 
   collapsed?: boolean;
   summary?: string;
@@ -626,9 +583,9 @@ export interface NumberField extends BaseField {
 
 export interface SelectField extends BaseField {
   widget: 'select';
-  default?: string | string[];
+  default?: string | number | (string | number)[];
 
-  options: string[] | SelectWidgetOptionObject[];
+  options: (string | number)[] | SelectWidgetOptionObject[];
   multiple?: boolean;
   min?: number;
   max?: number;
@@ -708,12 +665,9 @@ export interface SortableFields {
 
 export interface Backend {
   name: BackendType;
-  auth_scope?: AuthScope;
   repo?: string;
   branch?: string;
   api_root?: string;
-  api_version?: string;
-  tenant_id?: string;
   site_domain?: string;
   base_url?: string;
   auth_endpoint?: string;
@@ -725,6 +679,7 @@ export interface Backend {
   use_large_media_transforms_in_media_library?: boolean;
   identity_url?: string;
   gateway_url?: string;
+  auth_scope?: AuthScope;
   commit_messages?: {
     create?: string;
     update?: string;
@@ -784,23 +739,27 @@ export interface EventData {
   author: { login: string | undefined; name: string };
 }
 
+export type EventListenerOptions = Record<string, unknown>;
+
+export type EventListenerHandler = (
+  data: EventData,
+  options: EventListenerOptions,
+) => Promise<EntryData | undefined | null | void>;
+
 export interface EventListener {
   name: AllowedEvent;
-  handler: (
-    data: EventData,
-    options: Record<string, unknown>,
-  ) => Promise<EntryData | undefined | null | void>;
+  handler: EventListenerHandler;
 }
 
-export type EventListenerOptions = Record<string, unknown>;
+export interface AdditionalLinkOptions {
+  iconName?: string;
+}
 
 export interface AdditionalLink {
   id: string;
   title: string;
-  data: string | (() => JSX.Element);
-  options?: {
-    iconName?: string;
-  };
+  data: string | FunctionComponent;
+  options?: AdditionalLinkOptions;
 }
 
 export interface AuthenticationPageProps {
@@ -816,11 +775,9 @@ export interface AuthenticationPageProps {
 
 export type Integration = {
   collections?: '*' | string[];
-} & (AlgoliaIntegration | AssetStoreIntegration);
+} & AlgoliaIntegration;
 
-export type IntegrationProvider = Integration['provider'];
 export type SearchIntegrationProvider = 'algolia';
-export type MediaIntegrationProvider = 'assetStore';
 
 export interface AlgoliaIntegration extends AlgoliaConfig {
   provider: 'algolia';
@@ -831,16 +788,6 @@ export interface AlgoliaConfig {
   applicationID: string;
   apiKey: string;
   indexPrefix?: string;
-}
-
-export interface AssetStoreIntegration extends AssetStoreConfig {
-  provider: 'assetStore';
-}
-
-export interface AssetStoreConfig {
-  hooks: ['assetStore'];
-  shouldConfirmUpload?: boolean;
-  getSignedFormURL: string;
 }
 
 export interface SearchResponse {

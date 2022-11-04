@@ -68,7 +68,6 @@ export const DRAFT_CREATE_EMPTY = 'DRAFT_CREATE_EMPTY';
 export const DRAFT_DISCARD = 'DRAFT_DISCARD';
 export const DRAFT_CHANGE_FIELD = 'DRAFT_CHANGE_FIELD';
 export const DRAFT_VALIDATION_ERRORS = 'DRAFT_VALIDATION_ERRORS';
-export const DRAFT_CLEAR_ERRORS = 'DRAFT_CLEAR_ERRORS';
 export const DRAFT_LOCAL_BACKUP_RETRIEVED = 'DRAFT_LOCAL_BACKUP_RETRIEVED';
 export const DRAFT_LOCAL_BACKUP_DELETE = 'DRAFT_LOCAL_BACKUP_DELETE';
 export const DRAFT_CREATE_FROM_LOCAL_BACKUP = 'DRAFT_CREATE_FROM_LOCAL_BACKUP';
@@ -279,7 +278,7 @@ async function getAllEntries(state: RootState, collection: Collection) {
   const backend = currentBackend(configState.config);
   const integration = selectIntegration(state, collection.name, 'listEntries');
   const provider = integration
-    ? getSearchIntegrationProvider(state.integrations, backend.getToken, integration)
+    ? getSearchIntegrationProvider(state.integrations, integration)
     : backend;
 
   if (!provider) {
@@ -497,10 +496,6 @@ export function changeDraftFieldValidation(path: string, errors: FieldError[]) {
   } as const;
 }
 
-export function clearFieldErrors() {
-  return { type: DRAFT_CLEAR_ERRORS } as const;
-}
-
 export function localBackupRetrieved(entry: Entry) {
   return {
     type: DRAFT_LOCAL_BACKUP_RETRIEVED,
@@ -688,7 +683,7 @@ export function loadEntries(collection: Collection, page = 0) {
     const backend = currentBackend(configState.config);
     const integration = selectIntegration(state, collection.name, 'listEntries');
     const provider = integration
-      ? getSearchIntegrationProvider(state.integrations, backend.getToken, integration)
+      ? getSearchIntegrationProvider(state.integrations, integration)
       : backend;
 
     if (!provider) {
@@ -1142,7 +1137,6 @@ export type EntriesAction = ReturnType<
   | typeof discardDraft
   | typeof changeDraftField
   | typeof changeDraftFieldValidation
-  | typeof clearFieldErrors
   | typeof localBackupRetrieved
   | typeof loadLocalBackup
   | typeof deleteDraftLocalBackup

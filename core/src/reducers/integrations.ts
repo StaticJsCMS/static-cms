@@ -5,22 +5,18 @@ import { CONFIG_SUCCESS } from '../actions/config';
 import type { ConfigAction } from '../actions/config';
 import type {
   AlgoliaConfig,
-  AssetStoreConfig,
   Config,
-  MediaIntegrationProvider,
   SearchIntegrationProvider,
 } from '../interface';
 
 export interface IntegrationHooks {
   search?: SearchIntegrationProvider;
   listEntries?: SearchIntegrationProvider;
-  assetStore?: MediaIntegrationProvider;
 }
 
 export interface IntegrationsState {
   providers: {
     algolia?: AlgoliaConfig;
-    assetStore?: AssetStoreConfig;
   };
   hooks: IntegrationHooks;
   collectionHooks: Record<string, IntegrationHooks>;
@@ -47,8 +43,6 @@ export function getIntegrations(config: Config): IntegrationsState {
             hook => (acc.collectionHooks[collection][hook] = providerData.provider),
           );
         });
-      } else if (providerData.provider === 'assetStore') {
-        acc.providers[providerData.provider] = providerData;
       }
       return acc;
     },

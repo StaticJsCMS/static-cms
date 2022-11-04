@@ -18,18 +18,18 @@ import type { IntegrationHooks } from './integrations';
 
 const reducers = {
   auth,
-  config,
   collections,
-  search,
-  integrations,
-  entries,
+  config,
   cursors,
+  entries,
   entryDraft,
-  medias,
-  mediaLibrary,
   globalUI,
-  status,
+  integrations,
+  mediaLibrary,
+  medias,
   scroll,
+  search,
+  status,
 };
 
 export default reducers;

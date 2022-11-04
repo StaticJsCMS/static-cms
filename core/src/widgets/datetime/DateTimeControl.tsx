@@ -11,7 +11,9 @@ import formatDate from 'date-fns/format';
 import formatISO from 'date-fns/formatISO';
 import parse from 'date-fns/parse';
 import parseISO from 'date-fns/parseISO';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+
+import { isNotEmpty } from '../../lib/util/string.util';
 
 import type { MouseEvent } from 'react';
 import type { DateTimeField, TranslatedProps, WidgetControlProps } from '../../interface';
@@ -58,8 +60,6 @@ const DateTimeControl = ({
   onChange,
   hasErrors,
 }: WidgetControlProps<string, DateTimeField>) => {
-  const [internalValue, setInternalValue] = useState(value ?? '');
-
   const { format, dateFormat, timeFormat } = useMemo(() => {
     const format = field.format;
 
@@ -75,18 +75,7 @@ const DateTimeControl = ({
     };
   }, [field.date_format, field.format, field.time_format]);
 
-  const dateValue = useMemo(
-    () => (format ? parse(internalValue, format, new Date()) : parseISO(internalValue)),
-    [format, internalValue],
-  );
-
-  const timezoneOffset = useMemo(() => dateValue.getTimezoneOffset() * 60000, [dateValue]);
-
-  const utcDate = useMemo(() => {
-    const dateTime = new Date(dateValue);
-    const utcFromLocal = new Date(dateTime.getTime() + timezoneOffset);
-    return utcFromLocal;
-  }, [dateValue, timezoneOffset]);
+  const timezoneOffset = useMemo(() => new Date().getTimezoneOffset() * 60000, []);
 
   const localToUTC = useCallback(
     (dateTime: Date) => {
@@ -104,6 +93,20 @@ const DateTimeControl = ({
         : formatISO(today)
       : field.default;
   }, [field.default, field.picker_utc, format, localToUTC]);
+
+  const [internalValue, setInternalValue] = useState(value ?? defaultValue);
+
+  const dateValue = useMemo(
+    () =>
+      format ? parse(internalValue, format, new Date()) ?? defaultValue : parseISO(internalValue),
+    [defaultValue, format, internalValue],
+  );
+
+  const utcDate = useMemo(() => {
+    const dateTime = new Date(dateValue);
+    const utcFromLocal = new Date(dateTime.getTime() + timezoneOffset) ?? defaultValue;
+    return utcFromLocal;
+  }, [dateValue, defaultValue, timezoneOffset]);
 
   const handleChange = useCallback(
     (datetime: Date | null) => {
@@ -127,27 +130,16 @@ const DateTimeControl = ({
     [defaultValue, field.picker_utc, format, localToUTC, onChange],
   );
 
-  useEffect(() => {
-    /**
-     * Set the current date as default value if no value is provided and default is absent. An
-     * empty default string means the value is intentionally blank.
-     */
-    if (internalValue === undefined) {
-      setTimeout(() => {
-        setInternalValue(defaultValue);
-        onChange(defaultValue);
-      }, 0);
-    }
-  }, [defaultValue, handleChange, internalValue, onChange]);
-
   const dateTimePicker = useMemo(() => {
     if (dateFormat && !timeFormat) {
+      const inputDateFormat = typeof dateFormat === 'string' ? dateFormat : 'MMM d, yyyy';
+
       return (
         <MobileDatePicker
           key="mobile-date-picker"
-          inputFormat={typeof dateFormat === 'string' ? dateFormat : 'MMM d, yyyy'}
+          inputFormat={inputDateFormat}
           label={label}
-          value={field.picker_utc ? utcDate : dateValue}
+          value={formatDate(field.picker_utc ? utcDate : dateValue, inputDateFormat)}
           onChange={handleChange}
           renderInput={params => (
             <TextField
@@ -172,12 +164,14 @@ const DateTimeControl = ({
     }
 
     if (!dateFormat && timeFormat) {
+      const inputTimeFormat = typeof timeFormat === 'string' ? timeFormat : 'H:mm';
+
       return (
         <TimePicker
           key="time-picker"
           label={label}
-          inputFormat={typeof timeFormat === 'string' ? timeFormat : 'H:mm'}
-          value={field.picker_utc ? utcDate : dateValue}
+          inputFormat={inputTimeFormat}
+          value={formatDate(field.picker_utc ? utcDate : dateValue, inputTimeFormat)}
           onChange={handleChange}
           renderInput={params => (
             <TextField
@@ -202,17 +196,19 @@ const DateTimeControl = ({
     }
 
     let inputFormat = 'MMM d, yyyy H:mm';
-    if (dateFormat || timeFormat) {
+    if (typeof dateFormat === 'string' || typeof timeFormat === 'string') {
       const formatParts: string[] = [];
-      if (typeof dateFormat === 'string') {
+      if (typeof dateFormat === 'string' && isNotEmpty(dateFormat)) {
         formatParts.push(dateFormat);
       }
 
-      if (typeof timeFormat === 'string') {
+      if (typeof timeFormat === 'string' && isNotEmpty(timeFormat)) {
         formatParts.push(timeFormat);
       }
 
-      inputFormat = formatParts.join(' ');
+      if (formatParts.length > 0) {
+        inputFormat = formatParts.join(' ');
+      }
     }
 
     return (
@@ -220,7 +216,7 @@ const DateTimeControl = ({
         key="mobile-date-time-picker"
         inputFormat={inputFormat}
         label={label}
-        value={field.picker_utc ? utcDate : dateValue}
+        value={formatDate(field.picker_utc ? utcDate : dateValue, inputFormat)}
         onChange={handleChange}
         renderInput={params => (
           <TextField

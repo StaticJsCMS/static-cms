@@ -166,7 +166,6 @@ const nb_no: LocalePhrasesRoot = {
       noResults: 'Ingen resultater.',
       noAssetsFound: 'Ingen elementer funnet.',
       noImagesFound: 'Ingen bilder funnet.',
-      private: 'Privat ',
       images: 'Bilder',
       mediaAssets: 'Mediebibliotek',
       search: 'Søk...',

@@ -1,9 +1,8 @@
 import { currentBackend } from '../backend';
 import confirm from '../components/UI/Confirm';
-import { getMediaIntegrationProvider } from '../integrations';
 import { sanitizeSlug } from '../lib/urlHelper';
 import { basename, getBlobSHA } from '../lib/util';
-import { selectIntegration } from '../reducers';
+import { selectMediaFilePath, selectMediaFilePublicPath } from '../lib/util/media.util';
 import { selectEditingDraft } from '../reducers/entries';
 import { selectMediaDisplayURL, selectMediaFiles } from '../reducers/mediaLibrary';
 import { addSnackbar } from '../store/slices/snackbars';
@@ -11,13 +10,12 @@ import { createAssetProxy } from '../valueObjects/AssetProxy';
 import { addDraftEntryMediaFile, removeDraftEntryMediaFile } from './entries';
 import { addAsset, removeAsset } from './media';
 import { waitUntilWithTimeout } from './waitUntil';
-import { selectMediaFilePath, selectMediaFilePublicPath } from '../lib/util/media.util';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type {
-  Field,
   DisplayURLState,
+  Field,
   ImplementationMediaFile,
   MediaFile,
   MediaLibraryInstance,
@@ -78,7 +76,6 @@ export function openMediaLibrary(
   payload: {
     controlID?: string;
     forImage?: boolean;
-    privateUpload?: boolean;
     value?: string | string[];
     allowMultiple?: boolean;
     replaceIndex?: number;
@@ -134,10 +131,8 @@ export function removeInsertedMedia(controlID: string) {
   return { type: MEDIA_REMOVE_INSERTED, payload: { controlID } } as const;
 }
 
-export function loadMedia(
-  opts: { delay?: number; query?: string; page?: number; privateUpload?: boolean } = {},
-) {
-  const { delay = 0, query = '', page = 1, privateUpload = false } = opts;
+export function loadMedia(opts: { delay?: number; query?: string; page?: number } = {}) {
+  const { delay = 0, page = 1 } = opts;
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const config = state.config.config;
@@ -146,32 +141,6 @@ export function loadMedia(
     }
 
     const backend = currentBackend(config);
-    const integration = selectIntegration(state, null, 'assetStore');
-    if (integration) {
-      const provider = getMediaIntegrationProvider(
-        state.integrations,
-        backend.getToken,
-        integration,
-      );
-      if (!provider) {
-        throw new Error('Provider not found');
-      }
-
-      dispatch(mediaLoading(page));
-      try {
-        const files = await provider.retrieve(query, page, privateUpload);
-        const mediaLoadedOpts = {
-          page,
-          canPaginate: true,
-          dynamicSearch: true,
-          dynamicSearchQuery: query,
-          privateUpload,
-        };
-        return dispatch(mediaLoaded(files, mediaLoadedOpts));
-      } catch (error) {
-        return dispatch(mediaLoadFailed({ privateUpload }));
-      }
-    }
     dispatch(mediaLoading(page));
 
     function loadFunction() {
@@ -225,7 +194,7 @@ function createMediaFileFromAsset({
 }
 
 export function persistMedia(file: File, opts: MediaOptions = {}) {
-  const { privateUpload, field } = opts;
+  const { field } = opts;
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const config = state.config.config;
@@ -234,7 +203,6 @@ export function persistMedia(file: File, opts: MediaOptions = {}) {
     }
 
     const backend = currentBackend(config);
-    const integration = selectIntegration(state, null, 'assetStore');
     const files: MediaFile[] = selectMediaFiles(state, field);
     const fileName = sanitizeSlug(file.name.toLowerCase(), config.slug);
     const existingFile = files.find(existingFile => existingFile.name.toLowerCase() === fileName);
@@ -247,7 +215,7 @@ export function persistMedia(file: File, opts: MediaOptions = {}) {
      * expect file names to be unique. If an asset store is in use, file names
      * may not be unique, so we forego this check.
      */
-    if (!integration && existingFile) {
+    if (existingFile) {
       if (
         !(await confirm({
           title: 'mediaLibrary.mediaLibrary.alreadyExistsTitle',
@@ -260,60 +228,28 @@ export function persistMedia(file: File, opts: MediaOptions = {}) {
       ) {
         return;
       } else {
-        await dispatch(deleteMedia(existingFile, { privateUpload }));
+        await dispatch(deleteMedia(existingFile));
       }
     }
 
-    if (integration || !editingDraft) {
+    if (!editingDraft) {
       dispatch(mediaPersisting());
     }
 
     try {
-      let assetProxy: AssetProxy;
-      if (integration) {
-        try {
-          const provider = getMediaIntegrationProvider(
-            state.integrations,
-            backend.getToken,
-            integration,
-          );
-          if (!provider) {
-            throw new Error('Provider not found');
-          }
-
-          const response = await provider.upload(file, privateUpload);
-          assetProxy = createAssetProxy({
-            url: response.asset.url,
-            path: response.asset.url,
-          });
-        } catch (error) {
-          assetProxy = createAssetProxy({
-            file,
-            path: fileName,
-          });
-        }
-      } else if (privateUpload) {
-        console.error('The Private Upload option is only available for Asset Store Integration')
-        throw new Error('The Private Upload option is only available for Asset Store Integration');
-      } else {
-        const entry = state.entryDraft.entry;
-        const collection = entry?.collection ? state.collections[entry.collection] : null;
-        const path = selectMediaFilePath(config, collection, entry, fileName, field);
-        assetProxy = createAssetProxy({
-          file,
-          path,
-          field,
-        });
-      }
+      const entry = state.entryDraft.entry;
+      const collection = entry?.collection ? state.collections[entry.collection] : null;
+      const path = selectMediaFilePath(config, collection, entry, fileName, field);
+      const assetProxy = createAssetProxy({
+        file,
+        path,
+        field,
+      });
 
       dispatch(addAsset(assetProxy));
 
       let mediaFile: ImplementationMediaFile;
-      if (integration) {
-        const id = await getBlobSHA(file);
-        // integration assets are persisted immediately, thus draft is false
-        mediaFile = createMediaFileFromAsset({ id, file, assetProxy, draft: false });
-      } else if (editingDraft) {
+      if (editingDraft) {
         const id = await getBlobSHA(file);
         mediaFile = createMediaFileFromAsset({
           id,
@@ -326,7 +262,7 @@ export function persistMedia(file: File, opts: MediaOptions = {}) {
         mediaFile = await backend.persistMedia(config, assetProxy);
       }
 
-      return dispatch(mediaPersisted(mediaFile, { privateUpload }));
+      return dispatch(mediaPersisted(mediaFile));
     } catch (error) {
       console.error(error);
       dispatch(
@@ -340,13 +276,12 @@ export function persistMedia(file: File, opts: MediaOptions = {}) {
           },
         }),
       );
-      return dispatch(mediaPersistFailed({ privateUpload }));
+      return dispatch(mediaPersistFailed());
     }
   };
 }
 
-export function deleteMedia(file: MediaFile, opts: MediaOptions = {}) {
-  const { privateUpload } = opts;
+export function deleteMedia(file: MediaFile) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const config = state.config.config;
@@ -355,42 +290,6 @@ export function deleteMedia(file: MediaFile, opts: MediaOptions = {}) {
     }
 
     const backend = currentBackend(config);
-    const integration = selectIntegration(state, null, 'assetStore');
-    if (integration) {
-      const provider = getMediaIntegrationProvider(
-        state.integrations,
-        backend.getToken,
-        integration,
-      );
-      if (!provider) {
-        throw new Error('Provider not found');
-      }
-
-      dispatch(mediaDeleting());
-
-      try {
-        await provider.delete(file.id);
-        return dispatch(mediaDeleted(file, { privateUpload }));
-      } catch (error: unknown) {
-        console.error(error);
-
-        if (error instanceof Error) {
-          dispatch(
-            addSnackbar({
-              type: 'error',
-              message: {
-                key: 'ui.toast.onFailToDeleteMedia',
-                options: {
-                  details: error.message,
-                },
-              },
-            }),
-          );
-        }
-
-        return dispatch(mediaDeleteFailed({ privateUpload }));
-      }
-    }
 
     try {
       if (file.draft) {
@@ -490,7 +389,6 @@ export function loadMediaDisplayURL(file: MediaFile) {
 function mediaLibraryOpened(payload: {
   controlID?: string;
   forImage?: boolean;
-  privateUpload?: boolean;
   value?: string | string[];
   replaceIndex?: number;
   allowMultiple?: boolean;
@@ -516,7 +414,6 @@ export function mediaLoading(page: number) {
 }
 
 export interface MediaOptions {
-  privateUpload?: boolean;
   field?: Field;
   page?: number;
   canPaginate?: boolean;
@@ -531,43 +428,38 @@ export function mediaLoaded(files: ImplementationMediaFile[], opts: MediaOptions
   } as const;
 }
 
-export function mediaLoadFailed(opts: MediaOptions = {}) {
-  const { privateUpload } = opts;
-  return { type: MEDIA_LOAD_FAILURE, payload: { privateUpload } } as const;
+export function mediaLoadFailed() {
+  return { type: MEDIA_LOAD_FAILURE } as const;
 }
 
 export function mediaPersisting() {
   return { type: MEDIA_PERSIST_REQUEST } as const;
 }
 
-export function mediaPersisted(file: ImplementationMediaFile, opts: MediaOptions = {}) {
-  const { privateUpload } = opts;
+export function mediaPersisted(file: ImplementationMediaFile) {
   return {
     type: MEDIA_PERSIST_SUCCESS,
-    payload: { file, privateUpload },
+    payload: { file },
   } as const;
 }
 
-export function mediaPersistFailed(opts: MediaOptions = {}) {
-  const { privateUpload } = opts;
-  return { type: MEDIA_PERSIST_FAILURE, payload: { privateUpload } } as const;
+export function mediaPersistFailed() {
+  return { type: MEDIA_PERSIST_FAILURE } as const;
 }
 
 export function mediaDeleting() {
   return { type: MEDIA_DELETE_REQUEST } as const;
 }
 
-export function mediaDeleted(file: MediaFile, opts: MediaOptions = {}) {
-  const { privateUpload } = opts;
+export function mediaDeleted(file: MediaFile) {
   return {
     type: MEDIA_DELETE_SUCCESS,
-    payload: { file, privateUpload },
+    payload: { file },
   } as const;
 }
 
-export function mediaDeleteFailed(opts: MediaOptions = {}) {
-  const { privateUpload } = opts;
-  return { type: MEDIA_DELETE_FAILURE, payload: { privateUpload } } as const;
+export function mediaDeleteFailed() {
+  return { type: MEDIA_DELETE_FAILURE } as const;
 }
 
 export function mediaDisplayURLRequest(key: string) {

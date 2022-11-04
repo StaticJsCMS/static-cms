@@ -171,7 +171,6 @@ export function registerWidget<T = unknown>(
         validator = () => false,
         getValidValue = (value: T | undefined | null) => value,
         schema,
-        allowMapValue,
       } = {},
     } = name;
     if (registry.widgets[widgetName]) {
@@ -189,7 +188,6 @@ export function registerWidget<T = unknown>(
       validator: validator as Widget['validator'],
       getValidValue: getValidValue as Widget['getValidValue'],
       schema,
-      allowMapValue,
     };
   } else {
     console.error('`registerWidget` failed, called with incorrect arguments.');
@@ -360,6 +358,7 @@ export function getAdditionalLinks(): Record<string, AdditionalLink> {
 }
 
 export function getAdditionalLink(id: string): AdditionalLink | undefined {
+  console.log('additionalLinks', registry.additionalLinks);
   return registry.additionalLinks[id];
 }
 

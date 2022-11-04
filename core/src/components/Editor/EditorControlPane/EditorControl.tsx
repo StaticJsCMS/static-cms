@@ -7,8 +7,6 @@ import { connect } from 'react-redux';
 import {
   changeDraftField as changeDraftFieldAction,
   changeDraftFieldValidation as changeDraftFieldValidationAction,
-  clearFieldErrors as clearFieldErrorsAction,
-  tryLoadEntry,
 } from '../../../actions/entries';
 import { getAsset as getAssetAction } from '../../../actions/media';
 import {
@@ -17,7 +15,7 @@ import {
   removeInsertedMedia as removeInsertedMediaAction,
   removeMediaControl as removeMediaControlAction,
 } from '../../../actions/mediaLibrary';
-import { clearSearch as clearSearchAction, query as queryAction } from '../../../actions/search';
+import { query as queryAction } from '../../../actions/search';
 import { borders, colors, lengths, transitions } from '../../../components/UI/styles';
 import { transientOptions } from '../../../lib';
 import { resolveWidget } from '../../../lib/registry';
@@ -37,7 +35,6 @@ import type {
   Widget,
 } from '../../../interface';
 import type { RootState } from '../../../store';
-import type { EditorControlPaneProps } from './EditorControlPane';
 
 /**
  * This is a necessary bridge as we are still passing classnames to widgets
@@ -133,9 +130,7 @@ const ControlHint = styled(
 
 const EditorControl = ({
   className,
-  clearFieldErrors,
   clearMediaControl,
-  clearSearch,
   collection,
   config: configState,
   entry,
@@ -144,11 +139,9 @@ const EditorControl = ({
   submitted,
   getAsset,
   isDisabled,
-  isFetching,
   isFieldDuplicate,
   isFieldHidden,
   isHidden = false,
-  loadEntry,
   locale,
   mediaPaths,
   changeDraftFieldValidation,
@@ -210,8 +203,6 @@ const EditorControl = ({
       <>
         {React.createElement(widget.control, {
           key: `field_${path}`,
-          clearFieldErrors,
-          clearSearch,
           collection,
           config,
           entry,
@@ -220,11 +211,9 @@ const EditorControl = ({
           submitted,
           getAsset: handleGetAsset,
           isDisabled: isDisabled ?? false,
-          isFetching,
           isFieldDuplicate,
           isFieldHidden,
           label: getFieldLabel(field, t),
-          loadEntry,
           locale,
           mediaPaths,
           onChange: handleChangeDraftField,
@@ -264,7 +253,6 @@ const EditorControl = ({
 
 interface EditorControlOwnProps {
   className?: string;
-  clearFieldErrors: EditorControlPaneProps['clearFieldErrors'];
   field: Field;
   fieldsErrors: FieldsErrors;
   submitted: boolean;
@@ -285,25 +273,13 @@ function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
   const collection = entryDraft.entry ? collections[entryDraft.entry.collection] : null;
   const isLoadingAsset = selectIsLoadingAsset(state.medias);
 
-  async function loadEntry(collectionName: string, slug: string) {
-    const targetCollection = collections[collectionName];
-    if (targetCollection) {
-      const loadedEntry = await tryLoadEntry(state, targetCollection, slug);
-      return loadedEntry;
-    } else {
-      throw new Error(`Can't find collection '${collectionName}'`);
-    }
-  }
-
   return {
     ...ownProps,
     mediaPaths: state.mediaLibrary.controlMedia,
-    isFetching: state.search.isFetching,
     config: state.config,
     entry,
     collection,
     isLoadingAsset,
-    loadEntry,
   };
 }
 
@@ -315,8 +291,6 @@ const mapDispatchToProps = {
   removeMediaControl: removeMediaControlAction,
   removeInsertedMedia: removeInsertedMediaAction,
   query: queryAction,
-  clearSearch: clearSearchAction,
-  clearFieldErrors: clearFieldErrorsAction,
   getAsset: getAssetAction,
 };
 

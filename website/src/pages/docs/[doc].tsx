@@ -4,9 +4,13 @@ import { MDXRemote } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import remarkGfm from 'remark-gfm';
 
+import Anchor from '../../components/docs/components/Anchor';
 import Blockquote from '../../components/docs/components/Blockquote';
-import Header2 from '../../components/docs/components/Header2';
-import Header3 from '../../components/docs/components/Header3';
+import Header2 from '../../components/docs/components/headers/Header2';
+import Header3 from '../../components/docs/components/headers/Header3';
+import Header4 from '../../components/docs/components/headers/Header4';
+import Header5 from '../../components/docs/components/headers/Header5';
+import Header6 from '../../components/docs/components/headers/Header6';
 import DocsTable from '../../components/docs/components/table/Table';
 import TableBody from '../../components/docs/components/table/TableBody';
 import TableBodyCell from '../../components/docs/components/table/TableBodyCell';
@@ -95,12 +99,16 @@ const Docs = ({ docsGroups, title, slug, description = '', source }: DocsProps) 
               components={{
                 h2: Header2,
                 h3: Header3,
+                h4: Header4,
+                h5: Header5,
+                h6: Header6,
                 blockquote: Blockquote,
                 table: DocsTable,
                 thead: TableHead,
                 tbody: TableBody,
                 th: TableHeaderCell,
                 td: TableBodyCell,
+                a: Anchor,
               }}
             />
           </DocsContent>
@@ -144,8 +152,6 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ prop
       remarkPlugins: [remarkGfm],
     },
   });
-
-  console.log(docsGroups.flatMap(group => group.links.flatMap(link => link.title)));
 
   return {
     props: {

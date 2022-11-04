@@ -212,16 +212,11 @@ function getWidget(
       config={config}
       collection={collection}
       value={
-        value &&
-        !widget.allowMapValue &&
-        typeof value === 'object' &&
-        !isJsxElement(value) &&
-        !isReactFragment(value)
+        value && typeof value === 'object' && !isJsxElement(value) && !isReactFragment(value)
           ? (value as Record<string, unknown>)[field.name]
           : value
       }
       entry={entry}
-      resolveWidget={resolveWidget}
     />
   );
 }

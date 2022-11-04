@@ -1,0 +1,58 @@
+---
+group: Backends
+title: Local Backend
+weight: 50
+---
+
+The local backend allows you to use Static CMS with a local git repository, instead of working with a live repo, regardless of backend provider. It will read and write file from your local file system inside your local git repository. You will still need to manually commit and push any files you have changed or added after completing the edits.
+
+## Configuration
+
+| Name          | Type                                          | Default | Description                                                                         |
+| ------------- | --------------------------------------------- | ------- | ----------------------------------------------------------------------------------- |
+| local_backend | boolean<br />\| [Proxy Config](#configure-proxy-server-port) | `false` | Activates the local backend for Static CMS, overriding other backend configurations |
+
+### Example
+
+```yaml
+backend:
+  name: git-gateway
+
+# when using the default proxy server port
+local_backend: true
+```
+
+## Usage
+
+1. Run `npx @staticcms/proxy-server` from the root directory of the above repository.
+   - If the default port (8081) is in use, the proxy server won't start and you will see an error message. In this case, follow [these steps](#configure-the-@staticcms/proxy-server-port-number) before proceeding.
+2. Start your local development server (e.g. run `gatsby develop`).
+3. Open `http://localhost:<port>/admin` to verify that your can administer your content locally. Replace `<port>` with the port of your local development server. For example Gatsby's default port is `8000`
+
+**Note:** `@staticcms/proxy-server` runs an unauthenticated express server. As any client can send requests to the server, it should only be used for local development.
+
+### Configure Proxy Server Port
+
+| Name          | Type          | Default                        | Description                                                                                                |
+| ------------- | ------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| url           | string        | `http://localhost:8080/api/v1` | URL for proxy server                                                                                       |
+| allowed_hosts | list of hosts | `['localhost', '127.0.0.1']`   | Whitelist of allowed hosts when accessing the local site from a host other than 'localhost' or '127.0.0.1' |
+
+1. Create a `.env` file in the project's root folder and define the PORT you'd like the proxy server to use.
+
+```ini
+PORT=8082
+```
+
+2. Update the `local_backend` object in `config.yml` and specify a `url` property to use your custom port number
+
+```yaml
+backend:
+  name: git-gateway
+
+local_backend:
+  # when using a custom proxy server port
+  url: http://localhost:8082/api/v1
+  # when accessing the local site from a host other than 'localhost' or '127.0.0.1'
+  allowed_hosts: ['192.168.0.1']
+```

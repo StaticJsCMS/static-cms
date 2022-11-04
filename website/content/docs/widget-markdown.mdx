@@ -4,23 +4,32 @@ title: Markdown
 weight: 19
 ---
 
-## Overview
-
 - **Name:** `markdown`
-- **UI:** [Toast UI Editor](https://ui.toast.com/tui-editor)
+- **UI:** [Toast UI Editor](https://ui.toast.com/tui-editor) ([Docs](https://nhn.github.io/tui.editor/latest/))
 - **Data type:** `markdown string`
 
 The markdown widget provides a full fledged text editor allowing users to format text with features such as headings and blockquotes. Users can change their editing view with a handy toggle button.
 
 _Please note:_ If you want to use your markdown editor to fill a markdown file contents after its frontmatter, you'll have to name the field `body` so the CMS recognizes it and saves the file accordingly.
 
-## Widget options
+## Widget Options
 
 For common options, see [Common widget options](/docs/widgets#common-widget-options).
 
-| Name    | Type   | Default | Description                                                           |
-| ------- | ------ | ------- | --------------------------------------------------------------------- |
-| default | string | `''`    | _Optional_. The default value for the field. Accepts markdown content |
+| Name          | Type                  | Default | Description                                                                                                                                           |
+| ------------- | --------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| default       | string                | `''`    | _Optional_. The default value for the field. Accepts markdown content                                                                                 |
+| media_library | Media Library Options | `{}`    | _Optional_. Media library settings to apply when a media library is opened by the current widget. See [Media Library Options](#media-library-options) |
+| media_folder  | string                |         | _Optional_. Specifies the folder path where uploaded files should be saved, relative to the base of the repo                                          |
+| public_folder | string                |         | _Optional_. Specifies the folder path where the files uploaded by the media library will be accessed, relative to the base of the built site          |
+
+### Media Library Options
+
+| Name           | Type                   | Default | Description                                                                                                                                       |
+| -------------- | ---------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| allow_multiple | boolean                | `true`  | _Optional_. When set to `false`, prevents multiple selection for any media library extension, but must be supported by the extension in use       |
+| config         | string                 | `{}`    | _Optional_. A configuration object that will be passed directly to the media library being used - available options are determined by the library |
+| choose_url     | string<br />\| boolean | `true`  | _Optional_. When set to `false`, the "Insert from URL" button will be hidden                                                                      |
 
 ## Example
 
@@ -35,3 +44,63 @@ This would render as:
 ![Markdown widget example](/img/widgets-markdown.webp)
 
 _Please note:_ The markdown widget outputs a raw markdown string. Your static site generator may or may not render the markdown to HTML automatically. Consult with your static site generator's documentation for more information about rendering markdown.
+
+## Customization
+
+Several customization options are available for the markdown editor. You can register the options by calling `setMarkdownEditorOptions` (also available on the global `window.CMS`).
+
+### Available Options
+
+| Name            | Type                         | Default                             | Description                                                                 |
+| --------------- | ---------------------------- | ----------------------------------- | --------------------------------------------------------------------------- |
+| initialEditType | 'markdown'<br />\| 'wysiwyg' | `'wysiwyg'`                         | _Optional_. Sets which editor view that is active when the editor is loaded |
+| height          | string                       | `'600px'`                           | _Optional_. Specify the height of the editor                                |
+| toolbarItems    | factory of list of strings   | See [Toolbar Items](#toolbar-items) | _Optional_. See [Toolbar Items](#toolbar-items)                             |
+| plugins         | list of plugin factories     |                                     | _Optional_. See [Plugins](#plugins)                                         |
+
+### Toolbar Items
+
+`toolbarItems` accepts a factory function that returns a list of toolbar buttons for the editor. See the [ToastUI Editor toolbar docs](https://github.com/nhn/tui.editor/blob/master/docs/en/toolbar.md).
+
+#### Default Value
+
+```js
+[
+  ['heading', 'bold', 'italic', 'strike'],
+  ['hr', 'quote'],
+  ['ul', 'ol', 'task', 'indent', 'outdent'],
+  ['table', imageToolbarButton, 'link'],
+  ['code', 'codeblock'],
+];
+```
+
+#### Factory Props
+
+| Name               | Type               | Description                                                 |
+| ------------------ | ------------------ | ----------------------------------------------------------- |
+| imageToolbarButton | ToolbarItemOptions | An image insert button tied into Static CMS's media library |
+
+### Plugins
+
+`plugins` accepts a list of factory functions that returns a plugin for the editor. See the [ToastUI Editor plugins docs](https://github.com/nhn/tui.editor/blob/master/docs/en/plugin.md).
+
+#### Default Value
+
+```js
+[imagePlugin];
+```
+
+#### Factory Props
+
+| Name   | Type                    | Description                                                                                    |
+| ------ | ----------------------- | ---------------------------------------------------------------------------------------------- |
+| config | Config                  | The current Static CMS config. See [configuration options](/docs/configuration-options)        |
+| field  | MarkdownField           | The field configuration for the current Markdown widget. See [Widget Options](#widget-options) |
+| media  | MediaHolder             | See [Media Holder](#media-holder)                                                              |
+| mode   | 'editor'<br />\| 'preview' | Specifies if your plugin is running in the markdown editor or the markdown preview             |
+
+##### Media Holder
+
+Media holder is a javascript class that holds the loaded media assets (images or files) that are present in the markdown content. It exposes a method called `getMedia` that takes a `url` and returns the loaded image or file as an blob asset.
+
+This is utilized by the `imagePlugin` to be able to render images present in the markdown that are currently only available in backend or are not yet persisted to the backend.

@@ -1,35 +1,21 @@
 import { styled } from '@mui/material/styles';
 import React from 'react';
 
-import { colors } from '../../components/UI/styles';
-import { transientOptions } from '../../lib';
-
-interface EmptyMessageContainerProps {
-  $isPrivate: boolean;
-}
-
-const EmptyMessageContainer = styled(
-  'div',
-  transientOptions,
-)<EmptyMessageContainerProps>(
-  ({ $isPrivate }) => `
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    ${$isPrivate ? `color: ${colors.textFieldBorder};` : ''}
-  `,
-);
+const EmptyMessageContainer = styled('div')`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 interface EmptyMessageProps {
   content: string;
-  isPrivate?: boolean;
 }
 
-const EmptyMessage = ({ content, isPrivate = false }: EmptyMessageProps) => {
+const EmptyMessage = ({ content }: EmptyMessageProps) => {
   return (
-    <EmptyMessageContainer $isPrivate={isPrivate}>
+    <EmptyMessageContainer>
       <h1>{content}</h1>
     </EmptyMessageContainer>
   );

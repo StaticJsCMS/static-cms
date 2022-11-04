@@ -76,7 +76,7 @@ In Hugo, static files that don't need to be processed by the build commands live
   </head>
   <body>
     <!-- Include the script that builds the page and powers Static CMS -->
-    <script src="https://unpkg.com/@staticcms/core@%5E0.1.0/dist/static-cms-core.js"></script>
+    <script src="https://unpkg.com/@staticcms/core@%5E1.0.0/dist/static-cms-core.js"></script>
   </body>
 </html>
 ```
@@ -85,12 +85,12 @@ In the `config.yml` file, you can add this basic configuration — you can custo
 
 ```yaml
 backend:
-  title: git-gateway
+  name: git-gateway
   branch: main # Branch to update (optional; defaults to main)
 media_folder: static/img
 public_folder: /img
 collections:
-  - title: 'blog'
+  - name: 'blog'
     label: 'Blog'
     folder: 'content/blog'
     create: true
@@ -98,10 +98,10 @@ collections:
     editor:
       preview: false
     fields:
-      - { label: 'Title', title: 'title', widget: 'string' }
-      - { label: 'Publish Date', title: 'date', widget: 'datetime' }
-      - { label: 'Description', title: 'description', widget: 'string' }
-      - { label: 'Body', title: 'body', widget: 'markdown' }
+      - { label: 'Title', name: 'title', widget: 'string' }
+      - { label: 'Publish Date', name: 'date', widget: 'datetime' }
+      - { label: 'Description', name: 'description', widget: 'string' }
+      - { label: 'Body', name: 'body', widget: 'markdown' }
 ```
 
 **Note:** You won't be able to access the CMS just yet — you still need to deploy the project with **Netlify** and authenticate with **Netlify Identity**. You'll handle this in the next few steps of this guide.

@@ -53,13 +53,17 @@ const DocsContent = styled('div')(
       font-weight: 500;
       margin-top: 28px;
       margin-bottom: 12px;
+      position: relative;
     }
 
-    & h3,
+    & h3 {
+      color: ${theme.palette.text.primary};
+    }
+
     & h4,
     & h5,
     & h6 {
-      color: ${theme.palette.text.primary};
+      color: ${theme.palette.text.secondary};
     }
 
     ${theme.breakpoints.up('lg')} {
@@ -157,19 +161,6 @@ const DocsContent = styled('div')(
 
     & h1 + h2 {
       margin-top: 0;
-    }
-
-    & table thead tr th,
-    & table thead tr td {
-      white-space: nowrap;
-    }
-
-    & table tbody tr td {
-      white-space: nowrap;
-    }
-
-    & table tbody tr td:last-child {
-      white-space: normal;
     }
 
     & pre {
@@ -273,13 +264,6 @@ const DocsContent = styled('div')(
     }
 
     ${theme.breakpoints.down('md')} {
-      & h2,
-      & h3,
-      & h4,
-      & h5 {
-        position: relative;
-      }
-
       & h2::before {
         display: block;
       }

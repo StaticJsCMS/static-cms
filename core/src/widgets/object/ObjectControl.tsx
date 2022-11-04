@@ -47,7 +47,6 @@ const StyledNoFieldsMessage = styled('div')`
 `;
 
 const ObjectControl = ({
-  clearFieldErrors,
   field,
   fieldsErrors,
   submitted,
@@ -89,7 +88,6 @@ const ObjectControl = ({
             key={index}
             field={field}
             value={fieldValue}
-            clearFieldErrors={clearFieldErrors}
             fieldsErrors={fieldsErrors}
             submitted={submitted}
             parentPath={path}
@@ -104,7 +102,6 @@ const ObjectControl = ({
       }) ?? null
     );
   }, [
-    clearFieldErrors,
     fieldsErrors,
     i18n,
     isFieldDuplicate,

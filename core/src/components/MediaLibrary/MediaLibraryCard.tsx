@@ -1,8 +1,8 @@
 import { styled } from '@mui/material/styles';
 import React, { useEffect, useMemo } from 'react';
 
-import { transientOptions } from '../../lib';
 import { borders, colors, effects, lengths, shadows } from '../../components/UI/styles';
+import { transientOptions } from '../../lib';
 
 import type { MediaLibraryDisplayURL } from '../../reducers/mediaLibrary';
 
@@ -13,14 +13,13 @@ interface CardProps {
   $height: string;
   $margin: string;
   $isSelected: boolean;
-  $isPrivate: boolean;
 }
 
 const Card = styled(
   'div',
   transientOptions,
 )<CardProps>(
-  ({ $width, $height, $margin, $isSelected, $isPrivate }) => `
+  ({ $width, $height, $margin, $isSelected }) => `
     width: ${$width};
     height: ${$height};
     margin: ${$margin};
@@ -29,7 +28,6 @@ const Card = styled(
     border-radius: ${lengths.borderRadius};
     cursor: pointer;
     overflow: hidden;
-    ${$isPrivate ? `background-color: ${colors.textFieldBorder};` : ''}
 
     &:focus {
       outline: none;
@@ -86,7 +84,6 @@ interface MediaLibraryCardProps {
   width: string;
   height: string;
   margin: string;
-  isPrivate?: boolean;
   type?: string;
   isViewableImage: boolean;
   loadDisplayURL: () => void;
@@ -102,7 +99,6 @@ const MediaLibraryCard = ({
   width,
   height,
   margin,
-  isPrivate = false,
   type,
   isViewableImage,
   isDraft,
@@ -122,7 +118,6 @@ const MediaLibraryCard = ({
       $width={width}
       $height={height}
       $margin={margin}
-      $isPrivate={isPrivate}
       onClick={onClick}
       tabIndex={-1}
     >

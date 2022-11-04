@@ -29,7 +29,6 @@ const StyledDialogTitle = styled(DialogTitle)`
 
 export interface MediaLibraryTopProps {
   onClose: () => void;
-  privateUpload?: boolean;
   forImage?: boolean;
   onDownload: () => void;
   onUpload: (event: ChangeEvent<HTMLInputElement> | DragEvent) => void;
@@ -62,7 +61,6 @@ const MediaLibraryTop = ({
   isPersisting,
   isDeleting,
   selectedFile,
-  privateUpload,
 }: TranslatedProps<MediaLibraryTopProps>) => {
   const shouldShowButtonLoader = isPersisting || isDeleting;
   const uploadEnabled = !shouldShowButtonLoader;
@@ -80,11 +78,9 @@ const MediaLibraryTop = ({
   return (
     <LibraryTop>
       <StyledDialogTitle>
-        {`${privateUpload ? t('mediaLibrary.mediaLibraryModal.private') : ''}${
-          forImage
-            ? t('mediaLibrary.mediaLibraryModal.images')
-            : t('mediaLibrary.mediaLibraryModal.mediaAssets')
-        }`}
+        {forImage
+          ? t('mediaLibrary.mediaLibraryModal.images')
+          : t('mediaLibrary.mediaLibraryModal.mediaAssets')}
         <StyledButtonsContainer>
           <CopyToClipBoardButton
             disabled={!hasSelection}

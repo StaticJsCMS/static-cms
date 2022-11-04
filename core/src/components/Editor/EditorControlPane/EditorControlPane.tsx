@@ -6,10 +6,7 @@ import get from 'lodash/get';
 import React, { useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
 
-import {
-  changeDraftField as changeDraftFieldAction,
-  clearFieldErrors as clearFieldErrorsAction,
-} from '../../../actions/entries';
+import { changeDraftField as changeDraftFieldAction } from '../../../actions/entries';
 import confirm from '../../../components/UI/Confirm';
 import {
   getI18nInfo,
@@ -115,7 +112,6 @@ const EditorControlPane = ({
   changeDraftField,
   locale,
   onLocaleChange,
-  clearFieldErrors,
   t,
 }: TranslatedProps<EditorControlPaneProps>) => {
   const i18n = useMemo(() => {
@@ -211,7 +207,6 @@ const EditorControlPane = ({
               isFieldDuplicate={field => isFieldDuplicate(field, locale, i18n?.defaultLocale)}
               isFieldHidden={field => isFieldHidden(field, locale, i18n?.defaultLocale)}
               locale={locale}
-              clearFieldErrors={clearFieldErrors}
               parentPath=""
               i18n={i18n}
             />
@@ -239,7 +234,6 @@ function mapStateToProps(_state: RootState, ownProps: EditorControlPaneOwnProps)
 
 const mapDispatchToProps = {
   changeDraftField: changeDraftFieldAction,
-  clearFieldErrors: clearFieldErrorsAction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

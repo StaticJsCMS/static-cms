@@ -60,14 +60,14 @@ In your `config.yml` file paste the following configuration:
 
 ```yml
 backend:
-  title: git-gateway
+  name: git-gateway
   branch: main # Branch to update (optional; defaults to main)
 
 media_folder: static/img
 public_folder: /img
 
 collections:
-  - title: 'blog'
+  - name: 'blog'
     label: 'Blog'
     folder: 'content/blog'
     create: true
@@ -78,10 +78,10 @@ collections:
     editor:
       preview: false
     fields:
-      - { label: 'Title', title: 'title', widget: 'string' }
-      - { label: 'Publish Date', title: 'date', widget: 'datetime' }
-      - { label: 'Description', title: 'description', widget: 'string' }
-      - { label: 'Body', title: 'body', widget: 'markdown' }
+      - { label: 'Title', name: 'title', widget: 'string' }
+      - { label: 'Publish Date', name: 'date', widget: 'datetime' }
+      - { label: 'Description', name: 'description', widget: 'string' }
+      - { label: 'Body', name: 'body', widget: 'markdown' }
 ```
 
 **Note:** The above configuration allows assets to be stored relative to their content. Therefore posts would be stored in the format below as it is in `gatsby-starter-blog`.

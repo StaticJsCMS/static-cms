@@ -135,7 +135,6 @@ const hu: LocalePhrasesRoot = {
       noResults: 'Nincs találat.',
       noAssetsFound: 'Nem található tartalom.',
       noImagesFound: 'Nem található kép.',
-      private: 'Privát ',
       images: 'Képek',
       mediaAssets: 'Média tartalmak',
       search: 'Keresés...',

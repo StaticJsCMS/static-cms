@@ -41,9 +41,8 @@ import {
 } from './lib/util/collection.util';
 import { selectMediaFilePath } from './lib/util/media.util';
 import { set } from './lib/util/object.util';
-import { selectIntegration } from './reducers/integrations';
-import { createEntry } from './valueObjects/Entry';
 import { dateParsers, expandPath, extractTemplateVars } from './lib/widgets/stringTemplate';
+import { createEntry } from './valueObjects/Entry';
 
 import type {
   BackendClass,
@@ -778,9 +777,8 @@ export class Backend {
       throw new Error('Config not loaded');
     }
 
-    const integration = selectIntegration(state.integrations, null, 'assetStore');
     const mediaFolders = selectMediaFolders(configState.config, collection, entry);
-    if (mediaFolders.length > 0 && !integration) {
+    if (mediaFolders.length > 0) {
       const files = await Promise.all(
         mediaFolders.map(folder => this.implementation.getMedia(folder)),
       );

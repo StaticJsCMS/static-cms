@@ -95,7 +95,7 @@ Your website is now deployed. Netlify provides you with a randomly generated dom
      - foo
      - bar
    authors:
-     - title: Garrison McMullen
+     - name: Garrison McMullen
        title: Instruction Writer
        url: https://github.com/garrison0
        image_url: https://avatars.githubusercontent.com/u/4089393?v=4
@@ -127,7 +127,7 @@ Your website is now deployed. Netlify provides you with a randomly generated dom
    </head>
    <body>
      <!-- Include the script that builds the page and powers Static CMS -->
-     <script src="https://unpkg.com/@staticcms/core@%5E0.1.0/dist/static-cms-core.js"></script>
+     <script src="https://unpkg.com/@staticcms/core@%5E1.0.0/dist/static-cms-core.js"></script>
    </body>
    </html>
    ```
@@ -135,7 +135,7 @@ Your website is now deployed. Netlify provides you with a randomly generated dom
 4. Edit `config.yml` to look like this: 
    ```yaml
    backend:
-     title: github
+     name: github
      branch: main 
      repo: <your-github>/my-website
    
@@ -144,7 +144,7 @@ Your website is now deployed. Netlify provides you with a randomly generated dom
    public_folder: "/img/" # The src attribute for uploaded media will begin with /images/uploads
    
    collections:
-   - title: blog
+   - name: blog
      label: "blog"
      folder: blog
      identifier_field: title
@@ -153,20 +153,20 @@ Your website is now deployed. Netlify provides you with a randomly generated dom
      create: true
      slug: "{{year}}-{{month}}-{{day}}-{{slug}}" # Filename template, e.g., YYYY-MM-DD-title.md
      fields:
-       - { title: title, label: Title, widget: string }
-       - { title: body, label: Body, widget: markdown }
-       - { title: slug, label: Slug, widget: string }
+       - { name: title, label: Title, widget: string }
+       - { name: body, label: Body, widget: markdown }
+       - { name: slug, label: Slug, widget: string }
        - label: "Tags"
-         title: "tags"
+         name: "tags"
          widget: "list"
        - label: "Authors"
-         title: "authors" 
+         name: "authors" 
          widget: "list"
          fields:
-           - { title: name, label: Name, widget: string }
-           - { title: title, label: Title, widget: string } 
-           - { title: url, label: URL, widget: string } 
-           - { title: imageUrl, label: ImageURL, widget: string } 
+           - { name: name, label: Name, widget: string }
+           - { name: title, label: Title, widget: string } 
+           - { name: url, label: URL, widget: string } 
+           - { name: imageUrl, label: ImageURL, widget: string } 
    ```
 
    `config.yml` specifies what kind of content your blog posts have. The content specification enables Static CMS to edit existing posts and create new ones with the same format. To learn more, read about Static CMS' [](/docs/configuration-options/)[Configuration options](/docs/configuration-options/).

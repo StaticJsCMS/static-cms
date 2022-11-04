@@ -4,23 +4,19 @@ import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { lengths } from '../../components/UI/styles';
 import { getAdditionalLink } from '../../lib/registry';
+import MainView from '../App/MainView';
 import Sidebar from '../Collection/Sidebar';
 
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import type { RootState } from '../../store';
 
-const StylePage = styled('div')`
-  margin: ${lengths.pageMargin};
-`;
-
 const StyledPageContent = styled('div')`
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
 `;
 
 const Page = ({ collections, isSearchEnabled, searchTerm, filterTerm }: PageProps) => {
@@ -51,7 +47,7 @@ const Page = ({ collections, isSearchEnabled, searchTerm, filterTerm }: PageProp
   }, [Content]);
 
   return (
-    <StylePage>
+    <MainView>
       <Sidebar
         collections={collections}
         collection={false}
@@ -60,7 +56,7 @@ const Page = ({ collections, isSearchEnabled, searchTerm, filterTerm }: PageProp
         filterTerm={filterTerm}
       />
       {pageContent}
-    </StylePage>
+    </MainView>
   );
 };
 

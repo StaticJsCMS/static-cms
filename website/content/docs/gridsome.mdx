@@ -105,23 +105,23 @@ Your `config.yml` for GitHub should look like this:
 
 ```yml
 backend:
-  title: git-gateway
+  name: git-gateway
   branch: main # Branch to update (optional; defaults to main)
 
 media_folder: "static/uploads"
 public_folder: "/uploads"
 
 collections:
-  - title: "posts"
+  - name: "posts"
     label: "Posts"
     folder: "posts"
     create: true
     slug: "{{slug}}"
     fields:
-      - {label: "Title", title: "title", widget: "string"}
-      - {label: "Excerpt", title: "excerpt", widget: "string"}
-      - {label: "Publish Date", title: "date", widget: "datetime"}
-      - {label: "Body", title: "body", widget: "markdown"}
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Excerpt", name: "excerpt", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Body", name: "body", widget: "markdown"}
 ```
 
 ## Push to GitHub

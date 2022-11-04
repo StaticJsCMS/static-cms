@@ -497,6 +497,8 @@ collections:
         label: Site Settings
         file: _data/settings.json
         description: General Site Settings
+        editor:
+          preview: true
         fields:
           - label: Number of posts on frontpage
             name: front_limit
@@ -526,6 +528,8 @@ collections:
         label: Authors
         file: _data/authors.yml
         description: Author descriptions
+        editor:
+          preview: true
         fields:
           - name: authors
             label: Authors

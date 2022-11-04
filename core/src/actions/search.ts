@@ -122,7 +122,7 @@ export function searchEntries(searchTerm: string, searchCollections: string[], p
     dispatch(searchingEntries(searchTerm, allCollections, page));
 
     const searchPromise = integration
-      ? getSearchIntegrationProvider(state.integrations, backend.getToken, integration)?.search(
+      ? getSearchIntegrationProvider(state.integrations, integration)?.search(
           collections,
           searchTerm,
           page,
@@ -179,7 +179,7 @@ export function query(
     }
 
     const queryPromise = integration
-      ? getSearchIntegrationProvider(state.integrations, backend.getToken, integration)?.searchBy(
+      ? getSearchIntegrationProvider(state.integrations, integration)?.searchBy(
           JSON.stringify(searchFields.map(f => `data.${f}`)),
           collectionName,
           searchTerm,

@@ -18,7 +18,7 @@ import type {
   ListField,
   ObjectValue,
   ValueOrNestedValue,
-  WidgetControlProps,
+  WidgetControlProps
 } from '../../interface';
 
 const StyledListWrapper = styled('div')`
@@ -96,7 +96,6 @@ function getFieldsDefault(fields: Field[], initialValue: ObjectValue = {}): Obje
 }
 
 const ListControl = ({
-  clearFieldErrors,
   entry,
   field,
   fieldsErrors,
@@ -223,7 +222,6 @@ const ListControl = ({
           key={key}
           valueType={valueType}
           handleRemove={handleRemove}
-          clearFieldErrors={clearFieldErrors}
           data-testid={`object-control-${index}`}
           entry={entry}
           field={field}
@@ -242,7 +240,6 @@ const ListControl = ({
       keys,
       valueType,
       handleRemove,
-      clearFieldErrors,
       entry,
       field,
       fieldsErrors,

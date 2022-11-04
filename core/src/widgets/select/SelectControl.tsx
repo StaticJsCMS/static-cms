@@ -34,7 +34,7 @@ const SelectControl = ({
 }: WidgetControlProps<string | number | (string | number)[], SelectField>) => {
   const [internalValue, setInternalValue] = useState(value);
 
-  const fieldOptions: (string | Option)[] = useMemo(() => field.options, [field.options]);
+  const fieldOptions: (string | number | Option)[] = useMemo(() => field.options, [field.options]);
   const isMultiple = useMemo(() => field.multiple ?? false, [field.multiple]);
 
   const options = useMemo(

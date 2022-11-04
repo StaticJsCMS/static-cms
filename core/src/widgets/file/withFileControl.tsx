@@ -306,7 +306,6 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
         return openMediaLibrary({
           controlID,
           forImage,
-          privateUpload: field.private,
           value: internalValue,
           allowMultiple:
             'allow_multiple' in mediaLibraryFieldOptions
@@ -355,7 +354,6 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
         return openMediaLibrary({
           controlID,
           forImage,
-          privateUpload: field.private,
           value: internalValue,
           replaceIndex: index,
           allowMultiple: false,

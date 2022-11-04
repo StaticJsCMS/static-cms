@@ -4,8 +4,6 @@ title: List
 weight: 17
 ---
 
-## Overview
-
 - **Name:** `list`
 - **UI:** The list widget contains a repeatable child widget, with controls for adding, deleting, and re-ordering the repeated widgets.
 - **Data type:** List of widget values
@@ -24,8 +22,8 @@ For common options, see [Common widget options](/docs/widgets#common-widget-opti
 | summary        | string                 |                                            | _Optional_. The label displayed on collapsed entries                                                                                                                          |
 | label_singular | string                 | `label`                                    | _Optional_. The text to show on the add button                                                                                                                                |
 | fields         | list of widgets        | []                                         | _Optional_. A nested list of multiple widget fields to be included in each repeatable iteration                                                                               |
-| max            | number                 |                                            | _Optional_. Maximum number of items in the list                                                                                                                               |
 | min            | number                 |                                            | _Optional_. Minimum number of items in the list                                                                                                                               |
+| max            | number                 |                                            | _Optional_. Maximum number of items in the list                                                                                                                               |
 | add_to_top     | boolean                | `false`                                    | _Optional_. <ul><li>`true` - New entries will be added to the top of the list</li><li>`false` - New entries will be added to the bottom of the list</li></ul>                 |
 | types          | list of object widgets |                                            | _Optional_. A nested list of object widgets representing the available types for items in the list. Takes priority over `fields`.                                             |
 | type_key       | string                 | `'type'`                                   | _Optional_. The name of the field that will be added to every item in list representing the name of the object widget that item belongs to. Ignored if `types` is not defined |

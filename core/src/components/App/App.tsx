@@ -16,6 +16,7 @@ import { history } from '../../routing/history';
 import CollectionRoute from '../Collection/CollectionRoute';
 import EditorRoute from '../Editor/EditorRoute';
 import MediaLibrary from '../MediaLibrary/MediaLibrary';
+import Page from '../page/Page';
 import Snackbars from '../snackbar/Snackbars';
 import { Alert } from '../UI/Alert';
 import { Confirm } from '../UI/Confirm';
@@ -212,6 +213,7 @@ const App = ({
             element={<CollectionRoute collections={collections} isSearchResults />}
           />
           <Route path="/edit/:name/:entryName" element={<EditEntityRedirect />} />
+          <Route path="/page/:id" element={<Page />} />
           <Route element={<NotFoundPage />} />
         </Routes>
         {useMediaLibrary ? <MediaLibrary /> : null}

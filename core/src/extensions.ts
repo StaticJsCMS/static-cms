@@ -1,5 +1,4 @@
 import {
-  AzureBackend,
   BitbucketBackend,
   GitGatewayBackend,
   GitHubBackend,
@@ -30,7 +29,6 @@ import {
 export function addExtensions() {
   // Register all the things
   registerBackend('git-gateway', GitGatewayBackend);
-  registerBackend('azure', AzureBackend);
   registerBackend('github', GitHubBackend);
   registerBackend('gitlab', GitLabBackend);
   registerBackend('bitbucket', BitbucketBackend);

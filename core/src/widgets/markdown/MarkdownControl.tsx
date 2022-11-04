@@ -86,7 +86,6 @@ const MarkdownControl = ({
       openMediaLibrary({
         controlID,
         forImage,
-        privateUpload: false,
         allowMultiple: false,
         field,
         config: 'config' in mediaLibraryFieldOptions ? mediaLibraryFieldOptions.config : undefined,

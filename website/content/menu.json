@@ -6,12 +6,8 @@
         "title": "Intro to Static CMS"
       },
       {
-        "name": "Accounts",
-        "title": "Account Settings"
-      },
-      {
-        "name": "Configuration",
-        "title": "Configuring your Site"
+        "name": "Backends",
+        "title": "Backends"
       },
       {
         "name": "Collections",
