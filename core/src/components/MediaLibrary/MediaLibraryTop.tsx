@@ -78,6 +78,9 @@ const MediaLibraryTop = ({
   return (
     <LibraryTop>
       <StyledDialogTitle>
+        {forImage
+          ? t('mediaLibrary.mediaLibraryModal.images')
+          : t('mediaLibrary.mediaLibraryModal.mediaAssets')}
         <StyledButtonsContainer>
           <CopyToClipBoardButton
             disabled={!hasSelection}

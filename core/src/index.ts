@@ -18,6 +18,9 @@ export const CMS = {
 if (typeof window !== 'undefined') {
   window.CMS = CMS;
   window.createClass = window.createClass || createReactClass;
+  window.useState = window.useState || React.useState;
+  window.useMemo = window.useMemo || React.useMemo;
+  window.useEffect = window.useEffect || React.useEffect;
   window.h = window.h || React.createElement;
 }
 
