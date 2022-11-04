@@ -115,7 +115,7 @@ collections:
         widget: markdown
 ```
 
-## Folder Collections Path
+### Folder Collections Path <img src="https://img.shields.io/badge/-Beta%20Feature-blue" alt="Beta Feature. Use at your own risk" title="Beta Feature. Use at your own risk" />
 
 By default the CMS stores folder collection content under the folder specified in the collection setting.
 
@@ -125,7 +125,7 @@ You can now specify an additional `path` template (similar to the `slug` templat
 
 This allows saving content in subfolders, e.g. configuring `path: '{{year}}/{{slug}}'` will save the content under `posts/2019/post-title.md`.
 
-### Media and Public Folder
+#### Media and Public Folder
 
 By default the CMS stores media files for all collections under a global `media_folder` directory as specified in the configuration.
 
@@ -180,7 +180,7 @@ And for the image field being populated with a value of `image.png`.
 
 **Note: When specifying a `path` on a folder collection, `media_folder` defaults to an empty string.**
 
-**Available template tags:**
+##### Available Template Tags
 
 Supports all of the [`slug` templates](/docs/configuration-options#slug) and:
 
@@ -190,7 +190,7 @@ Supports all of the [`slug` templates](/docs/configuration-options#slug) and:
 * `{{media_folder}}` The global `media_folder`.
 * `{{public_folder}}` The global `public_folder`.
 
-### Nested Collections (Beta)
+### Nested Collections <img src="https://img.shields.io/badge/-Beta%20Feature-blue" alt="Beta Feature. Use at your own risk" title="Beta Feature. Use at your own risk" />
 
 [Nested collections](/docs/beta-features/#nested-collections) is a beta feature that allows a folder collection to show a nested structure of entries and edit the locations of the entries. This feature is useful when you have a complex folder structure and may not want to create separate collections for every directory. As it is in beta, please use with discretion.
 

@@ -1,9 +1,10 @@
 ---
-group: Configuration
-title: Beta Features!
+group: Intro
+title: Beta Features
 weight: 200
 ---
-We run new functionality in an open beta format from time to time. That means that this functionality is totally available for use, and we *think* it might be ready for primetime, but it could break or change without notice.
+
+We run new functionality in an open beta format from time to time. That means that this functionality is totally available for use, and we _think_ it might be ready for primetime, but it could break or change without notice.
 
 **Use these features at your own risk.**
 
@@ -131,6 +132,94 @@ collections:
       }
 ```
 
+## Folder Collections Path
+
+See [Folder Collections Path](/docs/collection-types#folder-collections-path).
+
+## Nested Collections
+
+Seed [Nested Collections](/docs/collection-types#nested-collections).
+
+## List Widget: Variable Types
+
+Before this feature, the [list widget](/docs/widgets/#list) allowed a set of fields to be repeated, but every list item had the same set of fields available. With variable types, multiple named sets of fields can be defined, which opens the door to highly flexible content authoring (even page building) in Static CMS.
+
+**Note: this feature does not yet support default previews and requires [registering a preview template](/docs/customization#registerpreviewtemplate) in order to show up in the preview pane.**
+
+To use variable types in the list widget, update your field configuration as follows:
+
+1. Instead of defining your list fields under `fields` or `field`, define them under `types`. Similar to `fields`, `types` must be an array of field definition objects.
+2. Each field definition under `types` must use the `object` widget (this is the default value for
+   `widget`).
+
+### Additional list widget options
+
+- `types`: a nested list of object widgets. All widgets must be of type `object`. Every object widget may define different set of fields.
+- `typeKey`: the name of the field that will be added to every item in list representing the name of the object widget that item belongs to. Ignored if `types` is not defined. Default is `type`.
+- `summary`: allows customization of a collapsed list item object in a similar way to a [collection summary](/docs/configuration-options/?#summary)
+
+### Example Configuration
+
+The example configuration below imagines a scenario where the editor can add two "types" of content,
+either a "carousel" or a "spotlight". Each type has a unique name and set of fields.
+
+```yaml
+- label: 'Home Section'
+  name: 'sections'
+  widget: 'list'
+  types:
+    - label: 'Carousel'
+      name: 'carousel'
+      widget: object
+      summary: '{{fields.header}}'
+      fields:
+        - { label: Header, name: header, widget: string, default: 'Image Gallery' }
+        - { label: Template, name: template, widget: string, default: 'carousel.html' }
+        - label: Images
+          name: images
+          widget: list
+          field: { label: Image, name: image, widget: image }
+    - label: 'Spotlight'
+      name: 'spotlight'
+      widget: object
+      fields:
+        - { label: Header, name: header, widget: string, default: 'Spotlight' }
+        - { label: Template, name: template, widget: string, default: 'spotlight.html' }
+        - { label: Text, name: text, widget: text, default: 'Hello World' }
+```
+
+### Example Output
+
+The output for the list widget will be an array of objects, and each object will have a `type` key
+with the name of the type used for the list item. The `type` key name can be customized via the
+`typeKey` property in the list configuration.
+
+If the above example configuration were used to create a carousel, a spotlight, and another
+carousel, the output could look like this:
+
+```yaml
+title: Home
+sections:
+  - type: carousel
+    header: Image Gallery
+    template: carousel.html
+    images:
+      - images/image01.png
+      - images/image02.png
+      - images/image03.png
+  - type: spotlight
+    header: Spotlight
+    template: spotlight.html
+    text: Hello World
+  - type: carousel
+    header: Image Gallery
+    template: carousel.html
+    images:
+      - images/image04.png
+      - images/image05.png
+      - images/image06.png
+```
+
 ## Custom Mount Element
 
 Static CMS always creates its own DOM element for mounting the application, which means it always takes over the entire page, and is generally inflexible if you're trying to do something creative, like injecting it into a shared context.
@@ -223,22 +312,22 @@ backend:
 
 Static CMS generates the following commit types:
 
-| Commit type     | When is it triggered?                    | Available template tags                                     |
-| --------------- | ---------------------------------------- | ----------------------------------------------------------- |
-| `create`        | A new entry is created                   | `slug`, `path`, `collection`, `author-login`, `author-name` |
-| `update`        | An existing entry is changed             | `slug`, `path`, `collection`, `author-login`, `author-name` |
-| `delete`        | An existing entry is deleted             | `slug`, `path`, `collection`, `author-login`, `author-name` |
-| `uploadMedia`   | A media file is uploaded                 | `path`, `author-login`, `author-name`                       |
-| `deleteMedia`   | A media file is deleted                  | `path`, `author-login`, `author-name`                       |
+| Commit type   | When is it triggered?        | Available template tags                                     |
+| ------------- | ---------------------------- | ----------------------------------------------------------- |
+| `create`      | A new entry is created       | `slug`, `path`, `collection`, `author-login`, `author-name` |
+| `update`      | An existing entry is changed | `slug`, `path`, `collection`, `author-login`, `author-name` |
+| `delete`      | An existing entry is deleted | `slug`, `path`, `collection`, `author-login`, `author-name` |
+| `uploadMedia` | A media file is uploaded     | `path`, `author-login`, `author-name`                       |
+| `deleteMedia` | A media file is deleted      | `path`, `author-login`, `author-name`                       |
 
 Template tags produce the following output:
 
-* `{{slug}}`: the url-safe filename of the entry changed
-* `{{collection}}`: the name of the collection containing the entry changed
-* `{{path}}`: the full path to the file changed
-* `{{message}}`: the relevant message based on the current change (e.g. the `create` message when an entry is created)
-* `{{author-login}}`: the login/username of the author
-* `{{author-name}}`: the full name of the author (might be empty based on the user's profile)
+- `{{slug}}`: the url-safe filename of the entry changed
+- `{{collection}}`: the name of the collection containing the entry changed
+- `{{path}}`: the full path to the file changed
+- `{{message}}`: the relevant message based on the current change (e.g. the `create` message when an entry is created)
+- `{{author-login}}`: the login/username of the author
+- `{{author-name}}`: the full name of the author (might be empty based on the user's profile)
 
 ## Image widget file size limit
 
@@ -335,45 +424,3 @@ will open the editor for a new post with the `title` field populated with `first
 with `second` and the markdown `body` field with `# content`.
 
 **Note:** URL Encoding might be required for certain values (e.g. in the previous example the value for `body` is URL encoded).
-
-## Nested Collections
-
-Allows a folder collection to show a nested structure of entries and edit the locations of the entries.
-
-Example configuration:
-
-```yaml
-collections:
-  - name: pages
-    label: Pages
-    label_singular: 'Page'
-    folder: content/pages
-    create: true
-    # adding a nested object will show the collection folder structure
-    nested:
-      depth: 100 # max depth to show in the collection tree
-      summary: '{{title}}' # optional summary for a tree node, defaults to the inferred title field
-    fields:
-      - label: Title
-        name: title
-        widget: string
-      - label: Body
-        name: body
-        widget: markdown
-```
-
-Nested collections expect the following directory structure:
-
-```bash
-content
-└── pages
-    ├── authors
-    │   ├── author-1
-    │   │   └── index.md
-    │   └── index.md
-    ├── index.md
-    └── posts
-        ├── hello-world
-        │   └── index.md
-        └── index.md
-```

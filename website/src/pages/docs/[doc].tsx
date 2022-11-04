@@ -6,8 +6,8 @@ import remarkGfm from 'remark-gfm';
 
 import Anchor from '../../components/docs/components/Anchor';
 import Blockquote from '../../components/docs/components/Blockquote';
-import Header2 from '../../components/docs/components/Header2';
-import Header3 from '../../components/docs/components/Header3';
+import Header2 from '../../components/docs/components/headers/Header2';
+import Header3 from '../../components/docs/components/headers/Header3';
 import DocsTable from '../../components/docs/components/table/Table';
 import TableBody from '../../components/docs/components/table/TableBody';
 import TableBodyCell from '../../components/docs/components/table/TableBodyCell';

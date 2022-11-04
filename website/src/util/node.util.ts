@@ -1,3 +1,7 @@
+import { useMemo } from 'react';
+
+import { isNotEmpty } from './string.util';
+
 import type { ReactNode } from 'react';
 
 export const getNodeText = (node: ReactNode): string => {
@@ -6,7 +10,7 @@ export const getNodeText = (node: ReactNode): string => {
   }
 
   if (node instanceof Array) {
-    return node.map(getNodeText).join('');
+    return node.map(getNodeText).filter(isNotEmpty).join('');
   }
 
   if (typeof node === 'object' && node && 'props' in node) {
@@ -15,3 +19,5 @@ export const getNodeText = (node: ReactNode): string => {
 
   return '';
 };
+
+export const useNodeText = (node: ReactNode) => useMemo(() => getNodeText(node), [node]);
