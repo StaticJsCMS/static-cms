@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 
+import { isNotEmpty } from '../../../util/string.util';
 import DocsHeadings from './DocsHeadings';
 
 export interface Heading {
@@ -71,7 +72,7 @@ const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
         const headingElement = (
           headingElementsRef.current as Record<string, IntersectionObserverEntry>
         )[key];
-        if (headingElement.isIntersecting) {
+        if (headingElement.isIntersecting && isNotEmpty(headingElement.target.textContent)) {
           visibleHeadings.push(headingElement);
         }
       });

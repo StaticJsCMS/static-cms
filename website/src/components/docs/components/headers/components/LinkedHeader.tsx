@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 
 import { useNodeText } from '../../../../../util/node.util';
-import AnchorLinkIcon from './AnchorLinkIcon';
+import { isNotEmpty } from '../../../../../util/string.util';
 import useAnchor from '../hooks/useAnchor';
+import AnchorLinkIcon from './AnchorLinkIcon';
 
 import type { ReactNode } from 'react';
 
@@ -35,9 +36,11 @@ const Header3 = ({ variant, children = '' }: Header3Props) => {
   const anchor = useAnchor(textContent);
   const link = useMemo(() => `#${anchor}`, [anchor]);
   const theme = useTheme();
+  const hasText = useMemo(() => isNotEmpty(textContent), [textContent]);
   return (
     <Typography
       variant={variant}
+      component={hasText ? variant : 'div'}
       id={anchor}
       sx={{
         [theme.breakpoints.down('sm')]: {
@@ -45,11 +48,13 @@ const Header3 = ({ variant, children = '' }: Header3Props) => {
         },
       }}
     >
-      <Link href={link} className="anchor-link">
-        <StyledLink href={link}>
-          <AnchorLinkIcon variant={variant} />
-        </StyledLink>
-      </Link>
+      {hasText ? (
+        <Link href={link} className="anchor-link">
+          <StyledLink href={link}>
+            <AnchorLinkIcon variant={variant} />
+          </StyledLink>
+        </Link>
+      ) : null}
       {children}
     </Typography>
   );
