@@ -163,19 +163,6 @@ const DocsContent = styled('div')(
       margin-top: 0;
     }
 
-    & table thead tr th,
-    & table thead tr td {
-      white-space: nowrap;
-    }
-
-    & table tbody tr td {
-      white-space: nowrap;
-    }
-
-    & table tbody tr td:last-child {
-      white-space: normal;
-    }
-
     & pre {
       display: block;
       line-height: 1.25rem;

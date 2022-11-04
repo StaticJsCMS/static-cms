@@ -15,8 +15,29 @@ const StyledTableContainer = styled(TableContainer)(
         ${theme.palette.mode === 'light' ? '#751365' : '#ffb6ec'};
     }
 
-    & td:last-of-type {
+    & thead tr th,
+    & thead tr td {
+      white-space: nowrap;
+    }
+
+    & tbody tr td {
+      white-space: nowrap;
+    }
+
+    & tbody tr td:last-of-type {
+      white-space: normal;
+    }
+
+    .non-props-table + & tbody tr td {
+      white-space: normal;
+    }
+
+    & tbody tr td:last-of-type {
       min-width: 200px;
+    }
+
+    .non-props-table + & tbody tr td:last-of-type {
+      min-width: unset;
     }
   `,
 );
