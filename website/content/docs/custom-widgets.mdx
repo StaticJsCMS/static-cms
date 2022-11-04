@@ -6,9 +6,7 @@ weight: 40
 
 ## Overview
 
-The Static CMS exposes a `window.CMS` a global object that you can use to register custom widgets. The same object is also the default export if you import Static CMS as an npm module. The available widget extension methods are:
-
-- **registerWidget:** registers a custom widget.
+The Static CMS exposes a `window.CMS` a global object that you can use to register custom widgets via `registerWidget`. The same object is also the default export if you import Static CMS as an npm module.
 
 ### React Components Inline
 
@@ -31,12 +29,12 @@ CMS.registerWidget(name, control, [preview], [schema]);
 
 ### Params
 
-| Param   | Type                           | Description                                                                                                                                                                                                                                                                                                                     |
-| ------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| name    | string                         | Widget name, allows this widget to be used via the field `widget` property in config                                                                                                                                                                                                                                            |
-| control | React.Component<br />\| string | <ul><li>`React.Component` - The react component that renders the control. See [Control Component](#control-component)</li><li>`string` - Name of a registered widget whose control should be used (includes built in widgets).</li></ul>                                                                                        |
-| preview | React.Component                | _Optional_. Renders the widget preview, receives the following props: <ul><li>**value:** Current preview value</li><li>**field:** Immutable map of current field configuration</li><li>**getAsset:** Function for retrieving an asset url for image/file fields</li><li>**entry:** Immutable Record of all entry data</li></ul> |
-| options | object                         | _Optional_. Widget options. See [Options](#options)                                                                                                                                                                                                                                                                             |
+| Param   | Type                           | Description                                                                                                                                                                                                                              |
+| ------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| name    | string                         | Widget name, allows this widget to be used via the field `widget` property in config                                                                                                                                                     |
+| control | React.Component<br />\| string | <ul><li>`React.Component` - The react component that renders the control. See [Control Component](#control-component)</li><li>`string` - Name of a registered widget whose control should be used (includes built in widgets).</li></ul> |
+| preview | React.Component                | _Optional_. Renders the widget preview. See [Preview Component](#preview-component)                                                                                                                                                      |
+| options | object                         | _Optional_. Widget options. See [Options](#options)                                                                                                                                                                                      |
 
 ### Control Component
 
@@ -96,6 +94,29 @@ The react component that renders the control. It receives the following props:
 | searchTerm     | string          |         | The term to search with                                                                |
 | file           | string          |         | _Optional_ The file in a file collection to search. Ignored on folder collections      |
 | limit          | string          |         | _Optional_ The number of results to return. If not specified, all results are returned |
+
+### Preview Component
+
+The react component that renders the preview. It receives the following props:
+
+| Param      | Type                  | Description                                                                                               |
+| ---------- | --------------------- | --------------------------------------------------------------------------------------------------------- |
+| value      | An valid widget value | The current value of the widget                                                                           |
+| field      | object                | The field configuration for the current widget. See [Widget Options](/docs/widgets#common-widget-options) |
+| collection | object                | The collection configuration for the current widget. See [Collections](/docs/collection-overview)         |
+| config     | object                | The current Static CMS config. See [configuration options](/docs/configuration-options)                   |
+| entry      | object                | Object with a `data` field that contains the current value of all widgets in the editor                   |
+| getAsset   | Async function        | Function that given a url returns (as a promise) a loaded asset                                           |
+
+### Options
+
+Register widget takes an optional object of options. These options include:
+
+| Param         | Type               | Description                                                                                                             |
+| ------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| validator     | function           | _Optional_. Validates the value of the widget                                                                           |
+| getValidValue | string             | _Optional_. Given the current value, returns a valid value. See [Advanced field validation](#advanced-field-validation) |
+| schema        | JSON Schema object | _Optional_. Enforces a schema for the widget's field configuration                                                      |
 
 ### Example
 
@@ -160,16 +181,6 @@ collections:
         widget: categories
         separator: __
 ```
-
-### Options
-
-Register widget takes an optional object of options. These options include:
-
-| Param         | Type               | Description                                                                                                             |
-| ------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| validator     | function           | _Optional_. Validates the value of the widget                                                                           |
-| getValidValue | string             | _Optional_. Given the current value, returns a valid value. See [Advanced field validation](#advanced-field-validation) |
-| schema        | JSON Schema object | _Optional_. Enforces a schema for the widget's field configuration                                                      |
 
 ## Advanced field validation
 

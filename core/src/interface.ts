@@ -255,7 +255,6 @@ export interface WidgetPreviewProps<T = unknown, F extends Field = Field> {
   entry: Entry;
   field: RenderedField<F>;
   getAsset: GetAssetFunction;
-  resolveWidget: <W = unknown, WF extends Field = Field>(name: string) => Widget<W, WF>;
   value: T | undefined | null;
 }
 
