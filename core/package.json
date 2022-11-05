@@ -1,6 +1,6 @@
 {
   "name": "@staticcms/core",
-  "version": "1.0.0-alpha33",
+  "version": "1.0.0-alpha34",
   "license": "MIT",
   "description": "Static CMS core application.",
   "repository": "https://github.com/StaticJsCMS/static-cms",
@@ -27,12 +27,10 @@
     "type-check": "tsc --watch"
   },
   "main": "dist/static-cms-core.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "src/",
-    "dist/",
-    "index.d.ts"
+    "dist/**/*"
   ],
-  "types": "index.d.ts",
   "browserslist": [
     "last 2 Chrome versions",
     "last 2 ChromeAndroid versions",
