@@ -10,6 +10,8 @@ export * from './media-libraries';
 export * from './locales';
 export * from './lib';
 
+export * from './interface';
+
 const CMS = {
   ...Registry,
   init: bootstrap,
