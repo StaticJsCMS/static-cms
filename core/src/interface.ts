@@ -263,29 +263,30 @@ export type WidgetPreviewComponent<T = unknown, F extends Field = Field> =
   | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
   | ComponentType<WidgetPreviewProps<T, F>>;
 
-export interface TemplatePreviewProps<T = unknown> {
+export type WidgetsFor<P = EntryData> = <K extends keyof P>(
+  name: K,
+) => P[K] extends Array<infer U>
+  ? {
+      data: U | null;
+      widgets: Record<keyof U, React.ReactNode>;
+    }[]
+  : {
+      data: P[K] | null;
+      widgets: Record<keyof P[K], React.ReactNode>;
+    };
+
+export interface TemplatePreviewProps<T = EntryData> {
   collection: Collection;
   fields: Field[];
   entry: Entry<T>;
   document: Document | undefined | null;
   window: Window | undefined | null;
   getAsset: GetAssetFunction;
-  widgetFor: (name: string) => ReactNode;
-  widgetsFor: (name: string) =>
-    | {
-        data: EntryData | null;
-        widgets: Record<string, React.ReactNode>;
-      }
-    | {
-        data: EntryData | null;
-        widgets: Record<string, React.ReactNode>;
-      }[];
+  widgetFor: (name: T extends EntryData ? string : keyof T) => ReactNode;
+  widgetsFor: WidgetsFor<T>;
 }
 
-export type TemplatePreviewComponent =
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
-  | ComponentType<TemplatePreviewProps>;
+export type TemplatePreviewComponent<T = EntryData> = ComponentType<TemplatePreviewProps<T>>;
 
 export interface WidgetOptions<T = unknown, F extends Field = Field> {
   validator?: Widget<T, F>['validator'];
@@ -752,7 +753,7 @@ export interface EventListener {
 }
 
 export interface AdditionalLinkOptions {
-  iconName?: string;
+  icon?: string;
 }
 
 export interface AdditionalLink {

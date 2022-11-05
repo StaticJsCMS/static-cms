@@ -96,54 +96,56 @@ const Sidebar = ({
   const additionalLinks = useMemo(() => getAdditionalLinks(), []);
   const links = useMemo(
     () =>
-      Object.values(additionalLinks).map(({ id, title, data, options: { iconName } = {} }) => {
-        let icon: ReactNode = <ArticleIcon />;
-        if (iconName) {
-          const StoredIcon = getIcon(iconName);
-          if (StoredIcon) {
-            icon = <StoredIcon />;
+      Object.values(additionalLinks).map(
+        ({ id, title, data, options: { icon: iconName } = {} }) => {
+          let icon: ReactNode = <ArticleIcon />;
+          if (iconName) {
+            const StoredIcon = getIcon(iconName);
+            if (StoredIcon) {
+              icon = <StoredIcon />;
+            }
           }
-        }
 
-        const content = (
-          <>
-            <StyledListItemIcon>{icon}</StyledListItemIcon>
-            <ListItemText primary={title} />
-          </>
-        );
+          const content = (
+            <>
+              <StyledListItemIcon>{icon}</StyledListItemIcon>
+              <ListItemText primary={title} />
+            </>
+          );
 
-        return typeof data === 'string' ? (
-          <ListItem
-            key={title}
-            href={data}
-            component="a"
-            disablePadding
-            target="_blank"
-            rel="noopener"
-            sx={{
-              color: colors.inactive,
-              '&:hover': {
-                color: colors.active,
-                '.MuiListItemIcon-root': {
+          return typeof data === 'string' ? (
+            <ListItem
+              key={title}
+              href={data}
+              component="a"
+              disablePadding
+              target="_blank"
+              rel="noopener"
+              sx={{
+                color: colors.inactive,
+                '&:hover': {
                   color: colors.active,
+                  '.MuiListItemIcon-root': {
+                    color: colors.active,
+                  },
                 },
-              },
-            }}
-          >
-            <ListItemButton>{content}</ListItemButton>
-          </ListItem>
-        ) : (
-          <ListItem
-            key={title}
-            to={`/page/${id}`}
-            component={NavLink}
-            disablePadding
-            activeClassName="sidebar-active"
-          >
-            <ListItemButton>{content}</ListItemButton>
-          </ListItem>
-        );
-      }),
+              }}
+            >
+              <ListItemButton>{content}</ListItemButton>
+            </ListItem>
+          ) : (
+            <ListItem
+              key={title}
+              to={`/page/${id}`}
+              component={NavLink}
+              disablePadding
+              activeClassName="sidebar-active"
+            >
+              <ListItemButton>{content}</ListItemButton>
+            </ListItem>
+          );
+        },
+      ),
     [additionalLinks],
   );
 

@@ -13,8 +13,6 @@ const EditorPreviewContent = ({ previewComponent, previewProps }: EditorPreviewC
     let children: ReactNode;
     if (!previewComponent) {
       children = null;
-    } else if (React.isValidElement(previewComponent)) {
-      children = React.cloneElement(previewComponent, previewProps);
     } else {
       children = React.createElement(previewComponent, previewProps);
     }

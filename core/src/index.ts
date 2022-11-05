@@ -10,7 +10,7 @@ export * from './media-libraries';
 export * from './locales';
 export * from './lib';
 
-export const CMS = {
+const CMS = {
   ...Registry,
   init: bootstrap,
 };
