@@ -85,14 +85,33 @@ const DateTimeControl = ({
     [timezoneOffset],
   );
 
+  const inputFormat = useMemo(() => {
+    if (typeof dateFormat === 'string' || typeof timeFormat === 'string') {
+      const formatParts: string[] = [];
+      if (typeof dateFormat === 'string' && isNotEmpty(dateFormat)) {
+        formatParts.push(dateFormat);
+      }
+
+      if (typeof timeFormat === 'string' && isNotEmpty(timeFormat)) {
+        formatParts.push(timeFormat);
+      }
+
+      if (formatParts.length > 0) {
+        return formatParts.join(' ');
+      }
+    }
+
+    return "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+  }, [dateFormat, timeFormat]);
+
   const defaultValue = useMemo(() => {
     const today = field.picker_utc ? localToUTC(new Date()) : new Date();
     return field.default === undefined
       ? format
         ? formatDate(today, format)
-        : formatISO(today)
+        : formatDate(today, inputFormat)
       : field.default;
-  }, [field.default, field.picker_utc, format, localToUTC]);
+  }, [field.default, field.picker_utc, format, inputFormat, localToUTC]);
 
   const [internalValue, setInternalValue] = useState(value ?? defaultValue);
 
@@ -132,14 +151,12 @@ const DateTimeControl = ({
 
   const dateTimePicker = useMemo(() => {
     if (dateFormat && !timeFormat) {
-      const inputDateFormat = typeof dateFormat === 'string' ? dateFormat : 'MMM d, yyyy';
-
       return (
         <MobileDatePicker
           key="mobile-date-picker"
-          inputFormat={inputDateFormat}
+          inputFormat={inputFormat}
           label={label}
-          value={formatDate(field.picker_utc ? utcDate : dateValue, inputDateFormat)}
+          value={formatDate(field.picker_utc ? utcDate : dateValue, inputFormat)}
           onChange={handleChange}
           renderInput={params => (
             <TextField
@@ -164,14 +181,12 @@ const DateTimeControl = ({
     }
 
     if (!dateFormat && timeFormat) {
-      const inputTimeFormat = typeof timeFormat === 'string' ? timeFormat : 'H:mm';
-
       return (
         <TimePicker
           key="time-picker"
           label={label}
-          inputFormat={inputTimeFormat}
-          value={formatDate(field.picker_utc ? utcDate : dateValue, inputTimeFormat)}
+          inputFormat={inputFormat}
+          value={formatDate(field.picker_utc ? utcDate : dateValue, inputFormat)}
           onChange={handleChange}
           renderInput={params => (
             <TextField
@@ -193,22 +208,6 @@ const DateTimeControl = ({
           )}
         />
       );
-    }
-
-    let inputFormat = 'MMM d, yyyy H:mm';
-    if (typeof dateFormat === 'string' || typeof timeFormat === 'string') {
-      const formatParts: string[] = [];
-      if (typeof dateFormat === 'string' && isNotEmpty(dateFormat)) {
-        formatParts.push(dateFormat);
-      }
-
-      if (typeof timeFormat === 'string' && isNotEmpty(timeFormat)) {
-        formatParts.push(timeFormat);
-      }
-
-      if (formatParts.length > 0) {
-        inputFormat = formatParts.join(' ');
-      }
     }
 
     return (
@@ -244,6 +243,8 @@ const DateTimeControl = ({
     field.picker_utc,
     handleChange,
     hasErrors,
+    inputFormat,
+    internalValue,
     isDisabled,
     label,
     t,

@@ -8,6 +8,7 @@ import type {
   Config,
   CustomIcon,
   Entry,
+  EntryData,
   EventData,
   EventListener,
   Field,
@@ -34,7 +35,7 @@ const eventHandlers = allowedEvents.reduce((acc, e) => {
 
 interface Registry {
   backends: Record<string, BackendInitializer>;
-  templates: Record<string, TemplatePreviewComponent>;
+  templates: Record<string, TemplatePreviewComponent<EntryData>>;
   widgets: Record<string, Widget>;
   icons: Record<string, CustomIcon>;
   additionalLinks: Record<string, AdditionalLink>;
@@ -109,11 +110,11 @@ export function getPreviewStyles() {
 /**
  * Preview Templates
  */
-export function registerPreviewTemplate(name: string, component: TemplatePreviewComponent) {
-  registry.templates[name] = component;
+export function registerPreviewTemplate<T>(name: string, component: TemplatePreviewComponent<T>) {
+  registry.templates[name] = component as TemplatePreviewComponent<EntryData>;
 }
 
-export function getPreviewTemplate(name: string): TemplatePreviewComponent {
+export function getPreviewTemplate(name: string): TemplatePreviewComponent<EntryData> {
   return registry.templates[name];
 }
 
@@ -126,7 +127,7 @@ export function registerWidget(widget: WidgetParam): void;
 export function registerWidget<T = unknown>(
   name: string,
   control: string | Widget<T>['control'],
-  preview: Widget<T>['preview'],
+  preview?: Widget<T>['preview'],
   options?: WidgetOptions,
 ): void;
 export function registerWidget<T = unknown>(
@@ -358,7 +359,6 @@ export function getAdditionalLinks(): Record<string, AdditionalLink> {
 }
 
 export function getAdditionalLink(id: string): AdditionalLink | undefined {
-  console.log('additionalLinks', registry.additionalLinks);
   return registry.additionalLinks[id];
 }
 

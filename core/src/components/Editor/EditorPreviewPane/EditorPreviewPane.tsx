@@ -429,13 +429,14 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
 
   const element = useMemo(() => document.getElementById('cms-root'), []);
 
-  const previewProps: Omit<TemplatePreviewProps, 'document' | 'window'> = useMemo(
-    () => ({
-      ...props,
-      getAsset: handleGetAsset,
-      widgetFor,
-      widgetsFor,
-    }),
+  const previewProps = useMemo(
+    () =>
+      ({
+        ...props,
+        getAsset: handleGetAsset,
+        widgetFor,
+        widgetsFor,
+      } as Omit<TemplatePreviewProps, 'document' | 'window'>),
     [handleGetAsset, props, widgetFor, widgetsFor],
   );
 

@@ -1,29 +1,25 @@
 import YamlFormatter from './YamlFormatter';
-import TomlFormatter from './TomlFormatter';
 import JsonFormatter from './JsonFormatter';
-import { FrontmatterInfer, frontmatterJSON, frontmatterTOML, frontmatterYAML } from './frontmatter';
+import { FrontmatterInfer, frontmatterJSON, frontmatterYAML } from './frontmatter';
 
 import type { Delimiter } from './frontmatter';
 import type { Collection, Entry, Format } from '../interface';
 import type { FileFormatter } from './FileFormatter';
 
-export const frontmatterFormats = ['yaml-frontmatter', 'toml-frontmatter', 'json-frontmatter'];
+export const frontmatterFormats = ['yaml-frontmatter', 'json-frontmatter'];
 
 export const formatExtensions = {
   yml: 'yml',
   yaml: 'yml',
-  toml: 'toml',
   json: 'json',
   frontmatter: 'md',
   'json-frontmatter': 'md',
-  'toml-frontmatter': 'md',
   'yaml-frontmatter': 'md',
 };
 
 export const extensionFormatters: Record<string, FileFormatter> = {
   yml: YamlFormatter,
   yaml: YamlFormatter,
-  toml: TomlFormatter,
   json: JsonFormatter,
   md: FrontmatterInfer,
   markdown: FrontmatterInfer,
@@ -34,11 +30,9 @@ function formatByName(name: Format, customDelimiter?: Delimiter): FileFormatter 
   const fileFormatter: Record<string, FileFormatter> = {
     yml: YamlFormatter,
     yaml: YamlFormatter,
-    toml: TomlFormatter,
     json: JsonFormatter,
     frontmatter: FrontmatterInfer,
     'json-frontmatter': frontmatterJSON(customDelimiter),
-    'toml-frontmatter': frontmatterTOML(customDelimiter),
     'yaml-frontmatter': frontmatterYAML(customDelimiter),
   };
 
