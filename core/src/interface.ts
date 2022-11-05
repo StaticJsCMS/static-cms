@@ -19,7 +19,7 @@ export interface Pages {
   [collection: string]: { isFetching?: boolean; page?: number; ids: string[] };
 }
 
-export type SortableField =
+export type SortableField<EF extends BaseField = UnknownField> =
   | {
       key: string;
       name: string;
@@ -27,7 +27,7 @@ export type SortableField =
     }
   | ({
       key: string;
-    } & Field);
+    } & Field<EF>);
 
 export interface SortObject {
   key: string;
@@ -131,11 +131,11 @@ export interface EditorConfig {
   frame?: boolean;
 }
 
-export interface CollectionFile {
+export interface CollectionFile<EF extends BaseField = UnknownField> {
   name: string;
   label: string;
   file: string;
-  fields: Field[];
+  fields: Field<EF>[];
   label_singular?: string;
   description?: string;
   media_folder?: string;
@@ -157,17 +157,18 @@ export interface I18nSettings {
 
 export type Format = keyof typeof formatExtensions;
 
-export interface i18nCollection extends Omit<Collection, 'i18n'> {
-  i18n: Required<Collection>['i18n'];
+export interface i18nCollection<EF extends BaseField = UnknownField>
+  extends Omit<Collection<EF>, 'i18n'> {
+  i18n: Required<Collection<EF>>['i18n'];
 }
 
-export interface Collection {
+export interface Collection<EF extends BaseField = UnknownField> {
   name: string;
   description?: string;
   icon?: string;
   folder?: string;
-  files?: CollectionFile[];
-  fields: Field[];
+  files?: CollectionFile<EF>[];
+  fields: Field<EF>[];
   isFetching?: boolean;
   media_folder?: string;
   public_folder?: string;
@@ -193,7 +194,7 @@ export interface Collection {
   editor?: EditorConfig;
 }
 
-export type Collections = Record<string, Collection>;
+export type Collections<EF extends BaseField = UnknownField> = Record<string, Collection<EF>>;
 
 export interface MediaLibraryInstance {
   show: (args: {
@@ -221,9 +222,9 @@ export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
 export type GetAssetFunction = (path: string, field?: Field) => Promise<AssetProxy>;
 
-export interface WidgetControlProps<T, F extends Field = Field> {
-  collection: Collection;
-  config: Config;
+export interface WidgetControlProps<T, F extends Field = Field, EF extends BaseField = Field> {
+  collection: Collection<EF>;
+  config: Config<EF>;
   entry: Entry;
   field: F;
   fieldsErrors: FieldsErrors;
@@ -249,19 +250,27 @@ export interface WidgetControlProps<T, F extends Field = Field> {
   value: T | undefined | null;
 }
 
-export interface WidgetPreviewProps<T = unknown, F extends Field = Field> {
-  config: Config;
-  collection: Collection;
+export interface WidgetPreviewProps<
+  T = unknown,
+  F extends Field = Field,
+  EF extends BaseField = Field,
+> {
+  config: Config<EF>;
+  collection: Collection<EF>;
   entry: Entry;
   field: RenderedField<F>;
   getAsset: GetAssetFunction;
   value: T | undefined | null;
 }
 
-export type WidgetPreviewComponent<T = unknown, F extends Field = Field> =
+export type WidgetPreviewComponent<
+  T = unknown,
+  F extends Field = Field,
+  EF extends BaseField = Field,
+> =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
-  | ComponentType<WidgetPreviewProps<T, F>>;
+  | ComponentType<WidgetPreviewProps<T, F, EF>>;
 
 export type WidgetsFor<P = EntryData> = <K extends keyof P>(
   name: K,
@@ -275,9 +284,9 @@ export type WidgetsFor<P = EntryData> = <K extends keyof P>(
       widgets: Record<keyof P[K], React.ReactNode>;
     };
 
-export interface TemplatePreviewProps<T = EntryData> {
-  collection: Collection;
-  fields: Field[];
+export interface TemplatePreviewProps<T = EntryData, EF extends BaseField = Field> {
+  collection: Collection<EF>;
+  fields: Field<EF>[];
   entry: Entry<T>;
   document: Document | undefined | null;
   window: Window | undefined | null;
@@ -286,7 +295,9 @@ export interface TemplatePreviewProps<T = EntryData> {
   widgetsFor: WidgetsFor<T>;
 }
 
-export type TemplatePreviewComponent<T = EntryData> = ComponentType<TemplatePreviewProps<T>>;
+export type TemplatePreviewComponent<T = EntryData, EF extends BaseField = Field> = ComponentType<
+  TemplatePreviewProps<T, EF>
+>;
 
 export interface WidgetOptions<T = unknown, F extends Field = Field> {
   validator?: Widget<T, F>['validator'];
@@ -294,18 +305,18 @@ export interface WidgetOptions<T = unknown, F extends Field = Field> {
   schema?: Widget<T, F>['schema'];
 }
 
-export interface Widget<T = unknown, F extends Field = Field> {
-  control: ComponentType<WidgetControlProps<T, F>>;
-  preview?: WidgetPreviewComponent<T, F>;
+export interface Widget<T = unknown, F extends Field = Field, EF extends BaseField = Field> {
+  control: ComponentType<WidgetControlProps<T, F, EF>>;
+  preview?: WidgetPreviewComponent<T, F, EF>;
   validator: FieldValidationMethod<T, F>;
   getValidValue: (value: T | undefined | null) => T | undefined | null;
   schema?: PropertiesSchema<unknown>;
 }
 
-export interface WidgetParam<T = unknown, F extends Field = Field> {
+export interface WidgetParam<T = unknown, F extends Field = Field, EF extends BaseField = Field> {
   name: string;
-  controlComponent: Widget<T, F>['control'];
-  previewComponent?: Widget<T, F>['preview'];
+  controlComponent: Widget<T, F, EF>['control'];
+  previewComponent?: Widget<T, F, EF>['preview'];
   options?: WidgetOptions<T, F>;
 }
 
@@ -529,15 +540,15 @@ export interface FileOrImageField extends BaseField {
   public_folder?: string;
 }
 
-export interface ObjectField extends BaseField {
+export interface ObjectField<EF extends BaseField = UnknownField> extends BaseField {
   widget: 'object';
 
   collapsed?: boolean;
   summary?: string;
-  fields: Field[];
+  fields: Field<EF>[];
 }
 
-export interface ListField extends BaseField {
+export interface ListField<EF extends BaseField = UnknownField> extends BaseField {
   widget: 'list';
   default?: ObjectValue[];
 
@@ -545,7 +556,7 @@ export interface ListField extends BaseField {
   collapsed?: boolean;
   summary?: string;
   label_singular?: string;
-  fields?: Field[];
+  fields?: Field<EF>[];
   max?: number;
   min?: number;
   add_to_top?: boolean;
@@ -618,7 +629,11 @@ export interface StringOrTextField extends BaseField {
   default?: string;
 }
 
-export type Field =
+export interface UnknownField extends BaseField {
+  widget: 'unknown';
+}
+
+export type Field<EF extends BaseField = UnknownField> =
   | BooleanField
   | CodeField
   | ColorField
@@ -632,7 +647,8 @@ export type Field =
   | RelationField
   | SelectField
   | HiddenField
-  | StringOrTextField;
+  | StringOrTextField
+  | EF;
 
 export interface ViewFilter {
   id: string;
@@ -701,9 +717,9 @@ export interface LocalBackend {
   allowed_hosts?: string[];
 }
 
-export interface Config {
+export interface Config<EF extends BaseField = UnknownField> {
   backend: Backend;
-  collections: Collection[];
+  collections: Collection<EF>[];
   locale?: string;
   site_id?: string;
   site_url?: string;
@@ -723,8 +739,8 @@ export interface Config {
   search?: boolean;
 }
 
-export interface InitOptions {
-  config: Config;
+export interface InitOptions<EF extends BaseField = UnknownField> {
+  config: Config<EF>;
 }
 
 export interface BackendInitializerOptions {
