@@ -33,6 +33,7 @@ import type {
   TemplatePreviewProps,
   TranslatedProps,
   ValueOrNestedValue,
+  WidgetPreviewComponent,
 } from '../../../interface';
 import type { RootState } from '../../../store';
 
@@ -104,12 +105,12 @@ function getWidgetFor(
   }
 
   const value = values?.[field.name];
-  let fieldWithWidgets: RenderedField = Object.entries(field).reduce((acc, [key, fieldValue]) => {
+  let fieldWithWidgets = Object.entries(field).reduce((acc, [key, fieldValue]) => {
     if (!['fields', 'fields'].includes(key)) {
       acc[key] = fieldValue;
     }
     return acc;
-  }, {} as Record<string, unknown>) as Omit<Field, 'fields' | 'field'>;
+  }, {} as Record<string, unknown>) as RenderedField;
 
   if ('fields' in field && field.fields) {
     fieldWithWidgets = {
@@ -205,9 +206,9 @@ function getWidget(
    */
   return !widget.preview ? null : (
     <PreviewHOC
-      previewComponent={widget.preview}
+      previewComponent={widget.preview as WidgetPreviewComponent}
       key={key}
-      field={field}
+      field={field as RenderedField}
       getAsset={getAsset}
       config={config}
       collection={collection}

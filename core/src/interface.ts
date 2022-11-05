@@ -1,10 +1,10 @@
 import type {
-  EditorPlugin as MarkdownPlugin,
-  EditorType as MarkdownEditorType,
+	EditorPlugin as MarkdownPlugin,
+	EditorType as MarkdownEditorType
 } from '@toast-ui/editor/types/editor';
 import type { ToolbarItemOptions as MarkdownToolbarItemOptions } from '@toast-ui/editor/types/ui';
 import type { PropertiesSchema } from 'ajv/dist/types/json-schema';
-import type { FunctionComponent, ComponentType, ReactNode } from 'react';
+import type { ComponentType, FunctionComponent, ReactNode } from 'react';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
 import type { MediaFile as BackendMediaFile } from './backend';
 import type { EditorControlProps } from './components/Editor/EditorControlPane/EditorControl';
@@ -106,13 +106,13 @@ export interface FieldsErrors {
   [field: string]: FieldError[];
 }
 
-export interface FieldValidationMethodProps<T = unknown, F extends Field = Field> {
+export interface FieldValidationMethodProps<T = unknown, F extends BaseField = UnknownField> {
   field: F;
   value: T | undefined | null;
   t: t;
 }
 
-export type FieldValidationMethod<T = unknown, F extends Field = Field> = (
+export type FieldValidationMethod<T = unknown, F extends BaseField = UnknownField> = (
   props: FieldValidationMethodProps<T, F>,
 ) => false | FieldError | Promise<false | FieldError>;
 
@@ -222,9 +222,9 @@ export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
 export type GetAssetFunction = (path: string, field?: Field) => Promise<AssetProxy>;
 
-export interface WidgetControlProps<T, F extends Field = Field, EF extends BaseField = Field> {
-  collection: Collection<EF>;
-  config: Config<EF>;
+export interface WidgetControlProps<T, F extends BaseField = UnknownField> {
+  collection: Collection<F>;
+  config: Config<F>;
   entry: Entry;
   field: F;
   fieldsErrors: FieldsErrors;
@@ -252,11 +252,10 @@ export interface WidgetControlProps<T, F extends Field = Field, EF extends BaseF
 
 export interface WidgetPreviewProps<
   T = unknown,
-  F extends Field = Field,
-  EF extends BaseField = Field,
+  F extends BaseField = UnknownField
 > {
-  config: Config<EF>;
-  collection: Collection<EF>;
+  config: Config<F>;
+  collection: Collection<F>;
   entry: Entry;
   field: RenderedField<F>;
   getAsset: GetAssetFunction;
@@ -265,12 +264,11 @@ export interface WidgetPreviewProps<
 
 export type WidgetPreviewComponent<
   T = unknown,
-  F extends Field = Field,
-  EF extends BaseField = Field,
+  F extends BaseField = UnknownField
 > =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
-  | ComponentType<WidgetPreviewProps<T, F, EF>>;
+  | ComponentType<WidgetPreviewProps<T, F>>;
 
 export type WidgetsFor<P = EntryData> = <K extends keyof P>(
   name: K,
@@ -284,7 +282,7 @@ export type WidgetsFor<P = EntryData> = <K extends keyof P>(
       widgets: Record<keyof P[K], React.ReactNode>;
     };
 
-export interface TemplatePreviewProps<T = EntryData, EF extends BaseField = Field> {
+export interface TemplatePreviewProps<T = EntryData, EF extends BaseField = UnknownField> {
   collection: Collection<EF>;
   fields: Field<EF>[];
   entry: Entry<T>;
@@ -295,28 +293,28 @@ export interface TemplatePreviewProps<T = EntryData, EF extends BaseField = Fiel
   widgetsFor: WidgetsFor<T>;
 }
 
-export type TemplatePreviewComponent<T = EntryData, EF extends BaseField = Field> = ComponentType<
+export type TemplatePreviewComponent<T = EntryData, EF extends BaseField = UnknownField> = ComponentType<
   TemplatePreviewProps<T, EF>
 >;
 
-export interface WidgetOptions<T = unknown, F extends Field = Field> {
+export interface WidgetOptions<T = unknown, F extends BaseField = UnknownField> {
   validator?: Widget<T, F>['validator'];
   getValidValue?: Widget<T, F>['getValidValue'];
   schema?: Widget<T, F>['schema'];
 }
 
-export interface Widget<T = unknown, F extends Field = Field, EF extends BaseField = Field> {
-  control: ComponentType<WidgetControlProps<T, F, EF>>;
-  preview?: WidgetPreviewComponent<T, F, EF>;
+export interface Widget<T = unknown, F extends BaseField = UnknownField> {
+  control: ComponentType<WidgetControlProps<T, F>>;
+  preview?: WidgetPreviewComponent<T, F>;
   validator: FieldValidationMethod<T, F>;
   getValidValue: (value: T | undefined | null) => T | undefined | null;
   schema?: PropertiesSchema<unknown>;
 }
 
-export interface WidgetParam<T = unknown, F extends Field = Field, EF extends BaseField = Field> {
+export interface WidgetParam<T = unknown, F extends BaseField = UnknownField> {
   name: string;
-  controlComponent: Widget<T, F, EF>['control'];
-  previewComponent?: Widget<T, F, EF>['preview'];
+  controlComponent: Widget<T, F>['control'];
+  previewComponent?: Widget<T, F>['preview'];
   options?: WidgetOptions<T, F>;
 }
 
@@ -480,7 +478,7 @@ export type AuthScope = 'repo' | 'public_repo';
 
 export type SlugEncoding = 'unicode' | 'ascii';
 
-export type RenderedField<T extends Field = Field> = Omit<T, 'fields'> & {
+export type RenderedField<T extends BaseField = UnknownField> = Omit<T, 'fields'> & {
   fields?: ReactNode[];
 };
 
@@ -850,7 +848,7 @@ export interface PreviewStyle {
 }
 
 export interface MarkdownPluginFactoryProps {
-  config: Config;
+  config: Config<MarkdownField>;
   field: MarkdownField;
   media: MediaHolder;
   mode: 'editor' | 'preview';

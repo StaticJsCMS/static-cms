@@ -31,6 +31,7 @@ import type {
   GetAssetFunction,
   I18nSettings,
   TranslatedProps,
+  UnknownField,
   ValueOrNestedValue,
   Widget,
 } from '../../../interface';
@@ -206,7 +207,7 @@ const EditorControl = ({
           collection,
           config,
           entry,
-          field,
+          field: field as UnknownField,
           fieldsErrors,
           submitted,
           getAsset: handleGetAsset,

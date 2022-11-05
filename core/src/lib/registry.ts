@@ -121,7 +121,8 @@ export function getPreviewTemplate(name: string): TemplatePreviewComponent<Entry
 /**
  * Editor Widgets
  */
-export function registerWidget(widgets: WidgetParam[]): void;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function registerWidget(widgets: WidgetParam<any, any>[]): void;
 export function registerWidget(widget: WidgetParam): void;
 export function registerWidget<T = unknown>(
   name: string,

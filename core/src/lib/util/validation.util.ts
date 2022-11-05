@@ -7,6 +7,7 @@ import type {
   FieldError,
   FieldValidationMethod,
   FieldValidationMethodProps,
+  UnknownField,
   ValueOrNestedValue,
   Widget,
 } from '../../interface';
@@ -76,7 +77,6 @@ export function validatePattern({
   return false;
 }
 
-// TODO Fix typings
 export async function validate(
   path: string,
   field: Field,
@@ -94,7 +94,7 @@ export async function validate(
   ];
 
   for (const validation of validations) {
-    const response = await validation({ field, value: validValue, t });
+    const response = await validation({ field: field as UnknownField, value: validValue, t });
     if (response) {
       errors.push(response);
     }
