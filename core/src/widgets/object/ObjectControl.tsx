@@ -7,7 +7,7 @@ import Outline from '../../components/UI/Outline';
 import { transientOptions } from '../../lib';
 import { compileStringTemplate } from '../../lib/widgets/stringTemplate';
 
-import type { ListField, ObjectField, ObjectValue, WidgetControlProps } from '../../interface';
+import type { ObjectField, ObjectValue, WidgetControlProps } from '../../interface';
 
 const StyledObjectControlWrapper = styled('div')`
   position: relative;
@@ -59,7 +59,7 @@ const ObjectControl = ({
   i18n,
   hasErrors,
   value = {},
-}: WidgetControlProps<ObjectValue, ObjectField | ListField>) => {
+}: WidgetControlProps<ObjectValue, ObjectField>) => {
   const [collapsed, setCollapsed] = useState(false);
 
   const handleCollapseToggle = useCallback(() => {

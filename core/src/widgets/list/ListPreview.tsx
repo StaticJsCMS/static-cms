@@ -2,9 +2,9 @@ import React from 'react';
 
 import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
 
-import type { ObjectField, ObjectValue, WidgetPreviewProps } from '../../interface';
+import type { ListField, ObjectValue, WidgetPreviewProps } from '../../interface';
 
-function ObjectPreview({ field }: WidgetPreviewProps<ObjectValue, ObjectField>) {
+function ObjectPreview({ field }: WidgetPreviewProps<ObjectValue[], ListField>) {
   return <WidgetPreviewContainer>{field.fields ?? null}</WidgetPreviewContainer>;
 }
 

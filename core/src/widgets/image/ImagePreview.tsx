@@ -18,7 +18,7 @@ const StyledImage = styled(({ src }: StyledImageProps) => (
 `;
 
 interface ImageAssetProps {
-  getAsset: GetAssetFunction;
+  getAsset: GetAssetFunction<FileOrImageField>;
   value: string;
   field: FileOrImageField;
 }

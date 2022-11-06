@@ -126,7 +126,7 @@ const SortableImageButtons = ({ onRemove, onReplace }: SortableImageButtonsProps
 
 interface SortableImageProps {
   itemValue: string;
-  getAsset: GetAssetFunction;
+  getAsset: GetAssetFunction<FileOrImageField>;
   field: FileOrImageField;
   onRemove: MouseEventHandler;
   onReplace: MouseEventHandler;
@@ -167,7 +167,7 @@ const StyledSortableMultiImageWrapper = styled('div')`
 
 interface SortableMultiImageWrapperProps {
   items: string[];
-  getAsset: GetAssetFunction;
+  getAsset: GetAssetFunction<FileOrImageField>;
   field: FileOrImageField;
   onRemoveOne: (index: number) => MouseEventHandler;
   onReplaceOne: (index: number) => MouseEventHandler;

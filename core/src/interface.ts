@@ -229,7 +229,7 @@ export interface DisplayURLState {
 
 export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
-export type GetAssetFunction = (path: string, field?: Field) => Promise<AssetProxy>;
+export type GetAssetFunction<F extends BaseField = UnknownField> = (path: string, field?: F) => Promise<AssetProxy>;
 
 export interface WidgetControlProps<T, F extends BaseField = UnknownField> {
   collection: Collection<F>;
@@ -239,7 +239,7 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField> {
   fieldsErrors: FieldsErrors;
   submitted: boolean;
   forList: boolean;
-  getAsset: GetAssetFunction;
+  getAsset: GetAssetFunction<F>;
   isDisabled: boolean;
   isFieldDuplicate: EditorControlProps['isFieldDuplicate'];
   isFieldHidden: EditorControlProps['isFieldHidden'];
@@ -264,7 +264,7 @@ export interface WidgetPreviewProps<T = unknown, F extends BaseField = UnknownFi
   collection: Collection<F>;
   entry: Entry;
   field: RenderedField<F>;
-  getAsset: GetAssetFunction;
+  getAsset: GetAssetFunction<F>;
   value: T | undefined | null;
 }
 
@@ -291,7 +291,7 @@ export interface TemplatePreviewProps<T = EntryData, EF extends BaseField = Unkn
   entry: Entry<T>;
   document: Document | undefined | null;
   window: Window | undefined | null;
-  getAsset: GetAssetFunction;
+  getAsset: GetAssetFunction<Field<EF>>;
   widgetFor: (name: T extends EntryData ? string : keyof T) => ReactNode;
   widgetsFor: WidgetsFor<T>;
 }
