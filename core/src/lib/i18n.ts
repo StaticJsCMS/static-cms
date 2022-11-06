@@ -22,13 +22,13 @@ export enum I18N_FIELD {
   NONE = 'none',
 }
 
-export function hasI18n(collection: Collection): collection is i18nCollection {
+export function hasI18n(collection: Collection | i18nCollection): collection is i18nCollection {
   return I18N in collection;
 }
 
 export function getI18nInfo(collection: i18nCollection): I18nInfo;
 export function getI18nInfo(collection: Collection): I18nInfo | null;
-export function getI18nInfo(collection: Collection): I18nInfo | null {
+export function getI18nInfo(collection: Collection | i18nCollection): I18nInfo | null {
   if (!hasI18n(collection) || typeof collection[I18N] !== 'object') {
     return null;
   }

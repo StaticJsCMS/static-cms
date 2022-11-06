@@ -94,9 +94,10 @@ function mapStateToProps(state: RootState, ownProps: EntryCardOwnProps) {
     ...ownProps,
     path: `/collections/${collection.name}/entries/${entry.slug}`,
     image,
-    imageField: collection.fields?.find(
-      f => f.name === inferedFields.imageField && f.widget === 'image',
-    ),
+    imageField:
+      'fields' in collection
+        ? collection.fields?.find(f => f.name === inferedFields.imageField && f.widget === 'image')
+        : undefined,
     isLoadingAsset,
   };
 }

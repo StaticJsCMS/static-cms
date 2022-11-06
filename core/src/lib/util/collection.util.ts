@@ -18,79 +18,21 @@ import type { Backend } from '../../backend';
 import type { InferredField } from '../../constants/fieldInference';
 import type {
   Collection,
-  CollectionFile,
   Config,
   Entry,
   Field,
+  FilesCollection,
   ObjectField,
-  SortableField,FilesCollection
+  SortableField,
 } from '../../interface';
 
-function  fileForEntry(collection: FilesCollection, slug?: string) {
+function fileForEntry(collection: FilesCollection, slug?: string) {
   const files = collection.files;
   if (!slug) {
     return files?.[0];
   }
   return files && files.filter(f => f?.name === slug)?.[0];
-},
-
-const selectors = {
-  [CollectionType]: {
-    entryExtension(collection: Collection) {
-      return (collection.extension || formatExtensions[collection.format ?? 'frontmatter']).replace(
-        /^\./,
-        '',
-      );
-    },
-    fields(collection: Collection) {},
-    entryPath(collection: Collection, slug: string) {
-      const folder = (collection.folder as string).replace(/\/$/, '');
-      return `${folder}/${slug}.${this.entryExtension(collection)}`;
-    },
-    entrySlug(collection: Collection, path: string) {
-      const folder = (collection.folder as string).replace(/\/$/, '');
-      const slug = path
-        .split(folder + '/')
-        .pop()
-        ?.replace(new RegExp(`\\.${this.entryExtension(collection)}$`), '');
-
-      return slug;
-    },
-    allowNewEntries(collection: Collection) {
-      return collection.create;
-    },
-    allowDeletion(collection: Collection) {
-      return collection.delete ?? true;
-    },
-    templateName(collection: Collection) {
-      return collection.name;
-    },
-  },
-  [FILES]: {
-    fields(collection: Collection, slug?: string) {},
-    entryPath(collection: Collection, slug: string) {
-      const file = this.fileForEntry(collection, slug);
-      return file && file.file;
-    },
-    entrySlug(collection: Collection, path: string) {
-      const file = (collection.files as CollectionFile[]).filter(f => f?.file === path)?.[0];
-      return file && file.name;
-    },
-    entryLabel(collection: Collection, slug: string) {
-      const file = this.fileForEntry(collection, slug);
-      return file && file.label;
-    },
-    allowNewEntries() {
-      return false;
-    },
-    allowDeletion(collection: Collection) {
-      return collection.delete ?? false;
-    },
-    templateName(_collection: Collection, slug: string) {
-      return slug;
-    },
-  },
-};
+}
 
 export function selectFields(collection: Collection, slug?: string) {
   if ('fields' in collection) {
@@ -102,31 +44,68 @@ export function selectFields(collection: Collection, slug?: string) {
 }
 
 export function selectFolderEntryExtension(collection: Collection) {
-  return selectors[FOLDER].entryExtension(collection);
+  return (collection.extension || formatExtensions[collection.format ?? 'frontmatter']).replace(
+    /^\./,
+    '',
+  );
 }
 
 export function selectFileEntryLabel(collection: Collection, slug: string) {
-  return selectors[FILES].entryLabel(collection, slug);
+  if ('fields' in collection) {
+    return undefined;
+  }
+
+  const file = fileForEntry(collection, slug);
+  return file && file.label;
 }
 
 export function selectEntryPath(collection: Collection, slug: string) {
-  return selectors[collection.type].entryPath(collection, slug);
+  if ('fields' in collection) {
+    const folder = collection.folder.replace(/\/$/, '');
+    return `${folder}/${slug}.${selectFolderEntryExtension(collection)}`;
+  }
+
+  const file = fileForEntry(collection, slug);
+  return file && file.file;
 }
 
 export function selectEntrySlug(collection: Collection, path: string) {
-  return selectors[collection.type].entrySlug(collection, path);
+  if ('fields' in collection) {
+    const folder = (collection.folder as string).replace(/\/$/, '');
+    const slug = path
+      .split(folder + '/')
+      .pop()
+      ?.replace(new RegExp(`\\.${selectFolderEntryExtension(collection)}$`), '');
+
+    return slug;
+  }
+
+  const file = collection.files.filter(f => f?.file === path)?.[0];
+  return file && file.name;
 }
 
 export function selectAllowNewEntries(collection: Collection) {
-  return selectors[collection.type].allowNewEntries(collection);
+  if ('fields' in collection) {
+    return collection.create ?? true;
+  }
+
+  return false;
 }
 
 export function selectAllowDeletion(collection: Collection) {
-  return selectors[collection.type].allowDeletion(collection);
+  if ('fields' in collection) {
+    return collection.delete ?? true;
+  }
+
+  return false;
 }
 
 export function selectTemplateName(collection: Collection, slug: string) {
-  return selectors[collection.type].templateName(collection, slug);
+  if ('fields' in collection) {
+    return collection.name;
+  }
+
+  return slug;
 }
 
 export function selectEntryCollectionTitle(collection: Collection, entry: Entry): string {
@@ -250,7 +229,7 @@ function getFieldsWithMediaFolders(fields: Field[]) {
   return fieldsWithMediaFolders;
 }
 
-export function getFileFromSlug(collection: FileCollection, slug: string) {
+export function getFileFromSlug(collection: FilesCollection, slug: string) {
   return collection.files?.find(f => f.name === slug);
 }
 
@@ -258,7 +237,7 @@ export function selectFieldsWithMediaFolders(collection: Collection, slug: strin
   if ('folder' in collection) {
     const fields = collection.fields;
     return getFieldsWithMediaFolders(fields);
-  } else if ('files' in collection) {
+  } else {
     const fields = getFileFromSlug(collection, slug)?.fields || [];
     return getFieldsWithMediaFolders(fields);
   }

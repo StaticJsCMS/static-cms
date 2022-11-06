@@ -77,7 +77,7 @@ const CollectionView = ({
   }, [collection]);
 
   const newEntryUrl = useMemo(() => {
-    let url = collection.create ? getNewEntryUrl(collectionName) : '';
+    let url = 'fields' in collection && collection.create ? getNewEntryUrl(collectionName) : '';
     if (url && filterTerm) {
       url = getNewEntryUrl(collectionName);
       if (filterTerm) {

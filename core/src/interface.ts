@@ -169,14 +169,6 @@ export interface BaseCollection {
   isFetching?: boolean;
   summary?: string;
   filter?: FilterRule;
-  extension?: string;
-  format?: Format;
-  frontmatter_delimiter?: string | [string, string];
-  create?: boolean;
-  delete?: boolean;
-  identifier_field?: string;
-  path?: string;
-  slug?: string;
   label_singular?: string;
   label: string;
   sortable_fields?: SortableFields;
@@ -186,6 +178,14 @@ export interface BaseCollection {
   i18n?: boolean | I18nInfo;
   hide?: boolean;
   editor?: EditorConfig;
+  identifier_field?: string;
+  path?: string;
+  extension?: string;
+  format?: Format;
+  frontmatter_delimiter?: string | [string, string];
+  slug?: string;
+  media_folder?: string;
+  public_folder?: string;
 }
 
 export interface FilesCollection<EF extends BaseField = UnknownField> extends BaseCollection {
@@ -195,8 +195,8 @@ export interface FilesCollection<EF extends BaseField = UnknownField> extends Ba
 export interface FolderCollection<EF extends BaseField = UnknownField> extends BaseCollection {
   folder: string;
   fields: Field<EF>[];
-  media_folder?: string;
-  public_folder?: string;
+  create?: boolean;
+  delete?: boolean;
 }
 
 export type Collection<EF extends BaseField = UnknownField> =

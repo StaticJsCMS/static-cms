@@ -49,7 +49,7 @@ function hasCustomFolder(
     return true;
   }
 
-  if (collection.files) {
+  if ('files' in collection) {
     const file = getFileField(collection.files, slug);
     if (file && file[folderKey]) {
       return true;
@@ -78,7 +78,7 @@ function evaluateFolder(
     collection[folderKey] = `{{${folderKey}}}`;
   }
 
-  if (collection.files) {
+  if ('files' in collection) {
     // files collection evaluate the collection template
     // then move on to the specific file configuration denoted by the slug
     currentFolder = folderFormatter(
@@ -244,7 +244,7 @@ export function selectMediaFolder(
       const entryPath = entryMap?.path;
       mediaFolder = entryPath
         ? join(dirname(entryPath), folder)
-        : join(collection!.folder as string, DRAFT_MEDIA_FILES);
+        : join(collection && 'folder' in collection ? collection.folder : '', DRAFT_MEDIA_FILES);
     }
   }
 

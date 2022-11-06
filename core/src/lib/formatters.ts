@@ -11,7 +11,7 @@ import {
   addFileTemplateFields,
   compileStringTemplate,
   keyToPathArray,
-  parseDateFromEntry,
+  parseDateFromEntry
 } from './widgets/stringTemplate';
 
 import type { Collection, Config, Entry, EntryData, Slug } from '../interface';
@@ -111,7 +111,9 @@ export function summaryFormatter(summaryTemplate: string, entry: Entry, collecti
   const date = parseDateFromEntry(entry, selectInferedField(collection, 'date')) || null;
   const identifier = get(entryData, keyToPathArray(selectIdentifier(collection)));
 
-  entryData = addFileTemplateFields(entry.path, entryData, collection.folder) ?? {};
+  entryData =
+    addFileTemplateFields(entry.path, entryData, 'folder' in collection ? collection.folder : '') ??
+    {};
   // allow commit information in summary template
   if (entry.author && !selectField(collection, COMMIT_AUTHOR)) {
     entryData = set(entryData, COMMIT_AUTHOR, entry.author);
@@ -136,7 +138,11 @@ export function folderFormatter(
   }
 
   let fields = set(entry.data, folderKey, defaultFolder) as EntryData;
-  fields = addFileTemplateFields(entry.path, fields, collection.folder);
+  fields = addFileTemplateFields(
+    entry.path,
+    fields,
+    'folder' in collection ? collection.folder : '',
+  );
 
   const date = parseDateFromEntry(entry, selectInferedField(collection, 'date')) || null;
   const identifier = get(fields, keyToPathArray(selectIdentifier(collection)));
