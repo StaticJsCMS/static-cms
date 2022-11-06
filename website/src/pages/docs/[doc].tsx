@@ -11,6 +11,7 @@ import Header3 from '../../components/docs/components/headers/Header3';
 import Header4 from '../../components/docs/components/headers/Header4';
 import Header5 from '../../components/docs/components/headers/Header5';
 import Header6 from '../../components/docs/components/headers/Header6';
+import Pre from '../../components/docs/components/Pre';
 import DocsTable from '../../components/docs/components/table/Table';
 import TableBody from '../../components/docs/components/table/TableBody';
 import TableBodyCell from '../../components/docs/components/table/TableBodyCell';
@@ -103,6 +104,7 @@ const Docs = ({ docsGroups, title, slug, description = '', source }: DocsProps) 
                 h5: Header5,
                 h6: Header6,
                 blockquote: Blockquote,
+                pre: Pre,
                 table: DocsTable,
                 thead: TableHead,
                 tbody: TableBody,
