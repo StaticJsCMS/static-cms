@@ -8,6 +8,11 @@ import type { ComponentType, FunctionComponent, ReactNode } from 'react';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
 import type { MediaFile as BackendMediaFile } from './backend';
 import type { EditorControlProps } from './components/Editor/EditorControlPane/EditorControl';
+import type {
+  SORT_DIRECTION_ASCENDING,
+  SORT_DIRECTION_DESCENDING,
+  SORT_DIRECTION_NONE,
+} from './constants';
 import type { formatExtensions } from './formats/formats';
 import type { I18N_STRUCTURE } from './lib/i18n';
 import type { AllowedEvent } from './lib/registry';
@@ -229,7 +234,10 @@ export interface DisplayURLState {
 
 export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
-export type GetAssetFunction<F extends BaseField = UnknownField> = (path: string, field?: F) => Promise<AssetProxy>;
+export type GetAssetFunction<F extends BaseField = UnknownField> = (
+  path: string,
+  field?: F,
+) => Promise<AssetProxy>;
 
 export interface WidgetControlProps<T, F extends BaseField = UnknownField> {
   collection: Collection<F>;
@@ -667,11 +675,10 @@ export interface ViewGroup {
   pattern?: string;
 }
 
-export enum SortDirection {
-  Ascending = 'Ascending',
-  Descending = 'Descending',
-  None = 'None',
-}
+export type SortDirection =
+  | typeof SORT_DIRECTION_ASCENDING
+  | typeof SORT_DIRECTION_DESCENDING
+  | typeof SORT_DIRECTION_NONE;
 
 export interface SortableFieldsDefault {
   field: string;

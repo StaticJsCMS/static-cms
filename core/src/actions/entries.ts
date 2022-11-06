@@ -1,9 +1,9 @@
 import isEqual from 'lodash/isEqual';
 
 import { currentBackend } from '../backend';
+import { SORT_DIRECTION_ASCENDING } from '../constants';
 import ValidationErrorTypes from '../constants/validationErrorTypes';
 import { getSearchIntegrationProvider } from '../integrations';
-import { SortDirection } from '../interface';
 import { duplicateDefaultI18nFields, hasI18n, I18N_FIELD, serializeI18n } from '../lib/i18n';
 import { serializeValues } from '../lib/serializeEntryValues';
 import { Cursor } from '../lib/util';
@@ -33,6 +33,7 @@ import type {
   I18nSettings,
   ImplementationMediaFile,
   ObjectValue,
+  SortDirection,
   ValueOrNestedValue,
   ViewFilter,
   ViewGroup,
@@ -292,7 +293,7 @@ async function getAllEntries(state: RootState, collection: Collection) {
 export function sortByField(
   collection: Collection,
   key: string,
-  direction: SortDirection = SortDirection.Ascending,
+  direction: SortDirection = SORT_DIRECTION_ASCENDING,
 ) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();

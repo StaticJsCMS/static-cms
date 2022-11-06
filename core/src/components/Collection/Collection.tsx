@@ -10,7 +10,7 @@ import {
   sortByField as sortByFieldAction,
 } from '../../actions/entries';
 import { components } from '../../components/UI/styles';
-import { SortDirection } from '../../interface';
+import { SORT_DIRECTION_ASCENDING } from '../../constants';
 import { getNewEntryUrl } from '../../lib/urlHelper';
 import {
   selectSortableFields,
@@ -31,7 +31,13 @@ import Sidebar from './Sidebar';
 
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
-import type { Collection, TranslatedProps, ViewFilter, ViewGroup } from '../../interface';
+import type {
+  Collection,
+  SortDirection,
+  TranslatedProps,
+  ViewFilter,
+  ViewGroup,
+} from '../../interface';
 import type { RootState } from '../../store';
 
 const CollectionMain = styled('main')`
@@ -177,7 +183,7 @@ const CollectionView = ({
 
     const sortEntries = () => {
       setTimeout(async () => {
-        await onSortClick(defaultSort.field, defaultSort.direction ?? SortDirection.Ascending);
+        await onSortClick(defaultSort.field, defaultSort.direction ?? SORT_DIRECTION_ASCENDING);
 
         if (alive) {
           setReadyToLoad(true);

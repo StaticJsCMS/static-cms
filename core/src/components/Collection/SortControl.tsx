@@ -8,9 +8,13 @@ import MenuItem from '@mui/material/MenuItem';
 import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
-import { SortDirection } from '../../interface';
+import {
+  SORT_DIRECTION_ASCENDING,
+  SORT_DIRECTION_DESCENDING,
+  SORT_DIRECTION_NONE,
+} from '../../constants';
 
-import type { SortableField, SortMap, TranslatedProps } from '../../interface';
+import type { SortableField, SortDirection, SortMap, TranslatedProps } from '../../interface';
 
 const StyledMenuIconWrapper = styled('div')`
   width: 32px;
@@ -22,12 +26,12 @@ const StyledMenuIconWrapper = styled('div')`
 
 function nextSortDirection(direction: SortDirection) {
   switch (direction) {
-    case SortDirection.Ascending:
-      return SortDirection.Descending;
-    case SortDirection.Descending:
-      return SortDirection.None;
+    case SORT_DIRECTION_ASCENDING:
+      return SORT_DIRECTION_DESCENDING;
+    case SORT_DIRECTION_DESCENDING:
+      return SORT_DIRECTION_NONE;
     default:
-      return SortDirection.Ascending;
+      return SORT_DIRECTION_NONE;
   }
 }
 
@@ -53,7 +57,7 @@ const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortContr
     }
 
     const sortValues = Object.values(sort);
-    if (Object.values(sortValues).length < 1 || sortValues[0].direction === SortDirection.None) {
+    if (Object.values(sortValues).length < 1 || sortValues[0].direction === SORT_DIRECTION_NONE) {
       return { key: undefined, direction: undefined };
     }
 
@@ -83,7 +87,7 @@ const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortContr
         }}
       >
         {fields.map(field => {
-          const sortDir = sort?.[field.name]?.direction ?? SortDirection.None;
+          const sortDir = sort?.[field.name]?.direction ?? SORT_DIRECTION_NONE;
           const nextSortDir = nextSortDirection(sortDir);
           return (
             <MenuItem
@@ -94,7 +98,7 @@ const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortContr
               <ListItemText>{field.label ?? field.name}</ListItemText>
               <StyledMenuIconWrapper>
                 {field.name === selectedSort.key ? (
-                  selectedSort.direction === SortDirection.Ascending ? (
+                  selectedSort.direction === SORT_DIRECTION_ASCENDING ? (
                     <KeyboardArrowUpIcon fontSize="small" />
                   ) : (
                     <KeyboardArrowDownIcon fontSize="small" />
