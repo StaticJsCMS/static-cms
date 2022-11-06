@@ -22,8 +22,10 @@ Then import it (assuming your project has tooling for imports):
 
 ```js
 import CMS from '@staticcms/core';
+import config from './config';
+
 // Initialize the CMS object
-CMS.init();
+CMS.init({ config });
 // Now the registry is available via the CMS object.
 CMS.registerPreviewTemplate('my-template', MyTemplate);
 ```
@@ -32,7 +34,7 @@ CMS.registerPreviewTemplate('my-template', MyTemplate);
 
 ## Configuration
 
-Configuration is different for every site, so we'll break it down into parts. Add all the code snippets in this section to your `admin/config.js` file. Alternatively, you can use a yaml file (`admin/config.yml`) instead of a javascript file. See [Configuration in the CDN Guide](/docs/add-to-your-site-cdn#configuration) for details.
+Configuration is different for every site, so we'll break it down into parts. Add all the code snippets in this section to your `admin/config.js` file (which is passed into the `CMS.init({ config })` call). Alternatively, you can use a yaml file (`admin/config.yml`) instead of a javascript file. See [Configuration in the CDN Guide](/docs/add-to-your-site-cdn#configuration) for details.
 
 ### Backend
 

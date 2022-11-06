@@ -4,4 +4,134 @@ title: Typescript
 weight: 20
 ---
 
-Coming soon
+Static CMS provides first class support for Typescript when using the [Bundling option](/docs/add-to-your-site-bundling).
+
+## Configuration
+
+When using Typescript it is recommended to store your CMS configuration in a typescript file instead of a yaml file to take full advantage of the typings available.
+
+```ts
+import type { Config } from '@staticcms/core';
+
+export const config: Config = {
+  ...
+}
+```
+
+### Custom Widgets
+
+When providing your own widgets, you can extend the `Config` type with your custom widget types to provide proper typing in your config. All custom widget types should extend the `BaseField` interface.
+
+```ts
+import type { Config, BaseField } from '@staticcms/core';
+
+export interface HtmlField extends BaseField {
+  widget: 'html'
+  default: string;
+}
+
+export interface CustomField extends BaseField {
+  widget: 'custom'
+  default: number[];
+  some_other_prop: string;
+}
+
+export const config: Config<HtmlField | CustomField> = {
+  ...
+}
+```
+
+## Widgets
+
+When providing types for custom widgets you need to know the datatype your widget works with and the definition of its `Field`. The examples below assumes the field interface for the widget is in the `config.ts` file in the parent directory.
+
+### Control Component
+
+Control widgets take the `WidgetControlProps` interface as their props.
+
+```tsx
+import type { FC } from 'react';
+import type { WidgetControlProps } from '@staticcms/core';
+import type { HtmlField } from '../config';
+
+const EditorControl: FC<WidgetControlProps<string, HtmlField>> = ({
+  field, // Typed as a HtmlField
+  value, // Typed as string | null | undefined
+  onChange,
+  openMediaLibrary,
+  getAsset,
+  mediaPaths
+}) => {
+  ...
+};
+```
+
+### Preview Component
+
+Control widgets take the `WidgetPreviewProps` interface as their props.
+
+```tsx
+import type { FC } from 'react';
+import type { WidgetPreviewProps } from '@staticcms/core';
+import type { HtmlField } from '../config';
+
+const EditorPreview: FC<WidgetPreviewProps<string, HtmlField>> = ({
+  field, // Typed as a HtmlField
+  value, // Typed as string | null | undefined
+  getAsset,
+}) => {
+  ...
+};
+```
+
+## Preview Templates
+
+When providing types for custom preview templates you need to know the datatype of your collection (or file) that the template is represents. Preview templates take the `TemplatePreviewProps` interface as their props.
+
+```tsx
+import { useEffect, useMemo, useState } from 'react';
+
+import type { FC } from 'react';
+import type { TemplatePreviewProps } from '@staticcms/core';
+
+interface PostPreviewData {
+  body: string;
+  date: string;
+  title: string;
+  image?: string;
+  slug: string;
+  tags?: string[];
+}
+
+const PostPreview: FC<TemplatePreviewProps<PostPreviewData>> = ({ entry, widgetFor, getAsset }) => {
+  const dateString = useMemo(() => entry.data.date, [entry.data.date]);
+
+  const [image, setImage] = useState('');
+  useEffect(() => {
+    let alive = true;
+
+    const loadImage = async () => {
+      const loadedImage = await getAsset(entry.data.image ?? '');
+      if (alive) {
+        setImage(loadedImage.toString());
+      }
+    };
+
+    loadImage();
+
+    return () => {
+      alive = false;
+    };
+  }, [entry.data.image, getAsset]);
+
+  return (
+    <div>
+      <h1>{entry.data.title}</h1>
+      <div>{entry.data.date}</div>
+      <img title={title} src={image} />
+      <div>{(entry.data.tags ?? []).join(', ')}</div>
+      <div>{widgetFor('body')}</div>
+    </div>
+  );
+};
+```
