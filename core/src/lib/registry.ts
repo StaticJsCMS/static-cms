@@ -5,6 +5,7 @@ import type {
   BackendClass,
   BackendInitializer,
   BackendInitializerOptions,
+  BaseField,
   Config,
   CustomIcon,
   Entry,
@@ -19,6 +20,7 @@ import type {
   PreviewStyle,
   PreviewStyleOptions,
   TemplatePreviewComponent,
+  UnknownField,
   Widget,
   WidgetOptions,
   WidgetParam,
@@ -124,21 +126,21 @@ export function getPreviewTemplate(name: string): TemplatePreviewComponent<Entry
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function registerWidget(widgets: WidgetParam<any, any>[]): void;
 export function registerWidget(widget: WidgetParam): void;
-export function registerWidget<T = unknown>(
+export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
   name: string,
-  control: string | Widget<T>['control'],
-  preview?: Widget<T>['preview'],
-  options?: WidgetOptions,
+  control: string | Widget<T, F>['control'],
+  preview?: Widget<T, F>['preview'],
+  options?: WidgetOptions<T, F>,
 ): void;
-export function registerWidget<T = unknown>(
-  name: string | WidgetParam<T> | WidgetParam[],
-  control?: string | Widget<T>['control'],
-  preview?: Widget<T>['preview'],
+export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
+  name: string | WidgetParam<T, F> | WidgetParam[],
+  control?: string | Widget<T, F>['control'],
+  preview?: Widget<T, F>['preview'],
   {
     schema,
     validator = () => false,
-    getValidValue = (value: unknown) => value,
-  }: WidgetOptions = {},
+    getValidValue = (value: T | null | undefined) => value,
+  }: WidgetOptions<T, F> = {},
 ): void {
   if (Array.isArray(name)) {
     name.forEach(widget => {
@@ -184,12 +186,12 @@ export function registerWidget<T = unknown>(
       throw Error(`Widget "${widgetName}" registered without \`controlComponent\`.`);
     }
     registry.widgets[widgetName] = {
-      control: control as Widget['control'],
-      preview: preview as Widget['preview'],
-      validator: validator as Widget['validator'],
-      getValidValue: getValidValue as Widget['getValidValue'],
+      control,
+      preview,
+      validator,
+      getValidValue,
       schema,
-    };
+    } as unknown as Widget;
   } else {
     console.error('`registerWidget` failed, called with incorrect arguments.');
   }
