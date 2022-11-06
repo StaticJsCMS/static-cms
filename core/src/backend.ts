@@ -261,7 +261,7 @@ interface PersistArgs {
 
 function collectionDepth(collection: Collection) {
   let depth;
-  depth = collection.nested?.depth || getPathDepth(collection.path ?? '');
+  depth = 'nested' in collection && collection.nested?.depth || getPathDepth(collection.path ?? '');
 
   if (hasI18n(collection)) {
     depth = getI18nFilesDepth(collection, depth);

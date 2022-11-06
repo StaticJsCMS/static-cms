@@ -21,6 +21,7 @@ import type {
   ListField,
   LocalBackend,
   ObjectField,
+  UnknownField,
 } from '../interface';
 import type { RootState } from '../store';
 
@@ -28,11 +29,11 @@ export const CONFIG_REQUEST = 'CONFIG_REQUEST';
 export const CONFIG_SUCCESS = 'CONFIG_SUCCESS';
 export const CONFIG_FAILURE = 'CONFIG_FAILURE';
 
-function isObjectField(field: Field): field is BaseField & ObjectField {
+function isObjectField<F extends BaseField = UnknownField>(field: Field<F>): field is ObjectField {
   return 'fields' in (field as ObjectField);
 }
 
-function isFieldList(field: Field): field is BaseField & ListField {
+function isFieldList<F extends BaseField = UnknownField>(field: Field<F>): field is ListField {
   return 'types' in (field as ListField) || 'field' in (field as ListField);
 }
 
@@ -210,8 +211,6 @@ export function applyDefaults(originalConfig: Config) {
 
       if ('files' in collection && collection.files) {
         throwOnInvalidFileCollectionStructure(collectionI18n);
-
-        delete collection.nested;
 
         for (const file of collection.files) {
           file.file = trimStart(file.file, '/');

@@ -838,6 +838,10 @@ function processValue(unsafe: string) {
 
 export function createEmptyDraft(collection: Collection, search: string) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
+    if ('files' in collection) {
+      return;
+    }
+
     const params = new URLSearchParams(search);
     params.forEach((value, key) => {
       collection = updateFieldByKey(collection, key, field => {
@@ -885,7 +889,7 @@ export function createEmptyDraftData(
     }
 
     const subfields = 'fields' in item && item.fields;
-    const list = item.widget == 'list';
+    const list = item.widget === 'list';
     const name = item.name;
     const defaultValue = (('default' in item ? item.default : null) ?? null) as EntryData;
 

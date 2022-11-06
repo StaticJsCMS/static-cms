@@ -87,7 +87,10 @@ const Header = ({
   }, []);
 
   const createableCollections = useMemo(
-    () => Object.values(collections).filter(collection => collection.create),
+    () =>
+      Object.values(collections).filter(collection =>
+        'folder' in collection ? collection.create ?? false : false,
+      ),
     [collections],
   );
 

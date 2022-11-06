@@ -174,7 +174,6 @@ export interface BaseCollection {
   sortable_fields?: SortableFields;
   view_filters?: ViewFilter[];
   view_groups?: ViewGroup[];
-  nested?: Nested;
   i18n?: boolean | I18nInfo;
   hide?: boolean;
   editor?: EditorConfig;
@@ -197,6 +196,7 @@ export interface FolderCollection<EF extends BaseField = UnknownField> extends B
   fields: Field<EF>[];
   create?: boolean;
   delete?: boolean;
+  nested?: Nested;
 }
 
 export type Collection<EF extends BaseField = UnknownField> =
@@ -494,6 +494,7 @@ export interface BaseField {
   pattern?: [string, string];
   i18n?: boolean | 'translate' | 'duplicate' | 'none';
   comment?: string;
+  widget: string;
 }
 
 export interface BooleanField extends BaseField {
@@ -627,7 +628,7 @@ export interface HiddenField extends BaseField {
 
 export interface StringOrTextField extends BaseField {
   // This is the default widget, so declaring its type is optional.
-  widget?: 'string' | 'text';
+  widget: 'string' | 'text';
   default?: string;
 }
 
