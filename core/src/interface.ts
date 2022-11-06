@@ -167,8 +167,6 @@ export interface BaseCollection {
   description?: string;
   icon?: string;
   isFetching?: boolean;
-  media_folder?: string;
-  public_folder?: string;
   summary?: string;
   filter?: FilterRule;
   extension?: string;
@@ -190,17 +188,19 @@ export interface BaseCollection {
   editor?: EditorConfig;
 }
 
-export interface FileCollection<EF extends BaseField = UnknownField> extends BaseCollection {
-  folder: string;
-  fields: Field<EF>[];
-}
-
-export interface FolderCollection<EF extends BaseField = UnknownField> extends BaseCollection {
+export interface FilesCollection<EF extends BaseField = UnknownField> extends BaseCollection {
   files: CollectionFile<EF>[];
 }
 
+export interface FolderCollection<EF extends BaseField = UnknownField> extends BaseCollection {
+  folder: string;
+  fields: Field<EF>[];
+  media_folder?: string;
+  public_folder?: string;
+}
+
 export type Collection<EF extends BaseField = UnknownField> =
-  | FileCollection<EF>
+  | FilesCollection<EF>
   | FolderCollection<EF>;
 
 export type Collections<EF extends BaseField = UnknownField> = Record<string, Collection<EF>>;
@@ -873,4 +873,9 @@ export interface MarkdownEditorOptions {
   height?: string;
   toolbarItems?: MarkdownToolbarItemsFactory;
   plugins?: MarkdownPluginFactory[];
+}
+
+export enum CollectionType {
+  FOLDER,
+  FILES,
 }

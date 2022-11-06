@@ -1,7 +1,6 @@
 import get from 'lodash/get';
 import { useMemo } from 'react';
 
-import { FILES, FOLDER } from '../../constants/collectionTypes';
 import { COMMIT_AUTHOR, COMMIT_DATE } from '../../constants/commitProps';
 import {
   IDENTIFIER_FIELDS,
@@ -24,20 +23,26 @@ import type {
   Entry,
   Field,
   ObjectField,
-  SortableField,
+  SortableField,FilesCollection
 } from '../../interface';
 
+function  fileForEntry(collection: FilesCollection, slug?: string) {
+  const files = collection.files;
+  if (!slug) {
+    return files?.[0];
+  }
+  return files && files.filter(f => f?.name === slug)?.[0];
+},
+
 const selectors = {
-  [FOLDER]: {
+  [CollectionType]: {
     entryExtension(collection: Collection) {
       return (collection.extension || formatExtensions[collection.format ?? 'frontmatter']).replace(
         /^\./,
         '',
       );
     },
-    fields(collection: Collection) {
-      return collection.fields;
-    },
+    fields(collection: Collection) {},
     entryPath(collection: Collection, slug: string) {
       const folder = (collection.folder as string).replace(/\/$/, '');
       return `${folder}/${slug}.${this.entryExtension(collection)}`;
@@ -62,17 +67,7 @@ const selectors = {
     },
   },
   [FILES]: {
-    fileForEntry(collection: Collection, slug?: string) {
-      const files = collection.files;
-      if (!slug) {
-        return files?.[0];
-      }
-      return files && files.filter(f => f?.name === slug)?.[0];
-    },
-    fields(collection: Collection, slug?: string) {
-      const file = this.fileForEntry(collection, slug);
-      return file && file.fields;
-    },
+    fields(collection: Collection, slug?: string) {},
     entryPath(collection: Collection, slug: string) {
       const file = this.fileForEntry(collection, slug);
       return file && file.file;
@@ -98,7 +93,12 @@ const selectors = {
 };
 
 export function selectFields(collection: Collection, slug?: string) {
-  return selectors[collection.type].fields(collection, slug);
+  if ('fields' in collection) {
+    return collection.fields;
+  }
+
+  const file = fileForEntry(collection, slug);
+  return file && file.fields;
 }
 
 export function selectFolderEntryExtension(collection: Collection) {
@@ -137,7 +137,7 @@ export function selectEntryCollectionTitle(collection: Collection, entry: Entry)
   }
 
   // if the collection is a file collection return the label of the entry
-  if (collection.type == FILES) {
+  if ('files' in collection && collection.files) {
     const label = selectFileEntryLabel(collection, entry.slug);
     if (label) {
       return label;
@@ -250,7 +250,7 @@ function getFieldsWithMediaFolders(fields: Field[]) {
   return fieldsWithMediaFolders;
 }
 
-export function getFileFromSlug(collection: Collection, slug: string) {
+export function getFileFromSlug(collection: FileCollection, slug: string) {
   return collection.files?.find(f => f.name === slug);
 }
 
@@ -274,17 +274,15 @@ export function selectMediaFolders(config: Config, collection: Collection, entry
     if (file) {
       folders.unshift(selectMediaFolder(config, collection, entry, undefined));
     }
-  }
-  if ('media_folder' in collection) {
+  } else if ('media_folder' in collection) {
     // stop evaluating media folders at collection level
     const newCollection = { ...collection };
-    delete newCollection.files;
     folders.unshift(selectMediaFolder(config, newCollection, entry, undefined));
   }
 
   return [...new Set(...folders)];
 }
-export function getFieldsNames(fields: (Field | Field)[] | undefined, prefix = '') {
+export function getFieldsNames(fields: Field[] | undefined, prefix = '') {
   let names = fields?.map(f => `${prefix}${f.name}`) ?? [];
 
   fields?.forEach((f, index) => {
@@ -347,7 +345,9 @@ export function updateFieldByKey(
     }
   }
 
-  collection.fields = traverseFields(collection.fields ?? [], updateAndBreak, () => updated);
+  if ('fields' in collection) {
+    collection.fields = traverseFields(collection.fields ?? [], updateAndBreak, () => updated);
+  }
 
   return collection;
 }
@@ -355,7 +355,7 @@ export function updateFieldByKey(
 export function selectIdentifier(collection: Collection) {
   const identifier = collection.identifier_field;
   const identifierFields = identifier ? [identifier, ...IDENTIFIER_FIELDS] : [...IDENTIFIER_FIELDS];
-  const fieldNames = getFieldsNames(collection.fields ?? []);
+  const fieldNames = getFieldsNames('fields' in collection ? collection.fields ?? [] : []);
   return identifierFields.find(id =>
     fieldNames.find(name => name.toLowerCase().trim() === id.toLowerCase().trim()),
   );
@@ -377,7 +377,7 @@ export function selectInferedField(collection: Collection, fieldName: string) {
       }
     >
   )[fieldName];
-  const fields = collection.fields as (Field | Field)[];
+  const fields = 'fields' in collection ? collection.fields ?? [] : [];
   let field;
 
   // If collection has no fields or fieldName is not defined within inferables list, return null

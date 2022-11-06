@@ -221,7 +221,7 @@ const EditorInterface = ({
     let preview = collection.editor?.preview ?? true;
     let frame = collection.editor?.frame ?? true;
 
-    if (collection.type === FILES) {
+    if ('files' in collection) {
       const file = getFileFromSlug(collection, entry.slug);
       if (file?.editor?.preview !== undefined) {
         preview = file.editor.preview;
