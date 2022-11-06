@@ -163,7 +163,7 @@ const CollectionView = ({
       return;
     }
 
-    const defaultSort = collection.sortable_fields.default;
+    const defaultSort = collection.sortable_fields?.default;
     if (!defaultSort || !defaultSort.field) {
       if (!readyToLoad) {
         setReadyToLoad(true);
@@ -218,8 +218,8 @@ const CollectionView = ({
                 sortableFields={sortableFields}
                 onSortClick={onSortClick}
                 sort={sort}
-                viewFilters={viewFilters}
-                viewGroups={viewGroups}
+                viewFilters={viewFilters ?? []}
+                viewGroups={viewGroups ?? []}
                 t={t}
                 onFilterClick={onFilterClick}
                 onGroupClick={onGroupClick}

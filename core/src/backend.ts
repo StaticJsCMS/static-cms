@@ -441,14 +441,13 @@ export class Backend {
   async listEntries(collection: Collection) {
     const extension = selectFolderEntryExtension(collection);
     let listMethod: () => Promise<ImplementationEntry[]>;
-    const collectionType = collection.type;
-    if (collectionType === FOLDER) {
+    if ('folder' in collection) {
       listMethod = () => {
         const depth = collectionDepth(collection);
         return this.implementation.entriesByFolder(collection.folder as string, extension, depth);
       };
-    } else if (collectionType === FILES) {
-      const files = collection.files!.map(collectionFile => ({
+    } else if ('files' in collection) {
+      const files = collection.files.map(collectionFile => ({
         path: collectionFile!.file,
         label: collectionFile!.label,
       }));
@@ -481,7 +480,7 @@ export class Backend {
   // returns all the collected entries. Used to retrieve all entries
   // for local searches and queries.
   async listAllEntries(collection: Collection) {
-    if (collection.folder && this.implementation.allEntriesByFolder) {
+    if ('folder' in collection && collection.folder && this.implementation.allEntriesByFolder) {
       const depth = collectionDepth(collection);
       const extension = selectFolderEntryExtension(collection);
       return this.implementation

@@ -1,6 +1,6 @@
 import type {
-	EditorPlugin as MarkdownPlugin,
-	EditorType as MarkdownEditorType
+  EditorPlugin as MarkdownPlugin,
+  EditorType as MarkdownEditorType,
 } from '@toast-ui/editor/types/editor';
 import type { ToolbarItemOptions as MarkdownToolbarItemOptions } from '@toast-ui/editor/types/ui';
 import type { PropertiesSchema } from 'ajv/dist/types/json-schema';
@@ -162,19 +162,15 @@ export interface i18nCollection<EF extends BaseField = UnknownField>
   i18n: Required<Collection<EF>>['i18n'];
 }
 
-export interface Collection<EF extends BaseField = UnknownField> {
+export interface BaseCollection {
   name: string;
   description?: string;
   icon?: string;
-  folder?: string;
-  files?: CollectionFile<EF>[];
-  fields: Field<EF>[];
   isFetching?: boolean;
   media_folder?: string;
   public_folder?: string;
   summary?: string;
   filter?: FilterRule;
-  type: 'file_based_collection' | 'folder_based_collection';
   extension?: string;
   format?: Format;
   frontmatter_delimiter?: string | [string, string];
@@ -185,14 +181,27 @@ export interface Collection<EF extends BaseField = UnknownField> {
   slug?: string;
   label_singular?: string;
   label: string;
-  sortable_fields: SortableFields;
-  view_filters: ViewFilter[];
-  view_groups: ViewGroup[];
+  sortable_fields?: SortableFields;
+  view_filters?: ViewFilter[];
+  view_groups?: ViewGroup[];
   nested?: Nested;
   i18n?: boolean | I18nInfo;
   hide?: boolean;
   editor?: EditorConfig;
 }
+
+export interface FileCollection<EF extends BaseField = UnknownField> extends BaseCollection {
+  folder: string;
+  fields: Field<EF>[];
+}
+
+export interface FolderCollection<EF extends BaseField = UnknownField> extends BaseCollection {
+  files: CollectionFile<EF>[];
+}
+
+export type Collection<EF extends BaseField = UnknownField> =
+  | FileCollection<EF>
+  | FolderCollection<EF>;
 
 export type Collections<EF extends BaseField = UnknownField> = Record<string, Collection<EF>>;
 
@@ -250,10 +259,7 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField> {
   value: T | undefined | null;
 }
 
-export interface WidgetPreviewProps<
-  T = unknown,
-  F extends BaseField = UnknownField
-> {
+export interface WidgetPreviewProps<T = unknown, F extends BaseField = UnknownField> {
   config: Config<F>;
   collection: Collection<F>;
   entry: Entry;
@@ -262,10 +268,7 @@ export interface WidgetPreviewProps<
   value: T | undefined | null;
 }
 
-export type WidgetPreviewComponent<
-  T = unknown,
-  F extends BaseField = UnknownField
-> =
+export type WidgetPreviewComponent<T = unknown, F extends BaseField = UnknownField> =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
   | ComponentType<WidgetPreviewProps<T, F>>;
@@ -293,9 +296,10 @@ export interface TemplatePreviewProps<T = EntryData, EF extends BaseField = Unkn
   widgetsFor: WidgetsFor<T>;
 }
 
-export type TemplatePreviewComponent<T = EntryData, EF extends BaseField = UnknownField> = ComponentType<
-  TemplatePreviewProps<T, EF>
->;
+export type TemplatePreviewComponent<
+  T = EntryData,
+  EF extends BaseField = UnknownField,
+> = ComponentType<TemplatePreviewProps<T, EF>>;
 
 export interface WidgetOptions<T = unknown, F extends BaseField = UnknownField> {
   validator?: Widget<T, F>['validator'];
