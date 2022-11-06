@@ -478,7 +478,7 @@ export type AuthScope = 'repo' | 'public_repo';
 
 export type SlugEncoding = 'unicode' | 'ascii';
 
-export type RenderedField<T extends BaseField = UnknownField> = Omit<T, 'fields'> & {
+export type RenderedField<F extends BaseField = UnknownField> = Omit<F, 'fields'> & {
   fields?: ReactNode[];
 };
 

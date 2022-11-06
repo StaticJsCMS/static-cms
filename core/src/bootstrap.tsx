@@ -20,7 +20,7 @@ import { store } from './store';
 
 import type { AnyAction } from '@reduxjs/toolkit';
 import type { ConnectedProps } from 'react-redux';
-import type { Config } from './interface';
+import type { BaseField, Config, UnknownField } from './interface';
 import type { RootState } from './store';
 
 const ROOT_ID = 'nc-root';
@@ -50,7 +50,10 @@ export type AppRootProps = ConnectedProps<typeof connector>;
 
 const ConnectedTranslatedApp = connector(TranslatedApp);
 
-function bootstrap(opts?: { config?: Config; autoInitialize?: boolean }) {
+function bootstrap<F extends BaseField = UnknownField>(opts?: {
+  config?: Config<F>;
+  autoInitialize?: boolean;
+}) {
   const { config, autoInitialize = true } = opts ?? {};
 
   /**
@@ -86,7 +89,7 @@ function bootstrap(opts?: { config?: Config; autoInitialize?: boolean }) {
   }
 
   store.dispatch(
-    loadConfig(config, function onLoad(config) {
+    loadConfig(config as Config | undefined, function onLoad(config) {
       if (config.backend.name !== 'git-gateway') {
         store.dispatch(authenticateUser() as unknown as AnyAction);
       }
