@@ -3,7 +3,11 @@
     "docs": [
       {
         "name": "Intro",
-        "title": "Intro to Static CMS"
+        "title": "Getting Started"
+      },
+      {
+        "name": "Migration",
+        "title": "Migration Guides"
       },
       {
         "name": "Backends",

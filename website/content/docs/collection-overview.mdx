@@ -47,18 +47,16 @@ collections:
 
 These settings determine how collection files are parsed and saved. Both are optional—Static CMS will attempt to infer your settings based on existing items in the collection. If your collection is empty, or you'd like more control, you can set these fields explicitly.
 
-`extension` determines the file extension searched for when finding existing entries in a folder collection and it determines the file extension used to save new collection items. It accepts the following values: `yml`, `yaml`, `toml`, `json`, `md`, `markdown`, `html`.
+`extension` determines the file extension searched for when finding existing entries in a folder collection and it determines the file extension used to save new collection items. It accepts the following values: `yml`, `yaml`, `json`, `md`, `markdown`, `html`.
 
 You may also specify a custom `extension` not included in the list above, as long as the collection files can be parsed and saved in one of the supported formats below.
 
 `format` determines how collection files are parsed and saved. It will be inferred if the `extension` field or existing collection file extensions match one of the supported extensions above. It accepts the following values:
 
 - `yml` or `yaml`: parses and saves files as YAML-formatted data files; saves with `yml` extension by default
-- `toml`: parses and saves files as TOML-formatted data files; saves with `toml` extension by default
 - `json`: parses and saves files as JSON-formatted data files; saves with `json` extension by default
-- `frontmatter`: parses files and saves files with data frontmatter followed by an unparsed body text (edited using a `body` field); saves with `md` extension by default; default for collections that can't be inferred. Collections with `frontmatter` format (either inferred or explicitly set) can parse files with frontmatter in YAML, TOML, or JSON format. However, they will be saved with YAML frontmatter.
+- `frontmatter`: parses files and saves files with data frontmatter followed by an unparsed body text (edited using a `body` field); saves with `md` extension by default; default for collections that can't be inferred. Collections with `frontmatter` format (either inferred or explicitly set) can parse files with frontmatter in YAML or JSON format. However, they will be saved with YAML frontmatter.
 - `yaml-frontmatter`: same as the `frontmatter` format above, except frontmatter will be both parsed and saved only as YAML, followed by unparsed body text. The default delimiter for this option is `---`.
-- `toml-frontmatter`: same as the `frontmatter` format above, except frontmatter will be both parsed and saved only as TOML, followed by unparsed body text. The default delimiter for this option is `+++`.
 - `json-frontmatter`: same as the `frontmatter` format above, except frontmatter will be both parsed and saved as JSON, followed by unparsed body text. The default delimiter for this option is `{` `}`.
 
 ## `frontmatter_delimiter`
