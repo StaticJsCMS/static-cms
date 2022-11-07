@@ -283,6 +283,10 @@ const DocsContent = styled('div')(
       display: flex;
       width: 100%;
     }
+
+    .MuiAlert-root {
+      margin-bottom: 16px;
+    }
   `,
 );
 
