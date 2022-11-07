@@ -1,8 +1,11 @@
-import { isValidElement, useMemo, useState } from 'react';
+import { isValidElement, useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
+import Prism from 'prismjs';
+import yaml from 'yaml';
+import prettier from 'prettier';
 
 import type { ReactNode, SyntheticEvent } from 'react';
 
@@ -24,7 +27,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -44,14 +47,14 @@ interface PreProps {
 }
 
 const Pre = ({ children }: PreProps) => {
-  const isYaml = useMemo(() => {
+  const yaml = useMemo(() => {
     if (isValidElement(children)) {
       if (children.type === 'code' && children.props.className === 'language-yaml') {
-        return true;
+        return children.props.children as string;
       }
     }
 
-    return false;
+    return undefined;
   }, [children]);
 
   const [value, setValue] = useState(0);
@@ -60,33 +63,43 @@ const Pre = ({ children }: PreProps) => {
     setValue(newValue);
   };
 
-  console.log(isYaml, children);
+  console.log(yaml, children);
 
-  if (!isYaml) {
-    return <pre>{children}</pre>;
-  }
+  const [output, setOutput] = useState(<pre>{children}</pre>);
 
-  return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-          sx={{ '.MuiTabs-root': { margin: 0 }, '.MuiTabs-flexContainer': { margin: 0 } }}
-        >
-          <Tab label="Yaml" {...a11yProps(0)} />
-          <Tab label="JavaScript" {...a11yProps(1)} />
-        </Tabs>
-      </Box>
-      <TabPanel value={value} index={0}>
-        Yaml
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        JavaScript
-      </TabPanel>
-    </Box>
-  );
+  useEffect(() => {
+    if (!yaml) {
+      return;
+    }
+
+    const highlightedYaml = Prism.highlight(yaml, Prism.languages.yaml, 'yaml');
+
+    setOutput(
+      <Box sx={{ width: '100%' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+            sx={{ '.MuiTabs-root': { margin: 0 }, '.MuiTabs-flexContainer': { margin: 0 } }}
+          >
+            <Tab label="Yaml" {...a11yProps(0)} />
+            <Tab label="JavaScript" {...a11yProps(1)} />
+          </Tabs>
+        </Box>
+        <TabPanel value={value} index={0}>
+          <pre className="language-yaml">
+            <code className="language-yaml" dangerouslySetInnerHTML={{ __html: highlightedYaml }} />
+          </pre>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          JavaScript
+        </TabPanel>
+      </Box>,
+    );
+  }, [children, yaml, value]);
+
+  return output;
 };
 
 export default Pre;

@@ -22,7 +22,6 @@ const DocsContent = styled('div')(
       color: #9b9b9b;
     }
 
-    & div,
     & p {
       line-height: 1.5rem;
       margin: 0 0 16px;
@@ -30,7 +29,6 @@ const DocsContent = styled('div')(
       word-break: break-word;
     }
 
-    & div,
     & p:not(:first-of-type) {
       margin-top: 8px;
     }
@@ -163,12 +161,15 @@ const DocsContent = styled('div')(
       margin-top: 0;
     }
 
-    & pre {
+    .dark & pre,
+    .dark & pre[class*='language-'],
+    .light & pre,
+    .light & pre[class*='language-'] {
       display: block;
       line-height: 1.25rem;
       padding: 1rem;
       overflow: auto;
-      margin: 1.75rem 0 0 0;
+      margin: 0;
     }
 
     & pre code {
