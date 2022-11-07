@@ -5,7 +5,6 @@ import get from 'lodash/get';
 import isError from 'lodash/isError';
 import uniq from 'lodash/uniq';
 
-import { FILES, FOLDER } from './constants/collectionTypes';
 import { resolveFormat } from './formats/formats';
 import { commitMessageFormatter, slugFormatter } from './lib/formatters';
 import {
@@ -262,7 +261,7 @@ interface PersistArgs {
 
 function collectionDepth(collection: Collection) {
   let depth;
-  depth = collection.nested?.depth || getPathDepth(collection.path ?? '');
+  depth = 'nested' in collection && collection.nested?.depth || getPathDepth(collection.path ?? '');
 
   if (hasI18n(collection)) {
     depth = getI18nFilesDepth(collection, depth);
@@ -441,20 +440,17 @@ export class Backend {
   async listEntries(collection: Collection) {
     const extension = selectFolderEntryExtension(collection);
     let listMethod: () => Promise<ImplementationEntry[]>;
-    const collectionType = collection.type;
-    if (collectionType === FOLDER) {
+    if ('folder' in collection) {
       listMethod = () => {
         const depth = collectionDepth(collection);
         return this.implementation.entriesByFolder(collection.folder as string, extension, depth);
       };
-    } else if (collectionType === FILES) {
-      const files = collection.files!.map(collectionFile => ({
+    } else {
+      const files = collection.files.map(collectionFile => ({
         path: collectionFile!.file,
         label: collectionFile!.label,
       }));
       listMethod = () => this.implementation.entriesByFiles(files);
-    } else {
-      throw new Error(`Unknown collection type: ${collectionType}`);
     }
     const loadedEntries = await listMethod();
     /*
@@ -481,7 +477,7 @@ export class Backend {
   // returns all the collected entries. Used to retrieve all entries
   // for local searches and queries.
   async listAllEntries(collection: Collection) {
-    if (collection.folder && this.implementation.allEntriesByFolder) {
+    if ('folder' in collection && collection.folder && this.implementation.allEntriesByFolder) {
       const depth = collectionDepth(collection);
       const extension = selectFolderEntryExtension(collection);
       return this.implementation
@@ -513,8 +509,8 @@ export class Backend {
         // TODO: pass search fields in as an argument
         let searchFields: (string | null | undefined)[] = [];
 
-        if (collection.type === FILES) {
-          collection.files?.forEach(f => {
+        if ('files' in collection) {
+          collection.files.forEach(f => {
             const topLevelFields = f!.fields.map(f => f!.name);
             searchFields = [...searchFields, ...topLevelFields];
           });
@@ -970,19 +966,19 @@ export class Backend {
   }
 
   fieldsOrder(collection: Collection, entry: Entry) {
-    const fields = collection.fields;
-    if (fields) {
-      return collection.fields.map(f => f!.name);
+    if ('fields' in collection) {
+      return collection.fields?.map(f => f!.name) ?? [];
+    } else {
+      const files = collection.files ?? [];
+      const file: CollectionFile | null = files.filter(f => f!.name === entry.slug)?.[0] ?? null;
+
+      if (file == null) {
+        throw new Error(`No file found for ${entry.slug} in ${collection.name}`);
+      }
+      return file.fields.map(f => f.name);
     }
 
-    const files = collection.files;
-    const file: CollectionFile | null =
-      (files ?? []).filter(f => f!.name === entry.slug)?.[0] ?? null;
-
-    if (file == null) {
-      throw new Error(`No file found for ${entry.slug} in ${collection.name}`);
-    }
-    return file.fields.map(f => f.name);
+    return [];
   }
 
   filterEntries(collection: { entries: Entry[] }, filterRule: FilterRule) {

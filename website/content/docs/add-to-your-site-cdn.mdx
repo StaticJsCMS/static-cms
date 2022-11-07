@@ -61,19 +61,29 @@ In the code above the `script` is loaded from the `unpkg` CDN. Should there be a
 
 ## Configuration
 
-Configuration is different for every site, so we'll break it down into parts. Add all the code snippets in this section to your `admin/config.yml` file.
+Configuration is different for every site, so we'll break it down into parts. Add all the code snippets in this section to your `admin/config.yml` file. Alternatively, you can use a javascript file (`admin/config.js`) instead of a yaml file. Simply import the javascript config and pass it into your `CMS.init({ config })` call.
 
 ### Backend
 
 We're using [Netlify](https://www.netlify.com) for our hosting and authentication in this tutorial, so backend configuration is fairly straightforward.
 
-For GitHub repositories, you can start your Static CMS `config.yml` file with these lines:
+For GitHub repositories, you can start your Static CMS `config` file with these lines:
 
+<CodeTabs>
 ```yaml
 backend:
   name: git-gateway
   branch: main # Branch to update (optional; defaults to main)
 ```
+
+```js
+backend: {
+  name: 'git-gateway',
+  branch: 'main' // Branch to update (optional; defaults to main)
+},
+```
+
+</CodeTabs>
 
 _(For GitLab repositories, use [GitLab backend](/docs/gitlab-backend) and for Bitbucket repositories, use [Bitbucket backend](/docs/bitbucket-backend).)_
 
@@ -83,20 +93,35 @@ The configuration above specifies your backend protocol and your publication bra
 
 Static CMS allows users to upload images directly within the editor. For this to work, the CMS needs to know where to save them. If you already have an `images` folder in your project, you could use its path, possibly creating an `uploads` sub-folder, for example:
 
+<CodeTabs>
 ```yaml
 # This line should *not* be indented
 media_folder: 'images/uploads' # Media files will be stored in the repo under images/uploads
 ```
 
+```js
+media_folder: 'images/uploads', // Media files will be stored in the repo under images/uploads
+```
+
+</CodeTabs>
+
 If you're creating a new folder for uploaded media, you'll need to know where your static site generator expects static files. You can refer to the paths outlined above in [App File Structure](#app-file-structure), and put your media folder in the same location where you put the `admin` folder.
 
 Note that the `media_folder` file path is relative to the project root, so the example above would work for Jekyll, GitBook, or any other generator that stores static files at the project root. However, it would not work for Hugo, Next, Hexo, Middleman or others that store static files in a subfolder. Here's an example that could work for a Hugo site:
 
+<CodeTabs>
 ```yaml
 # These lines should *not* be indented
 media_folder: 'static/images/uploads' # Media files will be stored in the repo under static/images/uploads
 public_folder: '/images/uploads' # The src attribute for uploaded media will begin with /images/uploads
 ```
+
+```js
+media_folder: 'static/images/uploads', // Media files will be stored in the repo under static/images/uploads
+public_folder: '/images/uploads', // The src attribute for uploaded media will begin with /images/uploads
+```
+
+</CodeTabs>
 
 The configuration above adds a new setting, `public_folder`. While `media_folder` specifies where uploaded files are saved in the repo, `public_folder` indicates where they are found in the published site. Image `src` attributes use this path, which is relative to the file where it's called. For this reason, we usually start the path at the site root, using the opening `/`.
 
@@ -119,8 +144,9 @@ rating: 5
 This is the post body, where I write about our last chance to party before the Y2K bug destroys us all.
 ```
 
-Given this example, our `collections` settings would look like this in your Static CMS `config.yml` file:
+Given this example, our `collections` settings would look like this in your Static CMS `config` file:
 
+<CodeTabs>
 ```yaml
 collections:
   - name: 'blog' # Used in routes, e.g., /admin/collections/blog
@@ -137,6 +163,29 @@ collections:
       - { label: 'Body', name: 'body', widget: 'markdown' }
 ```
 
+```js
+collections: [
+  {
+    name: 'blog', // Used in routes, e.g., /admin/collections/blog
+    label: 'Blog', // Used in the UI
+    folder: '_posts/blog', // The path to the folder where the documents are stored
+    create: true, // Allow users to create new documents in this collection
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}', // Filename template, e.g., YYYY-MM-DD-title.md
+    fields: [
+      // The fields for each document, usually in front matter
+      { label: 'Layout', name: 'layout', widget: 'hidden', default: 'blog' },
+      { label: 'Title', name: 'title', widget: 'string' },
+      { label: 'Publish Date', name: 'date', widget: 'datetime' },
+      { label: 'Featured Image', name: 'thumbnail', widget: 'image' },
+      { label: 'Rating (scale of 1-5)', name: 'rating', widget: 'number' },
+      { label: 'Body', name: 'body', widget: 'markdown' },
+    ],
+  },
+],
+```
+
+</CodeTabs>
+
 Let's break that down:
 
 | Field  | Description                                                                                                                                                                                                     |
@@ -150,7 +199,47 @@ Let's break that down:
 
 As described above, the `widget` property specifies a built-in or custom UI widget for a given field. When a content editor enters a value into a widget, that value is saved in the document front matter as the value for the `name` specified for that field. A full listing of available widgets can be found in the [Widgets doc](/docs/widgets).
 
-Based on this example, you can go through the post types in your site and add the appropriate settings to your Static CMS `config.yml` file. Each post type should be listed as a separate node under the `collections` field. See the [Collections reference doc](/docs/collection-overview) for more configuration options.
+Based on this example, you can go through the post types in your site and add the appropriate settings to your Static CMS `config` file. Each post type should be listed as a separate node under the `collections` field. See the [Collections reference doc](/docs/collection-overview) for more configuration options.
+
+### Filter
+
+The entries for any collection can be filtered based on the value of a single field. The example collection below only shows post entries with the value `en` in the `language` field.
+
+<CodeTabs>
+```yaml
+collections:
+  - name: posts
+    label: Post
+    folder: _posts
+    filter:
+      field: language
+      value: en
+    fields:
+      - name: language
+        label: Language
+```
+
+```js
+collections: [
+  {
+    name: 'posts',
+    label: 'Post',
+    folder: '_posts',
+    filter: {
+      field: 'language',
+      value: 'en',
+    },
+    fields: [
+      {
+        name: 'language',
+        label: 'Language',
+      },
+    ],
+  },
+],
+```
+
+</CodeTabs>
 
 ## Authentication
 
@@ -205,6 +294,6 @@ If you set your registration preference to "Invite only," invite yourself (and a
 
 If you left your site registration open, or for return visits after confirming an email invitation, access your site's CMS at `yoursite.com/admin/`.
 
-**Note:** No matter where you access Static CMS — whether running locally, in a staging environment, or in your published site — it always fetches and commits files in your hosted repository (for example, on GitHub), on the branch you configured in your Static CMS config.yml file. This means that content fetched in the admin UI matches the content in the repository, which may be different from your locally running site. It also means that content saved using the admin UI saves directly to the hosted repository, even if you're running the UI locally or in staging.
+**Note:** No matter where you access Static CMS — whether running locally, in a staging environment, or in your published site — it always fetches and commits files in your hosted repository (for example, on GitHub), on the branch you configured in your Static CMS `config` file. This means that content fetched in the admin UI matches the content in the repository, which may be different from your locally running site. It also means that content saved using the admin UI saves directly to the hosted repository, even if you're running the UI locally or in staging.
 
 Happy posting!

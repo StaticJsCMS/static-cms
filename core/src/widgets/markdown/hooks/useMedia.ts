@@ -5,7 +5,7 @@ import type AssetProxy from '../../../valueObjects/AssetProxy';
 
 interface UseMediaProps {
   value: string | undefined | null;
-  getAsset: GetAssetFunction;
+  getAsset: GetAssetFunction<MarkdownField>;
   field: MarkdownField;
 }
 

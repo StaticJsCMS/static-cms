@@ -7,7 +7,7 @@ import type { FileOrImageField, GetAssetFunction, WidgetPreviewProps } from '../
 
 interface FileLinkProps {
   value: string;
-  getAsset: GetAssetFunction;
+  getAsset: GetAssetFunction<FileOrImageField>;
   field: FileOrImageField;
 }
 
@@ -40,7 +40,7 @@ const StyledFileLink = styled(FileLink)`
 
 interface FileLinkListProps {
   values: string[];
-  getAsset: GetAssetFunction;
+  getAsset: GetAssetFunction<FileOrImageField>;
   field: FileOrImageField;
 }
 

@@ -10,7 +10,7 @@ import {
   sortByField as sortByFieldAction,
 } from '../../actions/entries';
 import { components } from '../../components/UI/styles';
-import { SortDirection } from '../../interface';
+import { SORT_DIRECTION_ASCENDING } from '../../constants';
 import { getNewEntryUrl } from '../../lib/urlHelper';
 import {
   selectSortableFields,
@@ -31,7 +31,13 @@ import Sidebar from './Sidebar';
 
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
-import type { Collection, TranslatedProps, ViewFilter, ViewGroup } from '../../interface';
+import type {
+  Collection,
+  SortDirection,
+  TranslatedProps,
+  ViewFilter,
+  ViewGroup,
+} from '../../interface';
 import type { RootState } from '../../store';
 
 const CollectionMain = styled('main')`
@@ -77,7 +83,7 @@ const CollectionView = ({
   }, [collection]);
 
   const newEntryUrl = useMemo(() => {
-    let url = collection.create ? getNewEntryUrl(collectionName) : '';
+    let url = 'fields' in collection && collection.create ? getNewEntryUrl(collectionName) : '';
     if (url && filterTerm) {
       url = getNewEntryUrl(collectionName);
       if (filterTerm) {
@@ -163,7 +169,7 @@ const CollectionView = ({
       return;
     }
 
-    const defaultSort = collection.sortable_fields.default;
+    const defaultSort = collection.sortable_fields?.default;
     if (!defaultSort || !defaultSort.field) {
       if (!readyToLoad) {
         setReadyToLoad(true);
@@ -177,7 +183,7 @@ const CollectionView = ({
 
     const sortEntries = () => {
       setTimeout(async () => {
-        await onSortClick(defaultSort.field, defaultSort.direction ?? SortDirection.Ascending);
+        await onSortClick(defaultSort.field, defaultSort.direction ?? SORT_DIRECTION_ASCENDING);
 
         if (alive) {
           setReadyToLoad(true);
@@ -218,8 +224,8 @@ const CollectionView = ({
                 sortableFields={sortableFields}
                 onSortClick={onSortClick}
                 sort={sort}
-                viewFilters={viewFilters}
-                viewGroups={viewGroups}
+                viewFilters={viewFilters ?? []}
+                viewGroups={viewGroups ?? []}
                 t={t}
                 onFilterClick={onFilterClick}
                 onGroupClick={onGroupClick}

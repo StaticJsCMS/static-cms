@@ -31,6 +31,7 @@ For common options, see [Common widget options](/docs/widgets#common-widget-opti
 
 ## Example
 
+<CodeTabs>
 ```yaml
 name: thumbnail
 label: Featured Image
@@ -41,3 +42,18 @@ media_library:
   config:
     multiple: true
 ```
+
+```js
+name: 'thumbnail',
+label: 'Featured Image',
+widget: 'image',
+default: '/uploads/chocolate-dogecoin.jpg',
+media_library: {
+  choose_url: true,
+  config: {
+    multiple: true,
+  },
+},
+```
+
+</CodeTabs>

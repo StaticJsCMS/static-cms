@@ -15,11 +15,15 @@ import type { PaletteMode } from '@mui/material';
 import type { AppProps } from 'next/app';
 
 require('prismjs/components/prism-javascript');
+require('prismjs/components/prism-typescript');
 require('prismjs/components/prism-css');
 require('prismjs/components/prism-jsx');
+require('prismjs/components/prism-tsx');
 require('prismjs/components/prism-yaml');
 require('prismjs/components/prism-json');
 require('prismjs/components/prism-toml');
+require('prismjs/components/prism-markup-templating');
+require('prismjs/components/prism-handlebars');
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [mode, setMode] = useState<PaletteMode>('dark');

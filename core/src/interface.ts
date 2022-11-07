@@ -1,6 +1,6 @@
 import type {
-	EditorPlugin as MarkdownPlugin,
-	EditorType as MarkdownEditorType
+  EditorPlugin as MarkdownPlugin,
+  EditorType as MarkdownEditorType,
 } from '@toast-ui/editor/types/editor';
 import type { ToolbarItemOptions as MarkdownToolbarItemOptions } from '@toast-ui/editor/types/ui';
 import type { PropertiesSchema } from 'ajv/dist/types/json-schema';
@@ -8,6 +8,11 @@ import type { ComponentType, FunctionComponent, ReactNode } from 'react';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
 import type { MediaFile as BackendMediaFile } from './backend';
 import type { EditorControlProps } from './components/Editor/EditorControlPane/EditorControl';
+import type {
+  SORT_DIRECTION_ASCENDING,
+  SORT_DIRECTION_DESCENDING,
+  SORT_DIRECTION_NONE,
+} from './constants';
 import type { formatExtensions } from './formats/formats';
 import type { I18N_STRUCTURE } from './lib/i18n';
 import type { AllowedEvent } from './lib/registry';
@@ -162,37 +167,46 @@ export interface i18nCollection<EF extends BaseField = UnknownField>
   i18n: Required<Collection<EF>>['i18n'];
 }
 
-export interface Collection<EF extends BaseField = UnknownField> {
+export interface BaseCollection {
   name: string;
   description?: string;
   icon?: string;
-  folder?: string;
-  files?: CollectionFile<EF>[];
-  fields: Field<EF>[];
   isFetching?: boolean;
-  media_folder?: string;
-  public_folder?: string;
   summary?: string;
   filter?: FilterRule;
-  type: 'file_based_collection' | 'folder_based_collection';
-  extension?: string;
-  format?: Format;
-  frontmatter_delimiter?: string | [string, string];
-  create?: boolean;
-  delete?: boolean;
-  identifier_field?: string;
-  path?: string;
-  slug?: string;
   label_singular?: string;
   label: string;
-  sortable_fields: SortableFields;
-  view_filters: ViewFilter[];
-  view_groups: ViewGroup[];
-  nested?: Nested;
+  sortable_fields?: SortableFields;
+  view_filters?: ViewFilter[];
+  view_groups?: ViewGroup[];
   i18n?: boolean | I18nInfo;
   hide?: boolean;
   editor?: EditorConfig;
+  identifier_field?: string;
+  path?: string;
+  extension?: string;
+  format?: Format;
+  frontmatter_delimiter?: string | [string, string];
+  slug?: string;
+  media_folder?: string;
+  public_folder?: string;
 }
+
+export interface FilesCollection<EF extends BaseField = UnknownField> extends BaseCollection {
+  files: CollectionFile<EF>[];
+}
+
+export interface FolderCollection<EF extends BaseField = UnknownField> extends BaseCollection {
+  folder: string;
+  fields: Field<EF>[];
+  create?: boolean;
+  delete?: boolean;
+  nested?: Nested;
+}
+
+export type Collection<EF extends BaseField = UnknownField> =
+  | FilesCollection<EF>
+  | FolderCollection<EF>;
 
 export type Collections<EF extends BaseField = UnknownField> = Record<string, Collection<EF>>;
 
@@ -220,7 +234,10 @@ export interface DisplayURLState {
 
 export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
-export type GetAssetFunction = (path: string, field?: Field) => Promise<AssetProxy>;
+export type GetAssetFunction<F extends BaseField = UnknownField> = (
+  path: string,
+  field?: F,
+) => Promise<AssetProxy>;
 
 export interface WidgetControlProps<T, F extends BaseField = UnknownField> {
   collection: Collection<F>;
@@ -230,7 +247,7 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField> {
   fieldsErrors: FieldsErrors;
   submitted: boolean;
   forList: boolean;
-  getAsset: GetAssetFunction;
+  getAsset: GetAssetFunction<F>;
   isDisabled: boolean;
   isFieldDuplicate: EditorControlProps['isFieldDuplicate'];
   isFieldHidden: EditorControlProps['isFieldHidden'];
@@ -250,22 +267,16 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField> {
   value: T | undefined | null;
 }
 
-export interface WidgetPreviewProps<
-  T = unknown,
-  F extends BaseField = UnknownField
-> {
+export interface WidgetPreviewProps<T = unknown, F extends BaseField = UnknownField> {
   config: Config<F>;
   collection: Collection<F>;
   entry: Entry;
   field: RenderedField<F>;
-  getAsset: GetAssetFunction;
+  getAsset: GetAssetFunction<F>;
   value: T | undefined | null;
 }
 
-export type WidgetPreviewComponent<
-  T = unknown,
-  F extends BaseField = UnknownField
-> =
+export type WidgetPreviewComponent<T = unknown, F extends BaseField = UnknownField> =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
   | ComponentType<WidgetPreviewProps<T, F>>;
@@ -288,14 +299,15 @@ export interface TemplatePreviewProps<T = EntryData, EF extends BaseField = Unkn
   entry: Entry<T>;
   document: Document | undefined | null;
   window: Window | undefined | null;
-  getAsset: GetAssetFunction;
+  getAsset: GetAssetFunction<Field<EF>>;
   widgetFor: (name: T extends EntryData ? string : keyof T) => ReactNode;
   widgetsFor: WidgetsFor<T>;
 }
 
-export type TemplatePreviewComponent<T = EntryData, EF extends BaseField = UnknownField> = ComponentType<
-  TemplatePreviewProps<T, EF>
->;
+export type TemplatePreviewComponent<
+  T = EntryData,
+  EF extends BaseField = UnknownField,
+> = ComponentType<TemplatePreviewProps<T, EF>>;
 
 export interface WidgetOptions<T = unknown, F extends BaseField = UnknownField> {
   validator?: Widget<T, F>['validator'];
@@ -490,6 +502,7 @@ export interface BaseField {
   pattern?: [string, string];
   i18n?: boolean | 'translate' | 'duplicate' | 'none';
   comment?: string;
+  widget: string;
 }
 
 export interface BooleanField extends BaseField {
@@ -623,7 +636,7 @@ export interface HiddenField extends BaseField {
 
 export interface StringOrTextField extends BaseField {
   // This is the default widget, so declaring its type is optional.
-  widget?: 'string' | 'text';
+  widget: 'string' | 'text';
   default?: string;
 }
 
@@ -662,11 +675,10 @@ export interface ViewGroup {
   pattern?: string;
 }
 
-export enum SortDirection {
-  Ascending = 'Ascending',
-  Descending = 'Descending',
-  None = 'None',
-}
+export type SortDirection =
+  | typeof SORT_DIRECTION_ASCENDING
+  | typeof SORT_DIRECTION_DESCENDING
+  | typeof SORT_DIRECTION_NONE;
 
 export interface SortableFieldsDefault {
   field: string;
@@ -869,4 +881,9 @@ export interface MarkdownEditorOptions {
   height?: string;
   toolbarItems?: MarkdownToolbarItemsFactory;
   plugins?: MarkdownPluginFactory[];
+}
+
+export enum CollectionType {
+  FOLDER,
+  FILES,
 }

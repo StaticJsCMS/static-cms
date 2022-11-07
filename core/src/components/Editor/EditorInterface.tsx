@@ -7,7 +7,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ScrollSync, ScrollSyncPane } from 'react-scroll-sync';
 
 import { colorsRaw, components, zIndex } from '../../components/UI/styles';
-import { FILES } from '../../constants/collectionTypes';
 import { transientOptions } from '../../lib';
 import { getI18nInfo, getPreviewEntry, hasI18n } from '../../lib/i18n';
 import { getFileFromSlug } from '../../lib/util/collection.util';
@@ -221,7 +220,7 @@ const EditorInterface = ({
     let preview = collection.editor?.preview ?? true;
     let frame = collection.editor?.frame ?? true;
 
-    if (collection.type === FILES) {
+    if ('files' in collection) {
       const file = getFileFromSlug(collection, entry.slug);
       if (file?.editor?.preview !== undefined) {
         preview = file.editor.preview;

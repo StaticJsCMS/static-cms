@@ -5,7 +5,6 @@ import trimStart from 'lodash/trimStart';
 import yaml from 'yaml';
 
 import { resolveBackend } from '../backend';
-import { FILES, FOLDER } from '../constants/collectionTypes';
 import { validateConfig } from '../constants/configSchema';
 import { I18N, I18N_FIELD, I18N_STRUCTURE } from '../lib/i18n';
 import { selectDefaultSortableFields } from '../lib/util/collection.util';
@@ -22,6 +21,7 @@ import type {
   ListField,
   LocalBackend,
   ObjectField,
+  UnknownField,
 } from '../interface';
 import type { RootState } from '../store';
 
@@ -29,11 +29,11 @@ export const CONFIG_REQUEST = 'CONFIG_REQUEST';
 export const CONFIG_SUCCESS = 'CONFIG_SUCCESS';
 export const CONFIG_FAILURE = 'CONFIG_FAILURE';
 
-function isObjectField(field: Field): field is BaseField & ObjectField {
+function isObjectField<F extends BaseField = UnknownField>(field: Field<F>): field is ObjectField {
   return 'fields' in (field as ObjectField);
 }
 
-function isFieldList(field: Field): field is BaseField & ListField {
+function isFieldList<F extends BaseField = UnknownField>(field: Field<F>): field is ListField {
   return 'types' in (field as ListField) || 'field' in (field as ListField);
 }
 
@@ -186,15 +186,13 @@ export function applyDefaults(originalConfig: Config) {
         delete collection[I18N];
       }
 
-      if (collection.fields) {
+      if ('fields' in collection && collection.fields) {
         collection.fields = setI18nDefaultsForFields(collection.fields, Boolean(collectionI18n));
       }
 
-      const { folder, files, view_filters, view_groups } = collection;
+      const { view_filters, view_groups } = collection;
 
-      if (folder) {
-        collection.type = FOLDER;
-
+      if ('folder' in collection && collection.folder) {
         if (collection.path && !collection.media_folder) {
           // default value for media folder when using the path config
           collection.media_folder = '';
@@ -204,21 +202,17 @@ export function applyDefaults(originalConfig: Config) {
           collection.public_folder = collection.media_folder;
         }
 
-        if (collection.fields) {
+        if ('fields' in collection && collection.fields) {
           collection.fields = traverseFieldsJS(collection.fields, setDefaultPublicFolderForField);
         }
 
-        collection.folder = trim(folder, '/');
+        collection.folder = trim(collection.folder, '/');
       }
 
-      if (files) {
-        collection.type = FILES;
-
+      if ('files' in collection && collection.files) {
         throwOnInvalidFileCollectionStructure(collectionI18n);
 
-        delete collection.nested;
-
-        for (const file of files) {
+        for (const file of collection.files) {
           file.file = trimStart(file.file, '/');
 
           if ('media_folder' in file && !('public_folder' in file)) {

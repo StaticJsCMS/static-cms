@@ -106,7 +106,10 @@ const EditorToolbar = ({
   t,
   editorBackLink,
 }: TranslatedProps<EditorToolbarProps>) => {
-  const canCreate = useMemo(() => collection.create ?? false, [collection.create]);
+  const canCreate = useMemo(
+    () => ('folder' in collection && collection.create) ?? false,
+    [collection],
+  );
   const canDelete = useMemo(() => selectAllowDeletion(collection), [collection]);
   const isPublished = useMemo(() => !isNewEntry && !hasChanged, [hasChanged, isNewEntry]);
 

@@ -13,10 +13,10 @@ const TableBodyCell = ({ children }: TableBodyCellProps) => {
       scope="row"
       sx={{
         padding: '16px 12px',
-        '&:first-child, &:first-child': {
+        '&:first-of-type, &:first-of-type': {
           paddingLeft: 0,
         },
-        '&:last-child, &:last-child': {
+        '&:last-of-type, &:last-of-type': {
           paddingRight: 0,
         },
       }}

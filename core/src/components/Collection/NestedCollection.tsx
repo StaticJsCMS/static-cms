@@ -165,7 +165,7 @@ export function walk(treeData: TreeNodeData[], callback: (node: TreeNodeData) =>
 }
 
 export function getTreeData(collection: Collection, entries: Entry[]): TreeNodeData[] {
-  const collectionFolder = collection.folder ?? '';
+  const collectionFolder = 'folder' in collection ? collection.folder : '';
   const rootFolder = '/';
   const entriesObj = entries.map(e => ({ ...e, path: e.path.slice(collectionFolder.length) }));
 

@@ -14,11 +14,13 @@ import { waitUntilWithTimeout } from './waitUntil';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type {
+  BaseField,
   DisplayURLState,
   Field,
   ImplementationMediaFile,
   MediaFile,
   MediaLibraryInstance,
+  UnknownField,
 } from '../interface';
 import type { RootState } from '../store';
 import type AssetProxy from '../valueObjects/AssetProxy';
@@ -72,7 +74,7 @@ export function removeMediaControl(id: string) {
   };
 }
 
-export function openMediaLibrary(
+export function openMediaLibrary<F extends BaseField = UnknownField>(
   payload: {
     controlID?: string;
     forImage?: boolean;
@@ -80,17 +82,27 @@ export function openMediaLibrary(
     allowMultiple?: boolean;
     replaceIndex?: number;
     config?: Record<string, unknown>;
-    field?: Field;
+    field?: F;
   } = {},
 ) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const mediaLibrary = state.mediaLibrary.externalLibrary;
+    const { controlID, value, config = {}, allowMultiple, forImage, replaceIndex, field } = payload;
     if (mediaLibrary) {
-      const { controlID: id, value, config = {}, allowMultiple, forImage } = payload;
-      mediaLibrary.show({ id, value, config, allowMultiple, imagesOnly: forImage });
+      mediaLibrary.show({ id: controlID, value, config, allowMultiple, imagesOnly: forImage });
     }
-    dispatch(mediaLibraryOpened(payload));
+    dispatch(
+      mediaLibraryOpened({
+        controlID,
+        forImage,
+        value,
+        allowMultiple,
+        replaceIndex,
+        config,
+        field: field as Field,
+      }),
+    );
   };
 }
 

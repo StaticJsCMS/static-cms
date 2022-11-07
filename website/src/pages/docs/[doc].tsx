@@ -6,6 +6,7 @@ import remarkGfm from 'remark-gfm';
 
 import Anchor from '../../components/docs/components/Anchor';
 import Blockquote from '../../components/docs/components/Blockquote';
+import CodeTabs from '../../components/docs/components/CodeTabs';
 import Header2 from '../../components/docs/components/headers/Header2';
 import Header3 from '../../components/docs/components/headers/Header3';
 import Header4 from '../../components/docs/components/headers/Header4';
@@ -103,6 +104,7 @@ const Docs = ({ docsGroups, title, slug, description = '', source }: DocsProps) 
                 h5: Header5,
                 h6: Header6,
                 blockquote: Blockquote,
+                CodeTabs,
                 table: DocsTable,
                 thead: TableHead,
                 tbody: TableBody,

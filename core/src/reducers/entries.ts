@@ -21,11 +21,11 @@ import {
   GROUP_ENTRIES_SUCCESS,
   SORT_ENTRIES_FAILURE,
   SORT_ENTRIES_REQUEST,
-  SORT_ENTRIES_SUCCESS,
+  SORT_ENTRIES_SUCCESS
 } from '../actions/entries';
 import { SEARCH_ENTRIES_SUCCESS } from '../actions/search';
+import { SORT_DIRECTION_ASCENDING, SORT_DIRECTION_NONE } from '../constants';
 import { VIEW_STYLE_LIST } from '../constants/collectionViews';
-import { SortDirection } from '../interface';
 import { set } from '../lib/util/object.util';
 import { selectSortDataPath } from '../lib/util/sort.util';
 
@@ -44,7 +44,7 @@ import type {
   Pages,
   Sort,
   SortMap,
-  SortObject,
+  SortObject
 } from '../interface';
 import type { EntryDraftState } from './entryDraft';
 
@@ -568,7 +568,7 @@ export function selectEntriesGroupField(entries: EntriesState, collection: strin
 
 export function selectEntriesSortFields(entries: EntriesState, collection: string) {
   const sort = selectEntriesSort(entries, collection);
-  const values = Object.values(sort ?? {}).filter(v => v?.direction !== SortDirection.None) || [];
+  const values = Object.values(sort ?? {}).filter(v => v?.direction !== SORT_DIRECTION_NONE) || [];
 
   return values;
 }
@@ -605,7 +605,7 @@ export function selectEntries(state: EntriesState, collection: Collection) {
   const sortFields = selectEntriesSortFields(state, collectionName);
   if (sortFields && sortFields.length > 0) {
     const keys = sortFields.map(v => selectSortDataPath(collection, v.key));
-    const orders = sortFields.map(v => (v.direction === SortDirection.Ascending ? 'asc' : 'desc'));
+    const orders = sortFields.map(v => (v.direction === SORT_DIRECTION_ASCENDING ? 'asc' : 'desc'));
     entries = orderBy(entries, keys, orders);
   }
 

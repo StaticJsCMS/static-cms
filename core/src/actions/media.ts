@@ -6,7 +6,7 @@ import { getMediaDisplayURL, getMediaFile, waitForMediaLibraryToLoad } from './m
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type { Collection, Entry, Field } from '../interface';
+import type { BaseField, Collection, Entry, Field, UnknownField } from '../interface';
 import type { RootState } from '../store';
 import type AssetProxy from '../valueObjects/AssetProxy';
 
@@ -83,11 +83,11 @@ async function loadAsset(
 
 const promiseCache: Record<string, Promise<AssetProxy>> = {};
 
-export function getAsset(
+export function getAsset<F extends BaseField = UnknownField>(
   collection: Collection | null | undefined,
   entry: Entry | null | undefined,
   path: string,
-  field?: Field,
+  field?: F,
 ) {
   return (
     dispatch: ThunkDispatch<RootState, {}, AnyAction>,
@@ -102,7 +102,13 @@ export function getAsset(
       return Promise.resolve(emptyAsset);
     }
 
-    const resolvedPath = selectMediaFilePath(state.config.config, collection, entry, path, field);
+    const resolvedPath = selectMediaFilePath(
+      state.config.config,
+      collection,
+      entry,
+      path,
+      field as Field,
+    );
     let { asset, isLoading, error } = state.medias[resolvedPath] || {};
     if (isLoading) {
       return promiseCache[resolvedPath];

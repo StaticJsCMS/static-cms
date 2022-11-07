@@ -24,6 +24,7 @@ _Please note:_ A default value cannot be set directly on an object widget. Inste
 
 ## Example
 
+<CodeTabs>
 ```yaml
 name: 'profile'
 label: 'Profile'
@@ -57,3 +58,43 @@ fields:
         label: Postal Code
         widget: string
 ```
+
+```js
+name: 'profile',
+label: 'Profile',
+widget: 'object',
+summary: '{{fields.name}}: {{fields.birthdate}}',
+fields: [
+  {
+    name: 'public',
+    label: 'Public',
+    widget: 'boolean',
+    default: true
+  },
+  {
+    name: 'name',
+    label: 'Name',
+    widget: 'string'
+  },
+  {
+    name: 'birthdate',
+    label: 'Birthdate',
+    widget: 'date',
+    default: '',
+    format: 'MM/DD/YYYY'
+  },
+  {
+    name: 'address',
+    label: 'Address',
+    widget: 'object',
+    collapsed: true,
+    fields: [
+      { name: 'street', label: 'Street Address', widget: 'string' },
+      { name: 'city', label: 'City', widget: 'string' },
+      { name: 'post-code', label: 'Postal Code', widget: 'string' },
+    ],
+  },
+],
+```
+
+</CodeTabs>

@@ -15,7 +15,7 @@ For repositories stored on GitLab, the `gitlab` backend allows CMS users to log 
 With GitLab's PKCE authorization, users can authenticate with GitLab directly from the client. To do this:
 
 1. Follow the [GitLab docs](https://docs.gitlab.com/ee/integration/oauth_provider.html#adding-an-application-through-the-profile) to add your Static CMS instance as an OAuth application and uncheck the **Confidential** checkbox. For the **Redirect URI**, enter the address where you access Static CMS, for example, `https://www.mysite.com/admin/`. For scope, select `api`.
-2. GitLab gives you an **Application ID**. Copy this ID and enter it in your Static CMS `config.yml` file, along with the following settings:
+2. GitLab gives you an **Application ID**. Copy this ID and enter it in your Static CMS `config` file, along with the following settings:
 
 | Name      | Type   | Default | Description                              |
 | --------- | ------ | ------- | ---------------------------------------- |
@@ -24,6 +24,7 @@ With GitLab's PKCE authorization, users can authenticate with GitLab directly fr
 
 ### Example
 
+<CodeTabs>
 ```yaml
 backend:
   name: gitlab
@@ -31,6 +32,16 @@ backend:
   auth_type: pkce # Required for pkce
   app_id: your-app-id # Application ID from your GitLab settings
 ```
+
+```js
+backend: {
+  name: 'gitlab',
+  repo: 'owner-name/repo-name', // Path to your GitLab repository
+  auth_type: 'pkce', // Required for pkce
+  app_id: 'your-app-id', // Application ID from your GitLab settings
+},
+```
+</CodeTabs>
 
 ### Self-Hosted GitLab Instance
 
@@ -44,6 +55,7 @@ You can also use PKCE Authorization with a self-hosted GitLab instance. This req
 
 #### Example
 
+<CodeTabs>
 ```yaml
 backend:
   name: gitlab
@@ -54,3 +66,16 @@ backend:
   base_url: https://my-hosted-gitlab-instance.com
   auth_endpoint: oauth/authorize
 ```
+
+```js
+backend: {
+  name: 'gitlab',
+  repo: 'owner-name/repo-name', // Path to your GitLab repository
+  auth_type: 'pkce', // Required for pkce
+  app_id: 'your-app-id', // Application ID from your GitLab settings
+  api_root: 'https://my-hosted-gitlab-instance.com/api/v4',
+  base_url: 'https://my-hosted-gitlab-instance.com',
+  auth_endpoint: 'oauth/authorize',
+},
+```
+</CodeTabs>

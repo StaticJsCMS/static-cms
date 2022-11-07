@@ -23,6 +23,7 @@ const MobileNavLink = ({ link, onClick }: MobileNavLinkProps) => {
   return (
     <Link href={url} target={url.startsWith('http') ? '_blank' : undefined}>
       <ListItemButton
+        href={url}
         sx={{ paddingLeft: '24px', paddingTop: '4px', paddingBottom: '4px' }}
         onClick={onClick}
         selected={selected}

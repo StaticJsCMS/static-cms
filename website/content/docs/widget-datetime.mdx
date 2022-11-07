@@ -26,6 +26,7 @@ For common options, see [Common widget options](/docs/widgets#common-widget-opti
 
 ### Date Time Picker
 
+<CodeTabs>
 ```yaml
 name: 'datetime'
 label: 'Datetime'
@@ -35,8 +36,20 @@ time_format: 'HH:mm' # e.g. 21:07
 format: 'yyyy-MM-dd HH:mm' # e.g. 2022-12-24 21:07
 ```
 
+```js
+name: 'datetime',
+label: 'Datetime',
+widget: 'datetime',
+date_format: 'dd.MM.yyyy', // e.g. 24.12.2022
+time_format: 'HH:mm', // e.g. 21:07
+format: 'yyyy-MM-dd HH:mm', // e.g. 2022-12-24 21:07
+```
+
+</CodeTabs>
+
 ### Date Picker
 
+<CodeTabs>
 ```yaml
 name: 'date'
 label: 'Date'
@@ -46,8 +59,20 @@ time_format: false
 format: 'yyyy-MM-dd' # e.g. 2022-12-24
 ```
 
+```js
+name: 'date',
+label: 'Date',
+widget: 'datetime',
+date_format: 'dd.MM.yyyy', // e.g. 24.12.2022
+time_format: false,
+format: 'yyyy-MM-dd', // e.g. 2022-12-24
+```
+
+</CodeTabs>
+
 ### Time Picker
 
+<CodeTabs>
 ```yaml
 name: 'date'
 label: 'Date'
@@ -56,3 +81,14 @@ date_format: false
 time_format: 'HH:mm' # e.g. 21:07
 format: 'HH:mm' # e.g. 21:07
 ```
+
+```js
+name: 'date',
+label: 'Date',
+widget: 'datetime',
+date_format: false,
+time_format: 'HH:mm', // e.g. 21:07
+format: 'HH:mm', // e.g. 21:07
+```
+
+</CodeTabs>
