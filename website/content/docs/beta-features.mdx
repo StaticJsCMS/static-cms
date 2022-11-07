@@ -15,6 +15,8 @@ Configuring the CMS for i18n support requires top level configuration, collectio
 
 ### Top level configuration
 
+<CodeTabs>
+  
 ```yaml
 i18n:
   # Required and can be one of multiple_folders, multiple_files or single_file
@@ -23,16 +25,43 @@ i18n:
   # single_file - persists a single file in `<folder>/<slug>.<extension>`
   structure: multiple_folders
 
-  # Required - a list of locales to show in the editor UI
-  locales: [en, de, fr]
+# Required - a list of locales to show in the editor UI
 
-  # Optional, defaults to the first item in locales.
-  # The locale to be used for fields validation and as a baseline for the entry.
-  defaultLocale: en
+locales: [en, de, fr]
+
+# Optional, defaults to the first item in locales.
+
+# The locale to be used for fields validation and as a baseline for the entry.
+
+defaultLocale: en
 ```
+
+```js
+i18n: {
+  /**
+   * Required and can be one of multiple_folders, multiple_files or single_file
+   * multiple_folders - persists files in `<folder>/<locale>/<slug>.<extension>`
+   * multiple_files - persists files in `<folder>/<slug>.<locale>.<extension>`
+   * single_file - persists a single file in `<folder>/<slug>.<extension>`
+   */
+  structure: 'multiple_folders',
+
+  // Required - a list of locales to show in the editor UI
+  locales: ['en', 'de', 'fr'],
+
+  /**
+   * Optional, defaults to the first item in locales.
+   * The locale to be used for fields validation and as a baseline for the entry.
+   */
+  defaultLocale: 'en'
+},
+```
+
+</CodeTabs>
 
 ### Collection level configuration
 
+<CodeTabs>
 ```yaml
 collections:
   - name: i18n_content
@@ -41,8 +70,24 @@ collections:
     i18n: true
 ```
 
+```js
+collections: [
+  {
+    name: 'i18n_content',
+    /**
+     * same as the top level, but all fields are optional and defaults to the top level
+     * can also be a boolean to accept the top level defaults
+     */
+    i18n: true
+  },
+],
+```
+
+</CodeTabs>
+
 When using a file collection, you must also enable i18n for each individual file:
 
+<CodeTabs>
 ```yaml
 collections:
   - name: pages
@@ -61,8 +106,37 @@ collections:
           - { label: Title, name: title, widget: string, i18n: true }
 ```
 
+```js
+collections: [
+  {
+    name: 'pages',
+    label: 'Pages',
+    // Configure i18n for this collection.
+    i18n: {
+      structure: 'single_file',
+      locales: ['en', 'de', 'fr']
+    },
+    files: [
+      {
+        name: 'about',
+        label: 'About Page',
+        file: 'site/content/about.yml',
+        // Enable i18n for this file.
+        i18n: true,
+        fields: [
+          { label: 'Title', name: 'title', widget: 'string', i18n: true }
+        ],
+      },
+    ],
+  },
+],
+```
+
+</CodeTabs>
+
 ### Field level configuration
 
+<CodeTabs>
 ```yaml
 fields:
   - label: Title
@@ -81,8 +155,36 @@ fields:
     widget: markdown
 ```
 
+```js
+fields: [
+  {
+    label: 'Title',
+    name: 'title',
+    widget: 'string',
+    // same as 'i18n: translate'. Allows translation of the title field
+    i18n: true
+  },
+  {
+    label: 'Date',
+    name: 'date',
+    widget: 'datetime',
+    // The date field will be duplicated from the default locale.
+    i18n: 'duplicate'
+  },
+  {
+    label: 'Body',
+    name: 'body',
+    // The markdown field will be omitted from the translation.
+    widget: 'markdown'
+  },
+],
+```
+
+</CodeTabs>
+
 Example configuration:
 
+<CodeTabs>
 ```yaml
 i18n:
   structure: multiple_folders
@@ -108,12 +210,36 @@ collections:
         widget: markdown
 ```
 
+```js
+i18n: {
+  structure: 'multiple_folders',
+  locales: ['en', 'de', 'fr']
+},
+collections: [
+  {
+    name: 'posts',
+    label: 'Posts',
+    folder: 'content/posts',
+    create: true,
+    i18n: true,
+    fields: [
+      { label: 'Title', name: 'title', widget: 'string', i18n: true },
+      { label: 'Date', name: 'date', widget: 'datetime', i18n: 'duplicate' },
+      { label: 'Body', name: 'body', widget: 'markdown' },
+    ],
+  },
+],
+```
+
+</CodeTabs>
+
 ### Limitations
 
 1. File collections support only `structure: single_file`.
 2. List widgets only support `i18n: true`. `i18n` configuration on sub fields is ignored.
 3. Object widgets only support `i18n: true` and `i18n` configuration should be done per field:
 
+<CodeTabs>
 ```yaml
 - label: 'Object'
   name: 'object'
@@ -132,6 +258,29 @@ collections:
       }
 ```
 
+```js
+{
+  label: 'Object',
+  name: 'object',
+  widget: 'object',
+  i18n: true,
+  fields: [
+    { label: 'String', name: 'string', widget: 'string', i18n: true },
+    { label: 'Date', name: 'date', widget: 'datetime', i18n: 'duplicate' },
+    { label: 'Boolean', name: 'boolean', widget: 'boolean', i18n: 'duplicate' },
+    {
+      label: 'Object',
+      name: 'object',
+      widget: 'object',
+      i18n: true,
+      field: { label: 'String', name: 'string', widget: 'string', i18n: 'duplicate' },
+    },
+  ],
+},
+```
+
+</CodeTabs>
+
 ## Folder Collections Path
 
 See [Folder Collections Path](/docs/collection-types#folder-collections-path).
@@ -148,21 +297,36 @@ You can now provide your own element for Static CMS to mount in by setting the t
 
 ## Commit Message Templates
 
-You can customize the templates used by Static CMS to generate commit messages by setting the `commit_messages` option under `backend` in your Static CMS `config.yml`.
+You can customize the templates used by Static CMS to generate commit messages by setting the `commit_messages` option under `backend` in your Static CMS `config`.
 
 Template tags wrapped in curly braces will be expanded to include information about the file changed by the commit. For example, `{{path}}` will include the full path to the file changed.
 
-Setting up your Static CMS `config.yml` to recreate the default values would look like this:
+Setting up your Static CMS `config` to recreate the default values would look like this:
 
+<CodeTabs>
 ```yaml
 backend:
   commit_messages:
-    create: Create {{collection}} “{{slug}}”
-    update: Update {{collection}} “{{slug}}”
-    delete: Delete {{collection}} “{{slug}}”
-    uploadMedia: Upload “{{path}}”
-    deleteMedia: Delete “{{path}}”
+    create: Create {{collection}} "{{slug}}"
+    update: Update {{collection}} "{{slug}}"
+    delete: Delete {{collection}} "{{slug}}"
+    uploadMedia: Upload "{{path}}"
+    deleteMedia: Delete "{{path}}"
 ```
+
+```js
+backend: {
+  commit_messages: {
+    create: 'Create {{collection}} "{{slug}}"',
+    update: 'Update {{collection}} "{{slug}}"',
+    delete: 'Delete {{collection}} "{{slug}}"',
+    uploadMedia: 'Upload "{{path}}"',
+    deleteMedia: 'Delete "{{path}}"',
+  },
+},
+```
+
+</CodeTabs>
 
 Static CMS generates the following commit types:
 
@@ -189,6 +353,7 @@ You can set a limit to as what the maximum file size of a file is that users can
 
 Example config:
 
+<CodeTabs>
 ```yaml
 - label: 'Featured Image'
   name: 'thumbnail'
@@ -199,23 +364,58 @@ Example config:
       max_file_size: 512000 # in bytes, only for default media library
 ```
 
+```js
+{
+  label: 'Featured Image',
+  name: 'thumbnail',
+  widget: 'image',
+  default: '/uploads/chocolate-dogecoin.jpg',
+  media_library: {
+    config: {
+      max_file_size: 512000 // in bytes, only for default media library
+    },
+  },
+},
+```
+
+</CodeTabs>
+
 ## Summary string template transformations
 
 You can apply transformations on fields in a summary string template using filter notation syntax.
 
 Example config:
 
+<CodeTabs>
 ```yaml
 collections:
   - name: 'posts'
     label: 'Posts'
     folder: '_posts'
-    summary: "{{title | upper}} - {{date | date('YYYY-MM-DD')}} – {{body | truncate(20, '***')}}"
+    summary: "{{title | upper}} - {{date | date('YYYY-MM-DD')}} - {{body | truncate(20, '***')}}"
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Publish Date', name: 'date', widget: 'datetime' }
       - { label: 'Body', name: 'body', widget: 'markdown' }
 ```
+
+```js
+collections: [
+  {
+    name: 'posts',
+    label: 'Posts',
+    folder: '_posts',
+    summary: "{{title | upper}} - {{date | date('YYYY-MM-DD')}} - {{body | truncate(20, '***')}}",
+    fields: [
+      { label: 'Title', name: 'title', widget: 'string' },
+      { label: 'Publish Date', name: 'date', widget: 'datetime' },
+      { label: 'Body', name: 'body', widget: 'markdown' },
+    ],
+  },
+],
+```
+
+</CodeTabs>
 
 The above config will transform the title field to uppercase and format the date field using `YYYY-MM-DD` format.
 Available transformations are `upper`, `lower`, `date('<format>')`, `default('defaultValue')`, `ternary('valueForTrue','valueForFalse')` and `truncate(<number>)`/`truncate(<number>, '<string>')`
@@ -250,6 +450,7 @@ When linking to `/admin/#/collections/posts/new` you can pass URL parameters to 
 
 For example given the configuration:
 
+<CodeTabs>
 ```yaml
 collections:
   - name: posts
@@ -271,6 +472,43 @@ collections:
         name: body
         widget: markdown
 ```
+
+```js
+collections: [
+  {
+    name: 'posts',
+    label: 'Posts',
+    folder: 'content/posts',
+    create: true,
+    fields: [
+      {
+        label: 'Title',
+        name: 'title',
+        widget: 'string'
+      },
+      {
+        label: 'Object',
+        name: 'object',
+        widget: 'object',
+        fields: [
+          {
+            label: 'Title',
+            name: 'title',
+            widget: 'string'
+          }
+        ],
+      },
+      {
+        label: 'body',
+        name: 'body',
+        widget: 'markdown'
+      },
+    ],
+  },
+],
+```
+
+</CodeTabs>
 
 clicking the following link: `/#/collections/posts/new?title=first&object.title=second&body=%23%20content`
 

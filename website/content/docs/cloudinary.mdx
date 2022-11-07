@@ -20,6 +20,7 @@ You can [sign up for Cloudinary](https://cloudinary.com/users/register/free) for
 
 To use the Cloudinary media library within Static CMS, you'll need to update your Static CMS configuration file with the information from your Cloudinary account:
 
+<CodeTabs>
 ```yaml
 media_library:
   name: cloudinary
@@ -28,11 +29,23 @@ media_library:
     api_key: your_api_key
 ```
 
+```js
+media_library: {
+  name: 'cloudinary',
+  config: {
+    cloud_name: 'your_cloud_name',
+    api_key: 'your_api_key'
+  },
+},
+```
+
+</CodeTabs>
+
 **Note:** The user must be logged in to the Cloudinary account connected to the `api_key` used in your Static CMS configuration.
 
 ### Security Considerations
 
-Although this setup exposes the `cloud_name` and `api_key` publicly via the `/admin/config.yml` endpoint, this information is not sensitive. Any integration of the Cloudinary media library requires this information to be exposed publicly. To use this library or use the restricted Cloudinary API endpoints, the user must have access to the Cloudinary account login details or the `api_secret` associated with the `cloud_name` and `api_key`.
+Although this setup exposes the `cloud_name` and `api_key` publicly via the `config` endpoint, this information is not sensitive. Any integration of the Cloudinary media library requires this information to be exposed publicly. To use this library or use the restricted Cloudinary API endpoints, the user must have access to the Cloudinary account login details or the `api_secret` associated with the `cloud_name` and `api_key`.
 
 ## Static CMS configuration options
 
@@ -75,6 +88,8 @@ Global configuration, which is meant to affect the Cloudinary widget at all time
 as seen below, under the primary `media_library` property. Settings applied here will affect every
 instance of the Cloudinary widget.
 
+
+<CodeTabs>
 ```yaml
 # global
 media_library:
@@ -88,12 +103,35 @@ media_library:
           crop: scale
 ```
 
+```js
+// global
+media_library: {
+  name: 'cloudinary',
+  output_filename_only: false,
+  config: {
+    default_transformations: [
+      [
+        {
+          fetch_format: 'auto',
+          width: 160,
+          quality: 'auto',
+          crop: 'scale'
+        }
+      ],
+    ],
+  },
+},
+```
+
+</CodeTabs>
+
 #### Field configuration
 
 Configuration can also be provided for individual fields that use the media library. The structure
 is very similar to the global configuration, except the settings are added to an individual `field`.
 For example:
 
+<CodeTabs>
 ```yaml
 # field
 fields: # The fields each document in this collection have
@@ -112,22 +150,79 @@ fields: # The fields each document in this collection have
             effect: grayscale
 ```
 
+```js
+// field
+fields: [
+  {
+    label: 'Cover Image',
+    name: 'image',
+    widget: 'image',
+    required: false,
+    tagtitle: '',
+    media_library: {
+      config: {
+        default_transformations: [
+          {
+            fetch_format: 'auto',
+            width: 300,
+            quality: 'auto',
+            crop: 'fill',
+            effect: 'grayscale',
+          },
+        ],
+      },
+    },
+  },
+],
+```
+
+</CodeTabs>
+
 ## Inserting Cloudinary URL in page templates
 
 If you prefer to provide direction so that images are transformed in a specific way, or dynamically retrieve images based on viewport size, you can do so by providing your own base Cloudinary URL and only storing the asset filenames in your content:
 
 - Either globally or for specific fields, configure the Cloudinary extension to only output the asset filename
 
+**Global**
+
+<CodeTabs>
 ```yaml
 # global
 media_library:
   name: cloudinary
   output_filename_only: true
+```
+
+```js
+// global
+media_library: {
+  name: 'cloudinary',
+  output_filename_only: true,
+},
+```
+
+</CodeTabs>
+
+**Field**
+
+<CodeTabs>
+```yaml
 # field
 media_library:
   name: cloudinary
   output_filename_only: true
 ```
+
+```js
+// field
+media_library: {
+  name: 'cloudinary',
+  output_filename_only: true,
+},
+```
+
+</CodeTabs>
 
 - Provide a dynamic URL in the site template
 

@@ -6,25 +6,24 @@ weight: 9
 
 `collections` accepts a list of collection objects, each with the following options
 
-| Name                  | Type
-                                                                                                                      | Default   | Description                                                                                                                                   |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| name                  | string                                                                                                                             |           | Unique identifier for the collection, used as the key when referenced in other contexts (like the [relation widget](/docs/widgets/#relation)) |
-| identifier_field      | string                                                                                                                             | `'title'` | _Optional_. See [identifier_field](#identifier_field) below                                                                                   |
-| label                 | string                                                                                                                             | `name`    | _Optional_. Label for the collection in the editor UI                                                                                         |
-| label_singular        | string                                                                                                                             | `label`   | _Optional_. Singular label for certain elements in the editor                                                                                 |
+| Name                  | Type                                                                                                                               | Default   | Description                                                                                                                                               |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| name                  | string                                                                                                                             |           | Unique identifier for the collection, used as the key when referenced in other contexts (like the [relation widget](/docs/widgets/#relation))             |
+| identifier_field      | string                                                                                                                             | `'title'` | _Optional_. See [identifier_field](#identifier_field) below                                                                                               |
+| label                 | string                                                                                                                             | `name`    | _Optional_. Label for the collection in the editor UI                                                                                                     |
+| label_singular        | string                                                                                                                             | `label`   | _Optional_. Singular label for certain elements in the editor                                                                                             |
 | icon                  | string                                                                                                                             |           | _Optional_. Unique name of icon to use in main menu. See [Custom Icons](/docs/custom-icons)                                                               |
-| description           | string                                                                                                                             |           | _Optional_. Text displayed below the label when viewing a collection                                                                          |
-| files or folder       | [Collection Files](/docs/collection-types#file-collections)<br />\| [Collection Folder](/docs/collection-types#folder-collections) |           | **Requires one of these**: Specifies the collection type and location; details in [Collection Types](/docs/collection-types)                  |
-| filter                | string                                                                                                                             |           | _Optional_. Filter for [Folder Collections](/docs/collection-types#folder-collections)                                                        |
-| create                | string                                                                                                                             | `false`   | _Optional_.  **For [Folder Collections](/docs/collection-types#folder-collections) only**<br />`true` - Allows users to create new items in the collection |
+| description           | string                                                                                                                             |           | _Optional_. Text displayed below the label when viewing a collection                                                                                      |
+| files or folder       | [Collection Files](/docs/collection-types#file-collections)<br />\| [Collection Folder](/docs/collection-types#folder-collections) |           | **Requires one of these**: Specifies the collection type and location; details in [Collection Types](/docs/collection-types)                              |
+| filter                | string                                                                                                                             |           | _Optional_. Filter for [Folder Collections](/docs/collection-types#folder-collections)                                                                    |
+| create                | string                                                                                                                             | `false`   | _Optional_. **For [Folder Collections](/docs/collection-types#folder-collections) only**<br />`true` - Allows users to create new items in the collection |
 | hide                  | string                                                                                                                             | `false`   | _Optional_. `true` hides a collection in the CMS UI. Useful when using the relation widget to hide referenced collections                                 |
 | delete                | string                                                                                                                             | `true`    | _Optional_. `false` prevents users from deleting items in a collection                                                                                    |
 | extension             | string                                                                                                                             |           | _Optional_. See [extension](#extension-and-format) below                                                                                                  |
 | format                | string                                                                                                                             |           | _Optional_. See [format](#extension-and-format) below                                                                                                     |
 | frontmatter_delimiter | string                                                                                                                             |           | _Optional_. See [frontmatter_delimiter](#frontmatter_delimiter) below                                                                                     |
 | slug                  | string                                                                                                                             |           | _Optional_. See [slug](#slug) below                                                                                                                       |
-| fields (required)     | string                                                                                                                             |           | _Optional_. See [fields](#fields) below. Ignored if [Files Collection](/docs/collection-types#file-collections)                                                                                                                   |
+| fields (required)     | string                                                                                                                             |           | _Optional_. See [fields](#fields) below. Ignored if [Files Collection](/docs/collection-types#file-collections)                                           |
 | editor                | string                                                                                                                             |           | _Optional_. See [editor](#editor) below                                                                                                                   |
 | summary               | string                                                                                                                             |           | _Optional_. See [summary](#summary) below                                                                                                                 |
 | sortable_fields       | string                                                                                                                             |           | _Optional_. See [sortable_fields](#sortable_fields) below                                                                                                 |
@@ -35,13 +34,23 @@ weight: 9
 
 Static CMS expects every entry to provide a field named `"title"` that serves as an identifier for the entry. The identifier field serves as an entry's title when viewing a list of entries, and is used in [slug](#slug) creation. If you would like to use a field other than `"title"` as the identifier, you can set `identifier_field` to the name of the other field.
 
-### Example
-
+<CodeTabs>
 ```yaml
 collections:
   - name: posts
     identifier_field: name
 ```
+
+```js
+collections: [
+  {
+    name: 'posts',
+    identifier_field: 'name',
+  },
+],
+```
+
+</CodeTabs>
 
 ## `extension` and `format`
 
@@ -69,7 +78,7 @@ For folder collections where users can create new items, the `slug` option speci
 
 The slug template can also reference a field value by name, eg. `{{title}}`. If a field name conflicts with a built in template tag name - for example, if you have a field named `slug`, and would like to reference that field via `{{slug}}`, you can do so by adding the explicit `fields.` prefix, eg. `{{fields.slug}}`.
 
-### Available Template Tags
+**Available Template Tags**
 
 - Any field can be referenced by wrapping the field name in double curly braces, eg. `{{author}}`
 - `{{slug}}`: a url-safe version of the `title` field (or identifier field) for the file
@@ -84,34 +93,54 @@ The slug template can also reference a field value by name, eg. `{{title}}`. If 
 
 #### Basic Example
 
+<CodeTabs>
 ```yaml
 slug: '{{year}}-{{month}}-{{day}}_{{slug}}'
 ```
 
+```js
+slug: '{{year}}-{{month}}-{{day}}_{{slug}}',
+```
+
+</CodeTabs>
+
 #### Field Names
 
+<CodeTabs>
 ```yaml
 slug: '{{year}}-{{month}}-{{day}}_{{title}}_{{some_other_field}}'
 ```
 
+```js
+slug: '{{year}}-{{month}}-{{day}}_{{title}}_{{some_other_field}}',
+```
+
+</CodeTabs>
+
 #### Field Name That Conflicts With Template Tag
 
+<CodeTabs>
 ```yaml
 slug: '{{year}}-{{month}}-{{day}}_{{fields.slug}}'
 ```
+
+```js
+slug: '{{year}}-{{month}}-{{day}}_{{fields.slug}}',
+```
+
+</CodeTabs>
 
 ## `fields`
 
 _Ignored if [Files Collection](/docs/collection-types#file-collections)_
 
-The `fields` option maps editor UI widgets to field-value pairs in the saved file. The order of the fields in your Static CMS `config.yml` file determines their order in the editor UI and in the saved file.
+The `fields` option maps editor UI widgets to field-value pairs in the saved file. The order of the fields in your Static CMS `config` file determines their order in the editor UI and in the saved file.
 
 `fields` accepts a list of widgets. See [widgets](/docs/widgets) for more details.
 
 In files with frontmatter, one field should be named `body`. This special field represents the section of the document (usually markdown) that comes after the frontmatter.
 
-### Example
-
+<CodeTabs>
 ```yaml
 fields:
   - label: "Title"
@@ -120,9 +149,19 @@ fields:
     pattern: ['.{20,}', "Must have at least 20 characters"]
   - {label: "Layout", name: "layout", widget: "hidden", default: "blog"}
   - {label: "Featured Image", name: "thumbnail", widget: "image", required: false}
-  - {label: "Body", name: "body", widget: "markdown"}
-    comment: 'This is a multiline\ncomment'
+  - {label: "Body", name: "body", widget: "markdown", comment: 'This is a multiline\ncomment' }
 ```
+
+```js
+fields: [
+  { label: 'Title', name: 'title', widget: 'string', pattern: ['.{20,}', 'Must have at least 20 characters'] },
+  { label: 'Layout', name: 'layout', widget: 'hidden', default: 'blog' },
+  { label: 'Featured Image', name: 'thumbnail', widget: 'image', required: false },
+  { label: 'Body', name: 'body', widget: 'markdown', comment: 'This is a multiline\\ncomment' },
+],
+```
+
+</CodeTabs>
 
 ## `editor`
 
@@ -133,13 +172,21 @@ This setting changes options for the editor view of a collection or a file insid
 | preview | boolean | `true`  | Set to `false` to disable the preview pane for this collection or file                                       |
 | frame   | boolean | `true`  | <ul><li>`true` - Previews render in a frame</li><li>`false` - Previews render directly in your app</li></ul> |
 
-### Example
-
+<CodeTabs>
 ```yaml
 editor:
   preview: false
   frame: false
 ```
+
+```js
+editor: {
+  preview: false,
+  frame: false,
+},
+```
+
+</CodeTabs>
 
 **Note**: Setting this as a top level configuration will set the default for all collections
 
@@ -147,7 +194,7 @@ editor:
 
 This setting allows the customization of the collection list view. Similar to the `slug` field, a string with templates can be used to include values of different fields, e.g. `{{title}}`. This option over-rides the default of `title` field and `identifier_field`.
 
-### Available Template Tags
+**Available Template Tags**
 
 Template tags are the same as those for [slug](#slug), with the following additions:
 
@@ -157,11 +204,16 @@ Template tags are the same as those for [slug](#slug), with the following additi
 - `{{commit_date}}` The file commit date on supported backends (git based backends).
 - `{{commit_author}}` The file author date on supported backends (git based backends).
 
-### Example
-
+<CodeTabs>
 ```yaml
 summary: 'Version: {{version}} - {{title}}'
 ```
+
+```js
+summary: 'Version: {{version}} - {{title}}',
+```
+
+</CodeTabs>
 
 ## `sortable_fields`
 
@@ -171,21 +223,26 @@ Defaults to inferring `title`, `date`, `author` and `description` fields and wil
 
 When `author` field can't be inferred commit author will be used.
 
-### Example
-
+<CodeTabs>
 ```yaml
 # use dot notation for nested fields
 sortable_fields: ['commit_date', 'title', 'commit_author', 'language.en']
 ```
 
-### `view_filters`
+```js
+// use dot notation for nested fields
+sortable_fields: ['commit_date', 'title', 'commit_author', 'language.en'],
+```
+
+</CodeTabs>
+
+## `view_filters`
 
 An optional list of predefined view filters to show in the UI.
 
 Defaults to an empty list.
 
-### Example
-
+<CodeTabs>
 ```yaml
 view_filters:
   - label: "Alice's and Bob's Posts"
@@ -199,14 +256,35 @@ view_filters:
     pattern: true
 ```
 
+```js
+view_filters: [
+  {
+    label: "Alice's and Bob's Posts",
+    field: 'author',
+    pattern: 'Alice|Bob',
+  },
+  {
+    label: 'Posts published in 2020',
+    field: 'date',
+    pattern: '2020',
+  },
+  {
+    label: 'Drafts',
+    field: 'draft',
+    pattern: true,
+  },
+],
+```
+
+</CodeTabs>
+
 ## `view_groups`
 
 An optional list of predefined view groups to show in the UI.
 
 Defaults to an empty list.
 
-### Example
-
+<CodeTabs>
 ```yaml
 view_groups:
   - label: Year
@@ -216,3 +294,19 @@ view_groups:
   - label: Drafts
     field: draft
 ```
+
+```js
+view_groups: [
+  {
+    label: 'Year',
+    field: 'date',
+    pattern: '\\d{4}',
+  },
+  {
+    label: 'Drafts',
+    field: 'draft',
+  },
+],
+```
+
+</CodeTabs>

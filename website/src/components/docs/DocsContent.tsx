@@ -32,6 +32,10 @@ const DocsContent = styled('div')(
     & p:not(:first-of-type) {
       margin-top: 8px;
     }
+    
+    & pre + p:not(:first-of-type) {
+      margin-top: 20px;
+    }
 
     & :not(h1,h2,h3,h4,h5,h6) a {
       color: ${theme.palette.secondary.main};

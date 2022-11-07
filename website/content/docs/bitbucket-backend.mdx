@@ -13,10 +13,19 @@ For repositories stored on Bitbucket, the `bitbucket` backend allows CMS users t
 To enable Bitbucket authentication it:
 
 1. Follow the authentication provider setup steps in the [Netlify docs](https://www.netlify.com/docs/authentication-providers/#using-an-authentication-provider).
-2. Add the following lines to your Static CMS `config.yml` file:
+2. Add the following lines to your Static CMS `config` file:
 
+<CodeTabs>
 ```yaml
 backend:
   name: bitbucket
   repo: owner-name/repo-name # Path to your Bitbucket repository
 ```
+
+```js
+backend: {
+  name: 'bitbucket',
+  repo: 'owner-name/repo-name', // Path to your Bitbucket repository
+},
+```
+</CodeTabs>

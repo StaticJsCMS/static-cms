@@ -163,9 +163,10 @@ Register widget takes an optional object of options. These options include:
 </script>
 ```
 
-`admin/config.yml`
+`admin/config.yml` (or `admin/config.js`)
 
-```yml
+<CodeTabs>
+```yaml
 collections:
   - name: posts
     label: Posts
@@ -179,6 +180,30 @@ collections:
         widget: categories
         separator: __
 ```
+
+```js
+collections: [
+  {
+    name: 'posts',
+    label: 'Posts',
+    folder: 'content/posts',
+    fields: [
+      {
+        name: 'title'
+        label: 'Title'
+        widget: 'string'
+      },
+      {
+        name: 'categories'
+        label: 'Categories'
+        widget: 'categories'
+        separator: '__'
+      }
+    ]
+  }
+]
+```
+</CodeTabs>
 
 ## Advanced field validation
 

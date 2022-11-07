@@ -4,7 +4,7 @@ title: Collection Types
 weight: 10
 ---
 
-All editable content types are defined in the `collections` field of your `config.yml` file, and display in the left sidebar of the Content page of the editor UI.
+All editable content types are defined in the `collections` field of your `config` file, and display in the left sidebar of the Content page of the editor UI.
 
 Collections come in two main types: `folder` and `files`.
 
@@ -20,6 +20,7 @@ Unlike file collections, folder collections have the option to allow editors to 
 
 #### Basic
 
+<CodeTabs>
 ```yaml
 collections:
   - name: blog
@@ -38,11 +39,31 @@ collections:
         widget: image
       - name: body
         label: Body
-        widget: 'markdown
+        widget: 'markdown'
 ```
+
+```js
+collections: [
+  {
+    name: 'blog',
+    label: 'Blog',
+    folder: '_posts/blog',
+    create: true,
+    fields: [
+      { name: 'title', label: 'Title', widget: 'string' },
+      { name: 'date', label: 'Publish Date', widget: 'datetime' },
+      { name: 'thumbnail', label: 'Featured Image', widget: 'image' },
+      { name: 'body', label: 'Body', widget: 'markdown' },
+    ],
+  },
+],
+```
+
+</CodeTabs>
 
 #### With Identifier Field
 
+<CodeTabs>
 ```yaml
 - name: 'blog'
   label: 'Blog'
@@ -64,6 +85,24 @@ collections:
       widget: markdown
 ```
 
+```js
+{
+  name: 'blog',
+  label: 'Blog',
+  folder: '_posts/blog',
+  create: true,
+  identifier_field: 'name',
+  fields: [
+    { name: 'name', label: 'Name', widget: 'string' },
+    { name: 'date', label: 'Publish Date', widget: 'datetime' },
+    { name: 'thumbnail', label: 'Featured Image', widget: 'image' },
+    { name: 'body', label: 'Body', widget: 'markdown' },
+  ],
+},
+```
+
+</CodeTabs>
+
 ### Filtered folder collections
 
 The entries for any folder collection can be filtered based on the value of a single field. By filtering a folder into different collections, you can manage files with different fields, options, extensions, etc. in the same folder.
@@ -75,6 +114,7 @@ The `filter` option requires two fields:
 
 The example below creates two collections in the same folder, filtered by the `language` field. The first collection includes posts with `language: en`, and the second, with `language: es`.
 
+<CodeTabs>
 ```yaml
 collections:
   - name: 'english_posts'
@@ -115,6 +155,37 @@ collections:
         widget: markdown
 ```
 
+```js
+collections: [
+  {
+    name: 'english_posts',
+    label: 'Blog in English',
+    folder: '_posts',
+    create: true,
+    filter: { field: 'language', value: 'en' },
+    fields: [
+      { name: 'language', label: 'Language', widget: 'select', options: ['en', 'es'] },
+      { name: 'title', label: 'Title', widget: 'string' },
+      { name: 'body', label: 'Content', widget: 'markdown' },
+    ],
+  },
+  {
+    name: 'spanish_posts',
+    label: 'Blog en Español',
+    folder: '_posts',
+    create: true,
+    filter: { field: 'language', value: 'es' },
+    fields: [
+      { name: 'language', label: 'Lenguaje', widget: 'select', options: ['en', 'es'] },
+      { name: 'title', label: 'Titulo', widget: 'string' },
+      { name: 'body', label: 'Contenido', widget: 'markdown' },
+    ],
+  },
+],
+```
+
+</CodeTabs>
+
 ### Folder Collections Path <img src="https://img.shields.io/badge/-Beta%20Feature-blue" alt="Beta Feature. Use at your own risk" title="Beta Feature. Use at your own risk" />
 
 By default the CMS stores folder collection content under the folder specified in the collection setting.
@@ -133,10 +204,18 @@ When using the global `media_folder` directory any entry field that points to a 
 
 For example configuring:
 
+<CodeTabs>
 ```yaml
 media_folder: static/media
 public_folder: /media
 ```
+
+```js
+media_folder: 'static/media',
+public_folder: '/media'
+```
+
+</CodeTabs>
 
 And saving an entry with an image named `image.png` will result in the image being saved under `static/media/image.png` and relevant entry fields populated with the value of `/media/image.png`.
 
@@ -146,6 +225,7 @@ This can now be achieved using a per collection `media_folder` configuration whi
 
 For example, the following configuration will result in media files being saved in the same directory as the entry, and the image field being populated with the relative path to the image.
 
+<CodeTabs>
 ```yaml
 media_folder: static/media
 public_folder: /media
@@ -166,6 +246,28 @@ collections:
         widget: 'image'
 ```
 
+```js
+media_folder: 'static/media',
+public_folder: '/media',
+collections: [
+  {
+    name: 'posts',
+    label: 'Posts',
+    label_singular: 'Post',
+    folder: 'content/posts',
+    path: '{{slug}}/index',
+    media_folder: '',
+    public_folder: '',
+    fields: [
+      { label: 'Title', name: 'title', widget: 'string' },
+      { label: 'Cover Image', name: 'image', widget: 'image' },
+    ],
+  },
+],
+```
+
+</CodeTabs>
+
 More specifically, saving an entry with a title of `example post` with an image named `image.png` will result in a directory structure of:
 
 ```bash
@@ -184,11 +286,11 @@ And for the image field being populated with a value of `image.png`.
 
 Supports all of the [`slug` templates](/docs/configuration-options#slug) and:
 
-* `{{dirname}}` The path to the file's parent directory, relative to the collection's `folder`.
-* `{{filename}}` The file name without the extension part.
-* `{{extension}}` The file extension.
-* `{{media_folder}}` The global `media_folder`.
-* `{{public_folder}}` The global `public_folder`.
+- `{{dirname}}` The path to the file's parent directory, relative to the collection's `folder`.
+- `{{filename}}` The file name without the extension part.
+- `{{extension}}` The file extension.
+- `{{media_folder}}` The global `media_folder`.
+- `{{public_folder}}` The global `public_folder`.
 
 ### Nested Collections <img src="https://img.shields.io/badge/-Beta%20Feature-blue" alt="Beta Feature. Use at your own risk" title="Beta Feature. Use at your own risk" />
 
@@ -202,8 +304,7 @@ When configuring a `files` collection, configure each file in the collection sep
 
 **Note:** Files listed in a file collection must already exist in the hosted repository branch set in your Static CMS [backend configuration](/docs/backends-overview). Files must also have a valid value for the file type. For example, an empty file works as valid YAML, but a JSON file must have a non-empty value to be valid, such as an empty object.
 
-### Example
-
+<CodeTabs>
 ```yaml
 collections:
   - name: pages
@@ -253,3 +354,53 @@ collections:
                 label: Address
                 widget: string
 ```
+
+```js
+collections: [
+  {
+    name: 'pages',
+    label: 'Pages',
+    files: [
+      {
+        name: 'about',
+        label: 'About Page',
+        file: 'site/content/about.yml',
+        fields: [
+          { name: 'title', label: 'Title', widget: 'string' },
+          { name: 'intro', label: 'Intro', widget: 'markdown' },
+          {
+            name: 'team',
+            label: 'Team',
+            widget: 'list',
+            fields: [
+              { name: 'name', label: 'Name', widget: 'string' },
+              { name: 'position', label: 'Position', widget: 'string' },
+              { name: 'photo', label: 'Photo', widget: 'image' },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'locations',
+        label: 'Locations Page',
+        file: 'site/content/locations.yml',
+        fields: [
+          { name: 'title', label: 'Title', widget: 'string' },
+          { name: 'intro', label: 'Intro', widget: 'markdown' },
+          {
+            name: 'locations',
+            label: 'Locations',
+            widget: 'list',
+            fields: [
+              { name: 'name', label: 'Name', widget: 'string' },
+              { name: 'address', label: 'Address', widget: 'string' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+],
+```
+
+</CodeTabs>
