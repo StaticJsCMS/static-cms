@@ -72,9 +72,9 @@ const StyledCommunityLinksContent = styled('div')`
   gap: 40px;
 `;
 
-const Community = ({ docsGroups }: DocsMenuProps) => {
+const Community = ({ docsGroups, searchablePages }: DocsMenuProps) => {
   return (
-    <Page url="/community" docsGroups={docsGroups} fullWidth>
+    <Page url="/community" docsGroups={docsGroups} searchablePages={searchablePages} fullWidth>
       <StyledCommunityContent>
         <Container>
           <StyledTitle>

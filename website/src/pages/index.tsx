@@ -247,11 +247,11 @@ const StyledFeatureText = styled('div')`
   padding: 0 16px;
 `;
 
-const Home = ({ docsGroups }: DocsMenuProps) => {
+const Home = ({ docsGroups, searchablePages }: DocsMenuProps) => {
   const theme = useTheme();
 
   return (
-    <Page url="/" docsGroups={docsGroups} fullWidth>
+    <Page url="/" docsGroups={docsGroups} searchablePages={searchablePages} fullWidth>
       <StyledHomagePageContent>
         <StyledIntroSection>
           <Container>
