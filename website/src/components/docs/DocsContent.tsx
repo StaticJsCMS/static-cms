@@ -5,7 +5,7 @@ const DocsContent = styled('div')(
     color: ${theme.palette.text.primary};
     font-weight: 200;
     width: 100%;
-    max-width: 900px;
+    max-width: 1100px;
     padding: 0 40px 0 56px;
     display: flex;
     flex-direction: column;
