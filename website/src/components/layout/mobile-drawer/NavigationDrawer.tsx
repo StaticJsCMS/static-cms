@@ -12,14 +12,19 @@ import type { MenuItem } from '../../../interface';
 const DRAWER_WIDTH = 300;
 
 const StyledDrawerContents = styled('div')`
-  padding-top: 16px;
   text-align: center;
 `;
 
-const StyledLogoWrapper = styled('div')`
-  display: flex;
-  justify-content: center;
-`;
+const StyledLogoWrapper = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    justify-content: center;
+    padding: 16px 0;
+    background: ${
+      theme.palette.mode === 'light' ? theme.palette.primary.main : theme.palette.background.paper
+    };
+  `,
+);
 
 interface NavigationDrawerProps {
   items: MenuItem[];
@@ -39,9 +44,9 @@ const NavigationDrawer = ({ items, mobileOpen, onMobileOpenToggle }: NavigationD
     () => (
       <StyledDrawerContents key="drawer-nav-contents" onClick={onMobileOpenToggle}>
         <StyledLogoWrapper key="drawer-nav-logo-wrapper">
-          <Logo key="drawer-nav-logo" inDrawer />
+          <Logo key="drawer-nav-logo" />
         </StyledLogoWrapper>
-        <Divider key="drawer-nav-divider" sx={{ borderColor: 'rgba(255, 255, 255, 0.8)', pt: 2 }} />
+        <Divider key="drawer-nav-divider" sx={{ borderColor: 'rgba(255, 255, 255, 0.8)' }} />
         <List key="drawer-nav-list">
           {items.map(item => (
             <MobileNavItem key={`drawer-nav-item-${item.title}`} item={item} />
@@ -84,7 +89,7 @@ const NavigationDrawer = ({ items, mobileOpen, onMobileOpenToggle }: NavigationD
           boxSizing: 'border-box',
           width: '80%',
           maxWidth: DRAWER_WIDTH,
-          background: '#2e3034',
+          background: theme.palette.background.paper,
         },
         '& .MuiListSubheader-root': {
           textAlign: 'left',

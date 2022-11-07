@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { useCallback, useState } from 'react';
+import IconButton from '@mui/material/IconButton';
 
 import SearchModal from './SearchModal';
 
@@ -28,6 +29,14 @@ const StyledSearchPlaceholderBox = styled(Button)(
     }
 
     ${theme.breakpoints.down('lg')} {
+      display: none;
+    }
+  `,
+);
+
+const StyledIconButton = styled(IconButton)(
+  ({ theme }) => `
+    ${theme.breakpoints.up('lg')} {
       display: none;
     }
   `,
@@ -65,6 +74,9 @@ const Search = ({ searchablePages }: SearchProps) => {
           Search the docs
         </Typography>
       </StyledSearchPlaceholderBox>
+      <StyledIconButton onClick={handleOpen} color="inherit">
+        <SearchIcon />
+      </StyledIconButton>
       <SearchModal open={open} onClose={handleClose} searchablePages={searchablePages} />
     </>
   );

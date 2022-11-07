@@ -5,7 +5,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Link from 'next/link';
 import { useCallback, useMemo, useState } from 'react';
@@ -106,6 +106,7 @@ interface HeaderProps {
 }
 
 const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderProps) => {
+  const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = useCallback(() => {
@@ -151,10 +152,10 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
             <MenuIcon fontSize="large" />
           </StyledMenuButton>
           <Logo />
-          <Search searchablePages={searchablePages} />
           <StyledIconsWrapper>
+            <Search searchablePages={searchablePages} />
             <IconButton
-              sx={{ ml: 1 }}
+              sx={{ [theme.breakpoints.up('lg')]: { ml: 1 } }}
               onClick={toggleColorMode}
               color="inherit"
               title={mode === 'dark' ? 'Turn on the light' : 'Turn off the light'}

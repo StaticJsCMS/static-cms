@@ -13,10 +13,10 @@ const useCreateTheme = (mode: PaletteMode) => {
         ? {
             mode,
             primary: {
-              main: '#3764be',
+              main: '#1b72de',
             },
             secondary: {
-              main: '#3764be',
+              main: '#1b72de',
             },
             background: {
               default: '#f9f9f9',
