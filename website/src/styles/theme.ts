@@ -26,7 +26,7 @@ const useCreateTheme = (mode: PaletteMode) => {
         : {
             mode,
             primary: {
-              main: '#3A69C7',
+              main: '#5ecffb',
             },
             secondary: {
               main: '#5ecffb',

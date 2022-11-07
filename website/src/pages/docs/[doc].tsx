@@ -1,6 +1,6 @@
+import Alert from '@mui/material/Alert';
 import { styled, useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import Alert from '@mui/material/Alert';
 import { MDXRemote } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import remarkGfm from 'remark-gfm';
@@ -22,11 +22,11 @@ import DocsContent from '../../components/docs/DocsContent';
 import DocsLeftNav from '../../components/docs/DocsLeftNav';
 import DocsRightNav from '../../components/docs/DocsRightNav';
 import Page from '../../components/layout/Page';
-import { fetchDocsContent } from '../../lib/docs';
+import { fetchDocsContent, getSearchablePages } from '../../lib/docs';
 
 import type { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import type { GetStaticPaths, GetStaticProps } from 'next/types';
-import type { DocsGroup, DocsPage } from '../../interface';
+import type { DocsGroup, DocsPage, SearchablePage } from '../../interface';
 
 const StyledDocsView = styled('div')(
   ({ theme }) => `
@@ -74,13 +74,21 @@ const StyledDocsContentWrapper = styled('main')(
 
 interface DocsProps {
   docsGroups: DocsGroup[];
+  searchablePages: SearchablePage[];
   title: string;
   slug: string;
   description?: string;
   source: MDXRemoteSerializeResult;
 }
 
-const Docs = ({ docsGroups, title, slug, description = '', source }: DocsProps) => {
+const Docs = ({
+  docsGroups,
+  searchablePages,
+  title,
+  slug,
+  description = '',
+  source,
+}: DocsProps) => {
   const theme = useTheme();
 
   return (
@@ -89,6 +97,7 @@ const Docs = ({ docsGroups, title, slug, description = '', source }: DocsProps) 
       url={`/docs/${slug}`}
       description={description}
       docsGroups={docsGroups}
+      searchablePages={searchablePages}
       fullWidth
     >
       <DocsLeftNav docsGroups={docsGroups} />
@@ -160,6 +169,7 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ prop
   return {
     props: {
       docsGroups,
+      searchablePages: getSearchablePages(),
       title: data.title,
       slug: data.slug,
       description: '',

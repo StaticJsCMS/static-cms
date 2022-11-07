@@ -11,7 +11,7 @@ const AnchorLinkIcon = ({ variant }: AnchorLinkIconProps) => {
 
   const color = useMemo(() => {
     if (variant === 'h2') {
-      return theme.palette.secondary.main;
+      return theme.palette.primary.main;
     }
 
     if (variant === 'h3') {
@@ -20,7 +20,7 @@ const AnchorLinkIcon = ({ variant }: AnchorLinkIconProps) => {
 
     return theme.palette.text.secondary;
   }, [
-    theme.palette.secondary.main,
+    theme.palette.primary.main,
     theme.palette.text.primary,
     theme.palette.text.secondary,
     variant,

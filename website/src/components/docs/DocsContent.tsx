@@ -38,7 +38,7 @@ const DocsContent = styled('div')(
     }
 
     & :not(h1,h2,h3,h4,h5,h6) a {
-      color: ${theme.palette.secondary.main};
+      color: ${theme.palette.primary.main};
       text-decoration: none;
       font-weight: 500;
     }
@@ -93,7 +93,7 @@ const DocsContent = styled('div')(
     }
 
     & h2 {
-      color: ${theme.palette.secondary.main};
+      color: ${theme.palette.primary.main};
       font-size: 26px;
       line-height: 26px;
     }

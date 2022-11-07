@@ -78,7 +78,7 @@ const Community = ({ docsGroups }: DocsMenuProps) => {
       <StyledCommunityContent>
         <Container>
           <StyledTitle>
-            <Typography variant="h1" color="secondary">
+            <Typography variant="h1" color="primary">
               {communityData.title}
             </Typography>
             <Typography variant="h2" color="text.primary">

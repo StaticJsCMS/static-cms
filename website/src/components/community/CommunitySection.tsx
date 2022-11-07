@@ -12,7 +12,7 @@ const StyledCommunitySection = styled('div')(
     display: flex;
     flex-direction: column;
     gap: 16px;
-    color: ${theme.palette.secondary.main}
+    color: ${theme.palette.primary.main}
   `,
 );
 

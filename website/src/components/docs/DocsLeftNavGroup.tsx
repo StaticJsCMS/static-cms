@@ -50,7 +50,7 @@ const DocsLeftNavGroup = ({ name, links }: DocsLeftNavGroupProps) => {
                 >
                   <ListItemText
                     primaryTypographyProps={{
-                      color: selected ? theme.palette.secondary.main : theme.palette.text.secondary,
+                      color: selected ? theme.palette.primary.main : theme.palette.text.secondary,
                       fontWeight: selected ? 600 : 400,
                     }}
                     primary={link.title}

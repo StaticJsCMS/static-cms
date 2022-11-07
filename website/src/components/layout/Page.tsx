@@ -12,7 +12,7 @@ import Container from './Container';
 import Header from './Header';
 
 import type { ReactNode } from 'react';
-import type { DocsGroup } from '../../interface';
+import type { DocsGroup, SearchablePage } from '../../interface';
 
 const StyledPageContentWrapper = styled('div')`
   display: block;
@@ -36,6 +36,7 @@ export interface PageProps {
   };
   fullWidth?: boolean;
   docsGroups: DocsGroup[];
+  searchablePages: SearchablePage[];
 }
 
 const Page = ({
@@ -47,6 +48,7 @@ const Page = ({
   pageDetails,
   fullWidth = false,
   docsGroups,
+  searchablePages,
 }: PageProps) => {
   const scrollableArea = useRef<HTMLDivElement | null>(null);
   const theme = useTheme();
@@ -94,6 +96,7 @@ const Page = ({
       <Header
         mode={theme.palette.mode}
         docsGroups={docsGroups}
+        searchablePages={searchablePages}
         toggleColorMode={colorMode.toggleColorMode}
       />
       <StyledPageContentWrapper ref={scrollableArea}>{content}</StyledPageContentWrapper>
