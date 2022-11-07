@@ -121,6 +121,7 @@ This is the post body, where I write about our last chance to party before the Y
 
 Given this example, our `collections` settings would look like this in your Static CMS `config.yml` file:
 
+<CodeTabs>
 ```yaml
 collections:
   - name: 'blog' # Used in routes, e.g., /admin/collections/blog
@@ -136,6 +137,15 @@ collections:
       - { label: 'Rating (scale of 1-5)', name: 'rating', widget: 'number' }
       - { label: 'Body', name: 'body', widget: 'markdown' }
 ```
+
+```js
+{
+  collection: {
+  }
+}
+```
+
+</CodeTabs>
 
 Let's break that down:
 

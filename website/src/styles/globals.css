@@ -6,6 +6,10 @@ img {
   max-width: 100%;
 }
 
+#__next {
+  position: relative;
+}
+
 /* PrismJS 1.29.0 (Dark)
 https://prismjs.com/download.html#themes=prism-tomorrow&languages=markup+css+clike+javascript+json+toml+typescript+yaml */
 .dark code[class*='language-'],

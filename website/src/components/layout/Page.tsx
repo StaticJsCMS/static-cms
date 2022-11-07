@@ -15,14 +15,13 @@ import type { ReactNode } from 'react';
 import type { DocsGroup } from '../../interface';
 
 const StyledPageContentWrapper = styled('div')`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: block;
   height: calc(100vh - 72px);
   width: 100%;
   position: relative;
   top: 72px;
   overflow-y: auto;
+  overflow-x: hidden;
 `;
 
 export interface PageProps {
