@@ -15,20 +15,20 @@ weight: 9
 | icon                  | string                                                                                                                             |           | _Optional_. Unique name of icon to use in main menu. See [Custom Icons](/docs/custom-icons)                                                               |
 | description           | string                                                                                                                             |           | _Optional_. Text displayed below the label when viewing a collection                                                                                      |
 | files or folder       | [Collection Files](/docs/collection-types#file-collections)<br />\| [Collection Folder](/docs/collection-types#folder-collections) |           | **Requires one of these**: Specifies the collection type and location; details in [Collection Types](/docs/collection-types)                              |
-| filter                | string                                                                                                                             |           | _Optional_. Filter for [Folder Collections](/docs/collection-types#folder-collections)                                                                    |
-| create                | string                                                                                                                             | `false`   | _Optional_. **For [Folder Collections](/docs/collection-types#folder-collections) only**<br />`true` - Allows users to create new items in the collection |
-| hide                  | string                                                                                                                             | `false`   | _Optional_. `true` hides a collection in the CMS UI. Useful when using the relation widget to hide referenced collections                                 |
-| delete                | string                                                                                                                             | `true`    | _Optional_. `false` prevents users from deleting items in a collection                                                                                    |
+| filter                | FilterRule                                                                                                                         |           | _Optional_. Filter for [Folder Collections](/docs/collection-types#folder-collections)                                                                    |
+| create                | boolean                                                                                                                            | `false`   | _Optional_. **For [Folder Collections](/docs/collection-types#folder-collections) only**<br />`true` - Allows users to create new items in the collection |
+| hide                  | boolean                                                                                                                            | `false`   | _Optional_. `true` hides a collection in the CMS UI. Useful when using the relation widget to hide referenced collections                                 |
+| delete                | boolean                                                                                                                            | `true`    | _Optional_. `false` prevents users from deleting items in a collection                                                                                    |
 | extension             | string                                                                                                                             |           | _Optional_. See [extension](#extension-and-format) below                                                                                                  |
-| format                | string                                                                                                                             |           | _Optional_. See [format](#extension-and-format) below                                                                                                     |
-| frontmatter_delimiter | string                                                                                                                             |           | _Optional_. See [frontmatter_delimiter](#frontmatter_delimiter) below                                                                                     |
+| format                | 'yaml'<br />\| 'yml'<br />\| 'json'<br />\| 'frontmatter'<br />\| 'json-frontmatter'<br />\| 'yaml-frontmatter'                    |           | _Optional_. See [format](#extension-and-format) below                                                                                                     |
+| frontmatter_delimiter | string<br />\| [string, string]                                                                                                    |           | _Optional_. See [frontmatter_delimiter](#frontmatter_delimiter) below                                                                                     |
 | slug                  | string                                                                                                                             |           | _Optional_. See [slug](#slug) below                                                                                                                       |
-| fields (required)     | string                                                                                                                             |           | _Optional_. See [fields](#fields) below. Ignored if [Files Collection](/docs/collection-types#file-collections)                                           |
-| editor                | string                                                                                                                             |           | _Optional_. See [editor](#editor) below                                                                                                                   |
+| fields (required)     | Field                                                                                                                              |           | _Optional_. See [fields](#fields) below. Ignored if [Files Collection](/docs/collection-types#file-collections)                                           |
+| editor                | EditorConfig                                                                                                                       |           | _Optional_. See [editor](#editor) below                                                                                                                   |
 | summary               | string                                                                                                                             |           | _Optional_. See [summary](#summary) below                                                                                                                 |
-| sortable_fields       | string                                                                                                                             |           | _Optional_. See [sortable_fields](#sortable_fields) below                                                                                                 |
-| view_filters          | string                                                                                                                             |           | _Optional_. See [view_filters](#view_filters) below                                                                                                       |
-| view_groups           | string                                                                                                                             |           | _Optional_. See [view_groups](#view_groups) below                                                                                                         |
+| sortable_fields       | SortableFields                                                                                                                     |           | _Optional_. See [sortable_fields](#sortable_fields) below                                                                                                 |
+| view_filters          | ViewFilter                                                                                                                         |           | _Optional_. See [view_filters](#view_filters) below                                                                                                       |
+| view_groups           | ViewGroup                                                                                                                          |           | _Optional_. See [view_groups](#view_groups) below                                                                                                         |
 
 ## `identifier_field`
 
@@ -217,7 +217,12 @@ summary: 'Version: {{version}} - {{title}}',
 
 ## `sortable_fields`
 
-An optional list of sort fields to show in the UI.
+An optional object with the following options:
+
+| Name    | Type                  | Default | Description                                                                                                       |
+| ------- | --------------------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
+| fields  | list of string        |         | A list of sort fields to show in the UI                                                                           |
+| default | SortableFieldsDefault |         | _Optional_. The default field and direction to sort the collection. See [Default Sort](#default-sort) for details |
 
 Defaults to inferring `title`, `date`, `author` and `description` fields and will also show `Update On` sort field in git based backends.
 
@@ -226,12 +231,45 @@ When `author` field can't be inferred commit author will be used.
 <CodeTabs>
 ```yaml
 # use dot notation for nested fields
-sortable_fields: ['commit_date', 'title', 'commit_author', 'language.en']
+sortable_fields:
+  fields: ['commit_date', 'title', 'commit_author', 'language.en']
 ```
 
 ```js
 // use dot notation for nested fields
-sortable_fields: ['commit_date', 'title', 'commit_author', 'language.en'],
+sortable_fields: {
+  fields: ['commit_date', 'title', 'commit_author', 'language.en'],
+},
+```
+
+</CodeTabs>
+
+### Default Sort
+
+| Name      | Type                                            | Default     | Description                       |
+| --------- | ----------------------------------------------- | ----------- | --------------------------------- |
+| field     | string                                          |             | The field to sort                 |
+| direction | 'Ascending'<br />\| 'Descending'<br />\| 'None' | `Ascending` | _Optional_. The direction to sort |
+
+<CodeTabs>
+```yaml
+# use dot notation for nested fields
+sortable_fields:
+  fields: ['commit_date', 'title', 'commit_author', 'language.en']
+  default:
+    field: commit_date
+    direction: Descending
+```
+
+```js
+// use dot notation for nested fields
+sortable_fields: {
+  fields: ['commit_date', 'title', 'commit_author', 'language.en'],
+  default: {
+    field: 'commit_date',
+    direction: 'Descending'
+  }
+},
 ```
 
 </CodeTabs>
