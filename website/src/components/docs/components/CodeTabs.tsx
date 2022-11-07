@@ -90,8 +90,6 @@ const CodeTabs = ({ children }: CodeTabsProps) => {
 
         const language = supportedLanguages[code.props.className];
 
-        console.log(code.props.children);
-
         return {
           title: language.title,
           className: code.props.className,
