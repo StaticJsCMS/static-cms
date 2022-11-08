@@ -8,6 +8,7 @@ import remarkGfm from 'remark-gfm';
 import Anchor from '../../components/docs/components/Anchor';
 import Blockquote from '../../components/docs/components/Blockquote';
 import CodeTabs from '../../components/docs/components/CodeTabs';
+import Header1 from '../../components/docs/components/headers/Header1';
 import Header2 from '../../components/docs/components/headers/Header2';
 import Header3 from '../../components/docs/components/headers/Header3';
 import Header4 from '../../components/docs/components/headers/Header4';
@@ -103,10 +104,11 @@ const Docs = ({
       <StyledDocsView className={theme.palette.mode}>
         <StyledDocsContentWrapper>
           <DocsContent>
-            <Typography variant="h1">{title}</Typography>
+            <Header1>{title}</Header1>
             <MDXRemote
               {...source}
               components={{
+                h1: Header1,
                 h2: Header2,
                 h3: Header3,
                 h4: Header4,
