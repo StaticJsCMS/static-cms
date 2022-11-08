@@ -16,6 +16,7 @@ import {
 
 import type { ListChildComponentProps } from 'react-window';
 import type { Entry, EntryData, RelationField, WidgetControlProps } from '../../interface';
+import { isNotEmpty } from '../../lib/util/string.util';
 
 // TODO Remove if sorting not needed
 // function arrayMove(array, from, to) {
@@ -113,7 +114,7 @@ const RelationControl = ({
   query,
   locale,
   label,
-  hasErrors
+  hasErrors,
 }: WidgetControlProps<string | string[], RelationField>) => {
   const [internalValue, setInternalValue] = useState(value);
   const [initialOptions, setInitialOptions] = useState<HitOption[]>([]);
@@ -184,7 +185,14 @@ const RelationControl = ({
 
   const [options, setOptions] = useState<HitOption[]>([]);
   const [open, setOpen] = React.useState(false);
-  const loading = useMemo(() => open && options.length === 0, [open, options.length]);
+  const valueNotEmpty = useMemo(
+    () => (Array.isArray(internalValue) ? internalValue.length > 0 : isNotEmpty(internalValue)),
+    [internalValue],
+  );
+  const loading = useMemo(
+    () => (open || valueNotEmpty) && options.length === 0,
+    [open, valueNotEmpty, options.length],
+  );
 
   useEffect(() => {
     let alive = true;
