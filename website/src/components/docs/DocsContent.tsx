@@ -5,7 +5,7 @@ const DocsContent = styled('div')(
     color: ${theme.palette.text.primary};
     font-weight: 200;
     width: 100%;
-    max-width: 900px;
+    max-width: 1100px;
     padding: 0 40px 0 56px;
     display: flex;
     flex-direction: column;
@@ -32,9 +32,13 @@ const DocsContent = styled('div')(
     & p:not(:first-of-type) {
       margin-top: 8px;
     }
+    
+    & pre + p:not(:first-of-type) {
+      margin-top: 20px;
+    }
 
     & :not(h1,h2,h3,h4,h5,h6) a {
-      color: ${theme.palette.secondary.main};
+      color: ${theme.palette.primary.main};
       text-decoration: none;
       font-weight: 500;
     }
@@ -89,7 +93,7 @@ const DocsContent = styled('div')(
     }
 
     & h2 {
-      color: ${theme.palette.secondary.main};
+      color: ${theme.palette.primary.main};
       font-size: 26px;
       line-height: 26px;
     }
@@ -278,6 +282,10 @@ const DocsContent = styled('div')(
     & hr {
       display: flex;
       width: 100%;
+    }
+
+    .MuiAlert-root {
+      margin-bottom: 16px;
     }
   `,
 );

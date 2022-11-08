@@ -31,6 +31,7 @@ For common options, see [Common widget options](/docs/widgets#common-widget-opti
 
 ## Example
 
+<CodeTabs>
 ```yaml
 name: manual_pdf
 label: Manual PDF
@@ -41,3 +42,18 @@ media_library:
   config:
     multiple: true
 ```
+
+```js
+name: 'manual_pdf',
+label: 'Manual PDF',
+widget: 'file',
+default: '/uploads/general-manual.pdf',
+media_library: {
+  choose_url: true,
+  config: {
+    multiple: true,
+  },
+},
+```
+
+</CodeTabs>

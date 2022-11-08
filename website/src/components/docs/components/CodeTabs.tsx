@@ -2,10 +2,12 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Prism from 'prismjs';
-import { isValidElement, useEffect, useMemo, useState } from 'react';
-import yaml from 'yaml';
+import { isValidElement, useMemo, useState } from 'react';
 
-import type { ReactNode, ReactElement, SyntheticEvent } from 'react';
+import { isNotEmpty } from '../../../util/string.util';
+
+import type { Grammar } from 'prismjs';
+import type { ReactElement, ReactNode, SyntheticEvent } from 'react';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -36,6 +38,25 @@ function a11yProps(index: number) {
   };
 }
 
+interface CodeLanguage {
+  title: string;
+  grammar: Grammar;
+  language: string;
+}
+
+const supportedLanguages: Record<string, CodeLanguage> = {
+  'language-yaml': {
+    title: 'Yaml',
+    grammar: Prism.languages.yaml,
+    language: 'yaml',
+  },
+  'language-js': {
+    title: 'JavaScript',
+    grammar: Prism.languages.javascript,
+    language: 'javascript',
+  },
+};
+
 interface TabData {
   title: string;
   className: string;
@@ -47,63 +68,45 @@ interface CodeTabsProps {
 }
 
 const CodeTabs = ({ children }: CodeTabsProps) => {
-  // const rawYaml = useMemo(() => {
-  //   console.log(children);
-  //   if (Array.isArray(children)) {
-
-  //   }
-
-  //   if (isValidElement(children)) {
-  //     console.log(children);
-  //     if (children.type === 'code' && children.props.className === 'codetabs') {
-  //       console.log(rawYaml);
-  //       return children.props.children
-  //         .filter((child: ReactNode) => isValidElement(child) && child.type === 'pre')
-  //         .map((child: ReactElement) => child.props.children.props.children);
-  //     }
-  //   }
-
-  //   return undefined;
-  // }, [children]);
-
   const [value, setValue] = useState(0);
 
   const handleChange = (_event: SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  const [tabs, setTabs] = useState<TabData[]>([]);
-
-  useEffect(() => {
+  const tabs = useMemo(() => {
     if (!children || !Array.isArray(children)) {
-      return;
+      return [];
     }
 
+    return children
+      .filter((child: ReactNode) => isValidElement(child) && child.type === 'pre')
+      .map((child: ReactElement) => child.props.children)
+      .filter((subChild: ReactNode) => isValidElement(subChild) && subChild.type === 'code')
+      .map((code: ReactElement) => {
+        if (!(code.props.className in supportedLanguages)) {
+          return false;
+        }
 
+        const language = supportedLanguages[code.props.className];
 
-    const javascriptLines = JSON.stringify(yaml.parseAllDocuments(rawYaml), null, 2).split('\n');
-    const rawJavascript = javascriptLines
-      .slice(2, javascriptLines.length - 2)
-      .map(line =>
-        line
-          .replace(/^[ ]{4}/g, '')
-          .replace(/"([a-zA-Z][a-zA-Z_0-9]*)":/g, '$1:')
-          .replace(/"/g, "'"),
-      )
-      .join('\n');
-
-    const javascript = Prism.highlight(rawJavascript, Prism.languages.javascript, 'javascript');
-    const highlightedYaml = Prism.highlight(rawYaml, Prism.languages.yaml, 'yaml');
-
-    setOutput();
-  }, [children, rawYaml, value]);
+        return {
+          title: language.title,
+          className: code.props.className,
+          content: typeof code.props.children === 'string' && isNotEmpty(code.props.children)
+            ? Prism.highlight(code.props.children, language.grammar, language.language)
+            : '',
+        };
+      })
+      .filter(Boolean) as TabData[];
+  }, [children]);
 
   if (tabs.length === 0) {
     return null;
   }
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', margin: '8px 0 16px' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}

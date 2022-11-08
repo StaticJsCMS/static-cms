@@ -3,13 +3,25 @@ import matter from 'gray-matter';
 import yaml from 'js-yaml';
 import path from 'path';
 
+import { getAnchor } from '../components/docs/components/headers/hooks/useAnchor';
 import { SUMMARY_MIN_PARAGRAPH_LENGTH } from '../constants';
 import menu from './menu';
 
 import type { GetStaticProps } from 'next';
-import type { DocsData, DocsGroup, DocsGroupLink, DocsPage, FileMatter } from '../interface';
+import type {
+  DocsData,
+  DocsGroup,
+  DocsGroupLink,
+  DocsPage,
+  FileMatter,
+  SearchablePage,
+} from '../interface';
 
-export interface DocsMenuProps {
+export interface SearchProps {
+  searchablePages: SearchablePage[];
+}
+
+export interface DocsMenuProps extends SearchProps {
   docsGroups: DocsGroup[];
 }
 
@@ -48,6 +60,37 @@ export function fetchDocsMatter(): FileMatter[] {
   return docsMatterCache;
 }
 
+function getHeadings(content: string): string[] {
+  const headingRegex = /^## ([^\n]+)/gm;
+  let matches = headingRegex.exec(content);
+
+  const headings: string[] = [];
+  while (matches && matches.length === 2) {
+    headings.push(matches[1]);
+    matches = headingRegex.exec(content);
+  }
+
+  return headings;
+}
+
+function getTextContent(content: string): string {
+  const textContentRegex =
+    /^(?:-|\*|\n)((?!```|<| |const|interface|export|import|let|var|CMS\.)(?:[`\-# {*]*)[a-zA-Z]+[^|\n]+)$/gm;
+  let matches = textContentRegex.exec(content);
+
+  const paragraphs: string[] = [];
+  while (matches && matches.length === 2) {
+    paragraphs.push(
+      matches[1]
+        .replace(/(^- )|(`)|(^[#]+ )|(\*\*)|((?<= )_)|(^_)|(_(?=[ .]{1}))|(_$)/gm, '')
+        .replace(/\[([^\]]+)\]\((?:[^)]+)\)/gm, '$1'),
+    );
+    matches = textContentRegex.exec(content);
+  }
+
+  return paragraphs.join('\n');
+}
+
 export function fetchDocsContent(): [DocsPage[], DocsGroup[]] {
   if (docsCache && process.env.NODE_ENV !== 'development') {
     return docsCache;
@@ -76,7 +119,11 @@ export function fetchDocsContent(): [DocsPage[], DocsGroup[]] {
           ...data,
           slug,
         } as DocsData,
-        summary: summaryMatch && summaryMatch.length >= 2 ? summaryMatch[1] : content,
+        textContent: getTextContent(content),
+        headings: getHeadings(content).map(heading => ({
+          title: heading,
+          anchor: getAnchor(heading),
+        })),
         content,
       };
     },
@@ -103,10 +150,30 @@ export function fetchDocsContent(): [DocsPage[], DocsGroup[]] {
   return docsCache;
 }
 
+export function getSearchablePages(): SearchablePage[] {
+  const pages = fetchDocsContent()[0];
+
+  return pages.map(page => ({
+    title: page.data.title,
+    textContent: page.textContent,
+    url: `/docs/${page.data.slug}`,
+    headings: page.headings,
+  }));
+}
+
+export const getSearchStaticProps: GetStaticProps = (): { props: SearchProps } => {
+  return {
+    props: {
+      searchablePages: getSearchablePages(),
+    },
+  };
+};
+
 export const getDocsMenuStaticProps: GetStaticProps = (): { props: DocsMenuProps } => {
   return {
     props: {
       docsGroups: fetchDocsContent()[1],
+      searchablePages: getSearchablePages()
     },
   };
 };

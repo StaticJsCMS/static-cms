@@ -247,16 +247,16 @@ const StyledFeatureText = styled('div')`
   padding: 0 16px;
 `;
 
-const Home = ({ docsGroups }: DocsMenuProps) => {
+const Home = ({ docsGroups, searchablePages }: DocsMenuProps) => {
   const theme = useTheme();
 
   return (
-    <Page url="/" docsGroups={docsGroups} fullWidth>
+    <Page url="/" docsGroups={docsGroups} searchablePages={searchablePages} fullWidth>
       <StyledHomagePageContent>
         <StyledIntroSection>
           <Container>
             <StyledIntroSectionContent>
-              <Typography variant="h1" color="secondary">
+              <Typography variant="h1" color="primary">
                 {homepageData.title}
               </Typography>
               <Typography variant="h2" color="text.primary">
@@ -340,7 +340,7 @@ const Home = ({ docsGroups }: DocsMenuProps) => {
                         sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}
                       >
                         <>
-                          <Chip label={release.version} color="secondary" />
+                          <Chip label={release.version} color="primary" />
                           <DateDisplay date={release.date} format="MMMM dd, yyyy" />
                         </>
                       </Typography>

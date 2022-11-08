@@ -24,8 +24,9 @@ The next and final step is updating your Static CMS configuration file:
 2. In the `media_library` object, add the name of the media player under `name`.
 3. Add a `config` object under name with a `publicKey` property with your Uploadcare public key as it's value.
 
-Your `config.yml` should now include something like this (except with a real API key):
+Your `config` should now include something like this (except with a real API key):
 
+<CodeTabs>
 ```yaml
 media_library:
   name: uploadcare
@@ -33,13 +34,23 @@ media_library:
     publicKey: YOUR_UPLOADCARE_PUBLIC_KEY
 ```
 
+```js
+media_library: {
+  name: 'uploadcare',
+  config: {
+    publicKey: 'YOUR_UPLOADCARE_PUBLIC_KEY',
+  },
+},
+```
+</CodeTabs>
+
 Once you've finished updating your Static CMS configuration, the Uploadcare widget will appear when using the image or file widgets.
 
 **Note:** You'll need to [register the media libraries yourself](/blog/2019/07/netlify-cms-gatsby-plugin-4-0-0#using-media-libraries-with-netlify-cms-app).
 
 ## Configuring the Uploadcare Widget
 
-The Uploadcare widget can be configured with settings that are outlined [in their docs](https://uploadcare.com/docs/file_uploads/widget/options/). The widget itself accepts configuration through global variables and data properties on HTML elements, but with Static CMS you can pass configuration options directly through your `config.yml`.
+The Uploadcare widget can be configured with settings that are outlined [in their docs](https://uploadcare.com/docs/file_uploads/widget/options/). The widget itself accepts configuration through global variables and data properties on HTML elements, but with Static CMS you can pass configuration options directly through your `config`.
 
 **Note:** all default values described in Uploadcare's documentation also apply in the Static CMS integration, except for `previewStep`, which is set to `true`. This was done because the preview step provides helpful information like upload status, and provides access to image editing controls. This option can be disabled through the configuration options below.
 
@@ -51,17 +62,32 @@ Global configuration, which is meant to affect the Uploadcare widget at all time
 
 Configuration can also be provided for individual fields that use the media library. The structure is very similar to the global configuration, except the settings are added to an individual `field`. For example:
 
+<CodeTabs>
 ```yaml
-  ...
-  fields:
-    name: cover
-    label: Cover Image
-    widget: image
-    media_library:
-      config:
-        multiple: true
-        previewStep: false
+fields:
+  name: cover
+  label: Cover Image
+  widget: image
+  media_library:
+    config:
+      multiple: true
+      previewStep: false
 ```
+
+```js
+fields: {
+  name: 'cover',
+  label: 'Cover Image',
+  widget: 'image',
+  media_library: {
+    config: {
+      multiple: true,
+      previewStep: false,
+    },
+  },
+},
+```
+</CodeTabs>
 
 ## Integration settings
 
@@ -70,6 +96,7 @@ There are several settings that control the behavior of integration with the wid
 * `autoFilename` (`boolean`) - specify whether to add a filename to the end of the url. Example: `http://ucarecdn.com/:uuid/filename.png`
 * `defaultOperations` (`string`) - specify a string added at the end of the url. This could be useful to apply a set of CDN operations to each image, for example resizing or compression. All the possible operations are listed [here](https://uploadcare.com/docs/api_reference/cdn/).
 
+<CodeTabs>
 ```yaml
 media_library:
   name: uploadcare
@@ -79,3 +106,17 @@ media_library:
     autoFiletitle: true
     defaultOperations: '/resize/800x600/'
 ```
+
+```js
+media_library: {
+  name: 'uploadcare',
+  config: {
+    publicKey: 'YOUR_UPLOADCARE_PUBLIC_KEY',
+  },
+  settings: {
+    autoFiletitle: true,
+    defaultOperations: '/resize/800x600/',
+  },
+},
+```
+</CodeTabs>

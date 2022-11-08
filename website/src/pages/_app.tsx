@@ -22,6 +22,8 @@ require('prismjs/components/prism-tsx');
 require('prismjs/components/prism-yaml');
 require('prismjs/components/prism-json');
 require('prismjs/components/prism-toml');
+require('prismjs/components/prism-markup-templating');
+require('prismjs/components/prism-handlebars');
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [mode, setMode] = useState<PaletteMode>('dark');

@@ -76,9 +76,15 @@ export interface DocsData {
   readonly slug: string;
 }
 
+export interface DocsPageHeading {
+  readonly title: string;
+  readonly anchor: string;
+}
+
 export interface DocsPage {
   readonly fullPath: string;
-  readonly summary: string;
+  readonly headings: DocsPageHeading[];
+  readonly textContent: string;
   readonly content: string;
   readonly data: DocsData;
 }
@@ -137,3 +143,10 @@ export interface MenuLinkGroup {
 }
 
 export type MenuItem = MenuLinkGroup | MenuLink;
+
+export interface SearchablePage {
+  readonly title: string;
+  readonly url: string;
+  readonly headings: DocsPageHeading[];
+  readonly textContent: string;
+}

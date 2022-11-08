@@ -33,6 +33,7 @@ For common options, see [Common widget options](/docs/widgets#common-widget-opti
 
 _Assuming a separate "authors" collection with "name" and "twitterHandle" fields with subfields "first" and "last" for the "name" field._
 
+<CodeTabs>
 ```yaml
 name: author
 label: Post Author
@@ -43,12 +44,25 @@ value_field: name.first
 display_fields: ['twitterHandle', 'followerCount']
 ```
 
+```js
+name: 'author',
+label: 'Post Author',
+widget: 'relation',
+collection: 'authors',
+search_fields: ['name.first', 'twitterHandle'],
+value_field: 'name.first',
+display_fields: ['twitterHandle', 'followerCount'],
+```
+
+</CodeTabs>
+
 The generated UI input will search the authors collection by name and twitterHandle, and display each author's handle and follower count. On selection, the author's name is saved for the field.
 
 ### String Template
 
 _Assuming a separate "authors" collection with "name" and "twitterHandle" fields with subfields "first" and "last" for the "name" field._
 
+<CodeTabs>
 ```yaml
 name: author
 label: Post Author
@@ -59,12 +73,25 @@ value_field: '{{slug}}'
 display_fields: ['{{twitterHandle}} - {{followerCount}}']
 ```
 
+```js
+name: 'author',
+label: 'Post Author',
+widget: 'relation',
+collection: 'authors',
+search_fields: ['name.first'],
+value_field: '{{slug}}',
+display_fields: ['{{twitterHandle}} - {{followerCount}}'],
+```
+
+</CodeTabs>
+
 The generated UI input will search the authors collection by name, and display each author's handle and follower count. On selection, the author entry slug is saved for the field.
 
 ### Referencing A File Collection List Field
 
 _Assuming a separate "relation_files" collection with a file named "cities" with a list field "cities" with subfields "name" and "id"._
 
+<CodeTabs>
 ```yaml
 name: city
 label: City
@@ -75,5 +102,18 @@ search_fields: ['cities.*.name']
 display_fields: ['cities.*.name']
 value_field: 'cities.*.id'
 ```
+
+```js
+name: 'city',
+label: 'City',
+widget: 'relation',
+collection: 'relation_files',
+file: 'cities',
+search_fields: ['cities.*.name'],
+display_fields: ['cities.*.name'],
+value_field: 'cities.*.id',
+```
+
+</CodeTabs>
 
 The generated UI input will search the cities file by city name, and display each city's name. On selection, the city id is saved for the field.

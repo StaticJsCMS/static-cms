@@ -22,6 +22,33 @@ This example uses Font Awesome to supply the icon.
 ```js
 import { faHouse } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import CMS from '@staticcms/core';
 
-cmsApp.registerIcon('house', <FontAwesomeIcon icon={faHouse} size="lg" />);
+CMS.registerIcon('house', <FontAwesomeIcon icon={faHouse} size="lg" />);
 ```
+
+## Usage
+
+### Collection
+
+<CodeTabs>
+```yaml
+collections:
+  - name: homepage
+    icon: house
+```
+
+```js
+collections: [
+  {
+    name: 'homepage',
+    icon: 'house'
+  },
+],
+```
+
+</CodeTabs>
+
+### Additional Links
+
+See [Additional Links](/docs/additional-links#examples) for details.

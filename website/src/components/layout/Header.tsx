@@ -1,23 +1,23 @@
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Link from 'next/link';
-import GitHubIcon from '@mui/icons-material/GitHub';
 import { useCallback, useMemo, useState } from 'react';
 
 import Logo from './Logo';
 import NavigationDrawer from './mobile-drawer/NavigationDrawer';
-import Search from './Search';
+import Search from './search/Search';
 
 import type { PaletteMode } from '@mui/material';
 import type { ButtonTypeMap } from '@mui/material/Button';
 import type { ExtendButtonBase } from '@mui/material/ButtonBase';
-import type { DocsGroup, MenuItem } from '../../interface';
+import type { DocsGroup, MenuItem, SearchablePage } from '../../interface';
 
 const StyledAppBar = styled(AppBar)(
   ({ theme }) => `
@@ -101,10 +101,12 @@ const StyledDesktopLink = styled(Button)(
 interface HeaderProps {
   mode: PaletteMode;
   docsGroups: DocsGroup[];
+  searchablePages: SearchablePage[];
   toggleColorMode: () => void;
 }
 
-const Header = ({ mode, docsGroups, toggleColorMode }: HeaderProps) => {
+const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderProps) => {
+  const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = useCallback(() => {
@@ -150,10 +152,10 @@ const Header = ({ mode, docsGroups, toggleColorMode }: HeaderProps) => {
             <MenuIcon fontSize="large" />
           </StyledMenuButton>
           <Logo />
-          <Search />
           <StyledIconsWrapper>
+            <Search searchablePages={searchablePages} />
             <IconButton
-              sx={{ ml: 1 }}
+              sx={{ [theme.breakpoints.up('lg')]: { ml: 1 } }}
               onClick={toggleColorMode}
               color="inherit"
               title={mode === 'dark' ? 'Turn on the light' : 'Turn off the light'}
@@ -171,10 +173,7 @@ const Header = ({ mode, docsGroups, toggleColorMode }: HeaderProps) => {
                 src="https://img.shields.io/github/stars/StaticJsCMS/static-cms?style=social"
               />
             </StyledGithubLink>
-            <IconButton
-              href="https://github.com/StaticJsCMS/static-cms"
-              color="inherit"
-            >
+            <IconButton href="https://github.com/StaticJsCMS/static-cms" color="inherit">
               <GitHubIcon />
             </IconButton>
           </StyledIconsWrapper>

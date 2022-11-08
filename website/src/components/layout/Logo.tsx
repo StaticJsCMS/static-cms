@@ -2,46 +2,19 @@ import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import transientOptions from '../../util/transientOptions';
-
-interface StyledImageLinkProps {
-  $inDrawer: boolean;
-}
-
-const StyledImageLink = styled(
-  'a',
-  transientOptions,
-)<StyledImageLinkProps>(
-  ({ theme, $inDrawer }) => `
-    display: flex;
-    align-items: center;
-
-    ${
-      !$inDrawer
-        ? `
-          ${theme.breakpoints.down('lg')} {
-            position: absolute;
-            left: 50%;
-            transform: translate(-50%, 0);
-          }
-        `
-        : ''
-    }
-  `,
-);
+const StyledImageLink = styled('a')`
+  display: flex;
+  align-items: center;
+`;
 
 const StyledImage = styled(Image)`
   cursor: pointer;
 `;
 
-interface LogoProps {
-  inDrawer?: boolean;
-}
-
-const Logo = ({ inDrawer = false }: LogoProps) => {
+const Logo = () => {
   return (
     <Link href="/">
-      <StyledImageLink $inDrawer={inDrawer}>
+      <StyledImageLink>
         <StyledImage src="/static-cms-logo.svg" width={182} height={72} />
       </StyledImageLink>
     </Link>

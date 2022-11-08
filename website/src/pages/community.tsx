@@ -72,13 +72,13 @@ const StyledCommunityLinksContent = styled('div')`
   gap: 40px;
 `;
 
-const Community = ({ docsGroups }: DocsMenuProps) => {
+const Community = ({ docsGroups, searchablePages }: DocsMenuProps) => {
   return (
-    <Page url="/community" docsGroups={docsGroups} fullWidth>
+    <Page url="/community" docsGroups={docsGroups} searchablePages={searchablePages} fullWidth>
       <StyledCommunityContent>
         <Container>
           <StyledTitle>
-            <Typography variant="h1" color="secondary">
+            <Typography variant="h1" color="primary">
               {communityData.title}
             </Typography>
             <Typography variant="h2" color="text.primary">

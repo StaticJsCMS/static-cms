@@ -32,6 +32,7 @@ For common options, see [Common widget options](/docs/widgets#common-widget-opti
 
 ### Basic
 
+<CodeTabs>
 ```yaml
 name: testimonials
 label: Testimonials
@@ -56,8 +57,45 @@ fields:
         default: /img/emmet.jpg
 ```
 
+```js
+name: 'testimonials',
+label: 'Testimonials',
+widget: 'list',
+summary: '{{fields.quote}} - {{fields.author.name}}',
+fields: [
+  {
+    name: 'quote',
+    label: 'Quote',
+    widget: 'string',
+    default: 'Everything is awesome!'
+  },
+  {
+    name: 'author',
+    label: 'Author',
+    widget: 'object',
+    fields: [
+      {
+        name: 'name',
+        label: 'Name',
+        widget: 'string',
+        default: 'Emmet'
+      },
+      {
+        name: 'avatar',
+        label: 'Avatar',
+        widget: 'image',
+        default: '/img/emmet.jpg'
+      },
+    ],
+  },
+],
+```
+
+</CodeTabs>
+
 ### Allow Additions
 
+<CodeTabs>
 ```yaml
 name: testimonials
 label: Testimonials
@@ -83,28 +121,97 @@ fields:
         default: /img/emmet.jpg
 ```
 
+```js
+name: 'testimonials',
+label: 'Testimonials',
+widget: 'list',
+summary: '{{fields.quote}} - {{fields.author.name}}',
+allow_add: false,
+fields: [
+  {
+    name: 'quote',
+    label: 'Quote',
+    widget: 'string',
+    default: 'Everything is awesome!'
+  },
+  {
+    name: 'author',
+    label: 'Author',
+    widget: 'object',
+    fields: [
+      {
+        name: 'name',
+        label: 'Name',
+        widget: 'string',
+        default: 'Emmet'
+      },
+      {
+        name: 'avatar',
+        label: 'Avatar',
+        widget: 'image',
+        default: '/img/emmet.jpg'
+      },
+    ],
+  },
+],
+```
+
+</CodeTabs>
+
 ### Default Value
 
+<CodeTabs>
 ```yaml
-- name: galleryImages
-  label: Gallery
-  widget: list
-  fields:
-    - name: src
-      label: Source
-      widget: string
-    - name: alt
-      label: Alt Text
-      widget: string
-  default:
-    - src: /img/tennis.jpg
-      alt: Tennis
-    - src: /img/footbar.jpg
-      alt: Football
+name: galleryImages
+label: Gallery
+widget: list
+fields:
+  - name: src
+    label: Source
+    widget: string
+  - name: alt
+    label: Alt Text
+    widget: string
+default:
+  - src: /img/tennis.jpg
+    alt: Tennis
+  - src: /img/footbar.jpg
+    alt: Football
 ```
+
+```js
+name: 'galleryImages',
+label: 'Gallery',
+widget: 'list',
+fields: [
+  {
+    name: 'src',
+    label: 'Source',
+    widget: 'string'
+  },
+  {
+    name: 'alt',
+    label: 'Alt Text',
+    widget: 'string'
+  },
+],
+default: [
+  {
+    src: '/img/tennis.jpg',
+    alt: 'Tennis'
+  },
+  {
+    src: '/img/footbar.jpg',
+    alt: 'Football'
+  },
+],
+```
+
+</CodeTabs>
 
 ### Start Collapsed
 
+<CodeTabs>
 ```yaml
 name: testimonials
 label: Testimonials
@@ -130,8 +237,46 @@ fields:
         default: /img/emmet.jpg
 ```
 
+```js
+name: 'testimonials',
+label: 'Testimonials',
+widget: 'list',
+summary: '{{fields.quote}} - {{fields.author.name}}',
+collapsed: false,
+fields: [
+  {
+    name: 'quote',
+    label: 'Quote',
+    widget: 'string',
+    default: 'Everything is awesome!'
+  },
+  {
+    name: 'author',
+    label: 'Author',
+    widget: 'object',
+    fields: [
+      {
+        name: 'name',
+        label: 'Name',
+        widget: 'string',
+        default: 'Emmet'
+      },
+      {
+        name: 'avatar',
+        label: 'Avatar',
+        widget: 'image',
+        default: '/img/emmet.jpg'
+      },
+    ],
+  },
+],
+```
+
+</CodeTabs>
+
 ### Min and Max
 
+<CodeTabs>
 ```yaml
 name: testimonials
 label: Testimonials
@@ -158,8 +303,47 @@ fields:
         default: /img/emmet.jpg
 ```
 
+```js
+name: 'testimonials',
+label: 'Testimonials',
+widget: 'list',
+summary: '{{fields.quote}} - {{fields.author.name}}',
+min: 1,
+max: 3,
+fields: [
+  {
+    name: 'quote',
+    label: 'Quote',
+    widget: 'string',
+    default: 'Everything is awesome!'
+  },
+  {
+    name: 'author',
+    label: 'Author',
+    widget: 'object',
+    fields: [
+      {
+        name: 'name',
+        label: 'Name',
+        widget: 'string',
+        default: 'Emmet'
+      },
+      {
+        name: 'avatar',
+        label: 'Avatar',
+        widget: 'image',
+        default: '/img/emmet.jpg'
+      },
+    ],
+  },
+],
+```
+
+</CodeTabs>
+
 ### Add To Top
 
+<CodeTabs>
 ```yaml
 name: testimonials
 label: Testimonials
@@ -185,8 +369,46 @@ fields:
         default: /img/emmet.jpg
 ```
 
+```js
+name: 'testimonials',
+label: 'Testimonials',
+widget: 'list',
+summary: '{{fields.quote}} - {{fields.author.name}}',
+add_to_top: true,
+fields: [
+  {
+    name: 'quote',
+    label: 'Quote',
+    widget: 'string',
+    default: 'Everything is awesome!'
+  },
+  {
+    name: 'author',
+    label: 'Author',
+    widget: 'object',
+    fields: [
+      {
+        name: 'name',
+        label: 'Name',
+        widget: 'string',
+        default: 'Emmet'
+      },
+      {
+        name: 'avatar',
+        label: 'Avatar',
+        widget: 'image',
+        default: '/img/emmet.jpg'
+      },
+    ],
+  },
+],
+```
+
+</CodeTabs>
+
 ### Typed List
 
+<CodeTabs>
 ```yaml
 name: sections
 label: Home Section
@@ -229,3 +451,70 @@ types:
         widget: text
         default: Hello World
 ```
+
+```js
+name: 'sections',
+label: 'Home Section',
+widget: 'list',
+types: [
+  {
+    name: 'carousel',
+    label: 'Carousel',
+    widget: 'object',
+    summary: '{{fields.header}}',
+    fields: [
+      {
+        name: 'header',
+        label: 'Header',
+        widget: 'string',
+        default: 'Image Gallery'
+      },
+      {
+        name: 'template',
+        label: 'Template',
+        widget: 'string',
+        default: 'carousel.html'
+      },
+      {
+        name: 'images',
+        label: 'Images',
+        widget: 'list',
+        fields: [
+          {
+            name: 'image',
+            label: 'Image',
+            widget: 'image'
+          }
+        ],
+      },
+    ],
+  },
+  {
+    name: 'spotlight',
+    label: 'Spotlight',
+    widget: 'object',
+    fields: [
+      {
+        name: 'header',
+        label: 'Header',
+        widget: 'string',
+        default: 'Spotlight'
+      },
+      {
+        name: 'template',
+        label: 'Template',
+        widget: 'string',
+        default: 'spotlight.html'
+      },
+      {
+        name: 'text',
+        label: 'Text',
+        widget: 'text',
+        default: 'Hello World'
+      },
+    ],
+  },
+],
+```
+
+</CodeTabs>

@@ -6,6 +6,8 @@ import type { ReactNode } from 'react';
 
 const StyledTableContainer = styled(TableContainer)(
   ({ theme }) => `
+    margin-bottom: 16px;
+
     & td {
       color: ${theme.palette.text.secondary};
     }

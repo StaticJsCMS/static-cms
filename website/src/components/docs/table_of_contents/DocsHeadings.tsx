@@ -30,12 +30,12 @@ const StyledListItem = styled('li')(
     }
 
     &.active > a {
-      color: ${theme.palette.secondary.main};
-      border-left: 2px solid ${theme.palette.secondary.main};
+      color: ${theme.palette.primary.main};
+      border-left: 2px solid ${theme.palette.primary.main};
     }
 
     & > a:hover {
-      color: ${theme.palette.secondary.main};
+      color: ${theme.palette.primary.main};
       text-decoration: underline;
     }
   `,

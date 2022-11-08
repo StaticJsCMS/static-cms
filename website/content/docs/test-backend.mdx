@@ -10,11 +10,20 @@ You can use the `test-repo` backend to try out Static CMS without connecting to 
 
 **Note:** The `test-repo` backend can't access your local file system, nor does it connect to a Git repo, thus you won't see any existing files while using it.
 
-To enable this backend, set your backend name to `test-repo` in your Static CMS `config.yml` file.
+To enable this backend, set your backend name to `test-repo` in your Static CMS `config` file.
 
 ## Example
 
+<CodeTabs>
 ```yaml
 backend:
   name: test-repo
 ```
+
+```js
+backend: {
+  name: 'test-repo',
+},
+```
+
+</CodeTabs>
