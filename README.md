@@ -15,7 +15,7 @@ and add content to any site built with a static site generator.
 
 > **DISCLAIMER**: This package/repository is under heavy development and as such is very unstable at current. A stable release is targeted for the end of Novemeber and will be labeled `1.0.0`. Documentation may not be completely accurate prior to the `1.0.0` release.
 >
-> An alpha build for the stable release is available under the `@next` tack on npm.
+> An beta build for the stable release is available under the `@next` tack on npm.
 
 ## Community Chat
 
