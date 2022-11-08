@@ -23,8 +23,8 @@ const StyledMainContainerWrapper = styled('div')`
 `;
 
 const StyledMainContainer = styled('div')`
-  min-width: 1200px;
-  max-width: 1440px;
+  min-width: 1152px;
+  max-width: 1392px;
   margin: 0 auto;
   display: flex;
   gap: 24px;

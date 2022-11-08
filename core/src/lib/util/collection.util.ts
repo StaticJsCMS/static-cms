@@ -356,7 +356,7 @@ export function selectInferedField(collection: Collection, fieldName: string) {
       }
     >
   )[fieldName];
-  const fields = 'fields' in collection ? collection.fields ?? [] : [];
+  const fields = 'fields' in collection ? collection.fields ?? [] : undefined;
   let field;
 
   // If collection has no fields or fieldName is not defined within inferables list, return null
