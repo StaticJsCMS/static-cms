@@ -7,6 +7,7 @@ import uniqBy from 'lodash/uniqBy';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { QUERY_SUCCESS } from '../../actions/search';
+import { isNotEmpty } from '../../lib/util/string.util';
 import {
   addFileTemplateFields,
   compileStringTemplate,
@@ -16,7 +17,6 @@ import {
 
 import type { ListChildComponentProps } from 'react-window';
 import type { Entry, EntryData, RelationField, WidgetControlProps } from '../../interface';
-import { isNotEmpty } from '../../lib/util/string.util';
 
 // TODO Remove if sorting not needed
 // function arrayMove(array, from, to) {
