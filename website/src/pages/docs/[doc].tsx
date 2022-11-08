@@ -114,7 +114,6 @@ const Docs = ({
                 h5: Header5,
                 h6: Header6,
                 blockquote: Blockquote,
-                CodeTabs,
                 table: DocsTable,
                 thead: TableHead,
                 tbody: TableBody,
