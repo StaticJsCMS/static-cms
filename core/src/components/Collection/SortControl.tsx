@@ -31,7 +31,7 @@ function nextSortDirection(direction: SortDirection) {
     case SORT_DIRECTION_DESCENDING:
       return SORT_DIRECTION_NONE;
     default:
-      return SORT_DIRECTION_NONE;
+      return SORT_DIRECTION_ASCENDING;
   }
 }
 

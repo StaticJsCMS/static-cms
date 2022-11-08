@@ -82,16 +82,16 @@ const nb_no: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Er du sikker på du vil navigere bort fra denne siden?',
-      onUpdatingWithUnsavedChanges: 'Du må lagre endringene dine før du oppdaterer status.',
-      onPublishingNotReady: 'Du må endre status til "Klar" før du publiserer.',
-      onPublishingWithUnsavedChanges: 'Du må lagre endringene dine før du kan publisere.',
-      onPublishing: 'Er du sikker på at du vil publisere?',
+      onUpdatingWithUnsavedChangesBody: 'Du må lagre endringene dine før du oppdaterer status.',
+      onPublishingNotReadyBody: 'Du må endre status til "Klar" før du publiserer.',
+      onPublishingWithUnsavedChangesBody: 'Du må lagre endringene dine før du kan publisere.',
+      onPublishingBody: 'Er du sikker på at du vil publisere?',
       onUnpublishing: 'Er du sikker på at du vil avpublisere innlegget?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'Er du sikker på at du vil slette et publisert innlegg med tilhørende ulagrede endringer?',
-      onDeletePublishedEntry: 'Er du sikker på at du vil slette dette publiserte innlegget?',
+      onDeletePublishedEntryBody: 'Er du sikker på at du vil slette dette publiserte innlegget?',
       loadingEntry: 'Laster innlegg...',
-      confirmLoadBackup: 'Vil du gjenopprette tidligere endringer som ikke har blitt lagret?',
+      confirmLoadBackupBody: 'Vil du gjenopprette tidligere endringer som ikke har blitt lagret?',
     },
     editorToolbar: {
       publishing: 'Publiserer...',
@@ -158,8 +158,8 @@ const nb_no: LocalePhrasesRoot = {
       draft: 'Kladd',
     },
     mediaLibrary: {
-      onDelete: 'Er du sikker på at du vil slette markert element?',
-      fileTooLarge: 'Filen er for stor.\nMaksimal konfiguert filstørrelse er %{size} kB.',
+      onDeleteBody: 'Er du sikker på at du vil slette markert element?',
+      fileTooLargeBody: 'Filen er for stor.\nMaksimal konfiguert filstørrelse er %{size} kB.',
     },
     mediaLibraryModal: {
       loading: 'Laster...',

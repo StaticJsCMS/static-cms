@@ -97,17 +97,17 @@ const da: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Er du sikker på at du vil forlade siden?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Du har ændringer der ikke er gemt, gem disse før status ændres.',
-      onPublishingNotReady: 'Skift status til "Klar" inden publicering.',
-      onPublishingWithUnsavedChanges: 'Du har ændringer der ikke er gemt, gem inden publicing.',
-      onPublishing: 'Er du sikker på at du vil publicere dette dokument?',
-      onDeleteWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Skift status til "Klar" inden publicering.',
+      onPublishingWithUnsavedChangesBody: 'Du har ændringer der ikke er gemt, gem inden publicing.',
+      onPublishingBody: 'Er du sikker på at du vil publicere dette dokument?',
+      onDeleteWithUnsavedChangesBody:
         'Er du sikker på at du vil slette dette tidliere publiceret dokument, samt dine nuværende ugemte ændringer fra denne session?',
-      onDeletePublishedEntry:
+      onDeletePublishedEntryBody:
         'Er du sikker på at du vil slette dette tidliere publiceret dokument?',
       loadingEntry: 'Indlæser dokument...',
-      confirmLoadBackup:
+      confirmLoadBackupBody:
         'En lokal sikkerhedskopi blev gendannet for dette dokument, vil du anvende denne?',
     },
     editorToolbar: {
@@ -183,8 +183,8 @@ const da: LocalePhrasesRoot = {
       draft: 'Kladde',
     },
     mediaLibrary: {
-      onDelete: 'Er du sikker på at du vil slette det valgte medie?',
-      fileTooLarge: 'Filen er for stor.\nOpsætningen tillader ikke filer større end %{size} kB.',
+      onDeleteBody: 'Er du sikker på at du vil slette det valgte medie?',
+      fileTooLargeBody: 'Filen er for stor.\nOpsætningen tillader ikke filer større end %{size} kB.',
     },
     mediaLibraryModal: {
       loading: 'Indlæser...',

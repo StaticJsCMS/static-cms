@@ -97,18 +97,18 @@ const ro: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Ești sigur/ă că dorești să părăsești pagina?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Există modificări nesalvate! Te rugăm salvează înainte de a actualiza statusul.',
-      onPublishingNotReady: 'Actualizează statusul la „Gata” înainte de publicare.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Actualizează statusul la „Gata” înainte de publicare.',
+      onPublishingWithUnsavedChangesBody:
         'Există modificări nesalvate, salvează-le înainte de publicare.',
-      onPublishing: 'Ești sigur/ă că dorești să publici acest articol?',
+      onPublishingBody: 'Ești sigur/ă că dorești să publici acest articol?',
       onUnpublishing: 'Ești sigur/ă că dorești să anulezi publicarea acestui articol?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'Ești sigur/ă că dorești să ștergi această publicare, dar și modificările nesalvate din sesiunea curentă?',
-      onDeletePublishedEntry: 'Ești sigur/ă că dorești să ștergi această publicare?',
+      onDeletePublishedEntryBody: 'Ești sigur/ă că dorești să ștergi această publicare?',
       loadingEntry: 'Se încarcă...',
-      confirmLoadBackup:
+      confirmLoadBackupBody:
         'Un backup local a fost recuperat pentru această intrare, dorești să îl folosești?',
     },
     editorInterface: {
@@ -202,8 +202,8 @@ const ro: LocalePhrasesRoot = {
       copied: 'Copiat',
     },
     mediaLibrary: {
-      onDelete: 'Ești sigur/ă că dorești să ștergi fișierul selectat?',
-      fileTooLarge: 'Fișier prea mare.\nConfigurarea nu permite fișiere mai mari de %{size} KB.',
+      onDeleteBody: 'Ești sigur/ă că dorești să ștergi fișierul selectat?',
+      fileTooLargeBody: 'Fișier prea mare.\nConfigurarea nu permite fișiere mai mari de %{size} KB.',
     },
     mediaLibraryModal: {
       loading: 'Se încarcă...',

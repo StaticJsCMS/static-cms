@@ -95,18 +95,18 @@ const nl: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Weet je zeker dat je deze pagina wilt verlaten?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Er zijn nog niet-opgeslagen wijzigingen. Bewaar ze voordat u de status bijwerkt.',
-      onPublishingNotReady: 'Stel de status in op "Voltooid" voordat u publiceert.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Stel de status in op "Voltooid" voordat u publiceert.',
+      onPublishingWithUnsavedChangesBody:
         'Er zijn nog niet-opgeslagen wijzigingen. Bewaar deze voordat u publiceert.',
-      onPublishing: 'Weet u zeker dat u dit item wil publiceren?',
+      onPublishingBody: 'Weet u zeker dat u dit item wil publiceren?',
       onUnpublishing: 'Weet u zeker dat u de publicatie voor dit item ongedaan wilt maken?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'Weet u zeker dat u dit gepubliceerde item en uw niet-opgeslagen wijzigingen uit de huidige sessie wilt verwijderen?',
-      onDeletePublishedEntry: 'Weet u zeker dat u dit gepubliceerde item wilt verwijderen?',
+      onDeletePublishedEntryBody: 'Weet u zeker dat u dit gepubliceerde item wilt verwijderen?',
       loadingEntry: 'Item laden...',
-      confirmLoadBackup: 'Voor dit item is een lokale back-up hersteld, wilt u deze gebruiken?',
+      confirmLoadBackupBody: 'Voor dit item is een lokale back-up hersteld, wilt u deze gebruiken?',
     },
     editorInterface: {
       toggleI18n: 'Wissel i18n',
@@ -202,8 +202,8 @@ const nl: LocalePhrasesRoot = {
       copied: 'Gekopieerd',
     },
     mediaLibrary: {
-      onDelete: 'Weet u zeker dat u de geselecteerde media wilt verwijderen?',
-      fileTooLarge:
+      onDeleteBody: 'Weet u zeker dat u de geselecteerde media wilt verwijderen?',
+      fileTooLargeBody:
         'Het bestand is te groot.\n De instellingen staan geen bestanden toe groter dan %{size} kB.',
     },
     mediaLibraryModal: {

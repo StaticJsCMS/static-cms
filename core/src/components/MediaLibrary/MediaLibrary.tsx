@@ -237,7 +237,7 @@ const MediaLibrary = ({
     if (
       !(await confirm({
         title: 'mediaLibrary.mediaLibrary.onDeleteTitle',
-        body: 'mediaLibrary.mediaLibrary.onDeleteBody',
+        body: 'mediaLibrary.mediaLibrary.onDelete',
         color: 'error',
       }))
     ) {

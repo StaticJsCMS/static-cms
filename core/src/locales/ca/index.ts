@@ -97,17 +97,17 @@ const ca: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Estàs segur que vols deixar aquesta pàgina?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         "Tens canvis no guardats, si us plau, guarda'ls abans d'actualitzar l'estat.",
-      onPublishingNotReady: 'Si us plau, actualitza l\'estat a "Llest" abans de publicar.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Si us plau, actualitza l\'estat a "Llest" abans de publicar.',
+      onPublishingWithUnsavedChangesBody:
         "Tens canvis no guardats, si us plau, guarda'ls abans de publicar-los.",
-      onPublishing: 'Estàs segur que vols publicar aquesta entrada?',
-      onDeleteWithUnsavedChanges:
+      onPublishingBody: 'Estàs segur que vols publicar aquesta entrada?',
+      onDeleteWithUnsavedChangesBody:
         'Està segur que vol eliminar aquesta entrada publicada, així com els canvis no guardats de la sessió actual?',
-      onDeletePublishedEntry: 'Està segur que vol eliminar aquesta entrada publicada?',
+      onDeletePublishedEntryBody: 'Està segur que vol eliminar aquesta entrada publicada?',
       loadingEntry: 'Carregant entrada...',
-      confirmLoadBackup:
+      confirmLoadBackupBody:
         "S'ha recuperat una copia de seguretat local per aquesta entrada. La vol utilitzar?",
     },
     editorInterface: {
@@ -197,8 +197,8 @@ const ca: LocalePhrasesRoot = {
       copied: 'Copiat',
     },
     mediaLibrary: {
-      onDelete: 'Està segur de que vol eliminar el mitjà seleccionat?',
-      fileTooLarge:
+      onDeleteBody: 'Està segur de que vol eliminar el mitjà seleccionat?',
+      fileTooLargeBody:
         'El fitxer és massa gran.\nLa configuració no permet fitxers més grans de %{size} kB.',
     },
     mediaLibraryModal: {

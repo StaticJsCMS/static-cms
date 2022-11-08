@@ -94,24 +94,24 @@ const de: LocalePhrasesRoot = {
       i18n: {
         writingInLocale: 'Aktuelle Sprache: %{locale}',
         copyFromLocale: 'Aus anderer Sprache übernehmen',
-        copyFromLocaleConfirm:
+        copyFromLocaleConfirmBody:
           'Wollen Sie wirklich die Daten aus der Sprache %{locale} übernehmen?\nAlle bishergen Inhalte werden überschrieben.',
       },
     },
     editor: {
       onLeavePage: 'Möchten Sie diese Seite wirklich verlassen?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Es sind noch ungespeicherte Änderungen vorhanden. Bitte speichern Sie diese, bevor Sie den Status aktualisieren.',
-      onPublishingNotReady:
+      onPublishingNotReadyBody:
         'Bitte setzten die den Status vor dem Veröffentlichen auf "Abgeschlossen".',
-      onPublishingWithUnsavedChanges:
+      onPublishingWithUnsavedChangesBody:
         'Es sind noch ungespeicherte Änderungen vorhanden. Bitte speicheren Sie vor dem Veröffentlichen.',
-      onPublishing: 'Soll dieser Beitrag wirklich veröffentlicht werden?',
-      onDeleteWithUnsavedChanges:
+      onPublishingBody: 'Soll dieser Beitrag wirklich veröffentlicht werden?',
+      onDeleteWithUnsavedChangesBody:
         'Möchten Sie diesen veröffentlichten Beitrag, sowie Ihre nicht gespeicherten Änderungen löschen?',
-      onDeletePublishedEntry: 'Soll dieser veröffentlichte Beitrag wirklich gelöscht werden?',
+      onDeletePublishedEntryBody: 'Soll dieser veröffentlichte Beitrag wirklich gelöscht werden?',
       loadingEntry: 'Beitrag laden...',
-      confirmLoadBackup:
+      confirmLoadBackupBody:
         'Für diesen Beitrag ist ein lokales Backup vorhanden. Möchten Sie dieses benutzen?',
     },
     editorInterface: {
@@ -211,8 +211,8 @@ const de: LocalePhrasesRoot = {
       copied: 'Kopiert',
     },
     mediaLibrary: {
-      onDelete: 'Soll das ausgewählte Medium wirklich gelöscht werden?',
-      fileTooLarge: 'Datei zu groß.\nErlaubt sind nur Dateien bis %{size} kB.',
+      onDeleteBody: 'Soll das ausgewählte Medium wirklich gelöscht werden?',
+      fileTooLargeBody: 'Datei zu groß.\nErlaubt sind nur Dateien bis %{size} kB.',
     },
     mediaLibraryModal: {
       loading: 'Laden...',

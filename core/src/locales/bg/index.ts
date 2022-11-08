@@ -97,16 +97,16 @@ const bg: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Наистина ли искате да напуснете тази страница?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Имате незапазени промени, моля, запазете преди актуализиране на състоянието.',
-      onPublishingNotReady: 'Моля, актуализирайте състоянието на „Готово“, преди да публикувате',
-      onPublishingWithUnsavedChanges: 'Имате незапазени промени, моля, запазете преди публикуване.',
-      onPublishing: 'Наистина ли искате да публикувате този запис?',
-      onDeleteWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Моля, актуализирайте състоянието на „Готово“, преди да публикувате',
+      onPublishingWithUnsavedChangesBody: 'Имате незапазени промени, моля, запазете преди публикуване.',
+      onPublishingBody: 'Наистина ли искате да публикувате този запис?',
+      onDeleteWithUnsavedChangesBody:
         'Наистина ли искате да изтриете този публикуван запис, както и незаписаните промени от текущата сесия?',
-      onDeletePublishedEntry: 'Наистина ли искате да изтриете този публикуван запис?',
+      onDeletePublishedEntryBody: 'Наистина ли искате да изтриете този публикуван запис?',
       loadingEntry: 'Зареждане на запис...',
-      confirmLoadBackup:
+      confirmLoadBackupBody:
         'За този запис беше възстановен локален архив, бихте ли искали да го използвате?',
     },
     editorInterface: {
@@ -198,8 +198,8 @@ const bg: LocalePhrasesRoot = {
       copied: 'Копирано',
     },
     mediaLibrary: {
-      onDelete: 'Наистина ли искате да изтриете избрания медиен файл?',
-      fileTooLarge:
+      onDeleteBody: 'Наистина ли искате да изтриете избрания медиен файл?',
+      fileTooLargeBody:
         'Файлът е твърде голям.\nНастройките не позволяват запазване на файлове по-големи от %{size} kB.',
     },
     mediaLibraryModal: {

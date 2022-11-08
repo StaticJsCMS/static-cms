@@ -97,15 +97,15 @@ const zh_Hans: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: '你确定要离开此页面吗？',
-      onUpdatingWithUnsavedChanges: '你有尚未保存的修改，请在更新状态前进行保存',
-      onPublishingNotReady: '请在发布之前将状态更新为“就绪”',
-      onPublishingWithUnsavedChanges: '你有尚未保存的修改，请在发布前进行保存',
-      onPublishing: '你确定要发布此内容吗？',
+      onUpdatingWithUnsavedChangesBody: '你有尚未保存的修改，请在更新状态前进行保存',
+      onPublishingNotReadyBody: '请在发布之前将状态更新为“就绪”',
+      onPublishingWithUnsavedChangesBody: '你有尚未保存的修改，请在发布前进行保存',
+      onPublishingBody: '你确定要发布此内容吗？',
       onUnpublishing: '你确定要撤销发布此内容吗？',
-      onDeleteWithUnsavedChanges: '你确定要删除这个已经发布的内容，以及当前尚未保存的修改吗？',
-      onDeletePublishedEntry: '你确定要删除这个已经发布的内容吗？',
+      onDeleteWithUnsavedChangesBody: '你确定要删除这个已经发布的内容，以及当前尚未保存的修改吗？',
+      onDeletePublishedEntryBody: '你确定要删除这个已经发布的内容吗？',
       loadingEntry: '正在加载内容...',
-      confirmLoadBackup: '发现了一个对应此内容的本地备份，你要加载它吗？',
+      confirmLoadBackupBody: '发现了一个对应此内容的本地备份，你要加载它吗？',
     },
     editorInterface: {
       toggleI18n: '打开/关闭国际化',
@@ -198,8 +198,8 @@ const zh_Hans: LocalePhrasesRoot = {
       copied: '已复制',
     },
     mediaLibrary: {
-      onDelete: '你确定要删除此媒体项目吗？',
-      fileTooLarge: '文件体积过大\n目前的配置中不允许文件体积超过 %{size} kB',
+      onDeleteBody: '你确定要删除此媒体项目吗？',
+      fileTooLargeBody: '文件体积过大\n目前的配置中不允许文件体积超过 %{size} kB',
     },
     mediaLibraryModal: {
       loading: '正在加载...',

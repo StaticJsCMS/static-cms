@@ -26,6 +26,7 @@ import type { EntriesAction } from '../actions/entries';
 import type { Entry, FieldsErrors } from '../interface';
 
 export interface EntryDraftState {
+  original?: Entry;
   entry?: Entry;
   fieldsErrors: FieldsErrors;
   hasChanged: boolean;
@@ -49,13 +50,16 @@ function entryDraftReducer(
     case DRAFT_CREATE_FROM_ENTRY: {
       const newState = { ...state };
 
+      const entry: Entry = {
+        ...action.payload.entry,
+        newRecord: false,
+      };
+
       // Existing Entry
       return {
         ...newState,
-        entry: {
-          ...action.payload.entry,
-          newRecord: false,
-        },
+        entry,
+        original: entry,
         fieldsErrors: {},
         hasChanged: false,
         key: uuid(),
@@ -65,13 +69,16 @@ function entryDraftReducer(
       const newState = { ...state };
       delete newState.localBackup;
 
+      const entry: Entry = {
+        ...action.payload,
+        newRecord: true,
+      };
+
       // New Entry
       return {
         ...newState,
-        entry: {
-          ...action.payload,
-          newRecord: true,
-        },
+        entry,
+        original: entry,
         fieldsErrors: {},
         hasChanged: false,
         key: uuid(),
@@ -88,13 +95,16 @@ function entryDraftReducer(
       const newState = { ...state };
       delete newState.localBackup;
 
+      const entry: Entry = {
+        ...backupEntry,
+        newRecord: !backupEntry?.path,
+      };
+
       // Local Backup
       return {
         ...state,
-        entry: {
-          ...backupEntry,
-          newRecord: !backupEntry?.path,
-        },
+        entry,
+        original: entry,
         fieldsErrors: {},
         hasChanged: true,
         key: uuid(),
@@ -105,13 +115,16 @@ function entryDraftReducer(
       const newState = { ...state };
       delete newState.localBackup;
 
+      const entry: Entry = {
+        ...action.payload,
+        newRecord: true,
+      };
+
       // Duplicate Entry
       return {
         ...newState,
-        entry: {
-          ...action.payload,
-          newRecord: true,
-        },
+        entry,
+        original: entry,
         fieldsErrors: {},
         hasChanged: true,
       };
@@ -157,7 +170,7 @@ function entryDraftReducer(
 
       return {
         ...newState,
-        hasChanged: !entry || !isEqual(newData, get(entry, dataPath)),
+        hasChanged: !entry || !isEqual(newData, get(newState.original, dataPath)),
       };
     }
 
@@ -211,14 +224,17 @@ function entryDraftReducer(
       const newState = { ...state };
       delete newState.localBackup;
 
+      const entry: Entry = {
+        ...state.entry,
+        slug: action.payload.slug,
+        isPersisting: false,
+      };
+
       return {
         ...newState,
         hasChanged: false,
-        entry: {
-          ...state.entry,
-          slug: action.payload.slug,
-          isPersisting: false,
-        },
+        entry,
+        original: entry,
       };
     }
 
@@ -230,13 +246,16 @@ function entryDraftReducer(
       const newState = { ...state };
       delete newState.localBackup;
 
+      const entry: Entry = {
+        ...state.entry,
+        isPersisting: false,
+      };
+
       return {
         ...newState,
         hasChanged: false,
-        entry: {
-          ...state.entry,
-          isPersisting: false,
-        },
+        entry,
+        original: entry
       };
     }
 

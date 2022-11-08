@@ -52,17 +52,17 @@ const uk: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Ви дійсно бажаєте залишити сторінку?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Присутні незбережені зміни, будь ласка збережіть перед зміною статусу.',
-      onPublishingNotReady: 'Будь ласка, встановіть статус "Готово" перед публікацією.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Будь ласка, встановіть статус "Готово" перед публікацією.',
+      onPublishingWithUnsavedChangesBody:
         'Присутні незбережені зміни, будь ласка збережіть їх перед публікацією.',
-      onPublishing: 'Ви дійсно бажаєте опублікувати запис?',
-      onDeleteWithUnsavedChanges:
+      onPublishingBody: 'Ви дійсно бажаєте опублікувати запис?',
+      onDeleteWithUnsavedChangesBody:
         'Ви дійсно бажаєте видалити опублікований запис, як і всі незбережені зміни під час поточної сесії?',
-      onDeletePublishedEntry: 'Ви дійсно бажаєте видалити опублікований запис?',
+      onDeletePublishedEntryBody: 'Ви дійсно бажаєте видалити опублікований запис?',
       loadingEntry: 'Завантаження...',
-      confirmLoadBackup: 'Відновлено резервну копію, бажаєте її використати?',
+      confirmLoadBackupBody: 'Відновлено резервну копію, бажаєте її використати?',
     },
     editorToolbar: {
       publishing: 'Публікація...',
@@ -118,7 +118,7 @@ const uk: LocalePhrasesRoot = {
       draft: 'В роботі',
     },
     mediaLibrary: {
-      onDelete: 'Ви дійсно бажаєте видалити обрані матеріали?',
+      onDeleteBody: 'Ви дійсно бажаєте видалити обрані матеріали?',
     },
     mediaLibraryModal: {
       loading: 'Завантаження...',

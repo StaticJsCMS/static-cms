@@ -89,17 +89,17 @@ const vi: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Bạn có chắc rằng bạn muốn rời khỏi trang này?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Bạn chưa lưu những thay đổi, hãy lưu trước khi thay đổi trạng thái.',
-      onPublishingNotReady: 'Hãy thay đổi trạng thái thành "Sẵn sàng" trước khi công bố.',
-      onPublishingWithUnsavedChanges: 'Bạn có thay đổi chưa lưu, hãy lưu trước khi công bố.',
-      onPublishing: 'Bạn có chắc rằng bạn muốn công bố mục này?',
+      onPublishingNotReadyBody: 'Hãy thay đổi trạng thái thành "Sẵn sàng" trước khi công bố.',
+      onPublishingWithUnsavedChangesBody: 'Bạn có thay đổi chưa lưu, hãy lưu trước khi công bố.',
+      onPublishingBody: 'Bạn có chắc rằng bạn muốn công bố mục này?',
       onUnpublishing: 'Bạn có chắc rằng bạn muốn ngừng công bố mục này?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'Bạn có chắc rằng bạn muốn xoá mục đã được công bố này, cũng như là những thay đổi chưa lưu của bạn trong phiên làm việc này?',
-      onDeletePublishedEntry: 'Bạn có chắc rằng bạn muốn xoá mục đã được công bố này?',
+      onDeletePublishedEntryBody: 'Bạn có chắc rằng bạn muốn xoá mục đã được công bố này?',
       loadingEntry: 'Đang tải...',
-      confirmLoadBackup:
+      confirmLoadBackupBody:
         'Một bản sao lưu trên máy đã được phục hồi cho mục này, bạn có muốn tải lên không?',
     },
     editorToolbar: {
@@ -167,8 +167,8 @@ const vi: LocalePhrasesRoot = {
       draft: 'Bản nháp',
     },
     mediaLibrary: {
-      onDelete: 'Bạn có chắc rằng bạn muốn xoá tập tin này?',
-      fileTooLarge: 'Tập tin quá lớn.\nCấu hình không cho phép những tập tin lớn hơn %{size} kB.',
+      onDeleteBody: 'Bạn có chắc rằng bạn muốn xoá tập tin này?',
+      fileTooLargeBody: 'Tập tin quá lớn.\nCấu hình không cho phép những tập tin lớn hơn %{size} kB.',
     },
     mediaLibraryModal: {
       loading: 'Đang tải...',

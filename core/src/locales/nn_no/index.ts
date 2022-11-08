@@ -82,16 +82,16 @@ const nn_no: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Er du sikker på at du vil navigere bort frå denne sida?',
-      onUpdatingWithUnsavedChanges: 'Du må lagra endringane dine før du endrar status',
-      onPublishingNotReady: 'Du må endre status til "Klar" før du publiserer',
-      onPublishingWithUnsavedChanges: 'Du må laga endringane dine før du kan publisere.',
-      onPublishing: 'Er du sikker på at vil publisere?',
+      onUpdatingWithUnsavedChangesBody: 'Du må lagra endringane dine før du endrar status',
+      onPublishingNotReadyBody: 'Du må endre status til "Klar" før du publiserer',
+      onPublishingWithUnsavedChangesBody: 'Du må laga endringane dine før du kan publisere.',
+      onPublishingBody: 'Er du sikker på at vil publisere?',
       onUnpublishing: 'Er du sikker på at du vil avpublisere innlegget?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'Er du sikkert på at du vil slette eit publisert innlegg med tilhøyrande ulagra endringar?',
-      onDeletePublishedEntry: 'Er du sikker på at du vil slette dette publiserte innlegget?',
+      onDeletePublishedEntryBody: 'Er du sikker på at du vil slette dette publiserte innlegget?',
       loadingEntry: 'Lastar innlegg...',
-      confirmLoadBackup:
+      confirmLoadBackupBody:
         'Ynskjer du å gjennopprette tidlegare endringar som ikkje har verta lagra?',
     },
     editorToolbar: {
@@ -159,8 +159,8 @@ const nn_no: LocalePhrasesRoot = {
       draft: 'Kladd',
     },
     mediaLibrary: {
-      onDelete: 'Er du sikker på at du vil slette markert element?',
-      fileTooLarge: 'Fila er for stor.\nMaksimal konfiguert filstorleik er %{size} kB.',
+      onDeleteBody: 'Er du sikker på at du vil slette markert element?',
+      fileTooLargeBody: 'Fila er for stor.\nMaksimal konfiguert filstorleik er %{size} kB.',
     },
     mediaLibraryModal: {
       loading: 'Lastar...',

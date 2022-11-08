@@ -92,15 +92,15 @@ const zh_Hant: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: '您確定要離開這頁嗎？',
-      onUpdatingWithUnsavedChanges: '您有未儲存的變更，在更新狀態前請先進行儲存。',
-      onPublishingNotReady: '在發布前，請先將狀態設定為：預備發布。',
-      onPublishingWithUnsavedChanges: '您有未儲存的變更，在發布前請先進行儲存。',
-      onPublishing: '你確定要發表此內容嗎？',
+      onUpdatingWithUnsavedChangesBody: '您有未儲存的變更，在更新狀態前請先進行儲存。',
+      onPublishingNotReadyBody: '在發布前，請先將狀態設定為：預備發布。',
+      onPublishingWithUnsavedChangesBody: '您有未儲存的變更，在發布前請先進行儲存。',
+      onPublishingBody: '你確定要發表此內容嗎？',
       onUnpublishing: '你確定要取消發表此內容嗎？',
-      onDeleteWithUnsavedChanges: '你確定要刪除這篇已發布的內容以及你尚未儲存的變更？',
-      onDeletePublishedEntry: '你確定要刪除這篇已發布的內容？',
+      onDeleteWithUnsavedChangesBody: '你確定要刪除這篇已發布的內容以及你尚未儲存的變更？',
+      onDeletePublishedEntryBody: '你確定要刪除這篇已發布的內容？',
       loadingEntry: '載入內容中...',
-      confirmLoadBackup: '此內容的本地備份已經還原，你想要使用嗎？',
+      confirmLoadBackupBody: '此內容的本地備份已經還原，你想要使用嗎？',
     },
     editorToolbar: {
       publishing: '發布中...',
@@ -177,8 +177,8 @@ const zh_Hant: LocalePhrasesRoot = {
       draft: '草稿',
     },
     mediaLibrary: {
-      onDelete: '你確定要刪除已選擇的媒體嗎？',
-      fileTooLarge: '檔案太大。\n已設定不允許大於 %{size} kB 的檔案。',
+      onDeleteBody: '你確定要刪除已選擇的媒體嗎？',
+      fileTooLargeBody: '檔案太大。\n已設定不允許大於 %{size} kB 的檔案。',
     },
     mediaLibraryModal: {
       loading: '載入中...',

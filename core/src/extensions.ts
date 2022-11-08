@@ -51,5 +51,8 @@ export function addExtensions() {
     CodeWidget(),
     ColorStringWidget(),
   ]);
-  registerLocale('en', locales.en);
+
+  Object.keys(locales).forEach(locale => {
+    registerLocale(locale, locales[locale]);
+  });
 }

@@ -97,17 +97,17 @@ const ja: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'このページから遷移しますか？',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         '変更した項目があります。ステータスを更新する前に保存してください。',
-      onPublishingNotReady: '公開する前に、ステータスを「準備完了」に更新してください。',
-      onPublishingWithUnsavedChanges: '変更した項目があります。公開する前に保存してください。',
-      onPublishing: 'このエントリを公開しますか？',
+      onPublishingNotReadyBody: '公開する前に、ステータスを「準備完了」に更新してください。',
+      onPublishingWithUnsavedChangesBody: '変更した項目があります。公開する前に保存してください。',
+      onPublishingBody: 'このエントリを公開しますか？',
       onUnpublishing: 'このエントリを未公開にしますか？',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         '保存されていない変更も削除されますが、この公開エントリを削除しますか？',
-      onDeletePublishedEntry: 'この公開エントリを削除しますか？',
+      onDeletePublishedEntryBody: 'この公開エントリを削除しますか？',
       loadingEntry: 'エントリの読込中...',
-      confirmLoadBackup: 'ローカルのバックアップが復旧できました。利用しますか？',
+      confirmLoadBackupBody: 'ローカルのバックアップが復旧できました。利用しますか？',
     },
     editorInterface: {
       toggleI18n: '言語を切り替える',
@@ -204,8 +204,8 @@ const ja: LocalePhrasesRoot = {
       copied: 'コピーしました',
     },
     mediaLibrary: {
-      onDelete: '選択しているデータを削除しますか？',
-      fileTooLarge: 'ファイルサイズが大きすぎます。\n%{size} kB 以下にしてください。',
+      onDeleteBody: '選択しているデータを削除しますか？',
+      fileTooLargeBody: 'ファイルサイズが大きすぎます。\n%{size} kB 以下にしてください。',
     },
     mediaLibraryModal: {
       loading: '読込中...',

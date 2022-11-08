@@ -655,12 +655,12 @@ const appendActions = {
 function addAppendActionsToCursor(cursor: Cursor) {
   return Cursor.create(cursor).updateStore(store => ({
     ...store,
-    actions: new Set(
+    actions: new Set([
       ...store.actions,
       ...(Object.entries(appendActions)
         .filter(([_k, v]) => store.actions.has(v.action as string))
         .map(([k, _v]) => k) as string[]),
-    ),
+    ]),
   }));
 }
 

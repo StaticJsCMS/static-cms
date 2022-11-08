@@ -98,17 +98,17 @@ const fr: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Voulez-vous vraiment quitter cette page ?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Veuillez enregistrer vos modifications avant de mettre à jour le statut.',
-      onPublishingNotReady: 'Veuillez mettre à jour le statut à "Prêt" avant de publier.',
-      onPublishingWithUnsavedChanges: 'Veuillez enregistrer vos modifications avant de publier.',
-      onPublishing: 'Voulez-vous vraiment publier cette entrée ?',
+      onPublishingNotReadyBody: 'Veuillez mettre à jour le statut à "Prêt" avant de publier.',
+      onPublishingWithUnsavedChangesBody: 'Veuillez enregistrer vos modifications avant de publier.',
+      onPublishingBody: 'Voulez-vous vraiment publier cette entrée ?',
       onUnpublishing: 'Voulez-vous vraiment dépublier cette entrée ?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'Voulez-vous vraiment supprimer cette entrée publiée ainsi que vos modifications non enregistrées de cette session ?',
-      onDeletePublishedEntry: 'Voulez-vous vraiment supprimer cette entrée publiée ?',
+      onDeletePublishedEntryBody: 'Voulez-vous vraiment supprimer cette entrée publiée ?',
       loadingEntry: "Chargement de l'entrée...",
-      confirmLoadBackup:
+      confirmLoadBackupBody:
         "Une sauvegarde locale a été trouvée pour cette entrée. Voulez-vous l'utiliser ?",
     },
     editorInterface: {
@@ -206,8 +206,8 @@ const fr: LocalePhrasesRoot = {
       copied: 'Copié',
     },
     mediaLibrary: {
-      onDelete: 'Voulez-vous vraiment supprimer la ressource sélectionné ?',
-      fileTooLarge:
+      onDeleteBody: 'Voulez-vous vraiment supprimer la ressource sélectionné ?',
+      fileTooLargeBody:
         "Le fichier est trop volumineux.\nL'instance est configurée pour bloquer les envois de plus de %{size} kB.",
     },
     mediaLibraryModal: {

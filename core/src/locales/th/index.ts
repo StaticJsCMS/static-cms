@@ -92,18 +92,18 @@ const th: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'คุณแน่ใจหรือว่าจะออกจากหน้านี้?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'คุณมีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก โปรดบันทึกก่อนอัปเดตสถานะ',
-      onPublishingNotReady: 'โปรดอัปเดตสถานะเป็น "พร้อม" ก่อนจะเผยแพร่',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'โปรดอัปเดตสถานะเป็น "พร้อม" ก่อนจะเผยแพร่',
+      onPublishingWithUnsavedChangesBody:
         'คุณมีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก โปรดบันทึกก่อนจะเผยแพร่',
-      onPublishing: 'คุณแน่ใจหรือว่าจะเผยแพร่เนื้อหานี้?',
+      onPublishingBody: 'คุณแน่ใจหรือว่าจะเผยแพร่เนื้อหานี้?',
       onUnpublishing: 'คุณแน่ใจหรือว่าจะไม่ต้องการเผยแพร่เนื้อหานี้?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'คุณแน่ใจหรือว่าจะต้องการลบการเผยแพร่เนื้อหานี้ รวมถึงการเปลี่ยนแปลงที่ยังไม่ได้บันทึก?',
-      onDeletePublishedEntry: 'คุณแน่ใจหรือว่าจะต้องการลบการเผยแพร่เนื้อหานี้?',
+      onDeletePublishedEntryBody: 'คุณแน่ใจหรือว่าจะต้องการลบการเผยแพร่เนื้อหานี้?',
       loadingEntry: 'กำลังโหลดเนื้อหา...',
-      confirmLoadBackup: 'ข้อมูลสำรองได้ถูกกู้คืนสำหรับเนื้อหานี้ คุณต้องการใช้มันไหม?',
+      confirmLoadBackupBody: 'ข้อมูลสำรองได้ถูกกู้คืนสำหรับเนื้อหานี้ คุณต้องการใช้มันไหม?',
     },
     editorToolbar: {
       publishing: 'กำลังเผยแพร่...',
@@ -170,8 +170,8 @@ const th: LocalePhrasesRoot = {
       draft: 'ร่าง',
     },
     mediaLibrary: {
-      onDelete: 'คุณแน่ใจหรือว่าจะลบมีเดียที่ถูกเลือก?',
-      fileTooLarge: 'ไฟล์ใหญ่เกินไป\n ค่าที่ตั้งไว้ไม่ยอมรับไฟล์ที่ใหญ่กว่า %{size} kB.',
+      onDeleteBody: 'คุณแน่ใจหรือว่าจะลบมีเดียที่ถูกเลือก?',
+      fileTooLargeBody: 'ไฟล์ใหญ่เกินไป\n ค่าที่ตั้งไว้ไม่ยอมรับไฟล์ที่ใหญ่กว่า %{size} kB.',
     },
     mediaLibraryModal: {
       loading: 'กำลังโหลด...',

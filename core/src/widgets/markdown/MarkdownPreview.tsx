@@ -22,6 +22,11 @@ const MarkdownPreview = ({
   const viewer = useRef<Viewer | null>(null);
 
   useEffect(() => {
+    viewer.current?.getInstance().setMarkdown(value ?? '');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
+  useEffect(() => {
     mediaHolder.setBulkMedia(media);
     viewer.current?.getInstance().setMarkdown(value ?? '');
     // eslint-disable-next-line react-hooks/exhaustive-deps

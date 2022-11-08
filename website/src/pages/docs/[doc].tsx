@@ -39,7 +39,6 @@ const StyledDocsView = styled('div')(
     ${theme.breakpoints.down('lg')} {
       margin-left: 0;
       padding-top: 24px;
-      overflow-x: hidden;
       width: 100vw;
     }
 
