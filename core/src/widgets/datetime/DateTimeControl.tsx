@@ -11,10 +11,10 @@ import formatDate from 'date-fns/format';
 import formatISO from 'date-fns/formatISO';
 import parse from 'date-fns/parse';
 import parseISO from 'date-fns/parseISO';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { isNotEmpty } from '../../lib/util/string.util';
 import alert from '../../components/UI/Alert';
+import { isNotEmpty } from '../../lib/util/string.util';
 
 import type { MouseEvent } from 'react';
 import type { DateTimeField, TranslatedProps, WidgetControlProps } from '../../interface';
@@ -114,13 +114,16 @@ const DateTimeControl = ({
       : field.default;
   }, [field.default, field.picker_utc, format, inputFormat, localToUTC]);
 
-  const [internalValue, setInternalValue] = useState(value ?? defaultValue);
+  const [internalValue, setInternalValue] = useState(value);
 
-  const dateValue = useMemo(
-    () =>
-      format ? parse(internalValue, format, new Date()) ?? defaultValue : parseISO(internalValue),
-    [defaultValue, format, internalValue],
-  );
+  const dateValue: Date = useMemo(() => {
+    let valueToParse = internalValue;
+    if (!valueToParse) {
+      valueToParse = defaultValue;
+    }
+
+    return format ? parse(valueToParse, format, new Date()) : parseISO(valueToParse);
+  }, [defaultValue, format, internalValue]);
 
   const utcDate = useMemo(() => {
     const dateTime = new Date(dateValue);
@@ -150,7 +153,22 @@ const DateTimeControl = ({
     [defaultValue, field.picker_utc, format, localToUTC, onChange],
   );
 
+  useEffect(() => {
+    if (isNotEmpty(internalValue)) {
+      return;
+    }
+
+    setInternalValue(defaultValue);
+    setTimeout(() => {
+      onChange(defaultValue);
+    });
+  }, [defaultValue, internalValue, onChange]);
+
   const dateTimePicker = useMemo(() => {
+    if (!internalValue) {
+      return null;
+    }
+
     let formattedValue = defaultValue;
     try {
       formattedValue = formatDate(field.picker_utc ? utcDate : dateValue, inputFormat);
@@ -257,6 +275,7 @@ const DateTimeControl = ({
     handleChange,
     hasErrors,
     inputFormat,
+    internalValue,
     isDisabled,
     label,
     t,
