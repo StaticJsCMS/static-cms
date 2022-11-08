@@ -111,7 +111,7 @@ const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
 const StyledNav = styled('nav')(
   ({ theme }) => `
     width: 100%;
-    padding: 0 16px 16px 0;
+    padding: 0 20px 16px 0;
     align-self: flex-start;
     position: sticky;
     top: 0;
@@ -120,7 +120,7 @@ const StyledNav = styled('nav')(
     top: 16px;
     
     ${theme.breakpoints.between('md', 'lg')} {
-      top: 0;
+      top: 24px;
     }
 
     ${theme.breakpoints.down('md')} {
