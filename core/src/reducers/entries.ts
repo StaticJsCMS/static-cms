@@ -21,7 +21,7 @@ import {
   GROUP_ENTRIES_SUCCESS,
   SORT_ENTRIES_FAILURE,
   SORT_ENTRIES_REQUEST,
-  SORT_ENTRIES_SUCCESS
+  SORT_ENTRIES_SUCCESS,
 } from '../actions/entries';
 import { SEARCH_ENTRIES_SUCCESS } from '../actions/search';
 import { SORT_DIRECTION_ASCENDING, SORT_DIRECTION_NONE } from '../constants';
@@ -44,7 +44,7 @@ import type {
   Pages,
   Sort,
   SortMap,
-  SortObject
+  SortObject,
 } from '../interface';
 import type { EntryDraftState } from './entryDraft';
 
@@ -204,7 +204,7 @@ function entries(
 
       pages[payload.collection] = {
         page: page ?? undefined,
-        ids: loadedEntries.map(entry => entry.slug),
+        ids: [...(pages[payload.collection]?.ids ?? []), ...loadedEntries.map(entry => entry.slug)],
         isFetching: false,
       };
 

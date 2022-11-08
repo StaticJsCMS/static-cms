@@ -41,7 +41,7 @@ function createCursorStore(...args: unknown[]) {
 
   return {
     // actions are a Set, rather than a List, to ensure an efficient .has
-    actions: new Set(...actions),
+    actions: new Set([...actions]),
     // data and meta are Maps
     data,
     meta: filterUnknownMetaKeys(meta),
@@ -97,13 +97,13 @@ export default class Cursor {
   addAction(action: string) {
     return this.updateStore(store => ({
       ...store,
-      actions: new Set(...store.actions, action),
+      actions: new Set([...store.actions, action]),
     }));
   }
 
   removeAction(action: string) {
     return this.updateStore(store => {
-      const newActions = new Set(...store.actions);
+      const newActions = new Set([...store.actions]);
       newActions.delete(action);
 
       return {
@@ -123,7 +123,7 @@ export default class Cursor {
   mergeActions(actions: Set<string>) {
     return this.updateStore(store => ({
       ...store,
-      actions: new Set({ ...store.actions, ...actions }),
+      actions: new Set([...store.actions, ...actions]),
     }));
   }
 

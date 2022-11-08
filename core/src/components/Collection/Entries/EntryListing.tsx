@@ -65,13 +65,13 @@ const EntryListing = ({
   handleCursorActions,
   ...otherProps
 }: EntryListingProps) => {
-  const hasMore = useCallback(() => {
+  const hasMore = useMemo(() => {
     const hasMore = cursor?.actions?.has('append_next');
     return hasMore;
   }, [cursor?.actions]);
 
   const handleLoadMore = useCallback(() => {
-    if (hasMore()) {
+    if (hasMore) {
       handleCursorActions('append_next');
     }
   }, [handleCursorActions, hasMore]);
@@ -138,7 +138,7 @@ const EntryListing = ({
     <div>
       <CardsGrid $layout={viewStyle}>
         {renderedCards}
-        {hasMore() && <Waypoint key={page} onEnter={handleLoadMore} />}
+        {hasMore && <Waypoint key={page} onEnter={handleLoadMore} />}
       </CardsGrid>
     </div>
   );
