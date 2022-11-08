@@ -97,16 +97,16 @@ const he: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'האם ברצונך לעבור לעמוד אחר ללא שמירה?',
-      onUpdatingWithUnsavedChanges: 'בוצעו שינויים שלא נשמרו. יש לבצע שמירה לפני עדכון מצב האייטם.',
-      onPublishingNotReady: 'נא לשנות את מצב האייטם ל״מוכן לפרסום״ לפני הפרסום.',
-      onPublishingWithUnsavedChanges: 'בוצעו שינויים שלא נשמרו. יש לבצע שמירה לפני הפרסום.',
-      onPublishing: 'האם ברצונך לפרסם את האייטם?',
+      onUpdatingWithUnsavedChangesBody: 'בוצעו שינויים שלא נשמרו. יש לבצע שמירה לפני עדכון מצב האייטם.',
+      onPublishingNotReadyBody: 'נא לשנות את מצב האייטם ל״מוכן לפרסום״ לפני הפרסום.',
+      onPublishingWithUnsavedChangesBody: 'בוצעו שינויים שלא נשמרו. יש לבצע שמירה לפני הפרסום.',
+      onPublishingBody: 'האם ברצונך לפרסם את האייטם?',
       onUnpublishing: 'האם ברצונך לבטל את פרסום האייטם?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'האם ברצונך למחוק את האייטם הזה לפני פרסומו, וכן את השינויים שבוצעו כעת וטרם נשמרו?',
-      onDeletePublishedEntry: 'האם ברצונך למחוק את האייטם הזה לאחר פרסומו?',
+      onDeletePublishedEntryBody: 'האם ברצונך למחוק את האייטם הזה לאחר פרסומו?',
       loadingEntry: 'טעינת אייטם...',
-      confirmLoadBackup: 'קיים עותק מקומי שמור של האייטם. האם ברצונך לטעון אותו?',
+      confirmLoadBackupBody: 'קיים עותק מקומי שמור של האייטם. האם ברצונך לטעון אותו?',
     },
     editorInterface: {
       toggleI18n: 'החלפת שפות',
@@ -207,8 +207,8 @@ const he: LocalePhrasesRoot = {
       copied: 'העתקה הושלמה',
     },
     mediaLibrary: {
-      onDelete: 'האם ברצונך למחוק את פריט המדיה הזה?',
-      fileTooLarge: 'הקובץ גדול מדי.\nמוגדר לא לאפשר העלאת קבצים גדולים מ-%{size} קילובייט.',
+      onDeleteBody: 'האם ברצונך למחוק את פריט המדיה הזה?',
+      fileTooLargeBody: 'הקובץ גדול מדי.\nמוגדר לא לאפשר העלאת קבצים גדולים מ-%{size} קילובייט.',
     },
     mediaLibraryModal: {
       loading: 'טעינה...',

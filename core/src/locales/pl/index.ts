@@ -97,17 +97,17 @@ const pl: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Czy na pewno chcesz opuścić tę stronę?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Masz niezapisane zmiany, proszę zapisz je przed aktualizacją statusu.',
-      onPublishingNotReady: 'Proszę zaktualizować status do "Gotowe" przed publikacją.',
-      onPublishingWithUnsavedChanges: 'Masz niezapisane zmiany, proszę zapisz je przed publikacją.',
-      onPublishing: 'Czy na pewno chcesz opublikować tę pozycję?',
+      onPublishingNotReadyBody: 'Proszę zaktualizować status do "Gotowe" przed publikacją.',
+      onPublishingWithUnsavedChangesBody: 'Masz niezapisane zmiany, proszę zapisz je przed publikacją.',
+      onPublishingBody: 'Czy na pewno chcesz opublikować tę pozycję?',
       onUnpublishing: 'Czy na pewno chcesz cofnąć publikację tej pozycji?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'Czy na pewno chcesz usunąć tę opublikowaną pozycję, a także niezapisane zmiany z bieżącej sesji?',
-      onDeletePublishedEntry: 'Czy na pewno chcesz usunąć tę opublikowaną pozycję?',
+      onDeletePublishedEntryBody: 'Czy na pewno chcesz usunąć tę opublikowaną pozycję?',
       loadingEntry: 'Ładowanie pozycji...',
-      confirmLoadBackup: 'Odzyskano lokalną kopię zapasową tej pozycji, czy chcesz jej użyć?',
+      confirmLoadBackupBody: 'Odzyskano lokalną kopię zapasową tej pozycji, czy chcesz jej użyć?',
     },
     editorInterface: {
       toggleI18n: 'Przełącz i18n',
@@ -208,8 +208,8 @@ const pl: LocalePhrasesRoot = {
       copied: 'Skopiowano',
     },
     mediaLibrary: {
-      onDelete: 'Czy na pewno chcesz usunąć zaznaczone multimedia?',
-      fileTooLarge: 'Plik jest za duży.\nUstawiony maksymalny rozmiar pliku: %{size} kB.',
+      onDeleteBody: 'Czy na pewno chcesz usunąć zaznaczone multimedia?',
+      fileTooLargeBody: 'Plik jest za duży.\nUstawiony maksymalny rozmiar pliku: %{size} kB.',
     },
     mediaLibraryModal: {
       loading: 'Ładowanie...',

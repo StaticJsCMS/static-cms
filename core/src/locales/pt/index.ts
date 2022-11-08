@@ -97,18 +97,18 @@ const pt: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Tem certeza que deseja sair desta página?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Há mudanças não salvas. Por favor, salve-as antes de atualizar o status.',
-      onPublishingNotReady: 'Por favor, altere o status para "Pronto" antes de publicar.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Por favor, altere o status para "Pronto" antes de publicar.',
+      onPublishingWithUnsavedChangesBody:
         'Há mudanças não salvas. Por favor, salve-as antes de publicar.',
-      onPublishing: 'Tem certeza que deseja publicar essa entrada?',
+      onPublishingBody: 'Tem certeza que deseja publicar essa entrada?',
       onUnpublishing: 'Tem certeza que deseja cancelar a publicação dessa entrada?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'Tem certeza de que deseja excluir esta entrada publicada, bem como as alterações não salvas da sessão atual?',
-      onDeletePublishedEntry: 'Tem certeza de que deseja excluir esta entrada publicada?',
+      onDeletePublishedEntryBody: 'Tem certeza de que deseja excluir esta entrada publicada?',
       loadingEntry: 'Carregando entrada...',
-      confirmLoadBackup: 'Um backup local foi recuperado para esta entrada. Deseja usá-lo?',
+      confirmLoadBackupBody: 'Um backup local foi recuperado para esta entrada. Deseja usá-lo?',
     },
     editorInterface: {
       toggleI18n: 'Mudar i18n',
@@ -209,8 +209,8 @@ const pt: LocalePhrasesRoot = {
       copied: 'Copiado',
     },
     mediaLibrary: {
-      onDelete: 'Tem certeza de que deseja excluir a mídia selecionada?',
-      fileTooLarge:
+      onDeleteBody: 'Tem certeza de que deseja excluir a mídia selecionada?',
+      fileTooLargeBody:
         'Arquivo muito grande.\nConfigurado para não permitir arquivos maiores que %{size} kB.',
     },
     mediaLibraryModal: {

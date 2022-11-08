@@ -175,12 +175,12 @@ const Editor = ({
   useEffect(() => {
     if (!prevLocalBackup && localBackup) {
       const updateLocalBackup = async () => {
-        const confirmLoadBackup = await confirm({
+        const confirmLoadBackupBody = await confirm({
           title: 'editor.editor.confirmLoadBackupTitle',
           body: 'editor.editor.confirmLoadBackupBody',
         });
 
-        if (confirmLoadBackup) {
+        if (confirmLoadBackupBody) {
           loadLocalBackup();
           setVersion(version + 1);
         } else {

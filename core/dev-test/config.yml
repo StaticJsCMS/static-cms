@@ -2,6 +2,7 @@ backend:
   name: test-repo
 site_url: 'https://example.com'
 media_folder: assets/uploads
+locale: de
 collections:
   - name: posts
     label: Posts

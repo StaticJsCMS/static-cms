@@ -97,18 +97,18 @@ const ru: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Вы уверены, что хотите покинуть эту страницу?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'У вас есть несохраненные изменения, сохраните их перед обновлением статуса.',
-      onPublishingNotReady: 'Пожалуйста, измените статус на «Готов» перед публикацией.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Пожалуйста, измените статус на «Готов» перед публикацией.',
+      onPublishingWithUnsavedChangesBody:
         'У вас есть несохраненные изменения, сохраните их перед публикацией.',
-      onPublishing: 'Вы уверены, что хотите опубликовать эту запись?',
+      onPublishingBody: 'Вы уверены, что хотите опубликовать эту запись?',
       onUnpublishing: 'Вы уверены, что хотите отменить публикацию этой записи?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'Вы уверены, что хотите удалить эту опубликованную запись, а также несохраненные изменения из текущего сеанса?',
-      onDeletePublishedEntry: 'Вы уверены, что хотите удалить эту опубликованную запись?',
+      onDeletePublishedEntryBody: 'Вы уверены, что хотите удалить эту опубликованную запись?',
       loadingEntry: 'Загрузка записи…',
-      confirmLoadBackup:
+      confirmLoadBackupBody:
         'Для этой записи была восстановлена локальная резервная копия, хотите ли вы ее использовать?',
     },
     editorToolbar: {
@@ -197,8 +197,8 @@ const ru: LocalePhrasesRoot = {
       copied: 'Скопировано',
     },
     mediaLibrary: {
-      onDelete: 'Вы уверены, что хотите удалить выбранный медиафайл?',
-      fileTooLarge:
+      onDeleteBody: 'Вы уверены, что хотите удалить выбранный медиафайл?',
+      fileTooLargeBody:
         'Файл слишком большой.\nНастройки не позволяют сохранять файлы более %{size} kB.',
     },
     mediaLibraryModal: {

@@ -66,18 +66,18 @@ const it: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Sei sicuro di voler lasciare questa pagina?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Hai delle modifiche non salvate, salvale prima di aggiornare lo status.',
-      onPublishingNotReady: 'Aggiorna lo status a "Pronto" prima di pubblicare.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Aggiorna lo status a "Pronto" prima di pubblicare.',
+      onPublishingWithUnsavedChangesBody:
         'Hai delle modifiche non salvate, salvale prima di pubblicare.',
-      onPublishing: 'Sei sicuro di voler pubblicare questa voce?',
+      onPublishingBody: 'Sei sicuro di voler pubblicare questa voce?',
       onUnpublishing: 'Sei sicuro di voler nascondere questa voce?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'Sei sicuro di voler cancellare questa voce pubblicata e tutte le modifiche non salvate della tua sessione corrente?',
-      onDeletePublishedEntry: 'Sei sicuro di voler cancellare questa voce pubblicata?',
+      onDeletePublishedEntryBody: 'Sei sicuro di voler cancellare questa voce pubblicata?',
       loadingEntry: 'Caricando la voce...',
-      confirmLoadBackup: 'Un backup locale è stato recuperato per questa voce, vuoi utilizzarlo?',
+      confirmLoadBackupBody: 'Un backup locale è stato recuperato per questa voce, vuoi utilizzarlo?',
     },
     editorToolbar: {
       publishing: 'Pubblicando...',
@@ -137,8 +137,8 @@ const it: LocalePhrasesRoot = {
       draft: 'Bozza',
     },
     mediaLibrary: {
-      onDelete: 'Sei sicuro di voler cancellare il media selezionato?',
-      fileTooLarge:
+      onDeleteBody: 'Sei sicuro di voler cancellare il media selezionato?',
+      fileTooLargeBody:
         'File troppo grande.\nConfigurato per non accettare file piú grandi di %{size} kB.',
     },
     mediaLibraryModal: {

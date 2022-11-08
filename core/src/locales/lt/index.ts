@@ -98,18 +98,18 @@ const lt: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Ar tikrai norite uždaryti šį puslapį?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Turite neišsaugotų pakeitimų! Prašome išsaugoti prieš pakeičiant statusą.',
-      onPublishingNotReady: 'Prieš publikuojant, privalote pakeisti statusą į „Paruošta“.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Prieš publikuojant, privalote pakeisti statusą į „Paruošta“.',
+      onPublishingWithUnsavedChangesBody:
         'Yra neišsaugotų pakeitimų, prašome išsaugoti juos prieš publikuojant.',
-      onPublishing: 'Ae tikrai norite publikuoti šį įrašą?',
+      onPublishingBody: 'Ae tikrai norite publikuoti šį įrašą?',
       onUnpublishing: 'Tikrai norite panaikinti publikavimo statusą?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'Tikrai norite panaikinti publikuotą įrašą ir Jūsų pakeiitmus iš dabartinės sesijos?',
-      onDeletePublishedEntry: 'Tikrai norite ištrinti šį publikuotą įrašą?',
+      onDeletePublishedEntryBody: 'Tikrai norite ištrinti šį publikuotą įrašą?',
       loadingEntry: 'Kraunamas įrašas...',
-      confirmLoadBackup:
+      confirmLoadBackupBody:
         'Radome Jūsų įrenginyje išsaugota juodraštį šiam įrašui, ar norite jį atgaivinti ir naudoti?',
     },
     editorToolbar: {
@@ -187,8 +187,8 @@ const lt: LocalePhrasesRoot = {
       draft: 'Juodraštis',
     },
     mediaLibrary: {
-      onDelete: 'Ar jūs tikrai norite ištrinti pasirinktą mediją?',
-      fileTooLarge:
+      onDeleteBody: 'Ar jūs tikrai norite ištrinti pasirinktą mediją?',
+      fileTooLargeBody:
         'Failas per didelis.\nNustatymuose (konfigūracijoje) nurodyta, kad failai negali viršyti %{size} kB.',
     },
     mediaLibraryModal: {

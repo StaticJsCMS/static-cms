@@ -97,18 +97,18 @@ const sv: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Är du säker på att du vill lämna sidan?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Du har osparade ändringar, vänligen spara dem innan du uppdaterar status.',
-      onPublishingNotReady: 'Vänligen uppdatera status till "Redo" innan du publicerar.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Vänligen uppdatera status till "Redo" innan du publicerar.',
+      onPublishingWithUnsavedChangesBody:
         'Du har osparade ändringar, vänligen spara innan du publicerar.',
-      onPublishing: 'Är du säker på att du vill publicera det här inlägget?',
+      onPublishingBody: 'Är du säker på att du vill publicera det här inlägget?',
       onUnpublishing: 'Är du säker på att du vill avpublicera det här inlägget?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'Är du säker på att du vill radera det här publicerade inlägget, inklusive dina osparade ändringar från nuvarande session?',
-      onDeletePublishedEntry: 'Är du säker på att du vill radera det här publicerade inlägget?',
+      onDeletePublishedEntryBody: 'Är du säker på att du vill radera det här publicerade inlägget?',
       loadingEntry: 'Hämtar inlägg...',
-      confirmLoadBackup: 'En lokal kopia hittades för det här inlägget, vill du använda den?',
+      confirmLoadBackupBody: 'En lokal kopia hittades för det här inlägget, vill du använda den?',
     },
     editorInterface: {
       toggleI18n: 'Slå på/av i18n',
@@ -201,8 +201,8 @@ const sv: LocalePhrasesRoot = {
       copied: 'Kopierad',
     },
     mediaLibrary: {
-      onDelete: 'Är du säker på att du vill radera valt mediaobjekt?',
-      fileTooLarge:
+      onDeleteBody: 'Är du säker på att du vill radera valt mediaobjekt?',
+      fileTooLargeBody:
         'Maximal filstorlek överskriden.\nKonfigurerad att inte tillåta filer större än %{size} kB.',
     },
     mediaLibraryModal: {

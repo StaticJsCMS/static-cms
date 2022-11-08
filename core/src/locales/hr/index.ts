@@ -97,18 +97,18 @@ const hr: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Jeste li sigurni da želite napustiti stranicu?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Imate nespremljene promjene, molimo spremite prije ažuriranja statusa.',
-      onPublishingNotReady: 'Molimo ažurirajte status na "Spremno" prije objavljivanja.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Molimo ažurirajte status na "Spremno" prije objavljivanja.',
+      onPublishingWithUnsavedChangesBody:
         'Imate nespremljene promjene, molimo spremite prije objavljivanja.',
-      onPublishing: 'Jeste li sigurni da želite objaviti ovaj unos?',
+      onPublishingBody: 'Jeste li sigurni da želite objaviti ovaj unos?',
       onUnpublishing: 'Jeste li sigurni da želite maknuti objavu za ovaj unos?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'Jeste li sigurni da želite obrisati objavljeni unos, te nespremljene promjene u trenutnoj sesiji?',
-      onDeletePublishedEntry: 'Jeste li sigurni da želite obrisati ovaj objavljeni unos?',
+      onDeletePublishedEntryBody: 'Jeste li sigurni da želite obrisati ovaj objavljeni unos?',
       loadingEntry: 'Učitavanje unosa...',
-      confirmLoadBackup: 'Lokalna kopija je dohvaćena za ovaj unos, želite li ju koristiti?',
+      confirmLoadBackupBody: 'Lokalna kopija je dohvaćena za ovaj unos, želite li ju koristiti?',
     },
     editorToolbar: {
       publishing: 'Objavljivanje...',
@@ -185,8 +185,8 @@ const hr: LocalePhrasesRoot = {
       draft: 'Skica',
     },
     mediaLibrary: {
-      onDelete: 'Jeste li sigurni da želite obrisati odabrane medijske datoteke?',
-      fileTooLarge:
+      onDeleteBody: 'Jeste li sigurni da želite obrisati odabrane medijske datoteke?',
+      fileTooLargeBody:
         'Datoteka prevelika.\nKonfigurirano da ne podržava datoteke veće od %{size} kB.',
     },
     mediaLibraryModal: {

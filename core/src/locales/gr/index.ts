@@ -66,20 +66,20 @@ const gr: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Είστε βέβαιοι ότι θέλετε να αφήσετε αυτήν τη σελίδα;',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Έχετε μη αποθηκευμένες αλλαγές, αποθηκεύστε πριν να ενημερώσετε την κατάσταση.',
-      onPublishingNotReady: 'Ενημερώστε την κατάσταση σε "έτοιμο" πριν από τη δημοσίευση.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Ενημερώστε την κατάσταση σε "έτοιμο" πριν από τη δημοσίευση.',
+      onPublishingWithUnsavedChangesBody:
         'Έχετε μη αποθηκευμένες αλλαγές, αποθηκεύστε πριν από τη δημοσίευση.',
-      onPublishing: 'Είστε βέβαιοι ότι θέλετε να δημοσιεύσετε αυτήν την καταχώρηση;',
+      onPublishingBody: 'Είστε βέβαιοι ότι θέλετε να δημοσιεύσετε αυτήν την καταχώρηση;',
       onUnpublishing:
         'Είστε βέβαιοι ότι θέλετε να καταργήσετε τη δημοσίευση αυτής της καταχώρησης;',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν τη δημοσιευμένη καταχώρηση, καθώς και τις αλλαγές που δεν αποθηκεύσατε από την τρέχουσα περίοδο λειτουργίας;',
-      onDeletePublishedEntry:
+      onDeletePublishedEntryBody:
         'Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν τη δημοσιευμένη καταχώρηση;',
       loadingEntry: 'Φόρτωση εισόδου...',
-      confirmLoadBackup:
+      confirmLoadBackupBody:
         'Ανακτήθηκε ένα τοπικό αντίγραφο ασφαλείας για αυτήν την καταχώρηση, θέλετε να το χρησιμοποιήσετε;',
     },
     editorToolbar: {
@@ -140,8 +140,8 @@ const gr: LocalePhrasesRoot = {
       draft: 'Προσχέδιο',
     },
     mediaLibrary: {
-      onDelete: 'Είστε βέβαιοι ότι θέλετε να διαγράψετε τα επιλεγμένα πολυμέσα;',
-      fileTooLarge:
+      onDeleteBody: 'Είστε βέβαιοι ότι θέλετε να διαγράψετε τα επιλεγμένα πολυμέσα;',
+      fileTooLargeBody:
         'Το αρχείο είναι πολύ μεγάλο.\nΔεν επιτρέπονται αρχεία μεγαλύτερα από %{size} kB.',
     },
     mediaLibraryModal: {

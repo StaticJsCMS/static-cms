@@ -89,18 +89,18 @@ const ko: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: '이 페이지를 떠나시겠습니까?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         '저장하지 않은 변경사항이 있습니다. 상태 업데이트 전 먼저 저장하세요.',
-      onPublishingNotReady: '게시 하기 앞서 상태를 "준비됨" 으로 업데이트 하세요.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: '게시 하기 앞서 상태를 "준비됨" 으로 업데이트 하세요.',
+      onPublishingWithUnsavedChangesBody:
         '저장하지 않은 변경사항이 있습니다, 게시하기 전 먼저 저장하세요.',
-      onPublishing: '이 항목을 게시하시곘습니까?',
+      onPublishingBody: '이 항목을 게시하시곘습니까?',
       onUnpublishing: '이 항목을 게시 철회 하시겠습니까?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         '현재 세션에서의 저장되지 않은 변경사항과 이 게시된 항목을 삭제하시겠습니까?',
-      onDeletePublishedEntry: '이 게시된 항목을 삭제하시겠습니까?',
+      onDeletePublishedEntryBody: '이 게시된 항목을 삭제하시겠습니까?',
       loadingEntry: '항목 불러오는 중...',
-      confirmLoadBackup:
+      confirmLoadBackupBody:
         '이 항목에 대한 로컬 백업이 복구되었습니다, 복구된 것으로 사용하시겠습니까?',
     },
     editorToolbar: {
@@ -168,8 +168,8 @@ const ko: LocalePhrasesRoot = {
       draft: '초안',
     },
     mediaLibrary: {
-      onDelete: '선택하신 미디어를 삭제하시겠습니까?',
-      fileTooLarge:
+      onDeleteBody: '선택하신 미디어를 삭제하시겠습니까?',
+      fileTooLargeBody:
         '파일이 너무 큽니다.\n%{size} kB 보다 큰 파일을 허용하지 않도록 구성되어 있습니다.',
     },
     mediaLibraryModal: {

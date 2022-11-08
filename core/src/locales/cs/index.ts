@@ -98,15 +98,15 @@ const cs: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Chcete opravdu opustit tuto stránku?',
-      onUpdatingWithUnsavedChanges: 'Máte neuložené změny. Uložte je prosím před změnou statusu.',
-      onPublishingNotReady: 'Změňte stav na „Připraveno“ před publikováním.',
-      onPublishingWithUnsavedChanges: 'Máte neuložené změny, prosím uložte je před publikováním.',
-      onPublishing: 'Chcete opravdu publikovat tento záznam?',
-      onDeleteWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody: 'Máte neuložené změny. Uložte je prosím před změnou statusu.',
+      onPublishingNotReadyBody: 'Změňte stav na „Připraveno“ před publikováním.',
+      onPublishingWithUnsavedChangesBody: 'Máte neuložené změny, prosím uložte je před publikováním.',
+      onPublishingBody: 'Chcete opravdu publikovat tento záznam?',
+      onDeleteWithUnsavedChangesBody:
         'Chcete opravdu vymazat tento publikovaný záznam a všechny neuložené změny z této relace?',
-      onDeletePublishedEntry: 'Chcete opravdu smazat tento publikovaný záznam?',
+      onDeletePublishedEntryBody: 'Chcete opravdu smazat tento publikovaný záznam?',
       loadingEntry: 'Načítání záznamu…',
-      confirmLoadBackup: 'Lokální kopie tohoto záznamu byla nalezena, chcete ji použít?',
+      confirmLoadBackupBody: 'Lokální kopie tohoto záznamu byla nalezena, chcete ji použít?',
     },
     editorInterface: {
       toggleI18n: 'Přepnout lokalizaci',
@@ -197,8 +197,8 @@ const cs: LocalePhrasesRoot = {
       copied: 'Zkopírováno',
     },
     mediaLibrary: {
-      onDelete: 'Chcete skutečně vymazat označená média?',
-      fileTooLarge: 'Soubor je příliš velký.\nSoubor musí být menší než %{size} kB.',
+      onDeleteBody: 'Chcete skutečně vymazat označená média?',
+      fileTooLargeBody: 'Soubor je příliš velký.\nSoubor musí být menší než %{size} kB.',
     },
     mediaLibraryModal: {
       loading: 'Načítání…',

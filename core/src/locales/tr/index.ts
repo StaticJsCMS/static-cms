@@ -95,24 +95,24 @@ const tr: LocalePhrasesRoot = {
       i18n: {
         writingInLocale: '%{locale} için yazılıyor',
         copyFromLocale: 'Başka bir dilden doldurun',
-        copyFromLocaleConfirm:
+        copyFromLocaleConfirmBody:
           'Verileri %{locale} dilinden mi doldurmak istiyorsun?\nVarolan bütün verilerin üzerine yazılacak.',
       },
     },
     editor: {
       onLeavePage: 'Bu sayfadan ayrılmak istediğinize emin misiniz?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Kaydedilmemiş değişiklikleriniz var, lütfen içeriği güncellemeden önce kaydedin.',
-      onPublishingNotReady: 'Lütfen yayınlamadan önce içeriği "Hazır" olarak güncelleyin.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Lütfen yayınlamadan önce içeriği "Hazır" olarak güncelleyin.',
+      onPublishingWithUnsavedChangesBody:
         'Kaydedilmemiş değişiklikleriniz var, lütfen yayınlamadan önce kaydedin.',
-      onPublishing: 'Bu girdiyi yayınlamak istediğinize emin misiniz?',
+      onPublishingBody: 'Bu girdiyi yayınlamak istediğinize emin misiniz?',
       onUnpublishing: 'Bu girdiyi yayından kaldırmak istediğinizden emin misiniz?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'Bu oturumda kaydedilmiş değişikliklerin yanı sıra geçerli oturumdaki kaydedilmemiş değişikliklerinizi silmek istediğinize emin misiniz?',
-      onDeletePublishedEntry: 'Bu yayınlanmış girdiyi silmek istediğinize emin misiniz?',
+      onDeletePublishedEntryBody: 'Bu yayınlanmış girdiyi silmek istediğinize emin misiniz?',
       loadingEntry: 'Girdiler yükleniyor...',
-      confirmLoadBackup: 'Bu girdi için yerel bir yedekleme kurtarıldı, kullanmak ister misiniz?',
+      confirmLoadBackupBody: 'Bu girdi için yerel bir yedekleme kurtarıldı, kullanmak ister misiniz?',
     },
     editorInterface: {
       toggleI18n: 'i18n değiştir',
@@ -213,8 +213,8 @@ const tr: LocalePhrasesRoot = {
       copied: 'Kopyalandı',
     },
     mediaLibrary: {
-      onDelete: 'Seçilen medyayı silmek istediğinize emin misiniz?',
-      fileTooLarge:
+      onDeleteBody: 'Seçilen medyayı silmek istediğinize emin misiniz?',
+      fileTooLargeBody:
         'Dosya çok büyük.\n%{size} kilobaytdan daha büyük dosyaların yüklenmemesi için ayarlanmış.',
     },
     mediaLibraryModal: {

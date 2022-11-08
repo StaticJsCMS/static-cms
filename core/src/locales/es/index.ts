@@ -82,18 +82,18 @@ const es: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: '¿Estás seguro de que quieres dejar esta página?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Tiene cambios no guardados, por favor, guárdelos antes de actualizar el estado.',
-      onPublishingNotReady: 'Por favor, actualice el estado a "Ready" antes de publicar.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Por favor, actualice el estado a "Ready" antes de publicar.',
+      onPublishingWithUnsavedChangesBody:
         'Tiene cambios no guardados, por favor guárdelos antes de publicarlos.',
-      onPublishing: '¿Estás seguro de que quieres publicar esta entrada?',
+      onPublishingBody: '¿Estás seguro de que quieres publicar esta entrada?',
       onUnpublishing: '¿Estás seguro de que quieres retirar esta entrada?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         '¿Está seguro de que desea eliminar esta entrada publicada, así como los cambios no guardados de la sesión actual?',
-      onDeletePublishedEntry: '¿Estás seguro de que quieres borrar esta entrada publicada?',
+      onDeletePublishedEntryBody: '¿Estás seguro de que quieres borrar esta entrada publicada?',
       loadingEntry: 'Cargando entrada...',
-      confirmLoadBackup:
+      confirmLoadBackupBody:
         'Se recuperó una copia de seguridad local para esta entrada, ¿le gustaría utilizarla?',
     },
     editorToolbar: {
@@ -161,8 +161,8 @@ const es: LocalePhrasesRoot = {
       draft: 'Borrador',
     },
     mediaLibrary: {
-      onDelete: '¿Está seguro de que desea eliminar el archivo seleccionado?',
-      fileTooLarge:
+      onDeleteBody: '¿Está seguro de que desea eliminar el archivo seleccionado?',
+      fileTooLargeBody:
         'Archivo muy pesado.\nConfigurado para no permitir archivos más pesados que %{size} kB.',
     },
     mediaLibraryModal: {

@@ -52,18 +52,18 @@ const hu: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Biztos hogy el akarod hagyni az oldalt?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Mentettlen változtatások vannak, kérjük, mentse az állapot frissítése előtt.',
-      onPublishingNotReady: 'Változtasd az állapotot "Kész"-re publikálás előtt.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Változtasd az állapotot "Kész"-re publikálás előtt.',
+      onPublishingWithUnsavedChangesBody:
         'Mentetlen változtatások vannak, kérjük, mentsen a publikálás előtt.',
-      onPublishing: 'Publikálod ezt a bejegyzést?',
+      onPublishingBody: 'Publikálod ezt a bejegyzést?',
       onUnpublishing: 'Publikálás visszavonása erre a bejegyzésre?',
-      onDeleteWithUnsavedChanges:
+      onDeleteWithUnsavedChangesBody:
         'Töröljük ezt a publikált bejegyzést, a többi mentetlen modositással együtt?',
-      onDeletePublishedEntry: 'Töröljük ezt a publikált bejegyzést?',
+      onDeletePublishedEntryBody: 'Töröljük ezt a publikált bejegyzést?',
       loadingEntry: 'Bejegyzés betöltése...',
-      confirmLoadBackup:
+      confirmLoadBackupBody:
         'Helyi biztonsági másolat került helyre ehhez a bejegyzéshez, szeretné használni?',
     },
     editorToolbar: {
@@ -128,7 +128,7 @@ const hu: LocalePhrasesRoot = {
       draft: 'Piszkozat',
     },
     mediaLibrary: {
-      onDelete: 'Biztos törli a kiválasztott média tartalmat?',
+      onDeleteBody: 'Biztos törli a kiválasztott média tartalmat?',
     },
     mediaLibraryModal: {
       loading: 'Betöltés...',
