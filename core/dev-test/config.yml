@@ -49,7 +49,7 @@ collections:
         widget: datetime
         date_format: yyyy-MM-dd
         time_format: 'HH:mm'
-        format: 'yyyy-MM-dd HH:mm'
+        format: "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
       - label: Cover Image
         name: image
         widget: image
