@@ -14,6 +14,7 @@ import parseISO from 'date-fns/parseISO';
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { isNotEmpty } from '../../lib/util/string.util';
+import alert from '../../components/UI/Alert';
 
 import type { MouseEvent } from 'react';
 import type { DateTimeField, TranslatedProps, WidgetControlProps } from '../../interface';
@@ -150,13 +151,24 @@ const DateTimeControl = ({
   );
 
   const dateTimePicker = useMemo(() => {
+    let formattedValue = defaultValue;
+    try {
+      formattedValue = formatDate(field.picker_utc ? utcDate : dateValue, inputFormat);
+    } catch (e) {
+      alert({
+        title: 'editor.editorWidgets.datetime.invalidDateTitle',
+        body: 'editor.editorWidgets.datetime.invalidDateBody',
+      });
+      console.error(e);
+    }
+
     if (dateFormat && !timeFormat) {
       return (
         <MobileDatePicker
           key="mobile-date-picker"
           inputFormat={inputFormat}
           label={label}
-          value={formatDate(field.picker_utc ? utcDate : dateValue, inputFormat)}
+          value={formattedValue}
           onChange={handleChange}
           renderInput={params => (
             <TextField
@@ -186,7 +198,7 @@ const DateTimeControl = ({
           key="time-picker"
           label={label}
           inputFormat={inputFormat}
-          value={formatDate(field.picker_utc ? utcDate : dateValue, inputFormat)}
+          value={formattedValue}
           onChange={handleChange}
           renderInput={params => (
             <TextField
@@ -215,7 +227,7 @@ const DateTimeControl = ({
         key="mobile-date-time-picker"
         inputFormat={inputFormat}
         label={label}
-        value={formatDate(field.picker_utc ? utcDate : dateValue, inputFormat)}
+        value={formattedValue}
         onChange={handleChange}
         renderInput={params => (
           <TextField
@@ -240,11 +252,11 @@ const DateTimeControl = ({
   }, [
     dateFormat,
     dateValue,
+    defaultValue,
     field.picker_utc,
     handleChange,
     hasErrors,
     inputFormat,
-    internalValue,
     isDisabled,
     label,
     t,
