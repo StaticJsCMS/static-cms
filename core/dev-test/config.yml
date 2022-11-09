@@ -54,6 +54,14 @@ collections:
         name: image
         widget: image
         required: false
+      - label: 'Elements'
+        label_singular: 'Element'
+        name: 'elements'
+        widget: 'list'
+        fields:
+          - { label: 'Title', name: 'title', widget: 'string', required: true }
+          - { label: 'Text', name: 'content', widget: 'markdown', required: true }
+        required: false
       - label: Body
         name: body
         widget: markdown
@@ -628,7 +636,7 @@ collections:
         widget: select
         options:
           - label: One
-            value: "One"
+            value: 'One'
           - label: Two
             value: 2
           - label: Three
