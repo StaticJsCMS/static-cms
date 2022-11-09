@@ -1,5 +1,5 @@
 import isEqual from 'lodash/isEqual';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 
 import {
@@ -11,6 +11,7 @@ import { selectSearchedEntries } from '../../../reducers';
 import Entries from './Entries';
 
 import type { ConnectedProps } from 'react-redux';
+import type { CollectionViewStyle } from '../../../constants/collectionViews';
 import type { Collections } from '../../../interface';
 import type { RootState } from '../../../store';
 
@@ -20,35 +21,24 @@ const EntriesSearch = ({
   isFetching,
   page,
   searchTerm,
+  viewStyle,
   searchEntries,
-  collectionNames,
   clearSearch,
 }: EntriesSearchProps) => {
+  const collectionNames = useMemo(() => Object.keys(collections), [collections]);
+
   const getCursor = useCallback(() => {
     return Cursor.create({
       actions: Number.isNaN(page) ? [] : ['append_next'],
     });
   }, [page]);
 
-  const handleCursorActions = useCallback(
-    (action: string) => {
-      if (action === 'append_next') {
-        const nextPage = page + 1;
-        searchEntries(searchTerm, collectionNames, nextPage);
-      }
-    },
-    [collectionNames, page, searchEntries, searchTerm],
-  );
-
-  useEffect(() => {
-    searchEntries(searchTerm, collectionNames);
-  }, [collectionNames, searchEntries, searchTerm]);
-
   useEffect(() => {
     return () => {
       clearSearch();
     };
-  }, [clearSearch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [prevSearch, setPrevSearch] = useState('');
   const [prevCollectionNames, setPrevCollectionNames] = useState<string[]>([]);
@@ -61,16 +51,19 @@ const EntriesSearch = ({
     setPrevSearch(searchTerm);
     setPrevCollectionNames(collectionNames);
 
-    searchEntries(searchTerm, collectionNames);
-  }, [collectionNames, prevCollectionNames, prevSearch, searchEntries, searchTerm]);
+    setTimeout(() => {
+      searchEntries(searchTerm, collectionNames);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collectionNames, prevCollectionNames, prevSearch, searchTerm]);
 
   return (
     <Entries
       cursor={getCursor()}
-      handleCursorActions={handleCursorActions}
       collections={collections}
       entries={entries}
       isFetching={isFetching}
+      viewStyle={viewStyle}
     />
   );
 };
@@ -78,16 +71,16 @@ const EntriesSearch = ({
 interface EntriesSearchOwnProps {
   searchTerm: string;
   collections: Collections;
+  viewStyle: CollectionViewStyle;
 }
 
 function mapStateToProps(state: RootState, ownProps: EntriesSearchOwnProps) {
-  const { searchTerm } = ownProps;
-  const collections = Object.values(ownProps.collections);
-  const collectionNames = Object.keys(ownProps.collections);
+  const { searchTerm, collections, viewStyle } = ownProps;
+  const collectionNames = Object.keys(collections);
   const isFetching = state.search.isFetching;
   const page = state.search.page;
   const entries = selectSearchedEntries(state, collectionNames);
-  return { isFetching, page, collections, collectionNames, entries, searchTerm };
+  return { isFetching, page, collections, viewStyle, entries, searchTerm };
 }
 
 const mapDispatchToProps = {

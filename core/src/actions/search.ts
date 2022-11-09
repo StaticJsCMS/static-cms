@@ -140,7 +140,7 @@ export function searchEntries(searchTerm: string, searchCollections: string[], p
         return dispatch(searchFailure(new Error(`No integration found for name "${integration}"`)));
       }
 
-      return dispatch(searchSuccess(response.entries, response.pagination));
+      return dispatch(searchSuccess(response.entries, page));
     } catch (error: unknown) {
       console.error(error);
       if (error instanceof Error) {

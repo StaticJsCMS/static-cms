@@ -1,37 +1,27 @@
-import { styled } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
+import Popover from '@mui/material/Popover';
+import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { translate } from 'react-polyglot';
 
+import { colors, colorsRaw, lengths } from '../../components/UI/styles';
 import { transientOptions } from '../../lib';
-import { colors, colorsRaw, lengths, zIndex } from '../../components/UI/styles';
 
-import type { KeyboardEvent, MouseEvent } from 'react';
+import type { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent } from 'react';
 import type { Collection, Collections, TranslatedProps } from '../../interface';
 
 const SearchContainer = styled('div')`
   position: relative;
 `;
 
-const SuggestionsContainer = styled('div')`
-  position: relative;
-  width: 100%;
-`;
-
 const Suggestions = styled('ul')`
-  position: absolute;
-  top: 0px;
-  left: 0;
-  right: 0;
   padding: 10px 0;
   margin: 0;
   list-style: none;
-  background-color: #fff;
   border-radius: ${lengths.borderRadius};
-  border: 1px solid ${colors.textFieldBorder};
-  z-index: ${zIndex.zIndex1};
+  width: 240px;
 `;
 
 const SuggestionHeader = styled('li')`
@@ -66,6 +56,10 @@ const SuggestionDivider = styled('div')`
   width: 100%;
 `;
 
+const StyledPopover = styled(Popover)`
+  margin-left: -44px;
+`;
+
 interface CollectionSearchProps {
   collections: Collections;
   collection?: Collection;
@@ -74,17 +68,34 @@ interface CollectionSearchProps {
 }
 
 const CollectionSearch = ({
-  collections,
+  collections: collectionsMap,
   collection,
   searchTerm,
   onSubmit,
   t,
 }: TranslatedProps<CollectionSearchProps>) => {
+  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>();
   const [query, setQuery] = useState(searchTerm);
-  const [suggestionsVisible, setSuggestionsVisible] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLInputElement | HTMLTextAreaElement | null>(null);
+  const open = Boolean(anchorEl);
+
+  const collections = useMemo(() => Object.values(collectionsMap), [collectionsMap]);
+
+  const handleClose = useCallback(() => {
+    setAnchorEl(null);
+    inputRef.current?.blur();
+  }, []);
+
+  const handleFocus = useCallback((event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setAnchorEl(event.currentTarget);
+  }, []);
+
+  const handleBlur = useCallback(() => {
+    setAnchorEl(null);
+  }, []);
 
   const getSelectedSelectionBasedOnProps = useCallback(() => {
-    return collection ? Object.keys(collections).indexOf(collection.name) : -1;
+    return collection ? collections.findIndex(c => c.name === collection.name) : -1;
   }, [collection, collections]);
 
   const [selectedCollectionIdx, setSelectedCollectionIdx] = useState(
@@ -92,50 +103,62 @@ const CollectionSearch = ({
   );
   const [prevCollection, setPrevCollection] = useState(collection);
 
+  console.log('selectedCollectionIdx', selectedCollectionIdx);
+
   useEffect(() => {
     if (prevCollection !== collection) {
+      console.log(
+        'resetting to ',
+        getSelectedSelectionBasedOnProps(),
+        'collection',
+        collection,
+        'prev',
+        prevCollection,
+      );
       setSelectedCollectionIdx(getSelectedSelectionBasedOnProps());
     }
     setPrevCollection(collection);
   }, [collection, getSelectedSelectionBasedOnProps, prevCollection]);
 
-  const toggleSuggestions = useCallback((visible: boolean) => {
-    setSuggestionsVisible(visible);
-  }, []);
-
   const selectNextSuggestion = useCallback(() => {
-    setSelectedCollectionIdx(
-      Math.min(selectedCollectionIdx + 1, Object.keys(collections).length - 1),
-    );
+    console.log('selectNextSuggestion');
+    setSelectedCollectionIdx(Math.min(selectedCollectionIdx + 1, collections.length - 1));
   }, [collections, selectedCollectionIdx]);
 
   const selectPreviousSuggestion = useCallback(() => {
+    console.log('selectPreviousSuggestion');
     setSelectedCollectionIdx(Math.max(selectedCollectionIdx - 1, -1));
   }, [selectedCollectionIdx]);
 
   const resetSelectedSuggestion = useCallback(() => {
+    console.log('resetSelectedSuggestion');
     setSelectedCollectionIdx(-1);
   }, []);
 
-  const submitSearch = useCallback(() => {
-    toggleSuggestions(false);
-    if (selectedCollectionIdx !== -1) {
-      onSubmit(query, Object.values(collections)[selectedCollectionIdx]?.name);
-    } else {
-      onSubmit(query);
-    }
-  }, [collections, onSubmit, query, selectedCollectionIdx, toggleSuggestions]);
+  const submitSearch = useCallback(
+    (index: number) => {
+      console.log('searching selectedCollectionIdx', index);
+      if (index !== -1) {
+        console.log(collections, index);
+        onSubmit(query, collections[index]?.name);
+      } else {
+        onSubmit(query);
+      }
+      handleClose();
+    },
+    [collections, handleClose, onSubmit, query],
+  );
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
-        submitSearch();
+        submitSearch(selectedCollectionIdx);
       }
 
-      if (suggestionsVisible) {
+      if (open) {
         // allow closing of suggestions with escape key
         if (event.key === 'Escape') {
-          toggleSuggestions(false);
+          handleClose();
         }
 
         if (event.key === 'ArrowDown') {
@@ -148,30 +171,37 @@ const CollectionSearch = ({
       }
     },
     [
+      handleClose,
+      open,
       selectNextSuggestion,
       selectPreviousSuggestion,
+      selectedCollectionIdx,
       submitSearch,
-      suggestionsVisible,
-      toggleSuggestions,
     ],
   );
 
   const handleQueryChange = useCallback(
-    (newQuery: string) => {
+    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const newQuery = event.target.value;
       setQuery(newQuery);
-      toggleSuggestions(newQuery !== '');
-      if (newQuery === '') {
-        resetSelectedSuggestion();
+
+      if (newQuery !== '') {
+        setAnchorEl(event.currentTarget);
+        return;
       }
+
+      resetSelectedSuggestion();
+      handleClose();
     },
-    [resetSelectedSuggestion, toggleSuggestions],
+    [handleClose, resetSelectedSuggestion],
   );
 
   const handleSuggestionClick = useCallback(
     (event: MouseEvent, idx: number) => {
-      setSelectedCollectionIdx(idx);
-      submitSearch();
       event.preventDefault();
+      console.log('clicked index', idx);
+      setSelectedCollectionIdx(idx);
+      submitSearch(idx);
     },
     [submitSearch],
   );
@@ -180,16 +210,16 @@ const CollectionSearch = ({
     <SearchContainer>
       <TextField
         onKeyDown={handleKeyDown}
-        onClick={() => toggleSuggestions(true)}
         placeholder={t('collection.sidebar.searchAll')}
-        onBlur={() => toggleSuggestions(false)}
-        onFocus={() => toggleSuggestions(query !== '')}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
         value={query}
-        onChange={e => handleQueryChange(e.target.value)}
+        onChange={handleQueryChange}
         variant="outlined"
         size="small"
         fullWidth
         InputProps={{
+          inputRef,
           startAdornment: (
             <InputAdornment position="start">
               <SearchIcon />
@@ -197,31 +227,42 @@ const CollectionSearch = ({
           ),
         }}
       />
-      {suggestionsVisible && (
-        <SuggestionsContainer>
-          <Suggestions>
-            <SuggestionHeader>{t('collection.sidebar.searchIn')}</SuggestionHeader>
+      <StyledPopover
+        id="search-popover"
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        disableAutoFocus
+        disableEnforceFocus
+        disableScrollLock
+        hideBackdrop
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <Suggestions>
+          <SuggestionHeader>{t('collection.sidebar.searchIn')}</SuggestionHeader>
+          <SuggestionItem
+            $isActive={selectedCollectionIdx === -1}
+            onClick={e => handleSuggestionClick(e, -1)}
+            onMouseDown={e => e.preventDefault()}
+          >
+            {t('collection.sidebar.allCollections')}
+          </SuggestionItem>
+          <SuggestionDivider />
+          {collections.map((collection, idx) => (
             <SuggestionItem
-              $isActive={selectedCollectionIdx === -1}
-              onClick={e => handleSuggestionClick(e, -1)}
+              key={idx}
+              $isActive={idx === selectedCollectionIdx}
+              onClick={e => handleSuggestionClick(e, idx)}
               onMouseDown={e => e.preventDefault()}
             >
-              {t('collection.sidebar.allCollections')}
+              {collection.label}
             </SuggestionItem>
-            <SuggestionDivider />
-            {Object.values(collections).map((collection, idx) => (
-              <SuggestionItem
-                key={idx}
-                $isActive={idx === selectedCollectionIdx}
-                onClick={e => handleSuggestionClick(e, idx)}
-                onMouseDown={e => e.preventDefault()}
-              >
-                {collection.label}
-              </SuggestionItem>
-            ))}
-          </Suggestions>
-        </SuggestionsContainer>
-      )}
+          ))}
+        </Suggestions>
+      </StyledPopover>
     </SearchContainer>
   );
 };

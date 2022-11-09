@@ -261,7 +261,8 @@ interface PersistArgs {
 
 function collectionDepth(collection: Collection) {
   let depth;
-  depth = 'nested' in collection && collection.nested?.depth || getPathDepth(collection.path ?? '');
+  depth =
+    ('nested' in collection && collection.nested?.depth) || getPathDepth(collection.path ?? '');
 
   if (hasI18n(collection)) {
     depth = getI18nFilesDepth(collection, depth);
@@ -549,7 +550,7 @@ export class Backend {
     }
 
     const hits = entries
-      .filter(({ score }: fuzzy.FilterResult<Entry>) => score > 5)
+      .filter(({ score }: fuzzy.FilterResult<Entry>) => score > 3)
       .sort(sortByScore)
       .map((f: fuzzy.FilterResult<Entry>) => f.original);
     return { entries: hits, pagination: 1 };

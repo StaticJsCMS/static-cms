@@ -13,7 +13,6 @@ import parse from 'date-fns/parse';
 import parseISO from 'date-fns/parseISO';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import alert from '../../components/UI/Alert';
 import { isNotEmpty } from '../../lib/util/string.util';
 
 import type { MouseEvent } from 'react';
@@ -261,7 +260,6 @@ const DateTimeControl = ({
   }, [
     dateFormat,
     dateValue,
-    defaultValue,
     field.picker_utc,
     handleChange,
     hasErrors,

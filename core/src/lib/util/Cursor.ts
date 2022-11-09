@@ -19,7 +19,7 @@ const knownMetaKeys = [
 ];
 
 function filterUnknownMetaKeys(meta: Record<string, unknown>) {
-  return Object.keys(meta).reduce((acc, k) => {
+  return Object.keys(meta ?? {}).reduce((acc, k) => {
     if (knownMetaKeys.includes(k)) {
       acc[k] = meta[k];
     }

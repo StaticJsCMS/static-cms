@@ -110,7 +110,14 @@ const CollectionView = ({
         }
       }
 
-      return <EntriesSearch collections={searchCollections} searchTerm={searchTerm} />;
+      return (
+        <EntriesSearch
+          key="search"
+          collections={searchCollections}
+          searchTerm={searchTerm}
+          viewStyle={viewStyle}
+        />
+      );
     }
 
     return (
@@ -210,11 +217,14 @@ const CollectionView = ({
       <CollectionMain>
         <>
           {isSearchResults ? (
-            <SearchResultContainer>
-              <SearchResultHeading>
-                {t(searchResultKey, { searchTerm, collection: collection.label })}
-              </SearchResultHeading>
-            </SearchResultContainer>
+            <>
+              <SearchResultContainer>
+                <SearchResultHeading>
+                  {t(searchResultKey, { searchTerm, collection: collection.label })}
+                </SearchResultHeading>
+              </SearchResultContainer>
+              <CollectionControls viewStyle={viewStyle} onChangeViewStyle={changeViewStyle} t={t} />
+            </>
           ) : (
             <>
               <CollectionTop collection={collection} newEntryUrl={newEntryUrl} />

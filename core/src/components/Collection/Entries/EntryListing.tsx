@@ -41,7 +41,7 @@ export interface BaseEntryListingProps {
   entries: Entry[];
   viewStyle: CollectionViewStyle;
   cursor?: Cursor;
-  handleCursorActions: (action: string) => void;
+  handleCursorActions?: (action: string) => void;
   page?: number;
 }
 
@@ -65,14 +65,11 @@ const EntryListing = ({
   handleCursorActions,
   ...otherProps
 }: EntryListingProps) => {
-  const hasMore = useMemo(() => {
-    const hasMore = cursor?.actions?.has('append_next');
-    return hasMore;
-  }, [cursor?.actions]);
+  const hasMore = useMemo(() => cursor?.actions?.has('append_next'), [cursor?.actions]);
 
   const handleLoadMore = useCallback(() => {
     if (hasMore) {
-      handleCursorActions('append_next');
+      handleCursorActions?.('append_next');
     }
   }, [handleCursorActions, hasMore]);
 
@@ -138,7 +135,7 @@ const EntryListing = ({
     <div>
       <CardsGrid $layout={viewStyle}>
         {renderedCards}
-        {hasMore && <Waypoint key={page} onEnter={handleLoadMore} />}
+        {hasMore && handleLoadMore && <Waypoint key={page} onEnter={handleLoadMore} />}
       </CardsGrid>
     </div>
   );
