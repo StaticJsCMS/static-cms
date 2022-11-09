@@ -29,6 +29,7 @@ import type {
   Field,
   GetAssetFunction,
   ListField,
+  ObjectValue,
   RenderedField,
   TemplatePreviewProps,
   TranslatedProps,
@@ -367,36 +368,92 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
    */
   const widgetsFor = useCallback(
     (name: string) => {
-      const field = fields.find(f => f.name === name);
-      if (!field) {
+      const cmsConfig = config.config;
+      if (!cmsConfig) {
         return {
           data: null,
           widgets: {},
         };
       }
 
-      const nestedFields = field && 'fields' in field ? field.fields ?? [] : [];
-      const value = entry.data?.[field.name] as EntryData | EntryData[];
+      const field = fields.find(f => f.name === name);
+      if (!field || !('fields' in field)) {
+        return {
+          data: null,
+          widgets: {},
+        };
+      }
 
-      if (Array.isArray(value)) {
-        return value.map(val => {
-          const widgets = nestedFields.reduce((acc, field, index) => {
-            acc[field.name] = <div key={index}>{widgetFor(field.name)}</div>;
-            return acc;
-          }, {} as Record<string, ReactNode>);
-          return { data: val, widgets };
-        });
+      const value = entry.data?.[field.name];
+      const nestedFields = field && 'fields' in field ? field.fields ?? [] : [];
+
+      if (field.widget === 'list' || Array.isArray(value)) {
+        let finalValue: ObjectValue[];
+        if (!value || typeof value !== 'object') {
+          finalValue = [];
+        } else if (!Array.isArray(value)) {
+          finalValue = [value];
+        } else {
+          finalValue = value as ObjectValue[];
+        }
+
+        return finalValue
+          .filter((val: unknown) => typeof val === 'object')
+          .map((val: ObjectValue) => {
+            const widgets = nestedFields.reduce((acc, field, index) => {
+              acc[field.name] = (
+                <div key={index}>
+                  {getWidgetFor(
+                    cmsConfig,
+                    collection,
+                    field.name,
+                    fields,
+                    entry,
+                    inferedFields,
+                    handleGetAsset,
+                    nestedFields,
+                    val,
+                    index,
+                  )}
+                </div>
+              );
+              return acc;
+            }, {} as Record<string, ReactNode>);
+            return { data: val, widgets };
+          });
+      }
+
+      if (typeof value !== 'object') {
+        return {
+          data: {},
+          widgets: {},
+        };
       }
 
       return {
         data: value,
         widgets: nestedFields.reduce((acc, field, index) => {
-          acc[field.name] = <div key={index}>{widgetFor(field.name)}</div>;
+          acc[field.name] = (
+            <div key={index}>
+              {getWidgetFor(
+                cmsConfig,
+                collection,
+                field.name,
+                fields,
+                entry,
+                inferedFields,
+                handleGetAsset,
+                nestedFields,
+                value,
+                index,
+              )}
+            </div>
+          );
           return acc;
         }, {} as Record<string, ReactNode>),
       };
     },
-    [entry.data, fields, widgetFor],
+    [collection, config.config, entry, fields, handleGetAsset, inferedFields],
   );
 
   const previewStyles = useMemo(

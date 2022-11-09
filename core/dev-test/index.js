@@ -2,39 +2,11 @@
 CMS.init();
 
 const PostPreview = ({ entry, widgetFor, widgetsFor }) => {
-  console.log(widgetsFor('elements'));
-  const elements = widgetsFor('elements');
-
   return h(
     'div',
     {},
     h('div', { className: 'cover' }, h('h1', {}, entry.data.title), widgetFor('image')),
     h('p', {}, h('small', {}, 'Written ' + entry.data.date)),
-    h(
-      'div',
-      { className: 'row' },
-      Array.isArray(elements)
-        ? elements.map((element, index) => {
-            return h(
-              'div',
-              { key: index, className: 'col-lg-4 col-sm-6 mb-4' },
-              h(
-                'div',
-                {
-                  className:
-                    'card rounded-0 hover-shadow border-top-0 border-left-0 border-right-0',
-                },
-                h(
-                  'div',
-                  { className: 'card-body' },
-                  h('h4', { className: 'card-title mb-3' }, element.data.title),
-                  h('div', { className: 'content' }, element.widgets.content),
-                ),
-              ),
-            );
-          })
-        : null,
-    ),
     h('div', { className: 'text' }, widgetFor('body')),
   );
 };

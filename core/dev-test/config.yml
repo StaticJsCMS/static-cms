@@ -54,14 +54,6 @@ collections:
         name: image
         widget: image
         required: false
-      - label: 'Elements'
-        label_singular: 'Element'
-        name: 'elements'
-        widget: 'list'
-        fields:
-          - { label: 'Title', name: 'title', widget: 'string', required: true }
-          - { label: 'Text', name: 'content', widget: 'markdown', required: true }
-        required: false
       - label: Body
         name: body
         widget: markdown
