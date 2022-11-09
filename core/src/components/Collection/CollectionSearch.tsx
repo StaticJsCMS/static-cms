@@ -103,43 +103,28 @@ const CollectionSearch = ({
   );
   const [prevCollection, setPrevCollection] = useState(collection);
 
-  console.log('selectedCollectionIdx', selectedCollectionIdx);
-
   useEffect(() => {
     if (prevCollection !== collection) {
-      console.log(
-        'resetting to ',
-        getSelectedSelectionBasedOnProps(),
-        'collection',
-        collection,
-        'prev',
-        prevCollection,
-      );
       setSelectedCollectionIdx(getSelectedSelectionBasedOnProps());
     }
     setPrevCollection(collection);
   }, [collection, getSelectedSelectionBasedOnProps, prevCollection]);
 
   const selectNextSuggestion = useCallback(() => {
-    console.log('selectNextSuggestion');
     setSelectedCollectionIdx(Math.min(selectedCollectionIdx + 1, collections.length - 1));
   }, [collections, selectedCollectionIdx]);
 
   const selectPreviousSuggestion = useCallback(() => {
-    console.log('selectPreviousSuggestion');
     setSelectedCollectionIdx(Math.max(selectedCollectionIdx - 1, -1));
   }, [selectedCollectionIdx]);
 
   const resetSelectedSuggestion = useCallback(() => {
-    console.log('resetSelectedSuggestion');
     setSelectedCollectionIdx(-1);
   }, []);
 
   const submitSearch = useCallback(
     (index: number) => {
-      console.log('searching selectedCollectionIdx', index);
       if (index !== -1) {
-        console.log(collections, index);
         onSubmit(query, collections[index]?.name);
       } else {
         onSubmit(query);
@@ -199,7 +184,6 @@ const CollectionSearch = ({
   const handleSuggestionClick = useCallback(
     (event: MouseEvent, idx: number) => {
       event.preventDefault();
-      console.log('clicked index', idx);
       setSelectedCollectionIdx(idx);
       submitSearch(idx);
     },
