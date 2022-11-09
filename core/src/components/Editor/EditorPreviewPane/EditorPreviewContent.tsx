@@ -1,6 +1,5 @@
-import React, { useMemo } from 'react';
+import React, { memo } from 'react';
 
-import type { ReactNode } from 'react';
 import type { TemplatePreviewComponent, TemplatePreviewProps } from '../../../interface';
 
 interface EditorPreviewContentProps {
@@ -8,17 +7,16 @@ interface EditorPreviewContentProps {
   previewProps: TemplatePreviewProps;
 }
 
-const EditorPreviewContent = ({ previewComponent, previewProps }: EditorPreviewContentProps) => {
-  return useMemo(() => {
-    let children: ReactNode;
+const EditorPreviewContent = memo(
+  ({ previewComponent, previewProps }: EditorPreviewContentProps) => {
     if (!previewComponent) {
-      children = null;
-    } else {
-      children = React.createElement(previewComponent, previewProps);
+      return null;
     }
 
-    return children;
-  }, [previewComponent, previewProps]);
-};
+    return React.createElement(previewComponent, previewProps);
+  },
+);
+
+EditorPreviewContent.displayName = 'EditorPreviewContent';
 
 export default EditorPreviewContent;

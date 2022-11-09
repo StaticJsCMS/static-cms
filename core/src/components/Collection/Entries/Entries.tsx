@@ -24,7 +24,7 @@ export interface BaseEntriesProps {
   isFetching: boolean;
   viewStyle: CollectionViewStyle;
   cursor: Cursor;
-  handleCursorActions: (action: string) => void;
+  handleCursorActions?: (action: string) => void;
 }
 
 export interface SingleCollectionEntriesProps extends BaseEntriesProps {

@@ -628,7 +628,7 @@ collections:
         widget: select
         options:
           - label: One
-            value: "One"
+            value: 'One'
           - label: Two
             value: 2
           - label: Three

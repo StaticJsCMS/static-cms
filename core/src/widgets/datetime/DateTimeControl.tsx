@@ -13,7 +13,6 @@ import parse from 'date-fns/parse';
 import parseISO from 'date-fns/parseISO';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import alert from '../../components/UI/Alert';
 import { isNotEmpty } from '../../lib/util/string.util';
 
 import type { MouseEvent } from 'react';
@@ -169,16 +168,7 @@ const DateTimeControl = ({
       return null;
     }
 
-    let formattedValue = defaultValue;
-    try {
-      formattedValue = formatDate(field.picker_utc ? utcDate : dateValue, inputFormat);
-    } catch (e) {
-      alert({
-        title: 'editor.editorWidgets.datetime.invalidDateTitle',
-        body: 'editor.editorWidgets.datetime.invalidDateBody',
-      });
-      console.error(e);
-    }
+    const inputDate = field.picker_utc ? utcDate : dateValue;
 
     if (dateFormat && !timeFormat) {
       return (
@@ -186,7 +176,7 @@ const DateTimeControl = ({
           key="mobile-date-picker"
           inputFormat={inputFormat}
           label={label}
-          value={formattedValue}
+          value={inputDate}
           onChange={handleChange}
           renderInput={params => (
             <TextField
@@ -216,7 +206,7 @@ const DateTimeControl = ({
           key="time-picker"
           label={label}
           inputFormat={inputFormat}
-          value={formattedValue}
+          value={inputDate}
           onChange={handleChange}
           renderInput={params => (
             <TextField
@@ -245,7 +235,7 @@ const DateTimeControl = ({
         key="mobile-date-time-picker"
         inputFormat={inputFormat}
         label={label}
-        value={formattedValue}
+        value={inputDate}
         onChange={handleChange}
         renderInput={params => (
           <TextField
@@ -270,7 +260,6 @@ const DateTimeControl = ({
   }, [
     dateFormat,
     dateValue,
-    defaultValue,
     field.picker_utc,
     handleChange,
     hasErrors,
