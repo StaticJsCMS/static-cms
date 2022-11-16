@@ -17,8 +17,6 @@ and add content to any site built with a static site generator.
 >
 > An beta build for the stable release is available under the `@next` tack on npm.
 
-## Community Chat
-
 ## How It Works
 
 Static CMS is a single-page app that you pull into the `/admin` part of your site.
