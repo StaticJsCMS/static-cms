@@ -283,7 +283,14 @@ export default class TestBackend implements BackendClass {
     extension: string,
     depth: number,
   ): Promise<ImplementationEntry[]> {
-    return this.entriesByFolder(folder, extension, depth);
+    const files = folder ? getFolderFiles(window.repoFiles, folder, extension, depth) : [];
+
+    const entries = files.map(f => ({
+      data: f.content as string,
+      file: { path: f.path, id: f.path },
+    }));
+
+    return Promise.resolve(entries);
   }
 
   getMediaDisplayURL(_displayURL: DisplayURL): Promise<string> {
