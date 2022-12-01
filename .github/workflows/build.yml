@@ -4,11 +4,11 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - Editor/**
+      - core/**
   pull_request:
     branches: [ "main" ]
     paths:
-      - Editor/**
+      - core/**
 
 jobs:
   build:
@@ -21,17 +21,18 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Setup Node
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }}
+        cache: yarn
+        node-version: 16
 
-    - name: Setup
-      working-directory: ./Editor
+    - name: Install
+      working-directory: ./core
       run: |
         npm ci
 
     - name: Build
-      working-directory: ./Editor
+      working-directory: ./core
       run: |
         npm run build
