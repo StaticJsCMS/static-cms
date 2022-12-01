@@ -1,6 +1,6 @@
 import toml from '@ltd/j-toml';
 
-import { FileFormatter } from './FileFormatter';
+import FileFormatter from './FileFormatter';
 
 class TomlFormatter extends FileFormatter {
   fromFile(content: string) {

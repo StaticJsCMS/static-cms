@@ -6,11 +6,11 @@ import TextField from '@mui/material/TextField';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { translate } from 'react-polyglot';
 
-import { colors, colorsRaw, lengths } from '../../components/UI/styles';
-import { transientOptions } from '../../lib';
+import { colors, colorsRaw, lengths } from '@staticcms/core/components/UI/styles';
+import { transientOptions } from '@staticcms/core/lib';
 
 import type { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent } from 'react';
-import type { Collection, Collections, TranslatedProps } from '../../interface';
+import type { Collection, Collections, TranslatedProps } from '@staticcms/core/interface';
 
 const SearchContainer = styled('div')`
   position: relative;

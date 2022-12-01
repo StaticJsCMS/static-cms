@@ -6,10 +6,10 @@ import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ScrollSync, ScrollSyncPane } from 'react-scroll-sync';
 
-import { colorsRaw, components, zIndex } from '../../components/UI/styles';
-import { transientOptions } from '../../lib';
-import { getI18nInfo, getPreviewEntry, hasI18n } from '../../lib/i18n';
-import { getFileFromSlug } from '../../lib/util/collection.util';
+import { colorsRaw, components, zIndex } from '@staticcms/core/components/UI/styles';
+import { transientOptions } from '@staticcms/core/lib';
+import { getI18nInfo, getPreviewEntry, hasI18n } from '@staticcms/core/lib/i18n';
+import { getFileFromSlug } from '@staticcms/core/lib/util/collection.util';
 import EditorControlPane from './EditorControlPane/EditorControlPane';
 import EditorPreviewPane from './EditorPreviewPane/EditorPreviewPane';
 import EditorToolbar from './EditorToolbar';
@@ -22,7 +22,7 @@ import type {
   FieldsErrors,
   TranslatedProps,
   User,
-} from '../../interface';
+} from '@staticcms/core/interface';
 
 const PREVIEW_VISIBLE = 'cms.preview-visible';
 const I18N_VISIBLE = 'cms.i18n-visible';

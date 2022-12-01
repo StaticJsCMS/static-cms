@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import merge from 'lodash/merge';
 
 import { getLocale } from './registry';

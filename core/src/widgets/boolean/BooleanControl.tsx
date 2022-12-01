@@ -1,17 +1,17 @@
-import { colors } from '@mui/material';
+import { red } from '@mui/material/colors';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import type { ChangeEvent } from 'react';
-import type { BooleanField, WidgetControlProps } from '../../interface';
+import type { BooleanField, WidgetControlProps } from '@staticcms/core/interface';
+import type { ChangeEvent, FC } from 'react';
 
-const BooleanControl = ({
+const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
   value,
   label,
   onChange,
   hasErrors,
-}: WidgetControlProps<boolean, BooleanField>) => {
+}) => {
   const [internalValue, setInternalValue] = useState(value);
 
   const handleChange = useCallback(
@@ -39,7 +39,7 @@ const BooleanControl = ({
       }
       label={label}
       labelPlacement="start"
-      sx={{ marginLeft: '4px', color: hasErrors ? colors.red[500] : undefined }}
+      sx={{ marginLeft: '4px', color: hasErrors ? red[500] : undefined }}
     />
   );
 };

@@ -6,7 +6,7 @@ import GroupControl from './GroupControl';
 import SortControl from './SortControl';
 import ViewStyleControl from './ViewStyleControl';
 
-import type { CollectionViewStyle } from '../../constants/collectionViews';
+import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
 import type {
   FilterMap,
   GroupMap,
@@ -16,7 +16,7 @@ import type {
   TranslatedProps,
   ViewFilter,
   ViewGroup,
-} from '../../interface';
+} from '@staticcms/core/interface';
 
 const CollectionControlsContainer = styled('div')`
   display: flex;

@@ -1,4 +1,4 @@
-import { registerWidget } from '../../lib/registry';
+import { registerWidget } from '@staticcms/core/lib/registry';
 import UnknownControl from './Unknown/UnknownControl';
 import UnknownPreview from './Unknown/UnknownPreview';
 

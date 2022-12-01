@@ -1,7 +1,7 @@
 import uploadcare from 'uploadcare-widget';
 import uploadcareTabEffects from 'uploadcare-widget-tab-effects';
 
-import type { MediaLibraryInitOptions, MediaLibraryInstance } from '../../interface';
+import type { MediaLibraryInitOptions, MediaLibraryInstance } from '@staticcms/core/interface';
 
 declare global {
   interface Window {

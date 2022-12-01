@@ -5,7 +5,7 @@ import { filter, flow, fromPairs, map } from 'lodash/fp';
 
 import getBlobSHA from './getBlobSHA';
 
-import type AssetProxy from '../../valueObjects/AssetProxy';
+import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 
 export interface PointerFile {
   size: number;

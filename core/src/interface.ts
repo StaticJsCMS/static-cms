@@ -1,10 +1,12 @@
-import type {
-  EditorPlugin as MarkdownPlugin,
-  EditorType as MarkdownEditorType,
-} from '@toast-ui/editor/types/editor';
-import type { ToolbarItemOptions as MarkdownToolbarItemOptions } from '@toast-ui/editor/types/ui';
+import type { LanguageName } from '@uiw/codemirror-extensions-langs';
 import type { PropertiesSchema } from 'ajv/dist/types/json-schema';
-import type { ComponentType, FunctionComponent, ReactNode } from 'react';
+import type {
+  ComponentType,
+  FunctionComponent,
+  JSXElementConstructor,
+  ReactElement,
+  ReactNode,
+} from 'react';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
 import type { MediaFile as BackendMediaFile } from './backend';
 import type { EditorControlProps } from './components/Editor/EditorControlPane/EditorControl';
@@ -18,7 +20,6 @@ import type { I18N_STRUCTURE } from './lib/i18n';
 import type { AllowedEvent } from './lib/registry';
 import type Cursor from './lib/util/Cursor';
 import type AssetProxy from './valueObjects/AssetProxy';
-import type { MediaHolder } from './widgets/markdown/hooks/useMedia';
 
 export interface Pages {
   [collection: string]: { isFetching?: boolean; page?: number; ids: string[] };
@@ -278,7 +279,7 @@ export interface WidgetPreviewProps<T = unknown, F extends BaseField = UnknownFi
 
 export type WidgetPreviewComponent<T = unknown, F extends BaseField = UnknownField> =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
+  | ReactElement<unknown, string | JSXElementConstructor<any>>
   | ComponentType<WidgetPreviewProps<T, F>>;
 
 export type WidgetsFor<P = EntryData> = <K extends keyof P>(
@@ -286,11 +287,11 @@ export type WidgetsFor<P = EntryData> = <K extends keyof P>(
 ) => P[K] extends Array<infer U>
   ? {
       data: U | null;
-      widgets: Record<keyof U, React.ReactNode>;
+      widgets: Record<keyof U, ReactNode>;
     }[]
   : {
       data: P[K] | null;
-      widgets: Record<keyof P[K], React.ReactNode>;
+      widgets: Record<keyof P[K], ReactNode>;
     };
 
 export interface TemplatePreviewProps<T = EntryData, EF extends BaseField = UnknownField> {
@@ -841,7 +842,7 @@ export interface I18nInfo {
 export interface ProcessedCodeLanguage {
   label: string;
   identifiers: string[];
-  codemirror_mode: string;
+  codemirror_mode: LanguageName;
   codemirror_mime_type: string;
 }
 
@@ -862,22 +863,25 @@ export interface PreviewStyle {
 export interface MarkdownPluginFactoryProps {
   config: Config<MarkdownField>;
   field: MarkdownField;
-  media: MediaHolder;
   mode: 'editor' | 'preview';
 }
 
-export type MarkdownPluginFactory = (props: MarkdownPluginFactoryProps) => MarkdownPlugin;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type MarkdownPluginFactory = (props: MarkdownPluginFactoryProps) => any;
 
 export interface MarkdownToolbarItemsFactoryProps {
-  imageToolbarButton: MarkdownToolbarItemOptions;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  imageToolbarButton: any;
 }
 
 export type MarkdownToolbarItemsFactory = (
   props: MarkdownToolbarItemsFactoryProps,
-) => (string | MarkdownToolbarItemOptions)[][];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+) => (string | any)[][];
 
 export interface MarkdownEditorOptions {
-  initialEditType?: MarkdownEditorType;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  initialEditType?: any;
   height?: string;
   toolbarItems?: MarkdownToolbarItemsFactory;
   plugins?: MarkdownPluginFactory[];

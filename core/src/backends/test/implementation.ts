@@ -5,7 +5,7 @@ import unset from 'lodash/unset';
 import { extname } from 'path';
 import uuid from 'uuid/v4';
 
-import { basename, Cursor, CURSOR_COMPATIBILITY_SYMBOL } from '../../lib/util';
+import { basename, Cursor, CURSOR_COMPATIBILITY_SYMBOL } from '@staticcms/core/lib/util';
 import AuthenticationPage from './AuthenticationPage';
 
 import type {
@@ -16,8 +16,8 @@ import type {
   ImplementationEntry,
   ImplementationFile,
   User,
-} from '../../interface';
-import type AssetProxy from '../../valueObjects/AssetProxy';
+} from '@staticcms/core/interface';
+import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 
 type RepoFile = { path: string; content: string | AssetProxy };
 type RepoTree = { [key: string]: RepoFile | RepoTree };

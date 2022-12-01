@@ -7,8 +7,11 @@ import { FixedSizeGrid as Grid } from 'react-window';
 import MediaLibraryCard from './MediaLibraryCard';
 
 import type { GridChildComponentProps } from 'react-window';
-import type { MediaFile } from '../../interface';
-import type { MediaLibraryDisplayURL, MediaLibraryState } from '../../reducers/mediaLibrary';
+import type { MediaFile } from '@staticcms/core/interface';
+import type {
+  MediaLibraryDisplayURL,
+  MediaLibraryState,
+} from '@staticcms/core/reducers/mediaLibrary';
 
 export interface MediaLibraryCardItem {
   displayURL?: MediaLibraryDisplayURL;

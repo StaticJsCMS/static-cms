@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 export async function doesUrlFileExist(url: string): Promise<{ type: string; exists: boolean }> {
   const cleanUrl = url.replace(/^blob:/g, '');
 

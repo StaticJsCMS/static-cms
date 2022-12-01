@@ -1,26 +1,24 @@
 import { styled } from '@mui/material/styles';
-import React, { isValidElement, useCallback, useMemo } from 'react';
+import React, { Fragment, isValidElement, useCallback, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
-import { getAsset as getAssetAction } from '../../../actions/media';
-import { lengths } from '../../../components/UI/styles';
-import { getPreviewStyles, getPreviewTemplate, resolveWidget } from '../../../lib/registry';
-import { selectTemplateName, useInferedFields } from '../../../lib/util/collection.util';
-import { selectField } from '../../../lib/util/field.util';
-import { selectIsLoadingAsset } from '../../../reducers/medias';
-import { getTypedFieldForValue } from '../../../widgets/list/typedListHelpers';
-import { ErrorBoundary } from '../../UI';
+import { getAsset as getAssetAction } from '@staticcms/core/actions/media';
+import { ErrorBoundary } from '@staticcms/core/components/UI';
+import { lengths } from '@staticcms/core/components/UI/styles';
+import { getPreviewStyles, getPreviewTemplate, resolveWidget } from '@staticcms/core/lib/registry';
+import { selectTemplateName, useInferedFields } from '@staticcms/core/lib/util/collection.util';
+import { selectField } from '@staticcms/core/lib/util/field.util';
+import { selectIsLoadingAsset } from '@staticcms/core/reducers/medias';
+import { getTypedFieldForValue } from '@staticcms/list/typedListHelpers';
 import EditorPreview from './EditorPreview';
 import EditorPreviewContent from './EditorPreviewContent';
 import PreviewHOC from './PreviewHOC';
 
-import type { ComponentType, ReactFragment, ReactNode } from 'react';
-import type { ConnectedProps } from 'react-redux';
-import type { InferredField } from '../../../constants/fieldInference';
+import type { InferredField } from '@staticcms/core/constants/fieldInference';
 import type {
   Collection,
   Config,
@@ -35,8 +33,10 @@ import type {
   TranslatedProps,
   ValueOrNestedValue,
   WidgetPreviewComponent,
-} from '../../../interface';
-import type { RootState } from '../../../store';
+} from '@staticcms/core/interface';
+import type { RootState } from '@staticcms/core/store';
+import type { ComponentType, ReactFragment, ReactNode } from 'react';
+import type { ConnectedProps } from 'react-redux';
 
 const PreviewPaneFrame = styled(Frame)`
   width: 100%;
@@ -180,10 +180,10 @@ function isJsxElement(value: any): value is JSX.Element {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isReactFragment(value: any): value is ReactFragment {
   if (value.type) {
-    return value.type === React.Fragment;
+    return value.type === Fragment;
   }
 
-  return value === React.Fragment;
+  return value === Fragment;
 }
 
 function getWidget(
@@ -478,7 +478,9 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
     () => `
       <!DOCTYPE html>
       <html>
-        <head><base target="_blank"/></head>
+        <head>
+          <base target="_blank"/>
+        </head>
         <body><div></div></body>
       </html>
     `,

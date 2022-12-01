@@ -15,7 +15,7 @@ import {
   getPointerFileForMediaFileObj,
   parsePointerFile,
   unsentRequest,
-} from '../../lib/util';
+} from '@staticcms/core/lib/util';
 import { API as BitBucketAPI, BitbucketBackend } from '../bitbucket';
 import { GitHubBackend } from '../github';
 import { GitLabBackend } from '../gitlab';
@@ -36,9 +36,9 @@ import type {
   PersistOptions,
   TranslatedProps,
   User,
-} from '../../interface';
-import type { ApiRequest, Cursor } from '../../lib/util';
-import type AssetProxy from '../../valueObjects/AssetProxy';
+} from '@staticcms/core/interface';
+import type { ApiRequest, Cursor } from '@staticcms/core/lib/util';
+import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 import type { Client } from './netlify-lfs-client';
 
 const STATUS_PAGE = 'https://www.netlifystatus.com';

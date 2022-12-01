@@ -1,6 +1,6 @@
 import controlComponent from './BooleanControl';
 
-import type { BooleanField, WidgetParam } from '../../interface';
+import type { BooleanField, WidgetParam } from '@staticcms/core/interface';
 
 const BooleanWidget = (): WidgetParam<boolean, BooleanField> => {
   return {
@@ -8,5 +8,7 @@ const BooleanWidget = (): WidgetParam<boolean, BooleanField> => {
     controlComponent,
   };
 };
+
+export { controlComponent as BooleanControl };
 
 export default BooleanWidget;

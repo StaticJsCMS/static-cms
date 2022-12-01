@@ -1,6 +1,6 @@
-import React, { memo } from 'react';
+import { createElement, memo } from 'react';
 
-import type { TemplatePreviewComponent, TemplatePreviewProps } from '../../../interface';
+import type { TemplatePreviewComponent, TemplatePreviewProps } from '@staticcms/core/interface';
 
 interface EditorPreviewContentProps {
   previewComponent?: TemplatePreviewComponent;
@@ -13,7 +13,7 @@ const EditorPreviewContent = memo(
       return null;
     }
 
-    return React.createElement(previewComponent, previewProps);
+    return createElement(previewComponent, previewProps);
   },
 );
 

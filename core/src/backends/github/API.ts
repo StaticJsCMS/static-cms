@@ -17,13 +17,13 @@ import {
   readFileMetadata,
   requestWithBackoff,
   unsentRequest,
-} from '../../lib/util';
+} from '@staticcms/core/lib/util';
 
 import type { Octokit } from '@octokit/rest';
 import type { Semaphore } from 'semaphore';
-import type { DataFile, PersistOptions } from '../../interface';
-import type { ApiRequest, FetchError } from '../../lib/util';
-import type AssetProxy from '../../valueObjects/AssetProxy';
+import type { DataFile, PersistOptions } from '@staticcms/core/interface';
+import type { ApiRequest, FetchError } from '@staticcms/core/lib/util';
+import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 
 type GitHubUser = Octokit.UsersGetAuthenticatedResponse;
 type GitCreateTreeParamsTree = Octokit.GitCreateTreeParamsTree;

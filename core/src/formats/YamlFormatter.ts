@@ -1,7 +1,7 @@
 import yaml from 'yaml';
 
 import { sortKeys } from './helpers';
-import { FileFormatter } from './FileFormatter';
+import FileFormatter from './FileFormatter';
 
 import type { Pair, YAMLMap, YAMLSeq } from 'yaml/types';
 

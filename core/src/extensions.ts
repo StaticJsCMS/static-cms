@@ -7,7 +7,7 @@ import {
   TestBackend,
 } from './backends';
 import { registerBackend, registerLocale, registerWidget } from './lib/registry';
-import { locales } from './locales';
+import locales from './locales';
 import {
   BooleanWidget,
   CodeWidget,
@@ -26,7 +26,7 @@ import {
   TextWidget,
 } from './widgets';
 
-export function addExtensions() {
+export default function addExtensions() {
   // Register all the things
   registerBackend('git-gateway', GitGatewayBackend);
   registerBackend('github', GitHubBackend);

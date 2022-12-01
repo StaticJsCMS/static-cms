@@ -1,6 +1,6 @@
-import React from 'react';
+import { cloneElement, createElement, isValidElement } from 'react';
 
-import type { WidgetPreviewComponent, WidgetPreviewProps } from '../../../interface';
+import type { WidgetPreviewComponent, WidgetPreviewProps } from '@staticcms/core/interface';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface PreviewHOCProps extends Omit<WidgetPreviewProps, 'widgetFor'> {
@@ -11,10 +11,10 @@ interface PreviewHOCProps extends Omit<WidgetPreviewProps, 'widgetFor'> {
 const PreviewHOC = ({ previewComponent, ...props }: PreviewHOCProps) => {
   if (!previewComponent) {
     return null;
-  } else if (React.isValidElement(previewComponent)) {
-    return React.cloneElement(previewComponent, props);
+  } else if (isValidElement(previewComponent)) {
+    return cloneElement(previewComponent, props);
   } else {
-    return React.createElement(previewComponent, props);
+    return createElement(previewComponent, props);
   }
 };
 

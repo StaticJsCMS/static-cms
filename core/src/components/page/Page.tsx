@@ -4,13 +4,13 @@ import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { getAdditionalLink } from '../../lib/registry';
+import { getAdditionalLink } from '@staticcms/core/lib/registry';
 import MainView from '../App/MainView';
 import Sidebar from '../Collection/Sidebar';
 
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
-import type { RootState } from '../../store';
+import type { RootState } from '@staticcms/core/store';
 
 const StyledPageContent = styled('div')`
   width: 100%;

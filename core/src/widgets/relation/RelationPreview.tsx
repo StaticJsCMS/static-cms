@@ -1,11 +1,12 @@
 import React from 'react';
 
-import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
+import WidgetPreviewContainer from '@staticcms/core/components/UI/WidgetPreviewContainer';
 
-import type { RelationField, WidgetPreviewProps } from '../../interface';
+import type { RelationField, WidgetPreviewProps } from '@staticcms/core/interface';
+import type { FC } from 'react';
 
-function RelationPreview({ value }: WidgetPreviewProps<string | string[], RelationField>) {
+const RelationPreview: FC<WidgetPreviewProps<string | string[], RelationField>> = ({ value }) => {
   return <WidgetPreviewContainer>{value}</WidgetPreviewContainer>;
-}
+};
 
 export default RelationPreview;

@@ -1,31 +1,25 @@
-import { styled } from '@mui/material/styles';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
+import WidgetPreviewContainer from '@staticcms/core/components/UI/WidgetPreviewContainer';
+import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 
-import type { FileOrImageField, GetAssetFunction, WidgetPreviewProps } from '../../interface';
+import type {
+  Collection,
+  Entry,
+  FileOrImageField,
+  WidgetPreviewProps,
+} from '@staticcms/core/interface';
+import type { FC } from 'react';
 
 interface FileLinkProps {
   value: string;
-  getAsset: GetAssetFunction<FileOrImageField>;
+  collection: Collection<FileOrImageField>;
   field: FileOrImageField;
+  entry: Entry;
 }
 
-const FileLink = ({ value, getAsset, field }: FileLinkProps) => {
-  const [assetSource, setAssetSource] = useState('');
-  useEffect(() => {
-    if (!value || Array.isArray(value)) {
-      return;
-    }
-
-    const getImage = async () => {
-      const asset = (await getAsset(value, field))?.toString() ?? '';
-      setAssetSource(asset);
-    };
-
-    getImage();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+const FileLink: FC<FileLinkProps> = ({ value, collection, field, entry }) => {
+  const assetSource = useMediaAsset(value, collection, field, entry);
 
   return (
     <a href={assetSource} rel="noopener noreferrer" target="_blank">
@@ -34,48 +28,35 @@ const FileLink = ({ value, getAsset, field }: FileLinkProps) => {
   );
 };
 
-const StyledFileLink = styled(FileLink)`
-  display: block;
-`;
-
-interface FileLinkListProps {
-  values: string[];
-  getAsset: GetAssetFunction<FileOrImageField>;
-  field: FileOrImageField;
-}
-
-function FileLinkList({ values, getAsset, field }: FileLinkListProps) {
-  return (
-    <div>
-      {values.map(value => (
-        <StyledFileLink key={value} value={value} getAsset={getAsset} field={field} />
-      ))}
-    </div>
-  );
-}
-
-function FileContent({
+const FileContent: FC<WidgetPreviewProps<string | string[], FileOrImageField>> = ({
   value,
-  getAsset,
+  collection,
   field,
-}: WidgetPreviewProps<string | string[], FileOrImageField>) {
+  entry,
+}) => {
   if (!value) {
     return null;
   }
 
   if (Array.isArray(value)) {
-    return <FileLinkList values={value} getAsset={getAsset} field={field} />;
+    return (
+      <div>
+        {value.map(link => (
+          <FileLink key={link} value={link} collection={collection} field={field} entry={entry} />
+        ))}
+      </div>
+    );
   }
 
-  return <StyledFileLink key={value} value={value} getAsset={getAsset} field={field} />;
-}
+  return <FileLink key={value} value={value} collection={collection} field={field} entry={entry} />;
+};
 
-function FilePreview(props: WidgetPreviewProps<string | string[], FileOrImageField>) {
+const FilePreview: FC<WidgetPreviewProps<string | string[], FileOrImageField>> = props => {
   return (
     <WidgetPreviewContainer>
       {props.value ? <FileContent {...props} /> : null}
     </WidgetPreviewContainer>
   );
-}
+};
 
 export default FilePreview;

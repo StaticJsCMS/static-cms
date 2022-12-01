@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 
-import type { Field, TemplatePreviewProps } from '../../../interface';
+import type { Field, TemplatePreviewProps } from '@staticcms/core/interface';
 
 function isVisible(field: Field) {
   return field.widget !== 'hidden';

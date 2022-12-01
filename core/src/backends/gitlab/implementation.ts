@@ -17,12 +17,12 @@ import {
   getMediaDisplayURL,
   localForage,
   runWithLock,
-} from '../../lib/util';
+} from '@staticcms/core/lib/util';
 import API, { API_NAME } from './API';
 import AuthenticationPage from './AuthenticationPage';
 
 import type { Semaphore } from 'semaphore';
-import type { AsyncLock, Cursor } from '../../lib/util';
+import type { AsyncLock, Cursor } from '@staticcms/core/lib/util';
 import type {
   Config,
   Credentials,
@@ -32,8 +32,8 @@ import type {
   ImplementationFile,
   PersistOptions,
   User,
-} from '../../interface';
-import type AssetProxy from '../../valueObjects/AssetProxy';
+} from '@staticcms/core/interface';
+import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 

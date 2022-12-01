@@ -11,15 +11,15 @@ import Typography from '@mui/material/Typography';
 import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
-import { searchCollections } from '../../actions/collections';
-import { colors } from '../../components/UI/styles';
-import { getAdditionalLinks, getIcon } from '../../lib/registry';
+import { searchCollections } from '@staticcms/core/actions/collections';
+import { colors } from '@staticcms/core/components/UI/styles';
+import { getAdditionalLinks, getIcon } from '@staticcms/core/lib/registry';
 import NavLink from '../UI/NavLink';
 import CollectionSearch from './CollectionSearch';
 import NestedCollection from './NestedCollection';
 
 import type { ReactNode } from 'react';
-import type { Collection, Collections, TranslatedProps } from '../../interface';
+import type { Collection, Collections, TranslatedProps } from '@staticcms/core/interface';
 
 const StyledSidebar = styled('div')`
   position: sticky;

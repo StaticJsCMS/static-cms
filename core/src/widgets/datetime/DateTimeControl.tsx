@@ -13,10 +13,10 @@ import parse from 'date-fns/parse';
 import parseISO from 'date-fns/parseISO';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { isNotEmpty } from '../../lib/util/string.util';
+import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 
-import type { MouseEvent } from 'react';
-import type { DateTimeField, TranslatedProps, WidgetControlProps } from '../../interface';
+import type { DateTimeField, TranslatedProps, WidgetControlProps } from '@staticcms/core/interface';
+import type { FC, MouseEvent } from 'react';
 
 const StyledNowButton = styled('div')`
   width: fit-content;
@@ -27,7 +27,7 @@ interface NowButtonProps {
   disabled: boolean;
 }
 
-function NowButton({ t, handleChange, disabled }: TranslatedProps<NowButtonProps>) {
+const NowButton: FC<TranslatedProps<NowButtonProps>> = ({ t, handleChange, disabled }) => {
   const handleClick = useCallback(
     (event: MouseEvent) => {
       event.stopPropagation();
@@ -49,9 +49,9 @@ function NowButton({ t, handleChange, disabled }: TranslatedProps<NowButtonProps
       </Button>
     </StyledNowButton>
   );
-}
+};
 
-const DateTimeControl = ({
+const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
   field,
   label,
   value,
@@ -59,7 +59,7 @@ const DateTimeControl = ({
   isDisabled,
   onChange,
   hasErrors,
-}: WidgetControlProps<string, DateTimeField>) => {
+}) => {
   const { format, dateFormat, timeFormat } = useMemo(() => {
     const format = field.format;
 

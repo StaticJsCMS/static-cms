@@ -1,10 +1,11 @@
 import React from 'react';
 
-import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
+import WidgetPreviewContainer from '@staticcms/core/components/UI/WidgetPreviewContainer';
 
-import type { MapField, WidgetPreviewProps } from '../../interface';
+import type { MapField, WidgetPreviewProps } from '@staticcms/core/interface';
+import type { FC } from 'react';
 
-const MapPreview = ({ value }: WidgetPreviewProps<string, MapField>) => {
+const MapPreview: FC<WidgetPreviewProps<string, MapField>> = ({ value }) => {
   return <WidgetPreviewContainer>{value ? value.toString() : null}</WidgetPreviewContainer>;
 };
 

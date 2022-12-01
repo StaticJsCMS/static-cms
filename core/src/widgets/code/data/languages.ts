@@ -1,10 +1,10 @@
-import type { ProcessedCodeLanguage } from '../../../interface';
+import type { ProcessedCodeLanguage } from '@staticcms/core/interface';
 
 const languages: ProcessedCodeLanguage[] = [
   {
     label: 'AGS Script',
     identifiers: ['ags', 'asc', 'ash'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-c++src',
   },
   {
@@ -14,15 +14,9 @@ const languages: ProcessedCodeLanguage[] = [
     codemirror_mime_type: 'text/apl',
   },
   {
-    label: 'ASN.1',
-    identifiers: ['asn'],
-    codemirror_mode: 'asn.1',
-    codemirror_mime_type: 'text/x-ttcn-asn',
-  },
-  {
     label: 'ASP',
     identifiers: ['asp', 'aspx', 'asax', 'ascx', 'ashx', 'asmx', 'axd'],
-    codemirror_mode: 'htmlembedded',
+    codemirror_mode: 'html',
     codemirror_mime_type: 'application/x-aspx',
   },
   {
@@ -34,7 +28,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'AngelScript',
     identifiers: ['angelscript', 'as'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-c++src',
   },
   {
@@ -46,13 +40,13 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'Apex',
     identifiers: ['apex', 'cls'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-java',
   },
   {
     label: 'Asymptote',
     identifiers: ['asymptote', 'asy'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-kotlin',
   },
   {
@@ -70,13 +64,13 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'C',
     identifiers: ['c', 'cats', 'h', 'idc'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-csrc',
   },
   {
     label: 'C#',
     identifiers: ['csharp', 'cs', 'cake', 'csx'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'csharp',
     codemirror_mime_type: 'text/x-csharp',
   },
   {
@@ -98,7 +92,7 @@ const languages: ProcessedCodeLanguage[] = [
       'tcc',
       'tpp',
     ],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'cpp',
     codemirror_mime_type: 'text/x-c++src',
   },
   {
@@ -146,7 +140,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'ChucK',
     identifiers: ['chuck', 'ck'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-java',
   },
   {
@@ -154,12 +148,6 @@ const languages: ProcessedCodeLanguage[] = [
     identifiers: ['clojure', 'clj', 'boot', 'cljc', 'cljs', 'cljscm', 'cljx', 'hic'],
     codemirror_mode: 'clojure',
     codemirror_mime_type: 'text/x-clojure',
-  },
-  {
-    label: 'Closure Templates',
-    identifiers: ['soy'],
-    codemirror_mode: 'soy',
-    codemirror_mime_type: 'text/x-soy',
   },
   {
     label: 'Cloud Firestore Security Rules',
@@ -176,7 +164,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'Common Lisp',
     identifiers: ['lisp', 'asd', 'cl', 'l', 'lsp', 'ny', 'podsl', 'sexp'],
-    codemirror_mode: 'commonlisp',
+    codemirror_mode: 'commonLisp',
     codemirror_mime_type: 'text/x-common-lisp',
   },
   {
@@ -200,7 +188,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'Cuda',
     identifiers: ['cuda', 'cu', 'cuh'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-c++src',
   },
   {
@@ -224,7 +212,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'DTrace',
     identifiers: ['dtrace', 'd'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-csrc',
   },
   {
@@ -272,7 +260,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'EQ',
     identifiers: ['eq'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-csharp',
   },
   {
@@ -302,7 +290,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'Edje Data Collection',
     identifiers: ['edc'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-c++src',
   },
   {
@@ -320,7 +308,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'Emacs Lisp',
     identifiers: ['elisp', 'emacs', 'el'],
-    codemirror_mode: 'commonlisp',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-common-lisp',
   },
   {
@@ -334,12 +322,6 @@ const languages: ProcessedCodeLanguage[] = [
     identifiers: ['erlang', 'erl', 'es', 'escript', 'hrl', 'xrl', 'yrl'],
     codemirror_mode: 'erlang',
     codemirror_mime_type: 'text/x-erlang',
-  },
-  {
-    label: 'F#',
-    identifiers: ['fsharp', 'fs', 'fsi', 'fsx'],
-    codemirror_mode: 'mllike',
-    codemirror_mime_type: 'text/x-fsharp',
   },
   {
     label: 'Factor',
@@ -362,7 +344,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'GCC Machine Description',
     identifiers: ['md'],
-    codemirror_mode: 'commonlisp',
+    codemirror_mode: 'commonLisp',
     codemirror_mime_type: 'text/x-common-lisp',
   },
   {
@@ -374,7 +356,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'Game Maker Language',
     identifiers: ['gml'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-c++src',
   },
   {
@@ -432,12 +414,6 @@ const languages: ProcessedCodeLanguage[] = [
     codemirror_mime_type: 'text/x-groovy',
   },
   {
-    label: 'Groovy Server Pages',
-    identifiers: ['gsp'],
-    codemirror_mode: 'htmlembedded',
-    codemirror_mime_type: 'application/x-jsp',
-  },
-  {
     label: 'HCL',
     identifiers: ['hcl', 'terraform', 'tf', 'tfvars', 'workflow'],
     codemirror_mode: 'ruby',
@@ -446,31 +422,25 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'HTML',
     identifiers: ['html', 'xhtml', 'htm', 'inc', 'st', 'xht'],
-    codemirror_mode: 'htmlmixed',
+    codemirror_mode: 'html',
     codemirror_mime_type: 'text/html',
-  },
-  {
-    label: 'HTML+Django',
-    identifiers: ['django', 'htmldjango', 'njk', 'nunjucks', 'jinja', 'mustache'],
-    codemirror_mode: 'django',
-    codemirror_mime_type: 'text/x-django',
   },
   {
     label: 'HTML+ECR',
     identifiers: ['ecr'],
-    codemirror_mode: 'htmlmixed',
+    codemirror_mode: 'html',
     codemirror_mime_type: 'text/html',
   },
   {
     label: 'HTML+EEX',
     identifiers: ['eex'],
-    codemirror_mode: 'htmlmixed',
+    codemirror_mode: 'html',
     codemirror_mime_type: 'text/html',
   },
   {
     label: 'HTML+ERB',
     identifiers: ['erb'],
-    codemirror_mode: 'htmlembedded',
+    codemirror_mode: 'html',
     codemirror_mime_type: 'application/x-erb',
   },
   {
@@ -482,7 +452,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'HTML+Razor',
     identifiers: ['razor', 'cshtml'],
-    codemirror_mode: 'htmlmixed',
+    codemirror_mode: 'html',
     codemirror_mime_type: 'text/html',
   },
   {
@@ -496,12 +466,6 @@ const languages: ProcessedCodeLanguage[] = [
     identifiers: ['hack', 'hh', 'php'],
     codemirror_mode: 'php',
     codemirror_mime_type: 'application/x-httpd-php',
-  },
-  {
-    label: 'Haml',
-    identifiers: ['haml'],
-    codemirror_mode: 'haml',
-    codemirror_mime_type: 'text/x-haml',
   },
   {
     label: 'Haskell',
@@ -518,7 +482,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'HolyC',
     identifiers: ['holyc', 'hc'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-csrc',
   },
   {
@@ -599,7 +563,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'Java',
     identifiers: ['java'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'java',
     codemirror_mime_type: 'text/x-java',
   },
   {
@@ -611,7 +575,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'Java Server Pages',
     identifiers: ['jsp'],
-    codemirror_mode: 'htmlembedded',
+    codemirror_mode: 'html',
     codemirror_mime_type: 'application/x-jsp',
   },
   {
@@ -662,25 +626,25 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'KiCad Layout',
     identifiers: ['pcbnew'],
-    codemirror_mode: 'commonlisp',
+    codemirror_mode: 'commonLisp',
     codemirror_mime_type: 'text/x-common-lisp',
   },
   {
     label: 'Kit',
     identifiers: ['kit'],
-    codemirror_mode: 'htmlmixed',
+    codemirror_mode: 'html',
     codemirror_mime_type: 'text/html',
   },
   {
     label: 'Kotlin',
     identifiers: ['kotlin', 'kt', 'ktm', 'kts'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'kotlin',
     codemirror_mime_type: 'text/x-kotlin',
   },
   {
     label: 'LFE',
     identifiers: ['lfe'],
-    codemirror_mode: 'commonlisp',
+    codemirror_mode: 'commonLisp',
     codemirror_mime_type: 'text/x-common-lisp',
   },
   {
@@ -696,12 +660,6 @@ const languages: ProcessedCodeLanguage[] = [
     codemirror_mime_type: 'text/xml',
   },
   {
-    label: 'Latte',
-    identifiers: ['latte'],
-    codemirror_mode: 'smarty',
-    codemirror_mime_type: 'text/x-smarty',
-  },
-  {
     label: 'Less',
     identifiers: ['less'],
     codemirror_mode: 'css',
@@ -710,7 +668,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'Literate Haskell',
     identifiers: ['lhaskell', 'lhs'],
-    codemirror_mode: 'haskell-literate',
+    codemirror_mode: 'haskell',
     codemirror_mime_type: 'text/x-literate-haskell',
   },
   {
@@ -746,7 +704,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'MTML',
     identifiers: ['mtml'],
-    codemirror_mode: 'htmlmixed',
+    codemirror_mode: 'html',
     codemirror_mime_type: 'text/html',
   },
   {
@@ -776,13 +734,13 @@ const languages: ProcessedCodeLanguage[] = [
       'ronn',
       'workbook',
     ],
-    codemirror_mode: 'gfm',
+    codemirror_mode: 'markdown',
     codemirror_mime_type: 'text/x-gfm',
   },
   {
     label: 'Marko',
     identifiers: ['marko', 'markojs'],
-    codemirror_mode: 'htmlmixed',
+    codemirror_mode: 'html',
     codemirror_mime_type: 'text/html',
   },
   {
@@ -806,7 +764,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'Metal',
     identifiers: ['metal'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-c++src',
   },
   {
@@ -830,13 +788,13 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'NetLogo',
     identifiers: ['netlogo', 'nlogo'],
-    codemirror_mode: 'commonlisp',
+    codemirror_mode: 'commonLisp',
     codemirror_mime_type: 'text/x-common-lisp',
   },
   {
     label: 'NewLisp',
     identifiers: ['newlisp', 'nl', 'lisp', 'lsp'],
-    codemirror_mode: 'commonlisp',
+    codemirror_mode: 'commonLisp',
     codemirror_mime_type: 'text/x-common-lisp',
   },
   {
@@ -858,27 +816,21 @@ const languages: ProcessedCodeLanguage[] = [
     codemirror_mime_type: 'text/x-python',
   },
   {
-    label: 'OCaml',
-    identifiers: ['ocaml', 'ml', 'eliom', 'eliomi', 'mli', 'mll', 'mly'],
-    codemirror_mode: 'mllike',
-    codemirror_mime_type: 'text/x-ocaml',
-  },
-  {
     label: 'Objective-C',
     identifiers: ['objc', 'objectivec', 'm', 'h'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-objectivec',
   },
   {
     label: 'Objective-C++',
     identifiers: ['mm'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-objectivec',
   },
   {
     label: 'OpenCL',
     identifiers: ['opencl', 'cl'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-csrc',
   },
   {
@@ -973,14 +925,8 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'Public Key',
     identifiers: ['asc', 'pub'],
-    codemirror_mode: 'asciiarmor',
+    codemirror_mode: 'asciiArmor',
     codemirror_mime_type: 'application/pgp',
-  },
-  {
-    label: 'Pug',
-    identifiers: ['pug', 'jade'],
-    codemirror_mode: 'pug',
-    codemirror_mime_type: 'text/x-pug',
   },
   {
     label: 'Puppet',
@@ -1035,20 +981,14 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'RHTML',
     identifiers: ['rhtml'],
-    codemirror_mode: 'htmlembedded',
+    codemirror_mode: 'html',
     codemirror_mime_type: 'application/x-erb',
   },
   {
     label: 'RMarkdown',
     identifiers: ['rmarkdown', 'rmd'],
-    codemirror_mode: 'gfm',
+    codemirror_mode: 'markdown',
     codemirror_mime_type: 'text/x-gfm',
-  },
-  {
-    label: 'RPM Spec',
-    identifiers: ['specfile', 'spec'],
-    codemirror_mode: 'rpm',
-    codemirror_mime_type: 'text/x-rpm-spec',
   },
   {
     label: 'Reason',
@@ -1157,7 +1097,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'SRecode Template',
     identifiers: ['srt'],
-    codemirror_mode: 'commonlisp',
+    codemirror_mode: 'commonLisp',
     codemirror_mime_type: 'text/x-common-lisp',
   },
   {
@@ -1187,7 +1127,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'Scala',
     identifiers: ['scala', 'kojo', 'sbt', 'sc'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'scala',
     codemirror_mime_type: 'text/x-scala',
   },
   {
@@ -1221,39 +1161,21 @@ const languages: ProcessedCodeLanguage[] = [
     codemirror_mime_type: 'text/x-sh',
   },
   {
-    label: 'Slim',
-    identifiers: ['slim'],
-    codemirror_mode: 'slim',
-    codemirror_mime_type: 'text/x-slim',
-  },
-  {
     label: 'Smalltalk',
     identifiers: ['smalltalk', 'squeak', 'st', 'cs'],
     codemirror_mode: 'smalltalk',
     codemirror_mime_type: 'text/x-stsrc',
   },
   {
-    label: 'Smarty',
-    identifiers: ['smarty', 'tpl'],
-    codemirror_mode: 'smarty',
-    codemirror_mime_type: 'text/x-smarty',
-  },
-  {
     label: 'Squirrel',
     identifiers: ['squirrel', 'nut'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'squirrel',
     codemirror_mime_type: 'text/x-c++src',
-  },
-  {
-    label: 'Standard ML',
-    identifiers: ['sml', 'ML', 'fun', 'sig'],
-    codemirror_mode: 'mllike',
-    codemirror_mime_type: 'text/x-ocaml',
   },
   {
     label: 'Svelte',
     identifiers: ['svelte'],
-    codemirror_mode: 'htmlmixed',
+    codemirror_mode: 'html',
     codemirror_mime_type: 'text/html',
   },
   {
@@ -1333,12 +1255,6 @@ const languages: ProcessedCodeLanguage[] = [
     codemirror_mime_type: 'text/turtle',
   },
   {
-    label: 'Twig',
-    identifiers: ['twig'],
-    codemirror_mode: 'twig',
-    codemirror_mime_type: 'text/x-twig',
-  },
-  {
     label: 'TypeScript',
     identifiers: ['typescript', 'ts'],
     codemirror_mode: 'javascript',
@@ -1347,7 +1263,7 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'Unified Parallel C',
     identifiers: ['upc'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-csrc',
   },
   {
@@ -1359,13 +1275,13 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'Uno',
     identifiers: ['uno'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-csharp',
   },
   {
     label: 'UnrealScript',
     identifiers: ['unrealscript', 'uc'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-java',
   },
   {
@@ -1401,14 +1317,8 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'WebAssembly',
     identifiers: ['webassembly', 'wast', 'wasm', 'wat'],
-    codemirror_mode: 'commonlisp',
+    codemirror_mode: 'commonLisp',
     codemirror_mime_type: 'text/x-common-lisp',
-  },
-  {
-    label: 'WebIDL',
-    identifiers: ['webidl'],
-    codemirror_mode: 'webidl',
-    codemirror_mime_type: 'text/x-webidl',
   },
   {
     label: 'Windows Registry Entries',
@@ -1419,19 +1329,19 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'X BitMap',
     identifiers: ['xbm'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-csrc',
   },
   {
     label: 'X PixMap',
     identifiers: ['xpm', 'pm'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-csrc',
   },
   {
     label: 'XC',
     identifiers: ['xc'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-csrc',
   },
   {
@@ -1560,13 +1470,13 @@ const languages: ProcessedCodeLanguage[] = [
   {
     label: 'XQuery',
     identifiers: ['xquery', 'xq', 'xql', 'xqm', 'xqy'],
-    codemirror_mode: 'xquery',
+    codemirror_mode: 'xQuery',
     codemirror_mime_type: 'application/xquery',
   },
   {
     label: 'XS',
     identifiers: ['xs'],
-    codemirror_mode: 'clike',
+    codemirror_mode: 'c',
     codemirror_mime_type: 'text/x-csrc',
   },
   {
@@ -1586,12 +1496,6 @@ const languages: ProcessedCodeLanguage[] = [
     identifiers: ['edn'],
     codemirror_mode: 'clojure',
     codemirror_mime_type: 'text/x-clojure',
-  },
-  {
-    label: 'reStructuredText',
-    identifiers: ['restructuredtext', 'rst', 'rest'],
-    codemirror_mode: 'rst',
-    codemirror_mime_type: 'text/x-rst',
   },
   {
     label: 'wisp',

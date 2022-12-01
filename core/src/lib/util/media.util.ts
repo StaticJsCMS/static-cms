@@ -15,7 +15,7 @@ import type {
   MarkdownField,
   ListField,
   ObjectField,
-} from '../../interface';
+} from '@staticcms/core/interface';
 
 export const DRAFT_MEDIA_FILES = 'DRAFT_MEDIA_FILES';
 
