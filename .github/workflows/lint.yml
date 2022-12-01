@@ -28,9 +28,9 @@ jobs:
     - name: Install
       working-directory: ./core
       run: |
-        npm ci
+        yarn install --frozen-lockfile
 
     - name: Lint
       working-directory: ./core
       run: |
-        npm run lint
+        yarn lint
