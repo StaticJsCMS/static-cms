@@ -1,4 +1,4 @@
-name: Build Editor
+name: Build
 
 on:
   push:
