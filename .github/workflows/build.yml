@@ -12,7 +12,7 @@ on:
       - core/**
 
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,13 +24,28 @@ jobs:
         cache: yarn
         cache-dependency-path: core/yarn.lock
         node-version: 16
-
+        
     - name: Install
       working-directory: ./core
       run: |
         yarn install --frozen-lockfile
+        
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
 
+    steps:
     - name: Build
       working-directory: ./core
       run: |
         yarn build
+
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Lint
+      working-directory: ./core
+      run: |
+        yarn lint
