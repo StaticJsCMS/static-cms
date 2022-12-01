@@ -12,7 +12,11 @@ on:
       - core/**
 
 jobs:
-  setup:
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+
+    steps:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,11 +34,6 @@ jobs:
       run: |
         yarn install --frozen-lockfile
         
-  build:
-    needs: setup
-    runs-on: ubuntu-latest
-
-    steps:
     - name: Build
       working-directory: ./core
       run: |
@@ -45,6 +44,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        cache: yarn
+        cache-dependency-path: core/yarn.lock
+        node-version: 16
+        
+    - name: Install
+      working-directory: ./core
+      run: |
+        yarn install --frozen-lockfile
+        
     - name: Lint
       working-directory: ./core
       run: |
