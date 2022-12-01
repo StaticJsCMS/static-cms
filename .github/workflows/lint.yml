@@ -21,6 +21,7 @@ jobs:
     - name: Setup Node
       uses: actions/setup-node@v3
       with:
+        working-directory: ./core
         cache: yarn
         node-version: 16
 
