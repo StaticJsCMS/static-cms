@@ -13,10 +13,6 @@ on:
 
 jobs:
   build:
-    needs: setup
-    runs-on: ubuntu-latest
-
-    steps:
     runs-on: ubuntu-latest
 
     steps:
@@ -40,10 +36,6 @@ jobs:
         yarn build
 
   lint:
-    needs: setup
-    runs-on: ubuntu-latest
-
-    steps:
     runs-on: ubuntu-latest
 
     steps:
