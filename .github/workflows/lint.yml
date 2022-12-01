@@ -12,7 +12,7 @@ on:
       - core/**
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
