@@ -36,7 +36,7 @@
     "@types/node": "18.11.3",
     "@types/prettier": "2.7.1",
     "@types/prismjs": "1.26.0",
-    "@types/react": "18.0.21",
+    "@types/react": "18.0.25",
     "@types/react-dom": "18.0.6",
     "@typescript-eslint/eslint-plugin": "5.40.1",
     "@typescript-eslint/parser": "5.40.1",
