@@ -120,7 +120,7 @@ const SearchModal: FC<SearchModalProps> = ({ open, onClose, searchablePages }) =
 
           if (!result.isExactTitleMatch) {
             const match = new RegExp(
-              `(?:[\\s]+[^\\s]+){0,10}[\\s]*${search}(?![^<>]*(([/"']|]]|\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
+              `(?:[\\s]+[^\\s]+){0,10}[\\s]*${search}(?![^<>]*(([/"']|]]|\\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
               'ig',
             ).exec(entry.textContent);
             if (match && match.length >= 1) {
@@ -129,7 +129,7 @@ const SearchModal: FC<SearchModalProps> = ({ open, onClose, searchablePages }) =
               const match = new RegExp(
                 `(?:[\\s]+[^\\s]+){0,10}[\\s]*(${search
                   .split(' ')
-                  .join('|')})(?![^<>]*(([/"']|]]|\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
+                  .join('|')})(?![^<>]*(([/"']|]]|\\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
                 'ig',
               ).exec(entry.textContent);
               if (match && match.length >= 1) {
@@ -139,7 +139,7 @@ const SearchModal: FC<SearchModalProps> = ({ open, onClose, searchablePages }) =
           }
 
           summary = summary?.replace(
-            new RegExp(`(${search.split(' ').join('|')})(?![^<>]*(([/"']|]]|\b)>))`, 'ig'),
+            new RegExp(`(${search.split(' ').join('|')})(?![^<>]*(([/"']|]]|\\b)>))`, 'ig'),
             `<strong style="color: ${theme.palette.primary.main}">$1</strong>`,
           );
 
