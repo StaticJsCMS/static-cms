@@ -58,7 +58,7 @@
     "array-move": "4.0.0",
     "buffer": "6.0.3",
     "clean-stack": "4.2.0",
-    "codemirror": "5.65.9",
+    "codemirror": "5.65.10",
     "common-tags": "1.8.1",
     "copy-text-to-clipboard": "3.0.1",
     "create-react-class": "15.7.0",
