@@ -1,6 +1,48 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base"
+  "extends": ["config:base"],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchPackagePrefixes": [
+        "lint-staged",
+        "@types/eslint",
+        "@typescript-eslint/",
+        "eslint"
+      ],
+      "labels": ["linting", "automerge"],
+      "automerge": true
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "addLabels": ["dev dependencies"]
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor"],
+      "addLabels": ["automerge"],
+      "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["patch"],
+      "addLabels": ["patch", "automerge"],
+      "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["minor"],
+      "addLabels": ["minor"]
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "addLabels": ["major"]
+    },
+    {
+      "matchPackagePrefixes": ["@types/react", "react"],
+      "addLabels": ["react"]
+    },
+    {
+      "matchPackagePrefixes": ["@types/jest", "jest"],
+      "addLabels": ["testing"]
+    }
   ]
 }
