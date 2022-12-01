@@ -21,8 +21,8 @@ jobs:
     - name: Setup Node
       uses: actions/setup-node@v3
       with:
-        working-directory: ./core
         cache: yarn
+        cache-dependency-path: core/yarn.lock
         node-version: 16
 
     - name: Install
