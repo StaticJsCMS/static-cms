@@ -77,7 +77,8 @@ const it: LocalePhrasesRoot = {
         'Sei sicuro di voler cancellare questa voce pubblicata e tutte le modifiche non salvate della tua sessione corrente?',
       onDeletePublishedEntryBody: 'Sei sicuro di voler cancellare questa voce pubblicata?',
       loadingEntry: 'Caricando la voce...',
-      confirmLoadBackupBody: 'Un backup locale è stato recuperato per questa voce, vuoi utilizzarlo?',
+      confirmLoadBackupBody:
+        'Un backup locale è stato recuperato per questa voce, vuoi utilizzarlo?',
     },
     editorToolbar: {
       publishing: 'Pubblicando...',

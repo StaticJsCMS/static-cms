@@ -255,7 +255,7 @@ function entryDraftReducer(
         ...newState,
         hasChanged: false,
         entry,
-        original: entry
+        original: entry,
       };
     }
 

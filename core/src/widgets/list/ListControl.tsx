@@ -18,7 +18,7 @@ import type {
   ListField,
   ObjectValue,
   ValueOrNestedValue,
-  WidgetControlProps
+  WidgetControlProps,
 } from '../../interface';
 
 const StyledListWrapper = styled('div')`

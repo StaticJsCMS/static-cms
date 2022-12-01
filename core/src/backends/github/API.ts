@@ -227,6 +227,7 @@ export default class API {
       responseStatus = response.status;
       const parsedResponse = await parser(response);
       return parsedResponse;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       return this.handleRequestError(error, responseStatus);
     }
@@ -349,6 +350,7 @@ export default class API {
             size: file.size!,
           }))
       );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (err && err.status === 404) {
         console.info('This 404 was expected and handled appropriately.');
@@ -360,14 +362,18 @@ export default class API {
   }
 
   async persistFiles(dataFiles: DataFile[], mediaFiles: AssetProxy[], options: PersistOptions) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const files: (DataFile | AssetProxy)[] = mediaFiles.concat(dataFiles as any);
     const uploadPromises = files.map(file => this.uploadBlob(file));
     await Promise.all(uploadPromises);
 
-    return this.getDefaultBranch()
-      .then(branchData => this.updateTree(branchData.commit.sha, files as any))
-      .then(changeTree => this.commit(options.commitMessage, changeTree))
-      .then(response => this.patchBranch(this.branch, response.sha));
+    return (
+      this.getDefaultBranch()
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .then(branchData => this.updateTree(branchData.commit.sha, files as any))
+        .then(changeTree => this.commit(options.commitMessage, changeTree))
+        .then(response => this.patchBranch(this.branch, response.sha))
+    );
   }
 
   async getFileSha(path: string, { repoURL = this.repoURL, branch = this.branch } = {}) {

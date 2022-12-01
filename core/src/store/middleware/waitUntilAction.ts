@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Based on wait-service by Mozilla:
 // https://github.com/mozilla/gecko-dev/blob/main/devtools/client/shared/redux/middleware/wait-service.js
 

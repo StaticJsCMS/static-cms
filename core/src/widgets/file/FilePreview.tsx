@@ -18,7 +18,7 @@ const FileLink = ({ value, getAsset, field }: FileLinkProps) => {
       return;
     }
 
-    const getImage = async() => {
+    const getImage = async () => {
       const asset = (await getAsset(value, field))?.toString() ?? '';
       setAssetSource(asset);
     };

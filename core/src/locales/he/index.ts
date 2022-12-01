@@ -97,7 +97,8 @@ const he: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'האם ברצונך לעבור לעמוד אחר ללא שמירה?',
-      onUpdatingWithUnsavedChangesBody: 'בוצעו שינויים שלא נשמרו. יש לבצע שמירה לפני עדכון מצב האייטם.',
+      onUpdatingWithUnsavedChangesBody:
+        'בוצעו שינויים שלא נשמרו. יש לבצע שמירה לפני עדכון מצב האייטם.',
       onPublishingNotReadyBody: 'נא לשנות את מצב האייטם ל״מוכן לפרסום״ לפני הפרסום.',
       onPublishingWithUnsavedChangesBody: 'בוצעו שינויים שלא נשמרו. יש לבצע שמירה לפני הפרסום.',
       onPublishingBody: 'האם ברצונך לפרסם את האייטם?',

@@ -112,7 +112,8 @@ const tr: LocalePhrasesRoot = {
         'Bu oturumda kaydedilmiş değişikliklerin yanı sıra geçerli oturumdaki kaydedilmemiş değişikliklerinizi silmek istediğinize emin misiniz?',
       onDeletePublishedEntryBody: 'Bu yayınlanmış girdiyi silmek istediğinize emin misiniz?',
       loadingEntry: 'Girdiler yükleniyor...',
-      confirmLoadBackupBody: 'Bu girdi için yerel bir yedekleme kurtarıldı, kullanmak ister misiniz?',
+      confirmLoadBackupBody:
+        'Bu girdi için yerel bir yedekleme kurtarıldı, kullanmak ister misiniz?',
     },
     editorInterface: {
       toggleI18n: 'i18n değiştir',

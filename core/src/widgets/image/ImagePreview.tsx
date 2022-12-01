@@ -26,7 +26,7 @@ interface ImageAssetProps {
 function ImageAsset({ getAsset, value, field }: ImageAssetProps) {
   const [assetSource, setAssetSource] = useState('');
   useEffect(() => {
-    const getImage = async() => {
+    const getImage = async () => {
       const asset = (await getAsset(value, field))?.toString() ?? '';
       setAssetSource(asset);
     };

@@ -184,7 +184,8 @@ const da: LocalePhrasesRoot = {
     },
     mediaLibrary: {
       onDeleteBody: 'Er du sikker på at du vil slette det valgte medie?',
-      fileTooLargeBody: 'Filen er for stor.\nOpsætningen tillader ikke filer større end %{size} kB.',
+      fileTooLargeBody:
+        'Filen er for stor.\nOpsætningen tillader ikke filer større end %{size} kB.',
     },
     mediaLibraryModal: {
       loading: 'Indlæser...',

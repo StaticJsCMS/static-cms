@@ -136,11 +136,11 @@ const SortableImage = SortableElement<SortableImageProps>(
   ({ itemValue, getAsset, field, onRemove, onReplace }: SortableImageProps) => {
     const [assetSource, setAssetSource] = useState('');
     useEffect(() => {
-      const getImage = async() => {
+      const getImage = async () => {
         const asset = (await getAsset(itemValue, field))?.toString() ?? '';
         setAssetSource(asset);
       };
-  
+
       getImage();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [itemValue]);
@@ -393,13 +393,13 @@ export default function withFileControl({ forImage = false }: WithImageOptions =
         return;
       }
 
-      const getImage = async() => {
+      const getImage = async () => {
         const newValue = (await getAsset(internalValue, field))?.toString() ?? '';
         if (newValue !== internalValue) {
           setAssetSource(newValue);
         }
       };
-  
+
       getImage();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [internalValue]);

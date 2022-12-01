@@ -364,6 +364,7 @@ export class Backend {
   async logout() {
     try {
       await this.implementation.logout();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       console.warn('Error during logout', e.message);
     } finally {

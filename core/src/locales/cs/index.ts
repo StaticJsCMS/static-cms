@@ -98,9 +98,11 @@ const cs: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Chcete opravdu opustit tuto stránku?',
-      onUpdatingWithUnsavedChangesBody: 'Máte neuložené změny. Uložte je prosím před změnou statusu.',
+      onUpdatingWithUnsavedChangesBody:
+        'Máte neuložené změny. Uložte je prosím před změnou statusu.',
       onPublishingNotReadyBody: 'Změňte stav na „Připraveno“ před publikováním.',
-      onPublishingWithUnsavedChangesBody: 'Máte neuložené změny, prosím uložte je před publikováním.',
+      onPublishingWithUnsavedChangesBody:
+        'Máte neuložené změny, prosím uložte je před publikováním.',
       onPublishingBody: 'Chcete opravdu publikovat tento záznam?',
       onDeleteWithUnsavedChangesBody:
         'Chcete opravdu vymazat tento publikovaný záznam a všechny neuložené změny z této relace?',

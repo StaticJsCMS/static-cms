@@ -531,6 +531,7 @@ export default class GitGateway implements BackendClass {
   async persistEntry(entry: BackendEntry, options: PersistOptions) {
     const client = await this.getLargeMediaClient();
     if (client.enabled) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const assets = (await getLargeMediaFilteredMediaFiles(client, entry.assets)) as any;
       return this.backend!.persistEntry({ ...entry, assets }, options);
     } else {
@@ -549,6 +550,7 @@ export default class GitGateway implements BackendClass {
         client,
         fileObj as File,
         path,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       )) as any;
       return {
         ...(await this.backend!.persistMedia(persistMediaArgument, options)),
