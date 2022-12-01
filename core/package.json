@@ -49,7 +49,7 @@
     "@mui/icons-material": "5.10.6",
     "@mui/material": "5.10.10",
     "@mui/system": "5.4.1",
-    "@mui/x-date-pickers": "5.0.4",
+    "@mui/x-date-pickers": "5.0.9",
     "@reduxjs/toolkit": "1.8.5",
     "@toast-ui/react-editor": "3.2.2",
     "ajv": "8.11.0",
