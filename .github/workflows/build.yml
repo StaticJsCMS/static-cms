@@ -15,10 +15,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [16.x]
-
     steps:
     - uses: actions/checkout@v3
 
@@ -26,14 +22,15 @@ jobs:
       uses: actions/setup-node@v3
       with:
         cache: yarn
+        cache-dependency-path: core/yarn.lock
         node-version: 16
 
     - name: Install
       working-directory: ./core
       run: |
-        npm ci
+        yarn install --frozen-lockfile
 
     - name: Build
       working-directory: ./core
       run: |
-        npm run build
+        yarn build
