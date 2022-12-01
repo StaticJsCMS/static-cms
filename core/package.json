@@ -136,7 +136,7 @@
     "@emotion/eslint-plugin": "11.10.0",
     "@octokit/core": "4.1.0",
     "@octokit/rest": "16.43.2",
-    "@pmmmwh/react-refresh-webpack-plugin": "0.5.8",
+    "@pmmmwh/react-refresh-webpack-plugin": "0.5.10",
     "@types/codemirror": "5.60.5",
     "@types/common-tags": "1.8.0",
     "@types/create-react-class": "15.6.3",
