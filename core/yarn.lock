@@ -9897,10 +9897,10 @@ react-router@6.4.4:
   dependencies:
     "@remix-run/router" "1.0.4"
 
-react-scroll-sync@0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/react-scroll-sync/-/react-scroll-sync-0.9.0.tgz#81ddea7a667092807c0150924a201eceed5979fe"
-  integrity sha512-IaMUSTbarj9mhjVtBl9I45Er8gQqV8rdb9A0eK77JJ8MvnLcFIlnoiXVx1NS9ACy9QELq7xCTxdIVEdhDV9R0Q==
+react-scroll-sync@0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/react-scroll-sync/-/react-scroll-sync-0.11.0.tgz#eaeb55240d7cb07ab6ccab2fb483f46f2832b8c1"
+  integrity sha512-COfA885/2NAQPxusIU6sukKiSFXgAd9+OWD7iBWA4NF5Y1Np8poBKLwgZ3y4iywo5/+ch0PLGz887myIbm+fPw==
   dependencies:
     prop-types "^15.5.7"
 
