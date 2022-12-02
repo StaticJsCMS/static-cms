@@ -122,7 +122,7 @@
     "sanitize-filename": "1.6.3",
     "semaphore": "1.1.0",
     "slate": "0.86.0",
-    "slate-history": "0.85.0",
+    "slate-history": "0.86.0",
     "slate-hyperscript": "0.77.0",
     "slate-react": "0.83.2",
     "stream-browserify": "3.0.0",
