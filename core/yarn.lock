@@ -3319,12 +3319,12 @@
   dependencies:
     "@udecode/plate-core" "18.13.0"
 
-"@udecode/plate-juice@18.9.0":
-  version "18.9.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-juice/-/plate-juice-18.9.0.tgz#5f9702b7f579975baaa6707a94343789ff931d5f"
-  integrity sha512-kFmKj8Za61mkkCmpeNCFX44ItLkMVHqFoG/VKnpBZ/042noDphJ0UD3yGDToSPc6VLEZGTt5epRb/m2n6g6EvQ==
+"@udecode/plate-juice@18.13.0":
+  version "18.13.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-juice/-/plate-juice-18.13.0.tgz#8fb2f5c952b8a5a919c7d9c20378c07e58a72537"
+  integrity sha512-+eE7LntwsALfnQuV+Fxw4Aa+e5LAzHEV4P20Ab5fsaIGllm1lX3WzxguLO4zZ/JEjgMS5oDf77ChBYf7nB/Utg==
   dependencies:
-    "@udecode/plate-core" "18.9.0"
+    "@udecode/plate-core" "18.13.0"
     juice "^8.0.0"
 
 "@udecode/plate-kbd@18.13.0":
