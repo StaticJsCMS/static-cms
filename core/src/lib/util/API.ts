@@ -57,6 +57,7 @@ export async function requestWithBackoff(
     const builtRequest = await api.buildRequest(req);
     const requestFunction = api.requestFunction || unsentRequest.performRequest;
     const response: Response = await requestFunction(builtRequest);
+    console.log('response', builtRequest, response, builtRequest)
     if (response.status === 429) {
       // GitLab/Bitbucket too many requests
       const text = await response.text().catch(() => 'Too many requests');

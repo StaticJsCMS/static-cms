@@ -49,6 +49,8 @@
       "@staticcms/string/*": ["./src/widgets/string/*"],
       "@staticcms/text": ["./src/widgets/text"],
       "@staticcms/text/*": ["./src/widgets/text/*"],
+      "@staticcms/test": ["./test"],
+      "@staticcms/test/*": ["./test/*"],
       "@staticcms/core": ["./src"],
       "@staticcms/core/*": ["./src/*"]
     },
