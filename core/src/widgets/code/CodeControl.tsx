@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import CodeMirror from '@uiw/react-codemirror';
 import React, { useCallback, useMemo, useState } from 'react';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
 import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
 import Outline from '@staticcms/core/components/UI/Outline';
