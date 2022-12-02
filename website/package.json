@@ -11,8 +11,8 @@
   "dependencies": {
     "@emotion/react": "11.10.5",
     "@emotion/styled": "11.10.5",
-    "@mui/icons-material": "5.10.9",
-    "@mui/material": "5.10.10",
+    "@mui/icons-material": "5.10.16",
+    "@mui/material": "5.10.16",
     "date-fns": "2.29.3",
     "gray-matter": "4.0.3",
     "js-yaml": "4.1.0",
