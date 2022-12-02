@@ -4,7 +4,7 @@ import uniqueItemProperties from 'ajv-keywords/dist/keywords/uniqueItemPropertie
 import instanceOf from 'ajv-keywords/dist/keywords/instanceof';
 import prohibited from 'ajv-keywords/dist/keywords/prohibited';
 import ajvErrors from 'ajv-errors';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
 import { formatExtensions, frontmatterFormats, extensionFormatters } from '../formats/formats';
 import { getWidgets } from '../lib/registry';
