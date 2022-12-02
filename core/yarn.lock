@@ -11512,10 +11512,10 @@ update-browserslist-db@^1.0.9:
     escalade "^3.1.1"
     picocolors "^1.0.0"
 
-uploadcare-widget-tab-effects@1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/uploadcare-widget-tab-effects/-/uploadcare-widget-tab-effects-1.5.0.tgz#b320fbf22c583bb3566da65549dcb6ace7caf6ac"
-  integrity sha512-HSqtidqATXC/LjkvBmIFp1Nn69r0rmJ1fGmKYHZN5WX3jqaTi2XgofrXPX7GMY6PX7z3sk8y4Edv2UoA5uuJJw==
+uploadcare-widget-tab-effects@1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/uploadcare-widget-tab-effects/-/uploadcare-widget-tab-effects-1.6.0.tgz#6de4664b0b2fa47100b5a3e0afc1d41b35b8f429"
+  integrity sha512-RoWxeZnk41qm8Mo19R8Zvshsuqetc4y+gFtxA89x+noLCSFItuviGZJBf7rcX3ocwn+aFNKbXp44dlaVDoYRIA==
 
 uploadcare-widget@3.19.0:
   version "3.19.0"
