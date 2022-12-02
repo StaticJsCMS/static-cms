@@ -4780,10 +4780,10 @@ clean-regexp@^1.0.0:
   dependencies:
     escape-string-regexp "^1.0.5"
 
-clean-stack@4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/clean-stack/-/clean-stack-4.2.0.tgz#c464e4cde4ac789f4e0735c5d75beb49d7b30b31"
-  integrity sha512-LYv6XPxoyODi36Dp976riBtSY27VmFo+MKqEU9QCCWyTrdEPDog+RWA7xQWHi6Vbp61j5c4cdzzX1NidnwtUWg==
+clean-stack@5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/clean-stack/-/clean-stack-5.0.1.tgz#a07645e5e1e94f300fe952709d4c178b5cf6397f"
+  integrity sha512-1FDmqRFlYUEuZJYwcofH5Oa9v/cjEdHekBMzKYN3W16A3BvleeV5fX5PqiQQNSifWx5aXAaHOS8zmlcZPmZmKA==
   dependencies:
     escape-string-regexp "5.0.0"
 
