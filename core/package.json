@@ -42,7 +42,7 @@
   ],
   "dependencies": {
     "@codemirror/commands": "6.1.2",
-    "@codemirror/view": "6.5.1",
+    "@codemirror/view": "6.6.0",
     "@emotion/babel-preset-css-prop": "11.10.0",
     "@emotion/css": "11.10.0",
     "@emotion/react": "11.10.4",
@@ -85,7 +85,7 @@
     "graphql-tag": "2.12.6",
     "gray-matter": "4.0.3",
     "history": "4.10.1",
-    "immer": "9.0.15",
+    "immer": "9.0.16",
     "ini": "2.0.0",
     "is-hotkey": "0.2.0",
     "js-base64": "3.7.2",
