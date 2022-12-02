@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 import { selectMediaPath } from '@staticcms/core/reducers/mediaLibrary';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';

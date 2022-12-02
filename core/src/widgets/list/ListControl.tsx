@@ -3,7 +3,7 @@ import { arrayMoveImmutable } from 'array-move';
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useMemo, useState } from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 import FieldLabel from '@staticcms/core/components/UI/FieldLabel';
 import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
