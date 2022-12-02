@@ -2,6 +2,8 @@ import { Base64 } from 'js-base64';
 
 import API from '../API';
 
+import type { Options } from '../API';
+
 describe('github API', () => {
   beforeEach(() => {
     jest.resetAllMocks();
@@ -9,7 +11,8 @@ describe('github API', () => {
     global.fetch = jest.fn().mockRejectedValue(new Error('should not call fetch inside tests'));
   });
 
-  function mockAPI(api, responses) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function mockAPI(api: API, responses: Record<string, (options: Options) => any>) {
     api.request = jest.fn().mockImplementation((path, options = {}) => {
       const normalizedPath = path.indexOf('?') !== -1 ? path.slice(0, path.indexOf('?')) : path;
       const response = responses[normalizedPath];
@@ -83,7 +86,6 @@ describe('github API', () => {
           Authorization: 'token token',
           'Content-Type': 'application/json; charset=utf-8',
         },
-        signal: expect.any(AbortSignal),
       });
     });
 
@@ -130,7 +132,6 @@ describe('github API', () => {
           Authorization: 'promise-token',
           'Content-Type': 'application/json; charset=utf-8',
         },
-        signal: expect.any(AbortSignal),
       });
     });
   });
@@ -147,8 +148,8 @@ describe('github API', () => {
         '/repos/owner/repo/branches/master': () => ({ commit: { sha: 'root' } }),
 
         // create new tree
-        '/repos/owner/repo/git/trees': options => {
-          const data = JSON.parse(options.body);
+        '/repos/owner/repo/git/trees': (options: Options) => {
+          const data = JSON.parse((options.body as string) ?? '');
           return { sha: data.base_tree };
         },
 
@@ -186,7 +187,9 @@ describe('github API', () => {
         },
       ]);
 
-      expect((api.request as jest.Mock).mock.calls[1]).toEqual(['/repos/owner/repo/branches/master']);
+      expect((api.request as jest.Mock).mock.calls[1]).toEqual([
+        '/repos/owner/repo/branches/master',
+      ]);
 
       expect((api.request as jest.Mock).mock.calls[2]).toEqual([
         '/repos/owner/repo/git/trees',
@@ -223,7 +226,6 @@ describe('github API', () => {
         {
           body: JSON.stringify({
             sha: 'commit-sha',
-            force: false,
           }),
           method: 'PATCH',
         },
