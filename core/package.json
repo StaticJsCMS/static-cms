@@ -198,7 +198,7 @@
     "babel-plugin-transform-define": "2.1.0",
     "babel-plugin-transform-export-extensions": "6.22.0",
     "babel-plugin-transform-inline-environment-variables": "0.4.4",
-    "cache-me-outside": "0.0.10",
+    "cache-me-outside": "1.0.0",
     "commonmark": "0.30.0",
     "commonmark-spec": "0.30.0",
     "cross-env": "7.0.3",

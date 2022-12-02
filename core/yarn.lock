@@ -4590,10 +4590,10 @@ bytes@3.1.2:
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.1.2.tgz#8b0beeb98605adf1b128fa4386403c009e0221a5"
   integrity sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==
 
-cache-me-outside@0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/cache-me-outside/-/cache-me-outside-0.0.10.tgz#8dc3345fb36f40e268cebb74474e9814e1ff2286"
-  integrity sha512-AN9fsDdzpH5qoQqpHs9qYV7dR6KJ2fYbrwWsq62gj0Xlo8eKUFU4Ood/WDJVns5cpfxFbqMKH6UZd+aLRsQELA==
+cache-me-outside@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/cache-me-outside/-/cache-me-outside-1.0.0.tgz#6fc7eda7077decea3fd405cbfe71fc66a7974809"
+  integrity sha512-C0lbEMPJHXpCLh4AMZBKEZSpMIaEWWqqZD3h0m+R++6cJ6rmII1X48CYWKSZ0dLwsjvUPqaNni2Mq2SK7eIC7A==
   dependencies:
     is-invalid-path "^1.0.2"
     rimraf "^2.6.2"
