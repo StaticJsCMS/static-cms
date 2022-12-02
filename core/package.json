@@ -203,7 +203,7 @@
     "commonmark-spec": "0.30.0",
     "cross-env": "7.0.3",
     "css-loader": "6.7.2",
-    "dotenv": "10.0.0",
+    "dotenv": "16.0.3",
     "eslint": "8.28.0",
     "eslint-import-resolver-typescript": "3.5.2",
     "eslint-plugin-cypress": "2.12.1",
