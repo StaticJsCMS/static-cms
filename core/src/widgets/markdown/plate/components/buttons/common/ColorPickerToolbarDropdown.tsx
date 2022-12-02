@@ -53,7 +53,7 @@ const ColorPickerToolbarDropdown: FC<ColorPickerToolbarDropdownProps> = ({
         setSelectedColor(value);
 
         Transforms.select(editorRef as BaseEditor, editor.selection);
-        ReactEditor.focus(editorRef as ReactEditor);
+        ReactEditor.focus(editorRef as unknown as ReactEditor);
 
         setMarks(editor, { [type]: value });
       }
@@ -72,7 +72,7 @@ const ColorPickerToolbarDropdown: FC<ColorPickerToolbarDropdownProps> = ({
   const clearColor = useCallback(() => {
     if (editorRef && editor && editor.selection) {
       Transforms.select(editorRef as BaseEditor, editor.selection);
-      ReactEditor.focus(editorRef as ReactEditor);
+      ReactEditor.focus(editorRef as unknown as ReactEditor);
 
       if (selectedColor) {
         removeMark(editor, { key: type });
