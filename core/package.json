@@ -173,7 +173,7 @@
     "@types/jwt-decode": "2.2.1",
     "@types/lodash": "4.14.191",
     "@types/minimatch": "5.1.2",
-    "@types/node": "16.18.4",
+    "@types/node": "18.11.10",
     "@types/node-fetch": "2.6.2",
     "@types/react": "18.0.25",
     "@types/react-color": "3.0.6",
