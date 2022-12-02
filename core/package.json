@@ -62,7 +62,7 @@
     "@udecode/plate-serializer-md": "18.9.0",
     "@uiw/codemirror-extensions-langs": "4.14.2",
     "@uiw/react-codemirror": "4.14.2",
-    "ajv": "8.11.0",
+    "ajv": "8.11.2",
     "ajv-errors": "3.0.0",
     "ajv-keywords": "5.1.0",
     "array-move": "4.0.0",
