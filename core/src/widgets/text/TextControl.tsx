@@ -1,15 +1,15 @@
 import TextField from '@mui/material/TextField';
 import React, { useCallback, useState } from 'react';
 
-import type { ChangeEvent } from 'react';
-import type { StringOrTextField, WidgetControlProps } from '../../interface';
+import type { StringOrTextField, WidgetControlProps } from '@staticcms/core/interface';
+import type { ChangeEvent, FC } from 'react';
 
-const TextControl = ({
+const TextControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   label,
   value,
   onChange,
   hasErrors,
-}: WidgetControlProps<string, StringOrTextField>) => {
+}) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
 
   const handleChange = useCallback(

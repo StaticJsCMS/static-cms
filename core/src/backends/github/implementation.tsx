@@ -16,7 +16,7 @@ import {
   getMediaDisplayURL,
   runWithLock,
   unsentRequest,
-} from '../../lib/util';
+} from '@staticcms/core/lib/util';
 import API, { API_NAME } from './API';
 import AuthenticationPage from './AuthenticationPage';
 
@@ -31,9 +31,9 @@ import type {
   ImplementationFile,
   PersistOptions,
   User,
-} from '../../interface';
-import type { AsyncLock } from '../../lib/util';
-import type AssetProxy from '../../valueObjects/AssetProxy';
+} from '@staticcms/core/interface';
+import type { AsyncLock } from '@staticcms/core/lib/util';
+import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 
 type GitHubUser = Octokit.UsersGetAuthenticatedResponse;
 

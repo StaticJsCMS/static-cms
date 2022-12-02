@@ -5,15 +5,15 @@ import { connect } from 'react-redux';
 import {
   clearSearch as clearSearchAction,
   searchEntries as searchEntriesAction,
-} from '../../../actions/search';
-import { Cursor } from '../../../lib/util';
-import { selectSearchedEntries } from '../../../reducers';
+} from '@staticcms/core/actions/search';
+import { Cursor } from '@staticcms/core/lib/util';
+import { selectSearchedEntries } from '@staticcms/core/reducers';
 import Entries from './Entries';
 
 import type { ConnectedProps } from 'react-redux';
-import type { CollectionViewStyle } from '../../../constants/collectionViews';
-import type { Collections } from '../../../interface';
-import type { RootState } from '../../../store';
+import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
+import type { Collections } from '@staticcms/core/interface';
+import type { RootState } from '@staticcms/core/store';
 
 const EntriesSearch = ({
   collections,

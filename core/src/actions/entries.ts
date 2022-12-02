@@ -14,7 +14,7 @@ import { selectEntriesSortFields, selectIsFetching } from '../reducers/entries';
 import { navigateToEntry } from '../routing/history';
 import { addSnackbar } from '../store/slices/snackbars';
 import { createAssetProxy } from '../valueObjects/AssetProxy';
-import { createEntry } from '../valueObjects/Entry';
+import createEntry from '../valueObjects/createEntry';
 import { addAssets, getAsset } from './media';
 import { loadMedia, waitForMediaLibraryToLoad } from './mediaLibrary';
 import { waitUntil } from './waitUntil';
@@ -475,18 +475,16 @@ export function changeDraftField({
   path,
   field,
   value,
-  entry,
   i18n,
 }: {
   path: string;
   field: Field;
   value: ValueOrNestedValue;
-  entry?: Entry | null;
   i18n?: I18nSettings;
 }) {
   return {
     type: DRAFT_CHANGE_FIELD,
-    payload: { path, field, value, entry, i18n },
+    payload: { path, field, value, i18n },
   } as const;
 }
 
@@ -884,7 +882,7 @@ export function createEmptyDraftData(
   fields: Field[],
   skipField: (field: Field) => boolean = () => false,
 ) {
-  return fields.reduce((acc, item) => {
+  const ddd = fields.reduce((acc, item) => {
     if (skipField(item)) {
       return acc;
     }
@@ -904,7 +902,7 @@ export function createEmptyDraftData(
       } else {
         const asList = Array.isArray(subfields) ? subfields : [subfields];
 
-        const subDefaultValue = Array.isArray(subfields)
+        const subDefaultValue = list
           ? [createEmptyDraftData(asList, skipField)]
           : createEmptyDraftData(asList, skipField);
 
@@ -921,6 +919,8 @@ export function createEmptyDraftData(
 
     return acc;
   }, {} as ObjectValue);
+
+  return ddd;
 }
 
 function createEmptyDraftI18nData(collection: Collection, dataFields: Field[]) {

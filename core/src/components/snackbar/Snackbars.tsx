@@ -5,17 +5,18 @@ import Snackbar from '@mui/material/Snackbar';
 import React, { useCallback, useEffect, useState } from 'react';
 import { translate } from 'react-polyglot';
 
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { removeSnackbarById, selectSnackbars } from '../../store/slices/snackbars';
+import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
+import { removeSnackbarById, selectSnackbars } from '@staticcms/core/store/slices/snackbars';
 
-import type { TranslatedProps } from '../../interface';
-import type { SnackbarMessage } from '../../store/slices/snackbars';
+import type { TranslatedProps } from '@staticcms/core/interface';
+import type { SnackbarMessage } from '@staticcms/core/store/slices/snackbars';
+import type { SyntheticEvent } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface SnackbarsProps {}
 
 const Snackbars = ({ t }: TranslatedProps<SnackbarsProps>) => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [messageInfo, setMessageInfo] = useState<SnackbarMessage | undefined>(undefined);
 
   const snackbars = useAppSelector(selectSnackbars);
@@ -34,7 +35,7 @@ const Snackbars = ({ t }: TranslatedProps<SnackbarsProps>) => {
     }
   }, [snackbars, messageInfo, open, dispatch]);
 
-  const handleClose = useCallback((_event?: React.SyntheticEvent | Event, reason?: string) => {
+  const handleClose = useCallback((_event?: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }

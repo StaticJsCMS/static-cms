@@ -1,8 +1,8 @@
-import withFileControl, { getValidValue } from '../file/withFileControl';
+import withFileControl, { getValidFileValue } from '../file/withFileControl';
 import previewComponent from './ImagePreview';
 import schema from './schema';
 
-import type { FileOrImageField, WidgetParam } from '../../interface';
+import type { FileOrImageField, WidgetParam } from '@staticcms/core/interface';
 
 const controlComponent = withFileControl({ forImage: true });
 
@@ -13,9 +13,11 @@ function ImageWidget(): WidgetParam<string | string[], FileOrImageField> {
     previewComponent,
     options: {
       schema,
-      getValidValue,
+      getValidValue: getValidFileValue,
     },
   };
 }
+
+export { previewComponent as ImagePreview, schema as ImageSchema };
 
 export default ImageWidget;

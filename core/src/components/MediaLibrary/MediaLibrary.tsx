@@ -10,17 +10,17 @@ import {
   loadMedia as loadMediaAction,
   loadMediaDisplayURL as loadMediaDisplayURLAction,
   persistMedia as persistMediaAction,
-} from '../../actions/mediaLibrary';
-import { fileExtension } from '../../lib/util';
-import { selectMediaFiles } from '../../reducers/mediaLibrary';
+} from '@staticcms/core/actions/mediaLibrary';
+import { fileExtension } from '@staticcms/core/lib/util';
+import { selectMediaFiles } from '@staticcms/core/reducers/mediaLibrary';
 import alert from '../UI/Alert';
 import confirm from '../UI/Confirm';
 import MediaLibraryModal from './MediaLibraryModal';
 
 import type { ChangeEvent, KeyboardEvent } from 'react';
 import type { ConnectedProps } from 'react-redux';
-import type { MediaFile, TranslatedProps } from '../../interface';
-import type { RootState } from '../../store';
+import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
+import type { RootState } from '@staticcms/core/store';
 
 /**
  * Extensions used to determine which files to show when the media library is

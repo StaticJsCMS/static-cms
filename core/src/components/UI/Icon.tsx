@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import React from 'react';
 
 import icons from './Icon/icons';
-import transientOptions from '../../lib/util/transientOptions';
+import transientOptions from '@staticcms/core/lib/util/transientOptions';
 
 import type { IconType } from './Icon/icons';
 

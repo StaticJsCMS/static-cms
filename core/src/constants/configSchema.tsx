@@ -343,7 +343,7 @@ class ConfigError extends Error {
  * `validateConfig` is a pure function. It does not mutate
  * the config that is passed in.
  */
-export function validateConfig(config: Config) {
+export default function validateConfig(config: Config) {
   const ajv = new AJV({ allErrors: true, allowUnionTypes: true, $data: true });
   uniqueItemProperties(ajv);
   select(ajv);

@@ -1,10 +1,10 @@
 import flatten from 'lodash/flatten';
 
-import { unsentRequest } from '../../../lib/util';
-import { selectEntrySlug } from '../../../lib/util/collection.util';
-import { createEntry } from '../../../valueObjects/Entry';
+import { unsentRequest } from '@staticcms/core/lib/util';
+import { selectEntrySlug } from '@staticcms/core/lib/util/collection.util';
+import createEntry from '@staticcms/core/valueObjects/createEntry';
 
-import type { AlgoliaConfig, Collection, Entry, SearchResponse } from '../../../interface';
+import type { AlgoliaConfig, Collection, Entry, SearchResponse } from '@staticcms/core/interface';
 
 const { fetchWithTimeout: fetch } = unsentRequest;
 

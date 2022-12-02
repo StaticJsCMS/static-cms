@@ -2,14 +2,14 @@ import { styled } from '@mui/material/styles';
 import React, { useCallback, useMemo } from 'react';
 import { Waypoint } from 'react-waypoint';
 
-import { VIEW_STYLE_LIST } from '../../../constants/collectionViews';
-import { transientOptions } from '../../../lib';
-import { selectFields, selectInferedField } from '../../../lib/util/collection.util';
+import { VIEW_STYLE_LIST } from '@staticcms/core/constants/collectionViews';
+import { transientOptions } from '@staticcms/core/lib';
+import { selectFields, selectInferedField } from '@staticcms/core/lib/util/collection.util';
 import EntryCard from './EntryCard';
 
-import type { CollectionViewStyle } from '../../../constants/collectionViews';
-import type { Field, Collection, Collections, Entry } from '../../../interface';
-import type Cursor from '../../../lib/util/Cursor';
+import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
+import type { Field, Collection, Collections, Entry } from '@staticcms/core/interface';
+import type Cursor from '@staticcms/core/lib/util/Cursor';
 
 interface CardsGridProps {
   $layout: CollectionViewStyle;

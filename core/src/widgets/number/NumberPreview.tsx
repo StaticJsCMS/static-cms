@@ -1,11 +1,12 @@
 import React from 'react';
 
-import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
+import WidgetPreviewContainer from '@staticcms/core/components/UI/WidgetPreviewContainer';
 
-import type { NumberField, WidgetPreviewProps } from '../../interface';
+import type { NumberField, WidgetPreviewProps } from '@staticcms/core/interface';
+import type { FC } from 'react';
 
-function NumberPreview({ value }: WidgetPreviewProps<string | number, NumberField>) {
+const NumberPreview: FC<WidgetPreviewProps<string | number, NumberField>> = ({ value }) => {
   return <WidgetPreviewContainer>{value}</WidgetPreviewContainer>;
-}
+};
 
 export default NumberPreview;

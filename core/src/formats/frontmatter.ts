@@ -3,7 +3,7 @@ import matter from 'gray-matter';
 import YamlFormatter from './YamlFormatter';
 import TomlFormatter from './TomlFormatter';
 import JsonFormatter from './JsonFormatter';
-import { FileFormatter } from './FileFormatter';
+import FileFormatter from './FileFormatter';
 
 const Languages = {
   YAML: 'yaml',

@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 export function stringToRGB(str: string) {
   if (!str) return '000000';
   let hash = 0;

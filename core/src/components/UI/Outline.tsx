@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import React from 'react';
 
-import transientOptions from '../../lib/util/transientOptions';
+import transientOptions from '@staticcms/core/lib/util/transientOptions';
 
 interface StyledOutlineProps {
   $active: boolean;

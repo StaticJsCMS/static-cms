@@ -3,7 +3,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import green from '@mui/material/colors/green';
+import { green } from '@mui/material/colors';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
@@ -11,13 +11,18 @@ import Toolbar from '@mui/material/Toolbar';
 import React, { useCallback, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 
-import { colors, components, zIndex } from '../../components/UI/styles';
-import { selectAllowDeletion } from '../../lib/util/collection.util';
+import { colors, components, zIndex } from '@staticcms/core/components/UI/styles';
+import { selectAllowDeletion } from '@staticcms/core/lib/util/collection.util';
 import { SettingsDropdown } from '../UI';
 import NavLink from '../UI/NavLink';
 
 import type { MouseEvent } from 'react';
-import type { Collection, EditorPersistOptions, TranslatedProps, User } from '../../interface';
+import type {
+  Collection,
+  EditorPersistOptions,
+  TranslatedProps,
+  User,
+} from '@staticcms/core/interface';
 
 const StyledAppBar = styled(AppBar)`
   background-color: ${colors.foreground};

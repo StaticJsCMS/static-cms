@@ -4,40 +4,30 @@ import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 import React from 'react';
 
-import { zIndex } from '../../components/UI/styles';
-import { transientOptions } from '../../lib';
+import { zIndex } from '@staticcms/core/components/UI/styles';
 
-import type { MouseEvent } from 'react';
+import type { FC, MouseEvent } from 'react';
 
-interface StyledSettingsButtonProps {
-  $showClose: boolean;
-}
+const StyledSettingsButton = styled(IconButton)`
+  position: absolute;
+  z-index: ${zIndex.zIndex100};
+  right: 8px;
+  top: 8px;
+  opacity: 0.8;
+  padding: 2px 4px;
+  line-height: 1;
+  height: auto;
+  color: #000;
+`;
 
-const StyledSettingsButton = styled(
-  IconButton,
-  transientOptions,
-)<StyledSettingsButtonProps>(
-  ({ $showClose }) => `
-    position: absolute;
-    z-index: ${zIndex.zIndex100};
-    right: 8px;
-    top: 8px;
-    opacity: 0.8;
-    padding: 2px 4px;
-    line-height: 1;
-    height: auto;
-    color: ${$showClose ? '#000' : '#fff'};
-  `,
-);
-
-interface SettingsButtonProps {
+export interface SettingsButtonProps {
   showClose?: boolean;
   onClick: (event: MouseEvent) => void;
 }
 
-const SettingsButton = ({ showClose = false, onClick }: SettingsButtonProps) => {
+const SettingsButton: FC<SettingsButtonProps> = ({ showClose = false, onClick }) => {
   return (
-    <StyledSettingsButton $showClose={showClose} onClick={onClick}>
+    <StyledSettingsButton onClick={onClick}>
       {showClose ? <CloseIcon /> : <SettingsIcon />}
     </StyledSettingsButton>
   );

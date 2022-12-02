@@ -154,7 +154,7 @@ function entryDraftReducer(
         return state;
       }
 
-      const { path, field, value, entry, i18n } = action.payload;
+      const { path, field, value, i18n } = action.payload;
       const dataPath = (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
 
       newState = {
@@ -170,7 +170,7 @@ function entryDraftReducer(
 
       return {
         ...newState,
-        hasChanged: !entry || !isEqual(newData, get(newState.original, dataPath)),
+        hasChanged: !newState.original || !isEqual(newData, get(newState.original, dataPath)),
       };
     }
 

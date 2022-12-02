@@ -3,7 +3,7 @@ import { Navigate, useParams } from 'react-router-dom';
 
 import Editor from './Editor';
 
-import type { Collections } from '../../interface';
+import type { Collections } from '@staticcms/core/interface';
 
 function getDefaultPath(collections: Collections) {
   const first = Object.values(collections).filter(collection => collection.hide !== true)[0];

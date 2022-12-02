@@ -5,13 +5,13 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 
-import { transientOptions } from '../../lib';
+import { transientOptions } from '@staticcms/core/lib';
 import { colors, colorsRaw, transitions } from './styles';
 
+import type { ObjectField, TranslatedProps } from '@staticcms/core/interface';
 import type { MouseEvent, ReactNode } from 'react';
-import type { ObjectField, TranslatedProps } from '../../interface';
 
 const TopBarContainer = styled('div')`
   position: relative;
@@ -67,9 +67,9 @@ const ObjectWidgetTopBar = ({
   hasError = false,
   t,
 }: TranslatedProps<ObjectWidgetTopBarProps>) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   }, []);
   const handleClose = useCallback(() => {

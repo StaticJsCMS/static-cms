@@ -5,7 +5,7 @@ import { FrontmatterInfer, frontmatterJSON, frontmatterTOML, frontmatterYAML } f
 
 import type { Delimiter } from './frontmatter';
 import type { Collection, Entry, Format } from '../interface';
-import type { FileFormatter } from './FileFormatter';
+import type FileFormatter from './FileFormatter';
 
 export const frontmatterFormats = ['yaml-frontmatter', 'toml-frontmatter', 'json-frontmatter'];
 

@@ -5,21 +5,21 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
 import uuid from 'uuid';
 
-import FieldLabel from '../../components/UI/FieldLabel';
-import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
-import Outline from '../../components/UI/Outline';
-import transientOptions from '../../lib/util/transientOptions';
+import FieldLabel from '@staticcms/core/components/UI/FieldLabel';
+import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
+import Outline from '@staticcms/core/components/UI/Outline';
+import transientOptions from '@staticcms/core/lib/util/transientOptions';
 import ListItem from './ListItem';
 import { resolveFieldKeyType, TYPES_KEY } from './typedListHelpers';
 
-import type { MouseEvent } from 'react';
 import type {
   Field,
   ListField,
   ObjectValue,
   ValueOrNestedValue,
   WidgetControlProps,
-} from '../../interface';
+} from '@staticcms/core/interface';
+import type { FC, MouseEvent } from 'react';
 
 const StyledListWrapper = styled('div')`
   position: relative;
@@ -95,7 +95,7 @@ function getFieldsDefault(fields: Field[], initialValue: ObjectValue = {}): Obje
   }, initialValue);
 }
 
-const ListControl = ({
+const ListControl: FC<WidgetControlProps<ObjectValue[], ListField>> = ({
   entry,
   field,
   fieldsErrors,
@@ -109,7 +109,7 @@ const ListControl = ({
   value,
   i18n,
   hasErrors,
-}: WidgetControlProps<ObjectValue[], ListField>) => {
+}) => {
   const internalValue = useMemo(() => value ?? [], [value]);
   const [collapsed, setCollapsed] = useState(field.collapsed ?? true);
   const [keys, setKeys] = useState(Array.from({ length: internalValue.length }, () => uuid()));

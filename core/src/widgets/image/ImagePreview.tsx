@@ -1,9 +1,16 @@
 import { styled } from '@mui/material/styles';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
+import WidgetPreviewContainer from '@staticcms/core/components/UI/WidgetPreviewContainer';
+import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 
-import type { FileOrImageField, GetAssetFunction, WidgetPreviewProps } from '../../interface';
+import type {
+  Collection,
+  Entry,
+  FileOrImageField,
+  WidgetPreviewProps,
+} from '@staticcms/core/interface';
+import type { FC } from 'react';
 
 interface StyledImageProps {
   src: string;
@@ -18,31 +25,24 @@ const StyledImage = styled(({ src }: StyledImageProps) => (
 `;
 
 interface ImageAssetProps {
-  getAsset: GetAssetFunction<FileOrImageField>;
   value: string;
+  collection: Collection<FileOrImageField>;
   field: FileOrImageField;
+  entry: Entry;
 }
 
-function ImageAsset({ getAsset, value, field }: ImageAssetProps) {
-  const [assetSource, setAssetSource] = useState('');
-  useEffect(() => {
-    const getImage = async () => {
-      const asset = (await getAsset(value, field))?.toString() ?? '';
-      setAssetSource(asset);
-    };
-
-    getImage();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+const ImageAsset: FC<ImageAssetProps> = ({ value, collection, field, entry }) => {
+  const assetSource = useMediaAsset(value, collection, field, entry);
 
   return <StyledImage src={assetSource} />;
-}
+};
 
-function ImagePreviewContent({
+const ImagePreviewContent: FC<WidgetPreviewProps<string | string[], FileOrImageField>> = ({
   value,
-  getAsset,
+  collection,
   field,
-}: WidgetPreviewProps<string | string[], FileOrImageField>) {
+  entry,
+}) => {
   if (!value) {
     return null;
   }
@@ -51,21 +51,21 @@ function ImagePreviewContent({
     return (
       <>
         {value.map(val => (
-          <ImageAsset key={val} value={val} getAsset={getAsset} field={field} />
+          <ImageAsset key={val} value={val} collection={collection} field={field} entry={entry} />
         ))}
       </>
     );
   }
 
-  return <ImageAsset value={value} getAsset={getAsset} field={field} />;
-}
+  return <ImageAsset value={value} collection={collection} field={field} entry={entry} />;
+};
 
-function ImagePreview(props: WidgetPreviewProps<string | string[], FileOrImageField>) {
+const ImagePreview: FC<WidgetPreviewProps<string | string[], FileOrImageField>> = props => {
   return (
     <WidgetPreviewContainer>
       {props.value ? <ImagePreviewContent {...props} /> : null}
     </WidgetPreviewContainer>
   );
-}
+};
 
 export default ImagePreview;

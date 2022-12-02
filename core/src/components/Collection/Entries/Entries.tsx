@@ -2,12 +2,12 @@ import { styled } from '@mui/material/styles';
 import React from 'react';
 import { translate } from 'react-polyglot';
 
-import Loader from '../../UI/Loader';
+import Loader from '@staticcms/core/components/UI/Loader';
 import EntryListing from './EntryListing';
 
-import type { CollectionViewStyle } from '../../../constants/collectionViews';
-import type { Collection, Collections, Entry, TranslatedProps } from '../../../interface';
-import type Cursor from '../../../lib/util/Cursor';
+import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
+import type { Collection, Collections, Entry, TranslatedProps } from '@staticcms/core/interface';
+import type Cursor from '@staticcms/core/lib/util/Cursor';
 
 const PaginationMessage = styled('div')`
   padding: 16px;

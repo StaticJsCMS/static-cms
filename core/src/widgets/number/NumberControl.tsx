@@ -1,9 +1,9 @@
 import TextField from '@mui/material/TextField';
 import React, { useCallback, useState } from 'react';
 
-import type { ChangeEvent } from 'react';
+import type { FieldError, NumberField, WidgetControlProps } from '@staticcms/core/interface';
+import type { ChangeEvent, FC } from 'react';
 import type { t } from 'react-polyglot';
-import type { FieldError, NumberField, WidgetControlProps } from '../../interface';
 
 const ValidationErrorTypes = {
   PRESENCE: 'PRESENCE',
@@ -12,7 +12,7 @@ const ValidationErrorTypes = {
   CUSTOM: 'CUSTOM',
 };
 
-export function validateMinMax(
+export function validateNumberMinMax(
   value: string | number,
   min: number | false,
   max: number | false,
@@ -58,13 +58,13 @@ export function validateMinMax(
   return error;
 }
 
-const NumberControl = ({
+const NumberControl: FC<WidgetControlProps<string | number, NumberField>> = ({
   label,
   field,
   value,
   onChange,
   hasErrors,
-}: WidgetControlProps<string | number, NumberField>) => {
+}) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
 
   const handleChange = useCallback(

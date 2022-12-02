@@ -519,10 +519,7 @@ function GlobalStyles() {
         }
 
         ${quantifier} {
-          font-family: ${fonts.primary};
-          font-weight: normal;
           background-color: ${colors.background};
-          color: ${colors.text};
           margin: 0;
 
           .ol-viewport {

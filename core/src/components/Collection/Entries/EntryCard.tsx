@@ -7,15 +7,15 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { getAsset as getAssetAction } from '../../../actions/media';
-import { VIEW_STYLE_GRID, VIEW_STYLE_LIST } from '../../../constants/collectionViews';
-import { selectEntryCollectionTitle } from '../../../lib/util/collection.util';
-import { selectIsLoadingAsset } from '../../../reducers/medias';
+import { getAsset as getAssetAction } from '@staticcms/core/actions/media';
+import { VIEW_STYLE_GRID, VIEW_STYLE_LIST } from '@staticcms/core/constants/collectionViews';
+import { selectEntryCollectionTitle } from '@staticcms/core/lib/util/collection.util';
+import { selectIsLoadingAsset } from '@staticcms/core/reducers/medias';
 
 import type { ConnectedProps } from 'react-redux';
-import type { CollectionViewStyle } from '../../../constants/collectionViews';
-import type { Field, Collection, Entry } from '../../../interface';
-import type { RootState } from '../../../store';
+import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
+import type { Field, Collection, Entry } from '@staticcms/core/interface';
+import type { RootState } from '@staticcms/core/store';
 
 const EntryCard = ({
   collection,

@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import React from 'react';
 import TopBarProgress from 'react-topbar-progress-indicator';
 
-import { colors } from '../../components/UI/styles';
+import { colors } from '@staticcms/core/components/UI/styles';
 import Header from './Header';
 
 import type { ReactNode } from 'react';

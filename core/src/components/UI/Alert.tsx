@@ -7,8 +7,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import React, { useCallback, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 
-import AlertEvent from '../../lib/util/events/AlertEvent';
-import { useWindowEvent } from '../../lib/util/window.util';
+import AlertEvent from '@staticcms/core/lib/util/events/AlertEvent';
+import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 
 import type { TranslateProps } from 'react-polyglot';
 

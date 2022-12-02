@@ -1,7 +1,7 @@
 import controlComponent from './ColorControl';
 import previewComponent from './ColorPreview';
 
-import type { ColorField, WidgetParam } from '../../interface';
+import type { ColorField, WidgetParam } from '@staticcms/core/interface';
 
 const ColorWidget = (): WidgetParam<string, ColorField> => {
   return {
@@ -10,5 +10,7 @@ const ColorWidget = (): WidgetParam<string, ColorField> => {
     previewComponent,
   };
 };
+
+export { controlComponent as ColorControl, previewComponent as ColorPreview };
 
 export default ColorWidget;

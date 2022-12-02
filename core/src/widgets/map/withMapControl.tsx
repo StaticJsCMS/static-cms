@@ -8,14 +8,15 @@ import olStyles from 'ol/ol.css';
 import OSMSource from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import View from 'ol/View.js';
-import React, { useCallback, useLayoutEffect, useMemo, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 
-import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
-import Outline from '../../components/UI/Outline';
-import transientOptions from '../../lib/util/transientOptions';
+import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
+import Outline from '@staticcms/core/components/UI/Outline';
+import transientOptions from '@staticcms/core/lib/util/transientOptions';
 
+import type { MapField, WidgetControlProps } from '@staticcms/core/interface';
 import type { Geometry } from 'ol/geom';
-import type { MapField, WidgetControlProps } from '../../interface';
+import type { FC } from 'react';
 
 const StyledMapControlWrapper = styled('div')`
   display: flex;
@@ -77,8 +78,8 @@ interface WithMapControlProps {
   getMap?: (target: HTMLDivElement, featuresLayer: VectorLayer<VectorSource<Geometry>>) => Map;
 }
 
-export default function withMapControl({ getFormat, getMap }: WithMapControlProps = {}) {
-  const MapControl = ({
+const withMapControl = ({ getFormat, getMap }: WithMapControlProps = {}) => {
+  const MapControl: FC<WidgetControlProps<string, MapField>> = ({
     path,
     value,
     field,
@@ -86,7 +87,7 @@ export default function withMapControl({ getFormat, getMap }: WithMapControlProp
     hasErrors,
     label,
     t,
-  }: WidgetControlProps<string, MapField>) => {
+  }) => {
     const [collapsed, setCollapsed] = useState(false);
 
     const handleCollapseToggle = useCallback(() => {
@@ -94,7 +95,7 @@ export default function withMapControl({ getFormat, getMap }: WithMapControlProp
     }, [collapsed]);
     const { height = '400px' } = field;
 
-    const mapContainer: React.LegacyRef<HTMLDivElement> = useMemo(() => React.createRef(), []);
+    const mapContainer = useRef<HTMLDivElement | null>(null);
 
     useLayoutEffect(() => {
       const format = getFormat ? getFormat(field) : getDefaultFormat();
@@ -147,4 +148,6 @@ export default function withMapControl({ getFormat, getMap }: WithMapControlProp
   MapControl.displayName = 'MapControl';
 
   return MapControl;
-}
+};
+
+export default withMapControl;

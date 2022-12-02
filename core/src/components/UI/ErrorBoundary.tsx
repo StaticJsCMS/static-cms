@@ -2,15 +2,15 @@ import { styled } from '@mui/material/styles';
 import cleanStack from 'clean-stack';
 import copyToClipboard from 'copy-text-to-clipboard';
 import truncate from 'lodash/truncate';
-import React from 'react';
+import React, { Component } from 'react';
 import { translate } from 'react-polyglot';
 import yaml from 'yaml';
 
-import { localForage } from '../../lib/util';
-import { buttons, colors } from '../../components/UI/styles';
+import { buttons, colors } from '@staticcms/core/components/UI/styles';
+import { localForage } from '@staticcms/core/lib/util';
 
+import type { Config, TranslatedProps } from '@staticcms/core/interface';
 import type { ReactNode } from 'react';
-import type { Config, TranslatedProps } from '../../interface';
 
 const ISSUE_URL = 'https://github.com/StaticJsCMS/static-cms/issues/new?';
 
@@ -45,7 +45,7 @@ function buildIssueTemplate(config: Config) {
   }
   const template = getIssueTemplate(
     version,
-    config.backend.name,
+    config?.backend?.name,
     navigator.userAgent,
     yaml.stringify(config),
   );
@@ -145,7 +145,7 @@ interface ErrorBoundaryState {
   backup: string;
 }
 
-export class ErrorBoundary extends React.Component<
+export class ErrorBoundary extends Component<
   TranslatedProps<ErrorBoundaryProps>,
   ErrorBoundaryState
 > {

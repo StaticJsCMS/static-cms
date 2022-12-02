@@ -2,7 +2,7 @@ import { stripIndent } from 'common-tags';
 import trimStart from 'lodash/trimStart';
 import semaphore from 'semaphore';
 
-import { NetlifyAuthenticator } from '../../lib/auth';
+import { NetlifyAuthenticator } from '@staticcms/core/lib/auth';
 import {
   AccessTokenError,
   allEntriesByFolder,
@@ -22,10 +22,10 @@ import {
   localForage,
   runWithLock,
   unsentRequest,
-} from '../../lib/util';
+} from '@staticcms/core/lib/util';
 import API, { API_NAME } from './API';
 import AuthenticationPage from './AuthenticationPage';
-import { GitLfsClient } from './git-lfs-client';
+import GitLfsClient from './git-lfs-client';
 
 import type { Semaphore } from 'semaphore';
 import type {
@@ -37,9 +37,9 @@ import type {
   ImplementationFile,
   PersistOptions,
   User,
-} from '../../interface';
-import type { ApiRequest, AsyncLock, Cursor, FetchError } from '../../lib/util';
-import type AssetProxy from '../../valueObjects/AssetProxy';
+} from '@staticcms/core/interface';
+import type { ApiRequest, AsyncLock, Cursor, FetchError } from '@staticcms/core/lib/util';
+import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 

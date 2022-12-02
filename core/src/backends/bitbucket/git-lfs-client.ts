@@ -1,8 +1,8 @@
 import minimatch from 'minimatch';
 
-import { unsentRequest } from '../../lib/util';
+import { unsentRequest } from '@staticcms/core/lib/util';
 
-import type { ApiRequest, PointerFile } from '../../lib/util';
+import type { ApiRequest, PointerFile } from '@staticcms/core/lib/util';
 
 type MakeAuthorizedRequest = (req: ApiRequest) => Promise<Response>;
 
@@ -37,7 +37,7 @@ interface LfsBatchUploadResponse {
   objects: (LfsBatchObjectUpload | LfsBatchObjectError)[];
 }
 
-export class GitLfsClient {
+export default class GitLfsClient {
   private static defaultContentHeaders = {
     Accept: 'application/vnd.git-lfs+json',
     ['Content-Type']: 'application/vnd.git-lfs+json',

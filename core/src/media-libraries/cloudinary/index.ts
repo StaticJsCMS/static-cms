@@ -1,8 +1,8 @@
 import pick from 'lodash/pick';
 
-import { loadScript } from '../../lib/util';
+import { loadScript } from '@staticcms/core/lib/util';
 
-import type { MediaLibraryInitOptions, MediaLibraryInstance } from '../../interface';
+import type { MediaLibraryInitOptions, MediaLibraryInstance } from '@staticcms/core/interface';
 
 interface GetAssetOptions {
   use_secure_url: boolean;

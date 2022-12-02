@@ -2,11 +2,11 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import React, { useCallback } from 'react';
 
-import GoBackButton from '../../components/UI/GoBackButton';
-import Icon from '../../components/UI/Icon';
+import GoBackButton from '@staticcms/core/components/UI/GoBackButton';
+import Icon from '@staticcms/core/components/UI/Icon';
 
 import type { MouseEvent } from 'react';
-import type { AuthenticationPageProps, TranslatedProps } from '../../interface';
+import type { AuthenticationPageProps, TranslatedProps } from '@staticcms/core/interface';
 
 const StyledAuthenticationPage = styled('section')`
   display: flex;

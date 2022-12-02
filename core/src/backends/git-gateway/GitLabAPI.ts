@@ -1,8 +1,8 @@
-import { unsentRequest } from '../../lib/util';
+import { unsentRequest } from '@staticcms/core/lib/util';
 import { API as GitlabAPI } from '../gitlab';
 
 import type { Config as GitLabConfig, CommitAuthor } from '../gitlab/API';
-import type { ApiRequest } from '../../lib/util';
+import type { ApiRequest } from '@staticcms/core/lib/util';
 
 type Config = GitLabConfig & { tokenPromise: () => Promise<string>; commitAuthor: CommitAuthor };
 

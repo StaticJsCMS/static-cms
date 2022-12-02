@@ -4,7 +4,7 @@ import truncate from 'lodash/truncate';
 import moment from 'moment';
 import { basename, dirname, extname } from 'path';
 
-import type { Entry, EntryData, ObjectValue } from '../../interface';
+import type { Entry, EntryData, ObjectValue } from '@staticcms/core/interface';
 
 const filters = [
   { pattern: /^upper$/, transform: (str: string) => str.toUpperCase() },

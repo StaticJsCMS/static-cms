@@ -1,9 +1,9 @@
 import controlComponent from './SelectControl';
 import previewComponent from './SelectPreview';
 import schema from './schema';
-import { validateMinMax } from '../../lib/widgets/validations';
+import { validateMinMax } from '@staticcms/core/lib/widgets/validations';
 
-import type { SelectField, WidgetParam } from '../../interface';
+import type { SelectField, WidgetParam } from '@staticcms/core/interface';
 
 const SelectWidget = (): WidgetParam<string | number | (string | number)[], SelectField> => {
   return {
@@ -26,6 +26,12 @@ const SelectWidget = (): WidgetParam<string | number | (string | number)[], Sele
       schema,
     },
   };
+};
+
+export {
+  controlComponent as SelectControl,
+  previewComponent as SelectPreview,
+  schema as SelectSchema,
 };
 
 export default SelectWidget;

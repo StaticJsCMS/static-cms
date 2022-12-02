@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
-import { logoutUser as logoutUserAction } from '../../actions/auth';
+import { logoutUser as logoutUserAction } from '@staticcms/core/actions/auth';
 import {
   changeDraftFieldValidation as changeDraftFieldValidationAction,
   createDraftDuplicateFromEntry as createDraftDuplicateFromEntryAction,
@@ -18,15 +18,15 @@ import {
   persistEntry as persistEntryAction,
   persistLocalBackup as persistLocalBackupAction,
   retrieveLocalBackup as retrieveLocalBackupAction,
-} from '../../actions/entries';
+} from '@staticcms/core/actions/entries';
 import {
   loadScroll as loadScrollAction,
   toggleScroll as toggleScrollAction,
-} from '../../actions/scroll';
-import { selectFields } from '../../lib/util/collection.util';
-import { useWindowEvent } from '../../lib/util/window.util';
-import { selectEntry } from '../../reducers';
-import { history, navigateToCollection, navigateToNewEntry } from '../../routing/history';
+} from '@staticcms/core/actions/scroll';
+import { selectFields } from '@staticcms/core/lib/util/collection.util';
+import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
+import { selectEntry } from '@staticcms/core/reducers';
+import { history, navigateToCollection, navigateToNewEntry } from '@staticcms/core/routing/history';
 import confirm from '../UI/Confirm';
 import Loader from '../UI/Loader';
 import EditorInterface from './EditorInterface';
@@ -34,8 +34,13 @@ import EditorInterface from './EditorInterface';
 import type { TransitionPromptHook } from 'history';
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
-import type { Collection, EditorPersistOptions, Entry, TranslatedProps } from '../../interface';
-import type { RootState } from '../../store';
+import type {
+  Collection,
+  EditorPersistOptions,
+  Entry,
+  TranslatedProps,
+} from '@staticcms/core/interface';
+import type { RootState } from '@staticcms/core/store';
 
 const Editor = ({
   entry,

@@ -1,10 +1,11 @@
 import React from 'react';
 
-import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
+import WidgetPreviewContainer from '@staticcms/core/components/UI/WidgetPreviewContainer';
 
-import type { ColorField, WidgetPreviewProps } from '../../interface';
+import type { ColorField, WidgetPreviewProps } from '@staticcms/core/interface';
+import type { FC } from 'react';
 
-const ColorPreview = ({ value }: WidgetPreviewProps<string, ColorField>) => {
+const ColorPreview: FC<WidgetPreviewProps<string, ColorField>> = ({ value }) => {
   return <WidgetPreviewContainer>{value}</WidgetPreviewContainer>;
 };
 

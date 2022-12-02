@@ -1,4 +1,4 @@
-import { FileFormatter } from './FileFormatter';
+import FileFormatter from './FileFormatter';
 
 class JsonFormatter extends FileFormatter {
   fromFile(content: string) {

@@ -5,7 +5,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import IconButton from '@mui/material/IconButton';
 import React from 'react';
 
-import { transientOptions } from '../../lib/util';
+import { transientOptions } from '@staticcms/core/lib/util';
 import { buttons, colors, lengths, transitions } from './styles';
 
 import type { ComponentClass, MouseEvent, ReactNode } from 'react';

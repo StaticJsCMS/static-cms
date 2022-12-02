@@ -1,13 +1,14 @@
+import PersonIcon from '@mui/icons-material/Person';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { translate } from 'react-polyglot';
-import PersonIcon from '@mui/icons-material/Person';
 
-import type { TranslatedProps } from '../../interface';
+import type { TranslatedProps } from '@staticcms/core/interface';
+import type { MouseEvent } from 'react';
 
 interface AvatarImageProps {
   imageUrl: string | undefined;
@@ -33,9 +34,9 @@ const SettingsDropdown = ({
   onLogoutClick,
   t,
 }: TranslatedProps<SettingsDropdownProps>) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   }, []);
   const handleClose = useCallback(() => {

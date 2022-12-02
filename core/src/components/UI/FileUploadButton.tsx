@@ -1,10 +1,12 @@
 import Button from '@mui/material/Button';
 import React from 'react';
 
+import type { ChangeEventHandler } from 'react';
+
 export interface FileUploadButtonProps {
   label: string;
   imagesOnly?: boolean;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  onChange: ChangeEventHandler<HTMLInputElement>;
   disabled?: boolean;
 }
 

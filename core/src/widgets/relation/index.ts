@@ -1,9 +1,9 @@
 import controlComponent from './RelationControl';
 import previewComponent from './RelationPreview';
 import schema from './schema';
-import { validations } from '../../lib/widgets';
+import { validations } from '@staticcms/core/lib/widgets';
 
-import type { RelationField, WidgetParam } from '../../interface';
+import type { RelationField, WidgetParam } from '@staticcms/core/interface';
 
 function isMultiple(field: RelationField) {
   return field.multiple ?? false;
@@ -31,5 +31,11 @@ function RelationWidget(): WidgetParam<string | string[], RelationField> {
     },
   };
 }
+
+export {
+  controlComponent as RelationControl,
+  previewComponent as RelationPreview,
+  schema as RelationSchema,
+};
 
 export default RelationWidget;

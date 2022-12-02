@@ -41,7 +41,7 @@ import {
 import { selectMediaFilePath } from './lib/util/media.util';
 import { set } from './lib/util/object.util';
 import { dateParsers, expandPath, extractTemplateVars } from './lib/widgets/stringTemplate';
-import { createEntry } from './valueObjects/Entry';
+import createEntry from './valueObjects/createEntry';
 
 import type {
   BackendClass,
