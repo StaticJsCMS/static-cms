@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles';
 import { arrayMoveImmutable } from 'array-move';
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
 import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
 import Outline from '@staticcms/core/components/UI/Outline';
