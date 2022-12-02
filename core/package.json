@@ -24,6 +24,7 @@
     "lint": "run-p -c --aggregate-output \"lint:*\"",
     "prepublishOnly": "yarn build",
     "start": "run-s clean develop",
+    "test": "cross-env NODE_ENV=test jest",
     "type-check": "tsc --watch"
   },
   "main": "dist/static-cms-core.js",
