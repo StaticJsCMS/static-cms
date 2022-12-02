@@ -4325,10 +4325,10 @@ babel-plugin-transform-builtin-extend@1.1.2:
     babel-runtime "^6.2.0"
     babel-template "^6.3.0"
 
-babel-plugin-transform-define@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-define/-/babel-plugin-transform-define-2.0.1.tgz#6a34fd6ea89989feb75721ee4cce817ec779be7f"
-  integrity sha512-7lDR1nFGSJHmhq/ScQtp9LTDmNE2yKPoLtwfiu+WQZnj84XL/J/5AZWZXwYcOwbDtUPhtg+y0yxTiP/oGDU6Kw==
+babel-plugin-transform-define@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-define/-/babel-plugin-transform-define-2.1.0.tgz#32d2e97cf40cffc1b809756a258b611e72036e41"
+  integrity sha512-bYuE8BNUnWuUs+QAmOaA+5+Bg+W7r6x97JX2Nb3xNlI91mLWH1OvIKcGqyJWPU5bWhEfJRbYi02CRarmiH6Tog==
   dependencies:
     lodash "^4.17.11"
     traverse "0.6.6"
