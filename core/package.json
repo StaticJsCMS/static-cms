@@ -231,7 +231,7 @@
     "react-refresh": "0.14.0",
     "react-svg-loader": "3.0.3",
     "rimraf": "3.0.2",
-    "simple-git": "3.14.1",
+    "simple-git": "3.15.1",
     "source-map-loader": "4.0.1",
     "style-loader": "3.3.1",
     "to-string-loader": "1.2.0",
