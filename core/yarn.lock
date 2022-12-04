@@ -1065,7 +1065,7 @@
     "@codemirror/state" "^6.0.0"
     "@lezer/css" "^1.0.0"
 
-"@codemirror/lang-html@^6.0.0":
+"@codemirror/lang-html@^6.0.0", "@codemirror/lang-html@~6.4.0":
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/@codemirror/lang-html/-/lang-html-6.4.0.tgz#55227541426ec4efb13d9da45d7a85cabaa45c73"
   integrity sha512-HHged0d9AQ/mpjYLTYDVdtI7235dO0COFNgc5uuiGokgjWx3L/sjMSw5aS/Nk7JG++LhsohG5HMNTCuqAq3Tcg==
@@ -1078,20 +1078,6 @@
     "@codemirror/view" "^6.2.2"
     "@lezer/common" "^1.0.0"
     "@lezer/css" "^1.1.0"
-    "@lezer/html" "^1.1.0"
-
-"@codemirror/lang-html@~6.2.0":
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/@codemirror/lang-html/-/lang-html-6.2.0.tgz#f6208194c351b5b1d955206b703159bad13d8e29"
-  integrity sha512-0Kr+gWPu1J4mhpLbqHPqoD5+xLCwAntfzRv9L61cqRSFNpDpDbGbONSN5xzWupo6AJ9qtDOlJNBFBuL72tXPwg==
-  dependencies:
-    "@codemirror/autocomplete" "^6.0.0"
-    "@codemirror/lang-css" "^6.0.0"
-    "@codemirror/lang-javascript" "^6.0.0"
-    "@codemirror/language" "^6.0.0"
-    "@codemirror/state" "^6.0.0"
-    "@codemirror/view" "^6.2.2"
-    "@lezer/common" "^1.0.0"
     "@lezer/html" "^1.1.0"
 
 "@codemirror/lang-java@^6.0.0", "@codemirror/lang-java@~6.0.0":
@@ -1156,20 +1142,12 @@
     "@lezer/common" "^1.0.0"
     "@lezer/php" "^1.0.0"
 
-"@codemirror/lang-python@^6.0.0":
+"@codemirror/lang-python@^6.0.0", "@codemirror/lang-python@~6.1.0":
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@codemirror/lang-python/-/lang-python-6.1.0.tgz#9e46bd79373664322eff6035ec42a9916c1616bb"
   integrity sha512-a/JhyPYn5qz5T8WtAfZCuAZcfClgNVb7UZzdLr76bWUeG7Usd3Un5o8UQOkZ/5Xw+EM5YGHHG+T6ickMYkDcRQ==
   dependencies:
     "@codemirror/autocomplete" "^6.3.2"
-    "@codemirror/language" "^6.0.0"
-    "@lezer/python" "^1.0.0"
-
-"@codemirror/lang-python@~6.0.0":
-  version "6.0.4"
-  resolved "https://registry.yarnpkg.com/@codemirror/lang-python/-/lang-python-6.0.4.tgz#81dc262e57cce6cba72302420b22a63c2d2a5892"
-  integrity sha512-CuC7V6MVw4HshQuFaB1SMXHOSbKLnBnBXMzm9Zjb+uvkggyY8fXp79T9eYFzMn7fuadoPJcXyTcT/q/SRT7lvQ==
-  dependencies:
     "@codemirror/language" "^6.0.0"
     "@lezer/python" "^1.0.0"
 
@@ -3693,20 +3671,20 @@
     "@codemirror/state" "^6.0.0"
     "@codemirror/view" "^6.0.0"
 
-"@uiw/codemirror-extensions-langs@4.15.1":
-  version "4.15.1"
-  resolved "https://registry.yarnpkg.com/@uiw/codemirror-extensions-langs/-/codemirror-extensions-langs-4.15.1.tgz#76b37b916155a61763560863d0bb7036cb79335b"
-  integrity sha512-osDz7cTs8fVvLcnZNn9+gE9qrH4eErWqIaaeS090px99KHbDTXfqre906Q+UmPFTDnO5JdlISno5MMlpBLdNaQ==
+"@uiw/codemirror-extensions-langs@4.16.0":
+  version "4.16.0"
+  resolved "https://registry.yarnpkg.com/@uiw/codemirror-extensions-langs/-/codemirror-extensions-langs-4.16.0.tgz#2f3247c68394e40b0c4ebc14fbd5e6eb0c06ba5e"
+  integrity sha512-ix2bDV+hhjk9TwNhuB/QIpQug6O1F8Am9s5ouviql64UukjCdEa9oPe0+HW4bMsgYL9jeo0FDTieo/gr9+yGow==
   dependencies:
     "@codemirror/lang-cpp" "~6.0.0"
-    "@codemirror/lang-html" "~6.2.0"
+    "@codemirror/lang-html" "~6.4.0"
     "@codemirror/lang-java" "~6.0.0"
     "@codemirror/lang-javascript" "~6.1.0"
     "@codemirror/lang-json" "~6.0.0"
     "@codemirror/lang-lezer" "~6.0.0"
     "@codemirror/lang-markdown" "~6.0.0"
     "@codemirror/lang-php" "~6.0.0"
-    "@codemirror/lang-python" "~6.0.0"
+    "@codemirror/lang-python" "~6.1.0"
     "@codemirror/lang-rust" "~6.0.0"
     "@codemirror/lang-sql" "~6.3.0"
     "@codemirror/lang-wast" "^6.0.0"
