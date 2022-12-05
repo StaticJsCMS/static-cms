@@ -16,7 +16,7 @@ import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import type {
   FileOrImageField,
   GetAssetFunction,
-  WidgetControlProps
+  WidgetControlProps,
 } from '@staticcms/core/interface';
 import type { FC, MouseEvent, MouseEventHandler } from 'react';
 
