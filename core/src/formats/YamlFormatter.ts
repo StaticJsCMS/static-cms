@@ -1,20 +1,21 @@
-import yaml from 'yaml';
+import yaml, { isNode, isMap } from 'yaml';
 
 import { sortKeys } from './helpers';
 import FileFormatter from './FileFormatter';
+import { isNotNullish } from '../lib/util/null.util';
 
-import type { Pair, YAMLMap, YAMLSeq } from 'yaml/types';
+import type { Pair, YAMLMap, Node } from 'yaml';
 
 function addComments(items: Array<Pair>, comments: Record<string, string>, prefix = '') {
   items.forEach(item => {
-    if (item.key !== undefined) {
-      const itemKey = item.key.toString();
+    if (isNotNullish(item.key)) {
+      const itemKey = item.key?.toString() ?? '';
       const key = prefix ? `${prefix}.${itemKey}` : itemKey;
-      if (comments[key]) {
+      if (isNode(item.key) && comments[key]) {
         const value = comments[key].split('\\n').join('\n ');
-        item.commentBefore = ` ${value}`;
+        item.key.commentBefore = ` ${value}`;
       }
-      if (Array.isArray(item.value?.items)) {
+      if (isMap(item.value)) {
         addComments(item.value.items, comments, key);
       }
     }
@@ -30,12 +31,12 @@ class YamlFormatter extends FileFormatter {
   }
 
   toFile(data: object, sortedKeys: string[] = [], comments: Record<string, string> = {}) {
-    const contents = yaml.createNode(data) as YAMLMap | YAMLSeq;
+    const doc = new yaml.Document();
+    const contents = doc.createNode(data) as YAMLMap<Node>;
 
-    addComments(contents.items, comments);
+    addComments(contents.items as Pair<Node>[], comments);
 
     contents.items.sort(sortKeys(sortedKeys, item => item.key?.toString()));
-    const doc = new yaml.Document();
     doc.contents = contents;
 
     return doc.toString();
