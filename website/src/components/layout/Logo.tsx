@@ -15,7 +15,7 @@ const Logo = () => {
   return (
     <Link href="/">
       <StyledImageLink>
-        <StyledImage src="/static-cms-logo.svg" width={182} height={72} />
+        <StyledImage src="/static-cms-logo.svg" alt="Static CMS" width={182} height={72} />
       </StyledImageLink>
     </Link>
   );
