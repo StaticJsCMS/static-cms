@@ -3581,10 +3581,10 @@
     immer "^9.0.6"
     react-tracked "^1.7.9"
 
-"@uiw/codemirror-extensions-basic-setup@4.16.0":
-  version "4.16.0"
-  resolved "https://registry.yarnpkg.com/@uiw/codemirror-extensions-basic-setup/-/codemirror-extensions-basic-setup-4.16.0.tgz#1262eb7bc84dfcefe5e683f85cbc90d72fe6768f"
-  integrity sha512-mvJnfUEJclfYiD3EL8+SkbeRmFL0fEERx6eZRNouopgXhkwMUp2qX5vD6escJVkLo3rTMt1ZU8LbmJf5X68vng==
+"@uiw/codemirror-extensions-basic-setup@4.17.1":
+  version "4.17.1"
+  resolved "https://registry.yarnpkg.com/@uiw/codemirror-extensions-basic-setup/-/codemirror-extensions-basic-setup-4.17.1.tgz#22f084ac33f930545c4e54b8b151f74c4fd2cdf3"
+  integrity sha512-lFH3gFPcpKDckaioYL2KonTYeeoP7gGtaDtDai7DV5UVEyuVPlkGukKCmHz6u0ol/Krs/RTbF4ylt8cDlBT1uA==
   dependencies:
     "@codemirror/autocomplete" "^6.0.0"
     "@codemirror/commands" "^6.0.0"
@@ -3615,16 +3615,16 @@
     "@codemirror/language-data" ">=6.0.0"
     "@codemirror/legacy-modes" ">=6.0.0"
 
-"@uiw/react-codemirror@4.16.0":
-  version "4.16.0"
-  resolved "https://registry.yarnpkg.com/@uiw/react-codemirror/-/react-codemirror-4.16.0.tgz#1eee7d6bfa0c30385ca2726f5d42d2cc0da813b7"
-  integrity sha512-SN/csC6+rU//j6a93y2PwaKSQwHK5H+lYaJp3fLGv6AaxxQWvGHUbUehySiD/kngueiRdfFRmGGsqY/6VxtL+Q==
+"@uiw/react-codemirror@4.17.1":
+  version "4.17.1"
+  resolved "https://registry.yarnpkg.com/@uiw/react-codemirror/-/react-codemirror-4.17.1.tgz#1051a31923c997f6567d2021fce12238304bfd50"
+  integrity sha512-ah7wFhvVW/uKbQR5D12AqDK51XGZaZI1WYO9/sraZzq32TGphL5BU3vcQd1P0YEZR6YLc23+KWNi2DCQ+EEAbA==
   dependencies:
     "@babel/runtime" "^7.18.6"
     "@codemirror/commands" "^6.1.0"
     "@codemirror/state" "^6.1.1"
     "@codemirror/theme-one-dark" "^6.0.0"
-    "@uiw/codemirror-extensions-basic-setup" "4.16.0"
+    "@uiw/codemirror-extensions-basic-setup" "4.17.1"
     codemirror "^6.0.0"
 
 "@viselect/vanilla@^3.1.0":
@@ -11913,7 +11913,12 @@ yallist@^4.0.0:
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
 
-yaml@1.10.2, yaml@^1.10.0:
+yaml@2.1.3:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/yaml/-/yaml-2.1.3.tgz#9b3a4c8aff9821b696275c79a8bee8399d945207"
+  integrity sha512-AacA8nRULjKMX2DvWvOAdBZMOfQlypSFkjcOcu9FalllIDJ1kvlREzcdIZmidQUqqeMv7jorHjq2HlLv/+c2lg==
+
+yaml@^1.10.0:
   version "1.10.2"
   resolved "https://registry.yarnpkg.com/yaml/-/yaml-1.10.2.tgz#2301c5ffbf12b467de8da2333a459e29e7920e4b"
   integrity sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==
