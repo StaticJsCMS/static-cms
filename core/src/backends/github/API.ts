@@ -71,7 +71,9 @@ export interface BlobArgs {
 
 type Param = string | number | undefined;
 
-export type Options = RequestInit & { params?: Record<string, Param | Record<string, Param> | string[]> };
+export type Options = RequestInit & {
+  params?: Record<string, Param | Record<string, Param> | string[]>;
+};
 
 type MediaFile = {
   sha: string;
