@@ -1,18 +1,18 @@
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Fab from '@mui/material/Fab';
 import { styled } from '@mui/material/styles';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { ScrollSync } from 'react-scroll-sync';
 import TopBarProgress from 'react-topbar-progress-indicator';
 
-import { loginUser as loginUserAction } from '../../actions/auth';
-import { discardDraft as discardDraftAction } from '../../actions/entries';
-import { currentBackend } from '../../backend';
-import { colors, GlobalStyles } from '../../components/UI/styles';
-import { history } from '../../routing/history';
+import { loginUser as loginUserAction } from '@staticcms/core/actions/auth';
+import { discardDraft as discardDraftAction } from '@staticcms/core/actions/entries';
+import { currentBackend } from '@staticcms/core/backend';
+import { colors, GlobalStyles } from '@staticcms/core/components/UI/styles';
+import { history } from '@staticcms/core/routing/history';
 import CollectionRoute from '../Collection/CollectionRoute';
 import EditorRoute from '../Editor/EditorRoute';
 import MediaLibrary from '../MediaLibrary/MediaLibrary';
@@ -24,10 +24,10 @@ import Loader from '../UI/Loader';
 import ScrollTop from '../UI/ScrollTop';
 import NotFoundPage from './NotFoundPage';
 
+import type { Collections, Credentials, TranslatedProps } from '@staticcms/core/interface';
+import type { RootState } from '@staticcms/core/store';
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
-import type { Collections, Credentials, TranslatedProps } from '../../interface';
-import type { RootState } from '../../store';
 
 TopBarProgress.config({
   barColors: {
@@ -162,7 +162,7 @@ const App = ({
   const defaultPath = useMemo(() => getDefaultPath(collections), [collections]);
 
   const { pathname } = useLocation();
-  React.useEffect(() => {
+  useEffect(() => {
     if (!/\/collections\/[a-zA-Z0-9_-]+\/entries\/[a-zA-Z0-9_-]+/g.test(pathname)) {
       discardDraft();
     }

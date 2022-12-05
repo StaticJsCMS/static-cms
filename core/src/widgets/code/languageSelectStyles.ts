@@ -1,7 +1,7 @@
-import { reactSelectStyles, borders } from '../../components/UI/styles';
+import { reactSelectStyles, borders } from '@staticcms/core/components/UI/styles';
 
 import type { CSSProperties } from 'react';
-import type { OptionStyleState } from '../../components/UI/styles';
+import type { OptionStyleState } from '@staticcms/core/components/UI/styles';
 
 const languageSelectStyles = {
   ...reactSelectStyles,

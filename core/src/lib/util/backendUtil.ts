@@ -70,6 +70,7 @@ export async function parseResponse<T extends keyof typeof responseFormatters = 
       throw new Error(`${format} is not a supported response format.`);
     }
     body = await formatter(res);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     throw new APIError(err.message, res.status, apiName);
   }

@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import React from 'react';
 import { translate } from 'react-polyglot';
 
-import { lengths } from '../../components/UI/styles';
+import { lengths } from '@staticcms/core/components/UI/styles';
 
 import type { ComponentType } from 'react';
 import type { TranslateProps } from 'react-polyglot';

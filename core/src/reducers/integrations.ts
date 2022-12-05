@@ -3,11 +3,7 @@ import get from 'lodash/get';
 import { CONFIG_SUCCESS } from '../actions/config';
 
 import type { ConfigAction } from '../actions/config';
-import type {
-  AlgoliaConfig,
-  Config,
-  SearchIntegrationProvider,
-} from '../interface';
+import type { AlgoliaConfig, Config, SearchIntegrationProvider } from '../interface';
 
 export interface IntegrationHooks {
   search?: SearchIntegrationProvider;

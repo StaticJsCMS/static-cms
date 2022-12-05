@@ -1,20 +1,20 @@
-import { styled } from '@mui/material/styles';
 import ArticleIcon from '@mui/icons-material/Article';
+import { styled } from '@mui/material/styles';
 import sortBy from 'lodash/sortBy';
 import { dirname, sep } from 'path';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
-import { colors, components } from '../../components/UI/styles';
-import { transientOptions } from '../../lib';
-import { selectEntryCollectionTitle } from '../../lib/util/collection.util';
-import { stringTemplate } from '../../lib/widgets';
-import { selectEntries } from '../../reducers/entries';
+import { colors, components } from '@staticcms/core/components/UI/styles';
+import { transientOptions } from '@staticcms/core/lib';
+import { selectEntryCollectionTitle } from '@staticcms/core/lib/util/collection.util';
+import { stringTemplate } from '@staticcms/core/lib/widgets';
+import { selectEntries } from '@staticcms/core/reducers/entries';
 
+import type { Collection, Entry } from '@staticcms/core/interface';
+import type { RootState } from '@staticcms/core/store';
 import type { ConnectedProps } from 'react-redux';
-import type { Collection, Entry } from '../../interface';
-import type { RootState } from '../../store';
 
 const { addFileTemplateFields } = stringTemplate;
 
@@ -124,7 +124,7 @@ const TreeNode = ({ collection, treeData, depth = 0, onToggle }: TreeNodeProps) 
         const hasChildren = depth === 0 || node.children.some(c => c.children.some(c => c.isDir));
 
         return (
-          <React.Fragment key={node.path}>
+          <Fragment key={node.path}>
             <TreeNavLink
               to={to}
               $activeClassName="sidebar-active"
@@ -146,7 +146,7 @@ const TreeNode = ({ collection, treeData, depth = 0, onToggle }: TreeNodeProps) 
                 onToggle={onToggle}
               />
             )}
-          </React.Fragment>
+          </Fragment>
         );
       })}
     </>

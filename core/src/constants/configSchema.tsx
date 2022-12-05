@@ -4,7 +4,7 @@ import uniqueItemProperties from 'ajv-keywords/dist/keywords/uniqueItemPropertie
 import instanceOf from 'ajv-keywords/dist/keywords/instanceof';
 import prohibited from 'ajv-keywords/dist/keywords/prohibited';
 import ajvErrors from 'ajv-errors';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
 import { formatExtensions, frontmatterFormats, extensionFormatters } from '../formats/formats';
 import { getWidgets } from '../lib/registry';
@@ -343,7 +343,7 @@ class ConfigError extends Error {
  * `validateConfig` is a pure function. It does not mutate
  * the config that is passed in.
  */
-export function validateConfig(config: Config) {
+export default function validateConfig(config: Config) {
   const ajv = new AJV({ allErrors: true, allowUnionTypes: true, $data: true });
   uniqueItemProperties(ajv);
   select(ajv);

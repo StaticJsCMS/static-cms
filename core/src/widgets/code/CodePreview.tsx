@@ -1,9 +1,10 @@
-import React from 'react';
 import isString from 'lodash/isString';
+import React from 'react';
 
-import WidgetPreviewContainer from '../../components/UI/WidgetPreviewContainer';
+import WidgetPreviewContainer from '@staticcms/core/components/UI/WidgetPreviewContainer';
 
-import type { CodeField, WidgetPreviewProps } from '../../interface';
+import type { CodeField, WidgetPreviewProps } from '@staticcms/core/interface';
+import type { FC } from 'react';
 
 function toValue(value: string | Record<string, string> | undefined | null, field: CodeField) {
   if (isString(value)) {
@@ -17,10 +18,10 @@ function toValue(value: string | Record<string, string> | undefined | null, fiel
   return '';
 }
 
-const CodePreview = ({
+const CodePreview: FC<WidgetPreviewProps<string | Record<string, string>, CodeField>> = ({
   value,
   field,
-}: WidgetPreviewProps<string | Record<string, string>, CodeField>) => {
+}) => {
   return (
     <WidgetPreviewContainer>
       <pre>

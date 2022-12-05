@@ -12,7 +12,7 @@ import { loadConfig } from './actions/config';
 import App from './components/App/App';
 import './components/EditorWidgets';
 import { ErrorBoundary } from './components/UI';
-import { addExtensions } from './extensions';
+import addExtensions from './extensions';
 import { getPhrases } from './lib/phrases';
 import './mediaLibrary';
 import { selectLocale } from './reducers/config';

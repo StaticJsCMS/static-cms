@@ -55,9 +55,12 @@ const MobileNavItem = ({ item }: MobileNavItemProps) => {
     return item.url;
   }, [item]);
 
-  const wrappedLink = useMemo(() => {
-    const button = (
+  const wrappedLink = useMemo(
+    () => (
       <ListItemButton
+        component={url ? Link : 'button'}
+        href={url}
+        target={url?.startsWith('http') ? '_blank' : undefined}
         key={`drawer-nav-item-${item.title}`}
         onClick={handleOnClick(item)}
         selected={selected}
@@ -72,18 +75,9 @@ const MobileNavItem = ({ item }: MobileNavItemProps) => {
           />
         ) : null}
       </ListItemButton>
-    );
-
-    if (!url) {
-      return button;
-    }
-
-    return (
-      <Link target={url?.startsWith('http') ? '_blank' : undefined} href={url}>
-        {button}
-      </Link>
-    );
-  }, [handleOnClick, item, open, selected, theme.transitions, url]);
+    ),
+    [handleOnClick, item, open, selected, theme.transitions, url],
+  );
 
   return (
     <>

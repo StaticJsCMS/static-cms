@@ -1,4 +1,4 @@
-import type { LocalePhrasesRoot } from '../../interface';
+import type { LocalePhrasesRoot } from '@staticcms/core/interface';
 
 const fr: LocalePhrasesRoot = {
   auth: {
@@ -101,7 +101,8 @@ const fr: LocalePhrasesRoot = {
       onUpdatingWithUnsavedChangesBody:
         'Veuillez enregistrer vos modifications avant de mettre à jour le statut.',
       onPublishingNotReadyBody: 'Veuillez mettre à jour le statut à "Prêt" avant de publier.',
-      onPublishingWithUnsavedChangesBody: 'Veuillez enregistrer vos modifications avant de publier.',
+      onPublishingWithUnsavedChangesBody:
+        'Veuillez enregistrer vos modifications avant de publier.',
       onPublishingBody: 'Voulez-vous vraiment publier cette entrée ?',
       onUnpublishing: 'Voulez-vous vraiment dépublier cette entrée ?',
       onDeleteWithUnsavedChangesBody:

@@ -1,30 +1,30 @@
 import { styled } from '@mui/material/styles';
+import { isEqual } from 'lodash';
 import isEmpty from 'lodash/isEmpty';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { createElement, useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
 import {
   changeDraftField as changeDraftFieldAction,
   changeDraftFieldValidation as changeDraftFieldValidationAction,
-} from '../../../actions/entries';
-import { getAsset as getAssetAction } from '../../../actions/media';
+} from '@staticcms/core/actions/entries';
+import { getAsset as getAssetAction } from '@staticcms/core/actions/media';
 import {
   clearMediaControl as clearMediaControlAction,
   openMediaLibrary as openMediaLibraryAction,
   removeInsertedMedia as removeInsertedMediaAction,
   removeMediaControl as removeMediaControlAction,
-} from '../../../actions/mediaLibrary';
-import { query as queryAction } from '../../../actions/search';
-import { borders, colors, lengths, transitions } from '../../../components/UI/styles';
-import { transientOptions } from '../../../lib';
-import { resolveWidget } from '../../../lib/registry';
-import { getFieldLabel } from '../../../lib/util/field.util';
-import { validate } from '../../../lib/util/validation.util';
-import { selectIsLoadingAsset } from '../../../reducers/medias';
+} from '@staticcms/core/actions/mediaLibrary';
+import { query as queryAction } from '@staticcms/core/actions/search';
+import { borders, colors, lengths, transitions } from '@staticcms/core/components/UI/styles';
+import { transientOptions } from '@staticcms/core/lib';
+import useMemoCompare from '@staticcms/core/lib/hooks/useMemoCompare';
+import { resolveWidget } from '@staticcms/core/lib/registry';
+import { getFieldLabel } from '@staticcms/core/lib/util/field.util';
+import { validate } from '@staticcms/core/lib/util/validation.util';
+import { selectIsLoadingAsset } from '@staticcms/core/reducers/medias';
 
-import type { ComponentType } from 'react';
-import type { ConnectedProps } from 'react-redux';
 import type {
   Field,
   FieldsErrors,
@@ -34,8 +34,10 @@ import type {
   UnknownField,
   ValueOrNestedValue,
   Widget,
-} from '../../../interface';
-import type { RootState } from '../../../store';
+} from '@staticcms/core/interface';
+import type { RootState } from '@staticcms/core/store';
+import type { ComponentType } from 'react';
+import type { ConnectedProps } from 'react-redux';
 
 /**
  * This is a necessary bridge as we are still passing classnames to widgets
@@ -130,7 +132,6 @@ const ControlHint = styled(
 );
 
 const EditorControl = ({
-  className,
   clearMediaControl,
   collection,
   config: configState,
@@ -167,7 +168,8 @@ const EditorControl = ({
   );
 
   const [dirty, setDirty] = useState(!isEmpty(value));
-  const errors = useMemo(() => fieldsErrors[path] ?? [], [fieldsErrors, path]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const errors = useMemo(() => fieldsErrors[path] ?? [], [fieldsErrors[path]]);
   const hasErrors = (submitted || dirty) && Boolean(errors.length);
 
   const handleGetAsset: GetAssetFunction = useMemo(
@@ -189,71 +191,101 @@ const EditorControl = ({
   const handleChangeDraftField = useCallback(
     (value: ValueOrNestedValue) => {
       setDirty(true);
-      changeDraftField({ path, field, value, entry, i18n });
+      changeDraftField({ path, field, value, i18n });
     },
-    [changeDraftField, entry, field, i18n, path],
+    [changeDraftField, field, i18n, path],
   );
 
   const config = useMemo(() => configState.config, [configState.config]);
-  if (!collection || !entry || !config) {
-    return null;
-  }
 
-  return (
-    <ControlContainer className={className} $isHidden={isHidden}>
-      <>
-        {React.createElement(widget.control, {
-          key: `field_${path}`,
-          collection,
-          config,
-          entry,
-          field: field as UnknownField,
-          fieldsErrors,
-          submitted,
-          getAsset: handleGetAsset,
-          isDisabled: isDisabled ?? false,
-          isFieldDuplicate,
-          isFieldHidden,
-          label: getFieldLabel(field, t),
-          locale,
-          mediaPaths,
-          onChange: handleChangeDraftField,
-          clearMediaControl,
-          openMediaLibrary,
-          removeInsertedMedia,
-          removeMediaControl,
-          path,
-          query,
-          t,
-          value,
-          forList,
-          i18n,
-          hasErrors,
-        })}
-        {fieldHint ? (
-          <ControlHint key="hint" $error={hasErrors}>
-            {fieldHint}
-          </ControlHint>
-        ) : null}
-        {hasErrors ? (
-          <ControlErrorsList key="errors">
-            {errors.map(error => {
-              return (
-                error.message &&
-                typeof error.message === 'string' && (
-                  <li key={error.message.trim().replace(/[^a-z0-9]+/gi, '-')}>{error.message}</li>
-                )
-              );
-            })}
-          </ControlErrorsList>
-        ) : null}
-      </>
-    </ControlContainer>
-  );
+  const finalValue = useMemoCompare(value, isEqual);
+
+  return useMemo(() => {
+    if (!collection || !entry || !config) {
+      return null;
+    }
+
+    return (
+      <ControlContainer $isHidden={isHidden}>
+        <>
+          {createElement(widget.control, {
+            key: `field_${path}`,
+            collection,
+            config,
+            entry,
+            field: field as UnknownField,
+            fieldsErrors,
+            submitted,
+            getAsset: handleGetAsset,
+            isDisabled: isDisabled ?? false,
+            isFieldDuplicate,
+            isFieldHidden,
+            label: getFieldLabel(field, t),
+            locale,
+            mediaPaths,
+            onChange: handleChangeDraftField,
+            clearMediaControl,
+            openMediaLibrary,
+            removeInsertedMedia,
+            removeMediaControl,
+            path,
+            query,
+            t,
+            value: finalValue,
+            forList,
+            i18n,
+            hasErrors,
+          })}
+          {fieldHint ? (
+            <ControlHint key="hint" $error={hasErrors}>
+              {fieldHint}
+            </ControlHint>
+          ) : null}
+          {hasErrors ? (
+            <ControlErrorsList key="errors">
+              {errors.map(error => {
+                return (
+                  error.message &&
+                  typeof error.message === 'string' && (
+                    <li key={error.message.trim().replace(/[^a-z0-9]+/gi, '-')}>{error.message}</li>
+                  )
+                );
+              })}
+            </ControlErrorsList>
+          ) : null}
+        </>
+      </ControlContainer>
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    collection,
+    config,
+    path,
+    errors,
+    isHidden,
+    widget.control,
+    field,
+    submitted,
+    handleGetAsset,
+    isDisabled,
+    t,
+    locale,
+    mediaPaths,
+    handleChangeDraftField,
+    clearMediaControl,
+    openMediaLibrary,
+    removeInsertedMedia,
+    removeMediaControl,
+    query,
+    finalValue,
+    forList,
+    i18n,
+    hasErrors,
+    fieldHint,
+  ]);
 };
 
 interface EditorControlOwnProps {
-  className?: string;
   field: Field;
   fieldsErrors: FieldsErrors;
   submitted: boolean;

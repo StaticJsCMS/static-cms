@@ -320,4 +320,8 @@ export function selectMediaDisplayURL(state: RootState, id: string) {
   return displayUrlState;
 }
 
+export const selectMediaPath = (controlID: string) => (state: RootState) => {
+  return state.mediaLibrary.controlMedia[controlID];
+};
+
 export default mediaLibrary;

@@ -11,7 +11,7 @@ import type {
   FileMetadata,
   ImplementationEntry,
   ImplementationFile,
-} from '../../interface';
+} from '@staticcms/core/interface';
 import type { AsyncLock } from './asyncLock';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;

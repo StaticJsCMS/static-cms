@@ -3,6 +3,8 @@ import { styled } from '@mui/material/styles';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import React, { useCallback } from 'react';
 
+import type { ReactNode, MouseEvent } from 'react';
+
 const StyledScrollTop = styled('div')`
   position: fixed;
   bottom: 16px;
@@ -10,7 +12,7 @@ const StyledScrollTop = styled('div')`
 `;
 
 interface ScrollTopProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const ScrollTop = ({ children }: ScrollTopProps) => {
@@ -19,7 +21,7 @@ const ScrollTop = ({ children }: ScrollTopProps) => {
     threshold: 100,
   });
 
-  const handleClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+  const handleClick = useCallback((event: MouseEvent<HTMLDivElement>) => {
     const anchor = ((event.target as HTMLDivElement).ownerDocument || document).querySelector(
       '#back-to-top-anchor',
     );

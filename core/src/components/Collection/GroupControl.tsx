@@ -1,14 +1,15 @@
+import CheckIcon from '@mui/icons-material/Check';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import Button from '@mui/material/Button/Button';
+import Button from '@mui/material/Button';
 import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import React, { useCallback, useMemo } from 'react';
-import { translate } from 'react-polyglot';
-import CheckIcon from '@mui/icons-material/Check';
 import { styled } from '@mui/material/styles';
+import React, { useCallback, useMemo, useState } from 'react';
+import { translate } from 'react-polyglot';
 
-import type { GroupMap, TranslatedProps, ViewGroup } from '../../interface';
+import type { GroupMap, TranslatedProps, ViewGroup } from '@staticcms/core/interface';
+import type { MouseEvent } from 'react';
 
 const StyledMenuIconWrapper = styled('div')`
   width: 32px;
@@ -30,9 +31,9 @@ const GroupControl = ({
   t,
   onGroupClick,
 }: TranslatedProps<GroupControlProps>) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   }, []);
   const handleClose = useCallback(() => {

@@ -6,9 +6,9 @@ import React, { useCallback } from 'react';
 import { translate } from 'react-polyglot';
 import { useNavigate } from 'react-router-dom';
 
-import { components } from '../../components/UI/styles';
+import { components } from '@staticcms/core/components/UI/styles';
 
-import type { Collection, TranslatedProps } from '../../interface';
+import type { Collection, TranslatedProps } from '@staticcms/core/interface';
 
 const CollectionTopRow = styled('div')`
   display: flex;

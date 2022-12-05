@@ -3,7 +3,7 @@ import trimEnd from 'lodash/trimEnd';
 
 import { createNonce, isInsecureProtocol, validateNonce } from './utils';
 
-import type { User, AuthenticatorConfig } from '../../interface';
+import type { User, AuthenticatorConfig } from '@staticcms/core/interface';
 import type { NetlifyError } from './netlify-auth';
 
 export default class ImplicitAuthenticator {

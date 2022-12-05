@@ -1,17 +1,17 @@
 import { styled } from '@mui/material/styles';
 import React, { useCallback, useMemo, useState } from 'react';
 
-import AuthenticationPage from '../../components/UI/AuthenticationPage';
-import Icon from '../../components/UI/Icon';
-import { NetlifyAuthenticator, PkceAuthenticator } from '../../lib/auth';
-import { isNotEmpty } from '../../lib/util/string.util';
+import AuthenticationPage from '@staticcms/core/components/UI/AuthenticationPage';
+import Icon from '@staticcms/core/components/UI/Icon';
+import { NetlifyAuthenticator, PkceAuthenticator } from '@staticcms/core/lib/auth';
+import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 
 import type { MouseEvent } from 'react';
 import type {
   AuthenticationPageProps,
   AuthenticatorConfig,
   TranslatedProps,
-} from '../../interface';
+} from '@staticcms/core/interface';
 
 const LoginButtonIcon = styled(Icon)`
   margin-right: 18px;

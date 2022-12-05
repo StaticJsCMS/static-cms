@@ -6,26 +6,25 @@ import get from 'lodash/get';
 import uniqBy from 'lodash/uniqBy';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { QUERY_SUCCESS } from '../../actions/search';
-import { isNotEmpty } from '../../lib/util/string.util';
+import { QUERY_SUCCESS } from '@staticcms/core/actions/search';
+import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import {
   addFileTemplateFields,
   compileStringTemplate,
   expandPath,
   extractTemplateVars,
-} from '../../lib/widgets/stringTemplate';
+} from '@staticcms/core/lib/widgets/stringTemplate';
 
+import type {
+  Entry,
+  EntryData,
+  RelationField,
+  WidgetControlProps,
+} from '@staticcms/core/interface';
+import type { FC, ReactNode } from 'react';
 import type { ListChildComponentProps } from 'react-window';
-import type { Entry, EntryData, RelationField, WidgetControlProps } from '../../interface';
 
-// TODO Remove if sorting not needed
-// function arrayMove(array, from, to) {
-//   const slicedArray = array.slice();
-//   slicedArray.splice(to < 0 ? array.length + to : to, 0, slicedArray.splice(from, 1)[0]);
-//   return slicedArray;
-// }
-
-function Option({ index, style, data }: ListChildComponentProps<{ options: React.ReactNode[] }>) {
+function Option({ index, style, data }: ListChildComponentProps<{ options: ReactNode[] }>) {
   return <div style={style}>{data.options[index]}</div>;
 }
 
@@ -106,7 +105,7 @@ function getSelectedValue(
   }
 }
 
-const RelationControl = ({
+const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> = ({
   path,
   value,
   field,
@@ -115,7 +114,7 @@ const RelationControl = ({
   locale,
   label,
   hasErrors,
-}: WidgetControlProps<string | string[], RelationField>) => {
+}) => {
   const [internalValue, setInternalValue] = useState(value);
   const [initialOptions, setInitialOptions] = useState<HitOption[]>([]);
 
@@ -184,7 +183,7 @@ const RelationControl = ({
   );
 
   const [options, setOptions] = useState<HitOption[]>([]);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const valueNotEmpty = useMemo(
     () => (Array.isArray(internalValue) ? internalValue.length > 0 : isNotEmpty(internalValue)),
     [internalValue],
@@ -240,10 +239,10 @@ const RelationControl = ({
           InputProps={{
             ...params.InputProps,
             endAdornment: (
-              <React.Fragment>
+              <>
                 {loading ? <CircularProgress color="inherit" size={20} /> : null}
                 {params.InputProps.endAdornment}
-              </React.Fragment>
+              </>
             ),
           }}
         />

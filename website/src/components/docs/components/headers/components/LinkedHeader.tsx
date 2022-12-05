@@ -10,7 +10,7 @@ import AnchorLinkIcon from './AnchorLinkIcon';
 
 import type { ReactNode } from 'react';
 
-const StyledLink = styled('a')(
+const StyledLink = styled(Link)(
   ({ theme }) => `
     position: absolute;
     margin-left: -28px;
@@ -49,11 +49,9 @@ const Header3 = ({ variant, children = '' }: Header3Props) => {
       }}
     >
       {hasText ? (
-        <Link href={link} className="anchor-link">
-          <StyledLink href={link}>
-            <AnchorLinkIcon variant={variant} />
-          </StyledLink>
-        </Link>
+        <StyledLink href={link}>
+          <AnchorLinkIcon variant={variant} />
+        </StyledLink>
       ) : null}
       {children}
     </Typography>

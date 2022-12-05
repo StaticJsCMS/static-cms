@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 export function sortKeys<Item>(
   sortedKeys: string[],
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

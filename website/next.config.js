@@ -8,7 +8,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 const redirects = [
-  { source: '/chat', destination: 'https://join.slack.com/t/static-cms/shared_invite/zt-1gvgnf5yv-E4sR17YnEcOy6fLFH9m7bQ', permanent: true },
+  { source: '/chat', destination: 'https://discord.gg/ZWJM9pBMjj', permanent: true },
 ];
 
 /** @type {import('next').NextConfig} */

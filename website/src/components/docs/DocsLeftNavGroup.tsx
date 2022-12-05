@@ -40,23 +40,23 @@ const DocsLeftNavGroup = ({ name, links }: DocsLeftNavGroupProps) => {
             const url = `/docs/${link.slug}`;
             const selected = asPath === url;
             return (
-              <Link key={link.slug} href={url}>
-                <ListItemButton
-                  href={url}
-                  sx={{
-                    pl: 4,
+              <ListItemButton
+                key={link.slug}
+                component={Link}
+                href={url}
+                sx={{
+                  pl: 4,
+                }}
+                selected={selected}
+              >
+                <ListItemText
+                  primaryTypographyProps={{
+                    color: selected ? theme.palette.primary.main : theme.palette.text.secondary,
+                    fontWeight: selected ? 600 : 400,
                   }}
-                  selected={selected}
-                >
-                  <ListItemText
-                    primaryTypographyProps={{
-                      color: selected ? theme.palette.primary.main : theme.palette.text.secondary,
-                      fontWeight: selected ? 600 : 400,
-                    }}
-                    primary={link.title}
-                  />
-                </ListItemButton>
-              </Link>
+                  primary={link.title}
+                />
+              </ListItemButton>
             );
           })}
         </List>

@@ -15,11 +15,11 @@ import {
   responseParser,
   throwOnConflictingBranches,
   unsentRequest,
-} from '../../lib/util';
+} from '@staticcms/core/lib/util';
 
-import type { DataFile, PersistOptions } from '../../interface';
-import type { ApiRequest, FetchError } from '../../lib/util';
-import type AssetProxy from '../../valueObjects/AssetProxy';
+import type { DataFile, PersistOptions } from '@staticcms/core/interface';
+import type { ApiRequest, FetchError } from '@staticcms/core/lib/util';
+import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 
 export const API_NAME = 'GitLab';
 

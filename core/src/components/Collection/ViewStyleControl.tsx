@@ -4,9 +4,9 @@ import ReorderSharpIcon from '@mui/icons-material/ReorderSharp';
 import IconButton from '@mui/material/IconButton';
 import React from 'react';
 
-import { VIEW_STYLE_GRID, VIEW_STYLE_LIST } from '../../constants/collectionViews';
+import { VIEW_STYLE_GRID, VIEW_STYLE_LIST } from '@staticcms/core/constants/collectionViews';
 
-import type { CollectionViewStyle } from '../../constants/collectionViews';
+import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
 
 const ViewControlsSection = styled('div')`
   margin-left: 24px;

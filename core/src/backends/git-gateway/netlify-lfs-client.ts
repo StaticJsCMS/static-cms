@@ -3,9 +3,9 @@ import isPlainObject from 'lodash/isPlainObject';
 import isEmpty from 'lodash/isEmpty';
 import minimatch from 'minimatch';
 
-import { unsentRequest } from '../../lib/util';
+import { unsentRequest } from '@staticcms/core/lib/util';
 
-import type { ApiRequest, PointerFile } from '../../lib/util';
+import type { ApiRequest, PointerFile } from '@staticcms/core/lib/util';
 
 type MakeAuthorizedRequest = (req: ApiRequest) => Promise<Response>;
 

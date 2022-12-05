@@ -41,7 +41,7 @@ import {
 import { selectMediaFilePath } from './lib/util/media.util';
 import { set } from './lib/util/object.util';
 import { dateParsers, expandPath, extractTemplateVars } from './lib/widgets/stringTemplate';
-import { createEntry } from './valueObjects/Entry';
+import createEntry from './valueObjects/createEntry';
 
 import type {
   BackendClass,
@@ -261,7 +261,8 @@ interface PersistArgs {
 
 function collectionDepth(collection: Collection) {
   let depth;
-  depth = 'nested' in collection && collection.nested?.depth || getPathDepth(collection.path ?? '');
+  depth =
+    ('nested' in collection && collection.nested?.depth) || getPathDepth(collection.path ?? '');
 
   if (hasI18n(collection)) {
     depth = getI18nFilesDepth(collection, depth);
@@ -270,8 +271,8 @@ function collectionDepth(collection: Collection) {
   return depth;
 }
 
-export class Backend {
-  implementation: BackendClass;
+export class Backend<BC extends BackendClass = BackendClass> {
+  implementation: BC;
   backendName: string;
   config: Config;
   authStore?: AuthStore;
@@ -287,7 +288,7 @@ export class Backend {
     this.config = config;
     this.implementation = implementation.init(this.config, {
       updateUserCredentials: this.updateUserCredentials,
-    });
+    }) as BC;
     this.backendName = backendName;
     this.authStore = authStore;
     if (this.implementation === null) {
@@ -363,6 +364,7 @@ export class Backend {
   async logout() {
     try {
       await this.implementation.logout();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       console.warn('Error during logout', e.message);
     } finally {
@@ -549,7 +551,7 @@ export class Backend {
     }
 
     const hits = entries
-      .filter(({ score }: fuzzy.FilterResult<Entry>) => score > 5)
+      .filter(({ score }: fuzzy.FilterResult<Entry>) => score > 3)
       .sort(sortByScore)
       .map((f: fuzzy.FilterResult<Entry>) => f.original);
     return { entries: hits, pagination: 1 };

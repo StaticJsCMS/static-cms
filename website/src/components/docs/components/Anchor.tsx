@@ -44,11 +44,7 @@ const Anchor = ({ href = '', children = '' }: AnchorProps) => {
   }
 
   if (type === LinkType.SAME_SITE) {
-    return (
-      <Link href={href}>
-        <a href={href}>{children}</a>
-      </Link>
-    );
+    return <Link href={href}>{children}</Link>;
   }
 
   return (

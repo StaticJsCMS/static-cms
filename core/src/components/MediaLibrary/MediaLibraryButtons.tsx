@@ -2,9 +2,9 @@ import Button from '@mui/material/Button';
 import copyToClipboard from 'copy-text-to-clipboard';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { isAbsolutePath } from '../../lib/util';
+import { isAbsolutePath } from '@staticcms/core/lib/util';
 
-import type { TranslatedProps } from '../../interface';
+import type { TranslatedProps } from '@staticcms/core/interface';
 
 export interface CopyToClipBoardButtonProps {
   disabled: boolean;

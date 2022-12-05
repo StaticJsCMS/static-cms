@@ -5,11 +5,11 @@ import React from 'react';
 
 import { CopyToClipBoardButton } from './MediaLibraryButtons';
 import MediaLibrarySearch from './MediaLibrarySearch';
-import { buttons, shadows, zIndex } from '../../components/UI/styles';
+import { buttons, shadows, zIndex } from '@staticcms/core/components/UI/styles';
 import FileUploadButton from '../UI/FileUploadButton';
 
 import type { ChangeEvent, ChangeEventHandler, KeyboardEventHandler } from 'react';
-import type { MediaFile, TranslatedProps } from '../../interface';
+import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
 
 const LibraryTop = styled('div')`
   position: relative;

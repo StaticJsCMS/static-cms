@@ -1,7 +1,7 @@
 // Register all the things
 CMS.init();
 
-const PostPreview = ({ entry, widgetFor }) => {
+const PostPreview = ({ entry, widgetFor, widgetsFor }) => {
   return h(
     'div',
     {},

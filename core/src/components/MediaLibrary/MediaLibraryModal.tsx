@@ -12,8 +12,8 @@ import MediaLibraryCardGrid from './MediaLibraryCardGrid';
 import MediaLibraryTop from './MediaLibraryTop';
 
 import type { ChangeEvent, ChangeEventHandler, KeyboardEventHandler } from 'react';
-import type { MediaFile, TranslatedProps } from '../../interface';
-import type { MediaLibraryState } from '../../reducers/mediaLibrary';
+import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
+import type { MediaLibraryState } from '@staticcms/core/reducers/mediaLibrary';
 
 const StyledFab = styled(Fab)`
   position: absolute;

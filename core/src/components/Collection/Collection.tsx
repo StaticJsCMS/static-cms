@@ -8,21 +8,21 @@ import {
   filterByField as filterByFieldAction,
   groupByField as groupByFieldAction,
   sortByField as sortByFieldAction,
-} from '../../actions/entries';
-import { components } from '../../components/UI/styles';
-import { SORT_DIRECTION_ASCENDING } from '../../constants';
-import { getNewEntryUrl } from '../../lib/urlHelper';
+} from '@staticcms/core/actions/entries';
+import { components } from '@staticcms/core/components/UI/styles';
+import { SORT_DIRECTION_ASCENDING } from '@staticcms/core/constants';
+import { getNewEntryUrl } from '@staticcms/core/lib/urlHelper';
 import {
   selectSortableFields,
   selectViewFilters,
   selectViewGroups,
-} from '../../lib/util/collection.util';
+} from '@staticcms/core/lib/util/collection.util';
 import {
   selectEntriesFilter,
   selectEntriesGroup,
   selectEntriesSort,
   selectViewStyle,
-} from '../../reducers/entries';
+} from '@staticcms/core/reducers/entries';
 import CollectionControls from './CollectionControls';
 import CollectionTop from './CollectionTop';
 import EntriesCollection from './Entries/EntriesCollection';
@@ -37,8 +37,8 @@ import type {
   TranslatedProps,
   ViewFilter,
   ViewGroup,
-} from '../../interface';
-import type { RootState } from '../../store';
+} from '@staticcms/core/interface';
+import type { RootState } from '@staticcms/core/store';
 
 const CollectionMain = styled('main')`
   width: 100%;
@@ -110,7 +110,14 @@ const CollectionView = ({
         }
       }
 
-      return <EntriesSearch collections={searchCollections} searchTerm={searchTerm} />;
+      return (
+        <EntriesSearch
+          key="search"
+          collections={searchCollections}
+          searchTerm={searchTerm}
+          viewStyle={viewStyle}
+        />
+      );
     }
 
     return (
@@ -210,11 +217,14 @@ const CollectionView = ({
       <CollectionMain>
         <>
           {isSearchResults ? (
-            <SearchResultContainer>
-              <SearchResultHeading>
-                {t(searchResultKey, { searchTerm, collection: collection.label })}
-              </SearchResultHeading>
-            </SearchResultContainer>
+            <>
+              <SearchResultContainer>
+                <SearchResultHeading>
+                  {t(searchResultKey, { searchTerm, collection: collection.label })}
+                </SearchResultHeading>
+              </SearchResultContainer>
+              <CollectionControls viewStyle={viewStyle} onChangeViewStyle={changeViewStyle} t={t} />
+            </>
           ) : (
             <>
               <CollectionTop collection={collection} newEntryUrl={newEntryUrl} />

@@ -1,7 +1,7 @@
-import { APIError } from '../../lib/util';
+import { APIError } from '@staticcms/core/lib/util';
 import { API as GithubAPI } from '../github';
 
-import type { FetchError } from '../../lib/util';
+import type { FetchError } from '@staticcms/core/lib/util';
 import type { Config as GitHubConfig } from '../github/API';
 
 type Config = GitHubConfig & {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { translate } from 'react-polyglot';
 
-import type { WidgetControlProps, TranslatedProps } from '../../../interface';
+import type { WidgetControlProps, TranslatedProps } from '@staticcms/core/interface';
 
 const UnknownControl = ({ field, t }: TranslatedProps<WidgetControlProps<unknown>>) => {
   return <div>{t('editor.editorWidgets.unknownControl.noControl', { widget: field.widget })}</div>;

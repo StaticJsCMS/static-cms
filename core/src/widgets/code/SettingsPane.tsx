@@ -6,20 +6,21 @@ import { styled } from '@mui/material/styles';
 import isHotkey from 'is-hotkey';
 import React from 'react';
 
-import { shadows, zIndex } from '../../components/UI/styles';
+import { shadows, zIndex } from '@staticcms/core/components/UI/styles';
 import SettingsButton from './SettingsButton';
 
 import type { SelectChangeEvent } from '@mui/material/Select';
+import type { FC } from 'react';
 
 const SettingsPaneContainer = styled('div')`
   position: absolute;
-  right: 0;
+  top: 1px;
+  bottom: 1px;
+  right: 1px;
   width: 200px;
   z-index: ${zIndex.zIndex10};
-  height: 100%;
   background-color: #fff;
   overflow: hidden;
-  overflow-y: scroll;
   padding: 12px;
   border-radius: 0 3px 3px 0;
   ${shadows.drop};
@@ -39,7 +40,7 @@ const SettingsSectionTitle = styled('h3')`
 `;
 
 interface SettingsSelectProps {
-  type: 'mode' | 'theme' | 'keymap';
+  type: 'language';
   label: string;
   uniqueId: string;
   value: {
@@ -53,14 +54,14 @@ interface SettingsSelectProps {
   onChange: (newValue: string) => void;
 }
 
-const SettingsSelect = ({
+const SettingsSelect: FC<SettingsSelectProps> = ({
   value,
   label,
   options,
   onChange,
   uniqueId,
   type,
-}: SettingsSelectProps) => {
+}) => {
   const handleChange = (event: SelectChangeEvent<string>) => {
     onChange(event.target.value);
   };
@@ -87,81 +88,40 @@ const SettingsSelect = ({
   );
 };
 
-interface SettingsPaneProps {
+export interface SettingsPaneProps {
   hideSettings: () => void;
   uniqueId: string;
-  modes: {
+  languages: {
     value: string;
     label: string;
   }[];
-  mode: {
+  language: {
     value: string;
     label: string;
   };
-  theme: string;
-  themes: string[];
-  keyMap: { value: string; label: string };
-  keyMaps: {
-    value: string;
-    label: string;
-  }[];
   allowLanguageSelection: boolean;
-  onChangeLang: (lang: string) => void;
-  onChangeTheme: (theme: string) => void;
-  onChangeKeyMap: (keyMap: string) => void;
+  onChangeLanguage: (lang: string) => void;
 }
 
-const SettingsPane = ({
+const SettingsPane: FC<SettingsPaneProps> = ({
   hideSettings,
   uniqueId,
-  modes,
-  mode,
-  theme,
-  themes,
-  keyMap,
-  keyMaps,
-  allowLanguageSelection,
-  onChangeLang,
-  onChangeTheme,
-  onChangeKeyMap,
-}: SettingsPaneProps) => {
+  languages,
+  language,
+  onChangeLanguage,
+}) => {
   return (
     <SettingsPaneContainer onKeyDown={e => isHotkey('esc', e) && hideSettings()}>
       <SettingsButton onClick={hideSettings} showClose={true} />
-      {allowLanguageSelection && (
-        <>
-          <SettingsSectionTitle>Field Settings</SettingsSectionTitle>
-          <SettingsSelect
-            type="mode"
-            label="Mode"
-            uniqueId={uniqueId}
-            value={mode}
-            options={modes}
-            onChange={onChangeLang}
-          />
-        </>
-      )}
       <>
-        <SettingsSectionTitle>Global Settings</SettingsSectionTitle>
-        {themes && (
-          <>
-            <SettingsSelect
-              type="theme"
-              label="Theme"
-              uniqueId={uniqueId}
-              value={{ value: theme, label: theme }}
-              options={themes.map(t => ({ value: t, label: t }))}
-              onChange={onChangeTheme}
-            />
-          </>
-        )}
+        <SettingsSectionTitle>Field Settings</SettingsSectionTitle>
         <SettingsSelect
-          type="keymap"
-          label="KeyMap"
+          type="language"
+          label="Language"
           uniqueId={uniqueId}
-          value={keyMap}
-          options={keyMaps}
-          onChange={onChangeKeyMap}
+          value={language}
+          options={languages}
+          onChange={onChangeLanguage}
         />
       </>
     </SettingsPaneContainer>

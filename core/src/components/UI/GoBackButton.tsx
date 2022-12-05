@@ -2,7 +2,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Button from '@mui/material/Button';
 import React from 'react';
 
-import type { TranslatedProps } from '../../interface';
+import type { TranslatedProps } from '@staticcms/core/interface';
 
 interface GoBackButtonProps {
   href: string;

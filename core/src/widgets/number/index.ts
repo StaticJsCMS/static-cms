@@ -1,8 +1,8 @@
-import controlComponent, { validateMinMax } from './NumberControl';
+import controlComponent, { validateNumberMinMax } from './NumberControl';
 import previewComponent from './NumberPreview';
 import schema from './schema';
 
-import type { NumberField, WidgetParam } from '../../interface';
+import type { NumberField, WidgetParam } from '@staticcms/core/interface';
 
 const NumberWidget = (): WidgetParam<string | number, NumberField> => {
   return {
@@ -21,12 +21,19 @@ const NumberWidget = (): WidgetParam<string | number, NumberField> => {
         const min = field.min ?? false;
         const max = field.max ?? false;
 
-        const error = validateMinMax(value, min, max, field, t);
+        const error = validateNumberMinMax(value, min, max, field, t);
         return error ?? false;
       },
       schema,
     },
   };
+};
+
+export {
+  controlComponent as NumberControl,
+  previewComponent as NumberPreview,
+  schema as NumberSchema,
+  validateNumberMinMax,
 };
 
 export default NumberWidget;

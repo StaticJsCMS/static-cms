@@ -1,13 +1,14 @@
 import { styled } from '@mui/material/styles';
 import React, { useCallback, useMemo, useState } from 'react';
 
-import EditorControl from '../../components/Editor/EditorControlPane/EditorControl';
-import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
-import Outline from '../../components/UI/Outline';
-import { transientOptions } from '../../lib';
-import { compileStringTemplate } from '../../lib/widgets/stringTemplate';
+import EditorControl from '@staticcms/core/components/Editor/EditorControlPane/EditorControl';
+import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
+import Outline from '@staticcms/core/components/UI/Outline';
+import { transientOptions } from '@staticcms/core/lib';
+import { compileStringTemplate } from '@staticcms/core/lib/widgets/stringTemplate';
 
-import type { ObjectField, ObjectValue, WidgetControlProps } from '../../interface';
+import type { ObjectField, ObjectValue, WidgetControlProps } from '@staticcms/core/interface';
+import type { FC } from 'react';
 
 const StyledObjectControlWrapper = styled('div')`
   position: relative;
@@ -46,7 +47,7 @@ const StyledNoFieldsMessage = styled('div')`
   width: 100%;
 `;
 
-const ObjectControl = ({
+const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
   field,
   fieldsErrors,
   submitted,
@@ -59,7 +60,7 @@ const ObjectControl = ({
   i18n,
   hasErrors,
   value = {},
-}: WidgetControlProps<ObjectValue, ObjectField>) => {
+}) => {
   const [collapsed, setCollapsed] = useState(false);
 
   const handleCollapseToggle = useCallback(() => {

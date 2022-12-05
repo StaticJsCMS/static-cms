@@ -1,7 +1,7 @@
 import controlComponent from './StringControl';
 import previewComponent from './StringPreview';
 
-import type { StringOrTextField, WidgetParam } from '../../interface';
+import type { StringOrTextField, WidgetParam } from '@staticcms/core/interface';
 
 const StringWidget = (): WidgetParam<string, StringOrTextField> => {
   return {
@@ -10,5 +10,7 @@ const StringWidget = (): WidgetParam<string, StringOrTextField> => {
     previewComponent,
   };
 };
+
+export { controlComponent as StringControl, previewComponent as StringPreview };
 
 export default StringWidget;

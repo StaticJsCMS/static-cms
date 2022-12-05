@@ -1,21 +1,21 @@
 import get from 'lodash/get';
 import { useMemo } from 'react';
 
-import { COMMIT_AUTHOR, COMMIT_DATE } from '../../constants/commitProps';
+import { COMMIT_AUTHOR, COMMIT_DATE } from '@staticcms/core/constants/commitProps';
 import {
   IDENTIFIER_FIELDS,
   INFERABLE_FIELDS,
   SORTABLE_FIELDS,
-} from '../../constants/fieldInference';
-import { formatExtensions } from '../../formats/formats';
+} from '@staticcms/core/constants/fieldInference';
+import { formatExtensions } from '@staticcms/core/formats/formats';
 import consoleError from '../consoleError';
 import { summaryFormatter } from '../formatters';
 import { keyToPathArray } from '../widgets/stringTemplate';
 import { selectField } from './field.util';
 import { selectMediaFolder } from './media.util';
 
-import type { Backend } from '../../backend';
-import type { InferredField } from '../../constants/fieldInference';
+import type { Backend } from '@staticcms/core/backend';
+import type { InferredField } from '@staticcms/core/constants/fieldInference';
 import type {
   Collection,
   Config,
@@ -24,7 +24,7 @@ import type {
   FilesCollection,
   ObjectField,
   SortableField,
-} from '../../interface';
+} from '@staticcms/core/interface';
 
 function fileForEntry(collection: FilesCollection, slug?: string) {
   const files = collection.files;

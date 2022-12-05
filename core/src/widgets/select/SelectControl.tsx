@@ -7,10 +7,11 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Select from '@mui/material/Select';
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { isNullish } from '../../lib/util/null.util';
+import { isNullish } from '@staticcms/core/lib/util/null.util';
 
 import type { SelectChangeEvent } from '@mui/material/Select';
-import type { SelectField, WidgetControlProps } from '../../interface';
+import type { SelectField, WidgetControlProps } from '@staticcms/core/interface';
+import type { FC } from 'react';
 
 interface Option {
   label: string;
@@ -25,13 +26,13 @@ function convertToOption(raw: string | number | Option | undefined): Option | un
   return raw;
 }
 
-const SelectControl = ({
+const SelectControl: FC<WidgetControlProps<string | number | (string | number)[], SelectField>> = ({
   label,
   field,
   value,
   hasErrors,
   onChange,
-}: WidgetControlProps<string | number | (string | number)[], SelectField>) => {
+}) => {
   const [internalValue, setInternalValue] = useState(value);
 
   const fieldOptions: (string | number | Option)[] = useMemo(() => field.options, [field.options]);

@@ -2,8 +2,8 @@ import React, { forwardRef } from 'react';
 import { NavLink as NavLinkBase } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 
-import { colors } from '../../components/UI/styles';
-import { transientOptions } from '../../lib';
+import { colors } from '@staticcms/core/components/UI/styles';
+import { transientOptions } from '@staticcms/core/lib';
 
 import type { RefAttributes } from 'react';
 import type { NavLinkProps as RouterNavLinkProps } from 'react-router-dom';

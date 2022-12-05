@@ -1,12 +1,12 @@
 import { styled } from '@mui/material/styles';
 import React, { useCallback, useState } from 'react';
 
-import AuthenticationPage from '../../components/UI/AuthenticationPage';
-import Icon from '../../components/UI/Icon';
-import { NetlifyAuthenticator } from '../../lib/auth';
+import AuthenticationPage from '@staticcms/core/components/UI/AuthenticationPage';
+import Icon from '@staticcms/core/components/UI/Icon';
+import { NetlifyAuthenticator } from '@staticcms/core/lib/auth';
 
 import type { MouseEvent } from 'react';
-import type { AuthenticationPageProps, TranslatedProps } from '../../interface';
+import type { AuthenticationPageProps, TranslatedProps } from '@staticcms/core/interface';
 
 const LoginButtonIcon = styled(Icon)`
   margin-right: 18px;

@@ -11,7 +11,7 @@ import {
   addFileTemplateFields,
   compileStringTemplate,
   keyToPathArray,
-  parseDateFromEntry
+  parseDateFromEntry,
 } from './widgets/stringTemplate';
 
 import type { Collection, Config, Entry, EntryData, Slug } from '../interface';

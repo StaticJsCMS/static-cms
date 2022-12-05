@@ -1,20 +1,26 @@
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { styled } from '@mui/material';
 import Button from '@mui/material/Button';
 import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import React, { useCallback, useMemo } from 'react';
+import { styled } from '@mui/material/styles';
+import React, { useCallback, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 
 import {
   SORT_DIRECTION_ASCENDING,
   SORT_DIRECTION_DESCENDING,
   SORT_DIRECTION_NONE,
-} from '../../constants';
+} from '@staticcms/core/constants';
 
-import type { SortableField, SortDirection, SortMap, TranslatedProps } from '../../interface';
+import type {
+  SortableField,
+  SortDirection,
+  SortMap,
+  TranslatedProps,
+} from '@staticcms/core/interface';
+import type { MouseEvent } from 'react';
 
 const StyledMenuIconWrapper = styled('div')`
   width: 32px;
@@ -42,9 +48,9 @@ interface SortControlProps {
 }
 
 const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortControlProps>) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   }, []);
   const handleClose = useCallback(() => {

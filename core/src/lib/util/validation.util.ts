@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import ValidationErrorTypes from '../../constants/validationErrorTypes';
+import ValidationErrorTypes from '@staticcms/core/constants/validationErrorTypes';
 
 import type { t } from 'react-polyglot';
 import type {
@@ -10,7 +10,7 @@ import type {
   UnknownField,
   ValueOrNestedValue,
   Widget,
-} from '../../interface';
+} from '@staticcms/core/interface';
 
 export function isEmpty(value: ValueOrNestedValue) {
   return (

@@ -1,9 +1,10 @@
 import fs from 'fs-extra';
-import path from 'path';
 import yaml from 'js-yaml';
 import uniq from 'lodash/uniq';
+import path from 'path';
 
-import type { ProcessedCodeLanguage } from '../../../interface';
+import type { ProcessedCodeLanguage } from '@staticcms/core/interface';
+import type { LanguageName } from '@uiw/codemirror-extensions-langs';
 
 const rawDataPath = '../data/languages-raw.yml';
 const outputPath = '../data/languages.ts';
@@ -11,7 +12,7 @@ const outputPath = '../data/languages.ts';
 interface CodeLanguage {
   extensions: string[];
   aliases: string[];
-  codemirror_mode: string;
+  codemirror_mode: LanguageName;
   codemirror_mime_type: string;
 }
 
@@ -25,7 +26,7 @@ function outputData(data: ProcessedCodeLanguage[]) {
   const filePath = path.resolve(__dirname, outputPath);
   return fs.writeFile(
     filePath,
-    `import type { ProcessedCodeLanguage } from '../../../interface';
+    `import type { ProcessedCodeLanguage } from '@staticcms/core/interface';
 
 const languages: ProcessedCodeLanguage[] = ${JSON.stringify(data, null, 2)};
 

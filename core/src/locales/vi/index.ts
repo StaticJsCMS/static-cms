@@ -1,4 +1,4 @@
-import type { LocalePhrasesRoot } from '../../interface';
+import type { LocalePhrasesRoot } from '@staticcms/core/interface';
 
 const vi: LocalePhrasesRoot = {
   auth: {
@@ -168,7 +168,8 @@ const vi: LocalePhrasesRoot = {
     },
     mediaLibrary: {
       onDeleteBody: 'Bạn có chắc rằng bạn muốn xoá tập tin này?',
-      fileTooLargeBody: 'Tập tin quá lớn.\nCấu hình không cho phép những tập tin lớn hơn %{size} kB.',
+      fileTooLargeBody:
+        'Tập tin quá lớn.\nCấu hình không cho phép những tập tin lớn hơn %{size} kB.',
     },
     mediaLibraryModal: {
       loading: 'Đang tải...',

@@ -3,16 +3,18 @@ import partial from 'lodash/partial';
 import React, { useCallback, useMemo, useState } from 'react';
 import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 
-import EditorControl from '../../components/Editor/EditorControlPane/EditorControl';
-import ListItemTopBar from '../../components/UI/ListItemTopBar';
-import Outline from '../../components/UI/Outline';
-import { colors } from '../../components/UI/styles';
-import { transientOptions } from '../../lib';
-import { addFileTemplateFields, compileStringTemplate } from '../../lib/widgets/stringTemplate';
+import EditorControl from '@staticcms/core/components/Editor/EditorControlPane/EditorControl';
+import ListItemTopBar from '@staticcms/core/components/UI/ListItemTopBar';
+import Outline from '@staticcms/core/components/UI/Outline';
+import { colors } from '@staticcms/core/components/UI/styles';
+import { transientOptions } from '@staticcms/core/lib';
+import {
+  addFileTemplateFields,
+  compileStringTemplate,
+} from '@staticcms/core/lib/widgets/stringTemplate';
 import { ListValueType } from './ListControl';
 import { getTypedFieldForValue } from './typedListHelpers';
 
-import type { MouseEvent } from 'react';
 import type {
   Entry,
   EntryData,
@@ -20,7 +22,8 @@ import type {
   ObjectField,
   ObjectValue,
   WidgetControlProps,
-} from '../../interface';
+} from '@staticcms/core/interface';
+import type { FC, MouseEvent } from 'react';
 
 const StyledListItem = styled('div')`
   position: relative;
@@ -95,7 +98,7 @@ interface ListItemProps
   handleRemove: (index: number, event: MouseEvent) => void;
 }
 
-const ListItem = ({
+const ListItem: FC<ListItemProps> = ({
   index,
   entry,
   field,
@@ -109,7 +112,7 @@ const ListItem = ({
   handleRemove,
   value,
   i18n,
-}: ListItemProps) => {
+}) => {
   const [objectLabel, objectField] = useMemo((): [string, ListField | ObjectField] => {
     const childObjectField: ObjectField = {
       name: `${index}`,

@@ -6,24 +6,24 @@ import { connect } from 'react-redux';
 import {
   loadEntries as loadEntriesAction,
   traverseCollectionCursor as traverseCollectionCursorAction,
-} from '../../../actions/entries';
-import { colors } from '../../../components/UI/styles';
-import { Cursor } from '../../../lib/util';
-import { selectCollectionEntriesCursor } from '../../../reducers/cursors';
+} from '@staticcms/core/actions/entries';
+import { colors } from '@staticcms/core/components/UI/styles';
+import { Cursor } from '@staticcms/core/lib/util';
+import { selectCollectionEntriesCursor } from '@staticcms/core/reducers/cursors';
 import {
   selectEntries,
   selectEntriesLoaded,
   selectGroups,
   selectIsFetching,
-} from '../../../reducers/entries';
+} from '@staticcms/core/reducers/entries';
 import Entries from './Entries';
 
 import type { ComponentType } from 'react';
 import type { t } from 'react-polyglot';
 import type { ConnectedProps } from 'react-redux';
-import type { CollectionViewStyle } from '../../../constants/collectionViews';
-import type { Collection, Entry, GroupOfEntries, TranslatedProps } from '../../../interface';
-import type { RootState } from '../../../store';
+import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
+import type { Collection, Entry, GroupOfEntries, TranslatedProps } from '@staticcms/core/interface';
+import type { RootState } from '@staticcms/core/store';
 
 const GroupHeading = styled('h2')`
   font-size: 23px;

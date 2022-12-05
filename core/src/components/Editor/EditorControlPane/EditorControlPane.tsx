@@ -3,11 +3,11 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import get from 'lodash/get';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 
-import { changeDraftField as changeDraftFieldAction } from '../../../actions/entries';
-import confirm from '../../../components/UI/Confirm';
+import { changeDraftField as changeDraftFieldAction } from '@staticcms/core/actions/entries';
+import confirm from '@staticcms/core/components/UI/Confirm';
 import {
   getI18nInfo,
   getLocaleDataPath,
@@ -15,10 +15,9 @@ import {
   isFieldDuplicate,
   isFieldHidden,
   isFieldTranslatable,
-} from '../../../lib/i18n';
+} from '@staticcms/core/lib/i18n';
 import EditorControl from './EditorControl';
 
-import type { ConnectedProps } from 'react-redux';
 import type {
   Collection,
   Entry,
@@ -27,8 +26,10 @@ import type {
   I18nSettings,
   TranslatedProps,
   ValueOrNestedValue,
-} from '../../../interface';
-import type { RootState } from '../../../store';
+} from '@staticcms/core/interface';
+import type { RootState } from '@staticcms/core/store';
+import type { MouseEvent } from 'react';
+import type { ConnectedProps } from 'react-redux';
 
 const ControlPaneContainer = styled('div')`
   max-width: 1000px;
@@ -50,9 +51,9 @@ interface LocaleDropdownProps {
 }
 
 const LocaleDropdown = ({ locales, dropdownText, onLocaleChange }: LocaleDropdownProps) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   }, []);
   const handleClose = useCallback(() => {
@@ -154,7 +155,7 @@ const EditorControlPane = ({
               sourceLocale !== i18n?.defaultLocale,
               sourceLocale,
             );
-            changeDraftField({ path: field.name, field, value: copyValue, entry, i18n });
+            changeDraftField({ path: field.name, field, value: copyValue, i18n });
           }
         });
       },

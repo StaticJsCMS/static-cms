@@ -1,4 +1,4 @@
-import { APIError, basename, blobToFileObj, unsentRequest } from '../../lib/util';
+import { APIError, basename, blobToFileObj, unsentRequest } from '@staticcms/core/lib/util';
 import AuthenticationPage from './AuthenticationPage';
 
 import type {
@@ -10,9 +10,9 @@ import type {
   ImplementationFile,
   PersistOptions,
   User,
-} from '../../interface';
-import type { Cursor } from '../../lib/util';
-import type AssetProxy from '../../valueObjects/AssetProxy';
+} from '@staticcms/core/interface';
+import type { Cursor } from '@staticcms/core/lib/util';
+import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 
 async function serializeAsset(assetProxy: AssetProxy) {
   const base64content = await assetProxy.toBase64!();

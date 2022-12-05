@@ -31,7 +31,7 @@ import he from './he';
 
 import type { LocalePhrasesRoot } from '../interface';
 
-export const locales: Record<string, LocalePhrasesRoot> = {
+const locales: Record<string, LocalePhrasesRoot> = {
   cs,
   da,
   de,
@@ -63,3 +63,5 @@ export const locales: Record<string, LocalePhrasesRoot> = {
   zh_Hans,
   he,
 };
+
+export default locales;

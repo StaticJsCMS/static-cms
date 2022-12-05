@@ -3,9 +3,9 @@ import isError from 'lodash/isError';
 import take from 'lodash/take';
 import unset from 'lodash/unset';
 import { extname } from 'path';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
-import { basename, Cursor, CURSOR_COMPATIBILITY_SYMBOL } from '../../lib/util';
+import { basename, Cursor, CURSOR_COMPATIBILITY_SYMBOL } from '@staticcms/core/lib/util';
 import AuthenticationPage from './AuthenticationPage';
 
 import type {
@@ -16,8 +16,8 @@ import type {
   ImplementationEntry,
   ImplementationFile,
   User,
-} from '../../interface';
-import type AssetProxy from '../../valueObjects/AssetProxy';
+} from '@staticcms/core/interface';
+import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 
 type RepoFile = { path: string; content: string | AssetProxy };
 type RepoTree = { [key: string]: RepoFile | RepoTree };
@@ -283,7 +283,14 @@ export default class TestBackend implements BackendClass {
     extension: string,
     depth: number,
   ): Promise<ImplementationEntry[]> {
-    return this.entriesByFolder(folder, extension, depth);
+    const files = folder ? getFolderFiles(window.repoFiles, folder, extension, depth) : [];
+
+    const entries = files.map(f => ({
+      data: f.content as string,
+      file: { path: f.path, id: f.path },
+    }));
+
+    return Promise.resolve(entries);
   }
 
   getMediaDisplayURL(_displayURL: DisplayURL): Promise<string> {

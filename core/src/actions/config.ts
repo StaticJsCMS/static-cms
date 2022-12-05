@@ -5,7 +5,7 @@ import trimStart from 'lodash/trimStart';
 import yaml from 'yaml';
 
 import { resolveBackend } from '../backend';
-import { validateConfig } from '../constants/configSchema';
+import validateConfig from '../constants/configSchema';
 import { I18N, I18N_FIELD, I18N_STRUCTURE } from '../lib/i18n';
 import { selectDefaultSortableFields } from '../lib/util/collection.util';
 import { getIntegrations, selectIntegration } from '../reducers/integrations';

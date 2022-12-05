@@ -3,7 +3,7 @@ import unsentRequest from './unsentRequest';
 import APIError from './APIError';
 
 import type { AsyncLock } from './asyncLock';
-import type { FileMetadata } from '../../interface';
+import type { FileMetadata } from '@staticcms/core/interface';
 
 export class FetchError extends Error {
   status: number;

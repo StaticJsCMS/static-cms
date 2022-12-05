@@ -2,6 +2,7 @@
   <img src="static-cms-logo.png" width="500px" />
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/StaticJsCMS/static-cms/blob/main/LICENSE)
+[![Build](https://github.com/StaticJsCMS/static-cms/actions/workflows/build.yml/badge.svg)](https://github.com/StaticJsCMS/static-cms/actions/workflows/build.yml)
 [![npm latest package](https://img.shields.io/npm/v/@staticcms/core/latest.svg)](https://www.npmjs.com/package/@staticcms/core)
 [![npm next package](https://img.shields.io/npm/v/@staticcms/core/next.svg)](https://www.npmjs.com/package/@staticcms/core/v/next)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/StaticJsCMS/static-cms/blob/main/CONTRIBUTING.md)
@@ -13,11 +14,9 @@
 A CMS for static site generators. Give users a simple way to edit
 and add content to any site built with a static site generator.
 
-> **DISCLAIMER**: This package/repository is under heavy development and as such is very unstable at current. A stable release is targeted for the end of Novemeber and will be labeled `1.0.0`. Documentation may not be completely accurate prior to the `1.0.0` release.
+> **DISCLAIMER**: This package/repository is under heavy development and as such is very unstable at current. A stable release is targeted for around the end of the year and will be labeled `1.0.0`. Documentation may not be completely accurate prior to the `1.0.0` release.
 >
 > An beta build for the stable release is available under the `@next` tack on npm.
-
-## Community Chat
 
 ## How It Works
 

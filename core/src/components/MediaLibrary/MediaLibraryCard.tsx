@@ -1,10 +1,10 @@
 import { styled } from '@mui/material/styles';
 import React, { useEffect, useMemo } from 'react';
 
-import { borders, colors, effects, lengths, shadows } from '../../components/UI/styles';
-import { transientOptions } from '../../lib';
+import { borders, colors, effects, lengths, shadows } from '@staticcms/core/components/UI/styles';
+import { transientOptions } from '@staticcms/core/lib';
 
-import type { MediaLibraryDisplayURL } from '../../reducers/mediaLibrary';
+import type { MediaLibraryDisplayURL } from '@staticcms/core/reducers/mediaLibrary';
 
 const IMAGE_HEIGHT = 160;
 

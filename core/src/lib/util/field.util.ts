@@ -1,7 +1,7 @@
 import { keyToPathArray } from '../widgets/stringTemplate';
 
 import type { t } from 'react-polyglot';
-import type { Collection, Field } from '../../interface';
+import type { Collection, Field } from '@staticcms/core/interface';
 
 export function selectField(collection: Collection, key: string) {
   const array = keyToPathArray(key);

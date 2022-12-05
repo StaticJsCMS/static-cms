@@ -1,7 +1,8 @@
-import { COMMIT_AUTHOR, COMMIT_DATE } from '../../constants/commitProps';
+/* eslint-disable import/prefer-default-export */
+import { COMMIT_AUTHOR, COMMIT_DATE } from '@staticcms/core/constants/commitProps';
 import { selectField } from './field.util';
 
-import type { Collection } from '../../interface';
+import type { Collection } from '@staticcms/core/interface';
 
 export function selectSortDataPath(collection: Collection, key: string) {
   if (key === COMMIT_DATE) {

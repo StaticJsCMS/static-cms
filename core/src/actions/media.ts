@@ -42,7 +42,7 @@ export function loadAssetFailure(path: string, error: Error) {
   return { type: LOAD_ASSET_FAILURE, payload: { path, error } } as const;
 }
 
-const emptyAsset = createAssetProxy({
+export const emptyAsset = createAssetProxy({
   path: 'empty.svg',
   file: new File([`<svg xmlns="http://www.w3.org/2000/svg"></svg>`], 'empty.svg', {
     type: 'image/svg+xml',
@@ -84,7 +84,7 @@ async function loadAsset(
 const promiseCache: Record<string, Promise<AssetProxy>> = {};
 
 export function getAsset<F extends BaseField = UnknownField>(
-  collection: Collection | null | undefined,
+  collection: Collection<F> | null | undefined,
   entry: Entry | null | undefined,
   path: string,
   field?: F,
@@ -104,7 +104,7 @@ export function getAsset<F extends BaseField = UnknownField>(
 
     const resolvedPath = selectMediaFilePath(
       state.config.config,
-      collection,
+      collection as Collection,
       entry,
       path,
       field as Field,

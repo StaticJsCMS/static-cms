@@ -6,7 +6,7 @@ import GoBackButton from './GoBackButton';
 import Icon from './Icon';
 
 import type { MouseEventHandler, ReactNode } from 'react';
-import type { TranslatedProps } from '../../interface';
+import type { TranslatedProps } from '@staticcms/core/interface';
 
 const StyledAuthenticationPage = styled('section')`
   display: flex;

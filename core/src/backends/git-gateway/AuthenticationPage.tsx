@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import AuthenticationPage from '../../components/UI/AuthenticationPage';
+import AuthenticationPage from '@staticcms/core/components/UI/AuthenticationPage';
 
-import type { AuthenticationPageProps, TranslatedProps, User } from '../../interface';
+import type { AuthenticationPageProps, TranslatedProps, User } from '@staticcms/core/interface';
 
 function useNetlifyIdentifyEvent(eventName: 'login', callback: (login: User) => void): void;
 function useNetlifyIdentifyEvent(eventName: 'logout', callback: () => void): void;

@@ -37,7 +37,7 @@ yarn start
 
 ### clean
 
-Removes all of the CMS package `dist` directories.
+Removes the `dist` directory.
 
 ```sh
 yarn clean
@@ -45,7 +45,7 @@ yarn clean
 
 ### build
 
-Runs the `clean` script and builds the static-cms-core.
+Runs the `clean` script and builds the @static-cms/core.
 
 ```sh
 yarn build
@@ -73,7 +73,7 @@ Static CMS uses the [Forking Workflow](https://www.atlassian.com/git/tutorials/c
 4. If you've changed APIs, update the documentation.
 5. Use `yarn format` to format and lint your code.
 6. PR's must be rebased before merge (feel free to ask for help).
-7. PR should be reviewed by two maintainers prior to merging.
+7. PR must be reviewed prior to merging.
 
 ## Debugging
 

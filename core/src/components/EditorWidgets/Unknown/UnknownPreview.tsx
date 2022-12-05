@@ -1,7 +1,7 @@
 import React from 'react';
 import { translate } from 'react-polyglot';
 
-import type { WidgetPreviewProps, TranslatedProps } from '../../../interface';
+import type { WidgetPreviewProps, TranslatedProps } from '@staticcms/core/interface';
 
 const UnknownPreview = ({ field, t }: TranslatedProps<WidgetPreviewProps>) => {
   return (

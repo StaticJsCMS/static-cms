@@ -12,9 +12,7 @@ interface Integrations {
   algolia?: Algolia;
 }
 
-export function resolveIntegrations(
-  config: IntegrationsConfig | undefined,
-) {
+export function resolveIntegrations(config: IntegrationsConfig | undefined) {
   const integrationInstances: Integrations = {};
 
   if (config?.providers?.algolia) {
@@ -27,10 +25,7 @@ export function resolveIntegrations(
 export const getSearchIntegrationProvider = (function () {
   let integrations: Integrations = {};
 
-  return (
-    config: IntegrationsConfig | undefined,
-    provider: SearchIntegrationProvider,
-  ) => {
+  return (config: IntegrationsConfig | undefined, provider: SearchIntegrationProvider) => {
     if (provider in (config?.providers ?? {}))
       if (integrations) {
         return integrations[provider];

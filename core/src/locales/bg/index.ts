@@ -1,4 +1,4 @@
-import type { LocalePhrasesRoot } from '../../interface';
+import type { LocalePhrasesRoot } from '@staticcms/core/interface';
 
 const bg: LocalePhrasesRoot = {
   auth: {
@@ -99,8 +99,10 @@ const bg: LocalePhrasesRoot = {
       onLeavePage: 'Наистина ли искате да напуснете тази страница?',
       onUpdatingWithUnsavedChangesBody:
         'Имате незапазени промени, моля, запазете преди актуализиране на състоянието.',
-      onPublishingNotReadyBody: 'Моля, актуализирайте състоянието на „Готово“, преди да публикувате',
-      onPublishingWithUnsavedChangesBody: 'Имате незапазени промени, моля, запазете преди публикуване.',
+      onPublishingNotReadyBody:
+        'Моля, актуализирайте състоянието на „Готово“, преди да публикувате',
+      onPublishingWithUnsavedChangesBody:
+        'Имате незапазени промени, моля, запазете преди публикуване.',
       onPublishingBody: 'Наистина ли искате да публикувате този запис?',
       onDeleteWithUnsavedChangesBody:
         'Наистина ли искате да изтриете този публикуван запис, както и незаписаните промени от текущата сесия?',

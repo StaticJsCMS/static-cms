@@ -1,4 +1,3 @@
-import { styled } from '@mui/material/styles';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ImageIcon from '@mui/icons-material/Image';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -8,24 +7,25 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
-import { logoutUser as logoutUserAction } from '../../actions/auth';
-import { createNewEntry } from '../../actions/collections';
-import { openMediaLibrary as openMediaLibraryAction } from '../../actions/mediaLibrary';
-import { checkBackendStatus as checkBackendStatusAction } from '../../actions/status';
-import { buttons, colors } from '../../components/UI/styles';
-import { stripProtocol } from '../../lib/urlHelper';
+import { logoutUser as logoutUserAction } from '@staticcms/core/actions/auth';
+import { createNewEntry } from '@staticcms/core/actions/collections';
+import { openMediaLibrary as openMediaLibraryAction } from '@staticcms/core/actions/mediaLibrary';
+import { checkBackendStatus as checkBackendStatusAction } from '@staticcms/core/actions/status';
+import { buttons, colors } from '@staticcms/core/components/UI/styles';
+import { stripProtocol } from '@staticcms/core/lib/urlHelper';
 import NavLink from '../UI/NavLink';
 import SettingsDropdown from '../UI/SettingsDropdown';
 
-import type { ComponentType } from 'react';
+import type { TranslatedProps } from '@staticcms/core/interface';
+import type { RootState } from '@staticcms/core/store';
+import type { ComponentType, MouseEvent } from 'react';
 import type { ConnectedProps } from 'react-redux';
-import type { TranslatedProps } from '../../interface';
-import type { RootState } from '../../store';
 
 const StyledAppBar = styled(AppBar)`
   background-color: ${colors.foreground};
@@ -73,9 +73,9 @@ const Header = ({
   showMediaButton,
   checkBackendStatus,
 }: TranslatedProps<HeaderProps>) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   }, []);
   const handleClose = useCallback(() => {

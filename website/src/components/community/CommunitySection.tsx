@@ -23,9 +23,7 @@ interface CommunitySectionProps {
 const CommunitySection = ({ section }: CommunitySectionProps) => {
   return (
     <StyledCommunitySection>
-      <Typography variant="h3">
-        {section.title}
-      </Typography>
+      <Typography variant="h3">{section.title}</Typography>
       <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
         {section.links.map(link => (
           <ListItemButton key={link.url} href={link.url} target="_blank">

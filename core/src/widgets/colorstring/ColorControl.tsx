@@ -7,14 +7,14 @@ import React, { useCallback, useState } from 'react';
 import { ChromePicker } from 'react-color';
 import validateColor from 'validate-color';
 
-import ObjectWidgetTopBar from '../../components/UI/ObjectWidgetTopBar';
-import Outline from '../../components/UI/Outline';
-import { zIndex } from '../../components/UI/styles';
-import { transientOptions } from '../../lib';
+import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
+import Outline from '@staticcms/core/components/UI/Outline';
+import { zIndex } from '@staticcms/core/components/UI/styles';
+import { transientOptions } from '@staticcms/core/lib';
 
-import type { ChangeEvent, MouseEvent } from 'react';
+import type { ColorField, WidgetControlProps } from '@staticcms/core/interface';
+import type { ChangeEvent, FC, MouseEvent } from 'react';
 import type { ColorResult } from 'react-color';
-import type { ColorField, WidgetControlProps } from '../../interface';
 
 const StyledColorControlWrapper = styled('div')`
   display: flex;
@@ -102,13 +102,13 @@ const ClickOutsideDiv = styled('div')`
   left: 0;
 `;
 
-const ColorControl = ({
+const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
   field,
   onChange,
   value,
   hasErrors,
   t,
-}: WidgetControlProps<string, ColorField>) => {
+}) => {
   const [collapsed, setCollapsed] = useState(false);
 
   const handleCollapseToggle = useCallback(() => {

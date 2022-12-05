@@ -1,4 +1,4 @@
-import type { LocalePhrasesRoot } from '../../interface';
+import type { LocalePhrasesRoot } from '@staticcms/core/interface';
 
 const ro: LocalePhrasesRoot = {
   auth: {
@@ -203,7 +203,8 @@ const ro: LocalePhrasesRoot = {
     },
     mediaLibrary: {
       onDeleteBody: 'Ești sigur/ă că dorești să ștergi fișierul selectat?',
-      fileTooLargeBody: 'Fișier prea mare.\nConfigurarea nu permite fișiere mai mari de %{size} KB.',
+      fileTooLargeBody:
+        'Fișier prea mare.\nConfigurarea nu permite fișiere mai mari de %{size} KB.',
     },
     mediaLibraryModal: {
       loading: 'Se încarcă...',

@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devServerPort = parseInt(process.env.STATIC_CMS_DEV_SERVER_PORT || `${8080}`);
@@ -18,7 +19,10 @@ module.exports = {
         test: /\.m?js$/,
         enforce: 'pre',
         use: ['source-map-loader'],
-        exclude: /(node_modules[\\/]@toast-ui[\\/]editor[\\/]dist)/,
+        exclude: [
+          /(node_modules[\\/]@toast-ui[\\/]editor[\\/]dist)/,
+          /(node_modules[\\/]nth-check[\\/]lib)/,
+        ],
       },
       {
         test: /\.m?js$/,
@@ -71,6 +75,7 @@ module.exports = {
     ],
   },
   resolve: {
+    plugins: [new TsconfigPathsPlugin({})],
     extensions: ['.tsx', '.ts', '.jsx', '.js'],
     fallback: {
       path: require.resolve('path-browserify'),
