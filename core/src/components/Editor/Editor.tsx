@@ -31,7 +31,7 @@ import confirm from '../UI/Confirm';
 import Loader from '../UI/Loader';
 import EditorInterface from './EditorInterface';
 
-import type { TransitionPromptHook } from 'history';
+import type { Blocker } from 'history';
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import type {
@@ -252,8 +252,8 @@ const Editor = ({
 
   useWindowEvent('beforeunload', exitBlocker);
 
-  const navigationBlocker: TransitionPromptHook = useCallback(
-    (location, action) => {
+  const navigationBlocker: Blocker = useCallback(
+    ({ location, action }) => {
       /**
        * New entry being saved and redirected to it's new slug based url.
        */
