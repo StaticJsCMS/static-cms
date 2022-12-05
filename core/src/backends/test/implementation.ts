@@ -3,7 +3,7 @@ import isError from 'lodash/isError';
 import take from 'lodash/take';
 import unset from 'lodash/unset';
 import { extname } from 'path';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
 import { basename, Cursor, CURSOR_COMPATIBILITY_SYMBOL } from '@staticcms/core/lib/util';
 import AuthenticationPage from './AuthenticationPage';
