@@ -322,7 +322,7 @@ export interface Widget<T = unknown, F extends BaseField = UnknownField> {
   preview?: WidgetPreviewComponent<T, F>;
   validator: FieldValidationMethod<T, F>;
   getValidValue: (value: T | undefined | null) => T | undefined | null;
-  getDefaultValue?: (defaultValue: T | undefined | null) => T;
+  getDefaultValue?: (defaultValue: T | undefined | null, field: F) => T;
   schema?: PropertiesSchema<unknown>;
 }
 

@@ -133,13 +133,26 @@ collections:
             allow_language_selection: true
             required: false
           - name: language_with_default
-            label: Language Selection With Default
+            label: Language Selection With Default Language
+            widget: code
+            allow_language_selection: true
+            required: false
+            default_language: html
+          - name: language_with_default_language_and_value
+            label: Language Selection With Default Language and Value
             widget: code
             allow_language_selection: true
             required: false
             default:
               lang: html
               code: '<div>Some html!</div>'
+          - name: language_with_default_language_and_value_string_default
+            label: Language Selection With Default Language and Value (String Default)
+            widget: code
+            allow_language_selection: true
+            required: false
+            default_language: html
+            default: '<div>Some html!</div>'
       - name: color
         label: Color
         file: _widgets/color.json

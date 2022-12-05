@@ -222,7 +222,9 @@ const EditorControl = ({
 
     if ('default' in field && isNotNullish(!field.default)) {
       if (widget.getDefaultValue) {
-        handleChangeDraftField(widget.getDefaultValue(field.default));
+        handleChangeDraftField(
+          widget.getDefaultValue(field.default, field as unknown as UnknownField),
+        );
       } else {
         handleChangeDraftField(field.default);
       }
@@ -231,7 +233,7 @@ const EditorControl = ({
     }
 
     if (widget.getDefaultValue) {
-      handleChangeDraftField(widget.getDefaultValue(null));
+      handleChangeDraftField(widget.getDefaultValue(null, field as unknown as UnknownField));
       setVersion(version => version + 1);
     }
   }, [field, finalValue, handleChangeDraftField, widget]);
