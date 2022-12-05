@@ -171,8 +171,6 @@
     "@babel/preset-react": "7.18.6",
     "@babel/preset-typescript": "7.18.6",
     "@emotion/eslint-plugin": "11.10.0",
-    "@octokit/core": "4.1.0",
-    "@octokit/rest": "19.0.5",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.10",
     "@simbathesailor/use-what-changed": "2.0.0",
     "@types/common-tags": "1.8.1",

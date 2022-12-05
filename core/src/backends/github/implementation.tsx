@@ -20,11 +20,9 @@ import {
 import API, { API_NAME } from './API';
 import AuthenticationPage from './AuthenticationPage';
 
-import type { Octokit } from '@octokit/rest';
-import type { Semaphore } from 'semaphore';
 import type {
-  BackendEntry,
   BackendClass,
+  BackendEntry,
   Config,
   Credentials,
   DisplayURL,
@@ -34,8 +32,8 @@ import type {
 } from '@staticcms/core/interface';
 import type { AsyncLock } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
-
-type GitHubUser = Octokit.UsersGetAuthenticatedResponse;
+import type { Semaphore } from 'semaphore';
+import type { GitHubUser } from './types';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 
