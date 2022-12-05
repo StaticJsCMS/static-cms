@@ -173,7 +173,7 @@ export const getDocsMenuStaticProps: GetStaticProps = (): { props: DocsMenuProps
   return {
     props: {
       docsGroups: fetchDocsContent()[1],
-      searchablePages: getSearchablePages()
+      searchablePages: getSearchablePages(),
     },
   };
 };

@@ -186,14 +186,14 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
             }
 
             return (
-              <Link key={`desktop-${item.title}-${url}`} href={url}>
-                <StyledDesktopLink component="a">{item.title}</StyledDesktopLink>
-              </Link>
+              <StyledDesktopLink key={`desktop-${item.title}-${url}`} component={Link} href={url}>
+                {item.title}
+              </StyledDesktopLink>
             );
           })}
-          {/* <Link href="/blog">
-          <StyledLink component="a">Blog</StyledLink>
-        </Link> */}
+          {/*
+            <StyledDesktopLink component={Link} href="/blog">Blog</StyledDesktopLink>
+          */}
         </StyledToolbar>
       </StyledAppBar>
       <NavigationDrawer

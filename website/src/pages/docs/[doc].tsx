@@ -1,6 +1,5 @@
 import Alert from '@mui/material/Alert';
 import { styled, useTheme } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
 import { MDXRemote } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import remarkGfm from 'remark-gfm';

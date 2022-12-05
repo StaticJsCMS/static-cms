@@ -16,7 +16,7 @@
     "build": "cross-env NODE_ENV=production run-s clean build:webpack build:types",
     "clean": "rimraf dist dev-test/dist",
     "develop": "webpack serve",
-    "format:prettier": "prettier \"{{src,scripts,website}/**/,}*.{js,jsx,ts,tsx,css}\"",
+    "format:prettier": "prettier \"src/**/*.{js,jsx,ts,tsx,css}\"",
     "format": "run-s \"lint:js --fix --quiet\" \"format:prettier --write\"",
     "lint-quiet": "run-p -c --aggregate-output \"lint:* --quiet\"",
     "lint:format": "prettier \"src/**/*.{js,jsx,ts,tsx,css}\" --list-different",

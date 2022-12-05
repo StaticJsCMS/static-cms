@@ -21,16 +21,16 @@ const MobileNavLink = ({ link, onClick }: MobileNavLinkProps) => {
   }, [asPath, url]);
 
   return (
-    <Link href={url} target={url.startsWith('http') ? '_blank' : undefined}>
-      <ListItemButton
-        href={url}
-        sx={{ paddingLeft: '24px', paddingTop: '4px', paddingBottom: '4px' }}
-        onClick={onClick}
-        selected={selected}
-      >
-        <ListItemText primary={title} />
-      </ListItemButton>
-    </Link>
+    <ListItemButton
+      component={Link}
+      href={url}
+      target={url.startsWith('http') ? '_blank' : undefined}
+      sx={{ paddingLeft: '24px', paddingTop: '4px', paddingBottom: '4px' }}
+      onClick={onClick}
+      selected={selected}
+    >
+      <ListItemText primary={title} />
+    </ListItemButton>
   );
 };
 

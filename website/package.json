@@ -1,12 +1,17 @@
 {
   "name": "website",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "format:prettier": "prettier \"src/**/*.{js,jsx,ts,tsx,css}\" --write",
+    "format:next": "next lint --fix",
+    "format": "run-s -c \"format:*\"",
+    "lint:prettier": "prettier \"src/**/*.{js,jsx,ts,tsx,css}\" --list-different",
+    "lint:next": "next lint",
+    "lint": "run-p -c --aggregate-output \"lint:*\""
   },
   "dependencies": {
     "@emotion/react": "11.10.5",
@@ -16,7 +21,7 @@
     "date-fns": "2.29.3",
     "gray-matter": "4.0.3",
     "js-yaml": "4.1.0",
-    "next": "12.3.4",
+    "next": "13.0.6",
     "next-mdx-remote": "4.2.0",
     "next-pwa": "5.6.0",
     "prismjs": "1.29.0",
@@ -30,8 +35,8 @@
   "devDependencies": {
     "@babel/core": "7.20.5",
     "@emotion/eslint-plugin": "11.10.0",
-    "@next/bundle-analyzer": "12.3.4",
-    "@next/eslint-plugin-next": "12.3.4",
+    "@next/bundle-analyzer": "13.0.6",
+    "@next/eslint-plugin-next": "13.0.6",
     "@types/js-yaml": "4.0.5",
     "@types/node": "16.18.4",
     "@types/prettier": "2.7.1",
@@ -42,10 +47,12 @@
     "@typescript-eslint/parser": "5.45.0",
     "babel-eslint": "10.1.0",
     "eslint": "8.29.0",
-    "eslint-config-next": "12.3.4",
+    "eslint-config-next": "13.0.6",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-babel": "5.3.1",
     "eslint-plugin-unicorn": "45.0.1",
+    "npm-run-all": "4.1.5",
+    "prettier": "2.8.0",
     "typescript": "4.9.3",
     "webpack": "5.75.0"
   }

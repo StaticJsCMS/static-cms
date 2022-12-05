@@ -70,48 +70,47 @@ const SearchResult = ({ entry: { url, title }, summary, onClick }: SearchResultP
   // }, [type]);
 
   return (
-    <Link href={url}>
-      <Button
-        href={url}
-        key={`result-${url}`}
-        onClick={onClick}
-        // startIcon={<Icon fontSize="large" />}
-        sx={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          textAlign: 'left',
-          width: '100%',
-          color: theme.palette.text.secondary,
-          lineHeight: 'inherit',
-          letterSpacing: 'inherit',
-          textTransform: 'unset',
-          gap: '8px',
-          padding: '16px',
-          boxSize: 'border-box',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.25)',
-          '&:hover': {
-            color: theme.palette.text.primary,
+    <Button
+      component={Link}
+      href={url}
+      key={`result-${url}`}
+      onClick={onClick}
+      // startIcon={<Icon fontSize="large" />}
+      sx={{
+        display: 'flex',
+        alignItems: 'flex-start',
+        textAlign: 'left',
+        width: '100%',
+        color: theme.palette.text.secondary,
+        lineHeight: 'inherit',
+        letterSpacing: 'inherit',
+        textTransform: 'unset',
+        gap: '8px',
+        padding: '16px',
+        boxSize: 'border-box',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.25)',
+        '&:hover': {
+          color: theme.palette.text.primary,
+        },
+        '.MuiButton-startIcon': {
+          marginLeft: 0,
+          '*:nth-of-type(1)': {
+            fontSize: '24px',
           },
-          '.MuiButton-startIcon': {
-            marginLeft: 0,
-            '*:nth-of-type(1)': {
-              fontSize: '24px',
-            },
-          },
-        }}
-      >
-        <StyledSearchResultBody>
-          <StyledSearchResultTitleWrapper>
-            <StyledSearchResultTitle>{title}</StyledSearchResultTitle>
-          </StyledSearchResultTitleWrapper>
-          <StyledSearchResultContent
-            dangerouslySetInnerHTML={{
-              __html: summary,
-            }}
-          />
-        </StyledSearchResultBody>
-      </Button>
-    </Link>
+        },
+      }}
+    >
+      <StyledSearchResultBody>
+        <StyledSearchResultTitleWrapper>
+          <StyledSearchResultTitle>{title}</StyledSearchResultTitle>
+        </StyledSearchResultTitleWrapper>
+        <StyledSearchResultContent
+          dangerouslySetInnerHTML={{
+            __html: summary,
+          }}
+        />
+      </StyledSearchResultBody>
+    </Button>
   );
 };
 

@@ -93,9 +93,10 @@ const CodeTabs = ({ children }: CodeTabsProps) => {
         return {
           title: language.title,
           className: code.props.className,
-          content: typeof code.props.children === 'string' && isNotEmpty(code.props.children)
-            ? Prism.highlight(code.props.children, language.grammar, language.language)
-            : '',
+          content:
+            typeof code.props.children === 'string' && isNotEmpty(code.props.children)
+              ? Prism.highlight(code.props.children, language.grammar, language.language)
+              : '',
         };
       })
       .filter(Boolean) as TabData[];
