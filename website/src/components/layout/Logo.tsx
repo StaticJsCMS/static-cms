@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const StyledImageLink = styled('a')`
+const StyledImageLink = styled(Link)`
   display: flex;
   align-items: center;
 `;
@@ -13,11 +13,9 @@ const StyledImage = styled(Image)`
 
 const Logo = () => {
   return (
-    <Link href="/">
-      <StyledImageLink>
-        <StyledImage src="/static-cms-logo.svg" alt="Static CMS" width={182} height={72} />
-      </StyledImageLink>
-    </Link>
+    <StyledImageLink href="/">
+      <StyledImage src="/static-cms-logo.svg" alt="Static CMS" width={182} height={72} />
+    </StyledImageLink>
   );
 };
 

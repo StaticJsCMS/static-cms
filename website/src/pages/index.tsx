@@ -262,11 +262,14 @@ const Home = ({ docsGroups, searchablePages }: DocsMenuProps) => {
               <Typography variant="h2" color="text.primary">
                 {homepageData.subtitle}
               </Typography>
-              <Link href={homepageData.get_started.url}>
-                <Button component="a" variant="contained" size="large">
-                  {homepageData.get_started.title}
-                </Button>
-              </Link>
+              <Button
+                component={Link}
+                href={homepageData.get_started.url}
+                variant="contained"
+                size="large"
+              >
+                {homepageData.get_started.title}
+              </Button>
             </StyledIntroSectionContent>
           </Container>
         </StyledIntroSection>
@@ -305,16 +308,15 @@ const Home = ({ docsGroups, searchablePages }: DocsMenuProps) => {
                     {homepageData.call_to_action.subtitle}
                   </Typography>
                 </StyledCallToActionText>
-                <Link href={homepageData.call_to_action.url}>
-                  <Button
-                    component="a"
-                    variant="contained"
-                    size="large"
-                    sx={{ width: '188px', whiteSpace: 'nowrap' }}
-                  >
-                    {homepageData.call_to_action.button_text}
-                  </Button>
-                </Link>
+                <Button
+                  component={Link}
+                  href={homepageData.call_to_action.url}
+                  variant="contained"
+                  size="large"
+                  sx={{ width: '188px', whiteSpace: 'nowrap' }}
+                >
+                  {homepageData.call_to_action.button_text}
+                </Button>
               </StyledCallToActionCardContent>
             </StyledCallToActionCard>
           </StyledCallToActionContainer>

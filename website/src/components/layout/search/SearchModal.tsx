@@ -174,9 +174,7 @@ const SearchModal: FC<SearchModalProps> = ({ open, onClose, searchablePages }) =
             <SuggestionLink href="/docs/configuration-options">
               Configuration Options
             </SuggestionLink>
-            <SuggestionLink href="/docs/collection-overview">
-              Collections
-            </SuggestionLink>
+            <SuggestionLink href="/docs/collection-overview">Collections</SuggestionLink>
           </StyledSuggestionSection>
           <StyledSuggestionSection>
             <Typography variant="h3" sx={{ marginBottom: '4px' }}>

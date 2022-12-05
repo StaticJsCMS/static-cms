@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "format:prettier": "prettier \"src/**/*.{js,jsx,ts,tsx,css}\" --write",
+    "format:next": "next lint --fix",
+    "format": "run-s -c \"format:*\"",
+    "lint:prettier": "prettier \"src/**/*.{js,jsx,ts,tsx,css}\" --list-different",
+    "lint:next": "next lint",
+    "lint": "run-p -c --aggregate-output \"lint:*\""
   },
   "dependencies": {
     "@emotion/react": "11.10.5",
@@ -46,6 +51,8 @@
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-babel": "5.3.1",
     "eslint-plugin-unicorn": "45.0.1",
+    "npm-run-all": "4.1.5",
+    "prettier": "2.8.0",
     "typescript": "4.9.3",
     "webpack": "5.75.0"
   }
