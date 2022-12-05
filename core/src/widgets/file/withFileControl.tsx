@@ -8,14 +8,16 @@ import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
 import Outline from '@staticcms/core/components/UI/Outline';
 import { borders, effects, lengths, shadows } from '@staticcms/core/components/UI/styles';
+import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { basename, transientOptions } from '@staticcms/core/lib/util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 
 import type {
+  Collection,
+  Entry,
   FileOrImageField,
-  GetAssetFunction,
   WidgetControlProps,
 } from '@staticcms/core/interface';
 import type { FC, MouseEvent, MouseEventHandler } from 'react';
@@ -102,11 +104,16 @@ const StyledImage = styled('img')`
 `;
 
 interface ImageProps {
-  src: string;
+  value: string;
+  collection: Collection<FileOrImageField>;
+  field: FileOrImageField;
+  entry: Entry;
 }
 
-const Image: FC<ImageProps> = ({ src }) => {
-  return <StyledImage key="image" role="presentation" src={src} />;
+const Image: FC<ImageProps> = ({ value, collection, field, entry }) => {
+  const assetSource = useMediaAsset(value, collection, field, entry);
+
+  return <StyledImage key="image" role="presentation" src={assetSource} />;
 };
 
 interface SortableImageButtonsProps {
@@ -129,34 +136,25 @@ const SortableImageButtons: FC<SortableImageButtonsProps> = ({ onRemove, onRepla
 
 interface SortableImageProps {
   itemValue: string;
-  getAsset: GetAssetFunction<FileOrImageField>;
+  collection: Collection<FileOrImageField>;
   field: FileOrImageField;
+  entry: Entry;
   onRemove: MouseEventHandler;
   onReplace: MouseEventHandler;
 }
 
 const SortableImage: FC<SortableImageProps> = ({
   itemValue,
-  getAsset,
+  collection,
   field,
+  entry,
   onRemove,
   onReplace,
 }: SortableImageProps) => {
-  const [assetSource, setAssetSource] = useState('');
-  useEffect(() => {
-    const getImage = async () => {
-      const asset = (await getAsset(itemValue, field))?.toString() ?? '';
-      setAssetSource(asset);
-    };
-
-    getImage();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [itemValue]);
-
   return (
     <div>
       <ImageWrapper key="image-wrapper" $sortable>
-        <Image key="image" src={assetSource} />
+        <Image key="image" value={itemValue} collection={collection} field={field} entry={entry} />
       </ImageWrapper>
       <SortableImageButtons
         key="image-buttons"
@@ -212,12 +210,13 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
   const FileControl: FC<WidgetControlProps<string | string[], FileOrImageField>> = memo(
     ({
       value,
+      collection,
       field,
+      entry,
       onChange,
       openMediaLibrary,
       clearMediaControl,
       removeMediaControl,
-      getAsset,
       hasErrors,
       t,
     }) => {
@@ -343,23 +342,6 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
         );
       }, []);
 
-      const [assetSource, setAssetSource] = useState('');
-      useEffect(() => {
-        if (Array.isArray(internalValue)) {
-          return;
-        }
-
-        const getImage = async () => {
-          const newValue = (await getAsset(internalValue, field))?.toString() ?? '';
-          if (newValue !== internalValue) {
-            setAssetSource(newValue);
-          }
-        };
-
-        getImage();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [internalValue]);
-
       const renderedImagesLinks = useMemo(() => {
         if (forImage) {
           if (!internalValue) {
@@ -373,8 +355,9 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
                   <SortableImage
                     key={`item-${itemValue}`}
                     itemValue={itemValue}
-                    getAsset={getAsset}
+                    collection={collection}
                     field={field}
+                    entry={entry}
                     onRemove={onRemoveOne(index)}
                     onReplace={onReplaceOne(index)}
                   />
@@ -385,7 +368,13 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
           return (
             <ImageWrapper key="single-image-wrapper">
-              <Image key="single-image" src={assetSource} />
+              <Image
+                key="single-image"
+                value={internalValue}
+                collection={collection}
+                field={field}
+                entry={entry}
+              />
             </ImageWrapper>
           );
         }
@@ -403,7 +392,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
         }
 
         return <FileLinks key="single-file-links">{renderFileLink(internalValue)}</FileLinks>;
-      }, [assetSource, field, getAsset, internalValue, onRemoveOne, onReplaceOne, renderFileLink]);
+      }, [collection, entry, field, internalValue, onRemoveOne, onReplaceOne, renderFileLink]);
 
       const content = useMemo(() => {
         const subject = forImage ? 'image' : 'file';

@@ -221,12 +221,17 @@ const EditorControl = ({
     }
 
     if ('default' in field && isNotNullish(!field.default)) {
-      handleChangeDraftField(field.default);
+      if (widget.getDefaultValue) {
+        handleChangeDraftField(widget.getDefaultValue(field.default));
+      } else {
+        handleChangeDraftField(field.default);
+      }
       setVersion(version => version + 1);
+      return;
     }
 
     if (widget.getDefaultValue) {
-      handleChangeDraftField(widget.getDefaultValue());
+      handleChangeDraftField(widget.getDefaultValue(null));
       setVersion(version => version + 1);
     }
   }, [field, finalValue, handleChangeDraftField, widget]);

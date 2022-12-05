@@ -7,5 +7,8 @@ export default {
       type: 'object',
       properties: { code: { type: 'string' }, lang: { type: 'string' } },
     },
+    default: {
+      oneOf: [{ type: 'string' }, { type: 'object' }],
+    },
   },
 };

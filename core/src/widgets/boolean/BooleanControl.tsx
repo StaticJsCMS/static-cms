@@ -1,7 +1,7 @@
 import { red } from '@mui/material/colors';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import type { BooleanField, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC } from 'react';
@@ -21,15 +21,6 @@ const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
     },
     [onChange],
   );
-
-  useEffect(() => {
-    if (typeof internalValue !== 'boolean') {
-      setInternalValue(false);
-      setTimeout(() => {
-        onChange(false);
-      });
-    }
-  }, [internalValue, onChange]);
 
   return (
     <FormControlLabel

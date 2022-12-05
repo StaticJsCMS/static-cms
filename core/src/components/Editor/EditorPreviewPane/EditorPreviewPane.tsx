@@ -217,6 +217,7 @@ function getWidget(
         value &&
         typeof value === 'object' &&
         !Array.isArray(value) &&
+        field.name in value &&
         !isJsxElement(value) &&
         !isReactFragment(value)
           ? (value as Record<string, unknown>)[field.name]
