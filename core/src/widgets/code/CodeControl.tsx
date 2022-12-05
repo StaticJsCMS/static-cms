@@ -2,10 +2,10 @@ import { styled } from '@mui/material/styles';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import CodeMirror from '@uiw/react-codemirror';
 import React, { useCallback, useMemo, useState } from 'react';
-import { v4 as uuid } from 'uuid';
 
 import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
 import Outline from '@staticcms/core/components/UI/Outline';
+import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import transientOptions from '@staticcms/core/lib/util/transientOptions';
 import languages from './data/languages';
 import SettingsButton from './SettingsButton';
@@ -146,7 +146,7 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
     setSettingsVisible(false);
   }, []);
 
-  const uniqueId = useMemo(() => uuid(), []);
+  const uniqueId = useUUID();
 
   // If `allow_language_selection` is not set, default to true. Otherwise, use its value.
   const allowLanguageSelection = useMemo(

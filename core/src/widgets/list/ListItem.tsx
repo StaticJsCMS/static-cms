@@ -1,7 +1,6 @@
 import { styled } from '@mui/material/styles';
 import partial from 'lodash/partial';
 import React, { useCallback, useMemo, useState } from 'react';
-import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 
 import EditorControl from '@staticcms/core/components/Editor/EditorControlPane/EditorControl';
 import ListItemTopBar from '@staticcms/core/components/UI/ListItemTopBar';
@@ -15,6 +14,7 @@ import {
 import { ListValueType } from './ListControl';
 import { getTypedFieldForValue } from './typedListHelpers';
 
+import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import type {
   Entry,
   EntryData,
@@ -28,8 +28,6 @@ import type { FC, MouseEvent } from 'react';
 const StyledListItem = styled('div')`
   position: relative;
 `;
-
-const SortableStyledListItem = SortableElement<{ children: JSX.Element }>(StyledListItem);
 
 const StyledListItemTopBar = styled(ListItemTopBar)`
   background-color: ${colors.textFieldBorder};
@@ -95,10 +93,13 @@ interface ListItemProps
   > {
   valueType: ListValueType;
   index: number;
+  id: string;
+  listeners: SyntheticListenerMap | undefined;
   handleRemove: (index: number, event: MouseEvent) => void;
 }
 
 const ListItem: FC<ListItemProps> = ({
+  id,
   index,
   entry,
   field,
@@ -112,6 +113,7 @@ const ListItem: FC<ListItemProps> = ({
   handleRemove,
   value,
   i18n,
+  listeners,
 }) => {
   const [objectLabel, objectField] = useMemo((): [string, ListField | ObjectField] => {
     const childObjectField: ObjectField = {
@@ -185,21 +187,21 @@ const ListItem: FC<ListItemProps> = ({
   const isHidden = isFieldHidden && isFieldHidden(field);
 
   return (
-    <SortableStyledListItem key="sortable-list-item" index={index}>
+    <StyledListItem key="sortable-list-item">
       <>
         <StyledListItemTopBar
           key="list-item-top-bar"
           collapsed={collapsed}
           onCollapseToggle={handleCollapseToggle}
           onRemove={partial(handleRemove, index)}
-          dragHandleHOC={SortableHandle}
-          data-testid={`styled-list-item-top-bar-${index}`}
+          data-testid={`styled-list-item-top-bar-${id}`}
           title={objectLabel}
           isVariableTypesList={valueType === ListValueType.MIXED}
+          listeners={listeners}
         />
         <StyledObjectFieldWrapper $collapsed={collapsed}>
           <EditorControl
-            key={index}
+            key={`control-${id}`}
             field={objectField}
             value={value}
             fieldsErrors={fieldsErrors}
@@ -216,7 +218,7 @@ const ListItem: FC<ListItemProps> = ({
         </StyledObjectFieldWrapper>
         <Outline key="outline" />
       </>
-    </SortableStyledListItem>
+    </StyledListItem>
   );
 };
 

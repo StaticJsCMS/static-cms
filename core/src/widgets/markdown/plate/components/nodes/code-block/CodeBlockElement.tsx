@@ -2,9 +2,9 @@ import { styled } from '@mui/material/styles';
 import { findNodePath, setNodes } from '@udecode/plate';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Frame from 'react-frame-component';
-import { v4 as uuid } from 'uuid';
 
 import Outline from '@staticcms/core/components/UI/Outline';
+import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 import CodeBlockFrame from './CodeBlockFrame';
 
@@ -49,7 +49,7 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
   const [codeHasFocus, setCodeHasFocus] = useState(false);
 
   const { attributes, nodeProps, element, editor, children } = props;
-  const id = useMemo(() => uuid(), []);
+  const id = useUUID();
 
   const lang = ('lang' in element ? element.lang : '') as string | undefined;
   const code = ('code' in element ? element.code ?? '' : '') as string;

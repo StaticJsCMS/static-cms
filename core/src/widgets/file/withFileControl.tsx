@@ -3,15 +3,13 @@ import PhotoIcon from '@mui/icons-material/Photo';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
-import { arrayMoveImmutable } from 'array-move';
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { SortableContainer, SortableElement } from 'react-sortable-hoc';
-import { v4 as uuid } from 'uuid';
 
 import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
 import Outline from '@staticcms/core/components/UI/Outline';
 import { borders, effects, lengths, shadows } from '@staticcms/core/components/UI/styles';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
+import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { basename, transientOptions } from '@staticcms/core/lib/util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 
@@ -137,66 +135,42 @@ interface SortableImageProps {
   onReplace: MouseEventHandler;
 }
 
-const SortableImage = SortableElement<SortableImageProps>(
-  ({ itemValue, getAsset, field, onRemove, onReplace }: SortableImageProps) => {
-    const [assetSource, setAssetSource] = useState('');
-    useEffect(() => {
-      const getImage = async () => {
-        const asset = (await getAsset(itemValue, field))?.toString() ?? '';
-        setAssetSource(asset);
-      };
+const SortableImage: FC<SortableImageProps> = ({
+  itemValue,
+  getAsset,
+  field,
+  onRemove,
+  onReplace,
+}: SortableImageProps) => {
+  const [assetSource, setAssetSource] = useState('');
+  useEffect(() => {
+    const getImage = async () => {
+      const asset = (await getAsset(itemValue, field))?.toString() ?? '';
+      setAssetSource(asset);
+    };
 
-      getImage();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [itemValue]);
+    getImage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [itemValue]);
 
-    return (
-      <div>
-        <ImageWrapper key="image-wrapper" $sortable>
-          <Image key="image" src={assetSource} />
-        </ImageWrapper>
-        <SortableImageButtons
-          key="image-buttons"
-          onRemove={onRemove}
-          onReplace={onReplace}
-        ></SortableImageButtons>
-      </div>
-    );
-  },
-);
+  return (
+    <div>
+      <ImageWrapper key="image-wrapper" $sortable>
+        <Image key="image" src={assetSource} />
+      </ImageWrapper>
+      <SortableImageButtons
+        key="image-buttons"
+        onRemove={onRemove}
+        onReplace={onReplace}
+      ></SortableImageButtons>
+    </div>
+  );
+};
 
-const StyledSortableMultiImageWrapper = styled('div')`
+const StyledMultiImageWrapper = styled('div')`
   display: flex;
   flex-wrap: wrap;
 `;
-
-interface SortableMultiImageWrapperProps {
-  items: string[];
-  getAsset: GetAssetFunction<FileOrImageField>;
-  field: FileOrImageField;
-  onRemoveOne: (index: number) => MouseEventHandler;
-  onReplaceOne: (index: number) => MouseEventHandler;
-}
-
-const SortableMultiImageWrapper = SortableContainer<SortableMultiImageWrapperProps>(
-  ({ items, getAsset, field, onRemoveOne, onReplaceOne }: SortableMultiImageWrapperProps) => {
-    return (
-      <StyledSortableMultiImageWrapper key="multi-image-wrapper">
-        {items.map((itemValue, index) => (
-          <SortableImage
-            key={`item-${itemValue}`}
-            index={index}
-            itemValue={itemValue}
-            getAsset={getAsset}
-            field={field}
-            onRemove={onRemoveOne(index)}
-            onReplace={onReplaceOne(index)}
-          />
-        ))}
-      </StyledSortableMultiImageWrapper>
-    );
-  },
-);
 
 const FileLink = styled('a')`
   margin-bottom: 20px;
@@ -247,7 +221,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       hasErrors,
       t,
     }) => {
-      const controlID = useMemo(() => uuid(), []);
+      const controlID = useUUID();
       const [collapsed, setCollapsed] = useState(false);
       const [internalValue, setInternalValue] = useState(value ?? '');
 
@@ -345,15 +319,16 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
         [config, controlID, field, openMediaLibrary, internalValue],
       );
 
-      const onSortEnd = useCallback(
-        ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
-          if (Array.isArray(internalValue)) {
-            const newValue = arrayMoveImmutable(internalValue, oldIndex, newIndex);
-            handleOnChange(newValue);
-          }
-        },
-        [handleOnChange, internalValue],
-      );
+      // TODO Readd when multiple uploads is supported
+      // const onSortEnd = useCallback(
+      //   ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
+      //     if (Array.isArray(internalValue)) {
+      //       const newValue = arrayMoveImmutable(internalValue, oldIndex, newIndex);
+      //       handleOnChange(newValue);
+      //     }
+      //   },
+      //   [handleOnChange, internalValue],
+      // );
 
       const renderFileLink = useCallback((link: string | undefined | null) => {
         const size = MAX_DISPLAY_LENGTH;
@@ -393,18 +368,18 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
           if (isMultiple(internalValue)) {
             return (
-              <SortableMultiImageWrapper
-                key="mulitple-image-wrapper"
-                items={internalValue}
-                onSortEnd={onSortEnd}
-                onRemoveOne={onRemoveOne}
-                onReplaceOne={onReplaceOne}
-                distance={4}
-                getAsset={getAsset}
-                field={field}
-                axis="xy"
-                lockToContainerEdges={true}
-              ></SortableMultiImageWrapper>
+              <StyledMultiImageWrapper key="multi-image-wrapper">
+                {internalValue.map((itemValue, index) => (
+                  <SortableImage
+                    key={`item-${itemValue}`}
+                    itemValue={itemValue}
+                    getAsset={getAsset}
+                    field={field}
+                    onRemove={onRemoveOne(index)}
+                    onReplace={onReplaceOne(index)}
+                  />
+                ))}
+              </StyledMultiImageWrapper>
             );
           }
 
@@ -428,16 +403,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
         }
 
         return <FileLinks key="single-file-links">{renderFileLink(internalValue)}</FileLinks>;
-      }, [
-        assetSource,
-        field,
-        getAsset,
-        internalValue,
-        onRemoveOne,
-        onReplaceOne,
-        onSortEnd,
-        renderFileLink,
-      ]);
+      }, [assetSource, field, getAsset, internalValue, onRemoveOne, onReplaceOne, renderFileLink]);
 
       const content = useMemo(() => {
         const subject = forImage ? 'image' : 'file';

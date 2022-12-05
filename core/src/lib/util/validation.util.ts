@@ -78,11 +78,9 @@ export function validatePattern({
 }
 
 export async function validate(
-  path: string,
   field: Field,
   value: ValueOrNestedValue,
   widget: Widget<any, any>,
-  onValidate: (path: string, errors: FieldError[]) => void,
   t: t,
 ): Promise<FieldError[]> {
   const validValue = widget.getValidValue(value);
@@ -100,6 +98,5 @@ export async function validate(
     }
   }
 
-  onValidate(path, errors);
   return errors;
 }
