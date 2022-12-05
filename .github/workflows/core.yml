@@ -1,4 +1,4 @@
-name: Build
+name: Core
 
 on:
   workflow_dispatch:
