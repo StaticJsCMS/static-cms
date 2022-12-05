@@ -42,6 +42,7 @@
     "last 2 Safari versions"
   ],
   "dependencies": {
+    "@babel/eslint-parser": "7.19.1",
     "@babel/runtime": "7.20.6",
     "@codemirror/autocomplete": "6.3.4",
     "@codemirror/commands": "6.1.2",
