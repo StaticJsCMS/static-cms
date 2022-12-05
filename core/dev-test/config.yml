@@ -207,6 +207,13 @@ collections:
             format: 'h:mm aaa'
             time_format: 'h:mm aaa'
             required: false
+          - name: time_with_default
+            label: Time With Deafult
+            widget: datetime
+            format: 'h:mm aaa'
+            time_format: 'h:mm aaa'
+            required: false
+            default: '12:00 am'
       - name: file
         label: File
         file: _widgets/file.json
