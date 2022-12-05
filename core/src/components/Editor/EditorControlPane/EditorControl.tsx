@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import {
   changeDraftField as changeDraftFieldAction,
-  changeDraftFieldValidation as changeDraftFieldValidationAction,
+  changeDraftFieldValidation,
 } from '@staticcms/core/actions/entries';
 import { getAsset as getAssetAction } from '@staticcms/core/actions/media';
 import {
@@ -20,10 +20,13 @@ import { query as queryAction } from '@staticcms/core/actions/search';
 import { borders, colors, lengths, transitions } from '@staticcms/core/components/UI/styles';
 import { transientOptions } from '@staticcms/core/lib';
 import useMemoCompare from '@staticcms/core/lib/hooks/useMemoCompare';
+import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { resolveWidget } from '@staticcms/core/lib/registry';
 import { getFieldLabel } from '@staticcms/core/lib/util/field.util';
 import { validate } from '@staticcms/core/lib/util/validation.util';
+import { selectFieldErrors } from '@staticcms/core/reducers/entryDraft';
 import { selectIsLoadingAsset } from '@staticcms/core/reducers/medias';
+import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 
 import type {
   Field,
@@ -146,7 +149,6 @@ const EditorControl = ({
   isHidden = false,
   locale,
   mediaPaths,
-  changeDraftFieldValidation,
   openMediaLibrary,
   parentPath,
   query,
@@ -158,6 +160,10 @@ const EditorControl = ({
   changeDraftField,
   i18n,
 }: TranslatedProps<EditorControlProps>) => {
+  const dispatch = useAppDispatch();
+
+  const id = useUUID();
+
   const widgetName = field.widget;
   const widget = resolveWidget(widgetName) as Widget<ValueOrNestedValue>;
   const fieldHint = field.hint;
@@ -168,8 +174,10 @@ const EditorControl = ({
   );
 
   const [dirty, setDirty] = useState(!isEmpty(value));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const errors = useMemo(() => fieldsErrors[path] ?? [], [fieldsErrors[path]]);
+
+  const fieldErrorsSelector = useMemo(() => selectFieldErrors(path), [path]);
+  const errors = useAppSelector(fieldErrorsSelector);
+
   const hasErrors = (submitted || dirty) && Boolean(errors.length);
 
   const handleGetAsset: GetAssetFunction = useMemo(
@@ -181,12 +189,17 @@ const EditorControl = ({
   );
 
   useEffect(() => {
+    if (!dirty && !submitted) {
+      return;
+    }
+
     const validateValue = async () => {
-      await validate(path, field, value, widget, changeDraftFieldValidation, t);
+      const errors = await validate(field, value, widget, t);
+      dispatch(changeDraftFieldValidation(path, errors));
     };
 
     validateValue();
-  }, [field, value, changeDraftFieldValidation, path, t, widget, dirty]);
+  }, [dispatch, field, path, t, value, widget, dirty, submitted]);
 
   const handleChangeDraftField = useCallback(
     (value: ValueOrNestedValue) => {
@@ -209,7 +222,7 @@ const EditorControl = ({
       <ControlContainer $isHidden={isHidden}>
         <>
           {createElement(widget.control, {
-            key: `field_${path}`,
+            key: id,
             collection,
             config,
             entry,
@@ -318,7 +331,6 @@ function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
 
 const mapDispatchToProps = {
   changeDraftField: changeDraftFieldAction,
-  changeDraftFieldValidation: changeDraftFieldValidationAction,
   openMediaLibrary: openMediaLibraryAction,
   clearMediaControl: clearMediaControlAction,
   removeMediaControl: removeMediaControlAction,

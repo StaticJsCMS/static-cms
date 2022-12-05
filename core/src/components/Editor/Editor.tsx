@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 
 import { logoutUser as logoutUserAction } from '@staticcms/core/actions/auth';
 import {
-  changeDraftFieldValidation as changeDraftFieldValidationAction,
   createDraftDuplicateFromEntry as createDraftDuplicateFromEntryAction,
   createEmptyDraft as createEmptyDraftAction,
   deleteDraftLocalBackup as deleteDraftLocalBackupAction,
@@ -385,7 +384,6 @@ const mapDispatchToProps = {
   retrieveLocalBackup: retrieveLocalBackupAction,
   persistLocalBackup: persistLocalBackupAction,
   deleteLocalBackup: deleteLocalBackupAction,
-  changeDraftFieldValidation: changeDraftFieldValidationAction,
   createDraftDuplicateFromEntry: createDraftDuplicateFromEntryAction,
   createEmptyDraft: createEmptyDraftAction,
   discardDraft: discardDraftAction,

@@ -1,14 +1,15 @@
-import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import IconButton from '@mui/material/IconButton';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 
 import { transientOptions } from '@staticcms/core/lib/util';
 import { buttons, colors, lengths, transitions } from './styles';
 
-import type { ComponentClass, MouseEvent, ReactNode } from 'react';
+import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
+import type { MouseEvent, ReactNode } from 'react';
 
 interface TopBarProps {
   $isVariableTypesList: boolean;
@@ -74,16 +75,15 @@ const DragIconContainer = styled(TopBarButtonSpan)`
 `;
 
 export interface DragHandleProps {
-  dragHandleHOC: (render: () => ReactNode) => ComponentClass;
+  listeners: SyntheticListenerMap | undefined;
 }
 
-const DragHandle = ({ dragHandleHOC }: DragHandleProps) => {
-  const Handle = dragHandleHOC(() => (
-    <DragIconContainer>
+const DragHandle = ({ listeners }: DragHandleProps) => {
+  return (
+    <DragIconContainer {...listeners}>
       <DragHandleIcon />
     </DragIconContainer>
-  ));
-  return <Handle />;
+  );
 };
 
 export interface ListItemTopBarProps {
@@ -92,8 +92,8 @@ export interface ListItemTopBarProps {
   collapsed?: boolean;
   onCollapseToggle?: (event: MouseEvent) => void;
   onRemove: (event: MouseEvent) => void;
-  dragHandleHOC: (render: () => ReactNode) => ComponentClass;
   isVariableTypesList?: boolean;
+  listeners: SyntheticListenerMap | undefined;
 }
 
 const ListItemTopBar = ({
@@ -102,8 +102,8 @@ const ListItemTopBar = ({
   collapsed = false,
   onCollapseToggle,
   onRemove,
-  dragHandleHOC,
   isVariableTypesList = false,
+  listeners,
 }: ListItemTopBarProps) => {
   return (
     <TopBar className={className} $collapsed={collapsed} $isVariableTypesList={isVariableTypesList}>
@@ -120,7 +120,7 @@ const ListItemTopBar = ({
       <StyledTitle key="title" onClick={onCollapseToggle}>
         {title}
       </StyledTitle>
-      {dragHandleHOC ? <DragHandle dragHandleHOC={dragHandleHOC} /> : null}
+      {listeners ? <DragHandle listeners={listeners} /> : null}
       {onRemove ? (
         <TopBarButton onClick={onRemove}>
           <CloseIcon />

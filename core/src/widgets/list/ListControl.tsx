@@ -1,8 +1,10 @@
+import { DndContext } from '@dnd-kit/core';
+import { SortableContext, useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { styled } from '@mui/material/styles';
 import { arrayMoveImmutable } from 'array-move';
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useMemo, useState } from 'react';
-import { SortableContainer } from 'react-sortable-hoc';
 import { v4 as uuid } from 'uuid';
 
 import FieldLabel from '@staticcms/core/components/UI/FieldLabel';
@@ -12,10 +14,15 @@ import transientOptions from '@staticcms/core/lib/util/transientOptions';
 import ListItem from './ListItem';
 import { resolveFieldKeyType, TYPES_KEY } from './typedListHelpers';
 
+import type { DragEndEvent } from '@dnd-kit/core';
 import type {
+  Entry,
   Field,
+  FieldsErrors,
+  I18nSettings,
   ListField,
   ObjectValue,
+  UnknownField,
   ValueOrNestedValue,
   WidgetControlProps,
 } from '@staticcms/core/interface';
@@ -51,17 +58,77 @@ const StyledSortableList = styled(
   `,
 );
 
-interface SortableListProps {
-  items: ObjectValue[];
-  collapsed: boolean;
-  renderItem: (item: ObjectValue, index: number) => JSX.Element;
+interface SortableItemProps {
+  id: string;
+  item: ObjectValue;
+  index: number;
+  valueType: ListValueType;
+  handleRemove: (index: number, event: MouseEvent) => void;
+  entry: Entry<ObjectValue>;
+  field: ListField;
+  fieldsErrors: FieldsErrors;
+  submitted: boolean;
+  isFieldDuplicate: ((field: Field<UnknownField>) => boolean) | undefined;
+  isFieldHidden: ((field: Field<UnknownField>) => boolean) | undefined;
+  locale: string | undefined;
+  path: string;
+  value: Record<string, ObjectValue>;
+  i18n: I18nSettings | undefined;
 }
 
-const SortableList = SortableContainer<SortableListProps>(
-  ({ items, collapsed, renderItem }: SortableListProps) => {
-    return <StyledSortableList $collapsed={collapsed}>{items.map(renderItem)}</StyledSortableList>;
-  },
-);
+const SortableItem: FC<SortableItemProps> = ({
+  id,
+  item,
+  index,
+  valueType,
+  handleRemove,
+  entry,
+  field,
+  fieldsErrors,
+  submitted,
+  isFieldDuplicate,
+  isFieldHidden,
+  locale,
+  path,
+  i18n,
+}) => {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id,
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  if (valueType === null) {
+    return <div key={id} />;
+  }
+
+  return (
+    <div ref={setNodeRef} style={style} {...attributes}>
+      <ListItem
+        index={index}
+        id={id}
+        key={`sortable-item-${id}`}
+        valueType={valueType}
+        handleRemove={handleRemove}
+        data-testid={`object-control-${index}`}
+        entry={entry}
+        field={field}
+        fieldsErrors={fieldsErrors}
+        submitted={submitted}
+        isFieldDuplicate={isFieldDuplicate}
+        isFieldHidden={isFieldHidden}
+        locale={locale}
+        path={path}
+        value={item as Record<string, ObjectValue>}
+        i18n={i18n}
+        listeners={listeners}
+      />
+    </div>
+  );
+};
 
 export enum ListValueType {
   MULTIPLE,
@@ -200,56 +267,20 @@ const ListControl: FC<WidgetControlProps<ObjectValue[], ListField>> = ({
     [collapsed],
   );
 
-  const onSortEnd = useCallback(
-    ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
+  const handleDragEnd = useCallback(
+    ({ active, over }: DragEndEvent) => {
+      if (!over || active.id === over.id) {
+        return;
+      }
+
+      const oldIndex = keys.indexOf(active.id as string);
+      const newIndex = keys.indexOf(over.id as string);
+
       // Update value
       setKeys(arrayMoveImmutable(keys, oldIndex, newIndex));
       onChange(arrayMoveImmutable(internalValue, oldIndex, newIndex));
     },
     [onChange, internalValue, keys],
-  );
-
-  const renderItem = useCallback(
-    (item: ObjectValue, index: number) => {
-      const key = keys[index];
-      if (valueType === null) {
-        return <div key={key} />;
-      }
-
-      return (
-        <ListItem
-          index={index}
-          key={key}
-          valueType={valueType}
-          handleRemove={handleRemove}
-          data-testid={`object-control-${index}`}
-          entry={entry}
-          field={field}
-          fieldsErrors={fieldsErrors}
-          submitted={submitted}
-          isFieldDuplicate={isFieldDuplicate}
-          isFieldHidden={isFieldHidden}
-          locale={locale}
-          path={path}
-          value={item as Record<string, ObjectValue>}
-          i18n={i18n}
-        />
-      );
-    },
-    [
-      keys,
-      valueType,
-      handleRemove,
-      entry,
-      field,
-      fieldsErrors,
-      submitted,
-      isFieldDuplicate,
-      isFieldHidden,
-      locale,
-      path,
-      i18n,
-    ],
   );
 
   if (valueType === null) {
@@ -277,15 +308,33 @@ const ListControl: FC<WidgetControlProps<ObjectValue[], ListField>> = ({
         t={t}
       />
       {internalValue.length > 0 ? (
-        <SortableList
-          key="sortable-list"
-          collapsed={collapsed}
-          items={internalValue}
-          renderItem={renderItem}
-          onSortEnd={onSortEnd}
-          useDragHandle
-          lockAxis="y"
-        />
+        <DndContext key="dnd-context" onDragEnd={handleDragEnd}>
+          <SortableContext items={keys}>
+            <StyledSortableList $collapsed={collapsed}>
+              {internalValue.map((item, index) => (
+                <SortableItem
+                  index={index}
+                  key={keys[index]}
+                  id={keys[index]}
+                  item={item}
+                  valueType={valueType}
+                  handleRemove={handleRemove}
+                  data-testid={`object-control-${index}`}
+                  entry={entry}
+                  field={field}
+                  fieldsErrors={fieldsErrors}
+                  submitted={submitted}
+                  isFieldDuplicate={isFieldDuplicate}
+                  isFieldHidden={isFieldHidden}
+                  locale={locale}
+                  path={path}
+                  value={item as Record<string, ObjectValue>}
+                  i18n={i18n}
+                />
+              ))}
+            </StyledSortableList>
+          </SortableContext>
+        </DndContext>
       ) : null}
       <Outline key="outline" hasLabel hasError={hasErrors} />
     </StyledListWrapper>
