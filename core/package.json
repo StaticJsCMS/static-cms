@@ -179,7 +179,7 @@
     "@types/fs-extra": "9.0.13",
     "@types/history": "4.7.11",
     "@types/is-hotkey": "0.1.7",
-    "@types/jest": "29.2.3",
+    "@types/jest": "29.2.4",
     "@types/js-base64": "3.3.1",
     "@types/js-yaml": "4.0.5",
     "@types/jwt-decode": "2.2.1",
