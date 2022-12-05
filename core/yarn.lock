@@ -2683,10 +2683,10 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@29.2.3":
-  version "29.2.3"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.2.3.tgz#f5fd88e43e5a9e4221ca361e23790d48fcf0a211"
-  integrity sha512-6XwoEbmatfyoCjWRX7z0fKMmgYKe9+/HrviJ5k0X/tjJWHGAezZOfYaxqQKuzG/TvQyr+ktjm4jgbk0s4/oF2w==
+"@types/jest@29.2.4":
+  version "29.2.4"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.2.4.tgz#9c155c4b81c9570dbd183eb8604aa0ae80ba5a5b"
+  integrity sha512-PipFB04k2qTRPePduVLTRiPzQfvMeLwUN3Z21hsAKaB/W9IIzgB2pizCL466ftJlcyZqnHoC9ZHpxLGl3fS86A==
   dependencies:
     expect "^29.0.0"
     pretty-format "^29.0.0"
@@ -3671,10 +3671,10 @@
     "@codemirror/state" "^6.0.0"
     "@codemirror/view" "^6.0.0"
 
-"@uiw/codemirror-extensions-langs@4.16.0":
-  version "4.16.0"
-  resolved "https://registry.yarnpkg.com/@uiw/codemirror-extensions-langs/-/codemirror-extensions-langs-4.16.0.tgz#2f3247c68394e40b0c4ebc14fbd5e6eb0c06ba5e"
-  integrity sha512-ix2bDV+hhjk9TwNhuB/QIpQug6O1F8Am9s5ouviql64UukjCdEa9oPe0+HW4bMsgYL9jeo0FDTieo/gr9+yGow==
+"@uiw/codemirror-extensions-langs@4.17.1":
+  version "4.17.1"
+  resolved "https://registry.yarnpkg.com/@uiw/codemirror-extensions-langs/-/codemirror-extensions-langs-4.17.1.tgz#9971f4393a1aee494f7c901fc3afa1b39f5d0432"
+  integrity sha512-ZVzsfqjDrpS2Z05EWZRvQ9bgDdS65Yb6khdypPa68ysdiv5FqGwJh0WvhcYNEXlyCB3VasLVYNSV6YOrseKA7Q==
   dependencies:
     "@codemirror/lang-cpp" "~6.0.0"
     "@codemirror/lang-html" "~6.4.0"
