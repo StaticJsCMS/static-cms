@@ -271,8 +271,8 @@ function collectionDepth(collection: Collection) {
   return depth;
 }
 
-export class Backend {
-  implementation: BackendClass;
+export class Backend<BC extends BackendClass = BackendClass> {
+  implementation: BC;
   backendName: string;
   config: Config;
   authStore?: AuthStore;
@@ -288,7 +288,7 @@ export class Backend {
     this.config = config;
     this.implementation = implementation.init(this.config, {
       updateUserCredentials: this.updateUserCredentials,
-    });
+    }) as BC;
     this.backendName = backendName;
     this.authStore = authStore;
     if (this.implementation === null) {
