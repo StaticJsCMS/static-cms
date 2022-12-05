@@ -23,6 +23,7 @@ import useMemoCompare from '@staticcms/core/lib/hooks/useMemoCompare';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { resolveWidget } from '@staticcms/core/lib/registry';
 import { getFieldLabel } from '@staticcms/core/lib/util/field.util';
+import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { validate } from '@staticcms/core/lib/util/validation.util';
 import { selectFieldErrors } from '@staticcms/core/reducers/entryDraft';
 import { selectIsLoadingAsset } from '@staticcms/core/reducers/medias';
@@ -213,6 +214,23 @@ const EditorControl = ({
 
   const finalValue = useMemoCompare(value, isEqual);
 
+  const [version, setVersion] = useState(0);
+  useEffect(() => {
+    if (isNotNullish(finalValue)) {
+      return;
+    }
+
+    if ('default' in field && isNotNullish(!field.default)) {
+      handleChangeDraftField(field.default);
+      setVersion(version => version + 1);
+    }
+
+    if (widget.getDefaultValue) {
+      handleChangeDraftField(widget.getDefaultValue());
+      setVersion(version => version + 1);
+    }
+  }, [field, finalValue, handleChangeDraftField, widget]);
+
   return useMemo(() => {
     if (!collection || !entry || !config) {
       return null;
@@ -222,7 +240,7 @@ const EditorControl = ({
       <ControlContainer $isHidden={isHidden}>
         <>
           {createElement(widget.control, {
-            key: id,
+            key: `${id}-${version}`,
             collection,
             config,
             entry,

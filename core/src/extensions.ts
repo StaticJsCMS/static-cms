@@ -14,6 +14,7 @@ import {
   ColorStringWidget,
   DateTimeWidget,
   FileWidget,
+  HiddenWidget,
   ImageWidget,
   ListWidget,
   MapWidget,
@@ -35,21 +36,22 @@ export default function addExtensions() {
   registerBackend('test-repo', TestBackend);
   registerBackend('proxy', ProxyBackend);
   registerWidget([
-    StringWidget(),
-    NumberWidget(),
-    TextWidget(),
-    ImageWidget(),
-    FileWidget(),
-    SelectWidget(),
-    MarkdownWidget(),
-    ListWidget(),
-    ObjectWidget(),
-    RelationWidget(),
     BooleanWidget(),
-    MapWidget(),
-    DateTimeWidget(),
     CodeWidget(),
     ColorStringWidget(),
+    DateTimeWidget(),
+    FileWidget(),
+    HiddenWidget(),
+    ImageWidget(),
+    ListWidget(),
+    MapWidget(),
+    MarkdownWidget(),
+    NumberWidget(),
+    ObjectWidget(),
+    RelationWidget(),
+    SelectWidget(),
+    StringWidget(),
+    TextWidget(),
   ]);
 
   Object.keys(locales).forEach(locale => {

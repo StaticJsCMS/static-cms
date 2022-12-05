@@ -8,13 +8,11 @@ import { resolveBackend } from '../backend';
 import validateConfig from '../constants/configSchema';
 import { I18N, I18N_FIELD, I18N_STRUCTURE } from '../lib/i18n';
 import { selectDefaultSortableFields } from '../lib/util/collection.util';
-import { getIntegrations, selectIntegration } from '../reducers/integrations';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type {
   BaseField,
-  Collection,
   Config,
   Field,
   I18nInfo,
@@ -124,12 +122,6 @@ function throwOnMissingDefaultLocale(i18n?: I18nInfo) {
       }`,
     );
   }
-}
-
-function hasIntegration(config: Config, collection: Collection) {
-  const integrations = getIntegrations(config);
-  const integration = selectIntegration(integrations, collection.name, 'listEntries');
-  return !!integration;
 }
 
 export function applyDefaults(originalConfig: Config) {
@@ -247,11 +239,7 @@ export function applyDefaults(originalConfig: Config) {
 
       if (!collection.sortable_fields) {
         collection.sortable_fields = {
-          fields: selectDefaultSortableFields(
-            collection,
-            backend,
-            hasIntegration(config, collection),
-          ),
+          fields: selectDefaultSortableFields(collection, backend),
         };
       }
 

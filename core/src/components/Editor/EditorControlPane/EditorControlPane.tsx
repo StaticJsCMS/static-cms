@@ -189,7 +189,6 @@ const EditorControlPane = ({
         </LocaleRowWrapper>
       ) : null}
       {fields
-        .filter(f => f.widget !== 'hidden')
         .map(field => {
           const isTranslatable = isFieldTranslatable(field, locale, i18n?.defaultLocale);
           const isDuplicate = isFieldDuplicate(field, locale, i18n?.defaultLocale);

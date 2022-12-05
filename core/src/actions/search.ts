@@ -1,8 +1,6 @@
 import isEqual from 'lodash/isEqual';
 
 import { currentBackend } from '../backend';
-import { getSearchIntegrationProvider } from '../integrations';
-import { selectIntegration } from '../reducers';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
@@ -103,42 +101,25 @@ export function searchEntries(searchTerm: string, searchCollections: string[], p
 
     const backend = currentBackend(configState.config);
     const allCollections = searchCollections || Object.keys(state.collections);
-    const collections = allCollections.filter(collection =>
-      selectIntegration(state, collection, 'search'),
-    );
-    const integration = selectIntegration(state, collections[0], 'search');
 
     // avoid duplicate searches
     if (
       search.isFetching &&
       search.term === searchTerm &&
-      isEqual(allCollections, search.collections) &&
-      // if an integration doesn't exist, 'page' is not used
-      (search.page === page || !integration)
+      isEqual(allCollections, search.collections)
     ) {
       return;
     }
 
     dispatch(searchingEntries(searchTerm, allCollections, page));
 
-    const searchPromise = integration
-      ? getSearchIntegrationProvider(state.integrations, integration)?.search(
-          collections,
-          searchTerm,
-          page,
-        )
-      : backend.search(
-          Object.entries(state.collections)
-            .filter(([key, _value]) => allCollections.indexOf(key) !== -1)
-            .map(([_key, value]) => value),
-          searchTerm,
-        );
-
     try {
-      const response = await searchPromise;
-      if (!response) {
-        return dispatch(searchFailure(new Error(`No integration found for name "${integration}"`)));
-      }
+      const response = await backend.search(
+        Object.entries(state.collections)
+          .filter(([key, _value]) => allCollections.indexOf(key) !== -1)
+          .map(([_key, value]) => value),
+        searchTerm,
+      );
 
       return dispatch(searchSuccess(response.entries, page));
     } catch (error: unknown) {
@@ -170,7 +151,6 @@ export function query(
     }
 
     const backend = currentBackend(configState.config);
-    const integration = selectIntegration(state, collectionName, 'search');
     const collection = Object.values(state.collections).find(
       collection => collection.name === collectionName,
     );
@@ -178,16 +158,14 @@ export function query(
       return dispatch(queryFailure(new Error('Collection not found')));
     }
 
-    const queryPromise = integration
-      ? getSearchIntegrationProvider(state.integrations, integration)?.searchBy(
-          JSON.stringify(searchFields.map(f => `data.${f}`)),
-          collectionName,
-          searchTerm,
-        )
-      : backend.query(collection, searchFields, searchTerm, file, limit);
-
     try {
-      const response: SearchQueryResponse = await queryPromise;
+      const response: SearchQueryResponse = await backend.query(
+        collection,
+        searchFields,
+        searchTerm,
+        file,
+        limit,
+      );
       return dispatch(querySuccess(namespace, response.hits));
     } catch (error: unknown) {
       console.error(error);

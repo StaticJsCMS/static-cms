@@ -139,18 +139,17 @@ export function selectEntryCollectionTitle(collection: Collection, entry: Entry)
 export function selectDefaultSortableFields(
   collection: Collection,
   backend: Backend,
-  hasIntegration: boolean,
 ) {
   let defaultSortable = SORTABLE_FIELDS.map((type: string) => {
     const field = selectInferedField(collection, type);
-    if (backend.isGitBackend() && type === 'author' && !field && !hasIntegration) {
+    if (backend.isGitBackend() && type === 'author' && !field) {
       // default to commit author if not author field is found
       return COMMIT_AUTHOR;
     }
     return field;
   }).filter(Boolean);
 
-  if (backend.isGitBackend() && !hasIntegration) {
+  if (backend.isGitBackend()) {
     // always have commit date by default
     defaultSortable = [COMMIT_DATE, ...defaultSortable];
   }

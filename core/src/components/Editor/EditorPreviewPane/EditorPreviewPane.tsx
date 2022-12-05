@@ -214,7 +214,11 @@ function getWidget(
       config={config}
       collection={collection}
       value={
-        value && typeof value === 'object' && !isJsxElement(value) && !isReactFragment(value)
+        value &&
+        typeof value === 'object' &&
+        !Array.isArray(value) &&
+        !isJsxElement(value) &&
+        !isReactFragment(value)
           ? (value as Record<string, unknown>)[field.name]
           : value
       }

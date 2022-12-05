@@ -313,6 +313,7 @@ export type TemplatePreviewComponent<
 export interface WidgetOptions<T = unknown, F extends BaseField = UnknownField> {
   validator?: Widget<T, F>['validator'];
   getValidValue?: Widget<T, F>['getValidValue'];
+  getDefaultValue?: Widget<T, F>['getDefaultValue'];
   schema?: Widget<T, F>['schema'];
 }
 
@@ -321,6 +322,7 @@ export interface Widget<T = unknown, F extends BaseField = UnknownField> {
   preview?: WidgetPreviewComponent<T, F>;
   validator: FieldValidationMethod<T, F>;
   getValidValue: (value: T | undefined | null) => T | undefined | null;
+  getDefaultValue?: () => T;
   schema?: PropertiesSchema<unknown>;
 }
 

@@ -1,3 +1,4 @@
+import schema from './schema';
 import controlComponent from './StringControl';
 import previewComponent from './StringPreview';
 
@@ -8,9 +9,16 @@ const StringWidget = (): WidgetParam<string, StringOrTextField> => {
     name: 'string',
     controlComponent,
     previewComponent,
+    options: {
+      schema,
+    },
   };
 };
 
-export { controlComponent as StringControl, previewComponent as StringPreview };
+export {
+  controlComponent as StringControl,
+  previewComponent as StringPreview,
+  schema as StringSchema,
+};
 
 export default StringWidget;

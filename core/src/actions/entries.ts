@@ -3,12 +3,11 @@ import isEqual from 'lodash/isEqual';
 import { currentBackend } from '../backend';
 import { SORT_DIRECTION_ASCENDING } from '../constants';
 import ValidationErrorTypes from '../constants/validationErrorTypes';
-import { getSearchIntegrationProvider } from '../integrations';
 import { duplicateDefaultI18nFields, hasI18n, I18N_FIELD, serializeI18n } from '../lib/i18n';
 import { serializeValues } from '../lib/serializeEntryValues';
 import { Cursor } from '../lib/util';
 import { selectFields, updateFieldByKey } from '../lib/util/collection.util';
-import { selectIntegration, selectPublishedSlugs } from '../reducers';
+import { selectPublishedSlugs } from '../reducers';
 import { selectCollectionEntriesCursor } from '../reducers/cursors';
 import { selectEntriesSortFields, selectIsFetching } from '../reducers/entries';
 import { navigateToEntry } from '../routing/history';
@@ -277,17 +276,7 @@ async function getAllEntries(state: RootState, collection: Collection) {
   }
 
   const backend = currentBackend(configState.config);
-  const integration = selectIntegration(state, collection.name, 'listEntries');
-  const provider = integration
-    ? getSearchIntegrationProvider(state.integrations, integration)
-    : backend;
-
-  if (!provider) {
-    return [];
-  }
-
-  const entries = await provider.listAllEntries(collection);
-  return entries;
+  return backend.listAllEntries(collection);
 }
 
 export function sortByField(
@@ -680,14 +669,6 @@ export function loadEntries(collection: Collection, page = 0) {
     }
 
     const backend = currentBackend(configState.config);
-    const integration = selectIntegration(state, collection.name, 'listEntries');
-    const provider = integration
-      ? getSearchIntegrationProvider(state.integrations, integration)
-      : backend;
-
-    if (!provider) {
-      throw new Error('Provider not found');
-    }
 
     const append = !!(page && !isNaN(page) && page > 0);
     dispatch(entriesLoading(collection));
@@ -701,8 +682,8 @@ export function loadEntries(collection: Collection, page = 0) {
         entries: Entry[];
       } = await (loadAllEntries
         ? // nested collections require all entries to construct the tree
-          provider.listAllEntries(collection).then((entries: Entry[]) => ({ entries }))
-        : provider.listEntries(collection, page));
+          backend.listAllEntries(collection).then((entries: Entry[]) => ({ entries }))
+        : backend.listEntries(collection));
 
       const cleanResponse = {
         ...response,
