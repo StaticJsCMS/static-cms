@@ -57,6 +57,6 @@
     "webpack": "5.75.0"
   },
   "lint-staged": {
-    "*": "prettier --write"
+    "*.[jt]sx?": "prettier --write"
   }
 }
