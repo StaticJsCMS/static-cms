@@ -8,8 +8,6 @@ export * from './datetime';
 export { default as DateTimeWidget } from './datetime';
 export * from './file';
 export { default as FileWidget } from './file';
-export * from './hidden';
-export { default as HiddenWidget } from './hidden';
 export * from './image';
 export { default as ImageWidget } from './image';
 export * from './list';

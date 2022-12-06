@@ -1,11 +1,7 @@
-import React from 'react';
 import { styled } from '@mui/material/styles';
+import React from 'react';
 
-import type { Field, TemplatePreviewProps } from '@staticcms/core/interface';
-
-function isVisible(field: Field) {
-  return field.widget !== 'hidden';
-}
+import type { TemplatePreviewProps } from '@staticcms/core/interface';
 
 const PreviewContainer = styled('div')`
   overflow-y: auto;
@@ -21,7 +17,7 @@ const Preview = ({ collection, fields, widgetFor }: TemplatePreviewProps) => {
 
   return (
     <PreviewContainer>
-      {fields.filter(isVisible).map(field => (
+      {fields.map(field => (
         <div key={field.name}>{widgetFor(field.name)}</div>
       ))}
     </PreviewContainer>

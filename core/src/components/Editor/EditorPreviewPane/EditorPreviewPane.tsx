@@ -188,7 +188,7 @@ function isReactFragment(value: any): value is ReactFragment {
 
 function getWidget(
   config: Config,
-  field: RenderedField,
+  field: RenderedField<Field>,
   collection: Collection,
   value: ValueOrNestedValue | ReactNode,
   entry: Entry,
@@ -201,6 +201,10 @@ function getWidget(
 
   const widget = resolveWidget(field.widget);
   const key = idx ? field.name + '_' + idx : field.name;
+
+  if (field.widget === 'hidden' || !widget.preview) {
+    return null;
+  }
 
   /**
    * Use an HOC to provide conditional updates for all previews.

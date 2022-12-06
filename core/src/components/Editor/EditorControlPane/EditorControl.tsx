@@ -239,7 +239,7 @@ const EditorControl = ({
   }, [field, finalValue, handleChangeDraftField, widget]);
 
   return useMemo(() => {
-    if (!collection || !entry || !config) {
+    if (!collection || !entry || !config || field.widget === 'hidden') {
       return null;
     }
 
