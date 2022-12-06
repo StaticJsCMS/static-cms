@@ -179,8 +179,6 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
     handleSetLanguage(langIdentifier);
   }, [field.default_language, handleSetLanguage, internalValue, keys.lang, valueIsMap]);
 
-  console.log(languages, availableLanguages);
-
   return (
     <StyledCodeControlWrapper>
       {allowLanguageSelection ? (
