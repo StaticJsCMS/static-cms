@@ -255,5 +255,8 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
+  },
+  "lint-staged": {
+    "*": "prettier --write"
   }
 }
