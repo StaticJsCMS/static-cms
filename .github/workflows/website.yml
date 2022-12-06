@@ -1,4 +1,4 @@
-name: Website
+name: Docs
 
 on:
   workflow_dispatch:
