@@ -2,6 +2,7 @@ import { CONFIG_SUCCESS } from '../actions/config';
 
 import type { ConfigAction } from '../actions/config';
 import type { Collection, Collections } from '../interface';
+import type { RootState } from '../store';
 
 export type CollectionsState = Collections;
 
@@ -25,3 +26,7 @@ function collections(
 }
 
 export default collections;
+
+export const selectCollection = (collectionName: string) => (state: RootState) => {
+  return Object.values(state.collections).find(collection => collection.name === collectionName);
+};

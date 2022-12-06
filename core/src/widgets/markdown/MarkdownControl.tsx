@@ -58,7 +58,7 @@ const MarkdownControl: FC<WidgetControlProps<string, MarkdownField>> = ({
   const handleOnChange = useCallback(
     (slateValue: MdValue) => {
       const newValue = slateValue.map(v => serialize(v as BlockType | LeafType)).join('\n');
-      console.log('[Plate] slateValue', slateValue, 'newMarkdownValue', newValue);
+      // console.log('[Plate] slateValue', slateValue, 'newMarkdownValue', newValue);
       if (newValue !== internalValue) {
         setInternalValue(newValue);
         onChange(newValue);
@@ -73,7 +73,7 @@ const MarkdownControl: FC<WidgetControlProps<string, MarkdownField>> = ({
 
   const [slateValue, loaded] = useMarkdownToSlate(internalValue);
 
-  console.log('[Plate] slateValue', slateValue);
+  // console.log('[Plate] slateValue', slateValue);
 
   return useMemo(
     () => (

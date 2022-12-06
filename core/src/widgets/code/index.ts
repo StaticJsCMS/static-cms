@@ -11,6 +11,29 @@ const CodeWidget = (): WidgetParam<string | { [key: string]: string }, CodeField
     previewComponent,
     options: {
       schema,
+      getDefaultValue: (
+        defaultValue: string | { [key: string]: string } | null | undefined,
+        field: CodeField,
+      ) => {
+        if (field.output_code_only) {
+          return String(defaultValue);
+        }
+
+        const langKey = field.keys?.['lang'] ?? 'lang';
+        const codeKey = field.keys?.['code'] ?? 'code';
+
+        if (typeof defaultValue === 'string') {
+          return {
+            [langKey]: field.default_language ?? '',
+            [codeKey]: defaultValue,
+          };
+        }
+
+        return {
+          [langKey]: field.default_language ?? defaultValue?.[langKey] ?? '',
+          [codeKey]: defaultValue?.[codeKey] ?? '',
+        };
+      },
     },
   };
 };

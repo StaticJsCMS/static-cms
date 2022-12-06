@@ -1,17 +1,22 @@
 import { styled } from '@mui/material/styles';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import CodeMirror from '@uiw/react-codemirror';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
 import Outline from '@staticcms/core/components/UI/Outline';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
+import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import transientOptions from '@staticcms/core/lib/util/transientOptions';
 import languages from './data/languages';
 import SettingsButton from './SettingsButton';
 import SettingsPane from './SettingsPane';
 
-import type { CodeField, WidgetControlProps } from '@staticcms/core/interface';
+import type {
+  CodeField,
+  ProcessedCodeLanguage,
+  WidgetControlProps,
+} from '@staticcms/core/interface';
 import type { LanguageName } from '@uiw/codemirror-extensions-langs';
 import type { FC } from 'react';
 
@@ -73,11 +78,7 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
   const valueIsMap = useMemo(() => Boolean(!field.output_code_only), [field.output_code_only]);
 
   const [internalValue, setInternalValue] = useState(value ?? '');
-  const [lang, setLang] = useState(() => {
-    return valueIsMap && typeof internalValue !== 'string'
-      ? internalValue && internalValue[keys.lang]
-      : field.default_language ?? '';
-  });
+  const [lang, setLang] = useState<ProcessedCodeLanguage | null>(null);
   const [collapsed, setCollapsed] = useState(false);
 
   const [hasFocus, setHasFocus] = useState(false);
@@ -105,20 +106,20 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
     (newValue: string) => {
       if (valueIsMap) {
         handleOnChange({
-          ...(typeof internalValue !== 'string' ? internalValue : {}),
+          lang: lang?.label ?? '',
           code: newValue,
         });
       }
       handleOnChange(newValue);
     },
-    [handleOnChange, internalValue, valueIsMap],
+    [handleOnChange, lang?.label, valueIsMap],
   );
 
   const loadedLangExtension = useMemo(() => {
     if (!lang) {
       return null;
     }
-    return loadLanguage(lang as LanguageName);
+    return loadLanguage(lang.codemirror_mode as LanguageName);
   }, [lang]);
 
   const extensions = useMemo(() => {
@@ -154,9 +155,29 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
     [field.allow_language_selection],
   );
 
-  const availableLanguages = languages.map(language =>
-    valueToOption({ name: language.codemirror_mode, label: language.label }),
-  );
+  const availableLanguages = languages.map(language => valueToOption(language.label));
+
+  const handleSetLanguage = useCallback((langIdentifier: string) => {
+    const language = languages.find(language => language.identifiers.includes(langIdentifier));
+    if (language) {
+      setLang(language);
+    }
+  }, []);
+
+  useEffect(() => {
+    let langIdentifier: string;
+    if (typeof internalValue !== 'string') {
+      langIdentifier = internalValue[keys.lang];
+    } else {
+      langIdentifier = internalValue;
+    }
+
+    if (isEmpty(langIdentifier)) {
+      return;
+    }
+
+    handleSetLanguage(langIdentifier);
+  }, [field.default_language, handleSetLanguage, internalValue, keys.lang, valueIsMap]);
 
   return (
     <StyledCodeControlWrapper>
@@ -168,9 +189,9 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
             hideSettings={hideSettings}
             uniqueId={uniqueId}
             languages={availableLanguages}
-            language={valueToOption(lang)}
+            language={valueToOption(lang?.label ?? '')}
             allowLanguageSelection={allowLanguageSelection}
-            onChangeLanguage={newLang => setLang(newLang)}
+            onChangeLanguage={handleSetLanguage}
           />
         )
       ) : null}

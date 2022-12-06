@@ -55,6 +55,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
+import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { BalloonToolbar } from './components/balloon-toolbar';
 import { BlockquoteElement } from './components/nodes/blockquote';
 import { CodeBlockElement } from './components/nodes/code-block';
@@ -236,11 +237,14 @@ const PlateEditor: FC<PlateEditorProps> = ({
     [components],
   );
 
+  const id = useUUID();
+
   return useMemo(
     () => (
       <StyledPlateEditor>
         <DndProvider backend={HTML5Backend}>
           <PlateProvider<MdValue>
+            id={id}
             key="plate-provider"
             initialValue={initialValue}
             plugins={plugins}
@@ -258,6 +262,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
               <div key="editor-wrapper" ref={editorContainerRef} style={styles.container}>
                 <Plate
                   key="editor"
+                  id={id}
                   editableProps={{
                     ...editableProps,
                     onFocus: handleOnFocus,

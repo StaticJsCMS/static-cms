@@ -311,27 +311,34 @@ const ListControl: FC<WidgetControlProps<ObjectValue[], ListField>> = ({
         <DndContext key="dnd-context" onDragEnd={handleDragEnd}>
           <SortableContext items={keys}>
             <StyledSortableList $collapsed={collapsed}>
-              {internalValue.map((item, index) => (
-                <SortableItem
-                  index={index}
-                  key={keys[index]}
-                  id={keys[index]}
-                  item={item}
-                  valueType={valueType}
-                  handleRemove={handleRemove}
-                  data-testid={`object-control-${index}`}
-                  entry={entry}
-                  field={field}
-                  fieldsErrors={fieldsErrors}
-                  submitted={submitted}
-                  isFieldDuplicate={isFieldDuplicate}
-                  isFieldHidden={isFieldHidden}
-                  locale={locale}
-                  path={path}
-                  value={item as Record<string, ObjectValue>}
-                  i18n={i18n}
-                />
-              ))}
+              {internalValue.map((item, index) => {
+                const key = keys[index];
+                if (!key) {
+                  return null;
+                }
+
+                return (
+                  <SortableItem
+                    index={index}
+                    key={key}
+                    id={key}
+                    item={item}
+                    valueType={valueType}
+                    handleRemove={handleRemove}
+                    data-testid={`object-control-${index}`}
+                    entry={entry}
+                    field={field}
+                    fieldsErrors={fieldsErrors}
+                    submitted={submitted}
+                    isFieldDuplicate={isFieldDuplicate}
+                    isFieldHidden={isFieldHidden}
+                    locale={locale}
+                    path={path}
+                    value={item as Record<string, ObjectValue>}
+                    i18n={i18n}
+                  />
+                );
+              })}
             </StyledSortableList>
           </SortableContext>
         </DndContext>

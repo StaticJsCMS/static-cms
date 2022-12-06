@@ -4,5 +4,6 @@ export default {
     value_type: { type: 'string' },
     min: { type: 'number' },
     max: { type: 'number' },
+    default: { type: 'number' },
   },
 };

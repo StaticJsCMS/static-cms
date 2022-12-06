@@ -11,12 +11,17 @@ import formatDate from 'date-fns/format';
 import formatISO from 'date-fns/formatISO';
 import parse from 'date-fns/parse';
 import parseISO from 'date-fns/parseISO';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 
 import type { DateTimeField, TranslatedProps, WidgetControlProps } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
+
+export function localToUTC(dateTime: Date, timezoneOffset: number) {
+  const utcFromLocal = new Date(dateTime.getTime() - timezoneOffset);
+  return utcFromLocal;
+}
 
 const StyledNowButton = styled('div')`
   width: fit-content;
@@ -77,14 +82,6 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
 
   const timezoneOffset = useMemo(() => new Date().getTimezoneOffset() * 60000, []);
 
-  const localToUTC = useCallback(
-    (dateTime: Date) => {
-      const utcFromLocal = new Date(dateTime.getTime() - timezoneOffset);
-      return utcFromLocal;
-    },
-    [timezoneOffset],
-  );
-
   const inputFormat = useMemo(() => {
     if (typeof dateFormat === 'string' || typeof timeFormat === 'string') {
       const formatParts: string[] = [];
@@ -105,13 +102,13 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
   }, [dateFormat, timeFormat]);
 
   const defaultValue = useMemo(() => {
-    const today = field.picker_utc ? localToUTC(new Date()) : new Date();
+    const today = field.picker_utc ? localToUTC(new Date(), timezoneOffset) : new Date();
     return field.default === undefined
       ? format
         ? formatDate(today, format)
         : formatDate(today, inputFormat)
       : field.default;
-  }, [field.default, field.picker_utc, format, inputFormat, localToUTC]);
+  }, [field.default, field.picker_utc, format, inputFormat, timezoneOffset]);
 
   const [internalValue, setInternalValue] = useState(value);
 
@@ -138,7 +135,7 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
         return;
       }
 
-      const adjustedValue = field.picker_utc ? localToUTC(datetime) : datetime;
+      const adjustedValue = field.picker_utc ? localToUTC(datetime, timezoneOffset) : datetime;
 
       let formattedValue: string;
       if (format) {
@@ -149,19 +146,8 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
       setInternalValue(formattedValue);
       onChange(formattedValue);
     },
-    [defaultValue, field.picker_utc, format, localToUTC, onChange],
+    [defaultValue, field.picker_utc, format, onChange, timezoneOffset],
   );
-
-  useEffect(() => {
-    if (isNotEmpty(internalValue)) {
-      return;
-    }
-
-    setInternalValue(defaultValue);
-    setTimeout(() => {
-      onChange(defaultValue);
-    });
-  }, [defaultValue, internalValue, onChange]);
 
   const dateTimePicker = useMemo(() => {
     if (!internalValue) {

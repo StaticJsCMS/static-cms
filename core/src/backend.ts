@@ -46,6 +46,7 @@ import createEntry from './valueObjects/createEntry';
 import type {
   BackendClass,
   BackendInitializer,
+  BaseField,
   Collection,
   CollectionFile,
   Config,
@@ -60,6 +61,7 @@ import type {
   ImplementationEntry,
   SearchQueryResponse,
   SearchResponse,
+  UnknownField,
   User,
 } from './interface';
 import type { AllowedEvent } from './lib/registry';
@@ -109,7 +111,7 @@ function getEntryBackupKey(collectionName?: string, slug?: string) {
   return `${baseKey}.${collectionName}${suffix}`;
 }
 
-function getEntryField(field: string, entry: Entry): string {
+export function getEntryField(field: string, entry: Entry): string {
   const value = get(entry.data, field);
   if (value) {
     return String(value);
@@ -210,9 +212,15 @@ export function mergeExpandedEntries(entries: (Entry & { field: string })[]) {
   return Object.values(merged);
 }
 
-function sortByScore(a: fuzzy.FilterResult<Entry>, b: fuzzy.FilterResult<Entry>) {
-  if (a.score > b.score) return -1;
-  if (a.score < b.score) return 1;
+export function sortByScore(a: fuzzy.FilterResult<Entry>, b: fuzzy.FilterResult<Entry>) {
+  if (a.score > b.score) {
+    return -1;
+  }
+
+  if (a.score < b.score) {
+    return 1;
+  }
+
   return 0;
 }
 
@@ -478,16 +486,16 @@ export class Backend<BC extends BackendClass = BackendClass> {
   // repeats the process. Once there is no available "next" action, it
   // returns all the collected entries. Used to retrieve all entries
   // for local searches and queries.
-  async listAllEntries(collection: Collection) {
+  async listAllEntries<T extends BaseField = UnknownField>(collection: Collection<T>) {
     if ('folder' in collection && collection.folder && this.implementation.allEntriesByFolder) {
-      const depth = collectionDepth(collection);
-      const extension = selectFolderEntryExtension(collection);
+      const depth = collectionDepth(collection as Collection);
+      const extension = selectFolderEntryExtension(collection as Collection);
       return this.implementation
         .allEntriesByFolder(collection.folder as string, extension, depth)
-        .then(entries => this.processEntries(entries, collection));
+        .then(entries => this.processEntries(entries, collection as Collection));
     }
 
-    const response = await this.listEntries(collection);
+    const response = await this.listEntries(collection as Collection);
     const { entries } = response;
     let { cursor } = response;
     while (cursor && cursor.actions?.has('next')) {
@@ -557,14 +565,14 @@ export class Backend<BC extends BackendClass = BackendClass> {
     return { entries: hits, pagination: 1 };
   }
 
-  async query(
-    collection: Collection,
+  async query<T extends BaseField = UnknownField>(
+    collection: Collection<T>,
     searchFields: string[],
     searchTerm: string,
     file?: string,
     limit?: number,
   ): Promise<SearchQueryResponse> {
-    let entries = await this.listAllEntries(collection);
+    let entries = await this.listAllEntries(collection as Collection);
     if (file) {
       entries = entries.filter(e => e.slug === file);
     }
@@ -1014,11 +1022,11 @@ export function resolveBackend(config?: Config) {
 export const currentBackend = (function () {
   let backend: Backend;
 
-  return (config: Config) => {
+  return <T extends BaseField = UnknownField>(config: Config<T>) => {
     if (backend) {
       return backend;
     }
 
-    return (backend = resolveBackend(config));
+    return (backend = resolveBackend(config as Config));
   };
 })();

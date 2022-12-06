@@ -140,6 +140,7 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
     schema,
     validator = () => false,
     getValidValue = (value: T | null | undefined) => value,
+    getDefaultValue,
   }: WidgetOptions<T, F> = {},
 ): void {
   if (Array.isArray(name)) {
@@ -162,6 +163,7 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
         preview: preview as Widget['preview'],
         validator: validator as Widget['validator'],
         getValidValue: getValidValue as Widget['getValidValue'],
+        getDefaultValue: getDefaultValue as Widget['getDefaultValue'],
         schema,
       };
     }
@@ -173,6 +175,7 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
       options: {
         validator = () => false,
         getValidValue = (value: T | undefined | null) => value,
+        getDefaultValue,
         schema,
       } = {},
     } = name;
@@ -190,6 +193,7 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
       preview,
       validator,
       getValidValue,
+      getDefaultValue,
       schema,
     } as unknown as Widget;
   } else {

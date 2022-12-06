@@ -1,3 +1,4 @@
+import schema from './schema';
 import controlComponent from './TextControl';
 import previewComponent from './TextPreview';
 
@@ -8,9 +9,12 @@ const TextWidget = (): WidgetParam<string, StringOrTextField> => {
     name: 'text',
     controlComponent,
     previewComponent,
+    options: {
+      schema,
+    },
   };
 };
 
-export { controlComponent as TextControl, previewComponent as TextPreview };
+export { controlComponent as TextControl, previewComponent as TextPreview, schema as TextSchema };
 
 export default TextWidget;

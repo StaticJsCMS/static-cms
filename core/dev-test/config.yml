@@ -98,10 +98,14 @@ collections:
         description: Boolean widget
         fields:
           - name: required
-            label: 'Required Validation'
+            label: Required Validation
             widget: boolean
+          - name: with_default
+            label: Required With Default
+            widget: boolean
+            default: true
           - name: pattern
-            label: 'Pattern Validation'
+            label: Pattern Validation
             widget: boolean
             pattern: ['true', 'Must be true']
             required: false
@@ -111,29 +115,58 @@ collections:
         description: Code widget
         fields:
           - name: required
-            label: 'Required Validation'
+            label: Required Validation
             widget: code
+          - name: with_default
+            label: Required With Default
+            widget: code
+            default: '<div>Some html!</div>'
           - name: pattern
-            label: 'Pattern Validation'
+            label: Pattern Validation
             widget: code
             pattern: ['.{12,}', 'Must have at least 12 characters']
             allow_input: true
             required: false
           - name: language
-            label: 'Language Selection'
+            label: Language Selection
             widget: code
             allow_language_selection: true
             required: false
+          - name: language_with_default
+            label: Language Selection With Default Language
+            widget: code
+            allow_language_selection: true
+            required: false
+            default_language: html
+          - name: language_with_default_language_and_value
+            label: Language Selection With Default Language and Value
+            widget: code
+            allow_language_selection: true
+            required: false
+            default:
+              lang: html
+              code: '<div>Some html!</div>'
+          - name: language_with_default_language_and_value_string_default
+            label: Language Selection With Default Language and Value (String Default)
+            widget: code
+            allow_language_selection: true
+            required: false
+            default_language: html
+            default: '<div>Some html!</div>'
       - name: color
         label: Color
         file: _widgets/color.json
         description: Color widget
         fields:
           - name: required
-            label: 'Required Validation'
+            label: Required Validation
             widget: color
+          - name: with_default
+            label: Required With Default
+            widget: color
+            default: '#2121c5'
           - name: pattern
-            label: 'Pattern Validation'
+            label: Pattern Validation
             widget: color
             pattern: ['^#([0-9a-fA-F]{3})(?:[0-9a-fA-F]{3})?$', 'Must be a valid hex code']
             allow_input: true
@@ -143,6 +176,12 @@ collections:
             widget: color
             enable_alpha: true
             required: false
+          - name: alpha_with_default
+            label: Alpha With Default
+            widget: color
+            enable_alpha: true
+            required: false
+            default: 'rgba(175, 28, 28, 0.65)'
       - name: datetime
         label: DateTime
         file: _widgets/datetime.json
@@ -166,33 +205,59 @@ collections:
             date_format: 'MMM d, yyyy'
             time_format: 'h:mm aaa'
             required: false
+          - name: date_and_time_with_default
+            label: Date and Time With Deafult
+            widget: datetime
+            format: 'MMM d, yyyy h:mm aaa'
+            date_format: 'MMM d, yyyy'
+            time_format: 'h:mm aaa'
+            required: false
+            default: 'Jan 12, 2023 12:00 am'
           - name: date
             label: Date
             widget: datetime
             format: 'MMM d, yyyy'
             date_format: 'MMM d, yyyy'
             required: false
+          - name: date_with_default
+            label: Date With Deafult
+            widget: datetime
+            format: 'MMM d, yyyy'
+            date_format: 'MMM d, yyyy'
+            required: false
+            default: 'Jan 12, 2023'
           - name: time
             label: Time
             widget: datetime
             format: 'h:mm aaa'
             time_format: 'h:mm aaa'
             required: false
+          - name: time_with_default
+            label: Time With Deafult
+            widget: datetime
+            format: 'h:mm aaa'
+            time_format: 'h:mm aaa'
+            required: false
+            default: '12:00 am'
       - name: file
         label: File
         file: _widgets/file.json
         description: File widget
         fields:
           - name: required
-            label: 'Required Validation'
+            label: Required Validation
             widget: file
+          - name: with_default
+            label: Required With Default
+            widget: file
+            default: /assets/uploads/moby-dick.jpg
           - name: pattern
-            label: 'Pattern Validation'
+            label: Pattern Validation
             widget: file
             pattern: ['\.pdf', 'Must be a pdf']
             required: false
           - name: choose_url
-            label: 'Choose URL'
+            label: Choose URL
             widget: file
             required: false
             media_library:
@@ -203,15 +268,19 @@ collections:
         description: Image widget
         fields:
           - name: required
-            label: 'Required Validation'
+            label: Required Validation
             widget: image
+          - name: with_default
+            label: Required With Default
+            widget: image
+            default: /assets/uploads/moby-dick.jpg
           - name: pattern
-            label: 'Pattern Validation'
+            label: Pattern Validation
             widget: image
             pattern: ['\.png', 'Must be a png']
             required: false
           - name: choose_url
-            label: 'Choose URL'
+            label: Choose URL
             widget: image
             required: false
             media_library:
@@ -222,8 +291,34 @@ collections:
         description: List widget
         fields:
           - name: list
-            label: List
+            label: Required List
             widget: list
+            fields:
+              - label: Name
+                name: name
+                widget: string
+                hint: First and Last
+              - label: Description
+                name: description
+                widget: text
+          - name: with_default
+            label: Required With Default
+            widget: list
+            default:
+              - name: Bob Billy
+                description: Some text about bob
+            fields:
+              - label: Name
+                name: name
+                widget: string
+                hint: First and Last
+              - label: Description
+                name: description
+                widget: text
+          - name: optional
+            label: Optional List
+            widget: list
+            required: false
             fields:
               - label: Name
                 name: name
@@ -268,7 +363,60 @@ collections:
                     widget: datetime
                   - label: Markdown
                     name: markdown
+                    widget: markdown
+              - label: Type 3 Object
+                name: type_3_object
+                widget: object
+                fields:
+                  - label: Image
+                    name: image
+                    widget: image
+                  - label: File
+                    name: file
+                    widget: file
+          - name: typed_list_with_default
+            label: Typed List With Default
+            widget: list
+            default:
+              - type: type_2_object
+                number: 5
+                select: c
+                datetime: '2022-12-05T20:22:52+0000'
+                markdown: Some ***Markdown*** ~content~ text
+            types:
+              - label: Type 1 Object
+                name: type_1_object
+                widget: object
+                fields:
+                  - label: String
+                    name: string
+                    widget: string
+                  - label: Boolean
+                    name: boolean
+                    widget: boolean
+                  - label: Text
+                    name: text
                     widget: text
+              - label: Type 2 Object
+                name: type_2_object
+                widget: object
+                fields:
+                  - label: Number
+                    name: number
+                    widget: number
+                  - label: Select
+                    name: select
+                    widget: select
+                    options:
+                      - a
+                      - b
+                      - c
+                  - label: Datetime
+                    name: datetime
+                    widget: datetime
+                  - label: Markdown
+                    name: markdown
+                    widget: markdown
               - label: Type 3 Object
                 name: type_3_object
                 widget: object
@@ -285,10 +433,14 @@ collections:
         description: Map widget
         fields:
           - name: required
-            label: 'Required Validation'
+            label: Required Validation
             widget: map
+          - name: with_default
+            label: Required With Default
+            widget: map
+            default: '{ "type": "Point", "coordinates": [-73.9852661, 40.7478738] }'
           - name: pattern
-            label: 'Pattern Validation'
+            label: Pattern Validation
             widget: map
             pattern: ['\[-([7-9][0-9]|1[0-2][0-9])\.', 'Must be between latitude -70 and -129']
             required: false
@@ -298,10 +450,14 @@ collections:
         description: Markdown widget
         fields:
           - name: required
-            label: 'Required Validation'
+            label: Required Validation
             widget: markdown
+          - name: with_default
+            label: Required With Default
+            widget: markdown
+            default: Default **markdown** value
           - name: pattern
-            label: 'Pattern Validation'
+            label: Pattern Validation
             widget: markdown
             pattern: ['# [a-zA-Z0-9]+', 'Must have a header']
             required: false
@@ -311,26 +467,30 @@ collections:
         description: Number widget
         fields:
           - name: required
-            label: 'Required Validation'
+            label: Required Validation
             widget: number
+          - name: with_default
+            label: Required With Default
+            widget: number
+            default: 5
           - name: min
-            label: 'Min Validation'
+            label: Min Validation
             widget: number
             min: 5
             required: false
           - name: max
-            label: 'Max Validation'
+            label: Max Validation
             widget: number
             max: 10
             required: false
           - name: min_and_max
-            label: 'Min and Max Validation'
+            label: Min and Max Validation
             widget: number
             min: 5
             max: 10
             required: false
           - name: pattern
-            label: 'Pattern Validation'
+            label: Pattern Validation
             widget: number
             pattern: ['[0-9]{3,}', 'Must be at least 3 digits']
             required: false
@@ -346,12 +506,28 @@ collections:
               - label: Number of posts on frontpage
                 name: front_limit
                 widget: number
-              - label: Default Author
+              - label: Author
                 name: author
                 widget: string
-              - label: Default Thumbnail
+              - label: Thumbnail
                 name: thumb
                 widget: image
+          - label: Required With Defaults
+            name: with_defaults
+            widget: object
+            fields:
+              - label: Number of posts on frontpage
+                name: front_limit
+                widget: number
+                default: 5
+              - label: Author
+                name: author
+                widget: string
+                default: Bob
+              - label: Thumbnail
+                name: thumb
+                widget: image
+                default: /assets/uploads/moby-dick.jpg
           - label: Optional Validation
             name: optional
             widget: object
@@ -361,11 +537,31 @@ collections:
                 name: front_limit
                 widget: number
                 required: false
-              - label: Default Author
+              - label: Author
                 name: author
                 widget: string
                 required: false
-              - label: Default Thumbnail
+              - label: Thumbnail
+                name: thumb
+                widget: image
+                required: false
+          - label: With Hidden Field
+            name: hidden_field
+            widget: object
+            required: false
+            fields:
+              - name: layout
+                widget: hidden
+                default: post
+              - label: Number of posts on frontpage
+                name: front_limit
+                widget: number
+                required: false
+              - label: Author
+                name: author
+                widget: string
+                required: false
+              - label: Thumbnail
                 name: thumb
                 widget: image
                 required: false
@@ -385,6 +581,18 @@ collections:
               - title
               - body
             value_field: title
+          - label: Required With Default
+            name: with_default
+            widget: relation
+            collection: posts
+            display_fields:
+              - title
+              - date
+            search_fields:
+              - title
+              - body
+            value_field: title
+            default: This is a YAML front matter post
           - label: Optional Validation
             name: optional
             widget: relation
@@ -410,6 +618,22 @@ collections:
               - title
               - body
             value_field: title
+          - label: Multiple With Default
+            name: multiple_with_default
+            widget: relation
+            multiple: true
+            required: false
+            collection: posts
+            default:
+              - This is a JSON front matter post
+              - This is a YAML front matter post
+            display_fields:
+              - title
+              - date
+            search_fields:
+              - title
+              - body
+            value_field: title
       - name: select
         label: Select
         file: _widgets/select.json
@@ -418,6 +642,14 @@ collections:
           - label: Required Validation
             name: required
             widget: select
+            options:
+              - a
+              - b
+              - c
+          - label: Required With Default
+            name: with_default
+            widget: select
+            default: b
             options:
               - a
               - b
@@ -431,19 +663,58 @@ collections:
               - c
             pattern: ['[a-b]', 'Must be a or b']
             required: false
+          - label: Number Value
+            name: number
+            widget: select
+            options:
+              - 1
+              - 2
+              - 3
+          - label: Number With Default
+            name: number_with_default
+            widget: select
+            default: 3
+            options:
+              - 1
+              - 2
+              - 3
           - label: Value and Label
             name: value_and_label
             widget: select
             options:
               - value: a
                 label: A fancy label
-              - value: b
+              - value: 2
+                label: Another fancy label
+              - value: c
+                label: And one more fancy label
+          - label: Value and Label With Default
+            name: value_and_label_with_default
+            widget: select
+            default: 2
+            options:
+              - value: a
+                label: A fancy label
+              - value: 2
                 label: Another fancy label
               - value: c
                 label: And one more fancy label
           - label: Multiple
             name: multiple
             widget: select
+            options:
+              - a
+              - b
+              - c
+            pattern: ['[a-b]', 'Must be a or b']
+            multiple: true
+            required: false
+          - label: Multiple With Default
+            name: multiple_with_default
+            widget: select
+            default:
+              - b
+              - c
             options:
               - a
               - b
@@ -468,10 +739,14 @@ collections:
         description: String widget
         fields:
           - name: required
-            label: 'Required Validation'
+            label: Required Validation
             widget: string
+          - name: with_default
+            label: Required With Default
+            widget: string
+            default: Default value
           - name: pattern
-            label: 'Pattern Validation'
+            label: Pattern Validation
             widget: string
             pattern: ['.{12,}', 'Must have at least 12 characters']
             required: false
@@ -483,6 +758,10 @@ collections:
           - name: required
             label: 'Required Validation'
             widget: text
+          - name: with_default
+            label: Required With Default
+            widget: text
+            default: Default value
           - name: pattern
             label: 'Pattern Validation'
             widget: text
@@ -778,7 +1057,7 @@ collections:
                     widget: number
                   - label: Markdown
                     name: markdown
-                    widget: text
+                    widget: markdown
                   - label: Datetime
                     name: datetime
                     widget: datetime
@@ -817,7 +1096,7 @@ collections:
                         widget: number
                       - label: Markdown
                         name: markdown
-                        widget: text
+                        widget: markdown
                       - label: Datetime
                         name: datetime
                         widget: datetime
@@ -870,7 +1149,7 @@ collections:
                 widget: datetime
               - label: Markdown
                 name: markdown
-                widget: text
+                widget: markdown
           - label: Type 3 Object
             name: type_3_object
             widget: object

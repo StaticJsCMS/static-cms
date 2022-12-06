@@ -1,3 +1,4 @@
+import * as fuzzy from 'fuzzy';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 import TextField from '@mui/material/TextField';
@@ -6,7 +7,13 @@ import get from 'lodash/get';
 import uniqBy from 'lodash/uniqBy';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { QUERY_SUCCESS } from '@staticcms/core/actions/search';
+import {
+  currentBackend,
+  expandSearchEntries,
+  getEntryField,
+  mergeExpandedEntries,
+  sortByScore,
+} from '@staticcms/core/backend';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import {
   addFileTemplateFields,
@@ -14,7 +21,10 @@ import {
   expandPath,
   extractTemplateVars,
 } from '@staticcms/core/lib/widgets/stringTemplate';
+import { useAppSelector } from '@staticcms/core/store/hooks';
+import { selectCollection } from '@staticcms/core/reducers/collections';
 
+import type { FilterOptionsState } from '@mui/material/useAutocomplete';
 import type {
   Entry,
   EntryData,
@@ -106,17 +116,22 @@ function getSelectedValue(
 }
 
 const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> = ({
-  path,
   value,
   field,
   onChange,
-  query,
+  config,
   locale,
   label,
   hasErrors,
 }) => {
   const [internalValue, setInternalValue] = useState(value);
   const [initialOptions, setInitialOptions] = useState<HitOption[]>([]);
+
+  const searchCollectionSelector = useMemo(
+    () => selectCollection(field.collection),
+    [field.collection],
+  );
+  const searchCollection = useAppSelector(searchCollectionSelector);
 
   const isMultiple = useMemo(() => {
     return field.multiple ?? false;
@@ -183,6 +198,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
   );
 
   const [options, setOptions] = useState<HitOption[]>([]);
+  const [entries, setEntries] = useState<Entry[]>([]);
   const [open, setOpen] = useState(false);
   const valueNotEmpty = useMemo(
     () => (Array.isArray(internalValue) ? internalValue.length > 0 : isNotEmpty(internalValue)),
@@ -193,33 +209,45 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
     [open, valueNotEmpty, options.length],
   );
 
+  const filterOptions = useCallback(
+    (_options: HitOption[], { inputValue }: FilterOptionsState<HitOption>) => {
+      const searchFields = field.search_fields;
+      const limit = field.options_length || 20;
+      const expandedEntries = expandSearchEntries(entries, searchFields);
+
+      let hits = fuzzy
+        .filter(inputValue, expandedEntries, {
+          extract: entry => {
+            return getEntryField(entry.field, entry);
+          },
+        })
+        .sort(sortByScore)
+        .map(f => f.original);
+
+      if (limit !== undefined && limit > 0) {
+        hits = hits.slice(0, limit);
+      }
+
+      return parseHitOptions(mergeExpandedEntries(hits));
+    },
+    [entries, field.options_length, field.search_fields, parseHitOptions],
+  );
+
   useEffect(() => {
-    let alive = true;
-    if (!loading) {
-      return undefined;
+    if (!loading || !searchCollection) {
+      return;
     }
 
-    (async () => {
-      const collection = field.collection;
-      const optionsLength = field.options_length || 20;
-      const searchFieldsArray = field.search_fields;
-      const file = field.file;
+    const getOptions = async () => {
+      const backend = currentBackend(config);
 
-      const response = await query(path, collection, searchFieldsArray, '', file, optionsLength);
-      if (alive) {
-        if (response?.type === QUERY_SUCCESS) {
-          const hits = response.payload.hits ?? [];
-          const options = parseHitOptions(hits);
-          setOptions(uniqOptions(initialOptions, options));
-        }
-      }
-    })();
-
-    return () => {
-      alive = false;
+      const options = await backend.listAllEntries(searchCollection);
+      setEntries(options);
+      setOptions(parseHitOptions(options));
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [field.collection, field.file, field.options_length, field.search_fields, loading]);
+
+    getOptions();
+  }, [searchCollection, config, loading, parseHitOptions]);
 
   const uniqueOptions = uniqOptions(initialOptions, options);
   const selectedValue = getSelectedValue(internalValue, uniqueOptions, isMultiple);
@@ -230,6 +258,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
       disablePortal
       options={uniqueOptions}
       fullWidth
+      filterOptions={filterOptions}
       renderInput={params => (
         <TextField
           key="relation-control-input"
