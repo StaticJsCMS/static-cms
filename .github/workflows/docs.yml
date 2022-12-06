@@ -5,11 +5,11 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - website/**
+      - docs/**
   pull_request:
     branches: [ "main" ]
     paths:
-      - website/**
+      - docs/**
 
 jobs:
   build:
@@ -28,16 +28,16 @@ jobs:
       uses: actions/setup-node@v3
       with:
         cache: yarn
-        cache-dependency-path: website/yarn.lock
+        cache-dependency-path: docs/yarn.lock
         node-version: 16
         
     - name: Install
-      working-directory: ./website
+      working-directory: ./docs
       run: |
         yarn install --frozen-lockfile
         
     - name: Lint
-      working-directory: ./website
+      working-directory: ./docs
       run: |
         yarn lint
 
