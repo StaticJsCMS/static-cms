@@ -257,6 +257,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "lint-staged": {
-    "*.[jt]sx?": "prettier --write"
+    "*.ts": "prettier --write",
+    "*.tsx": "prettier --write"
   }
 }
