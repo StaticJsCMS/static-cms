@@ -159,10 +159,14 @@ collections:
         description: Color widget
         fields:
           - name: required
-            label: 'Required Validation'
+            label: Required Validation
             widget: color
+          - name: with_default
+            label: Required With Default
+            widget: color
+            default: '#2121c5'
           - name: pattern
-            label: 'Pattern Validation'
+            label: Pattern Validation
             widget: color
             pattern: ['^#([0-9a-fA-F]{3})(?:[0-9a-fA-F]{3})?$', 'Must be a valid hex code']
             allow_input: true
@@ -172,6 +176,12 @@ collections:
             widget: color
             enable_alpha: true
             required: false
+          - name: alpha_with_default
+            label: Alpha With Default
+            widget: color
+            enable_alpha: true
+            required: false
+            default: 'rgba(175, 28, 28, 0.65)'
       - name: datetime
         label: DateTime
         file: _widgets/datetime.json
@@ -195,12 +205,27 @@ collections:
             date_format: 'MMM d, yyyy'
             time_format: 'h:mm aaa'
             required: false
+          - name: date_and_time_with_default
+            label: Date and Time With Deafult
+            widget: datetime
+            format: 'MMM d, yyyy h:mm aaa'
+            date_format: 'MMM d, yyyy'
+            time_format: 'h:mm aaa'
+            required: false
+            default: 'Jan 12, 2023 12:00 am'
           - name: date
             label: Date
             widget: datetime
             format: 'MMM d, yyyy'
             date_format: 'MMM d, yyyy'
             required: false
+          - name: date_with_default
+            label: Date With Deafult
+            widget: datetime
+            format: 'MMM d, yyyy'
+            date_format: 'MMM d, yyyy'
+            required: false
+            default: 'Jan 12, 2023'
           - name: time
             label: Time
             widget: datetime
