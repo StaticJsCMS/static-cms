@@ -3,8 +3,8 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/StaticJsCMS/static-cms/blob/main/LICENSE)
 [![Build](https://github.com/StaticJsCMS/static-cms/actions/workflows/core.yml/badge.svg)](https://github.com/StaticJsCMS/static-cms/actions/workflows/core.yml)
+[![Docs](https://github.com/StaticJsCMS/static-cms/actions/workflows/docs.yml/badge.svg)](https://github.com/StaticJsCMS/static-cms/actions/workflows/docs.yml)
 [![npm latest package](https://img.shields.io/npm/v/@staticcms/core/latest.svg)](https://www.npmjs.com/package/@staticcms/core)
-[![npm next package](https://img.shields.io/npm/v/@staticcms/core/next.svg)](https://www.npmjs.com/package/@staticcms/core/v/next)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/StaticJsCMS/static-cms/blob/main/CONTRIBUTING.md)
 
 </div>
