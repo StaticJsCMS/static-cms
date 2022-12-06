@@ -140,7 +140,7 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
     schema,
     validator = () => false,
     getValidValue = (value: T | null | undefined) => value,
-    getDefaultValue
+    getDefaultValue,
   }: WidgetOptions<T, F> = {},
 ): void {
   if (Array.isArray(name)) {

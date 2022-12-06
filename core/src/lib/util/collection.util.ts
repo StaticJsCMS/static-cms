@@ -136,10 +136,7 @@ export function selectEntryCollectionTitle(collection: Collection, entry: Entry)
   return result;
 }
 
-export function selectDefaultSortableFields(
-  collection: Collection,
-  backend: Backend,
-) {
+export function selectDefaultSortableFields(collection: Collection, backend: Backend) {
   let defaultSortable = SORTABLE_FIELDS.map((type: string) => {
     const field = selectInferedField(collection, type);
     if (backend.isGitBackend() && type === 'author' && !field) {

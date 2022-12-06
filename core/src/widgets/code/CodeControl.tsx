@@ -15,7 +15,7 @@ import SettingsPane from './SettingsPane';
 import type {
   CodeField,
   ProcessedCodeLanguage,
-  WidgetControlProps
+  WidgetControlProps,
 } from '@staticcms/core/interface';
 import type { LanguageName } from '@uiw/codemirror-extensions-langs';
 import type { FC } from 'react';

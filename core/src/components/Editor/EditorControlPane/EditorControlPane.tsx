@@ -188,30 +188,29 @@ const EditorControlPane = ({
           />
         </LocaleRowWrapper>
       ) : null}
-      {fields
-        .map(field => {
-          const isTranslatable = isFieldTranslatable(field, locale, i18n?.defaultLocale);
-          const isDuplicate = isFieldDuplicate(field, locale, i18n?.defaultLocale);
-          const isHidden = isFieldHidden(field, locale, i18n?.defaultLocale);
-          const key = i18n ? `field-${locale}_${field.name}` : `field-${field.name}`;
+      {fields.map(field => {
+        const isTranslatable = isFieldTranslatable(field, locale, i18n?.defaultLocale);
+        const isDuplicate = isFieldDuplicate(field, locale, i18n?.defaultLocale);
+        const isHidden = isFieldHidden(field, locale, i18n?.defaultLocale);
+        const key = i18n ? `field-${locale}_${field.name}` : `field-${field.name}`;
 
-          return (
-            <EditorControl
-              key={key}
-              field={field}
-              value={getFieldValue(field, entry, isTranslatable, locale)}
-              fieldsErrors={fieldsErrors}
-              submitted={submitted}
-              isDisabled={isDuplicate}
-              isHidden={isHidden}
-              isFieldDuplicate={field => isFieldDuplicate(field, locale, i18n?.defaultLocale)}
-              isFieldHidden={field => isFieldHidden(field, locale, i18n?.defaultLocale)}
-              locale={locale}
-              parentPath=""
-              i18n={i18n}
-            />
-          );
-        })}
+        return (
+          <EditorControl
+            key={key}
+            field={field}
+            value={getFieldValue(field, entry, isTranslatable, locale)}
+            fieldsErrors={fieldsErrors}
+            submitted={submitted}
+            isDisabled={isDuplicate}
+            isHidden={isHidden}
+            isFieldDuplicate={field => isFieldDuplicate(field, locale, i18n?.defaultLocale)}
+            isFieldHidden={field => isFieldHidden(field, locale, i18n?.defaultLocale)}
+            locale={locale}
+            parentPath=""
+            i18n={i18n}
+          />
+        );
+      })}
     </ControlPaneContainer>
   );
 };
