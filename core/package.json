@@ -122,7 +122,7 @@
     "react-is": "18.2.0",
     "react-polyglot": "0.7.2",
     "react-redux": "8.0.5",
-    "react-router-dom": "6.4.4",
+    "react-router-dom": "6.4.5",
     "react-scroll-sync": "0.11.0",
     "react-textarea-autosize": "8.4.0",
     "react-topbar-progress-indicator": "4.1.1",
