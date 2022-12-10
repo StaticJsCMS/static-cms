@@ -195,18 +195,6 @@ const PlateEditor: FC<PlateEditorProps> = ({
     };
   }, [collection, controlProps, entry, field, useMdx]);
 
-  const [hasEditorFocus, setHasEditorFocus] = useState(false);
-
-  const handleOnFocus = useCallback(() => {
-    setHasEditorFocus(true);
-    onFocus();
-  }, [onFocus]);
-
-  const handleOnBlur = useCallback(() => {
-    setHasEditorFocus(false);
-    onBlur();
-  }, [onBlur]);
-
   const plugins = useMemo(() => {
     const basePlugins: PlatePlugin<AnyObject, MdValue>[] = [
       createParagraphPlugin(),
@@ -300,8 +288,8 @@ const PlateEditor: FC<PlateEditorProps> = ({
                   id={id}
                   editableProps={{
                     ...editableProps,
-                    onFocus: handleOnFocus,
-                    onBlur: handleOnBlur,
+                    onFocus,
+                    onBlur,
                   }}
                 >
                   <div
@@ -313,7 +301,6 @@ const PlateEditor: FC<PlateEditorProps> = ({
                       key="balloon-toolbar"
                       useMdx={useMdx}
                       containerRef={innerEditorContainerRef.current}
-                      hasEditorFocus={hasEditorFocus}
                       collection={collection}
                       field={field}
                       entry={entry}
@@ -328,7 +315,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
       </StyledPlateEditor>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [collection, field, handleOnBlur, handleOnFocus, initialValue, onChange, plugins],
+    [collection, field, onBlur, onFocus, initialValue, onChange, plugins],
   );
 };
 

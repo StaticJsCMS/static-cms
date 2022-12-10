@@ -103,7 +103,21 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
         </StyledEditorWrapper>
       ),
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [hasErrors, hasFocus, label, loaded, slateValue],
+      [
+        collection,
+        controlProps,
+        debouncedFocus,
+        field,
+        handleLabelClick,
+        handleOnBlur,
+        handleOnChange,
+        handleOnFocus,
+        hasErrors,
+        hasFocus,
+        label,
+        loaded,
+        slateValue,
+      ],
     );
   };
 
