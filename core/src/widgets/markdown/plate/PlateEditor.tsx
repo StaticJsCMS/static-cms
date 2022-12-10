@@ -51,7 +51,7 @@ import {
   withProps,
 } from '@udecode/plate';
 import { StyledLeaf } from '@udecode/plate-styled-components';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
