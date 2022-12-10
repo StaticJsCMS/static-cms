@@ -3,10 +3,13 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { VFileMessage } from 'vfile-message';
 
 import WidgetPreviewContainer from '@staticcms/core/components/UI/WidgetPreviewContainer';
+import { getShortcodes } from '../../lib/registry';
+import withShortcodeMdxComponent from './mdx/withShortcodeMdxComponent';
 import useMdx from './plate/hooks/useMdx';
+import { processShortcodeConfigToMdx } from './plate/serialization/slate/processShortcodeConfig';
 
-import type { FC } from 'react';
 import type { MarkdownField, WidgetPreviewProps } from '@staticcms/core/interface';
+import type { FC } from 'react';
 
 interface FallbackComponentProps {
   error: string;
@@ -22,18 +25,24 @@ function FallbackComponent({ error }: FallbackComponentProps) {
   );
 }
 
-const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = ({ value }) => {
-  useEffect(() => {
-    // viewer.current?.getInstance().setMarkdown(value ?? '');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = previewProps => {
+  const { value } = previewProps;
+
+  const components = useMemo(
+    () => ({
+      Shortcode: withShortcodeMdxComponent({ previewProps }),
+    }),
+    [previewProps],
+  );
 
   const [state, setValue] = useMdx(value ?? '');
-  const [prevValue, setPrevValue] = useState(value);
+  const [prevValue, setPrevValue] = useState('');
   useEffect(() => {
     if (prevValue !== value) {
-      setPrevValue(value ?? '');
-      setValue(value ?? '');
+      const parsedValue = processShortcodeConfigToMdx(getShortcodes(), value ?? '');
+      // console.log('MDX_PREVIEW value', value, 'parsedValue', parsedValue);
+      setPrevValue(parsedValue);
+      setValue(parsedValue);
     }
   }, [prevValue, setValue, value]);
 
@@ -46,11 +55,10 @@ const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = ({ value 
     try {
       return (state.file.result as FC)({});
     } catch (error) {
+      // console.log('MDX_PREVIEW error', error);
       return <FallbackComponent error={String(error)} />;
     }
   }, [state.file]);
-
-  const components = useMemo(() => ({}), []);
 
   return useMemo(() => {
     if (!value) {

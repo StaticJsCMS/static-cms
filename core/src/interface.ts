@@ -889,6 +889,25 @@ export interface MarkdownEditorOptions {
   plugins?: MarkdownPluginFactory[];
 }
 
+export type ShortcodeControlProps<P = {}> = P & {
+  onChange: (props: P) => void;
+  controlProps: WidgetControlProps<string, MarkdownField>;
+}
+
+export type ShortcodePreviewProps<P = {}> = P & {
+  previewProps: WidgetPreviewProps<string, MarkdownField>;
+}
+
+export interface ShortcodeConfig<P = {}> {
+  openTag: string;
+  closeTag: string;
+  separator: string;
+  toProps?: (args: string[]) => P;
+  toArgs?: (props: P) => string[];
+  control: ComponentType<ShortcodeControlProps>;
+  preview: ComponentType<ShortcodePreviewProps>;
+}
+
 export enum CollectionType {
   FOLDER,
   FILES,

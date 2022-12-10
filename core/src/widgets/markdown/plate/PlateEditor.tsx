@@ -56,6 +56,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
+import { withShortcodeElement } from './components';
 import { BalloonToolbar } from './components/balloon-toolbar';
 import { BlockquoteElement } from './components/nodes/blockquote';
 import { CodeBlockElement } from './components/nodes/code-block';
@@ -79,7 +80,7 @@ import Paragraph from './components/nodes/paragraph/Paragraph';
 import { TableCellElement, TableElement, TableRowElement } from './components/nodes/table';
 import { Toolbar } from './components/toolbar';
 import editableProps from './editableProps';
-import { createMdPlugins } from './plateTypes';
+import { createMdPlugins, ELEMENT_SHORTCODE } from './plateTypes';
 import { alignPlugin } from './plugins/align';
 import { autoformatPlugin } from './plugins/autoformat';
 import { createCodeBlockPlugin } from './plugins/code-block';
@@ -87,11 +88,17 @@ import { CursorOverlayContainer } from './plugins/cursor-overlay';
 import { exitBreakPlugin } from './plugins/exit-break';
 import { createListPlugin } from './plugins/list';
 import { resetBlockTypePlugin } from './plugins/reset-node';
+import { createShortcodePlugin } from './plugins/shortcode';
 import { softBreakPlugin } from './plugins/soft-break';
 import { createTablePlugin } from './plugins/table';
 import { trailingBlockPlugin } from './plugins/trailing-block';
 
-import type { Collection, Entry, MarkdownField } from '@staticcms/core/interface';
+import type {
+  Collection,
+  Entry,
+  MarkdownField,
+  WidgetControlProps,
+} from '@staticcms/core/interface';
 import type { AutoformatPlugin } from '@udecode/plate';
 import type { CSSProperties, FC } from 'react';
 import type { MdEditor, MdValue } from './plateTypes';
@@ -112,6 +119,7 @@ export interface PlateEditorProps {
   collection: Collection<MarkdownField>;
   entry: Entry;
   field: MarkdownField;
+  controlProps: WidgetControlProps<string, MarkdownField>;
   onChange: (value: MdValue) => void;
   onFocus: () => void;
   onBlur: () => void;
@@ -122,6 +130,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
   collection,
   entry,
   field,
+  controlProps,
   onChange,
   onFocus,
   onBlur,
@@ -161,6 +170,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
       [ELEMENT_UL]: UnorderedListElement,
       [ELEMENT_LI]: ListItemElement,
       [ELEMENT_LIC]: ListItemContentElement,
+      [ELEMENT_SHORTCODE]: withShortcodeElement({ controlProps }),
       [MARK_BOLD]: withProps(StyledLeaf, { as: 'strong' }),
       [MARK_ITALIC]: withProps(StyledLeaf, { as: 'em' }),
       [MARK_STRIKETHROUGH]: withProps(StyledLeaf, { as: 's' }),
@@ -168,7 +178,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
       [MARK_SUPERSCRIPT]: withProps(StyledLeaf, { as: 'sup' }),
       [MARK_UNDERLINE]: withProps(StyledLeaf, { as: 'u' }),
     }),
-    [collection, entry, field],
+    [collection, controlProps, entry, field],
   );
 
   const [hasEditorFocus, setHasEditorFocus] = useState(false);
@@ -229,6 +239,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
           // createDeserializeCsvPlugin(),
           // createDeserializeDocxPlugin(),
           // createJuicePlugin() as MdPlatePlugin,
+          createShortcodePlugin(),
         ],
         {
           components,

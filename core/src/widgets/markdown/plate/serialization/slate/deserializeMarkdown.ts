@@ -1,8 +1,10 @@
 /* eslint-disable no-case-declarations */
 import { ELEMENT_PARAGRAPH } from '@udecode/plate';
 
-import { allowedStyles, LIST_TYPES, MarkNodeTypes, NodeTypes } from './ast-types';
+import { LIST_TYPES, MarkNodeTypes, NodeTypes } from './ast-types';
+import { processShortcodeConfigToSlate } from './processShortcodeConfig';
 
+import type { ShortcodeConfig } from '@staticcms/core/interface';
 import type { MdBlockElement } from '@staticcms/markdown';
 import type {
   AlignMdxMdastNodeAttribute,
@@ -18,6 +20,7 @@ import type {
   ListNode,
   MarkNode,
   MdastNode,
+  MdxMdastNode,
   ParagraphNode,
   StyleMdxMdastNodeAttribute,
   TextNode,
@@ -54,21 +57,62 @@ function mdxToMark(mark: keyof typeof MarkNodeTypes, children: DeserializedNode[
   } as MarkNode;
 }
 
-export interface Options {
-  isInTable?: boolean;
+function parseStyleAttribute(node: MdxMdastNode, allowedStyles: Record<string, string>) {
+  const styleAttribute = node.attributes?.find(
+    a => a.name === 'style',
+  ) as StyleMdxMdastNodeAttribute;
+  const nodeStyles: TextNodeStyles = {};
+  if (styleAttribute) {
+    let styles: Record<string, string> = {};
+    try {
+      styles =
+        JSON.parse(
+          styleAttribute.value.value
+            .replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, '"$2": ')
+            .replace(/:[ ]*[']([^']+)[']/g, ': "$1"'),
+        ) ?? {};
+    } catch (e) {
+      console.error(`Error parsing font styles (${styleAttribute.value.value})`, e);
+    }
+
+    Object.keys(styles).map(key => {
+      if (key in allowedStyles) {
+        nodeStyles[allowedStyles[key] as keyof TextNodeStyles] = styles[key];
+      }
+    });
+  }
+
+  return nodeStyles;
 }
 
-export default function deserializeMarkdown(node: MdastNode, options?: Options) {
+export interface Options {
+  isInTable?: boolean;
+  isInTableHeaderRow?: boolean;
+  tableAlign?: (string | null)[];
+  useMdx: boolean;
+  shortcodeConfigs: Record<string, ShortcodeConfig>;
+  index: number;
+}
+
+export default function deserializeMarkdown(node: MdastNode, options: Options) {
   let children: Array<DeserializedNode> = [{ text: '' }];
 
-  const { isInTable = false } = options ?? {};
+  const {
+    isInTable = false,
+    isInTableHeaderRow = false,
+    tableAlign,
+    useMdx,
+    shortcodeConfigs,
+    index,
+  } = options ?? {};
 
   const selfIsTable = node.type === 'table';
+  const selfIsTableHeaderRow = node.type === 'tableRow' && index === 0;
 
   const nodeChildren = node.children;
   if (nodeChildren && Array.isArray(nodeChildren) && nodeChildren.length > 0) {
     children = nodeChildren.flatMap(
-      (c: MdastNode) =>
+      (c: MdastNode, childIndex) =>
         deserializeMarkdown(
           {
             ...c,
@@ -76,6 +120,11 @@ export default function deserializeMarkdown(node: MdastNode, options?: Options) 
           },
           {
             isInTable: selfIsTable || isInTable,
+            isInTableHeaderRow: selfIsTableHeaderRow || isInTableHeaderRow,
+            useMdx,
+            shortcodeConfigs,
+            index: childIndex,
+            tableAlign: tableAlign || (selfIsTable ? node.align : undefined),
           },
         ) as DeserializedNode,
     );
@@ -152,7 +201,7 @@ export default function deserializeMarkdown(node: MdastNode, options?: Options) 
         type: NodeTypes.image,
         children: [{ text: '' }],
         url: node.url,
-        caption: [{ text: node.alt ?? '' }],
+        alt: node.alt,
       } as ImageNode;
 
     case 'blockquote':
@@ -213,7 +262,23 @@ export default function deserializeMarkdown(node: MdastNode, options?: Options) 
       return { type: NodeTypes.tableRow, children };
 
     case 'tableCell':
-      return { type: NodeTypes.tableCell, children: [{ type: NodeTypes.paragraph, children }] };
+      return {
+        type: isInTableHeaderRow ? NodeTypes.tableHeaderCell : NodeTypes.tableCell,
+        children: [{ type: NodeTypes.paragraph, children }],
+      };
+
+    case 'mdxJsxFlowElement':
+      if ('name' in node) {
+        switch (node.name) {
+          case 'br':
+            return { type: NodeTypes.paragraph, children: [{ text: '' }] };
+          default:
+            console.warn('unrecognized mdx flow element', node);
+            break;
+        }
+      }
+
+      return { text: node.value || '' };
 
     case 'mdxJsxTextElement':
       if ('name' in node) {
@@ -227,6 +292,8 @@ export default function deserializeMarkdown(node: MdastNode, options?: Options) 
           case 'u':
             return mdxToMark('underline_mark', children);
           case 'p':
+            const paragraphNodeStyles = parseStyleAttribute(node, { textAlign: 'align' });
+
             const alignAttribute = node.attributes?.find(
               a => a.name === 'align',
             ) as AlignMdxMdastNodeAttribute;
@@ -237,6 +304,7 @@ export default function deserializeMarkdown(node: MdastNode, options?: Options) 
 
             return {
               type: NodeTypes.paragraph,
+              ...paragraphNodeStyles,
               ...pNodeStyles,
               children: [
                 {
@@ -246,44 +314,25 @@ export default function deserializeMarkdown(node: MdastNode, options?: Options) 
               ],
             } as ParagraphNode;
           case 'font':
-            const styleAttribute = node.attributes?.find(
-              a => a.name === 'style',
-            ) as StyleMdxMdastNodeAttribute;
-            const nodeStyles: TextNodeStyles = {};
-            if (styleAttribute) {
-              let styles: Record<string, string> = {};
-              try {
-                styles =
-                  JSON.parse(
-                    styleAttribute.value.value
-                      .replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, '"$2": ')
-                      .replace(/:[ ]*[']([^']+)[']/g, ': "$1"'),
-                  ) ?? {};
-              } catch (e) {
-                console.error(`Error parsing font styles (${styleAttribute.value.value})`, e);
-              }
-
-              Object.keys(styles).map(key => {
-                if (allowedStyles.includes(key)) {
-                  nodeStyles[key as keyof TextNodeStyles] = styles[key];
-                }
-              });
-            }
+            const fontNodeStyles = parseStyleAttribute(node, {
+              color: 'color',
+              backgroundColor: 'backgroundColor',
+            });
 
             const colorAttribute = node.attributes?.find(
               a => a.name === 'color',
             ) as ColorMdxMdastNodeAttribute;
             if (colorAttribute) {
-              nodeStyles.color = colorAttribute.value;
+              fontNodeStyles.color = colorAttribute.value;
             }
 
             return {
-              ...nodeStyles,
+              ...fontNodeStyles,
               ...forceLeafNode(children as Array<TextNode>),
               ...persistLeafFormats(children as Array<MdastNode>),
             } as TextNode;
           default:
-            console.warn('unrecognized mdx node', node);
+            console.warn('unrecognized mdx text element', node);
             break;
         }
       }
@@ -291,7 +340,22 @@ export default function deserializeMarkdown(node: MdastNode, options?: Options) 
       return { text: node.value || '' };
 
     case 'text':
-      return { text: node.value || '' };
+      if (useMdx) {
+        return { text: node.value || '' };
+      }
+
+      if (!node.value) {
+        return { text: '' };
+      }
+
+      let nodes: MdastNode[] = [node];
+
+      for (const shortcode in shortcodeConfigs) {
+        nodes = processShortcodeConfigToSlate(shortcode, shortcodeConfigs[shortcode], nodes);
+      }
+
+      return nodes.map(node => (node.type === 'text' ? { text: node.value ?? '' } : node));
+
     default:
       console.warn('Unrecognized mdast node, proceeding as text', node);
       return { text: node.value || '' };

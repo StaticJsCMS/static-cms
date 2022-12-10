@@ -117,7 +117,7 @@ const withImageElement = ({ containerRef, collection, entry, field }: WithImageE
     }, [handleClose, hasEditorFocus, element, selection, editor, handleOpenPopover]);
 
     return (
-      <div onBlur={handleBlur}>
+      <span onBlur={handleBlur}>
         <img
           ref={imageRef}
           src={assetSource}
@@ -142,7 +142,7 @@ const withImageElement = ({ containerRef, collection, entry, field }: WithImageE
           forImage
         />
         {children}
-      </div>
+      </span>
     );
   };
 

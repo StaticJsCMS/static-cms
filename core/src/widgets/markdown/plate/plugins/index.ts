@@ -7,6 +7,7 @@ export * from './indent';
 export * from './list';
 export * from './reset-node';
 export * from './select-on-backspace';
+export * from './shortcode';
 export * from './soft-break';
 export * from './table';
 export * from './trailing-block';

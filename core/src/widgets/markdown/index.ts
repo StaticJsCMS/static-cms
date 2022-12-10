@@ -1,8 +1,10 @@
-import controlComponent from './MarkdownControl';
+import withMarkdownControl from './withMarkdownControl';
 import previewComponent from './MarkdownPreview';
 import schema from './schema';
 
 import type { MarkdownField, WidgetParam } from '@staticcms/core/interface';
+
+const controlComponent = withMarkdownControl({ useMdx: false });
 
 const MarkdownWidget = (): WidgetParam<string, MarkdownField> => {
   return {

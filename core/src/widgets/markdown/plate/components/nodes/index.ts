@@ -7,4 +7,5 @@ export * from './image';
 export * from './link';
 export * from './list';
 export * from './paragraph';
+export * from './shortcode';
 export * from './table';

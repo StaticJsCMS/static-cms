@@ -10,5 +10,8 @@ if (typeof window === 'undefined') {
       removeItem: jest.fn(),
       getItem: jest.fn(),
     },
+    navigator: {
+      platform: 'Win',
+    },
   };
 }

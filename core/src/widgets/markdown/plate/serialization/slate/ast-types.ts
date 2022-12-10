@@ -15,9 +15,12 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
   ELEMENT_TD,
+  ELEMENT_TH,
   ELEMENT_TR,
   ELEMENT_UL,
 } from '@udecode/plate';
+
+import { ELEMENT_SHORTCODE } from '../../plateTypes';
 
 export const VOID_ELEMENTS = [ELEMENT_CODE_BLOCK, ELEMENT_IMAGE];
 
@@ -39,6 +42,7 @@ export const NodeTypes = {
   table: ELEMENT_TABLE,
   tableRow: ELEMENT_TR,
   tableCell: ELEMENT_TD,
+  tableHeaderCell: ELEMENT_TH,
   heading: {
     1: ELEMENT_H1,
     2: ELEMENT_H2,
@@ -47,6 +51,7 @@ export const NodeTypes = {
     5: ELEMENT_H5,
     6: ELEMENT_H6,
   },
+  shortcode: ELEMENT_SHORTCODE,
   emphasis_mark: 'italic',
   strong_mark: 'bold',
   delete_mark: 'strikethrough',
@@ -87,13 +92,19 @@ export interface BlockType {
   type: string;
   parentType?: string;
   link?: string;
-  caption?: string;
+  alt?: string;
   language?: string;
   break?: boolean;
   children: Array<BlockType | LeafType>;
 }
 
-export type MdastNode = BaseMdastNode | MdxMdastNode;
+export interface ShortcodeNode extends BaseMdastNode {
+  type: 'shortcode';
+  shortcode: string;
+  args: string[];
+}
+
+export type MdastNode = BaseMdastNode | MdxMdastNode | ShortcodeNode;
 
 export interface BaseMdastNode {
   type?: Omit<MdastNodeType, 'mdxJsxTextElement'>;
@@ -114,6 +125,7 @@ export interface BaseMdastNode {
   checked?: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   indent?: any;
+  align?: (string | null)[];
 }
 
 export interface MdxMdastNodeAttributeValue {
@@ -149,8 +161,6 @@ export interface MdxMdastNode extends BaseMdastNode {
   name: string;
   attributes?: MdxMdastNodeAttribute[];
 }
-
-export const allowedStyles: string[] = ['color', 'backgroundColor'];
 
 export interface TextNodeStyles {
   color?: string;
@@ -208,7 +218,7 @@ export type ImageNode = {
   type: typeof NodeTypes['image'];
   children: Array<DeserializedNode>;
   url: string | undefined;
-  caption: TextNode;
+  alt: string | undefined;
 };
 
 export type TableNode = {
