@@ -14,7 +14,7 @@ import type { MdValue } from '../plateTypes';
 export interface UseMarkdownToSlateOptions {
   shortcodeConfigs?: Record<string, ShortcodeConfig>;
   useMdx: boolean;
-};
+}
 
 export const markdownToSlate = async (
   markdownValue: string,

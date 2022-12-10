@@ -13,9 +13,7 @@ export interface UseMdxState {
   file: VFile | null;
 }
 
-export default function useMdx(
-  input: string,
-): [UseMdxState, (value: string) => void] {
+export default function useMdx(input: string): [UseMdxState, (value: string) => void] {
   const [state, setState] = useState<UseMdxState>({ file: null });
 
   const setValueCallback = useCallback(async (value: string) => {

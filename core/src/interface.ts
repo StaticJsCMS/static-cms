@@ -892,11 +892,11 @@ export interface MarkdownEditorOptions {
 export type ShortcodeControlProps<P = {}> = P & {
   onChange: (props: P) => void;
   controlProps: WidgetControlProps<string, MarkdownField>;
-}
+};
 
 export type ShortcodePreviewProps<P = {}> = P & {
   previewProps: WidgetPreviewProps<string, MarkdownField>;
-}
+};
 
 export interface ShortcodeConfig<P = {}> {
   openTag: string;

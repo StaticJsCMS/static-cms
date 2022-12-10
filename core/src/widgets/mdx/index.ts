@@ -17,10 +17,6 @@ const MdxWidget = (): WidgetParam<string, MarkdownField> => {
   };
 };
 
-export {
-  controlComponent as MdxControl,
-  previewComponent as MdxPreview,
-  schema as MdxSchema,
-};
+export { controlComponent as MdxControl, previewComponent as MdxPreview, schema as MdxSchema };
 
 export default MdxWidget;

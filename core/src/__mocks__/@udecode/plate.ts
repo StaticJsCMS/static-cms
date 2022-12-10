@@ -17,7 +17,7 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  ELEMENT_UL
+  ELEMENT_UL,
 } from '@udecode/plate';
 
 export {

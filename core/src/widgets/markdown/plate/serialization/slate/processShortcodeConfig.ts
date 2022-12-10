@@ -68,7 +68,10 @@ export function processShortcodeConfigToSlate(
   return output;
 }
 
-export function processShortcodeConfigToMdx(configs: Record<string, ShortcodeConfig>, markdown: string) {
+export function processShortcodeConfigToMdx(
+  configs: Record<string, ShortcodeConfig>,
+  markdown: string,
+) {
   if (isEmpty(markdown)) {
     return '';
   }
