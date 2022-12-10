@@ -54,6 +54,7 @@ const StyledDivider = styled('div')(
 );
 
 export interface BalloonToolbarProps {
+  useMdx: boolean;
   containerRef: HTMLElement | null;
   hasEditorFocus: boolean;
   collection: Collection<MarkdownField>;
@@ -62,6 +63,7 @@ export interface BalloonToolbarProps {
 }
 
 const BalloonToolbar: FC<BalloonToolbarProps> = ({
+  useMdx,
   containerRef,
   hasEditorFocus,
   collection,
@@ -128,7 +130,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
 
     if (selectionText && selectionExpanded) {
       return [
-        <BasicMarkToolbarButtons key="selection-basic-mark-buttons" />,
+        <BasicMarkToolbarButtons key="selection-basic-mark-buttons" useMdx={useMdx} />,
         <BasicElementToolbarButtons
           key="selection-basic-element-buttons"
           hideFontTypeSelect={isInTableCell}
@@ -164,7 +166,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
         parent[0].children.length === 1
       ) {
         return [
-          <BasicMarkToolbarButtons key="empty-basic-mark-buttons" />,
+          <BasicMarkToolbarButtons key="empty-basic-mark-buttons" useMdx={useMdx} />,
           <BasicElementToolbarButtons
             key="empty-basic-element-buttons"
             hideFontTypeSelect={isInTableCell}

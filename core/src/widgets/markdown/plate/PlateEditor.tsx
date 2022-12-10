@@ -76,7 +76,7 @@ import {
   OrderedListElement,
   UnorderedListElement,
 } from './components/nodes/list';
-import Paragraph from './components/nodes/paragraph/Paragraph';
+import ParagraphElement from './components/nodes/paragraph/ParagraphElement';
 import { TableCellElement, TableElement, TableRowElement } from './components/nodes/table';
 import { Toolbar } from './components/toolbar';
 import editableProps from './editableProps';
@@ -99,7 +99,7 @@ import type {
   MarkdownField,
   WidgetControlProps,
 } from '@staticcms/core/interface';
-import type { AutoformatPlugin } from '@udecode/plate';
+import type { AnyObject, AutoformatPlugin, PlatePlugin } from '@udecode/plate';
 import type { CSSProperties, FC } from 'react';
 import type { MdEditor, MdValue } from './plateTypes';
 
@@ -119,6 +119,7 @@ export interface PlateEditorProps {
   collection: Collection<MarkdownField>;
   entry: Entry;
   field: MarkdownField;
+  useMdx: boolean;
   controlProps: WidgetControlProps<string, MarkdownField>;
   onChange: (value: MdValue) => void;
   onFocus: () => void;
@@ -130,6 +131,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
   collection,
   entry,
   field,
+  useMdx,
   controlProps,
   onChange,
   onFocus,
@@ -139,15 +141,15 @@ const PlateEditor: FC<PlateEditorProps> = ({
   const editorContainerRef = useRef<HTMLDivElement | null>(null);
   const innerEditorContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const components = useMemo(
-    () => ({
+  const components = useMemo(() => {
+    const baseComponents = {
       [ELEMENT_H1]: Heading1,
       [ELEMENT_H2]: Heading2,
       [ELEMENT_H3]: Heading3,
       [ELEMENT_H4]: Heading4,
       [ELEMENT_H5]: Heading5,
       [ELEMENT_H6]: Heading6,
-      [ELEMENT_PARAGRAPH]: Paragraph,
+      [ELEMENT_PARAGRAPH]: ParagraphElement,
       [ELEMENT_TABLE]: TableElement,
       [ELEMENT_TR]: TableRowElement,
       [ELEMENT_TH]: TableCellElement,
@@ -174,12 +176,24 @@ const PlateEditor: FC<PlateEditorProps> = ({
       [MARK_BOLD]: withProps(StyledLeaf, { as: 'strong' }),
       [MARK_ITALIC]: withProps(StyledLeaf, { as: 'em' }),
       [MARK_STRIKETHROUGH]: withProps(StyledLeaf, { as: 's' }),
-      [MARK_SUBSCRIPT]: withProps(StyledLeaf, { as: 'sub' }),
-      [MARK_SUPERSCRIPT]: withProps(StyledLeaf, { as: 'sup' }),
-      [MARK_UNDERLINE]: withProps(StyledLeaf, { as: 'u' }),
-    }),
-    [collection, controlProps, entry, field],
-  );
+    };
+
+    if (useMdx) {
+      // MDX Widget
+      return {
+        ...baseComponents,
+        [MARK_SUBSCRIPT]: withProps(StyledLeaf, { as: 'sub' }),
+        [MARK_SUPERSCRIPT]: withProps(StyledLeaf, { as: 'sup' }),
+        [MARK_UNDERLINE]: withProps(StyledLeaf, { as: 'u' }),
+      };
+    }
+
+    // Markdown widget
+    return {
+      ...baseComponents,
+      [ELEMENT_SHORTCODE]: withShortcodeElement({ controlProps }),
+    };
+  }, [collection, controlProps, entry, field, useMdx]);
 
   const [hasEditorFocus, setHasEditorFocus] = useState(false);
 
@@ -193,60 +207,69 @@ const PlateEditor: FC<PlateEditorProps> = ({
     onBlur();
   }, [onBlur]);
 
-  const plugins = useMemo(
-    () =>
-      createMdPlugins(
+  const plugins = useMemo(() => {
+    const basePlugins: PlatePlugin<AnyObject, MdValue>[] = [
+      createParagraphPlugin(),
+      createBlockquotePlugin(),
+      createTodoListPlugin(),
+      createHeadingPlugin(),
+      createImagePlugin(),
+      // createHorizontalRulePlugin(),
+      createLinkPlugin(),
+      createListPlugin(),
+      createTablePlugin(),
+      // createMediaEmbedPlugin(),
+      createCodeBlockPlugin(),
+      createBoldPlugin(),
+      createCodePlugin(),
+      createItalicPlugin(),
+      // createHighlightPlugin(),
+      createStrikethroughPlugin(),
+      // createFontSizePlugin(),
+      // createKbdPlugin(),
+      // createNodeIdPlugin(),
+      // createDndPlugin({ options: { enableScroller: true } }),
+      // dragOverCursorPlugin,
+      // createIndentPlugin(indentPlugin),
+      createAutoformatPlugin<AutoformatPlugin<MdValue, MdEditor>, MdValue, MdEditor>(
+        autoformatPlugin,
+      ),
+      createResetNodePlugin(resetBlockTypePlugin),
+      createSoftBreakPlugin(softBreakPlugin),
+      createExitBreakPlugin(exitBreakPlugin),
+      createTrailingBlockPlugin(trailingBlockPlugin),
+      // createSelectOnBackspacePlugin(selectOnBackspacePlugin),
+      // createComboboxPlugin(),
+      // createMentionPlugin(),
+      // createDeserializeMdPlugin(),
+      // createDeserializeCsvPlugin(),
+      // createDeserializeDocxPlugin(),
+      // createJuicePlugin() as MdPlatePlugin,
+    ];
+
+    if (useMdx) {
+      // MDX Widget
+      return createMdPlugins(
         [
-          createParagraphPlugin(),
-          createBlockquotePlugin(),
-          createTodoListPlugin(),
-          createHeadingPlugin(),
-          createImagePlugin(),
-          // createHorizontalRulePlugin(),
-          createLinkPlugin(),
-          createListPlugin(),
-          createTablePlugin(),
-          // createMediaEmbedPlugin(),
-          createCodeBlockPlugin(),
-          createAlignPlugin(alignPlugin),
-          createBoldPlugin(),
-          createCodePlugin(),
-          createItalicPlugin(),
-          // createHighlightPlugin(),
-          createUnderlinePlugin(),
-          createStrikethroughPlugin(),
-          createSubscriptPlugin(),
-          createSuperscriptPlugin(),
+          ...basePlugins,
           createFontColorPlugin(),
           createFontBackgroundColorPlugin(),
-          // createFontSizePlugin(),
-          // createKbdPlugin(),
-          // createNodeIdPlugin(),
-          // createDndPlugin({ options: { enableScroller: true } }),
-          // dragOverCursorPlugin,
-          // createIndentPlugin(indentPlugin),
-          createAutoformatPlugin<AutoformatPlugin<MdValue, MdEditor>, MdValue, MdEditor>(
-            autoformatPlugin,
-          ),
-          createResetNodePlugin(resetBlockTypePlugin),
-          createSoftBreakPlugin(softBreakPlugin),
-          createExitBreakPlugin(exitBreakPlugin),
-          createTrailingBlockPlugin(trailingBlockPlugin),
-          // createSelectOnBackspacePlugin(selectOnBackspacePlugin),
-          // createComboboxPlugin(),
-          // createMentionPlugin(),
-          // createDeserializeMdPlugin(),
-          // createDeserializeCsvPlugin(),
-          // createDeserializeDocxPlugin(),
-          // createJuicePlugin() as MdPlatePlugin,
-          createShortcodePlugin(),
+          createSubscriptPlugin(),
+          createSuperscriptPlugin(),
+          createUnderlinePlugin(),
+          createAlignPlugin(alignPlugin),
         ],
         {
           components,
         },
-      ),
-    [components],
-  );
+      );
+    }
+
+    // Markdown Widget
+    return createMdPlugins([...basePlugins, createShortcodePlugin()], {
+      components,
+    });
+  }, [components, useMdx]);
 
   const id = useUUID();
 
@@ -264,6 +287,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
             <div key="editor-outer_wrapper" ref={outerEditorContainerRef} style={styles.container}>
               <Toolbar
                 key="toolbar"
+                useMdx={useMdx}
                 containerRef={outerEditorContainerRef.current}
                 collection={collection}
                 field={field}
@@ -287,6 +311,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
                   >
                     <BalloonToolbar
                       key="balloon-toolbar"
+                      useMdx={useMdx}
                       containerRef={innerEditorContainerRef.current}
                       hasEditorFocus={hasEditorFocus}
                       collection={collection}

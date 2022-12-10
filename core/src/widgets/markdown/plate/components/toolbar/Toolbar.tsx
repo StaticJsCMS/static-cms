@@ -42,24 +42,29 @@ const StyledDivider = styled('div')(
 );
 
 export interface ToolbarProps {
+  useMdx: boolean;
   containerRef: HTMLElement | null;
   collection: Collection<MarkdownField>;
   field: MarkdownField;
   entry: Entry;
 }
 
-const Toolbar: FC<ToolbarProps> = ({ containerRef, collection, field, entry }) => {
+const Toolbar: FC<ToolbarProps> = ({ useMdx, containerRef, collection, field, entry }) => {
   return (
     <StyledToolbar>
-      <BasicMarkToolbarButtons key="basic-mark-buttons" extended />
+      <BasicMarkToolbarButtons key="basic-mark-buttons" useMdx={useMdx} extended />
       <StyledDivider />
       <BasicElementToolbarButtons key="basic-element-buttons" />
       <StyledDivider />
       <ListToolbarButtons key="list-buttons" />
-      <StyledDivider />
-      <ColorToolbarButtons key="color-buttons" />
-      <StyledDivider />
-      <AlignToolbarButtons key="align-mark-buttons" />
+      {useMdx ? (
+        <>
+          <StyledDivider key="color-divider" />
+          <ColorToolbarButtons key="color-buttons" />
+          <StyledDivider key="align-mark-divider" />
+          <AlignToolbarButtons key="align-mark-buttons" />
+        </>
+      ) : null}
       <StyledDivider />
       <MediaToolbarButton
         key="media-buttons"

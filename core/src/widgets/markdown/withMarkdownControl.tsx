@@ -87,6 +87,7 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
               collection={collection}
               entry={entry}
               field={field}
+              useMdx={useMdx}
               controlProps={controlProps}
               onChange={handleOnChange}
               onFocus={handleOnFocus}

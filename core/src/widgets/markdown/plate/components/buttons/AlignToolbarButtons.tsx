@@ -10,9 +10,24 @@ import type { FC } from 'react';
 const AlignToolbarButtons: FC = () => {
   return (
     <>
-      <AlignToolbarButton tooltip="Align Left" value="left" icon={<FormatAlignLeftIcon />} />
-      <AlignToolbarButton tooltip="Align Center" value="center" icon={<FormatAlignCenterIcon />} />
-      <AlignToolbarButton tooltip="Align Right" value="right" icon={<FormatAlignRightIcon />} />
+      <AlignToolbarButton
+        key="algin-button-left"
+        tooltip="Align Left"
+        value="left"
+        icon={<FormatAlignLeftIcon />}
+      />
+      <AlignToolbarButton
+        key="algin-button-center"
+        tooltip="Align Center"
+        value="center"
+        icon={<FormatAlignCenterIcon />}
+      />
+      <AlignToolbarButton
+        key="algin-button-right"
+        tooltip="Align Right"
+        value="right"
+        icon={<FormatAlignRightIcon />}
+      />
     </>
   );
 };

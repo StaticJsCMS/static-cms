@@ -1,8 +1,10 @@
+export * from './AlignToolbarButtons';
 export { default as AlignToolbarButtons } from './AlignToolbarButtons';
 export * from './BasicElementToolbarButtons';
 export { default as BasicElementToolbarButtons } from './BasicElementToolbarButtons';
 export * from './BasicMarkToolbarButtons';
 export { default as BasicMarkToolbarButtons } from './BasicMarkToolbarButtons';
+export * from './ColorToolbarButtons';
 export { default as ColorToolbarButtons } from './ColorToolbarButtons';
 export * from './common';
 export * from './FontTypeSelect';
