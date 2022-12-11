@@ -26,6 +26,7 @@ import BasicElementToolbarButtons from '../buttons/BasicElementToolbarButtons';
 import BasicMarkToolbarButtons from '../buttons/BasicMarkToolbarButtons';
 import MediaToolbarButtons from '../buttons/MediaToolbarButtons';
 import TableToolbarButtons from '../buttons/TableToolbarButtons';
+import ShortcodeToolbarButton from '../buttons/ShortcodeToolbarButton';
 
 import type { Collection, Entry, MarkdownField } from '@staticcms/core/interface';
 import type { ClientRectObject } from '@udecode/plate';
@@ -128,6 +129,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
       return [];
     }
 
+    // Selected text buttons
     if (selectionText && selectionExpanded) {
       return [
         <BasicMarkToolbarButtons key="selection-basic-mark-buttons" useMdx={useMdx} />,
@@ -149,6 +151,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
       ].filter(Boolean);
     }
 
+    // Empty paragraph, not first line
     if (
       editor.children.length > 1 &&
       node &&
@@ -181,6 +184,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
             entry={entry}
             onMediaToggle={setMediaOpen}
           />,
+          !useMdx ? <ShortcodeToolbarButton key="shortcode-button" /> : null,
         ];
       }
     }
@@ -247,7 +251,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
       >
         <StyledPopperContent>
           {(groups.length > 0 ? groups : debouncedGroups).map((group, index) => [
-            index !== 0 ? <StyledDivider key={`table-divider-${index}`} /> : null,
+            index !== 0 ? <StyledDivider key={`balloon-toolbar-divider-${index}`} /> : null,
             group,
           ])}
         </StyledPopperContent>

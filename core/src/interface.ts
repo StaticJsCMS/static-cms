@@ -899,6 +899,7 @@ export type ShortcodePreviewProps<P = {}> = P & {
 };
 
 export interface ShortcodeConfig<P = {}> {
+  label?: string;
   openTag: string;
   closeTag: string;
   separator: string;

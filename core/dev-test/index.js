@@ -119,14 +119,8 @@ CMS.registerAdditionalLink({
   },
 });
 
-CMS.registerShortcode('twitter', {
-  openTag: '{{< ',
-  closeTag: ' >}}',
-  separator: ' ',
-  control: () => h('div', {}, 'twitter'),
-});
-
 CMS.registerShortcode('youtube', {
+  label: 'YouTube',
   openTag: '[',
   closeTag: ']',
   separator: '|',

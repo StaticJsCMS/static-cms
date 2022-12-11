@@ -40,7 +40,6 @@ const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = previewPr
   useEffect(() => {
     if (prevValue !== value) {
       const parsedValue = processShortcodeConfigToMdx(getShortcodes(), value ?? '');
-      console.log('MDX_PREVIEW value', value, 'parsedValue', parsedValue);
       setPrevValue(parsedValue);
       setValue(parsedValue);
     }
@@ -55,7 +54,6 @@ const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = previewPr
     try {
       return (state.file.result as FC)({});
     } catch (error) {
-      console.log('MDX_PREVIEW error', error);
       return <FallbackComponent error={String(error)} />;
     }
   }, [state.file]);
