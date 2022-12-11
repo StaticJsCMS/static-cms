@@ -51,11 +51,12 @@ import {
   withProps,
 } from '@udecode/plate';
 import { StyledLeaf } from '@udecode/plate-styled-components';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
+import { withShortcodeElement } from './components';
 import { BalloonToolbar } from './components/balloon-toolbar';
 import { BlockquoteElement } from './components/nodes/blockquote';
 import { CodeBlockElement } from './components/nodes/code-block';
@@ -75,11 +76,11 @@ import {
   OrderedListElement,
   UnorderedListElement,
 } from './components/nodes/list';
-import Paragraph from './components/nodes/paragraph/Paragraph';
+import ParagraphElement from './components/nodes/paragraph/ParagraphElement';
 import { TableCellElement, TableElement, TableRowElement } from './components/nodes/table';
 import { Toolbar } from './components/toolbar';
 import editableProps from './editableProps';
-import { createMdPlugins } from './plateTypes';
+import { createMdPlugins, ELEMENT_SHORTCODE } from './plateTypes';
 import { alignPlugin } from './plugins/align';
 import { autoformatPlugin } from './plugins/autoformat';
 import { createCodeBlockPlugin } from './plugins/code-block';
@@ -87,12 +88,18 @@ import { CursorOverlayContainer } from './plugins/cursor-overlay';
 import { exitBreakPlugin } from './plugins/exit-break';
 import { createListPlugin } from './plugins/list';
 import { resetBlockTypePlugin } from './plugins/reset-node';
+import { createShortcodePlugin } from './plugins/shortcode';
 import { softBreakPlugin } from './plugins/soft-break';
 import { createTablePlugin } from './plugins/table';
 import { trailingBlockPlugin } from './plugins/trailing-block';
 
-import type { Collection, Entry, MarkdownField } from '@staticcms/core/interface';
-import type { AutoformatPlugin } from '@udecode/plate';
+import type {
+  Collection,
+  Entry,
+  MarkdownField,
+  WidgetControlProps,
+} from '@staticcms/core/interface';
+import type { AnyObject, AutoformatPlugin, PlatePlugin } from '@udecode/plate';
 import type { CSSProperties, FC } from 'react';
 import type { MdEditor, MdValue } from './plateTypes';
 
@@ -112,6 +119,8 @@ export interface PlateEditorProps {
   collection: Collection<MarkdownField>;
   entry: Entry;
   field: MarkdownField;
+  useMdx: boolean;
+  controlProps: WidgetControlProps<string, MarkdownField>;
   onChange: (value: MdValue) => void;
   onFocus: () => void;
   onBlur: () => void;
@@ -122,6 +131,8 @@ const PlateEditor: FC<PlateEditorProps> = ({
   collection,
   entry,
   field,
+  useMdx,
+  controlProps,
   onChange,
   onFocus,
   onBlur,
@@ -130,15 +141,15 @@ const PlateEditor: FC<PlateEditorProps> = ({
   const editorContainerRef = useRef<HTMLDivElement | null>(null);
   const innerEditorContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const components = useMemo(
-    () => ({
+  const components = useMemo(() => {
+    const baseComponents = {
       [ELEMENT_H1]: Heading1,
       [ELEMENT_H2]: Heading2,
       [ELEMENT_H3]: Heading3,
       [ELEMENT_H4]: Heading4,
       [ELEMENT_H5]: Heading5,
       [ELEMENT_H6]: Heading6,
-      [ELEMENT_PARAGRAPH]: Paragraph,
+      [ELEMENT_PARAGRAPH]: ParagraphElement,
       [ELEMENT_TABLE]: TableElement,
       [ELEMENT_TR]: TableRowElement,
       [ELEMENT_TH]: TableCellElement,
@@ -161,81 +172,92 @@ const PlateEditor: FC<PlateEditorProps> = ({
       [ELEMENT_UL]: UnorderedListElement,
       [ELEMENT_LI]: ListItemElement,
       [ELEMENT_LIC]: ListItemContentElement,
+      [ELEMENT_SHORTCODE]: withShortcodeElement({ controlProps }),
       [MARK_BOLD]: withProps(StyledLeaf, { as: 'strong' }),
       [MARK_ITALIC]: withProps(StyledLeaf, { as: 'em' }),
       [MARK_STRIKETHROUGH]: withProps(StyledLeaf, { as: 's' }),
-      [MARK_SUBSCRIPT]: withProps(StyledLeaf, { as: 'sub' }),
-      [MARK_SUPERSCRIPT]: withProps(StyledLeaf, { as: 'sup' }),
-      [MARK_UNDERLINE]: withProps(StyledLeaf, { as: 'u' }),
-    }),
-    [collection, entry, field],
-  );
+    };
 
-  const [hasEditorFocus, setHasEditorFocus] = useState(false);
+    if (useMdx) {
+      // MDX Widget
+      return {
+        ...baseComponents,
+        [MARK_SUBSCRIPT]: withProps(StyledLeaf, { as: 'sub' }),
+        [MARK_SUPERSCRIPT]: withProps(StyledLeaf, { as: 'sup' }),
+        [MARK_UNDERLINE]: withProps(StyledLeaf, { as: 'u' }),
+      };
+    }
 
-  const handleOnFocus = useCallback(() => {
-    setHasEditorFocus(true);
-    onFocus();
-  }, [onFocus]);
+    // Markdown widget
+    return {
+      ...baseComponents,
+      [ELEMENT_SHORTCODE]: withShortcodeElement({ controlProps }),
+    };
+  }, [collection, controlProps, entry, field, useMdx]);
 
-  const handleOnBlur = useCallback(() => {
-    setHasEditorFocus(false);
-    onBlur();
-  }, [onBlur]);
+  const plugins = useMemo(() => {
+    const basePlugins: PlatePlugin<AnyObject, MdValue>[] = [
+      createParagraphPlugin(),
+      createBlockquotePlugin(),
+      createTodoListPlugin(),
+      createHeadingPlugin(),
+      createImagePlugin(),
+      // createHorizontalRulePlugin(),
+      createLinkPlugin(),
+      createListPlugin(),
+      createTablePlugin(),
+      // createMediaEmbedPlugin(),
+      createCodeBlockPlugin(),
+      createBoldPlugin(),
+      createCodePlugin(),
+      createItalicPlugin(),
+      // createHighlightPlugin(),
+      createStrikethroughPlugin(),
+      // createFontSizePlugin(),
+      // createKbdPlugin(),
+      // createNodeIdPlugin(),
+      // createDndPlugin({ options: { enableScroller: true } }),
+      // dragOverCursorPlugin,
+      // createIndentPlugin(indentPlugin),
+      createAutoformatPlugin<AutoformatPlugin<MdValue, MdEditor>, MdValue, MdEditor>(
+        autoformatPlugin,
+      ),
+      createResetNodePlugin(resetBlockTypePlugin),
+      createSoftBreakPlugin(softBreakPlugin),
+      createExitBreakPlugin(exitBreakPlugin),
+      createTrailingBlockPlugin(trailingBlockPlugin),
+      // createSelectOnBackspacePlugin(selectOnBackspacePlugin),
+      // createComboboxPlugin(),
+      // createMentionPlugin(),
+      // createDeserializeMdPlugin(),
+      // createDeserializeCsvPlugin(),
+      // createDeserializeDocxPlugin(),
+      // createJuicePlugin() as MdPlatePlugin,
+    ];
 
-  const plugins = useMemo(
-    () =>
-      createMdPlugins(
+    if (useMdx) {
+      // MDX Widget
+      return createMdPlugins(
         [
-          createParagraphPlugin(),
-          createBlockquotePlugin(),
-          createTodoListPlugin(),
-          createHeadingPlugin(),
-          createImagePlugin(),
-          // createHorizontalRulePlugin(),
-          createLinkPlugin(),
-          createListPlugin(),
-          createTablePlugin(),
-          // createMediaEmbedPlugin(),
-          createCodeBlockPlugin(),
-          createAlignPlugin(alignPlugin),
-          createBoldPlugin(),
-          createCodePlugin(),
-          createItalicPlugin(),
-          // createHighlightPlugin(),
-          createUnderlinePlugin(),
-          createStrikethroughPlugin(),
-          createSubscriptPlugin(),
-          createSuperscriptPlugin(),
+          ...basePlugins,
           createFontColorPlugin(),
           createFontBackgroundColorPlugin(),
-          // createFontSizePlugin(),
-          // createKbdPlugin(),
-          // createNodeIdPlugin(),
-          // createDndPlugin({ options: { enableScroller: true } }),
-          // dragOverCursorPlugin,
-          // createIndentPlugin(indentPlugin),
-          createAutoformatPlugin<AutoformatPlugin<MdValue, MdEditor>, MdValue, MdEditor>(
-            autoformatPlugin,
-          ),
-          createResetNodePlugin(resetBlockTypePlugin),
-          createSoftBreakPlugin(softBreakPlugin),
-          createExitBreakPlugin(exitBreakPlugin),
-          createTrailingBlockPlugin(trailingBlockPlugin),
-          // createSelectOnBackspacePlugin(selectOnBackspacePlugin),
-          // createComboboxPlugin(),
-          // createMentionPlugin(),
-          // createDeserializeMdPlugin(),
-          // createDeserializeCsvPlugin(),
-          // createDeserializeDocxPlugin(),
-          // createJuicePlugin() as MdPlatePlugin,
+          createSubscriptPlugin(),
+          createSuperscriptPlugin(),
+          createUnderlinePlugin(),
+          createAlignPlugin(alignPlugin),
         ],
         {
           components,
         },
-      ),
-    [components],
-  );
+      );
+    }
+
+    // Markdown Widget
+    return createMdPlugins([...basePlugins, createShortcodePlugin()], {
+      components,
+    });
+  }, [components, useMdx]);
 
   const id = useUUID();
 
@@ -253,6 +275,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
             <div key="editor-outer_wrapper" ref={outerEditorContainerRef} style={styles.container}>
               <Toolbar
                 key="toolbar"
+                useMdx={useMdx}
                 containerRef={outerEditorContainerRef.current}
                 collection={collection}
                 field={field}
@@ -265,8 +288,8 @@ const PlateEditor: FC<PlateEditorProps> = ({
                   id={id}
                   editableProps={{
                     ...editableProps,
-                    onFocus: handleOnFocus,
-                    onBlur: handleOnBlur,
+                    onFocus,
+                    onBlur,
                   }}
                 >
                   <div
@@ -276,8 +299,8 @@ const PlateEditor: FC<PlateEditorProps> = ({
                   >
                     <BalloonToolbar
                       key="balloon-toolbar"
+                      useMdx={useMdx}
                       containerRef={innerEditorContainerRef.current}
-                      hasEditorFocus={hasEditorFocus}
                       collection={collection}
                       field={field}
                       entry={entry}
@@ -292,7 +315,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
       </StyledPlateEditor>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [collection, field, handleOnBlur, handleOnFocus, initialValue, onChange, plugins],
+    [collection, field, onBlur, onFocus, initialValue, onChange, plugins],
   );
 };
 

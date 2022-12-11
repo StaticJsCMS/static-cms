@@ -14,11 +14,11 @@ import type {
   EventListener,
   Field,
   LocalePhrasesRoot,
-  MarkdownEditorOptions,
   MediaLibraryExternalLibrary,
   MediaLibraryOptions,
   PreviewStyle,
   PreviewStyleOptions,
+  ShortcodeConfig,
   TemplatePreviewComponent,
   UnknownField,
   Widget,
@@ -48,7 +48,7 @@ interface Registry {
   previewStyles: PreviewStyle[];
 
   /** Markdown editor */
-  markdownEditorConfig: MarkdownEditorOptions;
+  shortcodes: Record<string, ShortcodeConfig>;
 }
 
 /**
@@ -65,7 +65,7 @@ const registry: Registry = {
   locales: {},
   eventHandlers,
   previewStyles: [],
-  markdownEditorConfig: {},
+  shortcodes: {},
 };
 
 export default {
@@ -93,6 +93,9 @@ export default {
   getAdditionalLinks,
   registerPreviewStyle,
   getPreviewStyles,
+  registerShortcode,
+  getShortcode,
+  getShortcodes,
 };
 
 /**
@@ -133,7 +136,7 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
   options?: WidgetOptions<T, F>,
 ): void;
 export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
-  name: string | WidgetParam<T, F> | WidgetParam[],
+  nameOrWidgetOrWidgets: string | WidgetParam<T, F> | WidgetParam[],
   control?: string | Widget<T, F>['control'],
   preview?: Widget<T, F>['preview'],
   {
@@ -143,22 +146,22 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
     getDefaultValue,
   }: WidgetOptions<T, F> = {},
 ): void {
-  if (Array.isArray(name)) {
-    name.forEach(widget => {
+  if (Array.isArray(nameOrWidgetOrWidgets)) {
+    nameOrWidgetOrWidgets.forEach(widget => {
       if (typeof widget !== 'object') {
         console.error(`Cannot register widget: ${widget}`);
       } else {
         registerWidget(widget);
       }
     });
-  } else if (typeof name === 'string') {
+  } else if (typeof nameOrWidgetOrWidgets === 'string') {
     // A registered widget control can be reused by a new widget, allowing
     // multiple copies with different previews.
     const newControl = (
       typeof control === 'string' ? registry.widgets[control]?.control : control
     ) as Widget['control'];
     if (newControl) {
-      registry.widgets[name] = {
+      registry.widgets[nameOrWidgetOrWidgets] = {
         control: newControl,
         preview: preview as Widget['preview'],
         validator: validator as Widget['validator'],
@@ -167,7 +170,7 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
         schema,
       };
     }
-  } else if (typeof name === 'object') {
+  } else if (typeof nameOrWidgetOrWidgets === 'object') {
     const {
       name: widgetName,
       controlComponent: control,
@@ -178,7 +181,7 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
         getDefaultValue,
         schema,
       } = {},
-    } = name;
+    } = nameOrWidgetOrWidgets;
     if (registry.widgets[widgetName]) {
       console.warn(oneLine`
         Multiple widgets registered with name "${widgetName}". Only the last widget registered with
@@ -369,12 +372,20 @@ export function getAdditionalLink(id: string): AdditionalLink | undefined {
 }
 
 /**
- * Markdown editor options
+ * Markdown editor shortcodes
  */
-export function setMarkdownEditorOptions(options: MarkdownEditorOptions) {
-  registry.markdownEditorConfig = options;
+export function registerShortcode(name: string, config: ShortcodeConfig) {
+  if (registry.backends[name]) {
+    console.error(`Shortcode [${name}] already registered. Please choose a different name.`);
+    return;
+  }
+  registry.shortcodes[name] = config;
 }
 
-export function getMarkdownEditorOptions(): MarkdownEditorOptions {
-  return registry.markdownEditorConfig;
+export function getShortcode(name: string): ShortcodeConfig {
+  return registry.shortcodes[name];
+}
+
+export function getShortcodes(): Record<string, ShortcodeConfig> {
+  return registry.shortcodes;
 }

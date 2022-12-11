@@ -154,6 +154,7 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
 
   useEffect(() => {
     if (
+      anchorEl &&
       !debouncedHasEditorFocus &&
       !hasEditorFocus &&
       !hasFocus &&
@@ -163,6 +164,7 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
       handleClose(false);
     }
   }, [
+    anchorEl,
     debouncedHasEditorFocus,
     debouncedHasFocus,
     handleClose,

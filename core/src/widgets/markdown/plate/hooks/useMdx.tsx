@@ -1,4 +1,5 @@
 import { evaluate } from '@mdx-js/mdx';
+import * as provider from '@mdx-js/react';
 import { useCallback, useEffect, useState } from 'react';
 import * as runtime from 'react/jsx-runtime';
 import remarkGfm from 'remark-gfm';
@@ -20,6 +21,7 @@ export default function useMdx(input: string): [UseMdxState, (value: string) => 
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const options: any = {
+      ...provider,
       ...runtime,
       useDynamicImport: true,
       remarkPlugins: [remarkGfm, flattenListItemParagraphs],

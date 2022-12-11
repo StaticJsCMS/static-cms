@@ -16,6 +16,7 @@ import {
   someNode,
   usePlateSelection,
 } from '@udecode/plate';
+import { useFocused } from 'slate-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
@@ -25,6 +26,7 @@ import BasicElementToolbarButtons from '../buttons/BasicElementToolbarButtons';
 import BasicMarkToolbarButtons from '../buttons/BasicMarkToolbarButtons';
 import MediaToolbarButtons from '../buttons/MediaToolbarButtons';
 import TableToolbarButtons from '../buttons/TableToolbarButtons';
+import ShortcodeToolbarButton from '../buttons/ShortcodeToolbarButton';
 
 import type { Collection, Entry, MarkdownField } from '@staticcms/core/interface';
 import type { ClientRectObject } from '@udecode/plate';
@@ -54,20 +56,21 @@ const StyledDivider = styled('div')(
 );
 
 export interface BalloonToolbarProps {
+  useMdx: boolean;
   containerRef: HTMLElement | null;
-  hasEditorFocus: boolean;
   collection: Collection<MarkdownField>;
   field: MarkdownField;
   entry: Entry;
 }
 
 const BalloonToolbar: FC<BalloonToolbarProps> = ({
+  useMdx,
   containerRef,
-  hasEditorFocus,
   collection,
   field,
   entry,
 }) => {
+  const hasEditorFocus = useFocused();
   const editor = useMdPlateEditorState();
   const selection = usePlateSelection();
   const [hasFocus, setHasFocus] = useState(false);
@@ -126,9 +129,10 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
       return [];
     }
 
+    // Selected text buttons
     if (selectionText && selectionExpanded) {
       return [
-        <BasicMarkToolbarButtons key="selection-basic-mark-buttons" />,
+        <BasicMarkToolbarButtons key="selection-basic-mark-buttons" useMdx={useMdx} />,
         <BasicElementToolbarButtons
           key="selection-basic-element-buttons"
           hideFontTypeSelect={isInTableCell}
@@ -147,6 +151,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
       ].filter(Boolean);
     }
 
+    // Empty paragraph, not first line
     if (
       editor.children.length > 1 &&
       node &&
@@ -164,7 +169,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
         parent[0].children.length === 1
       ) {
         return [
-          <BasicMarkToolbarButtons key="empty-basic-mark-buttons" />,
+          <BasicMarkToolbarButtons key="empty-basic-mark-buttons" useMdx={useMdx} />,
           <BasicElementToolbarButtons
             key="empty-basic-element-buttons"
             hideFontTypeSelect={isInTableCell}
@@ -179,6 +184,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
             entry={entry}
             onMediaToggle={setMediaOpen}
           />,
+          !useMdx ? <ShortcodeToolbarButton key="shortcode-button" /> : null,
         ];
       }
     }
@@ -186,18 +192,20 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    collection,
-    editor,
-    field,
+    mediaOpen,
+    debouncedEditorFocus,
     hasFocus,
     debouncedHasFocus,
-    debouncedEditorFocus,
-    isInTableCell,
-    mediaOpen,
-    node,
     selection,
-    selectionExpanded,
+    editor,
     selectionText,
+    selectionExpanded,
+    node,
+    useMdx,
+    isInTableCell,
+    containerRef,
+    collection,
+    field,
   ]);
 
   const [prevSelectionBoundingClientRect, setPrevSelectionBoundingClientRect] = useState(
@@ -243,7 +251,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
       >
         <StyledPopperContent>
           {(groups.length > 0 ? groups : debouncedGroups).map((group, index) => [
-            index !== 0 ? <StyledDivider key={`table-divider-${index}`} /> : null,
+            index !== 0 ? <StyledDivider key={`balloon-toolbar-divider-${index}`} /> : null,
             group,
           ])}
         </StyledPopperContent>

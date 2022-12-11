@@ -118,3 +118,56 @@ CMS.registerAdditionalLink({
     icon: 'page',
   },
 });
+
+CMS.registerShortcode('youtube', {
+  label: 'YouTube',
+  openTag: '[',
+  closeTag: ']',
+  separator: '|',
+  toProps: args => {
+    if (args.length > 0) {
+      return { src: args[0] };
+    }
+
+    return { src: '' };
+  },
+  toArgs: ({ src }) => {
+    return [src];
+  },
+  control: ({ src, onChange }) => {
+    return h('span', {}, [
+      h('input', {
+        key: 'control-input',
+        value: src,
+        onChange: event => {
+          onChange({ src: event.target.value });
+        },
+      }),
+      h(
+        'iframe',
+        {
+          key: 'control-preview',
+          width: '420',
+          height: '315',
+          src: `https://www.youtube.com/embed/${src}`,
+        },
+        '',
+      ),
+    ]);
+  },
+  preview: ({ src }) => {
+    return h(
+      'span',
+      {},
+      h(
+        'iframe',
+        {
+          width: '420',
+          height: '315',
+          src: `https://www.youtube.com/embed/${src}`,
+        },
+        '',
+      ),
+    );
+  },
+});

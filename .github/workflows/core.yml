@@ -79,4 +79,4 @@ jobs:
     - name: Test
       working-directory: ./core
       run: |
-        yarn test
+        yarn test:ci

@@ -1,2 +1,3 @@
+export * from './serializeMarkdown';
+export { default as serializeMarkdown } from './serializeMarkdown';
 export * from './slate';
-export { default as serializerMarkdown } from './serializerMarkdown';

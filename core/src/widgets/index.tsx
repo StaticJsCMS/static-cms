@@ -16,6 +16,8 @@ export * from './map';
 export { default as MapWidget } from './map';
 export * from './markdown';
 export { default as MarkdownWidget } from './markdown';
+export * from './mdx';
+export { default as MdxWidget } from './mdx';
 export * from './number';
 export { default as NumberWidget } from './number';
 export * from './object';

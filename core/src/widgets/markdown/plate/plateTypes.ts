@@ -35,6 +35,7 @@ import type {
   ELEMENT_HR,
   ELEMENT_IMAGE,
   ELEMENT_LI,
+  ELEMENT_LIC,
   ELEMENT_LINK,
   ELEMENT_MEDIA_EMBED,
   ELEMENT_MENTION,
@@ -78,6 +79,8 @@ import type {
   WithOverride,
 } from '@udecode/plate';
 import type { CSSProperties } from 'styled-components';
+
+export const ELEMENT_SHORTCODE = 'shortcode' as const;
 
 /**
  * Text
@@ -125,7 +128,12 @@ export interface MdMentionElement extends TMentionElement {
   children: [EmptyText];
 }
 
-export type MdInlineElement = MdLinkElement | MdMentionElement | MdMentionInputElement;
+export type MdInlineElement =
+  | MdImageElement
+  | MdLinkElement
+  | MdMentionElement
+  | MdMentionInputElement
+  | MdShortcodeElement;
 export type MdInlineDescendant = MdInlineElement | RichText;
 export type MdInlineChildren = MdInlineDescendant[];
 
@@ -165,6 +173,13 @@ export interface MdParagraphElement extends MdBlockElement {
   align?: 'left' | 'center' | 'right';
 }
 
+export interface MdShortcodeElement extends TElement {
+  type: typeof ELEMENT_SHORTCODE;
+  shortcode: string;
+  args: string[];
+  children: [EmptyText];
+}
+
 export interface MdH1Element extends MdBlockElement {
   type: typeof ELEMENT_H1;
   children: MdInlineChildren;
@@ -202,7 +217,7 @@ export interface MdBlockquoteElement extends MdBlockElement {
 
 export interface MdCodeBlockElement extends MdBlockElement {
   type: typeof ELEMENT_CODE_BLOCK;
-  lang: string | undefined;
+  lang: string | undefined | null;
   code: string;
 }
 
@@ -238,6 +253,12 @@ export interface MdNumberedListElement extends TElement, MdBlockElement {
 
 export interface MdListItemElement extends TElement, MdBlockElement {
   type: typeof ELEMENT_LI;
+  checked: boolean | null;
+  children: MdListItemContentElement[];
+}
+
+export interface MdListItemContentElement extends TElement, MdBlockElement {
+  type: typeof ELEMENT_LIC;
   checked: boolean | null;
   children: MdInlineChildren;
 }

@@ -12,6 +12,6 @@ module.exports = {
     ...pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
     '\\.(css|less)$': '<rootDir>/src/__mocks__/styleMock.ts',
   },
-  transformIgnorePatterns: ['node_modules/(?!(url-join|array-move|ol)/)'],
+  transformIgnorePatterns: [],
   setupFiles: ['./test/setupEnv.js'],
 };

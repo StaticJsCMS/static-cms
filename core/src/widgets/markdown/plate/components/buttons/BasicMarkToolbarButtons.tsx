@@ -22,33 +22,42 @@ import type { FC } from 'react';
 
 export interface BasicMarkToolbarButtonsProps {
   extended?: boolean;
+  useMdx: boolean;
 }
 
-const BasicMarkToolbarButtons: FC<BasicMarkToolbarButtonsProps> = ({ extended = false }) => {
+const BasicMarkToolbarButtons: FC<BasicMarkToolbarButtonsProps> = ({
+  extended = false,
+  useMdx,
+}) => {
   return (
     <>
       <MarkToolbarButton tooltip="Bold" type={MARK_BOLD} icon={<FormatBoldIcon />} />
       <MarkToolbarButton tooltip="Italic" type={MARK_ITALIC} icon={<FormatItalicIcon />} />
-      <MarkToolbarButton
-        tooltip="Underline"
-        type={MARK_UNDERLINE}
-        icon={<FormatUnderlinedIcon />}
-      />
+      {useMdx ? (
+        <MarkToolbarButton
+          key="underline-button"
+          tooltip="Underline"
+          type={MARK_UNDERLINE}
+          icon={<FormatUnderlinedIcon />}
+        />
+      ) : null}
       <MarkToolbarButton
         tooltip="Strikethrough"
         type={MARK_STRIKETHROUGH}
         icon={<FormatStrikethroughIcon />}
       />
       <MarkToolbarButton tooltip="Code" type={MARK_CODE} icon={<CodeIcon />} />
-      {extended ? (
+      {useMdx && extended ? (
         <>
           <MarkToolbarButton
+            key="superscript-button"
             tooltip="Superscript"
             type={MARK_SUPERSCRIPT}
             clear={MARK_SUBSCRIPT}
             icon={<SuperscriptIcon />}
           />
           <MarkToolbarButton
+            key="subscript-button"
             tooltip="Subscript"
             type={MARK_SUBSCRIPT}
             clear={MARK_SUPERSCRIPT}

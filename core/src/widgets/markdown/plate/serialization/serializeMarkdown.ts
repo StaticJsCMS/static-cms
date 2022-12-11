@@ -1,22 +1,24 @@
 /* eslint-disable no-case-declarations */
-// import { BlockType, defaultNodeTypes, LeafType, NodeTypes } from './ast-types';
-import escapeHtml from 'escape-html';
-
+import { getShortcodes } from '../../../../lib/registry';
+import { isEmpty } from '../../../../lib/util/string.util';
 import { LIST_TYPES, NodeTypes } from './slate/ast-types';
 
+import type { CSSProperties } from 'react';
+import type { ShortcodeConfig } from '../../../../interface';
 import type {
   MdCodeBlockElement,
   MdImageElement,
   MdLinkElement,
   MdListItemElement,
   MdParagraphElement,
+  MdShortcodeElement,
+  MdValue,
 } from '../plateTypes';
-import type { TableNode, BlockType, LeafType } from './slate/ast-types';
-import type { CSSProperties } from 'react';
+import type { BlockType, LeafType, TableNode } from './slate/ast-types';
 
 type FontStyles = Pick<CSSProperties, 'color' | 'backgroundColor' | 'textAlign'>;
 
-interface MdLeafType extends LeafType {
+export interface MdLeafType extends LeafType {
   superscript?: boolean;
   subscript?: boolean;
   underline?: boolean;
@@ -24,39 +26,55 @@ interface MdLeafType extends LeafType {
   backgroundColor?: string;
 }
 
-interface MdBlockType extends Omit<BlockType, 'children'> {
+export interface MdBlockType extends Omit<BlockType, 'children'> {
   children: Array<MdBlockType | MdLeafType>;
 }
 
-interface Options {
+interface SerializeMarkdownNodeOptions {
   isInTable?: boolean;
   isInCode?: boolean;
   listDepth?: number;
   blockquoteDepth?: number;
   ignoreParagraphNewline?: boolean;
+  useMdx: boolean;
+  index: number;
+  shortcodeConfigs: Record<string, ShortcodeConfig>;
 }
 
 const isLeafNode = (node: MdBlockType | MdLeafType): node is MdLeafType => {
   return typeof (node as MdLeafType).text === 'string';
 };
 
-const VOID_ELEMENTS: Array<keyof typeof NodeTypes> = ['thematic_break', 'image', 'code_block'];
+const VOID_ELEMENTS: Array<keyof typeof NodeTypes> = [
+  'thematic_break',
+  'image',
+  'code_block',
+  'shortcode',
+  'tableCell',
+  'tableHeaderCell',
+];
 
 const BREAK_TAG = '<br />';
 
 const CODE_ELEMENTS = [NodeTypes.code_block];
 
-export default function serializerMarkdown(chunk: MdBlockType | MdLeafType, opts: Options = {}) {
+function serializeMarkdownNode(
+  chunk: MdBlockType | MdLeafType,
+  opts: SerializeMarkdownNodeOptions,
+) {
   const {
     ignoreParagraphNewline = false,
     listDepth = 0,
     isInTable = false,
     isInCode = false,
     blockquoteDepth = 0,
+    useMdx,
+    shortcodeConfigs,
   } = opts;
 
   const text = (chunk as MdLeafType).text || '';
   let type = (chunk as MdBlockType).type || '';
+  const selfIsBlockquote = 'type' in chunk && chunk.type === 'blockquote';
 
   let children = text;
 
@@ -67,12 +85,11 @@ export default function serializerMarkdown(chunk: MdBlockType | MdLeafType, opts
     }
 
     children = chunk.children
-      .map((c: MdBlockType | MdLeafType) => {
+      .map((c: MdBlockType | MdLeafType, childIndex) => {
         const selfIsTable = type === NodeTypes.table;
         const isList = !isLeafNode(c) ? (LIST_TYPES as string[]).includes(c.type || '') : false;
         const selfIsList = (LIST_TYPES as string[]).includes(chunk.type || '');
         const selfIsCode = (CODE_ELEMENTS as string[]).includes(chunk.type || '');
-        const selfIsBlockquote = chunk.type === 'blockquote';
 
         // Links can have the following shape
         // In which case we don't want to surround
@@ -91,7 +108,7 @@ export default function serializerMarkdown(chunk: MdBlockType | MdLeafType, opts
           childrenHasLink = chunk.children.some(f => !isLeafNode(f) && f.type === NodeTypes.link);
         }
 
-        return serializerMarkdown(
+        return serializeMarkdownNode(
           { ...c, parentType: type },
           {
             // WOAH.
@@ -102,20 +119,18 @@ export default function serializerMarkdown(chunk: MdBlockType | MdLeafType, opts
             // of whitespace. If we're parallel to a link we also don't want
             // to respect neighboring paragraphs
             ignoreParagraphNewline:
-              (ignoreParagraphNewline || isList || selfIsList || childrenHasLink) &&
+              (ignoreParagraphNewline || isList || selfIsList || childrenHasLink || isInTable) &&
               // if we have c.break, never ignore empty paragraph new line
               !(c as MdBlockType).break,
 
             // track depth of nested lists so we can add proper spacing
-            listDepth: (LIST_TYPES as string[]).includes((c as MdBlockType).type || '')
-              ? listDepth + 1
-              : listDepth,
-
+            listDepth: selfIsList ? listDepth + 1 : listDepth,
             isInTable: selfIsTable || isInTable,
-
             isInCode: selfIsCode || isInCode,
-
             blockquoteDepth: selfIsBlockquote ? blockquoteDepth + 1 : blockquoteDepth,
+            useMdx,
+            index: childIndex,
+            shortcodeConfigs,
           },
         );
       })
@@ -127,7 +142,10 @@ export default function serializerMarkdown(chunk: MdBlockType | MdLeafType, opts
     !ignoreParagraphNewline &&
     (text === '' || text === '\n') &&
     chunk.parentType === NodeTypes.paragraph &&
-    type !== NodeTypes.image
+    type !== NodeTypes.image &&
+    type !== NodeTypes.shortcode &&
+    type !== NodeTypes.tableCell &&
+    type !== NodeTypes.tableHeaderCell
   ) {
     type = NodeTypes.paragraph;
     children = '\n';
@@ -145,7 +163,6 @@ export default function serializerMarkdown(chunk: MdBlockType | MdLeafType, opts
   // "Text foo bar **baz**" resulting in "**Text foo bar **baz****"
   // which is invalid markup and can mess everything up
   if (children !== '\n' && isLeafNode(chunk)) {
-    children = isInCode || chunk.code ? children : escapeHtml(children);
     if (chunk.strikethrough && chunk.bold && chunk.italic) {
       children = retainWhitespaceAndFormat(children, '~~***');
     } else if (chunk.bold && chunk.italic) {
@@ -220,46 +237,44 @@ export default function serializerMarkdown(chunk: MdBlockType | MdLeafType, opts
       return `###### ${children}\n`;
 
     case NodeTypes.block_quote:
-      // For some reason, marked is parsing blockquotes w/ one new line
-      // as contiued blockquotes, so adding two new lines ensures that doesn't
-      // happen
-      return `> ${children
+      return `${selfIsBlockquote && blockquoteDepth > 0 ? '\n' : ''}> ${children
         .replace(/^[\n]*|[\n]*$/gm, '')
         .split('\n')
-        .join('\n> ')}\n\n`;
+        .join('\n> ')}\n`;
 
     case NodeTypes.code_block:
       const codeBlock = chunk as MdCodeBlockElement;
       return `\`\`\`${codeBlock.lang ?? ''}\n${codeBlock.code}\n\`\`\`\n`;
 
     case NodeTypes.link:
-      const linkBlock = chunk as unknown as MdLinkElement;
+      const linkBlock = chunk as MdLinkElement;
       return `[${children}](${linkBlock.url || ''})`;
 
     case NodeTypes.image:
-      const imageBlock = chunk as unknown as MdImageElement;
-      const caption = imageBlock.caption ?? [];
-      return `![${caption.length > 0 ? caption[0].text ?? '' : ''}](${imageBlock.url || ''})`;
+      const imageBlock = chunk as MdImageElement;
+      const alt = imageBlock.alt ?? '';
+      return `![${alt}](${imageBlock.url || ''})`;
 
     case NodeTypes.ul_list:
     case NodeTypes.ol_list:
-      return `\n${children}`;
+      return `${listDepth > 0 ? '\n' : ''}${children}`;
 
     case NodeTypes.listItemContent:
       return children;
 
     case NodeTypes.listItem:
-      const listItemBlock = chunk as unknown as MdListItemElement;
+      const listItemBlock = chunk as MdListItemElement;
 
       const isOL = chunk && chunk.parentType === NodeTypes.ol_list;
 
       const treatAsLeaf =
         (chunk as MdBlockType).children.length >= 1 &&
         ((chunk as MdBlockType).children.reduce((acc, child) => acc && isLeafNode(child), true) ||
-          ((chunk as MdBlockType).children[0] as BlockType).type === 'lic');
+          ((chunk as MdBlockType).children.length === 1 &&
+            ((chunk as MdBlockType).children[0] as BlockType).type === 'lic'));
 
       let spacer = '';
-      for (let k = 0; listDepth > k; k++) {
+      for (let k = 1; listDepth > k; k++) {
         if (isOL) {
           // https://github.com/remarkjs/remark-react/issues/65
           spacer += '   ';
@@ -270,15 +285,19 @@ export default function serializerMarkdown(chunk: MdBlockType | MdLeafType, opts
 
       let checkbox = '';
       if (typeof listItemBlock.checked === 'boolean') {
-        checkbox = ` [${listItemBlock.checked ? 'X' : ' '}]`;
+        checkbox = ` [${listItemBlock.checked ? 'x' : ' '}]`;
       }
 
       return `${spacer}${isOL ? '1.' : '-'}${checkbox} ${children}${treatAsLeaf ? '\n' : ''}`;
 
     case NodeTypes.paragraph:
-      const paragraphNode = chunk as unknown as MdParagraphElement;
-      if (paragraphNode.align) {
-        return `<p style={{ textAlign: '${paragraphNode.align}' }}>${children}</p>`;
+      const paragraphNode = chunk as MdParagraphElement;
+      if (useMdx && paragraphNode.align) {
+        return retainWhitespaceAndFormat(
+          children,
+          `<p style={{ textAlign: '${paragraphNode.align}' }}>`,
+          '</p>\n',
+        );
       }
       return `${children}${!isInTable ? '\n' : ''}`;
 
@@ -287,15 +306,31 @@ export default function serializerMarkdown(chunk: MdBlockType | MdLeafType, opts
 
     case NodeTypes.table:
       const columns = getTableColumnCount(chunk as TableNode);
-      return `|${Array(columns).fill('   ').join('|')}|
+      const rows = children.split('\n');
+      const header = rows.length > 0 ? rows[0] : `|${Array(columns).fill('   ').join('|')}|`;
+      const bodyRows = rows.slice(1);
+
+      return `${header}
 |${Array(columns).fill('---').join('|')}|
-${children}\n`;
+${bodyRows.join('\n')}`;
 
     case NodeTypes.tableRow:
       return `|${children}|\n`;
 
+    case NodeTypes.tableHeaderCell:
     case NodeTypes.tableCell:
-      return children.replace(/\|/g, '\\|').replace(/\n/g, BREAK_TAG);
+      return isEmpty(children) ? ' ' : children.replace(/\|/g, '\\|').replace(/\n/g, BREAK_TAG);
+
+    case NodeTypes.shortcode:
+      const shortcodeNode = chunk as MdShortcodeElement;
+      const shortcodeConfig = shortcodeConfigs[shortcodeNode.shortcode];
+      if (!shortcodeConfig) {
+        return children;
+      }
+
+      return `${shortcodeConfig.openTag}${[shortcodeNode.shortcode, ...shortcodeNode.args].join(
+        shortcodeConfig.separator,
+      )}${shortcodeConfig.closeTag}`;
 
     default:
       console.warn('Unrecognized slate node, proceeding as text', `"${type}"`, chunk);
@@ -342,4 +377,24 @@ function getTableColumnCount(tableNode: TableNode): number {
   }
 
   return rows[0].children.length;
+}
+
+export interface SerializeMarkdownOptions {
+  useMdx: boolean;
+  shortcodeConfigs?: Record<string, ShortcodeConfig<{}>>;
+}
+
+export default function serializeMarkdown(
+  slateValue: MdValue,
+  { useMdx, shortcodeConfigs }: SerializeMarkdownOptions,
+) {
+  return slateValue
+    .map((v, index) =>
+      serializeMarkdownNode(v as BlockType | LeafType, {
+        useMdx,
+        index,
+        shortcodeConfigs: shortcodeConfigs ?? getShortcodes(),
+      }),
+    )
+    .join('\n');
 }

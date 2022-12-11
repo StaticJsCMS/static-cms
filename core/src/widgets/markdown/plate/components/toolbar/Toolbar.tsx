@@ -7,6 +7,7 @@ import BasicMarkToolbarButtons from '../buttons/BasicMarkToolbarButtons';
 import ColorToolbarButtons from '../buttons/ColorToolbarButtons';
 import ListToolbarButtons from '../buttons/ListToolbarButtons';
 import MediaToolbarButton from '../buttons/MediaToolbarButtons';
+import ShortcodeToolbarButton from '../buttons/ShortcodeToolbarButton';
 
 import type { FC } from 'react';
 import type { Collection, Entry, MarkdownField } from '@staticcms/core/interface';
@@ -42,32 +43,36 @@ const StyledDivider = styled('div')(
 );
 
 export interface ToolbarProps {
+  useMdx: boolean;
   containerRef: HTMLElement | null;
   collection: Collection<MarkdownField>;
   field: MarkdownField;
   entry: Entry;
 }
 
-const Toolbar: FC<ToolbarProps> = ({ containerRef, collection, field, entry }) => {
+const Toolbar: FC<ToolbarProps> = ({ useMdx, containerRef, collection, field, entry }) => {
+  const groups = [
+    <BasicMarkToolbarButtons key="basic-mark-buttons" useMdx={useMdx} extended />,
+    <BasicElementToolbarButtons key="basic-element-buttons" />,
+    <ListToolbarButtons key="list-buttons" />,
+    useMdx ? <ColorToolbarButtons key="color-buttons" /> : null,
+    useMdx ? <AlignToolbarButtons key="align-mark-buttons" /> : null,
+    <MediaToolbarButton
+      key="media-buttons"
+      containerRef={containerRef}
+      collection={collection}
+      field={field}
+      entry={entry}
+    />,
+    !useMdx ? <ShortcodeToolbarButton key="shortcode-button" /> : null,
+  ].filter(Boolean);
+
   return (
     <StyledToolbar>
-      <BasicMarkToolbarButtons key="basic-mark-buttons" extended />
-      <StyledDivider />
-      <BasicElementToolbarButtons key="basic-element-buttons" />
-      <StyledDivider />
-      <ListToolbarButtons key="list-buttons" />
-      <StyledDivider />
-      <ColorToolbarButtons key="color-buttons" />
-      <StyledDivider />
-      <AlignToolbarButtons key="align-mark-buttons" />
-      <StyledDivider />
-      <MediaToolbarButton
-        key="media-buttons"
-        containerRef={containerRef}
-        collection={collection}
-        field={field}
-        entry={entry}
-      />
+      {groups.map((group, index) => [
+        index !== 0 ? <StyledDivider key={`toolbar-divider-${index}`} /> : null,
+        group,
+      ])}
     </StyledToolbar>
   );
 };
