@@ -25,6 +25,7 @@
     "prepublishOnly": "yarn build",
     "start": "run-s clean develop",
     "test": "cross-env NODE_ENV=test jest",
+    "test:ci": "cross-env NODE_ENV=test jest --maxWorkers=2",
     "type-check": "tsc --watch"
   },
   "main": "dist/static-cms-core.js",
