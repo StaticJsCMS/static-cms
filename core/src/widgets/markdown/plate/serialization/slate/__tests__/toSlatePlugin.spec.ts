@@ -1,9 +1,9 @@
 import {
   deserializationOnlyTestData,
   runSerializationTests,
-  testShortcodeConfigs as shortcodeConfigs
+  testShortcodeConfigs as shortcodeConfigs,
 } from '../../../tests-util/serializationTests.util';
-import { slateCompiler} from '../toSlatePlugin';
+import { slateCompiler } from '../toSlatePlugin';
 
 import type { SerializationTestData } from '../../../tests-util/serializationTests.util';
 import type { MdastNode } from '../ast-types';
@@ -27,11 +27,7 @@ function testRunner(key: string, mode: 'markdown' | 'mdx' | 'both', data: Serial
       return;
     }
 
-    await expectNodes(
-      data.mdast,
-      mode === 'mdx',
-      data.slate,
-    );
+    await expectNodes(data.mdast, mode === 'mdx', data.slate);
   });
 }
 

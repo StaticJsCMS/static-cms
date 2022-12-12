@@ -118,7 +118,7 @@ export interface BaseMdastNode {
   lang?: string | null;
   title?: string | null;
   start?: number | null;
-  meta?: null,
+  meta?: null;
   // mdast metadata
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   position?: any;
@@ -169,7 +169,6 @@ export interface MdxFlowMdastNode extends BaseMdastNode {
   type: 'mdxJsxFlowElement';
   name: string;
 }
-
 
 export interface TextNodeStyles {
   color?: string;
