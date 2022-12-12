@@ -16,6 +16,8 @@ export interface MediaToolbarButtonsProps {
   entry: Entry;
   inserting?: boolean;
   onMediaToggle?: (open: boolean) => void;
+  handleChildFocus?: (key: string) => () => void;
+  handleChildBlur?: (key: string) => () => void;
 }
 
 const MediaToolbarButtons: FC<MediaToolbarButtonsProps> = ({

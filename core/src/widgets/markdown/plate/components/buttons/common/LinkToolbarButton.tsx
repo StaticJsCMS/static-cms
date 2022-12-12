@@ -2,7 +2,7 @@ import { ELEMENT_LINK, insertLink, someNode } from '@udecode/plate';
 import React, { useCallback } from 'react';
 
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
-import { useMdPlateEditorState } from '@staticcms/markdown';
+import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import MediaToolbarButton from './MediaToolbarButton';
 
 import type { FC } from 'react';

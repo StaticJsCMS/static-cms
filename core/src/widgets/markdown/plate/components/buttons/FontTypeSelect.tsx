@@ -16,7 +16,7 @@ import { someNode, toggleNodeType } from '@udecode/plate-core';
 import React, { useCallback, useMemo, useState } from 'react';
 
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
-import { useMdPlateEditorState } from '@staticcms/markdown';
+import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 
 import type { SelectChangeEvent } from '@mui/material/Select';
 import type { FC } from 'react';
@@ -107,6 +107,7 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
       <StyledSelect
         labelId="font-type-select-label"
         id="font-type-select"
+        data-testid="font-type-select"
         value={value?.type ?? ELEMENT_PARAGRAPH}
         onChange={handleChange}
         size="small"

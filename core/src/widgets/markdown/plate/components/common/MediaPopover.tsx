@@ -1,26 +1,32 @@
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import Button from '@mui/material/Button';
-import Popover from '@mui/material/Popover';
+import Popper from '@mui/material/Popper';
 import { styled, useTheme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useFocused } from 'slate-react';
 
+import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import useIsMediaAsset from '@staticcms/core/lib/hooks/useIsMediaAsset';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 
 import type { Collection, Entry, FileOrImageField, MarkdownField } from '@staticcms/core/interface';
 import type { ChangeEvent, KeyboardEvent } from 'react';
 
-const StyledPopperContent = styled('div')`
-  display: flex;
-  gap: 4px;
-  margin-bottom: 10px;
-  padding: 6px;
-  border-radius: 4px;
-  align-items: center;
-  position: relative;
-`;
+const StyledPopperContent = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    gap: 4px;
+    background: ${theme.palette.background.paper};
+    box-shadow: ${theme.shadows[8]};
+    margin-bottom: 10px;
+    padding: 6px;
+    border-radius: 4px;
+    align-items: center;
+    position: relative;
+  `,
+);
 
 const StyledPopoverContent = styled(StyledPopperContent)`
   display: flex;
@@ -59,6 +65,7 @@ export interface MediaPopoverProps<T extends FileOrImageField | MarkdownField> {
   onUrlChange: (newValue: string) => void;
   onTextChange?: (newValue: string) => void;
   onClose: (shouldFocus: boolean) => void;
+  mediaOpen?: boolean;
   onMediaToggle?: (open: boolean) => void;
   onMediaChange: (newValue: string) => void;
   onRemove?: () => void;
@@ -78,6 +85,7 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
   onUrlChange,
   onTextChange,
   onClose,
+  mediaOpen,
   onMediaToggle,
   onMediaChange,
   onRemove,
@@ -88,6 +96,11 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
   const textRef = useRef<HTMLInputElement | null>(null);
 
   const [editing, setEditing] = useState(inserting);
+
+  const hasEditorFocus = useFocused();
+  const debouncedHasEditorFocus = useDebounce(hasEditorFocus, 150);
+  const [hasFocus, setHasFocus] = useState(false);
+  const debouncedHasFocus = useDebounce(hasFocus, 150);
 
   const handleClose = useCallback(
     (shouldFocus: boolean) => {
@@ -139,6 +152,33 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
     }
   }, [anchorEl, editing, inserting, urlDisabled]);
 
+  useEffect(() => {
+    if (
+      !debouncedHasEditorFocus &&
+      !hasEditorFocus &&
+      !hasFocus &&
+      !debouncedHasFocus &&
+      !mediaOpen
+    ) {
+      // handleClose(false);
+    }
+  }, [
+    debouncedHasEditorFocus,
+    debouncedHasFocus,
+    handleClose,
+    hasEditorFocus,
+    hasFocus,
+    mediaOpen,
+  ]);
+
+  const handleFocus = useCallback(() => {
+    setHasFocus(true);
+  }, []);
+
+  const handleBlur = useCallback(() => {
+    setHasFocus(false);
+  }, []);
+
   const handleMediaChange = useCallback(
     (newValue: string) => {
       onMediaChange(newValue);
@@ -189,25 +229,22 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
   );
 
   const open = Boolean(anchorEl);
+  const id = open ? 'edit-popover' : undefined;
 
   return (
-    <Popover
+    <Popper
+      id={id}
       open={open}
       anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left',
-      }}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'left',
-      }}
-      onClose={handleClose}
+      placeholder="bottom"
       container={containerRef}
-      disablePortal
+      sx={{ zIndex: 100 }}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      tabIndex={0}
     >
       {!editing ? (
-        <StyledPopoverEditingContent>
+        <StyledPopoverContent key="edit-content" contentEditable={false}>
           <Button
             ref={buttonRef}
             size="small"
@@ -241,9 +278,9 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
           >
             <DeleteForeverIcon />
           </Button>
-        </StyledPopoverEditingContent>
+        </StyledPopoverContent>
       ) : (
-        <StyledPopoverContent>
+        <StyledPopoverEditingContent key="editing-content" contentEditable={false}>
           <TextField
             key="url-input"
             inputRef={urlRef}
@@ -274,9 +311,9 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
           <Button fullWidth onClick={handleMediaOpen}>
             Open Media Library
           </Button>
-        </StyledPopoverContent>
+        </StyledPopoverEditingContent>
       )}
-    </Popover>
+    </Popper>
   );
 };
 

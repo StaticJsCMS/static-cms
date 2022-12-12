@@ -1,7 +1,8 @@
 import { focusEditor } from '@udecode/plate-core';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { MediaPopover, useMdPlateEditorState } from '@staticcms/markdown';
+import MediaPopover from '../../common/MediaPopover';
+import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import ToolbarButton from './ToolbarButton';
 
 import type { MarkdownField } from '@staticcms/core/interface';

@@ -4,7 +4,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { focusEditor } from '@udecode/plate';
 import React, { useCallback } from 'react';
 
-import { useMdPlateEditorState } from '@staticcms/markdown';
+import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 
 import type { MdEditor } from '@staticcms/markdown';
 import type { FC, MouseEvent, ReactNode } from 'react';
@@ -56,6 +56,7 @@ const ToolbarButton: FC<ToolbarButtonProps> = ({
         aria-label={label ?? tooltip}
         size="small"
         color="inherit"
+        data-testid={`toolbar-button-${label ?? tooltip}`.replace(' ', '-').toLowerCase()}
         sx={{
           padding: '2px',
           minWidth: 'unset',

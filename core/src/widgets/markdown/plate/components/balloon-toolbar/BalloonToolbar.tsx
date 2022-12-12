@@ -16,17 +16,18 @@ import {
   someNode,
   usePlateSelection,
 } from '@udecode/plate';
-import { useFocused } from 'slate-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useFocused } from 'slate-react';
 
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
-import { useMdPlateEditorState, VOID_ELEMENTS } from '@staticcms/markdown';
+import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
+import { VOID_ELEMENTS } from '../../serialization/slate/ast-types';
 import BasicElementToolbarButtons from '../buttons/BasicElementToolbarButtons';
 import BasicMarkToolbarButtons from '../buttons/BasicMarkToolbarButtons';
 import MediaToolbarButtons from '../buttons/MediaToolbarButtons';
-import TableToolbarButtons from '../buttons/TableToolbarButtons';
 import ShortcodeToolbarButton from '../buttons/ShortcodeToolbarButton';
+import TableToolbarButtons from '../buttons/TableToolbarButtons';
 
 import type { Collection, Entry, MarkdownField } from '@staticcms/core/interface';
 import type { ClientRectObject } from '@udecode/plate';
@@ -76,6 +77,13 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
   const [hasFocus, setHasFocus] = useState(false);
   const debouncedHasFocus = useDebounce(hasFocus, 150);
 
+  const [childFocusState, setChildFocusState] = useState<Record<string, boolean>>({});
+  const childHasFocus = useMemo(
+    () => Object.keys(childFocusState).reduce((acc, value) => acc || childFocusState[value], false),
+    [childFocusState],
+  );
+  const debouncedChildHasFocus = useDebounce(hasFocus, 150);
+
   const handleFocus = useCallback(() => {
     setHasFocus(true);
   }, []);
@@ -83,6 +91,23 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
   const handleBlur = useCallback(() => {
     setHasFocus(false);
   }, []);
+
+  const handleChildFocus = useCallback(
+    (key: string) => () => {
+      setChildFocusState(oldState => ({
+        ...oldState,
+        [key]: true,
+      }));
+    },
+    [],
+  );
+
+  const handleChildBlur = useCallback(
+    (key: string) => () => {
+      setHasFocus(false);
+    },
+    [],
+  );
 
   const anchorEl = useRef<HTMLDivElement>();
   const [selectionBoundingClientRect, setSelectionBoundingClientRect] =
@@ -121,16 +146,27 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
   const debouncedEditorFocus = useDebounce(hasEditorFocus, 150);
 
   const groups: ReactNode[] = useMemo(() => {
-    if (!mediaOpen && !debouncedEditorFocus && !hasFocus && !debouncedHasFocus) {
+    console.log('computing groups!');
+    if (
+      !mediaOpen &&
+      !debouncedEditorFocus &&
+      !hasFocus &&
+      !debouncedHasFocus &&
+      !debouncedChildHasFocus &&
+      !childHasFocus
+    ) {
+      console.log('no focus!');
       return [];
     }
 
     if (selection && someNode(editor, { match: { type: ELEMENT_LINK }, at: selection?.anchor })) {
+      console.log('is link node!');
       return [];
     }
 
     // Selected text buttons
     if (selectionText && selectionExpanded) {
+      console.log('is selected text!');
       return [
         <BasicMarkToolbarButtons key="selection-basic-mark-buttons" useMdx={useMdx} />,
         <BasicElementToolbarButtons
@@ -159,6 +195,16 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
     ) {
       const path = findNodePath(editor, node) ?? [];
       const parent = getParentNode(editor, path);
+      console.log(
+        'is empty at cursor!',
+        path.length > 0,
+        path[0] !== 0,
+        parent,
+        parent && parent?.length > 0,
+        parent && parent?.length > 0 && 'children' in parent[0],
+        parent && parent?.length > 0 && !VOID_ELEMENTS.includes(parent?.[0].type as string),
+        parent && parent?.length > 0 && parent?.[0].children.length === 1,
+      );
       if (
         path.length > 0 &&
         path[0] !== 0 &&
@@ -168,6 +214,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
         !VOID_ELEMENTS.includes(parent[0].type as string) &&
         parent[0].children.length === 1
       ) {
+        console.log('allowed to open balloon toolbar!');
         return [
           <BasicMarkToolbarButtons key="empty-basic-mark-buttons" useMdx={useMdx} />,
           <BasicElementToolbarButtons
@@ -188,6 +235,8 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
         ];
       }
     }
+
+    console.log('no groups!');
 
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -229,6 +278,8 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
     setPrevSelectionBoundingClientRect(selectionBoundingClientRect);
   }, [selectionBoundingClientRect]);
 
+  console.log('anchorEl.current', anchorEl.current ?? null);
+
   return (
     <>
       <Box
@@ -240,7 +291,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
         }}
       />
       <Popper
-        open={debouncedOpen}
+        open={Boolean(debouncedOpen && anchorEl.current)}
         placement="top"
         anchorEl={anchorEl.current ?? null}
         sx={{ zIndex: 100 }}

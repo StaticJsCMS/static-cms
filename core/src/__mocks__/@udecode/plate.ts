@@ -40,4 +40,28 @@ export {
   ELEMENT_UL,
 };
 
+export const createPlateEditor = jest.fn();
+export const createPluginFactory = jest.fn();
+export const createPlugins = jest.fn();
+export const createTEditor = jest.fn();
+export const getTEditor = jest.fn();
+export const useEditorRef = jest.fn();
+export const useEditorState = jest.fn();
+export const usePlateActions = jest.fn();
+export const usePlateEditorRef = jest.fn();
+export const usePlateEditorState = jest.fn();
+export const usePlateSelectors = jest.fn();
+export const usePlateStates = jest.fn();
+export const findNodePath = jest.fn();
+export const getNode = jest.fn();
+export const getParentNode = jest.fn();
+export const getSelectionBoundingClientRect = jest.fn();
+export const getSelectionText = jest.fn();
+export const isElement = jest.fn();
+export const isElementEmpty = jest.fn();
+export const isSelectionExpanded = jest.fn();
+export const isText = jest.fn();
+export const someNode = jest.fn();
+export const usePlateSelection = jest.fn();
+
 export default {};
