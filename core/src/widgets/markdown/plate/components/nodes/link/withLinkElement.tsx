@@ -6,14 +6,14 @@ import {
   unwrapLink,
   upsertLink,
 } from '@udecode/plate';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import MediaPopover from '../common/MediaPopover';
 
+import type { Collection, Entry, MarkdownField } from '@staticcms/core/interface';
 import type { MdLinkElement, MdValue } from '@staticcms/markdown';
 import type { PlateRenderElementProps } from '@udecode/plate';
 import type { FC, MouseEvent } from 'react';
-import type { Collection, Entry, MarkdownField } from '@staticcms/core/interface';
 
 export interface WithLinkElementProps {
   containerRef: HTMLElement | null;
@@ -33,7 +33,7 @@ const withLinkElement = ({ containerRef, collection, field, entry }: WithLinkEle
     const [anchorEl, setAnchorEl] = useState<HTMLAnchorElement | null>(null);
 
     const { url } = element;
-    const path = useMemo(() => findNodePath(editor, element), [editor, element]);
+    const path = findNodePath(editor, element);
 
     const [internalUrl, setInternalUrl] = useState(url);
     const [internalText, setInternalText] = useState(getEditorString(editor, path));
