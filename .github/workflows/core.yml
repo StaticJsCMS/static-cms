@@ -81,7 +81,7 @@ jobs:
         run: |
           yarn test:ci
 
-  "integration tests":
+  integration_tests:
     runs-on: ubuntu-latest
 
     steps:
