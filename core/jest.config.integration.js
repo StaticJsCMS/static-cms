@@ -12,6 +12,7 @@ module.exports = {
     ...pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
     '\\.(css|less)$': '<rootDir>/src/__mocks__/styleMock.ts',
   },
+  transformIgnorePatterns: [],
   setupFiles: ['./test/setupEnv.js'],
-  testRegex: '\\.spec\\.tsx?$',
+  testRegex: '\\.ispec\\.tsx?$',
 };

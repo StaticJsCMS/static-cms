@@ -8,6 +8,11 @@ import { markdownToSlate } from '../useMarkdownToSlate';
 import type { SerializationTestData } from '../../tests-util/serializationTests.util';
 import type { UseMarkdownToSlateOptions } from '../useMarkdownToSlate';
 
+jest.unmock('remark-gfm');
+jest.unmock('remark-mdx');
+jest.unmock('remark-parse');
+jest.unmock('unified');
+
 async function expectNodes(
   markdown: string,
   options: UseMarkdownToSlateOptions,
