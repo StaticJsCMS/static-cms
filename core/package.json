@@ -25,7 +25,9 @@
     "prepublishOnly": "yarn build",
     "start": "run-s clean develop",
     "test": "cross-env NODE_ENV=test jest",
+    "test:integration": "cross-env NODE_ENV=test jest -c jest.config.integration.js",
     "test:ci": "cross-env NODE_ENV=test jest --maxWorkers=2",
+    "test:integration:ci": "cross-env NODE_ENV=test jest -c jest.config.integration.js --maxWorkers=2",
     "type-check": "tsc --watch"
   },
   "main": "dist/static-cms-core.js",
@@ -54,7 +56,7 @@
     "@codemirror/search": "6.2.3",
     "@codemirror/state": "6.1.4",
     "@codemirror/theme-one-dark": "6.1.0",
-    "@codemirror/view": "6.6.0",
+    "@codemirror/view": "6.7.1",
     "@dnd-kit/core": "6.0.6",
     "@dnd-kit/sortable": "7.0.1",
     "@dnd-kit/utilities": "3.2.1",

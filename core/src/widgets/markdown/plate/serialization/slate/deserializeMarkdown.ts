@@ -20,7 +20,7 @@ import type {
   ListNode,
   MarkNode,
   MdastNode,
-  MdxMdastNode,
+  MdxTextMdastNode,
   ParagraphNode,
   StyleMdxMdastNodeAttribute,
   TextNode,
@@ -57,7 +57,7 @@ function mdxToMark(mark: keyof typeof MarkNodeTypes, children: DeserializedNode[
   } as MarkNode;
 }
 
-function parseStyleAttribute(node: MdxMdastNode, allowedStyles: Record<string, string>) {
+function parseStyleAttribute(node: MdxTextMdastNode, allowedStyles: Record<string, string>) {
   const styleAttribute = node.attributes?.find(
     a => a.name === 'style',
   ) as StyleMdxMdastNodeAttribute;
@@ -281,7 +281,7 @@ export default function deserializeMarkdown(node: MdastNode, options: Options) {
       return { text: node.value || '' };
 
     case 'mdxJsxTextElement':
-      if ('name' in node) {
+      if ('name' in node && node.type === 'mdxJsxTextElement') {
         switch (node.name) {
           case 'br':
             return [{ text: '\n' }];

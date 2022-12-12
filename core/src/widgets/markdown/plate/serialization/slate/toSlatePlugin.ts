@@ -9,13 +9,17 @@ export interface ToSlatePluginOptions {
   useMdx: boolean;
 }
 
-const toSlatePlugin = ({ shortcodeConfigs, useMdx }: ToSlatePluginOptions): Plugin =>
-  function () {
-    const compiler = (node: { children: Array<MdastNode> }) => {
-      return node.children.map((c, index) => transform(c, { shortcodeConfigs, useMdx, index }));
-    };
+export const slateCompiler =
+  ({ shortcodeConfigs, useMdx }: ToSlatePluginOptions) =>
+  (node: MdastNode) => {
+    return (
+      node.children?.map((c, index) => transform(c, { shortcodeConfigs, useMdx, index })) ?? []
+    );
+  };
 
-    this.Compiler = compiler;
+const toSlatePlugin = (options: ToSlatePluginOptions): Plugin =>
+  function () {
+    this.Compiler = slateCompiler(options);
   };
 
 export default toSlatePlugin;

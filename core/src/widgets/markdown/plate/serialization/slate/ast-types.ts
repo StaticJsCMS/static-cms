@@ -104,7 +104,7 @@ export interface ShortcodeNode extends BaseMdastNode {
   args: string[];
 }
 
-export type MdastNode = BaseMdastNode | MdxMdastNode | ShortcodeNode;
+export type MdastNode = BaseMdastNode | MdxTextMdastNode | MdxFlowMdastNode | ShortcodeNode;
 
 export interface BaseMdastNode {
   type?: Omit<MdastNodeType, 'mdxJsxTextElement'>;
@@ -115,7 +115,10 @@ export interface BaseMdastNode {
   depth?: 1 | 2 | 3 | 4 | 5 | 6;
   url?: string;
   alt?: string;
-  lang?: string;
+  lang?: string | null;
+  title?: string | null;
+  start?: number | null;
+  meta?: null;
   // mdast metadata
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   position?: any;
@@ -156,10 +159,15 @@ export type MdxMdastNodeAttribute =
   | ColorMdxMdastNodeAttribute
   | AlignMdxMdastNodeAttribute;
 
-export interface MdxMdastNode extends BaseMdastNode {
+export interface MdxTextMdastNode extends BaseMdastNode {
   type: 'mdxJsxTextElement';
   name: string;
   attributes?: MdxMdastNodeAttribute[];
+}
+
+export interface MdxFlowMdastNode extends BaseMdastNode {
+  type: 'mdxJsxFlowElement';
+  name: string;
 }
 
 export interface TextNodeStyles {
