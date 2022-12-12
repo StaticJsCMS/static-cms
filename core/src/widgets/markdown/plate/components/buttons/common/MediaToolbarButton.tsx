@@ -4,6 +4,7 @@ import { useFocused } from 'slate-react';
 
 import { MediaPopover, useMdPlateEditorState } from '@staticcms/markdown';
 import ToolbarButton from './ToolbarButton';
+import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 
 import type { MarkdownField } from '@staticcms/core/interface';
 import type { MdEditor, MediaPopoverProps } from '@staticcms/markdown';
@@ -38,11 +39,18 @@ const MediaToolbarButton: FC<MediaToolbarButtonProps> = ({
   const editor = useMdPlateEditorState();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
+  if (forImage) {
+    console.log('anchorEl', anchorEl);
+  }
+
   const [internalUrl, setInternalUrl] = useState('');
   const [internalText, setInternalText] = useState('');
 
   const handleClose = useCallback(
     (newValue: string | undefined, shouldFocus: boolean) => {
+      if (forImage) {
+        console.log('handleClose', newValue, shouldFocus);
+      }
       setAnchorEl(null);
       setInternalUrl('');
       setInternalText('');
@@ -64,6 +72,9 @@ const MediaToolbarButton: FC<MediaToolbarButtonProps> = ({
         return;
       }
 
+      if (forImage) {
+        console.log('handleOnClick');
+      }
       setAnchorEl(event.currentTarget);
     },
     [anchorEl, handleClose],
@@ -84,11 +95,12 @@ const MediaToolbarButton: FC<MediaToolbarButtonProps> = ({
   );
 
   const editorHasFocus = useFocused();
+  const debouncedEditorHasFocus = useDebounce(editorHasFocus, 150);
   useEffect(() => {
-    if (editorHasFocus) {
+    if (!editorHasFocus && !debouncedEditorHasFocus) {
       handleClose(undefined, false);
     }
-  }, [editorHasFocus, handleClose]);
+  }, [debouncedEditorHasFocus, editorHasFocus, handleClose]);
 
   return (
     <>
