@@ -3,11 +3,11 @@ name: Docs
 on:
   workflow_dispatch:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
     paths:
       - docs/**
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
     paths:
       - docs/**
 
@@ -16,33 +16,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
   lint:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Setup Node
-      uses: actions/setup-node@v3
-      with:
-        cache: yarn
-        cache-dependency-path: docs/yarn.lock
-        node-version: 16
-        
-    - name: Install
-      working-directory: ./docs
-      run: |
-        yarn install --frozen-lockfile
-        
-    - name: Lint
-      working-directory: ./docs
-      run: |
-        yarn lint
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          cache-dependency-path: docs/yarn.lock
+          node-version: 16
+
+      - name: Install
+        working-directory: ./docs
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: Lint
+        working-directory: ./docs
+        run: |
+          yarn lint
 
   test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+
+  "integration tests":
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
