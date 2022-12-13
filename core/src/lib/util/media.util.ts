@@ -41,12 +41,10 @@ function hasCustomFolder(
     return false;
   }
 
-  if (!isMediaField(folderKey, field)) {
-    return false;
-  }
-
-  if (field[folderKey]) {
-    return true;
+  if (isMediaField(folderKey, field)) {
+    if (field[folderKey]) {
+      return true;
+    }
   }
 
   if ('files' in collection) {
