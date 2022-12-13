@@ -1,6 +1,6 @@
 {
   "name": "@staticcms/core",
-  "version": "1.0.0-beta2",
+  "version": "1.0.0-beta3",
   "license": "MIT",
   "description": "Static CMS core application.",
   "repository": "https://github.com/StaticJsCMS/static-cms",
@@ -22,7 +22,9 @@
     "lint:format": "prettier \"src/**/*.{js,jsx,ts,tsx,css}\" --list-different",
     "lint:js": "eslint --color --ignore-path .gitignore \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint": "run-p -c --aggregate-output \"lint:*\"",
-    "prepublishOnly": "yarn build",
+    "prepublishOnly": "yarn build ",
+    "prepack": "cp ../README.md ./",
+    "postpack": "rm ./README.md",
     "start": "run-s clean develop",
     "test": "cross-env NODE_ENV=test jest",
     "test:integration": "cross-env NODE_ENV=test jest -c jest.config.integration.js",
