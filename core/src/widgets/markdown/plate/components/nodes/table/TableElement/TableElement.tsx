@@ -1,3 +1,4 @@
+import Box from '@mui/system/Box';
 import { useSelectedCells } from '@udecode/plate';
 import React from 'react';
 
@@ -13,9 +14,19 @@ const TableElement: FC<PlateRenderElementProps<MdValue, MdTableElement>> = ({
   useSelectedCells();
 
   return (
-    <table {...attributes} {...nodeProps}>
-      <tbody>{children}</tbody>
-    </table>
+    <Box
+      component="table"
+      {...attributes}
+      {...nodeProps}
+      sx={{ border: '1px solid rgba(209,213,219,0.75)', borderCollapse: 'collapse' }}
+    >
+      {children ? (
+        <>
+          <thead key="thead">{children[0]}</thead>
+          <tbody key="tbody">{children.slice(1)}</tbody>
+        </>
+      ) : null}
+    </Box>
   );
 };
 

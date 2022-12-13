@@ -12,11 +12,13 @@ const TableHeaderCellElement: FC<PlateRenderElementProps<MdValue, MdTableCellEle
 }) => {
   return (
     <Box
-      component="td"
+      component="th"
       {...attributes}
       {...nodeProps}
       sx={{
         padding: '8px',
+        background: 'rgb(244,245,247)',
+        textAlign: 'left',
         '&:not(:last-of-type)': {
           borderRight: '1px solid rgba(209,213,219,0.5)',
         },
