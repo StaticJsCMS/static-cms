@@ -9,6 +9,8 @@ collections:
   - name: posts
     label: Posts
     label_singular: Post
+    media_folder: /assets/posts
+    public_folder: /assets/posts
     description: >
       The description is a great place for tone setting, high level information,
       and editing guidelines that are specific to a collection.

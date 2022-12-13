@@ -18,7 +18,7 @@ Configuring the CMS for i18n support requires top level configuration, collectio
 ### Top level configuration
 
 <CodeTabs>
-  
+
 ```yaml
 i18n:
   # Required and can be one of multiple_folders, multiple_files or single_file
@@ -291,12 +291,6 @@ See [Folder Collections Path](/docs/collection-types#folder-collections-path).
 
 Seed [Nested Collections](/docs/collection-types#nested-collections).
 
-## Custom Mount Element
-
-Static CMS always creates its own DOM element for mounting the application, which means it always takes over the entire page, and is generally inflexible if you're trying to do something creative, like injecting it into a shared context.
-
-You can now provide your own element for Static CMS to mount in by setting the target element's ID as `nc-root`. If Static CMS finds an element with this ID during initialization, it will mount within that element instead of creating its own.
-
 ## Commit Message Templates
 
 You can customize the templates used by Static CMS to generate commit messages by setting the `commit_messages` option under `backend` in your Static CMS `config`.
@@ -445,76 +439,3 @@ CMS.registerEventListener({
   },
 });
 ```
-
-## Dynamic Default Values
-
-When linking to `/admin/#/collections/posts/new` you can pass URL parameters to pre-populate an entry.
-
-For example given the configuration:
-
-<CodeTabs>
-```yaml
-collections:
-  - name: posts
-    label: Posts
-    folder: content/posts
-    create: true
-    fields:
-      - label: Title
-        name: title
-        widget: string
-      - label: Object
-        name: object
-        widget: object
-        fields:
-          - label: Title
-            name: title
-            widget: string
-      - label: body
-        name: body
-        widget: markdown
-```
-
-```js
-collections: [
-  {
-    name: 'posts',
-    label: 'Posts',
-    folder: 'content/posts',
-    create: true,
-    fields: [
-      {
-        label: 'Title',
-        name: 'title',
-        widget: 'string'
-      },
-      {
-        label: 'Object',
-        name: 'object',
-        widget: 'object',
-        fields: [
-          {
-            label: 'Title',
-            name: 'title',
-            widget: 'string'
-          }
-        ],
-      },
-      {
-        label: 'body',
-        name: 'body',
-        widget: 'markdown'
-      },
-    ],
-  },
-],
-```
-
-</CodeTabs>
-
-clicking the following link: `/#/collections/posts/new?title=first&object.title=second&body=%23%20content`
-
-will open the editor for a new post with the `title` field populated with `first`, the nested `object.title` field
-with `second` and the markdown `body` field with `# content`.
-
-**Note:** URL Encoding might be required for certain values (e.g. in the previous example the value for `body` is URL encoded).
