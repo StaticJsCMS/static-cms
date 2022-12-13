@@ -77,7 +77,12 @@ import {
   UnorderedListElement,
 } from './components/nodes/list';
 import ParagraphElement from './components/nodes/paragraph/ParagraphElement';
-import { TableCellElement, TableElement, TableRowElement } from './components/nodes/table';
+import {
+  TableCellElement,
+  TableElement,
+  TableHeaderCellElement,
+  TableRowElement,
+} from './components/nodes/table';
 import { Toolbar } from './components/toolbar';
 import editableProps from './editableProps';
 import { createMdPlugins, ELEMENT_SHORTCODE } from './plateTypes';
@@ -152,7 +157,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
       [ELEMENT_PARAGRAPH]: ParagraphElement,
       [ELEMENT_TABLE]: TableElement,
       [ELEMENT_TR]: TableRowElement,
-      [ELEMENT_TH]: TableCellElement,
+      [ELEMENT_TH]: TableHeaderCellElement,
       [ELEMENT_TD]: TableCellElement,
       [ELEMENT_BLOCKQUOTE]: BlockquoteElement,
       [ELEMENT_CODE_BLOCK]: CodeBlockElement,
