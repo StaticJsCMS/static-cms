@@ -55,7 +55,6 @@ const MediaToolbarButton: FC<MediaToolbarButtonProps> = ({
       }
       const finalValue = newValue ?? internalUrl;
       if (finalValue) {
-        console.log('CLOSING ON CHANGE', finalValue, internalText);
         onChange(finalValue, internalText);
       }
     },

@@ -1,5 +1,7 @@
 import yamlFormatter from '../YamlFormatter';
 
+jest.unmock('yaml');
+
 const json = {
   keyF: 'valueF',
   keyA: 'valueA',

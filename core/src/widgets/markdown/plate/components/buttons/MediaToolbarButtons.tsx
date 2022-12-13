@@ -48,8 +48,6 @@ const MediaToolbarButtons: FC<MediaToolbarButtonsProps> = ({
     }
   }, [imageMediaOpen, linkMediaOpen, onMediaToggle, open]);
 
-  console.log('CLOSING media open! link', linkMediaOpen, 'image', imageMediaOpen, 'open', open);
-
   return (
     <>
       <LinkToolbarButton

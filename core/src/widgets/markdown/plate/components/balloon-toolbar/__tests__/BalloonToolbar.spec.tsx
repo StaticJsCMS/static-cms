@@ -86,18 +86,8 @@ describe(BalloonToolbar.name, () => {
   });
 
   it('renders empty div by default', () => {
-    const component = render(<BalloonToolbarWrapper />);
-    expect(component).toMatchInlineSnapshot(`
-      .emotion-0 {
-        position: fixed;
-      }
-
-      <div>
-        <div
-          className="MuiBox-root emotion-0"
-        />
-      </div>
-    `);
+    render(<BalloonToolbarWrapper />);
+    expect(screen.queryAllByRole('button').length).toBe(0);
   });
 
   describe('empty node toolbar', () => {
