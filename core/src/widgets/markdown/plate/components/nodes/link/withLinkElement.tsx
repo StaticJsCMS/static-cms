@@ -8,7 +8,7 @@ import {
 } from '@udecode/plate';
 import React, { useCallback, useState } from 'react';
 
-import MediaPopover from '../common/MediaPopover';
+import MediaPopover from '../../common/MediaPopover';
 
 import type { Collection, Entry, MarkdownField } from '@staticcms/core/interface';
 import type { MdLinkElement, MdValue } from '@staticcms/markdown';
@@ -52,10 +52,11 @@ const withLinkElement = ({ containerRef, collection, field, entry }: WithLinkEle
 
     const handleChange = useCallback(
       (newUrl: string, newText: string) => {
+        const path = findNodePath(editor, element);
         path && setNodes<MdLinkElement>(editor, { url: newUrl }, { at: path });
         upsertLink(editor, { url: newUrl, text: newText });
       },
-      [editor, path],
+      [editor, element],
     );
 
     const handleMediaChange = useCallback(

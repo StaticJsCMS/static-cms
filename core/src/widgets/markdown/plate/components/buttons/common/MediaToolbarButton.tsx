@@ -1,10 +1,9 @@
 import { focusEditor } from '@udecode/plate-core';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useFocused } from 'slate-react';
 
-import { MediaPopover, useMdPlateEditorState } from '@staticcms/markdown';
+import MediaPopover from '../../common/MediaPopover';
+import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import ToolbarButton from './ToolbarButton';
-import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 
 import type { MarkdownField } from '@staticcms/core/interface';
 import type { MdEditor, MediaPopoverProps } from '@staticcms/markdown';
@@ -21,6 +20,8 @@ export interface MediaToolbarButtonProps
   mediaOpen: boolean;
   onMediaToggle: (open: boolean) => void;
   onChange: (newUrl: string, newText: string | undefined) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 const MediaToolbarButton: FC<MediaToolbarButtonProps> = ({
@@ -34,23 +35,18 @@ const MediaToolbarButton: FC<MediaToolbarButtonProps> = ({
   mediaOpen,
   onMediaToggle,
   onChange,
+  onFocus,
+  onBlur,
   ...props
 }) => {
   const editor = useMdPlateEditorState();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-
-  if (forImage) {
-    console.log('anchorEl', anchorEl);
-  }
 
   const [internalUrl, setInternalUrl] = useState('');
   const [internalText, setInternalText] = useState('');
 
   const handleClose = useCallback(
     (newValue: string | undefined, shouldFocus: boolean) => {
-      if (forImage) {
-        console.log('handleClose', newValue, shouldFocus);
-      }
       setAnchorEl(null);
       setInternalUrl('');
       setInternalText('');
@@ -72,9 +68,6 @@ const MediaToolbarButton: FC<MediaToolbarButtonProps> = ({
         return;
       }
 
-      if (forImage) {
-        console.log('handleOnClick');
-      }
       setAnchorEl(event.currentTarget);
     },
     [anchorEl, handleClose],
@@ -94,13 +87,12 @@ const MediaToolbarButton: FC<MediaToolbarButtonProps> = ({
     [handleClose],
   );
 
-  const editorHasFocus = useFocused();
-  const debouncedEditorHasFocus = useDebounce(editorHasFocus, 150);
   useEffect(() => {
-    if (!editorHasFocus && !debouncedEditorHasFocus) {
+    if (anchorEl && !mediaOpen) {
       handleClose(undefined, false);
     }
-  }, [debouncedEditorHasFocus, editorHasFocus, handleClose]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mediaOpen]);
 
   return (
     <>
@@ -122,6 +114,8 @@ const MediaToolbarButton: FC<MediaToolbarButtonProps> = ({
         onMediaToggle={onMediaToggle}
         onMediaChange={handleMediaChange}
         onClose={handlePopoverClose}
+        onFocus={onFocus}
+        onBlur={onBlur}
       />
     </>
   );

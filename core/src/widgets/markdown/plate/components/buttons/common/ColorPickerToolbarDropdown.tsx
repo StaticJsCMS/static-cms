@@ -10,7 +10,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 
-import { useMdPlateEditorState } from '@staticcms/markdown';
+import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import ColorPicker from '../../color-picker/ColorPicker';
 import ToolbarDropdown from './dropdown/ToolbarDropdown';
 

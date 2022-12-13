@@ -6,7 +6,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import { getShortcodes } from '../../../../../lib/registry';
 import { toTitleCase } from '../../../../../lib/util/string.util';
-import { ELEMENT_SHORTCODE, useMdPlateEditorState } from '../../plateTypes';
+import { ELEMENT_SHORTCODE, useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 
 import type { FC, MouseEvent } from 'react';

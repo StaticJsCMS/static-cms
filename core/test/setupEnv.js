@@ -1,6 +1,3 @@
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
-
 if (typeof window === 'undefined') {
   global.window = {
     URL: {
@@ -15,3 +12,5 @@ if (typeof window === 'undefined') {
     },
   };
 }
+
+global.URL.createObjectURL = jest.fn();

@@ -16,17 +16,18 @@ import {
   someNode,
   usePlateSelection,
 } from '@udecode/plate';
-import { useFocused } from 'slate-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useFocused } from 'slate-react';
 
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
-import { useMdPlateEditorState, VOID_ELEMENTS } from '@staticcms/markdown';
+import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
+import { VOID_ELEMENTS } from '../../serialization/slate/ast-types';
 import BasicElementToolbarButtons from '../buttons/BasicElementToolbarButtons';
 import BasicMarkToolbarButtons from '../buttons/BasicMarkToolbarButtons';
 import MediaToolbarButtons from '../buttons/MediaToolbarButtons';
-import TableToolbarButtons from '../buttons/TableToolbarButtons';
 import ShortcodeToolbarButton from '../buttons/ShortcodeToolbarButton';
+import TableToolbarButtons from '../buttons/TableToolbarButtons';
 
 import type { Collection, Entry, MarkdownField } from '@staticcms/core/interface';
 import type { ClientRectObject } from '@udecode/plate';
@@ -76,6 +77,13 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
   const [hasFocus, setHasFocus] = useState(false);
   const debouncedHasFocus = useDebounce(hasFocus, 150);
 
+  const [childFocusState, setChildFocusState] = useState<Record<string, boolean>>({});
+  const childHasFocus = useMemo(
+    () => Object.keys(childFocusState).reduce((acc, value) => acc || childFocusState[value], false),
+    [childFocusState],
+  );
+  const debouncedChildHasFocus = useDebounce(hasFocus, 150);
+
   const handleFocus = useCallback(() => {
     setHasFocus(true);
   }, []);
@@ -83,6 +91,26 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
   const handleBlur = useCallback(() => {
     setHasFocus(false);
   }, []);
+
+  const handleChildFocus = useCallback(
+    (key: string) => () => {
+      setChildFocusState(oldState => ({
+        ...oldState,
+        [key]: true,
+      }));
+    },
+    [],
+  );
+
+  const handleChildBlur = useCallback(
+    (key: string) => () => {
+      setChildFocusState(oldState => ({
+        ...oldState,
+        [key]: false,
+      }));
+    },
+    [],
+  );
 
   const anchorEl = useRef<HTMLDivElement>();
   const [selectionBoundingClientRect, setSelectionBoundingClientRect] =
@@ -102,8 +130,8 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
   const node = getNode(editor, editor.selection?.anchor.path ?? []);
 
   useEffect(() => {
-    if (!editor) {
-      return undefined;
+    if (!editor || !hasEditorFocus) {
+      return;
     }
 
     setTimeout(() => {
@@ -121,7 +149,14 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
   const debouncedEditorFocus = useDebounce(hasEditorFocus, 150);
 
   const groups: ReactNode[] = useMemo(() => {
-    if (!mediaOpen && !debouncedEditorFocus && !hasFocus && !debouncedHasFocus) {
+    if (
+      !mediaOpen &&
+      !debouncedEditorFocus &&
+      !hasFocus &&
+      !debouncedHasFocus &&
+      !debouncedChildHasFocus &&
+      !childHasFocus
+    ) {
       return [];
     }
 
@@ -146,7 +181,9 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
           field={field}
           entry={entry}
           onMediaToggle={setMediaOpen}
-          hideUploads
+          hideImages
+          handleChildFocus={handleChildFocus}
+          handleChildBlur={handleChildBlur}
         />,
       ].filter(Boolean);
     }
@@ -183,9 +220,11 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
             field={field}
             entry={entry}
             onMediaToggle={setMediaOpen}
+            handleChildFocus={handleChildFocus}
+            handleChildBlur={handleChildBlur}
           />,
           !useMdx ? <ShortcodeToolbarButton key="shortcode-button" /> : null,
-        ];
+        ].filter(Boolean);
       }
     }
 
@@ -240,7 +279,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
         }}
       />
       <Popper
-        open={debouncedOpen}
+        open={Boolean(debouncedOpen && anchorEl.current)}
         placement="top"
         anchorEl={anchorEl.current ?? null}
         sx={{ zIndex: 100 }}

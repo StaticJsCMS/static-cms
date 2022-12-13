@@ -20,7 +20,7 @@ const StyledPopperContent = styled('div')(
     gap: 4px;
     background: ${theme.palette.background.paper};
     box-shadow: ${theme.shadows[8]};
-    margin-bottom: 10px;
+    margin: 10px 0;
     padding: 6px;
     border-radius: 4px;
     align-items: center;
@@ -69,6 +69,8 @@ export interface MediaPopoverProps<T extends FileOrImageField | MarkdownField> {
   onMediaToggle?: (open: boolean) => void;
   onMediaChange: (newValue: string) => void;
   onRemove?: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 const MediaPopover = <T extends FileOrImageField | MarkdownField>({
@@ -89,6 +91,8 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
   onMediaToggle,
   onMediaChange,
   onRemove,
+  onFocus,
+  onBlur,
 }: MediaPopoverProps<T>) => {
   const theme = useTheme();
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -98,7 +102,6 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
   const [editing, setEditing] = useState(inserting);
 
   const hasEditorFocus = useFocused();
-  const debouncedHasEditorFocus = useDebounce(hasEditorFocus, 150);
   const [hasFocus, setHasFocus] = useState(false);
   const debouncedHasFocus = useDebounce(hasFocus, 150);
 
@@ -152,34 +155,62 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
     }
   }, [anchorEl, editing, inserting, urlDisabled]);
 
+  const [
+    { prevAnchorEl, prevHasEditorFocus, prevHasFocus, prevDebouncedHasFocus },
+    setPrevFocusState,
+  ] = useState<{
+    prevAnchorEl: HTMLElement | null;
+    prevHasEditorFocus: boolean;
+    prevHasFocus: boolean;
+    prevDebouncedHasFocus: boolean;
+  }>({
+    prevAnchorEl: anchorEl,
+    prevHasEditorFocus: hasEditorFocus,
+    prevHasFocus: hasFocus,
+    prevDebouncedHasFocus: debouncedHasFocus,
+  });
+
   useEffect(() => {
-    if (
-      anchorEl &&
-      !debouncedHasEditorFocus &&
-      !hasEditorFocus &&
-      !hasFocus &&
-      !debouncedHasFocus &&
-      !mediaOpen
-    ) {
+    if (mediaOpen) {
+      return;
+    }
+
+    if (anchorEl && !prevHasEditorFocus && hasEditorFocus) {
       handleClose(false);
     }
+
+    if (anchorEl && (prevHasFocus || prevDebouncedHasFocus) && !hasFocus && !debouncedHasFocus) {
+      handleClose(false);
+    }
+
+    setPrevFocusState({
+      prevAnchorEl: anchorEl,
+      prevHasEditorFocus: hasEditorFocus,
+      prevHasFocus: hasFocus,
+      prevDebouncedHasFocus: debouncedHasFocus,
+    });
   }, [
     anchorEl,
-    debouncedHasEditorFocus,
     debouncedHasFocus,
     handleClose,
     hasEditorFocus,
     hasFocus,
     mediaOpen,
+    prevAnchorEl,
+    prevDebouncedHasFocus,
+    prevHasEditorFocus,
+    prevHasFocus,
   ]);
 
   const handleFocus = useCallback(() => {
     setHasFocus(true);
-  }, []);
+    onFocus?.();
+  }, [onFocus]);
 
   const handleBlur = useCallback(() => {
     setHasFocus(false);
-  }, []);
+    onBlur?.();
+  }, [onBlur]);
 
   const handleMediaChange = useCallback(
     (newValue: string) => {

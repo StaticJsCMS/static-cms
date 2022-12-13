@@ -1,7 +1,7 @@
 import { getListItemEntry, toggleList } from '@udecode/plate-list';
 import React, { useCallback } from 'react';
 
-import { useMdPlateEditorState } from '@staticcms/markdown';
+import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import ToolbarButton from './ToolbarButton';
 
 import type { MdEditor } from '@staticcms/markdown';

@@ -1,7 +1,7 @@
 import { isCollapsed, KEY_ALIGN, setAlign, someNode } from '@udecode/plate';
 import React, { useCallback } from 'react';
 
-import { useMdPlateEditorState } from '@staticcms/markdown';
+import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import ToolbarButton from './ToolbarButton';
 
 import type { MdEditor } from '@staticcms/markdown';

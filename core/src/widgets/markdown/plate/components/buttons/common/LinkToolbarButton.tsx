@@ -2,7 +2,7 @@ import { ELEMENT_LINK, insertLink, someNode } from '@udecode/plate';
 import React, { useCallback } from 'react';
 
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
-import { useMdPlateEditorState } from '@staticcms/markdown';
+import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import MediaToolbarButton from './MediaToolbarButton';
 
 import type { FC } from 'react';
@@ -12,10 +12,10 @@ const LinkToolbarButton: FC<Omit<MediaToolbarButtonProps, 'onChange'>> = props =
   const editor = useMdPlateEditorState();
   const handleInsert = useCallback(
     (newUrl: string, newText: string | undefined) => {
-      if (isNotEmpty(newUrl) && isNotEmpty(newText)) {
+      if (isNotEmpty(newUrl)) {
         insertLink(
           editor,
-          { url: newUrl, text: newText },
+          { url: newUrl, text: isNotEmpty(newText) ? newText : newUrl },
           { at: editor.selection ?? editor.prevSelection! },
         );
       }
