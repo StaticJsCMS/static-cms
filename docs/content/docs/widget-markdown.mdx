@@ -54,62 +54,71 @@ This would render as:
 
 _Please note:_ The markdown widget outputs a raw markdown string. Your static site generator may or may not render the markdown to HTML automatically. Consult with your static site generator's documentation for more information about rendering markdown.
 
-## Customization
+## Shortcodes
 
-Several customization options are available for the markdown editor. You can register the options by calling `setMarkdownEditorOptions` (also available on the global `window.CMS`).
+Shortcodes can be added to customize the Markdown editor via `registerShortcode`.
 
-### Available Options
+### Usage
 
-| Name            | Type                         | Default                             | Description                                                                 |
-| --------------- | ---------------------------- | ----------------------------------- | --------------------------------------------------------------------------- |
-| initialEditType | 'markdown'<br />\| 'wysiwyg' | `'wysiwyg'`                         | _Optional_. Sets which editor view that is active when the editor is loaded |
-| height          | string                       | `'600px'`                           | _Optional_. Specify the height of the editor                                |
-| toolbarItems    | factory of list of strings   | See [Toolbar Items](#toolbar-items) | _Optional_. See [Toolbar Items](#toolbar-items)                             |
-| plugins         | list of plugin factories     |                                     | _Optional_. See [Plugins](#plugins)                                         |
-
-### Toolbar Items
-
-`toolbarItems` accepts a factory function that returns a list of toolbar buttons for the editor. See the [ToastUI Editor toolbar docs](https://github.com/nhn/tui.editor/blob/master/docs/en/toolbar.md).
-
-#### Default Value
+<CodeTabs>
 
 ```js
-[
-  ['heading', 'bold', 'italic', 'strike'],
-  ['hr', 'quote'],
-  ['ul', 'ol', 'task', 'indent', 'outdent'],
-  ['table', imageToolbarButton, 'link'],
-  ['code', 'codeblock'],
-];
+CMS.registerShortcode('youtube', {
+  label: 'YouTube',
+  openTag: '[',
+  closeTag: ']',
+  separator: '|',
+  toProps: args => {
+    if (args.length > 0) {
+      return { src: args[0] };
+    }
+
+    return { src: '' };
+  },
+  toArgs: ({ src }) => {
+    return [src];
+  },
+  control: ({ src, onChange }) => {
+    return h('span', {}, [
+      h('input', {
+        key: 'control-input',
+        value: src,
+        onChange: event => {
+          onChange({ src: event.target.value });
+        },
+      }),
+      h(
+        'iframe',
+        {
+          key: 'control-preview',
+          width: '420',
+          height: '315',
+          src: `https://www.youtube.com/embed/${src}`,
+        },
+        '',
+      ),
+    ]);
+  },
+  preview: ({ src }) => {
+    return h(
+      'span',
+      {},
+      h(
+        'iframe',
+        {
+          width: '420',
+          height: '315',
+          src: `https://www.youtube.com/embed/${src}`,
+        },
+        '',
+      ),
+    );
+  },
+});
 ```
 
-#### Factory Props
-
-| Name               | Type               | Description                                                 |
-| ------------------ | ------------------ | ----------------------------------------------------------- |
-| imageToolbarButton | ToolbarItemOptions | An image insert button tied into Static CMS's media library |
-
-### Plugins
-
-`plugins` accepts a list of factory functions that returns a plugin for the editor. See the [ToastUI Editor plugins docs](https://github.com/nhn/tui.editor/blob/master/docs/en/plugin.md).
-
-#### Default Value
-
-```js
-[imagePlugin];
+```markdown
+[youtube|p6h-rYSVX90]
 ```
 
-#### Factory Props
-
-| Name   | Type                    | Description                                                                                    |
-| ------ | ----------------------- | ---------------------------------------------------------------------------------------------- |
-| config | Config                  | The current Static CMS config. See [configuration options](/docs/configuration-options)        |
-| field  | MarkdownField           | The field configuration for the current Markdown widget. See [Widget Options](#widget-options) |
-| media  | MediaHolder             | See [Media Holder](#media-holder)                                                              |
-| mode   | 'editor'<br />\| 'preview' | Specifies if your plugin is running in the markdown editor or the markdown preview             |
-
-##### Media Holder
-
-Media holder is a javascript class that holds the loaded media assets (images or files) that are present in the markdown content. It exposes a method called `getMedia` that takes a `url` and returns the loaded image or file as an blob asset.
-
-This is utilized by the `imagePlugin` to be able to render images present in the markdown that are currently only available in backend or are not yet persisted to the backend.
+</CodeTabs>

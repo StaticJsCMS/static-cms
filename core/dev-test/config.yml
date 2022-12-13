@@ -56,7 +56,7 @@ collections:
         required: false
       - label: Body
         name: body
-        widget: mdx
+        widget: markdown
         hint: Main content goes here.
   - name: faq
     label: FAQ
