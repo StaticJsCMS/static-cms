@@ -10,7 +10,7 @@ import type { FC } from 'react';
 
 export interface MediaToolbarButtonsProps {
   containerRef: HTMLElement | null;
-  hideUploads?: boolean;
+  hideImages?: boolean;
   collection: Collection<MarkdownField>;
   field: MarkdownField;
   entry: Entry;
@@ -25,8 +25,10 @@ const MediaToolbarButtons: FC<MediaToolbarButtonsProps> = ({
   collection,
   field,
   entry,
-  hideUploads = false,
+  hideImages = false,
   onMediaToggle,
+  handleChildFocus,
+  handleChildBlur,
 }) => {
   const [open, setOpen] = useState(false);
   const [linkMediaOpen, setLinkMediaOpen] = useState(false);
@@ -46,6 +48,8 @@ const MediaToolbarButtons: FC<MediaToolbarButtonsProps> = ({
     }
   }, [imageMediaOpen, linkMediaOpen, onMediaToggle, open]);
 
+  console.log('CLOSING media open! link', linkMediaOpen, 'image', imageMediaOpen, 'open', open);
+
   return (
     <>
       <LinkToolbarButton
@@ -58,8 +62,10 @@ const MediaToolbarButtons: FC<MediaToolbarButtonsProps> = ({
         entry={entry}
         mediaOpen={linkMediaOpen}
         onMediaToggle={setLinkMediaOpen}
+        onFocus={handleChildFocus?.('link')}
+        onBlur={handleChildBlur?.('link')}
       />
-      {!hideUploads ? (
+      {!hideImages ? (
         <ImageToolbarButton
           containerRef={containerRef}
           tooltip="Insert Image"
@@ -70,6 +76,8 @@ const MediaToolbarButtons: FC<MediaToolbarButtonsProps> = ({
           entry={entry}
           mediaOpen={imageMediaOpen}
           onMediaToggle={setImageMediaOpen}
+          onFocus={handleChildFocus?.('image')}
+          onBlur={handleChildBlur?.('image')}
         />
       ) : null}
     </>

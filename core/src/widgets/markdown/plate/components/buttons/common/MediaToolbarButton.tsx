@@ -20,6 +20,8 @@ export interface MediaToolbarButtonProps
   mediaOpen: boolean;
   onMediaToggle: (open: boolean) => void;
   onChange: (newUrl: string, newText: string | undefined) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 const MediaToolbarButton: FC<MediaToolbarButtonProps> = ({
@@ -33,14 +35,12 @@ const MediaToolbarButton: FC<MediaToolbarButtonProps> = ({
   mediaOpen,
   onMediaToggle,
   onChange,
+  onFocus,
+  onBlur,
   ...props
 }) => {
   const editor = useMdPlateEditorState();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-
-  if (forImage) {
-    console.log('anchorEl', anchorEl);
-  }
 
   const [internalUrl, setInternalUrl] = useState('');
   const [internalText, setInternalText] = useState('');
@@ -55,6 +55,7 @@ const MediaToolbarButton: FC<MediaToolbarButtonProps> = ({
       }
       const finalValue = newValue ?? internalUrl;
       if (finalValue) {
+        console.log('CLOSING ON CHANGE', finalValue, internalText);
         onChange(finalValue, internalText);
       }
     },
@@ -110,9 +111,12 @@ const MediaToolbarButton: FC<MediaToolbarButtonProps> = ({
         textLabel={textLabel}
         onUrlChange={setInternalUrl}
         onTextChange={setInternalText}
+        mediaOpen={mediaOpen}
         onMediaToggle={onMediaToggle}
         onMediaChange={handleMediaChange}
         onClose={handlePopoverClose}
+        onFocus={onFocus}
+        onBlur={onBlur}
       />
     </>
   );

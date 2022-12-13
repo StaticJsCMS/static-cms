@@ -104,7 +104,10 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
 
   const handleChildBlur = useCallback(
     (key: string) => () => {
-      setHasFocus(false);
+      setChildFocusState(oldState => ({
+        ...oldState,
+        [key]: false,
+      }));
     },
     [],
   );
@@ -127,8 +130,8 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
   const node = getNode(editor, editor.selection?.anchor.path ?? []);
 
   useEffect(() => {
-    if (!editor) {
-      return undefined;
+    if (!editor || !hasEditorFocus) {
+      return;
     }
 
     setTimeout(() => {
@@ -146,7 +149,6 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
   const debouncedEditorFocus = useDebounce(hasEditorFocus, 150);
 
   const groups: ReactNode[] = useMemo(() => {
-    console.log('computing groups!');
     if (
       !mediaOpen &&
       !debouncedEditorFocus &&
@@ -155,18 +157,15 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
       !debouncedChildHasFocus &&
       !childHasFocus
     ) {
-      console.log('no focus!');
       return [];
     }
 
     if (selection && someNode(editor, { match: { type: ELEMENT_LINK }, at: selection?.anchor })) {
-      console.log('is link node!');
       return [];
     }
 
     // Selected text buttons
     if (selectionText && selectionExpanded) {
-      console.log('is selected text!');
       return [
         <BasicMarkToolbarButtons key="selection-basic-mark-buttons" useMdx={useMdx} />,
         <BasicElementToolbarButtons
@@ -182,7 +181,9 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
           field={field}
           entry={entry}
           onMediaToggle={setMediaOpen}
-          hideUploads
+          hideImages
+          handleChildFocus={handleChildFocus}
+          handleChildBlur={handleChildBlur}
         />,
       ].filter(Boolean);
     }
@@ -195,16 +196,6 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
     ) {
       const path = findNodePath(editor, node) ?? [];
       const parent = getParentNode(editor, path);
-      console.log(
-        'is empty at cursor!',
-        path.length > 0,
-        path[0] !== 0,
-        parent,
-        parent && parent?.length > 0,
-        parent && parent?.length > 0 && 'children' in parent[0],
-        parent && parent?.length > 0 && !VOID_ELEMENTS.includes(parent?.[0].type as string),
-        parent && parent?.length > 0 && parent?.[0].children.length === 1,
-      );
       if (
         path.length > 0 &&
         path[0] !== 0 &&
@@ -214,7 +205,6 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
         !VOID_ELEMENTS.includes(parent[0].type as string) &&
         parent[0].children.length === 1
       ) {
-        console.log('allowed to open balloon toolbar!');
         return [
           <BasicMarkToolbarButtons key="empty-basic-mark-buttons" useMdx={useMdx} />,
           <BasicElementToolbarButtons
@@ -230,13 +220,13 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
             field={field}
             entry={entry}
             onMediaToggle={setMediaOpen}
+            handleChildFocus={handleChildFocus}
+            handleChildBlur={handleChildBlur}
           />,
           !useMdx ? <ShortcodeToolbarButton key="shortcode-button" /> : null,
-        ];
+        ].filter(Boolean);
       }
     }
-
-    console.log('no groups!');
 
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -277,8 +267,6 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
   useEffect(() => {
     setPrevSelectionBoundingClientRect(selectionBoundingClientRect);
   }, [selectionBoundingClientRect]);
-
-  console.log('anchorEl.current', anchorEl.current ?? null);
 
   return (
     <>

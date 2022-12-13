@@ -12,10 +12,10 @@ const LinkToolbarButton: FC<Omit<MediaToolbarButtonProps, 'onChange'>> = props =
   const editor = useMdPlateEditorState();
   const handleInsert = useCallback(
     (newUrl: string, newText: string | undefined) => {
-      if (isNotEmpty(newUrl) && isNotEmpty(newText)) {
+      if (isNotEmpty(newUrl)) {
         insertLink(
           editor,
-          { url: newUrl, text: newText },
+          { url: newUrl, text: isNotEmpty(newText) ? newText : newUrl },
           { at: editor.selection ?? editor.prevSelection! },
         );
       }
