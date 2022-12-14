@@ -19,7 +19,9 @@ cd static-cms
 yarn
 ```
 
-### Run locally
+### Run core locally
+
+> In `core` directory
 
 ```sh
 yarn start
