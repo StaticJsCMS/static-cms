@@ -170,7 +170,7 @@ function getConfigSchema() {
           name: { type: 'string', examples: ['uploadcare'] },
           config: { type: 'object' },
         },
-        required: ['name'],
+        required: [],
       },
       slug: {
         type: 'object',
