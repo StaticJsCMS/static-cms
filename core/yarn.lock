@@ -3633,10 +3633,10 @@
     "@codemirror/state" "^6.0.0"
     "@codemirror/view" "^6.0.0"
 
-"@uiw/codemirror-extensions-langs@4.19.3":
-  version "4.19.3"
-  resolved "https://registry.yarnpkg.com/@uiw/codemirror-extensions-langs/-/codemirror-extensions-langs-4.19.3.tgz#c1ac4b740376ebdaf44413cc3d059ba3e5597e52"
-  integrity sha512-CKvxHiXRlWtPd3FkSn55sX/Crw/PlBEV+M/Jua8d2ORLAcjuAFHez1n9vSpJ9qk99afka4IHPen7bTBl8spaZA==
+"@uiw/codemirror-extensions-langs@4.19.4":
+  version "4.19.4"
+  resolved "https://registry.yarnpkg.com/@uiw/codemirror-extensions-langs/-/codemirror-extensions-langs-4.19.4.tgz#fb3d370f895a7f61f9216c0c04e74f41b0b612eb"
+  integrity sha512-fa72GBrXTBzWjQdwNKSovyfgOiowxIpAi18i4i4etfDAg75SDShRvV+PS0BGWo9z03j+DT0QmLFAIzyd8Cvebw==
   dependencies:
     "@codemirror/lang-cpp" "~6.0.0"
     "@codemirror/lang-html" "~6.4.0"
