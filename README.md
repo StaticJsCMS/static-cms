@@ -2,8 +2,7 @@
   <img src="static-cms-logo.png" width="500px" />
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/StaticJsCMS/static-cms/blob/main/LICENSE)
-[![Build](https://github.com/StaticJsCMS/static-cms/actions/workflows/core.yml/badge.svg)](https://github.com/StaticJsCMS/static-cms/actions/workflows/core.yml)
-[![Docs](https://github.com/StaticJsCMS/static-cms/actions/workflows/docs.yml/badge.svg)](https://github.com/StaticJsCMS/static-cms/actions/workflows/docs.yml)
+[![Build](https://github.com/StaticJsCMS/static-cms/actions/workflows/build.yml/badge.svg)](https://github.com/StaticJsCMS/static-cms/actions/workflows/build.yml)
 [![npm latest package](https://img.shields.io/npm/v/@staticcms/core/latest.svg)](https://www.npmjs.com/package/@staticcms/core)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/StaticJsCMS/static-cms/blob/main/CONTRIBUTING.md)
 
