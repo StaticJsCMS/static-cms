@@ -54,6 +54,7 @@ const MediaLibrary = ({
   hasNextPage,
   isPaginating,
   config,
+  defaultConfig,
   loadMedia,
   dynamicSearchQuery,
   page,
@@ -189,7 +190,10 @@ const MediaLibrary = ({
       event.preventDefault();
       const files = [...Array.from(fileList)];
       const file = files[0];
-      const maxFileSize = typeof config.max_file_size === 'number' ? config.max_file_size : 512000;
+      const maxFileSize =
+        typeof config.max_file_size === 'number' ? config.max_file_size :
+        typeof defaultConfig?.max_file_size === 'number' ? defaultConfig.max_file_size :
+        512000;
 
       if (maxFileSize && file.size > maxFileSize) {
         alert({
@@ -361,7 +365,7 @@ const MediaLibrary = ({
 };
 
 function mapStateToProps(state: RootState) {
-  const { mediaLibrary } = state;
+  const { mediaLibrary, config } = state;
   const field = mediaLibrary.field;
   const mediaLibraryProps = {
     isVisible: mediaLibrary.isVisible,
@@ -379,6 +383,7 @@ function mapStateToProps(state: RootState) {
     page: mediaLibrary.page,
     hasNextPage: mediaLibrary.hasNextPage,
     isPaginating: mediaLibrary.isPaginating,
+    defaultConfig: config.config?.media_library?.config,
     field,
   };
   return { ...mediaLibraryProps };

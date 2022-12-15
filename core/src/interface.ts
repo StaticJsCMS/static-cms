@@ -476,6 +476,7 @@ export interface MediaLibraryExternalLibrary {
 export interface MediaLibraryInternalOptions {
   allow_multiple?: boolean;
   choose_url?: boolean;
+  config?: MediaLibraryOptions;
 }
 
 export type MediaLibrary = MediaLibraryExternalLibrary | MediaLibraryInternalOptions;

@@ -2,6 +2,9 @@ backend:
   name: test-repo
 site_url: 'https://example.com'
 media_folder: assets/uploads
+media_library:
+  config:
+    max_file_size: 20000000
 locale: en
 collections:
   - name: posts
