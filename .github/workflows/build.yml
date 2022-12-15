@@ -1,15 +1,11 @@
-name: Core
+name: Build
 
 on:
   workflow_dispatch:
   push:
     branches: ["main"]
-    paths:
-      - core/**
   pull_request:
     branches: ["main"]
-    paths:
-      - core/**
 
 jobs:
   build:
@@ -21,17 +17,13 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          cache: yarn
-          cache-dependency-path: core/yarn.lock
           node-version: 16
 
       - name: Install
-        working-directory: ./core
         run: |
           yarn install --frozen-lockfile
 
       - name: Build
-        working-directory: ./core
         run: |
           yarn build
 
@@ -44,17 +36,13 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          cache: yarn
-          cache-dependency-path: core/yarn.lock
           node-version: 16
 
       - name: Install
-        working-directory: ./core
         run: |
           yarn install --frozen-lockfile
 
       - name: Lint
-        working-directory: ./core
         run: |
           yarn lint
 
@@ -67,17 +55,13 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          cache: yarn
-          cache-dependency-path: core/yarn.lock
           node-version: 16
 
       - name: Install
-        working-directory: ./core
         run: |
           yarn install --frozen-lockfile
 
       - name: Test
-        working-directory: ./core
         run: |
           yarn test:ci
 
@@ -90,16 +74,12 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          cache: yarn
-          cache-dependency-path: core/yarn.lock
           node-version: 16
 
       - name: Install
-        working-directory: ./core
         run: |
           yarn install --frozen-lockfile
 
       - name: Test
-        working-directory: ./core
         run: |
           yarn test:integration:ci
