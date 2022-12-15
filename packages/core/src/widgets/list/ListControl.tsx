@@ -289,7 +289,7 @@ const ListControl: FC<WidgetControlProps<ObjectValue[], ListField>> = ({
 
   const label = field.label ?? field.name;
   const labelSingular = field.label_singular ? field.label_singular : field.label ?? field.name;
-  const listLabel = internalValue.length === 1 ? labelSingular.toLowerCase() : label.toLowerCase();
+  const listLabel = internalValue.length === 1 ? labelSingular : label;
 
   return (
     <StyledListWrapper key="list-widget">
@@ -301,7 +301,7 @@ const ListControl: FC<WidgetControlProps<ObjectValue[], ListField>> = ({
         types={field[TYPES_KEY] ?? []}
         onAddType={type => handleAddType(type, resolveFieldKeyType(field))}
         heading={`${internalValue.length} ${listLabel}`}
-        label={labelSingular.toLowerCase()}
+        label={labelSingular}
         onCollapseToggle={handleCollapseAllToggle}
         collapsed={collapsed}
         hasError={hasErrors}
