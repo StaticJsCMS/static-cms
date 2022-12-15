@@ -3620,10 +3620,10 @@
     immer "^9.0.6"
     react-tracked "^1.7.9"
 
-"@uiw/codemirror-extensions-basic-setup@4.19.3":
-  version "4.19.3"
-  resolved "https://registry.yarnpkg.com/@uiw/codemirror-extensions-basic-setup/-/codemirror-extensions-basic-setup-4.19.3.tgz#288874411de5cf7efac38cdf4f87b940eb82cef4"
-  integrity sha512-Itt/cgaw2g3facr52DSdkcKDZPTyW7M2YGjfSbjYC5Xaap0R31cClR09UZTEokxZmE4yYq7QIs3DTeURExxXzw==
+"@uiw/codemirror-extensions-basic-setup@4.19.4":
+  version "4.19.4"
+  resolved "https://registry.yarnpkg.com/@uiw/codemirror-extensions-basic-setup/-/codemirror-extensions-basic-setup-4.19.4.tgz#faa18c671df937c4f370bbbfdf9ebb454e56f4ae"
+  integrity sha512-iUni1tTpuSO6j1NShEo01eYGtED+9OYKyQ4Y54fBxluhZCT1Z/25sP05Im2rpt/VHE1fReRaC28FEBR5phBAfA==
   dependencies:
     "@codemirror/autocomplete" "^6.0.0"
     "@codemirror/commands" "^6.0.0"
@@ -3633,10 +3633,10 @@
     "@codemirror/state" "^6.0.0"
     "@codemirror/view" "^6.0.0"
 
-"@uiw/codemirror-extensions-langs@4.19.3":
-  version "4.19.3"
-  resolved "https://registry.yarnpkg.com/@uiw/codemirror-extensions-langs/-/codemirror-extensions-langs-4.19.3.tgz#c1ac4b740376ebdaf44413cc3d059ba3e5597e52"
-  integrity sha512-CKvxHiXRlWtPd3FkSn55sX/Crw/PlBEV+M/Jua8d2ORLAcjuAFHez1n9vSpJ9qk99afka4IHPen7bTBl8spaZA==
+"@uiw/codemirror-extensions-langs@4.19.4":
+  version "4.19.4"
+  resolved "https://registry.yarnpkg.com/@uiw/codemirror-extensions-langs/-/codemirror-extensions-langs-4.19.4.tgz#fb3d370f895a7f61f9216c0c04e74f41b0b612eb"
+  integrity sha512-fa72GBrXTBzWjQdwNKSovyfgOiowxIpAi18i4i4etfDAg75SDShRvV+PS0BGWo9z03j+DT0QmLFAIzyd8Cvebw==
   dependencies:
     "@codemirror/lang-cpp" "~6.0.0"
     "@codemirror/lang-html" "~6.4.0"
@@ -3654,16 +3654,16 @@
     "@codemirror/language-data" ">=6.0.0"
     "@codemirror/legacy-modes" ">=6.0.0"
 
-"@uiw/react-codemirror@4.19.3":
-  version "4.19.3"
-  resolved "https://registry.yarnpkg.com/@uiw/react-codemirror/-/react-codemirror-4.19.3.tgz#f36798090fce2a6d48fa2858864d6910fc398e6a"
-  integrity sha512-/Rg7U0CjPpsKd1vxve9he86MMQLVDz4N6fSBGOIx7R+6UPBoDcUOPlcmLRFUQvmP+H5Xyk5IBygeGPUR7IEPog==
+"@uiw/react-codemirror@4.19.4":
+  version "4.19.4"
+  resolved "https://registry.yarnpkg.com/@uiw/react-codemirror/-/react-codemirror-4.19.4.tgz#0e5f2534705c24d166b17780496e2c96bf0991d9"
+  integrity sha512-FGzrxLrY7t+u7ei7BJ3xlhUuRnSVg5N3mnFHXJzGlk6d1faHyoEv/2W2pLl/7BJPK2hL/tTGSieSNM9O1FxWEQ==
   dependencies:
     "@babel/runtime" "^7.18.6"
     "@codemirror/commands" "^6.1.0"
     "@codemirror/state" "^6.1.1"
     "@codemirror/theme-one-dark" "^6.0.0"
-    "@uiw/codemirror-extensions-basic-setup" "4.19.3"
+    "@uiw/codemirror-extensions-basic-setup" "4.19.4"
     codemirror "^6.0.0"
 
 "@viselect/vanilla@^3.1.0":

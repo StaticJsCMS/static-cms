@@ -10,23 +10,15 @@
         "@typescript-eslint/",
         "eslint"
       ],
-      "labels": ["linting", "automerge"],
-      "automerge": true
+      "labels": ["linting"]
     },
     {
       "matchDepTypes": ["devDependencies"],
       "addLabels": ["dev dependencies"]
     },
     {
-      "matchDepTypes": ["devDependencies"],
-      "matchUpdateTypes": ["minor"],
-      "addLabels": ["automerge"],
-      "automerge": true
-    },
-    {
       "matchUpdateTypes": ["patch"],
-      "addLabels": ["patch", "automerge"],
-      "automerge": true
+      "addLabels": ["patch"],
     },
     {
       "matchUpdateTypes": ["minor"],

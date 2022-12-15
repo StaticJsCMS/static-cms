@@ -17,6 +17,8 @@ For details on contributing to documentation, see [Website Directory Readme](htt
 git clone https://github.com/StaticJsCMS/static-cms
 cd static-cms
 yarn
+cd core
+yarn
 ```
 
 ### Run core locally
@@ -24,7 +26,8 @@ yarn
 > In `core` directory
 
 ```sh
-yarn dev
+cd core # if not there already
+yarn start
 ```
 
 ## Available scripts
@@ -34,7 +37,8 @@ yarn dev
 Starts the development server. This task runs both the `clean` and `serve` scripts.
 
 ```sh
-yarn dev
+cd core # if not there already
+yarn start
 ```
 
 ### clean
@@ -42,6 +46,7 @@ yarn dev
 Removes the `dist` directory.
 
 ```sh
+cd core # if not there already
 yarn clean
 ```
 
@@ -50,6 +55,7 @@ yarn clean
 Runs the `clean` script and builds the @static-cms/core.
 
 ```sh
+cd core # if not there already
 yarn build
 ```
 
@@ -58,6 +64,7 @@ yarn build
 Formats code and docs according to our style guidelines.
 
 ```sh
+cd core # if not there already
 yarn format
 ```
 

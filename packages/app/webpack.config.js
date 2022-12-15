@@ -13,11 +13,6 @@ function moduleNameToPath(libName) {
 module.exports = {
   entry: './src/index.ts',
   mode: isProduction ? 'production' : 'development',
-  externals: {
-    react: 'react',
-    'react-dom': 'react-dom',
-    'react-router-dom': 'react-router-dom',
-  },
   module: {
     rules: [
       {
