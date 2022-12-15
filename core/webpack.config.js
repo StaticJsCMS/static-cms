@@ -13,6 +13,7 @@ function moduleNameToPath(libName) {
 module.exports = {
   entry: './src/index.ts',
   mode: isProduction ? 'production' : 'development',
+  devtool: 'source-map',
   module: {
     rules: [
       {
