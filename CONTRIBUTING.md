@@ -17,54 +17,61 @@ For details on contributing to documentation, see [Website Directory Readme](htt
 git clone https://github.com/StaticJsCMS/static-cms
 cd static-cms
 yarn
-cd core
-yarn
 ```
 
-### Run core locally
-
-> In `core` directory
+### Run locally
 
 ```sh
-cd core # if not there already
-yarn start
+yarn dev
 ```
 
 ## Available scripts
 
 ### dev
 
-Starts the development server. This task runs both the `clean` and `serve` scripts.
+Starts the development server.
 
 ```sh
-cd core # if not there already
-yarn start
-```
-
-### clean
-
-Removes the `dist` directory.
-
-```sh
-cd core # if not there already
-yarn clean
+yarn dev
 ```
 
 ### build
 
-Runs the `clean` script and builds the @static-cms/core.
+Runs the builds for packages.
 
 ```sh
-cd core # if not there already
 yarn build
+```
+
+### test
+
+Runs unit tests for packages.
+
+```sh
+yarn test
+```
+
+### test:integration
+
+Runs integration tests for packages.
+
+```sh
+yarn test:integration
+```
+
+### lint
+
+Lints core and docs according to our style guidelines.
+
+```sh
+yarn lint
 ```
 
 ### format
 
-Formats code and docs according to our style guidelines.
+Formats core and docs according to our style guidelines.
 
 ```sh
-cd core # if not there already
 yarn format
 ```
 

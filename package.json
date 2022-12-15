@@ -3,12 +3,16 @@
   "private": true,
   "scripts": {
     "build": "lerna run build",
-    "test": "lerna run test",
-    "test:ci": "lerna run test:ci",
-    "test:integration": "lerna run test:integration",
-    "test:integration:ci": "lerna run test:integration:ci",
+    "dev": "lerna run dev --scope=@staticcms/core",
+    "docs": "lerna run dev --scope=docs",
+    "format": "lerna run format",
+    "lint": "lerna run lint",
+    "prepare": "husky install",
     "publish": "lerna run publish",
-    "prepare": "husky install"
+    "test:ci": "lerna run test:ci",
+    "test:integration:ci": "lerna run test:integration:ci",
+    "test:integration": "lerna run test:integration",
+    "test": "lerna run test"
   },
   "devDependencies": {
     "husky": "8.0.2",

@@ -14,10 +14,12 @@ module.exports = {
   entry: './src/index.ts',
   mode: isProduction ? 'production' : 'development',
   devtool: 'source-map',
-  externals: {
-    react: 'react',
-    'react-dom': 'react-dom',
-  },
+  externals: isProduction
+    ? {
+        react: 'react',
+        'react-dom': 'react-dom',
+      }
+    : {},
   module: {
     rules: [
       {
