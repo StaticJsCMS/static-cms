@@ -1,9 +1,27 @@
 {
+  "name": "static-cms",
+  "private": true,
+  "scripts": {
+    "build": "lerna run build",
+    "dev": "lerna run dev --scope=@staticcms/core",
+    "docs": "lerna run dev --scope=docs",
+    "format": "lerna run format",
+    "lint": "lerna run lint",
+    "prepare": "husky install",
+    "publish": "lerna run publish",
+    "test:ci": "lerna run test:ci",
+    "test:integration:ci": "lerna run test:integration:ci",
+    "test:integration": "lerna run test:integration",
+    "test": "lerna run test"
+  },
   "devDependencies": {
     "husky": "8.0.2",
-    "lint-staged": "13.1.0"
+    "lerna": "6.1.0",
+    "lint-staged": "13.1.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
-  "scripts": {
-    "prepare": "husky install"
-  }
+  "workspaces": [
+    "packages/*"
+  ]
 }

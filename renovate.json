@@ -18,7 +18,7 @@
     },
     {
       "matchUpdateTypes": ["patch"],
-      "addLabels": ["patch"],
+      "addLabels": ["patch"]
     },
     {
       "matchUpdateTypes": ["minor"],

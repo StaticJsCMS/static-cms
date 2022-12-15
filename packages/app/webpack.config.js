@@ -7,13 +7,12 @@ const isProduction = process.env.NODE_ENV === 'production';
 const devServerPort = parseInt(process.env.STATIC_CMS_DEV_SERVER_PORT || `${8080}`);
 
 function moduleNameToPath(libName) {
-  return path.resolve(__dirname, 'node_modules', libName);
+  return path.resolve(__dirname, '..', '..', 'node_modules', libName);
 }
 
 module.exports = {
   entry: './src/index.ts',
   mode: isProduction ? 'production' : 'development',
-  devtool: 'source-map',
   module: {
     rules: [
       {
