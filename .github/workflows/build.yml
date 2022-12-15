@@ -17,6 +17,12 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
+          cache: yarn
+          cache-dependency-path: |
+            yarn.lock
+            packages/app/yarn.lock
+            packages/core/yarn.lock
+            packages/docs/yarn.lock
           node-version: 16
 
       - name: Install
@@ -36,6 +42,12 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
+          cache: yarn
+          cache-dependency-path: |
+            yarn.lock
+            packages/app/yarn.lock
+            packages/core/yarn.lock
+            packages/docs/yarn.lock
           node-version: 16
 
       - name: Install
@@ -55,6 +67,12 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
+          cache: yarn
+          cache-dependency-path: |
+            yarn.lock
+            packages/app/yarn.lock
+            packages/core/yarn.lock
+            packages/docs/yarn.lock
           node-version: 16
 
       - name: Install
@@ -74,6 +92,12 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
+          cache: yarn
+          cache-dependency-path: |
+            yarn.lock
+            packages/app/yarn.lock
+            packages/core/yarn.lock
+            packages/docs/yarn.lock
           node-version: 16
 
       - name: Install
