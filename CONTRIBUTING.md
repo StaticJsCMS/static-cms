@@ -11,7 +11,7 @@ For details on contributing to documentation, see [Website Directory Readme](htt
 
 ### Install dependencies
 
-> Only required on the first run, subsequent runs can use `yarn start` to both bootstrap and run the development server.
+> Only required on the first run, subsequent runs can use `yarn dev` to both bootstrap and run the development server.
 
 ```sh
 git clone https://github.com/StaticJsCMS/static-cms
@@ -24,17 +24,17 @@ yarn
 > In `core` directory
 
 ```sh
-yarn start
+yarn dev
 ```
 
 ## Available scripts
 
-### start
+### dev
 
-Starts the development server. This task runs both the `clean` and `develop` scripts.
+Starts the development server. This task runs both the `clean` and `serve` scripts.
 
 ```sh
-yarn start
+yarn dev
 ```
 
 ### clean
@@ -79,7 +79,7 @@ Static CMS uses the [Forking Workflow](https://www.atlassian.com/git/tutorials/c
 
 ## Debugging
 
-`yarn start` spawns a development server and uses `dev-test/config.yml` and `dev-test/index.html` to serve the CMS.
+`yarn dev` spawns a development server and uses `dev-test/config.yml` and `dev-test/index.html` to serve the CMS.
 In order to debug a specific issue follow the next steps:
 
 1. Replace `dev-test/config.yml` with the relevant `config.yml`. If you want to test the backend, make sure that the `backend` property of the config indicates which backend you use (Github, Gitlab, Bitbucket etc) and path to the repo.
@@ -90,7 +90,7 @@ backend:
   repo: owner-name/repo-name
 ```
 
-2. Run `yarn start`
+2. Run `yarn dev`
 3. Open `http://localhost:8080/` in the browser and you should have access to the CMS
 
 ### Debugging Git Gateway

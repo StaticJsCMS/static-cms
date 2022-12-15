@@ -1,9 +1,18 @@
 {
+  "name": "static-cms",
+  "private": true,
+  "scripts": {
+    "build": "lerna run build",
+    "test": "lerna run test",
+    "publish": "lerna run publish",
+    "prepare": "husky install"
+  },
   "devDependencies": {
     "husky": "8.0.2",
+    "lerna": "6.1.0",
     "lint-staged": "13.1.0"
   },
-  "scripts": {
-    "prepare": "husky install"
-  }
+  "workspaces": [
+    "packages/*"
+  ]
 }
