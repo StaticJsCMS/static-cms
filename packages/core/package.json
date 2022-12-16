@@ -73,7 +73,7 @@
     "@mui/icons-material": "5.11.0",
     "@mui/material": "5.11.0",
     "@mui/system": "5.11.0",
-    "@mui/x-date-pickers": "5.0.10",
+    "@mui/x-date-pickers": "5.0.11",
     "@reduxjs/toolkit": "1.9.1",
     "@styled-icons/fluentui-system-regular": "10.46.0",
     "@styled-icons/remix-editor": "10.46.0",
