@@ -67,7 +67,7 @@
     "@emotion/react": "11.10.5",
     "@emotion/styled": "11.10.5",
     "@lezer/common": "1.0.2",
-    "@ltd/j-toml": "1.35.3",
+    "@ltd/j-toml": "1.36.0",
     "@mdx-js/mdx": "2.2.1",
     "@mdx-js/react": "2.2.1",
     "@mui/icons-material": "5.11.0",
