@@ -10,6 +10,7 @@ import type {
   ImplementationFile,
   PersistOptions,
   User,
+  ImplementationMediaFile,
 } from '@staticcms/core/interface';
 import type { Cursor } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
@@ -89,7 +90,7 @@ export default class ProxyBackend implements BackendClass {
     return Promise.resolve('');
   }
 
-  async request(payload: { action: string; params: Record<string, unknown> }) {
+  async request<T>(payload: { action: string; params: Record<string, unknown> }): Promise<T> {
     const response = await unsentRequest.fetchWithTimeout(this.proxyUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json; charset=utf-8' },
@@ -105,28 +106,32 @@ export default class ProxyBackend implements BackendClass {
     }
   }
 
-  entriesByFolder(folder: string, extension: string, depth: number) {
+  entriesByFolder(
+    folder: string,
+    extension: string,
+    depth: number,
+  ): Promise<ImplementationEntry[]> {
     return this.request({
       action: 'entriesByFolder',
       params: { branch: this.branch, folder, extension, depth },
     });
   }
 
-  entriesByFiles(files: ImplementationFile[]) {
+  entriesByFiles(files: ImplementationFile[]): Promise<ImplementationEntry[]> {
     return this.request({
       action: 'entriesByFiles',
       params: { branch: this.branch, files },
     });
   }
 
-  getEntry(path: string) {
+  getEntry(path: string): Promise<ImplementationEntry> {
     return this.request({
       action: 'getEntry',
       params: { branch: this.branch, path },
     });
   }
 
-  async persistEntry(entry: BackendEntry, options: PersistOptions) {
+  async persistEntry(entry: BackendEntry, options: PersistOptions): Promise<void> {
     const assets = await Promise.all(entry.assets.map(serializeAsset));
     return this.request({
       action: 'persistEntry',
@@ -153,8 +158,8 @@ export default class ProxyBackend implements BackendClass {
     });
   }
 
-  async getMediaFile(path: string) {
-    const file = await this.request({
+  async getMediaFile(path: string): Promise<ImplementationMediaFile> {
+    const file = await this.request<MediaFile>({
       action: 'getMediaFile',
       params: { branch: this.branch, path },
     });
@@ -187,10 +192,10 @@ export default class ProxyBackend implements BackendClass {
   }
 
   allEntriesByFolder(
-    _folder: string,
-    _extension: string,
-    _depth: number,
+    folder: string,
+    extension: string,
+    depth: number,
   ): Promise<ImplementationEntry[]> {
-    throw new Error('Not supported');
+    return this.entriesByFolder(folder, extension, depth);
   }
 }
