@@ -111,6 +111,14 @@ CMS.registerAdditionalLink({
   },
 });
 CMS.registerAdditionalLink({
+  id: 'config',
+  title: 'Demo config.yml',
+  data: 'https://github.com/StaticJsCMS/static-cms/blob/main/packages/demo/config.yml',
+  options: {
+    icon: 'page',
+  },
+});
+CMS.registerAdditionalLink({
   id: 'custom-page',
   title: 'Custom Page',
   data: CustomPage,
