@@ -1,5 +1,5 @@
 backend:
-  name: demo-repo
+  name: test-repo
 site_url: 'https://staticjscms.netlify.app/'
 media_folder: assets/uploads
 locale: en
