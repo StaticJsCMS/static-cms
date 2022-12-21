@@ -12,8 +12,7 @@
     "test:ci": "lerna run test:ci",
     "test:integration:ci": "lerna run test:integration:ci",
     "test:integration": "lerna run test:integration",
-    "test": "lerna run test",
-    "version": "lerna version"
+    "test": "lerna run test"
   },
   "devDependencies": {
     "husky": "8.0.2",
