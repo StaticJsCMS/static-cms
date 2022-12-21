@@ -94,18 +94,10 @@ module.exports = {
   ].filter(Boolean),
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'static-cms-core.js',
+    filename: 'static-cms-app.js',
     library: {
-      name: 'StaticCmsCore',
+      name: 'StaticCmsApp',
       type: 'umd',
     },
-  },
-  devServer: {
-    static: {
-      directory: './dev-test',
-    },
-    host: '0.0.0.0',
-    port: devServerPort,
-    hot: true,
-  },
+  }
 };
