@@ -3,80 +3,107 @@ name: Build
 on:
   workflow_dispatch:
   push:
-    branches: [ "main" ]
-    paths:
-      - core/**
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
-    paths:
-      - core/**
+    branches: ["main"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Setup Node
-      uses: actions/setup-node@v3
-      with:
-        cache: yarn
-        cache-dependency-path: core/yarn.lock
-        node-version: 16
-        
-    - name: Install
-      working-directory: ./core
-      run: |
-        yarn install --frozen-lockfile
-        
-    - name: Build
-      working-directory: ./core
-      run: |
-        yarn build
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          cache-dependency-path: |
+            yarn.lock
+            packages/app/yarn.lock
+            packages/core/yarn.lock
+            packages/docs/yarn.lock
+          node-version: 16
+
+      - name: Install
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: Build
+        run: |
+          yarn build
 
   lint:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Setup Node
-      uses: actions/setup-node@v3
-      with:
-        cache: yarn
-        cache-dependency-path: core/yarn.lock
-        node-version: 16
-        
-    - name: Install
-      working-directory: ./core
-      run: |
-        yarn install --frozen-lockfile
-        
-    - name: Lint
-      working-directory: ./core
-      run: |
-        yarn lint
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          cache-dependency-path: |
+            yarn.lock
+            packages/app/yarn.lock
+            packages/core/yarn.lock
+            packages/docs/yarn.lock
+          node-version: 16
+
+      - name: Install
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: Lint
+        run: |
+          yarn lint
 
   test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Setup Node
-      uses: actions/setup-node@v3
-      with:
-        cache: yarn
-        cache-dependency-path: core/yarn.lock
-        node-version: 16
-        
-    - name: Install
-      working-directory: ./core
-      run: |
-        yarn install --frozen-lockfile
-        
-    - name: Test
-      working-directory: ./core
-      run: |
-        yarn test
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          cache-dependency-path: |
+            yarn.lock
+            packages/app/yarn.lock
+            packages/core/yarn.lock
+            packages/docs/yarn.lock
+          node-version: 16
+
+      - name: Install
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: Test
+        run: |
+          yarn test:ci
+
+  integration_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          cache-dependency-path: |
+            yarn.lock
+            packages/app/yarn.lock
+            packages/core/yarn.lock
+            packages/docs/yarn.lock
+          node-version: 16
+
+      - name: Install
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: Test
+        run: |
+          yarn test:integration:ci
