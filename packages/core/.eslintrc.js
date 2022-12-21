@@ -80,7 +80,9 @@ module.exports = {
       version: 'detect',
     },
     'import/resolver': {
-      typescript: {}, // this loads <rootdir>/tsconfig.json to eslint
+      typescript: {
+        project: 'packages/core/tsconfig.json',
+      }, // this loads <rootdir>/tsconfig.json to eslint
     },
     'import/core-modules': ['src'],
   },
