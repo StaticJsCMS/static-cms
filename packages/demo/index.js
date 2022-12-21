@@ -103,9 +103,9 @@ CMS.registerPreviewTemplate('authors', AuthorsPreview);
 // Pass the name of a registered control to reuse with a new widget preview.
 CMS.registerWidget('relationKitchenSinkPost', 'relation', RelationKitchenSinkPostPreview);
 CMS.registerAdditionalLink({
-  id: 'example',
-  title: 'Example.com',
-  data: 'https://example.com',
+  id: 'docs',
+  title: 'Static CMS Docs',
+  data: 'https://staticjscms.netlify.app/',
   options: {
     icon: 'page',
   },
