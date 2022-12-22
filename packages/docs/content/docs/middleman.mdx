@@ -118,7 +118,7 @@ In the newly created `index.html` we add scripts for Static CMS and the Netlify 
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" type="text/javascript"></script>
   </head>
   <body>
-    <script src="https://unpkg.com/@staticcms/core@%5E1.0.0/dist/static-cms-core.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/@staticcms/app@%5E1.0.0/dist/static-cms-app.js" type="text/javascript"></script>
   </body>
 </html>
 
@@ -151,7 +151,7 @@ collections:
 ```
 
 ### Push to GitHub
-It's now time to commit your changes and push to GitHub. 
+It's now time to commit your changes and push to GitHub.
 
 ```bash
 git init
@@ -176,7 +176,7 @@ Netlify's Identity and Git Gateway services allow you to manage CMS admin users 
 
 ## Start publishing
 
-It's time to create your first blog post. Login to your site's `/admin/` page and create a new post by clicking New Blog. Add a title, a date and some text. When you click Publish, a new commit will be created in your GitHub repo with this format `Create Blog "year-month-date-title"`. 
+It's time to create your first blog post. Login to your site's `/admin/` page and create a new post by clicking New Blog. Add a title, a date and some text. When you click Publish, a new commit will be created in your GitHub repo with this format `Create Blog "year-month-date-title"`.
 
 Then Netlify will detect that there was a commit in your repo, and will start rebuilding your project. When your project is deployed you'll be able to see the post you created.
 
