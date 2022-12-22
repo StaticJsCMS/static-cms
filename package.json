@@ -8,7 +8,7 @@
     "format": "lerna run format",
     "lint": "lerna run lint",
     "prepare": "husky install",
-    "release": "lerna publish --no-private",
+    "release": "lerna publish --no-private --conventional-commits --create-release github",
     "test:ci": "lerna run test:ci",
     "test:integration:ci": "lerna run test:integration:ci",
     "test:integration": "lerna run test:integration",
