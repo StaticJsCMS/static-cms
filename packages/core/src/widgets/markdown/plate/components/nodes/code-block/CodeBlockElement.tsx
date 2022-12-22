@@ -104,10 +104,10 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
   );
 
   const [height, setHeight] = useState(24);
-  const iframeRef = useRef<Frame & HTMLIFrameElement>();
+  const iframeRef = useRef<typeof Frame & HTMLIFrameElement>();
 
   const handleResize = useCallback(
-    (iframe: MutableRefObject<(Frame & HTMLIFrameElement) | undefined>) => {
+    (iframe: MutableRefObject<(typeof Frame & HTMLIFrameElement) | undefined>) => {
       const height = iframe.current?.contentDocument?.body?.scrollHeight ?? 0;
       if (height !== 0) {
         setHeight(height);
@@ -140,7 +140,7 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
           <Frame
             key={`code-frame-${id}`}
             id={id}
-            ref={iframeRef as RefObject<Frame> & RefObject<HTMLIFrameElement>}
+            ref={iframeRef as RefObject<typeof Frame> & RefObject<HTMLIFrameElement>}
             style={{
               border: 'none',
               width: '100%',
