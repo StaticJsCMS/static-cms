@@ -4333,10 +4333,10 @@
     use-deep-compare "^1.1.0"
     zustand "^3.7.2"
 
-"@udecode/plate-emoji@18.14.0":
-  version "18.14.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-emoji/-/plate-emoji-18.14.0.tgz#d965d228e4ac145bb79b8b2d1cfb95a85fdd06c7"
-  integrity sha512-upB/e5Tui7NcrnmZXE9apt3FOYPaYWHx8pTjjeM7/dHthV5fSEMvtNy42FhtjB7tCDuoUfVC432uV65lB2WczA==
+"@udecode/plate-emoji@18.14.2":
+  version "18.14.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-emoji/-/plate-emoji-18.14.2.tgz#cfff407e8b9337cd39248ab2dfc831e58258133a"
+  integrity sha512-fU0Thx09VKMoR3/Qf6iWrgWIrJQJGD+eLNeiVZYiJtjeQKlDZEz9se5j56JD4rBNSpW168czEpfm2ZkR2gIKIg==
   dependencies:
     "@emoji-mart/data" "^1.0.8"
     "@udecode/plate-combobox" "18.13.0"
@@ -4371,10 +4371,10 @@
   dependencies:
     "@udecode/plate-core" "18.13.0"
 
-"@udecode/plate-headless@18.14.0":
-  version "18.14.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-18.14.0.tgz#9d62bb1d1ecc5de0acbc243f70644750323fe4dd"
-  integrity sha512-/dyryxuJa7BhK9IgwQdElO8DYdEHc+mx1008LveTg+ddxUYaUzHYBy7EyJoADp3iGIjOeSagDu/x9ryh5Am6WQ==
+"@udecode/plate-headless@18.14.2":
+  version "18.14.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-18.14.2.tgz#18dd525be7e4a6ff69e563d16c15a8bca5a2b0a6"
+  integrity sha512-UdMQoYEX6vM+AP3z0GzraImQdv/ROUEez+uOyXW5lnHMZBLTd77Wpeyupd8fuGljYZ0PSrMPYNRrBlf3R/5T5w==
   dependencies:
     "@udecode/plate-alignment" "18.13.0"
     "@udecode/plate-autoformat" "18.13.0"
@@ -4387,7 +4387,7 @@
     "@udecode/plate-combobox" "18.13.0"
     "@udecode/plate-comments" "18.13.0"
     "@udecode/plate-core" "18.13.0"
-    "@udecode/plate-emoji" "18.14.0"
+    "@udecode/plate-emoji" "18.14.2"
     "@udecode/plate-find-replace" "18.13.0"
     "@udecode/plate-floating" "18.13.0"
     "@udecode/plate-font" "18.13.0"
@@ -4694,14 +4694,14 @@
     "@udecode/plate-styled-components" "18.13.0"
     raf "^3.4.1"
 
-"@udecode/plate-ui-emoji@18.14.1":
-  version "18.14.1"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-emoji/-/plate-ui-emoji-18.14.1.tgz#17485efd73cfdebf23d1c7a4e19d876ad927e24c"
-  integrity sha512-h7hYlRFZLNx4jU80XXEUj0s74ep+8D2kDcQMcrYjhV0xm8p6X1PGCiEsqdsvLlo30CNNVkzWoAAzLEhh9Ufqdg==
+"@udecode/plate-ui-emoji@18.14.2":
+  version "18.14.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-emoji/-/plate-ui-emoji-18.14.2.tgz#1a404a4d56b52dfe7b2300c42dd059994607924b"
+  integrity sha512-It1i28ilHUfR7v2mNKpWuyWwmjTlgA9frjSLUddwMcCdAG8NGNXHin9Txy/6zQ8GjKLJ4p1p7Z/hgnQTctta2w==
   dependencies:
     "@udecode/plate-combobox" "18.13.0"
     "@udecode/plate-core" "18.13.0"
-    "@udecode/plate-emoji" "18.14.0"
+    "@udecode/plate-emoji" "18.14.2"
     "@udecode/plate-styled-components" "18.13.0"
     "@udecode/plate-ui-combobox" "18.13.0"
     "@udecode/plate-ui-toolbar" "18.13.0"
@@ -4816,12 +4816,12 @@
     "@udecode/plate-ui-button" "18.13.0"
     react-use "^17.3.2"
 
-"@udecode/plate-ui@18.14.1":
-  version "18.14.1"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-18.14.1.tgz#c0cff0508ece7075186a249e99fd84ce6a46c178"
-  integrity sha512-XsfUBApFczZp9/HmY4BTBoSkUbG/YJNRRV2Pyju80qcZ/AV5kX7LghY6zNDp8KuabvboLTTkf7pxVP6mo0RoZQ==
+"@udecode/plate-ui@18.14.2":
+  version "18.14.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-18.14.2.tgz#5bd0075645d9eb7fce308c95f8d3a48552b67942"
+  integrity sha512-9wkmx9DvUHdpHmA1Pc7LJOr/zakPRgfKjPe0rKEozHAjaz7dhHl03ZL0+N/CrM3GYetkkAo7OMoLLp0SW/++zA==
   dependencies:
-    "@udecode/plate-headless" "18.14.0"
+    "@udecode/plate-headless" "18.14.2"
     "@udecode/plate-styled-components" "18.13.0"
     "@udecode/plate-ui-alignment" "18.13.0"
     "@udecode/plate-ui-block-quote" "18.13.0"
@@ -4831,7 +4831,7 @@
     "@udecode/plate-ui-comments" "18.13.0"
     "@udecode/plate-ui-cursor" "18.13.0"
     "@udecode/plate-ui-dnd" "18.13.0"
-    "@udecode/plate-ui-emoji" "18.14.1"
+    "@udecode/plate-ui-emoji" "18.14.2"
     "@udecode/plate-ui-find-replace" "18.13.0"
     "@udecode/plate-ui-font" "18.13.0"
     "@udecode/plate-ui-line-height" "18.13.0"
@@ -4844,13 +4844,13 @@
     "@udecode/plate-ui-toolbar" "18.13.0"
     use-context-selector "1.4.1"
 
-"@udecode/plate@18.14.1":
-  version "18.14.1"
-  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-18.14.1.tgz#b8052ed3b3824be0d6e4babf630c93e770485bed"
-  integrity sha512-h/w38oE35em2rssoYobwypEiesQlDBeWuU1oa7Dc0yVebug4smtCIEi+3b0SIK0r5zGtczLdAK388RwddFUEVg==
+"@udecode/plate@18.14.2":
+  version "18.14.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-18.14.2.tgz#ae2cf7675dcca12229218f390768d98da40f7790"
+  integrity sha512-07drSwmxJjP581FK/0pZeAZpTltqCSvuv7ZBP4ZA+6q7+H8GK9NK2JGy/1jC1Yq7cZ4vShPFUriyKC8LNGt58w==
   dependencies:
-    "@udecode/plate-headless" "18.14.0"
-    "@udecode/plate-ui" "18.14.1"
+    "@udecode/plate-headless" "18.14.2"
+    "@udecode/plate-ui" "18.14.2"
 
 "@udecode/zustood@^1.1.1":
   version "1.1.3"
