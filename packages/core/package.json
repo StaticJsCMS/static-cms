@@ -161,7 +161,7 @@
     "vfile-statistics": "2.0.0",
     "what-input": "5.2.12",
     "what-the-diff": "0.6.0",
-    "yaml": "2.2.0"
+    "yaml": "2.2.1"
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",
