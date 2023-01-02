@@ -104,7 +104,7 @@
     "graphql-tag": "2.12.6",
     "gray-matter": "4.0.3",
     "history": "5.3.0",
-    "immer": "9.0.16",
+    "immer": "9.0.17",
     "ini": "3.0.1",
     "is-hotkey": "0.2.0",
     "js-base64": "3.7.3",
