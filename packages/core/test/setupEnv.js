@@ -15,4 +15,4 @@ if (typeof window === 'undefined') {
 
 global.URL.createObjectURL = jest.fn();
 
-jest.mock('../src/formats/util/j-toml.min');
+jest.mock('../src/formats/util/j-toml');
