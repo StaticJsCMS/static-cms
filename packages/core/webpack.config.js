@@ -29,6 +29,7 @@ module.exports = {
         exclude: [
           /(node_modules[\\/]@toast-ui[\\/]editor[\\/]dist)/,
           /(node_modules[\\/]nth-check[\\/]lib)/,
+          /(src[\\/]formats[\\/]util)/,
         ],
       },
       {
@@ -38,7 +39,7 @@ module.exports = {
         },
       },
       {
-        test: /\.tsx?$/,
+        test: /\.[jt]sx?$/,
         use: [
           {
             loader: 'babel-loader',

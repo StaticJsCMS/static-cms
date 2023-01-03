@@ -2,3 +2,4 @@ dist/
 bin/
 public/
 .cache/
+j-toml.js

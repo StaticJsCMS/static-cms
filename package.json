@@ -8,15 +8,15 @@
     "format": "lerna run format",
     "lint": "lerna run lint",
     "prepare": "husky install",
-    "publish": "lerna run publish",
+    "release": "lerna publish --no-private",
     "test:ci": "lerna run test:ci",
     "test:integration:ci": "lerna run test:integration:ci",
     "test:integration": "lerna run test:integration",
     "test": "lerna run test"
   },
   "devDependencies": {
-    "husky": "8.0.2",
-    "lerna": "6.1.0",
+    "husky": "8.0.3",
+    "lerna": "6.3.0",
     "lint-staged": "13.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
