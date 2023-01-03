@@ -2,4 +2,3 @@ node_modules
 dist
 dev-test
 *.js
-j-toml.min.d.ts
