@@ -107,7 +107,7 @@
     "immer": "9.0.17",
     "ini": "3.0.1",
     "is-hotkey": "0.2.0",
-    "js-base64": "3.7.3",
+    "js-base64": "3.7.4",
     "js-sha256": "0.9.0",
     "jwt-decode": "3.1.2",
     "localforage": "1.10.0",
