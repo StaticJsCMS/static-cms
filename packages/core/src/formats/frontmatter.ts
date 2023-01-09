@@ -11,7 +11,7 @@ const Languages = {
   JSON: 'json',
 } as const;
 
-type Language = typeof Languages[keyof typeof Languages];
+type Language = (typeof Languages)[keyof typeof Languages];
 
 export type Delimiter = string | [string, string];
 type Format = { language: Language; delimiters: Delimiter };
