@@ -93,10 +93,6 @@ export function getAsset<F extends BaseField = UnknownField>(
     dispatch: ThunkDispatch<RootState, {}, AnyAction>,
     getState: () => RootState,
   ): Promise<AssetProxy> => {
-    if (!collection || !entry || !path) {
-      return Promise.resolve(emptyAsset);
-    }
-
     const state = getState();
     if (!state.config.config) {
       return Promise.resolve(emptyAsset);

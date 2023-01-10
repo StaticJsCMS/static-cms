@@ -11,29 +11,12 @@ const PostPreview = ({ entry, widgetFor, widgetsFor }) => {
   );
 };
 
-const GeneralPreview = ({ widgetsFor, getAsset, entry }) => {
+const GeneralPreview = ({ widgetsFor, entry, collection }) => {
   const title = entry.data.site_title;
   const posts = entry.data.posts;
   const thumb = posts && posts.thumb;
 
-  const [thumbUrl, setThumbUrl] = useState('');
-
-  useEffect(() => {
-    let alive = true;
-
-    const loadThumb = async () => {
-      const thumbAsset = await getAsset(thumb);
-      if (alive) {
-        setThumbUrl(thumbAsset.toString());
-      }
-    };
-
-    loadThumb();
-
-    return () => {
-      alive = false;
-    };
-  }, [thumb]);
+  const thumbUrl = useMediaAsset(thumb, collection, undefined, entry);
 
   return h(
     'div',
@@ -96,7 +79,6 @@ const CustomPage = () => {
   return h('div', {}, 'I am a custom page!');
 };
 
-CMS.registerPreviewStyle('.toastui-editor-contents h1 { color: blue }', { raw: true });
 CMS.registerPreviewTemplate('posts', PostPreview);
 CMS.registerPreviewTemplate('general', GeneralPreview);
 CMS.registerPreviewTemplate('authors', AuthorsPreview);

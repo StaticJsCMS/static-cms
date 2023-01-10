@@ -1,17 +1,18 @@
 backend:
   name: github
   branch: main
-  repo: owner/repo
-
-media_folder: static/media
-public_folder: /media
+  repo: staticjscms/static-cms-github
 
 local_backend: true
 
+media_folder: assets/upload
+public_folder: /assets/upload
 collections:
   - name: posts
     label: Posts
     label_singular: Post
+    media_folder: /assets/posts
+    public_folder: /assets/posts
     description: >
       The description is a great place for tone setting, high level information,
       and editing guidelines that are specific to a collection.
@@ -94,8 +95,6 @@ collections:
   - name: settings
     label: Settings
     delete: false
-    editor:
-      preview: false
     files:
       - name: general
         label: Site Settings
