@@ -8,6 +8,7 @@ const tr: LocalePhrasesRoot = {
     loginWithBitbucket: 'Bitbucket ile Giriş',
     loginWithGitHub: 'GitHub ile Giriş',
     loginWithGitLab: 'GitLab ile Giriş',
+    loginWithGitea: 'Gitea ile Giriş',
     errors: {
       email: 'E-postanızı girdiğinizden emin olun.',
       password: 'Lütfen şifrenizi girin.',

@@ -3,6 +3,7 @@ import {
   GitGatewayBackend,
   GitHubBackend,
   GitLabBackend,
+  GiteaBackend,
   ProxyBackend,
   TestBackend,
 } from './backends';
@@ -32,6 +33,7 @@ export default function addExtensions() {
   registerBackend('git-gateway', GitGatewayBackend);
   registerBackend('github', GitHubBackend);
   registerBackend('gitlab', GitLabBackend);
+  registerBackend('gitea', GiteaBackend);
   registerBackend('bitbucket', BitbucketBackend);
   registerBackend('test-repo', TestBackend);
   registerBackend('proxy', ProxyBackend);

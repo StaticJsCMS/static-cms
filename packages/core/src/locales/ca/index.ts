@@ -8,6 +8,7 @@ const ca: LocalePhrasesRoot = {
     loginWithBitbucket: 'Iniciar sessió amb Bitbucket',
     loginWithGitHub: 'Iniciar sessió amb GitHub',
     loginWithGitLab: 'Iniciar sessió amb GitLab',
+    loginWithGitea: 'Iniciar sessió amb Gitea',
     errors: {
       email: 'Comprova que has escrit el teu email.',
       password: 'Si us plau escriu la teva contrasenya.',

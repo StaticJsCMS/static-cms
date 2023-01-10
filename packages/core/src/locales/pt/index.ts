@@ -8,6 +8,7 @@ const pt: LocalePhrasesRoot = {
     loginWithBitbucket: 'Entrar com o Bitbucket',
     loginWithGitHub: 'Entrar com o GitHub',
     loginWithGitLab: 'Entrar com o GitLab',
+    loginWithGitea: 'Entrar com o Gitea',
     errors: {
       email: 'Certifique-se de inserir seu e-mail.',
       password: 'Por favor, insira sua senha.',
