@@ -1,8 +1,9 @@
 import { styled } from '@mui/material/styles';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 
 import { borders, colors, effects, lengths, shadows } from '@staticcms/core/components/UI/styles';
-import { transientOptions } from '@staticcms/core/lib';
+import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
+import transientOptions from '@staticcms/core/lib/util/transientOptions';
 
 import type { MediaLibraryDisplayURL } from '@staticcms/core/reducers/mediaLibrary';
 
@@ -104,7 +105,7 @@ const MediaLibraryCard = ({
   isDraft,
   loadDisplayURL,
 }: MediaLibraryCardProps) => {
-  const url = useMemo(() => displayURL.url, [displayURL.url]);
+  const url = useMediaAsset(displayURL.url);
 
   useEffect(() => {
     if (!displayURL.url) {

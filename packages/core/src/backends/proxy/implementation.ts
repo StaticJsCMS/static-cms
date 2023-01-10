@@ -166,8 +166,12 @@ export default class ProxyBackend implements BackendClass {
     return deserializeMediaFile(file);
   }
 
-  getMediaDisplayURL(displayURL: DisplayURL) {
-    return Promise.resolve(typeof displayURL === 'string' ? displayURL : displayURL.id);
+  getMediaDisplayURL(displayURL: DisplayURL): Promise<string> {
+    if (typeof displayURL === 'string') {
+      return Promise.resolve(displayURL);
+    }
+
+    return Promise.resolve(displayURL.path);
   }
 
   async persistMedia(assetProxy: AssetProxy, options: PersistOptions) {

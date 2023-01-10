@@ -28,7 +28,7 @@ import type {
 } from '../interface';
 
 export const allowedEvents = ['prePublish', 'postPublish', 'preSave', 'postSave'] as const;
-export type AllowedEvent = typeof allowedEvents[number];
+export type AllowedEvent = (typeof allowedEvents)[number];
 
 const eventHandlers = allowedEvents.reduce((acc, e) => {
   acc[e] = [];

@@ -24,11 +24,11 @@ const formatters = {
 
 function catchFormatErrors<T extends keyof typeof formatters>(
   format: T,
-  formatter: typeof formatters[T],
+  formatter: (typeof formatters)[T],
 ) {
   return (res: Response) => {
     try {
-      return formatter(res) as ReturnType<typeof formatters[T]>;
+      return formatter(res) as ReturnType<(typeof formatters)[T]>;
     } catch (error: unknown) {
       if (error instanceof Error) {
         throw new Error(
@@ -62,8 +62,8 @@ interface ParseResponseOptions {
 export async function parseResponse<T extends keyof typeof responseFormatters = 'text'>(
   res: Response,
   { expectingOk = true, format = 'text', apiName = '' }: ParseResponseOptions,
-): Promise<Awaited<ReturnType<typeof responseFormatters[T]>>> {
-  let body: Awaited<ReturnType<typeof responseFormatters[T]>>;
+): Promise<Awaited<ReturnType<(typeof responseFormatters)[T]>>> {
+  let body: Awaited<ReturnType<(typeof responseFormatters)[T]>>;
   try {
     const formatter = responseFormatters[format] ?? false;
     if (!formatter) {

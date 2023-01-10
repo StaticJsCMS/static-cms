@@ -178,90 +178,90 @@ export interface TextNodeStyles {
 export type TextNode = { text?: string | undefined } & TextNodeStyles;
 
 export type CodeBlockNode = {
-  type: typeof NodeTypes['code_block'];
+  type: (typeof NodeTypes)['code_block'];
   lang: string | undefined;
   code: string;
 };
 
 export type HeadingNode = {
   type:
-    | typeof NodeTypes['heading'][1]
-    | typeof NodeTypes['heading'][2]
-    | typeof NodeTypes['heading'][3]
-    | typeof NodeTypes['heading'][4]
-    | typeof NodeTypes['heading'][5]
-    | typeof NodeTypes['heading'][6];
+    | (typeof NodeTypes)['heading'][1]
+    | (typeof NodeTypes)['heading'][2]
+    | (typeof NodeTypes)['heading'][3]
+    | (typeof NodeTypes)['heading'][4]
+    | (typeof NodeTypes)['heading'][5]
+    | (typeof NodeTypes)['heading'][6];
   children: Array<DeserializedNode>;
 };
 
 export type ListNode = {
-  type: typeof NodeTypes['ol_list'] | typeof NodeTypes['ul_list'];
+  type: (typeof NodeTypes)['ol_list'] | (typeof NodeTypes)['ul_list'];
   children: Array<DeserializedNode>;
 };
 
 export type ListItemNode = {
-  type: typeof NodeTypes['listItem'];
+  type: (typeof NodeTypes)['listItem'];
   checked: boolean;
   children: Array<DeserializedNode>;
 };
 
 export type ListItemContentNode = {
-  type: typeof NodeTypes['listItemContent'];
+  type: (typeof NodeTypes)['listItemContent'];
   children: Array<DeserializedNode>;
 };
 
 export type ParagraphNode = {
-  type: typeof NodeTypes['paragraph'];
+  type: (typeof NodeTypes)['paragraph'];
   break?: true;
   children: Array<DeserializedNode>;
 };
 
 export type LinkNode = {
-  type: typeof NodeTypes['link'];
+  type: (typeof NodeTypes)['link'];
   children: Array<DeserializedNode>;
   url: string | undefined;
 };
 
 export type ImageNode = {
-  type: typeof NodeTypes['image'];
+  type: (typeof NodeTypes)['image'];
   children: Array<DeserializedNode>;
   url: string | undefined;
   alt: string | undefined;
 };
 
 export type TableNode = {
-  type: typeof NodeTypes['table'];
+  type: (typeof NodeTypes)['table'];
   children: Array<TableRowNode>;
 };
 
 export type TableRowNode = {
-  type: typeof NodeTypes['tableRow'];
+  type: (typeof NodeTypes)['tableRow'];
   children: Array<TableCellNode>;
 };
 
 export type TableCellNode = {
-  type: typeof NodeTypes['tableCell'];
+  type: (typeof NodeTypes)['tableCell'];
   children: Array<DeserializedNode>;
 };
 
 export type BlockQuoteNode = {
-  type: typeof NodeTypes['block_quote'];
+  type: (typeof NodeTypes)['block_quote'];
   children: Array<DeserializedNode>;
 };
 
 export type InlineCodeMarkNode = {
-  type: typeof NodeTypes['inline_code_mark'];
+  type: (typeof NodeTypes)['inline_code_mark'];
   children: Array<TextNode>;
   language: string | undefined;
 };
 
 export type ThematicBreakNode = {
-  type: typeof NodeTypes['thematic_break'];
+  type: (typeof NodeTypes)['thematic_break'];
   children: Array<DeserializedNode>;
 };
 
 export type ItalicNode = {
-  [K in typeof NodeTypes['emphasis_mark']]: true;
+  [K in (typeof NodeTypes)['emphasis_mark']]: true;
 } & {
   children: TextNode;
 };
@@ -275,19 +275,19 @@ export type MarkNode =
   | InlineCodeNode;
 
 export type SuperscriptNode = {
-  [K in typeof NodeTypes['superscript_mark']]: true;
+  [K in (typeof NodeTypes)['superscript_mark']]: true;
 } & {
   children: TextNode;
 };
 
 export type SubscriptNode = {
-  [K in typeof NodeTypes['subscript_mark']]: true;
+  [K in (typeof NodeTypes)['subscript_mark']]: true;
 } & {
   children: TextNode;
 };
 
 export type UnderlineNode = {
-  [K in typeof NodeTypes['underline_mark']]: true;
+  [K in (typeof NodeTypes)['underline_mark']]: true;
 } & {
   children: TextNode;
 };

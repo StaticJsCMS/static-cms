@@ -235,6 +235,9 @@ export interface DisplayURLState {
 
 export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
+/**
+ * @deprecated Should use `useMediaAsset` React hook instead
+ */
 export type GetAssetFunction<F extends BaseField = UnknownField> = (
   path: string,
   field?: F,
@@ -248,6 +251,9 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField> {
   fieldsErrors: FieldsErrors;
   submitted: boolean;
   forList: boolean;
+  /**
+   * @deprecated Should use `useMediaAsset` React hook instead
+   */
   getAsset: GetAssetFunction<F>;
   isDisabled: boolean;
   isFieldDuplicate: EditorControlProps['isFieldDuplicate'];
@@ -273,6 +279,9 @@ export interface WidgetPreviewProps<T = unknown, F extends BaseField = UnknownFi
   collection: Collection<F>;
   entry: Entry;
   field: RenderedField<F>;
+  /**
+   * @deprecated Should use `useMediaAsset` React hook instead
+   */
   getAsset: GetAssetFunction<F>;
   value: T | undefined | null;
 }
@@ -300,6 +309,9 @@ export interface TemplatePreviewProps<T = EntryData, EF extends BaseField = Unkn
   entry: Entry<T>;
   document: Document | undefined | null;
   window: Window | undefined | null;
+  /**
+   * @deprecated Should use `useMediaAsset` React hook instead
+   */
   getAsset: GetAssetFunction<Field<EF>>;
   widgetFor: (name: T extends EntryData ? string : keyof T) => ReactNode;
   widgetsFor: WidgetsFor<T>;

@@ -65,7 +65,7 @@ function evaluateFolder(
   folderKey: 'media_folder' | 'public_folder',
   config: Config,
   c: Collection,
-  entryMap: Entry | undefined,
+  entryMap: Entry | null | undefined,
   field: FileOrImageField | MarkdownField,
 ) {
   let currentFolder = config[folderKey]!;
@@ -158,7 +158,7 @@ function traverseFields(
   folderKey: 'media_folder' | 'public_folder',
   config: Config,
   collection: Collection,
-  entryMap: Entry | undefined,
+  entryMap: Entry | null | undefined,
   field: FileOrImageField | MarkdownField | ListField | ObjectField,
   fields: Field[],
   currentFolder: string,
@@ -227,7 +227,7 @@ function traverseFields(
 export function selectMediaFolder(
   config: Config,
   collection: Collection | undefined | null,
-  entryMap: Entry | undefined,
+  entryMap: Entry | null | undefined,
   field: Field | undefined,
 ) {
   const name = 'media_folder';
@@ -279,7 +279,7 @@ export function selectMediaFilePublicPath(
 export function selectMediaFilePath(
   config: Config,
   collection: Collection | null,
-  entryMap: Entry | undefined,
+  entryMap: Entry | null | undefined,
   mediaPath: string,
   field: Field | undefined,
 ) {

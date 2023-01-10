@@ -127,7 +127,7 @@ export function summaryFormatter(summaryTemplate: string, entry: Entry, collecti
 
 export function folderFormatter(
   folderTemplate: string,
-  entry: Entry | undefined,
+  entry: Entry | null | undefined,
   collection: Collection,
   defaultFolder: string,
   folderKey: string,
