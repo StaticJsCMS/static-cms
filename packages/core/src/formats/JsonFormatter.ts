@@ -1,7 +1,12 @@
+import { isEmpty } from '../lib/util/string.util';
 import FileFormatter from './FileFormatter';
 
 class JsonFormatter extends FileFormatter {
   fromFile(content: string) {
+    if (isEmpty(content)) {
+      return {};
+    }
+
     return JSON.parse(content);
   }
 

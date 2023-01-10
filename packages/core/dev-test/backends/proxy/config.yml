@@ -5,18 +5,18 @@ backend:
 
 local_backend: true
 
-media_folder: assets/upload
-public_folder: /assets/upload
+media_folder: /packages/core/dev-test/backends/proxy/assets/upload
+public_folder: /backends/proxy/assets/upload
 collections:
   - name: posts
     label: Posts
     label_singular: Post
-    media_folder: /assets/posts
-    public_folder: /assets/posts
+    media_folder: /packages/core/dev-test/backends/proxy/assets/posts
+    public_folder: /backends/proxy/assets/posts
     description: >
       The description is a great place for tone setting, high level information,
       and editing guidelines that are specific to a collection.
-    folder: _posts
+    folder: packages/core/dev-test/backends/proxy/_posts
     slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
     summary: '{{title}} -- {{year}}/{{month}}/{{day}}'
     sortable_fields:
@@ -66,7 +66,7 @@ collections:
         hint: Main content goes here.
   - name: faq
     label: FAQ
-    folder: _faqs
+    folder: packages/core/dev-test/backends/proxy/_faqs
     create: true
     fields:
       - label: Question
@@ -98,7 +98,7 @@ collections:
     files:
       - name: general
         label: Site Settings
-        file: _data/settings.json
+        file: packages/core/dev-test/backends/proxy/_data/settings.json
         description: General Site Settings
         fields:
           - label: Number of posts on frontpage
@@ -127,7 +127,7 @@ collections:
                 required: false
       - name: authors
         label: Authors
-        file: _data/authors.yml
+        file: packages/core/dev-test/backends/proxy/_data/authors.yml
         description: Author descriptions
         fields:
           - name: authors
@@ -144,7 +144,7 @@ collections:
                 widget: text
   - name: kitchenSink
     label: Kitchen Sink
-    folder: _sink
+    folder: packages/core/dev-test/backends/proxy/_sink
     create: true
     fields:
       - label: Related Post

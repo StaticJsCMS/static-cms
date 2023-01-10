@@ -73,8 +73,8 @@ const CardWrapper = ({
     <div
       style={{
         ...style,
-        left: typeof style.left === 'number' ? style.left ?? +gutter * columnIndex : style.left,
-        top: typeof style.top === 'number' ? style.top + gutter : style.top,
+        left: typeof style.left === 'number' ? style.left ?? gutter * columnIndex : style.left,
+        top: style.top,
         width: typeof style.width === 'number' ? style.width - gutter : style.width,
         height: typeof style.height === 'number' ? style.height - gutter : style.height,
       }}
@@ -156,6 +156,7 @@ const VirtualizedGrid = (props: MediaLibraryCardGridProps) => {
                   columnCount,
                 } as CardGridItemData
               }
+              style={{ overflow: 'hidden', overflowY: 'scroll' }}
             >
               {CardWrapper}
             </Grid>

@@ -48,6 +48,7 @@ function deserializeMediaFile({ id, content, encoding, path, name }: MediaFile) 
 export default class ProxyBackend implements BackendClass {
   proxyUrl: string;
   mediaFolder?: string;
+  publicFolder?: string;
   options: {};
   branch: string;
 
@@ -59,6 +60,7 @@ export default class ProxyBackend implements BackendClass {
     this.branch = config.backend.branch || 'main';
     this.proxyUrl = config.backend.proxy_url;
     this.mediaFolder = config.media_folder;
+    this.publicFolder = config.public_folder;
     this.options = options;
   }
 
@@ -144,17 +146,17 @@ export default class ProxyBackend implements BackendClass {
     });
   }
 
-  async getMedia(mediaFolder = this.mediaFolder) {
+  async getMedia(mediaFolder = this.mediaFolder, publicFolder = this.publicFolder) {
     const files: { path: string; url: string }[] = await this.request({
       action: 'getMedia',
-      params: { branch: this.branch, mediaFolder },
+      params: { branch: this.branch, mediaFolder, publicFolder },
     });
 
     return files.map(({ url, path }) => {
       const id = url;
       const name = basename(path);
 
-      return { id, name, displayURL: { id, path }, path };
+      return { id, name, displayURL: { id, path: url }, path };
     });
   }
 

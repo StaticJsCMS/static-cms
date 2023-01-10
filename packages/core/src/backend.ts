@@ -38,7 +38,7 @@ import {
   selectInferedField,
   selectMediaFolders,
 } from './lib/util/collection.util';
-import { selectMediaFilePath } from './lib/util/media.util';
+import { selectMediaFilePath, selectMediaFilePublicPath } from './lib/util/media.util';
 import { set } from './lib/util/object.util';
 import { dateParsers, expandPath, extractTemplateVars } from './lib/widgets/stringTemplate';
 import createEntry from './valueObjects/createEntry';
@@ -786,7 +786,16 @@ export class Backend<BC extends BackendClass = BackendClass> {
     const mediaFolders = selectMediaFolders(configState.config, collection, entry);
     if (mediaFolders.length > 0) {
       const files = await Promise.all(
-        mediaFolders.map(folder => this.implementation.getMedia(folder)),
+        mediaFolders.map(folder => {
+          const mediaPath = selectMediaFilePublicPath(
+            configState.config!,
+            collection,
+            '',
+            entry,
+            undefined,
+          );
+          return this.implementation.getMedia(folder, mediaPath);
+        }),
       );
       entry.mediaFiles = entry.mediaFiles.concat(...files);
     } else {

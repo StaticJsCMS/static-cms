@@ -25,7 +25,7 @@ const StyledFab = styled(Fab)`
  * TODO Responsive styling needs to be overhauled. Current setup requires specifying
  * widths per breakpoint.
  */
-const cardWidth = `280px`;
+const cardWidth = `278px`;
 const cardHeight = `240px`;
 const cardMargin = `10px`;
 

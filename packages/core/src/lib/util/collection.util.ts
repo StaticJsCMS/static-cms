@@ -255,7 +255,7 @@ export function selectMediaFolders(config: Config, collection: Collection, entry
     folders.unshift(selectMediaFolder(config, newCollection, entry, undefined));
   }
 
-  return [...new Set(...folders)];
+  return [...new Set(folders)];
 }
 export function getFieldsNames(fields: Field[] | undefined, prefix = '') {
   let names = fields?.map(f => `${prefix}${f.name}`) ?? [];
