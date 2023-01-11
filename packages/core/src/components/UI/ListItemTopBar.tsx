@@ -117,7 +117,7 @@ const ListItemTopBar = ({
           />
         </IconButton>
       ) : null}
-      <StyledTitle key="title" onClick={onCollapseToggle}>
+      <StyledTitle key="title" onClick={onCollapseToggle} data-testid="list-item-title">
         {title}
       </StyledTitle>
       {listeners ? <DragHandle listeners={listeners} /> : null}

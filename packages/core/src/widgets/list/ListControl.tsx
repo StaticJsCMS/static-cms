@@ -60,7 +60,7 @@ const StyledSortableList = styled(
 
 interface SortableItemProps {
   id: string;
-  item: ObjectValue;
+  item: ValueOrNestedValue;
   index: number;
   valueType: ListValueType;
   handleRemove: (index: number, event: MouseEvent) => void;
@@ -106,7 +106,7 @@ const SortableItem: FC<SortableItemProps> = ({
   }
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes}>
+    <div ref={setNodeRef} data-testid={`object-control-${index}`} style={style} {...attributes}>
       <ListItem
         index={index}
         id={id}
@@ -122,7 +122,7 @@ const SortableItem: FC<SortableItemProps> = ({
         isFieldHidden={isFieldHidden}
         locale={locale}
         path={path}
-        value={item as Record<string, ObjectValue>}
+        value={item}
         i18n={i18n}
         listeners={listeners}
       />
@@ -135,7 +135,34 @@ export enum ListValueType {
   MIXED,
 }
 
-function getFieldsDefault(fields: Field[], initialValue: ObjectValue = {}): ObjectValue {
+function getFieldsDefault(
+  fields: Field[],
+  initialValue: ValueOrNestedValue = {},
+): ValueOrNestedValue {
+  console.log(
+    'fields.length',
+    fields.length,
+    'field[0].widget',
+    fields.length === 1 ? fields[0].widget : 'N/A',
+  );
+  if (fields.length === 1) {
+    if ('default' in fields[0] && fields[0].default) {
+      return fields[0].default;
+    }
+
+    switch (fields[0].widget) {
+      case 'string':
+      case 'text':
+        return '';
+      case 'boolean':
+        return false;
+      case 'number':
+        return 0;
+    }
+
+    return null;
+  }
+
   return fields.reduce((acc, item) => {
     const subfields = 'fields' in item && item.fields;
     const name = item.name;
@@ -159,10 +186,10 @@ function getFieldsDefault(fields: Field[], initialValue: ObjectValue = {}): Obje
     }
 
     return acc;
-  }, initialValue);
+  }, initialValue as ObjectValue);
 }
 
-const ListControl: FC<WidgetControlProps<ObjectValue[], ListField>> = ({
+const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
   entry,
   field,
   fieldsErrors,
@@ -196,7 +223,7 @@ const ListControl: FC<WidgetControlProps<ObjectValue[], ListField>> = ({
   }, []);
 
   const mixedDefault = useCallback(
-    (typeKey: string, type: string): ObjectValue => {
+    (typeKey: string, type: string): ValueOrNestedValue => {
       const selectedType = 'types' in field && field.types?.find(f => f.name === type);
       if (!selectedType) {
         return {};
@@ -208,7 +235,7 @@ const ListControl: FC<WidgetControlProps<ObjectValue[], ListField>> = ({
   );
 
   const addItem = useCallback(
-    (parsedValue: ObjectValue) => {
+    (parsedValue: ValueOrNestedValue) => {
       const addToTop = field.add_to_top ?? false;
 
       const newKeys = [...keys];
@@ -221,7 +248,7 @@ const ListControl: FC<WidgetControlProps<ObjectValue[], ListField>> = ({
         newValue.push(parsedValue);
       }
       setKeys(newKeys);
-      onChange(newValue);
+      onChange(newValue as string[] | ObjectValue[]);
       setCollapsed(false);
     },
     [field.add_to_top, onChange, internalValue, keys],
@@ -230,7 +257,9 @@ const ListControl: FC<WidgetControlProps<ObjectValue[], ListField>> = ({
   const handleAdd = useCallback(
     (e: MouseEvent) => {
       e.preventDefault();
-      addItem('fields' in field && field.fields ? multipleDefault(field.fields) : {});
+      console.log('HANDLE ADD!!!!!!!!');
+      const parsedValue = multipleDefault(field.fields ?? []);
+      addItem(parsedValue);
     },
     [addItem, field, multipleDefault],
   );
@@ -254,7 +283,7 @@ const ListControl: FC<WidgetControlProps<ObjectValue[], ListField>> = ({
       newValue.splice(index, 1);
 
       setKeys(newKeys);
-      onChange(newValue);
+      onChange(newValue as string[] | ObjectValue[]);
     },
     [onChange, internalValue, keys],
   );
@@ -278,7 +307,11 @@ const ListControl: FC<WidgetControlProps<ObjectValue[], ListField>> = ({
 
       // Update value
       setKeys(arrayMoveImmutable(keys, oldIndex, newIndex));
-      onChange(arrayMoveImmutable(internalValue, oldIndex, newIndex));
+      onChange(
+        arrayMoveImmutable<ValueOrNestedValue>(internalValue, oldIndex, newIndex) as
+          | string[]
+          | ObjectValue[],
+      );
     },
     [onChange, internalValue, keys],
   );
@@ -306,6 +339,7 @@ const ListControl: FC<WidgetControlProps<ObjectValue[], ListField>> = ({
         collapsed={collapsed}
         hasError={hasErrors}
         t={t}
+        testId="list-header"
       />
       {internalValue.length > 0 ? (
         <DndContext key="dnd-context" onDragEnd={handleDragEnd}>
@@ -325,7 +359,6 @@ const ListControl: FC<WidgetControlProps<ObjectValue[], ListField>> = ({
                     item={item}
                     valueType={valueType}
                     handleRemove={handleRemove}
-                    data-testid={`object-control-${index}`}
                     entry={entry}
                     field={field}
                     fieldsErrors={fieldsErrors}

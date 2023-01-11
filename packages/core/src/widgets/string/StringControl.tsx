@@ -22,7 +22,10 @@ const StringControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
 
   return (
     <TextField
-      key="string-control-input"
+      key="string-widget-control-input"
+      inputProps={{
+        'data-testid': 'string-widget-control-input',
+      }}
       label={label}
       variant="outlined"
       value={internalValue}

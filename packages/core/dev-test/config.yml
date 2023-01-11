@@ -301,6 +301,13 @@ collections:
               - label: Description
                 name: description
                 widget: text
+          - name: string_list
+            label: String List
+            widget: list
+            fields:
+              - label: Tag
+                name: tag
+                widget: string
           - name: with_default
             label: Required With Default
             widget: list

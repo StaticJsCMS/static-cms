@@ -78,8 +78,15 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
   const renderedField = useMemo(() => {
     return (
       multiFields?.map((field, index) => {
-        const fieldName = field.name;
+        let fieldName = field.name;
+        let parentPath = path;
         const fieldValue = value && value[fieldName];
+
+        if (multiFields.length === 1 && field.widget === 'string') {
+          const splitPath = path.split('.');
+          fieldName = splitPath.pop() ?? field.name;
+          parentPath = splitPath.join('.');
+        }
 
         const isDuplicate = isFieldDuplicate && isFieldDuplicate(field);
         const isHidden = isFieldHidden && isFieldHidden(field);
@@ -88,10 +95,11 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
           <EditorControl
             key={index}
             field={field}
+            fieldName={fieldName}
             value={fieldValue}
             fieldsErrors={fieldsErrors}
             submitted={submitted}
-            parentPath={path}
+            parentPath={parentPath}
             isDisabled={isDuplicate}
             isHidden={isHidden}
             isFieldDuplicate={isFieldDuplicate}

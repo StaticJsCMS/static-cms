@@ -4,7 +4,7 @@ import schema from './schema';
 
 import type { ListField, ObjectValue, WidgetParam } from '@staticcms/core/interface';
 
-const ListWidget = (): WidgetParam<ObjectValue[], ListField> => {
+const ListWidget = (): WidgetParam<ObjectValue[] | string[], ListField> => {
   return {
     name: 'list',
     controlComponent,

@@ -6,7 +6,7 @@ import EditorControl from '@staticcms/core/components/Editor/EditorControlPane/E
 import ListItemTopBar from '@staticcms/core/components/UI/ListItemTopBar';
 import Outline from '@staticcms/core/components/UI/Outline';
 import { colors } from '@staticcms/core/components/UI/styles';
-import { transientOptions } from '@staticcms/core/lib';
+import transientOptions from '@staticcms/core/lib/util/transientOptions';
 import {
   addFileTemplateFields,
   compileStringTemplate,
@@ -21,6 +21,7 @@ import type {
   ListField,
   ObjectField,
   ObjectValue,
+  ValueOrNestedValue,
   WidgetControlProps,
 } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
@@ -55,19 +56,27 @@ const StyledObjectFieldWrapper = styled(
   `,
 );
 
-function handleSummary(summary: string, entry: Entry, label: string, item: ObjectValue) {
-  const labeledItem: EntryData = {
-    ...item,
-    fields: {
-      label,
-    },
-  };
-  const data = addFileTemplateFields(entry.path, labeledItem);
-  return compileStringTemplate(summary, null, '', data);
+function handleSummary(summary: string, entry: Entry, label: string, item: ValueOrNestedValue) {
+  if (typeof item === 'object' && !Array.isArray(item)) {
+    const labeledItem: EntryData = {
+      ...item,
+      fields: {
+        label,
+      },
+    };
+    const data = addFileTemplateFields(entry.path, labeledItem);
+    return compileStringTemplate(summary, null, '', data);
+  }
+
+  return item;
 }
 
-function validateItem(field: ListField, item: ObjectValue) {
-  if (!(typeof item === 'object')) {
+function validateItem(field: ListField, item: ValueOrNestedValue) {
+  if (field.fields && field.fields.length === 1) {
+    return true;
+  }
+
+  if (typeof item !== 'object') {
     console.warn(
       `'${field.name}' field item value value should be an object but is a '${typeof item}'`,
     );
@@ -79,7 +88,7 @@ function validateItem(field: ListField, item: ObjectValue) {
 
 interface ListItemProps
   extends Pick<
-    WidgetControlProps<ObjectValue, ListField>,
+    WidgetControlProps<ValueOrNestedValue, ListField>,
     | 'entry'
     | 'field'
     | 'fieldsErrors'
@@ -137,7 +146,9 @@ const ListItem: FC<ListItemProps> = ({
           return [base, childObjectField];
         }
 
-        const itemType = getTypedFieldForValue(field, objectValue, index);
+        const mixedObjectValue = objectValue as ObjectValue;
+
+        const itemType = getTypedFieldForValue(field, mixedObjectValue, index);
         if (!itemType) {
           return [base, childObjectField];
         }
@@ -146,7 +157,7 @@ const ListItem: FC<ListItemProps> = ({
         // each type can have its own summary, but default to the list summary if exists
         const summary = ('summary' in itemType && itemType.summary) ?? field.summary;
         const labelReturn = summary
-          ? `${label} - ${handleSummary(summary, entry, label, objectValue)}`
+          ? `${label} - ${handleSummary(summary, entry, label, mixedObjectValue)}`
           : label;
         return [labelReturn, itemType];
       }
@@ -163,7 +174,10 @@ const ListItem: FC<ListItemProps> = ({
           return [base, childObjectField];
         }
 
-        const labelFieldValue = objectValue[labelField.name];
+        const labelFieldValue =
+          typeof objectValue === 'object' && !Array.isArray(objectValue)
+            ? objectValue[labelField.name]
+            : objectValue;
 
         const summary = field.summary;
         const labelReturn = summary
@@ -194,7 +208,7 @@ const ListItem: FC<ListItemProps> = ({
           collapsed={collapsed}
           onCollapseToggle={handleCollapseToggle}
           onRemove={partial(handleRemove, index)}
-          data-testid={`styled-list-item-top-bar-${id}`}
+          data-testid={`list-item-top-bar-${id}`}
           title={objectLabel}
           isVariableTypesList={valueType === ListValueType.MIXED}
           listeners={listeners}

@@ -66,13 +66,12 @@ export type ObjectValue = {
 export type ValueOrNestedValue =
   | string
   | number
-  | boolean
-  | string[]
   | (string | number)[]
-  | null
-  | undefined
+  | boolean
   | ObjectValue
-  | ObjectValue[];
+  | ValueOrNestedValue[]
+  | null
+  | undefined;
 
 export type EntryData = ObjectValue | undefined | null;
 
@@ -576,7 +575,7 @@ export interface ObjectField<EF extends BaseField = UnknownField> extends BaseFi
 
 export interface ListField<EF extends BaseField = UnknownField> extends BaseField {
   widget: 'list';
-  default?: ObjectValue[];
+  default?: ValueOrNestedValue[];
 
   allow_add?: boolean;
   collapsed?: boolean;
