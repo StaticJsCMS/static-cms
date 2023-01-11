@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { getAsset } from '@staticcms/core/actions/media';
+import { emptyAsset, getAsset } from '@staticcms/core/actions/media';
 import { useAppDispatch } from '@staticcms/core/store/hooks';
 import { isNotEmpty } from '../util/string.util';
 
@@ -21,8 +21,10 @@ export default function useMediaAsset<T extends Field>(
     }
 
     const fetchMedia = async () => {
-      const asset = (await dispatch(getAsset<T>(collection, entry, url, field)))?.toString() ?? '';
-      setAssetSource(asset);
+      const asset = await dispatch(getAsset<T>(collection, entry, url, field));
+      if (asset !== emptyAsset) {
+        setAssetSource(asset?.toString() ?? '');
+      }
     };
 
     fetchMedia();
