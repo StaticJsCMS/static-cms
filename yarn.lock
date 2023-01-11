@@ -4517,6 +4517,22 @@
     remark-slate "^1.8.6"
     unified "^9.2.1"
 
+"@udecode/plate-serializer-md@19.0.5":
+  version "19.0.5"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-19.0.5.tgz#c5016b15d02883067508bf6d57d7015b858b1a02"
+  integrity sha512-ItQI9pCgcGaqxhGOZdtTSUOCvarlCk00HGvMjIf+VlasQhf0mVzRHUgzA1mnkFKc+bCbkBE3d4CZdlS8c1gCkg==
+  dependencies:
+    "@udecode/plate-block-quote" "19.0.3"
+    "@udecode/plate-code-block" "19.0.3"
+    "@udecode/plate-core" "19.0.3"
+    "@udecode/plate-heading" "19.0.3"
+    "@udecode/plate-link" "19.0.3"
+    "@udecode/plate-list" "19.0.3"
+    "@udecode/plate-paragraph" "19.0.3"
+    remark-parse "^9.0.0"
+    remark-slate "^1.8.6"
+    unified "^9.2.1"
+
 "@udecode/plate-styled-components@19.0.3":
   version "19.0.3"
   resolved "https://registry.yarnpkg.com/@udecode/plate-styled-components/-/plate-styled-components-19.0.3.tgz#59d56ff8faf947c42fcfc3e1ee094805ef57e43a"
