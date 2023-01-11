@@ -27,6 +27,10 @@ const PROVIDERS = {
     width: 960,
     height: 600,
   },
+  gitea: {
+    width: 960,
+    height: 600,
+  },
   bitbucket: {
     width: 960,
     height: 500,
