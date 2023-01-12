@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "husky": "8.0.3",
-    "lerna": "6.4.0",
+    "lerna": "6.4.1",
     "lint-staged": "13.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
