@@ -106,17 +106,12 @@ function getWidgetFor(
   }
 
   const value = values?.[field.name];
-  let fieldWithWidgets = Object.entries(field).reduce((acc, [key, fieldValue]) => {
-    if (!['fields', 'fields'].includes(key)) {
-      acc[key] = fieldValue;
-    }
-    return acc;
-  }, {} as Record<string, unknown>) as RenderedField;
+  let fieldWithWidgets = field as RenderedField;
 
   if ('fields' in field && field.fields) {
     fieldWithWidgets = {
       ...fieldWithWidgets,
-      fields: getNestedWidgets(
+      renderedFields: getNestedWidgets(
         config,
         collection,
         fields,
@@ -130,7 +125,7 @@ function getWidgetFor(
   } else if ('types' in field && field.types) {
     fieldWithWidgets = {
       ...fieldWithWidgets,
-      fields: getTypedNestedWidgets(
+      renderedFields: getTypedNestedWidgets(
         config,
         collection,
         field,

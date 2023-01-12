@@ -5,22 +5,23 @@ import WidgetPreviewContainer from '@staticcms/core/components/UI/WidgetPreviewC
 import type { ListField, ValueOrNestedValue, WidgetPreviewProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
-const ObjectPreview: FC<WidgetPreviewProps<ValueOrNestedValue[], ListField>> = ({
-  field,
-  value = [],
-}) => {
-  return (
-    <WidgetPreviewContainer>
-      <div>
+const ListPreview: FC<WidgetPreviewProps<ValueOrNestedValue[], ListField>> = ({ field, value }) => {
+  if (field.fields && field.fields.length === 1) {
+    return (
+      <WidgetPreviewContainer>
         <label>
           <strong>{field.name}:</strong>
         </label>
-        <span>{JSON.stringify(value)}</span>
-      </div>
-      <br />
-    </WidgetPreviewContainer>
-  );
-  // return <WidgetPreviewContainer>{field.fields ?? null}</WidgetPreviewContainer>;
+        <ul style={{ marginTop: 0 }}>
+          {value?.map(item => (
+            <li key={String(item)}>{String(item)}</li>
+          ))}
+        </ul>
+      </WidgetPreviewContainer>
+    );
+  }
+
+  return <WidgetPreviewContainer>{field.renderedFields ?? null}</WidgetPreviewContainer>;
 };
 
-export default ObjectPreview;
+export default ListPreview;
