@@ -2,24 +2,24 @@
 import React from 'react';
 
 import type {
+  BaseField,
   Collection,
   Config,
   Entry,
-  Field,
   UnknownField,
   WidgetControlProps,
 } from '@staticcms/core/interface';
 import type { FC } from 'react';
 import type { t } from 'react-polyglot';
 
-export interface CreateControlWrapper<V = unknown, F extends Field = UnknownField> {
+export interface CreateControlWrapper<V = unknown, F extends BaseField = UnknownField> {
   defaultField: F;
   control: FC<WidgetControlProps<V, F>>;
   label: string;
   path: string;
 }
 
-const createControlWrapper = <V = unknown, F extends Field = UnknownField>({
+const createControlWrapper = <V = unknown, F extends BaseField = UnknownField>({
   defaultField,
   control: Control,
   label: defaultLabel,

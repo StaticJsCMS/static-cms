@@ -1,10 +1,29 @@
 import { currentBackend } from '../backend';
 import confirm from '../components/UI/Confirm';
+import {
+  MEDIA_DELETE_FAILURE,
+  MEDIA_DELETE_REQUEST,
+  MEDIA_DELETE_SUCCESS,
+  MEDIA_DISPLAY_URL_FAILURE,
+  MEDIA_DISPLAY_URL_REQUEST,
+  MEDIA_DISPLAY_URL_SUCCESS,
+  MEDIA_INSERT,
+  MEDIA_LIBRARY_CLOSE,
+  MEDIA_LIBRARY_CREATE,
+  MEDIA_LIBRARY_OPEN,
+  MEDIA_LOAD_FAILURE,
+  MEDIA_LOAD_REQUEST,
+  MEDIA_LOAD_SUCCESS,
+  MEDIA_PERSIST_FAILURE,
+  MEDIA_PERSIST_REQUEST,
+  MEDIA_PERSIST_SUCCESS,
+  MEDIA_REMOVE_INSERTED,
+} from '../constants';
 import { sanitizeSlug } from '../lib/urlHelper';
 import { basename, getBlobSHA } from '../lib/util';
 import { selectMediaFilePath, selectMediaFilePublicPath } from '../lib/util/media.util';
-import { selectEditingDraft } from '../reducers/entries';
-import { selectMediaDisplayURL, selectMediaFiles } from '../reducers/mediaLibrary';
+import { selectEditingDraft } from '../reducers/selectors/entryDraft';
+import { selectMediaDisplayURL, selectMediaFiles } from '../reducers/selectors/mediaLibrary';
 import { addSnackbar } from '../store/slices/snackbars';
 import { createAssetProxy } from '../valueObjects/AssetProxy';
 import { addDraftEntryMediaFile, removeDraftEntryMediaFile } from './entries';
@@ -24,24 +43,6 @@ import type {
 } from '../interface';
 import type { RootState } from '../store';
 import type AssetProxy from '../valueObjects/AssetProxy';
-
-export const MEDIA_LIBRARY_OPEN = 'MEDIA_LIBRARY_OPEN';
-export const MEDIA_LIBRARY_CLOSE = 'MEDIA_LIBRARY_CLOSE';
-export const MEDIA_LIBRARY_CREATE = 'MEDIA_LIBRARY_CREATE';
-export const MEDIA_INSERT = 'MEDIA_INSERT';
-export const MEDIA_REMOVE_INSERTED = 'MEDIA_REMOVE_INSERTED';
-export const MEDIA_LOAD_REQUEST = 'MEDIA_LOAD_REQUEST';
-export const MEDIA_LOAD_SUCCESS = 'MEDIA_LOAD_SUCCESS';
-export const MEDIA_LOAD_FAILURE = 'MEDIA_LOAD_FAILURE';
-export const MEDIA_PERSIST_REQUEST = 'MEDIA_PERSIST_REQUEST';
-export const MEDIA_PERSIST_SUCCESS = 'MEDIA_PERSIST_SUCCESS';
-export const MEDIA_PERSIST_FAILURE = 'MEDIA_PERSIST_FAILURE';
-export const MEDIA_DELETE_REQUEST = 'MEDIA_DELETE_REQUEST';
-export const MEDIA_DELETE_SUCCESS = 'MEDIA_DELETE_SUCCESS';
-export const MEDIA_DELETE_FAILURE = 'MEDIA_DELETE_FAILURE';
-export const MEDIA_DISPLAY_URL_REQUEST = 'MEDIA_DISPLAY_URL_REQUEST';
-export const MEDIA_DISPLAY_URL_SUCCESS = 'MEDIA_DISPLAY_URL_SUCCESS';
-export const MEDIA_DISPLAY_URL_FAILURE = 'MEDIA_DISPLAY_URL_FAILURE';
 
 export function createMediaLibrary(instance: MediaLibraryInstance) {
   const api = {
@@ -219,7 +220,7 @@ export function persistMedia(file: File, opts: MediaOptions = {}) {
     const fileName = sanitizeSlug(file.name.toLowerCase(), config.slug);
     const existingFile = files.find(existingFile => existingFile.name.toLowerCase() === fileName);
 
-    const editingDraft = selectEditingDraft(state.entryDraft);
+    const editingDraft = selectEditingDraft(state);
 
     /**
      * Check for existing files of the same name before persisting. If no asset
@@ -308,7 +309,7 @@ export function deleteMedia(file: MediaFile) {
         dispatch(removeAsset(file.path));
         dispatch(removeDraftEntryMediaFile({ id: file.id }));
       } else {
-        const editingDraft = selectEditingDraft(state.entryDraft);
+        const editingDraft = selectEditingDraft(state);
 
         dispatch(mediaDeleting());
         dispatch(removeAsset(file.path));

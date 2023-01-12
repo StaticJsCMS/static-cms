@@ -25,8 +25,8 @@ import { resolveWidget } from '@staticcms/core/lib/registry';
 import { getFieldLabel } from '@staticcms/core/lib/util/field.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { validate } from '@staticcms/core/lib/util/validation.util';
-import { selectFieldErrors } from '@staticcms/core/reducers/entryDraft';
-import { selectIsLoadingAsset } from '@staticcms/core/reducers/medias';
+import { selectFieldErrors } from '@staticcms/core/reducers/selectors/entryDraft';
+import { selectIsLoadingAsset } from '@staticcms/core/reducers/selectors/medias';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 
 import type {
@@ -345,7 +345,7 @@ function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
   const { collections, entryDraft } = state;
   const entry = entryDraft.entry;
   const collection = entryDraft.entry ? collections[entryDraft.entry.collection] : null;
-  const isLoadingAsset = selectIsLoadingAsset(state.medias);
+  const isLoadingAsset = selectIsLoadingAsset(state);
 
   return {
     ...ownProps,

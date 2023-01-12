@@ -1,6 +1,6 @@
 import { produce } from 'immer';
 
-import { SCROLL_SYNC_ENABLED, SET_SCROLL, TOGGLE_SCROLL } from '../actions/scroll';
+import { SCROLL_SYNC_ENABLED, SET_SCROLL, TOGGLE_SCROLL } from '../constants';
 
 import type { ScrollAction } from '../actions/scroll';
 

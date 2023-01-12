@@ -1,16 +1,11 @@
 import { currentBackend } from '../backend';
+import { AUTH_FAILURE, AUTH_REQUEST, AUTH_REQUEST_DONE, AUTH_SUCCESS, LOGOUT } from '../constants';
 import { addSnackbar } from '../store/slices/snackbars';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { Credentials, User } from '../interface';
 import type { RootState } from '../store';
-
-export const AUTH_REQUEST = 'AUTH_REQUEST';
-export const AUTH_SUCCESS = 'AUTH_SUCCESS';
-export const AUTH_FAILURE = 'AUTH_FAILURE';
-export const AUTH_REQUEST_DONE = 'AUTH_REQUEST_DONE';
-export const LOGOUT = 'LOGOUT';
 
 export function authenticating() {
   return {

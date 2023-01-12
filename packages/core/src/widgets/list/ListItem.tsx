@@ -200,6 +200,16 @@ const ListItem: FC<ListItemProps> = ({
   const isDuplicate = isFieldDuplicate && isFieldDuplicate(field);
   const isHidden = isFieldHidden && isFieldHidden(field);
 
+  const finalValue = useMemo(() => {
+    if (field.fields && field.fields.length === 1) {
+      return {
+        [field.fields[0].name]: value,
+      };
+    }
+
+    return value;
+  }, [field.fields, value]);
+
   return (
     <StyledListItem key="sortable-list-item">
       <>
@@ -217,7 +227,7 @@ const ListItem: FC<ListItemProps> = ({
           <EditorControl
             key={`control-${id}`}
             field={objectField}
-            value={value}
+            value={finalValue}
             fieldsErrors={fieldsErrors}
             submitted={submitted}
             parentPath={path}
@@ -227,7 +237,7 @@ const ListItem: FC<ListItemProps> = ({
             isFieldHidden={isFieldHidden}
             locale={locale}
             i18n={i18n}
-            forList
+            forList={true}
           />
         </StyledObjectFieldWrapper>
         <Outline key="outline" />

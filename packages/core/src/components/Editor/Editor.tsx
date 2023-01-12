@@ -24,15 +24,12 @@ import {
 } from '@staticcms/core/actions/scroll';
 import { selectFields } from '@staticcms/core/lib/util/collection.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
-import { selectEntry } from '@staticcms/core/reducers';
+import { selectEntry } from '@staticcms/core/reducers/selectors/entries';
 import { history, navigateToCollection, navigateToNewEntry } from '@staticcms/core/routing/history';
 import confirm from '../UI/Confirm';
 import Loader from '../UI/Loader';
 import EditorInterface from './EditorInterface';
 
-import type { Blocker } from 'history';
-import type { ComponentType } from 'react';
-import type { ConnectedProps } from 'react-redux';
 import type {
   Collection,
   EditorPersistOptions,
@@ -40,6 +37,9 @@ import type {
   TranslatedProps,
 } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
+import type { Blocker } from 'history';
+import type { ComponentType } from 'react';
+import type { ConnectedProps } from 'react-redux';
 
 const Editor = ({
   entry,

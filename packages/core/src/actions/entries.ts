@@ -1,15 +1,53 @@
 import isEqual from 'lodash/isEqual';
 
 import { currentBackend } from '../backend';
-import { SORT_DIRECTION_ASCENDING } from '../constants';
+import {
+  ADD_DRAFT_ENTRY_MEDIA_FILE,
+  CHANGE_VIEW_STYLE,
+  DRAFT_CHANGE_FIELD,
+  DRAFT_CREATE_DUPLICATE_FROM_ENTRY,
+  DRAFT_CREATE_EMPTY,
+  DRAFT_CREATE_FROM_ENTRY,
+  DRAFT_CREATE_FROM_LOCAL_BACKUP,
+  DRAFT_DISCARD,
+  DRAFT_LOCAL_BACKUP_DELETE,
+  DRAFT_LOCAL_BACKUP_RETRIEVED,
+  DRAFT_VALIDATION_ERRORS,
+  ENTRIES_FAILURE,
+  ENTRIES_REQUEST,
+  ENTRIES_SUCCESS,
+  ENTRY_DELETE_FAILURE,
+  ENTRY_DELETE_REQUEST,
+  ENTRY_DELETE_SUCCESS,
+  ENTRY_FAILURE,
+  ENTRY_PERSIST_FAILURE,
+  ENTRY_PERSIST_REQUEST,
+  ENTRY_PERSIST_SUCCESS,
+  ENTRY_REQUEST,
+  ENTRY_SUCCESS,
+  FILTER_ENTRIES_FAILURE,
+  FILTER_ENTRIES_REQUEST,
+  FILTER_ENTRIES_SUCCESS,
+  GROUP_ENTRIES_FAILURE,
+  GROUP_ENTRIES_REQUEST,
+  GROUP_ENTRIES_SUCCESS,
+  REMOVE_DRAFT_ENTRY_MEDIA_FILE,
+  SORT_DIRECTION_ASCENDING,
+  SORT_ENTRIES_FAILURE,
+  SORT_ENTRIES_REQUEST,
+  SORT_ENTRIES_SUCCESS,
+} from '../constants';
 import ValidationErrorTypes from '../constants/validationErrorTypes';
 import { duplicateDefaultI18nFields, hasI18n, I18N_FIELD, serializeI18n } from '../lib/i18n';
 import { serializeValues } from '../lib/serializeEntryValues';
 import { Cursor } from '../lib/util';
 import { selectFields, updateFieldByKey } from '../lib/util/collection.util';
-import { selectPublishedSlugs } from '../reducers';
-import { selectCollectionEntriesCursor } from '../reducers/cursors';
-import { selectEntriesSortFields, selectIsFetching } from '../reducers/entries';
+import { selectCollectionEntriesCursor } from '../reducers/selectors/cursors';
+import {
+  selectEntriesSortFields,
+  selectIsFetching,
+  selectPublishedSlugs,
+} from '../reducers/selectors/entries';
 import { navigateToEntry } from '../routing/history';
 import { addSnackbar } from '../store/slices/snackbars';
 import { createAssetProxy } from '../valueObjects/AssetProxy';
@@ -39,52 +77,6 @@ import type {
 } from '../interface';
 import type { RootState } from '../store';
 import type AssetProxy from '../valueObjects/AssetProxy';
-
-/*
- * Constant Declarations
- */
-export const ENTRY_REQUEST = 'ENTRY_REQUEST';
-export const ENTRY_SUCCESS = 'ENTRY_SUCCESS';
-export const ENTRY_FAILURE = 'ENTRY_FAILURE';
-
-export const ENTRIES_REQUEST = 'ENTRIES_REQUEST';
-export const ENTRIES_SUCCESS = 'ENTRIES_SUCCESS';
-export const ENTRIES_FAILURE = 'ENTRIES_FAILURE';
-
-export const SORT_ENTRIES_REQUEST = 'SORT_ENTRIES_REQUEST';
-export const SORT_ENTRIES_SUCCESS = 'SORT_ENTRIES_SUCCESS';
-export const SORT_ENTRIES_FAILURE = 'SORT_ENTRIES_FAILURE';
-
-export const FILTER_ENTRIES_REQUEST = 'FILTER_ENTRIES_REQUEST';
-export const FILTER_ENTRIES_SUCCESS = 'FILTER_ENTRIES_SUCCESS';
-export const FILTER_ENTRIES_FAILURE = 'FILTER_ENTRIES_FAILURE';
-
-export const GROUP_ENTRIES_REQUEST = 'GROUP_ENTRIES_REQUEST';
-export const GROUP_ENTRIES_SUCCESS = 'GROUP_ENTRIES_SUCCESS';
-export const GROUP_ENTRIES_FAILURE = 'GROUP_ENTRIES_FAILURE';
-
-export const DRAFT_CREATE_FROM_ENTRY = 'DRAFT_CREATE_FROM_ENTRY';
-export const DRAFT_CREATE_EMPTY = 'DRAFT_CREATE_EMPTY';
-export const DRAFT_DISCARD = 'DRAFT_DISCARD';
-export const DRAFT_CHANGE_FIELD = 'DRAFT_CHANGE_FIELD';
-export const DRAFT_VALIDATION_ERRORS = 'DRAFT_VALIDATION_ERRORS';
-export const DRAFT_LOCAL_BACKUP_RETRIEVED = 'DRAFT_LOCAL_BACKUP_RETRIEVED';
-export const DRAFT_LOCAL_BACKUP_DELETE = 'DRAFT_LOCAL_BACKUP_DELETE';
-export const DRAFT_CREATE_FROM_LOCAL_BACKUP = 'DRAFT_CREATE_FROM_LOCAL_BACKUP';
-export const DRAFT_CREATE_DUPLICATE_FROM_ENTRY = 'DRAFT_CREATE_DUPLICATE_FROM_ENTRY';
-
-export const ENTRY_PERSIST_REQUEST = 'ENTRY_PERSIST_REQUEST';
-export const ENTRY_PERSIST_SUCCESS = 'ENTRY_PERSIST_SUCCESS';
-export const ENTRY_PERSIST_FAILURE = 'ENTRY_PERSIST_FAILURE';
-
-export const ENTRY_DELETE_REQUEST = 'ENTRY_DELETE_REQUEST';
-export const ENTRY_DELETE_SUCCESS = 'ENTRY_DELETE_SUCCESS';
-export const ENTRY_DELETE_FAILURE = 'ENTRY_DELETE_FAILURE';
-
-export const ADD_DRAFT_ENTRY_MEDIA_FILE = 'ADD_DRAFT_ENTRY_MEDIA_FILE';
-export const REMOVE_DRAFT_ENTRY_MEDIA_FILE = 'REMOVE_DRAFT_ENTRY_MEDIA_FILE';
-
-export const CHANGE_VIEW_STYLE = 'CHANGE_VIEW_STYLE';
 
 /*
  * Simple Action Creators (Internal)
@@ -287,7 +279,7 @@ export function sortByField(
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     // if we're already fetching we update the sort key, but skip loading entries
-    const isFetching = selectIsFetching(state.entries, collection.name);
+    const isFetching = selectIsFetching(state, collection.name);
     dispatch(sortEntriesRequest(collection, key, direction));
     if (isFetching) {
       return;
@@ -307,7 +299,7 @@ export function filterByField(collection: Collection, filter: ViewFilter) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     // if we're already fetching we update the filter key, but skip loading entries
-    const isFetching = selectIsFetching(state.entries, collection.name);
+    const isFetching = selectIsFetching(state, collection.name);
     dispatch(filterEntriesRequest(collection, filter));
     if (isFetching) {
       return;
@@ -325,7 +317,7 @@ export function filterByField(collection: Collection, filter: ViewFilter) {
 export function groupByField(collection: Collection, group: ViewGroup) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
-    const isFetching = selectIsFetching(state.entries, collection.name);
+    const isFetching = selectIsFetching(state, collection.name);
     dispatch({
       type: GROUP_ENTRIES_REQUEST,
       payload: {
@@ -657,7 +649,7 @@ export function loadEntries(collection: Collection, page = 0) {
       return;
     }
     const state = getState();
-    const sortFields = selectEntriesSortFields(state.entries, collection.name);
+    const sortFields = selectEntriesSortFields(state, collection.name);
     if (sortFields && sortFields.length > 0) {
       const field = sortFields[0];
       return dispatch(sortByField(collection, field.key, field.direction));
@@ -687,12 +679,6 @@ export function loadEntries(collection: Collection, page = 0) {
 
       const cleanResponse = {
         ...response,
-        // The only existing backend using the pagination system is the
-        // Algolia integration, which is also the only integration used
-        // to list entries. Thus, this checking for an integration can
-        // determine whether or not this is using the old integer-based
-        // pagination API. Other backends will simply store an empty
-        // cursor, which behaves identically to no cursor at all.
         cursor: !('cursor' in response && response.cursor)
           ? Cursor.create({
               actions: ['next'],
@@ -759,7 +745,7 @@ export function traverseCollectionCursor(collection: Collection, action: string)
 
     const { action: realAction, append } =
       action in appendActions ? appendActions[action] : { action, append: false };
-    const cursor = selectCollectionEntriesCursor(state.cursors, collection.name);
+    const cursor = selectCollectionEntriesCursor(state, collection.name);
 
     // Handle cursors representing pages in the old, integer-based pagination API
     if (cursor.meta?.usingOldPaginationAPI ?? false) {

@@ -12,15 +12,15 @@ import {
   persistMedia as persistMediaAction,
 } from '@staticcms/core/actions/mediaLibrary';
 import { fileExtension } from '@staticcms/core/lib/util';
-import { selectMediaFiles } from '@staticcms/core/reducers/mediaLibrary';
+import { selectMediaFiles } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import alert from '../UI/Alert';
 import confirm from '../UI/Confirm';
 import MediaLibraryModal from './MediaLibraryModal';
 
-import type { ChangeEvent, KeyboardEvent } from 'react';
-import type { ConnectedProps } from 'react-redux';
 import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
+import type { ChangeEvent, KeyboardEvent } from 'react';
+import type { ConnectedProps } from 'react-redux';
 
 /**
  * Extensions used to determine which files to show when the media library is

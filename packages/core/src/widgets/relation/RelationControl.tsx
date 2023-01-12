@@ -1,7 +1,7 @@
-import * as fuzzy from 'fuzzy';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 import TextField from '@mui/material/TextField';
+import * as fuzzy from 'fuzzy';
 import find from 'lodash/find';
 import get from 'lodash/get';
 import uniqBy from 'lodash/uniqBy';
@@ -21,8 +21,8 @@ import {
   expandPath,
   extractTemplateVars,
 } from '@staticcms/core/lib/widgets/stringTemplate';
+import { selectCollection } from '@staticcms/core/reducers/selectors/collections';
 import { useAppSelector } from '@staticcms/core/store/hooks';
-import { selectCollection } from '@staticcms/core/reducers/collections';
 
 import type { FilterOptionsState } from '@mui/material/useAutocomplete';
 import type {

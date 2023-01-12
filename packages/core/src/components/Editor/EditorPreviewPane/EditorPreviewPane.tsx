@@ -12,7 +12,7 @@ import { lengths } from '@staticcms/core/components/UI/styles';
 import { getPreviewStyles, getPreviewTemplate, resolveWidget } from '@staticcms/core/lib/registry';
 import { selectTemplateName, useInferedFields } from '@staticcms/core/lib/util/collection.util';
 import { selectField } from '@staticcms/core/lib/util/field.util';
-import { selectIsLoadingAsset } from '@staticcms/core/reducers/medias';
+import { selectIsLoadingAsset } from '@staticcms/core/reducers/selectors/medias';
 import { getTypedFieldForValue } from '@staticcms/list/typedListHelpers';
 import EditorPreview from './EditorPreview';
 import EditorPreviewContent from './EditorPreviewContent';
@@ -594,7 +594,7 @@ export interface EditorPreviewPaneOwnProps {
 }
 
 function mapStateToProps(state: RootState, ownProps: EditorPreviewPaneOwnProps) {
-  const isLoadingAsset = selectIsLoadingAsset(state.medias);
+  const isLoadingAsset = selectIsLoadingAsset(state);
   return { ...ownProps, isLoadingAsset, config: state.config };
 }
 

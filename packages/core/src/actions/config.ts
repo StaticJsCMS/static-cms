@@ -5,6 +5,7 @@ import trimStart from 'lodash/trimStart';
 import yaml from 'yaml';
 
 import { resolveBackend } from '../backend';
+import { CONFIG_FAILURE, CONFIG_REQUEST, CONFIG_SUCCESS } from '../constants';
 import validateConfig from '../constants/configSchema';
 import { I18N, I18N_FIELD, I18N_STRUCTURE } from '../lib/i18n';
 import { selectDefaultSortableFields } from '../lib/util/collection.util';
@@ -22,10 +23,6 @@ import type {
   UnknownField,
 } from '../interface';
 import type { RootState } from '../store';
-
-export const CONFIG_REQUEST = 'CONFIG_REQUEST';
-export const CONFIG_SUCCESS = 'CONFIG_SUCCESS';
-export const CONFIG_FAILURE = 'CONFIG_FAILURE';
 
 function isObjectField<F extends BaseField = UnknownField>(field: Field<F>): field is ObjectField {
   return 'fields' in (field as ObjectField);
@@ -125,7 +122,7 @@ function throwOnMissingDefaultLocale(i18n?: I18nInfo) {
 }
 
 export function applyDefaults(originalConfig: Config) {
-  return produce(originalConfig, config => {
+  return produce(originalConfig, (config: Config) => {
     config.slug = config.slug || {};
     config.collections = config.collections || [];
 

@@ -1,24 +1,20 @@
 import isEqual from 'lodash/isEqual';
 
 import { currentBackend } from '../backend';
+import {
+  QUERY_FAILURE,
+  QUERY_REQUEST,
+  QUERY_SUCCESS,
+  SEARCH_CLEAR,
+  SEARCH_ENTRIES_FAILURE,
+  SEARCH_ENTRIES_REQUEST,
+  SEARCH_ENTRIES_SUCCESS,
+} from '../constants';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { Entry, SearchQueryResponse } from '../interface';
 import type { RootState } from '../store';
-
-/*
- * Constant Declarations
- */
-export const SEARCH_ENTRIES_REQUEST = 'SEARCH_ENTRIES_REQUEST';
-export const SEARCH_ENTRIES_SUCCESS = 'SEARCH_ENTRIES_SUCCESS';
-export const SEARCH_ENTRIES_FAILURE = 'SEARCH_ENTRIES_FAILURE';
-
-export const QUERY_REQUEST = 'QUERY_REQUEST';
-export const QUERY_SUCCESS = 'QUERY_SUCCESS';
-export const QUERY_FAILURE = 'QUERY_FAILURE';
-
-export const SEARCH_CLEAR = 'SEARCH_CLEAR';
 
 /*
  * Simple Action Creators (Internal)

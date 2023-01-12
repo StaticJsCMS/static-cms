@@ -22,15 +22,13 @@ import {
   selectEntriesGroup,
   selectEntriesSort,
   selectViewStyle,
-} from '@staticcms/core/reducers/entries';
+} from '@staticcms/core/reducers/selectors/entries';
 import CollectionControls from './CollectionControls';
 import CollectionTop from './CollectionTop';
 import EntriesCollection from './Entries/EntriesCollection';
 import EntriesSearch from './Entries/EntriesSearch';
 import Sidebar from './Sidebar';
 
-import type { ComponentType } from 'react';
-import type { ConnectedProps } from 'react-redux';
 import type {
   Collection,
   SortDirection,
@@ -39,6 +37,8 @@ import type {
   ViewGroup,
 } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
+import type { ComponentType } from 'react';
+import type { ConnectedProps } from 'react-redux';
 
 const CollectionMain = styled('main')`
   width: 100%;
@@ -271,13 +271,13 @@ function mapStateToProps(state: RootState, ownProps: TranslatedProps<CollectionV
     t,
   } = ownProps;
   const collection: Collection = name ? collections[name] : collections[0];
-  const sort = selectEntriesSort(state.entries, collection.name);
+  const sort = selectEntriesSort(state, collection.name);
   const sortableFields = selectSortableFields(collection, t);
   const viewFilters = selectViewFilters(collection);
   const viewGroups = selectViewGroups(collection);
-  const filter = selectEntriesFilter(state.entries, collection.name);
-  const group = selectEntriesGroup(state.entries, collection.name);
-  const viewStyle = selectViewStyle(state.entries);
+  const filter = selectEntriesFilter(state, collection.name);
+  const group = selectEntriesGroup(state, collection.name);
+  const viewStyle = selectViewStyle(state);
 
   return {
     isSearchResults,

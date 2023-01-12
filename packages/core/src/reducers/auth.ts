@@ -1,15 +1,9 @@
 import { produce } from 'immer';
 
-import {
-  AUTH_REQUEST,
-  AUTH_SUCCESS,
-  AUTH_FAILURE,
-  AUTH_REQUEST_DONE,
-  LOGOUT,
-} from '../actions/auth';
+import { AUTH_FAILURE, AUTH_REQUEST, AUTH_REQUEST_DONE, AUTH_SUCCESS, LOGOUT } from '../constants';
 
-import type { User } from '../interface';
 import type { AuthAction } from '../actions/auth';
+import type { User } from '../interface';
 
 export type AuthState = {
   isFetching: boolean;

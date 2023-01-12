@@ -1,7 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-/* eslint-disable @typescript-eslint/no-empty-function */
 import '@testing-library/jest-dom';
 import { getByTestId, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -82,7 +81,7 @@ describe(ObjectControl.name, () => {
           field={singleFieldObjectField}
           value={singleFieldObjectValue}
           path="list.0"
-          forList
+          forList={true}
         />,
       );
 

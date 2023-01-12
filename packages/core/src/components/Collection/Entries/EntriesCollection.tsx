@@ -9,21 +9,21 @@ import {
 } from '@staticcms/core/actions/entries';
 import { colors } from '@staticcms/core/components/UI/styles';
 import { Cursor } from '@staticcms/core/lib/util';
-import { selectCollectionEntriesCursor } from '@staticcms/core/reducers/cursors';
+import { selectCollectionEntriesCursor } from '@staticcms/core/reducers/selectors/cursors';
 import {
   selectEntries,
   selectEntriesLoaded,
   selectGroups,
   selectIsFetching,
-} from '@staticcms/core/reducers/entries';
+} from '@staticcms/core/reducers/selectors/entries';
 import Entries from './Entries';
 
-import type { ComponentType } from 'react';
-import type { t } from 'react-polyglot';
-import type { ConnectedProps } from 'react-redux';
 import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
 import type { Collection, Entry, GroupOfEntries, TranslatedProps } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
+import type { ComponentType } from 'react';
+import type { t } from 'react-polyglot';
+import type { ConnectedProps } from 'react-redux';
 
 const GroupHeading = styled('h2')`
   font-size: 23px;
@@ -163,18 +163,18 @@ function mapStateToProps(state: RootState, ownProps: EntriesCollectionOwnProps) 
   const { collection, viewStyle, filterTerm } = ownProps;
   const page = state.entries.pages[collection.name]?.page;
 
-  let entries = selectEntries(state.entries, collection);
-  const groups = selectGroups(state.entries, collection);
+  let entries = selectEntries(state, collection);
+  const groups = selectGroups(state, collection);
 
   if ('nested' in collection) {
     const collectionFolder = collection.folder ?? '';
     entries = filterNestedEntries(filterTerm || '', collectionFolder, entries);
   }
 
-  const entriesLoaded = selectEntriesLoaded(state.entries, collection.name);
-  const isFetching = selectIsFetching(state.entries, collection.name);
+  const entriesLoaded = selectEntriesLoaded(state, collection.name);
+  const isFetching = selectIsFetching(state, collection.name);
 
-  const rawCursor = selectCollectionEntriesCursor(state.cursors, collection.name);
+  const rawCursor = selectCollectionEntriesCursor(state, collection.name);
   const cursor = Cursor.create(rawCursor).clearData();
 
   return { ...ownProps, page, entries, groups, entriesLoaded, isFetching, viewStyle, cursor };

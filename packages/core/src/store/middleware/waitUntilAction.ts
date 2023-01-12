@@ -8,9 +8,9 @@
  * action coming through the system. Think of it as a thunk that
  * blocks until the condition is met.
  */
-import type { AnyAction, Dispatch, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
+import { WAIT_UNTIL_ACTION } from '@staticcms/core/constants';
 
-export const WAIT_UNTIL_ACTION = 'WAIT_UNTIL_ACTION';
+import type { AnyAction, Dispatch, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
 
 export interface WaitActionArgs {
   predicate: (action: AnyAction) => boolean;

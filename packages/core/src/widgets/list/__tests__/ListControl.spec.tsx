@@ -1,7 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-/* eslint-disable @typescript-eslint/no-empty-function */
 import '@testing-library/jest-dom';
 import { getByTestId, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -55,11 +54,12 @@ const ListControlWrapper = createControlWrapper({
 
 jest.mock('@staticcms/core/components/Editor/EditorControlPane/EditorControl', () => {
   return jest.fn(props => {
-    const { parentPath, field } = props;
+    const { parentPath, field, value } = props;
     return (
       <div data-testid="editor-control">
         <div data-testid="parentPath">{parentPath}</div>
         <div data-testid="fieldName">{field.name}</div>
+        <div data-testid="value">{JSON.stringify(value)}</div>
       </div>
     );
   });
@@ -85,12 +85,20 @@ describe(ListControl.name, () => {
       expect(getByTestId(itemOne, 'list-item-title').textContent).toBe('String Value 1');
       expect(getByTestId(itemOne, 'parentPath').textContent).toBe('list');
       expect(getByTestId(itemOne, 'fieldName').textContent).toBe('0');
+      expect(JSON.parse(getByTestId(itemOne, 'value').textContent ?? '')).toEqual({
+        stringInput: 'String Value 1',
+        textInput: 'Text Value 1',
+      });
 
       const itemTwo = screen.getByTestId('object-control-1');
       expect(itemTwo).toBeVisible();
       expect(getByTestId(itemTwo, 'list-item-title').textContent).toBe('String Value 2');
       expect(getByTestId(itemTwo, 'parentPath').textContent).toBe('list');
       expect(getByTestId(itemTwo, 'fieldName').textContent).toBe('1');
+      expect(JSON.parse(getByTestId(itemTwo, 'value').textContent ?? '')).toEqual({
+        stringInput: 'String Value 2',
+        textInput: 'Text Value 2',
+      });
     });
 
     it('outputs value as object array when adding new value', async () => {
@@ -164,12 +172,18 @@ describe(ListControl.name, () => {
       expect(getByTestId(itemOne, 'list-item-title').textContent).toBe('Value 1');
       expect(getByTestId(itemOne, 'parentPath').textContent).toBe('list');
       expect(getByTestId(itemOne, 'fieldName').textContent).toBe('0');
+      expect(JSON.parse(getByTestId(itemOne, 'value').textContent ?? '')).toEqual({
+        stringInput: 'Value 1',
+      });
 
       const itemTwo = screen.getByTestId('object-control-1');
       expect(itemTwo).toBeVisible();
       expect(getByTestId(itemTwo, 'list-item-title').textContent).toBe('Value 2');
       expect(getByTestId(itemTwo, 'parentPath').textContent).toBe('list');
       expect(getByTestId(itemTwo, 'fieldName').textContent).toBe('1');
+      expect(JSON.parse(getByTestId(itemTwo, 'value').textContent ?? '')).toEqual({
+        stringInput: 'Value 2',
+      });
     });
 
     it('outputs value as singleton array when adding new value', async () => {

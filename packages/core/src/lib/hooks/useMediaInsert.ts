@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { v4 as uuid } from 'uuid';
 
-import { selectMediaPath } from '@staticcms/core/reducers/mediaLibrary';
-import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import { openMediaLibrary, removeInsertedMedia } from '@staticcms/core/actions/mediaLibrary';
+import { selectMediaPath } from '@staticcms/core/reducers/selectors/mediaLibrary';
+import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 
-import type { MouseEvent } from 'react';
 import type { FileOrImageField, MarkdownField } from '@staticcms/core/interface';
+import type { MouseEvent } from 'react';
 
 export default function useMediaInsert<T extends string | string[]>(
   value: T,

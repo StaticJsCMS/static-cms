@@ -755,7 +755,6 @@ export interface Config<EF extends BaseField = UnknownField> {
   media_folder_relative?: boolean;
   media_library?: MediaLibrary;
   load_config_file?: boolean;
-  integrations?: Integration[];
   slug?: Slug;
   i18n?: I18nInfo;
   local_backend?: boolean | LocalBackend;
@@ -812,23 +811,6 @@ export interface AuthenticationPageProps {
   config: Config;
   error?: string | undefined;
   clearHash?: () => void;
-}
-
-export type Integration = {
-  collections?: '*' | string[];
-} & AlgoliaIntegration;
-
-export type SearchIntegrationProvider = 'algolia';
-
-export interface AlgoliaIntegration extends AlgoliaConfig {
-  provider: 'algolia';
-}
-
-export interface AlgoliaConfig {
-  hooks: ['search' | 'listEntries'];
-  applicationID: string;
-  apiKey: string;
-  indexPrefix?: string;
 }
 
 export interface SearchResponse {
