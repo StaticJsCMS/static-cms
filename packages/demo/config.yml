@@ -327,6 +327,34 @@ collections:
               - label: Description
                 name: description
                 widget: text
+          - name: string_list
+            label: String List
+            widget: list
+            fields:
+              - label: Tag
+                name: tag
+                widget: string
+          - name: number_list
+            label: Number List
+            widget: list
+            default:
+              - 5
+              - 13
+              - 2
+            fields:
+              - label: Value
+                name: value
+                widget: number
+          - name: boolean_list
+            label: Boolean List
+            widget: list
+            default:
+              - false
+              - true
+            fields:
+              - label: Active
+                name: active
+                widget: boolean
           - name: typed_list
             label: Typed List
             widget: list
