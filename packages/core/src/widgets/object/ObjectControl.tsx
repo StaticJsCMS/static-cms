@@ -82,7 +82,7 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
         let parentPath = path;
         const fieldValue = value && value[fieldName];
 
-        if (multiFields.length === 1 && field.widget === 'string') {
+        if (forList && multiFields.length === 1) {
           const splitPath = path.split('.');
           fieldName = splitPath.pop() ?? field.name;
           parentPath = splitPath.join('.');
@@ -112,6 +112,7 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
     );
   }, [
     fieldsErrors,
+    forList,
     i18n,
     isFieldDuplicate,
     isFieldHidden,
@@ -133,6 +134,7 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
             heading={objectLabel}
             hasError={hasErrors}
             t={t}
+            testId="object-title"
           />
         )}
         <StyledFieldsBox $collapsed={collapsed} key="object-control-fields">

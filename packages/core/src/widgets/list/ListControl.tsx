@@ -139,12 +139,6 @@ function getFieldsDefault(
   fields: Field[],
   initialValue: ValueOrNestedValue = {},
 ): ValueOrNestedValue {
-  console.log(
-    'fields.length',
-    fields.length,
-    'field[0].widget',
-    fields.length === 1 ? fields[0].widget : 'N/A',
-  );
   if (fields.length === 1) {
     if ('default' in fields[0] && fields[0].default) {
       return fields[0].default;
@@ -257,7 +251,6 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
   const handleAdd = useCallback(
     (e: MouseEvent) => {
       e.preventDefault();
-      console.log('HANDLE ADD!!!!!!!!');
       const parsedValue = multipleDefault(field.fields ?? []);
       addItem(parsedValue);
     },
