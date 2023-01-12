@@ -406,6 +406,41 @@ fields: [
 
 </CodeTabs>
 
+### Singleton List (List of Strings)
+
+<CodeTabs>
+```yaml
+name: sections
+label: Home Section
+widget: list
+default:
+  - tag-1
+  - tag-2
+fields:
+  - name: tag
+    label: Tag
+    widget: string
+```
+
+```js
+name: 'sections',
+label: 'Home Section',
+widget: 'list',
+default: [
+  'tag-1',
+  'tag-2'
+]
+fields: [
+  {
+    name: 'tag',
+    label: 'Tag',
+    widget: 'string',
+  },
+]
+```
+
+</CodeTabs>
+
 ### Typed List
 
 <CodeTabs>
