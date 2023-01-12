@@ -437,7 +437,6 @@ export default class API {
     });
   }
 
-
   async getDefaultBranch() {
     const result: ReposGetBranchResponse = await this.request(
       `${this.originRepoURL}/branches/${encodeURIComponent(this.branch)}`,
@@ -452,5 +451,4 @@ export default class API {
   toBase64(str: string) {
     return Promise.resolve(Base64.encode(str));
   }
-
 }

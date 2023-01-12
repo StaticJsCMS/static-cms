@@ -1,3 +1,7 @@
+import { stripIndent } from 'common-tags';
+import trimStart from 'lodash/trimStart';
+import semaphore from 'semaphore';
+
 import {
   asyncLock,
   basename,
@@ -13,10 +17,6 @@ import {
   runWithLock,
   unsentRequest,
 } from '@staticcms/core/lib/util';
-import { stripIndent } from 'common-tags';
-import trimStart from 'lodash/trimStart';
-import semaphore from 'semaphore';
-
 import API, { API_NAME } from './API';
 import AuthenticationPage from './AuthenticationPage';
 
