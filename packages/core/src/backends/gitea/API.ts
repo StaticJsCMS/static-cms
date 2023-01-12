@@ -37,6 +37,7 @@ import type {
   ReposGetBranchResponse,
   ReposGetResponse,
   ReposListCommitsResponse,
+  ContentsResponse,
 } from './types';
 
 export const API_NAME = 'Gitea';
@@ -378,16 +379,21 @@ export default class API {
   async persistFiles(dataFiles: DataFile[], mediaFiles: AssetProxy[], options: PersistOptions) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const files: (DataFile | AssetProxy)[] = mediaFiles.concat(dataFiles as any);
-    const uploadPromises = files.map(file => this.uploadBlob(file));
+    const branch = await this.getDefaultBranch();
+    const uploadPromises = files.map(async file => {
+      console.log(file);
+      const item: { raw?: string; sha?: string; toBase64?: () => Promise<string> } = file;
+      const contentBase64 = await result(
+        item,
+        'toBase64',
+        partial(this.toBase64, item.raw as string),
+      );
+      this.request(`${this.repoURL}/contents/${file.path}`, {
+        method: 'POST',
+        body: JSON.stringify({ branch: branch.name, content: contentBase64, message: options.commitMessage, signoff: false }),
+      });
+    });
     await Promise.all(uploadPromises);
-
-    return (
-      this.getDefaultBranch()
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .then(branchData => this.updateTree(branchData.commit.id, files as any))
-        .then(changeTree => this.commit(options.commitMessage, changeTree))
-        .then(response => this.patchBranch(this.branch, response.sha))
-    );
   }
 
   async getFileSha(path: string, { repoURL = this.repoURL, branch = this.branch } = {}) {
@@ -414,21 +420,26 @@ export default class API {
 
   async deleteFiles(paths: string[], message: string) {
     const branchData = await this.getDefaultBranch();
-    const files = paths.map(path => ({ path, sha: null }));
-    const changeTree = await this.updateTree(branchData.commit.id, files);
-    const commit = await this.commit(message, changeTree);
-    await this.patchBranch(this.branch, commit.sha);
+    paths.forEach(async (file) => {
+      const meta: ContentsResponse = await this.request(`${this.repoURL}/contents/${file}`, {
+        method: 'GET',
+      });
+      await this.request(`${this.repoURL}/contents/${file}`, {
+        method: 'DELETE',
+        body: JSON.stringify({ branch: branchData.name, message: message, sha: meta.sha, signoff: false }),
+      });
+    });
   }
 
-  async createRef(type: string, name: string, sha: string) {
+  /*async createRef(type: string, name: string, sha: string) {
     const result: GitCreateRefResponse = await this.request(`${this.repoURL}/git/refs`, {
       method: 'POST',
       body: JSON.stringify({ ref: `refs/${type}/${name}`, sha }),
     });
     return result;
-  }
+  }*/
 
-  async patchRef(type: string, name: string, sha: string) {
+  /*async patchRef(type: string, name: string, sha: string) {
     const result: GitUpdateRefResponse = await this.request(
       `${this.repoURL}/git/refs/${type}/${encodeURIComponent(name)}`,
       {
@@ -437,13 +448,13 @@ export default class API {
       },
     );
     return result;
-  }
+  }*/
 
-  deleteRef(type: string, name: string) {
+  /*deleteRef(type: string, name: string) {
     return this.request(`${this.repoURL}/git/refs/${type}/${encodeURIComponent(name)}`, {
       method: 'DELETE',
     });
-  }
+  }*/
 
   async getDefaultBranch() {
     const result: ReposGetBranchResponse = await this.request(
@@ -452,9 +463,9 @@ export default class API {
     return result;
   }
 
-  patchBranch(branchName: string, sha: string) {
+  /*patchBranch(branchName: string, sha: string) {
     return this.patchRef('heads', branchName, sha);
-  }
+  }*/
 
   async getHeadReference(head: string) {
     return `${this.repoOwner}:${head}`;
@@ -464,12 +475,7 @@ export default class API {
     return Promise.resolve(Base64.encode(str));
   }
 
-  async uploadBlob(item: { raw?: string; sha?: string; toBase64?: () => Promise<string> }) {
-    const contentBase64 = await result(
-      item,
-      'toBase64',
-      partial(this.toBase64, item.raw as string),
-    );
+  /*async uploadBlob(item: { raw?: string; sha?: string; toBase64?: () => Promise<string> }) {
     const response = await this.request(`${this.repoURL}/git/blobs`, {
       method: 'POST',
       body: JSON.stringify({
@@ -479,9 +485,9 @@ export default class API {
     });
     item.sha = response.sha;
     return item;
-  }
+  }*/
 
-  async updateTree(
+  /*async updateTree(
     baseSha: string,
     files: { path: string; sha: string | null; newPath?: string }[],
     branch = this.branch,
@@ -528,22 +534,22 @@ export default class API {
 
     const newTree = await this.createTree(baseSha, tree);
     return { ...newTree, parentSha: baseSha };
-  }
+  }*/
 
-  async createTree(baseSha: string, tree: TreeEntry[]) {
+  /*async createTree(baseSha: string, tree: TreeEntry[]) {
     const result: GitCreateTreeResponse = await this.request(`${this.repoURL}/git/trees`, {
       method: 'POST',
       body: JSON.stringify({ base_tree: baseSha, tree }),
     });
     return result;
-  }
+  }*/
 
-  commit(message: string, changeTree: { parentSha?: string; sha: string }) {
+  /*commit(message: string, changeTree: { parentSha?: string; sha: string }) {
     const parents = changeTree.parentSha ? [changeTree.parentSha] : [];
     return this.createCommit(message, changeTree.sha, parents);
-  }
+  }*/
 
-  async createCommit(
+  /*async createCommit(
     message: string,
     treeSha: string,
     parents: string[],
@@ -555,5 +561,5 @@ export default class API {
       body: JSON.stringify({ message, tree: treeSha, parents, author, committer }),
     });
     return result;
-  }
+  }*/
 }
