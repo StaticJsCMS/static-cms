@@ -80,6 +80,8 @@ jobs:
           yarn install --frozen-lockfile
 
       - name: Test
+        env:
+          NODE_OPTIONS: "--max-old-space-size=8192"
         run: |
           yarn test:ci
 
