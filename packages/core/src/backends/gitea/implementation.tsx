@@ -1,7 +1,3 @@
-import { stripIndent } from 'common-tags';
-import trimStart from 'lodash/trimStart';
-import semaphore from 'semaphore';
-
 import {
   asyncLock,
   basename,
@@ -17,6 +13,10 @@ import {
   runWithLock,
   unsentRequest,
 } from '@staticcms/core/lib/util';
+import { stripIndent } from 'common-tags';
+import trimStart from 'lodash/trimStart';
+import semaphore from 'semaphore';
+
 import API, { API_NAME } from './API';
 import AuthenticationPage from './AuthenticationPage';
 
@@ -71,7 +71,7 @@ export default class Gitea implements BackendClass {
       !this.options.proxied &&
       (config.backend.repo === null || config.backend.repo === undefined)
     ) {
-      throw new Error('The GitHub backend needs a "repo" in the backend configuration.');
+      throw new Error('The Gitea backend needs a "repo" in the backend configuration.');
     }
 
     this.api = this.options.API || null;
@@ -277,8 +277,6 @@ export default class Gitea implements BackendClass {
   // Fetches a single entry.
   getEntry(path: string) {
     const repoURL = this.api!.originRepoURL;
-    console.log("Repo url:", repoURL);
-    console.log("Path:", path);
     return this.api!.readFile(path, null, { repoURL })
       .then(data => ({
         file: { path, id: null },
@@ -293,7 +291,7 @@ export default class Gitea implements BackendClass {
     }
     return this.api!.listFiles(mediaFolder).then(files =>
       files.map(({ id, name, size, path }) => {
-        // load media using getMediaDisplayURL to avoid token expiration with GitHub raw content urls
+        // load media using getMediaDisplayURL to avoid token expiration with Gitlab raw content urls
         // for private repositories
         return { id, name, size, displayURL: { id, path }, path };
       }),
@@ -301,7 +299,6 @@ export default class Gitea implements BackendClass {
   }
 
   async getMediaFile(path: string) {
-    console.log("getMediaFile path:", path);
     const blob = await getMediaAsBlob(path, null, this.api!.readFile.bind(this.api!));
 
     const name = basename(path);

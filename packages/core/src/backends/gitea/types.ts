@@ -21,19 +21,19 @@ export type GiteaUser = {
   website: string;
 };
 
-export type Team = {
+export type GiteaTeam = {
   can_create_org_repo: boolean;
   description: string;
   id: number;
   includes_all_repositories: boolean;
   name: string;
-  organization: Organization;
+  organization: GiteaOrganization;
   permission: string;
   units: Array<string>;
   units_map: Map<string, string>;
 };
 
-export type Organization = {
+export type GiteaOrganization = {
   avatar_url: string;
   description: string;
   full_name: string;
@@ -46,49 +46,29 @@ export type Organization = {
   website: string;
 };
 
-export type GitCreateTreeParamsTree = {
-  content?: string;
-  mode?: '100644' | '100755' | '040000' | '160000' | '120000';
-  path?: string;
-  sha?: string;
-  type?: 'blob' | 'tree' | 'commit';
-};
-
-export type GitHubAuthor = {
-  date: string;
-  email: string;
-  name: string;
-};
-
-export type GitHubCommitter = {
-  date: string;
-  email: string;
-  name: string;
-};
-
 type ReposListCommitsResponseItemCommitUser = {
   date: string;
   email: string;
   name: string;
 };
 
-type ReposListCommitsResponseItemCommitMeta = { 
+type ReposListCommitsResponseItemCommitMeta = {
   created: string;
-  sha: string; 
-  url: string
+  sha: string;
+  url: string;
 };
 
-type ReposListCommitsResponsePayloadUser = {
+type PayloadUser = {
   email: string;
   name: string;
   username: string;
 };
 
-type ReposListCommitsResponsePayloadCommitVerification = {
+type PayloadCommitVerification = {
   payload: string;
   reason: string;
   signature: string;
-  signer: ReposListCommitsResponsePayloadUser;
+  signer: PayloadUser;
   verified: boolean;
 };
 
@@ -98,7 +78,7 @@ type ReposListCommitsResponseItemCommit = {
   message: string;
   tree: ReposListCommitsResponseItemCommitMeta;
   url: string;
-  verification: ReposListCommitsResponsePayloadCommitVerification;
+  verification: PayloadCommitVerification;
 };
 
 type ReposGetResponsePermissions = {
@@ -128,7 +108,7 @@ type ReposGetResponseRepoTransfer = {
   description: string;
   doer: GiteaUser;
   recipient: GiteaUser;
-  teams: Array<Team>;
+  teams: Array<GiteaTeam>;
   enable_issue_dependencies: boolean;
   enable_time_tracker: boolean;
 };
@@ -149,7 +129,7 @@ export type ReposGetResponse = {
   description: string;
   empty: boolean;
   external_tracker: ReposGetResponseExternalTracker;
-  external_wiki:ReposGetResponseExternalWiki;
+  external_wiki: ReposGetResponseExternalWiki;
   fork: boolean;
   forks_count: number;
   full_name: string;
@@ -201,7 +181,7 @@ type ReposListCommitsResponseItem = {
   commit: ReposListCommitsResponseItemCommit;
   committer: GiteaUser;
   created: string;
-  files: Array<ReposListCommitsResponseItemCommitAffectedFiles>
+  files: Array<ReposListCommitsResponseItemCommitAffectedFiles>;
   html_url: string;
   parents: Array<ReposListCommitsResponseItemCommitMeta>;
   sha: string;
@@ -237,72 +217,18 @@ export type GitGetTreeResponse = {
   url: string;
 };
 
-type GitCreateRefResponseObject = { sha: string; type: string; url: string };
-
-export type GitCreateRefResponse = {
-  node_id: string;
-  object: GitCreateRefResponseObject;
-  ref: string;
-  url: string;
-};
-
-type GitUpdateRefResponseObject = { sha: string; type: string; url: string };
-
-export type GitUpdateRefResponse = {
-  node_id: string;
-  object: GitUpdateRefResponseObject;
-  ref: string;
-  url: string;
-};
-
-type GitCreateCommitResponseVerification = {
-  payload: null;
-  reason: string;
-  signature: null;
-  verified: boolean;
-};
-
-type GitCreateCommitResponseTree = { sha: string; url: string };
-
-type GitCreateCommitResponseParentsItem = { sha: string; url: string };
-
-type GitCreateCommitResponseCommitter = {
-  date: string;
-  email: string;
-  name: string;
-};
-
-type GitCreateCommitResponseAuthor = {
-  date: string;
-  email: string;
-  name: string;
-};
-
-export type GitCreateCommitResponse = {
-  author: GitCreateCommitResponseAuthor;
-  committer: GitCreateCommitResponseCommitter;
-  message: string;
-  node_id: string;
-  parents: Array<GitCreateCommitResponseParentsItem>;
-  sha: string;
-  tree: GitCreateCommitResponseTree;
-  url: string;
-  verification: GitCreateCommitResponseVerification;
-};
-
 type ReposGetBranchResponsePayloadCommit = {
   added: Array<string>;
-  author: ReposListCommitsResponsePayloadUser;
-  committer: ReposListCommitsResponsePayloadUser;
+  author: PayloadUser;
+  committer: PayloadUser;
   id: string;
   message: string;
   modified: Array<string>;
   removed: Array<string>;
   timestamp: string;
   url: string;
-  verification: ReposListCommitsResponsePayloadCommitVerification;
+  verification: PayloadCommitVerification;
 };
-
 
 export type ReposGetBranchResponse = {
   commit: ReposGetBranchResponsePayloadCommit;
@@ -314,21 +240,6 @@ export type ReposGetBranchResponse = {
   status_check_contexts: Array<string>;
   user_can_merge: boolean;
   user_can_push: boolean;
-};
-
-type GitCreateTreeResponseTreeItem = {
-  mode: string;
-  path: string;
-  sha: string;
-  size: number;
-  type: string;
-  url: string;
-};
-
-export type GitCreateTreeResponse = {
-  sha: string;
-  tree: Array<GitCreateTreeResponseTreeItem>;
-  url: string;
 };
 
 export type GiteaIdentity = {
@@ -358,4 +269,4 @@ export type ContentsResponse = {
   target?: string | null;
   type: string;
   url: string;
-}
+};

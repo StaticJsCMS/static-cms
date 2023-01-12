@@ -4,8 +4,6 @@ import last from 'lodash/last';
 import partial from 'lodash/partial';
 import result from 'lodash/result';
 import trim from 'lodash/trim';
-import trimStart from 'lodash/trimStart';
-import { dirname } from 'path';
 
 import {
   APIError,
@@ -24,16 +22,9 @@ import type { ApiRequest, FetchError } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 import type { Semaphore } from 'semaphore';
 import type {
-  GitCreateCommitResponse,
-  GitCreateRefResponse,
-  GitCreateTreeParamsTree,
-  GitCreateTreeResponse,
   GitGetBlobResponse,
   GitGetTreeResponse,
-  GitHubAuthor,
-  GitHubCommitter,
   GiteaUser,
-  GitUpdateRefResponse,
   ReposGetBranchResponse,
   ReposGetResponse,
   ReposListCommitsResponse,
@@ -49,10 +40,6 @@ export interface Config {
   repo?: string;
   originRepo?: string;
 }
-
-type Override<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
-
-type TreeEntry = Override<GitCreateTreeParamsTree, { sha: string | null }>;
 
 interface MetaDataObjects {
   entry: { path: string; sha: string };
@@ -228,7 +215,6 @@ export default class API {
     options = { cache: 'no-cache', ...options };
     const headers = await this.requestHeaders(options.headers || {});
     const url = this.urlFor(path, options);
-    console.log(url);
     let responseStatus = 500;
 
     try {
@@ -287,7 +273,6 @@ export default class API {
       parseText?: boolean;
     } = {},
   ) {
-    console.log("readFile:", path);
     if (!sha) {
       sha = await this.getFileSha(path, { repoURL, branch });
     }
@@ -342,7 +327,6 @@ export default class API {
     path: string,
     { repoURL = this.repoURL, branch = this.branch, depth = 1 } = {},
   ): Promise<{ type: string; id: string; name: string; path: string; size: number }[]> {
-    console.log("Path:", path);
     const folder = encodeURIComponent(trim(path, '/'));
     try {
       const result: GitGetTreeResponse = await this.request(
@@ -381,7 +365,6 @@ export default class API {
     const files: (DataFile | AssetProxy)[] = mediaFiles.concat(dataFiles as any);
     const branch = await this.getDefaultBranch();
     const uploadPromises = files.map(async file => {
-      console.log(file);
       const item: { raw?: string; sha?: string; toBase64?: () => Promise<string> } = file;
       const contentBase64 = await result(
         item,
@@ -389,9 +372,32 @@ export default class API {
         partial(this.toBase64, item.raw as string),
       );
       this.request(`${this.repoURL}/contents/${file.path}`, {
-        method: 'POST',
-        body: JSON.stringify({ branch: branch.name, content: contentBase64, message: options.commitMessage, signoff: false }),
-      });
+        method: 'GET',
+      })
+        .then((fileStatus: ContentsResponse) => {
+          const content = JSON.stringify({
+            branch: branch.name,
+            content: contentBase64,
+            message: options.commitMessage,
+            sha: fileStatus.sha,
+            signoff: false,
+          });
+          this.request(`${this.repoURL}/contents/${file.path}`, {
+            method: 'PUT',
+            body: content,
+          });
+        })
+        .catch(() => {
+          this.request(`${this.repoURL}/contents/${file.path}`, {
+            method: 'POST',
+            body: JSON.stringify({
+              branch: branch.name,
+              content: contentBase64,
+              message: options.commitMessage,
+              signoff: false,
+            }),
+          });
+        });
     });
     await Promise.all(uploadPromises);
   }
@@ -420,41 +426,17 @@ export default class API {
 
   async deleteFiles(paths: string[], message: string) {
     const branchData = await this.getDefaultBranch();
-    paths.forEach(async (file) => {
+    paths.forEach(async file => {
       const meta: ContentsResponse = await this.request(`${this.repoURL}/contents/${file}`, {
         method: 'GET',
       });
       await this.request(`${this.repoURL}/contents/${file}`, {
         method: 'DELETE',
-        body: JSON.stringify({ branch: branchData.name, message: message, sha: meta.sha, signoff: false }),
+        body: JSON.stringify({ branch: branchData.name, message, sha: meta.sha, signoff: false }),
       });
     });
   }
 
-  /*async createRef(type: string, name: string, sha: string) {
-    const result: GitCreateRefResponse = await this.request(`${this.repoURL}/git/refs`, {
-      method: 'POST',
-      body: JSON.stringify({ ref: `refs/${type}/${name}`, sha }),
-    });
-    return result;
-  }*/
-
-  /*async patchRef(type: string, name: string, sha: string) {
-    const result: GitUpdateRefResponse = await this.request(
-      `${this.repoURL}/git/refs/${type}/${encodeURIComponent(name)}`,
-      {
-        method: 'PATCH',
-        body: JSON.stringify({ sha }),
-      },
-    );
-    return result;
-  }*/
-
-  /*deleteRef(type: string, name: string) {
-    return this.request(`${this.repoURL}/git/refs/${type}/${encodeURIComponent(name)}`, {
-      method: 'DELETE',
-    });
-  }*/
 
   async getDefaultBranch() {
     const result: ReposGetBranchResponse = await this.request(
@@ -462,10 +444,6 @@ export default class API {
     );
     return result;
   }
-
-  /*patchBranch(branchName: string, sha: string) {
-    return this.patchRef('heads', branchName, sha);
-  }*/
 
   async getHeadReference(head: string) {
     return `${this.repoOwner}:${head}`;
@@ -475,91 +453,4 @@ export default class API {
     return Promise.resolve(Base64.encode(str));
   }
 
-  /*async uploadBlob(item: { raw?: string; sha?: string; toBase64?: () => Promise<string> }) {
-    const response = await this.request(`${this.repoURL}/git/blobs`, {
-      method: 'POST',
-      body: JSON.stringify({
-        content: contentBase64,
-        encoding: 'base64',
-      }),
-    });
-    item.sha = response.sha;
-    return item;
-  }*/
-
-  /*async updateTree(
-    baseSha: string,
-    files: { path: string; sha: string | null; newPath?: string }[],
-    branch = this.branch,
-  ) {
-    const toMove: { from: string; to: string; sha: string }[] = [];
-    const tree = files.reduce((acc, file) => {
-      const entry = {
-        path: trimStart(file.path, '/'),
-        mode: '100644',
-        type: 'blob',
-        sha: file.sha,
-      } as TreeEntry;
-
-      if (file.newPath) {
-        toMove.push({ from: file.path, to: file.newPath, sha: file.sha as string });
-      } else {
-        acc.push(entry);
-      }
-
-      return acc;
-    }, [] as TreeEntry[]);
-
-    for (const { from, to, sha } of toMove) {
-      const sourceDir = dirname(from);
-      const destDir = dirname(to);
-      const files = await this.listFiles(sourceDir, { branch, depth: 100 });
-      for (const file of files) {
-        // delete current path
-        tree.push({
-          path: file.path,
-          mode: '100644',
-          type: 'blob',
-          sha: null,
-        });
-        // create in new path
-        tree.push({
-          path: file.path.replace(sourceDir, destDir),
-          mode: '100644',
-          type: 'blob',
-          sha: file.path === from ? sha : file.id,
-        });
-      }
-    }
-
-    const newTree = await this.createTree(baseSha, tree);
-    return { ...newTree, parentSha: baseSha };
-  }*/
-
-  /*async createTree(baseSha: string, tree: TreeEntry[]) {
-    const result: GitCreateTreeResponse = await this.request(`${this.repoURL}/git/trees`, {
-      method: 'POST',
-      body: JSON.stringify({ base_tree: baseSha, tree }),
-    });
-    return result;
-  }*/
-
-  /*commit(message: string, changeTree: { parentSha?: string; sha: string }) {
-    const parents = changeTree.parentSha ? [changeTree.parentSha] : [];
-    return this.createCommit(message, changeTree.sha, parents);
-  }*/
-
-  /*async createCommit(
-    message: string,
-    treeSha: string,
-    parents: string[],
-    author?: GitHubAuthor,
-    committer?: GitHubCommitter,
-  ) {
-    const result: GitCreateCommitResponse = await this.request(`${this.repoURL}/git/commits`, {
-      method: 'POST',
-      body: JSON.stringify({ message, tree: treeSha, parents, author, committer }),
-    });
-    return result;
-  }*/
 }
