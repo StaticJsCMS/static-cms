@@ -3,7 +3,7 @@ import {
   FILTER_ENTRIES_SUCCESS,
   GROUP_ENTRIES_SUCCESS,
   SORT_ENTRIES_SUCCESS,
-} from '../actions/entries';
+} from '../constants';
 import { Cursor } from '../lib/util';
 
 import type { EntriesAction } from '../actions/entries';
@@ -48,13 +48,6 @@ function cursors(
     default:
       return state;
   }
-}
-
-// Since pagination can be used for a variety of views (collections
-// and searches are the most common examples), we namespace cursors by
-// their type before storing them in the state.
-export function selectCollectionEntriesCursor(state: CursorsState, collectionName: string) {
-  return new Cursor(state.cursorsByType.collectionEntries[collectionName]);
 }
 
 export default cursors;

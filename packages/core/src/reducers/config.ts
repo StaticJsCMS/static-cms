@@ -1,6 +1,4 @@
-import { produce } from 'immer';
-
-import { CONFIG_FAILURE, CONFIG_REQUEST, CONFIG_SUCCESS } from '../actions/config';
+import { CONFIG_FAILURE, CONFIG_REQUEST, CONFIG_SUCCESS } from '../constants';
 
 import type { ConfigAction } from '../actions/config';
 import type { Config } from '../interface';
@@ -15,11 +13,13 @@ const defaultState: ConfigState = {
   isFetching: true,
 };
 
-const config = produce((state: ConfigState, action: ConfigAction) => {
+const config = (state: ConfigState = defaultState, action: ConfigAction) => {
   switch (action.type) {
     case CONFIG_REQUEST:
-      state.isFetching = true;
-      break;
+      return {
+        ...state,
+        isFetching: true,
+      };
     case CONFIG_SUCCESS:
       return {
         config: action.payload,
@@ -27,13 +27,15 @@ const config = produce((state: ConfigState, action: ConfigAction) => {
         error: undefined,
       };
     case CONFIG_FAILURE:
-      state.isFetching = false;
-      state.error = action.payload.toString();
-  }
-}, defaultState);
+      return {
+        ...state,
+        isFetching: false,
+        error: action.payload.toString(),
+      };
 
-export function selectLocale(state?: Config) {
-  return state?.locale || 'en';
-}
+    default:
+      return state;
+  }
+};
 
 export default config;

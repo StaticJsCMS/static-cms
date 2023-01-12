@@ -12,7 +12,7 @@ import { lengths } from '@staticcms/core/components/UI/styles';
 import { getPreviewStyles, getPreviewTemplate, resolveWidget } from '@staticcms/core/lib/registry';
 import { selectTemplateName, useInferedFields } from '@staticcms/core/lib/util/collection.util';
 import { selectField } from '@staticcms/core/lib/util/field.util';
-import { selectIsLoadingAsset } from '@staticcms/core/reducers/medias';
+import { selectIsLoadingAsset } from '@staticcms/core/reducers/selectors/medias';
 import { getTypedFieldForValue } from '@staticcms/list/typedListHelpers';
 import EditorPreview from './EditorPreview';
 import EditorPreviewContent from './EditorPreviewContent';
@@ -106,17 +106,12 @@ function getWidgetFor(
   }
 
   const value = values?.[field.name];
-  let fieldWithWidgets = Object.entries(field).reduce((acc, [key, fieldValue]) => {
-    if (!['fields', 'fields'].includes(key)) {
-      acc[key] = fieldValue;
-    }
-    return acc;
-  }, {} as Record<string, unknown>) as RenderedField;
+  let fieldWithWidgets = field as RenderedField;
 
   if ('fields' in field && field.fields) {
     fieldWithWidgets = {
       ...fieldWithWidgets,
-      fields: getNestedWidgets(
+      renderedFields: getNestedWidgets(
         config,
         collection,
         fields,
@@ -130,7 +125,7 @@ function getWidgetFor(
   } else if ('types' in field && field.types) {
     fieldWithWidgets = {
       ...fieldWithWidgets,
-      fields: getTypedNestedWidgets(
+      renderedFields: getTypedNestedWidgets(
         config,
         collection,
         field,
@@ -594,7 +589,7 @@ export interface EditorPreviewPaneOwnProps {
 }
 
 function mapStateToProps(state: RootState, ownProps: EditorPreviewPaneOwnProps) {
-  const isLoadingAsset = selectIsLoadingAsset(state.medias);
+  const isLoadingAsset = selectIsLoadingAsset(state);
   return { ...ownProps, isLoadingAsset, config: state.config };
 }
 

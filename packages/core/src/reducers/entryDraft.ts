@@ -18,13 +18,12 @@ import {
   ENTRY_PERSIST_REQUEST,
   ENTRY_PERSIST_SUCCESS,
   REMOVE_DRAFT_ENTRY_MEDIA_FILE,
-} from '../actions/entries';
+} from '../constants';
 import { duplicateI18nFields, getDataPath } from '../lib/i18n';
 import { set } from '../lib/util/object.util';
 
 import type { EntriesAction } from '../actions/entries';
 import type { Entry, FieldsErrors } from '../interface';
-import type { RootState } from '../store';
 
 export interface EntryDraftState {
   original?: Entry;
@@ -301,7 +300,3 @@ function entryDraftReducer(
 }
 
 export default entryDraftReducer;
-
-export const selectFieldErrors = (path: string) => (state: RootState) => {
-  return state.entryDraft.fieldsErrors[path] ?? [];
-};

@@ -1,6 +1,14 @@
+import {
+  ADD_ASSET,
+  ADD_ASSETS,
+  LOAD_ASSET_FAILURE,
+  LOAD_ASSET_REQUEST,
+  LOAD_ASSET_SUCCESS,
+  REMOVE_ASSET,
+} from '../constants';
 import { isAbsolutePath } from '../lib/util';
 import { selectMediaFilePath } from '../lib/util/media.util';
-import { selectMediaFileByPath } from '../reducers/mediaLibrary';
+import { selectMediaFileByPath } from '../reducers/selectors/mediaLibrary';
 import { createAssetProxy } from '../valueObjects/AssetProxy';
 import { getMediaDisplayURL, getMediaFile, waitForMediaLibraryToLoad } from './mediaLibrary';
 
@@ -9,14 +17,6 @@ import type { ThunkDispatch } from 'redux-thunk';
 import type { BaseField, Collection, Entry, Field, UnknownField } from '../interface';
 import type { RootState } from '../store';
 import type AssetProxy from '../valueObjects/AssetProxy';
-
-export const ADD_ASSETS = 'ADD_ASSETS';
-export const ADD_ASSET = 'ADD_ASSET';
-export const REMOVE_ASSET = 'REMOVE_ASSET';
-
-export const LOAD_ASSET_REQUEST = 'LOAD_ASSET_REQUEST';
-export const LOAD_ASSET_SUCCESS = 'LOAD_ASSET_SUCCESS';
-export const LOAD_ASSET_FAILURE = 'LOAD_ASSET_FAILURE';
 
 export function addAssets(assets: AssetProxy[]) {
   return { type: ADD_ASSETS, payload: assets } as const;

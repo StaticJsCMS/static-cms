@@ -1,11 +1,8 @@
+import { SCROLL_SYNC_ENABLED, SET_SCROLL, TOGGLE_SCROLL } from '../constants';
+
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { RootState } from '../store';
-
-export const SCROLL_SYNC_ENABLED = 'cms.scroll-sync-enabled';
-
-export const TOGGLE_SCROLL = 'TOGGLE_SCROLL';
-export const SET_SCROLL = 'SET_SCROLL';
 
 export function togglingScroll() {
   return {

@@ -1,7 +1,4 @@
-import get from 'lodash/get';
-import groupBy from 'lodash/groupBy';
 import once from 'lodash/once';
-import orderBy from 'lodash/orderBy';
 import sortBy from 'lodash/sortBy';
 
 import {
@@ -19,34 +16,29 @@ import {
   GROUP_ENTRIES_FAILURE,
   GROUP_ENTRIES_REQUEST,
   GROUP_ENTRIES_SUCCESS,
+  SEARCH_ENTRIES_SUCCESS,
   SORT_ENTRIES_FAILURE,
   SORT_ENTRIES_REQUEST,
   SORT_ENTRIES_SUCCESS,
-} from '../actions/entries';
-import { SEARCH_ENTRIES_SUCCESS } from '../actions/search';
-import { SORT_DIRECTION_ASCENDING, SORT_DIRECTION_NONE } from '../constants';
+} from '../constants';
 import { VIEW_STYLE_LIST } from '../constants/collectionViews';
 import { set } from '../lib/util/object.util';
-import { selectSortDataPath } from '../lib/util/sort.util';
 
 import type { EntriesAction } from '../actions/entries';
 import type { SearchAction } from '../actions/search';
 import type { CollectionViewStyle } from '../constants/collectionViews';
 import type {
-  Collection,
   Entities,
   Entry,
   Filter,
   FilterMap,
   Group,
   GroupMap,
-  GroupOfEntries,
   Pages,
   Sort,
   SortMap,
   SortObject,
 } from '../interface';
-import type { EntryDraftState } from './entryDraft';
 
 const storageSortKey = '../netlify-cms.entries.sort';
 const viewStyleKey = '../netlify-cms.entries.viewStyle';
@@ -543,175 +535,6 @@ function entries(
     default:
       return state;
   }
-}
-
-export function selectEntriesSort(entries: EntriesState, collection: string) {
-  const sort = entries.sort as Sort | undefined;
-  return sort?.[collection];
-}
-
-export function selectEntriesFilter(entries: EntriesState, collection: string) {
-  const filter = entries.filter as Filter | undefined;
-  return filter?.[collection] || {};
-}
-
-export function selectEntriesGroup(entries: EntriesState, collection: string) {
-  const group = entries.group as Group | undefined;
-  return group?.[collection] || {};
-}
-
-export function selectEntriesGroupField(entries: EntriesState, collection: string) {
-  const groups = selectEntriesGroup(entries, collection);
-  const value = Object.values(groups ?? {}).find(v => v?.active === true);
-  return value;
-}
-
-export function selectEntriesSortFields(entries: EntriesState, collection: string) {
-  const sort = selectEntriesSort(entries, collection);
-  const values = Object.values(sort ?? {}).filter(v => v?.direction !== SORT_DIRECTION_NONE) || [];
-
-  return values;
-}
-
-export function selectEntriesFilterFields(entries: EntriesState, collection: string) {
-  const filter = selectEntriesFilter(entries, collection);
-  const values = Object.values(filter ?? {}).filter(v => v?.active === true) || [];
-  return values;
-}
-
-export function selectViewStyle(entries: EntriesState): CollectionViewStyle {
-  return entries.viewStyle;
-}
-
-export function selectEntry(state: EntriesState, collection: string, slug: string) {
-  return state.entities[`${collection}.${slug}`];
-}
-
-export function selectPublishedSlugs(state: EntriesState, collection: string) {
-  return state.pages[collection]?.ids ?? [];
-}
-
-function getPublishedEntries(state: EntriesState, collectionName: string) {
-  const slugs = selectPublishedSlugs(state, collectionName);
-  const entries =
-    slugs && (slugs.map(slug => selectEntry(state, collectionName, slug as string)) as Entry[]);
-  return entries;
-}
-
-export function selectEntries(state: EntriesState, collection: Collection) {
-  const collectionName = collection.name;
-  let entries = getPublishedEntries(state, collectionName);
-
-  const sortFields = selectEntriesSortFields(state, collectionName);
-  if (sortFields && sortFields.length > 0) {
-    const keys = sortFields.map(v => selectSortDataPath(collection, v.key));
-    const orders = sortFields.map(v => (v.direction === SORT_DIRECTION_ASCENDING ? 'asc' : 'desc'));
-    entries = orderBy(entries, keys, orders);
-  }
-
-  const filters = selectEntriesFilterFields(state, collectionName);
-  if (filters && filters.length > 0) {
-    entries = entries.filter(e => {
-      const allMatched = filters.every(f => {
-        const pattern = f.pattern;
-        const field = f.field;
-        const data = e!.data || {};
-        const toMatch = get(data, field);
-        const matched = toMatch !== undefined && new RegExp(String(pattern)).test(String(toMatch));
-        return matched;
-      });
-      return allMatched;
-    });
-  }
-
-  return entries;
-}
-
-function getGroup(entry: Entry, selectedGroup: GroupMap) {
-  const label = selectedGroup.label;
-  const field = selectedGroup.field;
-
-  const fieldData = get(entry.data, field);
-  if (fieldData === undefined) {
-    return {
-      id: 'missing_value',
-      label,
-      value: fieldData,
-    };
-  }
-
-  const dataAsString = String(fieldData);
-  if (selectedGroup.pattern) {
-    const pattern = selectedGroup.pattern;
-    let value = '';
-    try {
-      const regex = new RegExp(pattern);
-      const matched = dataAsString.match(regex);
-      if (matched) {
-        value = matched[0];
-      }
-    } catch (e: unknown) {
-      console.warn(`Invalid view group pattern '${pattern}' for field '${field}'`, e);
-    }
-    return {
-      id: `${label}${value}`,
-      label,
-      value,
-    };
-  }
-
-  return {
-    id: `${label}${fieldData}`,
-    label,
-    value: typeof fieldData === 'boolean' ? fieldData : dataAsString,
-  };
-}
-
-export function selectGroups(state: EntriesState, collection: Collection) {
-  const collectionName = collection.name;
-  const entries = getPublishedEntries(state, collectionName);
-
-  const selectedGroup = selectEntriesGroupField(state, collectionName);
-  if (selectedGroup === undefined) {
-    return [];
-  }
-
-  let groups: Record<string, { id: string; label: string; value: string | boolean | undefined }> =
-    {};
-  const groupedEntries = groupBy(entries, entry => {
-    const group = getGroup(entry, selectedGroup);
-    groups = { ...groups, [group.id]: group };
-    return group.id;
-  });
-
-  const groupsArray: GroupOfEntries[] = Object.entries(groupedEntries).map(([id, entries]) => {
-    return {
-      ...groups[id],
-      paths: new Set(entries.map(entry => entry.path)),
-    };
-  });
-
-  return groupsArray;
-}
-
-export function selectEntryByPath(state: EntriesState, collection: string, path: string) {
-  const slugs = selectPublishedSlugs(state, collection);
-  const entries =
-    slugs && (slugs.map(slug => selectEntry(state, collection, slug as string)) as Entry[]);
-
-  return entries && entries.find(e => e?.path === path);
-}
-
-export function selectEntriesLoaded(state: EntriesState, collection: string) {
-  return !!state.pages[collection];
-}
-
-export function selectIsFetching(state: EntriesState, collection: string) {
-  return state.pages[collection]?.isFetching ?? false;
-}
-
-export function selectEditingDraft(state: EntryDraftState) {
-  return state.entry;
 }
 
 export default entries;

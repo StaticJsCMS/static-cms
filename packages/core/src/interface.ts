@@ -66,13 +66,12 @@ export type ObjectValue = {
 export type ValueOrNestedValue =
   | string
   | number
-  | boolean
-  | string[]
   | (string | number)[]
-  | null
-  | undefined
+  | boolean
   | ObjectValue
-  | ObjectValue[];
+  | ValueOrNestedValue[]
+  | null
+  | undefined;
 
 export type EntryData = ObjectValue | undefined | null;
 
@@ -505,8 +504,8 @@ export type AuthScope = 'repo' | 'public_repo';
 
 export type SlugEncoding = 'unicode' | 'ascii';
 
-export type RenderedField<F extends BaseField = UnknownField> = Omit<F, 'fields'> & {
-  fields?: ReactNode[];
+export type RenderedField<F extends BaseField = UnknownField> = F & {
+  renderedFields?: ReactNode[];
 };
 
 export interface BaseField {
@@ -576,7 +575,7 @@ export interface ObjectField<EF extends BaseField = UnknownField> extends BaseFi
 
 export interface ListField<EF extends BaseField = UnknownField> extends BaseField {
   widget: 'list';
-  default?: ObjectValue[];
+  default?: ValueOrNestedValue[];
 
   allow_add?: boolean;
   collapsed?: boolean;
@@ -756,7 +755,6 @@ export interface Config<EF extends BaseField = UnknownField> {
   media_folder_relative?: boolean;
   media_library?: MediaLibrary;
   load_config_file?: boolean;
-  integrations?: Integration[];
   slug?: Slug;
   i18n?: I18nInfo;
   local_backend?: boolean | LocalBackend;
@@ -813,23 +811,6 @@ export interface AuthenticationPageProps {
   config: Config;
   error?: string | undefined;
   clearHash?: () => void;
-}
-
-export type Integration = {
-  collections?: '*' | string[];
-} & AlgoliaIntegration;
-
-export type SearchIntegrationProvider = 'algolia';
-
-export interface AlgoliaIntegration extends AlgoliaConfig {
-  provider: 'algolia';
-}
-
-export interface AlgoliaConfig {
-  hooks: ['search' | 'listEntries'];
-  applicationID: string;
-  apiKey: string;
-  indexPrefix?: string;
 }
 
 export interface SearchResponse {

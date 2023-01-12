@@ -6,7 +6,7 @@ import type { ObjectField, ObjectValue, WidgetPreviewProps } from '@staticcms/co
 import type { FC } from 'react';
 
 const ObjectPreview: FC<WidgetPreviewProps<ObjectValue, ObjectField>> = ({ field }) => {
-  return <WidgetPreviewContainer>{field.fields ?? null}</WidgetPreviewContainer>;
+  return <WidgetPreviewContainer>{field.renderedFields ?? null}</WidgetPreviewContainer>;
 };
 
 export default ObjectPreview;

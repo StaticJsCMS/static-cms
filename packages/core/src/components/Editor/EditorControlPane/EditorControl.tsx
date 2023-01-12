@@ -25,8 +25,8 @@ import { resolveWidget } from '@staticcms/core/lib/registry';
 import { getFieldLabel } from '@staticcms/core/lib/util/field.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { validate } from '@staticcms/core/lib/util/validation.util';
-import { selectFieldErrors } from '@staticcms/core/reducers/entryDraft';
-import { selectIsLoadingAsset } from '@staticcms/core/reducers/medias';
+import { selectFieldErrors } from '@staticcms/core/reducers/selectors/entryDraft';
+import { selectIsLoadingAsset } from '@staticcms/core/reducers/selectors/medias';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 
 import type {
@@ -160,6 +160,7 @@ const EditorControl = ({
   forList = false,
   changeDraftField,
   i18n,
+  fieldName,
 }: TranslatedProps<EditorControlProps>) => {
   const dispatch = useAppDispatch();
 
@@ -170,8 +171,9 @@ const EditorControl = ({
   const fieldHint = field.hint;
 
   const path = useMemo(
-    () => (parentPath.length > 0 ? `${parentPath}.${field.name}` : field.name),
-    [field.name, parentPath],
+    () =>
+      parentPath.length > 0 ? `${parentPath}.${fieldName ?? field.name}` : fieldName ?? field.name,
+    [field.name, fieldName, parentPath],
   );
 
   const [dirty, setDirty] = useState(!isEmpty(value));
@@ -336,13 +338,14 @@ interface EditorControlOwnProps {
   value: ValueOrNestedValue;
   forList?: boolean;
   i18n: I18nSettings | undefined;
+  fieldName?: string;
 }
 
 function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
   const { collections, entryDraft } = state;
   const entry = entryDraft.entry;
   const collection = entryDraft.entry ? collections[entryDraft.entry.collection] : null;
-  const isLoadingAsset = selectIsLoadingAsset(state.medias);
+  const isLoadingAsset = selectIsLoadingAsset(state);
 
   return {
     ...ownProps,

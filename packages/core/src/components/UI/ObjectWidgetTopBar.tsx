@@ -53,6 +53,7 @@ export interface ObjectWidgetTopBarProps {
   heading: ReactNode;
   label?: string;
   hasError?: boolean;
+  testId?: string;
 }
 
 const ObjectWidgetTopBar = ({
@@ -66,6 +67,7 @@ const ObjectWidgetTopBar = ({
   label,
   hasError = false,
   t,
+  testId,
 }: TranslatedProps<ObjectWidgetTopBarProps>) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -129,6 +131,7 @@ const ObjectWidgetTopBar = ({
         endIcon={<AddIcon fontSize="small" />}
         size="small"
         variant="outlined"
+        data-testid="add-button"
       >
         {t('editor.editorWidgets.list.add', { item: label })}
       </Button>
@@ -147,7 +150,7 @@ const ObjectWidgetTopBar = ({
   }, [allowAdd, types, renderTypesDropdown, renderAddButton]);
 
   return (
-    <TopBarContainer>
+    <TopBarContainer data-testid={testId}>
       <ExpandButtonContainer $hasError={hasError}>
         <IconButton onClick={onCollapseToggle} data-testid="expand-button">
           <ExpandMoreIcon

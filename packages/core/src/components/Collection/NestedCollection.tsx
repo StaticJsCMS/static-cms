@@ -10,7 +10,7 @@ import { colors, components } from '@staticcms/core/components/UI/styles';
 import { transientOptions } from '@staticcms/core/lib';
 import { selectEntryCollectionTitle } from '@staticcms/core/lib/util/collection.util';
 import { stringTemplate } from '@staticcms/core/lib/widgets';
-import { selectEntries } from '@staticcms/core/reducers/entries';
+import { selectEntries } from '@staticcms/core/reducers/selectors/entries';
 
 import type { Collection, Entry } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
@@ -344,7 +344,7 @@ interface NestedCollectionOwnProps {
 
 function mapStateToProps(state: RootState, ownProps: NestedCollectionOwnProps) {
   const { collection } = ownProps;
-  const entries = selectEntries(state.entries, collection) ?? [];
+  const entries = selectEntries(state, collection) ?? [];
   return { ...ownProps, entries };
 }
 

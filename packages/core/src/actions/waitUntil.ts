@@ -1,4 +1,4 @@
-import { WAIT_UNTIL_ACTION } from '../store/middleware/waitUntilAction';
+import { WAIT_UNTIL_ACTION } from '../constants';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';

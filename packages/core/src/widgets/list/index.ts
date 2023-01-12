@@ -2,9 +2,9 @@ import controlComponent from './ListControl';
 import previewComponent from './ListPreview';
 import schema from './schema';
 
-import type { ListField, ObjectValue, WidgetParam } from '@staticcms/core/interface';
+import type { ListField, ValueOrNestedValue, WidgetParam } from '@staticcms/core/interface';
 
-const ListWidget = (): WidgetParam<ObjectValue[], ListField> => {
+const ListWidget = (): WidgetParam<ValueOrNestedValue[], ListField> => {
   return {
     name: 'list',
     controlComponent,

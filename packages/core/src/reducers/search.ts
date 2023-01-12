@@ -6,7 +6,7 @@ import {
   SEARCH_ENTRIES_FAILURE,
   SEARCH_ENTRIES_REQUEST,
   SEARCH_ENTRIES_SUCCESS,
-} from '../actions/search';
+} from '../constants';
 
 import type { SearchAction } from '../actions/search';
 

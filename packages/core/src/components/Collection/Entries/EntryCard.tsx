@@ -11,7 +11,7 @@ import { getAsset as getAssetAction } from '@staticcms/core/actions/media';
 import { VIEW_STYLE_GRID, VIEW_STYLE_LIST } from '@staticcms/core/constants/collectionViews';
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import { selectEntryCollectionTitle } from '@staticcms/core/lib/util/collection.util';
-import { selectIsLoadingAsset } from '@staticcms/core/reducers/medias';
+import { selectIsLoadingAsset } from '@staticcms/core/reducers/selectors/medias';
 
 import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
 import type { Collection, Entry, Field } from '@staticcms/core/interface';
@@ -78,7 +78,7 @@ function mapStateToProps(state: RootState, ownProps: EntryCardOwnProps) {
     image = encodeURI(image.trim());
   }
 
-  const isLoadingAsset = selectIsLoadingAsset(state.medias);
+  const isLoadingAsset = selectIsLoadingAsset(state);
 
   return {
     ...ownProps,

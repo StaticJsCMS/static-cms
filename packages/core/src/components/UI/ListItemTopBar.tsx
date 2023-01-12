@@ -117,12 +117,12 @@ const ListItemTopBar = ({
           />
         </IconButton>
       ) : null}
-      <StyledTitle key="title" onClick={onCollapseToggle}>
+      <StyledTitle key="title" onClick={onCollapseToggle} data-testid="list-item-title">
         {title}
       </StyledTitle>
       {listeners ? <DragHandle listeners={listeners} /> : null}
       {onRemove ? (
-        <TopBarButton onClick={onRemove}>
+        <TopBarButton data-testid="remove-button" onClick={onRemove}>
           <CloseIcon />
         </TopBarButton>
       ) : null}

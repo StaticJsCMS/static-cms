@@ -15,7 +15,7 @@ import { ErrorBoundary } from './components/UI';
 import addExtensions from './extensions';
 import { getPhrases } from './lib/phrases';
 import './mediaLibrary';
-import { selectLocale } from './reducers/config';
+import { selectLocale } from './reducers/selectors/config';
 import { store } from './store';
 
 import type { AnyAction } from '@reduxjs/toolkit';

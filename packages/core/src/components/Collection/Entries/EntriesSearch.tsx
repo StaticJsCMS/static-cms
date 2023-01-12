@@ -7,13 +7,13 @@ import {
   searchEntries as searchEntriesAction,
 } from '@staticcms/core/actions/search';
 import { Cursor } from '@staticcms/core/lib/util';
-import { selectSearchedEntries } from '@staticcms/core/reducers';
+import { selectSearchedEntries } from '@staticcms/core/reducers/selectors/entries';
 import Entries from './Entries';
 
-import type { ConnectedProps } from 'react-redux';
 import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
 import type { Collections } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
+import type { ConnectedProps } from 'react-redux';
 
 const EntriesSearch = ({
   collections,

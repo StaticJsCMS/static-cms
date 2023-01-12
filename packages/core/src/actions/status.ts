@@ -1,13 +1,10 @@
 import { currentBackend } from '../backend';
+import { STATUS_FAILURE, STATUS_REQUEST, STATUS_SUCCESS } from '../constants';
 import { addSnackbar, removeSnackbarById } from '../store/slices/snackbars';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { RootState } from '../store';
-
-export const STATUS_REQUEST = 'STATUS_REQUEST';
-export const STATUS_SUCCESS = 'STATUS_SUCCESS';
-export const STATUS_FAILURE = 'STATUS_FAILURE';
 
 export function statusRequest() {
   return {

@@ -1,5 +1,3 @@
-import get from 'lodash/get';
-import { dirname } from 'path';
 import { v4 as uuid } from 'uuid';
 
 import {
@@ -20,13 +18,10 @@ import {
   MEDIA_PERSIST_REQUEST,
   MEDIA_PERSIST_SUCCESS,
   MEDIA_REMOVE_INSERTED,
-} from '../actions/mediaLibrary';
-import { selectMediaFolder } from '../lib/util/media.util';
-import { selectEditingDraft } from './entries';
+} from '../constants';
 
 import type { MediaLibraryAction } from '../actions/mediaLibrary';
-import type { DisplayURLState, Field, MediaFile, MediaLibraryInstance } from '../interface';
-import type { RootState } from '../store';
+import type { Field, MediaFile, MediaLibraryInstance } from '../interface';
 
 export interface MediaLibraryDisplayURL {
   url?: string;
@@ -286,42 +281,5 @@ function mediaLibrary(
       return state;
   }
 }
-
-export function selectMediaFiles(state: RootState, field?: Field): MediaFile[] {
-  const { mediaLibrary, entryDraft } = state;
-  const editingDraft = selectEditingDraft(entryDraft);
-
-  let files: MediaFile[] = [];
-  if (editingDraft) {
-    const entryFiles = entryDraft?.entry?.mediaFiles ?? [];
-    const entry = entryDraft['entry'];
-    const collection = entry?.collection ? state.collections[entry.collection] : null;
-    if (state.config.config) {
-      const mediaFolder = selectMediaFolder(state.config.config, collection, entry, field);
-      files = entryFiles
-        .filter(f => dirname(f.path) === mediaFolder)
-        .map(file => ({ key: file.id, ...file }));
-    }
-  } else {
-    files = mediaLibrary.files || [];
-  }
-
-  return files;
-}
-
-export function selectMediaFileByPath(state: RootState, path: string) {
-  const files = selectMediaFiles(state);
-  const file = files.find(file => file.path === path);
-  return file;
-}
-
-export function selectMediaDisplayURL(state: RootState, id: string) {
-  const displayUrlState = (get(state.mediaLibrary, ['displayURLs', id]) ?? {}) as DisplayURLState;
-  return displayUrlState;
-}
-
-export const selectMediaPath = (controlID: string) => (state: RootState) => {
-  return state.mediaLibrary.controlMedia[controlID];
-};
 
 export default mediaLibrary;
