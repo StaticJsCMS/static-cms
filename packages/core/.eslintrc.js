@@ -122,12 +122,6 @@ module.exports = {
           { functions: false, classes: true, variables: true },
         ],
       },
-    },
-    {
-      files: ['website/**/*'],
-      rules: {
-        'import/no-unresolved': [0],
-      },
-    },
+    }
   ],
 };

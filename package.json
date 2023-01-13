@@ -5,6 +5,7 @@
     "build": "lerna run build",
     "build:demo": "cd packages/demo && yarn build",
     "dev": "lerna run dev --scope=@staticcms/core",
+    "demo": "lerna run dev --scope=@staticcms/demo",
     "docs": "lerna run dev --scope=docs",
     "format": "lerna run format",
     "lint": "lerna run lint",
