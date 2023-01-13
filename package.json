@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "lerna run build",
-    "build:demo": "cd packages/demo && yarn build",
+    "build:demo": "lerna run build --scope=@staticcms/demo",
     "dev": "lerna run dev --scope=@staticcms/core",
     "demo": "lerna run dev --scope=@staticcms/demo",
     "docs": "lerna run dev --scope=docs",
