@@ -54,3 +54,5 @@ __diff_output__
 public/sw.js
 public/workbox*.js
 
+build
+
