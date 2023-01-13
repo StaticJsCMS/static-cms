@@ -217,7 +217,7 @@ collections:
             label: Date
             widget: datetime
             format: 'MMM d, yyyy'
-            date_format: 'MMM d, yyyy'
+            time_format: false
             required: false
           - name: date_with_default
             label: Date With Deafult

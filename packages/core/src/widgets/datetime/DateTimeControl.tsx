@@ -98,6 +98,14 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
       }
     }
 
+    if (timeFormat === false) {
+      return 'yyyy-MM-dd';
+    }
+
+    if (dateFormat === false) {
+      return 'HH:mm:ss.SSSXXX';
+    }
+
     return "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
   }, [dateFormat, timeFormat]);
 
