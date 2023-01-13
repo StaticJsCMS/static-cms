@@ -1,5 +1,16 @@
 {
   "name": "@staticcms/demo",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack serve"
+  },
+  "dependencies": {
+    "@staticcms/app": "^1.0.0-beta.12"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "11.0.0",
+    "webpack": "5.75.0"
+  }
 }
