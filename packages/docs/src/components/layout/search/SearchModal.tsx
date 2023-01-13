@@ -188,12 +188,12 @@ const SearchModal: FC<SearchModalProps> = ({ open, onClose, searchablePages }) =
           </StyledSuggestionSection>
           <StyledSuggestionSection>
             <Typography variant="h3" sx={{ marginBottom: '4px' }}>
-              Platform Guides
+              Customize Your CMS
             </Typography>
-            <SuggestionLink href="/docs/nextjs">Next</SuggestionLink>
-            <SuggestionLink href="/docs/gatsby">Gatsby</SuggestionLink>
-            <SuggestionLink href="/docs/jekyll">Jekyll</SuggestionLink>
-            <SuggestionLink href="/docs/hugo">Hugo</SuggestionLink>
+            <SuggestionLink href="/docs/custom-previews">Custom Previews</SuggestionLink>
+            <SuggestionLink href="/docs/custom-widgets">Custom Widgets</SuggestionLink>
+            <SuggestionLink href="/docs/custom-icons">Custom Icons</SuggestionLink>
+            <SuggestionLink href="/docs/additional-links">Custom Pages / Links</SuggestionLink>
           </StyledSuggestionSection>
           <StyledSuggestionSection>
             <Typography variant="h3" sx={{ marginBottom: '4px' }}>
