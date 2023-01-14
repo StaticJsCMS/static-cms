@@ -221,7 +221,7 @@ export default class API {
     const fetchContent = async () => {
       const content = await this.request({
         url: `${this.repoURL}/repository/files/${encodeURIComponent(path)}/raw`,
-        params: { ref: branch },
+        params: { ref: branch, lfs: 'true' }, // lfs=true means that even if the file is stored in LFS, return the content
         cache: 'no-store',
       }).then<Blob | string>(parseText ? this.responseToText : this.responseToBlob);
       return content;
