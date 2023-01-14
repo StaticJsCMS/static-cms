@@ -27,7 +27,7 @@
     "eslint-plugin-react": "7.32.0",
     "eslint-plugin-unicorn": "45.0.2",
     "eslint": "8.31.0",
-    "prettier": "2.8.2",
+    "prettier": "2.8.3",
     "react-scripts": "5.0.1",
     "typescript": "4.9.4",
     "webpack": "5.75.0"
