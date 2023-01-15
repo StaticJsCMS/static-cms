@@ -29,6 +29,7 @@ module.exports = {
         exclude: [
           /(node_modules[\\/]@toast-ui[\\/]editor[\\/]dist)/,
           /(node_modules[\\/]nth-check[\\/]lib)/,
+          /(node_modules[\\/]minimatch[\\/]dist)/,
           /(src[\\/]formats[\\/]util)/,
         ],
       },

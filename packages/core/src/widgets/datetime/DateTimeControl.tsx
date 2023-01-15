@@ -158,10 +158,6 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
   );
 
   const dateTimePicker = useMemo(() => {
-    if (!internalValue) {
-      return null;
-    }
-
     const inputDate = field.picker_utc ? utcDate : dateValue;
 
     if (dateFormat && !timeFormat) {
@@ -258,7 +254,6 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
     handleChange,
     hasErrors,
     inputFormat,
-    internalValue,
     isDisabled,
     label,
     t,
