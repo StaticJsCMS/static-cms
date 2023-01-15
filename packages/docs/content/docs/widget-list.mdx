@@ -16,7 +16,7 @@ For common options, see [Common widget options](/docs/widgets#common-widget-opti
 
 | Name           | Type                   | Default                                    | Description                                                                                                                                                                   |
 | -------------- | ---------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| default        | string                 | `Single item`<br />`(with child defaults)` | _Optional_. The default value for the field. Accepts an array of list items                                                                                                   |
+| default        | string                 | `[ <default from the child fields> ]`      | _Optional_. The default values for fields. Also accepts an array of items                                                                                                   |
 | allow_add      | boolean                | `true`                                     | _Optional_. `false` - Hides the button to add additional items                                                                                                                |
 | collapsed      | boolean                | `true`                                     | _Optional_. `true` - The entries collapse by default                                                                                                                          |
 | summary        | string                 |                                            | _Optional_. The label displayed on collapsed entries                                                                                                                          |
@@ -26,7 +26,9 @@ For common options, see [Common widget options](/docs/widgets#common-widget-opti
 | max            | number                 |                                            | _Optional_. Maximum number of items in the list                                                                                                                               |
 | add_to_top     | boolean                | `false`                                    | _Optional_. <ul><li>`true` - New entries will be added to the top of the list</li><li>`false` - New entries will be added to the bottom of the list</li></ul>                 |
 | types          | list of object widgets |                                            | _Optional_. A nested list of object widgets representing the available types for items in the list. Takes priority over `fields`.                                             |
-| type_key       | string                 | `'type'`                                   | _Optional_. The name of the field that will be added to every item in list representing the name of the object widget that item belongs to. Ignored if `types` is not defined |
+| type_key       | string                 | `'type'`                                   | _Optional_. The name of the individual field that will be added to every item in list representing the name of the object widget that item belongs to. Ignored if `types` is not defined |
+
+Note that the option `field` is not a supported shorthand anymore. Please use `fields: [{...}]` instead of field: {...}
 
 ## Examples
 
