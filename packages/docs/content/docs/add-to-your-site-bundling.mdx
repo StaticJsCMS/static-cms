@@ -53,6 +53,79 @@ CMS.registerPreviewTemplate('my-template', MyTemplate);
 
 Make sure the file containing the CMS object will be built as a page, with `@staticcms/core` bundled, and the code including `CMS.init()` being run inside a script tag. This is what might take some time, as it will be done differently based on your framework. Check your framework's documentation for further details. 
 
+### Example using [Astro](https://astro.build)
+
+Create an _Astro component_ `src/pages/admin/index.astro`, with HTML boilerplate:
+
+```html
+---
+
+---
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Content Manager</title>
+</head>
+<body>
+  
+</body>
+</html>
+```
+
+By default, Astro will bundle all npm and local import statements from script tags, to the browser. Add a script tag:
+
+```html
+---
+
+---
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Content Manager</title>
+</head>
+<body>
+  
+</body>
+</html>
+<script>
+  import CMS from '@staticcms/core'
+ 
+  CMS.init();
+</script>
+```
+
+Now you have to add a config file in `src/pages/admin/config.yml` (alternatively `.js`). Static CMS will look for a config at `<siteurl>/admin/config.yml`.
+Because this file is not inside the public folder, Astro will not serve it statically. Therefore, an endpoint which returns the file needs to be created.
+
+In Astro this is done by creating a `src/pages/admin/config.yml.js` file. See [Astro documentation](https://docs.astro.build/en/core-concepts/endpoints/#static-file-endpoints) for details.
+
+The endpoint should return a body with the config inside:
+
+```js
+import config from './config.yml?raw' //vite's "?raw" suffix imports the asset as a string
+export function get() {
+    return {
+        body: config
+    }
+}
+```
+
+Since Static CMS uses react to components for customization, you can optionally add the react integration to your Astro project. This will add autocompletion when importing and using react components. Altough keep in mind that jsx/tsx syntax cannot be used inside script tags.
+
+
+```bash
+# Using NPM
+npx astro add react
+# Using Yarn
+yarn astro add react
+# Using PNPM
+pnpm astro add react
+```
+
 ## Configuration
 
 Configuration is different for every site, so we'll break it down into parts. Add all the code snippets in this section to your `admin/config.js` file (which is passed into the `CMS.init({ config })` call).
