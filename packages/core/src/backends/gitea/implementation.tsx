@@ -160,9 +160,9 @@ export default class Gitea implements BackendClass {
 
         Please ensure the repo information is spelled correctly.
 
-        If the repo is private, make sure you're logged into a Gitlab account with access.
+        If the repo is private, make sure you're logged into a Gitea account with access.
 
-        If your repo is under an organization, ensure the organization has granted access to Netlify
+        If your repo is under an organization, ensure the organization has granted access to Static
         CMS.
       `;
       throw error;
@@ -170,7 +170,7 @@ export default class Gitea implements BackendClass {
 
     // Unauthorized user
     if (!isCollab) {
-      throw new Error('Your Gitlab user account does not have access to this repo.');
+      throw new Error('Your Gitea user account does not have access to this repo.');
     }
 
     // Authorized user

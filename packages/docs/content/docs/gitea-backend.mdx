@@ -1,0 +1,47 @@
+---
+title: Gitea
+group: Backends
+weight: 70
+---
+
+- **Name**: `gitea`
+
+For repositories stored on Gitea, the `gitea` backend allows CMS users to log in directly with their Gitea account. Note that all users must have push access to your content repository for this to work.
+
+## Authentication
+
+Because Gitea requires a server for authentication and Netlify doesn't support Gitea, a custom OAuth provider needs to be used for basic Gitea authentication.
+
+To enable basic Gitea authentication:
+
+1. Setup an own OAuth provider, for example with [scm-oauth](https://github.com/denyskon/scm-oauth-provider).
+2. Add the following lines to your Static CMS `config` file:
+
+<CodeTabs>
+```yaml
+backend:
+  name: gitea
+  repo: owner-name/repo-name # Path to your Gitea repository
+  base_url: https://oauth.example.com # URL of your OAuth provider
+  api_root: https://gitea.example.com/api/v1 # API url of your Gitea instance
+  # optional, defaults to main
+  # branch: main
+
+```
+
+```js
+backend: {
+  name: 'gitea',
+  repo: 'owner-name/repo-name', // Path to your Gitea repository
+  base_url: 'https://oauth.example.com', // URL of your OAuth provider
+  api_root: 'https://gitea.example.com/api/v1' // API url of your Gitea instance
+  // optional, defaults to main
+  // branch: 'main'
+},
+```
+
+</CodeTabs>
+
+## Git Large File Storage (LFS)
+
+Please note that the Gitea backend **does not** support [git-lfs](https://git-lfs.github.com/).

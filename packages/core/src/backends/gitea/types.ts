@@ -217,31 +217,6 @@ export type GitGetTreeResponse = {
   url: string;
 };
 
-type ReposGetBranchResponsePayloadCommit = {
-  added: Array<string>;
-  author: PayloadUser;
-  committer: PayloadUser;
-  id: string;
-  message: string;
-  modified: Array<string>;
-  removed: Array<string>;
-  timestamp: string;
-  url: string;
-  verification: PayloadCommitVerification;
-};
-
-export type ReposGetBranchResponse = {
-  commit: ReposGetBranchResponsePayloadCommit;
-  effective_branch_protection_name: string;
-  enable_status_check: boolean;
-  name: string;
-  protected: boolean;
-  required_approvals: number;
-  status_check_contexts: Array<string>;
-  user_can_merge: boolean;
-  user_can_push: boolean;
-};
-
 export type GiteaIdentity = {
   email: string;
   name: string;

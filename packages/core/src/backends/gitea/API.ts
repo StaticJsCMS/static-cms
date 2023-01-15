@@ -25,7 +25,6 @@ import type {
   GitGetBlobResponse,
   GitGetTreeResponse,
   GiteaUser,
-  ReposGetBranchResponse,
   ReposGetResponse,
   ReposListCommitsResponse,
   ContentsResponse,
@@ -103,7 +102,7 @@ export default class API {
   commitAuthor?: {};
 
   constructor(config: Config) {
-    this.apiRoot = config.apiRoot || 'https://gitea.com/api/v1';
+    this.apiRoot = config.apiRoot || 'https://try.gitea.io/api/v1';
     this.token = config.token || '';
     this.branch = config.branch || 'main';
     this.repo = config.repo || '';
@@ -162,14 +161,12 @@ export default class API {
     return Promise.resolve(baseHeader);
   }
 
-  parseJsonResponse(response: Response) {
-    return response.json().then(json => {
-      if (!response.ok) {
-        return Promise.reject(json);
-      }
-
-      return json;
-    });
+  async parseJsonResponse(response: Response) {
+    const json = await response.json();
+    if (!response.ok) {
+      return Promise.reject(json);
+    }
+    return json;
   }
 
   urlFor(path: string, options: Options) {
@@ -327,10 +324,10 @@ export default class API {
     path: string,
     { repoURL = this.repoURL, branch = this.branch, depth = 1 } = {},
   ): Promise<{ type: string; id: string; name: string; path: string; size: number }[]> {
-    const folder = encodeURIComponent(trim(path, '/'));
+    const folder = trim(path, '/');
     try {
       const result: GitGetTreeResponse = await this.request(
-        `${repoURL}/git/trees/${branch}:${folder}`,
+        `${repoURL}/git/trees/${branch}:${encodeURIComponent(folder)}`,
         {
           // Gitea API supports recursive=1 for getting the entire recursive tree
           // or omitting it to get the non-recursive tree
@@ -340,7 +337,7 @@ export default class API {
       return (
         result.tree
           // filter only files and up to the required depth
-          .filter(file => file.type === 'blob' && file.path.split('/').length <= depth)
+          .filter(file => file.type === 'blob' && decodeURIComponent(file.path).split('/').length <= depth)
           .map(file => ({
             type: file.type,
             id: file.sha,
@@ -362,44 +359,39 @@ export default class API {
 
   async persistFiles(dataFiles: DataFile[], mediaFiles: AssetProxy[], options: PersistOptions) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const files: (DataFile | AssetProxy)[] = mediaFiles.concat(dataFiles as any);
-    const branch = await this.getDefaultBranch();
-    const uploadPromises = files.map(async file => {
-      const item: { raw?: string; sha?: string; toBase64?: () => Promise<string> } = file;
-      const contentBase64 = await result(
-        item,
-        'toBase64',
-        partial(this.toBase64, item.raw as string),
-      );
-      this.request(`${this.repoURL}/contents/${file.path}`, {
-        method: 'GET',
-      })
-        .then((fileStatus: ContentsResponse) => {
-          const content = JSON.stringify({
-            branch: branch.name,
-            content: contentBase64,
-            message: options.commitMessage,
-            sha: fileStatus.sha,
-            signoff: false,
-          });
-          this.request(`${this.repoURL}/contents/${file.path}`, {
-            method: 'PUT',
-            body: content,
-          });
-        })
-        .catch(() => {
-          this.request(`${this.repoURL}/contents/${file.path}`, {
+    [mediaFiles, dataFiles].forEach(async list => {
+      list.forEach(async file => {
+        const item: { raw?: string; sha?: string; toBase64?: () => Promise<string> } = file;
+        const contentBase64 = await result(
+          item,
+          'toBase64',
+          partial(this.toBase64, item.raw as string),
+        );
+        if (options.newEntry) {
+          await this.request(`${this.repoURL}/contents/${file.path}`, {
             method: 'POST',
             body: JSON.stringify({
-              branch: branch.name,
+              branch: this.branch,
               content: contentBase64,
               message: options.commitMessage,
               signoff: false,
             }),
           });
-        });
+        } else {
+          const oldSha = await this.getFileSha(file.path);
+          await this.request(`${this.repoURL}/contents/${file.path}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+              branch: this.branch,
+              content: contentBase64,
+              message: options.commitMessage,
+              sha: oldSha,
+              signoff: false,
+            })
+          });
+        }
+      });
     });
-    await Promise.all(uploadPromises);
   }
 
   async getFileSha(path: string, { repoURL = this.repoURL, branch = this.branch } = {}) {
@@ -420,32 +412,20 @@ export default class API {
     if (file) {
       return file.sha;
     } else {
-      throw new APIError('Not Found', 404, API_NAME);
+      console.error("File not found");
     }
   }
 
   async deleteFiles(paths: string[], message: string) {
-    const branchData = await this.getDefaultBranch();
     paths.forEach(async file => {
       const meta: ContentsResponse = await this.request(`${this.repoURL}/contents/${file}`, {
         method: 'GET',
       });
       await this.request(`${this.repoURL}/contents/${file}`, {
         method: 'DELETE',
-        body: JSON.stringify({ branch: branchData.name, message, sha: meta.sha, signoff: false }),
+        body: JSON.stringify({ branch: this.branch, message, sha: meta.sha, signoff: false }),
       });
     });
-  }
-
-  async getDefaultBranch() {
-    const result: ReposGetBranchResponse = await this.request(
-      `${this.originRepoURL}/branches/${encodeURIComponent(this.branch)}`,
-    );
-    return result;
-  }
-
-  async getHeadReference(head: string) {
-    return `${this.repoOwner}:${head}`;
   }
 
   toBase64(str: string) {

@@ -4,7 +4,7 @@ import API from '../API';
 
 import type { Options } from '../API';
 
-describe('github API', () => {
+describe('gitea API', () => {
   beforeEach(() => {
     jest.resetAllMocks();
 
@@ -21,42 +21,6 @@ describe('github API', () => {
         : Promise.reject(new Error(`No response for path '${normalizedPath}'`));
     });
   }
-
-  describe('updateTree', () => {
-    it('should create tree with nested paths', async () => {
-      const api = new API({ branch: 'master', repo: 'owner/repo' });
-
-      api.createTree = jest.fn().mockImplementation(() => Promise.resolve({ sha: 'newTreeSha' }));
-
-      const files = [
-        { path: '/static/media/new-image.jpeg', sha: null },
-        { path: 'content/posts/new-post.md', sha: 'new-post.md' },
-      ];
-
-      const baseTreeSha = 'baseTreeSha';
-
-      await expect(api.updateTree(baseTreeSha, files)).resolves.toEqual({
-        sha: 'newTreeSha',
-        parentSha: baseTreeSha,
-      });
-
-      expect(api.createTree).toHaveBeenCalledTimes(1);
-      expect(api.createTree).toHaveBeenCalledWith(baseTreeSha, [
-        {
-          path: 'static/media/new-image.jpeg',
-          mode: '100644',
-          type: 'blob',
-          sha: null,
-        },
-        {
-          path: 'content/posts/new-post.md',
-          mode: '100644',
-          type: 'blob',
-          sha: 'new-post.md',
-        },
-      ]);
-    });
-  });
 
   describe('request', () => {
     const fetch = jest.fn();
@@ -80,7 +44,7 @@ describe('github API', () => {
       const result = await api.request('/some-path');
       expect(result).toEqual('some response');
       expect(fetch).toHaveBeenCalledTimes(1);
-      expect(fetch).toHaveBeenCalledWith('https://api.github.com/some-path', {
+      expect(fetch).toHaveBeenCalledWith('https://try.gitea.io/api/v1/some-path', {
         cache: 'no-cache',
         headers: {
           Authorization: 'token token',
@@ -90,7 +54,7 @@ describe('github API', () => {
     });
 
     it('should throw error on not ok response', async () => {
-      const api = new API({ branch: 'gh-pages', repo: 'my-repo', token: 'token' });
+      const api = new API({ branch: 'gt-pages', repo: 'my-repo', token: 'token' });
 
       fetch.mockResolvedValue({
         text: jest.fn().mockResolvedValue({ message: 'some error' }),
@@ -104,13 +68,13 @@ describe('github API', () => {
           message: 'some error',
           name: 'API_ERROR',
           status: 404,
-          api: 'GitHub',
+          api: 'Gitea',
         }),
       );
     });
 
     it('should allow overriding requestHeaders to return a promise ', async () => {
-      const api = new API({ branch: 'gh-pages', repo: 'my-repo', token: 'token' });
+      const api = new API({ branch: 'gt-pages', repo: 'my-repo', token: 'token' });
 
       api.requestHeaders = jest.fn().mockResolvedValue({
         Authorization: 'promise-token',
@@ -126,7 +90,7 @@ describe('github API', () => {
       const result = await api.request('/some-path');
       expect(result).toEqual('some response');
       expect(fetch).toHaveBeenCalledTimes(1);
-      expect(fetch).toHaveBeenCalledWith('https://api.github.com/some-path', {
+      expect(fetch).toHaveBeenCalledWith('https://try.gitea.io/api/v1/some-path', {
         cache: 'no-cache',
         headers: {
           Authorization: 'promise-token',
@@ -137,27 +101,11 @@ describe('github API', () => {
   });
 
   describe('persistFiles', () => {
-    it('should update tree, commit and patch branch when useWorkflow is false', async () => {
+    it('should create a new file', async () => {
       const api = new API({ branch: 'master', repo: 'owner/repo' });
 
       const responses = {
-        // upload the file
-        '/repos/owner/repo/git/blobs': () => ({ sha: 'new-file-sha' }),
-
-        // get the branch
-        '/repos/owner/repo/branches/master': () => ({ commit: { sha: 'root' } }),
-
-        // create new tree
-        '/repos/owner/repo/git/trees': (options: Options) => {
-          const data = JSON.parse((options.body as string) ?? '');
-          return { sha: data.base_tree };
-        },
-
-        // update the commit with the tree
-        '/repos/owner/repo/git/commits': () => ({ sha: 'commit-sha' }),
-
-        // patch the branch
-        '/repos/owner/repo/git/refs/heads/master': () => ({}),
+        '/repos/owner/repo/contents/content/posts/new-post.md': () => ({ commit: { sha: "new-sha" }}),
       };
       mockAPI(api, responses);
 
@@ -172,63 +120,52 @@ describe('github API', () => {
         ],
         assets: [],
       };
-      await api.persistFiles(entry.dataFiles, entry.assets, { commitMessage: 'commitMessage' });
+      await api.persistFiles(entry.dataFiles, entry.assets, { commitMessage: 'commitMessage', newEntry: true  });
 
-      expect(api.request).toHaveBeenCalledTimes(5);
+      expect(api.request).toHaveBeenCalledTimes(1);
 
       expect((api.request as jest.Mock).mock.calls[0]).toEqual([
-        '/repos/owner/repo/git/blobs',
+        '/repos/owner/repo/contents/content/posts/new-post.md',
         {
           method: 'POST',
           body: JSON.stringify({
+            branch: "master",
             content: Base64.encode(entry.dataFiles[0].raw),
-            encoding: 'base64',
+            message: "commitMessage",
+            signoff: false,
           }),
         },
       ]);
+    });
+    it('should get the file sha and update the file', async () => {
+      jest.clearAllMocks();
+      const api = new API({ branch: 'master', repo: 'owner/repo' });
 
-      expect((api.request as jest.Mock).mock.calls[1]).toEqual([
-        '/repos/owner/repo/branches/master',
-      ]);
+      const responses = {
+        '/repos/owner/repo/git/trees/master:content%2Fposts': () => { return { tree: [ { path: "update-post.md", sha: "old-sha" } ] } },
 
-      expect((api.request as jest.Mock).mock.calls[2]).toEqual([
-        '/repos/owner/repo/git/trees',
-        {
-          body: JSON.stringify({
-            base_tree: 'root',
-            tree: [
-              {
-                path: 'content/posts/new-post.md',
-                mode: '100644',
-                type: 'blob',
-                sha: 'new-file-sha',
-              },
-            ],
-          }),
-          method: 'POST',
-        },
-      ]);
+        '/repos/owner/repo/contents/content/posts/update-post.md': () => { return { commit: { sha: "updated-sha" }} },
+      };
+      mockAPI(api, responses);
 
-      expect((api.request as jest.Mock).mock.calls[3]).toEqual([
-        '/repos/owner/repo/git/commits',
-        {
-          body: JSON.stringify({
-            message: 'commitMessage',
-            tree: 'root',
-            parents: ['root'],
-          }),
-          method: 'POST',
-        },
-      ]);
+      const entry = {
+        dataFiles: [
+          {
+            slug: 'entry',
+            sha: 'abc',
+            path: 'content/posts/update-post.md',
+            raw: 'content',
+          },
+        ],
+        assets: [],
+      };
 
-      expect((api.request as jest.Mock).mock.calls[4]).toEqual([
-        '/repos/owner/repo/git/refs/heads/master',
-        {
-          body: JSON.stringify({
-            sha: 'commit-sha',
-          }),
-          method: 'PATCH',
-        },
+      await api.persistFiles(entry.dataFiles, entry.assets, { commitMessage: 'commitMessage', newEntry: false });
+
+      expect(api.request).toHaveBeenCalledTimes(1);
+
+      expect((api.request as jest.Mock).mock.calls[0]).toEqual([
+        '/repos/owner/repo/git/trees/master:content%2Fposts'
       ]);
     });
   });
