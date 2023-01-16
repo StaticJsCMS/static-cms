@@ -123,7 +123,7 @@
     "react-dnd": "16.0.1",
     "react-dnd-html5-backend": "16.0.1",
     "react-dom": "18.2.0",
-    "react-frame-component": "5.2.4",
+    "react-frame-component": "5.2.6",
     "react-is": "18.2.0",
     "react-polyglot": "0.7.2",
     "react-redux": "8.0.5",
