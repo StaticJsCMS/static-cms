@@ -31,15 +31,6 @@ const StyledSplitPane = styled('div')`
   display: grid;
   grid-template-columns: min(864px, 50%) auto;
   height: calc(100vh - 64px);
-
-  > div:nth-of-type(2)::before {
-    content: '';
-    width: 2px;
-    height: calc(100vh - 64px);
-    position: relative;
-    background-color: rgb(223, 223, 227);
-    display: block;
-  }
 `;
 
 const NoPreviewContainer = styled('div')`
@@ -177,11 +168,14 @@ const EditorInterface = ({
   }, [loadScroll]);
 
   const { locales, defaultLocale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
-  const [selectedLocale, setSelectedLocale] = useState(locales?.[0]);
+  const [selectedLocale, setSelectedLocale] = useState<[string, string]>([
+    locales?.[0] ?? 'en',
+    locales?.[1] ?? 'en',
+  ]);
   const switchToDefaultLocale = useCallback(() => {
     if (hasI18n(collection)) {
       const { defaultLocale } = getI18nInfo(collection);
-      setSelectedLocale(defaultLocale);
+      setSelectedLocale(oldSelectedLocales => [defaultLocale, oldSelectedLocales[1]]);
     }
   }, [collection]);
 
@@ -189,8 +183,6 @@ const EditorInterface = ({
     async (opts: EditorPersistOptions = {}) => {
       const { createNew = false, duplicate = false } = opts;
       await switchToDefaultLocale();
-      // TODO Trigger field validation on persist
-      // this.controlPaneRef.validate();
       onPersist({ createNew, duplicate });
     },
     [onPersist, switchToDefaultLocale],
@@ -212,9 +204,17 @@ const EditorInterface = ({
     localStorage.setItem(I18N_VISIBLE, `${newI18nVisible}`);
   }, [i18nVisible]);
 
-  const handleLocaleChange = useCallback((locale: string) => {
-    setSelectedLocale(locale);
-  }, []);
+  const handleLocaleChange = useCallback(
+    (side: 'left' | 'right') => (locale: string) => {
+      if (side === 'left') {
+        setSelectedLocale(oldSelectedLocales => [locale, oldSelectedLocales[1]]);
+        return;
+      }
+
+      setSelectedLocale(oldSelectedLocales => [oldSelectedLocales[0], locale]);
+    },
+    [],
+  );
 
   const [previewEnabled, previewInFrame] = useMemo(() => {
     let preview = collection.editor?.preview ?? true;
@@ -237,14 +237,14 @@ const EditorInterface = ({
   const collectionI18nEnabled = hasI18n(collection);
 
   const editor = (
-    <ControlPaneContainer id="control-pane" $overFlow>
+    <ControlPaneContainer key={selectedLocale[0]} id="control-pane" $overFlow>
       <EditorControlPane
         collection={collection}
         entry={entry}
         fields={fields}
         fieldsErrors={fieldsErrors}
-        locale={selectedLocale}
-        onLocaleChange={handleLocaleChange}
+        locale={selectedLocale[0]}
+        onLocaleChange={handleLocaleChange('left')}
         submitted={submitted}
         t={t}
       />
@@ -252,14 +252,14 @@ const EditorInterface = ({
   );
 
   const editorLocale = (
-    <ControlPaneContainer $overFlow={!scrollSyncEnabled}>
+    <ControlPaneContainer key={selectedLocale[1]} $overFlow={!scrollSyncEnabled}>
       <EditorControlPane
         collection={collection}
         entry={entry}
         fields={fields}
         fieldsErrors={fieldsErrors}
-        locale={locales?.[1]}
-        onLocaleChange={handleLocaleChange}
+        locale={selectedLocale[1]}
+        onLocaleChange={handleLocaleChange('right')}
         submitted={submitted}
         t={t}
       />
@@ -267,7 +267,7 @@ const EditorInterface = ({
   );
 
   const previewEntry = collectionI18nEnabled
-    ? getPreviewEntry(entry, selectedLocale, defaultLocale)
+    ? getPreviewEntry(entry, selectedLocale[0], defaultLocale)
     : entry;
 
   const editorWithPreview = (

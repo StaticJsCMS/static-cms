@@ -192,7 +192,7 @@ const EditorControl = ({
   );
 
   useEffect(() => {
-    if (!dirty && !submitted) {
+    if ((!dirty && !submitted) || isHidden) {
       return;
     }
 
@@ -202,7 +202,7 @@ const EditorControl = ({
     };
 
     validateValue();
-  }, [dispatch, field, path, t, value, widget, dirty, submitted]);
+  }, [dispatch, field, path, t, value, widget, dirty, submitted, isHidden]);
 
   const handleChangeDraftField = useCallback(
     (value: ValueOrNestedValue) => {

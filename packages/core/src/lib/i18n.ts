@@ -44,18 +44,15 @@ export function getI18nFilesDepth(collection: Collection, depth: number) {
 }
 
 export function isFieldTranslatable(field: Field, locale?: string, defaultLocale?: string) {
-  const isTranslatable = locale !== defaultLocale && field.i18n === I18N_FIELD.TRANSLATE;
-  return isTranslatable;
+  return locale !== defaultLocale && field.i18n === I18N_FIELD.TRANSLATE;
 }
 
 export function isFieldDuplicate(field: Field, locale?: string, defaultLocale?: string) {
-  const isDuplicate = locale !== defaultLocale && field.i18n === I18N_FIELD.DUPLICATE;
-  return isDuplicate;
+  return locale !== defaultLocale && field.i18n === I18N_FIELD.DUPLICATE;
 }
 
 export function isFieldHidden(field: Field, locale?: string, defaultLocale?: string) {
-  const isHidden = locale !== defaultLocale && field.i18n === I18N_FIELD.NONE;
-  return isHidden;
+  return locale !== defaultLocale && field.i18n === I18N_FIELD.NONE;
 }
 
 export function getLocaleDataPath(locale: string) {
@@ -205,8 +202,15 @@ export function getI18nBackup(
       if (!data) {
         return acc;
       }
-      entry.data = data;
-      return { ...acc, [locale]: { raw: entryToRaw(entry) } };
+      return {
+        ...acc,
+        [locale]: {
+          raw: entryToRaw({
+            ...entry,
+            data,
+          }),
+        },
+      };
     }, {} as Record<string, { raw: string }>);
 
   return i18nBackup;
@@ -414,8 +418,10 @@ export function getPreviewEntry(
   if (!locale || locale === defaultLocale) {
     return entry;
   }
-  entry.data = entry.i18n?.[locale]?.data as EntryData;
-  return entry;
+  return {
+    ...entry,
+    data: entry.i18n?.[locale]?.data as EntryData,
+  };
 }
 
 export function serializeI18n(

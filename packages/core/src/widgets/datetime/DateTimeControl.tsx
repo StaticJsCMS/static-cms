@@ -168,6 +168,7 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
           label={label}
           value={inputDate}
           onChange={handleChange}
+          disabled={isDisabled}
           renderInput={params => (
             <TextField
               key="mobile-date-input"
@@ -198,6 +199,7 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
           inputFormat={inputFormat}
           value={inputDate}
           onChange={handleChange}
+          disabled={isDisabled}
           renderInput={params => (
             <TextField
               key="time-input"
@@ -227,6 +229,7 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
         label={label}
         value={inputDate}
         onChange={handleChange}
+        disabled={isDisabled}
         renderInput={params => (
           <TextField
             key="mobile-date-time-input"

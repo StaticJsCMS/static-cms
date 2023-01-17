@@ -1,3 +1,4 @@
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -18,6 +19,7 @@ import {
 } from '@staticcms/core/lib/i18n';
 import EditorControl from './EditorControl';
 
+import type { ButtonProps } from '@mui/material/Button';
 import type {
   Collection,
   Entry,
@@ -42,23 +44,35 @@ const ControlPaneContainer = styled('div')`
 
 const LocaleRowWrapper = styled('div')`
   display: flex;
+  gap: 8px;
 `;
 
 interface LocaleDropdownProps {
   locales: string[];
   dropdownText: string;
+  color: ButtonProps['color'];
   onLocaleChange: (locale: string) => void;
 }
 
-const LocaleDropdown = ({ locales, dropdownText, onLocaleChange }: LocaleDropdownProps) => {
+const LocaleDropdown = ({ locales, dropdownText, color, onLocaleChange }: LocaleDropdownProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
   const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   }, []);
+
   const handleClose = useCallback(() => {
     setAnchorEl(null);
   }, []);
+
+  const handleLocaleChange = useCallback(
+    (locale: string) => {
+      onLocaleChange(locale);
+      handleClose();
+    },
+    [handleClose, onLocaleChange],
+  );
 
   return (
     <div>
@@ -68,6 +82,9 @@ const LocaleDropdown = ({ locales, dropdownText, onLocaleChange }: LocaleDropdow
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        variant="contained"
+        endIcon={<KeyboardArrowDownIcon />}
+        color={color}
       >
         {dropdownText}
       </Button>
@@ -81,7 +98,11 @@ const LocaleDropdown = ({ locales, dropdownText, onLocaleChange }: LocaleDropdow
         }}
       >
         {locales.map(locale => (
-          <MenuItem key={locale} onClick={() => onLocaleChange(locale)}>
+          <MenuItem
+            key={locale}
+            onClick={() => handleLocaleChange(locale)}
+            sx={{ minWidth: '80px' }}
+          >
             {locale}
           </MenuItem>
         ))}
@@ -179,11 +200,13 @@ const EditorControlPane = ({
             dropdownText={t('editor.editorControlPane.i18n.writingInLocale', {
               locale: locale?.toUpperCase(),
             })}
+            color="primary"
             onLocaleChange={onLocaleChange}
           />
           <LocaleDropdown
             locales={i18n.locales.filter(l => l !== locale)}
             dropdownText={t('editor.editorControlPane.i18n.copyFromLocale')}
+            color="secondary"
             onLocaleChange={copyFromOtherLocale({ targetLocale: locale })}
           />
         </LocaleRowWrapper>
