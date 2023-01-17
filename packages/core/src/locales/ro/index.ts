@@ -8,6 +8,7 @@ const ro: LocalePhrasesRoot = {
     loginWithBitbucket: 'Autentifică-te cu Bitbucket',
     loginWithGitHub: 'Autentifică-te cu GitHub',
     loginWithGitLab: 'Autentifică-te cu GitLab',
+    loginWithGitea: 'Autentifică-te cu Gitea',
     errors: {
       email: 'Asigură-te că ai introdus email-ul.',
       password: 'Te rugăm introdu parola.',

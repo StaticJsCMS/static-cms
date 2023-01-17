@@ -8,6 +8,7 @@ const de: LocalePhrasesRoot = {
     loginWithBitbucket: 'Mit Bitbucket einloggen',
     loginWithGitHub: 'Mit GitHub einloggen',
     loginWithGitLab: 'Mit GitLab einloggen',
+    loginWithGitea: 'Mit Gitea einloggen',
     errors: {
       email: 'Stellen Sie sicher, Ihre E-Mail-Adresse einzugeben.',
       password: 'Bitte geben Sie Ihr Passwort ein.',
@@ -107,8 +108,10 @@ const de: LocalePhrasesRoot = {
       onPublishingWithUnsavedChangesBody:
         'Es sind noch ungespeicherte Änderungen vorhanden. Bitte speicheren Sie vor dem Veröffentlichen.',
       onPublishingBody: 'Soll dieser Beitrag wirklich veröffentlicht werden?',
+      onDeleteWithUnsavedChangesTitle: 'Veröffentlichten Beitrag löschen?',
       onDeleteWithUnsavedChangesBody:
         'Möchten Sie diesen veröffentlichten Beitrag, sowie Ihre nicht gespeicherten Änderungen löschen?',
+      onDeletePublishedEntryTitle: 'Veröffentlichten Beitrag löschen?',
       onDeletePublishedEntryBody: 'Soll dieser veröffentlichte Beitrag wirklich gelöscht werden?',
       loadingEntry: 'Beitrag laden...',
       confirmLoadBackupBody:
