@@ -136,6 +136,7 @@ export function fetchDocsContent(): [DocsPage[], DocsGroup[]] {
     acc[doc.data.group].push({
       title: doc.data.title,
       slug: doc.data.slug,
+      beta: doc.data.beta ?? false,
     });
     return acc;
   }, {} as Record<string, DocsGroupLink[]>);

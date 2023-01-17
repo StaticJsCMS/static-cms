@@ -14,7 +14,7 @@ const Header1 = ({ children }: Header1Props) => {
   const anchor = useAnchor(textContent);
 
   return (
-    <Typography variant="h1" id={anchor}>
+    <Typography variant="h1" id={anchor} sx={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
       {children}
     </Typography>
   );

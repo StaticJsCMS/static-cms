@@ -74,6 +74,7 @@ export interface DocsData {
   readonly title: string;
   readonly weight: number;
   readonly slug: string;
+  readonly beta?: boolean;
 }
 
 export interface DocsPageHeading {
@@ -92,6 +93,7 @@ export interface DocsPage {
 export interface DocsGroupLink {
   readonly title: string;
   readonly slug: string;
+  readonly beta: boolean;
 }
 
 export interface DocsGroup {

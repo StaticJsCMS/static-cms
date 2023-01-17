@@ -4,6 +4,7 @@ import { MDXRemote } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import remarkGfm from 'remark-gfm';
 
+import BetaImage from '../../components/docs/BetaImage';
 import Anchor from '../../components/docs/components/Anchor';
 import Blockquote from '../../components/docs/components/Blockquote';
 import CodeTabs from '../../components/docs/components/CodeTabs';
@@ -76,7 +77,8 @@ interface DocsProps {
   searchablePages: SearchablePage[];
   title: string;
   slug: string;
-  description?: string;
+  beta: boolean;
+  description: string;
   source: MDXRemoteSerializeResult;
 }
 
@@ -85,8 +87,9 @@ const Docs = ({
   searchablePages,
   title,
   slug,
-  description = '',
+  description,
   source,
+  beta,
 }: DocsProps) => {
   const theme = useTheme();
 
@@ -103,7 +106,10 @@ const Docs = ({
       <StyledDocsView className={theme.palette.mode}>
         <StyledDocsContentWrapper>
           <DocsContent>
-            <Header1>{title}</Header1>
+            <Header1>
+              {title}
+              {beta ? <BetaImage /> : null}
+            </Header1>
             <MDXRemote
               {...source}
               components={{
@@ -172,6 +178,7 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ prop
       searchablePages: getSearchablePages(),
       title: data.title,
       slug: data.slug,
+      beta: data.beta ?? false,
       description: '',
       source,
     },

@@ -3,12 +3,20 @@ import Collapse from '@mui/material/Collapse';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { useTheme } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
+import BetaImage from './BetaImage';
+
 import type { DocsGroupLink } from '../../interface';
+
+const StyledListItemPrimary = styled('div')`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
 
 export interface DocsLeftNavGroupProps {
   name: string;
@@ -54,7 +62,12 @@ const DocsLeftNavGroup = ({ name, links }: DocsLeftNavGroupProps) => {
                     color: selected ? theme.palette.primary.main : theme.palette.text.secondary,
                     fontWeight: selected ? 600 : 400,
                   }}
-                  primary={link.title}
+                  primary={
+                    <StyledListItemPrimary>
+                      {link.title}
+                      {link.beta ? <BetaImage /> : null}
+                    </StyledListItemPrimary>
+                  }
                 />
               </ListItemButton>
             );

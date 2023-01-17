@@ -18,6 +18,16 @@ let config = {
   redirects: async () => {
     return redirects;
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'img.shields.io',
+        port: '',
+        pathname: '/badge/**',
+      },
+    ],
+  },
 }
 
 if (process.env.NODE_ENV === 'production') {
