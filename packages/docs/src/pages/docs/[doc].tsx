@@ -19,6 +19,8 @@ import TableBody from '../../components/docs/components/table/TableBody';
 import TableBodyCell from '../../components/docs/components/table/TableBodyCell';
 import TableHead from '../../components/docs/components/table/TableHead';
 import TableHeaderCell from '../../components/docs/components/table/TableHeaderCell';
+import Template from '../../components/docs/components/Template';
+import Templates from '../../components/docs/components/Templates';
 import DocsContent from '../../components/docs/DocsContent';
 import DocsLeftNav from '../../components/docs/DocsLeftNav';
 import DocsRightNav from '../../components/docs/DocsRightNav';
@@ -128,6 +130,8 @@ const Docs = ({
                 a: Anchor,
                 CodeTabs,
                 Alert,
+                Template,
+                Templates,
               }}
             />
           </DocsContent>
