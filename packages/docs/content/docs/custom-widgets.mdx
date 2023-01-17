@@ -20,11 +20,11 @@ Register a custom widget.
 
 ```js
 // Using global window object
-CMS.registerWidget(name, control, [preview], [schema]);
+CMS.registerWidget(name, control, [preview], [{ schema }]);
 
 // Using npm module import
 import CMS from '@staticcms/core';
-CMS.registerWidget(name, control, [preview], [schema]);
+CMS.registerWidget(name, control, [preview], [{ schema }]);
 ```
 
 ### Params
@@ -159,7 +159,7 @@ Register widget takes an optional object of options. These options include:
     },
   };
 
-  CMS.registerWidget('categories', CategoriesControl, CategoriesPreview, options: { schema });
+  CMS.registerWidget('categories', CategoriesControl, CategoriesPreview, { schema });
 </script>
 ```
 
@@ -203,6 +203,7 @@ collections: [
   }
 ]
 ```
+
 </CodeTabs>
 
 ## Advanced field validation
@@ -260,3 +261,63 @@ const validator = () => {
   return this.existingPromise;
 };
 ```
+
+## Interacting With The Media Library
+
+If you want to use the media library in your custom widget you will need to use the `useMediaInsert` and `useMediaAsset` hooks.
+
+- `useMediaInsert` - Takes the current url to your media, details about your field (including a unique ID) and a callback method for when new media is uploaded.
+- `useMediaAsset` - Transforms your stored url into a usable url for displaying as a preview.
+
+<CodeTabs>
+
+```js
+import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
+import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
+
+const FileControl = ({ collection, field, value, entry, onChange }) => {
+  const handleOpenMediaLibrary = useMediaInsert(
+    value,
+    { field, controlID },
+    onChange,
+  );
+
+  const assetSource = useMediaAsset(value, collection, field, entry);
+
+  return (
+    <>
+      <button type="button" onClick={handleOpenMediaLibrary}>Upload</button>
+      <img role="presentation" src={assetSource} />
+    </>
+  );
+};
+```
+
+```ts
+import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
+import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
+
+import type { WidgetControlProps } from '@staticcms/core/interface';
+import type { FC } from 'react';
+
+const FileControl: FC<WidgetControlProps<string, MyField>> =
+  ({ collection, field, value, entry, onChange }) => {
+
+  const handleOpenMediaLibrary = useMediaInsert(
+    internalValue,
+    { field, controlID },
+    onChange,
+  );
+
+  const assetSource = useMediaAsset(value, collection, field, entry);
+
+  return (
+    <>
+      <button type="button" onClick={handleOpenMediaLibrary}>Upload</button>
+      <img role="presentation" src={assetSource} />
+    </>
+  );
+};
+```
+
+</CodeTabs>

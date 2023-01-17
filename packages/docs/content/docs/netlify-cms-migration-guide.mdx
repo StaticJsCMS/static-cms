@@ -4,4 +4,34 @@ title: Netlify CMS Migration Guide
 weight: 190
 ---
 
-Guide coming soon on how to migrate your site from Netlify CMS to Static CMS!
+Static CMS is a fork of Netlify CMS. Many changes have been made, some big, some small. If you are coming from Netlify CMS, here is the list items to watch out for while migrating.
+
+## Changes
+- React `18.2.0` is now the minimum supported React version. If you are using Static CMS through a CDN, this comes bundled.
+- [Moment](https://momentjs.com/) has been dropped as the date library used. Instead we are now using [date-fns](https://date-fns.org/). Date formats in your configuration will need to be updated. See [format docs](https://date-fns.org/v2.29.3/docs/format).
+- CMS must be explicitly initiated now by calling `CMS.init()`
+- Passing a config to `CMS.init()` will now completely override `config.yml` (they are now exclusive), instead of being merged with `config.yml`
+- A [new markdown editor](/docs/widget-markdown) has been added. It comes with a new [shortcode](/docs/widget-markdown#shortcodes) system, old editor components no longer work.
+- Support in the List Widget for the `field` property has been dropped. A single field in the `fields` property [achieves the same behavior](/docs/widget-list).
+- Custom widget creation has changed slightly. React class components have been deprecated. Widgets should all be [functional components](https://reactjs.org/docs/components-and-props.html#function-and-class-components) now. There have also been changes to how custom widgets are registered and the properties passed to the controls and previews. See [custom widgets](/docs/custom-widgets) for full details.
+
+## Deprecated and Removed Features
+- Dropped the following beta features from Netlify CMS.
+  - GraphQL support for GitHub and GitLab
+  - Remark plugins (new markdown editor has its own plugin system)
+  - Dynamic Default Values
+  - Custom Mount Element
+- Dropped support for AssetStore integration
+- Dropped support for Azure backend
+- All deprecated features were removed
+  - `date` widget has been removed
+  - `datetime` widget
+    - `dateFormat` has been removed (Use `date_format` instead)
+    - `timeFormat` has been removed (Use `time_foramt` instead)
+  - Gitlab, Client-Side Implicit Grant has been removed
+- `createClass` is deprecated, [functional components](https://reactjs.org/docs/components-and-props.html#function-and-class-components) should be used instead. Basic react hooks are provided as globals now.
+- `getAsset` is deprecated, the new `useMediaAsset` hook should be used instead. See [Interacting With The Media Library](/docs/custom-widgets#interacting-with-the-media-library).
+
+## Beta Features
+
+All beta features from Netlify CMS that were kept, remain in beta and may not fully function in their current state. Please [submit an issue](https://github.com/StaticJsCMS/static-cms/issues) for any bugs you find.
