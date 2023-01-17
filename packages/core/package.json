@@ -180,7 +180,7 @@
     "@emotion/jest": "11.10.5",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.10",
     "@simbathesailor/use-what-changed": "2.0.0",
-    "@testing-library/dom": "8.19.1",
+    "@testing-library/dom": "8.20.0",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "13.4.0",
     "@testing-library/user-event": "14.4.3",
