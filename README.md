@@ -8,14 +8,9 @@
 
 </div>
 
-[staticjscms.netlify.app](https://staticjscms.netlify.app/) 
+[staticjscms.netlify.app](https://staticjscms.netlify.app/)
 
-A CMS for static site generators. Give users a simple way to edit
-and add content to any site built with a static site generator.
-
-> **DISCLAIMER**: This package/repository is under heavy development and as such is very unstable at current. A stable release is targeted for around the end of the year and will be labeled `1.0.0`. Documentation may not be completely accurate prior to the `1.0.0` release.
->
-> An beta build for the stable release is available under the `@next` tack on npm.
+A CMS for static site generators. Give users a simple way to edit and add content to any site built with a static site generator.
 
 ## How It Works
 
@@ -23,11 +18,9 @@ Static CMS is a single-page app that you pull into the `/admin` part of your sit
 
 It presents a clean UI for editing content stored in a Git repository.
 
-You setup a YAML config to describe the content model of your site, and typically
-tweak the main layout of the CMS a bit to fit your own site.
+You setup a YAML config to describe the content model of your site, and typically tweak the main layout of the CMS a bit to fit your own site.
 
-When a user navigates to `/admin/` they'll be prompted to log in, and once authenticated
-they'll be able to create new content or edit existing content.
+When a user navigates to `/admin/` they'll be prompted to log in, and once authenticated they'll be able to create new content or edit existing content.
 
 Read more about Static CMS [Core Concepts](https://staticjscms.netlify.app/docs/intro/).
 
@@ -35,9 +28,9 @@ Read more about Static CMS [Core Concepts](https://staticjscms.netlify.app/docs/
 
 The Static CMS can be used in two different ways.
 
-* A Quick and easy install, that requires you to create a single HTML file and a configuration file. All the CMS JavaScript and CSS are loaded from a CDN.
+- A Quick and easy install, that requires you to create a single HTML file and a configuration file. All the CMS JavaScript and CSS are loaded from a CDN.
   To learn more about this installation method, refer to the [CDN Hosting Guide](https://staticjscms.netlify.app/docs/add-to-your-site-cdn/)
-* A complete, more complex install, that gives you more flexibility but requires that you use a static site builder with a build system that supports npm packages.
+- A complete, more complex install, that gives you more flexibility but requires that you use a static site builder with a build system that supports npm packages.
   To learn more about this installation method, refer to the [Bundling Guide](https://staticjscms.netlify.app/docs/add-to-your-site-bundling/)
 
 # Contributing
@@ -57,5 +50,3 @@ Please make sure you understand its [implications and guarantees](https://writin
 # Netlify CMS
 
 Static CMS is a fork of Netlify CMS focusing on the core product over adding massive, scope expanding, new features.
-
-# Thanks
