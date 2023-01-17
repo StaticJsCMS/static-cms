@@ -28,7 +28,7 @@ The default export is a _CMS_ object, which has an `init` method that takes an o
 
 ```js
 import CMS from '@staticcms/core';
-import config from './config.js';
+import config from './config';
 
 // Initialize the CMS object
 CMS.init({ config });
@@ -38,7 +38,7 @@ CMS.registerPreviewTemplate('my-template', MyTemplate);
 
 **Note**: Wherever you initialize Static CMS (via `CMS.init()`), it takes over the current page. Make sure you only run the initialization code on your CMS page.
 
-If the CMS object is initialized without being passed an object with a valid config attribute, it will try to fetch and read a `config.yml` or `config.js` file, via http, within the same path where the CMS resides (`/admin/config.<js/yml>`).
+If the CMS object is initialized without being passed an object with a valid config attribute, it will try to fetch and read a `config.yml` file, via http, within the same path where the CMS resides (`/admin/config.yml`).
 
 ```js
 import CMS from '@staticcms/core';
@@ -49,82 +49,9 @@ CMS.init();
 CMS.registerPreviewTemplate('my-template', MyTemplate);
 ```
 
-**Note**: Because `config.<js/yml>` is requested via http, make sure `<siteurl>/admin/config.<js/yml>` exists as an endpoint on your build. If the file is not placed in the public folder, this might not be the default behaviour for your framework.
+**Note**: Because `config.yml` is requested via http, make sure `<siteurl>/admin/config.yml` exists as an endpoint on your build. If the file is not placed in the public folder, this might not be the default behaviour for your static site generator.
 
-Make sure the file containing the CMS object will be built as a page, with `@staticcms/core` bundled, and the code including `CMS.init()` being run inside a script tag. This is what might take some time, as it will be done differently based on your framework. Check your framework's documentation for further details. 
-
-### Example using [Astro](https://astro.build)
-
-Create an _Astro component_ `src/pages/admin/index.astro`, with HTML boilerplate:
-
-```html
----
-
----
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Content Manager</title>
-</head>
-<body>
-  
-</body>
-</html>
-```
-
-By default, Astro will bundle all npm and local import statements from script tags, to the browser. Add a script tag:
-
-```html
----
-
----
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Content Manager</title>
-</head>
-<body>
-  
-</body>
-</html>
-<script>
-  import CMS from '@staticcms/core'
- 
-  CMS.init();
-</script>
-```
-
-Now you have to add a config file in `src/pages/admin/config.yml` (alternatively `.js`). Static CMS will look for a config at `<siteurl>/admin/config.yml`.
-Because this file is not inside the public folder, Astro will not serve it statically. Therefore, an endpoint which returns the file needs to be created.
-
-In Astro this is done by creating a `src/pages/admin/config.yml.js` file. See [Astro documentation](https://docs.astro.build/en/core-concepts/endpoints/#static-file-endpoints) for details.
-
-The endpoint should return a body with the config inside:
-
-```js
-import config from './config.yml?raw' //vite's "?raw" suffix imports the asset as a string
-export function get() {
-    return {
-        body: config
-    }
-}
-```
-
-Since Static CMS uses react components for customization, you can optionally add the react integration to your Astro project. This will add autocompletion when importing and using react components. Altough keep in mind that jsx/tsx syntax cannot be used inside script tags.
-
-
-```bash
-# Using NPM
-npx astro add react
-# Using Yarn
-yarn astro add react
-# Using PNPM
-pnpm astro add react
-```
+Make sure the file containing the CMS object will be built as a page, with `@staticcms/core` bundled, and the code including `CMS.init()` being run inside a script tag. This is what might take some time, as it will be done differently based on your static site generator. Check your static site generators's documentation for further details. 
 
 ## Configuration
 
