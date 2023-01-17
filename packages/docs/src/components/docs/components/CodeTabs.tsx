@@ -60,6 +60,11 @@ const supportedLanguages: Record<string, CodeLanguage> = {
     grammar: Prism.languages.markdown,
     language: 'markdown',
   },
+  'language-ts': {
+    title: 'Typescript',
+    grammar: Prism.languages.typescript,
+    language: 'typescript',
+  },
 };
 
 interface TabData {
