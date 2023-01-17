@@ -105,7 +105,9 @@ describe('gitea API', () => {
       const api = new API({ branch: 'master', repo: 'owner/repo' });
 
       const responses = {
-        '/repos/owner/repo/contents/content/posts/new-post.md': () => ({ commit: { sha: "new-sha" }}),
+        '/repos/owner/repo/contents/content/posts/new-post.md': () => ({
+          commit: { sha: 'new-sha' },
+        }),
       };
       mockAPI(api, responses);
 
@@ -120,7 +122,10 @@ describe('gitea API', () => {
         ],
         assets: [],
       };
-      await api.persistFiles(entry.dataFiles, entry.assets, { commitMessage: 'commitMessage', newEntry: true  });
+      await api.persistFiles(entry.dataFiles, entry.assets, {
+        commitMessage: 'commitMessage',
+        newEntry: true,
+      });
 
       expect(api.request).toHaveBeenCalledTimes(1);
 
@@ -129,9 +134,9 @@ describe('gitea API', () => {
         {
           method: 'POST',
           body: JSON.stringify({
-            branch: "master",
+            branch: 'master',
             content: Base64.encode(entry.dataFiles[0].raw),
-            message: "commitMessage",
+            message: 'commitMessage',
             signoff: false,
           }),
         },
@@ -142,9 +147,13 @@ describe('gitea API', () => {
       const api = new API({ branch: 'master', repo: 'owner/repo' });
 
       const responses = {
-        '/repos/owner/repo/git/trees/master:content%2Fposts': () => { return { tree: [ { path: "update-post.md", sha: "old-sha" } ] } },
+        '/repos/owner/repo/git/trees/master:content%2Fposts': () => {
+          return { tree: [{ path: 'update-post.md', sha: 'old-sha' }] };
+        },
 
-        '/repos/owner/repo/contents/content/posts/update-post.md': () => { return { commit: { sha: "updated-sha" }} },
+        '/repos/owner/repo/contents/content/posts/update-post.md': () => {
+          return { commit: { sha: 'updated-sha' } };
+        },
       };
       mockAPI(api, responses);
 
@@ -160,12 +169,15 @@ describe('gitea API', () => {
         assets: [],
       };
 
-      await api.persistFiles(entry.dataFiles, entry.assets, { commitMessage: 'commitMessage', newEntry: false });
+      await api.persistFiles(entry.dataFiles, entry.assets, {
+        commitMessage: 'commitMessage',
+        newEntry: false,
+      });
 
       expect(api.request).toHaveBeenCalledTimes(1);
 
       expect((api.request as jest.Mock).mock.calls[0]).toEqual([
-        '/repos/owner/repo/git/trees/master:content%2Fposts'
+        '/repos/owner/repo/git/trees/master:content%2Fposts',
       ]);
     });
   });

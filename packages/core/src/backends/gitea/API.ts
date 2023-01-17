@@ -337,7 +337,10 @@ export default class API {
       return (
         result.tree
           // filter only files and up to the required depth
-          .filter(file => file.type === 'blob' && decodeURIComponent(file.path).split('/').length <= depth)
+          .filter(
+            file =>
+              file.type === 'blob' && decodeURIComponent(file.path).split('/').length <= depth,
+          )
           .map(file => ({
             type: file.type,
             id: file.sha,
@@ -387,7 +390,7 @@ export default class API {
               message: options.commitMessage,
               sha: oldSha,
               signoff: false,
-            })
+            }),
           });
         }
       });
@@ -412,7 +415,7 @@ export default class API {
     if (file) {
       return file.sha;
     } else {
-      console.error("File not found");
+      console.error('File not found');
     }
   }
 

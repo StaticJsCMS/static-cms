@@ -1,5 +1,5 @@
 import Cursor, { CURSOR_COMPATIBILITY_SYMBOL } from '@staticcms/core/lib/util/Cursor';
-import GitHubImplementation from '../implementation';
+import GiteaImplementation from '../implementation';
 
 import type { Config, UnknownField } from '@staticcms/core';
 import type API from '../API';
@@ -8,11 +8,11 @@ import type { AssetProxy } from '@staticcms/core/valueObjects';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const global: any;
 
-describe('github backend implementation', () => {
+describe('gitea backend implementation', () => {
   const config = {
     backend: {
       repo: 'owner/repo',
-      api_root: 'https://api.github.com',
+      api_root: 'https://try.gitea.io/api/v1',
     },
   } as Config<UnknownField>;
 
@@ -49,8 +49,8 @@ describe('github backend implementation', () => {
     });
 
     it('should persist media file', async () => {
-      const gitHubImplementation = new GitHubImplementation(config);
-      gitHubImplementation.api = mockAPI;
+      const giteaImplementation = new GiteaImplementation(config);
+      giteaImplementation.api = mockAPI;
 
       const mediaFile = {
         fileObj: { size: 100, name: 'image.png' },
@@ -59,7 +59,7 @@ describe('github backend implementation', () => {
 
       expect.assertions(5);
       await expect(
-        gitHubImplementation.persistMedia(mediaFile, { commitMessage: 'Persisting media' }),
+        giteaImplementation.persistMedia(mediaFile, { commitMessage: 'Persisting media' }),
       ).resolves.toEqual({
         id: '0',
         name: 'image.png',
@@ -77,8 +77,8 @@ describe('github backend implementation', () => {
     });
 
     it('should log and throw error on "persistFiles" error', async () => {
-      const gitHubImplementation = new GitHubImplementation(config);
-      gitHubImplementation.api = mockAPI;
+      const giteaImplementation = new GiteaImplementation(config);
+      giteaImplementation.api = mockAPI;
 
       const error = new Error('failed to persist files');
       persistFiles.mockRejectedValue(error);
@@ -90,7 +90,7 @@ describe('github backend implementation', () => {
 
       expect.assertions(5);
       await expect(
-        gitHubImplementation.persistMedia(mediaFile, { commitMessage: 'Persisting media' }),
+        giteaImplementation.persistMedia(mediaFile, { commitMessage: 'Persisting media' }),
       ).rejects.toThrowError(error);
 
       expect(persistFiles).toHaveBeenCalledTimes(1);
@@ -113,8 +113,8 @@ describe('github backend implementation', () => {
     } as unknown as API;
 
     it('should return entries and cursor', async () => {
-      const gitHubImplementation = new GitHubImplementation(config);
-      gitHubImplementation.api = mockAPI;
+      const giteaImplementation = new GiteaImplementation(config);
+      giteaImplementation.api = mockAPI;
 
       const files = [];
       const count = 1501;
@@ -142,7 +142,7 @@ describe('github backend implementation', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (expectedEntries as any)[CURSOR_COMPATIBILITY_SYMBOL] = expectedCursor;
 
-      const result = await gitHubImplementation.entriesByFolder('posts', 'md', 1);
+      const result = await giteaImplementation.entriesByFolder('posts', 'md', 1);
 
       expect(result).toEqual(expectedEntries);
       expect(listFiles).toHaveBeenCalledTimes(1);
@@ -175,8 +175,8 @@ describe('github backend implementation', () => {
     }
 
     it('should handle next action', async () => {
-      const gitHubImplementation = new GitHubImplementation(config);
-      gitHubImplementation.api = mockAPI;
+      const giteaImplementation = new GiteaImplementation(config);
+      giteaImplementation.api = mockAPI;
 
       const cursor = Cursor.create({
         actions: ['next', 'last'],
@@ -194,7 +194,7 @@ describe('github backend implementation', () => {
         data: { files },
       });
 
-      const result = await gitHubImplementation.traverseCursor(cursor, 'next');
+      const result = await giteaImplementation.traverseCursor(cursor, 'next');
 
       expect(result).toEqual({
         entries: expectedEntries,
@@ -203,8 +203,8 @@ describe('github backend implementation', () => {
     });
 
     it('should handle prev action', async () => {
-      const gitHubImplementation = new GitHubImplementation(config);
-      gitHubImplementation.api = mockAPI;
+      const giteaImplementation = new GiteaImplementation(config);
+      giteaImplementation.api = mockAPI;
 
       const cursor = Cursor.create({
         actions: ['prev', 'first', 'next', 'last'],
@@ -222,7 +222,7 @@ describe('github backend implementation', () => {
         data: { files },
       });
 
-      const result = await gitHubImplementation.traverseCursor(cursor, 'prev');
+      const result = await giteaImplementation.traverseCursor(cursor, 'prev');
 
       expect(result).toEqual({
         entries: expectedEntries,
@@ -231,8 +231,8 @@ describe('github backend implementation', () => {
     });
 
     it('should handle last action', async () => {
-      const gitHubImplementation = new GitHubImplementation(config);
-      gitHubImplementation.api = mockAPI;
+      const giteaImplementation = new GiteaImplementation(config);
+      giteaImplementation.api = mockAPI;
 
       const cursor = Cursor.create({
         actions: ['next', 'last'],
@@ -250,7 +250,7 @@ describe('github backend implementation', () => {
         data: { files },
       });
 
-      const result = await gitHubImplementation.traverseCursor(cursor, 'last');
+      const result = await giteaImplementation.traverseCursor(cursor, 'last');
 
       expect(result).toEqual({
         entries: expectedEntries,
@@ -259,8 +259,8 @@ describe('github backend implementation', () => {
     });
 
     it('should handle first action', async () => {
-      const gitHubImplementation = new GitHubImplementation(config);
-      gitHubImplementation.api = mockAPI;
+      const giteaImplementation = new GiteaImplementation(config);
+      giteaImplementation.api = mockAPI;
 
       const cursor = Cursor.create({
         actions: ['prev', 'first'],
@@ -278,7 +278,7 @@ describe('github backend implementation', () => {
         data: { files },
       });
 
-      const result = await gitHubImplementation.traverseCursor(cursor, 'first');
+      const result = await giteaImplementation.traverseCursor(cursor, 'first');
 
       expect(result).toEqual({
         entries: expectedEntries,

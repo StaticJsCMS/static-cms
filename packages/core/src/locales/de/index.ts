@@ -111,7 +111,7 @@ const de: LocalePhrasesRoot = {
       onDeleteWithUnsavedChangesTitle: 'Veröffentlichten Beitrag löschen?',
       onDeleteWithUnsavedChangesBody:
         'Möchten Sie diesen veröffentlichten Beitrag, sowie Ihre nicht gespeicherten Änderungen löschen?',
-        onDeletePublishedEntryTitle: 'Veröffentlichten Beitrag löschen?',
+      onDeletePublishedEntryTitle: 'Veröffentlichten Beitrag löschen?',
       onDeletePublishedEntryBody: 'Soll dieser veröffentlichte Beitrag wirklich gelöscht werden?',
       loadingEntry: 'Beitrag laden...',
       confirmLoadBackupBody:
