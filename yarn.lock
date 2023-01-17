@@ -5088,22 +5088,6 @@
     "@udecode/plate-core" "19.0.3"
     html-entities "^2.3.3"
 
-"@udecode/plate-serializer-md@19.0.5":
-  version "19.0.5"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-19.0.5.tgz#c5016b15d02883067508bf6d57d7015b858b1a02"
-  integrity sha512-ItQI9pCgcGaqxhGOZdtTSUOCvarlCk00HGvMjIf+VlasQhf0mVzRHUgzA1mnkFKc+bCbkBE3d4CZdlS8c1gCkg==
-  dependencies:
-    "@udecode/plate-block-quote" "19.0.3"
-    "@udecode/plate-code-block" "19.0.3"
-    "@udecode/plate-core" "19.0.3"
-    "@udecode/plate-heading" "19.0.3"
-    "@udecode/plate-link" "19.0.3"
-    "@udecode/plate-list" "19.0.3"
-    "@udecode/plate-paragraph" "19.0.3"
-    remark-parse "^9.0.0"
-    remark-slate "^1.8.6"
-    unified "^9.2.1"
-
 "@udecode/plate-serializer-md@19.0.6":
   version "19.0.6"
   resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-19.0.6.tgz#4c6062d8ce4cd7b7fb8921d66aed22949520060e"
@@ -16232,10 +16216,10 @@ rifm@^0.12.1:
   resolved "https://registry.yarnpkg.com/rifm/-/rifm-0.12.1.tgz#8fa77f45b7f1cda2a0068787ac821f0593967ac4"
   integrity sha512-OGA1Bitg/dSJtI/c4dh90svzaUPt228kzFsUkJbtA2c964IqEAwWXeL9ZJi86xWv3j5SMqRvGULl7bA6cK0Bvg==
 
-rimraf@4.0.7:
-  version "4.0.7"
-  resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-4.0.7.tgz#f438c7d6a2d5e5cca1d81e3904a48ac7b053a542"
-  integrity sha512-CUEDDrZvc0swDgVdXGiv3FcYYQMpJxjvSGt85Amj6yU+MCVWurrLCeLiJDdJPHCzNJnwuebBEdcO//eP11Xa7w==
+rimraf@4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-4.1.0.tgz#c503e3b75b0da4e276846b45cace9a93d16a4903"
+  integrity sha512-ZJdkUR5/dRrRJHdcSKJLrpRn6tVjl9ALxd4yrTCxFsMpjQNzwHF6GLqMsuEzEYIXxHlFPDSk21Vr8VPuFBEz0g==
 
 rimraf@^2.6.2, rimraf@^2.6.3:
   version "2.7.1"
