@@ -5,10 +5,15 @@
 [![Build](https://github.com/StaticJsCMS/static-cms/actions/workflows/build.yml/badge.svg)](https://github.com/StaticJsCMS/static-cms/actions/workflows/build.yml)
 [![npm latest package](https://img.shields.io/npm/v/@staticcms/core/latest.svg)](https://www.npmjs.com/package/@staticcms/core)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/StaticJsCMS/static-cms/blob/main/CONTRIBUTING.md)
+<div align="center">
+
+[Docs](https://staticcms.org/)
+| [Demo](https://demo.staticcms.org/)
+| [Issues](https://github.com/StaticJsCMS/static-cms/issues)
+| [Discord](https://discord.gg/ZWJM9pBMjj)
 
 </div>
-
-[staticjscms.netlify.app](https://staticjscms.netlify.app/)
+</div>
 
 A CMS for static site generators. Give users a simple way to edit and add content to any site built with a static site generator.
 
@@ -22,16 +27,16 @@ You setup a YAML config to describe the content model of your site, and typicall
 
 When a user navigates to `/admin/` they'll be prompted to log in, and once authenticated they'll be able to create new content or edit existing content.
 
-Read more about Static CMS [Core Concepts](https://staticjscms.netlify.app/docs/intro/).
+Read more about Static CMS [Core Concepts](https://staticcms.org/docs/intro/).
 
 # Installation and Configuration
 
 The Static CMS can be used in two different ways.
 
 - A Quick and easy install, that requires you to create a single HTML file and a configuration file. All the CMS JavaScript and CSS are loaded from a CDN.
-  To learn more about this installation method, refer to the [CDN Hosting Guide](https://staticjscms.netlify.app/docs/add-to-your-site-cdn/)
+  To learn more about this installation method, refer to the [CDN Hosting Guide](https://staticcms.org/docs/add-to-your-site-cdn/)
 - A complete, more complex install, that gives you more flexibility but requires that you use a static site builder with a build system that supports npm packages.
-  To learn more about this installation method, refer to the [Bundling Guide](https://staticjscms.netlify.app/docs/add-to-your-site-bundling/)
+  To learn more about this installation method, refer to the [Bundling Guide](https://staticcms.org/docs/add-to-your-site-bundling/)
 
 # Contributing
 
