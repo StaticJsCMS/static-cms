@@ -51,7 +51,7 @@ CMS.registerPreviewTemplate('my-template', MyTemplate);
 
 **Note**: Because `config.yml` is requested via http, make sure `<siteurl>/admin/config.yml` exists as an endpoint on your build. If the file is not placed in the public folder, this might not be the default behaviour for your static site generator.
 
-Make sure the file containing the CMS object will be built as a page, with `@staticcms/core` bundled, and the code including `CMS.init()` being run inside a script tag. This is what might take some time, as it will be done differently based on your static site generator. Check your static site generators's documentation for further details. 
+Make sure the file containing the CMS object will be built as a page, with `@staticcms/core` bundled, and that the code including `CMS.init()` will run on the client. This is what might take some time, as it will be done differently based on your static site generator. Check your static site generators's documentation for further details. 
 
 ## Configuration
 
