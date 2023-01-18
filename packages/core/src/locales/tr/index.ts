@@ -95,9 +95,6 @@ const tr: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: '%{locale} için yazılıyor',
-        copyFromLocale: 'Başka bir dilden doldurun',
-        copyFromLocaleConfirmBody:
-          'Verileri %{locale} dilinden mi doldurmak istiyorsun?\nVarolan bütün verilerin üzerine yazılacak.',
       },
     },
     editor: {

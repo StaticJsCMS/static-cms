@@ -94,9 +94,6 @@ const de: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Aktuelle Sprache: %{locale}',
-        copyFromLocale: 'Aus anderer Sprache übernehmen',
-        copyFromLocaleConfirmBody:
-          'Wollen Sie wirklich die Daten aus der Sprache %{locale} übernehmen?\nAlle bishergen Inhalte werden überschrieben.',
       },
     },
     editor: {

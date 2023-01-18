@@ -1205,6 +1205,8 @@ collections:
     label: i18n Playground
     i18n: true
     folder: _i18n_playground
+    identifier_field: slug
+    create: true
     fields:
       # The slug field will be omitted from the translation.
       - name: slug

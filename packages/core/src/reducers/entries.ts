@@ -181,6 +181,7 @@ function entries(
       const payload = action.payload;
       const loadedEntries = payload.entries;
       const page = payload.page;
+      const append = payload.append;
 
       const entities = {
         ...state.entities,
@@ -196,7 +197,9 @@ function entries(
 
       pages[payload.collection] = {
         page: page ?? undefined,
-        ids: [...(pages[payload.collection]?.ids ?? []), ...loadedEntries.map(entry => entry.slug)],
+        ids: append
+          ? [...(pages[payload.collection]?.ids ?? []), ...loadedEntries.map(entry => entry.slug)]
+          : [...loadedEntries.map(entry => entry.slug)],
         isFetching: false,
       };
 

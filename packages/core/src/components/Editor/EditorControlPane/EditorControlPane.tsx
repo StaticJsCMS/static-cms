@@ -8,7 +8,6 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 
 import { changeDraftField as changeDraftFieldAction } from '@staticcms/core/actions/entries';
-import confirm from '@staticcms/core/components/UI/Confirm';
 import {
   getI18nInfo,
   getLocaleDataPath,
@@ -131,7 +130,6 @@ const EditorControlPane = ({
   fields,
   fieldsErrors,
   submitted,
-  changeDraftField,
   locale,
   onLocaleChange,
   t,
@@ -148,40 +146,6 @@ const EditorControlPane = ({
 
     return undefined;
   }, [collection, locale]);
-
-  const copyFromOtherLocale = useCallback(
-    ({ targetLocale }: { targetLocale?: string }) =>
-      async (sourceLocale: string) => {
-        if (!targetLocale) {
-          return;
-        }
-
-        if (
-          !(await confirm({
-            title: 'editor.editorControlPane.i18n.copyFromLocaleConfirmTitle',
-            body: {
-              key: 'editor.editorControlPane.i18n.copyFromLocaleConfirmBody',
-              options: { locale: sourceLocale.toUpperCase() },
-            },
-          }))
-        ) {
-          return;
-        }
-
-        fields.forEach(field => {
-          if (isFieldTranslatable(field, targetLocale, sourceLocale)) {
-            const copyValue = getFieldValue(
-              field,
-              entry,
-              sourceLocale !== i18n?.defaultLocale,
-              sourceLocale,
-            );
-            changeDraftField({ path: field.name, field, value: copyValue, i18n });
-          }
-        });
-      },
-    [fields, entry, i18n, changeDraftField],
-  );
 
   if (!collection || !fields) {
     return null;
@@ -202,12 +166,6 @@ const EditorControlPane = ({
             })}
             color="primary"
             onLocaleChange={onLocaleChange}
-          />
-          <LocaleDropdown
-            locales={i18n.locales.filter(l => l !== locale)}
-            dropdownText={t('editor.editorControlPane.i18n.copyFromLocale')}
-            color="secondary"
-            onLocaleChange={copyFromOtherLocale({ targetLocale: locale })}
           />
         </LocaleRowWrapper>
       ) : null}

@@ -98,10 +98,6 @@ const en: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Writing in %{locale}',
-        copyFromLocale: 'Fill in from another locale',
-        copyFromLocaleConfirmTitle: 'Fill in data from locale',
-        copyFromLocaleConfirmBody:
-          'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.',
       },
     },
     editor: {

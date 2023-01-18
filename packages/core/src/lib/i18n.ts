@@ -390,9 +390,9 @@ export function duplicateI18nFields(
     locales
       .filter(l => l !== defaultLocale)
       .forEach(l => {
-        entryDraft = get(
+        entryDraft = set(
           entryDraft,
-          ['entry', ...getDataPath(l, defaultLocale), ...fieldPath],
+          ['entry', ...getDataPath(l, defaultLocale), ...fieldPath].join('.'),
           value,
         );
       });
