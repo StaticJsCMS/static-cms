@@ -24,7 +24,7 @@ Then create a new route for your project (for instance at `/admin`), and import 
 import CMS from '@staticcms/core';
 ```
 
-The default export is a _CMS_ object, which has an `init` method that takes an object with a `config` attribute. The `config` attribute is an object representing the [configuration options](docs/configuration-options). You can use destructuring assigment syntax as shorthand: 
+The default export is a _CMS_ object, which has an `init` method that takes an object with a `config` attribute. The `config` attribute is an object representing the [configuration options](docs/configuration-options). You can use destructuring assigment syntax as shorthand:
 
 ```js
 import CMS from '@staticcms/core';
@@ -51,7 +51,7 @@ CMS.registerPreviewTemplate('my-template', MyTemplate);
 
 **Note**: Because `config.yml` is requested via http, make sure `<siteurl>/admin/config.yml` exists as an endpoint on your build. If the file is not placed in the public folder, this might not be the default behaviour for your static site generator.
 
-Make sure the file containing the CMS object will be built as a page, with `@staticcms/core` bundled, and that the code including `CMS.init()` will run on the client. This is what might take some time, as it will be done differently based on your static site generator. Check your static site generators's documentation for further details. 
+Make sure the file containing the CMS object will be built as a page, with `@staticcms/core` bundled, and that the code including `CMS.init()` will run on the client. This is what might take some time, as it will be done differently based on your static site generator. Check your static site generators's documentation for further details.
 
 ## Configuration
 
