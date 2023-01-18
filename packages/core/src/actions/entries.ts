@@ -469,10 +469,14 @@ export function changeDraftField({
   } as const;
 }
 
-export function changeDraftFieldValidation(path: string, errors: FieldError[]) {
+export function changeDraftFieldValidation(
+  path: string,
+  errors: FieldError[],
+  i18n?: I18nSettings,
+) {
   return {
     type: DRAFT_VALIDATION_ERRORS,
-    payload: { path, errors },
+    payload: { path, errors, i18n },
   } as const;
 }
 
@@ -662,12 +666,12 @@ export function loadEntries(collection: Collection, page = 0) {
 
     const backend = currentBackend(configState.config);
 
-    const append = !!(page && !isNaN(page) && page > 0);
+    console.log('Trying to load page', page);
+    const loadAllEntries = 'nested' in collection || hasI18n(collection);
+    const append = !!(page && !isNaN(page) && page > 0) && !loadAllEntries;
     dispatch(entriesLoading(collection));
 
     try {
-      const loadAllEntries = 'nested' in collection || hasI18n(collection);
-
       const response: {
         cursor?: Cursor;
         pagination?: number;
@@ -683,7 +687,7 @@ export function loadEntries(collection: Collection, page = 0) {
           ? Cursor.create({
               actions: ['next'],
               meta: { usingOldPaginationAPI: true },
-              data: { nextPage: page + 1 },
+              data: { nextPage: loadAllEntries ? -1 : page + 1 },
             })
           : Cursor.create(response.cursor),
       };
@@ -749,7 +753,12 @@ export function traverseCollectionCursor(collection: Collection, action: string)
 
     // Handle cursors representing pages in the old, integer-based pagination API
     if (cursor.meta?.usingOldPaginationAPI ?? false) {
-      return dispatch(loadEntries(collection, cursor.data!.nextPage as number));
+      const nextPage = (cursor.data!.nextPage as number) ?? -1;
+      if (nextPage < 0) {
+        return;
+      }
+
+      return dispatch(loadEntries(collection, nextPage));
     }
 
     try {

@@ -1,3 +1,4 @@
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -7,7 +8,6 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 
 import { changeDraftField as changeDraftFieldAction } from '@staticcms/core/actions/entries';
-import confirm from '@staticcms/core/components/UI/Confirm';
 import {
   getI18nInfo,
   getLocaleDataPath,
@@ -18,6 +18,7 @@ import {
 } from '@staticcms/core/lib/i18n';
 import EditorControl from './EditorControl';
 
+import type { ButtonProps } from '@mui/material/Button';
 import type {
   Collection,
   Entry,
@@ -42,23 +43,54 @@ const ControlPaneContainer = styled('div')`
 
 const LocaleRowWrapper = styled('div')`
   display: flex;
+  gap: 8px;
+`;
+
+const DefaultLocaleWrittingIn = styled('div')`
+  display: flex;
+  align-items: center;
+  height: 36.5px;
 `;
 
 interface LocaleDropdownProps {
   locales: string[];
+  defaultLocale: string;
   dropdownText: string;
-  onLocaleChange: (locale: string) => void;
+  color: ButtonProps['color'];
+  canChangeLocale: boolean;
+  onLocaleChange?: (locale: string) => void;
 }
 
-const LocaleDropdown = ({ locales, dropdownText, onLocaleChange }: LocaleDropdownProps) => {
+const LocaleDropdown = ({
+  locales,
+  defaultLocale,
+  dropdownText,
+  color,
+  canChangeLocale,
+  onLocaleChange,
+}: LocaleDropdownProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
   const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   }, []);
+
   const handleClose = useCallback(() => {
     setAnchorEl(null);
   }, []);
+
+  const handleLocaleChange = useCallback(
+    (locale: string) => {
+      onLocaleChange?.(locale);
+      handleClose();
+    },
+    [handleClose, onLocaleChange],
+  );
+
+  if (!canChangeLocale) {
+    return <DefaultLocaleWrittingIn>{dropdownText}</DefaultLocaleWrittingIn>;
+  }
 
   return (
     <div>
@@ -68,6 +100,9 @@ const LocaleDropdown = ({ locales, dropdownText, onLocaleChange }: LocaleDropdow
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        variant="contained"
+        endIcon={<KeyboardArrowDownIcon />}
+        color={color}
       >
         {dropdownText}
       </Button>
@@ -80,11 +115,17 @@ const LocaleDropdown = ({ locales, dropdownText, onLocaleChange }: LocaleDropdow
           'aria-labelledby': 'basic-button',
         }}
       >
-        {locales.map(locale => (
-          <MenuItem key={locale} onClick={() => onLocaleChange(locale)}>
-            {locale}
-          </MenuItem>
-        ))}
+        {locales
+          .filter(locale => locale !== defaultLocale)
+          .map(locale => (
+            <MenuItem
+              key={locale}
+              onClick={() => handleLocaleChange(locale)}
+              sx={{ minWidth: '80px' }}
+            >
+              {locale}
+            </MenuItem>
+          ))}
       </Menu>
     </div>
   );
@@ -110,8 +151,8 @@ const EditorControlPane = ({
   fields,
   fieldsErrors,
   submitted,
-  changeDraftField,
   locale,
+  canChangeLocale = false,
   onLocaleChange,
   t,
 }: TranslatedProps<EditorControlPaneProps>) => {
@@ -128,40 +169,6 @@ const EditorControlPane = ({
     return undefined;
   }, [collection, locale]);
 
-  const copyFromOtherLocale = useCallback(
-    ({ targetLocale }: { targetLocale?: string }) =>
-      async (sourceLocale: string) => {
-        if (!targetLocale) {
-          return;
-        }
-
-        if (
-          !(await confirm({
-            title: 'editor.editorControlPane.i18n.copyFromLocaleConfirmTitle',
-            body: {
-              key: 'editor.editorControlPane.i18n.copyFromLocaleConfirmBody',
-              options: { locale: sourceLocale.toUpperCase() },
-            },
-          }))
-        ) {
-          return;
-        }
-
-        fields.forEach(field => {
-          if (isFieldTranslatable(field, targetLocale, sourceLocale)) {
-            const copyValue = getFieldValue(
-              field,
-              entry,
-              sourceLocale !== i18n?.defaultLocale,
-              sourceLocale,
-            );
-            changeDraftField({ path: field.name, field, value: copyValue, i18n });
-          }
-        });
-      },
-    [fields, entry, i18n, changeDraftField],
-  );
-
   if (!collection || !fields) {
     return null;
   }
@@ -176,15 +183,13 @@ const EditorControlPane = ({
         <LocaleRowWrapper>
           <LocaleDropdown
             locales={i18n.locales}
+            defaultLocale={i18n.defaultLocale}
             dropdownText={t('editor.editorControlPane.i18n.writingInLocale', {
               locale: locale?.toUpperCase(),
             })}
+            color="primary"
+            canChangeLocale={canChangeLocale}
             onLocaleChange={onLocaleChange}
-          />
-          <LocaleDropdown
-            locales={i18n.locales.filter(l => l !== locale)}
-            dropdownText={t('editor.editorControlPane.i18n.copyFromLocale')}
-            onLocaleChange={copyFromOtherLocale({ targetLocale: locale })}
           />
         </LocaleRowWrapper>
       ) : null}
@@ -222,7 +227,8 @@ export interface EditorControlPaneOwnProps {
   fieldsErrors: FieldsErrors;
   submitted: boolean;
   locale?: string;
-  onLocaleChange: (locale: string) => void;
+  canChangeLocale?: boolean;
+  onLocaleChange?: (locale: string) => void;
 }
 
 function mapStateToProps(_state: RootState, ownProps: EditorControlPaneOwnProps) {

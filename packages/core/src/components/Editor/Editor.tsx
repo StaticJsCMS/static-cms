@@ -92,31 +92,35 @@ const Editor = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collection, createBackup, slug]);
 
+  console.log('VERSION', version);
+
   const [submitted, setSubmitted] = useState(false);
   const handlePersistEntry = useCallback(
-    async (opts: EditorPersistOptions = {}) => {
+    (opts: EditorPersistOptions = {}) => {
       const { createNew = false, duplicate = false } = opts;
 
       if (!entryDraft.entry) {
         return;
       }
 
-      try {
-        await persistEntry(collection);
-        setVersion(version + 1);
-
-        deleteBackup();
-
-        if (createNew) {
-          navigateToNewEntry(collection.name);
-          if (duplicate && entryDraft.entry) {
-            createDraftDuplicateFromEntry(entryDraft.entry);
-          }
-        }
-        // eslint-disable-next-line no-empty
-      } catch (e) {}
-
       setSubmitted(true);
+
+      setTimeout(async () => {
+        try {
+          await persistEntry(collection);
+          setVersion(version + 1);
+
+          deleteBackup();
+
+          if (createNew) {
+            navigateToNewEntry(collection.name);
+            if (duplicate && entryDraft.entry) {
+              createDraftDuplicateFromEntry(entryDraft.entry);
+            }
+          }
+          // eslint-disable-next-line no-empty
+        } catch (e) {}
+      }, 100);
     },
     [
       collection,

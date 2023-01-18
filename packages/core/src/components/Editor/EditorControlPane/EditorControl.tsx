@@ -178,7 +178,7 @@ const EditorControl = ({
 
   const [dirty, setDirty] = useState(!isEmpty(value));
 
-  const fieldErrorsSelector = useMemo(() => selectFieldErrors(path), [path]);
+  const fieldErrorsSelector = useMemo(() => selectFieldErrors(path, i18n), [i18n, path]);
   const errors = useAppSelector(fieldErrorsSelector);
 
   const hasErrors = (submitted || dirty) && Boolean(errors.length);
@@ -192,17 +192,17 @@ const EditorControl = ({
   );
 
   useEffect(() => {
-    if (!dirty && !submitted) {
+    if ((!dirty && !submitted) || isHidden) {
       return;
     }
 
     const validateValue = async () => {
       const errors = await validate(field, value, widget, t);
-      dispatch(changeDraftFieldValidation(path, errors));
+      dispatch(changeDraftFieldValidation(path, errors, i18n));
     };
 
     validateValue();
-  }, [dispatch, field, path, t, value, widget, dirty, submitted]);
+  }, [dirty, dispatch, field, i18n, isHidden, path, submitted, t, value, widget]);
 
   const handleChangeDraftField = useCallback(
     (value: ValueOrNestedValue) => {

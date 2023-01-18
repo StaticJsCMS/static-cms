@@ -3,6 +3,19 @@ backend:
 site_url: 'https://example.com'
 media_folder: assets/uploads
 locale: en
+i18n:
+  # Required and can be one of multiple_folders, multiple_files or single_file
+  # multiple_folders - persists files in `<folder>/<locale>/<slug>.<extension>`
+  # multiple_files - persists files in `<folder>/<slug>.<locale>.<extension>`
+  # single_file - persists a single file in `<folder>/<slug>.<extension>`
+  structure: multiple_files
+
+  # Required - a list of locales to show in the editor UI
+  locales: [en, de, fr]
+
+  # Optional, defaults to the first item in locales.
+  # The locale to be used for fields validation and as a baseline for the entry.
+  defaultLocale: en
 collections:
   - name: posts
     label: Posts
@@ -1188,3 +1201,24 @@ collections:
               - label: File
                 name: file
                 widget: file
+  - name: i18n_playground
+    label: i18n Playground
+    i18n: true
+    folder: _i18n_playground
+    identifier_field: slug
+    create: true
+    fields:
+      # The slug field will be omitted from the translation.
+      - name: slug
+        label: Slug
+        widget: string
+      # same as 'i18n: translate'. Allows translation of the description field
+      - name: description
+        label: Description
+        widget: text
+        i18n: true
+      # The date field will be duplicated from the default locale.
+      - name: date
+        label: Date
+        widget: datetime
+        i18n: duplicate
