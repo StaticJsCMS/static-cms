@@ -8,6 +8,7 @@ const lt: LocalePhrasesRoot = {
     loginWithBitbucket: 'Prisijungti su Bitbucket',
     loginWithGitHub: 'Prisijungti su GitHub',
     loginWithGitLab: 'Prisijungti su GitLab',
+    loginWithGitea: 'Prisijungti su Gitea',
     errors: {
       email: 'Įveskite savo elektroninį paštą.',
       password: 'Įveskite savo slaptažodį.',
