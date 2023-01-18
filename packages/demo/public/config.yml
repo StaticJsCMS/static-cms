@@ -1,6 +1,6 @@
 backend:
   name: test-repo
-site_url: 'https://staticjscms.netlify.app/'
+site_url: 'https://staticcms.org/'
 media_folder: assets/uploads
 locale: en
 collections:
