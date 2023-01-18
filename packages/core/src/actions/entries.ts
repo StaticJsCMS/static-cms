@@ -469,10 +469,14 @@ export function changeDraftField({
   } as const;
 }
 
-export function changeDraftFieldValidation(path: string, errors: FieldError[]) {
+export function changeDraftFieldValidation(
+  path: string,
+  errors: FieldError[],
+  i18n?: I18nSettings,
+) {
   return {
     type: DRAFT_VALIDATION_ERRORS,
-    payload: { path, errors },
+    payload: { path, errors, i18n },
   } as const;
 }
 

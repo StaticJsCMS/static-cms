@@ -69,14 +69,23 @@ const PreviewPaneContainer = styled(
   `,
 );
 
-const ControlPaneContainer = styled(PreviewPaneContainer)`
-  padding: 24px 16px 16px;
-  position: relative;
-  overflow-x: hidden;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-`;
+interface ControlPaneContainerProps {
+  $hidden?: boolean;
+}
+
+const ControlPaneContainer = styled(
+  PreviewPaneContainer,
+  transientOptions,
+)<ControlPaneContainerProps>(
+  ({ $hidden = false }) => `
+    padding: 24px 16px 16px;
+    position: relative;
+    overflow-x: hidden;
+    display: ${$hidden ? 'none' : 'flex'};
+    align-items: flex-start;
+    justify-content: center;
+  `,
+);
 
 const StyledViewControls = styled('div')`
   position: fixed;
@@ -118,7 +127,7 @@ interface EditorInterfaceProps {
   collection: Collection;
   fields: Field[] | undefined;
   fieldsErrors: FieldsErrors;
-  onPersist: (opts?: EditorPersistOptions) => Promise<void>;
+  onPersist: (opts?: EditorPersistOptions) => void;
   onDelete: () => Promise<void>;
   onDuplicate: () => void;
   showDelete: boolean;
@@ -168,24 +177,15 @@ const EditorInterface = ({
   }, [loadScroll]);
 
   const { locales, defaultLocale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
-  const [selectedLocale, setSelectedLocale] = useState<[string, string]>([
-    locales?.[0] ?? 'en',
-    locales?.[1] ?? 'en',
-  ]);
-  const switchToDefaultLocale = useCallback(() => {
-    if (hasI18n(collection)) {
-      const { defaultLocale } = getI18nInfo(collection);
-      setSelectedLocale(oldSelectedLocales => [defaultLocale, oldSelectedLocales[1]]);
-    }
-  }, [collection]);
+  const [selectedLocale, setSelectedLocale] = useState<string>(locales?.[1] ?? 'en');
 
   const handleOnPersist = useCallback(
     async (opts: EditorPersistOptions = {}) => {
       const { createNew = false, duplicate = false } = opts;
-      await switchToDefaultLocale();
+      // await switchToDefaultLocale();
       onPersist({ createNew, duplicate });
     },
-    [onPersist, switchToDefaultLocale],
+    [onPersist],
   );
 
   const handleTogglePreview = useCallback(() => {
@@ -204,17 +204,9 @@ const EditorInterface = ({
     localStorage.setItem(I18N_VISIBLE, `${newI18nVisible}`);
   }, [i18nVisible]);
 
-  const handleLocaleChange = useCallback(
-    (side: 'left' | 'right') => (locale: string) => {
-      if (side === 'left') {
-        setSelectedLocale(oldSelectedLocales => [locale, oldSelectedLocales[1]]);
-        return;
-      }
-
-      setSelectedLocale(oldSelectedLocales => [oldSelectedLocales[0], locale]);
-    },
-    [],
-  );
+  const handleLocaleChange = useCallback((locale: string) => {
+    setSelectedLocale(locale);
+  }, []);
 
   const [previewEnabled, previewInFrame] = useMemo(() => {
     let preview = collection.editor?.preview ?? true;
@@ -237,33 +229,50 @@ const EditorInterface = ({
   const collectionI18nEnabled = hasI18n(collection);
 
   const editor = (
-    <ControlPaneContainer key={selectedLocale[0]} id="control-pane" $overFlow>
+    <ControlPaneContainer key={defaultLocale} id="control-pane">
       <EditorControlPane
         collection={collection}
         entry={entry}
         fields={fields}
         fieldsErrors={fieldsErrors}
-        locale={selectedLocale[0]}
-        onLocaleChange={handleLocaleChange('left')}
+        locale={defaultLocale}
         submitted={submitted}
         t={t}
       />
     </ControlPaneContainer>
   );
 
-  const editorLocale = (
-    <ControlPaneContainer key={selectedLocale[1]} $overFlow={!scrollSyncEnabled}>
-      <EditorControlPane
-        collection={collection}
-        entry={entry}
-        fields={fields}
-        fieldsErrors={fieldsErrors}
-        locale={selectedLocale[1]}
-        onLocaleChange={handleLocaleChange('right')}
-        submitted={submitted}
-        t={t}
-      />
-    </ControlPaneContainer>
+  const editorLocale = useMemo(
+    () =>
+      (locales ?? [])
+        .filter(locale => locale !== defaultLocale)
+        .map(locale => (
+          <ControlPaneContainer key={locale} $hidden={locale !== selectedLocale}>
+            <EditorControlPane
+              collection={collection}
+              entry={entry}
+              fields={fields}
+              fieldsErrors={fieldsErrors}
+              locale={locale}
+              onLocaleChange={handleLocaleChange}
+              submitted={submitted}
+              canChangeLocale
+              t={t}
+            />
+          </ControlPaneContainer>
+        )),
+    [
+      collection,
+      defaultLocale,
+      entry,
+      fields,
+      fieldsErrors,
+      handleLocaleChange,
+      locales,
+      selectedLocale,
+      submitted,
+      t,
+    ],
   );
 
   const previewEntry = collectionI18nEnabled
@@ -291,7 +300,9 @@ const EditorInterface = ({
       <div>
         <StyledSplitPane>
           <ScrollSyncPane>{editor}</ScrollSyncPane>
-          <ScrollSyncPane>{editorLocale}</ScrollSyncPane>
+          <ScrollSyncPane>
+            <>{editorLocale}</>
+          </ScrollSyncPane>
         </StyledSplitPane>
       </div>
     </ScrollSync>

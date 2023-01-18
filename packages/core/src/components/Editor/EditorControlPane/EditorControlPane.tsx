@@ -46,14 +46,29 @@ const LocaleRowWrapper = styled('div')`
   gap: 8px;
 `;
 
+const DefaultLocaleWrittingIn = styled('div')`
+  display: flex;
+  align-items: center;
+  height: 36.5px;
+`;
+
 interface LocaleDropdownProps {
   locales: string[];
+  defaultLocale: string;
   dropdownText: string;
   color: ButtonProps['color'];
-  onLocaleChange: (locale: string) => void;
+  canChangeLocale: boolean;
+  onLocaleChange?: (locale: string) => void;
 }
 
-const LocaleDropdown = ({ locales, dropdownText, color, onLocaleChange }: LocaleDropdownProps) => {
+const LocaleDropdown = ({
+  locales,
+  defaultLocale,
+  dropdownText,
+  color,
+  canChangeLocale,
+  onLocaleChange,
+}: LocaleDropdownProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -67,11 +82,15 @@ const LocaleDropdown = ({ locales, dropdownText, color, onLocaleChange }: Locale
 
   const handleLocaleChange = useCallback(
     (locale: string) => {
-      onLocaleChange(locale);
+      onLocaleChange?.(locale);
       handleClose();
     },
     [handleClose, onLocaleChange],
   );
+
+  if (!canChangeLocale) {
+    return <DefaultLocaleWrittingIn>{dropdownText}</DefaultLocaleWrittingIn>;
+  }
 
   return (
     <div>
@@ -96,15 +115,17 @@ const LocaleDropdown = ({ locales, dropdownText, color, onLocaleChange }: Locale
           'aria-labelledby': 'basic-button',
         }}
       >
-        {locales.map(locale => (
-          <MenuItem
-            key={locale}
-            onClick={() => handleLocaleChange(locale)}
-            sx={{ minWidth: '80px' }}
-          >
-            {locale}
-          </MenuItem>
-        ))}
+        {locales
+          .filter(locale => locale !== defaultLocale)
+          .map(locale => (
+            <MenuItem
+              key={locale}
+              onClick={() => handleLocaleChange(locale)}
+              sx={{ minWidth: '80px' }}
+            >
+              {locale}
+            </MenuItem>
+          ))}
       </Menu>
     </div>
   );
@@ -131,6 +152,7 @@ const EditorControlPane = ({
   fieldsErrors,
   submitted,
   locale,
+  canChangeLocale = false,
   onLocaleChange,
   t,
 }: TranslatedProps<EditorControlPaneProps>) => {
@@ -161,10 +183,12 @@ const EditorControlPane = ({
         <LocaleRowWrapper>
           <LocaleDropdown
             locales={i18n.locales}
+            defaultLocale={i18n.defaultLocale}
             dropdownText={t('editor.editorControlPane.i18n.writingInLocale', {
               locale: locale?.toUpperCase(),
             })}
             color="primary"
+            canChangeLocale={canChangeLocale}
             onLocaleChange={onLocaleChange}
           />
         </LocaleRowWrapper>
@@ -203,7 +227,8 @@ export interface EditorControlPaneOwnProps {
   fieldsErrors: FieldsErrors;
   submitted: boolean;
   locale?: string;
-  onLocaleChange: (locale: string) => void;
+  canChangeLocale?: boolean;
+  onLocaleChange?: (locale: string) => void;
 }
 
 function mapStateToProps(_state: RootState, ownProps: EditorControlPaneOwnProps) {
