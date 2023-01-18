@@ -1,0 +1,14 @@
+name: docs
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy
+        run: |
+          curl -X POST -d {} https://api.netlify.com/build_hooks/63c803e85ddaf544a708c615
