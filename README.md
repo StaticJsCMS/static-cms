@@ -5,10 +5,15 @@
 [![Build](https://github.com/StaticJsCMS/static-cms/actions/workflows/build.yml/badge.svg)](https://github.com/StaticJsCMS/static-cms/actions/workflows/build.yml)
 [![npm latest package](https://img.shields.io/npm/v/@staticcms/core/latest.svg)](https://www.npmjs.com/package/@staticcms/core)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/StaticJsCMS/static-cms/blob/main/CONTRIBUTING.md)
+<div align="center">
+
+[Docs](https://staticcms.org/)
+| [Demo](https://demo.staticcms.org/)
+| [Issues](https://github.com/StaticJsCMS/static-cms/issues)
+| [Discord](https://discord.gg/ZWJM9pBMjj)
 
 </div>
-
-[staticcms.org](https://staticcms.org/)
+</div>
 
 A CMS for static site generators. Give users a simple way to edit and add content to any site built with a static site generator.
 
