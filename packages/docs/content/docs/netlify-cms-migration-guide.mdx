@@ -6,6 +6,49 @@ weight: 190
 
 Static CMS is a fork of Netlify CMS. Many changes have been made, some big, some small. If you are coming from Netlify CMS, here is the list items to watch out for while migrating.
 
+## How to Migrate
+
+To migrate, simply replace Netlify CMS with Static CMS, then address the changes below.
+
+### CDN
+
+Netlify CMS:
+
+```js
+<script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+```
+
+Static CMS:
+
+```js
+<script src="https://unpkg.com/@staticcms/app@^1.0.0/dist/static-cms-app.js"></script>
+```
+
+### Bundling
+
+```bash
+# Uninstall Netlify CMS
+npm uninstall netlify-cms-app
+npm uninstall netlify-cms-core
+
+# Install Static CMS
+npm install @staticcms/core
+```
+
+#### Change your imports
+
+Netlify CMS:
+
+```js
+import CMS from 'netlify-cms-app'
+```
+
+Static CMS:
+
+```js
+import CMS from '@staticcms/core';
+```
+
 ## Changes
 - React `18.2.0` is now the minimum supported React version. If you are using Static CMS through a CDN, this comes bundled.
 - [Moment](https://momentjs.com/) has been dropped as the date library used. Instead we are now using [date-fns](https://date-fns.org/). Date formats in your configuration will need to be updated. See [format docs](https://date-fns.org/v2.29.3/docs/format).
@@ -13,19 +56,20 @@ Static CMS is a fork of Netlify CMS. Many changes have been made, some big, some
 - Passing a config to `CMS.init()` will now completely override `config.yml` (they are now exclusive), instead of being merged with `config.yml`
 - A [new markdown editor](/docs/widget-markdown) has been added. It comes with a new [shortcode](/docs/widget-markdown#shortcodes) system, old editor components no longer work.
 - The `sortable_fields` configuration option has been slightly changed, as we now allow a [default sorting option](/docs/collection-overview#sortable_fields).
-  Migrate it by exchanging
+  <br /><br />Netlify CMS:
   ```yaml
   sortable_fields:
    - field1
    - field2
   ```
-  with
+  <br />Static CMS:
   ```yaml
   sortable_fields:
     fields:
      - field1
      - field2
    ```
+  <br />
 - Support in the List Widget for the `field` property has been dropped. A single field in the `fields` property [achieves the same behavior](/docs/widget-list).
 - Custom widget creation has changed slightly. React class components have been deprecated. Widgets should all be [functional components](https://reactjs.org/docs/components-and-props.html#function-and-class-components) now. There have also been changes to how custom widgets are registered and the properties passed to the controls and previews. See [custom widgets](/docs/custom-widgets) for full details.
 
