@@ -485,7 +485,7 @@ collections:
   - name: i18n_playground
     label: i18n Playground
     i18n: true
-    folder: _i18n_playground
+    folder: packages/core/dev-test/backends/proxy/_i18n_playground
     identifier_field: slug
     create: true
     fields:
