@@ -76,7 +76,7 @@
     "@reduxjs/toolkit": "1.9.1",
     "@styled-icons/fluentui-system-regular": "10.47.0",
     "@styled-icons/remix-editor": "10.46.0",
-    "@udecode/plate": "19.0.6",
+    "@udecode/plate": "19.0.7",
     "@udecode/plate-juice": "19.0.3",
     "@udecode/plate-serializer-md": "19.0.6",
     "@uiw/codemirror-extensions-langs": "4.19.7",
