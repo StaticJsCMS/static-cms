@@ -46,7 +46,7 @@ const LocaleRowWrapper = styled('div')`
   gap: 8px;
 `;
 
-const DefaultLocaleWrittingIn = styled('div')`
+const DefaultLocaleWritingIn = styled('div')`
   display: flex;
   align-items: center;
   height: 36.5px;
@@ -89,7 +89,7 @@ const LocaleDropdown = ({
   );
 
   if (!canChangeLocale) {
-    return <DefaultLocaleWrittingIn>{dropdownText}</DefaultLocaleWrittingIn>;
+    return <DefaultLocaleWritingIn>{dropdownText}</DefaultLocaleWritingIn>;
   }
 
   return (

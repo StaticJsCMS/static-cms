@@ -125,7 +125,7 @@ export function selectEntryCollectionTitle(collection: Collection, entry: Entry)
 
   // try to infer a title field from the entry data
   const entryData = entry.data;
-  const titleField = selectInferedField(collection, 'title');
+  const titleField = selectInferredField(collection, 'title');
   const result = titleField && get(entryData, keyToPathArray(titleField));
 
   // if the custom field does not yield a result, fallback to 'title'
@@ -138,7 +138,7 @@ export function selectEntryCollectionTitle(collection: Collection, entry: Entry)
 
 export function selectDefaultSortableFields(collection: Collection, backend: Backend) {
   let defaultSortable = SORTABLE_FIELDS.map((type: string) => {
-    const field = selectInferedField(collection, type);
+    const field = selectInferredField(collection, type);
     if (backend.isGitBackend() && type === 'author' && !field) {
       // default to commit author if not author field is found
       return COMMIT_AUTHOR;
@@ -336,7 +336,7 @@ export function selectIdentifier(collection: Collection) {
   );
 }
 
-export function selectInferedField(collection: Collection, fieldName: string) {
+export function selectInferredField(collection: Collection, fieldName: string) {
   if (fieldName === 'title' && collection.identifier_field) {
     return selectIdentifier(collection);
   }
@@ -393,11 +393,11 @@ export function selectInferedField(collection: Collection, fieldName: string) {
   return null;
 }
 
-export function useInferedFields(collection: Collection) {
+export function useInferredFields(collection: Collection) {
   return useMemo(() => {
-    const titleField = selectInferedField(collection, 'title');
-    const shortTitleField = selectInferedField(collection, 'shortTitle');
-    const authorField = selectInferedField(collection, 'author');
+    const titleField = selectInferredField(collection, 'title');
+    const shortTitleField = selectInferredField(collection, 'shortTitle');
+    const authorField = selectInferredField(collection, 'author');
 
     const iFields: Record<string, InferredField> = {};
     if (titleField) {

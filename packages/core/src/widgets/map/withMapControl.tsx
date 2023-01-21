@@ -36,7 +36,7 @@ const StyledMapControlContent = styled(
 )<StyledMapControlContentProps>(
   ({ $collapsed, $height }) => `
     display: flex;
-    postion: relative;
+    position: relative;
     height: ${$height}
     ${
       $collapsed

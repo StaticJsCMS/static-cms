@@ -35,7 +35,7 @@ import {
   selectFieldsComments,
   selectFileEntryLabel,
   selectFolderEntryExtension,
-  selectInferedField,
+  selectInferredField,
   selectMediaFolders,
 } from './lib/util/collection.util';
 import { selectMediaFilePath, selectMediaFilePublicPath } from './lib/util/media.util';
@@ -526,12 +526,12 @@ export class Backend<BC extends BackendClass = BackendClass> {
           });
         } else {
           searchFields = [
-            selectInferedField(collection, 'title'),
-            selectInferedField(collection, 'shortTitle'),
-            selectInferedField(collection, 'author'),
+            selectInferredField(collection, 'title'),
+            selectInferredField(collection, 'shortTitle'),
+            selectInferredField(collection, 'author'),
             ...summaryFields.map(elem => {
               if (dateParsers[elem]) {
-                return selectInferedField(collection, 'date');
+                return selectInferredField(collection, 'date');
               }
               return elem;
             }),
@@ -555,7 +555,7 @@ export class Backend<BC extends BackendClass = BackendClass> {
     if (errors.length > 0) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      throw new Error({ message: 'Errors ocurred while searching entries locally!', errors });
+      throw new Error({ message: 'Errors occurred while searching entries locally!', errors });
     }
 
     const hits = entries

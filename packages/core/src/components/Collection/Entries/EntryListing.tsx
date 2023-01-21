@@ -4,7 +4,7 @@ import { Waypoint } from 'react-waypoint';
 
 import { VIEW_STYLE_LIST } from '@staticcms/core/constants/collectionViews';
 import { transientOptions } from '@staticcms/core/lib';
-import { selectFields, selectInferedField } from '@staticcms/core/lib/util/collection.util';
+import { selectFields, selectInferredField } from '@staticcms/core/lib/util/collection.util';
 import EntryCard from './EntryCard';
 
 import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
@@ -86,12 +86,12 @@ const EntryListing = ({
         return {};
       }
 
-      const titleField = selectInferedField(collection, 'title');
-      const descriptionField = selectInferedField(collection, 'description');
-      const imageField = selectInferedField(collection, 'image');
+      const titleField = selectInferredField(collection, 'title');
+      const descriptionField = selectInferredField(collection, 'description');
+      const imageField = selectInferredField(collection, 'image');
       const fields = selectFields(collection);
-      const inferedFields = [titleField, descriptionField, imageField];
-      const remainingFields = fields && fields.filter(f => inferedFields.indexOf(f.name) === -1);
+      const inferredFields = [titleField, descriptionField, imageField];
+      const remainingFields = fields && fields.filter(f => inferredFields.indexOf(f.name) === -1);
       return { titleField, descriptionField, imageField, remainingFields };
     },
     [],
@@ -99,11 +99,11 @@ const EntryListing = ({
 
   const renderedCards = useMemo(() => {
     if ('collection' in otherProps) {
-      const inferedFields = inferFields(otherProps.collection);
+      const inferredFields = inferFields(otherProps.collection);
       return entries.map((entry, idx) => (
         <EntryCard
           collection={otherProps.collection}
-          inferedFields={inferedFields}
+          inferredFields={inferredFields}
           viewStyle={viewStyle}
           entry={entry}
           key={idx}
@@ -118,12 +118,12 @@ const EntryListing = ({
         coll => coll.name === collectionName,
       );
       const collectionLabel = !isSingleCollectionInList ? collection?.label : undefined;
-      const inferedFields = inferFields(collection);
+      const inferredFields = inferFields(collection);
       return collection ? (
         <EntryCard
           collection={collection}
           entry={entry}
-          inferedFields={inferedFields}
+          inferredFields={inferredFields}
           collectionLabel={collectionLabel}
           key={idx}
         />

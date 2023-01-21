@@ -54,7 +54,7 @@ const EntryCard = ({
 
 interface EntryCardOwnProps {
   entry: Entry;
-  inferedFields: {
+  inferredFields: {
     titleField?: string | null | undefined;
     descriptionField?: string | null | undefined;
     imageField?: string | null | undefined;
@@ -67,11 +67,11 @@ interface EntryCardOwnProps {
 }
 
 function mapStateToProps(state: RootState, ownProps: EntryCardOwnProps) {
-  const { entry, inferedFields, collection } = ownProps;
+  const { entry, inferredFields, collection } = ownProps;
   const entryData = entry.data;
 
-  let image = inferedFields.imageField
-    ? (entryData?.[inferedFields.imageField] as string | undefined)
+  let image = inferredFields.imageField
+    ? (entryData?.[inferredFields.imageField] as string | undefined)
     : undefined;
 
   if (image) {
@@ -86,7 +86,7 @@ function mapStateToProps(state: RootState, ownProps: EntryCardOwnProps) {
     image,
     imageField:
       'fields' in collection
-        ? collection.fields?.find(f => f.name === inferedFields.imageField && f.widget === 'image')
+        ? collection.fields?.find(f => f.name === inferredFields.imageField && f.widget === 'image')
         : undefined,
     isLoadingAsset,
   };

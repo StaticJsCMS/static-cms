@@ -86,7 +86,7 @@ const Header = ({
     createNewEntry(collectionName);
   }, []);
 
-  const createableCollections = useMemo(
+  const creatableCollections = useMemo(
     () =>
       Object.values(collections).filter(collection =>
         'folder' in collection ? collection.create ?? false : false,
@@ -123,7 +123,7 @@ const Header = ({
         ) : null}
         <StyledSpacer />
         <StyledAppHeaderActions>
-          {createableCollections.length > 0 && (
+          {creatableCollections.length > 0 && (
             <div key="quick-create">
               <Button
                 id="quick-create-button"
@@ -145,7 +145,7 @@ const Header = ({
                   'aria-labelledby': 'quick-create-button',
                 }}
               >
-                {createableCollections.map(collection => (
+                {creatableCollections.map(collection => (
                   <MenuItem
                     key={collection.name}
                     onClick={() => handleCreatePostClick(collection.name)}
