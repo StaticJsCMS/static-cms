@@ -48,7 +48,7 @@
   ],
   "dependencies": {
     "@babel/eslint-parser": "7.19.1",
-    "@babel/runtime": "7.20.7",
+    "@babel/runtime": "7.20.13",
     "@codemirror/autocomplete": "6.4.0",
     "@codemirror/commands": "6.2.0",
     "@codemirror/language": "6.4.0",
