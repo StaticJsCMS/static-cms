@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "@babel/eslint-parser": "7.19.1",
-    "@babel/runtime": "7.20.7",
+    "@babel/runtime": "7.20.13",
     "@emotion/babel-preset-css-prop": "11.10.0",
     "@staticcms/core": "^1.1.0",
     "buffer": "6.0.3",
