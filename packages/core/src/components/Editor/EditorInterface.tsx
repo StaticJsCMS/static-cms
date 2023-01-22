@@ -55,17 +55,16 @@ const Editor = styled('div')`
 
 interface PreviewPaneContainerProps {
   $blockEntry?: boolean;
-  $overFlow?: boolean;
 }
 
 const PreviewPaneContainer = styled(
   'div',
   transientOptions,
 )<PreviewPaneContainerProps>(
-  ({ $blockEntry, $overFlow }) => `
+  ({ $blockEntry }) => `
     height: 100%;
     pointer-events: ${$blockEntry ? 'none' : 'auto'};
-    overflow-y: ${$overFlow ? 'auto' : 'hidden'};
+    overflow-y: auto;
   `,
 );
 

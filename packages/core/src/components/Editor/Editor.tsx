@@ -92,8 +92,6 @@ const Editor = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collection, createBackup, slug]);
 
-  console.log('VERSION', version);
-
   const [submitted, setSubmitted] = useState(false);
   const handlePersistEntry = useCallback(
     (opts: EditorPersistOptions = {}) => {

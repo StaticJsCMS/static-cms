@@ -162,13 +162,9 @@ function entryDraftReducer(
         entry: set(newState.entry, `${dataPath.join('.')}.${path}`, value),
       };
 
-      console.log('BEFORE I18N', { ...newState.entry });
-
       if (i18n) {
         newState = duplicateI18nFields(newState, field, i18n.locales, i18n.defaultLocale);
       }
-
-      console.log('AFTER I18N', { ...newState.entry });
 
       const newData = get(newState.entry, dataPath) ?? {};
 

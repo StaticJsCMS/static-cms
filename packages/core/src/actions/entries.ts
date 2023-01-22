@@ -666,7 +666,6 @@ export function loadEntries(collection: Collection, page = 0) {
 
     const backend = currentBackend(configState.config);
 
-    console.log('Trying to load page', page);
     const loadAllEntries = 'nested' in collection || hasI18n(collection);
     const append = !!(page && !isNaN(page) && page > 0) && !loadAllEntries;
     dispatch(entriesLoading(collection));
