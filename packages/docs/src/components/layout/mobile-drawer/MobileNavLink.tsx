@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
+import BetaImage from '../../docs/BetaImage';
+
 import type { MouseEvent } from 'react';
 import type { MenuLink } from '../../../interface';
 
@@ -13,7 +15,7 @@ interface MobileNavLinkProps {
 }
 
 const MobileNavLink = ({ link, onClick }: MobileNavLinkProps) => {
-  const { title, url } = link;
+  const { title, url, beta = false } = link;
   const { asPath } = useRouter();
 
   const selected = useMemo(() => {
@@ -25,11 +27,21 @@ const MobileNavLink = ({ link, onClick }: MobileNavLinkProps) => {
       component={Link}
       href={url}
       target={url.startsWith('http') ? '_blank' : undefined}
-      sx={{ paddingLeft: '24px', paddingTop: '4px', paddingBottom: '4px' }}
+      sx={{ paddingLeft: '24px', paddingTop: '4px', paddingBottom: '4px', width: '100%' }}
       onClick={onClick}
       selected={selected}
     >
-      <ListItemText primary={title} />
+      <ListItemText
+        primary={
+          <>
+            {title}
+            {beta ? <BetaImage /> : null}
+          </>
+        }
+        primaryTypographyProps={{
+          sx: { display: 'flex', alignItems: 'center', gap: '8px' },
+        }}
+      />
     </ListItemButton>
   );
 };

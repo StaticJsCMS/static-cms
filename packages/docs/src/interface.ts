@@ -131,6 +131,7 @@ export interface CommunityData {
 export interface MenuLink {
   readonly title: string;
   readonly url: string;
+  readonly beta?: boolean;
 }
 
 export interface MenuLinkSubGroup {

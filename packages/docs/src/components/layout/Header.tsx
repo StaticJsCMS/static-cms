@@ -123,6 +123,7 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
           links: group.links.map(link => ({
             title: link.title,
             url: `/docs/${link.slug}`,
+            beta: link.beta,
           })),
         })),
       },
