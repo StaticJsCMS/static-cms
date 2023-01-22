@@ -24,7 +24,7 @@ import { faHouse } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CMS from '@staticcms/core';
 
-CMS.registerIcon('house', <FontAwesomeIcon icon={faHouse} size="lg" />);
+CMS.registerIcon('house', () => <FontAwesomeIcon icon={faHouse} size="lg" />);
 ```
 
 ## Usage
