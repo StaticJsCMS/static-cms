@@ -10,7 +10,7 @@ import { getAsset as getAssetAction } from '@staticcms/core/actions/media';
 import { ErrorBoundary } from '@staticcms/core/components/UI';
 import { lengths } from '@staticcms/core/components/UI/styles';
 import { getPreviewStyles, getPreviewTemplate, resolveWidget } from '@staticcms/core/lib/registry';
-import { selectTemplateName, useInferedFields } from '@staticcms/core/lib/util/collection.util';
+import { selectTemplateName, useInferredFields } from '@staticcms/core/lib/util/collection.util';
 import { selectField } from '@staticcms/core/lib/util/field.util';
 import { selectIsLoadingAsset } from '@staticcms/core/reducers/selectors/medias';
 import { getTypedFieldForValue } from '@staticcms/list/typedListHelpers';
@@ -92,7 +92,7 @@ function getWidgetFor(
   name: string,
   fields: Field[],
   entry: Entry,
-  inferedFields: Record<string, InferredField>,
+  inferredFields: Record<string, InferredField>,
   getAsset: GetAssetFunction,
   widgetFields: Field[] = fields,
   values: EntryData = entry.data,
@@ -116,7 +116,7 @@ function getWidgetFor(
         collection,
         fields,
         entry,
-        inferedFields,
+        inferredFields,
         getAsset,
         field.fields,
         value as EntryData | EntryData[],
@@ -130,7 +130,7 @@ function getWidgetFor(
         collection,
         field,
         entry,
-        inferedFields,
+        inferredFields,
         getAsset,
         value as EntryData[],
       ),
@@ -138,7 +138,7 @@ function getWidgetFor(
   }
 
   const labelledWidgets = ['string', 'text', 'number'];
-  const inferedField = Object.entries(inferedFields)
+  const inferredField = Object.entries(inferredFields)
     .filter(([key]) => {
       const fieldToMatch = selectField(collection, key);
       return fieldToMatch === fieldWithWidgets;
@@ -146,8 +146,8 @@ function getWidgetFor(
     .map(([, value]) => value)[0];
 
   let renderedValue: ValueOrNestedValue | ReactNode = value;
-  if (inferedField) {
-    renderedValue = inferedField.defaultPreview(String(value));
+  if (inferredField) {
+    renderedValue = inferredField.defaultPreview(String(value));
   } else if (
     value &&
     fieldWithWidgets.widget &&
@@ -235,7 +235,7 @@ function widgetsForNestedFields(
   collection: Collection,
   fields: Field[],
   entry: Entry,
-  inferedFields: Record<string, InferredField>,
+  inferredFields: Record<string, InferredField>,
   getAsset: GetAssetFunction,
   widgetFields: Field[],
   values: EntryData,
@@ -249,7 +249,7 @@ function widgetsForNestedFields(
         field.name,
         fields,
         entry,
-        inferedFields,
+        inferredFields,
         getAsset,
         widgetFields,
         values,
@@ -267,7 +267,7 @@ function getTypedNestedWidgets(
   collection: Collection,
   field: ListField,
   entry: Entry,
-  inferedFields: Record<string, InferredField>,
+  inferredFields: Record<string, InferredField>,
   getAsset: GetAssetFunction,
   values: EntryData[],
 ) {
@@ -283,7 +283,7 @@ function getTypedNestedWidgets(
         collection,
         itemType.fields,
         entry,
-        inferedFields,
+        inferredFields,
         getAsset,
         itemType.fields,
         value,
@@ -301,7 +301,7 @@ function getNestedWidgets(
   collection: Collection,
   fields: Field[],
   entry: Entry,
-  inferedFields: Record<string, InferredField>,
+  inferredFields: Record<string, InferredField>,
   getAsset: GetAssetFunction,
   widgetFields: Field[],
   values: EntryData | EntryData[],
@@ -314,7 +314,7 @@ function getNestedWidgets(
         collection,
         fields,
         entry,
-        inferedFields,
+        inferredFields,
         getAsset,
         widgetFields,
         value,
@@ -328,7 +328,7 @@ function getNestedWidgets(
     collection,
     fields,
     entry,
-    inferedFields,
+    inferredFields,
     getAsset,
     widgetFields,
     values,
@@ -338,7 +338,7 @@ function getNestedWidgets(
 const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
   const { entry, collection, config, fields, previewInFrame, getAsset, t } = props;
 
-  const inferedFields = useInferedFields(collection);
+  const inferredFields = useInferredFields(collection);
 
   const handleGetAsset = useCallback(
     (path: string, field?: Field) => {
@@ -359,11 +359,11 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
         name,
         fields,
         entry,
-        inferedFields,
+        inferredFields,
         handleGetAsset,
       );
     },
-    [collection, config, entry, fields, handleGetAsset, inferedFields],
+    [collection, config, entry, fields, handleGetAsset, inferredFields],
   );
 
   /**
@@ -413,7 +413,7 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
                     field.name,
                     fields,
                     entry,
-                    inferedFields,
+                    inferredFields,
                     handleGetAsset,
                     nestedFields,
                     val,
@@ -445,7 +445,7 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
                 field.name,
                 fields,
                 entry,
-                inferedFields,
+                inferredFields,
                 handleGetAsset,
                 nestedFields,
                 value,
@@ -457,7 +457,7 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
         }, {} as Record<string, ReactNode>),
       };
     },
-    [collection, config.config, entry, fields, handleGetAsset, inferedFields],
+    [collection, config.config, entry, fields, handleGetAsset, inferredFields],
   );
 
   const previewStyles = useMemo(

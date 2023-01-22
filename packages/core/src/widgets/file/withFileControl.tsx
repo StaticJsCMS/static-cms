@@ -381,7 +381,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
         if (isMultiple(internalValue)) {
           return (
-            <FileLinks key="mulitple-file-links">
+            <FileLinks key="multiple-file-links">
               <FileLinkList key="file-links-list">
                 {internalValue.map(val => (
                   <li key={val}>{renderFileLink(val)}</li>

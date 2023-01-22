@@ -2097,7 +2097,7 @@ const equalStaticArray = function * (            table       , finalKey        ,
     }
     else {
       if ( lineRest[0]===']' ) { break; }
-      throw throws(SyntaxError$1(`Unexpect character in static array item value` + where(', which is found at ')));
+      throw throws(SyntaxError$1(`Unexpected character in static array item value` + where(', which is found at ')));
     }
   }
   inline===null || beInline(staticArray, inline);
@@ -2231,7 +2231,7 @@ const Root = ()        => {
         const { leadingKeys, finalKey, asArrayItem, tag, lineRest } = TABLE_DEFINITION_exec_groups(line, parseKeys);
         const table        = prepareTable(rootTable, leadingKeys);
         if ( lineRest ) {
-          lineRest[0]==='#' || throws(SyntaxError$1(`Unexpect charachtor after table header` + where(' at ')));
+          lineRest[0]==='#' || throws(SyntaxError$1(`Unexpected charachtor after table header` + where(' at ')));
         }
         lastSectionTable = appendTable(table, finalKey, asArrayItem, tag);
         preserveComment && lineRest && ( lastSectionTable[commentForThis] = asArrayItem ? lineRest.slice(1) : table[commentFor(finalKey)] = lineRest.slice(1) );
@@ -2244,7 +2244,7 @@ const Root = ()        => {
         let rest             = assign(forComment);
         typeof rest==='string' || ( rest = x        (rest) );
         if ( rest ) {
-          rest[0]==='#' || throws(SyntaxError$1(`Unexpect charachtor after key/value pair` + where(' at ')));
+          rest[0]==='#' || throws(SyntaxError$1(`Unexpected charachtor after key/value pair` + where(' at ')));
           if ( preserveComment ) { forComment.table[commentFor(forComment.finalKey)] = rest.slice(1); }
         }
       }

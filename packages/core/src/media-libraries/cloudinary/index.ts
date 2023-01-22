@@ -48,7 +48,7 @@ declare global {
     cloudinary: {
       createMediaLibrary: (
         config: Record<string, unknown>,
-        hadlers: { insertHandler: (data: { assets: CloudinaryAsset[] }) => void },
+        handlers: { insertHandler: (data: { assets: CloudinaryAsset[] }) => void },
       ) => {
         show: (config: Record<string, unknown>) => void;
         hide: () => void;

@@ -4,7 +4,7 @@ import partialRight from 'lodash/partialRight';
 
 import { COMMIT_AUTHOR, COMMIT_DATE } from '../constants/commitProps';
 import { sanitizeSlug } from './urlHelper';
-import { selectIdentifier, selectInferedField } from './util/collection.util';
+import { selectIdentifier, selectInferredField } from './util/collection.util';
 import { selectField } from './util/field.util';
 import { set } from './util/object.util';
 import {
@@ -108,7 +108,7 @@ export function slugFormatter(collection: Collection, entryData: EntryData, slug
 
 export function summaryFormatter(summaryTemplate: string, entry: Entry, collection: Collection) {
   let entryData = entry.data;
-  const date = parseDateFromEntry(entry, selectInferedField(collection, 'date')) || null;
+  const date = parseDateFromEntry(entry, selectInferredField(collection, 'date')) || null;
   const identifier = get(entryData, keyToPathArray(selectIdentifier(collection)));
 
   entryData =
@@ -144,7 +144,7 @@ export function folderFormatter(
     'folder' in collection ? collection.folder : '',
   );
 
-  const date = parseDateFromEntry(entry, selectInferedField(collection, 'date')) || null;
+  const date = parseDateFromEntry(entry, selectInferredField(collection, 'date')) || null;
   const identifier = get(fields, keyToPathArray(selectIdentifier(collection)));
   const processSegment = getProcessSegment(slugConfig, [defaultFolder, fields?.dirname as string]);
 
