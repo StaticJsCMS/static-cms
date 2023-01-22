@@ -34,42 +34,74 @@ The following parameters will be passed to your `react_component` during render:
 
 ### Example
 
-```html
-<script src="https://unpkg.com/@staticcms/app@^1.0.0/dist/static-cms-app.js"></script>
-<script>
-  const PostPreview = ({ widgetFor, getAsset, entry }) => {
-    const [imageUrl, setImageUrl] = useState('');
-    const image = useMemo(() => entry.data.image, [entry.data.image]);
+<CodeTabs>
 
-    useEffect(() => {
-      let alive = true;
+```js
+import CMS, { useMediaAsset } from '@staticcms/core'; // or '@staticcms/app'
 
-      const loadImage = async () => {
-        const imageAsset = await getAsset(image);
-        if (alive) {
-          setImageUrl(imageAsset.toString());
-        }
-      };
+const PostPreview = ({ widgetFor, getAsset, entry, collection, field }) => {
+  const imageUrl = useMediaAsset(entry.data.image, collection, field, entry);
 
-      loadImage();
+  return h(
+    'div',
+    {},
+    h('h1', {}, entry.data.title),
+    h('img', { src: imageUrl }),
+    h('div', { className: 'text' }, widgetFor('body')),
+  );
+};
 
-      return () => {
-        alive = false;
-      };
-    }, [image]);
-
-    return h(
-      'div',
-      {},
-      h('h1', {}, entry.data.title),
-      h('img', { src: imageUrl }),
-      h('div', { classtitle: 'text' }, widgetFor('body')),
-    );
-  });
-
-  CMS.registerPreviewTemplate('posts', PostPreview);
-</script>
+CMS.registerPreviewTemplate('posts', PostPreview);
 ```
+
+```jsx
+import CMS, { useMediaAsset } from '@staticcms/core'; // or '@staticcms/app'
+
+const PostPreview = ({ widgetFor, getAsset, entry, collection, field }) => {
+  const imageUrl = useMediaAsset(entry.data.image, collection, field, entry);
+
+  return (
+    <div>
+      <h1>{entry.data.title}</h1>
+      <img src={imageUrl} />
+      <div className='text'>{widgetFor('body')}</div>
+    </div>
+  );
+};
+
+CMS.registerPreviewTemplate('posts', PostPreview);
+```
+
+```tsx
+import CMS, { useMediaAsset } from '@staticcms/core';
+
+import type { TemplatePreviewProps } from '@staticcms/core';
+
+/**
+ * The type for 'entry.data'
+ */
+interface Post {
+  image: string;
+  title: string;
+  body: string;
+}
+
+const PostPreview = ({ widgetFor, getAsset, entry, collection, field }: TemplatePreviewProps<Post>) => {
+  const imageUrl = useMediaAsset(entry.data.image, collection, field, entry);
+
+  return (
+    <div>
+      <h1>{entry.data.title}</h1>
+      <img src={imageUrl} />
+      <div className='text'>{widgetFor('body')}</div>
+    </div>
+  );
+};
+
+CMS.registerPreviewTemplate('posts', PostPreview);
+```
+
+</CodeTabs>
 
 ### Lists and Objects
 
