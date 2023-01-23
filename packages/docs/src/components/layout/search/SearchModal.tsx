@@ -99,7 +99,7 @@ const SearchModal: FC<SearchModalProps> = ({ open, onClose, searchablePages }) =
     setCanFocus(true);
     setTimeout(() => {
       onClose();
-    });
+    }, 100);
   }, [onClose]);
 
   const handleSearchChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {

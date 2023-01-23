@@ -58,24 +58,12 @@ interface SearchResultProps {
 const SearchResult = ({ entry: { url, title }, summary, onClick }: SearchResultProps) => {
   const theme = useTheme();
 
-  // const Icon = useMemo(() => {
-  //   switch (type) {
-  //     case NEWS:
-  //       return ArticleIcon;
-  //     case BULLETIN:
-  //       return NewspaperIcon;
-  //     default:
-  //       return WebIcon;
-  //   }
-  // }, [type]);
-
   return (
     <Button
       component={Link}
       href={url}
       key={`result-${url}`}
       onClick={onClick}
-      // startIcon={<Icon fontSize="large" />}
       sx={{
         display: 'flex',
         alignItems: 'flex-start',
