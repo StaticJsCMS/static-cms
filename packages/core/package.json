@@ -114,7 +114,7 @@
     "lodash": "4.17.21",
     "minimatch": "6.1.6",
     "moment": "2.29.4",
-    "node-polyglot": "2.4.2",
+    "node-polyglot": "2.5.0",
     "ol": "7.2.2",
     "path-browserify": "1.0.1",
     "prop-types": "15.8.1",
