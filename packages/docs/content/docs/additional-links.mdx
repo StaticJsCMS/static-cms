@@ -50,6 +50,8 @@ CMS.registerAdditionalLink({
 
 ### Custom Page
 
+<CodeTabs>
+
 ```js
 const CustomPage = () => {
   return h('div', {}, 'I am a custom page!');
@@ -64,3 +66,37 @@ CMS.registerAdditionalLink({
   },
 });
 ```
+
+```jsx
+const CustomPage = () => {
+  return <div>I am a custom page!</div>;
+};
+
+CMS.registerAdditionalLink({
+  id: 'custom-page',
+  title: 'Custom Page',
+  data: CustomPage,
+  options: {
+    icon: 'page',
+  },
+});
+```
+
+```tsx
+import type { FC } from 'react';
+
+const CustomPage: FC = () => {
+  return <div>I am a custom page!</div>;
+};
+
+CMS.registerAdditionalLink({
+  id: 'custom-page',
+  title: 'Custom Page',
+  data: CustomPage,
+  options: {
+    icon: 'page',
+  },
+});
+```
+
+</CodeTabs>
