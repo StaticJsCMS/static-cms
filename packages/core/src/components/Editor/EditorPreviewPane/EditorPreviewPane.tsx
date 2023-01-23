@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import React, { Fragment, isValidElement, useCallback, useMemo } from 'react';
 import ReactDOM from 'react-dom';
-import Frame, { FrameContextConsumer } from 'react-frame-component';
+import Frame from 'react-frame-component';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import { ScrollSyncPane } from 'react-scroll-sync';
@@ -16,6 +16,7 @@ import { selectIsLoadingAsset } from '@staticcms/core/reducers/selectors/medias'
 import { getTypedFieldForValue } from '@staticcms/list/typedListHelpers';
 import EditorPreview from './EditorPreview';
 import EditorPreviewContent from './EditorPreviewContent';
+import PreviewFrameContent from './PreviewFrameContent';
 import PreviewHOC from './PreviewHOC';
 
 import type { InferredField } from '@staticcms/core/constants/fieldInference';
@@ -523,24 +524,11 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
                 {!collection ? (
                   t('collection.notFound')
                 ) : (
-                  <FrameContextConsumer>
-                    {({ document, window }) => {
-                      return (
-                        <ScrollSyncPane
-                          key="preview-frame-scroll-sync"
-                          attachTo={
-                            (document?.scrollingElement ?? undefined) as HTMLElement | undefined
-                          }
-                        >
-                          <EditorPreviewContent
-                            key="preview-frame-content"
-                            previewComponent={previewComponent}
-                            previewProps={{ ...previewProps, document, window }}
-                          />
-                        </ScrollSyncPane>
-                      );
-                    }}
-                  </FrameContextConsumer>
+                  <PreviewFrameContent
+                    key="preview-frame-content"
+                    previewComponent={previewComponent}
+                    previewProps={{ ...previewProps }}
+                  />
                 )}
               </PreviewPaneFrame>
             ) : (
