@@ -87,22 +87,29 @@ const SearchModal: FC<SearchModalProps> = ({ open, onClose, searchablePages }) =
   const [canFocus, setCanFocus] = useState(true);
   const [search, setSearch] = useState('');
 
-  const handleFocus = () => {
+  const handleFocus = useCallback(() => {
     if (canFocus && open && inputRef.current) {
+      console.log('FOCUS!');
       inputRef.current?.focus();
       setSearch('');
       setCanFocus(false);
     }
-  };
+  }, [canFocus, open]);
 
   const handleClose = useCallback(() => {
+    console.log('handleClose!');
     setTimeout(() => {
       onClose();
-      setCanFocus(true);
+      console.log('CLOSE!');
+      setTimeout(() => {
+        setCanFocus(true);
+        console.log('CAN FOCUS!');
+      }, 100);
     }, 100);
   }, [onClose]);
 
   const handleSearchChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    console.log('CHANGE', event.target.value);
     setSearch(event.target.value);
   }, []);
 
