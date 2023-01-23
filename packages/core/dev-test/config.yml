@@ -606,6 +606,27 @@ collections:
                 name: thumb
                 widget: image
                 required: false
+          - label: Collapsed, optional with required children
+            name: collapsed_optional_with_required_children
+            widget: object
+            required: false
+            collapsed: true
+            fields:
+              - name: layout
+                widget: hidden
+                default: post
+              - label: Number of posts on frontpage
+                name: front_limit
+                widget: number
+                required: true
+              - label: Author
+                name: author
+                widget: string
+                required: true
+              - label: Thumbnail
+                name: thumb
+                widget: image
+                required: true
       - name: relation
         label: Relation
         file: _widgets/relation.json

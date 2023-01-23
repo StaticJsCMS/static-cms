@@ -6,6 +6,7 @@ import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar
 import Outline from '@staticcms/core/components/UI/Outline';
 import { transientOptions } from '@staticcms/core/lib';
 import { compileStringTemplate } from '@staticcms/core/lib/widgets/stringTemplate';
+import { getEntryDataPath } from '@staticcms/core/reducers/selectors/entryDraft';
 
 import type { ObjectField, ObjectValue, WidgetControlProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
@@ -61,7 +62,7 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
   hasErrors,
   value = {},
 }) => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(field.collapsed ?? false);
 
   const handleCollapseToggle = useCallback(() => {
     setCollapsed(!collapsed);
@@ -74,6 +75,13 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
   }, [field.label, field.name, field.summary, value]);
 
   const multiFields = useMemo(() => field.fields, [field.fields]);
+
+  const childHasError = useMemo(() => {
+    const dataPath = getEntryDataPath(i18n);
+    const fullPath = `${dataPath}.${path}`;
+
+    return Boolean(Object.keys(fieldsErrors).find(key => key.startsWith(fullPath)));
+  }, [fieldsErrors, i18n, path]);
 
   const renderedField = useMemo(() => {
     return (
@@ -132,7 +140,7 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
             collapsed={collapsed}
             onCollapseToggle={handleCollapseToggle}
             heading={objectLabel}
-            hasError={hasErrors}
+            hasError={hasErrors || childHasError}
             t={t}
             testId="object-title"
           />
@@ -140,7 +148,9 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
         <StyledFieldsBox $collapsed={collapsed} key="object-control-fields">
           {renderedField}
         </StyledFieldsBox>
-        {forList ? null : <Outline key="object-control-outline" hasError={hasErrors} />}
+        {forList ? null : (
+          <Outline key="object-control-outline" hasError={hasErrors || childHasError} />
+        )}
       </StyledObjectControlWrapper>
     );
   }
