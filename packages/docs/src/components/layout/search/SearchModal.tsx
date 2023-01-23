@@ -96,9 +96,9 @@ const SearchModal: FC<SearchModalProps> = ({ open, onClose, searchablePages }) =
   };
 
   const handleClose = useCallback(() => {
-    setCanFocus(true);
     setTimeout(() => {
       onClose();
+      setCanFocus(true);
     }, 100);
   }, [onClose]);
 
