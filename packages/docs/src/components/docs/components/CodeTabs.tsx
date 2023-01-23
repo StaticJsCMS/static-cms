@@ -55,6 +55,11 @@ const supportedLanguages: Record<string, CodeLanguage> = {
     grammar: Prism.languages.javascript,
     language: 'javascript',
   },
+  'language-jsx': {
+    title: 'JSX',
+    grammar: Prism.languages.jsx,
+    language: 'javascript',
+  },
   'language-markdown': {
     title: 'Markdown',
     grammar: Prism.languages.markdown,
@@ -63,6 +68,11 @@ const supportedLanguages: Record<string, CodeLanguage> = {
   'language-ts': {
     title: 'Typescript',
     grammar: Prism.languages.typescript,
+    language: 'typescript',
+  },
+  'language-tsx': {
+    title: 'Typescript',
+    grammar: Prism.languages.tsx,
     language: 'typescript',
   },
 };

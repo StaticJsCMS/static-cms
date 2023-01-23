@@ -34,124 +34,278 @@ The following parameters will be passed to your `react_component` during render:
 
 ### Example
 
-```html
-<script src="https://unpkg.com/@staticcms/app@^1.0.0/dist/static-cms-app.js"></script>
-<script>
-  const PostPreview = ({ widgetFor, getAsset, entry }) => {
-    const [imageUrl, setImageUrl] = useState('');
-    const image = useMemo(() => entry.data.image, [entry.data.image]);
+<CodeTabs>
 
-    useEffect(() => {
-      let alive = true;
+```js
+const PostPreview = ({ widgetFor, getAsset, entry, collection, field }) => {
+  const imageUrl = useMediaAsset(entry.data.image, collection, field, entry);
 
-      const loadImage = async () => {
-        const imageAsset = await getAsset(image);
-        if (alive) {
-          setImageUrl(imageAsset.toString());
-        }
-      };
+  return h(
+    'div',
+    {},
+    h('h1', {}, entry.data.title),
+    h('img', { src: imageUrl }),
+    h('div', { className: 'text' }, widgetFor('body')),
+  );
+};
 
-      loadImage();
-
-      return () => {
-        alive = false;
-      };
-    }, [image]);
-
-    return h(
-      'div',
-      {},
-      h('h1', {}, entry.data.title),
-      h('img', { src: imageUrl }),
-      h('div', { classtitle: 'text' }, widgetFor('body')),
-    );
-  });
-
-  CMS.registerPreviewTemplate('posts', PostPreview);
-</script>
+CMS.registerPreviewTemplate('posts', PostPreview);
 ```
+
+```jsx
+import CMS, { useMediaAsset } from '@staticcms/core';
+
+const PostPreview = ({ widgetFor, getAsset, entry, collection, field }) => {
+  const imageUrl = useMediaAsset(entry.data.image, collection, field, entry);
+
+  return (
+    <div>
+      <h1>{entry.data.title}</h1>
+      <img src={imageUrl} />
+      <div className='text'>{widgetFor('body')}</div>
+    </div>
+  );
+};
+
+CMS.registerPreviewTemplate('posts', PostPreview);
+```
+
+```tsx
+import CMS, { useMediaAsset } from '@staticcms/core';
+
+import type { TemplatePreviewProps } from '@staticcms/core';
+
+/**
+ * The type for 'entry.data'
+ */
+interface Post {
+  image: string;
+  title: string;
+  body: string;
+}
+
+const PostPreview = ({ widgetFor, getAsset, entry, collection, field }: TemplatePreviewProps<Post>) => {
+  const imageUrl = useMediaAsset(entry.data.image, collection, field, entry);
+
+  return (
+    <div>
+      <h1>{entry.data.title}</h1>
+      <img src={imageUrl} />
+      <div className='text'>{widgetFor('body')}</div>
+    </div>
+  );
+};
+
+CMS.registerPreviewTemplate('posts', PostPreview);
+```
+
+</CodeTabs>
 
 ### Lists and Objects
 
 The API for accessing the individual fields of list- and object-type entries is similar to the API for accessing fields in standard entries, but there are a few key differences. Access to these nested fields is facilitated through the `widgetsFor` function, which is passed to the preview template component during render.
 
-**List Example:**
+#### List Template Example
 
-```html
-<script>
-  // For list fields, the widgetFor function returns an array of objects
-  // that you can map over in your template. If our field is a list of
-  // authors containing two entries, with fields `name` and `description`,
-  // the return value of `widgetsFor` would look like this:
-  //
-  // [{
-  //   data: { title: 'Mathias', description: 'Co-Founder'},
-  //   widgets: { title: (<WidgetComponent>), description: (WidgetComponent>)}
-  // },
-  // {
-  //   data: { title: 'Chris', description: 'Co-Founder'},
-  //   widgets: { title: (<WidgetComponent>), description: (WidgetComponent>)}
-  // }]
-  //
-  // Templating would look something like this:
-  const AuthorsPreview = ({ widgetsFor }) => {
-    return h(
-      'div',
-      {},
+For list fields, the widgetFor function returns an array of objects that you can map over in your template. If your field is a list of authors containing two entries, with fields `name` and `description`, the return value of `widgetsFor` would look like this:
 
-      // This is a static header that would only be rendered once for the entire list
-      h('h1', {}, 'Authors'),
-
-      // Here we provide a simple mapping function that will be applied to each
-      // object in the array of authors
-      widgetsFor('authors').map(function (author, index) {
-        return h(
-          'div',
-          { key: index },
-          h('hr', {}),
-          h('strong', {}, author.data.name),
-          author.widgets.description,
-        );
-      }),
-    );
-  };
-
-  CMS.registerPreviewTemplate('authors', AuthorsPreview);
-</script>
+```js
+[{
+  data: { title: 'Mathias', description: 'Co-Founder'},
+  widgets: { title: <WidgetComponent>, description: <WidgetComponent>}
+},
+{
+  data: { title: 'Chris', description: 'Co-Founder'},
+  widgets: { title: <WidgetComponent>, description: <WidgetComponent>}
+}]
 ```
 
-**Object Example:**
+<CodeTabs>
 
-```html
-<script>
-  // Object fields are simpler than lists - instead of `widgetsFor` returning
-  // an array of objects, it returns a single object. Accessing the shape of
-  // that object is the same as the shape of objects returned for list fields:
-  //
-  // {
-  //   data: { front_limit: 0, author: 'Chris' },
-  //   widgets: { front_limit: (<WidgetComponent>), author: (WidgetComponent>)}
-  // }
-  const GeneralPreview = ({ entry, widgetsFor }) => {
-    const title = entry.data.site_title;
-    const posts = entry.data.posts;
+```js
+const AuthorsPreview = ({ widgetsFor }) => {
+  return h(
+    'div',
+    {},
 
-    return h(
-      'div',
-      {},
-      h('h1', {}, title),
-      h(
-        'dl',
-        {},
-        h('dt', {}, 'Posts on Frontpage'),
-        h('dd', {}, widgetsFor('posts').widgets.front_limit || 0),
+    // This is a static header that would only be rendered once for the entire list
+    h('h1', {}, 'Authors'),
 
-        h('dt', {}, 'Default Author'),
-        h('dd', {}, widgetsFor('posts').data.author || 'None'),
-      ),
-    );
-  };
+    // Here we provide a simple mapping function that will be applied to each
+    // object in the array of authors
+    widgetsFor('authors').map(function (author, index) {
+      return h(
+        'div',
+        { key: index },
+        h('hr', {}),
+        h('strong', {}, author.data.name),
+        author.widgets.description,
+      );
+    }),
+  );
+};
 
-  CMS.registerPreviewTemplate('general', GeneralPreview);
-</script>
+CMS.registerPreviewTemplate('authors', AuthorsPreview);
 ```
+
+```jsx
+import CMS from '@staticcms/core';
+
+const AuthorsPreview = ({ widgetsFor }) => {
+  return (
+    <div>
+      {/* This is a static header that would only be rendered once for the entire list */}
+      <h1>Authors</h1>
+      {/* Here we provide a simple mapping function that will be applied to each object in the array of authors */}
+      {widgetsFor('authors').map((author, index) => (
+        <div key={index}>
+          <hr />
+          <strong>{author.data.name}</strong>
+          {author.widgets.description}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+CMS.registerPreviewTemplate('authors', AuthorsPreview);
+```
+
+```tsx
+import CMS from '@staticcms/core';
+
+import type { TemplatePreviewProps } from '@staticcms/core';
+
+interface Author {
+  name: string;
+  description: string;
+}
+
+/**
+ * The type for 'entry.data'
+ */
+interface Authors {
+  authors: Author[];
+}
+
+const AuthorsPreview = ({ widgetsFor }: TemplatePreviewProps<Authors>) => {
+  return (
+    <div>
+      {/* This is a static header that would only be rendered once for the entire list */}
+      <h1>Authors</h1>
+      {/* Here we provide a simple mapping function that will be applied to each object in the array of authors */}
+      {widgetsFor('authors').map((author, index) => (
+        <div key={index}>
+          <hr />
+          <strong>{author.data.name}</strong>
+          {author.widgets.description}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+CMS.registerPreviewTemplate('authors', AuthorsPreview);
+```
+
+</CodeTabs>
+
+#### Object Example
+
+Object fields are simpler than lists - instead of `widgetsFor` returning an array of objects, it returns a single object. Accessing the shape of that object is the same as the shape of objects returned for list fields:
+
+```js
+{
+  data: { front_limit: 0, author: 'Chris' },
+  widgets: { front_limit: <WidgetComponent>, author: <WidgetComponent>}
+}
+```
+
+<CodeTabs>
+
+```js
+const GeneralPreview = ({ entry, widgetsFor }) => {
+  const title = entry.data.site_title;
+  const posts = entry.data.posts;
+
+  return h(
+    'div',
+    {},
+    h('h1', {}, title),
+    h(
+      'dl',
+      {},
+      h('dt', {}, 'Posts on Frontpage'),
+      h('dd', {}, widgetsFor('posts').widgets.front_limit || 0),
+
+      h('dt', {}, 'Default Author'),
+      h('dd', {}, widgetsFor('posts').data.author || 'None'),
+    ),
+  );
+};
+
+CMS.registerPreviewTemplate('general', GeneralPreview);
+```
+
+```jsx
+import CMS from '@staticcms/core';
+
+const GeneralPreview = ({ entry, widgetsFor }) => {
+  const title = entry.data.site_title;
+  const posts = entry.data.posts;
+
+  return (
+    <div>
+      <h1>{title}</h1>
+      <dl>
+        <dt>Posts on Frontpage</dt>
+        <dd>{widgetsFor('posts').widgets.front_limit || 0)}</dd>
+        <dt>Default Author</dt>
+        <dd>{widgetsFor('posts').data.author || 'None')}</dd>
+      </dl>
+    </div>
+  );
+};
+
+CMS.registerPreviewTemplate('general', GeneralPreview);
+```
+
+```tsx
+import CMS from '@staticcms/core';
+
+import type { TemplatePreviewProps } from '@staticcms/core';
+
+interface Posts {
+  front_limit?: number;
+  author?: string;
+}
+
+/**
+ * The type for 'entry.data'
+ */
+interface GeneralSettings {
+  site_title: string;
+  posts: Posts;
+}
+
+const GeneralPreview = ({ entry, widgetsFor }: TemplatePreviewProps<GeneralSettings>) => {
+  const title = entry.data.site_title;
+  const posts = entry.data.posts;
+
+  return (
+    <div>
+      <h1>{title}</h1>
+      <dl>
+        <dt>Posts on Frontpage</dt>
+        <dd>{widgetsFor('posts').widgets.front_limit || 0)}</dd>
+        <dt>Default Author</dt>
+        <dd>{widgetsFor('posts').data.author || 'None')}</dd>
+      </dl>
+    </div>
+  );
+};
+
+CMS.registerPreviewTemplate('general', GeneralPreview);
+```
+
+</CodeTabs>

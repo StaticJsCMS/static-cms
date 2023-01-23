@@ -24,6 +24,7 @@ CMS.registerWidget(name, control, [preview], [{ schema }]);
 
 // Using npm module import
 import CMS from '@staticcms/core';
+
 CMS.registerWidget(name, control, [preview], [{ schema }]);
 ```
 
@@ -120,48 +121,135 @@ Register widget takes an optional object of options. These options include:
 
 ### Example
 
-`admin/index.html`
+<CodeTabs>
 
-```html
-<script src="https://unpkg.com/@staticcms/app@^1.0.0/dist/static-cms-app.js"></script>
-<script>
-  const CategoriesControl = ({ label, value, field, onChange }) => {
-    const separator = useMemo(() => field.separator ?? ', ', [field.separator]);
+```js
+const CategoriesControl = ({ label, value, field, onChange }) => {
+  const separator = useMemo(() => field.separator ?? ', ', [field.separator]);
 
-    const handleChange = useCallback((e) => {
-      onChange(e.target.value.split(separator).map(e => e.trim()));
-    }, [separator, onChange]);
+  const handleChange = useCallback((e) => {
+    onChange(e.target.value.split(separator).map(e => e.trim()));
+  }, [separator, onChange]);
 
-    return h('div', {}, {
-      h('label', { for: 'inputId' }, label),
-      h('input', {
-        id: 'inputId',
-        type: 'text',
-        value: value ? value.join(separator) : '',
-        onChange: this.handleChange,
-      })
-    });
-  };
+  return h('div', {}, {
+    h('label', { for: 'inputId' }, label),
+    h('input', {
+      id: 'inputId',
+      type: 'text',
+      value: value ? value.join(separator) : '',
+      onChange: handleChange,
+    })
+  });
+};
 
-  const CategoriesPreview = ({ value }) => {
-    return h(
-      'ul',
-      {},
-      value.map(function (val, index) {
-        return h('li', { key: index }, val);
-      }),
-    );
-  };
+const CategoriesPreview = ({ value }) => {
+  return h(
+    'ul',
+    {},
+    value.map((val, index) => {
+      return h('li', { key: index }, val);
+    }),
+  );
+};
 
-  const schema = {
-    properties: {
-      separator: { type: 'string' },
-    },
-  };
+const schema = {
+  properties: {
+    separator: { type: 'string' },
+  },
+};
 
-  CMS.registerWidget('categories', CategoriesControl, CategoriesPreview, { schema });
-</script>
+CMS.registerWidget('categories', CategoriesControl, CategoriesPreview, { schema });
 ```
+
+```jsx
+import CMS from '@staticcms/core';
+
+const CategoriesControl = ({ label, value, field, onChange }) => {
+  const separator = useMemo(() => field.separator ?? ', ', [field.separator]);
+
+  const handleChange = useCallback((e) => {
+    onChange(e.target.value.split(separator).map(e => e.trim()));
+  }, [separator, onChange]);
+
+  return (
+    <div>
+      <label for="inputId">{label}</label>
+      <input
+        id="inputId"
+        type="text"
+        value={value ? value.join(separator) : ''}
+        onChange={handleChange} />
+    </div>
+  );
+};
+
+const CategoriesPreview = ({ value }) => {
+  return (
+    <ul>
+      {value.map((val, index) => {
+        return <li key={index}>{value}</li>;
+      })}
+    </ul>
+  );
+};
+
+const schema = {
+  properties: {
+    separator: { type: 'string' },
+  },
+};
+
+CMS.registerWidget('categories', CategoriesControl, CategoriesPreview, { schema });
+```
+
+```tsx
+import CMS from '@staticcms/core';
+
+import type { WidgetControlProps, WidgetPreviewProps } from '@staticcms/core';
+
+interface CategoriesField {
+  widget: 'categories'
+}
+
+const CategoriesControl = ({ label, value, field, onChange }: WidgetControlProps<string[], CategoriesField>) => {
+  const separator = useMemo(() => field.separator ?? ', ', [field.separator]);
+
+  const handleChange = useCallback((e) => {
+    onChange(e.target.value.split(separator).map(e => e.trim()));
+  }, [separator, onChange]);
+
+  return (
+    <div>
+      <label for="inputId">{label}</label>
+      <input
+        id="inputId"
+        type="text"
+        value={value ? value.join(separator) : ''}
+        onChange={handleChange} />
+    </div>
+  );
+};
+
+const CategoriesPreview = ({ value }: WidgetPreviewProps<string[], CategoriesField>) => {
+  return (
+    <ul>
+      {value.map((val, index) => {
+        return <li key={index}>{value}</li>;
+      })}
+    </ul>
+  );
+};
+
+const schema = {
+  properties: {
+    separator: { type: 'string' },
+  },
+};
+
+CMS.registerWidget('categories', CategoriesControl, CategoriesPreview, { schema });
+```
+
+</CodeTabs>
 
 `admin/config.yml` (or `admin/config.js`)
 
@@ -272,48 +360,61 @@ If you want to use the media library in your custom widget you will need to use 
 <CodeTabs>
 
 ```js
+const FileControl = ({ collection, field, value, entry, onChange }) => {
+  const handleOpenMediaLibrary = useMediaInsert(value, { field, controlID }, onChange);
+
+  const assetSource = useMediaAsset(value, collection, field, entry);
+
+  return [
+    h('button', { type: 'button', onClick: handleOpenMediaLibrary }, 'Upload'),
+    h('img', { role: 'presentation', src: assetSource })
+  ];
+};
+```
+
+```jsx
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 
 const FileControl = ({ collection, field, value, entry, onChange }) => {
-  const handleOpenMediaLibrary = useMediaInsert(
-    value,
-    { field, controlID },
-    onChange,
-  );
+  const handleOpenMediaLibrary = useMediaInsert(value, { field, controlID }, onChange);
 
   const assetSource = useMediaAsset(value, collection, field, entry);
 
   return (
     <>
-      <button type="button" onClick={handleOpenMediaLibrary}>Upload</button>
+      <button type="button" onClick={handleOpenMediaLibrary}>
+        Upload
+      </button>
       <img role="presentation" src={assetSource} />
     </>
   );
 };
 ```
 
-```ts
+```tsx
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 
 import type { WidgetControlProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
-const FileControl: FC<WidgetControlProps<string, MyField>> =
-  ({ collection, field, value, entry, onChange }) => {
-
-  const handleOpenMediaLibrary = useMediaInsert(
-    internalValue,
-    { field, controlID },
-    onChange,
-  );
+const FileControl: FC<WidgetControlProps<string, MyField>> = ({
+  collection,
+  field,
+  value,
+  entry,
+  onChange,
+}) => {
+  const handleOpenMediaLibrary = useMediaInsert(internalValue, { field, controlID }, onChange);
 
   const assetSource = useMediaAsset(value, collection, field, entry);
 
   return (
     <>
-      <button type="button" onClick={handleOpenMediaLibrary}>Upload</button>
+      <button type="button" onClick={handleOpenMediaLibrary}>
+        Upload
+      </button>
       <img role="presentation" src={assetSource} />
     </>
   );

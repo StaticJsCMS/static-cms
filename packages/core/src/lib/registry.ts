@@ -374,12 +374,12 @@ export function getAdditionalLink(id: string): AdditionalLink | undefined {
 /**
  * Markdown editor shortcodes
  */
-export function registerShortcode(name: string, config: ShortcodeConfig) {
+export function registerShortcode<P = {}>(name: string, config: ShortcodeConfig<P>) {
   if (registry.backends[name]) {
     console.error(`Shortcode [${name}] already registered. Please choose a different name.`);
     return;
   }
-  registry.shortcodes[name] = config;
+  registry.shortcodes[name] = config as unknown as ShortcodeConfig;
 }
 
 export function getShortcode(name: string): ShortcodeConfig {

@@ -19,6 +19,8 @@ Custom icons can be used with [Collections](/docs/collection-overview) or [Custo
 
 This example uses Font Awesome to supply the icon.
 
+<CodeTabs>
+
 ```js
 import { faHouse } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,6 +28,24 @@ import CMS from '@staticcms/core';
 
 CMS.registerIcon('house', () => h(FontAwesomeIcon, {icon=faHouse, size="lg"}));
 ```
+
+```jsx
+import { faHouse } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import CMS from '@staticcms/core';
+
+CMS.registerIcon('house', () => <FontAwesomeIcon icon={faHouse} size="lg" />);
+```
+
+```tsx
+import { faHouse } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import CMS from '@staticcms/core';
+
+CMS.registerIcon('house', () => <FontAwesomeIcon icon={faHouse} size="lg" />);
+```
+
+</CodeTabs>
 
 ## Usage
 
