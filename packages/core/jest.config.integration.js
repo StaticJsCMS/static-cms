@@ -5,7 +5,7 @@ const { compilerOptions } = require('./tsconfig.base');
 module.exports = {
   preset: 'ts-jest',
   transform: {
-    '\\.[jt]sx?$': ['ts-jest', { tsConfig: 'tsconfig.dev.json' }],
+    '\\.[jt]sx?$': ['ts-jest', { tsconfig: 'tsconfig.dev.json' }],
     '^.+\\.svg$': './test/fileTransformer',
   },
   moduleNameMapper: {

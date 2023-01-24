@@ -1,13 +1,9 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import API, { getMaxAccess } from '../API';
 
 global.fetch = jest.fn().mockRejectedValue(new Error('should not call fetch inside tests'));
 
 describe('GitLab API', () => {
-  beforeAll(() => {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    jest.spyOn(console, 'error').mockImplementation(() => {});
-  });
-
   beforeEach(() => {
     jest.resetAllMocks();
   });
@@ -136,6 +132,8 @@ describe('GitLab API', () => {
     test('should return false on shared group access_level >= 30, error getting branch', async () => {
       const api = new API({ repo: 'repo' });
 
+      const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+
       const requestJSONMock = (api.requestJSON = jest.fn());
       requestJSONMock.mockResolvedValueOnce({
         permissions: { project_access: null, group_access: null },
@@ -147,8 +145,10 @@ describe('GitLab API', () => {
 
       await expect(api.hasWriteAccess()).resolves.toBe(false);
 
-      expect(console.error).toHaveBeenCalledTimes(1);
-      expect(console.error).toHaveBeenCalledWith('Failed getting default branch', error);
+      expect(consoleError).toHaveBeenCalledTimes(1);
+      expect(consoleError).toHaveBeenCalledWith('Failed getting default branch', error);
+
+      consoleError.mockRestore();
     });
   });
 
