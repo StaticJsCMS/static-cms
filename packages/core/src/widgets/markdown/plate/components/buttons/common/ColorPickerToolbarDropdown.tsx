@@ -39,7 +39,7 @@ const ColorPickerToolbarDropdown: FC<ColorPickerToolbarDropdownProps> = ({
 
   const type = getPluginType(editorRef, pluginKey);
 
-  const color = editorRef && getMark(editorRef, type);
+  const color = editorRef && (getMark(editorRef, type) as string);
 
   const [selectedColor, setSelectedColor] = useState<string>();
 

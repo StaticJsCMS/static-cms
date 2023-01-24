@@ -283,7 +283,7 @@ export default class API {
         const result: ReposListCommitsResponse = await this.request(
           `${this.originRepoURL}/commits`,
           {
-            params: { path, sha: this.branch },
+            params: { path, sha: this.branch, stat: 'false' },
           },
         );
         const { commit } = result[0];
