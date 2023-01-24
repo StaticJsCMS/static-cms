@@ -7,7 +7,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useSearchScores } from '../../../util/search.util';
 import { isNotEmpty } from '../../../util/string.util';
@@ -84,24 +84,16 @@ const SearchModal: FC<SearchModalProps> = ({ open, onClose, searchablePages }) =
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-  const [canFocus, setCanFocus] = useState(true);
   const [search, setSearch] = useState('');
 
-  const handleFocus = useCallback(() => {
-    if (canFocus && open && inputRef.current) {
+  useEffect(() => {
+    setTimeout(() => {
       inputRef.current?.focus();
-      setSearch('');
-      setCanFocus(false);
-    }
-  }, [canFocus, open]);
+    });
+  }, []);
 
   const handleClose = useCallback(() => {
-    setTimeout(() => {
-      onClose();
-      setTimeout(() => {
-        setCanFocus(true);
-      }, 100);
-    }, 100);
+    onClose();
   }, [onClose]);
 
   const handleSearchChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -212,13 +204,7 @@ const SearchModal: FC<SearchModalProps> = ({ open, onClose, searchablePages }) =
   );
 
   return (
-    <StyledDialog
-      open={open}
-      onClose={handleClose}
-      fullScreen={fullScreen}
-      fullWidth
-      onFocus={handleFocus}
-    >
+    <StyledDialog open={open} onClose={handleClose} fullScreen={fullScreen} fullWidth>
       <StyledDialogContent>
         <StyledTextField
           autoFocus

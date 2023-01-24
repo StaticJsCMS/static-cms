@@ -77,7 +77,9 @@ const Search = ({ searchablePages }: SearchProps) => {
       <StyledIconButton onClick={handleOpen} color="inherit">
         <SearchIcon />
       </StyledIconButton>
-      <SearchModal open={open} onClose={handleClose} searchablePages={searchablePages} />
+      {open ? (
+        <SearchModal open={true} onClose={handleClose} searchablePages={searchablePages} />
+      ) : null}
     </>
   );
 };
