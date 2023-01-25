@@ -19,6 +19,7 @@ import type {
   PreviewStyle,
   PreviewStyleOptions,
   ShortcodeConfig,
+  TemplatePreviewCardComponent,
   TemplatePreviewComponent,
   UnknownField,
   Widget,
@@ -38,6 +39,7 @@ const eventHandlers = allowedEvents.reduce((acc, e) => {
 interface Registry {
   backends: Record<string, BackendInitializer>;
   templates: Record<string, TemplatePreviewComponent<EntryData>>;
+  cards: Record<string, TemplatePreviewCardComponent<EntryData>>;
   widgets: Record<string, Widget>;
   icons: Record<string, CustomIcon>;
   additionalLinks: Record<string, AdditionalLink>;
@@ -57,6 +59,7 @@ interface Registry {
 const registry: Registry = {
   backends: {},
   templates: {},
+  cards: {},
   widgets: {},
   icons: {},
   additionalLinks: {},
@@ -71,6 +74,8 @@ const registry: Registry = {
 export default {
   registerPreviewTemplate,
   getPreviewTemplate,
+  registerPreviewCard,
+  getPreviewCard,
   registerWidget,
   getWidget,
   getWidgets,
@@ -121,6 +126,17 @@ export function registerPreviewTemplate<T>(name: string, component: TemplatePrev
 
 export function getPreviewTemplate(name: string): TemplatePreviewComponent<EntryData> {
   return registry.templates[name];
+}
+
+/**
+ * Preview Cards
+ */
+export function registerPreviewCard<T>(name: string, component: TemplatePreviewCardComponent<T>) {
+  registry.cards[name] = component as TemplatePreviewCardComponent<EntryData>;
+}
+
+export function getPreviewCard(name: string): TemplatePreviewCardComponent<EntryData> {
+  return registry.cards[name];
 }
 
 /**

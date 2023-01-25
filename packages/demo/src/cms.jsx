@@ -18,6 +18,51 @@ const PostPreview = ({ entry, widgetFor }) => {
   );
 };
 
+const PostPreviewCard = ({ entry, widgetFor, viewStyle }) => {
+  return (
+    <div style={{ width: "100%" }}>
+      {viewStyle === "grid" ? widgetFor("image") : null}
+      <div style={{ padding: "16px", width: "100%" }}>
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "space-between",
+            alignItems: "start",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: viewStyle === "grid" ? "column" : "row",
+              alignItems: "baseline",
+              gap: "8px",
+            }}
+          >
+            <strong style={{ fontSize: "24px" }}>{entry.data.title}</strong>
+            <span style={{ fontSize: "16px" }}>{entry.data.date}</span>
+          </div>
+          <div
+            style={{
+              backgroundColor: entry.data.draft === true ? "blue" : "green",
+              color: "white",
+              border: "none",
+              padding: "4px 8px",
+              textAlign: "center",
+              textDecoration: "none",
+              display: "inline-block",
+              cursor: "pointer",
+              borderRadius: "4px",
+            }}
+          >
+            {entry.data.draft === true ? "Draft" : "Published"}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const GeneralPreview = ({ widgetsFor, entry }) => {
   const title = entry.data.site_title;
   const posts = entry.data.posts;
@@ -88,6 +133,7 @@ const CustomPage = () => {
 
 cms.registerPreviewStyle(".toastui-editor-contents h1 { color: blue }", { raw: true });
 cms.registerPreviewTemplate("posts", PostPreview);
+CMS.registerPreviewCard("posts", PostPreviewCard);
 cms.registerPreviewTemplate("general", GeneralPreview);
 cms.registerPreviewTemplate("authors", AuthorsPreview);
 // Pass the name of a registered control to reuse with a new widget preview.

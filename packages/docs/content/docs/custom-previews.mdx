@@ -4,17 +4,21 @@ title: Creating Custom Previews
 weight: 50
 ---
 
-The Static CMS exposes a `window.CMS` global object that you can use to register custom previews for an entire collection (or file within a file collection) via `registerPreviewTemplate`.
+The Static CMS exposes a `window.CMS` global object that you can use to register custom previews for an entire collection (or file within a file collection) via `registerPreviewTemplate` (editor view) and `registerPreviewCard` (collection view).
 
 ### React Components Inline
 
-The `registerPreviewTemplate` requires you to provide a React component. If you have a build process in place for your project, it is possible to integrate with this build process.
+The `registerPreviewTemplate` and `registerPreviewCard` require you to provide a React component. If you have a build process in place for your project, it is possible to integrate with this build process.
 
 However, although possible, it may be cumbersome or even impractical to add a React build phase. For this reason, Static CMS exposes some constructs globally to allow you to create components inline: `h` (alias for React.createElement) as well some basic hooks (`useState`, `useMemo`, `useEffect`, `useCallback`).
 
 **NOTE**: `createClass` is still provided, allowing for the creation of react class components. However it has now been deprecated and will be removed in `v2.0.0`.
 
-## Params
+## Editor Preview
+
+`registerPreviewTemplate` allows you to create a template that overrides the entire editor preview for a given collection.
+
+### `registerPreviewTemplate` Params
 
 | Param           | Type                                                                           | Description                                                                                                                                                                                                                          |
 | --------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -26,13 +30,15 @@ The following parameters will be passed to your `react_component` during render:
 | Param      | Type           | Description                                                                                          |
 | ---------- | -------------- | ---------------------------------------------------------------------------------------------------- |
 | entry      | object         | Object with a `data` field that contains the current value of all widgets in the editor              |
+| collection | object         | Collection configuration                                                                             |
+| fields     | object         | The fields for the given collection                                                                  |
 | document   | Document       | The document object the preview is within. If rendered with a frame, it will be the frame's document |
 | window     | Window         | The window object the preview is within. If rendered with a frame, it will be the frame's window     |
 | getAsset   | Async function | Function that given a url returns (as a promise) a loaded asset                                      |
 | widgetFor  | Function       | Given a field name, returns the rendered preview of that field's widget and value                    |
 | widgetsFor | Function       | Given a field name, returns the rendered previews of that field's nested child widgets and values    |
 
-### Example
+#### `registerPreviewTemplate` Example
 
 <CodeTabs>
 
@@ -62,7 +68,7 @@ const PostPreview = ({ widgetFor, getAsset, entry, collection, field }) => {
     <div>
       <h1>{entry.data.title}</h1>
       <img src={imageUrl} />
-      <div className='text'>{widgetFor('body')}</div>
+      <div className="text">{widgetFor('body')}</div>
     </div>
   );
 };
@@ -84,14 +90,20 @@ interface Post {
   body: string;
 }
 
-const PostPreview = ({ widgetFor, getAsset, entry, collection, field }: TemplatePreviewProps<Post>) => {
+const PostPreview = ({
+  widgetFor,
+  getAsset,
+  entry,
+  collection,
+  field,
+}: TemplatePreviewProps<Post>) => {
   const imageUrl = useMediaAsset(entry.data.image, collection, field, entry);
 
   return (
     <div>
       <h1>{entry.data.title}</h1>
       <img src={imageUrl} />
-      <div className='text'>{widgetFor('body')}</div>
+      <div className="text">{widgetFor('body')}</div>
     </div>
   );
 };
@@ -101,11 +113,11 @@ CMS.registerPreviewTemplate('posts', PostPreview);
 
 </CodeTabs>
 
-### Lists and Objects
+#### Lists and Objects
 
 The API for accessing the individual fields of list- and object-type entries is similar to the API for accessing fields in standard entries, but there are a few key differences. Access to these nested fields is facilitated through the `widgetsFor` function, which is passed to the preview template component during render.
 
-#### List Template Example
+##### List Template Example
 
 For list fields, the widgetFor function returns an array of objects that you can map over in your template. If your field is a list of authors containing two entries, with fields `name` and `description`, the return value of `widgetsFor` would look like this:
 
@@ -210,7 +222,7 @@ CMS.registerPreviewTemplate('authors', AuthorsPreview);
 
 </CodeTabs>
 
-#### Object Example
+##### Object Example
 
 Object fields are simpler than lists - instead of `widgetsFor` returning an array of objects, it returns a single object. Accessing the shape of that object is the same as the shape of objects returned for list fields:
 
@@ -309,3 +321,205 @@ CMS.registerPreviewTemplate('general', GeneralPreview);
 ```
 
 </CodeTabs>
+
+## Collection Card Preview
+
+`registerPreviewCard` allows you to create a card template that overrides the cards displayed in the collection view.
+
+### `registerPreviewCard` Params
+
+| Param           | Type                                                                           | Description                                                                                                                                                                                                                          |
+| --------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| name            | string                                                                         | The name of the collection (or file for file collections) which this preview component will be used for<br /><ul><li>Folder collections: Use the name of the collection</li><li>File collections: Use the name of the file</li></ul> |
+| react_component | [React Function Component](https://reactjs.org/docs/components-and-props.html) | A React functional component that renders a preview card for a given entry in your collection                                                                                                                                        |
+
+The following parameters will be passed to your `react_component` during render:
+
+| Param      | Type                  | Description                                                                                       |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------- |
+| viewStyle  | 'list'<br />\| 'grid' | The current view style being displayed                                                            |
+| entry      | object                | Object with a `data` field that contains the current value of all widgets in the editor           |
+| widgetFor  | Function              | Given a field name, returns the rendered preview of that field's widget and value                 |
+| widgetsFor | Function              | Given a field name, returns the rendered previews of that field's nested child widgets and values |
+
+#### `registerPreviewTemplate` Example
+
+<CodeTabs>
+
+```js
+const PostPreviewCard = ({ entry, widgetFor, viewStyle }) => {
+  return h(
+    'div',
+    { style: { width: '100%' } },
+    viewStyle === 'grid' ? widgetFor('image') : null,
+    h(
+      'div',
+      { style: { padding: '16px', width: '100%' } },
+      h(
+        'div',
+        {
+          style: {
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'space-between',
+            alignItems: 'start',
+          },
+        },
+        h(
+          'div',
+          {
+            style: {
+              display: 'flex',
+              flexDirection: viewStyle === 'grid' ? 'column' : 'row',
+              alignItems: 'baseline',
+              gap: '8px',
+            },
+          },
+          h('strong', { style: { fontSize: '24px' } }, entry.data.title),
+          h('span', { style: { fontSize: '16px' } }, entry.data.date),
+        ),
+        h(
+          'div',
+          {
+            style: {
+              backgroundColor: entry.data.draft === true ? 'blue' : 'green',
+              color: 'white',
+              border: 'none',
+              padding: '4px 8px',
+              textAlign: 'center',
+              textDecoration: 'none',
+              display: 'inline-block',
+              cursor: 'pointer',
+              borderRadius: '4px',
+            },
+          },
+          entry.data.draft === true ? 'Draft' : 'Published',
+        ),
+      ),
+    ),
+  );
+};
+
+CMS.registerPreviewCard('posts', PostPreviewCard);
+```
+
+```jsx
+import CMS from '@staticcms/core';
+
+const PostPreviewCard = ({ entry, widgetFor, viewStyle }) => {
+  return (
+    <div style={{ width: '100%' }}>
+      {viewStyle === 'grid' ? widgetFor('image') : null}
+      <div style={{ padding: '16px', width: '100%' }}>
+        <div
+          style={{
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'space-between',
+            alignItems: 'start',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: viewStyle === 'grid' ? 'column' : 'row',
+              alignItems: 'baseline',
+              gap: '8px',
+            }}
+          >
+            <strong style={{ fontSize: '24px' }}>{entry.data.title}</strong>
+            <span style={{ fontSize: '16px' }}>{entry.data.date}</span>
+          </div>
+          <div
+            style={{
+              backgroundColor: entry.data.draft === true ? 'blue' : 'green',
+              color: 'white',
+              border: 'none',
+              padding: '4px 8px',
+              textAlign: 'center',
+              textDecoration: 'none',
+              display: 'inline-block',
+              cursor: 'pointer',
+              borderRadius: '4px',
+            }}
+          >
+            {entry.data.draft === true ? 'Draft' : 'Published'}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+```
+
+```tsx
+import CMS from '@staticcms/core';
+
+import type { TemplatePreviewCardProps } from '@staticcms/core';
+
+/**
+ * The type for 'entry.data'
+ */
+interface Post {
+  image: string;
+  title: string;
+  body: string;
+}
+
+const PostPreviewCard = ({ entry, widgetFor, viewStyle }: TemplatePreviewCardProps<Post>) => {
+  return (
+    <div style={{ width: '100%' }}>
+      {viewStyle === 'grid' ? widgetFor('image') : null}
+      <div style={{ padding: '16px', width: '100%' }}>
+        <div
+          style={{
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'space-between',
+            alignItems: 'start',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: viewStyle === 'grid' ? 'column' : 'row',
+              alignItems: 'baseline',
+              gap: '8px',
+            }}
+          >
+            <strong style={{ fontSize: '24px' }}>{entry.data.title}</strong>
+            <span style={{ fontSize: '16px' }}>{entry.data.date}</span>
+          </div>
+          <div
+            style={{
+              backgroundColor: entry.data.draft === true ? 'blue' : 'green',
+              color: 'white',
+              border: 'none',
+              padding: '4px 8px',
+              textAlign: 'center',
+              textDecoration: 'none',
+              display: 'inline-block',
+              cursor: 'pointer',
+              borderRadius: '4px',
+            }}
+          >
+            {entry.data.draft === true ? 'Draft' : 'Published'}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+CMS.registerPreviewTemplate('posts', PostPreview);
+```
+
+</CodeTabs>
+
+##### List View
+
+![Post Preview Card List View](/img/preview_card_list.png)
+
+##### Grid View
+
+![Post Preview Card List View](/img/preview_card_grid.png)

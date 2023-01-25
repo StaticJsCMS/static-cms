@@ -14,7 +14,8 @@
     "test:ci": "lerna run test:ci",
     "test:integration:ci": "lerna run test:integration:ci",
     "test:integration": "lerna run test:integration",
-    "test": "lerna run test"
+    "test": "lerna run test",
+    "type-check": "lerna run type-check --scope @staticcms/core"
   },
   "devDependencies": {
     "husky": "8.0.3",
