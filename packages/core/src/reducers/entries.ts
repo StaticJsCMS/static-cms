@@ -405,6 +405,10 @@ function entries(
       const payload = action.payload;
       const { collection, filter: viewFilter } = payload;
 
+      if (!viewFilter.id) {
+        return state;
+      }
+
       const filter = {
         ...state.filter,
       };
@@ -433,6 +437,10 @@ function entries(
     case FILTER_ENTRIES_FAILURE: {
       const payload = action.payload;
       const { collection, filter: viewFilter } = payload;
+
+      if (!viewFilter.id) {
+        return state;
+      }
 
       const filter = {
         ...state.filter,
@@ -468,6 +476,10 @@ function entries(
       const payload = action.payload;
       const { collection, group: groupBy } = payload;
 
+      if (!groupBy.id) {
+        return state;
+      }
+
       const group = {
         ...state.group,
       };
@@ -493,6 +505,10 @@ function entries(
     case GROUP_ENTRIES_FAILURE: {
       const payload = action.payload;
       const { collection, group: groupBy } = payload;
+
+      if (!groupBy.id) {
+        return state;
+      }
 
       const group = {
         ...state.group,

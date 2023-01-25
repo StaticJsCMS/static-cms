@@ -57,7 +57,7 @@ const FilterControl = ({
         }}
       >
         {viewFilters.map(viewFilter => {
-          const checked = filter[viewFilter.id]?.active ?? false;
+          const checked = Boolean(viewFilter.id && filter[viewFilter?.id]?.active) ?? false;
           const labelId = `filter-list-label-${viewFilter.label}`;
           return (
             <MenuItem

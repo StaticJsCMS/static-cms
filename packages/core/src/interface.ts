@@ -692,14 +692,14 @@ export type Field<EF extends BaseField = UnknownField> =
   | EF;
 
 export interface ViewFilter {
-  id: string;
+  id?: string;
   label: string;
   field: string;
   pattern: string;
 }
 
 export interface ViewGroup {
-  id: string;
+  id?: string;
   label: string;
   field: string;
   pattern?: string;
