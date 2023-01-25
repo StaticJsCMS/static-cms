@@ -41,7 +41,6 @@ export default function getWidgetFor(
   // We retrieve the field by name so that this function can also be used in
   // custom preview templates, where the field object can't be passed in.
   const field = widgetFields && widgetFields.find(f => f.name === name);
-  console.log(field, fields);
   if (!field) {
     return null;
   }
