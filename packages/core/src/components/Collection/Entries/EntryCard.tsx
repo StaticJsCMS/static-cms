@@ -10,8 +10,16 @@ import { Link } from 'react-router-dom';
 import { getAsset as getAssetAction } from '@staticcms/core/actions/media';
 import { VIEW_STYLE_GRID, VIEW_STYLE_LIST } from '@staticcms/core/constants/collectionViews';
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
-import { selectEntryCollectionTitle } from '@staticcms/core/lib/util/collection.util';
+import { getPreviewCard } from '@staticcms/core/lib/registry';
+import {
+  selectEntryCollectionTitle,
+  selectFields,
+  selectTemplateName,
+} from '@staticcms/core/lib/util/collection.util';
+import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectIsLoadingAsset } from '@staticcms/core/reducers/selectors/medias';
+import { useAppSelector } from '@staticcms/core/store/hooks';
+import useWidgetsFor from '../../common/widget/useWidgetsFor';
 
 import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
 import type { Collection, Entry, Field } from '@staticcms/core/interface';
@@ -29,7 +37,44 @@ const EntryCard = ({
 }: NestedCollectionProps) => {
   const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
 
+  const fields = selectFields(collection, entry.slug);
   const imageUrl = useMediaAsset(image, collection, imageField, entry);
+
+  const config = useAppSelector(selectConfig);
+
+  const { widgetFor, widgetsFor } = useWidgetsFor(config, collection, fields, entry);
+
+  const PreviewCardComponent = useMemo(
+    () => getPreviewCard(selectTemplateName(collection, entry.slug)) ?? null,
+    [collection, entry.slug],
+  );
+
+  if (PreviewCardComponent) {
+    return (
+      <Card>
+        <CardActionArea
+          component={Link}
+          to={path}
+          sx={{
+            height: '100%',
+            position: 'relative',
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'start',
+          }}
+        >
+          <PreviewCardComponent
+            collection={collection}
+            fields={fields}
+            entry={entry}
+            viewStyle={viewStyle === VIEW_STYLE_LIST ? 'list' : 'grid'}
+            widgetFor={widgetFor}
+            widgetsFor={widgetsFor}
+          />
+        </CardActionArea>
+      </Card>
+    );
+  }
 
   return (
     <Card>
