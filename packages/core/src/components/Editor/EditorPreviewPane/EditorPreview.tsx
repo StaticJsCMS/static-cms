@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import React from 'react';
 
-import type { TemplatePreviewProps } from '@staticcms/core/interface';
+import type { ObjectValue, TemplatePreviewProps } from '@staticcms/core/interface';
 
 const PreviewContainer = styled('div')`
   overflow-y: auto;
@@ -10,7 +10,7 @@ const PreviewContainer = styled('div')`
   font-family: Roboto, 'Helvetica Neue', HelveticaNeue, Helvetica, Arial, sans-serif;
 `;
 
-const Preview = ({ collection, fields, widgetFor }: TemplatePreviewProps) => {
+const Preview = ({ collection, fields, widgetFor }: TemplatePreviewProps<ObjectValue>) => {
   if (!collection || !fields) {
     return null;
   }

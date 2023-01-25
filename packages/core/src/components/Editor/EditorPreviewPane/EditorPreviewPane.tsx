@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import React, { Fragment, isValidElement, useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import Frame from 'react-frame-component';
 import { translate } from 'react-polyglot';
@@ -9,34 +9,23 @@ import { ScrollSyncPane } from 'react-scroll-sync';
 import { getAsset as getAssetAction } from '@staticcms/core/actions/media';
 import { ErrorBoundary } from '@staticcms/core/components/UI';
 import { lengths } from '@staticcms/core/components/UI/styles';
-import { getPreviewStyles, getPreviewTemplate, resolveWidget } from '@staticcms/core/lib/registry';
-import { selectTemplateName, useInferredFields } from '@staticcms/core/lib/util/collection.util';
-import { selectField } from '@staticcms/core/lib/util/field.util';
+import { getPreviewStyles, getPreviewTemplate } from '@staticcms/core/lib/registry';
+import { selectTemplateName } from '@staticcms/core/lib/util/collection.util';
 import { selectIsLoadingAsset } from '@staticcms/core/reducers/selectors/medias';
-import { getTypedFieldForValue } from '@staticcms/list/typedListHelpers';
+import useWidgetsFor from '../../common/widget/useWidgetsFor';
 import EditorPreview from './EditorPreview';
 import EditorPreviewContent from './EditorPreviewContent';
 import PreviewFrameContent from './PreviewFrameContent';
-import PreviewHOC from './PreviewHOC';
 
-import type { InferredField } from '@staticcms/core/constants/fieldInference';
 import type {
   Collection,
-  Config,
   Entry,
-  EntryData,
   Field,
-  GetAssetFunction,
-  ListField,
-  ObjectValue,
-  RenderedField,
   TemplatePreviewProps,
   TranslatedProps,
-  ValueOrNestedValue,
-  WidgetPreviewComponent,
 } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
-import type { ComponentType, ReactFragment, ReactNode } from 'react';
+import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
 
 const PreviewPaneFrame = styled(Frame)`
@@ -81,265 +70,10 @@ const StyledPreviewContent = styled('div')`
   overflow: hidden;
 `;
 
-/**
- * Returns the widget component for a named field, and makes recursive calls
- * to retrieve components for nested and deeply nested fields, which occur in
- * object and list type fields. Used internally to retrieve widgets, and also
- * exposed for use in custom preview templates.
- */
-function getWidgetFor(
-  config: Config,
-  collection: Collection,
-  name: string,
-  fields: Field[],
-  entry: Entry,
-  inferredFields: Record<string, InferredField>,
-  getAsset: GetAssetFunction,
-  widgetFields: Field[] = fields,
-  values: EntryData = entry.data,
-  idx: number | null = null,
-): ReactNode {
-  // We retrieve the field by name so that this function can also be used in
-  // custom preview templates, where the field object can't be passed in.
-  const field = widgetFields && widgetFields.find(f => f.name === name);
-  if (!field) {
-    return null;
-  }
-
-  const value = values?.[field.name];
-  let fieldWithWidgets = field as RenderedField;
-
-  if ('fields' in field && field.fields) {
-    fieldWithWidgets = {
-      ...fieldWithWidgets,
-      renderedFields: getNestedWidgets(
-        config,
-        collection,
-        fields,
-        entry,
-        inferredFields,
-        getAsset,
-        field.fields,
-        value as EntryData | EntryData[],
-      ),
-    };
-  } else if ('types' in field && field.types) {
-    fieldWithWidgets = {
-      ...fieldWithWidgets,
-      renderedFields: getTypedNestedWidgets(
-        config,
-        collection,
-        field,
-        entry,
-        inferredFields,
-        getAsset,
-        value as EntryData[],
-      ),
-    };
-  }
-
-  const labelledWidgets = ['string', 'text', 'number'];
-  const inferredField = Object.entries(inferredFields)
-    .filter(([key]) => {
-      const fieldToMatch = selectField(collection, key);
-      return fieldToMatch === fieldWithWidgets;
-    })
-    .map(([, value]) => value)[0];
-
-  let renderedValue: ValueOrNestedValue | ReactNode = value;
-  if (inferredField) {
-    renderedValue = inferredField.defaultPreview(String(value));
-  } else if (
-    value &&
-    fieldWithWidgets.widget &&
-    labelledWidgets.indexOf(fieldWithWidgets.widget) !== -1 &&
-    value.toString().length < 50
-  ) {
-    renderedValue = (
-      <div key={field.name}>
-        <>
-          <strong>{field.label ?? field.name}:</strong> {value}
-        </>
-      </div>
-    );
-  }
-  return renderedValue
-    ? getWidget(config, fieldWithWidgets, collection, renderedValue, entry, getAsset, idx)
-    : null;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isJsxElement(value: any): value is JSX.Element {
-  return isValidElement(value);
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isReactFragment(value: any): value is ReactFragment {
-  if (value.type) {
-    return value.type === Fragment;
-  }
-
-  return value === Fragment;
-}
-
-function getWidget(
-  config: Config,
-  field: RenderedField<Field>,
-  collection: Collection,
-  value: ValueOrNestedValue | ReactNode,
-  entry: Entry,
-  getAsset: GetAssetFunction,
-  idx: number | null = null,
-) {
-  if (!field.widget) {
-    return null;
-  }
-
-  const widget = resolveWidget(field.widget);
-  const key = idx ? field.name + '_' + idx : field.name;
-
-  if (field.widget === 'hidden' || !widget.preview) {
-    return null;
-  }
-
-  /**
-   * Use an HOC to provide conditional updates for all previews.
-   */
-  return !widget.preview ? null : (
-    <PreviewHOC
-      previewComponent={widget.preview as WidgetPreviewComponent}
-      key={key}
-      field={field as RenderedField}
-      getAsset={getAsset}
-      config={config}
-      collection={collection}
-      value={
-        value &&
-        typeof value === 'object' &&
-        !Array.isArray(value) &&
-        field.name in value &&
-        !isJsxElement(value) &&
-        !isReactFragment(value)
-          ? (value as Record<string, unknown>)[field.name]
-          : value
-      }
-      entry={entry}
-    />
-  );
-}
-
-/**
- * Use getWidgetFor as a mapping function for recursive widget retrieval
- */
-function widgetsForNestedFields(
-  config: Config,
-  collection: Collection,
-  fields: Field[],
-  entry: Entry,
-  inferredFields: Record<string, InferredField>,
-  getAsset: GetAssetFunction,
-  widgetFields: Field[],
-  values: EntryData,
-  idx: number | null = null,
-) {
-  return widgetFields
-    .map(field =>
-      getWidgetFor(
-        config,
-        collection,
-        field.name,
-        fields,
-        entry,
-        inferredFields,
-        getAsset,
-        widgetFields,
-        values,
-        idx,
-      ),
-    )
-    .filter(widget => Boolean(widget)) as JSX.Element[];
-}
-
-/**
- * Retrieves widgets for nested fields (children of object/list fields)
- */
-function getTypedNestedWidgets(
-  config: Config,
-  collection: Collection,
-  field: ListField,
-  entry: Entry,
-  inferredFields: Record<string, InferredField>,
-  getAsset: GetAssetFunction,
-  values: EntryData[],
-) {
-  return values
-    ?.flatMap((value, index) => {
-      const itemType = getTypedFieldForValue(field, value ?? {}, index);
-      if (!itemType) {
-        return null;
-      }
-
-      return widgetsForNestedFields(
-        config,
-        collection,
-        itemType.fields,
-        entry,
-        inferredFields,
-        getAsset,
-        itemType.fields,
-        value,
-        index,
-      );
-    })
-    .filter(Boolean);
-}
-
-/**
- * Retrieves widgets for nested fields (children of object/list fields)
- */
-function getNestedWidgets(
-  config: Config,
-  collection: Collection,
-  fields: Field[],
-  entry: Entry,
-  inferredFields: Record<string, InferredField>,
-  getAsset: GetAssetFunction,
-  widgetFields: Field[],
-  values: EntryData | EntryData[],
-) {
-  // Fields nested within a list field will be paired with a List of value Maps.
-  if (Array.isArray(values)) {
-    return values.flatMap(value =>
-      widgetsForNestedFields(
-        config,
-        collection,
-        fields,
-        entry,
-        inferredFields,
-        getAsset,
-        widgetFields,
-        value,
-      ),
-    );
-  }
-
-  // Fields nested within an object field will be paired with a single Record of values.
-  return widgetsForNestedFields(
-    config,
-    collection,
-    fields,
-    entry,
-    inferredFields,
-    getAsset,
-    widgetFields,
-    values,
-  );
-}
-
 const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
   const { entry, collection, config, fields, previewInFrame, getAsset, t } = props;
 
-  const inferredFields = useInferredFields(collection);
+  const { widgetFor, widgetsFor } = useWidgetsFor(config.config, collection, fields, entry);
 
   const handleGetAsset = useCallback(
     (path: string, field?: Field) => {
@@ -347,118 +81,6 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [collection],
-  );
-
-  const widgetFor = useCallback(
-    (name: string) => {
-      if (!config.config) {
-        return null;
-      }
-      return getWidgetFor(
-        config.config,
-        collection,
-        name,
-        fields,
-        entry,
-        inferredFields,
-        handleGetAsset,
-      );
-    },
-    [collection, config, entry, fields, handleGetAsset, inferredFields],
-  );
-
-  /**
-   * This function exists entirely to expose nested widgets for object and list
-   * fields to custom preview templates.
-   */
-  const widgetsFor = useCallback(
-    (name: string) => {
-      const cmsConfig = config.config;
-      if (!cmsConfig) {
-        return {
-          data: null,
-          widgets: {},
-        };
-      }
-
-      const field = fields.find(f => f.name === name);
-      if (!field || !('fields' in field)) {
-        return {
-          data: null,
-          widgets: {},
-        };
-      }
-
-      const value = entry.data?.[field.name];
-      const nestedFields = field && 'fields' in field ? field.fields ?? [] : [];
-
-      if (field.widget === 'list' || Array.isArray(value)) {
-        let finalValue: ObjectValue[];
-        if (!value || typeof value !== 'object') {
-          finalValue = [];
-        } else if (!Array.isArray(value)) {
-          finalValue = [value];
-        } else {
-          finalValue = value as ObjectValue[];
-        }
-
-        return finalValue
-          .filter((val: unknown) => typeof val === 'object')
-          .map((val: ObjectValue) => {
-            const widgets = nestedFields.reduce((acc, field, index) => {
-              acc[field.name] = (
-                <div key={index}>
-                  {getWidgetFor(
-                    cmsConfig,
-                    collection,
-                    field.name,
-                    fields,
-                    entry,
-                    inferredFields,
-                    handleGetAsset,
-                    nestedFields,
-                    val,
-                    index,
-                  )}
-                </div>
-              );
-              return acc;
-            }, {} as Record<string, ReactNode>);
-            return { data: val, widgets };
-          });
-      }
-
-      if (typeof value !== 'object') {
-        return {
-          data: {},
-          widgets: {},
-        };
-      }
-
-      return {
-        data: value,
-        widgets: nestedFields.reduce((acc, field, index) => {
-          acc[field.name] = (
-            <div key={index}>
-              {getWidgetFor(
-                cmsConfig,
-                collection,
-                field.name,
-                fields,
-                entry,
-                inferredFields,
-                handleGetAsset,
-                nestedFields,
-                value,
-                index,
-              )}
-            </div>
-          );
-          return acc;
-        }, {} as Record<string, ReactNode>),
-      };
-    },
-    [collection, config.config, entry, fields, handleGetAsset, inferredFields],
   );
 
   const previewStyles = useMemo(

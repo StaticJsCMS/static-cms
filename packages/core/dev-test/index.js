@@ -11,6 +11,59 @@ const PostPreview = ({ entry, widgetFor }) => {
   );
 };
 
+const PostPreviewCard = ({ entry, widgetFor, viewStyle }) => {
+  return h(
+    'div',
+    { style: { width: '100%' } },
+    viewStyle === 'grid' ? widgetFor('image') : null,
+    h(
+      'div',
+      { style: { padding: '16px', width: '100%' } },
+      h(
+        'div',
+        {
+          style: {
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'space-between',
+            alignItems: 'start',
+          },
+        },
+        h(
+          'div',
+          {
+            style: {
+              display: 'flex',
+              flexDirection: viewStyle === 'grid' ? 'column' : 'row',
+              alignItems: 'baseline',
+              gap: '8px',
+            },
+          },
+          h('strong', { style: { fontSize: '24px' } }, entry.data.title),
+          h('span', { style: { fontSize: '16px' } }, entry.data.date),
+        ),
+        h(
+          'div',
+          {
+            style: {
+              backgroundColor: entry.data.draft === true ? 'blue' : 'green',
+              color: 'white',
+              border: 'none',
+              padding: '4px 8px',
+              textAlign: 'center',
+              textDecoration: 'none',
+              display: 'inline-block',
+              cursor: 'pointer',
+              borderRadius: '4px',
+            },
+          },
+          entry.data.draft === true ? 'Draft' : 'Published',
+        ),
+      ),
+    ),
+  );
+};
+
 const GeneralPreview = ({ widgetsFor, entry, collection }) => {
   const title = entry.data.site_title;
   const posts = entry.data.posts;
@@ -80,6 +133,7 @@ const CustomPage = () => {
 };
 
 CMS.registerPreviewTemplate('posts', PostPreview);
+CMS.registerPreviewCard('posts', PostPreviewCard);
 CMS.registerPreviewTemplate('general', GeneralPreview);
 CMS.registerPreviewTemplate('authors', AuthorsPreview);
 // Pass the name of a registered control to reuse with a new widget preview.

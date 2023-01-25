@@ -15,13 +15,13 @@ import { selectField } from './field.util';
 import { selectMediaFolder } from './media.util';
 
 import type { Backend } from '@staticcms/core/backend';
-import type { InferredField } from '@staticcms/core/constants/fieldInference';
 import type {
   Collection,
   Config,
   Entry,
   Field,
   FilesCollection,
+  InferredField,
   ObjectField,
   SortableField,
 } from '@staticcms/core/interface';

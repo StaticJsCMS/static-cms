@@ -1,19 +1,10 @@
 import React from 'react';
 
-import type { ReactNode } from 'react';
+import type { InferredField } from '../interface';
 
 export const IDENTIFIER_FIELDS = ['title', 'path'] as const;
 
 export const SORTABLE_FIELDS = ['title', 'date', 'author', 'description'] as const;
-
-export interface InferredField {
-  type: string;
-  secondaryTypes: string[];
-  synonyms: string[];
-  defaultPreview: (value: string | boolean | number) => JSX.Element | ReactNode;
-  fallbackToFirstField: boolean;
-  showError: boolean;
-}
 
 export const INFERABLE_FIELDS: Record<string, InferredField> = {
   title: {

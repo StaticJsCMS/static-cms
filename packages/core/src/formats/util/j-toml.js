@@ -1,15 +1,21 @@
 ﻿/*!@preserve@license
-* 模块名称：j-toml
-* 模块功能：龙腾道为汤小明语写的实现。从属于“简计划”。
-  　　　　　An implementation of TOML written by LongTengDao. Belong to "Plan J".
-* 模块版本：1.37.0
-* 许可条款：LGPL-3.0
-* 所属作者：龙腾道 <LongTengDao@LongTengDao.com> (www.LongTengDao.com)
-* 问题反馈：https://GitHub.com/LongTengDao/j-toml/issues
-* 项目主页：https://GitHub.com/LongTengDao/j-toml/
-*/
+ * 模块名称：j-toml
+ * 模块功能：龙腾道为汤小明语写的实现。从属于“简计划”。
+   　　　　　An implementation of TOML written by LongTengDao. Belong to "Plan J".
+ * 模块版本：1.38.0
+ * 许可条款：LGPL-3.0
+ * 所属作者：龙腾道 <LongTengDao@LongTengDao.com> (www.LongTengDao.com)
+ * 问题反馈：https://GitHub.com/LongTengDao/j-toml/issues
+ * 项目主页：https://GitHub.com/LongTengDao/j-toml/
+ */
 
-const version = '1.37.0';
+(function (global, factory) {
+typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+typeof define === 'function' && define.amd ? define(factory) :
+(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.TOML = factory());
+})(this, (function () { 'use strict';
+
+const version = '1.38.0';
 
 const SyntaxError$1 = SyntaxError;
 
@@ -128,15 +134,15 @@ const Default = (
 );
 
 /*!@preserve@license
-* 模块名称：j-regexp
-* 模块功能：可读性更好的正则表达式创建方式。从属于“简计划”。
-  　　　　　More readable way for creating RegExp. Belong to "Plan J".
-* 模块版本：8.2.0
-* 许可条款：LGPL-3.0
-* 所属作者：龙腾道 <LongTengDao@LongTengDao.com> (www.LongTengDao.com)
-* 问题反馈：https://GitHub.com/LongTengDao/j-regexp/issues
-* 项目主页：https://GitHub.com/LongTengDao/j-regexp/
-*/
+  * 模块名称：j-regexp
+  * 模块功能：可读性更好的正则表达式创建方式。从属于“简计划”。
+    　　　　　More readable way for creating RegExp. Belong to "Plan J".
+  * 模块版本：8.2.0
+  * 许可条款：LGPL-3.0
+  * 所属作者：龙腾道 <LongTengDao@LongTengDao.com> (www.LongTengDao.com)
+  * 问题反馈：https://GitHub.com/LongTengDao/j-regexp/issues
+  * 项目主页：https://GitHub.com/LongTengDao/j-regexp/
+  */
 
 var Test                                           = bind
   ? /*#__PURE__*/bind.bind(test       )
@@ -401,15 +407,15 @@ const Reflect_deleteProperty = Reflect.deleteProperty;
 const ownKeys = Reflect.ownKeys;
 
 /*!@preserve@license
-* 模块名称：j-orderify
-* 模块功能：返回一个能保证给定对象的属性按此后添加顺序排列的 proxy，即使键名是 symbol，或整数 string。从属于“简计划”。
-  　　　　　Return a proxy for given object, which can guarantee own keys are in setting order, even if the key name is symbol or int string. Belong to "Plan J".
-* 模块版本：7.0.1
-* 许可条款：LGPL-3.0
-* 所属作者：龙腾道 <LongTengDao@LongTengDao.com> (www.LongTengDao.com)
-* 问题反馈：https://GitHub.com/LongTengDao/j-orderify/issues
-* 项目主页：https://GitHub.com/LongTengDao/j-orderify/
-*/
+  * 模块名称：j-orderify
+  * 模块功能：返回一个能保证给定对象的属性按此后添加顺序排列的 proxy，即使键名是 symbol，或整数 string。从属于“简计划”。
+    　　　　　Return a proxy for given object, which can guarantee own keys are in setting order, even if the key name is symbol or int string. Belong to "Plan J".
+  * 模块版本：7.0.1
+  * 许可条款：LGPL-3.0
+  * 所属作者：龙腾道 <LongTengDao@LongTengDao.com> (www.LongTengDao.com)
+  * 问题反馈：https://GitHub.com/LongTengDao/j-orderify/issues
+  * 项目主页：https://GitHub.com/LongTengDao/j-orderify/
+  */
 
 const Keeper =     ()      => [];
 
@@ -423,16 +429,16 @@ const newWeakMap = () => {
 const target2keeper = /*#__PURE__*/newWeakMap()
 
 
-;
+  ;
 const proxy2target = /*#__PURE__*/newWeakMap()
 
 
 
-;
+  ;
 const target2proxy = /*#__PURE__*/newWeakMap()
 
 
-;
+  ;
 
 const handlers                       = /*#__PURE__*/assign$1(create$1(NULL), {
   defineProperty:                 (target                   , key   , descriptor                    )          => {
@@ -518,11 +524,11 @@ const ofInline = /*#__PURE__*/get.bind(INLINES)
 
 
 
-;
+  ;
 const beInline = /*#__PURE__*/set.bind(INLINES)
 
 
-;
+  ;
 const inline =                                                         (value   , mode                , looping         )    => {
   if ( isArray$1(value) ) {
     if ( looping ) { mode = 3; }
@@ -636,9 +642,9 @@ const next = ()         => sourceLines[++lineIndex] ;
 const rest = ()          => lineIndex!==lastLineIndex;
 
 class mark {
-                  lineIndex = lineIndex;
-                  type                                                                                           ;
-                  restColumn        ;
+                    lineIndex = lineIndex;
+                    type                                                                                           ;
+                    restColumn        ;
   constructor (type                                                                                           , restColumn        ) {
     this.type = type;
     this.restColumn = restColumn;
@@ -667,7 +673,7 @@ const done = ()       => {
 const Whitespace = /[ \t]/;
 
 const PRE_WHITESPACE = /*#__PURE__*/newRegExp`
-  ^${Whitespace}+`.valueOf();
+^${Whitespace}+`.valueOf();
 
 const { exec: VALUE_REST_exec } = /*#__PURE__*/newRegExp.s       `
 ^
@@ -713,8 +719,8 @@ ${Whitespace}*
 =
 ${Whitespace}*
 (?:
-<(${Tag})>
-${Whitespace}*
+  <(${Tag})>
+  ${Whitespace}*
 )?
 (.*)
 $`.valueOf();
@@ -917,7 +923,7 @@ const Keys = class KeysRegExp extends RegExp$1                 {
     this.lastIndex = maxLength+1;
     return this;
   }
-          test (                  key        )          {
+            test (                  key        )          {
     return key.length<this.lastIndex && super.test(key);
   }
 };
@@ -1398,7 +1404,7 @@ const OffsetDateTime = /*#__PURE__*/fpc(class OffsetDateTime extends Datetime {
 
   get [Symbol$1.toStringTag] () { return 'OffsetDateTime'         ; }
 
-          valueOf (                    )        { return this[OffsetDateTime_value]; }
+            valueOf (                    )        { return this[OffsetDateTime_value]; }
   toISOString (                    )         { return this[OffsetDateTime_ISOString]; }
 
   constructor (literal        ) {
@@ -1488,7 +1494,7 @@ const LocalDateTime = /*#__PURE__*/fpc(class LocalDateTime extends Datetime {
 
   get [Symbol$1.toStringTag] () { return 'LocalDateTime'         ; }
 
-          valueOf (                   )        { return this[LocalDateTime_value]; }
+            valueOf (                   )        { return this[LocalDateTime_value]; }
   toISOString (                   )         { return this[LocalDateTime_ISOString]; }
 
   constructor (literal        ) {
@@ -1540,7 +1546,7 @@ const LocalDate = /*#__PURE__*/fpc(class LocalDate extends Datetime {
 
   get [Symbol$1.toStringTag] () { return 'LocalDate'         ; }
 
-          valueOf (               )        { return this[LocalDate_value]; }
+            valueOf (               )        { return this[LocalDate_value]; }
   toISOString (               )         { return this[LocalDate_ISOString]; }
 
   constructor (literal        ) {
@@ -1579,7 +1585,7 @@ const LocalTime = /*#__PURE__*/fpc(class LocalTime extends Datetime {
 
   get [Symbol$1.toStringTag] () { return 'LocalTime'         ; }
 
-          valueOf (               )        { return this[LocalTime_value]; }
+            valueOf (               )        { return this[LocalTime_value]; }
   toISOString (               )         { return this[LocalTime_ISOString]; }
 
   constructor (literal        ) {
@@ -1766,6 +1772,10 @@ const Float = (literal        )         => {
       if ( literal==='nan' || literal==='+nan' ) { return NaN$1; }
       if ( literal==='-nan' ) { return _NaN; }
     }
+    else if ( !sError ) {
+      if ( literal==='inf' || literal==='+inf' ) { return Infinity; }
+      if ( literal==='-inf' ) { return _Infinity$1; }
+    }
     throw throws(SyntaxError$1(`Invalid Float ${literal}` + where(' at ')));
   }
   const withoutUnderscores         = literal.replace(UNDERSCORES, '');
@@ -1899,7 +1909,7 @@ const assignLiteralString = ( (table       , finalKey        , literal        ) 
 } )
 
 
-;
+  ;
 
 const assignBasicString = ( (table       , finalKey        , literal        )         => {
   if ( !literal.startsWith('"""') ) {
@@ -1952,7 +1962,7 @@ const assignBasicString = ( (table       , finalKey        , literal        )   
 } )
 
 
-;
+  ;
 
 const KEYS = /*#__PURE__*/Null$1        (null);
 const commentFor = (key        )         => KEYS[key] || ( KEYS[key] = Symbol$1(key) );
@@ -2097,7 +2107,7 @@ const equalStaticArray = function * (            table       , finalKey        ,
     }
     else {
       if ( lineRest[0]===']' ) { break; }
-      throw throws(SyntaxError$1(`Unexpected character in static array item value` + where(', which is found at ')));
+      throw throws(SyntaxError$1(`Unexpect character in static array item value` + where(', which is found at ')));
     }
   }
   inline===null || beInline(staticArray, inline);
@@ -2105,7 +2115,7 @@ const equalStaticArray = function * (            table       , finalKey        ,
 }
 
 
-;
+  ;
 
 const equalInlineTable = function * (            table       , finalKey        , lineRest        )    {
   const inlineTable        = table[finalKey] = new Table(DIRECTLY, INLINE);
@@ -2158,7 +2168,7 @@ const equalInlineTable = function * (            table       , finalKey        ,
 }
 
 
-;
+  ;
 
 
 const ForComment = (lastInlineTable       , lineRest        )             => {
@@ -2231,7 +2241,7 @@ const Root = ()        => {
         const { leadingKeys, finalKey, asArrayItem, tag, lineRest } = TABLE_DEFINITION_exec_groups(line, parseKeys);
         const table        = prepareTable(rootTable, leadingKeys);
         if ( lineRest ) {
-          lineRest[0]==='#' || throws(SyntaxError$1(`Unexpected charachtor after table header` + where(' at ')));
+          lineRest[0]==='#' || throws(SyntaxError$1(`Unexpect charachtor after table header` + where(' at ')));
         }
         lastSectionTable = appendTable(table, finalKey, asArrayItem, tag);
         preserveComment && lineRest && ( lastSectionTable[commentForThis] = asArrayItem ? lineRest.slice(1) : table[commentFor(finalKey)] = lineRest.slice(1) );
@@ -2244,7 +2254,7 @@ const Root = ()        => {
         let rest             = assign(forComment);
         typeof rest==='string' || ( rest = x        (rest) );
         if ( rest ) {
-          rest[0]==='#' || throws(SyntaxError$1(`Unexpected charachtor after key/value pair` + where(' at ')));
+          rest[0]==='#' || throws(SyntaxError$1(`Unexpect charachtor after key/value pair` + where(' at ')));
           if ( preserveComment ) { forComment.table[commentFor(forComment.finalKey)] = rest.slice(1); }
         }
       }
@@ -2455,7 +2465,7 @@ const $Keys = (keys        )         => isAmazing(keys) ? keys.replace(FIRST, li
 
 class TOMLSection extends Array$1         {
 
-                  document              ;
+                    document              ;
 
   constructor (document              ) {
     super();
@@ -2706,26 +2716,26 @@ const return_false = () => false;
 
 class TOMLDocument extends Array$1              {
 
-          get ['constructor'] () { return Array$1; }
+            get ['constructor'] () { return Array$1; }
 
   0 = new TOMLSection(this);
 
-          asInteger                                          = return_false;
-          newline                     = '';
-          newlineUnderSection          = true;
-          newlineUnderSectionButPair          = true;
-          newlineUnderHeader          = true;
-          newlineUnderPair          = false;
-          newlineUnderPairButDotted          = false;
-          newlineUnderDotted          = false;
-          indent         = '\t';
-          T                  = 'T';
-          Z            = 'Z';
-          nullDisabled          = true;
-          multilineTableDisabled          = true;
-          multilineTableComma          ;
-          preferCommentForThis          = false;
-          $singlelineArray                ;
+            asInteger                                          = return_false;
+            newline                     = '';
+            newlineUnderSection          = true;
+            newlineUnderSectionButPair          = true;
+            newlineUnderHeader          = true;
+            newlineUnderPair          = false;
+            newlineUnderPairButDotted          = false;
+            newlineUnderDotted          = false;
+            indent         = '\t';
+            T                  = 'T';
+            Z            = 'Z';
+            nullDisabled          = true;
+            multilineTableDisabled          = true;
+            multilineTableComma          ;
+            preferCommentForThis          = false;
+            $singlelineArray                ;
 
   constructor (options                  ) {
 
@@ -2887,7 +2897,16 @@ const assertFulScalar = (string        )       => {
 let holding          = false;
 
 const parse = (source        , specificationVersion                                   , multilineStringJoiner                                                                                                                       , bigint                                       , x                              , argsMode                 )        => {
-  let sourcePath         = '';if ( typeof source==='string' ) { assertFulScalar(source); }
+  let sourcePath         = '';
+  if ( typeof source==='object' && source ) {
+    if ( isArray$1(source) ) { throw TypeError$1(isLinesFromStringify(source) ? `TOML.parse(array from TOML.stringify(,{newline?}))` : `TOML.parse(array)`); }
+    else if ( isBinaryLike(source) ) { source = binary2string(source); }
+    else {
+      sourcePath = source.path;
+      if ( typeof sourcePath!=='string' ) { throw TypeError$1(`TOML.parse(source.path)`); }
+    }
+  }
+  else if ( typeof source==='string' ) { assertFulScalar(source); }
   else { throw TypeError$1(`TOML.parse(source)`); }
   let joiner                    ;
   let keys                                 ;
@@ -2948,6 +2967,6 @@ const _export = /*#__PURE__*/Default({
   Keys,
 });
 
-export { Keys, LocalDate, LocalDateTime, LocalTime, OffsetDateTime, Section, basic, commentFor, commentForThis, _export as default, inline, isInline, isSection, literal, multiline, parse$1 as parse, stringify, version };
+return _export;
 
-/*¡ j-toml */
+}));

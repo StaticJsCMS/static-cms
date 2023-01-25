@@ -290,6 +290,8 @@ export type WidgetPreviewComponent<T = unknown, F extends BaseField = UnknownFie
   | ReactElement<unknown, string | JSXElementConstructor<any>>
   | ComponentType<WidgetPreviewProps<T, F>>;
 
+export type WidgetFor<P = EntryData> = <K extends keyof P>(name: K) => ReactNode;
+
 export type WidgetsFor<P = EntryData> = <K extends keyof P>(
   name: K,
 ) => P[K] extends Array<infer U>
@@ -312,7 +314,7 @@ export interface TemplatePreviewProps<T = EntryData, EF extends BaseField = Unkn
    * @deprecated Should use `useMediaAsset` React hook instead
    */
   getAsset: GetAssetFunction<Field<EF>>;
-  widgetFor: (name: T extends EntryData ? string : keyof T) => ReactNode;
+  widgetFor: WidgetFor<T>;
   widgetsFor: WidgetsFor<T>;
 }
 
@@ -320,6 +322,20 @@ export type TemplatePreviewComponent<
   T = EntryData,
   EF extends BaseField = UnknownField,
 > = ComponentType<TemplatePreviewProps<T, EF>>;
+
+export interface TemplatePreviewCardProps<T = EntryData, EF extends BaseField = UnknownField> {
+  collection: Collection<EF>;
+  fields: Field<EF>[];
+  entry: Entry<T>;
+  viewStyle: 'list' | 'grid';
+  widgetFor: WidgetFor<T>;
+  widgetsFor: WidgetsFor<T>;
+}
+
+export type TemplatePreviewCardComponent<
+  T = EntryData,
+  EF extends BaseField = UnknownField,
+> = ComponentType<TemplatePreviewCardProps<T, EF>>;
 
 export interface WidgetOptions<T = unknown, F extends BaseField = UnknownField> {
   validator?: Widget<T, F>['validator'];
@@ -912,3 +928,12 @@ export type DeepPartial<T> = T extends object
       [P in keyof T]?: DeepPartial<T[P]>;
     }
   : T;
+
+export interface InferredField {
+  type: string;
+  secondaryTypes: string[];
+  synonyms: string[];
+  defaultPreview: (value: string | boolean | number) => JSX.Element | ReactNode;
+  fallbackToFirstField: boolean;
+  showError: boolean;
+}
