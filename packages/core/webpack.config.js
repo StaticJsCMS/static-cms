@@ -34,6 +34,12 @@ module.exports = {
         ],
       },
       {
+        test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false, // disable the behavior
+        },
+      },
+      {
         test: /\.[jt]sx?$/,
         use: [
           {
