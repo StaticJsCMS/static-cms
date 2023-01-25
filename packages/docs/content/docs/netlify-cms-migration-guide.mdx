@@ -14,13 +14,13 @@ To migrate, simply replace Netlify CMS with Static CMS, then address the changes
 
 Netlify CMS:
 
-```js
+```html
 <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
 ```
 
 Static CMS:
 
-```js
+```html
 <script src="https://unpkg.com/@staticcms/app@^1.0.0/dist/static-cms-app.js"></script>
 ```
 
@@ -93,3 +93,33 @@ import CMS from '@staticcms/core';
 ## Beta Features
 
 All beta features from Netlify CMS that were kept, remain in beta and may not fully function in their current state. Please [submit an issue](https://github.com/StaticJsCMS/static-cms/issues) for any bugs you find.
+
+## Platform Changes
+
+### Gatsby
+
+If you are using Gatsby you will need to change out your CMS plugin.
+
+```bash
+# Uninstall Netlify CMS plugin
+npm uninstall gatsby-plugin-netlify-cms
+
+# Install Static CMS plugin
+npm install gatsby-plugin-static-cms
+```
+
+## Local Development Changes
+
+If you are using the local backend you will need to switch the proxy server package you are using.
+
+Netlify CMS:
+
+```bash
+npx netlify-cms-proxy-server
+```
+
+Static CMS:
+
+```bash
+npx @staticcms/proxy-server
+```
