@@ -1,34 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-export const version: '1.38.0';
+export as namespace TOML;
+export = exports;
 
-export const parse: {
-  (
-    this: void,
-    source: Source,
-    specificationVersion: 1.0 | 0.5 | 0.4 | 0.3 | 0.2 | 0.1,
-    multilineStringJoiner?: string,
-    useBigInt?: boolean | number,
-    xOptions?: XOptions,
-  ): Table;
-  (
-    this: void,
-    source: Source,
-    multilineStringJoiner?: string,
-    useBigInt?: boolean | number,
-    xOptions?: XOptions,
-  ): Table;
-  (
-    this: void,
-    source: Source,
-    options?: {
-      readonly joiner?: string;
-      readonly bigint?: boolean | number;
-      readonly x?: XOptions;
-    },
-  ): Table;
-} & {
-  readonly [SpecificationVersion in 1.0 | 0.5 | 0.4 | 0.3 | 0.2 | 0.1]: {
+declare namespace exports {
+  export const version: '1.38.0';
+
+  export const parse: {
+    (
+      this: void,
+      source: Source,
+      specificationVersion: 1.0 | 0.5 | 0.4 | 0.3 | 0.2 | 0.1,
+      multilineStringJoiner?: string,
+      useBigInt?: boolean | number,
+      xOptions?: XOptions,
+    ): Table;
     (
       this: void,
       source: Source,
@@ -45,111 +31,116 @@ export const parse: {
         readonly x?: XOptions;
       },
     ): Table;
+  } & {
+    readonly [SpecificationVersion in 1.0 | 0.5 | 0.4 | 0.3 | 0.2 | 0.1]: {
+      (
+        this: void,
+        source: Source,
+        multilineStringJoiner?: string,
+        useBigInt?: boolean | number,
+        xOptions?: XOptions,
+      ): Table;
+      (
+        this: void,
+        source: Source,
+        options?: {
+          readonly joiner?: string;
+          readonly bigint?: boolean | number;
+          readonly x?: XOptions;
+        },
+      ): Table;
+    };
   };
-};
 
-export function stringify(
-  this: void,
-  rootTable: ReadonlyTable,
-  options?: {
-    readonly integer?: number;
-    readonly newline?: '\n' | '\r\n';
-    readonly newlineAround?: 'document' | 'section' | 'header' | 'pairs' | 'pair';
-    readonly indent?: string | number;
-    readonly T?: 'T' | 't' | ' ';
-    readonly Z?: 'Z' | 'z';
-    readonly xNull?: boolean;
-    readonly xBeforeNewlineInMultilineTable?: ',' | '';
-    readonly forceInlineArraySpacing?: 0 | 1 | 2 | 3;
-  },
-): string;
+  export function stringify(
+    this: void,
+    rootTable: ReadonlyTable,
+    options?: {
+      readonly integer?: number;
+      readonly newline?: '\n' | '\r\n';
+      readonly newlineAround?: 'document' | 'section' | 'header' | 'pairs' | 'pair';
+      readonly indent?: string | number;
+      readonly T?: 'T' | 't' | ' ';
+      readonly Z?: 'Z' | 'z';
+      readonly xNull?: boolean;
+      readonly xBeforeNewlineInMultilineTable?: ',' | '';
+      readonly forceInlineArraySpacing?: 0 | 1 | 2 | 3;
+    },
+  ): string;
 
-export function isSection(this: void, table: ReadonlyTable): boolean;
-export function isInline(this: void, value: ReadonlyTable | ReadonlyArray): boolean;
+  export function isSection(this: void, table: ReadonlyTable): boolean;
+  export function isInline(this: void, value: ReadonlyTable | ReadonlyArray): boolean;
 
-export function Section<T extends ReadonlyTable>(this: void, table: T): T;
-export function inline<T extends ReadonlyArray>(
-  this: void,
-  value: T,
-  inlineMode?: 0 | 1 | 2 | 3,
-): T;
-export function inline<T extends ReadonlyTable>(this: void, value: T): T;
-export const multiline: {
-  readonly array: {
-    <T extends ReadonlyArray>(this: void, array: T): T;
-  };
-  <T extends ReadonlyTable>(this: void, table: T): T;
-  (this: void, value: string): {
-    [_literal]: [`"""`, ...string[], `${string}"""`] | [`'''`, ...string[], `${string}'''`];
-  } & object &
-    String;
-  (this: void, lines: readonly string[]): {
-    [_literal]: [`"""`, ...string[], `${string}"""`] | [`'''`, ...string[], `${string}'''`];
-  } & object;
-  (this: void, lines: readonly string[], value: string): {
-    [_literal]: [`"""`, ...string[], `${string}"""`] | [`'''`, ...string[], `${string}'''`];
-  } & object &
-    String;
-  readonly basic: {
-    (this: void, value: string): { [_literal]: [`"""`, ...string[], `${string}"""`] } & object &
-      String;
-    (this: void, lines: readonly string[]): {
-      [_literal]: [`"""`, ...string[], `${string}"""`];
-    } & object;
-    (this: void, lines: readonly string[], value: string): {
-      [_literal]: [`"""`, ...string[], `${string}"""`];
+  export function Section<T extends ReadonlyTable>(this: void, table: T): T;
+  export function inline<T extends ReadonlyArray>(
+    this: void,
+    value: T,
+    inlineMode?: 0 | 1 | 2 | 3,
+  ): T;
+  export function inline<T extends ReadonlyTable>(this: void, value: T): T;
+  export const multiline: {
+    readonly array: {
+      <T extends ReadonlyArray>(this: void, array: T): T;
+    };
+    <T extends ReadonlyTable>(this: void, table: T): T;
+    (this: void, value: string): {
+      [_literal]: [`"""`, ...string[], `${string}"""`] | [`'''`, ...string[], `${string}'''`];
     } & object &
       String;
+    (this: void, lines: readonly string[]): {
+      [_literal]: [`"""`, ...string[], `${string}"""`] | [`'''`, ...string[], `${string}'''`];
+    } & object;
+    (this: void, lines: readonly string[], value: string): {
+      [_literal]: [`"""`, ...string[], `${string}"""`] | [`'''`, ...string[], `${string}'''`];
+    } & object &
+      String;
+    readonly basic: {
+      (this: void, value: string): { [_literal]: [`"""`, ...string[], `${string}"""`] } & object &
+        String;
+      (this: void, lines: readonly string[]): {
+        [_literal]: [`"""`, ...string[], `${string}"""`];
+      } & object;
+      (this: void, lines: readonly string[], value: string): {
+        [_literal]: [`"""`, ...string[], `${string}"""`];
+      } & object &
+        String;
+    };
   };
-};
-export function basic(this: void, value: string): { [_literal]: `"${string}"` } & object & String;
-export function literal(
-  this: void,
-  literal: string,
-): { [_literal]: string | [string, ...string[]] } & object;
-export function literal(
-  this: void,
-  literal: string,
-  value: string,
-): { [_literal]: string | [string, ...string[]] } & object & String;
-export function literal(
-  this: void,
-  literal: string,
-  value: number,
-): { [_literal]: string | [string, ...string[]] } & object & Number;
-export function literal(
-  this: void,
-  literal: string,
-  value: bigint,
-): { [_literal]: string | [string, ...string[]] } & object & BigInt;
-export function literal(
-  this: void,
-  literal: TemplateStringsArray,
-  ...chars: string[]
-): { [_literal]: string | [string, ...string[]] } & object;
+  export function basic(this: void, value: string): { [_literal]: `"${string}"` } & object & String;
+  export function literal(
+    this: void,
+    literal: string,
+  ): { [_literal]: string | [string, ...string[]] } & object;
+  export function literal(
+    this: void,
+    literal: string,
+    value: string,
+  ): { [_literal]: string | [string, ...string[]] } & object & String;
+  export function literal(
+    this: void,
+    literal: string,
+    value: number,
+  ): { [_literal]: string | [string, ...string[]] } & object & Number;
+  export function literal(
+    this: void,
+    literal: string,
+    value: bigint,
+  ): { [_literal]: string | [string, ...string[]] } & object & BigInt;
+  export function literal(
+    this: void,
+    literal: TemplateStringsArray,
+    ...chars: string[]
+  ): { [_literal]: string | [string, ...string[]] } & object;
 
-export function commentFor(this: void, key: string): symbol;
-export const commentForThis: unique symbol;
+  export function commentFor(this: void, key: string): symbol;
+  export const commentForThis: unique symbol;
 
-export default exports;
-declare const exports: Readonly<{
-  version: typeof version;
-  parse: typeof parse;
-  stringify: typeof stringify;
-  Section: typeof Section;
-  inline: typeof inline;
-  multiline: typeof multiline;
-  literal: typeof literal;
-  commentFor: typeof commentFor;
-  commentForThis: typeof commentForThis;
-  OffsetDateTime: typeof OffsetDateTime;
-  LocalDateTime: typeof LocalDateTime;
-  LocalDate: typeof LocalDate;
-  LocalTime: typeof LocalTime;
-  default: typeof exports;
-}>;
+  export { OffsetDateTime, LocalDateTime, LocalDate, LocalTime, Keys };
 
-export class OffsetDateTime {
+  export { exports as default };
+}
+
+declare class OffsetDateTime {
   readonly toJSON: Date['toJSON'];
 
   readonly [Symbol.toStringTag]: 'OffsetDateTime';
@@ -183,7 +174,7 @@ export class OffsetDateTime {
   readonly getTimezoneOffset: (this: Readonly<OffsetDateTime>) => _1439_1439;
   readonly getTime: (this: Readonly<OffsetDateTime>) => number;
 }
-export class LocalDateTime {
+declare class LocalDateTime {
   readonly toJSON: Date['toJSON'];
 
   readonly [Symbol.toStringTag]: 'LocalDateTime';
@@ -218,7 +209,7 @@ export class LocalDateTime {
   readonly getMilliseconds: (this: Readonly<LocalDateTime>) => _0_999;
   readonly setMilliseconds: (this: LocalDateTime, ms: _0_999) => void;
 }
-export class LocalDate {
+declare class LocalDate {
   readonly toJSON: Date['toJSON'];
 
   readonly [Symbol.toStringTag]: 'LocalDate';
@@ -238,7 +229,7 @@ export class LocalDate {
   readonly getDate: (this: Readonly<LocalDate>) => _1_31;
   readonly setDate: (this: LocalDate, date: _1_31) => void;
 }
-export class LocalTime {
+declare class LocalTime {
   readonly toJSON: Date['toJSON'];
 
   readonly [Symbol.toStringTag]: 'LocalTime';
@@ -263,7 +254,7 @@ export class LocalTime {
   readonly setMilliseconds: (this: LocalTime, ms: _0_999) => void;
 }
 
-export class Keys extends RegExp {
+declare class Keys extends RegExp {
   readonly lastIndex: number;
   constructor(keys: ArrayLike<string>);
   readonly test: (this: Keys, key: string) => boolean;
