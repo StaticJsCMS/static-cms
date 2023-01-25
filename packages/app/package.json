@@ -1,6 +1,6 @@
 {
   "name": "@staticcms/app",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "license": "MIT",
   "description": "Static CMS application.",
   "repository": "https://github.com/StaticJsCMS/static-cms",
@@ -35,7 +35,7 @@
     "@babel/eslint-parser": "7.19.1",
     "@babel/runtime": "7.20.13",
     "@emotion/babel-preset-css-prop": "11.10.0",
-    "@staticcms/core": "^1.2.0",
+    "@staticcms/core": "^1.2.1",
     "buffer": "6.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
