@@ -205,7 +205,7 @@
     "@types/uuid": "9.0.0",
     "@typescript-eslint/eslint-plugin": "5.49.0",
     "@typescript-eslint/parser": "5.49.0",
-    "axios": "1.2.4",
+    "axios": "1.2.5",
     "babel-core": "7.0.0-bridge.0",
     "babel-loader": "9.1.2",
     "babel-plugin-emotion": "11.0.0",
