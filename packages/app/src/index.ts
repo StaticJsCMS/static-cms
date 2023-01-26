@@ -1,1 +1,3 @@
-import '@staticcms/core';
+import CMS from '@staticcms/core';
+
+export default CMS;
