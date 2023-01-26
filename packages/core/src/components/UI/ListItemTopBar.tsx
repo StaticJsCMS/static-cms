@@ -62,9 +62,13 @@ const StyledTitle = styled('div')`
   line-height: 40px;
   white-space: nowrap;
   cursor: pointer;
-  display: flex;
-  align-items: center;
   z-index: 1;
+  width: 220px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  display: block;
+}
 `;
 
 const TopBarButtonSpan = TopBarButton.withComponent('span');
