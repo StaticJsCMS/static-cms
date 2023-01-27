@@ -62,7 +62,7 @@ The Static CMS can be used in two different ways.
 
 |Name|Demo|Status|
 |---|---|---|
-| Editorial Workflow - [static-cms-next-netlify-editoral-template](https://github.com/StaticJsCMS/static-cms-next-netlify-editoral-template) | Production: [next-editorial.staticcms.org](https://next-editorial.staticcms.org/)<br />Staging: [next-editorial-staging.staticcms.org](https://next-editorial-staging.staticcms.org/) | [![Netlify Status](https://api.netlify.com/api/v1/badges/94f05f8f-379a-4dd5-885f-ac2a0cb8a012/deploy-status)](https://app.netlify.com/sites/static-cms-next-editorial/deploys)<br />[![Netlify Status](https://api.netlify.com/api/v1/badges/756ff279-59aa-4b7b-96a5-75b2b2a8552b/deploy-status)](https://app.netlify.com/sites/static-cms-next-editorial-staging/deploys) |
+| [Editorial Workflow Template](https://github.com/StaticJsCMS/static-cms-next-netlify-editoral-template) | Production: [next-editorial.staticcms.org](https://next-editorial.staticcms.org/)<br />Staging: [next-editorial-staging.staticcms.org](https://next-editorial-staging.staticcms.org/) | [![Netlify Status](https://api.netlify.com/api/v1/badges/94f05f8f-379a-4dd5-885f-ac2a0cb8a012/deploy-status)](https://app.netlify.com/sites/static-cms-next-editorial/deploys)<br />[![Netlify Status](https://api.netlify.com/api/v1/badges/756ff279-59aa-4b7b-96a5-75b2b2a8552b/deploy-status)](https://app.netlify.com/sites/static-cms-next-editorial-staging/deploys) |
 
 # Other Projects
 
