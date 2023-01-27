@@ -4,6 +4,7 @@
   "scripts": {
     "build": "lerna run build --scope @staticcms/core --scope @staticcms/app",
     "build:demo": "lerna run build --scope @staticcms/demo",
+    "build:docs": "lerna run build --scope @staticcms/docs",
     "dev": "lerna run dev --scope @staticcms/core",
     "demo": "lerna run dev --scope @staticcms/demo",
     "docs": "lerna run dev --scope docs",
