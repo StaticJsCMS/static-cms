@@ -38,6 +38,23 @@ The Static CMS can be used in two different ways.
 - A complete, more complex install, that gives you more flexibility but requires that you use a static site builder with a build system that supports npm packages.
   To learn more about this installation method, refer to the [Bundling Guide](https://staticcms.org/docs/add-to-your-site-bundling/)
 
+# Projects
+
+* [static-cms](https://github.com/StaticJsCMS/static-cms)
+* [static-cms-proxy-server](https://github.com/StaticJsCMS/static-cms-proxy-server)
+
+# Platform Templates
+
+* [Next](https://nextjs.org/) - [static-cms-next-netlify-template](https://github.com/StaticJsCMS/static-cms-next-netlify-template)
+* [Gastby](https://www.gatsbyjs.com/) - [static-cms-gatsby-netlify-template](https://github.com/StaticJsCMS/static-cms-gatsby-netlify-template) (Static CMS Plugin for Gastby: [gatsby-plugin-static-cms](https://github.com/StaticJsCMS/gatsby-plugin-static-cms))
+* [Hugo](https://gohugo.io/) - [static-cms-hugo-netlify-template](https://github.com/StaticJsCMS/static-cms-hugo-netlify-template)
+* [Nuxt](https://nuxtjs.org/) - [static-cms-nuxt-netlify-template](https://github.com/StaticJsCMS/static-cms-nuxt-netlify-template)
+* [Preact](https://preactjs.com/) - [static-cms-preact-netlify-template](https://github.com/StaticJsCMS/static-cms-preact-netlify-template)
+* [Eleventy](https://www.11ty.dev/) - [static-cms-eleventy-netlify-template](https://github.com/StaticJsCMS/static-cms-eleventy-netlify-template)
+
+# Workflow Templates
+* Editorial Workflow (using [Next](https://nextjs.org/)) - [static-cms-next-netlify-editoral-template](https://github.com/StaticJsCMS/static-cms-next-netlify-editoral-template)
+
 # Contributing
 
 New contributors are always welcome! Check out [CONTRIBUTING.md](https://github.com/StaticJsCMS/static-cms/blob/main/CONTRIBUTING.md) to get involved.
