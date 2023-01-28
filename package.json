@@ -7,7 +7,7 @@
     "build:docs": "cd packages/docs && yarn build",
     "dev": "lerna run dev --scope @staticcms/core",
     "demo": "lerna run dev --scope @staticcms/demo",
-    "docs": "lerna run dev --scope docs",
+    "docs": "lerna run dev --scope @staticcms/docs",
     "format": "lerna run format",
     "lint": "lerna run lint",
     "prepare": "husky install",
