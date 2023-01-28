@@ -2,17 +2,9 @@ import React, { useMemo } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
 import Editor from './Editor';
+import { getDefaultPath } from '../../lib/util/collection.util';
 
 import type { Collections } from '@staticcms/core/interface';
-
-function getDefaultPath(collections: Collections) {
-  const first = Object.values(collections).filter(collection => collection.hide !== true)[0];
-  if (first) {
-    return `/collections/${first.name}`;
-  } else {
-    throw new Error('Could not find a non hidden collection');
-  }
-}
 
 interface EditorRouteProps {
   newRecord?: boolean;
