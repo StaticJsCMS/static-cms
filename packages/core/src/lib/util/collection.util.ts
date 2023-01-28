@@ -17,6 +17,7 @@ import { selectMediaFolder } from './media.util';
 import type { Backend } from '@staticcms/core/backend';
 import type {
   Collection,
+  Collections,
   Config,
   Entry,
   Field,
@@ -411,4 +412,21 @@ export function useInferredFields(collection: Collection) {
     }
     return iFields;
   }, [collection]);
+}
+
+export function getDefaultPath(collections: Collections) {
+  if (Object.keys(collections).length === 0) {
+    throw new Error('No collections found');
+  }
+
+  let options = Object.values(collections).filter(
+    collection =>
+      collection.hide !== true && (!('files' in collection) || (collection.files?.length ?? 0) > 1),
+  );
+
+  if (options.length === 0) {
+    options = Object.values(collections);
+  }
+
+  return `/collections/${options[0].name}`;
 }

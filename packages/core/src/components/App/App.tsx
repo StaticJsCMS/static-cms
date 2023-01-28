@@ -13,6 +13,7 @@ import { discardDraft as discardDraftAction } from '@staticcms/core/actions/entr
 import { currentBackend } from '@staticcms/core/backend';
 import { colors, GlobalStyles } from '@staticcms/core/components/UI/styles';
 import { history } from '@staticcms/core/routing/history';
+import { getDefaultPath } from '../../lib/util/collection.util';
 import CollectionRoute from '../Collection/CollectionRoute';
 import EditorRoute from '../Editor/EditorRoute';
 import MediaLibrary from '../MediaLibrary/MediaLibrary';
@@ -24,7 +25,7 @@ import Loader from '../UI/Loader';
 import ScrollTop from '../UI/ScrollTop';
 import NotFoundPage from './NotFoundPage';
 
-import type { Collections, Credentials, TranslatedProps } from '@staticcms/core/interface';
+import type { Credentials, TranslatedProps } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
@@ -60,19 +61,6 @@ const ErrorCodeBlock = styled('pre')`
   font-size: 15px;
   line-height: 1.5;
 `;
-
-function getDefaultPath(collections: Collections) {
-  const options = Object.values(collections).filter(
-    collection =>
-      collection.hide !== true && (!('files' in collection) || (collection.files?.length ?? 0) > 1),
-  );
-
-  if (options.length > 0) {
-    return `/collections/${options[0].name}`;
-  } else {
-    throw new Error('Could not find a non hidden collection');
-  }
-}
 
 function CollectionSearchRedirect() {
   const { name } = useParams();

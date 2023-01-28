@@ -1,19 +1,11 @@
 import React, { useMemo } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
+import { getDefaultPath } from '../../lib/util/collection.util';
 import MainView from '../App/MainView';
 import Collection from './Collection';
 
 import type { Collections } from '@staticcms/core/interface';
-
-function getDefaultPath(collections: Collections) {
-  const first = Object.values(collections).filter(collection => collection.hide !== true)[0];
-  if (first) {
-    return `/collections/${first.name}`;
-  } else {
-    throw new Error('Could not find a non hidden collection');
-  }
-}
 
 interface CollectionRouteProps {
   isSearchResults?: boolean;
