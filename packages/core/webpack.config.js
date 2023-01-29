@@ -102,6 +102,7 @@ module.exports = {
     }),
   ].filter(Boolean),
   output: {
+    publicPath: '',
     path: path.resolve(__dirname, 'dist'),
     filename: 'static-cms-core.js',
     library: {
