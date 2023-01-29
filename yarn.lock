@@ -18195,10 +18195,10 @@ valid-data-url@^3.0.0:
   resolved "https://registry.yarnpkg.com/valid-data-url/-/valid-data-url-3.0.1.tgz#826c1744e71b5632e847dd15dbd45b9fb38aa34f"
   integrity sha512-jOWVmzVceKlVVdwjNSenT4PbGghU0SBIizAev8ofZVgivk/TVHXSbNL8LP6M3spZvkR9/QolkyJavGSX5Cs0UA==
 
-validate-color@2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/validate-color/-/validate-color-2.2.1.tgz#f97214883304f87eaa9dc1eb8e9d8cd8b606a5d1"
-  integrity sha512-1eDb1zqP6W6bbfKKl6dRXObelNoQpW7aF3BUTh2AivWuhcD0pa3ejwURWqrVsyKJMLBMlHLFcM3sj5J+dSFhbg==
+validate-color@2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/validate-color/-/validate-color-2.2.2.tgz#5068c4d5f60a3e77a107ce89120a7c39dd113059"
+  integrity sha512-VcEmQ7lCjCLQwsnyqGQ2ojGgb0PNlfT0DLkrELSMngMlOT1/HWbLHT1Ft3bjKDK0rMAWQtznMcPwq2IBAvadpg==
 
 validate-npm-package-license@^3.0.1, validate-npm-package-license@^3.0.4:
   version "3.0.4"
