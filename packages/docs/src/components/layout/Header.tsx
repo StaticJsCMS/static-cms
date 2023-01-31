@@ -1,5 +1,6 @@
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
@@ -195,6 +196,17 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
           {/*
             <StyledDesktopLink component={Link} href="/blog">Blog</StyledDesktopLink>
           */}
+          <Button
+            component="a"
+            variant="outlined"
+            color={mode === 'dark' ? 'secondary' : 'inherit'}
+            href="https://github.com/sponsors/StaticJsCMS"
+            title="Sponsor StaticJsCMS"
+            startIcon={<FavoriteBorderIcon />}
+            sx={{ marginRight: '16px' }}
+          >
+            Sponsor
+          </Button>
         </StyledToolbar>
       </StyledAppBar>
       <NavigationDrawer
