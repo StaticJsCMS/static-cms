@@ -1,11 +1,13 @@
+import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import { styled, useTheme } from '@mui/material/styles';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import { useMemo } from 'react';
 
-import MobileNavItem from './MobileNavItem';
 import Logo from '../Logo';
+import SponsorButton from '../SponsorButton';
+import MobileNavItem from './MobileNavItem';
 
 import type { MenuItem } from '../../../interface';
 
@@ -13,6 +15,9 @@ const DRAWER_WIDTH = 300;
 
 const StyledDrawerContents = styled('div')`
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 `;
 
 const StyledLogoWrapper = styled('div')(
@@ -46,8 +51,9 @@ const NavigationDrawer = ({ items, mobileOpen, onMobileOpenToggle }: NavigationD
         <StyledLogoWrapper key="drawer-nav-logo-wrapper">
           <Logo key="drawer-nav-logo" />
         </StyledLogoWrapper>
+        <SponsorButton sx={{ margin: '16px', marginTop: 0 }} />
         <Divider key="drawer-nav-divider" sx={{ borderColor: 'rgba(255, 255, 255, 0.8)' }} />
-        <List key="drawer-nav-list">
+        <List key="drawer-nav-list" sx={{ flexGrow: 1 }}>
           {items.map(item => (
             <MobileNavItem key={`drawer-nav-item-${item.title}`} item={item} />
           ))}

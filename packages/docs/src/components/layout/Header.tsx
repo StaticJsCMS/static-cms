@@ -1,6 +1,5 @@
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
@@ -14,6 +13,7 @@ import { useCallback, useMemo, useState } from 'react';
 import Logo from './Logo';
 import NavigationDrawer from './mobile-drawer/NavigationDrawer';
 import Search from './search/Search';
+import SponsorButton from './SponsorButton';
 
 import type { PaletteMode } from '@mui/material';
 import type { ButtonTypeMap } from '@mui/material/Button';
@@ -178,6 +178,13 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
             <IconButton href="https://github.com/StaticJsCMS/static-cms" color="inherit">
               <GitHubIcon />
             </IconButton>
+            <SponsorButton
+              sx={{
+                display: 'none',
+                marginLeft: '8px',
+                [theme.breakpoints.only('md')]: { display: 'inline-flex' },
+              }}
+            />
           </StyledIconsWrapper>
           {items.map(item => {
             let url = '#';
@@ -196,17 +203,7 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
           {/*
             <StyledDesktopLink component={Link} href="/blog">Blog</StyledDesktopLink>
           */}
-          <Button
-            component="a"
-            variant="outlined"
-            color={mode === 'dark' ? 'secondary' : 'inherit'}
-            href="https://github.com/sponsors/StaticJsCMS"
-            title="Sponsor StaticJsCMS"
-            startIcon={<FavoriteBorderIcon />}
-            sx={{ marginRight: '16px' }}
-          >
-            Sponsor
-          </Button>
+          <SponsorButton sx={{ [theme.breakpoints.down('lg')]: { display: 'none' } }} />
         </StyledToolbar>
       </StyledAppBar>
       <NavigationDrawer

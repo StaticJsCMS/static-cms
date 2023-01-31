@@ -64,6 +64,7 @@ const MobileNavItem = ({ item }: MobileNavItemProps) => {
         key={`drawer-nav-item-${item.title}`}
         onClick={handleOnClick(item)}
         selected={selected}
+        sx={{ display: 'flex', width: '100%' }}
       >
         <ListItemText primary={item.title} />
         {isMenuLinkGroup(item) ? (
