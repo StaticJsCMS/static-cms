@@ -4924,10 +4924,10 @@
   dependencies:
     "@udecode/plate-core" "19.2.0"
 
-"@udecode/plate-headless@19.3.0":
-  version "19.3.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-19.3.0.tgz#3d6b26f4d5328aa9d5f43e9f3ae4b19647642faa"
-  integrity sha512-yHaXBfbBtrtDLKjNvwULmiz2uLHFGeqdkAIULAtcXux8ssvpfQNEKvuC4i+Y5A9bcOux6/z4AoB53xOnFWf/mw==
+"@udecode/plate-headless@19.4.0":
+  version "19.4.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-19.4.0.tgz#8acd2f9e991130598c8759afdd111d8c7cb3e962"
+  integrity sha512-fyr3xR7xtwbBKut3XAfP4XgwRLEQQ5eiki7eI4eArObyTakXlDyJL2F2ZfL0qfec19qDvGxJnrbWevPaJPJkeQ==
   dependencies:
     "@udecode/plate-alignment" "19.2.0"
     "@udecode/plate-autoformat" "19.2.0"
@@ -4963,7 +4963,7 @@
     "@udecode/plate-serializer-csv" "19.3.0"
     "@udecode/plate-serializer-docx" "19.3.0"
     "@udecode/plate-serializer-html" "19.2.0"
-    "@udecode/plate-serializer-md" "19.3.0"
+    "@udecode/plate-serializer-md" "19.4.0"
     "@udecode/plate-table" "19.3.0"
     "@udecode/plate-trailing-block" "19.2.0"
 
@@ -5363,12 +5363,12 @@
     "@udecode/plate-ui-button" "19.2.0"
     react-use "^17.3.2"
 
-"@udecode/plate-ui@19.3.0":
-  version "19.3.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-19.3.0.tgz#7a9b5cf5626abbe70a3adcba6dec6d1ec41ddeff"
-  integrity sha512-M2YCqMPcGgSq/CZ8DxqKp8xLU04UzubFmeUatpnoHOoyu4hD62Q5k0k5KdIjxQ8IaMccL5l3DZGr5FuDjRXDgA==
+"@udecode/plate-ui@19.4.0":
+  version "19.4.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-19.4.0.tgz#b58a620af49652b559a568a1bcd57c50ada440dd"
+  integrity sha512-BXtuTZNlRg9K4oWEDcQChBKVdigVJsBqZncDMzPvlXkSQGO3uNcIyaYn6FVC5w6moNKuzadbs7pf5ng0yCNkeA==
   dependencies:
-    "@udecode/plate-headless" "19.3.0"
+    "@udecode/plate-headless" "19.4.0"
     "@udecode/plate-styled-components" "19.2.0"
     "@udecode/plate-ui-alignment" "19.2.0"
     "@udecode/plate-ui-block-quote" "19.2.0"
@@ -5390,13 +5390,13 @@
     "@udecode/plate-ui-toolbar" "19.2.0"
     use-context-selector "1.4.1"
 
-"@udecode/plate@19.3.0":
-  version "19.3.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-19.3.0.tgz#3cb6ebb59514de4d0881758d00224635e45d0976"
-  integrity sha512-PzRQ8q06ptmpSSUm86aLtMT+igUs3WKrGVWYp0Q8dRlHuqNkpX8EU27//WG3Z0Z14sy6/9yFUhrfVQnXTSUjig==
+"@udecode/plate@19.4.0":
+  version "19.4.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-19.4.0.tgz#fa30c427394009523f58c7e0982566acfa4e1c39"
+  integrity sha512-RZRwSc4oi9HxLo8CQDdQ2zmYWL7HFXo89VwLjBdkKOB2dz9oR59rQV7d9waZZDOgr8trF8wYrol7bLX2Fz8VEg==
   dependencies:
-    "@udecode/plate-headless" "19.3.0"
-    "@udecode/plate-ui" "19.3.0"
+    "@udecode/plate-headless" "19.4.0"
+    "@udecode/plate-ui" "19.4.0"
 
 "@udecode/zustood@^1.1.1":
   version "1.1.3"
