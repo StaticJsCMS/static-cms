@@ -68,8 +68,8 @@ The Static CMS can be used in two different ways.
 
 |Name|Status|
 |---|---|
-| [static-cms-proxy-server](https://github.com/StaticJsCMS/static-cms-proxy-server) | [![Build and Test](https://github.com/StaticJsCMS/static-cms-proxy-server/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/StaticJsCMS/static-cms-proxy-server/actions/workflows/build-and-test.yml) |
-| [gatsby-plugin-static-cms](https://github.com/StaticJsCMS/gatsby-plugin-static-cms) | [![Build](https://github.com/StaticJsCMS/gatsby-plugin-static-cms/actions/workflows/build.yml/badge.svg)](https://github.com/StaticJsCMS/gatsby-plugin-static-cms/actions/workflows/build.yml) |
+| [static-cms-proxy-server](https://github.com/StaticJsCMS/static-cms-proxy-server) | [![Build and Test](https://github.com/StaticJsCMS/static-cms-proxy-server/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/StaticJsCMS/static-cms-proxy-server/actions/workflows/build-and-test.yml) [![npm latest package](https://img.shields.io/npm/v/@staticcms/proxy-server/latest.svg)](https://www.npmjs.com/package/@staticcms/proxy-server) |
+| [gatsby-plugin-static-cms](https://github.com/StaticJsCMS/gatsby-plugin-static-cms) | [![Build](https://github.com/StaticJsCMS/gatsby-plugin-static-cms/actions/workflows/build.yml/badge.svg)](https://github.com/StaticJsCMS/gatsby-plugin-static-cms/actions/workflows/build.yml) [![npm latest package](https://img.shields.io/npm/v/gatsby-plugin-static-cms/latest.svg)](https://www.npmjs.com/package/gatsby-plugin-static-cms) |
 
 # Contributing
 
