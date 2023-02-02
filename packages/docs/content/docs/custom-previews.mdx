@@ -34,7 +34,7 @@ The following parameters will be passed to your `react_component` during render:
 | fields     | object         | The fields for the given collection                                                                  |
 | document   | Document       | The document object the preview is within. If rendered with a frame, it will be the frame's document |
 | window     | Window         | The window object the preview is within. If rendered with a frame, it will be the frame's window     |
-| getAsset   | Async function | Function that given a url returns (as a promise) a loaded asset                                      |
+| getAsset   | Async function | __Deprecated__ Function that given a url returns (as a promise) a loaded asset                                      |
 | widgetFor  | Function       | Given a field name, returns the rendered preview of that field's widget and value                    |
 | widgetsFor | Function       | Given a field name, returns the rendered previews of that field's nested child widgets and values    |
 
@@ -43,7 +43,7 @@ The following parameters will be passed to your `react_component` during render:
 <CodeTabs>
 
 ```js
-const PostPreview = ({ widgetFor, getAsset, entry, collection, field }) => {
+const PostPreview = ({ widgetFor, entry, collection, field }) => {
   const imageUrl = useMediaAsset(entry.data.image, collection, field, entry);
 
   return h(
@@ -61,7 +61,7 @@ CMS.registerPreviewTemplate('posts', PostPreview);
 ```jsx
 import CMS, { useMediaAsset } from '@staticcms/core';
 
-const PostPreview = ({ widgetFor, getAsset, entry, collection, field }) => {
+const PostPreview = ({ widgetFor, entry, collection, field }) => {
   const imageUrl = useMediaAsset(entry.data.image, collection, field, entry);
 
   return (
@@ -92,7 +92,6 @@ interface Post {
 
 const PostPreview = ({
   widgetFor,
-  getAsset,
   entry,
   collection,
   field,

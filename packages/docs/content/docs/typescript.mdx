@@ -59,7 +59,6 @@ const EditorControl: FC<WidgetControlProps<string, HtmlField>> = ({
   value, // Typed as string | null | undefined
   onChange,
   openMediaLibrary,
-  getAsset,
   mediaPaths
 }) => {
   ...
@@ -78,7 +77,6 @@ import type { HtmlField } from '../config';
 const EditorPreview: FC<WidgetPreviewProps<string, HtmlField>> = ({
   field, // Typed as a HtmlField
   value, // Typed as string | null | undefined
-  getAsset,
 }) => {
   ...
 };
@@ -103,26 +101,10 @@ interface PostPreviewData {
   tags?: string[];
 }
 
-const PostPreview: FC<TemplatePreviewProps<PostPreviewData>> = ({ entry, widgetFor, getAsset }) => {
+const PostPreview: FC<TemplatePreviewProps<PostPreviewData>> = ({ entry, widgetFor, collection, field }) => {
   const dateString = useMemo(() => entry.data.date, [entry.data.date]);
 
-  const [image, setImage] = useState('');
-  useEffect(() => {
-    let alive = true;
-
-    const loadImage = async () => {
-      const loadedImage = await getAsset(entry.data.image ?? '');
-      if (alive) {
-        setImage(loadedImage.toString());
-      }
-    };
-
-    loadImage();
-
-    return () => {
-      alive = false;
-    };
-  }, [entry.data.image, getAsset]);
+  const image = useMediaAsset(entry.data.image ?? '', collection, field, entry);
 
   return (
     <div>
