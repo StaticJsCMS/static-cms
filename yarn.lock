@@ -4820,13 +4820,6 @@
   dependencies:
     "@udecode/plate-core" "19.4.2"
 
-"@udecode/plate-block-quote@19.2.0":
-  version "19.2.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-block-quote/-/plate-block-quote-19.2.0.tgz#0ff08960fbf25def207334995c791889f765d1a4"
-  integrity sha512-IHtyNt6ou4Ig7x7Lez/sTr6rAZSkfaSdCGFEpFva6zQlh2MgoPBgDMtFOeh10qlEvSndDV6vCfP6e0MTnYhfbw==
-  dependencies:
-    "@udecode/plate-core" "19.2.0"
-
 "@udecode/plate-block-quote@19.4.2":
   version "19.4.2"
   resolved "https://registry.yarnpkg.com/@udecode/plate-block-quote/-/plate-block-quote-19.4.2.tgz#b133edc96524a9cbbf0fe710a3f6b2844cf8fbea"
@@ -4841,27 +4834,12 @@
   dependencies:
     "@udecode/plate-core" "19.4.2"
 
-"@udecode/plate-button@19.2.0":
-  version "19.2.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-button/-/plate-button-19.2.0.tgz#d97b320b4d8d8659404ebc7261813e8f810c11f2"
-  integrity sha512-oXTfxZk+nT1AIUjCIEaN2dsQbLP5s++tui38D58wX2oqrAifEweXb1rzseHkqz9uTR3G95pUoOw1YALiLkn7/A==
-  dependencies:
-    "@udecode/plate-core" "19.2.0"
-
 "@udecode/plate-button@19.4.2":
   version "19.4.2"
   resolved "https://registry.yarnpkg.com/@udecode/plate-button/-/plate-button-19.4.2.tgz#2189643679c4f1f848ad1c8b72a7a49bcc21c4fb"
   integrity sha512-4gErF+L5EHVpWCrTcx7eqeA/T8MS0XWACkKoGl+vxmUPGj9ov4FiffIU6K0rfBOJh23Y0M0gmsg8id+mDx2YLA==
   dependencies:
     "@udecode/plate-core" "19.4.2"
-
-"@udecode/plate-code-block@19.3.0":
-  version "19.3.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-code-block/-/plate-code-block-19.3.0.tgz#c3e367db402255ea1fc9e142e1807cacf04a3739"
-  integrity sha512-iCDE5rW2NJDBn3sqWsMUztKbfwPQZaTFFqqwb4mk4TwPTvDNFZcqEmivB2XpW11QDxdaRsV++Cva0O+5EBTqFQ==
-  dependencies:
-    "@udecode/plate-core" "19.2.0"
-    prismjs "^1.25.0"
 
 "@udecode/plate-code-block@19.4.2":
   version "19.4.2"
@@ -4948,13 +4926,6 @@
   integrity sha512-Bf3FIkPf0bLIKNAA8uSNJEUxyRNVebazeFneLhEoHaPqOp24Idk4Lff4aHUHrlFRgZs8/I9XP3fwALSdJXvhPA==
   dependencies:
     "@udecode/plate-core" "19.4.2"
-
-"@udecode/plate-heading@19.2.0":
-  version "19.2.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-heading/-/plate-heading-19.2.0.tgz#21b3cd9c3dac57941b79013243b538c2a34b4710"
-  integrity sha512-HjVz7XdM89B3UW01s7ao1lQ7He3yzEFAfYcmv9g05nM/g/BpF6bvBxD5t4uMgq9nJWUXDH25vuOzkkMsYM/17A==
-  dependencies:
-    "@udecode/plate-core" "19.2.0"
 
 "@udecode/plate-heading@19.4.2":
   version "19.4.2"
@@ -5058,15 +5029,6 @@
   dependencies:
     "@udecode/plate-core" "19.4.2"
 
-"@udecode/plate-link@19.2.0":
-  version "19.2.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-link/-/plate-link-19.2.0.tgz#8dd7283ee7624479f0276f52c1adae8ea0f57217"
-  integrity sha512-BcmobCjNDI0CoAFWZbrwFokO8p5lSIakpDLPcI7xmgVkotP9HASoZen7KkFQtNamUAPakOiHldlce1TmxqAfkA==
-  dependencies:
-    "@udecode/plate-button" "19.2.0"
-    "@udecode/plate-core" "19.2.0"
-    "@udecode/plate-normalizers" "19.2.0"
-
 "@udecode/plate-link@19.4.2":
   version "19.4.2"
   resolved "https://registry.yarnpkg.com/@udecode/plate-link/-/plate-link-19.4.2.tgz#3773d52d6bde2050cd071c3311e7f97d2ed2514d"
@@ -5075,14 +5037,6 @@
     "@udecode/plate-button" "19.4.2"
     "@udecode/plate-core" "19.4.2"
     "@udecode/plate-normalizers" "19.4.2"
-
-"@udecode/plate-list@19.4.1":
-  version "19.4.1"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-list/-/plate-list-19.4.1.tgz#264eb9657e03780b695df328081e92c5ef5d9154"
-  integrity sha512-OcJsWNeTVpWL2jMKvw4d+iLCaHcp8NdbZe652okgceEh56I8/rh3/INSkSCqyYDDo0BD3CjlgYbRfxXw6tiZ4w==
-  dependencies:
-    "@udecode/plate-core" "19.2.0"
-    "@udecode/plate-reset-node" "19.2.0"
 
 "@udecode/plate-list@19.4.2":
   version "19.4.2"
@@ -5118,13 +5072,6 @@
   dependencies:
     "@udecode/plate-core" "19.4.2"
 
-"@udecode/plate-normalizers@19.2.0":
-  version "19.2.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-normalizers/-/plate-normalizers-19.2.0.tgz#d6ec14e5c121f5c791a9d1d789b2b49eb95cc954"
-  integrity sha512-TqFwEsPvdPwT+fMZs3Lzr0xL4RQxovTNNkAbkMTyaNOcirk4Hs3yTYjOmpKbvkybs/41XakqcOUWtlO9RfdPYQ==
-  dependencies:
-    "@udecode/plate-core" "19.2.0"
-
 "@udecode/plate-normalizers@19.4.2":
   version "19.4.2"
   resolved "https://registry.yarnpkg.com/@udecode/plate-normalizers/-/plate-normalizers-19.4.2.tgz#956660b322df07dabd8fae54a32ee541fbd02821"
@@ -5132,26 +5079,12 @@
   dependencies:
     "@udecode/plate-core" "19.4.2"
 
-"@udecode/plate-paragraph@19.2.0":
-  version "19.2.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-paragraph/-/plate-paragraph-19.2.0.tgz#824f18a1a8cd9f380ce1bc8dbd23acd13288d094"
-  integrity sha512-VqPGiJ20n2uUPsr5IKvhNEe4yUC6t8Yko/wBT6XQl1VevDgPyhQB5sftr9WxlU6uWgpjGx3McCSZXwqDabyvGQ==
-  dependencies:
-    "@udecode/plate-core" "19.2.0"
-
 "@udecode/plate-paragraph@19.4.2":
   version "19.4.2"
   resolved "https://registry.yarnpkg.com/@udecode/plate-paragraph/-/plate-paragraph-19.4.2.tgz#c1f01f9a9468ecbd3529544a4f43e2bff9e5c0cd"
   integrity sha512-2/WG6Z4MB+2Na7VBTVrHyLSNeNREN+j5JAznjNKoIsWGtVHMyxAoXRVtwnZf2AfTCySVYumWG3AhtCuuNkn/FA==
   dependencies:
     "@udecode/plate-core" "19.4.2"
-
-"@udecode/plate-reset-node@19.2.0":
-  version "19.2.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-reset-node/-/plate-reset-node-19.2.0.tgz#95e67a6bef5110ecdf3939a6776d5a781e70cab2"
-  integrity sha512-SgtHFgZMu/4ZkChAVOvpWJOL186O7gQT+M4fOYX/kQt6sicU88lkPvnFALlbuTeZZhTfEJUzDfZkr2H+JdKdJA==
-  dependencies:
-    "@udecode/plate-core" "19.2.0"
 
 "@udecode/plate-reset-node@19.4.2":
   version "19.4.2"
@@ -5197,21 +5130,6 @@
   dependencies:
     "@udecode/plate-core" "19.4.2"
     html-entities "^2.3.3"
-
-"@udecode/plate-serializer-md@19.4.1":
-  version "19.4.1"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-19.4.1.tgz#cbb7a1540e46d4c801cf0b611a76036bc4cdb1b1"
-  integrity sha512-5L9U/cau/M8FFSx0otlfokuUlV+nkqvKWp3xOutkD1xgMNhVTa+tHnYguBjGGU9pBNIqULIE1g1trYpJjBj5bg==
-  dependencies:
-    "@udecode/plate-block-quote" "19.2.0"
-    "@udecode/plate-code-block" "19.3.0"
-    "@udecode/plate-core" "19.2.0"
-    "@udecode/plate-heading" "19.2.0"
-    "@udecode/plate-link" "19.2.0"
-    "@udecode/plate-list" "19.4.1"
-    "@udecode/plate-paragraph" "19.2.0"
-    remark-parse "^9.0.0"
-    unified "^9.2.1"
 
 "@udecode/plate-serializer-md@19.4.2":
   version "19.4.2"
