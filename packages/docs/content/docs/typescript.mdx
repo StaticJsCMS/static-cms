@@ -57,7 +57,7 @@ import type { HtmlField } from '../config';
 const EditorControl: FC<WidgetControlProps<string, HtmlField>> = ({
   field, // Typed as a HtmlField
   value, // Typed as string | null | undefined
-  onChange,
+  onChange, // Typed to accept string | null | undefined
   openMediaLibrary,
   mediaPaths
 }) => {
@@ -101,10 +101,16 @@ interface PostPreviewData {
   tags?: string[];
 }
 
-const PostPreview: FC<TemplatePreviewProps<PostPreviewData>> = ({ entry, widgetFor, collection, field }) => {
+const PostPreview: FC<TemplatePreviewProps<PostPreviewData>> = ({
+  entry, // Typed as PostPreviewData
+  widgetFor, // Typed to accept only the keys of PostPreviewData (body, date, title, image, slug, tags)
+  collection,
+  fields
+}) => {
   const dateString = useMemo(() => entry.data.date, [entry.data.date]);
 
-  const image = useMediaAsset(entry.data.image ?? '', collection, field, entry);
+  const imageField = fields.find((field) => field.name === 'image');
+  const image = useMediaAsset(entry.data.image ?? '', collection, imageField, entry);
 
   return (
     <div>

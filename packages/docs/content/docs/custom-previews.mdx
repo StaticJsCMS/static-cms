@@ -43,8 +43,9 @@ The following parameters will be passed to your `react_component` during render:
 <CodeTabs>
 
 ```js
-const PostPreview = ({ widgetFor, entry, collection, field }) => {
-  const imageUrl = useMediaAsset(entry.data.image, collection, field, entry);
+const PostPreview = ({ widgetFor, entry, collection, fields }) => {
+  const imageField = fields.find((field) => field.name === 'image');
+  const imageUrl = useMediaAsset(entry.data.image, collection, imageField, entry);
 
   return h(
     'div',
@@ -61,8 +62,9 @@ CMS.registerPreviewTemplate('posts', PostPreview);
 ```jsx
 import CMS, { useMediaAsset } from '@staticcms/core';
 
-const PostPreview = ({ widgetFor, entry, collection, field }) => {
-  const imageUrl = useMediaAsset(entry.data.image, collection, field, entry);
+const PostPreview = ({ widgetFor, entry, collection, fields }) => {
+  const imageField = fields.find((field) => field.name === 'image');
+  const imageUrl = useMediaAsset(entry.data.image, collection, imageField, entry);
 
   return (
     <div>
@@ -94,9 +96,10 @@ const PostPreview = ({
   widgetFor,
   entry,
   collection,
-  field,
+  fields,
 }: TemplatePreviewProps<Post>) => {
-  const imageUrl = useMediaAsset(entry.data.image, collection, field, entry);
+  const imageField = fields.find((field) => field.name === 'image');
+  const imageUrl = useMediaAsset(entry.data.image, collection, imageField, entry);
 
   return (
     <div>
