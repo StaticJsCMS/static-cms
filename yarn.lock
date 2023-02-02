@@ -3260,10 +3260,10 @@
     prop-types "^15.8.1"
     react-is "^18.2.0"
 
-"@mui/x-date-pickers@5.0.16":
-  version "5.0.16"
-  resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-5.0.16.tgz#2ee6263e9ba4e0089a664f0bcb8ffaaff2c392d4"
-  integrity sha512-dfnz9e/zyYXMFH08PKhYHatBLzCt3hnEmbReaKTW+9FXLeZ8hTm4wM3IZi5kplEZuV5aVBJGzynwQ1o3EBoxoA==
+"@mui/x-date-pickers@5.0.17":
+  version "5.0.17"
+  resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-5.0.17.tgz#92a5ba3dec828ea1cdb6e5d3e96c7b0523507bb8"
+  integrity sha512-Rxm2OqSLGXijdwCpt8dzbuDIWNids7bUsuxB/ci66MB4ULfTswhFXZTcVvEm/SKZvtkUmDPQmMemdNg78440iA==
   dependencies:
     "@babel/runtime" "^7.18.9"
     "@date-io/core" "^2.15.0"
