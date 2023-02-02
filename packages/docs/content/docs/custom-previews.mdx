@@ -44,7 +44,7 @@ The following parameters will be passed to your `react_component` during render:
 
 ```js
 const PostPreview = ({ widgetFor, entry, collection, fields }) => {
-  const imageField = fields.find((field) => field.name === 'image');
+  const imageField = useMemo(fields.find((field) => field.name === 'image'), [fields]);
   const imageUrl = useMediaAsset(entry.data.image, collection, imageField, entry);
 
   return h(
@@ -63,7 +63,7 @@ CMS.registerPreviewTemplate('posts', PostPreview);
 import CMS, { useMediaAsset } from '@staticcms/core';
 
 const PostPreview = ({ widgetFor, entry, collection, fields }) => {
-  const imageField = fields.find((field) => field.name === 'image');
+  const imageField = useMemo(fields.find((field) => field.name === 'image'), [fields]);
   const imageUrl = useMediaAsset(entry.data.image, collection, imageField, entry);
 
   return (
@@ -98,7 +98,7 @@ const PostPreview = ({
   collection,
   fields,
 }: TemplatePreviewProps<Post>) => {
-  const imageField = fields.find((field) => field.name === 'image');
+  const imageField = useMemo(fields.find((field) => field.name === 'image'), [fields]);
   const imageUrl = useMediaAsset(entry.data.image, collection, imageField, entry);
 
   return (

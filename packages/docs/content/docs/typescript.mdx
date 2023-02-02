@@ -109,7 +109,7 @@ const PostPreview: FC<TemplatePreviewProps<PostPreviewData>> = ({
 }) => {
   const dateString = useMemo(() => entry.data.date, [entry.data.date]);
 
-  const imageField = fields.find((field) => field.name === 'image');
+  const imageField = useMemo(fields.find((field) => field.name === 'image'), [fields]);
   const image = useMediaAsset(entry.data.image ?? '', collection, imageField, entry);
 
   return (
