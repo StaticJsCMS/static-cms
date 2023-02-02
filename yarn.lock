@@ -5031,6 +5031,14 @@
     "@udecode/plate-core" "19.2.0"
     "@udecode/plate-reset-node" "19.2.0"
 
+"@udecode/plate-list@19.4.1":
+  version "19.4.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-list/-/plate-list-19.4.1.tgz#264eb9657e03780b695df328081e92c5ef5d9154"
+  integrity sha512-OcJsWNeTVpWL2jMKvw4d+iLCaHcp8NdbZe652okgceEh56I8/rh3/INSkSCqyYDDo0BD3CjlgYbRfxXw6tiZ4w==
+  dependencies:
+    "@udecode/plate-core" "19.2.0"
+    "@udecode/plate-reset-node" "19.2.0"
+
 "@udecode/plate-media@19.2.0":
   version "19.2.0"
   resolved "https://registry.yarnpkg.com/@udecode/plate-media/-/plate-media-19.2.0.tgz#937fde0d4f39faa75c94a4e5654b5db5c43b7fa7"
@@ -5127,6 +5135,21 @@
     "@udecode/plate-heading" "19.2.0"
     "@udecode/plate-link" "19.2.0"
     "@udecode/plate-list" "19.2.0"
+    "@udecode/plate-paragraph" "19.2.0"
+    remark-parse "^9.0.0"
+    unified "^9.2.1"
+
+"@udecode/plate-serializer-md@19.4.1":
+  version "19.4.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-19.4.1.tgz#cbb7a1540e46d4c801cf0b611a76036bc4cdb1b1"
+  integrity sha512-5L9U/cau/M8FFSx0otlfokuUlV+nkqvKWp3xOutkD1xgMNhVTa+tHnYguBjGGU9pBNIqULIE1g1trYpJjBj5bg==
+  dependencies:
+    "@udecode/plate-block-quote" "19.2.0"
+    "@udecode/plate-code-block" "19.3.0"
+    "@udecode/plate-core" "19.2.0"
+    "@udecode/plate-heading" "19.2.0"
+    "@udecode/plate-link" "19.2.0"
+    "@udecode/plate-list" "19.4.1"
     "@udecode/plate-paragraph" "19.2.0"
     remark-parse "^9.0.0"
     unified "^9.2.1"
