@@ -4849,6 +4849,14 @@
     "@udecode/plate-core" "19.4.2"
     prismjs "^1.25.0"
 
+"@udecode/plate-code-block@19.4.3":
+  version "19.4.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-code-block/-/plate-code-block-19.4.3.tgz#db281b59e5221ba93f975fa92e92295d935339a7"
+  integrity sha512-T8zOhJkOm81JpIVqKHXhg4J0AdUfS+hE6eQsL5CegUPNgxKBScKfUd+u+WAd1mjB5jktWwkT8HGr34hcvbdG3A==
+  dependencies:
+    "@udecode/plate-core" "19.4.2"
+    prismjs "^1.25.0"
+
 "@udecode/plate-combobox@19.4.2":
   version "19.4.2"
   resolved "https://registry.yarnpkg.com/@udecode/plate-combobox/-/plate-combobox-19.4.2.tgz#0c8e4cb009b1ba2a92fe830c475e6ed6b8060f7b"
@@ -5123,6 +5131,21 @@
   dependencies:
     "@udecode/plate-block-quote" "19.4.2"
     "@udecode/plate-code-block" "19.4.2"
+    "@udecode/plate-core" "19.4.2"
+    "@udecode/plate-heading" "19.4.2"
+    "@udecode/plate-link" "19.4.2"
+    "@udecode/plate-list" "19.4.2"
+    "@udecode/plate-paragraph" "19.4.2"
+    remark-parse "^9.0.0"
+    unified "^9.2.1"
+
+"@udecode/plate-serializer-md@19.4.3":
+  version "19.4.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-19.4.3.tgz#a44e7becbeeaa9f8c5ae978c98f2acc406755ca6"
+  integrity sha512-aLQtI8nFAxmSJK9ullnHXTQDonZ3AAfz058hO91vyiQlqaIhhtK3FozbCX+AeEtLd0qw1jl0c/iJsBRUn40KHw==
+  dependencies:
+    "@udecode/plate-block-quote" "19.4.2"
+    "@udecode/plate-code-block" "19.4.3"
     "@udecode/plate-core" "19.4.2"
     "@udecode/plate-heading" "19.4.2"
     "@udecode/plate-link" "19.4.2"
