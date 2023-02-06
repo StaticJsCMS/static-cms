@@ -5042,12 +5042,12 @@
   dependencies:
     "@udecode/plate-core" "19.4.4"
 
-"@udecode/plate-juice@19.4.2":
-  version "19.4.2"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-juice/-/plate-juice-19.4.2.tgz#ff0ff123aee31cfce85819f4864dafb19b47b788"
-  integrity sha512-Vr+G3+DoW1CaFdE7TY59oY7lg7feClKloo1gTcPTP1TtEF9UIsEYltm7VAOp5XZyNuRaWj5W/cUxmQn2wOSV+A==
+"@udecode/plate-juice@19.4.4":
+  version "19.4.4"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-juice/-/plate-juice-19.4.4.tgz#47283a2bd5874b5ac9edde1dc188ea082b263b13"
+  integrity sha512-k+X9gS+zCHOmAOxwyFJXXNuxMEO6JMHrUjydcmAxVsTHFUALF+5wPnyUj6euDO5Pn+GbGjHg990XxYe/CnLWsQ==
   dependencies:
-    "@udecode/plate-core" "19.4.2"
+    "@udecode/plate-core" "19.4.4"
     juice "^8.0.0"
 
 "@udecode/plate-kbd@19.4.4":
