@@ -28,7 +28,7 @@
     "serve": "webpack serve",
     "test": "cross-env NODE_ENV=test jest",
     "test:integration": "cross-env NODE_ENV=test jest -c jest.config.integration.js",
-    "test:ci": "cross-env NODE_ENV=test jest --maxWorkers=2",
+    "test:ci": "cross-env NODE_ENV=test jest --maxWorkers=2 --coverage",
     "test:integration:ci": "cross-env NODE_ENV=test jest -c jest.config.integration.js --maxWorkers=2",
     "type-check": "tsc --watch"
   },
