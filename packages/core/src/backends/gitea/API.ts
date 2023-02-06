@@ -362,38 +362,50 @@ export default class API {
 
   async persistFiles(dataFiles: DataFile[], mediaFiles: AssetProxy[], options: PersistOptions) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [mediaFiles, dataFiles].forEach(async list => {
-      list.forEach(async file => {
-        const item: { raw?: string; sha?: string; toBase64?: () => Promise<string> } = file;
-        const contentBase64 = await result(
-          item,
-          'toBase64',
-          partial(this.toBase64, item.raw as string),
-        );
-        if (options.newEntry) {
-          await this.request(`${this.repoURL}/contents/${file.path}`, {
-            method: 'POST',
-            body: JSON.stringify({
-              branch: this.branch,
-              content: contentBase64,
-              message: options.commitMessage,
-              signoff: false,
-            }),
-          });
-        } else {
-          const oldSha = await this.getFileSha(file.path);
-          await this.request(`${this.repoURL}/contents/${file.path}`, {
-            method: 'PUT',
-            body: JSON.stringify({
-              branch: this.branch,
-              content: contentBase64,
-              message: options.commitMessage,
-              sha: oldSha,
-              signoff: false,
-            }),
-          });
-        }
-      });
+    const files: (DataFile | AssetProxy)[] = mediaFiles.concat(dataFiles as any);
+    for (const file of files) {
+      const item: { raw?: string; sha?: string; toBase64?: () => Promise<string> } = file;
+      const contentBase64 = await result(
+        item,
+        'toBase64',
+        partial(this.toBase64, item.raw as string),
+      );
+      try {
+        const oldSha = await this.getFileSha(file.path);
+        await this.updateBlob(contentBase64, file, options, oldSha!);
+      } catch {
+        await this.createBlob(contentBase64, file, options);
+      }
+    }
+  }
+
+  async updateBlob(
+    contentBase64: string,
+    file: AssetProxy | DataFile,
+    options: PersistOptions,
+    oldSha: string,
+  ) {
+    await this.request(`${this.repoURL}/contents/${file.path}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        branch: this.branch,
+        content: contentBase64,
+        message: options.commitMessage,
+        sha: oldSha,
+        signoff: false,
+      }),
+    });
+  }
+
+  async createBlob(contentBase64: string, file: AssetProxy | DataFile, options: PersistOptions) {
+    await this.request(`${this.repoURL}/contents/${file.path}`, {
+      method: 'POST',
+      body: JSON.stringify({
+        branch: this.branch,
+        content: contentBase64,
+        message: options.commitMessage,
+        signoff: false,
+      }),
     });
   }
 
@@ -415,12 +427,12 @@ export default class API {
     if (file) {
       return file.sha;
     } else {
-      console.error('File not found');
+      throw new APIError('Not Found', 404, API_NAME);
     }
   }
 
   async deleteFiles(paths: string[], message: string) {
-    paths.forEach(async file => {
+    for (const file of paths) {
       const meta: ContentsResponse = await this.request(`${this.repoURL}/contents/${file}`, {
         method: 'GET',
       });
@@ -428,7 +440,7 @@ export default class API {
         method: 'DELETE',
         body: JSON.stringify({ branch: this.branch, message, sha: meta.sha, signoff: false }),
       });
-    });
+    }
   }
 
   toBase64(str: string) {

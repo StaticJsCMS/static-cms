@@ -101,7 +101,7 @@ describe('gitea API', () => {
   });
 
   describe('persistFiles', () => {
-    it('should create a new file', async () => {
+    it('should check if file exists and create a new file', async () => {
       const api = new API({ branch: 'master', repo: 'owner/repo' });
 
       const responses = {
@@ -127,9 +127,13 @@ describe('gitea API', () => {
         newEntry: true,
       });
 
-      expect(api.request).toHaveBeenCalledTimes(1);
+      expect(api.request).toHaveBeenCalledTimes(2);
 
       expect((api.request as jest.Mock).mock.calls[0]).toEqual([
+        '/repos/owner/repo/git/trees/master:content%2Fposts',
+      ]);
+
+      expect((api.request as jest.Mock).mock.calls[1]).toEqual([
         '/repos/owner/repo/contents/content/posts/new-post.md',
         {
           method: 'POST',
@@ -174,10 +178,24 @@ describe('gitea API', () => {
         newEntry: false,
       });
 
-      expect(api.request).toHaveBeenCalledTimes(1);
+      expect(api.request).toHaveBeenCalledTimes(2);
 
       expect((api.request as jest.Mock).mock.calls[0]).toEqual([
         '/repos/owner/repo/git/trees/master:content%2Fposts',
+      ]);
+
+      expect((api.request as jest.Mock).mock.calls[1]).toEqual([
+        '/repos/owner/repo/contents/content/posts/update-post.md',
+        {
+          method: 'PUT',
+          body: JSON.stringify({
+            branch: 'master',
+            content: Base64.encode(entry.dataFiles[0].raw),
+            message: 'commitMessage',
+            sha: 'old-sha',
+            signoff: false,
+          }),
+        },
       ]);
     });
   });
