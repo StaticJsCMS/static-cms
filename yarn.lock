@@ -4841,14 +4841,6 @@
   dependencies:
     "@udecode/plate-core" "19.4.2"
 
-"@udecode/plate-code-block@19.4.2":
-  version "19.4.2"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-code-block/-/plate-code-block-19.4.2.tgz#413dbfc38eab65294884c7aa61556ee6a03a7f46"
-  integrity sha512-L0m4qpEKRQvGCmR/kNiXe75RRzBg782RrIpYgV6gm44ShZOEwElb7OlarIW+1CwnDoi3SLdG/9l0Muv3iz0eIA==
-  dependencies:
-    "@udecode/plate-core" "19.4.2"
-    prismjs "^1.25.0"
-
 "@udecode/plate-code-block@19.4.3":
   version "19.4.3"
   resolved "https://registry.yarnpkg.com/@udecode/plate-code-block/-/plate-code-block-19.4.3.tgz#db281b59e5221ba93f975fa92e92295d935339a7"
@@ -5139,21 +5131,6 @@
   dependencies:
     "@udecode/plate-core" "19.4.2"
     html-entities "^2.3.3"
-
-"@udecode/plate-serializer-md@19.4.2":
-  version "19.4.2"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-19.4.2.tgz#69f101409c2023a154e237dccdbedaa5efd0d5c7"
-  integrity sha512-C7A2orqYHSTXXXMRqOYFM+9tzDidGVrWlasxPKI1Sb/N9afLD5ba7vg83cWKArQMxTbkBi9stcKsH1OV/uf6ew==
-  dependencies:
-    "@udecode/plate-block-quote" "19.4.2"
-    "@udecode/plate-code-block" "19.4.2"
-    "@udecode/plate-core" "19.4.2"
-    "@udecode/plate-heading" "19.4.2"
-    "@udecode/plate-link" "19.4.2"
-    "@udecode/plate-list" "19.4.2"
-    "@udecode/plate-paragraph" "19.4.2"
-    remark-parse "^9.0.0"
-    unified "^9.2.1"
 
 "@udecode/plate-serializer-md@19.4.3":
   version "19.4.3"
@@ -18423,11 +18400,12 @@ vfile-message@^2.0.0:
     "@types/unist" "^2.0.0"
     unist-util-stringify-position "^2.0.0"
 
-vfile-statistics@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/vfile-statistics/-/vfile-statistics-2.0.0.tgz#f04ee3e3c666809a3c10c06021becd41ea9c8037"
-  integrity sha512-foOWtcnJhKN9M2+20AOTlWi2dxNfAoeNIoxD5GXcO182UJyId4QrXa41fWrgcfV3FWTjdEDy3I4cpLVcQscIMA==
+vfile-statistics@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/vfile-statistics/-/vfile-statistics-2.0.1.tgz#2e1adae1cd3a45c1ed4f2a24bd103c3d71e4bce3"
+  integrity sha512-W6dkECZmP32EG/l+dp2jCLdYzmnDBIw6jwiLZSER81oR5AHRcVqL+k3Z+pfH1R73le6ayDkJRMk0sutj1bMVeg==
   dependencies:
+    vfile "^5.0.0"
     vfile-message "^3.0.0"
 
 vfile@5.3.6, vfile@^5.0.0, vfile@^5.3.0:
