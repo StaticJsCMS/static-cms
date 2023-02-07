@@ -63,6 +63,33 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "McFlyPartages",
+      "name": "McFlyPartages",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44530252?v=4",
+      "profile": "https://github.com/McFlyPartages",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "robigan",
+      "name": "robigan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35210888?v=4",
+      "profile": "https://github.com/robigan",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "mildred",
+      "name": "Mildred Ki'Lya",
+      "avatar_url": "https://avatars.githubusercontent.com/u/33804?v=4",
+      "profile": "http://mildred.fr/",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }

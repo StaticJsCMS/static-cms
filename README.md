@@ -100,6 +100,11 @@ New contributors are always welcome! Check out [CONTRIBUTING.md](https://github.
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Skrubbadubba"><img src="https://avatars.githubusercontent.com/u/75796723?v=4?s=100" width="100px;" alt="Skrubbadubba"/><br /><sub><b>Skrubbadubba</b></sub></a><br /><a href="https://github.com/StaticJsCMS/static-cms/commits?author=Skrubbadubba" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/a-kriya"><img src="https://avatars.githubusercontent.com/u/26761352?v=4?s=100" width="100px;" alt="a-kriya"/><br /><sub><b>a-kriya</b></sub></a><br /><a href="https://github.com/StaticJsCMS/static-cms/commits?author=a-kriya" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/whysthatso"><img src="https://avatars.githubusercontent.com/u/1685114?v=4?s=100" width="100px;" alt="Andreas Wagner"/><br /><sub><b>Andreas Wagner</b></sub></a><br /><a href="https://github.com/StaticJsCMS/static-cms/commits?author=whysthatso" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/McFlyPartages"><img src="https://avatars.githubusercontent.com/u/44530252?v=4?s=100" width="100px;" alt="McFlyPartages"/><br /><sub><b>McFlyPartages</b></sub></a><br /><a href="https://github.com/StaticJsCMS/static-cms/commits?author=McFlyPartages" title="Documentation">📖</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/robigan"><img src="https://avatars.githubusercontent.com/u/35210888?v=4?s=100" width="100px;" alt="robigan"/><br /><sub><b>robigan</b></sub></a><br /><a href="https://github.com/StaticJsCMS/static-cms/commits?author=robigan" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://mildred.fr/"><img src="https://avatars.githubusercontent.com/u/33804?v=4?s=100" width="100px;" alt="Mildred Ki'Lya"/><br /><sub><b>Mildred Ki'Lya</b></sub></a><br /><a href="https://github.com/StaticJsCMS/static-cms/commits?author=mildred" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
