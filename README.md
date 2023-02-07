@@ -5,6 +5,7 @@
 [![Build](https://github.com/StaticJsCMS/static-cms/actions/workflows/build.yml/badge.svg)](https://github.com/StaticJsCMS/static-cms/actions/workflows/build.yml)
 [![npm latest package](https://img.shields.io/npm/v/@staticcms/core/latest.svg)](https://www.npmjs.com/package/@staticcms/core)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/StaticJsCMS/static-cms/blob/main/CONTRIBUTING.md)
+[![All Contributors](https://img.shields.io/github/all-contributors/StaticJsCMS/static-cms?color=ee8449&style=flat-square)](#contributors)
 <div align="center">
 
 [Docs](https://staticcms.org/)
@@ -90,6 +91,18 @@ New contributors are always welcome! Check out [CONTRIBUTING.md](https://github.
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/KaneFreeman"><img src="https://avatars.githubusercontent.com/u/1388138?v=4?s=100" width="100px;" alt="Daniel Lautzenheiser"/><br /><sub><b>Daniel Lautzenheiser</b></sub></a><br /><a href="https://github.com/StaticJsCMS/static-cms/commits?author=KaneFreeman" title="Code">💻</a> <a href="https://github.com/StaticJsCMS/static-cms/commits?author=KaneFreeman" title="Documentation">📖</a> <a href="#design-KaneFreeman" title="Design">🎨</a> <a href="#maintenance-KaneFreeman" title="Maintenance">🚧</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/denyskon"><img src="https://avatars.githubusercontent.com/u/47871822?v=4?s=100" width="100px;" alt="Denys Konovalov"/><br /><sub><b>Denys Konovalov</b></sub></a><br /><a href="https://github.com/StaticJsCMS/static-cms/commits?author=denyskon" title="Code">💻</a> <a href="https://github.com/StaticJsCMS/static-cms/commits?author=denyskon" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://commanderstorm.github.io/"><img src="https://avatars.githubusercontent.com/u/26258709?v=4?s=100" width="100px;" alt="Frank Elsinga"/><br /><sub><b>Frank Elsinga</b></sub></a><br /><a href="https://github.com/StaticJsCMS/static-cms/commits?author=CommanderStorm" title="Code">💻</a> <a href="https://github.com/StaticJsCMS/static-cms/commits?author=CommanderStorm" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Skrubbadubba"><img src="https://avatars.githubusercontent.com/u/75796723?v=4?s=100" width="100px;" alt="Skrubbadubba"/><br /><sub><b>Skrubbadubba</b></sub></a><br /><a href="https://github.com/StaticJsCMS/static-cms/commits?author=Skrubbadubba" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/a-kriya"><img src="https://avatars.githubusercontent.com/u/26761352?v=4?s=100" width="100px;" alt="a-kriya"/><br /><sub><b>a-kriya</b></sub></a><br /><a href="https://github.com/StaticJsCMS/static-cms/commits?author=a-kriya" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/whysthatso"><img src="https://avatars.githubusercontent.com/u/1685114?v=4?s=100" width="100px;" alt="Andreas Wagner"/><br /><sub><b>Andreas Wagner</b></sub></a><br /><a href="https://github.com/StaticJsCMS/static-cms/commits?author=whysthatso" title="Documentation">📖</a></td>
+    </tr>
+  </tbody>
+</table>
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->

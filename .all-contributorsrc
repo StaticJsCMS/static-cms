@@ -2,5 +2,67 @@
   "projectName": "static-cms",
   "projectOwner": "StaticJsCMS",
   "repoType": "github",
-  "repoHost": "https://github.com"
+  "repoHost": "https://github.com",
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "KaneFreeman",
+      "name": "Daniel Lautzenheiser",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1388138?v=4",
+      "profile": "https://github.com/KaneFreeman",
+      "contributions": [
+        "code",
+        "doc",
+        "design",
+        "maintenance"
+      ]
+    },
+    {
+      "login": "denyskon",
+      "name": "Denys Konovalov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/47871822?v=4",
+      "profile": "https://github.com/denyskon",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "CommanderStorm",
+      "name": "Frank Elsinga",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26258709?v=4",
+      "profile": "https://commanderstorm.github.io/",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "Skrubbadubba",
+      "name": "Skrubbadubba",
+      "avatar_url": "https://avatars.githubusercontent.com/u/75796723?v=4",
+      "profile": "https://github.com/Skrubbadubba",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "a-kriya",
+      "name": "a-kriya",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26761352?v=4",
+      "profile": "https://github.com/a-kriya",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "whysthatso",
+      "name": "Andreas Wagner",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1685114?v=4",
+      "profile": "https://github.com/whysthatso",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ]
 }
