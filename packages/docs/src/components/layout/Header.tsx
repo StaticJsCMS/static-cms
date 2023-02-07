@@ -66,6 +66,8 @@ const StyledGithubImage = styled('img')`
 
 const StyledMenuButton = styled(IconButton)(
   ({ theme }) => `
+    z-index: 30;
+
     ${theme.breakpoints.up('lg')} {
       visibility: hidden;
       height: 0;

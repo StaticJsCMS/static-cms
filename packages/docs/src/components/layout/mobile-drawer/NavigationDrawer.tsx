@@ -48,7 +48,7 @@ const NavigationDrawer = ({ items, mobileOpen, onMobileOpenToggle }: NavigationD
     () => (
       <StyledDrawerContents key="drawer-nav-contents" onClick={onMobileOpenToggle}>
         <StyledLogoWrapper key="drawer-nav-logo-wrapper">
-          <Logo key="drawer-nav-logo" />
+          <Logo key="drawer-nav-logo" inMenu />
         </StyledLogoWrapper>
         <SponsorButton sx={{ margin: '16px', marginTop: 0 }} />
         <Divider key="drawer-nav-divider" sx={{ borderColor: 'rgba(255, 255, 255, 0.8)' }} />
