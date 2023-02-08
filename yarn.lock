@@ -1353,7 +1353,16 @@
     "@codemirror/view" "^6.0.0"
     "@lezer/highlight" "^1.0.0"
 
-"@codemirror/view@6.8.0", "@codemirror/view@^6.0.0", "@codemirror/view@^6.2.2", "@codemirror/view@^6.6.0":
+"@codemirror/view@6.8.1":
+  version "6.8.1"
+  resolved "https://registry.yarnpkg.com/@codemirror/view/-/view-6.8.1.tgz#6d4796344edd62670d1f202f9f014959f53242b5"
+  integrity sha512-bXWs42i1mnBexaktPABaEpYbt4FbJMnlesObDLF0GE8poRiNaRgm7H/2NfXfD5Swas1ULdFgONLLs4ncwHuz8g==
+  dependencies:
+    "@codemirror/state" "^6.1.4"
+    style-mod "^4.0.0"
+    w3c-keyname "^2.2.4"
+
+"@codemirror/view@^6.0.0", "@codemirror/view@^6.2.2", "@codemirror/view@^6.6.0":
   version "6.8.0"
   resolved "https://registry.yarnpkg.com/@codemirror/view/-/view-6.8.0.tgz#999633184c843692c70e33297b2d28c2d8174610"
   integrity sha512-9LR8uwkivHTvZxiYCRreO6VYleZUVbpvZ1+4oCQT2RU0VbpL3nYgO2/1hhgpIWh5mrIj48Rj+AGVFIr2RN4Zcg==
