@@ -2273,11 +2273,6 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@juggle/resize-observer@^3.4.0":
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.4.0.tgz#08d6c5e20cf7e4cc02fd181c4b0c225cd31dbb60"
-  integrity sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==
-
 "@kwsites/file-exists@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@kwsites/file-exists/-/file-exists-1.1.1.tgz#ad1efcac13e1987d8dbaf235ef3be5b0d96faa99"
@@ -16630,12 +16625,11 @@ slate-hyperscript@0.77.0:
   dependencies:
     is-plain-object "^5.0.0"
 
-slate-react@0.90.0:
-  version "0.90.0"
-  resolved "https://registry.yarnpkg.com/slate-react/-/slate-react-0.90.0.tgz#956f7b19913bc8ea81e162cef5efc6ee5f3a9e95"
-  integrity sha512-z6pGd6jjU5VazLxlDi6zL3a6yaPBPJ+A2VyIlE/h/rvDywaLYGvk0xcrA9NrK71Dr47HK5ZN2zFEZNleh6wlPA==
+slate-react@0.88.2:
+  version "0.88.2"
+  resolved "https://registry.yarnpkg.com/slate-react/-/slate-react-0.88.2.tgz#e072d54980876ec11ca057703a0e386dd290c03e"
+  integrity sha512-r06i+b7c1deP9PH69D3kJLStB2cbwryCVUGC++3phG7G3Ie+qEeJ5AZqogdxtsXd2vZaVGYKEjSASd3bTnj3tw==
   dependencies:
-    "@juggle/resize-observer" "^3.4.0"
     "@types/is-hotkey" "^0.1.1"
     "@types/lodash" "^4.14.149"
     direction "^1.0.3"
@@ -16645,10 +16639,10 @@ slate-react@0.90.0:
     scroll-into-view-if-needed "^2.2.20"
     tiny-invariant "1.0.6"
 
-slate@0.90.0:
-  version "0.90.0"
-  resolved "https://registry.yarnpkg.com/slate/-/slate-0.90.0.tgz#a21e5eae70171d435b30f9f50a92bddc3615143e"
-  integrity sha512-dv8idv0JjYyHiAJcVKf5yWKPDMTDi+PSZyfjsnquEI8VB5nmTVGjeJab06lc3o69O7aN05ROwO9/OY8mU1IUPA==
+slate@0.88.1:
+  version "0.88.1"
+  resolved "https://registry.yarnpkg.com/slate/-/slate-0.88.1.tgz#0fc20f33b7baed7ea979fa848232c336e788cc31"
+  integrity sha512-DEj9RpkNwPfdh3zbE9eGpeOVGWdS8BYQt754S0Lk6IvJXOkYaxza7WEZLZl/vnp7vloMdTe24zccyxywA3XK8g==
   dependencies:
     immer "^9.0.6"
     is-plain-object "^5.0.0"
