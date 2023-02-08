@@ -135,7 +135,7 @@
     "react-waypoint": "10.3.0",
     "react-window": "1.8.8",
     "remark-gfm": "3.0.1",
-    "remark-html": "15.0.1",
+    "remark-html": "15.0.2",
     "remark-mdx": "2.2.1",
     "remark-parse": "10.0.1",
     "sanitize-filename": "1.6.3",
