@@ -1238,21 +1238,10 @@
     "@codemirror/language" "^6.0.0"
     "@lezer/rust" "^1.0.0"
 
-"@codemirror/lang-sql@^6.0.0":
+"@codemirror/lang-sql@^6.0.0", "@codemirror/lang-sql@~6.4.0":
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/@codemirror/lang-sql/-/lang-sql-6.4.0.tgz#f9303e511fb9511884f90043e354d5df3bd4b032"
   integrity sha512-UWGK1+zc9+JtkiT+XxHByp4N6VLgLvC2x0tIudrJG26gyNtn0hWOVoB0A8kh/NABPWkKl3tLWDYf2qOBJS9Zdw==
-  dependencies:
-    "@codemirror/autocomplete" "^6.0.0"
-    "@codemirror/language" "^6.0.0"
-    "@codemirror/state" "^6.0.0"
-    "@lezer/highlight" "^1.0.0"
-    "@lezer/lr" "^1.0.0"
-
-"@codemirror/lang-sql@~6.3.0":
-  version "6.3.3"
-  resolved "https://registry.yarnpkg.com/@codemirror/lang-sql/-/lang-sql-6.3.3.tgz#3a0cad06cd5be5557850035c5f6592ea41dd21c2"
-  integrity sha512-VNsHju8500fkiDyDU8jZyGQ8M0iXU0SmfeCoCeAYkACcEFlX63BOT8311pICXyw43VYRbS23w54RgSEQmixGjQ==
   dependencies:
     "@codemirror/autocomplete" "^6.0.0"
     "@codemirror/language" "^6.0.0"
@@ -5323,10 +5312,10 @@
     "@codemirror/state" "^6.0.0"
     "@codemirror/view" "^6.0.0"
 
-"@uiw/codemirror-extensions-langs@4.19.7":
-  version "4.19.7"
-  resolved "https://registry.yarnpkg.com/@uiw/codemirror-extensions-langs/-/codemirror-extensions-langs-4.19.7.tgz#83792afb468b30847e190063d7c6cbcf556deab6"
-  integrity sha512-dqaOFrwv79y93pBIDJ41fWRxF4JP9ij/PVFi9YxHNILNN1RqdS0uDFj8VJ8aeHPM8w0dmQZUoDP3qySru+r5yA==
+"@uiw/codemirror-extensions-langs@4.19.8":
+  version "4.19.8"
+  resolved "https://registry.yarnpkg.com/@uiw/codemirror-extensions-langs/-/codemirror-extensions-langs-4.19.8.tgz#bdec7e4f6bf95ec63e2583beeb276bb0a0e33c57"
+  integrity sha512-AUD1YvbIEEGEier9xZvGCVmT8ozAh+nNuiIXdZh0VV3JmaoyJFI6p0V3AgIUTgIzQlpbY5lfcv/Y5ihwGVh2NQ==
   dependencies:
     "@codemirror/lang-cpp" "~6.0.0"
     "@codemirror/lang-html" "~6.4.0"
@@ -5338,7 +5327,7 @@
     "@codemirror/lang-php" "~6.0.0"
     "@codemirror/lang-python" "~6.1.0"
     "@codemirror/lang-rust" "~6.0.0"
-    "@codemirror/lang-sql" "~6.3.0"
+    "@codemirror/lang-sql" "~6.4.0"
     "@codemirror/lang-wast" "^6.0.0"
     "@codemirror/lang-xml" "~6.0.0"
     "@codemirror/language-data" ">=6.0.0"
