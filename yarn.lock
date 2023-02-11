@@ -4864,10 +4864,10 @@
   dependencies:
     "@udecode/plate-core" "19.4.4"
 
-"@udecode/plate-headless@19.4.4":
-  version "19.4.4"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-19.4.4.tgz#af2f0f51a6e0824267059891a2bd987ee86ca98f"
-  integrity sha512-dDarUtLSjTeHmRashhXdZGEBGeMaMsJlniupshldkrc8FkTa9DSjLEOubMOkCnLXiNMBe7hDnDXNVu5kB/TEYQ==
+"@udecode/plate-headless@19.4.5":
+  version "19.4.5"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-19.4.5.tgz#7ee6ae881008f316318417fec65974687e07b581"
+  integrity sha512-5M/HcsNmRGhzIgW49JxYvgieAUj4N0mSTFhx2Lir+ILn0q8JdiYJcRpHsEoc/+GDab6OhtUokXo8YEj4s/GQyg==
   dependencies:
     "@udecode/plate-alignment" "19.4.4"
     "@udecode/plate-autoformat" "19.4.4"
@@ -4904,7 +4904,7 @@
     "@udecode/plate-serializer-docx" "19.4.4"
     "@udecode/plate-serializer-html" "19.4.4"
     "@udecode/plate-serializer-md" "19.4.4"
-    "@udecode/plate-tabbable" "19.4.3"
+    "@udecode/plate-tabbable" "19.4.5"
     "@udecode/plate-table" "19.4.4"
     "@udecode/plate-trailing-block" "19.4.4"
 
@@ -5085,10 +5085,10 @@
     "@udecode/plate-core" "19.4.4"
     clsx "^1.1.1"
 
-"@udecode/plate-tabbable@19.4.3":
-  version "19.4.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-tabbable/-/plate-tabbable-19.4.3.tgz#86527b1cbd076634d34b8589758b42fff74ec92b"
-  integrity sha512-og1OKfS66FRt7vFSJbUGFfyE5B0ltSqvjeR7Up3k+iqN888wkQVx+2QKmTUM0XJq7Xw1CX7I26wCTVRyRGSq/g==
+"@udecode/plate-tabbable@19.4.5":
+  version "19.4.5"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-tabbable/-/plate-tabbable-19.4.5.tgz#a408f839010fc1a926bbe84201b6901a5622d14f"
+  integrity sha512-14g1dlEksDva3Hqm8CvnZWUpfvLXalNjmsDQnULUGBRC1jyh2QmTnD45U5M/v61Eevr06i1sI4LC7IP1sIYjJA==
   dependencies:
     "@udecode/plate-core" "19.2.0"
     tabbable "^6.0.1"
@@ -5296,12 +5296,12 @@
     "@udecode/plate-ui-button" "19.4.4"
     react-use "^17.3.2"
 
-"@udecode/plate-ui@19.4.4":
-  version "19.4.4"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-19.4.4.tgz#447373bf5f827ec0b77a8143cdf367d1a27033a0"
-  integrity sha512-h//QjijIVeBnTJBAPM1yMpWsQ50a4EZe65L9H8hwU/3jStAyY66MRKDn57/lWBpvb+Wi4GCDccohpy/GtuKUQQ==
+"@udecode/plate-ui@19.4.5":
+  version "19.4.5"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-19.4.5.tgz#7712d33ef0e8889fbb8642d9e035c8da0ed45f6e"
+  integrity sha512-iCtL1VP7Ui7ssiYkHAUqWYYHhl2zfCpTn62CmYKBnlCudnPwRp7A4CCkC4ueHiFshQzpU83AZVV5S12+cE7fnQ==
   dependencies:
-    "@udecode/plate-headless" "19.4.4"
+    "@udecode/plate-headless" "19.4.5"
     "@udecode/plate-styled-components" "19.4.4"
     "@udecode/plate-ui-alignment" "19.4.4"
     "@udecode/plate-ui-block-quote" "19.4.4"
@@ -5323,13 +5323,13 @@
     "@udecode/plate-ui-toolbar" "19.4.4"
     use-context-selector "1.4.1"
 
-"@udecode/plate@19.4.4":
-  version "19.4.4"
-  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-19.4.4.tgz#84a0c68b87f0ac9057c913de5fb2a9646c059bad"
-  integrity sha512-hyVNAaqAAdb+LRZueYZWMFVOax76qfDa7cEgR2apK29tIAhBmwb9HNI+IZRsMCjuvMDyN6LI49Js4jTbHedGeg==
+"@udecode/plate@19.4.5":
+  version "19.4.5"
+  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-19.4.5.tgz#fcb4832499490c5dabe6eb3b23418b1ae8910eec"
+  integrity sha512-VLbrd+cm0+6iWDiVKp2Z8vHsnRnObv6MlBftYazLXF2uYAE0ohtLe2c8gR5TfX82zf6DsuoGZF7O6mA8WySBYw==
   dependencies:
-    "@udecode/plate-headless" "19.4.4"
-    "@udecode/plate-ui" "19.4.4"
+    "@udecode/plate-headless" "19.4.5"
+    "@udecode/plate-ui" "19.4.5"
 
 "@udecode/zustood@^1.1.1":
   version "1.1.3"
