@@ -1,25 +1,42 @@
-import TodayIcon from '@mui/icons-material/Today';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import formatDate from 'date-fns/format';
+import formatISO from 'date-fns/formatISO';
+import parse from 'date-fns/parse';
+import parseISO from 'date-fns/parseISO';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import formatDate from 'date-fns/format';
-import formatISO from 'date-fns/formatISO';
-import parse from 'date-fns/parse';
-import parseISO from 'date-fns/parseISO';
-import React, { useCallback, useMemo, useState } from 'react';
 
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
+import Button from '@staticcms/core/components/common/button/Button';
+import Field from '@staticcms/core/components/common/field/Field';
+import TextField from '@staticcms/core/components/common/text-field/TextField';
 
 import type { DateTimeField, TranslatedProps, WidgetControlProps } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
+import type { TextFieldProps as MuiTextFieldProps } from '@mui/material/TextField';
+import type { TextFieldProps } from '@staticcms/core/components/common/text-field/TextField';
 
 export function localToUTC(dateTime: Date, timezoneOffset: number) {
   const utcFromLocal = new Date(dateTime.getTime() - timezoneOffset);
   return utcFromLocal;
+}
+
+function convertMuiTextFieldProps(
+  { value, onChange, onClick }: MuiTextFieldProps,
+  ref: React.MutableRefObject<HTMLInputElement | null>,
+): TextFieldProps & {
+  ref: React.MutableRefObject<HTMLInputElement | null>;
+} {
+  return {
+    ref,
+    type: 'text',
+    value: value as string,
+    onChange,
+    onClick,
+  };
 }
 
 interface NowButtonProps {
@@ -27,7 +44,7 @@ interface NowButtonProps {
   disabled: boolean;
 }
 
-const NowButton: FC<TranslatedProps<NowButtonProps>> = ({ t, handleChange, disabled }) => {
+const NowButton: FC<TranslatedProps<NowButtonProps>> = ({ disabled, t, handleChange }) => {
   const handleClick = useCallback(
     (event: MouseEvent) => {
       event.stopPropagation();
@@ -37,14 +54,12 @@ const NowButton: FC<TranslatedProps<NowButtonProps>> = ({ t, handleChange, disab
   );
 
   return (
-    <div key="now-button-wrapper">
-      <Button
-        key="now-button"
-        onClick={handleClick}
-        disabled={disabled}
-        startIcon={<TodayIcon key="today-icon" />}
-        variant="outlined"
-      >
+    <div
+      key="now-button-wrapper"
+      className="absolute inset-y-1 right-3 flex items-center
+    "
+    >
+      <Button key="now-button" onClick={handleClick} disabled={disabled} variant="outlined">
         {t('editor.editorWidgets.datetime.now')}
       </Button>
     </div>
@@ -57,9 +72,19 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
   value,
   t,
   isDisabled,
+  errors,
   onChange,
-  hasErrors,
 }) => {
+  const ref = useRef<HTMLInputElement | null>(null);
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = useCallback(() => {
+    setOpen(true);
+  }, []);
+  const handleClose = useCallback(() => {
+    setOpen(false);
+  }, []);
+
   const { format, dateFormat, timeFormat } = useMemo(() => {
     const format = field.format;
 
@@ -162,25 +187,20 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
           inputFormat={inputFormat}
           label={label}
           value={inputDate}
-          onChange={handleChange}
           disabled={isDisabled}
-          renderInput={params => (
-            <TextField
-              key="mobile-date-input"
-              {...params}
-              error={hasErrors}
-              fullWidth
-              InputProps={{
-                endAdornment: (
-                  <NowButton
-                    key="mobile-date-now"
-                    t={t}
-                    handleChange={v => handleChange(v)}
-                    disabled={isDisabled}
-                  />
-                ),
-              }}
-            />
+          onChange={handleChange}
+          onOpen={handleOpen}
+          onClose={handleClose}
+          renderInput={props => (
+            <>
+              <TextField key="mobile-date-input" {...convertMuiTextFieldProps(props, ref)} />
+              <NowButton
+                key="mobile-date-now"
+                t={t}
+                handleChange={v => handleChange(v)}
+                disabled={isDisabled}
+              />
+            </>
           )}
         />
       );
@@ -193,25 +213,20 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
           label={label}
           inputFormat={inputFormat}
           value={inputDate}
-          onChange={handleChange}
           disabled={isDisabled}
-          renderInput={params => (
-            <TextField
-              key="time-input"
-              {...params}
-              error={hasErrors}
-              fullWidth
-              InputProps={{
-                endAdornment: (
-                  <NowButton
-                    key="time-now"
-                    t={t}
-                    handleChange={v => handleChange(v)}
-                    disabled={isDisabled}
-                  />
-                ),
-              }}
-            />
+          onChange={handleChange}
+          onOpen={handleOpen}
+          onClose={handleClose}
+          renderInput={props => (
+            <>
+              <TextField key="mobile-time-input" {...convertMuiTextFieldProps(props, ref)} />
+              <NowButton
+                key="mobile-date-now"
+                t={t}
+                handleChange={v => handleChange(v)}
+                disabled={isDisabled}
+              />
+            </>
           )}
         />
       );
@@ -223,25 +238,20 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
         inputFormat={inputFormat}
         label={label}
         value={inputDate}
-        onChange={handleChange}
         disabled={isDisabled}
-        renderInput={params => (
-          <TextField
-            key="mobile-date-time-input"
-            {...params}
-            error={hasErrors}
-            fullWidth
-            InputProps={{
-              endAdornment: (
-                <NowButton
-                  key="mobile-date-time-now"
-                  t={t}
-                  handleChange={v => handleChange(v)}
-                  disabled={isDisabled}
-                />
-              ),
-            }}
-          />
+        onChange={handleChange}
+        onOpen={handleOpen}
+        onClose={handleClose}
+        renderInput={props => (
+          <>
+            <TextField key="mobile-date-time-input" {...convertMuiTextFieldProps(props, ref)} />
+            <NowButton
+              key="mobile-date-now"
+              t={t}
+              handleChange={v => handleChange(v)}
+              disabled={isDisabled}
+            />
+          </>
         )}
       />
     );
@@ -250,7 +260,8 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
     dateValue,
     field.picker_utc,
     handleChange,
-    hasErrors,
+    handleClose,
+    handleOpen,
     inputFormat,
     isDisabled,
     label,
@@ -260,9 +271,11 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
   ]);
 
   return (
-    <LocalizationProvider key="localization-provider" dateAdapter={AdapterDateFns}>
-      {dateTimePicker}
-    </LocalizationProvider>
+    <Field inputRef={!open ? ref : undefined} label={label} errors={errors}>
+      <LocalizationProvider key="localization-provider" dateAdapter={AdapterDateFns}>
+        {dateTimePicker}
+      </LocalizationProvider>
+    </Field>
   );
 };
 

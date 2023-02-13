@@ -2,10 +2,11 @@ import React, { forwardRef } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
 
-import type { ChangeEventHandler } from 'react';
+import type { ChangeEventHandler, MouseEventHandler } from 'react';
 
 export interface BaseTextFieldProps {
-  onChange: ChangeEventHandler<HTMLInputElement>;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+  onClick?: MouseEventHandler<HTMLInputElement>;
 }
 
 export interface NumberTextFieldProps extends BaseTextFieldProps {

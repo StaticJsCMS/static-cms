@@ -52,7 +52,8 @@ const Field: FC<FieldProps> = ({
   const rootClassNames = useMemo(
     () =>
       classNames(
-        `flex
+        `relative
+        flex
         flex-col
         border-b
         border-slate-400
