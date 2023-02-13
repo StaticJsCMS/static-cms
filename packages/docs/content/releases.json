@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "date": "2023-01-25T15:26:00.000Z",
+      "version": "v1.2.0",
+      "description": "Custom collection card templates."
+    },
+    {
+      "date": "2023-01-18T15:44:00.000Z",
+      "version": "v1.1.0",
+      "description": "Gitea backend beta support. Side by side i18n editing."
+    },
+    {
       "date": "2023-01-17T10:02:00.000Z",
       "version": "v1.0.0",
       "description": "The first major release of Static CMS with an all-new UI, revamped documentation and much more."
