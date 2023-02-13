@@ -25,18 +25,19 @@ export function localToUTC(dateTime: Date, timezoneOffset: number) {
 }
 
 function convertMuiTextFieldProps(
-  { inputProps, onChange, onClick }: MuiTextFieldProps,
+  { inputProps, onClick }: MuiTextFieldProps,
   ref: React.MutableRefObject<HTMLInputElement | null>,
 ): TextFieldProps & {
   ref: React.MutableRefObject<HTMLInputElement | null>;
 } {
-  const value = inputProps?.value ?? '';
+  const value: string = inputProps?.value ?? '';
 
   return {
     ref,
     type: 'text',
-    value: value as string,
-    onChange,
+    value,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    onChange: () => {},
     onClick,
   };
 }
@@ -61,7 +62,13 @@ const NowButton: FC<TranslatedProps<NowButtonProps>> = ({ disabled, t, handleCha
       className="absolute inset-y-1 right-3 flex items-center
     "
     >
-      <Button key="now-button" onClick={handleClick} disabled={disabled} variant="outlined">
+      <Button
+        key="now-button"
+        data-testid="datetime-now"
+        onClick={handleClick}
+        disabled={disabled}
+        variant="outlined"
+      >
         {t('editor.editorWidgets.datetime.now')}
       </Button>
     </div>
@@ -195,7 +202,11 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
           onClose={handleClose}
           renderInput={props => (
             <>
-              <TextField key="mobile-date-input" {...convertMuiTextFieldProps(props, ref)} />
+              <TextField
+                key="mobile-date-input"
+                data-testId="date-input"
+                {...convertMuiTextFieldProps(props, ref)}
+              />
               <NowButton
                 key="mobile-date-now"
                 t={t}
@@ -221,7 +232,11 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
           onClose={handleClose}
           renderInput={props => (
             <>
-              <TextField key="mobile-time-input" {...convertMuiTextFieldProps(props, ref)} />
+              <TextField
+                key="mobile-time-input"
+                data-testId="time-input"
+                {...convertMuiTextFieldProps(props, ref)}
+              />
               <NowButton
                 key="mobile-date-now"
                 t={t}
@@ -246,7 +261,11 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
         onClose={handleClose}
         renderInput={props => (
           <>
-            <TextField key="mobile-date-time-input" {...convertMuiTextFieldProps(props, ref)} />
+            <TextField
+              key="mobile-date-time-input"
+              data-testId="date-time-input"
+              {...convertMuiTextFieldProps(props, ref)}
+            />
             <NowButton
               key="mobile-date-now"
               t={t}

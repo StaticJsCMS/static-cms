@@ -14,6 +14,7 @@ export interface BaseBaseProps {
   children: ReactNode | ReactNode[];
   startIcon?: FC<{ className?: string }>;
   endIcon?: FC<{ className?: string }>;
+  'data-testid'?: string;
 }
 
 export interface ButtonButtonProps extends BaseBaseProps {
@@ -39,6 +40,7 @@ const Button = ({
   className,
   startIcon: StartIcon,
   endIcon: EndIcon,
+  'data-testid': dataTestId,
   ...otherProps
 }: ButtonProps) => {
   const buttonClassName = useButtonClassName(variant, color, rounded);
@@ -61,7 +63,7 @@ const Button = ({
 
   if ('to' in otherProps) {
     return (
-      <Link to={otherProps.to} className={buttonClassNames}>
+      <Link to={otherProps.to} data-testid={dataTestId} className={buttonClassNames}>
         {content}
       </Link>
     );
@@ -69,7 +71,13 @@ const Button = ({
 
   if ('href' in otherProps) {
     return (
-      <a href={otherProps.href} className={buttonClassNames} target="_blank" rel="noreferrer">
+      <a
+        href={otherProps.href}
+        data-testid={dataTestId}
+        className={buttonClassNames}
+        target="_blank"
+        rel="noreferrer"
+      >
         {content}
       </a>
     );
@@ -77,9 +85,10 @@ const Button = ({
 
   return (
     <button
+      data-testid={dataTestId}
+      className={buttonClassNames}
       disabled={otherProps.disabled}
       onClick={otherProps.onClick}
-      className={buttonClassNames}
     >
       {content}
     </button>

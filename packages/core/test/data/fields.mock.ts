@@ -20,6 +20,18 @@ export const mockDateTimeField: DateTimeField = {
   widget: 'datetime',
 };
 
+export const mockDateField: DateTimeField = {
+  label: 'Date',
+  name: 'mock_date',
+  widget: 'datetime',
+};
+
+export const mockTimeField: DateTimeField = {
+  label: 'Time',
+  name: 'mock_time',
+  widget: 'datetime',
+};
+
 export const mockMarkdownField: MarkdownField = {
   label: 'Body',
   name: 'body',

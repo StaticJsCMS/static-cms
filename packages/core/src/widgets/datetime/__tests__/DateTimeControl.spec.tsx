@@ -29,5 +29,8 @@ describe(DateTimeControl.name, () => {
     // Date Time Widget uses default label layout, with bottom padding on field
     expect(label).toHaveClass('px-3', 'pt-3');
     expect(field).toHaveClass('pb-3');
+
+    expect(getByTestId('datetime-now')).toBeInTheDocument();
+    expect(getByTestId('date-time-input')).toBeInTheDocument();
   });
 });
