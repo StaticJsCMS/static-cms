@@ -25,11 +25,14 @@ export function localToUTC(dateTime: Date, timezoneOffset: number) {
 }
 
 function convertMuiTextFieldProps(
-  { value, onChange, onClick }: MuiTextFieldProps,
+  { inputProps, onChange, onClick, ...other }: MuiTextFieldProps,
   ref: React.MutableRefObject<HTMLInputElement | null>,
 ): TextFieldProps & {
   ref: React.MutableRefObject<HTMLInputElement | null>;
 } {
+  const value = inputProps?.value ?? '';
+  console.log(value, other);
+
   return {
     ref,
     type: 'text',

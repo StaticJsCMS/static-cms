@@ -5,6 +5,8 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import type { ChangeEventHandler, MouseEventHandler } from 'react';
 
 export interface BaseTextFieldProps {
+  readonly?: boolean;
+  disabled?: boolean;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onClick?: MouseEventHandler<HTMLInputElement>;
 }
