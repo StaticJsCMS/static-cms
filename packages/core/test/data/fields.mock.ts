@@ -1,5 +1,6 @@
 import type {
   BooleanField,
+  DateTimeField,
   MarkdownField,
   NumberField,
   RelationField,
@@ -11,6 +12,12 @@ export const mockBooleanField: BooleanField = {
   label: 'Boolean',
   name: 'mock_boolean',
   widget: 'boolean',
+};
+
+export const mockDateTimeField: DateTimeField = {
+  label: 'DateTime',
+  name: 'mock_datetime',
+  widget: 'datetime',
 };
 
 export const mockMarkdownField: MarkdownField = {
