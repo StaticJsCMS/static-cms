@@ -1,7 +1,7 @@
-import { red } from '@mui/material/colors';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
+
+import Field from '@staticcms/core/components/common/field/Field';
+import Switch from '@staticcms/core/components/common/switch/Switch';
 
 import type { BooleanField, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC } from 'react';
@@ -10,9 +10,10 @@ const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
   value,
   label,
   onChange,
-  hasErrors,
+  errors,
 }) => {
-  const [internalValue, setInternalValue] = useState(value);
+  const [internalValue, setInternalValue] = useState(value ?? false);
+  const ref = useRef<HTMLInputElement | null>(null);
 
   const handleChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -23,15 +24,9 @@ const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
   );
 
   return (
-    <FormControlLabel
-      key="boolean-field-label"
-      control={
-        <Switch key="boolean-input" checked={internalValue ?? false} onChange={handleChange} />
-      }
-      label={label}
-      labelPlacement="start"
-      sx={{ marginLeft: '4px', color: hasErrors ? red[500] : undefined }}
-    />
+    <Field inputRef={ref} label={label} errors={errors} variant="inline" cursor="pointer">
+      <Switch ref={ref} value={internalValue} onChange={handleChange} />
+    </Field>
   );
 };
 

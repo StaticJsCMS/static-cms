@@ -1,12 +1,9 @@
-import { styled } from '@mui/material/styles';
 import partial from 'lodash/partial';
 import React, { useCallback, useMemo, useState } from 'react';
 
-import EditorControl from '@staticcms/core/components/Editor/EditorControlPane/EditorControl';
+import EditorControl from '@staticcms/core/components/editor/EditorControlPane/EditorControl';
 import ListItemTopBar from '@staticcms/core/components/UI/ListItemTopBar';
 import Outline from '@staticcms/core/components/UI/Outline';
-import { colors } from '@staticcms/core/components/UI/styles';
-import transientOptions from '@staticcms/core/lib/util/transientOptions';
 import {
   addFileTemplateFields,
   compileStringTemplate,
@@ -25,36 +22,6 @@ import type {
   WidgetControlProps,
 } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
-
-const StyledListItem = styled('div')`
-  position: relative;
-`;
-
-const StyledListItemTopBar = styled(ListItemTopBar)`
-  background-color: ${colors.textFieldBorder};
-`;
-
-interface StyledObjectFieldWrapperProps {
-  $collapsed: boolean;
-}
-
-const StyledObjectFieldWrapper = styled(
-  'div',
-  transientOptions,
-)<StyledObjectFieldWrapperProps>(
-  ({ $collapsed }) => `
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    ${
-      $collapsed
-        ? `
-          display: none;
-        `
-        : ''
-    }
-  `,
-);
 
 function handleSummary(summary: string, entry: Entry, label: string, item: ValueOrNestedValue) {
   if (typeof item === 'object' && !Array.isArray(item)) {
@@ -211,9 +178,9 @@ const ListItem: FC<ListItemProps> = ({
   }, [field.fields, value]);
 
   return (
-    <StyledListItem key="sortable-list-item">
+    <div key="sortable-list-item">
       <>
-        <StyledListItemTopBar
+        <ListItemTopBar
           key="list-item-top-bar"
           collapsed={collapsed}
           onCollapseToggle={handleCollapseToggle}
@@ -223,7 +190,8 @@ const ListItem: FC<ListItemProps> = ({
           isVariableTypesList={valueType === ListValueType.MIXED}
           listeners={listeners}
         />
-        <StyledObjectFieldWrapper $collapsed={collapsed}>
+        <div>
+          {/* TODO $collapsed={collapsed} */}
           <EditorControl
             key={`control-${id}`}
             field={objectField}
@@ -239,10 +207,10 @@ const ListItem: FC<ListItemProps> = ({
             i18n={i18n}
             forList={true}
           />
-        </StyledObjectFieldWrapper>
+        </div>
         <Outline key="outline" />
       </>
-    </StyledListItem>
+    </div>
   );
 };
 

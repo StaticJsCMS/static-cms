@@ -11,7 +11,6 @@ import type {
   Entry,
   EntryData,
   Field,
-  GetAssetFunction,
   InferredField,
   ListField,
   RenderedField,
@@ -33,7 +32,6 @@ export default function getWidgetFor(
   fields: Field[],
   entry: Entry,
   inferredFields: Record<string, InferredField>,
-  getAsset: GetAssetFunction,
   widgetFields: Field[] = fields,
   values: EntryData = entry.data,
   idx: number | null = null,
@@ -57,7 +55,6 @@ export default function getWidgetFor(
         fields,
         entry,
         inferredFields,
-        getAsset,
         field.fields,
         value as EntryData | EntryData[],
       ),
@@ -71,7 +68,6 @@ export default function getWidgetFor(
         field,
         entry,
         inferredFields,
-        getAsset,
         value as EntryData[],
       ),
     };
@@ -104,7 +100,7 @@ export default function getWidgetFor(
   }
 
   return renderedValue
-    ? getWidget(config, fieldWithWidgets, collection, renderedValue, entry, getAsset, idx)
+    ? getWidget(config, fieldWithWidgets, collection, renderedValue, entry, idx)
     : null;
 }
 
@@ -117,7 +113,6 @@ function getNestedWidgets(
   fields: Field[],
   entry: Entry,
   inferredFields: Record<string, InferredField>,
-  getAsset: GetAssetFunction,
   widgetFields: Field[],
   values: EntryData | EntryData[],
 ) {
@@ -130,7 +125,6 @@ function getNestedWidgets(
         fields,
         entry,
         inferredFields,
-        getAsset,
         widgetFields,
         value,
       ),
@@ -144,7 +138,6 @@ function getNestedWidgets(
     fields,
     entry,
     inferredFields,
-    getAsset,
     widgetFields,
     values,
   );
@@ -159,7 +152,6 @@ function getTypedNestedWidgets(
   field: ListField,
   entry: Entry,
   inferredFields: Record<string, InferredField>,
-  getAsset: GetAssetFunction,
   values: EntryData[],
 ) {
   return values
@@ -175,7 +167,6 @@ function getTypedNestedWidgets(
         itemType.fields,
         entry,
         inferredFields,
-        getAsset,
         itemType.fields,
         value,
         index,
@@ -193,7 +184,6 @@ function widgetsForNestedFields(
   fields: Field[],
   entry: Entry,
   inferredFields: Record<string, InferredField>,
-  getAsset: GetAssetFunction,
   widgetFields: Field[],
   values: EntryData,
   idx: number | null = null,
@@ -207,7 +197,6 @@ function widgetsForNestedFields(
         fields,
         entry,
         inferredFields,
-        getAsset,
         widgetFields,
         values,
         idx,
@@ -222,7 +211,6 @@ function getWidget(
   collection: Collection,
   value: ValueOrNestedValue | ReactNode,
   entry: Entry,
-  getAsset: GetAssetFunction,
   idx: number | null = null,
 ) {
   if (!field.widget) {
@@ -244,7 +232,6 @@ function getWidget(
       previewComponent={widget.preview as WidgetPreviewComponent}
       key={key}
       field={field as RenderedField}
-      getAsset={getAsset}
       config={config}
       collection={collection}
       value={

@@ -4,44 +4,10 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { styled } from '@mui/material/styles';
 import React, { useCallback, useState } from 'react';
-
-import { transientOptions } from '@staticcms/core/lib';
-import { colors, colorsRaw, transitions } from './styles';
 
 import type { ObjectField, TranslatedProps } from '@staticcms/core/interface';
 import type { MouseEvent, ReactNode } from 'react';
-
-const TopBarContainer = styled('div')`
-  position: relative;
-  align-items: center;
-  background-color: ${colors.textFieldBorder};
-  display: flex;
-  justify-content: space-between;
-  padding: 2px 8px;
-`;
-
-interface ExpandButtonContainerProps {
-  $hasError: boolean;
-}
-
-const ExpandButtonContainer = styled(
-  'div',
-  transientOptions,
-)<ExpandButtonContainerProps>(
-  ({ $hasError }) => `
-    display: flex;
-    align-items: center;
-    color: rgba(0, 0, 0, 0.6);
-    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
-    font-weight: 400;
-    font-size: 1rem;
-    line-height: 1.4375em;
-    letter-spacing: 0.00938em;
-    ${$hasError ? `color: ${colorsRaw.red}` : ''}
-  `,
-);
 
 export interface ObjectWidgetTopBarProps {
   allowAdd?: boolean;
@@ -65,7 +31,7 @@ const ObjectWidgetTopBar = ({
   collapsed,
   heading,
   label,
-  hasError = false,
+  // TODO hasError = false,
   t,
   testId,
 }: TranslatedProps<ObjectWidgetTopBarProps>) => {
@@ -150,21 +116,22 @@ const ObjectWidgetTopBar = ({
   }, [allowAdd, types, renderTypesDropdown, renderAddButton]);
 
   return (
-    <TopBarContainer data-testid={testId}>
-      <ExpandButtonContainer $hasError={hasError}>
+    <div data-testid={testId}>
+      <div>
+        {/* TODO $hasError={hasError} */}
         <IconButton onClick={onCollapseToggle} data-testid="expand-button">
           <ExpandMoreIcon
             sx={{
               transform: `rotateZ(${collapsed ? '-90deg' : '0deg'})`,
-              transition: `transform ${transitions.main};`,
-              color: hasError ? colorsRaw.red : undefined,
+              // TODO transition: `transform ${transitions.main};`,
+              // TODO color: hasError ? colorsRaw.red : undefined,
             }}
           />
         </IconButton>
         {heading}
-      </ExpandButtonContainer>
+      </div>
       {renderAddUI()}
-    </TopBarContainer>
+    </div>
   );
 };
 

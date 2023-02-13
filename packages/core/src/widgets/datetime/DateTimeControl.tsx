@@ -1,6 +1,5 @@
 import TodayIcon from '@mui/icons-material/Today';
 import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -23,10 +22,6 @@ export function localToUTC(dateTime: Date, timezoneOffset: number) {
   return utcFromLocal;
 }
 
-const StyledNowButton = styled('div')`
-  width: fit-content;
-`;
-
 interface NowButtonProps {
   handleChange: (value: Date) => void;
   disabled: boolean;
@@ -42,7 +37,7 @@ const NowButton: FC<TranslatedProps<NowButtonProps>> = ({ t, handleChange, disab
   );
 
   return (
-    <StyledNowButton key="now-button-wrapper">
+    <div key="now-button-wrapper">
       <Button
         key="now-button"
         onClick={handleClick}
@@ -52,7 +47,7 @@ const NowButton: FC<TranslatedProps<NowButtonProps>> = ({ t, handleChange, disab
       >
         {t('editor.editorWidgets.datetime.now')}
       </Button>
-    </StyledNowButton>
+    </div>
   );
 };
 

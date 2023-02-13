@@ -1,4 +1,3 @@
-import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
@@ -9,7 +8,6 @@ import {
   groupByField as groupByFieldAction,
   sortByField as sortByFieldAction,
 } from '@staticcms/core/actions/entries';
-import { components } from '@staticcms/core/components/UI/styles';
 import { SORT_DIRECTION_ASCENDING } from '@staticcms/core/constants';
 import { getNewEntryUrl } from '@staticcms/core/lib/urlHelper';
 import {
@@ -24,10 +22,9 @@ import {
   selectViewStyle,
 } from '@staticcms/core/reducers/selectors/entries';
 import CollectionControls from './CollectionControls';
-import CollectionTop from './CollectionTop';
+import CollectionHeader from './CollectionHeader';
 import EntriesCollection from './Entries/EntriesCollection';
 import EntriesSearch from './Entries/EntriesSearch';
-import Sidebar from './Sidebar';
 
 import type {
   Collection,
@@ -40,24 +37,11 @@ import type { RootState } from '@staticcms/core/store';
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
 
-const CollectionMain = styled('main')`
-  width: 100%;
-`;
-
-const SearchResultContainer = styled('div')`
-  ${components.cardTop};
-  margin-bottom: 22px;
-`;
-
-const SearchResultHeading = styled('h1')`
-  ${components.cardTopHeading};
-`;
-
 const CollectionView = ({
   collection,
   collections,
   collectionName,
-  isSearchEnabled,
+  // TODO isSearchEnabled,
   isSearchResults,
   isSingleSearchResult,
   searchTerm,
@@ -206,48 +190,37 @@ const CollectionView = ({
   }, [collection, onSortClick, prevCollection, readyToLoad, sort]);
 
   return (
-    <>
-      <Sidebar
-        collections={collections}
-        collection={(!isSearchResults || isSingleSearchResult) && collection}
-        isSearchEnabled={isSearchEnabled}
-        searchTerm={searchTerm}
-        filterTerm={filterTerm}
-      />
-      <CollectionMain>
-        <>
-          {isSearchResults ? (
-            <>
-              <SearchResultContainer>
-                <SearchResultHeading>
-                  {t(searchResultKey, { searchTerm, collection: collection.label })}
-                </SearchResultHeading>
-              </SearchResultContainer>
-              <CollectionControls viewStyle={viewStyle} onChangeViewStyle={changeViewStyle} t={t} />
-            </>
-          ) : (
-            <>
-              <CollectionTop collection={collection} newEntryUrl={newEntryUrl} />
-              <CollectionControls
-                viewStyle={viewStyle}
-                onChangeViewStyle={changeViewStyle}
-                sortableFields={sortableFields}
-                onSortClick={onSortClick}
-                sort={sort}
-                viewFilters={viewFilters ?? []}
-                viewGroups={viewGroups ?? []}
-                t={t}
-                onFilterClick={onFilterClick}
-                onGroupClick={onGroupClick}
-                filter={filter}
-                group={group}
-              />
-            </>
-          )}
-          {entries}
-        </>
-      </CollectionMain>
-    </>
+    <div className="flex flex-col">
+      <div className="flex items-center mb-4">
+        {isSearchResults ? (
+          <>
+            <div>
+              <div>{t(searchResultKey, { searchTerm, collection: collection.label })}</div>
+            </div>
+            <CollectionControls viewStyle={viewStyle} onChangeViewStyle={changeViewStyle} t={t} />
+          </>
+        ) : (
+          <>
+            <CollectionHeader collection={collection} newEntryUrl={newEntryUrl} />
+            <CollectionControls
+              viewStyle={viewStyle}
+              onChangeViewStyle={changeViewStyle}
+              sortableFields={sortableFields}
+              onSortClick={onSortClick}
+              sort={sort}
+              viewFilters={viewFilters ?? []}
+              viewGroups={viewGroups ?? []}
+              t={t}
+              onFilterClick={onFilterClick}
+              onGroupClick={onGroupClick}
+              filter={filter}
+              group={group}
+            />
+          </>
+        )}
+      </div>
+      {entries}
+    </div>
   );
 };
 

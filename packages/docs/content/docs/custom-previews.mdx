@@ -12,8 +12,6 @@ The `registerPreviewTemplate` and `registerPreviewCard` require you to provide a
 
 However, although possible, it may be cumbersome or even impractical to add a React build phase. For this reason, Static CMS exposes some constructs globally to allow you to create components inline: `h` (alias for React.createElement) as well some basic hooks (`useState`, `useMemo`, `useEffect`, `useCallback`).
 
-**NOTE**: `createClass` is still provided, allowing for the creation of react class components. However it has now been deprecated and will be removed in `v2.0.0`.
-
 ## Editor Preview
 
 `registerPreviewTemplate` allows you to create a template that overrides the entire editor preview for a given collection.
@@ -34,7 +32,6 @@ The following parameters will be passed to your `react_component` during render:
 | fields     | object         | The fields for the given collection                                                                  |
 | document   | Document       | The document object the preview is within. If rendered with a frame, it will be the frame's document |
 | window     | Window         | The window object the preview is within. If rendered with a frame, it will be the frame's window     |
-| getAsset   | Async function | __Deprecated__ Function that given a url returns (as a promise) a loaded asset                                      |
 | widgetFor  | Function       | Given a field name, returns the rendered preview of that field's widget and value                    |
 | widgetsFor | Function       | Given a field name, returns the rendered previews of that field's nested child widgets and values    |
 

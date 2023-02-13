@@ -1,8 +1,6 @@
 import React, { useCallback } from 'react';
 
-import { getAsset } from '@staticcms/core/actions/media';
 import { useInferredFields } from '@staticcms/core/lib/util/collection.util';
-import { useAppDispatch } from '@staticcms/core/store/hooks';
 import getWidgetFor from './widgetFor';
 
 import type {
@@ -23,28 +21,19 @@ export default function useWidgetsFor(
   fields: Field[],
   entry: Entry,
 ): {
-  widgetFor: WidgetFor<EntryData>;
-  widgetsFor: WidgetsFor<EntryData>;
+  widgetFor: WidgetFor;
+  widgetsFor: WidgetsFor;
 } {
   const inferredFields = useInferredFields(collection);
-  const dispatch = useAppDispatch();
-
-  const handleGetAsset = useCallback(
-    (path: string, field?: Field) => {
-      return dispatch(getAsset(collection, entry, path, field));
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [collection],
-  );
 
   const widgetFor = useCallback(
     (name: string): ReturnType<WidgetFor<EntryData>> => {
       if (!config) {
         return null;
       }
-      return getWidgetFor(config, collection, name, fields, entry, inferredFields, handleGetAsset);
+      return getWidgetFor(config, collection, name, fields, entry, inferredFields);
     },
-    [collection, config, entry, fields, handleGetAsset, inferredFields],
+    [collection, config, entry, fields, inferredFields],
   );
 
   /**
@@ -94,7 +83,6 @@ export default function useWidgetsFor(
                     fields,
                     entry,
                     inferredFields,
-                    handleGetAsset,
                     nestedFields,
                     val,
                     index,
@@ -126,7 +114,6 @@ export default function useWidgetsFor(
                 fields,
                 entry,
                 inferredFields,
-                handleGetAsset,
                 nestedFields,
                 value,
                 index,
@@ -137,11 +124,11 @@ export default function useWidgetsFor(
         }, {} as Record<string, ReactNode>),
       };
     },
-    [collection, config, entry, fields, handleGetAsset, inferredFields],
+    [collection, config, entry, fields, inferredFields],
   );
 
   return {
-    widgetFor,
-    widgetsFor,
+    widgetFor: widgetFor as WidgetFor,
+    widgetsFor: widgetsFor as WidgetsFor,
   };
 }

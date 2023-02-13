@@ -5,7 +5,7 @@ import { ScrollSyncPane } from 'react-scroll-sync';
 import EditorPreviewContent from './EditorPreviewContent';
 
 import type {
-  EntryData,
+  ObjectValue,
   TemplatePreviewComponent,
   TemplatePreviewProps,
   UnknownField,
@@ -13,8 +13,8 @@ import type {
 import type { FC } from 'react';
 
 interface PreviewFrameContentProps {
-  previewComponent: TemplatePreviewComponent<EntryData, UnknownField>;
-  previewProps: Omit<TemplatePreviewProps<EntryData, UnknownField>, 'document' | 'window'>;
+  previewComponent: TemplatePreviewComponent<ObjectValue, UnknownField>;
+  previewProps: Omit<TemplatePreviewProps<ObjectValue, UnknownField>, 'document' | 'window'>;
 }
 
 const PreviewFrameContent: FC<PreviewFrameContentProps> = ({ previewComponent, previewProps }) => {

@@ -9,7 +9,7 @@ import type {
 } from 'react';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
 import type { MediaFile as BackendMediaFile } from './backend';
-import type { EditorControlProps } from './components/Editor/EditorControlPane/EditorControl';
+import type { EditorControlProps } from './components/editor/EditorControlPane/EditorControl';
 import type {
   SORT_DIRECTION_ASCENDING,
   SORT_DIRECTION_DESCENDING,
@@ -173,6 +173,7 @@ export interface BaseCollection {
   icon?: string;
   isFetching?: boolean;
   summary?: string;
+  summary_fields?: string[];
   filter?: FilterRule;
   label_singular?: string;
   label: string;
@@ -234,26 +235,14 @@ export interface DisplayURLState {
 
 export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
-/**
- * @deprecated Should use `useMediaAsset` React hook instead
- */
-export type GetAssetFunction<F extends BaseField = UnknownField> = (
-  path: string,
-  field?: F,
-) => Promise<AssetProxy>;
-
-export interface WidgetControlProps<T, F extends BaseField = UnknownField> {
+export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = ObjectValue> {
   collection: Collection<F>;
   config: Config<F>;
-  entry: Entry;
+  entry: Entry<EV>;
   field: F;
   fieldsErrors: FieldsErrors;
   submitted: boolean;
   forList: boolean;
-  /**
-   * @deprecated Should use `useMediaAsset` React hook instead
-   */
-  getAsset: GetAssetFunction<F>;
   isDisabled: boolean;
   isFieldDuplicate: EditorControlProps['isFieldDuplicate'];
   isFieldHidden: EditorControlProps['isFieldHidden'];
@@ -267,6 +256,7 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField> {
   removeMediaControl: EditorControlProps['removeMediaControl'];
   i18n: I18nSettings | undefined;
   hasErrors: boolean;
+  errors: FieldError[];
   path: string;
   query: EditorControlProps['query'];
   t: t;
@@ -278,10 +268,6 @@ export interface WidgetPreviewProps<T = unknown, F extends BaseField = UnknownFi
   collection: Collection<F>;
   entry: Entry;
   field: RenderedField<F>;
-  /**
-   * @deprecated Should use `useMediaAsset` React hook instead
-   */
-  getAsset: GetAssetFunction<F>;
   value: T | undefined | null;
 }
 
@@ -290,9 +276,9 @@ export type WidgetPreviewComponent<T = unknown, F extends BaseField = UnknownFie
   | ReactElement<unknown, string | JSXElementConstructor<any>>
   | ComponentType<WidgetPreviewProps<T, F>>;
 
-export type WidgetFor<P = EntryData> = <K extends keyof P>(name: K) => ReactNode;
+export type WidgetFor<P = ObjectValue> = <K extends keyof P>(name: K) => ReactNode;
 
-export type WidgetsFor<P = EntryData> = <K extends keyof P>(
+export type WidgetsFor<P = ObjectValue> = <K extends keyof P>(
   name: K,
 ) => P[K] extends Array<infer U>
   ? {
@@ -304,22 +290,19 @@ export type WidgetsFor<P = EntryData> = <K extends keyof P>(
       widgets: Record<keyof P[K], ReactNode>;
     };
 
-export interface TemplatePreviewProps<T = EntryData, EF extends BaseField = UnknownField> {
+export interface TemplatePreviewProps<T = ObjectValue, EF extends BaseField = UnknownField> {
   collection: Collection<EF>;
   fields: Field<EF>[];
   entry: Entry<T>;
   document: Document | undefined | null;
   window: Window | undefined | null;
-  /**
-   * @deprecated Should use `useMediaAsset` React hook instead
-   */
-  getAsset: GetAssetFunction<Field<EF>>;
   widgetFor: WidgetFor<T>;
   widgetsFor: WidgetsFor<T>;
+  theme: 'dark' | 'light';
 }
 
 export type TemplatePreviewComponent<
-  T = EntryData,
+  T = ObjectValue,
   EF extends BaseField = UnknownField,
 > = ComponentType<TemplatePreviewProps<T, EF>>;
 
@@ -327,15 +310,26 @@ export interface TemplatePreviewCardProps<T = EntryData, EF extends BaseField = 
   collection: Collection<EF>;
   fields: Field<EF>[];
   entry: Entry<T>;
-  viewStyle: 'list' | 'grid';
   widgetFor: WidgetFor<T>;
   widgetsFor: WidgetsFor<T>;
+  theme: 'dark' | 'light';
 }
 
 export type TemplatePreviewCardComponent<
   T = EntryData,
   EF extends BaseField = UnknownField,
 > = ComponentType<TemplatePreviewCardProps<T, EF>>;
+
+export interface FieldPreviewProps<T = unknown, F extends BaseField = UnknownField> {
+  collection: Collection<F>;
+  field: Field<F>;
+  value: T;
+  theme: 'dark' | 'light';
+}
+
+export type FieldPreviewComponent<T = unknown, F extends BaseField = UnknownField> = ComponentType<
+  FieldPreviewProps<T, F>
+>;
 
 export interface WidgetOptions<T = unknown, F extends BaseField = UnknownField> {
   validator?: Widget<T, F>['validator'];
@@ -513,7 +507,7 @@ export type MapWidgetType = 'Point' | 'LineString' | 'Polygon';
 
 export interface SelectWidgetOptionObject {
   label: string;
-  value: string;
+  value: string | number;
 }
 
 export type AuthScope = 'repo' | 'public_repo';
@@ -627,7 +621,7 @@ export interface NumberField extends BaseField {
   widget: 'number';
   default?: string | number;
 
-  value_type?: 'int' | 'float' | string;
+  value_type?: 'int' | 'float' | 'string';
   min?: number;
   max?: number;
 
@@ -936,4 +930,13 @@ export interface InferredField {
   defaultPreview: (value: string | boolean | number) => JSX.Element | ReactNode;
   fallbackToFirstField: boolean;
   showError: boolean;
+}
+
+export interface SvgProps {
+  className: string;
+}
+
+export interface Breadcrumb {
+  name: string;
+  to?: string;
 }

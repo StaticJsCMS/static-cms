@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box';
 import Popper from '@mui/material/Popper';
-import { styled } from '@mui/material/styles';
 import {
   ELEMENT_LINK,
   ELEMENT_TD,
@@ -32,29 +31,6 @@ import TableToolbarButtons from '../buttons/TableToolbarButtons';
 import type { Collection, Entry, MarkdownField } from '@staticcms/core/interface';
 import type { ClientRectObject } from '@udecode/plate';
 import type { FC, ReactNode } from 'react';
-
-const StyledPopperContent = styled('div')(
-  ({ theme }) => `
-    display: flex;
-    gap: 4px;
-    background: ${theme.palette.background.paper};
-    box-shadow: ${theme.shadows[8]};
-    margin-bottom: 10px;
-    padding: 6px;
-    border-radius: 4px;
-    align-items: center;
-  `,
-);
-
-const StyledDivider = styled('div')(
-  ({ theme }) => `
-    height: 18px;
-    width: 1px;
-    background: ${theme.palette.text.secondary};
-    margin: 0 4px;
-    opacity: 0.5;
-  `,
-);
 
 export interface BalloonToolbarProps {
   useMdx: boolean;
@@ -288,12 +264,12 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
         disablePortal
         tabIndex={0}
       >
-        <StyledPopperContent>
+        <div>
           {(groups.length > 0 ? groups : debouncedGroups).map((group, index) => [
-            index !== 0 ? <StyledDivider key={`balloon-toolbar-divider-${index}`} /> : null,
+            index !== 0 ? <div key={`balloon-toolbar-divider-${index}`} /> : null,
             group,
           ])}
-        </StyledPopperContent>
+        </div>
       </Popper>
     </>
   );

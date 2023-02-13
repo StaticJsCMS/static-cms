@@ -9,13 +9,14 @@ import type {
   Config,
   CustomIcon,
   Entry,
-  EntryData,
   EventData,
   EventListener,
   Field,
+  FieldPreviewComponent,
   LocalePhrasesRoot,
   MediaLibraryExternalLibrary,
   MediaLibraryOptions,
+  ObjectValue,
   PreviewStyle,
   PreviewStyleOptions,
   ShortcodeConfig,
@@ -38,8 +39,9 @@ const eventHandlers = allowedEvents.reduce((acc, e) => {
 
 interface Registry {
   backends: Record<string, BackendInitializer>;
-  templates: Record<string, TemplatePreviewComponent<EntryData>>;
-  cards: Record<string, TemplatePreviewCardComponent<EntryData>>;
+  templates: Record<string, TemplatePreviewComponent<ObjectValue>>;
+  cards: Record<string, TemplatePreviewCardComponent<ObjectValue>>;
+  fieldPreviews: Record<string, Record<string, FieldPreviewComponent>>;
   widgets: Record<string, Widget>;
   icons: Record<string, CustomIcon>;
   additionalLinks: Record<string, AdditionalLink>;
@@ -60,6 +62,7 @@ const registry: Registry = {
   backends: {},
   templates: {},
   cards: {},
+  fieldPreviews: {},
   widgets: {},
   icons: {},
   additionalLinks: {},
@@ -76,6 +79,8 @@ export default {
   getPreviewTemplate,
   registerPreviewCard,
   getPreviewCard,
+  registerFieldPreview,
+  getFieldPreview,
   registerWidget,
   getWidget,
   getWidgets,
@@ -121,22 +126,43 @@ export function getPreviewStyles() {
  * Preview Templates
  */
 export function registerPreviewTemplate<T>(name: string, component: TemplatePreviewComponent<T>) {
-  registry.templates[name] = component as TemplatePreviewComponent<EntryData>;
+  registry.templates[name] = component as TemplatePreviewComponent<ObjectValue>;
 }
 
-export function getPreviewTemplate(name: string): TemplatePreviewComponent<EntryData> {
-  return registry.templates[name];
+export function getPreviewTemplate(name: string): TemplatePreviewComponent<ObjectValue> | null {
+  return registry.templates[name] ?? null;
 }
 
 /**
  * Preview Cards
  */
 export function registerPreviewCard<T>(name: string, component: TemplatePreviewCardComponent<T>) {
-  registry.cards[name] = component as TemplatePreviewCardComponent<EntryData>;
+  registry.cards[name] = component as TemplatePreviewCardComponent<ObjectValue>;
 }
 
-export function getPreviewCard(name: string): TemplatePreviewCardComponent<EntryData> {
-  return registry.cards[name];
+export function getPreviewCard(name: string): TemplatePreviewCardComponent<ObjectValue> | null {
+  return registry.cards[name] ?? null;
+}
+
+/**
+ * Field Previews
+ */
+export function registerFieldPreview<T>(
+  collectionName: string,
+  fieldName: string,
+  component: FieldPreviewComponent<T>,
+) {
+  if (!(collectionName in registry.fieldPreviews)) {
+    registry.fieldPreviews[collectionName] = {};
+  }
+  registry.fieldPreviews[collectionName][fieldName] = component as FieldPreviewComponent;
+}
+
+export function getFieldPreview(
+  collectionName: string,
+  fieldName: string,
+): FieldPreviewComponent | null {
+  return registry.fieldPreviews[collectionName]?.[fieldName] ?? null;
 }
 
 /**

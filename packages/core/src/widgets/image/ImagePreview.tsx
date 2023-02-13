@@ -1,7 +1,5 @@
-import { styled } from '@mui/material/styles';
 import React from 'react';
 
-import WidgetPreviewContainer from '@staticcms/core/components/UI/WidgetPreviewContainer';
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 
 import type {
@@ -11,18 +9,6 @@ import type {
   WidgetPreviewProps,
 } from '@staticcms/core/interface';
 import type { FC } from 'react';
-
-interface StyledImageProps {
-  src: string;
-}
-
-const StyledImage = styled(({ src }: StyledImageProps) => (
-  <img src={src || ''} role="presentation" />
-))`
-  display: block;
-  max-width: 100%;
-  height: auto;
-`;
 
 interface ImageAssetProps {
   value: string;
@@ -34,7 +20,7 @@ interface ImageAssetProps {
 const ImageAsset: FC<ImageAssetProps> = ({ value, collection, field, entry }) => {
   const assetSource = useMediaAsset(value, collection, field, entry);
 
-  return <StyledImage src={assetSource} />;
+  return <img src={assetSource || ''} role="presentation" />;
 };
 
 const ImagePreviewContent: FC<WidgetPreviewProps<string | string[], FileOrImageField>> = ({
@@ -61,11 +47,7 @@ const ImagePreviewContent: FC<WidgetPreviewProps<string | string[], FileOrImageF
 };
 
 const ImagePreview: FC<WidgetPreviewProps<string | string[], FileOrImageField>> = props => {
-  return (
-    <WidgetPreviewContainer>
-      {props.value ? <ImagePreviewContent {...props} /> : null}
-    </WidgetPreviewContainer>
-  );
+  return <div>{props.value ? <ImagePreviewContent {...props} /> : null}</div>;
 };
 
 export default ImagePreview;

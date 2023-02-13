@@ -1,30 +1,26 @@
 import React, { useMemo } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
+import {
+  selectCollection,
+  selectCollections,
+} from '@staticcms/core/reducers/selectors/collections';
+import { useAppSelector } from '@staticcms/core/store/hooks';
 import { getDefaultPath } from '../../lib/util/collection.util';
-import MainView from '../App/MainView';
+import MainView from '../MainView';
 import Collection from './Collection';
-
-import type { Collections } from '@staticcms/core/interface';
 
 interface CollectionRouteProps {
   isSearchResults?: boolean;
   isSingleSearchResult?: boolean;
-  collections: Collections;
 }
 
-const CollectionRoute = ({
-  isSearchResults,
-  isSingleSearchResult,
-  collections,
-}: CollectionRouteProps) => {
+const CollectionRoute = ({ isSearchResults, isSingleSearchResult }: CollectionRouteProps) => {
   const { name, searchTerm, filterTerm } = useParams();
-  const collection = useMemo(() => {
-    if (!name) {
-      return false;
-    }
-    return collections[name];
-  }, [collections, name]);
+
+  const collectionSelector = useMemo(() => selectCollection(name), [name]);
+  const collection = useAppSelector(collectionSelector);
+  const collections = useAppSelector(selectCollections);
 
   const defaultPath = useMemo(() => getDefaultPath(collections), [collections]);
 
@@ -37,7 +33,7 @@ const CollectionRoute = ({
   }
 
   return (
-    <MainView>
+    <MainView breadcrumbs={[{ name: collection.label }]} showQuickCreate showLeftNav>
       <Collection
         name={name}
         searchTerm={searchTerm}

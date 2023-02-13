@@ -12,8 +12,6 @@ The `registerPreviewTemplate` requires you to provide a React component. If you 
 
 However, although possible, it may be cumbersome or even impractical to add a React build phase. For this reason, Static CMS exposes some constructs globally to allow you to create components inline: `h` (alias for React.createElement) as well some basic hooks (`useState`, `useMemo`, `useEffect`, `useCallback`).
 
-**NOTE**: `createClass` is still provided, allowing for the creation of react class components. However it has now been deprecated and will be removed in `v2.0.0`.
-
 ## Register Widget
 
 Register a custom widget.
@@ -58,7 +56,6 @@ The react component that renders the control. It receives the following props:
 | forList             | boolean                  | Specifices if the widget is within a `list` widget                                                        |
 | isFieldDuplicate    | function                 | Function that given a field configuration, returns if that field is a duplicate                           |
 | isFieldHidden       | function                 | Function that given a field configuration, returns if that field is hidden                                |
-| getAsset            | Async function           | __Deprecated__ Function that given a url returns (as a promise) a loaded asset                                           |
 | locale              | string<br />\| undefined | The current locale of the editor                                                                          |
 | mediaPaths          | object                   | Key/value object of control IDs (passed to the media library) mapping to media paths                      |
 | clearMediaControl   | function                 | Clears a control ID's value from the internal store                                                       |
@@ -107,7 +104,6 @@ The react component that renders the preview. It receives the following props:
 | collection | object                | The collection configuration for the current widget. See [Collections](/docs/collection-overview)         |
 | config     | object                | The current Static CMS config. See [configuration options](/docs/configuration-options)                   |
 | entry      | object                | Object with a `data` field that contains the current value of all widgets in the editor                   |
-| getAsset   | Async function        | __Deprecated__ Function that given a url returns (as a promise) a loaded asset                                           |
 
 ### Options
 

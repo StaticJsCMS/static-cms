@@ -2,11 +2,11 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
-import { getByTestId, render, screen } from '@testing-library/react';
+import { getByTestId, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import createControlWrapper from '@staticcms/core/lib/test-utils/ControlWrapper';
+import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 import ListControl from '../ListControl';
 
 import type { ListField } from '@staticcms/core/interface';
@@ -45,14 +45,7 @@ const multipleFieldsValue = [
   { stringInput: 'String Value 2', textInput: 'Text Value 2' },
 ];
 
-const ListControlWrapper = createControlWrapper({
-  defaultField: singletonListField,
-  control: ListControl,
-  label: 'List Control',
-  path: 'list',
-});
-
-jest.mock('@staticcms/core/components/Editor/EditorControlPane/EditorControl', () => {
+jest.mock('@staticcms/core/components/editor/EditorControlPane/EditorControl', () => {
   return jest.fn(props => {
     const { parentPath, field, value } = props;
     return (
@@ -66,15 +59,24 @@ jest.mock('@staticcms/core/components/Editor/EditorControlPane/EditorControl', (
 });
 
 describe(ListControl.name, () => {
+  const renderControl = createWidgetControlHarness(ListControl, {
+    field: singletonListField,
+    label: 'List Control',
+    path: 'list',
+  });
+
   describe('multiple field list', () => {
     it('renders empty div by default', () => {
-      render(<ListControlWrapper field={multipleFieldsListField} value={multipleFieldsValue} />);
+      renderControl({
+        field: multipleFieldsListField,
+        value: multipleFieldsValue,
+      });
       expect(screen.getByTestId('object-control-0')).not.toBeVisible();
       expect(screen.getByTestId('object-control-1')).not.toBeVisible();
     });
 
     it('renders values when opened', async () => {
-      render(<ListControlWrapper field={multipleFieldsListField} value={multipleFieldsValue} />);
+      renderControl({ field: multipleFieldsListField, value: multipleFieldsValue });
 
       const headerBar = screen.getByTestId('list-header');
 
@@ -102,15 +104,9 @@ describe(ListControl.name, () => {
     });
 
     it('outputs value as object array when adding new value', async () => {
-      const onChange = jest.fn();
-
-      render(
-        <ListControlWrapper
-          field={multipleFieldsListField}
-          value={multipleFieldsValue}
-          onChange={onChange}
-        />,
-      );
+      const {
+        props: { onChange },
+      } = renderControl({ field: multipleFieldsListField, value: multipleFieldsValue });
 
       const headerBar = screen.getByTestId('list-header');
 
@@ -129,15 +125,9 @@ describe(ListControl.name, () => {
     });
 
     it('outputs value as object array when removing existing value', async () => {
-      const onChange = jest.fn();
-
-      render(
-        <ListControlWrapper
-          field={multipleFieldsListField}
-          value={multipleFieldsValue}
-          onChange={onChange}
-        />,
-      );
+      const {
+        props: { onChange },
+      } = renderControl({ field: multipleFieldsListField, value: multipleFieldsValue });
 
       const headerBar = screen.getByTestId('list-header');
 
@@ -155,13 +145,14 @@ describe(ListControl.name, () => {
 
   describe('singleton list', () => {
     it('renders empty div by default', () => {
-      render(<ListControlWrapper value={['Value 1', 'Value 2']} />);
+      renderControl({ value: ['Value 1', 'Value 2'] });
+
       expect(screen.getByTestId('object-control-0')).not.toBeVisible();
       expect(screen.getByTestId('object-control-1')).not.toBeVisible();
     });
 
     it('renders values when opened', async () => {
-      render(<ListControlWrapper value={['Value 1', 'Value 2']} />);
+      renderControl({ value: ['Value 1', 'Value 2'] });
 
       const headerBar = screen.getByTestId('list-header');
 
@@ -187,9 +178,9 @@ describe(ListControl.name, () => {
     });
 
     it('outputs value as singleton array when adding new value', async () => {
-      const onChange = jest.fn();
-
-      render(<ListControlWrapper value={['Value 1', 'Value 2']} onChange={onChange} />);
+      const {
+        props: { onChange },
+      } = renderControl({ value: ['Value 1', 'Value 2'] });
 
       const headerBar = screen.getByTestId('list-header');
 
@@ -202,9 +193,9 @@ describe(ListControl.name, () => {
     });
 
     it('outputs value as singleton array when removing existing value', async () => {
-      const onChange = jest.fn();
-
-      render(<ListControlWrapper value={['Value 1', 'Value 2']} onChange={onChange} />);
+      const {
+        props: { onChange },
+      } = renderControl({ value: ['Value 1', 'Value 2'] });
 
       const headerBar = screen.getByTestId('list-header');
 

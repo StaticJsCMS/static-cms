@@ -1,18 +1,7 @@
 import Typography from '@mui/material/Typography';
 import React from 'react';
 
-import { colors } from './styles';
-
 import type { MouseEventHandler } from 'react';
-
-const stateColors = {
-  default: {
-    text: colors.controlLabel,
-  },
-  error: {
-    text: colors.errorText,
-  },
-};
 
 export interface StyledLabelProps {
   hasErrors: boolean;
@@ -20,10 +9,10 @@ export interface StyledLabelProps {
 
 function getStateColors({ hasErrors }: StyledLabelProps) {
   if (hasErrors) {
-    return stateColors.error;
+    return 'red';
   }
 
-  return stateColors.default;
+  return 'green';
 }
 
 interface FieldLabelProps {
@@ -43,7 +32,7 @@ const FieldLabel = ({ children, htmlFor, onClick, hasErrors = false }: FieldLabe
       htmlFor={htmlFor}
       onClick={onClick}
       sx={{
-        color: getStateColors({ hasErrors }).text,
+        color: getStateColors({ hasErrors }),
         marginLeft: '4px',
       }}
     >

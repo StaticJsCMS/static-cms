@@ -25,7 +25,10 @@ collections:
       and editing guidelines that are specific to a collection.
     folder: _posts
     slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
-    summary: '{{title}} -- {{year}}/{{month}}/{{day}}'
+    summary_fields:
+      - title
+      - date
+      - draft
     sortable_fields:
       fields:
         - title
@@ -641,7 +644,7 @@ collections:
               - date
             search_fields:
               - title
-              - body
+              - date
             value_field: title
           - label: Required With Default
             name: with_default
@@ -652,7 +655,7 @@ collections:
               - date
             search_fields:
               - title
-              - body
+              - date
             value_field: title
             default: This is a YAML front matter post
           - label: Optional Validation
@@ -665,7 +668,7 @@ collections:
               - date
             search_fields:
               - title
-              - body
+              - date
             value_field: title
           - label: Multiple
             name: multiple
@@ -678,7 +681,7 @@ collections:
               - date
             search_fields:
               - title
-              - body
+              - date
             value_field: title
           - label: Multiple With Default
             name: multiple_with_default
@@ -694,7 +697,7 @@ collections:
               - date
             search_fields:
               - title
-              - body
+              - date
             value_field: title
       - name: select
         label: Select

@@ -1,22 +1,12 @@
-import { styled } from '@mui/material/styles';
 import React from 'react';
 import { translate } from 'react-polyglot';
 
-import Loader from '@staticcms/core/components/UI/Loader';
+import Loader from '@staticcms/core/components/common/progress/Loader';
 import EntryListing from './EntryListing';
 
 import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
 import type { Collection, Collections, Entry, TranslatedProps } from '@staticcms/core/interface';
 import type Cursor from '@staticcms/core/lib/util/Cursor';
-
-const PaginationMessage = styled('div')`
-  padding: 16px;
-  text-align: center;
-`;
-
-const NoEntriesMessage = styled(PaginationMessage)`
-  margin-top: 16px;
-`;
 
 export interface BaseEntriesProps {
   entries: Entry[];
@@ -81,13 +71,13 @@ const Entries = ({
           />
         )}
         {isFetching && page !== undefined && entries.length > 0 ? (
-          <PaginationMessage>{t('collection.entries.loadingEntries')}</PaginationMessage>
+          <div>{t('collection.entries.loadingEntries')}</div>
         ) : null}
       </>
     );
   }
 
-  return <NoEntriesMessage>{t('collection.entries.noEntries')}</NoEntriesMessage>;
+  return <div>{t('collection.entries.noEntries')}</div>;
 };
 
 export default translate()(Entries);

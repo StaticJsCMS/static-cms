@@ -1,4 +1,3 @@
-import { styled } from '@mui/material/styles';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import CodeMirror from '@uiw/react-codemirror';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -7,7 +6,6 @@ import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar
 import Outline from '@staticcms/core/components/UI/Outline';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
-import transientOptions from '@staticcms/core/lib/util/transientOptions';
 import languages from './data/languages';
 import SettingsButton from './SettingsButton';
 import SettingsPane from './SettingsPane';
@@ -19,34 +17,6 @@ import type {
 } from '@staticcms/core/interface';
 import type { LanguageName } from '@uiw/codemirror-extensions-langs';
 import type { FC } from 'react';
-
-const StyledCodeControlWrapper = styled('div')`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 100%;
-`;
-
-interface StyledCodeControlContentProps {
-  $collapsed: boolean;
-}
-
-const StyledCodeControlContent = styled(
-  'div',
-  transientOptions,
-)<StyledCodeControlContentProps>(
-  ({ $collapsed }) => `
-    display: block;
-    width: 100%;
-    ${
-      $collapsed
-        ? `
-          display: none;
-        `
-        : ''
-    }
-  `,
-);
 
 function valueToOption(val: string | { name: string; label?: string }): {
   value: string;
@@ -180,7 +150,7 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
   }, [field.default_language, handleSetLanguage, internalValue, keys.lang, valueIsMap]);
 
   return (
-    <StyledCodeControlWrapper>
+    <div>
       {allowLanguageSelection ? (
         !settingsVisible ? (
           <SettingsButton onClick={showSettings} />
@@ -203,7 +173,8 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
         hasError={hasErrors}
         t={t}
       />
-      <StyledCodeControlContent $collapsed={collapsed}>
+      <div>
+        {/* TODO $collapsed={collapsed} */}
         <CodeMirror
           value={code}
           height="auto"
@@ -215,9 +186,9 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
           onChange={handleChange}
           extensions={extensions}
         />
-      </StyledCodeControlContent>
+      </div>
       <Outline active={hasFocus} hasError={hasErrors} />
-    </StyledCodeControlWrapper>
+    </div>
   );
 };
 

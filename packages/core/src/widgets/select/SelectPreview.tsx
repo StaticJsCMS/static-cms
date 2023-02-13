@@ -1,7 +1,5 @@
 import React from 'react';
 
-import WidgetPreviewContainer from '@staticcms/core/components/UI/WidgetPreviewContainer';
-
 import type { SelectField, WidgetPreviewProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
@@ -23,17 +21,17 @@ const SelectPreview: FC<WidgetPreviewProps<string | number | (string | number)[]
   value,
 }) => {
   if (!value) {
-    return <WidgetPreviewContainer />;
+    return <div />;
   }
 
   return (
-    <WidgetPreviewContainer>
+    <div>
       {typeof value === 'string' || typeof value === 'number' ? (
         value
       ) : (
         <ListPreview values={value} />
       )}
-    </WidgetPreviewContainer>
+    </div>
   );
 };
 

@@ -2,7 +2,6 @@ import { MDXProvider } from '@mdx-js/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { VFileMessage } from 'vfile-message';
 
-import WidgetPreviewContainer from '@staticcms/core/components/UI/WidgetPreviewContainer';
 import { getShortcodes } from '../../lib/registry';
 import withShortcodeMdxComponent from './mdx/withShortcodeMdxComponent';
 import useMdx from './plate/hooks/useMdx';
@@ -64,13 +63,13 @@ const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = previewPr
     }
 
     return (
-      <WidgetPreviewContainer>
+      <div>
         {state.file && state.file.result ? (
           <MDXProvider components={components}>
             <MdxComponent />
           </MDXProvider>
         ) : null}
-      </WidgetPreviewContainer>
+      </div>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [MdxComponent]);

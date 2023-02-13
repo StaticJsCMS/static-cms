@@ -1,18 +1,16 @@
-import { styled } from '@mui/material/styles';
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import Frame from 'react-frame-component';
 import { translate } from 'react-polyglot';
-import { connect } from 'react-redux';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
-import { getAsset as getAssetAction } from '@staticcms/core/actions/media';
-import { ErrorBoundary } from '@staticcms/core/components/UI';
-import { lengths } from '@staticcms/core/components/UI/styles';
 import { getPreviewStyles, getPreviewTemplate } from '@staticcms/core/lib/registry';
 import { selectTemplateName } from '@staticcms/core/lib/util/collection.util';
-import { selectIsLoadingAsset } from '@staticcms/core/reducers/selectors/medias';
+import { selectConfig } from '@staticcms/core/reducers/selectors/config';
+import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
+import { useAppSelector } from '@staticcms/core/store/hooks';
 import useWidgetsFor from '../../common/widget/useWidgetsFor';
+import ErrorBoundary from '../../ErrorBoundary';
 import EditorPreview from './EditorPreview';
 import EditorPreviewContent from './EditorPreviewContent';
 import PreviewFrameContent from './PreviewFrameContent';
@@ -24,18 +22,7 @@ import type {
   TemplatePreviewProps,
   TranslatedProps,
 } from '@staticcms/core/interface';
-import type { RootState } from '@staticcms/core/store';
-import type { ComponentType } from 'react';
-import type { ConnectedProps } from 'react-redux';
-
-const PreviewPaneFrame = styled(Frame)`
-  width: 100%;
-  height: 100%;
-  border: none;
-  background: #fff;
-  border-radius: ${lengths.borderRadius};
-  overflow: auto;
-`;
+import type { FC } from 'react';
 
 const FrameGlobalStyles = `
   body {
@@ -51,37 +38,19 @@ const FrameGlobalStyles = `
   }
 `;
 
-const PreviewPaneWrapper = styled('div')`
-  width: 100%;
-  height: 100%;
-  border: none;
-  background: #fff;
-  border-radius: ${lengths.borderRadius};
-  overflow: auto;
-  padding: 16px;
-`;
-
-const StyledPreviewContent = styled('div')`
-  width: calc(100% - min(864px, 50%));
-  top: 64px;
-  right: 0;
-  position: absolute;
-  height: calc(100vh - 64px);
-  overflow: hidden;
-`;
+export interface EditorPreviewPaneProps {
+  collection: Collection;
+  fields: Field[];
+  entry: Entry;
+  previewInFrame: boolean;
+}
 
 const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
-  const { entry, collection, config, fields, previewInFrame, getAsset, t } = props;
+  const { entry, collection, fields, previewInFrame, t } = props;
 
-  const { widgetFor, widgetsFor } = useWidgetsFor(config.config, collection, fields, entry);
+  const config = useAppSelector(selectConfig);
 
-  const handleGetAsset = useCallback(
-    (path: string, field?: Field) => {
-      return getAsset(collection, entry, path, field);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [collection],
-  );
+  const { widgetFor, widgetsFor } = useWidgetsFor(config, collection, fields, entry);
 
   const previewStyles = useMemo(
     () => [
@@ -116,15 +85,17 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
 
   const element = useMemo(() => document.getElementById('cms-root'), []);
 
+  const theme = useAppSelector(selectTheme);
+
   const previewProps = useMemo(
     () =>
       ({
         ...props,
-        getAsset: handleGetAsset,
+        theme,
         widgetFor,
         widgetsFor,
       } as Omit<TemplatePreviewProps, 'document' | 'window'>),
-    [handleGetAsset, props, widgetFor, widgetsFor],
+    [props, theme, widgetFor, widgetsFor],
   );
 
   return useMemo(() => {
@@ -133,15 +104,16 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
     }
 
     return ReactDOM.createPortal(
-      <StyledPreviewContent className="preview-content">
+      <div className="w-preview h-main absolute top-16 right-0">
         {!entry || !entry.data ? null : (
           <ErrorBoundary config={config}>
             {previewInFrame ? (
-              <PreviewPaneFrame
+              <Frame
                 key="preview-frame"
                 id="preview-pane"
                 head={previewStyles}
                 initialContent={initialFrameContent}
+                className="w-full h-full"
               >
                 {!collection ? (
                   t('collection.notFound')
@@ -152,10 +124,10 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
                     previewProps={{ ...previewProps }}
                   />
                 )}
-              </PreviewPaneFrame>
+              </Frame>
             ) : (
               <ScrollSyncPane key="preview-wrapper-scroll-sync">
-                <PreviewPaneWrapper key="preview-wrapper" id="preview-pane">
+                <div key="preview-wrapper" id="preview-pane">
                   {!collection ? (
                     t('collection.notFound')
                   ) : (
@@ -168,12 +140,12 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
                       />
                     </>
                   )}
-                </PreviewPaneWrapper>
+                </div>
               </ScrollSyncPane>
             )}
           </ErrorBoundary>
         )}
-      </StyledPreviewContent>,
+      </div>,
       element,
       'preview-content',
     );
@@ -191,23 +163,4 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
   ]);
 };
 
-export interface EditorPreviewPaneOwnProps {
-  collection: Collection;
-  fields: Field[];
-  entry: Entry;
-  previewInFrame: boolean;
-}
-
-function mapStateToProps(state: RootState, ownProps: EditorPreviewPaneOwnProps) {
-  const isLoadingAsset = selectIsLoadingAsset(state);
-  return { ...ownProps, isLoadingAsset, config: state.config };
-}
-
-const mapDispatchToProps = {
-  getAsset: getAssetAction,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-export type EditorPreviewPaneProps = ConnectedProps<typeof connector>;
-
-export default connector(translate()(PreviewPane) as ComponentType<EditorPreviewPaneProps>);
+export default translate()(PreviewPane) as FC<EditorPreviewPaneProps>;

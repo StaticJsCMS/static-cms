@@ -1,4 +1,3 @@
-import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
@@ -7,7 +6,6 @@ import {
   loadEntries as loadEntriesAction,
   traverseCollectionCursor as traverseCollectionCursorAction,
 } from '@staticcms/core/actions/entries';
-import { colors } from '@staticcms/core/components/UI/styles';
 import { Cursor } from '@staticcms/core/lib/util';
 import { selectCollectionEntriesCursor } from '@staticcms/core/reducers/selectors/cursors';
 import {
@@ -24,14 +22,6 @@ import type { RootState } from '@staticcms/core/store';
 import type { ComponentType } from 'react';
 import type { t } from 'react-polyglot';
 import type { ConnectedProps } from 'react-redux';
-
-const GroupHeading = styled('h2')`
-  font-size: 23px;
-  font-weight: 600;
-  color: ${colors.textLead};
-`;
-
-const GroupContainer = styled('div')``;
 
 function getGroupEntries(entries: Entry[], paths: Set<string>) {
   return entries.filter(entry => paths.has(entry.path));
@@ -57,10 +47,10 @@ function withGroups(
   return groups.map(group => {
     const title = getGroupTitle(group, t);
     return (
-      <GroupContainer key={group.id} id={group.id}>
-        <GroupHeading>{title}</GroupHeading>
+      <div key={group.id} id={group.id}>
+        <h2>{title}</h2>
         <EntriesToRender entries={getGroupEntries(entries, group.paths)} />
-      </GroupContainer>
+      </div>
     );
   });
 }

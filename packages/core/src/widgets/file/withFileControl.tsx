@@ -2,16 +2,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import PhotoIcon from '@mui/icons-material/Photo';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import { styled } from '@mui/material/styles';
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
 import Outline from '@staticcms/core/components/UI/Outline';
-import { borders, effects, lengths, shadows } from '@staticcms/core/components/UI/styles';
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
-import { basename, transientOptions } from '@staticcms/core/lib/util';
+import { basename } from '@staticcms/core/lib/util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 
 import type {
@@ -23,86 +21,6 @@ import type {
 import type { FC, MouseEvent, MouseEventHandler } from 'react';
 
 const MAX_DISPLAY_LENGTH = 50;
-
-const StyledFileControlWrapper = styled('div')`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 100%;
-`;
-
-interface StyledFileControlContentProps {
-  $collapsed: boolean;
-}
-
-const StyledFileControlContent = styled(
-  'div',
-  transientOptions,
-)<StyledFileControlContentProps>(
-  ({ $collapsed }) => `
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    ${
-      $collapsed
-        ? `
-          display: none;
-        `
-        : `
-          padding: 16px;
-        `
-    }
-  `,
-);
-
-const StyledSelection = styled('div')`
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledButtonWrapper = styled('div')`
-  display: flex;
-  gap: 16px;
-`;
-
-interface ImageWrapperProps {
-  $sortable?: boolean;
-}
-
-const ImageWrapper = styled(
-  'div',
-  transientOptions,
-)<ImageWrapperProps>(
-  ({ $sortable }) => `
-    flex-basis: 155px;
-    width: 155px;
-    height: 100px;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    border: ${borders.textField};
-    border-radius: ${lengths.borderRadius};
-    overflow: hidden;
-    ${effects.checkerboard};
-    ${shadows.inset};
-    cursor: ${$sortable ? 'pointer' : 'auto'};
-  `,
-);
-
-const SortableImageButtonsWrapper = styled('div')`
-  display: flex;
-  justify-content: center;
-  column-gap: 10px;
-  margin-right: 20px;
-  margin-top: -10px;
-  margin-bottom: 10px;
-`;
-
-const StyledImage = styled('img')`
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-`;
-
 interface ImageProps {
   value: string;
   collection: Collection<FileOrImageField>;
@@ -113,7 +31,7 @@ interface ImageProps {
 const Image: FC<ImageProps> = ({ value, collection, field, entry }) => {
   const assetSource = useMediaAsset(value, collection, field, entry);
 
-  return <StyledImage key="image" role="presentation" src={assetSource} />;
+  return <img key="image" role="presentation" src={assetSource} />;
 };
 
 interface SortableImageButtonsProps {
@@ -123,14 +41,14 @@ interface SortableImageButtonsProps {
 
 const SortableImageButtons: FC<SortableImageButtonsProps> = ({ onRemove, onReplace }) => {
   return (
-    <SortableImageButtonsWrapper key="image-buttons-wrapper">
+    <div key="image-buttons-wrapper">
       <IconButton key="image-replace" onClick={onReplace}>
         <PhotoIcon key="image-replace-icon" />
       </IconButton>
       <IconButton key="image-remove" onClick={onRemove}>
         <CloseIcon key="image-remove-icon" />
       </IconButton>
-    </SortableImageButtonsWrapper>
+    </div>
   );
 };
 
@@ -153,9 +71,10 @@ const SortableImage: FC<SortableImageProps> = ({
 }: SortableImageProps) => {
   return (
     <div>
-      <ImageWrapper key="image-wrapper" $sortable>
+      <div key="image-wrapper">
+        {/* TODO $sortable */}
         <Image key="image" value={itemValue} collection={collection} field={field} entry={entry} />
-      </ImageWrapper>
+      </div>
       <SortableImageButtons
         key="image-buttons"
         onRemove={onRemove}
@@ -164,31 +83,6 @@ const SortableImage: FC<SortableImageProps> = ({
     </div>
   );
 };
-
-const StyledMultiImageWrapper = styled('div')`
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-const FileLink = styled('a')`
-  margin-bottom: 20px;
-  font-weight: normal;
-  color: inherit;
-
-  &:hover,
-  &:active,
-  &:focus {
-    text-decoration: underline;
-  }
-`;
-
-const FileLinks = styled('div')`
-  margin-bottom: 12px;
-`;
-
-const FileLinkList = styled('ul')`
-  list-style-type: none;
-`;
 
 function isMultiple(value: string | string[] | null | undefined): value is string[] {
   return Array.isArray(value);
@@ -336,9 +230,9 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
         }
         const text = `${link.slice(0, size / 2)}\u2026${link.slice(-(size / 2) + 1)}`;
         return (
-          <FileLink key={`file-link-${text}`} href={link} rel="noopener" target="_blank">
+          <a key={`file-link-${text}`} href={link} rel="noopener noreferrer" target="_blank">
             {text}
-          </FileLink>
+          </a>
         );
       }, []);
 
@@ -350,7 +244,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
           if (isMultiple(internalValue)) {
             return (
-              <StyledMultiImageWrapper key="multi-image-wrapper">
+              <div key="multi-image-wrapper">
                 {internalValue.map((itemValue, index) => (
                   <SortableImage
                     key={`item-${itemValue}`}
@@ -362,12 +256,12 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
                     onReplace={onReplaceOne(index)}
                   />
                 ))}
-              </StyledMultiImageWrapper>
+              </div>
             );
           }
 
           return (
-            <ImageWrapper key="single-image-wrapper">
+            <div key="single-image-wrapper">
               <Image
                 key="single-image"
                 value={internalValue}
@@ -375,31 +269,31 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
                 field={field}
                 entry={entry}
               />
-            </ImageWrapper>
+            </div>
           );
         }
 
         if (isMultiple(internalValue)) {
           return (
-            <FileLinks key="multiple-file-links">
-              <FileLinkList key="file-links-list">
+            <div key="mulitple-file-links">
+              <ul key="file-links-list">
                 {internalValue.map(val => (
                   <li key={val}>{renderFileLink(val)}</li>
                 ))}
-              </FileLinkList>
-            </FileLinks>
+              </ul>
+            </div>
           );
         }
 
-        return <FileLinks key="single-file-links">{renderFileLink(internalValue)}</FileLinks>;
+        return <div key="single-file-links">{renderFileLink(internalValue)}</div>;
       }, [collection, entry, field, internalValue, onRemoveOne, onReplaceOne, renderFileLink]);
 
-      const content = useMemo(() => {
+      const content: JSX.Element = useMemo(() => {
         const subject = forImage ? 'image' : 'file';
 
         if (Array.isArray(internalValue) ? internalValue.length === 0 : isEmpty(internalValue)) {
           return (
-            <StyledButtonWrapper>
+            <div>
               <Button
                 color="primary"
                 variant="outlined"
@@ -418,14 +312,14 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
                   {t(`editor.editorWidgets.${subject}.chooseUrl`)}
                 </Button>
               ) : null}
-            </StyledButtonWrapper>
+            </div>
           );
         }
 
         return (
-          <StyledSelection key="selection">
+          <div key="selection">
             {renderedImagesLinks}
-            <StyledButtonWrapper key="controls">
+            <div key="controls">
               <Button
                 color="primary"
                 variant="outlined"
@@ -451,8 +345,8 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
               <Button color="error" variant="outlined" key="remove" onClick={handleRemove}>
                 {t(`editor.editorWidgets.${subject}.remove${allowsMultiple ? 'All' : ''}`)}
               </Button>
-            </StyledButtonWrapper>
-          </StyledSelection>
+            </div>
+          </div>
         );
       }, [
         internalValue,
@@ -467,7 +361,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
       return useMemo(
         () => (
-          <StyledFileControlWrapper key="file-control-wrapper">
+          <div key="file-control-wrapper">
             <ObjectWidgetTopBar
               key="file-control-top-bar"
               collapsed={collapsed}
@@ -476,9 +370,12 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
               hasError={hasErrors}
               t={t}
             />
-            <StyledFileControlContent $collapsed={collapsed}>{content}</StyledFileControlContent>
+            <div>
+              {/* TODO $collapsed={collapsed} */}
+              {content}
+            </div>
             <Outline hasError={hasErrors} />
-          </StyledFileControlWrapper>
+          </div>
         ),
         [collapsed, content, field.label, field.name, handleCollapseToggle, hasErrors, t],
       );

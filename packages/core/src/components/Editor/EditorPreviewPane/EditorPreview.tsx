@@ -1,14 +1,6 @@
-import { styled } from '@mui/material/styles';
 import React from 'react';
 
 import type { ObjectValue, TemplatePreviewProps } from '@staticcms/core/interface';
-
-const PreviewContainer = styled('div')`
-  overflow-y: auto;
-  height: 100%;
-  padding: 24px;
-  font-family: Roboto, 'Helvetica Neue', HelveticaNeue, Helvetica, Arial, sans-serif;
-`;
 
 const Preview = ({ collection, fields, widgetFor }: TemplatePreviewProps<ObjectValue>) => {
   if (!collection || !fields) {
@@ -16,11 +8,11 @@ const Preview = ({ collection, fields, widgetFor }: TemplatePreviewProps<ObjectV
   }
 
   return (
-    <PreviewContainer>
+    <div>
       {fields.map(field => (
         <div key={field.name}>{widgetFor(field.name)}</div>
       ))}
-    </PreviewContainer>
+    </div>
   );
 };
 

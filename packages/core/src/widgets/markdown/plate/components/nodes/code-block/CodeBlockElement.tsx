@@ -1,4 +1,3 @@
-import { styled } from '@mui/material/styles';
 import { findNodePath, setNodes } from '@udecode/plate';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Frame from 'react-frame-component';
@@ -11,38 +10,6 @@ import CodeBlockFrame from './CodeBlockFrame';
 import type { MdCodeBlockElement, MdValue } from '@staticcms/markdown';
 import type { PlateRenderElementProps, TCodeBlockElement } from '@udecode/plate';
 import type { FC, MutableRefObject, RefObject } from 'react';
-
-const StyledCodeBlock = styled('div')`
-  position: relative;
-  margin: 12px 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledInput = styled('input')`
-  flex-grow: 1;
-  outline: none;
-  padding: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.35);
-  border-radius: 4px 4px 0 0;
-  width: 100%;
-  height: 34px;
-`;
-
-const StyledCodeBlockContent = styled('div')`
-  position: relative;
-  display: flex;
-
-  & div {
-    outline: none;
-  }
-`;
-
-const StyledHiddenChildren = styled('div')`
-  height: 0;
-  position: absolute;
-`;
 
 const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>> = props => {
   const [langHasFocus, setLangHasFocus] = useState(false);
@@ -124,8 +91,8 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
 
   return (
     <>
-      <StyledCodeBlock {...attributes} {...nodeProps} contentEditable={false}>
-        <StyledInput
+      <div {...attributes} {...nodeProps} contentEditable={false}>
+        <input
           id={id}
           value={lang}
           onFocus={() => setLangHasFocus(true)}
@@ -136,7 +103,7 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
             path && setNodes<TCodeBlockElement>(editor, { lang: value }, { at: path });
           }}
         />
-        <StyledCodeBlockContent>
+        <div>
           <Frame
             key={`code-frame-${id}`}
             id={id}
@@ -151,10 +118,10 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
           >
             <CodeBlockFrame id={id} code={code} lang={lang} />
           </Frame>
-        </StyledCodeBlockContent>
+        </div>
         <Outline active={langHasFocus || codeHasFocus} />
-        <StyledHiddenChildren>{children}</StyledHiddenChildren>
-      </StyledCodeBlock>
+        <div>{children}</div>
+      </div>
     </>
   );
 };

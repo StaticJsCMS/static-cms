@@ -1,80 +1,19 @@
 import ArticleIcon from '@mui/icons-material/Article';
-import { styled } from '@mui/material/styles';
 import sortBy from 'lodash/sortBy';
 import { dirname, sep } from 'path';
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
 
-import { colors, components } from '@staticcms/core/components/UI/styles';
-import { transientOptions } from '@staticcms/core/lib';
 import { selectEntryCollectionTitle } from '@staticcms/core/lib/util/collection.util';
 import { stringTemplate } from '@staticcms/core/lib/widgets';
 import { selectEntries } from '@staticcms/core/reducers/selectors/entries';
+import NavLink from '../navbar/NavLink';
 
 import type { Collection, Entry } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 import type { ConnectedProps } from 'react-redux';
 
 const { addFileTemplateFields } = stringTemplate;
-
-const NodeTitleContainer = styled('div')`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const NodeTitle = styled('div')`
-  margin-right: 4px;
-`;
-
-const Caret = styled('div')`
-  position: relative;
-  top: 2px;
-`;
-
-const CaretDown = styled(Caret)`
-  ${components.caretDown};
-  color: currentColor;
-`;
-
-const CaretRight = styled(Caret)`
-  ${components.caretRight};
-  color: currentColor;
-  left: 2px;
-`;
-
-interface TreeNavLinkProps {
-  $activeClassName: string;
-  $depth: number;
-}
-
-const TreeNavLink = styled(
-  NavLink,
-  transientOptions,
-)<TreeNavLinkProps>(
-  ({ $activeClassName, $depth }) => `
-    display: flex;
-    font-size: 14px;
-    font-weight: 500;
-    align-items: center;
-    padding: 8px;
-    padding-left: ${$depth * 20 + 12}px;
-    border-left: 2px solid #fff;
-
-    &:hover,
-    &:active,
-    &.${$activeClassName} {
-      color: ${colors.active};
-      background-color: ${colors.activeBackground};
-      border-left-color: #4863c6;
-
-      .MuiListItemIcon-root {
-        color: ${colors.active};
-      }
-    }
-  `,
-);
 
 interface BaseTreeNodeData {
   title: string | undefined;
@@ -125,19 +64,19 @@ const TreeNode = ({ collection, treeData, depth = 0, onToggle }: TreeNodeProps) 
 
         return (
           <Fragment key={node.path}>
-            <TreeNavLink
+            <NavLink
               to={to}
-              $activeClassName="sidebar-active"
               onClick={() => onToggle({ node, expanded: !node.expanded })}
-              $depth={depth}
               data-testid={node.path}
             >
+              {/* TODO $activeClassName="sidebar-active" */}
+              {/* TODO $depth={depth} */}
               <ArticleIcon />
-              <NodeTitleContainer>
-                <NodeTitle>{title}</NodeTitle>
-                {hasChildren && (node.expanded ? <CaretDown /> : <CaretRight />)}
-              </NodeTitleContainer>
-            </TreeNavLink>
+              <div>
+                <div>{title}</div>
+                {hasChildren && (node.expanded ? <div /> : <div />)}
+              </div>
+            </NavLink>
             {node.expanded && (
               <TreeNode
                 collection={collection}

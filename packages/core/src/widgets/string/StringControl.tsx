@@ -1,5 +1,7 @@
-import TextField from '@mui/material/TextField';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
+
+import Field from '@staticcms/core/components/common/field/Field';
+import TextField from '@staticcms/core/components/common/text-field/TextField';
 
 import type { StringOrTextField, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC } from 'react';
@@ -7,13 +9,14 @@ import type { ChangeEvent, FC } from 'react';
 const StringControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   value,
   label,
+  errors,
   onChange,
-  hasErrors,
 }) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
+  const ref = useRef<HTMLInputElement | null>(null);
 
   const handleChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    (event: ChangeEvent<HTMLInputElement>) => {
       setInternalValue(event.target.value);
       onChange(event.target.value);
     },
@@ -21,18 +24,9 @@ const StringControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   );
 
   return (
-    <TextField
-      key="string-widget-control-input"
-      inputProps={{
-        'data-testid': 'string-widget-control-input',
-      }}
-      label={label}
-      variant="outlined"
-      value={internalValue}
-      onChange={handleChange}
-      fullWidth
-      error={hasErrors}
-    />
+    <Field inputRef={ref} label={label} errors={errors}>
+      <TextField type="text" ref={ref} value={internalValue} onChange={handleChange} />
+    </Field>
   );
 };
 

@@ -1,64 +1,12 @@
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import Popover from '@mui/material/Popover';
-import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { translate } from 'react-polyglot';
 
-import { colors, colorsRaw, lengths } from '@staticcms/core/components/UI/styles';
-import { transientOptions } from '@staticcms/core/lib';
-
-import type { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent } from 'react';
 import type { Collection, Collections, TranslatedProps } from '@staticcms/core/interface';
-
-const SearchContainer = styled('div')`
-  position: relative;
-`;
-
-const Suggestions = styled('ul')`
-  padding: 10px 0;
-  margin: 0;
-  list-style: none;
-  border-radius: ${lengths.borderRadius};
-  width: 240px;
-`;
-
-const SuggestionHeader = styled('li')`
-  padding: 0 6px 6px 32px;
-  font-size: 12px;
-  color: ${colors.text};
-`;
-
-interface SuggestionItemProps {
-  $isActive: boolean;
-}
-
-const SuggestionItem = styled(
-  'li',
-  transientOptions,
-)<SuggestionItemProps>(
-  ({ $isActive }) => `
-    color: ${$isActive ? colors.active : colorsRaw.grayDark};
-    background-color: ${$isActive ? colors.activeBackground : 'inherit'};
-    padding: 6px 6px 6px 32px;
-    cursor: pointer;
-    position: relative;
-
-    &:hover {
-      color: ${colors.active};
-      background-color: ${colors.activeBackground};
-    }
-  `,
-);
-
-const SuggestionDivider = styled('div')`
-  width: 100%;
-`;
-
-const StyledPopover = styled(Popover)`
-  margin-left: -44px;
-`;
+import type { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent } from 'react';
 
 interface CollectionSearchProps {
   collections: Collections;
@@ -191,7 +139,7 @@ const CollectionSearch = ({
   );
 
   return (
-    <SearchContainer>
+    <div>
       <TextField
         onKeyDown={handleKeyDown}
         placeholder={t('collection.sidebar.searchAll')}
@@ -211,7 +159,7 @@ const CollectionSearch = ({
           ),
         }}
       />
-      <StyledPopover
+      <Popover
         id="search-popover"
         open={open}
         anchorEl={anchorEl}
@@ -225,29 +173,23 @@ const CollectionSearch = ({
           horizontal: 'left',
         }}
       >
-        <Suggestions>
-          <SuggestionHeader>{t('collection.sidebar.searchIn')}</SuggestionHeader>
-          <SuggestionItem
-            $isActive={selectedCollectionIdx === -1}
-            onClick={e => handleSuggestionClick(e, -1)}
-            onMouseDown={e => e.preventDefault()}
-          >
+        <div>
+          <div>{t('collection.sidebar.searchIn')}</div>
+          <div onClick={e => handleSuggestionClick(e, -1)} onMouseDown={e => e.preventDefault()}>
             {t('collection.sidebar.allCollections')}
-          </SuggestionItem>
-          <SuggestionDivider />
+          </div>
           {collections.map((collection, idx) => (
-            <SuggestionItem
+            <div
               key={idx}
-              $isActive={idx === selectedCollectionIdx}
               onClick={e => handleSuggestionClick(e, idx)}
               onMouseDown={e => e.preventDefault()}
             >
               {collection.label}
-            </SuggestionItem>
+            </div>
           ))}
-        </Suggestions>
-      </StyledPopover>
-    </SearchContainer>
+        </div>
+      </Popover>
+    </div>
   );
 };
 

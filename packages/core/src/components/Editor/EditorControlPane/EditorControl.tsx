@@ -1,4 +1,3 @@
-import { styled } from '@mui/material/styles';
 import { isEqual } from 'lodash';
 import isEmpty from 'lodash/isEmpty';
 import React, { createElement, useCallback, useEffect, useMemo, useState } from 'react';
@@ -9,7 +8,6 @@ import {
   changeDraftField as changeDraftFieldAction,
   changeDraftFieldValidation,
 } from '@staticcms/core/actions/entries';
-import { getAsset as getAssetAction } from '@staticcms/core/actions/media';
 import {
   clearMediaControl as clearMediaControlAction,
   openMediaLibrary as openMediaLibraryAction,
@@ -17,8 +15,6 @@ import {
   removeMediaControl as removeMediaControlAction,
 } from '@staticcms/core/actions/mediaLibrary';
 import { query as queryAction } from '@staticcms/core/actions/search';
-import { borders, colors, lengths, transitions } from '@staticcms/core/components/UI/styles';
-import { transientOptions } from '@staticcms/core/lib';
 import useMemoCompare from '@staticcms/core/lib/hooks/useMemoCompare';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { resolveWidget } from '@staticcms/core/lib/registry';
@@ -32,7 +28,6 @@ import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import type {
   Field,
   FieldsErrors,
-  GetAssetFunction,
   I18nSettings,
   TranslatedProps,
   UnknownField,
@@ -43,98 +38,6 @@ import type { RootState } from '@staticcms/core/store';
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
 
-/**
- * This is a necessary bridge as we are still passing classnames to widgets
- * for styling. Once that changes we can stop storing raw style strings like
- * this.
- */
-const styleStrings = {
-  widget: `
-    display: block;
-    width: 100%;
-    padding: ${lengths.inputPadding};
-    margin: 0;
-    border: ${borders.textField};
-    border-radius: ${lengths.borderRadius};
-    border-top-left-radius: 0;
-    outline: 0;
-    box-shadow: none;
-    background-color: ${colors.inputBackground};
-    color: #444a57;
-    transition: border-color ${transitions.main};
-    position: relative;
-    font-size: 15px;
-    line-height: 1.5;
-
-    select& {
-      text-indent: 14px;
-      height: 58px;
-    }
-  `,
-  widgetActive: `
-    border-color: ${colors.active};
-  `,
-  widgetError: `
-    border-color: ${colors.errorText};
-  `,
-  disabled: `
-    pointer-events: none;
-    opacity: 0.5;
-    background: #ccc;
-  `,
-  hidden: `
-    visibility: hidden;
-  `,
-};
-
-interface ControlContainerProps {
-  $isHidden: boolean;
-}
-
-const ControlContainer = styled(
-  'div',
-  transientOptions,
-)<ControlContainerProps>(
-  ({ $isHidden }) => `
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    align-items: flex-start;
-    width: 100%;
-    ${$isHidden ? styleStrings.hidden : ''};
-  `,
-);
-
-const ControlErrorsList = styled('ul')`
-  list-style-type: none;
-  font-size: 12px;
-  color: ${colors.errorText};
-  position: relative;
-  font-weight: 600;
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  padding: 4px 8px;
-`;
-
-interface ControlHintProps {
-  $error: boolean;
-}
-
-const ControlHint = styled(
-  'p',
-  transientOptions,
-)<ControlHintProps>(
-  ({ $error }) => `
-    margin: 0;
-    margin-left: 8px;
-    padding: 0;
-    font-size: 12px;
-    color: ${$error ? colors.errorText : colors.controlLabel};
-    transition: color ${transitions.main};
-  `,
-);
-
 const EditorControl = ({
   clearMediaControl,
   collection,
@@ -143,7 +46,6 @@ const EditorControl = ({
   field,
   fieldsErrors,
   submitted,
-  getAsset,
   isDisabled,
   isFieldDuplicate,
   isFieldHidden,
@@ -182,14 +84,6 @@ const EditorControl = ({
   const errors = useAppSelector(fieldErrorsSelector);
 
   const hasErrors = (submitted || dirty) && Boolean(errors.length);
-
-  const handleGetAsset: GetAssetFunction = useMemo(
-    () => (path: string, field?: Field) => {
-      return getAsset(collection, entry, path, field);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [collection],
-  );
 
   useEffect(() => {
     if ((!dirty && !submitted) || isHidden) {
@@ -246,7 +140,8 @@ const EditorControl = ({
     }
 
     return (
-      <ControlContainer $isHidden={isHidden}>
+      <div>
+        {/* TODO $isHidden={isHidden}> */}
         <>
           {createElement(widget.control, {
             key: `${id}-${version}`,
@@ -256,7 +151,6 @@ const EditorControl = ({
             field: field as UnknownField,
             fieldsErrors,
             submitted,
-            getAsset: handleGetAsset,
             isDisabled: isDisabled ?? false,
             isFieldDuplicate,
             isFieldHidden,
@@ -275,26 +169,16 @@ const EditorControl = ({
             forList,
             i18n,
             hasErrors,
+            errors,
           })}
           {fieldHint ? (
-            <ControlHint key="hint" $error={hasErrors}>
+            <div key="hint">
+              {/* TODO $error={hasErrors}> */}
               {fieldHint}
-            </ControlHint>
-          ) : null}
-          {hasErrors ? (
-            <ControlErrorsList key="errors">
-              {errors.map(error => {
-                return (
-                  error.message &&
-                  typeof error.message === 'string' && (
-                    <li key={error.message.trim().replace(/[^a-z0-9]+/gi, '-')}>{error.message}</li>
-                  )
-                );
-              })}
-            </ControlErrorsList>
+            </div>
           ) : null}
         </>
-      </ControlContainer>
+      </div>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -306,7 +190,6 @@ const EditorControl = ({
     widget.control,
     field,
     submitted,
-    handleGetAsset,
     isDisabled,
     t,
     locale,
@@ -364,7 +247,6 @@ const mapDispatchToProps = {
   removeMediaControl: removeMediaControlAction,
   removeInsertedMedia: removeInsertedMediaAction,
   query: queryAction,
-  getAsset: getAssetAction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

@@ -1,8 +1,6 @@
 import isString from 'lodash/isString';
 import React from 'react';
 
-import WidgetPreviewContainer from '@staticcms/core/components/UI/WidgetPreviewContainer';
-
 import type { CodeField, WidgetPreviewProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
@@ -23,11 +21,9 @@ const CodePreview: FC<WidgetPreviewProps<string | Record<string, string>, CodeFi
   field,
 }) => {
   return (
-    <WidgetPreviewContainer>
-      <pre>
-        <code>{toValue(value, field)}</code>
-      </pre>
-    </WidgetPreviewContainer>
+    <pre>
+      <code>{toValue(value, field)}</code>
+    </pre>
   );
 };
 

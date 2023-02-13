@@ -1,7 +1,6 @@
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import { styled } from '@mui/material/styles';
 import {
   ELEMENT_H1,
   ELEMENT_H2,
@@ -20,14 +19,6 @@ import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 
 import type { SelectChangeEvent } from '@mui/material/Select';
 import type { FC } from 'react';
-
-const StyledSelect = styled(Select<string>)`
-  padding: 0;
-
-  & .MuiSelect-select {
-    padding: 4px 7px;
-  }
-`;
 
 const types = [
   {
@@ -104,7 +95,7 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
 
   return (
     <FormControl sx={{ width: 120 }}>
-      <StyledSelect
+      <Select<string>
         labelId="font-type-select-label"
         id="font-type-select"
         data-testid="font-type-select"
@@ -118,7 +109,7 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
             {type.label}
           </MenuItem>
         ))}
-      </StyledSelect>
+      </Select>
     </FormControl>
   );
 };

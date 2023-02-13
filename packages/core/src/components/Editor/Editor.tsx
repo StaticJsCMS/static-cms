@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
-import { logoutUser as logoutUserAction } from '@staticcms/core/actions/auth';
 import {
   createDraftDuplicateFromEntry as createDraftDuplicateFromEntryAction,
   createEmptyDraft as createEmptyDraftAction,
@@ -26,8 +25,8 @@ import { selectFields } from '@staticcms/core/lib/util/collection.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 import { selectEntry } from '@staticcms/core/reducers/selectors/entries';
 import { history, navigateToCollection, navigateToNewEntry } from '@staticcms/core/routing/history';
-import confirm from '../UI/Confirm';
-import Loader from '../UI/Loader';
+import confirm from '../common/confirm/Confirm';
+import Loader from '../common/progress/Loader';
 import EditorInterface from './EditorInterface';
 
 import type {
@@ -46,16 +45,13 @@ const Editor = ({
   entryDraft,
   fields,
   collection,
-  user,
   hasChanged,
   displayUrl,
   isModification,
-  logoutUser,
   draftKey,
   t,
-  editorBackLink,
   toggleScroll,
-  scrollSyncEnabled,
+  scrollSyncActive,
   loadScroll,
   showDelete,
   slug,
@@ -308,15 +304,12 @@ const Editor = ({
       onDelete={handleDeleteEntry}
       onDuplicate={handleDuplicateEntry}
       showDelete={showDelete ?? true}
-      user={user}
       hasChanged={hasChanged}
       displayUrl={displayUrl}
       isNewEntry={!slug}
       isModification={isModification}
-      onLogoutClick={logoutUser}
-      editorBackLink={editorBackLink}
       toggleScroll={toggleScroll}
-      scrollSyncEnabled={scrollSyncEnabled}
+      scrollSyncActive={scrollSyncActive}
       loadScroll={loadScroll}
       submitted={submitted}
       t={t}
@@ -332,33 +325,18 @@ interface CollectionViewOwnProps {
 }
 
 function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
-  const { collections, entryDraft, auth, config, entries, scroll } = state;
+  const { collections, entryDraft, config, entries, scroll } = state;
   const { name, slug } = ownProps;
   const collection = collections[name];
   const collectionName = collection.name;
   const fields = selectFields(collection, slug);
   const entry = !slug ? null : selectEntry(state, collectionName, slug);
-  const user = auth.user;
   const hasChanged = entryDraft.hasChanged;
   const displayUrl = config.config?.display_url;
   const isModification = entryDraft.entry?.isModification ?? false;
   const collectionEntriesLoaded = Boolean(entries.pages[collectionName]);
   const localBackup = entryDraft.localBackup;
   const draftKey = entryDraft.key;
-  let editorBackLink = `/collections/${collectionName}`;
-  if ('files' in collection && collection.files?.length === 1) {
-    editorBackLink = '/';
-  }
-
-  if ('nested' in collection && collection.nested && slug) {
-    const pathParts = slug.split('/');
-    if (pathParts.length > 2) {
-      editorBackLink = `${editorBackLink}/filter/${pathParts.slice(0, -2).join('/')}`;
-    }
-  }
-
-  const scrollSyncEnabled = scroll.isScrolling;
-
   return {
     ...ownProps,
     collection,
@@ -366,15 +344,13 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
     entryDraft,
     fields,
     entry,
-    user,
     hasChanged,
     displayUrl,
     isModification,
     collectionEntriesLoaded,
     localBackup,
     draftKey,
-    editorBackLink,
-    scrollSyncEnabled,
+    scrollSyncActive: scroll.isScrolling,
   };
 }
 
@@ -391,7 +367,6 @@ const mapDispatchToProps = {
   discardDraft: discardDraftAction,
   persistEntry: persistEntryAction,
   deleteEntry: deleteEntryAction,
-  logoutUser: logoutUserAction,
   toggleScroll: toggleScrollAction,
   loadScroll: loadScrollAction,
 };

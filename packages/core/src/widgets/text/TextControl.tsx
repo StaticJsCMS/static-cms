@@ -1,5 +1,7 @@
-import TextField from '@mui/material/TextField';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
+
+import Field from '@staticcms/core/components/common/field/Field';
+import TextArea from '@staticcms/core/components/common/text-field/TextArea';
 
 import type { StringOrTextField, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC } from 'react';
@@ -7,13 +9,15 @@ import type { ChangeEvent, FC } from 'react';
 const TextControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   label,
   value,
-  onChange,
+  errors,
   hasErrors,
+  onChange,
 }) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
+  const ref = useRef<HTMLTextAreaElement | null>(null);
 
   const handleChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    (event: ChangeEvent<HTMLTextAreaElement>) => {
       setInternalValue(event.target.value);
       onChange(event.target.value);
     },
@@ -21,17 +25,9 @@ const TextControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   );
 
   return (
-    <TextField
-      key="text-control-input"
-      variant="outlined"
-      value={internalValue || ''}
-      onChange={handleChange}
-      multiline
-      minRows={4}
-      fullWidth
-      label={label}
-      error={hasErrors}
-    />
+    <Field inputRef={ref} label={label} errors={errors} noPadding={!hasErrors}>
+      <TextArea ref={ref} value={internalValue} onChange={handleChange} />
+    </Field>
   );
 };
 

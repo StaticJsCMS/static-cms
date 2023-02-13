@@ -1,15 +1,12 @@
-import HeightIcon from '@mui/icons-material/Height';
-import LanguageIcon from '@mui/icons-material/Language';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import Fab from '@mui/material/Fab';
-import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ScrollSync, ScrollSyncPane } from 'react-scroll-sync';
+import { ScrollSyncPane } from 'react-scroll-sync';
 
-import { colorsRaw, components, zIndex } from '@staticcms/core/components/UI/styles';
-import { transientOptions } from '@staticcms/core/lib';
 import { getI18nInfo, getPreviewEntry, hasI18n } from '@staticcms/core/lib/i18n';
-import { getFileFromSlug } from '@staticcms/core/lib/util/collection.util';
+import {
+  getFileFromSlug,
+  selectEntryCollectionTitle,
+} from '@staticcms/core/lib/util/collection.util';
+import MainView from '../MainView';
 import EditorControlPane from './EditorControlPane/EditorControlPane';
 import EditorPreviewPane from './EditorPreviewPane/EditorPreviewPane';
 import EditorToolbar from './EditorToolbar';
@@ -21,102 +18,36 @@ import type {
   Field,
   FieldsErrors,
   TranslatedProps,
-  User,
 } from '@staticcms/core/interface';
 
 const PREVIEW_VISIBLE = 'cms.preview-visible';
 const I18N_VISIBLE = 'cms.i18n-visible';
 
-const StyledSplitPane = styled('div')`
-  display: grid;
-  grid-template-columns: min(864px, 50%) auto;
-  height: calc(100vh - 64px);
-`;
-
-const NoPreviewContainer = styled('div')`
-  ${components.card};
-  border-radius: 0;
-  height: 100%;
-`;
-
-const EditorContainer = styled('div')`
-  width: 100%;
-  min-width: 1200px;
-  height: 100vh;
-  overflow: hidden;
-`;
-
-const Editor = styled('div')`
-  height: calc(100vh - 64px);
-  position: relative;
-  background-color: ${colorsRaw.white};
-  overflow-y: auto;
-`;
-
-interface PreviewPaneContainerProps {
-  $blockEntry?: boolean;
-}
-
-const PreviewPaneContainer = styled(
-  'div',
-  transientOptions,
-)<PreviewPaneContainerProps>(
-  ({ $blockEntry }) => `
-    height: 100%;
-    pointer-events: ${$blockEntry ? 'none' : 'auto'};
-    overflow-y: auto;
-  `,
-);
-
-interface ControlPaneContainerProps {
-  $hidden?: boolean;
-}
-
-const ControlPaneContainer = styled(
-  PreviewPaneContainer,
-  transientOptions,
-)<ControlPaneContainerProps>(
-  ({ $hidden = false }) => `
-    padding: 24px 16px 16px;
-    position: relative;
-    overflow-x: hidden;
-    display: ${$hidden ? 'none' : 'flex'};
-    align-items: flex-start;
-    justify-content: center;
-  `,
-);
-
-const StyledViewControls = styled('div')`
-  position: fixed;
-  bottom: 4px;
-  right: 8px;
-  z-index: ${zIndex.zIndex299};
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-`;
-
 interface EditorContentProps {
-  i18nVisible: boolean;
-  previewVisible: boolean;
+  i18nActive: boolean;
+  previewActive: boolean;
   editor: JSX.Element;
   editorSideBySideLocale: JSX.Element;
   editorWithPreview: JSX.Element;
 }
 
 const EditorContent = ({
-  i18nVisible,
-  previewVisible,
+  i18nActive,
+  previewActive,
   editor,
   editorSideBySideLocale,
   editorWithPreview,
 }: EditorContentProps) => {
-  if (i18nVisible) {
+  if (i18nActive) {
     return editorSideBySideLocale;
-  } else if (previewVisible) {
+  } else if (previewActive) {
     return editorWithPreview;
   } else {
-    return <NoPreviewContainer>{editor}</NoPreviewContainer>;
+    return (
+      <div className="flex justify-center">
+        <div className="w-editor-only max-w-full">{editor}</div>
+      </div>
+    );
   }
 };
 
@@ -130,15 +61,12 @@ interface EditorInterfaceProps {
   onDelete: () => Promise<void>;
   onDuplicate: () => void;
   showDelete: boolean;
-  user: User | undefined;
   hasChanged: boolean;
   displayUrl: string | undefined;
   isNewEntry: boolean;
   isModification: boolean;
-  onLogoutClick: () => void;
-  editorBackLink: string;
   toggleScroll: () => Promise<{ readonly type: 'TOGGLE_SCROLL' }>;
-  scrollSyncEnabled: boolean;
+  scrollSyncActive: boolean;
   loadScroll: () => void;
   submitted: boolean;
 }
@@ -152,24 +80,21 @@ const EditorInterface = ({
   onDelete,
   onDuplicate,
   onPersist,
-  user,
   hasChanged,
   displayUrl,
   isNewEntry,
   isModification,
-  onLogoutClick,
   draftKey,
-  editorBackLink,
-  scrollSyncEnabled,
+  scrollSyncActive,
   t,
   loadScroll,
   toggleScroll,
   submitted,
 }: TranslatedProps<EditorInterfaceProps>) => {
-  const [previewVisible, setPreviewVisible] = useState(
+  const [previewActive, setPreviewActive] = useState(
     localStorage.getItem(PREVIEW_VISIBLE) !== 'false',
   );
-  const [i18nVisible, setI18nVisible] = useState(localStorage.getItem(I18N_VISIBLE) !== 'false');
+  const [i18nActive, setI18nActive] = useState(localStorage.getItem(I18N_VISIBLE) !== 'false');
 
   useEffect(() => {
     loadScroll();
@@ -188,26 +113,26 @@ const EditorInterface = ({
   );
 
   const handleTogglePreview = useCallback(() => {
-    const newPreviewVisible = !previewVisible;
-    setPreviewVisible(newPreviewVisible);
-    localStorage.setItem(PREVIEW_VISIBLE, `${newPreviewVisible}`);
-  }, [previewVisible]);
+    const newPreviewActive = !previewActive;
+    setPreviewActive(newPreviewActive);
+    localStorage.setItem(PREVIEW_VISIBLE, `${newPreviewActive}`);
+  }, [previewActive]);
 
   const handleToggleScrollSync = useCallback(() => {
     toggleScroll();
   }, [toggleScroll]);
 
   const handleToggleI18n = useCallback(() => {
-    const newI18nVisible = !i18nVisible;
-    setI18nVisible(newI18nVisible);
-    localStorage.setItem(I18N_VISIBLE, `${newI18nVisible}`);
-  }, [i18nVisible]);
+    const newI18nActive = !i18nActive;
+    setI18nActive(newI18nActive);
+    localStorage.setItem(I18N_VISIBLE, `${newI18nActive}`);
+  }, [i18nActive]);
 
   const handleLocaleChange = useCallback((locale: string) => {
     setSelectedLocale(locale);
   }, []);
 
-  const [previewEnabled, previewInFrame] = useMemo(() => {
+  const [showPreviewToggle, previewInFrame] = useMemo(() => {
     let preview = collection.editor?.preview ?? true;
     let frame = collection.editor?.frame ?? true;
 
@@ -225,10 +150,10 @@ const EditorInterface = ({
     return [preview, frame];
   }, [collection, entry.slug]);
 
-  const collectionI18nEnabled = hasI18n(collection);
+  const collectHasI18n = hasI18n(collection);
 
   const editor = (
-    <ControlPaneContainer key={defaultLocale} id="control-pane">
+    <div key={defaultLocale} id="control-pane" className="w-full">
       <EditorControlPane
         collection={collection}
         entry={entry}
@@ -236,9 +161,10 @@ const EditorInterface = ({
         fieldsErrors={fieldsErrors}
         locale={defaultLocale}
         submitted={submitted}
+        hideBorder={!previewActive && !i18nActive}
         t={t}
       />
-    </ControlPaneContainer>
+    </div>
   );
 
   const editorLocale = useMemo(
@@ -246,7 +172,8 @@ const EditorInterface = ({
       (locales ?? [])
         .filter(locale => locale !== defaultLocale)
         .map(locale => (
-          <ControlPaneContainer key={locale} $hidden={locale !== selectedLocale}>
+          <div key={locale}>
+            {/* TODO Fix $hidden={locale !== selectedLocale}> */}
             <EditorControlPane
               collection={collection}
               entry={entry}
@@ -256,9 +183,10 @@ const EditorInterface = ({
               onLocaleChange={handleLocaleChange}
               submitted={submitted}
               canChangeLocale
+              hideBorder
               t={t}
             />
-          </ControlPaneContainer>
+          </div>
         )),
     [
       collection,
@@ -268,114 +196,88 @@ const EditorInterface = ({
       fieldsErrors,
       handleLocaleChange,
       locales,
-      selectedLocale,
       submitted,
       t,
     ],
   );
 
-  const previewEntry = collectionI18nEnabled
+  const previewEntry = collectHasI18n
     ? getPreviewEntry(entry, selectedLocale[0], defaultLocale)
     : entry;
 
   const editorWithPreview = (
-    <>
-      <StyledSplitPane>
-        <ScrollSyncPane>{editor}</ScrollSyncPane>
-        <PreviewPaneContainer>
-          <EditorPreviewPane
-            collection={collection}
-            previewInFrame={previewInFrame}
-            entry={previewEntry}
-            fields={fields}
-          />
-        </PreviewPaneContainer>
-      </StyledSplitPane>
-    </>
+    <div className="grid grid-cols-editor h-full">
+      <ScrollSyncPane>{editor}</ScrollSyncPane>
+      <EditorPreviewPane
+        collection={collection}
+        previewInFrame={previewInFrame}
+        entry={previewEntry}
+        fields={fields}
+      />
+    </div>
   );
 
   const editorSideBySideLocale = (
-    <ScrollSync enabled={scrollSyncEnabled}>
-      <div>
-        <StyledSplitPane>
-          <ScrollSyncPane>{editor}</ScrollSyncPane>
-          <ScrollSyncPane>
-            <>{editorLocale}</>
-          </ScrollSyncPane>
-        </StyledSplitPane>
-      </div>
-    </ScrollSync>
+    <div className="grid grid-cols-editor h-full">
+      <ScrollSyncPane>{editor}</ScrollSyncPane>
+      <ScrollSyncPane>
+        <>{editorLocale}</>
+      </ScrollSyncPane>
+    </div>
   );
 
-  const finalI18nVisible = collectionI18nEnabled && i18nVisible;
-  const finalPreviewVisible = previewEnabled && previewVisible;
-  const scrollSyncVisible = finalI18nVisible || finalPreviewVisible;
+  const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
 
   return (
-    <EditorContainer>
-      <EditorToolbar
-        isPersisting={entry.isPersisting}
-        isDeleting={entry.isDeleting}
-        onPersist={handleOnPersist}
-        onPersistAndNew={() => handleOnPersist({ createNew: true })}
-        onPersistAndDuplicate={() => handleOnPersist({ createNew: true, duplicate: true })}
-        onDelete={onDelete}
-        showDelete={showDelete}
-        onDuplicate={onDuplicate}
-        user={user}
-        hasChanged={hasChanged}
-        displayUrl={displayUrl}
-        collection={collection}
-        isNewEntry={isNewEntry}
-        isModification={isModification}
-        onLogoutClick={onLogoutClick}
-        editorBackLink={editorBackLink}
-      />
-      <Editor key={draftKey}>
-        <StyledViewControls>
-          {collectionI18nEnabled && (
-            <Fab
-              size="small"
-              color={finalI18nVisible ? 'primary' : 'default'}
-              aria-label="add"
-              onClick={handleToggleI18n}
-              title={t('editor.editorInterface.toggleI18n')}
-            >
-              <LanguageIcon />
-            </Fab>
-          )}
-          {previewEnabled && (
-            <Fab
-              size="small"
-              color={finalPreviewVisible ? 'primary' : 'default'}
-              aria-label="add"
-              onClick={handleTogglePreview}
-              title={t('editor.editorInterface.togglePreview')}
-            >
-              <VisibilityIcon />
-            </Fab>
-          )}
-          {scrollSyncVisible && (
-            <Fab
-              size="small"
-              color={scrollSyncEnabled ? 'primary' : 'default'}
-              aria-label="add"
-              onClick={handleToggleScrollSync}
-              title={t('editor.editorInterface.toggleScrollSync')}
-            >
-              <HeightIcon />
-            </Fab>
-          )}
-        </StyledViewControls>
-        <EditorContent
-          i18nVisible={finalI18nVisible}
-          previewVisible={finalPreviewVisible}
-          editor={editor}
-          editorSideBySideLocale={editorSideBySideLocale}
-          editorWithPreview={editorWithPreview}
+    <MainView
+      breadcrumbs={[
+        {
+          name: collection.label,
+          to: `/collections/${collection.name}`,
+        },
+        {
+          name: isNewEntry
+            ? t('collection.collectionTop.newButton', {
+                collectionLabel: collection.label_singular || collection.label,
+              })
+            : summary,
+        },
+      ]}
+      noMargin
+      navbarActions={
+        <EditorToolbar
+          isPersisting={entry.isPersisting}
+          isDeleting={entry.isDeleting}
+          onPersist={handleOnPersist}
+          onPersistAndNew={() => handleOnPersist({ createNew: true })}
+          onPersistAndDuplicate={() => handleOnPersist({ createNew: true, duplicate: true })}
+          onDelete={onDelete}
+          showDelete={showDelete}
+          onDuplicate={onDuplicate}
+          hasChanged={hasChanged}
+          displayUrl={displayUrl}
+          collection={collection}
+          isNewEntry={isNewEntry}
+          isModification={isModification}
+          showPreviewToggle={showPreviewToggle}
+          previewActive={previewActive}
+          scrollSyncActive={scrollSyncActive}
+          showI18nToggle={collectHasI18n}
+          i18nActive={i18nActive}
+          togglePreview={handleTogglePreview}
+          toggleScrollSync={handleToggleScrollSync}
+          toggleI18n={handleToggleI18n}
         />
-      </Editor>
-    </EditorContainer>
+      }
+    >
+      <EditorContent
+        i18nActive={i18nActive}
+        previewActive={previewActive && !i18nActive}
+        editor={editor}
+        editorSideBySideLocale={editorSideBySideLocale}
+        editorWithPreview={editorWithPreview}
+      />
+    </MainView>
   );
 };
 

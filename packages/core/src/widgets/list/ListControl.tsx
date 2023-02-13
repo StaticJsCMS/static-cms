@@ -1,7 +1,6 @@
 import { DndContext } from '@dnd-kit/core';
 import { SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { styled } from '@mui/material/styles';
 import { arrayMoveImmutable } from 'array-move';
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -10,7 +9,6 @@ import { v4 as uuid } from 'uuid';
 import FieldLabel from '@staticcms/core/components/UI/FieldLabel';
 import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
 import Outline from '@staticcms/core/components/UI/Outline';
-import transientOptions from '@staticcms/core/lib/util/transientOptions';
 import ListItem from './ListItem';
 import { resolveFieldKeyType, TYPES_KEY } from './typedListHelpers';
 
@@ -27,36 +25,6 @@ import type {
   WidgetControlProps,
 } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
-
-const StyledListWrapper = styled('div')`
-  position: relative;
-  width: 100%;
-`;
-
-interface StyledSortableListProps {
-  $collapsed: boolean;
-}
-
-const StyledSortableList = styled(
-  'div',
-  transientOptions,
-)<StyledSortableListProps>(
-  ({ $collapsed }) => `
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-    ${
-      $collapsed
-        ? `
-          display: none;
-        `
-        : `
-          padding: 16px;
-        `
-    }
-  `,
-);
 
 interface SortableItemProps {
   id: string;
@@ -318,7 +286,7 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
   const listLabel = internalValue.length === 1 ? labelSingular : label;
 
   return (
-    <StyledListWrapper key="list-widget">
+    <div key="list-widget">
       <FieldLabel key="label">{label}</FieldLabel>
       <ObjectWidgetTopBar
         key="header"
@@ -337,7 +305,8 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
       {internalValue.length > 0 ? (
         <DndContext key="dnd-context" onDragEnd={handleDragEnd}>
           <SortableContext items={keys}>
-            <StyledSortableList $collapsed={collapsed}>
+            <div>
+              {/* TODO $collapsed={collapsed} */}
               {internalValue.map((item, index) => {
                 const key = keys[index];
                 if (!key) {
@@ -365,12 +334,12 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
                   />
                 );
               })}
-            </StyledSortableList>
+            </div>
           </SortableContext>
         </DndContext>
       ) : null}
       <Outline key="outline" hasLabel hasError={hasErrors} />
-    </StyledListWrapper>
+    </div>
   );
 };
 

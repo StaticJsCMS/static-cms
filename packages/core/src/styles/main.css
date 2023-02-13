@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /**
+  * Buttons
+  */
+  .btn-base {
+    @apply inline-flex
+      items-center
+      justify-center
+      text-sm
+      font-medium
+      focus:outline-none
+      focus:ring-4
+      focus:ring-gray-200
+      dark:focus:ring-gray-700;
+  }
+
+  .btn {
+    @apply btn-base
+      rounded
+      px-2.5
+      py-1.5;
+  }
+
+  .btn-rounded {
+    @apply btn-base
+      p-1.5
+      rounded-full;
+  }
+
+  .btn-contained-primary {
+    @apply inline-flex
+      items-center
+      justify-center
+      text-sm
+      font-medium
+      focus:outline-none
+      focus:ring-4
+      focus:ring-gray-200
+      dark:focus:ring-gray-700
+      rounded
+      px-2.5
+      py-1.5
+      border
+      border-transparent
+      bg-blue-700
+      hover:bg-blue-800
+      dark:bg-blue-600
+      dark:hover:bg-blue-700
+      text-white;
+  }
+
+  .btn-contained-primary-base {
+    @apply border
+      border-transparent
+      bg-blue-700
+      hover:bg-blue-800
+      dark:bg-blue-600
+      dark:hover:bg-blue-700
+      text-white;
+  }
+
+  .btn-contained-primary {
+    @apply btn
+      btn-contained-primary-base;
+  }
+
+  .btn-contained-primary-rounded {
+    @apply btn-rounded
+      btn-contained-primary-base;
+  }
+
+  .btn-outlined-primary-base {
+    @apply text-gray-900
+      bg-white
+      border
+      border-gray-200
+      hover:bg-slate-100
+      hover:text-blue-700
+      dark:bg-slate-800
+      dark:text-gray-300
+      dark:border-gray-600
+      dark:hover:text-white
+      dark:hover:bg-slate-700;
+  }
+
+  .btn-outlined-primary {
+    @apply btn
+      btn-outlined-primary-base;
+  }
+
+  .btn-outlined-primary-rounded {
+    @apply btn-rounded
+      btn-outlined-primary-base;
+  }
+
+  .btn-text-primary-base {
+    @apply hover:text-blue-700
+      dark:text-gray-300
+      dark:ring-gray-600
+      dark:hover:text-white
+      hover:bg-slate-100
+      dark:hover:bg-slate-700;
+  }
+
+  .btn-text-primary {
+    @apply btn
+      btn-text-primary-base;
+  }
+
+  .btn-text-primary-rounded {
+    @apply btn-rounded
+      btn-text-primary-base;
+  }
+
+  /**
+  * Checkbox
+  */
+  .checkbox {
+    @apply w-4
+      h-4
+      bg-slate-100
+      border-gray-300
+      rounded
+      p-1.5
+      focus:ring-blue-500
+      dark:focus:ring-blue-600
+      dark:ring-offset-gray-800
+      focus:ring-2
+      dark:bg-slate-700
+      dark:border-gray-600;
+  }
+}

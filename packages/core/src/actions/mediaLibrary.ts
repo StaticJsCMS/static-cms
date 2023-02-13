@@ -1,5 +1,5 @@
 import { currentBackend } from '../backend';
-import confirm from '../components/UI/Confirm';
+import confirm from '../components/common/confirm/Confirm';
 import {
   MEDIA_DELETE_FAILURE,
   MEDIA_DELETE_REQUEST,

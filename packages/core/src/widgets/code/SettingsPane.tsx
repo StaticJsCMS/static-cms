@@ -2,42 +2,13 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import { styled } from '@mui/material/styles';
 import isHotkey from 'is-hotkey';
 import React from 'react';
 
-import { shadows, zIndex } from '@staticcms/core/components/UI/styles';
 import SettingsButton from './SettingsButton';
 
 import type { SelectChangeEvent } from '@mui/material/Select';
 import type { FC } from 'react';
-
-const SettingsPaneContainer = styled('div')`
-  position: absolute;
-  top: 1px;
-  bottom: 1px;
-  right: 1px;
-  width: 200px;
-  z-index: ${zIndex.zIndex10};
-  background-color: #fff;
-  overflow: hidden;
-  padding: 12px;
-  border-radius: 0 3px 3px 0;
-  ${shadows.drop};
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const SettingsSectionTitle = styled('h3')`
-  font-size: 14px;
-  margin-top: 14px;
-  margin-bottom: 0;
-
-  &:first-of-type {
-    margin-top: 4px;
-  }
-`;
 
 interface SettingsSelectProps {
   type: 'language';
@@ -111,10 +82,10 @@ const SettingsPane: FC<SettingsPaneProps> = ({
   onChangeLanguage,
 }) => {
   return (
-    <SettingsPaneContainer onKeyDown={e => isHotkey('esc', e) && hideSettings()}>
+    <div onKeyDown={e => isHotkey('esc', e) && hideSettings()}>
       <SettingsButton onClick={hideSettings} showClose={true} />
       <>
-        <SettingsSectionTitle>Field Settings</SettingsSectionTitle>
+        <h3>Field Settings</h3>
         <SettingsSelect
           type="language"
           label="Language"
@@ -124,7 +95,7 @@ const SettingsPane: FC<SettingsPaneProps> = ({
           onChange={onChangeLanguage}
         />
       </>
-    </SettingsPaneContainer>
+    </div>
   );
 };
 

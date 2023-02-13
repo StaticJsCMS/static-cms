@@ -1,41 +1,13 @@
-import { styled } from '@mui/material/styles';
 import React, { useCallback, useMemo } from 'react';
 import { Waypoint } from 'react-waypoint';
 
-import { VIEW_STYLE_LIST } from '@staticcms/core/constants/collectionViews';
-import { transientOptions } from '@staticcms/core/lib';
 import { selectFields, selectInferredField } from '@staticcms/core/lib/util/collection.util';
+import Table from '../../common/table/Table';
 import EntryCard from './EntryCard';
 
 import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
-import type { Field, Collection, Collections, Entry } from '@staticcms/core/interface';
+import type { Collection, Collections, Entry, Field } from '@staticcms/core/interface';
 import type Cursor from '@staticcms/core/lib/util/Cursor';
-
-interface CardsGridProps {
-  $layout: CollectionViewStyle;
-}
-
-const CardsGrid = styled(
-  'div',
-  transientOptions,
-)<CardsGridProps>(
-  ({ $layout }) => `
-    ${
-      $layout === VIEW_STYLE_LIST
-        ? `
-          display: flex;
-          flex-direction: column;
-        `
-        : `
-          display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-        `
-    }
-    width: 100%;
-    margin-top: 16px;
-    gap: 16px;
-  `,
-);
 
 export interface BaseEntryListingProps {
   entries: Entry[];
@@ -97,6 +69,15 @@ const EntryListing = ({
     [],
   );
 
+  const summaryFields = useMemo(() => {
+    let fields: string[] | undefined;
+    if ('collection' in otherProps) {
+      fields = otherProps.collection.summary_fields;
+    }
+
+    return fields ?? ['summary'];
+  }, [otherProps]);
+
   const renderedCards = useMemo(() => {
     if ('collection' in otherProps) {
       const inferredFields = inferFields(otherProps.collection);
@@ -107,36 +88,44 @@ const EntryListing = ({
           viewStyle={viewStyle}
           entry={entry}
           key={idx}
+          summaryFields={summaryFields}
         />
       ));
     }
 
-    const isSingleCollectionInList = Object.keys(otherProps.collections).length === 1;
+    // TODO const isSingleCollectionInList = Object.keys(otherProps.collections).length === 1;
     return entries.map((entry, idx) => {
       const collectionName = entry.collection;
       const collection = Object.values(otherProps.collections).find(
         coll => coll.name === collectionName,
       );
-      const collectionLabel = !isSingleCollectionInList ? collection?.label : undefined;
+      // TODO const collectionLabel = !isSingleCollectionInList ? collection?.label : undefined;
       const inferredFields = inferFields(collection);
       return collection ? (
         <EntryCard
           collection={collection}
           entry={entry}
           inferredFields={inferredFields}
-          collectionLabel={collectionLabel}
           key={idx}
+          summaryFields={summaryFields}
         />
       ) : null;
     });
-  }, [entries, inferFields, otherProps, viewStyle]);
+  }, [entries, inferFields, otherProps, summaryFields, viewStyle]);
 
-  return (
-    <div>
-      <CardsGrid $layout={viewStyle}>
+  if (viewStyle === 'VIEW_STYLE_LIST') {
+    return (
+      <Table columns={summaryFields}>
         {renderedCards}
         {hasMore && handleLoadMore && <Waypoint key={page} onEnter={handleLoadMore} />}
-      </CardsGrid>
+      </Table>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-3 gap-4">
+      {renderedCards}
+      {hasMore && handleLoadMore && <Waypoint key={page} onEnter={handleLoadMore} />}
     </div>
   );
 };

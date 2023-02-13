@@ -1,4 +1,3 @@
-import { styled } from '@mui/material/styles';
 import React from 'react';
 
 import FilterControl from './FilterControl';
@@ -17,18 +16,6 @@ import type {
   ViewFilter,
   ViewGroup,
 } from '@staticcms/core/interface';
-
-const CollectionControlsContainer = styled('div')`
-  display: flex;
-  align-items: center;
-  flex-direction: row-reverse;
-  margin-top: 22px;
-  max-width: 100%;
-
-  & > div {
-    margin-left: 6px;
-  }
-`;
 
 interface CollectionControlsProps {
   viewStyle: CollectionViewStyle;
@@ -59,7 +46,7 @@ const CollectionControls = ({
   group,
 }: TranslatedProps<CollectionControlsProps>) => {
   return (
-    <CollectionControlsContainer>
+    <div className="flex gap-2 items-center relative z-10">
       <ViewStyleControl viewStyle={viewStyle} onChangeViewStyle={onChangeViewStyle} />
       {viewGroups && onGroupClick && group
         ? viewGroups.length > 0 && (
@@ -81,7 +68,7 @@ const CollectionControls = ({
             <SortControl fields={sortableFields} sort={sort} onSortClick={onSortClick} />
           )
         : null}
-    </CollectionControlsContainer>
+    </div>
   );
 };
 

@@ -2,7 +2,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import Button from '@mui/material/Button';
 import Popper from '@mui/material/Popper';
-import { styled, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFocused } from 'slate-react';
@@ -13,43 +13,6 @@ import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 
 import type { Collection, Entry, FileOrImageField, MarkdownField } from '@staticcms/core/interface';
 import type { ChangeEvent, KeyboardEvent } from 'react';
-
-const StyledPopperContent = styled('div')(
-  ({ theme }) => `
-    display: flex;
-    gap: 4px;
-    background: ${theme.palette.background.paper};
-    box-shadow: ${theme.shadows[8]};
-    margin: 10px 0;
-    padding: 6px;
-    border-radius: 4px;
-    align-items: center;
-    position: relative;
-  `,
-);
-
-const StyledPopoverContent = styled(StyledPopperContent)`
-  display: flex;
-  align-items: center;
-  padding: 4px 8px;
-  gap: 2px;
-`;
-
-const StyledPopoverEditingContent = styled(StyledPopperContent)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16px;
-  gap: 16px;
-  width: 300px;
-`;
-
-const StyledFloatingVerticalDivider = styled('div')`
-  width: 1px;
-  height: 20px;
-  background-color: rgba(229, 231, 235, 1);
-  margin: 0 4px;
-`;
 
 export interface MediaPopoverProps<T extends FileOrImageField | MarkdownField> {
   containerRef: HTMLElement | null;
@@ -277,7 +240,7 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
       tabIndex={0}
     >
       {!editing ? (
-        <StyledPopoverContent key="edit-content" contentEditable={false}>
+        <div key="edit-content" contentEditable={false}>
           <Button
             ref={buttonRef}
             size="small"
@@ -291,7 +254,7 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
           >
             {forImage ? 'Edit Image' : 'Edit Link'}
           </Button>
-          <StyledFloatingVerticalDivider />
+          <div />
           {!forImage ? (
             <Button
               size="small"
@@ -311,9 +274,9 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
           >
             <DeleteForeverIcon />
           </Button>
-        </StyledPopoverContent>
+        </div>
       ) : (
-        <StyledPopoverEditingContent key="editing-content" contentEditable={false}>
+        <div key="editing-content" contentEditable={false}>
           <TextField
             key="url-input"
             inputRef={urlRef}
@@ -344,7 +307,7 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
           <Button fullWidth onClick={handleMediaOpen}>
             Open Media Library
           </Button>
-        </StyledPopoverEditingContent>
+        </div>
       )}
     </Popper>
   );

@@ -1,13 +1,19 @@
 import { createElement, memo } from 'react';
 
-import type { TemplatePreviewComponent, TemplatePreviewProps } from '@staticcms/core/interface';
+import type {
+  ObjectValue,
+  TemplatePreviewComponent,
+  TemplatePreviewProps,
+  UnknownField,
+} from '@staticcms/core/interface';
+import type { FC } from 'react';
 
 interface EditorPreviewContentProps {
-  previewComponent?: TemplatePreviewComponent;
-  previewProps: TemplatePreviewProps;
+  previewComponent?: TemplatePreviewComponent<ObjectValue, UnknownField>;
+  previewProps: TemplatePreviewProps<ObjectValue>;
 }
 
-const EditorPreviewContent = memo(
+const EditorPreviewContent: FC<EditorPreviewContentProps> = memo(
   ({ previewComponent, previewProps }: EditorPreviewContentProps) => {
     if (!previewComponent) {
       return null;

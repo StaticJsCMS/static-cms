@@ -1,4 +1,3 @@
-import { styled } from '@mui/material/styles';
 import React from 'react';
 
 import AlignToolbarButtons from '../buttons/AlignToolbarButtons';
@@ -9,38 +8,8 @@ import ListToolbarButtons from '../buttons/ListToolbarButtons';
 import MediaToolbarButton from '../buttons/MediaToolbarButtons';
 import ShortcodeToolbarButton from '../buttons/ShortcodeToolbarButton';
 
-import type { FC } from 'react';
 import type { Collection, Entry, MarkdownField } from '@staticcms/core/interface';
-
-const StyledToolbar = styled('div')(
-  ({ theme }) => `
-    display: flex;
-    align-items: center;
-    user-select: none;
-    box-sizing: content-box;
-    color: rgb(68,68,68);
-    min-height: 40px;
-    position: relative;
-    flex-wrap: wrap;
-    margin-top: -1.25rem;
-    margin-left: -1.25rem;
-    margin-right: -1.25rem;
-    padding: 12px;
-    border-bottom: 2px solid #eee;
-    gap:2px;
-    background: ${theme.palette.background.paper};
-  `,
-);
-
-const StyledDivider = styled('div')(
-  ({ theme }) => `
-    height: 18px;
-    width: 1px;
-    background: ${theme.palette.text.secondary};
-    margin: 0 4px;
-    opacity: 0.5;
-  `,
-);
+import type { FC } from 'react';
 
 export interface ToolbarProps {
   useMdx: boolean;
@@ -68,12 +37,12 @@ const Toolbar: FC<ToolbarProps> = ({ useMdx, containerRef, collection, field, en
   ].filter(Boolean);
 
   return (
-    <StyledToolbar>
+    <div>
       {groups.map((group, index) => [
-        index !== 0 ? <StyledDivider key={`toolbar-divider-${index}`} /> : null,
+        index !== 0 ? <div key={`toolbar-divider-${index}`} /> : null,
         group,
       ])}
-    </StyledToolbar>
+    </div>
   );
 };
 

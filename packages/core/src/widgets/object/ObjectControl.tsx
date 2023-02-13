@@ -1,52 +1,13 @@
-import { styled } from '@mui/material/styles';
 import React, { useCallback, useMemo, useState } from 'react';
 
-import EditorControl from '@staticcms/core/components/Editor/EditorControlPane/EditorControl';
+import EditorControl from '@staticcms/core/components/editor/EditorControlPane/EditorControl';
 import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
 import Outline from '@staticcms/core/components/UI/Outline';
-import { transientOptions } from '@staticcms/core/lib';
 import { compileStringTemplate } from '@staticcms/core/lib/widgets/stringTemplate';
 import { getEntryDataPath } from '@staticcms/core/reducers/selectors/entryDraft';
 
 import type { ObjectField, ObjectValue, WidgetControlProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
-
-const StyledObjectControlWrapper = styled('div')`
-  position: relative;
-  background: white;
-  width: 100%;
-`;
-
-interface StyledFieldsBoxProps {
-  $collapsed: boolean;
-}
-
-const StyledFieldsBox = styled(
-  'div',
-  transientOptions,
-)<StyledFieldsBoxProps>(
-  ({ $collapsed }) => `
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-    ${
-      $collapsed
-        ? `
-          display: none;
-        `
-        : `
-          padding: 16px;
-        `
-    }
-  `,
-);
-
-const StyledNoFieldsMessage = styled('div')`
-  display: flex;
-  padding: 16px;
-  width: 100%;
-`;
 
 const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
   field,
@@ -133,7 +94,7 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
 
   if (multiFields) {
     return (
-      <StyledObjectControlWrapper key="object-control-wrapper">
+      <div key="object-control-wrapper">
         {forList ? null : (
           <ObjectWidgetTopBar
             key="object-control-top-bar"
@@ -145,21 +106,18 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
             testId="object-title"
           />
         )}
-        <StyledFieldsBox $collapsed={collapsed} key="object-control-fields">
+        <div key="object-control-fields">
+          {/* TODO $collapsed={collapsed} */}
           {renderedField}
-        </StyledFieldsBox>
+        </div>
         {forList ? null : (
           <Outline key="object-control-outline" hasError={hasErrors || childHasError} />
         )}
-      </StyledObjectControlWrapper>
+      </div>
     );
   }
 
-  return (
-    <StyledNoFieldsMessage key="no-fields-found">
-      No field(s) defined for this widget
-    </StyledNoFieldsMessage>
-  );
+  return <div key="no-fields-found">No field(s) defined for this widget</div>;
 };
 
 export default ObjectControl;

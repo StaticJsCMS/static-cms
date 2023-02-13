@@ -55,23 +55,6 @@ module.exports = {
         caughtErrorsIgnorePattern: '^_',
       },
     ],
-    '@typescript-eslint/no-restricted-imports': [
-      'error',
-      {
-        patterns: [
-          {
-            group: ['@mui/*/*/*', '!@mui/material/test-utils/*'],
-            message: 'Do not import material imports as 3rd level imports',
-            allowTypeImports: true,
-          },
-          {
-            group: ['@mui/material', '!@mui/material/'],
-            message: 'Please import material imports as defaults or 2nd level imports',
-            allowTypeImports: true,
-          },
-        ],
-      },
-    ],
     'import/prefer-default-export': 'error',
   },
   plugins: ['babel', '@emotion', 'cypress', 'unicorn', 'react-hooks'],

@@ -1,6 +1,7 @@
 /**
  * @jest-environment jsdom
  */
+import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import {
   findNodePath,
@@ -13,9 +14,9 @@ import {
 } from '@udecode/plate';
 import React, { useRef } from 'react';
 import { useFocused } from 'slate-react';
-import '@testing-library/jest-dom';
 
-import { mockMarkdownCollection, mockMarkdownField } from '@staticcms/test/data/collection';
+import { createMockCollection } from '@staticcms/test/data/collections.mock';
+import { mockMarkdownField } from '@staticcms/test/data/fields.mock';
 import BalloonToolbar from '../BalloonToolbar';
 
 import type { Entry } from '@staticcms/core/interface';
@@ -37,7 +38,7 @@ const BalloonToolbarWrapper: FC<BalloonToolbarWrapperProps> = ({ useMdx = false 
         key="balloon-toolbar"
         useMdx={useMdx}
         containerRef={ref.current}
-        collection={mockMarkdownCollection}
+        collection={createMockCollection({}, mockMarkdownField)}
         field={mockMarkdownField}
         entry={entry}
       />

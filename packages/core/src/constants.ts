@@ -117,3 +117,6 @@ export const STATUS_FAILURE = 'STATUS_FAILURE';
 
 // Wait Until
 export const WAIT_UNTIL_ACTION = 'WAIT_UNTIL_ACTION';
+
+// Global UI
+export const THEME_CHANGE = 'THEME_CHANGE';

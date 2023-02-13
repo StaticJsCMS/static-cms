@@ -1,11 +1,5 @@
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import Button from '@mui/material/Button';
-import ListItemText from '@mui/material/ListItemText';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import { styled } from '@mui/material/styles';
-import React, { useCallback, useMemo, useState } from 'react';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
+import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
 import {
@@ -13,6 +7,9 @@ import {
   SORT_DIRECTION_DESCENDING,
   SORT_DIRECTION_NONE,
 } from '@staticcms/core/constants';
+import Menu from '../common/menu/Menu';
+import MenuItemButton from '../common/menu/MenuItemButton';
+import MenuGroup from '../common/menu/MenuGroup';
 
 import type {
   SortableField,
@@ -20,15 +17,6 @@ import type {
   SortMap,
   TranslatedProps,
 } from '@staticcms/core/interface';
-import type { MouseEvent } from 'react';
-
-const StyledMenuIconWrapper = styled('div')`
-  width: 32px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-`;
 
 function nextSortDirection(direction: SortDirection) {
   switch (direction) {
@@ -48,15 +36,6 @@ interface SortControlProps {
 }
 
 const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortControlProps>) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  }, []);
-  const handleClose = useCallback(() => {
-    setAnchorEl(null);
-  }, []);
-
   const selectedSort = useMemo(() => {
     if (!sort) {
       return { key: undefined, direction: undefined };
@@ -71,51 +50,32 @@ const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortContr
   }, [sort]);
 
   return (
-    <div>
-      <Button
-        id="sort-button"
-        aria-controls={open ? 'sort-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-        variant={selectedSort.key ? 'contained' : 'outlined'}
-        endIcon={<KeyboardArrowDownIcon />}
-      >
-        {t('collection.collectionTop.sortBy')}
-      </Button>
-      <Menu
-        id="sort-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'sort-button',
-        }}
-      >
+    <Menu
+      label={t('collection.collectionTop.sortBy')}
+      variant={selectedSort.key ? 'contained' : 'outlined'}
+    >
+      <MenuGroup>
         {fields.map(field => {
           const sortDir = sort?.[field.name]?.direction ?? SORT_DIRECTION_NONE;
           const nextSortDir = nextSortDirection(sortDir);
           return (
-            <MenuItem
+            <MenuItemButton
               key={field.name}
               onClick={() => onSortClick(field.name, nextSortDir)}
-              selected={field.name === selectedSort.key}
+              endIcon={
+                field.name === selectedSort.key
+                  ? selectedSort.direction === SORT_DIRECTION_ASCENDING
+                    ? ChevronUpIcon
+                    : ChevronDownIcon
+                  : undefined
+              }
             >
-              <ListItemText>{field.label ?? field.name}</ListItemText>
-              <StyledMenuIconWrapper>
-                {field.name === selectedSort.key ? (
-                  selectedSort.direction === SORT_DIRECTION_ASCENDING ? (
-                    <KeyboardArrowUpIcon fontSize="small" />
-                  ) : (
-                    <KeyboardArrowDownIcon fontSize="small" />
-                  )
-                ) : null}
-              </StyledMenuIconWrapper>
-            </MenuItem>
+              {field.label ?? field.name}
+            </MenuItemButton>
           );
         })}
-      </Menu>
-    </div>
+      </MenuGroup>
+    </Menu>
   );
 };
 

@@ -1,4 +1,3 @@
-import { styled } from '@mui/material/styles';
 import {
   createAlignPlugin,
   createAutoformatPlugin,
@@ -105,19 +104,8 @@ import type {
   WidgetControlProps,
 } from '@staticcms/core/interface';
 import type { AnyObject, AutoformatPlugin, PlatePlugin } from '@udecode/plate';
-import type { CSSProperties, FC } from 'react';
+import type { FC } from 'react';
 import type { MdEditor, MdValue } from './plateTypes';
-
-const StyledPlateEditor = styled('div')`
-  position: relative;
-  padding: 1.25rem;
-  padding-bottom: 0;
-  margin-bottom: 1.25rem;
-`;
-
-const styles: Record<string, CSSProperties> = {
-  container: { position: 'relative' },
-};
 
 export interface PlateEditorProps {
   initialValue: MdValue;
@@ -268,7 +256,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
 
   return useMemo(
     () => (
-      <StyledPlateEditor>
+      <div>
         <DndProvider backend={HTML5Backend}>
           <PlateProvider<MdValue>
             id={id}
@@ -277,7 +265,8 @@ const PlateEditor: FC<PlateEditorProps> = ({
             plugins={plugins}
             onChange={onChange}
           >
-            <div key="editor-outer_wrapper" ref={outerEditorContainerRef} style={styles.container}>
+            <div key="editor-outer_wrapper" ref={outerEditorContainerRef}>
+              {/* TODO style={styles.container}> */}
               <Toolbar
                 key="toolbar"
                 useMdx={useMdx}
@@ -287,7 +276,8 @@ const PlateEditor: FC<PlateEditorProps> = ({
                 entry={entry}
               />
 
-              <div key="editor-wrapper" ref={editorContainerRef} style={styles.container}>
+              <div key="editor-wrapper" ref={editorContainerRef}>
+                {/* TODO style={styles.container}> */}
                 <Plate
                   key="editor"
                   id={id}
@@ -297,11 +287,8 @@ const PlateEditor: FC<PlateEditorProps> = ({
                     onBlur,
                   }}
                 >
-                  <div
-                    key="editor-inner-wrapper"
-                    ref={innerEditorContainerRef}
-                    style={styles.container}
-                  >
+                  <div key="editor-inner-wrapper" ref={innerEditorContainerRef}>
+                    {/* TODO style={styles.container}> */}
                     <BalloonToolbar
                       key="balloon-toolbar"
                       useMdx={useMdx}
@@ -317,7 +304,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
             </div>
           </PlateProvider>
         </DndProvider>
-      </StyledPlateEditor>
+      </div>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [collection, field, onBlur, onFocus, initialValue, onChange, plugins],
