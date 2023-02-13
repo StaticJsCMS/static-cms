@@ -382,6 +382,61 @@ describe(RelationControl.name, () => {
       expect(queryByTestId(option6)).not.toBeInTheDocument();
     });
 
+    it('objects options limit', async () => {
+      const field: RelationField = {
+        label: 'Relation',
+        name: 'relation',
+        widget: 'relation',
+        collection: 'posts',
+        display_fields: ['title', 'date'],
+        search_fields: ['title', 'body'],
+        value_field: 'title',
+        options_length: 5,
+      };
+
+      const { getByTestId, queryByTestId } = await renderRelationControl({ field });
+
+      const input = getByTestId('autocomplete-input');
+      await userEvent.type(input, 'P');
+      expect(input).toHaveValue('P');
+
+      expect(getByTestId('autocomplete-option-Post 1')).toHaveClass('text-gray-900'); // Not selected
+      expect(getByTestId('autocomplete-option-Post 2')).toHaveClass('text-gray-900'); // Not selected
+      expect(getByTestId('autocomplete-option-Post 3')).toHaveClass('text-gray-900'); // Not selected
+      expect(getByTestId('autocomplete-option-Post 4')).toHaveClass('text-gray-900'); // Not selected
+      expect(getByTestId('autocomplete-option-Post 5')).toHaveClass('text-gray-900'); // Not selected
+      expect(queryByTestId('autocomplete-option-Post 6')).not.toBeInTheDocument();
+    });
+
+    it('always shows selected options in results', async () => {
+      const field: RelationField = {
+        label: 'Relation',
+        name: 'relation',
+        widget: 'relation',
+        collection: 'posts',
+        display_fields: ['title', 'date'],
+        search_fields: ['title', 'body'],
+        value_field: 'title',
+        options_length: 5,
+      };
+
+      const { getByTestId, queryByTestId } = await renderRelationControl(
+        { field, value: 'Post 6' },
+        { expectedValue: 'Post 6 2023-02-11' },
+      );
+
+      const input = getByTestId('autocomplete-input');
+      await userEvent.clear(input);
+      await userEvent.type(input, 'P');
+
+      expect(getByTestId('autocomplete-option-Post 1')).toHaveClass('text-gray-900'); // Not selected
+      expect(getByTestId('autocomplete-option-Post 2')).toHaveClass('text-gray-900'); // Not selected
+      expect(getByTestId('autocomplete-option-Post 3')).toHaveClass('text-gray-900'); // Not selected
+      expect(getByTestId('autocomplete-option-Post 4')).toHaveClass('text-gray-900'); // Not selected
+      expect(queryByTestId('autocomplete-option-Post 5')).not.toBeInTheDocument();
+      expect(getByTestId('autocomplete-option-Post 6')).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+    });
+
     it('should call onChange when option is selected', async () => {
       const {
         getByTestId,

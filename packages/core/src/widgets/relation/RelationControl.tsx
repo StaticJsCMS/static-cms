@@ -96,6 +96,8 @@ function getSelectedValue(
   }
 }
 
+const DEFAULT_OPTIONS_LIMIT = 20;
+
 const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> = ({
   value,
   field,
@@ -176,10 +178,9 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
   const filterOptions = useCallback(
     (inputValue: string) => {
       const searchFields = field.search_fields;
-      const limit = field.options_length || 20;
+      const limit = field.options_length || DEFAULT_OPTIONS_LIMIT;
       const expandedEntries = expandSearchEntries(entries, searchFields);
-
-      let hits = fuzzy
+      const hits = fuzzy
         .filter(inputValue, expandedEntries, {
           extract: entry => {
             return getEntryField(entry.field, entry);
@@ -188,11 +189,13 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
         .sort(sortByScore)
         .map(f => f.original);
 
+      let options = uniqBy(parseHitOptions(mergeExpandedEntries(hits)), o => o.value);
+
       if (limit !== undefined && limit > 0) {
-        hits = hits.slice(0, limit);
+        options = options.slice(0, limit);
       }
 
-      setOptions(parseHitOptions(mergeExpandedEntries(hits)));
+      setOptions(options);
     },
     [entries, field.options_length, field.search_fields, parseHitOptions],
   );
@@ -207,16 +210,44 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
 
       const options = await backend.listAllEntries(searchCollection);
       setEntries(options);
-      setOptions(parseHitOptions(options));
+
+      const hitOptions = parseHitOptions(options);
+
+      if (value) {
+        const byValue = hitOptions.reduce((acc, option) => {
+          acc[option.value] = option;
+          return acc;
+        }, {} as Record<string, HitOption>);
+
+        const newFilteredValue =
+          typeof value === 'string'
+            ? value in byValue
+              ? [value]
+              : []
+            : value.filter(v => v && v in byValue);
+
+        const newInitialOptions = newFilteredValue.map(v => byValue[v]);
+
+        setInitialOptions(newInitialOptions);
+      }
+
+      setOptions(hitOptions);
     };
 
     getOptions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchCollection, config, loading, parseHitOptions]);
 
-  const uniqueOptions = useMemo(
-    () => uniqOptions(initialOptions, options),
-    [initialOptions, options],
-  );
+  const uniqueOptions = useMemo(() => {
+    let uOptions = uniqOptions(initialOptions, options);
+
+    const limit = field.options_length || DEFAULT_OPTIONS_LIMIT;
+    if (limit !== undefined && limit > 0) {
+      uOptions = uOptions.slice(0, limit);
+    }
+
+    return uOptions;
+  }, [field.options_length, initialOptions, options]);
 
   const uniqueOptionsByValue = useMemo(
     () =>
