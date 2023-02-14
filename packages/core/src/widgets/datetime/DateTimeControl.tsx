@@ -139,6 +139,16 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
   }, [dateFormat, timeFormat]);
 
   const defaultValue = useMemo(() => {
+    console.log(
+      'utc',
+      localToUTC(new Date(), timezoneOffset).toISOString(),
+      'utc alt',
+      new Date(new Date().getTime() + timezoneOffset).toISOString(),
+      'timezoneOffset',
+      timezoneOffset,
+      'date',
+      new Date().toISOString(),
+    );
     const today = field.picker_utc ? localToUTC(new Date(), timezoneOffset) : new Date();
     return field.default === undefined
       ? format
