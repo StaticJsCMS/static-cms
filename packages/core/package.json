@@ -49,7 +49,7 @@
   "dependencies": {
     "@babel/eslint-parser": "7.19.1",
     "@babel/runtime": "7.20.13",
-    "@codemirror/autocomplete": "6.4.0",
+    "@codemirror/autocomplete": "6.4.1",
     "@codemirror/commands": "6.2.0",
     "@codemirror/language": "6.6.0",
     "@codemirror/language-data": "6.1.0",
