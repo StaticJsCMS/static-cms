@@ -26,11 +26,12 @@ export interface SelectProps<T> {
   value: T | T[] | null;
   options: T[] | Option<T>[];
   required?: boolean;
+  disabled?: boolean;
   onChange: SelectChangeEventHandler<T>;
 }
 
 const Select = function <T>(
-  { label, value, options, required = false, onChange }: SelectProps<T>,
+  { label, value, options, required = false, disabled, onChange }: SelectProps<T>,
   ref: Ref<HTMLButtonElement>,
 ) {
   const handleChange = useCallback(
@@ -55,7 +56,7 @@ const Select = function <T>(
 
   return (
     <div className="relative w-full mt-1">
-      <Listbox value={value} onChange={handleChange}>
+      <Listbox value={value} onChange={handleChange} disabled={disabled}>
         <Listbox.Button
           ref={ref}
           className="

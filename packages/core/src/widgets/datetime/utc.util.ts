@@ -1,12 +1,13 @@
-export function localToUTC(dateTime: Date, timezoneOffset: number): Date {
-  const utcFromLocal = new Date(dateTime.getTime() - timezoneOffset);
-  return utcFromLocal;
+import addMinutes from 'date-fns/addMinutes';
+
+export function localToUTC(dateTime: Date): Date {
+  return addMinutes(dateTime.getTime(), getTimezoneOffset(dateTime));
 }
 
-export function utcToLocal(dateTime: Date, timezoneOffset: number): Date {
-  return new Date(dateTime.getTime() + timezoneOffset);
+export function utcToLocal(dateTime: Date): Date {
+  return addMinutes(dateTime.getTime(), getTimezoneOffset(dateTime) * -1);
 }
 
-export function getTimezoneOffset(): number {
-  return new Date().getTimezoneOffset() * 60000;
+export function getTimezoneOffset(dateTime: Date): number {
+  return dateTime.getTimezoneOffset();
 }

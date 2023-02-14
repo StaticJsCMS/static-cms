@@ -81,4 +81,11 @@ describe(TextControl.name, () => {
 
     expect(input).toHaveFocus();
   });
+
+  it('should disable input if disabled', async () => {
+    const { getByTestId } = renderControl({ disabled: true });
+
+    const input = getByTestId('textarea-input');
+    expect(input).toBeDisabled();
+  });
 });

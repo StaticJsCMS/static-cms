@@ -84,6 +84,13 @@ describe(NumberControl.name, () => {
     expect(input).toHaveFocus();
   });
 
+  it('should disable input if disabled', async () => {
+    const { getByTestId } = await renderControl({ disabled: true });
+
+    const input = getByTestId('number-input');
+    expect(input).toBeDisabled();
+  });
+
   it('should pass min, max and step to input', async () => {
     const { getByTestId } = renderControl({
       field: {

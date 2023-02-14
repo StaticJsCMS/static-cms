@@ -28,6 +28,7 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
   value,
   errors,
   hasErrors,
+  disabled,
   onChange,
 }) => {
   const [internalValue, setInternalValue] = useState(value);
@@ -124,6 +125,7 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
         value={stringValue}
         options={stringValueOptions}
         required={field.required}
+        disabled={disabled}
         onChange={handleChange}
       />
     </Field>

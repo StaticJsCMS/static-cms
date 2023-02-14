@@ -9,8 +9,9 @@ import type { ChangeEvent, FC } from 'react';
 const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
   value,
   label,
-  onChange,
   errors,
+  disabled,
+  onChange,
 }) => {
   const [internalValue, setInternalValue] = useState(value ?? false);
   const ref = useRef<HTMLInputElement | null>(null);
@@ -25,7 +26,7 @@ const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
 
   return (
     <Field inputRef={ref} label={label} errors={errors} variant="inline" cursor="pointer">
-      <Switch ref={ref} value={internalValue} onChange={handleChange} />
+      <Switch ref={ref} value={internalValue} disabled={disabled} onChange={handleChange} />
     </Field>
   );
 };

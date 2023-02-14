@@ -95,4 +95,11 @@ describe(BooleanControl.name, () => {
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onChange).toHaveBeenLastCalledWith(true);
   });
+
+  it('should disable input if disabled', async () => {
+    const { getByTestId } = await renderControl({ disabled: true });
+
+    const input = getByTestId('switch-input');
+    expect(input).toBeDisabled();
+  });
 });

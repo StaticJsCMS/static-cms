@@ -25,14 +25,14 @@ export interface AutocompleteProps<T> {
   label: ReactNode | ReactNode[];
   value: T | T[] | null;
   options: T[] | Option<T>[];
-  required?: boolean;
+  disabled?: boolean;
   displayValue: (item: T | T[] | null) => string;
   onQuery: (query: string) => void;
   onChange: AutocompleteChangeEventHandler<T>;
 }
 
 const Autocomplete = function <T>(
-  { label, value, options, displayValue, onQuery, onChange }: AutocompleteProps<T>,
+  { label, value, options, disabled, displayValue, onQuery, onChange }: AutocompleteProps<T>,
   ref: Ref<HTMLInputElement>,
 ) {
   const handleChange = useCallback(
@@ -57,7 +57,7 @@ const Autocomplete = function <T>(
 
   return (
     <div className="relative w-full">
-      <Combobox value={value} onChange={handleChange}>
+      <Combobox value={value} onChange={handleChange} disabled={disabled}>
         <div className="relative mt-1">
           <div
             className="

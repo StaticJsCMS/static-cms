@@ -81,4 +81,11 @@ describe(StringControl.name, () => {
 
     expect(input).toHaveFocus();
   });
+
+  it('should disable input if disabled', async () => {
+    const { getByTestId } = renderControl({ disabled: true });
+
+    const input = getByTestId('text-input');
+    expect(input).toBeDisabled();
+  });
 });

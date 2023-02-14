@@ -99,7 +99,7 @@ const EditorControlPane = ({
             value={getFieldValue(field, entry, isTranslatable, locale)}
             fieldsErrors={fieldsErrors}
             submitted={submitted}
-            isDisabled={isDuplicate}
+            disabled={isDuplicate}
             isHidden={isHidden}
             isFieldDuplicate={field => isFieldDuplicate(field, locale, i18n?.defaultLocale)}
             isFieldHidden={field => isFieldHidden(field, locale, i18n?.defaultLocale)}

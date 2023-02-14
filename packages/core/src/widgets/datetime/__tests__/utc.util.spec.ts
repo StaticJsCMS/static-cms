@@ -1,23 +1,19 @@
-import formatISO from 'date-fns/formatISO';
-
-import { getTimezoneOffset, localToUTC } from '../utc.util';
+import { getTimezoneOffset, localToUTC, utcToLocal } from '../utc.util';
 
 describe('utc util', () => {
-  beforeAll(() => {
-    jest.useFakeTimers({ now: new Date(2023, 1, 12, 10, 5, 35) });
-  });
-
-  afterAll(() => {
-    jest.useRealTimers();
-  });
-
   it('gets the timezone offset in milliseconds', () => {
-    expect(getTimezoneOffset()).toBe(18000000);
+    expect(getTimezoneOffset(new Date())).toBe(300);
   });
 
   it('converts local (EST) to UTC', () => {
-    const expectedUTC = new Date(2023, 1, 12, 15, 5, 35);
-    const actualUTC = localToUTC(new Date(), getTimezoneOffset());
-    expect(formatISO(actualUTC)).toEqual(formatISO(expectedUTC));
+    expect(localToUTC(new Date(2023, 1, 12, 10, 5, 35)).toString()).toEqual(
+      'Sun Feb 12 2023 15:05:35 GMT-0500 (Eastern Standard Time)',
+    );
+  });
+
+  it('converts UTC to local (EST)', () => {
+    expect(utcToLocal(new Date(2023, 1, 12, 15, 5, 35)).toString()).toEqual(
+      'Sun Feb 12 2023 10:05:35 GMT-0500 (Eastern Standard Time)',
+    );
   });
 });

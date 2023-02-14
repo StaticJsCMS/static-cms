@@ -5,11 +5,12 @@ import type { ChangeEvent, ChangeEventHandler } from 'react';
 export interface SwitchProps {
   label?: string;
   value: boolean;
+  disabled?: boolean;
   onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
 const Switch = forwardRef<HTMLInputElement | null, SwitchProps>(
-  ({ label, value, onChange }, ref) => {
+  ({ label, value, disabled, onChange }, ref) => {
     const handleChange = useCallback(
       (event: ChangeEvent<HTMLInputElement>) => {
         onChange?.(event);
@@ -25,6 +26,7 @@ const Switch = forwardRef<HTMLInputElement | null, SwitchProps>(
           type="checkbox"
           checked={value}
           className="sr-only peer"
+          disabled={disabled}
           onChange={handleChange}
           onClick={() => false}
         />

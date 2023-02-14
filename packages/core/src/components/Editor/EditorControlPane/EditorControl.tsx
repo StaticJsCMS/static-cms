@@ -46,7 +46,7 @@ const EditorControl = ({
   field,
   fieldsErrors,
   submitted,
-  isDisabled,
+  disabled,
   isFieldDuplicate,
   isFieldHidden,
   isHidden = false,
@@ -151,7 +151,7 @@ const EditorControl = ({
             field: field as UnknownField,
             fieldsErrors,
             submitted,
-            isDisabled: isDisabled ?? false,
+            disabled: disabled ?? false,
             isFieldDuplicate,
             isFieldHidden,
             label: getFieldLabel(field, t),
@@ -190,7 +190,7 @@ const EditorControl = ({
     widget.control,
     field,
     submitted,
-    isDisabled,
+    disabled,
     t,
     locale,
     mediaPaths,
@@ -212,7 +212,7 @@ interface EditorControlOwnProps {
   field: Field;
   fieldsErrors: FieldsErrors;
   submitted: boolean;
-  isDisabled?: boolean;
+  disabled?: boolean;
   isFieldDuplicate?: (field: Field) => boolean;
   isFieldHidden?: (field: Field) => boolean;
   isHidden?: boolean;

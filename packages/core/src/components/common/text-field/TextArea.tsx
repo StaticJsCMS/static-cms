@@ -6,6 +6,7 @@ import type { ChangeEventHandler, KeyboardEvent } from 'react';
 
 export interface TextAreaProps {
   value: string;
+  disabled?: boolean;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
 }
 
@@ -13,7 +14,7 @@ const MIN_TEXT_AREA_HEIGHT = 80;
 const MIN_BOTTOM_PADDING = 12;
 
 const TextArea = forwardRef<HTMLTextAreaElement | null, TextAreaProps>(
-  ({ value, onChange }, ref) => {
+  ({ value, disabled, onChange }, ref) => {
     const autoGrow = useCallback((event: KeyboardEvent<HTMLTextAreaElement>) => {
       if (!event.target) {
         return;
@@ -48,6 +49,7 @@ const TextArea = forwardRef<HTMLTextAreaElement | null, TextAreaProps>(
           dark:text-slate-100`,
         )}
         value={value}
+        disabled={disabled}
         onChange={onChange}
         rows={4}
       />

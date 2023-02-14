@@ -66,7 +66,7 @@ export const createMockWidgetControlProps = <
     hasErrors,
     submitted: false,
     forList: false,
-    isDisabled: false,
+    disabled: false,
     locale: undefined,
     i18n: undefined,
     isFieldDuplicate: jest.fn().mockReturnValue(false),

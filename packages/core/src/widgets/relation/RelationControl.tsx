@@ -101,12 +101,13 @@ const DEFAULT_OPTIONS_LIMIT = 20;
 const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> = ({
   value,
   field,
-  onChange,
   config,
   locale,
   label,
   errors,
   hasErrors,
+  disabled,
+  onChange,
 }) => {
   const [internalValue, setInternalValue] = useState(value);
   const [initialOptions, setInitialOptions] = useState<HitOption[]>([]);
@@ -325,7 +326,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
         ref={ref}
         value={selectedValue}
         options={uniqueOptions}
-        required={field.required}
+        disabled={disabled}
         displayValue={item => {
           if (!item || Array.isArray(item)) {
             return '';

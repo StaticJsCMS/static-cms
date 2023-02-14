@@ -11,6 +11,7 @@ const NumberControl: FC<WidgetControlProps<string | number, NumberField>> = ({
   value,
   label,
   errors,
+  disabled,
   onChange,
 }) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
@@ -58,6 +59,7 @@ const NumberControl: FC<WidgetControlProps<string | number, NumberField>> = ({
         min={min}
         max={max}
         step={step}
+        disabled={disabled}
         onChange={handleChange}
       />
     </Field>

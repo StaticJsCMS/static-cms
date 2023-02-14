@@ -270,6 +270,13 @@ describe(RelationControl.name, () => {
     expect(field).not.toHaveClass('pb-3');
   });
 
+  it('should disable input if disabled', async () => {
+    const { getByTestId } = await renderRelationControl({ disabled: true });
+
+    const input = getByTestId('autocomplete-input');
+    expect(input).toBeDisabled();
+  });
+
   it('should show loading indicator while loading entries', async () => {
     const { getByTestId, queryByTestId } = renderControl({ value: 'Post 1' });
 

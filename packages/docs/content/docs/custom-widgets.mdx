@@ -51,7 +51,7 @@ The react component that renders the control. It receives the following props:
 | path                | string                   | `.` separated string donating the path to the current widget within the entry                             |
 | hasErrors           | boolean                  | Specifies if there are validation errors with the current widget                                          |
 | fieldsErrors        | object                   | Key/value object of field names mapping to validation errors                                              |
-| isDisabled          | boolean                  | Specifies if the widget control should be disabled                                                        |
+| disabled            | boolean                  | Specifies if the widget control should be disabled                                                        |
 | submitted           | boolean                  | Specifies if a save attempt has been made in the editor session                                           |
 | forList             | boolean                  | Specifices if the widget is within a `list` widget                                                        |
 | isFieldDuplicate    | function                 | Function that given a field configuration, returns if that field is a duplicate                           |
@@ -163,9 +163,12 @@ import CMS from '@staticcms/core';
 const CategoriesControl = ({ label, value, field, onChange }) => {
   const separator = useMemo(() => field.separator ?? ', ', [field.separator]);
 
-  const handleChange = useCallback((e) => {
-    onChange(e.target.value.split(separator).map(e => e.trim()));
-  }, [separator, onChange]);
+  const handleChange = useCallback(
+    e => {
+      onChange(e.target.value.split(separator).map(e => e.trim()));
+    },
+    [separator, onChange],
+  );
 
   return (
     <div>
@@ -174,7 +177,8 @@ const CategoriesControl = ({ label, value, field, onChange }) => {
         id="inputId"
         type="text"
         value={value ? value.join(separator) : ''}
-        onChange={handleChange} />
+        onChange={handleChange}
+      />
     </div>
   );
 };
@@ -204,15 +208,23 @@ import CMS from '@staticcms/core';
 import type { WidgetControlProps, WidgetPreviewProps } from '@staticcms/core';
 
 interface CategoriesField {
-  widget: 'categories'
+  widget: 'categories';
 }
 
-const CategoriesControl = ({ label, value, field, onChange }: WidgetControlProps<string[], CategoriesField>) => {
+const CategoriesControl = ({
+  label,
+  value,
+  field,
+  onChange,
+}: WidgetControlProps<string[], CategoriesField>) => {
   const separator = useMemo(() => field.separator ?? ', ', [field.separator]);
 
-  const handleChange = useCallback((e) => {
-    onChange(e.target.value.split(separator).map(e => e.trim()));
-  }, [separator, onChange]);
+  const handleChange = useCallback(
+    e => {
+      onChange(e.target.value.split(separator).map(e => e.trim()));
+    },
+    [separator, onChange],
+  );
 
   return (
     <div>
@@ -221,7 +233,8 @@ const CategoriesControl = ({ label, value, field, onChange }: WidgetControlProps
         id="inputId"
         type="text"
         value={value ? value.join(separator) : ''}
-        onChange={handleChange} />
+        onChange={handleChange}
+      />
     </div>
   );
 };
@@ -363,7 +376,7 @@ const FileControl = ({ collection, field, value, entry, onChange }) => {
 
   return [
     h('button', { type: 'button', onClick: handleOpenMediaLibrary }, 'Upload'),
-    h('img', { role: 'presentation', src: assetSource })
+    h('img', { role: 'presentation', src: assetSource }),
   ];
 };
 ```

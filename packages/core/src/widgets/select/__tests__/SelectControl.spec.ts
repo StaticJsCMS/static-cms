@@ -13,6 +13,13 @@ import type { SelectField } from '@staticcms/core/interface';
 describe(SelectControl.name, () => {
   const renderControl = createWidgetControlHarness(SelectControl, { field: mockSelectField });
 
+  it('should disable input if disabled', async () => {
+    const { getByTestId } = renderControl({ disabled: true });
+
+    const input = getByTestId('select-input');
+    expect(input).toBeDisabled();
+  });
+
   describe('simple string select', () => {
     it('should render', () => {
       const { getByTestId } = renderControl({ label: 'I am a label' });

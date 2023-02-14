@@ -7,7 +7,7 @@ import type { ChangeEventHandler, MouseEventHandler } from 'react';
 export interface BaseTextFieldProps {
   readonly?: boolean;
   disabled?: boolean;
-  'data-testId'?: string;
+  'data-testid'?: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onClick?: MouseEventHandler<HTMLInputElement>;
 }
@@ -28,7 +28,7 @@ export interface TextTextFieldProps extends BaseTextFieldProps {
 export type TextFieldProps = TextTextFieldProps | NumberTextFieldProps;
 
 const TextField = forwardRef<HTMLInputElement | null, TextFieldProps>(
-  ({ value, type, 'data-testId': dataTestId, onChange, ...otherProps }, ref) => {
+  ({ value, type, 'data-testid': dataTestId, onChange, ...otherProps }, ref) => {
     return (
       <input
         ref={ref}
