@@ -24,6 +24,10 @@ export function localToUTC(dateTime: Date, timezoneOffset: number) {
   return utcFromLocal;
 }
 
+export function utcToLocal(dateTime: Date, timezoneOffset: number) {
+  return new Date(dateTime.getTime() + timezoneOffset);
+}
+
 function convertMuiTextFieldProps(
   { inputProps, onClick }: MuiTextFieldProps,
   ref: React.MutableRefObject<HTMLInputElement | null>,
