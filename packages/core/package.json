@@ -197,7 +197,7 @@
     "@types/node-fetch": "2.6.2",
     "@types/react": "18.0.28",
     "@types/react-color": "3.0.6",
-    "@types/react-dom": "18.0.10",
+    "@types/react-dom": "18.0.11",
     "@types/react-virtualized-auto-sizer": "1.0.1",
     "@types/react-window": "1.8.5",
     "@types/styled-components": "5.1.26",
