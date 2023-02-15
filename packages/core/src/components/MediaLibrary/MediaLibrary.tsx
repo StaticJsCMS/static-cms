@@ -1,5 +1,5 @@
 import fuzzy from 'fuzzy';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
@@ -12,7 +12,11 @@ import {
   persistMedia as persistMediaAction,
 } from '@staticcms/core/actions/mediaLibrary';
 import { fileExtension } from '@staticcms/core/lib/util';
+import { selectMediaFolders } from '@staticcms/core/lib/util/collection.util';
+import { selectConfig } from '@staticcms/core/reducers/selectors/config';
+import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
 import { selectMediaFiles } from '@staticcms/core/reducers/selectors/mediaLibrary';
+import { useAppSelector } from '@staticcms/core/store/hooks';
 import alert from '../UI/Alert';
 import confirm from '../UI/Confirm';
 import MediaLibraryModal from './MediaLibraryModal';
@@ -53,7 +57,7 @@ const MediaLibrary = ({
   isDeleting,
   hasNextPage,
   isPaginating,
-  config,
+  config: mediaConfig,
   loadMedia,
   dynamicSearchQuery,
   page,
@@ -61,6 +65,7 @@ const MediaLibrary = ({
   deleteMedia,
   insertMedia,
   closeMediaLibrary,
+  collection,
   field,
   t,
 }: TranslatedProps<MediaLibraryProps>) => {
@@ -69,8 +74,20 @@ const MediaLibrary = ({
 
   const [prevIsVisible, setPrevIsVisible] = useState(false);
 
+  const config = useAppSelector(selectConfig);
+  const entry = useAppSelector(selectEditingDraft);
+  const mediaFolders = useMemo(() => {
+    if (!config || !collection || !entry) {
+      return [];
+    }
+
+    return selectMediaFolders(config, collection, entry);
+  }, [collection, config, entry]);
+
+  console.log('mediaFolders', mediaFolders);
+
   useEffect(() => {
-    loadMedia();
+    loadMedia({});
   }, [loadMedia]);
 
   useEffect(() => {
@@ -189,7 +206,8 @@ const MediaLibrary = ({
       event.preventDefault();
       const files = [...Array.from(fileList)];
       const file = files[0];
-      const maxFileSize = typeof config.max_file_size === 'number' ? config.max_file_size : 512000;
+      const maxFileSize =
+        typeof mediaConfig.max_file_size === 'number' ? mediaConfig.max_file_size : 512000;
 
       if (maxFileSize && file.size > maxFileSize) {
         alert({
@@ -213,7 +231,7 @@ const MediaLibrary = ({
         event.target.value = '';
       }
     },
-    [config.max_file_size, field, persistMedia],
+    [mediaConfig.max_file_size, field, persistMedia],
   );
 
   /**
@@ -379,6 +397,7 @@ function mapStateToProps(state: RootState) {
     page: mediaLibrary.page,
     hasNextPage: mediaLibrary.hasNextPage,
     isPaginating: mediaLibrary.isPaginating,
+    collection: mediaLibrary.collection,
     field,
   };
   return { ...mediaLibraryProps };

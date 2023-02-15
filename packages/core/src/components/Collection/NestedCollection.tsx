@@ -3,18 +3,15 @@ import { styled } from '@mui/material/styles';
 import sortBy from 'lodash/sortBy';
 import { dirname, sep } from 'path';
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
-import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import { colors, components } from '@staticcms/core/components/UI/styles';
 import { transientOptions } from '@staticcms/core/lib';
+import useEntries from '@staticcms/core/lib/hooks/useEntries';
 import { selectEntryCollectionTitle } from '@staticcms/core/lib/util/collection.util';
 import { stringTemplate } from '@staticcms/core/lib/widgets';
-import { selectEntries } from '@staticcms/core/reducers/selectors/entries';
 
 import type { Collection, Entry } from '@staticcms/core/interface';
-import type { RootState } from '@staticcms/core/store';
-import type { ConnectedProps } from 'react-redux';
 
 const { addFileTemplateFields } = stringTemplate;
 
@@ -271,7 +268,14 @@ export function updateNode(
   return updater([...treeData]);
 }
 
-const NestedCollection = ({ collection, entries, filterTerm }: NestedCollectionProps) => {
+export interface NestedCollectionProps {
+  collection: Collection;
+  filterTerm: string;
+}
+
+const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => {
+  const entries = useEntries(collection);
+
   const [treeData, setTreeData] = useState<TreeNodeData[]>(getTreeData(collection, entries));
   const [selected, setSelected] = useState<TreeNodeData | null>(null);
   const [useFilter, setUseFilter] = useState(true);
@@ -337,18 +341,4 @@ const NestedCollection = ({ collection, entries, filterTerm }: NestedCollectionP
   return <TreeNode collection={collection} treeData={treeData} onToggle={onToggle} />;
 };
 
-interface NestedCollectionOwnProps {
-  collection: Collection;
-  filterTerm: string;
-}
-
-function mapStateToProps(state: RootState, ownProps: NestedCollectionOwnProps) {
-  const { collection } = ownProps;
-  const entries = selectEntries(state, collection) ?? [];
-  return { ...ownProps, entries };
-}
-
-const connector = connect(mapStateToProps, {});
-export type NestedCollectionProps = ConnectedProps<typeof connector>;
-
-export default connector(NestedCollection);
+export default NestedCollection;

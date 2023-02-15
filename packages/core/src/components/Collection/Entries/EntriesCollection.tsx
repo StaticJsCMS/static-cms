@@ -1,22 +1,17 @@
 import { styled } from '@mui/material/styles';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
-import {
-  loadEntries as loadEntriesAction,
-  traverseCollectionCursor as traverseCollectionCursorAction,
-} from '@staticcms/core/actions/entries';
+import { loadEntries, traverseCollectionCursor } from '@staticcms/core/actions/entries';
 import { colors } from '@staticcms/core/components/UI/styles';
+import useEntries from '@staticcms/core/lib/hooks/useEntries';
+import useGroups from '@staticcms/core/lib/hooks/useGroups';
 import { Cursor } from '@staticcms/core/lib/util';
 import { selectCollectionEntriesCursor } from '@staticcms/core/reducers/selectors/cursors';
-import {
-  selectEntries,
-  selectEntriesLoaded,
-  selectGroups,
-  selectIsFetching,
-} from '@staticcms/core/reducers/selectors/entries';
+import { selectEntriesLoaded, selectIsFetching } from '@staticcms/core/reducers/selectors/entries';
 import Entries from './Entries';
+import { useAppDispatch } from '@staticcms/core/store/hooks';
 
 import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
 import type { Collection, Entry, GroupOfEntries, TranslatedProps } from '@staticcms/core/interface';
@@ -59,7 +54,7 @@ function withGroups(
     return (
       <GroupContainer key={group.id} id={group.id}>
         <GroupHeading>{title}</GroupHeading>
-        <EntriesToRender entries={getGroupEntries(entries, group.paths)} />
+        <EntriesToRender key="entries-with-group" entries={getGroupEntries(entries, group.paths)} />
       </GroupContainer>
     );
   });
@@ -71,20 +66,52 @@ interface EntriesToRenderProps {
 
 const EntriesCollection = ({
   collection,
-  entries,
-  groups,
+  filterTerm,
   isFetching,
   viewStyle,
   cursor,
   page,
-  traverseCollectionCursor,
   t,
   entriesLoaded,
   readyToLoad,
-  loadEntries,
 }: TranslatedProps<EntriesCollectionProps>) => {
+  const dispatch = useAppDispatch();
+
   const [prevReadyToLoad, setPrevReadyToLoad] = useState(false);
   const [prevCollection, setPrevCollection] = useState(collection);
+
+  const groups = useGroups(collection.name);
+
+  const entries = useEntries(collection);
+
+  const filteredEntries = useMemo(() => {
+    if ('nested' in collection) {
+      const collectionFolder = collection.folder ?? '';
+      return filterNestedEntries(filterTerm || '', collectionFolder, entries);
+    }
+
+    return entries;
+  }, [collection, entries, filterTerm]);
+
+  useEffect(() => {
+    console.log('[EntriesCollection] filteredEntries changed!', filteredEntries);
+  }, [filteredEntries]);
+
+  useEffect(() => {
+    console.log('[EntriesCollection] entries changed!', entries);
+  }, [entries]);
+
+  useEffect(() => {
+    console.log('[EntriesCollection] groups changed!', groups);
+  }, [groups]);
+
+  useEffect(() => {
+    console.log('[EntriesCollection] isFetching changed!', isFetching);
+  }, [isFetching]);
+
+  useEffect(() => {
+    console.log('[EntriesCollection] viewStyle changed!', viewStyle);
+  }, [viewStyle]);
 
   useEffect(() => {
     if (
@@ -93,43 +120,56 @@ const EntriesCollection = ({
       readyToLoad &&
       (!prevReadyToLoad || prevCollection !== collection)
     ) {
-      loadEntries(collection);
+      dispatch(loadEntries(collection));
     }
 
     setPrevReadyToLoad(readyToLoad);
     setPrevCollection(collection);
-  }, [collection, entriesLoaded, loadEntries, prevCollection, prevReadyToLoad, readyToLoad]);
+  }, [collection, dispatch, entriesLoaded, prevCollection, prevReadyToLoad, readyToLoad]);
 
   const handleCursorActions = useCallback(
     (action: string) => {
-      traverseCollectionCursor(collection, action);
+      dispatch(traverseCollectionCursor(collection, action));
     },
-    [collection, traverseCollectionCursor],
-  );
-
-  const EntriesToRender = useCallback(
-    ({ entries }: EntriesToRenderProps) => {
-      return (
-        <Entries
-          collection={collection}
-          entries={entries}
-          isFetching={isFetching}
-          collectionName={collection.label}
-          viewStyle={viewStyle}
-          cursor={cursor}
-          handleCursorActions={handleCursorActions}
-          page={page}
-        />
-      );
-    },
-    [collection, cursor, handleCursorActions, isFetching, page, viewStyle],
+    [collection, dispatch],
   );
 
   if (groups && groups.length > 0) {
-    return <>{withGroups(groups, entries, EntriesToRender, t)}</>;
+    <>
+      {groups.map(group => {
+        const title = getGroupTitle(group, t);
+        return (
+          <GroupContainer key={group.id} id={group.id}>
+            <GroupHeading>{title}</GroupHeading>
+            <Entries
+              collection={collection}
+              entries={getGroupEntries(entries, group.paths)}
+              isFetching={isFetching}
+              collectionName={collection.label}
+              viewStyle={viewStyle}
+              cursor={cursor}
+              handleCursorActions={handleCursorActions}
+              page={page}
+            />
+          </GroupContainer>
+        );
+      })}
+    </>;
   }
 
-  return <EntriesToRender entries={entries} />;
+  return (
+    <Entries
+      key="entries-without-group"
+      collection={collection}
+      entries={entries}
+      isFetching={isFetching}
+      collectionName={collection.label}
+      viewStyle={viewStyle}
+      cursor={cursor}
+      handleCursorActions={handleCursorActions}
+      page={page}
+    />
+  );
 };
 
 export function filterNestedEntries(path: string, collectionFolder: string, entries: Entry[]) {
@@ -163,27 +203,16 @@ function mapStateToProps(state: RootState, ownProps: EntriesCollectionOwnProps) 
   const { collection, viewStyle, filterTerm } = ownProps;
   const page = state.entries.pages[collection.name]?.page;
 
-  let entries = selectEntries(state, collection);
-  const groups = selectGroups(state, collection);
-
-  if ('nested' in collection) {
-    const collectionFolder = collection.folder ?? '';
-    entries = filterNestedEntries(filterTerm || '', collectionFolder, entries);
-  }
-
   const entriesLoaded = selectEntriesLoaded(state, collection.name);
   const isFetching = selectIsFetching(state, collection.name);
 
   const rawCursor = selectCollectionEntriesCursor(state, collection.name);
   const cursor = Cursor.create(rawCursor).clearData();
 
-  return { ...ownProps, page, entries, groups, entriesLoaded, isFetching, viewStyle, cursor };
+  return { ...ownProps, page, filterTerm, entriesLoaded, isFetching, viewStyle, cursor };
 }
 
-const mapDispatchToProps = {
-  loadEntries: loadEntriesAction,
-  traverseCollectionCursor: traverseCollectionCursorAction,
-};
+const mapDispatchToProps = {};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export type EntriesCollectionProps = ConnectedProps<typeof connector>;

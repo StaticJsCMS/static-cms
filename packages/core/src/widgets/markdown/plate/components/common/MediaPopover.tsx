@@ -220,7 +220,11 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
     [onMediaChange, onMediaToggle],
   );
 
-  const handleOpenMediaLibrary = useMediaInsert(url, { field, forImage }, handleMediaChange);
+  const handleOpenMediaLibrary = useMediaInsert(
+    url,
+    { collection, field, forImage },
+    handleMediaChange,
+  );
 
   const handleMediaOpen = useCallback(() => {
     onMediaToggle?.(true);

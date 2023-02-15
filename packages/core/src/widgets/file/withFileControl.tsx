@@ -238,7 +238,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
       const handleOpenMediaLibrary = useMediaInsert(
         internalValue,
-        { field, controlID },
+        { collection, field, controlID, forImage },
         handleOnChange,
       );
 
@@ -312,10 +312,11 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
             replaceIndex: index,
             allowMultiple: false,
             config,
+            collection,
             field,
           });
         },
-        [config, controlID, field, openMediaLibrary, internalValue],
+        [openMediaLibrary, controlID, internalValue, config, collection, field],
       );
 
       // TODO Readd when multiple uploads is supported

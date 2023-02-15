@@ -34,6 +34,7 @@ import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type {
   BaseField,
+  Collection,
   DisplayURLState,
   Field,
   ImplementationMediaFile,
@@ -83,16 +84,28 @@ export function openMediaLibrary<F extends BaseField = UnknownField>(
     allowMultiple?: boolean;
     replaceIndex?: number;
     config?: Record<string, unknown>;
+    collection?: Collection<F>;
     field?: F;
   } = {},
 ) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const mediaLibrary = state.mediaLibrary.externalLibrary;
-    const { controlID, value, config = {}, allowMultiple, forImage, replaceIndex, field } = payload;
+    const {
+      controlID,
+      value,
+      config = {},
+      allowMultiple,
+      forImage,
+      replaceIndex,
+      collection,
+      field,
+    } = payload;
+
     if (mediaLibrary) {
       mediaLibrary.show({ id: controlID, value, config, allowMultiple, imagesOnly: forImage });
     }
+
     dispatch(
       mediaLibraryOpened({
         controlID,
@@ -101,6 +114,7 @@ export function openMediaLibrary<F extends BaseField = UnknownField>(
         allowMultiple,
         replaceIndex,
         config,
+        collection: collection as Collection,
         field: field as Field,
       }),
     );
@@ -406,6 +420,7 @@ function mediaLibraryOpened(payload: {
   replaceIndex?: number;
   allowMultiple?: boolean;
   config?: Record<string, unknown>;
+  collection?: Collection;
   field?: Field;
 }) {
   return { type: MEDIA_LIBRARY_OPEN, payload } as const;

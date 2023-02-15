@@ -2,12 +2,12 @@
 title: Test
 draft: false
 date: 2022-11-01 14:28
-image: /backends/proxy/assets/posts/kittens.jpg
+image: kittens.jpg
 ---
-Test2
+Test234t6
 
-<br>
 ![moby-dick.jpg](/assets/upload/moby-dick.jpg)
+
 ![moby-dick.jpg](/assets/upload/moby-dick.jpg)
 
 ![kanefreeman_2.jpg](/assets/upload/kanefreeman_2.jpg)
