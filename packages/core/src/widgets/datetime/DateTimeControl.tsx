@@ -183,7 +183,7 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
     },
     [defaultValue, field.picker_utc, format, onChange],
   );
-  // console.log('dateFormat', dateFormat, '\ntimeFormat', timeFormat, '\ndateValue', dateValue, '\ninputFormat', inputFormat, '\nformat', format);
+  // console.log(label, 'dateFormat', dateFormat, '\ntimeFormat', timeFormat, '\ndateValue', dateValue, '\ninputFormat', inputFormat, '\nformat', format);
 
   const dateTimePicker = useMemo(() => {
     if (dateFormat && !timeFormat) {

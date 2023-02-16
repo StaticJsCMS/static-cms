@@ -222,7 +222,7 @@ collections:
             time_format: 'h:mm aaa'
             required: false
           - name: date_and_time_with_default
-            label: Date and Time With Deafult
+            label: Date and Time With Default
             widget: datetime
             format: 'MMM d, yyyy h:mm aaa'
             date_format: 'MMM d, yyyy'
@@ -236,22 +236,25 @@ collections:
             time_format: false
             required: false
           - name: date_with_default
-            label: Date With Deafult
+            label: Date With Default
             widget: datetime
             format: 'MMM d, yyyy'
             date_format: 'MMM d, yyyy'
+            time_format: false
             required: false
             default: 'Jan 12, 2023'
           - name: time
             label: Time
             widget: datetime
             format: 'h:mm aaa'
+            date_format: false
             time_format: 'h:mm aaa'
             required: false
           - name: time_with_default
-            label: Time With Deafult
+            label: Time With Default
             widget: datetime
             format: 'h:mm aaa'
+            date_format: false
             time_format: 'h:mm aaa'
             required: false
             default: '12:00 am'

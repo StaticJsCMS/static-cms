@@ -18,7 +18,7 @@ const StringWidget = (): WidgetParam<string, StringOrTextField> => {
 export {
   controlComponent as StringControl,
   previewComponent as StringPreview,
-  schema as StringSchema,
+  schema as stringSchema,
 };
 
 export default StringWidget;

@@ -111,6 +111,15 @@ export interface FieldsErrors {
   [field: string]: FieldError[];
 }
 
+export type FieldGetValidValueMethod<T = unknown> = (
+  value: T | undefined | null,
+) => T | undefined | null;
+
+export type FieldGetDefaultMethod<T = unknown, F extends BaseField = UnknownField> = (
+  defaultValue: T | undefined | null,
+  field: F,
+) => T;
+
 export interface FieldValidationMethodProps<T = unknown, F extends BaseField = UnknownField> {
   field: F;
   value: T | undefined | null;
@@ -342,8 +351,8 @@ export interface Widget<T = unknown, F extends BaseField = UnknownField> {
   control: ComponentType<WidgetControlProps<T, F>>;
   preview?: WidgetPreviewComponent<T, F>;
   validator: FieldValidationMethod<T, F>;
-  getValidValue: (value: T | undefined | null) => T | undefined | null;
-  getDefaultValue?: (defaultValue: T | undefined | null, field: F) => T;
+  getValidValue: FieldGetValidValueMethod<T>;
+  getDefaultValue?: FieldGetDefaultMethod<T, F>;
   schema?: PropertiesSchema<unknown>;
 }
 
