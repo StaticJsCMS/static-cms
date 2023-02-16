@@ -6,6 +6,7 @@ import { getShortcodes } from '../../lib/registry';
 import withShortcodeMdxComponent from './mdx/withShortcodeMdxComponent';
 import useMdx from './plate/hooks/useMdx';
 import { processShortcodeConfigToMdx } from './plate/serialization/slate/processShortcodeConfig';
+import { withMdxImage } from '@staticcms/core/components/common/image/Image';
 
 import type { MarkdownField, WidgetPreviewProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
@@ -25,13 +26,14 @@ function FallbackComponent({ error }: FallbackComponentProps) {
 }
 
 const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = previewProps => {
-  const { value } = previewProps;
+  const { value, collection, field } = previewProps;
 
   const components = useMemo(
     () => ({
       Shortcode: withShortcodeMdxComponent({ previewProps }),
+      img: withMdxImage({ collection, field }),
     }),
-    [previewProps],
+    [collection, field, previewProps],
   );
 
   const [state, setValue] = useMdx(value ?? '');

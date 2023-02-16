@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 
 import { emptyAsset, getAsset } from '@staticcms/core/actions/media';
 import { useAppDispatch } from '@staticcms/core/store/hooks';
-import { isNotEmpty } from '../util/string.util';
+import { isEmpty, isNotEmpty } from '../util/string.util';
+import useDebounce from './useDebounce';
 
-import type { Collection, Entry, FileOrImageField, MarkdownField } from '@staticcms/core/interface';
+import type { Collection, Entry, MediaField } from '@staticcms/core/interface';
 
-export default function useIsMediaAsset<T extends FileOrImageField | MarkdownField>(
+export default function useIsMediaAsset<T extends MediaField>(
   url: string,
   collection: Collection<T>,
   field: T,
@@ -14,17 +15,22 @@ export default function useIsMediaAsset<T extends FileOrImageField | MarkdownFie
 ): boolean {
   const dispatch = useAppDispatch();
   const [exists, setExists] = useState(false);
+  const debouncedUrl = useDebounce(url, 200);
 
   useEffect(() => {
+    if (isEmpty(debouncedUrl)) {
+      return;
+    }
+
     const checkMediaExistence = async () => {
-      const asset = await dispatch(getAsset<T>(collection, entry, url, field));
+      const asset = await dispatch(getAsset<T>(collection, entry, debouncedUrl, field));
       setExists(
         Boolean(asset && asset !== emptyAsset && isNotEmpty(asset.toString()) && asset.fileObj),
       );
     };
 
     checkMediaExistence();
-  }, [collection, dispatch, entry, field, url]);
+  }, [collection, dispatch, entry, field, debouncedUrl]);
 
   return exists;
 }

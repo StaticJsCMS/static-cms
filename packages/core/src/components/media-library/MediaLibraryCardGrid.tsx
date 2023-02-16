@@ -5,7 +5,7 @@ import { FixedSizeGrid as Grid } from 'react-window';
 
 import MediaLibraryCard from './MediaLibraryCard';
 
-import type { MediaFile } from '@staticcms/core/interface';
+import type { Collection, Field, MediaFile } from '@staticcms/core/interface';
 import type {
   MediaLibraryDisplayURL,
   MediaLibraryState,
@@ -24,7 +24,7 @@ export interface MediaLibraryCardItem {
 }
 
 export interface MediaLibraryCardGridProps {
-  setScrollContainerRef: () => void;
+  scrollContainerRef: React.MutableRefObject<HTMLDivElement | null>;
   mediaItems: MediaFile[];
   isSelectedFile: (file: MediaFile) => boolean;
   onAssetClick: (asset: MediaFile) => void;
@@ -38,6 +38,8 @@ export interface MediaLibraryCardGridProps {
   cardMargin: string;
   loadDisplayURL: (asset: MediaFile) => void;
   displayURLs: MediaLibraryState['displayURLs'];
+  collection?: Collection;
+  field?: Field;
 }
 
 export type CardGridItemData = MediaLibraryCardGridProps & {
@@ -60,6 +62,8 @@ const CardWrapper = ({
     loadDisplayURL,
     columnCount,
     gutter,
+    collection,
+    field,
   },
 }: GridChildComponentProps<CardGridItemData>) => {
   const index = rowIndex * columnCount + columnIndex;
@@ -92,6 +96,8 @@ const CardWrapper = ({
         loadDisplayURL={() => loadDisplayURL(file)}
         type={file.type}
         isViewableImage={file.isViewableImage ?? false}
+        collection={collection}
+        field={field}
       />
     </div>
   );
@@ -103,7 +109,7 @@ const VirtualizedGrid = (props: MediaLibraryCardGridProps) => {
     cardHeight: inputCardHeight,
     cardMargin,
     mediaItems,
-    setScrollContainerRef,
+    scrollContainerRef,
   } = props;
 
   return (
@@ -118,7 +124,7 @@ const VirtualizedGrid = (props: MediaLibraryCardGridProps) => {
         const rowCount = Math.ceil(mediaItems.length / columnCount);
 
         return (
-          <div ref={setScrollContainerRef}>
+          <div ref={scrollContainerRef}>
             {/* TODO $width={width} $height={height} */}
             <Grid
               columnCount={columnCount}
@@ -146,7 +152,7 @@ const VirtualizedGrid = (props: MediaLibraryCardGridProps) => {
 };
 
 const PaginatedGrid = ({
-  setScrollContainerRef,
+  scrollContainerRef,
   mediaItems,
   isSelectedFile,
   onAssetClick,
@@ -160,9 +166,11 @@ const PaginatedGrid = ({
   onLoadMore,
   isPaginating,
   paginatingMessage,
+  collection,
+  field,
 }: MediaLibraryCardGridProps) => {
   return (
-    <div ref={setScrollContainerRef}>
+    <div ref={scrollContainerRef}>
       <div>
         {mediaItems.map(file => (
           <MediaLibraryCard
@@ -179,6 +187,8 @@ const PaginatedGrid = ({
             loadDisplayURL={() => loadDisplayURL(file)}
             type={file.type}
             isViewableImage={file.isViewableImage ?? false}
+            collection={collection}
+            field={field}
           />
         ))}
         {!canLoadMore ? null : <Waypoint onEnter={onLoadMore} />}

@@ -23,8 +23,8 @@ import {
 } from '@staticcms/core/reducers/selectors/entries';
 import CollectionControls from './CollectionControls';
 import CollectionHeader from './CollectionHeader';
-import EntriesCollection from './Entries/EntriesCollection';
-import EntriesSearch from './Entries/EntriesSearch';
+import EntriesCollection from './entries/EntriesCollection';
+import EntriesSearch from './entries/EntriesSearch';
 
 import type {
   Collection,

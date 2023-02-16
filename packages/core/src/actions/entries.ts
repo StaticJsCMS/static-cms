@@ -44,7 +44,7 @@ import { Cursor } from '../lib/util';
 import { selectFields, updateFieldByKey } from '../lib/util/collection.util';
 import { selectCollectionEntriesCursor } from '../reducers/selectors/cursors';
 import {
-  selectEntriesSortFields,
+  selectEntriesSortField,
   selectIsFetching,
   selectPublishedSlugs,
 } from '../reducers/selectors/entries';
@@ -653,10 +653,9 @@ export function loadEntries(collection: Collection, page = 0) {
       return;
     }
     const state = getState();
-    const sortFields = selectEntriesSortFields(state, collection.name);
-    if (sortFields && sortFields.length > 0) {
-      const field = sortFields[0];
-      return dispatch(sortByField(collection, field.key, field.direction));
+    const sortField = selectEntriesSortField(collection.name)(state);
+    if (sortField) {
+      return dispatch(sortByField(collection, sortField.key, sortField.direction));
     }
 
     const configState = state.config;
@@ -956,7 +955,7 @@ export function persistEntry(collection: Collection) {
     const state = getState();
     const entryDraft = state.entryDraft;
     const fieldsErrors = entryDraft.fieldsErrors;
-    const usedSlugs = selectPublishedSlugs(state, collection.name);
+    const usedSlugs = selectPublishedSlugs(collection.name)(state);
 
     // Early return if draft contains validation errors
     if (Object.keys(fieldsErrors).length > 0) {

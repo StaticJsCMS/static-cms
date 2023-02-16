@@ -24,14 +24,15 @@ collections:
   - name: posts
     label: Posts
     label_singular: Post
-    media_folder: /packages/core/dev-test/backends/proxy/assets/posts
-    public_folder: /backends/proxy/assets/posts
     description: >
       The description is a great place for tone setting, high level information,
       and editing guidelines that are specific to a collection.
     folder: packages/core/dev-test/backends/proxy/_posts
-    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
     summary: '{{title}} -- {{year}}/{{month}}/{{day}}'
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    media_folder: ""
+    public_folder: ""
+    path: "{{year}}-{{month}}-{{day}}-{{slug}}/index"
     sortable_fields:
       fields:
         - title

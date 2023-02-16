@@ -81,32 +81,34 @@ const EntryListing = ({
   const renderedCards = useMemo(() => {
     if ('collection' in otherProps) {
       const inferredFields = inferFields(otherProps.collection);
-      return entries.map((entry, idx) => (
+      return entries.map(entry => (
         <EntryCard
           collection={otherProps.collection}
-          inferredFields={inferredFields}
+          imageFieldName={inferredFields.imageField}
           viewStyle={viewStyle}
           entry={entry}
-          key={idx}
+          key={entry.slug}
           summaryFields={summaryFields}
         />
       ));
     }
 
-    // TODO const isSingleCollectionInList = Object.keys(otherProps.collections).length === 1;
-    return entries.map((entry, idx) => {
+    const isSingleCollectionInList = Object.keys(otherProps.collections).length === 1;
+    return entries.map(entry => {
       const collectionName = entry.collection;
       const collection = Object.values(otherProps.collections).find(
         coll => coll.name === collectionName,
       );
-      // TODO const collectionLabel = !isSingleCollectionInList ? collection?.label : undefined;
+
+      const collectionLabel = !isSingleCollectionInList ? collection?.label : undefined;
       const inferredFields = inferFields(collection);
       return collection ? (
         <EntryCard
           collection={collection}
           entry={entry}
-          inferredFields={inferredFields}
-          key={idx}
+          imageFieldName={inferredFields.imageField}
+          collectionLabel={collectionLabel}
+          key={entry.slug}
           summaryFields={summaryFields}
         />
       ) : null;

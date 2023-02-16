@@ -529,6 +529,12 @@ export interface BaseField {
   widget: string;
 }
 
+export interface MediaField extends BaseField {
+  media_library?: MediaLibrary;
+  media_folder?: string;
+  public_folder?: string;
+}
+
 export interface BooleanField extends BaseField {
   widget: 'boolean';
   default?: boolean;
@@ -566,13 +572,9 @@ export interface DateTimeField extends BaseField {
   picker_utc?: boolean;
 }
 
-export interface FileOrImageField extends BaseField {
+export interface FileOrImageField extends MediaField {
   widget: 'file' | 'image';
   default?: string;
-
-  media_library?: MediaLibrary;
-  media_folder?: string;
-  public_folder?: string;
 }
 
 export interface ObjectField<EF extends BaseField = UnknownField> extends BaseField {
@@ -608,13 +610,9 @@ export interface MapField extends BaseField {
   height?: string;
 }
 
-export interface MarkdownField extends BaseField {
+export interface MarkdownField extends MediaField {
   widget: 'markdown';
   default?: string;
-
-  media_library?: MediaLibrary;
-  media_folder?: string;
-  public_folder?: string;
 }
 
 export interface NumberField extends BaseField {

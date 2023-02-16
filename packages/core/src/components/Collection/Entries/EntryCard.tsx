@@ -21,18 +21,13 @@ import TableRow from '../../common/table/TableRow';
 import useWidgetsFor from '../../common/widget/useWidgetsFor';
 
 import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
-import type { Collection, Entry, Field } from '@staticcms/core/interface';
+import type { Collection, Entry, FileOrImageField, MediaField } from '@staticcms/core/interface';
 
-interface EntryCardProps {
+export interface EntryCardProps {
   entry: Entry;
-  inferredFields: {
-    titleField?: string | null | undefined;
-    descriptionField?: string | null | undefined;
-    imageField?: string | null | undefined;
-    remainingFields?: Field[] | undefined;
-  };
+  imageFieldName?: string | null | undefined;
   collection: Collection;
-  imageField?: Field;
+  collectionLabel?: string;
   viewStyle?: CollectionViewStyle;
   summaryFields: string[];
 }
@@ -40,39 +35,42 @@ interface EntryCardProps {
 const EntryCard = ({
   collection,
   entry,
+  collectionLabel, // TODO Actually display somewhere
   viewStyle = VIEW_STYLE_LIST,
+  imageFieldName,
   summaryFields,
-  inferredFields,
 }: EntryCardProps) => {
-  const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
+  const entryData = entry.data;
 
   const path = useMemo(
     () => `/collections/${collection.name}/entries/${entry.slug}`,
     [collection.name, entry.slug],
   );
 
-  const image = useMemo(() => {
-    let image = inferredFields.imageField
-      ? (entry.data?.[inferredFields.imageField] as string | undefined)
-      : undefined;
-
-    if (image) {
-      image = encodeURI(image.trim());
-    }
-
-    return image;
-  }, [entry.data, inferredFields.imageField]);
-
   const imageField = useMemo(
     () =>
       'fields' in collection
-        ? collection.fields?.find(f => f.name === inferredFields.imageField && f.widget === 'image')
+        ? (collection.fields?.find(
+            f => f.name === imageFieldName && f.widget === 'image',
+          ) as FileOrImageField)
         : undefined,
-    [collection, inferredFields.imageField],
+    [collection, imageFieldName],
   );
 
+  const image = useMemo(() => {
+    let i = imageFieldName ? (entryData?.[imageFieldName] as string | undefined) : undefined;
+
+    if (i) {
+      i = encodeURI(i.trim());
+    }
+
+    return i;
+  }, [entryData, imageFieldName]);
+
+  const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
+
   const fields = selectFields(collection, entry.slug);
-  const imageUrl = useMediaAsset(image, collection, imageField, entry);
+  const imageUrl = useMediaAsset(image, collection as Collection<MediaField>, imageField, entry);
 
   const config = useAppSelector(selectConfig);
 

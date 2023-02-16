@@ -49,12 +49,12 @@ function hasCustomFolder(
 
   if ('files' in collection) {
     const file = getFileField(collection.files, slug);
-    if (file && file[folderKey]) {
+    if (file && folderKey in file) {
       return true;
     }
   }
 
-  if (collection[folderKey]) {
+  if (folderKey in collection) {
     return true;
   }
 
@@ -72,7 +72,7 @@ function evaluateFolder(
 
   const collection = { ...c };
   // add identity template if doesn't exist
-  if (!collection[folderKey]) {
+  if (!(folderKey in collection)) {
     collection[folderKey] = `{{${folderKey}}}`;
   }
 

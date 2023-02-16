@@ -1,20 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
-import {
-  loadEntries as loadEntriesAction,
-  traverseCollectionCursor as traverseCollectionCursorAction,
-} from '@staticcms/core/actions/entries';
+import { loadEntries, traverseCollectionCursor } from '@staticcms/core/actions/entries';
+import useEntries from '@staticcms/core/lib/hooks/useEntries';
+import useGroups from '@staticcms/core/lib/hooks/useGroups';
 import { Cursor } from '@staticcms/core/lib/util';
 import { selectCollectionEntriesCursor } from '@staticcms/core/reducers/selectors/cursors';
-import {
-  selectEntries,
-  selectEntriesLoaded,
-  selectGroups,
-  selectIsFetching,
-} from '@staticcms/core/reducers/selectors/entries';
+import { selectEntriesLoaded, selectIsFetching } from '@staticcms/core/reducers/selectors/entries';
 import Entries from './Entries';
+import { useAppDispatch } from '@staticcms/core/store/hooks';
 
 import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
 import type { Collection, Entry, GroupOfEntries, TranslatedProps } from '@staticcms/core/interface';
@@ -38,90 +33,6 @@ function getGroupTitle(group: GroupOfEntries, t: t) {
   return `${label} ${value}`.trim();
 }
 
-function withGroups(
-  groups: GroupOfEntries[],
-  entries: Entry[],
-  EntriesToRender: ComponentType<EntriesToRenderProps>,
-  t: t,
-) {
-  return groups.map(group => {
-    const title = getGroupTitle(group, t);
-    return (
-      <div key={group.id} id={group.id}>
-        <h2>{title}</h2>
-        <EntriesToRender entries={getGroupEntries(entries, group.paths)} />
-      </div>
-    );
-  });
-}
-
-interface EntriesToRenderProps {
-  entries: Entry[];
-}
-
-const EntriesCollection = ({
-  collection,
-  entries,
-  groups,
-  isFetching,
-  viewStyle,
-  cursor,
-  page,
-  traverseCollectionCursor,
-  t,
-  entriesLoaded,
-  readyToLoad,
-  loadEntries,
-}: TranslatedProps<EntriesCollectionProps>) => {
-  const [prevReadyToLoad, setPrevReadyToLoad] = useState(false);
-  const [prevCollection, setPrevCollection] = useState(collection);
-
-  useEffect(() => {
-    if (
-      collection &&
-      !entriesLoaded &&
-      readyToLoad &&
-      (!prevReadyToLoad || prevCollection !== collection)
-    ) {
-      loadEntries(collection);
-    }
-
-    setPrevReadyToLoad(readyToLoad);
-    setPrevCollection(collection);
-  }, [collection, entriesLoaded, loadEntries, prevCollection, prevReadyToLoad, readyToLoad]);
-
-  const handleCursorActions = useCallback(
-    (action: string) => {
-      traverseCollectionCursor(collection, action);
-    },
-    [collection, traverseCollectionCursor],
-  );
-
-  const EntriesToRender = useCallback(
-    ({ entries }: EntriesToRenderProps) => {
-      return (
-        <Entries
-          collection={collection}
-          entries={entries}
-          isFetching={isFetching}
-          collectionName={collection.label}
-          viewStyle={viewStyle}
-          cursor={cursor}
-          handleCursorActions={handleCursorActions}
-          page={page}
-        />
-      );
-    },
-    [collection, cursor, handleCursorActions, isFetching, page, viewStyle],
-  );
-
-  if (groups && groups.length > 0) {
-    return <>{withGroups(groups, entries, EntriesToRender, t)}</>;
-  }
-
-  return <EntriesToRender entries={entries} />;
-};
-
 export function filterNestedEntries(path: string, collectionFolder: string, entries: Entry[]) {
   const filtered = entries.filter(e => {
     const entryPath = e.path.slice(collectionFolder.length + 1);
@@ -142,6 +53,94 @@ export function filterNestedEntries(path: string, collectionFolder: string, entr
   return filtered;
 }
 
+const EntriesCollection = ({
+  collection,
+  filterTerm,
+  isFetching,
+  viewStyle,
+  cursor,
+  page,
+  t,
+  entriesLoaded,
+  readyToLoad,
+}: TranslatedProps<EntriesCollectionProps>) => {
+  const dispatch = useAppDispatch();
+
+  const [prevReadyToLoad, setPrevReadyToLoad] = useState(false);
+  const [prevCollection, setPrevCollection] = useState(collection);
+
+  const groups = useGroups(collection.name);
+
+  const entries = useEntries(collection);
+
+  const filteredEntries = useMemo(() => {
+    if ('nested' in collection) {
+      const collectionFolder = collection.folder ?? '';
+      return filterNestedEntries(filterTerm || '', collectionFolder, entries);
+    }
+
+    return entries;
+  }, [collection, entries, filterTerm]);
+
+  useEffect(() => {
+    if (
+      collection &&
+      !entriesLoaded &&
+      readyToLoad &&
+      (!prevReadyToLoad || prevCollection !== collection)
+    ) {
+      dispatch(loadEntries(collection));
+    }
+
+    setPrevReadyToLoad(readyToLoad);
+    setPrevCollection(collection);
+  }, [collection, dispatch, entriesLoaded, prevCollection, prevReadyToLoad, readyToLoad]);
+
+  const handleCursorActions = useCallback(
+    (action: string) => {
+      dispatch(traverseCollectionCursor(collection, action));
+    },
+    [collection, dispatch],
+  );
+
+  if (groups && groups.length > 0) {
+    <>
+      {groups.map(group => {
+        const title = getGroupTitle(group, t);
+        return (
+          <div key={group.id} id={group.id}>
+            <h2>{title}</h2>
+            <Entries
+              collection={collection}
+              entries={getGroupEntries(filteredEntries, group.paths)}
+              isFetching={isFetching}
+              collectionName={collection.label}
+              viewStyle={viewStyle}
+              cursor={cursor}
+              handleCursorActions={handleCursorActions}
+              page={page}
+            />
+          </div>
+        );
+      })}
+    </>;
+  }
+
+  return (
+    <Entries
+      key="entries-without-group"
+      collection={collection}
+      entries={filteredEntries}
+      isFetching={isFetching}
+      collectionName={collection.label}
+      viewStyle={viewStyle}
+      cursor={cursor}
+      handleCursorActions={handleCursorActions}
+      page={page}
+    />
+  );
+};
+
 interface EntriesCollectionOwnProps {
   collection: Collection;
   viewStyle: CollectionViewStyle;
@@ -153,27 +152,16 @@ function mapStateToProps(state: RootState, ownProps: EntriesCollectionOwnProps) 
   const { collection, viewStyle, filterTerm } = ownProps;
   const page = state.entries.pages[collection.name]?.page;
 
-  let entries = selectEntries(state, collection);
-  const groups = selectGroups(state, collection);
-
-  if ('nested' in collection) {
-    const collectionFolder = collection.folder ?? '';
-    entries = filterNestedEntries(filterTerm || '', collectionFolder, entries);
-  }
-
   const entriesLoaded = selectEntriesLoaded(state, collection.name);
   const isFetching = selectIsFetching(state, collection.name);
 
   const rawCursor = selectCollectionEntriesCursor(state, collection.name);
   const cursor = Cursor.create(rawCursor).clearData();
 
-  return { ...ownProps, page, entries, groups, entriesLoaded, isFetching, viewStyle, cursor };
+  return { ...ownProps, page, filterTerm, entriesLoaded, isFetching, viewStyle, cursor };
 }
 
-const mapDispatchToProps = {
-  loadEntries: loadEntriesAction,
-  traverseCollectionCursor: traverseCollectionCursorAction,
-};
+const mapDispatchToProps = {};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export type EntriesCollectionProps = ConnectedProps<typeof connector>;

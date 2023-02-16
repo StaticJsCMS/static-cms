@@ -10,9 +10,9 @@ import EmptyMessage from './EmptyMessage';
 import MediaLibraryCardGrid from './MediaLibraryCardGrid';
 import MediaLibraryTop from './MediaLibraryTop';
 
-import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
+import type { Collection, Field, MediaFile, TranslatedProps } from '@staticcms/core/interface';
 import type { MediaLibraryState } from '@staticcms/core/reducers/mediaLibrary';
-import type { ChangeEvent, ChangeEventHandler, KeyboardEventHandler } from 'react';
+import type { ChangeEvent, ChangeEventHandler, FC, KeyboardEventHandler } from 'react';
 
 /**
  * TODO Responsive styling needs to be overhauled. Current setup requires specifying
@@ -46,11 +46,13 @@ interface MediaLibraryModalProps {
   handleDelete: () => void;
   handleInsert: () => void;
   handleDownload: () => void;
-  setScrollContainerRef: () => void;
+  scrollContainerRef: React.MutableRefObject<HTMLDivElement | null>;
   handleAssetClick: (asset: MediaFile) => void;
   handleLoadMore: () => void;
   loadDisplayURL: (file: MediaFile) => void;
   displayURLs: MediaLibraryState['displayURLs'];
+  collection?: Collection;
+  field?: Field;
 }
 
 const MediaLibraryModal = ({
@@ -77,11 +79,13 @@ const MediaLibraryModal = ({
   handleDelete,
   handleInsert,
   handleDownload,
-  setScrollContainerRef,
+  scrollContainerRef,
   handleAssetClick,
   handleLoadMore,
   loadDisplayURL,
   displayURLs,
+  collection,
+  field,
   t,
 }: TranslatedProps<MediaLibraryModalProps>) => {
   const filteredFiles = forImage ? handleFilter(files) : files;
@@ -128,7 +132,7 @@ const MediaLibraryModal = ({
       <DialogContent>
         {!shouldShowEmptyMessage ? null : <EmptyMessage content={emptyMessage} />}
         <MediaLibraryCardGrid
-          setScrollContainerRef={setScrollContainerRef}
+          scrollContainerRef={scrollContainerRef}
           mediaItems={tableData}
           isSelectedFile={file => selectedFile?.key === file.key}
           onAssetClick={handleAssetClick}
@@ -142,10 +146,12 @@ const MediaLibraryModal = ({
           cardMargin={cardMargin}
           loadDisplayURL={loadDisplayURL}
           displayURLs={displayURLs}
+          collection={collection}
+          field={field}
         />
       </DialogContent>
     </Dialog>
   );
 };
 
-export default translate()(MediaLibraryModal);
+export default translate()(MediaLibraryModal) as FC<MediaLibraryModalProps>;

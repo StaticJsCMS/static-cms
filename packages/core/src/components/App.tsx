@@ -169,7 +169,7 @@ const App = ({
             element={<EditorRoute collections={collections} newRecord />}
           />
           <Route
-            path="/collections/:name/entries/:slug"
+            path="/collections/:name/entries/*"
             element={<EditorRoute collections={collections} />}
           />
           <Route
