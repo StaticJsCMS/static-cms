@@ -21,7 +21,7 @@ import {
 } from '../constants';
 
 import type { MediaLibraryAction } from '../actions/mediaLibrary';
-import type { Field, MediaFile, MediaLibraryInstance } from '../interface';
+import type { Collection, Field, MediaFile, MediaLibraryInstance } from '../interface';
 
 export interface MediaLibraryDisplayURL {
   url?: string;
@@ -39,6 +39,7 @@ export type MediaLibraryState = {
   page?: number;
   files?: MediaFile[];
   config: Record<string, unknown>;
+  collection?: Collection;
   field?: Field;
   value?: string | string[];
   replaceIndex?: number;
@@ -75,7 +76,8 @@ function mediaLibrary(
       };
 
     case MEDIA_LIBRARY_OPEN: {
-      const { controlID, forImage, config, field, value, replaceIndex } = action.payload;
+      const { controlID, forImage, config, collection, field, value, replaceIndex } =
+        action.payload;
       const libConfig = config || {};
 
       return {
@@ -85,6 +87,7 @@ function mediaLibrary(
         controlID,
         canInsert: !!controlID,
         config: libConfig,
+        collection,
         field,
         value,
         replaceIndex,

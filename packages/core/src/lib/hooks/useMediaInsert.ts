@@ -5,17 +5,17 @@ import { openMediaLibrary, removeInsertedMedia } from '@staticcms/core/actions/m
 import { selectMediaPath } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 
-import type { FileOrImageField, MarkdownField } from '@staticcms/core/interface';
+import type { Collection, MediaField } from '@staticcms/core/interface';
 import type { MouseEvent } from 'react';
 
-export default function useMediaInsert<T extends string | string[]>(
+export default function useMediaInsert<T extends string | string[], F extends MediaField>(
   value: T,
-  options: { field?: FileOrImageField | MarkdownField; controlID?: string; forImage?: boolean },
+  options: { collection: Collection<F>; field: F; controlID?: string; forImage?: boolean },
   callback: (newValue: T) => void,
 ): (e?: MouseEvent) => void {
   const dispatch = useAppDispatch();
 
-  const { controlID, field, forImage = false } = options;
+  const { controlID, collection, field, forImage = false } = options;
 
   const finalControlID = useMemo(() => controlID ?? uuid(), [controlID]);
   const mediaPathSelector = useMemo(() => selectMediaPath(finalControlID), [finalControlID]);
@@ -50,11 +50,12 @@ export default function useMediaInsert<T extends string | string[]>(
           replaceIndex,
           allowMultiple: false,
           config,
+          collection,
           field,
         }),
       );
     },
-    [dispatch, finalControlID, forImage, value, config, field],
+    [dispatch, finalControlID, forImage, value, config, collection, field],
   );
 
   return handleOpenMediaLibrary;

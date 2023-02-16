@@ -1,0 +1,1 @@
+- useMediaInsert now requires collection to be passed

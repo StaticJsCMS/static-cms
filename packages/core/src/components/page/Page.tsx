@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 
 import { getAdditionalLink } from '@staticcms/core/lib/registry';
 import MainView from '../App/MainView';
-import Sidebar from '../Collection/Sidebar';
+import Sidebar from '../collection/Sidebar';
 
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';

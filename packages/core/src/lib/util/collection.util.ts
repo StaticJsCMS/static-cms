@@ -258,6 +258,7 @@ export function selectMediaFolders(config: Config, collection: Collection, entry
 
   return [...new Set(folders)];
 }
+
 export function getFieldsNames(fields: Field[] | undefined, prefix = '') {
   let names = fields?.map(f => `${prefix}${f.name}`) ?? [];
 

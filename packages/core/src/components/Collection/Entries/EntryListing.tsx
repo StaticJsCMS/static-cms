@@ -8,7 +8,7 @@ import { selectFields, selectInferredField } from '@staticcms/core/lib/util/coll
 import EntryCard from './EntryCard';
 
 import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
-import type { Field, Collection, Collections, Entry } from '@staticcms/core/interface';
+import type { Collection, Collections, Entry, Field } from '@staticcms/core/interface';
 import type Cursor from '@staticcms/core/lib/util/Cursor';
 
 interface CardsGridProps {
@@ -100,19 +100,19 @@ const EntryListing = ({
   const renderedCards = useMemo(() => {
     if ('collection' in otherProps) {
       const inferredFields = inferFields(otherProps.collection);
-      return entries.map((entry, idx) => (
+      return entries.map(entry => (
         <EntryCard
           collection={otherProps.collection}
-          inferredFields={inferredFields}
+          imageFieldName={inferredFields.imageField}
           viewStyle={viewStyle}
           entry={entry}
-          key={idx}
+          key={entry.slug}
         />
       ));
     }
 
     const isSingleCollectionInList = Object.keys(otherProps.collections).length === 1;
-    return entries.map((entry, idx) => {
+    return entries.map(entry => {
       const collectionName = entry.collection;
       const collection = Object.values(otherProps.collections).find(
         coll => coll.name === collectionName,
@@ -123,9 +123,9 @@ const EntryListing = ({
         <EntryCard
           collection={collection}
           entry={entry}
-          inferredFields={inferredFields}
+          imageFieldName={inferredFields.imageField}
           collectionLabel={collectionLabel}
-          key={idx}
+          key={entry.slug}
         />
       ) : null;
     });

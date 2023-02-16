@@ -14,8 +14,8 @@ import { currentBackend } from '@staticcms/core/backend';
 import { colors, GlobalStyles } from '@staticcms/core/components/UI/styles';
 import { history } from '@staticcms/core/routing/history';
 import { getDefaultPath } from '../../lib/util/collection.util';
-import CollectionRoute from '../Collection/CollectionRoute';
-import EditorRoute from '../Editor/EditorRoute';
+import CollectionRoute from '../collection/CollectionRoute';
+import EditorRoute from '../editor/EditorRoute';
 import MediaLibrary from '../MediaLibrary/MediaLibrary';
 import Page from '../page/Page';
 import Snackbars from '../snackbar/Snackbars';
@@ -183,7 +183,7 @@ const App = ({
             element={<EditorRoute collections={collections} newRecord />}
           />
           <Route
-            path="/collections/:name/entries/:slug"
+            path="/collections/:name/entries/*"
             element={<EditorRoute collections={collections} />}
           />
           <Route

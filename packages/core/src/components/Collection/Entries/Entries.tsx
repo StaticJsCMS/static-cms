@@ -63,6 +63,7 @@ const Entries = ({
       <>
         {'collection' in otherProps ? (
           <EntryListing
+            key="collection-listing"
             collection={otherProps.collection}
             entries={entries}
             viewStyle={viewStyle}
@@ -72,6 +73,7 @@ const Entries = ({
           />
         ) : (
           <EntryListing
+            key="search-listing"
             collections={otherProps.collections}
             entries={entries}
             viewStyle={viewStyle}
