@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { emptyAsset, getAsset } from '@staticcms/core/actions/media';
 import { useAppDispatch } from '@staticcms/core/store/hooks';
+import useDebounce from './useDebounce';
 
 import type { Collection, Entry, MediaField } from '@staticcms/core/interface';
 
@@ -13,14 +14,15 @@ export default function useMediaAsset<T extends MediaField>(
 ): string {
   const dispatch = useAppDispatch();
   const [assetSource, setAssetSource] = useState('');
+  const debouncedUrl = useDebounce(url, 200);
 
   useEffect(() => {
-    if (!url) {
+    if (!debouncedUrl) {
       return;
     }
 
     const fetchMedia = async () => {
-      const asset = await dispatch(getAsset<T>(collection, entry, url, field));
+      const asset = await dispatch(getAsset<T>(collection, entry, debouncedUrl, field));
       if (asset !== emptyAsset) {
         setAssetSource(asset?.toString() ?? '');
       }
@@ -28,7 +30,10 @@ export default function useMediaAsset<T extends MediaField>(
 
     fetchMedia();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url]);
+  }, [debouncedUrl]);
 
-  return useMemo(() => assetSource ?? '', [assetSource]);
+  return useMemo(
+    () => (debouncedUrl?.startsWith('blob:') ? debouncedUrl : assetSource ?? ''),
+    [assetSource, debouncedUrl],
+  );
 }
