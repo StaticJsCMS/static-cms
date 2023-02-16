@@ -39,8 +39,6 @@ export default function useMediaInsert<T extends string | string[], F extends Me
     }
   }, [callback, finalControlID, dispatch, mediaPath, value]);
 
-  console.log('media library config', config);
-
   const handleOpenMediaLibrary = useCallback(
     (e?: MouseEvent, { replaceIndex }: { replaceIndex?: number } = {}) => {
       e?.preventDefault();

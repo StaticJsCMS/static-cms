@@ -233,10 +233,6 @@ export function selectMediaFolder(
   const name = 'media_folder';
   let mediaFolder = config[name];
 
-  console.log(
-    '[selectMediaFolder] hasCustomFolder',
-    hasCustomFolder(name, collection, entryMap?.slug, field),
-  );
   if (hasCustomFolder(name, collection, entryMap?.slug, field)) {
     const folder = evaluateFolder(name, config, collection!, entryMap, field);
     if (folder.startsWith('/')) {

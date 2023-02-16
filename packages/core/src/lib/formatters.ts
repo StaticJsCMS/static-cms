@@ -133,7 +133,6 @@ export function folderFormatter(
   folderKey: string,
   slugConfig?: Slug,
 ) {
-  console.log('FOLDER FORMATTER entry', entry);
   if (!entry || !entry.data) {
     return folderTemplate;
   }
@@ -156,8 +155,6 @@ export function folderFormatter(
     fields,
     processSegment,
   );
-
-  console.log('FOLDER FORMATTER', entry.path, mediaFolder);
 
   return mediaFolder;
 }

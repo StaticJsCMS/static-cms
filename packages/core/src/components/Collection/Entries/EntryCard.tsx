@@ -3,7 +3,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import { VIEW_STYLE_GRID, VIEW_STYLE_LIST } from '@staticcms/core/constants/collectionViews';
@@ -37,26 +37,6 @@ const EntryCard = ({
   imageFieldName,
 }: EntryCardProps) => {
   const entryData = entry.data;
-
-  useEffect(() => {
-    console.log('[EntryCard] entry changed!', entry);
-  }, [entry]);
-
-  useEffect(() => {
-    console.log('[EntryCard] imageFieldName changed!', imageFieldName);
-  }, [imageFieldName]);
-
-  useEffect(() => {
-    console.log('[EntryCard] collection changed!', collection);
-  }, [collection]);
-
-  useEffect(() => {
-    console.log('[EntryCard] collectionLabel changed!', collectionLabel);
-  }, [collectionLabel]);
-
-  useEffect(() => {
-    console.log('[EntryCard] viewStyle changed!', viewStyle);
-  }, [viewStyle]);
 
   const path = useMemo(
     () => `/collections/${collection.name}/entries/${entry.slug}`,

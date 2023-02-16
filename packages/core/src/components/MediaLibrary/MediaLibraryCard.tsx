@@ -4,8 +4,11 @@ import React, { useEffect } from 'react';
 import { borders, colors, effects, lengths, shadows } from '@staticcms/core/components/UI/styles';
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import transientOptions from '@staticcms/core/lib/util/transientOptions';
+import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
+import { useAppSelector } from '@staticcms/core/store/hooks';
 
 import type { MediaLibraryDisplayURL } from '@staticcms/core/reducers/mediaLibrary';
+import type { Field, Collection } from '@staticcms/core/interface';
 
 const IMAGE_HEIGHT = 160;
 
@@ -89,6 +92,8 @@ interface MediaLibraryCardProps {
   isViewableImage: boolean;
   loadDisplayURL: () => void;
   isDraft?: boolean;
+  collection?: Collection;
+  field?: Field;
 }
 
 const MediaLibraryCard = ({
@@ -103,9 +108,12 @@ const MediaLibraryCard = ({
   type,
   isViewableImage,
   isDraft,
+  collection,
+  field,
   loadDisplayURL,
 }: MediaLibraryCardProps) => {
-  const url = useMediaAsset(displayURL.url);
+  const entry = useAppSelector(selectEditingDraft);
+  const url = useMediaAsset(displayURL.url, collection, field, entry);
 
   useEffect(() => {
     if (!displayURL.url) {

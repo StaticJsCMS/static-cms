@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { translate } from 'react-polyglot';
 
 import Loader from '@staticcms/core/components/UI/Loader';
@@ -47,30 +47,6 @@ const Entries = ({
   page,
   ...otherProps
 }: TranslatedProps<EntriesProps>) => {
-  useEffect(() => {
-    console.log('[Entries] entries changed!', entries);
-  }, [entries]);
-
-  useEffect(() => {
-    console.log('[Entries] isFetching changed!', isFetching);
-  }, [isFetching]);
-
-  useEffect(() => {
-    console.log('[Entries] viewStyle changed!', viewStyle);
-  }, [viewStyle]);
-
-  useEffect(() => {
-    console.log('[Entries] cursor changed!', cursor);
-  }, [cursor]);
-
-  useEffect(() => {
-    console.log('[Entries] handleCursorActions changed!');
-  }, [handleCursorActions]);
-
-  useEffect(() => {
-    console.log('[Entries] page changed!', page);
-  }, [page]);
-
   const loadingMessages = [
     t('collection.entries.loadingEntries'),
     t('collection.entries.cachingEntries'),

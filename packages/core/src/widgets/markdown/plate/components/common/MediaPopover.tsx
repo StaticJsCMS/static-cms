@@ -5,11 +5,10 @@ import Popper from '@mui/material/Popper';
 import { styled, useTheme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useFocused } from 'slate-react';
 
-import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import useIsMediaAsset from '@staticcms/core/lib/hooks/useIsMediaAsset';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
+import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 
 import type { Collection, Entry, FileOrImageField, MarkdownField } from '@staticcms/core/interface';
 import type { ChangeEvent, KeyboardEvent } from 'react';
@@ -65,7 +64,6 @@ export interface MediaPopoverProps<T extends FileOrImageField | MarkdownField> {
   onUrlChange: (newValue: string) => void;
   onTextChange?: (newValue: string) => void;
   onClose: (shouldFocus: boolean) => void;
-  mediaOpen?: boolean;
   onMediaToggle?: (open: boolean) => void;
   onMediaChange: (newValue: string) => void;
   onRemove?: () => void;
@@ -87,7 +85,6 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
   onUrlChange,
   onTextChange,
   onClose,
-  mediaOpen,
   onMediaToggle,
   onMediaChange,
   onRemove,
@@ -101,9 +98,9 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
 
   const [editing, setEditing] = useState(inserting);
 
-  const hasEditorFocus = useFocused();
-  const [hasFocus, setHasFocus] = useState(false);
-  const debouncedHasFocus = useDebounce(hasFocus, 150);
+  useWindowEvent('mediaLibraryClose', () => {
+    onMediaToggle?.(false);
+  });
 
   const handleClose = useCallback(
     (shouldFocus: boolean) => {
@@ -155,60 +152,11 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
     }
   }, [anchorEl, editing, inserting, urlDisabled]);
 
-  const [
-    { prevAnchorEl, prevHasEditorFocus, prevHasFocus, prevDebouncedHasFocus },
-    setPrevFocusState,
-  ] = useState<{
-    prevAnchorEl: HTMLElement | null;
-    prevHasEditorFocus: boolean;
-    prevHasFocus: boolean;
-    prevDebouncedHasFocus: boolean;
-  }>({
-    prevAnchorEl: anchorEl,
-    prevHasEditorFocus: hasEditorFocus,
-    prevHasFocus: hasFocus,
-    prevDebouncedHasFocus: debouncedHasFocus,
-  });
-
-  useEffect(() => {
-    if (mediaOpen) {
-      return;
-    }
-
-    if (anchorEl && !prevHasEditorFocus && hasEditorFocus) {
-      handleClose(false);
-    }
-
-    if (anchorEl && (prevHasFocus || prevDebouncedHasFocus) && !hasFocus && !debouncedHasFocus) {
-      handleClose(false);
-    }
-
-    setPrevFocusState({
-      prevAnchorEl: anchorEl,
-      prevHasEditorFocus: hasEditorFocus,
-      prevHasFocus: hasFocus,
-      prevDebouncedHasFocus: debouncedHasFocus,
-    });
-  }, [
-    anchorEl,
-    debouncedHasFocus,
-    handleClose,
-    hasEditorFocus,
-    hasFocus,
-    mediaOpen,
-    prevAnchorEl,
-    prevDebouncedHasFocus,
-    prevHasEditorFocus,
-    prevHasFocus,
-  ]);
-
   const handleFocus = useCallback(() => {
-    setHasFocus(true);
     onFocus?.();
   }, [onFocus]);
 
   const handleBlur = useCallback(() => {
-    setHasFocus(false);
     onBlur?.();
   }, [onBlur]);
 

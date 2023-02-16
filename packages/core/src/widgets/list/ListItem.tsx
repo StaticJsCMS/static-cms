@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import partial from 'lodash/partial';
 import React, { useCallback, useMemo, useState } from 'react';
 
-import EditorControl from '@staticcms/core/components/Editor/EditorControlPane/EditorControl';
+import EditorControl from '@staticcms/core/components/editor/EditorControlPane/EditorControl';
 import ListItemTopBar from '@staticcms/core/components/UI/ListItemTopBar';
 import Outline from '@staticcms/core/components/UI/Outline';
 import { colors } from '@staticcms/core/components/UI/styles';

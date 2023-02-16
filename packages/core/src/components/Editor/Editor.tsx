@@ -110,8 +110,6 @@ const Editor = ({
 
           deleteBackup();
 
-          console.log('CREATE NEW?', createNew);
-
           if (createNew) {
             navigateToNewEntry(collection.name);
             if (duplicate && entryDraft.entry) {

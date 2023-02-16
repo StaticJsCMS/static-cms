@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Waypoint } from 'react-waypoint';
 
 import { VIEW_STYLE_LIST } from '@staticcms/core/constants/collectionViews';
@@ -8,7 +8,7 @@ import { selectFields, selectInferredField } from '@staticcms/core/lib/util/coll
 import EntryCard from './EntryCard';
 
 import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
-import type { Field, Collection, Collections, Entry } from '@staticcms/core/interface';
+import type { Collection, Collections, Entry, Field } from '@staticcms/core/interface';
 import type Cursor from '@staticcms/core/lib/util/Cursor';
 
 interface CardsGridProps {
@@ -65,26 +65,6 @@ const EntryListing = ({
   handleCursorActions,
   ...otherProps
 }: EntryListingProps) => {
-  useEffect(() => {
-    console.log('[EntryListing] entries changed!', entries);
-  }, [entries]);
-
-  useEffect(() => {
-    console.log('[EntryListing] page changed!', page);
-  }, [page]);
-
-  useEffect(() => {
-    console.log('[EntryListing] cursor changed!', cursor);
-  }, [cursor]);
-
-  useEffect(() => {
-    console.log('[EntryListing] viewStyle changed!', viewStyle);
-  }, [viewStyle]);
-
-  useEffect(() => {
-    console.log('[EntryListing] handleCursorActions changed!');
-  }, [handleCursorActions]);
-
   const hasMore = useMemo(() => cursor?.actions?.has('append_next'), [cursor?.actions]);
 
   const handleLoadMore = useCallback(() => {

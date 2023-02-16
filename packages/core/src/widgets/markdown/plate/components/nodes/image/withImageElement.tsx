@@ -12,6 +12,7 @@ import { useFocused } from 'slate-react';
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import { MediaPopover } from '@staticcms/markdown';
+import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 
 import type { Collection, Entry, MarkdownField } from '@staticcms/core/interface';
 import type { MdImageElement, MdValue } from '@staticcms/markdown';
@@ -35,13 +36,32 @@ const withImageElement = ({ containerRef, collection, entry, field }: WithImageE
     const { url, alt } = element;
     const [internalUrl, setInternalUrl] = useState(url);
     const [internalAlt, setInternalAlt] = useState(alt);
+    const [popoverHasFocus, setPopoverHasFocus] = useState(false);
+    const debouncedPopoverHasFocus = useDebounce(popoverHasFocus, 100);
+
+    const [mediaOpen, setMediaOpen] = useState(false);
     const imageRef = useRef<HTMLImageElement | null>(null);
 
     const [anchorEl, setAnchorEl] = useState<HTMLImageElement | null>(null);
     const hasEditorFocus = useFocused();
+    const debouncedHasEditorFocus = useDebounce(hasEditorFocus, 100);
 
     const handleBlur = useCallback(() => {
-      setAnchorEl(null);
+      if (!popoverHasFocus && !mediaOpen) {
+        setAnchorEl(null);
+      }
+    }, [mediaOpen, popoverHasFocus]);
+
+    const handlePopoverFocus = useCallback(() => {
+      setPopoverHasFocus(true);
+    }, []);
+
+    const handlePopoverBlur = useCallback(() => {
+      setPopoverHasFocus(false);
+    }, []);
+
+    const handleMediaToggle = useCallback(() => {
+      setMediaOpen(oldMediaOpen => !oldMediaOpen);
     }, []);
 
     const handleChange = useCallback(
@@ -96,7 +116,28 @@ const withImageElement = ({ containerRef, collection, entry, field }: WithImageE
     const selection = usePlateSelection();
 
     useEffect(() => {
-      if (!hasEditorFocus || !selection) {
+      if (
+        hasEditorFocus ||
+        debouncedHasEditorFocus ||
+        mediaOpen ||
+        popoverHasFocus ||
+        debouncedPopoverHasFocus
+      ) {
+        return;
+      }
+
+      handleClose();
+    }, [
+      debouncedHasEditorFocus,
+      debouncedPopoverHasFocus,
+      handleClose,
+      hasEditorFocus,
+      mediaOpen,
+      popoverHasFocus,
+    ]);
+
+    useEffect(() => {
+      if (!hasEditorFocus || !selection || mediaOpen || popoverHasFocus) {
         return;
       }
 
@@ -109,12 +150,24 @@ const withImageElement = ({ containerRef, collection, entry, field }: WithImageE
       }
 
       if (node !== element && node !== firstChild) {
-        handleClose();
+        if (anchorEl) {
+          handleClose();
+        }
         return;
       }
 
       handleOpenPopover();
-    }, [handleClose, hasEditorFocus, element, selection, editor, handleOpenPopover]);
+    }, [
+      handleClose,
+      hasEditorFocus,
+      element,
+      selection,
+      editor,
+      handleOpenPopover,
+      mediaOpen,
+      popoverHasFocus,
+      anchorEl,
+    ]);
 
     return (
       <span onBlur={handleBlur}>
@@ -140,6 +193,9 @@ const withImageElement = ({ containerRef, collection, entry, field }: WithImageE
           onMediaChange={handleMediaChange}
           onRemove={handleRemove}
           forImage
+          onFocus={handlePopoverFocus}
+          onBlur={handlePopoverBlur}
+          onMediaToggle={handleMediaToggle}
         />
         {children}
       </span>

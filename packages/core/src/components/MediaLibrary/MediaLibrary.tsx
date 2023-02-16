@@ -1,6 +1,5 @@
 import fuzzy from 'fuzzy';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { translate } from 'react-polyglot';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 
 import {
@@ -12,16 +11,13 @@ import {
   persistMedia as persistMediaAction,
 } from '@staticcms/core/actions/mediaLibrary';
 import { fileExtension } from '@staticcms/core/lib/util';
-import { selectMediaFolders } from '@staticcms/core/lib/util/collection.util';
-import { selectConfig } from '@staticcms/core/reducers/selectors/config';
-import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
+import MediaLibraryCloseEvent from '@staticcms/core/lib/util/events/MediaLibraryCloseEvent';
 import { selectMediaFiles } from '@staticcms/core/reducers/selectors/mediaLibrary';
-import { useAppSelector } from '@staticcms/core/store/hooks';
 import alert from '../UI/Alert';
 import confirm from '../UI/Confirm';
 import MediaLibraryModal from './MediaLibraryModal';
 
-import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
+import type { MediaFile } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 import type { ChangeEvent, KeyboardEvent } from 'react';
 import type { ConnectedProps } from 'react-redux';
@@ -67,24 +63,11 @@ const MediaLibrary = ({
   closeMediaLibrary,
   collection,
   field,
-  t,
-}: TranslatedProps<MediaLibraryProps>) => {
+}: MediaLibraryProps) => {
   const [selectedFile, setSelectedFile] = useState<MediaFile | null>(null);
   const [query, setQuery] = useState<string | undefined>(undefined);
 
   const [prevIsVisible, setPrevIsVisible] = useState(false);
-
-  const config = useAppSelector(selectConfig);
-  const entry = useAppSelector(selectEditingDraft);
-  const mediaFolders = useMemo(() => {
-    if (!config || !collection || !entry) {
-      return [];
-    }
-
-    return selectMediaFolders(config, collection, entry);
-  }, [collection, config, entry]);
-
-  console.log('mediaFolders', mediaFolders);
 
   useEffect(() => {
     loadMedia({});
@@ -94,15 +77,12 @@ const MediaLibrary = ({
     if (!prevIsVisible && isVisible) {
       setSelectedFile(null);
       setQuery('');
+      loadMedia();
+    } else if (prevIsVisible && !isVisible) {
+      window.dispatchEvent(new MediaLibraryCloseEvent());
     }
 
     setPrevIsVisible(isVisible);
-  }, [isVisible, prevIsVisible]);
-
-  useEffect(() => {
-    if (!prevIsVisible && isVisible) {
-      loadMedia();
-    }
   }, [isVisible, loadMedia, prevIsVisible]);
 
   const loadDisplayURL = useCallback(
@@ -172,7 +152,7 @@ const MediaLibrary = ({
     [selectedFile?.key],
   );
 
-  const scrollContainerRef = useRef<HTMLDivElement>();
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const scrollToTop = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTop = 0;
@@ -328,7 +308,7 @@ const MediaLibrary = ({
   /**
    * Filters files that do not match the query. Not used for dynamic search.
    */
-  const queryFilter = useCallback((query: string, files: { name: string }[]) => {
+  const queryFilter = useCallback((query: string, files: MediaFile[]): MediaFile[] => {
     /**
      * Because file names don't have spaces, typing a space eliminates all
      * potential matches, so we strip them all out internally before running the
@@ -336,11 +316,10 @@ const MediaLibrary = ({
      */
     const strippedQuery = query.replace(/ /g, '');
     const matches = fuzzy.filter(strippedQuery, files, { extract: file => file.name });
-    const matchFiles = matches.map((match, queryIndex) => {
+    return matches.map((match, queryIndex) => {
       const file = files[match.index];
       return { ...file, queryIndex };
-    });
-    return matchFiles;
+    }) as MediaFile[];
   }, []);
 
   return (
@@ -357,7 +336,7 @@ const MediaLibrary = ({
       hasNextPage={hasNextPage}
       isPaginating={isPaginating}
       query={query}
-      selectedFile={selectedFile}
+      selectedFile={selectedFile ?? undefined}
       handleFilter={filterImages}
       handleQuery={queryFilter}
       toTableData={toTableData}
@@ -368,12 +347,13 @@ const MediaLibrary = ({
       handleDelete={handleDelete}
       handleInsert={handleInsert}
       handleDownload={handleDownload}
-      setScrollContainerRef={scrollContainerRef}
+      scrollContainerRef={scrollContainerRef}
       handleAssetClick={handleAssetClick}
       handleLoadMore={handleLoadMore}
       displayURLs={displayURLs}
       loadDisplayURL={loadDisplayURL}
-      t={t}
+      collection={collection}
+      field={field}
     />
   );
 };
@@ -415,4 +395,4 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export type MediaLibraryProps = ConnectedProps<typeof connector>;
 
-export default connector(translate()(MediaLibrary));
+export default connector(MediaLibrary);

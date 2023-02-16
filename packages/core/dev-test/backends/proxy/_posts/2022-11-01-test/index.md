@@ -6,8 +6,6 @@ image: kittens.jpg
 ---
 Test234t6
 
-![moby-dick.jpg](/assets/upload/moby-dick.jpg)
+[Test](https://example.com)
 
-![moby-dick.jpg](/assets/upload/moby-dick.jpg)
-
-![kanefreeman_2.jpg](/assets/upload/kanefreeman_2.jpg)
+![Kittens!](kittens.jpg)

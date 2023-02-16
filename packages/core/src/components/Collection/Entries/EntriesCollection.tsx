@@ -43,25 +43,24 @@ function getGroupTitle(group: GroupOfEntries, t: t) {
   return `${label} ${value}`.trim();
 }
 
-function withGroups(
-  groups: GroupOfEntries[],
-  entries: Entry[],
-  EntriesToRender: ComponentType<EntriesToRenderProps>,
-  t: t,
-) {
-  return groups.map(group => {
-    const title = getGroupTitle(group, t);
-    return (
-      <GroupContainer key={group.id} id={group.id}>
-        <GroupHeading>{title}</GroupHeading>
-        <EntriesToRender key="entries-with-group" entries={getGroupEntries(entries, group.paths)} />
-      </GroupContainer>
-    );
-  });
-}
+export function filterNestedEntries(path: string, collectionFolder: string, entries: Entry[]) {
+  const filtered = entries.filter(e => {
+    const entryPath = e.path.slice(collectionFolder.length + 1);
+    if (!entryPath.startsWith(path)) {
+      return false;
+    }
 
-interface EntriesToRenderProps {
-  entries: Entry[];
+    // only show immediate children
+    if (path) {
+      // non root path
+      const trimmed = entryPath.slice(path.length + 1);
+      return trimmed.split('/').length === 2;
+    } else {
+      // root path
+      return entryPath.split('/').length <= 2;
+    }
+  });
+  return filtered;
 }
 
 const EntriesCollection = ({
@@ -94,26 +93,6 @@ const EntriesCollection = ({
   }, [collection, entries, filterTerm]);
 
   useEffect(() => {
-    console.log('[EntriesCollection] filteredEntries changed!', filteredEntries);
-  }, [filteredEntries]);
-
-  useEffect(() => {
-    console.log('[EntriesCollection] entries changed!', entries);
-  }, [entries]);
-
-  useEffect(() => {
-    console.log('[EntriesCollection] groups changed!', groups);
-  }, [groups]);
-
-  useEffect(() => {
-    console.log('[EntriesCollection] isFetching changed!', isFetching);
-  }, [isFetching]);
-
-  useEffect(() => {
-    console.log('[EntriesCollection] viewStyle changed!', viewStyle);
-  }, [viewStyle]);
-
-  useEffect(() => {
     if (
       collection &&
       !entriesLoaded &&
@@ -143,7 +122,7 @@ const EntriesCollection = ({
             <GroupHeading>{title}</GroupHeading>
             <Entries
               collection={collection}
-              entries={getGroupEntries(entries, group.paths)}
+              entries={getGroupEntries(filteredEntries, group.paths)}
               isFetching={isFetching}
               collectionName={collection.label}
               viewStyle={viewStyle}
@@ -161,7 +140,7 @@ const EntriesCollection = ({
     <Entries
       key="entries-without-group"
       collection={collection}
-      entries={entries}
+      entries={filteredEntries}
       isFetching={isFetching}
       collectionName={collection.label}
       viewStyle={viewStyle}
@@ -171,26 +150,6 @@ const EntriesCollection = ({
     />
   );
 };
-
-export function filterNestedEntries(path: string, collectionFolder: string, entries: Entry[]) {
-  const filtered = entries.filter(e => {
-    const entryPath = e.path.slice(collectionFolder.length + 1);
-    if (!entryPath.startsWith(path)) {
-      return false;
-    }
-
-    // only show immediate children
-    if (path) {
-      // non root path
-      const trimmed = entryPath.slice(path.length + 1);
-      return trimmed.split('/').length === 2;
-    } else {
-      // root path
-      return entryPath.split('/').length <= 2;
-    }
-  });
-  return filtered;
-}
 
 interface EntriesCollectionOwnProps {
   collection: Collection;

@@ -52,7 +52,7 @@ const ListControlWrapper = createControlWrapper({
   path: 'list',
 });
 
-jest.mock('@staticcms/core/components/Editor/EditorControlPane/EditorControl', () => {
+jest.mock('@staticcms/core/components/editor/EditorControlPane/EditorControl', () => {
   return jest.fn(props => {
     const { parentPath, field, value } = props;
     return (

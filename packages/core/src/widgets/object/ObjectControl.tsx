@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import React, { useCallback, useMemo, useState } from 'react';
 
-import EditorControl from '@staticcms/core/components/Editor/EditorControlPane/EditorControl';
+import EditorControl from '@staticcms/core/components/editor/EditorControlPane/EditorControl';
 import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
 import Outline from '@staticcms/core/components/UI/Outline';
 import { transientOptions } from '@staticcms/core/lib';

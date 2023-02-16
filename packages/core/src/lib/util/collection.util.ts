@@ -244,7 +244,6 @@ export function selectFieldsWithMediaFolders(collection: Collection, slug: strin
 
 export function selectMediaFolders(config: Config, collection: Collection, entry: Entry) {
   const fields = selectFieldsWithMediaFolders(collection, entry.slug);
-  console.log('selectMediaFolders', config, collection, entry, '\nfields', fields);
   const folders = fields.map(f => selectMediaFolder(config, collection, entry, f));
   if ('files' in collection) {
     const file = getFileFromSlug(collection, entry.slug);
@@ -254,7 +253,6 @@ export function selectMediaFolders(config: Config, collection: Collection, entry
   } else if ('media_folder' in collection) {
     // stop evaluating media folders at collection level
     const newCollection = { ...collection };
-    console.log('selectMediaFolders media_folder in collection', newCollection);
     folders.unshift(selectMediaFolder(config, newCollection, entry, undefined));
   }
 

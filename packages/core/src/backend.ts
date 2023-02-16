@@ -414,7 +414,6 @@ export class Backend<BC extends BackendClass = BackendClass> {
     ) {
       uniqueSlug = `${slug}${sanitizeChar(' ', slugConfig)}${i++}`;
     }
-    console.log('generateUniqueSlug', uniqueSlug);
     return uniqueSlug;
   }
 

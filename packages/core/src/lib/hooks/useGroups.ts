@@ -1,5 +1,5 @@
 import groupBy from 'lodash/groupBy';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { getGroup, selectEntriesGroupField } from '@staticcms/core/reducers/selectors/entries';
 import { useAppSelector } from '@staticcms/core/store/hooks';
@@ -16,16 +16,7 @@ export default function useGroups(collectionName: string) {
   );
   const selectedGroup = useAppSelector(entriesGroupFieldSelector);
 
-  useEffect(() => {
-    console.log('[EntriesCollection] recalculating groups, entries changed!', entries);
-  }, [entries]);
-
-  useEffect(() => {
-    console.log('[EntriesCollection] recalculating groups, selectedGroup changed!', selectedGroup);
-  }, [selectedGroup]);
-
   return useMemo(() => {
-    console.log('[EntriesCollection] recalculating groups');
     if (selectedGroup === undefined) {
       return [];
     }
