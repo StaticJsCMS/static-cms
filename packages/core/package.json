@@ -182,7 +182,7 @@
     "@simbathesailor/use-what-changed": "2.0.0",
     "@testing-library/dom": "9.0.0",
     "@testing-library/jest-dom": "5.16.5",
-    "@testing-library/react": "13.4.0",
+    "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.4.3",
     "@types/common-tags": "1.8.1",
     "@types/create-react-class": "15.6.3",
