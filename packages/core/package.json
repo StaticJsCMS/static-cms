@@ -49,7 +49,7 @@
   "dependencies": {
     "@babel/eslint-parser": "7.19.1",
     "@babel/runtime": "7.20.13",
-    "@codemirror/autocomplete": "6.4.1",
+    "@codemirror/autocomplete": "6.4.2",
     "@codemirror/commands": "6.2.1",
     "@codemirror/language": "6.6.0",
     "@codemirror/language-data": "6.1.0",
@@ -57,7 +57,7 @@
     "@codemirror/lint": "6.1.1",
     "@codemirror/search": "6.2.3",
     "@codemirror/state": "6.2.0",
-    "@codemirror/theme-one-dark": "6.1.0",
+    "@codemirror/theme-one-dark": "6.1.1",
     "@codemirror/view": "6.9.0",
     "@dnd-kit/core": "6.0.7",
     "@dnd-kit/sortable": "7.0.2",
