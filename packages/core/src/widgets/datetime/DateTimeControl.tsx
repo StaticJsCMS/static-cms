@@ -12,16 +12,13 @@ import Button from '@staticcms/core/components/common/button/Button';
 import Field from '@staticcms/core/components/common/field/Field';
 import TextField from '@staticcms/core/components/common/text-field/TextField';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
+import { DEFAULT_DATETIME_FORMAT, DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT } from './constants';
 import { localToUTC } from './utc.util';
 
 import type { TextFieldProps as MuiTextFieldProps } from '@mui/material/TextField';
 import type { TextFieldProps } from '@staticcms/core/components/common/text-field/TextField';
 import type { DateTimeField, TranslatedProps, WidgetControlProps } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
-
-const DEFAULT_DATE_FORMAT = 'yyyy-MM-dd';
-const DEFAULT_TIME_FORMAT = 'HH:mm:ss.SSS';
-const DEFAULT_DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
 function convertMuiTextFieldProps(
   { inputProps, disabled, onClick }: MuiTextFieldProps,
