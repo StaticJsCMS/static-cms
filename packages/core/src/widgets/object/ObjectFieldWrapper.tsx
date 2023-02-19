@@ -6,16 +6,17 @@ import ErrorMessage from '@staticcms/core/components/common/field/ErrorMessage';
 import Label from '@staticcms/core/components/common/field/Label';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 
-import type { FieldError } from '@staticcms/core/interface';
+import type { FieldError, ObjectField } from '@staticcms/core/interface';
 import type { FC, ReactNode } from 'react';
 
 export interface ObjectFieldWrapperProps {
+  field: ObjectField;
   label?: string;
   children: ReactNode | ReactNode[];
   errors: FieldError[];
 }
 
-const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({ label, children, errors }) => {
+const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({ field, label, children, errors }) => {
   const hasErrors = useMemo(() => errors.length > 0, [errors.length]);
 
   const renderedLabel = useMemo(
@@ -39,6 +40,8 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({ label, children, erro
 
   const renderedErrorMessage = useMemo(() => <ErrorMessage errors={errors} />, [errors]);
 
+  const defaultOpen = useMemo(() => !field.collapsed ?? true, [field.collapsed])
+
   return (
     <div
       data-testid="object-field"
@@ -55,10 +58,11 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({ label, children, erro
         !hasErrors && 'group/active-object',
       )}
     >
-      <Disclosure>
+      <Disclosure defaultOpen={defaultOpen}>
         {({ open }) => (
           <>
             <Disclosure.Button
+              data-testid="expand-button"
               className="
                 flex
                 w-full

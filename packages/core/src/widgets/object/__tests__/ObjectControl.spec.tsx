@@ -2,11 +2,11 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
-import { getByTestId, render, screen } from '@testing-library/react';
+import { getByTestId, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import createControlWrapper from '@staticcms/core/lib/test-utils/ControlWrapper';
+import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 import ObjectControl from '../ObjectControl';
 
 import type { ObjectField } from '@staticcms/core/interface';
@@ -28,13 +28,6 @@ const singleFieldObjectValue = {
   stringInput: 'String Value',
 };
 
-const ObjectControlWrapper = createControlWrapper({
-  defaultField: singleFieldObjectField,
-  control: ObjectControl,
-  label: 'Object Control',
-  path: 'object',
-});
-
 jest.mock('@staticcms/core/components/editor/EditorControlPane/EditorControl', () => {
   return jest.fn(props => {
     const { parentPath, fieldName, field } = props;
@@ -48,10 +41,15 @@ jest.mock('@staticcms/core/components/editor/EditorControlPane/EditorControl', (
 });
 
 describe(ObjectControl.name, () => {
-  it('renders all fields visible by default', () => {
-    render(<ObjectControlWrapper field={singleFieldObjectField} value={singleFieldObjectValue} />);
+  const renderControl = createWidgetControlHarness(ObjectControl, {
+    field: singleFieldObjectField,
+    path: 'object',
+  });
 
-    expect(screen.getByTestId('object-title').textContent).toBe('Object Field');
+  it('renders all fields visible by default', () => {
+    renderControl({ value: singleFieldObjectValue });
+
+    expect(screen.getByTestId('expand-button').textContent).toBe('Object Field');
 
     const fields = screen.getAllByTestId('editor-control');
     expect(fields.length).toBe(1);
@@ -63,7 +61,7 @@ describe(ObjectControl.name, () => {
   });
 
   it('does not render fields when closed', async () => {
-    render(<ObjectControlWrapper field={singleFieldObjectField} value={singleFieldObjectValue} />);
+    renderControl({ value: singleFieldObjectValue });
 
     await userEvent.click(screen.getByTestId('expand-button'));
 
@@ -76,16 +74,9 @@ describe(ObjectControl.name, () => {
 
   describe('for list', () => {
     it('should pass down parent path and field name to child if for list and single field', () => {
-      render(
-        <ObjectControlWrapper
-          field={singleFieldObjectField}
-          value={singleFieldObjectValue}
-          path="list.0"
-          forList={true}
-        />,
-      );
+      renderControl({ value: singleFieldObjectValue, path: 'list.0', forList: true });
 
-      expect(screen.queryByTestId('object-title')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('expand-button')).not.toBeInTheDocument();
 
       const fields = screen.getAllByTestId('editor-control');
       expect(fields.length).toBe(1);
