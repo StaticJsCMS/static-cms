@@ -110,11 +110,14 @@ async function selectDateTime(
 }
 
 describe(DateTimeControl.name, () => {
-  const renderControl = createWidgetControlHarness(DateTimeControl, { field: mockDateTimeField });
+  const renderControl = createWidgetControlHarness(
+    DateTimeControl,
+    { field: mockDateTimeField },
+    { useFakeTimers: true },
+  );
   let userEventActions: UserEvent;
 
   beforeEach(() => {
-    jest.useFakeTimers({ now: new Date(2023, 1, 12, 10, 15, 35, 0) });
     userEventActions = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
   });
 

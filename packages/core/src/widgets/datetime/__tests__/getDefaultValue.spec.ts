@@ -2,10 +2,6 @@ import { mockDateField, mockDateTimeField, mockTimeField } from '../../../../tes
 import getDefaultValue from '../getDefaultValue';
 
 describe('DateTime getDefaultValue', () => {
-  beforeEach(() => {
-    jest.useFakeTimers({ now: new Date(2023, 1, 12, 10, 15, 35, 0) });
-  });
-
   describe('datetime', () => {
     it("should use today's date", () => {
       expect(getDefaultValue(undefined, mockDateTimeField)).toEqual('2023-02-12T10:15:35.000');
@@ -24,9 +20,7 @@ describe('DateTime getDefaultValue', () => {
     });
 
     it('should use provided default', () => {
-      expect(getDefaultValue('2022-06-18', mockDateField)).toEqual(
-        '2022-06-18',
-      );
+      expect(getDefaultValue('2022-06-18', mockDateField)).toEqual('2022-06-18');
     });
   });
 
@@ -36,9 +30,7 @@ describe('DateTime getDefaultValue', () => {
     });
 
     it('should use provided default', () => {
-      expect(getDefaultValue('14:30:01.000', mockTimeField)).toEqual(
-        '14:30:01.000',
-      );
+      expect(getDefaultValue('14:30:01.000', mockTimeField)).toEqual('14:30:01.000');
     });
   });
 });

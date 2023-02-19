@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
-import { getByTestId, screen } from '@testing-library/react';
+import { getByTestId, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
@@ -70,6 +70,10 @@ describe(ObjectControl.name, () => {
     path: 'object_field',
   });
 
+  afterAll(() => {
+    jest.useRealTimers();
+  });
+
   it('should render', () => {
     const { getByTestId } = renderControl({ label: 'I am a label' });
 
@@ -110,6 +114,28 @@ describe(ObjectControl.name, () => {
     expect(getByTestId(fieldTwo, 'fieldName').textContent).toBe('text_input');
   });
 
+  it('renders all fields hidden if collapsed is true', () => {
+    renderControl(
+      {
+        field: { ...multiFieldObjectField, collapsed: true },
+        value: multiFieldObjectValue,
+        label: 'I am a label',
+      },
+      {
+        useFakeTimers: true,
+      },
+    );
+
+    const fields = screen.getAllByTestId('editor-control');
+    expect(fields.length).toBe(2);
+
+    const fieldOne = fields[0];
+    expect(fieldOne).not.toBeVisible();
+
+    const fieldTwo = fields[1];
+    expect(fieldTwo).not.toBeVisible();
+  });
+
   it('does not render fields when closed', async () => {
     renderControl({ value: multiFieldObjectValue, label: 'I am a label' });
 
@@ -141,13 +167,17 @@ describe(ObjectControl.name, () => {
 
     await userEvent.click(screen.getByTestId('expand-button'));
 
-    expect(screen.getByTestId('expand-button').textContent).toBe(
-      'I am a label - I am a summary: String Value Text Value',
+    await waitFor(() =>
+      expect(screen.getByTestId('expand-button').textContent).toBe(
+        'I am a label - I am a summary: String Value Text Value',
+      ),
     );
 
     await userEvent.click(screen.getByTestId('expand-button'));
 
-    expect(screen.getByTestId('expand-button').textContent).toBe('I am a label');
+    await waitFor(() =>
+      expect(screen.getByTestId('expand-button').textContent).toBe('I am a label'),
+    );
   });
 
   it('should show error', async () => {
