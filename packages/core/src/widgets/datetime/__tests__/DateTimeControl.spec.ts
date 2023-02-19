@@ -149,8 +149,8 @@ describe(DateTimeControl.name, () => {
       errors: [{ type: 'error-type', message: 'i am an error' }],
     });
 
-    const input = getByTestId('error');
-    expect(input.textContent).toBe('i am an error');
+    const error = getByTestId('error');
+    expect(error.textContent).toBe('i am an error');
 
     const field = getByTestId('field');
     expect(field).not.toHaveClass('group/active');

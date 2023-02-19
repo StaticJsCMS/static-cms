@@ -11,36 +11,26 @@ import type { FC, ReactNode } from 'react';
 
 export interface ObjectFieldWrapperProps {
   field: ObjectField;
-  label?: string;
+  openLabel: string;
+  closedLabel: string;
   children: ReactNode | ReactNode[];
   errors: FieldError[];
+  hasChildErrors: boolean;
 }
 
-const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({ field, label, children, errors }) => {
+const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
+  field,
+  openLabel,
+  closedLabel,
+  children,
+  errors,
+  hasChildErrors,
+}) => {
   const hasErrors = useMemo(() => errors.length > 0, [errors.length]);
-
-  const renderedLabel = useMemo(
-    () =>
-      label ? (
-        <Label
-          key="label"
-          hasErrors={hasErrors}
-          className={`
-            group-focus-within/active-object:text-blue-500
-            group-hover/active-object:text-blue-500
-          `}
-          cursor="pointer"
-          variant="inline"
-        >
-          {label}
-        </Label>
-      ) : null,
-    [hasErrors, label],
-  );
 
   const renderedErrorMessage = useMemo(() => <ErrorMessage errors={errors} />, [errors]);
 
-  const defaultOpen = useMemo(() => !field.collapsed ?? true, [field.collapsed])
+  const defaultOpen = useMemo(() => !field.collapsed ?? true, [field.collapsed]);
 
   return (
     <div
@@ -55,7 +45,7 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({ field, label, childre
           focus-within:border-blue-800
           dark:focus-within:border-blue-100
         `,
-        !hasErrors && 'group/active-object',
+        !(hasErrors || hasChildErrors) && 'group/active-object',
       )}
     >
       <Disclosure defaultOpen={defaultOpen}>
@@ -90,7 +80,18 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({ field, label, childre
                   `,
                 )}
               />
-              {renderedLabel}
+              <Label
+                key="label"
+                hasErrors={hasErrors || hasChildErrors}
+                className={`
+                  group-focus-within/active-object:text-blue-500
+                  group-hover/active-object:text-blue-500
+                `}
+                cursor="pointer"
+                variant="inline"
+              >
+                {open ? openLabel : closedLabel}
+              </Label>
             </Disclosure.Button>
             <Transition
               unmount={false}
@@ -102,16 +103,20 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({ field, label, childre
               leaveTo="transform opacity-0"
             >
               <Disclosure.Panel
+                data-testid="object-fields"
                 unmount={false}
-                className="
-                  ml-6
-                  text-sm
-                  text-gray-500
-                  border-l-2
-                  border-solid
-                  border-l-slate-400
-                  group-focus-within/active-object:border-l-blue-500
-                "
+                className={classNames(
+                  `
+                    ml-6
+                    text-sm
+                    text-gray-500
+                    border-l-2
+                    border-solid
+                    border-l-slate-400
+                    group-focus-within/active-object:border-l-blue-500
+                  `,
+                  (hasErrors || hasChildErrors) && 'border-l-red-500',
+                )}
               >
                 {children}
               </Disclosure.Panel>

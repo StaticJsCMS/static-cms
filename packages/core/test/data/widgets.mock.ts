@@ -18,7 +18,6 @@ export const createMockWidgetControlProps = <
     Partial<WidgetControlProps<T, F>>,
     | 'field'
     | 'data'
-    | 'fieldsErrors'
     | 'hasErrors'
     | 'isFieldDuplicate'
     | 'isFieldHidden'
@@ -36,6 +35,7 @@ export const createMockWidgetControlProps = <
     value: rawValue,
     path: rawPath,
     errors: rawErrors,
+    fieldsErrors: rawFieldsErrors,
     collection: rawCollection,
     config: rawConfig,
     entry: rawEntry,
@@ -50,7 +50,8 @@ export const createMockWidgetControlProps = <
 
   const path = rawPath ?? '';
   const errors = rawErrors ?? [];
-  const fieldsErrors = rawErrors ? { [`${path}.${options.field.name}`]: errors } : {};
+  const fieldsErrors =
+    rawFieldsErrors ?? (rawErrors ? { [`${path}.${options.field.name}`]: errors } : {});
   const hasErrors = Boolean(rawErrors && rawErrors.length > 0);
 
   return {
