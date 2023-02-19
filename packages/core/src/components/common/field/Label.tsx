@@ -9,9 +9,16 @@ export interface LabelProps {
   hasErrors: boolean;
   variant?: 'default' | 'inline';
   cursor?: 'pointer' | 'text';
+  className?: string;
 }
 
-const Label: FC<LabelProps> = ({ children, hasErrors, variant = 'default', cursor = 'text' }) => {
+const Label: FC<LabelProps> = ({
+  children,
+  hasErrors,
+  variant = 'default',
+  cursor = 'text',
+  className,
+}) => {
   return (
     <label
       data-testid="label"
@@ -31,6 +38,7 @@ const Label: FC<LabelProps> = ({ children, hasErrors, variant = 'default', curso
             dark:text-slate-400
           `,
         variant === 'default' && 'px-3 pt-3',
+        className,
       )}
     >
       {children}

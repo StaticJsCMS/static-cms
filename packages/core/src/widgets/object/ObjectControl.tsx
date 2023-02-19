@@ -1,10 +1,10 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import EditorControl from '@staticcms/core/components/editor/EditorControlPane/EditorControl';
-import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
 import Outline from '@staticcms/core/components/UI/Outline';
 import { compileStringTemplate } from '@staticcms/core/lib/widgets/stringTemplate';
 import { getEntryDataPath } from '@staticcms/core/reducers/selectors/entryDraft';
+import ObjectFieldWrapper from './ObjectFieldWrapper';
 
 import type { ObjectField, ObjectValue, WidgetControlProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
@@ -18,17 +18,11 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
   isFieldHidden,
   locale,
   path,
-  t,
   i18n,
   hasErrors,
+  errors,
   value = {},
 }) => {
-  const [collapsed, setCollapsed] = useState(field.collapsed ?? false);
-
-  const handleCollapseToggle = useCallback(() => {
-    setCollapsed(!collapsed);
-  }, [collapsed]);
-
   const objectLabel = useMemo(() => {
     const label = field.label ?? field.name;
     const summary = field.summary;
@@ -92,28 +86,18 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
     value,
   ]);
 
-  if (multiFields) {
+  if (multiFields.length) {
+    if (forList) {
+      return <>{renderedField}</>;
+    }
+
     return (
-      <div key="object-control-wrapper">
-        {forList ? null : (
-          <ObjectWidgetTopBar
-            key="object-control-top-bar"
-            collapsed={collapsed}
-            onCollapseToggle={handleCollapseToggle}
-            heading={objectLabel}
-            hasError={hasErrors || childHasError}
-            t={t}
-            testId="object-title"
-          />
-        )}
-        <div key="object-control-fields">
-          {/* TODO $collapsed={collapsed} */}
-          {renderedField}
-        </div>
+      <ObjectFieldWrapper key="object-control-wrapper" label={objectLabel} errors={errors}>
+        <div key="object-control-fields">{renderedField}</div>
         {forList ? null : (
           <Outline key="object-control-outline" hasError={hasErrors || childHasError} />
         )}
-      </div>
+      </ObjectFieldWrapper>
     );
   }
 
