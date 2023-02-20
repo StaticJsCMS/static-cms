@@ -12,6 +12,7 @@ const NumberControl: FC<WidgetControlProps<string | number, NumberField>> = ({
   label,
   errors,
   disabled,
+  forSingleList,
   onChange,
 }) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
@@ -51,7 +52,13 @@ const NumberControl: FC<WidgetControlProps<string | number, NumberField>> = ({
   }, [field.step, field.value_type]);
 
   return (
-    <Field inputRef={ref} label={label} errors={errors}>
+    <Field
+      inputRef={ref}
+      label={label}
+      errors={errors}
+      hint={field.hint}
+      forSingleList={forSingleList}
+    >
       <TextField
         type="number"
         ref={ref}

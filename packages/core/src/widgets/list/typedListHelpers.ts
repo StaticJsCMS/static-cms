@@ -10,7 +10,7 @@ export function getTypedFieldForValue(
   index: number,
 ): ObjectField | undefined {
   const typeKey = resolveFieldKeyType(field);
-  const types = field[TYPES_KEY] ?? [];
+  const types = field.types ?? [];
   const valueType = value?.[typeKey] ?? {};
   const typeField = types.find(type => type.name === valueType);
   if (!typeField) {

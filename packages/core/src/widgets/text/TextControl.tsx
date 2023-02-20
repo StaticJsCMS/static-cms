@@ -12,6 +12,8 @@ const TextControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   errors,
   hasErrors,
   disabled,
+  field,
+  forSingleList,
   onChange,
 }) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
@@ -26,7 +28,14 @@ const TextControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   );
 
   return (
-    <Field inputRef={ref} label={label} errors={errors} noPadding={!hasErrors}>
+    <Field
+      inputRef={ref}
+      label={label}
+      errors={errors}
+      noPadding={!hasErrors}
+      hint={field.hint}
+      forSingleList={forSingleList}
+    >
       <TextArea ref={ref} value={internalValue} disabled={disabled} onChange={handleChange} />
     </Field>
   );

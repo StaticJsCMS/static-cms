@@ -5,6 +5,9 @@ BREAKING_CHANGES
 - widget prop `isDisabled` renamed to `disabled`
 - useMediaInsert now requires collection to be passed
 
+ADDED
+- `forSingleList` - Allows for changing styles for single list items
+
 TODO
 
 - Docs on table columns

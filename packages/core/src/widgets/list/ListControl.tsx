@@ -6,9 +6,13 @@ import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useMemo, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
-import FieldLabel from '@staticcms/core/components/UI/FieldLabel';
-import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
-import Outline from '@staticcms/core/components/UI/Outline';
+import Button from '@staticcms/core/components/common/button/Button';
+import Menu from '@staticcms/core/components/common/menu/Menu';
+import MenuGroup from '@staticcms/core/components/common/menu/MenuGroup';
+import MenuItemButton from '@staticcms/core/components/common/menu/MenuItemButton';
+import useHasChildErrors from '@staticcms/core/lib/hooks/useHasChildErrors';
+import classNames from '@staticcms/core/lib/util/classNames.util';
+import ListFieldWrapper from './ListFieldWrapper';
 import ListItem from './ListItem';
 import { resolveFieldKeyType, TYPES_KEY } from './typedListHelpers';
 
@@ -65,7 +69,7 @@ const SortableItem: FC<SortableItemProps> = ({
   });
 
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Translate.toString(transform),
     transition,
   };
 
@@ -74,7 +78,18 @@ const SortableItem: FC<SortableItemProps> = ({
   }
 
   return (
-    <div ref={setNodeRef} data-testid={`object-control-${index}`} style={style} {...attributes}>
+    <div
+      ref={setNodeRef}
+      data-testid={`object-control-${index}`}
+      style={style}
+      {...attributes}
+      className={classNames(
+        `
+          first:pt-0
+        `,
+        field.fields?.length !== 1 && 'pt-1',
+      )}
+    >
       <ListItem
         index={index}
         id={id}
@@ -164,10 +179,9 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
   t,
   value,
   i18n,
-  hasErrors,
+  errors,
 }) => {
   const internalValue = useMemo(() => value ?? [], [value]);
-  const [collapsed, setCollapsed] = useState(field.collapsed ?? true);
   const [keys, setKeys] = useState(Array.from({ length: internalValue.length }, () => uuid()));
 
   const valueType = useMemo(() => {
@@ -211,7 +225,6 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
       }
       setKeys(newKeys);
       onChange(newValue as string[] | ObjectValue[]);
-      setCollapsed(false);
     },
     [field.add_to_top, onChange, internalValue, keys],
   );
@@ -249,14 +262,6 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
     [onChange, internalValue, keys],
   );
 
-  const handleCollapseAllToggle = useCallback(
-    (e: MouseEvent) => {
-      e.preventDefault();
-      setCollapsed(!collapsed);
-    },
-    [collapsed],
-  );
-
   const handleDragEnd = useCallback(
     ({ active, over }: DragEndEvent) => {
       if (!over || active.id === over.id) {
@@ -277,6 +282,8 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
     [onChange, internalValue, keys],
   );
 
+  const hasChildErrors = useHasChildErrors(path, fieldsErrors, i18n);
+
   if (valueType === null) {
     return null;
   }
@@ -285,60 +292,81 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
   const labelSingular = field.label_singular ? field.label_singular : field.label ?? field.name;
   const listLabel = internalValue.length === 1 ? labelSingular : label;
 
+  const types = field[TYPES_KEY];
+
   return (
     <div key="list-widget">
-      <FieldLabel key="label">{label}</FieldLabel>
-      <ObjectWidgetTopBar
-        key="header"
-        allowAdd={field.allow_add ?? true}
-        onAdd={handleAdd}
-        types={field[TYPES_KEY] ?? []}
-        onAddType={type => handleAddType(type, resolveFieldKeyType(field))}
-        heading={`${internalValue.length} ${listLabel}`}
-        label={labelSingular}
-        onCollapseToggle={handleCollapseAllToggle}
-        collapsed={collapsed}
-        hasError={hasErrors}
-        t={t}
-        testId="list-header"
-      />
-      {internalValue.length > 0 ? (
-        <DndContext key="dnd-context" onDragEnd={handleDragEnd}>
-          <SortableContext items={keys}>
-            <div>
-              {/* TODO $collapsed={collapsed} */}
-              {internalValue.map((item, index) => {
-                const key = keys[index];
-                if (!key) {
-                  return null;
-                }
+      <ListFieldWrapper
+        key="list-control-wrapper"
+        field={field}
+        openLabel={label}
+        closedLabel={listLabel}
+        errors={errors}
+        hasChildErrors={hasChildErrors}
+        hint={field.hint}
+      >
+        {internalValue.length > 0 ? (
+          <DndContext key="dnd-context" onDragEnd={handleDragEnd}>
+            <SortableContext items={keys}>
+              <div>
+                {internalValue.map((item, index) => {
+                  const key = keys[index];
+                  if (!key) {
+                    return null;
+                  }
 
-                return (
-                  <SortableItem
-                    index={index}
-                    key={key}
-                    id={key}
-                    item={item}
-                    valueType={valueType}
-                    handleRemove={handleRemove}
-                    entry={entry}
-                    field={field}
-                    fieldsErrors={fieldsErrors}
-                    submitted={submitted}
-                    isFieldDuplicate={isFieldDuplicate}
-                    isFieldHidden={isFieldHidden}
-                    locale={locale}
-                    path={path}
-                    value={item as Record<string, ObjectValue>}
-                    i18n={i18n}
-                  />
-                );
-              })}
-            </div>
-          </SortableContext>
-        </DndContext>
-      ) : null}
-      <Outline key="outline" hasLabel hasError={hasErrors} />
+                  return (
+                    <SortableItem
+                      index={index}
+                      key={key}
+                      id={key}
+                      item={item}
+                      valueType={valueType}
+                      handleRemove={handleRemove}
+                      entry={entry}
+                      field={field}
+                      fieldsErrors={fieldsErrors}
+                      submitted={submitted}
+                      isFieldDuplicate={isFieldDuplicate}
+                      isFieldHidden={isFieldHidden}
+                      locale={locale}
+                      path={path}
+                      value={item as Record<string, ObjectValue>}
+                      i18n={i18n}
+                    />
+                  );
+                })}
+              </div>
+            </SortableContext>
+          </DndContext>
+        ) : null}
+        <div className="py-3 px-4 w-full">
+          {types && types.length ? (
+            <Menu
+              label={t('editor.editorWidgets.list.addType', { item: label })}
+              variant="outlined"
+              className="w-full z-10"
+            >
+              <MenuGroup>
+                {types.map((type, idx) =>
+                  type ? (
+                    <MenuItemButton
+                      key={idx}
+                      onClick={() => handleAddType(type.name, resolveFieldKeyType(field))}
+                    >
+                      {type.label ?? type.name}
+                    </MenuItemButton>
+                  ) : null,
+                )}
+              </MenuGroup>
+            </Menu>
+          ) : (
+            <Button variant="outlined" onClick={handleAdd} className="w-full">
+              {t('editor.editorWidgets.list.add', { item: label })}
+            </Button>
+          )}
+        </div>
+      </ListFieldWrapper>
     </div>
   );
 };

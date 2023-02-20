@@ -29,6 +29,7 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
   errors,
   hasErrors,
   disabled,
+  forSingleList,
   onChange,
 }) => {
   const [internalValue, setInternalValue] = useState(value);
@@ -107,7 +108,15 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
   }, [isMultiple, internalValue]);
 
   return (
-    <Field inputRef={ref} label={label} errors={errors} noPadding={!hasErrors} cursor="pointer">
+    <Field
+      inputRef={ref}
+      label={label}
+      errors={errors}
+      noPadding={!hasErrors}
+      hint={field.hint}
+      forSingleList={forSingleList}
+      cursor="pointer"
+    >
       <Select
         label={
           Array.isArray(stringValue) ? (

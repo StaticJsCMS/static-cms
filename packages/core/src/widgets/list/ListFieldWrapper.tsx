@@ -7,11 +7,11 @@ import Hint from '@staticcms/core/components/common/field/Hint';
 import Label from '@staticcms/core/components/common/field/Label';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 
-import type { FieldError, ObjectField } from '@staticcms/core/interface';
+import type { FieldError, ListField } from '@staticcms/core/interface';
 import type { FC, ReactNode } from 'react';
 
-export interface ObjectFieldWrapperProps {
-  field: ObjectField;
+export interface ListFieldWrapperProps {
+  field: ListField;
   openLabel: string;
   closedLabel: string;
   children: ReactNode | ReactNode[];
@@ -20,7 +20,7 @@ export interface ObjectFieldWrapperProps {
   hint?: string;
 }
 
-const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
+const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
   field,
   openLabel,
   closedLabel,
@@ -35,7 +35,7 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
 
   return (
     <div
-      data-testid="object-field"
+      data-testid="list-field"
       className={classNames(
         `
           relative
@@ -46,7 +46,7 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
           focus-within:border-blue-800
           dark:focus-within:border-blue-100
         `,
-        !(hasErrors || hasChildErrors) && 'group/active-object',
+        !(hasErrors || hasChildErrors) && 'group/active-list',
       )}
     >
       <Disclosure defaultOpen={defaultOpen}>
@@ -58,8 +58,7 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
                 flex
                 w-full
                 justify-between
-                pl-2
-                pr-3
+                px-3
                 py-2
                 text-left
                 text-sm
@@ -68,8 +67,21 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
                 focus-visible:ring
                 gap-2
                 focus-visible:ring-opacity-75
+                items-center
               "
             >
+              <Label
+                key="label"
+                hasErrors={hasErrors || hasChildErrors}
+                className={`
+                  group-focus-within/active-list:text-blue-500
+                  group-hover/active-list:text-blue-500
+                `}
+                cursor="pointer"
+                variant="inline"
+              >
+                {open ? openLabel : closedLabel}
+              </Label>
               <ChevronRightIcon
                 className={classNames(
                   open && 'rotate-90 transform',
@@ -77,23 +89,11 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
                     transition-transform
                     h-5
                     w-5
-                    group-focus-within/active-object:text-blue-500
-                    group-hover/active-object:text-blue-500
+                    group-focus-within/active-list:text-blue-500
+                    group-hover/active-list:text-blue-500
                   `,
                 )}
               />
-              <Label
-                key="label"
-                hasErrors={hasErrors || hasChildErrors}
-                className={`
-                  group-focus-within/active-object:text-blue-500
-                  group-hover/active-object:text-blue-500
-                `}
-                cursor="pointer"
-                variant="inline"
-              >
-                {open ? openLabel : closedLabel}
-              </Label>
             </Disclosure.Button>
             <Transition
               unmount={false}
@@ -109,13 +109,8 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
                 unmount={false}
                 className={classNames(
                   `
-                    ml-4
                     text-sm
                     text-gray-500
-                    border-l-2
-                    border-solid
-                    border-l-slate-400
-                    group-focus-within/active-object:border-l-blue-500
                   `,
                   (hasErrors || hasChildErrors) && 'border-l-red-500',
                 )}
@@ -136,4 +131,4 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
   );
 };
 
-export default ObjectFieldWrapper;
+export default ListFieldWrapper;

@@ -107,6 +107,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
   errors,
   hasErrors,
   disabled,
+  forSingleList,
   onChange,
 }) => {
   const [internalValue, setInternalValue] = useState(value);
@@ -298,7 +299,15 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
   );
 
   return (
-    <Field inputRef={ref} label={label} errors={errors} noPadding={!hasErrors} cursor="text">
+    <Field
+      inputRef={ref}
+      label={label}
+      errors={errors}
+      noPadding={!hasErrors}
+      hint={field.hint}
+      forSingleList={forSingleList}
+      cursor="text"
+    >
       <Autocomplete
         label={
           <>

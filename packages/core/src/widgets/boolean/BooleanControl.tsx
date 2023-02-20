@@ -11,6 +11,8 @@ const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
   label,
   errors,
   disabled,
+  field,
+  forSingleList,
   onChange,
 }) => {
   const [internalValue, setInternalValue] = useState(value ?? false);
@@ -25,7 +27,15 @@ const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
   );
 
   return (
-    <Field inputRef={ref} label={label} errors={errors} variant="inline" cursor="pointer">
+    <Field
+      inputRef={ref}
+      label={label}
+      errors={errors}
+      variant="inline"
+      cursor="pointer"
+      hint={field.hint}
+      forSingleList={forSingleList}
+    >
       <Switch ref={ref} value={internalValue} disabled={disabled} onChange={handleChange} />
     </Field>
   );

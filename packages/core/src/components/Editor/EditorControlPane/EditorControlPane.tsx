@@ -67,12 +67,7 @@ const EditorControlPane = ({
   }
 
   return (
-    <div
-      className={classNames(
-        'flex flex-col h-full pb-0.5',
-        !hideBorder && 'border-r border-slate-700',
-      )}
-    >
+    <div className={classNames('flex flex-col h-full', !hideBorder && 'border-r border-slate-700')}>
       {i18n?.locales && locale ? (
         <div>
           <LocaleDropdown

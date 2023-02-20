@@ -1,13 +1,13 @@
 import partial from 'lodash/partial';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import EditorControl from '@staticcms/core/components/editor/EditorControlPane/EditorControl';
-import ListItemTopBar from '@staticcms/core/components/UI/ListItemTopBar';
-import Outline from '@staticcms/core/components/UI/Outline';
+import useHasChildErrors from '@staticcms/core/lib/hooks/useHasChildErrors';
 import {
   addFileTemplateFields,
   compileStringTemplate,
 } from '@staticcms/core/lib/widgets/stringTemplate';
+import ListItemWrapper from '@staticcms/list/ListItemWrapper';
 import { ListValueType } from './ListControl';
 import { getTypedFieldForValue } from './typedListHelpers';
 
@@ -91,7 +91,7 @@ const ListItem: FC<ListItemProps> = ({
   i18n,
   listeners,
 }) => {
-  const [objectLabel, objectField] = useMemo((): [string, ListField | ObjectField] => {
+  const [summary, objectField] = useMemo((): [string, ListField | ObjectField] => {
     const childObjectField: ObjectField = {
       name: `${index}`,
       label: field.label,
@@ -155,17 +155,10 @@ const ListItem: FC<ListItemProps> = ({
     }
   }, [entry, field, index, value, valueType]);
 
-  const [collapsed, setCollapsed] = useState(false);
-  const handleCollapseToggle = useCallback(
-    (event: MouseEvent) => {
-      event.stopPropagation();
-      setCollapsed(!collapsed);
-    },
-    [collapsed],
-  );
-
   const isDuplicate = isFieldDuplicate && isFieldDuplicate(field);
   const isHidden = isFieldHidden && isFieldHidden(field);
+
+  const hasChildErrors = useHasChildErrors(path, fieldsErrors, i18n);
 
   const finalValue = useMemo(() => {
     if (field.fields && field.fields.length === 1) {
@@ -177,39 +170,38 @@ const ListItem: FC<ListItemProps> = ({
     return value;
   }, [field.fields, value]);
 
+  const isSingleList = useMemo(() => field.fields?.length === 1, [field.fields?.length]);
+
   return (
     <div key="sortable-list-item">
-      <>
-        <ListItemTopBar
-          key="list-item-top-bar"
-          collapsed={collapsed}
-          onCollapseToggle={handleCollapseToggle}
-          onRemove={partial(handleRemove, index)}
-          data-testid={`list-item-top-bar-${id}`}
-          title={objectLabel}
-          isVariableTypesList={valueType === ListValueType.MIXED}
-          listeners={listeners}
+      <ListItemWrapper
+        key="list-item-top-bar"
+        collapsed={field.collapsed}
+        onRemove={partial(handleRemove, index)}
+        data-testid={`list-item-top-bar-${id}`}
+        label={field.label_singular ?? field.label ?? field.name}
+        summary={summary}
+        listeners={listeners}
+        hasErrors={hasChildErrors}
+        isSingleField={isSingleList}
+      >
+        <EditorControl
+          key={`control-${id}`}
+          field={objectField}
+          value={finalValue}
+          fieldsErrors={fieldsErrors}
+          submitted={submitted}
+          parentPath={path}
+          disabled={isDuplicate}
+          isHidden={isHidden}
+          isFieldDuplicate={isFieldDuplicate}
+          isFieldHidden={isFieldHidden}
+          locale={locale}
+          i18n={i18n}
+          forList={true}
+          forSingleList={isSingleList}
         />
-        <div>
-          {/* TODO $collapsed={collapsed} */}
-          <EditorControl
-            key={`control-${id}`}
-            field={objectField}
-            value={finalValue}
-            fieldsErrors={fieldsErrors}
-            submitted={submitted}
-            parentPath={path}
-            disabled={isDuplicate}
-            isHidden={isHidden}
-            isFieldDuplicate={isFieldDuplicate}
-            isFieldHidden={isFieldHidden}
-            locale={locale}
-            i18n={i18n}
-            forList={true}
-          />
-        </div>
-        <Outline key="outline" />
-      </>
+      </ListItemWrapper>
     </div>
   );
 };

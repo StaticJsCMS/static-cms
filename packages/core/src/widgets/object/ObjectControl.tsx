@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 
 import EditorControl from '@staticcms/core/components/editor/EditorControlPane/EditorControl';
+import useHasChildErrors from '@staticcms/core/lib/hooks/useHasChildErrors';
 import { compileStringTemplate } from '@staticcms/core/lib/widgets/stringTemplate';
-import { getEntryDataPath } from '@staticcms/core/reducers/selectors/entryDraft';
 import ObjectFieldWrapper from './ObjectFieldWrapper';
 
 import type { ObjectField, ObjectValue, WidgetControlProps } from '@staticcms/core/interface';
@@ -14,6 +14,7 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
   fieldsErrors,
   submitted,
   forList,
+  forSingleList,
   isFieldDuplicate,
   isFieldHidden,
   locale,
@@ -29,12 +30,7 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
 
   const fields = useMemo(() => field.fields, [field.fields]);
 
-  const hasChildErrors = useMemo(() => {
-    const dataPath = getEntryDataPath(i18n);
-    const fullPath = `${dataPath}.${path}`;
-
-    return Boolean(Object.keys(fieldsErrors).find(key => key.startsWith(fullPath)));
-  }, [fieldsErrors, i18n, path]);
+  const hasChildErrors = useHasChildErrors(path, fieldsErrors, i18n);
 
   const renderedField = useMemo(() => {
     return (
@@ -67,21 +63,24 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
             isFieldHidden={isFieldHidden}
             locale={locale}
             i18n={i18n}
+            forList={forList}
+            forSingleList={forSingleList}
           />
         );
       }) ?? null
     );
   }, [
-    fieldsErrors,
-    forList,
-    i18n,
-    isFieldDuplicate,
-    isFieldHidden,
-    locale,
     fields,
     path,
-    submitted,
     value,
+    forList,
+    isFieldDuplicate,
+    isFieldHidden,
+    fieldsErrors,
+    submitted,
+    locale,
+    i18n,
+    forSingleList,
   ]);
 
   if (fields.length) {
@@ -97,6 +96,7 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
         closedLabel={objectLabel}
         errors={errors}
         hasChildErrors={hasChildErrors}
+        hint={field.hint}
       >
         {renderedField}
       </ObjectFieldWrapper>

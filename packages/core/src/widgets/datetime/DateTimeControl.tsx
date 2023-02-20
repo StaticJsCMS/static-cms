@@ -76,9 +76,10 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
   field,
   label,
   value,
-  t,
   disabled,
   errors,
+  forSingleList,
+  t,
   onChange,
 }) => {
   const ref = useRef<HTMLInputElement | null>(null);
@@ -284,7 +285,13 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
   ]);
 
   return (
-    <Field inputRef={!open ? ref : undefined} label={label} errors={errors}>
+    <Field
+      inputRef={!open ? ref : undefined}
+      label={label}
+      errors={errors}
+      hint={field.hint}
+      forSingleList={forSingleList}
+    >
       <LocalizationProvider key="localization-provider" dateAdapter={AdapterDateFns}>
         {dateTimePicker}
       </LocalizationProvider>

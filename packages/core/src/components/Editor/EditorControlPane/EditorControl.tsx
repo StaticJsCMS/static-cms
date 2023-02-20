@@ -60,6 +60,7 @@ const EditorControl = ({
   t,
   value,
   forList = false,
+  forSingleList = false,
   changeDraftField,
   i18n,
   fieldName,
@@ -167,16 +168,11 @@ const EditorControl = ({
             t,
             value: finalValue,
             forList,
+            forSingleList,
             i18n,
             hasErrors,
             errors,
           })}
-          {fieldHint ? (
-            <div key="hint">
-              {/* TODO $error={hasErrors}> */}
-              {fieldHint}
-            </div>
-          ) : null}
         </>
       </div>
     );
@@ -202,6 +198,7 @@ const EditorControl = ({
     query,
     finalValue,
     forList,
+    forSingleList,
     i18n,
     hasErrors,
     fieldHint,
@@ -220,6 +217,7 @@ interface EditorControlOwnProps {
   parentPath: string;
   value: ValueOrNestedValue;
   forList?: boolean;
+  forSingleList?: boolean;
   i18n: I18nSettings | undefined;
   fieldName?: string;
 }

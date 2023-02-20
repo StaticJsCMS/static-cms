@@ -252,6 +252,7 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = 
   fieldsErrors: FieldsErrors;
   submitted: boolean;
   forList: boolean;
+  forSingleList: boolean;
   disabled: boolean;
   isFieldDuplicate: EditorControlProps['isFieldDuplicate'];
   isFieldHidden: EditorControlProps['isFieldHidden'];

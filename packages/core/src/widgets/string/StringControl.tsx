@@ -11,6 +11,8 @@ const StringControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   label,
   errors,
   disabled,
+  field,
+  forSingleList,
   onChange,
 }) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
@@ -25,7 +27,13 @@ const StringControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   );
 
   return (
-    <Field inputRef={ref} label={label} errors={errors}>
+    <Field
+      inputRef={ref}
+      label={label}
+      errors={errors}
+      hint={field.hint}
+      forSingleList={forSingleList}
+    >
       <TextField
         type="text"
         ref={ref}
