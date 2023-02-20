@@ -138,6 +138,9 @@ describe(DateTimeControl.name, () => {
     const field = getByTestId('field');
     expect(field).toHaveClass('group/active');
 
+    const fieldWrapper = getByTestId('field-wrapper');
+    expect(fieldWrapper).not.toHaveClass('mr-14');
+
     // Date Time Widget uses text cursor
     expect(label).toHaveClass('cursor-text');
     expect(field).toHaveClass('cursor-text');
@@ -145,6 +148,16 @@ describe(DateTimeControl.name, () => {
     // Date Time Widget uses default label layout, with bottom padding on field
     expect(label).toHaveClass('px-3', 'pt-3');
     expect(field).toHaveClass('pb-3');
+  });
+
+  it('should render as single list item', () => {
+    const { getByTestId } = renderControl({ label: 'I am a label', forSingleList: true });
+
+    expect(getByTestId('date-time-input')).toBeInTheDocument();
+    expect(getByTestId('datetime-now')).toBeInTheDocument();
+
+    const fieldWrapper = getByTestId('field-wrapper');
+    expect(fieldWrapper).toHaveClass('mr-14');
   });
 
   it('should show error', async () => {
@@ -292,8 +305,8 @@ describe(DateTimeControl.name, () => {
       const nowButton = getByTestId('datetime-now');
       await userEventActions.click(nowButton);
 
-      expect(onChange).toHaveBeenLastCalledWith('2023-02-12T10:15:35.000');
-      expect(input).toHaveValue('2023-02-12T10:15:35.000');
+      expect(onChange).toHaveBeenLastCalledWith('2023-02-12T10:15:36.000'); // Testing framework moves the time forward by a second by this point
+      expect(input).toHaveValue('2023-02-12T10:15:36.000');
     });
 
     describe('format', () => {
@@ -771,8 +784,8 @@ describe(DateTimeControl.name, () => {
       const nowButton = getByTestId('datetime-now');
       await userEventActions.click(nowButton);
 
-      expect(onChange).toHaveBeenLastCalledWith('10:15:35.000');
-      expect(input).toHaveValue('10:15:35.000');
+      expect(onChange).toHaveBeenLastCalledWith('10:15:36.000'); // Testing framework moves the time forward by a second by this point
+      expect(input).toHaveValue('10:15:36.000');
     });
 
     describe('format', () => {

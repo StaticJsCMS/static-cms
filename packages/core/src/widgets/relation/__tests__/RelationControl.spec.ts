@@ -261,6 +261,9 @@ describe(RelationControl.name, () => {
     const field = getByTestId('field');
     expect(field).toHaveClass('group/active');
 
+    const fieldWrapper = getByTestId('field-wrapper');
+    expect(fieldWrapper).not.toHaveClass('mr-14');
+
     // Relation Widget uses text cursor
     expect(label).toHaveClass('cursor-text');
     expect(field).toHaveClass('cursor-text');
@@ -268,6 +271,18 @@ describe(RelationControl.name, () => {
     // Relation Widget uses default label layout, without bottom padding on field
     expect(label).toHaveClass('px-3', 'pt-3');
     expect(field).not.toHaveClass('pb-3');
+  });
+
+  fit('should render as single list item', async () => {
+    const { getByTestId } = await renderRelationControl({
+      label: 'I am a label',
+      forSingleList: true,
+    });
+
+    expect(getByTestId('autocomplete-input')).toBeInTheDocument();
+
+    const fieldWrapper = getByTestId('field-wrapper');
+    expect(fieldWrapper).toHaveClass('mr-14');
   });
 
   it('should disable input if disabled', async () => {

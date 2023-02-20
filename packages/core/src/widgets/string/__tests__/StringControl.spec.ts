@@ -23,6 +23,9 @@ describe(StringControl.name, () => {
     const field = getByTestId('field');
     expect(field).toHaveClass('group/active');
 
+    const fieldWrapper = getByTestId('field-wrapper');
+    expect(fieldWrapper).not.toHaveClass('mr-14');
+
     // String Widget uses text cursor
     expect(label).toHaveClass('cursor-text');
     expect(field).toHaveClass('cursor-text');
@@ -30,6 +33,15 @@ describe(StringControl.name, () => {
     // String Widget uses default label layout, with bottom padding on field
     expect(label).toHaveClass('px-3', 'pt-3');
     expect(field).toHaveClass('pb-3');
+  });
+
+  it('should render as single list item', () => {
+    const { getByTestId } = renderControl({ label: 'I am a label', forSingleList: true });
+
+    expect(getByTestId('text-input')).toBeInTheDocument();
+
+    const fieldWrapper = getByTestId('field-wrapper');
+    expect(fieldWrapper).toHaveClass('mr-14');
   });
 
   it('should only use prop value as initial value', async () => {
