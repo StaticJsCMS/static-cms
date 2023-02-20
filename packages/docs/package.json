@@ -17,7 +17,7 @@
     "@emotion/react": "11.10.6",
     "@emotion/styled": "11.10.6",
     "@mui/icons-material": "5.11.9",
-    "@mui/material": "5.11.9",
+    "@mui/material": "5.11.10",
     "date-fns": "2.29.3",
     "gray-matter": "4.0.3",
     "js-yaml": "4.1.0",
@@ -33,7 +33,7 @@
     "yaml": "2.2.1"
   },
   "devDependencies": {
-    "@babel/core": "7.20.12",
+    "@babel/core": "7.21.0",
     "@emotion/eslint-plugin": "11.10.0",
     "@next/bundle-analyzer": "13.1.6",
     "@next/eslint-plugin-next": "13.1.6",
