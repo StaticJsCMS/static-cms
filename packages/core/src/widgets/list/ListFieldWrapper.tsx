@@ -53,7 +53,7 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
         {({ open }) => (
           <>
             <Disclosure.Button
-              data-testid="expand-button"
+              data-testid="list-expand-button"
               className="
                 flex
                 w-full

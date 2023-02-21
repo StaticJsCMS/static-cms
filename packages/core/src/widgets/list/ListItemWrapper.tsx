@@ -122,7 +122,7 @@ const ListItemWrapper = ({
         {({ open }) => (
           <>
             <Disclosure.Button
-              data-testid="expand-button"
+              data-testid="list-item-expand-button"
               className="
                 flex
                 w-full

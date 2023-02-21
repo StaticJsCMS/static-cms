@@ -179,14 +179,14 @@ describe(ListControl.name, () => {
 
     it('outputs value as singleton array when adding new value', async () => {
       const {
+        getByTestId,
         props: { onChange },
       } = renderControl({ value: ['Value 1', 'Value 2'] });
 
-      const headerBar = screen.getByTestId('list-header');
+      const listExpandButton = getByTestId('list-expand-button');
+      await userEvent.click(listExpandButton);
 
-      await userEvent.click(getByTestId(headerBar, 'expand-button'));
-
-      await userEvent.click(getByTestId(headerBar, 'add-button'));
+      await userEvent.click(getByTestId('list-add'));
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith(['Value 1', 'Value 2', 'string default']);
@@ -197,9 +197,8 @@ describe(ListControl.name, () => {
         props: { onChange },
       } = renderControl({ value: ['Value 1', 'Value 2'] });
 
-      const headerBar = screen.getByTestId('list-header');
-
-      await userEvent.click(getByTestId(headerBar, 'expand-button'));
+      const listExpandButton = screen.getByTestId('list-expand-button');
+      await userEvent.click(listExpandButton);
 
       const itemOne = screen.getByTestId('object-control-0');
       await userEvent.click(getByTestId(itemOne, 'remove-button'));

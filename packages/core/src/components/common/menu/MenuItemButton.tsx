@@ -3,7 +3,7 @@ import React from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
 
-import type { MouseEvent, ReactNode, FC } from 'react';
+import type { FC, MouseEvent, ReactNode } from 'react';
 
 export interface MenuItemButtonProps {
   onClick: (event: MouseEvent) => void;
@@ -12,6 +12,7 @@ export interface MenuItemButtonProps {
   disabled?: boolean;
   startIcon?: FC<{ className?: string }>;
   endIcon?: FC<{ className?: string }>;
+  'data-testid'?: string;
 }
 
 const MenuItemButton = ({
@@ -21,6 +22,7 @@ const MenuItemButton = ({
   disabled = false,
   startIcon: StartIcon,
   endIcon: EndIcon,
+  'data-testid': dataTestId,
 }: MenuItemButtonProps) => {
   return (
     <Menu.Item>
@@ -33,6 +35,7 @@ const MenuItemButton = ({
           )}
           onClick={onClick}
           disabled={disabled}
+          data-testid={dataTestId}
         >
           <div className="flex items-center gap-2 flex-grow">
             {StartIcon ? <StartIcon className="h-5 w-5" /> : null}

@@ -2,8 +2,8 @@ import { Menu as BaseMenu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import React, { useMemo } from 'react';
 
-import useButtonClassName from '../button/useButtonClassName';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import useButtonClassName from '../button/useButtonClassName';
 
 import type { FC, ReactNode } from 'react';
 
@@ -16,6 +16,7 @@ export interface MenuProps {
   className?: string;
   children: ReactNode | ReactNode[];
   hideDropdownIcon?: boolean;
+  'data-testid'?: string;
 }
 
 const Menu = ({
@@ -27,6 +28,7 @@ const Menu = ({
   className,
   children,
   hideDropdownIcon = false,
+  'data-testid': dataTestId,
 }: MenuProps) => {
   const buttonClassName = useButtonClassName(variant, color, rounded);
 
@@ -37,7 +39,7 @@ const Menu = ({
 
   return (
     <BaseMenu as="div" className="relative text-left flex items-center">
-      <BaseMenu.Button className={menuButtonClassNames}>
+      <BaseMenu.Button className={menuButtonClassNames} data-testid={dataTestId}>
         {StartIcon ? <StartIcon className="-ml-0.5 mr-1.5 h-5 w-5" /> : null}
         {label}
         {!hideDropdownIcon ? (

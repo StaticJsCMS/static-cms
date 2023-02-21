@@ -346,6 +346,7 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
               label={t('editor.editorWidgets.list.addType', { item: label })}
               variant="outlined"
               className="w-full z-10"
+              data-testid="list-type-add"
             >
               <MenuGroup>
                 {types.map((type, idx) =>
@@ -353,6 +354,7 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
                     <MenuItemButton
                       key={idx}
                       onClick={() => handleAddType(type.name, resolveFieldKeyType(field))}
+                      data-testid="list-type-add-item"
                     >
                       {type.label ?? type.name}
                     </MenuItemButton>
@@ -361,7 +363,12 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
               </MenuGroup>
             </Menu>
           ) : (
-            <Button variant="outlined" onClick={handleAdd} className="w-full">
+            <Button
+              variant="outlined"
+              onClick={handleAdd}
+              className="w-full"
+              data-testid="list-add"
+            >
               {t('editor.editorWidgets.list.add', { item: label })}
             </Button>
           )}
