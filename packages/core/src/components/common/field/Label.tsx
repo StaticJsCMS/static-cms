@@ -10,6 +10,7 @@ export interface LabelProps {
   variant?: 'default' | 'inline';
   cursor?: 'pointer' | 'text';
   className?: string;
+  'data-testid'?: string;
 }
 
 const Label: FC<LabelProps> = ({
@@ -18,10 +19,11 @@ const Label: FC<LabelProps> = ({
   variant = 'default',
   cursor = 'text',
   className,
+  'data-testid': dataTestId,
 }) => {
   return (
     <label
-      data-testid="label"
+      data-testid={dataTestId ?? 'label'}
       className={classNames(
         `w-full
         flex

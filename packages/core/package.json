@@ -90,7 +90,6 @@
     "ajv": "8.12.0",
     "ajv-errors": "3.0.0",
     "ajv-keywords": "5.1.0",
-    "array-move": "4.0.0",
     "buffer": "6.0.3",
     "clean-stack": "5.1.0",
     "codemirror": "6.0.1",

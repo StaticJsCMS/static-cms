@@ -18,6 +18,7 @@ export interface ListFieldWrapperProps {
   errors: FieldError[];
   hasChildErrors: boolean;
   hint?: string;
+  forSingleList: boolean;
 }
 
 const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
@@ -28,6 +29,7 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
   errors,
   hasChildErrors,
   hint,
+  forSingleList,
 }) => {
   const hasErrors = useMemo(() => errors.length > 0, [errors.length]);
 
@@ -49,12 +51,24 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
         !(hasErrors || hasChildErrors) && 'group/active-list',
       )}
     >
-      <Disclosure defaultOpen={defaultOpen}>
-        {({ open }) => (
-          <>
-            <Disclosure.Button
-              data-testid="list-expand-button"
-              className="
+      <div
+        data-testid="field-wrapper"
+        className={classNames(
+          `
+            relative
+            flex
+            flex-col
+            w-full
+          `,
+          forSingleList && 'mr-14',
+        )}
+      >
+        <Disclosure defaultOpen={defaultOpen}>
+          {({ open }) => (
+            <>
+              <Disclosure.Button
+                data-testid="list-expand-button"
+                className="
                 flex
                 w-full
                 justify-between
@@ -69,64 +83,64 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
                 focus-visible:ring-opacity-75
                 items-center
               "
-            >
-              <Label
-                key="label"
-                hasErrors={hasErrors || hasChildErrors}
-                className={`
-                  group-focus-within/active-list:text-blue-500
-                  group-hover/active-list:text-blue-500
-                `}
-                cursor="pointer"
-                variant="inline"
               >
-                {open ? openLabel : closedLabel}
-              </Label>
-              <ChevronRightIcon
-                className={classNames(
-                  open && 'rotate-90 transform',
-                  `
+                <Label
+                  key="label"
+                  hasErrors={hasErrors || hasChildErrors}
+                  className={`
+                    group-focus-within/active-list:text-blue-500
+                    group-hover/active-list:text-blue-500
+                  `}
+                  cursor="pointer"
+                  variant="inline"
+                >
+                  {open ? openLabel : closedLabel}
+                </Label>
+                <ChevronRightIcon
+                  className={classNames(
+                    open && 'rotate-90 transform',
+                    `
                     transition-transform
                     h-5
                     w-5
                     group-focus-within/active-list:text-blue-500
                     group-hover/active-list:text-blue-500
                   `,
-                )}
-              />
-            </Disclosure.Button>
-            <Transition
-              unmount={false}
-              enter="transition duration-100 ease-out"
-              enterFrom="transform opacity-0"
-              enterTo="transform opacity-100"
-              leave="transition duration-75 ease-out"
-              leaveFrom="transform opacity-100"
-              leaveTo="transform opacity-0"
-            >
-              <Disclosure.Panel
-                data-testid="object-fields"
+                  )}
+                />
+              </Disclosure.Button>
+              <Transition
                 unmount={false}
-                className={classNames(
-                  `
+                enter="transition duration-100 ease-out"
+                enterFrom="transform opacity-0"
+                enterTo="transform opacity-100"
+                leave="transition duration-75 ease-out"
+                leaveFrom="transform opacity-100"
+                leaveTo="transform opacity-0"
+              >
+                <Disclosure.Panel
+                  unmount={false}
+                  className={classNames(
+                    `
                     text-sm
                     text-gray-500
                   `,
-                  (hasErrors || hasChildErrors) && 'border-l-red-500',
-                )}
-              >
-                {children}
-              </Disclosure.Panel>
-            </Transition>
-          </>
-        )}
-      </Disclosure>
-      {hint ? (
-        <Hint key="hint" hasErrors={hasErrors} cursor="pointer">
-          {hint}
-        </Hint>
-      ) : null}
-      <ErrorMessage errors={errors} />
+                    (hasErrors || hasChildErrors) && 'border-l-red-500',
+                  )}
+                >
+                  <div data-testid="object-fields">{children}</div>
+                </Disclosure.Panel>
+              </Transition>
+            </>
+          )}
+        </Disclosure>
+        {hint ? (
+          <Hint key="hint" hasErrors={hasErrors} cursor="pointer">
+            {hint}
+          </Hint>
+        ) : null}
+        <ErrorMessage errors={errors} />
+      </div>
     </div>
   );
 };

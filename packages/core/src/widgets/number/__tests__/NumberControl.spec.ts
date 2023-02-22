@@ -28,11 +28,11 @@ describe(NumberControl.name, () => {
     const fieldWrapper = getByTestId('field-wrapper');
     expect(fieldWrapper).not.toHaveClass('mr-14');
 
-    // String Widget uses text cursor
+    // Number Widget uses text cursor
     expect(label).toHaveClass('cursor-text');
     expect(field).toHaveClass('cursor-text');
 
-    // String Widget uses default label layout, with bottom padding on field
+    // Number Widget uses default label layout, with bottom padding on field
     expect(label).toHaveClass('px-3', 'pt-3');
     expect(field).toHaveClass('pb-3');
   });

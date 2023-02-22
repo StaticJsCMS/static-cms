@@ -1,7 +1,6 @@
 import { DndContext } from '@dnd-kit/core';
 import { SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { arrayMoveImmutable } from 'array-move';
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useMemo, useState } from 'react';
 import { v4 as uuid } from 'uuid';
@@ -29,6 +28,14 @@ import type {
   WidgetControlProps,
 } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
+
+function arrayMoveImmutable<T>(array: T[], oldIndex: number, newIndex: number): T[] {
+  const newArray = [...array];
+
+  newArray.splice(newIndex, 0, newArray.splice(oldIndex, 1)[0]);
+
+  return newArray;
+}
 
 interface SortableItemProps {
   id: string;
@@ -180,6 +187,7 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
   value,
   i18n,
   errors,
+  forSingleList,
 }) => {
   const internalValue = useMemo(() => value ?? [], [value]);
   const [keys, setKeys] = useState(Array.from({ length: internalValue.length }, () => uuid()));
@@ -304,11 +312,12 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
         errors={errors}
         hasChildErrors={hasChildErrors}
         hint={field.hint}
+        forSingleList={forSingleList}
       >
         {internalValue.length > 0 ? (
-          <DndContext key="dnd-context" onDragEnd={handleDragEnd}>
+          <DndContext key="dnd-context" id="dnd-context" onDragEnd={handleDragEnd}>
             <SortableContext items={keys}>
-              <div>
+              <div data-testid="list-widget-children">
                 {internalValue.map((item, index) => {
                   const key = keys[index];
                   if (!key) {
@@ -340,39 +349,41 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
             </SortableContext>
           </DndContext>
         ) : null}
-        <div className="py-3 px-4 w-full">
-          {types && types.length ? (
-            <Menu
-              label={t('editor.editorWidgets.list.addType', { item: label })}
-              variant="outlined"
-              className="w-full z-10"
-              data-testid="list-type-add"
-            >
-              <MenuGroup>
-                {types.map((type, idx) =>
-                  type ? (
-                    <MenuItemButton
-                      key={idx}
-                      onClick={() => handleAddType(type.name, resolveFieldKeyType(field))}
-                      data-testid="list-type-add-item"
-                    >
-                      {type.label ?? type.name}
-                    </MenuItemButton>
-                  ) : null,
-                )}
-              </MenuGroup>
-            </Menu>
-          ) : (
-            <Button
-              variant="outlined"
-              onClick={handleAdd}
-              className="w-full"
-              data-testid="list-add"
-            >
-              {t('editor.editorWidgets.list.add', { item: label })}
-            </Button>
-          )}
-        </div>
+        {field.allow_add !== false ? (
+          <div className="py-3 px-4 w-full">
+            {types && types.length ? (
+              <Menu
+                label={t('editor.editorWidgets.list.addType', { item: label })}
+                variant="outlined"
+                className="w-full z-10"
+                data-testid="list-type-add"
+              >
+                <MenuGroup>
+                  {types.map((type, idx) =>
+                    type ? (
+                      <MenuItemButton
+                        key={idx}
+                        onClick={() => handleAddType(type.name, resolveFieldKeyType(field))}
+                        data-testid={`list-type-add-item-${type.name}`}
+                      >
+                        {type.label ?? type.name}
+                      </MenuItemButton>
+                    ) : null,
+                  )}
+                </MenuGroup>
+              </Menu>
+            ) : (
+              <Button
+                variant="outlined"
+                onClick={handleAdd}
+                className="w-full"
+                data-testid="list-add"
+              >
+                {t('editor.editorWidgets.list.add', { item: label })}
+              </Button>
+            )}
+          </div>
+        ) : null}
       </ListFieldWrapper>
     </div>
   );

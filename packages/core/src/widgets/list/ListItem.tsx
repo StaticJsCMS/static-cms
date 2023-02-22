@@ -23,7 +23,12 @@ import type {
 } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
 
-function handleSummary(summary: string, entry: Entry, label: string, item: ValueOrNestedValue) {
+function handleSummary(
+  summary: string,
+  entry: Entry,
+  label: string,
+  item: ValueOrNestedValue,
+): string {
   if (typeof item === 'object' && !Array.isArray(item)) {
     const labeledItem: EntryData = {
       ...item,
@@ -35,7 +40,7 @@ function handleSummary(summary: string, entry: Entry, label: string, item: Value
     return compileStringTemplate(summary, null, '', data);
   }
 
-  return item;
+  return String(item);
 }
 
 function validateItem(field: ListField, item: ValueOrNestedValue) {
@@ -149,8 +154,18 @@ const ListItem: FC<ListItemProps> = ({
         const summary = field.summary;
         const labelReturn = summary
           ? handleSummary(summary, entry, String(labelFieldValue), objectValue)
-          : labelFieldValue;
-        return [(labelReturn || `No ${labelField.name}`).toString(), childObjectField];
+          : String(labelFieldValue);
+        console.log(
+          'labelReturn',
+          labelReturn,
+          'summary',
+          summary,
+          'String(labelFieldValue)',
+          String(labelFieldValue),
+          'objectValue',
+          objectValue,
+        );
+        return [labelReturn, childObjectField];
       }
     }
   }, [entry, field, index, value, valueType]);

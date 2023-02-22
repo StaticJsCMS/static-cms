@@ -84,10 +84,10 @@ describe(ObjectControl.name, () => {
     expect(label.textContent).toBe('I am a label');
     expect(label).toHaveClass('text-slate-500');
 
-    // String Widget uses pointer cursor
+    // Object Widget uses pointer cursor
     expect(label).toHaveClass('cursor-pointer');
 
-    // String Widget uses inline label layout
+    // Object Widget uses inline label layout
     expect(label).not.toHaveClass('px-3', 'pt-3');
 
     // Should not render error state by default

@@ -51,11 +51,10 @@ export const createWidgetControlHarness = <
     }
 
     const rerender = (rerenderProps?: Omit<Props, 'field'>) => {
-      const finalRerenderProps = createMockWidgetControlProps<T, F>({
-        ...defaults,
+      const finalRerenderProps = {
+        ...props,
         ...rerenderProps,
-        field,
-      });
+      };
 
       result.rerender(<Component {...finalRerenderProps} />);
 

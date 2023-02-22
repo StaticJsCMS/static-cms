@@ -16,7 +16,7 @@ export interface DragHandleProps {
 
 const DragHandle = ({ listeners }: DragHandleProps) => {
   return (
-    <span {...listeners}>
+    <span data-testid="drag-handle" {...listeners}>
       <Bars3Icon
         className="
           h-3
@@ -161,10 +161,11 @@ const ListItemWrapper = ({
                   `}
                   cursor="pointer"
                   variant="inline"
+                  data-testid="item-label"
                 >
                   {label}
                 </Label>
-                {!open ? summary : null}
+                {!open ? <span data-testid="item-summary">{summary}</span> : null}
               </div>
               {renderedControls}
             </Disclosure.Button>
@@ -189,7 +190,6 @@ const ListItemWrapper = ({
               leaveTo="transform opacity-0"
             >
               <Disclosure.Panel
-                data-testid="list-item-fields"
                 unmount={false}
                 className={classNames(
                   `
