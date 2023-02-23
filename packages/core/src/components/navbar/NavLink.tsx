@@ -22,7 +22,7 @@ export interface NavInternalLinkProps extends BaseNavLinkProps {
 
 export type NavLinkProps = NavExternalLinkProps | NavInternalLinkProps;
 
-const linkClassNames = 'btn-text-primary w-full justify-start';
+const linkClassNames = 'btn btn-text-primary w-full justify-start';
 
 const NavLink = ({ icon, children, onClick, ...otherProps }: NavLinkProps) => {
   const content = useMemo(

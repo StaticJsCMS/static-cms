@@ -64,6 +64,40 @@
       dark:hover:bg-blue-700/20;
   }
 
+  .btn-contained-success {
+    @apply border
+      border-transparent
+      bg-green-700
+      hover:bg-green-800
+      dark:bg-green-600
+      dark:hover:bg-green-800
+      text-white;
+  }
+
+  .btn-outlined-success {
+    @apply bg-white
+      border
+      text-green-500
+      border-green-200
+      hover:bg-green-100
+      hover:text-green-700
+      dark:bg-slate-800
+      dark:text-green-400
+      dark:border-green-600
+      dark:hover:text-green-500
+      dark:hover:bg-green-700/10;
+  }
+
+  .btn-text-success {
+    @apply text-green-500
+      hover:text-green-700
+      dark:text-green-400
+      dark:ring-gray-600
+      dark:hover:text-green-500
+      hover:bg-green-100
+      dark:hover:bg-green-700/10;
+  }
+
   .btn-contained-error {
     @apply border
       border-transparent

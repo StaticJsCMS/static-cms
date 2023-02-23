@@ -8,7 +8,7 @@ import type { FC, MouseEventHandler, ReactNode, Ref } from 'react';
 
 export interface BaseBaseProps {
   variant?: 'contained' | 'outlined' | 'text';
-  color?: 'primary' | 'error';
+  color?: 'primary' | 'success' | 'error';
   rounded?: boolean;
   className?: string;
   children: ReactNode | ReactNode[];
@@ -21,6 +21,7 @@ export interface ButtonProps extends BaseBaseProps {
   onClick: MouseEventHandler;
   disabled?: boolean;
   buttonRef?: Ref<HTMLButtonElement>;
+  'aria-label'?: string;
 }
 
 export interface ButtonInternalLinkProps extends BaseBaseProps {
@@ -101,6 +102,7 @@ const Button: FC<ButtonLinkProps> = ({
       className={buttonClassNames}
       disabled={otherProps.disabled}
       onClick={otherProps.onClick}
+      aria-label={otherProps['aria-label']}
     >
       {content}
     </button>

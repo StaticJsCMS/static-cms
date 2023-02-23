@@ -1,14 +1,13 @@
-import CloseIcon from '@mui/icons-material/Close';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import Fab from '@mui/material/Fab';
+import XMarkIcon from '@heroicons/react/20/solid/XMarkIcon';
 import isEmpty from 'lodash/isEmpty';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { translate } from 'react-polyglot';
+import { Dialog, Transition } from '@headlessui/react';
 
 import EmptyMessage from './EmptyMessage';
 import MediaLibraryCardGrid from './MediaLibraryCardGrid';
 import MediaLibraryTop from './MediaLibraryTop';
+import IconButton from '../common/button/IconButton';
 
 import type { Collection, Field, MediaFile, TranslatedProps } from '@staticcms/core/interface';
 import type { MediaLibraryState } from '@staticcms/core/reducers/mediaLibrary';
@@ -107,50 +106,101 @@ const MediaLibraryModal = ({
   const hasSelection = hasMedia && !isEmpty(selectedFile);
 
   return (
-    <Dialog open={isVisible} onClose={handleClose}>
-      <Fab color="default" aria-label="add" onClick={handleClose} size="small">
-        <CloseIcon />
-      </Fab>
-      <MediaLibraryTop
-        t={t}
-        onClose={handleClose}
-        forImage={forImage}
-        onDownload={handleDownload}
-        onUpload={handlePersist}
-        query={query}
-        onSearchChange={handleSearchChange}
-        onSearchKeyDown={handleSearchKeyDown}
-        searchDisabled={!dynamicSearchActive && !hasFilteredFiles}
-        onDelete={handleDelete}
-        canInsert={canInsert}
-        onInsert={handleInsert}
-        hasSelection={hasSelection}
-        isPersisting={isPersisting}
-        isDeleting={isDeleting}
-        selectedFile={selectedFile}
-      />
-      <DialogContent>
-        {!shouldShowEmptyMessage ? null : <EmptyMessage content={emptyMessage} />}
-        <MediaLibraryCardGrid
-          scrollContainerRef={scrollContainerRef}
-          mediaItems={tableData}
-          isSelectedFile={file => selectedFile?.key === file.key}
-          onAssetClick={handleAssetClick}
-          canLoadMore={hasNextPage}
-          onLoadMore={handleLoadMore}
-          isPaginating={isPaginating}
-          paginatingMessage={t('mediaLibrary.mediaLibraryModal.loading')}
-          cardDraftText={t('mediaLibrary.mediaLibraryCard.draft')}
-          cardWidth={cardWidth}
-          cardHeight={cardHeight}
-          cardMargin={cardMargin}
-          loadDisplayURL={loadDisplayURL}
-          displayURLs={displayURLs}
-          collection={collection}
-          field={field}
-        />
-      </DialogContent>
-    </Dialog>
+    <Transition appear show={isVisible} as={Fragment}>
+      <Dialog open={isVisible} onClose={handleClose}>
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-black bg-opacity-25 z-30" />
+        </Transition.Child>
+
+        <div className="fixed inset-0 overflow-y-auto z-40">
+          <div className="flex min-h-full items-center justify-center p-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <Dialog.Panel
+                className="
+                  w-full
+                  max-w-3xl
+                  transform
+                  overflow-hidden
+                  rounded-2xl
+                  bg-white
+                  p-6 text-left
+                  align-middle
+                  shadow-xl
+                  transition-all
+                "
+              >
+                <IconButton
+                  className="absolute top-6 right-6"
+                  variant="outlined"
+                  aria-label="add"
+                  onClick={handleClose}
+                >
+                  <XMarkIcon className="w-5 h-5" />
+                </IconButton>
+                <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+                  {forImage
+                    ? t('mediaLibrary.mediaLibraryModal.images')
+                    : t('mediaLibrary.mediaLibraryModal.mediaAssets')}
+                </Dialog.Title>
+                <MediaLibraryTop
+                  t={t}
+                  onClose={handleClose}
+                  forImage={forImage}
+                  onDownload={handleDownload}
+                  onUpload={handlePersist}
+                  query={query}
+                  onSearchChange={handleSearchChange}
+                  onSearchKeyDown={handleSearchKeyDown}
+                  searchDisabled={!dynamicSearchActive && !hasFilteredFiles}
+                  onDelete={handleDelete}
+                  canInsert={canInsert}
+                  onInsert={handleInsert}
+                  hasSelection={hasSelection}
+                  isPersisting={isPersisting}
+                  isDeleting={isDeleting}
+                  selectedFile={selectedFile}
+                />
+                {!shouldShowEmptyMessage ? null : <EmptyMessage content={emptyMessage} />}
+                <MediaLibraryCardGrid
+                  scrollContainerRef={scrollContainerRef}
+                  mediaItems={tableData}
+                  isSelectedFile={file => selectedFile?.key === file.key}
+                  onAssetClick={handleAssetClick}
+                  canLoadMore={hasNextPage}
+                  onLoadMore={handleLoadMore}
+                  isPaginating={isPaginating}
+                  paginatingMessage={t('mediaLibrary.mediaLibraryModal.loading')}
+                  cardDraftText={t('mediaLibrary.mediaLibraryCard.draft')}
+                  cardWidth={cardWidth}
+                  cardHeight={cardHeight}
+                  cardMargin={cardMargin}
+                  loadDisplayURL={loadDisplayURL}
+                  displayURLs={displayURLs}
+                  collection={collection}
+                  field={field}
+                />
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
+        </div>
+      </Dialog>
+    </Transition>
   );
 };
 

@@ -1,10 +1,9 @@
-import Button from '@mui/material/Button';
-import DialogTitle from '@mui/material/DialogTitle';
 import React from 'react';
 
 import FileUploadButton from '../UI/FileUploadButton';
 import { CopyToClipBoardButton } from './MediaLibraryButtons';
 import MediaLibrarySearch from './MediaLibrarySearch';
+import Button from '../common/button/Button';
 
 import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
 import type { ChangeEvent, ChangeEventHandler, KeyboardEventHandler } from 'react';
@@ -59,6 +58,7 @@ const MediaLibraryTop = ({
 
   return (
     <div>
+      {/*
       <DialogTitle>
         {forImage
           ? t('mediaLibrary.mediaLibraryModal.images')
@@ -82,25 +82,30 @@ const MediaLibraryTop = ({
           />
         </div>
       </DialogTitle>
-      <DialogTitle>
-        <MediaLibrarySearch
-          value={query}
-          onChange={onSearchChange}
-          onKeyDown={onSearchKeyDown}
-          placeholder={t('mediaLibrary.mediaLibraryModal.search')}
-          disabled={searchDisabled}
-        />
-        <div>
-          <Button color="error" variant="outlined" onClick={onDelete} disabled={!deleteEnabled}>
-            {deleteButtonLabel}
+        */}
+      <MediaLibrarySearch
+        value={query}
+        onChange={onSearchChange}
+        onKeyDown={onSearchKeyDown}
+        placeholder={t('mediaLibrary.mediaLibraryModal.search')}
+        disabled={searchDisabled}
+      />
+      <div>
+        <Button color="error" variant="outlined" onClick={onDelete} disabled={!deleteEnabled}>
+          {deleteButtonLabel}
+        </Button>
+        {!canInsert ? null : (
+          <Button
+            key="choose-selected"
+            color="success"
+            variant="contained"
+            onClick={onInsert}
+            disabled={!hasSelection}
+          >
+            {insertButtonLabel}
           </Button>
-          {!canInsert ? null : (
-            <Button color="success" variant="contained" onClick={onInsert} disabled={!hasSelection}>
-              {insertButtonLabel}
-            </Button>
-          )}
-        </div>
-      </DialogTitle>
+        )}
+      </div>
     </div>
   );
 };

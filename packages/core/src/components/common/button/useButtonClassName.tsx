@@ -8,14 +8,17 @@ const classes: Record<
 > = {
   contained: {
     primary: 'btn-contained-primary',
+    success: 'btn-contained-success',
     error: 'btn-contained-error',
   },
   outlined: {
     primary: 'btn-outlined-primary',
+    success: 'btn-outlined-success',
     error: 'btn-outlined-error',
   },
   text: {
     primary: 'btn-text-primary',
+    success: 'btn-text-success',
     error: 'btn-text-error',
   },
 };
