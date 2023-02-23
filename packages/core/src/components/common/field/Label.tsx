@@ -8,7 +8,7 @@ export interface LabelProps {
   children: string;
   hasErrors: boolean;
   variant?: 'default' | 'inline';
-  cursor?: 'pointer' | 'text';
+  cursor?: 'default' | 'pointer' | 'text';
   className?: string;
   'data-testid'?: string;
 }
@@ -17,7 +17,7 @@ const Label: FC<LabelProps> = ({
   children,
   hasErrors,
   variant = 'default',
-  cursor = 'text',
+  cursor = 'default',
   className,
   'data-testid': dataTestId,
 }) => {

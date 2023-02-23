@@ -14,7 +14,7 @@ export interface FieldProps {
   children: ReactNode | ReactNode[];
   errors: FieldError[];
   variant?: 'default' | 'inline';
-  cursor?: 'pointer' | 'text';
+  cursor?: 'default' | 'pointer' | 'text';
   noPadding?: boolean;
   hint?: string;
   forSingleList?: boolean;
@@ -26,7 +26,7 @@ const Field: FC<FieldProps> = ({
   children,
   errors,
   variant = 'default',
-  cursor = 'text',
+  cursor = 'default',
   noPadding = false,
   hint,
   forSingleList,

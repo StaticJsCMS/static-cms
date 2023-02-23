@@ -8,7 +8,7 @@ export interface HintProps {
   children: string;
   hasErrors: boolean;
   variant?: 'default' | 'inline';
-  cursor?: 'pointer' | 'text';
+  cursor?: 'default' | 'pointer' | 'text';
   className?: string;
 }
 
@@ -16,7 +16,7 @@ const Hint: FC<HintProps> = ({
   children,
   hasErrors,
   variant = 'default',
-  cursor = 'text',
+  cursor = 'default',
   className,
 }) => {
   return (

@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import {
   findNodePath,
   getNode,
@@ -15,11 +15,15 @@ import {
 import React, { useRef } from 'react';
 import { useFocused } from 'slate-react';
 
+import { configLoaded } from '@staticcms/core/actions/config';
+import { store } from '@staticcms/core/store';
 import { createMockCollection } from '@staticcms/test/data/collections.mock';
+import { createMockConfig } from '@staticcms/test/data/config.mock';
 import { mockMarkdownField } from '@staticcms/test/data/fields.mock';
+import { renderWithProviders } from '@staticcms/test/test-utils';
 import BalloonToolbar from '../BalloonToolbar';
 
-import type { Entry } from '@staticcms/core/interface';
+import type { Config, Entry, MarkdownField } from '@staticcms/core/interface';
 import type { MdEditor } from '@staticcms/markdown/plate/plateTypes';
 import type { FC } from 'react';
 
@@ -46,6 +50,10 @@ const BalloonToolbarWrapper: FC<BalloonToolbarWrapperProps> = ({ useMdx = false 
   );
 };
 
+const config = createMockConfig({
+  collections: [],
+}) as unknown as Config<MarkdownField>;
+
 describe(BalloonToolbar.name, () => {
   const mockUseEditor = usePlateEditorState as jest.Mock;
   let mockEditor: MdEditor;
@@ -59,6 +67,8 @@ describe(BalloonToolbar.name, () => {
   const mockGetParentNode = getParentNode as jest.Mock;
 
   beforeEach(() => {
+    store.dispatch(configLoaded(config as unknown as Config));
+
     entry = {
       collection: 'posts',
       slug: '2022-12-13-post-number-1',
@@ -87,7 +97,7 @@ describe(BalloonToolbar.name, () => {
   });
 
   it('renders empty div by default', () => {
-    render(<BalloonToolbarWrapper />);
+    renderWithProviders(<BalloonToolbarWrapper />);
     expect(screen.queryAllByRole('button').length).toBe(0);
   });
 
@@ -127,7 +137,7 @@ describe(BalloonToolbar.name, () => {
         },
       ]);
 
-      const { rerender } = render(<BalloonToolbarWrapper />);
+      const { rerender } = renderWithProviders(<BalloonToolbarWrapper />);
 
       rerender(<BalloonToolbarWrapper useMdx={useMdx} />);
     };

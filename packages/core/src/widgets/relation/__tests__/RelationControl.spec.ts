@@ -273,7 +273,7 @@ describe(RelationControl.name, () => {
     expect(field).not.toHaveClass('pb-3');
   });
 
-  fit('should render as single list item', async () => {
+  it('should render as single list item', async () => {
     const { getByTestId } = await renderRelationControl({
       label: 'I am a label',
       forSingleList: true,

@@ -110,7 +110,6 @@ const MediaToolbarButton: FC<MediaToolbarButtonProps> = ({
         textLabel={textLabel}
         onUrlChange={setInternalUrl}
         onTextChange={setInternalText}
-        mediaOpen={mediaOpen}
         onMediaToggle={onMediaToggle}
         onMediaChange={handleMediaChange}
         onClose={handlePopoverClose}
