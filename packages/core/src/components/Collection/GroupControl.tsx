@@ -1,4 +1,4 @@
-import { CheckIcon } from '@heroicons/react/20/solid';
+import CheckIcon from '@heroicons/react/20/solid/CheckIcon';
 import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';
 

@@ -1,4 +1,5 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
+import ChevronDownIcon from '@heroicons/react/20/solid/ChevronDownIcon';
+import ChevronUpIcon from '@heroicons/react/20/solid/ChevronUpIcon';
 import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';
 

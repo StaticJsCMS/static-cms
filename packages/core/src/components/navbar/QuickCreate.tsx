@@ -1,4 +1,4 @@
-import { PlusIcon } from '@heroicons/react/20/solid';
+import PlusIcon from '@heroicons/react/20/solid/PlusIcon';
 import React, { useMemo } from 'react';
 
 import { getNewEntryUrl } from '@staticcms/core/lib/urlHelper';

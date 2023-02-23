@@ -1,4 +1,5 @@
-import { MoonIcon, UserIcon } from '@heroicons/react/24/outline';
+import MoonIcon from '@heroicons/react/24/outline/MoonIcon';
+import UserIcon from '@heroicons/react/24/outline/UserIcon';
 import { Logout as LogoutIcon } from '@styled-icons/material/Logout';
 import React, { useCallback, useState } from 'react';
 import { translate } from 'react-polyglot';

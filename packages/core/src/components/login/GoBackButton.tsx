@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon';
 
 import Button from '../common/button/Button';
 

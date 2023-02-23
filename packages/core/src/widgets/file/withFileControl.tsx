@@ -1,11 +1,10 @@
-import CloseIcon from '@mui/icons-material/Close';
-import PhotoIcon from '@mui/icons-material/Photo';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import CameraIcon from '@heroicons/react/20/solid/CameraIcon';
+import XMarkIcon from '@heroicons/react/20/solid/XMarkIcon';
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
-import Outline from '@staticcms/core/components/UI/Outline';
+import Button from '@staticcms/core/components/common/button/Button';
+import IconButton from '@staticcms/core/components/common/button/IconButton';
+import Field from '@staticcms/core/components/common/field/Field';
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
@@ -43,10 +42,10 @@ const SortableImageButtons: FC<SortableImageButtonsProps> = ({ onRemove, onRepla
   return (
     <div key="image-buttons-wrapper">
       <IconButton key="image-replace" onClick={onReplace}>
-        <PhotoIcon key="image-replace-icon" />
+        <CameraIcon key="image-replace-icon" />
       </IconButton>
       <IconButton key="image-remove" onClick={onRemove}>
-        <CloseIcon key="image-remove-icon" />
+        <XMarkIcon key="image-remove-icon" />
       </IconButton>
     </div>
   );
@@ -104,9 +103,12 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
   const FileControl: FC<WidgetControlProps<string | string[], FileOrImageField>> = memo(
     ({
       value,
+      label,
       collection,
       field,
       entry,
+      errors,
+      forSingleList,
       onChange,
       openMediaLibrary,
       clearMediaControl,
@@ -115,8 +117,9 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       t,
     }) => {
       const controlID = useUUID();
-      const [collapsed, setCollapsed] = useState(false);
       const [internalValue, setInternalValue] = useState(value ?? '');
+
+      const uploadButtonRef = useRef<HTMLButtonElement | null>(null);
 
       const handleOnChange = useCallback(
         (newValue: string | string[]) => {
@@ -135,10 +138,6 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
         { collection, field, controlID, forImage },
         handleOnChange,
       );
-
-      const handleCollapseToggle = useCallback(() => {
-        setCollapsed(!collapsed);
-      }, [collapsed]);
 
       useEffect(() => {
         return () => {
@@ -294,34 +293,38 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
         if (Array.isArray(internalValue) ? internalValue.length === 0 : isEmpty(internalValue)) {
           return (
-            <div>
-              <Button
-                color="primary"
-                variant="outlined"
-                key="upload"
-                onClick={handleOpenMediaLibrary}
-              >
-                {t(`editor.editorWidgets.${subject}.choose${allowsMultiple ? 'Multiple' : ''}`)}
-              </Button>
-              {chooseUrl ? (
+            <div key="selection" className="flex flex-col gap-2 px-3 pt-2 pb-4">
+              <div key="controls" className="flex gap-2">
                 <Button
+                  buttonRef={uploadButtonRef}
                   color="primary"
                   variant="outlined"
-                  key="choose-url"
-                  onClick={handleUrl(subject)}
+                  key="upload"
+                  onClick={handleOpenMediaLibrary}
                 >
-                  {t(`editor.editorWidgets.${subject}.chooseUrl`)}
+                  {t(`editor.editorWidgets.${subject}.choose${allowsMultiple ? 'Multiple' : ''}`)}
                 </Button>
-              ) : null}
+                {chooseUrl ? (
+                  <Button
+                    color="primary"
+                    variant="outlined"
+                    key="choose-url"
+                    onClick={handleUrl(subject)}
+                  >
+                    {t(`editor.editorWidgets.${subject}.chooseUrl`)}
+                  </Button>
+                ) : null}
+              </div>
             </div>
           );
         }
 
         return (
-          <div key="selection">
+          <div key="selection" className="flex flex-col gap-2 px-3 pt-2 pb-4">
             {renderedImagesLinks}
-            <div key="controls">
+            <div key="controls" className="flex gap-2">
               <Button
+                buttonRef={uploadButtonRef}
                 color="primary"
                 variant="outlined"
                 key="add-replace"
@@ -362,23 +365,19 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
       return useMemo(
         () => (
-          <div key="file-control-wrapper">
-            <ObjectWidgetTopBar
-              key="file-control-top-bar"
-              collapsed={collapsed}
-              onCollapseToggle={handleCollapseToggle}
-              heading={field.label ?? field.name}
-              hasError={hasErrors}
-              t={t}
-            />
-            <div>
-              {/* TODO $collapsed={collapsed} */}
-              {content}
-            </div>
-            <Outline hasError={hasErrors} />
-          </div>
+          <Field
+            inputRef={uploadButtonRef}
+            label={label}
+            errors={errors}
+            noPadding={!hasErrors}
+            hint={field.hint}
+            forSingleList={forSingleList}
+            cursor="pointer"
+          >
+            {content}
+          </Field>
         ),
-        [collapsed, content, field.label, field.name, handleCollapseToggle, hasErrors, t],
+        [content, errors, field.hint, forSingleList, hasErrors, label],
       );
     },
   );

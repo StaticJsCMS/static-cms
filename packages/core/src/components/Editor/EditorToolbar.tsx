@@ -1,13 +1,11 @@
 import { Publish as PublishIcon } from '@styled-icons/material/Publish';
 import { DocumentAdd as DocumentAddIcon } from '@styled-icons/fluentui-system-regular/DocumentAdd';
-import { CheckIcon } from '@heroicons/react/20/solid';
-import {
-  EllipsisVerticalIcon,
-  EyeIcon,
-  GlobeAltIcon,
-  TrashIcon,
-  DocumentDuplicateIcon,
-} from '@heroicons/react/24/outline';
+import CheckIcon from '@heroicons/react/20/solid/CheckIcon';
+import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
+import EyeIcon from '@heroicons/react/24/outline/EyeIcon';
+import GlobeAltIcon from '@heroicons/react/24/outline/GlobeAltIcon';
+import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
+import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
 import { Height as HeightIcon } from '@styled-icons/material-rounded/Height';
 import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';

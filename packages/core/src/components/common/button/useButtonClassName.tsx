@@ -4,25 +4,19 @@ import type { BaseBaseProps } from './Button';
 
 const classes: Record<
   Required<BaseBaseProps>['variant'],
-  Record<Required<BaseBaseProps>['color'], Record<'default' | 'rounded', string>>
+  Record<Required<BaseBaseProps>['color'], string>
 > = {
   contained: {
-    primary: {
-      default: 'btn-contained-primary',
-      rounded: 'btn-contained-primary-rounded',
-    },
+    primary: 'btn-contained-primary',
+    error: 'btn-contained-error',
   },
   outlined: {
-    primary: {
-      default: 'btn-outlined-primary',
-      rounded: 'btn-outlined-primary-rounded',
-    },
+    primary: 'btn-outlined-primary',
+    error: 'btn-outlined-error',
   },
   text: {
-    primary: {
-      default: 'btn-text-primary',
-      rounded: 'btn-text-primary-rounded',
-    },
+    primary: 'btn-text-primary',
+    error: 'btn-text-error',
   },
 };
 
@@ -32,7 +26,7 @@ export default function useButtonClassName(
   rounded: boolean,
 ) {
   return useMemo(
-    () => classes[variant][color][rounded ? 'rounded' : 'default'],
+    () => `${rounded ? 'btn-rounded' : 'btn'} ${classes[variant][color]}`,
     [color, rounded, variant],
   );
 }

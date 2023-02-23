@@ -1,5 +1,6 @@
 import { Disclosure } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import Bars3Icon from '@heroicons/react/24/outline/Bars3Icon';
+import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
 import React, { Fragment, useEffect } from 'react';
 import { translate } from 'react-polyglot';
 import { Link } from 'react-router-dom';

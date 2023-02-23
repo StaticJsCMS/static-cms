@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import useButtonClassName from './useButtonClassName';
 
-import type { FC, MouseEventHandler, ReactNode } from 'react';
+import type { FC, MouseEventHandler, ReactNode, Ref } from 'react';
 
 export interface BaseBaseProps {
   variant?: 'contained' | 'outlined' | 'text';
-  color?: 'primary';
+  color?: 'primary' | 'error';
   rounded?: boolean;
   className?: string;
   children: ReactNode | ReactNode[];
@@ -17,22 +17,27 @@ export interface BaseBaseProps {
   'data-testid'?: string;
 }
 
-export interface ButtonButtonProps extends BaseBaseProps {
+export interface ButtonProps extends BaseBaseProps {
   onClick: MouseEventHandler;
   disabled?: boolean;
+  buttonRef?: Ref<HTMLButtonElement>;
 }
 
 export interface ButtonInternalLinkProps extends BaseBaseProps {
   to: string;
+  linkRef?: Ref<HTMLAnchorElement>;
 }
 
 export interface ButtonExternalLinkProps extends BaseBaseProps {
   href: string;
+  linkRef?: Ref<HTMLAnchorElement>;
 }
 
-export type ButtonProps = ButtonButtonProps | ButtonInternalLinkProps | ButtonExternalLinkProps;
+export type LinkProps = ButtonInternalLinkProps | ButtonExternalLinkProps;
 
-const Button = ({
+export type ButtonLinkProps = ButtonProps | LinkProps;
+
+const Button: FC<ButtonLinkProps> = ({
   variant = 'contained',
   color = 'primary',
   rounded = false,
@@ -42,7 +47,7 @@ const Button = ({
   endIcon: EndIcon,
   'data-testid': dataTestId,
   ...otherProps
-}: ButtonProps) => {
+}) => {
   const buttonClassName = useButtonClassName(variant, color, rounded);
 
   const buttonClassNames = useMemo(
@@ -63,7 +68,12 @@ const Button = ({
 
   if ('to' in otherProps) {
     return (
-      <Link to={otherProps.to} data-testid={dataTestId} className={buttonClassNames}>
+      <Link
+        ref={otherProps.linkRef}
+        to={otherProps.to}
+        data-testid={dataTestId}
+        className={buttonClassNames}
+      >
         {content}
       </Link>
     );
@@ -72,6 +82,7 @@ const Button = ({
   if ('href' in otherProps) {
     return (
       <a
+        ref={otherProps.linkRef}
         href={otherProps.href}
         data-testid={dataTestId}
         className={buttonClassNames}
@@ -85,6 +96,7 @@ const Button = ({
 
   return (
     <button
+      ref={otherProps.buttonRef}
       data-testid={dataTestId}
       className={buttonClassNames}
       disabled={otherProps.disabled}

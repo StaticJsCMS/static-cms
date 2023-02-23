@@ -1,5 +1,6 @@
 import { Combobox, Transition } from '@headlessui/react';
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
+import CheckIcon from '@heroicons/react/20/solid/CheckIcon';
+import ChevronUpDownIcon from '@heroicons/react/20/solid/ChevronUpDownIcon';
 import React, { forwardRef, Fragment, useCallback } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';

@@ -32,48 +32,16 @@
   }
 
   .btn-contained-primary {
-    @apply inline-flex
-      items-center
-      justify-center
-      text-sm
-      font-medium
-      focus:outline-none
-      focus:ring-4
-      focus:ring-gray-200
-      dark:focus:ring-gray-700
-      rounded
-      px-2.5
-      py-1.5
-      border
-      border-transparent
-      bg-blue-700
-      hover:bg-blue-800
-      dark:bg-blue-600
-      dark:hover:bg-blue-700
-      text-white;
-  }
-
-  .btn-contained-primary-base {
     @apply border
       border-transparent
       bg-blue-700
       hover:bg-blue-800
       dark:bg-blue-600
-      dark:hover:bg-blue-700
+      dark:hover:bg-blue-800
       text-white;
   }
 
-  .btn-contained-primary {
-    @apply btn
-      btn-contained-primary-base;
-  }
-
-  .btn-contained-primary-rounded {
-    @apply btn-rounded
-      btn-contained-primary-base;
-  }
-
-  .btn-outlined-primary-base {
+  .btn-outlined-primary {
     @apply text-gray-900
       bg-white
       border
@@ -81,39 +49,53 @@
       hover:bg-slate-100
       hover:text-blue-700
       dark:bg-slate-800
-      dark:text-gray-300
-      dark:border-gray-600
-      dark:hover:text-white
-      dark:hover:bg-slate-700;
-  }
-
-  .btn-outlined-primary {
-    @apply btn
-      btn-outlined-primary-base;
-  }
-
-  .btn-outlined-primary-rounded {
-    @apply btn-rounded
-      btn-outlined-primary-base;
-  }
-
-  .btn-text-primary-base {
-    @apply hover:text-blue-700
-      dark:text-gray-300
-      dark:ring-gray-600
-      dark:hover:text-white
-      hover:bg-slate-100
-      dark:hover:bg-slate-700;
+      dark:text-blue-400
+      dark:border-blue-500
+      dark:hover:text-blue-500
+      dark:hover:bg-blue-700/20;
   }
 
   .btn-text-primary {
-    @apply btn
-      btn-text-primary-base;
+    @apply hover:text-blue-700
+      hover:bg-blue-100
+      dark:text-blue-400
+      dark:ring-gray-600
+      dark:hover:text-blue-500
+      dark:hover:bg-blue-700/20;
   }
 
-  .btn-text-primary-rounded {
-    @apply btn-rounded
-      btn-text-primary-base;
+  .btn-contained-error {
+    @apply border
+      border-transparent
+      bg-red-700
+      hover:bg-red-800
+      dark:bg-red-600
+      dark:hover:bg-red-800
+      text-white;
+  }
+
+  .btn-outlined-error {
+    @apply bg-white
+      border
+      text-red-500
+      border-red-200
+      hover:bg-red-100
+      hover:text-red-700
+      dark:bg-slate-800
+      dark:text-red-400
+      dark:border-red-600
+      dark:hover:text-red-500
+      dark:hover:bg-red-700/10;
+  }
+
+  .btn-text-error {
+    @apply text-red-500
+      hover:text-red-700
+      dark:text-red-400
+      dark:ring-gray-600
+      dark:hover:text-red-500
+      hover:bg-red-100
+      dark:hover:bg-red-700/10;
   }
 
   /**

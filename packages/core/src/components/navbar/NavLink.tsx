@@ -1,4 +1,4 @@
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
+import ArrowTopRightOnSquareIcon from '@heroicons/react/24/outline/ArrowTopRightOnSquareIcon';
 import React, { useMemo } from 'react';
 import { NavLink as BaseNavLink, useLocation } from 'react-router-dom';
 

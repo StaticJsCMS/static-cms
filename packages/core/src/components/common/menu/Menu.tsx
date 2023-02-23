@@ -1,5 +1,5 @@
 import { Menu as BaseMenu, Transition } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import ChevronDownIcon from '@heroicons/react/20/solid/ChevronDownIcon';
 import React, { useMemo } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';

@@ -1,4 +1,4 @@
-import { DocumentTextIcon } from '@heroicons/react/24/outline';
+import DocumentTextIcon from '@heroicons/react/24/outline/DocumentTextIcon';
 import React, { useMemo } from 'react';
 
 import { getIcon as getRegistryIcon } from '@staticcms/core/lib/registry';
