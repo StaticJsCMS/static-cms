@@ -13029,10 +13029,10 @@ minimatch@3.0.5:
   dependencies:
     brace-expansion "^1.1.7"
 
-minimatch@7.0.1:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-7.0.1.tgz#346583590577d192cab9b88514f1832b9509d737"
-  integrity sha512-C4CrOG1kAnaIxQPTAoiAmZCR2up1yjDdseGpr8UCUw5UqBUao5E1q2bOv0cAX0+y8MUxcyrvkTsoj5DvGRnvdQ==
+minimatch@7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-7.1.0.tgz#8d3b0a361b02b4420c89fb2b8295621429c340ea"
+  integrity sha512-ZRvZsrVXiuB/QDlJx7WPymFyOHQUntQOEH3vFIwCzs/fDnH/siHZQAmI6Zamx1J9u9S66ucgKXU0CnqHfi8Z4g==
   dependencies:
     brace-expansion "^2.0.1"
 
