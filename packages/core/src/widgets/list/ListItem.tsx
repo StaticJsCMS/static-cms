@@ -120,17 +120,19 @@ const ListItem: FC<ListItemProps> = ({
 
         const mixedObjectValue = objectValue as ObjectValue;
 
-        const itemType = getTypedFieldForValue(field, mixedObjectValue, index);
+        const [itemTypeName, itemType] = getTypedFieldForValue(field, mixedObjectValue, index);
         if (!itemType) {
           return [base, childObjectField];
         }
 
-        const label = itemType.label ?? itemType.name;
+        const label = itemType.label ?? itemTypeName;
         // each type can have its own summary, but default to the list summary if exists
-        const summary = ('summary' in itemType && itemType.summary) ?? field.summary;
+        const summary =
+          'summary' in itemType && itemType.summary ? itemType.summary : field.summary;
         const labelReturn = summary
           ? `${label} - ${handleSummary(summary, entry, label, mixedObjectValue)}`
           : label;
+
         return [labelReturn, itemType];
       }
       case ListValueType.MULTIPLE: {
@@ -155,16 +157,7 @@ const ListItem: FC<ListItemProps> = ({
         const labelReturn = summary
           ? handleSummary(summary, entry, String(labelFieldValue), objectValue)
           : String(labelFieldValue);
-        console.log(
-          'labelReturn',
-          labelReturn,
-          'summary',
-          summary,
-          'String(labelFieldValue)',
-          String(labelFieldValue),
-          'objectValue',
-          objectValue,
-        );
+
         return [labelReturn, childObjectField];
       }
     }

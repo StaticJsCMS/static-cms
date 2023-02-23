@@ -8,19 +8,22 @@ export function getTypedFieldForValue(
   field: ListField,
   value: ObjectValue | undefined | null,
   index: number,
-): ObjectField | undefined {
+): [string, ObjectField | undefined] {
   const typeKey = resolveFieldKeyType(field);
   const types = field.types ?? [];
   const valueType = value?.[typeKey] ?? {};
   const typeField = types.find(type => type.name === valueType);
   if (!typeField) {
-    return typeField;
+    return ['', typeField];
   }
 
-  return {
-    ...typeField,
-    name: `${index}`,
-  };
+  return [
+    typeField.name,
+    {
+      ...typeField,
+      name: `${index}`,
+    },
+  ];
 }
 
 export function resolveFunctionForTypedField(field: ListField) {

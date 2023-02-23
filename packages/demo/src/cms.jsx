@@ -149,7 +149,7 @@ cms.registerAdditionalLink({
 cms.registerAdditionalLink({
   id: "config",
   title: "Demo config.yml",
-  data: "https://github.com/StaticJsCMS/static-cms/blob/main/packages/demo/config.yml",
+  data: "https://github.com/StaticJsCMS/static-cms/blob/main/packages/demo/public/config.yml",
   options: {
     icon: "page",
   },

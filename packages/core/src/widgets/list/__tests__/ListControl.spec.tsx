@@ -49,7 +49,7 @@ const multipleFieldsValue = [
 
 const typedFieldsListField: ListField = {
   widget: 'list',
-  name: 'multipleFields',
+  name: 'typedFields',
   types: [
     {
       widget: 'object',
@@ -78,7 +78,7 @@ const typedFieldsListField: ListField = {
         },
         {
           widget: 'text',
-          name: 'stringInput2',
+          name: 'stringInput',
           default: 'string default 2',
         },
       ],
@@ -88,12 +88,12 @@ const typedFieldsListField: ListField = {
 
 const typedFieldsValue = [
   { type: 'type1', stringInput: 'String Value 1', textInput: 'Text Value 1' },
-  { type: 'type2', numberInput2: 10, stringInput2: 'String Value 2' },
+  { type: 'type2', numberInput2: 10, stringInput: 'String Value 2' },
 ];
 
 const typedOtherKeyFieldsListField: ListField = {
   widget: 'list',
-  name: 'multipleFields',
+  name: 'typedOtherKeyFields',
   type_key: 'someKey',
   types: [
     {
@@ -123,7 +123,7 @@ const typedOtherKeyFieldsListField: ListField = {
         },
         {
           widget: 'text',
-          name: 'stringInput2',
+          name: 'stringInput',
           default: 'string default 2',
         },
       ],
@@ -133,7 +133,7 @@ const typedOtherKeyFieldsListField: ListField = {
 
 const typedOtherKeyFieldsValue = [
   { someKey: 'type1', stringInput: 'String Value 1', textInput: 'Text Value 1' },
-  { someKey: 'type2', numberInput2: 10, stringInput2: 'String Value 2' },
+  { someKey: 'type2', numberInput2: 10, stringInput: 'String Value 2' },
 ];
 
 jest.mock('@staticcms/core/components/editor/EditorControlPane/EditorControl', () => {
@@ -280,8 +280,8 @@ describe(ListControl.name, () => {
       expect(itemTwo).toBeVisible();
       expect(getByTestId(itemTwo, 'parentPath').textContent).toBe('list');
       expect(getByTestId(itemTwo, 'fieldName').textContent).toBe('1');
-      expect(getByTestId(itemOne, 'item-label').textContent).toBe('multipleFields');
-      expect(queryByTestId(itemOne, 'item-summary')).not.toBeInTheDocument();
+      expect(getByTestId(itemTwo, 'item-label').textContent).toBe('multipleFields');
+      expect(queryByTestId(itemTwo, 'item-summary')).not.toBeInTheDocument();
       expect(JSON.parse(getByTestId(itemTwo, 'value').textContent ?? '')).toEqual({
         stringInput: 'String Value 2',
         textInput: 'Text Value 2',
@@ -304,17 +304,34 @@ describe(ListControl.name, () => {
       });
 
       const itemOne = screen.getByTestId('object-control-0');
-      expect(itemOne).toBeVisible();
-      expect(queryByTestId(itemOne, 'item-summary')).toBe('String Value 1');
+      expect(itemOne).not.toBeVisible();
+      expect(queryByTestId(itemOne, 'item-summary')?.textContent).toBe('String Value 1');
 
       const itemTwo = screen.getByTestId('object-control-1');
-      expect(itemTwo).toBeVisible();
-      expect(queryByTestId(itemTwo, 'item-summary')).toBe('String Value 1');
+      expect(itemTwo).not.toBeVisible();
+      expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe('String Value 2');
 
       await userEvent.click(screen.getByTestId('list-expand-button'));
 
-      expect(screen.getByTestId('object-control-0')).toBeVisible();
-      expect(screen.getByTestId('object-control-1')).toBeVisible();
+      expect(itemOne).toBeVisible();
+      expect(itemTwo).toBeVisible();
+    });
+
+    it('uses singular label for item labels', async () => {
+      await renderListControl({
+        field: {
+          ...multipleFieldsListField,
+          label: 'Things',
+          label_singular: 'Thing',
+        },
+        value: multipleFieldsValue,
+      });
+
+      const itemOne = screen.getByTestId('object-control-0');
+      expect(getByTestId(itemOne, 'item-label').textContent).toBe('Thing');
+
+      const itemTwo = screen.getByTestId('object-control-1');
+      expect(getByTestId(itemTwo, 'item-label').textContent).toBe('Thing');
     });
 
     it('reorders value on drag and drop', async () => {
@@ -423,6 +440,8 @@ describe(ListControl.name, () => {
       expect(itemOne).toBeVisible();
       expect(getByTestId(itemOne, 'parentPath').textContent).toBe('list');
       expect(getByTestId(itemOne, 'fieldName').textContent).toBe('0');
+      expect(queryByTestId(itemOne, 'item-label')).not.toBeInTheDocument();
+      expect(queryByTestId(itemOne, 'item-summary')).not.toBeInTheDocument();
       expect(JSON.parse(getByTestId(itemOne, 'value').textContent ?? '')).toEqual({
         stringInput: 'Value 1',
       });
@@ -431,6 +450,8 @@ describe(ListControl.name, () => {
       expect(itemTwo).toBeVisible();
       expect(getByTestId(itemTwo, 'parentPath').textContent).toBe('list');
       expect(getByTestId(itemTwo, 'fieldName').textContent).toBe('1');
+      expect(queryByTestId(itemTwo, 'item-label')).not.toBeInTheDocument();
+      expect(queryByTestId(itemTwo, 'item-summary')).not.toBeInTheDocument();
       expect(JSON.parse(getByTestId(itemTwo, 'value').textContent ?? '')).toEqual({
         stringInput: 'Value 2',
       });
@@ -535,6 +556,8 @@ describe(ListControl.name, () => {
       expect(itemOne).toBeVisible();
       expect(getByTestId(itemOne, 'parentPath').textContent).toBe('list');
       expect(getByTestId(itemOne, 'fieldName').textContent).toBe('0');
+      expect(getByTestId(itemOne, 'item-label').textContent).toBe('typedFields');
+      expect(queryByTestId(itemOne, 'item-summary')).not.toBeInTheDocument();
       expect(JSON.parse(getByTestId(itemOne, 'value').textContent ?? '')).toEqual({
         stringInput: 'String Value 1',
         textInput: 'Text Value 1',
@@ -545,9 +568,11 @@ describe(ListControl.name, () => {
       expect(itemTwo).toBeVisible();
       expect(getByTestId(itemTwo, 'parentPath').textContent).toBe('list');
       expect(getByTestId(itemTwo, 'fieldName').textContent).toBe('1');
+      expect(getByTestId(itemTwo, 'item-label').textContent).toBe('typedFields');
+      expect(queryByTestId(itemTwo, 'item-summary')).not.toBeInTheDocument();
       expect(JSON.parse(getByTestId(itemTwo, 'value').textContent ?? '')).toEqual({
         numberInput2: 10,
-        stringInput2: 'String Value 2',
+        stringInput: 'String Value 2',
         type: 'type2',
       });
     });
@@ -567,13 +592,228 @@ describe(ListControl.name, () => {
         field: { ...typedFieldsListField, collapsed: true },
       });
 
-      expect(screen.getByTestId('object-control-0')).not.toBeVisible();
-      expect(screen.getByTestId('object-control-1')).not.toBeVisible();
+      const itemOne = screen.getByTestId('object-control-0');
+      expect(itemOne).not.toBeVisible();
+      expect(queryByTestId(itemOne, 'item-summary')?.textContent).toBe('type1');
+
+      const itemTwo = screen.getByTestId('object-control-1');
+      expect(itemTwo).not.toBeVisible();
+      expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe('type2');
 
       await userEvent.click(screen.getByTestId('list-expand-button'));
 
-      expect(screen.getByTestId('object-control-0')).toBeVisible();
-      expect(screen.getByTestId('object-control-1')).toBeVisible();
+      expect(itemOne).toBeVisible();
+      expect(itemTwo).toBeVisible();
+    });
+
+    it('uses type labels as summary if present', async () => {
+      const field: ListField = {
+        ...typedFieldsListField,
+        collapsed: true,
+        types: [
+          {
+            ...typedFieldsListField.types![0],
+            label: 'Type 1 Label',
+          },
+          {
+            ...typedFieldsListField.types![1],
+            label: 'Type 2 Label',
+          },
+        ],
+      };
+
+      await renderListControl({
+        value: typedFieldsValue,
+        field,
+      });
+
+      const itemOne = screen.getByTestId('object-control-0');
+      expect(itemOne).not.toBeVisible();
+      expect(queryByTestId(itemOne, 'item-summary')?.textContent).toBe('Type 1 Label');
+
+      const itemTwo = screen.getByTestId('object-control-1');
+      expect(itemTwo).not.toBeVisible();
+      expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe('Type 2 Label');
+
+      await userEvent.click(screen.getByTestId('list-expand-button'));
+
+      expect(itemOne).toBeVisible();
+      expect(itemTwo).toBeVisible();
+    });
+
+    it('uses type summary if present with name', async () => {
+      const field: ListField = {
+        ...typedFieldsListField,
+        collapsed: true,
+        types: [
+          {
+            ...typedFieldsListField.types![0],
+            summary: '{{fields.textInput}} - {{stringInput}}',
+          },
+          {
+            ...typedFieldsListField.types![1],
+            summary: '{{fields.numberInput2}} - {{stringInput}}',
+          },
+        ],
+      };
+
+      await renderListControl({
+        value: typedFieldsValue,
+        field,
+      });
+
+      const itemOne = screen.getByTestId('object-control-0');
+      expect(itemOne).not.toBeVisible();
+      expect(queryByTestId(itemOne, 'item-summary')?.textContent).toBe(
+        'type1 - Text Value 1 - String Value 1',
+      );
+
+      const itemTwo = screen.getByTestId('object-control-1');
+      expect(itemTwo).not.toBeVisible();
+      expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe(
+        'type2 - 10 - String Value 2',
+      );
+
+      await userEvent.click(screen.getByTestId('list-expand-button'));
+
+      expect(itemOne).toBeVisible();
+      expect(itemTwo).toBeVisible();
+    });
+
+    it('uses type summary if present with label', async () => {
+      const field: ListField = {
+        ...typedFieldsListField,
+        collapsed: true,
+        types: [
+          {
+            ...typedFieldsListField.types![0],
+            label: 'Type 1 Label',
+            summary: '{{fields.textInput}} - {{stringInput}}',
+          },
+          {
+            ...typedFieldsListField.types![1],
+            label: 'Type 2 Label',
+            summary: '{{fields.numberInput2}} - {{stringInput}}',
+          },
+        ],
+      };
+
+      await renderListControl({
+        value: typedFieldsValue,
+        field,
+      });
+
+      const itemOne = screen.getByTestId('object-control-0');
+      expect(itemOne).not.toBeVisible();
+      expect(queryByTestId(itemOne, 'item-summary')?.textContent).toBe(
+        'Type 1 Label - Text Value 1 - String Value 1',
+      );
+
+      const itemTwo = screen.getByTestId('object-control-1');
+      expect(itemTwo).not.toBeVisible();
+      expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe(
+        'Type 2 Label - 10 - String Value 2',
+      );
+
+      await userEvent.click(screen.getByTestId('list-expand-button'));
+
+      expect(itemOne).toBeVisible();
+      expect(itemTwo).toBeVisible();
+    });
+
+    it('uses list summary if type summary is not present with name', async () => {
+      const field: ListField = {
+        ...typedFieldsListField,
+        collapsed: true,
+        summary: 'Summary: {{stringInput}}',
+        types: [
+          {
+            ...typedFieldsListField.types![0],
+          },
+          {
+            ...typedFieldsListField.types![1],
+          },
+        ],
+      };
+
+      await renderListControl({
+        value: typedFieldsValue,
+        field,
+      });
+
+      const itemOne = screen.getByTestId('object-control-0');
+      expect(itemOne).not.toBeVisible();
+      expect(queryByTestId(itemOne, 'item-summary')?.textContent).toBe(
+        'type1 - Summary: String Value 1',
+      );
+
+      const itemTwo = screen.getByTestId('object-control-1');
+      expect(itemTwo).not.toBeVisible();
+      expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe(
+        'type2 - Summary: String Value 2',
+      );
+
+      await userEvent.click(screen.getByTestId('list-expand-button'));
+
+      expect(itemOne).toBeVisible();
+      expect(itemTwo).toBeVisible();
+    });
+
+    it('uses list summary if type summary is not present with label', async () => {
+      const field: ListField = {
+        ...typedFieldsListField,
+        collapsed: true,
+        summary: 'Summary: {{stringInput}}',
+        types: [
+          {
+            label: 'Type 1 Label',
+            ...typedFieldsListField.types![0],
+          },
+          {
+            label: 'Type 2 Label',
+            ...typedFieldsListField.types![1],
+          },
+        ],
+      };
+
+      await renderListControl({
+        value: typedFieldsValue,
+        field,
+      });
+
+      const itemOne = screen.getByTestId('object-control-0');
+      expect(itemOne).not.toBeVisible();
+      expect(queryByTestId(itemOne, 'item-summary')?.textContent).toBe(
+        'Type 1 Label - Summary: String Value 1',
+      );
+
+      const itemTwo = screen.getByTestId('object-control-1');
+      expect(itemTwo).not.toBeVisible();
+      expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe(
+        'Type 2 Label - Summary: String Value 2',
+      );
+
+      await userEvent.click(screen.getByTestId('list-expand-button'));
+
+      expect(itemOne).toBeVisible();
+      expect(itemTwo).toBeVisible();
+    });
+
+    it('uses singular label for item labels', async () => {
+      await renderListControl({
+        field: {
+          ...typedFieldsListField,
+          label: 'Things',
+          label_singular: 'Thing',
+        },
+        value: typedFieldsValue,
+      });
+
+      const itemOne = screen.getByTestId('object-control-0');
+      expect(getByTestId(itemOne, 'item-label').textContent).toBe('Thing');
+
+      const itemTwo = screen.getByTestId('object-control-1');
+      expect(getByTestId(itemTwo, 'item-label').textContent).toBe('Thing');
     });
 
     it('reorders value on drag and drop', async () => {
@@ -617,7 +857,7 @@ describe(ListControl.name, () => {
         ...typedFieldsValue,
         {
           numberInput2: 5,
-          stringInput2: 'string default 2',
+          stringInput: 'string default 2',
           type: 'type2',
         },
       ];
@@ -664,7 +904,7 @@ describe(ListControl.name, () => {
       const newValue: ValueOrNestedValue[] | null | undefined = [
         {
           numberInput2: 5,
-          stringInput2: 'string default 2',
+          stringInput: 'string default 2',
           type: 'type2',
         },
         ...typedFieldsValue,
@@ -728,7 +968,7 @@ describe(ListControl.name, () => {
         expect(getByTestId(itemTwo, 'fieldName').textContent).toBe('1');
         expect(JSON.parse(getByTestId(itemTwo, 'value').textContent ?? '')).toEqual({
           numberInput2: 10,
-          stringInput2: 'String Value 2',
+          stringInput: 'String Value 2',
           someKey: 'type2',
         });
       });
@@ -748,13 +988,228 @@ describe(ListControl.name, () => {
           field: { ...typedOtherKeyFieldsListField, collapsed: true },
         });
 
-        expect(screen.getByTestId('object-control-0')).not.toBeVisible();
-        expect(screen.getByTestId('object-control-1')).not.toBeVisible();
+        const itemOne = screen.getByTestId('object-control-0');
+        expect(itemOne).not.toBeVisible();
+        expect(queryByTestId(itemOne, 'item-summary')?.textContent).toBe('type1');
+
+        const itemTwo = screen.getByTestId('object-control-1');
+        expect(itemTwo).not.toBeVisible();
+        expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe('type2');
 
         await userEvent.click(screen.getByTestId('list-expand-button'));
 
-        expect(screen.getByTestId('object-control-0')).toBeVisible();
-        expect(screen.getByTestId('object-control-1')).toBeVisible();
+        expect(itemOne).toBeVisible();
+        expect(itemTwo).toBeVisible();
+      });
+
+      it('uses type labels as summary if present', async () => {
+        const field: ListField = {
+          ...typedOtherKeyFieldsListField,
+          collapsed: true,
+          types: [
+            {
+              ...typedOtherKeyFieldsListField.types![0],
+              label: 'Type 1 Label',
+            },
+            {
+              ...typedOtherKeyFieldsListField.types![1],
+              label: 'Type 2 Label',
+            },
+          ],
+        };
+
+        await renderListControl({
+          value: typedOtherKeyFieldsValue,
+          field,
+        });
+
+        const itemOne = screen.getByTestId('object-control-0');
+        expect(itemOne).not.toBeVisible();
+        expect(queryByTestId(itemOne, 'item-summary')?.textContent).toBe('Type 1 Label');
+
+        const itemTwo = screen.getByTestId('object-control-1');
+        expect(itemTwo).not.toBeVisible();
+        expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe('Type 2 Label');
+
+        await userEvent.click(screen.getByTestId('list-expand-button'));
+
+        expect(itemOne).toBeVisible();
+        expect(itemTwo).toBeVisible();
+      });
+
+      it('uses type summary if present with name', async () => {
+        const field: ListField = {
+          ...typedOtherKeyFieldsListField,
+          collapsed: true,
+          types: [
+            {
+              ...typedOtherKeyFieldsListField.types![0],
+              summary: '{{fields.textInput}} - {{stringInput}}',
+            },
+            {
+              ...typedOtherKeyFieldsListField.types![1],
+              summary: '{{fields.numberInput2}} - {{stringInput}}',
+            },
+          ],
+        };
+
+        await renderListControl({
+          value: typedOtherKeyFieldsValue,
+          field,
+        });
+
+        const itemOne = screen.getByTestId('object-control-0');
+        expect(itemOne).not.toBeVisible();
+        expect(queryByTestId(itemOne, 'item-summary')?.textContent).toBe(
+          'type1 - Text Value 1 - String Value 1',
+        );
+
+        const itemTwo = screen.getByTestId('object-control-1');
+        expect(itemTwo).not.toBeVisible();
+        expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe(
+          'type2 - 10 - String Value 2',
+        );
+
+        await userEvent.click(screen.getByTestId('list-expand-button'));
+
+        expect(itemOne).toBeVisible();
+        expect(itemTwo).toBeVisible();
+      });
+
+      it('uses type summary if present with label', async () => {
+        const field: ListField = {
+          ...typedOtherKeyFieldsListField,
+          collapsed: true,
+          types: [
+            {
+              ...typedOtherKeyFieldsListField.types![0],
+              label: 'Type 1 Label',
+              summary: '{{fields.textInput}} - {{stringInput}}',
+            },
+            {
+              ...typedOtherKeyFieldsListField.types![1],
+              label: 'Type 2 Label',
+              summary: '{{fields.numberInput2}} - {{stringInput}}',
+            },
+          ],
+        };
+
+        await renderListControl({
+          value: typedOtherKeyFieldsValue,
+          field,
+        });
+
+        const itemOne = screen.getByTestId('object-control-0');
+        expect(itemOne).not.toBeVisible();
+        expect(queryByTestId(itemOne, 'item-summary')?.textContent).toBe(
+          'Type 1 Label - Text Value 1 - String Value 1',
+        );
+
+        const itemTwo = screen.getByTestId('object-control-1');
+        expect(itemTwo).not.toBeVisible();
+        expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe(
+          'Type 2 Label - 10 - String Value 2',
+        );
+
+        await userEvent.click(screen.getByTestId('list-expand-button'));
+
+        expect(itemOne).toBeVisible();
+        expect(itemTwo).toBeVisible();
+      });
+
+      it('uses list summary if type summary is not present with name', async () => {
+        const field: ListField = {
+          ...typedOtherKeyFieldsListField,
+          collapsed: true,
+          summary: 'Summary: {{stringInput}}',
+          types: [
+            {
+              ...typedOtherKeyFieldsListField.types![0],
+            },
+            {
+              ...typedOtherKeyFieldsListField.types![1],
+            },
+          ],
+        };
+
+        await renderListControl({
+          value: typedOtherKeyFieldsValue,
+          field,
+        });
+
+        const itemOne = screen.getByTestId('object-control-0');
+        expect(itemOne).not.toBeVisible();
+        expect(queryByTestId(itemOne, 'item-summary')?.textContent).toBe(
+          'type1 - Summary: String Value 1',
+        );
+
+        const itemTwo = screen.getByTestId('object-control-1');
+        expect(itemTwo).not.toBeVisible();
+        expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe(
+          'type2 - Summary: String Value 2',
+        );
+
+        await userEvent.click(screen.getByTestId('list-expand-button'));
+
+        expect(itemOne).toBeVisible();
+        expect(itemTwo).toBeVisible();
+      });
+
+      it('uses list summary if type summary is not present with label', async () => {
+        const field: ListField = {
+          ...typedOtherKeyFieldsListField,
+          collapsed: true,
+          summary: 'Summary: {{stringInput}}',
+          types: [
+            {
+              label: 'Type 1 Label',
+              ...typedOtherKeyFieldsListField.types![0],
+            },
+            {
+              label: 'Type 2 Label',
+              ...typedOtherKeyFieldsListField.types![1],
+            },
+          ],
+        };
+
+        await renderListControl({
+          value: typedOtherKeyFieldsValue,
+          field,
+        });
+
+        const itemOne = screen.getByTestId('object-control-0');
+        expect(itemOne).not.toBeVisible();
+        expect(queryByTestId(itemOne, 'item-summary')?.textContent).toBe(
+          'Type 1 Label - Summary: String Value 1',
+        );
+
+        const itemTwo = screen.getByTestId('object-control-1');
+        expect(itemTwo).not.toBeVisible();
+        expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe(
+          'Type 2 Label - Summary: String Value 2',
+        );
+
+        await userEvent.click(screen.getByTestId('list-expand-button'));
+
+        expect(itemOne).toBeVisible();
+        expect(itemTwo).toBeVisible();
+      });
+
+      it('uses singular label for item labels', async () => {
+        await renderListControl({
+          field: {
+            ...typedOtherKeyFieldsListField,
+            label: 'Things',
+            label_singular: 'Thing',
+          },
+          value: typedOtherKeyFieldsValue,
+        });
+
+        const itemOne = screen.getByTestId('object-control-0');
+        expect(getByTestId(itemOne, 'item-label').textContent).toBe('Thing');
+
+        const itemTwo = screen.getByTestId('object-control-1');
+        expect(getByTestId(itemTwo, 'item-label').textContent).toBe('Thing');
       });
 
       it('reorders value on drag and drop', async () => {
@@ -804,7 +1259,7 @@ describe(ListControl.name, () => {
           ...typedOtherKeyFieldsValue,
           {
             numberInput2: 5,
-            stringInput2: 'string default 2',
+            stringInput: 'string default 2',
             someKey: 'type2',
           },
         ];
@@ -851,7 +1306,7 @@ describe(ListControl.name, () => {
         const newValue: ValueOrNestedValue[] | null | undefined = [
           {
             numberInput2: 5,
-            stringInput2: 'string default 2',
+            stringInput: 'string default 2',
             someKey: 'type2',
           },
           ...typedOtherKeyFieldsValue,

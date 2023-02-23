@@ -156,7 +156,7 @@ function getTypedNestedWidgets(
 ) {
   return values
     ?.flatMap((value, index) => {
-      const itemType = getTypedFieldForValue(field, value ?? {}, index);
+      const [_, itemType] = getTypedFieldForValue(field, value ?? {}, index);
       if (!itemType) {
         return null;
       }
