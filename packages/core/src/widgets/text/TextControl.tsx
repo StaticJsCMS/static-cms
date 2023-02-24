@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import Field from '@staticcms/core/components/common/field/Field';
 import TextArea from '@staticcms/core/components/common/text-field/TextArea';
@@ -10,13 +10,18 @@ const TextControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   label,
   value,
   errors,
+  isDuplicate,
   hasErrors,
   disabled,
   field,
   forSingleList,
   onChange,
 }) => {
-  const [internalValue, setInternalValue] = useState(value ?? '');
+  const [internalRawValue, setInternalValue] = useState(value ?? '');
+  const internalValue = useMemo(
+    () => (isDuplicate ? value ?? '' : internalRawValue),
+    [internalRawValue, isDuplicate, value],
+  );
   const ref = useRef<HTMLTextAreaElement | null>(null);
 
   const handleChange = useCallback(

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import EditorControl from '@staticcms/core/components/editor/EditorControlPane/EditorControl';
+import EditorControl from '@staticcms/core/components/entry-editor/editor-control-pane/EditorControl';
 import useHasChildErrors from '@staticcms/core/lib/hooks/useHasChildErrors';
 import { compileStringTemplate } from '@staticcms/core/lib/widgets/stringTemplate';
 import ObjectFieldWrapper from './ObjectFieldWrapper';
@@ -15,12 +15,13 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
   submitted,
   forList,
   forSingleList,
-  isFieldDuplicate,
-  isFieldHidden,
+  isDuplicate,
+  isHidden,
   locale,
   path,
   i18n,
   errors,
+  disabled,
   value = {},
 }) => {
   const objectLabel = useMemo(() => {
@@ -45,9 +46,6 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
           parentPath = splitPath.join('.');
         }
 
-        const isDuplicate = isFieldDuplicate && isFieldDuplicate(field);
-        const isHidden = isFieldHidden && isFieldHidden(field);
-
         return (
           <EditorControl
             key={index}
@@ -57,10 +55,9 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
             fieldsErrors={fieldsErrors}
             submitted={submitted}
             parentPath={parentPath}
-            disabled={isDuplicate}
-            isHidden={isHidden}
-            isFieldDuplicate={isFieldDuplicate}
-            isFieldHidden={isFieldHidden}
+            disabled={disabled || isDuplicate}
+            isParentDuplicate={isDuplicate}
+            isParentHidden={isHidden}
             locale={locale}
             i18n={i18n}
             forList={forList}
@@ -74,10 +71,11 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
     path,
     value,
     forList,
-    isFieldDuplicate,
-    isFieldHidden,
     fieldsErrors,
     submitted,
+    disabled,
+    isDuplicate,
+    isHidden,
     locale,
     i18n,
     forSingleList,

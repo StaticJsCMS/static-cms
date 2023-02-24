@@ -1,7 +1,7 @@
 import partial from 'lodash/partial';
 import React, { useMemo } from 'react';
 
-import EditorControl from '@staticcms/core/components/editor/EditorControlPane/EditorControl';
+import EditorControl from '@staticcms/core/components/entry-editor/editor-control-pane/EditorControl';
 import useHasChildErrors from '@staticcms/core/lib/hooks/useHasChildErrors';
 import {
   addFileTemplateFields,
@@ -65,8 +65,9 @@ interface ListItemProps
     | 'field'
     | 'fieldsErrors'
     | 'submitted'
-    | 'isFieldDuplicate'
-    | 'isFieldHidden'
+    | 'disabled'
+    | 'isDuplicate'
+    | 'isHidden'
     | 'locale'
     | 'path'
     | 'value'
@@ -86,15 +87,16 @@ const ListItem: FC<ListItemProps> = ({
   field,
   fieldsErrors,
   submitted,
-  isFieldDuplicate,
-  isFieldHidden,
+  disabled,
+  isDuplicate,
+  isHidden,
   locale,
   path,
   valueType,
-  handleRemove,
   value,
   i18n,
   listeners,
+  handleRemove,
 }) => {
   const [summary, objectField] = useMemo((): [string, ListField | ObjectField] => {
     const childObjectField: ObjectField = {
@@ -163,9 +165,6 @@ const ListItem: FC<ListItemProps> = ({
     }
   }, [entry, field, index, value, valueType]);
 
-  const isDuplicate = isFieldDuplicate && isFieldDuplicate(field);
-  const isHidden = isFieldHidden && isFieldHidden(field);
-
   const hasChildErrors = useHasChildErrors(path, fieldsErrors, i18n);
 
   const finalValue = useMemo(() => {
@@ -200,10 +199,9 @@ const ListItem: FC<ListItemProps> = ({
           fieldsErrors={fieldsErrors}
           submitted={submitted}
           parentPath={path}
-          disabled={isDuplicate}
-          isHidden={isHidden}
-          isFieldDuplicate={isFieldDuplicate}
-          isFieldHidden={isFieldHidden}
+          disabled={disabled || isDuplicate}
+          isParentDuplicate={isDuplicate}
+          isParentHidden={isHidden}
           locale={locale}
           i18n={i18n}
           forList={true}

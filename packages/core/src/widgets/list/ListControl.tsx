@@ -23,7 +23,6 @@ import type {
   I18nSettings,
   ListField,
   ObjectValue,
-  UnknownField,
   ValueOrNestedValue,
   WidgetControlProps,
 } from '@staticcms/core/interface';
@@ -47,8 +46,9 @@ interface SortableItemProps {
   field: ListField;
   fieldsErrors: FieldsErrors;
   submitted: boolean;
-  isFieldDuplicate: ((field: Field<UnknownField>) => boolean) | undefined;
-  isFieldHidden: ((field: Field<UnknownField>) => boolean) | undefined;
+  disabled: boolean;
+  isDuplicate: boolean;
+  isHidden: boolean;
   locale: string | undefined;
   path: string;
   value: Record<string, ObjectValue>;
@@ -65,8 +65,9 @@ const SortableItem: FC<SortableItemProps> = ({
   field,
   fieldsErrors,
   submitted,
-  isFieldDuplicate,
-  isFieldHidden,
+  disabled,
+  isDuplicate,
+  isHidden,
   locale,
   path,
   i18n,
@@ -108,8 +109,9 @@ const SortableItem: FC<SortableItemProps> = ({
         field={field}
         fieldsErrors={fieldsErrors}
         submitted={submitted}
-        isFieldDuplicate={isFieldDuplicate}
-        isFieldHidden={isFieldHidden}
+        disabled={disabled}
+        isDuplicate={isDuplicate}
+        isHidden={isHidden}
         locale={locale}
         path={path}
         value={item}
@@ -178,16 +180,17 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
   field,
   fieldsErrors,
   submitted,
-  isFieldDuplicate,
-  isFieldHidden,
+  disabled,
+  isDuplicate,
+  isHidden,
   locale,
-  onChange,
   path,
-  t,
   value,
   i18n,
   errors,
   forSingleList,
+  onChange,
+  t,
 }) => {
   const internalValue = useMemo(() => value ?? [], [value]);
   const [keys, setKeys] = useState(Array.from({ length: internalValue.length }, () => uuid()));
@@ -336,8 +339,9 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
                       field={field}
                       fieldsErrors={fieldsErrors}
                       submitted={submitted}
-                      isFieldDuplicate={isFieldDuplicate}
-                      isFieldHidden={isFieldHidden}
+                      disabled={disabled}
+                      isDuplicate={isDuplicate}
+                      isHidden={isHidden}
                       locale={locale}
                       path={path}
                       value={item as Record<string, ObjectValue>}

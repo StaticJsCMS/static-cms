@@ -17,7 +17,9 @@ import {
 import { query as queryAction } from '@staticcms/core/actions/search';
 import useMemoCompare from '@staticcms/core/lib/hooks/useMemoCompare';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
+import { isFieldDuplicate, isFieldHidden } from '@staticcms/core/lib/i18n';
 import { resolveWidget } from '@staticcms/core/lib/registry';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { getFieldLabel } from '@staticcms/core/lib/util/field.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { validate } from '@staticcms/core/lib/util/validation.util';
@@ -46,10 +48,9 @@ const EditorControl = ({
   field,
   fieldsErrors,
   submitted,
-  disabled,
-  isFieldDuplicate,
-  isFieldHidden,
-  isHidden = false,
+  disabled = false,
+  isParentDuplicate = false,
+  isParentHidden = false,
   locale,
   mediaPaths,
   openMediaLibrary,
@@ -71,7 +72,6 @@ const EditorControl = ({
 
   const widgetName = field.widget;
   const widget = resolveWidget(widgetName) as Widget<ValueOrNestedValue>;
-  const fieldHint = field.hint;
 
   const path = useMemo(
     () =>
@@ -85,6 +85,15 @@ const EditorControl = ({
   const errors = useAppSelector(fieldErrorsSelector);
 
   const hasErrors = (submitted || dirty) && Boolean(errors.length);
+
+  const isDuplicate = useMemo(
+    () => isParentDuplicate || isFieldDuplicate(field, locale, i18n?.defaultLocale),
+    [field, i18n?.defaultLocale, isParentDuplicate, locale],
+  );
+  const isHidden = useMemo(
+    () => isParentHidden || isFieldHidden(field, locale, i18n?.defaultLocale),
+    [field, i18n?.defaultLocale, isParentHidden, locale],
+  );
 
   useEffect(() => {
     if ((!dirty && !submitted) || isHidden) {
@@ -141,52 +150,51 @@ const EditorControl = ({
     }
 
     return (
-      <div>
-        {/* TODO $isHidden={isHidden}> */}
-        <>
-          {createElement(widget.control, {
-            key: `${id}-${version}`,
-            collection,
-            config,
-            entry,
-            field: field as UnknownField,
-            fieldsErrors,
-            submitted,
-            disabled: disabled ?? false,
-            isFieldDuplicate,
-            isFieldHidden,
-            label: getFieldLabel(field, t),
-            locale,
-            mediaPaths,
-            onChange: handleChangeDraftField,
-            clearMediaControl,
-            openMediaLibrary,
-            removeInsertedMedia,
-            removeMediaControl,
-            path,
-            query,
-            t,
-            value: finalValue,
-            forList,
-            forSingleList,
-            i18n,
-            hasErrors,
-            errors,
-          })}
-        </>
+      <div className={classNames(isHidden && 'hidden')}>
+        {createElement(widget.control, {
+          key: `${id}-${version}`,
+          collection,
+          config,
+          entry,
+          field: field as UnknownField,
+          fieldsErrors,
+          submitted,
+          disabled: disabled || isDuplicate,
+          isDuplicate,
+          isHidden,
+          label: getFieldLabel(field, t),
+          locale,
+          mediaPaths,
+          onChange: handleChangeDraftField,
+          clearMediaControl,
+          openMediaLibrary,
+          removeInsertedMedia,
+          removeMediaControl,
+          path,
+          query,
+          t,
+          value: finalValue,
+          forList,
+          forSingleList,
+          i18n,
+          hasErrors,
+          errors,
+        })}
       </div>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     collection,
     config,
-    path,
-    errors,
+    field,
     isHidden,
     widget.control,
-    field,
+    id,
+    version,
+    fieldsErrors,
     submitted,
     disabled,
+    isDuplicate,
     t,
     locale,
     mediaPaths,
@@ -195,13 +203,14 @@ const EditorControl = ({
     openMediaLibrary,
     removeInsertedMedia,
     removeMediaControl,
+    path,
     query,
     finalValue,
     forList,
     forSingleList,
     i18n,
     hasErrors,
-    fieldHint,
+    errors,
   ]);
 };
 
@@ -210,9 +219,8 @@ interface EditorControlOwnProps {
   fieldsErrors: FieldsErrors;
   submitted: boolean;
   disabled?: boolean;
-  isFieldDuplicate?: (field: Field) => boolean;
-  isFieldHidden?: (field: Field) => boolean;
-  isHidden?: boolean;
+  isParentDuplicate?: boolean;
+  isParentHidden?: boolean;
   locale?: string;
   parentPath: string;
   value: ValueOrNestedValue;

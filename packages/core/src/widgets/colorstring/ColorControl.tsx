@@ -2,7 +2,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { ChromePicker } from 'react-color';
 
 import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
@@ -14,6 +14,7 @@ import type { ColorResult } from 'react-color';
 
 const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
   field,
+  isDuplicate,
   onChange,
   value,
   hasErrors,
@@ -26,7 +27,11 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
   }, [collapsed]);
 
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const [internalValue, setInternalValue] = useState(value ?? '');
+  const [internalRawValue, setInternalValue] = useState(value ?? '');
+  const internalValue = useMemo(
+    () => (isDuplicate ? value ?? '' : internalRawValue),
+    [internalRawValue, isDuplicate, value],
+  );
 
   // show/hide color picker
   const handleClick = useCallback(() => {

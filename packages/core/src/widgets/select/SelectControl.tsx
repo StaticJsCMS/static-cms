@@ -30,9 +30,14 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
   hasErrors,
   disabled,
   forSingleList,
+  isDuplicate,
   onChange,
 }) => {
-  const [internalValue, setInternalValue] = useState(value);
+  const [internalRawValue, setInternalValue] = useState(value);
+  const internalValue = useMemo(
+    () => (isDuplicate ? value : internalRawValue),
+    [internalRawValue, isDuplicate, value],
+  );
   const ref = useRef<HTMLButtonElement | null>(null);
 
   const fieldOptions: (string | number | SelectWidgetOptionObject)[] = useMemo(

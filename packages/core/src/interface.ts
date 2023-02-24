@@ -9,7 +9,7 @@ import type {
 } from 'react';
 import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
 import type { MediaFile as BackendMediaFile } from './backend';
-import type { EditorControlProps } from './components/editor/EditorControlPane/EditorControl';
+import type { EditorControlProps } from './components/entry-editor/editor-control-pane/EditorControl';
 import type {
   SORT_DIRECTION_ASCENDING,
   SORT_DIRECTION_DESCENDING,
@@ -254,8 +254,8 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = 
   forList: boolean;
   forSingleList: boolean;
   disabled: boolean;
-  isFieldDuplicate: EditorControlProps['isFieldDuplicate'];
-  isFieldHidden: EditorControlProps['isFieldHidden'];
+  isDuplicate: boolean;
+  isHidden: boolean;
   label: string;
   locale: string | undefined;
   mediaPaths: Record<string, string | string[]>;

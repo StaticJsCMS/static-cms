@@ -109,6 +109,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       entry,
       errors,
       forSingleList,
+      isDuplicate,
       onChange,
       openMediaLibrary,
       clearMediaControl,
@@ -117,7 +118,11 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       t,
     }) => {
       const controlID = useUUID();
-      const [internalValue, setInternalValue] = useState(value ?? '');
+      const [internalRawValue, setInternalValue] = useState(value ?? '');
+      const internalValue = useMemo(
+        () => (isDuplicate ? value ?? '' : internalRawValue),
+        [internalRawValue, isDuplicate, value],
+      );
 
       const uploadButtonRef = useRef<HTMLButtonElement | null>(null);
 

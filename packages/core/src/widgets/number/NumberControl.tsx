@@ -13,9 +13,14 @@ const NumberControl: FC<WidgetControlProps<string | number, NumberField>> = ({
   errors,
   disabled,
   forSingleList,
+  isDuplicate,
   onChange,
 }) => {
-  const [internalValue, setInternalValue] = useState(value ?? '');
+  const [internalRawValue, setInternalValue] = useState(value ?? '');
+  const internalValue = useMemo(
+    () => (isDuplicate ? value ?? '' : internalRawValue),
+    [internalRawValue, isDuplicate, value],
+  );
   const ref = useRef<HTMLInputElement | null>(null);
 
   const handleChange = useCallback(

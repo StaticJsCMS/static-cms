@@ -53,9 +53,10 @@ The react component that renders the control. It receives the following props:
 | fieldsErrors        | object                   | Key/value object of field names mapping to validation errors                                              |
 | disabled            | boolean                  | Specifies if the widget control should be disabled                                                        |
 | submitted           | boolean                  | Specifies if a save attempt has been made in the editor session                                           |
-| forList             | boolean                  | Specifices if the widget is within a `list` widget                                                        |
-| isFieldDuplicate    | function                 | Function that given a field configuration, returns if that field is a duplicate                           |
-| isFieldHidden       | function                 | Function that given a field configuration, returns if that field is hidden                                |
+| forList             | boolean                  | Specifies if the widget is within a `list` widget                                                         |
+| forSingleList       | boolean                  | Specifies if the widget is within a singleton `list` widget (string array, number array, etc)             |
+| isDuplicate         | function                 | Specifies if that field is an i18n duplicate                                                              |
+| isHidden            | function                 | Specifies if that field should be hidden                                                                  |
 | locale              | string<br />\| undefined | The current locale of the editor                                                                          |
 | mediaPaths          | object                   | Key/value object of control IDs (passed to the media library) mapping to media paths                      |
 | clearMediaControl   | function                 | Clears a control ID's value from the internal store                                                       |
@@ -104,6 +105,12 @@ The react component that renders the preview. It receives the following props:
 | collection | object                | The collection configuration for the current widget. See [Collections](/docs/collection-overview)         |
 | config     | object                | The current Static CMS config. See [configuration options](/docs/configuration-options)                   |
 | entry      | object                | Object with a `data` field that contains the current value of all widgets in the editor                   |
+
+# <<<<<<< HEAD
+
+| getAsset | Async function | **Deprecated** Function that given a url returns (as a promise) a loaded asset |
+
+> > > > > > > main
 
 ### Options
 

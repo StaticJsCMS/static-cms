@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import Field from '@staticcms/core/components/common/field/Field';
 import Switch from '@staticcms/core/components/common/switch/Switch';
@@ -13,9 +13,14 @@ const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
   disabled,
   field,
   forSingleList,
+  isDuplicate,
   onChange,
 }) => {
-  const [internalValue, setInternalValue] = useState(value ?? false);
+  const [internalRawValue, setInternalValue] = useState(value ?? false);
+  const internalValue = useMemo(
+    () => (isDuplicate ? value ?? false : internalRawValue),
+    [internalRawValue, isDuplicate, value],
+  );
   const ref = useRef<HTMLInputElement | null>(null);
 
   const handleChange = useCallback(
