@@ -29,7 +29,7 @@
     "react-dom": "18.2.0",
     "react-schemaorg": "2.0.0",
     "remark-gfm": "3.0.1",
-    "schema-dts": "1.1.0",
+    "schema-dts": "1.1.2",
     "yaml": "2.2.1"
   },
   "devDependencies": {
