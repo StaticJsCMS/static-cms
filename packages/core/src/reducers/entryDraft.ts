@@ -163,7 +163,6 @@ function entryDraftReducer(
       };
 
       if (i18n) {
-        console.log('i18n!')
         newState = duplicateI18nFields(newState, field, i18n.locales, i18n.defaultLocale, path);
       }
 
