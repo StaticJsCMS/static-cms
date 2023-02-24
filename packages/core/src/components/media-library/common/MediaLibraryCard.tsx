@@ -125,7 +125,7 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
             title={t('mediaLibrary.mediaLibraryModal.download')}
             className="text-white"
           >
-            <ArrowDownTrayIcon className="w-6 h-6" />
+            <ArrowDownTrayIcon className="w-5 h-5" />
           </Button>
           <Button
             variant="text"
@@ -134,7 +134,7 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
             title={t('mediaLibrary.mediaLibraryModal.deleteSelected')}
             className="text-red-400"
           >
-            <TrashIcon className="w-6 h-6" />
+            <TrashIcon className="w-5 h-5" />
           </Button>
         </div>
       </div>

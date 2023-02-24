@@ -69,7 +69,7 @@ const CopyToClipBoardButton: FC<TranslatedProps<CopyToClipBoardButtonProps>> = (
 
   return (
     <Button variant="text" title={getTitle()} onClick={handleCopy} className="text-white">
-      <ClipboardIcon className="w-6 h-6" />
+      <ClipboardIcon className="w-5 h-5" />
     </Button>
   );
 };
