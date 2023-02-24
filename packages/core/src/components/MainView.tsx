@@ -23,6 +23,7 @@ interface MainViewProps {
   navbarActions?: ReactNode;
   showLeftNav?: boolean;
   noMargin?: boolean;
+  noScroll?: boolean;
   children: ReactNode;
 }
 
@@ -32,6 +33,7 @@ const MainView = ({
   showQuickCreate = false,
   showLeftNav = false,
   noMargin = false,
+  noScroll = false,
   navbarActions,
 }: MainViewProps) => {
   return (
@@ -47,7 +49,8 @@ const MainView = ({
           className={classNames(
             showLeftNav ? 'w-main left-64' : 'w-full',
             !noMargin && 'px-5 py-4',
-            'overflow-y-auto h-main relative',
+            noScroll ? 'overflow-hidden' : 'overflow-y-auto',
+            'h-main relative',
           )}
         >
           {children}

@@ -9,7 +9,13 @@ import type { TranslateProps } from 'react-polyglot';
 
 const Media: FC<TranslateProps> = ({ t }) => {
   return (
-    <MainView breadcrumbs={[{ name: t('app.header.media') }]} showQuickCreate showLeftNav noMargin>
+    <MainView
+      breadcrumbs={[{ name: t('app.header.media') }]}
+      showQuickCreate
+      showLeftNav
+      noMargin
+      noScroll
+    >
       <MediaLibrary />
     </MainView>
   );
