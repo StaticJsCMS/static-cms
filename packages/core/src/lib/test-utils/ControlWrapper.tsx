@@ -38,7 +38,9 @@ const createControlWrapper = <V = unknown, F extends BaseField = UnknownField>({
       return Promise.resolve(null) as any;
     },
     isDisabled = false,
+    isDuplicate = false,
     isFieldDuplicate = () => false,
+    isHidden = false,
     isFieldHidden = () => false,
     label = defaultLabel,
     locale = 'en',
@@ -75,7 +77,9 @@ const createControlWrapper = <V = unknown, F extends BaseField = UnknownField>({
         forList={forList}
         getAsset={getAsset}
         isDisabled={isDisabled}
+        isDuplicate={isDuplicate}
         isFieldDuplicate={isFieldDuplicate}
+        isHidden={isHidden}
         isFieldHidden={isFieldHidden}
         label={label}
         locale={locale}

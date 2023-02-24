@@ -39,9 +39,14 @@ export interface WithMarkdownControlProps {
 
 const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
   const MarkdownControl: FC<WidgetControlProps<string, MarkdownField>> = controlProps => {
-    const { label, value, onChange, hasErrors, collection, entry, field } = controlProps;
+    const { label, value, isDuplicate, onChange, hasErrors, collection, entry, field } =
+      controlProps;
 
-    const [internalValue, setInternalValue] = useState(value ?? '');
+    const [internalRawValue, setInternalValue] = useState(value ?? '');
+    const internalValue = useMemo(
+      () => (isDuplicate ? value ?? '' : internalRawValue),
+      [internalRawValue, isDuplicate, value],
+    );
     const [hasFocus, setHasFocus] = useState(false);
     const debouncedFocus = useDebounce(hasFocus, 150);
 
