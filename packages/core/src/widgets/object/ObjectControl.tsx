@@ -53,7 +53,9 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
   fieldsErrors,
   submitted,
   forList,
+  isDuplicate,
   isFieldDuplicate,
+  isHidden,
   isFieldHidden,
   locale,
   path,
@@ -96,9 +98,6 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
           parentPath = splitPath.join('.');
         }
 
-        const isDuplicate = isFieldDuplicate && isFieldDuplicate(field);
-        const isHidden = isFieldHidden && isFieldHidden(field);
-
         return (
           <EditorControl
             key={index}
@@ -109,8 +108,9 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
             submitted={submitted}
             parentPath={parentPath}
             isDisabled={isDuplicate}
-            isHidden={isHidden}
+            isParentDuplicate={isDuplicate}
             isFieldDuplicate={isFieldDuplicate}
+            isParentHidden={isHidden}
             isFieldHidden={isFieldHidden}
             locale={locale}
             i18n={i18n}
@@ -122,8 +122,10 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
     fieldsErrors,
     forList,
     i18n,
+    isDuplicate,
     isFieldDuplicate,
     isFieldHidden,
+    isHidden,
     locale,
     multiFields,
     path,

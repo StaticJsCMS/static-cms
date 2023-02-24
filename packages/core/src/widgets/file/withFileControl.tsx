@@ -213,6 +213,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       collection,
       field,
       entry,
+      isDuplicate,
       onChange,
       openMediaLibrary,
       clearMediaControl,
@@ -222,7 +223,11 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
     }) => {
       const controlID = useUUID();
       const [collapsed, setCollapsed] = useState(false);
-      const [internalValue, setInternalValue] = useState(value ?? '');
+      const [internalRawValue, setInternalValue] = useState(value ?? '');
+      const internalValue = useMemo(
+        () => (isDuplicate ? value ?? '' : internalRawValue),
+        [internalRawValue, isDuplicate, value],
+      );
 
       const handleOnChange = useCallback(
         (newValue: string | string[]) => {
