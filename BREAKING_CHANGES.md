@@ -1,7 +1,7 @@
 BREAKING_CHANGES
 
 - Card preview only is used for card view (viewStyle prop removed).
-- Deprecated stuff removed (getAsset, createReactClass)
+- Deprecated stuff removed (getAsset, createReactClass, isFieldDuplicate, isFieldHidden)
 - widget prop `isDisabled` renamed to `disabled`
 - useMediaInsert now requires collection to be passed
 

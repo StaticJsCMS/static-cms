@@ -7,8 +7,8 @@ import {
   selectEntryCollectionTitle,
 } from '@staticcms/core/lib/util/collection.util';
 import MainView from '../MainView';
-import EditorControlPane from './EditorControlPane/EditorControlPane';
-import EditorPreviewPane from './EditorPreviewPane/EditorPreviewPane';
+import EditorControlPane from './editor-control-pane/EditorControlPane';
+import EditorPreviewPane from './editor-preview-pane/EditorPreviewPane';
 import EditorToolbar from './EditorToolbar';
 
 import type {

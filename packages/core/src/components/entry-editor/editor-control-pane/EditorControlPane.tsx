@@ -1,16 +1,10 @@
 import React, { useMemo } from 'react';
 
-import {
-  getI18nInfo,
-  hasI18n,
-  isFieldDuplicate,
-  isFieldHidden,
-  isFieldTranslatable,
-} from '@staticcms/core/lib/i18n';
+import { getI18nInfo, hasI18n, isFieldTranslatable } from '@staticcms/core/lib/i18n';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { getFieldValue } from '@staticcms/core/lib/util/field.util';
 import EditorControl from './EditorControl';
 import LocaleDropdown from './LocaleDropdown';
-import classNames from '@staticcms/core/lib/util/classNames.util';
 
 import type {
   Collection,
@@ -83,8 +77,6 @@ const EditorControlPane = ({
       ) : null}
       {fields.map(field => {
         const isTranslatable = isFieldTranslatable(field, locale, i18n?.defaultLocale);
-        const isDuplicate = isFieldDuplicate(field, locale, i18n?.defaultLocale);
-        const isHidden = isFieldHidden(field, locale, i18n?.defaultLocale);
         const key = i18n ? `field-${locale}_${field.name}` : `field-${field.name}`;
 
         return (
@@ -94,10 +86,6 @@ const EditorControlPane = ({
             value={getFieldValue(field, entry, isTranslatable, locale)}
             fieldsErrors={fieldsErrors}
             submitted={submitted}
-            disabled={isDuplicate}
-            isHidden={isHidden}
-            isFieldDuplicate={field => isFieldDuplicate(field, locale, i18n?.defaultLocale)}
-            isFieldHidden={field => isFieldHidden(field, locale, i18n?.defaultLocale)}
             locale={locale}
             parentPath=""
             i18n={i18n}

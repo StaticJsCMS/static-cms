@@ -248,7 +248,7 @@ function mapStateToProps(state: RootState, ownProps: TranslatedProps<CollectionV
   const sortableFields = selectSortableFields(collection, t);
   const viewFilters = selectViewFilters(collection);
   const viewGroups = selectViewGroups(collection);
-  const filter = selectEntriesFilter(state, collection.name);
+  const filter = selectEntriesFilter(collection.name)(state);
   const group = selectEntriesGroup(state, collection.name);
   const viewStyle = selectViewStyle(state);
 
