@@ -12774,10 +12774,10 @@ minimatch@3.0.5:
   dependencies:
     brace-expansion "^1.1.7"
 
-minimatch@7.1.1:
-  version "7.1.1"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-7.1.1.tgz#aeb8f7b0fef16531de96e56944b744860976d34a"
-  integrity sha512-jjK46CRPxSRHTwHYtg+7LJ4pmfg01JuCjYr24+PUi1zHtZ8rOABPA0cMHKBF4QNeKn1xYy4hiBOm57p56ClCjw==
+minimatch@7.1.2:
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-7.1.2.tgz#806a43e4366dbfebdcd63a9c59ce9987343a86f8"
+  integrity sha512-pPjQK2t2CsPTwXy+uNJxAajN2qMK1T0np9aHx2d5DTzpW/75J2fpHDm1p16OQDhu4AI8NfCH1FdtgyZGWMxy3g==
   dependencies:
     brace-expansion "^2.0.1"
 
@@ -15935,10 +15935,10 @@ scheduler@0.23.0, scheduler@^0.23.0:
   dependencies:
     loose-envify "^1.1.0"
 
-schema-dts@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/schema-dts/-/schema-dts-1.1.0.tgz#33227971076ef1daa33e56a3127a8aae030e81c9"
-  integrity sha512-vdmbs/5ycj4zyKpZIDqTcy+IZi4s7c38RVAYuDmRi7zgxUT8wRWPMLzg0jr7FjdVunYu9yZ00F3+XcZTTFcTOQ==
+schema-dts@1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/schema-dts/-/schema-dts-1.1.2.tgz#82ccf71b5dcb80065a1cc5941888507a4ce1e44b"
+  integrity sha512-MpNwH0dZJHinVxk9bT8XUdjKTxMYrA5bLtrrGmFA6PTLwlOKnhi67XoRd6/ty+Djt6ZC0slR57qFhZDNMI6DhQ==
 
 schema-utils@2.7.0:
   version "2.7.0"
