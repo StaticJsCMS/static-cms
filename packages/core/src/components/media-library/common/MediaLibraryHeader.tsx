@@ -3,18 +3,23 @@ import React from 'react';
 import { translate } from 'react-polyglot';
 
 import ViewStyleControl from '../../common/view-style/ViewStyleControl';
+import FileUploadButton from './FileUploadButton';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { TranslatedProps } from '@staticcms/core/interface';
-import type { FC } from 'react';
+import type { ChangeEvent, FC } from 'react';
 
 interface MediaHeaderProps {
+  forImage: boolean;
   viewStyle: ViewStyle;
+  onUpload: (event: ChangeEvent<HTMLInputElement> | DragEvent) => void;
   onChangeViewStyle: (viewStyle: ViewStyle) => void;
 }
 
 const MediaHeader: FC<TranslatedProps<MediaHeaderProps>> = ({
+  forImage,
   viewStyle,
+  onUpload,
   onChangeViewStyle,
   t,
 }) => {
@@ -30,9 +35,10 @@ const MediaHeader: FC<TranslatedProps<MediaHeaderProps>> = ({
       </div>
       <div className="flex gap-2 items-center relative z-10">
         <ViewStyleControl viewStyle={viewStyle} onChangeViewStyle={onChangeViewStyle} />
+        <FileUploadButton imagesOnly={forImage} onChange={onUpload} />
       </div>
     </div>
   );
 };
 
-export default translate()(MediaHeader);
+export default translate()(MediaHeader) as FC<MediaHeaderProps>;

@@ -55,7 +55,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
   files = [],
   dynamicSearch,
   dynamicSearchActive,
-  forImage,
+  forImage = false,
   isLoading,
   isPersisting,
   isDeleting,
@@ -250,51 +250,26 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
   /**
    * Removes the selected file from the backend.
    */
-  const handleDelete = useCallback(async () => {
-    if (
-      !(await confirm({
-        title: 'mediaLibrary.mediaLibrary.onDeleteTitle',
-        body: 'mediaLibrary.mediaLibrary.onDeleteBody',
-        color: 'error',
-      }))
-    ) {
-      return;
-    }
-    const file = files.find(file => selectedFile?.key === file.key);
-    if (file) {
-      deleteMedia(file).then(() => {
-        setSelectedFile(null);
-      });
-    }
-  }, [deleteMedia, files, selectedFile?.key]);
-
-  /**
-   * Downloads the selected file.
-   */
-  const handleDownload = useCallback(() => {
-    if (!selectedFile) {
-      return;
-    }
-
-    const url = displayURLs[selectedFile.id]?.url ?? selectedFile.url;
-    if (!url) {
-      return;
-    }
-
-    const filename = selectedFile.name;
-
-    const element = document.createElement('a');
-    element.setAttribute('href', url);
-    element.setAttribute('download', filename);
-
-    element.style.display = 'none';
-    document.body.appendChild(element);
-
-    element.click();
-
-    document.body.removeChild(element);
-    setSelectedFile(null);
-  }, [displayURLs, selectedFile]);
+  const handleDelete = useCallback(
+    async (fileToDelete: MediaFile) => {
+      if (
+        !(await confirm({
+          title: 'mediaLibrary.mediaLibrary.onDeleteTitle',
+          body: 'mediaLibrary.mediaLibrary.onDeleteBody',
+          color: 'error',
+        }))
+      ) {
+        return;
+      }
+      const file = files.find(file => fileToDelete?.key === file.key);
+      if (file) {
+        deleteMedia(file).then(() => {
+          setSelectedFile(null);
+        });
+      }
+    },
+    [deleteMedia, files],
+  );
 
   const handleLoadMore = useCallback(() => {
     loadMedia({ query: dynamicSearchQuery, page: (page ?? 0) + 1 });
@@ -361,7 +336,12 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
 
   return (
     <div className="flex flex-col w-full h-full">
-      <MediaLibraryHeader viewStyle={viewStyle} onChangeViewStyle={handleViewStyleChange} />
+      <MediaLibraryHeader
+        forImage={forImage}
+        viewStyle={viewStyle}
+        onUpload={handlePersist}
+        onChangeViewStyle={handleViewStyleChange}
+      />
       {!shouldShowEmptyMessage ? null : <EmptyMessage content={emptyMessage} />}
       <MediaLibraryCardGrid
         scrollContainerRef={scrollContainerRef}
@@ -377,6 +357,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
         displayURLs={displayURLs}
         collection={collection}
         field={field}
+        onDelete={handleDelete}
       />
     </div>
   );

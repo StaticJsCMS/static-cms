@@ -47,11 +47,13 @@
       border
       border-gray-200
       hover:bg-slate-100
+      hover:border-blue-400
       hover:text-blue-700
       dark:bg-slate-800
-      dark:text-blue-400
-      dark:border-blue-500
+      dark:text-slate-400
+      dark:border-slate-500
       dark:hover:text-blue-500
+      dark:hover:border-blue-500
       dark:hover:bg-blue-700/20;
   }
 

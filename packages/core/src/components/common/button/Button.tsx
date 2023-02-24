@@ -14,11 +14,12 @@ export interface BaseBaseProps {
   children: ReactNode | ReactNode[];
   startIcon?: FC<{ className?: string }>;
   endIcon?: FC<{ className?: string }>;
+  title?: string;
   'data-testid'?: string;
 }
 
 export interface ButtonProps extends BaseBaseProps {
-  onClick: MouseEventHandler;
+  onClick?: MouseEventHandler;
   disabled?: boolean;
   buttonRef?: Ref<HTMLButtonElement>;
   'aria-label'?: string;
@@ -46,6 +47,7 @@ const Button: FC<ButtonLinkProps> = ({
   className,
   startIcon: StartIcon,
   endIcon: EndIcon,
+  title,
   'data-testid': dataTestId,
   ...otherProps
 }) => {
@@ -72,6 +74,7 @@ const Button: FC<ButtonLinkProps> = ({
       <Link
         ref={otherProps.linkRef}
         to={otherProps.to}
+        title={title}
         data-testid={dataTestId}
         className={buttonClassNames}
       >
@@ -85,6 +88,7 @@ const Button: FC<ButtonLinkProps> = ({
       <a
         ref={otherProps.linkRef}
         href={otherProps.href}
+        title={title}
         data-testid={dataTestId}
         className={buttonClassNames}
         target="_blank"
@@ -98,6 +102,7 @@ const Button: FC<ButtonLinkProps> = ({
   return (
     <button
       ref={otherProps.buttonRef}
+      title={title}
       data-testid={dataTestId}
       className={buttonClassNames}
       disabled={otherProps.disabled}

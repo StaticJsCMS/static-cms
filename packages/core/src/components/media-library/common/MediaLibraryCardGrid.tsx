@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { Waypoint } from 'react-waypoint';
 import { VariableSizeGrid as Grid } from 'react-window';
@@ -8,7 +8,7 @@ import {
   MEDIA_CARD_HEIGHT,
   MEDIA_CARD_MARGIN,
   MEDIA_CARD_WIDTH,
-  MEDIA_LIBRARY_PADDING_LEFT,
+  MEDIA_LIBRARY_PADDING,
 } from '@staticcms/core/constants/mediaLibrary';
 
 import type { Collection, Field, MediaFile } from '@staticcms/core/interface';
@@ -44,6 +44,7 @@ export interface MediaLibraryCardGridProps {
   displayURLs: MediaLibraryState['displayURLs'];
   collection?: Collection;
   field?: Field;
+  onDelete: (file: MediaFile) => void;
 }
 
 export type CardGridItemData = MediaLibraryCardGridProps & {
@@ -63,9 +64,9 @@ const CardWrapper = ({
     displayURLs,
     loadDisplayURL,
     columnCount,
-    gutter,
     collection,
     field,
+    onDelete,
   },
 }: GridChildComponentProps<CardGridItemData>) => {
   const index = rowIndex * columnCount + columnIndex;
@@ -80,11 +81,15 @@ const CardWrapper = ({
         ...style,
         left:
           parseFloat(
-            `${typeof style.left === 'number' ? style.left ?? gutter * columnIndex : style.left}`,
-          ) + MEDIA_LIBRARY_PADDING_LEFT,
+            `${
+              typeof style.left === 'number'
+                ? style.left ?? MEDIA_CARD_MARGIN * columnIndex
+                : style.left
+            }`,
+          ) + MEDIA_LIBRARY_PADDING,
         top: style.top,
-        width: typeof style.width === 'number' ? style.width - gutter : style.width,
-        height: typeof style.height === 'number' ? style.height - gutter : style.height,
+        width: style.width,
+        height: style.height,
       }}
     >
       <MediaLibraryCard
@@ -94,15 +99,13 @@ const CardWrapper = ({
         onClick={() => onAssetClick(file)}
         isDraft={file.draft}
         draftText={cardDraftText}
-        width={MEDIA_CARD_WIDTH}
-        height={MEDIA_CARD_HEIGHT}
-        margin={'0px'}
         displayURL={displayURLs[file.id] ?? (file.url ? { url: file.url } : {})}
         loadDisplayURL={() => loadDisplayURL(file)}
         type={file.type}
         isViewableImage={file.isViewableImage ?? false}
         collection={collection}
         field={field}
+        onDelete={() => onDelete(file)}
       />
     </div>
   );
@@ -111,36 +114,40 @@ const CardWrapper = ({
 const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
   const { mediaItems, scrollContainerRef } = props;
 
+  const [version, setVersion] = useState(0);
+
+  const handleResize = useCallback(() => {
+    setVersion(oldVersion => oldVersion + 1);
+  }, []);
+
   return (
     <div className="relative w-full h-full">
-      <AutoSizer>
+      <AutoSizer onResize={handleResize}>
         {({ height, width }) => {
-          const cardWidth = parseInt(MEDIA_CARD_WIDTH, 10);
-          const cardHeight = parseInt(MEDIA_CARD_HEIGHT, 10);
-          const gutter = parseInt(MEDIA_CARD_MARGIN, 10);
-          const columnWidth = cardWidth;
-          const columnWidthWithGutter = columnWidth + gutter;
-          const rowHeight = cardHeight;
-          const rowHeightWithGutter = rowHeight + gutter;
-          const columnCount = Math.floor(width / columnWidth);
+          const columnWidthWithGutter = MEDIA_CARD_WIDTH + MEDIA_CARD_MARGIN;
+          const rowHeightWithGutter = MEDIA_CARD_HEIGHT + MEDIA_CARD_MARGIN;
+          const columnCount = Math.floor(
+            (width - MEDIA_LIBRARY_PADDING * 2) / columnWidthWithGutter,
+          );
           const rowCount = Math.ceil(mediaItems.length / columnCount);
 
           return (
-            <div ref={scrollContainerRef}>
+            <div key={version} ref={scrollContainerRef}>
               {/* TODO $width={width} $height={height} */}
               <Grid
                 columnCount={columnCount}
                 columnWidth={index =>
-                  index + 1 === rowCount ? columnWidth : columnWidthWithGutter
+                  index + 1 === columnCount ? MEDIA_CARD_WIDTH : columnWidthWithGutter
                 }
                 rowCount={rowCount}
-                rowHeight={index => (index + 1 === rowCount ? rowHeight : rowHeightWithGutter)}
+                rowHeight={index =>
+                  index + 1 === rowCount ? MEDIA_CARD_HEIGHT : rowHeightWithGutter
+                }
                 width={width}
                 height={height}
                 itemData={
                   {
                     ...props,
-                    gutter,
                     columnCount,
                   } as CardGridItemData
                 }

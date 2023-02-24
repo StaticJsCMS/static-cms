@@ -1,7 +1,7 @@
 import React from 'react';
 
-import FileUploadButton from '../UI/FileUploadButton';
-import { CopyToClipBoardButton } from './MediaLibraryButtons';
+import FileUploadButton from './common/FileUploadButton';
+import CopyToClipBoardButton from './common/CopyToClipBoardButton';
 import MediaLibrarySearch from './MediaLibrarySearch';
 import Button from '../common/button/Button';
 

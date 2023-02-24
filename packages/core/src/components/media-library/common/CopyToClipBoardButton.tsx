@@ -1,25 +1,26 @@
-import Button from '@mui/material/Button';
+import ClipboardIcon from '@heroicons/react/20/solid/ClipboardIcon';
 import copyToClipboard from 'copy-text-to-clipboard';
 import React, { useCallback, useEffect, useState } from 'react';
+import { translate } from 'react-polyglot';
 
 import { isAbsolutePath } from '@staticcms/core/lib/util';
+import Button from '../../common/button/Button';
 
 import type { TranslatedProps } from '@staticcms/core/interface';
+import type { FC } from 'react';
 
 export interface CopyToClipBoardButtonProps {
-  disabled: boolean;
   draft?: boolean;
   path?: string;
   name?: string;
 }
 
-export const CopyToClipBoardButton = ({
-  disabled,
+const CopyToClipBoardButton: FC<TranslatedProps<CopyToClipBoardButtonProps>> = ({
   draft,
   path,
   name,
   t,
-}: TranslatedProps<CopyToClipBoardButtonProps>) => {
+}) => {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -67,8 +68,10 @@ export const CopyToClipBoardButton = ({
   }, [copied, draft, path, t]);
 
   return (
-    <Button color="inherit" variant="contained" onClick={handleCopy} disabled={disabled}>
-      {getTitle()}
+    <Button variant="text" title={getTitle()} onClick={handleCopy} className="text-white">
+      <ClipboardIcon className="w-6 h-6" />
     </Button>
   );
 };
+
+export default translate()(CopyToClipBoardButton) as FC<CopyToClipBoardButtonProps>;

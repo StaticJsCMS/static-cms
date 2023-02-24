@@ -42,3 +42,11 @@ export function selectMediaDisplayURL(state: RootState, id: string) {
 export const selectMediaPath = (controlID: string) => (state: RootState) => {
   return state.mediaLibrary.controlMedia[controlID];
 };
+
+export const selectPersisting = (state: RootState) => {
+  return state.mediaLibrary.isPersisting;
+};
+
+export const selectDeleting = (state: RootState) => {
+  return state.mediaLibrary.isDeleting;
+};
