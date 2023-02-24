@@ -235,7 +235,7 @@ export interface DisplayURLState {
 export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
 /**
- * @deprecated Should use `useMediaAsset` React hook instead
+ * @deprecated Use `useMediaAsset` React hook instead. Will be removed in v2.0.0
  */
 export type GetAssetFunction<F extends BaseField = UnknownField> = (
   path: string,
@@ -251,11 +251,19 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField> {
   submitted: boolean;
   forList: boolean;
   /**
-   * @deprecated Should use `useMediaAsset` React hook instead
+   * @deprecated Use `useMediaAsset` React hook instead. Will be removed in v2.0.0
    */
   getAsset: GetAssetFunction<F>;
   isDisabled: boolean;
+  isDuplicate: boolean;
+  /**
+   * @deprecated Use `isDuplicate` instead. Will be removed in v2.0.0
+   */
   isFieldDuplicate: EditorControlProps['isFieldDuplicate'];
+  isHidden: boolean;
+  /**
+   * @deprecated Use `isHidden` instead. Will be removed in v2.0.0
+   */
   isFieldHidden: EditorControlProps['isFieldHidden'];
   label: string;
   locale: string | undefined;

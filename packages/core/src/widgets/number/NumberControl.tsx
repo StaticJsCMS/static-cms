@@ -1,5 +1,5 @@
 import TextField from '@mui/material/TextField';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import type { FieldError, NumberField, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC } from 'react';
@@ -62,10 +62,15 @@ const NumberControl: FC<WidgetControlProps<string | number, NumberField>> = ({
   label,
   field,
   value,
+  isDuplicate,
   onChange,
   hasErrors,
 }) => {
-  const [internalValue, setInternalValue] = useState(value ?? '');
+  const [internalRawValue, setInternalValue] = useState(value ?? '');
+  const internalValue = useMemo(
+    () => (isDuplicate ? value ?? '' : internalRawValue),
+    [internalRawValue, isDuplicate, value],
+  );
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

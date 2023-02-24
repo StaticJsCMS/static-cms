@@ -31,9 +31,14 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
   field,
   value,
   hasErrors,
+  isDuplicate,
   onChange,
 }) => {
-  const [internalValue, setInternalValue] = useState(value);
+  const [internalRawValue, setInternalValue] = useState(value);
+  const internalValue = useMemo(
+    () => (isDuplicate ? value : internalRawValue),
+    [internalRawValue, isDuplicate, value],
+  );
 
   const fieldOptions: (string | number | Option)[] = useMemo(() => field.options, [field.options]);
   const isMultiple = useMemo(() => field.multiple ?? false, [field.multiple]);

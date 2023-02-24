@@ -55,10 +55,12 @@ The react component that renders the control. It receives the following props:
 | fieldsErrors        | object                   | Key/value object of field names mapping to validation errors                                              |
 | isDisabled          | boolean                  | Specifies if the widget control should be disabled                                                        |
 | submitted           | boolean                  | Specifies if a save attempt has been made in the editor session                                           |
-| forList             | boolean                  | Specifices if the widget is within a `list` widget                                                        |
-| isFieldDuplicate    | function                 | Function that given a field configuration, returns if that field is a duplicate                           |
-| isFieldHidden       | function                 | Function that given a field configuration, returns if that field is hidden                                |
-| getAsset            | Async function           | __Deprecated__ Function that given a url returns (as a promise) a loaded asset                                           |
+| forList             | boolean                  | Specifies if the widget is within a `list` widget                                                         |
+| isDuplicate         | function                 | Specifies if that field is an i18n duplicate                                                              |
+| isFieldDuplicate    | function                 | **Deprecated** Function that given a field configuration, returns if that field is a duplicate            |
+| isHidden            | function                 | Specifies if that field should be hidden                                                                  |
+| isFieldHidden       | function                 | **Deprecated** Function that given a field configuration, returns if that field is hidden                 |
+| getAsset            | Async function           | **Deprecated** Function that given a url returns (as a promise) a loaded asset                            |
 | locale              | string<br />\| undefined | The current locale of the editor                                                                          |
 | mediaPaths          | object                   | Key/value object of control IDs (passed to the media library) mapping to media paths                      |
 | clearMediaControl   | function                 | Clears a control ID's value from the internal store                                                       |
@@ -107,7 +109,7 @@ The react component that renders the preview. It receives the following props:
 | collection | object                | The collection configuration for the current widget. See [Collections](/docs/collection-overview)         |
 | config     | object                | The current Static CMS config. See [configuration options](/docs/configuration-options)                   |
 | entry      | object                | Object with a `data` field that contains the current value of all widgets in the editor                   |
-| getAsset   | Async function        | __Deprecated__ Function that given a url returns (as a promise) a loaded asset                                           |
+| getAsset   | Async function        | **Deprecated** Function that given a url returns (as a promise) a loaded asset                            |
 
 ### Options
 
@@ -167,9 +169,12 @@ import CMS from '@staticcms/core';
 const CategoriesControl = ({ label, value, field, onChange }) => {
   const separator = useMemo(() => field.separator ?? ', ', [field.separator]);
 
-  const handleChange = useCallback((e) => {
-    onChange(e.target.value.split(separator).map(e => e.trim()));
-  }, [separator, onChange]);
+  const handleChange = useCallback(
+    e => {
+      onChange(e.target.value.split(separator).map(e => e.trim()));
+    },
+    [separator, onChange],
+  );
 
   return (
     <div>
@@ -178,7 +183,8 @@ const CategoriesControl = ({ label, value, field, onChange }) => {
         id="inputId"
         type="text"
         value={value ? value.join(separator) : ''}
-        onChange={handleChange} />
+        onChange={handleChange}
+      />
     </div>
   );
 };
@@ -208,15 +214,23 @@ import CMS from '@staticcms/core';
 import type { WidgetControlProps, WidgetPreviewProps } from '@staticcms/core';
 
 interface CategoriesField {
-  widget: 'categories'
+  widget: 'categories';
 }
 
-const CategoriesControl = ({ label, value, field, onChange }: WidgetControlProps<string[], CategoriesField>) => {
+const CategoriesControl = ({
+  label,
+  value,
+  field,
+  onChange,
+}: WidgetControlProps<string[], CategoriesField>) => {
   const separator = useMemo(() => field.separator ?? ', ', [field.separator]);
 
-  const handleChange = useCallback((e) => {
-    onChange(e.target.value.split(separator).map(e => e.trim()));
-  }, [separator, onChange]);
+  const handleChange = useCallback(
+    e => {
+      onChange(e.target.value.split(separator).map(e => e.trim()));
+    },
+    [separator, onChange],
+  );
 
   return (
     <div>
@@ -225,7 +239,8 @@ const CategoriesControl = ({ label, value, field, onChange }: WidgetControlProps
         id="inputId"
         type="text"
         value={value ? value.join(separator) : ''}
-        onChange={handleChange} />
+        onChange={handleChange}
+      />
     </div>
   );
 };
@@ -367,7 +382,7 @@ const FileControl = ({ collection, field, value, entry, onChange }) => {
 
   return [
     h('button', { type: 'button', onClick: handleOpenMediaLibrary }, 'Upload'),
-    h('img', { role: 'presentation', src: assetSource })
+    h('img', { role: 'presentation', src: assetSource }),
   ];
 };
 ```

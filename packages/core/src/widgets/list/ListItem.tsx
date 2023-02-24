@@ -93,7 +93,9 @@ interface ListItemProps
     | 'field'
     | 'fieldsErrors'
     | 'submitted'
+    | 'isDuplicate'
     | 'isFieldDuplicate'
+    | 'isHidden'
     | 'isFieldHidden'
     | 'locale'
     | 'path'
@@ -114,7 +116,9 @@ const ListItem: FC<ListItemProps> = ({
   field,
   fieldsErrors,
   submitted,
+  isDuplicate,
   isFieldDuplicate,
+  isHidden,
   isFieldHidden,
   locale,
   path,
@@ -197,9 +201,6 @@ const ListItem: FC<ListItemProps> = ({
     [collapsed],
   );
 
-  const isDuplicate = isFieldDuplicate && isFieldDuplicate(field);
-  const isHidden = isFieldHidden && isFieldHidden(field);
-
   const finalValue = useMemo(() => {
     if (field.fields && field.fields.length === 1) {
       return {
@@ -232,8 +233,9 @@ const ListItem: FC<ListItemProps> = ({
             submitted={submitted}
             parentPath={path}
             isDisabled={isDuplicate}
-            isHidden={isHidden}
+            isParentDuplicate={isDuplicate}
             isFieldDuplicate={isFieldDuplicate}
+            isParentHidden={isHidden}
             isFieldHidden={isFieldHidden}
             locale={locale}
             i18n={i18n}

@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { ChromePicker } from 'react-color';
 import validateColor from 'validate-color';
 
@@ -104,6 +104,7 @@ const ClickOutsideDiv = styled('div')`
 
 const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
   field,
+  isDuplicate,
   onChange,
   value,
   hasErrors,
@@ -116,7 +117,11 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
   }, [collapsed]);
 
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const [internalValue, setInternalValue] = useState(value ?? '');
+  const [internalRawValue, setInternalValue] = useState(value ?? '');
+  const internalValue = useMemo(
+    () => (isDuplicate ? value ?? '' : internalRawValue),
+    [internalRawValue, isDuplicate, value],
+  );
 
   // show/hide color picker
   const handleClick = useCallback(() => {

@@ -21,6 +21,7 @@ import { borders, colors, lengths, transitions } from '@staticcms/core/component
 import { transientOptions } from '@staticcms/core/lib';
 import useMemoCompare from '@staticcms/core/lib/hooks/useMemoCompare';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
+import { isFieldDuplicate, isFieldHidden } from '@staticcms/core/lib/i18n';
 import { resolveWidget } from '@staticcms/core/lib/registry';
 import { getFieldLabel } from '@staticcms/core/lib/util/field.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
@@ -144,10 +145,11 @@ const EditorControl = ({
   fieldsErrors,
   submitted,
   getAsset,
-  isDisabled,
-  isFieldDuplicate,
-  isFieldHidden,
-  isHidden = false,
+  isDisabled = false,
+  isParentDuplicate = false,
+  isFieldDuplicate: deprecatedIsFieldDuplicate,
+  isParentHidden = false,
+  isFieldHidden: deprecatedIsFieldHidden,
   locale,
   mediaPaths,
   openMediaLibrary,
@@ -189,6 +191,15 @@ const EditorControl = ({
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [collection],
+  );
+
+  const isDuplicate = useMemo(
+    () => isParentDuplicate || isFieldDuplicate(field, locale, i18n?.defaultLocale),
+    [field, i18n?.defaultLocale, isParentDuplicate, locale],
+  );
+  const isHidden = useMemo(
+    () => isParentHidden || isFieldHidden(field, locale, i18n?.defaultLocale),
+    [field, i18n?.defaultLocale, isParentHidden, locale],
   );
 
   useEffect(() => {
@@ -257,9 +268,11 @@ const EditorControl = ({
             fieldsErrors,
             submitted,
             getAsset: handleGetAsset,
-            isDisabled: isDisabled ?? false,
-            isFieldDuplicate,
-            isFieldHidden,
+            isDisabled: isDisabled || isDuplicate,
+            isDuplicate,
+            isFieldDuplicate: deprecatedIsFieldDuplicate,
+            isHidden,
+            isFieldHidden: deprecatedIsFieldHidden,
             label: getFieldLabel(field, t),
             locale,
             mediaPaths,
@@ -330,9 +343,16 @@ interface EditorControlOwnProps {
   fieldsErrors: FieldsErrors;
   submitted: boolean;
   isDisabled?: boolean;
+  isParentDuplicate?: boolean;
+  /**
+   * @deprecated use isDuplicate instead
+   */
   isFieldDuplicate?: (field: Field) => boolean;
+  isParentHidden?: boolean;
+  /**
+   * @deprecated use isHidden instead
+   */
   isFieldHidden?: (field: Field) => boolean;
-  isHidden?: boolean;
   locale?: string;
   parentPath: string;
   value: ValueOrNestedValue;

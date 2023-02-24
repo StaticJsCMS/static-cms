@@ -62,6 +62,7 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
   value,
   t,
   isDisabled,
+  isDuplicate,
   onChange,
   hasErrors,
 }) => {
@@ -118,7 +119,11 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
       : field.default;
   }, [field.default, field.picker_utc, format, inputFormat, timezoneOffset]);
 
-  const [internalValue, setInternalValue] = useState(value);
+  const [internalRawValue, setInternalValue] = useState(value);
+  const internalValue = useMemo(
+    () => (isDuplicate ? value : internalRawValue),
+    [internalRawValue, isDuplicate, value],
+  );
 
   const dateValue: Date = useMemo(() => {
     let valueToParse = internalValue;
