@@ -2,14 +2,14 @@ import React from 'react';
 import { Grid as GridIcon } from '@styled-icons/bootstrap/Grid';
 import { TableRows as TableRowsIcon } from '@styled-icons/material-rounded/TableRows';
 
-import { VIEW_STYLE_GRID, VIEW_STYLE_LIST } from '@staticcms/core/constants/collectionViews';
-import IconButton from '../common/button/IconButton';
+import { VIEW_STYLE_GRID, VIEW_STYLE_LIST } from '@staticcms/core/constants/views';
+import IconButton from '../button/IconButton';
 
-import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
+import type { ViewStyle } from '@staticcms/core/constants/views';
 
 interface ViewStyleControlPros {
-  viewStyle: CollectionViewStyle;
-  onChangeViewStyle: (viewStyle: CollectionViewStyle) => void;
+  viewStyle: ViewStyle;
+  onChangeViewStyle: (viewStyle: ViewStyle) => void;
 }
 
 const ViewStyleControl = ({ viewStyle, onChangeViewStyle }: ViewStyleControlPros) => {

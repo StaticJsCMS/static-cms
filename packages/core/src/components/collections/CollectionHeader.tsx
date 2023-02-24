@@ -7,12 +7,16 @@ import Button from '../common/button/Button';
 
 import type { Collection, TranslatedProps } from '@staticcms/core/interface';
 
-interface CollectionTopProps {
+interface CollectionHeaderProps {
   collection: Collection;
   newEntryUrl?: string;
 }
 
-const CollectionHeader = ({ collection, newEntryUrl, t }: TranslatedProps<CollectionTopProps>) => {
+const CollectionHeader = ({
+  collection,
+  newEntryUrl,
+  t,
+}: TranslatedProps<CollectionHeaderProps>) => {
   const navigate = useNavigate();
 
   const collectionLabel = collection.label;

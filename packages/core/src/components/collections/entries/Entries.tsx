@@ -4,7 +4,7 @@ import { translate } from 'react-polyglot';
 import Loader from '@staticcms/core/components/common/progress/Loader';
 import EntryListing from './EntryListing';
 
-import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
+import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { Collection, Collections, Entry, TranslatedProps } from '@staticcms/core/interface';
 import type Cursor from '@staticcms/core/lib/util/Cursor';
 
@@ -12,7 +12,7 @@ export interface BaseEntriesProps {
   entries: Entry[];
   page?: number;
   isFetching: boolean;
-  viewStyle: CollectionViewStyle;
+  viewStyle: ViewStyle;
   cursor: Cursor;
   handleCursorActions?: (action: string) => void;
 }

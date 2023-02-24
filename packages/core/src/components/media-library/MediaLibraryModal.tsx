@@ -4,8 +4,8 @@ import React, { Fragment } from 'react';
 import { translate } from 'react-polyglot';
 import { Dialog, Transition } from '@headlessui/react';
 
-import EmptyMessage from './EmptyMessage';
-import MediaLibraryCardGrid from './MediaLibraryCardGrid';
+import EmptyMessage from './common/EmptyMessage';
+import MediaLibraryCardGrid from './common/MediaLibraryCardGrid';
 import MediaLibraryTop from './MediaLibraryTop';
 import IconButton from '../common/button/IconButton';
 
@@ -184,12 +184,8 @@ const MediaLibraryModal = ({
                   onAssetClick={handleAssetClick}
                   canLoadMore={hasNextPage}
                   onLoadMore={handleLoadMore}
-                  isPaginating={isPaginating}
                   paginatingMessage={t('mediaLibrary.mediaLibraryModal.loading')}
                   cardDraftText={t('mediaLibrary.mediaLibraryCard.draft')}
-                  cardWidth={cardWidth}
-                  cardHeight={cardHeight}
-                  cardMargin={cardMargin}
                   loadDisplayURL={loadDisplayURL}
                   displayURLs={displayURLs}
                   collection={collection}

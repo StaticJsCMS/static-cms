@@ -1,7 +1,10 @@
 import fuzzy from 'fuzzy';
+import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
+import { changeViewStyle } from '@staticcms/core/actions/entries';
 import {
   closeMediaLibrary as closeMediaLibraryAction,
   deleteMedia as deleteMediaAction,
@@ -12,14 +15,19 @@ import {
 } from '@staticcms/core/actions/mediaLibrary';
 import { fileExtension } from '@staticcms/core/lib/util';
 import MediaLibraryCloseEvent from '@staticcms/core/lib/util/events/MediaLibraryCloseEvent';
+import { selectViewStyle } from '@staticcms/core/reducers/selectors/entries';
 import { selectMediaFiles } from '@staticcms/core/reducers/selectors/mediaLibrary';
-import alert from '../common/alert/Alert';
-import confirm from '../common/confirm/Confirm';
-import MediaLibraryModal from './MediaLibraryModal';
+import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
+import alert from '../../common/alert/Alert';
+import confirm from '../../common/confirm/Confirm';
+import EmptyMessage from './EmptyMessage';
+import MediaLibraryCardGrid from './MediaLibraryCardGrid';
+import MediaLibraryHeader from './MediaLibraryHeader';
 
-import type { MediaFile } from '@staticcms/core/interface';
+import type { ViewStyle } from '@staticcms/core/constants/views';
+import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
-import type { ChangeEvent, KeyboardEvent } from 'react';
+import type { ChangeEvent, FC, KeyboardEvent } from 'react';
 import type { ConnectedProps } from 'react-redux';
 
 /**
@@ -39,7 +47,7 @@ const IMAGE_EXTENSIONS_VIEWABLE = [
 ];
 const IMAGE_EXTENSIONS = [...IMAGE_EXTENSIONS_VIEWABLE];
 
-const MediaLibrary = ({
+const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
   isVisible,
   loadMediaDisplayURL,
   displayURLs,
@@ -63,11 +71,22 @@ const MediaLibrary = ({
   closeMediaLibrary,
   collection,
   field,
-}: MediaLibraryProps) => {
+  t,
+}) => {
   const [selectedFile, setSelectedFile] = useState<MediaFile | null>(null);
   const [query, setQuery] = useState<string | undefined>(undefined);
 
   const [prevIsVisible, setPrevIsVisible] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const viewStyle = useAppSelector(selectViewStyle);
+
+  const handleViewStyleChange = useCallback(
+    (viewStyle: ViewStyle) => {
+      dispatch(changeViewStyle(viewStyle));
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
     loadMedia({});
@@ -322,41 +341,80 @@ const MediaLibrary = ({
     }) as MediaFile[];
   }, []);
 
+  const filteredFiles = forImage ? filterImages(files) : files;
+  const queriedFiles = !dynamicSearch && query ? queryFilter(query, filteredFiles) : filteredFiles;
+  const tableData = toTableData(queriedFiles);
+  const hasFiles = files && !!files.length;
+  const hasFilteredFiles = filteredFiles && !!filteredFiles.length;
+  const hasSearchResults = queriedFiles && !!queriedFiles.length;
+  const hasMedia = hasSearchResults;
+  const shouldShowEmptyMessage = !hasMedia;
+  const emptyMessage =
+    (isLoading && !hasMedia && t('mediaLibrary.mediaLibraryModal.loading')) ||
+    (dynamicSearchActive && t('mediaLibrary.mediaLibraryModal.noResults')) ||
+    (!hasFiles && t('mediaLibrary.mediaLibraryModal.noAssetsFound')) ||
+    (!hasFilteredFiles && t('mediaLibrary.mediaLibraryModal.noImagesFound')) ||
+    (!hasSearchResults && t('mediaLibrary.mediaLibraryModal.noResults')) ||
+    '';
+
+  const hasSelection = hasMedia && !isEmpty(selectedFile);
+
   return (
-    <MediaLibraryModal
-      isVisible={isVisible}
-      canInsert={canInsert}
-      files={files}
-      dynamicSearch={dynamicSearch}
-      dynamicSearchActive={dynamicSearchActive}
-      forImage={forImage}
-      isLoading={isLoading}
-      isPersisting={isPersisting}
-      isDeleting={isDeleting}
-      hasNextPage={hasNextPage}
-      isPaginating={isPaginating}
-      query={query}
-      selectedFile={selectedFile ?? undefined}
-      handleFilter={filterImages}
-      handleQuery={queryFilter}
-      toTableData={toTableData}
-      handleClose={handleClose}
-      handleSearchChange={handleSearchChange}
-      handleSearchKeyDown={handleSearchKeyDown}
-      handlePersist={handlePersist}
-      handleDelete={handleDelete}
-      handleInsert={handleInsert}
-      handleDownload={handleDownload}
-      scrollContainerRef={scrollContainerRef}
-      handleAssetClick={handleAssetClick}
-      handleLoadMore={handleLoadMore}
-      displayURLs={displayURLs}
-      loadDisplayURL={loadDisplayURL}
-      collection={collection}
-      field={field}
-    />
+    <div className="flex flex-col w-full h-full">
+      <MediaLibraryHeader viewStyle={viewStyle} onChangeViewStyle={handleViewStyleChange} />
+      {!shouldShowEmptyMessage ? null : <EmptyMessage content={emptyMessage} />}
+      <MediaLibraryCardGrid
+        scrollContainerRef={scrollContainerRef}
+        mediaItems={tableData}
+        isSelectedFile={file => selectedFile?.key === file.key}
+        onAssetClick={handleAssetClick}
+        canLoadMore={hasNextPage}
+        onLoadMore={handleLoadMore}
+        isPaginating={isPaginating}
+        paginatingMessage={t('mediaLibrary.mediaLibraryModal.loading')}
+        cardDraftText={t('mediaLibrary.mediaLibraryCard.draft')}
+        loadDisplayURL={loadDisplayURL}
+        displayURLs={displayURLs}
+        collection={collection}
+        field={field}
+      />
+    </div>
   );
 };
+{
+  /* <MediaLibraryModal
+  isVisible={isVisible}
+  canInsert={canInsert}
+  files={files}
+  dynamicSearch={dynamicSearch}
+  dynamicSearchActive={dynamicSearchActive}
+  forImage={forImage}
+  isLoading={isLoading}
+  isPersisting={isPersisting}
+  isDeleting={isDeleting}
+  hasNextPage={hasNextPage}
+  isPaginating={isPaginating}
+  query={query}
+  selectedFile={selectedFile ?? undefined}
+  handleFilter={filterImages}
+  handleQuery={queryFilter}
+  toTableData={toTableData}
+  handleClose={handleClose}
+  handleSearchChange={handleSearchChange}
+  handleSearchKeyDown={handleSearchKeyDown}
+  handlePersist={handlePersist}
+  handleDelete={handleDelete}
+  handleInsert={handleInsert}
+  handleDownload={handleDownload}
+  scrollContainerRef={scrollContainerRef}
+  handleAssetClick={handleAssetClick}
+  handleLoadMore={handleLoadMore}
+  displayURLs={displayURLs}
+  loadDisplayURL={loadDisplayURL}
+  collection={collection}
+  field={field}
+/> */
+}
 
 function mapStateToProps(state: RootState) {
   const { mediaLibrary } = state;
@@ -395,4 +453,4 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export type MediaLibraryProps = ConnectedProps<typeof connector>;
 
-export default connector(MediaLibrary);
+export default translate()(connector(MediaLibrary)) as FC;

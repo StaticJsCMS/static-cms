@@ -1,7 +1,7 @@
 import get from 'lodash/get';
 import React, { useMemo } from 'react';
 
-import { VIEW_STYLE_LIST } from '@staticcms/core/constants/collectionViews';
+import { VIEW_STYLE_LIST } from '@staticcms/core/constants/views';
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import { getFieldPreview, getPreviewCard } from '@staticcms/core/lib/registry';
 import {
@@ -20,7 +20,7 @@ import TableCell from '../../common/table/TableCell';
 import TableRow from '../../common/table/TableRow';
 import useWidgetsFor from '../../common/widget/useWidgetsFor';
 
-import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
+import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { Collection, Entry, FileOrImageField, MediaField } from '@staticcms/core/interface';
 
 export interface EntryCardProps {
@@ -28,7 +28,7 @@ export interface EntryCardProps {
   imageFieldName?: string | null | undefined;
   collection: Collection;
   collectionLabel?: string;
-  viewStyle?: CollectionViewStyle;
+  viewStyle?: ViewStyle;
   summaryFields: string[];
 }
 

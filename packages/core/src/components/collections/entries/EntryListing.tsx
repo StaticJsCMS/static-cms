@@ -5,13 +5,13 @@ import { selectFields, selectInferredField } from '@staticcms/core/lib/util/coll
 import Table from '../../common/table/Table';
 import EntryCard from './EntryCard';
 
-import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
+import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { Collection, Collections, Entry, Field } from '@staticcms/core/interface';
 import type Cursor from '@staticcms/core/lib/util/Cursor';
 
 export interface BaseEntryListingProps {
   entries: Entry[];
-  viewStyle: CollectionViewStyle;
+  viewStyle: ViewStyle;
   cursor?: Cursor;
   handleCursorActions?: (action: string) => void;
   page?: number;

@@ -10,7 +10,7 @@ import { Cursor } from '@staticcms/core/lib/util';
 import { selectSearchedEntries } from '@staticcms/core/reducers/selectors/entries';
 import Entries from './Entries';
 
-import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
+import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { Collections } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 import type { ConnectedProps } from 'react-redux';
@@ -71,7 +71,7 @@ const EntriesSearch = ({
 interface EntriesSearchOwnProps {
   searchTerm: string;
   collections: Collections;
-  viewStyle: CollectionViewStyle;
+  viewStyle: ViewStyle;
 }
 
 function mapStateToProps(state: RootState, ownProps: EntriesSearchOwnProps) {

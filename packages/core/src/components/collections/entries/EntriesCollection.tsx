@@ -11,7 +11,7 @@ import { selectEntriesLoaded, selectIsFetching } from '@staticcms/core/reducers/
 import Entries from './Entries';
 import { useAppDispatch } from '@staticcms/core/store/hooks';
 
-import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
+import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { Collection, Entry, GroupOfEntries, TranslatedProps } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 import type { ComponentType } from 'react';
@@ -143,7 +143,7 @@ const EntriesCollection = ({
 
 interface EntriesCollectionOwnProps {
   collection: Collection;
-  viewStyle: CollectionViewStyle;
+  viewStyle: ViewStyle;
   readyToLoad: boolean;
   filterTerm: string;
 }

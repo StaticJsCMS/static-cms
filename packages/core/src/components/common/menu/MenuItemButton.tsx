@@ -31,7 +31,20 @@ const MenuItemButton = ({
           className={classNames(
             className,
             active ? 'bg-slate-100 dark:bg-slate-900' : '',
-            'px-4 py-2 text-sm text-gray-700 disabled:text-gray-300 dark:text-gray-300 dark:disabled:text-gray-700 w-full text-left flex items-center justify-between',
+            `
+              px-4
+              py-2
+              text-sm
+              text-gray-700
+              disabled:text-gray-300
+              dark:text-gray-300
+              dark:disabled:text-gray-700
+              w-full
+              text-left
+              flex
+              items-center
+              justify-between
+            `,
           )}
           onClick={onClick}
           disabled={disabled}

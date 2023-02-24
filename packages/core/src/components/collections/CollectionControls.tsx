@@ -3,9 +3,9 @@ import React from 'react';
 import FilterControl from './FilterControl';
 import GroupControl from './GroupControl';
 import SortControl from './SortControl';
-import ViewStyleControl from './ViewStyleControl';
+import ViewStyleControl from '../common/view-style/ViewStyleControl';
 
-import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
+import type { ViewStyle } from '@staticcms/core/constants/views';
 import type {
   FilterMap,
   GroupMap,
@@ -18,8 +18,8 @@ import type {
 } from '@staticcms/core/interface';
 
 interface CollectionControlsProps {
-  viewStyle: CollectionViewStyle;
-  onChangeViewStyle: (viewStyle: CollectionViewStyle) => void;
+  viewStyle: ViewStyle;
+  onChangeViewStyle: (viewStyle: ViewStyle) => void;
   sortableFields?: SortableField[];
   onSortClick?: (key: string, direction?: SortDirection) => Promise<void>;
   sort?: SortMap | undefined;

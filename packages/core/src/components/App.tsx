@@ -13,14 +13,14 @@ import { changeTheme } from '../actions/globalUI';
 import { getDefaultPath } from '../lib/util/collection.util';
 import { useAppDispatch } from '../store/hooks';
 import CollectionRoute from './collections/CollectionRoute';
-import EditorRoute from './entry-editor/EditorRoute';
-import MediaLibrary from './media-library/MediaLibrary';
-import NotFoundPage from './NotFoundPage';
-import Page from './page/Page';
-import Snackbars from './snackbar/Snackbars';
 import { Alert } from './common/alert/Alert';
 import { Confirm } from './common/confirm/Confirm';
 import Loader from './common/progress/Loader';
+import EditorRoute from './entry-editor/EditorRoute';
+import Media from './media-library/page/Media';
+import NotFoundPage from './NotFoundPage';
+import Page from './page/Page';
+import Snackbars from './snackbar/Snackbars';
 
 import type { Credentials, TranslatedProps } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
@@ -53,7 +53,6 @@ const App = ({
   collections,
   loginUser,
   isFetching,
-  useMediaLibrary,
   t,
   scrollSyncEnabled,
   discardDraft,
@@ -180,12 +179,12 @@ const App = ({
           <Route path="/search/:searchTerm" element={<CollectionRoute isSearchResults />} />
           <Route path="/edit/:name/:entryName" element={<EditEntityRedirect />} />
           <Route path="/page/:id" element={<Page />} />
+          <Route path="/media" element={<Media />} />
           <Route element={<NotFoundPage />} />
         </Routes>
-        {useMediaLibrary ? <MediaLibrary /> : null}
       </>
     );
-  }, [authenticationPage, collections, defaultPath, isFetching, useMediaLibrary, user]);
+  }, [authenticationPage, collections, defaultPath, isFetching, user]);
 
   if (!config.config) {
     return configError(t('app.app.configNotFound'));
@@ -219,10 +218,9 @@ const App = ({
 };
 
 function mapStateToProps(state: RootState) {
-  const { auth, config, collections, globalUI, mediaLibrary, scroll } = state;
+  const { auth, config, collections, globalUI, scroll } = state;
   const user = auth.user;
   const isFetching = globalUI.isFetching;
-  const useMediaLibrary = !mediaLibrary.externalLibrary;
   const scrollSyncEnabled = scroll.isScrolling;
   return {
     auth,
@@ -230,7 +228,6 @@ function mapStateToProps(state: RootState) {
     collections,
     user,
     isFetching,
-    useMediaLibrary,
     scrollSyncEnabled,
   };
 }

@@ -6,17 +6,17 @@ import MainView from '../MainView';
 
 const Page = () => {
   const { id } = useParams();
-  const Content = useMemo(() => {
+  const { data: Content, title } = useMemo(() => {
     if (!id) {
-      return '';
+      return { data: '', title: '' };
     }
 
     const page = getAdditionalLink(id);
     if (!page) {
-      return '';
+      return { data: '', title: '' };
     }
 
-    return page.data;
+    return page;
   }, [id]);
 
   const pageContent = useMemo(() => {
@@ -31,7 +31,11 @@ const Page = () => {
     );
   }, [Content]);
 
-  return <MainView showLeftNav>{pageContent}</MainView>;
+  return (
+    <MainView breadcrumbs={[{ name: title }]} showQuickCreate showLeftNav>
+      {pageContent}
+    </MainView>
+  );
 };
 
 export default Page;

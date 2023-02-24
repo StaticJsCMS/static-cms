@@ -21,12 +21,12 @@ import {
   SORT_ENTRIES_REQUEST,
   SORT_ENTRIES_SUCCESS,
 } from '../constants';
-import { VIEW_STYLE_LIST } from '../constants/collectionViews';
+import { VIEW_STYLE_LIST } from '../constants/views';
 import { set } from '../lib/util/object.util';
 
 import type { EntriesAction } from '../actions/entries';
 import type { SearchAction } from '../actions/search';
-import type { CollectionViewStyle } from '../constants/collectionViews';
+import type { ViewStyle } from '../constants/views';
 import type {
   Entities,
   Entry,
@@ -91,7 +91,7 @@ function persistSort(sort: Sort | undefined) {
 }
 
 const loadViewStyle = once(() => {
-  const viewStyle = localStorage.getItem(viewStyleKey) as CollectionViewStyle;
+  const viewStyle = localStorage.getItem(viewStyleKey) as ViewStyle;
   if (viewStyle) {
     return viewStyle;
   }
@@ -118,7 +118,7 @@ export type EntriesState = {
   sort: Sort;
   filter?: Filter;
   group?: Group;
-  viewStyle: CollectionViewStyle;
+  viewStyle: ViewStyle;
 };
 
 function entries(

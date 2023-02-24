@@ -1,4 +1,6 @@
+import PhotoIcon from '@heroicons/react/24/outline/PhotoIcon';
 import React, { useMemo } from 'react';
+import { translate } from 'react-polyglot';
 
 import { getIcon } from '@staticcms/core/lib/hooks/useIcon';
 import { getAdditionalLinks } from '@staticcms/core/lib/registry';
@@ -7,7 +9,10 @@ import { useAppSelector } from '@staticcms/core/store/hooks';
 import classNames from '../../lib/util/classNames.util';
 import NavLink from './NavLink';
 
-const Sidebar = () => {
+import type { FC } from 'react';
+import type { TranslateProps } from 'react-polyglot';
+
+const Sidebar: FC<TranslateProps> = ({ t }) => {
   const collections = useAppSelector(selectCollections);
   const collectionLinks = useMemo(
     () =>
@@ -61,7 +66,6 @@ const Sidebar = () => {
   );
 
   return (
-    // <div className="w-"
     <aside
       className={classNames(
         'w-sidebar-expanded',
@@ -73,10 +77,13 @@ const Sidebar = () => {
         <ul className="space-y-2">
           {collectionLinks}
           {links}
+          <NavLink key="Media" to="/media" icon={<PhotoIcon />}>
+            {t('app.header.media')}
+          </NavLink>
         </ul>
       </div>
     </aside>
   );
 };
 
-export default Sidebar;
+export default translate()(Sidebar) as FC;

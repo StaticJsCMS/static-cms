@@ -28,7 +28,7 @@ const NavLink = ({ icon, children, onClick, ...otherProps }: NavLinkProps) => {
   const content = useMemo(
     () => (
       <>
-        {icon}
+        <span className="w-6 h-6">{icon}</span>
         <span className="ml-3">{children}</span>
       </>
     ),
@@ -63,7 +63,14 @@ const NavLink = ({ icon, children, onClick, ...otherProps }: NavLinkProps) => {
         className={classNames(
           linkClassNames,
           pathname === otherProps.to &&
-            'bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-blue-700 dark:text-white',
+            `
+            bg-slate-100
+            dark:bg-slate-700
+            hover:bg-slate-200
+            dark:hover:bg-slate-600
+            text-blue-700
+            dark:text-white
+          `,
         )}
         onClick={onClick}
       >

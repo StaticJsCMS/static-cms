@@ -59,7 +59,7 @@ import { waitUntil } from './waitUntil';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { Backend } from '../backend';
-import type { CollectionViewStyle } from '../constants/collectionViews';
+import type { ViewStyle } from '../constants/views';
 import type {
   Collection,
   Entry,
@@ -345,7 +345,7 @@ export function groupByField(collection: Collection, group: ViewGroup) {
   };
 }
 
-export function changeViewStyle(viewStyle: CollectionViewStyle) {
+export function changeViewStyle(viewStyle: ViewStyle) {
   return {
     type: CHANGE_VIEW_STYLE,
     payload: {
