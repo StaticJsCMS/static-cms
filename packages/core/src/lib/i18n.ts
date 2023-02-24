@@ -400,7 +400,13 @@ export function duplicateI18nFields(
 
   if ('fields' in field && !Array.isArray(value)) {
     field.fields?.forEach(field => {
-      entryDraft = duplicateI18nFields(entryDraft, field, locales, defaultLocale, `${fieldPath}.${field.name}`);
+      entryDraft = duplicateI18nFields(
+        entryDraft,
+        field,
+        locales,
+        defaultLocale,
+        `${fieldPath}.${field.name}`,
+      );
     });
   }
 
