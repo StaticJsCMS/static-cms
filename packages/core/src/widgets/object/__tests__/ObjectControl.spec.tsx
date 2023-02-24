@@ -52,7 +52,7 @@ const multiFieldObjectValue = {
   text_input: 'Text Value',
 };
 
-jest.mock('@staticcms/core/components/editor/EditorControlPane/EditorControl', () => {
+jest.mock('@staticcms/core/components/entry-editor/editor-control-pane/EditorControl', () => {
   return jest.fn(props => {
     const { parentPath, fieldName, field } = props;
     return (

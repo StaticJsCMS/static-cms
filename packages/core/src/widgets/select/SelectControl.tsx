@@ -30,13 +30,13 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
   hasErrors,
   disabled,
   forSingleList,
-  isDuplicate,
+  duplicate,
   onChange,
 }) => {
   const [internalRawValue, setInternalValue] = useState(value);
   const internalValue = useMemo(
-    () => (isDuplicate ? value : internalRawValue),
-    [internalRawValue, isDuplicate, value],
+    () => (duplicate ? value : internalRawValue),
+    [internalRawValue, duplicate, value],
   );
   const ref = useRef<HTMLButtonElement | null>(null);
 

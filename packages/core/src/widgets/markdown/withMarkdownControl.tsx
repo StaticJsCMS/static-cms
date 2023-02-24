@@ -17,13 +17,12 @@ export interface WithMarkdownControlProps {
 
 const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
   const MarkdownControl: FC<WidgetControlProps<string, MarkdownField>> = controlProps => {
-    const { label, value, isDuplicate, onChange, hasErrors, collection, entry, field } =
-      controlProps;
+    const { label, value, duplicate, onChange, hasErrors, collection, entry, field } = controlProps;
 
     const [internalRawValue, setInternalValue] = useState(value ?? '');
     const internalValue = useMemo(
-      () => (isDuplicate ? value ?? '' : internalRawValue),
-      [internalRawValue, isDuplicate, value],
+      () => (duplicate ? value ?? '' : internalRawValue),
+      [internalRawValue, duplicate, value],
     );
     const [hasFocus, setHasFocus] = useState(false);
     const debouncedFocus = useDebounce(hasFocus, 150);

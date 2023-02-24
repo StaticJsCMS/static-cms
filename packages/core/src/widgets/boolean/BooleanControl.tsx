@@ -13,13 +13,13 @@ const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
   disabled,
   field,
   forSingleList,
-  isDuplicate,
+  duplicate,
   onChange,
 }) => {
   const [internalRawValue, setInternalValue] = useState(value ?? false);
   const internalValue = useMemo(
-    () => (isDuplicate ? value ?? false : internalRawValue),
-    [internalRawValue, isDuplicate, value],
+    () => (duplicate ? value ?? false : internalRawValue),
+    [internalRawValue, duplicate, value],
   );
   const ref = useRef<HTMLInputElement | null>(null);
 

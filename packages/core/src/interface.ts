@@ -254,8 +254,8 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = 
   forList: boolean;
   forSingleList: boolean;
   disabled: boolean;
-  isDuplicate: boolean;
-  isHidden: boolean;
+  duplicate: boolean;
+  hidden: boolean;
   label: string;
   locale: string | undefined;
   mediaPaths: Record<string, string | string[]>;

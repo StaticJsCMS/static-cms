@@ -49,8 +49,8 @@ const EditorControl = ({
   fieldsErrors,
   submitted,
   disabled = false,
-  isParentDuplicate = false,
-  isParentHidden = false,
+  parentDuplicate = false,
+  parentHidden = false,
   locale,
   mediaPaths,
   openMediaLibrary,
@@ -86,17 +86,17 @@ const EditorControl = ({
 
   const hasErrors = (submitted || dirty) && Boolean(errors.length);
 
-  const isDuplicate = useMemo(
-    () => isParentDuplicate || isFieldDuplicate(field, locale, i18n?.defaultLocale),
-    [field, i18n?.defaultLocale, isParentDuplicate, locale],
+  const duplicate = useMemo(
+    () => parentDuplicate || isFieldDuplicate(field, locale, i18n?.defaultLocale),
+    [field, i18n?.defaultLocale, parentDuplicate, locale],
   );
-  const isHidden = useMemo(
-    () => isParentHidden || isFieldHidden(field, locale, i18n?.defaultLocale),
-    [field, i18n?.defaultLocale, isParentHidden, locale],
+  const hidden = useMemo(
+    () => parentHidden || isFieldHidden(field, locale, i18n?.defaultLocale),
+    [field, i18n?.defaultLocale, parentHidden, locale],
   );
 
   useEffect(() => {
-    if ((!dirty && !submitted) || isHidden) {
+    if ((!dirty && !submitted) || hidden) {
       return;
     }
 
@@ -106,7 +106,7 @@ const EditorControl = ({
     };
 
     validateValue();
-  }, [dirty, dispatch, field, i18n, isHidden, path, submitted, t, value, widget]);
+  }, [dirty, dispatch, field, i18n, hidden, path, submitted, t, value, widget]);
 
   const handleChangeDraftField = useCallback(
     (value: ValueOrNestedValue) => {
@@ -150,7 +150,7 @@ const EditorControl = ({
     }
 
     return (
-      <div className={classNames(isHidden && 'hidden')}>
+      <div className={classNames(hidden && 'hidden')}>
         {createElement(widget.control, {
           key: `${id}-${version}`,
           collection,
@@ -159,9 +159,9 @@ const EditorControl = ({
           field: field as UnknownField,
           fieldsErrors,
           submitted,
-          disabled: disabled || isDuplicate,
-          isDuplicate,
-          isHidden,
+          disabled: disabled || duplicate,
+          duplicate,
+          hidden,
           label: getFieldLabel(field, t),
           locale,
           mediaPaths,
@@ -187,14 +187,14 @@ const EditorControl = ({
     collection,
     config,
     field,
-    isHidden,
+    hidden,
     widget.control,
     id,
     version,
     fieldsErrors,
     submitted,
     disabled,
-    isDuplicate,
+    duplicate,
     t,
     locale,
     mediaPaths,
@@ -219,8 +219,8 @@ interface EditorControlOwnProps {
   fieldsErrors: FieldsErrors;
   submitted: boolean;
   disabled?: boolean;
-  isParentDuplicate?: boolean;
-  isParentHidden?: boolean;
+  parentDuplicate?: boolean;
+  parentHidden?: boolean;
   locale?: string;
   parentPath: string;
   value: ValueOrNestedValue;

@@ -14,7 +14,7 @@ import type { ColorResult } from 'react-color';
 
 const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
   field,
-  isDuplicate,
+  duplicate,
   onChange,
   value,
   hasErrors,
@@ -29,8 +29,8 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [internalRawValue, setInternalValue] = useState(value ?? '');
   const internalValue = useMemo(
-    () => (isDuplicate ? value ?? '' : internalRawValue),
-    [internalRawValue, isDuplicate, value],
+    () => (duplicate ? value ?? '' : internalRawValue),
+    [internalRawValue, duplicate, value],
   );
 
   // show/hide color picker

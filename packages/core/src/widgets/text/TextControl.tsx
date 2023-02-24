@@ -10,7 +10,7 @@ const TextControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   label,
   value,
   errors,
-  isDuplicate,
+  duplicate,
   hasErrors,
   disabled,
   field,
@@ -19,8 +19,8 @@ const TextControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
 }) => {
   const [internalRawValue, setInternalValue] = useState(value ?? '');
   const internalValue = useMemo(
-    () => (isDuplicate ? value ?? '' : internalRawValue),
-    [internalRawValue, isDuplicate, value],
+    () => (duplicate ? value ?? '' : internalRawValue),
+    [internalRawValue, duplicate, value],
   );
   const ref = useRef<HTMLTextAreaElement | null>(null);
 

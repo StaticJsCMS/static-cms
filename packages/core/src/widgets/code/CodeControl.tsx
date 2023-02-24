@@ -30,7 +30,7 @@ function valueToOption(val: string | { name: string; label?: string }): {
 
 const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, CodeField>> = ({
   field,
-  isDuplicate,
+  duplicate,
   onChange,
   hasErrors,
   value,
@@ -50,8 +50,8 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
 
   const [internalRawValue, setInternalValue] = useState(value ?? '');
   const internalValue = useMemo(
-    () => (isDuplicate ? value ?? '' : internalRawValue),
-    [internalRawValue, isDuplicate, value],
+    () => (duplicate ? value ?? '' : internalRawValue),
+    [internalRawValue, duplicate, value],
   );
 
   const [lang, setLang] = useState<ProcessedCodeLanguage | null>(null);

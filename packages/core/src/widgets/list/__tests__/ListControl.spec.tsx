@@ -136,7 +136,7 @@ const typedOtherKeyFieldsValue = [
   { someKey: 'type2', numberInput2: 10, stringInput: 'String Value 2' },
 ];
 
-jest.mock('@staticcms/core/components/editor/EditorControlPane/EditorControl', () => {
+jest.mock('@staticcms/core/components/entry-editor/editor-control-pane/EditorControl', () => {
   return jest.fn(props => {
     const { parentPath, field, value } = props;
     return (

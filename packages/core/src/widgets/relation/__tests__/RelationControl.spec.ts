@@ -364,6 +364,22 @@ describe(RelationControl.name, () => {
       expect(input).toHaveValue('Post 1 2023-02-01');
     });
 
+    it('should use prop value exclusively if field is i18n duplicate', async () => {
+      const { rerender, getByTestId } = await renderRelationControl(
+        {
+          field: { ...mockRelationField, i18n: 'duplicate' },
+          duplicate: true,
+          value: 'Post 1',
+        },
+        { expectedValue: 'Post 1 2023-02-01' },
+      );
+
+      rerender({ value: 'Post 2' });
+
+      const input = getByTestId('autocomplete-input');
+      expect(input).toHaveValue('Post 2 2023-02-03');
+    });
+
     it('should filter results when text input changes', async () => {
       const {
         getByTestId,
@@ -507,6 +523,27 @@ describe(RelationControl.name, () => {
 
       const inputWrapper = getByTestId('autocomplete-input-wrapper');
       expect(inputWrapper.textContent).toBe('Post 2 2023-02-03Post 3 2023-02-04');
+    });
+
+    it('should use prop value exclusively if field is i18n duplicate', async () => {
+      const { rerender, getByTestId } = await renderRelationControl(
+        {
+          field: { ...mockMultiRelationField, i18n: 'duplicate' },
+          duplicate: true,
+          value: ['Post 2', 'Post 3'],
+        },
+        { expectedText: 'Post 2 2023-02-03Post 3 2023-02-04' },
+      );
+
+      const input = getByTestId('autocomplete-input');
+      expect(input).toHaveValue('');
+
+      rerender({ value: ['Post 1'] });
+
+      expect(input).toHaveValue('');
+
+      const inputWrapper = getByTestId('autocomplete-input-wrapper');
+      expect(inputWrapper.textContent).toBe('Post 1 2023-02-01');
     });
 
     it('should call onChange when text input changes', async () => {

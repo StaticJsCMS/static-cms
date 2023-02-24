@@ -54,6 +54,20 @@ describe(BooleanControl.name, () => {
     expect(input).toBeChecked();
   });
 
+  it('should use prop value exclusively if field is i18n duplicate', async () => {
+    const { rerender, getByTestId } = renderControl({
+      field: { ...mockBooleanField, i18n: 'duplicate' },
+      duplicate: true,
+      value: true,
+    });
+
+    const input = getByTestId('switch-input');
+    expect(input).toBeChecked();
+
+    rerender({ value: false });
+    expect(input).not.toBeChecked();
+  });
+
   it('should call onChange when switch is clicked', async () => {
     const {
       getByTestId,

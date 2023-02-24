@@ -196,6 +196,30 @@ describe(DateTimeControl.name, () => {
       expect(input).toHaveValue('2023-01-10T06:23:15.000');
     });
 
+    it('should only use prop value as initial value', async () => {
+      const { rerender, getByTestId } = renderControl({ value: '2023-02-12T10:15:35.000' });
+
+      const input = getByTestId('date-time-input');
+      expect(input).toHaveValue('2023-02-12T10:15:35.000');
+
+      rerender({ value: '2023-02-18T14:37:02.000' });
+      expect(input).toHaveValue('2023-02-12T10:15:35.000');
+    });
+
+    it('should use prop value exclusively if field is i18n duplicate', async () => {
+      const { rerender, getByTestId } = renderControl({
+        field: { ...mockDateTimeField, i18n: 'duplicate' },
+        duplicate: true,
+        value: '2023-02-12T10:15:35.000',
+      });
+
+      const input = getByTestId('date-time-input');
+      expect(input).toHaveValue('2023-02-12T10:15:35.000');
+
+      rerender({ value: '2023-02-18T14:37:02.000' });
+      expect(input).toHaveValue('2023-02-18T14:37:02.000');
+    });
+
     it('should disable input and now button if disabled', () => {
       const { getByTestId } = renderControl({ label: 'I am a label', disabled: true });
 
@@ -468,6 +492,33 @@ describe(DateTimeControl.name, () => {
       expect(input).toHaveValue('2023-01-10');
     });
 
+    it('should only use prop value as initial value', async () => {
+      const { rerender, getByTestId } = renderControl({
+        field: mockDateField,
+        value: '2023-02-12',
+      });
+
+      const input = getByTestId('date-input');
+      expect(input).toHaveValue('2023-02-12');
+
+      rerender({ value: '2023-02-18' });
+      expect(input).toHaveValue('2023-02-12');
+    });
+
+    it('should use prop value exclusively if field is i18n duplicate', async () => {
+      const { rerender, getByTestId } = renderControl({
+        field: { ...mockDateField, i18n: 'duplicate' },
+        duplicate: true,
+        value: '2023-02-12',
+      });
+
+      const input = getByTestId('date-input');
+      expect(input).toHaveValue('2023-02-12');
+
+      rerender({ value: '2023-02-18' });
+      expect(input).toHaveValue('2023-02-18');
+    });
+
     it('should disable input and now button if disabled', () => {
       const { getByTestId } = renderControl({
         label: 'I am a label',
@@ -676,6 +727,33 @@ describe(DateTimeControl.name, () => {
 
       const input = getByTestId('time-input');
       expect(input).toHaveValue('06:23:15.000');
+    });
+
+    it('should only use prop value as initial value', async () => {
+      const { rerender, getByTestId } = renderControl({
+        field: mockTimeField,
+        value: '10:15:35.000',
+      });
+
+      const input = getByTestId('time-input');
+      expect(input).toHaveValue('10:15:35.000');
+
+      rerender({ value: '14:37:02.000' });
+      expect(input).toHaveValue('10:15:35.000');
+    });
+
+    it('should use prop value exclusively if field is i18n duplicate', async () => {
+      const { rerender, getByTestId } = renderControl({
+        field: { ...mockTimeField, i18n: 'duplicate' },
+        duplicate: true,
+        value: '10:15:35.000',
+      });
+
+      const input = getByTestId('time-input');
+      expect(input).toHaveValue('10:15:35.000');
+
+      rerender({ value: '14:37:02.000' });
+      expect(input).toHaveValue('14:37:02.000');
     });
 
     it('should disable input and now button if disabled', () => {

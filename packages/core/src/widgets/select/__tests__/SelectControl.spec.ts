@@ -64,6 +64,20 @@ describe(SelectControl.name, () => {
       expect(input.textContent).toBe('Option 1');
     });
 
+    it('should use prop value exclusively if field is i18n duplicate', async () => {
+      const { rerender, getByTestId } = renderControl({
+        field: { ...mockSelectField, i18n: 'duplicate' },
+        duplicate: true,
+        value: 'Option 1',
+      });
+
+      const input = getByTestId('select-input');
+      expect(input.textContent).toBe('Option 1');
+
+      rerender({ value: 'Option 2' });
+      expect(input.textContent).toBe('Option 2');
+    });
+
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
@@ -148,6 +162,20 @@ describe(SelectControl.name, () => {
       expect(input.textContent).toBe('2');
     });
 
+    it('should use prop value exclusively if field is i18n duplicate', async () => {
+      const { rerender, getByTestId } = renderControl({
+        field: { ...mockSelectField, i18n: 'duplicate' },
+        duplicate: true,
+        value: 2,
+      });
+
+      const input = getByTestId('select-input');
+      expect(input.textContent).toBe('2');
+
+      rerender({ value: 3 });
+      expect(input.textContent).toBe('3');
+    });
+
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
@@ -203,6 +231,20 @@ describe(SelectControl.name, () => {
 
       rerender({ value: 'Option 2' });
       expect(input.textContent).toBe('1');
+    });
+
+    it('should use prop value exclusively if field is i18n duplicate', async () => {
+      const { rerender, getByTestId } = renderControl({
+        field: { ...mockMixedSelectField, i18n: 'duplicate' },
+        duplicate: true,
+        value: 1,
+      });
+
+      const input = getByTestId('select-input');
+      expect(input.textContent).toBe('1');
+
+      rerender({ value: 'Option 2' });
+      expect(input.textContent).toBe('Option 2');
     });
 
     it('should call onChange when text input changes', async () => {
@@ -275,6 +317,20 @@ describe(SelectControl.name, () => {
       expect(input.textContent).toBe('Option 2');
     });
 
+    it('should use prop value exclusively if field is i18n duplicate', async () => {
+      const { rerender, getByTestId } = renderControl({
+        field: { ...mockStringSelectField, i18n: 'duplicate' },
+        duplicate: true,
+        value: 'option 2',
+      });
+
+      const input = getByTestId('select-input');
+      expect(input.textContent).toBe('Option 2');
+
+      rerender({ value: 'option 3' });
+      expect(input.textContent).toBe('Option 3');
+    });
+
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
@@ -343,6 +399,20 @@ describe(SelectControl.name, () => {
 
       rerender({ value: 3 });
       expect(input.textContent).toBe('Option 2');
+    });
+
+    it('should use prop value exclusively if field is i18n duplicate', async () => {
+      const { rerender, getByTestId } = renderControl({
+        field: { ...mockNumberSelectField, i18n: 'duplicate' },
+        duplicate: true,
+        value: 2,
+      });
+
+      const input = getByTestId('select-input');
+      expect(input.textContent).toBe('Option 2');
+
+      rerender({ value: 3 });
+      expect(input.textContent).toBe('Option 3');
     });
 
     it('should call onChange when text input changes', async () => {
@@ -415,6 +485,20 @@ describe(SelectControl.name, () => {
       expect(input.textContent).toBe('Option 2');
     });
 
+    it('should use prop value exclusively if field is i18n duplicate', async () => {
+      const { rerender, getByTestId } = renderControl({
+        field: { ...mockMixedSelectField, i18n: 'duplicate' },
+        duplicate: true,
+        value: 'option 2',
+      });
+
+      const input = getByTestId('select-input');
+      expect(input.textContent).toBe('Option 2');
+
+      rerender({ value: 3 });
+      expect(input.textContent).toBe('Option 3');
+    });
+
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
@@ -471,6 +555,20 @@ describe(SelectControl.name, () => {
 
       rerender({ value: ['Option 1'] });
       expect(input.textContent).toBe('Option 2Option 3');
+    });
+
+    it('should use prop value exclusively if field is i18n duplicate', async () => {
+      const { rerender, getByTestId } = renderControl({
+        field: { ...mockMultiStringSelectField, i18n: 'duplicate' },
+        duplicate: true,
+        value: ['Option 2', 'Option 3'],
+      });
+
+      const input = getByTestId('select-input');
+      expect(input.textContent).toBe('Option 2Option 3');
+
+      rerender({ value: ['Option 1'] });
+      expect(input.textContent).toBe('Option 1');
     });
 
     it('should call onChange when text input changes', async () => {
@@ -542,6 +640,20 @@ describe(SelectControl.name, () => {
       expect(input.textContent).toBe('23');
     });
 
+    it('should use prop value exclusively if field is i18n duplicate', async () => {
+      const { rerender, getByTestId } = renderControl({
+        field: { ...mockMultiNumberSelectField, i18n: 'duplicate' },
+        duplicate: true,
+        value: [2, 3],
+      });
+
+      const input = getByTestId('select-input');
+      expect(input.textContent).toBe('23');
+
+      rerender({ value: [1] });
+      expect(input.textContent).toBe('1');
+    });
+
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
@@ -590,7 +702,7 @@ describe(SelectControl.name, () => {
   });
 
   describe('multi mixed select', () => {
-    const mockMultiNumberSelectField: SelectField = {
+    const mockMultiMixedSelectField: SelectField = {
       label: 'String',
       name: 'mock_string',
       widget: 'select',
@@ -600,7 +712,7 @@ describe(SelectControl.name, () => {
 
     it('should only use prop value as initial value', async () => {
       const { rerender, getByTestId } = renderControl({
-        field: mockMultiNumberSelectField,
+        field: mockMultiMixedSelectField,
         value: ['Option 2', 3],
       });
 
@@ -611,11 +723,25 @@ describe(SelectControl.name, () => {
       expect(input.textContent).toBe('Option 23');
     });
 
+    it('should use prop value exclusively if field is i18n duplicate', async () => {
+      const { rerender, getByTestId } = renderControl({
+        field: { ...mockMultiMixedSelectField, i18n: 'duplicate' },
+        duplicate: true,
+        value: ['Option 2', 3],
+      });
+
+      const input = getByTestId('select-input');
+      expect(input.textContent).toBe('Option 23');
+
+      rerender({ value: [1] });
+      expect(input.textContent).toBe('1');
+    });
+
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
         props: { onChange },
-      } = renderControl({ field: mockMultiNumberSelectField });
+      } = renderControl({ field: mockMultiMixedSelectField });
 
       const input = getByTestId('select-input');
       await userEvent.click(input);
@@ -682,6 +808,20 @@ describe(SelectControl.name, () => {
 
       rerender({ value: ['option 1'] });
       expect(input.textContent).toBe('Option 2Option 3');
+    });
+
+    it('should use prop value exclusively if field is i18n duplicate', async () => {
+      const { rerender, getByTestId } = renderControl({
+        field: { ...mockMultiStringSelectField, i18n: 'duplicate' },
+        duplicate: true,
+        value: ['option 2', 'option 3'],
+      });
+
+      const input = getByTestId('select-input');
+      expect(input.textContent).toBe('Option 2Option 3');
+
+      rerender({ value: ['option 1'] });
+      expect(input.textContent).toBe('Option 1');
     });
 
     it('should call onChange when text input changes', async () => {
@@ -757,6 +897,20 @@ describe(SelectControl.name, () => {
       expect(input.textContent).toBe('Option 2Option 3');
     });
 
+    it('should use prop value exclusively if field is i18n duplicate', async () => {
+      const { rerender, getByTestId } = renderControl({
+        field: { ...mockMultiNumberSelectField, i18n: 'duplicate' },
+        duplicate: true,
+        value: [2, 3],
+      });
+
+      const input = getByTestId('select-input');
+      expect(input.textContent).toBe('Option 2Option 3');
+
+      rerender({ value: [1] });
+      expect(input.textContent).toBe('Option 1');
+    });
+
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
@@ -828,6 +982,20 @@ describe(SelectControl.name, () => {
 
       rerender({ value: [1] });
       expect(input.textContent).toBe('Option 2Option 3');
+    });
+
+    it('should use prop value exclusively if field is i18n duplicate', async () => {
+      const { rerender, getByTestId } = renderControl({
+        field: { ...mockMultiNumberSelectField, i18n: 'duplicate' },
+        duplicate: true,
+        value: ['option 2', 3],
+      });
+
+      const input = getByTestId('select-input');
+      expect(input.textContent).toBe('Option 2Option 3');
+
+      rerender({ value: [1] });
+      expect(input.textContent).toBe('Option 1');
     });
 
     it('should call onChange when text input changes', async () => {

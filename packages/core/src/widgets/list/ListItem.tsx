@@ -66,8 +66,8 @@ interface ListItemProps
     | 'fieldsErrors'
     | 'submitted'
     | 'disabled'
-    | 'isDuplicate'
-    | 'isHidden'
+    | 'duplicate'
+    | 'hidden'
     | 'locale'
     | 'path'
     | 'value'
@@ -88,8 +88,8 @@ const ListItem: FC<ListItemProps> = ({
   fieldsErrors,
   submitted,
   disabled,
-  isDuplicate,
-  isHidden,
+  duplicate,
+  hidden,
   locale,
   path,
   valueType,
@@ -199,9 +199,9 @@ const ListItem: FC<ListItemProps> = ({
           fieldsErrors={fieldsErrors}
           submitted={submitted}
           parentPath={path}
-          disabled={disabled || isDuplicate}
-          isParentDuplicate={isDuplicate}
-          isParentHidden={isHidden}
+          disabled={disabled || duplicate}
+          parentDuplicate={duplicate}
+          parentHidden={hidden}
           locale={locale}
           i18n={i18n}
           forList={true}

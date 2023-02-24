@@ -10,7 +10,7 @@ import 'what-input';
 import { authenticateUser } from './actions/auth';
 import { loadConfig } from './actions/config';
 import App from './components/App';
-import './components/editor-widgets';
+import './components/entry-editor/widgets';
 import ErrorBoundary from './components/ErrorBoundary';
 import addExtensions from './extensions';
 import { getPhrases } from './lib/phrases';

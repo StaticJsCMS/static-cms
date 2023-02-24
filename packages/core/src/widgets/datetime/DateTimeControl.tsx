@@ -77,7 +77,7 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
   label,
   value,
   disabled,
-  isDuplicate,
+  duplicate,
   errors,
   forSingleList,
   t,
@@ -157,8 +157,8 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
 
   const [internalRawValue, setInternalValue] = useState(value);
   const internalValue = useMemo(
-    () => (isDuplicate ? value : internalRawValue),
-    [internalRawValue, isDuplicate, value],
+    () => (duplicate ? value : internalRawValue),
+    [internalRawValue, duplicate, value],
   );
 
   const dateValue: Date = useMemo(() => {

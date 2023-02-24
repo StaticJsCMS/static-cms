@@ -56,6 +56,20 @@ describe(NumberControl.name, () => {
     expect(input).toHaveValue(5);
   });
 
+  it('should use prop value exclusively if field is i18n duplicate', async () => {
+    const { rerender, getByTestId } = renderControl({
+      field: { ...mockNumberField, i18n: 'duplicate' },
+      duplicate: true,
+      value: '5',
+    });
+
+    const input = getByTestId('number-input');
+    expect(input).toHaveValue(5);
+
+    rerender({ value: '76' });
+    expect(input).toHaveValue(76);
+  });
+
   it('should call onChange when text input changes', async () => {
     const {
       getByTestId,

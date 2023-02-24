@@ -101,7 +101,7 @@ const DEFAULT_OPTIONS_LIMIT = 20;
 const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> = ({
   value,
   field,
-  isDuplicate,
+  duplicate,
   config,
   locale,
   label,
@@ -113,8 +113,8 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
 }) => {
   const [internalRawValue, setInternalValue] = useState(value);
   const internalValue = useMemo(
-    () => (isDuplicate ? value : internalRawValue),
-    [internalRawValue, isDuplicate, value],
+    () => (duplicate ? value : internalRawValue),
+    [internalRawValue, duplicate, value],
   );
   const [initialOptions, setInitialOptions] = useState<HitOption[]>([]);
 

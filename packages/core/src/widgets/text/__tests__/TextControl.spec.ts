@@ -54,6 +54,20 @@ describe(TextControl.name, () => {
     expect(input).toHaveValue('i am a value');
   });
 
+  it('should use prop value exclusively if field is i18n duplicate', async () => {
+    const { rerender, getByTestId } = renderControl({
+      field: { ...mockTextField, i18n: 'duplicate' },
+      duplicate: true,
+      value: 'i am a value',
+    });
+
+    const input = getByTestId('textarea-input');
+    expect(input).toHaveValue('i am a value');
+
+    rerender({ value: 'i am a new value' });
+    expect(input).toHaveValue('i am a new value');
+  });
+
   it('should call onChange when text input changes', async () => {
     const {
       getByTestId,
