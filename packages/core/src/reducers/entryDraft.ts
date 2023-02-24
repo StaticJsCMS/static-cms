@@ -163,7 +163,8 @@ function entryDraftReducer(
       };
 
       if (i18n) {
-        newState = duplicateI18nFields(newState, field, i18n.locales, i18n.defaultLocale);
+        console.log('i18n!')
+        newState = duplicateI18nFields(newState, field, i18n.locales, i18n.defaultLocale, path);
       }
 
       const newData = get(newState.entry, dataPath) ?? {};

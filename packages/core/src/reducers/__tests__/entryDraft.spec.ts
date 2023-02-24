@@ -37,6 +37,49 @@ describe('entryDraft', () => {
         });
       });
 
+      fit('duplicate values to other locales', () => {
+        const state = entryDraftReducer(startState, {
+          type: DRAFT_CHANGE_FIELD,
+          payload: {
+            path: 'path1.path2',
+            field: {
+              widget: 'string',
+              name: 'stringInput',
+              i18n: 'duplicate',
+            },
+            value: 'newValue',
+            i18n: {
+              locales: ['en', 'fr', 'es'],
+              defaultLocale: 'en',
+              currentLocale: 'en',
+            },
+          },
+        });
+
+        expect(state.entry?.data).toEqual({
+          path1: {
+            path2: 'newValue',
+          },
+        });
+
+        expect(state.entry?.i18n).toEqual({
+          fr: {
+            data: {
+              path1: {
+                path2: 'newValue',
+              },
+            },
+          },
+          es: {
+            data: {
+              path1: {
+                path2: 'newValue',
+              },
+            },
+          },
+        });
+      });
+
       it('should update path with value for singleton list', () => {
         let state = entryDraftReducer(startState, {
           type: DRAFT_CHANGE_FIELD,
