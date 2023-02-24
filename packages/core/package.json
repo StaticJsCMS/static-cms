@@ -1,6 +1,6 @@
 {
   "name": "@staticcms/core",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "license": "MIT",
   "description": "Static CMS core application.",
   "repository": "https://github.com/StaticJsCMS/static-cms",
