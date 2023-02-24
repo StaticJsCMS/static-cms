@@ -383,16 +383,16 @@ export function duplicateI18nFields(
   field: Field,
   locales: string[],
   defaultLocale: string,
-  fieldPath: string[] = [field.name],
+  fieldPath: string,
 ) {
-  const value = get(entryDraft, ['entry', 'data', ...fieldPath]);
+  const value = get(entryDraft, ['entry', 'data', ...fieldPath.split('.')]);
   if (field.i18n === I18N_FIELD.DUPLICATE) {
     locales
       .filter(l => l !== defaultLocale)
       .forEach(l => {
         entryDraft = set(
           entryDraft,
-          ['entry', ...getDataPath(l, defaultLocale), ...fieldPath].join('.'),
+          ['entry', ...getDataPath(l, defaultLocale), fieldPath].join('.'),
           value,
         );
       });
@@ -400,10 +400,13 @@ export function duplicateI18nFields(
 
   if ('fields' in field && !Array.isArray(value)) {
     field.fields?.forEach(field => {
-      entryDraft = duplicateI18nFields(entryDraft, field, locales, defaultLocale, [
-        ...fieldPath,
-        field.name,
-      ]);
+      entryDraft = duplicateI18nFields(
+        entryDraft,
+        field,
+        locales,
+        defaultLocale,
+        `${fieldPath}.${field.name}`,
+      );
     });
   }
 
