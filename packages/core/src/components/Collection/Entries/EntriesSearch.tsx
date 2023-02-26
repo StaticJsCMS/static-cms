@@ -25,6 +25,7 @@ const EntriesSearch = ({
   searchEntries,
   clearSearch,
 }: EntriesSearchProps) => {
+  console.log('collections', collections);
   const collectionNames = useMemo(() => Object.keys(collections), [collections]);
 
   const getCursor = useCallback(() => {

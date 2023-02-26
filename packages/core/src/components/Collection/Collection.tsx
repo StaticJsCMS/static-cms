@@ -104,10 +104,6 @@ const CollectionView = ({
   );
 
   const entries = useMemo(() => {
-    if (!collection) {
-      return null;
-    }
-
     if (isSearchResults) {
       let searchCollections = collections;
       if (isSingleSearchResult) {
@@ -127,6 +123,10 @@ const CollectionView = ({
           viewStyle={viewStyle}
         />
       );
+    }
+
+    if (!collection) {
+      return null;
     }
 
     return (
