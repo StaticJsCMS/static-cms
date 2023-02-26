@@ -12774,10 +12774,10 @@ minimatch@3.0.5:
   dependencies:
     brace-expansion "^1.1.7"
 
-minimatch@7.1.4:
-  version "7.1.4"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-7.1.4.tgz#5b252ebef9931e082549370815afdec3caed0319"
-  integrity sha512-dZdn8jDUB4Y3eu7hABT6IgLTMQ9cVf+vhhXjLAkuN40wRkweVxEpvnGYLYZUhNB0P+BbTOZDzo+1rCitOQWc3g==
+minimatch@7.2.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-7.2.0.tgz#741ff59370007ebb8faff0a9b20cdb44357803e4"
+  integrity sha512-rMRHmwySzopAQjmWW6TkAKCEDKNaY/HuV/c2YkWWuWnfkTwApt0V4hnYzzPnZ/5Gcd2+8MPncSyuOGPl3xPvcg==
   dependencies:
     brace-expansion "^2.0.1"
 
