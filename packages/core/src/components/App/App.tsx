@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
-import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ScrollSync } from 'react-scroll-sync';
 import TopBarProgress from 'react-topbar-progress-indicator';
 
@@ -12,7 +12,6 @@ import { loginUser as loginUserAction } from '@staticcms/core/actions/auth';
 import { discardDraft as discardDraftAction } from '@staticcms/core/actions/entries';
 import { currentBackend } from '@staticcms/core/backend';
 import { colors, GlobalStyles } from '@staticcms/core/components/UI/styles';
-import { history } from '@staticcms/core/routing/history';
 import { getDefaultPath } from '../../lib/util/collection.util';
 import CollectionRoute from '../Collection/CollectionRoute';
 import EditorRoute from '../Editor/EditorRoute';
@@ -84,6 +83,8 @@ const App = ({
   scrollSyncEnabled,
   discardDraft,
 }: TranslatedProps<AppProps>) => {
+  const navigate = useNavigate();
+
   const configError = useCallback(
     (error?: string) => {
       return (
@@ -140,7 +141,7 @@ const App = ({
           base_url={config.config.backend.base_url}
           authEndpoint={config.config.backend.auth_endpoint}
           config={config.config}
-          clearHash={() => history.replace('/')}
+          clearHash={() => navigate('/', { replace: true })}
           t={t}
         />
       </div>

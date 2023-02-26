@@ -21,7 +21,7 @@ const de: LocalePhrasesRoot = {
       content: 'Inhalt',
       workflow: 'Arbeitsablauf',
       media: 'Medien',
-      quickAdd: 'Schnell-Erstellung',
+      quickAdd: 'Schnellerstellung',
     },
     app: {
       errorHeader: 'Fehler beim Laden der CMS-Konfiguration.',
@@ -36,8 +36,8 @@ const de: LocalePhrasesRoot = {
   },
   collection: {
     sidebar: {
-      collections: 'Inhaltstypen',
-      allCollections: 'Allen Inhaltstypen',
+      collections: 'Bereiche',
+      allCollections: 'Allen Bereichen',
       searchAll: 'Alles durchsuchen',
       searchIn: 'Suchen in',
     },
@@ -231,6 +231,10 @@ const de: LocalePhrasesRoot = {
     },
   },
   ui: {
+    common: {
+      yes: 'Ja',
+      no: 'Nein',
+    },
     default: {
       goBackToSite: 'Zurück zur Seite',
     },

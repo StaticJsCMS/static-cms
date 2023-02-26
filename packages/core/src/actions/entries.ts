@@ -1,4 +1,5 @@
 import isEqual from 'lodash/isEqual';
+import { redirect } from 'react-router-dom';
 
 import { currentBackend } from '../backend';
 import {
@@ -48,7 +49,6 @@ import {
   selectIsFetching,
   selectPublishedSlugs,
 } from '../reducers/selectors/entries';
-import { navigateToEntry } from '../routing/history';
 import { addSnackbar } from '../store/slices/snackbars';
 import { createAssetProxy } from '../valueObjects/AssetProxy';
 import createEntry from '../valueObjects/createEntry';
@@ -1040,7 +1040,7 @@ export function persistEntry(collection: Collection) {
         }
         if (entry.slug !== newSlug) {
           await dispatch(loadEntry(collection, newSlug));
-          navigateToEntry(collection.name, newSlug);
+          redirect(`/collections/${collection.name}/entries/${newSlug}`);
         } else {
           await dispatch(loadEntry(collection, newSlug, true));
         }
