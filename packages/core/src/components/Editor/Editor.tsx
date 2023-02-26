@@ -2,6 +2,8 @@ import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { createHashHistory } from 'history';
 
 import { logoutUser as logoutUserAction } from '@staticcms/core/actions/auth';
 import {
@@ -25,7 +27,6 @@ import {
 import { selectFields } from '@staticcms/core/lib/util/collection.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 import { selectEntry } from '@staticcms/core/reducers/selectors/entries';
-import { history, navigateToCollection, navigateToNewEntry } from '@staticcms/core/routing/history';
 import confirm from '../UI/Confirm';
 import Loader from '../UI/Loader';
 import EditorInterface from './EditorInterface';
@@ -74,6 +75,10 @@ const Editor = ({
 }: TranslatedProps<EditorProps>) => {
   const [version, setVersion] = useState(0);
 
+  const history = createHashHistory();
+
+  const navigate = useNavigate();
+
   const createBackup = useMemo(
     () =>
       debounce(function (entry: Entry, collection: Collection) {
@@ -111,7 +116,7 @@ const Editor = ({
           deleteBackup();
 
           if (createNew) {
-            navigateToNewEntry(collection.name);
+            navigate(`/collections/${collection.name}/new`, { replace: true });
             if (duplicate && entryDraft.entry) {
               createDraftDuplicateFromEntry(entryDraft.entry);
             }
@@ -135,7 +140,7 @@ const Editor = ({
       return;
     }
 
-    navigateToNewEntry(collection.name);
+    navigate(`/collections/${collection.name}/new`, { replace: true });
     createDraftDuplicateFromEntry(entryDraft.entry);
   }, [collection.name, createDraftDuplicateFromEntry, entryDraft.entry]);
 
@@ -161,13 +166,13 @@ const Editor = ({
     }
 
     if (!slug) {
-      return navigateToCollection(collection.name);
+      return navigate(`/collections/${collection.name}`);
     }
 
     setTimeout(async () => {
       await deleteEntry(collection, slug);
       deleteBackup();
-      return navigateToCollection(collection.name);
+      return navigate(`/collections/${collection.name}`);
     }, 0);
   }, [collection, deleteBackup, deleteEntry, entryDraft.hasChanged, slug]);
 

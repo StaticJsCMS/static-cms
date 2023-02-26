@@ -12,13 +12,13 @@ import Toolbar from '@mui/material/Toolbar';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { logoutUser as logoutUserAction } from '@staticcms/core/actions/auth';
-import { createNewEntry } from '@staticcms/core/actions/collections';
 import { openMediaLibrary as openMediaLibraryAction } from '@staticcms/core/actions/mediaLibrary';
 import { checkBackendStatus as checkBackendStatusAction } from '@staticcms/core/actions/status';
 import { buttons, colors } from '@staticcms/core/components/UI/styles';
-import { stripProtocol } from '@staticcms/core/lib/urlHelper';
+import { stripProtocol, getNewEntryUrl } from '@staticcms/core/lib/urlHelper';
 import NavLink from '../UI/NavLink';
 import SettingsDropdown from '../UI/SettingsDropdown';
 
@@ -82,9 +82,7 @@ const Header = ({
     setAnchorEl(null);
   }, []);
 
-  const handleCreatePostClick = useCallback((collectionName: string) => {
-    createNewEntry(collectionName);
-  }, []);
+  const navigate = useNavigate();
 
   const creatableCollections = useMemo(
     () =>
@@ -148,7 +146,7 @@ const Header = ({
                 {creatableCollections.map(collection => (
                   <MenuItem
                     key={collection.name}
-                    onClick={() => handleCreatePostClick(collection.name)}
+                    onClick={() => navigate(getNewEntryUrl(collection.name))}
                   >
                     {collection.label_singular || collection.label}
                   </MenuItem>

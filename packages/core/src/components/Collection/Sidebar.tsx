@@ -10,8 +10,8 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';
+import { useNavigate } from 'react-router-dom';
 
-import { searchCollections } from '@staticcms/core/actions/collections';
 import { colors } from '@staticcms/core/components/UI/styles';
 import { getAdditionalLinks, getIcon } from '@staticcms/core/lib/registry';
 import NavLink from '../UI/NavLink';
@@ -48,6 +48,15 @@ const Sidebar = ({
   t,
   filterTerm,
 }: TranslatedProps<SidebarProps>) => {
+  const navigate = useNavigate();
+  function searchCollections(query: string, collection?: string) {
+    if (collection) {
+      navigate(`/collections/${collection}/search/${query}`);
+    } else {
+      navigate(`/search/${query}`);
+    }
+  }
+
   const collectionLinks = useMemo(
     () =>
       Object.values(collections)
