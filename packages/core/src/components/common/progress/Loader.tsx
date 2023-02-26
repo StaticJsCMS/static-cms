@@ -1,6 +1,6 @@
-import CircularProgress from '@mui/material/CircularProgress';
-import Typography from '@mui/material/Typography';
 import React, { useEffect, useMemo, useState } from 'react';
+
+import CircularProgress from './CircularProgress';
 
 export interface LoaderProps {
   children: string | string[] | undefined;
@@ -35,9 +35,9 @@ const Loader = ({ children }: LoaderProps) => {
   }, [children, currentItem]);
 
   return (
-    <div>
+    <div className="absolute inset-0 flex flex-col gap-2 items-center justify-center">
       <CircularProgress />
-      <Typography>{text}</Typography>
+      <div>{text}</div>
     </div>
   );
 };

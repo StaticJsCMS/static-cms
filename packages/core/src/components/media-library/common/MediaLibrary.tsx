@@ -57,8 +57,6 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
   dynamicSearchActive,
   forImage = false,
   isLoading,
-  isPersisting,
-  isDeleting,
   hasNextPage,
   isPaginating,
   config: mediaConfig,

@@ -8,7 +8,7 @@ import useDebounce from './useDebounce';
 import type { Collection, Entry, MediaField } from '@staticcms/core/interface';
 
 export default function useMediaAsset<T extends MediaField>(
-  url: string | undefined,
+  url: string | undefined | null,
   collection?: Collection<T>,
   field?: T,
   entry?: Entry,

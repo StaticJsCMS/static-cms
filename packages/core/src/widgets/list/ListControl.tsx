@@ -11,8 +11,8 @@ import MenuGroup from '@staticcms/core/components/common/menu/MenuGroup';
 import MenuItemButton from '@staticcms/core/components/common/menu/MenuItemButton';
 import useHasChildErrors from '@staticcms/core/lib/hooks/useHasChildErrors';
 import classNames from '@staticcms/core/lib/util/classNames.util';
-import ListFieldWrapper from './ListFieldWrapper';
-import ListItem from './ListItem';
+import ListFieldWrapper from './components/ListFieldWrapper';
+import ListItem from './components/ListItem';
 import { resolveFieldKeyType, TYPES_KEY } from './typedListHelpers';
 
 import type { DragEndEvent } from '@dnd-kit/core';

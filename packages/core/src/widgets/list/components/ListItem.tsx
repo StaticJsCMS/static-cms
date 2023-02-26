@@ -7,9 +7,9 @@ import {
   addFileTemplateFields,
   compileStringTemplate,
 } from '@staticcms/core/lib/widgets/stringTemplate';
-import ListItemWrapper from '@staticcms/list/ListItemWrapper';
-import { ListValueType } from './ListControl';
-import { getTypedFieldForValue } from './typedListHelpers';
+import ListItemWrapper from '@staticcms/list/components/ListItemWrapper';
+import { ListValueType } from '../ListControl';
+import { getTypedFieldForValue } from '../typedListHelpers';
 
 import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import type {

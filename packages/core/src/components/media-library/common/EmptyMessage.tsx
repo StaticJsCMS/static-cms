@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface EmptyMessageProps {
+export interface EmptyMessageProps {
   content: string;
 }
 

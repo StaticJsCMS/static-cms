@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
-import useButtonClassName from './useButtonClassName';
+import useButtonClassNames from './useButtonClassNames';
 
 import type { FC, MouseEventHandler, ReactNode, Ref } from 'react';
 
@@ -51,7 +51,7 @@ const Button: FC<ButtonLinkProps> = ({
   'data-testid': dataTestId,
   ...otherProps
 }) => {
-  const buttonClassName = useButtonClassName(variant, color, rounded);
+  const buttonClassName = useButtonClassNames(variant, color, rounded);
 
   const buttonClassNames = useMemo(
     () => classNames(className, buttonClassName),

@@ -23,7 +23,7 @@ const classes: Record<
   },
 };
 
-export default function useButtonClassName(
+export default function useButtonClassNames(
   variant: Required<BaseBaseProps>['variant'],
   color: Required<BaseBaseProps>['color'],
   rounded: boolean,

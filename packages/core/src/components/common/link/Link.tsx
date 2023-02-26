@@ -7,7 +7,7 @@ import { useAppSelector } from '@staticcms/core/store/hooks';
 import type { Collection, MediaField } from '@staticcms/core/interface';
 
 export interface LinkProps<F extends MediaField> {
-  src?: string;
+  href: string | undefined | null;
   children: string;
   collection?: Collection<F>;
   field?: F;
@@ -15,7 +15,7 @@ export interface LinkProps<F extends MediaField> {
 }
 
 const Link = <F extends MediaField>({
-  src,
+  href,
   children,
   collection,
   field,
@@ -23,7 +23,7 @@ const Link = <F extends MediaField>({
 }: LinkProps<F>) => {
   const entry = useAppSelector(selectEditingDraft);
 
-  const assetSource = useMediaAsset(src, collection, field, entry);
+  const assetSource = useMediaAsset(href, collection, field, entry);
 
   return (
     <a key="link" href={assetSource} data-testid={dataTestId ?? 'link'}>
@@ -35,9 +35,9 @@ const Link = <F extends MediaField>({
 export const withMdxLink = <F extends MediaField>({
   collection,
   field,
-}: Omit<LinkProps<F>, 'src' | 'children'>) => {
-  const MdxLink = ({ src, children }: Pick<LinkProps<F>, 'src' | 'children'>) => (
-    <Link src={src} collection={collection} field={field}>
+}: Pick<LinkProps<F>, 'collection' | 'field'>) => {
+  const MdxLink = ({ children, ...props }: Omit<LinkProps<F>, 'collection' | 'field'>) => (
+    <Link {...props} collection={collection} field={field}>
       {children}
     </Link>
   );

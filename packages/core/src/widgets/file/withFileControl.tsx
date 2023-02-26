@@ -1,9 +1,6 @@
-import CameraIcon from '@heroicons/react/20/solid/CameraIcon';
-import XMarkIcon from '@heroicons/react/20/solid/XMarkIcon';
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import Button from '@staticcms/core/components/common/button/Button';
-import IconButton from '@staticcms/core/components/common/button/IconButton';
 import Field from '@staticcms/core/components/common/field/Field';
 import Image from '@staticcms/core/components/common/image/Image';
 import Link from '@staticcms/core/components/common/link/Link';
@@ -11,59 +8,12 @@ import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { basename } from '@staticcms/core/lib/util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
+import SortableImage from './components/SortableImage';
 
-import type { Collection, FileOrImageField, WidgetControlProps } from '@staticcms/core/interface';
-import type { FC, MouseEvent, MouseEventHandler } from 'react';
+import type { FileOrImageField, WidgetControlProps } from '@staticcms/core/interface';
+import type { FC, MouseEvent } from 'react';
 
 const MAX_DISPLAY_LENGTH = 50;
-
-interface SortableImageButtonsProps {
-  onRemove: MouseEventHandler;
-  onReplace: MouseEventHandler;
-}
-
-const SortableImageButtons: FC<SortableImageButtonsProps> = ({ onRemove, onReplace }) => {
-  return (
-    <div key="image-buttons-wrapper">
-      <IconButton key="image-replace" onClick={onReplace}>
-        <CameraIcon key="image-replace-icon" />
-      </IconButton>
-      <IconButton key="image-remove" onClick={onRemove}>
-        <XMarkIcon key="image-remove-icon" />
-      </IconButton>
-    </div>
-  );
-};
-
-interface SortableImageProps {
-  itemValue: string;
-  collection: Collection<FileOrImageField>;
-  field: FileOrImageField;
-  onRemove: MouseEventHandler;
-  onReplace: MouseEventHandler;
-}
-
-const SortableImage: FC<SortableImageProps> = ({
-  itemValue,
-  collection,
-  field,
-  onRemove,
-  onReplace,
-}: SortableImageProps) => {
-  return (
-    <div>
-      <div key="image-wrapper">
-        {/* TODO $sortable */}
-        <Image key="image" src={itemValue} collection={collection} field={field} />
-      </div>
-      <SortableImageButtons
-        key="image-buttons"
-        onRemove={onRemove}
-        onReplace={onReplace}
-      ></SortableImageButtons>
-    </div>
-  );
-};
 
 function isMultiple(value: string | string[] | null | undefined): value is string[] {
   return Array.isArray(value);
@@ -209,18 +159,27 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       //   [handleOnChange, internalValue],
       // );
 
-      const renderFileLink = useCallback((link: string | undefined | null) => {
-        const size = MAX_DISPLAY_LENGTH;
-        if (!link || link.length <= size) {
-          return <Link;
-        }
-        const text = `${link.slice(0, size / 2)}\u2026${link.slice(-(size / 2) + 1)}`;
-        return (
-          <a key={`file-link-${text}`} href={link} rel="noopener noreferrer" target="_blank">
-            {text}
-          </a>
-        );
-      }, []);
+      const renderFileLink = useCallback(
+        (link: string | undefined | null) => {
+          if (!link) {
+            return null;
+          }
+
+          const text =
+            link.length <= MAX_DISPLAY_LENGTH
+              ? link
+              : `${link.slice(0, MAX_DISPLAY_LENGTH / 2)}\u2026${link.slice(
+                  -(MAX_DISPLAY_LENGTH / 2) + 1,
+                )}`;
+
+          return (
+            <Link href={link} collection={collection} field={field}>
+              {text}
+            </Link>
+          );
+        },
+        [collection, field],
+      );
 
       const renderedImagesLinks = useMemo(() => {
         if (forImage) {

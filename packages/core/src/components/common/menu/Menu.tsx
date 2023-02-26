@@ -3,7 +3,7 @@ import ChevronDownIcon from '@heroicons/react/20/solid/ChevronDownIcon';
 import React, { useMemo } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
-import useButtonClassName from '../button/useButtonClassName';
+import useButtonClassNames from '../button/useButtonClassNames';
 
 import type { FC, ReactNode } from 'react';
 
@@ -30,7 +30,7 @@ const Menu = ({
   hideDropdownIcon = false,
   'data-testid': dataTestId,
 }: MenuProps) => {
-  const buttonClassName = useButtonClassName(variant, color, rounded);
+  const buttonClassName = useButtonClassNames(variant, color, rounded);
 
   const menuButtonClassNames = useMemo(
     () => classNames(className, buttonClassName),

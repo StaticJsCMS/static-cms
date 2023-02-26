@@ -4,7 +4,7 @@ import { translate } from 'react-polyglot';
 
 import { selectDeleting, selectPersisting } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppSelector } from '@staticcms/core/store/hooks';
-import Button from '../../common/button/Button';
+import useButtonClassNames from '../../common/button/useButtonClassNames';
 
 import type { TranslatedProps } from '@staticcms/core/interface';
 import type { ChangeEventHandler, FC } from 'react';
@@ -22,8 +22,11 @@ const FileUploadButton: FC<TranslatedProps<FileUploadButtonProps>> = ({
   const isPersisting = useAppSelector(selectPersisting);
   const isDeleting = useAppSelector(selectDeleting);
 
+  const buttonClasses = useButtonClassNames('contained', 'primary', false);
+
   return (
-    <Button variant="contained" startIcon={ArrowUpTrayIcon}>
+    <label className={`${buttonClasses} cursor-pointer`}>
+      <ArrowUpTrayIcon className="w-5 h-5 mr-2" />
       {isPersisting
         ? t('mediaLibrary.mediaLibraryModal.uploading')
         : t('mediaLibrary.mediaLibraryModal.upload')}
@@ -35,7 +38,7 @@ const FileUploadButton: FC<TranslatedProps<FileUploadButtonProps>> = ({
         onChange={onChange}
         disabled={isDeleting || isPersisting}
       />
-    </Button>
+    </label>
   );
 };
 
