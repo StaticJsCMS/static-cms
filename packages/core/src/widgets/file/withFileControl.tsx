@@ -5,33 +5,17 @@ import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from '
 import Button from '@staticcms/core/components/common/button/Button';
 import IconButton from '@staticcms/core/components/common/button/IconButton';
 import Field from '@staticcms/core/components/common/field/Field';
-import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
+import Image from '@staticcms/core/components/common/image/Image';
+import Link from '@staticcms/core/components/common/link/Link';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { basename } from '@staticcms/core/lib/util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 
-import type {
-  Collection,
-  Entry,
-  FileOrImageField,
-  WidgetControlProps,
-} from '@staticcms/core/interface';
+import type { Collection, FileOrImageField, WidgetControlProps } from '@staticcms/core/interface';
 import type { FC, MouseEvent, MouseEventHandler } from 'react';
 
 const MAX_DISPLAY_LENGTH = 50;
-interface ImageProps {
-  value: string;
-  collection: Collection<FileOrImageField>;
-  field: FileOrImageField;
-  entry: Entry;
-}
-
-const Image: FC<ImageProps> = ({ value, collection, field, entry }) => {
-  const assetSource = useMediaAsset(value, collection, field, entry);
-
-  return <img key="image" role="presentation" src={assetSource} />;
-};
 
 interface SortableImageButtonsProps {
   onRemove: MouseEventHandler;
@@ -55,7 +39,6 @@ interface SortableImageProps {
   itemValue: string;
   collection: Collection<FileOrImageField>;
   field: FileOrImageField;
-  entry: Entry;
   onRemove: MouseEventHandler;
   onReplace: MouseEventHandler;
 }
@@ -64,7 +47,6 @@ const SortableImage: FC<SortableImageProps> = ({
   itemValue,
   collection,
   field,
-  entry,
   onRemove,
   onReplace,
 }: SortableImageProps) => {
@@ -72,7 +54,7 @@ const SortableImage: FC<SortableImageProps> = ({
     <div>
       <div key="image-wrapper">
         {/* TODO $sortable */}
-        <Image key="image" value={itemValue} collection={collection} field={field} entry={entry} />
+        <Image key="image" src={itemValue} collection={collection} field={field} />
       </div>
       <SortableImageButtons
         key="image-buttons"
@@ -106,7 +88,6 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       label,
       collection,
       field,
-      entry,
       errors,
       forSingleList,
       duplicate,
@@ -231,7 +212,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       const renderFileLink = useCallback((link: string | undefined | null) => {
         const size = MAX_DISPLAY_LENGTH;
         if (!link || link.length <= size) {
-          return link;
+          return <Link;
         }
         const text = `${link.slice(0, size / 2)}\u2026${link.slice(-(size / 2) + 1)}`;
         return (
@@ -256,7 +237,6 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
                     itemValue={itemValue}
                     collection={collection}
                     field={field}
-                    entry={entry}
                     onRemove={onRemoveOne(index)}
                     onReplace={onReplaceOne(index)}
                   />
@@ -267,13 +247,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
           return (
             <div key="single-image-wrapper">
-              <Image
-                key="single-image"
-                value={internalValue}
-                collection={collection}
-                field={field}
-                entry={entry}
-              />
+              <Image key="single-image" src={internalValue} collection={collection} field={field} />
             </div>
           );
         }
@@ -291,7 +265,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
         }
 
         return <div key="single-file-links">{renderFileLink(internalValue)}</div>;
-      }, [collection, entry, field, internalValue, onRemoveOne, onReplaceOne, renderFileLink]);
+      }, [collection, field, internalValue, onRemoveOne, onReplaceOne, renderFileLink]);
 
       const content: JSX.Element = useMemo(() => {
         const subject = forImage ? 'image' : 'file';

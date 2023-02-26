@@ -13,9 +13,17 @@ export interface ImageProps<F extends MediaField> {
   className?: string;
   collection?: Collection<F>;
   field?: F;
+  'data-testid'?: string;
 }
 
-const Image = <F extends MediaField>({ src, alt, className, collection, field }: ImageProps<F>) => {
+const Image = <F extends MediaField>({
+  src,
+  alt,
+  className,
+  collection,
+  field,
+  'data-testid': dataTestId,
+}: ImageProps<F>) => {
   const entry = useAppSelector(selectEditingDraft);
 
   const assetSource = useMediaAsset(src, collection, field, entry);
@@ -26,6 +34,7 @@ const Image = <F extends MediaField>({ src, alt, className, collection, field }:
       role="presentation"
       src={assetSource}
       alt={alt}
+      data-testid={dataTestId ?? 'image'}
       className={classNames('object-cover max-w-full overflow-hidden', className)}
     />
   );

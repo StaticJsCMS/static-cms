@@ -1,6 +1,7 @@
 import type {
   BooleanField,
   DateTimeField,
+  FileOrImageField,
   MarkdownField,
   NumberField,
   RelationField,
@@ -17,21 +18,27 @@ export const mockBooleanField: BooleanField = {
 export const mockDateTimeField: DateTimeField = {
   label: 'DateTime',
   name: 'mock_datetime',
-  widget: 'datetime'
+  widget: 'datetime',
 };
 
 export const mockDateField: DateTimeField = {
   label: 'Date',
   name: 'mock_date',
   widget: 'datetime',
-  time_format: false
+  time_format: false,
 };
 
 export const mockTimeField: DateTimeField = {
   label: 'Time',
   name: 'mock_time',
   widget: 'datetime',
-  date_format: false
+  date_format: false,
+};
+
+export const mockFileField: FileOrImageField = {
+  label: 'File',
+  name: 'mock_file',
+  widget: 'file',
 };
 
 export const mockMarkdownField: MarkdownField = {

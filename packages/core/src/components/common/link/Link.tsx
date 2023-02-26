@@ -11,14 +11,25 @@ export interface LinkProps<F extends MediaField> {
   children: string;
   collection?: Collection<F>;
   field?: F;
+  'data-testid'?: string;
 }
 
-const Link = <F extends MediaField>({ src, children, collection, field }: LinkProps<F>) => {
+const Link = <F extends MediaField>({
+  src,
+  children,
+  collection,
+  field,
+  'data-testid': dataTestId,
+}: LinkProps<F>) => {
   const entry = useAppSelector(selectEditingDraft);
 
   const assetSource = useMediaAsset(src, collection, field, entry);
 
-  return <a key="link" href={assetSource}>{children}</a>;
+  return (
+    <a key="link" href={assetSource} data-testid={dataTestId ?? 'link'}>
+      {children}
+    </a>
+  );
 };
 
 export const withMdxLink = <F extends MediaField>({
@@ -26,7 +37,9 @@ export const withMdxLink = <F extends MediaField>({
   field,
 }: Omit<LinkProps<F>, 'src' | 'children'>) => {
   const MdxLink = ({ src, children }: Pick<LinkProps<F>, 'src' | 'children'>) => (
-    <Link src={src} collection={collection} field={field}>{children}</Link>
+    <Link src={src} collection={collection} field={field}>
+      {children}
+    </Link>
   );
 
   return MdxLink;
