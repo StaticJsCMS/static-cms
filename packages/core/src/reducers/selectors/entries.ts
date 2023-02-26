@@ -17,17 +17,29 @@ import type {
 } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 
-export function selectEntriesSort(entries: RootState, collection: string) {
+export function selectEntriesSort(entries: RootState, collection?: string) {
+  if (!collection) {
+    return undefined;
+  }
+
   const sort = entries.entries.sort as Sort | undefined;
   return sort?.[collection];
 }
 
-export function selectEntriesFilter(entries: RootState, collection: string) {
+export function selectEntriesFilter(entries: RootState, collection?: string) {
+  if (!collection) {
+    return {};
+  }
+
   const filter = entries.entries.filter as Filter | undefined;
   return filter?.[collection] || {};
 }
 
-export function selectEntriesGroup(entries: RootState, collection: string) {
+export function selectEntriesGroup(entries: RootState, collection?: string) {
+  if (!collection) {
+    return {};
+  }
+
   const group = entries.entries.group as Group | undefined;
   return group?.[collection] || {};
 }

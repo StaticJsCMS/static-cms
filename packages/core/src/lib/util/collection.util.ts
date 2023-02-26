@@ -156,9 +156,13 @@ export function selectDefaultSortableFields(collection: Collection, backend: Bac
 }
 
 export function selectSortableFields(
-  collection: Collection,
+  collection: Collection | undefined,
   t: (key: string) => string,
 ): SortableField[] {
+  if (!collection) {
+    return [];
+  }
+
   const fields = (collection.sortable_fields?.fields ?? [])
     .map(key => {
       if (key === COMMIT_DATE) {
@@ -177,12 +181,12 @@ export function selectSortableFields(
   return fields;
 }
 
-export function selectViewFilters(collection: Collection) {
-  return collection.view_filters;
+export function selectViewFilters(collection?: Collection) {
+  return collection?.view_filters;
 }
 
-export function selectViewGroups(collection: Collection) {
-  return collection.view_groups;
+export function selectViewGroups(collection?: Collection) {
+  return collection?.view_groups;
 }
 
 export function selectFieldsComments(collection: Collection, entryMap: Entry) {

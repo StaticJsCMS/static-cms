@@ -28,11 +28,11 @@ const CollectionRoute = ({
 
   const defaultPath = useMemo(() => getDefaultPath(collections), [collections]);
 
-  if (!name || !collection) {
+  if (!searchTerm && (!name || !collection)) {
     return <Navigate to={defaultPath} />;
   }
 
-  if ('files' in collection && collection.files?.length === 1) {
+  if (collection && 'files' in collection && collection.files?.length === 1) {
     return <Navigate to={`/collections/${collection.name}/entries/${collection.files[0].name}`} />;
   }
 
