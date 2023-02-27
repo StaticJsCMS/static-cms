@@ -65,7 +65,7 @@ interface EditorInterfaceProps {
   displayUrl: string | undefined;
   isNewEntry: boolean;
   isModification: boolean;
-  toggleScroll: () => Promise<{ readonly type: 'TOGGLE_SCROLL' }>;
+  toggleScroll: () => Promise<void>;
   scrollSyncActive: boolean;
   loadScroll: () => void;
   submitted: boolean;
