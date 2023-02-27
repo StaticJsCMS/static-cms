@@ -1,32 +1,28 @@
+import { createHashHistory } from 'history';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { createHashHistory } from 'history';
 
-import { logoutUser as logoutUserAction } from '@staticcms/core/actions/auth';
+import { logoutUser } from '@staticcms/core/actions/auth';
 import {
-  createDraftDuplicateFromEntry as createDraftDuplicateFromEntryAction,
-  createEmptyDraft as createEmptyDraftAction,
-  deleteDraftLocalBackup as deleteDraftLocalBackupAction,
-  deleteEntry as deleteEntryAction,
-  deleteLocalBackup as deleteLocalBackupAction,
-  discardDraft as discardDraftAction,
-  loadEntries as loadEntriesAction,
-  loadEntry as loadEntryAction,
-  loadLocalBackup as loadLocalBackupAction,
-  persistEntry as persistEntryAction,
-  persistLocalBackup as persistLocalBackupAction,
-  retrieveLocalBackup as retrieveLocalBackupAction,
+  createDraftDuplicateFromEntry,
+  createEmptyDraft,
+  deleteDraftLocalBackup,
+  deleteEntry,
+  deleteLocalBackup,
+  loadEntry,
+  loadLocalBackup,
+  persistEntry,
+  persistLocalBackup,
+  retrieveLocalBackup,
 } from '@staticcms/core/actions/entries';
-import {
-  loadScroll as loadScrollAction,
-  toggleScroll as toggleScrollAction,
-} from '@staticcms/core/actions/scroll';
+import { loadScroll, toggleScroll } from '@staticcms/core/actions/scroll';
 import { selectFields } from '@staticcms/core/lib/util/collection.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 import { selectEntry } from '@staticcms/core/reducers/selectors/entries';
+import { useAppDispatch } from '@staticcms/core/store/hooks';
 import confirm from '../UI/Confirm';
 import Loader from '../UI/Loader';
 import EditorInterface from './EditorInterface';
@@ -39,10 +35,10 @@ import type {
 } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 import type { Blocker } from 'history';
-import type { ComponentType } from 'react';
+import type { ComponentType, FC } from 'react';
 import type { ConnectedProps } from 'react-redux';
 
-const Editor = ({
+const Editor: FC<TranslatedProps<EditorProps>> = ({
   entry,
   entryDraft,
   fields,
@@ -51,38 +47,25 @@ const Editor = ({
   hasChanged,
   displayUrl,
   isModification,
-  logoutUser,
   draftKey,
-  t,
   editorBackLink,
-  toggleScroll,
   scrollSyncEnabled,
-  loadScroll,
   showDelete,
   slug,
   localBackup,
-  persistLocalBackup,
-  loadEntry,
-  persistEntry,
-  deleteEntry,
-  loadLocalBackup,
-  retrieveLocalBackup,
-  deleteLocalBackup,
-  deleteDraftLocalBackup,
-  createDraftDuplicateFromEntry,
-  createEmptyDraft,
-  discardDraft,
-}: TranslatedProps<EditorProps>) => {
+  t,
+}) => {
   const [version, setVersion] = useState(0);
 
   const history = createHashHistory();
+  const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
 
   const createBackup = useMemo(
     () =>
       debounce(function (entry: Entry, collection: Collection) {
-        persistLocalBackup(entry, collection);
+        dispatch(persistLocalBackup(entry, collection));
       }, 2000),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
@@ -91,9 +74,9 @@ const Editor = ({
   const deleteBackup = useCallback(() => {
     createBackup.cancel();
     if (slug) {
-      deleteLocalBackup(collection, slug);
+      dispatch(deleteLocalBackup(collection, slug));
     }
-    deleteDraftLocalBackup();
+    dispatch(deleteDraftLocalBackup());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collection, createBackup, slug]);
 
@@ -110,29 +93,29 @@ const Editor = ({
 
       setTimeout(async () => {
         try {
-          await persistEntry(collection);
+          await dispatch(persistEntry(collection, navigate));
           setVersion(version + 1);
 
           deleteBackup();
 
           if (createNew) {
-            navigate(`/collections/${collection.name}/new`, { replace: true });
             if (duplicate && entryDraft.entry) {
-              createDraftDuplicateFromEntry(entryDraft.entry);
+              dispatch(createDraftDuplicateFromEntry(entryDraft.entry));
+              navigate(`/collections/${collection.name}/new`, { replace: true });
+            } else {
+              setSubmitted(false);
+              setTimeout(() => {
+                dispatch(createEmptyDraft(collection, location.search));
+                setVersion(version + 1);
+                navigate(`/collections/${collection.name}/new`, { replace: true });
+              }, 100);
             }
           }
           // eslint-disable-next-line no-empty
         } catch (e) {}
       }, 100);
     },
-    [
-      collection,
-      createDraftDuplicateFromEntry,
-      deleteBackup,
-      entryDraft.entry,
-      persistEntry,
-      version,
-    ],
+    [collection, deleteBackup, dispatch, entryDraft.entry, navigate, version],
   );
 
   const handleDuplicateEntry = useCallback(() => {
@@ -140,9 +123,9 @@ const Editor = ({
       return;
     }
 
-    navigate(`/collections/${collection.name}/new`, { replace: true });
-    createDraftDuplicateFromEntry(entryDraft.entry);
-  }, [collection.name, createDraftDuplicateFromEntry, entryDraft.entry]);
+    dispatch(createDraftDuplicateFromEntry(entryDraft.entry));
+    navigate(`/collections/${collection.name}/new?duplicate=true`, { replace: true });
+  }, [collection.name, dispatch, entryDraft.entry, navigate]);
 
   const handleDeleteEntry = useCallback(async () => {
     if (entryDraft.hasChanged) {
@@ -170,11 +153,11 @@ const Editor = ({
     }
 
     setTimeout(async () => {
-      await deleteEntry(collection, slug);
+      await dispatch(deleteEntry(collection, slug));
       deleteBackup();
       return navigate(`/collections/${collection.name}`);
     }, 0);
-  }, [collection, deleteBackup, deleteEntry, entryDraft.hasChanged, slug]);
+  }, [collection, deleteBackup, dispatch, entryDraft.hasChanged, navigate, slug]);
 
   const [prevLocalBackup, setPrevLocalBackup] = useState<
     | {
@@ -192,7 +175,7 @@ const Editor = ({
         });
 
         if (confirmLoadBackupBody) {
-          loadLocalBackup();
+          dispatch(loadLocalBackup());
           setVersion(version + 1);
         } else {
           deleteBackup();
@@ -203,7 +186,7 @@ const Editor = ({
     }
 
     setPrevLocalBackup(localBackup);
-  }, [deleteBackup, loadLocalBackup, localBackup, prevLocalBackup, version]);
+  }, [deleteBackup, dispatch, localBackup, prevLocalBackup, version]);
 
   useEffect(() => {
     if (hasChanged && entryDraft.entry) {
@@ -216,32 +199,22 @@ const Editor = ({
   }, [collection, createBackup, entryDraft.entry, hasChanged]);
 
   const [prevCollection, setPrevCollection] = useState<Collection | null>(null);
-  const [preSlug, setPrevSlug] = useState<string | undefined | null>(null);
+  const [prevSlug, setPrevSlug] = useState<string | undefined | null>(null);
   useEffect(() => {
-    if (!slug && preSlug !== slug) {
+    if (!slug && prevSlug !== slug) {
       setTimeout(() => {
-        createEmptyDraft(collection, location.search);
+        dispatch(createEmptyDraft(collection, location.search));
       });
-    } else if (slug && (prevCollection !== collection || preSlug !== slug)) {
+    } else if (slug && (prevCollection !== collection || prevSlug !== slug)) {
       setTimeout(() => {
-        retrieveLocalBackup(collection, slug);
-        loadEntry(collection, slug);
+        dispatch(retrieveLocalBackup(collection, slug));
+        dispatch(loadEntry(collection, slug));
       });
     }
 
     setPrevCollection(collection);
     setPrevSlug(slug);
-  }, [
-    collection,
-    createEmptyDraft,
-    discardDraft,
-    entryDraft.entry,
-    loadEntry,
-    preSlug,
-    prevCollection,
-    retrieveLocalBackup,
-    slug,
-  ]);
+  }, [collection, entryDraft.entry, prevSlug, prevCollection, slug, dispatch]);
 
   const leaveMessage = useMemo(() => t('editor.editor.onLeavePage'), [t]);
 
@@ -289,7 +262,19 @@ const Editor = ({
     return () => {
       unblock();
     };
-  }, [collection.name, deleteBackup, discardDraft, navigationBlocker]);
+  }, [collection.name, history, navigationBlocker]);
+
+  const handleLogout = useCallback(() => {
+    dispatch(logoutUser());
+  }, [dispatch]);
+
+  const handleToggleScroll = useCallback(async () => {
+    await dispatch(toggleScroll());
+  }, [dispatch]);
+
+  const handleLoadScroll = useCallback(async () => {
+    await dispatch(loadScroll());
+  }, [dispatch]);
 
   if (entry && entry.error) {
     return (
@@ -318,11 +303,11 @@ const Editor = ({
       displayUrl={displayUrl}
       isNewEntry={!slug}
       isModification={isModification}
-      onLogoutClick={logoutUser}
+      onLogoutClick={handleLogout}
       editorBackLink={editorBackLink}
-      toggleScroll={toggleScroll}
+      toggleScroll={handleToggleScroll}
       scrollSyncEnabled={scrollSyncEnabled}
-      loadScroll={loadScroll}
+      loadScroll={handleLoadScroll}
       submitted={submitted}
       t={t}
     />
@@ -383,25 +368,7 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
   };
 }
 
-const mapDispatchToProps = {
-  loadEntry: loadEntryAction,
-  loadEntries: loadEntriesAction,
-  loadLocalBackup: loadLocalBackupAction,
-  deleteDraftLocalBackup: deleteDraftLocalBackupAction,
-  retrieveLocalBackup: retrieveLocalBackupAction,
-  persistLocalBackup: persistLocalBackupAction,
-  deleteLocalBackup: deleteLocalBackupAction,
-  createDraftDuplicateFromEntry: createDraftDuplicateFromEntryAction,
-  createEmptyDraft: createEmptyDraftAction,
-  discardDraft: discardDraftAction,
-  persistEntry: persistEntryAction,
-  deleteEntry: deleteEntryAction,
-  logoutUser: logoutUserAction,
-  toggleScroll: toggleScrollAction,
-  loadScroll: loadScrollAction,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
+const connector = connect(mapStateToProps);
 export type EditorProps = ConnectedProps<typeof connector>;
 
 export default connector(translate()(Editor) as ComponentType<EditorProps>);
