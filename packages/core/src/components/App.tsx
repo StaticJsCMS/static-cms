@@ -1,14 +1,21 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
-import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import { ScrollSync } from 'react-scroll-sync';
 import TopBarProgress from 'react-topbar-progress-indicator';
 
 import { loginUser as loginUserAction } from '@staticcms/core/actions/auth';
-import { discardDraft as discardDraftAction } from '@staticcms/core/actions/entries';
+import { discardDraft } from '@staticcms/core/actions/entries';
 import { currentBackend } from '@staticcms/core/backend';
-import { history } from '@staticcms/core/routing/history';
 import { changeTheme } from '../actions/globalUI';
 import { getDefaultPath } from '../lib/util/collection.util';
 import { useAppDispatch } from '../store/hooks';
@@ -55,8 +62,8 @@ const App = ({
   isFetching,
   t,
   scrollSyncEnabled,
-  discardDraft,
 }: TranslatedProps<AppProps>) => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const configError = useCallback(
@@ -114,21 +121,27 @@ const App = ({
         base_url={config.config.backend.base_url}
         authEndpoint={config.config.backend.auth_endpoint}
         config={config.config}
-        clearHash={() => history.replace('/')}
+        clearHash={() => navigate('/', { replace: true })}
         t={t}
       />
     );
-  }, [AuthComponent, auth.error, auth.isFetching, config.config, handleLogin, t]);
+  }, [AuthComponent, auth.error, auth.isFetching, config.config, handleLogin, navigate, t]);
 
   const defaultPath = useMemo(() => getDefaultPath(collections), [collections]);
 
   const { pathname } = useLocation();
+  const [searchParams] = useSearchParams();
   useEffect(() => {
-    if (!/\/collections\/[a-zA-Z0-9_-]+\/entries\/[a-zA-Z0-9_-]+/g.test(pathname)) {
-      discardDraft();
+    if (
+      /\/collections\/[a-zA-Z0-9_-]+\/entries\/[a-zA-Z0-9_-]+/g.test(pathname) ||
+      (/\/collections\/[a-zA-Z0-9_-]+\/new/g.test(pathname) &&
+        searchParams.get('duplicate') === 'true')
+    ) {
+      return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+
+    dispatch(discardDraft());
+  }, [dispatch, pathname, searchParams]);
 
   useEffect(() => {
     // On page load or when changing themes, best to add inline in `head` to avoid FOUC
@@ -234,7 +247,6 @@ function mapStateToProps(state: RootState) {
 
 const mapDispatchToProps = {
   loginUser: loginUserAction,
-  discardDraft: discardDraftAction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

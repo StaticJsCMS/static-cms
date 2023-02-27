@@ -67,6 +67,10 @@ const CollectionView = ({
   }, [collection]);
 
   const newEntryUrl = useMemo(() => {
+    if (!collectionName || !collection) {
+      return undefined;
+    }
+
     let url = 'fields' in collection && collection.create ? getNewEntryUrl(collectionName) : '';
     if (url && filterTerm) {
       url = getNewEntryUrl(collectionName);
@@ -74,6 +78,7 @@ const CollectionView = ({
         url = `${newEntryUrl}?path=${filterTerm}`;
       }
     }
+
     return url;
   }, [collection, collectionName, filterTerm]);
 
@@ -104,6 +109,10 @@ const CollectionView = ({
       );
     }
 
+    if (!collection) {
+      return null;
+    }
+
     return (
       <EntriesCollection
         collection={collection}
@@ -126,21 +135,21 @@ const CollectionView = ({
 
   const onSortClick = useCallback(
     async (key: string, direction?: SortDirection) => {
-      await sortByField(collection, key, direction);
+      collection && (await sortByField(collection, key, direction));
     },
     [collection, sortByField],
   );
 
   const onFilterClick = useCallback(
     async (filter: ViewFilter) => {
-      await filterByField(collection, filter);
+      collection && (await filterByField(collection, filter));
     },
     [collection, filterByField],
   );
 
   const onGroupClick = useCallback(
     async (group: ViewGroup) => {
-      await groupByField(collection, group);
+      collection && (await groupByField(collection, group));
     },
     [collection, groupByField],
   );
@@ -160,7 +169,7 @@ const CollectionView = ({
       return;
     }
 
-    const defaultSort = collection.sortable_fields?.default;
+    const defaultSort = collection?.sortable_fields?.default;
     if (!defaultSort || !defaultSort.field) {
       if (!readyToLoad) {
         setReadyToLoad(true);
@@ -195,7 +204,7 @@ const CollectionView = ({
         {isSearchResults ? (
           <>
             <div>
-              <div>{t(searchResultKey, { searchTerm, collection: collection.label })}</div>
+              <div>{t(searchResultKey, { searchTerm, collection: collection?.label })}</div>
             </div>
             <CollectionControls viewStyle={viewStyle} onChangeViewStyle={changeViewStyle} t={t} />
           </>
@@ -227,7 +236,7 @@ const CollectionView = ({
 interface CollectionViewOwnProps {
   isSearchResults?: boolean;
   isSingleSearchResult?: boolean;
-  name: string;
+  name?: string;
   searchTerm?: string;
   filterTerm?: string;
 }
@@ -243,13 +252,13 @@ function mapStateToProps(state: RootState, ownProps: TranslatedProps<CollectionV
     filterTerm = '',
     t,
   } = ownProps;
-  const collection: Collection = name ? collections[name] : collections[0];
-  const sort = selectEntriesSort(state, collection.name);
+  const collection = (name ? collections[name] : collections[0]) as Collection | undefined;
+  const sort = selectEntriesSort(state, collection?.name);
   const sortableFields = selectSortableFields(collection, t);
   const viewFilters = selectViewFilters(collection);
   const viewGroups = selectViewGroups(collection);
-  const filter = selectEntriesFilter(collection.name)(state);
-  const group = selectEntriesGroup(state, collection.name);
+  const filter = selectEntriesFilter(collection?.name)(state);
+  const group = selectEntriesGroup(state, collection?.name);
   const viewStyle = selectViewStyle(state);
 
   return {

@@ -6,16 +6,28 @@ import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { Entry, Group, GroupMap, Sort } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 
-export function selectEntriesSort(entries: RootState, collection: string) {
+export function selectEntriesSort(entries: RootState, collection?: string) {
+  if (!collection) {
+    return undefined;
+  }
+
   const sort = entries.entries.sort as Sort | undefined;
   return sort?.[collection];
 }
 
-export const selectEntriesFilter = (collectionName: string) => (entries: RootState) => {
-  return entries.entries.filter?.[collectionName];
+export const selectEntriesFilter = (collectionName?: string) => (entries: RootState) => {
+  if (!collectionName) {
+    return {};
+  }
+
+  return entries.entries.filter?.[collectionName] ?? {};
 };
 
-export function selectEntriesGroup(entries: RootState, collection: string) {
+export function selectEntriesGroup(entries: RootState, collection?: string) {
+  if (!collection) {
+    return {};
+  }
+
   const group = entries.entries.group as Group | undefined;
   return group?.[collection] || {};
 }

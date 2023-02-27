@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 import Frame from 'react-frame-component';
 import { translate } from 'react-polyglot';
 import { ScrollSyncPane } from 'react-scroll-sync';
@@ -103,7 +103,7 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
       return null;
     }
 
-    return ReactDOM.createPortal(
+    return createPortal(
       <div className="w-preview h-main absolute top-16 right-0">
         {!entry || !entry.data ? null : (
           <ErrorBoundary config={config}>
