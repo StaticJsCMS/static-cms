@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import React, { useCallback, useMemo } from 'react';
-import ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 import Frame from 'react-frame-component';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
@@ -132,7 +132,7 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
       return null;
     }
 
-    return ReactDOM.createPortal(
+    return createPortal(
       <StyledPreviewContent className="preview-content">
         {!entry || !entry.data ? null : (
           <ErrorBoundary config={config}>
