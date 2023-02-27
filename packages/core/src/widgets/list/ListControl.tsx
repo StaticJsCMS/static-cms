@@ -383,7 +383,7 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
                 className="w-full"
                 data-testid="list-add"
               >
-                {t('editor.editorWidgets.list.add', { item: label })}
+                {t('editor.editorWidgets.list.add', { item: labelSingular })}
               </Button>
             )}
           </div>
