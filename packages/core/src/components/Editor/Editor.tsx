@@ -130,6 +130,7 @@ const Editor = ({
       createDraftDuplicateFromEntry,
       deleteBackup,
       entryDraft.entry,
+      navigate,
       persistEntry,
       version,
     ],
@@ -142,7 +143,7 @@ const Editor = ({
 
     navigate(`/collections/${collection.name}/new`, { replace: true });
     createDraftDuplicateFromEntry(entryDraft.entry);
-  }, [collection.name, createDraftDuplicateFromEntry, entryDraft.entry]);
+  }, [collection.name, createDraftDuplicateFromEntry, entryDraft.entry, navigate]);
 
   const handleDeleteEntry = useCallback(async () => {
     if (entryDraft.hasChanged) {
@@ -216,13 +217,13 @@ const Editor = ({
   }, [collection, createBackup, entryDraft.entry, hasChanged]);
 
   const [prevCollection, setPrevCollection] = useState<Collection | null>(null);
-  const [preSlug, setPrevSlug] = useState<string | undefined | null>(null);
+  const [prevSlug, setPrevSlug] = useState<string | undefined | null>(null);
   useEffect(() => {
-    if (!slug && preSlug !== slug) {
+    if (!slug && prevSlug !== slug) {
       setTimeout(() => {
         createEmptyDraft(collection, location.search);
       });
-    } else if (slug && (prevCollection !== collection || preSlug !== slug)) {
+    } else if (slug && (prevCollection !== collection || prevSlug !== slug)) {
       setTimeout(() => {
         retrieveLocalBackup(collection, slug);
         loadEntry(collection, slug);
@@ -237,7 +238,7 @@ const Editor = ({
     discardDraft,
     entryDraft.entry,
     loadEntry,
-    preSlug,
+    prevSlug,
     prevCollection,
     retrieveLocalBackup,
     slug,
