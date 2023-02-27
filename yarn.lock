@@ -4377,12 +4377,12 @@
   dependencies:
     "@udecode/plate-core" "19.7.0"
 
-"@udecode/plate-juice@19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-juice/-/plate-juice-19.5.0.tgz#eaffd53757fff286371b880f324ed5f2539d891f"
-  integrity sha512-88UImd00YuIFLflM6ERdvNNHQtBaeCYkpDBq9Rkcgb5v4DbUcKjrWmCZMksKQfGWKj2Fjx3ccTNO8gcVTOczag==
+"@udecode/plate-juice@19.7.0":
+  version "19.7.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-juice/-/plate-juice-19.7.0.tgz#5d582386719d2a7c23292884dc87bb654a3b484a"
+  integrity sha512-lusaIZPTZotQpa+Ic5GcFcPG0abc4+IQ6lMJ27iVfzFxszIU+XAMWcEVyFrHpsuFImaL6EE1surNCVT6Bd7DBA==
   dependencies:
-    "@udecode/plate-core" "19.5.0"
+    "@udecode/plate-core" "19.7.0"
     juice "^8.0.0"
 
 "@udecode/plate-kbd@19.7.0":
