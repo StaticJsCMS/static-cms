@@ -1,5 +1,4 @@
 import isEqual from 'lodash/isEqual';
-import { redirect } from 'react-router-dom';
 
 import { currentBackend } from '../backend';
 import {
@@ -56,6 +55,7 @@ import { addAssets, getAsset } from './media';
 import { loadMedia, waitForMediaLibraryToLoad } from './mediaLibrary';
 import { waitUntil } from './waitUntil';
 
+import type { NavigateFunction } from 'react-router-dom';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { Backend } from '../backend';
@@ -951,7 +951,7 @@ export function getSerializedEntry(collection: Collection, entry: Entry): Entry 
   return serializedEntry;
 }
 
-export function persistEntry(collection: Collection) {
+export function persistEntry(collection: Collection, navigate: NavigateFunction) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const entryDraft = state.entryDraft;
@@ -1040,7 +1040,8 @@ export function persistEntry(collection: Collection) {
         }
         if (entry.slug !== newSlug) {
           await dispatch(loadEntry(collection, newSlug));
-          redirect(`/collections/${collection.name}/entries/${newSlug}`);
+          console.log('entry.slug', entry.slug, 'newSlug', newSlug);
+          navigate(`/collections/${collection.name}/entries/${newSlug}`);
         } else {
           await dispatch(loadEntry(collection, newSlug, true));
         }

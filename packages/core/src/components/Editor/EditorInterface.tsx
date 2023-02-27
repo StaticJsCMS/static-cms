@@ -137,7 +137,7 @@ interface EditorInterfaceProps {
   isModification: boolean;
   onLogoutClick: () => void;
   editorBackLink: string;
-  toggleScroll: () => Promise<{ readonly type: 'TOGGLE_SCROLL' }>;
+  toggleScroll: () => Promise<void>;
   scrollSyncEnabled: boolean;
   loadScroll: () => void;
   submitted: boolean;
