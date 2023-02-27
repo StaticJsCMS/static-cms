@@ -1040,7 +1040,6 @@ export function persistEntry(collection: Collection, navigate: NavigateFunction)
         }
         if (entry.slug !== newSlug) {
           await dispatch(loadEntry(collection, newSlug));
-          console.log('entry.slug', entry.slug, 'newSlug', newSlug);
           navigate(`/collections/${collection.name}/entries/${newSlug}`);
         } else {
           await dispatch(loadEntry(collection, newSlug, true));
