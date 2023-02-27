@@ -4169,13 +4169,6 @@
   dependencies:
     "@udecode/plate-core" "19.7.0"
 
-"@udecode/plate-block-quote@19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-block-quote/-/plate-block-quote-19.5.0.tgz#603888d4521f517a9d52a727abc61b759f9359fe"
-  integrity sha512-ZbutqxMLmPPbvXsCfcoUxgD+ebXtlpnNwccn79vET+HSMWJr9gQv3GdqHbnjwYnnws8+GenxfF+zHp7VXNPHUg==
-  dependencies:
-    "@udecode/plate-core" "19.5.0"
-
 "@udecode/plate-block-quote@19.7.0":
   version "19.7.0"
   resolved "https://registry.yarnpkg.com/@udecode/plate-block-quote/-/plate-block-quote-19.7.0.tgz#793ed531956c1533fd411a46102c12a588c7e09a"
@@ -4190,27 +4183,12 @@
   dependencies:
     "@udecode/plate-core" "19.7.0"
 
-"@udecode/plate-button@19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-button/-/plate-button-19.5.0.tgz#c8d2ea10485a355630a94ee19a1bce8ebb7d564e"
-  integrity sha512-SXBrsrWjFFgIOH7bicD74qxlO7SGw9Wy2f124jqLuNjxzTGnu1IgovKqvGtAdplAnWFi57k06aLkCGzMcKNGyg==
-  dependencies:
-    "@udecode/plate-core" "19.5.0"
-
 "@udecode/plate-button@19.7.0":
   version "19.7.0"
   resolved "https://registry.yarnpkg.com/@udecode/plate-button/-/plate-button-19.7.0.tgz#ffe3165479a3e0d4aea50b0577de1376eb265333"
   integrity sha512-cXr21b8Lu0rJHcAXiN4Ss86wn6K2W1a9shMgGpycMEMhrgY8VDqnhuIME7/dA8r5wNkqOyWOfvoHsXiS/+2PUw==
   dependencies:
     "@udecode/plate-core" "19.7.0"
-
-"@udecode/plate-code-block@19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-code-block/-/plate-code-block-19.5.0.tgz#40459dab2c806a99c38d5082fc46a0865c078eb1"
-  integrity sha512-t2h/Fr7kpCCTGpFsaa5aV/Ww2aSyxOAq5ogDlftnLqtM9R1IL6nX0g0UeyWEL0nMIZR1+6S0xrl0RwFXwYQtCw==
-  dependencies:
-    "@udecode/plate-core" "19.5.0"
-    prismjs "^1.25.0"
 
 "@udecode/plate-code-block@19.7.0":
   version "19.7.0"
@@ -4236,21 +4214,6 @@
   dependencies:
     "@udecode/plate-button" "19.7.0"
     "@udecode/plate-core" "19.7.0"
-
-"@udecode/plate-core@19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-core/-/plate-core-19.5.0.tgz#cf367c5aa3d24bb7f66f2b223e0890453275b5c9"
-  integrity sha512-qnUBF04IkiZZ0WohyJKBToQelxBpZY11gTCOXxYeS3JfBDseorm7JUJhFa//PR7IixS4UAezQH18IoC/HZ9BpQ==
-  dependencies:
-    "@radix-ui/react-slot" "^1.0.1"
-    "@udecode/zustood" "^1.1.1"
-    clsx "^1.1.1"
-    jotai "^1.7.2"
-    lodash "^4.17.21"
-    nanoid "^3.3.4"
-    react-hotkeys-hook "^3.4.6"
-    use-deep-compare "^1.1.0"
-    zustand "^3.7.2"
 
 "@udecode/plate-core@19.7.0":
   version "19.7.0"
@@ -4297,13 +4260,6 @@
   integrity sha512-5i/5BOnUcAOL5p0dF79+nSn7HFSvof+XQowb++6GKgW5gKdpcaa3gr9WamZs2mJD3bvVWOKUrdOvNWuh0eE4Hg==
   dependencies:
     "@udecode/plate-core" "19.7.0"
-
-"@udecode/plate-heading@19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-heading/-/plate-heading-19.5.0.tgz#b4ef251903dee2aea49a80d38222ddafb9cca6e7"
-  integrity sha512-K4kJZFk+761R6P+xA2iXu4Abkek4nhPwV3VryFOeIfv60xQdEsxOVqxou3V1g+HplOEdRUfX/I8MExd2bXcOrQ==
-  dependencies:
-    "@udecode/plate-core" "19.5.0"
 
 "@udecode/plate-heading@19.7.0":
   version "19.7.0"
@@ -4408,15 +4364,6 @@
   dependencies:
     "@udecode/plate-core" "19.7.0"
 
-"@udecode/plate-link@19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-link/-/plate-link-19.5.0.tgz#0067350d8bb6958f7cacec6ce203c838b631dd14"
-  integrity sha512-NNDJ4R8QC4+CUuszIEDESnuNxVdTPK3x1lc4kskGq4NrvnuHMP3CvdL5W54nQBhoxOkz34ito3Dx1IMU9OwzyA==
-  dependencies:
-    "@udecode/plate-button" "19.5.0"
-    "@udecode/plate-core" "19.5.0"
-    "@udecode/plate-normalizers" "19.5.0"
-
 "@udecode/plate-link@19.7.0":
   version "19.7.0"
   resolved "https://registry.yarnpkg.com/@udecode/plate-link/-/plate-link-19.7.0.tgz#e7a99e2bfa33ffb92a91d50af4cbe837ed66b803"
@@ -4425,14 +4372,6 @@
     "@udecode/plate-button" "19.7.0"
     "@udecode/plate-core" "19.7.0"
     "@udecode/plate-normalizers" "19.7.0"
-
-"@udecode/plate-list@19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-list/-/plate-list-19.5.0.tgz#11cd95987016521b548cbdf705c0ba90503184ff"
-  integrity sha512-ui2ZOfxEUSl+ZCg1dvm4IvZMybRvF4XdDbJeM0uyD1RluR7EqgdAqJ0ej8drrZvyw91FjiemwaciJWFFG1yWBA==
-  dependencies:
-    "@udecode/plate-core" "19.5.0"
-    "@udecode/plate-reset-node" "19.5.0"
 
 "@udecode/plate-list@19.7.0":
   version "19.7.0"
@@ -4468,13 +4407,6 @@
   dependencies:
     "@udecode/plate-core" "19.7.0"
 
-"@udecode/plate-normalizers@19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-normalizers/-/plate-normalizers-19.5.0.tgz#26e05f909bf6681ab46aa42615a581feff4be0e9"
-  integrity sha512-DZDgqAGUnaqta/vAqSBrkZHKbI3jtKL1B66YzNnIx6ywINqTCuem2sWdRtbsOpSt4489E5Slz+lh8HWpZAunQQ==
-  dependencies:
-    "@udecode/plate-core" "19.5.0"
-
 "@udecode/plate-normalizers@19.7.0":
   version "19.7.0"
   resolved "https://registry.yarnpkg.com/@udecode/plate-normalizers/-/plate-normalizers-19.7.0.tgz#2781417abcc234103c04c0014f754682b3ad6e71"
@@ -4482,26 +4414,12 @@
   dependencies:
     "@udecode/plate-core" "19.7.0"
 
-"@udecode/plate-paragraph@19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-paragraph/-/plate-paragraph-19.5.0.tgz#79532222661298e408b4fa4d09909946b8d1b7e2"
-  integrity sha512-nsHm5ZJwR0u4nS9mOhrJ4wolU9HtRWeJAi1T4U7pgZnnoU1wF0EB8Luc8gaoYzt6HV5FO6ors0vuOSpKpVYHrQ==
-  dependencies:
-    "@udecode/plate-core" "19.5.0"
-
 "@udecode/plate-paragraph@19.7.0":
   version "19.7.0"
   resolved "https://registry.yarnpkg.com/@udecode/plate-paragraph/-/plate-paragraph-19.7.0.tgz#0e2a2734a583e0e88ce5819ecf953aa503866166"
   integrity sha512-JJFW53lwIF1r7f8b+RcyJdrl7jRVKBuaQUHXg5OY8loK8fadHsQHjw/+P6HGButgST4JEcmsvm7OhZm5TKRbYQ==
   dependencies:
     "@udecode/plate-core" "19.7.0"
-
-"@udecode/plate-reset-node@19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-reset-node/-/plate-reset-node-19.5.0.tgz#ea8dd7ec1ea71c1f258173f8e1a51f90d24fd01a"
-  integrity sha512-POtRwx2qgxUbX/Q3VUAcYy4rPMgaFiHLsR90lIzY5Cr3SOAWmpxLLsBxGFCMR90AAucQuTJQgfDGcC71h2WBHA==
-  dependencies:
-    "@udecode/plate-core" "19.5.0"
 
 "@udecode/plate-reset-node@19.7.0":
   version "19.7.0"
@@ -4547,21 +4465,6 @@
   dependencies:
     "@udecode/plate-core" "19.7.0"
     html-entities "^2.3.3"
-
-"@udecode/plate-serializer-md@19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-19.5.0.tgz#8f069e467d79d1adae70c28d8fe2f1492bcf0ecc"
-  integrity sha512-+8EY4TqwQKvlRrG/n/m4RsGmF4QmzOESoP2zMxojhj0pMfN669Fq+pohtcOmDlaphBbnxfgsDxHCvpw5p5OsOQ==
-  dependencies:
-    "@udecode/plate-block-quote" "19.5.0"
-    "@udecode/plate-code-block" "19.5.0"
-    "@udecode/plate-core" "19.5.0"
-    "@udecode/plate-heading" "19.5.0"
-    "@udecode/plate-link" "19.5.0"
-    "@udecode/plate-list" "19.5.0"
-    "@udecode/plate-paragraph" "19.5.0"
-    remark-parse "^9.0.0"
-    unified "^9.2.1"
 
 "@udecode/plate-serializer-md@19.7.0":
   version "19.7.0"
@@ -9592,11 +9495,6 @@ hosted-git-info@^5.0.0:
   integrity sha512-xIcQYMnhcx2Nr4JTjsFmwwnr9vldugPy9uVm0o87bjqqWMv9GaqsTeT+i99wTl0mk1uLxJtHxLb8kymqTENQsw==
   dependencies:
     lru-cache "^7.5.1"
-
-hotkeys-js@3.9.4:
-  version "3.9.4"
-  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.9.4.tgz#ce1aa4c3a132b6a63a9dd5644fc92b8a9b9cbfb9"
-  integrity sha512-2zuLt85Ta+gIyvs4N88pCYskNrxf1TFv3LR9t5mdAZIX8BcgQQ48F2opUptvHa6m8zsy5v/a0i9mWzTrlNWU0Q==
 
 hpack.js@^2.1.6:
   version "2.1.6"
@@ -15202,13 +15100,6 @@ react-frame-component@5.2.6:
   version "5.2.6"
   resolved "https://registry.yarnpkg.com/react-frame-component/-/react-frame-component-5.2.6.tgz#0d9991d251ff1f7177479d8f370deea06b824b79"
   integrity sha512-CwkEM5VSt6nFwZ1Op8hi3JB5rPseZlmnp5CGiismVTauE6S4Jsc4TNMlT0O7Cts4WgIC3ZBAQ2p1Mm9XgLbj+w==
-
-react-hotkeys-hook@^3.4.6:
-  version "3.4.7"
-  resolved "https://registry.yarnpkg.com/react-hotkeys-hook/-/react-hotkeys-hook-3.4.7.tgz#e16a0a85f59feed9f48d12cfaf166d7df4c96b7a"
-  integrity sha512-+bbPmhPAl6ns9VkXkNNyxlmCAIyDAcWbB76O4I0ntr3uWCRuIQf/aRLartUahe9chVMPj+OEzzfk3CQSjclUEQ==
-  dependencies:
-    hotkeys-js "3.9.4"
 
 react-hotkeys-hook@^4.3.7:
   version "4.3.7"
