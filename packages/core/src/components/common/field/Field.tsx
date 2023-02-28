@@ -15,9 +15,10 @@ export interface FieldProps {
   errors: FieldError[];
   variant?: 'default' | 'inline';
   cursor?: 'default' | 'pointer' | 'text';
-  noPadding?: boolean;
   hint?: string;
   forSingleList?: boolean;
+  noPadding?: boolean;
+  noHightlight?: boolean;
 }
 
 const Field: FC<FieldProps> = ({
@@ -27,9 +28,10 @@ const Field: FC<FieldProps> = ({
   errors,
   variant = 'default',
   cursor = 'default',
-  noPadding = false,
   hint,
   forSingleList,
+  noPadding = false,
+  noHightlight = false,
 }) => {
   const hasErrors = useMemo(() => errors.length > 0, [errors.length]);
 
@@ -74,16 +76,19 @@ const Field: FC<FieldProps> = ({
           border-slate-400
           focus-within:border-blue-800
           dark:focus-within:border-blue-100
-          focus-within:bg-slate-100
-          dark:focus-within:bg-slate-800
-          hover:bg-slate-100
-          dark:hover:bg-slate-800
         `,
+        !noHightlight &&
+          `
+            focus-within:bg-slate-100
+            dark:focus-within:bg-slate-800
+            hover:bg-slate-100
+            dark:hover:bg-slate-800
+          `,
         !noPadding && 'pb-3',
         cursor === 'pointer' ? 'cursor-pointer' : 'cursor-text',
         !hasErrors && 'group/active',
       ),
-    [cursor, hasErrors, noPadding],
+    [cursor, hasErrors, noHightlight, noPadding],
   );
 
   const wrapperClassNames = useMemo(

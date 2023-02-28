@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import FieldLabel from '@staticcms/core/components/UI/FieldLabel';
-import Outline from '@staticcms/core/components/UI/Outline';
+import Field from '@staticcms/core/components/common/field/Field';
 import useDebounce from '../../lib/hooks/useDebounce';
 import useMarkdownToSlate from './plate/hooks/useMarkdownToSlate';
 import PlateEditor from './plate/PlateEditor';
@@ -17,7 +16,8 @@ export interface WithMarkdownControlProps {
 
 const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
   const MarkdownControl: FC<WidgetControlProps<string, MarkdownField>> = controlProps => {
-    const { label, value, duplicate, onChange, hasErrors, collection, entry, field } = controlProps;
+    const { label, value, duplicate, onChange, hasErrors, collection, entry, field, errors } =
+      controlProps;
 
     const [internalRawValue, setInternalValue] = useState(value ?? '');
     const internalValue = useMemo(
@@ -54,15 +54,7 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
 
     return useMemo(
       () => (
-        <div key="markdown-control-wrapper">
-          <FieldLabel
-            key="markdown-control-label"
-            isActive={hasFocus}
-            hasErrors={hasErrors}
-            onClick={handleLabelClick}
-          >
-            {label}
-          </FieldLabel>
+        <Field label={label} errors={errors} noHightlight>
           {loaded ? (
             <PlateEditor
               initialValue={slateValue}
@@ -76,13 +68,7 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
               onBlur={handleOnBlur}
             />
           ) : null}
-          <Outline
-            key="markdown-control-outline"
-            hasLabel
-            hasError={hasErrors}
-            active={hasFocus || debouncedFocus}
-          />
-        </div>
+        </Field>
       ),
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [

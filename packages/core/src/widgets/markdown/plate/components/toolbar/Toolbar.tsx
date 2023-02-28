@@ -37,7 +37,22 @@ const Toolbar: FC<ToolbarProps> = ({ useMdx, containerRef, collection, field, en
   ].filter(Boolean);
 
   return (
-    <div>
+    <div
+      className="
+        flex
+        flex-wrap
+        relative
+        items-center
+        select-none
+        min-h-markdown-toolbar
+        -m-5
+        mb-0
+        p-2
+        border-bottom-2
+        border-gray-400
+        gap-0.5
+      "
+    >
       {groups.map((group, index) => [
         index !== 0 ? <div key={`toolbar-divider-${index}`} /> : null,
         group,

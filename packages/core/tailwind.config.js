@@ -12,6 +12,7 @@ module.exports = {
       },
       minHeight: {
         8: '2rem',
+        'markdown-toolbar': '40px',
       },
       width: {
         main: 'calc(100% - 256px)',
@@ -20,10 +21,10 @@ module.exports = {
         'sidebar-collapsed': '68px',
         'editor-only': '640px',
         'media-library-dialog': '80vw',
-        'media-card': '240px'
+        'media-card': '240px',
       },
       maxWidth: {
-        'media-search': '400px'
+        'media-search': '400px',
       },
       boxShadow: {
         sidebar: '0 10px 15px 18px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',

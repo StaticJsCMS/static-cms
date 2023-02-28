@@ -28,11 +28,26 @@ export interface SelectProps<T> {
   options: T[] | Option<T>[];
   required?: boolean;
   disabled?: boolean;
+  rootClassName?: string;
+  buttonClassName?: string;
+  optionsClassName?: string;
+  optionClassName?: string;
   onChange: SelectChangeEventHandler<T>;
 }
 
 const Select = function <T>(
-  { label, value, options, required = false, disabled, onChange }: SelectProps<T>,
+  {
+    label,
+    value,
+    options,
+    required = false,
+    disabled,
+    rootClassName,
+    buttonClassName,
+    optionsClassName,
+    optionClassName,
+    onChange,
+  }: SelectProps<T>,
   ref: Ref<HTMLButtonElement>,
 ) {
   const handleChange = useCallback(
@@ -56,23 +71,26 @@ const Select = function <T>(
   );
 
   return (
-    <div className="relative w-full mt-1">
+    <div className={classNames('relative w-full mt-1', rootClassName)}>
       <Listbox value={value} onChange={handleChange} disabled={disabled}>
         <Listbox.Button
           ref={ref}
-          className="
-            flex
-            items-center
-            text-sm
-            font-medium
-            relative
-            min-h-8
-            px-4
-            py-1.5
-            w-full
-            text-gray-900
-            dark:text-slate-100
-          "
+          className={classNames(
+            `
+              flex
+              items-center
+              text-sm
+              font-medium
+              relative
+              min-h-8
+              px-4
+              py-1.5
+              w-full
+              text-gray-900
+              dark:text-slate-100
+            `,
+            buttonClassName,
+          )}
           data-testid="select-input"
         >
           {label}
@@ -88,7 +106,9 @@ const Select = function <T>(
         >
           <Listbox.Options
             data-testid="select-options"
-            className="absolute
+            className={classNames(
+              `
+                absolute
                 mt-1
                 max-h-60
                 w-full
@@ -103,20 +123,26 @@ const Select = function <T>(
                 ring-opacity-5
                 focus:outline-none
                 sm:text-sm
-                z-40"
+                z-40
+              `,
+              optionsClassName,
+            )}
           >
             {!Array.isArray(value) && !required ? (
               <Listbox.Option
                 key="none"
                 data-testid={`select-option-none`}
                 className={classNames(
-                  `relative
-                select-none
-                py-2
-                pl-10
-                pr-4
-                cursor-pointer
-                text-gray-900`,
+                  `
+                    relative
+                    select-none
+                    py-2
+                    pl-10
+                    pr-4
+                    cursor-pointer
+                    text-gray-900
+                  `,
+                  optionClassName,
                 )}
                 value={null}
               >
@@ -137,13 +163,16 @@ const Select = function <T>(
                   key={index}
                   data-testid={`select-option-${optionValue}`}
                   className={classNames(
-                    `relative
+                    `
+                      relative
                       select-none
                       py-2
                       pl-10
                       pr-4
-                      cursor-pointer`,
+                      cursor-pointer
+                    `,
                     selected ? 'bg-gray-100 text-gray-900' : 'text-gray-900',
+                    optionClassName,
                   )}
                   value={optionValue}
                 >
@@ -171,5 +200,5 @@ const Select = function <T>(
 };
 
 export default forwardRef(Select) as <T>(
-  props: SelectProps<T> & { ref: Ref<HTMLButtonElement> },
+  props: SelectProps<T> & { ref?: Ref<HTMLButtonElement> },
 ) => JSX.Element;

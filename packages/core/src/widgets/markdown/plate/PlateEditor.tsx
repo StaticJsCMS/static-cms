@@ -256,7 +256,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
 
   return useMemo(
     () => (
-      <div>
+      <div className="relative p-5 pb-0 mb-5">
         <DndProvider backend={HTML5Backend}>
           <PlateProvider<MdValue>
             id={id}
