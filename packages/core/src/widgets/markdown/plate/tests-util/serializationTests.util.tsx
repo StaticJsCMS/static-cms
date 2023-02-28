@@ -458,6 +458,48 @@ And a completely new paragraph`,
           },
         ],
       },
+
+      'Multiline Header': {
+        markdown: `# Line One\\
+Line Two`,
+        mdast: {
+          type: 'root',
+          children: [
+            {
+              type: 'heading',
+              depth: 1,
+              children: [
+                {
+                  type: 'text',
+                  value: 'Line One\nLine Two',
+                  position: {
+                    start: { line: 1, column: 3, offset: 2 },
+                    end: { line: 1, column: 13, offset: 12 },
+                  },
+                },
+              ],
+              position: {
+                start: { line: 1, column: 1, offset: 0 },
+                end: { line: 1, column: 13, offset: 12 },
+              },
+            },
+          ],
+          position: {
+            start: { line: 1, column: 1, offset: 0 },
+            end: { line: 1, column: 13, offset: 12 },
+          },
+        },
+        slate: [
+          {
+            type: ELEMENT_H1,
+            children: [
+              {
+                text: 'Line One\nLine Two',
+              },
+            ],
+          },
+        ],
+      },
     },
   },
 
@@ -7617,9 +7659,11 @@ export function runSerializationTests(
     describe(key, () => {
       if (data.markdown) {
         runSectionSerializationTests('markdown', 'markdown', data.markdown, testCallback);
-      }
-      if (data.mdx) {
+      } else if (data.mdx) {
         runSectionSerializationTests('mdx', 'mdx', data.mdx, testCallback);
+      } else if (data.both) {
+        runSectionSerializationTests('markdown', 'markdown', data.both, testCallback);
+        runSectionSerializationTests('mdx', 'mdx', data.both, testCallback);
       }
     });
   });
