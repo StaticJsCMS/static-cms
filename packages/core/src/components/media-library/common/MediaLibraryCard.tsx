@@ -3,11 +3,13 @@ import TrashIcon from '@heroicons/react/20/solid/TrashIcon';
 import React, { useCallback, useEffect } from 'react';
 import { translate } from 'react-polyglot';
 
+import { MAX_LINK_DISPLAY_LENGTH } from '@staticcms/core/constants/mediaLibrary';
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import Button from '../../common/button/Button';
 import Image from '../../common/image/Image';
+import Pill from '../../common/pill/Pill';
 import CopyToClipBoardButton from './CopyToClipBoardButton';
 
 import type { Collection, Field, TranslatedProps } from '@staticcms/core/interface';
@@ -71,6 +73,13 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
     }
   }, [displayURL.url, loadDisplayURL]);
 
+  const shortenedText =
+    text.length <= MAX_LINK_DISPLAY_LENGTH
+      ? text
+      : `${text.slice(0, MAX_LINK_DISPLAY_LENGTH / 2)}\u2026${text.slice(
+          -(MAX_LINK_DISPLAY_LENGTH / 2) + 1,
+        )}`;
+
   return (
     <div
       onClick={onClick}
@@ -81,11 +90,14 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
         h-media-card
         rounded-md
         shadow-sm
-        bg-white
-        dark:bg-slate-800
         overflow-hidden
         group/media-card
         cursor-pointer
+        border
+        bg-gray-50/75
+        border-gray-200/75
+        dark:bg-slate-800
+        dark:border-slate-600/75
       "
     >
       {isSelected ? (
@@ -98,6 +110,7 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
             rounded-md
             border-2
             border-blue-500
+            z-20
           "
         />
       ) : null}
@@ -105,10 +118,12 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
         className="
           absolute
           inset-0
-          hidden
-          group-hover/media-card:flex
-          group-hover/media-card:bg-slate-900/20
-          dark:group-hover/media-card:bg-slate-900/40
+          invisible
+          transition-all
+          group-hover/media-card:visible
+          group-hover/media-card:bg-blue-200/25
+          dark:group-hover/media-card:bg-blue-300/30
+          z-10
         "
       >
         <div
@@ -123,7 +138,12 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
             variant="text"
             onClick={handleDownload}
             title={t('mediaLibrary.mediaLibraryModal.download')}
-            className="text-white"
+            className="
+              text-gray-500
+              dark:text-slate-800
+              dark:hover:text-blue-700
+              dark:hover:bg-blue-800/30
+            "
           >
             <ArrowDownTrayIcon className="w-5 h-5" />
           </Button>
@@ -132,16 +152,24 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
             color="error"
             onClick={onDelete}
             title={t('mediaLibrary.mediaLibraryModal.deleteSelected')}
-            className="text-red-400"
+            className="
+              text-red-400
+              dark:hover:text-red-600
+              dark:hover:bg-red-800/20
+            "
           >
             <TrashIcon className="w-5 h-5" />
           </Button>
         </div>
       </div>
-      <div>
-        {isDraft ? <p data-testid="draft-text">{draftText}</p> : null}
+      <div className="relative">
+        {isDraft ? (
+          <Pill data-testid="draft-text" color="primary" className="absolute top-3 left-3 z-10">
+            {draftText}
+          </Pill>
+        ) : null}
         {url && isViewableImage ? (
-          <Image src={url} className="w-media-card h-media-card-image" />
+          <Image src={url} className="w-media-card h-media-card-image rounded-md" />
         ) : (
           <div
             data-testid="card-file-icon"
@@ -173,9 +201,11 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
           dark:font-semibold
           text-slate-600
           dark:text-slate-100
+          whitespace-nowrap
+          overflow-hidden
         "
       >
-        {text}
+        {shortenedText}
       </div>
     </div>
   );

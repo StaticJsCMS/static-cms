@@ -54,9 +54,9 @@ const Menu = ({
         leave="transition ease-in duration-75"
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
-        className="z-10"
+        className="z-30"
       >
-        <BaseMenu.Items className="absolute right-0 z-10 mt-6 w-56 origin-top-right rounded-md bg-white dark:bg-slate-800 shadow-lg border border-gray-200 dark:border-gray-700 focus:outline-none divide-y divide-gray-100 dark:divide-gray-600">
+        <BaseMenu.Items className="absolute right-0 z-30 mt-6 w-56 origin-top-right rounded-md bg-white dark:bg-slate-800 shadow-lg border border-gray-200 dark:border-gray-700 focus:outline-none divide-y divide-gray-100 dark:divide-gray-600">
           {children}
         </BaseMenu.Items>
       </Transition>

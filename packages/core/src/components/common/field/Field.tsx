@@ -90,7 +90,6 @@ const Field: FC<FieldProps> = ({
     () =>
       classNames(
         `
-          relative
           flex
           flex-col
           w-full

@@ -125,7 +125,7 @@ const Autocomplete = function <T>(
                 ring-opacity-5
                 focus:outline-none
                 sm:text-sm
-                z-20`}
+                z-30`}
             >
               {options.length === 0 ? (
                 <div className="relative cursor-default select-none py-2 px-4 text-gray-700">

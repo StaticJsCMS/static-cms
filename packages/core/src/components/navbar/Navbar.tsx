@@ -38,7 +38,7 @@ const Navbar = ({
   }, [dispatch]);
 
   return (
-    <Disclosure as="nav" className="bg-white dark:bg-slate-800 drop-shadow-lg z-20 relative">
+    <Disclosure as="nav" className="bg-white dark:bg-slate-800 drop-shadow-lg z-40 relative">
       {({ open }) => (
         <>
           <div key="nav" className="mx-auto pr-2 sm:pr-4 lg:pr-5">

@@ -43,6 +43,10 @@ TopBarProgress.config({
   barThickness: 2,
 });
 
+window.addEventListener('beforeunload', function (event) {
+  event.stopImmediatePropagation();
+});
+
 function CollectionSearchRedirect() {
   const { name } = useParams();
   return <Navigate to={`/collections/${name}`} />;

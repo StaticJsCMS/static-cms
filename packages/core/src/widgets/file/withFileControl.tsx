@@ -115,6 +115,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       const handleRemove = useCallback(
         (e: MouseEvent) => {
           e.preventDefault();
+          e.stopPropagation();
           clearMediaControl(controlID);
           handleOnChange('');
         },

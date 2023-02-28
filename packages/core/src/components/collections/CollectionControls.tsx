@@ -46,7 +46,7 @@ const CollectionControls = ({
   group,
 }: TranslatedProps<CollectionControlsProps>) => {
   return (
-    <div className="flex gap-2 items-center relative z-10">
+    <div className="flex gap-2 items-center relative z-20">
       <ViewStyleControl viewStyle={viewStyle} onChangeViewStyle={onChangeViewStyle} />
       {viewGroups && onGroupClick && group
         ? viewGroups.length > 0 && (

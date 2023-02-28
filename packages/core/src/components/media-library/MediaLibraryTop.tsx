@@ -102,7 +102,7 @@ const MediaLibraryTop = ({
             onClick={onInsert}
             disabled={!hasSelection}
           >
-            {insertButtonLabel}
+            {t('mediaLibrary.mediaLibraryModal.chooseSelected')}
           </Button>
         )}
       </div>

@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       height: {
         main: 'calc(100vh - 64px)',
+        'media-library-dialog': '80vh',
         'media-card': '240px',
         'media-card-image': '196px',
       },
@@ -18,6 +19,7 @@ module.exports = {
         'sidebar-expanded': '256px',
         'sidebar-collapsed': '68px',
         'editor-only': '640px',
+        'media-library-dialog': '80vw',
         'media-card': '240px'
       },
       boxShadow: {

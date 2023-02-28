@@ -98,7 +98,7 @@ const ListItemWrapper = ({
           )}
         >
           {children}
-          <div className="absolute right-3 top-0 h-full flex items-center justify-end z-5">
+          <div className="absolute right-3 top-0 h-full flex items-center justify-end z-10">
             {renderedControls}
           </div>
         </div>

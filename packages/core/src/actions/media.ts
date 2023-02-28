@@ -55,7 +55,7 @@ async function loadAsset(
   try {
     dispatch(loadAssetRequest(resolvedPath));
     // load asset url from backend
-    await waitForMediaLibraryToLoad(dispatch, getState());
+    // await waitForMediaLibraryToLoad(dispatch, getState());
     const { url } = await getMediaFile(getState(), resolvedPath);
     const asset = createAssetProxy({ path: resolvedPath, url });
     dispatch(addAsset(asset));

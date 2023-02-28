@@ -69,7 +69,7 @@ const Sidebar: FC<TranslateProps> = ({ t }) => {
     <aside
       className={classNames(
         'w-sidebar-expanded',
-        'h-full sm:fixed sm:z-10 sm:shadow-sidebar lg:block lg:z-auto lg:shadow-none',
+        'h-full sm:fixed sm:z-20 sm:shadow-sidebar lg:block lg:z-auto lg:shadow-none',
       )}
       aria-label="Sidebar"
     >

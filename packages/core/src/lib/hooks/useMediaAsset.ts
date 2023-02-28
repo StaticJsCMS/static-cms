@@ -23,7 +23,7 @@ export default function useMediaAsset<T extends MediaField>(
   const debouncedUrl = useDebounce(url, 200);
 
   useEffect(() => {
-    if (!debouncedUrl || isAbsolute) {
+    if (!debouncedUrl || isAbsolute || debouncedUrl.startsWith('blob:')) {
       return;
     }
 

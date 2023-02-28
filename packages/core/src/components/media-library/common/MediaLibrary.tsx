@@ -51,7 +51,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
   isVisible,
   loadMediaDisplayURL,
   displayURLs,
-  canInsert,
+  canInsert = false,
   files = [],
   dynamicSearch,
   dynamicSearchActive,
@@ -321,7 +321,6 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
   const hasFilteredFiles = filteredFiles && !!filteredFiles.length;
   const hasSearchResults = queriedFiles && !!queriedFiles.length;
   const hasMedia = hasSearchResults;
-  const shouldShowEmptyMessage = !hasMedia;
   const emptyMessage =
     (isLoading && !hasMedia && t('mediaLibrary.mediaLibraryModal.loading')) ||
     (dynamicSearchActive && t('mediaLibrary.mediaLibraryModal.noResults')) ||
@@ -332,6 +331,8 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
 
   const hasSelection = hasMedia && !isEmpty(selectedFile);
 
+  console.log('hasMedia', hasMedia, 'files', files, 'tableData', tableData);
+
   return (
     <div className="flex flex-col w-full h-full">
       <MediaLibraryHeader
@@ -339,8 +340,11 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
         viewStyle={viewStyle}
         onUpload={handlePersist}
         onChangeViewStyle={handleViewStyleChange}
+        hasSelection={hasSelection}
+        canInsert={canInsert}
+        onInsert={handleInsert}
       />
-      {!shouldShowEmptyMessage ? null : <EmptyMessage content={emptyMessage} />}
+      {!hasMedia ? <EmptyMessage content={emptyMessage} /> : null}
       <MediaLibraryCardGrid
         scrollContainerRef={scrollContainerRef}
         mediaItems={tableData}

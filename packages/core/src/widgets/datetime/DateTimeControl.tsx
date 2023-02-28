@@ -8,17 +8,17 @@ import parse from 'date-fns/parse';
 import parseISO from 'date-fns/parseISO';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
-import Button from '@staticcms/core/components/common/button/Button';
 import Field from '@staticcms/core/components/common/field/Field';
 import TextField from '@staticcms/core/components/common/text-field/TextField';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
+import NowButton from './components/NowButton';
 import { DEFAULT_DATETIME_FORMAT, DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT } from './constants';
 import { localToUTC } from './utc.util';
 
 import type { TextFieldProps as MuiTextFieldProps } from '@mui/material/TextField';
 import type { TextFieldProps } from '@staticcms/core/components/common/text-field/TextField';
-import type { DateTimeField, TranslatedProps, WidgetControlProps } from '@staticcms/core/interface';
-import type { FC, MouseEvent } from 'react';
+import type { DateTimeField, WidgetControlProps } from '@staticcms/core/interface';
+import type { FC } from 'react';
 
 function convertMuiTextFieldProps(
   { inputProps, disabled, onClick }: MuiTextFieldProps,
@@ -38,39 +38,6 @@ function convertMuiTextFieldProps(
     onClick,
   };
 }
-
-interface NowButtonProps {
-  handleChange: (value: Date) => void;
-  disabled: boolean;
-}
-
-const NowButton: FC<TranslatedProps<NowButtonProps>> = ({ disabled, t, handleChange }) => {
-  const handleClick = useCallback(
-    (event: MouseEvent) => {
-      event.stopPropagation();
-      handleChange(new Date());
-    },
-    [handleChange],
-  );
-
-  return (
-    <div
-      key="now-button-wrapper"
-      className="absolute inset-y-1 right-3 flex items-center
-    "
-    >
-      <Button
-        key="now-button"
-        data-testid="datetime-now"
-        onClick={handleClick}
-        disabled={disabled}
-        variant="outlined"
-      >
-        {t('editor.editorWidgets.datetime.now')}
-      </Button>
-    </div>
-  );
-};
 
 const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
   field,

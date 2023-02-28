@@ -24,6 +24,7 @@ import { selectEntry } from '@staticcms/core/reducers/selectors/entries';
 import { useAppDispatch } from '@staticcms/core/store/hooks';
 import confirm from '../common/confirm/Confirm';
 import Loader from '../common/progress/Loader';
+import MediaLibraryModal from '../media-library/dialog/MediaLibraryModal';
 import EditorInterface from './EditorInterface';
 
 import type {
@@ -280,27 +281,30 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
   }
 
   return (
-    <EditorInterface
-      key={`editor-${version}`}
-      draftKey={draftKey}
-      entry={entryDraft.entry}
-      collection={collection}
-      fields={fields}
-      fieldsErrors={entryDraft.fieldsErrors}
-      onPersist={handlePersistEntry}
-      onDelete={handleDeleteEntry}
-      onDuplicate={handleDuplicateEntry}
-      showDelete={showDelete ?? true}
-      hasChanged={hasChanged}
-      displayUrl={displayUrl}
-      isNewEntry={!slug}
-      isModification={isModification}
-      toggleScroll={handleToggleScroll}
-      scrollSyncActive={scrollSyncActive}
-      loadScroll={handleLoadScroll}
-      submitted={submitted}
-      t={t}
-    />
+    <>
+      <EditorInterface
+        key={`editor-${version}`}
+        draftKey={draftKey}
+        entry={entryDraft.entry}
+        collection={collection}
+        fields={fields}
+        fieldsErrors={entryDraft.fieldsErrors}
+        onPersist={handlePersistEntry}
+        onDelete={handleDeleteEntry}
+        onDuplicate={handleDuplicateEntry}
+        showDelete={showDelete ?? true}
+        hasChanged={hasChanged}
+        displayUrl={displayUrl}
+        isNewEntry={!slug}
+        isModification={isModification}
+        toggleScroll={handleToggleScroll}
+        scrollSyncActive={scrollSyncActive}
+        loadScroll={handleLoadScroll}
+        submitted={submitted}
+        t={t}
+      />
+      <MediaLibraryModal />
+    </>
   );
 };
 

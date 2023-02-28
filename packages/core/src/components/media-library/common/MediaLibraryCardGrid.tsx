@@ -120,6 +120,8 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
     setVersion(oldVersion => oldVersion + 1);
   }, []);
 
+  console.log('mediaItems.length', mediaItems.length);
+
   return (
     <div className="relative w-full h-full">
       <AutoSizer onResize={handleResize}>
@@ -131,9 +133,10 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
           );
           const rowCount = Math.ceil(mediaItems.length / columnCount);
 
+          console.log('rowCount', rowCount, 'columnCount', columnCount);
+
           return (
             <div key={version} ref={scrollContainerRef}>
-              {/* TODO $width={width} $height={height} */}
               <Grid
                 columnCount={columnCount}
                 columnWidth={index =>

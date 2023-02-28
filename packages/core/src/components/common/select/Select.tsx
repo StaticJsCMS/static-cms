@@ -103,7 +103,7 @@ const Select = function <T>(
                 ring-opacity-5
                 focus:outline-none
                 sm:text-sm
-                z-20"
+                z-40"
           >
             {!Array.isArray(value) && !required ? (
               <Listbox.Option

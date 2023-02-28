@@ -50,3 +50,7 @@ export const selectPersisting = (state: RootState) => {
 export const selectDeleting = (state: RootState) => {
   return state.mediaLibrary.isDeleting;
 };
+
+export const selectVisible = (state: RootState) => {
+  return state.mediaLibrary.isVisible;
+};

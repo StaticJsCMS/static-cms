@@ -52,7 +52,7 @@ import { addSnackbar } from '../store/slices/snackbars';
 import { createAssetProxy } from '../valueObjects/AssetProxy';
 import createEntry from '../valueObjects/createEntry';
 import { addAssets, getAsset } from './media';
-import { loadMedia, waitForMediaLibraryToLoad } from './mediaLibrary';
+import { loadMedia } from './mediaLibrary';
 import { waitUntil } from './waitUntil';
 
 import type { NavigateFunction } from 'react-router-dom';
@@ -586,7 +586,6 @@ export function deleteLocalBackup(collection: Collection, slug: string) {
 
 export function loadEntry(collection: Collection, slug: string, silent = false) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
-    await waitForMediaLibraryToLoad(dispatch, getState());
     if (!silent) {
       dispatch(entryLoading(collection, slug));
     }
@@ -835,10 +834,6 @@ export function createEmptyDraft(collection: Collection, search: string) {
     }
 
     const backend = currentBackend(configState.config);
-
-    if (!('media_folder' in collection)) {
-      await waitForMediaLibraryToLoad(dispatch, getState());
-    }
 
     const i18nFields = createEmptyDraftI18nData(collection, fields);
 
