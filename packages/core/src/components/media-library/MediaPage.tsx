@@ -1,13 +1,13 @@
 import React from 'react';
 import { translate } from 'react-polyglot';
 
-import MainView from '../../MainView';
-import MediaLibrary from '../common/MediaLibrary';
+import MainView from '../MainView';
+import MediaLibrary from './common/MediaLibrary';
 
 import type { FC } from 'react';
 import type { TranslateProps } from 'react-polyglot';
 
-const Media: FC<TranslateProps> = ({ t }) => {
+const MediaPage: FC<TranslateProps> = ({ t }) => {
   return (
     <MainView
       breadcrumbs={[{ name: t('app.header.media') }]}
@@ -21,4 +21,4 @@ const Media: FC<TranslateProps> = ({ t }) => {
   );
 };
 
-export default translate()(Media) as FC;
+export default translate()(MediaPage) as FC;

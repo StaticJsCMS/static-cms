@@ -1,8 +1,8 @@
+import PhotoIcon from '@heroicons/react/24/outline/PhotoIcon';
 import fuzzy from 'fuzzy';
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { translate } from 'react-polyglot';
-import PhotoIcon from '@heroicons/react/24/outline/PhotoIcon';
 
 import { changeViewStyle } from '@staticcms/core/actions/entries';
 import {
@@ -20,13 +20,13 @@ import { selectViewStyle } from '@staticcms/core/reducers/selectors/entries';
 import { selectMediaLibraryState } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import alert from '../../common/alert/Alert';
+import Button from '../../common/button/Button';
 import confirm from '../../common/confirm/Confirm';
+import ViewStyleControl from '../../common/view-style/ViewStyleControl';
 import EmptyMessage from './EmptyMessage';
+import FileUploadButton from './FileUploadButton';
 import MediaLibraryCardGrid from './MediaLibraryCardGrid';
 import MediaLibrarySearch from './MediaLibrarySearch';
-import ViewStyleControl from '../../common/view-style/ViewStyleControl';
-import FileUploadButton from './FileUploadButton';
-import Button from '../../common/button/Button';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
@@ -337,15 +337,6 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
 
   return (
     <div className="flex flex-col w-full h-full">
-      {/* <MediaLibraryHeader
-        forImage={forImage}
-        viewStyle={viewStyle}
-        onUpload={handlePersist}
-        onChangeViewStyle={handleViewStyleChange}
-        hasSelection={hasSelection}
-        canInsert={canInsert}
-        onInsert={handleInsert}
-      /> */}
       <div className="flex items-center px-5 pt-4">
         <div className="flex flex-grow gap-4 mr-8">
           <h2 className="text-xl font-semibold flex items-center text-gray-800 dark:text-gray-300">
@@ -398,63 +389,5 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     </div>
   );
 };
-{
-  /* <MediaLibraryModal
-  isVisible={isVisible}
-  canInsert={canInsert}
-  files={files}
-  dynamicSearch={dynamicSearch}
-  dynamicSearchActive={dynamicSearchActive}
-  forImage={forImage}
-  isLoading={isLoading}
-  isPersisting={isPersisting}
-  isDeleting={isDeleting}
-  hasNextPage={hasNextPage}
-  isPaginating={isPaginating}
-  query={query}
-  selectedFile={selectedFile ?? undefined}
-  handleFilter={filterImages}
-  handleQuery={queryFilter}
-  toTableData={toTableData}
-  handleClose={handleClose}
-  handleSearchChange={handleSearchChange}
-  handleSearchKeyDown={handleSearchKeyDown}
-  handlePersist={handlePersist}
-  handleDelete={handleDelete}
-  handleInsert={handleInsert}
-  handleDownload={handleDownload}
-  scrollContainerRef={scrollContainerRef}
-  handleAssetClick={handleAssetClick}
-  handleLoadMore={handleLoadMore}
-  displayURLs={displayURLs}
-  loadDisplayURL={loadDisplayURL}
-  collection={collection}
-  field={field}
-/> */
-}
-
-// function mapStateToProps(state: RootState) {
-//   const { mediaLibrary } = state;
-//   const field = mediaLibrary.field;
-//   const mediaLibraryProps = {
-//     isVisible: mediaLibrary.isVisible,
-//     files: selectMediaFiles(state, field),
-//     displayURLs: mediaLibrary.displayURLs,
-//     dynamicSearch: mediaLibrary.dynamicSearch,
-//     dynamicSearchActive: mediaLibrary.dynamicSearchActive,
-//     dynamicSearchQuery: mediaLibrary.dynamicSearchQuery,
-//     forImage: mediaLibrary.forImage,
-//     isLoading: mediaLibrary.isLoading,
-//     isPersisting: mediaLibrary.isPersisting,
-//     isDeleting: mediaLibrary.isDeleting,
-//     config: mediaLibrary.config,
-//     page: mediaLibrary.page,
-//     hasNextPage: mediaLibrary.hasNextPage,
-//     isPaginating: mediaLibrary.isPaginating,
-//     collection: mediaLibrary.collection,
-//     field,
-//   };
-//   return { ...mediaLibraryProps };
-// }
 
 export default translate()(MediaLibrary) as FC<MediaLibraryProps>;

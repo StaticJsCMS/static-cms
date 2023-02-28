@@ -3,21 +3,21 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import { Waypoint } from 'react-waypoint';
 import { VariableSizeGrid as Grid } from 'react-window';
 
-import MediaLibraryCard from './MediaLibraryCard';
 import {
   MEDIA_CARD_HEIGHT,
   MEDIA_CARD_MARGIN,
   MEDIA_CARD_WIDTH,
   MEDIA_LIBRARY_PADDING,
 } from '@staticcms/core/constants/mediaLibrary';
+import MediaLibraryCard from './MediaLibraryCard';
 
 import type { Collection, Field, MediaFile } from '@staticcms/core/interface';
 import type {
   MediaLibraryDisplayURL,
   MediaLibraryState,
 } from '@staticcms/core/reducers/mediaLibrary';
-import type { GridChildComponentProps } from 'react-window';
 import type { FC } from 'react';
+import type { GridChildComponentProps } from 'react-window';
 
 export interface MediaLibraryCardItem {
   displayURL?: MediaLibraryDisplayURL;
@@ -124,7 +124,7 @@ const CardWrapper = ({
 };
 
 const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
-  const { mediaItems, scrollContainerRef } = props;
+  const { mediaItems, scrollContainerRef, canLoadMore, onLoadMore } = props;
 
   const [version, setVersion] = useState(0);
 
@@ -176,6 +176,7 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
               >
                 {CardWrapper}
               </Grid>
+              {!canLoadMore ? null : <Waypoint onEnter={onLoadMore} />}
             </div>
           );
         }}
@@ -183,52 +184,5 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
     </div>
   );
 };
-
-// const PaginatedGrid = ({
-//   scrollContainerRef,
-//   mediaItems,
-//   isSelectedFile,
-//   onAssetClick,
-//   cardDraftText,
-//   cardWidth,
-//   cardHeight,
-//   cardMargin,
-//   displayURLs,
-//   loadDisplayURL,
-//   canLoadMore,
-//   onLoadMore,
-//   isPaginating,
-//   paginatingMessage,
-//   collection,
-//   field,
-// }: MediaLibraryCardGridProps) => {
-//   return (
-//     <div ref={scrollContainerRef}>
-//       <div>
-//         {mediaItems.map(file => (
-//           <MediaLibraryCard
-//             key={file.key}
-//             isSelected={isSelectedFile(file)}
-//             text={file.name}
-//             onClick={() => onAssetClick(file)}
-//             isDraft={file.draft}
-//             draftText={cardDraftText}
-//             width={cardWidth}
-//             height={cardHeight}
-//             margin={cardMargin}
-//             displayURL={displayURLs[file.id] ?? (file.url ? { url: file.url } : {})}
-//             loadDisplayURL={() => loadDisplayURL(file)}
-//             type={file.type}
-//             isViewableImage={file.isViewableImage ?? false}
-//             collection={collection}
-//             field={field}
-//           />
-//         ))}
-//         {!canLoadMore ? null : <Waypoint onEnter={onLoadMore} />}
-//       </div>
-//       {!isPaginating ? null : <h1>{paginatingMessage}</h1>}
-//     </div>
-//   );
-// };
 
 export default MediaLibraryCardGrid;

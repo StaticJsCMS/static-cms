@@ -5,8 +5,8 @@ import React, { Fragment, useCallback } from 'react';
 import { closeMediaLibrary } from '@staticcms/core/actions/mediaLibrary';
 import { selectVisible } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
-import IconButton from '../../common/button/IconButton';
-import MediaLibrary from '../common/MediaLibrary';
+import IconButton from '../common/button/IconButton';
+import MediaLibrary from './common/MediaLibrary';
 
 import type { FC } from 'react';
 

@@ -24,7 +24,7 @@ import { selectEntry } from '@staticcms/core/reducers/selectors/entries';
 import { useAppDispatch } from '@staticcms/core/store/hooks';
 import confirm from '../common/confirm/Confirm';
 import Loader from '../common/progress/Loader';
-import MediaLibraryModal from '../media-library/dialog/MediaLibraryModal';
+import MediaLibraryModal from '../media-library/MediaLibraryModal';
 import EditorInterface from './EditorInterface';
 
 import type {

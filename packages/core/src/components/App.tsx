@@ -24,7 +24,7 @@ import { Alert } from './common/alert/Alert';
 import { Confirm } from './common/confirm/Confirm';
 import Loader from './common/progress/Loader';
 import EditorRoute from './entry-editor/EditorRoute';
-import Media from './media-library/page/Media';
+import MediaPage from './media-library/MediaPage';
 import NotFoundPage from './NotFoundPage';
 import Page from './page/Page';
 import Snackbars from './snackbar/Snackbars';
@@ -196,7 +196,7 @@ const App = ({
           <Route path="/search/:searchTerm" element={<CollectionRoute isSearchResults />} />
           <Route path="/edit/:name/:entryName" element={<EditEntityRedirect />} />
           <Route path="/page/:id" element={<Page />} />
-          <Route path="/media" element={<Media />} />
+          <Route path="/media" element={<MediaPage />} />
           <Route element={<NotFoundPage />} />
         </Routes>
       </>
