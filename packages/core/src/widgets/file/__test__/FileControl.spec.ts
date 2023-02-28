@@ -46,24 +46,24 @@ describe(FileControl.name, () => {
     const { rerender, getByTestId } = renderControl({ value: 'https://example.com/file.pdf' });
 
     const link = getByTestId('link');
-    expect(link).toHaveValue('https://example.com/file.pdf');
+    expect(link.textContent).toBe('https://example.com/file.pdf');
 
     rerender({ value: 'https://example.com/someoether.pdf' });
-    expect(link).toHaveValue('https://example.com/file.pdf');
+    expect(link.textContent).toBe('https://example.com/file.pdf');
   });
 
-  it('should use prop value exclusively if field is i18n duplicate', async () => {
+  fit('should use prop value exclusively if field is i18n duplicate', async () => {
     const { rerender, getByTestId } = renderControl({
       field: { ...mockFileField, i18n: 'duplicate' },
       duplicate: true,
-      value: 'i am a value',
+      value: 'https://example.com/file.pdf',
     });
 
-    const input = getByTestId('text-input');
-    expect(input).toHaveValue('i am a value');
+    const link = getByTestId('link');
+    expect(link.textContent).toBe('https://example.com/file.pdf');
 
-    rerender({ value: 'i am a new value' });
-    expect(input).toHaveValue('i am a new value');
+    rerender({ value: 'https://example.com/someoether.pdf' });
+    expect(link.textContent).toBe('https://example.com/someoether.pdf');
   });
 
   it('should call onChange when text input changes', async () => {

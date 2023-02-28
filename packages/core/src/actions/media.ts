@@ -8,7 +8,7 @@ import {
 } from '../constants';
 import { selectMediaFilePath } from '../lib/util/media.util';
 import { createAssetProxy } from '../valueObjects/AssetProxy';
-import { getMediaFile, waitForMediaLibraryToLoad } from './mediaLibrary';
+import { getMediaFile } from './mediaLibrary';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
