@@ -2,6 +2,7 @@ import fuzzy from 'fuzzy';
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { translate } from 'react-polyglot';
+import PhotoIcon from '@heroicons/react/24/outline/PhotoIcon';
 
 import { changeViewStyle } from '@staticcms/core/actions/entries';
 import {
@@ -22,7 +23,10 @@ import alert from '../../common/alert/Alert';
 import confirm from '../../common/confirm/Confirm';
 import EmptyMessage from './EmptyMessage';
 import MediaLibraryCardGrid from './MediaLibraryCardGrid';
-import MediaLibraryHeader from './MediaLibraryHeader';
+import MediaLibrarySearch from './MediaLibrarySearch';
+import ViewStyleControl from '../../common/view-style/ViewStyleControl';
+import FileUploadButton from './FileUploadButton';
+import Button from '../../common/button/Button';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
@@ -333,7 +337,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
 
   return (
     <div className="flex flex-col w-full h-full">
-      <MediaLibraryHeader
+      {/* <MediaLibraryHeader
         forImage={forImage}
         viewStyle={viewStyle}
         onUpload={handlePersist}
@@ -341,7 +345,39 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
         hasSelection={hasSelection}
         canInsert={canInsert}
         onInsert={handleInsert}
-      />
+      /> */}
+      <div className="flex items-center px-5 pt-4">
+        <div className="flex flex-grow gap-4 mr-8">
+          <h2 className="text-xl font-semibold flex items-center text-gray-800 dark:text-gray-300">
+            <span className="mr-2">
+              <PhotoIcon className="w-6 h-6" />
+            </span>
+            {t('app.header.media')}
+          </h2>
+          <MediaLibrarySearch
+            value={query}
+            onChange={handleSearchChange}
+            onKeyDown={handleSearchKeyDown}
+            placeholder={t('mediaLibrary.mediaLibraryModal.search')}
+            disabled={!dynamicSearchActive && !hasFilteredFiles}
+          />
+        </div>
+        <div className="flex gap-3 items-center relative z-20">
+          <ViewStyleControl viewStyle={viewStyle} onChangeViewStyle={handleViewStyleChange} />
+          <FileUploadButton imagesOnly={forImage} onChange={handlePersist} />
+          {canInsert ? (
+            <Button
+              key="choose-selected"
+              color="success"
+              variant="contained"
+              onClick={handleInsert}
+              disabled={!hasSelection}
+            >
+              {t('mediaLibrary.mediaLibraryModal.chooseSelected')}
+            </Button>
+          ) : null}
+        </div>
+      </div>
       {!hasMedia ? <EmptyMessage content={emptyMessage} /> : null}
       <MediaLibraryCardGrid
         scrollContainerRef={scrollContainerRef}

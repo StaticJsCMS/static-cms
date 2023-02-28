@@ -22,6 +22,9 @@ module.exports = {
         'media-library-dialog': '80vw',
         'media-card': '240px'
       },
+      maxWidth: {
+        'media-search': '400px'
+      },
       boxShadow: {
         sidebar: '0 10px 15px 18px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
       },
