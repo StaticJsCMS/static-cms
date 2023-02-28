@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { Waypoint } from 'react-waypoint';
 import { VariableSizeGrid as Grid } from 'react-window';
@@ -34,7 +34,7 @@ export interface MediaLibraryCardGridProps {
   scrollContainerRef: React.MutableRefObject<HTMLDivElement | null>;
   mediaItems: MediaFile[];
   isSelectedFile: (file: MediaFile) => boolean;
-  onAssetClick: (asset: MediaFile) => void;
+  onAssetSelect: (asset: MediaFile) => void;
   canLoadMore?: boolean;
   onLoadMore: () => void;
   isPaginating?: boolean;
@@ -59,7 +59,7 @@ const CardWrapper = ({
   data: {
     mediaItems,
     isSelectedFile,
-    onAssetClick,
+    onAssetSelect,
     cardDraftText,
     displayURLs,
     loadDisplayURL,
@@ -69,6 +69,25 @@ const CardWrapper = ({
     onDelete,
   },
 }: GridChildComponentProps<CardGridItemData>) => {
+  const left = useMemo(
+    () =>
+      parseFloat(
+        `${
+          typeof style.left === 'number'
+            ? style.left ?? MEDIA_CARD_MARGIN * columnIndex
+            : style.left
+        }`,
+      ) + MEDIA_LIBRARY_PADDING,
+    [columnIndex, style.left],
+  );
+
+  const top = useMemo(
+    () =>
+      parseFloat(`${typeof style.top === 'number' ? style.top ?? 0 : style.top}`) +
+      MEDIA_LIBRARY_PADDING,
+    [style.top],
+  );
+
   const index = rowIndex * columnCount + columnIndex;
   if (index >= mediaItems.length) {
     return null;
@@ -79,15 +98,8 @@ const CardWrapper = ({
     <div
       style={{
         ...style,
-        left:
-          parseFloat(
-            `${
-              typeof style.left === 'number'
-                ? style.left ?? MEDIA_CARD_MARGIN * columnIndex
-                : style.left
-            }`,
-          ) + MEDIA_LIBRARY_PADDING,
-        top: style.top,
+        left,
+        top,
         width: style.width,
         height: style.height,
       }}
@@ -96,7 +108,7 @@ const CardWrapper = ({
         key={file.key}
         isSelected={isSelectedFile(file)}
         text={file.name}
-        onClick={() => onAssetClick(file)}
+        onSelect={() => onAssetSelect(file)}
         isDraft={file.draft}
         draftText={cardDraftText}
         displayURL={displayURLs[file.id] ?? (file.url ? { url: file.url } : {})}
@@ -156,10 +168,11 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
                 }
                 className="
                   px-5
-                  pb-4
+                  py-4
                   overflow-hidden
                   overflow-y-auto
                 "
+                style={{ position: 'unset' }}
               >
                 {CardWrapper}
               </Grid>

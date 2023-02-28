@@ -39,7 +39,8 @@ const MediaLibraryModal: FC = () => {
                   transform
                   overflow-visible
                   rounded-2xl
-                  p-1
+                  py-1
+                  pl-1
                   text-left
                   align-middle
                   shadow-xl
@@ -51,7 +52,15 @@ const MediaLibraryModal: FC = () => {
                 "
               >
                 <IconButton
-                  className="absolute -top-3.5 -left-3.5 bg-white dark:bg-slate-800"
+                  className="
+                    absolute
+                    -top-3.5
+                    -left-3.5
+                    bg-white
+                    hover:bg-gray-100
+                    dark:bg-slate-800
+                    dark:hover:bg-slate-900
+                  "
                   variant="outlined"
                   aria-label="add"
                   onClick={handleClose}
@@ -59,7 +68,7 @@ const MediaLibraryModal: FC = () => {
                 >
                   <XMarkIcon className="w-5 h-5" />
                 </IconButton>
-                <MediaLibrary />
+                <MediaLibrary canInsert />
               </Dialog.Panel>
             </Transition.Child>
           </div>

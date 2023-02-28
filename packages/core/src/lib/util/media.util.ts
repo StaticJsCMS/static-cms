@@ -15,6 +15,7 @@ import type {
   MarkdownField,
   ListField,
   ObjectField,
+  MediaField,
 } from '@staticcms/core/interface';
 
 export const DRAFT_MEDIA_FILES = 'DRAFT_MEDIA_FILES';
@@ -26,7 +27,7 @@ function getFileField(collectionFiles: CollectionFile[], slug: string | undefine
 
 function isMediaField(
   folderKey: 'media_folder' | 'public_folder',
-  field: Field | undefined,
+  field: MediaField | undefined,
 ): field is FileOrImageField | MarkdownField {
   return Boolean(field && folderKey in field);
 }
@@ -35,7 +36,7 @@ function hasCustomFolder(
   folderKey: 'media_folder' | 'public_folder',
   collection: Collection | undefined | null,
   slug: string | undefined,
-  field: Field | undefined,
+  field: MediaField | undefined,
 ): field is FileOrImageField | MarkdownField {
   if (!collection) {
     return false;
@@ -228,7 +229,7 @@ export function selectMediaFolder(
   config: Config,
   collection: Collection | undefined | null,
   entryMap: Entry | null | undefined,
-  field: Field | undefined,
+  field: MediaField | undefined,
 ) {
   const name = 'media_folder';
   let mediaFolder = config[name];

@@ -31,7 +31,7 @@ const MediaHeader: FC<TranslatedProps<MediaHeaderProps>> = ({
   t,
 }) => {
   return (
-    <div className="flex items-center px-5 py-4">
+    <div className="flex items-center px-5 pt-4">
       <div className="flex flex-grow gap-4">
         <h2 className="text-xl font-semibold flex items-center text-gray-800 dark:text-gray-300">
           <span className="mr-2">
@@ -40,7 +40,7 @@ const MediaHeader: FC<TranslatedProps<MediaHeaderProps>> = ({
           {t('app.header.media')}
         </h2>
       </div>
-      <div className="flex gap-2 items-center relative z-20">
+      <div className="flex gap-3 items-center relative z-20">
         <ViewStyleControl viewStyle={viewStyle} onChangeViewStyle={onChangeViewStyle} />
         <FileUploadButton imagesOnly={forImage} onChange={onUpload} />
         {canInsert ? (

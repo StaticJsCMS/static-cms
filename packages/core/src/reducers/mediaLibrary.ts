@@ -43,7 +43,6 @@ export type MediaLibraryState = {
   field?: Field;
   value?: string | string[];
   replaceIndex?: number;
-  canInsert?: boolean;
   isLoading?: boolean;
   dynamicSearch?: boolean;
   dynamicSearchActive?: boolean;
@@ -85,7 +84,6 @@ function mediaLibrary(
         isVisible: true,
         forImage: Boolean(forImage),
         controlID,
-        canInsert: !!controlID,
         config: libConfig,
         collection,
         field,

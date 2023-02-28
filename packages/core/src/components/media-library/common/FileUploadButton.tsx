@@ -1,5 +1,5 @@
 import ArrowUpTrayIcon from '@heroicons/react/24/outline/ArrowUpTrayIcon';
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import { translate } from 'react-polyglot';
 
 import { selectDeleting, selectPersisting } from '@staticcms/core/reducers/selectors/mediaLibrary';
@@ -7,7 +7,7 @@ import { useAppSelector } from '@staticcms/core/store/hooks';
 import useButtonClassNames from '../../common/button/useButtonClassNames';
 
 import type { TranslatedProps } from '@staticcms/core/interface';
-import type { ChangeEventHandler, FC } from 'react';
+import type { ChangeEventHandler, FC, KeyboardEvent } from 'react';
 
 export interface FileUploadButtonProps {
   imagesOnly?: boolean;
@@ -19,13 +19,27 @@ const FileUploadButton: FC<TranslatedProps<FileUploadButtonProps>> = ({
   onChange,
   t,
 }) => {
+  const ref = useRef<HTMLLabelElement | null>(null);
+
   const isPersisting = useAppSelector(selectPersisting);
   const isDeleting = useAppSelector(selectDeleting);
 
   const buttonClasses = useButtonClassNames('contained', 'primary', false);
 
+  const handleOnKeyUp = useCallback((event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      ref.current?.click();
+    }
+  }, []);
+
   return (
-    <label className={`${buttonClasses} cursor-pointer`}>
+    <label
+      ref={ref}
+      role="button"
+      className={`${buttonClasses} cursor-pointer`}
+      tabIndex={0}
+      onKeyUp={handleOnKeyUp}
+    >
       <ArrowUpTrayIcon className="w-5 h-5 mr-2" />
       {isPersisting
         ? t('mediaLibrary.mediaLibraryModal.uploading')

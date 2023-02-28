@@ -2,21 +2,21 @@ import fuzzy from 'fuzzy';
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { translate } from 'react-polyglot';
-import { connect } from 'react-redux';
 
 import { changeViewStyle } from '@staticcms/core/actions/entries';
 import {
-  closeMediaLibrary as closeMediaLibraryAction,
-  deleteMedia as deleteMediaAction,
-  insertMedia as insertMediaAction,
-  loadMedia as loadMediaAction,
-  loadMediaDisplayURL as loadMediaDisplayURLAction,
-  persistMedia as persistMediaAction,
+  closeMediaLibrary,
+  deleteMedia,
+  insertMedia,
+  loadMedia,
+  loadMediaDisplayURL,
+  persistMedia,
 } from '@staticcms/core/actions/mediaLibrary';
+import useMediaFiles from '@staticcms/core/lib/hooks/useMediaFiles';
 import { fileExtension } from '@staticcms/core/lib/util';
 import MediaLibraryCloseEvent from '@staticcms/core/lib/util/events/MediaLibraryCloseEvent';
 import { selectViewStyle } from '@staticcms/core/reducers/selectors/entries';
-import { selectMediaFiles } from '@staticcms/core/reducers/selectors/mediaLibrary';
+import { selectMediaLibraryState } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import alert from '../../common/alert/Alert';
 import confirm from '../../common/confirm/Confirm';
@@ -26,9 +26,7 @@ import MediaLibraryHeader from './MediaLibraryHeader';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
-import type { RootState } from '@staticcms/core/store';
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
-import type { ConnectedProps } from 'react-redux';
 
 /**
  * Extensions used to determine which files to show when the media library is
@@ -47,30 +45,11 @@ const IMAGE_EXTENSIONS_VIEWABLE = [
 ];
 const IMAGE_EXTENSIONS = [...IMAGE_EXTENSIONS_VIEWABLE];
 
-const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
-  isVisible,
-  loadMediaDisplayURL,
-  displayURLs,
-  canInsert = false,
-  files = [],
-  dynamicSearch,
-  dynamicSearchActive,
-  forImage = false,
-  isLoading,
-  hasNextPage,
-  isPaginating,
-  config: mediaConfig,
-  loadMedia,
-  dynamicSearchQuery,
-  page,
-  persistMedia,
-  deleteMedia,
-  insertMedia,
-  closeMediaLibrary,
-  collection,
-  field,
-  t,
-}) => {
+interface MediaLibraryProps {
+  canInsert?: boolean;
+}
+
+const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = false, t }) => {
   const [selectedFile, setSelectedFile] = useState<MediaFile | null>(null);
   const [query, setQuery] = useState<string | undefined>(undefined);
 
@@ -78,6 +57,23 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
 
   const dispatch = useAppDispatch();
   const viewStyle = useAppSelector(selectViewStyle);
+  const {
+    isVisible,
+    displayURLs,
+    dynamicSearch,
+    dynamicSearchActive,
+    forImage = false,
+    isLoading,
+    hasNextPage,
+    isPaginating,
+    config: mediaConfig,
+    dynamicSearchQuery,
+    page,
+    collection,
+    field,
+  } = useAppSelector(selectMediaLibraryState);
+
+  const files = useMediaFiles(field);
 
   const handleViewStyleChange = useCallback(
     (viewStyle: ViewStyle) => {
@@ -87,26 +83,26 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
   );
 
   useEffect(() => {
-    loadMedia({});
-  }, [loadMedia]);
+    dispatch(loadMedia({}));
+  }, [dispatch]);
 
   useEffect(() => {
     if (!prevIsVisible && isVisible) {
       setSelectedFile(null);
       setQuery('');
-      loadMedia();
+      dispatch(loadMedia());
     } else if (prevIsVisible && !isVisible) {
       window.dispatchEvent(new MediaLibraryCloseEvent());
     }
 
     setPrevIsVisible(isVisible);
-  }, [isVisible, loadMedia, prevIsVisible]);
+  }, [isVisible, dispatch, prevIsVisible]);
 
   const loadDisplayURL = useCallback(
     (file: MediaFile) => {
-      loadMediaDisplayURL(file);
+      dispatch(loadMediaDisplayURL(file));
     },
-    [loadMediaDisplayURL],
+    [dispatch],
   );
 
   /**
@@ -154,19 +150,21 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
   }, []);
 
   const handleClose = useCallback(() => {
-    closeMediaLibrary();
-  }, [closeMediaLibrary]);
+    dispatch(closeMediaLibrary());
+  }, [dispatch]);
 
   /**
    * Toggle asset selection on click.
    */
-  const handleAssetClick = useCallback(
+  const handleAssetSelect = useCallback(
     (asset: MediaFile) => {
-      if (selectedFile?.key !== asset.key) {
-        setSelectedFile(asset);
+      if (!canInsert || selectedFile?.key === asset.key) {
+        return;
       }
+
+      setSelectedFile(asset);
     },
-    [selectedFile?.key],
+    [canInsert, selectedFile?.key],
   );
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
@@ -217,7 +215,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
           },
         });
       } else {
-        await persistMedia(file, { field });
+        await dispatch(persistMedia(file, { field }));
 
         setSelectedFile(files[0] as unknown as MediaFile);
 
@@ -228,7 +226,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
         event.target.value = '';
       }
     },
-    [mediaConfig.max_file_size, field, persistMedia],
+    [mediaConfig.max_file_size, field, dispatch],
   );
 
   /**
@@ -241,9 +239,9 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
     }
 
     const { path } = selectedFile;
-    insertMedia(path, field);
+    dispatch(insertMedia(path, field));
     handleClose();
-  }, [field, handleClose, insertMedia, selectedFile]);
+  }, [field, handleClose, dispatch, selectedFile]);
 
   /**
    * Removes the selected file from the backend.
@@ -261,17 +259,17 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
       }
       const file = files.find(file => fileToDelete?.key === file.key);
       if (file) {
-        deleteMedia(file).then(() => {
+        dispatch(deleteMedia(file)).then(() => {
           setSelectedFile(null);
         });
       }
     },
-    [deleteMedia, files],
+    [dispatch, files],
   );
 
   const handleLoadMore = useCallback(() => {
-    loadMedia({ query: dynamicSearchQuery, page: (page ?? 0) + 1 });
-  }, [dynamicSearchQuery, loadMedia, page]);
+    dispatch(loadMedia({ query: dynamicSearchQuery, page: (page ?? 0) + 1 }));
+  }, [dynamicSearchQuery, dispatch, page]);
 
   /**
    * Executes media library search for implementations that support dynamic
@@ -283,11 +281,11 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
   const handleSearchKeyDown = useCallback(
     async (event: KeyboardEvent) => {
       if (event.key === 'Enter' && dynamicSearch) {
-        await loadMedia({ query });
+        await dispatch(loadMedia({ query }));
         scrollToTop();
       }
     },
-    [dynamicSearch, loadMedia, query],
+    [dynamicSearch, dispatch, query],
   );
 
   /**
@@ -349,7 +347,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
         scrollContainerRef={scrollContainerRef}
         mediaItems={tableData}
         isSelectedFile={file => selectedFile?.key === file.key}
-        onAssetClick={handleAssetClick}
+        onAssetSelect={handleAssetSelect}
         canLoadMore={hasNextPage}
         onLoadMore={handleLoadMore}
         isPaginating={isPaginating}
@@ -399,41 +397,28 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
 /> */
 }
 
-function mapStateToProps(state: RootState) {
-  const { mediaLibrary } = state;
-  const field = mediaLibrary.field;
-  const mediaLibraryProps = {
-    isVisible: mediaLibrary.isVisible,
-    canInsert: mediaLibrary.canInsert,
-    files: selectMediaFiles(state, field),
-    displayURLs: mediaLibrary.displayURLs,
-    dynamicSearch: mediaLibrary.dynamicSearch,
-    dynamicSearchActive: mediaLibrary.dynamicSearchActive,
-    dynamicSearchQuery: mediaLibrary.dynamicSearchQuery,
-    forImage: mediaLibrary.forImage,
-    isLoading: mediaLibrary.isLoading,
-    isPersisting: mediaLibrary.isPersisting,
-    isDeleting: mediaLibrary.isDeleting,
-    config: mediaLibrary.config,
-    page: mediaLibrary.page,
-    hasNextPage: mediaLibrary.hasNextPage,
-    isPaginating: mediaLibrary.isPaginating,
-    collection: mediaLibrary.collection,
-    field,
-  };
-  return { ...mediaLibraryProps };
-}
+// function mapStateToProps(state: RootState) {
+//   const { mediaLibrary } = state;
+//   const field = mediaLibrary.field;
+//   const mediaLibraryProps = {
+//     isVisible: mediaLibrary.isVisible,
+//     files: selectMediaFiles(state, field),
+//     displayURLs: mediaLibrary.displayURLs,
+//     dynamicSearch: mediaLibrary.dynamicSearch,
+//     dynamicSearchActive: mediaLibrary.dynamicSearchActive,
+//     dynamicSearchQuery: mediaLibrary.dynamicSearchQuery,
+//     forImage: mediaLibrary.forImage,
+//     isLoading: mediaLibrary.isLoading,
+//     isPersisting: mediaLibrary.isPersisting,
+//     isDeleting: mediaLibrary.isDeleting,
+//     config: mediaLibrary.config,
+//     page: mediaLibrary.page,
+//     hasNextPage: mediaLibrary.hasNextPage,
+//     isPaginating: mediaLibrary.isPaginating,
+//     collection: mediaLibrary.collection,
+//     field,
+//   };
+//   return { ...mediaLibraryProps };
+// }
 
-const mapDispatchToProps = {
-  loadMedia: loadMediaAction,
-  persistMedia: persistMediaAction,
-  deleteMedia: deleteMediaAction,
-  insertMedia: insertMediaAction,
-  loadMediaDisplayURL: loadMediaDisplayURLAction,
-  closeMediaLibrary: closeMediaLibraryAction,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-export type MediaLibraryProps = ConnectedProps<typeof connector>;
-
-export default translate()(connector(MediaLibrary)) as FC;
+export default translate()(MediaLibrary) as FC<MediaLibraryProps>;

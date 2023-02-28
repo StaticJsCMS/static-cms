@@ -108,6 +108,9 @@ const Button: FC<ButtonLinkProps> = ({
       disabled={otherProps.disabled}
       onClick={otherProps.onClick}
       aria-label={otherProps['aria-label']}
+      type="button"
+      role="button"
+      tabIndex={0}
     >
       {content}
     </button>
