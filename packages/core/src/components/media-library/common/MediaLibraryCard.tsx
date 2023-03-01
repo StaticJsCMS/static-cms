@@ -103,6 +103,7 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
     >
       <div
         onClick={onSelect}
+        data-testid={`media-card-${displayURL.url}`}
         className="
           w-media-card
           h-media-card
@@ -121,6 +122,7 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
         <div
           key="handle"
           onKeyUp={handleOnKeyUp}
+          data-testid={`media-card-handle-${displayURL.url}`}
           tabIndex={0}
           className="
             absolute

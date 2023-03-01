@@ -5,6 +5,7 @@ import { act } from '@testing-library/react';
 import { store } from '@staticcms/core/store';
 import { createMockWidgetControlProps } from '@staticcms/test/data/widgets.mock';
 import { renderWithProviders } from '@staticcms/test/test-utils';
+import MediaLibrary from '@staticcms/core/components/media-library/common/MediaLibrary';
 
 import type {
   BaseField,
@@ -16,6 +17,7 @@ import type { FC } from 'react';
 
 export interface WidgetControlHarnessOptions {
   useFakeTimers?: boolean;
+  withMediaLibrary?: boolean;
 }
 
 export const createWidgetControlHarness = <
@@ -31,7 +33,7 @@ export const createWidgetControlHarness = <
   type Props = Omit<Params, 'field'> & Pick<Partial<Params>, 'field'>;
 
   return (renderProps?: Props, renderOptions?: WidgetControlHarnessOptions) => {
-    const { useFakeTimers = false } = renderOptions ?? options ?? {};
+    const { useFakeTimers = false, withMediaLibrary = false } = renderOptions ?? options ?? {};
     if (useFakeTimers) {
       jest.useFakeTimers({ now: new Date(2023, 1, 12, 10, 15, 35, 0) });
     } else {
@@ -42,7 +44,12 @@ export const createWidgetControlHarness = <
 
     const props = createMockWidgetControlProps<T, F>({ ...defaults, ...renderProps, field });
 
-    const result = renderWithProviders(<Component {...props} />);
+    const result = renderWithProviders(
+      <>
+        <Component {...props} />
+        {withMediaLibrary ? <MediaLibrary /> : null}
+      </>,
+    );
 
     if (useFakeTimers) {
       act(() => {
@@ -56,7 +63,12 @@ export const createWidgetControlHarness = <
         ...rerenderProps,
       };
 
-      result.rerender(<Component {...finalRerenderProps} />);
+      result.rerender(
+        <>
+          <Component {...finalRerenderProps} />
+          {withMediaLibrary ? <MediaLibrary /> : null}
+        </>,
+      );
 
       return { props: rerenderProps };
     };
