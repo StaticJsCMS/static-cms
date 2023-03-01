@@ -6,8 +6,8 @@ export interface EmptyMessageProps {
 
 const EmptyMessage = ({ content }: EmptyMessageProps) => {
   return (
-    <div>
-      <h1>{content}</h1>
+    <div className="relative flex-grow p-5 pb-20 flex items-center justify-center">
+      <h3 className="">{content}</h3>
     </div>
   );
 };

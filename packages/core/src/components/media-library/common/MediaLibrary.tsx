@@ -369,23 +369,26 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
           ) : null}
         </div>
       </div>
-      {!hasMedia ? <EmptyMessage content={emptyMessage} /> : null}
-      <MediaLibraryCardGrid
-        scrollContainerRef={scrollContainerRef}
-        mediaItems={tableData}
-        isSelectedFile={file => selectedFile?.key === file.key}
-        onAssetSelect={handleAssetSelect}
-        canLoadMore={hasNextPage}
-        onLoadMore={handleLoadMore}
-        isPaginating={isPaginating}
-        paginatingMessage={t('mediaLibrary.mediaLibraryModal.loading')}
-        cardDraftText={t('mediaLibrary.mediaLibraryCard.draft')}
-        loadDisplayURL={loadDisplayURL}
-        displayURLs={displayURLs}
-        collection={collection}
-        field={field}
-        onDelete={handleDelete}
-      />
+      {!hasMedia ? (
+        <EmptyMessage content={emptyMessage} />
+      ) : (
+        <MediaLibraryCardGrid
+          scrollContainerRef={scrollContainerRef}
+          mediaItems={tableData}
+          isSelectedFile={file => selectedFile?.key === file.key}
+          onAssetSelect={handleAssetSelect}
+          canLoadMore={hasNextPage}
+          onLoadMore={handleLoadMore}
+          isPaginating={isPaginating}
+          paginatingMessage={t('mediaLibrary.mediaLibraryModal.loading')}
+          cardDraftText={t('mediaLibrary.mediaLibraryCard.draft')}
+          loadDisplayURL={loadDisplayURL}
+          displayURLs={displayURLs}
+          collection={collection}
+          field={field}
+          onDelete={handleDelete}
+        />
+      )}
     </div>
   );
 };

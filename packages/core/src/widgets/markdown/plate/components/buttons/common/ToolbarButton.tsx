@@ -52,24 +52,11 @@ const ToolbarButton: FC<ToolbarButtonProps> = ({
       aria-label={label ?? tooltip}
       variant="text"
       data-testid={`toolbar-button-${label ?? tooltip}`.replace(' ', '-').toLowerCase()}
-      // sx={{
-      //   padding: '2px',
-      //   minWidth: 'unset',
-      //   borderRadius: '4px',
-      //   height: '26px',
-      //   width: '26px',
-      //   color: active ? activeColor ?? theme.palette.primary.main : theme.palette.text.secondary,
-
-      //   '& svg': {
-      //     height: '24px',
-      //     width: '24px',
-      //   },
-      // }}
       onClick={handleOnClick}
       className="
-          py-0.5
-          px-0.5
-        "
+        py-0.5
+        px-0.5
+      "
     >
       {icon}
     </Button>
