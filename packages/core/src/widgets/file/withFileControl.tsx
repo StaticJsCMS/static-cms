@@ -46,6 +46,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       clearMediaControl,
       removeMediaControl,
       hasErrors,
+      disabled,
       t,
     }) => {
       const controlID = useUUID();
@@ -240,6 +241,8 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
                   variant="outlined"
                   key="upload"
                   onClick={handleOpenMediaLibrary}
+                  data-testid="choose-upload"
+                  disabled={disabled}
                 >
                   {t(`editor.editorWidgets.${subject}.choose${allowsMultiple ? 'Multiple' : ''}`)}
                 </Button>
@@ -249,6 +252,8 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
                     variant="outlined"
                     key="choose-url"
                     onClick={handleUrl(subject)}
+                    data-testid="choose-url"
+                    disabled={disabled}
                   >
                     {t(`editor.editorWidgets.${subject}.chooseUrl`)}
                   </Button>
@@ -268,6 +273,8 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
                 variant="outlined"
                 key="add-replace"
                 onClick={handleOpenMediaLibrary}
+                data-testid="add-replace-upload"
+                disabled={disabled}
               >
                 {t(
                   `editor.editorWidgets.${subject}.${
@@ -281,11 +288,20 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
                   variant="outlined"
                   key="replace-url"
                   onClick={handleUrl(subject)}
+                  data-testid="replace-url"
+                  disabled={disabled}
                 >
                   {t(`editor.editorWidgets.${subject}.replaceUrl`)}
                 </Button>
               ) : null}
-              <Button color="error" variant="outlined" key="remove" onClick={handleRemove}>
+              <Button
+                color="error"
+                variant="outlined"
+                key="remove"
+                onClick={handleRemove}
+                data-testid="remove-upload"
+                disabled={disabled}
+              >
                 {t(`editor.editorWidgets.${subject}.remove${allowsMultiple ? 'All' : ''}`)}
               </Button>
             </div>

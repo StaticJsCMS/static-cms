@@ -35,6 +35,56 @@ describe(FileControl.name, () => {
     expect(field).not.toHaveClass('pb-3');
   });
 
+  fit('should show only the choose upload button by default', () => {
+    const { getByTestId, queryByTestId } = renderControl({ label: 'I am a label' });
+
+    expect(getByTestId('choose-upload')).toBeInTheDocument();
+    expect(queryByTestId('choose-url')).not.toBeInTheDocument();
+    expect(queryByTestId('add-replace-upload')).not.toBeInTheDocument();
+    expect(queryByTestId('replace-url')).not.toBeInTheDocument();
+    expect(queryByTestId('remove-upload')).not.toBeInTheDocument();
+  });
+
+  fit('should show only the choose upload and choose url buttons by default when choose url is true', () => {
+    const { getByTestId, queryByTestId } = renderControl({
+      label: 'I am a label',
+      field: { ...mockFileField, media_library: { choose_url: true } },
+    });
+
+    expect(getByTestId('choose-upload')).toBeInTheDocument();
+    expect(getByTestId('choose-url')).toBeInTheDocument();
+    expect(queryByTestId('add-replace-upload')).not.toBeInTheDocument();
+    expect(queryByTestId('replace-url')).not.toBeInTheDocument();
+    expect(queryByTestId('remove-upload')).not.toBeInTheDocument();
+  });
+
+  fit('should show only the add/replace upload and remove buttons by there is a value', () => {
+    const { getByTestId, queryByTestId } = renderControl({
+      label: 'I am a label',
+      value: 'https://example.com/file.pdf',
+    });
+
+    expect(queryByTestId('choose-upload')).not.toBeInTheDocument();
+    expect(queryByTestId('choose-url')).not.toBeInTheDocument();
+    expect(getByTestId('add-replace-upload')).toBeInTheDocument();
+    expect(queryByTestId('replace-url')).not.toBeInTheDocument();
+    expect(getByTestId('remove-upload')).toBeInTheDocument();
+  });
+
+  fit('should show the add/replace upload, replace url and remove buttons by there is a value and choose url is true', () => {
+    const { getByTestId, queryByTestId } = renderControl({
+      label: 'I am a label',
+      field: { ...mockFileField, media_library: { choose_url: true } },
+      value: 'https://example.com/file.pdf',
+    });
+
+    expect(queryByTestId('choose-upload')).not.toBeInTheDocument();
+    expect(queryByTestId('choose-url')).not.toBeInTheDocument();
+    expect(getByTestId('add-replace-upload')).toBeInTheDocument();
+    expect(getByTestId('replace-url')).toBeInTheDocument();
+    expect(getByTestId('remove-upload')).toBeInTheDocument();
+  });
+
   fit('should render as single list item', () => {
     const { getByTestId } = renderControl({ label: 'I am a label', forSingleList: true });
 
@@ -79,7 +129,7 @@ describe(FileControl.name, () => {
     expect(onChange).toHaveBeenLastCalledWith('I am some text');
   });
 
-  it('should show error', async () => {
+  fit('should show error', async () => {
     const { getByTestId } = renderControl({
       errors: [{ type: 'error-type', message: 'i am an error' }],
     });
@@ -106,10 +156,46 @@ describe(FileControl.name, () => {
     expect(input).toHaveFocus();
   });
 
-  it('should disable input if disabled', async () => {
-    const { getByTestId } = renderControl({ disabled: true });
+  describe('disabled', () => {
+    fit('should show only the choose upload button by default', () => {
+      const { getByTestId } = renderControl({ label: 'I am a label', disabled: true });
 
-    const input = getByTestId('text-input');
-    expect(input).toBeDisabled();
+      expect(getByTestId('choose-upload')).toBeDisabled();
+    });
+
+    fit('should show only the choose upload and choose url buttons by default when choose url is true', () => {
+      const { getByTestId } = renderControl({
+        label: 'I am a label',
+        field: { ...mockFileField, media_library: { choose_url: true } },
+        disabled: true,
+      });
+
+      expect(getByTestId('choose-upload')).toBeDisabled();
+      expect(getByTestId('choose-url')).toBeDisabled();
+    });
+
+    fit('should show only the add/replace upload and remove buttons by there is a value', () => {
+      const { getByTestId } = renderControl({
+        label: 'I am a label',
+        value: 'https://example.com/file.pdf',
+        disabled: true,
+      });
+
+      expect(getByTestId('add-replace-upload')).toBeDisabled();
+      expect(getByTestId('remove-upload')).toBeDisabled();
+    });
+
+    fit('should show the add/replace upload, replace url and remove buttons by there is a value and choose url is true', () => {
+      const { getByTestId } = renderControl({
+        label: 'I am a label',
+        field: { ...mockFileField, media_library: { choose_url: true } },
+        value: 'https://example.com/file.pdf',
+        disabled: true,
+      });
+
+      expect(getByTestId('add-replace-upload')).toBeDisabled();
+      expect(getByTestId('replace-url')).toBeDisabled();
+      expect(getByTestId('remove-upload')).toBeDisabled();
+    });
   });
 });
