@@ -69,6 +69,7 @@ const CardWrapper = ({
     onDelete,
   },
 }: GridChildComponentProps<CardGridItemData>) => {
+  console.log('mediaItems!!!!!!!!', mediaItems);
   const left = useMemo(
     () =>
       parseFloat(
@@ -93,6 +94,7 @@ const CardWrapper = ({
     return null;
   }
   const file = mediaItems[index];
+  console.log('FILE', file);
 
   return (
     <div
@@ -145,7 +147,16 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
           );
           const rowCount = Math.ceil(mediaItems.length / columnCount);
 
-          console.log('rowCount', rowCount, 'columnCount', columnCount);
+          console.log(
+            'height',
+            height,
+            'width',
+            width,
+            'rowCount',
+            rowCount,
+            'columnCount',
+            columnCount,
+          );
 
           return (
             <div key={version} ref={scrollContainerRef}>

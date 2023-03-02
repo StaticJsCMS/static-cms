@@ -92,6 +92,7 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
     [onSelect],
   );
 
+  console.log('DATA TEST ID', `media-card-handle-${displayURL.url}`)
   return (
     <div
       className="

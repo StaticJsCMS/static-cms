@@ -1,11 +1,11 @@
 /* eslint-disable import/prefer-default-export */
-import React from 'react';
 import { act } from '@testing-library/react';
+import React from 'react';
 
+import MediaLibraryModal from '@staticcms/core/components/media-library/MediaLibraryModal';
 import { store } from '@staticcms/core/store';
 import { createMockWidgetControlProps } from '@staticcms/test/data/widgets.mock';
 import { renderWithProviders } from '@staticcms/test/test-utils';
-import MediaLibrary from '@staticcms/core/components/media-library/common/MediaLibrary';
 
 import type {
   BaseField,
@@ -47,7 +47,7 @@ export const createWidgetControlHarness = <
     const result = renderWithProviders(
       <>
         <Component {...props} />
-        {withMediaLibrary ? <MediaLibrary /> : null}
+        {withMediaLibrary ? <MediaLibraryModal key="library" /> : null}
       </>,
     );
 
@@ -66,7 +66,7 @@ export const createWidgetControlHarness = <
       result.rerender(
         <>
           <Component {...finalRerenderProps} />
-          {withMediaLibrary ? <MediaLibrary /> : null}
+          {withMediaLibrary ? <MediaLibraryModal key="library" /> : null}
         </>,
       );
 

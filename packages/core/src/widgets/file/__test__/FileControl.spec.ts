@@ -5,11 +5,15 @@ import '@testing-library/jest-dom';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { configLoaded } from '@staticcms/core/actions/config';
+import { store } from '@staticcms/core/store';
+import { createMockCollection } from '@staticcms/test/data/collections.mock';
+import { createMockConfig } from '@staticcms/test/data/config.mock';
 import { mockFileField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 import withFileControl from '../withFileControl';
 
-import type { MediaFile } from '@staticcms/core/interface';
+import type { Config, FileOrImageField, MediaFile } from '@staticcms/core/interface';
 
 const FileControl = withFileControl();
 
@@ -18,20 +22,51 @@ jest.mock('@staticcms/core/lib/hooks/useMediaFiles', () => {
     {
       name: 'file1.txt',
       id: '12345',
-      path: 'path/to/file1.txt'
+      path: 'path/to/file1.txt',
     },
     {
       name: 'file2.png',
       id: '67890',
-      path: 'path/to/file2.png'
-    }
-  ]
+      path: 'path/to/file2.png',
+    },
+  ];
 
   return jest.fn(() => mockMediaFiles);
 });
 
+jest.mock('@staticcms/core/actions/mediaLibrary', () => ({
+  closeMediaLibrary: jest.fn(),
+  deleteMedia: jest.fn(),
+  insertMedia: jest.fn(),
+  loadMedia: jest.fn(),
+  loadMediaDisplayURL: jest.fn(),
+  persistMedia: jest.fn(),
+}));
+
 describe(FileControl.name, () => {
-  const renderControl = createWidgetControlHarness(FileControl, { field: mockFileField });
+  const collection = createMockCollection({}, mockFileField);
+  const config = createMockConfig({
+    collections: [collection],
+  }) as unknown as Config<FileOrImageField>;
+
+  const renderControl = createWidgetControlHarness(
+    FileControl,
+    { field: mockFileField, config },
+    { withMediaLibrary: true },
+  );
+
+  beforeEach(() => {
+    store.dispatch(configLoaded(config as unknown as Config));
+
+    // IntersectionObserver isn't available in test environment
+    const mockIntersectionObserver = jest.fn();
+    mockIntersectionObserver.mockReturnValue({
+      observe: () => null,
+      unobserve: () => null,
+      disconnect: () => null,
+    });
+    window.IntersectionObserver = mockIntersectionObserver;
+  });
 
   it('should render', () => {
     const { getByTestId } = renderControl({ label: 'I am a label' });
@@ -149,7 +184,7 @@ describe(FileControl.name, () => {
     await userEvent.click(file);
 
     expect(onChange).toHaveBeenCalledTimes(1);
-    expect(onChange).toHaveBeenCalledWith('path/to/file1.txt')
+    expect(onChange).toHaveBeenCalledWith('path/to/file1.txt');
   });
 
   it('should show error', async () => {
