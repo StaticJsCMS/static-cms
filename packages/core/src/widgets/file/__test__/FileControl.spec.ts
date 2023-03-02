@@ -11,6 +11,7 @@ import { createMockCollection } from '@staticcms/test/data/collections.mock';
 import { createMockConfig } from '@staticcms/test/data/config.mock';
 import { mockFileField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
+import { mediaDisplayURLSuccess } from '../../../actions/mediaLibrary';
 import withFileControl from '../withFileControl';
 
 import type { Config, FileOrImageField, MediaFile } from '@staticcms/core/interface';
@@ -35,6 +36,7 @@ jest.mock('@staticcms/core/lib/hooks/useMediaFiles', () => {
 });
 
 jest.mock('@staticcms/core/actions/mediaLibrary', () => ({
+  ...jest.requireActual('@staticcms/core/actions/mediaLibrary'),
   closeMediaLibrary: jest.fn(),
   deleteMedia: jest.fn(),
   insertMedia: jest.fn(),
@@ -42,6 +44,8 @@ jest.mock('@staticcms/core/actions/mediaLibrary', () => ({
   loadMediaDisplayURL: jest.fn(),
   persistMedia: jest.fn(),
 }));
+
+jest.mock('@staticcms/core/lib/hooks/useMediaAsset', () => (url: string) => url);
 
 describe(FileControl.name, () => {
   const collection = createMockCollection({}, mockFileField);
@@ -57,6 +61,8 @@ describe(FileControl.name, () => {
 
   beforeEach(() => {
     store.dispatch(configLoaded(config as unknown as Config));
+    store.dispatch(mediaDisplayURLSuccess('12345', 'path/to/file1.txt'));
+    store.dispatch(mediaDisplayURLSuccess('67890', 'path/to/file2.png'));
 
     // IntersectionObserver isn't available in test environment
     const mockIntersectionObserver = jest.fn();
@@ -182,6 +188,9 @@ describe(FileControl.name, () => {
 
     const file = screen.getByTestId('media-card-path/to/file2.png');
     await userEvent.click(file);
+
+    const chooseSelected = screen.getByTestId('choose-selected');
+    await userEvent.click(chooseSelected);
 
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onChange).toHaveBeenCalledWith('path/to/file1.txt');

@@ -363,6 +363,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
               variant="contained"
               onClick={handleInsert}
               disabled={!hasSelection}
+              data-testid="choose-selected"
             >
               {t('mediaLibrary.mediaLibraryModal.chooseSelected')}
             </Button>
