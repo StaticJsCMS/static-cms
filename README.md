@@ -105,6 +105,8 @@ New contributors are always welcome! Check out [CONTRIBUTING.md](https://github.
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/robigan"><img src="https://avatars.githubusercontent.com/u/35210888?v=4?s=100" width="100px;" alt="robigan"/><br /><sub><b>robigan</b></sub></a><br /><a href="https://github.com/StaticJsCMS/static-cms/commits?author=robigan" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://mildred.fr/"><img src="https://avatars.githubusercontent.com/u/33804?v=4?s=100" width="100px;" alt="Mildred Ki'Lya"/><br /><sub><b>Mildred Ki'Lya</b></sub></a><br /><a href="https://github.com/StaticJsCMS/static-cms/commits?author=mildred" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/acharlop"><img src="https://avatars.githubusercontent.com/u/8885448?v=4?s=100" width="100px;" alt="Avi Charlop"/><br /><sub><b>Avi Charlop</b></sub></a><br /><a href="https://github.com/StaticJsCMS/static-cms/commits?author=acharlop" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://dominiclooser.ch/"><img src="https://avatars.githubusercontent.com/u/2300581?v=4?s=100" width="100px;" alt="dominiclooser"/><br /><sub><b>dominiclooser</b></sub></a><br /><a href="https://github.com/StaticJsCMS/static-cms/commits?author=dominiclooser" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
