@@ -3,10 +3,11 @@ import React from 'react';
 import Image from '../../common/image/Image';
 import InlineEditTextField from './InlineEditTextField';
 
-import type { MediaField, MediaLibrarInsertOptions } from '@staticcms/core/interface';
+import type { Collection, MediaField, MediaLibrarInsertOptions } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 interface CurrentMediaDetailsProps {
+  collection?: Collection<MediaField>;
   field?: MediaField;
   canInsert: boolean;
   value?: string | string[];
@@ -16,6 +17,7 @@ interface CurrentMediaDetailsProps {
 }
 
 const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
+  collection,
   field,
   canInsert,
   value,
@@ -23,6 +25,7 @@ const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
   onUrlChange,
   onAltChange,
 }) => {
+  console.log('field!!!!!!!', field);
   if (!field || !canInsert || typeof value !== 'string') {
     return null;
   }
@@ -41,6 +44,7 @@ const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
     >
       <Image
         src={value}
+        collection={collection}
         field={field}
         className="
           w-media-preview-image

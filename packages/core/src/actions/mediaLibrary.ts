@@ -82,6 +82,7 @@ export function openMediaLibrary<F extends BaseField = UnknownField>(
     controlID?: string;
     forImage?: boolean;
     value?: string | string[];
+    alt?: string;
     allowMultiple?: boolean;
     replaceIndex?: number;
     config?: Record<string, unknown>;
@@ -96,6 +97,7 @@ export function openMediaLibrary<F extends BaseField = UnknownField>(
     const {
       controlID,
       value,
+      alt,
       config = {},
       allowMultiple,
       forImage,
@@ -114,6 +116,7 @@ export function openMediaLibrary<F extends BaseField = UnknownField>(
         controlID,
         forImage,
         value,
+        alt,
         allowMultiple,
         replaceIndex,
         config,
@@ -136,7 +139,7 @@ export function closeMediaLibrary() {
   };
 }
 
-export function insertMedia(mediaPath: string | string[], field: Field | undefined) {
+export function insertMedia(mediaPath: string | string[], field: Field | undefined, alt?: string) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const config = state.config.config;
@@ -154,7 +157,7 @@ export function insertMedia(mediaPath: string | string[], field: Field | undefin
     } else {
       mediaPath = selectMediaFilePublicPath(config, collection, mediaPath as string, entry, field);
     }
-    dispatch(mediaInserted(mediaPath));
+    dispatch(mediaInserted(mediaPath, alt));
   };
 }
 
@@ -421,6 +424,7 @@ function mediaLibraryOpened(payload: {
   controlID?: string;
   forImage?: boolean;
   value?: string | string[];
+  alt?: string;
   replaceIndex?: number;
   allowMultiple?: boolean;
   config?: Record<string, unknown>;
@@ -435,8 +439,8 @@ function mediaLibraryClosed() {
   return { type: MEDIA_LIBRARY_CLOSE } as const;
 }
 
-function mediaInserted(mediaPath: string | string[]) {
-  return { type: MEDIA_INSERT, payload: { mediaPath } } as const;
+function mediaInserted(mediaPath: string | string[], alt?: string) {
+  return { type: MEDIA_INSERT, payload: { mediaPath, alt } } as const;
 }
 
 export function mediaLoading(page: number) {

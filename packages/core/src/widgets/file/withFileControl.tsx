@@ -10,7 +10,7 @@ import { basename } from '@staticcms/core/lib/util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import SortableImage from './components/SortableImage';
 
-import type { FileOrImageField, WidgetControlProps } from '@staticcms/core/interface';
+import type { FileOrImageField, MediaPath, WidgetControlProps } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
 
 const MAX_DISPLAY_LENGTH = 50;
@@ -59,7 +59,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       const uploadButtonRef = useRef<HTMLButtonElement | null>(null);
 
       const handleOnChange = useCallback(
-        (newValue: string | string[]) => {
+        ({ path: newValue }: MediaPath) => {
           if (newValue !== internalValue) {
             setInternalValue(newValue);
             setTimeout(() => {
@@ -71,7 +71,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       );
 
       const handleOpenMediaLibrary = useMediaInsert(
-        internalValue,
+        { path: internalValue },
         { collection, field, controlID, forImage },
         handleOnChange,
       );
@@ -108,7 +108,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
           const url = window.prompt(t(`editor.editorWidgets.${subject}.promptUrl`));
 
-          handleOnChange(url ?? '');
+          handleOnChange({ path: url ?? '' });
         },
         [handleOnChange, t],
       );
@@ -118,7 +118,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
           e.preventDefault();
           e.stopPropagation();
           clearMediaControl(controlID);
-          handleOnChange('');
+          handleOnChange({ path: '' });
         },
         [clearMediaControl, controlID, handleOnChange],
       );
@@ -128,7 +128,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
           if (Array.isArray(internalValue)) {
             const newValue = [...internalValue];
             newValue.splice(index, 1);
-            handleOnChange(newValue);
+            handleOnChange({ path: newValue });
           }
         },
         [handleOnChange, internalValue],
@@ -311,6 +311,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
         internalValue,
         renderedImagesLinks,
         handleOpenMediaLibrary,
+        disabled,
         t,
         allowsMultiple,
         chooseUrl,

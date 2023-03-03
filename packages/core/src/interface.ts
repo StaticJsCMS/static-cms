@@ -244,6 +244,11 @@ export interface DisplayURLState {
 
 export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
+export interface MediaPath<T = string | string[]> {
+  path: T;
+  alt?: string;
+}
+
 export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = ObjectValue> {
   collection: Collection<F>;
   config: Config<F>;
@@ -258,7 +263,7 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = 
   hidden: boolean;
   label: string;
   locale: string | undefined;
-  mediaPaths: Record<string, string | string[]>;
+  mediaPaths: Record<string, MediaPath>;
   onChange: (value: T | null | undefined) => void;
   clearMediaControl: EditorControlProps['clearMediaControl'];
   openMediaLibrary: EditorControlProps['openMediaLibrary'];
@@ -945,7 +950,7 @@ export interface SvgProps {
 }
 
 export interface Breadcrumb {
-  name: string;
+  name?: string;
   to?: string;
 }
 

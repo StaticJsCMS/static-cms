@@ -5,8 +5,9 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import type { FC } from 'react';
 
 export interface LabelProps {
+  htmlFor?: string;
   children: string;
-  hasErrors: boolean;
+  hasErrors?: boolean;
   variant?: 'default' | 'inline';
   cursor?: 'default' | 'pointer' | 'text';
   className?: string;
@@ -14,8 +15,9 @@ export interface LabelProps {
 }
 
 const Label: FC<LabelProps> = ({
+  htmlFor,
   children,
-  hasErrors,
+  hasErrors = false,
   variant = 'default',
   cursor = 'default',
   className,
@@ -23,6 +25,7 @@ const Label: FC<LabelProps> = ({
 }) => {
   return (
     <label
+      htmlFor={htmlFor}
       data-testid={dataTestId ?? 'label'}
       className={classNames(
         `w-full

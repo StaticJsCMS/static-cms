@@ -28,7 +28,9 @@ export default function useMediaAsset<T extends MediaField>(
     }
 
     const fetchMedia = async () => {
+      console.log('field fetching', field, url);
       const asset = await dispatch(getAsset<T>(collection, entry, debouncedUrl, field));
+      console.log('field asset', asset);
       if (asset !== emptyAsset) {
         setAssetSource(asset?.toString() ?? '');
       }

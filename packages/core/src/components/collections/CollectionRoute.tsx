@@ -33,7 +33,7 @@ const CollectionRoute = ({ isSearchResults, isSingleSearchResult }: CollectionRo
   }
 
   return (
-    <MainView breadcrumbs={[{ name: collection.label }]} showQuickCreate showLeftNav>
+    <MainView breadcrumbs={[{ name: collection?.label }]} showQuickCreate showLeftNav>
       <Collection
         name={name}
         searchTerm={searchTerm}

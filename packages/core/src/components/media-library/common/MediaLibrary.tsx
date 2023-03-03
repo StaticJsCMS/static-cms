@@ -341,6 +341,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   return (
     <div className="flex flex-col w-full h-full">
       <CurrentMediaDetails
+        collection={collection}
         field={field}
         canInsert={canInsert}
         value={value}

@@ -5,13 +5,13 @@ import { openMediaLibrary, removeInsertedMedia } from '@staticcms/core/actions/m
 import { selectMediaPath } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 
-import type { Collection, MediaField } from '@staticcms/core/interface';
+import type { Collection, MediaField, MediaPath } from '@staticcms/core/interface';
 import type { MouseEvent } from 'react';
 
 export default function useMediaInsert<T extends string | string[], F extends MediaField>(
-  value: T,
+  value: MediaPath<T>,
   options: { collection: Collection<F>; field: F; controlID?: string; forImage?: boolean },
-  callback: (newValue: T) => void,
+  callback: (newValue: MediaPath<T>) => void,
 ): (e?: MouseEvent) => void {
   const dispatch = useAppDispatch();
 
@@ -31,8 +31,9 @@ export default function useMediaInsert<T extends string | string[], F extends Me
   );
 
   useEffect(() => {
-    if (mediaPath && mediaPath !== value) {
-      callback(mediaPath as T);
+    console.log('mediaPath', mediaPath, value);
+    if (mediaPath && mediaPath.path !== value.path) {
+      callback(mediaPath as MediaPath<T>);
       setTimeout(() => {
         dispatch(removeInsertedMedia(finalControlID));
       });
@@ -46,7 +47,8 @@ export default function useMediaInsert<T extends string | string[], F extends Me
         openMediaLibrary({
           controlID: finalControlID,
           forImage,
-          value,
+          value: value.path,
+          alt: value.alt,
           replaceIndex,
           allowMultiple: false,
           config,

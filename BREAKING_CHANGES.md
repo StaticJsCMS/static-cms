@@ -6,6 +6,7 @@ BREAKING_CHANGES
 - widget prop `isDuplicate` renamed to `duplicate`
 - widget prop `isHidden` renamed to `hidden`
 - useMediaInsert now requires collection to be passed
+- media path changed from `string | string[]` to `{ path: string | string[], alt?: string }`
 
 ADDED
 - `forSingleList` - Allows for changing styles for single list items

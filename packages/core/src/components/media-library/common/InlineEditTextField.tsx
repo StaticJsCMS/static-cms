@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import Label from '../../common/field/Label';
 
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
 
@@ -65,15 +66,19 @@ const InlineEditTextField: FC<InlineEditTextFieldProps> = ({ label, value, onCha
         flex
         flex-col
         gap-1
+        group/edit-field
       "
     >
       <label
         htmlFor={label}
         className="
-          text-sm
-          font-medium
-          text-gray-900
-          dark:text-white
+          w-full
+          flex
+          text-xs
+          font-bold
+          dark:font-semibold
+          group-focus-within/edit-field:text-blue-500
+          group-hover/edit-field:text-blue-500
         "
       >
         {label}

@@ -61,22 +61,24 @@ const Navbar = ({
                   <StaticCmsIcon className="inline-flex w-10 h-10" />
                 </div>
                 <div className="flex h-full items-center text-xl font-semibold gap-1 text-gray-800 dark:text-white">
-                  {breadcrumbs.map((breadcrumb, index) => (
-                    <Fragment key={`breadcrumb-${index}`}>
-                      {index > 0 ? <span key={`separator-${index}`}>&#62;</span> : null}
-                      {breadcrumb.to ? (
-                        <Link
-                          key={`link-${index}`}
-                          className="hover:text-gray-400 dark:hover:text-gray-400"
-                          to={breadcrumb.to}
-                        >
-                          {breadcrumb.name}
-                        </Link>
-                      ) : (
-                        <span key={`text-${index}`}>{breadcrumb.name}</span>
-                      )}
-                    </Fragment>
-                  ))}
+                  {breadcrumbs.map((breadcrumb, index) =>
+                    breadcrumb.name ? (
+                      <Fragment key={`breadcrumb-${index}`}>
+                        {index > 0 ? <span key={`separator-${index}`}>&#62;</span> : null}
+                        {breadcrumb.to ? (
+                          <Link
+                            key={`link-${index}`}
+                            className="hover:text-gray-400 dark:hover:text-gray-400"
+                            to={breadcrumb.to}
+                          >
+                            {breadcrumb.name}
+                          </Link>
+                        ) : (
+                          <span key={`text-${index}`}>{breadcrumb.name}</span>
+                        )}
+                      </Fragment>
+                    ) : null,
+                  )}
                 </div>
               </div>
               <div className="flex gap-3">
