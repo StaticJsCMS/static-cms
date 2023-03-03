@@ -12,7 +12,7 @@ export interface MenuProps {
   startIcon?: FC<{ className?: string }>;
   variant?: 'contained' | 'outlined' | 'text';
   color?: 'primary';
-  rounded?: boolean;
+  rounded?: boolean | 'no-padding';
   className?: string;
   children: ReactNode | ReactNode[];
   hideDropdownIcon?: boolean;

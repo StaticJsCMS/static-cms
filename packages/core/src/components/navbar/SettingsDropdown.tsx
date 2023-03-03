@@ -21,7 +21,11 @@ interface AvatarImageProps {
 }
 
 const AvatarImage = ({ imageUrl }: AvatarImageProps) => {
-  return imageUrl ? <img className="w-6 h-6" src={imageUrl} /> : <UserIcon className="w-6 h-6" />;
+  return imageUrl ? (
+    <img className="w-9 h-9 rounded-full" src={imageUrl} />
+  ) : (
+    <UserIcon className="w-6 h-6" />
+  );
 };
 
 const SettingsDropdown = ({ t }: TranslateProps) => {
@@ -78,7 +82,7 @@ const SettingsDropdown = ({ t }: TranslateProps) => {
         </>
       }
       variant="outlined"
-      rounded
+      rounded={!user?.avatar_url || 'no-padding'}
       hideDropdownIcon
     >
       <MenuGroup>

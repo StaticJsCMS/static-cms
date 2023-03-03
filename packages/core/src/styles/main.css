@@ -31,6 +31,11 @@
       rounded-full;
   }
 
+  .btn-rounded-no-padding {
+    @apply btn-base
+      rounded-full;
+  }
+
   .btn-contained-primary {
     @apply border
       border-transparent

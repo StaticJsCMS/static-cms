@@ -9,7 +9,7 @@ import type { FC, MouseEventHandler, ReactNode, Ref } from 'react';
 export interface BaseBaseProps {
   variant?: 'contained' | 'outlined' | 'text';
   color?: 'primary' | 'success' | 'error';
-  rounded?: boolean;
+  rounded?: boolean | 'no-padding';
   className?: string;
   children: ReactNode | ReactNode[];
   startIcon?: FC<{ className?: string }>;
