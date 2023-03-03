@@ -12,8 +12,12 @@ import Image from '../../common/image/Image';
 import Pill from '../../common/pill/Pill';
 import CopyToClipBoardButton from './CopyToClipBoardButton';
 
-import type { Collection, Field, TranslatedProps } from '@staticcms/core/interface';
-import type { MediaLibraryDisplayURL } from '@staticcms/core/reducers/mediaLibrary';
+import type {
+  Collection,
+  Field,
+  MediaLibraryDisplayURL,
+  TranslatedProps,
+} from '@staticcms/core/interface';
 import type { FC, KeyboardEvent } from 'react';
 
 interface MediaLibraryCardProps {
@@ -92,7 +96,7 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
     [onSelect],
   );
 
-  console.log('DATA TEST ID', `media-card-handle-${displayURL.url}`)
+  console.log('DATA TEST ID', `media-card-handle-${displayURL.url}`);
   return (
     <div
       className="
@@ -140,8 +144,6 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
         {isSelected ? (
           <div
             key="selected"
-            onKeyUp={handleOnKeyUp}
-            tabIndex={0}
             className="
               absolute
               inset-0

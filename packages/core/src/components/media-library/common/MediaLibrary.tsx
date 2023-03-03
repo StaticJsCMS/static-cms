@@ -23,6 +23,7 @@ import alert from '../../common/alert/Alert';
 import Button from '../../common/button/Button';
 import confirm from '../../common/confirm/Confirm';
 import ViewStyleControl from '../../common/view-style/ViewStyleControl';
+import CurrentMediaDetails from './CurrentMediaDetails';
 import EmptyMessage from './EmptyMessage';
 import FileUploadButton from './FileUploadButton';
 import MediaLibraryCardGrid from './MediaLibraryCardGrid';
@@ -75,6 +76,8 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     page,
     collection,
     field,
+    value,
+    insertOptions,
   } = useAppSelector(selectMediaLibraryState);
 
   const files = useMediaFiles(field);
@@ -337,6 +340,12 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
 
   return (
     <div className="flex flex-col w-full h-full">
+      <CurrentMediaDetails
+        field={field}
+        canInsert={canInsert}
+        value={value}
+        insertOptions={insertOptions}
+      />
       <div className="flex items-center px-5 pt-4">
         <div className="flex flex-grow gap-4 mr-8">
           <h2 className="text-xl font-semibold flex items-center text-gray-800 dark:text-gray-300">

@@ -21,13 +21,14 @@ import {
 } from '../constants';
 
 import type { MediaLibraryAction } from '../actions/mediaLibrary';
-import type { Collection, Field, MediaFile, MediaLibraryInstance } from '../interface';
-
-export interface MediaLibraryDisplayURL {
-  url?: string;
-  isFetching: boolean;
-  err?: unknown;
-}
+import type {
+  Collection,
+  Field,
+  MediaFile,
+  MediaLibrarInsertOptions,
+  MediaLibraryDisplayURL,
+  MediaLibraryInstance,
+} from '../interface';
 
 export type MediaLibraryState = {
   isVisible: boolean;
@@ -52,6 +53,7 @@ export type MediaLibraryState = {
   isDeleting?: boolean;
   hasNextPage?: boolean;
   isPaginating?: boolean;
+  insertOptions?: MediaLibrarInsertOptions;
 };
 
 const defaultState: MediaLibraryState = {
@@ -75,7 +77,7 @@ function mediaLibrary(
       };
 
     case MEDIA_LIBRARY_OPEN: {
-      const { controlID, forImage, config, collection, field, value, replaceIndex } =
+      const { controlID, forImage, config, collection, field, value, replaceIndex, insertOptions } =
         action.payload;
       const libConfig = config || {};
 
@@ -89,6 +91,7 @@ function mediaLibrary(
         field,
         value,
         replaceIndex,
+        insertOptions,
       };
     }
 
@@ -96,6 +99,7 @@ function mediaLibrary(
       return {
         ...state,
         isVisible: false,
+        insertOptions: undefined,
       };
 
     case MEDIA_INSERT: {

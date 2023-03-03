@@ -948,3 +948,14 @@ export interface Breadcrumb {
   name: string;
   to?: string;
 }
+
+export interface MediaLibraryDisplayURL {
+  url?: string;
+  isFetching: boolean;
+  err?: unknown;
+}
+
+export interface MediaLibrarInsertOptions {
+  showAlt?: boolean;
+  chooseUrl?: string;
+}

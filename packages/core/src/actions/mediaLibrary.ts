@@ -39,6 +39,7 @@ import type {
   Field,
   ImplementationMediaFile,
   MediaFile,
+  MediaLibrarInsertOptions,
   MediaLibraryInstance,
   UnknownField,
 } from '../interface';
@@ -86,6 +87,7 @@ export function openMediaLibrary<F extends BaseField = UnknownField>(
     config?: Record<string, unknown>;
     collection?: Collection<F>;
     field?: F;
+    insertOptions?: MediaLibrarInsertOptions;
   } = {},
 ) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
@@ -100,6 +102,7 @@ export function openMediaLibrary<F extends BaseField = UnknownField>(
       replaceIndex,
       collection,
       field,
+      insertOptions,
     } = payload;
 
     if (mediaLibrary) {
@@ -116,6 +119,7 @@ export function openMediaLibrary<F extends BaseField = UnknownField>(
         config,
         collection: collection as Collection,
         field: field as Field,
+        insertOptions,
       }),
     );
   };
@@ -422,6 +426,7 @@ function mediaLibraryOpened(payload: {
   config?: Record<string, unknown>;
   collection?: Collection;
   field?: Field;
+  insertOptions?: MediaLibrarInsertOptions;
 }) {
   return { type: MEDIA_LIBRARY_OPEN, payload } as const;
 }

@@ -11,11 +11,13 @@ import {
 } from '@staticcms/core/constants/mediaLibrary';
 import MediaLibraryCard from './MediaLibraryCard';
 
-import type { Collection, Field, MediaFile } from '@staticcms/core/interface';
 import type {
+  Collection,
+  Field,
+  MediaFile,
   MediaLibraryDisplayURL,
-  MediaLibraryState,
-} from '@staticcms/core/reducers/mediaLibrary';
+} from '@staticcms/core/interface';
+import type { MediaLibraryState } from '@staticcms/core/reducers/mediaLibrary';
 import type { FC } from 'react';
 import type { GridChildComponentProps } from 'react-window';
 

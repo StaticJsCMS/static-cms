@@ -8,7 +8,9 @@ module.exports = {
         main: 'calc(100vh - 64px)',
         'media-library-dialog': '80vh',
         'media-card': '240px',
+        'media-preview-image': '104px',
         'media-card-image': '196px',
+        input: '24px',
       },
       minHeight: {
         8: '2rem',
@@ -22,6 +24,7 @@ module.exports = {
         'editor-only': '640px',
         'media-library-dialog': '80vw',
         'media-card': '240px',
+        'media-preview-image': '126px',
       },
       maxWidth: {
         'media-search': '400px',
@@ -31,6 +34,7 @@ module.exports = {
       },
       gridTemplateColumns: {
         editor: '450px auto',
+        'media-preview': '126px auto',
       },
     },
   },
