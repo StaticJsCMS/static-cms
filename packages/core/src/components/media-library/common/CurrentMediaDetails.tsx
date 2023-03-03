@@ -10,7 +10,8 @@ interface CurrentMediaDetailsProps {
   collection?: Collection<MediaField>;
   field?: MediaField;
   canInsert: boolean;
-  value?: string | string[];
+  url?: string | string[];
+  alt?: string;
   insertOptions?: MediaLibrarInsertOptions;
   onUrlChange: (url: string) => void;
   onAltChange: (alt: string) => void;
@@ -20,13 +21,14 @@ const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
   collection,
   field,
   canInsert,
-  value,
+  url,
+  alt,
   insertOptions,
   onUrlChange,
   onAltChange,
 }) => {
   console.log('field!!!!!!!', field);
-  if (!field || !canInsert || typeof value !== 'string') {
+  if (!field || !canInsert || typeof url !== 'string') {
     return null;
   }
 
@@ -43,7 +45,7 @@ const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
       "
     >
       <Image
-        src={value}
+        src={url}
         collection={collection}
         field={field}
         className="
@@ -74,11 +76,11 @@ const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
       >
         <InlineEditTextField
           label="URL"
-          value={value}
+          value={url}
           onChange={insertOptions?.chooseUrl ? onUrlChange : undefined}
         />
         {insertOptions?.showAlt ? (
-          <InlineEditTextField label="Alt" value={value} onChange={onAltChange} />
+          <InlineEditTextField label="Alt" value={alt} onChange={onAltChange} />
         ) : null}
       </div>
     </div>

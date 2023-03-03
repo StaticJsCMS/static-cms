@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
-import Label from '../../common/field/Label';
 
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
 

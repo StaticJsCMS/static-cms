@@ -58,6 +58,9 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   const [selectedFile, setSelectedFile] = useState<MediaFile | null>(null);
   const [query, setQuery] = useState<string | undefined>(undefined);
 
+  const [url, setUrl] = useState<string | undefined>(undefined);
+  const [alt, setAlt] = useState<string | undefined>(undefined);
+
   const [prevIsVisible, setPrevIsVisible] = useState(false);
 
   const dispatch = useAppDispatch();
@@ -236,19 +239,39 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     [mediaConfig.max_file_size, field, dispatch],
   );
 
+  const handleURLChange = useCallback(
+    (url: string) => {
+      setUrl(url);
+      dispatch(insertMedia(url, field, alt));
+    },
+    [alt, dispatch, field],
+  );
+
+  const handleAltChange = useCallback(
+    (alt: string) => {
+      if (!url && !selectedFile?.path) {
+        return;
+      }
+
+      setAlt(alt);
+      dispatch(insertMedia((url ?? selectedFile?.path) as string, field, alt));
+    },
+    [dispatch, field, selectedFile?.path, url],
+  );
+
   /**
    * Stores the public path of the file in the application store, where the
    * editor field that launched the media library can retrieve it.
    */
   const handleInsert = useCallback(() => {
-    if (!selectedFile) {
+    if (!selectedFile?.path) {
       return;
     }
 
     const { path } = selectedFile;
-    dispatch(insertMedia(path, field));
-    handleClose();
-  }, [field, handleClose, dispatch, selectedFile]);
+    setUrl(path);
+    dispatch(insertMedia(path, field, alt));
+  }, [selectedFile, dispatch, field, alt]);
 
   /**
    * Removes the selected file from the backend.
@@ -344,8 +367,11 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
         collection={collection}
         field={field}
         canInsert={canInsert}
-        value={value}
+        url={url ?? value}
+        alt={alt}
         insertOptions={insertOptions}
+        onUrlChange={handleURLChange}
+        onAltChange={handleAltChange}
       />
       <div className="flex items-center px-5 pt-4">
         <div className="flex flex-grow gap-4 mr-8">
