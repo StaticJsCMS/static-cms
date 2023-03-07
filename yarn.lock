@@ -4217,12 +4217,41 @@
     "@udecode/plate-button" "19.7.0"
     "@udecode/plate-core" "19.7.0"
 
+"@udecode/plate-common@20.0.0":
+  version "20.0.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-common/-/plate-common-20.0.0.tgz#73bae414bd22e2fee15c79dd8569c85e291dc6e0"
+  integrity sha512-nJj72AszXcc5wcdw/ipXHHT3o6LHmMIDW3KGaXJ1ZSqNpDA7KsHXYd1Fyo1/A1n4wVz4i3xjLvtwqHlsaZkxsw==
+  dependencies:
+    "@udecode/plate-core" "20.0.0"
+    "@udecode/plate-utils" "20.0.0"
+    "@udecode/slate" "19.7.0"
+    "@udecode/slate-react" "19.7.0"
+    "@udecode/slate-utils" "19.7.0"
+    "@udecode/utils" "19.7.0"
+
 "@udecode/plate-core@19.7.0":
   version "19.7.0"
   resolved "https://registry.yarnpkg.com/@udecode/plate-core/-/plate-core-19.7.0.tgz#15d0e3ffddfc6340af2aedb2537cc79fbd39d646"
   integrity sha512-D5l9EHzg5Lse5FLkpBADjDoQu1uuNqaHSFCKWRfVbKn1aQd2USPfGvQv2jgb21qALVz24NOjm4Kkl7TlLWVf7w==
   dependencies:
     "@radix-ui/react-slot" "^1.0.1"
+    "@udecode/zustood" "^1.1.1"
+    clsx "^1.1.1"
+    jotai "^1.7.2"
+    lodash "^4.17.21"
+    nanoid "^3.3.4"
+    react-hotkeys-hook "^4.3.7"
+    use-deep-compare "^1.1.0"
+    zustand "^3.7.2"
+
+"@udecode/plate-core@20.0.0":
+  version "20.0.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-core/-/plate-core-20.0.0.tgz#a7e51ffac7ffffd65c0c838cc92c9e43a92968b6"
+  integrity sha512-aEZrj1cGUqrYyY6nvhmApE2BoJ/dhV7lUZcAWviND8cgWU5OgKArggMR4rBBAs9ChTF+rvBa7Flnn2m/C2HknA==
+  dependencies:
+    "@udecode/slate" "19.7.0"
+    "@udecode/slate-react" "19.7.0"
+    "@udecode/utils" "19.7.0"
     "@udecode/zustood" "^1.1.1"
     clsx "^1.1.1"
     jotai "^1.7.2"
@@ -4344,12 +4373,12 @@
   dependencies:
     "@udecode/plate-core" "19.7.0"
 
-"@udecode/plate-juice@19.7.0":
-  version "19.7.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-juice/-/plate-juice-19.7.0.tgz#5d582386719d2a7c23292884dc87bb654a3b484a"
-  integrity sha512-lusaIZPTZotQpa+Ic5GcFcPG0abc4+IQ6lMJ27iVfzFxszIU+XAMWcEVyFrHpsuFImaL6EE1surNCVT6Bd7DBA==
+"@udecode/plate-juice@20.0.0":
+  version "20.0.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-juice/-/plate-juice-20.0.0.tgz#b3a114f380af7fd76a7b9ff366e87681b86e2c6a"
+  integrity sha512-13/SRtYgkT7LCitnSYc6jbFl5CpIxvOJMdDPDP1N7yYTcKGWxzIi+ziR6CeLKxbhZ4QUJSCSuEDcJeyiekgVQg==
   dependencies:
-    "@udecode/plate-core" "19.7.0"
+    "@udecode/plate-common" "20.0.0"
     juice "^8.0.0"
 
 "@udecode/plate-kbd@19.7.0":
@@ -4729,6 +4758,18 @@
     "@udecode/plate-ui-toolbar" "19.7.0"
     use-context-selector "1.4.1"
 
+"@udecode/plate-utils@20.0.0":
+  version "20.0.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-utils/-/plate-utils-20.0.0.tgz#5d202c13380fdc5893ef0f91a96a4ca9627ab938"
+  integrity sha512-ptV1zJOCK/OMBswReZnMs4wc2WC51z34jg6vN73KjknRV6x18zccP1kIsPKEfZ0Pvn+F3UVq8Tmvg2/kr3wd8g==
+  dependencies:
+    "@radix-ui/react-slot" "^1.0.1"
+    "@udecode/plate-core" "20.0.0"
+    "@udecode/slate" "19.7.0"
+    "@udecode/slate-react" "19.7.0"
+    "@udecode/slate-utils" "19.7.0"
+    "@udecode/utils" "19.7.0"
+
 "@udecode/plate@19.7.0":
   version "19.7.0"
   resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-19.7.0.tgz#4a651f1034630367946a4c080a475607d7e6ff65"
@@ -4736,6 +4777,35 @@
   dependencies:
     "@udecode/plate-headless" "19.7.0"
     "@udecode/plate-ui" "19.7.0"
+
+"@udecode/slate-react@19.7.0":
+  version "19.7.0"
+  resolved "https://registry.yarnpkg.com/@udecode/slate-react/-/slate-react-19.7.0.tgz#657b4986852b82094266fc99e8593803fefba9ff"
+  integrity sha512-aRRibxFALG+EHx5TOxtpLY1lxEIr+L7OIOUMwR+ef2nHCB6xQGJi7RhiZI6ad0zLRO9adKb3KwCYeyPPl3iguQ==
+  dependencies:
+    "@udecode/slate" "19.7.0"
+    "@udecode/utils" "19.7.0"
+
+"@udecode/slate-utils@19.7.0":
+  version "19.7.0"
+  resolved "https://registry.yarnpkg.com/@udecode/slate-utils/-/slate-utils-19.7.0.tgz#751fa89c4e0a8ffe57ee33a3aaf29b44a82ddfdf"
+  integrity sha512-dEV9hUQSl0kddcz1IT3ekOpI0x6mNPQlbgH8AXmAHdnWa0HhHq7fm8X9vAaKasw0MgbnVfTjHSjIAXMwN04SFA==
+  dependencies:
+    "@udecode/slate" "19.7.0"
+    "@udecode/utils" "19.7.0"
+    lodash "^4.17.21"
+
+"@udecode/slate@19.7.0":
+  version "19.7.0"
+  resolved "https://registry.yarnpkg.com/@udecode/slate/-/slate-19.7.0.tgz#8f2ffeb2cde3e587dba786404d3fd915f88f0937"
+  integrity sha512-Ybt/dIVQP8vgT+iS2KV11D8pJFIuDv5bL3mUiUiMPg7IJEh0fv5xQbcMNtNS/DJplwCBzobuL+j7ifo0LYEaQQ==
+  dependencies:
+    "@udecode/utils" "19.7.0"
+
+"@udecode/utils@19.7.0":
+  version "19.7.0"
+  resolved "https://registry.yarnpkg.com/@udecode/utils/-/utils-19.7.0.tgz#d63ee40b6c9d0d37465ba0d3583117bd797775cd"
+  integrity sha512-XoJyNL2nues2mrUvTziY5KwE6fLN3oYymJh2WQs3yM4ONvi325xSd723/aQmyh+JtYNcCKAXOvFsfY7/HEYjNw==
 
 "@udecode/zustood@^1.1.1":
   version "1.1.3"
