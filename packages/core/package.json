@@ -78,7 +78,7 @@
     "@styled-icons/remix-editor": "10.46.0",
     "@udecode/plate": "19.7.0",
     "@udecode/plate-juice": "20.0.0",
-    "@udecode/plate-serializer-md": "19.7.0",
+    "@udecode/plate-serializer-md": "20.0.0",
     "@uiw/codemirror-extensions-langs": "4.19.9",
     "@uiw/react-codemirror": "4.19.9",
     "ajv": "8.12.0",
