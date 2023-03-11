@@ -89,7 +89,7 @@
     "clean-stack": "5.1.0",
     "codemirror": "6.0.1",
     "common-tags": "1.8.2",
-    "copy-text-to-clipboard": "3.0.1",
+    "copy-text-to-clipboard": "3.1.0",
     "create-react-class": "15.7.0",
     "date-fns": "2.29.3",
     "deepmerge": "4.3.0",
