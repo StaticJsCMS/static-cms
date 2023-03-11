@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { isEmpty } from '../../../lib/util/string.util';
 import Image from '../../common/image/Image';
 import InlineEditTextField from './InlineEditTextField';
 
@@ -28,7 +29,7 @@ const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
   onAltChange,
 }) => {
   console.log('field!!!!!!!', field);
-  if (!field || !canInsert || typeof url !== 'string') {
+  if (!field || !canInsert || typeof url !== 'string' || isEmpty(url)) {
     return null;
   }
 
