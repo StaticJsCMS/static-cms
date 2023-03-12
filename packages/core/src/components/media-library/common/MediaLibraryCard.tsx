@@ -30,6 +30,7 @@ interface MediaLibraryCardProps {
   isDraft?: boolean;
   collection?: Collection;
   field?: Field;
+  cursor?: 'pointer' | 'default';
   onSelect: () => void;
   loadDisplayURL: () => void;
   onDelete: () => void;
@@ -45,6 +46,7 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
   isDraft,
   collection,
   field,
+  cursor = 'pointer',
   onSelect,
   loadDisplayURL,
   onDelete,
@@ -163,7 +165,7 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
             rounded-md
             group-hover/media-card:visible
             group-hover/media-card:bg-blue-200/25
-            dark:group-hover/media-card:bg-blue-300/40
+            dark:group-hover/media-card:bg-blue-400/60
             z-10
           "
         >

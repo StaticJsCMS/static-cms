@@ -56,7 +56,6 @@ const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
           shadow-sm
           overflow-hidden
           group/media-card
-          cursor-pointer
           border
           bg-gray-50/75
           border-gray-200/75
