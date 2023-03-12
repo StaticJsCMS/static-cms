@@ -46,7 +46,7 @@ const TextArea = forwardRef<HTMLTextAreaElement | null, TextAreaProps>(
           text-sm
           font-medium
           text-gray-900
-          dark:text-slate-100`,
+          dark:text-gray-100`,
         )}
         value={value}
         disabled={disabled}

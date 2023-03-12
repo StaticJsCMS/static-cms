@@ -11,7 +11,7 @@ const UnknownControl = ({ field, t }: TranslatedProps<WidgetControlProps<unknown
         py-2
         text-small
         text-gray-900
-        dark:text-slate-100
+        dark:text-gray-100
       "
     >
       {t('editor.editorWidgets.unknownControl.noControl', { widget: field.widget })}

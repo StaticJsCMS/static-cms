@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer components {
+  body {
+    @apply text-gray-900
+      dark:text-gray-100;
+  }
+
   /**
   * Buttons
   */

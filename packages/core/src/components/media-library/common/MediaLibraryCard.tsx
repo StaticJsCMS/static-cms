@@ -241,7 +241,7 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
             font-bold
             dark:font-semibold
             text-slate-600
-            dark:text-slate-100
+            dark:text-gray-100
             whitespace-nowrap
             overflow-hidden
           "

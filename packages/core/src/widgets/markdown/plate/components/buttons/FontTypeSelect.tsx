@@ -119,7 +119,7 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
             rounded-sm
             text-gray-900
             border-gray-200
-            dark:text-slate-100
+            dark:text-gray-100
           "
           data-testid="select-input"
         >

@@ -71,7 +71,7 @@ const Autocomplete = function <T>(
               p-0
               w-full
               text-gray-900
-              dark:text-slate-100
+              dark:text-gray-100
             "
             data-testid="autocomplete-input-wrapper"
           >
@@ -92,7 +92,7 @@ const Autocomplete = function <T>(
                 basis-60
                 flex-grow
                 text-gray-900
-                dark:text-slate-100
+                dark:text-gray-100
               "
               data-testid="autocomplete-input"
               displayValue={displayValue}
@@ -110,14 +110,16 @@ const Autocomplete = function <T>(
             afterLeave={() => onQuery('')}
           >
             <Combobox.Options
-              data-testid={`autocomplete-options`}
-              className={`absolute
+              data-testid="autocomplete-options"
+              className={`
+                absolute
                 mt-1
                 max-h-60
                 w-full
                 overflow-auto
                 rounded-md
-                bg-white py-1
+                bg-white
+                py-1
                 text-base
                 shadow-lg
                 ring-1
@@ -125,7 +127,9 @@ const Autocomplete = function <T>(
                 ring-opacity-5
                 focus:outline-none
                 sm:text-sm
-                z-30`}
+                z-30
+                dark:bg-slate-700
+              `}
             >
               {options.length === 0 ? (
                 <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
@@ -145,13 +149,21 @@ const Autocomplete = function <T>(
                       data-testid={`autocomplete-option-${optionValue}`}
                       className={({ active }) =>
                         classNames(
-                          `relative
-                          select-none
-                          py-2
-                          pl-10
-                          pr-4
-                          cursor-pointer`,
-                          selected || active ? 'bg-gray-100 text-gray-900' : 'text-gray-900',
+                          `
+                            relative
+                            select-none
+                            py-2
+                            pl-10
+                            pr-4
+                            cursor-pointer
+                            text-gray-900
+                            dark:text-gray-100
+                          `,
+                          (selected || active) &&
+                            `
+                             bg-gray-100
+                             dark:bg-slate-600
+                            `,
                         )
                       }
                       value={optionValue}

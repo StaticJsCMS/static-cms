@@ -15,7 +15,7 @@ const EmptyMessage = ({ content }: EmptyMessageProps) => {
         flex
         items-center
         justify-center
-        dark:text-slate-100
+        dark:text-gray-100
       "
     >
       <h3 className="">{content}</h3>

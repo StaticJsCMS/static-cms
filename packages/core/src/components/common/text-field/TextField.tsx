@@ -44,7 +44,7 @@ const TextField = forwardRef<HTMLInputElement | null, TextFieldProps>(
           text-sm
           font-medium
           text-gray-900
-          dark:text-slate-100`,
+          dark:text-gray-100`,
         )}
         value={value}
         onChange={onChange}

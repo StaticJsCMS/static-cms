@@ -87,7 +87,7 @@ const Select = function <T>(
               py-1.5
               w-full
               text-gray-900
-              dark:text-slate-100
+              dark:text-gray-100
             `,
             buttonClassName,
           )}
