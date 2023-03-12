@@ -128,10 +128,7 @@ class Authenticator {
     if (options.invite_code) {
       url += '&invite_code=' + options.invite_code;
     }
-    this.authWindow = window.open(
-      url,
-      'Netlify Authorization'
-    );
+    this.authWindow = window.open(url, 'Netlify Authorization');
     this.authWindow?.focus();
   }
 
