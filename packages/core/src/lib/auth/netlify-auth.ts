@@ -18,29 +18,6 @@ export class NetlifyError {
   }
 }
 
-const PROVIDERS = {
-  github: {
-    width: 960,
-    height: 600,
-  },
-  gitlab: {
-    width: 960,
-    height: 600,
-  },
-  gitea: {
-    width: 960,
-    height: 600,
-  },
-  bitbucket: {
-    width: 960,
-    height: 500,
-  },
-  email: {
-    width: 500,
-    height: 400,
-  },
-} as const;
-
 class Authenticator {
   private site_id: string | null;
   private base_url: string;
@@ -55,7 +32,7 @@ class Authenticator {
   }
 
   handshakeCallback(
-    options: { provider?: keyof typeof PROVIDERS },
+    options: { provider?: string | undefined },
     cb: (error: Error | NetlifyError | null, data?: User) => void,
   ) {
     const fn = (e: { data: string; origin: string }) => {
@@ -69,7 +46,7 @@ class Authenticator {
   }
 
   authorizeCallback(
-    options: { provider?: keyof typeof PROVIDERS },
+    options: { provider?: string | undefined },
     cb: (error: Error | NetlifyError | null, data?: User) => void,
   ) {
     const fn = (e: { data: string; origin: string }) => {
@@ -109,7 +86,7 @@ class Authenticator {
 
   authenticate(
     options: {
-      provider?: keyof typeof PROVIDERS;
+      provider?: string | undefined;
       scope?: string;
       login?: boolean;
       beta_invite?: string;
@@ -137,9 +114,6 @@ class Authenticator {
       );
     }
 
-    const conf = PROVIDERS[provider] || PROVIDERS.github;
-    const left = screen.width / 2 - conf.width / 2;
-    const top = screen.height / 2 - conf.height / 2;
     window.addEventListener('message', this.handshakeCallback(options, cb), false);
     let url = `${this.base_url}/${this.auth_endpoint}?provider=${options.provider}&site_id=${siteID}`;
     if (options.scope) {
@@ -156,15 +130,14 @@ class Authenticator {
     }
     this.authWindow = window.open(
       url,
-      'Netlify Authorization',
-      `width=${conf.width}, height=${conf.height}, top=${top}, left=${left}`,
+      'Netlify Authorization'
     );
     this.authWindow?.focus();
   }
 
   refresh(
     options: {
-      provider: keyof typeof PROVIDERS;
+      provider: string;
       refresh_token?: string;
     },
     cb?: (error: Error | NetlifyError | null, data?: User) => void,
