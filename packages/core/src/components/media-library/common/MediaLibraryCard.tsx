@@ -30,7 +30,6 @@ interface MediaLibraryCardProps {
   isDraft?: boolean;
   collection?: Collection;
   field?: Field;
-  cursor?: 'pointer' | 'default';
   onSelect: () => void;
   loadDisplayURL: () => void;
   onDelete: () => void;
@@ -46,7 +45,6 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
   isDraft,
   collection,
   field,
-  cursor = 'pointer',
   onSelect,
   loadDisplayURL,
   onDelete,
@@ -166,7 +164,7 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
             group-hover/media-card:visible
             group-hover/media-card:bg-blue-200/25
             dark:group-hover/media-card:bg-blue-400/60
-            z-10
+            z-20
           "
         >
           <div
@@ -184,7 +182,7 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
               className="
                 text-gray-500
                 dark:text-white
-                dark:hover:text-blue-200
+                dark:hover:text-blue-100
                 dark:hover:bg-blue-800/50
               "
             >
@@ -196,9 +194,11 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
               onClick={onDelete}
               title={t('mediaLibrary.mediaLibraryModal.deleteSelected')}
               className="
+                position: relative;
                 text-red-400
                 dark:hover:text-red-600
                 dark:hover:bg-red-800/20
+                z-30
               "
             >
               <TrashIcon className="w-5 h-5" />
@@ -207,7 +207,7 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
         </div>
         <div className="relative">
           {isDraft ? (
-            <Pill data-testid="draft-text" color="primary" className="absolute top-3 left-3 z-10">
+            <Pill data-testid="draft-text" color="primary" className="absolute top-3 left-3 z-20">
               {draftText}
             </Pill>
           ) : null}

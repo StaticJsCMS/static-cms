@@ -75,7 +75,7 @@ const CopyToClipBoardButton: FC<TranslatedProps<CopyToClipBoardButtonProps>> = (
       className="
         text-gray-500
         dark:text-white
-        dark:hover:text-blue-200
+        dark:hover:text-blue-100
         dark:hover:bg-blue-800/50
       "
     >
