@@ -70,15 +70,20 @@ const InlineEditTextField: FC<InlineEditTextFieldProps> = ({ label, value, onCha
     >
       <label
         htmlFor={label}
-        className="
-          w-full
-          flex
-          text-xs
-          font-bold
-          dark:font-semibold
-          group-focus-within/edit-field:text-blue-500
-          group-hover/edit-field:text-blue-500
-        "
+        className={classNames(
+          `
+            w-full
+            flex
+            text-xs
+            font-bold
+            dark:font-semibold
+          `,
+          onChange &&
+            `
+              group-focus-within/edit-field:text-blue-500
+              group-hover/edit-field:text-blue-500
+            `,
+        )}
       >
         {label}
       </label>
