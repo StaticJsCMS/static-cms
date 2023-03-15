@@ -91,7 +91,7 @@ const CollectionView = ({
     if (url && filterTerm) {
       url = getNewEntryUrl(collectionName);
       if (filterTerm) {
-        url = `${newEntryUrl}?path=${filterTerm}`;
+        url = `${url}?path=${filterTerm}`;
       }
     }
 
