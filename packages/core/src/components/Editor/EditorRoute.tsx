@@ -12,7 +12,7 @@ interface EditorRouteProps {
 }
 
 const EditorRoute = ({ newRecord = false, collections }: EditorRouteProps) => {
-  const { name, slug } = useParams();
+  const { name, '*': slug } = useParams();
   const shouldRedirect = useMemo(() => {
     if (!name) {
       return false;
