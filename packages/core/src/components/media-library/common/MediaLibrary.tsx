@@ -6,7 +6,6 @@ import { translate } from 'react-polyglot';
 
 import { changeViewStyle } from '@staticcms/core/actions/entries';
 import {
-  closeMediaLibrary,
   deleteMedia,
   insertMedia,
   loadMedia,
@@ -271,7 +270,19 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     const { path } = selectedFile;
     setUrl(path);
     dispatch(insertMedia(path, field, alt));
-  }, [selectedFile, dispatch, field, alt]);
+
+    if (!insertOptions?.chooseUrl && !insertOptions?.showAlt) {
+      handleClose();
+    }
+  }, [
+    selectedFile,
+    dispatch,
+    field,
+    alt,
+    insertOptions?.chooseUrl,
+    insertOptions?.showAlt,
+    handleClose,
+  ]);
 
   /**
    * Removes the selected file from the backend.

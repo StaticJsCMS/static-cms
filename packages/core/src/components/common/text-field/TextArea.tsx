@@ -1,57 +1,85 @@
-import React, { forwardRef, useCallback } from 'react';
+import InputUnstyled from '@mui/base/InputUnstyled';
+import React, { forwardRef, useCallback, useState } from 'react';
 
-import classNames from '@staticcms/core/lib/util/classNames.util';
-
-import type { ChangeEventHandler, KeyboardEvent } from 'react';
+import type { ChangeEventHandler, RefObject } from 'react';
 
 export interface TextAreaProps {
   value: string;
   disabled?: boolean;
-  onChange: ChangeEventHandler<HTMLTextAreaElement>;
+  'data-testid'?: string;
+  onChange: ChangeEventHandler<HTMLInputElement>;
 }
 
 const MIN_TEXT_AREA_HEIGHT = 80;
 const MIN_BOTTOM_PADDING = 12;
 
-const TextArea = forwardRef<HTMLTextAreaElement | null, TextAreaProps>(
-  ({ value, disabled, onChange }, ref) => {
-    const autoGrow = useCallback((event: KeyboardEvent<HTMLTextAreaElement>) => {
-      if (!event.target) {
+function getHeight(rawHeight: string): number {
+  return Number(rawHeight.replace('px', ''));
+}
+
+const TextArea = forwardRef<HTMLInputElement | null, TextAreaProps>(
+  ({ value, disabled, 'data-testid': dataTestId, onChange }, ref) => {
+    const [lastAutogrowHeight, setLastAutogrowHeight] = useState(MIN_TEXT_AREA_HEIGHT);
+
+    const autoGrow = useCallback(() => {
+      const textarea = (ref as RefObject<HTMLInputElement | null>)?.current;
+      if (!textarea) {
         return;
       }
 
-      event.currentTarget.style.height = '5px';
+      const currentHeight = getHeight(textarea.style.height);
 
-      let height = event.currentTarget.scrollHeight;
-      if (height < MIN_TEXT_AREA_HEIGHT) {
-        height = MIN_TEXT_AREA_HEIGHT;
-      }
-      event.currentTarget.style.height = `${height}px`;
+      textarea.style.height = '5px';
 
-      if (height > MIN_TEXT_AREA_HEIGHT - MIN_BOTTOM_PADDING) {
-        event.currentTarget.style.paddingBottom = `${MIN_BOTTOM_PADDING}px`;
+      let newHeight = textarea.scrollHeight;
+      if (newHeight < MIN_TEXT_AREA_HEIGHT) {
+        newHeight = MIN_TEXT_AREA_HEIGHT;
       }
-    }, []);
+
+      if (currentHeight !== lastAutogrowHeight && currentHeight >= newHeight) {
+        textarea.style.height = `${currentHeight}px`;
+        return;
+      }
+
+      textarea.style.height = `${newHeight}px`;
+      setLastAutogrowHeight(newHeight);
+
+      if (newHeight > MIN_TEXT_AREA_HEIGHT - MIN_BOTTOM_PADDING) {
+        textarea.style.paddingBottom = `${MIN_BOTTOM_PADDING}px`;
+      }
+    }, [lastAutogrowHeight, ref]);
 
     return (
-      <textarea
-        ref={ref}
-        data-testid={`textarea-input`}
+      <InputUnstyled
+        multiline
+        minRows={4}
         onInput={autoGrow}
-        className={classNames(
-          `w-full
-          px-3
-          bg-transparent
-          outline-none
-          text-sm
-          font-medium
-          text-gray-900
-          dark:text-gray-100`,
-        )}
+        onChange={onChange}
         value={value}
         disabled={disabled}
-        onChange={onChange}
-        rows={4}
+        data-testid={dataTestId ?? 'textarea-input'}
+        slotProps={{
+          root: {
+            className: `
+              flex
+              w-full
+            `,
+          },
+          input: {
+            ref,
+            className: `
+              w-full
+              min-h-[80px]
+              px-3
+              bg-transparent
+              outline-none
+              text-sm
+              font-medium
+              text-gray-900
+              dark:text-gray-100
+            `,
+          },
+        }}
       />
     );
   },

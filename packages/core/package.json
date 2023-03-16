@@ -71,6 +71,7 @@
     "@lezer/common": "1.0.2",
     "@mdx-js/mdx": "2.3.0",
     "@mdx-js/react": "2.3.0",
+    "@mui/base": "5.0.0-alpha.121",
     "@mui/material": "5.11.12",
     "@mui/system": "5.11.12",
     "@mui/x-date-pickers": "5.0.20",

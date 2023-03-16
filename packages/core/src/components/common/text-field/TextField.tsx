@@ -1,6 +1,5 @@
+import InputUnstyled from '@mui/base/InputUnstyled';
 import React, { forwardRef } from 'react';
-
-import classNames from '@staticcms/core/lib/util/classNames.util';
 
 import type { ChangeEventHandler, MouseEventHandler } from 'react';
 
@@ -30,24 +29,34 @@ export type TextFieldProps = TextTextFieldProps | NumberTextFieldProps;
 const TextField = forwardRef<HTMLInputElement | null, TextFieldProps>(
   ({ value, type, 'data-testid': dataTestId, onChange, ...otherProps }, ref) => {
     return (
-      <input
-        ref={ref}
+      <InputUnstyled
         type={type}
-        {...otherProps}
-        data-testid={dataTestId ?? `${type}-input`}
-        className={classNames(
-          `w-full
-          h-6
-          px-3
-          bg-transparent
-          outline-none
-          text-sm
-          font-medium
-          text-gray-900
-          dark:text-gray-100`,
-        )}
         value={value}
         onChange={onChange}
+        data-testid={dataTestId ?? `${type}-input`}
+        {...otherProps}
+        slotProps={{
+          root: {
+            className: `
+              flex
+              w-full
+            `,
+          },
+          input: {
+            ref,
+            className: `
+              w-full
+              h-6
+              px-3
+              bg-transparent
+              outline-none
+              text-sm
+              font-medium
+              text-gray-900
+              dark:text-gray-100
+            `,
+          },
+        }}
       />
     );
   },

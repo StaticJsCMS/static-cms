@@ -1,11 +1,10 @@
-import { Listbox, Transition } from '@headlessui/react';
-import CheckIcon from '@heroicons/react/20/solid/CheckIcon';
 import ChevronUpDownIcon from '@heroicons/react/20/solid/ChevronUpDownIcon';
-import React, { forwardRef, Fragment, useCallback } from 'react';
+import SelectUnstyled from '@mui/base/SelectUnstyled';
+import React, { forwardRef, useCallback } from 'react';
 
-import classNames from '@staticcms/core/lib/util/classNames.util';
+import Option from './Option';
 
-import type { ReactNode, Ref } from 'react';
+import type { FocusEvent, KeyboardEvent, MouseEvent, ReactNode, Ref } from 'react';
 
 export interface Option<T> {
   label: string;
@@ -28,30 +27,16 @@ export interface SelectProps<T> {
   options: T[] | Option<T>[];
   required?: boolean;
   disabled?: boolean;
-  rootClassName?: string;
-  buttonClassName?: string;
-  optionsClassName?: string;
-  optionClassName?: string;
   onChange: SelectChangeEventHandler<T>;
 }
 
 const Select = function <T>(
-  {
-    label,
-    value,
-    options,
-    required = false,
-    disabled,
-    rootClassName,
-    buttonClassName,
-    optionsClassName,
-    optionClassName,
-    onChange,
-  }: SelectProps<T>,
+  { label, value, options, required = false, disabled, onChange }: SelectProps<T>,
   ref: Ref<HTMLButtonElement>,
 ) {
+  console.log(label, required);
   const handleChange = useCallback(
-    (selectedValue: T) => {
+    (_event: MouseEvent | KeyboardEvent | FocusEvent | null, selectedValue: T) => {
       if (Array.isArray(value)) {
         const newValue = [...value];
         const index = newValue.indexOf(selectedValue);
@@ -71,8 +56,77 @@ const Select = function <T>(
   );
 
   return (
-    <div className={classNames('relative w-full mt-1', rootClassName)}>
-      <Listbox value={value} onChange={handleChange} disabled={disabled}>
+    <div className="relative w-full">
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      <SelectUnstyled<any>
+        renderValue={() => {
+          return (
+            <>
+              {label}
+              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+              </span>
+            </>
+          );
+        }}
+        slotProps={{
+          root: {
+            ref,
+            className: `
+              flex
+              items-center
+              text-sm
+              font-medium
+              relative
+              min-h-8
+              px-4
+              py-1.5
+              w-full
+              text-gray-900
+              dark:text-gray-100
+            `,
+          },
+          popper: {
+            className: `
+              absolute
+              mt-1
+              max-h-60
+              w-full
+              overflow-auto
+              rounded-md
+              bg-white
+              py-1
+              text-base
+              shadow-lg
+              ring-1
+              ring-black
+              ring-opacity-5
+              focus:outline-none
+              sm:text-sm
+              z-40
+            `,
+          },
+        }}
+        value={value}
+        disabled={disabled}
+        onChange={handleChange}
+      >
+        {!Array.isArray(value) && !required ? (
+          <Option value={null} selectedValue={value}>
+            <i>None</i>
+          </Option>
+        ) : null}
+        {options.map((option, index) => {
+          const { label: optionLabel, value: optionValue } = getOptionLabelAndValue(option);
+
+          return (
+            <Option key={index} value={optionValue} selectedValue={value}>
+              {optionLabel}
+            </Option>
+          );
+        })}
+      </SelectUnstyled>
+      {/* <Listbox value={value} onChange={handleChange} disabled={disabled}>
         <Listbox.Button
           ref={ref}
           className={classNames(
@@ -194,7 +248,7 @@ const Select = function <T>(
             })}
           </Listbox.Options>
         </Transition>
-      </Listbox>
+      </Listbox> */}
     </div>
   );
 };

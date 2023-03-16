@@ -22,10 +22,10 @@ const TextControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
     () => (duplicate ? value ?? '' : internalRawValue),
     [internalRawValue, duplicate, value],
   );
-  const ref = useRef<HTMLTextAreaElement | null>(null);
+  const ref = useRef<HTMLInputElement | null>(null);
 
   const handleChange = useCallback(
-    (event: ChangeEvent<HTMLTextAreaElement>) => {
+    (event: ChangeEvent<HTMLInputElement>) => {
       setInternalValue(event.target.value);
       onChange(event.target.value);
     },
