@@ -1,5 +1,4 @@
-import Box from '@mui/material/Box';
-import Popper from '@mui/material/Popper';
+import PopperUnstyled from '@mui/base/PopperUnstyled';
 import {
   ELEMENT_LINK,
   ELEMENT_TD,
@@ -13,7 +12,7 @@ import {
   isSelectionExpanded,
   isText,
   someNode,
-  usePlateSelection,
+  usePlateSelection
 } from '@udecode/plate';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFocused } from 'slate-react';
@@ -88,7 +87,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
     [],
   );
 
-  const anchorEl = useRef<HTMLDivElement>();
+  const anchorEl = useRef<HTMLDivElement | null>(null);
   const [selectionBoundingClientRect, setSelectionBoundingClientRect] =
     useState<ClientRectObject | null>(null);
 
@@ -246,23 +245,38 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
 
   return (
     <>
-      <Box
+      <div
         ref={anchorEl}
-        sx={{
-          position: 'fixed',
-          top: selectionBoundingClientRect?.y,
-          left: selectionBoundingClientRect?.x,
-        }}
+        className="fixed"
+        style={{ top: `${selectionBoundingClientRect?.y ?? 0}px`, left: `${selectionBoundingClientRect?.x}px`}}
       />
-      <Popper
+      <PopperUnstyled
         open={Boolean(debouncedOpen && anchorEl.current)}
+        component="div"
         placement="top"
         anchorEl={anchorEl.current ?? null}
-        sx={{ zIndex: 100 }}
         onFocus={handleFocus}
         onBlur={handleBlur}
         disablePortal
         tabIndex={0}
+        className="
+          absolute
+          mt-1
+          max-h-60
+          w-full
+          overflow-auto
+          rounded-md
+          bg-white
+          py-1
+          text-base
+          shadow-lg
+          ring-1
+          ring-black
+          ring-opacity-5
+          focus:outline-none
+          sm:text-sm
+          z-40
+        "
       >
         <div>
           {(groups.length > 0 ? groups : debouncedGroups).map((group, index) => [
@@ -270,7 +284,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
             group,
           ])}
         </div>
-      </Popper>
+      </PopperUnstyled>
     </>
   );
 };
