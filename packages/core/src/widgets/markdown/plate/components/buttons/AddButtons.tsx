@@ -17,8 +17,15 @@ import React, { useCallback } from 'react';
 import MenuGroup from '@staticcms/core/components/common/menu/MenuGroup';
 import MenuItemButton from '@staticcms/core/components/common/menu/MenuItemButton';
 import { useMdPlateEditorState } from '../../plateTypes';
+import { useMediaInsert } from '@staticcms/core/lib';
 
 import type { FC } from 'react';
+import type { Collection, MarkdownField } from '@staticcms/core/interface';
+
+interface AddButtonsProps {
+  collection: Collection<MarkdownField>;
+  field: MarkdownField;
+}
 
 const AddButtons: FC = () => {
   const editor = useMdPlateEditorState();
@@ -35,6 +42,8 @@ const AddButtons: FC = () => {
       insertNodesOptions: { select: true },
     });
   }, [editor]);
+
+  const ddd = useMediaInsert();
 
   const handleMediaOnClick = useCallback(
     (forImage = false) =>
