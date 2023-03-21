@@ -263,7 +263,6 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
           absolute
           mt-1
           max-h-60
-          w-full
           overflow-auto
           rounded-md
           bg-white
@@ -276,9 +275,13 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
           focus:outline-none
           sm:text-sm
           z-40
+          dark:bg-slate-700
         "
       >
-        <div>
+        <div className="
+          flex
+          gap-0.5
+        ">
           {(groups.length > 0 ? groups : debouncedGroups).map((group, index) => [
             index !== 0 ? <div key={`balloon-toolbar-divider-${index}`} /> : null,
             group,
