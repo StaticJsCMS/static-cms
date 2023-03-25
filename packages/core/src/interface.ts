@@ -962,5 +962,5 @@ export interface MediaLibraryDisplayURL {
 
 export interface MediaLibrarInsertOptions {
   showAlt?: boolean;
-  chooseUrl?: string;
+  chooseUrl?: boolean;
 }

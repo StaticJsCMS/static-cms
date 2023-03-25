@@ -1,16 +1,20 @@
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import Button from '@mui/material/Button';
-import Popper from '@mui/material/Popper';
-import { useTheme } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
+import PopperUnstyled from '@mui/base/PopperUnstyled';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import useIsMediaAsset from '@staticcms/core/lib/hooks/useIsMediaAsset';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
+import Button from '@staticcms/core/components/common/button/Button';
 
-import type { Collection, Entry, FileOrImageField, MarkdownField } from '@staticcms/core/interface';
+import type {
+  Collection,
+  Entry,
+  FileOrImageField,
+  MarkdownField,
+  MediaPath,
+} from '@staticcms/core/interface';
 import type { ChangeEvent, KeyboardEvent } from 'react';
 
 export interface MediaPopoverProps<T extends FileOrImageField | MarkdownField> {
@@ -54,28 +58,9 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
   onFocus,
   onBlur,
 }: MediaPopoverProps<T>) => {
-  const theme = useTheme();
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const urlRef = useRef<HTMLInputElement | null>(null);
-  const textRef = useRef<HTMLInputElement | null>(null);
-
-  const [editing, setEditing] = useState(inserting);
-
   useWindowEvent('mediaLibraryClose', () => {
     onMediaToggle?.(false);
   });
-
-  const handleClose = useCallback(
-    (shouldFocus: boolean) => {
-      onClose(shouldFocus);
-      if (!inserting) {
-        setEditing(false);
-      }
-    },
-    [inserting, onClose],
-  );
-
-  const isMediaAsset = useIsMediaAsset(url, collection, field, entry);
 
   const mediaLibraryFieldOptions = useMemo(() => {
     return field.media_library ?? {};
@@ -86,35 +71,6 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
     [mediaLibraryFieldOptions],
   );
 
-  const urlDisabled = useMemo(
-    () => !chooseUrl && isMediaAsset && forImage,
-    [chooseUrl, forImage, isMediaAsset],
-  );
-
-  useEffect(() => {
-    if (anchorEl) {
-      if (!editing) {
-        return;
-      }
-
-      if (urlDisabled) {
-        setTimeout(() => {
-          textRef.current?.focus();
-        });
-        return;
-      }
-
-      setTimeout(() => {
-        urlRef.current?.focus();
-      });
-      return;
-    }
-
-    if (!inserting) {
-      setEditing(false);
-    }
-  }, [anchorEl, editing, inserting, urlDisabled]);
-
   const handleFocus = useCallback(() => {
     onFocus?.();
   }, [onFocus]);
@@ -124,144 +80,65 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
   }, [onBlur]);
 
   const handleMediaChange = useCallback(
-    (newValue: string) => {
-      onMediaChange(newValue);
+    (newValue: MediaPath<string>) => {
+      onMediaChange(newValue.path);
       onMediaToggle?.(false);
     },
     [onMediaChange, onMediaToggle],
   );
 
   const handleOpenMediaLibrary = useMediaInsert(
-    url,
-    { collection, field, forImage },
+    { path: url, alt: text },
+    { collection, field, forImage, insertOptions: { chooseUrl, showAlt: true } },
     handleMediaChange,
-  );
-
-  const handleMediaOpen = useCallback(() => {
-    onMediaToggle?.(true);
-    handleOpenMediaLibrary();
-  }, [handleOpenMediaLibrary, onMediaToggle]);
-
-  const handleUrlChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      onUrlChange(event.target.value);
-    },
-    [onUrlChange],
-  );
-
-  const handleTextChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      onTextChange?.(event.target.value);
-    },
-    [onTextChange],
-  );
-
-  const handleEditStart = useCallback(() => {
-    setEditing(true);
-  }, []);
-
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        event.stopPropagation();
-        event.preventDefault();
-        handleClose(true);
-        if (!inserting) {
-          setTimeout(() => {
-            setEditing(false);
-          });
-        }
-      }
-    },
-    [inserting, handleClose],
   );
 
   const open = Boolean(anchorEl);
   const id = open ? 'edit-popover' : undefined;
 
   return (
-    <Popper
+    <PopperUnstyled
       id={id}
       open={open}
+      component="div"
+      placement="top"
       anchorEl={anchorEl}
-      placeholder="bottom"
-      container={containerRef}
-      sx={{ zIndex: 100 }}
       onFocus={handleFocus}
       onBlur={handleBlur}
+      disablePortal
       tabIndex={0}
+      className="
+        absolute
+        mt-1
+        max-h-60
+        overflow-auto
+        rounded-md
+        bg-white
+        py-1
+        text-base
+        shadow-lg
+        ring-1
+        ring-black
+        ring-opacity-5
+        focus:outline-none
+        sm:text-sm
+        z-40
+        dark:bg-slate-700
+      "
     >
-      {!editing ? (
-        <div key="edit-content" contentEditable={false}>
-          <Button
-            ref={buttonRef}
-            size="small"
-            color="inherit"
-            sx={{
-              padding: '4px 8px',
-              textTransform: 'none',
-              color: theme.palette.text.secondary,
-            }}
-            onClick={handleEditStart}
-          >
-            {forImage ? 'Edit Image' : 'Edit Link'}
+      <div key="edit-content" contentEditable={false}>
+        <Button onClick={handleOpenMediaLibrary}>{forImage ? 'Edit Image' : 'Edit Link'}</Button>
+        <div />
+        {!forImage ? (
+          <Button href={url}>
+            <OpenInNewIcon />
           </Button>
-          <div />
-          {!forImage ? (
-            <Button
-              size="small"
-              color="inherit"
-              sx={{ padding: '4px', minWidth: 'unset', color: theme.palette.text.secondary }}
-              href={url}
-              target="_blank"
-            >
-              <OpenInNewIcon />
-            </Button>
-          ) : null}
-          <Button
-            size="small"
-            color="inherit"
-            sx={{ padding: '4px', minWidth: 'unset', color: theme.palette.text.secondary }}
-            onClick={onRemove}
-          >
-            <DeleteForeverIcon />
-          </Button>
-        </div>
-      ) : (
-        <div key="editing-content" contentEditable={false}>
-          <TextField
-            key="url-input"
-            inputRef={urlRef}
-            id="url"
-            label="Source"
-            variant="outlined"
-            value={url}
-            onKeyDown={handleKeyDown}
-            onChange={handleUrlChange}
-            fullWidth
-            size="small"
-            disabled={urlDisabled}
-          />
-          {!inserting || !forImage ? (
-            <TextField
-              key="text-input"
-              inputRef={textRef}
-              id="text"
-              label={textLabel}
-              variant="outlined"
-              value={text}
-              onKeyDown={handleKeyDown}
-              onChange={handleTextChange}
-              fullWidth
-              size="small"
-            />
-          ) : null}
-          <Button fullWidth onClick={handleMediaOpen}>
-            Open Media Library
-          </Button>
-        </div>
-      )}
-    </Popper>
+        ) : null}
+        <Button onClick={onRemove}>
+          <DeleteForeverIcon />
+        </Button>
+      </div>
+    </PopperUnstyled>
   );
 };
 

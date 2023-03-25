@@ -5,17 +5,28 @@ import { openMediaLibrary, removeInsertedMedia } from '@staticcms/core/actions/m
 import { selectMediaPath } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 
-import type { Collection, MediaField, MediaPath } from '@staticcms/core/interface';
+import type {
+  Collection,
+  MediaField,
+  MediaLibrarInsertOptions,
+  MediaPath,
+} from '@staticcms/core/interface';
 import type { MouseEvent } from 'react';
 
 export default function useMediaInsert<T extends string | string[], F extends MediaField>(
   value: MediaPath<T>,
-  options: { collection: Collection<F>; field: F; controlID?: string; forImage?: boolean },
+  options: {
+    collection: Collection<F>;
+    field: F;
+    controlID?: string;
+    forImage?: boolean;
+    insertOptions?: MediaLibrarInsertOptions;
+  },
   callback: (newValue: MediaPath<T>) => void,
 ): (e?: MouseEvent) => void {
   const dispatch = useAppDispatch();
 
-  const { controlID, collection, field, forImage = false } = options;
+  const { controlID, collection, field, forImage = false, insertOptions } = options;
 
   const finalControlID = useMemo(() => controlID ?? uuid(), [controlID]);
   const mediaPathSelector = useMemo(() => selectMediaPath(finalControlID), [finalControlID]);
@@ -56,11 +67,22 @@ export default function useMediaInsert<T extends string | string[], F extends Me
           config,
           collection,
           field,
+          insertOptions,
         }),
       );
       setSelected(false);
     },
-    [dispatch, finalControlID, forImage, value, config, collection, field],
+    [
+      dispatch,
+      finalControlID,
+      forImage,
+      value.path,
+      value.alt,
+      config,
+      collection,
+      field,
+      insertOptions,
+    ],
   );
 
   return handleOpenMediaLibrary;
