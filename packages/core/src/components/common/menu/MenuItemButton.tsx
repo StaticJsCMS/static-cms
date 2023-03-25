@@ -1,11 +1,12 @@
-import { Menu } from '@headlessui/react';
 import React from 'react';
+import MenuItemUnstyled from '@mui/base/MenuItemUnstyled';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
 
 import type { FC, MouseEvent, ReactNode } from 'react';
 
 export interface MenuItemButtonProps {
+  active?: boolean;
   onClick: (event: MouseEvent) => void;
   children: ReactNode;
   className?: string;
@@ -16,6 +17,7 @@ export interface MenuItemButtonProps {
 }
 
 const MenuItemButton = ({
+  active = false,
   onClick,
   children,
   className,
@@ -25,10 +27,10 @@ const MenuItemButton = ({
   'data-testid': dataTestId,
 }: MenuItemButtonProps) => {
   return (
-    <Menu.Item>
-      {({ active }) => (
-        <button
-          className={classNames(
+    <MenuItemUnstyled
+      slotProps={{
+        root: {
+          className: classNames(
             className,
             active ? 'bg-slate-100 dark:bg-slate-900' : '',
             `
@@ -37,27 +39,30 @@ const MenuItemButton = ({
               text-sm
               text-gray-700
               disabled:text-gray-300
-              dark:text-gray-300
-              dark:disabled:text-gray-700
               w-full
               text-left
               flex
               items-center
               justify-between
+              cursor-pointer
+              hover:bg-slate-100
+              dark:text-gray-300
+              dark:disabled:text-gray-700
+              dark:hover:bg-slate-900
             `,
-          )}
-          onClick={onClick}
-          disabled={disabled}
-          data-testid={dataTestId}
-        >
-          <div className="flex items-center gap-2 flex-grow">
-            {StartIcon ? <StartIcon className="h-5 w-5" /> : null}
-            {children}
-          </div>
-          {EndIcon ? <EndIcon className="h-5 w-5" /> : null}
-        </button>
-      )}
-    </Menu.Item>
+          ),
+        },
+      }}
+      onClick={onClick}
+      disabled={disabled}
+      data-testid={dataTestId}
+    >
+      <div className="flex items-center gap-2 flex-grow">
+        {StartIcon ? <StartIcon className="h-5 w-5" /> : null}
+        {children}
+      </div>
+      {EndIcon ? <EndIcon className="h-5 w-5" /> : null}
+    </MenuItemUnstyled>
   );
 };
 

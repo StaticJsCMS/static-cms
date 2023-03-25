@@ -54,7 +54,7 @@ const Button: FC<ButtonLinkProps> = ({
   const buttonClassName = useButtonClassNames(variant, color, rounded);
 
   const buttonClassNames = useMemo(
-    () => classNames(className, buttonClassName),
+    () => classNames(buttonClassName, className),
     [buttonClassName, className],
   );
 

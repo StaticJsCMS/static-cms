@@ -6,6 +6,7 @@ import { translate } from 'react-polyglot';
 
 import { changeViewStyle } from '@staticcms/core/actions/entries';
 import {
+  closeMediaLibrary,
   deleteMedia,
   insertMedia,
   loadMedia,

@@ -12,7 +12,7 @@ export type IconButtonProps = Omit<ButtonProps, 'children'> & {
 
 const IconButton = ({ children, className, ...otherProps }: ButtonProps) => {
   return (
-    <Button className={classNames(className, 'px-1.5')} {...otherProps}>
+    <Button className={classNames('px-1.5', className)} {...otherProps}>
       {children}
     </Button>
   );

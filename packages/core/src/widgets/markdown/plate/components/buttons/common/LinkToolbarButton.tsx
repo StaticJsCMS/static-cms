@@ -1,17 +1,33 @@
+import { Link as LinkIcon } from '@styled-icons/material/Link';
 import { ELEMENT_LINK, insertLink, someNode } from '@udecode/plate';
 import React, { useCallback } from 'react';
 
+import MenuItemButton from '@staticcms/core/components/common/menu/MenuItemButton';
+import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
+import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
-import MediaToolbarButton from './MediaToolbarButton';
+import ToolbarButton from './ToolbarButton';
 
+import type { Collection, MarkdownField, MediaPath } from '@staticcms/core/interface';
 import type { FC } from 'react';
-import type { MediaToolbarButtonProps } from './MediaToolbarButton';
 
-const LinkToolbarButton: FC<Omit<MediaToolbarButtonProps, 'onChange'>> = props => {
+interface LinkToolbarButtonProps {
+  variant?: 'button' | 'menu';
+  currentValue?: { url: string; alt?: string };
+  collection: Collection<MarkdownField>;
+  field: MarkdownField;
+}
+
+const LinkToolbarButton: FC<LinkToolbarButtonProps> = ({
+  variant = 'button',
+  field,
+  collection,
+  currentValue,
+}) => {
   const editor = useMdPlateEditorState();
   const handleInsert = useCallback(
-    (newUrl: string, newText: string | undefined) => {
+    ({ path: newUrl, alt: newText }: MediaPath<string>) => {
       if (isNotEmpty(newUrl)) {
         insertLink(
           editor,
@@ -25,7 +41,33 @@ const LinkToolbarButton: FC<Omit<MediaToolbarButtonProps, 'onChange'>> = props =
 
   const isLink = !!editor?.selection && someNode(editor, { match: { type: ELEMENT_LINK } });
 
-  return <MediaToolbarButton {...props} active={isLink} onChange={handleInsert} inserting />;
+  const controlID = useUUID();
+  const openMediaLibrary = useMediaInsert(
+    {
+      path: currentValue?.url ?? '',
+      alt: currentValue?.alt,
+    },
+    { collection, field, controlID, forImage: true },
+    handleInsert,
+  );
+
+  if (variant === 'menu') {
+    return (
+      <MenuItemButton key={ELEMENT_LINK} onClick={openMediaLibrary} startIcon={LinkIcon}>
+        File / Link
+      </MenuItemButton>
+    );
+  }
+
+  return (
+    <ToolbarButton
+      key="editImage"
+      tooltip="Edit Image"
+      icon={<LinkIcon />}
+      onClick={(_editor, event) => openMediaLibrary(event)}
+      active={isLink}
+    />
+  );
 };
 
 export default LinkToolbarButton;

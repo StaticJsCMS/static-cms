@@ -18,7 +18,7 @@ const ViewStyleControl = ({ viewStyle, onChangeViewStyle }: ViewStyleControlPros
     <div className="flex items-center gap-1.5 mr-1">
       <IconButton
         variant="text"
-        className={classNames(viewStyle === VIEW_STYLE_LIST && 'text-blue-500')}
+        className={classNames(viewStyle === VIEW_STYLE_LIST && 'text-blue-500 dark:text-blue-500')}
         aria-label="list view"
         onClick={() => onChangeViewStyle(VIEW_STYLE_LIST)}
       >
@@ -26,7 +26,7 @@ const ViewStyleControl = ({ viewStyle, onChangeViewStyle }: ViewStyleControlPros
       </IconButton>
       <IconButton
         variant="text"
-        className={classNames(viewStyle === VIEW_STYLE_GRID && 'text-blue-500')}
+        className={classNames(viewStyle === VIEW_STYLE_GRID && 'text-blue-500 dark:text-blue-500')}
         aria-label="grid view"
         onClick={() => onChangeViewStyle(VIEW_STYLE_GRID)}
       >

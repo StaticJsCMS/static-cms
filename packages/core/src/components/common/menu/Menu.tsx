@@ -1,6 +1,7 @@
-import { Menu as BaseMenu, Transition } from '@headlessui/react';
 import ChevronDownIcon from '@heroicons/react/20/solid/ChevronDownIcon';
-import React, { useMemo } from 'react';
+import MenuUnstyled from '@mui/base/MenuUnstyled';
+import React, { useCallback, useMemo } from 'react';
+import ClickAwayListener from '@mui/base/ClickAwayListener';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import useButtonClassNames from '../button/useButtonClassNames';
@@ -16,6 +17,7 @@ export interface MenuProps {
   className?: string;
   children: ReactNode | ReactNode[];
   hideDropdownIcon?: boolean;
+  keepMounted?: boolean;
   'data-testid'?: string;
 }
 
@@ -28,8 +30,27 @@ const Menu = ({
   className,
   children,
   hideDropdownIcon = false,
+  keepMounted = false,
   'data-testid': dataTestId,
 }: MenuProps) => {
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const isOpen = Boolean(anchorEl);
+
+  const handleButtonClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      if (isOpen) {
+        setAnchorEl(null);
+      } else {
+        setAnchorEl(event.currentTarget);
+      }
+    },
+    [isOpen],
+  );
+
+  const handleClose = useCallback(() => {
+    setAnchorEl(null);
+  }, []);
+
   const buttonClassName = useButtonClassNames(variant, color, rounded);
 
   const menuButtonClassNames = useMemo(
@@ -38,29 +59,54 @@ const Menu = ({
   );
 
   return (
-    <BaseMenu as="div" className="relative text-left flex items-center">
-      <BaseMenu.Button className={menuButtonClassNames} data-testid={dataTestId}>
-        {StartIcon ? <StartIcon className="-ml-0.5 mr-1.5 h-5 w-5" /> : null}
-        {label}
-        {!hideDropdownIcon ? (
-          <ChevronDownIcon className="-mr-0.5 ml-2 h-5 w-5" aria-hidden="true" />
-        ) : null}
-      </BaseMenu.Button>
-      <Transition
-        as="div"
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-        className="z-30"
-      >
-        <BaseMenu.Items className="absolute right-0 z-30 mt-6 w-56 origin-top-right rounded-md bg-white dark:bg-slate-800 shadow-lg border border-gray-200 dark:border-gray-700 focus:outline-none divide-y divide-gray-100 dark:divide-gray-600">
+    <ClickAwayListener mouseEvent="onMouseDown" touchEvent="onTouchStart" onClickAway={handleClose}>
+      <div>
+        <button
+          type="button"
+          onClick={handleButtonClick}
+          aria-controls={isOpen ? 'simple-menu' : undefined}
+          aria-expanded={isOpen || undefined}
+          aria-haspopup="menu"
+          data-testid={dataTestId}
+          className={menuButtonClassNames}
+        >
+          {StartIcon ? <StartIcon className="-ml-0.5 mr-1.5 h-5 w-5" /> : null}
+          {label}
+          {!hideDropdownIcon ? (
+            <ChevronDownIcon className="-mr-0.5 ml-2 h-5 w-5" aria-hidden="true" />
+          ) : null}
+        </button>
+        <MenuUnstyled
+          open={isOpen}
+          anchorEl={anchorEl}
+          keepMounted={keepMounted}
+          slotProps={{
+            root: {
+              className: `
+              absolute
+              right-0
+              z-40
+              w-56
+              origin-top-right
+              rounded-md
+              bg-white
+              dark:bg-slate-800
+              shadow-lg
+              border
+              border-gray-200
+              focus:outline-none divide-y
+              divide-gray-100
+              dark:border-gray-700
+              dark:divide-gray-600
+            `,
+              onClick: handleClose,
+            },
+          }}
+        >
           {children}
-        </BaseMenu.Items>
-      </Transition>
-    </BaseMenu>
+        </MenuUnstyled>
+      </div>
+    </ClickAwayListener>
   );
 };
 

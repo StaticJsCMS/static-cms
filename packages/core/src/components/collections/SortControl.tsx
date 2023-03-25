@@ -63,6 +63,7 @@ const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortContr
             <MenuItemButton
               key={field.name}
               onClick={() => onSortClick(field.name, nextSortDir)}
+              active={field.name === selectedSort.key}
               endIcon={
                 field.name === selectedSort.key
                   ? selectedSort.direction === SORT_DIRECTION_ASCENDING

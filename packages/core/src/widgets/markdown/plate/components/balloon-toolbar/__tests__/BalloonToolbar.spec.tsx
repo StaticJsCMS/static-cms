@@ -23,11 +23,9 @@ import { mockMarkdownField } from '@staticcms/test/data/fields.mock';
 import { renderWithProviders } from '@staticcms/test/test-utils';
 import BalloonToolbar from '../BalloonToolbar';
 
-import type { Config, Entry, MarkdownField } from '@staticcms/core/interface';
+import type { Config, MarkdownField } from '@staticcms/core/interface';
 import type { MdEditor } from '@staticcms/markdown/plate/plateTypes';
 import type { FC } from 'react';
-
-let entry: Entry;
 
 interface BalloonToolbarWrapperProps {
   useMdx?: boolean;
@@ -44,7 +42,6 @@ const BalloonToolbarWrapper: FC<BalloonToolbarWrapperProps> = ({ useMdx = false 
         containerRef={ref.current}
         collection={createMockCollection({}, mockMarkdownField)}
         field={mockMarkdownField}
-        entry={entry}
       />
     </div>
   );
@@ -69,25 +66,25 @@ describe(BalloonToolbar.name, () => {
   beforeEach(() => {
     store.dispatch(configLoaded(config as unknown as Config));
 
-    entry = {
-      collection: 'posts',
-      slug: '2022-12-13-post-number-1',
-      path: '_posts/2022-12-13-post-number-1.md',
-      partial: false,
-      raw: '--- title: "This is post # 1" draft: false date: 2022-12-13T00:00:00.000Z --- # The post is number 1\n\nAnd some text',
-      label: '',
-      author: '',
-      mediaFiles: [],
-      isModification: null,
-      newRecord: false,
-      updatedOn: '',
-      data: {
-        title: 'This is post # 1',
-        draft: false,
-        date: '2022-12-13T00:00:00.000Z',
-        body: '# The post is number 1\n\nAnd some text',
-      },
-    };
+    // entry = {
+    //   collection: 'posts',
+    //   slug: '2022-12-13-post-number-1',
+    //   path: '_posts/2022-12-13-post-number-1.md',
+    //   partial: false,
+    //   raw: '--- title: "This is post # 1" draft: false date: 2022-12-13T00:00:00.000Z --- # The post is number 1\n\nAnd some text',
+    //   label: '',
+    //   author: '',
+    //   mediaFiles: [],
+    //   isModification: null,
+    //   newRecord: false,
+    //   updatedOn: '',
+    //   data: {
+    //     title: 'This is post # 1',
+    //     draft: false,
+    //     date: '2022-12-13T00:00:00.000Z',
+    //     body: '# The post is number 1\n\nAnd some text',
+    //   },
+    // };
 
     mockEditor = {
       selection: undefined,

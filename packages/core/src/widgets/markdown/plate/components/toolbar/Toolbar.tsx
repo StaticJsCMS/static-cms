@@ -8,18 +8,16 @@ import ColorToolbarButtons from '../buttons/ColorToolbarButtons';
 import ListToolbarButtons from '../buttons/ListToolbarButtons';
 import ShortcodeToolbarButton from '../buttons/ShortcodeToolbarButton';
 
-import type { Collection, Entry, MarkdownField } from '@staticcms/core/interface';
+import type { Collection, MarkdownField } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 export interface ToolbarProps {
   useMdx: boolean;
-  containerRef: HTMLElement | null;
   collection: Collection<MarkdownField>;
   field: MarkdownField;
-  entry: Entry;
 }
 
-const Toolbar: FC<ToolbarProps> = ({ useMdx }) => {
+const Toolbar: FC<ToolbarProps> = ({ useMdx, collection, field }) => {
   const groups = [
     <BasicMarkToolbarButtons key="basic-mark-buttons" useMdx={useMdx} extended />,
     <BasicElementToolbarButtons key="basic-element-buttons" />,
@@ -27,7 +25,7 @@ const Toolbar: FC<ToolbarProps> = ({ useMdx }) => {
     useMdx ? <ColorToolbarButtons key="color-buttons" /> : null,
     useMdx ? <AlignToolbarButtons key="align-mark-buttons" /> : null,
     !useMdx ? <ShortcodeToolbarButton key="shortcode-button" /> : null,
-    <AddButtons key="add-buttons" />,
+    <AddButtons key="add-buttons" collection={collection} field={field} />,
   ].filter(Boolean);
 
   return (

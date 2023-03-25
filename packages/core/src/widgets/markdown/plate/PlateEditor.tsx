@@ -130,7 +130,6 @@ const PlateEditor: FC<PlateEditorProps> = ({
   onFocus,
   onBlur,
 }) => {
-  const outerEditorContainerRef = useRef<HTMLDivElement | null>(null);
   const editorContainerRef = useRef<HTMLDivElement | null>(null);
   const innerEditorContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -265,19 +264,10 @@ const PlateEditor: FC<PlateEditorProps> = ({
             plugins={plugins}
             onChange={onChange}
           >
-            <div key="editor-outer_wrapper" ref={outerEditorContainerRef}>
-              {/* TODO style={styles.container}> */}
-              <Toolbar
-                key="toolbar"
-                useMdx={useMdx}
-                containerRef={outerEditorContainerRef.current}
-                collection={collection}
-                field={field}
-                entry={entry}
-              />
+            <div key="editor-outer_wrapper">
+              <Toolbar key="toolbar" useMdx={useMdx} collection={collection} field={field} />
 
               <div key="editor-wrapper" ref={editorContainerRef}>
-                {/* TODO style={styles.container}> */}
                 <Plate
                   key="editor"
                   id={id}
@@ -288,14 +278,12 @@ const PlateEditor: FC<PlateEditorProps> = ({
                   }}
                 >
                   <div key="editor-inner-wrapper" ref={innerEditorContainerRef}>
-                    {/* TODO style={styles.container}> */}
                     <BalloonToolbar
                       key="balloon-toolbar"
                       useMdx={useMdx}
                       containerRef={innerEditorContainerRef.current}
                       collection={collection}
                       field={field}
-                      entry={entry}
                     />
                     <CursorOverlayContainer containerRef={editorContainerRef} />
                   </div>

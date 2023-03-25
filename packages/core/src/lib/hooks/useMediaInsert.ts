@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { openMediaLibrary, removeInsertedMedia } from '@staticcms/core/actions/mediaLibrary';
@@ -20,6 +20,7 @@ export default function useMediaInsert<T extends string | string[], F extends Me
   const finalControlID = useMemo(() => controlID ?? uuid(), [controlID]);
   const mediaPathSelector = useMemo(() => selectMediaPath(finalControlID), [finalControlID]);
   const mediaPath = useAppSelector(mediaPathSelector);
+  const [selected, setSelected] = useState(false);
 
   const mediaLibraryFieldOptions = useMemo(() => {
     return field?.media_library ?? {};
@@ -31,14 +32,15 @@ export default function useMediaInsert<T extends string | string[], F extends Me
   );
 
   useEffect(() => {
-    console.log('mediaPath', mediaPath, value);
-    if (mediaPath && mediaPath.path !== value.path) {
-      callback(mediaPath as MediaPath<T>);
+    console.log('[IMAGE TOOLBAR BUTTON] handleInsert', selected, mediaPath?.path, value.path);
+    if (!selected && mediaPath && mediaPath.path !== value.path) {
+      setSelected(true);
       setTimeout(() => {
+        callback(mediaPath as MediaPath<T>);
         dispatch(removeInsertedMedia(finalControlID));
       });
     }
-  }, [callback, finalControlID, dispatch, mediaPath, value]);
+  }, [callback, finalControlID, dispatch, mediaPath, value, selected]);
 
   const handleOpenMediaLibrary = useCallback(
     (e?: MouseEvent, { replaceIndex }: { replaceIndex?: number } = {}) => {
@@ -56,6 +58,7 @@ export default function useMediaInsert<T extends string | string[], F extends Me
           field,
         }),
       );
+      setSelected(false);
     },
     [dispatch, finalControlID, forImage, value, config, collection, field],
   );

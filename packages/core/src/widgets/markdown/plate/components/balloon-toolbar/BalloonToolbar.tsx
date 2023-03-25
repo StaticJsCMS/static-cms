@@ -12,7 +12,7 @@ import {
   isSelectionExpanded,
   isText,
   someNode,
-  usePlateSelection
+  usePlateSelection,
 } from '@udecode/plate';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFocused } from 'slate-react';
@@ -27,7 +27,7 @@ import MediaToolbarButtons from '../buttons/MediaToolbarButtons';
 import ShortcodeToolbarButton from '../buttons/ShortcodeToolbarButton';
 import TableToolbarButtons from '../buttons/TableToolbarButtons';
 
-import type { Collection, Entry, MarkdownField } from '@staticcms/core/interface';
+import type { Collection, MarkdownField } from '@staticcms/core/interface';
 import type { ClientRectObject } from '@udecode/plate';
 import type { FC, ReactNode } from 'react';
 
@@ -36,28 +36,14 @@ export interface BalloonToolbarProps {
   containerRef: HTMLElement | null;
   collection: Collection<MarkdownField>;
   field: MarkdownField;
-  entry: Entry;
 }
 
-const BalloonToolbar: FC<BalloonToolbarProps> = ({
-  useMdx,
-  containerRef,
-  collection,
-  field,
-  entry,
-}) => {
+const BalloonToolbar: FC<BalloonToolbarProps> = ({ useMdx, containerRef, collection, field }) => {
   const hasEditorFocus = useFocused();
   const editor = useMdPlateEditorState();
   const selection = usePlateSelection();
   const [hasFocus, setHasFocus] = useState(false);
   const debouncedHasFocus = useDebounce(hasFocus, 150);
-
-  const [childFocusState, setChildFocusState] = useState<Record<string, boolean>>({});
-  const childHasFocus = useMemo(
-    () => Object.keys(childFocusState).reduce((acc, value) => acc || childFocusState[value], false),
-    [childFocusState],
-  );
-  const debouncedChildHasFocus = useDebounce(hasFocus, 150);
 
   const handleFocus = useCallback(() => {
     setHasFocus(true);
@@ -67,31 +53,9 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
     setHasFocus(false);
   }, []);
 
-  const handleChildFocus = useCallback(
-    (key: string) => () => {
-      setChildFocusState(oldState => ({
-        ...oldState,
-        [key]: true,
-      }));
-    },
-    [],
-  );
-
-  const handleChildBlur = useCallback(
-    (key: string) => () => {
-      setChildFocusState(oldState => ({
-        ...oldState,
-        [key]: false,
-      }));
-    },
-    [],
-  );
-
   const anchorEl = useRef<HTMLDivElement | null>(null);
   const [selectionBoundingClientRect, setSelectionBoundingClientRect] =
     useState<ClientRectObject | null>(null);
-
-  const [mediaOpen, setMediaOpen] = useState(false);
 
   const [selectionExpanded, selectionText] = useMemo(() => {
     if (!editor) {
@@ -124,14 +88,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
   const debouncedEditorFocus = useDebounce(hasEditorFocus, 150);
 
   const groups: ReactNode[] = useMemo(() => {
-    if (
-      !mediaOpen &&
-      !debouncedEditorFocus &&
-      !hasFocus &&
-      !debouncedHasFocus &&
-      !debouncedChildHasFocus &&
-      !childHasFocus
-    ) {
+    if (!debouncedEditorFocus && !hasFocus && !debouncedHasFocus) {
       return [];
     }
 
@@ -151,14 +108,9 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
         isInTableCell && <TableToolbarButtons key="selection-table-toolbar-buttons" />,
         <MediaToolbarButtons
           key="selection-media-buttons"
-          containerRef={containerRef}
           collection={collection}
           field={field}
-          entry={entry}
-          onMediaToggle={setMediaOpen}
           hideImages
-          handleChildFocus={handleChildFocus}
-          handleChildBlur={handleChildBlur}
         />,
       ].filter(Boolean);
     }
@@ -188,16 +140,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
             hideCodeBlock
           />,
           <TableToolbarButtons key="empty-table-toolbar-buttons" isInTable={isInTableCell} />,
-          <MediaToolbarButtons
-            key="empty-media-buttons"
-            containerRef={containerRef}
-            collection={collection}
-            field={field}
-            entry={entry}
-            onMediaToggle={setMediaOpen}
-            handleChildFocus={handleChildFocus}
-            handleChildBlur={handleChildBlur}
-          />,
+          <MediaToolbarButtons key="empty-media-buttons" collection={collection} field={field} />,
           !useMdx ? <ShortcodeToolbarButton key="shortcode-button" /> : null,
         ].filter(Boolean);
       }
@@ -206,7 +149,6 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    mediaOpen,
     debouncedEditorFocus,
     hasFocus,
     debouncedHasFocus,
@@ -248,7 +190,10 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
       <div
         ref={anchorEl}
         className="fixed"
-        style={{ top: `${selectionBoundingClientRect?.y ?? 0}px`, left: `${selectionBoundingClientRect?.x}px`}}
+        style={{
+          top: `${selectionBoundingClientRect?.y ?? 0}px`,
+          left: `${selectionBoundingClientRect?.x}px`,
+        }}
       />
       <PopperUnstyled
         open={Boolean(debouncedOpen && anchorEl.current)}
@@ -278,10 +223,12 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
           dark:bg-slate-700
         "
       >
-        <div className="
+        <div
+          className="
           flex
           gap-0.5
-        ">
+        "
+        >
           {(groups.length > 0 ? groups : debouncedGroups).map((group, index) => [
             index !== 0 ? <div key={`balloon-toolbar-divider-${index}`} /> : null,
             group,

@@ -7,7 +7,18 @@ export interface MenuGroupProps {
 }
 
 const MenuGroup = ({ children }: MenuGroupProps) => {
-  return <div className="py-1">{children}</div>;
+  return (
+    <div
+      className="
+        py-1
+        border-b
+        border-gray-200
+        dark:border-slate-700
+      "
+    >
+      {children}
+    </div>
+  );
 };
 
 export default MenuGroup;

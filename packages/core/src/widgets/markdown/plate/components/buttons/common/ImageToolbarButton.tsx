@@ -3,7 +3,7 @@ import { ELEMENT_IMAGE, insertImage } from '@udecode/plate';
 import React, { useCallback } from 'react';
 
 import MenuItemButton from '@staticcms/core/components/common/menu/MenuItemButton';
-import { useMediaInsert } from '@staticcms/core/lib';
+import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import ToolbarButton from './ToolbarButton';
@@ -11,16 +11,23 @@ import ToolbarButton from './ToolbarButton';
 import type { Collection, MarkdownField, MediaPath } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
-interface ImageToolbarButton {
+interface ImageToolbarButtonProps {
+  variant?: 'button' | 'menu';
   currentValue?: { url: string; alt?: string };
   collection: Collection<MarkdownField>;
   field: MarkdownField;
 }
 
-const ImageToolbarButton: FC<ImageToolbarButton> = ({ field, collection, currentValue }) => {
+const ImageToolbarButton: FC<ImageToolbarButtonProps> = ({
+  variant = 'button',
+  field,
+  collection,
+  currentValue,
+}) => {
   const editor = useMdPlateEditorState();
   const handleInsert = useCallback(
     (newUrl: MediaPath<string>) => {
+      console.log('[IMAGE TOOLBAR BUTTON] handleInsert', newUrl.path, editor);
       if (isNotEmpty(newUrl.path)) {
         insertImage(editor, newUrl.path);
       }
@@ -37,7 +44,7 @@ const ImageToolbarButton: FC<ImageToolbarButton> = ({ field, collection, current
     handleInsert,
   );
 
-  if (!currentValue) {
+  if (variant === 'menu') {
     return (
       <MenuItemButton key={ELEMENT_IMAGE} onClick={openMediaLibrary} startIcon={ImageIcon}>
         Image
@@ -47,8 +54,8 @@ const ImageToolbarButton: FC<ImageToolbarButton> = ({ field, collection, current
 
   return (
     <ToolbarButton
-      key="editImage"
-      tooltip="Edit Image"
+      key="insertImage"
+      tooltip="Insert Image"
       icon={<ImageIcon />}
       onClick={(_editor, event) => openMediaLibrary(event)}
     />
