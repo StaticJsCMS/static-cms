@@ -31,8 +31,6 @@ const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = previewPr
 
   const id = useUUID();
 
-  console.log('[PREVIEW] value', value);
-
   const components = useMemo(
     () => ({
       Shortcode: withShortcodeMdxComponent({ previewProps }),
@@ -43,11 +41,9 @@ const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = previewPr
 
   const [state, setValue] = useMdx(`editor-${id}.mdx`, value ?? '');
   const [prevValue, setPrevValue] = useState('');
-  console.log('[PREVIEW] state', state, 'prevValue', prevValue);
   useEffect(() => {
     if (prevValue !== value) {
       const parsedValue = processShortcodeConfigToMdx(getShortcodes(), value ?? '');
-      console.log('[PREVIEW] parsedValue', parsedValue);
       setPrevValue(parsedValue);
       setValue(parsedValue);
     }
@@ -60,10 +56,8 @@ const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = previewPr
     }
 
     try {
-      console.log('[PREVIEW] result!!!!', (state.file.result as FC)({}));
       return (state.file.result as FC)({});
     } catch (error) {
-      console.log('[PREVIEW] error', error);
       return <FallbackComponent error={String(error)} />;
     }
   }, [state.file]);

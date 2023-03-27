@@ -33,7 +33,6 @@ export default function useMdx(
 
       try {
         file.result = (await evaluate(file, options)).default;
-        console.log('[PREVIEW] file.result', file.result);
       } catch (error) {
         const message = error instanceof VFileMessage ? error : new VFileMessage(String(error));
 

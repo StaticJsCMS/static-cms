@@ -100,7 +100,6 @@ const withImageElement = ({ collection, entry, field }: WithImageElementProps) =
       (newValue: MediaPath<string>) => {
         handleChange(newValue.path, 'url');
         handleChange(newValue.alt ?? '', 'alt');
-        console.log('[PREVIEW] newValue!!!!!!!!!', newValue);
         setInternalValue(newValue);
       },
       [handleChange],

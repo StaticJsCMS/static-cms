@@ -112,8 +112,6 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
     return `${internalValue}`;
   }, [isMultiple, internalValue]);
 
-  console.log(label, field);
-
   return (
     <Field
       inputRef={ref}

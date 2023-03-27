@@ -78,7 +78,6 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
 
   const handleChange = useCallback(
     (_event: KeyboardEvent | FocusEvent | MouseEvent | null, newValue: string | null) => {
-      console.log('newValue', newValue);
       if (!newValue || value?.value === newValue) {
         return;
       }
@@ -148,10 +147,6 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
       >
         {types.map(type => {
           const selected = (value?.value ?? ELEMENT_PARAGRAPH) === type.value;
-          console.log(
-            `[MARKDOWN] ${value?.value ?? ELEMENT_PARAGRAPH} === ${type.value}`,
-            (value?.value ?? ELEMENT_PARAGRAPH) === type.value,
-          );
 
           return (
             <OptionUnstyled

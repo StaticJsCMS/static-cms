@@ -25,7 +25,6 @@ const EntriesSearch = ({
   searchEntries,
   clearSearch,
 }: EntriesSearchProps) => {
-  console.log('collections', collections);
   const collectionNames = useMemo(() => Object.keys(collections), [collections]);
 
   const getCursor = useCallback(() => {
@@ -81,7 +80,6 @@ function mapStateToProps(state: RootState, ownProps: EntriesSearchOwnProps) {
   const isFetching = state.search.isFetching;
   const page = state.search.page;
   const entries = selectSearchedEntries(state, collectionNames);
-  console.log('searched entries', entries);
   return { isFetching, page, collections, viewStyle, entries, searchTerm };
 }
 

@@ -243,7 +243,6 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   const handleURLChange = useCallback(
     (url: string) => {
       setUrl(url);
-      console.log('[PREVIEW] URL', url);
       dispatch(insertMedia(url, field, alt));
     },
     [alt, dispatch, field],
@@ -256,7 +255,6 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
       }
 
       setAlt(alt);
-      console.log('[PREVIEW] ALT', alt);
       dispatch(insertMedia((url ?? selectedFile?.path) as string, field, alt));
     },
     [dispatch, field, selectedFile?.path, url],
@@ -373,8 +371,6 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     '';
 
   const hasSelection = hasMedia && !isEmpty(selectedFile);
-
-  console.log('hasMedia', hasMedia, 'files', files, 'tableData', tableData);
 
   return (
     <div className="flex flex-col w-full h-full">

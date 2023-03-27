@@ -93,8 +93,6 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
 
   const theme = useAppSelector(selectTheme);
 
-  console.log('[MARKDOWN] theme', theme);
-
   return (
     <>
       <div

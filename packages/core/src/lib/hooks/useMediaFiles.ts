@@ -26,7 +26,6 @@ export default function useMediaFiles(field?: MediaField): MediaFile[] {
       const entryFiles = entry.mediaFiles ?? [];
       if (config) {
         const mediaFolder = selectMediaFolder(config, collection, entry, field);
-        console.log('[MEDIA LIBRARY] mediaFolder', mediaFolder);
         return entryFiles
           .filter(f => dirname(f.path) === mediaFolder)
           .map(file => ({ key: file.id, ...file }));

@@ -61,8 +61,6 @@ const CodeBlockFrame: FC<CodeBlockFrameProps> = ({ id, lang, code, theme }) => {
     window?.parent.postMessage({ message: `code_block_${id}_onBlur` });
   }, [id, window?.parent]);
 
-  console.log('[MARKDOWN] theme', theme);
-
   return (
     <CodeMirror
       value={code}

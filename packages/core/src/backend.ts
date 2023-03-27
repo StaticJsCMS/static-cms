@@ -729,7 +729,6 @@ export class Backend<BC extends BackendClass = BackendClass> {
 
       entry = this.entryWithFormat(collection)(entry);
       entry = await this.processEntry(state, collection, entry);
-      console.log('[MEDIA LIBRARY] getEntry entry', entry);
 
       return entry;
     };
@@ -785,7 +784,6 @@ export class Backend<BC extends BackendClass = BackendClass> {
     }
 
     const mediaFolders = selectMediaFolders(configState.config, collection, entry);
-    console.log('[MEDIA LIBRARY] processEntry mediaFolders', mediaFolders);
     if (mediaFolders.length > 0) {
       const files = await Promise.all(
         mediaFolders.map(folder => {
@@ -799,12 +797,10 @@ export class Backend<BC extends BackendClass = BackendClass> {
           return this.implementation.getMedia(folder, mediaPath);
         }),
       );
-      console.log('[MEDIA LIBRARY] processEntry files', files);
       entry.mediaFiles = entry.mediaFiles.concat(...files);
     } else {
       entry.mediaFiles = entry.mediaFiles.concat(state.mediaLibrary.files || []);
     }
-    console.log('[MEDIA LIBRARY] processEntry state.mediaLibrary.files', state.mediaLibrary.files);
 
     return entry;
   }

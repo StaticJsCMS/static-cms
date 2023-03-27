@@ -39,13 +39,10 @@ const EditorContent = ({
   editorWithPreview,
 }: EditorContentProps) => {
   if (i18nActive) {
-    console.log('[PREVIEW] With i18n');
     return editorSideBySideLocale;
   } else if (previewActive) {
-    console.log('[PREVIEW] With Preview');
     return editorWithPreview;
   } else {
-    console.log('[PREVIEW] No preview');
     return (
       <div className="flex justify-center">
         <div className="w-editor-only max-w-full">{editor}</div>
@@ -101,7 +98,7 @@ const EditorInterface = ({
     localStorage.getItem(PREVIEW_VISIBLE) !== 'false',
   );
   const [i18nActive, setI18nActive] = useState(
-    localStorage.getItem(I18N_VISIBLE) !== 'false' && locales && locales.length > 0,
+    Boolean(localStorage.getItem(I18N_VISIBLE) !== 'false' && locales && locales.length > 0),
   );
 
   useEffect(() => {

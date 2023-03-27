@@ -34,7 +34,6 @@ const Select = function <T>(
   { label, value, options, required = false, disabled, onChange }: SelectProps<T>,
   ref: Ref<HTMLButtonElement>,
 ) {
-  console.log(label, required);
   const handleChange = useCallback(
     (_event: MouseEvent | KeyboardEvent | FocusEvent | null, selectedValue: T) => {
       if (Array.isArray(value)) {

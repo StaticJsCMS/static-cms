@@ -28,8 +28,6 @@ const Image = <F extends MediaField>({
 
   const assetSource = useMediaAsset(src, collection, field, entry);
 
-  console.log('src', src, 'assetSource', assetSource);
-
   return (
     <img
       key="image"
