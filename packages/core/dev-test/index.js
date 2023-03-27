@@ -231,7 +231,8 @@ CMS.registerShortcode('youtube', {
   toArgs: ({ src }) => {
     return [src];
   },
-  control: ({ src, onChange }) => {
+  control: ({ src, onChange, theme }) => {
+    console.log('[SHORTCUT] shortcut theme', theme);
     return h('span', {}, [
       h('input', {
         key: 'control-input',
@@ -239,12 +240,18 @@ CMS.registerShortcode('youtube', {
         onChange: event => {
           onChange({ src: event.target.value });
         },
+        style: {
+          width: '100%',
+          backgroundColor: theme === 'dark' ? 'rgb(30, 41, 59)' : 'white',
+          color: theme === 'dark' ? 'white' : 'black',
+          padding: '4px 8px',
+        },
       }),
       h(
         'iframe',
         {
           key: 'control-preview',
-          width: '420',
+          width: '100%',
           height: '315',
           src: `https://www.youtube.com/embed/${src}`,
         },

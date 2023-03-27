@@ -908,6 +908,7 @@ export interface MarkdownEditorOptions {
 export type ShortcodeControlProps<P = {}> = P & {
   onChange: (props: P) => void;
   controlProps: WidgetControlProps<string, MarkdownField>;
+  theme: 'dark' | 'light';
 };
 
 export type ShortcodePreviewProps<P = {}> = P & {

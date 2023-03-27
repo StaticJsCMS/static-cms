@@ -117,18 +117,19 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
             path && setNodes<TCodeBlockElement>(editor, { lang: value }, { at: path });
           }}
           className="
-              w-full
-              rounded-t-md
-              border
-              border-gray-100
-              border-b-white
-              px-2
-              py-1
-              h-6
-              dark:border-slate-700
-              dark:border-b-slate-800
-              dark:bg-slate-800
-            "
+            w-full
+            rounded-t-md
+            border
+            border-gray-100
+            border-b-white
+            px-2
+            py-1
+            h-6
+            dark:border-slate-700
+            dark:border-b-slate-800
+            dark:bg-slate-800
+            outline-none
+          "
         />
         <div>
           <Frame
