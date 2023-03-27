@@ -13,6 +13,7 @@ export interface MenuProps {
   startIcon?: FC<{ className?: string }>;
   variant?: 'contained' | 'outlined' | 'text';
   color?: 'primary';
+  size?: 'medium' | 'small';
   rounded?: boolean | 'no-padding';
   className?: string;
   children: ReactNode | ReactNode[];
@@ -26,6 +27,7 @@ const Menu = ({
   startIcon: StartIcon,
   variant = 'contained',
   color = 'primary',
+  size = 'medium',
   rounded = false,
   className,
   children,
@@ -51,7 +53,7 @@ const Menu = ({
     setAnchorEl(null);
   }, []);
 
-  const buttonClassName = useButtonClassNames(variant, color, rounded);
+  const buttonClassName = useButtonClassNames(variant, color, size, rounded);
 
   const menuButtonClassNames = useMemo(
     () => classNames(className, buttonClassName),

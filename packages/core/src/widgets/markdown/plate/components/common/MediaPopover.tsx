@@ -1,6 +1,6 @@
 import PopperUnstyled from '@mui/base/PopperUnstyled';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { DeleteForever as DeleteForeverIcon } from '@styled-icons/material/DeleteForever';
+import { OpenInNew as OpenInNewIcon } from '@styled-icons/material/OpenInNew';
 import React, { useCallback, useMemo } from 'react';
 
 import Button from '@staticcms/core/components/common/button/Button';
@@ -116,7 +116,7 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
           gap-0.5
         "
       >
-        <Button onClick={handleOpenMediaLibrary} variant="text">
+        <Button onClick={handleOpenMediaLibrary} variant="text" size="small">
           {forImage ? 'Edit Image' : 'Edit Link'}
         </Button>
         <div
@@ -128,12 +128,12 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
           "
         />
         {!forImage ? (
-          <Button href={url} variant="text">
-            <OpenInNewIcon />
+          <Button href={url} variant="text" size="small">
+            <OpenInNewIcon className="w-4 h-4" title="Open In New Tab" />
           </Button>
         ) : null}
-        <Button onClick={onRemove} variant="text">
-          <DeleteForeverIcon />
+        <Button onClick={onRemove} variant="text" size="small">
+          <DeleteForeverIcon className="w-4 h-4" title="Delete" />
         </Button>
       </div>
     </PopperUnstyled>

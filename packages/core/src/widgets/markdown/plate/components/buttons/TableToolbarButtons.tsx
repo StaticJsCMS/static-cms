@@ -56,31 +56,31 @@ const TableToolbarButtons: FC<TableToolbarButtonsProps> = ({ isInTable = true })
       <ToolbarButton
         key="insertRow"
         tooltip="Insert Row"
-        icon={<TableInsertRow />}
+        icon={<TableInsertRow className="w-5 h-5" />}
         onClick={handleInsertTableRow}
       />
       <ToolbarButton
         key="deleteRow"
         tooltip="Delete Row"
-        icon={<TableDeleteRow />}
+        icon={<TableDeleteRow className="w-5 h-5" />}
         onClick={handleDeleteRow}
       />
       <ToolbarButton
         key="insertColumn"
         tooltip="Insert Column"
-        icon={<TableInsertColumn />}
+        icon={<TableInsertColumn className="w-5 h-5" />}
         onClick={handleInsertTableColumn}
       />
       <ToolbarButton
         key="deleteColumn"
         tooltip="Delete Column"
-        icon={<TableDeleteColumn />}
+        icon={<TableDeleteColumn className="w-5 h-5" />}
         onClick={handleDeleteColumn}
       />
       <ToolbarButton
         key="deleteTable"
         tooltip="Delete Table"
-        icon={<TableDismiss />}
+        icon={<TableDismiss className="w-5 h-5" />}
         onClick={handleDeleteTable}
       />
     </>
@@ -88,7 +88,7 @@ const TableToolbarButtons: FC<TableToolbarButtonsProps> = ({ isInTable = true })
     <ToolbarButton
       key="insertRow"
       tooltip="Add Table"
-      icon={<TableAdd />}
+      icon={<TableAdd className="w-5 h-5" />}
       onClick={handleTableAdd}
     />
   );

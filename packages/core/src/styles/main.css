@@ -30,9 +30,22 @@
       py-1.5;
   }
 
+  .btn-sm {
+    @apply btn-base
+      rounded
+      px-1.5
+      py-0.5;
+  }
+
   .btn-rounded {
     @apply btn-base
       p-1.5
+      rounded-full;
+  }
+
+  .btn-rounded-sm {
+    @apply btn-base
+      p-0.5
       rounded-full;
   }
 

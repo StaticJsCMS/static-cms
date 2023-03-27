@@ -26,13 +26,14 @@ const classes: Record<
 export default function useButtonClassNames(
   variant: Required<BaseBaseProps>['variant'],
   color: Required<BaseBaseProps>['color'],
+  size: Required<BaseBaseProps>['size'],
   rounded: boolean | 'no-padding',
 ) {
-  let mainClass = 'btn';
+  let mainClass = size === 'small' ? 'btn-sm' : 'btn';
   if (rounded === 'no-padding') {
     mainClass = 'btn-rounded-no-padding';
   } else if (rounded) {
-    mainClass = 'btn-rounded';
+    mainClass = size === 'small' ? 'btn-rounded-sm' : 'btn-rounded';
   }
 
   return useMemo(() => `${mainClass} ${classes[variant][color]}`, [color, mainClass, variant]);

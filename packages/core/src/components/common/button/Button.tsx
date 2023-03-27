@@ -9,6 +9,7 @@ import type { FC, MouseEventHandler, ReactNode, Ref } from 'react';
 export interface BaseBaseProps {
   variant?: 'contained' | 'outlined' | 'text';
   color?: 'primary' | 'success' | 'error';
+  size?: 'medium' | 'small';
   rounded?: boolean | 'no-padding';
   className?: string;
   children: ReactNode | ReactNode[];
@@ -42,6 +43,7 @@ export type ButtonLinkProps = ButtonProps | LinkProps;
 const Button: FC<ButtonLinkProps> = ({
   variant = 'contained',
   color = 'primary',
+  size = 'medium',
   rounded = false,
   children,
   className,
@@ -51,7 +53,7 @@ const Button: FC<ButtonLinkProps> = ({
   'data-testid': dataTestId,
   ...otherProps
 }) => {
-  const buttonClassName = useButtonClassNames(variant, color, rounded);
+  const buttonClassName = useButtonClassNames(variant, color, size, rounded);
 
   const buttonClassNames = useMemo(
     () => classNames(buttonClassName, className),

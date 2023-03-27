@@ -184,7 +184,6 @@
     "@babel/preset-typescript": "7.21.0",
     "@emotion/eslint-plugin": "11.10.0",
     "@emotion/jest": "11.10.5",
-    "@headlessui/tailwindcss": "0.1.2",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.10",
     "@simbathesailor/use-what-changed": "2.0.0",
     "@testing-library/dom": "9.0.1",

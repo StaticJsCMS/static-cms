@@ -1,14 +1,10 @@
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import React, { useCallback, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 
 import ConfirmEvent from '@staticcms/core/lib/util/events/ConfirmEvent';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
+import Button from '../button/Button';
+import Modal from '../modal/Modal';
 
 import type { TranslateProps } from 'react-polyglot';
 
@@ -84,27 +80,53 @@ const ConfirmDialog = ({ t }: TranslateProps) => {
   }
 
   return (
-    <div>
-      <Dialog
-        open
-        onClose={handleCancel}
-        aria-labelledby="confirm-dialog-title"
-        aria-describedby="confirm-dialog-description"
+    <Modal
+      open
+      onClose={handleCancel}
+      className="
+        w-[540px]
+
+      "
+      aria-labelledby="confirm-dialog-title"
+      aria-describedby="confirm-dialog-description"
+    >
+      <div
+        className="
+          px-6
+          py-4
+          text-xl
+          bold
+        "
       >
-        <DialogTitle id="confirm-dialog-title">{title}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="confirm-dialog-description">{body}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancel} color="inherit">
-            {cancel}
-          </Button>
-          <Button onClick={handleConfirm} variant="contained" color={color}>
-            {confirm}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+        {title}
+      </div>
+      <div
+        className="
+          px-6
+          pb-4
+          text-sm
+          text-slate-500
+          dark:text-slate-400
+        "
+      >
+        {body}
+      </div>
+      <div
+        className="
+          p-2
+          flex
+          justify-end
+          gap-2
+        "
+      >
+        <Button onClick={handleCancel} variant="text">
+          {cancel}
+        </Button>
+        <Button onClick={handleConfirm} variant="contained" color={color}>
+          {confirm}
+        </Button>
+      </div>
+    </Modal>
   );
 };
 

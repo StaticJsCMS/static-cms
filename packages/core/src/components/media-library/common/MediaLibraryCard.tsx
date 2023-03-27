@@ -172,6 +172,8 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
               absolute
               top-2
               right-2
+              flex
+              gap-1
             "
           >
             <CopyToClipBoardButton path={displayURL.url} name={text} draft={isDraft} />
@@ -180,10 +182,11 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
               onClick={handleDownload}
               title={t('mediaLibrary.mediaLibraryModal.download')}
               className="
-                text-gray-500
+                text-white
                 dark:text-white
+                bg-gray-900/25
                 dark:hover:text-blue-100
-                dark:hover:bg-blue-800/50
+                dark:hover:bg-blue-800/80
               "
             >
               <ArrowDownTrayIcon className="w-5 h-5" />
@@ -196,8 +199,9 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
               className="
                 position: relative;
                 text-red-400
+                bg-gray-900/25
                 dark:hover:text-red-600
-                dark:hover:bg-red-800/20
+                dark:hover:bg-red-800/40
                 z-30
               "
             >

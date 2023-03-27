@@ -73,10 +73,11 @@ const CopyToClipBoardButton: FC<TranslatedProps<CopyToClipBoardButtonProps>> = (
       title={getTitle()}
       onClick={handleCopy}
       className="
-        text-gray-500
+        text-white
         dark:text-white
-        dark:hover:text-blue-100
-        dark:hover:bg-blue-800/50
+        bg-gray-900/25
+        dark:hover:text-white
+        dark:hover:bg-blue-800/80
       "
     >
       <ClipboardIcon className="w-5 h-5" />

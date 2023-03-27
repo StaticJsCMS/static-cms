@@ -1823,11 +1823,6 @@
   dependencies:
     client-only "^0.0.1"
 
-"@headlessui/tailwindcss@0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@headlessui/tailwindcss/-/tailwindcss-0.1.2.tgz#f49a88f00b235fe812583ece8bdb1038b096646d"
-  integrity sha512-AQNESz+f1grCxifrocOE6hDMDFqhqY0g3xrSGOS0ocGkmVkssaBzXaAPAPNSs/nHmr4ZUhfl5THQpYrvaouWlQ==
-
 "@heroicons/react@2.0.13":
   version "2.0.13"
   resolved "https://registry.yarnpkg.com/@heroicons/react/-/react-2.0.13.tgz#9b1cc54ff77d6625c9565efdce0054a4bcd9074c"

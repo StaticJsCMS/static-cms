@@ -115,6 +115,22 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({ useMdx, containerRef, collect
       ].filter(Boolean);
     }
 
+    const allButtons = [
+      <BasicMarkToolbarButtons key="empty-basic-mark-buttons" useMdx={useMdx} />,
+      <BasicElementToolbarButtons
+        key="empty-basic-element-buttons"
+        hideFontTypeSelect={isInTableCell}
+        hideCodeBlock
+      />,
+      <TableToolbarButtons key="empty-table-toolbar-buttons" isInTable={isInTableCell} />,
+      <MediaToolbarButtons key="empty-media-buttons" collection={collection} field={field} />,
+      !useMdx ? <ShortcodeToolbarButton key="shortcode-button" /> : null,
+    ].filter(Boolean);
+
+    // if (isInTableCell) {
+    //   return allButtons;
+    // }
+
     // Empty paragraph, not first line
     if (
       editor.children.length > 1 &&
@@ -132,17 +148,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({ useMdx, containerRef, collect
         !VOID_ELEMENTS.includes(parent[0].type as string) &&
         parent[0].children.length === 1
       ) {
-        return [
-          <BasicMarkToolbarButtons key="empty-basic-mark-buttons" useMdx={useMdx} />,
-          <BasicElementToolbarButtons
-            key="empty-basic-element-buttons"
-            hideFontTypeSelect={isInTableCell}
-            hideCodeBlock
-          />,
-          <TableToolbarButtons key="empty-table-toolbar-buttons" isInTable={isInTableCell} />,
-          <MediaToolbarButtons key="empty-media-buttons" collection={collection} field={field} />,
-          !useMdx ? <ShortcodeToolbarButton key="shortcode-button" /> : null,
-        ].filter(Boolean);
+        return allButtons;
       }
     }
 

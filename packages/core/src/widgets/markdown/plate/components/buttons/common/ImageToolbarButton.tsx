@@ -56,7 +56,7 @@ const ImageToolbarButton: FC<ImageToolbarButtonProps> = ({
     <ToolbarButton
       key="insertImage"
       tooltip="Insert Image"
-      icon={<ImageIcon />}
+      icon={<ImageIcon className="w-5 h-5" />}
       onClick={(_editor, event) => openMediaLibrary(event)}
     />
   );

@@ -24,7 +24,7 @@ const FileUploadButton: FC<TranslatedProps<FileUploadButtonProps>> = ({
   const isPersisting = useAppSelector(selectPersisting);
   const isDeleting = useAppSelector(selectDeleting);
 
-  const buttonClasses = useButtonClassNames('contained', 'primary', false);
+  const buttonClasses = useButtonClassNames('contained', 'primary', 'medium', false);
 
   const handleOnKeyUp = useCallback((event: KeyboardEvent) => {
     if (event.key === 'Enter') {
