@@ -5,6 +5,8 @@ import Frame from 'react-frame-component';
 import Outline from '@staticcms/core/components/UI/Outline';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
+import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
+import { useAppSelector } from '@staticcms/core/store/hooks';
 import CodeBlockFrame from './CodeBlockFrame';
 
 import type { MdCodeBlockElement, MdValue } from '@staticcms/markdown';
@@ -89,9 +91,21 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const theme = useAppSelector(selectTheme);
+
+  console.log('[MARKDOWN] theme', theme);
+
   return (
     <>
-      <div {...attributes} {...nodeProps} contentEditable={false}>
+      <div
+        key={theme}
+        {...attributes}
+        {...nodeProps}
+        contentEditable={false}
+        className="
+          my-2
+        "
+      >
         <input
           id={id}
           value={lang}
@@ -102,6 +116,19 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
             const path = findNodePath(editor, element);
             path && setNodes<TCodeBlockElement>(editor, { lang: value }, { at: path });
           }}
+          className="
+              w-full
+              rounded-t-md
+              border
+              border-gray-100
+              border-b-white
+              px-2
+              py-1
+              h-6
+              dark:border-slate-700
+              dark:border-b-slate-800
+              dark:bg-slate-800
+            "
         />
         <div>
           <Frame
@@ -116,7 +143,7 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
             }}
             initialContent={initialFrameContent}
           >
-            <CodeBlockFrame id={id} code={code} lang={lang} />
+            <CodeBlockFrame id={id} code={code} lang={lang} theme={theme} />
           </Frame>
         </div>
         <Outline active={langHasFocus || codeHasFocus} />

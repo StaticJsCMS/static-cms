@@ -58,11 +58,6 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   const [selectedFile, setSelectedFile] = useState<MediaFile | null>(null);
   const [query, setQuery] = useState<string | undefined>(undefined);
 
-  const [url, setUrl] = useState<string | undefined>(undefined);
-  const [alt, setAlt] = useState<string | undefined>(undefined);
-
-  const [prevIsVisible, setPrevIsVisible] = useState(false);
-
   const dispatch = useAppDispatch();
   const viewStyle = useAppSelector(selectViewStyle);
   const {
@@ -79,9 +74,15 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     page,
     collection,
     field,
-    value,
+    value: initialValue,
+    alt: initialAlt,
     insertOptions,
   } = useAppSelector(selectMediaLibraryState);
+
+  const [url, setUrl] = useState<string | string[] | undefined>(initialValue ?? '');
+  const [alt, setAlt] = useState<string | undefined>(initialAlt);
+
+  const [prevIsVisible, setPrevIsVisible] = useState(false);
 
   const files = useMediaFiles(field);
 
@@ -161,6 +162,10 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
 
   const handleClose = useCallback(() => {
     dispatch(closeMediaLibrary());
+    setTimeout(() => {
+      setUrl(undefined);
+      setAlt(undefined);
+    }, 500);
   }, [dispatch]);
 
   /**
@@ -242,6 +247,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   const handleURLChange = useCallback(
     (url: string) => {
       setUrl(url);
+      console.log('[PREVIEW] URL', url);
       dispatch(insertMedia(url, field, alt));
     },
     [alt, dispatch, field],
@@ -254,6 +260,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
       }
 
       setAlt(alt);
+      console.log('[PREVIEW] ALT', alt);
       dispatch(insertMedia((url ?? selectedFile?.path) as string, field, alt));
     },
     [dispatch, field, selectedFile?.path, url],
@@ -379,7 +386,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
         collection={collection}
         field={field}
         canInsert={canInsert}
-        url={url ?? value}
+        url={url}
         alt={alt}
         insertOptions={insertOptions}
         onUrlChange={handleURLChange}

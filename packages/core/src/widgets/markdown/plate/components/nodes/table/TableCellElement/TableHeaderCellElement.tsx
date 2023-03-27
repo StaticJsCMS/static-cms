@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import React from 'react';
 
 import type { MdTableCellElement, MdValue } from '@staticcms/markdown';
@@ -11,21 +10,25 @@ const TableHeaderCellElement: FC<PlateRenderElementProps<MdValue, MdTableCellEle
   nodeProps,
 }) => {
   return (
-    <Box
-      component="th"
+    <th
       {...attributes}
       {...nodeProps}
-      sx={{
-        padding: '8px',
-        background: 'rgb(244,245,247)',
-        textAlign: 'left',
-        '&:not(:last-of-type)': {
-          borderRight: '1px solid rgba(209,213,219,0.5)',
-        },
-      }}
+      className="
+        px-2
+        py-1
+        [&>div>p]:m-0
+        text-left
+        bg-slate-300
+        text-sm
+        border-r
+        border-gray-200
+        last:border-0
+        dark:bg-slate-700
+        dark:border-gray-800
+      "
     >
       <div>{children}</div>
-    </Box>
+    </th>
   );
 };
 

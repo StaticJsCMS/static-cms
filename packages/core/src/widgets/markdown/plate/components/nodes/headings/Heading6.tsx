@@ -10,7 +10,15 @@ const Heading6: FC<PlateRenderElementProps<MdValue, MdH6Element>> = ({
   nodeProps,
 }) => {
   return (
-    <h6 {...attributes} {...nodeProps}>
+    <h6
+      {...attributes}
+      {...nodeProps}
+      className="
+        text-[0.67em]
+        font-bold
+        my-[2.33em]
+      "
+    >
       {children}
     </h6>
   );

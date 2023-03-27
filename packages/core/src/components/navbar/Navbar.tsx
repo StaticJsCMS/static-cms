@@ -57,7 +57,7 @@ const Navbar = ({
                 </Disclosure.Button>
               </div>
               <div className="flex flex-1 items-center justify-center h-full sm:items-stretch sm:justify-start gap-4">
-                <div className="flex flex-shrink-0 items-center justify-center bg-slate-700 dark:bg-slate-700 w-16">
+                <div className="flex flex-shrink-0 items-center justify-center bg-slate-500 dark:bg-slate-700 w-16">
                   <StaticCmsIcon className="inline-flex w-10 h-10" />
                 </div>
                 <div className="flex h-full items-center text-xl font-semibold gap-1 text-gray-800 dark:text-white">
@@ -81,7 +81,7 @@ const Navbar = ({
                   )}
                 </div>
               </div>
-              <div className="flex gap-3">
+              <div className="flex gap-3 items-center">
                 {showQuickCreate ? <QuickCreate key="quick-create" /> : null}
                 {navbarActions}
                 <SettingsDropdown />

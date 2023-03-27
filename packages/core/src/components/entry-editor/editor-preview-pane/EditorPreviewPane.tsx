@@ -27,6 +27,7 @@ import type { FC } from 'react';
 const FrameGlobalStyles = `
   body {
     margin: 0;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   }
 
   img {
@@ -35,6 +36,26 @@ const FrameGlobalStyles = `
 
   .frame-content {
     padding: 16px;
+  }
+
+  .text-gray-900 {
+    --tw-text-opacity: 1;
+    color: rgb(17 24 39 / var(--tw-text-opacity));
+  }
+
+  .dark .dark\\:text-gray-100 {
+    --tw-text-opacity: 1;
+    color: rgb(243 244 246 / var(--tw-text-opacity));
+  }
+
+  .text-slate-500 {
+    --tw-text-opacity: 1;
+    color: rgb(100 116 139 / var(--tw-text-opacity));
+  }
+
+  .dark .dark\\:text-slate-400 {
+    --tw-text-opacity: 1;
+    color: rgb(148 163 184 / var(--tw-text-opacity));
   }
 `;
 
@@ -77,7 +98,9 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
         <head>
           <base target="_blank"/>
         </head>
-        <body><div></div></body>
+        <body>
+          <div></div>
+        </body>
       </html>
     `,
     [],

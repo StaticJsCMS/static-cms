@@ -10,7 +10,14 @@ const Heading4: FC<PlateRenderElementProps<MdValue, MdH4Element>> = ({
   nodeProps,
 }) => {
   return (
-    <h4 {...attributes} {...nodeProps}>
+    <h4
+      {...attributes}
+      {...nodeProps}
+      className="
+        font-bold
+        my-[1.33em]
+      "
+    >
       {children}
     </h4>
   );

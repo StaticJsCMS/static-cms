@@ -43,8 +43,8 @@ export default function useMediaInsert<T extends string | string[], F extends Me
   );
 
   useEffect(() => {
-    console.log('[IMAGE TOOLBAR BUTTON] handleInsert', selected, mediaPath?.path, value.path);
-    if (!selected && mediaPath && mediaPath.path !== value.path) {
+    console.log('[PREVIEW] handleInsert', selected, mediaPath?.path, value.path, value.alt);
+    if (!selected && mediaPath && (mediaPath.path !== value.path || mediaPath.alt !== value.alt)) {
       setSelected(true);
       setTimeout(() => {
         callback(mediaPath as MediaPath<T>);

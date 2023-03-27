@@ -39,10 +39,13 @@ const EditorContent = ({
   editorWithPreview,
 }: EditorContentProps) => {
   if (i18nActive) {
+    console.log('[PREVIEW] With i18n');
     return editorSideBySideLocale;
   } else if (previewActive) {
+    console.log('[PREVIEW] With Preview');
     return editorWithPreview;
   } else {
+    console.log('[PREVIEW] No preview');
     return (
       <div className="flex justify-center">
         <div className="w-editor-only max-w-full">{editor}</div>
@@ -84,24 +87,26 @@ const EditorInterface = ({
   displayUrl,
   isNewEntry,
   isModification,
-  draftKey,
+  draftKey, // TODO Review usage
   scrollSyncActive,
   t,
   loadScroll,
   toggleScroll,
   submitted,
 }: TranslatedProps<EditorInterfaceProps>) => {
+  const { locales, defaultLocale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
+  const [selectedLocale, setSelectedLocale] = useState<string>(locales?.[1] ?? 'en');
+
   const [previewActive, setPreviewActive] = useState(
     localStorage.getItem(PREVIEW_VISIBLE) !== 'false',
   );
-  const [i18nActive, setI18nActive] = useState(localStorage.getItem(I18N_VISIBLE) !== 'false');
+  const [i18nActive, setI18nActive] = useState(
+    localStorage.getItem(I18N_VISIBLE) !== 'false' && locales && locales.length > 0,
+  );
 
   useEffect(() => {
     loadScroll();
   }, [loadScroll]);
-
-  const { locales, defaultLocale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
-  const [selectedLocale, setSelectedLocale] = useState<string>(locales?.[1] ?? 'en');
 
   const handleOnPersist = useCallback(
     async (opts: EditorPersistOptions = {}) => {

@@ -93,7 +93,15 @@ export default function getWidgetFor(
     renderedValue = (
       <div key={field.name}>
         <>
-          <strong>{field.label ?? field.name}:</strong> {value}
+          <strong
+            className="
+              text-slate-500
+              dark:text-slate-400
+            "
+          >
+            {field.label ?? field.name}:
+          </strong>{' '}
+          {value}
         </>
       </div>
     );

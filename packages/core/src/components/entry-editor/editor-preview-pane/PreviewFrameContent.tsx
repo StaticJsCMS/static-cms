@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { FrameContextConsumer } from 'react-frame-component';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import EditorPreviewContent from './EditorPreviewContent';
 
 import type {
@@ -20,6 +21,8 @@ interface PreviewFrameContentProps {
 const PreviewFrameContent: FC<PreviewFrameContentProps> = ({ previewComponent, previewProps }) => {
   const ref = useRef<HTMLElement>();
 
+  const { theme } = previewProps;
+
   return (
     <FrameContextConsumer>
       {context => {
@@ -29,11 +32,24 @@ const PreviewFrameContent: FC<PreviewFrameContentProps> = ({ previewComponent, p
 
         return (
           <ScrollSyncPane key="preview-frame-scroll-sync" attachTo={ref}>
-            <EditorPreviewContent
-              key="preview-frame-content"
-              previewComponent={previewComponent}
-              previewProps={{ ...previewProps, document: context.document, window: context.window }}
-            />
+            <div className={classNames(theme === 'dark' && 'dark')}>
+              <div
+                className="
+                  text-gray-900
+                  dark:text-gray-100
+                "
+              >
+                <EditorPreviewContent
+                  key="preview-frame-content"
+                  previewComponent={previewComponent}
+                  previewProps={{
+                    ...previewProps,
+                    document: context.document,
+                    window: context.window,
+                  }}
+                />
+              </div>
+            </div>
           </ScrollSyncPane>
         );
       }}

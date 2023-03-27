@@ -14,9 +14,10 @@ export interface CodeBlockFrameProps {
   id: string;
   lang?: string;
   code: string;
+  theme: 'dark' | 'light';
 }
 
-const CodeBlockFrame: FC<CodeBlockFrameProps> = ({ id, lang, code }) => {
+const CodeBlockFrame: FC<CodeBlockFrameProps> = ({ id, lang, code, theme }) => {
   const { window } = useFrame();
 
   const loadedLangExtension = useMemo(() => {
@@ -60,6 +61,8 @@ const CodeBlockFrame: FC<CodeBlockFrameProps> = ({ id, lang, code }) => {
     window?.parent.postMessage({ message: `code_block_${id}_onBlur` });
   }, [id, window?.parent]);
 
+  console.log('[MARKDOWN] theme', theme);
+
   return (
     <CodeMirror
       value={code}
@@ -68,6 +71,7 @@ const CodeBlockFrame: FC<CodeBlockFrameProps> = ({ id, lang, code }) => {
       onBlur={handleBlur}
       onChange={handleChange}
       extensions={extensions}
+      theme={theme}
     />
   );
 };

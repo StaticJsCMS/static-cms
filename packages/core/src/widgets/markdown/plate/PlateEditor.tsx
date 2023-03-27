@@ -55,10 +55,9 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
-import { withShortcodeElement } from './components';
+import { CodeBlockElement, withShortcodeElement } from './components';
 import { BalloonToolbar } from './components/balloon-toolbar';
 import { BlockquoteElement } from './components/nodes/blockquote';
-import { CodeBlockElement } from './components/nodes/code-block';
 import {
   Heading1,
   Heading2,
@@ -149,13 +148,10 @@ const PlateEditor: FC<PlateEditorProps> = ({
       [ELEMENT_BLOCKQUOTE]: BlockquoteElement,
       [ELEMENT_CODE_BLOCK]: CodeBlockElement,
       [ELEMENT_LINK]: withLinkElement({
-        containerRef: innerEditorContainerRef.current,
         collection,
-        entry,
         field,
       }),
       [ELEMENT_IMAGE]: withImageElement({
-        containerRef: innerEditorContainerRef.current,
         collection,
         entry,
         field,
@@ -267,7 +263,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
             <div key="editor-outer_wrapper">
               <Toolbar key="toolbar" useMdx={useMdx} collection={collection} field={field} />
 
-              <div key="editor-wrapper" ref={editorContainerRef}>
+              <div key="editor-wrapper" ref={editorContainerRef} className="w-full overflow-hidden">
                 <Plate
                   key="editor"
                   id={id}

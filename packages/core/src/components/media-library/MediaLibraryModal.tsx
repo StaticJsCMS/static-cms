@@ -19,8 +19,8 @@ const MediaLibraryModal: FC = () => {
   }, [dispatch]);
 
   return (
-    <Transition appear show={isVisible} as={Fragment} unmount={false}>
-      <Dialog open={isVisible} onClose={handleClose} unmount={false}>
+    <Transition appear show={isVisible} as={Fragment}>
+      <Dialog open={isVisible} onClose={handleClose}>
         <div className="fixed inset-0 bg-black bg-opacity-25 dark:bg-opacity-40 z-50" />
         <div className="fixed inset-0 overflow-y-auto z-50">
           <div className="flex min-h-full items-center justify-center text-center">
@@ -32,7 +32,6 @@ const MediaLibraryModal: FC = () => {
               leave="ease-in duration-200"
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
-              unmount={false}
             >
               <Dialog.Panel
                 className="

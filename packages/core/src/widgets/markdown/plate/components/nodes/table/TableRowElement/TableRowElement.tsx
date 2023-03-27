@@ -1,5 +1,4 @@
 import React from 'react';
-import Box from '@mui/system/Box';
 
 import type { PlateRenderElementProps } from '@udecode/plate';
 import type { FC } from 'react';
@@ -11,18 +10,18 @@ const TableRowElement: FC<PlateRenderElementProps<MdValue, MdTableRowElement>> =
   nodeProps,
 }) => {
   return (
-    <Box
-      component="tr"
+    <tr
       {...attributes}
       {...nodeProps}
-      sx={{
-        '&:only-of-type, &:not(:last-of-type)': {
-          borderBottom: '1px solid rgba(209,213,219,0.5)',
-        },
-      }}
+      className="
+        border-b
+        border-gray-200
+        last:border-0
+        dark:border-gray-800
+      "
     >
       {children}
-    </Box>
+    </tr>
   );
 };
 

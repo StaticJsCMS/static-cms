@@ -6,11 +6,17 @@ import type { ChangeEvent, FC, KeyboardEvent } from 'react';
 
 interface InlineEditTextFieldProps {
   label: string;
+  placeholder?: string;
   value?: string;
   onChange?: (value: string) => void;
 }
 
-const InlineEditTextField: FC<InlineEditTextFieldProps> = ({ label, value, onChange }) => {
+const InlineEditTextField: FC<InlineEditTextFieldProps> = ({
+  label,
+  placeholder,
+  value,
+  onChange,
+}) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
 
   useEffect(() => {
@@ -98,20 +104,24 @@ const InlineEditTextField: FC<InlineEditTextFieldProps> = ({ label, value, onCha
               p-1.5
               -ml-1.5
               text-sm
-              dark:font-semibold
-              text-slate-600
-              dark:text-gray-100
               whitespace-nowrap
               overflow-hidden
               h-input
               rounded-md
               border
-              border-transparent
+              text-slate-600
+              dark:font-semibold
+              dark:text-gray-100
             `,
-            onChange &&
-              `
+            onChange
+              ? `
                 cursor-pointer
+                border-gray-100
                 hover:border-gray-300
+                dark:border-slate-600
+              `
+              : `
+                border-transparent
               `,
           )}
           onClick={handleValueClick}
@@ -145,7 +155,7 @@ const InlineEditTextField: FC<InlineEditTextFieldProps> = ({ label, value, onCha
             h-input
           "
           value={internalValue}
-          placeholder="URL"
+          placeholder={placeholder}
           onChange={handleInputChange}
           onKeyDown={handleInputKeydown}
           onBlur={handleInputBlur}

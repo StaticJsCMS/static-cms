@@ -13,34 +13,41 @@ export interface UseMdxState {
   file: VFile | null;
 }
 
-export default function useMdx(input: string): [UseMdxState, (value: string) => void] {
+export default function useMdx(
+  name: string,
+  input: string,
+): [UseMdxState, (value: string) => void] {
   const [state, setState] = useState<UseMdxState>({ file: null });
 
-  const setValueCallback = useCallback(async (value: string) => {
-    const file = new VFile({ basename: 'editor.mdx', value });
+  const setValueCallback = useCallback(
+    async (value: string) => {
+      const file = new VFile({ basename: name, value });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const options: any = {
-      ...provider,
-      ...runtime,
-      useDynamicImport: true,
-      remarkPlugins: [remarkGfm, flattenListItemParagraphs],
-    };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const options: any = {
+        ...provider,
+        ...runtime,
+        useDynamicImport: true,
+        remarkPlugins: [remarkGfm, flattenListItemParagraphs],
+      };
 
-    try {
-      file.result = (await evaluate(file, options)).default;
-    } catch (error) {
-      const message = error instanceof VFileMessage ? error : new VFileMessage(String(error));
+      try {
+        file.result = (await evaluate(file, options)).default;
+        console.log('[PREVIEW] file.result', file.result);
+      } catch (error) {
+        const message = error instanceof VFileMessage ? error : new VFileMessage(String(error));
 
-      if (!file.messages.includes(message)) {
-        file.messages.push(message);
+        if (!file.messages.includes(message)) {
+          file.messages.push(message);
+        }
+
+        message.fatal = true;
       }
 
-      message.fatal = true;
-    }
-
-    setState({ file });
-  }, []);
+      setState({ file });
+    },
+    [name],
+  );
 
   const setValue = useDebouncedCallback(setValueCallback, 100);
 

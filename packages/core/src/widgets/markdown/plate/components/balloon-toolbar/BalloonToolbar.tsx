@@ -206,7 +206,6 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({ useMdx, containerRef, collect
         tabIndex={0}
         className="
           absolute
-          mt-1
           max-h-60
           overflow-auto
           rounded-md

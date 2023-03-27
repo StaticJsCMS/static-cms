@@ -1,57 +1,40 @@
+import PopperUnstyled from '@mui/base/PopperUnstyled';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import PopperUnstyled from '@mui/base/PopperUnstyled';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
-import useIsMediaAsset from '@staticcms/core/lib/hooks/useIsMediaAsset';
+import Button from '@staticcms/core/components/common/button/Button';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
-import Button from '@staticcms/core/components/common/button/Button';
 
 import type {
   Collection,
-  Entry,
   FileOrImageField,
   MarkdownField,
   MediaPath,
 } from '@staticcms/core/interface';
-import type { ChangeEvent, KeyboardEvent } from 'react';
 
 export interface MediaPopoverProps<T extends FileOrImageField | MarkdownField> {
-  containerRef: HTMLElement | null;
   anchorEl: HTMLElement | null;
   url: string;
   text?: string;
-  textLabel?: string;
-  inserting?: boolean;
   forImage?: boolean;
   collection: Collection<T>;
   field: T;
-  entry: Entry;
-  onUrlChange: (newValue: string) => void;
-  onTextChange?: (newValue: string) => void;
-  onClose: (shouldFocus: boolean) => void;
   onMediaToggle?: (open: boolean) => void;
-  onMediaChange: (newValue: string) => void;
+  onMediaChange: (newValue: MediaPath<string>) => void;
   onRemove?: () => void;
   onFocus?: () => void;
   onBlur?: () => void;
 }
 
 const MediaPopover = <T extends FileOrImageField | MarkdownField>({
-  containerRef,
   anchorEl,
   url,
   text,
-  textLabel = 'Text',
-  inserting = false,
   forImage = false,
   collection,
   field,
-  entry,
-  onUrlChange,
-  onTextChange,
-  onClose,
   onMediaToggle,
   onMediaChange,
   onRemove,
@@ -81,7 +64,7 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
 
   const handleMediaChange = useCallback(
     (newValue: MediaPath<string>) => {
-      onMediaChange(newValue.path);
+      onMediaChange(newValue);
       onMediaToggle?.(false);
     },
     [onMediaChange, onMediaToggle],
@@ -109,12 +92,11 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
       tabIndex={0}
       className="
         absolute
-        mt-1
         max-h-60
         overflow-auto
         rounded-md
         bg-white
-        py-1
+        p-1
         text-base
         shadow-lg
         ring-1
@@ -126,15 +108,31 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
         dark:bg-slate-700
       "
     >
-      <div key="edit-content" contentEditable={false}>
-        <Button onClick={handleOpenMediaLibrary}>{forImage ? 'Edit Image' : 'Edit Link'}</Button>
-        <div />
+      <div
+        key="edit-content"
+        contentEditable={false}
+        className="
+          flex
+          gap-0.5
+        "
+      >
+        <Button onClick={handleOpenMediaLibrary} variant="text">
+          {forImage ? 'Edit Image' : 'Edit Link'}
+        </Button>
+        <div
+          className="
+            w-[1px]
+            border
+            border-gray-100
+            dark:border-slate-600
+          "
+        />
         {!forImage ? (
-          <Button href={url}>
+          <Button href={url} variant="text">
             <OpenInNewIcon />
           </Button>
         ) : null}
-        <Button onClick={onRemove}>
+        <Button onClick={onRemove} variant="text">
           <DeleteForeverIcon />
         </Button>
       </div>

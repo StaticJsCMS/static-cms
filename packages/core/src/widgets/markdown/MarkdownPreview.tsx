@@ -2,11 +2,12 @@ import { MDXProvider } from '@mdx-js/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { VFileMessage } from 'vfile-message';
 
+import { withMdxImage } from '@staticcms/core/components/common/image/Image';
+import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { getShortcodes } from '../../lib/registry';
 import withShortcodeMdxComponent from './mdx/withShortcodeMdxComponent';
 import useMdx from './plate/hooks/useMdx';
 import { processShortcodeConfigToMdx } from './plate/serialization/slate/processShortcodeConfig';
-import { withMdxImage } from '@staticcms/core/components/common/image/Image';
 
 import type { MarkdownField, WidgetPreviewProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
@@ -28,6 +29,10 @@ function FallbackComponent({ error }: FallbackComponentProps) {
 const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = previewProps => {
   const { value, collection, field } = previewProps;
 
+  const id = useUUID();
+
+  console.log('[PREVIEW] value', value);
+
   const components = useMemo(
     () => ({
       Shortcode: withShortcodeMdxComponent({ previewProps }),
@@ -36,11 +41,13 @@ const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = previewPr
     [collection, field, previewProps],
   );
 
-  const [state, setValue] = useMdx(value ?? '');
+  const [state, setValue] = useMdx(`editor-${id}.mdx`, value ?? '');
   const [prevValue, setPrevValue] = useState('');
+  console.log('[PREVIEW] state', state, 'prevValue', prevValue);
   useEffect(() => {
     if (prevValue !== value) {
       const parsedValue = processShortcodeConfigToMdx(getShortcodes(), value ?? '');
+      console.log('[PREVIEW] parsedValue', parsedValue);
       setPrevValue(parsedValue);
       setValue(parsedValue);
     }
@@ -53,8 +60,10 @@ const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = previewPr
     }
 
     try {
+      console.log('[PREVIEW] result!!!!', (state.file.result as FC)({}));
       return (state.file.result as FC)({});
     } catch (error) {
+      console.log('[PREVIEW] error', error);
       return <FallbackComponent error={String(error)} />;
     }
   }, [state.file]);

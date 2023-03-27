@@ -28,7 +28,6 @@ const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
   onUrlChange,
   onAltChange,
 }) => {
-  console.log('field!!!!!!!', field);
   if (!field || !canInsert || typeof url !== 'string' || isEmpty(url)) {
     return null;
   }
@@ -70,7 +69,7 @@ const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
           flex-col
           h-full
           p-0
-          pl-3
+          pl-4
           gap-2
         "
       >
