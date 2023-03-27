@@ -221,3 +221,12 @@
       dark:border-gray-600;
   }
 }
+
+.dark .MuiDialog-root .MuiPaper-root.MuiDialog-paper {
+  background-image: none;
+  background-color: rgb(30 41 59);
+}
+
+.dark .MuiClockNumber-root.Mui-selected {
+  color: white;
+}

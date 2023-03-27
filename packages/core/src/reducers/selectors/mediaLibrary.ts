@@ -35,6 +35,10 @@ export const selectMediaLibraryState = (state: RootState) => {
   return state.mediaLibrary;
 };
 
+export const selectMediaLibraryFiles = (state: RootState) => {
+  return state.mediaLibrary.files;
+};
+
 export function selectMediaDisplayURL(state: RootState, id: string) {
   return (get(state.mediaLibrary, ['displayURLs', id]) ?? {}) as DisplayURLState;
 }

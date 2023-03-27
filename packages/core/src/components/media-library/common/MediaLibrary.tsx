@@ -94,10 +94,6 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   );
 
   useEffect(() => {
-    dispatch(loadMedia({}));
-  }, [dispatch]);
-
-  useEffect(() => {
     if (!prevIsVisible && isVisible) {
       setSelectedFile(null);
       setQuery('');

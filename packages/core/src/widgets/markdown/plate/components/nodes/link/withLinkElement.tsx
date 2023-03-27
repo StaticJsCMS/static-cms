@@ -199,7 +199,18 @@ const withLinkElement = ({ collection, field }: WithLinkElementProps) => {
 
     return (
       <span onBlur={handleBlur}>
-        <a ref={urlRef} {...attributes} href={url} {...nodeProps} onClick={handleClick}>
+        <a
+          ref={urlRef}
+          {...attributes}
+          href={url}
+          {...nodeProps}
+          onClick={handleClick}
+          className="
+            text-blue-500
+            cursor-pointer
+            hover:underline
+          "
+        >
           {children}
         </a>
         <MediaPopover

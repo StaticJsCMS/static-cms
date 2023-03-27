@@ -168,9 +168,7 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
                   index + 1 === columnCount ? MEDIA_CARD_WIDTH : columnWidthWithGutter
                 }
                 rowCount={rowCount}
-                rowHeight={index =>
-                  index + 1 === rowCount ? MEDIA_CARD_HEIGHT : rowHeightWithGutter
-                }
+                rowHeight={() => rowHeightWithGutter}
                 width={width}
                 height={height}
                 itemData={

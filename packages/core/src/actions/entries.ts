@@ -591,6 +591,7 @@ export function loadEntry(collection: Collection, slug: string, silent = false) 
     }
 
     try {
+      await dispatch(loadMedia());
       const loadedEntry = await tryLoadEntry(getState(), collection, slug);
       dispatch(entryLoaded(collection, loadedEntry));
       dispatch(createDraftFromEntry(loadedEntry));

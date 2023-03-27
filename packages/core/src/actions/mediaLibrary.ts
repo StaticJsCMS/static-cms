@@ -168,9 +168,11 @@ export function removeInsertedMedia(controlID: string) {
 export function loadMedia(opts: { delay?: number; query?: string; page?: number } = {}) {
   const { delay = 0, page = 1 } = opts;
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
+    console.log('[MEDIA LIBRARY] LOADING!!');
     const state = getState();
     const config = state.config.config;
     if (!config) {
+      console.log('[MEDIA LIBRARY] NO CONFIG!');
       return;
     }
 

@@ -34,28 +34,37 @@ const FrameGlobalStyles = `
     max-width: 100%;
   }
 
+  a {
+    color: rgb(59 130 246);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
   .frame-content {
     padding: 16px;
   }
 
+  .text-blue-500 {
+    color: rgb(59 130 246);
+  }
+
   .text-gray-900 {
-    --tw-text-opacity: 1;
-    color: rgb(17 24 39 / var(--tw-text-opacity));
+    color: rgb(17 24 39);
   }
 
   .dark .dark\\:text-gray-100 {
-    --tw-text-opacity: 1;
-    color: rgb(243 244 246 / var(--tw-text-opacity));
+    color: rgb(243 244 246);
   }
 
   .text-slate-500 {
-    --tw-text-opacity: 1;
-    color: rgb(100 116 139 / var(--tw-text-opacity));
+    color: rgb(100 116 139);
   }
 
   .dark .dark\\:text-slate-400 {
-    --tw-text-opacity: 1;
-    color: rgb(148 163 184 / var(--tw-text-opacity));
+    color: rgb(148 163 184);
   }
 `;
 

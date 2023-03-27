@@ -12,8 +12,8 @@ const Backdrop = React.forwardRef<HTMLDivElement, { open?: boolean; className: s
             fixed
             inset-0
             bg-black
-            bg-opacity-25
-            dark:bg-opacity-40
+            bg-opacity-50
+            dark:bg-opacity-60
             z-50
           `,
           open && 'MuiBackdrop-open',

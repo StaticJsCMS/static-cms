@@ -1,3 +1,4 @@
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
@@ -18,7 +19,8 @@ import { discardDraft } from '@staticcms/core/actions/entries';
 import { currentBackend } from '@staticcms/core/backend';
 import { changeTheme } from '../actions/globalUI';
 import { getDefaultPath } from '../lib/util/collection.util';
-import { useAppDispatch } from '../store/hooks';
+import { selectTheme } from '../reducers/selectors/globalUI';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import CollectionRoute from './collections/CollectionRoute';
 import { Alert } from './common/alert/Alert';
 import { Confirm } from './common/confirm/Confirm';
@@ -69,6 +71,26 @@ const App = ({
 }: TranslatedProps<AppProps>) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const mode = useAppSelector(selectTheme);
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+          primary: {
+            main: 'rgb(37 99 235)',
+          },
+          ...(mode === 'dark' && {
+            background: {
+              paper: 'rgb(15 23 42)',
+            },
+          }),
+        },
+      }),
+    [mode],
+  );
 
   const configError = useCallback(
     (error?: string) => {
@@ -216,7 +238,7 @@ const App = ({
   }
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <ScrollSync key="scroll-sync" enabled={scrollSyncEnabled}>
         <>
           <div key="back-to-top-anchor" id="back-to-top-anchor" />
@@ -230,7 +252,7 @@ const App = ({
           </div>
         </>
       </ScrollSync>
-    </>
+    </ThemeProvider>
   );
 };
 
