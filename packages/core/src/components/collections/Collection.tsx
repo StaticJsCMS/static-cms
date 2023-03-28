@@ -21,6 +21,7 @@ import {
   selectEntriesSort,
   selectViewStyle,
 } from '@staticcms/core/reducers/selectors/entries';
+import Card from '../common/card/Card';
 import CollectionControls from './CollectionControls';
 import CollectionHeader from './CollectionHeader';
 import EntriesCollection from './entries/EntriesCollection';
@@ -198,6 +199,8 @@ const CollectionView = ({
     };
   }, [collection, onSortClick, prevCollection, readyToLoad, sort]);
 
+  const collectionDescription = collection?.description;
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center mb-4">
@@ -228,6 +231,11 @@ const CollectionView = ({
           </>
         )}
       </div>
+      {collectionDescription ? (
+        <div className="flex flex-grow mb-4">
+          <Card className="flex-grow px-4 py-3">{collectionDescription}</Card>
+        </div>
+      ) : null}
       {entries}
     </div>
   );

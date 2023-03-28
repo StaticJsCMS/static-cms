@@ -31,19 +31,21 @@ const CollectionHeader = ({
   const icon = useIcon(collection.icon);
 
   return (
-    <div className="flex flex-grow gap-4">
-      <h2 className="text-xl font-semibold flex items-center text-gray-800 dark:text-gray-300">
-        <div className="mr-2 flex">{icon}</div>
-        {collectionLabel}
-      </h2>
-      {newEntryUrl ? (
-        <Button onClick={onNewClick}>
-          {t('collection.collectionTop.newButton', {
-            collectionLabel: collectionLabelSingular || collectionLabel,
-          })}
-        </Button>
-      ) : null}
-    </div>
+    <>
+      <div className="flex flex-grow gap-4">
+        <h2 className="text-xl font-semibold flex items-center text-gray-800 dark:text-gray-300">
+          <div className="mr-2 flex">{icon}</div>
+          {collectionLabel}
+        </h2>
+        {newEntryUrl ? (
+          <Button onClick={onNewClick}>
+            {t('collection.collectionTop.newButton', {
+              collectionLabel: collectionLabelSingular || collectionLabel,
+            })}
+          </Button>
+        ) : null}
+      </div>
+    </>
   );
 };
 
