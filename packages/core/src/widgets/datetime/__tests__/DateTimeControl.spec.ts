@@ -74,7 +74,9 @@ async function selectDate(
   day: number,
 ) {
   const userEventActions = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-  const input = getByTestId('date-input');
+  const inputWrapper = getByTestId('date-input');
+  const input = inputWrapper.getElementsByTagName('input')[0];
+
   await userEventActions.click(input);
 
   await selectCalendarDate(userEventActions, day);
@@ -87,7 +89,8 @@ async function selectTime(
   ampm: 'am' | 'pm',
 ) {
   const userEventActions = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-  const input = getByTestId('time-input');
+  const inputWrapper = getByTestId('time-input');
+  const input = inputWrapper.getElementsByTagName('input')[0];
   await userEventActions.click(input);
 
   await selectClockTime(userEventActions, hour, minute, ampm);
@@ -101,7 +104,8 @@ async function selectDateTime(
   ampm: 'am' | 'pm',
 ) {
   const userEventActions = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-  const input = getByTestId('date-time-input');
+  const inputWrapper = getByTestId('date-time-input');
+  const input = inputWrapper.getElementsByTagName('input')[0];
   await userEventActions.click(input);
 
   await selectCalendarDate(userEventActions, day);
@@ -179,7 +183,8 @@ describe(DateTimeControl.name, () => {
     it("should default to today's date if no default is provided", () => {
       const { getByTestId } = renderControl({ label: 'I am a label' });
 
-      const input = getByTestId('date-time-input');
+      const inputWrapper = getByTestId('date-time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).toHaveValue('2023-02-12T10:15:35.000');
     });
 
@@ -192,14 +197,16 @@ describe(DateTimeControl.name, () => {
         },
       });
 
-      const input = getByTestId('date-time-input');
+      const inputWrapper = getByTestId('date-time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).toHaveValue('2023-01-10T06:23:15.000');
     });
 
     it('should only use prop value as initial value', async () => {
       const { rerender, getByTestId } = renderControl({ value: '2023-02-12T10:15:35.000' });
 
-      const input = getByTestId('date-time-input');
+      const inputWrapper = getByTestId('date-time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).toHaveValue('2023-02-12T10:15:35.000');
 
       rerender({ value: '2023-02-18T14:37:02.000' });
@@ -213,7 +220,8 @@ describe(DateTimeControl.name, () => {
         value: '2023-02-12T10:15:35.000',
       });
 
-      const input = getByTestId('date-time-input');
+      const inputWrapper = getByTestId('date-time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).toHaveValue('2023-02-12T10:15:35.000');
 
       rerender({ value: '2023-02-18T14:37:02.000' });
@@ -223,7 +231,8 @@ describe(DateTimeControl.name, () => {
     it('should disable input and now button if disabled', () => {
       const { getByTestId } = renderControl({ label: 'I am a label', disabled: true });
 
-      const input = getByTestId('date-time-input');
+      const inputWrapper = getByTestId('date-time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).toBeDisabled();
 
       const nowButton = getByTestId('datetime-now');
@@ -233,7 +242,8 @@ describe(DateTimeControl.name, () => {
     it('should focus current date in modal on field click', async () => {
       const { getByTestId } = renderControl();
 
-      const input = getByTestId('date-time-input');
+      const inputWrapper = getByTestId('date-time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).not.toHaveFocus();
 
       const field = getByTestId('field');
@@ -246,7 +256,8 @@ describe(DateTimeControl.name, () => {
     it('field click event should not prevent modal from closing', async () => {
       const { getByTestId } = renderControl();
 
-      const input = getByTestId('date-time-input');
+      const inputWrapper = getByTestId('date-time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).not.toHaveFocus();
 
       const field = getByTestId('field');
@@ -272,7 +283,8 @@ describe(DateTimeControl.name, () => {
 
       expect(onChange).not.toHaveBeenCalled();
 
-      const input = getByTestId('date-time-input');
+      const inputWrapper = getByTestId('date-time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
 
       await userEventActions.click(input);
 
@@ -318,7 +330,8 @@ describe(DateTimeControl.name, () => {
         label: 'I am a label',
       });
 
-      const input = getByTestId('date-time-input');
+      const inputWrapper = getByTestId('date-time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).toHaveValue('2023-02-12T10:15:35.000');
 
       await selectDateTime(getByTestId, 1, 2, 20, 'am');
@@ -346,7 +359,8 @@ describe(DateTimeControl.name, () => {
           },
         });
 
-        const input = getByTestId('date-time-input');
+        const inputWrapper = getByTestId('date-time-input');
+        const input = inputWrapper.getElementsByTagName('input')[0];
         expect(input).toHaveValue('02/12/2023 10:15:35.000');
 
         await selectDateTime(getByTestId, 1, 2, 20, 'am');
@@ -367,7 +381,8 @@ describe(DateTimeControl.name, () => {
           },
         });
 
-        const input = getByTestId('date-time-input');
+        const inputWrapper = getByTestId('date-time-input');
+        const input = inputWrapper.getElementsByTagName('input')[0];
         expect(input).toHaveValue('2023-02-12 10:15 am');
 
         await selectDateTime(getByTestId, 1, 2, 20, 'am');
@@ -389,7 +404,8 @@ describe(DateTimeControl.name, () => {
           },
         });
 
-        const input = getByTestId('date-time-input');
+        const inputWrapper = getByTestId('date-time-input');
+        const input = inputWrapper.getElementsByTagName('input')[0];
         expect(input).toHaveValue('02/12/2023 10:15 am');
 
         await selectDateTime(getByTestId, 1, 2, 20, 'am');
@@ -412,7 +428,8 @@ describe(DateTimeControl.name, () => {
           },
         });
 
-        const input = getByTestId('date-time-input');
+        const inputWrapper = getByTestId('date-time-input');
+        const input = inputWrapper.getElementsByTagName('input')[0];
         expect(input).toHaveValue('02/12/2023 10:15 am');
 
         await selectDateTime(getByTestId, 1, 3, 20, 'pm');
@@ -433,7 +450,8 @@ describe(DateTimeControl.name, () => {
           },
         });
 
-        const input = getByTestId('date-time-input');
+        const inputWrapper = getByTestId('date-time-input');
+        const input = inputWrapper.getElementsByTagName('input')[0];
         expect(input).toHaveValue('2023-02-12 10:15');
 
         await selectDateTime(getByTestId, 1, 3, 20, 'pm');
@@ -452,7 +470,8 @@ describe(DateTimeControl.name, () => {
       it("should default to today's date if no default is provided", () => {
         const { getByTestId } = renderControl({ label: 'I am a label', field: utcField });
 
-        const input = getByTestId('date-time-input');
+        const inputWrapper = getByTestId('date-time-input');
+        const input = inputWrapper.getElementsByTagName('input')[0];
         expect(input).toHaveValue('2023-02-12T15:15:35.000');
       });
 
@@ -465,7 +484,8 @@ describe(DateTimeControl.name, () => {
           },
         });
 
-        const input = getByTestId('date-time-input');
+        const inputWrapper = getByTestId('date-time-input');
+        const input = inputWrapper.getElementsByTagName('input')[0];
         expect(input).toHaveValue('2023-01-10T06:23:15.000');
       });
     });
@@ -475,7 +495,8 @@ describe(DateTimeControl.name, () => {
     it("should default to today's date if no default is provided", () => {
       const { getByTestId } = renderControl({ label: 'I am a label', field: mockDateField });
 
-      const input = getByTestId('date-input');
+      const inputWrapper = getByTestId('date-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).toHaveValue('2023-02-12');
     });
 
@@ -488,7 +509,8 @@ describe(DateTimeControl.name, () => {
         },
       });
 
-      const input = getByTestId('date-input');
+      const inputWrapper = getByTestId('date-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).toHaveValue('2023-01-10');
     });
 
@@ -498,7 +520,8 @@ describe(DateTimeControl.name, () => {
         value: '2023-02-12',
       });
 
-      const input = getByTestId('date-input');
+      const inputWrapper = getByTestId('date-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).toHaveValue('2023-02-12');
 
       rerender({ value: '2023-02-18' });
@@ -512,7 +535,8 @@ describe(DateTimeControl.name, () => {
         value: '2023-02-12',
       });
 
-      const input = getByTestId('date-input');
+      const inputWrapper = getByTestId('date-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).toHaveValue('2023-02-12');
 
       rerender({ value: '2023-02-18' });
@@ -526,7 +550,8 @@ describe(DateTimeControl.name, () => {
         disabled: true,
       });
 
-      const input = getByTestId('date-input');
+      const inputWrapper = getByTestId('date-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).toBeDisabled();
 
       const nowButton = getByTestId('datetime-now');
@@ -536,7 +561,8 @@ describe(DateTimeControl.name, () => {
     it('should focus current date in modal on field click', async () => {
       const { getByTestId } = renderControl({ field: mockDateField });
 
-      const input = getByTestId('date-input');
+      const inputWrapper = getByTestId('date-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).not.toHaveFocus();
 
       const field = getByTestId('field');
@@ -549,7 +575,8 @@ describe(DateTimeControl.name, () => {
     it('field click event should not prevent modal from closing', async () => {
       const { getByTestId } = renderControl({ field: mockDateField });
 
-      const input = getByTestId('date-input');
+      const inputWrapper = getByTestId('date-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).not.toHaveFocus();
 
       const field = getByTestId('field');
@@ -575,7 +602,8 @@ describe(DateTimeControl.name, () => {
 
       expect(onChange).not.toHaveBeenCalled();
 
-      const input = getByTestId('date-input');
+      const inputWrapper = getByTestId('date-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
 
       await userEventActions.click(input);
 
@@ -599,7 +627,8 @@ describe(DateTimeControl.name, () => {
         field: mockDateField,
       });
 
-      const input = getByTestId('date-input');
+      const inputWrapper = getByTestId('date-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).toHaveValue('2023-02-12');
 
       await selectDate(getByTestId, 1);
@@ -627,7 +656,8 @@ describe(DateTimeControl.name, () => {
           },
         });
 
-        const input = getByTestId('date-input');
+        const inputWrapper = getByTestId('date-input');
+        const input = inputWrapper.getElementsByTagName('input')[0];
         expect(input).toHaveValue('02/12/2023');
 
         await selectDate(getByTestId, 1);
@@ -649,7 +679,8 @@ describe(DateTimeControl.name, () => {
           },
         });
 
-        const input = getByTestId('date-input');
+        const inputWrapper = getByTestId('date-input');
+        const input = inputWrapper.getElementsByTagName('input')[0];
         expect(input).toHaveValue('02/12/2023');
 
         await selectDate(getByTestId, 1);
@@ -670,7 +701,8 @@ describe(DateTimeControl.name, () => {
           },
         });
 
-        const input = getByTestId('date-input');
+        const inputWrapper = getByTestId('date-input');
+        const input = inputWrapper.getElementsByTagName('input')[0];
         expect(input).toHaveValue('2023-02-12');
 
         await selectDate(getByTestId, 1);
@@ -689,7 +721,8 @@ describe(DateTimeControl.name, () => {
       it("should default to today's date if no default is provided", () => {
         const { getByTestId } = renderControl({ label: 'I am a label', field: utcField });
 
-        const input = getByTestId('date-input');
+        const inputWrapper = getByTestId('date-input');
+        const input = inputWrapper.getElementsByTagName('input')[0];
         expect(input).toHaveValue('2023-02-12');
       });
 
@@ -702,7 +735,8 @@ describe(DateTimeControl.name, () => {
           },
         });
 
-        const input = getByTestId('date-input');
+        const inputWrapper = getByTestId('date-input');
+        const input = inputWrapper.getElementsByTagName('input')[0];
         expect(input).toHaveValue('2023-01-10');
       });
     });
@@ -712,7 +746,8 @@ describe(DateTimeControl.name, () => {
     it("should default to today's date if no default is provided", () => {
       const { getByTestId } = renderControl({ label: 'I am a label', field: mockTimeField });
 
-      const input = getByTestId('time-input');
+      const inputWrapper = getByTestId('time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).toHaveValue('10:15:35.000');
     });
 
@@ -725,7 +760,8 @@ describe(DateTimeControl.name, () => {
         },
       });
 
-      const input = getByTestId('time-input');
+      const inputWrapper = getByTestId('time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).toHaveValue('06:23:15.000');
     });
 
@@ -735,7 +771,8 @@ describe(DateTimeControl.name, () => {
         value: '10:15:35.000',
       });
 
-      const input = getByTestId('time-input');
+      const inputWrapper = getByTestId('time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).toHaveValue('10:15:35.000');
 
       rerender({ value: '14:37:02.000' });
@@ -749,7 +786,9 @@ describe(DateTimeControl.name, () => {
         value: '10:15:35.000',
       });
 
-      const input = getByTestId('time-input');
+      const inputWrapper = getByTestId('time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
+
       expect(input).toHaveValue('10:15:35.000');
 
       rerender({ value: '14:37:02.000' });
@@ -763,7 +802,9 @@ describe(DateTimeControl.name, () => {
         disabled: true,
       });
 
-      const input = getByTestId('time-input');
+      const inputWrapper = getByTestId('time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
+
       expect(input).toBeDisabled();
 
       const nowButton = getByTestId('datetime-now');
@@ -773,7 +814,8 @@ describe(DateTimeControl.name, () => {
     it('should focus current time in modal on field click', async () => {
       const { getByTestId } = renderControl({ field: mockTimeField });
 
-      const input = getByTestId('time-input');
+      const inputWrapper = getByTestId('time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).not.toHaveFocus();
 
       const field = getByTestId('field');
@@ -786,7 +828,8 @@ describe(DateTimeControl.name, () => {
     it('field click event should not prevent modal from closing', async () => {
       const { getByTestId } = renderControl({ field: mockTimeField });
 
-      const input = getByTestId('time-input');
+      const inputWrapper = getByTestId('time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).not.toHaveFocus();
 
       const field = getByTestId('field');
@@ -812,7 +855,8 @@ describe(DateTimeControl.name, () => {
 
       expect(onChange).not.toHaveBeenCalled();
 
-      const input = getByTestId('time-input');
+      const inputWrapper = getByTestId('time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
 
       await userEventActions.click(input);
 
@@ -851,7 +895,8 @@ describe(DateTimeControl.name, () => {
         field: mockTimeField,
       });
 
-      const input = getByTestId('time-input');
+      const inputWrapper = getByTestId('time-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).toHaveValue('10:15:35.000');
 
       await selectTime(getByTestId, 2, 20, 'am');
@@ -879,7 +924,8 @@ describe(DateTimeControl.name, () => {
           },
         });
 
-        const input = getByTestId('time-input');
+        const inputWrapper = getByTestId('time-input');
+        const input = inputWrapper.getElementsByTagName('input')[0];
         expect(input).toHaveValue('10:15 am');
 
         await selectTime(getByTestId, 2, 20, 'am');
@@ -901,7 +947,8 @@ describe(DateTimeControl.name, () => {
           },
         });
 
-        const input = getByTestId('time-input');
+        const inputWrapper = getByTestId('time-input');
+        const input = inputWrapper.getElementsByTagName('input')[0];
         expect(input).toHaveValue('10:15 am');
 
         await selectTime(getByTestId, 3, 20, 'pm');
@@ -922,7 +969,8 @@ describe(DateTimeControl.name, () => {
           },
         });
 
-        const input = getByTestId('time-input');
+        const inputWrapper = getByTestId('time-input');
+        const input = inputWrapper.getElementsByTagName('input')[0];
         expect(input).toHaveValue('10:15');
 
         await selectTime(getByTestId, 3, 20, 'pm');
@@ -941,7 +989,8 @@ describe(DateTimeControl.name, () => {
       it("should default to today's date if no default is provided", () => {
         const { getByTestId } = renderControl({ label: 'I am a label', field: utcField });
 
-        const input = getByTestId('time-input');
+        const inputWrapper = getByTestId('time-input');
+        const input = inputWrapper.getElementsByTagName('input')[0];
         expect(input).toHaveValue('15:15:35.000');
       });
 
@@ -954,7 +1003,8 @@ describe(DateTimeControl.name, () => {
           },
         });
 
-        const input = getByTestId('time-input');
+        const inputWrapper = getByTestId('time-input');
+        const input = inputWrapper.getElementsByTagName('input')[0];
         expect(input).toHaveValue('06:23:15.000');
       });
     });
