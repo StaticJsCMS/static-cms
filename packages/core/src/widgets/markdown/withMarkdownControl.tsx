@@ -64,7 +64,13 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
 
     return useMemo(
       () => (
-        <Field label={label} errors={errors} forSingleList={forSingleList} noHightlight>
+        <Field
+          label={label}
+          errors={errors}
+          forSingleList={forSingleList}
+          hint={field.hint}
+          noHightlight
+        >
           {loaded ? (
             <PlateEditor
               initialValue={slateValue}
