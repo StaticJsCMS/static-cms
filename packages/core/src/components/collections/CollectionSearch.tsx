@@ -1,6 +1,4 @@
 import PopperUnstyled from '@mui/base/PopperUnstyled';
-import InputAdornment from '@mui/material/InputAdornment';
-import TextField from '@mui/material/TextField';
 import { Search as SearchIcon } from '@styled-icons/material/Search';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { translate } from 'react-polyglot';
@@ -140,25 +138,41 @@ const CollectionSearch = ({
 
   return (
     <div>
-      <TextField
-        onKeyDown={handleKeyDown}
-        placeholder={t('collection.sidebar.searchAll')}
-        onBlur={handleBlur}
-        onFocus={handleFocus}
-        value={query}
-        onChange={handleQueryChange}
-        variant="outlined"
-        size="small"
-        fullWidth
-        InputProps={{
-          inputRef,
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon className="w-6 h-6" />
-            </InputAdornment>
-          ),
-        }}
-      />
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <SearchIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+        </div>
+        <input
+          type="text"
+          id="first_name"
+          className="
+          block
+          w-full
+          p-1.5
+          pl-10
+          text-sm
+          text-gray-900
+          border
+          border-gray-300
+          rounded-lg
+          bg-gray-50
+          focus-visible:outline-none
+          focus:ring-4
+          focus:ring-gray-200
+          dark:bg-gray-700
+          dark:border-gray-600
+          dark:placeholder-gray-400
+          dark:text-white
+          dark:focus:ring-slate-700
+        "
+          placeholder={t('collection.sidebar.searchAll')}
+          onKeyDown={handleKeyDown}
+          onBlur={handleBlur}
+          onFocus={handleFocus}
+          value={query}
+          onChange={handleQueryChange}
+        />
+      </div>
       <PopperUnstyled
         open={open}
         component="div"
