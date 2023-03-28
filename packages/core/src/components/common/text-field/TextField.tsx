@@ -1,6 +1,8 @@
 import InputUnstyled from '@mui/base/InputUnstyled';
 import React, { forwardRef } from 'react';
 
+import classNames from '@staticcms/core/lib/util/classNames.util';
+
 import type { ChangeEventHandler, MouseEventHandler } from 'react';
 
 export interface BaseTextFieldProps {
@@ -9,6 +11,7 @@ export interface BaseTextFieldProps {
   'data-testid'?: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onClick?: MouseEventHandler<HTMLInputElement>;
+  cursor?: 'default' | 'pointer' | 'text';
 }
 
 export interface NumberTextFieldProps extends BaseTextFieldProps {
@@ -27,7 +30,7 @@ export interface TextTextFieldProps extends BaseTextFieldProps {
 export type TextFieldProps = TextTextFieldProps | NumberTextFieldProps;
 
 const TextField = forwardRef<HTMLInputElement | null, TextFieldProps>(
-  ({ value, type, 'data-testid': dataTestId, onChange, ...otherProps }, ref) => {
+  ({ value, type, 'data-testid': dataTestId, cursor, onChange, ...otherProps }, ref) => {
     return (
       <InputUnstyled
         type={type}
@@ -44,17 +47,22 @@ const TextField = forwardRef<HTMLInputElement | null, TextFieldProps>(
           },
           input: {
             ref,
-            className: `
-              w-full
-              h-6
-              px-3
-              bg-transparent
-              outline-none
-              text-sm
-              font-medium
-              text-gray-900
-              dark:text-gray-100
-            `,
+            className: classNames(
+              `
+                w-full
+                h-6
+                px-3
+                bg-transparent
+                outline-none
+                text-sm
+                font-medium
+                text-gray-900
+                dark:text-gray-100
+              `,
+              cursor === 'pointer' && 'cursor-pointer',
+              cursor === 'text' && 'cursor-text',
+              cursor === 'default' && 'cursor-default',
+            ),
           },
         }}
       />

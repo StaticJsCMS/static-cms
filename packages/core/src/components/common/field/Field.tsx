@@ -85,7 +85,9 @@ const Field: FC<FieldProps> = ({
             dark:hover:bg-slate-800
           `,
         !noPadding && 'pb-3',
-        cursor === 'pointer' ? 'cursor-pointer' : 'cursor-text',
+        cursor === 'pointer' && 'cursor-pointer',
+        cursor === 'text' && 'cursor-text',
+        cursor === 'default' && 'cursor-default',
         !hasErrors && 'group/active',
       ),
     [cursor, hasErrors, noHightlight, noPadding],

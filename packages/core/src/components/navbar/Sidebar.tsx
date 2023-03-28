@@ -1,4 +1,4 @@
-import PhotoIcon from '@heroicons/react/24/outline/PhotoIcon';
+import { Photo as PhotoIcon } from '@styled-icons/material/Photo';
 import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';
 

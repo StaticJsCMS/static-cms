@@ -1,5 +1,5 @@
-import ChevronDownIcon from '@heroicons/react/20/solid/ChevronDownIcon';
-import ChevronUpIcon from '@heroicons/react/20/solid/ChevronUpIcon';
+import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@styled-icons/material/KeyboardArrowDown';
+import { KeyboardArrowUp as KeyboardArrowUpIcon } from '@styled-icons/material/KeyboardArrowUp';
 import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
@@ -9,8 +9,8 @@ import {
   SORT_DIRECTION_NONE,
 } from '@staticcms/core/constants';
 import Menu from '../common/menu/Menu';
-import MenuItemButton from '../common/menu/MenuItemButton';
 import MenuGroup from '../common/menu/MenuGroup';
+import MenuItemButton from '../common/menu/MenuItemButton';
 
 import type {
   SortableField,
@@ -67,8 +67,8 @@ const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortContr
               endIcon={
                 field.name === selectedSort.key
                   ? selectedSort.direction === SORT_DIRECTION_ASCENDING
-                    ? ChevronUpIcon
-                    : ChevronDownIcon
+                    ? KeyboardArrowUpIcon
+                    : KeyboardArrowDownIcon
                   : undefined
               }
             >

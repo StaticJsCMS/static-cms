@@ -1,10 +1,10 @@
-import CheckIcon from '@heroicons/react/20/solid/CheckIcon';
+import { Check as CheckIcon } from '@styled-icons/material/Check';
 import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
 import Menu from '../common/menu/Menu';
-import MenuItemButton from '../common/menu/MenuItemButton';
 import MenuGroup from '../common/menu/MenuGroup';
+import MenuItemButton from '../common/menu/MenuItemButton';
 
 import type { GroupMap, TranslatedProps, ViewGroup } from '@staticcms/core/interface';
 

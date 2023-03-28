@@ -1,4 +1,4 @@
-import PlusIcon from '@heroicons/react/20/solid/PlusIcon';
+import { Add as AddIcon } from '@styled-icons/material/Add';
 import { Code as CodeIcon } from '@styled-icons/material/Code';
 import { FormatQuote as FormatQuoteIcon } from '@styled-icons/material/FormatQuote';
 import {
@@ -11,12 +11,12 @@ import {
 } from '@udecode/plate';
 import React, { useCallback } from 'react';
 
+import Menu from '@staticcms/core/components/common/menu/Menu';
 import MenuGroup from '@staticcms/core/components/common/menu/MenuGroup';
 import MenuItemButton from '@staticcms/core/components/common/menu/MenuItemButton';
 import { useMdPlateEditorState } from '../../plateTypes';
 import ImageToolbarButton from './common/ImageToolbarButton';
 import LinkToolbarButton from './common/LinkToolbarButton';
-import Menu from '@staticcms/core/components/common/menu/Menu';
 
 import type { Collection, MarkdownField } from '@staticcms/core/interface';
 import type { FC } from 'react';
@@ -44,7 +44,7 @@ const AddButtons: FC<AddButtonsProps> = ({ collection, field }) => {
 
   return (
     <Menu
-      label={<PlusIcon className="h-5 w-5" aria-hidden="true" />}
+      label={<AddIcon className="h-5 w-5" aria-hidden="true" />}
       data-testid="add-buttons"
       keepMounted
       hideDropdownIcon

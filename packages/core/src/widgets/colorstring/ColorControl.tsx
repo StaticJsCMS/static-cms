@@ -1,12 +1,12 @@
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import TextField from '@mui/material/TextField';
-import React, { useCallback, useMemo, useState } from 'react';
+import { Close as CloseIcon } from '@styled-icons/material/Close';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { ChromePicker } from 'react-color';
+import validateColor from 'validate-color';
 
-import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
-import Outline from '@staticcms/core/components/UI/Outline';
+import IconButton from '@staticcms/core/components/common/button/IconButton';
+import Field from '@staticcms/core/components/common/field/Field';
+import TextField from '@staticcms/core/components/common/text-field/TextField';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 
 import type { ColorField, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC, MouseEvent } from 'react';
@@ -17,14 +17,12 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
   duplicate,
   onChange,
   value,
-  hasErrors,
-  t,
+  errors,
+  label,
+  forSingleList,
 }) => {
-  const [collapsed, setCollapsed] = useState(false);
-
-  const handleCollapseToggle = useCallback(() => {
-    setCollapsed(!collapsed);
-  }, [collapsed]);
+  const swatchRef = useRef<HTMLDivElement | null>(null);
+  const ref = useRef<HTMLInputElement | null>(null);
 
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [internalRawValue, setInternalValue] = useState(value ?? '');
@@ -77,60 +75,94 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
   const showClearButton = !allowInput && internalValue;
 
   return (
-    <div>
-      <ObjectWidgetTopBar
-        key="file-control-top-bar"
-        collapsed={collapsed}
-        onCollapseToggle={handleCollapseToggle}
-        heading={field.label ?? field.name}
-        hasError={hasErrors}
-        t={t}
-      />
-      <div>
-        {/* TODO $collapsed={collapsed} */}
-        <div key="color-swatch" onClick={handleClick}>
-          {/* TODO $background={validateColor(internalValue) ? internalValue : '#fff'}
-        $color={validateColor(internalValue) ? 'rgba(255, 255, 255, 0)' : 'rgb(223, 223, 227)'} */}
-          ?
+    <Field
+      inputRef={allowInput ? ref : swatchRef}
+      label={label}
+      errors={errors}
+      hint={field.hint}
+      forSingleList={forSingleList}
+      cursor={allowInput ? 'text' : 'pointer'}
+    >
+      <div
+        className={classNames(
+          `
+            flex
+            items-center
+            pt-2
+            px-3
+          `,
+          allowInput ? 'cursor-text' : 'cursor-pointer',
+        )}
+      >
+        <div>
+          <div
+            ref={swatchRef}
+            key="color-swatch"
+            onClick={handleClick}
+            style={{
+              background: validateColor(internalValue) ? internalValue : '#fff',
+              color: validateColor(internalValue) ? 'rgba(255, 255, 255, 0)' : 'rgb(150, 150, 150)',
+            }}
+            className="
+            w-8
+            h-8
+            flex
+            items-center
+            justify-center
+            cursor-pointer
+          "
+          >
+            ?
+          </div>
         </div>
         {showColorPicker && (
-          <div key="color-swatch-wrapper">
-            <div key="click-outside" onClick={handleClose} />
+          <div
+            key="color-swatch-wrapper"
+            className="
+              absolute
+              bottom-0
+            "
+          >
+            <div
+              key="click-outside"
+              onClick={handleClose}
+              className="
+                fixed
+                inset-0
+                z-10
+              "
+            />
             <ChromePicker
               key="color-picker"
               color={internalValue}
               onChange={handlePickerChange}
               disableAlpha={!(field.enable_alpha ?? false)}
+              className="
+                absolute
+                z-20
+                -top-3
+              "
             />
           </div>
         )}
         <TextField
+          type="text"
+          ref={ref}
           key="color-picker-input"
           value={internalValue}
           onChange={handleInputChange}
-          sx={{
-            color: !allowInput ? '#bbb' : undefined,
-            '.MuiInputBase-input': {
-              paddingLeft: '75px',
-            },
-          }}
           // make readonly and open color picker on click if set to allow_input: false
           onClick={!allowInput ? handleClick : undefined}
           disabled={!allowInput}
-          fullWidth
-          InputProps={{
-            endAdornment: showClearButton ? (
-              <InputAdornment position="start">
-                <IconButton onClick={handleClear} aria-label="clear">
-                  <CloseIcon />
-                </IconButton>
-              </InputAdornment>
-            ) : undefined,
-          }}
+          cursor={allowInput ? 'text' : 'pointer'}
         />
+        {showClearButton ? (
+          <IconButton variant="text" onClick={handleClear}>
+            <CloseIcon className="w-5 h-5" />
+          </IconButton>
+        ) : null}
       </div>
-      <Outline hasError={hasErrors} />
-    </div>
+    </Field>
   );
 };
 

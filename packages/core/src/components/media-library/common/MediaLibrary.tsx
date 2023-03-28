@@ -1,4 +1,4 @@
-import PhotoIcon from '@heroicons/react/24/outline/PhotoIcon';
+import { Photo as PhotoIcon } from '@styled-icons/material/Photo';
 import fuzzy from 'fuzzy';
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useEffect, useRef, useState } from 'react';

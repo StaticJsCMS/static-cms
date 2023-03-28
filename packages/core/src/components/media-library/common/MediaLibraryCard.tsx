@@ -1,5 +1,5 @@
-import ArrowDownTrayIcon from '@heroicons/react/20/solid/ArrowDownTrayIcon';
-import TrashIcon from '@heroicons/react/20/solid/TrashIcon';
+import { Delete as DeleteIcon } from '@styled-icons/material/Delete';
+import { Download as DownloadIcon } from '@styled-icons/material/Download';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
@@ -188,7 +188,7 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
                 dark:hover:bg-blue-800/80
               "
             >
-              <ArrowDownTrayIcon className="w-5 h-5" />
+              <DownloadIcon className="w-5 h-5" />
             </Button>
             <Button
               variant="text"
@@ -204,7 +204,7 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
                 z-30
               "
             >
-              <TrashIcon className="w-5 h-5" />
+              <DeleteIcon className="w-5 h-5" />
             </Button>
           </div>
         </div>

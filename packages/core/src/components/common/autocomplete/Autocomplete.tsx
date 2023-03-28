@@ -1,6 +1,6 @@
 import { Combobox, Transition } from '@headlessui/react';
-import CheckIcon from '@heroicons/react/20/solid/CheckIcon';
-import ChevronUpDownIcon from '@heroicons/react/20/solid/ChevronUpDownIcon';
+import { Check as CheckIcon } from '@styled-icons/material/Check';
+import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@styled-icons/material/KeyboardArrowDown';
 import React, { forwardRef, Fragment, useCallback } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
@@ -99,7 +99,7 @@ const Autocomplete = function <T>(
               onChange={event => onQuery(event.target.value)}
             />
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-              <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+              <KeyboardArrowDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
             </Combobox.Button>
           </div>
           <Transition

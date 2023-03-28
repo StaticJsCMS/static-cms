@@ -1823,11 +1823,6 @@
   dependencies:
     client-only "^0.0.1"
 
-"@heroicons/react@2.0.13":
-  version "2.0.13"
-  resolved "https://registry.yarnpkg.com/@heroicons/react/-/react-2.0.13.tgz#9b1cc54ff77d6625c9565efdce0054a4bcd9074c"
-  integrity sha512-iSN5XwmagrnirWlYEWNPdCDj9aRYVD/lnK3JlsC9/+fqGF80k8C7rl+1HCvBX0dBoagKqOFBs6fMhJJ1hOg1EQ==
-
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.8.tgz#03595ac2075a4dc0f191cc2131de14fbd7d410b9"
@@ -3363,6 +3358,14 @@
   version "10.47.0"
   resolved "https://registry.yarnpkg.com/@styled-icons/fluentui-system-regular/-/fluentui-system-regular-10.47.0.tgz#f82d96d22748b994212e751e89924526131f4ea8"
   integrity sha512-x1TmxKS6mpX+QJw8ismT3rNa6TPvKYftmQRy57LbdNE9L5FkyWldrumPboZGKWi/oNiBn6SBelPeqv8LPFXNHQ==
+  dependencies:
+    "@babel/runtime" "^7.20.7"
+    "@styled-icons/styled-icon" "^10.7.0"
+
+"@styled-icons/heroicons-outline@10.47.0":
+  version "10.47.0"
+  resolved "https://registry.yarnpkg.com/@styled-icons/heroicons-outline/-/heroicons-outline-10.47.0.tgz#6b413931003a640faf98b82bedaf864b1a479143"
+  integrity sha512-C7bcJ/YPVKACoQLSBDM9DkgmrO1HmqAaru9kqYK2V+GaGUW5raf6dyTLo7GUYt/CJ7p3qWxsBz3SX6djzdaODQ==
   dependencies:
     "@babel/runtime" "^7.20.7"
     "@styled-icons/styled-icon" "^10.7.0"

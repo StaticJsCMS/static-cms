@@ -1,12 +1,12 @@
-import { Publish as PublishIcon } from '@styled-icons/material/Publish';
 import { DocumentAdd as DocumentAddIcon } from '@styled-icons/fluentui-system-regular/DocumentAdd';
-import CheckIcon from '@heroicons/react/20/solid/CheckIcon';
-import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
-import EyeIcon from '@heroicons/react/24/outline/EyeIcon';
-import GlobeAltIcon from '@heroicons/react/24/outline/GlobeAltIcon';
-import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
-import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
+import { DocumentDuplicate as DocumentDuplicateIcon } from '@styled-icons/heroicons-outline/DocumentDuplicate';
+import { Eye as EyeIcon } from '@styled-icons/heroicons-outline/Eye';
+import { GlobeAlt as GlobeAltIcon } from '@styled-icons/heroicons-outline/GlobeAlt';
+import { Trash as TrashIcon } from '@styled-icons/heroicons-outline/Trash';
 import { Height as HeightIcon } from '@styled-icons/material-rounded/Height';
+import { Check as CheckIcon } from '@styled-icons/material/Check';
+import { MoreVert as MoreVertIcon } from '@styled-icons/material/MoreVert';
+import { Publish as PublishIcon } from '@styled-icons/material/Publish';
 import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
@@ -116,7 +116,7 @@ const EditorToolbar = ({
         {showI18nToggle || showPreviewToggle || showDelete ? (
           <Menu
             key="extra-menu"
-            label={<EllipsisVerticalIcon className="w-5 h-5" />}
+            label={<MoreVertIcon className="w-5 h-5" />}
             variant="text"
             className="px-1.5"
             hideDropdownIcon

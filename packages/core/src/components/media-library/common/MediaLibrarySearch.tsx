@@ -1,4 +1,4 @@
-import MagnifyingGlassIcon from '@heroicons/react/20/solid/MagnifyingGlassIcon';
+import { Search as SearchIcon } from '@styled-icons/material/Search';
 import React from 'react';
 
 import type { ChangeEventHandler, KeyboardEventHandler } from 'react';
@@ -33,7 +33,7 @@ const MediaLibrarySearch = ({
       </label>
       <div className="relative">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-          <MagnifyingGlassIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+          <SearchIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
         </div>
         <input
           type="search"

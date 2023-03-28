@@ -1,5 +1,5 @@
-import ChevronUpDownIcon from '@heroicons/react/20/solid/ChevronUpDownIcon';
 import SelectUnstyled from '@mui/base/SelectUnstyled';
+import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@styled-icons/material/KeyboardArrowDown';
 import React, { forwardRef, useCallback } from 'react';
 
 import Option from './Option';
@@ -64,7 +64,7 @@ const Select = function <T>(
             <>
               {label ?? placeholder}
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                <KeyboardArrowDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
               </span>
             </>
           );

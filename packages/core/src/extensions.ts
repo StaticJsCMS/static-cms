@@ -1,18 +1,18 @@
 import {
+  BitbucketBackend,
+  GiteaBackend,
   GitGatewayBackend,
   GitHubBackend,
   GitLabBackend,
-  GiteaBackend,
-  BitbucketBackend,
-  TestBackend,
   ProxyBackend,
+  TestBackend,
 } from './backends';
 import { registerBackend, registerLocale, registerWidget } from './lib/registry';
 import locales from './locales';
 import {
   BooleanWidget,
   CodeWidget,
-  //   ColorStringWidget,
+  ColorStringWidget,
   DateTimeWidget,
   FileWidget,
   ImageWidget,
@@ -40,7 +40,7 @@ export default function addExtensions() {
   registerWidget([
     BooleanWidget(),
     CodeWidget(),
-    //   ColorStringWidget(),
+    ColorStringWidget(),
     DateTimeWidget(),
     FileWidget(),
     ImageWidget(),

@@ -1,5 +1,5 @@
-import ChevronRightIcon from '@heroicons/react/20/solid/ChevronRightIcon';
 import Collapse from '@mui/material/Collapse';
+import { ChevronRight as ChevronRightIcon } from '@styled-icons/material/ChevronRight';
 import React, { useCallback, useMemo, useState } from 'react';
 
 import ErrorMessage from '@staticcms/core/components/common/field/ErrorMessage';

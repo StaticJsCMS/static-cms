@@ -1,4 +1,4 @@
-import ArrowUpTrayIcon from '@heroicons/react/24/outline/ArrowUpTrayIcon';
+import { FileUpload as FileUploadIcon } from '@styled-icons/material/FileUpload';
 import React, { useCallback, useRef } from 'react';
 import { translate } from 'react-polyglot';
 
@@ -40,7 +40,7 @@ const FileUploadButton: FC<TranslatedProps<FileUploadButtonProps>> = ({
       tabIndex={0}
       onKeyUp={handleOnKeyUp}
     >
-      <ArrowUpTrayIcon className="w-5 h-5 mr-2" />
+      <FileUploadIcon className="w-5 h-5 mr-2" />
       {isPersisting
         ? t('mediaLibrary.mediaLibraryModal.uploading')
         : t('mediaLibrary.mediaLibraryModal.upload')}

@@ -1,5 +1,5 @@
-import ChevronRightIcon from '@heroicons/react/20/solid/ChevronRightIcon';
 import Collapse from '@mui/material/Collapse';
+import { ChevronRight as ChevronRightIcon } from '@styled-icons/material/ChevronRight';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import CodeMirror from '@uiw/react-codemirror';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -138,9 +138,7 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
   const availableLanguages = languages.map(language => valueToOption(language.label));
 
   const handleSetLanguage = useCallback((langLabel: string) => {
-    console.log('lang', langLabel);
     const language = languages.find(language => language.label === langLabel);
-    console.log('language', language, 'languages', languages);
     if (language) {
       setLang(language);
     }

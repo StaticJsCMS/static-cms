@@ -1,4 +1,4 @@
-import ArrowTopRightOnSquareIcon from '@heroicons/react/24/outline/ArrowTopRightOnSquareIcon';
+import { OpenInNew as OpenInNewIcon } from '@styled-icons/material/OpenInNew';
 import React, { useMemo } from 'react';
 import { NavLink as BaseNavLink, useLocation } from 'react-router-dom';
 
@@ -49,7 +49,7 @@ const NavLink = ({ icon, children, onClick, ...otherProps }: NavLinkProps) => {
         >
           <div className="flex justify-between w-full">
             <div className="flex items-center justify-start">{content}</div>
-            <ArrowTopRightOnSquareIcon className="h-6 w-6 text-gray-400 dark:text-gray-500" />
+            <OpenInNewIcon className="h-6 w-6 text-gray-400 dark:text-gray-500" />
           </div>
         </a>
       </li>

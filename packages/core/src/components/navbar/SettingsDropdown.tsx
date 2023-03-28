@@ -1,6 +1,6 @@
-import MoonIcon from '@heroicons/react/24/outline/MoonIcon';
-import UserIcon from '@heroicons/react/24/outline/UserIcon';
+import { Moon as MoonIcon } from '@styled-icons/bootstrap/Moon';
 import { Logout as LogoutIcon } from '@styled-icons/material/Logout';
+import { Person as PersonIcon } from '@styled-icons/material/Person';
 import React, { useCallback, useState } from 'react';
 import { translate } from 'react-polyglot';
 
@@ -24,7 +24,7 @@ const AvatarImage = ({ imageUrl }: AvatarImageProps) => {
   return imageUrl ? (
     <img className="w-9 h-9 rounded-full" src={imageUrl} />
   ) : (
-    <UserIcon className="w-6 h-6" />
+    <PersonIcon className="w-6 h-6" />
   );
 };
 

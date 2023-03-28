@@ -1,5 +1,5 @@
-import CameraIcon from '@heroicons/react/20/solid/CameraIcon';
-import XMarkIcon from '@heroicons/react/20/solid/XMarkIcon';
+import { CameraAlt as CameraAltIcon } from '@styled-icons/material/CameraAlt';
+import { Close as CloseIcon } from '@styled-icons/material/Close';
 import React from 'react';
 
 import IconButton from '@staticcms/core/components/common/button/IconButton';
@@ -31,10 +31,10 @@ const SortableImage: FC<SortableImageProps> = ({
       </div>
       <div key="image-buttons-wrapper">
         <IconButton key="image-replace" onClick={onReplace}>
-          <CameraIcon key="image-replace-icon" />
+          <CameraAltIcon key="image-replace-icon" />
         </IconButton>
         <IconButton key="image-remove" onClick={onRemove}>
-          <XMarkIcon key="image-remove-icon" />
+          <CloseIcon key="image-remove-icon" />
         </IconButton>
       </div>
     </div>

@@ -1,5 +1,5 @@
+import { ArrowBack as ArrowBackIcon } from '@styled-icons/material/ArrowBack';
 import React from 'react';
-import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon';
 
 import Button from '../common/button/Button';
 
@@ -11,7 +11,7 @@ interface GoBackButtonProps {
 
 const GoBackButton = ({ href, t }: TranslatedProps<GoBackButtonProps>) => {
   return (
-    <Button variant="text" href={href} startIcon={ArrowLeftIcon}>
+    <Button variant="text" href={href} startIcon={ArrowBackIcon}>
       {t('ui.default.goBackToSite')}
     </Button>
   );

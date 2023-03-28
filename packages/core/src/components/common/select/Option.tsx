@@ -1,4 +1,3 @@
-import CheckIcon from '@heroicons/react/20/solid/CheckIcon';
 import OptionUnstyled from '@mui/base/OptionUnstyled';
 import React, { useMemo } from 'react';
 

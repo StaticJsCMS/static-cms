@@ -1,4 +1,4 @@
-import PlusIcon from '@heroicons/react/20/solid/PlusIcon';
+import { Add as AddIcon } from '@styled-icons/material/Add';
 import React, { useMemo } from 'react';
 
 import { getNewEntryUrl } from '@staticcms/core/lib/urlHelper';
@@ -20,7 +20,7 @@ const QuickCreate = () => {
   );
 
   return (
-    <Menu label="Quick Add" startIcon={PlusIcon}>
+    <Menu label="Quick Add" startIcon={AddIcon}>
       <MenuGroup>
         {createableCollections.map(collection => (
           <MenuItemLink key={collection.name} href={getNewEntryUrl(collection.name)}>

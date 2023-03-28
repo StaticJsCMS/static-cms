@@ -1,6 +1,6 @@
-import Bars3Icon from '@heroicons/react/20/solid/Bars3Icon';
-import ChevronRightIcon from '@heroicons/react/20/solid/ChevronRightIcon';
-import XMarkIcon from '@heroicons/react/20/solid/XMarkIcon';
+import { Menu as MenuIcon } from '@styled-icons/material/Menu';
+import { ChevronRight as ChevronRightIcon } from '@styled-icons/material/ChevronRight';
+import { Close as CloseIcon } from '@styled-icons/material/Close';
 import Collapse from '@mui/material/Collapse';
 import React, { useCallback, useMemo, useState } from 'react';
 
@@ -17,7 +17,7 @@ export interface DragHandleProps {
 const DragHandle = ({ listeners }: DragHandleProps) => {
   return (
     <span data-testid="drag-handle" {...listeners}>
-      <Bars3Icon
+      <MenuIcon
         className="
           h-3
           w-3
@@ -60,7 +60,7 @@ const ListItemWrapper = ({
       <div className="flex gap-2 items-center">
         {onRemove ? (
           <div data-testid="remove-button" onClick={onRemove}>
-            <XMarkIcon
+            <CloseIcon
               className="
               h-5
               w-5

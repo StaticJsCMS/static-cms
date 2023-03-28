@@ -1,4 +1,4 @@
-import XMarkIcon from '@heroicons/react/20/solid/XMarkIcon';
+import { Close as CloseIcon } from '@styled-icons/material/Close';
 import React, { useCallback } from 'react';
 
 import { closeMediaLibrary } from '@staticcms/core/actions/mediaLibrary';
@@ -42,7 +42,7 @@ const MediaLibraryModal: FC = () => {
         onClick={handleClose}
         rounded
       >
-        <XMarkIcon className="w-5 h-5" />
+        <CloseIcon className="w-5 h-5" />
       </IconButton>
       <MediaLibrary canInsert />
     </Modal>

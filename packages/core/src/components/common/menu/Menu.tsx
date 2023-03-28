@@ -1,7 +1,7 @@
-import ChevronDownIcon from '@heroicons/react/20/solid/ChevronDownIcon';
-import MenuUnstyled from '@mui/base/MenuUnstyled';
-import React, { useCallback, useMemo } from 'react';
 import ClickAwayListener from '@mui/base/ClickAwayListener';
+import MenuUnstyled from '@mui/base/MenuUnstyled';
+import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@styled-icons/material/KeyboardArrowDown';
+import React, { useCallback, useMemo } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import useButtonClassNames from '../button/useButtonClassNames';
@@ -75,7 +75,7 @@ const Menu = ({
           {StartIcon ? <StartIcon className="-ml-0.5 mr-1.5 h-5 w-5" /> : null}
           {label}
           {!hideDropdownIcon ? (
-            <ChevronDownIcon className="-mr-0.5 ml-2 h-5 w-5" aria-hidden="true" />
+            <KeyboardArrowDownIcon className="-mr-0.5 ml-2 h-5 w-5" aria-hidden="true" />
           ) : null}
         </button>
         <MenuUnstyled

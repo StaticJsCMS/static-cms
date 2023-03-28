@@ -37,8 +37,6 @@ const SettingsSelect: FC<SettingsSelectProps> = ({
     }
   };
 
-  console.log('value', value, 'options', options);
-
   return (
     <div>
       <Label htmlFor={`${uniqueId}-select-${type}-label`}>{label}</Label>
@@ -75,7 +73,6 @@ const SettingsPane: FC<SettingsPaneProps> = ({
   language,
   onChangeLanguage,
 }) => {
-  console.log('SettingsPane lang', language);
   return (
     <div
       onKeyDown={e => isHotkey('esc', e) && hideSettings()}

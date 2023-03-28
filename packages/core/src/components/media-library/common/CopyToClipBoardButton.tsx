@@ -1,4 +1,4 @@
-import ClipboardIcon from '@heroicons/react/20/solid/ClipboardIcon';
+import { ContentCopy as ContentCopyIcon } from '@styled-icons/material/ContentCopy';
 import copyToClipboard from 'copy-text-to-clipboard';
 import React, { useCallback, useEffect, useState } from 'react';
 import { translate } from 'react-polyglot';
@@ -80,7 +80,7 @@ const CopyToClipBoardButton: FC<TranslatedProps<CopyToClipBoardButtonProps>> = (
         dark:hover:bg-blue-800/80
       "
     >
-      <ClipboardIcon className="w-5 h-5" />
+      <ContentCopyIcon className="w-5 h-5" />
     </Button>
   );
 };
