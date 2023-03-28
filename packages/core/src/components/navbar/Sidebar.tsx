@@ -1,19 +1,32 @@
 import { Photo as PhotoIcon } from '@styled-icons/material/Photo';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { getIcon } from '@staticcms/core/lib/hooks/useIcon';
 import { getAdditionalLinks } from '@staticcms/core/lib/registry';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectCollections } from '@staticcms/core/reducers/selectors/collections';
+import { selectIsSearchEnabled } from '@staticcms/core/reducers/selectors/config';
 import { useAppSelector } from '@staticcms/core/store/hooks';
-import classNames from '../../lib/util/classNames.util';
+import CollectionSearch from '../collections/CollectionSearch';
 import NavLink from './NavLink';
 
+import type { Collection } from '@staticcms/core/interface';
 import type { FC } from 'react';
 import type { TranslateProps } from 'react-polyglot';
 
 const Sidebar: FC<TranslateProps> = ({ t }) => {
+  const { name, searchTerm } = useParams();
+  const navigate = useNavigate();
+  const isSearchEnabled = useAppSelector(selectIsSearchEnabled);
   const collections = useAppSelector(selectCollections);
+
+  const collection = useMemo(
+    () => (name ? collections[name] : collections[0]) as Collection | undefined,
+    [collections, name],
+  );
+
   const collectionLinks = useMemo(
     () =>
       Object.values(collections)
@@ -65,6 +78,21 @@ const Sidebar: FC<TranslateProps> = ({ t }) => {
     [additionalLinks],
   );
 
+  const searchCollections = useCallback(
+    (query?: string, collection?: string) => {
+      if (!query) {
+        return;
+      }
+
+      if (collection) {
+        navigate(`/collections/${collection}/search/${query}`);
+      } else {
+        navigate(`/search/${query}`);
+      }
+    },
+    [navigate],
+  );
+
   return (
     <aside
       className={classNames(
@@ -75,6 +103,16 @@ const Sidebar: FC<TranslateProps> = ({ t }) => {
     >
       <div className="px-3 py-4 h-full w-full overflow-y-auto bg-white dark:bg-slate-800">
         <ul className="space-y-2">
+          {isSearchEnabled && (
+            <CollectionSearch
+              searchTerm={searchTerm}
+              collections={collections}
+              collection={collection}
+              onSubmit={(query: string, collection?: string) =>
+                searchCollections(query, collection)
+              }
+            />
+          )}
           {collectionLinks}
           {links}
           <NavLink key="Media" to="/media" icon={<PhotoIcon />}>

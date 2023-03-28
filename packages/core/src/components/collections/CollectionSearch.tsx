@@ -1,7 +1,7 @@
-import { Search as SearchIcon } from '@styled-icons/material/Search';
+import PopperUnstyled from '@mui/base/PopperUnstyled';
 import InputAdornment from '@mui/material/InputAdornment';
-import Popover from '@mui/material/Popover';
 import TextField from '@mui/material/TextField';
+import { Search as SearchIcon } from '@styled-icons/material/Search';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { translate } from 'react-polyglot';
 
@@ -154,12 +154,85 @@ const CollectionSearch = ({
           inputRef,
           startAdornment: (
             <InputAdornment position="start">
-              <SearchIcon />
+              <SearchIcon className="w-6 h-6" />
             </InputAdornment>
           ),
         }}
       />
-      <Popover
+      <PopperUnstyled
+        open={open}
+        component="div"
+        placement="top"
+        anchorEl={anchorEl}
+        tabIndex={0}
+        className="
+          absolute
+          overflow-auto
+          rounded-md
+          bg-white
+          text-base
+          shadow-lg
+          ring-1
+          ring-black
+          ring-opacity-5
+          focus:outline-none
+          sm:text-sm
+          z-40
+          dark:bg-slate-700
+        "
+      >
+        <div
+          key="edit-content"
+          contentEditable={false}
+          className="
+            flex
+            flex-col
+            min-w-[200px]
+          "
+        >
+          <div
+            className="
+              text-md
+              text-slate-500
+              dark:text-slate-400
+              py-2
+              px-3
+            "
+          >
+            {t('collection.sidebar.searchIn')}
+          </div>
+          <div
+            className="
+              cursor-pointer
+              hover:bg-blue-500
+              hover:color-gray-100
+              py-2
+              px-3
+            "
+            onClick={e => handleSuggestionClick(e, -1)}
+            onMouseDown={e => e.preventDefault()}
+          >
+            {t('collection.sidebar.allCollections')}
+          </div>
+          {collections.map((collection, idx) => (
+            <div
+              key={idx}
+              onClick={e => handleSuggestionClick(e, idx)}
+              onMouseDown={e => e.preventDefault()}
+              className="
+                cursor-pointer
+                hover:bg-blue-500
+                hover:color-gray-100
+                py-2
+                px-3
+              "
+            >
+              {collection.label}
+            </div>
+          ))}
+        </div>
+      </PopperUnstyled>
+      {/* <Popover
         id="search-popover"
         open={open}
         anchorEl={anchorEl}
@@ -171,6 +244,9 @@ const CollectionSearch = ({
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'left',
+        }}
+        sx={{
+          width: 300
         }}
       >
         <div>
@@ -188,7 +264,7 @@ const CollectionSearch = ({
             </div>
           ))}
         </div>
-      </Popover>
+      </Popover> */}
     </div>
   );
 };
