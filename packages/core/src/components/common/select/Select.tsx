@@ -22,7 +22,8 @@ function getOptionLabelAndValue<T>(option: T | Option<T>): Option<T> {
 export type SelectChangeEventHandler<T> = (value: T | T[]) => void;
 
 export interface SelectProps<T> {
-  label: ReactNode | ReactNode[];
+  label?: ReactNode | ReactNode[];
+  placeholder?: string;
   value: T | T[] | null;
   options: T[] | Option<T>[];
   required?: boolean;
@@ -31,7 +32,7 @@ export interface SelectProps<T> {
 }
 
 const Select = function <T>(
-  { label, value, options, required = false, disabled, onChange }: SelectProps<T>,
+  { label, placeholder, value, options, required = false, disabled, onChange }: SelectProps<T>,
   ref: Ref<HTMLButtonElement>,
 ) {
   const handleChange = useCallback(
@@ -61,7 +62,7 @@ const Select = function <T>(
         renderValue={() => {
           return (
             <>
-              {label}
+              {label ?? placeholder}
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
               </span>
@@ -88,9 +89,7 @@ const Select = function <T>(
           popper: {
             className: `
               absolute
-              mt-1
               max-h-60
-              w-full
               overflow-auto
               rounded-md
               bg-white
@@ -102,8 +101,10 @@ const Select = function <T>(
               ring-opacity-5
               focus:outline-none
               sm:text-sm
-              z-40
+              z-50
+              dark:bg-slate-700
             `,
+            disablePortal: false,
           },
         }}
         value={value}
@@ -125,129 +126,6 @@ const Select = function <T>(
           );
         })}
       </SelectUnstyled>
-      {/* <Listbox value={value} onChange={handleChange} disabled={disabled}>
-        <Listbox.Button
-          ref={ref}
-          className={classNames(
-            `
-              flex
-              items-center
-              text-sm
-              font-medium
-              relative
-              min-h-8
-              px-4
-              py-1.5
-              w-full
-              text-gray-900
-              dark:text-gray-100
-            `,
-            buttonClassName,
-          )}
-          data-testid="select-input"
-        >
-          {label}
-          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-            <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-          </span>
-        </Listbox.Button>
-        <Transition
-          as={Fragment}
-          leave="transition ease-in duration-100"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <Listbox.Options
-            data-testid="select-options"
-            className={classNames(
-              `
-                absolute
-                mt-1
-                max-h-60
-                w-full
-                overflow-auto
-                rounded-md
-                bg-white
-                py-1
-                text-base
-                shadow-lg
-                ring-1
-                ring-black
-                ring-opacity-5
-                focus:outline-none
-                sm:text-sm
-                z-40
-              `,
-              optionsClassName,
-            )}
-          >
-            {!Array.isArray(value) && !required ? (
-              <Listbox.Option
-                key="none"
-                data-testid={`select-option-none`}
-                className={classNames(
-                  `
-                    relative
-                    select-none
-                    py-2
-                    pl-10
-                    pr-4
-                    cursor-pointer
-                    text-gray-900
-                  `,
-                  optionClassName,
-                )}
-                value={null}
-              >
-                <span className="block truncate font-normal">
-                  <i>None</i>
-                </span>
-              </Listbox.Option>
-            ) : null}
-            {options.map((option, index) => {
-              const { label: optionLabel, value: optionValue } = getOptionLabelAndValue(option);
-
-              const selected = Array.isArray(value)
-                ? value.includes(optionValue)
-                : value === optionValue;
-
-              return (
-                <Listbox.Option
-                  key={index}
-                  data-testid={`select-option-${optionValue}`}
-                  className={classNames(
-                    `
-                      relative
-                      select-none
-                      py-2
-                      pl-10
-                      pr-4
-                      cursor-pointer
-                    `,
-                    selected ? 'bg-gray-100 text-gray-900' : 'text-gray-900',
-                    optionClassName,
-                  )}
-                  value={optionValue}
-                >
-                  <span
-                    className={classNames(
-                      'block truncate',
-                      selected ? 'font-medium' : 'font-normal',
-                    )}
-                  >
-                    {optionLabel}
-                  </span>
-                  {selected ? (
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-500">
-                      <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                    </span>
-                  ) : null}
-                </Listbox.Option>
-              );
-            })}
-          </Listbox.Options>
-        </Transition>
-      </Listbox> */}
     </div>
   );
 };

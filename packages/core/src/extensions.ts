@@ -11,7 +11,7 @@ import { registerBackend, registerLocale, registerWidget } from './lib/registry'
 import locales from './locales';
 import {
   BooleanWidget,
-  // CodeWidget,
+  CodeWidget,
   //   ColorStringWidget,
   DateTimeWidget,
   FileWidget,
@@ -39,7 +39,7 @@ export default function addExtensions() {
 
   registerWidget([
     BooleanWidget(),
-    // CodeWidget(),
+    CodeWidget(),
     //   ColorStringWidget(),
     DateTimeWidget(),
     FileWidget(),

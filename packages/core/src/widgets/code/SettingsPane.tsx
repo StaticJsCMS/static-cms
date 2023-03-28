@@ -1,18 +1,15 @@
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import isHotkey from 'is-hotkey';
 import React from 'react';
 
-import SettingsButton from './SettingsButton';
+import Label from '@staticcms/core/components/common/field/Label';
+import Select from '@staticcms/core/components/common/select/Select';
 
-import type { SelectChangeEvent } from '@mui/material/Select';
 import type { FC } from 'react';
 
 interface SettingsSelectProps {
   type: 'language';
   label: string;
+  placeholder?: string;
   uniqueId: string;
   value: {
     value: string;
@@ -28,34 +25,31 @@ interface SettingsSelectProps {
 const SettingsSelect: FC<SettingsSelectProps> = ({
   value,
   label,
+  placeholder,
   options,
   onChange,
   uniqueId,
   type,
 }) => {
-  const handleChange = (event: SelectChangeEvent<string>) => {
-    onChange(event.target.value);
+  const handleChange = (newValue: string | string[]) => {
+    if (!Array.isArray(newValue)) {
+      onChange(newValue);
+    }
   };
 
+  console.log('value', value, 'options', options);
+
   return (
-    <FormControl fullWidth size="small">
-      <InputLabel id={`${uniqueId}-select-${type}-label`}>{label}</InputLabel>
+    <div>
+      <Label htmlFor={`${uniqueId}-select-${type}-label`}>{label}</Label>
       <Select
-        labelId={`${uniqueId}-select-${type}-label`}
-        id={`${uniqueId}-select-${type}`}
         value={value.value}
-        label={label}
+        label={value.value}
+        placeholder={placeholder}
+        options={options}
         onChange={handleChange}
-      >
-        {options.map(({ label, value }) =>
-          value ? (
-            <MenuItem key={`${uniqueId}-select-${type}-option-${value}`} value={value}>
-              {label}
-            </MenuItem>
-          ) : null,
-        )}
-      </Select>
-    </FormControl>
+      />
+    </div>
   );
 };
 
@@ -81,20 +75,39 @@ const SettingsPane: FC<SettingsPaneProps> = ({
   language,
   onChangeLanguage,
 }) => {
+  console.log('SettingsPane lang', language);
   return (
-    <div onKeyDown={e => isHotkey('esc', e) && hideSettings()}>
-      <SettingsButton onClick={hideSettings} showClose={true} />
-      <>
-        <h3>Field Settings</h3>
-        <SettingsSelect
-          type="language"
-          label="Language"
-          uniqueId={uniqueId}
-          value={language}
-          options={languages}
-          onChange={onChangeLanguage}
-        />
-      </>
+    <div
+      onKeyDown={e => isHotkey('esc', e) && hideSettings()}
+      className="
+        absolute
+        top-10
+        bottom-0
+        right-0
+        w-40
+        flex
+        flex-col
+        gap-2
+        z-10
+        shadow-sm
+        bg-gray-100
+        dark:bg-slate-800
+        border-l
+        border-l-slate-400
+        border-t
+        border-t-slate-300
+        dark:border-t-slate-700
+      "
+    >
+      <SettingsSelect
+        type="language"
+        label="Language"
+        placeholder="Select language"
+        uniqueId={uniqueId}
+        value={language}
+        options={languages}
+        onChange={onChangeLanguage}
+      />
     </div>
   );
 };

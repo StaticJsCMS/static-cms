@@ -39,13 +39,13 @@ const Option = function <T>({
               relative
               select-none
               py-2
-              pl-10
-              pr-4
+              px-4
               cursor-pointer
               text-gray-900
-              hover:bg-gray-100
+              hover:bg-blue-500
+              dark:text-gray-100
             `,
-            selected ? 'bg-gray-100' : '',
+            selected ? 'bg-blue-400/75' : '',
           ),
         },
       }}
@@ -53,11 +53,6 @@ const Option = function <T>({
       <span className={classNames('block truncate', selected ? 'font-medium' : 'font-normal')}>
         {children}
       </span>
-      {selected ? (
-        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-500">
-          <CheckIcon className="h-5 w-5" aria-hidden="true" />
-        </span>
-      ) : null}
     </OptionUnstyled>
   );
 };

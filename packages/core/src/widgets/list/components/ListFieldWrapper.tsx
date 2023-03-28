@@ -1,6 +1,6 @@
-import { Disclosure, Transition } from '@headlessui/react';
 import ChevronRightIcon from '@heroicons/react/20/solid/ChevronRightIcon';
-import React, { useMemo } from 'react';
+import Collapse from '@mui/material/Collapse';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import ErrorMessage from '@staticcms/core/components/common/field/ErrorMessage';
 import Hint from '@staticcms/core/components/common/field/Hint';
@@ -33,7 +33,11 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
 }) => {
   const hasErrors = useMemo(() => errors.length > 0, [errors.length]);
 
-  const defaultOpen = useMemo(() => !field.collapsed ?? true, [field.collapsed]);
+  const [open, setOpen] = useState(!field.collapsed ?? true);
+
+  const handleOpenToggle = useCallback(() => {
+    setOpen(oldOpen => !oldOpen);
+  }, []);
 
   return (
     <div
@@ -63,77 +67,63 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
           forSingleList && 'mr-14',
         )}
       >
-        <Disclosure defaultOpen={defaultOpen}>
-          {({ open }) => (
-            <>
-              <Disclosure.Button
-                data-testid="list-expand-button"
-                className="
-                flex
-                w-full
-                justify-between
-                px-3
-                py-2
-                text-left
+        <button
+          data-testid="list-expand-button"
+          className="
+            flex
+            w-full
+            justify-between
+            px-3
+            py-2
+            text-left
+            text-sm
+            font-medium
+            focus:outline-none
+            focus-visible:ring
+            gap-2
+            focus-visible:ring-opacity-75
+            items-center
+          "
+          onClick={handleOpenToggle}
+        >
+          <Label
+            key="label"
+            hasErrors={hasErrors || hasChildErrors}
+            className={`
+              group-focus-within/active-list:text-blue-500
+              group-hover/active-list:text-blue-500
+            `}
+            cursor="pointer"
+            variant="inline"
+          >
+            {open ? openLabel : closedLabel}
+          </Label>
+          <ChevronRightIcon
+            className={classNames(
+              open && 'rotate-90 transform',
+              `
+                transition-transform
+                h-5
+                w-5
+                group-focus-within/active-list:text-blue-500
+                group-hover/active-list:text-blue-500
+              `,
+            )}
+          />
+        </button>
+        <Collapse in={open} appear={false}>
+          <div
+            className={classNames(
+              `
                 text-sm
-                font-medium
-                focus:outline-none
-                focus-visible:ring
-                gap-2
-                focus-visible:ring-opacity-75
-                items-center
-              "
-              >
-                <Label
-                  key="label"
-                  hasErrors={hasErrors || hasChildErrors}
-                  className={`
-                    group-focus-within/active-list:text-blue-500
-                    group-hover/active-list:text-blue-500
-                  `}
-                  cursor="pointer"
-                  variant="inline"
-                >
-                  {open ? openLabel : closedLabel}
-                </Label>
-                <ChevronRightIcon
-                  className={classNames(
-                    open && 'rotate-90 transform',
-                    `
-                    transition-transform
-                    h-5
-                    w-5
-                    group-focus-within/active-list:text-blue-500
-                    group-hover/active-list:text-blue-500
-                  `,
-                  )}
-                />
-              </Disclosure.Button>
-              <Transition
-                unmount={false}
-                enter="transition duration-100 ease-out"
-                enterFrom="transform opacity-0"
-                enterTo="transform opacity-100"
-                leave="transition duration-75 ease-out"
-                leaveFrom="transform opacity-100"
-                leaveTo="transform opacity-0"
-              >
-                <Disclosure.Panel
-                  unmount={false}
-                  className={classNames(
-                    `
-                    text-sm
-                    text-gray-500
-                  `,
-                    (hasErrors || hasChildErrors) && 'border-l-red-500',
-                  )}
-                >
-                  <div data-testid="object-fields">{children}</div>
-                </Disclosure.Panel>
-              </Transition>
-            </>
-          )}
-        </Disclosure>
+                text-gray-500
+              `,
+              (hasErrors || hasChildErrors) && 'border-l-red-500',
+            )}
+          >
+            <div data-testid="object-fields">{children}</div>
+          </div>
+        </Collapse>
         {hint ? (
           <Hint key="hint" hasErrors={hasErrors} cursor="pointer">
             {hint}
