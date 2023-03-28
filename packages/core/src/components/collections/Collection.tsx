@@ -233,7 +233,7 @@ const CollectionView = ({
       </div>
       {collectionDescription ? (
         <div className="flex flex-grow mb-4">
-          <Card className="flex-grow px-4 py-3">{collectionDescription}</Card>
+          <Card className="flex-grow px-3.5 py-2.5 text-sm">{collectionDescription}</Card>
         </div>
       ) : null}
       {entries}
