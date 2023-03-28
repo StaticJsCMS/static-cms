@@ -1,6 +1,6 @@
-import { Disclosure, Transition } from '@headlessui/react';
 import ChevronRightIcon from '@heroicons/react/20/solid/ChevronRightIcon';
-import React, { useMemo } from 'react';
+import Collapse from '@mui/material/Collapse';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import ErrorMessage from '@staticcms/core/components/common/field/ErrorMessage';
 import Hint from '@staticcms/core/components/common/field/Hint';
@@ -31,7 +31,11 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
 }) => {
   const hasErrors = useMemo(() => errors.length > 0, [errors.length]);
 
-  const defaultOpen = useMemo(() => !field.collapsed ?? true, [field.collapsed]);
+  const [open, setOpen] = useState(!field.collapsed ?? true);
+
+  const handleOpenToggle = useCallback(() => {
+    setOpen(oldOpen => !oldOpen);
+  }, []);
 
   return (
     <div
@@ -49,83 +53,69 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
         !(hasErrors || hasChildErrors) && 'group/active-object',
       )}
     >
-      <Disclosure defaultOpen={defaultOpen}>
-        {({ open }) => (
-          <>
-            <Disclosure.Button
-              data-testid="expand-button"
-              className="
-                flex
-                w-full
-                justify-between
-                pl-2
-                pr-3
-                py-2
-                text-left
-                text-sm
-                font-medium
-                focus:outline-none
-                focus-visible:ring
-                gap-2
-                focus-visible:ring-opacity-75
-              "
-            >
-              <ChevronRightIcon
-                className={classNames(
-                  open && 'rotate-90 transform',
-                  `
-                    transition-transform
-                    h-5
-                    w-5
-                    group-focus-within/active-object:text-blue-500
-                    group-hover/active-object:text-blue-500
-                  `,
-                )}
-              />
-              <Label
-                key="label"
-                hasErrors={hasErrors || hasChildErrors}
-                className={`
-                  group-focus-within/active-object:text-blue-500
-                  group-hover/active-object:text-blue-500
-                `}
-                cursor="pointer"
-                variant="inline"
-              >
-                {open ? openLabel : closedLabel}
-              </Label>
-            </Disclosure.Button>
-            <Transition
-              unmount={false}
-              enter="transition duration-100 ease-out"
-              enterFrom="transform opacity-0"
-              enterTo="transform opacity-100"
-              leave="transition duration-75 ease-out"
-              leaveFrom="transform opacity-100"
-              leaveTo="transform opacity-0"
-            >
-              <Disclosure.Panel
-                data-testid="object-fields"
-                unmount={false}
-                className={classNames(
-                  `
-                    ml-4
-                    text-sm
-                    text-gray-500
-                    border-l-2
-                    border-solid
-                    border-l-slate-400
-                    group-focus-within/active-object:border-l-blue-500
-                  `,
-                  (hasErrors || hasChildErrors) && 'border-l-red-500',
-                )}
-              >
-                {children}
-              </Disclosure.Panel>
-            </Transition>
-          </>
-        )}
-      </Disclosure>
+      <button
+        data-testid="expand-button"
+        className="
+          flex
+          w-full
+          justify-between
+          pl-2
+          pr-3
+          py-2
+          text-left
+          text-sm
+          font-medium
+          focus:outline-none
+          focus-visible:ring
+          gap-2
+          focus-visible:ring-opacity-75
+        "
+        onClick={handleOpenToggle}
+      >
+        <ChevronRightIcon
+          className={classNames(
+            open && 'rotate-90 transform',
+            `
+              transition-transform
+              h-5
+              w-5
+              group-focus-within/active-object:text-blue-500
+              group-hover/active-object:text-blue-500
+            `,
+          )}
+        />
+        <Label
+          key="label"
+          hasErrors={hasErrors || hasChildErrors}
+          className={`
+            group-focus-within/active-object:text-blue-500
+            group-hover/active-object:text-blue-500
+          `}
+          cursor="pointer"
+          variant="inline"
+        >
+          {open ? openLabel : closedLabel}
+        </Label>
+      </button>
+      <Collapse in={open} appear={false}>
+        <div
+          data-testid="object-fields"
+          className={classNames(
+            `
+              ml-4
+              text-sm
+              text-gray-500
+              border-l-2
+              border-solid
+              border-l-slate-400
+              group-focus-within/active-object:border-l-blue-500
+            `,
+            (hasErrors || hasChildErrors) && 'border-l-red-500',
+          )}
+        >
+          {children}
+        </div>
+      </Collapse>
       {hint ? (
         <Hint key="hint" hasErrors={hasErrors} cursor="pointer">
           {hint}

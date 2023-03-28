@@ -6,10 +6,9 @@ import Map from 'ol/Map.js';
 import OSMSource from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import View from 'ol/View.js';
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 
-import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
-import Outline from '@staticcms/core/components/UI/Outline';
+import Field from '@staticcms/core/components/common/field/Field';
 
 import type { MapField, WidgetControlProps } from '@staticcms/core/interface';
 import type { Geometry } from 'ol/geom';
@@ -43,16 +42,11 @@ const withMapControl = ({ getFormat, getMap }: WithMapControlProps = {}) => {
     value,
     field,
     onChange,
-    hasErrors,
+    errors,
+    forSingleList,
     label,
-    t,
   }) => {
-    const [collapsed, setCollapsed] = useState(false);
-
-    const handleCollapseToggle = useCallback(() => {
-      setCollapsed(!collapsed);
-    }, [collapsed]);
-    // TODO const { height = '400px' } = field;
+    const { height = '400px' } = field;
 
     const mapContainer = useRef<HTMLDivElement | null>(null);
 
@@ -87,21 +81,23 @@ const withMapControl = ({ getFormat, getMap }: WithMapControlProps = {}) => {
     }, [field, mapContainer, onChange, path, value]);
 
     return (
-      <div>
-        <ObjectWidgetTopBar
-          key="file-control-top-bar"
-          collapsed={collapsed}
-          onCollapseToggle={handleCollapseToggle}
-          heading={label}
-          hasError={hasErrors}
-          t={t}
+      <Field
+        label={label}
+        errors={errors}
+        hint={field.hint}
+        forSingleList={forSingleList}
+        noPadding
+      >
+        <div
+          ref={mapContainer}
+          className="
+            relative
+            w-full
+            mt-2
+          "
+          style={{ height }}
         />
-        <div>
-          {/* TODO $collapsed={collapsed} $height={height} */}
-          <div ref={mapContainer} />
-        </div>
-        <Outline hasError={hasErrors} />
-      </div>
+      </Field>
     );
   };
 

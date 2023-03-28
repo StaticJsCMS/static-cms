@@ -16,8 +16,18 @@ export interface WithMarkdownControlProps {
 
 const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
   const MarkdownControl: FC<WidgetControlProps<string, MarkdownField>> = controlProps => {
-    const { label, value, duplicate, onChange, hasErrors, collection, entry, field, errors } =
-      controlProps;
+    const {
+      label,
+      value,
+      duplicate,
+      onChange,
+      hasErrors,
+      collection,
+      entry,
+      field,
+      errors,
+      forSingleList,
+    } = controlProps;
 
     const [internalRawValue, setInternalValue] = useState(value ?? '');
     const internalValue = useMemo(
@@ -54,7 +64,7 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
 
     return useMemo(
       () => (
-        <Field label={label} errors={errors} noHightlight>
+        <Field label={label} errors={errors} forSingleList={forSingleList} noHightlight>
           {loaded ? (
             <PlateEditor
               initialValue={slateValue}
