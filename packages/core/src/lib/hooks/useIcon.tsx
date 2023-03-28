@@ -14,7 +14,7 @@ export function getIcon(iconName: string | undefined): ReactNode {
     }
   }
 
-  return <div className="h-6 w-6">{icon}</div>;
+  return <div className="h-6 w-6 flex">{icon}</div>;
 }
 
 export default function useIcon(iconName: string | undefined) {

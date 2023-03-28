@@ -1,5 +1,5 @@
-import FontDownloadIcon from '@mui/icons-material/FontDownload';
-import FormatColorTextIcon from '@mui/icons-material/FormatColorText';
+import { FontDownload as FontDownloadIcon } from '@styled-icons/material/FontDownload';
+import { FormatColorText as FormatColorTextIcon } from '@styled-icons/material/FormatColorText';
 import { MARK_BG_COLOR, MARK_COLOR } from '@udecode/plate';
 import React from 'react';
 

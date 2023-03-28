@@ -1,4 +1,4 @@
-import SearchIcon from '@mui/icons-material/Search';
+import { Search as SearchIcon } from '@styled-icons/material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import Popover from '@mui/material/Popover';
 import TextField from '@mui/material/TextField';

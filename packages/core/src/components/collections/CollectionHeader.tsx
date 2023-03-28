@@ -33,7 +33,7 @@ const CollectionHeader = ({
   return (
     <div className="flex flex-grow gap-4">
       <h2 className="text-xl font-semibold flex items-center text-gray-800 dark:text-gray-300">
-        <span className="mr-2">{icon}</span>
+        <div className="mr-2 flex">{icon}</div>
         {collectionLabel}
       </h2>
       {newEntryUrl ? (

@@ -2,7 +2,6 @@ import { findNodePath, setNodes } from '@udecode/plate';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Frame from 'react-frame-component';
 
-import Outline from '@staticcms/core/components/UI/Outline';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
@@ -14,9 +13,6 @@ import type { PlateRenderElementProps, TCodeBlockElement } from '@udecode/plate'
 import type { FC, MutableRefObject, RefObject } from 'react';
 
 const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>> = props => {
-  const [langHasFocus, setLangHasFocus] = useState(false);
-  const [codeHasFocus, setCodeHasFocus] = useState(false);
-
   const { attributes, nodeProps, element, editor, children } = props;
   const id = useUUID();
 
@@ -36,12 +32,6 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
       switch (event.data.message) {
         case `code_block_${id}_onChange`:
           handleChange(event.data.value);
-          break;
-        case `code_block_${id}_onFocus`:
-          setCodeHasFocus(true);
-          break;
-        case `code_block_${id}_onBlur`:
-          setCodeHasFocus(false);
           break;
       }
     },
@@ -107,8 +97,6 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
         <input
           id={id}
           value={lang}
-          onFocus={() => setLangHasFocus(true)}
-          onBlur={() => setLangHasFocus(false)}
           onChange={event => {
             const value = event.target.value;
             const path = findNodePath(editor, element);
@@ -145,7 +133,6 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
             <CodeBlockFrame id={id} code={code} lang={lang} theme={theme} />
           </Frame>
         </div>
-        <Outline active={langHasFocus || codeHasFocus} />
         <div>{children}</div>
       </div>
     </>

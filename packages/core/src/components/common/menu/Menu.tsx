@@ -7,13 +7,14 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import useButtonClassNames from '../button/useButtonClassNames';
 
 import type { FC, ReactNode } from 'react';
+import type { BaseBaseProps } from '../button/Button';
 
 export interface MenuProps {
   label: ReactNode;
   startIcon?: FC<{ className?: string }>;
-  variant?: 'contained' | 'outlined' | 'text';
-  color?: 'primary';
-  size?: 'medium' | 'small';
+  variant?: BaseBaseProps['variant'];
+  color?: BaseBaseProps['color'];
+  size?: BaseBaseProps['size'];
   rounded?: boolean | 'no-padding';
   className?: string;
   children: ReactNode | ReactNode[];
@@ -53,6 +54,7 @@ const Menu = ({
     setAnchorEl(null);
   }, []);
 
+  console.log(variant, color, size, rounded);
   const buttonClassName = useButtonClassNames(variant, color, size, rounded);
 
   const menuButtonClassNames = useMemo(

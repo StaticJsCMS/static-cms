@@ -35,7 +35,7 @@ export interface EntryCardProps {
 const EntryCard = ({
   collection,
   entry,
-  collectionLabel, // TODO Actually display somewhere
+  collectionLabel,
   viewStyle = VIEW_STYLE_LIST,
   imageFieldName,
   summaryFields,
@@ -88,6 +88,11 @@ const EntryCard = ({
   if (viewStyle === VIEW_STYLE_LIST) {
     return (
       <TableRow>
+        {collectionLabel ? (
+          <TableCell key="collectionLabel" to={path}>
+            {collectionLabel}
+          </TableCell>
+        ) : null}
         {summaryFields.map(fieldName => {
           if (fieldName === 'summary') {
             return (

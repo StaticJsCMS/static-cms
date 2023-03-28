@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import useButtonClassNames from './useButtonClassNames';
 
-import type { FC, MouseEventHandler, ReactNode, Ref } from 'react';
+import type { CSSProperties, FC, MouseEventHandler, ReactNode, Ref } from 'react';
 
 export interface BaseBaseProps {
   variant?: 'contained' | 'outlined' | 'text';
@@ -12,6 +12,7 @@ export interface BaseBaseProps {
   size?: 'medium' | 'small';
   rounded?: boolean | 'no-padding';
   className?: string;
+  style?: CSSProperties;
   children: ReactNode | ReactNode[];
   startIcon?: FC<{ className?: string }>;
   endIcon?: FC<{ className?: string }>;
@@ -47,6 +48,7 @@ const Button: FC<ButtonLinkProps> = ({
   rounded = false,
   children,
   className,
+  style,
   startIcon: StartIcon,
   endIcon: EndIcon,
   title,
@@ -79,6 +81,7 @@ const Button: FC<ButtonLinkProps> = ({
         title={title}
         data-testid={dataTestId}
         className={buttonClassNames}
+        style={style}
       >
         {content}
       </Link>
@@ -93,6 +96,7 @@ const Button: FC<ButtonLinkProps> = ({
         title={title}
         data-testid={dataTestId}
         className={buttonClassNames}
+        style={style}
         target="_blank"
         rel="noreferrer"
       >
@@ -107,6 +111,7 @@ const Button: FC<ButtonLinkProps> = ({
       title={title}
       data-testid={dataTestId}
       className={buttonClassNames}
+      style={style}
       disabled={otherProps.disabled}
       onClick={otherProps.onClick}
       aria-label={otherProps['aria-label']}

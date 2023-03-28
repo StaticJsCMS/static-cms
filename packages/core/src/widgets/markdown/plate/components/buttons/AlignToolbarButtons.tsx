@@ -1,6 +1,6 @@
-import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
-import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
-import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
+import { FormatAlignCenter as FormatAlignCenterIcon } from '@styled-icons/material/FormatAlignCenter';
+import { FormatAlignLeft as FormatAlignLeftIcon } from '@styled-icons/material/FormatAlignLeft';
+import { FormatAlignRight as FormatAlignRightIcon } from '@styled-icons/material/FormatAlignRight';
 import React from 'react';
 
 import AlignToolbarButton from './common/AlignToolbarButton';

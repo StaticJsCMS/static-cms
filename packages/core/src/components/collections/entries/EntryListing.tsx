@@ -78,6 +78,11 @@ const EntryListing = ({
     return fields ?? ['summary'];
   }, [otherProps]);
 
+  const isSingleCollectionInList = useMemo(
+    () => !('collections' in otherProps) || Object.keys(otherProps.collections).length === 1,
+    [otherProps],
+  );
+
   const renderedCards = useMemo(() => {
     if ('collection' in otherProps) {
       const inferredFields = inferFields(otherProps.collection);
@@ -93,7 +98,6 @@ const EntryListing = ({
       ));
     }
 
-    const isSingleCollectionInList = Object.keys(otherProps.collections).length === 1;
     return entries.map(entry => {
       const collectionName = entry.collection;
       const collection = Object.values(otherProps.collections).find(
@@ -113,11 +117,11 @@ const EntryListing = ({
         />
       ) : null;
     });
-  }, [entries, inferFields, otherProps, summaryFields, viewStyle]);
+  }, [entries, inferFields, isSingleCollectionInList, otherProps, summaryFields, viewStyle]);
 
   if (viewStyle === 'VIEW_STYLE_LIST') {
     return (
-      <Table columns={summaryFields}>
+      <Table columns={!isSingleCollectionInList ? ['Collection', ...summaryFields] : summaryFields}>
         {renderedCards}
         {hasMore && handleLoadMore && <Waypoint key={page} onEnter={handleLoadMore} />}
       </Table>

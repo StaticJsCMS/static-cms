@@ -1,10 +1,10 @@
-import CodeIcon from '@mui/icons-material/Code';
-import FormatBoldIcon from '@mui/icons-material/FormatBold';
-import FormatItalicIcon from '@mui/icons-material/FormatItalic';
-import FormatStrikethroughIcon from '@mui/icons-material/FormatStrikethrough';
-import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
-import SubscriptIcon from '@mui/icons-material/Subscript';
-import SuperscriptIcon from '@mui/icons-material/Superscript';
+import { Code as CodeIcon } from '@styled-icons/material/Code';
+import { FormatBold as FormatBoldIcon } from '@styled-icons/material/FormatBold';
+import { FormatItalic as FormatItalicIcon } from '@styled-icons/material/FormatItalic';
+import { FormatStrikethrough as FormatStrikethroughIcon } from '@styled-icons/material/FormatStrikethrough';
+import { FormatUnderlined as FormatUnderlinedIcon } from '@styled-icons/material/FormatUnderlined';
+import { Subscript as SubscriptIcon } from '@styled-icons/material/Subscript';
+import { Superscript as SuperscriptIcon } from '@styled-icons/material/Superscript';
 import {
   MARK_BOLD,
   MARK_CODE,

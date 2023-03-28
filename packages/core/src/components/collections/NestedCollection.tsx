@@ -1,4 +1,4 @@
-import ArticleIcon from '@mui/icons-material/Article';
+import { Article as ArticleIcon } from '@styled-icons/material/Article';
 import sortBy from 'lodash/sortBy';
 import { dirname, sep } from 'path';
 import React, { Fragment, useCallback, useEffect, useState } from 'react';

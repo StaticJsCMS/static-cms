@@ -273,6 +273,7 @@ const EditorInterface = ({
       }
     >
       <EditorContent
+        key={draftKey}
         i18nActive={i18nActive}
         previewActive={previewActive && !i18nActive}
         editor={editor}

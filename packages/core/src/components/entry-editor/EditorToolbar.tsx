@@ -161,7 +161,10 @@ const EditorToolbar = ({
             </MenuGroup>
           </Menu>
         ) : null}
-        <Menu label="Published">
+        <Menu
+          label={isPublished ? 'Published' : 'Publish'}
+          color={isPublished ? 'success' : 'primary'}
+        >
           <MenuGroup>{menuItems}</MenuGroup>
         </Menu>
       </div>
@@ -171,14 +174,15 @@ const EditorToolbar = ({
       showPreviewToggle,
       showDelete,
       toggleI18n,
-      t,
       i18nActive,
+      t,
       togglePreview,
       previewActive,
       toggleScrollSync,
       scrollSyncActive,
       canDelete,
       onDelete,
+      isPublished,
       menuItems,
     ],
   );

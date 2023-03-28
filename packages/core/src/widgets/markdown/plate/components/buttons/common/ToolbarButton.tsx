@@ -1,8 +1,8 @@
 import { focusEditor } from '@udecode/plate';
 import React, { useCallback } from 'react';
 
-import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import Button from '@staticcms/core/components/common/button/Button';
+import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 
 import type { MdEditor } from '@staticcms/markdown';
 import type { FC, MouseEvent, ReactNode } from 'react';
@@ -57,6 +57,7 @@ const ToolbarButton: FC<ToolbarButtonProps> = ({
         py-0.5
         px-0.5
       "
+      style={{ color: active ? activeColor : 'inherit' }}
     >
       {icon}
     </Button>
