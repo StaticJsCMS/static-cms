@@ -49,7 +49,8 @@ describe(NumberControl.name, () => {
   it('should only use prop value as initial value', async () => {
     const { rerender, getByTestId } = renderControl({ value: '5' });
 
-    const input = getByTestId('number-input');
+    const inputWrapper = getByTestId('number-input');
+    const input = inputWrapper.getElementsByTagName('input')[0];
     expect(input).toHaveValue(5);
 
     rerender({ value: '76' });
@@ -63,7 +64,8 @@ describe(NumberControl.name, () => {
       value: '5',
     });
 
-    const input = getByTestId('number-input');
+    const inputWrapper = getByTestId('number-input');
+    const input = inputWrapper.getElementsByTagName('input')[0];
     expect(input).toHaveValue(5);
 
     rerender({ value: '76' });
@@ -76,7 +78,8 @@ describe(NumberControl.name, () => {
       props: { onChange },
     } = renderControl();
 
-    const input = getByTestId('number-input');
+    const inputWrapper = getByTestId('number-input');
+    const input = inputWrapper.getElementsByTagName('input')[0];
 
     await userEvent.type(input, '1056');
 
@@ -101,7 +104,8 @@ describe(NumberControl.name, () => {
   it('should focus input on field click', async () => {
     const { getByTestId } = renderControl();
 
-    const input = getByTestId('number-input');
+    const inputWrapper = getByTestId('number-input');
+    const input = inputWrapper.getElementsByTagName('input')[0];
     expect(input).not.toHaveFocus();
 
     const field = getByTestId('field');
@@ -113,7 +117,8 @@ describe(NumberControl.name, () => {
   it('should disable input if disabled', async () => {
     const { getByTestId } = await renderControl({ disabled: true });
 
-    const input = getByTestId('number-input');
+    const inputWrapper = getByTestId('number-input');
+    const input = inputWrapper.getElementsByTagName('input')[0];
     expect(input).toBeDisabled();
   });
 
@@ -127,7 +132,8 @@ describe(NumberControl.name, () => {
       },
     });
 
-    const input = getByTestId('number-input');
+    const inputWrapper = getByTestId('number-input');
+    const input = inputWrapper.getElementsByTagName('input')[0];
 
     expect(input).toHaveAttribute('min', '10');
     expect(input).toHaveAttribute('max', '250');
@@ -137,7 +143,8 @@ describe(NumberControl.name, () => {
   it('should default to step of 1 if step is not set', async () => {
     const { getByTestId } = renderControl();
 
-    const input = getByTestId('number-input');
+    const inputWrapper = getByTestId('number-input');
+    const input = inputWrapper.getElementsByTagName('input')[0];
 
     expect(input).toHaveAttribute('step', '1');
   });
@@ -156,7 +163,8 @@ describe(NumberControl.name, () => {
         props: { onChange },
       } = renderControl({ field: mockIntNumberField });
 
-      const input = getByTestId('number-input');
+      const inputWrapper = getByTestId('number-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
 
       await userEvent.type(input, '1056.5');
 
@@ -171,7 +179,8 @@ describe(NumberControl.name, () => {
         },
       });
 
-      const input = getByTestId('number-input');
+      const inputWrapper = getByTestId('number-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
 
       expect(input).toHaveAttribute('step', '5');
     });
@@ -183,7 +192,8 @@ describe(NumberControl.name, () => {
         },
       });
 
-      const input = getByTestId('number-input');
+      const inputWrapper = getByTestId('number-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
 
       expect(input).toHaveAttribute('step', '1');
     });
@@ -203,7 +213,8 @@ describe(NumberControl.name, () => {
         props: { onChange },
       } = renderControl({ field: mockIntNumberField });
 
-      const input = getByTestId('number-input');
+      const inputWrapper = getByTestId('number-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
 
       await userEvent.type(input, '1056.5');
 
@@ -218,7 +229,8 @@ describe(NumberControl.name, () => {
         },
       });
 
-      const input = getByTestId('number-input');
+      const inputWrapper = getByTestId('number-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
 
       expect(input).toHaveAttribute('step', '5.25');
     });
@@ -230,7 +242,8 @@ describe(NumberControl.name, () => {
         },
       });
 
-      const input = getByTestId('number-input');
+      const inputWrapper = getByTestId('number-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
 
       expect(input).toHaveAttribute('step', '1');
     });

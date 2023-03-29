@@ -38,10 +38,11 @@ const StringControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
       errors={errors}
       hint={field.hint}
       forSingleList={forSingleList}
+      cursor="text"
     >
       <TextField
         type="text"
-        ref={ref}
+        inputRef={ref}
         value={internalValue}
         disabled={disabled}
         onChange={handleChange}

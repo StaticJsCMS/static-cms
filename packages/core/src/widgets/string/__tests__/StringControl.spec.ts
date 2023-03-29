@@ -3,6 +3,7 @@
  */
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
+import { act } from '@testing-library/react';
 
 import { mockStringField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
@@ -47,7 +48,8 @@ describe(StringControl.name, () => {
   it('should only use prop value as initial value', async () => {
     const { rerender, getByTestId } = renderControl({ value: 'i am a value' });
 
-    const input = getByTestId('text-input');
+    const inputWrapper = getByTestId('text-input');
+    const input = inputWrapper.getElementsByTagName('input')[0];
     expect(input).toHaveValue('i am a value');
 
     rerender({ value: 'i am a new value' });
@@ -61,7 +63,8 @@ describe(StringControl.name, () => {
       value: 'i am a value',
     });
 
-    const input = getByTestId('text-input');
+    const inputWrapper = getByTestId('text-input');
+    const input = inputWrapper.getElementsByTagName('input')[0];
     expect(input).toHaveValue('i am a value');
 
     rerender({ value: 'i am a new value' });
@@ -74,9 +77,12 @@ describe(StringControl.name, () => {
       props: { onChange },
     } = renderControl();
 
-    const input = getByTestId('text-input');
+    const inputWrapper = getByTestId('text-input');
+    const input = inputWrapper.getElementsByTagName('input')[0];
 
-    await userEvent.type(input, 'I am some text');
+    await act(async () => {
+      await userEvent.type(input, 'I am some text');
+    });
 
     expect(onChange).toHaveBeenLastCalledWith('I am some text');
   });
@@ -99,11 +105,14 @@ describe(StringControl.name, () => {
   it('should focus input on field click', async () => {
     const { getByTestId } = renderControl();
 
-    const input = getByTestId('text-input');
+    const inputWrapper = getByTestId('text-input');
+    const input = inputWrapper.getElementsByTagName('input')[0];
     expect(input).not.toHaveFocus();
 
-    const field = getByTestId('field');
-    await userEvent.click(field);
+    await act(async () => {
+      const field = getByTestId('field');
+      await userEvent.click(field);
+    });
 
     expect(input).toHaveFocus();
   });
@@ -111,7 +120,8 @@ describe(StringControl.name, () => {
   it('should disable input if disabled', async () => {
     const { getByTestId } = renderControl({ disabled: true });
 
-    const input = getByTestId('text-input');
+    const inputWrapper = getByTestId('text-input');
+    const input = inputWrapper.getElementsByTagName('input')[0];
     expect(input).toBeDisabled();
   });
 });

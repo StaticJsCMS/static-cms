@@ -110,6 +110,7 @@ const Select = function <T>(
         value={value}
         disabled={disabled}
         onChange={handleChange}
+        data-testid="select-input"
       >
         {!Array.isArray(value) && !required ? (
           <Option value={null} selectedValue={value}>
@@ -120,7 +121,12 @@ const Select = function <T>(
           const { label: optionLabel, value: optionValue } = getOptionLabelAndValue(option);
 
           return (
-            <Option key={index} value={optionValue} selectedValue={value}>
+            <Option
+              key={index}
+              value={optionValue}
+              selectedValue={value}
+              data-testid={`select-option-${optionValue}`}
+            >
               {optionLabel}
             </Option>
           );

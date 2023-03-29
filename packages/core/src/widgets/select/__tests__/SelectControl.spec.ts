@@ -3,6 +3,7 @@
  */
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
+import { act } from '@testing-library/react';
 
 import { mockSelectField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
@@ -85,7 +86,10 @@ describe(SelectControl.name, () => {
       } = renderControl();
 
       const input = getByTestId('select-input');
+
+    await act(async () => {
       await userEvent.click(input);
+    });
 
       const option1 = 'select-option-Option 1';
       const option2 = 'select-option-Option 2';
@@ -93,21 +97,30 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith('Option 2');
       expect(input.textContent).toBe('Option 2');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+
+    await act(async () => {
       await userEvent.click(getByTestId(option1));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith('Option 1');
       expect(input.textContent).toBe('Option 1');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
@@ -134,7 +147,10 @@ describe(SelectControl.name, () => {
       expect(queryByTestId('select-options')).not.toBeInTheDocument();
 
       const field = getByTestId('field');
+
+    await act(async () => {
       await userEvent.click(field);
+    });
 
       const optionsList = getByTestId('select-options');
       expect(optionsList).toHaveFocus();
@@ -183,7 +199,10 @@ describe(SelectControl.name, () => {
       } = renderControl({ field: mockNumberSelectField });
 
       const input = getByTestId('select-input');
+
+    await act(async () => {
       await userEvent.click(input);
+    });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-2';
@@ -191,21 +210,30 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith(2);
       expect(input.textContent).toBe('2');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+
+    await act(async () => {
       await userEvent.click(getByTestId(option1));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith(1);
       expect(input.textContent).toBe('1');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
@@ -254,7 +282,10 @@ describe(SelectControl.name, () => {
       } = renderControl({ field: mockMixedSelectField });
 
       const input = getByTestId('select-input');
+
+    await act(async () => {
       await userEvent.click(input);
+    });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-Option 2';
@@ -262,20 +293,27 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith('Option 2');
       expect(input.textContent).toBe('Option 2');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+
+    await act(async () => {
       await userEvent.click(getByTestId(option1));
 
       expect(onChange).toHaveBeenLastCalledWith(1);
       expect(input.textContent).toBe('1');
 
+      await act(async () => {
       await userEvent.click(input);
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
@@ -338,7 +376,10 @@ describe(SelectControl.name, () => {
       } = renderControl({ field: mockStringSelectField });
 
       const input = getByTestId('select-input');
+
+    await act(async () => {
       await userEvent.click(input);
+    });
 
       const option1 = 'select-option-option 1';
       const option2 = 'select-option-option 2';
@@ -346,21 +387,30 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith('option 2');
       expect(input.textContent).toBe('Option 2');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+
+      await act(async () => {
       await userEvent.click(getByTestId(option1));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith('option 1');
       expect(input.textContent).toBe('Option 1');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
@@ -422,7 +472,10 @@ describe(SelectControl.name, () => {
       } = renderControl({ field: mockNumberSelectField });
 
       const input = getByTestId('select-input');
+
+    await act(async () => {
       await userEvent.click(input);
+    });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-2';
@@ -430,21 +483,30 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith(2);
       expect(input.textContent).toBe('Option 2');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+
+    await act(async () => {
       await userEvent.click(getByTestId(option1));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith(1);
       expect(input.textContent).toBe('Option 1');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
@@ -506,7 +568,10 @@ describe(SelectControl.name, () => {
       } = renderControl({ field: mockMixedSelectField });
 
       const input = getByTestId('select-input');
+
+    await act(async () => {
       await userEvent.click(input);
+    });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-option 2';
@@ -514,12 +579,16 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith('option 2');
       expect(input.textContent).toBe('Option 2');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
@@ -528,7 +597,9 @@ describe(SelectControl.name, () => {
       expect(onChange).toHaveBeenLastCalledWith(1);
       expect(input.textContent).toBe('Option 1');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
@@ -578,7 +649,10 @@ describe(SelectControl.name, () => {
       } = renderControl({ field: mockMultiStringSelectField });
 
       const input = getByTestId('select-input');
+
+    await act(async () => {
       await userEvent.click(input);
+    });
 
       const option1 = 'select-option-Option 1';
       const option2 = 'select-option-Option 2';
@@ -586,32 +660,44 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith(['Option 2']);
       expect(input.textContent).toBe('Option 2');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option1));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith(['Option 2', 'Option 1']);
       expect(input.textContent).toBe('Option 2Option 1');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith(['Option 1']);
       expect(input.textContent).toBe('Option 1');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
@@ -661,7 +747,10 @@ describe(SelectControl.name, () => {
       } = renderControl({ field: mockMultiNumberSelectField });
 
       const input = getByTestId('select-input');
+
+    await act(async () => {
       await userEvent.click(input);
+    });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-2';
@@ -669,32 +758,44 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith([2]);
       expect(input.textContent).toBe('2');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option1));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith([2, 1]);
       expect(input.textContent).toBe('21');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith([1]);
       expect(input.textContent).toBe('1');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
@@ -744,7 +845,10 @@ describe(SelectControl.name, () => {
       } = renderControl({ field: mockMultiMixedSelectField });
 
       const input = getByTestId('select-input');
+
+    await act(async () => {
       await userEvent.click(input);
+    });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-Option 2';
@@ -752,32 +856,44 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith(['Option 2']);
       expect(input.textContent).toBe('Option 2');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option1));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith(['Option 2', 1]);
       expect(input.textContent).toBe('Option 21');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith([1]);
       expect(input.textContent).toBe('1');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
@@ -831,7 +947,10 @@ describe(SelectControl.name, () => {
       } = renderControl({ field: mockMultiStringSelectField });
 
       const input = getByTestId('select-input');
+
+    await act(async () => {
       await userEvent.click(input);
+    });
 
       const option1 = 'select-option-option 1';
       const option2 = 'select-option-option 2';
@@ -839,32 +958,44 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith(['option 2']);
       expect(input.textContent).toBe('Option 2');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option1));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith(['option 2', 'option 1']);
       expect(input.textContent).toBe('Option 2Option 1');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith(['option 1']);
       expect(input.textContent).toBe('Option 1');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
@@ -918,7 +1049,10 @@ describe(SelectControl.name, () => {
       } = renderControl({ field: mockMultiNumberSelectField });
 
       const input = getByTestId('select-input');
+
+    await act(async () => {
       await userEvent.click(input);
+    });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-2';
@@ -926,32 +1060,44 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith([2]);
       expect(input.textContent).toBe('Option 2');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option1));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith([2, 1]);
       expect(input.textContent).toBe('Option 2Option 1');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith([1]);
       expect(input.textContent).toBe('Option 1');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
@@ -1005,7 +1151,10 @@ describe(SelectControl.name, () => {
       } = renderControl({ field: mockMultiNumberSelectField });
 
       const input = getByTestId('select-input');
+
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-option 2';
@@ -1013,32 +1162,44 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith(['option 2']);
       expect(input.textContent).toBe('Option 2');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option1));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith(['option 2', 1]);
       expect(input.textContent).toBe('Option 2Option 1');
 
+      await act(async () => {
       await userEvent.click(input);
+    });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
 
+      await act(async () => {
       await userEvent.click(getByTestId(option2));
+    });
 
       expect(onChange).toHaveBeenLastCalledWith([1]);
       expect(input.textContent).toBe('Option 1');
 
+      await act(async () => {
       await userEvent.click(input);
+      });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
