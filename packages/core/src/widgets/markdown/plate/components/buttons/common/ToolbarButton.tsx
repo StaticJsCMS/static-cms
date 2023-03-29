@@ -2,10 +2,11 @@ import { focusEditor } from '@udecode/plate';
 import React, { useCallback } from 'react';
 
 import Button from '@staticcms/core/components/common/button/Button';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 
 import type { MdEditor } from '@staticcms/markdown';
-import type { FC, MouseEvent, ReactNode } from 'react';
+import type { CSSProperties, FC, MouseEvent, ReactNode } from 'react';
 
 export interface ToolbarButtonProps {
   label?: string;
@@ -47,17 +48,34 @@ const ToolbarButton: FC<ToolbarButtonProps> = ({
     [disableFocusAfterClick, editor, onClick],
   );
 
+  const style: CSSProperties = {};
+  if (active && activeColor) {
+    style.color = activeColor;
+  }
+
+  console.log('TOOLBAR BUTTON', label ?? tooltip, active);
+
   return (
     <Button
       aria-label={label ?? tooltip}
       variant="text"
       data-testid={`toolbar-button-${label ?? tooltip}`.replace(' ', '-').toLowerCase()}
       onClick={handleOnClick}
-      className="
-        py-0.5
-        px-0.5
-      "
-      style={{ color: active ? activeColor : 'inherit' }}
+      className={classNames(
+        `
+          py-0.5
+          px-0.5
+        `,
+        active &&
+          !activeColor &&
+          `
+          text-blue-500
+          bg-gray-100
+          dark:text-blue-500
+          dark:bg-slate-800
+        `,
+      )}
+      style={style}
     >
       {icon}
     </Button>

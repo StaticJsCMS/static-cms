@@ -216,7 +216,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({ useMdx, containerRef, collect
           overflow-auto
           rounded-md
           bg-white
-          py-1
+          p-1
           text-base
           shadow-lg
           ring-1
