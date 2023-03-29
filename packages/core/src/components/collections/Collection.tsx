@@ -74,10 +74,7 @@ const CollectionView = ({
 
     let url = 'fields' in collection && collection.create ? getNewEntryUrl(collectionName) : '';
     if (url && filterTerm) {
-      url = getNewEntryUrl(collectionName);
-      if (filterTerm) {
-        url = `${newEntryUrl}?path=${filterTerm}`;
-      }
+      url = `${url}?path=${filterTerm}`;
     }
 
     return url;
