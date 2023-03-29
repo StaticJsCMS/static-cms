@@ -66,6 +66,36 @@ const FrameGlobalStyles = `
   .dark .dark\\:text-slate-400 {
     color: rgb(148 163 184);
   }
+
+  .styled-scrollbars {
+    --scrollbar-foreground: rgba(100, 116, 139, 0.25);
+    --scrollbar-background: rgb(248 250 252);
+  }
+
+  .dark.styled-scrollbars {
+    --scrollbar-foreground: rgba(30, 41, 59, 0.8);
+    --scrollbar-background: rgb(15 23 42);
+  }
+
+  .styled-scrollbars {
+    /* Foreground, Background */
+    scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
+  }
+
+  .styled-scrollbars::-webkit-scrollbar {
+    width: 10px; /* Mostly for vertical scrollbars */
+    height: 10px; /* Mostly for horizontal scrollbars */
+  }
+
+  .styled-scrollbars::-webkit-scrollbar-thumb {
+    /* Foreground */
+    background: var(--scrollbar-foreground);
+  }
+
+  .styled-scrollbars::-webkit-scrollbar-track {
+    /* Background */
+    background: var(--scrollbar-background);
+  }
 `;
 
 export interface EditorPreviewPaneProps {
@@ -107,7 +137,7 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
         <head>
           <base target="_blank"/>
         </head>
-        <body>
+        <body class="styled-scrollbars">
           <div></div>
         </body>
       </html>

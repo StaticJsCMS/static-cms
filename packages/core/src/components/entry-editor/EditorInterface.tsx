@@ -155,7 +155,15 @@ const EditorInterface = ({
   const collectHasI18n = hasI18n(collection);
 
   const editor = (
-    <div key={defaultLocale} id="control-pane" className="w-full">
+    <div
+      key={defaultLocale}
+      id="control-pane"
+      className="
+        w-full
+        overflow-y-auto
+        styled-scrollbars
+      "
+    >
       <EditorControlPane
         collection={collection}
         entry={entry}
@@ -246,6 +254,7 @@ const EditorInterface = ({
         },
       ]}
       noMargin
+      noScroll
       navbarActions={
         <EditorToolbar
           isPersisting={entry.isPersisting}

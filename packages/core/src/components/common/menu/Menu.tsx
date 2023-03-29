@@ -86,22 +86,23 @@ const Menu = ({
           slotProps={{
             root: {
               className: `
-              absolute
-              right-0
-              z-40
-              w-56
-              origin-top-right
-              rounded-md
-              bg-white
-              dark:bg-slate-800
-              shadow-lg
-              border
-              border-gray-200
-              focus:outline-none divide-y
-              divide-gray-100
-              dark:border-gray-700
-              dark:divide-gray-600
-            `,
+                absolute
+                right-0
+                z-40
+                w-56
+                origin-top-right
+                rounded-md
+                bg-white
+                dark:bg-slate-800
+                shadow-lg
+                border
+                border-gray-200
+                focus:outline-none
+                divide-y
+                divide-gray-100
+                dark:border-gray-700
+                dark:divide-gray-600
+              `,
               onClick: handleClose,
             },
           }}

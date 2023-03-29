@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import { FrameContextConsumer } from 'react-frame-component';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
-import classNames from '@staticcms/core/lib/util/classNames.util';
 import EditorPreviewContent from './EditorPreviewContent';
 
 import type {
@@ -30,9 +29,15 @@ const PreviewFrameContent: FC<PreviewFrameContentProps> = ({ previewComponent, p
           ref.current = context.document?.scrollingElement as HTMLElement;
         }
 
+        if (theme === 'dark') {
+          context.document?.body.classList.add('dark');
+        } else {
+          context.document?.body.classList.remove('dark');
+        }
+
         return (
           <ScrollSyncPane key="preview-frame-scroll-sync" attachTo={ref}>
-            <div className={classNames(theme === 'dark' && 'dark')}>
+            <div>
               <div
                 className="
                   text-gray-900

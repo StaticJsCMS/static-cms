@@ -45,10 +45,10 @@ const MenuItemButton = ({
               items-center
               justify-between
               cursor-pointer
-              hover:bg-blue-500
+              hover:bg-gray-200
               dark:text-gray-300
               dark:disabled:text-gray-700
-              dark:hover:bg-blue-500
+              dark:hover:bg-slate-600
             `,
           ),
         },
