@@ -31,22 +31,30 @@ const BasicMarkToolbarButtons: FC<BasicMarkToolbarButtonsProps> = ({
 }) => {
   return (
     <>
-      <MarkToolbarButton tooltip="Bold" type={MARK_BOLD} icon={<FormatBoldIcon />} />
-      <MarkToolbarButton tooltip="Italic" type={MARK_ITALIC} icon={<FormatItalicIcon />} />
+      <MarkToolbarButton
+        tooltip="Bold"
+        type={MARK_BOLD}
+        icon={<FormatBoldIcon className="h-5 w-5" />}
+      />
+      <MarkToolbarButton
+        tooltip="Italic"
+        type={MARK_ITALIC}
+        icon={<FormatItalicIcon className="h-5 w-5" />}
+      />
       {useMdx ? (
         <MarkToolbarButton
           key="underline-button"
           tooltip="Underline"
           type={MARK_UNDERLINE}
-          icon={<FormatUnderlinedIcon />}
+          icon={<FormatUnderlinedIcon className="h-5 w-5" />}
         />
       ) : null}
       <MarkToolbarButton
         tooltip="Strikethrough"
         type={MARK_STRIKETHROUGH}
-        icon={<FormatStrikethroughIcon />}
+        icon={<FormatStrikethroughIcon className="h-5 w-5" />}
       />
-      <MarkToolbarButton tooltip="Code" type={MARK_CODE} icon={<CodeIcon />} />
+      <MarkToolbarButton tooltip="Code" type={MARK_CODE} icon={<CodeIcon className="h-5 w-5" />} />
       {useMdx && extended ? (
         <>
           <MarkToolbarButton
@@ -54,14 +62,14 @@ const BasicMarkToolbarButtons: FC<BasicMarkToolbarButtonsProps> = ({
             tooltip="Superscript"
             type={MARK_SUPERSCRIPT}
             clear={MARK_SUBSCRIPT}
-            icon={<SuperscriptIcon />}
+            icon={<SuperscriptIcon className="h-5 w-5" />}
           />
           <MarkToolbarButton
             key="subscript-button"
             tooltip="Subscript"
             type={MARK_SUBSCRIPT}
             clear={MARK_SUPERSCRIPT}
-            icon={<SubscriptIcon />}
+            icon={<SubscriptIcon className="h-5 w-5" />}
           />
         </>
       ) : null}

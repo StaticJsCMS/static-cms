@@ -14,19 +14,19 @@ const AlignToolbarButtons: FC = () => {
         key="algin-button-left"
         tooltip="Align Left"
         value="left"
-        icon={<FormatAlignLeftIcon />}
+        icon={<FormatAlignLeftIcon className="h-5 w-5" />}
       />
       <AlignToolbarButton
         key="algin-button-center"
         tooltip="Align Center"
         value="center"
-        icon={<FormatAlignCenterIcon />}
+        icon={<FormatAlignCenterIcon className="h-5 w-5" />}
       />
       <AlignToolbarButton
         key="algin-button-right"
         tooltip="Align Right"
         value="right"
-        icon={<FormatAlignRightIcon />}
+        icon={<FormatAlignRightIcon className="h-5 w-5" />}
       />
     </>
   );

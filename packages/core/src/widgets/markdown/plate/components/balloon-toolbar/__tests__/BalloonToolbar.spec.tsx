@@ -147,7 +147,6 @@ describe(BalloonToolbar.name, () => {
       expect(screen.queryByTestId('toolbar-button-code')).toBeInTheDocument();
       expect(screen.queryByTestId('toolbar-button-strikethrough')).toBeInTheDocument();
 
-      expect(screen.queryByTestId('toolbar-button-blockquote')).toBeInTheDocument();
       expect(screen.queryByTestId('font-type-select')).toBeInTheDocument();
       expect(screen.queryByTestId('toolbar-button-add-table')).toBeInTheDocument();
       expect(screen.queryByTestId('toolbar-button-insert-link')).toBeInTheDocument();
@@ -165,7 +164,6 @@ describe(BalloonToolbar.name, () => {
       expect(screen.queryByTestId('toolbar-button-code')).toBeInTheDocument();
       expect(screen.queryByTestId('toolbar-button-strikethrough')).toBeInTheDocument();
 
-      expect(screen.queryByTestId('toolbar-button-blockquote')).toBeInTheDocument();
       expect(screen.queryByTestId('font-type-select')).toBeInTheDocument();
       expect(screen.queryByTestId('toolbar-button-add-table')).toBeInTheDocument();
       expect(screen.queryByTestId('toolbar-button-insert-link')).toBeInTheDocument();

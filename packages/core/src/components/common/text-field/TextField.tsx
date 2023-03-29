@@ -35,8 +35,11 @@ const TextField: FC<TextFieldProps> = ({
   type,
   'data-testid': dataTestId,
   cursor,
-  onChange,
   inputRef,
+  readonly,
+  disabled,
+  onChange,
+  onClick,
   ...otherProps
 }) => {
   return (
@@ -44,8 +47,10 @@ const TextField: FC<TextFieldProps> = ({
       type={type}
       value={value}
       onChange={onChange}
+      onClick={onClick}
       data-testid={dataTestId ?? `${type}-input`}
-      {...otherProps}
+      readOnly={readonly}
+      disabled={disabled}
       slotProps={{
         root: {
           className: `
@@ -71,6 +76,7 @@ const TextField: FC<TextFieldProps> = ({
             cursor === 'text' && 'cursor-text',
             cursor === 'default' && 'cursor-default',
           ),
+          ...otherProps,
         },
       }}
     />

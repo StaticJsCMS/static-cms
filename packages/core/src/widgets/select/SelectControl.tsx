@@ -70,7 +70,7 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
   );
 
   const handleChange = useCallback(
-    (selectedValue: string | string[]) => {
+    (selectedValue: string | number | (string | number)[]) => {
       const isMultiple = field.multiple ?? false;
       const isEmpty =
         isMultiple && Array.isArray(selectedValue)
@@ -83,7 +83,7 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
       } else if (isEmpty) {
         setInternalValue('');
         onChange('');
-      } else if (typeof selectedValue === 'string') {
+      } else if (typeof selectedValue === 'string' || typeof selectedValue === 'number') {
         const selectedOption = optionsByValue[selectedValue];
         const optionValue = selectedOption?.value ?? '';
         setInternalValue(optionValue);

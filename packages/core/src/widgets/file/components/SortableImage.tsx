@@ -31,10 +31,10 @@ const SortableImage: FC<SortableImageProps> = ({
       </div>
       <div key="image-buttons-wrapper">
         <IconButton key="image-replace" onClick={onReplace}>
-          <CameraAltIcon key="image-replace-icon" />
+          <CameraAltIcon key="image-replace-icon" className="h-5 w-5" />
         </IconButton>
         <IconButton key="image-remove" onClick={onRemove}>
-          <CloseIcon key="image-remove-icon" />
+          <CloseIcon key="image-remove-icon" className="h-5 w-5" />
         </IconButton>
       </div>
     </div>

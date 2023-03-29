@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
-import { waitFor } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { configLoaded } from '@staticcms/core/actions/config';
@@ -346,7 +346,10 @@ describe(RelationControl.name, () => {
     expect(input).not.toHaveFocus();
 
     const field = getByTestId('field');
-    await userEvent.click(field);
+
+    await act(async () => {
+      await userEvent.click(field);
+    });
 
     expect(input).toHaveFocus();
   });
@@ -388,7 +391,10 @@ describe(RelationControl.name, () => {
       } = await renderRelationControl();
 
       const input = getByTestId('autocomplete-input');
-      await userEvent.type(input, 'P');
+
+      await act(async () => {
+        await userEvent.type(input, 'P');
+      });
 
       expect(onChange).not.toHaveBeenCalled();
       expect(input).toHaveValue('P');
@@ -407,7 +413,9 @@ describe(RelationControl.name, () => {
       expect(getByTestId(option5)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option6)).toHaveClass('text-gray-900'); // Not selected
 
-      await userEvent.type(input, 'ost body text for Post 3');
+      await act(async () => {
+        await userEvent.type(input, 'ost body text for Post 3');
+      });
 
       expect(onChange).not.toHaveBeenCalled();
       expect(input).toHaveValue('Post body text for Post 3');
@@ -435,7 +443,11 @@ describe(RelationControl.name, () => {
       const { getByTestId, queryByTestId } = await renderRelationControl({ field });
 
       const input = getByTestId('autocomplete-input');
-      await userEvent.type(input, 'P');
+
+      await act(async () => {
+        await userEvent.type(input, 'P');
+      });
+
       expect(input).toHaveValue('P');
 
       expect(getByTestId('autocomplete-option-Post 1')).toHaveClass('text-gray-900'); // Not selected
@@ -464,8 +476,14 @@ describe(RelationControl.name, () => {
       );
 
       const input = getByTestId('autocomplete-input');
-      await userEvent.clear(input);
-      await userEvent.type(input, 'P');
+
+      await act(async () => {
+        await userEvent.clear(input);
+      });
+
+      await act(async () => {
+        await userEvent.type(input, 'P');
+      });
 
       expect(getByTestId('autocomplete-option-Post 1')).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId('autocomplete-option-Post 2')).toHaveClass('text-gray-900'); // Not selected
@@ -482,12 +500,18 @@ describe(RelationControl.name, () => {
       } = await renderRelationControl();
 
       const input = getByTestId('autocomplete-input');
-      await userEvent.type(input, 'Post body text for Post 3');
+
+      await act(async () => {
+        await userEvent.type(input, 'Post body text for Post 3');
+      });
 
       expect(onChange).not.toHaveBeenCalled();
 
       const option3 = getByTestId('autocomplete-option-Post 3');
-      await userEvent.click(option3);
+
+      await act(async () => {
+        await userEvent.click(option3);
+      });
 
       expect(onChange).toHaveBeenCalledWith('Post 3');
     });
@@ -553,7 +577,10 @@ describe(RelationControl.name, () => {
       } = await renderRelationControl({ field: mockMultiRelationField });
 
       const input = getByTestId('autocomplete-input');
-      await userEvent.type(input, 'P');
+
+      await act(async () => {
+        await userEvent.type(input, 'P');
+      });
 
       const option1 = 'autocomplete-option-Post 1';
       const option2 = 'autocomplete-option-Post 2';
@@ -561,33 +588,45 @@ describe(RelationControl.name, () => {
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
 
-      await userEvent.click(getByTestId(option2));
+      await act(async () => {
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(['Post 2']);
       const inputWrapper = getByTestId('autocomplete-input-wrapper');
       expect(inputWrapper.textContent).toBe('Post 2 2023-02-03');
 
-      await userEvent.type(input, 'o');
+      await act(async () => {
+        await userEvent.type(input, 'o');
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
 
-      await userEvent.click(getByTestId(option1));
+      await act(async () => {
+        await userEvent.click(getByTestId(option1));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(['Post 2', 'Post 1']);
       expect(inputWrapper.textContent).toBe('Post 2 2023-02-03Post 1 2023-02-01');
 
-      await userEvent.type(input, 's');
+      await act(async () => {
+        await userEvent.type(input, 's');
+      });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
 
-      await userEvent.click(getByTestId(option2));
+      await act(async () => {
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(['Post 1']);
       expect(inputWrapper.textContent).toBe('Post 1 2023-02-01');
 
-      await userEvent.type(input, 't');
+      await act(async () => {
+        await userEvent.type(input, 't');
+      });
 
       expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
@@ -605,7 +644,7 @@ describe(RelationControl.name, () => {
         value_field: 'title',
       };
 
-      const { getByTestId } = await renderRelationControl(
+      const { getByTestId, queryByTestId } = await renderRelationControl(
         {
           value: 'Post 1',
           field,
@@ -614,10 +653,24 @@ describe(RelationControl.name, () => {
       );
 
       const input = getByTestId('autocomplete-input');
-      await userEvent.type(input, 'Post body text for Post 3');
+
+      await act(async () => {
+        await userEvent.clear(input);
+      });
+
+      await act(async () => {
+        await userEvent.type(input, 'Post body text for Post 3');
+      });
+
+      await waitFor(() => {
+        expect(queryByTestId('autocomplete-option-Post 3')).toBeInTheDocument();
+      });
 
       const option3 = getByTestId('autocomplete-option-Post 3');
-      await userEvent.click(option3);
+
+      await act(async () => {
+        await userEvent.click(option3);
+      });
 
       expect(input).toHaveValue('Post 3');
     });

@@ -54,7 +54,6 @@ const Menu = ({
     setAnchorEl(null);
   }, []);
 
-  console.log(variant, color, size, rounded);
   const buttonClassName = useButtonClassNames(variant, color, size, rounded);
 
   const menuButtonClassNames = useMemo(
@@ -64,7 +63,7 @@ const Menu = ({
 
   return (
     <ClickAwayListener mouseEvent="onMouseDown" touchEvent="onTouchStart" onClickAway={handleClose}>
-      <div>
+      <div className="flex">
         <button
           type="button"
           onClick={handleButtonClick}

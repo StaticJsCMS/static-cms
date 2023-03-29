@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
+import { act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { mockNumberField } from '@staticcms/test/data/fields.mock';
@@ -81,7 +82,9 @@ describe(NumberControl.name, () => {
     const inputWrapper = getByTestId('number-input');
     const input = inputWrapper.getElementsByTagName('input')[0];
 
-    await userEvent.type(input, '1056');
+    await act(async () => {
+      await userEvent.type(input, '1056');
+    });
 
     expect(onChange).toHaveBeenLastCalledWith('1056');
   });
@@ -109,7 +112,10 @@ describe(NumberControl.name, () => {
     expect(input).not.toHaveFocus();
 
     const field = getByTestId('field');
-    await userEvent.click(field);
+
+    await act(async () => {
+      await userEvent.click(field);
+    });
 
     expect(input).toHaveFocus();
   });
@@ -166,7 +172,9 @@ describe(NumberControl.name, () => {
       const inputWrapper = getByTestId('number-input');
       const input = inputWrapper.getElementsByTagName('input')[0];
 
-      await userEvent.type(input, '1056.5');
+      await act(async () => {
+        await userEvent.type(input, '1056.5');
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(1056);
     });
@@ -216,7 +224,9 @@ describe(NumberControl.name, () => {
       const inputWrapper = getByTestId('number-input');
       const input = inputWrapper.getElementsByTagName('input')[0];
 
-      await userEvent.type(input, '1056.5');
+      await act(async () => {
+        await userEvent.type(input, '1056.5');
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(1056.5);
     });

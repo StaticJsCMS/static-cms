@@ -40,7 +40,9 @@ const ColorButton: FC<ColorButtonProps> = ({
           }}
         >
           {isSelected ? (
-            <CheckIcon className={classNames(isBrightColor ? 'text-black' : 'text-white')} />
+            <CheckIcon
+              className={classNames('h-5 w-5', isBrightColor ? 'text-black' : 'text-white')}
+            />
           ) : (
             <>&nbsp;</>
           )}

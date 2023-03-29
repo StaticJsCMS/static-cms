@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
+import { act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { mockBooleanField } from '@staticcms/test/data/fields.mock';
@@ -78,12 +79,16 @@ describe(BooleanControl.name, () => {
 
     expect(onChange).not.toHaveBeenCalled();
 
-    await userEvent.click(input);
+    await act(async () => {
+      await userEvent.click(input);
+    });
 
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onChange).toHaveBeenLastCalledWith(true);
 
-    await userEvent.click(input);
+    await act(async () => {
+      await userEvent.click(input);
+    });
 
     expect(onChange).toHaveBeenCalledTimes(2);
     expect(onChange).toHaveBeenLastCalledWith(false);
@@ -115,7 +120,10 @@ describe(BooleanControl.name, () => {
     expect(onChange).not.toHaveBeenCalled();
 
     const field = getByTestId('inline-field');
-    await userEvent.click(field);
+
+    await act(async () => {
+      await userEvent.click(field);
+    });
 
     expect(input).toHaveFocus();
     expect(onChange).toHaveBeenCalledTimes(1);

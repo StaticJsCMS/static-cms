@@ -45,7 +45,7 @@ const AddButtons: FC<AddButtonsProps> = ({ collection, field }) => {
   return (
     <Menu
       label={<AddIcon className="h-5 w-5" aria-hidden="true" />}
-      data-testid="add-buttons"
+      data-testid="toolbar-add-buttons"
       keepMounted
       hideDropdownIcon
       variant="text"

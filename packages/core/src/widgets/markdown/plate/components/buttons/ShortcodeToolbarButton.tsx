@@ -39,8 +39,8 @@ const ShortcodeToolbarButton: FC = () => {
       className="
         py-0.5
         px-0.5
-        h-7
-        w-7
+        h-6
+        w-6
       "
     >
       <MenuGroup>

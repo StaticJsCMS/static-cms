@@ -68,7 +68,7 @@ const TreeNode = ({ collection, treeData, depth = 0, onToggle }: TreeNodeProps) 
             >
               {/* TODO $activeClassName="sidebar-active" */}
               {/* TODO $depth={depth} */}
-              <ArticleIcon />
+              <ArticleIcon className="h-5 w-5" />
               <div>
                 <div>{title}</div>
                 {hasChildren && (node.expanded ? <div /> : <div />)}

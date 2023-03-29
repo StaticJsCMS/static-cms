@@ -2,16 +2,17 @@ import SelectUnstyled from '@mui/base/SelectUnstyled';
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@styled-icons/material/KeyboardArrowDown';
 import React, { forwardRef, useCallback } from 'react';
 
+import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import Option from './Option';
 
 import type { FocusEvent, KeyboardEvent, MouseEvent, ReactNode, Ref } from 'react';
 
-export interface Option<T> {
+export interface Option {
   label: string;
-  value: T;
+  value: number | string;
 }
 
-function getOptionLabelAndValue<T>(option: T | Option<T>): Option<T> {
+function getOptionLabelAndValue(option: number | string | Option): Option {
   if (option && typeof option === 'object' && 'label' in option && 'value' in option) {
     return option;
   }
@@ -19,60 +20,61 @@ function getOptionLabelAndValue<T>(option: T | Option<T>): Option<T> {
   return { label: String(option), value: option };
 }
 
-export type SelectChangeEventHandler<T> = (value: T | T[]) => void;
+export type SelectChangeEventHandler = (value: number | string | (number | string)[]) => void;
 
-export interface SelectProps<T> {
+export interface SelectProps {
   label?: ReactNode | ReactNode[];
   placeholder?: string;
-  value: T | T[] | null;
-  options: T[] | Option<T>[];
+  value: number | string | (number | string)[];
+  options: (number | string)[] | Option[];
   required?: boolean;
   disabled?: boolean;
-  onChange: SelectChangeEventHandler<T>;
+  onChange: SelectChangeEventHandler;
 }
 
-const Select = function <T>(
-  { label, placeholder, value, options, required = false, disabled, onChange }: SelectProps<T>,
-  ref: Ref<HTMLButtonElement>,
-) {
-  const handleChange = useCallback(
-    (_event: MouseEvent | KeyboardEvent | FocusEvent | null, selectedValue: T) => {
-      if (Array.isArray(value)) {
-        const newValue = [...value];
-        const index = newValue.indexOf(selectedValue);
-        if (index > -1) {
-          newValue.splice(index, 1);
-        } else {
-          newValue.push(selectedValue);
+const Select = forwardRef(
+  (
+    { label, placeholder, value, options, required = false, disabled, onChange }: SelectProps,
+    ref: Ref<HTMLButtonElement>,
+  ) => {
+    const handleChange = useCallback(
+      (_event: MouseEvent | KeyboardEvent | FocusEvent | null, selectedValue: number | string) => {
+        if (Array.isArray(value)) {
+          const newValue = [...value];
+          const index = newValue.indexOf(selectedValue);
+          if (index > -1) {
+            newValue.splice(index, 1);
+          } else if (typeof selectedValue === 'number' || isNotEmpty(selectedValue)) {
+            newValue.push(selectedValue);
+          }
+
+          onChange(newValue);
+          return;
         }
 
-        onChange(newValue);
-        return;
-      }
+        onChange(selectedValue);
+      },
+      [onChange, value],
+    );
 
-      onChange(selectedValue);
-    },
-    [onChange, value],
-  );
-
-  return (
-    <div className="relative w-full">
-      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      <SelectUnstyled<any>
-        renderValue={() => {
-          return (
-            <>
-              {label ?? placeholder}
-              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                <KeyboardArrowDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-              </span>
-            </>
-          );
-        }}
-        slotProps={{
-          root: {
-            ref,
-            className: `
+    return (
+      <div className="relative w-full">
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <SelectUnstyled<any>
+          renderValue={() => {
+            return (
+              <>
+                {label ?? placeholder}
+                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                  <KeyboardArrowDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                </span>
+              </>
+            );
+          }}
+          slotProps={{
+            root: {
+              ref,
+              className: `
               flex
               items-center
               text-sm
@@ -85,9 +87,9 @@ const Select = function <T>(
               text-gray-900
               dark:text-gray-100
             `,
-          },
-          popper: {
-            className: `
+            },
+            popper: {
+              className: `
               absolute
               max-h-60
               overflow-auto
@@ -104,38 +106,39 @@ const Select = function <T>(
               z-50
               dark:bg-slate-700
             `,
-            disablePortal: false,
-          },
-        }}
-        value={value}
-        disabled={disabled}
-        onChange={handleChange}
-        data-testid="select-input"
-      >
-        {!Array.isArray(value) && !required ? (
-          <Option value={null} selectedValue={value}>
-            <i>None</i>
-          </Option>
-        ) : null}
-        {options.map((option, index) => {
-          const { label: optionLabel, value: optionValue } = getOptionLabelAndValue(option);
-
-          return (
-            <Option
-              key={index}
-              value={optionValue}
-              selectedValue={value}
-              data-testid={`select-option-${optionValue}`}
-            >
-              {optionLabel}
+              disablePortal: false,
+            },
+          }}
+          value={value}
+          disabled={disabled}
+          onChange={handleChange}
+          data-testid="select-input"
+        >
+          {!Array.isArray(value) && !required ? (
+            <Option value="" selectedValue={value}>
+              <i>None</i>
             </Option>
-          );
-        })}
-      </SelectUnstyled>
-    </div>
-  );
-};
+          ) : null}
+          {options.map((option, index) => {
+            const { label: optionLabel, value: optionValue } = getOptionLabelAndValue(option);
 
-export default forwardRef(Select) as <T>(
-  props: SelectProps<T> & { ref?: Ref<HTMLButtonElement> },
-) => JSX.Element;
+            return (
+              <Option
+                key={index}
+                value={optionValue}
+                selectedValue={value}
+                data-testid={`select-option-${optionValue}`}
+              >
+                {optionLabel}
+              </Option>
+            );
+          })}
+        </SelectUnstyled>
+      </div>
+    );
+  },
+);
+
+Select.displayName = 'Select';
+
+export default Select;

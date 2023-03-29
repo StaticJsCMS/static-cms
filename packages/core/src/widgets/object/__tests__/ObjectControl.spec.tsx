@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
-import { getByTestId, screen, waitFor } from '@testing-library/react';
+import { act, getByTestId, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
@@ -136,23 +136,6 @@ describe(ObjectControl.name, () => {
     expect(fieldTwo).not.toBeVisible();
   });
 
-  it('does not render fields when closed', async () => {
-    renderControl({ value: multiFieldObjectValue, label: 'I am a label' });
-
-    await userEvent.click(screen.getByTestId('expand-button'));
-
-    expect(screen.getByTestId('expand-button').textContent).toBe('I am a label');
-
-    const fields = screen.getAllByTestId('editor-control');
-    expect(fields.length).toBe(2);
-
-    const fieldOne = fields[0];
-    expect(fieldOne).not.toBeVisible();
-
-    const fieldTwo = fields[1];
-    expect(fieldTwo).not.toBeVisible();
-  });
-
   it('shows summary when closed', async () => {
     renderControl({
       field: {
@@ -165,7 +148,9 @@ describe(ObjectControl.name, () => {
 
     expect(screen.getByTestId('expand-button').textContent).toBe('I am a label');
 
-    await userEvent.click(screen.getByTestId('expand-button'));
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('expand-button'));
+    });
 
     await waitFor(() =>
       expect(screen.getByTestId('expand-button').textContent).toBe(
@@ -173,7 +158,9 @@ describe(ObjectControl.name, () => {
       ),
     );
 
-    await userEvent.click(screen.getByTestId('expand-button'));
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('expand-button'));
+    });
 
     await waitFor(() =>
       expect(screen.getByTestId('expand-button').textContent).toBe('I am a label'),

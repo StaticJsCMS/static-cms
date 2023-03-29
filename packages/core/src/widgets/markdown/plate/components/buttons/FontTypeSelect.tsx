@@ -99,7 +99,8 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
     <div
       className="
         w-28
-        h-7
+        h-6
+        mx-1
       "
     >
       <SelectUnstyled
@@ -117,7 +118,7 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
               px-1.5
               py-0.5
               w-full
-              h-7
+              h-6
               border
               rounded-sm
               text-gray-900
@@ -144,6 +145,7 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
             `,
           },
         }}
+        data-testid="font-type-select"
       >
         {types.map(type => {
           const selected = (value?.value ?? ELEMENT_PARAGRAPH) === type.value;
@@ -184,103 +186,6 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
         })}
       </SelectUnstyled>
     </div>
-    // <div className="relative flex-inline w-28 h-7">
-    //   <Listbox
-    //     value={value?.value ?? ELEMENT_PARAGRAPH}
-    //     onChange={handleChange}
-    //     disabled={disabled}
-    //   >
-    //     <Listbox.Button
-    //       className="
-    //         flex
-    //         items-center
-    //         text-sm
-    //         font-medium
-    //         relative
-    //         px-1.5
-    //         py-0.5
-    //         w-full
-    //         h-7
-    //         border
-    //         rounded-sm
-    //         text-gray-900
-    //         border-gray-200
-    //         dark:text-gray-100
-    //       "
-    //       data-testid="select-input"
-    //     >
-    //       {value?.label ?? 'Paragraph'}
-    //       <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-0.5">
-    //         <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-    //       </span>
-    //     </Listbox.Button>
-    //     <Transition
-    //       as={Fragment}
-    //       leave="transition ease-in duration-100"
-    //       leaveFrom="opacity-100"
-    //       leaveTo="opacity-0"
-    //     >
-    //       <Listbox.Options
-    //         data-testid="select-options"
-    //         className="
-    //           absolute
-    //           mt-1
-    //           max-h-60
-    //           w-50
-    //           overflow-auto
-    //           rounded-md
-    //           bg-white
-    //           py-1
-    //           text-base
-    //           shadow-lg
-    //           ring-1
-    //           ring-black
-    //           ring-opacity-5
-    //           focus:outline-none
-    //           sm:text-sm
-    //           z-40
-    //         "
-    //       >
-    //         {types.map((type, index) => {
-    //           const selected = (value?.value ?? ELEMENT_PARAGRAPH) === type.value;
-
-    //           return (
-    //             <Listbox.Option
-    //               key={index}
-    //               data-testid={`select-option-${type.value}`}
-    //               className={classNames(
-    //                 `
-    //                   relative
-    //                   select-none
-    //                   py-2
-    //                   pl-10
-    //                   pr-4
-    //                   cursor-pointer
-    //                 `,
-    //                 selected ? 'bg-gray-100 text-gray-900' : 'text-gray-900',
-    //               )}
-    //               value={type.value}
-    //             >
-    //               <span
-    //                 className={classNames(
-    //                   'block truncate',
-    //                   selected ? 'font-medium' : 'font-normal',
-    //                 )}
-    //               >
-    //                 {type.label}
-    //               </span>
-    //               {selected ? (
-    //                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-500">
-    //                   <CheckIcon className="h-5 w-5" aria-hidden="true" />
-    //                 </span>
-    //               ) : null}
-    //             </Listbox.Option>
-    //           );
-    //         })}
-    //       </Listbox.Options>
-    //     </Transition>
-    //   </Listbox>
-    // </div>
   );
 };
 

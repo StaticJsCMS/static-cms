@@ -234,10 +234,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({ useMdx, containerRef, collect
           gap-0.5
         "
         >
-          {(groups.length > 0 ? groups : debouncedGroups).map((group, index) => [
-            index !== 0 ? <div key={`balloon-toolbar-divider-${index}`} /> : null,
-            group,
-          ])}
+          {groups.length > 0 ? groups : debouncedGroups}
         </div>
       </PopperUnstyled>
     </>

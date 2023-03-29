@@ -61,8 +61,8 @@ const LinkToolbarButton: FC<LinkToolbarButtonProps> = ({
 
   return (
     <ToolbarButton
-      key="editImage"
-      tooltip="Edit Image"
+      key="insertLink"
+      tooltip="Insert Link"
       icon={<LinkIcon className="w-5 h-5" />}
       onClick={(_editor, event) => openMediaLibrary(event)}
       active={isLink}

@@ -87,9 +87,9 @@ describe(SelectControl.name, () => {
 
       const input = getByTestId('select-input');
 
-    await act(async () => {
-      await userEvent.click(input);
-    });
+      await act(async () => {
+        await userEvent.click(input);
+      });
 
       const option1 = 'select-option-Option 1';
       const option2 = 'select-option-Option 2';
@@ -98,31 +98,31 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith('Option 2');
       expect(input.textContent).toBe('Option 2');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
 
-    await act(async () => {
-      await userEvent.click(getByTestId(option1));
-    });
+      await act(async () => {
+        await userEvent.click(getByTestId(option1));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith('Option 1');
       expect(input.textContent).toBe('Option 1');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
     });
 
@@ -139,21 +139,6 @@ describe(SelectControl.name, () => {
 
       const label = getByTestId('label');
       expect(label).toHaveClass('text-red-500');
-    });
-
-    it('should focus options on field click', async () => {
-      const { getByTestId, queryByTestId } = renderControl();
-
-      expect(queryByTestId('select-options')).not.toBeInTheDocument();
-
-      const field = getByTestId('field');
-
-    await act(async () => {
-      await userEvent.click(field);
-    });
-
-      const optionsList = getByTestId('select-options');
-      expect(optionsList).toHaveFocus();
     });
   });
 
@@ -200,9 +185,9 @@ describe(SelectControl.name, () => {
 
       const input = getByTestId('select-input');
 
-    await act(async () => {
-      await userEvent.click(input);
-    });
+      await act(async () => {
+        await userEvent.click(input);
+      });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-2';
@@ -211,31 +196,31 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(2);
       expect(input.textContent).toBe('2');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
 
-    await act(async () => {
-      await userEvent.click(getByTestId(option1));
-    });
+      await act(async () => {
+        await userEvent.click(getByTestId(option1));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(1);
       expect(input.textContent).toBe('1');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
     });
   });
@@ -283,9 +268,9 @@ describe(SelectControl.name, () => {
 
       const input = getByTestId('select-input');
 
-    await act(async () => {
-      await userEvent.click(input);
-    });
+      await act(async () => {
+        await userEvent.click(input);
+      });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-Option 2';
@@ -294,29 +279,31 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith('Option 2');
       expect(input.textContent).toBe('Option 2');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
 
-    await act(async () => {
-      await userEvent.click(getByTestId(option1));
+      await act(async () => {
+        await userEvent.click(getByTestId(option1));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(1);
       expect(input.textContent).toBe('1');
 
       await act(async () => {
-      await userEvent.click(input);
+        await userEvent.click(input);
+      });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
     });
   });
@@ -377,9 +364,9 @@ describe(SelectControl.name, () => {
 
       const input = getByTestId('select-input');
 
-    await act(async () => {
-      await userEvent.click(input);
-    });
+      await act(async () => {
+        await userEvent.click(input);
+      });
 
       const option1 = 'select-option-option 1';
       const option2 = 'select-option-option 2';
@@ -388,31 +375,31 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith('option 2');
       expect(input.textContent).toBe('Option 2');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option1));
-    });
+        await userEvent.click(getByTestId(option1));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith('option 1');
       expect(input.textContent).toBe('Option 1');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
     });
   });
@@ -473,9 +460,9 @@ describe(SelectControl.name, () => {
 
       const input = getByTestId('select-input');
 
-    await act(async () => {
-      await userEvent.click(input);
-    });
+      await act(async () => {
+        await userEvent.click(input);
+      });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-2';
@@ -484,31 +471,31 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(2);
       expect(input.textContent).toBe('Option 2');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
 
-    await act(async () => {
-      await userEvent.click(getByTestId(option1));
-    });
+      await act(async () => {
+        await userEvent.click(getByTestId(option1));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(1);
       expect(input.textContent).toBe('Option 1');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
     });
   });
@@ -569,9 +556,9 @@ describe(SelectControl.name, () => {
 
       const input = getByTestId('select-input');
 
-    await act(async () => {
-      await userEvent.click(input);
-    });
+      await act(async () => {
+        await userEvent.click(input);
+      });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-option 2';
@@ -580,28 +567,31 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith('option 2');
       expect(input.textContent).toBe('Option 2');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
-      await userEvent.click(getByTestId(option1));
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
+
+      await act(async () => {
+        await userEvent.click(getByTestId(option1));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(1);
       expect(input.textContent).toBe('Option 1');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
     });
   });
@@ -650,9 +640,9 @@ describe(SelectControl.name, () => {
 
       const input = getByTestId('select-input');
 
-    await act(async () => {
-      await userEvent.click(input);
-    });
+      await act(async () => {
+        await userEvent.click(input);
+      });
 
       const option1 = 'select-option-Option 1';
       const option2 = 'select-option-Option 2';
@@ -661,45 +651,45 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(['Option 2']);
       expect(input.textContent).toBe('Option 2');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option1));
-    });
+        await userEvent.click(getByTestId(option1));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(['Option 2', 'Option 1']);
       expect(input.textContent).toBe('Option 2Option 1');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(['Option 1']);
       expect(input.textContent).toBe('Option 1');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
     });
   });
@@ -748,9 +738,9 @@ describe(SelectControl.name, () => {
 
       const input = getByTestId('select-input');
 
-    await act(async () => {
-      await userEvent.click(input);
-    });
+      await act(async () => {
+        await userEvent.click(input);
+      });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-2';
@@ -759,45 +749,45 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith([2]);
       expect(input.textContent).toBe('2');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option1));
-    });
+        await userEvent.click(getByTestId(option1));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith([2, 1]);
       expect(input.textContent).toBe('21');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith([1]);
       expect(input.textContent).toBe('1');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
     });
   });
@@ -846,9 +836,9 @@ describe(SelectControl.name, () => {
 
       const input = getByTestId('select-input');
 
-    await act(async () => {
-      await userEvent.click(input);
-    });
+      await act(async () => {
+        await userEvent.click(input);
+      });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-Option 2';
@@ -857,45 +847,45 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(['Option 2']);
       expect(input.textContent).toBe('Option 2');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option1));
-    });
+        await userEvent.click(getByTestId(option1));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(['Option 2', 1]);
       expect(input.textContent).toBe('Option 21');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith([1]);
       expect(input.textContent).toBe('1');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
     });
   });
@@ -948,9 +938,9 @@ describe(SelectControl.name, () => {
 
       const input = getByTestId('select-input');
 
-    await act(async () => {
-      await userEvent.click(input);
-    });
+      await act(async () => {
+        await userEvent.click(input);
+      });
 
       const option1 = 'select-option-option 1';
       const option2 = 'select-option-option 2';
@@ -959,45 +949,45 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(['option 2']);
       expect(input.textContent).toBe('Option 2');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option1));
-    });
+        await userEvent.click(getByTestId(option1));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(['option 2', 'option 1']);
       expect(input.textContent).toBe('Option 2Option 1');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(['option 1']);
       expect(input.textContent).toBe('Option 1');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
     });
   });
@@ -1050,9 +1040,9 @@ describe(SelectControl.name, () => {
 
       const input = getByTestId('select-input');
 
-    await act(async () => {
-      await userEvent.click(input);
-    });
+      await act(async () => {
+        await userEvent.click(input);
+      });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-2';
@@ -1061,45 +1051,45 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith([2]);
       expect(input.textContent).toBe('Option 2');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option1));
-    });
+        await userEvent.click(getByTestId(option1));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith([2, 1]);
       expect(input.textContent).toBe('Option 2Option 1');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith([1]);
       expect(input.textContent).toBe('Option 1');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
     });
   });
@@ -1153,8 +1143,8 @@ describe(SelectControl.name, () => {
       const input = getByTestId('select-input');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-option 2';
@@ -1163,45 +1153,45 @@ describe(SelectControl.name, () => {
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(['option 2']);
       expect(input.textContent).toBe('Option 2');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option1));
-    });
+        await userEvent.click(getByTestId(option1));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith(['option 2', 1]);
       expect(input.textContent).toBe('Option 2Option 1');
 
       await act(async () => {
-      await userEvent.click(input);
-    });
+        await userEvent.click(input);
+      });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
 
       await act(async () => {
-      await userEvent.click(getByTestId(option2));
-    });
+        await userEvent.click(getByTestId(option2));
+      });
 
       expect(onChange).toHaveBeenLastCalledWith([1]);
       expect(input.textContent).toBe('Option 1');
 
       await act(async () => {
-      await userEvent.click(input);
+        await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-900'); // Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
     });
   });

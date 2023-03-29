@@ -439,7 +439,7 @@ function mediaLibraryClosed() {
   return { type: MEDIA_LIBRARY_CLOSE } as const;
 }
 
-function mediaInserted(mediaPath: string | string[], alt?: string) {
+export function mediaInserted(mediaPath: string | string[], alt?: string) {
   return { type: MEDIA_INSERT, payload: { mediaPath, alt } } as const;
 }
 

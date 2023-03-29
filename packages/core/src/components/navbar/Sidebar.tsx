@@ -115,7 +115,7 @@ const Sidebar: FC<TranslateProps> = ({ t }) => {
           )}
           {collectionLinks}
           {links}
-          <NavLink key="Media" to="/media" icon={<PhotoIcon />}>
+          <NavLink key="Media" to="/media" icon={<PhotoIcon className="h-5 w-5" />}>
             {t('app.header.media')}
           </NavLink>
         </ul>

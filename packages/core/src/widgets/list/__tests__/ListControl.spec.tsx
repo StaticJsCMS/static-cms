@@ -311,7 +311,9 @@ describe(ListControl.name, () => {
       expect(itemTwo).not.toBeVisible();
       expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe('String Value 2');
 
-      await userEvent.click(screen.getByTestId('list-expand-button'));
+      await act(async () => {
+        await userEvent.click(screen.getByTestId('list-expand-button'));
+      });
 
       expect(itemOne).toBeVisible();
       expect(itemTwo).toBeVisible();
@@ -364,7 +366,9 @@ describe(ListControl.name, () => {
         props: { onChange },
       } = await renderListControl({ field: multipleFieldsListField, value: multipleFieldsValue });
 
-      await userEvent.click(screen.getByTestId('list-add'));
+      await act(async () => {
+        await userEvent.click(screen.getByTestId('list-add'));
+      });
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith([
@@ -384,7 +388,9 @@ describe(ListControl.name, () => {
         value: multipleFieldsValue,
       });
 
-      await userEvent.click(screen.getByTestId('list-add'));
+      await act(async () => {
+        await userEvent.click(screen.getByTestId('list-add'));
+      });
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith([
@@ -402,7 +408,10 @@ describe(ListControl.name, () => {
       } = await renderListControl({ field: multipleFieldsListField, value: multipleFieldsValue });
 
       const itemOne = screen.getByTestId('object-control-0');
-      await userEvent.click(getByTestId(itemOne, 'remove-button'));
+
+      await act(async () => {
+        await userEvent.click(getByTestId(itemOne, 'remove-button'));
+      });
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith([
@@ -474,7 +483,9 @@ describe(ListControl.name, () => {
       expect(screen.getByTestId('object-control-0')).not.toBeVisible();
       expect(screen.getByTestId('object-control-1')).not.toBeVisible();
 
-      await userEvent.click(screen.getByTestId('list-expand-button'));
+      await act(async () => {
+        await userEvent.click(screen.getByTestId('list-expand-button'));
+      });
 
       expect(screen.getByTestId('object-control-0')).toBeVisible();
       expect(screen.getByTestId('object-control-1')).toBeVisible();
@@ -509,7 +520,9 @@ describe(ListControl.name, () => {
         props: { onChange },
       } = await renderListControl({ value: ['Value 1', 'Value 2'] });
 
-      await userEvent.click(getByTestId('list-add'));
+      await act(async () => {
+        await userEvent.click(getByTestId('list-add'));
+      });
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith(['Value 1', 'Value 2', 'string default']);
@@ -527,7 +540,9 @@ describe(ListControl.name, () => {
         value: ['Value 1', 'Value 2'],
       });
 
-      await userEvent.click(getByTestId('list-add'));
+      await act(async () => {
+        await userEvent.click(getByTestId('list-add'));
+      });
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith(['string default', 'Value 1', 'Value 2']);
@@ -539,7 +554,10 @@ describe(ListControl.name, () => {
       } = await renderListControl({ value: ['Value 1', 'Value 2'] });
 
       const itemOne = screen.getByTestId('object-control-0');
-      await userEvent.click(getByTestId(itemOne, 'remove-button'));
+
+      await act(async () => {
+        await userEvent.click(getByTestId(itemOne, 'remove-button'));
+      });
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith(['Value 2']);
@@ -600,7 +618,9 @@ describe(ListControl.name, () => {
       expect(itemTwo).not.toBeVisible();
       expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe('type2');
 
-      await userEvent.click(screen.getByTestId('list-expand-button'));
+      await act(async () => {
+        await userEvent.click(screen.getByTestId('list-expand-button'));
+      });
 
       expect(itemOne).toBeVisible();
       expect(itemTwo).toBeVisible();
@@ -635,7 +655,9 @@ describe(ListControl.name, () => {
       expect(itemTwo).not.toBeVisible();
       expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe('Type 2 Label');
 
-      await userEvent.click(screen.getByTestId('list-expand-button'));
+      await act(async () => {
+        await userEvent.click(screen.getByTestId('list-expand-button'));
+      });
 
       expect(itemOne).toBeVisible();
       expect(itemTwo).toBeVisible();
@@ -674,7 +696,9 @@ describe(ListControl.name, () => {
         'type2 - 10 - String Value 2',
       );
 
-      await userEvent.click(screen.getByTestId('list-expand-button'));
+      await act(async () => {
+        await userEvent.click(screen.getByTestId('list-expand-button'));
+      });
 
       expect(itemOne).toBeVisible();
       expect(itemTwo).toBeVisible();
@@ -715,7 +739,9 @@ describe(ListControl.name, () => {
         'Type 2 Label - 10 - String Value 2',
       );
 
-      await userEvent.click(screen.getByTestId('list-expand-button'));
+      await act(async () => {
+        await userEvent.click(screen.getByTestId('list-expand-button'));
+      });
 
       expect(itemOne).toBeVisible();
       expect(itemTwo).toBeVisible();
@@ -753,7 +779,9 @@ describe(ListControl.name, () => {
         'type2 - Summary: String Value 2',
       );
 
-      await userEvent.click(screen.getByTestId('list-expand-button'));
+      await act(async () => {
+        await userEvent.click(screen.getByTestId('list-expand-button'));
+      });
 
       expect(itemOne).toBeVisible();
       expect(itemTwo).toBeVisible();
@@ -793,7 +821,9 @@ describe(ListControl.name, () => {
         'Type 2 Label - Summary: String Value 2',
       );
 
-      await userEvent.click(screen.getByTestId('list-expand-button'));
+      await act(async () => {
+        await userEvent.click(screen.getByTestId('list-expand-button'));
+      });
 
       expect(itemOne).toBeVisible();
       expect(itemTwo).toBeVisible();
@@ -850,8 +880,13 @@ describe(ListControl.name, () => {
 
       const typeAddButton = getByTestId('list-type-add');
 
-      await userEvent.click(typeAddButton);
-      await userEvent.click(getByTestId('list-type-add-item-type2'));
+      await act(async () => {
+        await userEvent.click(typeAddButton);
+      });
+
+      await act(async () => {
+        await userEvent.click(getByTestId('list-type-add-item-type2'));
+      });
 
       const newValue: ValueOrNestedValue[] | null | undefined = [
         ...typedFieldsValue,
@@ -869,8 +904,13 @@ describe(ListControl.name, () => {
         value: newValue,
       });
 
-      await userEvent.click(typeAddButton);
-      await userEvent.click(getByTestId('list-type-add-item-type1'));
+      await act(async () => {
+        await userEvent.click(typeAddButton);
+      });
+
+      await act(async () => {
+        await userEvent.click(getByTestId('list-type-add-item-type1'));
+      });
 
       expect(onChange).toHaveBeenCalledTimes(2);
       expect(onChange).toHaveBeenLastCalledWith([
@@ -898,8 +938,13 @@ describe(ListControl.name, () => {
 
       const typeAddButton = getByTestId('list-type-add');
 
-      await userEvent.click(typeAddButton);
-      await userEvent.click(getByTestId('list-type-add-item-type2'));
+      await act(async () => {
+        await userEvent.click(typeAddButton);
+      });
+
+      await act(async () => {
+        await userEvent.click(getByTestId('list-type-add-item-type2'));
+      });
 
       const newValue: ValueOrNestedValue[] | null | undefined = [
         {
@@ -917,8 +962,13 @@ describe(ListControl.name, () => {
         value: newValue,
       });
 
-      await userEvent.click(typeAddButton);
-      await userEvent.click(getByTestId('list-type-add-item-type1'));
+      await act(async () => {
+        await userEvent.click(typeAddButton);
+      });
+
+      await act(async () => {
+        await userEvent.click(getByTestId('list-type-add-item-type1'));
+      });
 
       expect(onChange).toHaveBeenCalledTimes(2);
       expect(onChange).toHaveBeenLastCalledWith([
@@ -937,7 +987,10 @@ describe(ListControl.name, () => {
       } = await renderListControl({ field: typedFieldsListField, value: typedFieldsValue });
 
       const itemOne = screen.getByTestId('object-control-0');
-      await userEvent.click(getByTestId(itemOne, 'remove-button'));
+
+      await act(async () => {
+        await userEvent.click(getByTestId(itemOne, 'remove-button'));
+      });
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith([typedFieldsValue[1]]);
@@ -996,7 +1049,9 @@ describe(ListControl.name, () => {
         expect(itemTwo).not.toBeVisible();
         expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe('type2');
 
-        await userEvent.click(screen.getByTestId('list-expand-button'));
+        await act(async () => {
+          await userEvent.click(screen.getByTestId('list-expand-button'));
+        });
 
         expect(itemOne).toBeVisible();
         expect(itemTwo).toBeVisible();
@@ -1031,7 +1086,9 @@ describe(ListControl.name, () => {
         expect(itemTwo).not.toBeVisible();
         expect(queryByTestId(itemTwo, 'item-summary')?.textContent).toBe('Type 2 Label');
 
-        await userEvent.click(screen.getByTestId('list-expand-button'));
+        await act(async () => {
+          await userEvent.click(screen.getByTestId('list-expand-button'));
+        });
 
         expect(itemOne).toBeVisible();
         expect(itemTwo).toBeVisible();
@@ -1070,7 +1127,9 @@ describe(ListControl.name, () => {
           'type2 - 10 - String Value 2',
         );
 
-        await userEvent.click(screen.getByTestId('list-expand-button'));
+        await act(async () => {
+          await userEvent.click(screen.getByTestId('list-expand-button'));
+        });
 
         expect(itemOne).toBeVisible();
         expect(itemTwo).toBeVisible();
@@ -1111,7 +1170,9 @@ describe(ListControl.name, () => {
           'Type 2 Label - 10 - String Value 2',
         );
 
-        await userEvent.click(screen.getByTestId('list-expand-button'));
+        await act(async () => {
+          await userEvent.click(screen.getByTestId('list-expand-button'));
+        });
 
         expect(itemOne).toBeVisible();
         expect(itemTwo).toBeVisible();
@@ -1149,7 +1210,9 @@ describe(ListControl.name, () => {
           'type2 - Summary: String Value 2',
         );
 
-        await userEvent.click(screen.getByTestId('list-expand-button'));
+        await act(async () => {
+          await userEvent.click(screen.getByTestId('list-expand-button'));
+        });
 
         expect(itemOne).toBeVisible();
         expect(itemTwo).toBeVisible();
@@ -1189,7 +1252,9 @@ describe(ListControl.name, () => {
           'Type 2 Label - Summary: String Value 2',
         );
 
-        await userEvent.click(screen.getByTestId('list-expand-button'));
+        await act(async () => {
+          await userEvent.click(screen.getByTestId('list-expand-button'));
+        });
 
         expect(itemOne).toBeVisible();
         expect(itemTwo).toBeVisible();
@@ -1252,8 +1317,13 @@ describe(ListControl.name, () => {
 
         const typeAddButton = getByTestId('list-type-add');
 
-        await userEvent.click(typeAddButton);
-        await userEvent.click(getByTestId('list-type-add-item-type2'));
+        await act(async () => {
+          await userEvent.click(typeAddButton);
+        });
+
+        await act(async () => {
+          await userEvent.click(getByTestId('list-type-add-item-type2'));
+        });
 
         const newValue: ValueOrNestedValue[] | null | undefined = [
           ...typedOtherKeyFieldsValue,
@@ -1271,8 +1341,13 @@ describe(ListControl.name, () => {
           value: newValue,
         });
 
-        await userEvent.click(typeAddButton);
-        await userEvent.click(getByTestId('list-type-add-item-type1'));
+        await act(async () => {
+          await userEvent.click(typeAddButton);
+        });
+
+        await act(async () => {
+          await userEvent.click(getByTestId('list-type-add-item-type1'));
+        });
 
         expect(onChange).toHaveBeenCalledTimes(2);
         expect(onChange).toHaveBeenLastCalledWith([
@@ -1300,8 +1375,13 @@ describe(ListControl.name, () => {
 
         const typeAddButton = getByTestId('list-type-add');
 
-        await userEvent.click(typeAddButton);
-        await userEvent.click(getByTestId('list-type-add-item-type2'));
+        await act(async () => {
+          await userEvent.click(typeAddButton);
+        });
+
+        await act(async () => {
+          await userEvent.click(getByTestId('list-type-add-item-type2'));
+        });
 
         const newValue: ValueOrNestedValue[] | null | undefined = [
           {
@@ -1319,8 +1399,13 @@ describe(ListControl.name, () => {
           value: newValue,
         });
 
-        await userEvent.click(typeAddButton);
-        await userEvent.click(getByTestId('list-type-add-item-type1'));
+        await act(async () => {
+          await userEvent.click(typeAddButton);
+        });
+
+        await act(async () => {
+          await userEvent.click(getByTestId('list-type-add-item-type1'));
+        });
 
         expect(onChange).toHaveBeenCalledTimes(2);
         expect(onChange).toHaveBeenLastCalledWith([
@@ -1342,7 +1427,10 @@ describe(ListControl.name, () => {
         });
 
         const itemOne = screen.getByTestId('object-control-0');
-        await userEvent.click(getByTestId(itemOne, 'remove-button'));
+
+        await act(async () => {
+          await userEvent.click(getByTestId(itemOne, 'remove-button'));
+        });
 
         expect(onChange).toHaveBeenCalledTimes(1);
         expect(onChange).toHaveBeenCalledWith([typedOtherKeyFieldsValue[1]]);

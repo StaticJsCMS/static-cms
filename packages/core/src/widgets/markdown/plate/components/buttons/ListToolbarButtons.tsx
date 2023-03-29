@@ -25,18 +25,26 @@ const ListToolbarButtons: FC = () => {
 
   return (
     <>
-      <ListToolbarButton tooltip="List" type={ELEMENT_UL} icon={<FormatListBulletedIcon />} />
+      <ListToolbarButton
+        tooltip="List"
+        type={ELEMENT_UL}
+        icon={<FormatListBulletedIcon className="h-5 w-5" />}
+      />
       <ListToolbarButton
         tooltip="Numbered List"
         type={getPluginType(editor, ELEMENT_OL)}
-        icon={<FormatListNumberedIcon />}
+        icon={<FormatListNumberedIcon className="h-5 w-5" />}
       />
       <ToolbarButton
         tooltip="Outdent"
         onClick={handleOutdent}
-        icon={<FormatIndentDecreaseIcon />}
+        icon={<FormatIndentDecreaseIcon className="h-5 w-5" />}
       />
-      <ToolbarButton tooltip="Indent" onClick={handleIndent} icon={<FormatIndentIncreaseIcon />} />
+      <ToolbarButton
+        tooltip="Indent"
+        onClick={handleIndent}
+        icon={<FormatIndentIncreaseIcon className="h-5 w-5" />}
+      />
     </>
   );
 };

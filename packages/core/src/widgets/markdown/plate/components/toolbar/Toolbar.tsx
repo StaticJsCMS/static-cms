@@ -49,10 +49,7 @@ const Toolbar: FC<ToolbarProps> = ({ useMdx, collection, field }) => {
         shadow-md
       "
     >
-      {groups.map((group, index) => [
-        index !== 0 ? <div key={`toolbar-divider-${index}`} /> : null,
-        group,
-      ])}
+      {groups}
     </div>
   );
 };

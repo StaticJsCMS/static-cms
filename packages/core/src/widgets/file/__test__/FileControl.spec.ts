@@ -2,16 +2,20 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
-import { screen } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { configLoaded } from '@staticcms/core/actions/config';
+import {
+  insertMedia,
+  mediaDisplayURLSuccess,
+  mediaInserted,
+} from '@staticcms/core/actions/mediaLibrary';
 import { store } from '@staticcms/core/store';
 import { createMockCollection } from '@staticcms/test/data/collections.mock';
 import { createMockConfig } from '@staticcms/test/data/config.mock';
 import { mockFileField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
-import { mediaDisplayURLSuccess } from '../../../actions/mediaLibrary';
 import withFileControl from '../withFileControl';
 
 import type { Config, FileOrImageField, MediaFile } from '@staticcms/core/interface';
@@ -22,11 +26,13 @@ jest.mock('@staticcms/core/lib/hooks/useMediaFiles', () => {
   const mockMediaFiles: MediaFile[] = [
     {
       name: 'file1.txt',
+      key: '12345',
       id: '12345',
       path: 'path/to/file1.txt',
     },
     {
       name: 'file2.png',
+      key: '67890',
       id: '67890',
       path: 'path/to/file2.png',
     },
@@ -47,11 +53,13 @@ jest.mock('@staticcms/core/actions/mediaLibrary', () => ({
 
 jest.mock('@staticcms/core/lib/hooks/useMediaAsset', () => (url: string) => url);
 
-describe(FileControl.name, () => {
+describe('File Control', () => {
   const collection = createMockCollection({}, mockFileField);
   const config = createMockConfig({
     collections: [collection],
   }) as unknown as Config<FileOrImageField>;
+
+  const mockInsertMedia = insertMedia as jest.Mock;
 
   const renderControl = createWidgetControlHarness(
     FileControl,
@@ -63,6 +71,10 @@ describe(FileControl.name, () => {
     store.dispatch(configLoaded(config as unknown as Config));
     store.dispatch(mediaDisplayURLSuccess('12345', 'path/to/file1.txt'));
     store.dispatch(mediaDisplayURLSuccess('67890', 'path/to/file2.png'));
+
+    mockInsertMedia.mockImplementation((mediaPath: string | string[]) => {
+      store.dispatch(mediaInserted(mediaPath, ''));
+    });
 
     // IntersectionObserver isn't available in test environment
     const mockIntersectionObserver = jest.fn();
@@ -177,23 +189,31 @@ describe(FileControl.name, () => {
     expect(link.textContent).toBe('https://example.com/someoether.pdf');
   });
 
-  fit('should call onChange when selected file changes', async () => {
+  it('should call onChange when selected file changes', async () => {
     const {
       getByTestId,
       props: { onChange },
     } = renderControl();
 
     const uploadButton = getByTestId('choose-upload');
-    await userEvent.click(uploadButton);
+    await act(async () => {
+      await userEvent.click(uploadButton);
+    });
 
     const file = screen.getByTestId('media-card-path/to/file2.png');
-    await userEvent.click(file);
+    await act(async () => {
+      await userEvent.click(file);
+    });
 
     const chooseSelected = screen.getByTestId('choose-selected');
-    await userEvent.click(chooseSelected);
+    await act(async () => {
+      await userEvent.click(chooseSelected);
+    });
 
-    expect(onChange).toHaveBeenCalledTimes(1);
-    expect(onChange).toHaveBeenCalledWith('path/to/file1.txt');
+    await waitFor(() => {
+      expect(onChange).toHaveBeenCalledTimes(1);
+      expect(onChange).toHaveBeenCalledWith('path/to/file2.png');
+    });
   });
 
   it('should show error', async () => {

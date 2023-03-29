@@ -13,13 +13,13 @@ const ColorToolbarButtons: FC = () => {
       <ColorPickerToolbarDropdown
         key="color-picker-button"
         pluginKey={MARK_COLOR}
-        icon={<FormatColorTextIcon />}
+        icon={<FormatColorTextIcon className="h-5 w-5" />}
         tooltip="Color"
       />
       <ColorPickerToolbarDropdown
         key="background-color-picker-button"
         pluginKey={MARK_BG_COLOR}
-        icon={<FontDownloadIcon />}
+        icon={<FontDownloadIcon className="h-5 w-5" />}
         tooltip="Background Color"
       />
     </>

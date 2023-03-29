@@ -276,15 +276,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     if (!insertOptions?.chooseUrl && !insertOptions?.showAlt) {
       handleClose();
     }
-  }, [
-    selectedFile,
-    dispatch,
-    field,
-    alt,
-    insertOptions?.chooseUrl,
-    insertOptions?.showAlt,
-    handleClose,
-  ]);
+  }, [selectedFile, dispatch, field, alt, insertOptions, handleClose]);
 
   /**
    * Removes the selected file from the backend.
@@ -388,7 +380,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
         <div className="flex flex-grow gap-4 mr-8">
           <h2 className="text-xl font-semibold flex items-center text-gray-800 dark:text-gray-300">
             <span className="mr-2">
-              <PhotoIcon className="w-6 h-6" />
+              <PhotoIcon className="w-5 h-5" />
             </span>
             {t('app.header.media')}
           </h2>

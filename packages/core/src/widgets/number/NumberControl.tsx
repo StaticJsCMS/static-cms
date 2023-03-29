@@ -63,10 +63,11 @@ const NumberControl: FC<WidgetControlProps<string | number, NumberField>> = ({
       errors={errors}
       hint={field.hint}
       forSingleList={forSingleList}
+      cursor="text"
     >
       <TextField
         type="number"
-        ref={ref}
+        inputRef={ref}
         value={internalValue}
         min={min}
         max={max}
