@@ -111,6 +111,7 @@ const EntryListing = ({
           collection={collection}
           entry={entry}
           imageFieldName={inferredFields.imageField}
+          viewStyle={viewStyle}
           collectionLabel={collectionLabel}
           key={entry.slug}
           summaryFields={summaryFields}
@@ -129,7 +130,17 @@ const EntryListing = ({
   }
 
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div
+      className="
+        grid
+        gap-4
+        sm:grid-cols-1
+        md:grid-cols-1
+        lg:grid-cols-2
+        xl:grid-cols-3
+        2xl:grid-cols-4
+      "
+    >
       {renderedCards}
       {hasMore && handleLoadMore && <Waypoint key={page} onEnter={handleLoadMore} />}
     </div>

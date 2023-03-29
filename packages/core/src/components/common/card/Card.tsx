@@ -19,7 +19,7 @@ const Card = ({ children, className }: CardProps) => {
           rounded-lg
           shadow-md
           dark:bg-slate-800
-          dark:border-gray-700
+          dark:border-gray-700/40
         `,
         className,
       )}

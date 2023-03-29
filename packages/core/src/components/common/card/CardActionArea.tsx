@@ -10,7 +10,18 @@ interface CardActionAreaProps {
 
 const CardActionArea = ({ to, children }: CardActionAreaProps) => {
   return (
-    <Link to={to} className="h-full w-full relative flex justify-start">
+    <Link
+      to={to}
+      className="
+        h-full
+        w-full
+        relative
+        flex
+        justify-start
+        hover:bg-gray-200
+        dark:hover:bg-slate-700/70
+      "
+    >
       {children}
     </Link>
   );

@@ -15,7 +15,16 @@ const TableCell = ({ children, emphasis = false, to }: TableCellProps) => {
   const content = useMemo(() => {
     if (to) {
       return (
-        <Link to={to} className="w-full h-full flex px-4 py-3">
+        <Link
+          to={to}
+          className="
+            w-full
+            h-full
+            flex
+            px-4
+            py-3
+          "
+        >
           {children}
         </Link>
       );

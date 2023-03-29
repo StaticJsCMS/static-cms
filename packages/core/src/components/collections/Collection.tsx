@@ -206,7 +206,7 @@ const CollectionView = ({
       <div className="flex items-center mb-4">
         {isSearchResults ? (
           <>
-            <div>
+            <div className="flex-grow">
               <div>{t(searchResultKey, { searchTerm, collection: collection?.label })}</div>
             </div>
             <CollectionControls viewStyle={viewStyle} onChangeViewStyle={changeViewStyle} t={t} />

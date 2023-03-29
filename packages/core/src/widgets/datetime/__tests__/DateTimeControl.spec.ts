@@ -162,9 +162,9 @@ describe(DateTimeControl.name, () => {
     const fieldWrapper = getByTestId('field-wrapper');
     expect(fieldWrapper).not.toHaveClass('mr-14');
 
-    // Date Time Widget uses text cursor
-    expect(label).toHaveClass('cursor-text');
-    expect(field).toHaveClass('cursor-text');
+    // Date Time Widget uses pointer cursor
+    expect(label).toHaveClass('cursor-pointer');
+    expect(field).toHaveClass('cursor-pointer');
 
     // Date Time Widget uses default label layout, with bottom padding on field
     expect(label).toHaveClass('px-3', 'pt-3');

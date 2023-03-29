@@ -28,7 +28,7 @@ export interface EntryCardProps {
   imageFieldName?: string | null | undefined;
   collection: Collection;
   collectionLabel?: string;
-  viewStyle?: ViewStyle;
+  viewStyle: ViewStyle;
   summaryFields: string[];
 }
 
@@ -87,7 +87,12 @@ const EntryCard = ({
 
   if (viewStyle === VIEW_STYLE_LIST) {
     return (
-      <TableRow>
+      <TableRow
+        className="
+          hover:bg-gray-200
+          dark:hover:bg-slate-700/70
+        "
+      >
         {collectionLabel ? (
           <TableCell key="collectionLabel" to={path}>
             {collectionLabel}

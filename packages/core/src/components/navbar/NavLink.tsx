@@ -64,13 +64,13 @@ const NavLink = ({ icon, children, onClick, ...otherProps }: NavLinkProps) => {
           linkClassNames,
           pathname === otherProps.to &&
             `
-            bg-slate-100
-            dark:bg-slate-700
-            hover:bg-slate-200
-            dark:hover:bg-slate-600
-            text-blue-700
-            dark:text-white
-          `,
+              bg-blue-200/75
+              dark:bg-slate-700
+              hover:bg-slate-200
+              dark:hover:bg-slate-700/75
+              text-blue-700
+              dark:text-blue-400
+            `,
         )}
         onClick={onClick}
       >

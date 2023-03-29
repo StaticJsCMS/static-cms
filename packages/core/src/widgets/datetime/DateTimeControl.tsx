@@ -171,6 +171,7 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
                 data-testid="date-input"
                 {...convertMuiTextFieldProps(props)}
                 inputRef={ref}
+                cursor="pointer"
               />
               <NowButton
                 key="mobile-date-now"
@@ -202,6 +203,7 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
                 data-testid="time-input"
                 {...convertMuiTextFieldProps(props)}
                 inputRef={ref}
+                cursor="pointer"
               />
               <NowButton
                 key="mobile-date-now"
@@ -232,6 +234,7 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
               data-testid="date-time-input"
               {...convertMuiTextFieldProps(props)}
               inputRef={ref}
+              cursor="pointer"
             />
             <NowButton
               key="mobile-date-now"
@@ -263,7 +266,7 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
       errors={errors}
       hint={field.hint}
       forSingleList={forSingleList}
-      cursor="text"
+      cursor="pointer"
     >
       <LocalizationProvider key="localization-provider" dateAdapter={AdapterDateFns}>
         {dateTimePicker}
