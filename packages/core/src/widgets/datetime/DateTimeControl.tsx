@@ -20,16 +20,14 @@ import type { TextFieldProps } from '@staticcms/core/components/common/text-fiel
 import type { DateTimeField, WidgetControlProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
-function convertMuiTextFieldProps(
-  { inputProps, disabled, onClick }: MuiTextFieldProps,
-  ref: React.MutableRefObject<HTMLInputElement | null>,
-): TextFieldProps & {
-  ref: React.MutableRefObject<HTMLInputElement | null>;
-} {
+function convertMuiTextFieldProps({
+  inputProps,
+  disabled,
+  onClick,
+}: MuiTextFieldProps): TextFieldProps {
   const value: string = inputProps?.value ?? '';
 
   return {
-    ref,
     type: 'text',
     value,
     disabled,
@@ -171,7 +169,8 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
               <TextField
                 key="mobile-date-input"
                 data-testid="date-input"
-                {...convertMuiTextFieldProps(props, ref)}
+                {...convertMuiTextFieldProps(props)}
+                inputRef={ref}
               />
               <NowButton
                 key="mobile-date-now"
@@ -201,7 +200,8 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
               <TextField
                 key="mobile-time-input"
                 data-testid="time-input"
-                {...convertMuiTextFieldProps(props, ref)}
+                {...convertMuiTextFieldProps(props)}
+                inputRef={ref}
               />
               <NowButton
                 key="mobile-date-now"
@@ -230,7 +230,8 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
             <TextField
               key="mobile-date-time-input"
               data-testid="date-time-input"
-              {...convertMuiTextFieldProps(props, ref)}
+              {...convertMuiTextFieldProps(props)}
+              inputRef={ref}
             />
             <NowButton
               key="mobile-date-now"
@@ -262,6 +263,7 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
       errors={errors}
       hint={field.hint}
       forSingleList={forSingleList}
+      cursor="text"
     >
       <LocalizationProvider key="localization-provider" dateAdapter={AdapterDateFns}>
         {dateTimePicker}

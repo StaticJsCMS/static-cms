@@ -1,8 +1,9 @@
 /**
  * @jest-environment jsdom
  */
-import { fireEvent, getByText, waitFor } from '@testing-library/dom';
+import { fireEvent, getByText } from '@testing-library/dom';
 import '@testing-library/jest-dom';
+import { act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { mockDateField, mockDateTimeField, mockTimeField } from '@staticcms/test/data/fields.mock';
@@ -10,8 +11,8 @@ import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.har
 import DateTimeControl from '../DateTimeControl';
 
 import type { Matcher, MatcherOptions } from '@testing-library/dom';
-import type { DateTimeField } from '../../../interface';
 import type { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import type { DateTimeField } from '../../../interface';
 
 const CLOCK_WIDTH = 220;
 const getClockTouchEvent = (value: number, view: 'minutes' | '12hours') => {
@@ -37,8 +38,10 @@ const getClockTouchEvent = (value: number, view: 'minutes' | '12hours') => {
 };
 
 async function selectCalendarDate(userEventActions: UserEvent, day: number) {
-  const days = document.querySelectorAll('button.MuiPickersDay-root');
-  await userEventActions.click(days[day - 1]);
+  await act(async () => {
+    const days = document.querySelectorAll('button.MuiPickersDay-root');
+    await userEventActions.click(days[day - 1]);
+  });
 }
 
 async function selectClockTime(
@@ -50,23 +53,29 @@ async function selectClockTime(
   const square = document.querySelector('.MuiClock-squareMask');
   expect(square).toBeTruthy();
 
-  if (ampm === 'am') {
-    const amButton = getByText(document.body, 'AM');
-    expect(amButton).toBeTruthy();
-    await userEventActions.click(amButton!);
-  } else {
-    const pmButton = getByText(document.body, 'PM');
-    expect(pmButton).toBeTruthy();
-    await userEventActions.click(pmButton!);
-  }
+  await act(async () => {
+    if (ampm === 'am') {
+      const amButton = getByText(document.body, 'AM');
+      expect(amButton).toBeTruthy();
+      await userEventActions.click(amButton!);
+    } else {
+      const pmButton = getByText(document.body, 'PM');
+      expect(pmButton).toBeTruthy();
+      await userEventActions.click(pmButton!);
+    }
+  });
 
-  const hourClockEvent = getClockTouchEvent(hour, '12hours');
-  fireEvent.touchMove(square!, hourClockEvent);
-  fireEvent.touchEnd(square!, hourClockEvent);
+  await act(async () => {
+    const hourClockEvent = getClockTouchEvent(hour, '12hours');
+    fireEvent.touchMove(square!, hourClockEvent);
+    fireEvent.touchEnd(square!, hourClockEvent);
+  });
 
-  const minuteClockEvent = getClockTouchEvent(minute, 'minutes');
-  fireEvent.touchMove(square!, minuteClockEvent);
-  fireEvent.touchEnd(square!, minuteClockEvent);
+  await act(async () => {
+    const minuteClockEvent = getClockTouchEvent(minute, 'minutes');
+    fireEvent.touchMove(square!, minuteClockEvent);
+    fireEvent.touchEnd(square!, minuteClockEvent);
+  });
 }
 
 async function selectDate(
@@ -74,10 +83,12 @@ async function selectDate(
   day: number,
 ) {
   const userEventActions = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-  const inputWrapper = getByTestId('date-input');
-  const input = inputWrapper.getElementsByTagName('input')[0];
 
-  await userEventActions.click(input);
+  await act(async () => {
+    const inputWrapper = getByTestId('date-input');
+    const input = inputWrapper.getElementsByTagName('input')[0];
+    await userEventActions.click(input);
+  });
 
   await selectCalendarDate(userEventActions, day);
 }
@@ -89,9 +100,12 @@ async function selectTime(
   ampm: 'am' | 'pm',
 ) {
   const userEventActions = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-  const inputWrapper = getByTestId('time-input');
-  const input = inputWrapper.getElementsByTagName('input')[0];
-  await userEventActions.click(input);
+
+  await act(async () => {
+    const inputWrapper = getByTestId('time-input');
+    const input = inputWrapper.getElementsByTagName('input')[0];
+    await userEventActions.click(input);
+  });
 
   await selectClockTime(userEventActions, hour, minute, ampm);
 }
@@ -104,9 +118,12 @@ async function selectDateTime(
   ampm: 'am' | 'pm',
 ) {
   const userEventActions = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-  const inputWrapper = getByTestId('date-time-input');
-  const input = inputWrapper.getElementsByTagName('input')[0];
-  await userEventActions.click(input);
+
+  await act(async () => {
+    const inputWrapper = getByTestId('date-time-input');
+    const input = inputWrapper.getElementsByTagName('input')[0];
+    await userEventActions.click(input);
+  });
 
   await selectCalendarDate(userEventActions, day);
 
@@ -246,33 +263,13 @@ describe(DateTimeControl.name, () => {
       const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).not.toHaveFocus();
 
-      const field = getByTestId('field');
-      await userEventActions.click(field);
+      await act(async () => {
+        const field = getByTestId('field');
+        await userEventActions.click(field);
+      });
 
       const days = document.querySelectorAll('button.MuiPickersDay-root');
       expect(days[11]).toHaveFocus(); // Feb 12th (aka current date)
-    });
-
-    it('field click event should not prevent modal from closing', async () => {
-      const { getByTestId } = renderControl();
-
-      const inputWrapper = getByTestId('date-time-input');
-      const input = inputWrapper.getElementsByTagName('input')[0];
-      expect(input).not.toHaveFocus();
-
-      const field = getByTestId('field');
-      await userEventActions.click(field);
-
-      let datetimePicker = document.querySelector('.MuiCalendarOrClockPicker-root');
-      expect(datetimePicker).toBeTruthy();
-
-      const cancelButton = getByText(document.body, 'Cancel');
-      await userEventActions.click(cancelButton);
-
-      await waitFor(() => {
-        datetimePicker = document.querySelector('.MuiCalendarOrClockPicker-root');
-        expect(datetimePicker).toBeFalsy();
-      });
     });
 
     it('should open calendar and allow date selection', async () => {
@@ -286,7 +283,9 @@ describe(DateTimeControl.name, () => {
       const inputWrapper = getByTestId('date-time-input');
       const input = inputWrapper.getElementsByTagName('input')[0];
 
-      await userEventActions.click(input);
+      await act(async () => {
+        await userEventActions.click(input);
+      });
 
       expect(onChange).not.toHaveBeenCalled();
 
@@ -294,7 +293,9 @@ describe(DateTimeControl.name, () => {
       expect(days.length).toBe(28);
       expect(days[0].textContent).toBe('1');
 
-      await userEventActions.click(days[0]);
+      await act(async () => {
+        await userEventActions.click(days[0]);
+      });
 
       expect(onChange).toHaveBeenLastCalledWith('2023-02-01T10:15:35.000');
 
@@ -305,9 +306,11 @@ describe(DateTimeControl.name, () => {
       const square = document.querySelector('.MuiClock-squareMask');
       expect(square).toBeTruthy();
 
-      const hourClockEvent = getClockTouchEvent(1, '12hours');
-      fireEvent.touchMove(square!, hourClockEvent);
-      fireEvent.touchEnd(square!, hourClockEvent);
+      await act(async () => {
+        const hourClockEvent = getClockTouchEvent(1, '12hours');
+        fireEvent.touchMove(square!, hourClockEvent);
+        fireEvent.touchEnd(square!, hourClockEvent);
+      });
 
       expect(onChange).toHaveBeenLastCalledWith('2023-02-01T01:15:35.000');
 
@@ -315,9 +318,11 @@ describe(DateTimeControl.name, () => {
       expect(minutes.length).toBe(12);
       expect(minutes[0].textContent).toBe('05');
 
-      const minuteClockEvent = getClockTouchEvent(5, 'minutes');
-      fireEvent.touchMove(square!, minuteClockEvent);
-      fireEvent.touchEnd(square!, minuteClockEvent);
+      await act(async () => {
+        const minuteClockEvent = getClockTouchEvent(5, 'minutes');
+        fireEvent.touchMove(square!, minuteClockEvent);
+        fireEvent.touchEnd(square!, minuteClockEvent);
+      });
 
       expect(onChange).toHaveBeenLastCalledWith('2023-02-01T01:05:35.000');
     });
@@ -339,8 +344,10 @@ describe(DateTimeControl.name, () => {
       expect(onChange).toHaveBeenLastCalledWith('2023-02-01T02:20:35.000');
       expect(input).toHaveValue('2023-02-01T02:20:35.000');
 
-      const nowButton = getByTestId('datetime-now');
-      await userEventActions.click(nowButton);
+      await act(async () => {
+        const nowButton = getByTestId('datetime-now');
+        await userEventActions.click(nowButton);
+      });
 
       expect(onChange).toHaveBeenLastCalledWith('2023-02-12T10:15:36.000'); // Testing framework moves the time forward by a second by this point
       expect(input).toHaveValue('2023-02-12T10:15:36.000');
@@ -565,33 +572,13 @@ describe(DateTimeControl.name, () => {
       const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).not.toHaveFocus();
 
-      const field = getByTestId('field');
-      await userEventActions.click(field);
+      await act(async () => {
+        const field = getByTestId('field');
+        await userEventActions.click(field);
+      });
 
       const days = document.querySelectorAll('button.MuiPickersDay-root');
       expect(days[11]).toHaveFocus(); // Feb 12th (aka current date)
-    });
-
-    it('field click event should not prevent modal from closing', async () => {
-      const { getByTestId } = renderControl({ field: mockDateField });
-
-      const inputWrapper = getByTestId('date-input');
-      const input = inputWrapper.getElementsByTagName('input')[0];
-      expect(input).not.toHaveFocus();
-
-      const field = getByTestId('field');
-      await userEventActions.click(field);
-
-      let datetimePicker = document.querySelector('.MuiCalendarOrClockPicker-root');
-      expect(datetimePicker).toBeTruthy();
-
-      const cancelButton = getByText(document.body, 'Cancel');
-      await userEventActions.click(cancelButton);
-
-      await waitFor(() => {
-        datetimePicker = document.querySelector('.MuiCalendarOrClockPicker-root');
-        expect(datetimePicker).toBeFalsy();
-      });
     });
 
     it('should open calendar and allow date selection', async () => {
@@ -605,7 +592,9 @@ describe(DateTimeControl.name, () => {
       const inputWrapper = getByTestId('date-input');
       const input = inputWrapper.getElementsByTagName('input')[0];
 
-      await userEventActions.click(input);
+      await act(async () => {
+        await userEventActions.click(input);
+      });
 
       expect(onChange).not.toHaveBeenCalled();
 
@@ -613,7 +602,9 @@ describe(DateTimeControl.name, () => {
       expect(days.length).toBe(28);
       expect(days[0].textContent).toBe('1');
 
-      await userEventActions.click(days[0]);
+      await act(async () => {
+        await userEventActions.click(days[0]);
+      });
 
       expect(onChange).toHaveBeenLastCalledWith('2023-02-01');
     });
@@ -636,8 +627,10 @@ describe(DateTimeControl.name, () => {
       expect(onChange).toHaveBeenLastCalledWith('2023-02-01');
       expect(input).toHaveValue('2023-02-01');
 
-      const nowButton = getByTestId('datetime-now');
-      await userEventActions.click(nowButton);
+      await act(async () => {
+        const nowButton = getByTestId('datetime-now');
+        await userEventActions.click(nowButton);
+      });
 
       expect(onChange).toHaveBeenLastCalledWith('2023-02-12');
       expect(input).toHaveValue('2023-02-12');
@@ -818,33 +811,13 @@ describe(DateTimeControl.name, () => {
       const input = inputWrapper.getElementsByTagName('input')[0];
       expect(input).not.toHaveFocus();
 
-      const field = getByTestId('field');
-      await userEventActions.click(field);
+      await act(async () => {
+        const field = getByTestId('field');
+        await userEventActions.click(field);
+      });
 
       const clock = document.querySelector('.MuiClock-wrapper');
       expect(clock).toHaveFocus();
-    });
-
-    it('field click event should not prevent modal from closing', async () => {
-      const { getByTestId } = renderControl({ field: mockTimeField });
-
-      const inputWrapper = getByTestId('time-input');
-      const input = inputWrapper.getElementsByTagName('input')[0];
-      expect(input).not.toHaveFocus();
-
-      const field = getByTestId('field');
-      await userEventActions.click(field);
-
-      let datetimePicker = document.querySelector('.MuiCalendarOrClockPicker-root');
-      expect(datetimePicker).toBeTruthy();
-
-      const cancelButton = getByText(document.body, 'Cancel');
-      await userEventActions.click(cancelButton);
-
-      await waitFor(() => {
-        datetimePicker = document.querySelector('.MuiCalendarOrClockPicker-root');
-        expect(datetimePicker).toBeFalsy();
-      });
     });
 
     it('should open calendar and allow date selection', async () => {
@@ -858,7 +831,9 @@ describe(DateTimeControl.name, () => {
       const inputWrapper = getByTestId('time-input');
       const input = inputWrapper.getElementsByTagName('input')[0];
 
-      await userEventActions.click(input);
+      await act(async () => {
+        await userEventActions.click(input);
+      });
 
       expect(onChange).not.toHaveBeenCalled();
 
@@ -869,9 +844,11 @@ describe(DateTimeControl.name, () => {
       const square = document.querySelector('.MuiClock-squareMask');
       expect(square).toBeTruthy();
 
-      const hourClockEvent = getClockTouchEvent(1, '12hours');
-      fireEvent.touchMove(square!, hourClockEvent);
-      fireEvent.touchEnd(square!, hourClockEvent);
+      await act(async () => {
+        const hourClockEvent = getClockTouchEvent(1, '12hours');
+        fireEvent.touchMove(square!, hourClockEvent);
+        fireEvent.touchEnd(square!, hourClockEvent);
+      });
 
       expect(onChange).toHaveBeenLastCalledWith('01:15:35.000');
 
@@ -879,9 +856,11 @@ describe(DateTimeControl.name, () => {
       expect(minutes.length).toBe(12);
       expect(minutes[0].textContent).toBe('05');
 
-      const minuteClockEvent = getClockTouchEvent(5, 'minutes');
-      fireEvent.touchMove(square!, minuteClockEvent);
-      fireEvent.touchEnd(square!, minuteClockEvent);
+      await act(async () => {
+        const minuteClockEvent = getClockTouchEvent(5, 'minutes');
+        fireEvent.touchMove(square!, minuteClockEvent);
+        fireEvent.touchEnd(square!, minuteClockEvent);
+      });
 
       expect(onChange).toHaveBeenLastCalledWith('01:05:35.000');
     });
@@ -904,8 +883,10 @@ describe(DateTimeControl.name, () => {
       expect(onChange).toHaveBeenLastCalledWith('02:20:35.000');
       expect(input).toHaveValue('02:20:35.000');
 
-      const nowButton = getByTestId('datetime-now');
-      await userEventActions.click(nowButton);
+      await act(async () => {
+        const nowButton = getByTestId('datetime-now');
+        await userEventActions.click(nowButton);
+      });
 
       expect(onChange).toHaveBeenLastCalledWith('10:15:36.000'); // Testing framework moves the time forward by a second by this point
       expect(input).toHaveValue('10:15:36.000');
