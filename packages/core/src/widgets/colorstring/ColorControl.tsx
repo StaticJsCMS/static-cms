@@ -147,7 +147,7 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
         )}
         <TextField
           type="text"
-          ref={ref}
+          inputRef={ref}
           key="color-picker-input"
           value={internalValue}
           onChange={handleInputChange}

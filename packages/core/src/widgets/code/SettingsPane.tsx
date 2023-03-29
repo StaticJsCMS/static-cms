@@ -31,8 +31,8 @@ const SettingsSelect: FC<SettingsSelectProps> = ({
   uniqueId,
   type,
 }) => {
-  const handleChange = (newValue: string | string[]) => {
-    if (!Array.isArray(newValue)) {
+  const handleChange = (newValue: string | number | (string | number)[]) => {
+    if (typeof newValue === 'string') {
       onChange(newValue);
     }
   };
