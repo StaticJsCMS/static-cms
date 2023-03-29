@@ -1,4 +1,4 @@
-import { FavoriteBorder as FavoriteBorderIcon } from '@styled-icons/material/FavoriteBorder';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
 

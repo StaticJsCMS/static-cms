@@ -16,7 +16,7 @@ import type {
   ImplementationEntry,
   ImplementationFile,
   ImplementationMediaFile,
-  User
+  User,
 } from '@staticcms/core/interface';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 

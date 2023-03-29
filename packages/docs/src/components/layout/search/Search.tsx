@@ -1,4 +1,4 @@
-import { Search as SearchIcon } from '@styled-icons/material/Search';
+import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';

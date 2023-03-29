@@ -1,4 +1,4 @@
-import { ExpandLess as ExpandLessIcon } from '@styled-icons/material/ExpandLess';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import Collapse from '@mui/material/Collapse';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';

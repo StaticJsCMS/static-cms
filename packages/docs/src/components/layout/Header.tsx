@@ -1,7 +1,7 @@
-import { Brightness4 as Brightness4Icon } from '@styled-icons/material/Brightness4';
-import { Brightness7 as Brightness7Icon } from '@styled-icons/material/Brightness7';
-import { GitHub as GitHubIcon } from '@styled-icons/material/GitHub';
-import { Menu as MenuIcon } from '@styled-icons/material/Menu';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';

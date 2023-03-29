@@ -1,4 +1,4 @@
-import { Link as LinkIcon } from '@styled-icons/material/Link';
+import LinkIcon from '@mui/icons-material/Link';
 import { useTheme } from '@mui/material/styles';
 import { useMemo } from 'react';
 

@@ -1,4 +1,4 @@
-import { ChevronRight as ChevronRightIcon } from '@styled-icons/material/ChevronRight';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MuiLink from '@mui/material/Link';
 import Link from 'next/link';
 
