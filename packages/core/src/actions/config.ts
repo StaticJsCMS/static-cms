@@ -7,7 +7,12 @@ import yaml from 'yaml';
 import { resolveBackend } from '../backend';
 import { CONFIG_FAILURE, CONFIG_REQUEST, CONFIG_SUCCESS } from '../constants';
 import validateConfig from '../constants/configSchema';
-import { I18N, I18N_FIELD, I18N_STRUCTURE } from '../lib/i18n';
+import {
+  I18N,
+  I18N_FIELD_NONE,
+  I18N_FIELD_TRANSLATE,
+  I18N_STRUCTURE_SINGLE_FILE,
+} from '../lib/i18n';
 import { selectDefaultSortableFields } from '../lib/util/collection.util';
 
 import type { AnyAction } from 'redux';
@@ -24,11 +29,13 @@ import type {
 } from '../interface';
 import type { RootState } from '../store';
 
-function isObjectField<F extends BaseField = UnknownField>(field: Field<F>): field is ObjectField {
+function isObjectField<F extends BaseField = UnknownField>(
+  field: Field<F>,
+): field is ObjectField<F> {
   return 'fields' in (field as ObjectField);
 }
 
-function isFieldList<F extends BaseField = UnknownField>(field: Field<F>): field is ListField {
+function isFieldList<F extends BaseField = UnknownField>(field: Field<F>): field is ListField<F> {
   return 'types' in (field as ListField) || 'field' in (field as ListField);
 }
 
@@ -70,9 +77,9 @@ function setDefaultPublicFolderForField<T extends Field>(field: T) {
 
 function setI18nField<T extends Field>(field: T) {
   if (field[I18N] === true) {
-    return { ...field, [I18N]: I18N_FIELD.TRANSLATE };
+    return { ...field, [I18N]: I18N_FIELD_TRANSLATE };
   } else if (field[I18N] === false || !field[I18N]) {
-    return { ...field, [I18N]: I18N_FIELD.NONE };
+    return { ...field, [I18N]: I18N_FIELD_NONE };
   }
   return field;
 }
@@ -104,9 +111,9 @@ function setI18nDefaultsForFields(collectionOrFileFields: Field[], hasI18n: bool
 }
 
 function throwOnInvalidFileCollectionStructure(i18n?: I18nInfo) {
-  if (i18n && i18n.structure !== I18N_STRUCTURE.SINGLE_FILE) {
+  if (i18n && i18n.structure !== I18N_STRUCTURE_SINGLE_FILE) {
     throw new Error(
-      `i18n configuration for files collections is limited to ${I18N_STRUCTURE.SINGLE_FILE} structure`,
+      `i18n configuration for files collections is limited to ${I18N_STRUCTURE_SINGLE_FILE} structure`,
     );
   }
 }

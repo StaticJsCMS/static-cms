@@ -38,7 +38,13 @@ import {
   SORT_ENTRIES_SUCCESS,
 } from '../constants';
 import ValidationErrorTypes from '../constants/validationErrorTypes';
-import { duplicateDefaultI18nFields, hasI18n, I18N_FIELD, serializeI18n } from '../lib/i18n';
+import {
+  duplicateDefaultI18nFields,
+  hasI18n,
+  I18N_FIELD_DUPLICATE,
+  I18N_FIELD_TRANSLATE,
+  serializeI18n,
+} from '../lib/i18n';
 import { serializeValues } from '../lib/serializeEntryValues';
 import { Cursor } from '../lib/util';
 import { selectFields, updateFieldByKey } from '../lib/util/collection.util';
@@ -899,7 +905,7 @@ function createEmptyDraftI18nData(collection: Collection, dataFields: Field[]) {
   }
 
   function skipField(field: Field) {
-    return field.i18n !== I18N_FIELD.DUPLICATE && field.i18n !== I18N_FIELD.TRANSLATE;
+    return field.i18n !== I18N_FIELD_DUPLICATE && field.i18n !== I18N_FIELD_TRANSLATE;
   }
 
   const i18nData = createEmptyDraftData(dataFields, skipField);

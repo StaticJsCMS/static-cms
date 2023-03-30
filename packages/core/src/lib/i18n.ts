@@ -5,22 +5,26 @@ import groupBy from 'lodash/groupBy';
 import { selectEntrySlug } from './util/collection.util';
 import { set } from './util/object.util';
 
-import type { Field, Collection, Entry, EntryData, i18nCollection, I18nInfo } from '../interface';
+import type {
+  Field,
+  Collection,
+  Entry,
+  EntryData,
+  i18nCollection,
+  I18nInfo,
+  I18nStructure,
+} from '../interface';
 import type { EntryDraftState } from '../reducers/entryDraft';
 
 export const I18N = 'i18n';
 
-export enum I18N_STRUCTURE {
-  MULTIPLE_FOLDERS = 'multiple_folders',
-  MULTIPLE_FILES = 'multiple_files',
-  SINGLE_FILE = 'single_file',
-}
+export const I18N_STRUCTURE_MULTIPLE_FOLDERS = 'multiple_folders';
+export const I18N_STRUCTURE_MULTIPLE_FILES = 'multiple_files';
+export const I18N_STRUCTURE_SINGLE_FILE = 'single_file';
 
-export enum I18N_FIELD {
-  TRANSLATE = 'translate',
-  DUPLICATE = 'duplicate',
-  NONE = 'none',
-}
+export const I18N_FIELD_TRANSLATE = 'translate';
+export const I18N_FIELD_DUPLICATE = 'duplicate';
+export const I18N_FIELD_NONE = 'none';
 
 export function hasI18n(collection: Collection | i18nCollection): collection is i18nCollection {
   return I18N in collection;
@@ -37,22 +41,22 @@ export function getI18nInfo(collection: Collection | i18nCollection): I18nInfo |
 
 export function getI18nFilesDepth(collection: Collection, depth: number) {
   const { structure } = getI18nInfo(collection) as I18nInfo;
-  if (structure === I18N_STRUCTURE.MULTIPLE_FOLDERS) {
+  if (structure === I18N_STRUCTURE_MULTIPLE_FOLDERS) {
     return depth + 1;
   }
   return depth;
 }
 
 export function isFieldTranslatable(field: Field, locale?: string, defaultLocale?: string) {
-  return locale !== defaultLocale && field.i18n === I18N_FIELD.TRANSLATE;
+  return locale !== defaultLocale && field.i18n === I18N_FIELD_TRANSLATE;
 }
 
 export function isFieldDuplicate(field: Field, locale?: string, defaultLocale?: string) {
-  return locale !== defaultLocale && field.i18n === I18N_FIELD.DUPLICATE;
+  return locale !== defaultLocale && field.i18n === I18N_FIELD_DUPLICATE;
 }
 
 export function isFieldHidden(field: Field, locale?: string, defaultLocale?: string) {
-  return locale !== defaultLocale && field.i18n === I18N_FIELD.NONE;
+  return locale !== defaultLocale && field.i18n === I18N_FIELD_NONE;
 }
 
 export function getLocaleDataPath(locale: string) {
@@ -65,37 +69,37 @@ export function getDataPath(locale: string, defaultLocale: string) {
 }
 
 export function getFilePath(
-  structure: I18N_STRUCTURE,
+  structure: I18nStructure,
   extension: string,
   path: string,
   slug: string,
   locale: string,
 ) {
   switch (structure) {
-    case I18N_STRUCTURE.MULTIPLE_FOLDERS:
+    case I18N_STRUCTURE_MULTIPLE_FOLDERS:
       return path.replace(`/${slug}`, `/${locale}/${slug}`);
-    case I18N_STRUCTURE.MULTIPLE_FILES:
+    case I18N_STRUCTURE_MULTIPLE_FILES:
       return path.replace(new RegExp(`${escapeRegExp(extension)}$`), `${locale}.${extension}`);
-    case I18N_STRUCTURE.SINGLE_FILE:
+    case I18N_STRUCTURE_SINGLE_FILE:
     default:
       return path;
   }
 }
 
-export function getLocaleFromPath(structure: I18N_STRUCTURE, extension: string, path: string) {
+export function getLocaleFromPath(structure: I18nStructure, extension: string, path: string) {
   switch (structure) {
-    case I18N_STRUCTURE.MULTIPLE_FOLDERS: {
+    case I18N_STRUCTURE_MULTIPLE_FOLDERS: {
       const parts = path.split('/');
       // filename
       parts.pop();
       // locale
       return parts.pop();
     }
-    case I18N_STRUCTURE.MULTIPLE_FILES: {
+    case I18N_STRUCTURE_MULTIPLE_FILES: {
       const parts = path.slice(0, -`.${extension}`.length);
       return parts.split('.').pop();
     }
-    case I18N_STRUCTURE.SINGLE_FILE:
+    case I18N_STRUCTURE_SINGLE_FILE:
     default:
       return '';
   }
@@ -109,24 +113,24 @@ export function getFilePaths(
 ) {
   const { structure, locales } = getI18nInfo(collection) as I18nInfo;
 
-  if (structure === I18N_STRUCTURE.SINGLE_FILE) {
+  if (structure === I18N_STRUCTURE_SINGLE_FILE) {
     return [path];
   }
 
   const paths = locales.map(locale =>
-    getFilePath(structure as I18N_STRUCTURE, extension, path, slug, locale),
+    getFilePath(structure as I18nStructure, extension, path, slug, locale),
   );
 
   return paths;
 }
 
-export function normalizeFilePath(structure: I18N_STRUCTURE, path: string, locale: string) {
+export function normalizeFilePath(structure: I18nStructure, path: string, locale: string) {
   switch (structure) {
-    case I18N_STRUCTURE.MULTIPLE_FOLDERS:
+    case I18N_STRUCTURE_MULTIPLE_FOLDERS:
       return path.replace(`${locale}/`, '');
-    case I18N_STRUCTURE.MULTIPLE_FILES:
+    case I18N_STRUCTURE_MULTIPLE_FILES:
       return path.replace(`.${locale}`, '');
-    case I18N_STRUCTURE.SINGLE_FILE:
+    case I18N_STRUCTURE_SINGLE_FILE:
     default:
       return path;
   }
@@ -142,12 +146,12 @@ export function getI18nFiles(
   newPath?: string,
 ) {
   const {
-    structure = I18N_STRUCTURE.SINGLE_FILE,
+    structure = I18N_STRUCTURE_SINGLE_FILE,
     defaultLocale,
     locales,
   } = getI18nInfo(collection) as I18nInfo;
 
-  if (structure === I18N_STRUCTURE.SINGLE_FILE) {
+  if (structure === I18N_STRUCTURE_SINGLE_FILE) {
     const data = locales.reduce((map, locale) => {
       const dataPath = getDataPath(locale, defaultLocale);
       if (map) {
@@ -230,7 +234,7 @@ export function formatI18nBackup(
 
 function mergeValues(
   collection: Collection,
-  structure: I18N_STRUCTURE,
+  structure: I18nStructure,
   defaultLocale: string,
   values: { locale: string; value: Entry }[],
 ) {
@@ -285,13 +289,13 @@ export async function getI18nEntry(
   getEntryValue: (path: string) => Promise<Entry>,
 ) {
   const {
-    structure = I18N_STRUCTURE.SINGLE_FILE,
+    structure = I18N_STRUCTURE_SINGLE_FILE,
     locales,
     defaultLocale,
   } = getI18nInfo(collection) as I18nInfo;
 
   let entryValue: Entry;
-  if (structure === I18N_STRUCTURE.SINGLE_FILE) {
+  if (structure === I18N_STRUCTURE_SINGLE_FILE) {
     entryValue = mergeSingleFileValue(await getEntryValue(path), defaultLocale, locales);
   } else {
     const entryValues = await Promise.all(
@@ -315,11 +319,11 @@ export async function getI18nEntry(
 
 export function groupEntries(collection: Collection, extension: string, entries: Entry[]): Entry[] {
   const {
-    structure = I18N_STRUCTURE.SINGLE_FILE,
+    structure = I18N_STRUCTURE_SINGLE_FILE,
     defaultLocale,
     locales,
   } = getI18nInfo(collection) as I18nInfo;
-  if (structure === I18N_STRUCTURE.SINGLE_FILE) {
+  if (structure === I18N_STRUCTURE_SINGLE_FILE) {
     return entries.map(e => mergeSingleFileValue(e, defaultLocale, locales));
   }
 
@@ -349,7 +353,7 @@ export function getI18nDataFiles(
   diffFiles: { path: string; id: string; newFile: boolean }[],
 ) {
   const { structure } = getI18nInfo(collection) as I18nInfo;
-  if (structure === I18N_STRUCTURE.SINGLE_FILE) {
+  if (structure === I18N_STRUCTURE_SINGLE_FILE) {
     return diffFiles;
   }
   const paths = getFilePaths(collection, extension, path, slug);
@@ -386,7 +390,7 @@ export function duplicateI18nFields(
   fieldPath: string,
 ) {
   const value = get(entryDraft, ['entry', 'data', ...fieldPath.split('.')]);
-  if (field.i18n === I18N_FIELD.DUPLICATE) {
+  if (field.i18n === I18N_FIELD_DUPLICATE) {
     locales
       .filter(l => l !== defaultLocale)
       .forEach(l => {
