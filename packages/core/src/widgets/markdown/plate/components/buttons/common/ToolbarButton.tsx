@@ -53,8 +53,6 @@ const ToolbarButton: FC<ToolbarButtonProps> = ({
     style.color = activeColor;
   }
 
-  console.log('TOOLBAR BUTTON', label ?? tooltip, active);
-
   return (
     <Button
       aria-label={label ?? tooltip}

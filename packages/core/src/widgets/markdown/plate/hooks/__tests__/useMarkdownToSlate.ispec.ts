@@ -25,11 +25,7 @@ async function expectNodes(
 
 function testRunner(key: string, mode: 'markdown' | 'mdx' | 'both', data: SerializationTestData) {
   it(`deserializes ${key}`, async () => {
-    await expectNodes(
-      data.markdown,
-      { shortcodeConfigs, useMdx: mode === 'mdx' },
-      data.slate,
-    );
+    await expectNodes(data.markdown, { shortcodeConfigs, useMdx: mode === 'mdx' }, data.slate);
   });
 }
 
