@@ -138,7 +138,6 @@ collections:
             label: Pattern Validation
             widget: code
             pattern: ['.{12,}', 'Must have at least 12 characters']
-            allow_input: true
             required: false
           - name: language
             label: Language Selection

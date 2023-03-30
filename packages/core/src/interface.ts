@@ -16,7 +16,14 @@ import type {
   SORT_DIRECTION_NONE,
 } from './constants';
 import type { formatExtensions } from './formats/formats';
-import type { I18N_STRUCTURE } from './lib/i18n';
+import type {
+  I18N_FIELD_DUPLICATE,
+  I18N_FIELD_NONE,
+  I18N_FIELD_TRANSLATE,
+  I18N_STRUCTURE_MULTIPLE_FILES,
+  I18N_STRUCTURE_MULTIPLE_FOLDERS,
+  I18N_STRUCTURE_SINGLE_FILE,
+} from './lib/i18n';
 import type { AllowedEvent } from './lib/registry';
 import type Cursor from './lib/util/Cursor';
 import type AssetProxy from './valueObjects/AssetProxy';
@@ -521,7 +528,7 @@ export type MapWidgetType = 'Point' | 'LineString' | 'Polygon';
 
 export interface SelectWidgetOptionObject {
   label: string;
-  value: string;
+  value: string | number;
 }
 
 export type AuthScope = 'repo' | 'public_repo';
@@ -557,7 +564,7 @@ export interface CodeField extends BaseField {
   keys?: { code: string; lang: string };
   output_code_only?: boolean;
 
-  code_mirror_config: {
+  code_mirror_config?: {
     extra_keys?: Record<string, string>;
   } & Record<string, unknown>;
 }
@@ -688,11 +695,11 @@ export type Field<EF extends BaseField = UnknownField> =
   | ColorField
   | DateTimeField
   | FileOrImageField
-  | ListField
+  | ListField<EF>
   | MapField
   | MarkdownField
   | NumberField
-  | ObjectField
+  | ObjectField<EF>
   | RelationField
   | SelectField
   | HiddenField
@@ -703,7 +710,7 @@ export interface ViewFilter {
   id?: string;
   label: string;
   field: string;
-  pattern: string;
+  pattern: string | boolean | number;
 }
 
 export interface ViewGroup {
@@ -852,10 +859,20 @@ export interface EditorPersistOptions {
   duplicate?: boolean;
 }
 
+export type I18nStructure =
+  | typeof I18N_STRUCTURE_MULTIPLE_FILES
+  | typeof I18N_STRUCTURE_MULTIPLE_FOLDERS
+  | typeof I18N_STRUCTURE_SINGLE_FILE;
+
+export type I18nField =
+  | typeof I18N_FIELD_DUPLICATE
+  | typeof I18N_FIELD_TRANSLATE
+  | typeof I18N_FIELD_NONE;
+
 export interface I18nInfo {
   locales: string[];
   defaultLocale: string;
-  structure?: I18N_STRUCTURE;
+  structure?: I18nStructure;
 }
 
 export interface ProcessedCodeLanguage {

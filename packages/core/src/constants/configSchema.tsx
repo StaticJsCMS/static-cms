@@ -8,7 +8,14 @@ import { v4 as uuid } from 'uuid';
 
 import { formatExtensions, frontmatterFormats, extensionFormatters } from '../formats/formats';
 import { getWidgets } from '../lib/registry';
-import { I18N_STRUCTURE, I18N_FIELD } from '../lib/i18n';
+import {
+  I18N_FIELD_DUPLICATE,
+  I18N_FIELD_NONE,
+  I18N_FIELD_TRANSLATE,
+  I18N_STRUCTURE_MULTIPLE_FILES,
+  I18N_STRUCTURE_MULTIPLE_FOLDERS,
+  I18N_STRUCTURE_SINGLE_FILE,
+} from '../lib/i18n';
 
 import type { ErrorObject } from 'ajv';
 import type { Config } from '../interface';
@@ -18,7 +25,14 @@ const localeType = { type: 'string', minLength: 2, maxLength: 10, pattern: '^[a-
 const i18n = {
   type: 'object',
   properties: {
-    structure: { type: 'string', enum: Object.values(I18N_STRUCTURE) },
+    structure: {
+      type: 'string',
+      enum: [
+        I18N_STRUCTURE_MULTIPLE_FILES,
+        I18N_STRUCTURE_MULTIPLE_FOLDERS,
+        I18N_STRUCTURE_SINGLE_FILE,
+      ],
+    },
     locales: {
       type: 'array',
       minItems: 2,
@@ -39,7 +53,10 @@ const i18nCollection = {
 };
 
 const i18nField = {
-  oneOf: [{ type: 'boolean' }, { type: 'string', enum: Object.values(I18N_FIELD) }],
+  oneOf: [
+    { type: 'boolean' },
+    { type: 'string', enum: [I18N_FIELD_DUPLICATE, I18N_FIELD_NONE, I18N_FIELD_TRANSLATE] },
+  ],
 };
 
 /**
