@@ -40,7 +40,9 @@ function persistLeafFormats(
 ): Omit<MdastNode, 'children' | 'type' | 'text'> {
   return children.reduce((acc, node) => {
     (Object.keys(node) as Array<keyof MdastNode>).forEach(function (key) {
-      if (key === 'children' || key === 'type' || key === 'text') return;
+      if (key === 'children' || key === 'type' || key === 'text') {
+        return;
+      }
 
       acc[key] = node[key];
     });

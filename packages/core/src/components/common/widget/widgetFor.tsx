@@ -11,7 +11,6 @@ import type {
   Entry,
   EntryData,
   Field,
-  GetAssetFunction,
   InferredField,
   ListField,
   RenderedField,
@@ -32,8 +31,8 @@ export default function getWidgetFor(
   name: string,
   fields: Field[],
   entry: Entry,
+  theme: 'dark' | 'light',
   inferredFields: Record<string, InferredField>,
-  getAsset: GetAssetFunction,
   widgetFields: Field[] = fields,
   values: EntryData = entry.data,
   idx: number | null = null,
@@ -56,8 +55,8 @@ export default function getWidgetFor(
         collection,
         fields,
         entry,
+        theme,
         inferredFields,
-        getAsset,
         field.fields,
         value as EntryData | EntryData[],
       ),
@@ -70,8 +69,8 @@ export default function getWidgetFor(
         collection,
         field,
         entry,
+        theme,
         inferredFields,
-        getAsset,
         value as EntryData[],
       ),
     };
@@ -97,14 +96,22 @@ export default function getWidgetFor(
     renderedValue = (
       <div key={field.name}>
         <>
-          <strong>{field.label ?? field.name}:</strong> {value}
+          <strong
+            className="
+              text-slate-500
+              dark:text-slate-400
+            "
+          >
+            {field.label ?? field.name}:
+          </strong>{' '}
+          {value}
         </>
       </div>
     );
   }
 
   return renderedValue
-    ? getWidget(config, fieldWithWidgets, collection, renderedValue, entry, getAsset, idx)
+    ? getWidget(config, fieldWithWidgets, collection, renderedValue, entry, theme, idx)
     : null;
 }
 
@@ -116,8 +123,8 @@ function getNestedWidgets(
   collection: Collection,
   fields: Field[],
   entry: Entry,
+  theme: 'dark' | 'light',
   inferredFields: Record<string, InferredField>,
-  getAsset: GetAssetFunction,
   widgetFields: Field[],
   values: EntryData | EntryData[],
 ) {
@@ -129,8 +136,8 @@ function getNestedWidgets(
         collection,
         fields,
         entry,
+        theme,
         inferredFields,
-        getAsset,
         widgetFields,
         value,
       ),
@@ -143,8 +150,8 @@ function getNestedWidgets(
     collection,
     fields,
     entry,
+    theme,
     inferredFields,
-    getAsset,
     widgetFields,
     values,
   );
@@ -158,13 +165,13 @@ function getTypedNestedWidgets(
   collection: Collection,
   field: ListField,
   entry: Entry,
+  theme: 'dark' | 'light',
   inferredFields: Record<string, InferredField>,
-  getAsset: GetAssetFunction,
   values: EntryData[],
 ) {
   return values
     ?.flatMap((value, index) => {
-      const itemType = getTypedFieldForValue(field, value ?? {}, index);
+      const [_, itemType] = getTypedFieldForValue(field, value ?? {}, index);
       if (!itemType) {
         return null;
       }
@@ -174,8 +181,8 @@ function getTypedNestedWidgets(
         collection,
         itemType.fields,
         entry,
+        theme,
         inferredFields,
-        getAsset,
         itemType.fields,
         value,
         index,
@@ -192,8 +199,8 @@ function widgetsForNestedFields(
   collection: Collection,
   fields: Field[],
   entry: Entry,
+  theme: 'dark' | 'light',
   inferredFields: Record<string, InferredField>,
-  getAsset: GetAssetFunction,
   widgetFields: Field[],
   values: EntryData,
   idx: number | null = null,
@@ -206,8 +213,8 @@ function widgetsForNestedFields(
         field.name,
         fields,
         entry,
+        theme,
         inferredFields,
-        getAsset,
         widgetFields,
         values,
         idx,
@@ -222,7 +229,7 @@ function getWidget(
   collection: Collection,
   value: ValueOrNestedValue | ReactNode,
   entry: Entry,
-  getAsset: GetAssetFunction,
+  theme: 'dark' | 'light',
   idx: number | null = null,
 ) {
   if (!field.widget) {
@@ -244,7 +251,6 @@ function getWidget(
       previewComponent={widget.preview as WidgetPreviewComponent}
       key={key}
       field={field as RenderedField}
-      getAsset={getAsset}
       config={config}
       collection={collection}
       value={
@@ -258,6 +264,7 @@ function getWidget(
           : value
       }
       entry={entry}
+      theme={theme}
     />
   );
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import {
   deserializationOnlyTestData,
   runSerializationTests,
@@ -22,30 +23,9 @@ async function expectNodes(
   expect(await markdownToSlate(markdown, options)).toEqual(children);
 }
 
-function sanitizeHtmlInMarkdown(markdown: string) {
-  return markdown
-    .replace('</font>', '<\\/font>')
-    .replace('<u>', '<u\\>')
-    .replace('</u>', '<\\/u>')
-    .replace('<sub>', '<sub\\>')
-    .replace('</sub>', '<\\/sub>')
-    .replace('<sup>', '<sup\\>')
-    .replace('</sup>', '<\\/sup>');
-}
-
 function testRunner(key: string, mode: 'markdown' | 'mdx' | 'both', data: SerializationTestData) {
   it(`deserializes ${key}`, async () => {
-    if (mode === 'both') {
-      await expectNodes(data.markdown, { shortcodeConfigs, useMdx: false }, data.slate);
-      await expectNodes(data.markdown, { shortcodeConfigs, useMdx: true }, data.slate);
-      return;
-    }
-
-    await expectNodes(
-      mode === 'markdown' ? sanitizeHtmlInMarkdown(data.markdown) : data.markdown,
-      { shortcodeConfigs, useMdx: mode === 'mdx' },
-      data.slate,
-    );
+    await expectNodes(data.markdown, { shortcodeConfigs, useMdx: mode === 'mdx' }, data.slate);
   });
 }
 

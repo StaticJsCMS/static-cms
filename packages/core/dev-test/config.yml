@@ -25,7 +25,10 @@ collections:
       and editing guidelines that are specific to a collection.
     folder: _posts
     slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
-    summary: '{{title}} -- {{year}}/{{month}}/{{day}}'
+    summary_fields:
+      - title
+      - date
+      - draft
     sortable_fields:
       fields:
         - title
@@ -219,7 +222,7 @@ collections:
             time_format: 'h:mm aaa'
             required: false
           - name: date_and_time_with_default
-            label: Date and Time With Deafult
+            label: Date and Time With Default
             widget: datetime
             format: 'MMM d, yyyy h:mm aaa'
             date_format: 'MMM d, yyyy'
@@ -233,22 +236,25 @@ collections:
             time_format: false
             required: false
           - name: date_with_default
-            label: Date With Deafult
+            label: Date With Default
             widget: datetime
             format: 'MMM d, yyyy'
             date_format: 'MMM d, yyyy'
+            time_format: false
             required: false
             default: 'Jan 12, 2023'
           - name: time
             label: Time
             widget: datetime
             format: 'h:mm aaa'
+            date_format: false
             time_format: 'h:mm aaa'
             required: false
           - name: time_with_default
-            label: Time With Deafult
+            label: Time With Default
             widget: datetime
             format: 'h:mm aaa'
+            date_format: false
             time_format: 'h:mm aaa'
             required: false
             default: '12:00 am'
@@ -641,7 +647,7 @@ collections:
               - date
             search_fields:
               - title
-              - body
+              - date
             value_field: title
           - label: Required With Default
             name: with_default
@@ -652,7 +658,7 @@ collections:
               - date
             search_fields:
               - title
-              - body
+              - date
             value_field: title
             default: This is a YAML front matter post
           - label: Optional Validation
@@ -665,7 +671,7 @@ collections:
               - date
             search_fields:
               - title
-              - body
+              - date
             value_field: title
           - label: Multiple
             name: multiple
@@ -678,7 +684,7 @@ collections:
               - date
             search_fields:
               - title
-              - body
+              - date
             value_field: title
           - label: Multiple With Default
             name: multiple_with_default
@@ -694,7 +700,7 @@ collections:
               - date
             search_fields:
               - title
-              - body
+              - date
             value_field: title
       - name: select
         label: Select

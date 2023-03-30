@@ -1,8 +1,10 @@
-import CheckIcon from '@mui/icons-material/Check';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+import { Check as CheckIcon } from '@styled-icons/material/Check';
 import React, { useCallback } from 'react';
+
+import classNames from '@staticcms/core/lib/util/classNames.util';
 
 import type { FC } from 'react';
 
@@ -38,7 +40,9 @@ const ColorButton: FC<ColorButtonProps> = ({
           }}
         >
           {isSelected ? (
-            <CheckIcon sx={{ color: isBrightColor ? '#000000' : '#ffffff' }} />
+            <CheckIcon
+              className={classNames('h-5 w-5', isBrightColor ? 'text-black' : 'text-white')}
+            />
           ) : (
             <>&nbsp;</>
           )}

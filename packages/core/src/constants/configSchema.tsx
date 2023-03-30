@@ -216,6 +216,12 @@ function getConfigSchema() {
             },
             identifier_field: { type: 'string' },
             summary: { type: 'string' },
+            summary_fields: {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+            },
             slug: { type: 'string' },
             path: { type: 'string' },
             create: { type: 'boolean' },

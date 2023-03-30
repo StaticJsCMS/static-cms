@@ -5,16 +5,17 @@ import unset from 'lodash/unset';
 import { extname } from 'path';
 import { v4 as uuid } from 'uuid';
 
-import { basename, Cursor, CURSOR_COMPATIBILITY_SYMBOL } from '@staticcms/core/lib/util';
+import { Cursor, CURSOR_COMPATIBILITY_SYMBOL } from '@staticcms/core/lib/util';
 import AuthenticationPage from './AuthenticationPage';
 
 import type {
-  BackendEntry,
   BackendClass,
+  BackendEntry,
   Config,
   DisplayURL,
   ImplementationEntry,
   ImplementationFile,
+  ImplementationMediaFile,
   User,
 } from '@staticcms/core/interface';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
@@ -215,37 +216,35 @@ export default class TestBackend implements BackendClass {
     return Promise.resolve();
   }
 
-  async getMedia(mediaFolder = this.mediaFolder) {
+  async getMedia(mediaFolder = this.mediaFolder): Promise<ImplementationMediaFile[]> {
     if (!mediaFolder) {
       return [];
     }
     const files = getFolderFiles(window.repoFiles, mediaFolder.split('/')[0], '', 100).filter(f =>
       f.path.startsWith(mediaFolder),
     );
-    return files.map(f => this.normalizeAsset(f.content as AssetProxy));
+    return files.map(f => ({
+      name: f.path,
+      id: f.path,
+      path: f.path,
+      displayURL: f.path,
+    }));
   }
 
   async getMediaFile(path: string) {
-    const asset = getFile(path, window.repoFiles).content as AssetProxy;
-
-    const url = asset?.toString() ?? '';
-    const name = basename(path);
-    const blob = await fetch(url).then(res => res.blob());
-    const fileObj = new File([blob], name);
-
     return {
-      id: url,
-      displayURL: url,
+      id: path,
+      displayURL: path,
       path,
-      name,
-      size: fileObj.size,
-      file: fileObj,
-      url,
+      name: path,
+      size: 1,
+      url: path,
     };
   }
 
-  normalizeAsset(assetProxy: AssetProxy) {
+  normalizeAsset(assetProxy: AssetProxy): ImplementationMediaFile {
     const fileObj = assetProxy.fileObj as File;
+
     const { name, size } = fileObj;
     const objectUrl = attempt(window.URL.createObjectURL, fileObj);
     const url = isError(objectUrl) ? '' : objectUrl;

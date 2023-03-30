@@ -1,13 +1,12 @@
-import Button from '@mui/material/Button';
-import { useTheme } from '@mui/material/styles';
-import Tooltip from '@mui/material/Tooltip';
 import { focusEditor } from '@udecode/plate';
 import React, { useCallback } from 'react';
 
+import Button from '@staticcms/core/components/common/button/Button';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 
 import type { MdEditor } from '@staticcms/markdown';
-import type { FC, MouseEvent, ReactNode } from 'react';
+import type { CSSProperties, FC, MouseEvent, ReactNode } from 'react';
 
 export interface ToolbarButtonProps {
   label?: string;
@@ -16,6 +15,7 @@ export interface ToolbarButtonProps {
   activeColor?: string;
   icon: ReactNode;
   disableFocusAfterClick?: boolean;
+  disabled: boolean;
   onClick: (editor: MdEditor, event: MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -26,10 +26,10 @@ const ToolbarButton: FC<ToolbarButtonProps> = ({
   active = false,
   activeColor,
   disableFocusAfterClick = false,
+  disabled,
   onClick,
 }) => {
   const editor = useMdPlateEditorState();
-  const theme = useTheme();
 
   const handleOnClick = useCallback(
     (event: MouseEvent<HTMLButtonElement>) => {
@@ -50,31 +50,36 @@ const ToolbarButton: FC<ToolbarButtonProps> = ({
     [disableFocusAfterClick, editor, onClick],
   );
 
-  return (
-    <Tooltip title={tooltip} disableInteractive>
-      <Button
-        aria-label={label ?? tooltip}
-        size="small"
-        color="inherit"
-        data-testid={`toolbar-button-${label ?? tooltip}`.replace(' ', '-').toLowerCase()}
-        sx={{
-          padding: '2px',
-          minWidth: 'unset',
-          borderRadius: '4px',
-          height: '26px',
-          width: '26px',
-          color: active ? activeColor ?? theme.palette.primary.main : theme.palette.text.secondary,
+  const style: CSSProperties = {};
+  if (active && activeColor) {
+    style.color = activeColor;
+  }
 
-          '& svg': {
-            height: '24px',
-            width: '24px',
-          },
-        }}
-        onClick={handleOnClick}
-      >
-        {icon}
-      </Button>
-    </Tooltip>
+  return (
+    <Button
+      aria-label={label ?? tooltip}
+      variant="text"
+      data-testid={`toolbar-button-${label ?? tooltip}`.replace(' ', '-').toLowerCase()}
+      onClick={handleOnClick}
+      className={classNames(
+        `
+          py-0.5
+          px-0.5
+        `,
+        active &&
+          !activeColor &&
+          `
+            text-blue-500
+            bg-gray-100
+            dark:text-blue-500
+            dark:bg-slate-800
+          `,
+      )}
+      style={style}
+      disabled={disabled}
+    >
+      {icon}
+    </Button>
   );
 };
 

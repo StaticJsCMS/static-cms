@@ -1,9 +1,9 @@
 import {
   BitbucketBackend,
+  GiteaBackend,
   GitGatewayBackend,
   GitHubBackend,
   GitLabBackend,
-  GiteaBackend,
   ProxyBackend,
   TestBackend,
 } from './backends';
@@ -19,7 +19,6 @@ import {
   ListWidget,
   MapWidget,
   MarkdownWidget,
-  MdxWidget,
   NumberWidget,
   ObjectWidget,
   RelationWidget,
@@ -37,6 +36,7 @@ export default function addExtensions() {
   registerBackend('bitbucket', BitbucketBackend);
   registerBackend('test-repo', TestBackend);
   registerBackend('proxy', ProxyBackend);
+
   registerWidget([
     BooleanWidget(),
     CodeWidget(),
@@ -47,7 +47,6 @@ export default function addExtensions() {
     ListWidget(),
     MapWidget(),
     MarkdownWidget(),
-    MdxWidget(),
     NumberWidget(),
     ObjectWidget(),
     RelationWidget(),

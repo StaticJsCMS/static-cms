@@ -458,6 +458,48 @@ And a completely new paragraph`,
           },
         ],
       },
+
+      'Multiline Header': {
+        markdown: `# Line One\
+ Line Two`,
+        mdast: {
+          type: 'root',
+          children: [
+            {
+              type: 'heading',
+              depth: 1,
+              children: [
+                {
+                  type: 'text',
+                  value: 'Line One Line Two',
+                  position: {
+                    start: { line: 1, column: 3, offset: 2 },
+                    end: { line: 1, column: 13, offset: 12 },
+                  },
+                },
+              ],
+              position: {
+                start: { line: 1, column: 1, offset: 0 },
+                end: { line: 1, column: 13, offset: 12 },
+              },
+            },
+          ],
+          position: {
+            start: { line: 1, column: 1, offset: 0 },
+            end: { line: 1, column: 13, offset: 12 },
+          },
+        },
+        slate: [
+          {
+            type: ELEMENT_H1,
+            children: [
+              {
+                text: 'Line One Line Two',
+              },
+            ],
+          },
+        ],
+      },
     },
   },
 
@@ -2566,48 +2608,6 @@ And a completely new paragraph`,
   },
 
   subscript: {
-    markdown: {
-      'subscript tag': {
-        markdown: '<sub>Subscript</sub>',
-        mdast: {
-          type: 'root',
-          children: [
-            {
-              type: 'paragraph',
-              children: [
-                {
-                  type: 'text',
-                  value: '<sub>Subscript</sub>',
-                  position: {
-                    start: { line: 1, column: 6, offset: 5 },
-                    end: { line: 1, column: 15, offset: 14 },
-                  },
-                },
-              ],
-              position: {
-                start: { line: 1, column: 1, offset: 0 },
-                end: { line: 1, column: 21, offset: 20 },
-              },
-            },
-          ],
-          position: {
-            start: { line: 1, column: 1, offset: 0 },
-            end: { line: 1, column: 21, offset: 20 },
-          },
-        },
-        slate: [
-          {
-            type: ELEMENT_PARAGRAPH,
-            children: [
-              {
-                text: '<sub>Subscript</sub>',
-              },
-            ],
-          },
-        ],
-      },
-    },
-
     mdx: {
       'subscript tag': {
         markdown: '<sub>Subscript</sub>',
@@ -2664,48 +2664,6 @@ And a completely new paragraph`,
   },
 
   superscript: {
-    markdown: {
-      'superscript tag': {
-        markdown: '<sup>Superscript</sup>',
-        mdast: {
-          type: 'root',
-          children: [
-            {
-              type: 'paragraph',
-              children: [
-                {
-                  type: 'text',
-                  value: '<sup>Superscript</sup>',
-                  position: {
-                    start: { line: 1, column: 6, offset: 5 },
-                    end: { line: 1, column: 17, offset: 16 },
-                  },
-                },
-              ],
-              position: {
-                start: { line: 1, column: 1, offset: 0 },
-                end: { line: 1, column: 23, offset: 22 },
-              },
-            },
-          ],
-          position: {
-            start: { line: 1, column: 1, offset: 0 },
-            end: { line: 1, column: 23, offset: 22 },
-          },
-        },
-        slate: [
-          {
-            type: ELEMENT_PARAGRAPH,
-            children: [
-              {
-                text: '<sup>Superscript</sup>',
-              },
-            ],
-          },
-        ],
-      },
-    },
-
     mdx: {
       'superscript tag': {
         markdown: '<sup>Superscript</sup>',
@@ -2762,48 +2720,6 @@ And a completely new paragraph`,
   },
 
   underline: {
-    markdown: {
-      'underline tag': {
-        markdown: '<u>Underlined</u>',
-        mdast: {
-          type: 'root',
-          children: [
-            {
-              type: 'paragraph',
-              children: [
-                {
-                  type: 'text',
-                  value: '<u>Underlined</u>',
-                  position: {
-                    start: { line: 1, column: 4, offset: 3 },
-                    end: { line: 1, column: 14, offset: 13 },
-                  },
-                },
-              ],
-              position: {
-                start: { line: 1, column: 1, offset: 0 },
-                end: { line: 1, column: 18, offset: 17 },
-              },
-            },
-          ],
-          position: {
-            start: { line: 1, column: 1, offset: 0 },
-            end: { line: 1, column: 18, offset: 17 },
-          },
-        },
-        slate: [
-          {
-            type: ELEMENT_PARAGRAPH,
-            children: [
-              {
-                text: '<u>Underlined</u>',
-              },
-            ],
-          },
-        ],
-      },
-    },
-
     mdx: {
       'underline tag': {
         markdown: '<u>Underlined</u>',
@@ -2860,49 +2776,6 @@ And a completely new paragraph`,
   },
 
   'font tags': {
-    markdown: {
-      'font tag': {
-        markdown: "<font style={{ color: 'red', backgroundColor: 'black' }}>Colored Text</font>",
-        mdast: {
-          type: 'root',
-          children: [
-            {
-              type: 'paragraph',
-              children: [
-                {
-                  type: 'text',
-                  value:
-                    "<font style={{ color: 'red', backgroundColor: 'black' }}>Colored Text</font>",
-                  position: {
-                    start: { line: 1, column: 1, offset: 0 },
-                    end: { line: 1, column: 70, offset: 69 },
-                  },
-                },
-              ],
-              position: {
-                start: { line: 1, column: 1, offset: 0 },
-                end: { line: 1, column: 77, offset: 76 },
-              },
-            },
-          ],
-          position: {
-            start: { line: 1, column: 1, offset: 0 },
-            end: { line: 1, column: 77, offset: 76 },
-          },
-        },
-        slate: [
-          {
-            type: ELEMENT_PARAGRAPH,
-            children: [
-              {
-                text: "<font style={{ color: 'red', backgroundColor: 'black' }}>Colored Text</font>",
-              },
-            ],
-          },
-        ],
-      },
-    },
-
     mdx: {
       'color and background color from style attribute of font tag': {
         markdown: "<font style={{ color: 'red', backgroundColor: 'black' }}>Colored Text</font>",
@@ -7617,9 +7490,11 @@ export function runSerializationTests(
     describe(key, () => {
       if (data.markdown) {
         runSectionSerializationTests('markdown', 'markdown', data.markdown, testCallback);
-      }
-      if (data.mdx) {
+      } else if (data.mdx) {
         runSectionSerializationTests('mdx', 'mdx', data.mdx, testCallback);
+      } else if (data.both) {
+        runSectionSerializationTests('markdown', 'markdown', data.both, testCallback);
+        runSectionSerializationTests('mdx', 'mdx', data.both, testCallback);
       }
     });
   });

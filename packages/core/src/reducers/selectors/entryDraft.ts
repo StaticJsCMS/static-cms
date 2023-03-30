@@ -17,3 +17,7 @@ export const selectFieldErrors =
 export function selectEditingDraft(state: RootState) {
   return state.entryDraft.entry;
 }
+
+export function selectDraftMediaFiles(state: RootState) {
+  return state.entryDraft.entry?.mediaFiles;
+}

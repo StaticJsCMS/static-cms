@@ -224,17 +224,17 @@ function serializeMarkdownNode(
 
   switch (type) {
     case NodeTypes.heading[1]:
-      return `# ${children}\n`;
+      return `# ${handleInBlockNewline(children)}\n`;
     case NodeTypes.heading[2]:
-      return `## ${children}\n`;
+      return `## ${handleInBlockNewline(children)}\n`;
     case NodeTypes.heading[3]:
-      return `### ${children}\n`;
+      return `### ${handleInBlockNewline(children)}\n`;
     case NodeTypes.heading[4]:
-      return `#### ${children}\n`;
+      return `#### ${handleInBlockNewline(children)}\n`;
     case NodeTypes.heading[5]:
-      return `##### ${children}\n`;
+      return `##### ${handleInBlockNewline(children)}\n`;
     case NodeTypes.heading[6]:
-      return `###### ${children}\n`;
+      return `###### ${handleInBlockNewline(children)}\n`;
 
     case NodeTypes.block_quote:
       return `${selfIsBlockquote && blockquoteDepth > 0 ? '\n' : ''}> ${children
@@ -377,6 +377,10 @@ function getTableColumnCount(tableNode: TableNode): number {
   }
 
   return rows[0].children.length;
+}
+
+function handleInBlockNewline(children: string) {
+  return children.replace(/\n/g, '\\\n');
 }
 
 export interface SerializeMarkdownOptions {

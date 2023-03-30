@@ -1,4 +1,4 @@
-import type { AlertDialogProps } from '@staticcms/core/components/UI/Alert';
+import type { AlertDialogProps } from '@staticcms/core/components/common/alert/Alert';
 
 export default class AlertEvent extends CustomEvent<AlertDialogProps> {
   constructor(detail: AlertDialogProps) {

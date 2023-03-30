@@ -1,21 +1,16 @@
-import { styled } from '@mui/material/styles';
+import { Gitlab as GitlabIcon } from '@styled-icons/simple-icons/Gitlab';
 import React, { useCallback, useMemo, useState } from 'react';
 
-import AuthenticationPage from '@staticcms/core/components/UI/AuthenticationPage';
-import Icon from '@staticcms/core/components/UI/Icon';
+import Login from '@staticcms/core/components/login/Login';
 import { NetlifyAuthenticator, PkceAuthenticator } from '@staticcms/core/lib/auth';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 
-import type { MouseEvent } from 'react';
 import type {
   AuthenticationPageProps,
   AuthenticatorConfig,
   TranslatedProps,
 } from '@staticcms/core/interface';
-
-const LoginButtonIcon = styled(Icon)`
-  margin-right: 18px;
-`;
+import type { MouseEvent } from 'react';
 
 const clientSideAuthenticators = {
   pkce: (config: AuthenticatorConfig) => new PkceAuthenticator(config),
@@ -83,15 +78,12 @@ const GitLabAuthenticationPage = ({
   );
 
   return (
-    <AuthenticationPage
-      onLogin={handleLogin}
-      loginDisabled={inProgress}
-      loginErrorMessage={loginError}
-      logoUrl={config.logo_url}
-      siteUrl={config.site_url}
-      icon={<LoginButtonIcon type="gitlab" />}
-      buttonContent={inProgress ? t('auth.loggingIn') : t('auth.loginWithGitLab')}
-      t={t}
+    <Login
+      login={handleLogin}
+      label={t('auth.loginWithGitLab')}
+      icon={GitlabIcon}
+      inProgress={inProgress}
+      error={loginError}
     />
   );
 };

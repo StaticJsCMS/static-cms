@@ -14,19 +14,17 @@ import { useFocused } from 'slate-react';
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import MediaPopover from '../../common/MediaPopover';
 
-import type { Collection, Entry, MarkdownField } from '@staticcms/core/interface';
+import type { Collection, MarkdownField, MediaPath } from '@staticcms/core/interface';
 import type { MdLinkElement, MdValue } from '@staticcms/markdown';
 import type { PlateRenderElementProps, TText } from '@udecode/plate';
 import type { FC, MouseEvent } from 'react';
 
 export interface WithLinkElementProps {
-  containerRef: HTMLElement | null;
   collection: Collection<MarkdownField>;
   field: MarkdownField;
-  entry: Entry;
 }
 
-const withLinkElement = ({ containerRef, collection, field, entry }: WithLinkElementProps) => {
+const withLinkElement = ({ collection, field }: WithLinkElementProps) => {
   const LinkElement: FC<PlateRenderElementProps<MdValue, MdLinkElement>> = ({
     attributes: { ref: _ref, ...attributes },
     children,
@@ -39,8 +37,10 @@ const withLinkElement = ({ containerRef, collection, field, entry }: WithLinkEle
     const { url } = element;
     const path = findNodePath(editor, element);
 
-    const [internalUrl, setInternalUrl] = useState(url);
-    const [internalText, setInternalText] = useState(getEditorString(editor, path));
+    const [internalValue, setInternalValue] = useState<MediaPath<string>>({
+      path: url,
+      alt: getEditorString(editor, path),
+    });
     const [popoverHasFocus, setPopoverHasFocus] = useState(false);
     const debouncedPopoverHasFocus = useDebounce(popoverHasFocus, 100);
 
@@ -112,17 +112,16 @@ const withLinkElement = ({ containerRef, collection, field, entry }: WithLinkEle
     );
 
     const handleMediaChange = useCallback(
-      (newValue: string) => {
-        handleChange(newValue, internalText);
-        setInternalUrl(newValue);
+      (newValue: MediaPath<string>) => {
+        handleChange(newValue.path, newValue.alt ?? '');
+        setInternalValue(newValue);
       },
-      [handleChange, internalText],
+      [handleChange],
     );
 
     const handleClose = useCallback(() => {
       setAnchorEl(null);
-      handleChange(internalUrl, internalText);
-    }, [handleChange, internalText, internalUrl]);
+    }, []);
 
     useEffect(() => {
       if (
@@ -200,20 +199,26 @@ const withLinkElement = ({ containerRef, collection, field, entry }: WithLinkEle
 
     return (
       <span onBlur={handleBlur}>
-        <a ref={urlRef} {...attributes} href={url} {...nodeProps} onClick={handleClick}>
+        <a
+          ref={urlRef}
+          {...attributes}
+          href={url}
+          {...nodeProps}
+          onClick={handleClick}
+          className="
+            text-blue-500
+            cursor-pointer
+            hover:underline
+          "
+        >
           {children}
         </a>
         <MediaPopover
           anchorEl={anchorEl}
-          containerRef={containerRef}
           collection={collection}
           field={field}
-          entry={entry}
-          url={internalUrl}
-          text={internalText}
-          onUrlChange={setInternalUrl}
-          onTextChange={setInternalText}
-          onClose={handleClose}
+          url={internalValue.path}
+          text={internalValue.alt}
           onMediaChange={handleMediaChange}
           onRemove={handleRemove}
           onFocus={handlePopoverFocus}

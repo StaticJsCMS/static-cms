@@ -9,9 +9,9 @@ import { HashRouter as Router } from 'react-router-dom';
 import 'what-input';
 import { authenticateUser } from './actions/auth';
 import { loadConfig } from './actions/config';
-import App from './components/App/App';
-import './components/EditorWidgets';
-import { ErrorBoundary } from './components/UI';
+import App from './components/App';
+import './components/entry-editor/widgets';
+import ErrorBoundary from './components/ErrorBoundary';
 import addExtensions from './extensions';
 import { getPhrases } from './lib/phrases';
 import './mediaLibrary';
@@ -22,6 +22,12 @@ import type { AnyAction } from '@reduxjs/toolkit';
 import type { ConnectedProps } from 'react-redux';
 import type { BaseField, Config, UnknownField } from './interface';
 import type { RootState } from './store';
+
+import './styles/datetime/calendar.css';
+import './styles/datetime/clock.css';
+import './styles/datetime/datetime.css';
+import './styles/inter.css';
+import './styles/main.css';
 
 const ROOT_ID = 'nc-root';
 

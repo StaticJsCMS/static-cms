@@ -1,4 +1,4 @@
-import CloseIcon from '@mui/icons-material/Close';
+import { Close as CloseIcon } from '@styled-icons/material/Close';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
@@ -78,7 +78,7 @@ const Snackbars = ({ t }: TranslatedProps<SnackbarsProps>) => {
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       action={
         <IconButton aria-label="close" color="inherit" sx={{ p: 0.5 }} onClick={handleClose}>
-          <CloseIcon />
+          <CloseIcon className="h-5 w-5" />
         </IconButton>
       }
     >

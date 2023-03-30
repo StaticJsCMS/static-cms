@@ -14,9 +14,10 @@ export interface CodeBlockFrameProps {
   id: string;
   lang?: string;
   code: string;
+  theme: 'dark' | 'light';
 }
 
-const CodeBlockFrame: FC<CodeBlockFrameProps> = ({ id, lang, code }) => {
+const CodeBlockFrame: FC<CodeBlockFrameProps> = ({ id, lang, code, theme }) => {
   const { window } = useFrame();
 
   const loadedLangExtension = useMemo(() => {
@@ -68,6 +69,7 @@ const CodeBlockFrame: FC<CodeBlockFrameProps> = ({ id, lang, code }) => {
       onBlur={handleBlur}
       onChange={handleChange}
       extensions={extensions}
+      theme={theme}
     />
   );
 };

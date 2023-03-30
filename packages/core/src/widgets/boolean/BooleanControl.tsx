@@ -1,7 +1,7 @@
-import { red } from '@mui/material/colors';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+
+import Field from '@staticcms/core/components/common/field/Field';
+import Switch from '@staticcms/core/components/common/switch/Switch';
 
 import type { BooleanField, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC } from 'react';
@@ -9,15 +9,19 @@ import type { ChangeEvent, FC } from 'react';
 const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
   value,
   label,
-  isDuplicate,
+  errors,
+  disabled,
+  field,
+  forSingleList,
+  duplicate,
   onChange,
-  hasErrors,
 }) => {
-  const [internalRawValue, setInternalValue] = useState(value);
+  const [internalRawValue, setInternalValue] = useState(value ?? false);
   const internalValue = useMemo(
-    () => (isDuplicate ? value : internalRawValue),
-    [internalRawValue, isDuplicate, value],
+    () => (duplicate ? value ?? false : internalRawValue),
+    [internalRawValue, duplicate, value],
   );
+  const ref = useRef<HTMLInputElement | null>(null);
 
   const handleChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -28,15 +32,18 @@ const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
   );
 
   return (
-    <FormControlLabel
-      key="boolean-field-label"
-      control={
-        <Switch key="boolean-input" checked={internalValue ?? false} onChange={handleChange} />
-      }
+    <Field
+      inputRef={ref}
       label={label}
-      labelPlacement="start"
-      sx={{ marginLeft: '4px', color: hasErrors ? red[500] : undefined }}
-    />
+      errors={errors}
+      variant="inline"
+      cursor="pointer"
+      hint={field.hint}
+      forSingleList={forSingleList}
+      disabled={disabled}
+    >
+      <Switch ref={ref} value={internalValue} disabled={disabled} onChange={handleChange} />
+    </Field>
   );
 };
 

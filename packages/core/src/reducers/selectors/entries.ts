@@ -2,7 +2,7 @@ import get from 'lodash/get';
 
 import { SORT_DIRECTION_NONE } from '@staticcms/core/constants';
 
-import type { CollectionViewStyle } from '@staticcms/core/constants/collectionViews';
+import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { Entry, Group, GroupMap, Sort } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 
@@ -42,7 +42,7 @@ export const selectEntriesSortField = (collectionName: string) => (entries: Root
   return Object.values(sort ?? {}).find(v => v?.direction !== SORT_DIRECTION_NONE);
 };
 
-export function selectViewStyle(entries: RootState): CollectionViewStyle {
+export function selectViewStyle(entries: RootState): ViewStyle {
   return entries.entries.viewStyle;
 }
 

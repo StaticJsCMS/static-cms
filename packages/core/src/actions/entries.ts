@@ -52,14 +52,14 @@ import { addSnackbar } from '../store/slices/snackbars';
 import { createAssetProxy } from '../valueObjects/AssetProxy';
 import createEntry from '../valueObjects/createEntry';
 import { addAssets, getAsset } from './media';
-import { loadMedia, waitForMediaLibraryToLoad } from './mediaLibrary';
+import { loadMedia } from './mediaLibrary';
 import { waitUntil } from './waitUntil';
 
 import type { NavigateFunction } from 'react-router-dom';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { Backend } from '../backend';
-import type { CollectionViewStyle } from '../constants/collectionViews';
+import type { ViewStyle } from '../constants/views';
 import type {
   Collection,
   Entry,
@@ -345,7 +345,7 @@ export function groupByField(collection: Collection, group: ViewGroup) {
   };
 }
 
-export function changeViewStyle(viewStyle: CollectionViewStyle) {
+export function changeViewStyle(viewStyle: ViewStyle) {
   return {
     type: CHANGE_VIEW_STYLE,
     payload: {
@@ -586,12 +586,12 @@ export function deleteLocalBackup(collection: Collection, slug: string) {
 
 export function loadEntry(collection: Collection, slug: string, silent = false) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
-    await waitForMediaLibraryToLoad(dispatch, getState());
     if (!silent) {
       dispatch(entryLoading(collection, slug));
     }
 
     try {
+      await dispatch(loadMedia());
       const loadedEntry = await tryLoadEntry(getState(), collection, slug);
       dispatch(entryLoaded(collection, loadedEntry));
       dispatch(createDraftFromEntry(loadedEntry));
@@ -835,10 +835,6 @@ export function createEmptyDraft(collection: Collection, search: string) {
     }
 
     const backend = currentBackend(configState.config);
-
-    if (!('media_folder' in collection)) {
-      await waitForMediaLibraryToLoad(dispatch, getState());
-    }
 
     const i18nFields = createEmptyDraftI18nData(collection, fields);
 

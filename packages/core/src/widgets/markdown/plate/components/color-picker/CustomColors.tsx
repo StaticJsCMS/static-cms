@@ -1,18 +1,11 @@
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { styled } from '@mui/material/styles';
 
 import ColorInput from './ColorInput';
 import Colors from './Colors';
 
 import type { ColorType } from '@udecode/plate';
 import type { ChangeEvent, FC } from 'react';
-
-const StyledCustomColors = styled('div')`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
 
 export type CustomColorsProps = {
   color?: string;
@@ -73,10 +66,10 @@ const CustomColors: FC<CustomColorsProps> = ({
   );
 
   return (
-    <StyledCustomColors>
+    <div>
       <ColorInput value={value} onChange={handleChange} />
       <Colors color={color} colors={computedColors} updateColor={updateColor} />
-    </StyledCustomColors>
+    </div>
   );
 };
 

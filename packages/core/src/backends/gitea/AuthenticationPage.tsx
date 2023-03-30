@@ -1,16 +1,11 @@
-import { styled } from '@mui/material/styles';
+import { Gitea as GiteaIcon } from '@styled-icons/simple-icons/Gitea';
 import React, { useCallback, useState } from 'react';
 
-import AuthenticationPage from '@staticcms/core/components/UI/AuthenticationPage';
-import Icon from '@staticcms/core/components/UI/Icon';
+import Login from '@staticcms/core/components/login/Login';
 import { NetlifyAuthenticator } from '@staticcms/core/lib/auth';
 
-import type { MouseEvent } from 'react';
 import type { AuthenticationPageProps, TranslatedProps } from '@staticcms/core/interface';
-
-const LoginButtonIcon = styled(Icon)`
-  margin-right: 18px;
-`;
+import type { MouseEvent } from 'react';
 
 const GiteaAuthenticationPage = ({
   inProgress = false,
@@ -48,15 +43,12 @@ const GiteaAuthenticationPage = ({
   );
 
   return (
-    <AuthenticationPage
-      onLogin={handleLogin}
-      loginDisabled={inProgress}
-      loginErrorMessage={loginError}
-      logoUrl={config.logo_url}
-      siteUrl={config.site_url}
-      icon={<LoginButtonIcon type="gitea" />}
-      buttonContent={t('auth.loginWithGitea')}
-      t={t}
+    <Login
+      login={handleLogin}
+      label={t('auth.loginWithGitea')}
+      icon={GiteaIcon}
+      inProgress={inProgress}
+      error={loginError}
     />
   );
 };

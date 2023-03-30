@@ -1,5 +1,7 @@
-import TextField from '@mui/material/TextField';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+
+import Field from '@staticcms/core/components/common/field/Field';
+import TextArea from '@staticcms/core/components/common/text-field/TextArea';
 
 import type { StringOrTextField, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC } from 'react';
@@ -7,18 +9,23 @@ import type { ChangeEvent, FC } from 'react';
 const TextControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   label,
   value,
-  isDuplicate,
-  onChange,
+  errors,
+  duplicate,
   hasErrors,
+  disabled,
+  field,
+  forSingleList,
+  onChange,
 }) => {
   const [internalRawValue, setInternalValue] = useState(value ?? '');
   const internalValue = useMemo(
-    () => (isDuplicate ? value ?? '' : internalRawValue),
-    [internalRawValue, isDuplicate, value],
+    () => (duplicate ? value ?? '' : internalRawValue),
+    [internalRawValue, duplicate, value],
   );
+  const ref = useRef<HTMLInputElement | null>(null);
 
   const handleChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    (event: ChangeEvent<HTMLInputElement>) => {
       setInternalValue(event.target.value);
       onChange(event.target.value);
     },
@@ -26,17 +33,18 @@ const TextControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   );
 
   return (
-    <TextField
-      key="text-control-input"
-      variant="outlined"
-      value={internalValue || ''}
-      onChange={handleChange}
-      multiline
-      minRows={4}
-      fullWidth
+    <Field
+      inputRef={ref}
       label={label}
-      error={hasErrors}
-    />
+      errors={errors}
+      noPadding={!hasErrors}
+      hint={field.hint}
+      forSingleList={forSingleList}
+      cursor="text"
+      disabled={disabled}
+    >
+      <TextArea ref={ref} value={internalValue} disabled={disabled} onChange={handleChange} />
+    </Field>
   );
 };
 

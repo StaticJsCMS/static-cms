@@ -1,4 +1,3 @@
-import { styled } from '@mui/material/styles';
 import {
   createAlignPlugin,
   createAutoformatPlugin,
@@ -56,10 +55,9 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
-import { withShortcodeElement } from './components';
+import { CodeBlockElement, withShortcodeElement } from './components';
 import { BalloonToolbar } from './components/balloon-toolbar';
 import { BlockquoteElement } from './components/nodes/blockquote';
-import { CodeBlockElement } from './components/nodes/code-block';
 import {
   Heading1,
   Heading2,
@@ -105,19 +103,8 @@ import type {
   WidgetControlProps,
 } from '@staticcms/core/interface';
 import type { AnyObject, AutoformatPlugin, PlatePlugin } from '@udecode/plate';
-import type { CSSProperties, FC } from 'react';
+import type { FC } from 'react';
 import type { MdEditor, MdValue } from './plateTypes';
-
-const StyledPlateEditor = styled('div')`
-  position: relative;
-  padding: 1.25rem;
-  padding-bottom: 0;
-  margin-bottom: 1.25rem;
-`;
-
-const styles: Record<string, CSSProperties> = {
-  container: { position: 'relative' },
-};
 
 export interface PlateEditorProps {
   initialValue: MdValue;
@@ -142,9 +129,10 @@ const PlateEditor: FC<PlateEditorProps> = ({
   onFocus,
   onBlur,
 }) => {
-  const outerEditorContainerRef = useRef<HTMLDivElement | null>(null);
   const editorContainerRef = useRef<HTMLDivElement | null>(null);
   const innerEditorContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const { disabled } = controlProps;
 
   const components = useMemo(() => {
     const baseComponents = {
@@ -162,13 +150,10 @@ const PlateEditor: FC<PlateEditorProps> = ({
       [ELEMENT_BLOCKQUOTE]: BlockquoteElement,
       [ELEMENT_CODE_BLOCK]: CodeBlockElement,
       [ELEMENT_LINK]: withLinkElement({
-        containerRef: innerEditorContainerRef.current,
         collection,
-        entry,
         field,
       }),
       [ELEMENT_IMAGE]: withImageElement({
-        containerRef: innerEditorContainerRef.current,
         collection,
         entry,
         field,
@@ -268,7 +253,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
 
   return useMemo(
     () => (
-      <StyledPlateEditor>
+      <div className="relative px-3 py-5 pb-0 mb-5">
         <DndProvider backend={HTML5Backend}>
           <PlateProvider<MdValue>
             id={id}
@@ -276,18 +261,18 @@ const PlateEditor: FC<PlateEditorProps> = ({
             initialValue={initialValue}
             plugins={plugins}
             onChange={onChange}
+            readOnly={disabled}
           >
-            <div key="editor-outer_wrapper" ref={outerEditorContainerRef} style={styles.container}>
+            <div key="editor-outer_wrapper">
               <Toolbar
                 key="toolbar"
                 useMdx={useMdx}
-                containerRef={outerEditorContainerRef.current}
                 collection={collection}
                 field={field}
-                entry={entry}
+                disabled={disabled}
               />
 
-              <div key="editor-wrapper" ref={editorContainerRef} style={styles.container}>
+              <div key="editor-wrapper" ref={editorContainerRef} className="w-full overflow-hidden">
                 <Plate
                   key="editor"
                   id={id}
@@ -297,18 +282,14 @@ const PlateEditor: FC<PlateEditorProps> = ({
                     onBlur,
                   }}
                 >
-                  <div
-                    key="editor-inner-wrapper"
-                    ref={innerEditorContainerRef}
-                    style={styles.container}
-                  >
+                  <div key="editor-inner-wrapper" ref={innerEditorContainerRef}>
                     <BalloonToolbar
                       key="balloon-toolbar"
                       useMdx={useMdx}
                       containerRef={innerEditorContainerRef.current}
                       collection={collection}
                       field={field}
-                      entry={entry}
+                      disabled={disabled}
                     />
                     <CursorOverlayContainer containerRef={editorContainerRef} />
                   </div>
@@ -317,7 +298,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
             </div>
           </PlateProvider>
         </DndProvider>
-      </StyledPlateEditor>
+      </div>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [collection, field, onBlur, onFocus, initialValue, onChange, plugins],

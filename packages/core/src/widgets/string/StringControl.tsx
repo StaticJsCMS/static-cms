@@ -1,5 +1,7 @@
-import TextField from '@mui/material/TextField';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+
+import Field from '@staticcms/core/components/common/field/Field';
+import TextField from '@staticcms/core/components/common/text-field/TextField';
 
 import type { StringOrTextField, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC } from 'react';
@@ -7,18 +9,22 @@ import type { ChangeEvent, FC } from 'react';
 const StringControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   value,
   label,
-  isDuplicate,
+  errors,
+  disabled,
+  field,
+  forSingleList,
+  duplicate,
   onChange,
-  hasErrors,
 }) => {
   const [internalRawValue, setInternalValue] = useState(value ?? '');
   const internalValue = useMemo(
-    () => (isDuplicate ? value ?? '' : internalRawValue),
-    [internalRawValue, isDuplicate, value],
+    () => (duplicate ? value ?? '' : internalRawValue),
+    [internalRawValue, duplicate, value],
   );
+  const ref = useRef<HTMLInputElement | null>(null);
 
   const handleChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    (event: ChangeEvent<HTMLInputElement>) => {
       setInternalValue(event.target.value);
       onChange(event.target.value);
     },
@@ -26,18 +32,23 @@ const StringControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   );
 
   return (
-    <TextField
-      key="string-widget-control-input"
-      inputProps={{
-        'data-testid': 'string-widget-control-input',
-      }}
+    <Field
+      inputRef={ref}
       label={label}
-      variant="outlined"
-      value={internalValue}
-      onChange={handleChange}
-      fullWidth
-      error={hasErrors}
-    />
+      errors={errors}
+      hint={field.hint}
+      forSingleList={forSingleList}
+      cursor="text"
+      disabled={disabled}
+    >
+      <TextField
+        type="text"
+        inputRef={ref}
+        value={internalValue}
+        disabled={disabled}
+        onChange={handleChange}
+      />
+    </Field>
   );
 };
 

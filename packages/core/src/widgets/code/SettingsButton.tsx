@@ -1,35 +1,22 @@
-import CloseIcon from '@mui/icons-material/Close';
-import SettingsIcon from '@mui/icons-material/Settings';
-import IconButton from '@mui/material/IconButton';
-import { styled } from '@mui/material/styles';
+import { Close as CloseIcon } from '@styled-icons/material/Close';
+import { Settings as SettingsIcon } from '@styled-icons/material/Settings';
 import React from 'react';
 
-import { zIndex } from '@staticcms/core/components/UI/styles';
+import IconButton from '@staticcms/core/components/common/button/IconButton';
 
 import type { FC, MouseEvent } from 'react';
 
-const StyledSettingsButton = styled(IconButton)`
-  position: absolute;
-  z-index: ${zIndex.zIndex100};
-  right: 8px;
-  top: 8px;
-  opacity: 0.8;
-  padding: 2px 4px;
-  line-height: 1;
-  height: auto;
-  color: #000;
-`;
-
 export interface SettingsButtonProps {
   showClose?: boolean;
+  disabled: boolean;
   onClick: (event: MouseEvent) => void;
 }
 
-const SettingsButton: FC<SettingsButtonProps> = ({ showClose = false, onClick }) => {
+const SettingsButton: FC<SettingsButtonProps> = ({ showClose = false, disabled, onClick }) => {
   return (
-    <StyledSettingsButton onClick={onClick}>
-      {showClose ? <CloseIcon /> : <SettingsIcon />}
-    </StyledSettingsButton>
+    <IconButton onClick={onClick} size="small" variant="text" disabled={disabled}>
+      {showClose ? <CloseIcon className="w-5 h-5" /> : <SettingsIcon className="w-5 h-5" />}
+    </IconButton>
   );
 };
 

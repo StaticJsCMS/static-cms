@@ -123,6 +123,8 @@ const en: LocalePhrasesRoot = {
         'A local backup was recovered for this entry, would you like to use it?',
     },
     editorInterface: {
+      sideBySideI18n: 'I18n Side by Side',
+      preview: 'Preview',
       toggleI18n: 'Toggle i18n',
       togglePreview: 'Toggle preview',
       toggleScrollSync: 'Sync scrolling',
@@ -270,6 +272,7 @@ const en: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
+      darkMode: 'Dark Mode',
       logOut: 'Log Out',
     },
     toast: {

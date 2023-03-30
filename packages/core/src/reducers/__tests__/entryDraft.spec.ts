@@ -1,6 +1,6 @@
 import { DRAFT_CHANGE_FIELD, DRAFT_CREATE_EMPTY } from '@staticcms/core/constants';
-import mockEntry from '@staticcms/core/lib/test-utils/mock-data/MockEntry';
 import entryDraftReducer from '../entryDraft';
+import { createMockEntry } from '@staticcms/test/data/entry.mock';
 
 import type { I18nSettings, StringOrTextField } from '@staticcms/core/interface';
 import type { EntryDraftState } from '../entryDraft';
@@ -13,7 +13,7 @@ describe('entryDraft', () => {
       beforeEach(() => {
         startState = entryDraftReducer(undefined, {
           type: DRAFT_CREATE_EMPTY,
-          payload: mockEntry,
+          payload: createMockEntry({ data: {} }),
         });
       });
 

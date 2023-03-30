@@ -1,5 +1,5 @@
 import { currentBackend } from '../backend';
-import confirm from '../components/UI/Confirm';
+import confirm from '../components/common/confirm/Confirm';
 import {
   MEDIA_DELETE_FAILURE,
   MEDIA_DELETE_REQUEST,
@@ -39,6 +39,7 @@ import type {
   Field,
   ImplementationMediaFile,
   MediaFile,
+  MediaLibrarInsertOptions,
   MediaLibraryInstance,
   UnknownField,
 } from '../interface';
@@ -81,11 +82,13 @@ export function openMediaLibrary<F extends BaseField = UnknownField>(
     controlID?: string;
     forImage?: boolean;
     value?: string | string[];
+    alt?: string;
     allowMultiple?: boolean;
     replaceIndex?: number;
     config?: Record<string, unknown>;
     collection?: Collection<F>;
     field?: F;
+    insertOptions?: MediaLibrarInsertOptions;
   } = {},
 ) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
@@ -94,12 +97,14 @@ export function openMediaLibrary<F extends BaseField = UnknownField>(
     const {
       controlID,
       value,
+      alt,
       config = {},
       allowMultiple,
       forImage,
       replaceIndex,
       collection,
       field,
+      insertOptions,
     } = payload;
 
     if (mediaLibrary) {
@@ -111,11 +116,13 @@ export function openMediaLibrary<F extends BaseField = UnknownField>(
         controlID,
         forImage,
         value,
+        alt,
         allowMultiple,
         replaceIndex,
         config,
         collection: collection as Collection,
         field: field as Field,
+        insertOptions,
       }),
     );
   };
@@ -132,7 +139,7 @@ export function closeMediaLibrary() {
   };
 }
 
-export function insertMedia(mediaPath: string | string[], field: Field | undefined) {
+export function insertMedia(mediaPath: string | string[], field: Field | undefined, alt?: string) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const config = state.config.config;
@@ -150,7 +157,7 @@ export function insertMedia(mediaPath: string | string[], field: Field | undefin
     } else {
       mediaPath = selectMediaFilePublicPath(config, collection, mediaPath as string, entry, field);
     }
-    dispatch(mediaInserted(mediaPath));
+    dispatch(mediaInserted(mediaPath, alt));
   };
 }
 
@@ -230,7 +237,7 @@ export function persistMedia(file: File, opts: MediaOptions = {}) {
     }
 
     const backend = currentBackend(config);
-    const files: MediaFile[] = selectMediaFiles(state, field);
+    const files: MediaFile[] = selectMediaFiles(field)(state);
     const fileName = sanitizeSlug(file.name.toLowerCase(), config.slug);
     const existingFile = files.find(existingFile => existingFile.name.toLowerCase() === fileName);
 
@@ -417,11 +424,13 @@ function mediaLibraryOpened(payload: {
   controlID?: string;
   forImage?: boolean;
   value?: string | string[];
+  alt?: string;
   replaceIndex?: number;
   allowMultiple?: boolean;
   config?: Record<string, unknown>;
   collection?: Collection;
   field?: Field;
+  insertOptions?: MediaLibrarInsertOptions;
 }) {
   return { type: MEDIA_LIBRARY_OPEN, payload } as const;
 }
@@ -430,8 +439,8 @@ function mediaLibraryClosed() {
   return { type: MEDIA_LIBRARY_CLOSE } as const;
 }
 
-function mediaInserted(mediaPath: string | string[]) {
-  return { type: MEDIA_INSERT, payload: { mediaPath } } as const;
+export function mediaInserted(mediaPath: string | string[], alt?: string) {
+  return { type: MEDIA_INSERT, payload: { mediaPath, alt } } as const;
 }
 
 export function mediaLoading(page: number) {

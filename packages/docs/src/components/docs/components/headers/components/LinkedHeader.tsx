@@ -40,9 +40,12 @@ const Header3 = ({ variant, children = '' }: Header3Props) => {
   return (
     <Typography
       variant={variant}
-      component={hasText ? variant : 'div'}
+      component={variant}
       id={anchor}
       sx={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
         [theme.breakpoints.down('sm')]: {
           marginLeft: '8px',
         },

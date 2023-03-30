@@ -1,4 +1,3 @@
-import createReactClass from 'create-react-class';
 import { createElement, useCallback, useEffect, useMemo, useState } from 'react';
 
 import bootstrap from './bootstrap';
@@ -22,7 +21,6 @@ const CMS = {
 
 if (typeof window !== 'undefined') {
   window.CMS = CMS;
-  window.createClass = window.createClass || createReactClass;
   window.useState = window.useState || useState;
   window.useMemo = window.useMemo || useMemo;
   window.useEffect = window.useEffect || useEffect;

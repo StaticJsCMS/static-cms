@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devServerPort = parseInt(process.env.STATIC_CMS_DEV_SERVER_PORT || `${8080}`);
@@ -44,14 +45,11 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        include: ['ol', 'codemirror', '@toast-ui'].map(moduleNameToPath),
+        include: [...['ol', 'codemirror', '@toast-ui'].map(moduleNameToPath), path.resolve(__dirname, '..', 'core', 'src')],
         use: [
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
-          },
+          !isProduction ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
         ],
       },
       {
@@ -85,6 +83,7 @@ module.exports = {
   },
   plugins: [
     !isProduction && new ReactRefreshWebpackPlugin(),
+    isProduction && new MiniCssExtractPlugin(),
     new webpack.IgnorePlugin({ resourceRegExp: /^esprima$/ }),
     new webpack.IgnorePlugin({ resourceRegExp: /moment\/locale\// }),
     new webpack.ProvidePlugin({

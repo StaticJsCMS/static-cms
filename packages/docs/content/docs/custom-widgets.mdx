@@ -12,8 +12,6 @@ The `registerPreviewTemplate` requires you to provide a React component. If you 
 
 However, although possible, it may be cumbersome or even impractical to add a React build phase. For this reason, Static CMS exposes some constructs globally to allow you to create components inline: `h` (alias for React.createElement) as well some basic hooks (`useState`, `useMemo`, `useEffect`, `useCallback`).
 
-**NOTE**: `createClass` is still provided, allowing for the creation of react class components. However it has now been deprecated and will be removed in `v2.0.0`.
-
 ## Register Widget
 
 Register a custom widget.
@@ -53,14 +51,12 @@ The react component that renders the control. It receives the following props:
 | path                | string                   | `.` separated string donating the path to the current widget within the entry                             |
 | hasErrors           | boolean                  | Specifies if there are validation errors with the current widget                                          |
 | fieldsErrors        | object                   | Key/value object of field names mapping to validation errors                                              |
-| isDisabled          | boolean                  | Specifies if the widget control should be disabled                                                        |
+| disabled            | boolean                  | Specifies if the widget control should be disabled                                                        |
 | submitted           | boolean                  | Specifies if a save attempt has been made in the editor session                                           |
 | forList             | boolean                  | Specifies if the widget is within a `list` widget                                                         |
-| isDuplicate         | function                 | Specifies if that field is an i18n duplicate                                                              |
-| isFieldDuplicate    | function                 | **Deprecated** Function that given a field configuration, returns if that field is a duplicate            |
-| isHidden            | function                 | Specifies if that field should be hidden                                                                  |
-| isFieldHidden       | function                 | **Deprecated** Function that given a field configuration, returns if that field is hidden                 |
-| getAsset            | Async function           | **Deprecated** Function that given a url returns (as a promise) a loaded asset                            |
+| forSingleList       | boolean                  | Specifies if the widget is within a singleton `list` widget (string array, number array, etc)             |
+| duplicate           | function                 | Specifies if that field is an i18n duplicate                                                              |
+| hidden              | function                 | Specifies if that field should be hidden                                                                  |
 | locale              | string<br />\| undefined | The current locale of the editor                                                                          |
 | mediaPaths          | object                   | Key/value object of control IDs (passed to the media library) mapping to media paths                      |
 | clearMediaControl   | function                 | Clears a control ID's value from the internal store                                                       |
@@ -70,6 +66,7 @@ The react component that renders the control. It receives the following props:
 | query               | function                 | Runs a search on another collection. See [Query](#query)                                                  |
 | i18n                | object                   | The current i18n settings                                                                                 |
 | t                   | function                 | Translates a given key to the current locale                                                              |
+| theme               | 'light'<br />\| 'dark'   | The current theme being used by the app                                                                   |
 
 #### Open Media Library
 
@@ -102,14 +99,14 @@ The react component that renders the control. It receives the following props:
 
 The react component that renders the preview. It receives the following props:
 
-| Param      | Type                  | Description                                                                                               |
-| ---------- | --------------------- | --------------------------------------------------------------------------------------------------------- |
-| value      | An valid widget value | The current value of the widget                                                                           |
-| field      | object                | The field configuration for the current widget. See [Widget Options](/docs/widgets#common-widget-options) |
-| collection | object                | The collection configuration for the current widget. See [Collections](/docs/collection-overview)         |
-| config     | object                | The current Static CMS config. See [configuration options](/docs/configuration-options)                   |
-| entry      | object                | Object with a `data` field that contains the current value of all widgets in the editor                   |
-| getAsset   | Async function        | **Deprecated** Function that given a url returns (as a promise) a loaded asset                            |
+| Param      | Type                   | Description                                                                                               |
+| ---------- | ---------------------- | --------------------------------------------------------------------------------------------------------- |
+| value      | An valid widget value  | The current value of the widget                                                                           |
+| field      | object                 | The field configuration for the current widget. See [Widget Options](/docs/widgets#common-widget-options) |
+| collection | object                 | The collection configuration for the current widget. See [Collections](/docs/collection-overview)         |
+| config     | object                 | The current Static CMS config. See [configuration options](/docs/configuration-options)                   |
+| entry      | object                 | Object with a `data` field that contains the current value of all widgets in the editor                   |
+| theme      | 'light'<br />\| 'dark' | The current theme being used by the app                                                                   |
 
 ### Options
 

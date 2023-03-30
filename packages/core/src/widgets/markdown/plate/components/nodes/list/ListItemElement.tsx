@@ -26,7 +26,7 @@ const ListItemElement: FC<PlateRenderElementProps<MdValue, MdListItemElement>> =
   return (
     <li>
       {isNotNullish(checked) ? (
-        <input type="checkbox" checked={checked} onChange={handleChange} />
+        <input type="checkbox" checked={checked} onChange={handleChange} className="m-[5px] mr-2" />
       ) : null}
       {children}
     </li>

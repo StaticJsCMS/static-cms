@@ -1,28 +1,22 @@
-import DataArrayIcon from '@mui/icons-material/DataArray';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import { DataArray as DataArrayIcon } from '@styled-icons/material/DataArray';
 import { focusEditor, insertNodes } from '@udecode/plate-core';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
-import { getShortcodes } from '../../../../../lib/registry';
-import { toTitleCase } from '../../../../../lib/util/string.util';
+import Menu from '@staticcms/core/components/common/menu/Menu';
+import MenuGroup from '@staticcms/core/components/common/menu/MenuGroup';
+import MenuItemButton from '@staticcms/core/components/common/menu/MenuItemButton';
+import { getShortcodes } from '@staticcms/core/lib/registry';
+import { toTitleCase } from '@staticcms/core/lib/util/string.util';
 import { ELEMENT_SHORTCODE, useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
-import ToolbarButton from './common/ToolbarButton';
 
-import type { FC, MouseEvent } from 'react';
-import type { MdEditor } from '../../plateTypes';
+import type { FC } from 'react';
 
-const ShortcodeToolbarButton: FC = () => {
+interface ShortcodeToolbarButtonProps {
+  disabled: boolean;
+}
+
+const ShortcodeToolbarButton: FC<ShortcodeToolbarButtonProps> = ({ disabled }) => {
   const editor = useMdPlateEditorState();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = useCallback((_editor: MdEditor, event: MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  }, []);
-
-  const handleClose = useCallback(() => {
-    setAnchorEl(null);
-  }, []);
 
   const configs = useMemo(() => getShortcodes(), []);
 
@@ -35,38 +29,36 @@ const ShortcodeToolbarButton: FC = () => {
         children: [{ text: '' }],
       });
       focusEditor(editor);
-      handleClose();
     },
-    [editor, handleClose],
+    [editor],
   );
 
   return (
-    <>
-      <ToolbarButton
-        key="shortcode-button"
-        tooltip="Add Shortcode"
-        icon={<DataArrayIcon />}
-        onClick={handleClick}
-      />
-      <Menu
-        id="shortcode-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'shortcode-button',
-        }}
-      >
+    <Menu
+      label={<DataArrayIcon className="h-5 w-5" aria-hidden="true" />}
+      data-testid="add-buttons"
+      keepMounted
+      hideDropdownIcon
+      variant="text"
+      className="
+        py-0.5
+        px-0.5
+        h-6
+        w-6
+      "
+      disabled={disabled}
+    >
+      <MenuGroup>
         {Object.keys(configs).map(name => {
           const config = configs[name];
           return (
-            <MenuItem key={`shortcode-${name}`} onClick={handleShortcodeClick(name)}>
+            <MenuItemButton key={`shortcode-${name}`} onClick={handleShortcodeClick(name)}>
               {config.label ?? toTitleCase(name)}
-            </MenuItem>
+            </MenuItemButton>
           );
         })}
-      </Menu>
-    </>
+      </MenuGroup>
+    </Menu>
   );
 };
 

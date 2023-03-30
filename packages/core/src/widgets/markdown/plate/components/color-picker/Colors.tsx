@@ -1,16 +1,9 @@
-import { styled } from '@mui/material/styles';
 import React from 'react';
 
 import ColorButton from './ColorButton';
 
 import type { ColorType } from '@udecode/plate';
 import type { FC } from 'react';
-
-const StyledColors = styled('div')`
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap: 0.25rem;
-`;
 
 export type ColorsProps = {
   color?: string;
@@ -20,7 +13,7 @@ export type ColorsProps = {
 
 const Colors: FC<ColorsProps> = ({ color, colors, updateColor }) => {
   return (
-    <StyledColors>
+    <div>
       {colors.map(({ name, value, isBrightColor }) => (
         <ColorButton
           key={name ?? value}
@@ -31,7 +24,7 @@ const Colors: FC<ColorsProps> = ({ color, colors, updateColor }) => {
           updateColor={updateColor}
         />
       ))}
-    </StyledColors>
+    </div>
   );
 };
 

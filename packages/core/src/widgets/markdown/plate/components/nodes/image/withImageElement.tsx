@@ -14,28 +14,26 @@ import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import { MediaPopover } from '@staticcms/markdown';
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 
-import type { Collection, Entry, MarkdownField } from '@staticcms/core/interface';
+import type { Collection, Entry, MarkdownField, MediaPath } from '@staticcms/core/interface';
 import type { MdImageElement, MdValue } from '@staticcms/markdown';
 import type { PlateRenderElementProps } from '@udecode/plate';
 import type { TMediaElement } from '@udecode/plate-media';
 import type { FC } from 'react';
 
 export interface WithImageElementProps {
-  containerRef: HTMLElement | null;
   collection: Collection<MarkdownField>;
   entry: Entry;
   field: MarkdownField;
 }
 
-const withImageElement = ({ containerRef, collection, entry, field }: WithImageElementProps) => {
+const withImageElement = ({ collection, entry, field }: WithImageElementProps) => {
   const ImageElement: FC<PlateRenderElementProps<MdValue, MdImageElement>> = ({
     element,
     editor,
     children,
   }) => {
     const { url, alt } = element;
-    const [internalUrl, setInternalUrl] = useState(url);
-    const [internalAlt, setInternalAlt] = useState(alt);
+    const [internalValue, setInternalValue] = useState<MediaPath<string>>({ path: url, alt });
     const [popoverHasFocus, setPopoverHasFocus] = useState(false);
     const debouncedPopoverHasFocus = useDebounce(popoverHasFocus, 100);
 
@@ -94,16 +92,15 @@ const withImageElement = ({ containerRef, collection, entry, field }: WithImageE
 
     const handleClose = useCallback(() => {
       setAnchorEl(null);
-      handleChange(internalUrl, 'url');
-      handleChange(internalAlt ?? '', 'alt');
-    }, [handleChange, internalAlt, internalUrl]);
+    }, []);
 
     const assetSource = useMediaAsset(url, collection, field, entry);
 
     const handleMediaChange = useCallback(
-      (newValue: string) => {
-        handleChange(newValue, 'url');
-        setInternalUrl(newValue);
+      (newValue: MediaPath<string>) => {
+        handleChange(newValue.path, 'url');
+        handleChange(newValue.alt ?? '', 'alt');
+        setInternalValue(newValue);
       },
       [handleChange],
     );
@@ -180,16 +177,10 @@ const withImageElement = ({ containerRef, collection, entry, field }: WithImageE
         />
         <MediaPopover
           anchorEl={anchorEl}
-          containerRef={containerRef}
           collection={collection}
           field={field}
-          entry={entry}
-          url={internalUrl}
-          text={internalAlt ?? ''}
-          textLabel="Alt"
-          onUrlChange={setInternalUrl}
-          onTextChange={setInternalAlt}
-          onClose={handleClose}
+          url={internalValue.path}
+          text={internalValue.alt}
           onMediaChange={handleMediaChange}
           onRemove={handleRemove}
           forImage

@@ -1,60 +1,18 @@
-import { css, styled } from '@mui/material/styles';
 import GeoJSON from 'ol/format/GeoJSON';
 import Draw from 'ol/interaction/Draw';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
 import Map from 'ol/Map.js';
-import olStyles from 'ol/ol.css';
 import OSMSource from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import View from 'ol/View.js';
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 
-import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
-import Outline from '@staticcms/core/components/UI/Outline';
-import transientOptions from '@staticcms/core/lib/util/transientOptions';
+import Field from '@staticcms/core/components/common/field/Field';
 
 import type { MapField, WidgetControlProps } from '@staticcms/core/interface';
 import type { Geometry } from 'ol/geom';
 import type { FC } from 'react';
-
-const StyledMapControlWrapper = styled('div')`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 100%;
-`;
-
-interface StyledMapControlContentProps {
-  $collapsed: boolean;
-  $height: string;
-}
-
-const StyledMapControlContent = styled(
-  'div',
-  transientOptions,
-)<StyledMapControlContentProps>(
-  ({ $collapsed, $height }) => `
-    display: flex;
-    position: relative;
-    height: ${$height}
-    ${
-      $collapsed
-        ? `
-          display: none;
-        `
-        : ''
-    }
-  `,
-);
-
-const StyledMap = styled('div')`
-  width: 100%;
-  position: relative;
-  ${css`
-    ${olStyles}
-  `}
-`;
 
 const formatOptions = {
   dataProjection: 'EPSG:4326',
@@ -84,15 +42,11 @@ const withMapControl = ({ getFormat, getMap }: WithMapControlProps = {}) => {
     value,
     field,
     onChange,
-    hasErrors,
+    errors,
+    forSingleList,
     label,
-    t,
+    disabled,
   }) => {
-    const [collapsed, setCollapsed] = useState(false);
-
-    const handleCollapseToggle = useCallback(() => {
-      setCollapsed(!collapsed);
-    }, [collapsed]);
     const { height = '400px' } = field;
 
     const mapContainer = useRef<HTMLDivElement | null>(null);
@@ -120,28 +74,37 @@ const withMapControl = ({ getFormat, getMap }: WithMapControlProps = {}) => {
       const writeOptions = { decimals: field.decimals ?? 7 };
       draw.on('drawend', ({ feature }) => {
         featuresSource.clear();
+
+        if (disabled) {
+          return;
+        }
+
         const geometry = feature.getGeometry();
         if (geometry) {
           onChange(format.writeGeometry(geometry, writeOptions));
         }
       });
-    }, [field, mapContainer, onChange, path, value]);
+    }, [disabled, field, mapContainer, onChange, path, value]);
 
     return (
-      <StyledMapControlWrapper>
-        <ObjectWidgetTopBar
-          key="file-control-top-bar"
-          collapsed={collapsed}
-          onCollapseToggle={handleCollapseToggle}
-          heading={label}
-          hasError={hasErrors}
-          t={t}
+      <Field
+        label={label}
+        errors={errors}
+        hint={field.hint}
+        forSingleList={forSingleList}
+        noPadding
+        disabled={disabled}
+      >
+        <div
+          ref={mapContainer}
+          className="
+            relative
+            w-full
+            mt-2
+          "
+          style={{ height }}
         />
-        <StyledMapControlContent $collapsed={collapsed} $height={height}>
-          <StyledMap ref={mapContainer} />
-        </StyledMapControlContent>
-        <Outline hasError={hasErrors} />
-      </StyledMapControlWrapper>
+      </Field>
     );
   };
 

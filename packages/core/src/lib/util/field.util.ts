@@ -1,7 +1,10 @@
+import get from 'lodash/get';
+
+import { getLocaleDataPath } from '../i18n';
 import { keyToPathArray } from '../widgets/stringTemplate';
 
+import type { Collection, Entry, Field, ValueOrNestedValue } from '@staticcms/core/interface';
 import type { t } from 'react-polyglot';
-import type { Collection, Field } from '@staticcms/core/interface';
 
 export function selectField(collection: Collection, key: string) {
   const array = keyToPathArray(key);
@@ -64,4 +67,18 @@ export function getField(field: Field | Field[], path: string): Field | null {
       : field,
     path.split('.'),
   );
+}
+
+export function getFieldValue(
+  field: Field,
+  entry: Entry,
+  isTranslatable: boolean,
+  locale: string | undefined,
+): ValueOrNestedValue {
+  if (isTranslatable && locale) {
+    const dataPath = getLocaleDataPath(locale);
+    return get(entry, [...dataPath, field.name]);
+  }
+
+  return entry.data?.[field.name];
 }

@@ -1,19 +1,10 @@
 import Popover from '@mui/material/Popover';
-import { styled } from '@mui/material/styles';
 import React, { useCallback, useState } from 'react';
 
 import ToolbarButton from '../ToolbarButton';
 
 import type { FC, ReactNode } from 'react';
 import type { ToolbarButtonProps } from '../ToolbarButton';
-
-const StyledPopperContent = styled('div')`
-  display: flex;
-  gap: 4px;
-  padding: 16px;
-  border-radius: 4px;
-  align-items: center;
-`;
 
 export interface ToolbarDropdownProps extends Omit<ToolbarButtonProps, 'onClick'> {
   children: ReactNode;
@@ -58,7 +49,7 @@ const ToolbarDropdown: FC<ToolbarDropdownProps> = ({ children, onClose, ...contr
         onClose={handleClose}
         disablePortal
       >
-        <StyledPopperContent>{children}</StyledPopperContent>
+        <div>{children}</div>
       </Popover>
     </>
   );

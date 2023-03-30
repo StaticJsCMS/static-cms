@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import AuthenticationPage from '@staticcms/core/components/UI/AuthenticationPage';
+import Login from '@staticcms/core/components/login/Login';
 
 import type { AuthenticationPageProps, TranslatedProps, User } from '@staticcms/core/interface';
 
@@ -22,11 +22,7 @@ export interface GitGatewayAuthenticationPageProps
   handleAuth: (email: string, password: string) => Promise<User | string>;
 }
 
-const GitGatewayAuthenticationPage = ({
-  config,
-  onLogin,
-  t,
-}: GitGatewayAuthenticationPageProps) => {
+const GitGatewayAuthenticationPage = ({ onLogin, t }: GitGatewayAuthenticationPageProps) => {
   const [loggingIn, setLoggingIn] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [errors, setErrors] = useState<{
@@ -97,7 +93,7 @@ const GitGatewayAuthenticationPage = ({
     }
   }, [onLogin]);
 
-  const pageContent = useMemo(() => {
+  const errorContent = useMemo(() => {
     if (!window.netlifyIdentity) {
       return t('auth.errors.netlifyIdentityNotFound');
     }
@@ -118,15 +114,11 @@ const GitGatewayAuthenticationPage = ({
   }, [errors.identity, t]);
 
   return (
-    <AuthenticationPage
-      key="git-gateway-auth"
-      logoUrl={config.logo_url}
-      siteUrl={config.site_url}
-      onLogin={handleIdentity}
-      buttonContent={t('auth.loginWithNetlifyIdentity')}
-      pageContent={pageContent}
-      loginDisabled={loggingIn}
-      t={t}
+    <Login
+      login={handleIdentity}
+      label={t('auth.loginWithNetlifyIdentity')}
+      inProgress={loggingIn}
+      error={errorContent}
     />
   );
 };

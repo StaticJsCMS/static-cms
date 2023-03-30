@@ -1,11 +1,7 @@
-import Autocomplete from '@mui/material/Autocomplete';
-import CircularProgress from '@mui/material/CircularProgress';
-import TextField from '@mui/material/TextField';
 import * as fuzzy from 'fuzzy';
-import find from 'lodash/find';
 import get from 'lodash/get';
 import uniqBy from 'lodash/uniqBy';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
   currentBackend,
@@ -14,7 +10,12 @@ import {
   mergeExpandedEntries,
   sortByScore,
 } from '@staticcms/core/backend';
-import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
+import Autocomplete from '@staticcms/core/components/common/autocomplete/Autocomplete';
+import Field from '@staticcms/core/components/common/field/Field';
+import Pill from '@staticcms/core/components/common/pill/Pill';
+import CircularProgress from '@staticcms/core/components/common/progress/CircularProgress';
+import { isNullish } from '@staticcms/core/lib/util/null.util';
+import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import {
   addFileTemplateFields,
   compileStringTemplate,
@@ -24,7 +25,6 @@ import {
 import { selectCollection } from '@staticcms/core/reducers/selectors/collections';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 
-import type { FilterOptionsState } from '@mui/material/useAutocomplete';
 import type {
   Entry,
   EntryData,
@@ -49,21 +49,6 @@ export interface Option {
   label: string;
 }
 
-function optionToString(option: Option | HitOption | null): string {
-  return option && option.value ? option.value : '';
-}
-
-function convertToOption(raw: string | HitOption): HitOption;
-function convertToOption(raw: string | Option | HitOption): Option;
-function convertToOption(raw: string | HitOption | undefined): HitOption | undefined;
-function convertToOption(raw: string | Option | HitOption | undefined): Option | undefined;
-function convertToOption(raw: string | Option | HitOption | undefined): Option | undefined {
-  if (typeof raw === 'string') {
-    return { label: raw, value: raw };
-  }
-  return raw;
-}
-
 function getSelectedOptions(value: HitOption[] | undefined | null): HitOption[] | null;
 function getSelectedOptions(value: string[] | undefined | null): string[] | null;
 function getSelectedOptions(value: string[] | HitOption[] | undefined | null) {
@@ -78,26 +63,22 @@ function uniqOptions(initial: HitOption[], current: HitOption[]): HitOption[] {
   return uniqBy(initial.concat(current), o => o.value);
 }
 
-function getSelectedValue(
-  value: string,
-  options: HitOption[],
-  isMultiple: boolean,
-): HitOption | null;
+function getSelectedValue(value: string, options: HitOption[], isMultiple: boolean): string | null;
 function getSelectedValue(
   value: string[],
   options: HitOption[],
   isMultiple: boolean,
-): HitOption[] | null;
+): string[] | null;
 function getSelectedValue(
   value: string | string[] | null | undefined,
   options: HitOption[],
   isMultiple: boolean,
-): HitOption | HitOption[] | null;
+): string | string[] | null;
 function getSelectedValue(
   value: string | string[] | null | undefined,
   options: HitOption[],
   isMultiple: boolean,
-): HitOption | HitOption[] | null {
+): string | string[] | null {
   if (isMultiple && Array.isArray(value)) {
     const selectedOptions = getSelectedOptions(value);
     if (selectedOptions === null) {
@@ -107,28 +88,33 @@ function getSelectedValue(
     const selected = selectedOptions
       .map(i => options.find(o => o.value === i))
       .filter(Boolean)
-      .map(convertToOption) as HitOption[];
+      .map(option => (typeof option === 'string' ? option : option?.value)) as string[];
 
     return selected;
   } else {
-    return find(options, ['value', value]) ?? null;
+    return options.find(option => option.value === value)?.value ?? null;
   }
 }
+
+const DEFAULT_OPTIONS_LIMIT = 20;
 
 const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> = ({
   value,
   field,
-  isDuplicate,
-  onChange,
+  duplicate,
   config,
   locale,
   label,
+  errors,
   hasErrors,
+  disabled,
+  forSingleList,
+  onChange,
 }) => {
   const [internalRawValue, setInternalValue] = useState(value);
   const internalValue = useMemo(
-    () => (isDuplicate ? value : internalRawValue),
-    [internalRawValue, isDuplicate, value],
+    () => (duplicate ? value : internalRawValue),
+    [internalRawValue, duplicate, value],
   );
   const [initialOptions, setInitialOptions] = useState<HitOption[]>([]);
 
@@ -148,6 +134,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
         locale != null && hit.i18n != null && hit.i18n[locale] != null
           ? hit.i18n[locale].data
           : hit.data;
+
       const templateVars = extractTemplateVars(field);
       // return non template fields as is
       if (templateVars.length <= 0) {
@@ -163,16 +150,23 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
     (hits: Entry[]) => {
       const valueField = field.value_field;
       const displayField = field.display_fields || [field.value_field];
+
       const options = hits.reduce((acc, hit) => {
         const valuesPaths = expandPath({ data: hit.data, path: valueField });
         for (let i = 0; i < valuesPaths.length; i++) {
+          const value = parseNestedFields(hit, valuesPaths[i]) as string;
+
           const label = displayField
             .map(key => {
               const displayPaths = expandPath({ data: hit.data, path: key });
-              return parseNestedFields(hit, displayPaths[i] || displayPaths[0]);
+              const path = displayPaths[i] ?? displayPaths[0];
+              if (isNullish(path) || isEmpty(path)) {
+                return value;
+              }
+              return parseNestedFields(hit, displayPaths[i] ?? displayPaths[0]);
             })
             .join(' ');
-          const value = parseNestedFields(hit, valuesPaths[i]) as string;
+
           acc.push({ data: hit.data, value, label });
         }
 
@@ -184,43 +178,16 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
     [field.display_fields, field.value_field, parseNestedFields],
   );
 
-  const handleChange = useCallback(
-    (selectedOption: HitOption | HitOption[] | null) => {
-      if (Array.isArray(selectedOption)) {
-        const options = selectedOption;
-        setInitialOptions(options.filter(Boolean));
-        const newValue = options.map(optionToString);
-        setInternalValue(newValue);
-        onChange(newValue);
-      } else {
-        setInitialOptions([selectedOption].filter(Boolean) as HitOption[]);
-        const newValue = optionToString(selectedOption);
-        setInternalValue(newValue);
-        onChange(newValue);
-      }
-    },
-    [onChange],
-  );
-
   const [options, setOptions] = useState<HitOption[]>([]);
   const [entries, setEntries] = useState<Entry[]>([]);
-  const [open, setOpen] = useState(false);
-  const valueNotEmpty = useMemo(
-    () => (Array.isArray(internalValue) ? internalValue.length > 0 : isNotEmpty(internalValue)),
-    [internalValue],
-  );
-  const loading = useMemo(
-    () => (open || valueNotEmpty) && options.length === 0,
-    [open, valueNotEmpty, options.length],
-  );
+  const loading = useMemo(() => options.length === 0, [options.length]);
 
   const filterOptions = useCallback(
-    (_options: HitOption[], { inputValue }: FilterOptionsState<HitOption>) => {
+    (inputValue: string) => {
       const searchFields = field.search_fields;
-      const limit = field.options_length || 20;
+      const limit = field.options_length || DEFAULT_OPTIONS_LIMIT;
       const expandedEntries = expandSearchEntries(entries, searchFields);
-
-      let hits = fuzzy
+      const hits = fuzzy
         .filter(inputValue, expandedEntries, {
           extract: entry => {
             return getEntryField(entry.field, entry);
@@ -229,11 +196,13 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
         .sort(sortByScore)
         .map(f => f.original);
 
+      let options = uniqBy(parseHitOptions(mergeExpandedEntries(hits)), o => o.value);
+
       if (limit !== undefined && limit > 0) {
-        hits = hits.slice(0, limit);
+        options = options.slice(0, limit);
       }
 
-      return parseHitOptions(mergeExpandedEntries(hits));
+      setOptions(options);
     },
     [entries, field.options_length, field.search_fields, parseHitOptions],
   );
@@ -248,50 +217,147 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
 
       const options = await backend.listAllEntries(searchCollection);
       setEntries(options);
-      setOptions(parseHitOptions(options));
+
+      const hitOptions = parseHitOptions(options);
+
+      if (value) {
+        const byValue = hitOptions.reduce((acc, option) => {
+          acc[option.value] = option;
+          return acc;
+        }, {} as Record<string, HitOption>);
+
+        const newFilteredValue =
+          typeof value === 'string'
+            ? value in byValue
+              ? [value]
+              : []
+            : value.filter(v => v && v in byValue);
+
+        const newInitialOptions = newFilteredValue.map(v => byValue[v]);
+
+        setInitialOptions(newInitialOptions);
+      }
+
+      setOptions(hitOptions);
     };
 
     getOptions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchCollection, config, loading, parseHitOptions]);
 
-  const uniqueOptions = uniqOptions(initialOptions, options);
-  const selectedValue = getSelectedValue(internalValue, uniqueOptions, isMultiple);
+  const uniqueOptions = useMemo(() => {
+    let uOptions = uniqOptions(initialOptions, options);
+
+    const limit = field.options_length || DEFAULT_OPTIONS_LIMIT;
+    if (limit !== undefined && limit > 0) {
+      uOptions = uOptions.slice(0, limit);
+    }
+
+    return uOptions;
+  }, [field.options_length, initialOptions, options]);
+
+  const uniqueOptionsByValue = useMemo(
+    () =>
+      uniqueOptions.reduce((acc, option) => {
+        acc[option.value] = option;
+        return acc;
+      }, {} as Record<string, HitOption>),
+    [uniqueOptions],
+  );
+
+  const selectedValue = useMemo(() => {
+    let selected = getSelectedValue(internalValue, uniqueOptions, isMultiple);
+    if (isMultiple && !selected) {
+      selected = [];
+    }
+    return selected;
+  }, [internalValue, isMultiple, uniqueOptions]);
+
+  const ref = useRef<HTMLButtonElement | null>(null);
+
+  const handleChange = useCallback(
+    (newValue: string | string[] | null) => {
+      if (!newValue) {
+        setInternalValue(newValue);
+        onChange(newValue);
+        return;
+      }
+
+      if (Array.isArray(newValue)) {
+        const newFilteredValue = newValue.filter(v => v && v in uniqueOptionsByValue);
+        const newInitialOptions = newFilteredValue.map(v => uniqueOptionsByValue[v]);
+        setInitialOptions(newInitialOptions);
+        setInternalValue(newFilteredValue);
+        onChange(newFilteredValue);
+      } else {
+        if (!(newValue in uniqueOptionsByValue)) {
+          setInternalValue(null);
+          onChange(null);
+          return;
+        }
+        setInitialOptions([uniqueOptionsByValue[newValue]]);
+        setInternalValue(newValue);
+        onChange(newValue);
+      }
+    },
+    [onChange, uniqueOptionsByValue],
+  );
 
   return (
-    <Autocomplete
-      key="relation-control-autocomplete"
-      disablePortal
-      options={uniqueOptions}
-      fullWidth
-      filterOptions={filterOptions}
-      renderInput={params => (
-        <TextField
-          key="relation-control-input"
-          {...params}
-          label={label}
-          error={hasErrors}
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <>
-                {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                {params.InputProps.endAdornment}
-              </>
-            ),
-          }}
-        />
-      )}
-      value={selectedValue ? selectedValue : isMultiple ? [] : null}
-      onChange={(_event, newValue) => handleChange(newValue)}
-      multiple={isMultiple}
-      open={open}
-      onOpen={() => {
-        setOpen(true);
-      }}
-      onClose={() => {
-        setOpen(false);
-      }}
-    />
+    <Field
+      inputRef={ref}
+      label={label}
+      errors={errors}
+      noPadding={!hasErrors}
+      hint={field.hint}
+      forSingleList={forSingleList}
+      cursor="text"
+      disabled={disabled}
+    >
+      <Autocomplete
+        label={
+          <>
+            {Array.isArray(selectedValue) && selectedValue.length > 0 ? (
+              <div className="flex flex-wrap gap-0.5 w-full pr-4 p-2">
+                {selectedValue.map(selectValue => {
+                  const option = uniqueOptionsByValue[selectValue];
+                  return (
+                    <Pill key={selectValue} noWrap disabled={disabled}>
+                      {option?.label ?? selectValue}
+                    </Pill>
+                  );
+                })}
+              </div>
+            ) : null}
+            {loading ? (
+              <CircularProgress
+                key="loading-indicator"
+                className="absolute inset-y-0 right-4 flex items-center pr-2"
+                data-testid="relation-loading-indicator"
+              />
+            ) : null}
+          </>
+        }
+        ref={ref}
+        value={selectedValue}
+        options={uniqueOptions}
+        disabled={disabled}
+        displayValue={item => {
+          if (!item || Array.isArray(item)) {
+            return '';
+          }
+
+          const option = uniqueOptionsByValue[item];
+          if (!option) {
+            return '';
+          }
+
+          return option.label;
+        }}
+        onQuery={filterOptions}
+        onChange={handleChange}
+      />
+    </Field>
   );
 };
 

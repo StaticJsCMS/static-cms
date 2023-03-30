@@ -6,7 +6,27 @@
     <title>Static CMS Development Test</title>
     <script>
       window.repoFiles = {
+        assets: {
+          uploads: {
+            'moby-dick.jpg': {
+              content: '',
+            },
+            'lobby.jpg': {
+              content: '',
+            },
+          },
+        },
         _posts: {
+          assets: {
+            uploads: {
+              'moby-dick.jpg': {
+                content: '',
+              },
+              'lobby.jpg': {
+                content: '',
+              },
+            },
+          },
           '2015-02-14-this-is-a-post.md': {
             content:
               '---\ntitle: This is a YAML front matter post\ndraft: true\nimage: /assets/uploads/moby-dick.jpg\ndate: 2015-02-14T00:00:00.000Z\n---\n\n# I Am a Title in Markdown\n\nHello, world\n\n* One Thing\n* Another Thing\n* A Third Thing\n',
@@ -14,10 +34,6 @@
           '2015-02-15-this-is-a-json-frontmatter-post.md': {
             content:
               '{\n"title": "This is a JSON front matter post",\n"draft": false,\n"image": "/assets/uploads/moby-dick.jpg",\n"date": "2015-02-15T00:00:00.000Z"\n}\n\n# I Am a Title in Markdown\n\nHello, world\n\n* One Thing\n* Another Thing\n* A Third Thing\n',
-          },
-          '2015-02-16-this-is-a-toml-frontmatter-post.md': {
-            content:
-              '+++\ntitle = "This is a TOML front matter post"\nimage = "/assets/uploads/moby-dick.jpg"\ndate = "2015-02-16T00:00:00.000Z"\n+++\n\n# I Am a Title in Markdown\n\nHello, world\n\n* One Thing\n* Another Thing\n* A Third Thing\n',
           },
           '2015-02-14-this-is-a-post-with-a-different-extension.other': {
             content:
@@ -104,15 +120,15 @@
         _i18n_playground: {
           'file1.en.md': {
             content:
-              '---\nslug: file1\ndescription: Coffee is a small tree or shrub that grows in the forest understory in its wild form, and traditionally was grown commercially under other trees that provided shade. The forest-like structure of shade coffee farms provides habitat for a great number of migratory and resident species.\ndate: 2015-02-14T00:00:00.000Z\n---\n'
+              '---\nslug: file1\ndescription: Coffee is a small tree or shrub that grows in the forest understory in its wild form, and traditionally was grown commercially under other trees that provided shade. The forest-like structure of shade coffee farms provides habitat for a great number of migratory and resident species.\ndate: 2015-02-14T00:00:00.000Z\n---\n',
           },
           'file1.de.md': {
             content:
-              '---\ndescription: Kaffee ist ein kleiner Baum oder Strauch, der in seiner wilden Form im Unterholz des Waldes wächst und traditionell kommerziell unter anderen Bäumen angebaut wurde, die Schatten spendeten. Die waldähnliche Struktur schattiger Kaffeefarmen bietet Lebensraum für eine Vielzahl von wandernden und ansässigen Arten.\ndate: 2015-02-14T00:00:00.000Z\n---\n'
+              '---\ndescription: Kaffee ist ein kleiner Baum oder Strauch, der in seiner wilden Form im Unterholz des Waldes wächst und traditionell kommerziell unter anderen Bäumen angebaut wurde, die Schatten spendeten. Die waldähnliche Struktur schattiger Kaffeefarmen bietet Lebensraum für eine Vielzahl von wandernden und ansässigen Arten.\ndate: 2015-02-14T00:00:00.000Z\n---\n',
           },
           'file1.fr.md': {
             content:
-              '---\ndescription: Le café est un petit arbre ou un arbuste qui pousse dans le sous-étage de la forêt sous sa forme sauvage et qui était traditionnellement cultivé commercialement sous d\'autres arbres qui fournissaient de l\'ombre. La structure forestière des plantations de café d\'ombre fournit un habitat à un grand nombre d\'espèces migratrices et résidentes.\ndate: 2015-02-14T00:00:00.000Z\n---\n'
+              "---\ndescription: Le café est un petit arbre ou un arbuste qui pousse dans le sous-étage de la forêt sous sa forme sauvage et qui était traditionnellement cultivé commercialement sous d'autres arbres qui fournissaient de l'ombre. La structure forestière des plantations de café d'ombre fournit un habitat à un grand nombre d'espèces migratrices et résidentes.\ndate: 2015-02-14T00:00:00.000Z\n---\n",
           },
         },
       };

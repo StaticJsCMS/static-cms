@@ -7,7 +7,16 @@ import type { FC } from 'react';
 const OrderedListElement: FC<PlateRenderElementProps<MdValue, MdNumberedListElement>> = ({
   children,
 }) => {
-  return <ol>{children}</ol>;
+  return (
+    <ol
+      className="
+        list-decimal
+        pl-10
+      "
+    >
+      {children}
+    </ol>
+  );
 };
 
 export default OrderedListElement;

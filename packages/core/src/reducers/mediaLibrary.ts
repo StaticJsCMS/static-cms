@@ -21,18 +21,20 @@ import {
 } from '../constants';
 
 import type { MediaLibraryAction } from '../actions/mediaLibrary';
-import type { Collection, Field, MediaFile, MediaLibraryInstance } from '../interface';
-
-export interface MediaLibraryDisplayURL {
-  url?: string;
-  isFetching: boolean;
-  err?: unknown;
-}
+import type {
+  Collection,
+  Field,
+  MediaFile,
+  MediaLibrarInsertOptions,
+  MediaLibraryDisplayURL,
+  MediaLibraryInstance,
+  MediaPath,
+} from '../interface';
 
 export type MediaLibraryState = {
   isVisible: boolean;
   showMediaButton: boolean;
-  controlMedia: Record<string, string | string[]>;
+  controlMedia: Record<string, MediaPath>;
   displayURLs: Record<string, MediaLibraryDisplayURL>;
   externalLibrary?: MediaLibraryInstance;
   controlID?: string;
@@ -42,8 +44,8 @@ export type MediaLibraryState = {
   collection?: Collection;
   field?: Field;
   value?: string | string[];
+  alt?: string;
   replaceIndex?: number;
-  canInsert?: boolean;
   isLoading?: boolean;
   dynamicSearch?: boolean;
   dynamicSearchActive?: boolean;
@@ -53,6 +55,7 @@ export type MediaLibraryState = {
   isDeleting?: boolean;
   hasNextPage?: boolean;
   isPaginating?: boolean;
+  insertOptions?: MediaLibrarInsertOptions;
 };
 
 const defaultState: MediaLibraryState = {
@@ -76,8 +79,17 @@ function mediaLibrary(
       };
 
     case MEDIA_LIBRARY_OPEN: {
-      const { controlID, forImage, config, collection, field, value, replaceIndex } =
-        action.payload;
+      const {
+        controlID,
+        forImage,
+        config,
+        collection,
+        field,
+        value,
+        alt,
+        replaceIndex,
+        insertOptions,
+      } = action.payload;
       const libConfig = config || {};
 
       return {
@@ -85,12 +97,13 @@ function mediaLibrary(
         isVisible: true,
         forImage: Boolean(forImage),
         controlID,
-        canInsert: !!controlID,
         config: libConfig,
         collection,
         field,
         value,
+        alt,
         replaceIndex,
+        insertOptions,
       };
     }
 
@@ -98,10 +111,12 @@ function mediaLibrary(
       return {
         ...state,
         isVisible: false,
+        insertOptions: undefined,
+        alt: undefined,
       };
 
     case MEDIA_INSERT: {
-      const { mediaPath } = action.payload;
+      const { mediaPath, alt } = action.payload;
       const controlID = state.controlID;
       if (!controlID) {
         return state;
@@ -114,7 +129,10 @@ function mediaLibrary(
           ...state,
           controlMedia: {
             ...state.controlMedia,
-            [controlID]: mediaPath,
+            [controlID]: {
+              path: mediaPath,
+              alt,
+            },
           },
         };
       }
@@ -132,7 +150,9 @@ function mediaLibrary(
         ...state,
         controlMedia: {
           ...state.controlMedia,
-          [controlID]: valueArray,
+          [controlID]: {
+            path: valueArray,
+          },
         },
       };
     }
@@ -140,12 +160,12 @@ function mediaLibrary(
     case MEDIA_REMOVE_INSERTED: {
       const controlID = action.payload.controlID;
 
+      const newControlMedia = { ...state.controlMedia };
+      delete newControlMedia[controlID];
+
       return {
         ...state,
-        controlMedia: {
-          ...state.controlMedia,
-          [controlID]: '',
-        },
+        controlMedia: newControlMedia,
       };
     }
 

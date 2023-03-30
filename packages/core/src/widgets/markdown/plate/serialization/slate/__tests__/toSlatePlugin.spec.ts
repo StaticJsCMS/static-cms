@@ -21,12 +21,6 @@ async function expectNodes(
 
 function testRunner(key: string, mode: 'markdown' | 'mdx' | 'both', data: SerializationTestData) {
   it(`deserializes ${key}`, async () => {
-    if (mode === 'both') {
-      await expectNodes(data.mdast, false, data.slate);
-      await expectNodes(data.mdast, true, data.slate);
-      return;
-    }
-
     await expectNodes(data.mdast, mode === 'mdx', data.slate);
   });
 }

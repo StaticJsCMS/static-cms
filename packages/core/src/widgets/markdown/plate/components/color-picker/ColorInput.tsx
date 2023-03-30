@@ -1,13 +1,7 @@
 import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
 import React, { useRef } from 'react';
 
 import type { ChangeEvent, FC } from 'react';
-
-const StyledInput = styled('input')`
-  visibility: hidden;
-  position: absolute;
-`;
 
 export interface ColorInputProps {
   value?: string;
@@ -31,7 +25,7 @@ const ColorInput: FC<ColorInputProps> = ({ value = '#000000', onChange }) => {
       <Button onClick={handleClick} fullWidth>
         CUSTOM
       </Button>
-      <StyledInput ref={ref} type="color" onChange={handleOnChange} value={value} />
+      <input ref={ref} type="color" onChange={handleOnChange} value={value} />
     </div>
   );
 };

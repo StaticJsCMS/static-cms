@@ -1,98 +1,46 @@
-import { styled } from '@mui/material/styles';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
-import EditorControl from '@staticcms/core/components/editor/EditorControlPane/EditorControl';
-import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
-import Outline from '@staticcms/core/components/UI/Outline';
-import { transientOptions } from '@staticcms/core/lib';
+import EditorControl from '@staticcms/core/components/entry-editor/editor-control-pane/EditorControl';
+import useHasChildErrors from '@staticcms/core/lib/hooks/useHasChildErrors';
 import { compileStringTemplate } from '@staticcms/core/lib/widgets/stringTemplate';
-import { getEntryDataPath } from '@staticcms/core/reducers/selectors/entryDraft';
+import ObjectFieldWrapper from './ObjectFieldWrapper';
 
 import type { ObjectField, ObjectValue, WidgetControlProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
-const StyledObjectControlWrapper = styled('div')`
-  position: relative;
-  background: white;
-  width: 100%;
-`;
-
-interface StyledFieldsBoxProps {
-  $collapsed: boolean;
-}
-
-const StyledFieldsBox = styled(
-  'div',
-  transientOptions,
-)<StyledFieldsBoxProps>(
-  ({ $collapsed }) => `
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-    ${
-      $collapsed
-        ? `
-          display: none;
-        `
-        : `
-          padding: 16px;
-        `
-    }
-  `,
-);
-
-const StyledNoFieldsMessage = styled('div')`
-  display: flex;
-  padding: 16px;
-  width: 100%;
-`;
-
 const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
+  label,
   field,
   fieldsErrors,
   submitted,
   forList,
-  isDuplicate,
-  isFieldDuplicate,
-  isHidden,
-  isFieldHidden,
+  forSingleList,
+  duplicate,
+  hidden,
   locale,
   path,
-  t,
   i18n,
-  hasErrors,
+  errors,
+  disabled,
   value = {},
 }) => {
-  const [collapsed, setCollapsed] = useState(field.collapsed ?? false);
-
-  const handleCollapseToggle = useCallback(() => {
-    setCollapsed(!collapsed);
-  }, [collapsed]);
-
   const objectLabel = useMemo(() => {
-    const label = field.label ?? field.name;
     const summary = field.summary;
     return summary ? `${label} - ${compileStringTemplate(summary, null, '', value)}` : label;
-  }, [field.label, field.name, field.summary, value]);
+  }, [field.summary, label, value]);
 
-  const multiFields = useMemo(() => field.fields, [field.fields]);
+  const fields = useMemo(() => field.fields, [field.fields]);
 
-  const childHasError = useMemo(() => {
-    const dataPath = getEntryDataPath(i18n);
-    const fullPath = `${dataPath}.${path}`;
-
-    return Boolean(Object.keys(fieldsErrors).find(key => key.startsWith(fullPath)));
-  }, [fieldsErrors, i18n, path]);
+  const hasChildErrors = useHasChildErrors(path, fieldsErrors, i18n);
 
   const renderedField = useMemo(() => {
     return (
-      multiFields?.map((field, index) => {
+      fields?.map((field, index) => {
         let fieldName = field.name;
         let parentPath = path;
         const fieldValue = value && value[fieldName];
 
-        if (forList && multiFields.length === 1) {
+        if (forList && fields.length === 1) {
           const splitPath = path.split('.');
           fieldName = splitPath.pop() ?? field.name;
           parentPath = splitPath.join('.');
@@ -107,61 +55,54 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
             fieldsErrors={fieldsErrors}
             submitted={submitted}
             parentPath={parentPath}
-            isDisabled={isDuplicate}
-            isParentDuplicate={isDuplicate}
-            isFieldDuplicate={isFieldDuplicate}
-            isParentHidden={isHidden}
-            isFieldHidden={isFieldHidden}
+            disabled={disabled || duplicate}
+            parentDuplicate={duplicate}
+            parentHidden={hidden}
             locale={locale}
             i18n={i18n}
+            forList={forList}
+            forSingleList={forSingleList}
           />
         );
       }) ?? null
     );
   }, [
-    fieldsErrors,
-    forList,
-    i18n,
-    isDuplicate,
-    isFieldDuplicate,
-    isFieldHidden,
-    isHidden,
-    locale,
-    multiFields,
+    fields,
     path,
-    submitted,
     value,
+    forList,
+    fieldsErrors,
+    submitted,
+    disabled,
+    duplicate,
+    hidden,
+    locale,
+    i18n,
+    forSingleList,
   ]);
 
-  if (multiFields) {
+  if (fields.length) {
+    if (forList) {
+      return <>{renderedField}</>;
+    }
+
     return (
-      <StyledObjectControlWrapper key="object-control-wrapper">
-        {forList ? null : (
-          <ObjectWidgetTopBar
-            key="object-control-top-bar"
-            collapsed={collapsed}
-            onCollapseToggle={handleCollapseToggle}
-            heading={objectLabel}
-            hasError={hasErrors || childHasError}
-            t={t}
-            testId="object-title"
-          />
-        )}
-        <StyledFieldsBox $collapsed={collapsed} key="object-control-fields">
-          {renderedField}
-        </StyledFieldsBox>
-        {forList ? null : (
-          <Outline key="object-control-outline" hasError={hasErrors || childHasError} />
-        )}
-      </StyledObjectControlWrapper>
+      <ObjectFieldWrapper
+        key="object-control-wrapper"
+        field={field}
+        openLabel={label}
+        closedLabel={objectLabel}
+        errors={errors}
+        hasChildErrors={hasChildErrors}
+        hint={field.hint}
+        disabled={disabled}
+      >
+        {renderedField}
+      </ObjectFieldWrapper>
     );
   }
 
-  return (
-    <StyledNoFieldsMessage key="no-fields-found">
-      No field(s) defined for this widget
-    </StyledNoFieldsMessage>
-  );
+  return <div key="no-fields-found">No field(s) defined for this widget</div>;
 };
 
 export default ObjectControl;
