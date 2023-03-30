@@ -153,12 +153,14 @@ const EditorToolbar = ({
                   </MenuItemButton>
                 </>
               )}
-              {showDelete && canDelete ? (
-                <MenuItemButton key="delete-button" onClick={onDelete} startIcon={TrashIcon}>
+            </MenuGroup>
+            {showDelete && canDelete ? (
+              <MenuGroup key="delete-button">
+                <MenuItemButton onClick={onDelete} startIcon={TrashIcon} color="error">
                   {t('editor.editorToolbar.deleteEntry')}
                 </MenuItemButton>
-              ) : null}
-            </MenuGroup>
+              </MenuGroup>
+            ) : null}
           </Menu>
         ) : null}
         <Menu
