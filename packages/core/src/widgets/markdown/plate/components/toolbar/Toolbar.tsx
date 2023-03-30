@@ -15,17 +15,23 @@ export interface ToolbarProps {
   useMdx: boolean;
   collection: Collection<MarkdownField>;
   field: MarkdownField;
+  disabled: boolean;
 }
 
-const Toolbar: FC<ToolbarProps> = ({ useMdx, collection, field }) => {
+const Toolbar: FC<ToolbarProps> = ({ useMdx, collection, field, disabled }) => {
   const groups = [
-    <BasicMarkToolbarButtons key="basic-mark-buttons" useMdx={useMdx} extended />,
-    <BasicElementToolbarButtons key="basic-element-buttons" />,
-    <ListToolbarButtons key="list-buttons" />,
-    useMdx ? <ColorToolbarButtons key="color-buttons" /> : null,
-    useMdx ? <AlignToolbarButtons key="align-mark-buttons" /> : null,
-    !useMdx ? <ShortcodeToolbarButton key="shortcode-button" /> : null,
-    <AddButtons key="add-buttons" collection={collection} field={field} />,
+    <BasicMarkToolbarButtons
+      key="basic-mark-buttons"
+      useMdx={useMdx}
+      extended
+      disabled={disabled}
+    />,
+    <BasicElementToolbarButtons key="basic-element-buttons" disabled={disabled} />,
+    <ListToolbarButtons key="list-buttons" disabled={disabled} />,
+    useMdx ? <ColorToolbarButtons key="color-buttons" disabled={disabled} /> : null,
+    useMdx ? <AlignToolbarButtons key="align-mark-buttons" disabled={disabled} /> : null,
+    !useMdx ? <ShortcodeToolbarButton key="shortcode-button" disabled={disabled} /> : null,
+    <AddButtons key="add-buttons" collection={collection} field={field} disabled={disabled} />,
   ].filter(Boolean);
 
   return (

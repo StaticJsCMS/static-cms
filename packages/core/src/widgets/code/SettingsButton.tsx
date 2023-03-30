@@ -8,12 +8,13 @@ import type { FC, MouseEvent } from 'react';
 
 export interface SettingsButtonProps {
   showClose?: boolean;
+  disabled: boolean;
   onClick: (event: MouseEvent) => void;
 }
 
-const SettingsButton: FC<SettingsButtonProps> = ({ showClose = false, onClick }) => {
+const SettingsButton: FC<SettingsButtonProps> = ({ showClose = false, disabled, onClick }) => {
   return (
-    <IconButton onClick={onClick} size="small" variant="text">
+    <IconButton onClick={onClick} size="small" variant="text" disabled={disabled}>
       {showClose ? <CloseIcon className="w-5 h-5" /> : <SettingsIcon className="w-5 h-5" />}
     </IconButton>
   );

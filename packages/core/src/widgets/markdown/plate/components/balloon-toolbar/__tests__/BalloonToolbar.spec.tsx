@@ -42,6 +42,7 @@ const BalloonToolbarWrapper: FC<BalloonToolbarWrapperProps> = ({ useMdx = false 
         containerRef={ref.current}
         collection={createMockCollection({}, mockMarkdownField)}
         field={mockMarkdownField}
+        disabled={false}
       />
     </div>
   );

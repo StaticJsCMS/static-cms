@@ -95,6 +95,7 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
         errors={errors}
         hasChildErrors={hasChildErrors}
         hint={field.hint}
+        disabled={disabled}
       >
         {renderedField}
       </ObjectFieldWrapper>

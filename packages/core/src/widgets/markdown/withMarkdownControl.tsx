@@ -27,6 +27,7 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
       field,
       errors,
       forSingleList,
+      disabled,
     } = controlProps;
 
     const [internalRawValue, setInternalValue] = useState(value ?? '');
@@ -70,6 +71,7 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
           forSingleList={forSingleList}
           hint={field.hint}
           noHightlight
+          disabled={disabled}
         >
           {loaded ? (
             <PlateEditor

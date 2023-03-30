@@ -16,6 +16,7 @@ interface ImageToolbarButtonProps {
   currentValue?: { url: string; alt?: string };
   collection: Collection<MarkdownField>;
   field: MarkdownField;
+  disabled: boolean;
 }
 
 const ImageToolbarButton: FC<ImageToolbarButtonProps> = ({
@@ -23,6 +24,7 @@ const ImageToolbarButton: FC<ImageToolbarButtonProps> = ({
   field,
   collection,
   currentValue,
+  disabled,
 }) => {
   const editor = useMdPlateEditorState();
   const handleInsert = useCallback(
@@ -57,6 +59,7 @@ const ImageToolbarButton: FC<ImageToolbarButtonProps> = ({
       tooltip="Insert Image"
       icon={<ImageIcon className="w-5 h-5" />}
       onClick={(_editor, event) => openMediaLibrary(event)}
+      disabled={disabled}
     />
   );
 };

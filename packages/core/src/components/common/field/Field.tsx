@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 
+import useCursor from '@staticcms/core/lib/hooks/useCursor';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import ErrorMessage from './ErrorMessage';
 import Hint from './Hint';
@@ -19,6 +20,7 @@ export interface FieldProps {
   forSingleList?: boolean;
   noPadding?: boolean;
   noHightlight?: boolean;
+  disabled: boolean;
 }
 
 const Field: FC<FieldProps> = ({
@@ -32,10 +34,17 @@ const Field: FC<FieldProps> = ({
   forSingleList,
   noPadding = false,
   noHightlight = false,
+  disabled,
 }) => {
+  const finalCursor = useCursor(cursor, disabled);
+
   const hasErrors = useMemo(() => errors.length > 0, [errors.length]);
 
   const handleOnClick = (event: MouseEvent) => {
+    if (disabled) {
+      return;
+    }
+
     if (event.target !== inputRef?.current) {
       inputRef?.current?.focus();
       inputRef?.current?.click();
@@ -47,21 +56,33 @@ const Field: FC<FieldProps> = ({
   const renderedLabel = useMemo(
     () =>
       label ? (
-        <Label key="label" hasErrors={hasErrors} variant={variant} cursor={cursor}>
+        <Label
+          key="label"
+          hasErrors={hasErrors}
+          variant={variant}
+          cursor={finalCursor}
+          disabled={disabled}
+        >
           {label}
         </Label>
       ) : null,
-    [cursor, hasErrors, label, variant],
+    [finalCursor, disabled, hasErrors, label, variant],
   );
 
   const renderedHint = useMemo(
     () =>
       hint ? (
-        <Hint key="hint" hasErrors={hasErrors} variant={variant} cursor={cursor}>
+        <Hint
+          key="hint"
+          hasErrors={hasErrors}
+          variant={variant}
+          cursor={finalCursor}
+          disabled={disabled}
+        >
           {hint}
         </Hint>
       ) : null,
-    [cursor, hasErrors, hint, variant],
+    [disabled, finalCursor, hasErrors, hint, variant],
   );
 
   const renderedErrorMessage = useMemo(() => <ErrorMessage errors={errors} />, [errors]);
@@ -78,6 +99,7 @@ const Field: FC<FieldProps> = ({
           dark:focus-within:border-blue-100
         `,
         !noHightlight &&
+          !disabled &&
           `
             focus-within:bg-slate-100
             dark:focus-within:bg-slate-800
@@ -85,12 +107,12 @@ const Field: FC<FieldProps> = ({
             dark:hover:bg-slate-800
           `,
         !noPadding && 'pb-3',
-        cursor === 'pointer' && 'cursor-pointer',
-        cursor === 'text' && 'cursor-text',
-        cursor === 'default' && 'cursor-default',
+        finalCursor === 'pointer' && 'cursor-pointer',
+        finalCursor === 'text' && 'cursor-text',
+        finalCursor === 'default' && 'cursor-default',
         !hasErrors && 'group/active',
       ),
-    [cursor, hasErrors, noHightlight, noPadding],
+    [finalCursor, disabled, hasErrors, noHightlight, noPadding],
   );
 
   const wrapperClassNames = useMemo(

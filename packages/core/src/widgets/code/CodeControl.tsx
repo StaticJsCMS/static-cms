@@ -43,6 +43,7 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
   value,
   forSingleList,
   errors,
+  disabled,
 }) => {
   const theme = useAppSelector(selectTheme);
 
@@ -189,36 +190,45 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
       >
         <button
           data-testid="list-expand-button"
-          className="
-            flex
-            w-full
-            justify-between
-            px-3
-            py-2
-            text-left
-            text-sm
-            font-medium
-            focus:outline-none
-            focus-visible:ring
-            gap-2
-            focus-visible:ring-opacity-75
-            items-center
-          "
+          className={classNames(
+            `
+              flex
+              w-full
+              justify-between
+              px-3
+              py-2
+              text-left
+              text-sm
+              font-medium
+              focus:outline-none
+              focus-visible:ring
+              gap-2
+              focus-visible:ring-opacity-75
+              items-center
+            `,
+            disabled && 'cursor-default',
+          )}
           onClick={handleOpenToggle}
         >
           <Label
             key="label"
             hasErrors={hasErrors}
-            className={`
-              group-focus-within/active-list:text-blue-500
-              group-hover/active-list:text-blue-500
-            `}
+            className={classNames(
+              !disabled &&
+                `
+                  group-focus-within/active-list:text-blue-500
+                  group-hover/active-list:text-blue-500
+                `,
+            )}
             cursor="pointer"
             variant="inline"
+            disabled={disabled}
           >
             {label}
           </Label>
-          {open && allowLanguageSelection ? <SettingsButton onClick={toggleSettings} /> : null}
+          {open && allowLanguageSelection ? (
+            <SettingsButton onClick={toggleSettings} disabled={disabled} />
+          ) : null}
           <ChevronRightIcon
             className={classNames(
               open && 'rotate-90 transform',
@@ -226,9 +236,16 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
                 transition-transform
                 h-5
                 w-5
-                group-focus-within/active-list:text-blue-500
-                group-hover/active-list:text-blue-500
               `,
+              disabled
+                ? `
+                    text-slate-300
+                    dark:text-slate-600
+                  `
+                : `
+                    group-focus-within/active-list:text-blue-500
+                    group-hover/active-list:text-blue-500
+                  `,
             )}
           />
         </button>
@@ -253,11 +270,12 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
               onChange={handleChange}
               extensions={extensions}
               theme={theme}
+              readOnly={disabled}
             />
           </div>
         </Collapse>
         {field.hint ? (
-          <Hint key="hint" hasErrors={hasErrors} cursor="pointer">
+          <Hint key="hint" hasErrors={hasErrors} cursor="pointer" disabled={disabled}>
             {field.hint}
           </Hint>
         ) : null}

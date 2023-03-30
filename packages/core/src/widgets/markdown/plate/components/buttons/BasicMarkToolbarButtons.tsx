@@ -23,11 +23,13 @@ import type { FC } from 'react';
 export interface BasicMarkToolbarButtonsProps {
   extended?: boolean;
   useMdx: boolean;
+  disabled: boolean;
 }
 
 const BasicMarkToolbarButtons: FC<BasicMarkToolbarButtonsProps> = ({
   extended = false,
   useMdx,
+  disabled,
 }) => {
   return (
     <>
@@ -35,11 +37,13 @@ const BasicMarkToolbarButtons: FC<BasicMarkToolbarButtonsProps> = ({
         tooltip="Bold"
         type={MARK_BOLD}
         icon={<FormatBoldIcon className="h-5 w-5" />}
+        disabled={disabled}
       />
       <MarkToolbarButton
         tooltip="Italic"
         type={MARK_ITALIC}
         icon={<FormatItalicIcon className="h-5 w-5" />}
+        disabled={disabled}
       />
       {useMdx ? (
         <MarkToolbarButton
@@ -47,14 +51,21 @@ const BasicMarkToolbarButtons: FC<BasicMarkToolbarButtonsProps> = ({
           tooltip="Underline"
           type={MARK_UNDERLINE}
           icon={<FormatUnderlinedIcon className="h-5 w-5" />}
+          disabled={disabled}
         />
       ) : null}
       <MarkToolbarButton
         tooltip="Strikethrough"
         type={MARK_STRIKETHROUGH}
         icon={<FormatStrikethroughIcon className="h-5 w-5" />}
+        disabled={disabled}
       />
-      <MarkToolbarButton tooltip="Code" type={MARK_CODE} icon={<CodeIcon className="h-5 w-5" />} />
+      <MarkToolbarButton
+        tooltip="Code"
+        type={MARK_CODE}
+        icon={<CodeIcon className="h-5 w-5" />}
+        disabled={disabled}
+      />
       {useMdx && extended ? (
         <>
           <MarkToolbarButton
@@ -63,6 +74,7 @@ const BasicMarkToolbarButtons: FC<BasicMarkToolbarButtonsProps> = ({
             type={MARK_SUPERSCRIPT}
             clear={MARK_SUBSCRIPT}
             icon={<SuperscriptIcon className="h-5 w-5" />}
+            disabled={disabled}
           />
           <MarkToolbarButton
             key="subscript-button"
@@ -70,6 +82,7 @@ const BasicMarkToolbarButtons: FC<BasicMarkToolbarButtonsProps> = ({
             type={MARK_SUBSCRIPT}
             clear={MARK_SUPERSCRIPT}
             icon={<SubscriptIcon className="h-5 w-5" />}
+            disabled={disabled}
           />
         </>
       ) : null}

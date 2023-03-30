@@ -1,22 +1,24 @@
-import { Menu as MenuIcon } from '@styled-icons/material/Menu';
+import Collapse from '@mui/material/Collapse';
 import { ChevronRight as ChevronRightIcon } from '@styled-icons/material/ChevronRight';
 import { Close as CloseIcon } from '@styled-icons/material/Close';
-import Collapse from '@mui/material/Collapse';
+import { Menu as MenuIcon } from '@styled-icons/material/Menu';
 import React, { useCallback, useMemo, useState } from 'react';
 
-import classNames from '@staticcms/core/lib/util/classNames.util';
+import IconButton from '@staticcms/core/components/common/button/IconButton';
 import Label from '@staticcms/core/components/common/field/Label';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 
 import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import type { MouseEvent, ReactNode } from 'react';
 
 export interface DragHandleProps {
   listeners: SyntheticListenerMap | undefined;
+  disabled: boolean;
 }
 
-const DragHandle = ({ listeners }: DragHandleProps) => {
+const DragHandle = ({ listeners, disabled }: DragHandleProps) => {
   return (
-    <span data-testid="drag-handle" {...listeners}>
+    <span data-testid="drag-handle" className="flex items-center" {...(disabled ? {} : listeners)}>
       <MenuIcon
         className="
           h-3
@@ -37,6 +39,7 @@ export interface ListItemWrapperProps {
   hasErrors: boolean;
   children: ReactNode;
   isSingleField: boolean;
+  disabled: boolean;
 }
 
 const ListItemWrapper = ({
@@ -48,6 +51,7 @@ const ListItemWrapper = ({
   hasErrors,
   children,
   isSingleField,
+  disabled,
 }: ListItemWrapperProps) => {
   const [open, setOpen] = useState(!collapsed);
 
@@ -59,19 +63,25 @@ const ListItemWrapper = ({
     () => (
       <div className="flex gap-2 items-center">
         {onRemove ? (
-          <div data-testid="remove-button" onClick={onRemove}>
+          <IconButton
+            data-testid="remove-button"
+            size="small"
+            variant="text"
+            onClick={onRemove}
+            disabled={disabled}
+          >
             <CloseIcon
               className="
-              h-5
-              w-5
-            "
+                h-5
+                w-5
+              "
             />
-          </div>
+          </IconButton>
         ) : null}
-        {listeners ? <DragHandle listeners={listeners} /> : null}
+        {listeners ? <DragHandle listeners={listeners} disabled={disabled} /> : null}
       </div>
     ),
-    [listeners, onRemove],
+    [disabled, listeners, onRemove],
   );
 
   if (isSingleField) {
@@ -98,8 +108,8 @@ const ListItemWrapper = ({
               border-l-2
               border-solid
               border-l-slate-400
-              group-focus-within/active-list-item:border-l-blue-500
             `,
+            !disabled && 'group-focus-within/active-list-item:border-l-blue-500',
             hasErrors && 'border-l-red-500',
           )}
         >
@@ -124,55 +134,77 @@ const ListItemWrapper = ({
         !hasErrors && 'group/active-list-item',
       )}
     >
-      <button
-        data-testid="list-item-expand-button"
+      <div
         className="
           flex
           w-full
-          pl-2
           pr-3
-          py-2
           text-left
           text-sm
-          font-medium
-          focus:outline-none
-          focus-visible:ring
           gap-2
-          focus-visible:ring-opacity-75
           items-center
         "
-        onClick={handleOpenToggle}
       >
-        <ChevronRightIcon
-          className={classNames(
-            open && 'rotate-90 transform',
-            `
-              transition-transform
-              h-5
-              w-5
-              group-focus-within/active-list-item:text-blue-500
-              group-hover/active-list-item:text-blue-500
-            `,
-          )}
-        />
-        <div className="flex-grow">
-          <Label
-            key="label"
-            hasErrors={hasErrors}
-            className={`
-              group-focus-within/active-list-item:text-blue-500
-              group-hover/active-list-item:text-blue-500
-            `}
-            cursor="pointer"
-            variant="inline"
-            data-testid="item-label"
-          >
-            {label}
-          </Label>
-          {!open ? <span data-testid="item-summary">{summary}</span> : null}
-        </div>
+        <button
+          data-testid="list-item-expand-button"
+          className="
+            flex
+            w-full
+            pl-2
+            py-2
+            text-left
+            text-sm
+            font-medium
+            focus:outline-none
+            focus-visible:ring
+            gap-2
+            focus-visible:ring-opacity-75
+            items-center
+          "
+          onClick={handleOpenToggle}
+        >
+          <ChevronRightIcon
+            className={classNames(
+              open && 'rotate-90 transform',
+              `
+                transition-transform
+                h-5
+                w-5
+              `,
+              disabled
+                ? `
+                    text-slate-300
+                    dark:text-slate-600
+                  `
+                : `
+                    group-focus-within/active-list:text-blue-500
+                    group-hover/active-list:text-blue-500
+                  `,
+            )}
+          />
+          <div className="flex-grow">
+            <Label
+              key="label"
+              hasErrors={hasErrors}
+              className={classNames(
+                !disabled &&
+                  `
+                    group-focus-within/active-list-item:text-blue-500
+                    group-hover/active-list-item:text-blue-500
+                  `,
+              )}
+              cursor="pointer"
+              variant="inline"
+              data-testid="item-label"
+              disabled={disabled}
+            >
+              {label}
+            </Label>
+            {!open ? <span data-testid="item-summary">{summary}</span> : null}
+          </div>
+        </button>
         {renderedControls}
-      </button>
+      </div>
       {!open ? (
         <div
           className="
@@ -194,8 +226,8 @@ const ListItemWrapper = ({
               border-l-2
               border-solid
               border-l-slate-400
-              group-focus-within/active-list-item:border-l-blue-500
             `,
+            !disabled && 'group-focus-within/active-list-item:border-l-blue-500',
             hasErrors && 'border-l-red-500',
           )}
         >

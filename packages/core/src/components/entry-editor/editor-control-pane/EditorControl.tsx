@@ -19,7 +19,6 @@ import useMemoCompare from '@staticcms/core/lib/hooks/useMemoCompare';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { isFieldDuplicate, isFieldHidden } from '@staticcms/core/lib/i18n';
 import { resolveWidget } from '@staticcms/core/lib/registry';
-import classNames from '@staticcms/core/lib/util/classNames.util';
 import { getFieldLabel } from '@staticcms/core/lib/util/field.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { validate } from '@staticcms/core/lib/util/validation.util';
@@ -99,17 +98,18 @@ const EditorControl = ({
   );
 
   useEffect(() => {
-    if ((!dirty && !submitted) || hidden) {
+    if ((!dirty && !submitted) || hidden || disabled) {
       return;
     }
 
     const validateValue = async () => {
+      console.log('VALIDATING', field.name);
       const errors = await validate(field, value, widget, t);
       dispatch(changeDraftFieldValidation(path, errors, i18n));
     };
 
     validateValue();
-  }, [dirty, dispatch, field, i18n, hidden, path, submitted, t, value, widget]);
+  }, [dirty, dispatch, field, i18n, hidden, path, submitted, t, value, widget, disabled]);
 
   const handleChangeDraftField = useCallback(
     (value: ValueOrNestedValue) => {
@@ -153,7 +153,7 @@ const EditorControl = ({
     }
 
     return (
-      <div className={classNames(hidden && 'hidden')}>
+      <div>
         {createElement(widget.control, {
           key: `${id}-${version}`,
           collection,
@@ -162,7 +162,7 @@ const EditorControl = ({
           field: field as UnknownField,
           fieldsErrors,
           submitted,
-          disabled: disabled || duplicate,
+          disabled: disabled || duplicate || hidden,
           duplicate,
           hidden,
           label: getFieldLabel(field, t),

@@ -132,6 +132,8 @@ const PlateEditor: FC<PlateEditorProps> = ({
   const editorContainerRef = useRef<HTMLDivElement | null>(null);
   const innerEditorContainerRef = useRef<HTMLDivElement | null>(null);
 
+  const { disabled } = controlProps;
+
   const components = useMemo(() => {
     const baseComponents = {
       [ELEMENT_H1]: Heading1,
@@ -259,9 +261,16 @@ const PlateEditor: FC<PlateEditorProps> = ({
             initialValue={initialValue}
             plugins={plugins}
             onChange={onChange}
+            readOnly={disabled}
           >
             <div key="editor-outer_wrapper">
-              <Toolbar key="toolbar" useMdx={useMdx} collection={collection} field={field} />
+              <Toolbar
+                key="toolbar"
+                useMdx={useMdx}
+                collection={collection}
+                field={field}
+                disabled={disabled}
+              />
 
               <div key="editor-wrapper" ref={editorContainerRef} className="w-full overflow-hidden">
                 <Plate
@@ -280,6 +289,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
                       containerRef={innerEditorContainerRef.current}
                       collection={collection}
                       field={field}
+                      disabled={disabled}
                     />
                     <CursorOverlayContainer containerRef={editorContainerRef} />
                   </div>

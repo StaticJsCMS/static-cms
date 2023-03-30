@@ -20,6 +20,7 @@ export interface MenuProps {
   children: ReactNode | ReactNode[];
   hideDropdownIcon?: boolean;
   keepMounted?: boolean;
+  disabled?: boolean;
   'data-testid'?: string;
 }
 
@@ -34,6 +35,7 @@ const Menu = ({
   children,
   hideDropdownIcon = false,
   keepMounted = false,
+  disabled = false,
   'data-testid': dataTestId,
 }: MenuProps) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
@@ -72,6 +74,7 @@ const Menu = ({
           aria-haspopup="menu"
           data-testid={dataTestId}
           className={menuButtonClassNames}
+          disabled={disabled}
         >
           {StartIcon ? <StartIcon className="-ml-0.5 mr-1.5 h-5 w-5" /> : null}
           {label}

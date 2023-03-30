@@ -15,6 +15,7 @@ export interface ToolbarButtonProps {
   activeColor?: string;
   icon: ReactNode;
   disableFocusAfterClick?: boolean;
+  disabled: boolean;
   onClick: (editor: MdEditor, event: MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -25,6 +26,7 @@ const ToolbarButton: FC<ToolbarButtonProps> = ({
   active = false,
   activeColor,
   disableFocusAfterClick = false,
+  disabled,
   onClick,
 }) => {
   const editor = useMdPlateEditorState();
@@ -67,13 +69,14 @@ const ToolbarButton: FC<ToolbarButtonProps> = ({
         active &&
           !activeColor &&
           `
-          text-blue-500
-          bg-gray-100
-          dark:text-blue-500
-          dark:bg-slate-800
-        `,
+            text-blue-500
+            bg-gray-100
+            dark:text-blue-500
+            dark:bg-slate-800
+          `,
       )}
       style={style}
+      disabled={disabled}
     >
       {icon}
     </Button>

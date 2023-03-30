@@ -191,6 +191,7 @@ const ListItem: FC<ListItemProps> = ({
         listeners={listeners}
         hasErrors={hasChildErrors}
         isSingleField={isSingleList}
+        disabled={disabled}
       >
         <EditorControl
           key={`control-${id}`}

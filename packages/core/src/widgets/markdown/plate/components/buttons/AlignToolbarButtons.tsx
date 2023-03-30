@@ -7,7 +7,11 @@ import AlignToolbarButton from './common/AlignToolbarButton';
 
 import type { FC } from 'react';
 
-const AlignToolbarButtons: FC = () => {
+interface AlignToolbarButtonsProps {
+  disabled: boolean;
+}
+
+const AlignToolbarButtons: FC<AlignToolbarButtonsProps> = ({ disabled }) => {
   return (
     <>
       <AlignToolbarButton
@@ -15,18 +19,21 @@ const AlignToolbarButtons: FC = () => {
         tooltip="Align Left"
         value="left"
         icon={<FormatAlignLeftIcon className="h-5 w-5" />}
+        disabled={disabled}
       />
       <AlignToolbarButton
         key="algin-button-center"
         tooltip="Align Center"
         value="center"
         icon={<FormatAlignCenterIcon className="h-5 w-5" />}
+        disabled={disabled}
       />
       <AlignToolbarButton
         key="algin-button-right"
         tooltip="Align Right"
         value="right"
         icon={<FormatAlignRightIcon className="h-5 w-5" />}
+        disabled={disabled}
       />
     </>
   );

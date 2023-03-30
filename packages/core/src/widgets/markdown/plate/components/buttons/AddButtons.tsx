@@ -24,9 +24,10 @@ import type { FC } from 'react';
 interface AddButtonsProps {
   collection: Collection<MarkdownField>;
   field: MarkdownField;
+  disabled: boolean;
 }
 
-const AddButtons: FC<AddButtonsProps> = ({ collection, field }) => {
+const AddButtons: FC<AddButtonsProps> = ({ collection, field, disabled }) => {
   const editor = useMdPlateEditorState();
 
   const handleBlockOnClick = useCallback(
@@ -55,6 +56,7 @@ const AddButtons: FC<AddButtonsProps> = ({ collection, field }) => {
         h-7
         w-7
       "
+      disabled={disabled}
     >
       <MenuGroup>
         <MenuItemButton
@@ -78,12 +80,14 @@ const AddButtons: FC<AddButtonsProps> = ({ collection, field }) => {
           collection={collection}
           field={field}
           variant="menu"
+          disabled={disabled}
         />
         <LinkToolbarButton
           key={ELEMENT_LINK}
           collection={collection}
           field={field}
           variant="menu"
+          disabled={disabled}
         />
       </MenuGroup>
     </Menu>

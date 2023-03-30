@@ -312,6 +312,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
       hint={field.hint}
       forSingleList={forSingleList}
       cursor="text"
+      disabled={disabled}
     >
       <Autocomplete
         label={
@@ -321,7 +322,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
                 {selectedValue.map(selectValue => {
                   const option = uniqueOptionsByValue[selectValue];
                   return (
-                    <Pill key={selectValue} noWrap>
+                    <Pill key={selectValue} noWrap disabled={disabled}>
                       {option?.label ?? selectValue}
                     </Pill>
                   );

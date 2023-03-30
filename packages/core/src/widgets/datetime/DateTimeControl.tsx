@@ -267,6 +267,7 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
       hint={field.hint}
       forSingleList={forSingleList}
       cursor="pointer"
+      disabled={disabled}
     >
       <LocalizationProvider key="localization-provider" dateAdapter={AdapterDateFns}>
         {dateTimePicker}

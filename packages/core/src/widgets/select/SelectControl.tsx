@@ -121,6 +121,7 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
       hint={field.hint}
       forSingleList={forSingleList}
       cursor="pointer"
+      disabled={disabled}
     >
       <Select
         label={
@@ -128,7 +129,11 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
             <div className="flex wrap gap-0.5">
               {stringValue.map(selectValue => {
                 const label = optionsByValue[selectValue]?.label ?? selectValue;
-                return <Pill key={selectValue}>{label}</Pill>;
+                return (
+                  <Pill key={selectValue} disabled={disabled}>
+                    {label}
+                  </Pill>
+                );
               })}
             </div>
           ) : (

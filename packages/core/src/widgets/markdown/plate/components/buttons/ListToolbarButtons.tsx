@@ -12,7 +12,11 @@ import ToolbarButton from './common/ToolbarButton';
 import type { FC } from 'react';
 import type { MdEditor } from '@staticcms/markdown';
 
-const ListToolbarButtons: FC = () => {
+interface ListToolbarButtonsProps {
+  disabled: boolean;
+}
+
+const ListToolbarButtons: FC<ListToolbarButtonsProps> = ({ disabled }) => {
   const editor = useMdPlateEditorRef();
 
   const handleOutdent = useCallback((editor: MdEditor) => {
@@ -29,21 +33,25 @@ const ListToolbarButtons: FC = () => {
         tooltip="List"
         type={ELEMENT_UL}
         icon={<FormatListBulletedIcon className="h-5 w-5" />}
+        disabled={disabled}
       />
       <ListToolbarButton
         tooltip="Numbered List"
         type={getPluginType(editor, ELEMENT_OL)}
         icon={<FormatListNumberedIcon className="h-5 w-5" />}
+        disabled={disabled}
       />
       <ToolbarButton
         tooltip="Outdent"
         onClick={handleOutdent}
         icon={<FormatIndentDecreaseIcon className="h-5 w-5" />}
+        disabled={disabled}
       />
       <ToolbarButton
         tooltip="Indent"
         onClick={handleIndent}
         icon={<FormatIndentIncreaseIcon className="h-5 w-5" />}
+        disabled={disabled}
       />
     </>
   );

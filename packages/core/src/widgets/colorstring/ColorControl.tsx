@@ -20,6 +20,7 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
   errors,
   label,
   forSingleList,
+  disabled,
 }) => {
   const swatchRef = useRef<HTMLDivElement | null>(null);
   const ref = useRef<HTMLInputElement | null>(null);
@@ -82,6 +83,7 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
       hint={field.hint}
       forSingleList={forSingleList}
       cursor={allowInput ? 'text' : 'pointer'}
+      disabled={disabled}
     >
       <div
         className={classNames(
@@ -91,26 +93,28 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
             pt-2
             px-3
           `,
-          allowInput ? 'cursor-text' : 'cursor-pointer',
+          disabled ? 'cursor-default' : allowInput ? 'cursor-text' : 'cursor-pointer',
         )}
       >
         <div>
           <div
             ref={swatchRef}
             key="color-swatch"
-            onClick={handleClick}
+            onClick={!disabled ? handleClick : undefined}
             style={{
               background: validateColor(internalValue) ? internalValue : '#fff',
               color: validateColor(internalValue) ? 'rgba(255, 255, 255, 0)' : 'rgb(150, 150, 150)',
             }}
-            className="
-            w-8
-            h-8
-            flex
-            items-center
-            justify-center
-            cursor-pointer
-          "
+            className={classNames(
+              `
+                w-8
+                h-8
+                flex
+                items-center
+                justify-center
+              `,
+              disabled ? 'cursor-default' : 'cursor-pointer',
+            )}
           >
             ?
           </div>
@@ -152,12 +156,12 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
           value={internalValue}
           onChange={handleInputChange}
           // make readonly and open color picker on click if set to allow_input: false
-          onClick={!allowInput ? handleClick : undefined}
-          disabled={!allowInput}
+          onClick={!allowInput && !disabled ? handleClick : undefined}
+          disabled={!allowInput || disabled}
           cursor={allowInput ? 'text' : 'pointer'}
         />
         {showClearButton ? (
-          <IconButton variant="text" onClick={handleClear}>
+          <IconButton variant="text" onClick={handleClear} disabled={disabled}>
             <CloseIcon className="w-5 h-5" />
           </IconButton>
         ) : null}

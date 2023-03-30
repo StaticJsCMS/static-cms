@@ -20,7 +20,19 @@ const LocaleDropdown = ({
   onLocaleChange,
 }: LocaleDropdownProps) => {
   if (!canChangeLocale) {
-    return <div>{dropdownText}</div>;
+    return (
+      <div
+        className="
+          btn
+          border
+          border-transparent
+          text-slate-500
+          dark:text-slate-400
+        "
+      >
+        {dropdownText}
+      </div>
+    );
   }
 
   return (

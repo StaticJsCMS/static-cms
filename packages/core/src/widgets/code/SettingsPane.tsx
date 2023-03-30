@@ -39,7 +39,9 @@ const SettingsSelect: FC<SettingsSelectProps> = ({
 
   return (
     <div>
-      <Label htmlFor={`${uniqueId}-select-${type}-label`}>{label}</Label>
+      <Label htmlFor={`${uniqueId}-select-${type}-label`} disabled={false}>
+        {label}
+      </Label>
       <Select
         value={value.value}
         label={value.value}

@@ -21,9 +21,10 @@ import type { MdEditor } from '@staticcms/markdown';
 
 export interface TableToolbarButtonsProps {
   isInTable?: boolean;
+  disabled: boolean;
 }
 
-const TableToolbarButtons: FC<TableToolbarButtonsProps> = ({ isInTable = true }) => {
+const TableToolbarButtons: FC<TableToolbarButtonsProps> = ({ isInTable = true, disabled }) => {
   const handleTableAdd = useCallback((editor: MdEditor) => {
     insertTable(editor, {
       rowCount: 2,
@@ -58,30 +59,35 @@ const TableToolbarButtons: FC<TableToolbarButtonsProps> = ({ isInTable = true })
         tooltip="Insert Row"
         icon={<TableInsertRow className="w-5 h-5" />}
         onClick={handleInsertTableRow}
+        disabled={disabled}
       />
       <ToolbarButton
         key="deleteRow"
         tooltip="Delete Row"
         icon={<TableDeleteRow className="w-5 h-5" />}
         onClick={handleDeleteRow}
+        disabled={disabled}
       />
       <ToolbarButton
         key="insertColumn"
         tooltip="Insert Column"
         icon={<TableInsertColumn className="w-5 h-5" />}
         onClick={handleInsertTableColumn}
+        disabled={disabled}
       />
       <ToolbarButton
         key="deleteColumn"
         tooltip="Delete Column"
         icon={<TableDeleteColumn className="w-5 h-5" />}
         onClick={handleDeleteColumn}
+        disabled={disabled}
       />
       <ToolbarButton
         key="deleteTable"
         tooltip="Delete Table"
         icon={<TableDismiss className="w-5 h-5" />}
         onClick={handleDeleteTable}
+        disabled={disabled}
       />
     </>
   ) : (
@@ -90,6 +96,7 @@ const TableToolbarButtons: FC<TableToolbarButtonsProps> = ({ isInTable = true })
       tooltip="Add Table"
       icon={<TableAdd className="w-5 h-5" />}
       onClick={handleTableAdd}
+      disabled={disabled}
     />
   );
 };

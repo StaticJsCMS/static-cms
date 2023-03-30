@@ -17,6 +17,7 @@ interface LinkToolbarButtonProps {
   currentValue?: { url: string; alt?: string };
   collection: Collection<MarkdownField>;
   field: MarkdownField;
+  disabled: boolean;
 }
 
 const LinkToolbarButton: FC<LinkToolbarButtonProps> = ({
@@ -24,6 +25,7 @@ const LinkToolbarButton: FC<LinkToolbarButtonProps> = ({
   field,
   collection,
   currentValue,
+  disabled,
 }) => {
   const editor = useMdPlateEditorState();
   const handleInsert = useCallback(
@@ -66,6 +68,7 @@ const LinkToolbarButton: FC<LinkToolbarButtonProps> = ({
       icon={<LinkIcon className="w-5 h-5" />}
       onClick={(_editor, event) => openMediaLibrary(event)}
       active={isLink}
+      disabled={disabled}
     />
   );
 };

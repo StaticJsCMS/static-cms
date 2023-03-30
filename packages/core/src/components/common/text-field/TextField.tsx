@@ -1,6 +1,7 @@
 import InputUnstyled from '@mui/base/InputUnstyled';
 import React from 'react';
 
+import useCursor from '@staticcms/core/lib/hooks/useCursor';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 
 import type { ChangeEventHandler, FC, MouseEventHandler, Ref } from 'react';
@@ -34,14 +35,16 @@ const TextField: FC<TextFieldProps> = ({
   value,
   type,
   'data-testid': dataTestId,
-  cursor,
+  cursor = 'default',
   inputRef,
   readonly,
-  disabled,
+  disabled = false,
   onChange,
   onClick,
   ...otherProps
 }) => {
+  const finalCursor = useCursor(cursor, disabled);
+
   return (
     <InputUnstyled
       type={type}
@@ -54,27 +57,29 @@ const TextField: FC<TextFieldProps> = ({
       slotProps={{
         root: {
           className: `
-              flex
-              w-full
-            `,
+            flex
+            w-full
+          `,
         },
         input: {
           ref: inputRef,
           className: classNames(
             `
-                w-full
-                h-6
-                px-3
-                bg-transparent
-                outline-none
-                text-sm
-                font-medium
-                text-gray-900
-                dark:text-gray-100
-              `,
-            cursor === 'pointer' && 'cursor-pointer',
-            cursor === 'text' && 'cursor-text',
-            cursor === 'default' && 'cursor-default',
+              w-full
+              h-6
+              px-3
+              bg-transparent
+              outline-none
+              text-sm
+              font-medium
+              text-gray-900
+              disabled:text-gray-300
+              dark:text-gray-100
+              dark:disabled:text-gray-500
+            `,
+            finalCursor === 'pointer' && 'cursor-pointer',
+            finalCursor === 'text' && 'cursor-text',
+            finalCursor === 'default' && 'cursor-default',
           ),
           ...otherProps,
         },

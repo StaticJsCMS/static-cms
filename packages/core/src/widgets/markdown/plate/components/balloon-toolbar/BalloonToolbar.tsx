@@ -36,9 +36,16 @@ export interface BalloonToolbarProps {
   containerRef: HTMLElement | null;
   collection: Collection<MarkdownField>;
   field: MarkdownField;
+  disabled: boolean;
 }
 
-const BalloonToolbar: FC<BalloonToolbarProps> = ({ useMdx, containerRef, collection, field }) => {
+const BalloonToolbar: FC<BalloonToolbarProps> = ({
+  useMdx,
+  containerRef,
+  collection,
+  field,
+  disabled,
+}) => {
   const hasEditorFocus = useFocused();
   const editor = useMdPlateEditorState();
   const selection = usePlateSelection();
@@ -99,32 +106,54 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({ useMdx, containerRef, collect
     // Selected text buttons
     if (selectionText && selectionExpanded) {
       return [
-        <BasicMarkToolbarButtons key="selection-basic-mark-buttons" useMdx={useMdx} />,
+        <BasicMarkToolbarButtons
+          key="selection-basic-mark-buttons"
+          useMdx={useMdx}
+          disabled={disabled}
+        />,
         <BasicElementToolbarButtons
           key="selection-basic-element-buttons"
           hideFontTypeSelect={isInTableCell}
           hideCodeBlock
+          disabled={disabled}
         />,
-        isInTableCell && <TableToolbarButtons key="selection-table-toolbar-buttons" />,
+        isInTableCell && (
+          <TableToolbarButtons key="selection-table-toolbar-buttons" disabled={disabled} />
+        ),
         <MediaToolbarButtons
           key="selection-media-buttons"
           collection={collection}
           field={field}
           hideImages
+          disabled={disabled}
         />,
       ].filter(Boolean);
     }
 
     const allButtons = [
-      <BasicMarkToolbarButtons key="empty-basic-mark-buttons" useMdx={useMdx} />,
+      <BasicMarkToolbarButtons
+        key="empty-basic-mark-buttons"
+        useMdx={useMdx}
+        disabled={disabled}
+      />,
       <BasicElementToolbarButtons
         key="empty-basic-element-buttons"
         hideFontTypeSelect={isInTableCell}
         hideCodeBlock
+        disabled={disabled}
       />,
-      <TableToolbarButtons key="empty-table-toolbar-buttons" isInTable={isInTableCell} />,
-      <MediaToolbarButtons key="empty-media-buttons" collection={collection} field={field} />,
-      !useMdx ? <ShortcodeToolbarButton key="shortcode-button" /> : null,
+      <TableToolbarButtons
+        key="empty-table-toolbar-buttons"
+        isInTable={isInTableCell}
+        disabled={disabled}
+      />,
+      <MediaToolbarButtons
+        key="empty-media-buttons"
+        collection={collection}
+        field={field}
+        disabled={disabled}
+      />,
+      !useMdx ? <ShortcodeToolbarButton key="shortcode-button" disabled={disabled} /> : null,
     ].filter(Boolean);
 
     // if (isInTableCell) {

@@ -10,9 +10,13 @@ export type IconButtonProps = Omit<ButtonProps, 'children'> & {
   children: FC<{ className?: string }>;
 };
 
-const IconButton = ({ children, className, ...otherProps }: ButtonProps) => {
+const IconButton = ({ children, size = 'medium', className, ...otherProps }: ButtonProps) => {
   return (
-    <Button className={classNames('px-1.5', className)} {...otherProps}>
+    <Button
+      className={classNames(size === 'small' && 'px-0.5', size === 'medium' && 'px-1.5', className)}
+      size={size}
+      {...otherProps}
+    >
       {children}
     </Button>
   );

@@ -2,6 +2,7 @@ import SelectUnstyled from '@mui/base/SelectUnstyled';
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@styled-icons/material/KeyboardArrowDown';
 import React, { forwardRef, useCallback } from 'react';
 
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import Option from './Option';
 
@@ -65,8 +66,32 @@ const Select = forwardRef(
             return (
               <>
                 {label ?? placeholder}
-                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                  <KeyboardArrowDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                <span
+                  className="
+                    pointer-events-none
+                    absolute
+                    inset-y-0
+                    right-0
+                    flex
+                    items-center
+                    pr-2
+                  "
+                >
+                  <KeyboardArrowDownIcon
+                    className={classNames(
+                      `
+                        h-5
+                        w-5
+                        text-gray-400
+                      `,
+                      disabled &&
+                        `
+                          text-gray-300/75
+                          dark:text-gray-600/75
+                        `,
+                    )}
+                    aria-hidden="true"
+                  />
                 </span>
               </>
             );
@@ -74,38 +99,45 @@ const Select = forwardRef(
           slotProps={{
             root: {
               ref,
-              className: `
-              flex
-              items-center
-              text-sm
-              font-medium
-              relative
-              min-h-8
-              px-4
-              py-1.5
-              w-full
-              text-gray-900
-              dark:text-gray-100
-            `,
+              className: classNames(
+                `
+                  flex
+                  items-center
+                  text-sm
+                  font-medium
+                  relative
+                  min-h-8
+                  px-4
+                  py-1.5
+                  w-full
+                  text-gray-900
+                  dark:text-gray-100
+                `,
+                disabled &&
+                  `
+                    text-gray-300/75
+                    dark:text-gray-600/75
+                  `,
+              ),
             },
             popper: {
               className: `
-              absolute
-              max-h-60
-              overflow-auto
-              rounded-md
-              bg-white
-              py-1
-              text-base
-              shadow-lg
-              ring-1
-              ring-black
-              ring-opacity-5
-              focus:outline-none
-              sm:text-sm
-              z-50
-              dark:bg-slate-700
-            `,
+                absolute
+                max-h-60
+                overflow-auto
+                rounded-md
+                bg-white
+                py-1
+                text-base
+                shadow-lg
+                ring-1
+                ring-black
+                ring-opacity-5
+                focus:outline-none
+                sm:text-sm
+                z-50
+                dark:bg-slate-700
+              `,
               disablePortal: false,
             },
           }}

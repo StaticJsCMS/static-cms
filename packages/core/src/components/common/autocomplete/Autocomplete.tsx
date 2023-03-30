@@ -78,28 +78,51 @@ const Autocomplete = function <T>(
             {label}
             <Combobox.Input<'input', T | T[] | null>
               ref={ref}
-              className="
-                w-full
-                bg-transparent
-                border-none
-                py-2
-                pl-3
-                pr-10
-                text-sm
-                leading-5
-                focus:ring-0
-                outline-none
-                basis-60
-                flex-grow
-                text-gray-900
-                dark:text-gray-100
-              "
+              className={classNames(
+                `
+                  w-full
+                  bg-transparent
+                  border-none
+                  py-2
+                  pl-3
+                  pr-10
+                  text-sm
+                  leading-5
+                  focus:ring-0
+                  outline-none
+                  basis-60
+                  flex-grow
+                `,
+                disabled
+                  ? `
+                      text-gray-300
+                      dark:text-gray-500
+                    `
+                  : `
+                      text-gray-900
+                      dark:text-gray-100
+                    `,
+              )}
               data-testid="autocomplete-input"
               displayValue={displayValue}
               onChange={event => onQuery(event.target.value)}
             />
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-              <KeyboardArrowDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+              <KeyboardArrowDownIcon
+                className={classNames(
+                  `
+                    h-5
+                    w-5
+                    text-gray-400
+                  `,
+                  disabled &&
+                    `
+                      text-gray-300/75
+                      dark:text-gray-600/75
+                    `,
+                )}
+                aria-hidden="true"
+              />
             </Combobox.Button>
           </div>
           <Transition

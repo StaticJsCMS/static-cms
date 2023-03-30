@@ -109,22 +109,34 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
         disabled={disabled}
         slotProps={{
           root: {
-            className: `
-              flex
-              items-center
-              text-sm
-              font-medium
-              relative
-              px-1.5
-              py-0.5
-              w-full
-              h-6
-              border
-              rounded-sm
-              text-gray-900
-              border-gray-200
-              dark:text-gray-100
-            `,
+            className: classNames(
+              `
+                flex
+                items-center
+                text-sm
+                font-medium
+                relative
+                px-1.5
+                py-0.5
+                w-full
+                h-6
+                border
+                rounded-sm
+              `,
+              disabled
+                ? `
+                    text-gray-300
+                    border-gray-200
+                    dark:border-gray-600
+                    dark:text-gray-500
+                  `
+                : `
+                    text-gray-900
+                    border-gray-600
+                    dark:border-gray-200
+                    dark:text-gray-100
+                  `,
+            ),
           },
           popper: {
             disablePortal: false,
@@ -134,7 +146,6 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
               overflow-auto
               rounded-md
               bg-white
-              text-base
               shadow-lg
               ring-1
               ring-black

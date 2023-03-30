@@ -329,11 +329,12 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
             hint={field.hint}
             forSingleList={forSingleList}
             cursor="pointer"
+            disabled={disabled}
           >
             {content}
           </Field>
         ),
-        [content, errors, field.hint, forSingleList, hasErrors, label],
+        [content, disabled, errors, field.hint, forSingleList, hasErrors, label],
       );
     },
   );

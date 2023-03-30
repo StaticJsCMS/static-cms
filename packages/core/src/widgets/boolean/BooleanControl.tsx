@@ -40,6 +40,7 @@ const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
       cursor="pointer"
       hint={field.hint}
       forSingleList={forSingleList}
+      disabled={disabled}
     >
       <Switch ref={ref} value={internalValue} disabled={disabled} onChange={handleChange} />
     </Field>

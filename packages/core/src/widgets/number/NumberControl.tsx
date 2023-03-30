@@ -64,6 +64,7 @@ const NumberControl: FC<WidgetControlProps<string | number, NumberField>> = ({
       hint={field.hint}
       forSingleList={forSingleList}
       cursor="text"
+      disabled={disabled}
     >
       <TextField
         type="number"

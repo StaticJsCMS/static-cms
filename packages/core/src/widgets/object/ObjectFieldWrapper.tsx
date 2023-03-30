@@ -18,6 +18,7 @@ export interface ObjectFieldWrapperProps {
   errors: FieldError[];
   hasChildErrors: boolean;
   hint?: string;
+  disabled: boolean;
 }
 
 const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
@@ -28,6 +29,7 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
   errors,
   hasChildErrors,
   hint,
+  disabled,
 }) => {
   const hasErrors = useMemo(() => errors.length > 0, [errors.length]);
 
@@ -79,20 +81,31 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
               transition-transform
               h-5
               w-5
-              group-focus-within/active-object:text-blue-500
-              group-hover/active-object:text-blue-500
             `,
+            disabled
+              ? `
+                  text-slate-300
+                  dark:text-slate-600
+                `
+              : `
+                  group-focus-within/active-list:text-blue-500
+                  group-hover/active-list:text-blue-500
+                `,
           )}
         />
         <Label
           key="label"
           hasErrors={hasErrors || hasChildErrors}
-          className={`
-            group-focus-within/active-object:text-blue-500
-            group-hover/active-object:text-blue-500
-          `}
+          className={classNames(
+            !disabled &&
+              `
+                group-focus-within/active-object:text-blue-500
+                group-hover/active-object:text-blue-500
+              `,
+          )}
           cursor="pointer"
           variant="inline"
+          disabled={disabled}
         >
           {open ? openLabel : closedLabel}
         </Label>
@@ -108,8 +121,8 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
               border-l-2
               border-solid
               border-l-slate-400
-              group-focus-within/active-object:border-l-blue-500
             `,
+            !disabled && 'group-focus-within/active-object:border-l-blue-500',
             (hasErrors || hasChildErrors) && 'border-l-red-500',
           )}
         >
@@ -117,7 +130,7 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
         </div>
       </Collapse>
       {hint ? (
-        <Hint key="hint" hasErrors={hasErrors} cursor="pointer">
+        <Hint key="hint" hasErrors={hasErrors} cursor="pointer" disabled={disabled}>
           {hint}
         </Hint>
       ) : null}

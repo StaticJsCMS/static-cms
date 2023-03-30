@@ -45,6 +45,7 @@ const withMapControl = ({ getFormat, getMap }: WithMapControlProps = {}) => {
     errors,
     forSingleList,
     label,
+    disabled,
   }) => {
     const { height = '400px' } = field;
 
@@ -73,12 +74,17 @@ const withMapControl = ({ getFormat, getMap }: WithMapControlProps = {}) => {
       const writeOptions = { decimals: field.decimals ?? 7 };
       draw.on('drawend', ({ feature }) => {
         featuresSource.clear();
+
+        if (disabled) {
+          return;
+        }
+
         const geometry = feature.getGeometry();
         if (geometry) {
           onChange(format.writeGeometry(geometry, writeOptions));
         }
       });
-    }, [field, mapContainer, onChange, path, value]);
+    }, [disabled, field, mapContainer, onChange, path, value]);
 
     return (
       <Field
@@ -87,6 +93,7 @@ const withMapControl = ({ getFormat, getMap }: WithMapControlProps = {}) => {
         hint={field.hint}
         forSingleList={forSingleList}
         noPadding
+        disabled={disabled}
       >
         <div
           ref={mapContainer}

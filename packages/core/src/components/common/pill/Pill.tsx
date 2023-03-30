@@ -8,28 +8,49 @@ interface PillProps {
   children: ReactNode | ReactNode[];
   noWrap?: boolean;
   className?: string;
+  disabled?: boolean;
   color?: 'default' | 'primary';
 }
 
-const Pill: FC<PillProps> = ({ children, noWrap, className, color = 'default' }) => {
+const Pill: FC<PillProps> = ({
+  children,
+  noWrap,
+  className,
+  disabled = false,
+  color = 'default',
+}) => {
   const colorClassNames = useMemo(() => {
     switch (color) {
       case 'primary':
-        return `
-          bg-blue-700
-          text-gray-100
-          dark:bg-blue-700
-          dark:text-gray-100
-        `;
+        return disabled
+          ? `
+              bg-blue-300/75
+              text-gray-100/75
+              dark:bg-blue-700/25
+              dark:text-gray-500
+            `
+          : `
+              bg-blue-700
+              text-gray-100
+              dark:bg-blue-700
+              dark:text-gray-100
+            `;
       default:
-        return `
-          bg-gray-200
-          text-gray-900
-          dark:bg-gray-700
-          dark:text-gray-100
-        `;
+        return disabled
+          ? `
+              bg-gray-100
+              text-gray-400/75
+              dark:bg-gray-800/75
+              dark:text-gray-500
+            `
+          : `
+              bg-gray-200
+              text-gray-900
+              dark:bg-gray-700
+              dark:text-gray-100
+            `;
     }
-  }, [color]);
+  }, [color, disabled]);
 
   return (
     <span

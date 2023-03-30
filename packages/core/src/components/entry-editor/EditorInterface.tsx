@@ -178,37 +178,23 @@ const EditorInterface = ({
   );
 
   const editorLocale = useMemo(
-    () =>
-      (locales ?? [])
-        .filter(locale => locale !== defaultLocale)
-        .map(locale => (
-          <div key={locale}>
-            {/* TODO Fix $hidden={locale !== selectedLocale}> */}
-            <EditorControlPane
-              collection={collection}
-              entry={entry}
-              fields={fields}
-              fieldsErrors={fieldsErrors}
-              locale={locale}
-              onLocaleChange={handleLocaleChange}
-              submitted={submitted}
-              canChangeLocale
-              hideBorder
-              t={t}
-            />
-          </div>
-        )),
-    [
-      collection,
-      defaultLocale,
-      entry,
-      fields,
-      fieldsErrors,
-      handleLocaleChange,
-      locales,
-      submitted,
-      t,
-    ],
+    () => (
+      <div key={selectedLocale}>
+        <EditorControlPane
+          collection={collection}
+          entry={entry}
+          fields={fields}
+          fieldsErrors={fieldsErrors}
+          locale={selectedLocale}
+          onLocaleChange={handleLocaleChange}
+          submitted={submitted}
+          canChangeLocale
+          hideBorder
+          t={t}
+        />
+      </div>
+    ),
+    [collection, entry, fields, fieldsErrors, handleLocaleChange, selectedLocale, submitted, t],
   );
 
   const previewEntry = collectHasI18n
@@ -228,7 +214,7 @@ const EditorInterface = ({
   );
 
   const editorSideBySideLocale = (
-    <div className="grid grid-cols-editor h-full">
+    <div className="grid grid-cols-2 h-full">
       <ScrollSyncPane>{editor}</ScrollSyncPane>
       <ScrollSyncPane>
         <>{editorLocale}</>

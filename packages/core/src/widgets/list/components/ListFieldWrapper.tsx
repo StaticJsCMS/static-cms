@@ -19,6 +19,7 @@ export interface ListFieldWrapperProps {
   hasChildErrors: boolean;
   hint?: string;
   forSingleList: boolean;
+  disabled: boolean;
 }
 
 const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
@@ -30,6 +31,7 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
   hasChildErrors,
   hint,
   forSingleList,
+  disabled,
 }) => {
   const hasErrors = useMemo(() => errors.length > 0, [errors.length]);
 
@@ -89,12 +91,16 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
           <Label
             key="label"
             hasErrors={hasErrors || hasChildErrors}
-            className={`
-              group-focus-within/active-list:text-blue-500
-              group-hover/active-list:text-blue-500
-            `}
+            className={classNames(
+              !disabled &&
+                `
+                  group-focus-within/active-list:text-blue-500
+                  group-hover/active-list:text-blue-500
+                `,
+            )}
             cursor="pointer"
             variant="inline"
+            disabled={disabled}
           >
             {open ? openLabel : closedLabel}
           </Label>
@@ -105,9 +111,16 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
                 transition-transform
                 h-5
                 w-5
-                group-focus-within/active-list:text-blue-500
-                group-hover/active-list:text-blue-500
               `,
+              disabled
+                ? `
+                    text-slate-300
+                    dark:text-slate-600
+                  `
+                : `
+                    group-focus-within/active-list:text-blue-500
+                    group-hover/active-list:text-blue-500
+                  `,
             )}
           />
         </button>
@@ -125,7 +138,7 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
           </div>
         </Collapse>
         {hint ? (
-          <Hint key="hint" hasErrors={hasErrors} cursor="pointer">
+          <Hint key="hint" hasErrors={hasErrors} cursor="pointer" disabled={disabled}>
             {hint}
           </Hint>
         ) : null}

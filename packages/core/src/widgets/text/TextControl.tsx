@@ -41,6 +41,7 @@ const TextControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
       hint={field.hint}
       forSingleList={forSingleList}
       cursor="text"
+      disabled={disabled}
     >
       <TextArea ref={ref} value={internalValue} disabled={disabled} onChange={handleChange} />
     </Field>

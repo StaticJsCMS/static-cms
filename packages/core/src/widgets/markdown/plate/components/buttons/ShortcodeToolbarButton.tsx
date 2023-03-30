@@ -11,7 +11,11 @@ import { ELEMENT_SHORTCODE, useMdPlateEditorState } from '@staticcms/markdown/pl
 
 import type { FC } from 'react';
 
-const ShortcodeToolbarButton: FC = () => {
+interface ShortcodeToolbarButtonProps {
+  disabled: boolean;
+}
+
+const ShortcodeToolbarButton: FC<ShortcodeToolbarButtonProps> = ({ disabled }) => {
   const editor = useMdPlateEditorState();
 
   const configs = useMemo(() => getShortcodes(), []);
@@ -42,6 +46,7 @@ const ShortcodeToolbarButton: FC = () => {
         h-6
         w-6
       "
+      disabled={disabled}
     >
       <MenuGroup>
         {Object.keys(configs).map(name => {

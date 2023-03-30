@@ -90,7 +90,7 @@ const SortableItem: FC<SortableItemProps> = ({
       ref={setNodeRef}
       data-testid={`object-control-${index}`}
       style={style}
-      {...attributes}
+      {...(disabled ? {} : attributes)}
       className={classNames(
         `
           first:pt-0
@@ -316,6 +316,7 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
         hasChildErrors={hasChildErrors}
         hint={field.hint}
         forSingleList={forSingleList}
+        disabled={disabled}
       >
         {internalValue.length > 0 ? (
           <DndContext key="dnd-context" id="dnd-context" onDragEnd={handleDragEnd}>
@@ -361,6 +362,7 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
                 variant="outlined"
                 className="w-full z-20"
                 data-testid="list-type-add"
+                disabled={disabled}
               >
                 <MenuGroup>
                   {types.map((type, idx) =>
@@ -382,6 +384,7 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
                 onClick={handleAdd}
                 className="w-full"
                 data-testid="list-add"
+                disabled={disabled}
               >
                 {t('editor.editorWidgets.list.add', { item: labelSingular })}
               </Button>

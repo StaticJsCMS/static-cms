@@ -39,6 +39,7 @@ const StringControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
       hint={field.hint}
       forSingleList={forSingleList}
       cursor="text"
+      disabled={disabled}
     >
       <TextField
         type="text"
