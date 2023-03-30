@@ -1,6 +1,6 @@
 BREAKING_CHANGES
 
-- Card preview only is used for card view (viewStyle prop removed).
+- Card preview only is used for card view (viewStyle prop removed, theme prop added). Field preview can be used in table view.
 - Deprecated stuff removed (getAsset, createReactClass, isFieldDuplicate, isFieldHidden)
 - widget prop `isDisabled` renamed to `disabled`
 - widget prop `isDuplicate` renamed to `duplicate`
