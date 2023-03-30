@@ -132,6 +132,7 @@ const Docs = ({
                 Alert,
                 Template,
                 Templates,
+                BetaImage,
               }}
             />
           </DocsContent>

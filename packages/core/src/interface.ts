@@ -276,6 +276,7 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = 
   query: EditorControlProps['query'];
   t: t;
   value: T | undefined | null;
+  theme: 'dark' | 'light';
 }
 
 export interface WidgetPreviewProps<T = unknown, F extends BaseField = UnknownField> {
@@ -284,6 +285,7 @@ export interface WidgetPreviewProps<T = unknown, F extends BaseField = UnknownFi
   entry: Entry;
   field: RenderedField<F>;
   value: T | undefined | null;
+  theme: 'dark' | 'light';
 }
 
 export type WidgetPreviewComponent<T = unknown, F extends BaseField = UnknownField> =

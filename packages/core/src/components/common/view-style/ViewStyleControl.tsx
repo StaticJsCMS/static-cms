@@ -19,7 +19,7 @@ const ViewStyleControl = ({ viewStyle, onChangeViewStyle }: ViewStyleControlPros
       <IconButton
         variant="text"
         className={classNames(viewStyle === VIEW_STYLE_LIST && 'text-blue-500 dark:text-blue-500')}
-        aria-label="list view"
+        aria-label="table view"
         onClick={() => onChangeViewStyle(VIEW_STYLE_LIST)}
       >
         <TableRowsIcon className="h-5 w-5" />

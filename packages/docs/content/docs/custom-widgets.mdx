@@ -66,6 +66,7 @@ The react component that renders the control. It receives the following props:
 | query               | function                 | Runs a search on another collection. See [Query](#query)                                                  |
 | i18n                | object                   | The current i18n settings                                                                                 |
 | t                   | function                 | Translates a given key to the current locale                                                              |
+| theme               | 'light'<br />\| 'dark'   | The current theme being used by the app                                                                   |
 
 #### Open Media Library
 
@@ -98,19 +99,14 @@ The react component that renders the control. It receives the following props:
 
 The react component that renders the preview. It receives the following props:
 
-| Param      | Type                  | Description                                                                                               |
-| ---------- | --------------------- | --------------------------------------------------------------------------------------------------------- |
-| value      | An valid widget value | The current value of the widget                                                                           |
-| field      | object                | The field configuration for the current widget. See [Widget Options](/docs/widgets#common-widget-options) |
-| collection | object                | The collection configuration for the current widget. See [Collections](/docs/collection-overview)         |
-| config     | object                | The current Static CMS config. See [configuration options](/docs/configuration-options)                   |
-| entry      | object                | Object with a `data` field that contains the current value of all widgets in the editor                   |
-
-# <<<<<<< HEAD
-
-| getAsset | Async function | **Deprecated** Function that given a url returns (as a promise) a loaded asset |
-
-> > > > > > > main
+| Param      | Type                   | Description                                                                                               |
+| ---------- | ---------------------- | --------------------------------------------------------------------------------------------------------- |
+| value      | An valid widget value  | The current value of the widget                                                                           |
+| field      | object                 | The field configuration for the current widget. See [Widget Options](/docs/widgets#common-widget-options) |
+| collection | object                 | The collection configuration for the current widget. See [Collections](/docs/collection-overview)         |
+| config     | object                 | The current Static CMS config. See [configuration options](/docs/configuration-options)                   |
+| entry      | object                 | Object with a `data` field that contains the current value of all widgets in the editor                   |
+| theme      | 'light'<br />\| 'dark' | The current theme being used by the app                                                                   |
 
 ### Options
 

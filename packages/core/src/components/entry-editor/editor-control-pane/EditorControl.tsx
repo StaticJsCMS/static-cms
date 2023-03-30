@@ -24,6 +24,7 @@ import { getFieldLabel } from '@staticcms/core/lib/util/field.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { validate } from '@staticcms/core/lib/util/validation.util';
 import { selectFieldErrors } from '@staticcms/core/reducers/selectors/entryDraft';
+import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
 import { selectIsLoadingAsset } from '@staticcms/core/reducers/selectors/medias';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 
@@ -72,6 +73,8 @@ const EditorControl = ({
 
   const widgetName = field.widget;
   const widget = resolveWidget(widgetName) as Widget<ValueOrNestedValue>;
+
+  const theme = useAppSelector(selectTheme);
 
   const path = useMemo(
     () =>
@@ -179,6 +182,7 @@ const EditorControl = ({
           i18n,
           hasErrors,
           errors,
+          theme,
         })}
       </div>
     );
