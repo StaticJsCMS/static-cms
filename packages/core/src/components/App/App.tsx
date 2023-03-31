@@ -76,8 +76,8 @@ function CollectionSearchRedirect() {
 }
 
 function EditEntityRedirect() {
-  const { name, entryName } = useParams();
-  return <Navigate to={`/collections/${name}/entries/${entryName}`} />;
+  const params = useParams();
+  return <Navigate to={`/collections/${params.name}/entries/${params['*']}`} />;
 }
 
 const App = ({
@@ -199,7 +199,7 @@ const App = ({
             element={<EditorRoute collections={collections} newRecord />}
           />
           <Route
-            path="/collections/:name/entries/:slug"
+            path="/collections/:name/entries/*"
             element={<EditorRoute collections={collections} />}
           />
           <Route
@@ -209,14 +209,14 @@ const App = ({
             }
           />
           <Route
-            path="/collections/:name/filter/:filterTerm"
+            path="/collections/:name/filter/*"
             element={<CollectionRoute collections={collections} />}
           />
           <Route
             path="/search/:searchTerm"
             element={<CollectionRoute collections={collections} isSearchResults />}
           />
-          <Route path="/edit/:name/:entryName" element={<EditEntityRedirect />} />
+          <Route path="/edit/:name/*" element={<EditEntityRedirect />} />
           <Route path="/page/:id" element={<Page />} />
           <Route element={<NotFoundPage />} />
         </Routes>

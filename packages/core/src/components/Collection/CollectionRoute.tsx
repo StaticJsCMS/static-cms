@@ -18,7 +18,9 @@ const CollectionRoute = ({
   isSingleSearchResult,
   collections,
 }: CollectionRouteProps) => {
-  const { name, searchTerm, filterTerm } = useParams();
+  const params = useParams();
+  const { name, searchTerm } = params;
+  const filterTerm = params['*'];
   const collection = useMemo(() => {
     if (!name) {
       return false;
