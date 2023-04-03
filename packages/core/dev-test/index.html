@@ -131,6 +131,32 @@
               "---\ndescription: Le café est un petit arbre ou un arbuste qui pousse dans le sous-étage de la forêt sous sa forme sauvage et qui était traditionnellement cultivé commercialement sous d'autres arbres qui fournissaient de l'ombre. La structure forestière des plantations de café d'ombre fournit un habitat à un grand nombre d'espèces migratrices et résidentes.\ndate: 2015-02-14T00:00:00.000Z\n---\n",
           },
         },
+        _nested_pages: {
+          authors: {
+            'author-1': {
+              'index.md': {
+                content: '---\ntitle: An Author\n---\nAuthor details go here!.\n',
+              },
+            },
+            'index.md': {
+              content: '---\ntitle: Authors\n---\n',
+            },
+          },
+          posts: {
+            'hello-world': {
+              'index.md': {
+                content:
+                  '---\ntitle: Hello World\n---\nCoffee is a small tree or shrub that grows in the forest understory in its wild form, and traditionally was grown commercially under other trees that provided shade. The forest-like structure of shade coffee farms provides habitat for a great number of migratory and resident species.\n',
+              },
+            },
+            'index.md': {
+              content: '---\ntitle: Posts\n---\n',
+            },
+          },
+          'index.md': {
+            content: '---\ntitle: Pages\n---\n',
+          },
+        },
       };
 
       var ONE_DAY = 60 * 60 * 24 * 1000;

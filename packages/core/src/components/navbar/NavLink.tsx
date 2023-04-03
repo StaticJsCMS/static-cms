@@ -27,10 +27,10 @@ const linkClassNames = 'btn btn-text-primary w-full justify-start';
 const NavLink = ({ icon, children, onClick, ...otherProps }: NavLinkProps) => {
   const content = useMemo(
     () => (
-      <>
+      <div className="flex w-full gap-3 items-center">
         <span className="w-6 h-6">{icon}</span>
-        <span className="ml-3">{children}</span>
-      </>
+        <span className="flex-grow">{children}</span>
+      </div>
     ),
     [children, icon],
   );

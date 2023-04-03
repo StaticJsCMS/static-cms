@@ -1,9 +1,11 @@
 import { Article as ArticleIcon } from '@styled-icons/material/Article';
+import { ChevronRight as ChevronRightIcon } from '@styled-icons/material/ChevronRight';
 import sortBy from 'lodash/sortBy';
 import { dirname, sep } from 'path';
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
 
 import useEntries from '@staticcms/core/lib/hooks/useEntries';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectEntryCollectionTitle } from '@staticcms/core/lib/util/collection.util';
 import { stringTemplate } from '@staticcms/core/lib/widgets';
 import NavLink from '../navbar/NavLink';
@@ -61,27 +63,42 @@ const TreeNode = ({ collection, treeData, depth = 0, onToggle }: TreeNodeProps) 
 
         return (
           <Fragment key={node.path}>
-            <NavLink
-              to={to}
-              onClick={() => onToggle({ node, expanded: !node.expanded })}
-              data-testid={node.path}
-            >
-              {/* TODO $activeClassName="sidebar-active" */}
-              {/* TODO $depth={depth} */}
-              <ArticleIcon className="h-5 w-5" />
-              <div>
-                <div>{title}</div>
-                {hasChildren && (node.expanded ? <div /> : <div />)}
+            <div style={{ marginLeft: `${32 * depth}px` }}>
+              <NavLink
+                to={to}
+                onClick={() => onToggle({ node, expanded: !node.expanded })}
+                data-testid={node.path}
+                icon={<ArticleIcon className={classNames(depth === 0 ? 'h-6 w-6' : 'h-5 w-5')} />}
+              >
+                <div className="flex w-full gap-2 items-center justify-between">
+                  <div>{title}</div>
+                  {hasChildren && (
+                    <ChevronRightIcon
+                      className={classNames(
+                        node.expanded && 'rotate-90 transform',
+                        `
+                        transition-transform
+                        h-5
+                        w-5
+                        group-focus-within/active-list:text-blue-500
+                        group-hover/active-list:text-blue-500
+                      `,
+                      )}
+                    />
+                  )}
+                </div>
+              </NavLink>
+              <div className="mt-2 space-y-1.5">
+                {node.expanded && (
+                  <TreeNode
+                    collection={collection}
+                    depth={depth + 1}
+                    treeData={node.children}
+                    onToggle={onToggle}
+                  />
+                )}
               </div>
-            </NavLink>
-            {node.expanded && (
-              <TreeNode
-                collection={collection}
-                depth={depth + 1}
-                treeData={node.children}
-                onToggle={onToggle}
-              />
-            )}
+            </div>
           </Fragment>
         );
       })}

@@ -2,6 +2,7 @@ import React, { Fragment, isValidElement } from 'react';
 
 import { resolveWidget } from '@staticcms/core/lib/registry';
 import { selectField } from '@staticcms/core/lib/util/field.util';
+import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { getTypedFieldForValue } from '@staticcms/list/typedListHelpers';
 import PreviewHOC from './PreviewHOC';
 
@@ -86,7 +87,7 @@ export default function getWidgetFor(
 
   let renderedValue: ValueOrNestedValue | ReactNode = value;
   if (inferredField) {
-    renderedValue = inferredField.defaultPreview(String(value));
+    renderedValue = inferredField.defaultPreview(isNullish(value) ? '' : String(value));
   } else if (
     value &&
     fieldWithWidgets.widget &&
@@ -103,7 +104,7 @@ export default function getWidgetFor(
             "
           >
             {field.label ?? field.name}:
-          </strong>{' '}
+          </strong>
           {value}
         </>
       </div>
