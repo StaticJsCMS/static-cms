@@ -743,8 +743,8 @@ export class Backend<BC extends BackendClass = BackendClass> {
     return entryValue;
   }
 
-  getMedia() {
-    return this.implementation.getMedia();
+  getMedia(folder?: string | undefined, mediaPath?: string | undefined) {
+    return this.implementation.getMedia(folder, mediaPath);
   }
 
   getMediaFile(path: string) {
