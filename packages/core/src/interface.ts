@@ -490,7 +490,7 @@ export abstract class BackendClass {
   abstract entriesByFiles(files: ImplementationFile[]): Promise<ImplementationEntry[]>;
 
   abstract getMediaDisplayURL(displayURL: DisplayURL): Promise<string>;
-  abstract getMedia(folder?: string, folderSupport?: boolean, mediaPath?: string): Promise<ImplementationMediaFile[]>;
+  abstract getMedia(folder?: string, mediaPath?: string, folderSupport?: boolean): Promise<ImplementationMediaFile[]>;
   abstract getMediaFile(path: string): Promise<ImplementationMediaFile>;
 
   abstract persistEntry(entry: BackendEntry, opts: PersistOptions): Promise<void>;
