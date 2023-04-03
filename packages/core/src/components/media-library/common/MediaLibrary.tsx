@@ -75,11 +75,18 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   } = useAppSelector(selectMediaLibraryState);
 
   const [url, setUrl] = useState<string | string[] | undefined>(initialValue ?? '');
+
   const [alt, setAlt] = useState<string | undefined>(initialAlt);
 
   const [prevIsVisible, setPrevIsVisible] = useState(false);
 
-  const files = useMediaFiles(field);
+  const mediaFiles = useMediaFiles;
+
+  console.log(field);
+
+  var files = mediaFiles(field);
+
+  console.log(files);
 
   useEffect(() => {
     if (!prevIsVisible && isVisible) {
@@ -106,7 +113,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   const filterImages = useCallback((files: MediaFile[]) => {
     return files.filter(file => {
       const ext = fileExtension(file.name).toLowerCase();
-      return IMAGE_EXTENSIONS.includes(ext);
+      return IMAGE_EXTENSIONS.includes(ext) || file.type == "tree";
     });
   }, []);
 
@@ -116,7 +123,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   const toTableData = useCallback((files: MediaFile[]) => {
     const tableData =
       files &&
-      files.map(({ key, name, id, size, path, queryOrder, displayURL, draft }) => {
+      files.map(({ key, name, id, size, path, queryOrder, displayURL, draft, type }) => {
         const ext = fileExtension(name).toLowerCase();
         return {
           key,
@@ -130,6 +137,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
           draft,
           isImage: IMAGE_EXTENSIONS.includes(ext),
           isViewableImage: IMAGE_EXTENSIONS_VIEWABLE.includes(ext),
+          isDirectory: type == "tree"
         };
       });
 
@@ -246,6 +254,15 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
       dispatch(insertMedia((url ?? selectedFile?.path) as string, field, alt));
     },
     [dispatch, field, selectedFile?.path, url],
+  );
+
+  const handleOpenDirectory = useCallback(
+    (dir: string) => {
+      files = mediaFiles(field);
+      dispatch(loadMedia());
+      console.log("handleOpenDirectory:" + dir);
+    },
+    []
   );
 
   /**
@@ -416,6 +433,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
           onAssetSelect={handleAssetSelect}
           canLoadMore={hasNextPage}
           onLoadMore={handleLoadMore}
+          onDirectoryOpen={handleOpenDirectory}
           isPaginating={isPaginating}
           paginatingMessage={t('mediaLibrary.mediaLibraryModal.loading')}
           cardDraftText={t('mediaLibrary.mediaLibraryCard.draft')}

@@ -89,6 +89,8 @@ export function openMediaLibrary<EF extends BaseField = UnknownField>(
     collection?: Collection<EF>;
     field?: EF;
     insertOptions?: MediaLibrarInsertOptions;
+    folderSupport?: boolean;
+    selectFolder?: boolean;
   } = {},
 ) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
@@ -105,6 +107,8 @@ export function openMediaLibrary<EF extends BaseField = UnknownField>(
       collection,
       field,
       insertOptions,
+      folderSupport,
+      selectFolder
     } = payload;
 
     if (mediaLibrary) {
@@ -123,6 +127,8 @@ export function openMediaLibrary<EF extends BaseField = UnknownField>(
         collection: collection as Collection,
         field: field as Field,
         insertOptions,
+        folderSupport,
+        selectFolder,
       }),
     );
   };
@@ -179,7 +185,7 @@ export function loadMedia(opts: { delay?: number; query?: string; page?: number 
 
     function loadFunction() {
       return backend
-        .getMedia()
+        .getMedia(config?.media_library_folder_support)
         .then(files => dispatch(mediaLoaded(files)))
         .catch((error: { status?: number }) => {
           console.error(error);
@@ -431,6 +437,8 @@ function mediaLibraryOpened(payload: {
   collection?: Collection;
   field?: Field;
   insertOptions?: MediaLibrarInsertOptions;
+  folderSupport?: boolean;
+  selectFolder?: boolean;
 }) {
   return { type: MEDIA_LIBRARY_OPEN, payload } as const;
 }

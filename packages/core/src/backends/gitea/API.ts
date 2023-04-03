@@ -360,6 +360,46 @@ export default class API {
     }
   }
 
+  async listDirectory(
+    path: string,
+    { repoURL = this.repoURL, branch = this.branch, depth = 1 } = {},
+  ): Promise<{ type: string; id: string; name: string; path: string; size: number }[]> {
+    const folder = trim(path, '/');
+    try {
+      const result: GitGetTreeResponse = await this.request(
+        `${repoURL}/git/trees/${branch}:${encodeURIComponent(folder)}`,
+        {
+          // Gitea API supports recursive=1 for getting the entire recursive tree
+          // or omitting it to get the non-recursive tree
+          params: depth > 1 ? { recursive: 1 } : {},
+        },
+      );
+      return (
+        result.tree
+          // filter only files and up to the required depth
+          .filter(
+            file =>
+              decodeURIComponent(file.path).split('/').length <= depth,
+          )
+          .map(file => ({
+            type: file.type,
+            id: file.sha,
+            name: basename(file.path),
+            path: `${folder}/${file.path}`,
+            size: file.size!,
+          }))
+      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      if (err && err.status === 404) {
+        console.info('This 404 was expected and handled appropriately.');
+        return [];
+      } else {
+        throw err;
+      }
+    }
+  }
+
   async persistFiles(dataFiles: DataFile[], mediaFiles: AssetProxy[], options: PersistOptions) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const files: (DataFile | AssetProxy)[] = mediaFiles.concat(dataFiles as any);

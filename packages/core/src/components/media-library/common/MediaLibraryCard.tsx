@@ -1,5 +1,7 @@
 import { Delete as DeleteIcon } from '@styled-icons/material/Delete';
 import { Download as DownloadIcon } from '@styled-icons/material/Download';
+import { FolderOpen as FolderIcon } from '@styled-icons/material/FolderOpen';
+
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
@@ -30,9 +32,11 @@ interface MediaLibraryCardProps<T extends MediaField, EF extends BaseField = Unk
   type?: string;
   isViewableImage: boolean;
   isDraft?: boolean;
-  collection?: Collection<EF>;
-  field?: T;
+  isDirectory?: boolean;
+  collection?: Collection;
+  field?: Field;
   onSelect: () => void;
+  onDirectoryOpen: () => void,
   loadDisplayURL: () => void;
   onDelete: () => void;
 }
@@ -45,15 +49,17 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
   type,
   isViewableImage,
   isDraft,
+  isDirectory,
   collection,
   field,
   onSelect,
+  onDirectoryOpen,
   loadDisplayURL,
   onDelete,
   t,
 }: TranslatedProps<MediaLibraryCardProps<T, EF>>) => {
   const entry = useAppSelector(selectEditingDraft);
-  const url = useMediaAsset(displayURL.url, collection, field, entry);
+  const url = !isDirectory ? useMediaAsset(displayURL.url, collection, field, entry): undefined;
 
   const handleDownload = useCallback(() => {
     const url = displayURL.url;
@@ -109,6 +115,7 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
     >
       <div
         onClick={onSelect}
+        onDoubleClick={isDirectory ? onDirectoryOpen : undefined}
         data-testid={`media-card-${displayURL.url}`}
         className="
           w-media-card
@@ -177,8 +184,8 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
               gap-1
             "
           >
-            <CopyToClipBoardButton path={displayURL.url} name={text} draft={isDraft} />
-            <Button
+            {!isDirectory ? <CopyToClipBoardButton path={displayURL.url} name={text} draft={isDraft} /> : null}
+            {!isDirectory ? <Button
               variant="text"
               onClick={handleDownload}
               title={t('mediaLibrary.mediaLibraryModal.download')}
@@ -191,7 +198,7 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
               "
             >
               <DownloadIcon className="w-5 h-5" />
-            </Button>
+            </Button> : null}
             <Button
               variant="text"
               color="error"
@@ -218,6 +225,25 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
           ) : null}
           {url && isViewableImage ? (
             <Image src={url} className="w-media-card h-media-card-image rounded-md" />
+          ) : isDirectory ? (
+            <div
+              data-testid="card-file-icon"
+              className="
+                w-media-card
+                h-media-card-image
+                bg-gray-500
+                dark:bg-slate-700
+                text-gray-200
+                dark:text-slate-400
+                font-bold
+                flex
+                items-center
+                justify-center
+                text-5xl
+              "
+            >
+              <FolderIcon className="w-24 h-24" />
+            </div>
           ) : (
             <div
               data-testid="card-file-icon"

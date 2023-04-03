@@ -133,6 +133,7 @@ export function applyDefaults(originalConfig: Config) {
     config.slug = config.slug || {};
     config.collections = config.collections || [];
 
+
     // Use `site_url` as default `display_url`.
     if (!config.display_url && config.site_url) {
       config.display_url = config.site_url;

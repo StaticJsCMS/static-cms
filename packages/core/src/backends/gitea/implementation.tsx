@@ -285,15 +285,21 @@ export default class Gitea implements BackendClass {
       .catch(() => ({ file: { path, id: null }, data: '' }));
   }
 
-  async getMedia(mediaFolder = this.mediaFolder) {
+  async getMedia(mediaFolder = this.mediaFolder, folderSupport?: boolean) {
     if (!mediaFolder) {
       return [];
     }
-    return this.api!.listFiles(mediaFolder).then(files =>
-      files.map(({ id, name, size, path }) => {
+    return folderSupport ? this.api!.listDirectory(mediaFolder).then(files =>
+      files.map(({ id, name, size, path, type }) => {
         // load media using getMediaDisplayURL to avoid token expiration with Gitlab raw content urls
         // for private repositories
-        return { id, name, size, displayURL: { id, path }, path };
+        return { id, name, size, displayURL: { id, path }, path, type };
+      }),
+    ) : this.api!.listFiles(mediaFolder).then(files =>
+      files.map(({ id, name, size, path, type }) => {
+        // load media using getMediaDisplayURL to avoid token expiration with Gitlab raw content urls
+        // for private repositories
+        return { id, name, size, displayURL: { id, path }, path, type };
       }),
     );
   }

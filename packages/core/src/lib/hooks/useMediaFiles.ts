@@ -53,6 +53,7 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
     }
 
     if (entry) {
+      console.log("isEntry");
       const entryFiles = entry.mediaFiles ?? [];
       if (config) {
         const mediaFolder = selectMediaFolder(config, collection, entry, field);
