@@ -37,6 +37,7 @@ const Modal: FC<ModalProps> = ({ open, children, className, onClose }) => {
             items-center
             justify-center
             text-center
+            styled-scrollbars
           `,
         },
       }}

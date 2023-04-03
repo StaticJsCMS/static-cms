@@ -45,7 +45,7 @@ const EditorContent = ({
   } else {
     return (
       <div className="flex justify-center">
-        <div className="w-editor-only max-w-full">{editor}</div>
+        <div className="w-editor-only max-w-full h-main">{editor}</div>
       </div>
     );
   }
@@ -162,6 +162,7 @@ const EditorInterface = ({
         w-full
         overflow-y-auto
         styled-scrollbars
+        h-main
       "
     >
       <EditorControlPane
@@ -179,7 +180,15 @@ const EditorInterface = ({
 
   const editorLocale = useMemo(
     () => (
-      <div key={selectedLocale}>
+      <div
+        key={selectedLocale}
+        className="
+          w-full
+          overflow-y-auto
+          styled-scrollbars
+          h-main
+        "
+      >
         <EditorControlPane
           collection={collection}
           entry={entry}

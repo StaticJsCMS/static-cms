@@ -50,7 +50,11 @@ const MainView = ({
             showLeftNav ? 'w-main left-64' : 'w-full',
             !noMargin && 'px-5 py-4',
             noScroll ? 'overflow-hidden' : 'overflow-y-auto',
-            'h-main relative',
+            `
+              h-main
+              relative
+              styled-scrollbars
+            `,
           )}
         >
           {children}

@@ -167,6 +167,7 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
                   py-4
                   overflow-hidden
                   overflow-y-auto
+                  styled-scrollbars
                 "
                 style={{ position: 'unset' }}
               >

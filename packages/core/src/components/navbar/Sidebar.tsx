@@ -101,7 +101,18 @@ const Sidebar: FC<TranslateProps> = ({ t }) => {
       )}
       aria-label="Sidebar"
     >
-      <div className="px-3 py-4 h-full w-full overflow-y-auto bg-white dark:bg-slate-800">
+      <div
+        className="
+          px-3
+          py-4
+          h-full
+          w-full
+          overflow-y-auto
+          bg-white
+          dark:bg-slate-800
+          styled-scrollbars
+        "
+      >
         <ul className="space-y-2">
           {isSearchEnabled && (
             <CollectionSearch
