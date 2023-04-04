@@ -837,7 +837,6 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     const newEntry = entryDraft.entry.newRecord ?? false;
 
     const customPath = selectCustomPath(draft.entry, collection);
-    console.log('[NESTED] customPath', customPath);
 
     let dataFile: DataFile;
     if (newEntry) {

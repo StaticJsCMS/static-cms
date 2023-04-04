@@ -44,8 +44,6 @@ export default function useBreadcrumbs(
         return acc;
       }, {} as Record<string, Entry>);
 
-      console.log('entriesByPath', entriesByPath);
-
       const path = filterTerm.split('/');
       if (path.length > 0) {
         const extension = selectFolderEntryExtension(collection);
@@ -57,25 +55,20 @@ export default function useBreadcrumbs(
             entriesByPath[
               `${collection.folder}/${pathSoFar}/${collection.nested.path.index_file}.${extension}`
             ];
-          console.log(
-            'path to check',
-            `${collection.folder}/${pathSoFar}/${collection.nested.path.index_file}.${extension}`,
-            'entry',
-            entry,
-          );
 
+          let title = path[i];
           if (entry) {
             entry = {
               ...entry,
               data: addFileTemplateFields(entry.path, entry.data as Record<string, string>),
             };
-            const title = selectEntryCollectionTitle(collection, entry);
-
-            crumbs.push({
-              name: title,
-              to: `/collections/${collection.name}/filter/${pathSoFar}`,
-            });
+            title = selectEntryCollectionTitle(collection, entry);
           }
+
+          crumbs.push({
+            name: title,
+            to: `/collections/${collection.name}/filter/${pathSoFar}`,
+          });
         }
 
         return crumbs;

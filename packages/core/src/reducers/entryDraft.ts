@@ -178,8 +178,6 @@ function entryDraftReducer(
           !isEqual(newState.entry?.i18n?.[locale]?.data, newState.original?.i18n?.[locale]?.data);
       }
 
-      console.log('new entry', newState);
-
       return {
         ...newState,
         hasChanged: !newState.original || hasChanged,

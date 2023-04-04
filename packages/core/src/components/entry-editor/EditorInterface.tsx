@@ -239,7 +239,6 @@ const EditorInterface = ({
     [collection, entry.slug],
   );
   const breadcrumbs = useBreadcrumbs(collection, nestedFieldPath, { isNewEntry, summary, t });
-  console.log('[NESTED] nestedFieldPath', nestedFieldPath, 'breadcrumbs', breadcrumbs);
 
   return (
     <MainView

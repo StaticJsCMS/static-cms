@@ -54,7 +54,10 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        include: [...['ol', 'codemirror', '@toast-ui'].map(moduleNameToPath), path.resolve(__dirname, 'src')],
+        include: [
+          ...['ol', 'codemirror', '@toast-ui'].map(moduleNameToPath),
+          path.resolve(__dirname, 'src'),
+        ],
         use: [
           !isProduction ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
@@ -112,6 +115,7 @@ module.exports = {
   devServer: {
     static: {
       directory: './dev-test',
+      watch: false,
     },
     host: '0.0.0.0',
     port: devServerPort,

@@ -15,8 +15,6 @@ import type { Collection, Entry } from '@staticcms/core/interface';
 
 const { addFileTemplateFields } = stringTemplate;
 
-const NESTED_NAV_LINK_MARGIN = 32;
-
 interface BaseTreeNodeData {
   title: string | undefined;
   path: string;
@@ -66,7 +64,7 @@ const TreeNode = ({ collection, treeData, depth = 0, onToggle }: TreeNodeProps) 
 
         return (
           <Fragment key={node.path}>
-            <div style={{ marginLeft: `${NESTED_NAV_LINK_MARGIN * depth}px` }}>
+            <div className={classNames(depth !== 0 && 'ml-8')}>
               <NavLink
                 to={to}
                 onClick={() => onToggle({ node, expanded: !node.expanded })}
