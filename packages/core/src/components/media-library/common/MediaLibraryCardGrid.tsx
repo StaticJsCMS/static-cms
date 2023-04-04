@@ -40,7 +40,7 @@ export interface MediaLibraryCardGridProps {
   onAssetSelect: (asset: MediaFile) => void;
   canLoadMore?: boolean;
   onLoadMore: () => void;
-  onDirectoryOpen: (dir: string) => void,
+  onDirectoryOpen: (dir: string) => void;
   isPaginating?: boolean;
   paginatingMessage?: string;
   cardDraftText: string;

@@ -4,6 +4,7 @@ import fuzzy from 'fuzzy';
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { translate } from 'react-polyglot';
+import { dirname } from 'path';
 
 import {
   closeMediaLibrary,
@@ -29,7 +30,6 @@ import MediaLibrarySearch from './MediaLibrarySearch';
 
 import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
-import { dirname } from 'path';
 
 /**
  * Extensions used to determine which files to show when the media library is
@@ -120,7 +120,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   const filterImages = useCallback((files: MediaFile[]) => {
     return files.filter(file => {
       const ext = fileExtension(file.name).toLowerCase();
-      return IMAGE_EXTENSIONS.includes(ext) || file.type == "tree";
+      return IMAGE_EXTENSIONS.includes(ext) || file.type == 'tree';
     });
   }, []);
 
@@ -144,7 +144,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
           draft,
           isImage: IMAGE_EXTENSIONS.includes(ext),
           isViewableImage: IMAGE_EXTENSIONS_VIEWABLE.includes(ext),
-          isDirectory: type == "tree"
+          isDirectory: type == 'tree',
         };
       });
 
@@ -263,13 +263,10 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     [dispatch, field, selectedFile?.path, url],
   );
 
-  const handleOpenDirectory = useCallback(
-    (dir: string) => {
-      setCustomDirectory(dir);
-      dispatch(loadMedia());
-    },
-    []
-  );
+  const handleOpenDirectory = useCallback((dir: string) => {
+    setCustomDirectory(dir);
+    dispatch(loadMedia());
+  }, []);
 
   /**
    * Stores the public path of the file in the application store, where the

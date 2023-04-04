@@ -108,7 +108,7 @@ export function openMediaLibrary<EF extends BaseField = UnknownField>(
       field,
       insertOptions,
       folderSupport,
-      selectFolder
+      selectFolder,
     } = payload;
 
     if (mediaLibrary) {

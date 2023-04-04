@@ -377,10 +377,7 @@ export default class API {
       return (
         result.tree
           // filter only files and up to the required depth
-          .filter(
-            file =>
-              decodeURIComponent(file.path).split('/').length <= depth,
-          )
+          .filter(file => decodeURIComponent(file.path).split('/').length <= depth)
           .map(file => ({
             type: file.type,
             id: file.sha,

@@ -1,7 +1,6 @@
 import { Delete as DeleteIcon } from '@styled-icons/material/Delete';
 import { Download as DownloadIcon } from '@styled-icons/material/Download';
 import { FolderOpen as FolderIcon } from '@styled-icons/material/FolderOpen';
-
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
@@ -36,7 +35,7 @@ interface MediaLibraryCardProps<T extends MediaField, EF extends BaseField = Unk
   collection?: Collection;
   field?: Field;
   onSelect: () => void;
-  onDirectoryOpen: () => void,
+  onDirectoryOpen: () => void;
   loadDisplayURL: () => void;
   onDelete: () => void;
 }
@@ -59,7 +58,7 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
   t,
 }: TranslatedProps<MediaLibraryCardProps<T, EF>>) => {
   const entry = useAppSelector(selectEditingDraft);
-  const url = !isDirectory ? useMediaAsset(displayURL.url, collection, field, entry): undefined;
+  const url = useMediaAsset(displayURL.url, collection, field, entry);
 
   const handleDownload = useCallback(() => {
     const url = displayURL.url;
@@ -80,7 +79,7 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
   }, [displayURL.url, text]);
 
   useEffect(() => {
-    console.log("displayURL: " + displayURL.url)
+    console.log('displayURL: ' + displayURL.url);
     if (!displayURL.url) {
       loadDisplayURL();
     }
@@ -185,21 +184,25 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
               gap-1
             "
           >
-            {!isDirectory ? <CopyToClipBoardButton path={displayURL.url} name={text} draft={isDraft} /> : null}
-            {!isDirectory ? <Button
-              variant="text"
-              onClick={handleDownload}
-              title={t('mediaLibrary.mediaLibraryModal.download')}
-              className="
+            {!isDirectory ? (
+              <CopyToClipBoardButton path={displayURL.url} name={text} draft={isDraft} />
+            ) : null}
+            {!isDirectory ? (
+              <Button
+                variant="text"
+                onClick={handleDownload}
+                title={t('mediaLibrary.mediaLibraryModal.download')}
+                className="
                 text-white
                 dark:text-white
                 bg-gray-900/25
                 dark:hover:text-blue-100
                 dark:hover:bg-blue-800/80
               "
-            >
-              <DownloadIcon className="w-5 h-5" />
-            </Button> : null}
+              >
+                <DownloadIcon className="w-5 h-5" />
+              </Button>
+            ) : null}
             <Button
               variant="text"
               color="error"
