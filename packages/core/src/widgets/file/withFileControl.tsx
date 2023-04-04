@@ -10,7 +10,13 @@ import { basename } from '@staticcms/core/lib/util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import SortableImage from './components/SortableImage';
 
-import type { FileOrImageField, MediaPath, WidgetControlProps } from '@staticcms/core/interface';
+import type {
+  BaseField,
+  Collection,
+  FileOrImageField,
+  MediaPath,
+  WidgetControlProps,
+} from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
 
 const MAX_DISPLAY_LENGTH = 50;
@@ -143,7 +149,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
             replaceIndex: index,
             allowMultiple: false,
             config,
-            collection,
+            collection: collection as Collection<BaseField>,
             field,
           });
         },

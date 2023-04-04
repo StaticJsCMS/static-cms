@@ -1,9 +1,9 @@
 import { CONFIG_SUCCESS } from '../constants';
 
 import type { ConfigAction } from '../actions/config';
-import type { Collection, Collections } from '../interface';
+import type { BaseField, Collection, Collections, UnknownField } from '../interface';
 
-export type CollectionsState = Collections;
+export type CollectionsState<EF extends BaseField = UnknownField> = Collections<EF>;
 
 const defaultState: CollectionsState = {};
 

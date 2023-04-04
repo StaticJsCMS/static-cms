@@ -39,9 +39,9 @@ function isFieldList<F extends BaseField = UnknownField>(field: Field<F>): field
   return 'types' in (field as ListField) || 'field' in (field as ListField);
 }
 
-function traverseFieldsJS<F extends Field>(
+function traverseFieldsJS<F extends BaseField = UnknownField>(
   fields: F[],
-  updater: <T extends Field>(field: T) => T,
+  updater: <T extends BaseField = UnknownField>(field: T) => T,
 ): F[] {
   return fields.map(field => {
     const newField = updater(field);
@@ -68,14 +68,14 @@ function getConfigUrl() {
   return 'config.yml';
 }
 
-function setDefaultPublicFolderForField<T extends Field>(field: T) {
+function setDefaultPublicFolderForField<T extends BaseField = UnknownField>(field: T) {
   if ('media_folder' in field && !('public_folder' in field)) {
     return { ...field, public_folder: field.media_folder };
   }
   return field;
 }
 
-function setI18nField<T extends Field>(field: T) {
+function setI18nField<T extends BaseField = UnknownField>(field: T) {
   if (field[I18N] === true) {
     return { ...field, [I18N]: I18N_FIELD_TRANSLATE };
   } else if (field[I18N] === false || !field[I18N]) {

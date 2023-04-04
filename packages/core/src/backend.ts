@@ -20,10 +20,10 @@ import {
 import { getBackend, invokeEvent } from './lib/registry';
 import { sanitizeChar } from './lib/urlHelper';
 import {
+  CURSOR_COMPATIBILITY_SYMBOL,
+  Cursor,
   asyncLock,
   blobToFileObj,
-  Cursor,
-  CURSOR_COMPATIBILITY_SYMBOL,
   getPathDepth,
   localForage,
 } from './lib/util';
@@ -230,9 +230,9 @@ interface AuthStore {
   logout: () => void;
 }
 
-interface BackendOptions {
+interface BackendOptions<EF extends BaseField> {
   backendName: string;
-  config: Config;
+  config: Config<EF>;
   authStore?: AuthStore;
 }
 
@@ -267,7 +267,7 @@ interface PersistArgs {
   status?: string;
 }
 
-function collectionDepth(collection: Collection) {
+function collectionDepth<EF extends BaseField>(collection: Collection<EF>) {
   let depth;
   depth =
     ('nested' in collection && collection.nested?.depth) || getPathDepth(collection.path ?? '');
@@ -279,17 +279,17 @@ function collectionDepth(collection: Collection) {
   return depth;
 }
 
-export class Backend<BC extends BackendClass = BackendClass> {
+export class Backend<EF extends BaseField = UnknownField, BC extends BackendClass = BackendClass> {
   implementation: BC;
   backendName: string;
-  config: Config;
+  config: Config<EF>;
   authStore?: AuthStore;
   user?: User | null;
   backupSync: AsyncLock;
 
   constructor(
-    implementation: BackendInitializer,
-    { backendName, authStore, config }: BackendOptions,
+    implementation: BackendInitializer<EF>,
+    { backendName, authStore, config }: BackendOptions<EF>,
   ) {
     // We can't reliably run this on exit, so we do cleanup on load.
     this.deleteAnonymousBackup();
@@ -417,7 +417,10 @@ export class Backend<BC extends BackendClass = BackendClass> {
     return uniqueSlug;
   }
 
-  processEntries(loadedEntries: ImplementationEntry[], collection: Collection): Entry[] {
+  processEntries<EF extends BaseField>(
+    loadedEntries: ImplementationEntry[],
+    collection: Collection<EF>,
+  ): Entry[] {
     const entries = loadedEntries.map(loadedEntry =>
       createEntry(
         collection.name,
@@ -486,13 +489,13 @@ export class Backend<BC extends BackendClass = BackendClass> {
   // repeats the process. Once there is no available "next" action, it
   // returns all the collected entries. Used to retrieve all entries
   // for local searches and queries.
-  async listAllEntries<T extends BaseField = UnknownField>(collection: Collection<T>) {
+  async listAllEntries<EF extends BaseField>(collection: Collection<EF>) {
     if ('folder' in collection && collection.folder && this.implementation.allEntriesByFolder) {
-      const depth = collectionDepth(collection as Collection);
-      const extension = selectFolderEntryExtension(collection as Collection);
+      const depth = collectionDepth(collection);
+      const extension = selectFolderEntryExtension(collection);
       return this.implementation
         .allEntriesByFolder(collection.folder as string, extension, depth)
-        .then(entries => this.processEntries(entries, collection as Collection));
+        .then(entries => this.processEntries(entries, collection));
     }
 
     const response = await this.listEntries(collection as Collection);
@@ -565,8 +568,8 @@ export class Backend<BC extends BackendClass = BackendClass> {
     return { entries: hits, pagination: 1 };
   }
 
-  async query<T extends BaseField = UnknownField>(
-    collection: Collection<T>,
+  async query<EF extends BaseField>(
+    collection: Collection<EF>,
     searchFields: string[],
     searchTerm: string,
     file?: string,
@@ -714,7 +717,11 @@ export class Backend<BC extends BackendClass = BackendClass> {
     return localForage.removeItem(getEntryBackupKey());
   }
 
-  async getEntry(state: RootState, collection: Collection, slug: string) {
+  async getEntry<EF extends BaseField>(
+    state: RootState<EF>,
+    collection: Collection<EF>,
+    slug: string,
+  ) {
     const path = selectEntryPath(collection, slug) as string;
     const label = selectFileEntryLabel(collection, slug);
     const extension = selectFolderEntryExtension(collection);
@@ -762,7 +769,7 @@ export class Backend<BC extends BackendClass = BackendClass> {
     return Promise.reject(err);
   }
 
-  entryWithFormat(collection: Collection) {
+  entryWithFormat<EF extends BaseField>(collection: Collection<EF>) {
     return (entry: Entry): Entry => {
       const format = resolveFormat(collection, entry);
       if (entry && entry.raw !== undefined) {
@@ -777,7 +784,11 @@ export class Backend<BC extends BackendClass = BackendClass> {
     };
   }
 
-  async processEntry(state: RootState, collection: Collection, entry: Entry) {
+  async processEntry<EF extends BaseField>(
+    state: RootState<EF>,
+    collection: Collection<EF>,
+    entry: Entry,
+  ) {
     const configState = state.config;
     if (!configState.config) {
       throw new Error('Config not loaded');
@@ -938,7 +949,11 @@ export class Backend<BC extends BackendClass = BackendClass> {
     return this.implementation.persistMedia(file, options);
   }
 
-  async deleteEntry(state: RootState, collection: Collection, slug: string) {
+  async deleteEntry<EF extends BaseField>(
+    state: RootState<EF>,
+    collection: Collection<EF>,
+    slug: string,
+  ) {
     const configState = state.config;
     if (!configState.config) {
       throw new Error('Config not loaded');
@@ -1012,7 +1027,7 @@ export class Backend<BC extends BackendClass = BackendClass> {
   }
 }
 
-export function resolveBackend(config?: Config) {
+export function resolveBackend<EF extends BaseField>(config?: Config<EF>) {
   if (!config?.backend.name) {
     throw new Error('No backend defined in configuration');
   }
@@ -1020,22 +1035,22 @@ export function resolveBackend(config?: Config) {
   const { name } = config.backend;
   const authStore = new LocalStorageAuthStore();
 
-  const backend = getBackend(name);
+  const backend = getBackend<EF>(name);
   if (!backend) {
     throw new Error(`Backend not found: ${name}`);
   } else {
-    return new Backend(backend, { backendName: name, authStore, config });
+    return new Backend<EF, BackendClass>(backend, { backendName: name, authStore, config });
   }
 }
 
 export const currentBackend = (function () {
   let backend: Backend;
 
-  return <T extends BaseField = UnknownField>(config: Config<T>) => {
+  return <EF extends BaseField = UnknownField>(config: Config<EF>) => {
     if (backend) {
       return backend;
     }
 
-    return (backend = resolveBackend(config as Config));
+    return (backend = resolveBackend(config) as unknown as Backend);
   };
 })();

@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
 import { getI18nInfo, getPreviewEntry, hasI18n } from '@staticcms/core/lib/i18n';
@@ -7,11 +8,12 @@ import {
   selectEntryCollectionTitle,
 } from '@staticcms/core/lib/util/collection.util';
 import MainView from '../MainView';
+import EditorToolbar from './EditorToolbar';
 import EditorControlPane from './editor-control-pane/EditorControlPane';
 import EditorPreviewPane from './editor-preview-pane/EditorPreviewPane';
-import EditorToolbar from './EditorToolbar';
 
 import type {
+  Breadcrumb,
   Collection,
   EditorPersistOptions,
   Entry,
@@ -84,7 +86,7 @@ const EditorInterface = ({
   displayUrl,
   isNewEntry,
   isModification,
-  draftKey, // TODO Review usage
+  draftKey,
   scrollSyncActive,
   t,
   loadScroll,
@@ -93,6 +95,9 @@ const EditorInterface = ({
 }: TranslatedProps<EditorInterfaceProps>) => {
   const { locales, defaultLocale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
   const [selectedLocale, setSelectedLocale] = useState<string>(locales?.[1] ?? 'en');
+
+  const [searchParams] = useSearchParams();
+  const filterTerm = searchParams.get('path');
 
   const [previewActive, setPreviewActive] = useState(
     localStorage.getItem(PREVIEW_VISIBLE) !== 'false',
@@ -233,21 +238,43 @@ const EditorInterface = ({
 
   const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
 
+  const breadcrumbs = useMemo(() => {
+    const crumbs: Breadcrumb[] = [
+      {
+        name: collection.label,
+        to: `/collections/${collection.name}`,
+      },
+    ];
+
+    if (filterTerm) {
+      crumbs.push({
+        name: filterTerm,
+        to: `/collections/${collection.name}/filter/${filterTerm}`,
+      });
+    }
+
+    crumbs.push({
+      name: isNewEntry
+        ? t('collection.collectionTop.newButton', {
+            collectionLabel: collection.label_singular || collection.label,
+          })
+        : summary,
+    });
+
+    return crumbs;
+  }, [
+    collection.label,
+    collection.label_singular,
+    collection.name,
+    filterTerm,
+    isNewEntry,
+    summary,
+    t,
+  ]);
+
   return (
     <MainView
-      breadcrumbs={[
-        {
-          name: collection.label,
-          to: `/collections/${collection.name}`,
-        },
-        {
-          name: isNewEntry
-            ? t('collection.collectionTop.newButton', {
-                collectionLabel: collection.label_singular || collection.label,
-              })
-            : summary,
-        },
-      ]}
+      breadcrumbs={breadcrumbs}
       noMargin
       noScroll
       navbarActions={

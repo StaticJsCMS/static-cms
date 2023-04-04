@@ -13,14 +13,16 @@ import Pill from '../../common/pill/Pill';
 import CopyToClipBoardButton from './CopyToClipBoardButton';
 
 import type {
+  BaseField,
   Collection,
-  Field,
+  MediaField,
   MediaLibraryDisplayURL,
   TranslatedProps,
+  UnknownField,
 } from '@staticcms/core/interface';
 import type { FC, KeyboardEvent } from 'react';
 
-interface MediaLibraryCardProps {
+interface MediaLibraryCardProps<T extends MediaField, EF extends BaseField = UnknownField> {
   isSelected?: boolean;
   displayURL: MediaLibraryDisplayURL;
   text: string;
@@ -28,14 +30,14 @@ interface MediaLibraryCardProps {
   type?: string;
   isViewableImage: boolean;
   isDraft?: boolean;
-  collection?: Collection;
-  field?: Field;
+  collection?: Collection<EF>;
+  field?: T;
   onSelect: () => void;
   loadDisplayURL: () => void;
   onDelete: () => void;
 }
 
-const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
+const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownField>({
   isSelected = false,
   displayURL,
   text,
@@ -49,7 +51,7 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
   loadDisplayURL,
   onDelete,
   t,
-}) => {
+}: TranslatedProps<MediaLibraryCardProps<T, EF>>) => {
   const entry = useAppSelector(selectEditingDraft);
   const url = useMediaAsset(displayURL.url, collection, field, entry);
 
@@ -258,4 +260,4 @@ const MediaLibraryCard: FC<TranslatedProps<MediaLibraryCardProps>> = ({
   );
 };
 
-export default translate()(MediaLibraryCard) as FC<MediaLibraryCardProps>;
+export default translate()(MediaLibraryCard) as FC<MediaLibraryCardProps<MediaField, UnknownField>>;

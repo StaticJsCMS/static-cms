@@ -183,6 +183,14 @@ export interface i18nCollection<EF extends BaseField = UnknownField>
   i18n: Required<Collection<EF>>['i18n'];
 }
 
+export interface CollectionMeta<EF extends BaseField = UnknownField> {
+  path?: {
+    label: string;
+    widget: Field<EF>['widget'];
+    index_file: string;
+  };
+}
+
 export interface BaseCollection {
   name: string;
   description?: string;
@@ -219,6 +227,7 @@ export interface FolderCollection<EF extends BaseField = UnknownField> extends B
   create?: boolean;
   delete?: boolean;
   nested?: Nested;
+  meta?: CollectionMeta<EF>;
 }
 
 export type Collection<EF extends BaseField = UnknownField> =
@@ -621,7 +630,7 @@ export interface ListField<EF extends BaseField = UnknownField> extends BaseFiel
   max?: number;
   min?: number;
   add_to_top?: boolean;
-  types?: ObjectField[];
+  types?: ObjectField<EF>[];
   type_key?: string;
 }
 
@@ -802,8 +811,8 @@ export interface BackendInitializerOptions {
   updateUserCredentials: (credentials: Credentials) => void;
 }
 
-export interface BackendInitializer {
-  init: (config: Config, options: BackendInitializerOptions) => BackendClass;
+export interface BackendInitializer<EF extends BaseField = UnknownField> {
+  init: (config: Config<EF>, options: BackendInitializerOptions) => BackendClass;
 }
 
 export interface EventData {

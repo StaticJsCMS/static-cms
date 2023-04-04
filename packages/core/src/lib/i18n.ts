@@ -6,13 +6,14 @@ import { selectEntrySlug } from './util/collection.util';
 import { set } from './util/object.util';
 
 import type {
-  Field,
+  BaseField,
   Collection,
   Entry,
   EntryData,
-  i18nCollection,
+  Field,
   I18nInfo,
   I18nStructure,
+  i18nCollection,
 } from '../interface';
 import type { EntryDraftState } from '../reducers/entryDraft';
 
@@ -26,20 +27,24 @@ export const I18N_FIELD_TRANSLATE = 'translate';
 export const I18N_FIELD_DUPLICATE = 'duplicate';
 export const I18N_FIELD_NONE = 'none';
 
-export function hasI18n(collection: Collection | i18nCollection): collection is i18nCollection {
+export function hasI18n<EF extends BaseField>(
+  collection: Collection<EF> | i18nCollection<EF>,
+): collection is i18nCollection<EF> {
   return I18N in collection;
 }
 
-export function getI18nInfo(collection: i18nCollection): I18nInfo;
-export function getI18nInfo(collection: Collection): I18nInfo | null;
-export function getI18nInfo(collection: Collection | i18nCollection): I18nInfo | null {
+export function getI18nInfo<EF extends BaseField>(collection: i18nCollection<EF>): I18nInfo;
+export function getI18nInfo<EF extends BaseField>(collection: Collection<EF>): I18nInfo | null;
+export function getI18nInfo<EF extends BaseField>(
+  collection: Collection<EF> | i18nCollection<EF>,
+): I18nInfo | null {
   if (!hasI18n(collection) || typeof collection[I18N] !== 'object') {
     return null;
   }
   return collection.i18n;
 }
 
-export function getI18nFilesDepth(collection: Collection, depth: number) {
+export function getI18nFilesDepth<EF extends BaseField>(collection: Collection<EF>, depth: number) {
   const { structure } = getI18nInfo(collection) as I18nInfo;
   if (structure === I18N_STRUCTURE_MULTIPLE_FOLDERS) {
     return depth + 1;
@@ -105,8 +110,8 @@ export function getLocaleFromPath(structure: I18nStructure, extension: string, p
   }
 }
 
-export function getFilePaths(
-  collection: Collection,
+export function getFilePaths<EF extends BaseField>(
+  collection: Collection<EF>,
   extension: string,
   path: string,
   slug: string,
@@ -136,8 +141,8 @@ export function normalizeFilePath(structure: I18nStructure, path: string, locale
   }
 }
 
-export function getI18nFiles(
-  collection: Collection,
+export function getI18nFiles<EF extends BaseField>(
+  collection: Collection<EF>,
   extension: string,
   entryDraft: Entry,
   entryToRaw: (entryDraft: Entry) => string,
@@ -232,8 +237,8 @@ export function formatI18nBackup(
   return i18n;
 }
 
-function mergeValues(
-  collection: Collection,
+function mergeValues<EF extends BaseField>(
+  collection: Collection<EF>,
   structure: I18nStructure,
   defaultLocale: string,
   values: { locale: string; value: Entry }[],
@@ -281,8 +286,8 @@ function mergeSingleFileValue(entryValue: Entry, defaultLocale: string, locales:
   };
 }
 
-export async function getI18nEntry(
-  collection: Collection,
+export async function getI18nEntry<EF extends BaseField>(
+  collection: Collection<EF>,
   extension: string,
   path: string,
   slug: string,
@@ -317,7 +322,11 @@ export async function getI18nEntry(
   return entryValue;
 }
 
-export function groupEntries(collection: Collection, extension: string, entries: Entry[]): Entry[] {
+export function groupEntries<EF extends BaseField>(
+  collection: Collection<EF>,
+  extension: string,
+  entries: Entry[],
+): Entry[] {
   const {
     structure = I18N_STRUCTURE_SINGLE_FILE,
     defaultLocale,

@@ -1,11 +1,11 @@
-import YamlFormatter from './YamlFormatter';
-import TomlFormatter from './TomlFormatter';
 import JsonFormatter from './JsonFormatter';
+import TomlFormatter from './TomlFormatter';
+import YamlFormatter from './YamlFormatter';
 import { FrontmatterInfer, frontmatterJSON, frontmatterTOML, frontmatterYAML } from './frontmatter';
 
-import type { Delimiter } from './frontmatter';
-import type { Collection, Entry, Format } from '../interface';
+import type { BaseField, Collection, Entry, Format } from '../interface';
 import type FileFormatter from './FileFormatter';
+import type { Delimiter } from './frontmatter';
 
 export const frontmatterFormats = ['yaml-frontmatter', 'toml-frontmatter', 'json-frontmatter'];
 
@@ -45,7 +45,10 @@ function formatByName(name: Format, customDelimiter?: Delimiter): FileFormatter 
   return fileFormatter[name];
 }
 
-export function resolveFormat(collection: Collection, entry: Entry): FileFormatter | undefined {
+export function resolveFormat<EF extends BaseField>(
+  collection: Collection<EF>,
+  entry: Entry,
+): FileFormatter | undefined {
   // Check for custom delimiter
   const frontmatter_delimiter = collection.frontmatter_delimiter;
 

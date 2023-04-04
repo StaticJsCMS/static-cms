@@ -291,6 +291,7 @@ const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => 
     collection,
     entries,
     filterTerm,
+    pathname,
     prevCollection,
     prevEntries,
     prevFilterTerm,
