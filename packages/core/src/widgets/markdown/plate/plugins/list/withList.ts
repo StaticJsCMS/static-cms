@@ -8,9 +8,9 @@ import {
 
 import insertBreakList from './insertBreakList';
 
-import type { PlateEditor, WithPlatePlugin } from '@udecode/plate-core';
-import type { ListPlugin } from '@udecode/plate-list';
 import type { MdValue } from '@staticcms/markdown';
+import type { PlateEditor, WithPlatePlugin } from '@udecode/plate';
+import type { ListPlugin } from '@udecode/plate-list';
 
 const withList = (
   editor: PlateEditor<MdValue>,

@@ -1,11 +1,11 @@
-import { createPluginFactory, KEY_DESERIALIZE_HTML, someNode } from '@udecode/plate-core';
+import { createPluginFactory, KEY_DESERIALIZE_HTML, someNode } from '@udecode/plate';
 import { onKeyDownList } from '@udecode/plate-list';
 
 import withList from './withList';
 
-import type { PlateEditor, PlatePlugin } from '@udecode/plate-core';
-import type { ListPlugin } from '@udecode/plate-list';
 import type { MdValue } from '@staticcms/markdown';
+import type { PlateEditor, PlatePlugin } from '@udecode/plate';
+import type { ListPlugin } from '@udecode/plate-list';
 
 export const ELEMENT_UL = 'ul';
 export const ELEMENT_OL = 'ol';

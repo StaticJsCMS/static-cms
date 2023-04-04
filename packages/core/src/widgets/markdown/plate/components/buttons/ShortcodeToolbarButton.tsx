@@ -1,5 +1,5 @@
 import { DataArray as DataArrayIcon } from '@styled-icons/material/DataArray';
-import { focusEditor, insertNodes } from '@udecode/plate-core';
+import { focusEditor, insertNodes } from '@udecode/plate';
 import React, { useCallback, useMemo } from 'react';
 
 import Menu from '@staticcms/core/components/common/menu/Menu';

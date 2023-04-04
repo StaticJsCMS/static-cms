@@ -137,7 +137,7 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
   return (
     <div className="relative w-full h-full">
       <AutoSizer onResize={handleResize}>
-        {({ height, width }) => {
+        {({ height = 0, width = 0 }) => {
           const columnWidthWithGutter = MEDIA_CARD_WIDTH + MEDIA_CARD_MARGIN;
           const rowHeightWithGutter = MEDIA_CARD_HEIGHT + MEDIA_CARD_MARGIN;
           const columnCount = Math.floor(
