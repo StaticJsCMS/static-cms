@@ -1,26 +1,30 @@
-import { dirname, join } from 'path';
 import trim from 'lodash/trim';
+import { dirname, join } from 'path';
 
+import { basename, isAbsolutePath } from '.';
 import { folderFormatter } from '../formatters';
 import { joinUrlPath } from '../urlHelper';
-import { basename, isAbsolutePath } from '.';
 
 import type {
-  Config,
-  Field,
+  BaseField,
   Collection,
   CollectionFile,
+  Config,
   Entry,
+  Field,
   FileOrImageField,
-  MarkdownField,
   ListField,
-  ObjectField,
+  MarkdownField,
   MediaField,
+  ObjectField,
 } from '@staticcms/core/interface';
 
 export const DRAFT_MEDIA_FILES = 'DRAFT_MEDIA_FILES';
 
-function getFileField(collectionFiles: CollectionFile[], slug: string | undefined) {
+function getFileField<EF extends BaseField>(
+  collectionFiles: CollectionFile<EF>[],
+  slug: string | undefined,
+) {
   const file = collectionFiles.find(f => f?.name === slug);
   return file;
 }
@@ -32,9 +36,9 @@ function isMediaField(
   return Boolean(field && folderKey in field);
 }
 
-function hasCustomFolder(
+function hasCustomFolder<EF extends BaseField>(
   folderKey: 'media_folder' | 'public_folder',
-  collection: Collection | undefined | null,
+  collection: Collection<EF> | undefined | null,
   slug: string | undefined,
   field: MediaField | undefined,
 ): field is FileOrImageField | MarkdownField {
@@ -62,10 +66,10 @@ function hasCustomFolder(
   return false;
 }
 
-function evaluateFolder(
+function evaluateFolder<EF extends BaseField>(
   folderKey: 'media_folder' | 'public_folder',
-  config: Config,
-  c: Collection,
+  config: Config<EF>,
+  c: Collection<EF>,
   entryMap: Entry | null | undefined,
   field: FileOrImageField | MarkdownField,
 ) {
@@ -114,7 +118,7 @@ function evaluateFolder(
           collection,
           entryMap,
           field,
-          file.fields! as Field[],
+          file.fields,
           currentFolder,
         );
 
@@ -142,7 +146,7 @@ function evaluateFolder(
         collection,
         entryMap,
         field,
-        collection.fields! as Field[],
+        collection.fields,
         currentFolder,
       );
 
@@ -155,13 +159,13 @@ function evaluateFolder(
   return currentFolder;
 }
 
-function traverseFields(
+function traverseFields<EF extends BaseField>(
   folderKey: 'media_folder' | 'public_folder',
-  config: Config,
-  collection: Collection,
+  config: Config<EF>,
+  collection: Collection<EF>,
   entryMap: Entry | null | undefined,
-  field: FileOrImageField | MarkdownField | ListField | ObjectField,
-  fields: Field[],
+  field: FileOrImageField | MarkdownField | ListField<EF> | ObjectField<EF>,
+  fields: Field<EF>[],
   currentFolder: string,
 ): string | null {
   const matchedField = fields.filter(f => f === field)[0] as
@@ -182,7 +186,7 @@ function traverseFields(
   }
 
   for (const f of fields) {
-    const childField: Field = { ...f };
+    const childField: Field<EF> = { ...f };
     if (isMediaField(folderKey, childField) && !childField[folderKey]) {
       // add identity template if doesn't exist
       childField[folderKey] = `{{${folderKey}}}`;
@@ -225,9 +229,9 @@ function traverseFields(
   return null;
 }
 
-export function selectMediaFolder(
-  config: Config,
-  collection: Collection | undefined | null,
+export function selectMediaFolder<EF extends BaseField>(
+  config: Config<EF>,
+  collection: Collection<EF> | undefined | null,
   entryMap: Entry | null | undefined,
   field: MediaField | undefined,
 ) {
@@ -250,12 +254,12 @@ export function selectMediaFolder(
   return trim(mediaFolder, '/');
 }
 
-export function selectMediaFilePublicPath(
-  config: Config,
-  collection: Collection | null,
+export function selectMediaFilePublicPath<EF extends BaseField>(
+  config: Config<EF>,
+  collection: Collection<EF> | null,
   mediaPath: string,
   entryMap: Entry | undefined,
-  field: Field | undefined,
+  field: Field<EF> | undefined,
 ) {
   if (isAbsolutePath(mediaPath)) {
     return mediaPath;

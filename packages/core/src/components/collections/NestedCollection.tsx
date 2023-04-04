@@ -1,9 +1,12 @@
 import { Article as ArticleIcon } from '@styled-icons/material/Article';
+import { ChevronRight as ChevronRightIcon } from '@styled-icons/material/ChevronRight';
 import sortBy from 'lodash/sortBy';
 import { dirname, sep } from 'path';
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import useEntries from '@staticcms/core/lib/hooks/useEntries';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectEntryCollectionTitle } from '@staticcms/core/lib/util/collection.util';
 import { stringTemplate } from '@staticcms/core/lib/widgets';
 import NavLink from '../navbar/NavLink';
@@ -61,27 +64,42 @@ const TreeNode = ({ collection, treeData, depth = 0, onToggle }: TreeNodeProps) 
 
         return (
           <Fragment key={node.path}>
-            <NavLink
-              to={to}
-              onClick={() => onToggle({ node, expanded: !node.expanded })}
-              data-testid={node.path}
-            >
-              {/* TODO $activeClassName="sidebar-active" */}
-              {/* TODO $depth={depth} */}
-              <ArticleIcon className="h-5 w-5" />
-              <div>
-                <div>{title}</div>
-                {hasChildren && (node.expanded ? <div /> : <div />)}
+            <div className={classNames(depth !== 0 && 'ml-8')}>
+              <NavLink
+                to={to}
+                onClick={() => onToggle({ node, expanded: !node.expanded })}
+                data-testid={node.path}
+                icon={<ArticleIcon className={classNames(depth === 0 ? 'h-6 w-6' : 'h-5 w-5')} />}
+              >
+                <div className="flex w-full gap-2 items-center justify-between">
+                  <div>{title}</div>
+                  {hasChildren && (
+                    <ChevronRightIcon
+                      className={classNames(
+                        node.expanded && 'rotate-90 transform',
+                        `
+                          transition-transform
+                          h-5
+                          w-5
+                          group-focus-within/active-list:text-blue-500
+                          group-hover/active-list:text-blue-500
+                        `,
+                      )}
+                    />
+                  )}
+                </div>
+              </NavLink>
+              <div className="mt-2 space-y-1.5">
+                {node.expanded && (
+                  <TreeNode
+                    collection={collection}
+                    depth={depth + 1}
+                    treeData={node.children}
+                    onToggle={onToggle}
+                  />
+                )}
               </div>
-            </NavLink>
-            {node.expanded && (
-              <TreeNode
-                collection={collection}
-                depth={depth + 1}
-                treeData={node.children}
-                onToggle={onToggle}
-              />
-            )}
+            </div>
           </Fragment>
         );
       })}
@@ -141,12 +159,12 @@ export function getTreeData(collection: Collection, entries: Entry[]): TreeNodeD
       isRoot: false,
     })),
     ...entriesObj.map((e, index) => {
-      let entryMap = entries[index];
-      entryMap = {
-        ...entryMap,
-        data: addFileTemplateFields(entryMap.path, entryMap.data as Record<string, string>),
+      let entry = entries[index];
+      entry = {
+        ...entry,
+        data: addFileTemplateFields(entry.path, entry.data as Record<string, string>),
       };
-      const title = selectEntryCollectionTitle(collection, entryMap);
+      const title = selectEntryCollectionTitle(collection, entry);
       return {
         ...e,
         title,
@@ -219,9 +237,11 @@ const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => 
   const [selected, setSelected] = useState<TreeNodeData | null>(null);
   const [useFilter, setUseFilter] = useState(true);
 
-  const [prevCollection, setPrevCollection] = useState(collection);
-  const [prevEntries, setPrevEntries] = useState(entries);
-  const [prevFilterTerm, setPrevFilterTerm] = useState(filterTerm);
+  const [prevCollection, setPrevCollection] = useState<Collection | null>(null);
+  const [prevEntries, setPrevEntries] = useState<Entry[] | null>(null);
+  const [prevFilterTerm, setPrevFilterTerm] = useState<string | null>(null);
+
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if (collection !== prevCollection || entries !== prevEntries || filterTerm !== prevFilterTerm) {
@@ -235,7 +255,12 @@ const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => 
 
       const path = `/${filterTerm}`;
       walk(newTreeData, node => {
-        if (expanded[node.path] || (useFilter && path.startsWith(node.path))) {
+        if (
+          expanded[node.path] ||
+          (useFilter &&
+            path.startsWith(node.path) &&
+            pathname.startsWith(`/collections/${collection.name}`))
+        ) {
           node.expanded = true;
         }
       });
@@ -250,6 +275,7 @@ const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => 
     collection,
     entries,
     filterTerm,
+    pathname,
     prevCollection,
     prevEntries,
     prevFilterTerm,

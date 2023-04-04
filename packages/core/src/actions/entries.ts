@@ -39,10 +39,10 @@ import {
 } from '../constants';
 import ValidationErrorTypes from '../constants/validationErrorTypes';
 import {
-  duplicateDefaultI18nFields,
-  hasI18n,
   I18N_FIELD_DUPLICATE,
   I18N_FIELD_TRANSLATE,
+  duplicateDefaultI18nFields,
+  hasI18n,
   serializeI18n,
 } from '../lib/i18n';
 import { serializeValues } from '../lib/serializeEntryValues';
@@ -463,15 +463,17 @@ export function changeDraftField({
   field,
   value,
   i18n,
+  isMeta,
 }: {
   path: string;
   field: Field;
   value: ValueOrNestedValue;
   i18n?: I18nSettings;
+  isMeta: boolean;
 }) {
   return {
     type: DRAFT_CHANGE_FIELD,
-    payload: { path, field, value, i18n },
+    payload: { path, field, value, i18n, isMeta },
   } as const;
 }
 

@@ -10,6 +10,7 @@ import { selectCollections } from '@staticcms/core/reducers/selectors/collection
 import { selectIsSearchEnabled } from '@staticcms/core/reducers/selectors/config';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import CollectionSearch from '../collections/CollectionSearch';
+import NestedCollection from '../collections/NestedCollection';
 import NavLink from './NavLink';
 
 import type { Collection } from '@staticcms/core/interface';
@@ -17,7 +18,9 @@ import type { FC } from 'react';
 import type { TranslateProps } from 'react-polyglot';
 
 const Sidebar: FC<TranslateProps> = ({ t }) => {
-  const { name, searchTerm } = useParams();
+  const { name, searchTerm, ...params } = useParams();
+  const filterTerm = useMemo(() => params['*'] ?? '', [params]);
+
   const navigate = useNavigate();
   const isSearchEnabled = useAppSelector(selectIsSearchEnabled);
   const collections = useAppSelector(selectCollections);
@@ -35,18 +38,17 @@ const Sidebar: FC<TranslateProps> = ({ t }) => {
           const collectionName = collection.name;
           const icon = getIcon(collection.icon);
 
-          // TODO
-          // if ('nested' in collection) {
-          //   return (
-          //     <li key={`nested-${collectionName}`}>
-          //       <NestedCollection
-          //         collection={collection}
-          //         filterTerm={filterTerm}
-          //         data-testid={collectionName}
-          //       />
-          //     </li>
-          //   );
-          // }
+          if ('nested' in collection) {
+            return (
+              <li key={`nested-${collectionName}`}>
+                <NestedCollection
+                  collection={collection}
+                  filterTerm={filterTerm}
+                  data-testid={collectionName}
+                />
+              </li>
+            );
+          }
 
           return (
             <NavLink key={collectionName} to={`/collections/${collectionName}`} icon={icon}>
@@ -54,7 +56,7 @@ const Sidebar: FC<TranslateProps> = ({ t }) => {
             </NavLink>
           );
         }),
-    [collections],
+    [collections, filterTerm],
   );
 
   const additionalLinks = useMemo(() => getAdditionalLinks(), []);
@@ -126,7 +128,7 @@ const Sidebar: FC<TranslateProps> = ({ t }) => {
           )}
           {collectionLinks}
           {links}
-          <NavLink key="Media" to="/media" icon={<PhotoIcon className="h-5 w-5" />}>
+          <NavLink key="Media" to="/media" icon={<PhotoIcon className="h-6 w-6" />}>
             {t('app.header.media')}
           </NavLink>
         </ul>

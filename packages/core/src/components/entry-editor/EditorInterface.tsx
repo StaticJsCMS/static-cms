@@ -1,15 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
+import useBreadcrumbs from '@staticcms/core/lib/hooks/useBreadcrumbs';
 import { getI18nInfo, getPreviewEntry, hasI18n } from '@staticcms/core/lib/i18n';
 import {
   getFileFromSlug,
   selectEntryCollectionTitle,
 } from '@staticcms/core/lib/util/collection.util';
+import { customPathFromSlug } from '@staticcms/core/lib/util/nested.util';
 import MainView from '../MainView';
+import EditorToolbar from './EditorToolbar';
 import EditorControlPane from './editor-control-pane/EditorControlPane';
 import EditorPreviewPane from './editor-preview-pane/EditorPreviewPane';
-import EditorToolbar from './EditorToolbar';
 
 import type {
   Collection,
@@ -84,7 +86,7 @@ const EditorInterface = ({
   displayUrl,
   isNewEntry,
   isModification,
-  draftKey, // TODO Review usage
+  draftKey,
   scrollSyncActive,
   t,
   loadScroll,
@@ -232,22 +234,15 @@ const EditorInterface = ({
   );
 
   const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
+  const nestedFieldPath = useMemo(
+    () => customPathFromSlug(collection, entry.slug),
+    [collection, entry.slug],
+  );
+  const breadcrumbs = useBreadcrumbs(collection, nestedFieldPath, { isNewEntry, summary, t });
 
   return (
     <MainView
-      breadcrumbs={[
-        {
-          name: collection.label,
-          to: `/collections/${collection.name}`,
-        },
-        {
-          name: isNewEntry
-            ? t('collection.collectionTop.newButton', {
-                collectionLabel: collection.label_singular || collection.label,
-              })
-            : summary,
-        },
-      ]}
+      breadcrumbs={breadcrumbs}
       noMargin
       noScroll
       navbarActions={

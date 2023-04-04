@@ -207,8 +207,14 @@ export default class TestBackend implements BackendClass {
 
   async persistEntry(entry: BackendEntry) {
     entry.dataFiles.forEach(dataFile => {
-      const { path, raw } = dataFile;
-      writeFile(path, raw, window.repoFiles);
+      const { path, newPath, raw } = dataFile;
+
+      if (newPath) {
+        deleteFile(path, window.repoFiles);
+        writeFile(newPath, raw, window.repoFiles);
+      } else {
+        writeFile(path, raw, window.repoFiles);
+      }
     });
     entry.assets.forEach(a => {
       writeFile(a.path, a, window.repoFiles);

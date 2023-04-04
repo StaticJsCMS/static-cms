@@ -1,10 +1,10 @@
 import { CONFIG_FAILURE, CONFIG_REQUEST, CONFIG_SUCCESS } from '../constants';
 
 import type { ConfigAction } from '../actions/config';
-import type { Config } from '../interface';
+import type { BaseField, Config, UnknownField } from '../interface';
 
-export interface ConfigState {
-  config?: Config;
+export interface ConfigState<EF extends BaseField = UnknownField> {
+  config?: Config<EF>;
   isFetching: boolean;
   error?: string;
 }

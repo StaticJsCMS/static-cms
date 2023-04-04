@@ -11,7 +11,6 @@ import type {
   Entry,
   EventData,
   EventListener,
-  Field,
   FieldPreviewComponent,
   LocalePhrasesRoot,
   MediaLibraryExternalLibrary,
@@ -246,8 +245,10 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
   }
 }
 
-export function getWidget<T = unknown, F extends Field = Field>(name: string): Widget<T, F> {
-  return registry.widgets[name] as unknown as Widget<T, F>;
+export function getWidget<T = unknown, EF extends BaseField = UnknownField>(
+  name: string,
+): Widget<T, EF> {
+  return registry.widgets[name] as unknown as Widget<T, EF>;
 }
 
 export function getWidgets(): ({
@@ -259,7 +260,9 @@ export function getWidgets(): ({
   }));
 }
 
-export function resolveWidget<T = unknown, F extends Field = Field>(name?: string): Widget<T, F> {
+export function resolveWidget<T = unknown, EF extends BaseField = UnknownField>(
+  name?: string,
+): Widget<T, EF> {
   return getWidget(name || 'string') || getWidget('unknown');
 }
 
@@ -297,8 +300,10 @@ export function registerBackend<
   }
 }
 
-export function getBackend(name: string): BackendInitializer {
-  return registry.backends[name];
+export function getBackend<EF extends BaseField = UnknownField>(
+  name: string,
+): BackendInitializer<EF> {
+  return registry.backends[name] as unknown as BackendInitializer<EF>;
 }
 
 /**

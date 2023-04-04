@@ -3,13 +3,19 @@ import get from 'lodash/get';
 import { getLocaleDataPath } from '../i18n';
 import { keyToPathArray } from '../widgets/stringTemplate';
 
-import type { Collection, Entry, Field, ValueOrNestedValue } from '@staticcms/core/interface';
+import type {
+  BaseField,
+  Collection,
+  Entry,
+  Field,
+  ValueOrNestedValue,
+} from '@staticcms/core/interface';
 import type { t } from 'react-polyglot';
 
-export function selectField(collection: Collection, key: string) {
+export function selectField<EF extends BaseField>(collection: Collection<EF>, key: string) {
   const array = keyToPathArray(key);
   let name: string | undefined;
-  let field: Field | undefined;
+  let field: Field<EF> | undefined;
 
   if ('fields' in collection) {
     let fields = collection.fields ?? [];

@@ -8,7 +8,7 @@ import type { Collection, MediaField, MediaLibrarInsertOptions } from '@staticcm
 import type { FC } from 'react';
 
 interface CurrentMediaDetailsProps {
-  collection?: Collection<MediaField>;
+  collection?: Collection;
   field?: MediaField;
   canInsert: boolean;
   url?: string | string[];

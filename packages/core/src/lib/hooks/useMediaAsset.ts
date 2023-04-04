@@ -5,11 +5,17 @@ import { useAppDispatch } from '@staticcms/core/store/hooks';
 import { isNotEmpty } from '../util/string.util';
 import useDebounce from './useDebounce';
 
-import type { Collection, Entry, MediaField } from '@staticcms/core/interface';
+import type {
+  BaseField,
+  Collection,
+  Entry,
+  MediaField,
+  UnknownField,
+} from '@staticcms/core/interface';
 
-export default function useMediaAsset<T extends MediaField>(
+export default function useMediaAsset<T extends MediaField, EF extends BaseField = UnknownField>(
   url: string | undefined | null,
-  collection?: Collection<T>,
+  collection?: Collection<EF>,
   field?: T,
   entry?: Entry,
 ): string {
@@ -28,7 +34,7 @@ export default function useMediaAsset<T extends MediaField>(
     }
 
     const fetchMedia = async () => {
-      const asset = await dispatch(getAsset<T>(collection, entry, debouncedUrl, field));
+      const asset = await dispatch(getAsset<T, EF>(collection, entry, debouncedUrl, field));
       if (asset !== emptyAsset) {
         setAssetSource(asset?.toString() ?? '');
       }

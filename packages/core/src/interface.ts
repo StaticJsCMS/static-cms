@@ -105,6 +105,9 @@ export interface Entry<T = ObjectValue> {
       data: EntryData;
     };
   };
+  meta?: {
+    path: string;
+  };
 }
 
 export type Entities = Record<string, Entry>;
@@ -168,6 +171,10 @@ export interface CollectionFile<EF extends BaseField = UnknownField> {
 interface Nested {
   summary?: string;
   depth: number;
+  path?: {
+    label?: string;
+    index_file: string;
+  };
 }
 
 export interface I18nSettings {
@@ -382,6 +389,15 @@ export interface PersistOptions {
   newEntry?: boolean;
   commitMessage: string;
   collectionName?: string;
+  status?: string;
+}
+
+export interface PersistArgs {
+  config: Config;
+  collection: Collection;
+  entryDraft: EntryDraft;
+  assetProxies: AssetProxy[];
+  usedSlugs: string[];
   status?: string;
 }
 
@@ -621,7 +637,7 @@ export interface ListField<EF extends BaseField = UnknownField> extends BaseFiel
   max?: number;
   min?: number;
   add_to_top?: boolean;
-  types?: ObjectField[];
+  types?: ObjectField<EF>[];
   type_key?: string;
 }
 
@@ -802,8 +818,8 @@ export interface BackendInitializerOptions {
   updateUserCredentials: (credentials: Credentials) => void;
 }
 
-export interface BackendInitializer {
-  init: (config: Config, options: BackendInitializerOptions) => BackendClass;
+export interface BackendInitializer<EF extends BaseField = UnknownField> {
+  init: (config: Config<EF>, options: BackendInitializerOptions) => BackendClass;
 }
 
 export interface EventData {

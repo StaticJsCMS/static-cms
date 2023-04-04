@@ -77,7 +77,7 @@ export function removeMediaControl(id: string) {
   };
 }
 
-export function openMediaLibrary<F extends BaseField = UnknownField>(
+export function openMediaLibrary<EF extends BaseField = UnknownField>(
   payload: {
     controlID?: string;
     forImage?: boolean;
@@ -86,8 +86,8 @@ export function openMediaLibrary<F extends BaseField = UnknownField>(
     allowMultiple?: boolean;
     replaceIndex?: number;
     config?: Record<string, unknown>;
-    collection?: Collection<F>;
-    field?: F;
+    collection?: Collection<EF>;
+    field?: EF;
     insertOptions?: MediaLibrarInsertOptions;
   } = {},
 ) {

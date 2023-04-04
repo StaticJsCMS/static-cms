@@ -42,7 +42,6 @@ const CollectionView = ({
   collection,
   collections,
   collectionName,
-  // TODO isSearchEnabled,
   isSearchResults,
   isSingleSearchResult,
   searchTerm,
@@ -72,13 +71,8 @@ const CollectionView = ({
       return undefined;
     }
 
-    let url = 'fields' in collection && collection.create ? getNewEntryUrl(collectionName) : '';
-    if (url && filterTerm) {
-      url = `${url}?path=${filterTerm}`;
-    }
-
-    return url;
-  }, [collection, collectionName, filterTerm]);
+    return 'fields' in collection && collection.create ? getNewEntryUrl(collectionName) : '';
+  }, [collection, collectionName]);
 
   const searchResultKey = useMemo(
     () => `collection.collectionTop.searchResults${isSingleSearchResult ? 'InCollection' : ''}`,
@@ -248,7 +242,6 @@ interface CollectionViewOwnProps {
 
 function mapStateToProps(state: RootState, ownProps: TranslatedProps<CollectionViewOwnProps>) {
   const { collections } = state;
-  const isSearchEnabled = state.config.config && state.config.config.search != false;
   const {
     isSearchResults,
     isSingleSearchResult,
@@ -275,7 +268,6 @@ function mapStateToProps(state: RootState, ownProps: TranslatedProps<CollectionV
     collection,
     collections,
     collectionName: name,
-    isSearchEnabled,
     sort,
     sortableFields,
     viewFilters,

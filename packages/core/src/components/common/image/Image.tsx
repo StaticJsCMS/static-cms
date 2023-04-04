@@ -5,25 +5,25 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 
-import type { Collection, MediaField } from '@staticcms/core/interface';
+import type { BaseField, Collection, MediaField, UnknownField } from '@staticcms/core/interface';
 
-export interface ImageProps<F extends MediaField> {
+export interface ImageProps<EF extends BaseField> {
   src?: string;
   alt?: string;
   className?: string;
-  collection?: Collection<F>;
-  field?: F;
+  collection?: Collection<EF>;
+  field?: MediaField;
   'data-testid'?: string;
 }
 
-const Image = <F extends MediaField>({
+const Image = <EF extends BaseField = UnknownField>({
   src,
   alt,
   className,
   collection,
   field,
   'data-testid': dataTestId,
-}: ImageProps<F>) => {
+}: ImageProps<EF>) => {
   const entry = useAppSelector(selectEditingDraft);
 
   const assetSource = useMediaAsset(src, collection, field, entry);
@@ -40,11 +40,11 @@ const Image = <F extends MediaField>({
   );
 };
 
-export const withMdxImage = <F extends MediaField>({
+export const withMdxImage = <EF extends BaseField = UnknownField>({
   collection,
   field,
-}: Pick<ImageProps<F>, 'collection' | 'field'>) => {
-  const MdxImage = (props: Omit<ImageProps<F>, 'collection' | 'field'>) => (
+}: Pick<ImageProps<EF>, 'collection' | 'field'>) => {
+  const MdxImage = (props: Omit<ImageProps<EF>, 'collection' | 'field'>) => (
     <Image {...props} collection={collection} field={field} />
   );
 

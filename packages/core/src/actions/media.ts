@@ -12,7 +12,7 @@ import { getMediaFile } from './mediaLibrary';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type { BaseField, Collection, Entry, Field, UnknownField } from '../interface';
+import type { BaseField, Collection, Entry, Field, MediaField, UnknownField } from '../interface';
 import type { RootState } from '../store';
 import type AssetProxy from '../valueObjects/AssetProxy';
 
@@ -72,11 +72,11 @@ async function loadAsset(
 
 const promiseCache: Record<string, Promise<AssetProxy>> = {};
 
-export function getAsset<F extends BaseField = UnknownField>(
-  collection: Collection<F> | null | undefined,
+export function getAsset<T extends MediaField, EF extends BaseField = UnknownField>(
+  collection: Collection<EF> | null | undefined,
   entry: Entry | null | undefined,
   path: string,
-  field?: F,
+  field?: T,
 ) {
   return (
     dispatch: ThunkDispatch<RootState, {}, AnyAction>,

@@ -1,4 +1,3 @@
-import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import { v4 as uuid } from 'uuid';
 
@@ -154,8 +153,10 @@ function entryDraftReducer(
         return state;
       }
 
-      const { path, field, value, i18n } = action.payload;
-      const dataPath = (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
+      const { path, field, value, i18n, isMeta } = action.payload;
+      const dataPath = isMeta
+        ? ['meta']
+        : (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
 
       newState = {
         ...newState,
@@ -166,11 +167,20 @@ function entryDraftReducer(
         newState = duplicateI18nFields(newState, field, i18n.locales, i18n.defaultLocale, path);
       }
 
-      const newData = get(newState.entry, dataPath) ?? {};
+      let hasChanged =
+        !isEqual(newState.entry?.meta, newState.original?.meta) ||
+        !isEqual(newState.entry?.data, newState.original?.data);
+
+      const i18nData = newState.entry?.i18n ?? {};
+      for (const locale in i18nData) {
+        hasChanged =
+          hasChanged ||
+          !isEqual(newState.entry?.i18n?.[locale]?.data, newState.original?.i18n?.[locale]?.data);
+      }
 
       return {
         ...newState,
-        hasChanged: !newState.original || !isEqual(newData, get(newState.original, dataPath)),
+        hasChanged: !newState.original || hasChanged,
       };
     }
 
