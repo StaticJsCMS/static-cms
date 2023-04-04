@@ -6,9 +6,8 @@ import {
   withSelectionTable,
 } from '@udecode/plate';
 
-import type { PlateEditor, WithPlatePlugin } from '@udecode/plate-core';
 import type { MdValue } from '@staticcms/markdown';
-import type { TablePlugin } from '@udecode/plate';
+import type { PlateEditor, TablePlugin, WithPlatePlugin } from '@udecode/plate';
 
 const withTable = (
   editor: PlateEditor<MdValue>,

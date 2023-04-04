@@ -1,12 +1,12 @@
-import { ELEMENT_DEFAULT, getPluginType, isBlockAboveEmpty, mockPlugin } from '@udecode/plate-core';
+import { ELEMENT_DEFAULT, getPluginType, isBlockAboveEmpty, mockPlugin } from '@udecode/plate';
 import { ELEMENT_LI, getListItemEntry, moveListItemUp, unwrapList } from '@udecode/plate-list';
-import { onKeyDownResetNode, SIMULATE_BACKSPACE } from '@udecode/plate-reset-node';
+import { SIMULATE_BACKSPACE, onKeyDownResetNode } from '@udecode/plate-reset-node';
 
 import insertListItem from './transforms/insertListItem';
 
-import type { PlateEditor } from '@udecode/plate-core';
-import type { ResetNodePlugin } from '@udecode/plate-reset-node';
 import type { MdValue } from '@staticcms/markdown';
+import type { PlateEditor } from '@udecode/plate';
+import type { ResetNodePlugin } from '@udecode/plate-reset-node';
 
 const insertBreakList = (editor: PlateEditor<MdValue>) => {
   if (!editor.selection) return;

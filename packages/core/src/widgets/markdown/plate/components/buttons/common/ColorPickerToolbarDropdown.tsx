@@ -1,11 +1,12 @@
-import { DEFAULT_COLORS, DEFAULT_CUSTOM_COLORS } from '@udecode/plate';
 import {
+  DEFAULT_COLORS,
+  DEFAULT_CUSTOM_COLORS,
   getMark,
   getPluginType,
   removeMark,
   setMarks,
   usePlateEditorRef,
-} from '@udecode/plate-core';
+} from '@udecode/plate';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';

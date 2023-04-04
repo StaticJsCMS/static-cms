@@ -9,8 +9,9 @@ import {
   ELEMENT_H6,
   ELEMENT_PARAGRAPH,
   focusEditor,
+  someNode,
+  toggleNodeType,
 } from '@udecode/plate';
-import { someNode, toggleNodeType } from '@udecode/plate-core';
 import React, { useCallback, useMemo, useState } from 'react';
 
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';

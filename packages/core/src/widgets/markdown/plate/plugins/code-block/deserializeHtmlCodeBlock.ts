@@ -1,6 +1,6 @@
 import { ELEMENT_CODE_BLOCK } from '@udecode/plate';
 
-import type { DeserializeHtml } from '@udecode/plate-core';
+import type { DeserializeHtml } from '@udecode/plate';
 
 const deserializeHtmlCodeBlock: DeserializeHtml = {
   rules: [

@@ -13,12 +13,12 @@ import {
   splitNodes,
   withoutNormalizing,
   wrapNodes,
-} from '@udecode/plate-core';
+} from '@udecode/plate';
 import { Path, Range } from 'slate';
 
 import { ELEMENT_LI, ELEMENT_LIC } from '../createListPlugin';
 
-import type { PlateEditor, TElement } from '@udecode/plate-core';
+import type { PlateEditor, TElement } from '@udecode/plate';
 import type { MdListItemElement, MdValue } from '@staticcms/markdown';
 
 /**

@@ -3,11 +3,11 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
+  createPluginFactory,
   insertTableColumn,
   insertTableRow,
   onKeyDownTable,
 } from '@udecode/plate';
-import { createPluginFactory } from '@udecode/plate-core';
 
 import withTable from './withTable';
 
