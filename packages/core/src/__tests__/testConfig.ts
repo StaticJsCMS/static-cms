@@ -1780,6 +1780,10 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
       nested: {
         depth: 100,
         summary: '{{title}}',
+        path: {
+          label: 'Path',
+          index_file: 'index',
+        },
       },
       fields: [
         {
@@ -1793,13 +1797,6 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
           widget: 'markdown',
         },
       ],
-      meta: {
-        path: {
-          widget: 'string',
-          label: 'Path',
-          index_file: 'index',
-        },
-      },
     },
   ],
 };

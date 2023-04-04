@@ -168,6 +168,10 @@ export interface CollectionFile<EF extends BaseField = UnknownField> {
 interface Nested {
   summary?: string;
   depth: number;
+  path: {
+    label: string;
+    index_file: string;
+  };
 }
 
 export interface I18nSettings {
@@ -181,14 +185,6 @@ export type Format = keyof typeof formatExtensions;
 export interface i18nCollection<EF extends BaseField = UnknownField>
   extends Omit<Collection<EF>, 'i18n'> {
   i18n: Required<Collection<EF>>['i18n'];
-}
-
-export interface CollectionMeta<EF extends BaseField = UnknownField> {
-  path?: {
-    label: string;
-    widget: Field<EF>['widget'];
-    index_file: string;
-  };
 }
 
 export interface BaseCollection {
@@ -227,7 +223,6 @@ export interface FolderCollection<EF extends BaseField = UnknownField> extends B
   create?: boolean;
   delete?: boolean;
   nested?: Nested;
-  meta?: CollectionMeta<EF>;
 }
 
 export type Collection<EF extends BaseField = UnknownField> =
@@ -392,6 +387,18 @@ export interface PersistOptions {
   commitMessage: string;
   collectionName?: string;
   status?: string;
+}
+
+export interface PersistArgs {
+  config: Config;
+  collection: Collection;
+  entryDraft: EntryDraft;
+  assetProxies: AssetProxy[];
+  usedSlugs: string[];
+  status?: string;
+  meta?: {
+    path: string;
+  };
 }
 
 export interface ImplementationEntry {

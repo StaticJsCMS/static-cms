@@ -76,6 +76,7 @@ import type {
   I18nSettings,
   ImplementationMediaFile,
   ObjectValue,
+  PersistArgs,
   SortDirection,
   ValueOrNestedValue,
   ViewFilter,
@@ -952,7 +953,11 @@ export function getSerializedEntry(collection: Collection, entry: Entry): Entry 
   return serializedEntry;
 }
 
-export function persistEntry(collection: Collection, navigate: NavigateFunction) {
+export function persistEntry(
+  collection: Collection,
+  navigate: NavigateFunction,
+  meta: PersistArgs['meta'],
+) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const entryDraft = state.entryDraft;
@@ -1020,6 +1025,7 @@ export function persistEntry(collection: Collection, navigate: NavigateFunction)
         entryDraft: newEntryDraft,
         assetProxies,
         usedSlugs,
+        meta,
       })
       .then(async (newSlug: string) => {
         dispatch(

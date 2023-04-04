@@ -7,8 +7,9 @@ import {
 } from '@staticcms/core/reducers/selectors/collections';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import { getDefaultPath } from '../../lib/util/collection.util';
-import MainView from '../MainView';
-import Collection from './Collection';
+import CollectionPage from './CollectionPage';
+
+import type { Collection } from '@staticcms/core/interface';
 
 interface CollectionRouteProps {
   isSearchResults?: boolean;
@@ -35,15 +36,11 @@ const CollectionRoute = ({ isSearchResults, isSingleSearchResult }: CollectionRo
   }
 
   return (
-    <MainView breadcrumbs={[{ name: collection?.label }]} showQuickCreate showLeftNav>
-      <Collection
-        name={name}
-        searchTerm={searchTerm}
-        filterTerm={filterTerm}
-        isSearchResults={isSearchResults}
-        isSingleSearchResult={isSingleSearchResult}
-      />
-    </MainView>
+    <CollectionPage
+      collection={collection as unknown as Collection}
+      isSearchResults={isSearchResults}
+      isSingleSearchResult={isSingleSearchResult}
+    />
   );
 };
 

@@ -292,6 +292,14 @@ function getConfigSchema() {
               properties: {
                 depth: { type: 'number', minimum: 1, maximum: 1000 },
                 summary: { type: 'string' },
+                path: {
+                  type: 'object',
+                  properties: {
+                    label: { type: 'string' },
+                    index_file: { type: 'string' },
+                  },
+                  required: ['label', 'index_file'],
+                },
               },
               required: ['depth'],
             },

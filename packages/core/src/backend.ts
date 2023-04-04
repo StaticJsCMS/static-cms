@@ -39,6 +39,7 @@ import {
   selectMediaFolders,
 } from './lib/util/collection.util';
 import { selectMediaFilePath, selectMediaFilePublicPath } from './lib/util/media.util';
+import { selectCustomPath, slugFromCustomPath } from './lib/util/nested.util';
 import { set } from './lib/util/object.util';
 import { dateParsers, expandPath, extractTemplateVars } from './lib/widgets/stringTemplate';
 import createEntry from './valueObjects/createEntry';
@@ -59,6 +60,7 @@ import type {
   Field,
   FilterRule,
   ImplementationEntry,
+  PersistArgs,
   SearchQueryResponse,
   SearchResponse,
   UnknownField,
@@ -258,15 +260,6 @@ interface BackupEntry {
   i18n?: Record<string, { raw: string }>;
 }
 
-interface PersistArgs {
-  config: Config;
-  collection: Collection;
-  entryDraft: EntryDraft;
-  assetProxies: AssetProxy[];
-  usedSlugs: string[];
-  status?: string;
-}
-
 function collectionDepth<EF extends BaseField>(collection: Collection<EF>) {
   let depth;
   depth =
@@ -401,9 +394,15 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     entryData: EntryData,
     config: Config,
     usedSlugs: string[],
+    customPath: string | undefined,
   ) {
     const slugConfig = config.slug;
-    const slug = slugFormatter(collection, entryData, slugConfig);
+    let slug: string;
+    if (customPath) {
+      slug = slugFromCustomPath(collection, customPath);
+    } else {
+      slug = slugFormatter(collection, entryData, slugConfig);
+    }
     let i = 1;
     let uniqueSlug = slug;
 
@@ -823,6 +822,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     assetProxies,
     usedSlugs,
     status,
+    meta,
   }: PersistArgs) {
     const modifiedData = await this.invokePreSaveEvent(draft.entry);
     const entryDraft = modifiedData
@@ -837,6 +837,8 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
     const newEntry = entryDraft.entry.newRecord ?? false;
 
+    const customPath = selectCustomPath(meta, collection);
+
     let dataFile: DataFile;
     if (newEntry) {
       if (!selectAllowNewEntries(collection)) {
@@ -847,8 +849,9 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         entryDraft.entry.data,
         config,
         usedSlugs,
+        customPath,
       );
-      const path = selectEntryPath(collection, slug) ?? '';
+      const path = customPath || (selectEntryPath(collection, slug) ?? '');
       dataFile = {
         path,
         slug,
@@ -860,8 +863,9 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       const slug = entryDraft.entry.slug;
       dataFile = {
         path: entryDraft.entry.path,
-        slug,
+        slug: customPath ? slugFromCustomPath(collection, customPath) : slug,
         raw: this.entryToRaw(collection, entryDraft.entry),
+        newPath: customPath,
       };
     }
 

@@ -135,6 +135,7 @@ export function getTreeData(collection: Collection, entries: Entry[]): TreeNodeD
     }
     return acc;
   }, {} as Record<string, string | undefined>);
+  console.log('dirs', dirs);
 
   if ('nested' in collection && collection.nested?.summary) {
     collection = {
@@ -162,12 +163,12 @@ export function getTreeData(collection: Collection, entries: Entry[]): TreeNodeD
       isRoot: false,
     })),
     ...entriesObj.map((e, index) => {
-      let entryMap = entries[index];
-      entryMap = {
-        ...entryMap,
-        data: addFileTemplateFields(entryMap.path, entryMap.data as Record<string, string>),
+      let entry = entries[index];
+      entry = {
+        ...entry,
+        data: addFileTemplateFields(entry.path, entry.data as Record<string, string>),
       };
-      const title = selectEntryCollectionTitle(collection, entryMap);
+      const title = selectEntryCollectionTitle(collection, entry);
       return {
         ...e,
         title,

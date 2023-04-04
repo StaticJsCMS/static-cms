@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
+import useBreadcrumbs from '@staticcms/core/lib/hooks/useBreadcrumbs';
 import { getI18nInfo, getPreviewEntry, hasI18n } from '@staticcms/core/lib/i18n';
 import {
   getFileFromSlug,
@@ -13,7 +14,6 @@ import EditorControlPane from './editor-control-pane/EditorControlPane';
 import EditorPreviewPane from './editor-preview-pane/EditorPreviewPane';
 
 import type {
-  Breadcrumb,
   Collection,
   EditorPersistOptions,
   Entry,
@@ -238,39 +238,7 @@ const EditorInterface = ({
 
   const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
 
-  const breadcrumbs = useMemo(() => {
-    const crumbs: Breadcrumb[] = [
-      {
-        name: collection.label,
-        to: `/collections/${collection.name}`,
-      },
-    ];
-
-    if (filterTerm) {
-      crumbs.push({
-        name: filterTerm,
-        to: `/collections/${collection.name}/filter/${filterTerm}`,
-      });
-    }
-
-    crumbs.push({
-      name: isNewEntry
-        ? t('collection.collectionTop.newButton', {
-            collectionLabel: collection.label_singular || collection.label,
-          })
-        : summary,
-    });
-
-    return crumbs;
-  }, [
-    collection.label,
-    collection.label_singular,
-    collection.name,
-    filterTerm,
-    isNewEntry,
-    summary,
-    t,
-  ]);
+  const breadcrumbs = useBreadcrumbs(collection, filterTerm, { isNewEntry, summary, t });
 
   return (
     <MainView
