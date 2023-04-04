@@ -185,7 +185,7 @@ export function loadMedia(opts: { delay?: number; query?: string; page?: number 
 
     function loadFunction() {
       return backend
-        .getMedia(config?.media_library_folder_support)
+        .getMedia(undefined, undefined, config?.media_library_folder_support)
         .then(files => dispatch(mediaLoaded(files)))
         .catch((error: { status?: number }) => {
           console.error(error);

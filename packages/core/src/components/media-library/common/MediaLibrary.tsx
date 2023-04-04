@@ -1,4 +1,5 @@
 import { Photo as PhotoIcon } from '@styled-icons/material/Photo';
+import { ArrowUpward as UpwardIcon } from '@styled-icons/material/ArrowUpward';
 import fuzzy from 'fuzzy';
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -28,6 +29,7 @@ import MediaLibrarySearch from './MediaLibrarySearch';
 
 import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
+import { dirname } from 'path';
 
 /**
  * Extensions used to determine which files to show when the media library is
@@ -51,6 +53,7 @@ interface MediaLibraryProps {
 }
 
 const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = false, t }) => {
+  const [customDirectory, setCustomDirectory] = useState<string | undefined>(undefined);
   const [selectedFile, setSelectedFile] = useState<MediaFile | null>(null);
   const [query, setQuery] = useState<string | undefined>(undefined);
 
@@ -80,18 +83,18 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
 
   const [prevIsVisible, setPrevIsVisible] = useState(false);
 
-  const mediaFiles = useMediaFiles;
-
-  console.log(field);
-
-  var files = mediaFiles(field);
-
-  console.log(files);
+  const handleViewStyleChange = useCallback(
+    (viewStyle: ViewStyle) => {
+      dispatch(changeViewStyle(viewStyle));
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
     if (!prevIsVisible && isVisible) {
       setSelectedFile(null);
       setQuery('');
+      setCustomDirectory(undefined);
       dispatch(loadMedia());
     } else if (prevIsVisible && !isVisible) {
       window.dispatchEvent(new MediaLibraryCloseEvent());
@@ -99,6 +102,10 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
 
     setPrevIsVisible(isVisible);
   }, [isVisible, dispatch, prevIsVisible]);
+
+  const files = useMediaFiles(field, customDirectory);
+
+  console.log(files);
 
   const loadDisplayURL = useCallback(
     (file: MediaFile) => {
@@ -258,9 +265,8 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
 
   const handleOpenDirectory = useCallback(
     (dir: string) => {
-      files = mediaFiles(field);
+      setCustomDirectory(dir);
       dispatch(loadMedia());
-      console.log("handleOpenDirectory:" + dir);
     },
     []
   );

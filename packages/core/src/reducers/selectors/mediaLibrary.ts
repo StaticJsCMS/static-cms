@@ -28,8 +28,6 @@ export const selectMediaFiles =
       files = mediaLibrary.files || [];
     }
 
-    console.log("selectMediaLibraryFiles");
-
     return files;
   };
 

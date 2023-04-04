@@ -10,6 +10,7 @@ import { selectMediaFolder } from '../util/media.util';
 import { currentBackend } from '@staticcms/core/backend';
 
 import type { MediaField, MediaFile } from '@staticcms/core/interface';
+import { dir } from 'console';
 
 export default function useMediaFiles(field?: MediaField, currentFolder?: string): MediaFile[] {
   const [currentFolderMediaFiles, setCurrentFolderMediaFiles] = useState<MediaFile[] | null>(null);
@@ -33,7 +34,7 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
 
     const getMediaFiles = async () => {
       const backend = currentBackend(config);
-      const files = await backend.getMedia(currentFolder);
+      const files = await backend.getMedia(currentFolder, undefined, config.media_library_folder_support);
 
       if (alive) {
         setCurrentFolderMediaFiles(files);
@@ -53,12 +54,13 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
     }
 
     if (entry) {
-      console.log("isEntry");
       const entryFiles = entry.mediaFiles ?? [];
       if (config) {
         const mediaFolder = selectMediaFolder(config, collection, entry, field);
         return entryFiles
-          .filter(f => dirname(f.path) === mediaFolder)
+          .filter(f => {
+            return dirname(f.path) === mediaFolder
+          })
           .map(file => ({ key: file.id, ...file }));
       }
     }

@@ -5,4 +5,4 @@ export const MEDIA_CARD_MARGIN = 10;
 
 export const MEDIA_LIBRARY_PADDING = 20;
 
-export const MAX_LINK_DISPLAY_LENGTH = 28;
+export const MAX_LINK_DISPLAY_LENGTH = 64;

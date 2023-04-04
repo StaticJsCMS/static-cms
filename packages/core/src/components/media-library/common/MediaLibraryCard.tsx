@@ -80,6 +80,7 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
   }, [displayURL.url, text]);
 
   useEffect(() => {
+    console.log("displayURL: " + displayURL.url)
     if (!displayURL.url) {
       loadDisplayURL();
     }

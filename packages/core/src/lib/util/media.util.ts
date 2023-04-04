@@ -235,9 +235,6 @@ export function selectMediaFolder<EF extends BaseField>(
   entryMap: Entry | null | undefined,
   field: MediaField | undefined,
 ) {
-  console.log("selectMediaFolder: " + field);
-
-
   const name = 'media_folder';
   let mediaFolder = config[name];
 
@@ -253,8 +250,6 @@ export function selectMediaFolder<EF extends BaseField>(
         : join(collection && 'folder' in collection ? collection.folder : '', DRAFT_MEDIA_FILES);
     }
   }
-
-  console.log("mediaFolder: " + mediaFolder);
 
   return trim(mediaFolder, '/');
 }

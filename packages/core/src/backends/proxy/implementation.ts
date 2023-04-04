@@ -146,7 +146,7 @@ export default class ProxyBackend implements BackendClass {
     });
   }
 
-  async getMedia(mediaFolder = this.mediaFolder, folderSupport?: boolean, publicFolder = this.publicFolder) {
+  async getMedia(mediaFolder = this.mediaFolder, publicFolder = this.publicFolder, folderSupport?: boolean) {
     const files: { path: string; url: string, isDirectory: boolean }[] = await this.request({
       action: 'getMedia',
       params: { branch: this.branch, mediaFolder, publicFolder },

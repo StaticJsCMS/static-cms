@@ -285,7 +285,7 @@ export default class Gitea implements BackendClass {
       .catch(() => ({ file: { path, id: null }, data: '' }));
   }
 
-  async getMedia(mediaFolder = this.mediaFolder, folderSupport?: boolean) {
+  async getMedia(mediaFolder = this.mediaFolder, _publicFolder?: string, folderSupport?: boolean) {
     if (!mediaFolder) {
       return [];
     }
