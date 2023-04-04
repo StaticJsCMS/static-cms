@@ -5,14 +5,19 @@ import { selectFolderEntryExtension } from './collection.util';
 
 import type { Collection, Entry } from '@staticcms/core/interface';
 
-export function selectCustomPath(meta: Entry['meta'], collection: Collection): string | undefined {
-  if (!('nested' in collection) || !collection.nested?.path || !meta) {
+export function selectCustomPath(entry: Entry, collection: Collection): string | undefined {
+  if (!('nested' in collection) || !collection.nested?.path || !entry.meta) {
     return undefined;
   }
 
   const indexFile = collection.nested.path.index_file;
   const extension = selectFolderEntryExtension(collection);
-  const customPath = join(collection.folder, meta.path, `${indexFile}.${extension}`);
+  const customPath = join(
+    collection.folder,
+    entry.meta.path,
+    entry.slug,
+    `${indexFile}.${extension}`,
+  );
   return customPath;
 }
 
