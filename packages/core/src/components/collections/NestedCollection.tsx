@@ -3,6 +3,7 @@ import { ChevronRight as ChevronRightIcon } from '@styled-icons/material/Chevron
 import sortBy from 'lodash/sortBy';
 import { dirname, sep } from 'path';
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import useEntries from '@staticcms/core/lib/hooks/useEntries';
 import classNames from '@staticcms/core/lib/util/classNames.util';
@@ -13,6 +14,8 @@ import NavLink from '../navbar/NavLink';
 import type { Collection, Entry } from '@staticcms/core/interface';
 
 const { addFileTemplateFields } = stringTemplate;
+
+const NESTED_NAV_LINK_MARGIN = 32;
 
 interface BaseTreeNodeData {
   title: string | undefined;
@@ -61,9 +64,10 @@ const TreeNode = ({ collection, treeData, depth = 0, onToggle }: TreeNodeProps) 
 
         const hasChildren = depth === 0 || node.children.some(c => c.children.some(c => c.isDir));
 
+        console.log(node.path, node.expanded, node.children, hasChildren);
         return (
           <Fragment key={node.path}>
-            <div style={{ marginLeft: `${32 * depth}px` }}>
+            <div style={{ marginLeft: `${NESTED_NAV_LINK_MARGIN * depth}px` }}>
               <NavLink
                 to={to}
                 onClick={() => onToggle({ node, expanded: !node.expanded })}
@@ -77,12 +81,12 @@ const TreeNode = ({ collection, treeData, depth = 0, onToggle }: TreeNodeProps) 
                       className={classNames(
                         node.expanded && 'rotate-90 transform',
                         `
-                        transition-transform
-                        h-5
-                        w-5
-                        group-focus-within/active-list:text-blue-500
-                        group-hover/active-list:text-blue-500
-                      `,
+                          transition-transform
+                          h-5
+                          w-5
+                          group-focus-within/active-list:text-blue-500
+                          group-hover/active-list:text-blue-500
+                        `,
                       )}
                     />
                   )}
@@ -186,6 +190,7 @@ export function getTreeData(collection: Collection, entries: Entry[]): TreeNodeD
   function reducer(acc: TreeNodeData[], value: BaseTreeNodeData) {
     const node = value;
     let children: TreeNodeData[] = [];
+    console.log('parentsToChildren', parentsToChildren);
     if (parentsToChildren[node.path]) {
       children = parentsToChildren[node.path].reduce(reducer, []);
     }
@@ -236,12 +241,15 @@ const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => 
   const [selected, setSelected] = useState<TreeNodeData | null>(null);
   const [useFilter, setUseFilter] = useState(true);
 
-  const [prevCollection, setPrevCollection] = useState(collection);
-  const [prevEntries, setPrevEntries] = useState(entries);
-  const [prevFilterTerm, setPrevFilterTerm] = useState(filterTerm);
+  const [prevCollection, setPrevCollection] = useState<Collection | null>(null);
+  const [prevEntries, setPrevEntries] = useState<Entry[] | null>(null);
+  const [prevFilterTerm, setPrevFilterTerm] = useState<string | null>(null);
+
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if (collection !== prevCollection || entries !== prevEntries || filterTerm !== prevFilterTerm) {
+      console.log('filterTerm', filterTerm);
       const expanded: Record<string, boolean> = {};
       walk(treeData, node => {
         if (node.expanded) {
@@ -252,10 +260,26 @@ const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => 
 
       const path = `/${filterTerm}`;
       walk(newTreeData, node => {
-        if (expanded[node.path] || (useFilter && path.startsWith(node.path))) {
+        console.log(
+          'filter check',
+          useFilter,
+          path,
+          node,
+          path.startsWith(node.path),
+          pathname,
+          collection.name,
+          pathname.startsWith(`/collections/${collection.name}`),
+        );
+        if (
+          expanded[node.path] ||
+          (useFilter &&
+            path.startsWith(node.path) &&
+            pathname.startsWith(`/collections/${collection.name}`))
+        ) {
           node.expanded = true;
         }
       });
+      console.log('newTreeData', newTreeData);
 
       setTreeData(newTreeData);
     }
