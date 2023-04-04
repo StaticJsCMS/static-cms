@@ -54,7 +54,6 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
   t,
 }) => {
   const [version, setVersion] = useState(0);
-  const [customPath, setCustomPath] = useState<string | null>(null);
 
   const history = createHashHistory();
   const dispatch = useAppDispatch();
@@ -92,17 +91,7 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
 
       setTimeout(async () => {
         try {
-          await dispatch(
-            persistEntry(
-              collection,
-              navigate,
-              customPath
-                ? {
-                    path: customPath,
-                  }
-                : undefined,
-            ),
-          );
+          await dispatch(persistEntry(collection, navigate));
           setVersion(version + 1);
 
           deleteBackup();
@@ -124,7 +113,7 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
         } catch (e) {}
       }, 100);
     },
-    [collection, customPath, deleteBackup, dispatch, entryDraft.entry, navigate, version],
+    [collection, deleteBackup, dispatch, entryDraft.entry, navigate, version],
   );
 
   const handleDuplicateEntry = useCallback(() => {

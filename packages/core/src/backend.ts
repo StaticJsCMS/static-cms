@@ -822,7 +822,6 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     assetProxies,
     usedSlugs,
     status,
-    meta,
   }: PersistArgs) {
     const modifiedData = await this.invokePreSaveEvent(draft.entry);
     const entryDraft = modifiedData
@@ -837,7 +836,8 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
     const newEntry = entryDraft.entry.newRecord ?? false;
 
-    const customPath = selectCustomPath(meta, collection);
+    const customPath = selectCustomPath(draft.entry.meta, collection);
+    console.log('[NESTED] customPath', customPath);
 
     let dataFile: DataFile;
     if (newEntry) {

@@ -39,12 +39,10 @@ const CollectionHeader = ({
   const params = useParams();
   const filterTerm = useMemo(() => params['*'], [params]);
   const entries = useEntries(collection);
-  console.log('[NESTED] entries', entries);
 
   const pluralLabel = useMemo(() => {
-    if ('nested' in collection && collection.nested && filterTerm) {
+    if ('nested' in collection && collection.nested?.path && filterTerm) {
       const entriesByPath = entries.reduce((acc, entry) => {
-        console.log('[NESTED]', entry.path);
         acc[entry.path] = entry;
         return acc;
       }, {} as Record<string, Entry>);

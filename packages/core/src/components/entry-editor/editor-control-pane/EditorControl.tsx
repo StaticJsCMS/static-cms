@@ -65,6 +65,7 @@ const EditorControl = ({
   changeDraftField,
   i18n,
   fieldName,
+  isMeta = false,
 }: TranslatedProps<EditorControlProps>) => {
   const dispatch = useAppDispatch();
 
@@ -103,7 +104,6 @@ const EditorControl = ({
     }
 
     const validateValue = async () => {
-      console.log('VALIDATING', field.name);
       const errors = await validate(field, value, widget, t);
       dispatch(changeDraftFieldValidation(path, errors, i18n));
     };
@@ -114,9 +114,9 @@ const EditorControl = ({
   const handleChangeDraftField = useCallback(
     (value: ValueOrNestedValue) => {
       setDirty(true);
-      changeDraftField({ path, field, value, i18n });
+      changeDraftField({ path, field, value, i18n, isMeta });
     },
-    [changeDraftField, field, i18n, path],
+    [changeDraftField, field, i18n, isMeta, path],
   );
 
   const config = useMemo(() => configState.config, [configState.config]);
@@ -232,6 +232,7 @@ interface EditorControlOwnProps {
   forSingleList?: boolean;
   i18n: I18nSettings | undefined;
   fieldName?: string;
+  isMeta?: boolean;
 }
 
 function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {

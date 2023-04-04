@@ -17,9 +17,7 @@ interface CollectionRouteProps {
 }
 
 const CollectionRoute = ({ isSearchResults, isSingleSearchResult }: CollectionRouteProps) => {
-  const { name, searchTerm, ...params } = useParams();
-  const filterTerm = params['*'];
-  console.log('filterTerm', filterTerm);
+  const { name, searchTerm } = useParams();
 
   const collectionSelector = useMemo(() => selectCollection(name), [name]);
   const collection = useAppSelector(collectionSelector);

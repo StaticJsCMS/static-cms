@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import { getI18nInfo, hasI18n, isFieldTranslatable } from '@staticcms/core/lib/i18n';
 import classNames from '@staticcms/core/lib/util/classNames.util';
@@ -12,6 +13,7 @@ import type {
   Field,
   FieldsErrors,
   I18nSettings,
+  StringOrTextField,
   TranslatedProps,
 } from '@staticcms/core/interface';
 
@@ -39,6 +41,23 @@ const EditorControlPane = ({
   onLocaleChange,
   t,
 }: TranslatedProps<EditorControlPaneProps>) => {
+  const [searchParams] = useSearchParams();
+  const filterTerm = useMemo(() => searchParams.get('path'), [searchParams]);
+
+  const pathField = useMemo(
+    () =>
+      ({
+        name: 'path',
+        label:
+          'nested' in collection && collection.nested?.path?.label
+            ? collection.nested.path.label
+            : 'Path',
+        widget: 'string',
+        i18n: 'none',
+      } as StringOrTextField),
+    [collection],
+  );
+
   const i18n = useMemo(() => {
     if (hasI18n(collection)) {
       const { locales, defaultLocale } = getI18nInfo(collection);
@@ -91,6 +110,19 @@ const EditorControlPane = ({
             onLocaleChange={onLocaleChange}
           />
         </div>
+      ) : null}
+      {'nested' in collection && collection.nested?.path ? (
+        <EditorControl
+          key="entry-path"
+          field={pathField}
+          value={filterTerm}
+          fieldsErrors={fieldsErrors}
+          submitted={submitted}
+          locale={locale}
+          parentPath=""
+          i18n={i18n}
+          isMeta
+        />
       ) : null}
       {fields.map(field => {
         const isTranslatable = isFieldTranslatable(field, locale, i18n?.defaultLocale);

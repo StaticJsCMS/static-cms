@@ -117,7 +117,6 @@ export function selectEntryCollectionTitle<EF extends BaseField>(
   collection: Collection<EF>,
   entry: Entry,
 ): string {
-  console.log('selectEntryCollectionTitle', collection, entry);
   // prefer formatted summary over everything else
   const summaryTemplate = collection.summary;
   if (summaryTemplate) {

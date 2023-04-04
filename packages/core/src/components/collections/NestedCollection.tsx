@@ -64,7 +64,6 @@ const TreeNode = ({ collection, treeData, depth = 0, onToggle }: TreeNodeProps) 
 
         const hasChildren = depth === 0 || node.children.some(c => c.children.some(c => c.isDir));
 
-        console.log(node.path, node.expanded, node.children, hasChildren);
         return (
           <Fragment key={node.path}>
             <div style={{ marginLeft: `${NESTED_NAV_LINK_MARGIN * depth}px` }}>
@@ -135,7 +134,6 @@ export function getTreeData(collection: Collection, entries: Entry[]): TreeNodeD
     }
     return acc;
   }, {} as Record<string, string | undefined>);
-  console.log('dirs', dirs);
 
   if ('nested' in collection && collection.nested?.summary) {
     collection = {
@@ -191,7 +189,6 @@ export function getTreeData(collection: Collection, entries: Entry[]): TreeNodeD
   function reducer(acc: TreeNodeData[], value: BaseTreeNodeData) {
     const node = value;
     let children: TreeNodeData[] = [];
-    console.log('parentsToChildren', parentsToChildren);
     if (parentsToChildren[node.path]) {
       children = parentsToChildren[node.path].reduce(reducer, []);
     }
@@ -250,7 +247,6 @@ const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => 
 
   useEffect(() => {
     if (collection !== prevCollection || entries !== prevEntries || filterTerm !== prevFilterTerm) {
-      console.log('filterTerm', filterTerm);
       const expanded: Record<string, boolean> = {};
       walk(treeData, node => {
         if (node.expanded) {
@@ -261,16 +257,6 @@ const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => 
 
       const path = `/${filterTerm}`;
       walk(newTreeData, node => {
-        console.log(
-          'filter check',
-          useFilter,
-          path,
-          node,
-          path.startsWith(node.path),
-          pathname,
-          collection.name,
-          pathname.startsWith(`/collections/${collection.name}`),
-        );
         if (
           expanded[node.path] ||
           (useFilter &&
@@ -280,7 +266,6 @@ const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => 
           node.expanded = true;
         }
       });
-      console.log('newTreeData', newTreeData);
 
       setTreeData(newTreeData);
     }

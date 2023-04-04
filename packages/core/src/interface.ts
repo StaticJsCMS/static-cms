@@ -105,6 +105,9 @@ export interface Entry<T = ObjectValue> {
       data: EntryData;
     };
   };
+  meta?: {
+    path: string;
+  };
 }
 
 export type Entities = Record<string, Entry>;
@@ -168,8 +171,8 @@ export interface CollectionFile<EF extends BaseField = UnknownField> {
 interface Nested {
   summary?: string;
   depth: number;
-  path: {
-    label: string;
+  path?: {
+    label?: string;
     index_file: string;
   };
 }
@@ -396,9 +399,6 @@ export interface PersistArgs {
   assetProxies: AssetProxy[];
   usedSlugs: string[];
   status?: string;
-  meta?: {
-    path: string;
-  };
 }
 
 export interface ImplementationEntry {

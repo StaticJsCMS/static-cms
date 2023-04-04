@@ -3,13 +3,10 @@ import { basename, dirname, extname, join } from 'path';
 
 import { selectFolderEntryExtension } from './collection.util';
 
-import type { Collection, PersistArgs } from '@staticcms/core/interface';
+import type { Collection, Entry } from '@staticcms/core/interface';
 
-export function selectCustomPath(
-  meta: PersistArgs['meta'],
-  collection: Collection,
-): string | undefined {
-  if (!('nested' in collection) || !collection.nested || !meta) {
+export function selectCustomPath(meta: Entry['meta'], collection: Collection): string | undefined {
+  if (!('nested' in collection) || !collection.nested?.path || !meta) {
     return undefined;
   }
 

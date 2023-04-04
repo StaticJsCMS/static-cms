@@ -20,15 +20,6 @@ export default function useBreadcrumbs(
 ) {
   const entries = useEntries(collection);
 
-  console.log(
-    '[NESTED] collection',
-    collection,
-    'filterTerm',
-    filterTerm,
-    'entryDetails',
-    entryDetails,
-  );
-
   return useMemo(() => {
     const crumbs: Breadcrumb[] = [
       {
@@ -37,9 +28,8 @@ export default function useBreadcrumbs(
       },
     ];
 
-    if ('nested' in collection && collection.nested && filterTerm) {
+    if ('nested' in collection && collection.nested?.path && filterTerm) {
       const entriesByPath = entries.reduce((acc, entry) => {
-        console.log('[NESTED]', entry.path);
         acc[entry.path] = entry;
         return acc;
       }, {} as Record<string, Entry>);

@@ -298,7 +298,7 @@ function getConfigSchema() {
                     label: { type: 'string' },
                     index_file: { type: 'string' },
                   },
-                  required: ['label', 'index_file'],
+                  required: ['index_file'],
                 },
               },
               required: ['depth'],
