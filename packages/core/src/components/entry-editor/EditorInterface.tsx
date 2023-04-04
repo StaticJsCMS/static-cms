@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
 import useBreadcrumbs from '@staticcms/core/lib/hooks/useBreadcrumbs';
@@ -8,6 +7,7 @@ import {
   getFileFromSlug,
   selectEntryCollectionTitle,
 } from '@staticcms/core/lib/util/collection.util';
+import { customPathFromSlug } from '@staticcms/core/lib/util/nested.util';
 import MainView from '../MainView';
 import EditorToolbar from './EditorToolbar';
 import EditorControlPane from './editor-control-pane/EditorControlPane';
@@ -95,9 +95,6 @@ const EditorInterface = ({
 }: TranslatedProps<EditorInterfaceProps>) => {
   const { locales, defaultLocale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
   const [selectedLocale, setSelectedLocale] = useState<string>(locales?.[1] ?? 'en');
-
-  const [searchParams] = useSearchParams();
-  const filterTerm = searchParams.get('path');
 
   const [previewActive, setPreviewActive] = useState(
     localStorage.getItem(PREVIEW_VISIBLE) !== 'false',
@@ -237,8 +234,12 @@ const EditorInterface = ({
   );
 
   const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
-
-  const breadcrumbs = useBreadcrumbs(collection, filterTerm, { isNewEntry, summary, t });
+  const nestedFieldPath = useMemo(
+    () => customPathFromSlug(collection, entry.slug),
+    [collection, entry.slug],
+  );
+  const breadcrumbs = useBreadcrumbs(collection, nestedFieldPath, { isNewEntry, summary, t });
+  console.log('[NESTED] nestedFieldPath', nestedFieldPath, 'breadcrumbs', breadcrumbs);
 
   return (
     <MainView

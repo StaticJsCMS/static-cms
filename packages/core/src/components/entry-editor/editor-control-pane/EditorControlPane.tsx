@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
 
 import { getI18nInfo, hasI18n, isFieldTranslatable } from '@staticcms/core/lib/i18n';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { getFieldValue } from '@staticcms/core/lib/util/field.util';
+import { customPathFromSlug } from '@staticcms/core/lib/util/nested.util';
 import EditorControl from './EditorControl';
 import LocaleDropdown from './LocaleDropdown';
 
@@ -41,8 +41,10 @@ const EditorControlPane = ({
   onLocaleChange,
   t,
 }: TranslatedProps<EditorControlPaneProps>) => {
-  const [searchParams] = useSearchParams();
-  const filterTerm = useMemo(() => searchParams.get('path'), [searchParams]);
+  const nestedFieldPath = useMemo(
+    () => customPathFromSlug(collection, entry.slug),
+    [collection, entry.slug],
+  );
 
   const pathField = useMemo(
     () =>
@@ -115,7 +117,7 @@ const EditorControlPane = ({
         <EditorControl
           key="entry-path"
           field={pathField}
-          value={filterTerm}
+          value={nestedFieldPath}
           fieldsErrors={fieldsErrors}
           submitted={submitted}
           locale={locale}

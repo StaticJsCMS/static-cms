@@ -1,6 +1,5 @@
 import get from 'lodash/get';
 import React, { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
 
 import { VIEW_STYLE_LIST } from '@staticcms/core/constants/views';
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
@@ -43,15 +42,9 @@ const EntryCard = ({
 }: EntryCardProps) => {
   const entryData = entry.data;
 
-  const params = useParams();
-  const filterTerm = params['*'];
-
   const path = useMemo(
-    () =>
-      `/collections/${collection.name}/entries/${entry.slug}${
-        filterTerm ? `?path=${filterTerm}` : ''
-      }`,
-    [collection.name, entry.slug, filterTerm],
+    () => `/collections/${collection.name}/entries/${entry.slug}`,
+    [collection.name, entry.slug],
   );
 
   const imageField = useMemo(

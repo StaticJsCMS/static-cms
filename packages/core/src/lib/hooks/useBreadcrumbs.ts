@@ -1,5 +1,7 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
+import { loadEntries } from '@staticcms/core/actions/entries';
+import { useAppDispatch } from '@staticcms/core/store/hooks';
 import { selectEntryCollectionTitle, selectFolderEntryExtension } from '../util/collection.util';
 import { addFileTemplateFields } from '../widgets/stringTemplate';
 import useEntries from './useEntries';
@@ -19,6 +21,14 @@ export default function useBreadcrumbs(
   entryDetails?: EntryDetails,
 ) {
   const entries = useEntries(collection);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!entries || entries.length === 0) {
+      dispatch(loadEntries(collection));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return useMemo(() => {
     const crumbs: Breadcrumb[] = [
@@ -34,17 +44,25 @@ export default function useBreadcrumbs(
         return acc;
       }, {} as Record<string, Entry>);
 
+      console.log('entriesByPath', entriesByPath);
+
       const path = filterTerm.split('/');
       if (path.length > 0) {
         const extension = selectFolderEntryExtension(collection);
 
         for (let i = 0; i < path.length; i++) {
-          const pathPart = path[i];
+          const pathSoFar = path.slice(0, i + 1).join('/');
 
           let entry =
             entriesByPath[
-              `${collection.folder}/${pathPart}/${collection.nested.path.index_file}.${extension}`
+              `${collection.folder}/${pathSoFar}/${collection.nested.path.index_file}.${extension}`
             ];
+          console.log(
+            'path to check',
+            `${collection.folder}/${pathSoFar}/${collection.nested.path.index_file}.${extension}`,
+            'entry',
+            entry,
+          );
 
           if (entry) {
             entry = {
@@ -55,10 +73,12 @@ export default function useBreadcrumbs(
 
             crumbs.push({
               name: title,
-              to: `/collections/${collection.name}/filter/${path.slice(0, i + 1).join('/')}`,
+              to: `/collections/${collection.name}/filter/${pathSoFar}`,
             });
           }
         }
+
+        return crumbs;
       }
     }
 

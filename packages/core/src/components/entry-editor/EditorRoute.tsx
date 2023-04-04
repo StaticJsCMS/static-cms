@@ -14,6 +14,7 @@ interface EditorRouteProps {
 const EditorRoute = ({ newRecord = false, collections }: EditorRouteProps) => {
   const { name, ...params } = useParams();
   const slug = params['*'];
+  console.log('[NESTED] slug', slug);
 
   const shouldRedirect = useMemo(() => {
     if (!name) {
