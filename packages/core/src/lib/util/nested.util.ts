@@ -10,14 +10,8 @@ export function selectCustomPath(entry: Entry, collection: Collection): string |
     return undefined;
   }
 
-  const indexFile = collection.nested.path.index_file;
   const extension = selectFolderEntryExtension(collection);
-  const customPath = join(
-    collection.folder,
-    entry.meta.path,
-    entry.slug,
-    `${indexFile}.${extension}`,
-  );
+  const customPath = join(collection.folder, entry.meta.path, `${entry.slug}.${extension}`);
   return customPath;
 }
 
