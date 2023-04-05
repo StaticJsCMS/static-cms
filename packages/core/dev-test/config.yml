@@ -844,8 +844,6 @@ collections:
         label: Site Settings
         file: _data/settings.json
         description: General Site Settings
-        editor:
-          preview: true
         fields:
           - label: Number of posts on frontpage
             name: front_limit

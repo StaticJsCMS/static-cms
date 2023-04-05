@@ -62,7 +62,6 @@ interface EditorInterfaceProps {
   onPersist: (opts?: EditorPersistOptions) => void;
   onDelete: () => Promise<void>;
   onDuplicate: () => void;
-  showDelete: boolean;
   hasChanged: boolean;
   displayUrl: string | undefined;
   isNewEntry: boolean;
@@ -78,7 +77,6 @@ const EditorInterface = ({
   entry,
   fields = [],
   fieldsErrors,
-  showDelete,
   onDelete,
   onDuplicate,
   onPersist,
@@ -99,6 +97,7 @@ const EditorInterface = ({
   const [previewActive, setPreviewActive] = useState(
     localStorage.getItem(PREVIEW_VISIBLE) !== 'false',
   );
+
   const [i18nActive, setI18nActive] = useState(
     Boolean(localStorage.getItem(I18N_VISIBLE) !== 'false' && locales && locales.length > 0),
   );
@@ -137,13 +136,16 @@ const EditorInterface = ({
   }, []);
 
   const [showPreviewToggle, previewInFrame] = useMemo(() => {
+    console.log('[PREVIEW] collection', collection);
     let preview = collection.editor?.preview ?? true;
+    console.log('[PREVIEW] preview', preview);
     let frame = collection.editor?.frame ?? true;
 
     if ('files' in collection) {
       const file = getFileFromSlug(collection, entry.slug);
       if (file?.editor?.preview !== undefined) {
         preview = file.editor.preview;
+        console.log('[PREVIEW] preview file', preview);
       }
 
       if (file?.editor?.frame !== undefined) {
@@ -153,6 +155,11 @@ const EditorInterface = ({
 
     return [preview, frame];
   }, [collection, entry.slug]);
+
+  const finalPreviewActive = useMemo(
+    () => showPreviewToggle && previewActive,
+    [previewActive, showPreviewToggle],
+  );
 
   const collectHasI18n = hasI18n(collection);
 
@@ -174,7 +181,7 @@ const EditorInterface = ({
         fieldsErrors={fieldsErrors}
         locale={defaultLocale}
         submitted={submitted}
-        hideBorder={!previewActive && !i18nActive}
+        hideBorder={!finalPreviewActive && !i18nActive}
         t={t}
       />
     </div>
@@ -240,6 +247,8 @@ const EditorInterface = ({
   );
   const breadcrumbs = useBreadcrumbs(collection, nestedFieldPath, { isNewEntry, summary, t });
 
+  console.log('[PREVIEW] showPreviewToggle', showPreviewToggle);
+
   return (
     <MainView
       breadcrumbs={breadcrumbs}
@@ -253,7 +262,6 @@ const EditorInterface = ({
           onPersistAndNew={() => handleOnPersist({ createNew: true })}
           onPersistAndDuplicate={() => handleOnPersist({ createNew: true, duplicate: true })}
           onDelete={onDelete}
-          showDelete={showDelete}
           onDuplicate={onDuplicate}
           hasChanged={hasChanged}
           displayUrl={displayUrl}
@@ -261,7 +269,7 @@ const EditorInterface = ({
           isNewEntry={isNewEntry}
           isModification={isModification}
           showPreviewToggle={showPreviewToggle}
-          previewActive={previewActive}
+          previewActive={finalPreviewActive}
           scrollSyncActive={scrollSyncActive}
           showI18nToggle={collectHasI18n}
           i18nActive={i18nActive}
@@ -274,7 +282,7 @@ const EditorInterface = ({
       <EditorContent
         key={draftKey}
         i18nActive={i18nActive}
-        previewActive={previewActive && !i18nActive}
+        previewActive={finalPreviewActive && !i18nActive}
         editor={editor}
         editorSideBySideLocale={editorSideBySideLocale}
         editorWithPreview={editorWithPreview}

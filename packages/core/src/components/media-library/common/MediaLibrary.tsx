@@ -4,7 +4,6 @@ import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { translate } from 'react-polyglot';
 
-import { changeViewStyle } from '@staticcms/core/actions/entries';
 import {
   closeMediaLibrary,
   deleteMedia,
@@ -16,20 +15,17 @@ import {
 import useMediaFiles from '@staticcms/core/lib/hooks/useMediaFiles';
 import { fileExtension } from '@staticcms/core/lib/util';
 import MediaLibraryCloseEvent from '@staticcms/core/lib/util/events/MediaLibraryCloseEvent';
-import { selectViewStyle } from '@staticcms/core/reducers/selectors/entries';
 import { selectMediaLibraryState } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import alert from '../../common/alert/Alert';
 import Button from '../../common/button/Button';
 import confirm from '../../common/confirm/Confirm';
-import ViewStyleControl from '../../common/view-style/ViewStyleControl';
 import CurrentMediaDetails from './CurrentMediaDetails';
 import EmptyMessage from './EmptyMessage';
 import FileUploadButton from './FileUploadButton';
 import MediaLibraryCardGrid from './MediaLibraryCardGrid';
 import MediaLibrarySearch from './MediaLibrarySearch';
 
-import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
 
@@ -59,7 +55,6 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   const [query, setQuery] = useState<string | undefined>(undefined);
 
   const dispatch = useAppDispatch();
-  const viewStyle = useAppSelector(selectViewStyle);
   const {
     isVisible,
     displayURLs,
@@ -85,13 +80,6 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   const [prevIsVisible, setPrevIsVisible] = useState(false);
 
   const files = useMediaFiles(field);
-
-  const handleViewStyleChange = useCallback(
-    (viewStyle: ViewStyle) => {
-      dispatch(changeViewStyle(viewStyle));
-    },
-    [dispatch],
-  );
 
   useEffect(() => {
     if (!prevIsVisible && isVisible) {
@@ -378,10 +366,20 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
       />
       <div className="flex items-center px-5 pt-4">
         <div className="flex flex-grow gap-4 mr-8">
-          <h2 className="text-xl font-semibold flex items-center text-gray-800 dark:text-gray-300">
-            <span className="mr-2">
+          <h2
+            className="
+              text-xl
+              font-semibold
+              flex
+              items-center
+              gap-2
+              text-gray-800
+              dark:text-gray-300
+            "
+          >
+            <div className="flex items-center">
               <PhotoIcon className="w-5 h-5" />
-            </span>
+            </div>
             {t('app.header.media')}
           </h2>
           <MediaLibrarySearch
@@ -393,7 +391,6 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
           />
         </div>
         <div className="flex gap-3 items-center relative z-20">
-          <ViewStyleControl viewStyle={viewStyle} onChangeViewStyle={handleViewStyleChange} />
           <FileUploadButton imagesOnly={forImage} onChange={handlePersist} />
           {canInsert ? (
             <Button

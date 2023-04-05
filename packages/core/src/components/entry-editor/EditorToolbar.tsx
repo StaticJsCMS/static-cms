@@ -25,7 +25,6 @@ export interface EditorToolbarProps {
   onPersistAndNew: () => Promise<void>;
   onPersistAndDuplicate: () => Promise<void>;
   onDelete: () => Promise<void>;
-  showDelete: boolean;
   onDuplicate: () => void;
   hasChanged: boolean;
   displayUrl: string | undefined;
@@ -52,7 +51,6 @@ const EditorToolbar = ({
   onPersistAndDuplicate,
   onPersistAndNew,
   isNewEntry,
-  showDelete,
   onDelete,
   t,
   showPreviewToggle,
@@ -110,10 +108,17 @@ const EditorToolbar = ({
     return items;
   }, [canCreate, isPublished, onDuplicate, onPersist, onPersistAndDuplicate, onPersistAndNew, t]);
 
+  console.log(
+    '[PREVIEW] showI18nToggle || showPreviewToggle || showDelete',
+    showI18nToggle,
+    showPreviewToggle,
+    canDelete,
+  );
+
   return useMemo(
     () => (
       <div className="flex gap-2">
-        {showI18nToggle || showPreviewToggle || showDelete ? (
+        {showI18nToggle || showPreviewToggle || canDelete ? (
           <Menu
             key="extra-menu"
             label={<MoreVertIcon className="w-5 h-5" />}
@@ -154,7 +159,7 @@ const EditorToolbar = ({
                 </>
               )}
             </MenuGroup>
-            {showDelete && canDelete ? (
+            {canDelete ? (
               <MenuGroup key="delete-button">
                 <MenuItemButton onClick={onDelete} startIcon={TrashIcon} color="error">
                   {t('editor.editorToolbar.deleteEntry')}
@@ -174,7 +179,6 @@ const EditorToolbar = ({
     [
       showI18nToggle,
       showPreviewToggle,
-      showDelete,
       toggleI18n,
       i18nActive,
       t,

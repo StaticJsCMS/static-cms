@@ -47,7 +47,6 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
   displayUrl,
   isModification,
   draftKey,
-  showDelete,
   slug,
   localBackup,
   scrollSyncActive,
@@ -292,7 +291,6 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
         onPersist={handlePersistEntry}
         onDelete={handleDeleteEntry}
         onDuplicate={handleDuplicateEntry}
-        showDelete={showDelete ?? true}
         hasChanged={hasChanged}
         displayUrl={displayUrl}
         isNewEntry={!slug}
@@ -312,7 +310,6 @@ interface CollectionViewOwnProps {
   name: string;
   slug?: string;
   newRecord: boolean;
-  showDelete?: boolean;
 }
 
 function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
