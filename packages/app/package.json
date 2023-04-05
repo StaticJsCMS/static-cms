@@ -16,7 +16,12 @@
     "clean": "rimraf dist dev-test/dist",
     "prepublishOnly": "yarn build ",
     "prepack": "cp ../../README.md ./",
-    "postpack": "rm ./README.md"
+    "postpack": "rm ./README.md",
+    "format:prettier": "prettier \"src/**/*.{js,jsx,ts,tsx,css}\" --write",
+    "format": "run-s \"lint:js --fix --quiet\" \"format:prettier\"",
+    "lint:format": "prettier \"src/**/*.{js,jsx,ts,tsx,css}\" --list-different",
+    "lint:js": "eslint --color \"src/**/*.{ts,tsx}\"",
+    "lint": "run-p -c --aggregate-output \"lint:*\""
   },
   "main": "dist/static-cms-app.js",
   "files": [
