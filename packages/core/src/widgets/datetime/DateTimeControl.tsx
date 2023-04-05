@@ -12,7 +12,12 @@ import Field from '@staticcms/core/components/common/field/Field';
 import TextField from '@staticcms/core/components/common/text-field/TextField';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import NowButton from './components/NowButton';
-import { DEFAULT_DATETIME_FORMAT, DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT } from './constants';
+import {
+  DEFAULT_DATETIME_FORMAT,
+  DEFAULT_DATE_FORMAT,
+  DEFAULT_TIMEZONE_FORMAT,
+  DEFAULT_TIME_FORMAT,
+} from './constants';
 import { localToUTC } from './utc.util';
 
 import type { TextFieldProps as MuiTextFieldProps } from '@mui/material/TextField';
@@ -58,6 +63,11 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
     setOpen(false);
   }, []);
 
+  const timezoneExtra = useMemo(
+    () => (field.picker_utc ? '' : DEFAULT_TIMEZONE_FORMAT),
+    [field.picker_utc],
+  );
+
   const { format, dateFormat, timeFormat } = useMemo(() => {
     // dateFormat and timeFormat are strictly for modifying input field with the date/time pickers
     const dateFormat: string | boolean = field.date_format ?? true;
@@ -68,9 +78,9 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
     if (timeFormat === false) {
       finalFormat = field.format ?? DEFAULT_DATE_FORMAT;
     } else if (dateFormat === false) {
-      finalFormat = field.format ?? DEFAULT_TIME_FORMAT;
+      finalFormat = field.format ?? `${DEFAULT_TIME_FORMAT}${timezoneExtra}`;
     } else {
-      finalFormat = field.format ?? DEFAULT_DATETIME_FORMAT;
+      finalFormat = field.format ?? `${DEFAULT_DATETIME_FORMAT}${timezoneExtra}`;
     }
 
     return {
@@ -78,7 +88,7 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
       dateFormat,
       timeFormat,
     };
-  }, [field.date_format, field.format, field.time_format]);
+  }, [field.date_format, field.format, field.time_format, timezoneExtra]);
 
   const inputFormat = useMemo(() => {
     if (typeof dateFormat === 'string' || typeof timeFormat === 'string') {
@@ -92,7 +102,7 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
       if (typeof timeFormat === 'string' && isNotEmpty(timeFormat)) {
         formatParts.push(timeFormat);
       } else if (timeFormat !== false) {
-        formatParts.push(DEFAULT_TIME_FORMAT);
+        formatParts.push(`${DEFAULT_TIME_FORMAT}${timezoneExtra}`);
       }
 
       if (formatParts.length > 0) {
@@ -105,11 +115,11 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
     }
 
     if (dateFormat === false) {
-      return format ?? DEFAULT_TIME_FORMAT;
+      return format ?? `${DEFAULT_TIME_FORMAT}${timezoneExtra}`;
     }
 
-    return format ?? DEFAULT_DATETIME_FORMAT;
-  }, [dateFormat, format, timeFormat]);
+    return format ?? `${DEFAULT_DATETIME_FORMAT}${timezoneExtra}`;
+  }, [dateFormat, format, timeFormat, timezoneExtra]);
 
   const defaultValue = useMemo(() => {
     const today = field.picker_utc ? localToUTC(new Date()) : new Date();
