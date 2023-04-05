@@ -373,7 +373,11 @@ If you want to use the media library in your custom widget you will need to use 
 
 ```js
 const FileControl = ({ collection, field, value, entry, onChange }) => {
-  const handleOpenMediaLibrary = useMediaInsert(value, { field, controlID }, onChange);
+  const handleChange = ({ path }) => {
+    onChange(path);
+  };
+
+  const handleOpenMediaLibrary = useMediaInsert(value, { collection, field, controlID }, onChange);
 
   const assetSource = useMediaAsset(value, collection, field, entry);
 
@@ -389,7 +393,11 @@ import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 
 const FileControl = ({ collection, field, value, entry, onChange }) => {
-  const handleOpenMediaLibrary = useMediaInsert(value, { field, controlID }, onChange);
+  const handleChange = ({ path }) => {
+    onChange(path);
+  };
+
+  const handleOpenMediaLibrary = useMediaInsert(value, { collection, field, controlID }, handleChange);
 
   const assetSource = useMediaAsset(value, collection, field, entry);
 
@@ -408,7 +416,7 @@ const FileControl = ({ collection, field, value, entry, onChange }) => {
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 
-import type { WidgetControlProps } from '@staticcms/core/interface';
+import type { WidgetControlProps, MediaPath } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 const FileControl: FC<WidgetControlProps<string, MyField>> = ({
@@ -418,7 +426,11 @@ const FileControl: FC<WidgetControlProps<string, MyField>> = ({
   entry,
   onChange,
 }) => {
-  const handleOpenMediaLibrary = useMediaInsert(internalValue, { field, controlID }, onChange);
+  const handleChange = ({ path }: MediaPath) => {
+    onChange(path);
+  };
+
+  const handleOpenMediaLibrary = useMediaInsert(internalValue, { collection, field, controlID }, onChange);
 
   const assetSource = useMediaAsset(value, collection, field, entry);
 

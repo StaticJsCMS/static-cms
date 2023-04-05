@@ -32,7 +32,7 @@ const DocsContent = styled('div')(
     & p:not(:first-of-type) {
       margin-top: 8px;
     }
-    
+
     & pre + p:not(:first-of-type) {
       margin-top: 20px;
     }
@@ -174,6 +174,15 @@ const DocsContent = styled('div')(
       padding: 1rem;
       overflow: auto;
       margin: 0;
+      border-radius: 12px;
+    }
+
+    .dark & pre.code-tabpanel,
+    .dark & pre.code-tabpanel[class*='language-'],
+    .light & pre.code-tabpanel,
+    .light & pre.code-tabpanel[class*='language-'] {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
     }
 
     & pre code {

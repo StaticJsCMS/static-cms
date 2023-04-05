@@ -18,48 +18,81 @@ const PostPreview = ({ entry, widgetFor }) => {
   );
 };
 
-const PostPreviewCard = ({ entry, widgetFor, viewStyle }) => {
-  return (
-    <div style={{ width: "100%" }}>
-      {viewStyle === "grid" ? widgetFor("image") : null}
-      <div style={{ padding: "16px", width: "100%" }}>
-        <div
-          style={{
-            display: "flex",
-            width: "100%",
-            justifyContent: "space-between",
-            alignItems: "start",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: viewStyle === "grid" ? "column" : "row",
-              alignItems: "baseline",
-              gap: "8px",
-            }}
-          >
-            <strong style={{ fontSize: "24px" }}>{entry.data.title}</strong>
-            <span style={{ fontSize: "16px" }}>{entry.data.date}</span>
-          </div>
-          <div
-            style={{
-              backgroundColor: entry.data.draft === true ? "blue" : "green",
-              color: "white",
-              border: "none",
-              padding: "4px 8px",
-              textAlign: "center",
-              textDecoration: "none",
-              display: "inline-block",
-              cursor: "pointer",
-              borderRadius: "4px",
-            }}
-          >
-            {entry.data.draft === true ? "Draft" : "Published"}
-          </div>
-        </div>
-      </div>
-    </div>
+const PostPreviewCard = ({ entry, theme }) => {
+  const date = new Date(entry.data.date);
+
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  return h(
+    'div',
+    { style: { width: '100%' } },
+    h(
+      'div',
+      { style: { padding: '16px', width: '100%' } },
+      h(
+        'div',
+        {
+          style: {
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'space-between',
+            alignItems: 'start',
+            gap: '4px',
+            color: theme === 'dark' ? 'white' : 'inherit',
+          },
+        },
+        h(
+          'div',
+          {
+            style: {
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'baseline',
+              gap: '4px',
+            },
+          },
+          h(
+            'div',
+            {
+              style: {
+                fontSize: '14px',
+                fontWeight: 700,
+                color: 'rgb(107, 114, 128)',
+                fontSize: '14px',
+                lineHeight: '18px',
+              },
+            },
+            entry.data.title,
+          ),
+          h(
+            'span',
+            { style: { fontSize: '14px' } },
+            `${date.getFullYear()}-${month < 10 ? `0${month}` : month}-${
+              day < 10 ? `0${day}` : day
+            }`,
+          ),
+        ),
+        h(
+          'div',
+          {
+            style: {
+              backgroundColor: entry.data.draft === true ? 'blue' : 'green',
+              color: 'white',
+              border: 'none',
+              padding: '2px 6px',
+              textAlign: 'center',
+              textDecoration: 'none',
+              display: 'inline-block',
+              cursor: 'pointer',
+              borderRadius: '4px',
+              fontSize: '14px',
+            },
+          },
+          entry.data.draft === true ? 'Draft' : 'Published',
+        ),
+      ),
+    ),
   );
 };
 

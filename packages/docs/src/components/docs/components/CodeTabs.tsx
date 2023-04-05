@@ -142,7 +142,7 @@ const CodeTabs = ({ children }: CodeTabsProps) => {
       </Box>
       {tabs.map((tabData, index) => (
         <TabPanel key={tabData.className} value={value} index={index}>
-          <pre className={tabData.className}>
+          <pre className={`code-tabpanel ${tabData.className}`} tabIndex={0}>
             <code
               className={tabData.className}
               dangerouslySetInnerHTML={{ __html: tabData.content }}

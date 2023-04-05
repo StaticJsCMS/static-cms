@@ -18,7 +18,11 @@ const getNestedHeadings = (headingElements: HTMLHeadingElement[]) => {
   const nestedHeadings: NestedHeading[] = [];
 
   headingElements.forEach(heading => {
-    const { innerText: title, id } = heading;
+    const { innerText, id } = heading;
+    const title = innerText
+      .replace(/\n/g, '')
+      .replace(/Beta Feature$/g, '')
+      .trim();
 
     if (heading.nodeName === 'H1' || heading.nodeName === 'H2') {
       nestedHeadings.push({ id, title, items: [] });
@@ -118,7 +122,7 @@ const StyledNav = styled('nav')(
     max-height: calc(100vh - 72px);
     overflow-y: auto;
     top: 16px;
-    
+
     ${theme.breakpoints.between('md', 'lg')} {
       top: 24px;
     }
