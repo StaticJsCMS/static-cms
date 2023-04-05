@@ -32,8 +32,8 @@ interface MediaLibraryCardProps<T extends MediaField, EF extends BaseField = Unk
   isViewableImage: boolean;
   isDraft?: boolean;
   isDirectory?: boolean;
-  collection?: Collection;
-  field?: Field;
+  collection?: Collection<EF>;
+  field?: T;
   onSelect: () => void;
   onDirectoryOpen: () => void;
   loadDisplayURL: () => void;
