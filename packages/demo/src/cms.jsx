@@ -165,7 +165,6 @@ const CustomPage = () => {
   return <div>I am a custom page!</div>;
 };
 
-cms.registerPreviewStyle(".toastui-editor-contents h1 { color: blue }", { raw: true });
 cms.registerPreviewTemplate("posts", PostPreview);
 CMS.registerPreviewCard("posts", PostPreviewCard);
 CMS.registerFieldPreview('posts', 'date', PostDateFieldPreview);
