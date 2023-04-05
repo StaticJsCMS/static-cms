@@ -19,8 +19,6 @@ export const createMockWidgetControlProps = <
     | 'field'
     | 'data'
     | 'hasErrors'
-    | 'isFieldDuplicate'
-    | 'isFieldHidden'
     | 'onChange'
     | 'clearMediaControl'
     | 'openMediaLibrary'

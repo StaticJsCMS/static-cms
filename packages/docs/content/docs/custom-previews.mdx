@@ -326,6 +326,22 @@ CMS.registerPreviewTemplate('general', GeneralPreview);
 
 </CodeTabs>
 
+## Editor Preview Styles
+
+Register a custom stylesheet to use on the preview pane.
+
+```js
+CMS.registerPreviewStyle(url);
+```
+
+### Raw Styles
+
+If you want to provide a raw CSS string instead of a url, you can pass `{ raw: true }` as the second parameter.
+
+```js
+CMS.registerPreviewStyle('.main { color: blue; border: 1px solid gree; }', { raw: true });
+```
+
 ## Collection Card Preview
 
 `registerPreviewCard` allows you to create a card template that overrides the cards displayed in the collection view.
@@ -341,7 +357,6 @@ The following parameters will be passed to your `react_component` during render:
 
 | Param      | Type                   | Description                                                                                       |
 | ---------- | ---------------------- | ------------------------------------------------------------------------------------------------- |
-| viewStyle  | 'list'<br />\| 'grid'  | The current view style being displayed                                                            |
 | entry      | object                 | Object with a `data` field that contains the current value of all widgets in the editor           |
 | widgetFor  | Function               | Given a field name, returns the rendered preview of that field's widget and value                 |
 | widgetsFor | Function               | Given a field name, returns the rendered previews of that field's nested child widgets and values |
@@ -352,11 +367,11 @@ The following parameters will be passed to your `react_component` during render:
 <CodeTabs>
 
 ```js
-const PostPreviewCard = ({ entry, widgetFor, viewStyle }) => {
+const PostPreviewCard = ({ entry, widgetFor }) => {
   return h(
     'div',
     { style: { width: '100%' } },
-    viewStyle === 'grid' ? widgetFor('image') : null,
+    widgetFor('image'),
     h(
       'div',
       { style: { padding: '16px', width: '100%' } },
@@ -375,7 +390,7 @@ const PostPreviewCard = ({ entry, widgetFor, viewStyle }) => {
           {
             style: {
               display: 'flex',
-              flexDirection: viewStyle === 'grid' ? 'column' : 'row',
+              flexDirection: 'column',
               alignItems: 'baseline',
               gap: '8px',
             },
@@ -411,10 +426,10 @@ CMS.registerPreviewCard('posts', PostPreviewCard);
 ```jsx
 import CMS from '@staticcms/core';
 
-const PostPreviewCard = ({ entry, widgetFor, viewStyle }) => {
+const PostPreviewCard = ({ entry, widgetFor }) => {
   return (
     <div style={{ width: '100%' }}>
-      {viewStyle === 'grid' ? widgetFor('image') : null}
+      {widgetFor('image')}
       <div style={{ padding: '16px', width: '100%' }}>
         <div
           style={{
@@ -427,7 +442,7 @@ const PostPreviewCard = ({ entry, widgetFor, viewStyle }) => {
           <div
             style={{
               display: 'flex',
-              flexDirection: viewStyle === 'grid' ? 'column' : 'row',
+              flexDirection: 'column',
               alignItems: 'baseline',
               gap: '8px',
             }}
@@ -471,10 +486,10 @@ interface Post {
   body: string;
 }
 
-const PostPreviewCard = ({ entry, widgetFor, viewStyle }: TemplatePreviewCardProps<Post>) => {
+const PostPreviewCard = ({ entry, widgetFor }: TemplatePreviewCardProps<Post>) => {
   return (
     <div style={{ width: '100%' }}>
-      {viewStyle === 'grid' ? widgetFor('image') : null}
+      {widgetFor('image')}
       <div style={{ padding: '16px', width: '100%' }}>
         <div
           style={{
@@ -487,7 +502,7 @@ const PostPreviewCard = ({ entry, widgetFor, viewStyle }: TemplatePreviewCardPro
           <div
             style={{
               display: 'flex',
-              flexDirection: viewStyle === 'grid' ? 'column' : 'row',
+              flexDirection: 'column',
               alignItems: 'baseline',
               gap: '8px',
             }}
@@ -521,15 +536,11 @@ CMS.registerPreviewTemplate('posts', PostPreview);
 
 </CodeTabs>
 
-##### Table View
-
-![Post Preview Card Table View](/img/preview_card_list.png)
-
 ##### Grid View
 
 ![Post Preview Card Grid View](/img/preview_card_grid.png)
 
-## Field Preview
+## Collection Field Preview
 
 `registerFieldPreview` allows you to create a custom preview for a specific field in the table view for collections.
 
