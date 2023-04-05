@@ -112,18 +112,20 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
 
   const { widgetFor, widgetsFor } = useWidgetsFor(config, collection, fields, entry);
 
-  const previewStyles = useMemo(
-    () => [
-      ...getPreviewStyles().map((style, i) => {
-        if (style.raw) {
-          return <style key={i}>{style.value}</style>;
-        }
-        return <link key={i} href={style.value} type="text/css" rel="stylesheet" />;
-      }),
-      <style key="global">{FrameGlobalStyles}</style>,
-    ],
-    [],
-  );
+  const previewStyles = useMemo(() => {
+    const styles = getPreviewStyles().map((style, i) => {
+      if (style.raw) {
+        return <style key={i}>{style.value}</style>;
+      }
+      return <link key={i} href={style.value} type="text/css" rel="stylesheet" />;
+    });
+
+    if (styles.length === 0) {
+      return <style key="global">{FrameGlobalStyles}</style>;
+    }
+
+    return styles;
+  }, []);
 
   const previewComponent = useMemo(
     () => getPreviewTemplate(selectTemplateName(collection, entry.slug)) ?? EditorPreview,

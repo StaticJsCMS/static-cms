@@ -9,6 +9,10 @@ BREAKING_CHANGES
 - media path changed from `string | string[]` to `{ path: string | string[], alt?: string }`
 - Nested collections, meta config moved into nested config.
 
+CHANGES
+
+- Default styles are now provided in the preview frame. If you provide your own via `registerPreviewStyle`, then these default styles will not be included.
+
 ADDED
 - `forSingleList` - Allows for changing styles for single list items
 
