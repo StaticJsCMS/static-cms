@@ -31,6 +31,20 @@ import './styles/main.css';
 
 const ROOT_ID = 'nc-root';
 
+/**
+ * Very hacky. This suppresses the "You are importing createRoot from "react-dom" which
+ * is not supported. You should instead import it from "react-dom/client"." warning.
+ *
+ * Not sure why this is necessary as we import from "react-dom/client" as we should.
+ */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, import/order
+import ReactDOM from 'react-dom';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+ReactDOM.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.usingClientEntryPoint = true;
+
 const TranslatedApp = ({ locale, config }: AppRootProps) => {
   if (!config) {
     return null;

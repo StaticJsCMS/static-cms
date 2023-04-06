@@ -40,13 +40,12 @@ const Sidebar: FC<TranslateProps> = ({ t }) => {
 
           if ('nested' in collection) {
             return (
-              <li key={`nested-${collectionName}`}>
-                <NestedCollection
-                  collection={collection}
-                  filterTerm={filterTerm}
-                  data-testid={collectionName}
-                />
-              </li>
+              <NestedCollection
+                key={`nested-${collectionName}`}
+                collection={collection}
+                filterTerm={filterTerm}
+                data-testid={collectionName}
+              />
             );
           }
 

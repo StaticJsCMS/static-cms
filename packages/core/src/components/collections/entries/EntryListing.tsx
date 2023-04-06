@@ -122,10 +122,14 @@ const EntryListing = ({
 
   if (viewStyle === 'VIEW_STYLE_LIST') {
     return (
-      <Table columns={!isSingleCollectionInList ? ['Collection', ...summaryFields] : summaryFields}>
-        {renderedCards}
+      <>
+        <Table
+          columns={!isSingleCollectionInList ? ['Collection', ...summaryFields] : summaryFields}
+        >
+          {renderedCards}
+        </Table>
         {hasMore && handleLoadMore && <Waypoint key={page} onEnter={handleLoadMore} />}
-      </Table>
+      </>
     );
   }
 
