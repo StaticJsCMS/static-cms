@@ -39,38 +39,41 @@ CMS.registerWidget(name, control, [preview], [{ schema }]);
 
 The react component that renders the control. It receives the following props:
 
-| Param               | Type                     | Description                                                                                               |
-| ------------------- | ------------------------ | --------------------------------------------------------------------------------------------------------- |
-| label               | string                   | The label for the widget                                                                                  |
-| value               | An valid widget value    | The current value of the widget                                                                           |
-| onChange            | function                 | Function to be called when the value changes. Accepts a valid widget value                                |
-| field               | object                   | The field configuration for the current widget. See [Widget Options](/docs/widgets#common-widget-options) |
-| collection          | object                   | The collection configuration for the current widget. See [Collections](/docs/collection-overview)         |
-| config              | object                   | The current Static CMS config. See [configuration options](/docs/configuration-options)                   |
-| entry               | object                   | Object with a `data` field that contains the current value of all widgets in the editor                   |
-| path                | string                   | `.` separated string donating the path to the current widget within the entry                             |
-| hasErrors           | boolean                  | Specifies if there are validation errors with the current widget                                          |
-| fieldsErrors        | object                   | Key/value object of field names mapping to validation errors                                              |
-| disabled            | boolean                  | Specifies if the widget control should be disabled                                                        |
-| submitted           | boolean                  | Specifies if a save attempt has been made in the editor session                                           |
-| forList             | boolean                  | Specifies if the widget is within a `list` widget                                                         |
-| forSingleList       | boolean                  | Specifies if the widget is within a singleton `list` widget (string array, number array, etc)             |
-| duplicate           | function                 | Specifies if that field is an i18n duplicate                                                              |
-| hidden              | function                 | Specifies if that field should be hidden                                                                  |
-| locale              | string<br />\| undefined | The current locale of the editor                                                                          |
-| mediaPaths          | object                   | <Deprecated>Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead. Will be removed in v3.0.0.</Deprecated> Key/value object of control IDs (passed to the media library) mapping to media paths    |
-| clearMediaControl   | function                 | <Deprecated>Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead. Will be removed in v3.0.0.</Deprecated> Clears a control ID's value from the internal store                                     |
-| openMediaLibrary    | function                 | <Deprecated>Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead. Will be removed in v3.0.0.</Deprecated> Opens the media library popup. See [Open Media Library](#open-media-library)            |
-| removeInsertedMedia | function                 | <Deprecated>Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead. Will be removed in v3.0.0.</Deprecated> Removes draft media for a give control ID                                               |
-| removeMediaControl  | function                 | <Deprecated>Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead. Will be removed in v3.0.0.</Deprecated> Clears a control ID completely from the internal store                                  |
-| query               | function                 | Runs a search on another collection. See [Query](#query)                                                  |
-| i18n                | object                   | The current i18n settings                                                                                 |
-| t                   | function                 | Translates a given key to the current locale                                                              |
-| theme               | 'light'<br />\| 'dark'   | The current theme being used by the app                                                                   |
+| Param               | Type                     | Description                                                                                                                                                                                                                     |
+| ------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| label               | string                   | The label for the widget                                                                                                                                                                                                        |
+| value               | An valid widget value    | The current value of the widget                                                                                                                                                                                                 |
+| onChange            | function                 | Function to be called when the value changes. Accepts a valid widget value                                                                                                                                                      |
+| field               | object                   | The field configuration for the current widget. See [Widget Options](/docs/widgets#common-widget-options)                                                                                                                       |
+| collection          | object                   | The collection configuration for the current widget. See [Collections](/docs/collection-overview)                                                                                                                               |
+| config              | object                   | The current Static CMS config. See [configuration options](/docs/configuration-options)                                                                                                                                         |
+| entry               | object                   | Object with a `data` field that contains the current value of all widgets in the editor                                                                                                                                         |
+| path                | string                   | `.` separated string donating the path to the current widget within the entry                                                                                                                                                   |
+| hasErrors           | boolean                  | Specifies if there are validation errors with the current widget                                                                                                                                                                |
+| fieldsErrors        | object                   | Key/value object of field names mapping to validation errors                                                                                                                                                                    |
+| disabled            | boolean                  | Specifies if the widget control should be disabled                                                                                                                                                                              |
+| submitted           | boolean                  | Specifies if a save attempt has been made in the editor session                                                                                                                                                                 |
+| forList             | boolean                  | Specifies if the widget is within a `list` widget                                                                                                                                                                               |
+| forSingleList       | boolean                  | Specifies if the widget is within a singleton `list` widget (string array, number array, etc)                                                                                                                                   |
+| duplicate           | function                 | Specifies if that field is an i18n duplicate                                                                                                                                                                                    |
+| hidden              | function                 | Specifies if that field should be hidden                                                                                                                                                                                        |
+| locale              | string<br />\| undefined | The current locale of the editor                                                                                                                                                                                                |
+| mediaPaths          | object                   | <Deprecated>Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead. Will be removed in v3.0.0.</Deprecated> Key/value object of control IDs (passed to the media library) mapping to media paths |
+| clearMediaControl   | function                 | <Deprecated>Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead. Will be removed in v3.0.0.</Deprecated> Clears a control ID's value from the internal store                                  |
+| openMediaLibrary    | function                 | <Deprecated>Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead. Will be removed in v3.0.0.</Deprecated> Opens the media library popup. See [Open Media Library](#open-media-library)         |
+| removeInsertedMedia | function                 | <Deprecated>Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead. Will be removed in v3.0.0.</Deprecated> Removes draft media for a give control ID                                            |
+| removeMediaControl  | function                 | <Deprecated>Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead. Will be removed in v3.0.0.</Deprecated> Clears a control ID completely from the internal store                               |
+| query               | function                 | Runs a search on another collection. See [Query](#query)                                                                                                                                                                        |
+| i18n                | object                   | The current i18n settings                                                                                                                                                                                                       |
+| t                   | function                 | Translates a given key to the current locale                                                                                                                                                                                    |
+| theme               | 'light'<br />\| 'dark'   | The current theme being used by the app                                                                                                                                                                                         |
 
 #### Open Media Library
 
-<Alert severity="error">Deprecated. Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead. Will be removed in v3.0.0.</Alert>
+<Alert severity="error">
+  Deprecated. Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead.
+  Will be removed in v3.0.0.
+</Alert>
 
 `openMediaLibrary` allows you to open up the media library popup. It accepts the following props:
 
