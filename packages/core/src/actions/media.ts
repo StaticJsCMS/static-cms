@@ -94,7 +94,7 @@ export function getAsset<T extends MediaField, EF extends BaseField = UnknownFie
       entry,
       path,
       field as Field,
-      currentFolder
+      currentFolder,
     );
 
     const { asset, isLoading } = state.medias[resolvedPath] || {};

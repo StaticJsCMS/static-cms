@@ -2,8 +2,10 @@ import { ContentCopy as ContentCopyIcon } from '@styled-icons/material/ContentCo
 import copyToClipboard from 'copy-text-to-clipboard';
 import React, { useCallback, useEffect, useState } from 'react';
 import { translate } from 'react-polyglot';
+
+import { isAbsolutePath } from '@staticcms/core/lib/util';
 import Button from '../../common/button/Button';
-import { isAbsolute } from 'path';
+
 import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
@@ -41,7 +43,7 @@ const CopyToClipBoardButton: FC<TranslatedProps<CopyToClipBoardButtonProps>> = (
       return;
     }
 
-    copyToClipboard(isAbsolute(path) || !draft ? path : name);
+    copyToClipboard(isAbsolutePath(path) || !draft ? path : name);
     setCopied(true);
   }, [draft, name, path]);
 
@@ -54,7 +56,7 @@ const CopyToClipBoardButton: FC<TranslatedProps<CopyToClipBoardButtonProps>> = (
       return t('mediaLibrary.mediaLibraryCard.copy');
     }
 
-    if (isAbsolute(path)) {
+    if (isAbsolutePath(path)) {
       return t('mediaLibrary.mediaLibraryCard.copyUrl');
     }
 

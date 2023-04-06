@@ -177,21 +177,21 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
           "
         >
           {!isDirectory ? (
-          <div
-            className="
+            <div
+              className="
               absolute
               top-2
               right-2
               flex
               gap-1
             "
-          >
-            <CopyToClipBoardButton path={displayURL.url} name={text} draft={isDraft} />
-            <Button
-              variant="text"
-              onClick={handleDownload}
-              title={t('mediaLibrary.mediaLibraryModal.download')}
-              className="
+            >
+              <CopyToClipBoardButton path={displayURL.url} name={text} draft={isDraft} />
+              <Button
+                variant="text"
+                onClick={handleDownload}
+                title={t('mediaLibrary.mediaLibraryModal.download')}
+                className="
                 text-white
                 dark:text-white
                 bg-gray-900/25
@@ -199,14 +199,14 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
                 dark:hover:bg-blue-800/80
               "
               >
-              <DownloadIcon className="w-5 h-5" />
-            </Button>
-            <Button
-              variant="text"
-              color="error"
-              onClick={onDelete}
-              title={t('mediaLibrary.mediaLibraryModal.deleteSelected')}
-              className="
+                <DownloadIcon className="w-5 h-5" />
+              </Button>
+              <Button
+                variant="text"
+                color="error"
+                onClick={onDelete}
+                title={t('mediaLibrary.mediaLibraryModal.deleteSelected')}
+                className="
                 position: relative;
                 text-red-400
                 bg-gray-900/25
@@ -214,10 +214,11 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
                 dark:hover:bg-red-800/40
                 z-30
               "
-            >
-              <DeleteIcon className="w-5 h-5" />
-            </Button>
-          </div>) : null}
+              >
+                <DeleteIcon className="w-5 h-5" />
+              </Button>
+            </div>
+          ) : null}
         </div>
         <div className="relative">
           {isDraft ? (

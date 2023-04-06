@@ -35,7 +35,14 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
       const backend = currentBackend(config);
       const files = await backend.getMedia(
         currentFolder,
-        config.public_folder ? currentFolder.replace(/\\/g, '/').replace(config.media_folder!.replace(/^\//g, ''), config.public_folder.replace(/^\//g, '')) : currentFolder,
+        config.public_folder
+          ? currentFolder
+              .replace(/\\/g, '/')
+              .replace(
+                config.media_folder!.replace(/^\//g, ''),
+                config.public_folder.replace(/^\//g, ''),
+              )
+          : currentFolder,
         config.media_library_folder_support,
       );
 

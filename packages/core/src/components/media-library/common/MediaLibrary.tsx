@@ -27,12 +27,12 @@ import EmptyMessage from './EmptyMessage';
 import FileUploadButton from './FileUploadButton';
 import MediaLibraryCardGrid from './MediaLibraryCardGrid';
 import MediaLibrarySearch from './MediaLibrarySearch';
-
-import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
-import type { ChangeEvent, FC, KeyboardEvent } from 'react';
 import { selectMediaFilePath } from '@staticcms/core/lib/util/media.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
+
+import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
+import type { ChangeEvent, FC, KeyboardEvent } from 'react';
 
 /**
  * Extensions used to determine which files to show when the media library is
@@ -77,7 +77,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     field,
     value: initialValue,
     alt: initialAlt,
-    insertOptions
+    insertOptions,
   } = useAppSelector(selectMediaLibraryState);
 
   const config = useAppSelector(selectConfig);
@@ -269,15 +269,25 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     [dispatch, field, selectedFile?.path, url],
   );
 
-  const handleOpenDirectory = useCallback((dir: string) => {
-    console.log("currentFolder: " + currentFolder);
-    const newDirectory = selectMediaFilePath(config!, collection!, entry, dir, field, currentFolder);
-    console.log("newDirectory: " + newDirectory);
-    setSelectedFile(null);
-    setQuery('');
-    setCurrentFolder(newDirectory);
-    dispatch(loadMedia());
-  }, [dispatch]);
+  const handleOpenDirectory = useCallback(
+    (dir: string) => {
+      console.log('currentFolder: ' + currentFolder);
+      const newDirectory = selectMediaFilePath(
+        config!,
+        collection!,
+        entry,
+        dir,
+        field,
+        currentFolder,
+      );
+      console.log('newDirectory: ' + newDirectory);
+      setSelectedFile(null);
+      setQuery('');
+      setCurrentFolder(newDirectory);
+      dispatch(loadMedia());
+    },
+    [dispatch],
+  );
 
   /**
    * Stores the public path of the file in the application store, where the

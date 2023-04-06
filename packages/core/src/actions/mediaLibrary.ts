@@ -145,7 +145,12 @@ export function closeMediaLibrary() {
   };
 }
 
-export function insertMedia(mediaPath: string | string[], field: Field | undefined, alt?: string, currentFolder?: string) {
+export function insertMedia(
+  mediaPath: string | string[],
+  field: Field | undefined,
+  alt?: string,
+  currentFolder?: string,
+) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const config = state.config.config;
@@ -161,7 +166,14 @@ export function insertMedia(mediaPath: string | string[], field: Field | undefin
         selectMediaFilePublicPath(config, collection, path, entry, field, currentFolder),
       );
     } else {
-      mediaPath = selectMediaFilePublicPath(config, collection, mediaPath as string, entry, field, currentFolder);
+      mediaPath = selectMediaFilePublicPath(
+        config,
+        collection,
+        mediaPath as string,
+        entry,
+        field,
+        currentFolder,
+      );
     }
     dispatch(mediaInserted(mediaPath, alt));
   };
@@ -279,9 +291,9 @@ export function persistMedia(file: File, opts: MediaOptions = {}, currentFolder?
     try {
       const entry = state.entryDraft.entry;
       const collection = entry?.collection ? state.collections[entry.collection] : null;
-      console.log("fileName:" + fileName);
+      console.log('fileName:' + fileName);
       const path = selectMediaFilePath(config, collection, entry, fileName, field, currentFolder);
-      console.log("fileName path:" + path);
+      console.log('fileName path:' + path);
       const assetProxy = createAssetProxy({
         file,
         path,

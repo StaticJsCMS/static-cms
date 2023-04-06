@@ -31,7 +31,7 @@ export {
 } from './implementation';
 export { default as loadScript } from './loadScript';
 export { default as localForage } from './localForage';
-export { basename, fileExtension, fileExtensionWithSeparator } from './path';
+export { basename, fileExtension, fileExtensionWithSeparator, isAbsolutePath } from './path';
 export { flowAsync, onlySuccessfulPromises, then } from './promise';
 export { default as unsentRequest } from './unsentRequest';
 

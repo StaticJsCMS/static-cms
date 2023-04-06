@@ -323,7 +323,7 @@ export default class API {
   async listFiles(
     path: string,
     { repoURL = this.repoURL, branch = this.branch, depth = 1 } = {},
-    folderSupport?: boolean
+    folderSupport?: boolean,
   ): Promise<{ type: string; id: string; name: string; path: string; size: number }[]> {
     const folder = trim(path, '/');
     try {
@@ -339,7 +339,9 @@ export default class API {
         result.tree
           // filter only files and/or folders up to the required depth
           .filter(
-            file => (!folderSupport ? file.type === 'blob' : true) && decodeURIComponent(file.path).split('/').length <= depth,
+            file =>
+              (!folderSupport ? file.type === 'blob' : true) &&
+              decodeURIComponent(file.path).split('/').length <= depth,
           )
           .map(file => ({
             type: file.type,

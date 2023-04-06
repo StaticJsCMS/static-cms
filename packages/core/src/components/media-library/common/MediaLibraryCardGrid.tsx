@@ -10,6 +10,7 @@ import {
   MEDIA_LIBRARY_PADDING,
 } from '@staticcms/core/constants/mediaLibrary';
 import MediaLibraryCard from './MediaLibraryCard';
+import { selectMediaFilePath } from '@staticcms/core/lib/util/media.util';
 
 import type {
   Collection,
@@ -20,7 +21,6 @@ import type {
 import type { MediaLibraryState } from '@staticcms/core/reducers/mediaLibrary';
 import type { FC } from 'react';
 import type { GridChildComponentProps } from 'react-window';
-import { selectMediaFilePath } from '@staticcms/core/lib/util/media.util';
 
 export interface MediaLibraryCardItem {
   displayURL?: MediaLibraryDisplayURL;
@@ -42,7 +42,7 @@ export interface MediaLibraryCardGridProps {
   canLoadMore?: boolean;
   onLoadMore: () => void;
   onDirectoryOpen: (dir: string) => void;
-  currentFolder?: string,
+  currentFolder?: string;
   isPaginating?: boolean;
   paginatingMessage?: string;
   cardDraftText: string;

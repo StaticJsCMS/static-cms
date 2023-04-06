@@ -1,7 +1,7 @@
 import trim from 'lodash/trim';
-import { dirname, join, isAbsolute } from 'path';
+import { dirname, join } from 'path';
 
-import { basename } from '.';
+import { basename, isAbsolutePath } from '.';
 import { folderFormatter } from '../formatters';
 import { joinUrlPath } from '../urlHelper';
 
@@ -252,13 +252,13 @@ export function selectMediaFolder<EF extends BaseField>(
     }
   }
 
-  console.log("mediaFolder 1: " + mediaFolder);
+  console.log('mediaFolder 1: ' + mediaFolder);
 
   if (currentFolder) {
-    mediaFolder = trim(currentFolder, '/').replace(trim(mediaFolder, "/"), mediaFolder!);
+    mediaFolder = trim(currentFolder, '/').replace(trim(mediaFolder, '/'), mediaFolder!);
   }
 
-  console.log("mediaFolder 2: " + mediaFolder);
+  console.log('mediaFolder 2: ' + mediaFolder);
 
   return trim(mediaFolder, '/');
 }
@@ -269,10 +269,10 @@ export function selectMediaFilePublicPath<EF extends BaseField>(
   mediaPath: string,
   entryMap: Entry | undefined,
   field: Field<EF> | undefined,
-  currentFolder?: string, 
+  currentFolder?: string,
 ) {
-  console.log("mediaFIlePublicPath: " + mediaPath + " currentFolder: " + currentFolder);
-  if (isAbsolute(mediaPath)) {
+  console.log('mediaFIlePublicPath: ' + mediaPath + ' currentFolder: ' + currentFolder);
+  if (isAbsolutePath(mediaPath)) {
     return mediaPath;
   }
 
@@ -288,11 +288,13 @@ export function selectMediaFilePublicPath<EF extends BaseField>(
 
   if (currentFolder) {
     const customMediaFolder = hasCustomFolder('media_folder', collection, entryMap?.slug, field);
-    const mediaFolder = customMediaFolder ? evaluateFolder('media_folder', config, collection!, entryMap, field) : config['media_folder'];
+    const mediaFolder = customMediaFolder
+      ? evaluateFolder('media_folder', config, collection!, entryMap, field)
+      : config['media_folder'];
     selectedPublicFolder = currentFolder.replace(mediaFolder!, publicFolder);
   }
 
-  if (isAbsolute(selectedPublicFolder)) {
+  if (isAbsolutePath(selectedPublicFolder)) {
     return joinUrlPath(selectedPublicFolder, basename(mediaPath));
   }
 
@@ -307,9 +309,9 @@ export function selectMediaFilePath(
   field: Field | undefined,
   currentFolder?: string,
 ) {
-  console.log("mediaPath: " + mediaPath + " currentFolder: " + currentFolder);
-  if (isAbsolute(mediaPath)) {
-    console.log("mediaPath absolute");
+  console.log('mediaPath: ' + mediaPath + ' currentFolder: ' + currentFolder);
+  if (isAbsolutePath(mediaPath)) {
+    console.log('mediaPath absolute');
     return mediaPath;
   }
 
