@@ -1,13 +1,19 @@
-import Alert from '@mui/material/Alert';
 import { styled, useTheme } from '@mui/material/styles';
 import { MDXRemote } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import remarkGfm from 'remark-gfm';
 
 import BetaImage from '../../components/docs/BetaImage';
+import DocsContent from '../../components/docs/DocsContent';
+import DocsLeftNav from '../../components/docs/DocsLeftNav';
+import DocsRightNav from '../../components/docs/DocsRightNav';
+import Alert from '../../components/docs/components/Alert';
 import Anchor from '../../components/docs/components/Anchor';
 import Blockquote from '../../components/docs/components/Blockquote';
 import CodeTabs from '../../components/docs/components/CodeTabs';
+import Deprecated from '../../components/docs/components/Deprecated';
+import Template from '../../components/docs/components/Template';
+import Templates from '../../components/docs/components/Templates';
 import Header1 from '../../components/docs/components/headers/Header1';
 import Header2 from '../../components/docs/components/headers/Header2';
 import Header3 from '../../components/docs/components/headers/Header3';
@@ -19,11 +25,6 @@ import TableBody from '../../components/docs/components/table/TableBody';
 import TableBodyCell from '../../components/docs/components/table/TableBodyCell';
 import TableHead from '../../components/docs/components/table/TableHead';
 import TableHeaderCell from '../../components/docs/components/table/TableHeaderCell';
-import Template from '../../components/docs/components/Template';
-import Templates from '../../components/docs/components/Templates';
-import DocsContent from '../../components/docs/DocsContent';
-import DocsLeftNav from '../../components/docs/DocsLeftNav';
-import DocsRightNav from '../../components/docs/DocsRightNav';
 import Page from '../../components/layout/Page';
 import { fetchDocsContent, getSearchablePages } from '../../lib/docs';
 
@@ -133,6 +134,7 @@ const Docs = ({
                 Template,
                 Templates,
                 BetaImage,
+                Deprecated,
               }}
             />
           </DocsContent>

@@ -4,7 +4,10 @@ title: Beta Features
 weight: 200
 ---
 
-<Alert severity="error">Features on this page may be broken or may not function as expected. We are working to test and fix the features as well as update the docs. Use at your own risk.</Alert>
+<Alert severity="error">
+  Features on this page may be broken or may not function as expected. We are working to test and
+  fix the features as well as update the docs. Use at your own risk.
+</Alert>
 
 Static CMS runs new functionality in an open beta format from time to time. That means that this functionality is totally available for use, an it might be ready for primetime, but it could break or change without notice.
 
@@ -12,11 +15,17 @@ Static CMS runs new functionality in an open beta format from time to time. That
 
 ## Folder Collections Path
 
-See [Folder Collections Path](/docs/collection-types#folder-collections-path).
+By default Static CMS stores folder collection content under the folder specified in the collection setting. You can now specify an additional `path` template (similar to the `slug` template) to control the content destination.
+
+This allows saving content in subfolders, e.g. configuring `path: '{{year}}/{{slug}}'` will save the content under `posts/2019/post-title.md`.
+
+See [Folder Collections Path](/docs/collection-types#folder-collections-path) for more information.
 
 ## Nested Collections
 
-Seed [Nested Collections](/docs/collection-types#nested-collections).
+Nested collections is a beta feature that allows a folder collection to show a nested structure of entries and edit the locations of the entries. This feature is useful when you have a complex folder structure and may not want to create separate collections for every directory.
+
+See [Nested Collections](/docs/collection-types#nested-collections) for more information.
 
 ## Commit Message Templates
 
@@ -162,7 +171,31 @@ Supported events are `prePublish`, `postPublish`, `preSave` and `postSave`. The 
 CMS.registerEventListener({
   name: 'preSave',
   handler: ({ entry }) => {
-    return entry.data.set('title', 'new title');
+    return {
+      ...entry,
+      data: {
+        ...entry.data,
+        title: 'new title',
+      },
+    };
   },
 });
 ```
+
+## i18n Support
+
+Static CMS can provide a side by side interface for authoring content in multiple languages. Configuring Static CMS for i18n support requires top level configuration, collection level configuration and field level configuration.
+
+## Gitea Backend
+
+For repositories stored on Gitea, the gitea backend allows CMS users to log in directly with their Gitea account. Note that all users must have push access to your content repository for this to work.
+
+See [Gitea Backend](/docs/gitea-backend) for more information.
+
+## External Media Library
+
+Using an external media library allows you to store your media files outside of your git backend. This is helpful if you are trying to store large media files. There are three external media libraries available in beta:
+
+- [Cloudinary](/docs/cloudinary)
+- [Netlify Large Media](/docs/netlify-large-media)
+- [Uploadcare](/docs/uploadcare)

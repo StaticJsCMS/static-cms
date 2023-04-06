@@ -15,7 +15,7 @@ Alternatively, you can specify a custom config file using a link tag:
 
 If you prefer, you can use a javascript file (`admin/config.js`) instead of a yaml file. Simply import the javascript config and pass it into your `CMS.init({ config })` call.
 
-To see working configuration examples, you can [start from a template](/docs/start-with-a-template) or check out the [CMS demo site](https://demo-staticcms.org/). (No login required: click the login button and the CMS will open.) You can refer to the demo [configuration code](https://github.com/StaticJsCMS/static-cms/blob/main/core/dev-test/config.yml) to see how each option was configured.
+To see working configuration examples, you can [start from a template](/docs/start-with-a-template) or check out the [CMS demo site](https://demo-staticcms.org/). (No login required: click the login button and Static CMS will open.) You can refer to the demo [configuration code](https://github.com/StaticJsCMS/static-cms/blob/main/core/dev-test/config.yml) to see how each option was configured.
 
 You can find details about all configuration options below. Note that [YAML syntax](https://en.wikipedia.org/wiki/YAML#Basic_components) allows lists and objects to be written in block or inline style, and the code samples below include a mix of both.
 
@@ -94,7 +94,7 @@ media_library: {
 
 ## Site URL
 
-The `site_url` setting should provide a URL to your published site. May be used by the CMS for various functionality. Used together with a collection's `preview_path` to create links to live content.
+The `site_url` setting should provide a URL to your published site. May be used by Static CMS for various functionality. Used together with a collection's `preview_path` to create links to live content.
 
 **Example:**
 
@@ -111,7 +111,7 @@ site_url: 'https://your-site.com',
 
 ## Display URL
 
-When the `display_url` setting is specified, the CMS UI will include a link in the fixed area at the top of the page, allowing content authors to easily return to your main site. The text of the link consists of the URL with the protocol portion (e.g., `https://your-site.com`).
+When the `display_url` setting is specified, the Static CMS UI will include a link in the fixed area at the top of the page, allowing content authors to easily return to your main site. The text of the link consists of the URL with the protocol portion (e.g., `https://your-site.com`).
 
 Defaults to `site_url`.
 
@@ -130,7 +130,7 @@ display_url: 'https://your-site.com',
 
 ## Custom Logo
 
-When the `logo_url` setting is specified, the CMS UI will change the logo displayed at the top of the login page, allowing you to brand the CMS with your own logo. `logo_url` is assumed to be a URL to an image file.
+When the `logo_url` setting is specified, the Static CMS UI will change the logo displayed at the top of the login page, allowing you to brand Static CMS with your own logo. `logo_url` is assumed to be a URL to an image file.
 
 **Example:**
 
@@ -147,7 +147,7 @@ logo_url: 'https://your-site.com/images/logo.svg',
 
 ## Locale
 
-The CMS locale. Defaults to `en`.
+Static CMS locale. Defaults to `en`.
 
 Other languages than English must be registered manually.
 

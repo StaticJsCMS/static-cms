@@ -58,17 +58,19 @@ The react component that renders the control. It receives the following props:
 | duplicate           | function                 | Specifies if that field is an i18n duplicate                                                              |
 | hidden              | function                 | Specifies if that field should be hidden                                                                  |
 | locale              | string<br />\| undefined | The current locale of the editor                                                                          |
-| mediaPaths          | object                   | Key/value object of control IDs (passed to the media library) mapping to media paths                      |
-| clearMediaControl   | function                 | Clears a control ID's value from the internal store                                                       |
-| openMediaLibrary    | function                 | Opens the media library popup. See [Open Media Library](#open-media-library)                              |
-| removeInsertedMedia | function                 | Removes draft media for a give control ID                                                                 |
-| removeMediaControl  | function                 | Clears a control ID completely from the internal store                                                    |
+| mediaPaths          | object                   | <Deprecated>Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead. Will be removed in v3.0.0.</Deprecated> Key/value object of control IDs (passed to the media library) mapping to media paths    |
+| clearMediaControl   | function                 | <Deprecated>Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead. Will be removed in v3.0.0.</Deprecated> Clears a control ID's value from the internal store                                     |
+| openMediaLibrary    | function                 | <Deprecated>Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead. Will be removed in v3.0.0.</Deprecated> Opens the media library popup. See [Open Media Library](#open-media-library)            |
+| removeInsertedMedia | function                 | <Deprecated>Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead. Will be removed in v3.0.0.</Deprecated> Removes draft media for a give control ID                                               |
+| removeMediaControl  | function                 | <Deprecated>Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead. Will be removed in v3.0.0.</Deprecated> Clears a control ID completely from the internal store                                  |
 | query               | function                 | Runs a search on another collection. See [Query](#query)                                                  |
 | i18n                | object                   | The current i18n settings                                                                                 |
 | t                   | function                 | Translates a given key to the current locale                                                              |
 | theme               | 'light'<br />\| 'dark'   | The current theme being used by the app                                                                   |
 
 #### Open Media Library
+
+<Alert severity="error">Deprecated. Use [useMediaInsert](/docs/custom-widgets#interacting-with-the-media-library) instead. Will be removed in v3.0.0.</Alert>
 
 `openMediaLibrary` allows you to open up the media library popup. It accepts the following props:
 
@@ -397,7 +399,11 @@ const FileControl = ({ collection, field, value, entry, onChange }) => {
     onChange(path);
   };
 
-  const handleOpenMediaLibrary = useMediaInsert(value, { collection, field, controlID }, handleChange);
+  const handleOpenMediaLibrary = useMediaInsert(
+    value,
+    { collection, field, controlID },
+    handleChange,
+  );
 
   const assetSource = useMediaAsset(value, collection, field, entry);
 
@@ -430,7 +436,11 @@ const FileControl: FC<WidgetControlProps<string, MyField>> = ({
     onChange(path);
   };
 
-  const handleOpenMediaLibrary = useMediaInsert(internalValue, { collection, field, controlID }, onChange);
+  const handleOpenMediaLibrary = useMediaInsert(
+    internalValue,
+    { collection, field, controlID },
+    onChange,
+  );
 
   const assetSource = useMediaAsset(value, collection, field, entry);
 

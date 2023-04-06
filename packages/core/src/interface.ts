@@ -277,11 +277,16 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = 
   hidden: boolean;
   label: string;
   locale: string | undefined;
+  // @deprecated Use useMediaInsert instead
   mediaPaths: Record<string, MediaPath>;
   onChange: (value: T | null | undefined) => void;
+  // @deprecated Use useMediaInsert instead
   clearMediaControl: EditorControlProps['clearMediaControl'];
+  // @deprecated Use useMediaInsert instead
   openMediaLibrary: EditorControlProps['openMediaLibrary'];
+  // @deprecated Use useMediaInsert instead
   removeInsertedMedia: EditorControlProps['removeInsertedMedia'];
+  // @deprecated Use useMediaInsert instead
   removeMediaControl: EditorControlProps['removeMediaControl'];
   i18n: I18nSettings | undefined;
   hasErrors: boolean;
