@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import { dirname } from 'path';
-import { dir } from 'console';
 
 import { selectMediaLibraryFiles } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
@@ -36,7 +35,7 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
       const backend = currentBackend(config);
       const files = await backend.getMedia(
         currentFolder,
-        undefined,
+        config.public_folder ? currentFolder.replace(/\\/g, '/').replace(config.media_folder!.replace(/^\//g, ''), config.public_folder.replace(/^\//g, '')) : currentFolder,
         config.media_library_folder_support,
       );
 
@@ -54,7 +53,7 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
 
   return useMemo(() => {
     if (currentFolderMediaFiles) {
-      return currentFolderMediaFiles;
+      return currentFolderMediaFiles.map(file => ({ key: file.id, ...file }));
     }
 
     if (entry) {

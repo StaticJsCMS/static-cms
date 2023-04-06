@@ -805,7 +805,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
             entry,
             undefined,
           );
-          return this.implementation.getMedia(folder, mediaPath);
+          return this.implementation.getMedia(folder, mediaPath, configState.config!.media_library_folder_support);
         }),
       );
       entry.mediaFiles = entry.mediaFiles.concat(...files);

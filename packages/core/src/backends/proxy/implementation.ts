@@ -162,7 +162,7 @@ export default class ProxyBackend implements BackendClass {
       const id = url;
       const name = basename(path);
 
-      return { id, name, displayURL: { id, path: url }, path, type: isDirectory ? 'tree' : 'blob' };
+      return { id, name, displayURL: { id, path: url }, path, isDirectory };
     });
   }
 

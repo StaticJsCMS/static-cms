@@ -20,6 +20,7 @@ import type {
 import type { MediaLibraryState } from '@staticcms/core/reducers/mediaLibrary';
 import type { FC } from 'react';
 import type { GridChildComponentProps } from 'react-window';
+import { selectMediaFilePath } from '@staticcms/core/lib/util/media.util';
 
 export interface MediaLibraryCardItem {
   displayURL?: MediaLibraryDisplayURL;
@@ -41,6 +42,7 @@ export interface MediaLibraryCardGridProps {
   canLoadMore?: boolean;
   onLoadMore: () => void;
   onDirectoryOpen: (dir: string) => void;
+  currentFolder?: string,
   isPaginating?: boolean;
   paginatingMessage?: string;
   cardDraftText: string;
@@ -65,6 +67,7 @@ const CardWrapper = ({
     isSelectedFile,
     onAssetSelect,
     onDirectoryOpen,
+    currentFolder,
     cardDraftText,
     displayURLs,
     loadDisplayURL,
@@ -115,6 +118,7 @@ const CardWrapper = ({
         text={file.name}
         onSelect={() => onAssetSelect(file)}
         onDirectoryOpen={() => onDirectoryOpen(file.path)}
+        currentFolder={currentFolder}
         isDraft={file.draft}
         draftText={cardDraftText}
         displayURL={displayURLs[file.id] ?? (file.url ? { url: file.url } : {})}

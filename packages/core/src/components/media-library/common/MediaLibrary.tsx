@@ -30,6 +30,9 @@ import MediaLibrarySearch from './MediaLibrarySearch';
 
 import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
+import { selectMediaFilePath } from '@staticcms/core/lib/util/media.util';
+import { selectConfig } from '@staticcms/core/reducers/selectors/config';
+import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
 
 /**
  * Extensions used to determine which files to show when the media library is
@@ -53,7 +56,7 @@ interface MediaLibraryProps {
 }
 
 const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = false, t }) => {
-  const [customDirectory, setCustomDirectory] = useState<string | undefined>(undefined);
+  const [currentFolder, setCurrentFolder] = useState<string | undefined>(undefined);
   const [selectedFile, setSelectedFile] = useState<MediaFile | null>(null);
   const [query, setQuery] = useState<string | undefined>(undefined);
 
@@ -74,8 +77,11 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     field,
     value: initialValue,
     alt: initialAlt,
-    insertOptions,
+    insertOptions
   } = useAppSelector(selectMediaLibraryState);
+
+  const config = useAppSelector(selectConfig);
+  const entry = useAppSelector(selectEditingDraft);
 
   const [url, setUrl] = useState<string | string[] | undefined>(initialValue ?? '');
 
@@ -94,7 +100,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     if (!prevIsVisible && isVisible) {
       setSelectedFile(null);
       setQuery('');
-      setCustomDirectory(undefined);
+      setCurrentFolder(undefined);
       dispatch(loadMedia());
     } else if (prevIsVisible && !isVisible) {
       window.dispatchEvent(new MediaLibraryCloseEvent());
@@ -103,7 +109,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     setPrevIsVisible(isVisible);
   }, [isVisible, dispatch, prevIsVisible]);
 
-  const files = useMediaFiles(field, customDirectory);
+  const files = useMediaFiles(field, currentFolder);
 
   console.log(files);
 
@@ -120,7 +126,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   const filterImages = useCallback((files: MediaFile[]) => {
     return files.filter(file => {
       const ext = fileExtension(file.name).toLowerCase();
-      return IMAGE_EXTENSIONS.includes(ext) || file.type == 'tree';
+      return IMAGE_EXTENSIONS.includes(ext) || file.isDirectory;
     });
   }, []);
 
@@ -130,7 +136,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   const toTableData = useCallback((files: MediaFile[]) => {
     const tableData =
       files &&
-      files.map(({ key, name, id, size, path, queryOrder, displayURL, draft, type }) => {
+      files.map(({ key, name, id, size, path, queryOrder, displayURL, draft, isDirectory }) => {
         const ext = fileExtension(name).toLowerCase();
         return {
           key,
@@ -144,7 +150,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
           draft,
           isImage: IMAGE_EXTENSIONS.includes(ext),
           isViewableImage: IMAGE_EXTENSIONS_VIEWABLE.includes(ext),
-          isDirectory: type == 'tree',
+          isDirectory,
         };
       });
 
@@ -229,7 +235,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
           },
         });
       } else {
-        await dispatch(persistMedia(file, { field }));
+        await dispatch(persistMedia(file, { field }, currentFolder));
 
         setSelectedFile(files[0] as unknown as MediaFile);
 
@@ -246,7 +252,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   const handleURLChange = useCallback(
     (url: string) => {
       setUrl(url);
-      dispatch(insertMedia(url, field, alt));
+      dispatch(insertMedia(url, field, alt, currentFolder));
     },
     [alt, dispatch, field],
   );
@@ -258,15 +264,20 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
       }
 
       setAlt(alt);
-      dispatch(insertMedia((url ?? selectedFile?.path) as string, field, alt));
+      dispatch(insertMedia((url ?? selectedFile?.path) as string, field, alt, currentFolder));
     },
     [dispatch, field, selectedFile?.path, url],
   );
 
   const handleOpenDirectory = useCallback((dir: string) => {
-    setCustomDirectory(dir);
+    console.log("currentFolder: " + currentFolder);
+    const newDirectory = selectMediaFilePath(config!, collection!, entry, dir, field, currentFolder);
+    console.log("newDirectory: " + newDirectory);
+    setSelectedFile(null);
+    setQuery('');
+    setCurrentFolder(newDirectory);
     dispatch(loadMedia());
-  }, []);
+  }, [dispatch]);
 
   /**
    * Stores the public path of the file in the application store, where the
@@ -279,7 +290,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
 
     const { path } = selectedFile;
     setUrl(path);
-    dispatch(insertMedia(path, field, alt));
+    dispatch(insertMedia(path, field, alt, currentFolder));
 
     if (!insertOptions?.chooseUrl && !insertOptions?.showAlt) {
       handleClose();
@@ -384,7 +395,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
         onUrlChange={handleURLChange}
         onAltChange={handleAltChange}
       />
-      <div className="flex items-center px-5 pt-4">
+      <div className="flex items-center px-5 pt-4 mb-4">
         <div className="flex flex-grow gap-4 mr-8">
           <h2
             className="
@@ -437,6 +448,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
           canLoadMore={hasNextPage}
           onLoadMore={handleLoadMore}
           onDirectoryOpen={handleOpenDirectory}
+          currentFolder={currentFolder}
           isPaginating={isPaginating}
           paginatingMessage={t('mediaLibrary.mediaLibraryModal.loading')}
           cardDraftText={t('mediaLibrary.mediaLibraryCard.draft')}

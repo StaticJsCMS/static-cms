@@ -145,7 +145,7 @@ export function closeMediaLibrary() {
   };
 }
 
-export function insertMedia(mediaPath: string | string[], field: Field | undefined, alt?: string) {
+export function insertMedia(mediaPath: string | string[], field: Field | undefined, alt?: string, currentFolder?: string) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const config = state.config.config;
@@ -158,10 +158,10 @@ export function insertMedia(mediaPath: string | string[], field: Field | undefin
     const collection = state.collections[collectionName];
     if (Array.isArray(mediaPath)) {
       mediaPath = mediaPath.map(path =>
-        selectMediaFilePublicPath(config, collection, path, entry, field),
+        selectMediaFilePublicPath(config, collection, path, entry, field, currentFolder),
       );
     } else {
-      mediaPath = selectMediaFilePublicPath(config, collection, mediaPath as string, entry, field);
+      mediaPath = selectMediaFilePublicPath(config, collection, mediaPath as string, entry, field, currentFolder);
     }
     dispatch(mediaInserted(mediaPath, alt));
   };
@@ -233,7 +233,7 @@ function createMediaFileFromAsset({
   return mediaFile;
 }
 
-export function persistMedia(file: File, opts: MediaOptions = {}) {
+export function persistMedia(file: File, opts: MediaOptions = {}, currentFolder?: string) {
   const { field } = opts;
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
@@ -279,7 +279,9 @@ export function persistMedia(file: File, opts: MediaOptions = {}) {
     try {
       const entry = state.entryDraft.entry;
       const collection = entry?.collection ? state.collections[entry.collection] : null;
-      const path = selectMediaFilePath(config, collection, entry, fileName, field);
+      console.log("fileName:" + fileName);
+      const path = selectMediaFilePath(config, collection, entry, fileName, field, currentFolder);
+      console.log("fileName path:" + path);
       const assetProxy = createAssetProxy({
         file,
         path,

@@ -34,6 +34,7 @@ interface MediaLibraryCardProps<T extends MediaField, EF extends BaseField = Unk
   isDirectory?: boolean;
   collection?: Collection<EF>;
   field?: T;
+  currentFolder?: string;
   onSelect: () => void;
   onDirectoryOpen: () => void;
   loadDisplayURL: () => void;
@@ -51,6 +52,7 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
   isDirectory,
   collection,
   field,
+  currentFolder,
   onSelect,
   onDirectoryOpen,
   loadDisplayURL,
@@ -58,7 +60,7 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
   t,
 }: TranslatedProps<MediaLibraryCardProps<T, EF>>) => {
   const entry = useAppSelector(selectEditingDraft);
-  const url = useMediaAsset(displayURL.url, collection, field, entry);
+  const url = useMediaAsset(displayURL.url, collection, field, entry, currentFolder);
 
   const handleDownload = useCallback(() => {
     const url = displayURL.url;
@@ -79,7 +81,6 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
   }, [displayURL.url, text]);
 
   useEffect(() => {
-    console.log('displayURL: ' + displayURL.url);
     if (!displayURL.url) {
       loadDisplayURL();
     }
@@ -175,6 +176,7 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
             z-20
           "
         >
+          {!isDirectory ? (
           <div
             className="
               absolute
@@ -184,15 +186,12 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
               gap-1
             "
           >
-            {!isDirectory ? (
-              <CopyToClipBoardButton path={displayURL.url} name={text} draft={isDraft} />
-            ) : null}
-            {!isDirectory ? (
-              <Button
-                variant="text"
-                onClick={handleDownload}
-                title={t('mediaLibrary.mediaLibraryModal.download')}
-                className="
+            <CopyToClipBoardButton path={displayURL.url} name={text} draft={isDraft} />
+            <Button
+              variant="text"
+              onClick={handleDownload}
+              title={t('mediaLibrary.mediaLibraryModal.download')}
+              className="
                 text-white
                 dark:text-white
                 bg-gray-900/25
@@ -200,9 +199,8 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
                 dark:hover:bg-blue-800/80
               "
               >
-                <DownloadIcon className="w-5 h-5" />
-              </Button>
-            ) : null}
+              <DownloadIcon className="w-5 h-5" />
+            </Button>
             <Button
               variant="text"
               color="error"
@@ -219,7 +217,7 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
             >
               <DeleteIcon className="w-5 h-5" />
             </Button>
-          </div>
+          </div>) : null}
         </div>
         <div className="relative">
           {isDraft ? (

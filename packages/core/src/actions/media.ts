@@ -77,6 +77,7 @@ export function getAsset<T extends MediaField, EF extends BaseField = UnknownFie
   entry: Entry | null | undefined,
   path: string,
   field?: T,
+  currentFolder?: string,
 ) {
   return (
     dispatch: ThunkDispatch<RootState, {}, AnyAction>,
@@ -93,6 +94,7 @@ export function getAsset<T extends MediaField, EF extends BaseField = UnknownFie
       entry,
       path,
       field as Field,
+      currentFolder
     );
 
     const { asset, isLoading } = state.medias[resolvedPath] || {};

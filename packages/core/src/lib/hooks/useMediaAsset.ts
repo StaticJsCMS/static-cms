@@ -18,6 +18,7 @@ export default function useMediaAsset<T extends MediaField, EF extends BaseField
   collection?: Collection<EF>,
   field?: T,
   entry?: Entry,
+  currentFolder?: string,
 ): string {
   const isAbsolute = useMemo(
     () => (isNotEmpty(url) ? /^(?:[a-z+]+:)?\/\//g.test(url) : false),
@@ -34,7 +35,7 @@ export default function useMediaAsset<T extends MediaField, EF extends BaseField
     }
 
     const fetchMedia = async () => {
-      const asset = await dispatch(getAsset<T, EF>(collection, entry, debouncedUrl, field));
+      const asset = await dispatch(getAsset<T, EF>(collection, entry, debouncedUrl, field, currentFolder));
       if (asset !== emptyAsset) {
         setAssetSource(asset?.toString() ?? '');
       }
