@@ -16,6 +16,7 @@ export interface LoginProps {
   icon?: FC<{ className?: string | undefined }>;
   label?: string;
   error?: ReactNode;
+  disabled?: boolean;
 }
 
 const Login = ({
@@ -24,6 +25,7 @@ const Login = ({
   icon,
   label,
   error,
+  disabled = false,
   t,
 }: TranslatedProps<LoginProps>) => {
   const config = useAppSelector(selectConfig);
@@ -53,7 +55,7 @@ const Login = ({
           <div>{error}</div>
         </div>
       ) : null}
-      <Button disabled={inProgress} onClick={login} className="mb-6" startIcon={icon}>
+      <Button disabled={inProgress || disabled} onClick={login} className="mb-6" startIcon={icon}>
         {inProgress ? t('auth.loggingIn') : label ?? t('auth.login')}
       </Button>
       {config?.site_url && <GoBackButton href={config.site_url} t={t}></GoBackButton>}

@@ -136,16 +136,13 @@ const EditorInterface = ({
   }, []);
 
   const [showPreviewToggle, previewInFrame] = useMemo(() => {
-    console.log('[PREVIEW] collection', collection);
     let preview = collection.editor?.preview ?? true;
-    console.log('[PREVIEW] preview', preview);
     let frame = collection.editor?.frame ?? true;
 
     if ('files' in collection) {
       const file = getFileFromSlug(collection, entry.slug);
       if (file?.editor?.preview !== undefined) {
         preview = file.editor.preview;
-        console.log('[PREVIEW] preview file', preview);
       }
 
       if (file?.editor?.frame !== undefined) {
@@ -246,8 +243,6 @@ const EditorInterface = ({
     [collection, entry.slug],
   );
   const breadcrumbs = useBreadcrumbs(collection, nestedFieldPath, { isNewEntry, summary, t });
-
-  console.log('[PREVIEW] showPreviewToggle', showPreviewToggle);
 
   return (
     <MainView

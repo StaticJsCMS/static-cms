@@ -106,27 +106,6 @@ function getEndpoint(endpoint: string, netlifySiteURL: string | null) {
   return endpoint;
 }
 
-// wait for identity widget to initialize
-// force init on timeout
-let initPromise = Promise.resolve() as Promise<unknown>;
-if (window.netlifyIdentity) {
-  let initialized = false;
-  initPromise = Promise.race([
-    new Promise<void>(resolve => {
-      window.netlifyIdentity?.on('init', () => {
-        initialized = true;
-        resolve();
-      });
-    }),
-    new Promise(resolve => setTimeout(resolve, 2500)).then(() => {
-      if (!initialized) {
-        console.info('Manually initializing identity widget');
-        window.netlifyIdentity?.init();
-      }
-    }),
-  ]);
-}
-
 interface NetlifyUser extends Credentials {
   jwt: () => Promise<string>;
   email: string;
@@ -222,7 +201,6 @@ export default class GitGateway implements BackendClass {
     if (this.authClient) {
       return this.authClient;
     }
-    await initPromise;
     this.authClient = {
       logout: () => window.netlifyIdentity?.logout(),
       currentUser: () => window.netlifyIdentity?.currentUser(),

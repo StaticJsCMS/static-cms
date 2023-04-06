@@ -232,7 +232,6 @@ CMS.registerShortcode('youtube', {
     return [src];
   },
   control: ({ src, onChange, theme }) => {
-    console.log('[SHORTCUT] shortcut theme', theme);
     return h('span', {}, [
       h('input', {
         key: 'control-input',

@@ -108,13 +108,6 @@ const EditorToolbar = ({
     return items;
   }, [canCreate, isPublished, onDuplicate, onPersist, onPersistAndDuplicate, onPersistAndNew, t]);
 
-  console.log(
-    '[PREVIEW] showI18nToggle || showPreviewToggle || showDelete',
-    showI18nToggle,
-    showPreviewToggle,
-    canDelete,
-  );
-
   return useMemo(
     () => (
       <div className="flex gap-2">

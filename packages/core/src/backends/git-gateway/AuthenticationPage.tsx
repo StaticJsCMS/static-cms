@@ -32,6 +32,42 @@ const GitGatewayAuthenticationPage = ({ onLogin, t }: GitGatewayAuthenticationPa
     password?: string;
   }>({});
 
+  const [initialized, setInitialized] = useState(false);
+
+  useEffect(() => {
+    if (window.netlifyIdentity) {
+      let initialized = false;
+      Promise.race([
+        new Promise<void>(resolve => {
+          window.netlifyIdentity?.on('init', () => {
+            if (!initialized) {
+              initialized = true;
+              resolve();
+            }
+          });
+        }),
+        new Promise<void>(resolve => {
+          const interval = setInterval(() => {
+            if (initialized) {
+              clearInterval(interval);
+              return;
+            }
+
+            if (window.netlifyIdentity) {
+              console.info('Manually initializing identity widget');
+              initialized = true;
+              window.netlifyIdentity.init();
+              clearInterval(interval);
+              resolve();
+            }
+          }, 250);
+        }),
+      ]).then(() => {
+        setInitialized(true);
+      });
+    }
+  }, []);
+
   useEffect(() => {
     if (!loggedIn && window.netlifyIdentity && window.netlifyIdentity.currentUser()) {
       setLoggingIn(true);
@@ -119,6 +155,7 @@ const GitGatewayAuthenticationPage = ({ onLogin, t }: GitGatewayAuthenticationPa
       label={t('auth.loginWithNetlifyIdentity')}
       inProgress={loggingIn}
       error={errorContent}
+      disabled={!initialized}
     />
   );
 };
