@@ -188,7 +188,8 @@ export default class API {
     // doesn't.)
     ...(file.commit && file.commit.hash ? { id: this.getFileId(file.commit.hash, file.path) } : {}),
   });
-  processFiles = (files: BitBucketFile[]) => files.filter(this.isFile).map(this.processFile);
+  processFiles = (files: BitBucketFile[], folderSupport?: boolean) =>
+    files.filter(file => (!folderSupport ? this.isFile(file) : true)).map(this.processFile);
 
   readFile = async (
     path: string,
@@ -294,7 +295,7 @@ export default class API {
       })),
     ])((cursor.data?.links as Record<string, unknown>)[action]);
 
-  listAllFiles = async (path: string, depth: number, branch: string) => {
+  listAllFiles = async (path: string, depth: number, branch: string, folderSupport?: boolean) => {
     const { cursor: initialCursor, entries: initialEntries } = await this.listFiles(
       path,
       depth,
@@ -311,7 +312,7 @@ export default class API {
       entries.push(...newEntries);
       currentCursor = newCursor;
     }
-    return this.processFiles(entries);
+    return this.processFiles(entries, folderSupport);
   };
 
   async uploadFiles(

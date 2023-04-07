@@ -172,7 +172,7 @@ export default class GitLab implements BackendClass {
   }
 
   async listAllFiles(folder: string, extension: string, depth: number) {
-    const files = await this.api!.listAllFiles(folder, depth > 1);
+    const files = await this.api!.listAllFiles(folder, undefined, depth > 1);
     const filtered = files.filter(file => this.filterFile(folder, file, extension, depth));
     return filtered;
   }
@@ -217,11 +217,11 @@ export default class GitLab implements BackendClass {
     }));
   }
 
-  async getMedia(mediaFolder = this.mediaFolder) {
+  async getMedia(mediaFolder = this.mediaFolder, _publicFolder?: string, folderSupport?: boolean) {
     if (!mediaFolder) {
       return [];
     }
-    return this.api!.listAllFiles(mediaFolder).then(files =>
+    return this.api!.listAllFiles(mediaFolder, folderSupport).then(files =>
       files.map(({ id, name, path }) => {
         return { id, name, path, displayURL: { id, name, path } };
       }),

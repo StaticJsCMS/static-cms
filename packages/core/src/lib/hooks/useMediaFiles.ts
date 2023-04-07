@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { dirname } from 'path';
+import trim from 'lodash/trim';
 
 import { selectMediaLibraryFiles } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
@@ -36,12 +37,7 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
       const files = await backend.getMedia(
         currentFolder,
         config.public_folder
-          ? currentFolder
-              .replace(/\\/g, '/')
-              .replace(
-                config.media_folder!.replace(/^\//g, ''),
-                config.public_folder.replace(/^\//g, ''),
-              )
+          ? trim(currentFolder, '/').replace(trim(config.media_folder!), config.public_folder)
           : currentFolder,
         config.media_library_folder_support,
       );

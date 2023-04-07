@@ -250,7 +250,9 @@ const en: LocalePhrasesRoot = {
     },
     folderSupport: {
       onCreateTitle: 'Create new folder',
-      onCreateBody: 'Please anter a name for the new folder.',
+      onCreateBody: 'Please enter a name for the new folder.',
+      goBackToHome: 'Go back to media folder.',
+      goBack: 'Go back to previous folder.',
     },
   },
   ui: {

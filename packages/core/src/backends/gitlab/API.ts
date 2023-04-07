@@ -318,7 +318,12 @@ export default class API {
     };
   };
 
-  listAllFiles = async (path: string, recursive = false, branch = this.branch) => {
+  listAllFiles = async (
+    path: string,
+    folderSupport?: boolean,
+    recursive = false,
+    branch = this.branch,
+  ) => {
     const entries = [];
     // eslint-disable-next-line prefer-const
     let { cursor, entries: initialEntries } = await this.fetchCursorAndEntries({
@@ -333,7 +338,7 @@ export default class API {
       entries.push(...newEntries);
       cursor = newCursor;
     }
-    return entries.filter(({ type }) => type === 'blob');
+    return entries.filter(({ type }) => (!folderSupport ? type === 'blob' : true));
   };
 
   toBase64 = (str: string) => Promise.resolve(Base64.encode(str));
@@ -421,7 +426,7 @@ export default class API {
     for (const item of items.filter(i => i.oldPath && i.action === CommitAction.MOVE)) {
       const sourceDir = dirname(item.oldPath as string);
       const destDir = dirname(item.path);
-      const children = await this.listAllFiles(sourceDir, true, branch);
+      const children = await this.listAllFiles(sourceDir, undefined, true, branch);
       children
         .filter(f => f.path !== item.oldPath)
         .forEach(file => {

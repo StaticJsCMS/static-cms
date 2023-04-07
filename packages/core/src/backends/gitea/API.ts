@@ -351,6 +351,7 @@ export default class API {
             size: file.size!,
           }))
       );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (err && err.status === 404) {
         console.info('This 404 was expected and handled appropriately.');

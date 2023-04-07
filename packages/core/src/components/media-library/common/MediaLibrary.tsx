@@ -1,9 +1,12 @@
 import { Photo as PhotoIcon } from '@styled-icons/material/Photo';
 import { ArrowUpward as UpwardIcon } from '@styled-icons/material/ArrowUpward';
+import { Home as HomeIcon } from '@styled-icons/material/Home';
 import fuzzy from 'fuzzy';
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { translate } from 'react-polyglot';
+import { dirname } from 'path';
+import trim from 'lodash/trim';
 
 import {
   closeMediaLibrary,
@@ -26,14 +29,12 @@ import EmptyMessage from './EmptyMessage';
 import FileUploadButton from './FileUploadButton';
 import MediaLibraryCardGrid from './MediaLibraryCardGrid';
 import MediaLibrarySearch from './MediaLibrarySearch';
-import { selectMediaFilePath } from '@staticcms/core/lib/util/media.util';
+import { selectMediaFilePath, selectMediaFolder } from '@staticcms/core/lib/util/media.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
-import { changeViewStyle } from '@staticcms/core/actions/entries';
 
 import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
-import type { ViewStyle } from '@staticcms/core/constants/views';
 
 /**
  * Extensions used to determine which files to show when the media library is
@@ -276,7 +277,25 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
       setCurrentFolder(newDirectory);
       dispatch(loadMedia());
     },
-    [dispatch, currentFolder],
+    [dispatch, currentFolder, collection, config, entry, field],
+  );
+
+  const handleGoBack = useCallback(
+    (toHome?: boolean) => {
+      setSelectedFile(null);
+      setQuery('');
+      if (toHome) {
+        setCurrentFolder(undefined);
+      } else {
+        const mediaFolder = trim(selectMediaFolder(config!, collection, entry, field), '/');
+        const dir = dirname(currentFolder!);
+        const newDirectory =
+          dir.includes(mediaFolder) && trim(dir, '/') != mediaFolder ? dir : undefined;
+        setCurrentFolder(newDirectory);
+      }
+      dispatch(loadMedia());
+    },
+    [dispatch, config, collection, entry, field, currentFolder],
   );
 
   /* const handleCreateFolder = useCallback(
@@ -433,6 +452,24 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
             </div>
             {t('app.header.media')}
           </h2>
+          {config?.media_library_folder_support ? (
+            <div className="flex gap-3 items-center">
+              <Button
+                onClick={() => handleGoBack(true)}
+                title={t('mediaLibrary.folderSupport.goBackToHome')}
+                disabled={!currentFolder}
+              >
+                <HomeIcon className="h-5 w-5" />
+              </Button>
+              <Button
+                onClick={() => handleGoBack()}
+                title={t('mediaLibrary.folderSupport.goBack')}
+                disabled={!currentFolder}
+              >
+                <UpwardIcon className="h-5 w-5" />
+              </Button>
+            </div>
+          ) : null}
           <MediaLibrarySearch
             value={query}
             onChange={handleSearchChange}

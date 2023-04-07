@@ -10,7 +10,6 @@ import {
   MEDIA_LIBRARY_PADDING,
 } from '@staticcms/core/constants/mediaLibrary';
 import MediaLibraryCard from './MediaLibraryCard';
-import { selectMediaFilePath } from '@staticcms/core/lib/util/media.util';
 
 import type {
   Collection,

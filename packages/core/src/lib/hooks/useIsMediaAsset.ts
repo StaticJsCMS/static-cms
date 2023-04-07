@@ -39,7 +39,7 @@ export default function useIsMediaAsset<T extends MediaField, EF extends BaseFie
     };
 
     checkMediaExistence();
-  }, [collection, dispatch, entry, field, debouncedUrl]);
+  }, [collection, dispatch, entry, field, debouncedUrl, currentFolder]);
 
   return exists;
 }

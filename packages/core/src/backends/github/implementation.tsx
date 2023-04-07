@@ -314,15 +314,15 @@ export default class GitHub implements BackendClass {
       .catch(() => ({ file: { path, id: null }, data: '' }));
   }
 
-  async getMedia(mediaFolder = this.mediaFolder) {
+  async getMedia(mediaFolder = this.mediaFolder, _publicFolder?: string, folderSupport?: boolean) {
     if (!mediaFolder) {
       return [];
     }
-    return this.api!.listFiles(mediaFolder).then(files =>
-      files.map(({ id, name, size, path }) => {
+    return this.api!.listFiles(mediaFolder, undefined, folderSupport).then(files =>
+      files.map(({ id, name, size, path, type }) => {
         // load media using getMediaDisplayURL to avoid token expiration with GitHub raw content urls
         // for private repositories
-        return { id, name, size, displayURL: { id, path }, path };
+        return { id, name, size, displayURL: { id, path }, path, isDirectory: type == 'tree' };
       }),
     );
   }
