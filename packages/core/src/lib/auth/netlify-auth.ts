@@ -36,7 +36,7 @@ class Authenticator {
     cb: (error: Error | NetlifyError | null, data?: User) => void,
   ) {
     const fn = (e: { data: string; origin: string }) => {
-      if (e.data === 'authorizing:' + options.provider && e.origin === this.base_url) {
+      if (e.data === 'authorizing:' + options.provider && e.origin === new URL(this.base_url).origin) {
         window.removeEventListener('message', fn, false);
         window.addEventListener('message', this.authorizeCallback(options, cb), false);
         return this.authWindow?.postMessage(e.data, e.origin);
@@ -50,7 +50,7 @@ class Authenticator {
     cb: (error: Error | NetlifyError | null, data?: User) => void,
   ) {
     const fn = (e: { data: string; origin: string }) => {
-      if (e.origin !== this.base_url) {
+      if (e.origin !== new URL(this.base_url).origin) {
         return;
       }
 
