@@ -29,9 +29,11 @@ import MediaLibrarySearch from './MediaLibrarySearch';
 import { selectMediaFilePath } from '@staticcms/core/lib/util/media.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
+import { changeViewStyle } from '@staticcms/core/actions/entries';
 
 import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
+import type { ViewStyle } from '@staticcms/core/constants/views';
 
 /**
  * Extensions used to determine which files to show when the media library is
@@ -87,13 +89,6 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   const [alt, setAlt] = useState<string | undefined>(initialAlt);
 
   const [prevIsVisible, setPrevIsVisible] = useState(false);
-
-  const handleViewStyleChange = useCallback(
-    (viewStyle: ViewStyle) => {
-      dispatch(changeViewStyle(viewStyle));
-    },
-    [dispatch],
-  );
 
   useEffect(() => {
     if (!prevIsVisible && isVisible) {
