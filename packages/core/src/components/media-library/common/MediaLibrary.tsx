@@ -4,7 +4,6 @@ import fuzzy from 'fuzzy';
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { translate } from 'react-polyglot';
-import { dirname } from 'path';
 
 import {
   closeMediaLibrary,
@@ -110,8 +109,6 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   }, [isVisible, dispatch, prevIsVisible]);
 
   const files = useMediaFiles(field, currentFolder);
-
-  console.log(files);
 
   const loadDisplayURL = useCallback(
     (file: MediaFile) => {
@@ -246,7 +243,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
         event.target.value = '';
       }
     },
-    [mediaConfig.max_file_size, field, dispatch],
+    [mediaConfig.max_file_size, field, dispatch, currentFolder],
   );
 
   const handleURLChange = useCallback(
@@ -254,7 +251,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
       setUrl(url);
       dispatch(insertMedia(url, field, alt, currentFolder));
     },
-    [alt, dispatch, field],
+    [alt, dispatch, field, currentFolder],
   );
 
   const handleAltChange = useCallback(
@@ -266,12 +263,11 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
       setAlt(alt);
       dispatch(insertMedia((url ?? selectedFile?.path) as string, field, alt, currentFolder));
     },
-    [dispatch, field, selectedFile?.path, url],
+    [dispatch, field, selectedFile?.path, url, currentFolder],
   );
 
   const handleOpenDirectory = useCallback(
     (dir: string) => {
-      console.log('currentFolder: ' + currentFolder);
       const newDirectory = selectMediaFilePath(
         config!,
         collection!,
@@ -280,14 +276,33 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
         field,
         currentFolder,
       );
-      console.log('newDirectory: ' + newDirectory);
       setSelectedFile(null);
       setQuery('');
       setCurrentFolder(newDirectory);
       dispatch(loadMedia());
     },
-    [dispatch],
+    [dispatch, currentFolder],
   );
+
+  /* const handleCreateFolder = useCallback(
+    async (slug: string) => {
+      if (
+        !(await confirm({
+          title: 'mediaLibrary.folderSupport.onCreateTitle',
+          body: 'mediaLibrary.folderSupport.onCreateBody',
+          color: 'error',
+        }))
+      ) {
+        return;
+      }
+      const file = files.find(file => fileToDelete?.key === file.key);
+      if (file) {
+        dispatch(deleteMedia(file)).then(() => {
+          setSelectedFile(null);
+        });
+      }
+    }, [dispatch, currentFolder]
+  );*/
 
   /**
    * Stores the public path of the file in the application store, where the
@@ -305,7 +320,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     if (!insertOptions?.chooseUrl && !insertOptions?.showAlt) {
       handleClose();
     }
-  }, [selectedFile, dispatch, field, alt, insertOptions, handleClose]);
+  }, [selectedFile, dispatch, field, alt, insertOptions, handleClose, currentFolder]);
 
   /**
    * Removes the selected file from the backend.

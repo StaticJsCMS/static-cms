@@ -252,13 +252,9 @@ export function selectMediaFolder<EF extends BaseField>(
     }
   }
 
-  console.log('mediaFolder 1: ' + mediaFolder);
-
   if (currentFolder) {
     mediaFolder = trim(currentFolder, '/').replace(trim(mediaFolder, '/'), mediaFolder!);
   }
-
-  console.log('mediaFolder 2: ' + mediaFolder);
 
   return trim(mediaFolder, '/');
 }
@@ -271,7 +267,6 @@ export function selectMediaFilePublicPath<EF extends BaseField>(
   field: Field<EF> | undefined,
   currentFolder?: string,
 ) {
-  console.log('mediaFIlePublicPath: ' + mediaPath + ' currentFolder: ' + currentFolder);
   if (isAbsolutePath(mediaPath)) {
     return mediaPath;
   }
@@ -291,7 +286,7 @@ export function selectMediaFilePublicPath<EF extends BaseField>(
     const mediaFolder = customMediaFolder
       ? evaluateFolder('media_folder', config, collection!, entryMap, field)
       : config['media_folder'];
-    selectedPublicFolder = currentFolder.replace(mediaFolder!, publicFolder);
+    selectedPublicFolder = trim(currentFolder, '/').replace(trim(mediaFolder!, '/'), publicFolder);
   }
 
   if (isAbsolutePath(selectedPublicFolder)) {
@@ -309,9 +304,7 @@ export function selectMediaFilePath(
   field: Field | undefined,
   currentFolder?: string,
 ) {
-  console.log('mediaPath: ' + mediaPath + ' currentFolder: ' + currentFolder);
   if (isAbsolutePath(mediaPath)) {
-    console.log('mediaPath absolute');
     return mediaPath;
   }
 

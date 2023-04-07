@@ -291,9 +291,7 @@ export function persistMedia(file: File, opts: MediaOptions = {}, currentFolder?
     try {
       const entry = state.entryDraft.entry;
       const collection = entry?.collection ? state.collections[entry.collection] : null;
-      console.log('fileName:' + fileName);
       const path = selectMediaFilePath(config, collection, entry, fileName, field, currentFolder);
-      console.log('fileName path:' + path);
       const assetProxy = createAssetProxy({
         file,
         path,
