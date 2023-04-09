@@ -1,6 +1,7 @@
 import { Photo as PhotoIcon } from '@styled-icons/material/Photo';
 import { ArrowUpward as UpwardIcon } from '@styled-icons/material/ArrowUpward';
 import { Home as HomeIcon } from '@styled-icons/material/Home';
+import { CreateNewFolder as NewFolderIcon } from '@styled-icons/material/CreateNewFolder';
 import fuzzy from 'fuzzy';
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -298,25 +299,11 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     [dispatch, config, collection, entry, field, currentFolder],
   );
 
-  /* const handleCreateFolder = useCallback(
-    async (slug: string) => {
-      if (
-        !(await confirm({
-          title: 'mediaLibrary.folderSupport.onCreateTitle',
-          body: 'mediaLibrary.folderSupport.onCreateBody',
-          color: 'error',
-        }))
-      ) {
-        return;
-      }
-      const file = files.find(file => fileToDelete?.key === file.key);
-      if (file) {
-        dispatch(deleteMedia(file)).then(() => {
-          setSelectedFile(null);
-        });
-      }
-    }, [dispatch, currentFolder]
-  );*/
+  const handleCreateFolder = useCallback(
+    () => {
+      console.log("[createFolder]");
+    }, []
+  );
 
   /**
    * Stores the public path of the file in the application store, where the
@@ -479,6 +466,14 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
           />
         </div>
         <div className="flex gap-3 items-center relative z-20">
+          {config?.media_library_folder_support ? (
+            <Button
+              onClick={() => handleCreateFolder()}
+              title={t('mediaLibrary.folderSupport.onCreateTitle')}
+            >
+              <NewFolderIcon className="h-5 w-5"></NewFolderIcon>
+            </Button>
+          ) : null}
           <FileUploadButton imagesOnly={forImage} onChange={handlePersist} />
           {canInsert ? (
             <Button
