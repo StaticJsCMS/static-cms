@@ -172,7 +172,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
    */
   const handleAssetSelect = useCallback(
     (asset: MediaFile) => {
-      if (!canInsert || selectedFile?.key === asset.key) {
+      if (!canInsert || selectedFile?.key === asset.key || asset.isDirectory) {
         return;
       }
 

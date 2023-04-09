@@ -291,7 +291,7 @@ export default class Gitea implements BackendClass {
     }
     return this.api!.listFiles(mediaFolder, undefined, folderSupport).then(files =>
       files.map(({ id, name, size, path, type }) => {
-        return { id, name, size, displayURL: { id, path }, path, isDirectory: type == 'tree' };
+        return { id, name, size, displayURL: { id, path }, path, isDirectory: type === 'tree' };
       }),
     );
   }

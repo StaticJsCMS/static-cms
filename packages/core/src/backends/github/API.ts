@@ -352,7 +352,7 @@ export default class API {
       );
       return (
         result.tree
-          // filter only files and/or up to the required depth
+          // filter only files and/or folders up to the required depth
           .filter(
             file =>
               (!folderSupport ? file.type === 'blob' : true) &&

@@ -1,5 +1,4 @@
 # dependencies
 /node_modules
-packages/core/dev-test/backends/gitea/*
 *.log
 .vscode
