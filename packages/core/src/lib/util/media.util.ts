@@ -308,7 +308,26 @@ export function selectMediaFilePath(
     return mediaPath;
   }
 
-  const mediaFolder = selectMediaFolder(config, collection, entryMap, field, currentFolder);
+  let mediaFolder = selectMediaFolder(config, collection, entryMap, field, currentFolder);
+
+  if (!currentFolder) {
+    let publicFolder = trim(config['public_folder']!, '/');
+    const mediaPathDir = trim(dirname(mediaPath), '/');
+
+    if (hasCustomFolder('public_folder', collection, entryMap?.slug, field)) {
+      publicFolder = trim(
+        evaluateFolder('public_folder', config, collection!, entryMap, field),
+        '/',
+      );
+    }
+    currentFolder =
+      mediaPathDir.includes(publicFolder) && mediaPathDir != mediaFolder
+        ? mediaPathDir.replace(publicFolder, mediaFolder)
+        : undefined;
+    if (currentFolder) {
+      mediaFolder = selectMediaFolder(config, collection, entryMap, field, currentFolder);
+    }
+  }
 
   return join(mediaFolder, basename(mediaPath));
 }

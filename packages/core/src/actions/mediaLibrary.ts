@@ -183,8 +183,10 @@ export function removeInsertedMedia(controlID: string) {
   return { type: MEDIA_REMOVE_INSERTED, payload: { controlID } } as const;
 }
 
-export function loadMedia(opts: { delay?: number; query?: string; page?: number } = {}) {
-  const { delay = 0, page = 1 } = opts;
+export function loadMedia(
+  opts: { delay?: number; query?: string; page?: number; currentFolder?: string } = {},
+) {
+  const { delay = 0, page = 1, currentFolder } = opts;
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const config = state.config.config;
@@ -197,7 +199,7 @@ export function loadMedia(opts: { delay?: number; query?: string; page?: number 
 
     function loadFunction() {
       return backend
-        .getMedia(undefined, undefined, config?.media_library_folder_support)
+        .getMedia(currentFolder, undefined, config?.media_library_folder_support)
         .then(files => dispatch(mediaLoaded(files)))
         .catch((error: { status?: number }) => {
           console.error(error);

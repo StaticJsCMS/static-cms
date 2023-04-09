@@ -276,7 +276,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
       setSelectedFile(null);
       setQuery('');
       setCurrentFolder(newDirectory);
-      dispatch(loadMedia());
+      dispatch(loadMedia({ currentFolder: newDirectory }));
     },
     [dispatch, currentFolder, collection, config, entry, field],
   );
@@ -285,16 +285,16 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     (toHome?: boolean) => {
       setSelectedFile(null);
       setQuery('');
+      let newDirectory: string | undefined;
       if (toHome) {
         setCurrentFolder(undefined);
       } else {
         const mediaFolder = trim(selectMediaFolder(config!, collection, entry, field), '/');
         const dir = dirname(currentFolder!);
-        const newDirectory =
-          dir.includes(mediaFolder) && trim(dir, '/') != mediaFolder ? dir : undefined;
+        newDirectory = dir.includes(mediaFolder) && trim(dir, '/') != mediaFolder ? dir : undefined;
         setCurrentFolder(newDirectory);
       }
-      dispatch(loadMedia());
+      dispatch(loadMedia({ currentFolder: newDirectory }));
     },
     [dispatch, config, collection, entry, field, currentFolder],
   );

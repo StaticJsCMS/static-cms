@@ -25,7 +25,7 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
   const collection = useAppSelector(collectionSelector);
 
   useEffect(() => {
-    if (!currentFolder || !config) {
+    if (!currentFolder || !config || !entry) {
       setCurrentFolderMediaFiles(null);
       return;
     }
@@ -52,25 +52,29 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
     return () => {
       alive = false;
     };
-  }, [currentFolder, config]);
+  }, [currentFolder, config, entry]);
 
   return useMemo(() => {
-    if (currentFolderMediaFiles) {
-      return currentFolderMediaFiles.map(file => ({ key: file.id, ...file }));
-    }
-
     if (entry) {
       const entryFiles = entry.mediaFiles ?? [];
       if (config) {
-        const mediaFolder = selectMediaFolder(config, collection, entry, field);
-        return entryFiles
+        const mediaFolder = selectMediaFolder(config, collection, entry, field, currentFolder);
+        const entryFolderFiles = entryFiles
           .filter(f => {
             return dirname(f.path) === mediaFolder;
           })
           .map(file => ({ key: file.id, ...file }));
+        if (currentFolderMediaFiles) {
+          if (entryFiles.length > 0) {
+            const draftFiles = entryFolderFiles.filter(file => file.draft == true);
+            currentFolderMediaFiles.unshift(...draftFiles);
+          }
+          return currentFolderMediaFiles.map(file => ({ key: file.id, ...file }));
+        }
+        return entryFolderFiles;
       }
     }
 
     return mediaLibraryFiles ?? [];
-  }, [collection, config, currentFolderMediaFiles, entry, field, mediaLibraryFiles]);
+  }, [collection, config, currentFolderMediaFiles, entry, field, mediaLibraryFiles, currentFolder]);
 }
