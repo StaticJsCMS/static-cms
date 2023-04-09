@@ -299,11 +299,9 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     [dispatch, config, collection, entry, field, currentFolder],
   );
 
-  const handleCreateFolder = useCallback(
-    () => {
-      console.log("[createFolder]");
-    }, []
-  );
+  const handleCreateFolder = useCallback(() => {
+    console.log('[createFolder]');
+  }, []);
 
   /**
    * Stores the public path of the file in the application store, where the

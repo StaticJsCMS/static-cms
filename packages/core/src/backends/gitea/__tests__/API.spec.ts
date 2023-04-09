@@ -318,7 +318,7 @@ describe('gitea API', () => {
           path: 'media/dir1',
           type: 'tree',
           name: 'dir1',
-        }
+        },
       ]);
       expect(api.request).toHaveBeenCalledTimes(1);
       expect(api.request).toHaveBeenCalledWith('/repos/owner/repo/git/trees/master:media', {
