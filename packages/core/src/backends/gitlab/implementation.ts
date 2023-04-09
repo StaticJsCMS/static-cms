@@ -223,7 +223,7 @@ export default class GitLab implements BackendClass {
     }
     return this.api!.listAllFiles(mediaFolder, folderSupport).then(files =>
       files.map(({ id, name, path, type }) => {
-        return { id, name, path, displayURL: { id, name, path }, isDirectory: type === 'tree'};
+        return { id, name, path, displayURL: { id, name, path }, isDirectory: type === 'tree' };
       }),
     );
   }
