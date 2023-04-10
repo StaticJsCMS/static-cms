@@ -162,8 +162,11 @@ const EditorToolbar = ({
           </Menu>
         ) : null}
         <Menu
-          label={isPublished ? 'Published' : 'Publish'}
+          label={
+            isPublished ? t('editor.editorToolbar.published') : t('editor.editorToolbar.publish')
+          }
           color={isPublished ? 'success' : 'primary'}
+          disabled={menuItems.length == 0}
         >
           <MenuGroup>{menuItems}</MenuGroup>
         </Menu>

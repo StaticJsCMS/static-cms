@@ -13,13 +13,12 @@ const de: LocalePhrasesRoot = {
       email: 'Stellen Sie sicher, Ihre E-Mail-Adresse einzugeben.',
       password: 'Bitte geben Sie Ihr Passwort ein.',
       identitySettings:
-        'Identity Einstellungen konnten nicht abgerufen werden. Stellen Sie bei der Verwendung des Git-Gateway Backends sicher, den Identity Service und das Git Gateway zu aktivieren.',
+        'Identity-Einstellungen konnten nicht abgerufen werden. Stellen Sie bei der Verwendung des Git-Gateway Backends sicher, den Identity Service und das Git Gateway zu aktivieren.',
     },
   },
   app: {
     header: {
       content: 'Inhalt',
-      workflow: 'Arbeitsablauf',
       media: 'Medien',
       quickAdd: 'Schnellerstellung',
     },
@@ -53,8 +52,8 @@ const de: LocalePhrasesRoot = {
       groupBy: 'Gruppieren nach',
     },
     entries: {
-      loadingEntries: 'Beiträge laden',
-      cachingEntries: 'Beiträge zwischenspeichern',
+      loadingEntries: 'Beiträge werden geladen....',
+      cachingEntries: 'Beiträge werden zwischengespeichert...',
       longerLoading: 'Diese Aktion kann einige Minuten in Anspruch nehmen',
       noEntries: 'Keine Beiträge',
     },
@@ -111,6 +110,7 @@ const de: LocalePhrasesRoot = {
       onDeletePublishedEntryTitle: 'Veröffentlichten Beitrag löschen?',
       onDeletePublishedEntryBody: 'Soll dieser veröffentlichte Beitrag wirklich gelöscht werden?',
       loadingEntry: 'Beitrag laden...',
+      confirmLoadBackupTitle: 'Lokales Backup benutzen?',
       confirmLoadBackupBody:
         'Für diesen Beitrag ist ein lokales Backup vorhanden. Möchten Sie dieses benutzen?',
     },
@@ -211,8 +211,12 @@ const de: LocalePhrasesRoot = {
       copied: 'Kopiert',
     },
     mediaLibrary: {
+      onDeleteTitle: 'Ausgewähltes Medium löschen?',
       onDeleteBody: 'Soll das ausgewählte Medium wirklich gelöscht werden?',
+      fileTooLargeTitle: 'Datei zu groß',
       fileTooLargeBody: 'Datei zu groß.\nErlaubt sind nur Dateien bis %{size} kB.',
+      alreadyExistsTitle: 'Datei existiert bereits',
+      alreadyExistsBody: '%{filename} existiert bereits. Soll sie überschrieben werden?',
     },
     mediaLibraryModal: {
       loading: 'Laden...',
@@ -270,35 +274,6 @@ const de: LocalePhrasesRoot = {
         'Sie wurden ausgeloggt. Bitte sichern Sie Ihre Daten und melden Sie sich erneut an.',
       onBackendDown:
         'Der Server ist aktuell nicht erreichbar. Für weitere Informationen, siehe: %{details}',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Arbeitsablauf Beiträge laden',
-      workflowHeading: 'Redaktioneller Arbeitsablauf',
-      newPost: 'Neuer Beitrag',
-      description:
-        '%{smart_count} Beitrag zur Überprüfung bereit, %{readyCount} bereit zur Veröffentlichung. |||| %{smart_count} Beiträge zur Überprüfung bereit, %{readyCount} bereit zur Veröffentlichung. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} von %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'von %{author}',
-      deleteChanges: 'Änderungen verwerfen',
-      deleteNewEntry: 'Lösche neuen Beitrag',
-      publishChanges: 'Veröffentliche Änderungen',
-      publishNewEntry: 'Veröffentliche neuen Beitrag',
-    },
-    workflowList: {
-      onDeleteEntry: 'Soll dieser Beitrag wirklich gelöscht werden?',
-      onPublishingNotReadyEntry:
-        'Nur Beiträge im Status "Abgeschlossen" können veröffentlicht werden. Bitte ziehen Sie den Beitrag in die "Abgeschlossen" Spalte um die Veröffentlichung zu aktivieren.',
-      onPublishEntry: 'Soll dieser Beitrag wirklich veröffentlicht werden soll?',
-      draftHeader: 'Entwurf',
-      inReviewHeader: 'In Prüfung',
-      readyHeader: 'Abgeschlossen',
-      currentEntries: '%{smart_count} Beitrag |||| %{smart_count} Beiträge',
     },
   },
 };
