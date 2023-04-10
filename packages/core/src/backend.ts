@@ -1005,17 +1005,15 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
   fieldsOrder(collection: Collection, entry: Entry) {
     if ('fields' in collection) {
       return collection.fields?.map(f => f!.name) ?? [];
-    } else {
-      const files = collection.files ?? [];
-      const file: CollectionFile | null = files.filter(f => f!.name === entry.slug)?.[0] ?? null;
-
-      if (file == null) {
-        throw new Error(`No file found for ${entry.slug} in ${collection.name}`);
-      }
-      return file.fields.map(f => f.name);
     }
 
-    return [];
+    const files = collection.files ?? [];
+    const file: CollectionFile | null = files.filter(f => f!.name === entry.slug)?.[0] ?? null;
+
+    if (file == null) {
+      throw new Error(`No file found for ${entry.slug} in ${collection.name}`);
+    }
+    return file.fields.map(f => f.name);
   }
 
   filterEntries(collection: { entries: Entry[] }, filterRule: FilterRule) {

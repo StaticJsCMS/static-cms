@@ -71,7 +71,6 @@ const EntriesCollection = ({
   const [prevCollection, setPrevCollection] = useState(collection);
 
   const groups = useGroups(collection.name);
-  console.log('[GROUPS] groups', groups);
 
   const entries = useEntries(collection);
 

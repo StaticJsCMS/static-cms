@@ -25,6 +25,7 @@ const FilterControl = ({
   const handleFilterClick = useCallback(
     (viewFilter: ViewFilter) => (event: MouseEvent | ChangeEvent) => {
       event.stopPropagation();
+      event.preventDefault();
       onFilterClick(viewFilter);
     },
     [onFilterClick],

@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
 
-import { selectEntriesSortField } from '@staticcms/core/reducers/selectors/entries';
+import { selectEntriesFilter } from '@staticcms/core/reducers/selectors/entries';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 
 export default function useFilters(collectionName: string) {
-  const entriesSortFieldSelector = useMemo(
-    () => selectEntriesSortField(collectionName),
+  const entriesFilterFieldSelector = useMemo(
+    () => selectEntriesFilter(collectionName),
     [collectionName],
   );
-  const filters = useAppSelector(entriesSortFieldSelector);
+  const filters = useAppSelector(entriesFilterFieldSelector);
 
   return useMemo(() => {
     return Object.values(filters ?? {}).filter(v => v?.active === true) || [];
