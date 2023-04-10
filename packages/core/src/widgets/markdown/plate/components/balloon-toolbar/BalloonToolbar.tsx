@@ -237,7 +237,6 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
         anchorEl={anchorEl.current ?? null}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        disablePortal
         tabIndex={0}
         className="
           absolute
