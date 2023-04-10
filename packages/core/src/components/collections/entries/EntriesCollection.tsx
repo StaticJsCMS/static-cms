@@ -6,10 +6,11 @@ import { loadEntries, traverseCollectionCursor } from '@staticcms/core/actions/e
 import useEntries from '@staticcms/core/lib/hooks/useEntries';
 import useGroups from '@staticcms/core/lib/hooks/useGroups';
 import { Cursor } from '@staticcms/core/lib/util';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectCollectionEntriesCursor } from '@staticcms/core/reducers/selectors/cursors';
 import { selectEntriesLoaded, selectIsFetching } from '@staticcms/core/reducers/selectors/entries';
-import Entries from './Entries';
 import { useAppDispatch } from '@staticcms/core/store/hooks';
+import Entries from './Entries';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { Collection, Entry, GroupOfEntries, TranslatedProps } from '@staticcms/core/interface';
@@ -70,6 +71,7 @@ const EntriesCollection = ({
   const [prevCollection, setPrevCollection] = useState(collection);
 
   const groups = useGroups(collection.name);
+  console.log('[GROUPS] groups', groups);
 
   const entries = useEntries(collection);
 
@@ -104,26 +106,39 @@ const EntriesCollection = ({
   );
 
   if (groups && groups.length > 0) {
-    <>
-      {groups.map(group => {
-        const title = getGroupTitle(group, t);
-        return (
-          <div key={group.id} id={group.id}>
-            <h2>{title}</h2>
-            <Entries
-              collection={collection}
-              entries={getGroupEntries(filteredEntries, group.paths)}
-              isFetching={isFetching}
-              collectionName={collection.label}
-              viewStyle={viewStyle}
-              cursor={cursor}
-              handleCursorActions={handleCursorActions}
-              page={page}
-            />
-          </div>
-        );
-      })}
-    </>;
+    return (
+      <>
+        {groups.map((group, index) => {
+          const title = getGroupTitle(group, t);
+          return (
+            <div key={group.id} id={group.id}>
+              <h2
+                className={classNames(
+                  `
+                    px-2
+                    pt-4
+                    pb-2
+                  `,
+                  index === 0 && 'pt-0',
+                )}
+              >
+                {title}
+              </h2>
+              <Entries
+                collection={collection}
+                entries={getGroupEntries(filteredEntries, group.paths)}
+                isFetching={isFetching}
+                collectionName={collection.label}
+                viewStyle={viewStyle}
+                cursor={cursor}
+                handleCursorActions={handleCursorActions}
+                page={page}
+              />
+            </div>
+          );
+        })}
+      </>
+    );
   }
 
   return (
