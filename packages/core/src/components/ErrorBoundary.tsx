@@ -147,31 +147,72 @@ class ErrorBoundary extends Component<TranslatedProps<ErrorBoundaryProps>, Error
       return this.props.children;
     }
     return (
-      <div key="error-boundary-container">
-        <h1>{t('ui.errorBoundary.title')}</h1>
-        <p>
-          <span>{t('ui.errorBoundary.details')}</span>
-          <a
-            href={buildIssueUrl(errorTitle, this.props.config)}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-testid="issue-url"
-          >
-            {t('ui.errorBoundary.reportIt')}
-          </a>
-        </p>
-        <p>
-          {t('ui.errorBoundary.privacyWarning')
-            .split('\n')
-            .map((item, index) => [
-              <span key={`private-warning-${index}`}>{item}</span>,
-              <br key={`break-${index}`} />,
-            ])}
-        </p>
+      <div
+        key="error-boundary-container"
+        className="
+          flex
+          flex-col
+          bg-slate-50
+          dark:bg-slate-900
+          min-h-screen
+          gap-2
+        "
+      >
+        <div
+          className="
+            flex
+            flex-col
+            py-2
+            px-4
+            gap-2
+          "
+        >
+          <h1 className="text-2xl bold">{t('ui.errorBoundary.title')}</h1>
+          <p>
+            <span>{t('ui.errorBoundary.details')}</span>
+            <a
+              href={buildIssueUrl(errorTitle, this.props.config)}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="issue-url"
+              className="
+                text-blue-500
+                hover:underline
+              "
+            >
+              {t('ui.errorBoundary.reportIt')}
+            </a>
+          </p>
+          <p>
+            {t('ui.errorBoundary.privacyWarning')
+              .split('\n')
+              .map((item, index) => [
+                <span key={`private-warning-${index}`}>{item}</span>,
+                <br key={`break-${index}`} />,
+              ])}
+          </p>
+        </div>
         <hr />
-        <h2>{t('ui.errorBoundary.detailsHeading')}</h2>
-        <p>{errorMessage}</p>
-        {backup && showBackup && <RecoveredEntry key="backup" entry={backup} t={t} />}
+        <div
+          className="
+            flex
+            flex-col
+            py-2
+            px-4
+            gap-2
+          "
+        >
+          <h2 className="text-xl bold">{t('ui.errorBoundary.detailsHeading')}</h2>
+          <p>
+            {errorMessage.split('\n').map((item, index) => [
+              <span key={`error-line-${index}`} className="whitespace-pre">
+                {item}
+              </span>,
+              <br key={`error-break-${index}`} />,
+            ])}
+          </p>
+          {backup && showBackup && <RecoveredEntry key="backup" entry={backup} t={t} />}
+        </div>
       </div>
     );
   }

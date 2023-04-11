@@ -9,8 +9,6 @@ import { useAppSelector } from '@staticcms/core/store/hooks';
 import { getDefaultPath } from '../../lib/util/collection.util';
 import CollectionPage from './CollectionPage';
 
-import type { Collection } from '@staticcms/core/interface';
-
 interface CollectionRouteProps {
   isSearchResults?: boolean;
   isSingleSearchResult?: boolean;
@@ -35,7 +33,7 @@ const CollectionRoute = ({ isSearchResults, isSingleSearchResult }: CollectionRo
 
   return (
     <CollectionPage
-      collection={collection as unknown as Collection}
+      collection={collection}
       isSearchResults={isSearchResults}
       isSingleSearchResult={isSingleSearchResult}
     />
