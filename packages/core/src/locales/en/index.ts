@@ -248,6 +248,12 @@ const en: LocalePhrasesRoot = {
       deleteSelected: 'Delete selected',
       chooseSelected: 'Choose selected',
     },
+    folderSupport: {
+      onCreateTitle: 'Create new folder',
+      onCreateBody: 'Please enter a name for the new folder.',
+      goBackToHome: 'Go back to media folder.',
+      goBack: 'Go back to previous folder.',
+    },
   },
   ui: {
     common: {

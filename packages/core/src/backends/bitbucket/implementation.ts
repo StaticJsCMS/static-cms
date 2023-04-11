@@ -351,12 +351,18 @@ export default class BitbucketBackend implements BackendClass {
     }));
   }
 
-  async getMedia(mediaFolder = this.mediaFolder) {
+  async getMedia(mediaFolder = this.mediaFolder, folderSupport?: boolean) {
     if (!mediaFolder) {
       return [];
     }
-    return this.api!.listAllFiles(mediaFolder, 1, this.branch).then(files =>
-      files.map(({ id, name, path }) => ({ id, name, path, displayURL: { id, path } })),
+    return this.api!.listAllFiles(mediaFolder, 1, this.branch, folderSupport).then(files =>
+      files.map(({ id, name, path, type }) => ({
+        id,
+        name,
+        path,
+        displayURL: { id, path },
+        isDirectory: type === 'commit_directory',
+      })),
     );
   }
 

@@ -314,5 +314,49 @@ describe('github API', () => {
         params: { recursive: 1 },
       });
     });
+    it('should get files and folders', async () => {
+      const api = new API({ branch: 'master', repo: 'owner/repo' });
+
+      const tree = [
+        {
+          path: 'image.png',
+          type: 'blob',
+        },
+        {
+          path: 'dir1',
+          type: 'tree',
+        },
+        {
+          path: 'dir1/nested-image.png',
+          type: 'blob',
+        },
+        {
+          path: 'dir1/dir2',
+          type: 'tree',
+        },
+        {
+          path: 'dir1/dir2/nested-image.png',
+          type: 'blob',
+        },
+      ];
+      api.request = jest.fn().mockResolvedValue({ tree });
+
+      await expect(api.listFiles('media', {}, true)).resolves.toEqual([
+        {
+          path: 'media/image.png',
+          type: 'blob',
+          name: 'image.png',
+        },
+        {
+          path: 'media/dir1',
+          type: 'tree',
+          name: 'dir1',
+        },
+      ]);
+      expect(api.request).toHaveBeenCalledTimes(1);
+      expect(api.request).toHaveBeenCalledWith('/repos/owner/repo/git/trees/master:media', {
+        params: {},
+      });
+    });
   });
 });

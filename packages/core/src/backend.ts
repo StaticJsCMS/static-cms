@@ -251,6 +251,7 @@ export interface MediaFile {
   queryOrder?: unknown;
   isViewableImage?: boolean;
   type?: string;
+  isDirectory?: boolean;
 }
 
 interface BackupEntry {
@@ -749,8 +750,8 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return entryValue;
   }
 
-  getMedia(folder?: string | undefined, mediaPath?: string | undefined) {
-    return this.implementation.getMedia(folder, mediaPath);
+  getMedia(folder?: string | undefined, folderSupport?: boolean, mediaPath?: string | undefined) {
+    return this.implementation.getMedia(folder, folderSupport, mediaPath);
   }
 
   getMediaFile(path: string) {
@@ -804,7 +805,11 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
             entry,
             undefined,
           );
-          return this.implementation.getMedia(folder, mediaPath);
+          return this.implementation.getMedia(
+            folder,
+            configState.config?.media_library_folder_support ?? false,
+            mediaPath,
+          );
         }),
       );
       entry.mediaFiles = entry.mediaFiles.concat(...files);

@@ -139,7 +139,12 @@ export function closeMediaLibrary() {
   };
 }
 
-export function insertMedia(mediaPath: string | string[], field: Field | undefined, alt?: string) {
+export function insertMedia(
+  mediaPath: string | string[],
+  field: Field | undefined,
+  alt?: string,
+  currentFolder?: string,
+) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const config = state.config.config;
@@ -152,10 +157,17 @@ export function insertMedia(mediaPath: string | string[], field: Field | undefin
     const collection = state.collections[collectionName];
     if (Array.isArray(mediaPath)) {
       mediaPath = mediaPath.map(path =>
-        selectMediaFilePublicPath(config, collection, path, entry, field),
+        selectMediaFilePublicPath(config, collection, path, entry, field, currentFolder),
       );
     } else {
-      mediaPath = selectMediaFilePublicPath(config, collection, mediaPath as string, entry, field);
+      mediaPath = selectMediaFilePublicPath(
+        config,
+        collection,
+        mediaPath as string,
+        entry,
+        field,
+        currentFolder,
+      );
     }
     dispatch(mediaInserted(mediaPath, alt));
   };
@@ -165,8 +177,10 @@ export function removeInsertedMedia(controlID: string) {
   return { type: MEDIA_REMOVE_INSERTED, payload: { controlID } } as const;
 }
 
-export function loadMedia(opts: { delay?: number; query?: string; page?: number } = {}) {
-  const { delay = 0, page = 1 } = opts;
+export function loadMedia(
+  opts: { delay?: number; query?: string; page?: number; currentFolder?: string } = {},
+) {
+  const { delay = 0, page = 1, currentFolder } = opts;
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const config = state.config.config;
@@ -179,7 +193,7 @@ export function loadMedia(opts: { delay?: number; query?: string; page?: number 
 
     function loadFunction() {
       return backend
-        .getMedia()
+        .getMedia(currentFolder, config?.media_library_folder_support ?? false)
         .then(files => dispatch(mediaLoaded(files)))
         .catch((error: { status?: number }) => {
           console.error(error);
@@ -227,7 +241,7 @@ function createMediaFileFromAsset({
   return mediaFile;
 }
 
-export function persistMedia(file: File, opts: MediaOptions = {}) {
+export function persistMedia(file: File, opts: MediaOptions = {}, currentFolder?: string) {
   const { field } = opts;
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
@@ -273,7 +287,7 @@ export function persistMedia(file: File, opts: MediaOptions = {}) {
     try {
       const entry = state.entryDraft.entry;
       const collection = entry?.collection ? state.collections[entry.collection] : null;
-      const path = selectMediaFilePath(config, collection, entry, fileName, field);
+      const path = selectMediaFilePath(config, collection, entry, fileName, field, currentFolder);
       const assetProxy = createAssetProxy({
         file,
         path,

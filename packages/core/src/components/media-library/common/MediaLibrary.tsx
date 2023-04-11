@@ -1,8 +1,13 @@
 import { Photo as PhotoIcon } from '@styled-icons/material/Photo';
+import { ArrowUpward as UpwardIcon } from '@styled-icons/material/ArrowUpward';
+import { Home as HomeIcon } from '@styled-icons/material/Home';
+import { CreateNewFolder as NewFolderIcon } from '@styled-icons/material/CreateNewFolder';
 import fuzzy from 'fuzzy';
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { translate } from 'react-polyglot';
+import { dirname } from 'path';
+import trim from 'lodash/trim';
 
 import {
   closeMediaLibrary,
@@ -25,6 +30,9 @@ import EmptyMessage from './EmptyMessage';
 import FileUploadButton from './FileUploadButton';
 import MediaLibraryCardGrid from './MediaLibraryCardGrid';
 import MediaLibrarySearch from './MediaLibrarySearch';
+import { selectMediaFilePath, selectMediaFolder } from '@staticcms/core/lib/util/media.util';
+import { selectConfig } from '@staticcms/core/reducers/selectors/config';
+import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
 
 import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
@@ -51,6 +59,7 @@ interface MediaLibraryProps {
 }
 
 const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = false, t }) => {
+  const [currentFolder, setCurrentFolder] = useState<string | undefined>(undefined);
   const [selectedFile, setSelectedFile] = useState<MediaFile | null>(null);
   const [query, setQuery] = useState<string | undefined>(undefined);
 
@@ -74,17 +83,20 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
     insertOptions,
   } = useAppSelector(selectMediaLibraryState);
 
+  const config = useAppSelector(selectConfig);
+  const entry = useAppSelector(selectEditingDraft);
+
   const [url, setUrl] = useState<string | string[] | undefined>(initialValue ?? '');
+
   const [alt, setAlt] = useState<string | undefined>(initialAlt);
 
   const [prevIsVisible, setPrevIsVisible] = useState(false);
-
-  const files = useMediaFiles(field);
 
   useEffect(() => {
     if (!prevIsVisible && isVisible) {
       setSelectedFile(null);
       setQuery('');
+      setCurrentFolder(undefined);
       dispatch(loadMedia());
     } else if (prevIsVisible && !isVisible) {
       window.dispatchEvent(new MediaLibraryCloseEvent());
@@ -92,6 +104,8 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
 
     setPrevIsVisible(isVisible);
   }, [isVisible, dispatch, prevIsVisible]);
+
+  const files = useMediaFiles(field, currentFolder);
 
   const loadDisplayURL = useCallback(
     (file: MediaFile) => {
@@ -106,7 +120,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   const filterImages = useCallback((files: MediaFile[]) => {
     return files.filter(file => {
       const ext = fileExtension(file.name).toLowerCase();
-      return IMAGE_EXTENSIONS.includes(ext);
+      return IMAGE_EXTENSIONS.includes(ext) || file.isDirectory;
     });
   }, []);
 
@@ -116,7 +130,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
   const toTableData = useCallback((files: MediaFile[]) => {
     const tableData =
       files &&
-      files.map(({ key, name, id, size, path, queryOrder, displayURL, draft }) => {
+      files.map(({ key, name, id, size, path, queryOrder, displayURL, draft, isDirectory }) => {
         const ext = fileExtension(name).toLowerCase();
         return {
           key,
@@ -130,6 +144,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
           draft,
           isImage: IMAGE_EXTENSIONS.includes(ext),
           isViewableImage: IMAGE_EXTENSIONS_VIEWABLE.includes(ext),
+          isDirectory,
         };
       });
 
@@ -157,7 +172,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
    */
   const handleAssetSelect = useCallback(
     (asset: MediaFile) => {
-      if (!canInsert || selectedFile?.key === asset.key) {
+      if (!canInsert || selectedFile?.key === asset.key || asset.isDirectory) {
         return;
       }
 
@@ -214,7 +229,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
           },
         });
       } else {
-        await dispatch(persistMedia(file, { field }));
+        await dispatch(persistMedia(file, { field }, currentFolder));
 
         setSelectedFile(files[0] as unknown as MediaFile);
 
@@ -225,15 +240,15 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
         event.target.value = '';
       }
     },
-    [mediaConfig.max_file_size, field, dispatch],
+    [mediaConfig.max_file_size, field, dispatch, currentFolder],
   );
 
   const handleURLChange = useCallback(
     (url: string) => {
       setUrl(url);
-      dispatch(insertMedia(url, field, alt));
+      dispatch(insertMedia(url, field, alt, currentFolder));
     },
-    [alt, dispatch, field],
+    [alt, dispatch, field, currentFolder],
   );
 
   const handleAltChange = useCallback(
@@ -243,10 +258,50 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
       }
 
       setAlt(alt);
-      dispatch(insertMedia((url ?? selectedFile?.path) as string, field, alt));
+      dispatch(insertMedia((url ?? selectedFile?.path) as string, field, alt, currentFolder));
     },
-    [dispatch, field, selectedFile?.path, url],
+    [dispatch, field, selectedFile?.path, url, currentFolder],
   );
+
+  const handleOpenDirectory = useCallback(
+    (dir: string) => {
+      const newDirectory = selectMediaFilePath(
+        config!,
+        collection!,
+        entry,
+        dir,
+        field,
+        currentFolder,
+      );
+      setSelectedFile(null);
+      setQuery('');
+      setCurrentFolder(newDirectory);
+      dispatch(loadMedia({ currentFolder: newDirectory }));
+    },
+    [dispatch, currentFolder, collection, config, entry, field],
+  );
+
+  const handleGoBack = useCallback(
+    (toHome?: boolean) => {
+      setSelectedFile(null);
+      setQuery('');
+      let newDirectory: string | undefined;
+      if (toHome) {
+        setCurrentFolder(undefined);
+      } else {
+        const mediaFolder = trim(selectMediaFolder(config!, collection, entry, field), '/');
+        const dir = dirname(currentFolder!);
+        newDirectory = dir.includes(mediaFolder) && trim(dir, '/') != mediaFolder ? dir : undefined;
+        setCurrentFolder(newDirectory);
+      }
+      dispatch(loadMedia({ currentFolder: newDirectory }));
+    },
+    [dispatch, config, collection, entry, field, currentFolder],
+  );
+
+  const handleCreateFolder = useCallback(() => {
+    console.log('[createFolder]');
+  }, []);
 
   /**
    * Stores the public path of the file in the application store, where the
@@ -259,12 +314,12 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
 
     const { path } = selectedFile;
     setUrl(path);
-    dispatch(insertMedia(path, field, alt));
+    dispatch(insertMedia(path, field, alt, currentFolder));
 
     if (!insertOptions?.chooseUrl && !insertOptions?.showAlt) {
       handleClose();
     }
-  }, [selectedFile, dispatch, field, alt, insertOptions, handleClose]);
+  }, [selectedFile, dispatch, field, alt, insertOptions, handleClose, currentFolder]);
 
   /**
    * Removes the selected file from the backend.
@@ -364,7 +419,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
         onUrlChange={handleURLChange}
         onAltChange={handleAltChange}
       />
-      <div className="flex items-center px-5 pt-4">
+      <div className="flex items-center px-5 pt-4 mb-4">
         <div className="flex flex-grow gap-4 mr-8">
           <h2
             className="
@@ -382,6 +437,24 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
             </div>
             {t('app.header.media')}
           </h2>
+          {config?.media_library_folder_support ? (
+            <div className="flex gap-3 items-center">
+              <Button
+                onClick={() => handleGoBack(true)}
+                title={t('mediaLibrary.folderSupport.goBackToHome')}
+                disabled={!currentFolder}
+              >
+                <HomeIcon className="h-5 w-5" />
+              </Button>
+              <Button
+                onClick={() => handleGoBack()}
+                title={t('mediaLibrary.folderSupport.goBack')}
+                disabled={!currentFolder}
+              >
+                <UpwardIcon className="h-5 w-5" />
+              </Button>
+            </div>
+          ) : null}
           <MediaLibrarySearch
             value={query}
             onChange={handleSearchChange}
@@ -391,6 +464,14 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
           />
         </div>
         <div className="flex gap-3 items-center relative z-20">
+          {config?.media_library_folder_support ? (
+            <Button
+              onClick={() => handleCreateFolder()}
+              title={t('mediaLibrary.folderSupport.onCreateTitle')}
+            >
+              <NewFolderIcon className="h-5 w-5"></NewFolderIcon>
+            </Button>
+          ) : null}
           <FileUploadButton imagesOnly={forImage} onChange={handlePersist} />
           {canInsert ? (
             <Button
@@ -416,6 +497,8 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({ canInsert = fals
           onAssetSelect={handleAssetSelect}
           canLoadMore={hasNextPage}
           onLoadMore={handleLoadMore}
+          onDirectoryOpen={handleOpenDirectory}
+          currentFolder={currentFolder}
           isPaginating={isPaginating}
           paginatingMessage={t('mediaLibrary.mediaLibraryModal.loading')}
           cardDraftText={t('mediaLibrary.mediaLibraryCard.draft')}

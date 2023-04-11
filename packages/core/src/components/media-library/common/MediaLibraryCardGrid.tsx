@@ -29,6 +29,7 @@ export interface MediaLibraryCardItem {
   type: string;
   draft: boolean;
   isViewableImage?: boolean;
+  isDirectory?: boolean;
   url?: string;
 }
 
@@ -39,6 +40,8 @@ export interface MediaLibraryCardGridProps {
   onAssetSelect: (asset: MediaFile) => void;
   canLoadMore?: boolean;
   onLoadMore: () => void;
+  onDirectoryOpen: (dir: string) => void;
+  currentFolder?: string;
   isPaginating?: boolean;
   paginatingMessage?: string;
   cardDraftText: string;
@@ -62,6 +65,8 @@ const CardWrapper = ({
     mediaItems,
     isSelectedFile,
     onAssetSelect,
+    onDirectoryOpen,
+    currentFolder,
     cardDraftText,
     displayURLs,
     loadDisplayURL,
@@ -111,12 +116,15 @@ const CardWrapper = ({
         isSelected={isSelectedFile(file)}
         text={file.name}
         onSelect={() => onAssetSelect(file)}
+        onDirectoryOpen={() => onDirectoryOpen(file.path)}
+        currentFolder={currentFolder}
         isDraft={file.draft}
         draftText={cardDraftText}
         displayURL={displayURLs[file.id] ?? (file.url ? { url: file.url } : {})}
         loadDisplayURL={() => loadDisplayURL(file)}
         type={file.type}
         isViewableImage={file.isViewableImage ?? false}
+        isDirectory={file.isDirectory ?? false}
         collection={collection}
         field={field}
         onDelete={() => onDelete(file)}

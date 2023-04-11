@@ -146,17 +146,23 @@ export default class ProxyBackend implements BackendClass {
     });
   }
 
-  async getMedia(mediaFolder = this.mediaFolder, publicFolder = this.publicFolder) {
-    const files: { path: string; url: string }[] = await this.request({
+  async getMedia(
+    mediaFolder = this.mediaFolder,
+    folderSupport?: boolean,
+    publicFolder = this.publicFolder,
+  ) {
+    const files: { path: string; url: string; isDirectory: boolean }[] = await this.request({
       action: 'getMedia',
       params: { branch: this.branch, mediaFolder, publicFolder },
     });
 
-    return files.map(({ url, path }) => {
+    const filteredFiles = folderSupport ? files : files.filter(f => !f.isDirectory);
+
+    return filteredFiles.map(({ url, path, isDirectory }) => {
       const id = url;
       const name = basename(path);
 
-      return { id, name, displayURL: { id, path: url }, path };
+      return { id, name, displayURL: { id, path: url }, path, isDirectory };
     });
   }
 

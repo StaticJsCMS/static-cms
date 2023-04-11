@@ -490,7 +490,11 @@ export abstract class BackendClass {
   abstract entriesByFiles(files: ImplementationFile[]): Promise<ImplementationEntry[]>;
 
   abstract getMediaDisplayURL(displayURL: DisplayURL): Promise<string>;
-  abstract getMedia(folder?: string, mediaPath?: string): Promise<ImplementationMediaFile[]>;
+  abstract getMedia(
+    folder?: string,
+    folderSupport?: boolean,
+    mediaPath?: string,
+  ): Promise<ImplementationMediaFile[]>;
   abstract getMediaFile(path: string): Promise<ImplementationMediaFile>;
 
   abstract persistEntry(entry: BackendEntry, opts: PersistOptions): Promise<void>;
@@ -813,6 +817,7 @@ export interface Config<EF extends BaseField = UnknownField> {
   local_backend?: boolean | LocalBackend;
   editor?: EditorConfig;
   search?: boolean;
+  media_library_folder_support?: boolean;
 }
 
 export interface InitOptions<EF extends BaseField = UnknownField> {

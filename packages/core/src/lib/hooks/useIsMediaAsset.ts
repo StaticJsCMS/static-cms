@@ -18,6 +18,7 @@ export default function useIsMediaAsset<T extends MediaField, EF extends BaseFie
   collection: Collection<EF>,
   field: T,
   entry: Entry,
+  currentFolder?: string,
 ): boolean {
   const dispatch = useAppDispatch();
   const [exists, setExists] = useState(false);
@@ -29,14 +30,16 @@ export default function useIsMediaAsset<T extends MediaField, EF extends BaseFie
     }
 
     const checkMediaExistence = async () => {
-      const asset = await dispatch(getAsset<T, EF>(collection, entry, debouncedUrl, field));
+      const asset = await dispatch(
+        getAsset<T, EF>(collection, entry, debouncedUrl, field, currentFolder),
+      );
       setExists(
         Boolean(asset && asset !== emptyAsset && isNotEmpty(asset.toString()) && asset.fileObj),
       );
     };
 
     checkMediaExistence();
-  }, [collection, dispatch, entry, field, debouncedUrl]);
+  }, [collection, dispatch, entry, field, debouncedUrl, currentFolder]);
 
   return exists;
 }
