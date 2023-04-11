@@ -236,13 +236,13 @@ export function selectMediaFolder<EF extends BaseField>(
   field: MediaField | undefined,
   currentFolder?: string,
 ) {
-  const name = 'media_folder';
-  let mediaFolder = config[name];
+  let mediaFolder = config['media_folder'] ?? '';
 
-  if (hasCustomFolder(name, collection, entryMap?.slug, field)) {
-    const folder = evaluateFolder(name, config, collection!, entryMap, field);
+  if (currentFolder) {
+    mediaFolder = currentFolder;
+  } else if (hasCustomFolder('media_folder', collection, entryMap?.slug, field)) {
+    const folder = evaluateFolder('media_folder', config, collection!, entryMap, field);
     if (folder.startsWith('/')) {
-      // return absolute paths as is
       mediaFolder = join(folder);
     } else {
       const entryPath = entryMap?.path;
@@ -250,10 +250,6 @@ export function selectMediaFolder<EF extends BaseField>(
         ? join(dirname(entryPath), folder)
         : join(collection && 'folder' in collection ? collection.folder : '', DRAFT_MEDIA_FILES);
     }
-  }
-
-  if (currentFolder) {
-    mediaFolder = trim(currentFolder, '/').replace(trim(mediaFolder, '/'), mediaFolder!);
   }
 
   return trim(mediaFolder, '/');
@@ -311,7 +307,7 @@ export function selectMediaFilePath(
   let mediaFolder = selectMediaFolder(config, collection, entryMap, field, currentFolder);
 
   if (!currentFolder) {
-    let publicFolder = trim(config['public_folder']!, '/');
+    let publicFolder = trim(config['public_folder'] ?? mediaFolder, '/');
     const mediaPathDir = trim(dirname(mediaPath), '/');
 
     if (hasCustomFolder('public_folder', collection, entryMap?.slug, field)) {
@@ -320,12 +316,14 @@ export function selectMediaFilePath(
         '/',
       );
     }
-    currentFolder =
-      mediaPathDir.includes(publicFolder) && mediaPathDir != mediaFolder
-        ? mediaPathDir.replace(publicFolder, mediaFolder)
-        : undefined;
-    if (currentFolder) {
-      mediaFolder = selectMediaFolder(config, collection, entryMap, field, currentFolder);
+    if (mediaPathDir.includes(publicFolder) && mediaPathDir != mediaFolder) {
+      mediaFolder = selectMediaFolder(
+        config,
+        collection,
+        entryMap,
+        field,
+        mediaPathDir.replace(publicFolder, mediaFolder),
+      );
     }
   }
 

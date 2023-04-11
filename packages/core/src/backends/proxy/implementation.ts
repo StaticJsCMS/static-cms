@@ -148,8 +148,8 @@ export default class ProxyBackend implements BackendClass {
 
   async getMedia(
     mediaFolder = this.mediaFolder,
-    publicFolder = this.publicFolder,
     folderSupport?: boolean,
+    publicFolder = this.publicFolder,
   ) {
     const files: { path: string; url: string; isDirectory: boolean }[] = await this.request({
       action: 'getMedia',

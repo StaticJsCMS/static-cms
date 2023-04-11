@@ -391,8 +391,8 @@ export default class GitGateway implements BackendClass {
     return client.enabled && client.matchPath(path);
   }
 
-  getMedia(mediaFolder = this.mediaFolder, publicFolder?: string, folderSupport?: boolean) {
-    return this.backend!.getMedia(mediaFolder, publicFolder, folderSupport);
+  getMedia(mediaFolder = this.mediaFolder, folderSupport?: boolean) {
+    return this.backend!.getMedia(mediaFolder, folderSupport);
   }
 
   // this method memoizes this._getLargeMediaClient so that there can

@@ -750,8 +750,8 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return entryValue;
   }
 
-  getMedia(folder?: string | undefined, mediaPath?: string | undefined, folderSupport?: boolean) {
-    return this.implementation.getMedia(folder, mediaPath, folderSupport);
+  getMedia(folder?: string | undefined, folderSupport?: boolean, mediaPath?: string | undefined) {
+    return this.implementation.getMedia(folder, folderSupport, mediaPath);
   }
 
   getMediaFile(path: string) {
@@ -807,8 +807,8 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
           );
           return this.implementation.getMedia(
             folder,
+            configState.config?.media_library_folder_support ?? false,
             mediaPath,
-            configState.config!.media_library_folder_support,
           );
         }),
       );

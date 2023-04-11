@@ -351,7 +351,7 @@ export default class BitbucketBackend implements BackendClass {
     }));
   }
 
-  async getMedia(mediaFolder = this.mediaFolder, _publicFolder?: string, folderSupport?: boolean) {
+  async getMedia(mediaFolder = this.mediaFolder, folderSupport?: boolean) {
     if (!mediaFolder) {
       return [];
     }

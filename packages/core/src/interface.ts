@@ -492,8 +492,8 @@ export abstract class BackendClass {
   abstract getMediaDisplayURL(displayURL: DisplayURL): Promise<string>;
   abstract getMedia(
     folder?: string,
-    mediaPath?: string,
     folderSupport?: boolean,
+    mediaPath?: string,
   ): Promise<ImplementationMediaFile[]>;
   abstract getMediaFile(path: string): Promise<ImplementationMediaFile>;
 

@@ -314,7 +314,7 @@ export default class GitHub implements BackendClass {
       .catch(() => ({ file: { path, id: null }, data: '' }));
   }
 
-  async getMedia(mediaFolder = this.mediaFolder, _publicFolder?: string, folderSupport?: boolean) {
+  async getMedia(mediaFolder = this.mediaFolder, folderSupport?: boolean) {
     if (!mediaFolder) {
       return [];
     }

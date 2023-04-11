@@ -193,7 +193,7 @@ export function loadMedia(
 
     function loadFunction() {
       return backend
-        .getMedia(currentFolder, undefined, config?.media_library_folder_support)
+        .getMedia(currentFolder, config?.media_library_folder_support ?? false)
         .then(files => dispatch(mediaLoaded(files)))
         .catch((error: { status?: number }) => {
           console.error(error);
