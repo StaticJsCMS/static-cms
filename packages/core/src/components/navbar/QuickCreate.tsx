@@ -1,5 +1,6 @@
 import { Add as AddIcon } from '@styled-icons/material/Add';
 import React, { useMemo } from 'react';
+import { translate } from 'react-polyglot';
 
 import { getNewEntryUrl } from '@staticcms/core/lib/urlHelper';
 import { selectCollections } from '@staticcms/core/reducers/selectors/collections';
@@ -8,7 +9,9 @@ import Menu from '../common/menu/Menu';
 import MenuItemLink from '../common/menu/MenuItemLink';
 import MenuGroup from '../common/menu/MenuGroup';
 
-const QuickCreate = () => {
+import type { TranslateProps } from 'react-polyglot';
+
+const QuickCreate = ({ t }: TranslateProps) => {
   const collections = useAppSelector(selectCollections);
 
   const createableCollections = useMemo(
@@ -20,7 +23,7 @@ const QuickCreate = () => {
   );
 
   return (
-    <Menu label="Quick Add" startIcon={AddIcon}>
+    <Menu label={t('app.header.quickAdd')} startIcon={AddIcon}>
       <MenuGroup>
         {createableCollections.map(collection => (
           <MenuItemLink key={collection.name} href={getNewEntryUrl(collection.name)}>
@@ -32,4 +35,4 @@ const QuickCreate = () => {
   );
 };
 
-export default QuickCreate;
+export default translate()(QuickCreate);
