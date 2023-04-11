@@ -19,7 +19,6 @@ const bg: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Съдържание',
-      workflow: 'Работен процес',
       media: 'Мултимедийни файлове',
       quickAdd: 'Бързо добавяне',
     },
@@ -256,35 +255,6 @@ const bg: LocalePhrasesRoot = {
       onFailToAuth: '%{details}',
       onLoggedOut: 'Излезли сте. Моля, запазете всички данни и влезте отново',
       onBackendDown: 'Има прекъсване в работата на бекенда. Виж детайлите %{details}',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Зареждане на редакционни записи',
-      workflowHeading: 'Редакционен работен процес',
-      newPost: 'Нова публикация',
-      description:
-        'Броят на записите, които очакват проверка -% {smart_count}, готови за публикуване -% {readyCount}. |||| Броят на записите, които очакват проверка -% {smart_count}, готови за публикуване -% {readyCount}. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date}, %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: '%{author}',
-      deleteChanges: 'Изтриване на промените',
-      deleteNewEntry: 'Изтриване на нов запис',
-      pubChanges: 'Публикуване на промени',
-      objavNewEntry: 'Публикуване на нов запис',
-    },
-    workflowList: {
-      onDeleteEntry: 'Наистина ли искате да изтриете този запис?',
-      onPublishingNotReadyEntry:
-        'Могат да се публикуват само елементи със статус "Готов". Плъзенете картата в колоната "Готов" за да активирате публикуването.',
-      onPublishEntry: 'Наистина ли искате да публикувате този запис?',
-      draftHeader: 'Чернови',
-      inReviewHeader: 'В Ревю',
-      readyHeader: 'Готов',
-      currentEntries: '%{smart_count} запис |||| %{smart_count} записи',
     },
   },
 };
