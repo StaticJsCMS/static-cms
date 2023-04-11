@@ -35,7 +35,19 @@ const Loader = ({ children }: LoaderProps) => {
   }, [children, currentItem]);
 
   return (
-    <div className="absolute inset-0 flex flex-col gap-2 items-center justify-center">
+    <div
+      className="
+        absolute
+        inset-0
+        flex
+        flex-col
+        gap-2
+        items-center
+        justify-center
+        bg-slate-50
+        dark:bg-slate-900
+      "
+    >
       <CircularProgress />
       <div>{text}</div>
     </div>
