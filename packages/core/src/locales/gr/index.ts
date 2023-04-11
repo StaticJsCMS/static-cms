@@ -19,7 +19,6 @@ const gr: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Περιεχόμενα',
-      workflow: 'Ροής εργασίας',
       media: 'Πολυμέσα',
       quickAdd: 'Γρήγορη προσθήκη',
     },
@@ -188,35 +187,6 @@ const gr: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Η δημοσίευση απέτυχε: %{details}',
       entryUpdated: 'Η κατάσταση εισόδου ενημερώθηκε',
       onFailToAuth: '%{details}',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Φόρτωση καταχωρήσεων ροής εργασίας σύνταξης',
-      workflowHeading: 'Ροή εργασιών',
-      newPost: 'Νέα δημοσίευση',
-      description:
-        '%{smart_count} καταχώρησεις σε αναμονή για αναθεώρηση, %{readyCount} έτοιμες για Live μετάβαση. |||| %{smart_count} καταχωρήσεις σε αναμονή για αναθεώρηση, %{readyCount} έτοιμες για Live μετάβαση. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} από %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'από %{author}',
-      deleteChanges: 'Διαγραφή αλλαγών',
-      deleteNewEntry: 'Διαγραφή νέας καταχώρησης',
-      publishChanges: 'Δημοσίευση αλλαγών',
-      publishNewEntry: 'Δημοσίευση νέας καταχώρησης',
-    },
-    workflowList: {
-      onDeleteEntry: 'Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν την καταχώρηση;',
-      onPublishingNotReadyEntry:
-        'Μόνο τα στοιχεία με κατάσταση "Ready" μπορούν να δημοσιευτούν. Σύρετε την κάρτα στη στήλη "έτοιμο" για να ενεργοποιήσετε τη δημοσίευση.',
-      onPublishEntry: 'Είστε βέβαιοι ότι θέλετε να δημοσιεύσετε αυτήν την καταχώρηση;',
-      draftHeader: 'Προσχέδια',
-      inReviewHeader: 'Σε ανασκόπηση',
-      readyHeader: 'Έτοιμα',
-      currentEntries: '%{smart_count} καταχωρηση |||| %{smart_count} καταχωρησεις',
     },
   },
 };

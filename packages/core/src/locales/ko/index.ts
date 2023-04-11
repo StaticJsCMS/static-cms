@@ -19,7 +19,6 @@ const ko: LocalePhrasesRoot = {
   app: {
     header: {
       content: '콘텐츠',
-      workflow: '워크플로우',
       media: '미디어',
       quickAdd: '빠른 추가',
     },
@@ -224,35 +223,6 @@ const ko: LocalePhrasesRoot = {
       onLoggedOut: '로그아웃 하셨습니다, 데티어를 백업하시고 다시 로그인 하세요.',
       onBackendDown:
         '백엔드 서비스가 장애를 겪고 있습니다. 자세한 사항은 %{details} 을(를) 참고하세요.',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: '편집 워크플로우의 항목을 불러오는 중',
-      workflowHeading: '편집 워크플로우',
-      newPost: '새 게시물',
-      description:
-        '%{smart_count}개 항목 검토 대기중, %{readyCount}개 항목 게시 준비 완료됨. |||| %{smart_count}개 항목 검토 대기중, %{readyCount}개 항목 게시 준비 완료됨. ',
-      dateFormat: 'M월 D일',
-    },
-    workflowCard: {
-      lastChange: '%{date} by %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'by %{author}',
-      deleteChanges: '변경사항 삭제',
-      deleteNewEntry: '새 항목 삭제',
-      publishChanges: '변경사항 게시',
-      publishNewEntry: '새 항목 게시',
-    },
-    workflowList: {
-      onDeleteEntry: 'Are you sure you want to delete this entry?',
-      onPublishingNotReadyEntry:
-        '"준비됨" 상태의 항목만 게시할 수 있습니다. 게시를 활성화 하려면 카드를 "준비됨" 열에 끌어 놓으세요.',
-      onPublishEntry: '이 항목을 게시하시곘습니까?',
-      draftHeader: '초안',
-      inReviewHeader: '검토 진행중',
-      readyHeader: '준비됨',
-      currentEntries: '%{smart_count}개 항목 |||| %{smart_count}개 항목',
     },
   },
 };

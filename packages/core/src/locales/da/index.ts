@@ -19,7 +19,6 @@ const da: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Indhold',
-      workflow: 'Arbejdsgang',
       media: 'Medier',
       quickAdd: 'Hurtig opret',
     },
@@ -240,35 +239,6 @@ const da: LocalePhrasesRoot = {
       onLoggedOut: 'Du er blevet logget ind, gem venligst evt. ændringer og log på igen',
       onBackendDown:
         'Den bagvedliggende service er ikke tilgængelig i øjeblikket. Se %{details} for mere information',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Indlæser dokumenter i redaktionel arbejdsgang',
-      workflowHeading: 'Redaktionel arbejdsgang',
-      newPost: 'Nyt indlæg',
-      description:
-        '%{smart_count} dokumenter afventer gennemsyn, %{readyCount} er klar til live. |||| %{smart_count} dokumenter afventer gennemsyn, %{readyCount} klar til go live. ',
-      dateFormat: 'D. MMMM',
-    },
-    workflowCard: {
-      lastChange: '%{date} af %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'af %{author}',
-      deleteChanges: 'Slet ændringer',
-      deleteNewEntry: 'Slet nye dokumenter',
-      publishChanges: 'Publicer ændringer',
-      publishNewEntry: 'Publicer nye dokumenter',
-    },
-    workflowList: {
-      onDeleteEntry: 'Er du sikker på at du vil slette dette dokument?',
-      onPublishingNotReadyEntry:
-        'Kun dokumenter med "Klar" status kan publiceres. Træk kortet til "Klar" kolonnen for at tillade publicering.',
-      onPublishEntry: 'Er du sikker på at du vil publicere dokumentet?',
-      draftHeader: 'Kladder',
-      inReviewHeader: 'Til gennemsyn',
-      readyHeader: 'Klar',
-      currentEntries: '%{smart_count} dokument |||| %{smart_count} dokumenter',
     },
   },
 };

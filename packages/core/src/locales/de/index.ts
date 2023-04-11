@@ -19,7 +19,6 @@ const de: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Inhalt',
-      media: 'Medien',
       quickAdd: 'Schnellerstellung',
     },
     app: {

@@ -19,7 +19,6 @@ const zh_Hant: LocalePhrasesRoot = {
   app: {
     header: {
       content: '內容',
-      workflow: '作業流程',
       media: '媒體',
       quickAdd: '快速新增',
     },
@@ -231,35 +230,6 @@ const zh_Hant: LocalePhrasesRoot = {
       onFailToAuth: '%{details}',
       onLoggedOut: '你已經登出，請備份任何資料然後重新登入',
       onBackendDown: '後端服務發生中斷。看 %{details} 取得更多資訊',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: '正在載入編輯流程的內容',
-      workflowHeading: '編輯作業流程',
-      newPost: '建立新的內容',
-      description:
-        '%{smart_count} 篇內容正在等待審核， %{readyCount} 篇已經準備進行發布。 |||| %{smart_count} 篇內容正在等待審核， %{readyCount} 篇已經準備進行發布。',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} by %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'by %{author}',
-      deleteChanges: '刪除變更',
-      deleteNewEntry: '刪除新內容',
-      publishChanges: '發布變更',
-      publishNewEntry: '發布新內容',
-    },
-    workflowList: {
-      onDeleteEntry: '你確定要刪除這個項目嗎？',
-      onPublishingNotReadyEntry:
-        '只有狀態為 預備發布 的內容可以被發布，請將本內容的狀態設定為 預備發布 來進行發布前的準備',
-      onPublishEntry: '你確定要發表這篇內容嗎？',
-      draftHeader: '草稿',
-      inReviewHeader: '正在預覽',
-      readyHeader: '準備完成',
-      currentEntries: '%{smart_count} 篇內容 |||| %{smart_count} 篇內容',
     },
   },
 };

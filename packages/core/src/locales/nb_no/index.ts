@@ -19,7 +19,6 @@ const nb_no: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Innhold',
-      workflow: 'Arbeidsflyt',
       media: 'Media',
       quickAdd: 'Hurtiginnlegg',
     },
@@ -211,35 +210,6 @@ const nb_no: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Kunne ikke publisere: %{details}',
       entryUpdated: 'Innleggsstatus oppdatert',
       onFailToAuth: '%{details}',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Laster innlegg for redaksjonell arbeidsflyt',
-      workflowHeading: 'Redaksjonell arbeidsflyt',
-      newPost: 'Nytt innlegg',
-      description:
-        '%{smart_count} innlegg trenger gjennomgang, og %{readyCount} er klar til publisering. |||| %{smart_count} innlegg trenger gjennomgang, og %{readyCount} er klar til publisering ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} av %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'av %{author}',
-      deleteChanges: 'Slett endringer',
-      deleteNewEntry: 'Slett nytt innlegg',
-      publishChanges: 'Publiser endringer',
-      publishNewEntry: 'Publiser nytt innlegg',
-    },
-    workflowList: {
-      onDeleteEntry: 'Er du sikker på du vil slette innlegget?',
-      onPublishingNotReadyEntry:
-        'Du kan bare publisere innlegg i "Klar" kolonnen. Trekk kortet til riktig kolonne for å fortsette.',
-      onPublishEntry: 'Er du sikker på du vil publisere innlegget?',
-      draftHeader: 'Kladd',
-      inReviewHeader: 'Gjennomgås',
-      readyHeader: 'Klar',
-      currentEntries: '%{smart_count} innlegg |||| %{smart_count} innlegg',
     },
   },
 };

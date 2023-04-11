@@ -19,7 +19,6 @@ const zh_Hans: LocalePhrasesRoot = {
   app: {
     header: {
       content: '内容',
-      workflow: '工作流',
       media: '媒体',
       quickAdd: '快速新建',
     },
@@ -253,35 +252,6 @@ const zh_Hans: LocalePhrasesRoot = {
       onFailToAuth: '%{details}',
       onLoggedOut: '你已注销，请先保存好数据然后再次登录',
       onBackendDown: 'Backend 服务已中断，欲知详情请查看：%{details}',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: '正在加载编辑工作流项目',
-      workflowHeading: '编辑工作流',
-      newPost: '新建帖子',
-      description:
-        '%{smart_count} 个待审查的内容、%{readyCount} 个已就绪的内容 |||| %{smart_count} 个待检查的内容、%{readyCount} 个已就绪的内容',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} 由 %{author} 修改',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: '由 %{author} 修改',
-      deleteChanges: '删除修改',
-      deleteNewEntry: '删除新内容',
-      publishChanges: '发布修改',
-      publishNewEntry: '发布新内容',
-    },
-    workflowList: {
-      onDeleteEntry: '你确定要删除此内容吗？',
-      onPublishingNotReadyEntry:
-        '只有状态为“就绪”的项目才能被发布。需要先将卡片拖动到“就绪”一列才能发布',
-      onPublishEntry: '你确定要发布此内容吗？',
-      draftHeader: '草稿',
-      inReviewHeader: '审查中',
-      readyHeader: '就绪',
-      currentEntries: '%{smart_count} 个内容 |||| %{smart_count} 个内容',
     },
   },
 };

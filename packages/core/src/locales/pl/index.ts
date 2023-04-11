@@ -19,7 +19,6 @@ const pl: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Treść',
-      workflow: 'Przebieg redakcyjny',
       media: 'Multimedia',
       quickAdd: 'Szybkie dodawanie',
     },
@@ -263,36 +262,6 @@ const pl: LocalePhrasesRoot = {
       onFailToAuth: '%{details}',
       onLoggedOut: 'Zostałeś wylogowany, utwórz kopię zapasową danych i zaloguj się ponownie.',
       onBackendDown: 'Usługa backendu uległa awarii. Zobacz więcej informacji: %{details}',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Ładowanie pozycji przebiegu redakcyjnego',
-      workflowHeading: 'Przebieg redakcyjny',
-      newPost: 'Nowa pozycja',
-      description:
-        '%{smart_count} pozycja oczekuje na recenzję, %{readyCount} oczekuje na publikacje. |||| %{smart_count} pozycje oczekują na recenzję, %{readyCount} oczekuje na publikacje. |||| %{smart_count} pozycji oczekuje na recenzje, %{readyCount} oczekuje na publikacje. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} przez %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'przez %{author}',
-      deleteChanges: 'Usuń zmiany',
-      deleteNewEntry: 'Usuń nową pozycję',
-      publishChanges: 'Opublikuj zmiany',
-      publishNewEntry: 'Opublikuj nową pozycję',
-    },
-    workflowList: {
-      onDeleteEntry: 'Czy na pewno chcesz usunąć tę pozycję?',
-      onPublishingNotReadyEntry:
-        'Tylko pozycje o statusie „Gotowe” mogą być publikowane. Przeciągnij proszę kartę do kolumny „Gotowe do publikacji”, aby umożliwić publikowanie.',
-      onPublishEntry: 'Czy na pewno chcesz opublikować tę pozycję?',
-      draftHeader: 'Wersje robocze',
-      inReviewHeader: 'W recenzji',
-      readyHeader: 'Gotowe do publikacji',
-      currentEntries:
-        '%{smart_count} pozycja |||| %{smart_count} pozycje |||| %{smart_count} pozycji',
     },
   },
 };

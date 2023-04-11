@@ -19,7 +19,6 @@ const lt: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Turinys',
-      workflow: 'Darbo eiga',
       media: 'Medija',
       quickAdd: 'Sukurti naują',
     },
@@ -245,35 +244,6 @@ const lt: LocalePhrasesRoot = {
         'Mes jus atjungėme. Jeigu yra poreikis, sukurkite duomenų atsarginę kopiją. Galite tiesiog iš naujo prisijungti.',
       onBackendDown:
         'Deja, serveris šiuo metu neveikia. Bandykite iš naujo dar sykį arba šiek tiek vėliau. Detalės: %{details}',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Kraunamas turinys',
-      workflowHeading: 'Redakcijos darbo eiga',
-      newPost: 'Naujas įrašas',
-      description:
-        '%{smart_count} įrašas laukia Jūsų peržiūrėjimo, %{readyCount} jau gali būti publikuojamas. |||| %{smart_count} elementai laukia Jūsų peržiūrėjimo, %{readyCount} jau gali būti publikuojami. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} pagal %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'oagal %{author}',
-      deleteChanges: 'Trinti keitimus',
-      deleteNewEntry: 'Trinti naują įrašą',
-      publishChanges: 'Publikuoti keitimus',
-      publishNewEntry: 'Kurti naują įrašą',
-    },
-    workflowList: {
-      onDeleteEntry: 'Ar tikrai norite ištrinti šį įrašą?',
-      onPublishingNotReadyEntry:
-        'Tik įrašai su statusu „Paruošta“ gali būti patvirtinti. Prašome pajudinti įrašo kortelę link „Paruošta“ stulpelio, kad galėtumėte publikuoti įrašą.',
-      onPublishEntry: 'Ar jūs tikrai norite publikuoti šį įrašą?',
-      draftHeader: 'Juodraščiai',
-      inReviewHeader: 'Peržiūrima redakcijoje',
-      readyHeader: 'Paruošta',
-      currentEntries: '%{smart_count} įrašas |||| %{smart_count} įrašai',
     },
   },
 };

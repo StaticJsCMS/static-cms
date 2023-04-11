@@ -4,7 +4,6 @@ const uk: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Зміст',
-      workflow: 'Робочий процес',
       media: 'Медіа',
       quickAdd: 'Додати',
     },
@@ -163,34 +162,6 @@ const uk: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Помилка публікації: %{details}',
       entryUpdated: 'Статус оновлено',
       onFailToAuth: '%{details}',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Завантаження редакційних матеріалів',
-      workflowHeading: 'Редакція',
-      newPost: 'Новий запис',
-      description: '%{smart_count} записів очікують розгляду, %{readyCount} готові до публікації. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} від %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'від %{author}',
-      deleteChanges: 'Видалити зміни',
-      deleteNewEntry: 'Видалити новий запис',
-      publishChanges: 'Опублікувати всі зміни',
-      publishNewEntry: 'Опублікувати новий запис',
-    },
-    workflowList: {
-      onDeleteEntry: 'Ви дійсно бажаєте видалити запис?',
-      onPublishingNotReadyEntry:
-        'Тільки елементи з статусом "Готово" можуть бути опубліковані. Будь ласка перемістіть картку в колонку "Готово" для публікації.',
-      onPublishEntry: 'Дійсно бажаєте опублікувати запис?',
-      draftHeader: 'В роботі',
-      inReviewHeader: 'На розгляді',
-      readyHeader: 'Готово',
-      currentEntries: '%{smart_count} запис |||| %{smart_count} записів',
     },
   },
 };

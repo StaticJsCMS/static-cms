@@ -19,7 +19,6 @@ const ja: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'コンテンツ',
-      workflow: 'ワークフロー',
       media: 'メディア',
       quickAdd: '新規作成',
     },
@@ -258,34 +257,6 @@ const ja: LocalePhrasesRoot = {
       onFailToAuth: '%{details}',
       onLoggedOut: 'ログアウトされています。データをバックアップし、再度ログインしてください。',
       onBackendDown: 'バックエンドのシステムが停止しています。%{details}',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'ワークフロー内のエントリを読込中',
-      workflowHeading: 'ワークフロー',
-      newPost: '新規作成',
-      description: '%{smart_count}件がレビュー中、%{readyCount}件が準備完了です。',
-      dateFormat: 'M月D日',
-    },
-    workflowCard: {
-      lastChange: '%{author}が%{date}に更新',
-      lastChangeNoAuthor: '最終更新日：%{date}',
-      lastChangeNoDate: '最終更新者：%{author}',
-      deleteChanges: '変更を削除',
-      deleteNewEntry: 'エントリを削除',
-      publishChanges: '変更を公開',
-      publishNewEntry: 'エントリを公開',
-    },
-    workflowList: {
-      onDeleteEntry: 'このエントリを削除しますか？',
-      onPublishingNotReadyEntry:
-        '「準備完了」のエントリのみを公開できます。「準備完了」列にカードを移動し、ステータスを更新してください。',
-      onPublishEntry: 'このエントリを公開しますか？',
-      draftHeader: '下書き',
-      inReviewHeader: 'レビュー中',
-      readyHeader: '準備完了',
-      currentEntries: '%{smart_count}件のエントリ',
     },
   },
 };

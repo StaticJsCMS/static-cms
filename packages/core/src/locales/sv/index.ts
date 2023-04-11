@@ -19,7 +19,6 @@ const sv: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Innehåll',
-      workflow: 'Arbetsflöde',
       media: 'Media',
       quickAdd: 'Snabbt tillägg',
     },
@@ -258,35 +257,6 @@ const sv: LocalePhrasesRoot = {
       onLoggedOut:
         'Du har blivit utloggad, vänligen spara en kopia av eventuella ändringar och logga in på nytt',
       onBackendDown: 'Tjänsten är drabbad av en störning. Se %{details} för mer information',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Hämtar inlägg för redaktionellt arbetsflöde',
-      workflowHeading: 'Redaktionellt arbetsflöde',
-      newPost: 'Nytt inlägg',
-      description:
-        '%{smart_count} inlägg väntar på granskning, %{readyCount} redo att publiceras. |||| %{smart_count} inlägg väntar på granskning, %{readyCount} redo att publiceras. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} av %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'av %{author}',
-      deleteChanges: 'Radera ändringar',
-      deleteNewEntry: 'Radera nytt inlägg',
-      publishChanges: 'Publicera ändringar',
-      publishNewEntry: 'Publicera nytt inlägg',
-    },
-    workflowList: {
-      onDeleteEntry: 'Är du säker på att du vill radera det här inlägget?',
-      onPublishingNotReadyEntry:
-        'Bara inlägg med statusen "Redo" kan publiceras. Vänligen dra kortet till "Redo"-kolumnen för att möjliggöra publicering',
-      onPublishEntry: 'Är du säker på att du vill publicera det här inlägget?',
-      draftHeader: 'Utkast',
-      inReviewHeader: 'Under granskning',
-      readyHeader: 'Redo',
-      currentEntries: '%{smart_count} inlägg |||| %{smart_count} inlägg',
     },
   },
 };
