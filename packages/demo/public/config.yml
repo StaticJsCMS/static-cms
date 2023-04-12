@@ -2,6 +2,7 @@ backend:
   name: test-repo
 site_url: 'https://staticcms.org/'
 media_folder: assets/uploads
+media_library_folder_support: true
 locale: en
 i18n:
   # Required and can be one of multiple_folders, multiple_files or single_file
