@@ -9,6 +9,7 @@ import {
   selectFields,
   selectTemplateName,
 } from '@staticcms/core/lib/util/collection.util';
+import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
@@ -120,6 +121,8 @@ const EntryCard = ({
                   value={value}
                   theme={theme}
                 />
+              ) : isNullish(value) ? (
+                ''
               ) : (
                 String(value)
               )}

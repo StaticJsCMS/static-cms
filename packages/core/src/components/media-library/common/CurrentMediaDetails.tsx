@@ -42,6 +42,7 @@ const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
         py-4
         border-b
         border-gray-200/75
+        dark:border-slate-500/75
       "
     >
       <Image

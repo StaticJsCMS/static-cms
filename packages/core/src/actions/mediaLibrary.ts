@@ -241,7 +241,12 @@ function createMediaFileFromAsset({
   return mediaFile;
 }
 
-export function persistMedia(file: File, opts: MediaOptions = {}, currentFolder?: string) {
+export function persistMedia(
+  file: File,
+  opts: MediaOptions = {},
+  targetFolder?: string,
+  currentFolder?: string,
+) {
   const { field } = opts;
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
@@ -287,7 +292,7 @@ export function persistMedia(file: File, opts: MediaOptions = {}, currentFolder?
     try {
       const entry = state.entryDraft.entry;
       const collection = entry?.collection ? state.collections[entry.collection] : null;
-      const path = selectMediaFilePath(config, collection, entry, fileName, field, currentFolder);
+      const path = selectMediaFilePath(config, collection, entry, fileName, field, targetFolder);
       const assetProxy = createAssetProxy({
         file,
         path,
@@ -310,7 +315,7 @@ export function persistMedia(file: File, opts: MediaOptions = {}, currentFolder?
         mediaFile = await backend.persistMedia(config, assetProxy);
       }
 
-      return dispatch(mediaPersisted(mediaFile));
+      return dispatch(mediaPersisted(mediaFile, currentFolder));
     } catch (error) {
       console.error(error);
       dispatch(
@@ -487,10 +492,10 @@ export function mediaPersisting() {
   return { type: MEDIA_PERSIST_REQUEST } as const;
 }
 
-export function mediaPersisted(file: ImplementationMediaFile) {
+export function mediaPersisted(file: ImplementationMediaFile, currentFolder: string | undefined) {
   return {
     type: MEDIA_PERSIST_SUCCESS,
-    payload: { file },
+    payload: { file, currentFolder },
   } as const;
 }
 

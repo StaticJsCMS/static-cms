@@ -249,10 +249,12 @@ const en: LocalePhrasesRoot = {
       chooseSelected: 'Choose selected',
     },
     folderSupport: {
-      onCreateTitle: 'Create new folder',
-      onCreateBody: 'Please enter a name for the new folder.',
-      goBackToHome: 'Go back to media folder.',
-      goBack: 'Go back to previous folder.',
+      newFolder: 'New folder',
+      createNewFolder: 'Create new folder',
+      enterFolderName: 'Enter folder name...',
+      home: 'Home',
+      up: 'Up',
+      upToFolder: 'Up to %{folder}',
     },
   },
   ui: {

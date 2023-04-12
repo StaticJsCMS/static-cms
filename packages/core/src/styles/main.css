@@ -107,6 +107,66 @@
       dark:disabled:hover:bg-transparent;
   }
 
+  .btn-contained-secondary {
+    @apply border
+      font-medium
+      text-gray-600
+      bg-white
+      border-gray-200/75
+      hover:text-gray-700
+      hover:bg-gray-100
+      hover:border-gray-200/50
+      disabled:text-gray-300/75
+      disabled:bg-white/80
+      disabled:border-gray-200/5
+      dark:text-gray-300
+      dark:bg-gray-800
+      dark:border-gray-600/60
+      dark:hover:bg-gray-700
+      dark:hover:text-white
+      dark:hover:border-gray-600/80
+      dark:disabled:text-gray-400/20
+      dark:disabled:bg-gray-700/20
+      dark:disabled:border-gray-600/20;
+  }
+
+  .btn-outlined-secondary {
+    @apply text-gray-900
+      bg-transparent
+      border
+      border-gray-200
+      hover:bg-gray-100
+      hover:text-gray-700
+      hover:border-gray-200/50
+      disabled:text-gray-300/75
+      disabled:border-gray-200/40
+      disabled:hover:bg-transparent
+      dark:bg-transparent
+      dark:text-gray-300
+      dark:border-gray-600/60
+      dark:hover:bg-gray-700
+      dark:hover:text-white
+      dark:hover:border-gray-600/80
+      dark:disabled:text-gray-400/20
+      dark:disabled:border-gray-600/20
+      dark:disabled:hover:bg-transparent;
+  }
+
+  .btn-text-secondary {
+    @apply bg-transparent
+      text-gray-900
+      hover:text-gray-700
+      hover:bg-gray-100
+      disabled:text-gray-300/75
+      disabled:hover:bg-transparent
+      dark:text-gray-300
+      dark:hover:text-white
+      dark:hover:bg-gray-700
+      dark:disabled:text-gray-400/20
+      dark:disabled:border-gray-600/20
+      dark:disabled:hover:bg-transparent;
+  }
+
   .btn-contained-success {
     @apply border
       border-transparent
@@ -238,9 +298,19 @@
   --scrollbar-background: rgb(248 250 252);
 }
 
+.styled-scrollbars.styled-scrollbars-secondary {
+  --scrollbar-foreground: rgba(100, 116, 139, 0.25);
+  --scrollbar-background: rgb(255 255 255);
+}
+
 .dark .styled-scrollbars {
   --scrollbar-foreground: rgba(30, 41, 59, 0.8);
   --scrollbar-background: rgb(15 23 42);
+}
+
+.dark .styled-scrollbars.styled-scrollbars-secondary {
+  --scrollbar-foreground: rgba(47, 64, 93, 0.8);
+  --scrollbar-background: rgb(30 41 59);
 }
 
 .styled-scrollbars {

@@ -1,6 +1,6 @@
 import { Delete as DeleteIcon } from '@styled-icons/material/Delete';
 import { Download as DownloadIcon } from '@styled-icons/material/Download';
-import { FolderOpen as FolderIcon } from '@styled-icons/material/FolderOpen';
+import { FolderOpen as FolderOpenIcon } from '@styled-icons/material/FolderOpen';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
@@ -245,7 +245,7 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
                 text-5xl
               "
             >
-              <FolderIcon className="w-24 h-24" />
+              <FolderOpenIcon className="w-24 h-24" />
             </div>
           ) : (
             <div
