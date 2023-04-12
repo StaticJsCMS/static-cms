@@ -1,3 +1,4 @@
+import { basename, dirname } from 'path';
 import { v4 as uuid } from 'uuid';
 
 import {
@@ -208,13 +209,41 @@ function mediaLibrary(
       };
 
     case MEDIA_PERSIST_SUCCESS: {
-      const { file } = action.payload;
+      const { file, currentFolder } = action.payload;
       const fileWithKey = { ...file, key: uuid() };
       const files = state.files as MediaFile[];
-      const updatedFiles = [fileWithKey, ...files];
+
+      const dir = dirname(file.path);
+      if (!currentFolder || dir === currentFolder) {
+        const updatedFiles: MediaFile[] = [fileWithKey, ...files];
+        return {
+          ...state,
+          files: updatedFiles,
+          isPersisting: false,
+        };
+      }
+
+      const folder = files.find(otherFile => otherFile.isDirectory && otherFile.path === dir);
+      if (!folder) {
+        const updatedFiles: MediaFile[] = [
+          {
+            name: basename(dir),
+            id: dir,
+            path: dir,
+            isDirectory: true,
+          },
+          ...files,
+        ];
+
+        return {
+          ...state,
+          files: updatedFiles,
+          isPersisting: false,
+        };
+      }
+
       return {
         ...state,
-        files: updatedFiles,
         isPersisting: false,
       };
     }

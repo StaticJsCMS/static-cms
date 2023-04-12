@@ -294,7 +294,7 @@ export function selectMediaFilePublicPath<EF extends BaseField>(
 
 export function selectMediaFilePath(
   config: Config,
-  collection: Collection | null,
+  collection: Collection | null | undefined,
   entryMap: Entry | null | undefined,
   mediaPath: string,
   field: Field | undefined,

@@ -44,7 +44,7 @@ const MediaLibraryModal: FC = () => {
       >
         <CloseIcon className="w-5 h-5" />
       </IconButton>
-      <MediaLibrary canInsert />
+      <MediaLibrary canInsert isDialog />
     </Modal>
   );
 };

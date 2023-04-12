@@ -9,6 +9,9 @@ import {
   MEDIA_CARD_WIDTH,
   MEDIA_LIBRARY_PADDING,
 } from '@staticcms/core/constants/mediaLibrary';
+import classNames from '@staticcms/core/lib/util/classNames.util';
+import { selectConfig } from '@staticcms/core/reducers/selectors/config';
+import { useAppSelector } from '@staticcms/core/store/hooks';
 import MediaLibraryCard from './MediaLibraryCard';
 
 import type {
@@ -49,6 +52,7 @@ export interface MediaLibraryCardGridProps {
   displayURLs: MediaLibraryState['displayURLs'];
   collection?: Collection;
   field?: Field;
+  isDialog: boolean;
   onDelete: (file: MediaFile) => void;
 }
 
@@ -89,9 +93,7 @@ const CardWrapper = ({
   );
 
   const top = useMemo(
-    () =>
-      parseFloat(`${typeof style.top === 'number' ? style.top ?? 0 : style.top}`) +
-      MEDIA_LIBRARY_PADDING,
+    () => parseFloat(`${typeof style.top === 'number' ? style.top ?? 0 : style.top}`),
     [style.top],
   );
 
@@ -134,7 +136,8 @@ const CardWrapper = ({
 };
 
 const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
-  const { mediaItems, scrollContainerRef, canLoadMore, onLoadMore } = props;
+  const { mediaItems, scrollContainerRef, canLoadMore, isDialog, onLoadMore } = props;
+  const config = useAppSelector(selectConfig);
 
   const [version, setVersion] = useState(0);
 
@@ -154,7 +157,20 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
           const rowCount = Math.ceil(mediaItems.length / columnCount);
 
           return (
-            <div key={version} ref={scrollContainerRef}>
+            <div
+              key={version}
+              className={classNames(
+                `
+                  overflow-hidden
+                `,
+                isDialog && 'rounded-b-lg',
+                !config?.media_library_folder_support && 'pt-[20px]',
+              )}
+              style={{
+                width,
+                height,
+              }}
+            >
               <Grid
                 columnCount={columnCount}
                 columnWidth={index =>
@@ -163,20 +179,26 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
                 rowCount={rowCount}
                 rowHeight={() => rowHeightWithGutter}
                 width={width}
-                height={height}
+                height={
+                  height - (!config?.media_library_folder_support ? MEDIA_LIBRARY_PADDING : 0)
+                }
                 itemData={
                   {
                     ...props,
                     columnCount,
                   } as CardGridItemData
                 }
-                className="
-                  px-5
-                  py-4
-                  overflow-hidden
-                  overflow-y-auto
-                  styled-scrollbars
-                "
+                outerRef={scrollContainerRef}
+                className={classNames(
+                  `
+                    px-5
+                    pb-2
+                    overflow-hidden
+                    overflow-y-auto
+                    styled-scrollbars
+                  `,
+                  isDialog && 'styled-scrollbars-secondary',
+                )}
                 style={{ position: 'unset' }}
               >
                 {CardWrapper}

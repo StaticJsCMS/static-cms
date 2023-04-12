@@ -8,16 +8,19 @@ const classes: Record<
 > = {
   contained: {
     primary: 'btn-contained-primary',
+    secondary: 'btn-contained-secondary',
     success: 'btn-contained-success',
     error: 'btn-contained-error',
   },
   outlined: {
     primary: 'btn-outlined-primary',
+    secondary: 'btn-outlined-secondary',
     success: 'btn-outlined-success',
     error: 'btn-outlined-error',
   },
   text: {
     primary: 'btn-text-primary',
+    secondary: 'btn-text-secondary',
     success: 'btn-text-success',
     error: 'btn-text-error',
   },

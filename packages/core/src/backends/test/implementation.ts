@@ -2,10 +2,11 @@ import attempt from 'lodash/attempt';
 import isError from 'lodash/isError';
 import take from 'lodash/take';
 import unset from 'lodash/unset';
-import { extname } from 'path';
+import { basename, dirname } from 'path';
 import { v4 as uuid } from 'uuid';
 
 import { Cursor, CURSOR_COMPATIBILITY_SYMBOL } from '@staticcms/core/lib/util';
+import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import AuthenticationPage from './AuthenticationPage';
 
 import type {
@@ -20,7 +21,7 @@ import type {
 } from '@staticcms/core/interface';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 
-type RepoFile = { path: string; content: string | AssetProxy };
+type RepoFile = { path: string; content: string | AssetProxy; isDirectory?: boolean };
 type RepoTree = { [key: string]: RepoFile | RepoTree };
 
 declare global {
@@ -83,20 +84,36 @@ export function getFolderFiles(
   depth: number,
   files = [] as RepoFile[],
   path = folder,
-) {
+  includeFolders?: boolean,
+): RepoFile[] {
   if (depth <= 0) {
     return files;
   }
 
+  if (includeFolders) {
+    files.unshift({ isDirectory: true, content: '', path });
+  }
+
   Object.keys(tree[folder] || {}).forEach(key => {
-    if (extname(key)) {
+    const parts = key.split('.');
+    const keyExtension = parts.length > 1 ? parts[parts.length - 1] : '';
+
+    if (isNotEmpty(keyExtension)) {
       const file = (tree[folder] as RepoTree)[key] as RepoFile;
       if (!extension || key.endsWith(`.${extension}`)) {
         files.unshift({ content: file.content, path: `${path}/${key}` });
       }
     } else {
       const subTree = tree[folder] as RepoTree;
-      return getFolderFiles(subTree, key, extension, depth - 1, files, `${path}/${key}`);
+      return getFolderFiles(
+        subTree,
+        key,
+        extension,
+        depth - 1,
+        files,
+        `${path}/${key}`,
+        includeFolders,
+      );
     }
   });
 
@@ -222,18 +239,31 @@ export default class TestBackend implements BackendClass {
     return Promise.resolve();
   }
 
-  async getMedia(mediaFolder = this.mediaFolder): Promise<ImplementationMediaFile[]> {
+  async getMedia(
+    mediaFolder = this.mediaFolder,
+    folderSupport?: boolean,
+  ): Promise<ImplementationMediaFile[]> {
     if (!mediaFolder) {
       return [];
     }
-    const files = getFolderFiles(window.repoFiles, mediaFolder.split('/')[0], '', 100).filter(f =>
-      f.path.startsWith(mediaFolder),
-    );
+    const files = getFolderFiles(
+      window.repoFiles,
+      mediaFolder.split('/')[0],
+      '',
+      100,
+      undefined,
+      undefined,
+      folderSupport,
+    ).filter(f => {
+      return dirname(f.path) === mediaFolder;
+    });
+
     return files.map(f => ({
-      name: f.path,
+      name: basename(f.path),
       id: f.path,
       path: f.path,
       displayURL: f.path,
+      isDirectory: f.isDirectory ?? false,
     }));
   }
 
@@ -242,7 +272,7 @@ export default class TestBackend implements BackendClass {
       id: path,
       displayURL: path,
       path,
-      name: path,
+      name: basename(path),
       size: 1,
       url: path,
     };
