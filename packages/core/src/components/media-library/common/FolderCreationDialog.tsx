@@ -42,6 +42,7 @@ const FolderCreationDialog: FC<TranslatedProps<FolderCreationDialogProps>> = ({
       className="
         w-[50%]
         w-min-[300px]
+        w-max-[600px]
       "
     >
       <div
