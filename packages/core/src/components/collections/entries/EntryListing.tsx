@@ -120,11 +120,21 @@ const EntryListing = ({
     });
   }, [entries, inferFields, isSingleCollectionInList, otherProps, summaryFields, viewStyle]);
 
+  const summaryFieldHeaders = useMemo(() => {
+    if ('collection' in otherProps) {
+      return selectFields(otherProps.collection).map(f => f.label ?? f.name);
+    }
+
+    return [];
+  }, [otherProps]);
+
   if (viewStyle === 'VIEW_STYLE_LIST') {
     return (
       <>
         <Table
-          columns={!isSingleCollectionInList ? ['Collection', ...summaryFields] : summaryFields}
+          columns={
+            !isSingleCollectionInList ? ['Collection', ...summaryFieldHeaders] : summaryFields
+          }
         >
           {renderedCards}
         </Table>
