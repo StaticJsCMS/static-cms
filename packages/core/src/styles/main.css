@@ -170,8 +170,8 @@
   .btn-contained-success {
     @apply border
       border-transparent
-      bg-green-700
-      hover:bg-green-800
+      bg-green-600
+      hover:bg-green-700
       text-white
       disabled:text-gray-50
       disabled:bg-gray-300/80
@@ -219,8 +219,8 @@
   .btn-contained-error {
     @apply border
       border-transparent
-      bg-red-700
-      hover:bg-red-800
+      bg-red-600
+      hover:bg-red-700
       text-white
       disabled:text-gray-50
       disabled:bg-gray-300/80

@@ -84,8 +84,9 @@ const ConfirmDialog = ({ t }: TranslateProps) => {
       open
       onClose={handleCancel}
       className="
-        w-[540px]
-
+        w-[50%]
+        min-w-[300px]
+        max-w-[600px]
       "
       aria-labelledby="confirm-dialog-title"
       aria-describedby="confirm-dialog-description"

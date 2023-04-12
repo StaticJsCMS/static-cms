@@ -3700,6 +3700,14 @@
     "@babel/runtime" "^7.20.7"
     "@styled-icons/styled-icon" "^10.7.0"
 
+"@styled-icons/material-outlined@10.47.0":
+  version "10.47.0"
+  resolved "https://registry.yarnpkg.com/@styled-icons/material-outlined/-/material-outlined-10.47.0.tgz#d799a14c1cbbd4d730d046d9f791f108e907fd34"
+  integrity sha512-/QeDSGXlfRoIsgx4g4Hb//xhsucD4mJJsNPk/e1XzckxkNG+YHCIjbAHzDwxwNfSCJYcTDcOp2SZcoS7iyNGlw==
+  dependencies:
+    "@babel/runtime" "^7.20.7"
+    "@styled-icons/styled-icon" "^10.7.0"
+
 "@styled-icons/material-rounded@10.47.0":
   version "10.47.0"
   resolved "https://registry.yarnpkg.com/@styled-icons/material-rounded/-/material-rounded-10.47.0.tgz#c2a9e8277ba88949caffe08d42360d7aa45afaa8"

@@ -1,14 +1,10 @@
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import React, { useCallback, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 
 import AlertEvent from '@staticcms/core/lib/util/events/AlertEvent';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
+import Button from '../button/Button';
+import Modal from '../modal/Modal';
 
 import type { TranslateProps } from 'react-polyglot';
 
@@ -68,24 +64,51 @@ const AlertDialog = ({ t }: TranslateProps) => {
   }
 
   return (
-    <div>
-      <Dialog
-        open
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+    <Modal
+      open
+      onClose={handleClose}
+      className="
+        w-[50%]
+        min-w-[300px]
+        max-w-[600px]
+      "
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <div
+        className="
+          px-6
+          py-4
+          text-xl
+          bold
+        "
       >
-        <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">{body}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} variant="contained" color={color}>
-            {okay}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+        {title}
+      </div>
+      <div
+        className="
+          px-6
+          pb-4
+          text-sm
+          text-slate-500
+          dark:text-slate-400
+        "
+      >
+        {body}
+      </div>
+      <div
+        className="
+          p-2
+          flex
+          justify-end
+          gap-2
+        "
+      >
+        <Button onClick={handleClose} variant="contained" color={color}>
+          {okay}
+        </Button>
+      </div>
+    </Modal>
   );
 };
 
