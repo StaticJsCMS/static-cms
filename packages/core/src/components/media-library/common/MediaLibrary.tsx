@@ -5,7 +5,6 @@ import { Home as HomeIcon } from '@styled-icons/material/Home';
 import { Photo as PhotoIcon } from '@styled-icons/material/Photo';
 import fuzzy from 'fuzzy';
 import isEmpty from 'lodash/isEmpty';
-import trim from 'lodash/trim';
 import { dirname, join } from 'path';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { translate } from 'react-polyglot';
@@ -298,7 +297,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
     if (!config) {
       return undefined;
     }
-    return trim(selectMediaFolder(config, collection, entry, field), '/');
+    return selectMediaFolder(config, collection, entry, field);
   }, [collection, config, entry, field]);
 
   const parentFolder = useMemo(() => {
