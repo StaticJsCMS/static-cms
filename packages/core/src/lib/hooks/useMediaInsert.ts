@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { openMediaLibrary, removeInsertedMedia } from '@staticcms/core/actions/mediaLibrary';
+import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectMediaPath } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 
@@ -28,19 +29,12 @@ export default function useMediaInsert<T extends string | string[], F extends Me
 
   const { controlID, collection, field, forImage = false, insertOptions } = options;
 
+  const config = useAppSelector(selectConfig);
+
   const finalControlID = useMemo(() => controlID ?? uuid(), [controlID]);
   const mediaPathSelector = useMemo(() => selectMediaPath(finalControlID), [finalControlID]);
   const mediaPath = useAppSelector(mediaPathSelector);
   const [selected, setSelected] = useState(false);
-
-  const mediaLibraryFieldOptions = useMemo(() => {
-    return field?.media_library ?? {};
-  }, [field?.media_library]);
-
-  const config = useMemo(
-    () => ('config' in mediaLibraryFieldOptions ? mediaLibraryFieldOptions.config : undefined),
-    [mediaLibraryFieldOptions],
-  );
 
   useEffect(() => {
     if (!selected && mediaPath && (mediaPath.path !== value.path || mediaPath.alt !== value.alt)) {
@@ -63,7 +57,7 @@ export default function useMediaInsert<T extends string | string[], F extends Me
           alt: value.alt,
           replaceIndex,
           allowMultiple: false,
-          config,
+          config: config?.media_library,
           collection,
           field,
           insertOptions,
@@ -77,7 +71,7 @@ export default function useMediaInsert<T extends string | string[], F extends Me
       forImage,
       value.path,
       value.alt,
-      config,
+      config?.media_library,
       collection,
       field,
       insertOptions,

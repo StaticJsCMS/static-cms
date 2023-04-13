@@ -164,7 +164,7 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
                   overflow-hidden
                 `,
                 isDialog && 'rounded-b-lg',
-                !config?.media_library_folder_support && 'pt-[20px]',
+                !config?.media_library?.folder_support && 'pt-[20px]',
               )}
               style={{
                 width,
@@ -180,7 +180,7 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
                 rowHeight={() => rowHeightWithGutter}
                 width={width}
                 height={
-                  height - (!config?.media_library_folder_support ? MEDIA_LIBRARY_PADDING : 0)
+                  height - (!config?.media_library?.folder_support ? MEDIA_LIBRARY_PADDING : 0)
                 }
                 itemData={
                   {

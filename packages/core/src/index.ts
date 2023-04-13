@@ -11,7 +11,6 @@ export * from './backends';
 export * from './interface';
 export * from './lib';
 export { default as locales } from './locales';
-export * from './media-libraries';
 export * from './widgets';
 
 const CMS = {

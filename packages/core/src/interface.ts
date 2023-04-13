@@ -234,20 +234,6 @@ export type Collection<EF extends BaseField = UnknownField> =
 
 export type Collections<EF extends BaseField = UnknownField> = Record<string, Collection<EF>>;
 
-export interface MediaLibraryInstance {
-  show: (args: {
-    id?: string;
-    value?: string | string[];
-    config: Record<string, unknown>;
-    allowMultiple?: boolean;
-    imagesOnly?: boolean;
-  }) => void;
-  hide?: () => void;
-  onClearControl?: (args: { id: string }) => void;
-  onRemoveControl?: (args: { id: string }) => void;
-  enableStandalone: () => boolean;
-}
-
 export type MediaFile = BackendMediaFile & { key?: string };
 
 export interface DisplayURLState {
@@ -281,13 +267,9 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = 
   mediaPaths: Record<string, MediaPath>;
   onChange: (value: T | null | undefined) => void;
   // @deprecated Use useMediaInsert instead
-  clearMediaControl: EditorControlProps['clearMediaControl'];
-  // @deprecated Use useMediaInsert instead
   openMediaLibrary: EditorControlProps['openMediaLibrary'];
   // @deprecated Use useMediaInsert instead
   removeInsertedMedia: EditorControlProps['removeInsertedMedia'];
-  // @deprecated Use useMediaInsert instead
-  removeMediaControl: EditorControlProps['removeMediaControl'];
   i18n: I18nSettings | undefined;
   hasErrors: boolean;
   errors: FieldError[];
@@ -530,25 +512,15 @@ export type WidgetValueSerializer = {
   deserialize: (value: ValueOrNestedValue) => ValueOrNestedValue;
 };
 
-export type MediaLibraryOptions = Record<string, unknown>;
-
 export interface MediaLibraryInitOptions {
   options: Record<string, unknown> | undefined;
   handleInsert: (url: string | string[]) => void;
 }
 
-export interface MediaLibraryExternalLibrary {
-  name: string;
-  config?: MediaLibraryOptions;
-  init: ({ options, handleInsert }: MediaLibraryInitOptions) => Promise<MediaLibraryInstance>;
+export interface MediaLibraryConfig {
+  max_file_size?: number;
+  folder_support?: boolean;
 }
-
-export interface MediaLibraryInternalOptions {
-  allow_multiple?: boolean;
-  choose_url?: boolean;
-}
-
-export type MediaLibrary = MediaLibraryExternalLibrary | MediaLibraryInternalOptions;
 
 export type BackendType = 'git-gateway' | 'github' | 'gitlab' | 'bitbucket' | 'test-repo' | 'proxy';
 
@@ -579,9 +551,10 @@ export interface BaseField {
 }
 
 export interface MediaField extends BaseField {
-  media_library?: MediaLibrary;
   media_folder?: string;
   public_folder?: string;
+  choose_url?: boolean;
+  multiple?: boolean;
 }
 
 export interface BooleanField extends BaseField {
@@ -774,7 +747,6 @@ export interface Backend {
   proxy_url?: string;
   large_media_url?: string;
   login?: boolean;
-  use_large_media_transforms_in_media_library?: boolean;
   identity_url?: string;
   gateway_url?: string;
   auth_scope?: AuthScope;
@@ -810,14 +782,13 @@ export interface Config<EF extends BaseField = UnknownField> {
   media_folder?: string;
   public_folder?: string;
   media_folder_relative?: boolean;
-  media_library?: MediaLibrary;
+  media_library?: MediaLibraryConfig;
   load_config_file?: boolean;
   slug?: Slug;
   i18n?: I18nInfo;
   local_backend?: boolean | LocalBackend;
   editor?: EditorConfig;
   search?: boolean;
-  media_library_folder_support?: boolean;
 }
 
 export interface InitOptions<EF extends BaseField = UnknownField> {

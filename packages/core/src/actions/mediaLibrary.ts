@@ -9,7 +9,6 @@ import {
   MEDIA_DISPLAY_URL_SUCCESS,
   MEDIA_INSERT,
   MEDIA_LIBRARY_CLOSE,
-  MEDIA_LIBRARY_CREATE,
   MEDIA_LIBRARY_OPEN,
   MEDIA_LOAD_FAILURE,
   MEDIA_LOAD_REQUEST,
@@ -40,42 +39,11 @@ import type {
   ImplementationMediaFile,
   MediaFile,
   MediaLibrarInsertOptions,
-  MediaLibraryInstance,
+  MediaLibraryConfig,
   UnknownField,
 } from '../interface';
 import type { RootState } from '../store';
 import type AssetProxy from '../valueObjects/AssetProxy';
-
-export function createMediaLibrary(instance: MediaLibraryInstance) {
-  const api = {
-    show: instance.show || (() => undefined),
-    hide: instance.hide || (() => undefined),
-    onClearControl: instance.onClearControl || (() => undefined),
-    onRemoveControl: instance.onRemoveControl || (() => undefined),
-    enableStandalone: instance.enableStandalone || (() => undefined),
-  };
-  return { type: MEDIA_LIBRARY_CREATE, payload: api } as const;
-}
-
-export function clearMediaControl(id: string) {
-  return (_dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
-    const state = getState();
-    const mediaLibrary = state.mediaLibrary.externalLibrary;
-    if (mediaLibrary) {
-      mediaLibrary.onClearControl?.({ id });
-    }
-  };
-}
-
-export function removeMediaControl(id: string) {
-  return (_dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
-    const state = getState();
-    const mediaLibrary = state.mediaLibrary.externalLibrary;
-    if (mediaLibrary) {
-      mediaLibrary.onRemoveControl?.({ id });
-    }
-  };
-}
 
 export function openMediaLibrary<EF extends BaseField = UnknownField>(
   payload: {
@@ -85,15 +53,13 @@ export function openMediaLibrary<EF extends BaseField = UnknownField>(
     alt?: string;
     allowMultiple?: boolean;
     replaceIndex?: number;
-    config?: Record<string, unknown>;
+    config?: MediaLibraryConfig;
     collection?: Collection<EF>;
     field?: EF;
     insertOptions?: MediaLibrarInsertOptions;
   } = {},
 ) {
-  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
-    const state = getState();
-    const mediaLibrary = state.mediaLibrary.externalLibrary;
+  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>) => {
     const {
       controlID,
       value,
@@ -106,10 +72,6 @@ export function openMediaLibrary<EF extends BaseField = UnknownField>(
       field,
       insertOptions,
     } = payload;
-
-    if (mediaLibrary) {
-      mediaLibrary.show({ id: controlID, value, config, allowMultiple, imagesOnly: forImage });
-    }
 
     dispatch(
       mediaLibraryOpened({
@@ -129,12 +91,7 @@ export function openMediaLibrary<EF extends BaseField = UnknownField>(
 }
 
 export function closeMediaLibrary() {
-  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
-    const state = getState();
-    const mediaLibrary = state.mediaLibrary.externalLibrary;
-    if (mediaLibrary) {
-      mediaLibrary.hide?.();
-    }
+  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>) => {
     dispatch(mediaLibraryClosed());
   };
 }
@@ -178,7 +135,12 @@ export function removeInsertedMedia(controlID: string) {
 }
 
 export function loadMedia(
-  opts: { delay?: number; query?: string; page?: number; currentFolder?: string } = {},
+  opts: {
+    delay?: number;
+    query?: string;
+    page?: number;
+    currentFolder?: string;
+  } = {},
 ) {
   const { delay = 0, page = 1, currentFolder } = opts;
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
@@ -193,7 +155,7 @@ export function loadMedia(
 
     function loadFunction() {
       return backend
-        .getMedia(currentFolder, config?.media_library_folder_support ?? false)
+        .getMedia(currentFolder, config?.media_library?.folder_support ?? false)
         .then(files => dispatch(mediaLoaded(files)))
         .catch((error: { status?: number }) => {
           console.error(error);
@@ -446,7 +408,7 @@ function mediaLibraryOpened(payload: {
   alt?: string;
   replaceIndex?: number;
   allowMultiple?: boolean;
-  config?: Record<string, unknown>;
+  config?: MediaLibraryConfig;
   collection?: Collection;
   field?: Field;
   insertOptions?: MediaLibrarInsertOptions;
@@ -540,7 +502,7 @@ export async function waitForMediaLibraryToLoad(
   dispatch: ThunkDispatch<RootState, {}, AnyAction>,
   state: RootState,
 ) {
-  if (state.mediaLibrary.isLoading !== false && !state.mediaLibrary.externalLibrary) {
+  if (state.mediaLibrary.isLoading !== false) {
     await waitUntilWithTimeout(dispatch, resolve => ({
       predicate: ({ type }) => type === MEDIA_LOAD_SUCCESS || type === MEDIA_LOAD_FAILURE,
       run: () => resolve(),
@@ -583,7 +545,6 @@ export async function getMediaDisplayURL(
 }
 
 export type MediaLibraryAction = ReturnType<
-  | typeof createMediaLibrary
   | typeof mediaLibraryOpened
   | typeof mediaLibraryClosed
   | typeof mediaInserted

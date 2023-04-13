@@ -121,7 +121,7 @@ describe('File Control', () => {
   it('should show only the choose upload and choose url buttons by default when choose url is true', () => {
     const { getByTestId, queryByTestId } = renderControl({
       label: 'I am a label',
-      field: { ...mockFileField, media_library: { choose_url: true } },
+      field: { ...mockFileField, choose_url: true },
     });
 
     expect(getByTestId('choose-upload')).toBeInTheDocument();
@@ -147,7 +147,7 @@ describe('File Control', () => {
   it('should show the add/replace upload, replace url and remove buttons by there is a value and choose url is true', () => {
     const { getByTestId, queryByTestId } = renderControl({
       label: 'I am a label',
-      field: { ...mockFileField, media_library: { choose_url: true } },
+      field: { ...mockFileField, choose_url: true },
       value: 'https://example.com/file.pdf',
     });
 
@@ -241,7 +241,7 @@ describe('File Control', () => {
     it('should show only the choose upload and choose url buttons by default when choose url is true', () => {
       const { getByTestId } = renderControl({
         label: 'I am a label',
-        field: { ...mockFileField, media_library: { choose_url: true } },
+        field: { ...mockFileField, choose_url: true },
         disabled: true,
       });
 
@@ -263,7 +263,7 @@ describe('File Control', () => {
     it('should show the add/replace upload, replace url and remove buttons by there is a value and choose url is true', () => {
       const { getByTestId } = renderControl({
         label: 'I am a label',
-        field: { ...mockFileField, media_library: { choose_url: true } },
+        field: { ...mockFileField, choose_url: true },
         value: 'https://example.com/file.pdf',
         disabled: true,
       });

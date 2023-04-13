@@ -13,8 +13,6 @@ import type {
   EventListener,
   FieldPreviewComponent,
   LocalePhrasesRoot,
-  MediaLibraryExternalLibrary,
-  MediaLibraryOptions,
   ObjectValue,
   PreviewStyle,
   PreviewStyleOptions,
@@ -25,7 +23,7 @@ import type {
   Widget,
   WidgetOptions,
   WidgetParam,
-  WidgetValueSerializer,
+  WidgetValueSerializer
 } from '../interface';
 
 export const allowedEvents = ['prePublish', 'postPublish', 'preSave', 'postSave'] as const;
@@ -45,7 +43,6 @@ interface Registry {
   icons: Record<string, CustomIcon>;
   additionalLinks: Record<string, AdditionalLink>;
   widgetValueSerializers: Record<string, WidgetValueSerializer>;
-  mediaLibraries: (MediaLibraryExternalLibrary & { options: MediaLibraryOptions })[];
   locales: Record<string, LocalePhrasesRoot>;
   eventHandlers: typeof eventHandlers;
   previewStyles: PreviewStyle[];
@@ -66,7 +63,6 @@ const registry: Registry = {
   icons: {},
   additionalLinks: {},
   widgetValueSerializers: {},
-  mediaLibraries: [],
   locales: {},
   eventHandlers,
   previewStyles: [],
@@ -88,8 +84,6 @@ export default {
   getWidgetValueSerializer,
   registerBackend,
   getBackend,
-  registerMediaLibrary,
-  getMediaLibrary,
   registerLocale,
   getLocale,
   registerEventListener,
@@ -304,25 +298,6 @@ export function getBackend<EF extends BaseField = UnknownField>(
   name: string,
 ): BackendInitializer<EF> {
   return registry.backends[name] as unknown as BackendInitializer<EF>;
-}
-
-/**
- * Media Libraries
- */
-export function registerMediaLibrary(
-  mediaLibrary: MediaLibraryExternalLibrary,
-  options: MediaLibraryOptions = {},
-) {
-  if (registry.mediaLibraries.find(ml => mediaLibrary.name === ml.name)) {
-    throw new Error(`A media library named ${mediaLibrary.name} has already been registered.`);
-  }
-  registry.mediaLibraries.push({ ...mediaLibrary, options });
-}
-
-export function getMediaLibrary(
-  name: string,
-): (MediaLibraryExternalLibrary & { options: MediaLibraryOptions }) | undefined {
-  return registry.mediaLibraries.find(ml => ml.name === name);
 }
 
 /**

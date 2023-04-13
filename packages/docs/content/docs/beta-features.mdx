@@ -92,8 +92,7 @@ Example config:
   widget: 'image'
   default: '/uploads/chocolate-dogecoin.jpg'
   media_library:
-    config:
-      max_file_size: 512000 # in bytes, only for default media library
+    max_file_size: 512000 # in bytes, only for default media library
 ```
 
 ```js
@@ -103,9 +102,7 @@ Example config:
   widget: 'image',
   default: '/uploads/chocolate-dogecoin.jpg',
   media_library: {
-    config: {
-      max_file_size: 512000 // in bytes, only for default media library
-    },
+    max_file_size: 512000 // in bytes, only for default media library
   },
 },
 ```
@@ -197,11 +194,3 @@ See [Gitea Backend](/docs/gitea-backend) for more information.
 Adds support for viewing subfolders and creating new subfolders in the media library, under your configured `media_folder`.
 
 See [Media Library Folders](/docs/configuration-options#media-library-folders) for more information.
-
-## External Media Library
-
-Using an external media library allows you to store your media files outside of your git backend. This is helpful if you are trying to store large media files. There are three external media libraries available in beta:
-
-- [Cloudinary](/docs/cloudinary)
-- [Netlify Large Media](/docs/netlify-large-media)
-- [Uploadcare](/docs/uploadcare)
