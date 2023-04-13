@@ -31,7 +31,7 @@ weight: 9
 | view_filters          | ViewFilter                                                                                                                         |             | _Optional_. See [view_filters](#view_filters) below                                                                                                       |
 | view_groups           | ViewGroup                                                                                                                          |             | _Optional_. See [view_groups](#view_groups) below                                                                                                         |
 
-## `identifier_field`
+## Identifier Field
 
 Static CMS expects every entry to provide a field named `"title"` that serves as an identifier for the entry. The identifier field serves as an entry's title when viewing a list of entries, and is used in [slug](#slug) creation. If you would like to use a field other than `"title"` as the identifier, you can set `identifier_field` to the name of the other field.
 
@@ -53,7 +53,7 @@ collections: [
 
 </CodeTabs>
 
-## `extension` and `format`
+## Extension and Format
 
 These settings determine how collection files are parsed and saved. Both are optional—Static CMS will attempt to infer your settings based on existing items in the collection. If your collection is empty, or you'd like more control, you can set these fields explicitly.
 
@@ -69,11 +69,11 @@ You may also specify a custom `extension` not included in the list above, as lon
 - `yaml-frontmatter`: same as the `frontmatter` format above, except frontmatter will be both parsed and saved only as YAML, followed by unparsed body text. The default delimiter for this option is `---`.
 - `json-frontmatter`: same as the `frontmatter` format above, except frontmatter will be both parsed and saved as JSON, followed by unparsed body text. The default delimiter for this option is `{` `}`.
 
-## `frontmatter_delimiter`
+## Frontmatter Delimiter
 
-If you have an explicit frontmatter format declared, this option allows you to specify a custom delimiter like `~~~`. If you need different beginning and ending delimiters, you can use an array like `["(", ")"]`.
+If you have an explicit frontmatter format declared, the `frontmatter_delimiter` option allows you to specify a custom delimiter like `~~~`. If you need different beginning and ending delimiters, you can use an array like `["(", ")"]`.
 
-## `slug`
+## Slug
 
 For folder collections where users can create new items, the `slug` option specifies a template for generating new filenames based on a file's creation date and `title` field. (This means that all collections with `create: true` must have a `title` field (a different field can be used via [`identifier_field`](#identifier_field)).
 
@@ -131,7 +131,7 @@ slug: '{{year}}-{{month}}-{{day}}_{{fields.slug}}',
 
 </CodeTabs>
 
-## `fields`
+## Fields
 
 _Ignored if [Files Collection](/docs/collection-types#file-collections)_
 
@@ -164,9 +164,9 @@ fields: [
 
 </CodeTabs>
 
-## `editor`
+## Editor
 
-This setting changes options for the editor view of a collection or a file inside a files collection. It has the following options:
+The `editor` setting changes options for the editor view of a collection or a file inside a files collection. It has the following options:
 
 | Name    | Type    | Default | Description                                                                                                  |
 | ------- | ------- | ------- | ------------------------------------------------------------------------------------------------------------ |
@@ -191,9 +191,9 @@ editor: {
 
 **Note**: Setting this as a top level configuration will set the default for all collections
 
-## `summary`
+## Summary
 
-This setting allows the customization of the collection table view. Similar to the `slug` field, a string with templates can be used to include values of different fields, e.g. `{{title}}`. This option over-rides the default of `title` field and `identifier_field`.
+The `summary` setting allows the customization of the collection table view. Similar to the `slug` field, a string with templates can be used to include values of different fields, e.g. `{{title}}`. This option over-rides the default of `title` field and `identifier_field`.
 
 **Available Template Tags**
 
@@ -216,9 +216,9 @@ summary: 'Version: {{version}} - {{title}}',
 
 </CodeTabs>
 
-## `sortable_fields`
+## Sortable Fields
 
-An optional object with the following options:
+The `sortable_fields` setting is an optional object with the following options:
 
 | Name    | Type                  | Default | Description                                                                                                       |
 | ------- | --------------------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
@@ -275,9 +275,9 @@ sortable_fields: {
 
 </CodeTabs>
 
-## `view_filters`
+## View Filters
 
-An optional list of predefined view filters to show in the UI.
+The `view_filters` setting is an optional list of predefined view filters to show in the UI.
 
 Defaults to an empty list.
 
@@ -317,9 +317,9 @@ view_filters: [
 
 </CodeTabs>
 
-## `view_groups`
+## View Groups
 
-An optional list of predefined view groups to show in the UI.
+The `view_groups` setting is an optional list of predefined view groups to show in the UI.
 
 Defaults to an empty list.
 
@@ -349,3 +349,7 @@ view_groups: [
 ```
 
 </CodeTabs>
+
+## Media Library
+
+The `media_library` settings allows customization of the media library at the collection level. See [Media Library](/docs/configuration-options#media-library) for more details.

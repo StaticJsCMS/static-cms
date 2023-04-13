@@ -10,15 +10,17 @@ weight: 16
 
 The file widget allows editors to upload a file or select an existing one from the media library. The path to the file will be saved to the field as a string.
 
-## Widget options
+## Widget Options
 
 For common options, see [Common widget options](/docs/widgets#common-widget-options).
 
-| Name          | Type   | Default | Description                                                                                                                                  |
-| ------------- | ------ | ------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| default       | string | `null`  | _Optional_. The default value for the field. Accepts a string.                                                                               |
-| media_folder  | string |         | _Optional_. Specifies the folder path where uploaded files should be saved, relative to the base of the repo                                 |
-| public_folder | string |         | _Optional_. Specifies the folder path where the files uploaded by the media library will be accessed, relative to the base of the built site |
+| Name          | Type                  | Default | Description                                                                                                                                                        |
+| ------------- | --------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| default       | string                | `null`  | _Optional_. The default value for the field. Accepts a string.                                                                                                     |
+| media_folder  | string                |         | _Optional_. Specifies the folder path where uploaded files should be saved, relative to the base of the repo                                                       |
+| public_folder | string                |         | _Optional_. Specifies the folder path where the files uploaded by the media library will be accessed, relative to the base of the built site                       |
+| media_library | Media Library Options | `{}`    | _Optional_. Media library settings to apply when the media library is opened by the current widget. See [Media Library](/docs/configuration-options#media-library) |
+| choose_url    | boolean               | `false` | _Optional_. When set to `false`, the "Insert from URL" button will be hidden                                                                                       |
 
 ## Example
 

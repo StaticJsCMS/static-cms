@@ -62,17 +62,6 @@ const setFieldDefaults =
     }
 
     if (field.widget === 'image' || field.widget === 'file') {
-      console.log(
-        `[FOLDER SUPPORT][LOAD CONFIG][${
-          collectionFile ? `File: ${collectionFile.name}` : `Collection: ${collection.name}`
-        }][Field: ${field.name}] set field values`,
-        { ...(collectionFile ?? collection).media_library },
-        { ...field.media_library },
-        {
-          ...((collectionFile ?? collection).media_library ?? {}),
-          ...(field.media_library ?? {}),
-        },
-      );
       field.media_library = {
         ...((collectionFile ?? collection).media_library ?? {}),
         ...(field.media_library ?? {}),
@@ -181,15 +170,6 @@ export function applyDefaults(originalConfig: Config) {
         collection.editor = { preview: config.editor.preview, frame: config.editor.frame };
       }
 
-      console.log(
-        `[FOLDER SUPPORT][LOAD CONFIG][Collection: ${collection.name}] set collection values`,
-        { ...config.media_library },
-        { ...collection.media_library },
-        {
-          ...(config.media_library ?? {}),
-          ...(collection.media_library ?? {}),
-        },
-      );
       collection.media_library = {
         ...(config.media_library ?? {}),
         ...(collection.media_library ?? {}),
@@ -236,15 +216,6 @@ export function applyDefaults(originalConfig: Config) {
             file.public_folder = file.media_folder;
           }
 
-          console.log(
-            `[FOLDER SUPPORT][LOAD CONFIG][Collection: ${collection.name}][File: ${file.name}] set file values`,
-            { ...collection.media_library },
-            { ...file.media_library },
-            {
-              ...(collection.media_library ?? {}),
-              ...(file.media_library ?? {}),
-            },
-          );
           file.media_library = {
             ...(collection.media_library ?? {}),
             ...(file.media_library ?? {}),

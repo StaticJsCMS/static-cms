@@ -392,6 +392,8 @@ collections:
       - name: about
         label: About Page
         file: site/content/about.yml
+        media_library:
+          folder_support: true
         fields:
           - name: title
             label: Title
@@ -444,6 +446,9 @@ collections: [
         name: 'about',
         label: 'About Page',
         file: 'site/content/about.yml',
+        media_library: {
+          folder_support: true
+        },
         fields: [
           { name: 'title', label: 'Title', widget: 'string' },
           { name: 'intro', label: 'Intro', widget: 'markdown' },

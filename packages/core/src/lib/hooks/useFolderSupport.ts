@@ -15,16 +15,6 @@ export function getFolderSupport({
   collectionFile,
   field,
 }: UseFolderSupportProps) {
-  console.log(
-    '[FOLDER SUPPORT] config',
-    config?.media_library?.folder_support,
-    'collection',
-    collection,
-    'collectionFile',
-    collectionFile,
-    'field',
-    field?.media_library?.folder_support,
-  );
   return (field ?? collectionFile ?? collection ?? config)?.media_library?.folder_support ?? false;
 }
 

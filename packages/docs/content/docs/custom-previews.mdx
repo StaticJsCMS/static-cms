@@ -16,7 +16,7 @@ However, although possible, it may be cumbersome or even impractical to add a Re
 
 `registerPreviewTemplate` allows you to create a template that overrides the entire editor preview for a given collection.
 
-### `registerPreviewTemplate` Params
+### Params
 
 | Param           | Type                                                                           | Description                                                                                                                                                                                                                          |
 | --------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -36,7 +36,7 @@ The following parameters will be passed to your `react_component` during render:
 | widgetsFor | Function               | Given a field name, returns the rendered previews of that field's nested child widgets and values    |
 | theme      | 'light'<br />\| 'dark' | The current theme being used by the app                                                              |
 
-#### `registerPreviewTemplate` Example
+#### Example
 
 <CodeTabs>
 
@@ -346,7 +346,7 @@ CMS.registerPreviewStyle('.main { color: blue; border: 1px solid gree; }', { raw
 
 `registerPreviewCard` allows you to create a card template that overrides the cards displayed in the collection view.
 
-### `registerPreviewCard` Params
+### Params
 
 | Param           | Type                                                                           | Description                                                                                                                                                                                                                          |
 | --------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -362,7 +362,7 @@ The following parameters will be passed to your `react_component` during render:
 | widgetsFor | Function               | Given a field name, returns the rendered previews of that field's nested child widgets and values |
 | theme      | 'light'<br />\| 'dark' | The current theme being used by the app                                                           |
 
-#### `registerPreviewTemplate` Example
+#### Example
 
 <CodeTabs>
 
@@ -544,7 +544,7 @@ CMS.registerPreviewTemplate('posts', PostPreview);
 
 `registerFieldPreview` allows you to create a custom preview for a specific field in the table view for collections.
 
-### `registerFieldPreview` Params
+### Params
 
 | Param          | Type                                                                           | Description                                                                                                                                                                                                                          |
 | -------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -561,7 +561,7 @@ The following parameters will be passed to your `component` during render:
 | value      | Function               | The current value of the field for the given entry |
 | theme      | 'light'<br />\| 'dark' | The current theme being used by the app            |
 
-#### `registerFieldPreview` Example
+#### Example
 
 <CodeTabs>
 
