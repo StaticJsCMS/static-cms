@@ -2,7 +2,8 @@ backend:
   name: test-repo
 site_url: 'https://staticcms.org/'
 media_folder: assets/uploads
-media_library_folder_support: true
+media_library:
+  folder_support: true
 locale: en
 i18n:
   # Required and can be one of multiple_folders, multiple_files or single_file
@@ -280,12 +281,13 @@ collections:
             label: Choose URL
             widget: file
             required: false
-            media_library:
-              choose_url: true
+            choose_url: true
       - name: image
         label: Image
         file: _widgets/image.json
         description: Image widget
+        media_library:
+          folder_support: false
         fields:
           - name: required
             label: Required Validation
@@ -303,8 +305,12 @@ collections:
             label: Choose URL
             widget: image
             required: false
+            choose_url: true
+          - name: folder_support
+            label: Folder Support
+            widget: image
             media_library:
-              choose_url: true
+              folder_support: true
       - name: list
         label: List
         file: _widgets/list.yml

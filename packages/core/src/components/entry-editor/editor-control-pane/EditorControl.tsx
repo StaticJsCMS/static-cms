@@ -17,6 +17,7 @@ import useMemoCompare from '@staticcms/core/lib/hooks/useMemoCompare';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { isFieldDuplicate, isFieldHidden } from '@staticcms/core/lib/i18n';
 import { resolveWidget } from '@staticcms/core/lib/registry';
+import { fileForEntry } from '@staticcms/core/lib/util/collection.util';
 import { getFieldLabel } from '@staticcms/core/lib/util/field.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { validate } from '@staticcms/core/lib/util/validation.util';
@@ -40,6 +41,7 @@ import type { ConnectedProps } from 'react-redux';
 
 const EditorControl = ({
   collection,
+  collectionFile,
   config: configState,
   entry,
   field,
@@ -153,6 +155,7 @@ const EditorControl = ({
         {createElement(widget.control, {
           key: `${id}-${version}`,
           collection,
+          collectionFile,
           config,
           entry,
           field: field as UnknownField,
@@ -231,6 +234,7 @@ function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
   const { collections, entryDraft } = state;
   const entry = entryDraft.entry;
   const collection = entryDraft.entry ? collections[entryDraft.entry.collection] : null;
+  const collectionFile = fileForEntry(collection, entryDraft.entry?.slug);
   const isLoadingAsset = selectIsLoadingAsset(state);
 
   return {
@@ -239,6 +243,7 @@ function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
     config: state.config,
     entry,
     collection,
+    collectionFile,
     isLoadingAsset,
   };
 }

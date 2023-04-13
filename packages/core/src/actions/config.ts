@@ -20,6 +20,7 @@ import type { ThunkDispatch } from 'redux-thunk';
 import type {
   BaseField,
   Collection,
+  CollectionFile,
   Config,
   Field,
   I18nInfo,
@@ -54,20 +55,32 @@ function getConfigUrl() {
   return 'config.yml';
 }
 
-const setFieldDefaults = (collection: Collection) => (field: Field) => {
-  if ('media_folder' in field && !('public_folder' in field)) {
-    return { ...field, public_folder: field.media_folder };
-  }
+const setFieldDefaults =
+  (collection: Collection, collectionFile?: CollectionFile) => (field: Field) => {
+    if ('media_folder' in field && !('public_folder' in field)) {
+      return { ...field, public_folder: field.media_folder };
+    }
 
-  if (field.widget === 'image' || field.widget === 'file') {
-    field.media_library = {
-      ...(collection.media_library ?? {}),
-      ...(field.media_library ?? {}),
-    };
-  }
+    if (field.widget === 'image' || field.widget === 'file') {
+      console.log(
+        `[FOLDER SUPPORT][LOAD CONFIG][${
+          collectionFile ? `File: ${collectionFile.name}` : `Collection: ${collection.name}`
+        }][Field: ${field.name}] set field values`,
+        { ...(collectionFile ?? collection).media_library },
+        { ...field.media_library },
+        {
+          ...((collectionFile ?? collection).media_library ?? {}),
+          ...(field.media_library ?? {}),
+        },
+      );
+      field.media_library = {
+        ...((collectionFile ?? collection).media_library ?? {}),
+        ...(field.media_library ?? {}),
+      };
+    }
 
-  return field;
-};
+    return field;
+  };
 
 function setI18nField<T extends BaseField = UnknownField>(field: T) {
   if (field[I18N] === true) {
@@ -168,6 +181,15 @@ export function applyDefaults(originalConfig: Config) {
         collection.editor = { preview: config.editor.preview, frame: config.editor.frame };
       }
 
+      console.log(
+        `[FOLDER SUPPORT][LOAD CONFIG][Collection: ${collection.name}] set collection values`,
+        { ...config.media_library },
+        { ...collection.media_library },
+        {
+          ...(config.media_library ?? {}),
+          ...(collection.media_library ?? {}),
+        },
+      );
       collection.media_library = {
         ...(config.media_library ?? {}),
         ...(collection.media_library ?? {}),
@@ -214,8 +236,22 @@ export function applyDefaults(originalConfig: Config) {
             file.public_folder = file.media_folder;
           }
 
+          console.log(
+            `[FOLDER SUPPORT][LOAD CONFIG][Collection: ${collection.name}][File: ${file.name}] set file values`,
+            { ...collection.media_library },
+            { ...file.media_library },
+            {
+              ...(collection.media_library ?? {}),
+              ...(file.media_library ?? {}),
+            },
+          );
+          file.media_library = {
+            ...(collection.media_library ?? {}),
+            ...(file.media_library ?? {}),
+          };
+
           if (file.fields) {
-            file.fields = traverseFields(file.fields, setFieldDefaults(collection));
+            file.fields = traverseFields(file.fields, setFieldDefaults(collection, file));
           }
 
           let fileI18n = file[I18N];

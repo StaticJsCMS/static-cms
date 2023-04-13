@@ -18,6 +18,7 @@ import type { Backend } from '@staticcms/core/backend';
 import type {
   BaseField,
   Collection,
+  CollectionFile,
   Collections,
   Config,
   Entry,
@@ -28,7 +29,14 @@ import type {
   SortableField,
 } from '@staticcms/core/interface';
 
-function fileForEntry<EF extends BaseField>(collection: FilesCollection<EF>, slug?: string) {
+export function fileForEntry<EF extends BaseField>(
+  collection: Collection<EF> | undefined | null,
+  slug?: string,
+): CollectionFile<EF> | undefined {
+  if (!collection || !('files' in collection)) {
+    return undefined;
+  }
+
   const files = collection.files;
   if (!slug) {
     return files?.[0];
@@ -36,13 +44,16 @@ function fileForEntry<EF extends BaseField>(collection: FilesCollection<EF>, slu
   return files && files.filter(f => f?.name === slug)?.[0];
 }
 
-export function selectFields<EF extends BaseField>(collection: Collection<EF>, slug?: string) {
+export function selectFields<EF extends BaseField>(
+  collection: Collection<EF>,
+  slug?: string,
+): Field<EF>[] {
   if ('fields' in collection) {
     return collection.fields;
   }
 
   const file = fileForEntry(collection, slug);
-  return file && file.fields;
+  return file ? file.fields : [];
 }
 
 export function selectFolderEntryExtension<EF extends BaseField>(collection: Collection<EF>) {

@@ -57,9 +57,9 @@ import type {
   Entry,
   EntryData,
   EntryDraft,
-  Field,
   FilterRule,
   ImplementationEntry,
+  MediaField,
   PersistArgs,
   SearchQueryResponse,
   SearchResponse,
@@ -247,7 +247,7 @@ export interface MediaFile {
   draft?: boolean;
   url?: string;
   file?: File;
-  field?: Field;
+  field?: MediaField;
   queryOrder?: unknown;
   isViewableImage?: boolean;
   type?: string;

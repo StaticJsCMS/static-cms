@@ -7,7 +7,7 @@ import type {
   ReactElement,
   ReactNode,
 } from 'react';
-import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
+import type { TranslateProps as ReactPolyglotTranslateProps, t } from 'react-polyglot';
 import type { MediaFile as BackendMediaFile } from './backend';
 import type { EditorControlProps } from './components/entry-editor/editor-control-pane/EditorControl';
 import type {
@@ -164,6 +164,7 @@ export interface CollectionFile<EF extends BaseField = UnknownField> {
   description?: string;
   media_folder?: string;
   public_folder?: string;
+  media_library?: MediaLibraryConfig;
   i18n?: boolean | I18nInfo;
   editor?: EditorConfig;
 }
@@ -252,6 +253,7 @@ export interface MediaPath<T = string | string[]> {
 
 export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = ObjectValue> {
   collection: Collection<F>;
+  collectionFile: CollectionFile<F> | undefined;
   config: Config<F>;
   entry: Entry<EV>;
   field: F;
@@ -410,7 +412,7 @@ export interface ImplementationMediaFile {
   draft?: boolean;
   url?: string;
   file?: File;
-  field?: Field;
+  field?: MediaField;
 }
 
 export interface DataFile {

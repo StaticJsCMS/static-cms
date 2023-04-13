@@ -1,17 +1,17 @@
-import type { Field } from '../interface';
+import type { MediaField } from '../interface';
 
 interface AssetProxyArgs {
   path: string;
   url?: string;
   file?: File;
-  field?: Field;
+  field?: MediaField;
 }
 
 export default class AssetProxy {
   url: string;
   fileObj?: File;
   path: string;
-  field?: Field;
+  field?: MediaField;
 
   constructor({ url, file, path, field }: AssetProxyArgs) {
     this.url = url ? url : file ? window.URL.createObjectURL(file as Blob) : '';

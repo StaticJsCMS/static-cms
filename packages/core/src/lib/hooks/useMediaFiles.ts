@@ -9,6 +9,8 @@ import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraf
 import { selectMediaLibraryFiles } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import { selectMediaFolder } from '../util/media.util';
+import useFolderSupport from './useFolderSupport';
+import { fileForEntry } from '../util/collection.util';
 
 import type { MediaField, MediaFile } from '@staticcms/core/interface';
 
@@ -23,11 +25,12 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
     [entry?.collection],
   );
   const collection = useAppSelector(collectionSelector);
-
-  const folderSupport = useMemo(
-    () => (field ?? collection ?? config)?.media_library?.folder_support ?? false,
-    [collection, config, field],
+  const collectionFile = useMemo(
+    () => fileForEntry(collection, entry?.slug),
+    [collection, entry?.slug],
   );
+
+  const folderSupport = useFolderSupport({ config, collection, collectionFile, field });
 
   useEffect(() => {
     if (!currentFolder || !config || !entry) {

@@ -9,6 +9,7 @@ import {
   MEDIA_CARD_WIDTH,
   MEDIA_LIBRARY_PADDING,
 } from '@staticcms/core/constants/mediaLibrary';
+import useFolderSupport from '@staticcms/core/lib/hooks/useFolderSupport';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { useAppSelector } from '@staticcms/core/store/hooks';
@@ -16,6 +17,7 @@ import MediaLibraryCard from './MediaLibraryCard';
 
 import type {
   Collection,
+  CollectionFile,
   MediaField,
   MediaFile,
   MediaLibraryDisplayURL,
@@ -51,6 +53,7 @@ export interface MediaLibraryCardGridProps {
   loadDisplayURL: (asset: MediaFile) => void;
   displayURLs: MediaLibraryState['displayURLs'];
   collection?: Collection;
+  collectionFile?: CollectionFile;
   field?: MediaField;
   isDialog: boolean;
   onDelete: (file: MediaFile) => void;
@@ -136,15 +139,20 @@ const CardWrapper = ({
 };
 
 const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
-  const { mediaItems, scrollContainerRef, canLoadMore, isDialog, onLoadMore, field, collection } =
-    props;
+  const {
+    mediaItems,
+    scrollContainerRef,
+    canLoadMore,
+    isDialog,
+    onLoadMore,
+    field,
+    collection,
+    collectionFile,
+  } = props;
 
   const config = useAppSelector(selectConfig);
 
-  const folderSupport = useMemo(
-    () => (field ?? collection ?? config)?.media_library?.folder_support ?? false,
-    [collection, config, field],
-  );
+  const folderSupport = useFolderSupport({ config, collection, collectionFile, field });
 
   const [version, setVersion] = useState(0);
 
