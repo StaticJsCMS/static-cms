@@ -23,7 +23,7 @@ import {
 import type { MediaLibraryAction } from '../actions/mediaLibrary';
 import type {
   Collection,
-  Field,
+  MediaField,
   MediaFile,
   MediaLibrarInsertOptions,
   MediaLibraryConfig,
@@ -41,7 +41,7 @@ export type MediaLibraryState = {
   files?: MediaFile[];
   config: MediaLibraryConfig;
   collection?: Collection;
-  field?: Field;
+  field?: MediaField;
   value?: string | string[];
   alt?: string;
   replaceIndex?: number;

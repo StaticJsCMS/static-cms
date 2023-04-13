@@ -214,6 +214,7 @@ export interface BaseCollection {
   slug?: string;
   media_folder?: string;
   public_folder?: string;
+  media_library?: MediaLibraryConfig;
 }
 
 export interface FilesCollection<EF extends BaseField = UnknownField> extends BaseCollection {
@@ -555,6 +556,7 @@ export interface MediaField extends BaseField {
   public_folder?: string;
   choose_url?: boolean;
   multiple?: boolean;
+  media_library?: MediaLibraryConfig;
 }
 
 export interface BooleanField extends BaseField {

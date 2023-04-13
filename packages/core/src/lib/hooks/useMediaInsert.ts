@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { openMediaLibrary, removeInsertedMedia } from '@staticcms/core/actions/mediaLibrary';
-import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectMediaPath } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 
@@ -28,8 +27,6 @@ export default function useMediaInsert<T extends string | string[], F extends Me
   const dispatch = useAppDispatch();
 
   const { controlID, collection, field, forImage = false, insertOptions } = options;
-
-  const config = useAppSelector(selectConfig);
 
   const finalControlID = useMemo(() => controlID ?? uuid(), [controlID]);
   const mediaPathSelector = useMemo(() => selectMediaPath(finalControlID), [finalControlID]);
@@ -57,7 +54,7 @@ export default function useMediaInsert<T extends string | string[], F extends Me
           alt: value.alt,
           replaceIndex,
           allowMultiple: false,
-          config: config?.media_library,
+          config: field.media_library,
           collection,
           field,
           insertOptions,
@@ -65,17 +62,7 @@ export default function useMediaInsert<T extends string | string[], F extends Me
       );
       setSelected(false);
     },
-    [
-      dispatch,
-      finalControlID,
-      forImage,
-      value.path,
-      value.alt,
-      config?.media_library,
-      collection,
-      field,
-      insertOptions,
-    ],
+    [dispatch, finalControlID, forImage, value.path, value.alt, collection, field, insertOptions],
   );
 
   return handleOpenMediaLibrary;

@@ -24,6 +24,11 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
   );
   const collection = useAppSelector(collectionSelector);
 
+  const folderSupport = useMemo(
+    () => (field ?? collection ?? config)?.media_library?.folder_support ?? false,
+    [collection, config, field],
+  );
+
   useEffect(() => {
     if (!currentFolder || !config || !entry) {
       setCurrentFolderMediaFiles(null);
@@ -36,7 +41,7 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
       const backend = currentBackend(config);
       const files = await backend.getMedia(
         currentFolder,
-        config.media_library?.folder_support ?? false,
+        folderSupport,
         config.public_folder
           ? trim(currentFolder, '/').replace(trim(config.media_folder!), config.public_folder)
           : currentFolder,
@@ -52,7 +57,7 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
     return () => {
       alive = false;
     };
-  }, [currentFolder, config, entry]);
+  }, [currentFolder, config, entry, field, collection, folderSupport]);
 
   const files = useMemo(() => {
     if (entry) {
