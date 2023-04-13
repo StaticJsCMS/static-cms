@@ -260,7 +260,7 @@ export function selectMediaFilePublicPath<EF extends BaseField>(
   collection: Collection<EF> | null,
   mediaPath: string,
   entryMap: Entry | undefined,
-  field: Field<EF> | undefined,
+  field: MediaField | undefined,
   currentFolder?: string,
 ) {
   if (isAbsolutePath(mediaPath)) {
@@ -297,7 +297,7 @@ export function selectMediaFilePath(
   collection: Collection | null | undefined,
   entryMap: Entry | null | undefined,
   mediaPath: string,
-  field: Field | undefined,
+  field: MediaField | undefined,
   currentFolder?: string,
 ) {
   if (isAbsolutePath(mediaPath)) {

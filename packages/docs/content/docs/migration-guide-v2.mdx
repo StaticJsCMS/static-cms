@@ -192,16 +192,20 @@ collections:
 
 ## External Media Libraries
 
-External media integrations (Cloudinary, Netlify Large Media and Uploadcare) have been removed as part of an ongoing to effect to narrow the focus of Static CMS. With [Decap](https://decapcms.org/)  (previously Netlify CMS) being supported again its not as critical for Static CMS to support every possible option.
+External media integrations (Cloudinary, Netlify Large Media and Uploadcare) have been removed as part of an ongoing to effect to narrow the focus of Static CMS. With [Decap](https://decapcms.org/) (previously Netlify CMS) being supported again its not as critical for Static CMS to support every possible option.
 
 The external media integrations have been broken for sometime, and would require a lot of effort to get them back to the level already available in Decap. So, in order to focus our efforts on other features, it has been decided to remove all external media integrations.
 
 This brings with it some breaking changes for the `media_library` config property.
 
-**Old Config**
+**Old Config (for Image or File Field)**
 
 <CodeTabs>
 ```yaml
+name: thumbnail
+label: Featured Image
+widget: image
+default: /uploads/chocolate-dogecoin.jpg
 media_library:
   choose_url: true
   config:
@@ -210,6 +214,10 @@ media_library:
 
 ```js
 {
+  name: "thumbnail",
+  label: "Featured Image",
+  widget: "image",
+  default: "/uploads/chocolate-dogecoin.jpg",
   media_library: {
     choose_url: true,
     config: {
@@ -225,15 +233,23 @@ media_library:
 
 <CodeTabs>
 ```yaml
+name: thumbnail
+label: Featured Image
+widget: image
+default: /uploads/chocolate-dogecoin.jpg
+choose_url: true
 media_library:
-  choose_url: true
   max_file_size: 512000
 ```
 
 ```js
 {
+  name: "thumbnail",
+  label: "Featured Image",
+  widget: "image",
+  default: "/uploads/chocolate-dogecoin.jpg",
+  choose_url: true,
   media_library: {
-    choose_url: true,
     max_file_size: 512000
   }
 }
@@ -242,7 +258,6 @@ media_library:
 </CodeTabs>
 
 Also the `clearMediaControl` and `removeMediaControl` widget control props have been removed as they were only used for the external media library integrations.
-
 
 ## Other Breaking Changes
 

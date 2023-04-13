@@ -67,16 +67,22 @@ Based on the settings above, if a user used an image widget field called `avatar
 
 This setting can be set to an absolute URL e.g. `https://netlify.com/media` should you wish, however in general this is not advisable as content should have relative paths to other content.
 
-## Media Library
+## Media Library <BetaImage />
 
-Media library integrations are configured via the `media_library` property, and its value should be an object with at least a `name` property. A `config` property can also be used for options that should be passed to the library in use.
+The `media_library` settings allows customization of the media library.
 
-**Example:**
+### Options
+
+| Name           | Type    | Default  | Description                                                                            |
+| -------------- | ------- | -------- | -------------------------------------------------------------------------------------- |
+| max_file_size  | number  | `512000` | _Optional_. <BetaImage /> The max size, in bytes, of files that can be uploaded to the media library |
+| folder_support | boolean | `false`  | _Optional_. <BetaImage /> Enables directory navigation and folder creation in your media library     |
+
+### Example
 
 <CodeTabs>
 ```yaml
 media_library:
-  choose_url: true,
   max_file_size: 512000
   folder_support: true
 ```
@@ -84,29 +90,8 @@ media_library:
 ```js
 {
   media_library: {
-    choose_url: "true,",
     max_file_size: 512000,
     folder_support: true
-  }
-}
-```
-
-</CodeTabs>
-
-### Media Library Folders <BetaImage />
-
-The `folder_support` flag enables support for viewing subfolders and creating new subfolders in the media library, under your configured `media_folder`.
-
-<CodeTabs>
-```yaml
-media_library:
-  folder_support: true
-```
-
-```js
-{
-  media_library: {
-    folder_support: true;
   }
 }
 ```

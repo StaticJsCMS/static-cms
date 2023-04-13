@@ -23,7 +23,8 @@ import {
 import type { MediaLibraryAction } from '../actions/mediaLibrary';
 import type {
   Collection,
-  Field,
+  CollectionFile,
+  MediaField,
   MediaFile,
   MediaLibrarInsertOptions,
   MediaLibraryConfig,
@@ -41,7 +42,8 @@ export type MediaLibraryState = {
   files?: MediaFile[];
   config: MediaLibraryConfig;
   collection?: Collection;
-  field?: Field;
+  collectionFile?: CollectionFile;
+  field?: MediaField;
   value?: string | string[];
   alt?: string;
   replaceIndex?: number;
@@ -76,6 +78,7 @@ function mediaLibrary(
         forImage,
         config,
         collection,
+        collectionFile,
         field,
         value,
         alt,
@@ -91,6 +94,7 @@ function mediaLibrary(
         controlID,
         config: libConfig,
         collection,
+        collectionFile,
         field,
         value,
         alt,

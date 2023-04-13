@@ -8,8 +8,6 @@ import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { basename } from '@staticcms/core/lib/util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
-import { selectConfig } from '@staticcms/core/reducers/selectors/config';
-import { useAppSelector } from '@staticcms/core/store/hooks';
 import SortableImage from './components/SortableImage';
 
 import type {
@@ -82,8 +80,6 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
         handleOnChange,
       );
 
-      const config = useAppSelector(selectConfig);
-
       const allowsMultiple = useMemo(() => {
         return field.multiple ?? false;
       }, [field.multiple]);
@@ -129,12 +125,12 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
             value: internalValue,
             replaceIndex: index,
             allowMultiple: false,
-            config: config?.media_library,
+            config: field.media_library,
             collection: collection as Collection<BaseField>,
             field,
           });
         },
-        [openMediaLibrary, controlID, internalValue, config, collection, field],
+        [openMediaLibrary, controlID, internalValue, collection, field],
       );
 
       // TODO Readd when multiple uploads is supported

@@ -23,7 +23,7 @@ import type {
   Widget,
   WidgetOptions,
   WidgetParam,
-  WidgetValueSerializer
+  WidgetValueSerializer,
 } from '../interface';
 
 export const allowedEvents = ['prePublish', 'postPublish', 'preSave', 'postSave'] as const;

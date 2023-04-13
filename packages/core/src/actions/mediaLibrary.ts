@@ -34,9 +34,11 @@ import type { ThunkDispatch } from 'redux-thunk';
 import type {
   BaseField,
   Collection,
+  CollectionFile,
   DisplayURLState,
   Field,
   ImplementationMediaFile,
+  MediaField,
   MediaFile,
   MediaLibrarInsertOptions,
   MediaLibraryConfig,
@@ -55,50 +57,50 @@ export function openMediaLibrary<EF extends BaseField = UnknownField>(
     replaceIndex?: number;
     config?: MediaLibraryConfig;
     collection?: Collection<EF>;
+    collectionFile?: CollectionFile<EF>;
     field?: EF;
     insertOptions?: MediaLibrarInsertOptions;
   } = {},
 ) {
-  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>) => {
-    const {
+  const {
+    controlID,
+    value,
+    alt,
+    config = {},
+    allowMultiple,
+    forImage,
+    replaceIndex,
+    collection,
+    collectionFile,
+    field,
+    insertOptions,
+  } = payload;
+
+  return {
+    type: MEDIA_LIBRARY_OPEN,
+    payload: {
       controlID,
+      forImage,
       value,
       alt,
-      config = {},
       allowMultiple,
-      forImage,
       replaceIndex,
-      collection,
-      field,
+      config,
+      collection: collection as Collection,
+      collectionFile: collectionFile as CollectionFile,
+      field: field as Field,
       insertOptions,
-    } = payload;
-
-    dispatch(
-      mediaLibraryOpened({
-        controlID,
-        forImage,
-        value,
-        alt,
-        allowMultiple,
-        replaceIndex,
-        config,
-        collection: collection as Collection,
-        field: field as Field,
-        insertOptions,
-      }),
-    );
-  };
+    },
+  } as const;
 }
 
 export function closeMediaLibrary() {
-  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>) => {
-    dispatch(mediaLibraryClosed());
-  };
+  return { type: MEDIA_LIBRARY_CLOSE } as const;
 }
 
 export function insertMedia(
   mediaPath: string | string[],
-  field: Field | undefined,
+  field: MediaField | undefined,
   alt?: string,
   currentFolder?: string,
 ) {
@@ -401,25 +403,6 @@ export function loadMediaDisplayURL(file: MediaFile) {
   };
 }
 
-function mediaLibraryOpened(payload: {
-  controlID?: string;
-  forImage?: boolean;
-  value?: string | string[];
-  alt?: string;
-  replaceIndex?: number;
-  allowMultiple?: boolean;
-  config?: MediaLibraryConfig;
-  collection?: Collection;
-  field?: Field;
-  insertOptions?: MediaLibrarInsertOptions;
-}) {
-  return { type: MEDIA_LIBRARY_OPEN, payload } as const;
-}
-
-function mediaLibraryClosed() {
-  return { type: MEDIA_LIBRARY_CLOSE } as const;
-}
-
 export function mediaInserted(mediaPath: string | string[], alt?: string) {
   return { type: MEDIA_INSERT, payload: { mediaPath, alt } } as const;
 }
@@ -432,7 +415,7 @@ export function mediaLoading(page: number) {
 }
 
 export interface MediaOptions {
-  field?: Field;
+  field?: MediaField;
   page?: number;
   canPaginate?: boolean;
   dynamicSearch?: boolean;
@@ -545,8 +528,8 @@ export async function getMediaDisplayURL(
 }
 
 export type MediaLibraryAction = ReturnType<
-  | typeof mediaLibraryOpened
-  | typeof mediaLibraryClosed
+  | typeof openMediaLibrary
+  | typeof closeMediaLibrary
   | typeof mediaInserted
   | typeof removeInsertedMedia
   | typeof mediaLoading

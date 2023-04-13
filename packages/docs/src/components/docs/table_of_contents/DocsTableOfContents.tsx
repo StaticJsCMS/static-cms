@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { isNotEmpty } from '../../../util/string.util';
 import DocsHeadings from './DocsHeadings';
+import { getAnchor } from '../components/headers/hooks/useAnchor';
 
 export interface Heading {
   id: string;
@@ -14,21 +15,43 @@ export interface NestedHeading extends Heading {
   items: Heading[];
 }
 
-const getNestedHeadings = (headingElements: HTMLHeadingElement[]) => {
+export const getId = (headingsSoFar: string[], potentialHeading: string): string => {
+  let heading = potentialHeading;
+
+  let index = 1;
+  while (headingsSoFar.includes(heading)) {
+    heading = `${potentialHeading}-${index}`;
+    index++;
+  }
+
+  return heading;
+};
+
+const getNestedHeadings = (
+  headingElements: HTMLHeadingElement[],
+  headingsSoFar: string[],
+): NestedHeading[] => {
   const nestedHeadings: NestedHeading[] = [];
 
   headingElements.forEach(heading => {
-    const { innerText, id } = heading;
+    const { innerText } = heading;
     const title = innerText
       .replace(/\n/g, '')
       .replace(/Beta Feature$/g, '')
       .trim();
 
+    const id = getAnchor(title);
+
+    const finalId = getId(headingsSoFar, id);
+
+    headingsSoFar.push(finalId);
+    heading.id = finalId;
+
     if (heading.nodeName === 'H1' || heading.nodeName === 'H2') {
-      nestedHeadings.push({ id, title, items: [] });
+      nestedHeadings.push({ id: finalId, title, items: [] });
     } else if (heading.nodeName === 'H3' && nestedHeadings.length > 0) {
       nestedHeadings[nestedHeadings.length - 1].items.push({
-        id,
+        id: finalId,
         title,
       });
     }
@@ -46,8 +69,10 @@ const useHeadingsData = () => {
       document.querySelectorAll<HTMLHeadingElement>('main h1, main h2, main h3'),
     );
 
+    const headingsSoFar: string[] = [];
+
     // Created a list of headings, with H3s nested
-    const newNestedHeadings = getNestedHeadings(headingElements);
+    const newNestedHeadings = getNestedHeadings(headingElements, headingsSoFar);
     setNestedHeadings(newNestedHeadings);
   }, [asPath]);
 

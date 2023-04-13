@@ -9,6 +9,8 @@ import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraf
 import { selectMediaLibraryFiles } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import { selectMediaFolder } from '../util/media.util';
+import useFolderSupport from './useFolderSupport';
+import { fileForEntry } from '../util/collection.util';
 
 import type { MediaField, MediaFile } from '@staticcms/core/interface';
 
@@ -23,6 +25,12 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
     [entry?.collection],
   );
   const collection = useAppSelector(collectionSelector);
+  const collectionFile = useMemo(
+    () => fileForEntry(collection, entry?.slug),
+    [collection, entry?.slug],
+  );
+
+  const folderSupport = useFolderSupport({ config, collection, collectionFile, field });
 
   useEffect(() => {
     if (!currentFolder || !config || !entry) {
@@ -36,7 +44,7 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
       const backend = currentBackend(config);
       const files = await backend.getMedia(
         currentFolder,
-        config.media_library?.folder_support ?? false,
+        folderSupport,
         config.public_folder
           ? trim(currentFolder, '/').replace(trim(config.media_folder!), config.public_folder)
           : currentFolder,
@@ -52,7 +60,7 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
     return () => {
       alive = false;
     };
-  }, [currentFolder, config, entry]);
+  }, [currentFolder, config, entry, field, collection, folderSupport]);
 
   const files = useMemo(() => {
     if (entry) {

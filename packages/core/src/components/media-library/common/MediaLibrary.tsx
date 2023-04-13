@@ -17,6 +17,7 @@ import {
   loadMediaDisplayURL,
   persistMedia,
 } from '@staticcms/core/actions/mediaLibrary';
+import useFolderSupport from '@staticcms/core/lib/hooks/useFolderSupport';
 import useMediaFiles from '@staticcms/core/lib/hooks/useMediaFiles';
 import { fileExtension } from '@staticcms/core/lib/util';
 import classNames from '@staticcms/core/lib/util/classNames.util';
@@ -85,6 +86,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
     dynamicSearchQuery,
     page,
     collection,
+    collectionFile,
     field,
     value: initialValue,
     alt: initialAlt,
@@ -463,6 +465,8 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
 
   const hasSelection = hasMedia && !isEmpty(selectedFile);
 
+  const folderSupport = useFolderSupport({ config, collection, collectionFile, field });
+
   return (
     <>
       <div className="flex flex-col w-full h-full">
@@ -484,7 +488,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
               px-5
               pt-4
             `,
-            config?.media_library?.folder_support &&
+            folderSupport &&
               `
                 pb-4
                 border-b
@@ -517,7 +521,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
               placeholder={t('mediaLibrary.mediaLibraryModal.search')}
               disabled={!dynamicSearchActive && !hasFilteredFiles}
             />
-            {config?.media_library?.folder_support ? (
+            {folderSupport ? (
               <div className="flex gap-1.5 items-center">
                 <IconButton
                   onClick={handleHome}
@@ -565,7 +569,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
             ) : null}
           </div>
         </div>
-        {config?.media_library?.folder_support ? (
+        {folderSupport ? (
           <div
             className="
               flex

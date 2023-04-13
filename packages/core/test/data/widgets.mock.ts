@@ -54,6 +54,7 @@ export const createMockWidgetControlProps = <
     label: 'Mock Widget',
     config,
     collection,
+    collectionFile: undefined,
     entry,
     value,
     path,

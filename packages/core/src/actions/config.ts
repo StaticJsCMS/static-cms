@@ -19,39 +19,26 @@ import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type {
   BaseField,
+  Collection,
+  CollectionFile,
   Config,
   Field,
   I18nInfo,
-  ListField,
   LocalBackend,
-  ObjectField,
   UnknownField,
 } from '../interface';
 import type { RootState } from '../store';
 
-function isObjectField<F extends BaseField = UnknownField>(
-  field: Field<F>,
-): field is ObjectField<F> {
-  return 'fields' in (field as ObjectField);
-}
-
-function isFieldList<F extends BaseField = UnknownField>(field: Field<F>): field is ListField<F> {
-  return 'types' in (field as ListField) || 'field' in (field as ListField);
-}
-
-function traverseFieldsJS<F extends BaseField = UnknownField>(
-  fields: F[],
-  updater: <T extends BaseField = UnknownField>(field: T) => T,
-): F[] {
+function traverseFields(fields: Field[], updater: (field: Field) => Field): Field[] {
   return fields.map(field => {
     const newField = updater(field);
-    if (isObjectField(newField)) {
-      return { ...newField, fields: traverseFieldsJS(newField.fields, updater) };
-    } else if (isFieldList(newField) && newField.types) {
-      return { ...newField, types: traverseFieldsJS(newField.types, updater) };
+    if ('fields' in newField && newField.fields) {
+      return { ...newField, fields: traverseFields(newField.fields, updater) } as Field;
+    } else if (newField.widget === 'list' && newField.types) {
+      return { ...newField, types: traverseFields(newField.types, updater) } as Field;
     }
 
-    return newField;
+    return newField as Field;
   });
 }
 
@@ -68,12 +55,21 @@ function getConfigUrl() {
   return 'config.yml';
 }
 
-function setDefaultPublicFolderForField<T extends BaseField = UnknownField>(field: T) {
-  if ('media_folder' in field && !('public_folder' in field)) {
-    return { ...field, public_folder: field.media_folder };
-  }
-  return field;
-}
+const setFieldDefaults =
+  (collection: Collection, collectionFile?: CollectionFile) => (field: Field) => {
+    if ('media_folder' in field && !('public_folder' in field)) {
+      return { ...field, public_folder: field.media_folder };
+    }
+
+    if (field.widget === 'image' || field.widget === 'file') {
+      field.media_library = {
+        ...((collectionFile ?? collection).media_library ?? {}),
+        ...(field.media_library ?? {}),
+      };
+    }
+
+    return field;
+  };
 
 function setI18nField<T extends BaseField = UnknownField>(field: T) {
   if (field[I18N] === true) {
@@ -100,9 +96,9 @@ function getI18nDefaults(collectionOrFileI18n: boolean | I18nInfo, defaultI18n: 
 
 function setI18nDefaultsForFields(collectionOrFileFields: Field[], hasI18n: boolean) {
   if (hasI18n) {
-    return traverseFieldsJS(collectionOrFileFields, setI18nField);
+    return traverseFields(collectionOrFileFields, setI18nField);
   } else {
-    return traverseFieldsJS(collectionOrFileFields, field => {
+    return traverseFields(collectionOrFileFields, field => {
       const newField = { ...field };
       delete newField[I18N];
       return newField;
@@ -174,6 +170,11 @@ export function applyDefaults(originalConfig: Config) {
         collection.editor = { preview: config.editor.preview, frame: config.editor.frame };
       }
 
+      collection.media_library = {
+        ...(config.media_library ?? {}),
+        ...(collection.media_library ?? {}),
+      };
+
       if (i18n && collectionI18n) {
         collectionI18n = getI18nDefaults(collectionI18n, i18n);
         collection[I18N] = collectionI18n;
@@ -199,7 +200,7 @@ export function applyDefaults(originalConfig: Config) {
         }
 
         if ('fields' in collection && collection.fields) {
-          collection.fields = traverseFieldsJS(collection.fields, setDefaultPublicFolderForField);
+          collection.fields = traverseFields(collection.fields, setFieldDefaults(collection));
         }
 
         collection.folder = trim(collection.folder, '/');
@@ -215,8 +216,13 @@ export function applyDefaults(originalConfig: Config) {
             file.public_folder = file.media_folder;
           }
 
+          file.media_library = {
+            ...(collection.media_library ?? {}),
+            ...(file.media_library ?? {}),
+          };
+
           if (file.fields) {
-            file.fields = traverseFieldsJS(file.fields, setDefaultPublicFolderForField);
+            file.fields = traverseFields(file.fields, setFieldDefaults(collection, file));
           }
 
           let fileI18n = file[I18N];

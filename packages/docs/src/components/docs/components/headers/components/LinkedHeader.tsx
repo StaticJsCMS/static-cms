@@ -41,7 +41,6 @@ const Header3 = ({ variant, children = '' }: Header3Props) => {
     <Typography
       variant={variant}
       component={variant}
-      id={anchor}
       sx={{
         display: 'flex',
         alignItems: 'center',

@@ -9,6 +9,7 @@ import {
   MEDIA_CARD_WIDTH,
   MEDIA_LIBRARY_PADDING,
 } from '@staticcms/core/constants/mediaLibrary';
+import useFolderSupport from '@staticcms/core/lib/hooks/useFolderSupport';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { useAppSelector } from '@staticcms/core/store/hooks';
@@ -16,7 +17,8 @@ import MediaLibraryCard from './MediaLibraryCard';
 
 import type {
   Collection,
-  Field,
+  CollectionFile,
+  MediaField,
   MediaFile,
   MediaLibraryDisplayURL,
 } from '@staticcms/core/interface';
@@ -51,7 +53,8 @@ export interface MediaLibraryCardGridProps {
   loadDisplayURL: (asset: MediaFile) => void;
   displayURLs: MediaLibraryState['displayURLs'];
   collection?: Collection;
-  field?: Field;
+  collectionFile?: CollectionFile;
+  field?: MediaField;
   isDialog: boolean;
   onDelete: (file: MediaFile) => void;
 }
@@ -136,8 +139,20 @@ const CardWrapper = ({
 };
 
 const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
-  const { mediaItems, scrollContainerRef, canLoadMore, isDialog, onLoadMore } = props;
+  const {
+    mediaItems,
+    scrollContainerRef,
+    canLoadMore,
+    isDialog,
+    onLoadMore,
+    field,
+    collection,
+    collectionFile,
+  } = props;
+
   const config = useAppSelector(selectConfig);
+
+  const folderSupport = useFolderSupport({ config, collection, collectionFile, field });
 
   const [version, setVersion] = useState(0);
 
@@ -164,7 +179,7 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
                   overflow-hidden
                 `,
                 isDialog && 'rounded-b-lg',
-                !config?.media_library?.folder_support && 'pt-[20px]',
+                !folderSupport && 'pt-[20px]',
               )}
               style={{
                 width,
@@ -179,9 +194,7 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
                 rowCount={rowCount}
                 rowHeight={() => rowHeightWithGutter}
                 width={width}
-                height={
-                  height - (!config?.media_library?.folder_support ? MEDIA_LIBRARY_PADDING : 0)
-                }
+                height={height - (!folderSupport ? MEDIA_LIBRARY_PADDING : 0)}
                 itemData={
                   {
                     ...props,
