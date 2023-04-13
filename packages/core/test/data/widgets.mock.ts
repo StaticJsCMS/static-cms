@@ -20,10 +20,8 @@ export const createMockWidgetControlProps = <
     | 'data'
     | 'hasErrors'
     | 'onChange'
-    | 'clearMediaControl'
     | 'openMediaLibrary'
     | 'removeInsertedMedia'
-    | 'removeMediaControl'
     | 'query'
     | 't'
   > &
@@ -73,10 +71,8 @@ export const createMockWidgetControlProps = <
     hidden: false,
     theme: 'light',
     onChange: jest.fn(),
-    clearMediaControl: jest.fn(),
     openMediaLibrary: jest.fn(),
     removeInsertedMedia: jest.fn(),
-    removeMediaControl: jest.fn(),
     query: jest.fn(),
     t: jest.fn(),
     ...extra,

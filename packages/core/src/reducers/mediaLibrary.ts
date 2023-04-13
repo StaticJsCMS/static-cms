@@ -10,7 +10,6 @@ import {
   MEDIA_DISPLAY_URL_SUCCESS,
   MEDIA_INSERT,
   MEDIA_LIBRARY_CLOSE,
-  MEDIA_LIBRARY_CREATE,
   MEDIA_LIBRARY_OPEN,
   MEDIA_LOAD_FAILURE,
   MEDIA_LOAD_REQUEST,
@@ -27,8 +26,8 @@ import type {
   Field,
   MediaFile,
   MediaLibrarInsertOptions,
+  MediaLibraryConfig,
   MediaLibraryDisplayURL,
-  MediaLibraryInstance,
   MediaPath,
 } from '../interface';
 
@@ -37,11 +36,10 @@ export type MediaLibraryState = {
   showMediaButton: boolean;
   controlMedia: Record<string, MediaPath>;
   displayURLs: Record<string, MediaLibraryDisplayURL>;
-  externalLibrary?: MediaLibraryInstance;
   controlID?: string;
   page?: number;
   files?: MediaFile[];
-  config: Record<string, unknown>;
+  config: MediaLibraryConfig;
   collection?: Collection;
   field?: Field;
   value?: string | string[];
@@ -72,13 +70,6 @@ function mediaLibrary(
   action: MediaLibraryAction,
 ): MediaLibraryState {
   switch (action.type) {
-    case MEDIA_LIBRARY_CREATE:
-      return {
-        ...state,
-        externalLibrary: action.payload,
-        showMediaButton: action.payload.enableStandalone(),
-      };
-
     case MEDIA_LIBRARY_OPEN: {
       const {
         controlID,

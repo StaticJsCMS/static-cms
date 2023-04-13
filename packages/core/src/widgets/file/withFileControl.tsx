@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
 
 import Button from '@staticcms/core/components/common/button/Button';
 import Field from '@staticcms/core/components/common/field/Field';
@@ -8,6 +8,8 @@ import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { basename } from '@staticcms/core/lib/util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
+import { selectConfig } from '@staticcms/core/reducers/selectors/config';
+import { useAppSelector } from '@staticcms/core/store/hooks';
 import SortableImage from './components/SortableImage';
 
 import type {
@@ -49,8 +51,6 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       duplicate,
       onChange,
       openMediaLibrary,
-      clearMediaControl,
-      removeMediaControl,
       hasErrors,
       disabled,
       t,
@@ -82,31 +82,13 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
         handleOnChange,
       );
 
-      useEffect(() => {
-        return () => {
-          removeMediaControl(controlID);
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, []);
-
-      const mediaLibraryFieldOptions = useMemo(() => {
-        return field.media_library ?? {};
-      }, [field.media_library]);
-
-      const config = useMemo(
-        () => ('config' in mediaLibraryFieldOptions ? mediaLibraryFieldOptions.config : undefined),
-        [mediaLibraryFieldOptions],
-      );
+      const config = useAppSelector(selectConfig);
 
       const allowsMultiple = useMemo(() => {
-        return config?.multiple ?? false;
-      }, [config?.multiple]);
+        return field.multiple ?? false;
+      }, [field.multiple]);
 
-      const chooseUrl = useMemo(
-        () =>
-          'choose_url' in mediaLibraryFieldOptions && (mediaLibraryFieldOptions.choose_url ?? true),
-        [mediaLibraryFieldOptions],
-      );
+      const chooseUrl = useMemo(() => field.choose_url ?? false, [field.choose_url]);
 
       const handleUrl = useCallback(
         (subject: 'image' | 'file') => (e: MouseEvent) => {
@@ -123,10 +105,9 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
         (e: MouseEvent) => {
           e.preventDefault();
           e.stopPropagation();
-          clearMediaControl(controlID);
           handleOnChange({ path: '' });
         },
-        [clearMediaControl, controlID, handleOnChange],
+        [handleOnChange],
       );
 
       const onRemoveOne = useCallback(
@@ -148,7 +129,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
             value: internalValue,
             replaceIndex: index,
             allowMultiple: false,
-            config,
+            config: config?.media_library,
             collection: collection as Collection<BaseField>,
             field,
           });

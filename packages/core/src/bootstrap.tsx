@@ -14,7 +14,6 @@ import './components/entry-editor/widgets';
 import ErrorBoundary from './components/ErrorBoundary';
 import addExtensions from './extensions';
 import { getPhrases } from './lib/phrases';
-import './mediaLibrary';
 import { selectLocale } from './reducers/selectors/config';
 import { store } from './store';
 

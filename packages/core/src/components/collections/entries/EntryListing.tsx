@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { Waypoint } from 'react-waypoint';
 
 import { selectFields, selectInferredField } from '@staticcms/core/lib/util/collection.util';
+import { toTitleCaseFromKey } from '@staticcms/core/lib/util/string.util';
 import Table from '../../common/table/Table';
 import EntryCard from './EntryCard';
 
@@ -120,11 +121,30 @@ const EntryListing = ({
     });
   }, [entries, inferFields, isSingleCollectionInList, otherProps, summaryFields, viewStyle]);
 
+  const summaryFieldHeaders = useMemo(() => {
+    if ('collection' in otherProps) {
+      const collectionFields = selectFields(otherProps.collection).reduce((acc, f) => {
+        acc[f.name] = f;
+        return acc;
+      }, {} as Record<string, Field>);
+      return summaryFields.map(summaryField => {
+        const field = collectionFields[summaryField];
+        return !field
+          ? toTitleCaseFromKey(summaryField)
+          : field.label ?? toTitleCaseFromKey(field.name);
+      });
+    }
+
+    return [];
+  }, [otherProps, summaryFields]);
+
   if (viewStyle === 'VIEW_STYLE_LIST') {
     return (
       <>
         <Table
-          columns={!isSingleCollectionInList ? ['Collection', ...summaryFields] : summaryFields}
+          columns={
+            !isSingleCollectionInList ? ['Collection', ...summaryFieldHeaders] : summaryFieldHeaders
+          }
         >
           {renderedCards}
         </Table>

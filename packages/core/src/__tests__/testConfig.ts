@@ -376,9 +376,7 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
               label: 'Choose URL',
               widget: 'file',
               required: false,
-              media_library: {
-                choose_url: true,
-              },
+              choose_url: true,
             },
           ],
         },
@@ -411,9 +409,7 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
               label: 'Choose URL',
               widget: 'image',
               required: false,
-              media_library: {
-                choose_url: true,
-              },
+              choose_url: true,
             },
           ],
         },

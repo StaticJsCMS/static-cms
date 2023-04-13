@@ -484,7 +484,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
               px-5
               pt-4
             `,
-            config?.media_library_folder_support &&
+            config?.media_library?.folder_support &&
               `
                 pb-4
                 border-b
@@ -517,7 +517,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
               placeholder={t('mediaLibrary.mediaLibraryModal.search')}
               disabled={!dynamicSearchActive && !hasFilteredFiles}
             />
-            {config?.media_library_folder_support ? (
+            {config?.media_library?.folder_support ? (
               <div className="flex gap-1.5 items-center">
                 <IconButton
                   onClick={handleHome}
@@ -565,7 +565,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
             ) : null}
           </div>
         </div>
-        {config?.media_library_folder_support ? (
+        {config?.media_library?.folder_support ? (
           <div
             className="
               flex

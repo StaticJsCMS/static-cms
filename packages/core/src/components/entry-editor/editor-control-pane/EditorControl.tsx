@@ -9,10 +9,8 @@ import {
   changeDraftFieldValidation,
 } from '@staticcms/core/actions/entries';
 import {
-  clearMediaControl as clearMediaControlAction,
   openMediaLibrary as openMediaLibraryAction,
   removeInsertedMedia as removeInsertedMediaAction,
-  removeMediaControl as removeMediaControlAction,
 } from '@staticcms/core/actions/mediaLibrary';
 import { query as queryAction } from '@staticcms/core/actions/search';
 import useMemoCompare from '@staticcms/core/lib/hooks/useMemoCompare';
@@ -41,7 +39,6 @@ import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
 
 const EditorControl = ({
-  clearMediaControl,
   collection,
   config: configState,
   entry,
@@ -57,7 +54,6 @@ const EditorControl = ({
   parentPath,
   query,
   removeInsertedMedia,
-  removeMediaControl,
   t,
   value,
   forList = false,
@@ -169,10 +165,8 @@ const EditorControl = ({
           locale,
           mediaPaths,
           onChange: handleChangeDraftField,
-          clearMediaControl,
           openMediaLibrary,
           removeInsertedMedia,
-          removeMediaControl,
           path,
           query,
           t,
@@ -203,10 +197,8 @@ const EditorControl = ({
     locale,
     mediaPaths,
     handleChangeDraftField,
-    clearMediaControl,
     openMediaLibrary,
     removeInsertedMedia,
-    removeMediaControl,
     path,
     query,
     finalValue,
@@ -254,8 +246,6 @@ function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
 const mapDispatchToProps = {
   changeDraftField: changeDraftFieldAction,
   openMediaLibrary: openMediaLibraryAction,
-  clearMediaControl: clearMediaControlAction,
-  removeMediaControl: removeMediaControlAction,
   removeInsertedMedia: removeInsertedMediaAction,
   query: queryAction,
 };

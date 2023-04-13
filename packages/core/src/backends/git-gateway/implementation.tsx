@@ -117,7 +117,6 @@ export default class GitGateway implements BackendClass {
   api?: GitHubAPI | GitLabAPI | BitBucketAPI;
   branch: string;
   mediaFolder?: string;
-  transformImages: boolean;
   gatewayUrl: string;
   netlifyLargeMediaURL: string;
   backendType: string | null;
@@ -141,8 +140,6 @@ export default class GitGateway implements BackendClass {
     this.config = config;
     this.branch = config.backend.branch?.trim() || 'main';
     this.mediaFolder = config.media_folder;
-    const { use_large_media_transforms_in_media_library: transformImages = true } = config.backend;
-    this.transformImages = transformImages;
 
     const netlifySiteURL = localStorage.getItem('netlifySiteURL');
     this.apiUrl = getEndpoint(config.backend.identity_url || defaults.identity, netlifySiteURL);
@@ -440,7 +437,7 @@ export default class GitGateway implements BackendClass {
           rootURL: this.netlifyLargeMediaURL,
           makeAuthorizedRequest: this.requestFunction,
           patterns,
-          transformImages: this.transformImages ? { nf_resize: 'fit', w: 560, h: 320 } : false,
+          transformImages: false,
         });
       },
     );
