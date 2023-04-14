@@ -306,6 +306,21 @@ describe(RelationControl.name, () => {
     expect(queryByTestId('relation-loading-indicator')).not.toBeInTheDocument();
   });
 
+  it('should stop showing loading indicator if no entries found', async () => {
+    mockListAllEntries.mockReturnValue([]);
+    const { getByTestId, queryByTestId } = renderControl({ value: 'Post 1' });
+
+    const input = getByTestId('autocomplete-input');
+
+    expect(input).toHaveValue('');
+
+    getByTestId('relation-loading-indicator');
+
+    await waitFor(() =>
+      expect(queryByTestId('relation-loading-indicator')).not.toBeInTheDocument(),
+    );
+  });
+
   it('should not try to load entiries if search collection does not exist', () => {
     const field: RelationField = {
       label: 'Relation',

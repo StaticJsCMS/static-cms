@@ -515,6 +515,11 @@ collections:
             widget: markdown
             pattern: ['# [a-zA-Z0-9]+', 'Must have a header']
             required: false
+          - name: folder_support
+            label: Folder Support
+            widget: markdown
+            media_library:
+              folder_support: true
       - name: number
         label: Number
         file: _widgets/number.json

@@ -293,7 +293,7 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
     [onChange, internalValue, keys],
   );
 
-  const hasChildErrors = useHasChildErrors(path, fieldsErrors, i18n);
+  const hasChildErrors = useHasChildErrors(path, fieldsErrors, i18n, false);
 
   if (valueType === null) {
     return null;

@@ -1,18 +1,43 @@
 import React from 'react';
 
+import classNames from '@staticcms/core/lib/util/classNames.util';
+
 import type { FC } from 'react';
 
 export interface CircularProgressProps {
   className?: string;
   'data-testid'?: string;
+  size?: 'small' | 'medium';
 }
 
-const CircularProgress: FC<CircularProgressProps> = ({ className, 'data-testid': dataTestId }) => {
+const CircularProgress: FC<CircularProgressProps> = ({
+  className,
+  'data-testid': dataTestId,
+  size = 'medium',
+}) => {
   return (
     <div role="status" className={className} data-testid={dataTestId}>
       <svg
         aria-hidden="true"
-        className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+        className={classNames(
+          `
+            mr-2
+            text-gray-200
+            animate-spin
+            dark:text-gray-600
+            fill-blue-600
+          `,
+          size === 'medium' &&
+            `
+              w-8
+              h-8
+            `,
+          size === 'small' &&
+            `
+              w-5
+              h-5
+            `,
+        )}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

@@ -117,7 +117,7 @@ const EditorControlPane = ({
         <EditorControl
           key="entry-path"
           field={pathField}
-          value={nestedFieldPath}
+          value={entry.meta?.path ?? nestedFieldPath}
           fieldsErrors={fieldsErrors}
           submitted={submitted}
           locale={locale}

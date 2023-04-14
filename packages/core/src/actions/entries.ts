@@ -481,10 +481,11 @@ export function changeDraftFieldValidation(
   path: string,
   errors: FieldError[],
   i18n?: I18nSettings,
+  isMeta?: boolean,
 ) {
   return {
     type: DRAFT_VALIDATION_ERRORS,
-    payload: { path, errors, i18n },
+    payload: { path, errors, i18n, isMeta },
   } as const;
 }
 

@@ -82,7 +82,10 @@ const EditorControl = ({
 
   const [dirty, setDirty] = useState(!isEmpty(value));
 
-  const fieldErrorsSelector = useMemo(() => selectFieldErrors(path, i18n), [i18n, path]);
+  const fieldErrorsSelector = useMemo(
+    () => selectFieldErrors(path, i18n, isMeta),
+    [i18n, isMeta, path],
+  );
   const errors = useAppSelector(fieldErrorsSelector);
 
   const hasErrors = (submitted || dirty) && Boolean(errors.length);
@@ -103,11 +106,11 @@ const EditorControl = ({
 
     const validateValue = async () => {
       const errors = await validate(field, value, widget, t);
-      dispatch(changeDraftFieldValidation(path, errors, i18n));
+      dispatch(changeDraftFieldValidation(path, errors, i18n, isMeta));
     };
 
     validateValue();
-  }, [dirty, dispatch, field, i18n, hidden, path, submitted, t, value, widget, disabled]);
+  }, [dirty, dispatch, field, i18n, hidden, path, submitted, t, value, widget, disabled, isMeta]);
 
   const handleChangeDraftField = useCallback(
     (value: ValueOrNestedValue) => {

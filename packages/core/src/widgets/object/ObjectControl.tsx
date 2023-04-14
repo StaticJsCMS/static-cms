@@ -31,7 +31,7 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
 
   const fields = useMemo(() => field.fields, [field.fields]);
 
-  const hasChildErrors = useHasChildErrors(path, fieldsErrors, i18n);
+  const hasChildErrors = useHasChildErrors(path, fieldsErrors, i18n, false);
 
   const renderedField = useMemo(() => {
     return (
