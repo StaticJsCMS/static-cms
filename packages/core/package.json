@@ -33,7 +33,7 @@
     "type-check": "tsc --watch"
   },
   "main": "dist/static-cms-core.js",
-  "types": "dist/src/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist/**/*"
   ],

@@ -179,11 +179,15 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
   );
 
   const [options, setOptions] = useState<HitOption[]>([]);
-  const [entries, setEntries] = useState<Entry[]>([]);
-  const loading = useMemo(() => options.length === 0, [options.length]);
+  const [entries, setEntries] = useState<Entry[] | null>(null);
+  const loading = useMemo(() => !entries, [entries]);
 
   const filterOptions = useCallback(
     (inputValue: string) => {
+      if (!entries) {
+        return;
+      }
+
       const searchFields = field.search_fields;
       const limit = field.options_length || DEFAULT_OPTIONS_LIMIT;
       const expandedEntries = expandSearchEntries(entries, searchFields);
@@ -334,6 +338,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
                 key="loading-indicator"
                 className="absolute inset-y-0 right-4 flex items-center pr-2"
                 data-testid="relation-loading-indicator"
+                size="small"
               />
             ) : null}
           </>
