@@ -8,11 +8,12 @@ export default function useHasChildErrors(
   path: string,
   fieldsErrors: FieldsErrors,
   i18n: I18nSettings | undefined,
+  isMeta: boolean | undefined,
 ) {
   return useMemo(() => {
-    const dataPath = getEntryDataPath(i18n);
+    const dataPath = getEntryDataPath(i18n, isMeta);
     const fullPath = `${dataPath}.${path}`;
 
     return Boolean(Object.keys(fieldsErrors).find(key => key.startsWith(fullPath)));
-  }, [fieldsErrors, i18n, path]);
+  }, [fieldsErrors, i18n, isMeta, path]);
 }

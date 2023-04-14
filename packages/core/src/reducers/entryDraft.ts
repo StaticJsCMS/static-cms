@@ -185,10 +185,12 @@ function entryDraftReducer(
     }
 
     case DRAFT_VALIDATION_ERRORS: {
-      const { path, errors, i18n } = action.payload;
+      const { path, errors, i18n, isMeta } = action.payload;
       const fieldsErrors = { ...state.fieldsErrors };
 
-      const dataPath = (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
+      const dataPath = isMeta
+        ? ['meta']
+        : (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
       const fullPath = `${dataPath.join('.')}.${path}`;
 
       if (errors.length === 0) {

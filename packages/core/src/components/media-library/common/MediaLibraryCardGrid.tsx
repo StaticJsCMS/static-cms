@@ -126,6 +126,7 @@ const CardWrapper = ({
         isDraft={file.draft}
         draftText={cardDraftText}
         displayURL={displayURLs[file.id] ?? (file.url ? { url: file.url } : {})}
+        path={file.path}
         loadDisplayURL={() => loadDisplayURL(file)}
         type={file.type}
         isViewableImage={file.isViewableImage ?? false}

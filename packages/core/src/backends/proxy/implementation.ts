@@ -169,7 +169,10 @@ export default class ProxyBackend implements BackendClass {
   async getMediaFile(path: string): Promise<ImplementationMediaFile> {
     const file = await this.request<MediaFile>({
       action: 'getMediaFile',
-      params: { branch: this.branch, path },
+      params: {
+        branch: this.branch,
+        path,
+      },
     });
     return deserializeMediaFile(file);
   }

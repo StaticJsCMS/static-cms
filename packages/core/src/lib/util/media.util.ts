@@ -232,7 +232,7 @@ function traverseFields<EF extends BaseField>(
 export function selectMediaFolder<EF extends BaseField>(
   config: Config<EF>,
   collection: Collection<EF> | undefined | null,
-  entryMap: Entry | null | undefined,
+  entryMap: Entry | undefined | null,
   field: MediaField | undefined,
   currentFolder?: string,
 ) {
@@ -257,9 +257,9 @@ export function selectMediaFolder<EF extends BaseField>(
 
 export function selectMediaFilePublicPath<EF extends BaseField>(
   config: Config<EF>,
-  collection: Collection<EF> | null,
+  collection: Collection<EF> | undefined | null,
   mediaPath: string,
-  entryMap: Entry | undefined,
+  entryMap: Entry | undefined | null,
   field: MediaField | undefined,
   currentFolder?: string,
 ) {
@@ -299,7 +299,7 @@ export function selectMediaFilePath(
   mediaPath: string,
   field: MediaField | undefined,
   currentFolder?: string,
-) {
+): string {
   if (isAbsolutePath(mediaPath)) {
     return mediaPath;
   }

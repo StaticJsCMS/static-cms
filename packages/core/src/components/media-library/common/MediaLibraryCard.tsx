@@ -26,6 +26,7 @@ import type { FC, KeyboardEvent } from 'react';
 interface MediaLibraryCardProps<T extends MediaField, EF extends BaseField = UnknownField> {
   isSelected?: boolean;
   displayURL: MediaLibraryDisplayURL;
+  path: string;
   text: string;
   draftText: string;
   type?: string;
@@ -44,6 +45,7 @@ interface MediaLibraryCardProps<T extends MediaField, EF extends BaseField = Unk
 const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownField>({
   isSelected = false,
   displayURL,
+  path,
   text,
   draftText,
   type,
@@ -60,7 +62,7 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
   t,
 }: TranslatedProps<MediaLibraryCardProps<T, EF>>) => {
   const entry = useAppSelector(selectEditingDraft);
-  const url = useMediaAsset(displayURL.url, collection, field, entry, currentFolder);
+  const url = useMediaAsset(path, collection, field, entry, currentFolder);
 
   const handleDownload = useCallback(() => {
     const url = displayURL.url;

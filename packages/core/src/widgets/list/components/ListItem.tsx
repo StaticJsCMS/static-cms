@@ -165,7 +165,7 @@ const ListItem: FC<ListItemProps> = ({
     }
   }, [entry, field, index, value, valueType]);
 
-  const hasChildErrors = useHasChildErrors(path, fieldsErrors, i18n);
+  const hasChildErrors = useHasChildErrors(path, fieldsErrors, i18n, false);
 
   const finalValue = useMemo(() => {
     if (field.fields && field.fields.length === 1) {
