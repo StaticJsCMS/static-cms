@@ -61,7 +61,7 @@ const setFieldDefaults =
       return { ...field, public_folder: field.media_folder };
     }
 
-    if (field.widget === 'image' || field.widget === 'file') {
+    if (field.widget === 'image' || field.widget === 'file' || field.widget === 'markdown') {
       field.media_library = {
         ...((collectionFile ?? collection).media_library ?? {}),
         ...(field.media_library ?? {}),

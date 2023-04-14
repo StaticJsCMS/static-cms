@@ -31,6 +31,7 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
   );
 
   const folderSupport = useFolderSupport({ config, collection, collectionFile, field });
+  console.log('FOLDER_SUPPORT', folderSupport);
 
   useEffect(() => {
     if (!currentFolder || !config || !entry) {
@@ -105,5 +106,8 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
     return mediaLibraryFiles ?? [];
   }, [collection, config, currentFolderMediaFiles, entry, field, mediaLibraryFiles, currentFolder]);
 
-  return useMemo(() => files.filter(file => file.name !== '.gitkeep'), [files]);
+  return useMemo(
+    () => files.filter(file => file.name !== '.gitkeep' && (folderSupport || !file.isDirectory)),
+    [files, folderSupport],
+  );
 }
