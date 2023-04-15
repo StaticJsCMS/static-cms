@@ -27,58 +27,6 @@ Nested collections is a beta feature that allows a folder collection to show a n
 
 See [Nested Collections](/docs/collection-types#nested-collections) for more information.
 
-## Commit Message Templates
-
-You can customize the templates used by Static CMS to generate commit messages by setting the `commit_messages` option under `backend` in your Static CMS `config`.
-
-Template tags wrapped in curly braces will be expanded to include information about the file changed by the commit. For example, `{{path}}` will include the full path to the file changed.
-
-Setting up your Static CMS `config` to recreate the default values would look like this:
-
-<CodeTabs>
-```yaml
-backend:
-  commit_messages:
-    create: Create {{collection}} "{{slug}}"
-    update: Update {{collection}} "{{slug}}"
-    delete: Delete {{collection}} "{{slug}}"
-    uploadMedia: Upload "{{path}}"
-    deleteMedia: Delete "{{path}}"
-```
-
-```js
-backend: {
-  commit_messages: {
-    create: 'Create {{collection}} "{{slug}}"',
-    update: 'Update {{collection}} "{{slug}}"',
-    delete: 'Delete {{collection}} "{{slug}}"',
-    uploadMedia: 'Upload "{{path}}"',
-    deleteMedia: 'Delete "{{path}}"',
-  },
-},
-```
-
-</CodeTabs>
-
-Static CMS generates the following commit types:
-
-| Commit type   | When is it triggered?        | Available template tags                                     |
-| ------------- | ---------------------------- | ----------------------------------------------------------- |
-| `create`      | A new entry is created       | `slug`, `path`, `collection`, `author-login`, `author-name` |
-| `update`      | An existing entry is changed | `slug`, `path`, `collection`, `author-login`, `author-name` |
-| `delete`      | An existing entry is deleted | `slug`, `path`, `collection`, `author-login`, `author-name` |
-| `uploadMedia` | A media file is uploaded     | `path`, `author-login`, `author-name`                       |
-| `deleteMedia` | A media file is deleted      | `path`, `author-login`, `author-name`                       |
-
-Template tags produce the following output:
-
-- `{{slug}}`: the url-safe filename of the entry changed
-- `{{collection}}`: the name of the collection containing the entry changed
-- `{{path}}`: the full path to the file changed
-- `{{message}}`: the relevant message based on the current change (e.g. the `create` message when an entry is created)
-- `{{author-login}}`: the login/username of the author
-- `{{author-name}}`: the full name of the author (might be empty based on the user's profile)
-
 ## Image widget file size limit
 
 You can set a limit to as what the maximum file size of a file is that users can upload directly into a image field.

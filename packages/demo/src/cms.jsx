@@ -209,7 +209,7 @@ cms.registerWidget("relationKitchenSinkPost", "relation", RelationKitchenSinkPos
 cms.registerAdditionalLink({
   id: "docs",
   title: "Static CMS Docs",
-  data: "https://staticjsCMS.netlify.app/",
+  data: "https://staticcms.org",
   options: {
     icon: "page",
   },

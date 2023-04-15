@@ -213,3 +213,92 @@ CMS.registerShortcode<YouTubeShortcodeProps>('youtube', {
 ```
 
 </CodeTabs>
+
+### Interacting With The Media Library
+
+If you want to use the media library in your shortcode you will need to use the `useMediaInsert` and `useMediaAsset` hooks.
+
+- `useMediaInsert` - Takes the current url to your media, details about your field and a callback method for when new media is uploaded.
+- `useMediaAsset` - Transforms your stored url into a usable url for displaying as a preview.
+
+<CodeTabs>
+
+```js
+const ImageControl = ({ src, onChange, controlProps }) => {
+  const { collection, field, entry } = controlProps;
+
+  const handleChange = ({ path }) => {
+    onChange({ src: path });
+  };
+
+  const handleOpenMediaLibrary = useMediaInsert(src, { collection: collection, field }, handleChange);
+
+  const assetSource = useMediaAsset(src , collection, field, entry);
+
+  return [
+    h('button', { type: 'button', onClick: handleOpenMediaLibrary }, 'Upload'),
+    h('img', { role: 'presentation', src: assetSource }),
+  ];
+};
+```
+
+```jsx
+import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
+import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
+
+const ImageControl = ({ src, onChange, controlProps }) => {
+  const { collection, field, entry } = controlProps;
+
+  const handleChange = ({ path }) => {
+    onChange({ src: path });
+  };
+
+  const handleOpenMediaLibrary = useMediaInsert(src ,{ collection: collection, field }, handleChange);
+
+  const assetSource = useMediaAsset(src , collection, field, entry);
+
+  return (
+    <>
+      <button type="button" onClick={handleOpenMediaLibrary}>
+        Upload
+      </button>
+      <img role="presentation" src={assetSource} />
+    </>
+  );
+};
+```
+
+```tsx
+import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
+import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
+
+import type { WidgetControlProps, MediaPath } from '@staticcms/core/interface';
+import type { FC } from 'react';
+
+const FileControl: FC<WidgetControlProps<string, MyField>> = ({
+  src,
+  onChange,
+  controlProps
+}) => {
+  const { collection, field, entry } = controlProps;
+
+  const handleChange = ({ path }: MediaPath) => {
+    onChange({ src: path });
+  };
+
+  const handleOpenMediaLibrary = useMediaInsert(src, { collection, field }, handleChange);
+
+  const assetSource = useMediaAsset(value, collection, field, entry);
+
+  return (
+    <>
+      <button type="button" onClick={handleOpenMediaLibrary}>
+        Upload
+      </button>
+      <img role="presentation" src={assetSource} />
+    </>
+  );
+};
+```
+
+</CodeTabs>
