@@ -232,6 +232,14 @@ const de: LocalePhrasesRoot = {
       deleteSelected: 'Ausgewähltes Element löschen',
       chooseSelected: 'Ausgewähltes Element verwenden',
     },
+    folderSupport: {
+      newFolder: 'Neuer Ordner',
+      createNewFolder: 'Neuen Ordner erstellen',
+      enterFolderName: 'Ordnernamen eingeben...',
+      home: 'Start',
+      up: 'Zurück',
+      upToFolder: 'Zurück zu %{folder}',
+    },
   },
   ui: {
     common: {

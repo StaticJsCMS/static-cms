@@ -31,7 +31,6 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
   );
 
   const folderSupport = useFolderSupport({ config, collection, collectionFile, field });
-  console.log('FOLDER_SUPPORT', folderSupport);
 
   useEffect(() => {
     if (!currentFolder || !config || !entry) {
