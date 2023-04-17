@@ -4,6 +4,6 @@ export default {
     collapsed: { type: 'boolean' },
     summary: { type: 'string' },
     i18n: { type: 'boolean' },
-    fields: { type: 'object' },
+    fields: { type: 'array', items: { type: 'object' } },
   },
 };
