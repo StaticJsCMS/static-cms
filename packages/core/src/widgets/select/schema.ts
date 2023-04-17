@@ -1,8 +1,5 @@
 export default {
   properties: {
-    multiple: { type: 'boolean' },
-    min: { type: 'integer' },
-    max: { type: 'integer' },
     default: {
       oneOf: [
         { type: 'string' },
@@ -32,6 +29,9 @@ export default {
         ],
       },
     },
+    multiple: { type: 'boolean' },
+    min: { type: 'integer' },
+    max: { type: 'integer' },
   },
   required: ['options'],
 };
