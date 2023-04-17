@@ -33,7 +33,6 @@ const CollectionRoute = ({ isSearchResults, isSingleSearchResult }: CollectionRo
     const href = window.location.href;
     if (!href.includes('noredirect')) {
       window.history.replaceState(null, document.title, `${href}?noredirect`);
-      console.log('REPLACE STATE', document.title, `${href}?noredirect`);
     }
     return <Navigate to={`/collections/${collection.name}/entries/${collection.files[0].name}`} />;
   }

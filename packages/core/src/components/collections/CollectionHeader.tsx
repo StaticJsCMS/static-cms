@@ -8,6 +8,7 @@ import {
   selectEntryCollectionTitle,
   selectFolderEntryExtension,
 } from '@staticcms/core/lib/util/collection.util';
+import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { addFileTemplateFields } from '@staticcms/core/lib/widgets/stringTemplate';
 import Button from '../common/button/Button';
 
@@ -47,15 +48,12 @@ const CollectionHeader = ({
         return acc;
       }, {} as Record<string, Entry>);
 
-      const path = filterTerm.split('/');
-      if (path.length > 0) {
+      if (isNotEmpty(filterTerm)) {
         const extension = selectFolderEntryExtension(collection);
-
-        const finalPathPart = path[path.length - 1];
 
         let entry =
           entriesByPath[
-            `${collection.folder}/${finalPathPart}/${collection.nested.path.index_file}.${extension}`
+            `${collection.folder}/${filterTerm}/${collection.nested.path.index_file}.${extension}`
           ];
 
         if (entry) {
