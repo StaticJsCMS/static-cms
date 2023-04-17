@@ -2,13 +2,13 @@ import SelectUnstyled from '@mui/base/SelectUnstyled';
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@styled-icons/material/KeyboardArrowDown';
 import React, { forwardRef, useCallback, useState } from 'react';
 
+import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import useElementSize from '@staticcms/core/lib/hooks/useElementSize';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import Option from './Option';
 
 import type { FocusEvent, KeyboardEvent, MouseEvent, ReactNode, Ref } from 'react';
-import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 
 export interface Option {
   label: string;

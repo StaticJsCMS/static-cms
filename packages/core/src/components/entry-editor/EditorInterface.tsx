@@ -3,6 +3,7 @@ import { ScrollSyncPane } from 'react-scroll-sync';
 
 import useBreadcrumbs from '@staticcms/core/lib/hooks/useBreadcrumbs';
 import { getI18nInfo, getPreviewEntry, hasI18n } from '@staticcms/core/lib/i18n';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import {
   getFileFromSlug,
   selectEntryCollectionTitle,
@@ -47,7 +48,7 @@ const EditorContent = ({
   } else {
     return (
       <div className="flex justify-center">
-        <div className="w-editor-only max-w-full h-main">{editor}</div>
+        <div className="w-editor-only max-w-full">{editor}</div>
       </div>
     );
   }
@@ -166,12 +167,17 @@ const EditorInterface = ({
     <div
       key={defaultLocale}
       id="control-pane"
-      className="
-        w-full
-        overflow-y-auto
-        styled-scrollbars
-        h-main
-      "
+      className={classNames(
+        `
+          w-full
+        `,
+        (finalPreviewActive || i18nActive) &&
+          `
+            overflow-y-auto
+            styled-scrollbars
+            h-main
+          `,
+      )}
     >
       <EditorControlPane
         collection={collection}
@@ -251,7 +257,7 @@ const EditorInterface = ({
     <MainView
       breadcrumbs={breadcrumbs}
       noMargin
-      noScroll
+      noScroll={finalPreviewActive || i18nActive}
       navbarActions={
         <EditorToolbar
           isPersisting={entry.isPersisting}
