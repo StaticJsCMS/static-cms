@@ -1,9 +1,12 @@
+import { OpenInNew as OpenInNewIcon } from '@styled-icons/material/OpenInNew';
 import React, { Fragment, useEffect } from 'react';
 import { translate } from 'react-polyglot';
 import { Link } from 'react-router-dom';
 
 import { checkBackendStatus } from '@staticcms/core/actions/status';
-import { useAppDispatch } from '@staticcms/core/store/hooks';
+import { selectDisplayUrl } from '@staticcms/core/reducers/selectors/config';
+import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
+import Button from '../common/button/Button';
 import { StaticCmsIcon } from '../images/_index';
 import QuickCreate from './QuickCreate';
 import SettingsDropdown from './SettingsDropdown';
@@ -23,6 +26,8 @@ const Navbar = ({
   breadcrumbs = [],
 }: TranslatedProps<NavbarProps>) => {
   const dispatch = useAppDispatch();
+
+  const displayUrl = useAppSelector(selectDisplayUrl);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -64,6 +69,12 @@ const Navbar = ({
             </div>
           </div>
           <div className="flex gap-3 items-center">
+            {displayUrl ? (
+              <Button variant="text" className="flex gap-2" href={displayUrl}>
+                {displayUrl}
+                <OpenInNewIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+              </Button>
+            ) : null}
             {showQuickCreate ? <QuickCreate key="quick-create" /> : null}
             {navbarActions}
             <SettingsDropdown />

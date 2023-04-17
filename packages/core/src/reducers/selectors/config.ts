@@ -14,3 +14,7 @@ export function selectConfig(state: RootState) {
 export function selectIsSearchEnabled(state: RootState) {
   return state.config.config?.search !== false;
 }
+
+export function selectDisplayUrl(state: RootState) {
+  return state.config.config?.display_url;
+}
