@@ -80,7 +80,7 @@ const EditorControl = ({
     [field.name, fieldName, parentPath],
   );
 
-  const [dirty, setDirty] = useState(!isEmpty(value));
+  const [dirty, setDirty] = useState(!isEmpty(widget.getValidValue(value, field as UnknownField)));
 
   const fieldErrorsSelector = useMemo(
     () => selectFieldErrors(path, i18n, isMeta),
@@ -114,10 +114,12 @@ const EditorControl = ({
 
   const handleChangeDraftField = useCallback(
     (value: ValueOrNestedValue) => {
-      setDirty(true);
+      setDirty(
+        oldDirty => oldDirty || !isEmpty(widget.getValidValue(value, field as UnknownField)),
+      );
       changeDraftField({ path, field, value, i18n, isMeta });
     },
-    [changeDraftField, field, i18n, isMeta, path],
+    [changeDraftField, field, i18n, isMeta, path, widget],
   );
 
   const config = useMemo(() => configState.config, [configState.config]);

@@ -134,7 +134,7 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
           {hint}
         </Hint>
       ) : null}
-      <ErrorMessage errors={errors} />
+      <ErrorMessage errors={errors} className="pl-4 pt-2 pb-3" />
     </div>
   );
 };

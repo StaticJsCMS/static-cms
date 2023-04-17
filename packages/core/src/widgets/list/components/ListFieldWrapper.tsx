@@ -142,7 +142,7 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
             {hint}
           </Hint>
         ) : null}
-        <ErrorMessage errors={errors} />
+        <ErrorMessage errors={errors} className="pb-3" />
       </div>
     </div>
   );

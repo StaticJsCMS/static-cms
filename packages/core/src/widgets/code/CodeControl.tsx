@@ -279,7 +279,7 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
             {field.hint}
           </Hint>
         ) : null}
-        <ErrorMessage errors={errors} />
+        <ErrorMessage errors={errors} className="pt-2 pb-3" />
       </div>
     </div>
   );
