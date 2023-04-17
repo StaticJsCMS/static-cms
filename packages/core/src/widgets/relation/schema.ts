@@ -1,14 +1,5 @@
 export default {
   properties: {
-    collection: { type: 'string' },
-    value_field: { type: 'string' },
-    search_fields: { type: 'array', minItems: 1, items: { type: 'string' } },
-    file: { type: 'string' },
-    multiple: { type: 'boolean' },
-    min: { type: 'integer' },
-    max: { type: 'integer' },
-    display_fields: { type: 'array', minItems: 1, items: { type: 'string' } },
-    options_length: { type: 'integer' },
     default: {
       oneOf: [
         { type: 'string' },
@@ -20,6 +11,15 @@ export default {
         },
       ],
     },
+    collection: { type: 'string' },
+    value_field: { type: 'string' },
+    search_fields: { type: 'array', minItems: 1, items: { type: 'string' } },
+    file: { type: 'string' },
+    display_fields: { type: 'array', minItems: 1, items: { type: 'string' } },
+    multiple: { type: 'boolean' },
+    min: { type: 'integer' },
+    max: { type: 'integer' },
+    options_length: { type: 'integer' },
   },
   oneOf: [
     {

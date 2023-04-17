@@ -8,6 +8,7 @@ import {
   ENTRIES_SUCCESS,
   ENTRY_DELETE_SUCCESS,
   ENTRY_FAILURE,
+  ENTRY_PERSIST_SUCCESS,
   ENTRY_REQUEST,
   ENTRY_SUCCESS,
   FILTER_ENTRIES_FAILURE,
@@ -548,6 +549,19 @@ function entries(
       return {
         ...state,
         viewStyle: style,
+      };
+    }
+
+    case ENTRY_PERSIST_SUCCESS: {
+      const payload = action.payload;
+      const { collectionName } = payload;
+
+      const pages = { ...state.pages };
+      delete pages[collectionName];
+
+      return {
+        ...state,
+        pages,
       };
     }
 
