@@ -46,7 +46,7 @@ const Snackbars: FC<TranslateProps> = ({ t }) => {
     <Snackbar
       key={messageInfo ? messageInfo.id : undefined}
       open={open}
-      autoHideDuration={600000}
+      autoHideDuration={6000}
       onClose={handleClose}
       TransitionProps={{ onExited: handleExited }}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}

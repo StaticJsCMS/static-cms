@@ -1,12 +1,14 @@
 import SelectUnstyled from '@mui/base/SelectUnstyled';
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@styled-icons/material/KeyboardArrowDown';
-import React, { forwardRef, useCallback } from 'react';
+import React, { forwardRef, useCallback, useState } from 'react';
 
+import useElementSize from '@staticcms/core/lib/hooks/useElementSize';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import Option from './Option';
 
 import type { FocusEvent, KeyboardEvent, MouseEvent, ReactNode, Ref } from 'react';
+import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 
 export interface Option {
   label: string;
@@ -58,6 +60,23 @@ const Select = forwardRef(
       [onChange, value],
     );
 
+    const { width } = useElementSize<HTMLButtonElement>(ref);
+
+    const [open, setOpen] = useState(false);
+    const debouncedOpen = useDebounce(open, 250);
+    const handleOpenChange = useCallback(
+      (newOpen: boolean) => {
+        if (debouncedOpen !== open) {
+          return;
+        }
+
+        setOpen(newOpen);
+      },
+      [debouncedOpen, open],
+    );
+
+    const handleButtonClick = useCallback(() => handleOpenChange(!open), [handleOpenChange, open]);
+
     return (
       <div className="relative w-full">
         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
@@ -99,6 +118,7 @@ const Select = forwardRef(
           slotProps={{
             root: {
               ref,
+              onClick: handleButtonClick,
               className: classNames(
                 `
                   flex
@@ -122,7 +142,6 @@ const Select = forwardRef(
             },
             popper: {
               className: `
-                absolute
                 max-h-60
                 overflow-auto
                 rounded-md
@@ -138,12 +157,15 @@ const Select = forwardRef(
                 z-50
                 dark:bg-slate-700
               `,
+              style: { width },
               disablePortal: false,
             },
           }}
           value={value}
           disabled={disabled}
           onChange={handleChange}
+          listboxOpen={open}
+          onListboxOpenChange={handleOpenChange}
           data-testid="select-input"
         >
           {!Array.isArray(value) && !required ? (
