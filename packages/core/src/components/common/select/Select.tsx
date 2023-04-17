@@ -40,6 +40,22 @@ const Select = forwardRef(
     { label, placeholder, value, options, required = false, disabled, onChange }: SelectProps,
     ref: Ref<HTMLButtonElement>,
   ) => {
+    const { width } = useElementSize<HTMLButtonElement>(ref);
+
+    const [open, setOpen] = useState(false);
+    const debouncedOpen = useDebounce(open, 200);
+    const handleOpenChange = useCallback(
+      (newOpen: boolean) => {
+        if (debouncedOpen !== open) {
+          return;
+        }
+
+        setOpen(newOpen);
+      },
+      [debouncedOpen, open],
+    );
+    const handleButtonClick = useCallback(() => handleOpenChange(!open), [handleOpenChange, open]);
+
     const handleChange = useCallback(
       (_event: MouseEvent | KeyboardEvent | FocusEvent | null, selectedValue: number | string) => {
         if (Array.isArray(value)) {
@@ -52,30 +68,15 @@ const Select = forwardRef(
           }
 
           onChange(newValue);
+          setOpen(false);
           return;
         }
 
         onChange(selectedValue);
+        setOpen(false);
       },
       [onChange, value],
     );
-
-    const { width } = useElementSize<HTMLButtonElement>(ref);
-
-    const [open, setOpen] = useState(false);
-    const debouncedOpen = useDebounce(open, 250);
-    const handleOpenChange = useCallback(
-      (newOpen: boolean) => {
-        if (debouncedOpen !== open) {
-          return;
-        }
-
-        setOpen(newOpen);
-      },
-      [debouncedOpen, open],
-    );
-
-    const handleButtonClick = useCallback(() => handleOpenChange(!open), [handleOpenChange, open]);
 
     return (
       <div className="relative w-full">

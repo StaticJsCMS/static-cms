@@ -70,6 +70,7 @@ export const createMockWidgetControlProps = <
     i18n: undefined,
     duplicate: false,
     hidden: false,
+    controlled: false,
     theme: 'light',
     onChange: jest.fn(),
     openMediaLibrary: jest.fn(),

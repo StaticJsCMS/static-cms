@@ -2,8 +2,8 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
-import userEvent from '@testing-library/user-event';
 import { act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { mockSelectField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
