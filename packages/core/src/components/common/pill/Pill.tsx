@@ -58,7 +58,6 @@ const Pill: FC<PillProps> = ({
         `
           text-xs
           font-medium
-          mr-2
           px-3
           py-1
           rounded-lg

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams, useSearchParams } from 'react-router-dom';
 
 import {
   selectCollection,
@@ -16,6 +16,8 @@ interface CollectionRouteProps {
 
 const CollectionRoute = ({ isSearchResults, isSingleSearchResult }: CollectionRouteProps) => {
   const { name, searchTerm } = useParams();
+  const [searchParams] = useSearchParams();
+  const noRedirect = searchParams.has('noredirect');
 
   const collectionSelector = useMemo(() => selectCollection(name), [name]);
   const collection = useAppSelector(collectionSelector);
@@ -27,7 +29,12 @@ const CollectionRoute = ({ isSearchResults, isSingleSearchResult }: CollectionRo
     return <Navigate to={defaultPath} />;
   }
 
-  if (collection && 'files' in collection && collection.files?.length === 1) {
+  if (collection && 'files' in collection && collection.files?.length === 1 && !noRedirect) {
+    const href = window.location.href;
+    if (!href.includes('noredirect')) {
+      window.history.replaceState(null, document.title, `${href}?noredirect`);
+      console.log('REPLACE STATE', document.title, `${href}?noredirect`);
+    }
     return <Navigate to={`/collections/${collection.name}/entries/${collection.files[0].name}`} />;
   }
 

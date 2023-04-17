@@ -126,7 +126,7 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
       <Select
         label={
           Array.isArray(stringValue) ? (
-            <div className="flex wrap gap-0.5">
+            <div className="flex wrap gap-2 max-w-fit">
               {stringValue.map(selectValue => {
                 const label = optionsByValue[selectValue]?.label ?? selectValue;
                 return (

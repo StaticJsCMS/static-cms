@@ -34,7 +34,7 @@ export default function useBreadcrumbs(
     const crumbs: Breadcrumb[] = [
       {
         name: collection.label,
-        to: `/collections/${collection.name}`,
+        to: `/collections/${collection.name}?noredirect`,
       },
     ];
 
