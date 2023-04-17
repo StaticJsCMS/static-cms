@@ -282,6 +282,7 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = 
   t: t;
   value: T | undefined | null;
   theme: 'dark' | 'light';
+  controlled: boolean;
 }
 
 export interface WidgetPreviewProps<T = unknown, F extends BaseField = UnknownField> {
@@ -385,6 +386,7 @@ export interface PersistOptions {
 
 export interface PersistArgs {
   config: Config;
+  rootSlug: string | undefined;
   collection: Collection;
   entryDraft: EntryDraft;
   assetProxies: AssetProxy[];

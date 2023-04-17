@@ -50,6 +50,7 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
   slug,
   localBackup,
   scrollSyncActive,
+  newRecord,
   t,
 }) => {
   const [version, setVersion] = useState(0);
@@ -90,7 +91,7 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
 
       setTimeout(async () => {
         try {
-          await dispatch(persistEntry(collection, navigate));
+          await dispatch(persistEntry(collection, slug, navigate));
           setVersion(version + 1);
 
           deleteBackup();
@@ -112,7 +113,7 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
         } catch (e) {}
       }, 100);
     },
-    [collection, deleteBackup, dispatch, entryDraft.entry, navigate, version],
+    [collection, deleteBackup, dispatch, entryDraft.entry, navigate, slug, version],
   );
 
   const handleDuplicateEntry = useCallback(() => {
@@ -145,7 +146,7 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
       return;
     }
 
-    if (!slug) {
+    if (!slug || newRecord) {
       return navigate(`/collections/${collection.name}`);
     }
 
@@ -154,7 +155,7 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
       deleteBackup();
       return navigate(`/collections/${collection.name}`);
     }, 0);
-  }, [collection, deleteBackup, dispatch, entryDraft.hasChanged, navigate, slug]);
+  }, [collection, deleteBackup, dispatch, entryDraft.hasChanged, navigate, newRecord, slug]);
 
   const [prevLocalBackup, setPrevLocalBackup] = useState<
     | {
@@ -198,11 +199,11 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
   const [prevCollection, setPrevCollection] = useState<Collection | null>(null);
   const [prevSlug, setPrevSlug] = useState<string | undefined | null>(null);
   useEffect(() => {
-    if (!slug && prevSlug !== slug) {
+    if (newRecord && slug !== prevSlug) {
       setTimeout(() => {
         dispatch(createEmptyDraft(collection, location.search));
       });
-    } else if (slug && (prevCollection !== collection || prevSlug !== slug)) {
+    } else if (!newRecord && slug && (prevCollection !== collection || prevSlug !== slug)) {
       setTimeout(() => {
         dispatch(retrieveLocalBackup(collection, slug));
         dispatch(loadEntry(collection, slug));
@@ -211,7 +212,7 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
 
     setPrevCollection(collection);
     setPrevSlug(slug);
-  }, [collection, entryDraft.entry, prevSlug, prevCollection, slug, dispatch]);
+  }, [collection, entryDraft.entry, prevSlug, prevCollection, slug, dispatch, newRecord]);
 
   const leaveMessage = useMemo(() => t('editor.editor.onLeavePage'), [t]);
 
@@ -236,7 +237,12 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
       const isPersisting = entryDraft.entry?.isPersisting;
       const newRecord = entryDraft.entry?.newRecord;
       const newEntryPath = `/collections/${collection.name}/new`;
-      if (isPersisting && newRecord && location.pathname === newEntryPath && action === 'PUSH') {
+      if (
+        isPersisting &&
+        newRecord &&
+        location.pathname.startsWith(newEntryPath) &&
+        action === 'PUSH'
+      ) {
         return;
       }
 
@@ -293,12 +299,13 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
         onDuplicate={handleDuplicateEntry}
         hasChanged={hasChanged}
         displayUrl={displayUrl}
-        isNewEntry={!slug}
+        isNewEntry={newRecord}
         isModification={isModification}
         toggleScroll={handleToggleScroll}
         scrollSyncActive={scrollSyncActive}
         loadScroll={handleLoadScroll}
         submitted={submitted}
+        slug={slug}
         t={t}
       />
       <MediaLibraryModal />

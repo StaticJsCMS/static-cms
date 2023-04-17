@@ -14,12 +14,13 @@ const StringControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   field,
   forSingleList,
   duplicate,
+  controlled,
   onChange,
 }) => {
   const [internalRawValue, setInternalValue] = useState(value ?? '');
   const internalValue = useMemo(
-    () => (duplicate ? value ?? '' : internalRawValue),
-    [internalRawValue, duplicate, value],
+    () => (controlled || duplicate ? value ?? '' : internalRawValue),
+    [controlled, duplicate, value, internalRawValue],
   );
   const ref = useRef<HTMLInputElement | null>(null);
 

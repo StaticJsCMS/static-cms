@@ -64,6 +64,7 @@ const EditorControl = ({
   i18n,
   fieldName,
   isMeta = false,
+  controlled = false,
 }: TranslatedProps<EditorControlProps>) => {
   const dispatch = useAppDispatch();
 
@@ -185,6 +186,7 @@ const EditorControl = ({
           hasErrors,
           errors,
           theme,
+          controlled,
         })}
       </div>
     );
@@ -232,6 +234,7 @@ interface EditorControlOwnProps {
   forSingleList?: boolean;
   i18n: I18nSettings | undefined;
   fieldName?: string;
+  controlled?: boolean;
   isMeta?: boolean;
 }
 

@@ -78,6 +78,13 @@ export function selectFileEntryLabel<EF extends BaseField>(
 export function selectEntryPath<EF extends BaseField>(collection: Collection<EF>, slug: string) {
   if ('fields' in collection) {
     const folder = collection.folder.replace(/\/$/, '');
+
+    if (collection.nested) {
+      if (collection.nested.path?.index_file) {
+        return `${folder}/${slug}.${selectFolderEntryExtension(collection)}`;
+      }
+    }
+
     return `${folder}/${slug}.${selectFolderEntryExtension(collection)}`;
   }
 

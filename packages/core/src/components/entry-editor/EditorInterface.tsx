@@ -70,6 +70,7 @@ interface EditorInterfaceProps {
   scrollSyncActive: boolean;
   loadScroll: () => void;
   submitted: boolean;
+  slug: string | undefined;
 }
 
 const EditorInterface = ({
@@ -90,6 +91,7 @@ const EditorInterface = ({
   loadScroll,
   toggleScroll,
   submitted,
+  slug,
 }: TranslatedProps<EditorInterfaceProps>) => {
   const { locales, defaultLocale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
   const [selectedLocale, setSelectedLocale] = useState<string>(locales?.[1] ?? 'en');
@@ -179,6 +181,7 @@ const EditorInterface = ({
         locale={defaultLocale}
         submitted={submitted}
         hideBorder={!finalPreviewActive && !i18nActive}
+        slug={slug}
         t={t}
       />
     </div>

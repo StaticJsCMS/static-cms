@@ -15,6 +15,7 @@ import {
   selectViewFilters,
   selectViewGroups,
 } from '@staticcms/core/lib/util/collection.util';
+import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import {
   selectEntriesFilter,
   selectEntriesGroup,
@@ -71,8 +72,10 @@ const CollectionView = ({
       return undefined;
     }
 
-    return 'fields' in collection && collection.create ? getNewEntryUrl(collectionName) : '';
-  }, [collection, collectionName]);
+    return 'fields' in collection && collection.create
+      ? `${getNewEntryUrl(collectionName)}${isNotEmpty(filterTerm) ? `/${filterTerm}` : ''}`
+      : '';
+  }, [collection, collectionName, filterTerm]);
 
   const searchResultKey = useMemo(
     () => `collection.collectionTop.searchResults${isSingleSearchResult ? 'InCollection' : ''}`,

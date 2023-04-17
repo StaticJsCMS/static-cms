@@ -822,6 +822,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   async persistEntry({
     config,
+    rootSlug,
     collection,
     entryDraft: draft,
     assetProxies,
@@ -841,7 +842,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
     const newEntry = entryDraft.entry.newRecord ?? false;
 
-    const customPath = selectCustomPath(draft.entry, collection);
+    const customPath = selectCustomPath(draft.entry, collection, rootSlug, config);
 
     let dataFile: DataFile;
     if (newEntry) {

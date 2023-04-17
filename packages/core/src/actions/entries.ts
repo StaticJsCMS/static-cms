@@ -955,7 +955,11 @@ export function getSerializedEntry(collection: Collection, entry: Entry): Entry 
   return serializedEntry;
 }
 
-export function persistEntry(collection: Collection, navigate: NavigateFunction) {
+export function persistEntry(
+  collection: Collection,
+  rootSlug: string | undefined,
+  navigate: NavigateFunction,
+) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const entryDraft = state.entryDraft;
@@ -1019,6 +1023,7 @@ export function persistEntry(collection: Collection, navigate: NavigateFunction)
     return backend
       .persistEntry({
         config: configState.config,
+        rootSlug,
         collection,
         entryDraft: newEntryDraft,
         assetProxies,

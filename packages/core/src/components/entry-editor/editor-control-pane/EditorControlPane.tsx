@@ -3,7 +3,9 @@ import React, { useMemo } from 'react';
 import { getI18nInfo, hasI18n, isFieldTranslatable } from '@staticcms/core/lib/i18n';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { getFieldValue } from '@staticcms/core/lib/util/field.util';
-import { customPathFromSlug } from '@staticcms/core/lib/util/nested.util';
+import { getNestedSlug } from '@staticcms/core/lib/util/nested.util';
+import { selectConfig } from '@staticcms/core/reducers/selectors/config';
+import { useAppSelector } from '@staticcms/core/store/hooks';
 import EditorControl from './EditorControl';
 import LocaleDropdown from './LocaleDropdown';
 
@@ -26,6 +28,7 @@ export interface EditorControlPaneProps {
   locale?: string;
   canChangeLocale?: boolean;
   hideBorder: boolean;
+  slug?: string;
   onLocaleChange?: (locale: string) => void;
 }
 
@@ -38,14 +41,10 @@ const EditorControlPane = ({
   locale,
   canChangeLocale = false,
   hideBorder,
+  slug,
   onLocaleChange,
   t,
 }: TranslatedProps<EditorControlPaneProps>) => {
-  const nestedFieldPath = useMemo(
-    () => customPathFromSlug(collection, entry.slug),
-    [collection, entry.slug],
-  );
-
   const pathField = useMemo(
     () =>
       ({
@@ -56,8 +55,16 @@ const EditorControlPane = ({
             : 'Path',
         widget: 'string',
         i18n: 'none',
+        hint: ``,
       } as StringOrTextField),
     [collection],
+  );
+
+  const config = useAppSelector(selectConfig);
+
+  const defaultNestedPath = useMemo(
+    () => getNestedSlug(collection, entry, slug, config),
+    [collection, config, entry, slug],
   );
 
   const i18n = useMemo(() => {
@@ -117,12 +124,13 @@ const EditorControlPane = ({
         <EditorControl
           key="entry-path"
           field={pathField}
-          value={entry.meta?.path ?? nestedFieldPath}
+          value={entry.meta?.path ?? defaultNestedPath}
           fieldsErrors={fieldsErrors}
           submitted={submitted}
           locale={locale}
           parentPath=""
           i18n={i18n}
+          controlled
           isMeta
         />
       ) : null}

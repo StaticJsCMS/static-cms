@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import useEntries from '@staticcms/core/lib/hooks/useEntries';
 import useIcon from '@staticcms/core/lib/hooks/useIcon';
@@ -24,16 +24,8 @@ const CollectionHeader = ({
   newEntryUrl,
   t,
 }: TranslatedProps<CollectionHeaderProps>) => {
-  const navigate = useNavigate();
-
   const collectionLabel = collection.label;
   const collectionLabelSingular = collection.label_singular;
-
-  const onNewClick = useCallback(() => {
-    if (newEntryUrl) {
-      navigate(newEntryUrl);
-    }
-  }, [navigate, newEntryUrl]);
 
   const icon = useIcon(collection.icon);
 
@@ -89,7 +81,7 @@ const CollectionHeader = ({
           {pluralLabel}
         </h2>
         {newEntryUrl ? (
-          <Button onClick={onNewClick}>
+          <Button to={newEntryUrl}>
             {t('collection.collectionTop.newButton', {
               collectionLabel: collectionLabelSingular || pluralLabel,
             })}
