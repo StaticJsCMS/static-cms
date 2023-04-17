@@ -11,7 +11,6 @@ export default {
         max_file_size: { type: 'number' },
         folder_support: { type: 'boolean' },
       },
-      additionalProperties: false,
     },
   },
 };
