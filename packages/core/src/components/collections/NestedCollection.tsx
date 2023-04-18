@@ -1,33 +1,16 @@
 import { Article as ArticleIcon } from '@styled-icons/material/Article';
 import { ChevronRight as ChevronRightIcon } from '@styled-icons/material/ChevronRight';
 import sortBy from 'lodash/sortBy';
-import { dirname, sep } from 'path';
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import useEntries from '@staticcms/core/lib/hooks/useEntries';
 import classNames from '@staticcms/core/lib/util/classNames.util';
-import { selectEntryCollectionTitle } from '@staticcms/core/lib/util/collection.util';
-import { stringTemplate } from '@staticcms/core/lib/widgets';
+import { getTreeData } from '@staticcms/core/lib/util/nested.util';
 import NavLink from '../navbar/NavLink';
 
 import type { Collection, Entry } from '@staticcms/core/interface';
-
-const { addFileTemplateFields } = stringTemplate;
-
-interface BaseTreeNodeData {
-  title: string | undefined;
-  path: string;
-  isDir: boolean;
-  isRoot: boolean;
-  expanded?: boolean;
-}
-
-type SingleTreeNodeData = BaseTreeNodeData | (Entry & BaseTreeNodeData);
-
-type TreeNodeData = SingleTreeNodeData & {
-  children: TreeNodeData[];
-};
+import type { TreeNodeData } from '@staticcms/core/lib/util/nested.util';
 
 function getNodeTitle(node: TreeNodeData) {
   const title = node.isRoot
@@ -118,88 +101,6 @@ export function walk(treeData: TreeNodeData[], callback: (node: TreeNodeData) =>
   return traverse(treeData);
 }
 
-export function getTreeData(collection: Collection, entries: Entry[]): TreeNodeData[] {
-  const collectionFolder = 'folder' in collection ? collection.folder : '';
-  const rootFolder = '/';
-  const entriesObj = entries.map(e => ({ ...e, path: e.path.slice(collectionFolder.length) }));
-
-  const dirs = entriesObj.reduce((acc, entry) => {
-    let dir: string | undefined = dirname(entry.path);
-    while (dir && !acc[dir] && dir !== rootFolder) {
-      const parts: string[] = dir.split(sep);
-      acc[dir] = parts.pop();
-      dir = parts.length ? parts.join(sep) : undefined;
-    }
-    return acc;
-  }, {} as Record<string, string | undefined>);
-
-  if ('nested' in collection && collection.nested?.summary) {
-    collection = {
-      ...collection,
-      summary: collection.nested.summary,
-    };
-  } else {
-    collection = {
-      ...collection,
-    };
-    delete collection.summary;
-  }
-
-  const flatData = [
-    {
-      title: collection.label,
-      path: rootFolder,
-      isDir: true,
-      isRoot: true,
-    },
-    ...Object.entries(dirs).map(([key, value]) => ({
-      title: value,
-      path: key,
-      isDir: true,
-      isRoot: false,
-    })),
-    ...entriesObj.map((e, index) => {
-      let entry = entries[index];
-      entry = {
-        ...entry,
-        data: addFileTemplateFields(entry.path, entry.data as Record<string, string>),
-      };
-      const title = selectEntryCollectionTitle(collection, entry);
-      return {
-        ...e,
-        title,
-        isDir: false,
-        isRoot: false,
-      };
-    }),
-  ];
-
-  const parentsToChildren = flatData.reduce((acc, node) => {
-    const parent = node.path === rootFolder ? '' : dirname(node.path);
-    if (acc[parent]) {
-      acc[parent].push(node);
-    } else {
-      acc[parent] = [node];
-    }
-    return acc;
-  }, {} as Record<string, BaseTreeNodeData[]>);
-
-  function reducer(acc: TreeNodeData[], value: BaseTreeNodeData) {
-    const node = value;
-    let children: TreeNodeData[] = [];
-    if (parentsToChildren[node.path]) {
-      children = parentsToChildren[node.path].reduce(reducer, []);
-    }
-
-    acc.push({ ...node, children });
-    return acc;
-  }
-
-  const treeData = parentsToChildren[''].reduce(reducer, []);
-
-  return treeData;
-}
-
 export function updateNode(
   treeData: TreeNodeData[],
   node: TreeNodeData,
@@ -234,6 +135,7 @@ const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => 
   const entries = useEntries(collection);
 
   const [treeData, setTreeData] = useState<TreeNodeData[]>(getTreeData(collection, entries));
+  console.log('TREE DATA', treeData, collection, entries);
   const [selected, setSelected] = useState<TreeNodeData | null>(null);
   const [useFilter, setUseFilter] = useState(true);
 

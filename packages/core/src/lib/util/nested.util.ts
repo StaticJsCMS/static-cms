@@ -1,11 +1,28 @@
 import trim from 'lodash/trim';
-import { basename, dirname, extname, join } from 'path';
+import { basename, dirname, extname, join, sep } from 'path';
 
 import { sanitizeSlug } from '../urlHelper';
 import { selectEntryCollectionTitle, selectFolderEntryExtension } from './collection.util';
 import { isEmpty, isNotEmpty } from './string.util';
+import { stringTemplate } from '../widgets';
 
-import type { Collection, Config, Entry } from '@staticcms/core/interface';
+import type { BaseField, Collection, Config, Entry } from '@staticcms/core/interface';
+
+const { addFileTemplateFields } = stringTemplate;
+
+interface BaseTreeNodeData {
+  title: string | undefined;
+  path: string;
+  isDir: boolean;
+  isRoot: boolean;
+  expanded?: boolean;
+}
+
+export type SingleTreeNodeData = BaseTreeNodeData | (Entry & BaseTreeNodeData);
+
+export type TreeNodeData = SingleTreeNodeData & {
+  children: TreeNodeData[];
+};
 
 export function selectCustomPath(
   entry: Entry,
@@ -74,4 +91,89 @@ export function getNestedSlug(
   }
 
   return '';
+}
+
+export function getTreeData<EF extends BaseField>(
+  collection: Collection<EF>,
+  entries: Entry[],
+): TreeNodeData[] {
+  const collectionFolder = 'folder' in collection ? collection.folder : '';
+  const rootFolder = '/';
+  const entriesObj = entries.map(e => ({ ...e, path: e.path.slice(collectionFolder.length) }));
+
+  const dirs = entriesObj.reduce((acc, entry) => {
+    let dir: string | undefined = dirname(entry.path);
+    while (dir && !acc[dir] && dir !== rootFolder) {
+      const parts: string[] = dir.split(sep);
+      acc[dir] = parts.pop();
+      dir = parts.length ? parts.join(sep) : undefined;
+    }
+    return acc;
+  }, {} as Record<string, string | undefined>);
+
+  if ('nested' in collection && collection.nested?.summary) {
+    collection = {
+      ...collection,
+      summary: collection.nested.summary,
+    };
+  } else {
+    collection = {
+      ...collection,
+    };
+    delete collection.summary;
+  }
+
+  const flatData = [
+    {
+      title: collection.label,
+      path: rootFolder,
+      isDir: true,
+      isRoot: true,
+    },
+    ...Object.entries(dirs).map(([key, value]) => ({
+      title: value,
+      path: key,
+      isDir: true,
+      isRoot: false,
+    })),
+    ...entriesObj.map((e, index) => {
+      let entry = entries[index];
+      entry = {
+        ...entry,
+        data: addFileTemplateFields(entry.path, entry.data as Record<string, string>),
+      };
+      const title = selectEntryCollectionTitle(collection, entry);
+      return {
+        ...e,
+        title,
+        isDir: false,
+        isRoot: false,
+      };
+    }),
+  ];
+
+  const parentsToChildren = flatData.reduce((acc, node) => {
+    const parent = node.path === rootFolder ? '' : dirname(node.path);
+    if (acc[parent]) {
+      acc[parent].push(node);
+    } else {
+      acc[parent] = [node];
+    }
+    return acc;
+  }, {} as Record<string, BaseTreeNodeData[]>);
+
+  function reducer(acc: TreeNodeData[], value: BaseTreeNodeData) {
+    const node = value;
+    let children: TreeNodeData[] = [];
+    if (parentsToChildren[node.path]) {
+      children = parentsToChildren[node.path].reduce(reducer, []);
+    }
+
+    acc.push({ ...node, children });
+    return acc;
+  }
+
+  const treeData = parentsToChildren[''].reduce(reducer, []);
+
+  return treeData;
 }
