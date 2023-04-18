@@ -62,6 +62,10 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
       const uploadButtonRef = useRef<HTMLButtonElement | null>(null);
 
+      const forFolder = useMemo(() => field.select_folder ?? false, [field.select_folder]);
+
+      console.log(forFolder);
+
       const handleOnChange = useCallback(
         ({ path: newValue }: MediaPath) => {
           if (newValue !== internalValue) {
@@ -76,7 +80,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
       const handleOpenMediaLibrary = useMediaInsert(
         { path: internalValue },
-        { collection, field, controlID, forImage },
+        { collection, field, controlID, forImage, forFolder },
         handleOnChange,
       );
 
@@ -87,7 +91,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       const chooseUrl = useMemo(() => field.choose_url ?? false, [field.choose_url]);
 
       const handleUrl = useCallback(
-        (subject: 'image' | 'file') => (e: MouseEvent) => {
+        (subject: 'image' | 'folder' | 'file') => (e: MouseEvent) => {
           e.preventDefault();
 
           const url = window.prompt(t(`editor.editorWidgets.${subject}.promptUrl`));
@@ -122,6 +126,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
           return openMediaLibrary({
             controlID,
             forImage,
+            forFolder,
             value: internalValue,
             replaceIndex: index,
             allowMultiple: false,
@@ -130,7 +135,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
             field,
           });
         },
-        [openMediaLibrary, controlID, internalValue, collection, field],
+        [openMediaLibrary, controlID, internalValue, collection, field, forFolder],
       );
 
       // TODO Readd when multiple uploads is supported
@@ -212,7 +217,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       }, [collection, field, internalValue, onRemoveOne, onReplaceOne, renderFileLink]);
 
       const content: JSX.Element = useMemo(() => {
-        const subject = forImage ? 'image' : 'file';
+        const subject = forImage ? 'image' : forFolder ? 'folder' : 'file';
 
         if (Array.isArray(internalValue) ? internalValue.length === 0 : isEmpty(internalValue)) {
           return (

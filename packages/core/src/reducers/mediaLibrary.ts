@@ -52,6 +52,7 @@ export type MediaLibraryState = {
   dynamicSearchActive?: boolean;
   dynamicSearchQuery?: string;
   forImage?: boolean;
+  forFolder?: boolean;
   isPersisting?: boolean;
   isDeleting?: boolean;
   hasNextPage?: boolean;
@@ -76,6 +77,7 @@ function mediaLibrary(
       const {
         controlID,
         forImage,
+        forFolder,
         config,
         collection,
         collectionFile,
@@ -87,10 +89,13 @@ function mediaLibrary(
       } = action.payload;
       const libConfig = config || {};
 
+      console.log(forFolder);
+
       return {
         ...state,
         isVisible: true,
         forImage: Boolean(forImage),
+        forFolder: Boolean(forFolder),
         controlID,
         config: libConfig,
         collection,

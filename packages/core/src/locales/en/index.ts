@@ -191,6 +191,17 @@ const en: LocalePhrasesRoot = {
         remove: 'Remove file',
         removeAll: 'Remove all files',
       },
+      folder: {
+        choose: 'Choose a folder',
+        chooseUrl: 'Insert folder path',
+        chooseMultiple: 'Choose folders',
+        replaceUrl: 'Replace with path',
+        promptUrl: 'Enter path of the folder',
+        chooseDifferent: 'Choose different folder',
+        addMore: 'Add more folders',
+        remove: 'Remove folder',
+        removeAll: 'Remove all folders',
+      },
       unknownControl: {
         noControl: "No control for widget '%{widget}'.",
       },
