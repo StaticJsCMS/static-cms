@@ -160,7 +160,7 @@ function getConfigSchema() {
           auth_type: {
             type: 'string',
             examples: ['implicit', 'pkce'],
-            enum: ['implicit', 'public_pkcerepo'],
+            enum: ['implicit', 'pkce'],
           },
           proxy_url: { type: 'string' },
           large_media_url: { type: 'string' },
