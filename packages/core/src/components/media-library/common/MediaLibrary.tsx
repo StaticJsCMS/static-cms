@@ -72,6 +72,8 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
   const [selectedFile, setSelectedFile] = useState<MediaFile | null>(null);
   const [query, setQuery] = useState<string | undefined>(undefined);
 
+  const config = useAppSelector(selectConfig);
+
   const dispatch = useAppDispatch();
   const {
     isVisible,
@@ -83,7 +85,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
     isLoading,
     hasNextPage,
     isPaginating,
-    config: mediaConfig,
+    config: mediaConfig = config?.media_library ?? {},
     dynamicSearchQuery,
     page,
     collection,
@@ -94,7 +96,6 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
     insertOptions,
   } = useAppSelector(selectMediaLibraryState);
 
-  const config = useAppSelector(selectConfig);
   const entry = useAppSelector(selectEditingDraft);
 
   const [url, setUrl] = useState<string | string[] | undefined>(initialValue ?? '');
