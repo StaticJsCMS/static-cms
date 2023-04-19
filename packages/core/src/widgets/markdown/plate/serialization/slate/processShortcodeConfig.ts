@@ -19,7 +19,7 @@ function createShortcodeRegex(name: string, config: ShortcodeConfig) {
   )}?([\\w\\W]*?)${cleanRegex(config.closeTag)}`;
 }
 
-export function processShortcodeConfigToSlate(
+function processShortcodeConfigToSlate(
   name: string,
   config: ShortcodeConfig,
   nodes: BaseMdastNode[],
@@ -66,6 +66,19 @@ export function processShortcodeConfigToSlate(
   }
 
   return output;
+}
+
+export function processShortcodeConfigsToSlate(
+  configs: Record<string, ShortcodeConfig>,
+  nodes: BaseMdastNode[],
+) {
+  let finalNodes: MdastNode[] = nodes;
+
+  for (const shortcode in configs) {
+    finalNodes = processShortcodeConfigToSlate(shortcode, configs[shortcode], finalNodes);
+  }
+
+  return finalNodes;
 }
 
 export function processShortcodeConfigToMdx(

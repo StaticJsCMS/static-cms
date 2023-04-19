@@ -2,7 +2,8 @@
 import { ELEMENT_PARAGRAPH } from '@udecode/plate';
 
 import { LIST_TYPES, MarkNodeTypes, NodeTypes } from './ast-types';
-import { processShortcodeConfigToSlate } from './processShortcodeConfig';
+import { autoLinkToSlate } from './autoLinkUrls';
+import { processShortcodeConfigsToSlate } from './processShortcodeConfig';
 
 import type { ShortcodeConfig } from '@staticcms/core/interface';
 import type { MdBlockElement } from '@staticcms/markdown';
@@ -350,11 +351,7 @@ export default function deserializeMarkdown(node: MdastNode, options: Options) {
         return { text: '' };
       }
 
-      let nodes: MdastNode[] = [node];
-
-      for (const shortcode in shortcodeConfigs) {
-        nodes = processShortcodeConfigToSlate(shortcode, shortcodeConfigs[shortcode], nodes);
-      }
+      const nodes = autoLinkToSlate(processShortcodeConfigsToSlate(shortcodeConfigs, [node]));
 
       return nodes.map(node => (node.type === 'text' ? { text: node.value ?? '' } : node));
 

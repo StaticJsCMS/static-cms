@@ -1,11 +1,11 @@
 import { ELEMENT_PARAGRAPH } from '@udecode/plate';
 import { useEffect, useState } from 'react';
-import gfm from 'remark-gfm';
 import mdx from 'remark-mdx';
 import markdown from 'remark-parse';
 import { unified } from 'unified';
 
 import { getShortcodes } from '../../../../lib/registry';
+import gfm from '../serialization/gfm';
 import toSlatePlugin from '../serialization/slate/toSlatePlugin';
 
 import type { ShortcodeConfig } from '../../../../interface';
