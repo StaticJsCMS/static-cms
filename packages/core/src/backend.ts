@@ -895,8 +895,6 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       ...updatedOptions,
     };
 
-    await this.invokePrePublishEvent(entryDraft.entry);
-
     await this.implementation.persistEntry(
       {
         dataFiles,
@@ -906,7 +904,6 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     );
 
     await this.invokePostSaveEvent(entryDraft.entry);
-    await this.invokePostPublishEvent(entryDraft.entry);
 
     return slug;
   }
@@ -914,14 +911,6 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
   async invokeEventWithEntry(event: AllowedEvent, entry: Entry) {
     const { login, name = '' } = (await this.currentUser()) as User;
     return await invokeEvent({ name: event, data: { entry, author: { login, name } } });
-  }
-
-  async invokePrePublishEvent(entry: Entry) {
-    await this.invokeEventWithEntry('prePublish', entry);
-  }
-
-  async invokePostPublishEvent(entry: Entry) {
-    await this.invokeEventWithEntry('postPublish', entry);
   }
 
   async invokePreSaveEvent(entry: Entry) {
