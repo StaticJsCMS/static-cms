@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import isEqual from 'lodash/isEqual';
 
 import {
   createDraftDuplicateFromEntry,
@@ -165,7 +166,12 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
   >();
 
   useEffect(() => {
-    if (!prevLocalBackup && localBackup) {
+    if (
+      !prevLocalBackup &&
+      localBackup &&
+      (!isEqual(localBackup.entry.data, entryDraft.entry?.data) ||
+        !isEqual(localBackup.entry.meta, entryDraft.entry?.meta))
+    ) {
       const updateLocalBackup = async () => {
         const confirmLoadBackupBody = await confirm({
           title: 'editor.editor.confirmLoadBackupTitle',
@@ -184,7 +190,15 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
     }
 
     setPrevLocalBackup(localBackup);
-  }, [deleteBackup, dispatch, localBackup, prevLocalBackup, version]);
+  }, [
+    deleteBackup,
+    dispatch,
+    entryDraft.entry?.data,
+    entryDraft.entry?.meta,
+    localBackup,
+    prevLocalBackup,
+    version,
+  ]);
 
   useEffect(() => {
     if (hasChanged && entryDraft.entry) {
