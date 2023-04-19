@@ -194,7 +194,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
 
       setSelectedFile(asset);
     },
-    [canInsert, selectedFile?.key],
+    [canInsert, forFolder, selectedFile?.key],
   );
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);

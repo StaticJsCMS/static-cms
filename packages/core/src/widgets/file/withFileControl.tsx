@@ -294,6 +294,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
           </div>
         );
       }, [
+        forFolder,
         internalValue,
         renderedImagesLinks,
         handleOpenMediaLibrary,

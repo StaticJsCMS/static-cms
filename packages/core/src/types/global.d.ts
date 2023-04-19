@@ -3,7 +3,16 @@ export {};
 import type { Config } from '../interface';
 import type CmsAPI from '../index';
 import type { createElement, useEffect, useState, useMemo, useCallback } from 'react';
-import type { useIsMediaAsset, useMediaAsset, useMediaInsert, useUUID } from '../lib/hooks';
+import type {
+  useEntries,
+  useFolderSupport,
+  useHasChildErrors,
+  useIsMediaAsset,
+  useMediaAsset,
+  useMediaFiles,
+  useMediaInsert,
+  useUUID,
+} from '../lib/hooks';
 
 declare global {
   interface Window {
@@ -15,8 +24,13 @@ declare global {
     useMemo: useMemo;
     useEffect: useEffect;
     useCallback: useCallback;
+
+    useEntries: useEntries;
+    useFolderSupport: useFolderSupport;
+    useHasChildErrors: useHasChildErrors;
     useIsMediaAsset: useIsMediaAsset;
     useMediaAsset: useMediaAsset;
+    useMediaFiles: useMediaFiles;
     useMediaInsert: useMediaInsert;
     useUUID: useUUID;
   }
