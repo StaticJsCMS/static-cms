@@ -40,7 +40,7 @@ export type MediaLibraryState = {
   controlID?: string;
   page?: number;
   files?: MediaFile[];
-  config: MediaLibraryConfig;
+  config?: MediaLibraryConfig;
   collection?: Collection;
   collectionFile?: CollectionFile;
   field?: MediaField;
@@ -65,7 +65,6 @@ const defaultState: MediaLibraryState = {
   showMediaButton: true,
   controlMedia: {},
   displayURLs: {},
-  config: {},
 };
 
 function mediaLibrary(
