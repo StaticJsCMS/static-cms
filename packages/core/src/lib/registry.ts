@@ -323,22 +323,22 @@ export function registerEventListener(
   registry.eventHandlers[name].push({ handler, options });
 }
 
-export async function invokeEvent({ name, data }: { name: AllowedEvent; data: EventData }) {
+export async function invokeEvent({ name, data }: { name: AllowedEvent; data?: EventData }) {
   validateEventName(name);
   const handlers = registry.eventHandlers[name];
 
-  let _data = { ...data };
+  let _data = data ? { ...data } : undefined;
   for (const { handler, options } of handlers) {
     const result = await handler(_data, options);
-    if (result !== undefined) {
+    if (_data !== undefined && result !== undefined) {
       const entry = {
         ..._data.entry,
         data: result,
       } as Entry;
-      _data = { ...data, entry };
+      _data = { ..._data, entry };
     }
   }
-  return _data.entry.data;
+  return _data?.entry.data;
 }
 
 export function removeEventListener({ name, handler }: EventListener) {
