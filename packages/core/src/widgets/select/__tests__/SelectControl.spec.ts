@@ -2,8 +2,8 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
-import { act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { act, waitFor } from '@testing-library/react';
 
 import { mockSelectField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
@@ -82,6 +82,7 @@ describe(SelectControl.name, () => {
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
+        queryByTestId,
         props: { onChange },
       } = renderControl();
 
@@ -93,6 +94,11 @@ describe(SelectControl.name, () => {
 
       const option1 = 'select-option-Option 1';
       const option2 = 'select-option-Option 2';
+
+      await waitFor(() => {
+        expect(queryByTestId(option1)).toBeInTheDocument();
+        expect(queryByTestId(option2)).toBeInTheDocument();
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
@@ -180,6 +186,7 @@ describe(SelectControl.name, () => {
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
+        queryByTestId,
         props: { onChange },
       } = renderControl({ field: mockNumberSelectField });
 
@@ -191,6 +198,11 @@ describe(SelectControl.name, () => {
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-2';
+
+      await waitFor(() => {
+        expect(queryByTestId(option1)).toBeInTheDocument();
+        expect(queryByTestId(option2)).toBeInTheDocument();
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
@@ -263,17 +275,22 @@ describe(SelectControl.name, () => {
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
+        queryByTestId,
         props: { onChange },
       } = renderControl({ field: mockMixedSelectField });
 
       const input = getByTestId('select-input');
-
       await act(async () => {
         await userEvent.click(input);
       });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-Option 2';
+
+      await waitFor(() => {
+        expect(queryByTestId(option1)).toBeInTheDocument();
+        expect(queryByTestId(option2)).toBeInTheDocument();
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
@@ -359,17 +376,22 @@ describe(SelectControl.name, () => {
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
+        queryByTestId,
         props: { onChange },
       } = renderControl({ field: mockStringSelectField });
 
       const input = getByTestId('select-input');
-
       await act(async () => {
         await userEvent.click(input);
       });
 
       const option1 = 'select-option-option 1';
       const option2 = 'select-option-option 2';
+
+      await waitFor(() => {
+        expect(queryByTestId(option1)).toBeInTheDocument();
+        expect(queryByTestId(option2)).toBeInTheDocument();
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
@@ -455,17 +477,22 @@ describe(SelectControl.name, () => {
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
+        queryByTestId,
         props: { onChange },
       } = renderControl({ field: mockNumberSelectField });
 
       const input = getByTestId('select-input');
-
       await act(async () => {
         await userEvent.click(input);
       });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-2';
+
+      await waitFor(() => {
+        expect(queryByTestId(option1)).toBeInTheDocument();
+        expect(queryByTestId(option2)).toBeInTheDocument();
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
@@ -551,17 +578,22 @@ describe(SelectControl.name, () => {
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
+        queryByTestId,
         props: { onChange },
       } = renderControl({ field: mockMixedSelectField });
 
       const input = getByTestId('select-input');
-
       await act(async () => {
         await userEvent.click(input);
       });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-option 2';
+
+      await waitFor(() => {
+        expect(queryByTestId(option1)).toBeInTheDocument();
+        expect(queryByTestId(option2)).toBeInTheDocument();
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
@@ -635,17 +667,22 @@ describe(SelectControl.name, () => {
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
+        queryByTestId,
         props: { onChange },
       } = renderControl({ field: mockMultiStringSelectField });
 
       const input = getByTestId('select-input');
-
       await act(async () => {
         await userEvent.click(input);
       });
 
       const option1 = 'select-option-Option 1';
       const option2 = 'select-option-Option 2';
+
+      await waitFor(() => {
+        expect(queryByTestId(option1)).toBeInTheDocument();
+        expect(queryByTestId(option2)).toBeInTheDocument();
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
@@ -733,17 +770,22 @@ describe(SelectControl.name, () => {
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
+        queryByTestId,
         props: { onChange },
       } = renderControl({ field: mockMultiNumberSelectField });
 
       const input = getByTestId('select-input');
-
       await act(async () => {
         await userEvent.click(input);
       });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-2';
+
+      await waitFor(() => {
+        expect(queryByTestId(option1)).toBeInTheDocument();
+        expect(queryByTestId(option2)).toBeInTheDocument();
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
@@ -831,17 +873,22 @@ describe(SelectControl.name, () => {
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
+        queryByTestId,
         props: { onChange },
       } = renderControl({ field: mockMultiMixedSelectField });
 
       const input = getByTestId('select-input');
-
       await act(async () => {
         await userEvent.click(input);
       });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-Option 2';
+
+      await waitFor(() => {
+        expect(queryByTestId(option1)).toBeInTheDocument();
+        expect(queryByTestId(option2)).toBeInTheDocument();
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
@@ -933,17 +980,22 @@ describe(SelectControl.name, () => {
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
+        queryByTestId,
         props: { onChange },
       } = renderControl({ field: mockMultiStringSelectField });
 
       const input = getByTestId('select-input');
-
       await act(async () => {
         await userEvent.click(input);
       });
 
       const option1 = 'select-option-option 1';
       const option2 = 'select-option-option 2';
+
+      await waitFor(() => {
+        expect(queryByTestId(option1)).toBeInTheDocument();
+        expect(queryByTestId(option2)).toBeInTheDocument();
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
@@ -1035,17 +1087,22 @@ describe(SelectControl.name, () => {
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
+        queryByTestId,
         props: { onChange },
       } = renderControl({ field: mockMultiNumberSelectField });
 
       const input = getByTestId('select-input');
-
       await act(async () => {
         await userEvent.click(input);
       });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-2';
+
+      await waitFor(() => {
+        expect(queryByTestId(option1)).toBeInTheDocument();
+        expect(queryByTestId(option2)).toBeInTheDocument();
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
@@ -1137,17 +1194,22 @@ describe(SelectControl.name, () => {
     it('should call onChange when text input changes', async () => {
       const {
         getByTestId,
+        queryByTestId,
         props: { onChange },
       } = renderControl({ field: mockMultiNumberSelectField });
 
       const input = getByTestId('select-input');
-
       await act(async () => {
         await userEvent.click(input);
       });
 
       const option1 = 'select-option-1';
       const option2 = 'select-option-option 2';
+
+      await waitFor(() => {
+        expect(queryByTestId(option1)).toBeInTheDocument();
+        expect(queryByTestId(option2)).toBeInTheDocument();
+      });
 
       expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
       expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected

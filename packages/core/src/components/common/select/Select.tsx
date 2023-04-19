@@ -2,7 +2,6 @@ import SelectUnstyled from '@mui/base/SelectUnstyled';
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@styled-icons/material/KeyboardArrowDown';
 import React, { forwardRef, useCallback, useState } from 'react';
 
-import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import useElementSize from '@staticcms/core/lib/hooks/useElementSize';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
@@ -33,26 +32,32 @@ export interface SelectProps {
   required?: boolean;
   disabled?: boolean;
   onChange: SelectChangeEventHandler;
+  onOpenChange: (open: boolean) => void;
 }
 
 const Select = forwardRef(
   (
-    { label, placeholder, value, options, required = false, disabled, onChange }: SelectProps,
+    {
+      label,
+      placeholder,
+      value,
+      options,
+      required = false,
+      disabled,
+      onChange,
+      onOpenChange,
+    }: SelectProps,
     ref: Ref<HTMLButtonElement>,
   ) => {
     const { width } = useElementSize<HTMLButtonElement>(ref);
 
     const [open, setOpen] = useState(false);
-    const debouncedOpen = useDebounce(open, 200);
     const handleOpenChange = useCallback(
       (newOpen: boolean) => {
-        if (debouncedOpen !== open) {
-          return;
-        }
-
         setOpen(newOpen);
+        onOpenChange(newOpen);
       },
-      [debouncedOpen, open],
+      [onOpenChange],
     );
     const handleButtonClick = useCallback(() => handleOpenChange(!open), [handleOpenChange, open]);
 
