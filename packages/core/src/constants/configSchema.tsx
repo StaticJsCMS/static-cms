@@ -363,7 +363,6 @@ function getConfigSchema() {
           folder_support: { type: 'boolean' },
         },
       },
-      load_config_file: { type: 'boolean' },
       slug: {
         type: 'object',
         properties: {
@@ -388,6 +387,7 @@ function getConfigSchema() {
           },
         ],
       },
+      disable_local_backup: { type: 'boolean' },
       editor: {
         type: 'object',
         properties: {

@@ -791,10 +791,10 @@ export interface Config<EF extends BaseField = UnknownField> {
   public_folder?: string;
   media_folder_relative?: boolean;
   media_library?: MediaLibraryConfig;
-  load_config_file?: boolean;
   slug?: Slug;
   i18n?: I18nInfo;
   local_backend?: boolean | LocalBackend;
+  disable_local_backup?: boolean;
   editor?: EditorConfig;
   search?: boolean;
 }

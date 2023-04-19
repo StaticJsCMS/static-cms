@@ -1,10 +1,10 @@
 import { createHashHistory } from 'history';
 import debounce from 'lodash/debounce';
+import isEqual from 'lodash/isEqual';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import isEqual from 'lodash/isEqual';
 
 import {
   createDraftDuplicateFromEntry,
@@ -21,8 +21,9 @@ import {
 import { loadScroll, toggleScroll } from '@staticcms/core/actions/scroll';
 import { selectFields } from '@staticcms/core/lib/util/collection.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
+import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectEntry } from '@staticcms/core/reducers/selectors/entries';
-import { useAppDispatch } from '@staticcms/core/store/hooks';
+import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import confirm from '../common/confirm/Confirm';
 import Loader from '../common/progress/Loader';
 import MediaLibraryModal from '../media-library/MediaLibraryModal';
@@ -61,23 +62,32 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
 
   const navigate = useNavigate();
 
+  const config = useAppSelector(selectConfig);
+
   const createBackup = useMemo(
     () =>
       debounce(function (entry: Entry, collection: Collection) {
+        if (config?.disable_local_backup) {
+          return;
+        }
+
         dispatch(persistLocalBackup(entry, collection));
       }, 2000),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [config],
   );
 
   const deleteBackup = useCallback(() => {
+    if (config?.disable_local_backup) {
+      return;
+    }
+
     createBackup.cancel();
     if (slug) {
       dispatch(deleteLocalBackup(collection, slug));
     }
     dispatch(deleteDraftLocalBackup());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [collection, createBackup, slug]);
+  }, [config?.disable_local_backup, createBackup, slug, dispatch, collection]);
 
   const [submitted, setSubmitted] = useState(false);
   const handlePersistEntry = useCallback(
@@ -166,6 +176,10 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
   >();
 
   useEffect(() => {
+    if (config?.disable_local_backup) {
+      return;
+    }
+
     if (
       !prevLocalBackup &&
       localBackup &&
@@ -191,6 +205,7 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
 
     setPrevLocalBackup(localBackup);
   }, [
+    config?.disable_local_backup,
     deleteBackup,
     dispatch,
     entryDraft.entry?.data,
@@ -219,14 +234,25 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
       });
     } else if (!newRecord && slug && (prevCollection !== collection || prevSlug !== slug)) {
       setTimeout(() => {
-        dispatch(retrieveLocalBackup(collection, slug));
+        if (!config?.disable_local_backup) {
+          dispatch(retrieveLocalBackup(collection, slug));
+        }
         dispatch(loadEntry(collection, slug));
       });
     }
 
     setPrevCollection(collection);
     setPrevSlug(slug);
-  }, [collection, entryDraft.entry, prevSlug, prevCollection, slug, dispatch, newRecord]);
+  }, [
+    collection,
+    entryDraft.entry,
+    prevSlug,
+    prevCollection,
+    slug,
+    dispatch,
+    newRecord,
+    config?.disable_local_backup,
+  ]);
 
   const leaveMessage = useMemo(() => t('editor.editor.onLeavePage'), [t]);
 
