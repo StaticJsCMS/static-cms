@@ -89,8 +89,6 @@ function mediaLibrary(
       } = action.payload;
       const libConfig = config || {};
 
-      console.log(forFolder);
-
       return {
         ...state,
         isVisible: true,
