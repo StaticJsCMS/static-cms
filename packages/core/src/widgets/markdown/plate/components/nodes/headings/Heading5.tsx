@@ -15,6 +15,7 @@ const Heading5: FC<PlateRenderElementProps<MdValue, MdH5Element>> = ({
       {...nodeProps}
       className="
         text-[0.83em]
+        leading-[1.25em]
         font-bold
         my-[1.67em]
       "

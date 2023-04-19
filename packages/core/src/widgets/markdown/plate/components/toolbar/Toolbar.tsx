@@ -39,7 +39,6 @@ const Toolbar: FC<ToolbarProps> = ({ useMdx, collection, field, disabled }) => {
       className="
         flex
         flex-wrap
-        relative
         items-center
         select-none
         min-h-markdown-toolbar
@@ -53,6 +52,11 @@ const Toolbar: FC<ToolbarProps> = ({ useMdx, collection, field, disabled }) => {
         border-gray-400
         gap-0.5
         shadow-md
+        bg-slate-50
+        dark:bg-slate-900
+        sticky
+        top-0
+        z-10
       "
     >
       {groups}
