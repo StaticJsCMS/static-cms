@@ -179,7 +179,7 @@ describe('nested.util', () => {
       expect(authorsNode.isDir).toBe(true);
       expect(authorsNode.isRoot).toBe(false);
       expect(authorsNode.path).toBe('/authors');
-      expect(authorsNode.title).toBe('/authors');
+      expect(authorsNode.title).toBe('authors');
       expect(authorsNode.children.length).toBe(2);
 
       // ROOT > Authors Node > index.md
@@ -195,7 +195,7 @@ describe('nested.util', () => {
       expect(anAuthorNode.isDir).toBe(true);
       expect(anAuthorNode.isRoot).toBe(false);
       expect(anAuthorNode.path).toBe('/authors/author-1');
-      expect(anAuthorNode.title).toBe('/authors/author-1');
+      expect(anAuthorNode.title).toBe('author-1');
       expect(anAuthorNode.children.length).toBe(1);
 
       // ROOT > Authors Node > An Author Node > index.md
@@ -211,7 +211,7 @@ describe('nested.util', () => {
       expect(postsNode.isDir).toBe(true);
       expect(postsNode.isRoot).toBe(false);
       expect(postsNode.path).toBe('/posts');
-      expect(postsNode.title).toBe('/posts');
+      expect(postsNode.title).toBe('posts');
       expect(postsNode.children.length).toBe(3);
 
       // ROOT > Posts Node > index.md
@@ -227,7 +227,7 @@ describe('nested.util', () => {
       expect(helloWorldNode.isDir).toBe(true);
       expect(helloWorldNode.isRoot).toBe(false);
       expect(helloWorldNode.path).toBe('/posts/hello-world');
-      expect(helloWorldNode.title).toBe('/posts/hello-world');
+      expect(helloWorldNode.title).toBe('hello-world');
       expect(helloWorldNode.children.length).toBe(1);
 
       // ROOT > Posts Node > Hello World Node > index.md
@@ -243,7 +243,7 @@ describe('nested.util', () => {
       expect(newsArticlesNode.isDir).toBe(true);
       expect(newsArticlesNode.isRoot).toBe(false);
       expect(newsArticlesNode.path).toBe('/posts/news');
-      expect(newsArticlesNode.title).toBe('/posts/news');
+      expect(newsArticlesNode.title).toBe('news');
       expect(newsArticlesNode.children.length).toBe(2);
 
       // ROOT > Posts Node > Hello World Node > index.md
@@ -259,7 +259,7 @@ describe('nested.util', () => {
       expect(helloWorldNewsNode.isDir).toBe(true);
       expect(helloWorldNewsNode.isRoot).toBe(false);
       expect(helloWorldNewsNode.path).toBe('/posts/news/hello-world-news');
-      expect(helloWorldNewsNode.title).toBe('/posts/news/hello-world-news');
+      expect(helloWorldNewsNode.title).toBe('hello-world-news');
       expect(helloWorldNewsNode.children.length).toBe(1);
 
       // ROOT > Posts Node > Hello World Node > Hello World News Node > index.md

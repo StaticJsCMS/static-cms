@@ -135,7 +135,6 @@ const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => 
   const entries = useEntries(collection);
 
   const [treeData, setTreeData] = useState<TreeNodeData[]>(getTreeData(collection, entries));
-  console.log('TREE DATA', treeData, collection, entries);
   const [selected, setSelected] = useState<TreeNodeData | null>(null);
   const [useFilter, setUseFilter] = useState(true);
 
