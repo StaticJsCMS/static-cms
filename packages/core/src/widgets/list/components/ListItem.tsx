@@ -29,7 +29,7 @@ function handleSummary(
   label: string,
   item: ValueOrNestedValue,
 ): string {
-  if (typeof item === 'object' && !Array.isArray(item)) {
+  if (typeof item === 'object' && !(item instanceof Date) && !Array.isArray(item)) {
     const labeledItem: EntryData = {
       ...item,
       fields: {
@@ -151,7 +151,9 @@ const ListItem: FC<ListItemProps> = ({
         }
 
         const labelFieldValue =
-          typeof objectValue === 'object' && !Array.isArray(objectValue)
+          typeof objectValue === 'object' &&
+          !(objectValue instanceof Date) &&
+          !Array.isArray(objectValue)
             ? objectValue[labelField.name]
             : objectValue;
 

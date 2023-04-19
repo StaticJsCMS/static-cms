@@ -5,7 +5,7 @@ import schema from './schema';
 
 import type { DateTimeField, WidgetParam } from '@staticcms/core/interface';
 
-const DateTimeWidget = (): WidgetParam<string, DateTimeField> => {
+const DateTimeWidget = (): WidgetParam<string | Date, DateTimeField> => {
   return {
     name: 'datetime',
     controlComponent,

@@ -308,7 +308,10 @@ export function selectMediaFilePath(
 
   if (!currentFolder) {
     let publicFolder = trim(config['public_folder'] ?? mediaFolder, '/');
-    const mediaPathDir = trim(dirname(mediaPath), '/');
+    let mediaPathDir = trim(dirname(mediaPath), '/');
+    if (mediaPathDir === '.') {
+      mediaPathDir = '';
+    }
 
     if (hasCustomFolder('public_folder', collection, entryMap?.slug, field)) {
       publicFolder = trim(
@@ -316,6 +319,7 @@ export function selectMediaFilePath(
         '/',
       );
     }
+
     if (mediaPathDir.includes(publicFolder) && mediaPathDir != mediaFolder) {
       mediaFolder = selectMediaFolder(
         config,

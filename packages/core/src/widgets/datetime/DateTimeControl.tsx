@@ -42,7 +42,7 @@ function convertMuiTextFieldProps({
   };
 }
 
-const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
+const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
   field,
   label,
   value,
@@ -140,6 +140,10 @@ const DateTimeControl: FC<WidgetControlProps<string, DateTimeField>> = ({
     let valueToParse = internalValue;
     if (!valueToParse) {
       valueToParse = defaultValue;
+    }
+
+    if (typeof valueToParse !== 'string') {
+      return valueToParse;
     }
 
     return format ? parse(valueToParse, format, new Date()) : parseISO(valueToParse);
