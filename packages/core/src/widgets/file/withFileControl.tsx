@@ -64,8 +64,6 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
       const forFolder = useMemo(() => field.select_folder ?? false, [field.select_folder]);
 
-      console.log(forFolder);
-
       const handleOnChange = useCallback(
         ({ path: newValue }: MediaPath) => {
           if (newValue !== internalValue) {
