@@ -112,6 +112,11 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
     return `${internalValue}`;
   }, [isMultiple, internalValue]);
 
+  const [open, setOpen] = useState(false);
+  const handleOpenChange = useCallback((open: boolean) => {
+    setOpen(open);
+  }, []);
+
   return (
     <Field
       inputRef={ref}
@@ -122,6 +127,7 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
       forSingleList={forSingleList}
       cursor="pointer"
       disabled={disabled}
+      disableClick={open}
     >
       <Select
         label={
@@ -146,6 +152,7 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
         required={field.required}
         disabled={disabled}
         onChange={handleChange}
+        onOpenChange={handleOpenChange}
       />
     </Field>
   );

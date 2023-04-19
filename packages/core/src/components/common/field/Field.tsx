@@ -21,6 +21,7 @@ export interface FieldProps {
   noPadding?: boolean;
   noHightlight?: boolean;
   disabled: boolean;
+  disableClick?: boolean;
 }
 
 const Field: FC<FieldProps> = ({
@@ -35,13 +36,14 @@ const Field: FC<FieldProps> = ({
   noPadding = false,
   noHightlight = false,
   disabled,
+  disableClick = false,
 }) => {
   const finalCursor = useCursor(cursor, disabled);
 
   const hasErrors = useMemo(() => errors.length > 0, [errors.length]);
 
   const handleOnClick = (event: MouseEvent) => {
-    if (disabled) {
+    if (disabled || disableClick) {
       return;
     }
 

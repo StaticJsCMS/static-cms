@@ -1,5 +1,5 @@
 import trim from 'lodash/trim';
-import { basename, dirname, extname, join, sep } from 'path';
+import { basename, dirname, extname, join } from 'path';
 
 import { sanitizeSlug } from '../urlHelper';
 import { selectEntryCollectionTitle, selectFolderEntryExtension } from './collection.util';
@@ -104,9 +104,9 @@ export function getTreeData<EF extends BaseField>(
   const dirs = entriesObj.reduce((acc, entry) => {
     let dir: string | undefined = dirname(entry.path);
     while (dir && !acc[dir] && dir !== rootFolder) {
-      const parts: string[] = dir.split(sep);
+      const parts: string[] = dir.split('/');
       acc[dir] = parts.pop();
-      dir = parts.length ? parts.join(sep) : undefined;
+      dir = parts.length ? parts.join('/') : undefined;
     }
     return acc;
   }, {} as Record<string, string | undefined>);
