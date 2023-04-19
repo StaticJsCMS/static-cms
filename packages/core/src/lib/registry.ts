@@ -26,7 +26,7 @@ import type {
   WidgetValueSerializer,
 } from '../interface';
 
-export const allowedEvents = ['preSave', 'postSave'] as const;
+export const allowedEvents = ['mounted', 'preSave', 'postSave'] as const;
 export type AllowedEvent = (typeof allowedEvents)[number];
 
 const eventHandlers = allowedEvents.reduce((acc, e) => {

@@ -1,6 +1,6 @@
 import 'symbol-observable';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { I18n } from 'react-polyglot';
 import { connect, Provider } from 'react-redux';
@@ -14,6 +14,7 @@ import './components/entry-editor/widgets';
 import ErrorBoundary from './components/ErrorBoundary';
 import addExtensions from './extensions';
 import { getPhrases } from './lib/phrases';
+import { invokeEvent } from './lib/registry';
 import { selectLocale } from './reducers/selectors/config';
 import { store } from './store';
 
@@ -40,6 +41,7 @@ const ROOT_ID = 'nc-root';
 // @ts-ignore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, import/order
 import ReactDOM from 'react-dom';
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 ReactDOM.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.usingClientEntryPoint = true;
@@ -119,6 +121,10 @@ function bootstrap<F extends BaseField = UnknownField>(opts?: {
    * Create connected root component.
    */
   function Root() {
+    useEffect(() => {
+      invokeEvent({ name: 'mounted' });
+    }, []);
+
     return (
       <>
         <Provider store={store}>
