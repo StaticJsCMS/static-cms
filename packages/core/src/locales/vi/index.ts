@@ -99,8 +99,6 @@ const vi: LocalePhrasesRoot = {
         'Bạn có chắc rằng bạn muốn xoá mục đã được công bố này, cũng như là những thay đổi chưa lưu của bạn trong phiên làm việc này?',
       onDeletePublishedEntryBody: 'Bạn có chắc rằng bạn muốn xoá mục đã được công bố này?',
       loadingEntry: 'Đang tải...',
-      confirmLoadBackupBody:
-        'Một bản sao lưu trên máy đã được phục hồi cho mục này, bạn có muốn tải lên không?',
     },
     editorToolbar: {
       publishing: 'Đang công bố...',

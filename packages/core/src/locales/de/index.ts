@@ -109,9 +109,6 @@ const de: LocalePhrasesRoot = {
       onDeletePublishedEntryTitle: 'Veröffentlichten Beitrag löschen?',
       onDeletePublishedEntryBody: 'Soll dieser veröffentlichte Beitrag wirklich gelöscht werden?',
       loadingEntry: 'Beitrag laden...',
-      confirmLoadBackupTitle: 'Lokales Backup benutzen?',
-      confirmLoadBackupBody:
-        'Für diesen Beitrag ist ein lokales Backup vorhanden. Möchten Sie dieses benutzen?',
     },
     editorInterface: {
       toggleI18n: 'Übersetzungen',

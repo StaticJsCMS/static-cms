@@ -107,7 +107,6 @@ const ja: LocalePhrasesRoot = {
         '保存されていない変更も削除されますが、この公開エントリを削除しますか？',
       onDeletePublishedEntryBody: 'この公開エントリを削除しますか？',
       loadingEntry: 'エントリの読込中...',
-      confirmLoadBackupBody: 'ローカルのバックアップが復旧できました。利用しますか？',
     },
     editorInterface: {
       toggleI18n: '言語を切り替える',

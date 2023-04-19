@@ -120,9 +120,6 @@ const en: LocalePhrasesRoot = {
       onDeletePublishedEntryTitle: 'Delete this published entry?',
       onDeletePublishedEntryBody: 'Are you sure you want to delete this published entry?',
       loadingEntry: 'Loading entry...',
-      confirmLoadBackupTitle: 'Use local backup?',
-      confirmLoadBackupBody:
-        'A local backup was recovered for this entry, would you like to use it?',
     },
     editorInterface: {
       sideBySideI18n: 'I18n Side by Side',
@@ -155,6 +152,9 @@ const en: LocalePhrasesRoot = {
       inReview: 'In review',
       ready: 'Ready',
       publishNow: 'Publish now',
+      discardChanges: 'Discard changes',
+      discardChangesTitle: 'Discard changes',
+      discardChangesBody: 'Are you sure you want to discard the unsaved changed?',
     },
     editorWidgets: {
       markdown: {

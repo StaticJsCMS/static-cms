@@ -108,7 +108,6 @@ const sv: LocalePhrasesRoot = {
         'Är du säker på att du vill radera det här publicerade inlägget, inklusive dina osparade ändringar från nuvarande session?',
       onDeletePublishedEntryBody: 'Är du säker på att du vill radera det här publicerade inlägget?',
       loadingEntry: 'Hämtar inlägg...',
-      confirmLoadBackupBody: 'En lokal kopia hittades för det här inlägget, vill du använda den?',
     },
     editorInterface: {
       toggleI18n: 'Slå på/av i18n',

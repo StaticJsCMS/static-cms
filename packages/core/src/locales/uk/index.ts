@@ -61,7 +61,6 @@ const uk: LocalePhrasesRoot = {
         'Ви дійсно бажаєте видалити опублікований запис, як і всі незбережені зміни під час поточної сесії?',
       onDeletePublishedEntryBody: 'Ви дійсно бажаєте видалити опублікований запис?',
       loadingEntry: 'Завантаження...',
-      confirmLoadBackupBody: 'Відновлено резервну копію, бажаєте її використати?',
     },
     editorToolbar: {
       publishing: 'Публікація...',

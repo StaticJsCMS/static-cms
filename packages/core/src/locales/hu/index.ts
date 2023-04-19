@@ -62,8 +62,6 @@ const hu: LocalePhrasesRoot = {
         'Töröljük ezt a publikált bejegyzést, a többi mentetlen modositással együtt?',
       onDeletePublishedEntryBody: 'Töröljük ezt a publikált bejegyzést?',
       loadingEntry: 'Bejegyzés betöltése...',
-      confirmLoadBackupBody:
-        'Helyi biztonsági másolat került helyre ehhez a bejegyzéshez, szeretné használni?',
     },
     editorToolbar: {
       publishing: 'Publikálás...',

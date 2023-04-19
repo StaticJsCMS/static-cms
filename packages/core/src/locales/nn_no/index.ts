@@ -91,8 +91,6 @@ const nn_no: LocalePhrasesRoot = {
         'Er du sikkert på at du vil slette eit publisert innlegg med tilhøyrande ulagra endringar?',
       onDeletePublishedEntryBody: 'Er du sikker på at du vil slette dette publiserte innlegget?',
       loadingEntry: 'Lastar innlegg...',
-      confirmLoadBackupBody:
-        'Ynskjer du å gjennopprette tidlegare endringar som ikkje har verta lagra?',
     },
     editorToolbar: {
       publishing: 'Publiserer...',

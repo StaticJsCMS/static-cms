@@ -100,7 +100,6 @@ const zh_Hant: LocalePhrasesRoot = {
       onDeleteWithUnsavedChangesBody: '你確定要刪除這篇已發布的內容以及你尚未儲存的變更？',
       onDeletePublishedEntryBody: '你確定要刪除這篇已發布的內容？',
       loadingEntry: '載入內容中...',
-      confirmLoadBackupBody: '此內容的本地備份已經還原，你想要使用嗎？',
     },
     editorToolbar: {
       publishing: '發布中...',

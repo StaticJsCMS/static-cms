@@ -109,8 +109,6 @@ const lt: LocalePhrasesRoot = {
         'Tikrai norite panaikinti publikuotą įrašą ir Jūsų pakeiitmus iš dabartinės sesijos?',
       onDeletePublishedEntryBody: 'Tikrai norite ištrinti šį publikuotą įrašą?',
       loadingEntry: 'Kraunamas įrašas...',
-      confirmLoadBackupBody:
-        'Radome Jūsų įrenginyje išsaugota juodraštį šiam įrašui, ar norite jį atgaivinti ir naudoti?',
     },
     editorToolbar: {
       publishing: 'Publikuojama...',

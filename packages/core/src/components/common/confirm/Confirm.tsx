@@ -13,7 +13,7 @@ interface ConfirmProps {
   body: string | { key: string; options?: Record<string, unknown> };
   cancel?: string | { key: string; options?: Record<string, unknown> };
   confirm?: string | { key: string; options?: Record<string, unknown> };
-  color?: 'success' | 'error' | 'primary';
+  color?: 'success' | 'error' | 'warning' | 'primary';
 }
 
 export interface ConfirmDialogProps extends ConfirmProps {
@@ -120,7 +120,7 @@ const ConfirmDialog = ({ t }: TranslateProps) => {
           gap-2
         "
       >
-        <Button onClick={handleCancel} variant="text">
+        <Button onClick={handleCancel} variant="text" color="secondary">
           {cancel}
         </Button>
         <Button onClick={handleConfirm} variant="contained" color={color}>

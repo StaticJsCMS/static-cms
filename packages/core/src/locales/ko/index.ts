@@ -100,8 +100,6 @@ const ko: LocalePhrasesRoot = {
         '현재 세션에서의 저장되지 않은 변경사항과 이 게시된 항목을 삭제하시겠습니까?',
       onDeletePublishedEntryBody: '이 게시된 항목을 삭제하시겠습니까?',
       loadingEntry: '항목 불러오는 중...',
-      confirmLoadBackupBody:
-        '이 항목에 대한 로컬 백업이 복구되었습니다, 복구된 것으로 사용하시겠습니까?',
     },
     editorToolbar: {
       publishing: '게시 중...',

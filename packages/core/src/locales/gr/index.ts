@@ -79,8 +79,6 @@ const gr: LocalePhrasesRoot = {
       onDeletePublishedEntryBody:
         'Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν τη δημοσιευμένη καταχώρηση;',
       loadingEntry: 'Φόρτωση εισόδου...',
-      confirmLoadBackupBody:
-        'Ανακτήθηκε ένα τοπικό αντίγραφο ασφαλείας για αυτήν την καταχώρηση, θέλετε να το χρησιμοποιήσετε;',
     },
     editorToolbar: {
       publishing: 'Δημοσίευση...',

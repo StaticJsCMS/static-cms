@@ -107,8 +107,6 @@ const ca: LocalePhrasesRoot = {
         'Està segur que vol eliminar aquesta entrada publicada, així com els canvis no guardats de la sessió actual?',
       onDeletePublishedEntryBody: 'Està segur que vol eliminar aquesta entrada publicada?',
       loadingEntry: 'Carregant entrada...',
-      confirmLoadBackupBody:
-        "S'ha recuperat una copia de seguretat local per aquesta entrada. La vol utilitzar?",
     },
     editorInterface: {
       toggleI18n: 'Mostrar/Amagar traduccions',

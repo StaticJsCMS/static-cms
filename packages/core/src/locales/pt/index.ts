@@ -108,7 +108,6 @@ const pt: LocalePhrasesRoot = {
         'Tem certeza de que deseja excluir esta entrada publicada, bem como as alterações não salvas da sessão atual?',
       onDeletePublishedEntryBody: 'Tem certeza de que deseja excluir esta entrada publicada?',
       loadingEntry: 'Carregando entrada...',
-      confirmLoadBackupBody: 'Um backup local foi recuperado para esta entrada. Deseja usá-lo?',
     },
     editorInterface: {
       toggleI18n: 'Mudar i18n',

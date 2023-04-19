@@ -106,7 +106,6 @@ const nl: LocalePhrasesRoot = {
         'Weet u zeker dat u dit gepubliceerde item en uw niet-opgeslagen wijzigingen uit de huidige sessie wilt verwijderen?',
       onDeletePublishedEntryBody: 'Weet u zeker dat u dit gepubliceerde item wilt verwijderen?',
       loadingEntry: 'Item laden...',
-      confirmLoadBackupBody: 'Voor dit item is een lokale back-up hersteld, wilt u deze gebruiken?',
     },
     editorInterface: {
       toggleI18n: 'Wissel i18n',

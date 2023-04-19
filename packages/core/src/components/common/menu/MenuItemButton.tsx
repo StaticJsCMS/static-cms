@@ -13,7 +13,7 @@ export interface MenuItemButtonProps {
   disabled?: boolean;
   startIcon?: FC<{ className?: string }>;
   endIcon?: FC<{ className?: string }>;
-  color?: 'default' | 'error';
+  color?: 'default' | 'error' | 'warning';
   'data-testid'?: string;
 }
 
@@ -46,19 +46,32 @@ const MenuItemButton = ({
               items-center
               justify-between
               cursor-pointer
-              hover:bg-gray-200
-              dark:hover:bg-slate-600
               dark:disabled:text-gray-700
             `,
             color === 'default' &&
               `
                 text-gray-700
                 dark:text-gray-300
+                hover:bg-gray-200
+                dark:hover:bg-slate-600
+              `,
+            color === 'warning' &&
+              `
+                text-yellow-600
+                dark:text-yellow-500
+                hover:text-white
+                hover:bg-yellow-500
+                dark:hover:text-yellow-100
+                dark:hover:bg-yellow-600
               `,
             color === 'error' &&
               `
                 text-red-500
                 dark:text-red-500
+                hover:text-white
+                hover:bg-red-500
+                dark:hover:text-red-100
+                dark:hover:bg-red-600
               `,
           ),
         },

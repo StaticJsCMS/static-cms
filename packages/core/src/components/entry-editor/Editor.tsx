@@ -187,17 +187,8 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
         !isEqual(localBackup.entry.meta, entryDraft.entry?.meta))
     ) {
       const updateLocalBackup = async () => {
-        const confirmLoadBackupBody = await confirm({
-          title: 'editor.editor.confirmLoadBackupTitle',
-          body: 'editor.editor.confirmLoadBackupBody',
-        });
-
-        if (confirmLoadBackupBody) {
-          dispatch(loadLocalBackup());
-          setVersion(version + 1);
-        } else {
-          deleteBackup();
-        }
+        dispatch(loadLocalBackup());
+        setVersion(version + 1);
       };
 
       updateLocalBackup();

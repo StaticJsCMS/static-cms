@@ -108,7 +108,6 @@ const hr: LocalePhrasesRoot = {
         'Jeste li sigurni da želite obrisati objavljeni unos, te nespremljene promjene u trenutnoj sesiji?',
       onDeletePublishedEntryBody: 'Jeste li sigurni da želite obrisati ovaj objavljeni unos?',
       loadingEntry: 'Učitavanje unosa...',
-      confirmLoadBackupBody: 'Lokalna kopija je dohvaćena za ovaj unos, želite li ju koristiti?',
     },
     editorToolbar: {
       publishing: 'Objavljivanje...',

@@ -11,18 +11,21 @@ const classes: Record<
     secondary: 'btn-contained-secondary',
     success: 'btn-contained-success',
     error: 'btn-contained-error',
+    warning: 'btn-contained-warning',
   },
   outlined: {
     primary: 'btn-outlined-primary',
     secondary: 'btn-outlined-secondary',
     success: 'btn-outlined-success',
     error: 'btn-outlined-error',
+    warning: 'btn-outlined-warning',
   },
   text: {
     primary: 'btn-text-primary',
     secondary: 'btn-text-secondary',
     success: 'btn-text-success',
     error: 'btn-text-error',
+    warning: 'btn-text-warning',
   },
 };
 
