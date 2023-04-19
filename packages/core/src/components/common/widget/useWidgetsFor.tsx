@@ -66,7 +66,7 @@ export default function useWidgetsFor(
 
       if (field.widget === 'list' || Array.isArray(value)) {
         let finalValue: ObjectValue[];
-        if (!value || typeof value !== 'object') {
+        if (!value || typeof value !== 'object' || value instanceof Date) {
           finalValue = [];
         } else if (!Array.isArray(value)) {
           finalValue = [value];
@@ -100,7 +100,7 @@ export default function useWidgetsFor(
           });
       }
 
-      if (typeof value !== 'object') {
+      if (typeof value !== 'object' || value instanceof Date) {
         return {
           data: {},
           widgets: {},

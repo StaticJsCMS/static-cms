@@ -76,6 +76,7 @@ export type ValueOrNestedValue =
   | (string | number)[]
   | boolean
   | ObjectValue
+  | Date
   | ValueOrNestedValue[]
   | null
   | undefined;
