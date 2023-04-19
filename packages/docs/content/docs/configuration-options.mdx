@@ -210,8 +210,6 @@ logo_url: 'https://your-site.com/images/logo.svg',
 
 Static CMS locale. Defaults to `en`.
 
-Other languages than English must be registered manually.
-
 **Example**
 
 In your `config`:
@@ -226,14 +224,6 @@ locale: 'de',
 ```
 
 </CodeTabs>
-
-And in your custom JavaScript code:
-
-```js
-import CMS, { de } from '@staticcms/core';
-
-CMS.registerLocale('de', de);
-```
 
 When a translation for the selected locale is missing the English one will be used.
 
