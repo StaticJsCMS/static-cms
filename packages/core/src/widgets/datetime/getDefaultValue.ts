@@ -6,7 +6,10 @@ import { localToUTC } from './utc.util';
 
 import type { DateTimeField, FieldGetDefaultMethod } from '@staticcms/core/interface';
 
-const getDefaultValue: FieldGetDefaultMethod<string, DateTimeField> = (defaultValue, field) => {
+const getDefaultValue: FieldGetDefaultMethod<string | Date, DateTimeField> = (
+  defaultValue,
+  field,
+) => {
   if (isNotNullish(defaultValue)) {
     return defaultValue;
   }
