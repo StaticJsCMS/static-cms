@@ -9,7 +9,7 @@ import TextField from '@staticcms/core/components/common/text-field/TextField';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 
 import type { ColorField, WidgetControlProps } from '@staticcms/core/interface';
-import type { ChangeEvent, FC, MouseEvent } from 'react';
+import type { ChangeEvent, FC, MouseEvent, MouseEventHandler } from 'react';
 import type { ColorResult } from 'react-color';
 
 const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
@@ -33,9 +33,10 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
   );
 
   // show/hide color picker
-  const handleClick = useCallback(() => {
-    setShowColorPicker(!showColorPicker);
-  }, [showColorPicker]);
+  const handleClick: MouseEventHandler = useCallback(event => {
+    event.stopPropagation();
+    setShowColorPicker(oldShowColorPicker => !oldShowColorPicker);
+  }, []);
 
   const handleClear = useCallback(
     (event: MouseEvent) => {
@@ -84,6 +85,7 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
       forSingleList={forSingleList}
       cursor={allowInput ? 'text' : 'pointer'}
       disabled={disabled}
+      disableClick={showColorPicker}
     >
       <div
         className={classNames(
@@ -100,6 +102,7 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
           <div
             ref={swatchRef}
             key="color-swatch"
+            data-testid="color-swatch"
             onClick={!disabled ? handleClick : undefined}
             style={{
               background: validateColor(internalValue) ? internalValue : '#fff',
@@ -157,7 +160,8 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
           onChange={handleInputChange}
           // make readonly and open color picker on click if set to allow_input: false
           onClick={!allowInput && !disabled ? handleClick : undefined}
-          disabled={!allowInput || disabled}
+          disabled={disabled}
+          readonly={!allowInput}
           cursor={allowInput ? 'text' : 'pointer'}
         />
         {showClearButton ? (

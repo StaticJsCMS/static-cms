@@ -22,7 +22,7 @@ const ErrorMessage: FC<ErrorMessageProps> = ({ errors, className }) => {
           text-xs
           text-red-500
           px-3
-          pt-1
+          pt-2
         `,
         className,
       )}

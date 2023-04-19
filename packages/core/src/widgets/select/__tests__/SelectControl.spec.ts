@@ -21,6 +21,38 @@ describe(SelectControl.name, () => {
     expect(input).toBeDisabled();
   });
 
+  it('should open and close options on field click', async () => {
+    const { getByTestId, queryByTestId } = renderControl();
+
+    const option1 = 'select-option-Option 1';
+    const option2 = 'select-option-Option 2';
+
+    await waitFor(() => {
+      expect(queryByTestId(option1)).not.toBeInTheDocument();
+      expect(queryByTestId(option2)).not.toBeInTheDocument();
+    });
+
+    await act(async () => {
+      const field = getByTestId('field');
+      await userEvent.click(field);
+    });
+
+    await waitFor(() => {
+      expect(queryByTestId(option1)).toBeInTheDocument();
+      expect(queryByTestId(option2)).toBeInTheDocument();
+    });
+
+    await act(async () => {
+      const field = getByTestId('field');
+      await userEvent.click(field);
+    });
+
+    await waitFor(() => {
+      expect(queryByTestId(option1)).not.toBeInTheDocument();
+      expect(queryByTestId(option2)).not.toBeInTheDocument();
+    });
+  });
+
   describe('simple string select', () => {
     it('should render', () => {
       const { getByTestId } = renderControl({ label: 'I am a label' });

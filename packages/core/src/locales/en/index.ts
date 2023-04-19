@@ -93,8 +93,10 @@ const en: LocalePhrasesRoot = {
         rangeCountExact: '%{fieldLabel} must have exactly %{count} item(s).',
         rangeMin: '%{fieldLabel} must be at least %{minCount} item(s).',
         rangeMax: '%{fieldLabel} must be %{maxCount} or less item(s).',
-        invalidPath: `'%{path}' is not a valid path`,
-        pathExists: `Path '%{path}' already exists`,
+        invalidPath: `'%{path}' is not a valid path.`,
+        pathExists: `Path '%{path}' already exists.`,
+        invalidColor: `Color '%{color}' is invalid.`,
+        invalidHexCode: `Hex codes must start with a # sign.`,
       },
       i18n: {
         writingInLocale: 'Writing in %{locale}',

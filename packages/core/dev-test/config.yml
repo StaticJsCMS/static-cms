@@ -179,6 +179,10 @@ collections:
           - name: required
             label: Required Validation
             widget: color
+          - name: allow_input
+            label: Allow Input
+            widget: color
+            allow_input: true
           - name: with_default
             label: Required With Default
             widget: color
@@ -186,7 +190,7 @@ collections:
           - name: pattern
             label: Pattern Validation
             widget: color
-            pattern: ['^#([0-9a-fA-F]{3})(?:[0-9a-fA-F]{3})?$', 'Must be a valid hex code']
+            pattern: ['^#[a-fA-F0-9]{3}$|^[a-fA-F0-9]{4}$|^[a-fA-F0-9]{6}$', 'Must be a valid hex code']
             allow_input: true
             required: false
           - name: alpha
