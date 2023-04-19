@@ -79,6 +79,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
     dynamicSearch,
     dynamicSearchActive,
     forImage = false,
+    forFolder = false,
     isLoading,
     hasNextPage,
     isPaginating,
@@ -182,7 +183,12 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
    */
   const handleAssetSelect = useCallback(
     (asset: MediaFile) => {
-      if (!canInsert || selectedFile?.key === asset.key || asset.isDirectory) {
+      if (
+        !canInsert ||
+        selectedFile?.key === asset.key ||
+        (!forFolder && asset.isDirectory) ||
+        (forFolder && !asset.isDirectory)
+      ) {
         return;
       }
 

@@ -14,15 +14,16 @@ The file widget allows editors to upload a file or select an existing one from t
 
 For common options, see [Common widget options](/docs/widgets#common-widget-options).
 
-| Name          | Type                  | Default | Description                                                                                                                                                        |
-| ------------- | --------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| default       | string                | `null`  | _Optional_. The default value for the field. Accepts a string.                                                                                                     |
-| media_folder  | string                |         | _Optional_. Specifies the folder path where uploaded files should be saved, relative to the base of the repo                                                       |
-| public_folder | string                |         | _Optional_. Specifies the folder path where the files uploaded by the media library will be accessed, relative to the base of the built site                       |
-| media_library | Media Library Options | `{}`    | _Optional_. Media library settings to apply when the media library is opened by the current widget. See [Media Library](/docs/configuration-options#media-library) |
-| choose_url    | boolean               | `false` | _Optional_. When set to `false`, the "Insert from URL" button will be hidden                                                                                       |
+| Name          | Type                  | Default | Description                                                                                                                                                             |
+| ------------- | --------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| default       | string                | `null`  | _Optional_. The default value for the field. Accepts a string.                                                                                                          |
+| media_folder  | string                |         | _Optional_. Specifies the folder path where uploaded files should be saved, relative to the base of the repo                                                            |
+| public_folder | string                |         | _Optional_. Specifies the folder path where the files uploaded by the media library will be accessed, relative to the base of the built site                            |
+| media_library | Media Library Options | `{}`    | _Optional_. Media library settings to apply when the media library is opened by the current widget. See [Media Library](/docs/configuration-options#media-library)      |
+| choose_url    | boolean               | `false` | _Optional_. When set to `false`, the "Insert from URL" button will be hidden                                                                                            |
+| select_folder | boolean               | `false` | _Optional_. When set to `true`, selecting folders instead of files will be possible. See [Media Library](/docs/configuration-options#media-library) for folder support. |
 
-## Example
+## Examples
 
 <CodeTabs>
 ```yaml
@@ -37,6 +38,23 @@ name: 'manual_pdf',
 label: 'Manual PDF',
 widget: 'file',
 default: '/uploads/general-manual.pdf',
+```
+
+</CodeTabs>
+
+<CodeTabs>
+```yaml
+name: gallery_folder
+label: Gallery Folder
+widget: file
+select_folder: true
+```
+
+```js
+name: 'gallery_folder',
+label: 'Gallery Folder',
+widget: 'file',
+select_folder: true,
 ```
 
 </CodeTabs>

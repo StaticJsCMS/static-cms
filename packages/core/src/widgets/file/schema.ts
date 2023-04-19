@@ -14,6 +14,7 @@ export default {
     },
     media_folder: { type: 'string' },
     public_folder: { type: 'string' },
+    select_folder: { type: 'boolean' },
     choose_url: { type: 'boolean' },
     multiple: { type: 'boolean' },
     media_library: {

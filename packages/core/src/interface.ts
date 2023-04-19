@@ -562,6 +562,7 @@ export interface MediaField extends BaseField {
   choose_url?: boolean;
   multiple?: boolean;
   media_library?: MediaLibraryConfig;
+  select_folder?: boolean;
 }
 
 export interface BooleanField extends BaseField {

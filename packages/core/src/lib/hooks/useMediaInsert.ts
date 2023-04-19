@@ -20,13 +20,21 @@ export default function useMediaInsert<T extends string | string[], F extends Me
     field: F;
     controlID?: string;
     forImage?: boolean;
+    forFolder?: boolean;
     insertOptions?: MediaLibrarInsertOptions;
   },
   callback: (newValue: MediaPath<T>) => void,
 ): (e?: MouseEvent) => void {
   const dispatch = useAppDispatch();
 
-  const { controlID, collection, field, forImage = false, insertOptions } = options;
+  const {
+    controlID,
+    collection,
+    field,
+    forImage = false,
+    forFolder = false,
+    insertOptions,
+  } = options;
 
   const finalControlID = useMemo(() => controlID ?? uuid(), [controlID]);
   const mediaPathSelector = useMemo(() => selectMediaPath(finalControlID), [finalControlID]);
@@ -50,6 +58,7 @@ export default function useMediaInsert<T extends string | string[], F extends Me
         openMediaLibrary({
           controlID: finalControlID,
           forImage,
+          forFolder,
           value: value.path,
           alt: value.alt,
           replaceIndex,
@@ -62,7 +71,17 @@ export default function useMediaInsert<T extends string | string[], F extends Me
       );
       setSelected(false);
     },
-    [dispatch, finalControlID, forImage, value.path, value.alt, collection, field, insertOptions],
+    [
+      dispatch,
+      finalControlID,
+      forImage,
+      forFolder,
+      value.path,
+      value.alt,
+      collection,
+      field,
+      insertOptions,
+    ],
   );
 
   return handleOpenMediaLibrary;

@@ -51,6 +51,7 @@ export function openMediaLibrary<EF extends BaseField = UnknownField>(
   payload: {
     controlID?: string;
     forImage?: boolean;
+    forFolder?: boolean;
     value?: string | string[];
     alt?: string;
     allowMultiple?: boolean;
@@ -69,6 +70,7 @@ export function openMediaLibrary<EF extends BaseField = UnknownField>(
     config = {},
     allowMultiple,
     forImage,
+    forFolder,
     replaceIndex,
     collection,
     collectionFile,
@@ -81,6 +83,7 @@ export function openMediaLibrary<EF extends BaseField = UnknownField>(
     payload: {
       controlID,
       forImage,
+      forFolder,
       value,
       alt,
       allowMultiple,
