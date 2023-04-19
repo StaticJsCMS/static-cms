@@ -336,6 +336,7 @@ export interface TemplatePreviewCardProps<T = EntryData, EF extends BaseField = 
   widgetFor: WidgetFor<T>;
   widgetsFor: WidgetsFor<T>;
   theme: 'dark' | 'light';
+  hasLocalBackup: boolean;
 }
 
 export type TemplatePreviewCardComponent<
@@ -791,10 +792,10 @@ export interface Config<EF extends BaseField = UnknownField> {
   public_folder?: string;
   media_folder_relative?: boolean;
   media_library?: MediaLibraryConfig;
-  load_config_file?: boolean;
   slug?: Slug;
   i18n?: I18nInfo;
   local_backend?: boolean | LocalBackend;
+  disable_local_backup?: boolean;
   editor?: EditorConfig;
   search?: boolean;
 }
@@ -988,4 +989,11 @@ export interface MediaLibraryDisplayURL {
 export interface MediaLibrarInsertOptions {
   showAlt?: boolean;
   chooseUrl?: boolean;
+}
+
+export interface BackupEntry {
+  raw: string;
+  path: string;
+  mediaFiles: MediaFile[];
+  i18n?: Record<string, { raw: string }>;
 }

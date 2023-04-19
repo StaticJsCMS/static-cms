@@ -107,8 +107,6 @@ const da: LocalePhrasesRoot = {
       onDeletePublishedEntryBody:
         'Er du sikker på at du vil slette dette tidliere publiceret dokument?',
       loadingEntry: 'Indlæser dokument...',
-      confirmLoadBackupBody:
-        'En lokal sikkerhedskopi blev gendannet for dette dokument, vil du anvende denne?',
     },
     editorToolbar: {
       publishing: 'Publicerer...',

@@ -265,6 +265,55 @@
       dark:disabled:hover:bg-transparent;
   }
 
+  .btn-contained-warning {
+    @apply border
+      border-transparent
+      bg-yellow-500
+      hover:bg-yellow-600
+      text-white
+      disabled:text-gray-50
+      disabled:bg-gray-300/80
+      dark:bg-yellow-600
+      dark:hover:bg-yellow-800
+      dark:disabled:text-slate-400/50
+      dark:disabled:bg-slate-700/50;
+  }
+
+  .btn-outlined-warning {
+    @apply bg-transparent
+      border
+      text-yellow-500
+      border-yellow-200
+      hover:bg-yellow-50
+      hover:text-yellow-600
+      disabled:text-gray-300
+      disabled:border-gray-200
+      disabled:hover:bg-transparent
+      dark:bg-transparent
+      dark:text-yellow-400
+      dark:border-yellow-600
+      dark:hover:text-yellow-500
+      dark:hover:bg-yellow-700/10
+      dark:disabled:text-slate-600/75
+      dark:disabled:border-slate-600/75
+      dark:disabled:hover:bg-transparent;
+  }
+
+  .btn-text-warning {
+    @apply bg-transparent
+      text-yellow-500
+      hover:text-yellow-600
+      hover:bg-yellow-50
+      disabled:text-gray-300
+      disabled:hover:bg-transparent
+      dark:text-yellow-400
+      dark:hover:text-yellow-500
+      dark:hover:bg-yellow-700/10
+      dark:disabled:text-slate-600/75
+      dark:disabled:border-slate-600/75
+      dark:disabled:hover:bg-transparent;
+  }
+
   /**
   * Checkbox
   */

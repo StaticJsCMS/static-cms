@@ -108,7 +108,6 @@ const pl: LocalePhrasesRoot = {
         'Czy na pewno chcesz usunąć tę opublikowaną pozycję, a także niezapisane zmiany z bieżącej sesji?',
       onDeletePublishedEntryBody: 'Czy na pewno chcesz usunąć tę opublikowaną pozycję?',
       loadingEntry: 'Ładowanie pozycji...',
-      confirmLoadBackupBody: 'Odzyskano lokalną kopię zapasową tej pozycji, czy chcesz jej użyć?',
     },
     editorInterface: {
       toggleI18n: 'Przełącz i18n',

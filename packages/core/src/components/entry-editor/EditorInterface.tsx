@@ -280,6 +280,7 @@ const EditorInterface = ({
           togglePreview={handleTogglePreview}
           toggleScrollSync={handleToggleScrollSync}
           toggleI18n={handleToggleI18n}
+          slug={slug}
         />
       }
     >

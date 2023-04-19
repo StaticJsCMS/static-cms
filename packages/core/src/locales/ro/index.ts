@@ -108,8 +108,6 @@ const ro: LocalePhrasesRoot = {
         'Ești sigur/ă că dorești să ștergi această publicare, dar și modificările nesalvate din sesiunea curentă?',
       onDeletePublishedEntryBody: 'Ești sigur/ă că dorești să ștergi această publicare?',
       loadingEntry: 'Se încarcă...',
-      confirmLoadBackupBody:
-        'Un backup local a fost recuperat pentru această intrare, dorești să îl folosești?',
     },
     editorInterface: {
       toggleI18n: 'Comută limba',

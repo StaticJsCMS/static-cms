@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
+import { translate } from 'react-polyglot';
 import { Waypoint } from 'react-waypoint';
 
 import { selectFields, selectInferredField } from '@staticcms/core/lib/util/collection.util';
@@ -7,8 +8,15 @@ import Table from '../../common/table/Table';
 import EntryCard from './EntryCard';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
-import type { Collection, Collections, Entry, Field } from '@staticcms/core/interface';
+import type {
+  Collection,
+  Collections,
+  Entry,
+  Field,
+  TranslatedProps,
+} from '@staticcms/core/interface';
 import type Cursor from '@staticcms/core/lib/util/Cursor';
+import type { FC } from 'react';
 
 export interface BaseEntryListingProps {
   entries: Entry[];
@@ -30,14 +38,15 @@ export type EntryListingProps =
   | SingleCollectionEntryListingProps
   | MultipleCollectionEntryListingProps;
 
-const EntryListing = ({
+const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
   entries,
   page,
   cursor,
   viewStyle,
   handleCursorActions,
+  t,
   ...otherProps
-}: EntryListingProps) => {
+}) => {
   const hasMore = useMemo(() => cursor?.actions?.has('append_next'), [cursor?.actions]);
 
   const handleLoadMore = useCallback(() => {
@@ -95,6 +104,7 @@ const EntryListing = ({
           entry={entry}
           key={entry.slug}
           summaryFields={summaryFields}
+          t={t}
         />
       ));
     }
@@ -116,10 +126,11 @@ const EntryListing = ({
           collectionLabel={collectionLabel}
           key={entry.slug}
           summaryFields={summaryFields}
+          t={t}
         />
       ) : null;
     });
-  }, [entries, inferFields, isSingleCollectionInList, otherProps, summaryFields, viewStyle]);
+  }, [entries, inferFields, isSingleCollectionInList, otherProps, summaryFields, t, viewStyle]);
 
   const summaryFieldHeaders = useMemo(() => {
     if ('collection' in otherProps) {
@@ -143,7 +154,9 @@ const EntryListing = ({
       <>
         <Table
           columns={
-            !isSingleCollectionInList ? ['Collection', ...summaryFieldHeaders] : summaryFieldHeaders
+            !isSingleCollectionInList
+              ? ['Collection', ...summaryFieldHeaders, '']
+              : [...summaryFieldHeaders, '']
           }
         >
           {renderedCards}
@@ -171,4 +184,4 @@ const EntryListing = ({
   );
 };
 
-export default EntryListing;
+export default translate()(EntryListing) as FC<EntryListingProps>;

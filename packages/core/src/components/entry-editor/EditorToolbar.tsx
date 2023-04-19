@@ -7,13 +7,16 @@ import { Height as HeightIcon } from '@styled-icons/material-rounded/Height';
 import { Check as CheckIcon } from '@styled-icons/material/Check';
 import { MoreVert as MoreVertIcon } from '@styled-icons/material/MoreVert';
 import { Publish as PublishIcon } from '@styled-icons/material/Publish';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
 import { selectAllowDeletion } from '@staticcms/core/lib/util/collection.util';
 import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
+import confirm from '../common/confirm/Confirm';
+import { useAppDispatch } from '@staticcms/core/store/hooks';
+import { deleteLocalBackup, loadEntry } from '@staticcms/core/actions/entries';
 
 import type { Collection, EditorPersistOptions, TranslatedProps } from '@staticcms/core/interface';
 import type { FC, MouseEventHandler } from 'react';
@@ -39,6 +42,7 @@ export interface EditorToolbarProps {
   togglePreview: MouseEventHandler;
   toggleScrollSync: MouseEventHandler;
   toggleI18n: MouseEventHandler;
+  slug?: string | undefined;
 }
 
 const EditorToolbar = ({
@@ -61,6 +65,7 @@ const EditorToolbar = ({
   togglePreview,
   toggleScrollSync,
   toggleI18n,
+  slug,
 }: TranslatedProps<EditorToolbarProps>) => {
   const canCreate = useMemo(
     () => ('folder' in collection && collection.create) ?? false,
@@ -69,7 +74,28 @@ const EditorToolbar = ({
   const canDelete = useMemo(() => selectAllowDeletion(collection), [collection]);
   const isPublished = useMemo(() => !isNewEntry && !hasChanged, [hasChanged, isNewEntry]);
 
-  const menuItems = useMemo(() => {
+  const dispatch = useAppDispatch();
+
+  const handleDiscardDraft = useCallback(async () => {
+    if (!slug) {
+      return;
+    }
+
+    if (
+      await confirm({
+        title: 'editor.editorToolbar.discardChangesTitle',
+        body: {
+          key: 'editor.editorToolbar.discardChangesBody',
+        },
+        color: 'warning',
+      })
+    ) {
+      dispatch(deleteLocalBackup(collection, slug));
+      dispatch(loadEntry(collection, slug));
+    }
+  }, [collection, dispatch, slug]);
+
+  const menuItems: JSX.Element[][] = useMemo(() => {
     const items: JSX.Element[] = [];
 
     if (!isPublished) {
@@ -105,8 +131,34 @@ const EditorToolbar = ({
       );
     }
 
-    return items;
-  }, [canCreate, isPublished, onDuplicate, onPersist, onPersistAndDuplicate, onPersistAndNew, t]);
+    if (hasChanged) {
+      return [
+        items,
+        [
+          <MenuItemButton
+            key="discardChanges"
+            onClick={handleDiscardDraft}
+            startIcon={TrashIcon}
+            color="warning"
+          >
+            {t('editor.editorToolbar.discardChanges')}
+          </MenuItemButton>,
+        ],
+      ];
+    }
+
+    return [items];
+  }, [
+    canCreate,
+    handleDiscardDraft,
+    hasChanged,
+    isPublished,
+    onDuplicate,
+    onPersist,
+    onPersistAndDuplicate,
+    onPersistAndNew,
+    t,
+  ]);
 
   return useMemo(
     () => (
@@ -166,9 +218,11 @@ const EditorToolbar = ({
             isPublished ? t('editor.editorToolbar.published') : t('editor.editorToolbar.publish')
           }
           color={isPublished ? 'success' : 'primary'}
-          disabled={menuItems.length == 0}
+          disabled={menuItems.length == 1 && menuItems[0].length === 0}
         >
-          <MenuGroup>{menuItems}</MenuGroup>
+          {menuItems.map((group, index) => (
+            <MenuGroup key={`menu-group-${index}`}>{group}</MenuGroup>
+          ))}
         </Menu>
       </div>
     ),

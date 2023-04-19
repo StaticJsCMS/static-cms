@@ -27,6 +27,7 @@ import {
   getPathDepth,
   localForage,
 } from './lib/util';
+import { getEntryBackupKey } from './lib/util/backup.util';
 import {
   selectAllowDeletion,
   selectAllowNewEntries,
@@ -47,6 +48,7 @@ import createEntry from './valueObjects/createEntry';
 import type {
   BackendClass,
   BackendInitializer,
+  BackupEntry,
   BaseField,
   Collection,
   CollectionFile,
@@ -102,15 +104,6 @@ export class LocalStorageAuthStore {
   logout() {
     window.localStorage.removeItem(this.storageKey);
   }
-}
-
-function getEntryBackupKey(collectionName?: string, slug?: string) {
-  const baseKey = 'backup';
-  if (!collectionName) {
-    return baseKey;
-  }
-  const suffix = slug ? `.${slug}` : '';
-  return `${baseKey}.${collectionName}${suffix}`;
 }
 
 export function getEntryField(field: string, entry: Entry): string {
@@ -252,13 +245,6 @@ export interface MediaFile {
   isViewableImage?: boolean;
   type?: string;
   isDirectory?: boolean;
-}
-
-interface BackupEntry {
-  raw: string;
-  path: string;
-  mediaFiles: MediaFile[];
-  i18n?: Record<string, { raw: string }>;
 }
 
 function collectionDepth<EF extends BaseField>(collection: Collection<EF>) {

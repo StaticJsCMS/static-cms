@@ -1,14 +1,17 @@
+import { Info as InfoIcon } from '@styled-icons/material-outlined/Info';
 import get from 'lodash/get';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { VIEW_STYLE_LIST } from '@staticcms/core/constants/views';
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import { getFieldPreview, getPreviewCard } from '@staticcms/core/lib/registry';
+import { getEntryBackupKey } from '@staticcms/core/lib/util/backup.util';
 import {
   selectEntryCollectionTitle,
   selectFields,
   selectTemplateName,
 } from '@staticcms/core/lib/util/collection.util';
+import localForage from '@staticcms/core/lib/util/localForage';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
@@ -22,7 +25,15 @@ import TableRow from '../../common/table/TableRow';
 import useWidgetsFor from '../../common/widget/useWidgetsFor';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
-import type { Collection, Entry, FileOrImageField, MediaField } from '@staticcms/core/interface';
+import type {
+  BackupEntry,
+  Collection,
+  Entry,
+  FileOrImageField,
+  MediaField,
+  TranslatedProps,
+} from '@staticcms/core/interface';
+import type { FC } from 'react';
 
 export interface EntryCardProps {
   entry: Entry;
@@ -33,14 +44,15 @@ export interface EntryCardProps {
   summaryFields: string[];
 }
 
-const EntryCard = ({
+const EntryCard: FC<TranslatedProps<EntryCardProps>> = ({
   collection,
   entry,
   collectionLabel,
   viewStyle = VIEW_STYLE_LIST,
   imageFieldName,
   summaryFields,
-}: EntryCardProps) => {
+  t,
+}) => {
   const entryData = entry.data;
 
   const path = useMemo(
@@ -86,6 +98,31 @@ const EntryCard = ({
 
   const theme = useAppSelector(selectTheme);
 
+  const [hasLocalBackup, setHasLocalBackup] = useState(false);
+  useEffect(() => {
+    let alive = true;
+
+    const checkLocalBackup = async () => {
+      const key = getEntryBackupKey(collection.name, entry.slug);
+      const backup = await localForage.getItem<BackupEntry>(key);
+
+      if (alive) {
+        setHasLocalBackup(Boolean(backup));
+      }
+    };
+
+    checkLocalBackup();
+
+    // Check again after small delay to ensure we capture the draft just made from the editor
+    setTimeout(() => {
+      checkLocalBackup();
+    }, 250);
+
+    return () => {
+      alive = false;
+    };
+  }, [collection.name, entry.slug]);
+
   if (viewStyle === VIEW_STYLE_LIST) {
     return (
       <TableRow
@@ -129,6 +166,19 @@ const EntryCard = ({
             </TableCell>
           );
         })}
+        <TableCell key="unsavedChanges" to={path} shrink>
+          {hasLocalBackup ? (
+            <InfoIcon
+              className="
+                w-5
+                h-5
+                text-blue-600
+                dark:text-blue-300
+              "
+              title={t('ui.localBackup.hasLocalBackup')}
+            />
+          ) : null}
+        </TableCell>
       </TableRow>
     );
   }
@@ -144,6 +194,7 @@ const EntryCard = ({
             widgetFor={widgetFor}
             widgetsFor={widgetsFor}
             theme={theme}
+            hasLocalBackup={hasLocalBackup}
           />
         </CardActionArea>
       </Card>
@@ -154,7 +205,22 @@ const EntryCard = ({
     <Card>
       <CardActionArea to={path}>
         {image && imageField ? <CardMedia height="140" image={imageUrl} /> : null}
-        <CardContent>{summary}</CardContent>
+        <CardContent>
+          <div className="flex w-full items-center justify-between">
+            <div>{summary}</div>
+            {hasLocalBackup ? (
+              <InfoIcon
+                className="
+                  w-5
+                  h-5
+                  text-blue-600
+                  dark:text-blue-300
+                "
+                title={t('ui.localBackup.hasLocalBackup')}
+              />
+            ) : null}
+          </div>
+        </CardContent>
       </CardActionArea>
     </Card>
   );

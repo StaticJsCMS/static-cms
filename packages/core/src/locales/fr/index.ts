@@ -109,8 +109,6 @@ const fr: LocalePhrasesRoot = {
         'Voulez-vous vraiment supprimer cette entrée publiée ainsi que vos modifications non enregistrées de cette session ?',
       onDeletePublishedEntryBody: 'Voulez-vous vraiment supprimer cette entrée publiée ?',
       loadingEntry: "Chargement de l'entrée...",
-      confirmLoadBackupBody:
-        "Une sauvegarde locale a été trouvée pour cette entrée. Voulez-vous l'utiliser ?",
     },
     editorInterface: {
       toggleI18n: 'Édition multilingue',

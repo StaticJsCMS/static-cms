@@ -108,7 +108,6 @@ const cs: LocalePhrasesRoot = {
         'Chcete opravdu vymazat tento publikovaný záznam a všechny neuložené změny z této relace?',
       onDeletePublishedEntryBody: 'Chcete opravdu smazat tento publikovaný záznam?',
       loadingEntry: 'Načítání záznamu…',
-      confirmLoadBackupBody: 'Lokální kopie tohoto záznamu byla nalezena, chcete ji použít?',
     },
     editorInterface: {
       toggleI18n: 'Přepnout lokalizaci',

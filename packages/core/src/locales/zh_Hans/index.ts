@@ -105,7 +105,6 @@ const zh_Hans: LocalePhrasesRoot = {
       onDeleteWithUnsavedChangesBody: '你确定要删除这个已经发布的内容，以及当前尚未保存的修改吗？',
       onDeletePublishedEntryBody: '你确定要删除这个已经发布的内容吗？',
       loadingEntry: '正在加载内容...',
-      confirmLoadBackupBody: '发现了一个对应此内容的本地备份，你要加载它吗？',
     },
     editorInterface: {
       toggleI18n: '打开/关闭国际化',

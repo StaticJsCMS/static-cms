@@ -8,7 +8,7 @@ import type { CSSProperties, FC, MouseEventHandler, ReactNode, Ref } from 'react
 
 export interface BaseBaseProps {
   variant?: 'contained' | 'outlined' | 'text';
-  color?: 'primary' | 'secondary' | 'success' | 'error';
+  color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning';
   size?: 'medium' | 'small';
   rounded?: boolean | 'no-padding';
   className?: string;

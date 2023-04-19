@@ -107,7 +107,6 @@ const he: LocalePhrasesRoot = {
         'האם ברצונך למחוק את האייטם הזה לפני פרסומו, וכן את השינויים שבוצעו כעת וטרם נשמרו?',
       onDeletePublishedEntryBody: 'האם ברצונך למחוק את האייטם הזה לאחר פרסומו?',
       loadingEntry: 'טעינת אייטם...',
-      confirmLoadBackupBody: 'קיים עותק מקומי שמור של האייטם. האם ברצונך לטעון אותו?',
     },
     editorInterface: {
       toggleI18n: 'החלפת שפות',

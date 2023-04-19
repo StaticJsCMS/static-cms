@@ -93,8 +93,6 @@ const es: LocalePhrasesRoot = {
         '¿Está seguro de que desea eliminar esta entrada publicada, así como los cambios no guardados de la sesión actual?',
       onDeletePublishedEntryBody: '¿Estás seguro de que quieres borrar esta entrada publicada?',
       loadingEntry: 'Cargando entrada...',
-      confirmLoadBackupBody:
-        'Se recuperó una copia de seguridad local para esta entrada, ¿le gustaría utilizarla?',
     },
     editorToolbar: {
       publishing: 'Publicando...',
