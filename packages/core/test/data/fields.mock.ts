@@ -1,5 +1,6 @@
 import type {
   BooleanField,
+  ColorField,
   DateTimeField,
   FileOrImageField,
   MarkdownField,
@@ -13,6 +14,12 @@ export const mockBooleanField: BooleanField = {
   label: 'Boolean',
   name: 'mock_boolean',
   widget: 'boolean',
+};
+
+export const mockColorField: ColorField = {
+  label: 'Color',
+  name: 'mock_color',
+  widget: 'color',
 };
 
 export const mockDateTimeField: DateTimeField = {
