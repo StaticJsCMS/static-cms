@@ -32,7 +32,7 @@ export interface SelectProps {
   required?: boolean;
   disabled?: boolean;
   onChange: SelectChangeEventHandler;
-  onOpenChange: (open: boolean) => void;
+  onOpenChange?: (open: boolean) => void;
 }
 
 const Select = forwardRef(
@@ -55,7 +55,7 @@ const Select = forwardRef(
     const handleOpenChange = useCallback(
       (newOpen: boolean) => {
         setOpen(newOpen);
-        onOpenChange(newOpen);
+        onOpenChange?.(newOpen);
       },
       [onOpenChange],
     );
