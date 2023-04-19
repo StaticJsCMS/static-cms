@@ -183,8 +183,6 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
    */
   const handleAssetSelect = useCallback(
     (asset: MediaFile) => {
-      console.log(forFolder);
-
       if (
         !canInsert ||
         selectedFile?.key === asset.key ||
