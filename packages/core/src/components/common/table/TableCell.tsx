@@ -9,9 +9,10 @@ interface TableCellProps {
   children: ReactNode;
   emphasis?: boolean;
   to?: string;
+  shrink?: boolean;
 }
 
-const TableCell = ({ children, emphasis = false, to }: TableCellProps) => {
+const TableCell = ({ children, emphasis = false, to, shrink = false }: TableCellProps) => {
   const content = useMemo(() => {
     if (to) {
       return (
@@ -39,6 +40,7 @@ const TableCell = ({ children, emphasis = false, to }: TableCellProps) => {
         !to ? 'px-4 py-3' : 'p-0',
         'text-gray-500 dark:text-gray-300',
         emphasis && 'font-medium text-gray-900 whitespace-nowrap dark:text-white',
+        shrink && 'w-0',
       )}
     >
       {content}

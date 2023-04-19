@@ -336,6 +336,7 @@ export interface TemplatePreviewCardProps<T = EntryData, EF extends BaseField = 
   widgetFor: WidgetFor<T>;
   widgetsFor: WidgetsFor<T>;
   theme: 'dark' | 'light';
+  hasLocalBackup: boolean;
 }
 
 export type TemplatePreviewCardComponent<
@@ -988,4 +989,11 @@ export interface MediaLibraryDisplayURL {
 export interface MediaLibrarInsertOptions {
   showAlt?: boolean;
   chooseUrl?: boolean;
+}
+
+export interface BackupEntry {
+  raw: string;
+  path: string;
+  mediaFiles: MediaFile[];
+  i18n?: Record<string, { raw: string }>;
 }

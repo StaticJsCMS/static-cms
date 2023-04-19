@@ -11,7 +11,7 @@ const PostPreview = ({ entry, widgetFor }) => {
   );
 };
 
-const PostPreviewCard = ({ entry, theme }) => {
+const PostPreviewCard = ({ entry, theme, hasLocalBackup }) => {
   const date = new Date(entry.data.date);
 
   const month = date.getMonth() + 1;
@@ -70,19 +70,53 @@ const PostPreviewCard = ({ entry, theme }) => {
           'div',
           {
             style: {
-              backgroundColor: entry.data.draft === true ? 'blue' : 'green',
-              color: 'white',
-              border: 'none',
-              padding: '2px 6px',
-              textAlign: 'center',
-              textDecoration: 'none',
-              display: 'inline-block',
-              cursor: 'pointer',
-              borderRadius: '4px',
-              fontSize: '14px',
+              display: 'flex',
+              alignItems: 'center',
+              whiteSpace: 'no-wrap',
+              gap: '8px',
             },
           },
-          entry.data.draft === true ? 'Draft' : 'Published',
+          hasLocalBackup
+            ? h(
+                'div',
+                {
+                  style: {
+                    border: '2px solid rgb(147, 197, 253)',
+                    borderRadius: '50%',
+                    color: 'rgb(147, 197, 253)',
+                    height: '18px',
+                    width: '18px',
+                    fontWeight: 'bold',
+                    fontSize: '11px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                  },
+                  title: 'Has local backup'
+                },
+                'i',
+              )
+            : null,
+          h(
+            'div',
+            {
+              style: {
+                backgroundColor:
+                  entry.data.draft === true ? 'rgb(37, 99, 235)' : 'rgb(22, 163, 74)',
+                color: 'white',
+                border: 'none',
+                padding: '2px 6px',
+                textAlign: 'center',
+                textDecoration: 'none',
+                display: 'inline-block',
+                cursor: 'pointer',
+                borderRadius: '4px',
+                fontSize: '14px',
+              },
+            },
+            entry.data.draft === true ? 'Draft' : 'Published',
+          ),
         ),
       ),
     ),

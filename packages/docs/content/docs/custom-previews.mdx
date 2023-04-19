@@ -42,10 +42,7 @@ The following parameters will be passed to your `react_component` during render:
 
 ```js
 const PostPreview = ({ widgetFor, entry, collection, fields }) => {
-  const imageField = useMemo(() =>
-    fields.find(field => field.name === 'image'),
-    [fields],
-  );
+  const imageField = useMemo(() => fields.find(field => field.name === 'image'), [fields]);
   const imageUrl = useMediaAsset(entry.data.image, collection, imageField, entry);
 
   return h(
@@ -64,10 +61,7 @@ CMS.registerPreviewTemplate('posts', PostPreview);
 import CMS, { useMediaAsset } from '@staticcms/core';
 
 const PostPreview = ({ widgetFor, entry, collection, fields }) => {
-  const imageField = useMemo(() =>
-    fields.find(field => field.name === 'image'),
-    [fields],
-  );
+  const imageField = useMemo(() => fields.find(field => field.name === 'image'), [fields]);
   const imageUrl = useMediaAsset(entry.data.image, collection, imageField, entry);
 
   return (
@@ -97,10 +91,7 @@ interface Post {
 }
 
 const PostPreview = ({ widgetFor, entry, collection, fields }: TemplatePreviewProps<Post>) => {
-  const imageField = useMemo(() =>
-    fields.find(field => field.name === 'image'),
-    [fields],
-  );
+  const imageField = useMemo(() => fields.find(field => field.name === 'image'), [fields]);
   const imageUrl = useMediaAsset(entry.data.image, collection, imageField, entry);
 
   return (
@@ -355,12 +346,13 @@ CMS.registerPreviewStyle('.main { color: blue; border: 1px solid gree; }', { raw
 
 The following parameters will be passed to your `react_component` during render:
 
-| Param      | Type                   | Description                                                                                       |
-| ---------- | ---------------------- | ------------------------------------------------------------------------------------------------- |
-| entry      | object                 | Object with a `data` field that contains the current value of all widgets in the editor           |
-| widgetFor  | Function               | Given a field name, returns the rendered preview of that field's widget and value                 |
-| widgetsFor | Function               | Given a field name, returns the rendered previews of that field's nested child widgets and values |
-| theme      | 'light'<br />\| 'dark' | The current theme being used by the app                                                           |
+| Param          | Type                   | Description                                                                                       |
+| -------------- | ---------------------- | ------------------------------------------------------------------------------------------------- |
+| entry          | object                 | Object with a `data` field that contains the current value of all widgets in the editor           |
+| widgetFor      | Function               | Given a field name, returns the rendered preview of that field's widget and value                 |
+| widgetsFor     | Function               | Given a field name, returns the rendered previews of that field's nested child widgets and values |
+| theme          | 'light'<br />\| 'dark' | The current theme being used by the app                                                           |
+| hasLocalBackup | boolean                | Whether the current entry has a local backup                                                      |
 
 #### Example
 

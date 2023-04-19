@@ -279,6 +279,9 @@ const en: LocalePhrasesRoot = {
     default: {
       goBackToSite: 'Go back to site',
     },
+    localBackup: {
+      hasLocalBackup: 'Has local backup',
+    },
     errorBoundary: {
       title: 'Error',
       details: "There's been an error - please ",
