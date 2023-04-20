@@ -34,7 +34,7 @@
     "prettier": "2.8.7",
     "react-app-rewired": "2.2.1",
     "react-scripts": "5.0.1",
-    "typescript": "5.0.3",
+    "typescript": "5.0.4",
     "webpack": "5.77.0"
   },
   "browserslist": {

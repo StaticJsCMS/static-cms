@@ -98,7 +98,7 @@
     "style-loader": "3.3.2",
     "to-string-loader": "1.2.0",
     "tsconfig-paths-webpack-plugin": "4.0.1",
-    "typescript": "5.0.3",
+    "typescript": "5.0.4",
     "webpack": "5.77.0",
     "webpack-cli": "5.0.1"
   },
