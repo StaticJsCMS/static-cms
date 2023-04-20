@@ -61,6 +61,7 @@ const DocsLeftNavGroup = ({ name, links }: DocsLeftNavGroupProps) => {
                   primaryTypographyProps={{
                     color: selected ? theme.palette.primary.main : theme.palette.text.secondary,
                     fontWeight: selected ? 600 : 400,
+                    whiteSpace: 'nowrap',
                   }}
                   primary={
                     <StyledListItemPrimary>

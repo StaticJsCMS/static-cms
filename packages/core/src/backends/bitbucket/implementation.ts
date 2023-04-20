@@ -126,7 +126,7 @@ export default class BitbucketBackend implements BackendClass {
           );
       })
       .catch(e => {
-        console.warn('Failed getting BitBucket status', e);
+        console.warn('[StaticCMS] Failed getting BitBucket status', e);
         return true;
       });
 
@@ -138,7 +138,7 @@ export default class BitbucketBackend implements BackendClass {
           ?.user()
           .then(user => !!user)
           .catch(e => {
-            console.warn('Failed getting Bitbucket user', e);
+            console.warn('[StaticCMS] Failed getting Bitbucket user', e);
             return false;
           })) || false;
     }
@@ -351,12 +351,18 @@ export default class BitbucketBackend implements BackendClass {
     }));
   }
 
-  async getMedia(mediaFolder = this.mediaFolder) {
+  async getMedia(mediaFolder = this.mediaFolder, folderSupport?: boolean) {
     if (!mediaFolder) {
       return [];
     }
-    return this.api!.listAllFiles(mediaFolder, 1, this.branch).then(files =>
-      files.map(({ id, name, path }) => ({ id, name, path, displayURL: { id, path } })),
+    return this.api!.listAllFiles(mediaFolder, 1, this.branch, folderSupport).then(files =>
+      files.map(({ id, name, path, type }) => ({
+        id,
+        name,
+        path,
+        displayURL: { id, path },
+        isDirectory: type === 'commit_directory',
+      })),
     );
   }
 
@@ -367,7 +373,7 @@ export default class BitbucketBackend implements BackendClass {
           .then(attributes => getLargeMediaPatternsFromGitAttributesFile(attributes as string))
           .catch((err: FetchError) => {
             if (err.status === 404) {
-              console.info('This 404 was expected and handled appropriately.');
+              console.info('[StaticCMS] This 404 was expected and handled appropriately.');
             } else {
               console.error(err);
             }

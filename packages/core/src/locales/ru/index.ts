@@ -19,7 +19,6 @@ const ru: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Записи',
-      workflow: 'Документооборот',
       media: 'Медиафайлы',
       quickAdd: 'Быстрое добавление',
     },
@@ -109,8 +108,6 @@ const ru: LocalePhrasesRoot = {
         'Вы уверены, что хотите удалить эту опубликованную запись, а также несохраненные изменения из текущего сеанса?',
       onDeletePublishedEntryBody: 'Вы уверены, что хотите удалить эту опубликованную запись?',
       loadingEntry: 'Загрузка записи…',
-      confirmLoadBackupBody:
-        'Для этой записи была восстановлена локальная резервная копия, хотите ли вы ее использовать?',
     },
     editorToolbar: {
       publishing: 'Публикация…',
@@ -253,35 +250,6 @@ const ru: LocalePhrasesRoot = {
       onFailToAuth: '%{details}',
       onLoggedOut: 'Вы вышли. Пожалуйста, сохраните все данные и войдите снова',
       onBackendDown: 'Происходят перебои в работе бекенда. См. %{details}',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Загрузка записей редакционного документооборота',
-      workflowHeading: 'Редакционный документооборот',
-      newPost: 'Новая запись',
-      description:
-        'Число записей, ожидающих проверки — %{smart_count}, готовых к публикации — %{readyCount}. |||| Число записей, ожидающих проверки — %{smart_count}, готовых к публикации — %{readyCount}. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date}, %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: '%{author}',
-      deleteChanges: 'Удалить изменения',
-      deleteNewEntry: 'Удалить новую запись',
-      publishChanges: 'Опубликовать изменения',
-      publishNewEntry: 'Опубликовать новую запись',
-    },
-    workflowList: {
-      onDeleteEntry: 'Вы уверены, что хотите удалить эту запись?',
-      onPublishingNotReadyEntry:
-        'Только элементы со статусом «Готов» могут быть опубликованы. Перетащите карточку в столбец «Одобренные», чтобы разрешить публикацию.',
-      onPublishEntry: 'Вы уверены, что хотите опубликовать эту запись?',
-      draftHeader: 'Черновики',
-      inReviewHeader: 'На рассмотрении',
-      readyHeader: 'Одобренные',
-      currentEntries: '%{smart_count} entry |||| %{smart_count} entries',
     },
   },
 };

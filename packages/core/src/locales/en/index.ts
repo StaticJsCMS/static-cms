@@ -93,8 +93,10 @@ const en: LocalePhrasesRoot = {
         rangeCountExact: '%{fieldLabel} must have exactly %{count} item(s).',
         rangeMin: '%{fieldLabel} must be at least %{minCount} item(s).',
         rangeMax: '%{fieldLabel} must be %{maxCount} or less item(s).',
-        invalidPath: `'%{path}' is not a valid path`,
-        pathExists: `Path '%{path}' already exists`,
+        invalidPath: `'%{path}' is not a valid path.`,
+        pathExists: `Path '%{path}' already exists.`,
+        invalidColor: `Color '%{color}' is invalid.`,
+        invalidHexCode: `Hex codes must start with a # sign.`,
       },
       i18n: {
         writingInLocale: 'Writing in %{locale}',
@@ -118,11 +120,10 @@ const en: LocalePhrasesRoot = {
       onDeletePublishedEntryTitle: 'Delete this published entry?',
       onDeletePublishedEntryBody: 'Are you sure you want to delete this published entry?',
       loadingEntry: 'Loading entry...',
-      confirmLoadBackupTitle: 'Use local backup?',
-      confirmLoadBackupBody:
-        'A local backup was recovered for this entry, would you like to use it?',
     },
     editorInterface: {
+      sideBySideI18n: 'I18n Side by Side',
+      preview: 'Preview',
       toggleI18n: 'Toggle i18n',
       togglePreview: 'Toggle preview',
       toggleScrollSync: 'Sync scrolling',
@@ -151,6 +152,9 @@ const en: LocalePhrasesRoot = {
       inReview: 'In review',
       ready: 'Ready',
       publishNow: 'Publish now',
+      discardChanges: 'Discard changes',
+      discardChangesTitle: 'Discard changes',
+      discardChangesBody: 'Are you sure you want to discard the unsaved changed?',
     },
     editorWidgets: {
       markdown: {
@@ -188,6 +192,17 @@ const en: LocalePhrasesRoot = {
         addMore: 'Add more files',
         remove: 'Remove file',
         removeAll: 'Remove all files',
+      },
+      folder: {
+        choose: 'Choose a folder',
+        chooseUrl: 'Insert folder path',
+        chooseMultiple: 'Choose folders',
+        replaceUrl: 'Replace with path',
+        promptUrl: 'Enter path of the folder',
+        chooseDifferent: 'Choose different folder',
+        addMore: 'Add more folders',
+        remove: 'Remove folder',
+        removeAll: 'Remove all folders',
       },
       unknownControl: {
         noControl: "No control for widget '%{widget}'.",
@@ -246,6 +261,14 @@ const en: LocalePhrasesRoot = {
       deleteSelected: 'Delete selected',
       chooseSelected: 'Choose selected',
     },
+    folderSupport: {
+      newFolder: 'New folder',
+      createNewFolder: 'Create new folder',
+      enterFolderName: 'Enter folder name...',
+      home: 'Home',
+      up: 'Up',
+      upToFolder: 'Up to %{folder}',
+    },
   },
   ui: {
     common: {
@@ -255,6 +278,9 @@ const en: LocalePhrasesRoot = {
     },
     default: {
       goBackToSite: 'Go back to site',
+    },
+    localBackup: {
+      hasLocalBackup: 'Has local backup',
     },
     errorBoundary: {
       title: 'Error',
@@ -270,6 +296,7 @@ const en: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
+      darkMode: 'Dark Mode',
       logOut: 'Log Out',
     },
     toast: {

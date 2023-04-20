@@ -1,7 +1,7 @@
+import schema from './schema';
 import controlComponent from './SelectControl';
 import previewComponent from './SelectPreview';
-import schema from './schema';
-import { validateMinMax } from '@staticcms/core/lib/widgets/validations';
+import validator from './validator';
 
 import type { SelectField, WidgetParam } from '@staticcms/core/interface';
 
@@ -11,18 +11,7 @@ const SelectWidget = (): WidgetParam<string | number | (string | number)[], Sele
     controlComponent,
     previewComponent,
     options: {
-      validator: ({ field, value, t }) => {
-        const min = field.min;
-        const max = field.max;
-
-        if (!field.multiple || typeof value === 'string') {
-          return false;
-        }
-
-        const error = validateMinMax(t, field.label ?? field.name, value, min, max);
-
-        return error ? error : false;
-      },
+      validator,
       schema,
     },
   };
@@ -31,7 +20,8 @@ const SelectWidget = (): WidgetParam<string | number | (string | number)[], Sele
 export {
   controlComponent as SelectControl,
   previewComponent as SelectPreview,
-  schema as SelectSchema,
+  schema as selectSchema,
+  validator as selectValidator,
 };
 
 export default SelectWidget;

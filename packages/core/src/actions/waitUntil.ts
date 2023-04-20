@@ -29,7 +29,7 @@ export async function waitUntilWithTimeout<T>(
       if (waitDone) {
         resolve(null);
       } else {
-        console.warn('Wait Action timed out');
+        console.warn('[StaticCMS] Wait Action timed out');
         resolve(null);
       }
     }, timeout);

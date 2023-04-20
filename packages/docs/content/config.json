@@ -1,5 +1,5 @@
 {
-  "base_url": "https://static-cms.netlify.app/",
+  "base_url": "https://staticcms.org/",
   "repo_url": "https://github.com/StaticJsCMS/static-cms",
   "site_title": "Static CMS | Open Source Content Management System",
   "site_description": "Open source content management for your Git workflow. Use Static CMS with any static site generator for a faster and more flexible web project.",

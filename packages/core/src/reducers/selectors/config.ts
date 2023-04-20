@@ -10,3 +10,11 @@ export function selectLocale(config?: Config) {
 export function selectConfig(state: RootState) {
   return state.config.config;
 }
+
+export function selectIsSearchEnabled(state: RootState) {
+  return state.config.config?.search !== false;
+}
+
+export function selectDisplayUrl(state: RootState) {
+  return state.config.config?.display_url;
+}

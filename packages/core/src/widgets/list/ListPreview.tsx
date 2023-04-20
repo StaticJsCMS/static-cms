@@ -1,14 +1,12 @@
 import React from 'react';
 
-import WidgetPreviewContainer from '@staticcms/core/components/UI/WidgetPreviewContainer';
-
 import type { ListField, ValueOrNestedValue, WidgetPreviewProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 const ListPreview: FC<WidgetPreviewProps<ValueOrNestedValue[], ListField>> = ({ field, value }) => {
   if (field.fields && field.fields.length === 1) {
     return (
-      <WidgetPreviewContainer>
+      <div>
         <label>
           <strong>{field.name}:</strong>
         </label>
@@ -17,11 +15,11 @@ const ListPreview: FC<WidgetPreviewProps<ValueOrNestedValue[], ListField>> = ({ 
             <li key={String(item)}>{String(item)}</li>
           ))}
         </ul>
-      </WidgetPreviewContainer>
+      </div>
     );
   }
 
-  return <WidgetPreviewContainer>{field.renderedFields ?? null}</WidgetPreviewContainer>;
+  return <div>{field.renderedFields ?? null}</div>;
 };
 
 export default ListPreview;

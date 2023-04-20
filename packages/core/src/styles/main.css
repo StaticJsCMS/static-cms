@@ -1,0 +1,383 @@
+@import 'ol/ol.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  body {
+    @apply text-gray-900
+      dark:text-gray-100;
+  }
+
+  /**
+  * Buttons
+  */
+  .btn-base {
+    @apply inline-flex
+      items-center
+      justify-center
+      text-sm
+      font-medium
+      focus:outline-none
+      focus:ring-4
+      focus:ring-gray-200
+      dark:focus:ring-slate-700;
+  }
+
+  .btn {
+    @apply btn-base
+      rounded
+      px-2.5
+      py-1.5;
+  }
+
+  .btn-sm {
+    @apply btn-base
+      rounded
+      px-1.5
+      py-0.5;
+  }
+
+  .btn-rounded {
+    @apply btn-base
+      p-1.5
+      rounded-full;
+  }
+
+  .btn-rounded-sm {
+    @apply btn-base
+      p-0.5
+      rounded-full;
+  }
+
+  .btn-rounded-no-padding {
+    @apply btn-base
+      rounded-full;
+  }
+
+  .btn-contained-primary {
+    @apply border
+      border-transparent
+      bg-blue-700
+      hover:bg-blue-800
+      text-white
+      disabled:text-gray-50
+      disabled:bg-gray-300/80
+      dark:bg-blue-600
+      dark:hover:bg-blue-800
+      dark:disabled:text-slate-400/50
+      dark:disabled:bg-slate-700/50;
+  }
+
+  .btn-outlined-primary {
+    @apply text-gray-900
+      bg-transparent
+      border
+      border-gray-200
+      hover:bg-slate-100
+      hover:border-blue-400
+      hover:text-blue-700
+      disabled:text-gray-300
+      disabled:border-gray-200
+      disabled:hover:bg-transparent
+      dark:bg-transparent
+      dark:text-slate-300
+      dark:border-slate-400
+      dark:hover:text-blue-400
+      dark:hover:border-blue-500
+      dark:hover:bg-blue-700/20
+      dark:disabled:text-slate-600/75
+      dark:disabled:border-slate-600/75
+      dark:disabled:hover:bg-transparent;
+  }
+
+  .btn-text-primary {
+    @apply bg-transparent
+      text-gray-700
+      hover:text-blue-700
+      hover:bg-blue-100
+      disabled:text-gray-300
+      disabled:hover:bg-transparent
+      dark:text-gray-300
+      dark:hover:text-blue-400
+      dark:hover:bg-slate-700/75
+      dark:disabled:text-slate-600/75
+      dark:disabled:border-slate-600/75
+      dark:disabled:hover:bg-transparent;
+  }
+
+  .btn-contained-secondary {
+    @apply border
+      font-medium
+      text-gray-600
+      bg-white
+      border-gray-200/75
+      hover:text-gray-700
+      hover:bg-gray-100
+      hover:border-gray-200/50
+      disabled:text-gray-300/75
+      disabled:bg-white/80
+      disabled:border-gray-200/5
+      dark:text-gray-300
+      dark:bg-gray-800
+      dark:border-gray-600/60
+      dark:hover:bg-gray-700
+      dark:hover:text-white
+      dark:hover:border-gray-600/80
+      dark:disabled:text-gray-400/20
+      dark:disabled:bg-gray-700/20
+      dark:disabled:border-gray-600/20;
+  }
+
+  .btn-outlined-secondary {
+    @apply text-gray-900
+      bg-transparent
+      border
+      border-gray-200
+      hover:bg-gray-100
+      hover:text-gray-700
+      hover:border-gray-200/50
+      disabled:text-gray-300/75
+      disabled:border-gray-200/40
+      disabled:hover:bg-transparent
+      dark:bg-transparent
+      dark:text-gray-300
+      dark:border-gray-600/60
+      dark:hover:bg-gray-700
+      dark:hover:text-white
+      dark:hover:border-gray-600/80
+      dark:disabled:text-gray-400/20
+      dark:disabled:border-gray-600/20
+      dark:disabled:hover:bg-transparent;
+  }
+
+  .btn-text-secondary {
+    @apply bg-transparent
+      text-gray-900
+      hover:text-gray-700
+      hover:bg-gray-100
+      disabled:text-gray-300/75
+      disabled:hover:bg-transparent
+      dark:text-gray-300
+      dark:hover:text-white
+      dark:hover:bg-gray-700
+      dark:disabled:text-gray-400/20
+      dark:disabled:border-gray-600/20
+      dark:disabled:hover:bg-transparent;
+  }
+
+  .btn-contained-success {
+    @apply border
+      border-transparent
+      bg-green-600
+      hover:bg-green-700
+      text-white
+      disabled:text-gray-50
+      disabled:bg-gray-300/80
+      dark:bg-green-600
+      dark:hover:bg-green-800
+      dark:disabled:text-slate-400/50
+      dark:disabled:bg-slate-700/50;
+  }
+
+  .btn-outlined-success {
+    @apply bg-transparent
+      border
+      text-green-500
+      border-green-200
+      hover:bg-green-100
+      hover:text-green-700
+      disabled:text-gray-300
+      disabled:border-gray-200
+      disabled:hover:bg-transparent
+      dark:bg-transparent
+      dark:text-green-400
+      dark:border-green-600
+      dark:hover:text-green-500
+      dark:hover:bg-green-700/10
+      dark:disabled:text-slate-600/75
+      dark:disabled:border-slate-600/75
+      dark:disabled:hover:bg-transparent;
+  }
+
+  .btn-text-success {
+    @apply bg-transparent
+      text-green-500
+      hover:text-green-700
+      hover:bg-green-100
+      disabled:text-gray-300
+      disabled:hover:bg-transparent
+      dark:text-green-400
+      dark:hover:text-green-500
+      dark:hover:bg-green-700/10
+      dark:disabled:text-slate-600/75
+      dark:disabled:border-slate-600/75
+      dark:disabled:hover:bg-transparent;
+  }
+
+  .btn-contained-error {
+    @apply border
+      border-transparent
+      bg-red-600
+      hover:bg-red-700
+      text-white
+      disabled:text-gray-50
+      disabled:bg-gray-300/80
+      dark:bg-red-600
+      dark:hover:bg-red-800
+      dark:disabled:text-slate-400/50
+      dark:disabled:bg-slate-700/50;
+  }
+
+  .btn-outlined-error {
+    @apply bg-transparent
+      border
+      text-red-500
+      border-red-200
+      hover:bg-red-100
+      hover:text-red-700
+      disabled:text-gray-300
+      disabled:border-gray-200
+      disabled:hover:bg-transparent
+      dark:bg-transparent
+      dark:text-red-400
+      dark:border-red-600
+      dark:hover:text-red-500
+      dark:hover:bg-red-700/10
+      dark:disabled:text-slate-600/75
+      dark:disabled:border-slate-600/75
+      dark:disabled:hover:bg-transparent;
+  }
+
+  .btn-text-error {
+    @apply bg-transparent
+      text-red-500
+      hover:text-red-700
+      hover:bg-red-100
+      disabled:text-gray-300
+      disabled:hover:bg-transparent
+      dark:text-red-400
+      dark:hover:text-red-500
+      dark:hover:bg-red-700/10
+      dark:disabled:text-slate-600/75
+      dark:disabled:border-slate-600/75
+      dark:disabled:hover:bg-transparent;
+  }
+
+  .btn-contained-warning {
+    @apply border
+      border-transparent
+      bg-yellow-500
+      hover:bg-yellow-600
+      text-white
+      disabled:text-gray-50
+      disabled:bg-gray-300/80
+      dark:bg-yellow-600
+      dark:hover:bg-yellow-800
+      dark:disabled:text-slate-400/50
+      dark:disabled:bg-slate-700/50;
+  }
+
+  .btn-outlined-warning {
+    @apply bg-transparent
+      border
+      text-yellow-500
+      border-yellow-200
+      hover:bg-yellow-50
+      hover:text-yellow-600
+      disabled:text-gray-300
+      disabled:border-gray-200
+      disabled:hover:bg-transparent
+      dark:bg-transparent
+      dark:text-yellow-400
+      dark:border-yellow-600
+      dark:hover:text-yellow-500
+      dark:hover:bg-yellow-700/10
+      dark:disabled:text-slate-600/75
+      dark:disabled:border-slate-600/75
+      dark:disabled:hover:bg-transparent;
+  }
+
+  .btn-text-warning {
+    @apply bg-transparent
+      text-yellow-500
+      hover:text-yellow-600
+      hover:bg-yellow-50
+      disabled:text-gray-300
+      disabled:hover:bg-transparent
+      dark:text-yellow-400
+      dark:hover:text-yellow-500
+      dark:hover:bg-yellow-700/10
+      dark:disabled:text-slate-600/75
+      dark:disabled:border-slate-600/75
+      dark:disabled:hover:bg-transparent;
+  }
+
+  /**
+  * Checkbox
+  */
+  .checkbox {
+    @apply w-4
+      h-4
+      bg-slate-100
+      border-gray-300
+      rounded
+      p-1.5
+      focus:ring-blue-500
+      dark:focus:ring-blue-600
+      dark:ring-offset-gray-800
+      focus:ring-2
+      dark:bg-slate-700
+      dark:border-gray-600;
+  }
+}
+
+.dark .MuiDialog-root .MuiPaper-root.MuiDialog-paper {
+  background-image: none;
+  background-color: rgb(30 41 59);
+}
+
+.dark .MuiClockNumber-root.Mui-selected {
+  color: white;
+}
+
+.styled-scrollbars {
+  --scrollbar-foreground: rgba(100, 116, 139, 0.25);
+  --scrollbar-background: rgb(248 250 252);
+}
+
+.styled-scrollbars.styled-scrollbars-secondary {
+  --scrollbar-foreground: rgba(100, 116, 139, 0.25);
+  --scrollbar-background: rgb(255 255 255);
+}
+
+.dark .styled-scrollbars {
+  --scrollbar-foreground: rgba(30, 41, 59, 0.8);
+  --scrollbar-background: rgb(15 23 42);
+}
+
+.dark .styled-scrollbars.styled-scrollbars-secondary {
+  --scrollbar-foreground: rgba(47, 64, 93, 0.8);
+  --scrollbar-background: rgb(30 41 59);
+}
+
+.styled-scrollbars {
+  /* Foreground, Background */
+  scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
+}
+
+.styled-scrollbars::-webkit-scrollbar {
+  width: 10px; /* Mostly for vertical scrollbars */
+  height: 10px; /* Mostly for horizontal scrollbars */
+}
+
+.styled-scrollbars::-webkit-scrollbar-thumb {
+  /* Foreground */
+  background: var(--scrollbar-foreground);
+}
+
+.styled-scrollbars::-webkit-scrollbar-track {
+  /* Background */
+  background: var(--scrollbar-background);
+}

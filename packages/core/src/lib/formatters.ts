@@ -14,7 +14,7 @@ import {
   parseDateFromEntry,
 } from './widgets/stringTemplate';
 
-import type { Collection, Config, Entry, EntryData, Slug } from '../interface';
+import type { BaseField, Collection, Config, Entry, EntryData, Slug } from '../interface';
 
 const commitMessageTemplates = {
   create: 'Create {{collection}} “{{slug}}”',
@@ -26,18 +26,18 @@ const commitMessageTemplates = {
 
 const variableRegex = /\{\{([^}]+)\}\}/g;
 
-type Options = {
+type Options<EF extends BaseField> = {
   slug?: string;
   path?: string;
-  collection?: Collection;
+  collection?: Collection<EF>;
   authorLogin?: string;
   authorName?: string;
 };
 
-export function commitMessageFormatter(
+export function commitMessageFormatter<EF extends BaseField>(
   type: keyof typeof commitMessageTemplates,
-  config: Config,
-  { slug, path, collection, authorLogin, authorName }: Options,
+  config: Config<EF>,
+  { slug, path, collection, authorLogin, authorName }: Options<EF>,
 ) {
   const templates = { ...commitMessageTemplates, ...(config.backend.commit_messages || {}) };
 
@@ -54,7 +54,9 @@ export function commitMessageFormatter(
       case 'author-name':
         return authorName || '';
       default:
-        console.warn(`Ignoring unknown variable “${variable}” in commit message template.`);
+        console.warn(
+          `[StaticCMS] Ignoring unknown variable “${variable}” in commit message template.`,
+        );
         return '';
     }
   });
@@ -106,7 +108,11 @@ export function slugFormatter(collection: Collection, entryData: EntryData, slug
   }
 }
 
-export function summaryFormatter(summaryTemplate: string, entry: Entry, collection: Collection) {
+export function summaryFormatter<EF extends BaseField>(
+  summaryTemplate: string,
+  entry: Entry,
+  collection: Collection<EF>,
+) {
   let entryData = entry.data;
   const date = parseDateFromEntry(entry, selectInferredField(collection, 'date')) || null;
   const identifier = get(entryData, keyToPathArray(selectIdentifier(collection)));
@@ -125,10 +131,10 @@ export function summaryFormatter(summaryTemplate: string, entry: Entry, collecti
   return summary;
 }
 
-export function folderFormatter(
+export function folderFormatter<EF extends BaseField>(
   folderTemplate: string,
   entry: Entry | null | undefined,
-  collection: Collection,
+  collection: Collection<EF>,
   defaultFolder: string,
   folderKey: string,
   slugConfig?: Slug,

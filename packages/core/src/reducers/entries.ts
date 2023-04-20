@@ -8,6 +8,7 @@ import {
   ENTRIES_SUCCESS,
   ENTRY_DELETE_SUCCESS,
   ENTRY_FAILURE,
+  ENTRY_PERSIST_SUCCESS,
   ENTRY_REQUEST,
   ENTRY_SUCCESS,
   FILTER_ENTRIES_FAILURE,
@@ -21,12 +22,12 @@ import {
   SORT_ENTRIES_REQUEST,
   SORT_ENTRIES_SUCCESS,
 } from '../constants';
-import { VIEW_STYLE_LIST } from '../constants/collectionViews';
+import { VIEW_STYLE_LIST } from '../constants/views';
 import { set } from '../lib/util/object.util';
 
 import type { EntriesAction } from '../actions/entries';
 import type { SearchAction } from '../actions/search';
-import type { CollectionViewStyle } from '../constants/collectionViews';
+import type { ViewStyle } from '../constants/views';
 import type {
   Entities,
   Entry,
@@ -91,7 +92,7 @@ function persistSort(sort: Sort | undefined) {
 }
 
 const loadViewStyle = once(() => {
-  const viewStyle = localStorage.getItem(viewStyleKey) as CollectionViewStyle;
+  const viewStyle = localStorage.getItem(viewStyleKey) as ViewStyle;
   if (viewStyle) {
     return viewStyle;
   }
@@ -118,7 +119,7 @@ export type EntriesState = {
   sort: Sort;
   filter?: Filter;
   group?: Group;
-  viewStyle: CollectionViewStyle;
+  viewStyle: ViewStyle;
 };
 
 function entries(
@@ -548,6 +549,19 @@ function entries(
       return {
         ...state,
         viewStyle: style,
+      };
+    }
+
+    case ENTRY_PERSIST_SUCCESS: {
+      const payload = action.payload;
+      const { collectionName } = payload;
+
+      const pages = { ...state.pages };
+      delete pages[collectionName];
+
+      return {
+        ...state,
+        pages,
       };
     }
 

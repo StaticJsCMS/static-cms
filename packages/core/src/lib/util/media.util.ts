@@ -1,41 +1,46 @@
-import { dirname, join } from 'path';
 import trim from 'lodash/trim';
+import { dirname, join } from 'path';
 
+import { basename, isAbsolutePath } from '.';
 import { folderFormatter } from '../formatters';
 import { joinUrlPath } from '../urlHelper';
-import { basename, isAbsolutePath } from '.';
 
 import type {
-  Config,
-  Field,
+  BaseField,
   Collection,
   CollectionFile,
+  Config,
   Entry,
+  Field,
   FileOrImageField,
-  MarkdownField,
   ListField,
+  MarkdownField,
+  MediaField,
   ObjectField,
 } from '@staticcms/core/interface';
 
 export const DRAFT_MEDIA_FILES = 'DRAFT_MEDIA_FILES';
 
-function getFileField(collectionFiles: CollectionFile[], slug: string | undefined) {
+function getFileField<EF extends BaseField>(
+  collectionFiles: CollectionFile<EF>[],
+  slug: string | undefined,
+) {
   const file = collectionFiles.find(f => f?.name === slug);
   return file;
 }
 
 function isMediaField(
   folderKey: 'media_folder' | 'public_folder',
-  field: Field | undefined,
+  field: MediaField | undefined,
 ): field is FileOrImageField | MarkdownField {
   return Boolean(field && folderKey in field);
 }
 
-function hasCustomFolder(
+function hasCustomFolder<EF extends BaseField>(
   folderKey: 'media_folder' | 'public_folder',
-  collection: Collection | undefined | null,
+  collection: Collection<EF> | undefined | null,
   slug: string | undefined,
-  field: Field | undefined,
+  field: MediaField | undefined,
 ): field is FileOrImageField | MarkdownField {
   if (!collection) {
     return false;
@@ -49,22 +54,22 @@ function hasCustomFolder(
 
   if ('files' in collection) {
     const file = getFileField(collection.files, slug);
-    if (file && file[folderKey]) {
+    if (file && folderKey in file) {
       return true;
     }
   }
 
-  if (collection[folderKey]) {
+  if (folderKey in collection) {
     return true;
   }
 
   return false;
 }
 
-function evaluateFolder(
+function evaluateFolder<EF extends BaseField>(
   folderKey: 'media_folder' | 'public_folder',
-  config: Config,
-  c: Collection,
+  config: Config<EF>,
+  c: Collection<EF>,
   entryMap: Entry | null | undefined,
   field: FileOrImageField | MarkdownField,
 ) {
@@ -72,7 +77,7 @@ function evaluateFolder(
 
   const collection = { ...c };
   // add identity template if doesn't exist
-  if (!collection[folderKey]) {
+  if (!(folderKey in collection)) {
     collection[folderKey] = `{{${folderKey}}}`;
   }
 
@@ -113,7 +118,7 @@ function evaluateFolder(
           collection,
           entryMap,
           field,
-          file.fields! as Field[],
+          file.fields,
           currentFolder,
         );
 
@@ -141,7 +146,7 @@ function evaluateFolder(
         collection,
         entryMap,
         field,
-        collection.fields! as Field[],
+        collection.fields,
         currentFolder,
       );
 
@@ -154,13 +159,13 @@ function evaluateFolder(
   return currentFolder;
 }
 
-function traverseFields(
+function traverseFields<EF extends BaseField>(
   folderKey: 'media_folder' | 'public_folder',
-  config: Config,
-  collection: Collection,
+  config: Config<EF>,
+  collection: Collection<EF>,
   entryMap: Entry | null | undefined,
-  field: FileOrImageField | MarkdownField | ListField | ObjectField,
-  fields: Field[],
+  field: FileOrImageField | MarkdownField | ListField<EF> | ObjectField<EF>,
+  fields: Field<EF>[],
   currentFolder: string,
 ): string | null {
   const matchedField = fields.filter(f => f === field)[0] as
@@ -181,7 +186,7 @@ function traverseFields(
   }
 
   for (const f of fields) {
-    const childField: Field = { ...f };
+    const childField: Field<EF> = { ...f };
     if (isMediaField(folderKey, childField) && !childField[folderKey]) {
       // add identity template if doesn't exist
       childField[folderKey] = `{{${folderKey}}}`;
@@ -224,19 +229,20 @@ function traverseFields(
   return null;
 }
 
-export function selectMediaFolder(
-  config: Config,
-  collection: Collection | undefined | null,
-  entryMap: Entry | null | undefined,
-  field: Field | undefined,
+export function selectMediaFolder<EF extends BaseField>(
+  config: Config<EF>,
+  collection: Collection<EF> | undefined | null,
+  entryMap: Entry | undefined | null,
+  field: MediaField | undefined,
+  currentFolder?: string,
 ) {
-  const name = 'media_folder';
-  let mediaFolder = config[name];
+  let mediaFolder = config['media_folder'] ?? '';
 
-  if (hasCustomFolder(name, collection, entryMap?.slug, field)) {
-    const folder = evaluateFolder(name, config, collection!, entryMap, field);
+  if (currentFolder) {
+    mediaFolder = currentFolder;
+  } else if (hasCustomFolder('media_folder', collection, entryMap?.slug, field)) {
+    const folder = evaluateFolder('media_folder', config, collection!, entryMap, field);
     if (folder.startsWith('/')) {
-      // return absolute paths as is
       mediaFolder = join(folder);
     } else {
       const entryPath = entryMap?.path;
@@ -249,45 +255,81 @@ export function selectMediaFolder(
   return trim(mediaFolder, '/');
 }
 
-export function selectMediaFilePublicPath(
-  config: Config,
-  collection: Collection | null,
+export function selectMediaFilePublicPath<EF extends BaseField>(
+  config: Config<EF>,
+  collection: Collection<EF> | undefined | null,
   mediaPath: string,
-  entryMap: Entry | undefined,
-  field: Field | undefined,
+  entryMap: Entry | undefined | null,
+  field: MediaField | undefined,
+  currentFolder?: string,
 ) {
   if (isAbsolutePath(mediaPath)) {
     return mediaPath;
   }
 
-  const name = 'public_folder';
-  let publicFolder = config[name]!;
+  let publicFolder = config['public_folder']!;
+  let selectedPublicFolder = publicFolder;
 
-  const customFolder = hasCustomFolder(name, collection, entryMap?.slug, field);
+  const customPublicFolder = hasCustomFolder('public_folder', collection, entryMap?.slug, field);
 
-  if (customFolder) {
-    publicFolder = evaluateFolder(name, config, collection!, entryMap, field);
+  if (customPublicFolder) {
+    publicFolder = evaluateFolder('public_folder', config, collection!, entryMap, field);
+    selectedPublicFolder = publicFolder;
   }
 
-  if (isAbsolutePath(publicFolder)) {
-    return joinUrlPath(publicFolder, basename(mediaPath));
+  if (currentFolder) {
+    const customMediaFolder = hasCustomFolder('media_folder', collection, entryMap?.slug, field);
+    const mediaFolder = customMediaFolder
+      ? evaluateFolder('media_folder', config, collection!, entryMap, field)
+      : config['media_folder'];
+    selectedPublicFolder = trim(currentFolder, '/').replace(trim(mediaFolder!, '/'), publicFolder);
   }
 
-  return join(publicFolder, basename(mediaPath));
+  if (isAbsolutePath(selectedPublicFolder)) {
+    return joinUrlPath(selectedPublicFolder, basename(mediaPath));
+  }
+
+  return join(selectedPublicFolder, basename(mediaPath));
 }
 
 export function selectMediaFilePath(
   config: Config,
-  collection: Collection | null,
+  collection: Collection | null | undefined,
   entryMap: Entry | null | undefined,
   mediaPath: string,
-  field: Field | undefined,
-) {
+  field: MediaField | undefined,
+  currentFolder?: string,
+): string {
   if (isAbsolutePath(mediaPath)) {
     return mediaPath;
   }
 
-  const mediaFolder = selectMediaFolder(config, collection, entryMap, field);
+  let mediaFolder = selectMediaFolder(config, collection, entryMap, field, currentFolder);
+
+  if (!currentFolder) {
+    let publicFolder = trim(config['public_folder'] ?? mediaFolder, '/');
+    let mediaPathDir = trim(dirname(mediaPath), '/');
+    if (mediaPathDir === '.') {
+      mediaPathDir = '';
+    }
+
+    if (hasCustomFolder('public_folder', collection, entryMap?.slug, field)) {
+      publicFolder = trim(
+        evaluateFolder('public_folder', config, collection!, entryMap, field),
+        '/',
+      );
+    }
+
+    if (mediaPathDir.includes(publicFolder) && mediaPathDir != mediaFolder) {
+      mediaFolder = selectMediaFolder(
+        config,
+        collection,
+        entryMap,
+        field,
+        mediaPathDir.replace(publicFolder, mediaFolder),
+      );
+    }
+  }
 
   return join(mediaFolder, basename(mediaPath));
 }

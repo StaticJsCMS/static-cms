@@ -33,7 +33,6 @@ export { default as loadScript } from './loadScript';
 export { default as localForage } from './localForage';
 export { basename, fileExtension, fileExtensionWithSeparator, isAbsolutePath } from './path';
 export { flowAsync, onlySuccessfulPromises, then } from './promise';
-export { default as transientOptions } from './transientOptions';
 export { default as unsentRequest } from './unsentRequest';
 
 export type { ApiRequest, FetchError } from './API';

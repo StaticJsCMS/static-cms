@@ -1,132 +1,42 @@
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import { styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
-import React, { useCallback, useMemo, useState } from 'react';
+import { Close as CloseIcon } from '@styled-icons/material/Close';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { ChromePicker } from 'react-color';
 import validateColor from 'validate-color';
 
-import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
-import Outline from '@staticcms/core/components/UI/Outline';
-import { zIndex } from '@staticcms/core/components/UI/styles';
-import { transientOptions } from '@staticcms/core/lib';
+import IconButton from '@staticcms/core/components/common/button/IconButton';
+import Field from '@staticcms/core/components/common/field/Field';
+import TextField from '@staticcms/core/components/common/text-field/TextField';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 
 import type { ColorField, WidgetControlProps } from '@staticcms/core/interface';
-import type { ChangeEvent, FC, MouseEvent } from 'react';
+import type { ChangeEvent, FC, MouseEvent, MouseEventHandler } from 'react';
 import type { ColorResult } from 'react-color';
-
-const StyledColorControlWrapper = styled('div')`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 100%;
-`;
-
-interface StyledColorControlContentProps {
-  $collapsed: boolean;
-}
-
-const StyledColorControlContent = styled(
-  'div',
-  transientOptions,
-)<StyledColorControlContentProps>(
-  ({ $collapsed }) => `
-    display: flex;
-    ${
-      $collapsed
-        ? `
-          display: none;
-        `
-        : `
-          padding: 16px;
-        `
-    }
-  `,
-);
-
-// color swatch background with checkerboard to display behind transparent colors
-const ColorSwatchBackground = styled('div')`
-  position: absolute;
-  z-index: ${zIndex.zIndex1};
-  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMUlEQVQ4T2NkYGAQYcAP3uCTZhw1gGGYhAGBZIA/nYDCgBDAm9BGDWAAJyRCgLaBCAAgXwixzAS0pgAAAABJRU5ErkJggg==');
-  height: 38px;
-  width: 48px;
-  margin-top: 10px;
-  margin-left: 10px;
-  border-radius: 5px;
-`;
-
-interface ColorSwatchProps {
-  $background: string;
-  $color: string;
-}
-
-const ColorSwatch = styled(
-  'div',
-  transientOptions,
-)<ColorSwatchProps>(
-  ({ $background, $color }) => `
-    position: absolute;
-    z-index: ${zIndex.zIndex2};
-    background: ${$background};
-    cursor: pointer;
-    height: 38px;
-    width: 48px;
-    margin-top: 10px;
-    margin-left: 10px;
-    border-radius: 5px;
-    border: 2px solid rgb(223, 223, 227);
-    text-align: center;
-    font-size: 27px;
-    line-height: 1;
-    padding-top: 4px;
-    user-select: none;
-    color: ${$color};
-  `,
-);
-
-const ColorPickerContainer = styled('div')`
-  position: absolute;
-  z-index: ${zIndex.zIndex1000};
-  margin-top: 48px;
-  margin-left: 12px;
-`;
-
-// fullscreen div to close color picker when clicking outside of picker
-const ClickOutsideDiv = styled('div')`
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-`;
 
 const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
   field,
-  isDuplicate,
+  duplicate,
   onChange,
   value,
-  hasErrors,
-  t,
+  errors,
+  label,
+  forSingleList,
+  disabled,
 }) => {
-  const [collapsed, setCollapsed] = useState(false);
-
-  const handleCollapseToggle = useCallback(() => {
-    setCollapsed(!collapsed);
-  }, [collapsed]);
+  const swatchRef = useRef<HTMLDivElement | null>(null);
+  const ref = useRef<HTMLInputElement | null>(null);
 
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [internalRawValue, setInternalValue] = useState(value ?? '');
   const internalValue = useMemo(
-    () => (isDuplicate ? value ?? '' : internalRawValue),
-    [internalRawValue, isDuplicate, value],
+    () => (duplicate ? value ?? '' : internalRawValue),
+    [internalRawValue, duplicate, value],
   );
 
   // show/hide color picker
-  const handleClick = useCallback(() => {
-    setShowColorPicker(!showColorPicker);
-  }, [showColorPicker]);
+  const handleClick: MouseEventHandler = useCallback(event => {
+    event.stopPropagation();
+    setShowColorPicker(oldShowColorPicker => !oldShowColorPicker);
+  }, []);
 
   const handleClear = useCallback(
     (event: MouseEvent) => {
@@ -167,63 +77,100 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
   const showClearButton = !allowInput && internalValue;
 
   return (
-    <StyledColorControlWrapper>
-      <ObjectWidgetTopBar
-        key="file-control-top-bar"
-        collapsed={collapsed}
-        onCollapseToggle={handleCollapseToggle}
-        heading={field.label ?? field.name}
-        hasError={hasErrors}
-        t={t}
-      />
-      <StyledColorControlContent $collapsed={collapsed}>
-        <ColorSwatchBackground />
-        <ColorSwatch
-          key="color-swatch"
-          $background={validateColor(internalValue) ? internalValue : '#fff'}
-          $color={validateColor(internalValue) ? 'rgba(255, 255, 255, 0)' : 'rgb(223, 223, 227)'}
-          onClick={handleClick}
-        >
-          ?
-        </ColorSwatch>
+    <Field
+      inputRef={allowInput ? ref : swatchRef}
+      label={label}
+      errors={errors}
+      hint={field.hint}
+      forSingleList={forSingleList}
+      cursor={allowInput ? 'text' : 'pointer'}
+      disabled={disabled}
+      disableClick={showColorPicker}
+    >
+      <div
+        className={classNames(
+          `
+            flex
+            items-center
+            pt-2
+            px-3
+          `,
+          disabled ? 'cursor-default' : allowInput ? 'cursor-text' : 'cursor-pointer',
+        )}
+      >
+        <div>
+          <div
+            ref={swatchRef}
+            key="color-swatch"
+            data-testid="color-swatch"
+            onClick={!disabled ? handleClick : undefined}
+            style={{
+              background: validateColor(internalValue) ? internalValue : '#fff',
+              color: validateColor(internalValue) ? 'rgba(255, 255, 255, 0)' : 'rgb(150, 150, 150)',
+            }}
+            className={classNames(
+              `
+                w-8
+                h-8
+                flex
+                items-center
+                justify-center
+              `,
+              disabled ? 'cursor-default' : 'cursor-pointer',
+            )}
+          >
+            ?
+          </div>
+        </div>
         {showColorPicker && (
-          <ColorPickerContainer key="color-swatch-wrapper">
-            <ClickOutsideDiv key="click-outside" onClick={handleClose} />
+          <div
+            key="color-swatch-wrapper"
+            className="
+              absolute
+              bottom-0
+            "
+          >
+            <div
+              key="click-outside"
+              onClick={handleClose}
+              className="
+                fixed
+                inset-0
+                z-10
+              "
+            />
             <ChromePicker
               key="color-picker"
               color={internalValue}
               onChange={handlePickerChange}
               disableAlpha={!(field.enable_alpha ?? false)}
+              className="
+                absolute
+                z-20
+                -top-3
+              "
             />
-          </ColorPickerContainer>
+          </div>
         )}
         <TextField
+          type="text"
+          inputRef={ref}
           key="color-picker-input"
           value={internalValue}
           onChange={handleInputChange}
-          sx={{
-            color: !allowInput ? '#bbb' : undefined,
-            '.MuiInputBase-input': {
-              paddingLeft: '75px',
-            },
-          }}
           // make readonly and open color picker on click if set to allow_input: false
-          onClick={!allowInput ? handleClick : undefined}
-          disabled={!allowInput}
-          fullWidth
-          InputProps={{
-            endAdornment: showClearButton ? (
-              <InputAdornment position="start">
-                <IconButton onClick={handleClear} aria-label="clear">
-                  <CloseIcon />
-                </IconButton>
-              </InputAdornment>
-            ) : undefined,
-          }}
+          onClick={!allowInput && !disabled ? handleClick : undefined}
+          disabled={disabled}
+          readonly={!allowInput}
+          cursor={allowInput ? 'text' : 'pointer'}
         />
-      </StyledColorControlContent>
-      <Outline hasError={hasErrors} />
-    </StyledColorControlWrapper>
+        {showClearButton ? (
+          <IconButton variant="text" onClick={handleClear} disabled={disabled}>
+            <CloseIcon className="w-5 h-5" />
+          </IconButton>
+        ) : null}
+      </div>
+    </Field>
   );
 };
 

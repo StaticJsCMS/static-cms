@@ -114,7 +114,7 @@ export async function runWithLock(lock: AsyncLock, func: Function, message: stri
   try {
     const acquired = await lock.acquire();
     if (!acquired) {
-      console.warn(message);
+      console.warn('[StaticCMS]', message);
     }
 
     const result = await func();
@@ -315,7 +315,7 @@ export async function allEntriesByFolder({
       const localTreeInBranch = await isShaExistsInBranch(branch.name, localTree.head);
       if (!localTreeInBranch) {
         console.info(
-          `Can't find local tree head '${localTree.head}' in branch '${branch.name}', rebuilding local tree`,
+          `[StaticCMS] Can't find local tree head '${localTree.head}' in branch '${branch.name}', rebuilding local tree`,
         );
         return listAllFilesAndPersist();
       }
@@ -329,12 +329,12 @@ export async function allEntriesByFolder({
         getFileId,
         filterFile,
       }).catch(e => {
-        console.info('Failed getting diff from local tree:', e);
+        console.info('[StaticCMS] Failed getting diff from local tree:', e);
         return null;
       });
 
       if (!diff) {
-        console.info(`Diff is null, rebuilding local tree`);
+        console.info(`[StaticCMS] Diff is null, rebuilding local tree`);
         return listAllFilesAndPersist();
       }
 

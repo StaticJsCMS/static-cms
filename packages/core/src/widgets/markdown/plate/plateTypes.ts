@@ -78,7 +78,7 @@ import type {
   TText,
   WithOverride,
 } from '@udecode/plate';
-import type { CSSProperties } from 'styled-components';
+import type { CSSProperties } from 'react';
 
 export const ELEMENT_SHORTCODE = 'shortcode' as const;
 

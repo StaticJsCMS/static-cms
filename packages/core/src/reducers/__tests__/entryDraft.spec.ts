@@ -1,6 +1,6 @@
 import { DRAFT_CHANGE_FIELD, DRAFT_CREATE_EMPTY } from '@staticcms/core/constants';
-import mockEntry from '@staticcms/core/lib/test-utils/mock-data/MockEntry';
 import entryDraftReducer from '../entryDraft';
+import { createMockEntry } from '@staticcms/test/data/entry.mock';
 
 import type { I18nSettings, StringOrTextField } from '@staticcms/core/interface';
 import type { EntryDraftState } from '../entryDraft';
@@ -13,7 +13,7 @@ describe('entryDraft', () => {
       beforeEach(() => {
         startState = entryDraftReducer(undefined, {
           type: DRAFT_CREATE_EMPTY,
-          payload: mockEntry,
+          payload: createMockEntry({ data: {} }),
         });
       });
 
@@ -28,10 +28,33 @@ describe('entryDraft', () => {
             },
             value: 'newValue',
             i18n: undefined,
+            isMeta: false,
           },
         });
 
         expect(state.entry?.data).toEqual({
+          path1: {
+            path2: 'newValue',
+          },
+        });
+      });
+
+      it('should update meta path with value', () => {
+        const state = entryDraftReducer(startState, {
+          type: DRAFT_CHANGE_FIELD,
+          payload: {
+            path: 'path1.path2',
+            field: {
+              widget: 'string',
+              name: 'stringInput',
+            },
+            value: 'newValue',
+            i18n: undefined,
+            isMeta: true,
+          },
+        });
+
+        expect(state.entry?.meta).toEqual({
           path1: {
             path2: 'newValue',
           },
@@ -49,6 +72,7 @@ describe('entryDraft', () => {
             },
             value: ['newValue1', 'newValue2', 'newValue3'],
             i18n: undefined,
+            isMeta: false,
           },
         });
 
@@ -66,6 +90,7 @@ describe('entryDraft', () => {
             },
             value: 'newValue2Updated',
             i18n: undefined,
+            isMeta: false,
           },
         });
 
@@ -91,6 +116,7 @@ describe('entryDraft', () => {
                 defaultLocale: 'en',
                 currentLocale: 'en',
               },
+              isMeta: false,
             },
           });
 
@@ -138,6 +164,7 @@ describe('entryDraft', () => {
               field,
               value: ['newValue1', 'newValue2', 'newValue3'],
               i18n,
+              isMeta: false,
             },
           });
 
@@ -165,6 +192,7 @@ describe('entryDraft', () => {
               field,
               value: 'newValue2Updated',
               i18n,
+              isMeta: false,
             },
           });
 

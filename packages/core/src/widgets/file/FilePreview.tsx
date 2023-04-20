@@ -1,6 +1,5 @@
 import React from 'react';
 
-import WidgetPreviewContainer from '@staticcms/core/components/UI/WidgetPreviewContainer';
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 
 import type {
@@ -52,11 +51,7 @@ const FileContent: FC<WidgetPreviewProps<string | string[], FileOrImageField>> =
 };
 
 const FilePreview: FC<WidgetPreviewProps<string | string[], FileOrImageField>> = props => {
-  return (
-    <WidgetPreviewContainer>
-      {props.value ? <FileContent {...props} /> : null}
-    </WidgetPreviewContainer>
-  );
+  return <div>{props.value ? <FileContent {...props} /> : null}</div>;
 };
 
 export default FilePreview;

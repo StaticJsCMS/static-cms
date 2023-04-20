@@ -19,7 +19,6 @@ const es: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Contenido',
-      workflow: 'Flujo Editorial',
       media: 'Medios',
       quickAdd: 'Añadir rápido',
     },
@@ -94,8 +93,6 @@ const es: LocalePhrasesRoot = {
         '¿Está seguro de que desea eliminar esta entrada publicada, así como los cambios no guardados de la sesión actual?',
       onDeletePublishedEntryBody: '¿Estás seguro de que quieres borrar esta entrada publicada?',
       loadingEntry: 'Cargando entrada...',
-      confirmLoadBackupBody:
-        'Se recuperó una copia de seguridad local para esta entrada, ¿le gustaría utilizarla?',
     },
     editorToolbar: {
       publishing: 'Publicando...',
@@ -215,35 +212,6 @@ const es: LocalePhrasesRoot = {
       onFailToPublishEntry: 'No se ha podido publicar: %{details}',
       entryUpdated: 'Estado de entrada actualizado',
       onFailToAuth: '%{details}',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Cargando Entradas del Flujo Editorial',
-      workflowHeading: 'Flujo Editorial',
-      newPost: 'Nuevo artículo',
-      description:
-        '%{smart_count} entrada esperando revisión, %{readyCount} lista para publicar |||| %{smart_count} entradas esperando revisión, %{readyCount} listas para publicar. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} por %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'por %{author}',
-      deleteChanges: 'Eliminar cambios',
-      deleteNewEntry: 'Eliminar nueva entrada',
-      publishChanges: 'Publicar cambios',
-      publishNewEntry: 'Publicar nueva entrada',
-    },
-    workflowList: {
-      onDeleteEntry: '¿Está seguro de que quiere borrar esta entrada?',
-      onPublishingNotReadyEntry:
-        'Sólo se pueden publicar los elementos con el estado "Listo". Por favor, arrastre la tarjeta hasta la columna "Listo" para permitir la publicación.',
-      onPublishEntry: '¿Estás seguro de que quieres publicar esta entrada?',
-      draftHeader: 'Borradores',
-      inReviewHeader: 'En revisión',
-      readyHeader: 'Listo',
-      currentEntries: '%{smart_count} entrada |||| %{smart_count} entradas',
     },
   },
 };

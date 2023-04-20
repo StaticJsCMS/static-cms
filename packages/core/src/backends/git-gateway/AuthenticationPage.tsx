@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import AuthenticationPage from '@staticcms/core/components/UI/AuthenticationPage';
+import Login from '@staticcms/core/components/login/Login';
 
 import type { AuthenticationPageProps, TranslatedProps, User } from '@staticcms/core/interface';
 
@@ -22,11 +22,7 @@ export interface GitGatewayAuthenticationPageProps
   handleAuth: (email: string, password: string) => Promise<User | string>;
 }
 
-const GitGatewayAuthenticationPage = ({
-  config,
-  onLogin,
-  t,
-}: GitGatewayAuthenticationPageProps) => {
+const GitGatewayAuthenticationPage = ({ onLogin, t }: GitGatewayAuthenticationPageProps) => {
   const [loggingIn, setLoggingIn] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [errors, setErrors] = useState<{
@@ -35,6 +31,42 @@ const GitGatewayAuthenticationPage = ({
     email?: string;
     password?: string;
   }>({});
+
+  const [initialized, setInitialized] = useState(false);
+
+  useEffect(() => {
+    if (window.netlifyIdentity) {
+      let initialized = false;
+      Promise.race([
+        new Promise<void>(resolve => {
+          window.netlifyIdentity?.on('init', () => {
+            if (!initialized) {
+              initialized = true;
+              resolve();
+            }
+          });
+        }),
+        new Promise<void>(resolve => {
+          const interval = setInterval(() => {
+            if (initialized) {
+              clearInterval(interval);
+              return;
+            }
+
+            if (window.netlifyIdentity) {
+              console.info('[StaticCMS] Manually initializing identity widget');
+              initialized = true;
+              window.netlifyIdentity.init();
+              clearInterval(interval);
+              resolve();
+            }
+          }, 250);
+        }),
+      ]).then(() => {
+        setInitialized(true);
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (!loggedIn && window.netlifyIdentity && window.netlifyIdentity.currentUser()) {
@@ -97,7 +129,7 @@ const GitGatewayAuthenticationPage = ({
     }
   }, [onLogin]);
 
-  const pageContent = useMemo(() => {
+  const errorContent = useMemo(() => {
     if (!window.netlifyIdentity) {
       return t('auth.errors.netlifyIdentityNotFound');
     }
@@ -118,15 +150,12 @@ const GitGatewayAuthenticationPage = ({
   }, [errors.identity, t]);
 
   return (
-    <AuthenticationPage
-      key="git-gateway-auth"
-      logoUrl={config.logo_url}
-      siteUrl={config.site_url}
-      onLogin={handleIdentity}
-      buttonContent={t('auth.loginWithNetlifyIdentity')}
-      pageContent={pageContent}
-      loginDisabled={loggingIn}
-      t={t}
+    <Login
+      login={handleIdentity}
+      label={t('auth.loginWithNetlifyIdentity')}
+      inProgress={loggingIn}
+      error={errorContent}
+      disabled={!initialized}
     />
   );
 };

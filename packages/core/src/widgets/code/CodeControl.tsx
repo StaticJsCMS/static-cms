@@ -1,13 +1,17 @@
-import { styled } from '@mui/material/styles';
+import Collapse from '@mui/material/Collapse';
+import { ChevronRight as ChevronRightIcon } from '@styled-icons/material/ChevronRight';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import CodeMirror from '@uiw/react-codemirror';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import ObjectWidgetTopBar from '@staticcms/core/components/UI/ObjectWidgetTopBar';
-import Outline from '@staticcms/core/components/UI/Outline';
+import ErrorMessage from '@staticcms/core/components/common/field/ErrorMessage';
+import Hint from '@staticcms/core/components/common/field/Hint';
+import Label from '@staticcms/core/components/common/field/Label';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
-import transientOptions from '@staticcms/core/lib/util/transientOptions';
+import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
+import { useAppSelector } from '@staticcms/core/store/hooks';
 import languages from './data/languages';
 import SettingsButton from './SettingsButton';
 import SettingsPane from './SettingsPane';
@@ -18,35 +22,7 @@ import type {
   WidgetControlProps,
 } from '@staticcms/core/interface';
 import type { LanguageName } from '@uiw/codemirror-extensions-langs';
-import type { FC } from 'react';
-
-const StyledCodeControlWrapper = styled('div')`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 100%;
-`;
-
-interface StyledCodeControlContentProps {
-  $collapsed: boolean;
-}
-
-const StyledCodeControlContent = styled(
-  'div',
-  transientOptions,
-)<StyledCodeControlContentProps>(
-  ({ $collapsed }) => `
-    display: block;
-    width: 100%;
-    ${
-      $collapsed
-        ? `
-          display: none;
-        `
-        : ''
-    }
-  `,
-);
+import type { FC, MouseEvent } from 'react';
 
 function valueToOption(val: string | { name: string; label?: string }): {
   value: string;
@@ -59,13 +35,18 @@ function valueToOption(val: string | { name: string; label?: string }): {
 }
 
 const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, CodeField>> = ({
+  label,
   field,
-  isDuplicate,
+  duplicate,
   onChange,
   hasErrors,
   value,
-  t,
+  forSingleList,
+  errors,
+  disabled,
 }) => {
+  const theme = useAppSelector(selectTheme);
+
   const keys = useMemo(() => {
     const defaults = {
       code: 'code',
@@ -80,25 +61,28 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
 
   const [internalRawValue, setInternalValue] = useState(value ?? '');
   const internalValue = useMemo(
-    () => (isDuplicate ? value ?? '' : internalRawValue),
-    [internalRawValue, isDuplicate, value],
+    () => (duplicate ? value ?? '' : internalRawValue),
+    [internalRawValue, duplicate, value],
   );
 
   const [lang, setLang] = useState<ProcessedCodeLanguage | null>(null);
-  const [collapsed, setCollapsed] = useState(false);
 
-  const [hasFocus, setHasFocus] = useState(false);
-  const handleFocus = useCallback(() => {
-    setHasFocus(true);
+  const [settingsVisible, setSettingsVisible] = useState(false);
+  const toggleSettings = useCallback((event: MouseEvent) => {
+    event.stopPropagation();
+    setSettingsVisible(old => !old);
   }, []);
 
-  const handleBlur = useCallback(() => {
-    setHasFocus(false);
+  const hideSettings = useCallback(() => {
+    setSettingsVisible(false);
   }, []);
 
-  const handleCollapseToggle = useCallback(() => {
-    setCollapsed(!collapsed);
-  }, [collapsed]);
+  const [open, setOpen] = useState(true);
+
+  const handleOpenToggle = useCallback(() => {
+    setOpen(oldOpen => !oldOpen);
+    setSettingsVisible(false);
+  }, []);
 
   const handleOnChange = useCallback(
     (newValue: string | { [key: string]: string } | null | undefined) => {
@@ -144,15 +128,6 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
     return internalValue[keys.code];
   }, [internalValue, keys.code]);
 
-  const [settingsVisible, setSettingsVisible] = useState(false);
-  const showSettings = useCallback(() => {
-    setSettingsVisible(true);
-  }, []);
-
-  const hideSettings = useCallback(() => {
-    setSettingsVisible(false);
-  }, []);
-
   const uniqueId = useUUID();
 
   // If `allow_language_selection` is not set, default to true. Otherwise, use its value.
@@ -163,8 +138,8 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
 
   const availableLanguages = languages.map(language => valueToOption(language.label));
 
-  const handleSetLanguage = useCallback((langIdentifier: string) => {
-    const language = languages.find(language => language.identifiers.includes(langIdentifier));
+  const handleSetLanguage = useCallback((langLabel: string) => {
+    const language = languages.find(language => language.label === langLabel);
     if (language) {
       setLang(language);
     }
@@ -186,44 +161,127 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
   }, [field.default_language, handleSetLanguage, internalValue, keys.lang, valueIsMap]);
 
   return (
-    <StyledCodeControlWrapper>
-      {allowLanguageSelection ? (
-        !settingsVisible ? (
-          <SettingsButton onClick={showSettings} />
-        ) : (
+    <div
+      data-testid="list-field"
+      className={classNames(
+        `
+          relative
+          flex
+          flex-col
+          border-b
+          border-slate-400
+          focus-within:border-blue-800
+          dark:focus-within:border-blue-100
+        `,
+        !hasErrors && 'group/active-list',
+      )}
+    >
+      <div
+        data-testid="field-wrapper"
+        className={classNames(
+          `
+            relative
+            flex
+            flex-col
+            w-full
+          `,
+          forSingleList && 'mr-14',
+        )}
+      >
+        <button
+          data-testid="list-expand-button"
+          className={classNames(
+            `
+              flex
+              w-full
+              justify-between
+              px-3
+              py-2
+              text-left
+              text-sm
+              font-medium
+              focus:outline-none
+              focus-visible:ring
+              gap-2
+              focus-visible:ring-opacity-75
+              items-center
+            `,
+            disabled && 'cursor-default',
+          )}
+          onClick={handleOpenToggle}
+        >
+          <Label
+            key="label"
+            hasErrors={hasErrors}
+            className={classNames(
+              !disabled &&
+                `
+                  group-focus-within/active-list:text-blue-500
+                  group-hover/active-list:text-blue-500
+                `,
+            )}
+            cursor="pointer"
+            variant="inline"
+            disabled={disabled}
+          >
+            {label}
+          </Label>
+          {open && allowLanguageSelection ? (
+            <SettingsButton onClick={toggleSettings} disabled={disabled} />
+          ) : null}
+          <ChevronRightIcon
+            className={classNames(
+              open && 'rotate-90 transform',
+              `
+                transition-transform
+                h-5
+                w-5
+              `,
+              disabled
+                ? `
+                    text-slate-300
+                    dark:text-slate-600
+                  `
+                : `
+                    group-focus-within/active-list:text-blue-500
+                    group-hover/active-list:text-blue-500
+                  `,
+            )}
+          />
+        </button>
+        {open && allowLanguageSelection && settingsVisible ? (
           <SettingsPane
-            hideSettings={hideSettings}
             uniqueId={uniqueId}
             languages={availableLanguages}
             language={valueToOption(lang?.label ?? '')}
             allowLanguageSelection={allowLanguageSelection}
             onChangeLanguage={handleSetLanguage}
+            hideSettings={hideSettings}
           />
-        )
-      ) : null}
-      <ObjectWidgetTopBar
-        key="file-control-top-bar"
-        collapsed={collapsed}
-        onCollapseToggle={handleCollapseToggle}
-        heading={field.label ?? field.name}
-        hasError={hasErrors}
-        t={t}
-      />
-      <StyledCodeControlContent $collapsed={collapsed}>
-        <CodeMirror
-          value={code}
-          height="auto"
-          minHeight="120px"
-          width="100%"
-          editable={true}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          onChange={handleChange}
-          extensions={extensions}
-        />
-      </StyledCodeControlContent>
-      <Outline active={hasFocus} hasError={hasErrors} />
-    </StyledCodeControlWrapper>
+        ) : null}
+        <Collapse in={open} appear={false}>
+          <div>
+            <CodeMirror
+              value={code}
+              height="auto"
+              minHeight="120px"
+              width="100%"
+              editable={true}
+              onChange={handleChange}
+              extensions={extensions}
+              theme={theme}
+              readOnly={disabled}
+            />
+          </div>
+        </Collapse>
+        {field.hint ? (
+          <Hint key="hint" hasErrors={hasErrors} cursor="pointer" disabled={disabled}>
+            {field.hint}
+          </Hint>
+        ) : null}
+        <ErrorMessage errors={errors} className="pt-2 pb-3" />
+      </div>
+    </div>
   );
 };
 

@@ -1,3 +1,4 @@
+import { basename, dirname } from 'path';
 import { v4 as uuid } from 'uuid';
 
 import {
@@ -9,7 +10,6 @@ import {
   MEDIA_DISPLAY_URL_SUCCESS,
   MEDIA_INSERT,
   MEDIA_LIBRARY_CLOSE,
-  MEDIA_LIBRARY_CREATE,
   MEDIA_LIBRARY_OPEN,
   MEDIA_LOAD_FAILURE,
   MEDIA_LOAD_REQUEST,
@@ -21,37 +21,43 @@ import {
 } from '../constants';
 
 import type { MediaLibraryAction } from '../actions/mediaLibrary';
-import type { Field, MediaFile, MediaLibraryInstance } from '../interface';
-
-export interface MediaLibraryDisplayURL {
-  url?: string;
-  isFetching: boolean;
-  err?: unknown;
-}
+import type {
+  Collection,
+  CollectionFile,
+  MediaField,
+  MediaFile,
+  MediaLibrarInsertOptions,
+  MediaLibraryConfig,
+  MediaLibraryDisplayURL,
+  MediaPath,
+} from '../interface';
 
 export type MediaLibraryState = {
   isVisible: boolean;
   showMediaButton: boolean;
-  controlMedia: Record<string, string | string[]>;
+  controlMedia: Record<string, MediaPath>;
   displayURLs: Record<string, MediaLibraryDisplayURL>;
-  externalLibrary?: MediaLibraryInstance;
   controlID?: string;
   page?: number;
   files?: MediaFile[];
-  config: Record<string, unknown>;
-  field?: Field;
+  config?: MediaLibraryConfig;
+  collection?: Collection;
+  collectionFile?: CollectionFile;
+  field?: MediaField;
   value?: string | string[];
+  alt?: string;
   replaceIndex?: number;
-  canInsert?: boolean;
   isLoading?: boolean;
   dynamicSearch?: boolean;
   dynamicSearchActive?: boolean;
   dynamicSearchQuery?: string;
   forImage?: boolean;
+  forFolder?: boolean;
   isPersisting?: boolean;
   isDeleting?: boolean;
   hasNextPage?: boolean;
   isPaginating?: boolean;
+  insertOptions?: MediaLibrarInsertOptions;
 };
 
 const defaultState: MediaLibraryState = {
@@ -59,7 +65,6 @@ const defaultState: MediaLibraryState = {
   showMediaButton: true,
   controlMedia: {},
   displayURLs: {},
-  config: {},
 };
 
 function mediaLibrary(
@@ -67,27 +72,36 @@ function mediaLibrary(
   action: MediaLibraryAction,
 ): MediaLibraryState {
   switch (action.type) {
-    case MEDIA_LIBRARY_CREATE:
-      return {
-        ...state,
-        externalLibrary: action.payload,
-        showMediaButton: action.payload.enableStandalone(),
-      };
-
     case MEDIA_LIBRARY_OPEN: {
-      const { controlID, forImage, config, field, value, replaceIndex } = action.payload;
+      const {
+        controlID,
+        forImage,
+        forFolder,
+        config,
+        collection,
+        collectionFile,
+        field,
+        value,
+        alt,
+        replaceIndex,
+        insertOptions,
+      } = action.payload;
       const libConfig = config || {};
 
       return {
         ...state,
         isVisible: true,
         forImage: Boolean(forImage),
+        forFolder: Boolean(forFolder),
         controlID,
-        canInsert: !!controlID,
         config: libConfig,
+        collection,
+        collectionFile,
         field,
         value,
+        alt,
         replaceIndex,
+        insertOptions,
       };
     }
 
@@ -95,10 +109,12 @@ function mediaLibrary(
       return {
         ...state,
         isVisible: false,
+        insertOptions: undefined,
+        alt: undefined,
       };
 
     case MEDIA_INSERT: {
-      const { mediaPath } = action.payload;
+      const { mediaPath, alt } = action.payload;
       const controlID = state.controlID;
       if (!controlID) {
         return state;
@@ -111,7 +127,10 @@ function mediaLibrary(
           ...state,
           controlMedia: {
             ...state.controlMedia,
-            [controlID]: mediaPath,
+            [controlID]: {
+              path: mediaPath,
+              alt,
+            },
           },
         };
       }
@@ -129,7 +148,9 @@ function mediaLibrary(
         ...state,
         controlMedia: {
           ...state.controlMedia,
-          [controlID]: valueArray,
+          [controlID]: {
+            path: valueArray,
+          },
         },
       };
     }
@@ -137,12 +158,12 @@ function mediaLibrary(
     case MEDIA_REMOVE_INSERTED: {
       const controlID = action.payload.controlID;
 
+      const newControlMedia = { ...state.controlMedia };
+      delete newControlMedia[controlID];
+
       return {
         ...state,
-        controlMedia: {
-          ...state.controlMedia,
-          [controlID]: '',
-        },
+        controlMedia: newControlMedia,
       };
     }
 
@@ -185,13 +206,41 @@ function mediaLibrary(
       };
 
     case MEDIA_PERSIST_SUCCESS: {
-      const { file } = action.payload;
+      const { file, currentFolder } = action.payload;
       const fileWithKey = { ...file, key: uuid() };
       const files = state.files as MediaFile[];
-      const updatedFiles = [fileWithKey, ...files];
+
+      const dir = dirname(file.path);
+      if (!currentFolder || dir === currentFolder) {
+        const updatedFiles: MediaFile[] = [fileWithKey, ...files];
+        return {
+          ...state,
+          files: updatedFiles,
+          isPersisting: false,
+        };
+      }
+
+      const folder = files.find(otherFile => otherFile.isDirectory && otherFile.path === dir);
+      if (!folder) {
+        const updatedFiles: MediaFile[] = [
+          {
+            name: basename(dir),
+            id: dir,
+            path: dir,
+            isDirectory: true,
+          },
+          ...files,
+        ];
+
+        return {
+          ...state,
+          files: updatedFiles,
+          isPersisting: false,
+        };
+      }
+
       return {
         ...state,
-        files: updatedFiles,
         isPersisting: false,
       };
     }

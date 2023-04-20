@@ -1,30 +1,13 @@
-import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
 import React, { useCallback } from 'react';
 
-import GoBackButton from '@staticcms/core/components/UI/GoBackButton';
-import Icon from '@staticcms/core/components/UI/Icon';
+import Login from '@staticcms/core/components/login/Login';
 
-import type { MouseEvent } from 'react';
 import type { AuthenticationPageProps, TranslatedProps } from '@staticcms/core/interface';
-
-const StyledAuthenticationPage = styled('section')`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-`;
-
-const PageLogoIcon = styled(Icon)`
-  color: #c4c6d2;
-`;
+import type { MouseEvent } from 'react';
 
 const AuthenticationPage = ({
   inProgress = false,
-  config,
   onLogin,
-  t,
 }: TranslatedProps<AuthenticationPageProps>) => {
   const handleLogin = useCallback(
     (e: MouseEvent<HTMLButtonElement>) => {
@@ -34,15 +17,7 @@ const AuthenticationPage = ({
     [onLogin],
   );
 
-  return (
-    <StyledAuthenticationPage>
-      <PageLogoIcon width={300} height={150} type="static-cms" />
-      <Button variant="contained" disabled={inProgress} onClick={handleLogin}>
-        {inProgress ? t('auth.loggingIn') : t('auth.login')}
-      </Button>
-      {config.site_url && <GoBackButton href={config.site_url} t={t}></GoBackButton>}
-    </StyledAuthenticationPage>
-  );
+  return <Login login={handleLogin} inProgress={inProgress} />;
 };
 
 export default AuthenticationPage;

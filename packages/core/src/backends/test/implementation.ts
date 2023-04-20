@@ -2,24 +2,26 @@ import attempt from 'lodash/attempt';
 import isError from 'lodash/isError';
 import take from 'lodash/take';
 import unset from 'lodash/unset';
-import { extname } from 'path';
+import { basename, dirname } from 'path';
 import { v4 as uuid } from 'uuid';
 
-import { basename, Cursor, CURSOR_COMPATIBILITY_SYMBOL } from '@staticcms/core/lib/util';
+import { Cursor, CURSOR_COMPATIBILITY_SYMBOL } from '@staticcms/core/lib/util';
+import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import AuthenticationPage from './AuthenticationPage';
 
 import type {
-  BackendEntry,
   BackendClass,
+  BackendEntry,
   Config,
   DisplayURL,
   ImplementationEntry,
   ImplementationFile,
+  ImplementationMediaFile,
   User,
 } from '@staticcms/core/interface';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 
-type RepoFile = { path: string; content: string | AssetProxy };
+type RepoFile = { path: string; content: string | AssetProxy; isDirectory?: boolean };
 type RepoTree = { [key: string]: RepoFile | RepoTree };
 
 declare global {
@@ -82,20 +84,36 @@ export function getFolderFiles(
   depth: number,
   files = [] as RepoFile[],
   path = folder,
-) {
+  includeFolders?: boolean,
+): RepoFile[] {
   if (depth <= 0) {
     return files;
   }
 
+  if (includeFolders) {
+    files.unshift({ isDirectory: true, content: '', path });
+  }
+
   Object.keys(tree[folder] || {}).forEach(key => {
-    if (extname(key)) {
+    const parts = key.split('.');
+    const keyExtension = parts.length > 1 ? parts[parts.length - 1] : '';
+
+    if (isNotEmpty(keyExtension)) {
       const file = (tree[folder] as RepoTree)[key] as RepoFile;
       if (!extension || key.endsWith(`.${extension}`)) {
         files.unshift({ content: file.content, path: `${path}/${key}` });
       }
     } else {
       const subTree = tree[folder] as RepoTree;
-      return getFolderFiles(subTree, key, extension, depth - 1, files, `${path}/${key}`);
+      return getFolderFiles(
+        subTree,
+        key,
+        extension,
+        depth - 1,
+        files,
+        `${path}/${key}`,
+        includeFolders,
+      );
     }
   });
 
@@ -206,8 +224,14 @@ export default class TestBackend implements BackendClass {
 
   async persistEntry(entry: BackendEntry) {
     entry.dataFiles.forEach(dataFile => {
-      const { path, raw } = dataFile;
-      writeFile(path, raw, window.repoFiles);
+      const { path, newPath, raw } = dataFile;
+
+      if (newPath) {
+        deleteFile(path, window.repoFiles);
+        writeFile(newPath, raw, window.repoFiles);
+      } else {
+        writeFile(path, raw, window.repoFiles);
+      }
     });
     entry.assets.forEach(a => {
       writeFile(a.path, a, window.repoFiles);
@@ -215,37 +239,48 @@ export default class TestBackend implements BackendClass {
     return Promise.resolve();
   }
 
-  async getMedia(mediaFolder = this.mediaFolder) {
+  async getMedia(
+    mediaFolder = this.mediaFolder,
+    folderSupport?: boolean,
+  ): Promise<ImplementationMediaFile[]> {
     if (!mediaFolder) {
       return [];
     }
-    const files = getFolderFiles(window.repoFiles, mediaFolder.split('/')[0], '', 100).filter(f =>
-      f.path.startsWith(mediaFolder),
-    );
-    return files.map(f => this.normalizeAsset(f.content as AssetProxy));
+    const files = getFolderFiles(
+      window.repoFiles,
+      mediaFolder.split('/')[0],
+      '',
+      100,
+      undefined,
+      undefined,
+      folderSupport,
+    ).filter(f => {
+      return dirname(f.path) === mediaFolder;
+    });
+
+    return files.map(f => ({
+      name: basename(f.path),
+      id: f.path,
+      path: f.path,
+      displayURL: f.path,
+      isDirectory: f.isDirectory ?? false,
+    }));
   }
 
   async getMediaFile(path: string) {
-    const asset = getFile(path, window.repoFiles).content as AssetProxy;
-
-    const url = asset?.toString() ?? '';
-    const name = basename(path);
-    const blob = await fetch(url).then(res => res.blob());
-    const fileObj = new File([blob], name);
-
     return {
-      id: url,
-      displayURL: url,
+      id: path,
+      displayURL: path,
       path,
-      name,
-      size: fileObj.size,
-      file: fileObj,
-      url,
+      name: basename(path),
+      size: 1,
+      url: path,
     };
   }
 
-  normalizeAsset(assetProxy: AssetProxy) {
+  normalizeAsset(assetProxy: AssetProxy): ImplementationMediaFile {
     const fileObj = assetProxy.fileObj as File;
+
     const { name, size } = fileObj;
     const objectUrl = attempt(window.URL.createObjectURL, fileObj);
     const url = isError(objectUrl) ? '' : objectUrl;

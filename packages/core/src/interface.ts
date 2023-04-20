@@ -7,9 +7,9 @@ import type {
   ReactElement,
   ReactNode,
 } from 'react';
-import type { t, TranslateProps as ReactPolyglotTranslateProps } from 'react-polyglot';
+import type { TranslateProps as ReactPolyglotTranslateProps, t } from 'react-polyglot';
 import type { MediaFile as BackendMediaFile } from './backend';
-import type { EditorControlProps } from './components/Editor/EditorControlPane/EditorControl';
+import type { EditorControlProps } from './components/entry-editor/editor-control-pane/EditorControl';
 import type {
   SORT_DIRECTION_ASCENDING,
   SORT_DIRECTION_DESCENDING,
@@ -76,6 +76,7 @@ export type ValueOrNestedValue =
   | (string | number)[]
   | boolean
   | ObjectValue
+  | Date
   | ValueOrNestedValue[]
   | null
   | undefined;
@@ -105,6 +106,9 @@ export interface Entry<T = ObjectValue> {
       data: EntryData;
     };
   };
+  meta?: {
+    path: string;
+  };
 }
 
 export type Entities = Record<string, Entry>;
@@ -117,6 +121,16 @@ export interface FieldError {
 export interface FieldsErrors {
   [field: string]: FieldError[];
 }
+
+export type FieldGetValidValueMethod<T = unknown, F extends BaseField = UnknownField> = (
+  value: T | undefined | null,
+  field: F,
+) => T | undefined | null;
+
+export type FieldGetDefaultMethod<T = unknown, F extends BaseField = UnknownField> = (
+  defaultValue: T | undefined | null,
+  field: F,
+) => T;
 
 export interface FieldValidationMethodProps<T = unknown, F extends BaseField = UnknownField> {
   field: F;
@@ -152,6 +166,7 @@ export interface CollectionFile<EF extends BaseField = UnknownField> {
   description?: string;
   media_folder?: string;
   public_folder?: string;
+  media_library?: MediaLibraryConfig;
   i18n?: boolean | I18nInfo;
   editor?: EditorConfig;
 }
@@ -159,6 +174,10 @@ export interface CollectionFile<EF extends BaseField = UnknownField> {
 interface Nested {
   summary?: string;
   depth: number;
+  path?: {
+    label?: string;
+    index_file: string;
+  };
 }
 
 export interface I18nSettings {
@@ -180,6 +199,7 @@ export interface BaseCollection {
   icon?: string;
   isFetching?: boolean;
   summary?: string;
+  summary_fields?: string[];
   filter?: FilterRule;
   label_singular?: string;
   label: string;
@@ -197,6 +217,7 @@ export interface BaseCollection {
   slug?: string;
   media_folder?: string;
   public_folder?: string;
+  media_library?: MediaLibraryConfig;
 }
 
 export interface FilesCollection<EF extends BaseField = UnknownField> extends BaseCollection {
@@ -217,20 +238,6 @@ export type Collection<EF extends BaseField = UnknownField> =
 
 export type Collections<EF extends BaseField = UnknownField> = Record<string, Collection<EF>>;
 
-export interface MediaLibraryInstance {
-  show: (args: {
-    id?: string;
-    value?: string | string[];
-    config: Record<string, unknown>;
-    allowMultiple?: boolean;
-    imagesOnly?: boolean;
-  }) => void;
-  hide?: () => void;
-  onClearControl?: (args: { id: string }) => void;
-  onRemoveControl?: (args: { id: string }) => void;
-  enableStandalone: () => boolean;
-}
-
 export type MediaFile = BackendMediaFile & { key?: string };
 
 export interface DisplayURLState {
@@ -241,51 +248,42 @@ export interface DisplayURLState {
 
 export type TranslatedProps<T> = T & ReactPolyglotTranslateProps;
 
-/**
- * @deprecated Use `useMediaAsset` React hook instead. Will be removed in v2.0.0
- */
-export type GetAssetFunction<F extends BaseField = UnknownField> = (
-  path: string,
-  field?: F,
-) => Promise<AssetProxy>;
+export interface MediaPath<T = string | string[]> {
+  path: T;
+  alt?: string;
+}
 
-export interface WidgetControlProps<T, F extends BaseField = UnknownField> {
+export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = ObjectValue> {
   collection: Collection<F>;
+  collectionFile: CollectionFile<F> | undefined;
   config: Config<F>;
-  entry: Entry;
+  entry: Entry<EV>;
   field: F;
   fieldsErrors: FieldsErrors;
   submitted: boolean;
   forList: boolean;
-  /**
-   * @deprecated Use `useMediaAsset` React hook instead. Will be removed in v2.0.0
-   */
-  getAsset: GetAssetFunction<F>;
-  isDisabled: boolean;
-  isDuplicate: boolean;
-  /**
-   * @deprecated Use `isDuplicate` instead. Will be removed in v2.0.0
-   */
-  isFieldDuplicate: EditorControlProps['isFieldDuplicate'];
-  isHidden: boolean;
-  /**
-   * @deprecated Use `isHidden` instead. Will be removed in v2.0.0
-   */
-  isFieldHidden: EditorControlProps['isFieldHidden'];
+  forSingleList: boolean;
+  disabled: boolean;
+  duplicate: boolean;
+  hidden: boolean;
   label: string;
   locale: string | undefined;
-  mediaPaths: Record<string, string | string[]>;
+  // @deprecated Use useMediaInsert instead
+  mediaPaths: Record<string, MediaPath>;
   onChange: (value: T | null | undefined) => void;
-  clearMediaControl: EditorControlProps['clearMediaControl'];
+  // @deprecated Use useMediaInsert instead
   openMediaLibrary: EditorControlProps['openMediaLibrary'];
+  // @deprecated Use useMediaInsert instead
   removeInsertedMedia: EditorControlProps['removeInsertedMedia'];
-  removeMediaControl: EditorControlProps['removeMediaControl'];
   i18n: I18nSettings | undefined;
   hasErrors: boolean;
+  errors: FieldError[];
   path: string;
   query: EditorControlProps['query'];
   t: t;
   value: T | undefined | null;
+  theme: 'dark' | 'light';
+  controlled: boolean;
 }
 
 export interface WidgetPreviewProps<T = unknown, F extends BaseField = UnknownField> {
@@ -293,11 +291,8 @@ export interface WidgetPreviewProps<T = unknown, F extends BaseField = UnknownFi
   collection: Collection<F>;
   entry: Entry;
   field: RenderedField<F>;
-  /**
-   * @deprecated Should use `useMediaAsset` React hook instead
-   */
-  getAsset: GetAssetFunction<F>;
   value: T | undefined | null;
+  theme: 'dark' | 'light';
 }
 
 export type WidgetPreviewComponent<T = unknown, F extends BaseField = UnknownField> =
@@ -305,9 +300,9 @@ export type WidgetPreviewComponent<T = unknown, F extends BaseField = UnknownFie
   | ReactElement<unknown, string | JSXElementConstructor<any>>
   | ComponentType<WidgetPreviewProps<T, F>>;
 
-export type WidgetFor<P = EntryData> = <K extends keyof P>(name: K) => ReactNode;
+export type WidgetFor<P = ObjectValue> = <K extends keyof P>(name: K) => ReactNode;
 
-export type WidgetsFor<P = EntryData> = <K extends keyof P>(
+export type WidgetsFor<P = ObjectValue> = <K extends keyof P>(
   name: K,
 ) => P[K] extends Array<infer U>
   ? {
@@ -319,22 +314,19 @@ export type WidgetsFor<P = EntryData> = <K extends keyof P>(
       widgets: Record<keyof P[K], ReactNode>;
     };
 
-export interface TemplatePreviewProps<T = EntryData, EF extends BaseField = UnknownField> {
+export interface TemplatePreviewProps<T = ObjectValue, EF extends BaseField = UnknownField> {
   collection: Collection<EF>;
   fields: Field<EF>[];
   entry: Entry<T>;
   document: Document | undefined | null;
   window: Window | undefined | null;
-  /**
-   * @deprecated Should use `useMediaAsset` React hook instead
-   */
-  getAsset: GetAssetFunction<Field<EF>>;
   widgetFor: WidgetFor<T>;
   widgetsFor: WidgetsFor<T>;
+  theme: 'dark' | 'light';
 }
 
 export type TemplatePreviewComponent<
-  T = EntryData,
+  T = ObjectValue,
   EF extends BaseField = UnknownField,
 > = ComponentType<TemplatePreviewProps<T, EF>>;
 
@@ -342,15 +334,27 @@ export interface TemplatePreviewCardProps<T = EntryData, EF extends BaseField = 
   collection: Collection<EF>;
   fields: Field<EF>[];
   entry: Entry<T>;
-  viewStyle: 'list' | 'grid';
   widgetFor: WidgetFor<T>;
   widgetsFor: WidgetsFor<T>;
+  theme: 'dark' | 'light';
+  hasLocalBackup: boolean;
 }
 
 export type TemplatePreviewCardComponent<
   T = EntryData,
   EF extends BaseField = UnknownField,
 > = ComponentType<TemplatePreviewCardProps<T, EF>>;
+
+export interface FieldPreviewProps<T = unknown, F extends BaseField = UnknownField> {
+  collection: Collection<F>;
+  field: Field<F>;
+  value: T;
+  theme: 'dark' | 'light';
+}
+
+export type FieldPreviewComponent<T = unknown, F extends BaseField = UnknownField> = ComponentType<
+  FieldPreviewProps<T, F>
+>;
 
 export interface WidgetOptions<T = unknown, F extends BaseField = UnknownField> {
   validator?: Widget<T, F>['validator'];
@@ -363,8 +367,8 @@ export interface Widget<T = unknown, F extends BaseField = UnknownField> {
   control: ComponentType<WidgetControlProps<T, F>>;
   preview?: WidgetPreviewComponent<T, F>;
   validator: FieldValidationMethod<T, F>;
-  getValidValue: (value: T | undefined | null) => T | undefined | null;
-  getDefaultValue?: (defaultValue: T | undefined | null, field: F) => T;
+  getValidValue: FieldGetValidValueMethod<T, F>;
+  getDefaultValue?: FieldGetDefaultMethod<T, F>;
   schema?: PropertiesSchema<unknown>;
 }
 
@@ -379,6 +383,16 @@ export interface PersistOptions {
   newEntry?: boolean;
   commitMessage: string;
   collectionName?: string;
+  status?: string;
+}
+
+export interface PersistArgs {
+  config: Config;
+  rootSlug: string | undefined;
+  collection: Collection;
+  entryDraft: EntryDraft;
+  assetProxies: AssetProxy[];
+  usedSlugs: string[];
   status?: string;
 }
 
@@ -403,7 +417,7 @@ export interface ImplementationMediaFile {
   draft?: boolean;
   url?: string;
   file?: File;
-  field?: Field;
+  field?: MediaField;
 }
 
 export interface DataFile {
@@ -466,7 +480,11 @@ export abstract class BackendClass {
   abstract entriesByFiles(files: ImplementationFile[]): Promise<ImplementationEntry[]>;
 
   abstract getMediaDisplayURL(displayURL: DisplayURL): Promise<string>;
-  abstract getMedia(folder?: string, mediaPath?: string): Promise<ImplementationMediaFile[]>;
+  abstract getMedia(
+    mediaFolder?: string,
+    folderSupport?: boolean,
+    publicFolder?: string,
+  ): Promise<ImplementationMediaFile[]>;
   abstract getMediaFile(path: string): Promise<ImplementationMediaFile>;
 
   abstract persistEntry(entry: BackendEntry, opts: PersistOptions): Promise<void>;
@@ -502,25 +520,15 @@ export type WidgetValueSerializer = {
   deserialize: (value: ValueOrNestedValue) => ValueOrNestedValue;
 };
 
-export type MediaLibraryOptions = Record<string, unknown>;
-
 export interface MediaLibraryInitOptions {
   options: Record<string, unknown> | undefined;
   handleInsert: (url: string | string[]) => void;
 }
 
-export interface MediaLibraryExternalLibrary {
-  name: string;
-  config?: MediaLibraryOptions;
-  init: ({ options, handleInsert }: MediaLibraryInitOptions) => Promise<MediaLibraryInstance>;
+export interface MediaLibraryConfig {
+  max_file_size?: number;
+  folder_support?: boolean;
 }
-
-export interface MediaLibraryInternalOptions {
-  allow_multiple?: boolean;
-  choose_url?: boolean;
-}
-
-export type MediaLibrary = MediaLibraryExternalLibrary | MediaLibraryInternalOptions;
 
 export type BackendType = 'git-gateway' | 'github' | 'gitlab' | 'bitbucket' | 'test-repo' | 'proxy';
 
@@ -548,6 +556,15 @@ export interface BaseField {
   i18n?: boolean | 'translate' | 'duplicate' | 'none';
   comment?: string;
   widget: string;
+}
+
+export interface MediaField extends BaseField {
+  media_folder?: string;
+  public_folder?: string;
+  choose_url?: boolean;
+  multiple?: boolean;
+  media_library?: MediaLibraryConfig;
+  select_folder?: boolean;
 }
 
 export interface BooleanField extends BaseField {
@@ -587,13 +604,9 @@ export interface DateTimeField extends BaseField {
   picker_utc?: boolean;
 }
 
-export interface FileOrImageField extends BaseField {
+export interface FileOrImageField extends MediaField {
   widget: 'file' | 'image';
   default?: string;
-
-  media_library?: MediaLibrary;
-  media_folder?: string;
-  public_folder?: string;
 }
 
 export interface ObjectField<EF extends BaseField = UnknownField> extends BaseField {
@@ -616,7 +629,7 @@ export interface ListField<EF extends BaseField = UnknownField> extends BaseFiel
   max?: number;
   min?: number;
   add_to_top?: boolean;
-  types?: ObjectField[];
+  types?: ObjectField<EF>[];
   type_key?: string;
 }
 
@@ -629,20 +642,16 @@ export interface MapField extends BaseField {
   height?: string;
 }
 
-export interface MarkdownField extends BaseField {
+export interface MarkdownField extends MediaField {
   widget: 'markdown';
   default?: string;
-
-  media_library?: MediaLibrary;
-  media_folder?: string;
-  public_folder?: string;
 }
 
 export interface NumberField extends BaseField {
   widget: 'number';
   default?: string | number;
 
-  value_type?: 'int' | 'float' | string;
+  value_type?: 'int' | 'float' | 'string';
   min?: number;
   max?: number;
 
@@ -680,9 +689,13 @@ export interface HiddenField extends BaseField {
 }
 
 export interface StringOrTextField extends BaseField {
-  // This is the default widget, so declaring its type is optional.
   widget: 'string' | 'text';
   default?: string;
+}
+
+export interface UUIDField extends BaseField {
+  widget: 'uuid';
+  allow_regenerate?: boolean;
 }
 
 export interface UnknownField extends BaseField {
@@ -704,6 +717,7 @@ export type Field<EF extends BaseField = UnknownField> =
   | SelectField
   | HiddenField
   | StringOrTextField
+  | UUIDField
   | EF;
 
 export interface ViewFilter {
@@ -748,7 +762,6 @@ export interface Backend {
   proxy_url?: string;
   large_media_url?: string;
   login?: boolean;
-  use_large_media_transforms_in_media_library?: boolean;
   identity_url?: string;
   gateway_url?: string;
   auth_scope?: AuthScope;
@@ -759,6 +772,7 @@ export interface Backend {
     uploadMedia?: string;
     deleteMedia?: string;
   };
+  use_large_media_transforms_in_media_library?: boolean;
 }
 
 export interface Slug {
@@ -784,11 +798,11 @@ export interface Config<EF extends BaseField = UnknownField> {
   media_folder?: string;
   public_folder?: string;
   media_folder_relative?: boolean;
-  media_library?: MediaLibrary;
-  load_config_file?: boolean;
+  media_library?: MediaLibraryConfig;
   slug?: Slug;
   i18n?: I18nInfo;
   local_backend?: boolean | LocalBackend;
+  disable_local_backup?: boolean;
   editor?: EditorConfig;
   search?: boolean;
 }
@@ -801,8 +815,8 @@ export interface BackendInitializerOptions {
   updateUserCredentials: (credentials: Credentials) => void;
 }
 
-export interface BackendInitializer {
-  init: (config: Config, options: BackendInitializerOptions) => BackendClass;
+export interface BackendInitializer<EF extends BaseField = UnknownField> {
+  init: (config: Config<EF>, options: BackendInitializerOptions) => BackendClass;
 }
 
 export interface EventData {
@@ -813,7 +827,7 @@ export interface EventData {
 export type EventListenerOptions = Record<string, unknown>;
 
 export type EventListenerHandler = (
-  data: EventData,
+  data: EventData | undefined,
   options: EventListenerOptions,
 ) => Promise<EntryData | undefined | null | void>;
 
@@ -926,6 +940,7 @@ export interface MarkdownEditorOptions {
 export type ShortcodeControlProps<P = {}> = P & {
   onChange: (props: P) => void;
   controlProps: WidgetControlProps<string, MarkdownField>;
+  theme: 'dark' | 'light';
 };
 
 export type ShortcodePreviewProps<P = {}> = P & {
@@ -961,4 +976,31 @@ export interface InferredField {
   defaultPreview: (value: string | boolean | number) => JSX.Element | ReactNode;
   fallbackToFirstField: boolean;
   showError: boolean;
+}
+
+export interface SvgProps {
+  className: string;
+}
+
+export interface Breadcrumb {
+  name?: string;
+  to?: string;
+}
+
+export interface MediaLibraryDisplayURL {
+  url?: string;
+  isFetching: boolean;
+  err?: unknown;
+}
+
+export interface MediaLibrarInsertOptions {
+  showAlt?: boolean;
+  chooseUrl?: boolean;
+}
+
+export interface BackupEntry {
+  raw: string;
+  path: string;
+  mediaFiles: MediaFile[];
+  i18n?: Record<string, { raw: string }>;
 }

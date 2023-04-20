@@ -4,7 +4,6 @@ const hu: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Tartalom',
-      workflow: 'Munkafolyamat',
       media: 'Média',
       quickAdd: 'Gyors hozzáadás',
     },
@@ -63,8 +62,6 @@ const hu: LocalePhrasesRoot = {
         'Töröljük ezt a publikált bejegyzést, a többi mentetlen modositással együtt?',
       onDeletePublishedEntryBody: 'Töröljük ezt a publikált bejegyzést?',
       loadingEntry: 'Bejegyzés betöltése...',
-      confirmLoadBackupBody:
-        'Helyi biztonsági másolat került helyre ehhez a bejegyzéshez, szeretné használni?',
     },
     editorToolbar: {
       publishing: 'Publikálás...',
@@ -172,35 +169,6 @@ const hu: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Bejegyzés publikálása sikertelen: %{details}',
       entryUpdated: 'Bejegyzés állapota frissült',
       onFailToAuth: '%{details}',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'A szerkesztési munkafolyamat-bejegyzések betöltése',
-      workflowHeading: 'Szerkesztői Folyamat',
-      newPost: 'New Post',
-      description:
-        '%{smart_count} bejegyzés felülvizsgálatra vár, %{readyCount} élesítésre vár. |||| %{smart_count} bejegyzés felülvizsgálatra vár, %{readyCount} élesítésre vár. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date}, írta %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: '%{author}',
-      deleteChanges: 'Változtatások törlése',
-      deleteNewEntry: 'Új bejegyzés törlése',
-      publishChanges: 'Változtatások publikálása',
-      publishNewEntry: 'Új bejegyzés publikálása',
-    },
-    workflowList: {
-      onDeleteEntry: 'Biztosan törli ezt a bejegyzést?',
-      onPublishingNotReadyEntry:
-        'Csak a "Kész" állapotú tételek tehetők közzé. A közzététel engedélyezéséhez húzza a kártyát a „Kész” oszlopba.',
-      onPublishEntry: 'Biztosan közzéteszi ezt a bejegyzést?',
-      draftHeader: 'Piszkozat',
-      inReviewHeader: 'Vizsgálat alatt',
-      readyHeader: 'Kész',
-      currentEntries: '%{smart_count} bejegyzés |||| %{smart_count} bejegyzések',
     },
   },
 };

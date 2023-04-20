@@ -19,7 +19,6 @@ const ca: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Contingut',
-      workflow: 'Flux Editorial',
       media: 'Multimèdia',
       quickAdd: 'Afegir',
     },
@@ -108,8 +107,6 @@ const ca: LocalePhrasesRoot = {
         'Està segur que vol eliminar aquesta entrada publicada, així com els canvis no guardats de la sessió actual?',
       onDeletePublishedEntryBody: 'Està segur que vol eliminar aquesta entrada publicada?',
       loadingEntry: 'Carregant entrada...',
-      confirmLoadBackupBody:
-        "S'ha recuperat una copia de seguretat local per aquesta entrada. La vol utilitzar?",
     },
     editorInterface: {
       toggleI18n: 'Mostrar/Amagar traduccions',
@@ -252,35 +249,6 @@ const ca: LocalePhrasesRoot = {
       onFailToAuth: '%{details}',
       onLoggedOut: 'La teva sessió ha estat tancada. Si us plau, torna a iniciar-la',
       onBackendDown: 'El servidor està patint problemes. Consulta %{details} per a més informació',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Carregant Entradas del Flux Editorial',
-      workflowHeading: 'Flux Editorial',
-      newPost: 'Nou article',
-      description:
-        '%{smart_count} entrada esperant revisió, %{readyCount} llesta per a publicar |||| %{smart_count} entrades esperant revisió, %{readyCount} llestes per a publicar. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} per %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'per %{author}',
-      deleteChanges: 'Eliminar canvis',
-      deleteNewEntry: 'Eliminar nova entrada',
-      publishChanges: 'Publicar canvis',
-      publishNewEntry: 'Publicar nova entrada',
-    },
-    workflowList: {
-      onDeleteEntry: 'Està segur que vol borrar aquesta entrada?',
-      onPublishingNotReadyEntry:
-        'Només es poden publicar elements amb estat "Llest". Si us plau, arrossegui la targeta fins la columna "Llest" per a permetre\'n la publicació',
-      onPublishEntry: 'Està segur que vol publicar aquesta entrada?',
-      draftHeader: 'Esborranys',
-      inReviewHeader: 'En revisió',
-      readyHeader: 'Llest',
-      currentEntries: '%{smart_count} entrada |||| %{smart_count} entrades',
     },
   },
 };

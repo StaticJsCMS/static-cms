@@ -19,7 +19,6 @@ const he: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'תוכן',
-      workflow: 'ניהול אייטמים לפני הפרסום',
       media: 'מדיה',
       quickAdd: 'הוספה מהירה',
     },
@@ -108,7 +107,6 @@ const he: LocalePhrasesRoot = {
         'האם ברצונך למחוק את האייטם הזה לפני פרסומו, וכן את השינויים שבוצעו כעת וטרם נשמרו?',
       onDeletePublishedEntryBody: 'האם ברצונך למחוק את האייטם הזה לאחר פרסומו?',
       loadingEntry: 'טעינת אייטם...',
-      confirmLoadBackupBody: 'קיים עותק מקומי שמור של האייטם. האם ברצונך לטעון אותו?',
     },
     editorInterface: {
       toggleI18n: 'החלפת שפות',
@@ -263,35 +261,6 @@ const he: LocalePhrasesRoot = {
       onFailToAuth: '%{details}',
       onLoggedOut: 'נותקת מהמערכת. יש לגבות מידע לא שמור ולהתחבר שוב',
       onBackendDown: 'ה-backend המוגדר אינו זמין. ראו %{details} למידע נוסף',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'טעינת אייטמים',
-      workflowHeading: 'ניהול אייטמים לפני הפרסום',
-      newPost: 'אייטם חדש',
-      description:
-        '%אייטם {smart_count} ממתין לאישור, אייטם %{readyCount} מוכן לפרסום |||| %{smart_count} אייטמים ממתינים לאישור, %{readyCount} מוכנים לפרסום',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} מאת %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'מאת %{author}',
-      deleteChanges: 'למחוק את השינויים',
-      deleteNewEntry: 'למחוק אייטם חדש',
-      publishChanges: 'פרסום השינויים',
-      publishNewEntry: 'פרסום אייטם חדש',
-    },
-    workflowList: {
-      onDeleteEntry: 'האם ברצונך למחוק אייטם זה?',
-      onPublishingNotReadyEntry:
-        'ניתן לפרסם רק אייטמים שנמצאים במצב ״מוכן לפרסום״. נא לגרור את האייטם לטור ״מוכן לפרסום״ כדי לפרסם.',
-      onPublishEntry: 'האם ברצונך לפרסם אייטם זה?',
-      draftHeader: 'טיוטות',
-      inReviewHeader: 'ממתין לאישור',
-      readyHeader: 'מוכן לפרסום',
-      currentEntries: 'אייטם %{smart_count} |||| %{smart_count} אייטמים',
     },
   },
 };

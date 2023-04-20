@@ -19,7 +19,6 @@ const ro: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Conținut',
-      workflow: 'Workflow',
       media: 'Fișiere',
       quickAdd: 'Adaugă',
     },
@@ -109,8 +108,6 @@ const ro: LocalePhrasesRoot = {
         'Ești sigur/ă că dorești să ștergi această publicare, dar și modificările nesalvate din sesiunea curentă?',
       onDeletePublishedEntryBody: 'Ești sigur/ă că dorești să ștergi această publicare?',
       loadingEntry: 'Se încarcă...',
-      confirmLoadBackupBody:
-        'Un backup local a fost recuperat pentru această intrare, dorești să îl folosești?',
     },
     editorInterface: {
       toggleI18n: 'Comută limba',
@@ -257,35 +254,6 @@ const ro: LocalePhrasesRoot = {
       onFailToAuth: '%{details}',
       onLoggedOut: 'Ai fost delogat, te rugăm salvează orice date și autentifică-te din nou.',
       onBackendDown: 'Există probleme la server. Vezi %{details} pentru mai multe informații.',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Se încarcă intrările din Workflow-ul Editorial',
-      workflowHeading: 'Workflow Editorial',
-      newPost: 'Postare nouă',
-      description:
-        '%{smart_count} pregătite de revizuire, %{readyCount} gata de publicare. |||| %{smart_count} pregătite de revizuire, %{readyCount} gata de publicare. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} de %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'de %{author}',
-      deleteChanges: 'Modificări șterse',
-      deleteNewEntry: 'Șterge intrarea nouă',
-      publishChanges: 'Publicare modificări',
-      publishNewEntry: 'Publicare intrare nouă',
-    },
-    workflowList: {
-      onDeleteEntry: 'Ești sigur/ă că dorești ștergerea intrării?',
-      onPublishingNotReadyEntry:
-        'Numai intrări cu status-ul „Gata” pot fi publicate. Trage un card în coloana „Gata” pentru a putea publica.',
-      onPublishEntry: 'Ești sigur/ă că dorești să faci publicarea?',
-      draftHeader: 'Ciorne',
-      inReviewHeader: 'În revizuire',
-      readyHeader: 'Gata',
-      currentEntries: '%{smart_count} intrări |||| %{smart_count} intrări',
     },
   },
 };

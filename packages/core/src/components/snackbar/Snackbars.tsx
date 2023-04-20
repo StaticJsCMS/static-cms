@@ -1,21 +1,16 @@
-import CloseIcon from '@mui/icons-material/Close';
-import Alert from '@mui/material/Alert';
-import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
 import React, { useCallback, useEffect, useState } from 'react';
 import { translate } from 'react-polyglot';
 
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import { removeSnackbarById, selectSnackbars } from '@staticcms/core/store/slices/snackbars';
+import SnackbarAlert from './SnackbarAlert';
 
-import type { TranslatedProps } from '@staticcms/core/interface';
 import type { SnackbarMessage } from '@staticcms/core/store/slices/snackbars';
-import type { SyntheticEvent } from 'react';
+import type { FC, SyntheticEvent } from 'react';
+import type { TranslateProps } from 'react-polyglot';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface SnackbarsProps {}
-
-const Snackbars = ({ t }: TranslatedProps<SnackbarsProps>) => {
+const Snackbars: FC<TranslateProps> = ({ t }) => {
   const [open, setOpen] = useState(false);
   const [messageInfo, setMessageInfo] = useState<SnackbarMessage | undefined>(undefined);
 
@@ -47,27 +42,6 @@ const Snackbars = ({ t }: TranslatedProps<SnackbarsProps>) => {
     setMessageInfo(undefined);
   };
 
-  const renderAlert = useCallback(
-    (data: SnackbarMessage) => {
-      const { type, message } = data;
-
-      let renderedMessage: string;
-      if (typeof message === 'string') {
-        renderedMessage = message;
-      } else {
-        const { key, options } = message;
-        renderedMessage = t(key, options);
-      }
-
-      return (
-        <Alert key="message" onClose={handleClose} severity={type} sx={{ width: '100%' }}>
-          {renderedMessage}
-        </Alert>
-      );
-    },
-    [handleClose, t],
-  );
-
   return (
     <Snackbar
       key={messageInfo ? messageInfo.id : undefined}
@@ -76,13 +50,9 @@ const Snackbars = ({ t }: TranslatedProps<SnackbarsProps>) => {
       onClose={handleClose}
       TransitionProps={{ onExited: handleExited }}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-      action={
-        <IconButton aria-label="close" color="inherit" sx={{ p: 0.5 }} onClick={handleClose}>
-          <CloseIcon />
-        </IconButton>
-      }
+      className="test"
     >
-      {messageInfo ? renderAlert(messageInfo) : undefined}
+      {messageInfo ? <SnackbarAlert data={messageInfo} onClose={handleClose} t={t} /> : undefined}
     </Snackbar>
   );
 };

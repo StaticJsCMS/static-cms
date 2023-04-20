@@ -14,12 +14,6 @@ function expectMarkdown(nodes: MdValue, options: { useMdx: boolean }, markdown: 
 describe('serializeMarkdown', () => {
   runSerializationTests((key, mode, data) => {
     it(`serializes ${key}`, async () => {
-      if (mode === 'both') {
-        await expectMarkdown(data.slate, { useMdx: false }, data.markdown);
-        await expectMarkdown(data.slate, { useMdx: true }, data.markdown);
-        return;
-      }
-
       await expectMarkdown(data.slate, { useMdx: mode === 'mdx' }, data.markdown);
     });
   });

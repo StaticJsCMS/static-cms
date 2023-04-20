@@ -83,7 +83,7 @@ export const API_NAME = 'Bitbucket';
 
 function replace404WithEmptyResponse(err: FetchError) {
   if (err && err.status === 404) {
-    console.info('This 404 was expected and handled appropriately.');
+    console.info('[StaticCMS] This 404 was expected and handled appropriately.');
     return { size: 0, values: [] as BitBucketFile[] } as BitBucketSrcResult;
   } else {
     return Promise.reject(err);
@@ -188,7 +188,8 @@ export default class API {
     // doesn't.)
     ...(file.commit && file.commit.hash ? { id: this.getFileId(file.commit.hash, file.path) } : {}),
   });
-  processFiles = (files: BitBucketFile[]) => files.filter(this.isFile).map(this.processFile);
+  processFiles = (files: BitBucketFile[], folderSupport?: boolean) =>
+    files.filter(file => (!folderSupport ? this.isFile(file) : true)).map(this.processFile);
 
   readFile = async (
     path: string,
@@ -234,7 +235,7 @@ export default class API {
       url: `${this.repoURL}/commits`,
       params: { include: branch, pagelen: '100' },
     }).catch(e => {
-      console.info(`Failed getting commits for branch '${branch}'`, e);
+      console.info(`[StaticCMS] Failed getting commits for branch '${branch}'`, e);
       return [];
     });
 
@@ -294,7 +295,7 @@ export default class API {
       })),
     ])((cursor.data?.links as Record<string, unknown>)[action]);
 
-  listAllFiles = async (path: string, depth: number, branch: string) => {
+  listAllFiles = async (path: string, depth: number, branch: string, folderSupport?: boolean) => {
     const { cursor: initialCursor, entries: initialEntries } = await this.listFiles(
       path,
       depth,
@@ -311,7 +312,7 @@ export default class API {
       entries.push(...newEntries);
       currentCursor = newCursor;
     }
-    return this.processFiles(entries);
+    return this.processFiles(entries, folderSupport);
   };
 
   async uploadFiles(

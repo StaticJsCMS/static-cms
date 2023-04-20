@@ -19,7 +19,6 @@ const tr: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'İçerikler',
-      workflow: 'İş Akışı',
       media: 'Medya',
       quickAdd: 'Hızlı ekle',
     },
@@ -110,8 +109,6 @@ const tr: LocalePhrasesRoot = {
         'Bu oturumda kaydedilmiş değişikliklerin yanı sıra geçerli oturumdaki kaydedilmemiş değişikliklerinizi silmek istediğinize emin misiniz?',
       onDeletePublishedEntryBody: 'Bu yayınlanmış girdiyi silmek istediğinize emin misiniz?',
       loadingEntry: 'Girdiler yükleniyor...',
-      confirmLoadBackupBody:
-        'Bu girdi için yerel bir yedekleme kurtarıldı, kullanmak ister misiniz?',
     },
     editorInterface: {
       toggleI18n: 'i18n değiştir',
@@ -267,35 +264,6 @@ const tr: LocalePhrasesRoot = {
       onLoggedOut: 'Çıkış yaptınız, lütfen tüm verileri yedekleyin ve tekrar giriş yapın',
       onBackendDown:
         'Arka uç hizmetinde bir kesinti yaşanıyor. Daha fazla bilgi için %{details} gör',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'İş Akışı Girdileri Yükleniyor',
-      workflowHeading: 'Editoryal İş Akışı',
-      newPost: 'Yeni Mesaj',
-      description:
-        '%{smart_count} girdi incelemeyi bekliyor, %{readyCount} yayına hazır. |||| %{smart_count} girdi incelemeyi bekliyor, %{readyCount} yayınlanmaya hazır. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} tarafından %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: '%{author} tarafından',
-      deleteChanges: 'Değişiklikleri sil',
-      deleteNewEntry: 'Yeni girdiyi sil',
-      publishChanges: 'Değişiklikleri yayınla',
-      publishNewEntry: 'Yeni girdi yayınla',
-    },
-    workflowList: {
-      onDeleteEntry: 'Bu girdiyi silmek istediğinize emin misiniz?',
-      onPublishingNotReadyEntry:
-        'Yalnızca "Hazır" durumu olan öğeler yayınlanabilir. Lütfen yayınlamayı etkinleştirmek için kartı "Hazır" sütununa sürükleyin.',
-      onPublishEntry: 'Bu girdiyi yayınlamak istediğinize emin misiniz?',
-      draftHeader: 'Taslaklar',
-      inReviewHeader: 'İncelemede',
-      readyHeader: 'Hazır',
-      currentEntries: '%{smart_count} girdi |||| %{smart_count} girdiler',
     },
   },
 };

@@ -113,10 +113,12 @@ const viewFilters = {
           {
             type: 'string',
           },
+          {
+            type: 'number',
+          },
         ],
       },
     },
-    additionalProperties: false,
     required: ['label', 'field', 'pattern'],
   },
 };
@@ -131,7 +133,6 @@ const viewGroups = {
       field: { type: 'string' },
       pattern: { type: 'string' },
     },
-    additionalProperties: false,
     required: ['label', 'field'],
   },
 };
@@ -149,52 +150,41 @@ function getConfigSchema() {
         type: 'object',
         properties: {
           name: { type: 'string', examples: ['test-repo'] },
+          repo: { type: 'string' },
+          branch: { type: 'string' },
+          api_root: { type: 'string' },
+          site_domain: { type: 'string' },
+          base_url: { type: 'string' },
+          auth_endpoint: { type: 'string' },
+          app_id: { type: 'string' },
+          auth_type: {
+            type: 'string',
+            examples: ['implicit', 'pkce'],
+            enum: ['implicit', 'pkce'],
+          },
+          proxy_url: { type: 'string' },
+          large_media_url: { type: 'string' },
+          login: { type: 'boolean' },
+          identity_url: { type: 'string' },
+          gateway_url: { type: 'string' },
           auth_scope: {
             type: 'string',
             examples: ['repo', 'public_repo'],
             enum: ['repo', 'public_repo'],
           },
-        },
-        required: ['name'],
-      },
-      local_backend: {
-        oneOf: [
-          { type: 'boolean' },
-          {
+          commit_messages: {
             type: 'object',
             properties: {
-              url: { type: 'string', examples: ['http://localhost:8081/api/v1'] },
-              allowed_hosts: {
-                type: 'array',
-                items: { type: 'string' },
-              },
+              create: { type: 'string' },
+              update: { type: 'string' },
+              delete: { type: 'string' },
+              uploadMedia: { type: 'string' },
+              deleteMedia: { type: 'string' },
             },
-            additionalProperties: false,
           },
-        ],
-      },
-      locale: { type: 'string', examples: ['en', 'fr', 'de'] },
-      i18n: i18nRoot,
-      site_url: { type: 'string', examples: ['https://example.com'] },
-      display_url: { type: 'string', examples: ['https://example.com'] },
-      logo_url: { type: 'string', examples: ['https://example.com/images/logo.svg'] },
-      media_folder: { type: 'string', examples: ['assets/uploads'] },
-      public_folder: { type: 'string', examples: ['/uploads'] },
-      media_folder_relative: { type: 'boolean' },
-      media_library: {
-        type: 'object',
-        properties: {
-          name: { type: 'string', examples: ['uploadcare'] },
-          config: { type: 'object' },
+          use_large_media_transforms_in_media_library: { type: 'boolean' },
         },
-        required: [],
-      },
-      slug: {
-        type: 'object',
-        properties: {
-          encoding: { type: 'string', enum: ['unicode', 'ascii'] },
-          clean_accents: { type: 'boolean' },
-        },
+        required: ['name'],
       },
       collections: {
         type: 'array',
@@ -204,57 +194,25 @@ function getConfigSchema() {
           type: 'object',
           properties: {
             name: { type: 'string' },
-            label: { type: 'string' },
-            label_singular: { type: 'string' },
             description: { type: 'string' },
-            folder: { type: 'string' },
-            files: {
-              type: 'array',
-              items: {
-                // ------- Each file: -------
-                type: 'object',
-                properties: {
-                  name: { type: 'string' },
-                  label: { type: 'string' },
-                  label_singular: { type: 'string' },
-                  description: { type: 'string' },
-                  file: { type: 'string' },
-                  editor: {
-                    type: 'object',
-                    properties: {
-                      preview: { type: 'boolean' },
-                    },
-                  },
-                  fields: fieldsConfig(),
-                },
-                required: ['name', 'label', 'file', 'fields'],
-              },
-              uniqueItemProperties: ['name'],
-            },
-            identifier_field: { type: 'string' },
+            icon: { type: 'string' },
             summary: { type: 'string' },
-            slug: { type: 'string' },
-            path: { type: 'string' },
-            create: { type: 'boolean' },
-            publish: { type: 'boolean' },
-            hide: { type: 'boolean' },
-            editor: {
-              type: 'object',
-              properties: {
-                preview: { type: 'boolean' },
-              },
-            },
-            format: { type: 'string', enum: Object.keys(formatExtensions) },
-            extension: { type: 'string' },
-            frontmatter_delimiter: {
-              type: ['string', 'array'],
-              minItems: 2,
-              maxItems: 2,
+            summary_fields: {
+              type: 'array',
               items: {
                 type: 'string',
               },
             },
-            fields: fieldsConfig(),
+            filter: {
+              type: 'object',
+              properties: {
+                value: { type: 'string' },
+                field: { type: 'string' },
+              },
+              required: ['value', 'field'],
+            },
+            label_singular: { type: 'string' },
+            label: { type: 'string' },
             sortable_fields: {
               type: 'object',
               properties: {
@@ -281,15 +239,91 @@ function getConfigSchema() {
             },
             view_filters: viewFilters,
             view_groups: viewGroups,
+            i18n: i18nCollection,
+            hide: { type: 'boolean' },
+            editor: {
+              type: 'object',
+              properties: {
+                preview: { type: 'boolean' },
+                frame: { type: 'boolean' },
+              },
+            },
+            identifier_field: { type: 'string' },
+            path: { type: 'string' },
+            extension: { type: 'string' },
+            format: { type: 'string', enum: Object.keys(formatExtensions) },
+            frontmatter_delimiter: {
+              type: ['string', 'array'],
+              minItems: 2,
+              maxItems: 2,
+              items: {
+                type: 'string',
+              },
+            },
+            slug: { type: 'string' },
+            media_folder: { type: 'string' },
+            public_folder: { type: 'string' },
+            media_library: {
+              type: 'object',
+              properties: {
+                max_file_size: { type: 'number' },
+                folder_support: { type: 'boolean' },
+              },
+            },
+            folder: { type: 'string' },
+            fields: fieldsConfig(),
+            create: { type: 'boolean' },
+            delete: { type: 'boolean' },
             nested: {
               type: 'object',
               properties: {
                 depth: { type: 'number', minimum: 1, maximum: 1000 },
                 summary: { type: 'string' },
+                path: {
+                  type: 'object',
+                  properties: {
+                    label: { type: 'string' },
+                    index_file: { type: 'string' },
+                  },
+                  required: ['index_file'],
+                },
               },
               required: ['depth'],
             },
-            i18n: i18nCollection,
+            files: {
+              type: 'array',
+              items: {
+                // ------- Each file: -------
+                type: 'object',
+                properties: {
+                  name: { type: 'string' },
+                  label: { type: 'string' },
+                  file: { type: 'string' },
+                  fields: fieldsConfig(),
+                  label_singular: { type: 'string' },
+                  description: { type: 'string' },
+                  media_folder: { type: 'string' },
+                  public_folder: { type: 'string' },
+                  media_library: {
+                    type: 'object',
+                    properties: {
+                      max_file_size: { type: 'number' },
+                      folder_support: { type: 'boolean' },
+                    },
+                  },
+                  i18n: i18nCollection,
+                  editor: {
+                    type: 'object',
+                    properties: {
+                      preview: { type: 'boolean' },
+                      frame: { type: 'boolean' },
+                    },
+                  },
+                },
+                required: ['name', 'label', 'file', 'fields'],
+              },
+              uniqueItemProperties: ['name'],
+            },
           },
           required: ['name', 'label'],
           oneOf: [{ required: ['files'] }, { required: ['folder', 'fields'] }],
@@ -314,15 +348,57 @@ function getConfigSchema() {
         },
         uniqueItemProperties: ['name'],
       },
+      locale: { type: 'string', examples: ['en', 'fr', 'de'] },
+      site_id: { type: 'string' },
+      site_url: { type: 'string', examples: ['https://example.com'] },
+      display_url: { type: 'string', examples: ['https://example.com'] },
+      base_url: { type: 'string' },
+      logo_url: { type: 'string', examples: ['https://example.com/images/logo.svg'] },
+      media_folder: { type: 'string', examples: ['assets/uploads'] },
+      public_folder: { type: 'string', examples: ['/uploads'] },
+      media_folder_relative: { type: 'boolean' },
+      media_library: {
+        type: 'object',
+        properties: {
+          max_file_size: { type: 'number' },
+          folder_support: { type: 'boolean' },
+        },
+      },
+      slug: {
+        type: 'object',
+        properties: {
+          encoding: { type: 'string', enum: ['unicode', 'ascii'] },
+          clean_accents: { type: 'boolean' },
+          sanitize_replacement: { type: 'string' },
+        },
+      },
+      i18n: i18nRoot,
+      local_backend: {
+        oneOf: [
+          { type: 'boolean' },
+          {
+            type: 'object',
+            properties: {
+              url: { type: 'string', examples: ['http://localhost:8081/api/v1'] },
+              allowed_hosts: {
+                type: 'array',
+                items: { type: 'string' },
+              },
+            },
+          },
+        ],
+      },
+      disable_local_backup: { type: 'boolean' },
       editor: {
         type: 'object',
         properties: {
           preview: { type: 'boolean' },
+          frame: { type: 'boolean' },
         },
       },
+      search: { type: 'string' },
     },
-    required: ['backend', 'collections'],
-    anyOf: [{ required: ['media_folder'] }, { required: ['media_library'] }],
+    required: ['backend', 'collections', 'media_folder'],
   };
 }
 

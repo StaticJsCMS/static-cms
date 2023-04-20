@@ -2,6 +2,8 @@ backend:
   name: test-repo
 site_url: 'https://example.com'
 media_folder: assets/uploads
+media_library:
+  folder_support: true
 locale: en
 i18n:
   # Required and can be one of multiple_folders, multiple_files or single_file
@@ -25,7 +27,10 @@ collections:
       and editing guidelines that are specific to a collection.
     folder: _posts
     slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
-    summary: '{{title}} -- {{year}}/{{month}}/{{day}}'
+    summary_fields:
+      - title
+      - date
+      - draft
     sortable_fields:
       fields:
         - title
@@ -138,6 +143,7 @@ collections:
             label: Pattern Validation
             widget: code
             pattern: ['.{12,}', 'Must have at least 12 characters']
+            allow_input: true
             required: false
           - name: language
             label: Language Selection
@@ -173,6 +179,10 @@ collections:
           - name: required
             label: Required Validation
             widget: color
+          - name: allow_input
+            label: Allow Input
+            widget: color
+            allow_input: true
           - name: with_default
             label: Required With Default
             widget: color
@@ -180,7 +190,8 @@ collections:
           - name: pattern
             label: Pattern Validation
             widget: color
-            pattern: ['^#([0-9a-fA-F]{3})(?:[0-9a-fA-F]{3})?$', 'Must be a valid hex code']
+            pattern:
+              ['^#[a-fA-F0-9]{3}$|^[a-fA-F0-9]{4}$|^[a-fA-F0-9]{6}$', 'Must be a valid hex code']
             allow_input: true
             required: false
           - name: alpha
@@ -218,7 +229,7 @@ collections:
             time_format: 'h:mm aaa'
             required: false
           - name: date_and_time_with_default
-            label: Date and Time With Deafult
+            label: Date and Time With Default
             widget: datetime
             format: 'MMM d, yyyy h:mm aaa'
             date_format: 'MMM d, yyyy'
@@ -232,22 +243,25 @@ collections:
             time_format: false
             required: false
           - name: date_with_default
-            label: Date With Deafult
+            label: Date With Default
             widget: datetime
             format: 'MMM d, yyyy'
             date_format: 'MMM d, yyyy'
+            time_format: false
             required: false
             default: 'Jan 12, 2023'
           - name: time
             label: Time
             widget: datetime
             format: 'h:mm aaa'
+            date_format: false
             time_format: 'h:mm aaa'
             required: false
           - name: time_with_default
-            label: Time With Deafult
+            label: Time With Default
             widget: datetime
             format: 'h:mm aaa'
+            date_format: false
             time_format: 'h:mm aaa'
             required: false
             default: '12:00 am'
@@ -272,12 +286,13 @@ collections:
             label: Choose URL
             widget: file
             required: false
-            media_library:
-              choose_url: true
+            choose_url: true
       - name: image
         label: Image
         file: _widgets/image.json
         description: Image widget
+        media_library:
+          folder_support: false
         fields:
           - name: required
             label: Required Validation
@@ -295,8 +310,12 @@ collections:
             label: Choose URL
             widget: image
             required: false
+            choose_url: true
+          - name: folder_support
+            label: Folder Support
+            widget: image
             media_library:
-              choose_url: true
+              folder_support: true
       - name: list
         label: List
         file: _widgets/list.yml
@@ -501,6 +520,11 @@ collections:
             widget: markdown
             pattern: ['# [a-zA-Z0-9]+', 'Must have a header']
             required: false
+          - name: folder_support
+            label: Folder Support
+            widget: markdown
+            media_library:
+              folder_support: true
       - name: number
         label: Number
         file: _widgets/number.json
@@ -640,7 +664,7 @@ collections:
               - date
             search_fields:
               - title
-              - body
+              - date
             value_field: title
           - label: Required With Default
             name: with_default
@@ -651,7 +675,7 @@ collections:
               - date
             search_fields:
               - title
-              - body
+              - date
             value_field: title
             default: This is a YAML front matter post
           - label: Optional Validation
@@ -664,7 +688,7 @@ collections:
               - date
             search_fields:
               - title
-              - body
+              - date
             value_field: title
           - label: Multiple
             name: multiple
@@ -677,7 +701,7 @@ collections:
               - date
             search_fields:
               - title
-              - body
+              - date
             value_field: title
           - label: Multiple With Default
             name: multiple_with_default
@@ -693,7 +717,7 @@ collections:
               - date
             search_fields:
               - title
-              - body
+              - date
             value_field: title
       - name: select
         label: Select
@@ -828,6 +852,18 @@ collections:
             widget: text
             pattern: ['.{12,}', 'Must have at least 12 characters']
             required: false
+      - name: uuid
+        label: UUID
+        file: _widgets/uuid.json
+        description: UUID widget
+        fields:
+          - name: uuid
+            label: UUID
+            widget: uuid
+          - name: no_regenerate
+            label: Does not allow regeneration
+            widget: uuid
+            allow_regenerate: false
   - name: settings
     label: Settings
     delete: false
@@ -838,8 +874,6 @@ collections:
         label: Site Settings
         file: _data/settings.json
         description: General Site Settings
-        editor:
-          preview: true
         fields:
           - label: Number of posts on frontpage
             name: front_limit
@@ -1242,3 +1276,22 @@ collections:
         label: Date
         widget: datetime
         i18n: duplicate
+  - name: pages
+    label: Nested Pages
+    label_singular: 'Page'
+    folder: _nested_pages
+    create: true
+    # adding a nested object will show the collection folder structure
+    nested:
+      depth: 100 # max depth to show in the collection tree
+      summary: '{{title}}' # optional summary for a tree node, defaults to the inferred title field
+      # adding a path object allows editing the path of entries
+      # moving an existing entry will move the entire sub tree of the entry to the new location
+      path: { label: 'Path', index_file: 'index' }
+    fields:
+      - label: Title
+        name: title
+        widget: string
+      - label: Body
+        name: body
+        widget: markdown

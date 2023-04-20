@@ -11,11 +11,15 @@ const PostPreview = ({ entry, widgetFor }) => {
   );
 };
 
-const PostPreviewCard = ({ entry, widgetFor, viewStyle }) => {
+const PostPreviewCard = ({ entry, theme, hasLocalBackup }) => {
+  const date = new Date(entry.data.date);
+
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
   return h(
     'div',
     { style: { width: '100%' } },
-    viewStyle === 'grid' ? widgetFor('image') : null,
     h(
       'div',
       { style: { padding: '16px', width: '100%' } },
@@ -27,6 +31,8 @@ const PostPreviewCard = ({ entry, widgetFor, viewStyle }) => {
             width: '100%',
             justifyContent: 'space-between',
             alignItems: 'start',
+            gap: '4px',
+            color: theme === 'dark' ? 'white' : 'inherit',
           },
         },
         h(
@@ -34,33 +40,120 @@ const PostPreviewCard = ({ entry, widgetFor, viewStyle }) => {
           {
             style: {
               display: 'flex',
-              flexDirection: viewStyle === 'grid' ? 'column' : 'row',
+              flexDirection: 'column',
               alignItems: 'baseline',
-              gap: '8px',
+              gap: '4px',
             },
           },
-          h('strong', { style: { fontSize: '24px' } }, entry.data.title),
-          h('span', { style: { fontSize: '16px' } }, entry.data.date),
+          h(
+            'div',
+            {
+              style: {
+                fontSize: '14px',
+                fontWeight: 700,
+                color: 'rgb(107, 114, 128)',
+                fontSize: '14px',
+                lineHeight: '18px',
+              },
+            },
+            entry.data.title,
+          ),
+          h(
+            'span',
+            { style: { fontSize: '14px' } },
+            `${date.getFullYear()}-${month < 10 ? `0${month}` : month}-${
+              day < 10 ? `0${day}` : day
+            }`,
+          ),
         ),
         h(
           'div',
           {
             style: {
-              backgroundColor: entry.data.draft === true ? 'blue' : 'green',
-              color: 'white',
-              border: 'none',
-              padding: '4px 8px',
-              textAlign: 'center',
-              textDecoration: 'none',
-              display: 'inline-block',
-              cursor: 'pointer',
-              borderRadius: '4px',
+              display: 'flex',
+              alignItems: 'center',
+              whiteSpace: 'no-wrap',
+              gap: '8px',
             },
           },
-          entry.data.draft === true ? 'Draft' : 'Published',
+          hasLocalBackup
+            ? h(
+                'div',
+                {
+                  style: {
+                    border: '2px solid rgb(147, 197, 253)',
+                    borderRadius: '50%',
+                    color: 'rgb(147, 197, 253)',
+                    height: '18px',
+                    width: '18px',
+                    fontWeight: 'bold',
+                    fontSize: '11px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                  },
+                  title: 'Has local backup'
+                },
+                'i',
+              )
+            : null,
+          h(
+            'div',
+            {
+              style: {
+                backgroundColor:
+                  entry.data.draft === true ? 'rgb(37, 99, 235)' : 'rgb(22, 163, 74)',
+                color: 'white',
+                border: 'none',
+                padding: '2px 6px',
+                textAlign: 'center',
+                textDecoration: 'none',
+                display: 'inline-block',
+                cursor: 'pointer',
+                borderRadius: '4px',
+                fontSize: '14px',
+              },
+            },
+            entry.data.draft === true ? 'Draft' : 'Published',
+          ),
         ),
       ),
     ),
+  );
+};
+
+const PostDateFieldPreview = ({ value }) => {
+  const date = new Date(value);
+
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  return h(
+    'div',
+    {},
+    `${date.getFullYear()}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}`,
+  );
+};
+
+const PostDraftFieldPreview = ({ value }) => {
+  return h(
+    'div',
+    {
+      style: {
+        backgroundColor: value === true ? 'rgb(37 99 235)' : 'rgb(22 163 74)',
+        color: 'white',
+        border: 'none',
+        padding: '2px 6px',
+        textAlign: 'center',
+        textDecoration: 'none',
+        display: 'inline-block',
+        cursor: 'pointer',
+        borderRadius: '4px',
+        fontSize: '14px',
+      },
+    },
+    value === true ? 'Draft' : 'Published',
   );
 };
 
@@ -134,6 +227,8 @@ const CustomPage = () => {
 
 CMS.registerPreviewTemplate('posts', PostPreview);
 CMS.registerPreviewCard('posts', PostPreviewCard);
+CMS.registerFieldPreview('posts', 'date', PostDateFieldPreview);
+CMS.registerFieldPreview('posts', 'draft', PostDraftFieldPreview);
 CMS.registerPreviewTemplate('general', GeneralPreview);
 CMS.registerPreviewTemplate('authors', AuthorsPreview);
 // Pass the name of a registered control to reuse with a new widget preview.
@@ -170,7 +265,7 @@ CMS.registerShortcode('youtube', {
   toArgs: ({ src }) => {
     return [src];
   },
-  control: ({ src, onChange }) => {
+  control: ({ src, onChange, theme }) => {
     return h('span', {}, [
       h('input', {
         key: 'control-input',
@@ -178,12 +273,18 @@ CMS.registerShortcode('youtube', {
         onChange: event => {
           onChange({ src: event.target.value });
         },
+        style: {
+          width: '100%',
+          backgroundColor: theme === 'dark' ? 'rgb(30, 41, 59)' : 'white',
+          color: theme === 'dark' ? 'white' : 'black',
+          padding: '4px 8px',
+        },
       }),
       h(
         'iframe',
         {
           key: 'control-preview',
-          width: '420',
+          width: '100%',
           height: '315',
           src: `https://www.youtube.com/embed/${src}`,
         },

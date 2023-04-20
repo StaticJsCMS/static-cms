@@ -4,21 +4,19 @@ title: Creating Custom Previews
 weight: 50
 ---
 
-The Static CMS exposes a `window.CMS` global object that you can use to register custom previews for an entire collection (or file within a file collection) via `registerPreviewTemplate` (editor view) and `registerPreviewCard` (collection view).
+The Static CMS exposes a `window.CMS` global object that you can use to register custom previews for an entire collection (or file within a file collection) via `registerPreviewTemplate` (editor view) and `registerPreviewCard` / `registerFieldPreview` (collection view).
 
 ### React Components Inline
 
-The `registerPreviewTemplate` and `registerPreviewCard` require you to provide a React component. If you have a build process in place for your project, it is possible to integrate with this build process.
+`registerPreviewTemplate`, `registerPreviewCard` and `registerFieldPreview` require you to provide a React component. If you have a build process in place for your project, it is possible to integrate with this build process.
 
 However, although possible, it may be cumbersome or even impractical to add a React build phase. For this reason, Static CMS exposes some constructs globally to allow you to create components inline: `h` (alias for React.createElement) as well some basic hooks (`useState`, `useMemo`, `useEffect`, `useCallback`).
-
-**NOTE**: `createClass` is still provided, allowing for the creation of react class components. However it has now been deprecated and will be removed in `v2.0.0`.
 
 ## Editor Preview
 
 `registerPreviewTemplate` allows you to create a template that overrides the entire editor preview for a given collection.
 
-### `registerPreviewTemplate` Params
+### Params
 
 | Param           | Type                                                                           | Description                                                                                                                                                                                                                          |
 | --------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -27,24 +25,24 @@ However, although possible, it may be cumbersome or even impractical to add a Re
 
 The following parameters will be passed to your `react_component` during render:
 
-| Param      | Type           | Description                                                                                          |
-| ---------- | -------------- | ---------------------------------------------------------------------------------------------------- |
-| entry      | object         | Object with a `data` field that contains the current value of all widgets in the editor              |
-| collection | object         | Collection configuration                                                                             |
-| fields     | object         | The fields for the given collection                                                                  |
-| document   | Document       | The document object the preview is within. If rendered with a frame, it will be the frame's document |
-| window     | Window         | The window object the preview is within. If rendered with a frame, it will be the frame's window     |
-| getAsset   | Async function | __Deprecated__ Function that given a url returns (as a promise) a loaded asset                                      |
-| widgetFor  | Function       | Given a field name, returns the rendered preview of that field's widget and value                    |
-| widgetsFor | Function       | Given a field name, returns the rendered previews of that field's nested child widgets and values    |
+| Param      | Type                   | Description                                                                                          |
+| ---------- | ---------------------- | ---------------------------------------------------------------------------------------------------- |
+| entry      | object                 | Object with a `data` field that contains the current value of all widgets in the editor              |
+| collection | object                 | Collection configuration                                                                             |
+| fields     | object                 | The fields for the given collection                                                                  |
+| document   | Document               | The document object the preview is within. If rendered with a frame, it will be the frame's document |
+| window     | Window                 | The window object the preview is within. If rendered with a frame, it will be the frame's window     |
+| widgetFor  | Function               | Given a field name, returns the rendered preview of that field's widget and value                    |
+| widgetsFor | Function               | Given a field name, returns the rendered previews of that field's nested child widgets and values    |
+| theme      | 'light'<br />\| 'dark' | The current theme being used by the app                                                              |
 
-#### `registerPreviewTemplate` Example
+#### Example
 
 <CodeTabs>
 
 ```js
 const PostPreview = ({ widgetFor, entry, collection, fields }) => {
-  const imageField = useMemo(fields.find((field) => field.name === 'image'), [fields]);
+  const imageField = useMemo(() => fields.find(field => field.name === 'image'), [fields]);
   const imageUrl = useMediaAsset(entry.data.image, collection, imageField, entry);
 
   return h(
@@ -63,7 +61,7 @@ CMS.registerPreviewTemplate('posts', PostPreview);
 import CMS, { useMediaAsset } from '@staticcms/core';
 
 const PostPreview = ({ widgetFor, entry, collection, fields }) => {
-  const imageField = useMemo(fields.find((field) => field.name === 'image'), [fields]);
+  const imageField = useMemo(() => fields.find(field => field.name === 'image'), [fields]);
   const imageUrl = useMediaAsset(entry.data.image, collection, imageField, entry);
 
   return (
@@ -92,13 +90,8 @@ interface Post {
   body: string;
 }
 
-const PostPreview = ({
-  widgetFor,
-  entry,
-  collection,
-  fields,
-}: TemplatePreviewProps<Post>) => {
-  const imageField = useMemo(fields.find((field) => field.name === 'image'), [fields]);
+const PostPreview = ({ widgetFor, entry, collection, fields }: TemplatePreviewProps<Post>) => {
+  const imageField = useMemo(() => fields.find(field => field.name === 'image'), [fields]);
   const imageUrl = useMediaAsset(entry.data.image, collection, imageField, entry);
 
   return (
@@ -324,11 +317,27 @@ CMS.registerPreviewTemplate('general', GeneralPreview);
 
 </CodeTabs>
 
+## Editor Preview Styles
+
+Register a custom stylesheet to use on the preview pane.
+
+```js
+CMS.registerPreviewStyle(url);
+```
+
+### Raw Styles
+
+If you want to provide a raw CSS string instead of a url, you can pass `{ raw: true }` as the second parameter.
+
+```js
+CMS.registerPreviewStyle('.main { color: blue; border: 1px solid gree; }', { raw: true });
+```
+
 ## Collection Card Preview
 
 `registerPreviewCard` allows you to create a card template that overrides the cards displayed in the collection view.
 
-### `registerPreviewCard` Params
+### Params
 
 | Param           | Type                                                                           | Description                                                                                                                                                                                                                          |
 | --------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -337,23 +346,24 @@ CMS.registerPreviewTemplate('general', GeneralPreview);
 
 The following parameters will be passed to your `react_component` during render:
 
-| Param      | Type                  | Description                                                                                       |
-| ---------- | --------------------- | ------------------------------------------------------------------------------------------------- |
-| viewStyle  | 'list'<br />\| 'grid' | The current view style being displayed                                                            |
-| entry      | object                | Object with a `data` field that contains the current value of all widgets in the editor           |
-| widgetFor  | Function              | Given a field name, returns the rendered preview of that field's widget and value                 |
-| widgetsFor | Function              | Given a field name, returns the rendered previews of that field's nested child widgets and values |
+| Param          | Type                   | Description                                                                                       |
+| -------------- | ---------------------- | ------------------------------------------------------------------------------------------------- |
+| entry          | object                 | Object with a `data` field that contains the current value of all widgets in the editor           |
+| widgetFor      | Function               | Given a field name, returns the rendered preview of that field's widget and value                 |
+| widgetsFor     | Function               | Given a field name, returns the rendered previews of that field's nested child widgets and values |
+| theme          | 'light'<br />\| 'dark' | The current theme being used by the app                                                           |
+| hasLocalBackup | boolean                | Whether the current entry has a local backup                                                      |
 
-#### `registerPreviewTemplate` Example
+#### Example
 
 <CodeTabs>
 
 ```js
-const PostPreviewCard = ({ entry, widgetFor, viewStyle }) => {
+const PostPreviewCard = ({ entry, widgetFor }) => {
   return h(
     'div',
     { style: { width: '100%' } },
-    viewStyle === 'grid' ? widgetFor('image') : null,
+    widgetFor('image'),
     h(
       'div',
       { style: { padding: '16px', width: '100%' } },
@@ -372,7 +382,7 @@ const PostPreviewCard = ({ entry, widgetFor, viewStyle }) => {
           {
             style: {
               display: 'flex',
-              flexDirection: viewStyle === 'grid' ? 'column' : 'row',
+              flexDirection: 'column',
               alignItems: 'baseline',
               gap: '8px',
             },
@@ -408,10 +418,10 @@ CMS.registerPreviewCard('posts', PostPreviewCard);
 ```jsx
 import CMS from '@staticcms/core';
 
-const PostPreviewCard = ({ entry, widgetFor, viewStyle }) => {
+const PostPreviewCard = ({ entry, widgetFor }) => {
   return (
     <div style={{ width: '100%' }}>
-      {viewStyle === 'grid' ? widgetFor('image') : null}
+      {widgetFor('image')}
       <div style={{ padding: '16px', width: '100%' }}>
         <div
           style={{
@@ -424,7 +434,7 @@ const PostPreviewCard = ({ entry, widgetFor, viewStyle }) => {
           <div
             style={{
               display: 'flex',
-              flexDirection: viewStyle === 'grid' ? 'column' : 'row',
+              flexDirection: 'column',
               alignItems: 'baseline',
               gap: '8px',
             }}
@@ -468,10 +478,10 @@ interface Post {
   body: string;
 }
 
-const PostPreviewCard = ({ entry, widgetFor, viewStyle }: TemplatePreviewCardProps<Post>) => {
+const PostPreviewCard = ({ entry, widgetFor }: TemplatePreviewCardProps<Post>) => {
   return (
     <div style={{ width: '100%' }}>
-      {viewStyle === 'grid' ? widgetFor('image') : null}
+      {widgetFor('image')}
       <div style={{ padding: '16px', width: '100%' }}>
         <div
           style={{
@@ -484,7 +494,7 @@ const PostPreviewCard = ({ entry, widgetFor, viewStyle }: TemplatePreviewCardPro
           <div
             style={{
               display: 'flex',
-              flexDirection: viewStyle === 'grid' ? 'column' : 'row',
+              flexDirection: 'column',
               alignItems: 'baseline',
               gap: '8px',
             }}
@@ -518,10 +528,118 @@ CMS.registerPreviewTemplate('posts', PostPreview);
 
 </CodeTabs>
 
-##### List View
-
-![Post Preview Card List View](/img/preview_card_list.png)
-
 ##### Grid View
 
-![Post Preview Card List View](/img/preview_card_grid.png)
+![Post Preview Card Grid View](/img/preview_card_grid.png)
+
+## Collection Field Preview
+
+`registerFieldPreview` allows you to create a custom preview for a specific field in the table view for collections.
+
+### Params
+
+| Param          | Type                                                                           | Description                                                                                                                                                                                                                          |
+| -------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| collectionName | string                                                                         | The name of the collection (or file for file collections) which this preview component will be used for<br /><ul><li>Folder collections: Use the name of the collection</li><li>File collections: Use the name of the file</li></ul> |
+| fieldName      | string                                                                         | The name of the field                                                                                                                                                                                                                |
+| component      | [React Function Component](https://reactjs.org/docs/components-and-props.html) | A React functional component that renders a preview of the field for a given entry in your collection                                                                                                                                |
+
+The following parameters will be passed to your `component` during render:
+
+| Param      | Type                   | Description                                        |
+| ---------- | ---------------------- | -------------------------------------------------- |
+| collection | object                 | Collection configuration                           |
+| field      | object                 | Field configuration                                |
+| value      | Function               | The current value of the field for the given entry |
+| theme      | 'light'<br />\| 'dark' | The current theme being used by the app            |
+
+#### Example
+
+<CodeTabs>
+
+```js
+const PostDraftFieldPreview = ({ value }) => {
+  return h(
+    'div',
+    {
+      style: {
+        backgroundColor: value === true ? 'rgb(37 99 235)' : 'rgb(22 163 74)',
+        color: 'white',
+        border: 'none',
+        padding: '2px 6px',
+        textAlign: 'center',
+        textDecoration: 'none',
+        display: 'inline-block',
+        cursor: 'pointer',
+        borderRadius: '4px',
+        fontSize: '14px',
+      },
+    },
+    value === true ? 'Draft' : 'Published',
+  );
+};
+
+CMS.registerFieldPreview('posts', 'draft', PostDraftFieldPreview);
+```
+
+```jsx
+import CMS from '@staticcms/core';
+
+const PostDraftFieldPreview = ({ value }) => {
+  return h(
+    'div',
+    {
+      style: {
+        backgroundColor: value === true ? 'rgb(37 99 235)' : 'rgb(22 163 74)',
+        color: 'white',
+        border: 'none',
+        padding: '2px 6px',
+        textAlign: 'center',
+        textDecoration: 'none',
+        display: 'inline-block',
+        cursor: 'pointer',
+        borderRadius: '4px',
+        fontSize: '14px',
+      },
+    },
+    value === true ? 'Draft' : 'Published',
+  );
+};
+
+CMS.registerFieldPreview('posts', 'draft', PostDraftFieldPreview);
+```
+
+```tsx
+import CMS from '@staticcms/core';
+
+import type { FieldPreviewProps } from '@staticcms/core';
+
+const CMS = ({ value }: FieldPreviewProps<boolean>) => {
+  return h(
+    'div',
+    {
+      style: {
+        backgroundColor: value === true ? 'rgb(37 99 235)' : 'rgb(22 163 74)',
+        color: 'white',
+        border: 'none',
+        padding: '2px 6px',
+        textAlign: 'center',
+        textDecoration: 'none',
+        display: 'inline-block',
+        cursor: 'pointer',
+        borderRadius: '4px',
+        fontSize: '14px',
+      },
+    },
+    value === true ? 'Draft' : 'Published',
+  );
+};
+
+CMS.registerFieldPreview('posts', 'draft', PostDraftFieldPreview);
+```
+
+</CodeTabs>
+
+##### Table View
+
+![Post Draft Field Preview Table View](/img/preview_draft_field_table.png)

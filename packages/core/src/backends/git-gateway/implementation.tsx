@@ -106,27 +106,6 @@ function getEndpoint(endpoint: string, netlifySiteURL: string | null) {
   return endpoint;
 }
 
-// wait for identity widget to initialize
-// force init on timeout
-let initPromise = Promise.resolve() as Promise<unknown>;
-if (window.netlifyIdentity) {
-  let initialized = false;
-  initPromise = Promise.race([
-    new Promise<void>(resolve => {
-      window.netlifyIdentity?.on('init', () => {
-        initialized = true;
-        resolve();
-      });
-    }),
-    new Promise(resolve => setTimeout(resolve, 2500)).then(() => {
-      if (!initialized) {
-        console.info('Manually initializing identity widget');
-        window.netlifyIdentity?.init();
-      }
-    }),
-  ]);
-}
-
 interface NetlifyUser extends Credentials {
   jwt: () => Promise<string>;
   email: string;
@@ -199,7 +178,7 @@ export default class GitGateway implements BackendClass {
           .every((statusComponent: GitGatewayStatus) => statusComponent.status === 'operational');
       })
       .catch(e => {
-        console.warn('Failed getting Git Gateway status', e);
+        console.warn('[StaticCMS] Failed getting Git Gateway status', e);
         return true;
       });
 
@@ -210,7 +189,7 @@ export default class GitGateway implements BackendClass {
         (await this.tokenPromise?.()
           .then(token => !!token)
           .catch(e => {
-            console.warn('Failed getting Identity token', e);
+            console.warn('[StaticCMS] Failed getting Identity token', e);
             return false;
           })) || false;
     }
@@ -222,7 +201,6 @@ export default class GitGateway implements BackendClass {
     if (this.authClient) {
       return this.authClient;
     }
-    await initPromise;
     this.authClient = {
       logout: () => window.netlifyIdentity?.logout(),
       currentUser: () => window.netlifyIdentity?.currentUser(),
@@ -413,8 +391,8 @@ export default class GitGateway implements BackendClass {
     return client.enabled && client.matchPath(path);
   }
 
-  getMedia(mediaFolder = this.mediaFolder) {
-    return this.backend!.getMedia(mediaFolder);
+  getMedia(mediaFolder = this.mediaFolder, folderSupport?: boolean) {
+    return this.backend!.getMedia(mediaFolder, folderSupport);
   }
 
   // this method memoizes this._getLargeMediaClient so that there can
@@ -440,7 +418,7 @@ export default class GitGateway implements BackendClass {
       .then((patterns: string[]) => ({ err: null, patterns }))
       .catch((err: Error) => {
         if (err.message.includes('404')) {
-          console.info('This 404 was expected and handled appropriately.');
+          console.info('[StaticCMS] This 404 was expected and handled appropriately.');
           return { err: null, patterns: [] as string[] };
         } else {
           return { err, patterns: [] as string[] };
@@ -486,7 +464,7 @@ export default class GitGateway implements BackendClass {
     const entry = items[0];
     const pointerFile = parsePointerFile(entry.data);
     if (!pointerFile.sha) {
-      console.warn(`Failed parsing pointer file ${path}`);
+      console.warn(`[StaticCMS] Failed parsing pointer file ${path}`);
       return { url: path, blob: new Blob() };
     }
 
@@ -495,7 +473,7 @@ export default class GitGateway implements BackendClass {
     return { url, blob };
   }
 
-  async getMediaDisplayURL(displayURL: DisplayURL) {
+  async getMediaDisplayURL(displayURL: DisplayURL): Promise<string> {
     const { path, id } = displayURL as DisplayURLObject;
     const isLargeMedia = await this.isLargeMediaFile(path);
     if (isLargeMedia) {
@@ -506,8 +484,7 @@ export default class GitGateway implements BackendClass {
       return displayURL;
     }
 
-    const url = await this.backend!.getMediaDisplayURL(displayURL);
-    return url;
+    return this.backend!.getMediaDisplayURL(displayURL);
   }
 
   async getMediaFile(path: string) {

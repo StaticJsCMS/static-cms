@@ -93,7 +93,7 @@ export default class Gitea implements BackendClass {
         ?.user()
         .then(user => !!user)
         .catch(e => {
-          console.warn('Failed getting Gitea user', e);
+          console.warn('[StaticCMS] Failed getting Gitea user', e);
           return false;
         })) || false;
 
@@ -285,15 +285,13 @@ export default class Gitea implements BackendClass {
       .catch(() => ({ file: { path, id: null }, data: '' }));
   }
 
-  async getMedia(mediaFolder = this.mediaFolder) {
+  async getMedia(mediaFolder = this.mediaFolder, folderSupport?: boolean) {
     if (!mediaFolder) {
       return [];
     }
-    return this.api!.listFiles(mediaFolder).then(files =>
-      files.map(({ id, name, size, path }) => {
-        // load media using getMediaDisplayURL to avoid token expiration with Gitlab raw content urls
-        // for private repositories
-        return { id, name, size, displayURL: { id, path }, path };
+    return this.api!.listFiles(mediaFolder, undefined, folderSupport).then(files =>
+      files.map(({ id, name, size, path, type }) => {
+        return { id, name, size, displayURL: { id, path }, path, isDirectory: type === 'tree' };
       }),
     );
   }

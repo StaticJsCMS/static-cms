@@ -186,9 +186,9 @@ collections: [
 
 </CodeTabs>
 
-### Folder Collections Path <img src="https://img.shields.io/badge/-Beta%20Feature-blue" alt="Beta Feature. Use at your own risk" title="Beta Feature. Use at your own risk" />
+### Folder Collections Path <BetaImage />
 
-By default the CMS stores folder collection content under the folder specified in the collection setting.
+By default Static CMS stores folder collection content under the folder specified in the collection setting.
 
 For example configuring `folder: posts` for a collection will save the content under `posts/post-title.md`.
 
@@ -198,7 +198,7 @@ This allows saving content in subfolders, e.g. configuring `path: '{{year}}/{{sl
 
 #### Media and Public Folder
 
-By default the CMS stores media files for all collections under a global `media_folder` directory as specified in the configuration.
+By default Static CMS stores media files for all collections under a global `media_folder` directory as specified in the configuration.
 
 When using the global `media_folder` directory any entry field that points to a media file will use the absolute path to the published file as designated by the `public_folder` configuration.
 
@@ -292,9 +292,9 @@ Supports all of the [`slug` templates](/docs/configuration-options#slug) and:
 - `{{media_folder}}` The global `media_folder`.
 - `{{public_folder}}` The global `public_folder`.
 
-### Nested Collections <img src="https://img.shields.io/badge/-Beta%20Feature-blue" alt="Beta Feature. Use at your own risk" title="Beta Feature. Use at your own risk" />
+### Nested Collections <BetaImage />
 
-Nested collections is a beta feature that allows a folder collection to show a nested structure of entries and edit the locations of the entries. This feature is useful when you have a complex folder structure and may not want to create separate collections for every directory. As it is in beta, please use with discretion.
+Nested collections is a beta feature that allows a folder collection to show a nested structure of entries and edit the locations of the entries. This feature is useful when you have a complex folder structure and may not want to create separate collections for every directory.
 
 Example configuration:
 
@@ -311,6 +311,9 @@ collections:
     nested:
       depth: 100 # max depth to show in the collection tree
       summary: '{{title}}' # optional summary for a tree node, defaults to the inferred title field
+      # adding a path object allows editing the path of entries
+      # moving an existing entry will move the entire sub tree of the entry to the new location
+      path: { widget: string, index_file: 'index' }
     fields:
       - label: Title
         name: title
@@ -318,9 +321,6 @@ collections:
       - label: Body
         name: body
         widget: markdown
-    # adding a meta object with a path property allows editing the path of entries
-    # moving an existing entry will move the entire sub tree of the entry to the new location
-    meta: { path: { widget: string, label: 'Path', index_file: 'index' } }
 ```
 
 ```js
@@ -334,7 +334,11 @@ collections:
       "create": true,
       "nested": {
         "depth": 100,
-        "summary": "{{title}}"
+        "summary": "{{title}}",
+        "path": {
+          "label": "Path",
+          "index_file": "index"
+        }
       },
       "fields": [
         {
@@ -347,14 +351,7 @@ collections:
           "name": "body",
           "widget": "markdown"
         }
-      ],
-      "meta": {
-        "path": {
-          "widget": "string",
-          "label": "Path",
-          "index_file": "index"
-        }
-      }
+      ]
     }
   ]
 }
@@ -395,6 +392,8 @@ collections:
       - name: about
         label: About Page
         file: site/content/about.yml
+        media_library:
+          folder_support: true
         fields:
           - name: title
             label: Title
@@ -447,6 +446,9 @@ collections: [
         name: 'about',
         label: 'About Page',
         file: 'site/content/about.yml',
+        media_library: {
+          folder_support: true
+        },
         fields: [
           { name: 'title', label: 'Title', widget: 'string' },
           { name: 'intro', label: 'Intro', widget: 'markdown' },

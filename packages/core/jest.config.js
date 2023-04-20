@@ -13,6 +13,7 @@ module.exports = {
     '\\.(css|less)$': '<rootDir>/src/__mocks__/styleMock.ts',
   },
   setupFiles: ['./test/setupEnv.js'],
+  globalSetup: './test/globalSetup.js',
   testRegex: '\\.spec\\.tsx?$',
   snapshotSerializers: ['@emotion/jest/serializer'],
 };

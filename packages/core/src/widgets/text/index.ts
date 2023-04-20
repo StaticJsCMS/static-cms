@@ -15,6 +15,6 @@ const TextWidget = (): WidgetParam<string, StringOrTextField> => {
   };
 };
 
-export { controlComponent as TextControl, previewComponent as TextPreview, schema as TextSchema };
+export { controlComponent as TextControl, previewComponent as TextPreview, schema as textSchema };
 
 export default TextWidget;

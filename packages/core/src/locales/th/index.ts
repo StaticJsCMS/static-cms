@@ -19,7 +19,6 @@ const th: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'เนื้อหา',
-      workflow: 'ขั้นตอนการทำงาน',
       media: 'มีเดีย',
       quickAdd: 'เพิ่มเนื้อหา อย่างเร็ว',
     },
@@ -104,7 +103,6 @@ const th: LocalePhrasesRoot = {
         'คุณแน่ใจหรือว่าจะต้องการลบการเผยแพร่เนื้อหานี้ รวมถึงการเปลี่ยนแปลงที่ยังไม่ได้บันทึก?',
       onDeletePublishedEntryBody: 'คุณแน่ใจหรือว่าจะต้องการลบการเผยแพร่เนื้อหานี้?',
       loadingEntry: 'กำลังโหลดเนื้อหา...',
-      confirmLoadBackupBody: 'ข้อมูลสำรองได้ถูกกู้คืนสำหรับเนื้อหานี้ คุณต้องการใช้มันไหม?',
     },
     editorToolbar: {
       publishing: 'กำลังเผยแพร่...',
@@ -225,34 +223,6 @@ const th: LocalePhrasesRoot = {
       onFailToAuth: '%{details}',
       onLoggedOut: 'คุณได้ออกจากระบบ โปรดสำรองข้อมูลแล้วเข้าสู่ระบบอีกครั้ง',
       onBackendDown: 'บริการแบ็กเอนด์เกิดการขัดข้อง ดู %{details} สำหรับข้อมูลเพิ่มเติม',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'กำลังโหลดเนื้อหาขั้นตอนการทำงานของบรรณาธิการ',
-      workflowHeading: 'ขั้นตอนการทำงานของบรรณาธิการ',
-      newPost: 'สร้างโพสต์ใหม่',
-      description: '%{smart_count} เนื้อหารอการตรวจสอบ, %{readyCount} พร้อมที่จะเผยแพร่ ่',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} โดย %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'โดย %{author}',
-      deleteChanges: 'ลบการเปลี่ยนแปลง',
-      deleteNewEntry: 'ลบเนื้อหาใหม่',
-      publishChanges: 'เผยแพร่การเปลี่ยนแปลง',
-      publishNewEntry: 'เผยแพร่เนื้อหาใหม่',
-    },
-    workflowList: {
-      onDeleteEntry: 'คุณแน่ใจหรือว่าจะต้องการลบเนื้อหานี้?',
-      onPublishingNotReadyEntry:
-        'เฉพาะรายการที่มีสถานะ "พร้อม" สามารถทำการเผยแพร่ โปรดลากเนื้อหาไปยังช่อง "พร้อม" เพื่อจะทำการเผยแพร่.',
-      onPublishEntry: 'คุณแน่ใจหรือว่าจะต้องการเผยแพร่เนื้อหานี้?',
-      draftHeader: 'ร่าง',
-      inReviewHeader: 'อยู่ในการตรวจสอบ',
-      readyHeader: 'พร้อม',
-      currentEntries: '%{smart_count} เนื้อหา',
     },
   },
 };

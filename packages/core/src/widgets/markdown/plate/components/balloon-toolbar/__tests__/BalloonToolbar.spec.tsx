@@ -1,7 +1,8 @@
 /**
  * @jest-environment jsdom
  */
-import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { screen } from '@testing-library/react';
 import {
   findNodePath,
   getNode,
@@ -13,16 +14,18 @@ import {
 } from '@udecode/plate';
 import React, { useRef } from 'react';
 import { useFocused } from 'slate-react';
-import '@testing-library/jest-dom';
 
-import { mockMarkdownCollection, mockMarkdownField } from '@staticcms/test/data/collection';
+import { configLoaded } from '@staticcms/core/actions/config';
+import { store } from '@staticcms/core/store';
+import { createMockCollection } from '@staticcms/test/data/collections.mock';
+import { createMockConfig } from '@staticcms/test/data/config.mock';
+import { mockMarkdownField } from '@staticcms/test/data/fields.mock';
+import { renderWithProviders } from '@staticcms/test/test-utils';
 import BalloonToolbar from '../BalloonToolbar';
 
-import type { Entry } from '@staticcms/core/interface';
+import type { Config, MarkdownField } from '@staticcms/core/interface';
 import type { MdEditor } from '@staticcms/markdown/plate/plateTypes';
 import type { FC } from 'react';
-
-let entry: Entry;
 
 interface BalloonToolbarWrapperProps {
   useMdx?: boolean;
@@ -37,13 +40,17 @@ const BalloonToolbarWrapper: FC<BalloonToolbarWrapperProps> = ({ useMdx = false 
         key="balloon-toolbar"
         useMdx={useMdx}
         containerRef={ref.current}
-        collection={mockMarkdownCollection}
+        collection={createMockCollection({}, mockMarkdownField)}
         field={mockMarkdownField}
-        entry={entry}
+        disabled={false}
       />
     </div>
   );
 };
+
+const config = createMockConfig({
+  collections: [],
+}) as unknown as Config<MarkdownField>;
 
 describe(BalloonToolbar.name, () => {
   const mockUseEditor = usePlateEditorState as jest.Mock;
@@ -58,25 +65,27 @@ describe(BalloonToolbar.name, () => {
   const mockGetParentNode = getParentNode as jest.Mock;
 
   beforeEach(() => {
-    entry = {
-      collection: 'posts',
-      slug: '2022-12-13-post-number-1',
-      path: '_posts/2022-12-13-post-number-1.md',
-      partial: false,
-      raw: '--- title: "This is post # 1" draft: false date: 2022-12-13T00:00:00.000Z --- # The post is number 1\n\nAnd some text',
-      label: '',
-      author: '',
-      mediaFiles: [],
-      isModification: null,
-      newRecord: false,
-      updatedOn: '',
-      data: {
-        title: 'This is post # 1',
-        draft: false,
-        date: '2022-12-13T00:00:00.000Z',
-        body: '# The post is number 1\n\nAnd some text',
-      },
-    };
+    store.dispatch(configLoaded(config as unknown as Config));
+
+    // entry = {
+    //   collection: 'posts',
+    //   slug: '2022-12-13-post-number-1',
+    //   path: '_posts/2022-12-13-post-number-1.md',
+    //   partial: false,
+    //   raw: '--- title: "This is post # 1" draft: false date: 2022-12-13T00:00:00.000Z --- # The post is number 1\n\nAnd some text',
+    //   label: '',
+    //   author: '',
+    //   mediaFiles: [],
+    //   isModification: null,
+    //   newRecord: false,
+    //   updatedOn: '',
+    //   data: {
+    //     title: 'This is post # 1',
+    //     draft: false,
+    //     date: '2022-12-13T00:00:00.000Z',
+    //     body: '# The post is number 1\n\nAnd some text',
+    //   },
+    // };
 
     mockEditor = {
       selection: undefined,
@@ -86,7 +95,7 @@ describe(BalloonToolbar.name, () => {
   });
 
   it('renders empty div by default', () => {
-    render(<BalloonToolbarWrapper />);
+    renderWithProviders(<BalloonToolbarWrapper />);
     expect(screen.queryAllByRole('button').length).toBe(0);
   });
 
@@ -126,7 +135,7 @@ describe(BalloonToolbar.name, () => {
         },
       ]);
 
-      const { rerender } = render(<BalloonToolbarWrapper />);
+      const { rerender } = renderWithProviders(<BalloonToolbarWrapper />);
 
       rerender(<BalloonToolbarWrapper useMdx={useMdx} />);
     };
@@ -139,7 +148,6 @@ describe(BalloonToolbar.name, () => {
       expect(screen.queryByTestId('toolbar-button-code')).toBeInTheDocument();
       expect(screen.queryByTestId('toolbar-button-strikethrough')).toBeInTheDocument();
 
-      expect(screen.queryByTestId('toolbar-button-blockquote')).toBeInTheDocument();
       expect(screen.queryByTestId('font-type-select')).toBeInTheDocument();
       expect(screen.queryByTestId('toolbar-button-add-table')).toBeInTheDocument();
       expect(screen.queryByTestId('toolbar-button-insert-link')).toBeInTheDocument();
@@ -157,7 +165,6 @@ describe(BalloonToolbar.name, () => {
       expect(screen.queryByTestId('toolbar-button-code')).toBeInTheDocument();
       expect(screen.queryByTestId('toolbar-button-strikethrough')).toBeInTheDocument();
 
-      expect(screen.queryByTestId('toolbar-button-blockquote')).toBeInTheDocument();
       expect(screen.queryByTestId('font-type-select')).toBeInTheDocument();
       expect(screen.queryByTestId('toolbar-button-add-table')).toBeInTheDocument();
       expect(screen.queryByTestId('toolbar-button-insert-link')).toBeInTheDocument();

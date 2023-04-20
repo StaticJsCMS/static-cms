@@ -2,7 +2,8 @@
 import { ELEMENT_PARAGRAPH } from '@udecode/plate';
 
 import { LIST_TYPES, MarkNodeTypes, NodeTypes } from './ast-types';
-import { processShortcodeConfigToSlate } from './processShortcodeConfig';
+import { autoLinkToSlate } from './autoLinkUrls';
+import { processShortcodeConfigsToSlate } from './processShortcodeConfig';
 
 import type { ShortcodeConfig } from '@staticcms/core/interface';
 import type { MdBlockElement } from '@staticcms/markdown';
@@ -40,7 +41,9 @@ function persistLeafFormats(
 ): Omit<MdastNode, 'children' | 'type' | 'text'> {
   return children.reduce((acc, node) => {
     (Object.keys(node) as Array<keyof MdastNode>).forEach(function (key) {
-      if (key === 'children' || key === 'type' || key === 'text') return;
+      if (key === 'children' || key === 'type' || key === 'text') {
+        return;
+      }
 
       acc[key] = node[key];
     });
@@ -273,7 +276,7 @@ export default function deserializeMarkdown(node: MdastNode, options: Options) {
           case 'br':
             return { type: NodeTypes.paragraph, children: [{ text: '' }] };
           default:
-            console.warn('unrecognized mdx flow element', node);
+            console.warn('[StaticCMS] Unrecognized mdx flow element', node);
             break;
         }
       }
@@ -332,7 +335,7 @@ export default function deserializeMarkdown(node: MdastNode, options: Options) {
               ...persistLeafFormats(children as Array<MdastNode>),
             } as TextNode;
           default:
-            console.warn('unrecognized mdx text element', node);
+            console.warn('[StaticCMS] Unrecognized mdx text element', node);
             break;
         }
       }
@@ -348,16 +351,12 @@ export default function deserializeMarkdown(node: MdastNode, options: Options) {
         return { text: '' };
       }
 
-      let nodes: MdastNode[] = [node];
-
-      for (const shortcode in shortcodeConfigs) {
-        nodes = processShortcodeConfigToSlate(shortcode, shortcodeConfigs[shortcode], nodes);
-      }
+      const nodes = autoLinkToSlate(processShortcodeConfigsToSlate(shortcodeConfigs, [node]));
 
       return nodes.map(node => (node.type === 'text' ? { text: node.value ?? '' } : node));
 
     default:
-      console.warn('Unrecognized mdast node, proceeding as text', node);
+      console.warn('[StaticCMS] Unrecognized mdast node, proceeding as text', node);
       return { text: node.value || '' };
   }
 }

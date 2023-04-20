@@ -1,0 +1,36 @@
+---
+group: Widgets
+title: UUID
+weight: 26
+---
+
+- **Name:** `uuid`
+- **UI:** Text input
+- **Data type:** `string`
+
+The uuid widget generates a unique id (uuid) and saves it as a string.
+
+## Widget Options
+
+For common options, see [Common widget options](/docs/widgets#common-widget-options).
+
+| Name             | Type    | Default | Description                                                                            |
+| ---------------- | ------- | ------- | -------------------------------------------------------------------------------------- |
+| allow_regenerate | boolean | `true`  | _Optional_. If set to `false` the `Generate new UUID` button does not appear in the UI |
+
+## Example
+
+<CodeTabs>
+```yaml
+name: id
+label: Id
+widget: uuid
+```
+
+```js
+name: 'id',
+label: 'Id',
+widget: 'uuid',
+```
+
+</CodeTabs>

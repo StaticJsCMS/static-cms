@@ -1,8 +1,6 @@
-import { styled } from '@mui/material/styles';
 import React, { useCallback, useMemo, useState } from 'react';
 
-import FieldLabel from '@staticcms/core/components/UI/FieldLabel';
-import Outline from '@staticcms/core/components/UI/Outline';
+import Field from '@staticcms/core/components/common/field/Field';
 import useDebounce from '../../lib/hooks/useDebounce';
 import useMarkdownToSlate from './plate/hooks/useMarkdownToSlate';
 import PlateEditor from './plate/PlateEditor';
@@ -12,40 +10,30 @@ import type { MarkdownField, WidgetControlProps } from '@staticcms/core/interfac
 import type { FC } from 'react';
 import type { MdValue } from './plate/plateTypes';
 
-const StyledEditorWrapper = styled('div')`
-  position: relative;
-  width: 100%;
-
-  .toastui-editor-main .toastui-editor-md-vertical-style .toastui-editor {
-    width: 100%;
-  }
-
-  .toastui-editor-main .toastui-editor-md-splitter {
-    display: none;
-  }
-
-  .toastui-editor-md-preview {
-    display: none;
-  }
-
-  .toastui-editor-defaultUI {
-    border: none;
-  }
-`;
-
 export interface WithMarkdownControlProps {
   useMdx: boolean;
 }
 
 const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
   const MarkdownControl: FC<WidgetControlProps<string, MarkdownField>> = controlProps => {
-    const { label, value, isDuplicate, onChange, hasErrors, collection, entry, field } =
-      controlProps;
+    const {
+      label,
+      value,
+      duplicate,
+      onChange,
+      hasErrors,
+      collection,
+      entry,
+      field,
+      errors,
+      forSingleList,
+      disabled,
+    } = controlProps;
 
     const [internalRawValue, setInternalValue] = useState(value ?? '');
     const internalValue = useMemo(
-      () => (isDuplicate ? value ?? '' : internalRawValue),
-      [internalRawValue, isDuplicate, value],
+      () => (duplicate ? value ?? '' : internalRawValue),
+      [internalRawValue, duplicate, value],
     );
     const [hasFocus, setHasFocus] = useState(false);
     const debouncedFocus = useDebounce(hasFocus, 150);
@@ -77,15 +65,14 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
 
     return useMemo(
       () => (
-        <StyledEditorWrapper key="markdown-control-wrapper">
-          <FieldLabel
-            key="markdown-control-label"
-            isActive={hasFocus}
-            hasErrors={hasErrors}
-            onClick={handleLabelClick}
-          >
-            {label}
-          </FieldLabel>
+        <Field
+          label={label}
+          errors={errors}
+          forSingleList={forSingleList}
+          hint={field.hint}
+          noHightlight
+          disabled={disabled}
+        >
           {loaded ? (
             <PlateEditor
               initialValue={slateValue}
@@ -99,13 +86,7 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
               onBlur={handleOnBlur}
             />
           ) : null}
-          <Outline
-            key="markdown-control-outline"
-            hasLabel
-            hasError={hasErrors}
-            active={hasFocus || debouncedFocus}
-          />
-        </StyledEditorWrapper>
+        </Field>
       ),
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [

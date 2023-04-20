@@ -39,10 +39,10 @@ import {
 } from '../constants';
 import ValidationErrorTypes from '../constants/validationErrorTypes';
 import {
-  duplicateDefaultI18nFields,
-  hasI18n,
   I18N_FIELD_DUPLICATE,
   I18N_FIELD_TRANSLATE,
+  duplicateDefaultI18nFields,
+  hasI18n,
   serializeI18n,
 } from '../lib/i18n';
 import { serializeValues } from '../lib/serializeEntryValues';
@@ -50,7 +50,7 @@ import { Cursor } from '../lib/util';
 import { selectFields, updateFieldByKey } from '../lib/util/collection.util';
 import { selectCollectionEntriesCursor } from '../reducers/selectors/cursors';
 import {
-  selectEntriesSortFields,
+  selectEntriesSortField,
   selectIsFetching,
   selectPublishedSlugs,
 } from '../reducers/selectors/entries';
@@ -58,14 +58,14 @@ import { addSnackbar } from '../store/slices/snackbars';
 import { createAssetProxy } from '../valueObjects/AssetProxy';
 import createEntry from '../valueObjects/createEntry';
 import { addAssets, getAsset } from './media';
-import { loadMedia, waitForMediaLibraryToLoad } from './mediaLibrary';
+import { loadMedia } from './mediaLibrary';
 import { waitUntil } from './waitUntil';
 
 import type { NavigateFunction } from 'react-router-dom';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { Backend } from '../backend';
-import type { CollectionViewStyle } from '../constants/collectionViews';
+import type { ViewStyle } from '../constants/views';
 import type {
   Collection,
   Entry,
@@ -351,7 +351,7 @@ export function groupByField(collection: Collection, group: ViewGroup) {
   };
 }
 
-export function changeViewStyle(viewStyle: CollectionViewStyle) {
+export function changeViewStyle(viewStyle: ViewStyle) {
   return {
     type: CHANGE_VIEW_STYLE,
     payload: {
@@ -463,15 +463,17 @@ export function changeDraftField({
   field,
   value,
   i18n,
+  isMeta,
 }: {
   path: string;
   field: Field;
   value: ValueOrNestedValue;
   i18n?: I18nSettings;
+  isMeta: boolean;
 }) {
   return {
     type: DRAFT_CHANGE_FIELD,
-    payload: { path, field, value, i18n },
+    payload: { path, field, value, i18n, isMeta },
   } as const;
 }
 
@@ -479,10 +481,11 @@ export function changeDraftFieldValidation(
   path: string,
   errors: FieldError[],
   i18n?: I18nSettings,
+  isMeta?: boolean,
 ) {
   return {
     type: DRAFT_VALIDATION_ERRORS,
-    payload: { path, errors, i18n },
+    payload: { path, errors, i18n, isMeta },
   } as const;
 }
 
@@ -592,12 +595,12 @@ export function deleteLocalBackup(collection: Collection, slug: string) {
 
 export function loadEntry(collection: Collection, slug: string, silent = false) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
-    await waitForMediaLibraryToLoad(dispatch, getState());
     if (!silent) {
       dispatch(entryLoading(collection, slug));
     }
 
     try {
+      await dispatch(loadMedia());
       const loadedEntry = await tryLoadEntry(getState(), collection, slug);
       dispatch(entryLoaded(collection, loadedEntry));
       dispatch(createDraftFromEntry(loadedEntry));
@@ -659,10 +662,9 @@ export function loadEntries(collection: Collection, page = 0) {
       return;
     }
     const state = getState();
-    const sortFields = selectEntriesSortFields(state, collection.name);
-    if (sortFields && sortFields.length > 0) {
-      const field = sortFields[0];
-      return dispatch(sortByField(collection, field.key, field.direction));
+    const sortField = selectEntriesSortField(collection.name)(state);
+    if (sortField) {
+      return dispatch(sortByField(collection, sortField.key, sortField.direction));
     }
 
     const configState = state.config;
@@ -843,10 +845,6 @@ export function createEmptyDraft(collection: Collection, search: string) {
 
     const backend = currentBackend(configState.config);
 
-    if (!('media_folder' in collection)) {
-      await waitForMediaLibraryToLoad(dispatch, getState());
-    }
-
     const i18nFields = createEmptyDraftI18nData(collection, fields);
 
     let newEntry = createEntry(collection.name, '', '', {
@@ -957,12 +955,16 @@ export function getSerializedEntry(collection: Collection, entry: Entry): Entry 
   return serializedEntry;
 }
 
-export function persistEntry(collection: Collection, navigate: NavigateFunction) {
+export function persistEntry(
+  collection: Collection,
+  rootSlug: string | undefined,
+  navigate: NavigateFunction,
+) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const entryDraft = state.entryDraft;
     const fieldsErrors = entryDraft.fieldsErrors;
-    const usedSlugs = selectPublishedSlugs(state, collection.name);
+    const usedSlugs = selectPublishedSlugs(collection.name)(state);
 
     // Early return if draft contains validation errors
     if (Object.keys(fieldsErrors).length > 0) {
@@ -1021,6 +1023,7 @@ export function persistEntry(collection: Collection, navigate: NavigateFunction)
     return backend
       .persistEntry({
         config: configState.config,
+        rootSlug,
         collection,
         entryDraft: newEntryDraft,
         assetProxies,

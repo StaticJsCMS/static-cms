@@ -1,24 +1,20 @@
-import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Select from '@mui/material/Select';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
+import Field from '@staticcms/core/components/common/field/Field';
+import Pill from '@staticcms/core/components/common/pill/Pill';
+import Select from '@staticcms/core/components/common/select/Select';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
 
-import type { SelectChangeEvent } from '@mui/material/Select';
-import type { SelectField, WidgetControlProps } from '@staticcms/core/interface';
+import type {
+  SelectField,
+  SelectWidgetOptionObject,
+  WidgetControlProps,
+} from '@staticcms/core/interface';
 import type { FC } from 'react';
 
-interface Option {
-  label: string;
-  value: string | number;
-}
-
-function convertToOption(raw: string | number | Option | undefined): Option | undefined {
+function convertToOption(
+  raw: string | number | SelectWidgetOptionObject | undefined,
+): SelectWidgetOptionObject | undefined {
   if (typeof raw === 'string' || typeof raw === 'number') {
     return { label: `${raw}`, value: raw };
   }
@@ -30,21 +26,28 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
   label,
   field,
   value,
+  errors,
   hasErrors,
-  isDuplicate,
+  disabled,
+  forSingleList,
+  duplicate,
   onChange,
 }) => {
   const [internalRawValue, setInternalValue] = useState(value);
   const internalValue = useMemo(
-    () => (isDuplicate ? value : internalRawValue),
-    [internalRawValue, isDuplicate, value],
+    () => (duplicate ? value : internalRawValue),
+    [internalRawValue, duplicate, value],
   );
+  const ref = useRef<HTMLButtonElement | null>(null);
 
-  const fieldOptions: (string | number | Option)[] = useMemo(() => field.options, [field.options]);
+  const fieldOptions: (string | number | SelectWidgetOptionObject)[] = useMemo(
+    () => field.options,
+    [field.options],
+  );
   const isMultiple = useMemo(() => field.multiple ?? false, [field.multiple]);
 
   const options = useMemo(
-    () => fieldOptions.map(convertToOption).filter(Boolean) as Option[],
+    () => fieldOptions.map(convertToOption).filter(Boolean) as SelectWidgetOptionObject[],
     [fieldOptions],
   );
 
@@ -53,7 +56,7 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
       options.reduce((acc, option) => {
         acc[`${option.value}`] = option;
         return acc;
-      }, {} as Record<string, Option>),
+      }, {} as Record<string, SelectWidgetOptionObject>),
     [options],
   );
 
@@ -67,8 +70,7 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
   );
 
   const handleChange = useCallback(
-    (event: SelectChangeEvent<string | string[]>) => {
-      const selectedValue = event.target.value;
+    (selectedValue: string | number | (string | number)[]) => {
       const isMultiple = field.multiple ?? false;
       const isEmpty =
         isMultiple && Array.isArray(selectedValue)
@@ -81,7 +83,7 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
       } else if (isEmpty) {
         setInternalValue('');
         onChange('');
-      } else if (typeof selectedValue === 'string') {
+      } else if (typeof selectedValue === 'string' || typeof selectedValue === 'number') {
         const selectedOption = optionsByValue[selectedValue];
         const optionValue = selectedOption?.value ?? '';
         setInternalValue(optionValue);
@@ -110,40 +112,49 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
     return `${internalValue}`;
   }, [isMultiple, internalValue]);
 
-  return (
-    <FormControl fullWidth error={hasErrors}>
-      <InputLabel id="demo-simple-select-label">{label}</InputLabel>
-      <Select
-        value={stringValue}
-        onChange={handleChange}
-        multiple={isMultiple}
-        label={label}
-        input={isMultiple ? <OutlinedInput id="select-multiple-chip" label={label} /> : undefined}
-        renderValue={selectValues => {
-          if (Array.isArray(selectValues)) {
-            return (
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                {selectValues.map(selectValue => {
-                  const label = optionsByValue[selectValue]?.label ?? selectValue;
-                  return <Chip key={selectValue} label={label} />;
-                })}
-              </Box>
-            );
-          }
+  const [open, setOpen] = useState(false);
+  const handleOpenChange = useCallback((open: boolean) => {
+    setOpen(open);
+  }, []);
 
-          return optionsByValue[selectValues]?.label ?? selectValues;
-        }}
-      >
-        <MenuItem key={`empty-option`} value="">
-          &nbsp;
-        </MenuItem>
-        {stringValueOptions.map(option => (
-          <MenuItem key={`option-${option.value}`} value={option.value}>
-            {option.label}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+  return (
+    <Field
+      inputRef={ref}
+      label={label}
+      errors={errors}
+      noPadding={!hasErrors}
+      hint={field.hint}
+      forSingleList={forSingleList}
+      cursor="pointer"
+      disabled={disabled}
+      disableClick={open}
+    >
+      <Select
+        label={
+          Array.isArray(stringValue) ? (
+            <div className="flex wrap gap-2 max-w-fit">
+              {stringValue.map(selectValue => {
+                const label = optionsByValue[selectValue]?.label ?? selectValue;
+                return (
+                  <Pill key={selectValue} disabled={disabled}>
+                    {label}
+                  </Pill>
+                );
+              })}
+            </div>
+          ) : (
+            optionsByValue[stringValue]?.label ?? stringValue
+          )
+        }
+        ref={ref}
+        value={stringValue}
+        options={stringValueOptions}
+        required={field.required}
+        disabled={disabled}
+        onChange={handleChange}
+        onOpenChange={handleOpenChange}
+      />
+    </Field>
   );
 };
 

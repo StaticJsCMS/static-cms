@@ -9,13 +9,11 @@ import type {
   Config,
   CustomIcon,
   Entry,
-  EntryData,
   EventData,
   EventListener,
-  Field,
+  FieldPreviewComponent,
   LocalePhrasesRoot,
-  MediaLibraryExternalLibrary,
-  MediaLibraryOptions,
+  ObjectValue,
   PreviewStyle,
   PreviewStyleOptions,
   ShortcodeConfig,
@@ -28,7 +26,7 @@ import type {
   WidgetValueSerializer,
 } from '../interface';
 
-export const allowedEvents = ['prePublish', 'postPublish', 'preSave', 'postSave'] as const;
+export const allowedEvents = ['mounted', 'preSave', 'postSave'] as const;
 export type AllowedEvent = (typeof allowedEvents)[number];
 
 const eventHandlers = allowedEvents.reduce((acc, e) => {
@@ -38,13 +36,13 @@ const eventHandlers = allowedEvents.reduce((acc, e) => {
 
 interface Registry {
   backends: Record<string, BackendInitializer>;
-  templates: Record<string, TemplatePreviewComponent<EntryData>>;
-  cards: Record<string, TemplatePreviewCardComponent<EntryData>>;
+  templates: Record<string, TemplatePreviewComponent<ObjectValue>>;
+  cards: Record<string, TemplatePreviewCardComponent<ObjectValue>>;
+  fieldPreviews: Record<string, Record<string, FieldPreviewComponent>>;
   widgets: Record<string, Widget>;
   icons: Record<string, CustomIcon>;
   additionalLinks: Record<string, AdditionalLink>;
   widgetValueSerializers: Record<string, WidgetValueSerializer>;
-  mediaLibraries: (MediaLibraryExternalLibrary & { options: MediaLibraryOptions })[];
   locales: Record<string, LocalePhrasesRoot>;
   eventHandlers: typeof eventHandlers;
   previewStyles: PreviewStyle[];
@@ -60,11 +58,11 @@ const registry: Registry = {
   backends: {},
   templates: {},
   cards: {},
+  fieldPreviews: {},
   widgets: {},
   icons: {},
   additionalLinks: {},
   widgetValueSerializers: {},
-  mediaLibraries: [],
   locales: {},
   eventHandlers,
   previewStyles: [],
@@ -76,6 +74,8 @@ export default {
   getPreviewTemplate,
   registerPreviewCard,
   getPreviewCard,
+  registerFieldPreview,
+  getFieldPreview,
   registerWidget,
   getWidget,
   getWidgets,
@@ -84,8 +84,6 @@ export default {
   getWidgetValueSerializer,
   registerBackend,
   getBackend,
-  registerMediaLibrary,
-  getMediaLibrary,
   registerLocale,
   getLocale,
   registerEventListener,
@@ -121,22 +119,43 @@ export function getPreviewStyles() {
  * Preview Templates
  */
 export function registerPreviewTemplate<T>(name: string, component: TemplatePreviewComponent<T>) {
-  registry.templates[name] = component as TemplatePreviewComponent<EntryData>;
+  registry.templates[name] = component as TemplatePreviewComponent<ObjectValue>;
 }
 
-export function getPreviewTemplate(name: string): TemplatePreviewComponent<EntryData> {
-  return registry.templates[name];
+export function getPreviewTemplate(name: string): TemplatePreviewComponent<ObjectValue> | null {
+  return registry.templates[name] ?? null;
 }
 
 /**
  * Preview Cards
  */
 export function registerPreviewCard<T>(name: string, component: TemplatePreviewCardComponent<T>) {
-  registry.cards[name] = component as TemplatePreviewCardComponent<EntryData>;
+  registry.cards[name] = component as TemplatePreviewCardComponent<ObjectValue>;
 }
 
-export function getPreviewCard(name: string): TemplatePreviewCardComponent<EntryData> {
-  return registry.cards[name];
+export function getPreviewCard(name: string): TemplatePreviewCardComponent<ObjectValue> | null {
+  return registry.cards[name] ?? null;
+}
+
+/**
+ * Field Previews
+ */
+export function registerFieldPreview<T>(
+  collectionName: string,
+  fieldName: string,
+  component: FieldPreviewComponent<T>,
+) {
+  if (!(collectionName in registry.fieldPreviews)) {
+    registry.fieldPreviews[collectionName] = {};
+  }
+  registry.fieldPreviews[collectionName][fieldName] = component as FieldPreviewComponent;
+}
+
+export function getFieldPreview(
+  collectionName: string,
+  fieldName: string,
+): FieldPreviewComponent | null {
+  return registry.fieldPreviews[collectionName]?.[fieldName] ?? null;
 }
 
 /**
@@ -200,7 +219,7 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
     } = nameOrWidgetOrWidgets;
     if (registry.widgets[widgetName]) {
       console.warn(oneLine`
-        Multiple widgets registered with name "${widgetName}". Only the last widget registered with
+        [StaticCMS] Multiple widgets registered with name "${widgetName}". Only the last widget registered with
         this name will be used.
       `);
     }
@@ -220,8 +239,10 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
   }
 }
 
-export function getWidget<T = unknown, F extends Field = Field>(name: string): Widget<T, F> {
-  return registry.widgets[name] as unknown as Widget<T, F>;
+export function getWidget<T = unknown, EF extends BaseField = UnknownField>(
+  name: string,
+): Widget<T, EF> {
+  return registry.widgets[name] as unknown as Widget<T, EF>;
 }
 
 export function getWidgets(): ({
@@ -233,7 +254,9 @@ export function getWidgets(): ({
   }));
 }
 
-export function resolveWidget<T = unknown, F extends Field = Field>(name?: string): Widget<T, F> {
+export function resolveWidget<T = unknown, EF extends BaseField = UnknownField>(
+  name?: string,
+): Widget<T, EF> {
   return getWidget(name || 'string') || getWidget('unknown');
 }
 
@@ -271,27 +294,10 @@ export function registerBackend<
   }
 }
 
-export function getBackend(name: string): BackendInitializer {
-  return registry.backends[name];
-}
-
-/**
- * Media Libraries
- */
-export function registerMediaLibrary(
-  mediaLibrary: MediaLibraryExternalLibrary,
-  options: MediaLibraryOptions = {},
-) {
-  if (registry.mediaLibraries.find(ml => mediaLibrary.name === ml.name)) {
-    throw new Error(`A media library named ${mediaLibrary.name} has already been registered.`);
-  }
-  registry.mediaLibraries.push({ ...mediaLibrary, options });
-}
-
-export function getMediaLibrary(
+export function getBackend<EF extends BaseField = UnknownField>(
   name: string,
-): (MediaLibraryExternalLibrary & { options: MediaLibraryOptions }) | undefined {
-  return registry.mediaLibraries.find(ml => ml.name === name);
+): BackendInitializer<EF> {
+  return registry.backends[name] as unknown as BackendInitializer<EF>;
 }
 
 /**
@@ -317,22 +323,24 @@ export function registerEventListener(
   registry.eventHandlers[name].push({ handler, options });
 }
 
-export async function invokeEvent({ name, data }: { name: AllowedEvent; data: EventData }) {
+export async function invokeEvent({ name, data }: { name: AllowedEvent; data?: EventData }) {
   validateEventName(name);
   const handlers = registry.eventHandlers[name];
 
-  let _data = { ...data };
+  console.info(`[StaticCMS] Firing event ${name}`, data);
+
+  let _data = data ? { ...data } : undefined;
   for (const { handler, options } of handlers) {
     const result = await handler(_data, options);
-    if (result !== undefined) {
+    if (_data !== undefined && result !== undefined) {
       const entry = {
         ..._data.entry,
         data: result,
       } as Entry;
-      _data = { ...data, entry };
+      _data = { ..._data, entry };
     }
   }
-  return _data.entry.data;
+  return _data?.entry.data;
 }
 
 export function removeEventListener({ name, handler }: EventListener) {

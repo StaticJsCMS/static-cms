@@ -19,7 +19,6 @@ const vi: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Nội dung',
-      workflow: 'Biên tập',
       media: 'Tập tin',
       quickAdd: 'Tạo nhanh',
     },
@@ -100,8 +99,6 @@ const vi: LocalePhrasesRoot = {
         'Bạn có chắc rằng bạn muốn xoá mục đã được công bố này, cũng như là những thay đổi chưa lưu của bạn trong phiên làm việc này?',
       onDeletePublishedEntryBody: 'Bạn có chắc rằng bạn muốn xoá mục đã được công bố này?',
       loadingEntry: 'Đang tải...',
-      confirmLoadBackupBody:
-        'Một bản sao lưu trên máy đã được phục hồi cho mục này, bạn có muốn tải lên không?',
     },
     editorToolbar: {
       publishing: 'Đang công bố...',
@@ -223,35 +220,6 @@ const vi: LocalePhrasesRoot = {
       onFailToAuth: '%{details}',
       onLoggedOut: 'Bạn đã đăng xuất, hãy sao lưu dữ liệu và đăng nhập lại',
       onBackendDown: 'Dịch vụ backend đang gặp trục trặc. Hãy xem {details} để biết thêm thông tin',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Đang tải bài viết',
-      workflowHeading: 'Quy trình biên tập',
-      newPost: 'Bài mới',
-      description:
-        '%{smart_count} bài đang chờ duyệt, %{readyCount} bài đã sẵn sàng để công bố. |||| %{smart_count} bài đang chờ duyệt, %{readyCount} bài đã sẵn sàng để công bố. ',
-      dateFormat: 'D MMMM',
-    },
-    workflowCard: {
-      lastChange: '%{date} bởi %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'bởi %{author}',
-      deleteChanges: 'Xoá thay đổi',
-      deleteNewEntry: 'Xoá bài mới',
-      publishChanges: 'Công bố thay đổi',
-      publishNewEntry: 'Công bố bài mới',
-    },
-    workflowList: {
-      onDeleteEntry: 'Bạn có chắc rằng bạn muốn xoá bài này?',
-      onPublishingNotReadyEntry:
-        'Chỉ những bài với trạng thái "Sẵn sàng" mới có thể được công bố. Hãy kéo thẻ vào cột "Sẵn sàng" để cho phép công bố.',
-      onPublishEntry: 'Bạn có chắc rằng bạn muốn công khai bài này?',
-      draftHeader: 'Bản nháp',
-      inReviewHeader: 'Đang xét duyệt',
-      readyHeader: 'Sẵn sàng',
-      currentEntries: '%{smart_count} bài |||| %{smart_count} bài',
     },
   },
 };

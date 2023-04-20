@@ -338,6 +338,7 @@ export default class API {
   async listFiles(
     path: string,
     { repoURL = this.repoURL, branch = this.branch, depth = 1 } = {},
+    folderSupport?: boolean,
   ): Promise<{ type: string; id: string; name: string; path: string; size: number }[]> {
     const folder = trim(path, '/');
     try {
@@ -351,8 +352,12 @@ export default class API {
       );
       return (
         result.tree
-          // filter only files and up to the required depth
-          .filter(file => file.type === 'blob' && file.path.split('/').length <= depth)
+          // filter only files and/or folders up to the required depth
+          .filter(
+            file =>
+              (!folderSupport ? file.type === 'blob' : true) &&
+              file.path.split('/').length <= depth,
+          )
           .map(file => ({
             type: file.type,
             id: file.sha,
@@ -364,7 +369,7 @@ export default class API {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (err && err.status === 404) {
-        console.info('This 404 was expected and handled appropriately.');
+        console.info('[StaticCMS] This 404 was expected and handled appropriately.');
         return [];
       } else {
         throw err;

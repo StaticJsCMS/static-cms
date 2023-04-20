@@ -1,53 +1,18 @@
-import { styled } from '@mui/material/styles';
 import { findNodePath, setNodes } from '@udecode/plate';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Frame from 'react-frame-component';
 
-import Outline from '@staticcms/core/components/UI/Outline';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
+import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
+import { useAppSelector } from '@staticcms/core/store/hooks';
 import CodeBlockFrame from './CodeBlockFrame';
 
 import type { MdCodeBlockElement, MdValue } from '@staticcms/markdown';
 import type { PlateRenderElementProps, TCodeBlockElement } from '@udecode/plate';
 import type { FC, MutableRefObject, RefObject } from 'react';
 
-const StyledCodeBlock = styled('div')`
-  position: relative;
-  margin: 12px 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledInput = styled('input')`
-  flex-grow: 1;
-  outline: none;
-  padding: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.35);
-  border-radius: 4px 4px 0 0;
-  width: 100%;
-  height: 34px;
-`;
-
-const StyledCodeBlockContent = styled('div')`
-  position: relative;
-  display: flex;
-
-  & div {
-    outline: none;
-  }
-`;
-
-const StyledHiddenChildren = styled('div')`
-  height: 0;
-  position: absolute;
-`;
-
 const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>> = props => {
-  const [langHasFocus, setLangHasFocus] = useState(false);
-  const [codeHasFocus, setCodeHasFocus] = useState(false);
-
   const { attributes, nodeProps, element, editor, children } = props;
   const id = useUUID();
 
@@ -67,12 +32,6 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
       switch (event.data.message) {
         case `code_block_${id}_onChange`:
           handleChange(event.data.value);
-          break;
-        case `code_block_${id}_onFocus`:
-          setCodeHasFocus(true);
-          break;
-        case `code_block_${id}_onBlur`:
-          setCodeHasFocus(false);
           break;
       }
     },
@@ -122,21 +81,43 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const theme = useAppSelector(selectTheme);
+
   return (
     <>
-      <StyledCodeBlock {...attributes} {...nodeProps} contentEditable={false}>
-        <StyledInput
+      <div
+        key={theme}
+        {...attributes}
+        {...nodeProps}
+        contentEditable={false}
+        className="
+          my-2
+        "
+      >
+        <input
           id={id}
           value={lang}
-          onFocus={() => setLangHasFocus(true)}
-          onBlur={() => setLangHasFocus(false)}
           onChange={event => {
             const value = event.target.value;
             const path = findNodePath(editor, element);
             path && setNodes<TCodeBlockElement>(editor, { lang: value }, { at: path });
           }}
+          className="
+            w-full
+            rounded-t-md
+            border
+            border-gray-100
+            border-b-white
+            px-2
+            py-1
+            h-6
+            dark:border-slate-700
+            dark:border-b-slate-800
+            dark:bg-slate-800
+            outline-none
+          "
         />
-        <StyledCodeBlockContent>
+        <div>
           <Frame
             key={`code-frame-${id}`}
             id={id}
@@ -149,12 +130,11 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
             }}
             initialContent={initialFrameContent}
           >
-            <CodeBlockFrame id={id} code={code} lang={lang} />
+            <CodeBlockFrame id={id} code={code} lang={lang} theme={theme} />
           </Frame>
-        </StyledCodeBlockContent>
-        <Outline active={langHasFocus || codeHasFocus} />
-        <StyledHiddenChildren>{children}</StyledHiddenChildren>
-      </StyledCodeBlock>
+        </div>
+        <div>{children}</div>
+      </div>
     </>
   );
 };

@@ -19,7 +19,6 @@ const nl: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Inhoud',
-      workflow: 'Workflow',
       media: 'Media',
       quickAdd: 'Snel toevoegen',
     },
@@ -107,7 +106,6 @@ const nl: LocalePhrasesRoot = {
         'Weet u zeker dat u dit gepubliceerde item en uw niet-opgeslagen wijzigingen uit de huidige sessie wilt verwijderen?',
       onDeletePublishedEntryBody: 'Weet u zeker dat u dit gepubliceerde item wilt verwijderen?',
       loadingEntry: 'Item laden...',
-      confirmLoadBackupBody: 'Voor dit item is een lokale back-up hersteld, wilt u deze gebruiken?',
     },
     editorInterface: {
       toggleI18n: 'Wissel i18n',
@@ -258,35 +256,6 @@ const nl: LocalePhrasesRoot = {
       onLoggedOut: 'Je bent uitgelogd, back-up alstublieft uw data log daarna in',
       onBackendDown:
         'De backend-service ondervindt een storing. Zie% {details} voor meer informatie',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Redactionele Workflow items laden',
-      workflowHeading: 'Redactionele Workflow',
-      newPost: 'Nieuw bericht',
-      description:
-        '%{smart_count} item wacht op beoordeling, %{readyCount} klaar om live te gaan. |||| %{smart_count} items wachten op beoordeling, %{readyCount} klaar om live te gaan. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} door %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'door %{author}',
-      deleteChanges: 'Verwijder wijzigingen',
-      deleteNewEntry: 'Verwijder nieuw item',
-      publishChanges: 'Publiceer wijzigingen',
-      publishNewEntry: 'Publiceer nieuw item',
-    },
-    workflowList: {
-      onDeleteEntry: 'Weet u zeker dat u dit item wilt verwijderen?',
-      onPublishingNotReadyEntry:
-        'Alleen items met de status "Gereed" kunnen worden gepubliceerd. Sleep de kaart naar de kolom "Gereed" om publiceren mogelijk te maken.',
-      onPublishEntry: 'Weet u zeker dat u dit item wilt publiceren?',
-      draftHeader: 'Concepten',
-      inReviewHeader: 'Wordt beoordeeld',
-      readyHeader: 'Klaar',
-      currentEntries: '%{smart_count} item |||| %{smart_count} items',
     },
   },
 };

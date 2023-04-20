@@ -19,7 +19,6 @@ const hr: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Sadržaj',
-      workflow: 'Tijek rada',
       media: 'Mediji',
       quickAdd: 'Dodaj',
     },
@@ -109,7 +108,6 @@ const hr: LocalePhrasesRoot = {
         'Jeste li sigurni da želite obrisati objavljeni unos, te nespremljene promjene u trenutnoj sesiji?',
       onDeletePublishedEntryBody: 'Jeste li sigurni da želite obrisati ovaj objavljeni unos?',
       loadingEntry: 'Učitavanje unosa...',
-      confirmLoadBackupBody: 'Lokalna kopija je dohvaćena za ovaj unos, želite li ju koristiti?',
     },
     editorToolbar: {
       publishing: 'Objavljivanje...',
@@ -241,35 +239,6 @@ const hr: LocalePhrasesRoot = {
       onFailToAuth: '%{details}',
       onLoggedOut: 'Odjavljeni ste, molimo spremite sve podatke i prijavite se ponovno',
       onBackendDown: 'Backend servis ima prekid rada. Pogledaj %{details} za više informacija',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Učitavanje unosa uredničkog tijeka rada',
-      workflowHeading: 'Urednički tijek rada',
-      newPost: 'Nova objava',
-      description:
-        '%{smart_count} unos čeka pregled, %{readyCount} unos spreman za produkciju. |||| %{smart_count} unosa čeka pregled, %{readyCount} unosa spremno za produkciju. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} od strane %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'od strane %{author}',
-      deleteChanges: 'Obriši promjene',
-      deleteNewEntry: 'Obriši novi unos',
-      publishChanges: 'Objavi promjene',
-      publishNewEntry: 'Objavi novi unos',
-    },
-    workflowList: {
-      onDeleteEntry: 'Jeste li sigurni da želite obrisati unos?',
-      onPublishingNotReadyEntry:
-        'Samo promjene sa statusom "Spremno" mogu biti objavljene. Molimo povucite karticu u kolumnu "Spremno" prije objavljivanja.',
-      onPublishEntry: 'Jeste li sigurni da želite objaviti unos?',
-      draftHeader: 'Skice',
-      inReviewHeader: 'U osvrtu',
-      readyHeader: 'Spremno',
-      currentEntries: '%{smart_count} unos |||| %{smart_count} unosa',
     },
   },
 };

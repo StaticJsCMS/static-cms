@@ -9,12 +9,11 @@ import { HashRouter as Router } from 'react-router-dom';
 import 'what-input';
 import { authenticateUser } from './actions/auth';
 import { loadConfig } from './actions/config';
-import App from './components/App/App';
-import './components/EditorWidgets';
-import { ErrorBoundary } from './components/UI';
+import App from './components/App';
+import './components/entry-editor/widgets';
+import ErrorBoundary from './components/ErrorBoundary';
 import addExtensions from './extensions';
 import { getPhrases } from './lib/phrases';
-import './mediaLibrary';
 import { selectLocale } from './reducers/selectors/config';
 import { store } from './store';
 
@@ -23,7 +22,28 @@ import type { ConnectedProps } from 'react-redux';
 import type { BaseField, Config, UnknownField } from './interface';
 import type { RootState } from './store';
 
+import './styles/datetime/calendar.css';
+import './styles/datetime/clock.css';
+import './styles/datetime/datetime.css';
+import './styles/inter.css';
+import './styles/main.css';
+
 const ROOT_ID = 'nc-root';
+
+/**
+ * Very hacky. This suppresses the "You are importing createRoot from "react-dom" which
+ * is not supported. You should instead import it from "react-dom/client"." warning.
+ *
+ * Not sure why this is necessary as we import from "react-dom/client" as we should.
+ */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, import/order
+import ReactDOM from 'react-dom';
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+ReactDOM.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.usingClientEntryPoint = true;
 
 const TranslatedApp = ({ locale, config }: AppRootProps) => {
   if (!config) {
@@ -60,7 +80,7 @@ function bootstrap<F extends BaseField = UnknownField>(opts?: {
    * Log the version number.
    */
   if (typeof STATIC_CMS_CORE_VERSION === 'string') {
-    console.info(`static-cms-core ${STATIC_CMS_CORE_VERSION}`);
+    console.info(`[StaticCMS] Using @staticcms/core ${STATIC_CMS_CORE_VERSION}`);
   }
 
   /**

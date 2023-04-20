@@ -19,7 +19,6 @@ const fr: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Contenus',
-      workflow: 'Flux',
       media: 'Media',
       quickAdd: 'Ajout rapide',
     },
@@ -110,8 +109,6 @@ const fr: LocalePhrasesRoot = {
         'Voulez-vous vraiment supprimer cette entrée publiée ainsi que vos modifications non enregistrées de cette session ?',
       onDeletePublishedEntryBody: 'Voulez-vous vraiment supprimer cette entrée publiée ?',
       loadingEntry: "Chargement de l'entrée...",
-      confirmLoadBackupBody:
-        "Une sauvegarde locale a été trouvée pour cette entrée. Voulez-vous l'utiliser ?",
     },
     editorInterface: {
       toggleI18n: 'Édition multilingue',
@@ -264,35 +261,6 @@ const fr: LocalePhrasesRoot = {
       onLoggedOut: 'Vous avez été déconnecté, merci de sauvegarder les données et vous reconnecter',
       onBackendDown:
         "Le serveur est actuellement hors-service. Pour plus d'informations : %{details}",
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Chargement des entrées du flux éditorial',
-      workflowHeading: 'Flux éditorial',
-      newPost: 'Nouvel article',
-      description:
-        '%{smart_count} entrée(s) en attente de revue, %{readyCount} prête(s) à être publiée(s). |||| %{smart_count} entrée(s) en attente de revue, %{readyCount} prête(s) à être publiée(s). ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} par %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'par %{author}',
-      deleteChanges: 'Supprimer les mofications',
-      deleteNewEntry: 'Supprimer la nouvelle entrée',
-      publishChanges: 'Publier les modifications',
-      publishNewEntry: 'Publier la nouvelle entrée',
-    },
-    workflowList: {
-      onDeleteEntry: 'Voulez-vous vraiment supprimer cette entrée ?',
-      onPublishingNotReadyEntry:
-        'Seuls les éléments ayant le statut "Prêt" peuvent être publiés. Veuillez glisser/déposer la carte dans la colonne "Prêt" pour activer la publication',
-      onPublishEntry: 'Voulez-vous vraiment publier cette entrée ?',
-      draftHeader: 'Brouillons',
-      inReviewHeader: 'En cours de révision',
-      readyHeader: 'Prêt',
-      currentEntries: '%{smart_count} entrée |||| %{smart_count} entrées',
     },
   },
 };

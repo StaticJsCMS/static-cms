@@ -21,9 +21,10 @@ import type { MdEditor } from '@staticcms/markdown';
 
 export interface TableToolbarButtonsProps {
   isInTable?: boolean;
+  disabled: boolean;
 }
 
-const TableToolbarButtons: FC<TableToolbarButtonsProps> = ({ isInTable = true }) => {
+const TableToolbarButtons: FC<TableToolbarButtonsProps> = ({ isInTable = true, disabled }) => {
   const handleTableAdd = useCallback((editor: MdEditor) => {
     insertTable(editor, {
       rowCount: 2,
@@ -56,40 +57,46 @@ const TableToolbarButtons: FC<TableToolbarButtonsProps> = ({ isInTable = true })
       <ToolbarButton
         key="insertRow"
         tooltip="Insert Row"
-        icon={<TableInsertRow />}
+        icon={<TableInsertRow className="w-5 h-5" />}
         onClick={handleInsertTableRow}
+        disabled={disabled}
       />
       <ToolbarButton
         key="deleteRow"
         tooltip="Delete Row"
-        icon={<TableDeleteRow />}
+        icon={<TableDeleteRow className="w-5 h-5" />}
         onClick={handleDeleteRow}
+        disabled={disabled}
       />
       <ToolbarButton
         key="insertColumn"
         tooltip="Insert Column"
-        icon={<TableInsertColumn />}
+        icon={<TableInsertColumn className="w-5 h-5" />}
         onClick={handleInsertTableColumn}
+        disabled={disabled}
       />
       <ToolbarButton
         key="deleteColumn"
         tooltip="Delete Column"
-        icon={<TableDeleteColumn />}
+        icon={<TableDeleteColumn className="w-5 h-5" />}
         onClick={handleDeleteColumn}
+        disabled={disabled}
       />
       <ToolbarButton
         key="deleteTable"
         tooltip="Delete Table"
-        icon={<TableDismiss />}
+        icon={<TableDismiss className="w-5 h-5" />}
         onClick={handleDeleteTable}
+        disabled={disabled}
       />
     </>
   ) : (
     <ToolbarButton
       key="insertRow"
       tooltip="Add Table"
-      icon={<TableAdd />}
+      icon={<TableAdd className="w-5 h-5" />}
       onClick={handleTableAdd}
+      disabled={disabled}
     />
   );
 };

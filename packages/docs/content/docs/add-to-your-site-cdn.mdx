@@ -45,11 +45,12 @@ In this example, we pull the `admin/index.html` file from a public CDN.
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/@staticcms/app@^2.0.0-rc.1/dist/main.css" />
     <title>Content Manager</title>
   </head>
   <body>
     <!-- Include the script that builds the page and powers Static CMS -->
-    <script src="https://unpkg.com/@staticcms/app@^1.0.0/dist/static-cms-app.js"></script>
+    <script src="https://unpkg.com/@staticcms/app@^2.0.0-rc.1/dist/static-cms-app.js"></script>
     <script>
       window.CMS.init();
     </script>
@@ -57,7 +58,7 @@ In this example, we pull the `admin/index.html` file from a public CDN.
 </html>
 ```
 
-In the code above the `script` is loaded from the `unpkg` CDN. Should there be any issue, `jsDelivr` can be used as an alternative source. Simply set the `src` to `https://cdn.jsdelivr.net/npm/@staticcms/app@%5E1.0.0/dist/static-cms-app.js`
+In the code above the `script` is loaded from the `unpkg` CDN. Should there be any issue, `jsDelivr` can be used as an alternative source. Simply replace `https://unpkg.com/` with `https://cdn.jsdelivr.net/npm/`
 
 ## Configuration
 
@@ -91,7 +92,7 @@ The configuration above specifies your backend protocol and your publication bra
 
 ### Media and Public Folders
 
-Static CMS allows users to upload images directly within the editor. For this to work, the CMS needs to know where to save them. If you already have an `images` folder in your project, you could use its path, possibly creating an `uploads` sub-folder, for example:
+Static CMS allows users to upload images directly within the editor. For this to work, Static CMS needs to know where to save them. If you already have an `images` folder in your project, you could use its path, possibly creating an `uploads` sub-folder, for example:
 
 <CodeTabs>
 ```yaml
@@ -256,7 +257,7 @@ Netlify's Identity and Git Gateway services allow you to manage CMS admin users 
 1. Go to **Settings > Identity**, and select **Enable Identity service**.
 2. Under **Registration preferences**, select **Open** or **Invite only**. In most cases, you want only invited users to access your CMS, but if you're just experimenting, you can leave it open for convenience.
 3. If you'd like to allow one-click login with services like Google and GitHub, check the boxes next to the services you'd like to use, under **External providers**.
-4. Scroll down to **Services > Git Gateway**, and click **Enable Git Gateway**. This authenticates with your Git host and generates an API access token. In this case, we're leaving the **Roles** field blank, which means any logged in user may access the CMS. For information on changing this, check the [Netlify Identity documentation](https://www.netlify.com/docs/identity/).
+4. Scroll down to **Services > Git Gateway**, and click **Enable Git Gateway**. This authenticates with your Git host and generates an API access token. In this case, we're leaving the **Roles** field blank, which means any logged in user may access Static CMS. For information on changing this, check the [Netlify Identity documentation](https://www.netlify.com/docs/identity/).
 
 ### Add the Netlify Identity Widget
 
@@ -268,7 +269,7 @@ With the backend set to handle authentication, now you need a frontend interface
 
 Add this to the `<head>` of your CMS index page at `/admin/index.html`, as well as the `<head>` of your site's main index page. Depending on how your site generator is set up, this may mean you need to add it to the default template, or to a "partial" or "include" template. If you can find where the site stylesheet is linked, that's probably the right place. Alternatively, you can include the script in your site using Netlify's [Script Injection](https://www.netlify.com/docs/inject-analytics-snippets/) feature.
 
-When a user logs in with the Netlify Identity widget, an access token directs to the site homepage. In order to complete the login and get back to the CMS, redirect the user back to the `/admin/` path. To do this, add the following script before the closing `body` tag of your site's main index page:
+When a user logs in with the Netlify Identity widget, an access token directs to the site homepage. In order to complete the login and get back to Static CMS, redirect the user back to the `/admin/` path. To do this, add the following script before the closing `body` tag of your site's main index page:
 
 ```html
 <script>
@@ -286,7 +287,7 @@ When a user logs in with the Netlify Identity widget, an access token directs to
 
 Note: This example script requires modern JavaScript and does not work on IE11. For legacy browser support, use function expressions (`function () {}`) in place of the arrow functions (`() => {}`), or use a transpiler such as [Babel](https://babeljs.io/).
 
-## Accessing the CMS
+## Accessing Static CMS
 
 Your site CMS is now fully configured and ready for login!
 

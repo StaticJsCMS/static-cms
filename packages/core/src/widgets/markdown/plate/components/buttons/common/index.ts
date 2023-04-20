@@ -11,7 +11,5 @@ export * from './ListToolbarButton';
 export { default as ListToolbarButton } from './ListToolbarButton';
 export * from './MarkToolbarButton';
 export { default as MarkToolbarButton } from './MarkToolbarButton';
-export * from './MediaToolbarButton';
-export { default as MediaToolbarButton } from './MediaToolbarButton';
 export * from './ToolbarButton';
 export { default as ToolbarButton } from './ToolbarButton';

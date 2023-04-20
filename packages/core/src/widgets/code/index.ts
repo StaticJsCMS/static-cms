@@ -11,6 +11,15 @@ const CodeWidget = (): WidgetParam<string | { [key: string]: string }, CodeField
     previewComponent,
     options: {
       schema,
+      getValidValue: (value, field) => {
+        if (!value || typeof value === 'string') {
+          return value;
+        }
+
+        const codeKey = field.keys ? field.keys.code : 'code';
+
+        return value[codeKey];
+      },
       getDefaultValue: (
         defaultValue: string | { [key: string]: string } | null | undefined,
         field: CodeField,

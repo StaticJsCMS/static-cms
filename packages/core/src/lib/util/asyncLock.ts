@@ -33,7 +33,7 @@ export function asyncLock(): AsyncLock {
       if (e instanceof Error && e.message !== 'leave called too many times.') {
         throw e;
       } else {
-        console.warn('leave called too many times.');
+        console.warn('[StaticCMS] Leave called too many times.');
         lock = semaphore(1);
       }
     }

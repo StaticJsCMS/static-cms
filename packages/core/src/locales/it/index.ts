@@ -19,7 +19,6 @@ const it: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Contenuti',
-      workflow: 'Workflow',
       media: 'Media',
       quickAdd: 'Aggiunta veloce',
     },
@@ -78,8 +77,6 @@ const it: LocalePhrasesRoot = {
         'Sei sicuro di voler cancellare questa voce pubblicata e tutte le modifiche non salvate della tua sessione corrente?',
       onDeletePublishedEntryBody: 'Sei sicuro di voler cancellare questa voce pubblicata?',
       loadingEntry: 'Caricando la voce...',
-      confirmLoadBackupBody:
-        'Un backup locale è stato recuperato per questa voce, vuoi utilizzarlo?',
     },
     editorToolbar: {
       publishing: 'Pubblicando...',
@@ -186,35 +183,6 @@ const it: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Pubblicazione fallita: %{details}',
       entryUpdated: 'Status della voce aggiornato',
       onFailToAuth: '%{details}',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Caricando le voci del Flusso Editoriale',
-      workflowHeading: 'Flusso Editoriale',
-      newPost: 'Nuovo Post',
-      description:
-        '%{smart_count} voce attende la revisione, %{readyCount} pronte per la pubblicazione. |||| %{smart_count} voci attendono la revisione, %{readyCount} pronte per la pubblicazione. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} da %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'da %{author}',
-      deleteChanges: 'Cancella le modifiche',
-      deleteNewEntry: 'Cancella nuova voce',
-      publishChanges: 'Pubblica modifiche',
-      publishNewEntry: 'Pubblica una nuova voce',
-    },
-    workflowList: {
-      onDeleteEntry: 'Sei sicuro di voler cancellare questa voce?',
-      onPublishingNotReadyEntry:
-        'Solo gli oggetti con lo status "Pronto" possono essere pubblicati. Sposta la Card nella colonna "Pronto" per abilitare la pubblicazione.',
-      onPublishEntry: 'Sei sicuro di voler pubblicare questa voce?',
-      draftHeader: 'Bozze',
-      inReviewHeader: 'In Revisione',
-      readyHeader: 'Pronto',
-      currentEntries: '%{smart_count} voce |||| %{smart_count} voci',
     },
   },
 };

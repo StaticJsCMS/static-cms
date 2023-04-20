@@ -20,7 +20,6 @@ const cs: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Obsah',
-      workflow: 'Workflow',
       media: 'Média',
       quickAdd: 'Přidat',
     },
@@ -109,7 +108,6 @@ const cs: LocalePhrasesRoot = {
         'Chcete opravdu vymazat tento publikovaný záznam a všechny neuložené změny z této relace?',
       onDeletePublishedEntryBody: 'Chcete opravdu smazat tento publikovaný záznam?',
       loadingEntry: 'Načítání záznamu…',
-      confirmLoadBackupBody: 'Lokální kopie tohoto záznamu byla nalezena, chcete ji použít?',
     },
     editorInterface: {
       toggleI18n: 'Přepnout lokalizaci',
@@ -253,35 +251,6 @@ const cs: LocalePhrasesRoot = {
       onFailToAuth: '%{details}',
       onLoggedOut: 'Byli jste odhlášeni, prosím zálohujte všechna data a znova se přihlašte',
       onBackendDown: 'Backend zaznamenal výpadek. Podívejte se do %{details} pro více informací.',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Načítání workflow záznamů',
-      workflowHeading: 'Schvalovací Workflow',
-      newPost: 'Nový post',
-      description:
-        '%{smart_count} záznam čeká na schválení, %{readyCount} připraven k publikaci. |||| %{smart_count} čeká na schválení, %{readyCount} připraveno k publikaci. ',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} (%{author})',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: '%{author}',
-      deleteChanges: 'Vymazat změny',
-      deleteNewEntry: 'Vymazat nový záznam',
-      publishChanges: 'Publikovat změny',
-      publishNewEntry: 'Publikovat nový záznam',
-    },
-    workflowList: {
-      onDeleteEntry: 'Opravdu chcete smazat tento záznam?',
-      onPublishingNotReadyEntry:
-        'Pouze položky se statusem "Připraveno" mohou být publikováno. Pro umožnění publikace musíte přetáhnout kartu do sloupce "Připraveno"',
-      onPublishEntry: 'Opravdu chcete publikovat tento záznam?',
-      draftHeader: 'Koncepty',
-      inReviewHeader: 'V revizi',
-      readyHeader: 'Připraveno',
-      currentEntries: '%{smart_count} záznam |||| %{smart_count} záznamů',
     },
   },
 };

@@ -109,7 +109,7 @@ export default class GitHub implements BackendClass {
           );
       })
       .catch(e => {
-        console.warn('Failed getting GitHub status', e);
+        console.warn('[StaticCMS] Failed getting GitHub status', e);
         return true;
       });
 
@@ -121,7 +121,7 @@ export default class GitHub implements BackendClass {
           ?.getUser()
           .then(user => !!user)
           .catch(e => {
-            console.warn('Failed getting GitHub user', e);
+            console.warn('[StaticCMS] Failed getting GitHub user', e);
             return false;
           })) || false;
     }
@@ -314,15 +314,15 @@ export default class GitHub implements BackendClass {
       .catch(() => ({ file: { path, id: null }, data: '' }));
   }
 
-  async getMedia(mediaFolder = this.mediaFolder) {
+  async getMedia(mediaFolder = this.mediaFolder, folderSupport?: boolean) {
     if (!mediaFolder) {
       return [];
     }
-    return this.api!.listFiles(mediaFolder).then(files =>
-      files.map(({ id, name, size, path }) => {
+    return this.api!.listFiles(mediaFolder, undefined, folderSupport).then(files =>
+      files.map(({ id, name, size, path, type }) => {
         // load media using getMediaDisplayURL to avoid token expiration with GitHub raw content urls
         // for private repositories
-        return { id, name, size, displayURL: { id, path }, path };
+        return { id, name, size, displayURL: { id, path }, path, isDirectory: type == 'tree' };
       }),
     );
   }

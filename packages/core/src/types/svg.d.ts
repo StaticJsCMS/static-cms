@@ -1,4 +1,7 @@
 declare module '*.svg' {
-  const content: () => JSX.Element;
+  import type { FC } from 'react';
+  import type { SvgProps } from '@staticcms/core/interface';
+
+  const content: FC<SvgProps>;
   export default content;
 }

@@ -19,7 +19,6 @@ const pt: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Conteúdos',
-      workflow: 'Fluxo de Trabalho',
       media: 'Mídia',
       quickAdd: 'Adição rápida',
     },
@@ -109,7 +108,6 @@ const pt: LocalePhrasesRoot = {
         'Tem certeza de que deseja excluir esta entrada publicada, bem como as alterações não salvas da sessão atual?',
       onDeletePublishedEntryBody: 'Tem certeza de que deseja excluir esta entrada publicada?',
       loadingEntry: 'Carregando entrada...',
-      confirmLoadBackupBody: 'Um backup local foi recuperado para esta entrada. Deseja usá-lo?',
     },
     editorInterface: {
       toggleI18n: 'Mudar i18n',
@@ -265,35 +263,6 @@ const pt: LocalePhrasesRoot = {
       onFailToAuth: '%{details}',
       onLoggedOut: 'Você foi desconectado. Por favor, salve as alterações e entre novamente',
       onBackendDown: 'O serviço de back-end está fora do ar. Veja %{details} para mais informações',
-    },
-  },
-  workflow: {
-    workflow: {
-      loading: 'Carregando entradas do Fluxo de Trabalho Editorial',
-      workflowHeading: 'Fluxo de Trabalho Editorial',
-      newPost: 'Nova Publicação',
-      description:
-        '%{smart_count} entrada aguardando revisão, %{readyCount} pronta para publicação. |||| %{smart_count} entradas aguardando revisão, %{readyCount} pronta para publicação.',
-      dateFormat: 'MMMM D',
-    },
-    workflowCard: {
-      lastChange: '%{date} por %{author}',
-      lastChangeNoAuthor: '%{date}',
-      lastChangeNoDate: 'por %{author}',
-      deleteChanges: 'Excluir alterações',
-      deleteNewEntry: 'Excluir nova entrada',
-      publishChanges: 'Publicar alterações',
-      publishNewEntry: 'Publicar nova entrada',
-    },
-    workflowList: {
-      onDeleteEntry: 'Tem certeza de que deseja excluir esta entrada?',
-      onPublishingNotReadyEntry:
-        'Somente itens com o status "Pronto" podem ser publicados. Arraste o cartão para a coluna "Pronto" para poder publicar.',
-      onPublishEntry: 'Tem certeza de que quer publicar esta entrada?',
-      draftHeader: 'Rascunhos',
-      inReviewHeader: 'Em Revisão',
-      readyHeader: 'Prontos',
-      currentEntries: '%{smart_count} entrada |||| %{smart_count} entradas',
     },
   },
 };

@@ -15,7 +15,7 @@ const ListWidget = (): WidgetParam<ValueOrNestedValue[], ListField> => {
   };
 };
 
-export { default as ListItem } from './ListItem';
+export { default as ListItem } from './components/ListItem';
 export * from './typedListHelpers';
 export { controlComponent as ListControl, previewComponent as ListPreview, schema as ListSchema };
 
