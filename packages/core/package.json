@@ -204,7 +204,7 @@
     "@types/jest": "29.5.0",
     "@types/js-yaml": "4.0.5",
     "@types/jwt-decode": "2.2.1",
-    "@types/lodash": "4.14.191",
+    "@types/lodash": "4.14.194",
     "@types/minimatch": "5.1.2",
     "@types/node": "18.15.11",
     "@types/node-fetch": "2.6.3",
