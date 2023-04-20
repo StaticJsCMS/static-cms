@@ -4753,10 +4753,10 @@
   dependencies:
     "@udecode/plate-common" "20.4.0"
 
-"@udecode/plate-headless@20.6.0":
-  version "20.6.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-20.6.0.tgz#11d6393e2cfdaa290673739426ce43b9c19dd04a"
-  integrity sha512-0DeS3y4Dx/R29EMDTPcPhjUs11iIPQrkYNFCNsY5lHDzWDKf42YUJDjpaHbQGMkA5P00HfhSHDCTlu+9WQhWIQ==
+"@udecode/plate-headless@20.6.5":
+  version "20.6.5"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-20.6.5.tgz#e56de4a45e26b7080d791d5ae6fdc20d7d500e20"
+  integrity sha512-7DNizPiEGqnfozEfdsgBvxm8XYkGjtnUsEF9vCMc3dQzXP3cdsw9XqmXhRfGoS6r1Xtb5aw8gFs/EQ9gIpz9/A==
   dependencies:
     "@udecode/plate-alignment" "20.4.0"
     "@udecode/plate-autoformat" "20.4.0"
@@ -4782,21 +4782,21 @@
     "@udecode/plate-line-height" "20.4.0"
     "@udecode/plate-link" "20.4.1"
     "@udecode/plate-list" "20.4.0"
-    "@udecode/plate-media" "20.6.0"
-    "@udecode/plate-mention" "20.4.0"
+    "@udecode/plate-media" "20.6.3"
+    "@udecode/plate-mention" "20.6.5"
     "@udecode/plate-node-id" "20.4.0"
     "@udecode/plate-normalizers" "20.4.0"
     "@udecode/plate-paragraph" "20.4.0"
     "@udecode/plate-reset-node" "20.4.0"
     "@udecode/plate-select" "20.4.0"
-    "@udecode/plate-serializer-csv" "20.5.0"
-    "@udecode/plate-serializer-docx" "20.6.0"
+    "@udecode/plate-serializer-csv" "20.6.3"
+    "@udecode/plate-serializer-docx" "20.6.3"
     "@udecode/plate-serializer-html" "20.4.0"
     "@udecode/plate-serializer-md" "20.4.1"
     "@udecode/plate-tabbable" "20.4.0"
-    "@udecode/plate-table" "20.5.0"
+    "@udecode/plate-table" "20.6.3"
     "@udecode/plate-trailing-block" "20.4.0"
-    "@udecode/resizable" "20.4.0"
+    "@udecode/resizable" "20.4.1"
 
 "@udecode/plate-highlight@20.4.0":
   version "20.4.0"
@@ -4867,21 +4867,21 @@
     "@udecode/plate-common" "20.4.0"
     "@udecode/plate-reset-node" "20.4.0"
 
-"@udecode/plate-media@20.6.0":
-  version "20.6.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-media/-/plate-media-20.6.0.tgz#79654585afa0641d26ce36fcf8839754faffe3c6"
-  integrity sha512-aw1v/kuHSmpz8kcVDuxXYAO2SnO60mKZ/eahOLfiKNvIKp1LB1U9dfmkRYD8qYo1QsJQiCfpejSysTFFqiThHw==
+"@udecode/plate-media@20.6.3":
+  version "20.6.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-media/-/plate-media-20.6.3.tgz#22e97bd7b6c1344d7254f89568ff532f4bab1627"
+  integrity sha512-SX7PBP9GYbZcKbgn/1M3ctjv5DMnlqU+JtwbyTHK1C/mPjXyauGF0IH6VP6IoPTo1VF2GtPAahZj4VmfTW4VcQ==
   dependencies:
     "@udecode/plate-common" "20.4.0"
-    "@udecode/resizable" "20.4.0"
+    "@udecode/resizable" "20.4.1"
     js-video-url-parser "^0.5.1"
     react-textarea-autosize "^8.3.3"
     scriptjs "2.5.9"
 
-"@udecode/plate-mention@20.4.0":
-  version "20.4.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-mention/-/plate-mention-20.4.0.tgz#36c5623278d6063abc8708fbb22d7b5a9b0cb8ce"
-  integrity sha512-HYsXE3NSJWiElKtNfnTYzo0dvfTyjS3rvzb2Yc0lVrIpT9GjnDCw5PllEtIMKC37u+zXsV+MfZfR0D51WKybfw==
+"@udecode/plate-mention@20.6.5":
+  version "20.6.5"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-mention/-/plate-mention-20.6.5.tgz#7b389d1f9447d0e89f4688f0354205b4ce451e35"
+  integrity sha512-s59EFRWt7yffwAm2ridcmXpLcD1fk8cEceLjP+0SnPIS626N2Bq/tyW9mSr2K6yh4EBTwnDg1BsXorW1FRp5hQ==
   dependencies:
     "@udecode/plate-combobox" "20.4.0"
     "@udecode/plate-common" "20.4.0"
@@ -4921,27 +4921,27 @@
   dependencies:
     "@udecode/plate-common" "20.4.0"
 
-"@udecode/plate-serializer-csv@20.5.0":
-  version "20.5.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-csv/-/plate-serializer-csv-20.5.0.tgz#08b7aa1c2b9bd374656ced2b95a639921f1dd121"
-  integrity sha512-ljVPN1DBaNpxFPkkagJSh0Z0gquJmIb0A/iSyPkah8zo8EtLN+3rNi4Qx07W34vmqaIF/OLsBD233ZBo1Orf8A==
+"@udecode/plate-serializer-csv@20.6.3":
+  version "20.6.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-csv/-/plate-serializer-csv-20.6.3.tgz#3c906b1cf414c6f7833760fa658550804477a88e"
+  integrity sha512-knzmzH1S/Rok/Rgewcb/2EmMz3rtgKDxBs6SKMFFUhy19Ph8T6XonA2LdilFXzCnp5+sWEJXC1feA31yWe9dWg==
   dependencies:
     "@udecode/plate-common" "20.4.0"
-    "@udecode/plate-table" "20.5.0"
+    "@udecode/plate-table" "20.6.3"
     papaparse "^5.3.2"
 
-"@udecode/plate-serializer-docx@20.6.0":
-  version "20.6.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-docx/-/plate-serializer-docx-20.6.0.tgz#bc66714145c8cc0b42c1c6e9b3753594f001902e"
-  integrity sha512-JhaZ7Hl85ALb5lCj6pMb9aN3i30oS+DjAVYCmN6/jJUMp7cWCl8S8gBSKKb9JlNZ/Z23/6cQ2WVEqU0G9ORh7A==
+"@udecode/plate-serializer-docx@20.6.3":
+  version "20.6.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-docx/-/plate-serializer-docx-20.6.3.tgz#7f81342005a4fe12c3946d12b763ad70955e67fc"
+  integrity sha512-XkwX0PIu4IGmGHkUI3/mLgsDwbqjncMys4zykp+YepHWf6wN/K/ize2+1rXnBa/eUgOlq4P8wDQX+T4J4VsNLw==
   dependencies:
     "@udecode/plate-common" "20.4.0"
     "@udecode/plate-heading" "20.4.0"
     "@udecode/plate-indent" "20.4.0"
     "@udecode/plate-indent-list" "20.4.0"
-    "@udecode/plate-media" "20.6.0"
+    "@udecode/plate-media" "20.6.3"
     "@udecode/plate-paragraph" "20.4.0"
-    "@udecode/plate-table" "20.5.0"
+    "@udecode/plate-table" "20.6.3"
     validator "^13.7.0"
 
 "@udecode/plate-serializer-html@20.4.0":
@@ -4983,13 +4983,13 @@
     "@udecode/plate-common" "20.4.0"
     tabbable "^6.0.1"
 
-"@udecode/plate-table@20.5.0":
-  version "20.5.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-table/-/plate-table-20.5.0.tgz#b014fd524fc5234246d59c8c3a4ac39f4f3af501"
-  integrity sha512-rlJQpcbzN4AmxQXHAfOZHPCs4aTQ9uStFIl5Ys5bfW/onsOMLlIfzOBA8Hxg35L8NvyYQkueHRcOAL0vRssk2A==
+"@udecode/plate-table@20.6.3":
+  version "20.6.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-table/-/plate-table-20.6.3.tgz#c5a9a20e14f6227631360e81e59d28a0657a5e69"
+  integrity sha512-/YcWk00ZkrHGlwJwbXki5xkcc6tz0Sr5DpV6Sob2XV5pNTfog33Usc9F/XdSSmhSdTPgJjo80Z25rSTDBdN9lg==
   dependencies:
     "@udecode/plate-common" "20.4.0"
-    "@udecode/resizable" "20.4.0"
+    "@udecode/resizable" "20.4.1"
 
 "@udecode/plate-trailing-block@20.4.0":
   version "20.4.0"
@@ -5129,28 +5129,28 @@
     "@udecode/plate-styled-components" "20.4.0"
     "@udecode/plate-ui-toolbar" "20.4.0"
 
-"@udecode/plate-ui-media@20.6.0":
-  version "20.6.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-media/-/plate-ui-media-20.6.0.tgz#1d684c005b23fed2e607931cc93ceca80cfcfdb9"
-  integrity sha512-fwWkfux8N6Y0BlhhfeIV+69fFvsabEyB0jYFpJzPkPg41cuy7z/T39UpRnEAhVPodmbS3vi/3FfS0RcE/GJCog==
+"@udecode/plate-ui-media@20.6.3":
+  version "20.6.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-media/-/plate-ui-media-20.6.3.tgz#c521345bd50345676ff1baaad35d49af86b52d80"
+  integrity sha512-V9cqKtgFtN6wSpwKRrsIGWFsHEULp29nlmr5vUL+Akshrz11or2PFLt3NhJA20c3F2wyrziw99p1VI+PbD0Kfw==
   dependencies:
     "@udecode/plate-common" "20.4.0"
     "@udecode/plate-floating" "20.4.0"
     "@udecode/plate-link" "20.4.1"
-    "@udecode/plate-media" "20.6.0"
+    "@udecode/plate-media" "20.6.3"
     "@udecode/plate-styled-components" "20.4.0"
     "@udecode/plate-ui-link" "20.4.1"
     "@udecode/plate-ui-toolbar" "20.4.0"
     js-video-url-parser "0.5.1"
 
-"@udecode/plate-ui-mention@20.4.0":
-  version "20.4.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-mention/-/plate-ui-mention-20.4.0.tgz#92be0bac72317dccbecad9938943907265dc9e3d"
-  integrity sha512-eL1fU/4/4efTvlplFCO5fMFdo3dOVFOkNoikqeS9qVbkAJ7utCNj7KREmXetgKN631UPpwxIkNa/KD9bZeen7w==
+"@udecode/plate-ui-mention@20.6.5":
+  version "20.6.5"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-mention/-/plate-ui-mention-20.6.5.tgz#89b084a6909b40318c56bbb9425104a354a50cbc"
+  integrity sha512-5o1EHVRo3eK9Ap6r6CnEJ7YSgHNbw2ikocPihDmEMzTbD2XfOup74oPDsHAyFRkR9JMQUGAdLeLCuhUzwGyTvw==
   dependencies:
     "@udecode/plate-combobox" "20.4.0"
     "@udecode/plate-common" "20.4.0"
-    "@udecode/plate-mention" "20.4.0"
+    "@udecode/plate-mention" "20.6.5"
     "@udecode/plate-styled-components" "20.4.0"
     "@udecode/plate-ui-combobox" "20.4.0"
 
@@ -5162,15 +5162,15 @@
     "@udecode/plate-common" "20.4.0"
     "@udecode/plate-styled-components" "20.4.0"
 
-"@udecode/plate-ui-table@20.5.0":
-  version "20.5.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-table/-/plate-ui-table-20.5.0.tgz#f114fccbbe2f7e2cd36ff4f68df646a4bc9c26bc"
-  integrity sha512-Jx6gog6Ro4dO1HLH7aK+wFJPj9SGVoFLhlyUmOsnrZ0qAqU8AhGmlWvg40fiRlyklM/ZaNCGRjsvesMhxKEi/w==
+"@udecode/plate-ui-table@20.6.3":
+  version "20.6.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-table/-/plate-ui-table-20.6.3.tgz#e3ee7beb80308ac49e6dfb23fe2178740d7fbf6c"
+  integrity sha512-Zf9MtJkEv9Hm6fjnNIYhoP8Wcp+yyeQ1wYEKR46XBqSYDJtW0gyNr8C82x6ESciUKVLWSzsysqmvjQMAnzcQ5g==
   dependencies:
     "@udecode/plate-common" "20.4.0"
     "@udecode/plate-floating" "20.4.0"
     "@udecode/plate-styled-components" "20.4.0"
-    "@udecode/plate-table" "20.5.0"
+    "@udecode/plate-table" "20.6.3"
     "@udecode/plate-ui-button" "20.4.0"
     "@udecode/plate-ui-toolbar" "20.4.0"
 
@@ -5186,12 +5186,12 @@
     "@udecode/plate-ui-button" "20.4.0"
     react-use "^17.3.2"
 
-"@udecode/plate-ui@20.6.0":
-  version "20.6.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-20.6.0.tgz#aaeb0e7b535ee8b2418718fd3fa10170fc8c5859"
-  integrity sha512-MMU9Tj6tdsi2r+0bW7rcja9yILArbBFRQPZ0hUaXzN8A5FlISpQEDbdBRpQov4kgkPpIihUbOzBOH4HTDTtedg==
+"@udecode/plate-ui@20.6.5":
+  version "20.6.5"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-20.6.5.tgz#f08c8ca5e8de2467e33c53d7eb4d6848ae38af9f"
+  integrity sha512-N4dFyi4PMJ1LznsVEsdpK2MxrOW6VUIVIFWHAys3OY2zmct2Dw+gSuSKagGSzHLhw4t2iHA/CqJ5dJENdT5Dzg==
   dependencies:
-    "@udecode/plate-headless" "20.6.0"
+    "@udecode/plate-headless" "20.6.5"
     "@udecode/plate-styled-components" "20.4.0"
     "@udecode/plate-ui-alignment" "20.4.0"
     "@udecode/plate-ui-block-quote" "20.4.0"
@@ -5206,10 +5206,10 @@
     "@udecode/plate-ui-line-height" "20.4.0"
     "@udecode/plate-ui-link" "20.4.1"
     "@udecode/plate-ui-list" "20.4.0"
-    "@udecode/plate-ui-media" "20.6.0"
-    "@udecode/plate-ui-mention" "20.4.0"
+    "@udecode/plate-ui-media" "20.6.3"
+    "@udecode/plate-ui-mention" "20.6.5"
     "@udecode/plate-ui-placeholder" "20.4.0"
-    "@udecode/plate-ui-table" "20.5.0"
+    "@udecode/plate-ui-table" "20.6.3"
     "@udecode/plate-ui-toolbar" "20.4.0"
     use-context-selector "1.4.1"
 
@@ -5225,18 +5225,18 @@
     "@udecode/slate-utils" "19.7.1"
     "@udecode/utils" "19.7.0"
 
-"@udecode/plate@20.6.0":
-  version "20.6.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-20.6.0.tgz#ec0b69c66a0c2447e8dd94ff235956c2b2ab0d3a"
-  integrity sha512-9PxOAtVJ+4o7H5R+Pwb0HdQBqjA7vomzALmhTtkAMq5gRo2Cb4oW6CqgxULGMYJU6kFpnGncCbHPP3W2izAhlQ==
+"@udecode/plate@20.6.5":
+  version "20.6.5"
+  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-20.6.5.tgz#a98684ea02631a37e5e79ef19c4a6b57da27c511"
+  integrity sha512-GCkKL2l7BwbI0r08n208LwdRXbIlQjJQJPJMMpoLisq7oWf2ShuVzUYD02hYBCBmZRAZdh+th1UxK3QLzK7BCw==
   dependencies:
-    "@udecode/plate-headless" "20.6.0"
-    "@udecode/plate-ui" "20.6.0"
+    "@udecode/plate-headless" "20.6.5"
+    "@udecode/plate-ui" "20.6.5"
 
-"@udecode/resizable@20.4.0":
-  version "20.4.0"
-  resolved "https://registry.yarnpkg.com/@udecode/resizable/-/resizable-20.4.0.tgz#79374f53187dee3b9cd0f786a95f4b1f0045fc10"
-  integrity sha512-Hkf+emIqf8iTX5MERXSZbbWbTYN+AddsvNXUbY9x0X9s5U+zHyU0X8L13D04PeLsV5myc4IkMUQarPjJ8YboLA==
+"@udecode/resizable@20.4.1":
+  version "20.4.1"
+  resolved "https://registry.yarnpkg.com/@udecode/resizable/-/resizable-20.4.1.tgz#10edd7d70140c8b882828bae1f5de1702cb17c5e"
+  integrity sha512-A0r6TgHTaavCqHl3hJ3mrBcCf4mqNJF7PCJB3J5Jx1JV/lw8V8SFVaxnn+uwe0DzY8bmUD3RjNlgWqqfg+PIRw==
   dependencies:
     "@udecode/plate-common" "20.4.0"
 
