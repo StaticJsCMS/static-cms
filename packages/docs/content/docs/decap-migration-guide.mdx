@@ -1,0 +1,250 @@
+---
+group: Migration
+title: Decap CMS Migration Guide
+weight: 190
+---
+
+Static CMS is a fork of [Decap](https://github.com/decaporg/decap-cms) (previously Netlify CMS) . Many changes have been made, some big, some small.
+
+In this guide, we will walk you through the steps of migrating from Decap to Static CMS.
+
+## How to Migrate
+
+Start by replacing Decap with Static CMS, then address the changes below.
+
+### CDN
+
+Decap:
+
+```html
+<script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+```
+
+Static CMS:
+
+```html
+<script src="https://unpkg.com/@staticcms/app@^2.0.0-rc.1/dist/static-cms-app.js"></script>
+```
+
+### Bundling
+
+```bash
+# Uninstall Decap
+npm uninstall netlify-cms-app
+npm uninstall netlify-cms-core
+
+# Install Static CMS
+npm install @staticcms/core
+```
+
+#### Change your imports
+
+Decap:
+
+```js
+import CMS from 'netlify-cms-app';
+```
+
+Static CMS:
+
+```js
+import CMS from '@staticcms/core';
+```
+
+## Changes
+
+### React 18
+
+React `18.2.0` is now the minimum supported React version. If you are using Static CMS through a CDN, this comes bundled.
+
+### Static CMS Styles
+
+Static CMS bundles it styles separately from the main javascript file, so you will need to import them separately.
+
+**CDN**:
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/@staticcms/app@^2.0.0-rc.1/dist/main.css" />
+```
+
+**Bundling**:
+
+```js
+import '@staticcms/core/dist/main.css';
+```
+
+### Backends
+
+The Azure backend has been remove. All other backends are still supported.
+
+However, the Gitlab, Client-Side Implicit Grant has been removed as a method of authentication.
+
+### Dates
+
+[Moment](https://momentjs.com/) has been dropped as the date library used. Instead we are now using [date-fns](https://date-fns.org/). Date formats in your configuration will need to be updated. See [format docs](https://date-fns.org/v2.29.3/docs/format).
+
+### Initializing Static CMS
+
+CMS must be explicitly initiated by calling `CMS.init()`. Passing a config to `CMS.init()` will now completely override `config.yml` (they are now exclusive), instead of being merged with `config.yml`
+
+### Markdown Editor
+
+A [new markdown editor](/docs/widget-markdown) has been added. It comes with a new [shortcode](/docs/widget-markdown#shortcodes) system, old editor components no longer work.
+
+### Sortable Fields
+
+The `sortable_fields` configuration option has been slightly changed, as we now allow a [default sorting option](/docs/collection-overview#sortable_fields).
+
+**Decap**:
+
+```yaml
+sortable_fields: - field1 - field2
+```
+
+**Static CMS**:
+
+```yaml
+sortable_fields: fields: - field1 - field2
+```
+
+### List Widget
+
+Support in the List Widget for the `field` property has been dropped. A single field in the `fields` property [achieves the same behavior](/docs/widget-list).
+
+### Custom Widgets
+
+Custom widget creation has changed. `createClass` has been removed. Custom widgets should all be [functional components](https://reactjs.org/docs/components-and-props.html#function-and-class-components) now.
+
+There have also been changes to how custom widgets are registered and the properties passed to the controls and previews. See [custom widgets](/docs/custom-widgets) for full details.
+
+### Custom Previews
+
+Custom preview creation has changed. `createClass` has been removed. Custom previews should all be [functional components](https://reactjs.org/docs/components-and-props.html#function-and-class-components) now.
+
+There have also been changes to the properties passed to custom previews. See [custom previews](/docs/custom-previews) for full details.
+
+### External integrations
+
+The following external integrations have been removed:
+
+- Algolia
+- AssetStore
+- Cloudinary
+- Uploadcare
+
+### Deprecated Features
+
+- All deprecated features were removed
+  - `date` widget has been removed
+  - `datetime` widget
+    - `dateFormat` has been removed (Use `date_format` instead)
+    - `timeFormat` has been removed (Use `time_format` instead)
+
+### Media Library
+
+The `getAsset` method has been removed, the new `useMediaAsset` hook should be used instead. See [Interacting With The Media Library](/docs/custom-widgets#interacting-with-the-media-library).
+
+### Beta Features
+
+The following beta features from Decap have been dropped:
+
+- GraphQL support for GitHub and GitLab
+- Remark plugins (new markdown editor has its own plugin system)
+- Dynamic Default Values
+- Custom Mount Element
+
+#### Nested Collections
+
+[Nested Collections](/docs/collection-types#nested-collections) have some breaking config changes. The `meta` config has been dropped and its `path` property has been moved into the `nested` prop. You can also no longer specify the widget type for the path.
+
+**Old Config**
+
+<CodeTabs>
+```yaml
+collections:
+  - name: pages
+    label: Pages
+    label_singular: 'Page'
+    folder: content/pages
+    create: true
+    nested:
+      depth: 100
+      summary: '{{title}}'
+    fields:
+      - label: Title
+        name: title
+        widget: string
+      - label: Body
+        name: body
+        widget: markdown
+    meta: { path: { widget: string, label: 'Path', index_file: 'index' } }
+```
+
+```js
+{
+  collections: [
+    {
+      name: 'pages',
+      label: 'Pages',
+      label_singular: 'Page',
+      folder: 'content/pages',
+      create: true,
+      nested: {
+        depth: 100,
+        summary: '{{title}}',
+      },
+      fields: [
+        {
+          label: 'Title',
+          name: 'title',
+          widget: 'string',
+        },
+        {
+          label: 'Body',
+          name: 'body',
+          widget: 'markdown',
+        },
+      ],
+      meta: {
+        path: {
+          widget: 'string',
+          label: 'Path',
+          index_file: 'index',
+        },
+      },
+    },
+  ];
+}
+```
+
+</CodeTabs>
+
+## Platform Changes
+
+### Gatsby
+
+If you are using Gatsby you will need to change out your CMS plugin.
+
+```bash
+# Uninstall Decap plugin
+npm uninstall gatsby-plugin-netlify-cms
+
+# Install Static CMS plugin
+npm install gatsby-plugin-static-cms
+```
+
+## Local Development Changes
+
+If you are using the local backend you will need to switch the proxy server package you are using.
+
+Decap:
+
+```bash
+npx netlify-cms-proxy-server
+```
+
+Static CMS:
+
+```bash
+npx @staticcms/proxy-server
+```

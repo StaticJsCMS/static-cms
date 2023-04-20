@@ -126,6 +126,6 @@ Every release is documented on the Github [Releases](https://github.com/StaticJs
 Static CMS is released under the [MIT License](LICENSE).
 Please make sure you understand its [implications and guarantees](https://writing.kemitchell.com/2016/09/21/MIT-License-Line-by-Line.html).
 
-# Netlify CMS
+# Decap
 
-Static CMS is a fork of Netlify CMS focusing on the core product over adding massive, scope expanding, new features.
+Static CMS is a fork of [Decap](https://github.com/decaporg/decap-cms) (previously Netlify CMS) focusing on the core product over adding massive, scope expanding, new features.
