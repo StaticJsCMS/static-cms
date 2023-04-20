@@ -1,6 +1,11 @@
 {
   "releases": [
     {
+      "date": "2023-04-21T15:00:00.000Z",
+      "version": "v2.0.0",
+      "description": "New UI and Media Library enchancements."
+    },
+    {
       "date": "2023-01-25T15:26:00.000Z",
       "version": "v1.2.0",
       "description": "Custom collection card templates."

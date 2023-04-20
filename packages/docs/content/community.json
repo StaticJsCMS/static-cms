@@ -3,6 +3,16 @@
   "subtitle": "Get support, give support and find out what's new through the channels below.",
   "sections": [
     {
+      "title": "Contributing",
+      "links": [
+        {
+          "title": "Contributor Guide",
+          "description": "Contribute to the project",
+          "url": "/docs/contributor-guide"
+        }
+      ]
+    },
+    {
       "title": "Support",
       "links": [
         {

@@ -28,7 +28,7 @@ const StyledAppBar = styled(AppBar)(
 
 const StyledToolbar = styled(Toolbar)(
   ({ theme }) => `
-    gap: 16px;
+    gap: 12px;
     height: 72px;
 
     ${theme.breakpoints.down('lg')} {
@@ -90,6 +90,8 @@ const StyledDesktopGap = styled('div')(
 const StyledDesktopLink = styled(Button)(
   ({ theme }) => `
     color: white;
+    text-transform: none;
+    min-width: unset;
 
     &:hover {
       color: rgba(255, 255, 255, 0.6);
@@ -119,6 +121,10 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
   const items: MenuItem[] = useMemo(
     () => [
       {
+        title: 'v2.0.0',
+        url: '/releases',
+      },
+      {
         title: 'Docs',
         path: '/docs',
         groups: docsGroups.map(group => ({
@@ -129,10 +135,6 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
             beta: link.beta,
           })),
         })),
-      },
-      {
-        title: 'Contributing',
-        url: '/docs/contributor-guide',
       },
       {
         title: 'Community',
