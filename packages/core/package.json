@@ -74,7 +74,7 @@
     "@mui/material": "5.11.16",
     "@mui/system": "5.11.16",
     "@mui/x-date-pickers": "5.0.20",
-    "@reduxjs/toolkit": "1.9.3",
+    "@reduxjs/toolkit": "1.9.5",
     "@styled-icons/bootstrap": "10.47.0",
     "@styled-icons/fa-brands": "10.47.0",
     "@styled-icons/fluentui-system-regular": "10.47.0",
