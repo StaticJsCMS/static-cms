@@ -4,7 +4,7 @@ import React from 'react';
 import useCursor from '@staticcms/core/lib/hooks/useCursor';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 
-import type { ChangeEventHandler, FC, MouseEventHandler, Ref } from 'react';
+import type { ChangeEventHandler, FC, MouseEventHandler, ReactNode, Ref } from 'react';
 
 export interface BaseTextFieldProps {
   id?: string;
@@ -17,6 +17,8 @@ export interface BaseTextFieldProps {
   variant?: 'borderless' | 'contained';
   inputRef?: Ref<HTMLInputElement>;
   placeholder?: string;
+  endAdornment?: ReactNode;
+  startAdornment?: ReactNode;
 }
 
 export interface NumberTextFieldProps extends BaseTextFieldProps {
@@ -45,6 +47,8 @@ const TextField: FC<TextFieldProps> = ({
   disabled = false,
   onChange,
   onClick,
+  startAdornment,
+  endAdornment,
   ...otherProps
 }) => {
   const finalCursor = useCursor(cursor, disabled);
@@ -58,6 +62,8 @@ const TextField: FC<TextFieldProps> = ({
       data-testid={dataTestId ?? `${type}-input`}
       readOnly={readonly}
       disabled={disabled}
+      startAdornment={startAdornment}
+      endAdornment={endAdornment}
       slotProps={{
         root: {
           className: `

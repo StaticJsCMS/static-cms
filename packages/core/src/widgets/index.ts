@@ -28,3 +28,5 @@ export * from './string';
 export { default as StringWidget } from './string';
 export * from './text';
 export { default as TextWidget } from './text';
+export * from './uuid';
+export { default as UUIDWidget } from './uuid';

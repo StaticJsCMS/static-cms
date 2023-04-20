@@ -8,6 +8,7 @@ import type {
   RelationField,
   SelectField,
   StringOrTextField,
+  UUIDField,
 } from '@staticcms/core';
 
 export const mockBooleanField: BooleanField = {
@@ -88,4 +89,10 @@ export const mockTextField: StringOrTextField = {
   label: 'Text',
   name: 'mock_text',
   widget: 'text',
+};
+
+export const mockUUIDField: UUIDField = {
+  label: 'UUID',
+  name: 'mock_uuid',
+  widget: 'uuid',
 };

@@ -689,9 +689,13 @@ export interface HiddenField extends BaseField {
 }
 
 export interface StringOrTextField extends BaseField {
-  // This is the default widget, so declaring its type is optional.
   widget: 'string' | 'text';
   default?: string;
+}
+
+export interface UUIDField extends BaseField {
+  widget: 'uuid';
+  allow_regenerate?: boolean;
 }
 
 export interface UnknownField extends BaseField {
@@ -713,6 +717,7 @@ export type Field<EF extends BaseField = UnknownField> =
   | SelectField
   | HiddenField
   | StringOrTextField
+  | UUIDField
   | EF;
 
 export interface ViewFilter {

@@ -13,6 +13,8 @@ import ListControl from '../ListControl';
 import type { DragEndEvent } from '@dnd-kit/core';
 import type { ListField, ValueOrNestedValue } from '@staticcms/core/interface';
 
+jest.unmock('uuid');
+
 const singletonListField: ListField = {
   widget: 'list',
   name: 'singleton',
