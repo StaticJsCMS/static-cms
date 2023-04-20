@@ -767,6 +767,7 @@ export interface Backend {
     uploadMedia?: string;
     deleteMedia?: string;
   };
+  use_large_media_transforms_in_media_library?: boolean;
 }
 
 export interface Slug {

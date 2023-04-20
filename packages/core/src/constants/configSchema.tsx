@@ -182,6 +182,7 @@ function getConfigSchema() {
               deleteMedia: { type: 'string' },
             },
           },
+          use_large_media_transforms_in_media_library: { type: 'boolean' },
         },
         required: ['name'],
       },
