@@ -49,7 +49,7 @@ const NavLink = ({ icon, children, onClick, ...otherProps }: NavLinkProps) => {
         >
           <div className="flex justify-between w-full">
             <div className="flex items-center justify-start">{content}</div>
-            <OpenInNewIcon className="h-6 w-6 text-gray-400 dark:text-gray-500" />
+            <OpenInNewIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
           </div>
         </a>
       </li>
