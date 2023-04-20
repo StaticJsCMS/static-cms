@@ -83,7 +83,7 @@ export async function requestWithBackoff(
         if (!api.rateLimiter) {
           const timeout = error.resetSeconds || attempt * attempt;
           console.info(
-            `Pausing requests for ${timeout} ${
+            `[StaticCMS] Pausing requests for ${timeout} ${
               attempt === 1 ? 'second' : 'seconds'
             } due to fetch failures:`,
             error.message,
@@ -93,7 +93,7 @@ export async function requestWithBackoff(
           setTimeout(() => {
             api.rateLimiter?.release();
             api.rateLimiter = undefined;
-            console.info(`Done pausing requests`);
+            console.info('[StaticCMS] Done pausing requests');
           }, 1000 * timeout);
         }
         return requestWithBackoff(api, req, attempt + 1);

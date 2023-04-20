@@ -821,7 +821,7 @@ export interface EventData {
 export type EventListenerOptions = Record<string, unknown>;
 
 export type EventListenerHandler = (
-  data: EventData,
+  data: EventData | undefined,
   options: EventListenerOptions,
 ) => Promise<EntryData | undefined | null | void>;
 

@@ -26,7 +26,7 @@ import type {
   WidgetValueSerializer,
 } from '../interface';
 
-export const allowedEvents = ['preSave', 'postSave'] as const;
+export const allowedEvents = ['mounted', 'preSave', 'postSave'] as const;
 export type AllowedEvent = (typeof allowedEvents)[number];
 
 const eventHandlers = allowedEvents.reduce((acc, e) => {
@@ -219,7 +219,7 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
     } = nameOrWidgetOrWidgets;
     if (registry.widgets[widgetName]) {
       console.warn(oneLine`
-        Multiple widgets registered with name "${widgetName}". Only the last widget registered with
+        [StaticCMS] Multiple widgets registered with name "${widgetName}". Only the last widget registered with
         this name will be used.
       `);
     }
@@ -323,22 +323,24 @@ export function registerEventListener(
   registry.eventHandlers[name].push({ handler, options });
 }
 
-export async function invokeEvent({ name, data }: { name: AllowedEvent; data: EventData }) {
+export async function invokeEvent({ name, data }: { name: AllowedEvent; data?: EventData }) {
   validateEventName(name);
   const handlers = registry.eventHandlers[name];
 
-  let _data = { ...data };
+  console.info(`[StaticCMS] Firing event ${name}`, data);
+
+  let _data = data ? { ...data } : undefined;
   for (const { handler, options } of handlers) {
     const result = await handler(_data, options);
-    if (result !== undefined) {
+    if (_data !== undefined && result !== undefined) {
       const entry = {
         ..._data.entry,
         data: result,
       } as Entry;
-      _data = { ...data, entry };
+      _data = { ..._data, entry };
     }
   }
-  return _data.entry.data;
+  return _data?.entry.data;
 }
 
 export function removeEventListener({ name, handler }: EventListener) {

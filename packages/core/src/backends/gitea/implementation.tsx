@@ -93,7 +93,7 @@ export default class Gitea implements BackendClass {
         ?.user()
         .then(user => !!user)
         .catch(e => {
-          console.warn('Failed getting Gitea user', e);
+          console.warn('[StaticCMS] Failed getting Gitea user', e);
           return false;
         })) || false;
 

@@ -676,7 +676,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       const result = await localForage.setItem(getEntryBackupKey(), raw);
       return result;
     } catch (e) {
-      console.warn('persistLocalDraftBackup', e);
+      console.warn('[StaticCMS] persistLocalDraftBackup', e);
     } finally {
       this.backupSync.release();
     }
@@ -691,7 +691,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       const result = await this.deleteAnonymousBackup();
       return result;
     } catch (e) {
-      console.warn('deleteLocalDraftBackup', e);
+      console.warn('[StaticCMS] deleteLocalDraftBackup', e);
     } finally {
       this.backupSync.release();
     }

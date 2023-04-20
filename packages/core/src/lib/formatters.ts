@@ -54,7 +54,9 @@ export function commitMessageFormatter<EF extends BaseField>(
       case 'author-name':
         return authorName || '';
       default:
-        console.warn(`Ignoring unknown variable “${variable}” in commit message template.`);
+        console.warn(
+          `[StaticCMS] Ignoring unknown variable “${variable}” in commit message template.`,
+        );
         return '';
     }
   });

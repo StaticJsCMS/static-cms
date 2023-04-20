@@ -246,7 +246,7 @@ function mergeValues<EF extends BaseField>(
   let defaultEntry = values.find(e => e.locale === defaultLocale);
   if (!defaultEntry) {
     defaultEntry = values[0];
-    console.warn(`Could not locale entry for default locale '${defaultLocale}'`);
+    console.warn(`[StaticCMS] Could not locale entry for default locale '${defaultLocale}'`);
   }
   const i18n = values
     .filter(e => e.locale !== defaultEntry!.locale)

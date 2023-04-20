@@ -40,6 +40,7 @@ const ROOT_ID = 'nc-root';
 // @ts-ignore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, import/order
 import ReactDOM from 'react-dom';
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 ReactDOM.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.usingClientEntryPoint = true;
@@ -79,7 +80,7 @@ function bootstrap<F extends BaseField = UnknownField>(opts?: {
    * Log the version number.
    */
   if (typeof STATIC_CMS_CORE_VERSION === 'string') {
-    console.info(`static-cms-core ${STATIC_CMS_CORE_VERSION}`);
+    console.info(`[StaticCMS] Using @staticcms/core ${STATIC_CMS_CORE_VERSION}`);
   }
 
   /**
