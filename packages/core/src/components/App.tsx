@@ -18,6 +18,7 @@ import { loginUser as loginUserAction } from '@staticcms/core/actions/auth';
 import { discardDraft } from '@staticcms/core/actions/entries';
 import { currentBackend } from '@staticcms/core/backend';
 import { changeTheme } from '../actions/globalUI';
+import { invokeEvent } from '../lib/registry';
 import { getDefaultPath } from '../lib/util/collection.util';
 import { selectTheme } from '../reducers/selectors/globalUI';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
@@ -228,6 +229,12 @@ const App = ({
       </>
     );
   }, [authenticationPage, collections, defaultPath, isFetching, user]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      invokeEvent({ name: 'mounted' });
+    });
+  }, []);
 
   if (!config.config) {
     return configError(t('app.app.configNotFound'));

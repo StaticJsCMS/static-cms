@@ -89,7 +89,7 @@ export function getGroup(entry: Entry, selectedGroup: GroupMap) {
         value = matched[0];
       }
     } catch (e: unknown) {
-      console.warn(`Invalid view group pattern '${pattern}' for field '${field}'`, e);
+      console.warn(`[StaticCMS] Invalid view group pattern '${pattern}' for field '${field}'`, e);
     }
     return {
       id: `${label}${value}`,

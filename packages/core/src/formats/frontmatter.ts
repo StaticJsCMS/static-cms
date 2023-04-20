@@ -67,7 +67,7 @@ function inferFrontmatterFormat(str: string) {
     case '{':
       return getFormatOpts(Languages.JSON);
     default:
-      console.warn('Unrecognized front-matter format.');
+      console.warn('[StaticCMS] Unrecognized front-matter format.');
   }
 }
 

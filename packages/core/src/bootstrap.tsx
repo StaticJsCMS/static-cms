@@ -1,6 +1,6 @@
 import 'symbol-observable';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { I18n } from 'react-polyglot';
 import { connect, Provider } from 'react-redux';
@@ -14,7 +14,6 @@ import './components/entry-editor/widgets';
 import ErrorBoundary from './components/ErrorBoundary';
 import addExtensions from './extensions';
 import { getPhrases } from './lib/phrases';
-import { invokeEvent } from './lib/registry';
 import { selectLocale } from './reducers/selectors/config';
 import { store } from './store';
 
@@ -81,7 +80,7 @@ function bootstrap<F extends BaseField = UnknownField>(opts?: {
    * Log the version number.
    */
   if (typeof STATIC_CMS_CORE_VERSION === 'string') {
-    console.info(`static-cms-core ${STATIC_CMS_CORE_VERSION}`);
+    console.info(`[StaticCMS] Using @staticcms/core ${STATIC_CMS_CORE_VERSION}`);
   }
 
   /**
@@ -121,10 +120,6 @@ function bootstrap<F extends BaseField = UnknownField>(opts?: {
    * Create connected root component.
    */
   function Root() {
-    useEffect(() => {
-      invokeEvent({ name: 'mounted' });
-    }, []);
-
     return (
       <>
         <Provider store={store}>

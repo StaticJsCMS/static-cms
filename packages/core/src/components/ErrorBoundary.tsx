@@ -62,7 +62,7 @@ function buildIssueUrl(title: string, config?: Config) {
 
     return `${ISSUE_URL}${params.toString()}`;
   } catch (e) {
-    console.info(e);
+    console.error(e);
     return `${ISSUE_URL}template=bug_report.md`;
   }
 }
@@ -72,7 +72,7 @@ interface RecoveredEntryProps {
 }
 
 const RecoveredEntry = ({ entry, t }: TranslatedProps<RecoveredEntryProps>) => {
-  console.info(entry);
+  console.info('[StaticCMS] Recovered entry', entry);
   return (
     <>
       <hr />
@@ -134,7 +134,7 @@ class ErrorBoundary extends Component<TranslatedProps<ErrorBoundaryProps>, Error
     if (this.props.showBackup) {
       const backup = await localForage.getItem<string>('backup');
       if (backup) {
-        console.info(backup);
+        console.info('[StaticCMS] Recovered backup', backup);
         this.setState({ backup });
       }
     }

@@ -333,7 +333,7 @@ ${bodyRows.join('\n')}`;
       )}${shortcodeConfig.closeTag}`;
 
     default:
-      console.warn('Unrecognized slate node, proceeding as text', `"${type}"`, chunk);
+      console.warn('[StaticCMS] Unrecognized slate node, proceeding as text', `"${type}"`, chunk);
       return children;
   }
 }

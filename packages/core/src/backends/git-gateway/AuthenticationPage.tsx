@@ -54,7 +54,7 @@ const GitGatewayAuthenticationPage = ({ onLogin, t }: GitGatewayAuthenticationPa
             }
 
             if (window.netlifyIdentity) {
-              console.info('Manually initializing identity widget');
+              console.info('[StaticCMS] Manually initializing identity widget');
               initialized = true;
               window.netlifyIdentity.init();
               clearInterval(interval);

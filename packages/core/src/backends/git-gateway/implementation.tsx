@@ -175,7 +175,7 @@ export default class GitGateway implements BackendClass {
           .every((statusComponent: GitGatewayStatus) => statusComponent.status === 'operational');
       })
       .catch(e => {
-        console.warn('Failed getting Git Gateway status', e);
+        console.warn('[StaticCMS] Failed getting Git Gateway status', e);
         return true;
       });
 
@@ -186,7 +186,7 @@ export default class GitGateway implements BackendClass {
         (await this.tokenPromise?.()
           .then(token => !!token)
           .catch(e => {
-            console.warn('Failed getting Identity token', e);
+            console.warn('[StaticCMS] Failed getting Identity token', e);
             return false;
           })) || false;
     }
@@ -415,7 +415,7 @@ export default class GitGateway implements BackendClass {
       .then((patterns: string[]) => ({ err: null, patterns }))
       .catch((err: Error) => {
         if (err.message.includes('404')) {
-          console.info('This 404 was expected and handled appropriately.');
+          console.info('[StaticCMS] This 404 was expected and handled appropriately.');
           return { err: null, patterns: [] as string[] };
         } else {
           return { err, patterns: [] as string[] };
@@ -461,7 +461,7 @@ export default class GitGateway implements BackendClass {
     const entry = items[0];
     const pointerFile = parsePointerFile(entry.data);
     if (!pointerFile.sha) {
-      console.warn(`Failed parsing pointer file ${path}`);
+      console.warn(`[StaticCMS] Failed parsing pointer file ${path}`);
       return { url: path, blob: new Blob() };
     }
 

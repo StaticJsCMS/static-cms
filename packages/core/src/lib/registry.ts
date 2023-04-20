@@ -219,7 +219,7 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
     } = nameOrWidgetOrWidgets;
     if (registry.widgets[widgetName]) {
       console.warn(oneLine`
-        Multiple widgets registered with name "${widgetName}". Only the last widget registered with
+        [StaticCMS] Multiple widgets registered with name "${widgetName}". Only the last widget registered with
         this name will be used.
       `);
     }
@@ -326,6 +326,8 @@ export function registerEventListener(
 export async function invokeEvent({ name, data }: { name: AllowedEvent; data?: EventData }) {
   validateEventName(name);
   const handlers = registry.eventHandlers[name];
+
+  console.info(`[StaticCMS] Firing event ${name}`, data);
 
   let _data = data ? { ...data } : undefined;
   for (const { handler, options } of handlers) {

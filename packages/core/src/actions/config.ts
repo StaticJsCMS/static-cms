@@ -49,7 +49,7 @@ function getConfigUrl() {
   };
   const configLinkEl = document.querySelector<HTMLLinkElement>('link[rel="cms-config-url"]');
   if (configLinkEl && validTypes[configLinkEl.type] && configLinkEl.href) {
-    console.info(`Using config file path: "${configLinkEl.href}"`);
+    console.info(`[StaticCMS] Using config file path: "${configLinkEl.href}"`);
     return configLinkEl.href;
   }
   return 'config.yml';
@@ -294,7 +294,7 @@ async function getConfigYaml(file: string): Promise<Config> {
   const contentType = response.headers.get('Content-Type') ?? 'Not-Found';
   const isYaml = contentType.indexOf('yaml') !== -1;
   if (!isYaml) {
-    console.info(`Response for ${file} was not yaml. (Content-Type: ${contentType})`);
+    console.info(`[StaticCMS] Response for ${file} was not yaml. (Content-Type: ${contentType})`);
   }
   return parseConfig(await response.text());
 }
@@ -338,7 +338,7 @@ export async function detectProxyServer(localBackend?: boolean | LocalBackend) {
       : localBackend.url || defaultUrl.replace('localhost', location.hostname);
 
   try {
-    console.info(`Looking for Static CMS Proxy Server at '${proxyUrl}'`);
+    console.info(`[StaticCMS] Looking for Static CMS Proxy Server at '${proxyUrl}'`);
     const res = await fetch(`${proxyUrl}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -349,14 +349,14 @@ export async function detectProxyServer(localBackend?: boolean | LocalBackend) {
       type?: string;
     };
     if (typeof repo === 'string' && typeof type === 'string') {
-      console.info(`Detected Static CMS Proxy Server at '${proxyUrl}' with repo: '${repo}'`);
+      console.info(`[StaticCMS] Detected Static CMS Proxy Server at '${proxyUrl}' with repo: '${repo}'`);
       return { proxyUrl, type };
     } else {
-      console.info(`Static CMS Proxy Server not detected at '${proxyUrl}'`);
+      console.info(`[StaticCMS] Static CMS Proxy Server not detected at '${proxyUrl}'`);
       return {};
     }
   } catch {
-    console.info(`Static CMS Proxy Server not detected at '${proxyUrl}'`);
+    console.info(`[StaticCMS] Static CMS Proxy Server not detected at '${proxyUrl}'`);
     return {};
   }
 }

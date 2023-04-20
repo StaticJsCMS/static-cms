@@ -86,7 +86,7 @@ export default class GitLab implements BackendClass {
         ?.user()
         .then(user => !!user)
         .catch(e => {
-          console.warn('Failed getting GitLab user', e);
+          console.warn('[StaticCMS] Failed getting GitLab user', e);
           return false;
         })) || false;
 

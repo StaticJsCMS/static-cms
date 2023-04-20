@@ -109,7 +109,7 @@ export default class GitHub implements BackendClass {
           );
       })
       .catch(e => {
-        console.warn('Failed getting GitHub status', e);
+        console.warn('[StaticCMS] Failed getting GitHub status', e);
         return true;
       });
 
@@ -121,7 +121,7 @@ export default class GitHub implements BackendClass {
           ?.getUser()
           .then(user => !!user)
           .catch(e => {
-            console.warn('Failed getting GitHub user', e);
+            console.warn('[StaticCMS] Failed getting GitHub user', e);
             return false;
           })) || false;
     }
