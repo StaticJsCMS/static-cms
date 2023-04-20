@@ -190,7 +190,8 @@ collections:
           - name: pattern
             label: Pattern Validation
             widget: color
-            pattern: ['^#[a-fA-F0-9]{3}$|^[a-fA-F0-9]{4}$|^[a-fA-F0-9]{6}$', 'Must be a valid hex code']
+            pattern:
+              ['^#[a-fA-F0-9]{3}$|^[a-fA-F0-9]{4}$|^[a-fA-F0-9]{6}$', 'Must be a valid hex code']
             allow_input: true
             required: false
           - name: alpha
@@ -851,6 +852,18 @@ collections:
             widget: text
             pattern: ['.{12,}', 'Must have at least 12 characters']
             required: false
+      - name: uuid
+        label: UUID
+        file: _widgets/uuid.json
+        description: UUID widget
+        fields:
+          - name: uuid
+            label: UUID
+            widget: uuid
+          - name: no_regenerate
+            label: Does not allow regeneration
+            widget: uuid
+            allow_regenerate: false
   - name: settings
     label: Settings
     delete: false

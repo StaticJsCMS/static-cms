@@ -25,6 +25,7 @@ import {
   SelectWidget,
   StringWidget,
   TextWidget,
+  UUIDWidget,
 } from './widgets';
 
 export default function addExtensions() {
@@ -53,6 +54,7 @@ export default function addExtensions() {
     SelectWidget(),
     StringWidget(),
     TextWidget(),
+    UUIDWidget(),
   ]);
 
   Object.keys(locales).forEach(locale => {
