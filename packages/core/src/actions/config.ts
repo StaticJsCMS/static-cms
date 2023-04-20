@@ -349,7 +349,9 @@ export async function detectProxyServer(localBackend?: boolean | LocalBackend) {
       type?: string;
     };
     if (typeof repo === 'string' && typeof type === 'string') {
-      console.info(`[StaticCMS] Detected Static CMS Proxy Server at '${proxyUrl}' with repo: '${repo}'`);
+      console.info(
+        `[StaticCMS] Detected Static CMS Proxy Server at '${proxyUrl}' with repo: '${repo}'`,
+      );
       return { proxyUrl, type };
     } else {
       console.info(`[StaticCMS] Static CMS Proxy Server not detected at '${proxyUrl}'`);

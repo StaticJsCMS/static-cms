@@ -50,7 +50,9 @@ function validateItem(field: ListField, item: ValueOrNestedValue) {
 
   if (typeof item !== 'object') {
     console.warn(
-      `[StaticCMS] '${field.name}' field item value value should be an object but is a '${typeof item}'`,
+      `[StaticCMS] '${
+        field.name
+      }' field item value value should be an object but is a '${typeof item}'`,
     );
     return false;
   }
