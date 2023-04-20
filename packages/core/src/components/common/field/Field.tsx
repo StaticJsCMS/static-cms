@@ -22,6 +22,7 @@ export interface FieldProps {
   noHightlight?: boolean;
   disabled: boolean;
   disableClick?: boolean;
+  endAdornment?: ReactNode;
 }
 
 const Field: FC<FieldProps> = ({
@@ -37,6 +38,7 @@ const Field: FC<FieldProps> = ({
   noHightlight = false,
   disabled,
   disableClick = false,
+  endAdornment,
 }) => {
   const finalCursor = useCursor(cursor, disabled);
 
@@ -95,6 +97,8 @@ const Field: FC<FieldProps> = ({
         `
           relative
           flex
+          items-center
+          gap-2
           border-b
           border-slate-400
           focus-within:border-blue-800
@@ -152,6 +156,16 @@ const Field: FC<FieldProps> = ({
         {children}
         {renderedHint}
         {renderedErrorMessage}
+      </div>
+      <div
+        className={classNames(
+          `
+            pr-2
+          `,
+          !noPadding && '-mb-3',
+        )}
+      >
+        {endAdornment}
       </div>
     </div>
   );
