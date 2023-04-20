@@ -16484,10 +16484,10 @@ react-use@^17.3.2:
     ts-easing "^0.2.0"
     tslib "^2.1.0"
 
-react-virtualized-auto-sizer@1.0.11:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/react-virtualized-auto-sizer/-/react-virtualized-auto-sizer-1.0.11.tgz#2ec880161c91327531f56b218d067736fd4ae3fe"
-  integrity sha512-v2YlC4KCnjEF7V5KtxrHCy50vPhbL73BS1qNOXFYaaE1XGeRqZHrGP+F4BE0QDv2pP+f1t9twL1n5pRp5GPMkQ==
+react-virtualized-auto-sizer@1.0.15:
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/react-virtualized-auto-sizer/-/react-virtualized-auto-sizer-1.0.15.tgz#84558bcab61a625d13ec37876639bb09c5a3ec0b"
+  integrity sha512-01yhkssgHShMiu5W8k+86kgl8lutpl+Uef9KP4wrozXnzZjxWIgj+cH8Qi064oQpKD8myn/JNMzp4tcZNQ3Avg==
 
 react-waypoint@10.3.0:
   version "10.3.0"

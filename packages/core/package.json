@@ -146,7 +146,7 @@
     "react-router-dom": "6.10.0",
     "react-scroll-sync": "0.11.0",
     "react-topbar-progress-indicator": "4.1.1",
-    "react-virtualized-auto-sizer": "1.0.11",
+    "react-virtualized-auto-sizer": "1.0.15",
     "react-waypoint": "10.3.0",
     "react-window": "1.8.8",
     "remark-html": "15.0.2",
