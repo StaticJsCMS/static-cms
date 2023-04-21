@@ -128,7 +128,7 @@
     "micromark-extension-gfm-table": "1.0.5",
     "micromark-extension-gfm-task-list-item": "1.0.4",
     "micromark-util-combine-extensions": "1.0.0",
-    "minimatch": "8.0.4",
+    "minimatch": "9.0.0",
     "moment": "2.29.4",
     "node-polyglot": "2.5.0",
     "ol": "7.3.0",
