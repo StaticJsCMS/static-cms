@@ -140,10 +140,10 @@ export function getPreviewCard(name: string): TemplatePreviewCardComponent<Objec
 /**
  * Field Previews
  */
-export function registerFieldPreview<T>(
+export function registerFieldPreview<T, F extends BaseField = UnknownField>(
   collectionName: string,
   fieldName: string,
-  component: FieldPreviewComponent<T>,
+  component: FieldPreviewComponent<T, F>,
 ) {
   if (!(collectionName in registry.fieldPreviews)) {
     registry.fieldPreviews[collectionName] = {};
