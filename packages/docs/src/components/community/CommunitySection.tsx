@@ -3,6 +3,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import Link from 'next/link';
 
 import type { CommunityLinksSection } from '../../interface';
 
@@ -25,11 +26,17 @@ const CommunitySection = ({ section }: CommunitySectionProps) => {
     <StyledCommunitySection>
       <Typography variant="h3">{section.title}</Typography>
       <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-        {section.links.map(link => (
-          <ListItemButton key={link.url} href={link.url} target="_blank">
-            <ListItemText primary={link.title} secondary={link.description} />
-          </ListItemButton>
-        ))}
+        {section.links.map(link =>
+          link.url.startsWith('http') ? (
+            <ListItemButton key={link.url} href={link.url} target="_blank">
+              <ListItemText primary={link.title} secondary={link.description} />
+            </ListItemButton>
+          ) : (
+            <ListItemButton component={Link} key={link.url} href={link.url}>
+              <ListItemText primary={link.title} secondary={link.description} />
+            </ListItemButton>
+          ),
+        )}
       </List>
     </StyledCommunitySection>
   );
