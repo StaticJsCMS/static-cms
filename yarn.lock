@@ -10388,7 +10388,12 @@ immediate@~3.0.5:
   resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.0.6.tgz#9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
   integrity sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==
 
-immer@9.0.21, immer@^9.0.21, immer@^9.0.6, immer@^9.0.7:
+immer@10.0.1:
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-10.0.1.tgz#9065aeb856a39670a6f19b449a1222218bc8cf24"
+  integrity sha512-zg++jJLsKKTwXGeSYIw0HgChSYQGtu0UDTnbKx5aGLYgte4CwTmH9eJDYyQ6FheyUtBe+lQW9FrGxya1G+Dtmg==
+
+immer@^9.0.21, immer@^9.0.6, immer@^9.0.7:
   version "9.0.21"
   resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.21.tgz#1e025ea31a40f24fb064f1fef23e931496330176"
   integrity sha512-bc4NBHqOqSfRW7POMkHd51LvClaeMXpm8dx0e8oE2GORbq5aRK7Bxl4FyzVLdGtLmvLKL7BTDBG5ACQm4HWjTA==
