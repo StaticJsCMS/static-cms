@@ -56,13 +56,16 @@ const StyledReleaseLinks = styled('section')(
     align-items: center;
     padding: 24px 0 32px;
     flex-grow: 1;
+    gap: 40px;
 
     ${theme.breakpoints.between('md', 'lg')} {
       padding: 24px 0 32px;
+      gap: 32px;
     }
 
     ${theme.breakpoints.down('md')} {
       padding: 24px 0 32px;
+      gap: 24px;
     }
   `,
 );
@@ -92,31 +95,31 @@ const Releases = ({ docsGroups, searchablePages }: DocsMenuProps) => {
   return (
     <Page url="/releases" docsGroups={docsGroups} searchablePages={searchablePages} fullWidth>
       <StyledReleaseContent>
-        <Container>
-          <StyledTitle>
-            <Typography variant="h1" color="primary">
-              Static CMS Versions
-            </Typography>
-            <Typography variant="body2" color="text.primary" fontSize={16}>
-              A complete release history for Static CMS is available on GitHub.
-              <br />
-              <br />
-              Changelogs for recent major releases can also be found below.
-            </Typography>
-          </StyledTitle>
-        </Container>
-        <Container>
-          <Alert severity="warning" sx={{ alignSelf: 'flex-start' }}>
-            <AlertTitle>
-              <strong>Note</strong>
-            </AlertTitle>
-            <Typography variant="subtitle1" component="div" color="inherit">
-              <span>The current docs are for Static CMS v2. For Static CMS v1, see&nbsp;</span>
-              <StyledLink href="https://v1.staticcms.org">https://v1.staticcms.org</StyledLink>.
-            </Typography>
-          </Alert>
-        </Container>
         <StyledReleaseLinks>
+          <Container>
+            <StyledTitle>
+              <Typography variant="h1" color="primary">
+                Static CMS Versions
+              </Typography>
+              <Typography variant="body2" color="text.primary" fontSize={16}>
+                A complete release history for Static CMS is available on GitHub.
+                <br />
+                <br />
+                Changelogs for recent major releases can also be found below.
+              </Typography>
+            </StyledTitle>
+          </Container>
+          <Container>
+            <Alert severity="warning" sx={{ alignSelf: 'flex-start' }}>
+              <AlertTitle>
+                <strong>Note</strong>
+              </AlertTitle>
+              <Typography variant="subtitle1" component="div" color="inherit">
+                <span>The current docs are for Static CMS v2. For Static CMS v1, see&nbsp;</span>
+                <StyledLink href="https://v1.staticcms.org">https://v1.staticcms.org</StyledLink>.
+              </Typography>
+            </Alert>
+          </Container>
           <Container>
             <StyledReleaseLinksContent>
               {releaseData.map(release => (
