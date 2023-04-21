@@ -13,7 +13,7 @@ const StyledCommunityContent = styled('div')(
   ({ theme }) => `
     width: 100%;
     padding-top: 72px;
-    min-height: calc(100vh - 72px);
+    min-height: calc(100vh - 112px);
     display: flex;
     flex-direction: column;
     gap: 80px;

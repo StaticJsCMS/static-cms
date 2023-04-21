@@ -115,10 +115,10 @@ const StyledNav = styled('nav')(
     align-self: flex-start;
     position: sticky;
     top: 0;
-    max-height: calc(100vh - 72px);
+    max-height: calc(100vh - 112px);
     overflow-y: auto;
     top: 16px;
-    
+
     ${theme.breakpoints.between('md', 'lg')} {
       top: 24px;
     }

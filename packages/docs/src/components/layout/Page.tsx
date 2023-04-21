@@ -16,7 +16,7 @@ import type { DocsGroup, SearchablePage } from '../../interface';
 
 const StyledPageContentWrapper = styled('div')`
   display: block;
-  height: calc(100vh - 72px);
+  height: calc(100vh - 112px);
   width: 100%;
   position: relative;
   top: 72px;

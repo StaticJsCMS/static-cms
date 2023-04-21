@@ -22,7 +22,7 @@ const DocsLeftNav = ({ docsGroups }: DocsLeftNavProps) => {
         bgcolor: 'background.paper',
         position: 'fixed',
         left: 0,
-        top: '72px',
+        top: '112px',
         bottom: 0,
         overflowY: 'auto',
         paddingBottom: '24px',

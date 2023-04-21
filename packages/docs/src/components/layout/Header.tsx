@@ -20,9 +20,34 @@ import type { ButtonTypeMap } from '@mui/material/Button';
 import type { ExtendButtonBase } from '@mui/material/ButtonBase';
 import type { DocsGroup, MenuItem, SearchablePage } from '../../interface';
 
+const StyledHeaderWrapper = styled('div')`
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledNewerDocsWarning = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 40px;
+    font-weight: 600;
+    font-size: 18px;
+    background: ${theme.palette.mode === 'light' ? '#b4d1f6' : '#022a39'};
+  `,
+);
+
+const StyledLink = styled(Link)(
+  ({ theme }) => `
+    color: ${theme.palette.primary.main};
+  `,
+);
+
 const StyledAppBar = styled(AppBar)(
   ({ theme }) => `
     background: ${theme.palette.mode === 'light' ? theme.palette.primary.main : '#121212'};
+    top: 40px;
   `,
 );
 
@@ -143,7 +168,11 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
   );
 
   return (
-    <>
+    <StyledHeaderWrapper>
+      <StyledNewerDocsWarning>
+        This documentation is for Static CMS v1.{' '}
+        <StyledLink href="https://staticcms.org">Go to the latest docs.</StyledLink>
+      </StyledNewerDocsWarning>
       <StyledAppBar position="fixed">
         <StyledToolbar>
           <StyledMenuButton
@@ -214,7 +243,7 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
         mobileOpen={mobileOpen}
         onMobileOpenToggle={handleDrawerToggle}
       />
-    </>
+    </StyledHeaderWrapper>
   );
 };
 
