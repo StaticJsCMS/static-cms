@@ -206,7 +206,7 @@
     "@types/jwt-decode": "2.2.1",
     "@types/lodash": "4.14.194",
     "@types/minimatch": "5.1.2",
-    "@types/node": "18.15.13",
+    "@types/node": "18.16.0",
     "@types/node-fetch": "2.6.3",
     "@types/react": "18.0.38",
     "@types/react-color": "3.0.6",
