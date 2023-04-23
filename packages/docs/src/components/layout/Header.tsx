@@ -35,6 +35,11 @@ const StyledNewerDocsWarning = styled('div')(
     font-weight: 600;
     font-size: 18px;
     background: ${theme.palette.mode === 'light' ? '#b4d1f6' : '#022a39'};
+
+    ${theme.breakpoints.down('sm')} {
+      flex-direction: column;
+      height: 70px;
+    }
   `,
 );
 
@@ -48,6 +53,11 @@ const StyledAppBar = styled(AppBar)(
   ({ theme }) => `
     background: ${theme.palette.mode === 'light' ? theme.palette.primary.main : '#121212'};
     top: 40px;
+
+    ${theme.breakpoints.down('sm')} {
+      flex-direction: column;
+      top: 70px;
+    }
   `,
 );
 

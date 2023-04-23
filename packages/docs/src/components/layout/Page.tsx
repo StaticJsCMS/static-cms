@@ -14,15 +14,21 @@ import Header from './Header';
 import type { ReactNode } from 'react';
 import type { DocsGroup, SearchablePage } from '../../interface';
 
-const StyledPageContentWrapper = styled('div')`
-  display: block;
-  height: calc(100vh - 112px);
-  width: 100%;
-  position: relative;
-  top: 72px;
-  overflow-y: auto;
-  overflow-x: hidden;
-`;
+const StyledPageContentWrapper = styled('div')(
+  ({ theme }) => `
+    display: block;
+    height: calc(100vh - 112px);
+    width: 100%;
+    position: relative;
+    top: 72px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    ${theme.breakpoints.down('sm')} {
+      height: calc(100vh - 142px);
+    }
+  `,
+);
 
 export interface PageProps {
   title?: string;

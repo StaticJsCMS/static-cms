@@ -27,6 +27,10 @@ const StyledCommunityContent = styled('div')(
       padding-top: 32px;
       gap: 40px
     }
+
+    ${theme.breakpoints.down('sm')} {
+      min-height: calc(100vh - 142px);
+    }
   `,
 );
 
