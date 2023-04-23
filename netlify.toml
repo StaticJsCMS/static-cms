@@ -1,3 +1,7 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+[[redirects]]
+  from = "https://staticjscms.netlify.app/*"
+  to = "https://www.staticcms.org/:splat"
+  status = 301
