@@ -118,7 +118,10 @@ export function getPreviewStyles() {
 /**
  * Preview Templates
  */
-export function registerPreviewTemplate<T>(name: string, component: TemplatePreviewComponent<T>) {
+export function registerPreviewTemplate<T, EF extends BaseField = UnknownField>(
+  name: string,
+  component: TemplatePreviewComponent<T, EF>,
+) {
   registry.templates[name] = component as TemplatePreviewComponent<ObjectValue>;
 }
 
@@ -129,7 +132,10 @@ export function getPreviewTemplate(name: string): TemplatePreviewComponent<Objec
 /**
  * Preview Cards
  */
-export function registerPreviewCard<T>(name: string, component: TemplatePreviewCardComponent<T>) {
+export function registerPreviewCard<T, EF extends BaseField = UnknownField>(
+  name: string,
+  component: TemplatePreviewCardComponent<T, EF>,
+) {
   registry.cards[name] = component as TemplatePreviewCardComponent<ObjectValue>;
 }
 
@@ -140,10 +146,10 @@ export function getPreviewCard(name: string): TemplatePreviewCardComponent<Objec
 /**
  * Field Previews
  */
-export function registerFieldPreview<T>(
+export function registerFieldPreview<T, F extends BaseField = UnknownField>(
   collectionName: string,
   fieldName: string,
-  component: FieldPreviewComponent<T>,
+  component: FieldPreviewComponent<T, F>,
 ) {
   if (!(collectionName in registry.fieldPreviews)) {
     registry.fieldPreviews[collectionName] = {};
