@@ -30,7 +30,7 @@
     "react-schemaorg": "2.0.0",
     "remark-gfm": "3.0.1",
     "schema-dts": "1.1.2",
-    "yaml": "2.2.1"
+    "yaml": "2.2.2"
   },
   "devDependencies": {
     "@babel/core": "7.21.4",
