@@ -696,6 +696,7 @@ export interface StringOrTextField extends BaseField {
 export interface UUIDField extends BaseField {
   widget: 'uuid';
   allow_regenerate?: boolean;
+  prefix?: string;
 }
 
 export interface UnknownField extends BaseField {

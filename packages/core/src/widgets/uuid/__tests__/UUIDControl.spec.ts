@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
-import { act } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { v4, validate } from 'uuid';
 
@@ -91,10 +91,13 @@ describe(UUIDControl.name, () => {
       props: { onChange },
     } = renderControl({ value: 'I_AM_AN_INVALID_UUID' });
 
-    const inputWrapper = getByTestId('text-input');
-    const input = inputWrapper.getElementsByTagName('input')[0];
-    expect(input).toHaveValue('I_AM_A_NEW_UUID');
-    expect(onChange).toHaveBeenLastCalledWith('I_AM_A_NEW_UUID');
+    await waitFor(() => {
+      const inputWrapper = getByTestId('text-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
+      expect(input).toHaveValue('I_AM_A_NEW_UUID');
+      expect(onChange).toHaveBeenLastCalledWith('I_AM_A_NEW_UUID');
+      expect(mockValidate).toHaveBeenCalledWith('I_AM_AN_INVALID_UUID');
+    });
   });
 
   it('should generate a new UUID if none is provided', async () => {
@@ -103,11 +106,13 @@ describe(UUIDControl.name, () => {
       props: { onChange },
     } = renderControl();
 
-    const inputWrapper = getByTestId('text-input');
-    const input = inputWrapper.getElementsByTagName('input')[0];
-    expect(input).toHaveValue('I_AM_A_NEW_UUID');
+    await waitFor(() => {
+      const inputWrapper = getByTestId('text-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
+      expect(input).toHaveValue('I_AM_A_NEW_UUID');
 
-    expect(onChange).toHaveBeenLastCalledWith('I_AM_A_NEW_UUID');
+      expect(onChange).toHaveBeenLastCalledWith('I_AM_A_NEW_UUID');
+    });
   });
 
   it('shows generate new uuid button by default', async () => {
@@ -135,8 +140,11 @@ describe(UUIDControl.name, () => {
 
     const inputWrapper = getByTestId('text-input');
     const input = inputWrapper.getElementsByTagName('input')[0];
-    expect(input).toHaveValue('I_AM_A_NEW_UUID');
-    expect(onChange).toHaveBeenLastCalledWith('I_AM_A_NEW_UUID');
+
+    await waitFor(() => {
+      expect(input).toHaveValue('I_AM_A_NEW_UUID');
+      expect(onChange).toHaveBeenLastCalledWith('I_AM_A_NEW_UUID');
+    });
 
     mockUUID.mockReturnValue('I_AM_ANOTHER_NEW_UUID');
     const generateNewUUIDButton = getByTestId('generate-new-uuid');
@@ -188,5 +196,46 @@ describe(UUIDControl.name, () => {
     const inputWrapper = getByTestId('text-input');
     const input = inputWrapper.getElementsByTagName('input')[0];
     expect(input).toBeDisabled();
+  });
+
+  it('should add prefix to start of UUID onChange', async () => {
+    const {
+      getByTestId,
+      props: { onChange },
+    } = renderControl({
+      field: {
+        ...mockUUIDField,
+        prefix: 'book/',
+      },
+    });
+
+    await waitFor(() => {
+      const inputWrapper = getByTestId('text-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
+      expect(input).toHaveValue('book/I_AM_A_NEW_UUID');
+
+      expect(onChange).toHaveBeenLastCalledWith('book/I_AM_A_NEW_UUID');
+    });
+  });
+
+  it('should consider UUID with prefix to be valid', async () => {
+    mockValidate.mockReturnValue(true);
+
+    const {
+      getByTestId,
+      props: { onChange },
+    } = renderControl({
+      value: 'book/I_AM_A_VALID_UUID',
+      field: {
+        ...mockUUIDField,
+        prefix: 'book/',
+      },
+    });
+
+    const inputWrapper = getByTestId('text-input');
+    const input = inputWrapper.getElementsByTagName('input')[0];
+    expect(input).toHaveValue('book/I_AM_A_VALID_UUID');
+    expect(onChange).not.toHaveBeenCalled();
+    expect(mockValidate).toHaveBeenCalledWith('I_AM_A_VALID_UUID');
   });
 });
