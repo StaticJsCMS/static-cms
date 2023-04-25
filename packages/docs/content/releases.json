@@ -1,6 +1,11 @@
 {
   "releases": [
     {
+      "date": "2023-04-25T14:28:00.000Z",
+      "version": "v2.1.0",
+      "description": "Prefix option for UUID widget."
+    },
+    {
       "date": "2023-04-21T15:00:00.000Z",
       "version": "v2.0.0",
       "description": "New UI and Media Library enchancements."
