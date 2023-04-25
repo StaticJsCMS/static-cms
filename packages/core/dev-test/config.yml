@@ -864,6 +864,10 @@ collections:
             label: Does not allow regeneration
             widget: uuid
             allow_regenerate: false
+          - name: with_prefix
+            label: With Prefix
+            widget: uuid
+            prefix: 'book/'
   - name: settings
     label: Settings
     delete: false

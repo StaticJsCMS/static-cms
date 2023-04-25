@@ -5,7 +5,7 @@ import { v4 as uuid, validate } from 'uuid';
 import IconButton from '@staticcms/core/components/common/button/IconButton';
 import Field from '@staticcms/core/components/common/field/Field';
 import TextField from '@staticcms/core/components/common/text-field/TextField';
-import { isEmpty } from '@staticcms/core/lib/util/string.util';
+import { isEmpty, isNotEmpty } from '@staticcms/core/lib/util/string.util';
 
 import type { UUIDField, WidgetControlProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
@@ -28,6 +28,12 @@ const UUIDControl: FC<WidgetControlProps<string, UUIDField>> = ({
   );
   const ref = useRef<HTMLInputElement | null>(null);
 
+  const prefix = useMemo(() => field.prefix ?? '', [field.prefix]);
+  const internalValueWithoutPrefix =
+    isNotEmpty(prefix) && internalValue.startsWith(prefix)
+      ? internalValue.replace(prefix, '')
+      : internalValue;
+
   const handleChange = useCallback(
     (newUUID: string) => {
       setInternalValue(newUUID);
@@ -37,14 +43,24 @@ const UUIDControl: FC<WidgetControlProps<string, UUIDField>> = ({
   );
 
   const generateUUID = useCallback(() => {
-    handleChange(uuid());
-  }, [handleChange]);
+    handleChange(`${prefix}${uuid()}`);
+  }, [handleChange, prefix]);
 
   useEffect(() => {
-    if (isEmpty(internalValue) || !validate(internalValue)) {
-      generateUUID();
+    let alive = true;
+
+    if (isEmpty(internalValueWithoutPrefix) || !validate(internalValueWithoutPrefix)) {
+      setTimeout(() => {
+        if (alive) {
+          generateUUID();
+        }
+      }, 100);
     }
-  }, [generateUUID, internalValue]);
+
+    return () => {
+      alive = false;
+    };
+  }, [generateUUID, internalValueWithoutPrefix]);
 
   const allowRegenerate = useMemo(() => field.allow_regenerate ?? true, [field.allow_regenerate]);
 
