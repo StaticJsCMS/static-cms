@@ -9,11 +9,15 @@ import type {
   Config,
   CustomIcon,
   Entry,
+  EntryData,
   EventData,
   EventListener,
   FieldPreviewComponent,
   LocalePhrasesRoot,
+  MountedEventHandler,
   ObjectValue,
+  PostSaveEventHandler,
+  PreSaveEventHandler,
   PreviewStyle,
   PreviewStyleOptions,
   ShortcodeConfig,
@@ -29,10 +33,16 @@ import type {
 export const allowedEvents = ['mounted', 'preSave', 'postSave'] as const;
 export type AllowedEvent = (typeof allowedEvents)[number];
 
+type EventHandlerRegistry = {
+  preSave: { handler: PreSaveEventHandler; options: Record<string, unknown> }[];
+  postSave: { handler: PostSaveEventHandler; options: Record<string, unknown> }[];
+  mounted: { handler: MountedEventHandler; options: Record<string, unknown> }[];
+};
+
 const eventHandlers = allowedEvents.reduce((acc, e) => {
   acc[e] = [];
   return acc;
-}, {} as Record<AllowedEvent, { handler: EventListener['handler']; options: Record<string, unknown> }[]>);
+}, {} as EventHandlerRegistry);
 
 interface Registry {
   backends: Record<string, BackendInitializer>;
@@ -44,7 +54,7 @@ interface Registry {
   additionalLinks: Record<string, AdditionalLink>;
   widgetValueSerializers: Record<string, WidgetValueSerializer>;
   locales: Record<string, LocalePhrasesRoot>;
-  eventHandlers: typeof eventHandlers;
+  eventHandlers: EventHandlerRegistry;
   previewStyles: PreviewStyle[];
 
   /** Markdown editor */
@@ -309,9 +319,8 @@ export function getBackend<EF extends BaseField = UnknownField>(
 /**
  * Event Handlers
  */
-function validateEventName(name: string) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  if (!allowedEvents.includes(name as any)) {
+function validateEventName(name: AllowedEvent) {
+  if (!allowedEvents.includes(name)) {
     throw new Error(`Invalid event name '${name}'`);
   }
 }
@@ -321,21 +330,48 @@ export function getEventListeners(name: AllowedEvent) {
   return [...registry.eventHandlers[name]];
 }
 
-export function registerEventListener(
-  { name, handler }: EventListener,
-  options: Record<string, unknown> = {},
-) {
+export function registerEventListener<
+  E extends AllowedEvent,
+  O extends Record<string, unknown> = Record<string, unknown>,
+>({ name, handler }: EventListener<E, O>, options?: O) {
   validateEventName(name);
-  registry.eventHandlers[name].push({ handler, options });
+  registry.eventHandlers[name].push({
+    handler: handler as MountedEventHandler & PreSaveEventHandler & PostSaveEventHandler,
+    options: options ?? {},
+  });
 }
 
-export async function invokeEvent({ name, data }: { name: AllowedEvent; data?: EventData }) {
+export async function invokeEvent(name: 'preSave', data: EventData): Promise<EntryData>;
+export async function invokeEvent(name: 'postSave', data: EventData): Promise<void>;
+export async function invokeEvent(name: 'mounted'): Promise<void>;
+export async function invokeEvent(name: AllowedEvent, data?: EventData): Promise<void | EntryData> {
   validateEventName(name);
+
+  if (name === 'mounted') {
+    console.info('[StaticCMS] Firing mounted event');
+    const handlers = registry.eventHandlers[name];
+    for (const { handler, options } of handlers) {
+      handler(options);
+    }
+
+    return;
+  }
+
+  if (name === 'postSave') {
+    console.info(`[StaticCMS] Firing post save event`, data);
+    const handlers = registry.eventHandlers[name];
+    for (const { handler, options } of handlers) {
+      handler(data!, options);
+    }
+
+    return;
+  }
+
   const handlers = registry.eventHandlers[name];
 
-  console.info(`[StaticCMS] Firing event ${name}`, data);
+  console.info(`[StaticCMS] Firing pre save event`, data);
 
-  let _data = data ? { ...data } : undefined;
+  let _data = { ...data! };
   for (const { handler, options } of handlers) {
     const result = await handler(_data, options);
     if (_data !== undefined && result !== undefined) {
@@ -346,7 +382,8 @@ export async function invokeEvent({ name, data }: { name: AllowedEvent; data?: E
       _data = { ..._data, entry };
     }
   }
-  return _data?.entry.data;
+
+  return _data.entry.data;
 }
 
 export function removeEventListener({ name, handler }: EventListener) {

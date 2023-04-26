@@ -825,16 +825,32 @@ export interface EventData {
   author: { login: string | undefined; name: string };
 }
 
-export type EventListenerOptions = Record<string, unknown>;
+export type PreSaveEventHandler<O extends Record<string, unknown> = Record<string, unknown>> = (
+  data: EventData,
+  options: O,
+) => EntryData | undefined | null | void | Promise<EntryData | undefined | null | void>;
 
-export type EventListenerHandler = (
-  data: EventData | undefined,
-  options: EventListenerOptions,
-) => Promise<EntryData | undefined | null | void>;
+export type PostSaveEventHandler<O extends Record<string, unknown> = Record<string, unknown>> = (
+  data: EventData,
+  options: O,
+) => void | Promise<void>;
 
-export interface EventListener {
-  name: AllowedEvent;
-  handler: EventListenerHandler;
+export type MountedEventHandler<O extends Record<string, unknown> = Record<string, unknown>> = (
+  options: O,
+) => void | Promise<void>;
+
+export type EventHandlers<O extends Record<string, unknown> = Record<string, unknown>> = {
+  preSave: PreSaveEventHandler<O>;
+  postSave: PostSaveEventHandler<O>;
+  mounted: MountedEventHandler<O>;
+};
+
+export interface EventListener<
+  E extends AllowedEvent = 'mounted',
+  O extends Record<string, unknown> = Record<string, unknown>,
+> {
+  name: E;
+  handler: EventHandlers<O>[E];
 }
 
 export interface AdditionalLinkOptions {

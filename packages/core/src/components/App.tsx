@@ -232,7 +232,7 @@ const App = ({
 
   useEffect(() => {
     setTimeout(() => {
-      invokeEvent({ name: 'mounted' });
+      invokeEvent('mounted');
     });
   }, []);
 

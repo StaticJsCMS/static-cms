@@ -59,6 +59,7 @@ import type {
   Entry,
   EntryData,
   EntryDraft,
+  EventData,
   FilterRule,
   ImplementationEntry,
   MediaField,
@@ -68,7 +69,6 @@ import type {
   UnknownField,
   User,
 } from './interface';
-import type { AllowedEvent } from './lib/registry';
 import type { AsyncLock } from './lib/util';
 import type { RootState } from './store';
 import type AssetProxy from './valueObjects/AssetProxy';
@@ -908,17 +908,19 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return slug;
   }
 
-  async invokeEventWithEntry(event: AllowedEvent, entry: Entry) {
+  async getEventData(entry: Entry): Promise<EventData> {
     const { login, name = '' } = (await this.currentUser()) as User;
-    return await invokeEvent({ name: event, data: { entry, author: { login, name } } });
+    return { entry, author: { login, name } };
   }
 
-  async invokePreSaveEvent(entry: Entry) {
-    return await this.invokeEventWithEntry('preSave', entry);
+  async invokePreSaveEvent(entry: Entry): Promise<EntryData> {
+    const eventData = await this.getEventData(entry);
+    return await invokeEvent('preSave', eventData);
   }
 
-  async invokePostSaveEvent(entry: Entry) {
-    await this.invokeEventWithEntry('postSave', entry);
+  async invokePostSaveEvent(entry: Entry): Promise<void> {
+    const eventData = await this.getEventData(entry);
+    await invokeEvent('postSave', eventData);
   }
 
   async persistMedia(config: Config, file: AssetProxy) {
