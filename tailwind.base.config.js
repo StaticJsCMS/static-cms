@@ -34,6 +34,9 @@ module.exports = {
         editor: '450px auto',
         'media-preview': '126px auto',
       },
+      fontFamily: {
+        sans: ['Inter var', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      },
     },
   },
 };
