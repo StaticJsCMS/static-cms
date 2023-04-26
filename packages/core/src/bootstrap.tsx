@@ -25,7 +25,6 @@ import type { RootState } from './store';
 import './styles/datetime/calendar.css';
 import './styles/datetime/clock.css';
 import './styles/datetime/datetime.css';
-import './styles/inter.css';
 import './styles/main.css';
 
 const ROOT_ID = 'nc-root';
