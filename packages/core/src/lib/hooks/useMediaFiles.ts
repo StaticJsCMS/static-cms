@@ -1,6 +1,6 @@
-import trim from 'lodash/trim';
 import { basename, dirname } from 'path';
 import { useEffect, useMemo, useState } from 'react';
+import trim from 'lodash/trim';
 
 import { currentBackend } from '@staticcms/core/backend';
 import { selectCollection } from '@staticcms/core/reducers/selectors/collections';
@@ -41,12 +41,17 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
     let alive = true;
 
     const getMediaFiles = async () => {
+      if (entry.mediaFiles.find(f => dirname(f.path) == currentFolder)?.draft) {
+        setCurrentFolderMediaFiles([]);
+        return;
+      }
+      const { media_folder, public_folder } = config ?? {};
       const backend = currentBackend(config);
       const files = await backend.getMedia(
         currentFolder,
         folderSupport,
-        config.public_folder
-          ? trim(currentFolder, '/').replace(trim(config.media_folder!), config.public_folder)
+        public_folder
+          ? trim(currentFolder, '/').replace(trim(media_folder, '/'), public_folder)
           : currentFolder,
       );
 
@@ -60,7 +65,7 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
     return () => {
       alive = false;
     };
-  }, [currentFolder, config, entry, field, collection, folderSupport]);
+  }, [currentFolder, config, entry, folderSupport]);
 
   const files = useMemo(() => {
     if (entry) {
