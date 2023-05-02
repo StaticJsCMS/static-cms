@@ -18,13 +18,19 @@ import Menu from '@staticcms/core/components/common/menu/Menu';
 import MenuGroup from '@staticcms/core/components/common/menu/MenuGroup';
 import MenuItemButton from '@staticcms/core/components/common/menu/MenuItemButton';
 import { useMdPlateEditorState } from '../../plateTypes';
-import ImageToolbarButton from './common/ImageToolbarButton';
-import LinkToolbarButton from './common/LinkToolbarButton';
+import ImageToolbarButton from './ImageToolbarButton';
+import LinkToolbarButton from './LinkToolbarButton';
 
 import type { Collection, MarkdownField } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
-interface AddButtonsProps {
+export const DEFAULT_INSERT_BUTTONS: string[][] = [
+  ['blockquote', 'code-block'],
+  ['table'],
+  ['image', 'file-link'],
+];
+
+export interface AddButtonsProps {
   collection: Collection<MarkdownField>;
   field: MarkdownField;
   disabled: boolean;
@@ -32,6 +38,74 @@ interface AddButtonsProps {
 
 const AddButtons: FC<AddButtonsProps> = ({ collection, field, disabled }) => {
   const editor = useMdPlateEditorState();
+
+  const buttons = useMemo(() => {
+    const toolbarButtons = field.toolbar_buttons?.main ?? DEFAULT_TOOLBAR_BUTTONS;
+
+    return toolbarButtons.map(name => {
+      switch (name) {
+        case 'bold':
+          return (
+            <MarkToolbarButton
+              key="bold"
+              tooltip="Bold"
+              type={MARK_BOLD}
+              icon={<FormatBoldIcon className="h-5 w-5" />}
+              disabled={disabled}
+            />
+          );
+        case 'italic':
+          return (
+            <MarkToolbarButton
+              key="italic"
+              tooltip="Italic"
+              type={MARK_ITALIC}
+              icon={<FormatItalicIcon className="h-5 w-5" />}
+              disabled={disabled}
+            />
+          );
+        case 'strikethrough':
+          return (
+            <MarkToolbarButton
+              key="strikethrough"
+              tooltip="Strikethrough"
+              type={MARK_STRIKETHROUGH}
+              icon={<FormatStrikethroughIcon className="h-5 w-5" />}
+              disabled={disabled}
+            />
+          );
+        case 'code':
+          return (
+            <MarkToolbarButton
+              key="code"
+              tooltip="Code"
+              type={MARK_CODE}
+              icon={<CodeIcon className="h-5 w-5" />}
+              disabled={disabled}
+            />
+          );
+        case 'font':
+          return <FontTypeSelect key="font" disabled={disabled} />;
+
+        case 'unordered-list':
+          return <UnorderedListButton key="unordered-list" disabled={disabled} />;
+        case 'ordered-list':
+          return <OrderedListButton key="ordered-list" disabled={disabled} />;
+        case 'decrease-indent':
+          return <DecreaseIndentButton key="decrease-indent" disabled={disabled} />;
+        case 'increase-indent':
+          return <IncreaseIndentButton key="increase-indent" disabled={disabled} />;
+
+        case 'shortcode':
+          return <ShortcodeToolbarButton key="shortcode" disabled={disabled} />;
+
+        case 'insert':
+          return (
+            <AddButtons key="insert" collection={collection} field={field} disabled={disabled} />
+          );
+      }
+    });
+  }, [collection, disabled, field]);
 
   const handleBlockOnClick = useCallback(
     (type: string, inactiveType?: string) => () => {

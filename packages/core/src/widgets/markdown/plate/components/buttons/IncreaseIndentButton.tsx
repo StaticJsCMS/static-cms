@@ -7,7 +7,7 @@ import ToolbarButton from './common/ToolbarButton';
 import type { MdEditor } from '@staticcms/markdown';
 import type { FC } from 'react';
 
-interface IncreaseIndentButtonProps {
+export interface IncreaseIndentButtonProps {
   disabled: boolean;
 }
 

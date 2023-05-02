@@ -24,9 +24,28 @@ import MediaToolbarButtons from '../buttons/MediaToolbarButtons';
 import ShortcodeToolbarButton from '../buttons/ShortcodeToolbarButton';
 import TableToolbarButtons from '../buttons/TableToolbarButtons';
 
-import type { Collection, MarkdownField } from '@staticcms/core/interface';
+import type {
+  Collection,
+  MarkdownField,
+  MarkdownToolbarButtonType,
+} from '@staticcms/core/interface';
 import type { ClientRectObject } from '@udecode/plate';
 import type { FC, ReactNode } from 'react';
+
+const DEFAULT_TABLE_EMPTY_BUTTONS: MarkdownToolbarButtonType[] = [
+  'bold',
+  'italic',
+  'strikethrough',
+  'code',
+  'font',
+  'unordered-list',
+  'ordered-list',
+  'decrease-indent',
+  'increase-indent',
+  'file-link',
+  'image',
+  'shortcode',
+];
 
 export interface BalloonToolbarProps {
   useMdx: boolean;

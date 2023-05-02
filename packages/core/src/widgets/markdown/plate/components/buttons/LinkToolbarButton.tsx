@@ -7,12 +7,12 @@ import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
-import ToolbarButton from './ToolbarButton';
+import ToolbarButton from './common/ToolbarButton';
 
 import type { Collection, MarkdownField, MediaPath } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
-interface LinkToolbarButtonProps {
+export interface LinkToolbarButtonProps {
   variant?: 'button' | 'menu';
   currentValue?: { url: string; alt?: string };
   collection: Collection<MarkdownField>;

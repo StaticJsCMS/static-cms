@@ -6,9 +6,41 @@ export default {
     choose_url: { type: 'boolean' },
     multiple: { type: 'boolean' },
     toolbar_buttons: {
-      type: 'array',
-      items: {
-        type: 'string',
+      type: 'object',
+      properties: {
+        main: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+        },
+        selection: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+        },
+        table_empty: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+        },
+        table_select: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+        },
+        insert: {
+          type: 'array',
+          items: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          },
+        },
       },
     },
     media_library: {

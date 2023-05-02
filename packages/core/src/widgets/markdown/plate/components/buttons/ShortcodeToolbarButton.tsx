@@ -11,7 +11,7 @@ import { ELEMENT_SHORTCODE, useMdPlateEditorState } from '@staticcms/markdown/pl
 
 import type { FC } from 'react';
 
-interface ShortcodeToolbarButtonProps {
+export interface ShortcodeToolbarButtonProps {
   disabled: boolean;
 }
 

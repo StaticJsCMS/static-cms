@@ -6,12 +6,12 @@ import MenuItemButton from '@staticcms/core/components/common/menu/MenuItemButto
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
-import ToolbarButton from './ToolbarButton';
+import ToolbarButton from './common/ToolbarButton';
 
 import type { Collection, MarkdownField, MediaPath } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
-interface ImageToolbarButtonProps {
+export interface ImageToolbarButtonProps {
   variant?: 'button' | 'menu';
   currentValue?: { url: string; alt?: string };
   collection: Collection<MarkdownField>;

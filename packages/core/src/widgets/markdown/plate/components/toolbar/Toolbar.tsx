@@ -6,23 +6,22 @@ import { MARK_BOLD, MARK_CODE, MARK_ITALIC, MARK_STRIKETHROUGH } from '@udecode/
 import React, { useMemo } from 'react';
 
 import AddButtons from '../buttons/AddButtons';
-import AlignToolbarButtons from '../buttons/AlignToolbarButtons';
-import BasicElementToolbarButtons from '../buttons/BasicElementToolbarButtons';
-import BasicMarkToolbarButtons from '../buttons/BasicMarkToolbarButtons';
-import ColorToolbarButtons from '../buttons/ColorToolbarButtons';
-import FontTypeSelect from '../buttons/FontTypeSelect';
-import ListToolbarButtons from '../buttons/ListToolbarButtons';
-import ShortcodeToolbarButton from '../buttons/ShortcodeToolbarButton';
-import MarkToolbarButton from '../buttons/common/MarkToolbarButton';
-import UnorderedListButton from '../buttons/UnordredListButton';
-import OrderedListButton from '../buttons/OrderedListButton';
-import IncreaseIndentButton from '../buttons/IncreaseIndentButton';
 import DecreaseIndentButton from '../buttons/DecreaseIndentButton';
+import FontTypeSelect from '../buttons/FontTypeSelect';
+import IncreaseIndentButton from '../buttons/IncreaseIndentButton';
+import OrderedListButton from '../buttons/OrderedListButton';
+import ShortcodeToolbarButton from '../buttons/ShortcodeToolbarButton';
+import UnorderedListButton from '../buttons/UnorderedListButton';
+import MarkToolbarButton from '../buttons/common/MarkToolbarButton';
 
-import type { Collection, MarkdownField } from '@staticcms/core/interface';
+import type {
+  Collection,
+  MarkdownField,
+  MarkdownToolbarButtonType,
+} from '@staticcms/core/interface';
 import type { FC } from 'react';
 
-const DEFAULT_TOOLBAR_BUTTONS: string[] = [
+const DEFAULT_TOOLBAR_BUTTONS: MarkdownToolbarButtonType[] = [
   'bold',
   'italic',
   'strikethrough',
@@ -36,12 +35,6 @@ const DEFAULT_TOOLBAR_BUTTONS: string[] = [
   'insert',
 ];
 
-const DEFAULT_INSERT_BUTTONS: string[][] = [
-  ['blockquote', 'code-block'],
-  ['table'],
-  ['image', 'file-link'],
-];
-
 export interface ToolbarProps {
   useMdx: boolean;
   collection: Collection<MarkdownField>;
@@ -49,9 +42,9 @@ export interface ToolbarProps {
   disabled: boolean;
 }
 
-const Toolbar: FC<ToolbarProps> = ({ useMdx, collection, field, disabled }) => {
+const Toolbar: FC<ToolbarProps> = ({ collection, field, disabled }) => {
   const buttons = useMemo(() => {
-    const toolbarButtons = field.toolbar_buttons ?? DEFAULT_TOOLBAR_BUTTONS;
+    const toolbarButtons = field.toolbar_buttons?.main ?? DEFAULT_TOOLBAR_BUTTONS;
 
     return toolbarButtons.map(name => {
       switch (name) {
@@ -117,21 +110,6 @@ const Toolbar: FC<ToolbarProps> = ({ useMdx, collection, field, disabled }) => {
       }
     });
   }, [collection, disabled, field]);
-
-  const groups = [
-    <BasicMarkToolbarButtons
-      key="basic-mark-buttons"
-      useMdx={useMdx}
-      extended
-      disabled={disabled}
-    />,
-    <BasicElementToolbarButtons key="basic-element-buttons" disabled={disabled} />,
-    <ListToolbarButtons key="list-buttons" disabled={disabled} />,
-    useMdx ? <ColorToolbarButtons key="color-buttons" disabled={disabled} /> : null,
-    useMdx ? <AlignToolbarButtons key="align-mark-buttons" disabled={disabled} /> : null,
-    !useMdx ? <ShortcodeToolbarButton key="shortcode-button" disabled={disabled} /> : null,
-    <AddButtons key="add-buttons" collection={collection} field={field} disabled={disabled} />,
-  ].filter(Boolean);
 
   return (
     <div

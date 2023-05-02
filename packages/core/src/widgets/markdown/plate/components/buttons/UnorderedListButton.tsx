@@ -6,7 +6,7 @@ import ListToolbarButton from './common/ListToolbarButton';
 
 import type { FC } from 'react';
 
-interface UnorderedListButtonProps {
+export interface UnorderedListButtonProps {
   disabled: boolean;
 }
 

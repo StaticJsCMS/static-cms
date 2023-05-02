@@ -525,6 +525,21 @@ collections:
             widget: markdown
             media_library:
               folder_support: true
+          - name: customized_toolbars
+            label: Customized Toolbars
+            widget: markdown
+            toolbar_buttons:
+              main:
+                - bold
+                - italic
+                - font
+                - shortcode
+                - insert
+              selection:
+                - bold
+                - italic
+                - font
+              insert: [['image', 'file-link'], ['table']],
       - name: number
         label: Number
         file: _widgets/number.json

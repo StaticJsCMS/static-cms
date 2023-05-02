@@ -642,9 +642,34 @@ export interface MapField extends BaseField {
   height?: string;
 }
 
+export type MarkdownToolbarButtonType =
+  | 'bold'
+  | 'italic'
+  | 'strikethrough'
+  | 'code'
+  | 'font'
+  | 'unordered-list'
+  | 'ordered-list'
+  | 'decrease-indent'
+  | 'increase-indent'
+  | 'shortcode'
+  | 'insert'
+  | 'file-link'
+  | 'image';
+
+export type MarkdownInsertMenuTypes = 'blockquote' | 'code-block' | 'table' | 'image' | 'file-link';
+
+export interface MarkdownFieldToolbarButtons {
+  main: MarkdownToolbarButtonType[];
+  selection: MarkdownToolbarButtonType[];
+  table_empty: MarkdownToolbarButtonType[];
+  table_select: MarkdownToolbarButtonType[];
+  insert: MarkdownInsertMenuTypes[][];
+}
+
 export interface MarkdownField extends MediaField {
   widget: 'markdown';
-  toolbar_buttons?: string[];
+  toolbar_buttons?: MarkdownFieldToolbarButtons;
   default?: string;
 }
 
