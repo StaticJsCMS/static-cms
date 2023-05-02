@@ -5,6 +5,12 @@ export default {
     public_folder: { type: 'string' },
     choose_url: { type: 'boolean' },
     multiple: { type: 'boolean' },
+    toolbar_buttons: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+    },
     media_library: {
       type: 'object',
       properties: {

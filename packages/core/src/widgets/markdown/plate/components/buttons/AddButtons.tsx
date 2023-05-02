@@ -53,8 +53,8 @@ const AddButtons: FC<AddButtonsProps> = ({ collection, field, disabled }) => {
       className="
         py-0.5
         px-0.5
-        h-7
-        w-7
+        h-6
+        w-6
       "
       disabled={disabled}
     >

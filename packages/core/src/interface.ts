@@ -644,6 +644,7 @@ export interface MapField extends BaseField {
 
 export interface MarkdownField extends MediaField {
   widget: 'markdown';
+  toolbar_buttons?: string[];
   default?: string;
 }
 
