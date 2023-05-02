@@ -1,5 +1,6 @@
 import { basename, dirname } from 'path';
 import { useEffect, useMemo, useState } from 'react';
+import trim from 'lodash/trim';
 
 import { currentBackend } from '@staticcms/core/backend';
 import { selectCollection } from '@staticcms/core/reducers/selectors/collections';
@@ -44,8 +45,15 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
         setCurrentFolderMediaFiles([]);
         return;
       }
+      const { media_folder, public_folder } = config ?? {};
       const backend = currentBackend(config);
-      const files = await backend.getMedia(currentFolder, folderSupport);
+      const files = await backend.getMedia(
+        currentFolder,
+        folderSupport,
+        public_folder
+          ? trim(currentFolder, '/').replace(trim(media_folder, '/'), public_folder)
+          : currentFolder,
+      );
 
       if (alive) {
         setCurrentFolderMediaFiles(files);
