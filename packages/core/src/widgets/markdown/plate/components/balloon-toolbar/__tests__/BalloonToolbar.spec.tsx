@@ -4,6 +4,7 @@
 import '@testing-library/jest-dom';
 import { screen } from '@testing-library/react';
 import {
+  ELEMENT_LINK,
   findNodePath,
   getNode,
   getParentNode,
@@ -11,6 +12,7 @@ import {
   isElementEmpty,
   someNode,
   usePlateEditorState,
+  usePlateSelection,
 } from '@udecode/plate';
 import React, { useRef } from 'react';
 import { useFocused } from 'slate-react';
@@ -25,6 +27,7 @@ import BalloonToolbar from '../BalloonToolbar';
 
 import type { Config, MarkdownField } from '@staticcms/core/interface';
 import type { MdEditor } from '@staticcms/markdown/plate/plateTypes';
+import type { TRange } from '@udecode/plate';
 import type { FC } from 'react';
 
 interface BalloonToolbarWrapperProps {
@@ -54,6 +57,7 @@ const config = createMockConfig({
 
 describe(BalloonToolbar.name, () => {
   const mockUseEditor = usePlateEditorState as jest.Mock;
+  const mockUsePlateSelection = usePlateSelection as jest.Mock;
   let mockEditor: MdEditor;
 
   const mockGetNode = getNode as jest.Mock;
@@ -67,26 +71,6 @@ describe(BalloonToolbar.name, () => {
   beforeEach(() => {
     store.dispatch(configLoaded(config as unknown as Config));
 
-    // entry = {
-    //   collection: 'posts',
-    //   slug: '2022-12-13-post-number-1',
-    //   path: '_posts/2022-12-13-post-number-1.md',
-    //   partial: false,
-    //   raw: '--- title: "This is post # 1" draft: false date: 2022-12-13T00:00:00.000Z --- # The post is number 1\n\nAnd some text',
-    //   label: '',
-    //   author: '',
-    //   mediaFiles: [],
-    //   isModification: null,
-    //   newRecord: false,
-    //   updatedOn: '',
-    //   data: {
-    //     title: 'This is post # 1',
-    //     draft: false,
-    //     date: '2022-12-13T00:00:00.000Z',
-    //     body: '# The post is number 1\n\nAnd some text',
-    //   },
-    // };
-
     mockEditor = {
       selection: undefined,
     } as unknown as MdEditor;
@@ -99,45 +83,57 @@ describe(BalloonToolbar.name, () => {
     expect(screen.queryAllByRole('button').length).toBe(0);
   });
 
-  describe('empty node toolbar', () => {
+  describe('empty node toolbar inside table', () => {
     interface EmptyNodeToolbarSetupOptions {
       useMdx?: boolean;
     }
 
     const emptyNodeToolbarSetup = ({ useMdx }: EmptyNodeToolbarSetupOptions = {}) => {
       mockEditor = {
-        selection: undefined,
+        selection: {
+          anchor: {
+            path: [1, 0],
+            offset: 0,
+          },
+          focus: {
+            path: [1, 0],
+            offset: 0,
+          },
+        } as TRange,
         children: [
           {
             type: 'p',
             children: [{ text: '' }],
           },
           {
-            type: 'p',
+            type: 'td',
             children: [{ text: '' }],
           },
         ],
       } as unknown as MdEditor;
 
       mockUseEditor.mockReturnValue(mockEditor);
+      mockUsePlateSelection.mockReturnValue(mockEditor.selection);
 
       mockGetNode.mockReturnValue({ text: '' });
       mockIsElement.mockReturnValue(true);
       mockIsElementEmpty.mockReturnValue(true);
-      mockSomeNode.mockReturnValue(false);
+      mockSomeNode.mockImplementation((_editor, { match: { type } }) => type !== ELEMENT_LINK);
       mockUseFocused.mockReturnValue(true);
 
       mockFindNodePath.mockReturnValue([1, 0]);
       mockGetParentNode.mockReturnValue([
         {
-          type: 'p',
+          type: 'td',
           children: [{ text: '' }],
         },
       ]);
 
-      const { rerender } = renderWithProviders(<BalloonToolbarWrapper />);
+      const result = renderWithProviders(<BalloonToolbarWrapper />);
 
-      rerender(<BalloonToolbarWrapper useMdx={useMdx} />);
+      result.rerender(<BalloonToolbarWrapper useMdx={useMdx} />);
+
+      return result;
     };
 
     it('renders empty node toolbar for markdown', () => {
@@ -148,8 +144,14 @@ describe(BalloonToolbar.name, () => {
       expect(screen.queryByTestId('toolbar-button-code')).toBeInTheDocument();
       expect(screen.queryByTestId('toolbar-button-strikethrough')).toBeInTheDocument();
 
-      expect(screen.queryByTestId('font-type-select')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-add-table')).toBeInTheDocument();
+      expect(screen.queryByTestId('font-type-select')).not.toBeInTheDocument();
+
+      expect(screen.queryByTestId('toolbar-button-insert-row')).toBeInTheDocument();
+      expect(screen.queryByTestId('toolbar-button-delete-row')).toBeInTheDocument();
+      expect(screen.queryByTestId('toolbar-button-insert-column')).toBeInTheDocument();
+      expect(screen.queryByTestId('toolbar-button-delete-column')).toBeInTheDocument();
+      expect(screen.queryByTestId('toolbar-button-delete-table')).toBeInTheDocument();
+
       expect(screen.queryByTestId('toolbar-button-insert-link')).toBeInTheDocument();
       expect(screen.queryByTestId('toolbar-button-insert-image')).toBeInTheDocument();
 
@@ -165,8 +167,14 @@ describe(BalloonToolbar.name, () => {
       expect(screen.queryByTestId('toolbar-button-code')).toBeInTheDocument();
       expect(screen.queryByTestId('toolbar-button-strikethrough')).toBeInTheDocument();
 
-      expect(screen.queryByTestId('font-type-select')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-add-table')).toBeInTheDocument();
+      expect(screen.queryByTestId('font-type-select')).not.toBeInTheDocument();
+
+      expect(screen.queryByTestId('toolbar-button-insert-row')).toBeInTheDocument();
+      expect(screen.queryByTestId('toolbar-button-delete-row')).toBeInTheDocument();
+      expect(screen.queryByTestId('toolbar-button-insert-column')).toBeInTheDocument();
+      expect(screen.queryByTestId('toolbar-button-delete-column')).toBeInTheDocument();
+      expect(screen.queryByTestId('toolbar-button-delete-table')).toBeInTheDocument();
+
       expect(screen.queryByTestId('toolbar-button-insert-link')).toBeInTheDocument();
       expect(screen.queryByTestId('toolbar-button-insert-image')).toBeInTheDocument();
 
