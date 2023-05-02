@@ -1,3 +1,4 @@
+import { TableAdd } from '@styled-icons/fluentui-system-regular/TableAdd';
 import { Add as AddIcon } from '@styled-icons/material/Add';
 import { Code as CodeIcon } from '@styled-icons/material/Code';
 import { FormatQuote as FormatQuoteIcon } from '@styled-icons/material/FormatQuote';
@@ -6,7 +7,9 @@ import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_IMAGE,
   ELEMENT_LINK,
+  ELEMENT_TABLE,
   insertEmptyCodeBlock,
+  insertTable,
   toggleNodeType,
 } from '@udecode/plate';
 import React, { useCallback } from 'react';
@@ -43,6 +46,13 @@ const AddButtons: FC<AddButtonsProps> = ({ collection, field, disabled }) => {
     });
   }, [editor]);
 
+  const handleTableAdd = useCallback(() => {
+    insertTable(editor, {
+      rowCount: 2,
+      colCount: 2,
+    });
+  }, [editor]);
+
   return (
     <Menu
       label={<AddIcon className="h-5 w-5" aria-hidden="true" />}
@@ -72,6 +82,11 @@ const AddButtons: FC<AddButtonsProps> = ({ collection, field, disabled }) => {
           startIcon={CodeIcon}
         >
           Code Block
+        </MenuItemButton>
+      </MenuGroup>
+      <MenuGroup>
+        <MenuItemButton key={ELEMENT_TABLE} onClick={handleTableAdd} startIcon={TableAdd}>
+          Table
         </MenuItemButton>
       </MenuGroup>
       <MenuGroup>

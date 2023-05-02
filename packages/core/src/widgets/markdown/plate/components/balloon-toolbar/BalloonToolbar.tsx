@@ -162,6 +162,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
 
     // Empty paragraph, not first line
     if (
+      isInTableCell &&
       editor.children.length > 1 &&
       node &&
       ((isElement(node) && isElementEmpty(editor, node)) || (isText(node) && isEmpty(node.text)))

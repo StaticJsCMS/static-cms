@@ -157,16 +157,18 @@ const Field: FC<FieldProps> = ({
         {renderedHint}
         {renderedErrorMessage}
       </div>
-      <div
-        className={classNames(
-          `
+      {endAdornment ? (
+        <div
+          className={classNames(
+            `
             pr-2
           `,
-          !noPadding && '-mb-3',
-        )}
-      >
-        {endAdornment}
-      </div>
+            !noPadding && '-mb-3',
+          )}
+        >
+          {endAdornment}
+        </div>
+      ) : null}
     </div>
   );
 };

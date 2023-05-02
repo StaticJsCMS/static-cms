@@ -1,6 +1,6 @@
 import { Image as ImageIcon } from '@styled-icons/material/Image';
 import { ELEMENT_IMAGE, insertImage } from '@udecode/plate';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import MenuItemButton from '@staticcms/core/components/common/menu/MenuItemButton';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
@@ -36,12 +36,14 @@ const ImageToolbarButton: FC<ImageToolbarButtonProps> = ({
     [editor],
   );
 
+  const chooseUrl = useMemo(() => field.choose_url ?? true, [field.choose_url]);
+
   const openMediaLibrary = useMediaInsert(
     {
       path: currentValue?.url ?? '',
       alt: currentValue?.alt,
     },
-    { collection, field, forImage: true },
+    { collection, field, forImage: true, insertOptions: { chooseUrl, showAlt: true } },
     handleInsert,
   );
 
