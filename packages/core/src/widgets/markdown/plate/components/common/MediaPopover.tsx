@@ -45,7 +45,7 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
     onMediaToggle?.(false);
   });
 
-  const chooseUrl = useMemo(() => field.choose_url ?? false, [field.choose_url]);
+  const chooseUrl = useMemo(() => field.choose_url ?? true, [field.choose_url]);
 
   const handleFocus = useCallback(() => {
     onFocus?.();

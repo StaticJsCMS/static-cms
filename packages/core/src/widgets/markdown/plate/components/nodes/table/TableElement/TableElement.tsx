@@ -27,7 +27,19 @@ const TableElement: FC<PlateRenderElementProps<MdValue, MdTableElement>> = ({
     >
       {children ? (
         <>
-          <thead key="thead">{children[0]}</thead>
+          <thead
+            key="thead"
+            className="
+              border-r
+              border-b
+              bg-slate-300
+              border-gray-200
+              dark:bg-slate-700
+              dark:border-gray-800
+            "
+          >
+            {children[0]}
+          </thead>
           <tbody key="tbody">{children.slice(1)}</tbody>
         </>
       ) : null}

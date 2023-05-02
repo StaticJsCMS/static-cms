@@ -63,5 +63,6 @@ export const isSelectionExpanded = jest.fn();
 export const isText = jest.fn();
 export const someNode = jest.fn();
 export const usePlateSelection = jest.fn();
+export const isMarkActive = jest.fn();
 
 export default {};

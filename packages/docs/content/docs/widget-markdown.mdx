@@ -22,7 +22,7 @@ For common options, see [Common widget options](/docs/widgets#common-widget-opti
 | media_folder  | string                |         | _Optional_. Specifies the folder path where uploaded files should be saved, relative to the base of the repo                                                       |
 | public_folder | string                |         | _Optional_. Specifies the folder path where the files uploaded by the media library will be accessed, relative to the base of the built site                       |
 | media_library | Media Library Options | `{}`    | _Optional_. Media library settings to apply when the media library is opened by the current widget. See [Media Library](/docs/configuration-options#media-library) |
-| choose_url    | boolean               | `false` | _Optional_. When set to `false`, the "Insert from URL" button will be hidden                                                                                       |
+| choose_url    | boolean               | `true`  | _Optional_. When set to `false`, the "Insert from URL" button will be hidden                                                                                       |
 
 ## Example
 
@@ -231,9 +231,13 @@ const ImageControl = ({ src, onChange, controlProps }) => {
     onChange({ src: path });
   };
 
-  const handleOpenMediaLibrary = useMediaInsert(src, { collection: collection, field }, handleChange);
+  const handleOpenMediaLibrary = useMediaInsert(
+    src,
+    { collection: collection, field },
+    handleChange,
+  );
 
-  const assetSource = useMediaAsset(src , collection, field, entry);
+  const assetSource = useMediaAsset(src, collection, field, entry);
 
   return [
     h('button', { type: 'button', onClick: handleOpenMediaLibrary }, 'Upload'),
@@ -253,9 +257,13 @@ const ImageControl = ({ src, onChange, controlProps }) => {
     onChange({ src: path });
   };
 
-  const handleOpenMediaLibrary = useMediaInsert(src ,{ collection: collection, field }, handleChange);
+  const handleOpenMediaLibrary = useMediaInsert(
+    src,
+    { collection: collection, field },
+    handleChange,
+  );
 
-  const assetSource = useMediaAsset(src , collection, field, entry);
+  const assetSource = useMediaAsset(src, collection, field, entry);
 
   return (
     <>
@@ -275,11 +283,7 @@ import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import type { WidgetControlProps, MediaPath } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
-const FileControl: FC<WidgetControlProps<string, MyField>> = ({
-  src,
-  onChange,
-  controlProps
-}) => {
+const FileControl: FC<WidgetControlProps<string, MyField>> = ({ src, onChange, controlProps }) => {
   const { collection, field, entry } = controlProps;
 
   const handleChange = ({ path }: MediaPath) => {

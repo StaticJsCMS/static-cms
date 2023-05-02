@@ -1,9 +1,11 @@
 import React from 'react';
+import { Image as ImageIcon } from '@styled-icons/material-outlined/Image';
 
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
 import { useAppSelector } from '@staticcms/core/store/hooks';
+import { isEmpty } from '@staticcms/core/lib/util/string.util';
 
 import type { BaseField, Collection, MediaField, UnknownField } from '@staticcms/core/interface';
 
@@ -27,6 +29,20 @@ const Image = <EF extends BaseField = UnknownField>({
   const entry = useAppSelector(selectEditingDraft);
 
   const assetSource = useMediaAsset(src, collection, field, entry);
+
+  if (isEmpty(src)) {
+    return (
+      <ImageIcon
+        className="
+          p-10
+          rounded-md
+          border
+          border-gray-200/75
+          dark:border-slate-600/75
+        "
+      />
+    );
+  }
 
   return (
     <img

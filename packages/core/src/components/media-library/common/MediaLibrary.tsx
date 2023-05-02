@@ -484,6 +484,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
           url={url}
           alt={alt}
           insertOptions={insertOptions}
+          forImage={forImage}
           onUrlChange={handleURLChange}
           onAltChange={handleAltChange}
         />
