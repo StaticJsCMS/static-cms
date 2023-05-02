@@ -1,6 +1,6 @@
 import { Link as LinkIcon } from '@styled-icons/material/Link';
 import { ELEMENT_LINK, insertLink, someNode } from '@udecode/plate';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import MenuItemButton from '@staticcms/core/components/common/menu/MenuItemButton';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
@@ -41,6 +41,8 @@ const LinkToolbarButton: FC<LinkToolbarButtonProps> = ({
     [editor],
   );
 
+  const chooseUrl = useMemo(() => field.choose_url ?? true, [field.choose_url]);
+
   const isLink = !!editor?.selection && someNode(editor, { match: { type: ELEMENT_LINK } });
 
   const controlID = useUUID();
@@ -49,7 +51,7 @@ const LinkToolbarButton: FC<LinkToolbarButtonProps> = ({
       path: currentValue?.url ?? '',
       alt: currentValue?.alt,
     },
-    { collection, field, controlID, forImage: true },
+    { collection, field, controlID, forImage: false, insertOptions: { chooseUrl, showAlt: true } },
     handleInsert,
   );
 

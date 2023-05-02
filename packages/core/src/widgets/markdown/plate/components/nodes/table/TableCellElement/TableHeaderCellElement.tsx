@@ -22,7 +22,6 @@ const TableHeaderCellElement: FC<PlateRenderElementProps<MdValue, MdTableCellEle
         text-sm
         border-r
         border-gray-200
-        last:border-0
         dark:bg-slate-700
         dark:border-gray-800
       "

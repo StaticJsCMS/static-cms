@@ -253,7 +253,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
 
   return useMemo(
     () => (
-      <div className="relative px-3 py-5 pb-0 mb-5">
+      <div className="relative px-3 py-5 pb-0">
         <DndProvider backend={HTML5Backend}>
           <PlateProvider<MdValue>
             id={id}
@@ -272,7 +272,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
                 disabled={disabled}
               />
 
-              <div key="editor-wrapper" ref={editorContainerRef} className="w-full overflow-hidden">
+              <div key="editor-wrapper" ref={editorContainerRef} className="w-full">
                 <Plate
                   key="editor"
                   id={id}

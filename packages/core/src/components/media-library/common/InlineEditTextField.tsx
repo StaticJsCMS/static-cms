@@ -96,6 +96,7 @@ const InlineEditTextField: FC<InlineEditTextFieldProps> = ({
       {!editing || !onChange ? (
         <div
           key="value"
+          tabIndex={0}
           className={classNames(
             `
               flex
@@ -110,7 +111,6 @@ const InlineEditTextField: FC<InlineEditTextFieldProps> = ({
               rounded-md
               border
               text-slate-600
-              dark:font-semibold
               dark:text-gray-100
             `,
             onChange
@@ -125,6 +125,7 @@ const InlineEditTextField: FC<InlineEditTextFieldProps> = ({
               `,
           )}
           onClick={handleValueClick}
+          onFocus={handleValueClick}
         >
           {internalValue}
         </div>

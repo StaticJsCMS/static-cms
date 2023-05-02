@@ -2,9 +2,7 @@ import PopperUnstyled from '@mui/base/PopperUnstyled';
 import {
   ELEMENT_LINK,
   ELEMENT_TD,
-  findNodePath,
   getNode,
-  getParentNode,
   getSelectionBoundingClientRect,
   getSelectionText,
   isElement,
@@ -20,7 +18,6 @@ import { useFocused } from 'slate-react';
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
-import { VOID_ELEMENTS } from '../../serialization/slate/ast-types';
 import BasicElementToolbarButtons from '../buttons/BasicElementToolbarButtons';
 import BasicMarkToolbarButtons from '../buttons/BasicMarkToolbarButtons';
 import MediaToolbarButtons from '../buttons/MediaToolbarButtons';
@@ -156,29 +153,14 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
       !useMdx ? <ShortcodeToolbarButton key="shortcode-button" disabled={disabled} /> : null,
     ].filter(Boolean);
 
-    // if (isInTableCell) {
-    //   return allButtons;
-    // }
-
-    // Empty paragraph, not first line
+    // Empty table cell
     if (
+      isInTableCell &&
       editor.children.length > 1 &&
       node &&
       ((isElement(node) && isElementEmpty(editor, node)) || (isText(node) && isEmpty(node.text)))
     ) {
-      const path = findNodePath(editor, node) ?? [];
-      const parent = getParentNode(editor, path);
-      if (
-        path.length > 0 &&
-        path[0] !== 0 &&
-        parent &&
-        parent.length > 0 &&
-        'children' in parent[0] &&
-        !VOID_ELEMENTS.includes(parent[0].type as string) &&
-        parent[0].children.length === 1
-      ) {
-        return allButtons;
-      }
+      return allButtons;
     }
 
     return [];

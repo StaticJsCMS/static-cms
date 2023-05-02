@@ -1,5 +1,6 @@
 import React from 'react';
 
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isEmpty } from '../../../lib/util/string.util';
 import Image from '../../common/image/Image';
 import InlineEditTextField from './InlineEditTextField';
@@ -14,6 +15,7 @@ interface CurrentMediaDetailsProps {
   url?: string | string[];
   alt?: string;
   insertOptions?: MediaLibrarInsertOptions;
+  forImage: boolean;
   onUrlChange: (url: string) => void;
   onAltChange: (alt: string) => void;
 }
@@ -25,54 +27,83 @@ const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
   url,
   alt,
   insertOptions,
+  forImage,
   onUrlChange,
   onAltChange,
 }) => {
-  if (!field || !canInsert || typeof url !== 'string' || isEmpty(url)) {
+  if (
+    !field ||
+    !canInsert ||
+    Array.isArray(url) ||
+    (!insertOptions?.chooseUrl &&
+      !insertOptions?.showAlt &&
+      (typeof url !== 'string' || isEmpty(url)))
+  ) {
     return null;
   }
 
   return (
     <div
-      className="
-        grid
-        grid-cols-media-preview
-        items-center
-        px-5
-        py-4
-        border-b
-        border-gray-200/75
-        dark:border-slate-500/75
-      "
-    >
-      <Image
-        src={url}
-        collection={collection}
-        field={field}
-        className="
-          w-media-preview-image
-          h-media-preview-image
-          rounded-md
-          shadow-sm
-          overflow-hidden
-          group/media-card
-          border
-          bg-gray-50/75
+      className={classNames(
+        `
+          items-center
+          px-5
+          py-4
+          border-b
           border-gray-200/75
-          dark:bg-slate-800
-          dark:border-slate-600/75
-          object-cover
-        "
-      />
+          dark:border-slate-500/75
+        `,
+        forImage
+          ? `
+            grid
+            grid-cols-media-preview
+          `
+          : `
+            flex
+            w-full
+          `,
+      )}
+    >
+      {forImage ? (
+        <Image
+          key="image-preview"
+          src={url}
+          collection={collection}
+          field={field}
+          className="
+            w-media-preview-image
+            h-media-preview-image
+            rounded-md
+            shadow-sm
+            overflow-hidden
+            group/media-card
+            border
+            bg-gray-50/75
+            border-gray-200/75
+            dark:bg-slate-800
+            dark:border-slate-600/75
+            object-cover
+          "
+        />
+      ) : null}
       <div
-        className="
-          flex
-          flex-col
-          h-full
-          p-0
-          pl-4
-          gap-2
-        "
+        className={classNames(
+          `
+            flex
+            flex-col
+            h-full
+            p-0
+            gap-2
+          `,
+          forImage
+            ? `
+              pl-4
+            `
+            : `
+              w-full
+              pl-1.5
+            `,
+        )}
       >
         <InlineEditTextField
           label="URL"
@@ -80,7 +111,11 @@ const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
           onChange={insertOptions?.chooseUrl ? onUrlChange : undefined}
         />
         {insertOptions?.showAlt ? (
-          <InlineEditTextField label="Alt" value={alt} onChange={onAltChange} />
+          <InlineEditTextField
+            label={forImage ? 'Alt' : 'Text'}
+            value={alt}
+            onChange={onAltChange}
+          />
         ) : null}
       </div>
     </div>

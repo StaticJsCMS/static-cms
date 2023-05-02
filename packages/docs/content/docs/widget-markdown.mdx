@@ -232,9 +232,13 @@ const ImageControl = ({ src, onChange, controlProps }) => {
     onChange({ src: path });
   };
 
-  const handleOpenMediaLibrary = useMediaInsert(src, { collection: collection, field }, handleChange);
+  const handleOpenMediaLibrary = useMediaInsert(
+    src,
+    { collection: collection, field },
+    handleChange,
+  );
 
-  const assetSource = useMediaAsset(src , collection, field, entry);
+  const assetSource = useMediaAsset(src, collection, field, entry);
 
   return [
     h('button', { type: 'button', onClick: handleOpenMediaLibrary }, 'Upload'),
@@ -254,9 +258,13 @@ const ImageControl = ({ src, onChange, controlProps }) => {
     onChange({ src: path });
   };
 
-  const handleOpenMediaLibrary = useMediaInsert(src ,{ collection: collection, field }, handleChange);
+  const handleOpenMediaLibrary = useMediaInsert(
+    src,
+    { collection: collection, field },
+    handleChange,
+  );
 
-  const assetSource = useMediaAsset(src , collection, field, entry);
+  const assetSource = useMediaAsset(src, collection, field, entry);
 
   return (
     <>
@@ -276,11 +284,7 @@ import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import type { WidgetControlProps, MediaPath } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
-const FileControl: FC<WidgetControlProps<string, MyField>> = ({
-  src,
-  onChange,
-  controlProps
-}) => {
+const FileControl: FC<WidgetControlProps<string, MyField>> = ({ src, onChange, controlProps }) => {
   const { collection, field, entry } = controlProps;
 
   const handleChange = ({ path }: MediaPath) => {
