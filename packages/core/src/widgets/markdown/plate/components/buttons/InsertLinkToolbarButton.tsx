@@ -1,5 +1,5 @@
 import { Link as LinkIcon } from '@styled-icons/material/Link';
-import { ELEMENT_LINK, getNode, insertLink, someNode } from '@udecode/plate';
+import { ELEMENT_LINK, getSelectionText, insertLink, someNode } from '@udecode/plate';
 import React, { useCallback, useMemo } from 'react';
 
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
@@ -49,9 +49,7 @@ const InsertLinkToolbarButton: FC<InsertLinkToolbarButtonProps> = ({
       return '';
     }
 
-    const node = getNode(editor, editor.selection.anchor.path);
-
-    return node && 'text' in node ? (node.text as string) : '';
+    return getSelectionText(editor);
   }, [editor]);
 
   const controlID = useUUID();

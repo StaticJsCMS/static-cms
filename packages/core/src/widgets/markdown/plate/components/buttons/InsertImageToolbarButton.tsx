@@ -28,7 +28,6 @@ const InsertImageToolbarButton: FC<InsertImageToolbarButtonProps> = ({
   const editor = useMdPlateEditorState();
   const handleInsert = useCallback(
     (newUrl: MediaPath<string>) => {
-      console.log('[IMAGE] Trying to insert!', newUrl);
       if (isNotEmpty(newUrl.path)) {
         insertImage(editor, newUrl.path);
       }

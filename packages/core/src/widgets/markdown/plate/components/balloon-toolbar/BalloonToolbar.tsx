@@ -46,11 +46,11 @@ const DEFAULT_TABLE_EMPTY_BUTTONS: MarkdownToolbarButtonType[] = [
   'italic',
   'strikethrough',
   'code',
-  'font',
-  'unordered-list',
-  'ordered-list',
-  'decrease-indent',
-  'increase-indent',
+  'insert-row',
+  'delete-row',
+  'insert-column',
+  'delete-column',
+  'delete-table',
   'file-link',
   'image',
   'shortcode',
@@ -67,8 +67,6 @@ const DEFAULT_TABLE_SELECTION_BUTTONS: MarkdownToolbarButtonType[] = [
   'delete-column',
   'delete-table',
   'file-link',
-  'image',
-  'shortcode',
 ];
 
 export interface BalloonToolbarProps {
@@ -263,10 +261,11 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
         "
       >
         <div
+          data-testid="balloon-toolbar"
           className="
-          flex
-          gap-0.5
-        "
+            flex
+            gap-0.5
+          "
         >
           {groups.length > 0 ? groups : debouncedGroups}
         </div>
