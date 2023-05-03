@@ -4,7 +4,6 @@ import React, { useCallback } from 'react';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import ToolbarButton from './ToolbarButton';
 
-import type { MdEditor } from '@staticcms/markdown';
 import type { Alignment } from '@udecode/plate';
 import type { FC } from 'react';
 import type { ToolbarButtonProps } from './ToolbarButton';
@@ -12,6 +11,7 @@ import type { ToolbarButtonProps } from './ToolbarButton';
 export interface AlignToolbarButtonProps extends Omit<ToolbarButtonProps, 'active' | 'onClick'> {
   value: Alignment;
   pluginKey?: string;
+  variant: 'button' | 'menu';
 }
 
 const AlignToolbarButton: FC<AlignToolbarButtonProps> = ({
@@ -21,15 +21,12 @@ const AlignToolbarButton: FC<AlignToolbarButtonProps> = ({
 }) => {
   const editor = useMdPlateEditorState();
 
-  const handleOnClick = useCallback(
-    (editor: MdEditor) => {
-      setAlign(editor, {
-        value,
-        key: pluginKey,
-      });
-    },
-    [pluginKey, value],
-  );
+  const handleOnClick = useCallback(() => {
+    setAlign(editor, {
+      value,
+      key: pluginKey,
+    });
+  }, [editor, pluginKey, value]);
 
   return (
     <ToolbarButton

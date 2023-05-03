@@ -525,6 +525,42 @@ collections:
             widget: markdown
             media_library:
               folder_support: true
+          - name: customized_buttons
+            label: Customized Buttons
+            widget: markdown
+            toolbar_buttons:
+              main:
+                - bold
+                - italic
+                - font
+                - shortcode
+                - label: Insert
+                  groups:
+                    - items: ['image', 'file-link']
+                    - items: ['insert-table']
+              empty:
+                - bold
+                - italic
+                - font
+                - label: Insert
+                  groups:
+                    - items: ['image', 'file-link']
+                    - items: ['blockquote', 'code-block']
+              selection:
+                - bold
+                - italic
+                - font
+                - file-link
+              table_empty:
+                - insert-row
+                - insert-column
+                - delete-row
+                - delete-column
+                - delete-table
+              table_selection:
+                - bold
+                - italic
+                - font
       - name: number
         label: Number
         file: _widgets/number.json

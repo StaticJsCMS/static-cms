@@ -39,6 +39,7 @@ const Header3 = ({ variant, children = '' }: Header3Props) => {
   const hasText = useMemo(() => isNotEmpty(textContent), [textContent]);
   return (
     <Typography
+      id={anchor}
       variant={variant}
       component={variant}
       sx={{

@@ -5,8 +5,6 @@ export { default as BlockToolbarButton } from './BlockToolbarButton';
 export * from './ColorPickerToolbarDropdown';
 export { default as ColorPickerToolbarDropdown } from './ColorPickerToolbarDropdown';
 export * from './dropdown';
-export { default as ImageToolbarButton } from './ImageToolbarButton';
-export { default as LinkToolbarButton } from './LinkToolbarButton';
 export * from './ListToolbarButton';
 export { default as ListToolbarButton } from './ListToolbarButton';
 export * from './MarkToolbarButton';

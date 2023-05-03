@@ -16,13 +16,14 @@ _Please note:_ If you want to use your markdown editor to fill a markdown file c
 
 For common options, see [Common widget options](/docs/widgets#common-widget-options).
 
-| Name          | Type                  | Default | Description                                                                                                                                                        |
-| ------------- | --------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| default       | string                | `''`    | _Optional_. The default value for the field. Accepts markdown content                                                                                              |
-| media_folder  | string                |         | _Optional_. Specifies the folder path where uploaded files should be saved, relative to the base of the repo                                                       |
-| public_folder | string                |         | _Optional_. Specifies the folder path where the files uploaded by the media library will be accessed, relative to the base of the built site                       |
-| media_library | Media Library Options | `{}`    | _Optional_. Media library settings to apply when the media library is opened by the current widget. See [Media Library](/docs/configuration-options#media-library) |
-| choose_url    | boolean               | `true`  | _Optional_. When set to `false`, the "Insert from URL" button will be hidden                                                                                       |
+| Name            | Type                  | Default | Description                                                                                                                                                        |
+| --------------- | --------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| default         | string                | `''`    | _Optional_. The default value for the field. Accepts markdown content                                                                                              |
+| media_folder    | string                |         | _Optional_. Specifies the folder path where uploaded files should be saved, relative to the base of the repo                                                       |
+| public_folder   | string                |         | _Optional_. Specifies the folder path where the files uploaded by the media library will be accessed, relative to the base of the built site                       |
+| media_library   | Media Library Options | `{}`    | _Optional_. Media library settings to apply when the media library is opened by the current widget. See [Media Library](/docs/configuration-options#media-library) |
+| choose_url      | boolean               | `true`  | _Optional_. When set to `false`, the "Insert from URL" button will be hidden                                                                                       |
+| toolbar_buttons | object                | []      | _Optional_. Specifies which toolbar items to show for the markdown widget. See [Toolbar Customization](#toolbar-customization)                                     |
 
 ## Example
 
@@ -46,6 +47,234 @@ This would render as:
 ![Markdown widget example](/img/widgets-markdown.webp)
 
 _Please note:_ The markdown widget outputs a raw markdown string. Your static site generator may or may not render the markdown to HTML automatically. Consult with your static site generator's documentation for more information about rendering markdown.
+
+## Toolbar Customization
+
+| Name            | Type   | Default                                                   | Description                                                                                               |
+| --------------- | ------ | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| main            | object | See [Main Toolbar](#main-toolbar)                         | _Optional_. A list of buttons and menus for the top level toolbar                                         |
+| empty           | object | See [Empty Toolbar](#empty-toolbar)                       | _Optional_. A list of buttons and menus for the popup toolbar when in an empty paragraph                  |
+| selection       | object | See [Selection Toolbar](#selection-toolbar)               | _Optional_. A list of buttons and menus for the popup toolbar when selecting text outside of a table cell |
+| table_empty     | object | See [Empty Table Cell Toolbar](#empty-table-cell-toolbar) | _Optional_. A list of buttons and menus for the popup toolbar when in an empty table cell                 |
+| table_selection | object | See [Table Selection Toolbar](#table-selection-toolbar)   | _Optional_. A list of buttons and menus for the popup toolbar when selecting text in a table cell         |
+
+### Options
+
+All toolbars can be customized with a list consisting of buttons and dropdown menus.
+
+#### Buttons
+
+Buttons can be configured simply with their name. The following options are available:
+
+- `blockquote`
+- `bold`
+- `code`
+- `code-block`
+- `decrease-indent`
+- `delete-column`
+- `delete-row`
+- `delete-table`
+- `file-link`
+- `font`
+- `image`
+- `increase-indent`
+- `insert-column`
+- `insert-row`
+- `insert-table`
+- `italic`
+- `ordered-list`
+- `shortcode`
+- `strikethrough`
+- `unordered-list`
+
+#### Menus
+
+The following options are available for menus:
+
+| Name   | Type           | Description                                                                               |
+| ------ | -------------- | ----------------------------------------------------------------------------------------- |
+| label  | string         | The name and tooltip label for the menu                                                   |
+| icon   | string         | _Optional_. The icon to use for the menu. If not supplied a default add icon will be used |
+| groups | list of groups | A list groups of menu items. Each group is separated by a divider                         |
+
+##### Menu Groups
+
+The following options are available for menu groups:
+
+| Name  | Type            | Description                                                                                                                |
+| ----- | --------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| items | list of strings | The name of the toolbar buttons in the group. All [buttons](#buttons) are available in menus except `font` and `shortcode` |
+
+### Default Values
+
+Below are the default values for the various toolbars:
+
+#### Main Toolbar
+
+<CodeTabs>
+
+```yaml
+main:
+  - bold
+  - italic
+  - strikethrough
+  - code
+  - font
+  - unordered-list
+  - ordered-list
+  - decrease-indent
+  - increase-indent
+  - shortcode
+  - label: Insert
+    groups:
+      - items:
+          - blockquote
+          - code-block
+      - items:
+          - insert-table
+      - items:
+          - image
+          - file-link
+```
+
+```js
+main: [
+  'bold',
+  'italic',
+  'strikethrough',
+  'code',
+  'font',
+  'unordered-list',
+  'ordered-list',
+  'decrease-indent',
+  'increase-indent',
+  'shortcode',
+  {
+    label: 'Insert',
+    groups: [
+      {
+        items: ['blockquote', 'code-block'],
+      },
+      {
+        items: ['insert-table'],
+      },
+      {
+        items: ['image', 'file-link'],
+      },
+    ],
+  },
+];
+```
+
+</CodeTabs>
+
+#### Empty Toolbar
+
+<CodeTabs>
+
+```yaml
+empty: []
+```
+
+```js
+empty: [];
+```
+
+</CodeTabs>
+
+#### Selection Toolbar
+
+<CodeTabs>
+
+```yaml
+selection:
+  - bold
+  - italic
+  - strikethrough
+  - code
+  - font
+  - file-link
+```
+
+```js
+selection: ['bold', 'italic', 'strikethrough', 'code', 'font', 'file-link'];
+```
+
+</CodeTabs>
+
+#### Empty Table Cell Toolbar
+
+<CodeTabs>
+
+```yaml
+table_empty:
+  - bold
+  - italic
+  - strikethrough
+  - code
+  - insert-row
+  - delete-row
+  - insert-column
+  - delete-column
+  - delete-table
+  - file-link
+  - image
+  - shortcode
+```
+
+```js
+table_empty: [
+  'bold',
+  'italic',
+  'strikethrough',
+  'code',
+  'insert-row',
+  'delete-row',
+  'insert-column',
+  'delete-column',
+  'delete-table',
+  'file-link',
+  'image',
+  'shortcode',
+];
+```
+
+</CodeTabs>
+
+#### Table Selection Toolbar
+
+<CodeTabs>
+
+```yaml
+table_selection:
+  - bold
+  - italic
+  - strikethrough
+  - code
+  - insert-row
+  - delete-row
+  - insert-column
+  - delete-column
+  - delete-table
+  - file-link
+```
+
+```js
+table_selection: [
+  'bold',
+  'italic',
+  'strikethrough',
+  'code',
+  'insert-row',
+  'delete-row',
+  'insert-column',
+  'delete-column',
+  'delete-table',
+  'file-link',
+];
+```
+
+</CodeTabs>
 
 ## Shortcodes
 

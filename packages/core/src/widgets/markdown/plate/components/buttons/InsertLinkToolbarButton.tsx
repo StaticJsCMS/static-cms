@@ -1,27 +1,26 @@
 import { Link as LinkIcon } from '@styled-icons/material/Link';
-import { ELEMENT_LINK, insertLink, someNode } from '@udecode/plate';
+import { ELEMENT_LINK, getSelectionText, insertLink, someNode } from '@udecode/plate';
 import React, { useCallback, useMemo } from 'react';
 
-import MenuItemButton from '@staticcms/core/components/common/menu/MenuItemButton';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
-import ToolbarButton from './ToolbarButton';
+import ToolbarButton from './common/ToolbarButton';
 
 import type { Collection, MarkdownField, MediaPath } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
-interface LinkToolbarButtonProps {
-  variant?: 'button' | 'menu';
+export interface InsertLinkToolbarButtonProps {
+  variant: 'button' | 'menu';
   currentValue?: { url: string; alt?: string };
   collection: Collection<MarkdownField>;
   field: MarkdownField;
   disabled: boolean;
 }
 
-const LinkToolbarButton: FC<LinkToolbarButtonProps> = ({
-  variant = 'button',
+const InsertLinkToolbarButton: FC<InsertLinkToolbarButtonProps> = ({
+  variant,
   field,
   collection,
   currentValue,
@@ -45,34 +44,35 @@ const LinkToolbarButton: FC<LinkToolbarButtonProps> = ({
 
   const isLink = !!editor?.selection && someNode(editor, { match: { type: ELEMENT_LINK } });
 
+  const selectedText: string = useMemo(() => {
+    if (!editor.selection) {
+      return '';
+    }
+
+    return getSelectionText(editor);
+  }, [editor]);
+
   const controlID = useUUID();
   const openMediaLibrary = useMediaInsert(
     {
       path: currentValue?.url ?? '',
-      alt: currentValue?.alt,
+      alt: currentValue?.alt ?? selectedText,
     },
     { collection, field, controlID, forImage: false, insertOptions: { chooseUrl, showAlt: true } },
     handleInsert,
   );
 
-  if (variant === 'menu') {
-    return (
-      <MenuItemButton key={ELEMENT_LINK} onClick={openMediaLibrary} startIcon={LinkIcon}>
-        File / Link
-      </MenuItemButton>
-    );
-  }
-
   return (
     <ToolbarButton
-      key="insertLink"
-      tooltip="Insert Link"
-      icon={<LinkIcon className="w-5 h-5" />}
-      onClick={(_editor, event) => openMediaLibrary(event)}
+      label="Link"
+      tooltip="Insert link"
+      icon={LinkIcon}
+      onClick={openMediaLibrary}
       active={isLink}
       disabled={disabled}
+      variant={variant}
     />
   );
 };
 
-export default LinkToolbarButton;
+export default InsertLinkToolbarButton;

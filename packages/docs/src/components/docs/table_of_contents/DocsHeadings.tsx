@@ -8,7 +8,7 @@ const StyledList = styled('ul')(
     flex-direction: column;
     list-style-type: none;
     padding: 0;
-      
+
     ${theme.breakpoints.down('lg')} {
       margin-top: 0;
     }
@@ -64,6 +64,7 @@ const DocsHeadings = ({ headings, activeId }: DocsHeadingsProps) => (
             document.querySelector(`#${heading.id}`)?.scrollIntoView({
               behavior: 'smooth',
             });
+            history.pushState(null, '', `#${heading.id}`);
           }}
         >
           {heading.title}
@@ -79,6 +80,7 @@ const DocsHeadings = ({ headings, activeId }: DocsHeadingsProps) => (
                     document.querySelector(`#${child.id}`)?.scrollIntoView({
                       behavior: 'smooth',
                     });
+                    history.pushState(null, '', `#${child.id}`);
                   }}
                 >
                   {child.title}

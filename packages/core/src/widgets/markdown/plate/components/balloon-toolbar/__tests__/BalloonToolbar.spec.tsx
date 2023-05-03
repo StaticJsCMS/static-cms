@@ -2,14 +2,16 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import {
   ELEMENT_LINK,
   findNodePath,
   getNode,
   getParentNode,
+  getSelectionText,
   isElement,
   isElementEmpty,
+  isSelectionExpanded,
   someNode,
   usePlateEditorState,
   usePlateSelection,
@@ -67,8 +69,12 @@ describe(BalloonToolbar.name, () => {
   const mockUseFocused = useFocused as jest.Mock;
   const mockFindNodePath = findNodePath as jest.Mock;
   const mockGetParentNode = getParentNode as jest.Mock;
+  const mockGetSelectionText = getSelectionText as jest.Mock;
+  const mockIsSelectionExpanded = isSelectionExpanded as jest.Mock;
 
   beforeEach(() => {
+    jest.useFakeTimers();
+
     store.dispatch(configLoaded(config as unknown as Config));
 
     mockEditor = {
@@ -78,107 +84,158 @@ describe(BalloonToolbar.name, () => {
     mockUseEditor.mockReturnValue(mockEditor);
   });
 
+  afterAll(() => {
+    jest.useRealTimers();
+  });
+
   it('renders empty div by default', () => {
     renderWithProviders(<BalloonToolbarWrapper />);
     expect(screen.queryAllByRole('button').length).toBe(0);
   });
 
-  describe('empty node toolbar inside table', () => {
-    interface EmptyNodeToolbarSetupOptions {
-      useMdx?: boolean;
-    }
+  interface BalloonToolbarSetupOptions {
+    inTable?: boolean;
+    selectedText?: string;
+  }
 
-    const emptyNodeToolbarSetup = ({ useMdx }: EmptyNodeToolbarSetupOptions = {}) => {
-      mockEditor = {
-        selection: {
-          anchor: {
-            path: [1, 0],
-            offset: 0,
-          },
-          focus: {
-            path: [1, 0],
-            offset: 0,
-          },
-        } as TRange,
-        children: [
-          {
-            type: 'p',
-            children: [{ text: '' }],
-          },
-          {
-            type: 'td',
-            children: [{ text: '' }],
-          },
-        ],
-      } as unknown as MdEditor;
-
-      mockUseEditor.mockReturnValue(mockEditor);
-      mockUsePlateSelection.mockReturnValue(mockEditor.selection);
-
-      mockGetNode.mockReturnValue({ text: '' });
-      mockIsElement.mockReturnValue(true);
-      mockIsElementEmpty.mockReturnValue(true);
-      mockSomeNode.mockImplementation((_editor, { match: { type } }) => type !== ELEMENT_LINK);
-      mockUseFocused.mockReturnValue(true);
-
-      mockFindNodePath.mockReturnValue([1, 0]);
-      mockGetParentNode.mockReturnValue([
+  const emptyNodeToolbarSetup = ({ inTable, selectedText }: BalloonToolbarSetupOptions = {}) => {
+    mockEditor = {
+      selection: {
+        anchor: {
+          path: [1, 0],
+          offset: 0,
+        },
+        focus: {
+          path: [1, 0],
+          offset: 0,
+        },
+      } as TRange,
+      children: [
+        {
+          type: 'p',
+          children: [{ text: !inTable && selectedText ? selectedText : '' }],
+        },
         {
           type: 'td',
-          children: [{ text: '' }],
+          children: [{ text: inTable && selectedText ? selectedText : '' }],
         },
-      ]);
+      ],
+    } as unknown as MdEditor;
 
-      const result = renderWithProviders(<BalloonToolbarWrapper />);
+    mockUseEditor.mockReturnValue(mockEditor);
+    mockUsePlateSelection.mockReturnValue(mockEditor.selection);
 
-      result.rerender(<BalloonToolbarWrapper useMdx={useMdx} />);
+    mockGetNode.mockReturnValue({ text: '' });
+    mockIsElement.mockReturnValue(true);
+    mockIsElementEmpty.mockReturnValue(true);
+    mockUseFocused.mockReturnValue(true);
 
-      return result;
-    };
+    if (selectedText) {
+      mockIsSelectionExpanded.mockReturnValue(true);
+      mockGetSelectionText.mockReturnValue(selectedText);
+    } else {
+      mockIsSelectionExpanded.mockReturnValue(false);
+      mockGetSelectionText.mockReturnValue('');
+    }
 
-    it('renders empty node toolbar for markdown', () => {
-      emptyNodeToolbarSetup();
+    if (inTable) {
+      mockSomeNode.mockImplementation((_editor, { match: { type } }) => type !== ELEMENT_LINK);
+      mockFindNodePath.mockReturnValue([1, 0]);
+    } else {
+      mockSomeNode.mockReturnValue(false);
+      mockFindNodePath.mockReturnValue([0, 0]);
+    }
 
-      expect(screen.queryByTestId('toolbar-button-bold')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-italic')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-code')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-strikethrough')).toBeInTheDocument();
+    mockGetParentNode.mockReturnValue([
+      {
+        type: 'td',
+        children: [{ text: '' }],
+      },
+    ]);
 
-      expect(screen.queryByTestId('font-type-select')).not.toBeInTheDocument();
+    const result = renderWithProviders(<BalloonToolbarWrapper />);
 
-      expect(screen.queryByTestId('toolbar-button-insert-row')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-delete-row')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-insert-column')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-delete-column')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-delete-table')).toBeInTheDocument();
-
-      expect(screen.queryByTestId('toolbar-button-insert-link')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-insert-image')).toBeInTheDocument();
-
-      // MDX Only do not show for markdown version
-      expect(screen.queryByTestId('toolbar-button-underline')).not.toBeInTheDocument();
+    act(() => {
+      jest.advanceTimersByTime(1000);
     });
 
-    it('renders empty node toolbar for mdx', () => {
-      emptyNodeToolbarSetup({ useMdx: true });
+    result.rerender(<BalloonToolbarWrapper />);
 
-      expect(screen.queryByTestId('toolbar-button-bold')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-italic')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-code')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-strikethrough')).toBeInTheDocument();
+    return result;
+  };
 
-      expect(screen.queryByTestId('font-type-select')).not.toBeInTheDocument();
+  it('does not render empty node toolbar', () => {
+    emptyNodeToolbarSetup();
 
-      expect(screen.queryByTestId('toolbar-button-insert-row')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-delete-row')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-insert-column')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-delete-column')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-delete-table')).toBeInTheDocument();
+    expect(screen.queryByTestId('balloon-toolbar')).not.toBeInTheDocument();
+  });
 
-      expect(screen.queryByTestId('toolbar-button-insert-link')).toBeInTheDocument();
-      expect(screen.queryByTestId('toolbar-button-insert-image')).toBeInTheDocument();
+  it('renders selected node toolbar when text is selected', () => {
+    emptyNodeToolbarSetup({ selectedText: 'Test Text' });
 
-      expect(screen.queryByTestId('toolbar-button-underline')).toBeInTheDocument();
-    });
+    expect(screen.queryByTestId('balloon-toolbar')).toBeInTheDocument();
+
+    expect(screen.queryByTestId('toolbar-button-bold')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-italic')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-code')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-strikethrough')).toBeInTheDocument();
+
+    expect(screen.queryByTestId('font-type-select')).toBeInTheDocument();
+
+    expect(screen.queryByTestId('toolbar-button-insert-row')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-delete-row')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-insert-column')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-delete-column')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-delete-table')).not.toBeInTheDocument();
+
+    expect(screen.queryByTestId('toolbar-button-link')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-image')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-shortcode')).not.toBeInTheDocument();
+  });
+
+  it('renders empty table node toolbar when in table', () => {
+    emptyNodeToolbarSetup({ inTable: true });
+
+    expect(screen.queryByTestId('balloon-toolbar')).toBeInTheDocument();
+
+    expect(screen.queryByTestId('toolbar-button-bold')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-italic')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-code')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-strikethrough')).toBeInTheDocument();
+
+    expect(screen.queryByTestId('font-type-select')).not.toBeInTheDocument();
+
+    expect(screen.queryByTestId('toolbar-button-insert-row')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-delete-row')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-insert-column')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-delete-column')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-delete-table')).toBeInTheDocument();
+
+    expect(screen.queryByTestId('toolbar-button-link')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-image')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-shortcode')).toBeInTheDocument();
+  });
+
+  it('renders selected table node toolbar when text is selected in table', () => {
+    emptyNodeToolbarSetup({ inTable: true, selectedText: 'Test Text' });
+
+    expect(screen.queryByTestId('balloon-toolbar')).toBeInTheDocument();
+
+    expect(screen.queryByTestId('toolbar-button-bold')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-italic')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-code')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-strikethrough')).toBeInTheDocument();
+
+    expect(screen.queryByTestId('font-type-select')).not.toBeInTheDocument();
+
+    expect(screen.queryByTestId('toolbar-button-insert-row')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-delete-row')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-insert-column')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-delete-column')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-delete-table')).toBeInTheDocument();
+
+    expect(screen.queryByTestId('toolbar-button-link')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-image')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('toolbar-button-shortcode')).not.toBeInTheDocument();
   });
 });

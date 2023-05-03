@@ -1,15 +1,53 @@
 import React from 'react';
 
-import AddButtons from '../buttons/AddButtons';
-import AlignToolbarButtons from '../buttons/AlignToolbarButtons';
-import BasicElementToolbarButtons from '../buttons/BasicElementToolbarButtons';
-import BasicMarkToolbarButtons from '../buttons/BasicMarkToolbarButtons';
-import ColorToolbarButtons from '../buttons/ColorToolbarButtons';
-import ListToolbarButtons from '../buttons/ListToolbarButtons';
-import ShortcodeToolbarButton from '../buttons/ShortcodeToolbarButton';
+import useToolbarButtons from '../../hooks/useToolbarButtons';
+import {
+  BOLD_TOOLBAR_BUTTON,
+  ITALIC_TOOLBAR_BUTTON,
+  STRIKETHROUGH_TOOLBAR_BUTTON,
+  CODE_TOOLBAR_BUTTON,
+  FONT_TOOLBAR_BUTTON,
+  IMAGE_TOOLBAR_BUTTON,
+  FILE_LINK_TOOLBAR_BUTTON,
+  INSERT_TABLE_TOOLBAR_BUTTON,
+  BLOCKQUOTE_TOOLBAR_BUTTON,
+  SHORTCODE_TOOLBAR_BUTTON,
+  INCRASE_IDENT_TOOLBAR_BUTTON,
+  DECREASE_IDENT_TOOLBAR_BUTTON,
+  ORDERED_LIST_TOOLBAR_BUTTON,
+  UNORDERED_LIST_TOOLBAR_BUTTON,
+  CODE_BLOCK_TOOLBAR_BUTTON,
+} from '@staticcms/core/constants/toolbar_buttons';
 
-import type { Collection, MarkdownField } from '@staticcms/core/interface';
+import type { Collection, MarkdownField, MarkdownToolbarItem } from '@staticcms/core/interface';
 import type { FC } from 'react';
+
+const DEFAULT_TOOLBAR_BUTTONS: MarkdownToolbarItem[] = [
+  BOLD_TOOLBAR_BUTTON,
+  ITALIC_TOOLBAR_BUTTON,
+  STRIKETHROUGH_TOOLBAR_BUTTON,
+  CODE_TOOLBAR_BUTTON,
+  FONT_TOOLBAR_BUTTON,
+  UNORDERED_LIST_TOOLBAR_BUTTON,
+  ORDERED_LIST_TOOLBAR_BUTTON,
+  DECREASE_IDENT_TOOLBAR_BUTTON,
+  INCRASE_IDENT_TOOLBAR_BUTTON,
+  SHORTCODE_TOOLBAR_BUTTON,
+  {
+    label: 'Insert',
+    groups: [
+      {
+        items: [BLOCKQUOTE_TOOLBAR_BUTTON, CODE_BLOCK_TOOLBAR_BUTTON],
+      },
+      {
+        items: [INSERT_TABLE_TOOLBAR_BUTTON],
+      },
+      {
+        items: [IMAGE_TOOLBAR_BUTTON, FILE_LINK_TOOLBAR_BUTTON],
+      },
+    ],
+  },
+];
 
 export interface ToolbarProps {
   useMdx: boolean;
@@ -18,21 +56,13 @@ export interface ToolbarProps {
   disabled: boolean;
 }
 
-const Toolbar: FC<ToolbarProps> = ({ useMdx, collection, field, disabled }) => {
-  const groups = [
-    <BasicMarkToolbarButtons
-      key="basic-mark-buttons"
-      useMdx={useMdx}
-      extended
-      disabled={disabled}
-    />,
-    <BasicElementToolbarButtons key="basic-element-buttons" disabled={disabled} />,
-    <ListToolbarButtons key="list-buttons" disabled={disabled} />,
-    useMdx ? <ColorToolbarButtons key="color-buttons" disabled={disabled} /> : null,
-    useMdx ? <AlignToolbarButtons key="align-mark-buttons" disabled={disabled} /> : null,
-    !useMdx ? <ShortcodeToolbarButton key="shortcode-button" disabled={disabled} /> : null,
-    <AddButtons key="add-buttons" collection={collection} field={field} disabled={disabled} />,
-  ].filter(Boolean);
+const Toolbar: FC<ToolbarProps> = ({ collection, field, disabled }) => {
+  const buttons = useToolbarButtons(
+    field.toolbar_buttons?.main ?? DEFAULT_TOOLBAR_BUTTONS,
+    collection,
+    field,
+    disabled,
+  );
 
   return (
     <div
@@ -59,7 +89,7 @@ const Toolbar: FC<ToolbarProps> = ({ useMdx, collection, field, disabled }) => {
         z-10
       "
     >
-      {groups}
+      {buttons}
     </div>
   );
 };

@@ -11,7 +11,7 @@ import { ELEMENT_SHORTCODE, useMdPlateEditorState } from '@staticcms/markdown/pl
 
 import type { FC } from 'react';
 
-interface ShortcodeToolbarButtonProps {
+export interface ShortcodeToolbarButtonProps {
   disabled: boolean;
 }
 
@@ -36,7 +36,7 @@ const ShortcodeToolbarButton: FC<ShortcodeToolbarButtonProps> = ({ disabled }) =
   return (
     <Menu
       label={<DataArrayIcon className="h-5 w-5" aria-hidden="true" />}
-      data-testid="add-buttons"
+      data-testid="toolbar-button-shortcode"
       keepMounted
       hideDropdownIcon
       variant="text"
