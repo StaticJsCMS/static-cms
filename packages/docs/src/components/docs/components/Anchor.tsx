@@ -36,6 +36,7 @@ const Anchor = ({ href = '', children = '' }: AnchorProps) => {
           document.querySelector(href)?.scrollIntoView({
             behavior: 'smooth',
           });
+          history.pushState(null, '', href);
         }}
       >
         {children}

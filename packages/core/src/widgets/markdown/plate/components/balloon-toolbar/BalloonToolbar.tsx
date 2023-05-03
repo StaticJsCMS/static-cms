@@ -21,6 +21,21 @@ import { selectVisible } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import { getToolbarButtons } from '../../hooks/useToolbarButtons';
+import {
+  BOLD_TOOLBAR_BUTTON,
+  CODE_BLOCK_TOOLBAR_BUTTON,
+  DELETE_COLUMN_TOOLBAR_BUTTON,
+  DELETE_ROW_TOOLBAR_BUTTON,
+  DELETE_TABLE_TOOLBAR_BUTTON,
+  FILE_LINK_TOOLBAR_BUTTON,
+  FONT_TOOLBAR_BUTTON,
+  IMAGE_TOOLBAR_BUTTON,
+  INSERT_COLUMN_TOOLBAR_BUTTON,
+  INSERT_ROW_TOOLBAR_BUTTON,
+  ITALIC_TOOLBAR_BUTTON,
+  SHORTCODE_TOOLBAR_BUTTON,
+  STRIKETHROUGH_TOOLBAR_BUTTON,
+} from '@staticcms/core/constants/toolbar_buttons';
 
 import type {
   Collection,
@@ -33,40 +48,40 @@ import type { FC, ReactNode } from 'react';
 const DEFAULT_EMPTY_BUTTONS: MarkdownToolbarButtonType[] = [];
 
 const DEFAULT_SELECTION_BUTTONS: MarkdownToolbarButtonType[] = [
-  'bold',
-  'italic',
-  'strikethrough',
-  'code',
-  'font',
-  'file-link',
+  BOLD_TOOLBAR_BUTTON,
+  ITALIC_TOOLBAR_BUTTON,
+  STRIKETHROUGH_TOOLBAR_BUTTON,
+  CODE_BLOCK_TOOLBAR_BUTTON,
+  FONT_TOOLBAR_BUTTON,
+  FILE_LINK_TOOLBAR_BUTTON,
 ];
 
 const DEFAULT_TABLE_EMPTY_BUTTONS: MarkdownToolbarButtonType[] = [
-  'bold',
-  'italic',
-  'strikethrough',
-  'code',
-  'insert-row',
-  'delete-row',
-  'insert-column',
-  'delete-column',
-  'delete-table',
-  'file-link',
-  'image',
-  'shortcode',
+  BOLD_TOOLBAR_BUTTON,
+  ITALIC_TOOLBAR_BUTTON,
+  STRIKETHROUGH_TOOLBAR_BUTTON,
+  CODE_BLOCK_TOOLBAR_BUTTON,
+  INSERT_ROW_TOOLBAR_BUTTON,
+  DELETE_ROW_TOOLBAR_BUTTON,
+  INSERT_COLUMN_TOOLBAR_BUTTON,
+  DELETE_COLUMN_TOOLBAR_BUTTON,
+  DELETE_TABLE_TOOLBAR_BUTTON,
+  FILE_LINK_TOOLBAR_BUTTON,
+  IMAGE_TOOLBAR_BUTTON,
+  SHORTCODE_TOOLBAR_BUTTON,
 ];
 
 const DEFAULT_TABLE_SELECTION_BUTTONS: MarkdownToolbarButtonType[] = [
-  'bold',
-  'italic',
-  'strikethrough',
-  'code',
-  'insert-row',
-  'delete-row',
-  'insert-column',
-  'delete-column',
-  'delete-table',
-  'file-link',
+  BOLD_TOOLBAR_BUTTON,
+  ITALIC_TOOLBAR_BUTTON,
+  STRIKETHROUGH_TOOLBAR_BUTTON,
+  CODE_BLOCK_TOOLBAR_BUTTON,
+  INSERT_ROW_TOOLBAR_BUTTON,
+  DELETE_ROW_TOOLBAR_BUTTON,
+  INSERT_COLUMN_TOOLBAR_BUTTON,
+  DELETE_COLUMN_TOOLBAR_BUTTON,
+  DELETE_TABLE_TOOLBAR_BUTTON,
+  FILE_LINK_TOOLBAR_BUTTON,
 ];
 
 export interface BalloonToolbarProps {

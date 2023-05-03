@@ -700,11 +700,11 @@ export type MarkdownToolbarItem =
     };
 
 export interface MarkdownFieldToolbarButtons {
-  main: MarkdownToolbarItem[];
-  empty: MarkdownToolbarItem[];
-  selection: MarkdownToolbarItem[];
-  table_empty: MarkdownToolbarItem[];
-  table_selection: MarkdownToolbarItem[];
+  main?: MarkdownToolbarItem[];
+  empty?: MarkdownToolbarItem[];
+  selection?: MarkdownToolbarItem[];
+  table_empty?: MarkdownToolbarItem[];
+  table_selection?: MarkdownToolbarItem[];
 }
 
 export interface MarkdownField extends MediaField {
