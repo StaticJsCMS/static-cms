@@ -2,28 +2,30 @@ import { TableInsertColumn } from '@styled-icons/fluentui-system-regular/TableIn
 import { insertTableColumn } from '@udecode/plate';
 import React, { useCallback } from 'react';
 
+import { useMdPlateEditorState } from '../../plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 
-import type { MdEditor } from '@staticcms/markdown';
 import type { FC } from 'react';
 
 export interface InsertColumnToolbarButtonProps {
   disabled: boolean;
-  variant?: 'button' | 'menu';
+  variant: 'button' | 'menu';
 }
 
-const InsertColumnToolbarButton: FC<InsertColumnToolbarButtonProps> = ({ disabled }) => {
-  const handleInsertTableColumn = useCallback((editor: MdEditor) => {
+const InsertColumnToolbarButton: FC<InsertColumnToolbarButtonProps> = ({ disabled, variant }) => {
+  const editor = useMdPlateEditorState();
+
+  const handleInsertTableColumn = useCallback(() => {
     insertTableColumn(editor);
-  }, []);
+  }, [editor]);
 
   return (
     <ToolbarButton
-      key="insertColumn"
-      tooltip="Insert Column"
-      icon={<TableInsertColumn className="w-5 h-5" />}
+      tooltip="Insert column"
+      icon={TableInsertColumn}
       onClick={handleInsertTableColumn}
       disabled={disabled}
+      variant={variant}
     />
   );
 };

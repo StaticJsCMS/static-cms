@@ -2,14 +2,10 @@ import React from 'react';
 
 import useToolbarButtons from '../../hooks/useToolbarButtons';
 
-import type {
-  Collection,
-  MarkdownField,
-  MarkdownToolbarButtonType,
-} from '@staticcms/core/interface';
+import type { Collection, MarkdownField, MarkdownToolbarItem } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
-const DEFAULT_TOOLBAR_BUTTONS: MarkdownToolbarButtonType[] = [
+const DEFAULT_TOOLBAR_BUTTONS: MarkdownToolbarItem[] = [
   'bold',
   'italic',
   'strikethrough',
@@ -20,6 +16,20 @@ const DEFAULT_TOOLBAR_BUTTONS: MarkdownToolbarButtonType[] = [
   'decrease-indent',
   'increase-indent',
   'shortcode',
+  {
+    label: 'Insert',
+    groups: [
+      {
+        items: ['blockquote', 'code-block'],
+      },
+      {
+        items: ['insert-table'],
+      },
+      {
+        items: ['image', 'file-link'],
+      },
+    ],
+  },
 ];
 
 export interface ToolbarProps {
@@ -32,6 +42,8 @@ export interface ToolbarProps {
 const Toolbar: FC<ToolbarProps> = ({ collection, field, disabled }) => {
   const buttons = useToolbarButtons(
     field.toolbar_buttons?.main ?? DEFAULT_TOOLBAR_BUTTONS,
+    collection,
+    field,
     disabled,
   );
 

@@ -2,44 +2,46 @@ import { focusEditor } from '@udecode/plate';
 import React, { useCallback } from 'react';
 
 import Button from '@staticcms/core/components/common/button/Button';
+import MenuItemButton from '@staticcms/core/components/common/menu/MenuItemButton';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 
-import type { MdEditor } from '@staticcms/markdown';
-import type { CSSProperties, FC, MouseEvent, ReactNode } from 'react';
+import type { CSSProperties, FC, MouseEvent } from 'react';
 
 export interface ToolbarButtonProps {
   label?: string;
   tooltip: string;
   active?: boolean;
   activeColor?: string;
-  icon: ReactNode;
+  icon: FC<{ className?: string }>;
   disableFocusAfterClick?: boolean;
   disabled: boolean;
-  onClick: (editor: MdEditor, event: MouseEvent<HTMLButtonElement>) => void;
+  variant: 'button' | 'menu';
+  onClick: (event: MouseEvent) => void;
 }
 
 const ToolbarButton: FC<ToolbarButtonProps> = ({
-  icon,
+  icon: Icon,
   tooltip,
   label,
   active = false,
   activeColor,
   disableFocusAfterClick = false,
   disabled,
+  variant,
   onClick,
 }) => {
   const editor = useMdPlateEditorState();
 
   const handleOnClick = useCallback(
-    (event: MouseEvent<HTMLButtonElement>) => {
+    (event: MouseEvent) => {
       event.preventDefault();
 
       if (!editor) {
         return;
       }
 
-      onClick(editor, event);
+      onClick(event);
 
       if (!disableFocusAfterClick) {
         setTimeout(() => {
@@ -55,8 +57,17 @@ const ToolbarButton: FC<ToolbarButtonProps> = ({
     style.color = activeColor;
   }
 
+  if (variant === 'menu') {
+    return (
+      <MenuItemButton key="menu-item" onClick={handleOnClick} startIcon={Icon}>
+        {label ?? tooltip}
+      </MenuItemButton>
+    );
+  }
+
   return (
     <Button
+      key="button"
       aria-label={label ?? tooltip}
       variant="text"
       data-testid={`toolbar-button-${label ?? tooltip}`.replace(' ', '-').toLowerCase()}
@@ -78,7 +89,7 @@ const ToolbarButton: FC<ToolbarButtonProps> = ({
       style={style}
       disabled={disabled}
     >
-      {icon}
+      {<Icon className="w-5 h-5" />}
     </Button>
   );
 };

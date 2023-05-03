@@ -2,40 +2,35 @@ import { FormatIndentDecrease as FormatIndentDecreaseIcon } from '@styled-icons/
 import { outdent } from '@udecode/plate';
 import React, { useCallback } from 'react';
 
-import MenuItemButton from '@staticcms/core/components/common/menu/MenuItemButton';
 import { useMdPlateEditorState } from '../../plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 
 import type { FC } from 'react';
 
-export interface DecreaseIndentButtonProps {
+export interface DecreaseIndentToolbarButtonProps {
   disabled: boolean;
-  variant?: 'button' | 'menu';
+  variant: 'button' | 'menu';
 }
 
-const DecreaseIndentButton: FC<DecreaseIndentButtonProps> = ({ disabled, variant }) => {
+const DecreaseIndentToolbarButton: FC<DecreaseIndentToolbarButtonProps> = ({
+  disabled,
+  variant,
+}) => {
   const editor = useMdPlateEditorState();
 
   const handleOutdent = useCallback(() => {
     outdent(editor);
   }, [editor]);
 
-  if (variant === 'menu') {
-    return (
-      <MenuItemButton key="insertRow" onClick={handleOutdent} startIcon={FormatIndentDecreaseIcon}>
-        Outdent
-      </MenuItemButton>
-    );
-  }
-
   return (
     <ToolbarButton
-      tooltip="Outdent"
+      tooltip="Decrease indent"
       onClick={handleOutdent}
-      icon={<FormatIndentDecreaseIcon className="h-5 w-5" />}
+      icon={FormatIndentDecreaseIcon}
       disabled={disabled}
+      variant={variant}
     />
   );
 };
 
-export default DecreaseIndentButton;
+export default DecreaseIndentToolbarButton;

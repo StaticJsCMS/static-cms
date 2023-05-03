@@ -13,7 +13,6 @@ import type { FC } from 'react';
 
 export interface ShortcodeToolbarButtonProps {
   disabled: boolean;
-  variant?: 'button' | 'menu';
 }
 
 const ShortcodeToolbarButton: FC<ShortcodeToolbarButtonProps> = ({ disabled }) => {

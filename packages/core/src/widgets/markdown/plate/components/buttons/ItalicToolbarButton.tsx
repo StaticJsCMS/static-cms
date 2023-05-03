@@ -8,7 +8,7 @@ import type { FC } from 'react';
 
 export interface ItalicToolbarButtonsProp {
   disabled: boolean;
-  variant?: 'button' | 'menu';
+  variant: 'button' | 'menu';
 }
 
 const ItalicToolbarButton: FC<ItalicToolbarButtonsProp> = ({ disabled, variant }) => {

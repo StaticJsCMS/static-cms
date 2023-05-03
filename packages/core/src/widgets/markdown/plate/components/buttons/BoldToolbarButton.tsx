@@ -8,7 +8,7 @@ import type { FC } from 'react';
 
 export interface BoldToolbarButtonProps {
   disabled: boolean;
-  variant?: 'button' | 'menu';
+  variant: 'button' | 'menu';
 }
 
 const BoldToolbarButton: FC<BoldToolbarButtonProps> = ({ disabled, variant }) => {

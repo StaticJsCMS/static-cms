@@ -2,40 +2,35 @@ import { FormatIndentIncrease as FormatIndentIncreaseIcon } from '@styled-icons/
 import { indent } from '@udecode/plate';
 import React, { useCallback } from 'react';
 
-import MenuItemButton from '@staticcms/core/components/common/menu/MenuItemButton';
 import { useMdPlateEditorState } from '../../plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 
 import type { FC } from 'react';
 
-export interface IncreaseIndentButtonProps {
+export interface IncreaseIndentToolbarButtonProps {
   disabled: boolean;
-  variant?: 'button' | 'menu';
+  variant: 'button' | 'menu';
 }
 
-const IncreaseIndentButton: FC<IncreaseIndentButtonProps> = ({ disabled, variant }) => {
+const IncreaseIndentToolbarButton: FC<IncreaseIndentToolbarButtonProps> = ({
+  disabled,
+  variant,
+}) => {
   const editor = useMdPlateEditorState();
 
   const handleIndent = useCallback(() => {
     indent(editor);
   }, [editor]);
 
-  if (variant === 'menu') {
-    return (
-      <MenuItemButton key="insertRow" onClick={handleIndent} startIcon={FormatIndentIncreaseIcon}>
-        Indent
-      </MenuItemButton>
-    );
-  }
-
   return (
     <ToolbarButton
-      tooltip="Indent"
+      tooltip="Increase indent"
       onClick={handleIndent}
-      icon={<FormatIndentIncreaseIcon className="h-5 w-5" />}
+      icon={FormatIndentIncreaseIcon}
       disabled={disabled}
+      variant={variant}
     />
   );
 };
 
-export default IncreaseIndentButton;
+export default IncreaseIndentToolbarButton;

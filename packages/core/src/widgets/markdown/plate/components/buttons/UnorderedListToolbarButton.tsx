@@ -6,20 +6,21 @@ import ListToolbarButton from './common/ListToolbarButton';
 
 import type { FC } from 'react';
 
-export interface UnorderedListButtonProps {
+export interface UnorderedListToolbarButtonProps {
   disabled: boolean;
-  variant?: 'button' | 'menu';
+  variant: 'button' | 'menu';
 }
 
-const UnorderedListButton: FC<UnorderedListButtonProps> = ({ disabled }) => {
+const UnorderedListToolbarButton: FC<UnorderedListToolbarButtonProps> = ({ disabled, variant }) => {
   return (
     <ListToolbarButton
       tooltip="List"
       type={ELEMENT_UL}
-      icon={<FormatListBulletedIcon className="h-5 w-5" />}
+      icon={FormatListBulletedIcon}
       disabled={disabled}
+      variant={variant}
     />
   );
 };
 
-export default UnorderedListButton;
+export default UnorderedListToolbarButton;

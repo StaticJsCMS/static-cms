@@ -17,12 +17,10 @@ import { useFocused } from 'slate-react';
 
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
+import { selectVisible } from '@staticcms/core/reducers/selectors/mediaLibrary';
+import { useAppSelector } from '@staticcms/core/store/hooks';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
-import BasicElementToolbarButtons from '../buttons/BasicElementToolbarButtons';
-import BasicMarkToolbarButtons from '../buttons/BasicMarkToolbarButtons';
-import MediaToolbarButtons from '../buttons/MediaToolbarButtons';
-import ShortcodeToolbarButton from '../buttons/ShortcodeToolbarButton';
-import TableToolbarButtons from '../buttons/TableToolbarButtons';
+import { getToolbarButtons } from '../../hooks/useToolbarButtons';
 
 import type {
   Collection,
@@ -31,6 +29,17 @@ import type {
 } from '@staticcms/core/interface';
 import type { ClientRectObject } from '@udecode/plate';
 import type { FC, ReactNode } from 'react';
+
+const DEFAULT_EMPTY_BUTTONS: MarkdownToolbarButtonType[] = [];
+
+const DEFAULT_SELECTION_BUTTONS: MarkdownToolbarButtonType[] = [
+  'bold',
+  'italic',
+  'strikethrough',
+  'code',
+  'font',
+  'file-link',
+];
 
 const DEFAULT_TABLE_EMPTY_BUTTONS: MarkdownToolbarButtonType[] = [
   'bold',
@@ -42,6 +51,21 @@ const DEFAULT_TABLE_EMPTY_BUTTONS: MarkdownToolbarButtonType[] = [
   'ordered-list',
   'decrease-indent',
   'increase-indent',
+  'file-link',
+  'image',
+  'shortcode',
+];
+
+const DEFAULT_TABLE_SELECTION_BUTTONS: MarkdownToolbarButtonType[] = [
+  'bold',
+  'italic',
+  'strikethrough',
+  'code',
+  'insert-row',
+  'delete-row',
+  'insert-column',
+  'delete-column',
+  'delete-table',
   'file-link',
   'image',
   'shortcode',
@@ -67,6 +91,8 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
   const selection = usePlateSelection();
   const [hasFocus, setHasFocus] = useState(false);
   const debouncedHasFocus = useDebounce(hasFocus, 150);
+
+  const isMediaLibraryOpen = useAppSelector(selectVisible);
 
   const handleFocus = useCallback(() => {
     setHasFocus(true);
@@ -110,79 +136,57 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
 
   const debouncedEditorFocus = useDebounce(hasEditorFocus, 150);
 
-  const groups: ReactNode[] = useMemo(() => {
+  const [groups, setGroups] = useState<ReactNode[]>([]);
+
+  useEffect(() => {
+    if (isMediaLibraryOpen) {
+      return;
+    }
+
     if (!debouncedEditorFocus && !hasFocus && !debouncedHasFocus) {
-      return [];
+      setGroups([]);
+      return;
     }
 
     if (selection && someNode(editor, { match: { type: ELEMENT_LINK }, at: selection?.anchor })) {
-      return [];
+      setGroups([]);
+      return;
     }
 
     // Selected text buttons
     if (selectionText && selectionExpanded) {
-      return [
-        <BasicMarkToolbarButtons
-          key="selection-basic-mark-buttons"
-          useMdx={useMdx}
-          disabled={disabled}
-        />,
-        <BasicElementToolbarButtons
-          key="selection-basic-element-buttons"
-          hideFontTypeSelect={isInTableCell}
-          hideCodeBlock
-          disabled={disabled}
-        />,
-        isInTableCell && (
-          <TableToolbarButtons key="selection-table-toolbar-buttons" disabled={disabled} />
+      setGroups(
+        getToolbarButtons(
+          isInTableCell
+            ? field.toolbar_buttons?.table_selection ?? DEFAULT_TABLE_SELECTION_BUTTONS
+            : field.toolbar_buttons?.selection ?? DEFAULT_SELECTION_BUTTONS,
+          collection,
+          field,
+          disabled,
         ),
-        <MediaToolbarButtons
-          key="selection-media-buttons"
-          collection={collection}
-          field={field}
-          hideImages
-          disabled={disabled}
-        />,
-      ].filter(Boolean);
+      );
+      return;
     }
-
-    const allButtons = [
-      <BasicMarkToolbarButtons
-        key="empty-basic-mark-buttons"
-        useMdx={useMdx}
-        disabled={disabled}
-      />,
-      <BasicElementToolbarButtons
-        key="empty-basic-element-buttons"
-        hideFontTypeSelect={isInTableCell}
-        hideCodeBlock
-        disabled={disabled}
-      />,
-      <TableToolbarButtons
-        key="empty-table-toolbar-buttons"
-        isInTable={isInTableCell}
-        disabled={disabled}
-      />,
-      <MediaToolbarButtons
-        key="empty-media-buttons"
-        collection={collection}
-        field={field}
-        disabled={disabled}
-      />,
-      !useMdx ? <ShortcodeToolbarButton key="shortcode-button" disabled={disabled} /> : null,
-    ].filter(Boolean);
 
     // Empty table cell
     if (
-      isInTableCell &&
-      editor.children.length > 1 &&
       node &&
       ((isElement(node) && isElementEmpty(editor, node)) || (isText(node) && isEmpty(node.text)))
     ) {
-      return allButtons;
+      setGroups(
+        getToolbarButtons(
+          isInTableCell
+            ? field.toolbar_buttons?.table_empty ?? DEFAULT_TABLE_EMPTY_BUTTONS
+            : field.toolbar_buttons?.empty ?? DEFAULT_EMPTY_BUTTONS,
+          collection,
+          field,
+          disabled,
+        ),
+      );
+      return;
     }
 
-    return [];
+    setGroups([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     debouncedEditorFocus,
@@ -198,6 +202,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
     containerRef,
     collection,
     field,
+    isMediaLibraryOpen,
   ]);
 
   const [prevSelectionBoundingClientRect, setPrevSelectionBoundingClientRect] = useState(
@@ -209,8 +214,8 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
     prevSelectionBoundingClientRect !== selectionBoundingClientRect ? 0 : 150,
   );
   const open = useMemo(
-    () => groups.length > 0 || debouncedGroups.length > 0,
-    [debouncedGroups.length, groups.length],
+    () => groups.length > 0 || debouncedGroups.length > 0 || isMediaLibraryOpen,
+    [debouncedGroups.length, groups.length, isMediaLibraryOpen],
   );
   const debouncedOpen = useDebounce(
     open,

@@ -15,6 +15,28 @@ import type {
   SORT_DIRECTION_DESCENDING,
   SORT_DIRECTION_NONE,
 } from './constants';
+import type {
+  BLOCKQUOTE_TOOLBAR_BUTTON,
+  BOLD_TOOLBAR_BUTTON,
+  CODE_BLOCK_TOOLBAR_BUTTON,
+  CODE_TOOLBAR_BUTTON,
+  DECREASE_IDENT_TOOLBAR_BUTTON,
+  DELETE_COLUMN_TOOLBAR_BUTTON,
+  DELETE_ROW_TOOLBAR_BUTTON,
+  DELETE_TABLE_TOOLBAR_BUTTON,
+  FILE_LINK_TOOLBAR_BUTTON,
+  FONT_TOOLBAR_BUTTON,
+  IMAGE_TOOLBAR_BUTTON,
+  INCRASE_IDENT_TOOLBAR_BUTTON,
+  INSERT_COLUMN_TOOLBAR_BUTTON,
+  INSERT_ROW_TOOLBAR_BUTTON,
+  INSERT_TABLE_TOOLBAR_BUTTON,
+  ITALIC_TOOLBAR_BUTTON,
+  ORDERED_LIST_TOOLBAR_BUTTON,
+  SHORTCODE_TOOLBAR_BUTTON,
+  STRIKETHROUGH_TOOLBAR_BUTTON,
+  UNORDERED_LIST_TOOLBAR_BUTTON,
+} from './constants/toolbar_buttons';
 import type { formatExtensions } from './formats/formats';
 import type {
   I18N_FIELD_DUPLICATE,
@@ -643,32 +665,46 @@ export interface MapField extends BaseField {
 }
 
 export type MarkdownToolbarButtonType =
-  | 'bold'
-  | 'italic'
-  | 'strikethrough'
-  | 'code'
-  | 'font'
-  | 'unordered-list'
-  | 'ordered-list'
-  | 'decrease-indent'
-  | 'increase-indent'
-  | 'shortcode'
-  | 'file-link'
-  | 'image';
+  | LowLevelMarkdownToolbarButtonType
+  | typeof FONT_TOOLBAR_BUTTON
+  | typeof SHORTCODE_TOOLBAR_BUTTON;
+
+export type LowLevelMarkdownToolbarButtonType =
+  | typeof BLOCKQUOTE_TOOLBAR_BUTTON
+  | typeof BOLD_TOOLBAR_BUTTON
+  | typeof CODE_BLOCK_TOOLBAR_BUTTON
+  | typeof CODE_TOOLBAR_BUTTON
+  | typeof DECREASE_IDENT_TOOLBAR_BUTTON
+  | typeof DELETE_COLUMN_TOOLBAR_BUTTON
+  | typeof DELETE_ROW_TOOLBAR_BUTTON
+  | typeof DELETE_TABLE_TOOLBAR_BUTTON
+  | typeof INCRASE_IDENT_TOOLBAR_BUTTON
+  | typeof INSERT_COLUMN_TOOLBAR_BUTTON
+  | typeof IMAGE_TOOLBAR_BUTTON
+  | typeof FILE_LINK_TOOLBAR_BUTTON
+  | typeof INSERT_ROW_TOOLBAR_BUTTON
+  | typeof INSERT_TABLE_TOOLBAR_BUTTON
+  | typeof ITALIC_TOOLBAR_BUTTON
+  | typeof ORDERED_LIST_TOOLBAR_BUTTON
+  | typeof STRIKETHROUGH_TOOLBAR_BUTTON
+  | typeof UNORDERED_LIST_TOOLBAR_BUTTON;
 
 export type MarkdownToolbarItem =
   | MarkdownToolbarButtonType
   | {
       label: string;
       icon?: string;
-      items: MarkdownToolbarButtonType[];
+      groups: {
+        items: LowLevelMarkdownToolbarButtonType[];
+      }[];
     };
 
 export interface MarkdownFieldToolbarButtons {
   main: MarkdownToolbarItem[];
-  selection: MarkdownToolbarButtonType[];
-  table_empty: MarkdownToolbarButtonType[];
-  table_selection: MarkdownToolbarButtonType[];
+  empty: MarkdownToolbarItem[];
+  selection: MarkdownToolbarItem[];
+  table_empty: MarkdownToolbarItem[];
+  table_selection: MarkdownToolbarItem[];
 }
 
 export interface MarkdownField extends MediaField {

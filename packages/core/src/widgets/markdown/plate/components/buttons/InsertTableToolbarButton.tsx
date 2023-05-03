@@ -2,18 +2,17 @@ import { TableAdd } from '@styled-icons/fluentui-system-regular/TableAdd';
 import { insertTable } from '@udecode/plate';
 import React, { useCallback } from 'react';
 
-import MenuItemButton from '@staticcms/core/components/common/menu/MenuItemButton';
 import { useMdPlateEditorState } from '../../plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 
 import type { FC } from 'react';
 
-export interface AddTableToolbarButtonProps {
+export interface InsertTableToolbarButtonProps {
   disabled: boolean;
-  variant?: 'button' | 'menu';
+  variant: 'button' | 'menu';
 }
 
-const AddTableToolbarButton: FC<AddTableToolbarButtonProps> = ({
+const InsertTableToolbarButton: FC<InsertTableToolbarButtonProps> = ({
   disabled,
   variant = 'button',
 }) => {
@@ -26,23 +25,16 @@ const AddTableToolbarButton: FC<AddTableToolbarButtonProps> = ({
     });
   }, [editor]);
 
-  if (variant === 'menu') {
-    return (
-      <MenuItemButton key="insertRow" onClick={handleTableAdd} startIcon={TableAdd}>
-        Table
-      </MenuItemButton>
-    );
-  }
-
   return (
     <ToolbarButton
-      key="insertRow"
-      tooltip="Add Table"
-      icon={<TableAdd className="w-5 h-5" />}
+      label="Table"
+      tooltip="Insert table"
+      icon={TableAdd}
       onClick={handleTableAdd}
       disabled={disabled}
+      variant={variant}
     />
   );
 };
 
-export default AddTableToolbarButton;
+export default InsertTableToolbarButton;

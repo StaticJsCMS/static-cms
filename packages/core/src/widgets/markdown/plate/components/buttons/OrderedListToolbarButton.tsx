@@ -6,20 +6,21 @@ import ListToolbarButton from './common/ListToolbarButton';
 
 import type { FC } from 'react';
 
-export interface OrderedListButtonProps {
+export interface OrderedListToolbarButtonProps {
   disabled: boolean;
-  variant?: 'button' | 'menu';
+  variant: 'button' | 'menu';
 }
 
-const OrderedListButton: FC<OrderedListButtonProps> = ({ disabled }) => {
+const OrderedListToolbarButton: FC<OrderedListToolbarButtonProps> = ({ disabled, variant }) => {
   return (
     <ListToolbarButton
-      tooltip="Numbered List"
+      tooltip="Numbered list"
       type={ELEMENT_OL}
-      icon={<FormatListNumberedIcon className="h-5 w-5" />}
+      icon={FormatListNumberedIcon}
       disabled={disabled}
+      variant={variant}
     />
   );
 };
 
-export default OrderedListButton;
+export default OrderedListToolbarButton;

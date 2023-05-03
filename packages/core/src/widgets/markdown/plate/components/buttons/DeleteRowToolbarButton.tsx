@@ -2,28 +2,30 @@ import { TableDeleteRow } from '@styled-icons/fluentui-system-regular/TableDelet
 import { deleteRow } from '@udecode/plate';
 import React, { useCallback } from 'react';
 
+import { useMdPlateEditorState } from '../../plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 
-import type { MdEditor } from '@staticcms/markdown';
 import type { FC } from 'react';
 
 export interface DeleteRowToolbarButtonProps {
   disabled: boolean;
-  variant?: 'button' | 'menu';
+  variant: 'button' | 'menu';
 }
 
-const DeleteRowToolbarButton: FC<DeleteRowToolbarButtonProps> = ({ disabled }) => {
-  const handleDeleteRow = useCallback((editor: MdEditor) => {
+const DeleteRowToolbarButton: FC<DeleteRowToolbarButtonProps> = ({ disabled, variant }) => {
+  const editor = useMdPlateEditorState();
+
+  const handleDeleteRow = useCallback(() => {
     deleteRow(editor);
-  }, []);
+  }, [editor]);
 
   return (
     <ToolbarButton
-      key="deleteRow"
-      tooltip="Delete Row"
-      icon={<TableDeleteRow className="w-5 h-5" />}
+      tooltip="Delete row"
+      icon={TableDeleteRow}
       onClick={handleDeleteRow}
       disabled={disabled}
+      variant={variant}
     />
   );
 };
