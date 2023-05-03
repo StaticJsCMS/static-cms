@@ -29,7 +29,7 @@ const AddTableToolbarButton: FC<AddTableToolbarButtonProps> = ({
   if (variant === 'menu') {
     return (
       <MenuItemButton key="insertRow" onClick={handleTableAdd} startIcon={TableAdd}>
-        File / Link
+        Table
       </MenuItemButton>
     );
   }

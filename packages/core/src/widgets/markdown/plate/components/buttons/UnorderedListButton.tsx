@@ -8,6 +8,7 @@ import type { FC } from 'react';
 
 export interface UnorderedListButtonProps {
   disabled: boolean;
+  variant?: 'button' | 'menu';
 }
 
 const UnorderedListButton: FC<UnorderedListButtonProps> = ({ disabled }) => {

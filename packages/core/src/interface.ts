@@ -653,18 +653,22 @@ export type MarkdownToolbarButtonType =
   | 'decrease-indent'
   | 'increase-indent'
   | 'shortcode'
-  | 'insert'
   | 'file-link'
   | 'image';
 
-export type MarkdownInsertMenuTypes = 'blockquote' | 'code-block' | 'table' | 'image' | 'file-link';
+export type MarkdownToolbarItem =
+  | MarkdownToolbarButtonType
+  | {
+      label: string;
+      icon?: string;
+      items: MarkdownToolbarButtonType[];
+    };
 
 export interface MarkdownFieldToolbarButtons {
-  main: MarkdownToolbarButtonType[];
+  main: MarkdownToolbarItem[];
   selection: MarkdownToolbarButtonType[];
   table_empty: MarkdownToolbarButtonType[];
-  table_select: MarkdownToolbarButtonType[];
-  insert: MarkdownInsertMenuTypes[][];
+  table_selection: MarkdownToolbarButtonType[];
 }
 
 export interface MarkdownField extends MediaField {

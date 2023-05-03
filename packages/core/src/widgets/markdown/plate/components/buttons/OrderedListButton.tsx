@@ -8,6 +8,7 @@ import type { FC } from 'react';
 
 export interface OrderedListButtonProps {
   disabled: boolean;
+  variant?: 'button' | 'menu';
 }
 
 const OrderedListButton: FC<OrderedListButtonProps> = ({ disabled }) => {

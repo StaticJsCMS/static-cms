@@ -9,6 +9,7 @@ import type { FC } from 'react';
 
 export interface InsertRowToolbarButtonProps {
   disabled: boolean;
+  variant?: 'button' | 'menu';
 }
 
 const InsertRowToolbarButton: FC<InsertRowToolbarButtonProps> = ({ disabled }) => {

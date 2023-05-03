@@ -8,14 +8,16 @@ import type { FC } from 'react';
 
 export interface StrikethroughToolbarButtonProps {
   disabled: boolean;
+  variant?: 'button' | 'menu';
 }
 
-const StrikethroughToolbarButton: FC<StrikethroughToolbarButtonProps> = ({ disabled }) => {
+const StrikethroughToolbarButton: FC<StrikethroughToolbarButtonProps> = ({ disabled, variant }) => {
   return (
     <MarkToolbarButton
       tooltip="Strikethrough"
       type={MARK_STRIKETHROUGH}
-      icon={<FormatStrikethroughIcon className="h-5 w-5" />}
+      variant={variant}
+      icon={FormatStrikethroughIcon}
       disabled={disabled}
     />
   );
