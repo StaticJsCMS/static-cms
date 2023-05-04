@@ -19,6 +19,7 @@ export default function useMediaAsset<T extends MediaField, EF extends BaseField
   field?: T,
   entry?: Entry,
   currentFolder?: string,
+  isDirectory?: boolean,
 ): string {
   const isAbsolute = useMemo(
     () => (isNotEmpty(url) ? /^(?:[a-z+]+:)?\/\//g.test(url) : false),
@@ -30,7 +31,7 @@ export default function useMediaAsset<T extends MediaField, EF extends BaseField
   const debouncedUrl = useDebounce(url, 200);
 
   useEffect(() => {
-    if (!debouncedUrl || isAbsolute || debouncedUrl.startsWith('blob:')) {
+    if (!debouncedUrl || isAbsolute || debouncedUrl.startsWith('blob:') || isDirectory) {
       return;
     }
 

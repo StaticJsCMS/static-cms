@@ -270,7 +270,7 @@ export function persistMedia(
 
       let mediaFile: ImplementationMediaFile;
       if (editingDraft) {
-        const id = await getBlobSHA(file);
+        const id = `${assetProxy.path}/${await getBlobSHA(file)}`;
         mediaFile = createMediaFileFromAsset({
           id,
           file,

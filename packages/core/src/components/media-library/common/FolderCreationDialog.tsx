@@ -33,12 +33,18 @@ const FolderCreationDialog: FC<TranslatedProps<FolderCreationDialogProps>> = ({
     }
 
     onCreate(folderName);
+    setFolderName('');
   }, [folderName, onCreate]);
+
+  const handleClose = useCallback(() => {
+    onClose();
+    setFolderName('');
+  }, [onClose]);
 
   return (
     <Modal
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       className="
         w-[50%]
         min-w-[300px]
@@ -65,7 +71,7 @@ const FolderCreationDialog: FC<TranslatedProps<FolderCreationDialogProps>> = ({
         >
           {t('mediaLibrary.folderSupport.createNewFolder')}
         </h3>
-        <IconButton variant="text" aria-label="add" onClick={onClose}>
+        <IconButton variant="text" aria-label="add" onClick={handleClose}>
           <CloseIcon className="w-5 h-5" />
         </IconButton>
       </div>
@@ -96,7 +102,7 @@ const FolderCreationDialog: FC<TranslatedProps<FolderCreationDialogProps>> = ({
           space-x-2
         "
       >
-        <Button variant="text" aria-label="cancel" onClick={onClose}>
+        <Button variant="text" aria-label="cancel" onClick={handleClose}>
           Cancel
         </Button>
         <Button

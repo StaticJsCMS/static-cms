@@ -1,12 +1,12 @@
 import { sha256 } from 'js-sha256';
 
 export default (blob: Blob): Promise<string> =>
-  new Promise((resolve, reject) => {
+  new Promise(resolve => {
     const fr = new FileReader();
     fr.onload = ({ target }) => resolve(sha256(target?.result || ''));
-    fr.onerror = err => {
+    fr.onerror = () => {
       fr.abort();
-      reject(err);
+      resolve('');
     };
     fr.readAsArrayBuffer(blob);
   });

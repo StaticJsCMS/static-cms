@@ -41,10 +41,6 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
     let alive = true;
 
     const getMediaFiles = async () => {
-      if (entry.mediaFiles.find(f => dirname(f.path) == currentFolder)?.draft) {
-        setCurrentFolderMediaFiles([]);
-        return;
-      }
       const { media_folder, public_folder } = config ?? {};
       const backend = currentBackend(config);
       const files = await backend.getMedia(
@@ -61,6 +57,7 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
     };
 
     getMediaFiles();
+    setCurrentFolderMediaFiles([]);
 
     return () => {
       alive = false;
@@ -68,46 +65,47 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
   }, [currentFolder, config, entry, folderSupport]);
 
   const files = useMemo(() => {
-    if (entry) {
-      const entryFiles = entry.mediaFiles ?? [];
-      if (config) {
-        const mediaFolder = selectMediaFolder(config, collection, entry, field, currentFolder);
-        const entryFolderFiles = entryFiles
-          .filter(f => {
-            if (f.name === '.gitkeep') {
-              const folder = dirname(f.path);
-              return dirname(folder) === mediaFolder;
-            }
-
-            return dirname(f.path) === mediaFolder;
-          })
-          .map(file => {
-            if (file.name === '.gitkeep') {
-              const folder = dirname(file.path);
-              return {
-                key: folder,
-                id: folder,
-                name: basename(folder),
-                path: folder,
-                isDirectory: true,
-                draft: true,
-              } as MediaFile;
-            }
-            return { key: file.id, ...file };
-          });
-
-        if (currentFolderMediaFiles) {
-          if (entryFiles.length > 0) {
-            const draftFiles = entryFolderFiles.filter(file => file.draft == true);
-            currentFolderMediaFiles.unshift(...draftFiles);
-          }
-          return currentFolderMediaFiles.map(file => ({ key: file.id, ...file }));
-        }
-        return entryFolderFiles;
-      }
+    if (!entry || !config) {
+      return mediaLibraryFiles ?? [];
     }
 
-    return mediaLibraryFiles ?? [];
+    const entryFiles = entry.mediaFiles ?? [];
+    const mediaFolder = selectMediaFolder(config, collection, entry, field, currentFolder);
+    const entryFolderFiles = entryFiles
+      .filter(f => {
+        if (f.name === '.gitkeep') {
+          const folder = dirname(f.path);
+          return dirname(folder) === mediaFolder;
+        }
+
+        return dirname(f.path) === mediaFolder;
+      })
+      .map(file => {
+        if (file.name === '.gitkeep') {
+          const folder = dirname(file.path);
+          return {
+            key: folder,
+            id: folder,
+            name: basename(folder),
+            path: folder,
+            isDirectory: true,
+            draft: true,
+          } as MediaFile;
+        }
+        return { key: file.id, ...file };
+      });
+
+    if (currentFolderMediaFiles) {
+      const files = [...currentFolderMediaFiles];
+      if (entryFiles.length > 0) {
+        const draftFiles = entryFolderFiles.filter(
+          file => file.draft == true && !files.find(f => f.id === file.id),
+        );
+        files.unshift(...draftFiles);
+      }
+      return files.map(file => ({ key: file.id, ...file }));
+    }
+    return entryFolderFiles;
   }, [collection, config, currentFolderMediaFiles, entry, field, mediaLibraryFiles, currentFolder]);
 
   return useMemo(
