@@ -49,6 +49,12 @@ export const mockFileField: FileOrImageField = {
   widget: 'file',
 };
 
+export const mockImageField: FileOrImageField = {
+  label: 'Image',
+  name: 'mock_image',
+  widget: 'image',
+};
+
 export const mockMarkdownField: MarkdownField = {
   label: 'Body',
   name: 'body',

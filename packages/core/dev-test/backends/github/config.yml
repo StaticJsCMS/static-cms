@@ -58,6 +58,8 @@ collections:
         name: image
         widget: image
         required: false
+        media_library:
+          folder_support: true
       - label: Body
         name: body
         widget: markdown

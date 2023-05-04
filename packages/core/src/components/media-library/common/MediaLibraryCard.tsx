@@ -62,7 +62,7 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
   t,
 }: TranslatedProps<MediaLibraryCardProps<T, EF>>) => {
   const entry = useAppSelector(selectEditingDraft);
-  const url = useMediaAsset(path, collection, field, entry, currentFolder);
+  const url = useMediaAsset(path, collection, field, entry, currentFolder, isDirectory);
 
   const handleDownload = useCallback(() => {
     const url = displayURL.url;
