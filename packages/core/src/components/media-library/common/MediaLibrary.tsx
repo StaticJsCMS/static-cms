@@ -94,6 +94,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
     value: initialValue,
     alt: initialAlt,
     insertOptions,
+    replaceIndex,
   } = useAppSelector(selectMediaLibraryState);
 
   const entry = useAppSelector(selectEditingDraft);
@@ -485,6 +486,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
           alt={alt}
           insertOptions={insertOptions}
           forImage={forImage}
+          replaceIndex={replaceIndex}
           onUrlChange={handleURLChange}
           onAltChange={handleAltChange}
         />

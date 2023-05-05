@@ -269,6 +269,8 @@ collections:
         label: File
         file: _widgets/file.json
         description: File widget
+        media_library:
+          folder_support: false
         fields:
           - name: required
             label: Required Validation
@@ -287,6 +289,22 @@ collections:
             widget: file
             required: false
             choose_url: true
+          - name: multiple
+            label: Multiple Files
+            widget: file
+            required: false
+            multiple: true
+          - name: multiple_choose_url
+            label: Multiple Files, Choose URL
+            widget: file
+            required: false
+            multiple: true
+            choose_url: true
+          - name: folder_support
+            label: Folder Support
+            widget: file
+            media_library:
+              folder_support: true
       - name: image
         label: Image
         file: _widgets/image.json
@@ -310,6 +328,17 @@ collections:
             label: Choose URL
             widget: image
             required: false
+            choose_url: true
+          - name: multiple
+            label: Multiple Images
+            widget: image
+            required: false
+            multiple: true
+          - name: multiple_choose_url
+            label: Multiple Images, Choose URL
+            widget: image
+            required: false
+            multiple: true
             choose_url: true
           - name: folder_support
             label: Folder Support

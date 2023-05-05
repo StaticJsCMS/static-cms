@@ -118,6 +118,7 @@ const Button: FC<ButtonLinkProps> = ({
       type="button"
       role="button"
       tabIndex={0}
+      data-no-dnd="true"
     >
       {content}
     </button>

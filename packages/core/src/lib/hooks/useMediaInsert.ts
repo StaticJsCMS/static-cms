@@ -24,7 +24,7 @@ export default function useMediaInsert<T extends string | string[], F extends Me
     insertOptions?: MediaLibrarInsertOptions;
   },
   callback: (newValue: MediaPath<T>) => void,
-): (e?: MouseEvent) => void {
+): (e?: MouseEvent, options?: { replaceIndex?: number }) => void {
   const dispatch = useAppDispatch();
 
   const {
@@ -59,7 +59,7 @@ export default function useMediaInsert<T extends string | string[], F extends Me
           controlID: finalControlID,
           forImage,
           forFolder,
-          value: value.path,
+          value: Array.isArray(value.path) ? [...value.path] : value.path,
           alt: value.alt,
           replaceIndex,
           allowMultiple: false,

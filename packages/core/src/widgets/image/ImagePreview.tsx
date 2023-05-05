@@ -36,8 +36,14 @@ const ImagePreviewContent: FC<WidgetPreviewProps<string | string[], FileOrImageF
   if (Array.isArray(value)) {
     return (
       <>
-        {value.map(val => (
-          <ImageAsset key={val} value={val} collection={collection} field={field} entry={entry} />
+        {value.map((val, index) => (
+          <ImageAsset
+            key={`image-preview-${index}`}
+            value={val}
+            collection={collection}
+            field={field}
+            entry={entry}
+          />
         ))}
       </>
     );

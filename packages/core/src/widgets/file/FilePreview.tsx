@@ -39,9 +39,15 @@ const FileContent: FC<WidgetPreviewProps<string | string[], FileOrImageField>> =
 
   if (Array.isArray(value)) {
     return (
-      <div>
-        {value.map(link => (
-          <FileLink key={link} value={link} collection={collection} field={field} entry={entry} />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {value.map((link, index) => (
+          <FileLink
+            key={`link-preview-${index}`}
+            value={link}
+            collection={collection}
+            field={field}
+            entry={entry}
+          />
         ))}
       </div>
     );
