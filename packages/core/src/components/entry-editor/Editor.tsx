@@ -195,16 +195,8 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
     }
 
     setPrevLocalBackup(localBackup);
-  }, [
-    config?.disable_local_backup,
-    deleteBackup,
-    dispatch,
-    entryDraft.entry?.data,
-    entryDraft.entry?.meta,
-    localBackup,
-    prevLocalBackup,
-    version,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [config?.disable_local_backup, deleteBackup, dispatch, localBackup, prevLocalBackup, version]);
 
   useEffect(() => {
     if (hasChanged && entryDraft.entry) {

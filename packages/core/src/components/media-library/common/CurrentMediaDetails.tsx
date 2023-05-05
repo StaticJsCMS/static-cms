@@ -1,6 +1,7 @@
 import React from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { isEmpty } from '../../../lib/util/string.util';
 import Image from '../../common/image/Image';
 import InlineEditTextField from './InlineEditTextField';
@@ -16,6 +17,7 @@ interface CurrentMediaDetailsProps {
   alt?: string;
   insertOptions?: MediaLibrarInsertOptions;
   forImage: boolean;
+  replaceIndex?: number;
   onUrlChange: (url: string) => void;
   onAltChange: (alt: string) => void;
 }
@@ -28,16 +30,27 @@ const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
   alt,
   insertOptions,
   forImage,
+  replaceIndex,
   onUrlChange,
   onAltChange,
 }) => {
+  console.log('url', url, 'replaceIndex', replaceIndex);
+
+  if (!field || !canInsert) {
+    return null;
+  }
+
+  if (Array.isArray(url)) {
+    if (isNullish(replaceIndex)) {
+      return null;
+    }
+  }
+
   if (
-    !field ||
-    !canInsert ||
-    Array.isArray(url) ||
-    (!insertOptions?.chooseUrl &&
-      !insertOptions?.showAlt &&
-      (typeof url !== 'string' || isEmpty(url)))
+    !Array.isArray(url) &&
+    !insertOptions?.chooseUrl &&
+    !insertOptions?.showAlt &&
+    (typeof url !== 'string' || isEmpty(url))
   ) {
     return null;
   }
@@ -67,7 +80,7 @@ const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
       {forImage ? (
         <Image
           key="image-preview"
-          src={url}
+          src={Array.isArray(url) ? url[replaceIndex!] : url}
           collection={collection}
           field={field}
           className="
@@ -107,7 +120,7 @@ const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
       >
         <InlineEditTextField
           label="URL"
-          value={url}
+          value={Array.isArray(url) ? url[replaceIndex!] : url}
           onChange={insertOptions?.chooseUrl ? onUrlChange : undefined}
         />
         {insertOptions?.showAlt ? (

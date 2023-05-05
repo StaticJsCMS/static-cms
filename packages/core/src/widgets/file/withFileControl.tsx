@@ -1,4 +1,13 @@
+import { DndContext, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
+import {
+  SortableContext,
+  arrayMove,
+  rectSortingStrategy,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
+import { v4 as uuid } from 'uuid';
 
 import Button from '@staticcms/core/components/common/button/Button';
 import Field from '@staticcms/core/components/common/field/Field';
@@ -7,16 +16,14 @@ import Link from '@staticcms/core/components/common/link/Link';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { basename } from '@staticcms/core/lib/util';
+import classNames from '@staticcms/core/lib/util/classNames.util';
+import { KeyboardSensor, PointerSensor } from '@staticcms/core/lib/util/dnd.util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import SortableImage from './components/SortableImage';
+import SortableLink from './components/SortableLink';
 
-import type {
-  BaseField,
-  Collection,
-  FileOrImageField,
-  MediaPath,
-  WidgetControlProps,
-} from '@staticcms/core/interface';
+import type { DragEndEvent } from '@dnd-kit/core';
+import type { FileOrImageField, MediaPath, WidgetControlProps } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
 
 const MAX_DISPLAY_LENGTH = 50;
@@ -48,43 +55,62 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       forSingleList,
       duplicate,
       onChange,
-      openMediaLibrary,
       hasErrors,
       disabled,
       t,
     }) => {
       const controlID = useUUID();
-      const [internalRawValue, setInternalValue] = useState(value ?? '');
+
+      const allowsMultiple = useMemo(() => {
+        return field.multiple ?? false;
+      }, [field.multiple]);
+
+      const emptyValue = useMemo(() => (allowsMultiple ? [] : ''), [allowsMultiple]);
+      const [internalRawValue, setInternalValue] = useState(value ?? emptyValue);
       const internalValue = useMemo(
-        () => (duplicate ? value ?? '' : internalRawValue),
-        [internalRawValue, duplicate, value],
+        () => (duplicate ? value ?? emptyValue : internalRawValue),
+        [duplicate, value, emptyValue, internalRawValue],
       );
 
       const uploadButtonRef = useRef<HTMLButtonElement | null>(null);
 
       const forFolder = useMemo(() => field.select_folder ?? false, [field.select_folder]);
 
+      const [keys, setKeys] = useState(Array.from({ length: internalValue.length }, () => uuid()));
+
       const handleOnChange = useCallback(
-        ({ path: newValue }: MediaPath) => {
+        ({ path: newValue }: MediaPath, providedNewKeys?: string[]) => {
           if (newValue !== internalValue) {
+            if (Array.isArray(newValue)) {
+              const newKeys = [...(providedNewKeys ?? keys)];
+              while (newKeys.length < newValue.length) {
+                newKeys.push(uuid());
+              }
+              setKeys(newKeys);
+            }
             setInternalValue(newValue);
             setTimeout(() => {
               onChange(newValue);
             });
           }
         },
-        [internalValue, onChange],
+        [internalValue, keys, onChange],
       );
 
       const handleOpenMediaLibrary = useMediaInsert(
         { path: internalValue },
-        { collection, field, controlID, forImage, forFolder },
+        {
+          collection,
+          field,
+          controlID,
+          forImage,
+          forFolder,
+          insertOptions: {
+            chooseUrl: field.choose_url,
+          },
+        },
         handleOnChange,
       );
-
-      const allowsMultiple = useMemo(() => {
-        return field.multiple ?? false;
-      }, [field.multiple]);
 
       const chooseUrl = useMemo(() => field.choose_url ?? false, [field.choose_url]);
 
@@ -92,17 +118,25 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
         (subject: 'image' | 'folder' | 'file') => (e: MouseEvent) => {
           e.preventDefault();
 
-          const url = window.prompt(t(`editor.editorWidgets.${subject}.promptUrl`));
+          const url = window.prompt(t(`editor.editorWidgets.${subject}.promptUrl`)) ?? '';
+          if (url === '') {
+            return;
+          }
 
-          handleOnChange({ path: url ?? '' });
+          handleOnChange({
+            path: allowsMultiple
+              ? [...(Array.isArray(internalValue) ? internalValue : [internalValue]), url]
+              : url,
+          });
         },
-        [handleOnChange, t],
+        [allowsMultiple, handleOnChange, internalValue, t],
       );
 
       const handleRemove = useCallback(
         (e: MouseEvent) => {
           e.preventDefault();
           e.stopPropagation();
+          console.log('[SORT] remove?');
           handleOnChange({ path: '' });
         },
         [handleOnChange],
@@ -110,42 +144,48 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
       const onRemoveOne = useCallback(
         (index: number) => () => {
+          console.log('[SORT] remove', index);
           if (Array.isArray(internalValue)) {
             const newValue = [...internalValue];
+            const newKeys = [...keys];
             newValue.splice(index, 1);
-            handleOnChange({ path: newValue });
+            newKeys.splice(index, 1);
+            handleOnChange({ path: newValue }, newKeys);
           }
         },
-        [handleOnChange, internalValue],
+        [handleOnChange, internalValue, keys],
       );
 
       const onReplaceOne = useCallback(
-        (index: number) => () => {
-          return openMediaLibrary({
-            controlID,
-            forImage,
-            forFolder,
-            value: internalValue,
-            replaceIndex: index,
-            allowMultiple: false,
-            config: field.media_library,
-            collection: collection as Collection<BaseField>,
-            field,
-          });
+        (replaceIndex: number) => (e: MouseEvent) => {
+          handleOpenMediaLibrary(e, { replaceIndex });
         },
-        [openMediaLibrary, controlID, internalValue, collection, field, forFolder],
+        [handleOpenMediaLibrary],
       );
 
-      // TODO Readd when multiple uploads is supported
-      // const onSortEnd = useCallback(
-      //   ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
-      //     if (Array.isArray(internalValue)) {
-      //       const newValue = arrayMoveImmutable(internalValue, oldIndex, newIndex);
-      //       handleOnChange(newValue);
-      //     }
-      //   },
-      //   [handleOnChange, internalValue],
-      // );
+      const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+          coordinateGetter: sortableKeyboardCoordinates,
+        }),
+      );
+
+      const onSortEnd = useCallback(
+        ({ active, over }: DragEndEvent) => {
+          if (Array.isArray(internalValue) && over && active.id !== over.id) {
+            const oldIndex = keys.indexOf(`${active.id}`);
+            const newIndex = keys.indexOf(`${over.id}`);
+
+            setKeys(arrayMove(keys, oldIndex, newIndex));
+            const newValue = arrayMove(internalValue, oldIndex, newIndex);
+            setInternalValue(newValue);
+            setTimeout(() => {
+              handleOnChange({ path: newValue });
+            });
+          }
+        },
+        [handleOnChange, internalValue, keys],
+      );
 
       const renderFileLink = useCallback(
         (link: string | undefined | null) => {
@@ -177,18 +217,31 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
           if (isMultiple(internalValue)) {
             return (
-              <div key="multi-image-wrapper">
-                {internalValue.map((itemValue, index) => (
-                  <SortableImage
-                    key={`item-${itemValue}`}
-                    itemValue={itemValue}
-                    collection={collection}
-                    field={field}
-                    onRemove={onRemoveOne(index)}
-                    onReplace={onReplaceOne(index)}
-                  />
-                ))}
-              </div>
+              <DndContext
+                key="multi-image-wrapper"
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={onSortEnd}
+              >
+                <SortableContext items={keys} strategy={rectSortingStrategy}>
+                  <div className="grid grid-cols-images gap-2">
+                    {internalValue.map((itemValue, index) => {
+                      const key = keys[index];
+                      return (
+                        <SortableImage
+                          id={key}
+                          key={`image-${key}`}
+                          itemValue={itemValue}
+                          collection={collection}
+                          field={field}
+                          onRemove={onRemoveOne(index)}
+                          onReplace={onReplaceOne(index)}
+                        />
+                      );
+                    })}
+                  </div>
+                </SortableContext>
+              </DndContext>
             );
           }
 
@@ -201,18 +254,44 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
         if (isMultiple(internalValue)) {
           return (
-            <div key="mulitple-file-links">
-              <ul key="file-links-list">
-                {internalValue.map(val => (
-                  <li key={val}>{renderFileLink(val)}</li>
-                ))}
-              </ul>
-            </div>
+            <DndContext
+              key="multi-image-wrapper"
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={onSortEnd}
+            >
+              <SortableContext items={keys} strategy={verticalListSortingStrategy}>
+                <div key="mulitple-file-links">
+                  {internalValue.map((itemValue, index) => {
+                    const key = keys[index];
+                    return (
+                      <SortableLink
+                        id={key}
+                        key={`link-${key}`}
+                        itemValue={itemValue}
+                        onRemove={onRemoveOne(index)}
+                        onReplace={onReplaceOne(index)}
+                      />
+                    );
+                  })}
+                </div>
+              </SortableContext>
+            </DndContext>
           );
         }
 
         return <div key="single-file-links">{renderFileLink(internalValue)}</div>;
-      }, [collection, field, internalValue, onRemoveOne, onReplaceOne, renderFileLink]);
+      }, [
+        collection,
+        field,
+        internalValue,
+        keys,
+        onRemoveOne,
+        onReplaceOne,
+        onSortEnd,
+        renderFileLink,
+        sensors,
+      ]);
 
       const content: JSX.Element = useMemo(() => {
         const subject = forImage ? 'image' : forFolder ? 'folder' : 'file';
@@ -250,7 +329,13 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
         }
 
         return (
-          <div key="selection" className="flex flex-col gap-2 px-3 pt-2 pb-4">
+          <div
+            key="selection"
+            className={classNames(
+              `flex flex-col gap-4 pl-3 pt-2 pb-4`,
+              (forImage || !allowsMultiple) && 'pr-3',
+            )}
+          >
             {renderedImagesLinks}
             <div key="controls" className="flex gap-2">
               <Button
@@ -268,17 +353,30 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
                   }`,
                 )}
               </Button>
-              {chooseUrl && !allowsMultiple ? (
-                <Button
-                  color="primary"
-                  variant="outlined"
-                  key="replace-url"
-                  onClick={handleUrl(subject)}
-                  data-testid="replace-url"
-                  disabled={disabled}
-                >
-                  {t(`editor.editorWidgets.${subject}.replaceUrl`)}
-                </Button>
+              {chooseUrl ? (
+                allowsMultiple ? (
+                  <Button
+                    color="primary"
+                    variant="outlined"
+                    key="choose-url"
+                    onClick={handleUrl(subject)}
+                    data-testid="choose-url"
+                    disabled={disabled}
+                  >
+                    {t(`editor.editorWidgets.${subject}.chooseUrl`)}
+                  </Button>
+                ) : (
+                  <Button
+                    color="primary"
+                    variant="outlined"
+                    key="replace-url"
+                    onClick={handleUrl(subject)}
+                    data-testid="replace-url"
+                    disabled={disabled}
+                  >
+                    {t(`editor.editorWidgets.${subject}.replaceUrl`)}
+                  </Button>
+                )
               ) : null}
               <Button
                 color="error"
@@ -296,11 +394,11 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       }, [
         forFolder,
         internalValue,
+        allowsMultiple,
         renderedImagesLinks,
         handleOpenMediaLibrary,
         disabled,
         t,
-        allowsMultiple,
         chooseUrl,
         handleUrl,
         handleRemove,
@@ -309,19 +407,19 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       return useMemo(
         () => (
           <Field
-            inputRef={uploadButtonRef}
+            inputRef={allowsMultiple ? undefined : uploadButtonRef}
             label={label}
             errors={errors}
             noPadding={!hasErrors}
             hint={field.hint}
             forSingleList={forSingleList}
-            cursor="pointer"
+            cursor={allowsMultiple ? 'default' : 'pointer'}
             disabled={disabled}
           >
             {content}
           </Field>
         ),
-        [content, disabled, errors, field.hint, forSingleList, hasErrors, label],
+        [content, disabled, errors, field.hint, allowsMultiple, forSingleList, hasErrors, label],
       );
     },
   );

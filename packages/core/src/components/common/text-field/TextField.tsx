@@ -60,6 +60,7 @@ const TextField: FC<TextFieldProps> = ({
       onChange={onChange}
       onClick={onClick}
       data-testid={dataTestId ?? `${type}-input`}
+      data-no-dnd="true"
       readOnly={readonly}
       disabled={disabled}
       startAdornment={startAdornment}
