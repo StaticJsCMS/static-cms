@@ -40,6 +40,11 @@ export function getValidFileValue(value: string | string[] | null | undefined) {
   return value;
 }
 
+export interface FileControlState {
+  keys: string[];
+  internalRawValue: string | string[];
+}
+
 export interface WithFileControlProps {
   forImage?: boolean;
 }
@@ -66,7 +71,17 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
       }, [field.multiple]);
 
       const emptyValue = useMemo(() => (allowsMultiple ? [] : ''), [allowsMultiple]);
-      const [internalRawValue, setInternalValue] = useState(value ?? emptyValue);
+
+      const [{ keys, internalRawValue }, setState] = useState<FileControlState>(() => {
+        const incomingValue = value ?? emptyValue;
+        return {
+          keys: Array.from(
+            { length: Array.isArray(incomingValue) ? incomingValue.length : 1 },
+            () => uuid(),
+          ),
+          internalRawValue: incomingValue,
+        };
+      });
       const internalValue = useMemo(
         () => (duplicate ? value ?? emptyValue : internalRawValue),
         [duplicate, value, emptyValue, internalRawValue],
@@ -76,19 +91,20 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
       const forFolder = useMemo(() => field.select_folder ?? false, [field.select_folder]);
 
-      const [keys, setKeys] = useState(Array.from({ length: internalValue.length }, () => uuid()));
-
       const handleOnChange = useCallback(
         ({ path: newValue }: MediaPath, providedNewKeys?: string[]) => {
           if (newValue !== internalValue) {
+            const newKeys = [...(providedNewKeys ?? keys)];
             if (Array.isArray(newValue)) {
-              const newKeys = [...(providedNewKeys ?? keys)];
               while (newKeys.length < newValue.length) {
                 newKeys.push(uuid());
               }
-              setKeys(newKeys);
             }
-            setInternalValue(newValue);
+            setState({
+              keys: newKeys,
+              internalRawValue: newValue,
+            });
+
             setTimeout(() => {
               onChange(newValue);
             });
@@ -174,12 +190,9 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
             const oldIndex = keys.indexOf(`${active.id}`);
             const newIndex = keys.indexOf(`${over.id}`);
 
-            setKeys(arrayMove(keys, oldIndex, newIndex));
+            const newKeys = arrayMove(keys, oldIndex, newIndex);
             const newValue = arrayMove(internalValue, oldIndex, newIndex);
-            setInternalValue(newValue);
-            setTimeout(() => {
-              handleOnChange({ path: newValue });
-            });
+            handleOnChange({ path: newValue }, newKeys);
           }
         },
         [handleOnChange, internalValue, keys],
