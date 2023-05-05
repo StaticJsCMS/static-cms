@@ -34,8 +34,6 @@ const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
   onUrlChange,
   onAltChange,
 }) => {
-  console.log('url', url, 'replaceIndex', replaceIndex);
-
   if (!field || !canInsert) {
     return null;
   }

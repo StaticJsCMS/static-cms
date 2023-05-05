@@ -136,7 +136,6 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
         (e: MouseEvent) => {
           e.preventDefault();
           e.stopPropagation();
-          console.log('[SORT] remove?');
           handleOnChange({ path: '' });
         },
         [handleOnChange],
@@ -144,7 +143,6 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
       const onRemoveOne = useCallback(
         (index: number) => () => {
-          console.log('[SORT] remove', index);
           if (Array.isArray(internalValue)) {
             const newValue = [...internalValue];
             const newKeys = [...keys];

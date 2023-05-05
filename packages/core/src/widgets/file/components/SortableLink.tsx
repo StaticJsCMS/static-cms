@@ -30,7 +30,6 @@ const SortableLink: FC<SortableLinkProps> = ({ id, itemValue, onRemove, onReplac
   );
 
   const handleClick: MouseEventHandler = useCallback(event => {
-    console.log('[SORT] BLOCK!');
     event.stopPropagation();
     event.preventDefault();
   }, []);
@@ -46,7 +45,6 @@ const SortableLink: FC<SortableLinkProps> = ({ id, itemValue, onRemove, onReplac
 
   const handleRemove: MouseEventHandler = useCallback(
     event => {
-      console.log('[SORT] remove!');
       event.stopPropagation();
       event.preventDefault();
       onRemove?.(event);
