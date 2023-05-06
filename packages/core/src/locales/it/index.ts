@@ -66,43 +66,20 @@ const it: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Sei sicuro di voler lasciare questa pagina?',
-      onUpdatingWithUnsavedChangesBody:
-        'Hai delle modifiche non salvate, salvale prima di aggiornare lo status.',
-      onPublishingNotReadyBody: 'Aggiorna lo status a "Pronto" prima di pubblicare.',
-      onPublishingWithUnsavedChangesBody:
-        'Hai delle modifiche non salvate, salvale prima di pubblicare.',
-      onPublishingBody: 'Sei sicuro di voler pubblicare questa voce?',
-      onUnpublishing: 'Sei sicuro di voler nascondere questa voce?',
       onDeleteWithUnsavedChangesBody:
         'Sei sicuro di voler cancellare questa voce pubblicata e tutte le modifiche non salvate della tua sessione corrente?',
       onDeletePublishedEntryBody: 'Sei sicuro di voler cancellare questa voce pubblicata?',
       loadingEntry: 'Caricando la voce...',
     },
     editorToolbar: {
-      publishing: 'Pubblicando...',
       publish: 'Pubblica',
       published: 'Pubblicato',
       unpublish: 'Rimuovi dalla pubblicazione',
       duplicate: 'Duplica',
-      unpublishing: 'Rimuovendo dalla pubblicazione...',
       publishAndCreateNew: 'Pubblica e creane uno nuovo',
       publishAndDuplicate: 'Pubblica e duplica',
       deleteEntry: 'Cancella voce',
-      saving: 'Salvando...',
-      save: 'Salva',
-      deleting: 'Cancellando...',
-      updating: 'Aggiornando...',
-      status: 'Status: %{status}',
-      backCollection: ' Scrivendo nella sezione %{collectionLabel}',
-      unsavedChanges: 'Modifiche non salvate',
-      changesSaved: 'Modifiche salvate',
-      draft: 'Bozza',
-      inReview: 'In revisione',
-      ready: 'Pronto',
       publishNow: 'Pubblica ora',
-      deployPreviewPendingButtonLabel: "Controlla l'anteprima",
-      deployPreviewButtonLabel: "Guarda l'anteprima",
-      deployButtonLabel: 'Guarda Live',
     },
     editorWidgets: {
       image: {

@@ -98,43 +98,20 @@ const lt: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Ar tikrai norite uždaryti šį puslapį?',
-      onUpdatingWithUnsavedChangesBody:
-        'Turite neišsaugotų pakeitimų! Prašome išsaugoti prieš pakeičiant statusą.',
-      onPublishingNotReadyBody: 'Prieš publikuojant, privalote pakeisti statusą į „Paruošta“.',
-      onPublishingWithUnsavedChangesBody:
-        'Yra neišsaugotų pakeitimų, prašome išsaugoti juos prieš publikuojant.',
-      onPublishingBody: 'Ae tikrai norite publikuoti šį įrašą?',
-      onUnpublishing: 'Tikrai norite panaikinti publikavimo statusą?',
       onDeleteWithUnsavedChangesBody:
         'Tikrai norite panaikinti publikuotą įrašą ir Jūsų pakeiitmus iš dabartinės sesijos?',
       onDeletePublishedEntryBody: 'Tikrai norite ištrinti šį publikuotą įrašą?',
       loadingEntry: 'Kraunamas įrašas...',
     },
     editorToolbar: {
-      publishing: 'Publikuojama...',
       publish: 'Publikuoti',
       published: 'Jau publikuota',
       unpublish: 'Atšaukti paskelbimą',
       duplicate: 'Daryti dublį',
-      unpublishing: 'Nebeskelbiama...',
       publishAndCreateNew: 'Publikuoti šitą, po to kurti kažką naujo',
       publishAndDuplicate: 'Publikuoti šitą, po to kurti šito dublį',
       deleteEntry: 'Panaikinti įrašą',
-      saving: 'Išsaugojama...',
-      save: 'Išsaugoti',
-      deleting: 'Trinama...',
-      updating: 'Atnaujinama...',
-      status: 'Statusą: %{status}',
-      backCollection: ' Rašoma %{collectionLabel} kolekcijoje',
-      unsavedChanges: 'Neišsaugoti pakeitimai',
-      changesSaved: 'Pakeitimai išsauogti',
-      draft: 'Juodraštis',
-      inReview: 'Peržiūrima redakcijoje',
-      ready: 'Paruošta',
       publishNow: 'Skelbti naują',
-      deployPreviewPendingButtonLabel: 'Tikrinti, ar yra demonstracija',
-      deployPreviewButtonLabel: 'Žiūrėti demonstraciją (netiesiogiai)',
-      deployButtonLabel: 'Žiūrėti tiesiogiai tinklalapyje',
     },
     editorWidgets: {
       markdown: {

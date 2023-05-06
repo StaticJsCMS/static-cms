@@ -92,43 +92,20 @@ const th: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'คุณแน่ใจหรือว่าจะออกจากหน้านี้?',
-      onUpdatingWithUnsavedChangesBody:
-        'คุณมีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก โปรดบันทึกก่อนอัปเดตสถานะ',
-      onPublishingNotReadyBody: 'โปรดอัปเดตสถานะเป็น "พร้อม" ก่อนจะเผยแพร่',
-      onPublishingWithUnsavedChangesBody:
-        'คุณมีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก โปรดบันทึกก่อนจะเผยแพร่',
-      onPublishingBody: 'คุณแน่ใจหรือว่าจะเผยแพร่เนื้อหานี้?',
-      onUnpublishing: 'คุณแน่ใจหรือว่าจะไม่ต้องการเผยแพร่เนื้อหานี้?',
       onDeleteWithUnsavedChangesBody:
         'คุณแน่ใจหรือว่าจะต้องการลบการเผยแพร่เนื้อหานี้ รวมถึงการเปลี่ยนแปลงที่ยังไม่ได้บันทึก?',
       onDeletePublishedEntryBody: 'คุณแน่ใจหรือว่าจะต้องการลบการเผยแพร่เนื้อหานี้?',
       loadingEntry: 'กำลังโหลดเนื้อหา...',
     },
     editorToolbar: {
-      publishing: 'กำลังเผยแพร่...',
       publish: 'เผยแพร่',
       published: 'เผยแพร่แล้ว',
       unpublish: 'ไม่ได้เผยแพร่',
       duplicate: 'ทำซ้ำ',
-      unpublishing: 'ไม่ทำการเผยแพร่...',
       publishAndCreateNew: 'เผยแพร่ และ สร้างใหม่',
       publishAndDuplicate: 'เผยแพร่ และ ทำซ้ำ',
       deleteEntry: 'ลบเนื้อหา',
-      saving: 'กำลังบันทึก...',
-      save: 'บันทึก',
-      deleting: 'กำลังลบ...',
-      updating: 'กำลังอัปเดต...',
-      status: 'สถานะ: %{status}',
-      backCollection: ' เขียนในกลุ่ม %{collectionLabel}',
-      unsavedChanges: 'การเปลี่ยนแปลงยังไม่ได้บันทึก',
-      changesSaved: 'การเปลี่ยนเปลงถูกบันทึกแล้ว',
-      draft: 'ร่าง',
-      inReview: 'อยู่ระหว่างการตรวจสอบ',
-      ready: 'พร้อม',
       publishNow: 'เผยแพร่ตอนนี้',
-      deployPreviewPendingButtonLabel: 'ตรวจสอบตัวอย่าง',
-      deployPreviewButtonLabel: 'ดูตัวอย่าง',
-      deployButtonLabel: 'ดูตัวอย่างจากหน้าจริง',
     },
     editorWidgets: {
       markdown: {

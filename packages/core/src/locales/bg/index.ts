@@ -97,13 +97,6 @@ const bg: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Наистина ли искате да напуснете тази страница?',
-      onUpdatingWithUnsavedChangesBody:
-        'Имате незапазени промени, моля, запазете преди актуализиране на състоянието.',
-      onPublishingNotReadyBody:
-        'Моля, актуализирайте състоянието на „Готово“, преди да публикувате',
-      onPublishingWithUnsavedChangesBody:
-        'Имате незапазени промени, моля, запазете преди публикуване.',
-      onPublishingBody: 'Наистина ли искате да публикувате този запис?',
       onDeleteWithUnsavedChangesBody:
         'Наистина ли искате да изтриете този публикуван запис, както и незаписаните промени от текущата сесия?',
       onDeletePublishedEntryBody: 'Наистина ли искате да изтриете този публикуван запис?',
@@ -115,28 +108,13 @@ const bg: LocalePhrasesRoot = {
       toggleScrollSync: 'Синхронизирай превъртане',
     },
     editorToolbar: {
-      publishing: 'Публикуване...',
       publish: 'Публикувай',
       published: 'Публикуван',
       duplicate: 'Дублирай',
       publishAndCreateNew: 'Публикувай и създай нов',
       publishAndDuplicate: 'Публикувай и дублирай',
       deleteEntry: 'Изтрий запис',
-      saving: 'Запазване...',
-      save: 'Запази',
-      deleting: 'Изтриване...',
-      updating: 'Актуализиране...',
-      status: 'Cъстояние: %{status}',
-      backCollection: 'Записване в %{collectionLabel} колекция',
-      unsavedChanges: 'Незапазени Промени',
-      changesSaved: 'Запазени промени',
-      draft: 'Чернова',
-      inReview: 'В ревю',
-      ready: 'Готово',
       publishNow: 'Публикувай сега',
-      deployPreviewPendingButtonLabel: 'Проверете  визуализацията',
-      deployPreviewButtonLabel: 'Визуализация',
-      deployButtonLabel: 'Изглед',
     },
     editorWidgets: {
       markdown: {

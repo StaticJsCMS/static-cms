@@ -97,12 +97,6 @@ const ca: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Estàs segur que vols deixar aquesta pàgina?',
-      onUpdatingWithUnsavedChangesBody:
-        "Tens canvis no guardats, si us plau, guarda'ls abans d'actualitzar l'estat.",
-      onPublishingNotReadyBody: 'Si us plau, actualitza l\'estat a "Llest" abans de publicar.',
-      onPublishingWithUnsavedChangesBody:
-        "Tens canvis no guardats, si us plau, guarda'ls abans de publicar-los.",
-      onPublishingBody: 'Estàs segur que vols publicar aquesta entrada?',
       onDeleteWithUnsavedChangesBody:
         'Està segur que vol eliminar aquesta entrada publicada, així com els canvis no guardats de la sessió actual?',
       onDeletePublishedEntryBody: 'Està segur que vol eliminar aquesta entrada publicada?',
@@ -113,28 +107,13 @@ const ca: LocalePhrasesRoot = {
       togglePreview: 'Mostrar/Amagar previsualització',
     },
     editorToolbar: {
-      publishing: 'Publicant...',
       publish: 'Publicar',
       published: 'Publicat',
       duplicate: 'Duplicar',
       publishAndCreateNew: 'Publicar i crear de nou',
       publishAndDuplicate: 'Publica i duplica',
       deleteEntry: 'Eliminar entrada',
-      saving: 'Guardant...',
-      save: 'Guardar',
-      deleting: 'Eliminant...',
-      updating: 'Actualizant...',
-      status: 'Estat: %{status}',
-      backCollection: 'Escrivint a la colecció %{collectionLabel}',
-      unsavedChanges: 'Canvis no guardats',
-      changesSaved: 'Canvis guardats',
-      draft: 'Esborrany',
-      inReview: 'En revisió',
-      ready: 'Llest',
       publishNow: 'Publicar ara',
-      deployPreviewPendingButtonLabel: 'Comprovar Vista Prèvia',
-      deployPreviewButtonLabel: 'Veure Vista Prèvia',
-      deployButtonLabel: 'Veure publicació',
     },
     editorWidgets: {
       markdown: {

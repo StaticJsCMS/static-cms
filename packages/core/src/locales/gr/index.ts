@@ -66,14 +66,6 @@ const gr: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Είστε βέβαιοι ότι θέλετε να αφήσετε αυτήν τη σελίδα;',
-      onUpdatingWithUnsavedChangesBody:
-        'Έχετε μη αποθηκευμένες αλλαγές, αποθηκεύστε πριν να ενημερώσετε την κατάσταση.',
-      onPublishingNotReadyBody: 'Ενημερώστε την κατάσταση σε "έτοιμο" πριν από τη δημοσίευση.',
-      onPublishingWithUnsavedChangesBody:
-        'Έχετε μη αποθηκευμένες αλλαγές, αποθηκεύστε πριν από τη δημοσίευση.',
-      onPublishingBody: 'Είστε βέβαιοι ότι θέλετε να δημοσιεύσετε αυτήν την καταχώρηση;',
-      onUnpublishing:
-        'Είστε βέβαιοι ότι θέλετε να καταργήσετε τη δημοσίευση αυτής της καταχώρησης;',
       onDeleteWithUnsavedChangesBody:
         'Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν τη δημοσιευμένη καταχώρηση, καθώς και τις αλλαγές που δεν αποθηκεύσατε από την τρέχουσα περίοδο λειτουργίας;',
       onDeletePublishedEntryBody:
@@ -81,30 +73,14 @@ const gr: LocalePhrasesRoot = {
       loadingEntry: 'Φόρτωση εισόδου...',
     },
     editorToolbar: {
-      publishing: 'Δημοσίευση...',
       publish: 'Δημοσίευση',
       published: 'Δημοσιεύθηκε',
       unpublish: 'Κατάργηση δημοσίευσης',
       duplicate: 'Διπλότυπο',
-      unpublishing: 'Κατάργηση δημοσίευσης...',
       publishAndCreateNew: 'Δημοσίευση και δημιουργία νέων',
       publishAndDuplicate: 'Δημοσίευση και αντίγραφο',
       deleteEntry: 'Διαγραφή καταχώρησης',
-      saving: 'Εξοικονόμηση...',
-      save: 'Αποθήκευση',
-      deleting: 'Διαγραφή...',
-      updating: 'Ενημέρωση...',
-      status: 'Κατάστασης: %{status}',
-      backCollection: ' Εγγραφή στη συλλογή %{collectionLabel}',
-      unsavedChanges: 'Μη αποθηκευμένες αλλαγές',
-      changesSaved: 'Αλλαγές που αποθηκεύτηκαν',
-      draft: 'Σχέδιο',
-      inReview: 'Σε επανεξέταση',
-      ready: 'Έτοιμα',
       publishNow: 'Δημοσίευση τώρα',
-      deployPreviewPendingButtonLabel: 'Έλεγχος για προεπισκόπηση',
-      deployPreviewButtonLabel: 'Προβολή προεπισκόπησης',
-      deployButtonLabel: 'Προβολή Live',
     },
     editorWidgets: {
       image: {

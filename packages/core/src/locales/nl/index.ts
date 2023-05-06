@@ -95,13 +95,6 @@ const nl: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Weet je zeker dat je deze pagina wilt verlaten?',
-      onUpdatingWithUnsavedChangesBody:
-        'Er zijn nog niet-opgeslagen wijzigingen. Bewaar ze voordat u de status bijwerkt.',
-      onPublishingNotReadyBody: 'Stel de status in op "Voltooid" voordat u publiceert.',
-      onPublishingWithUnsavedChangesBody:
-        'Er zijn nog niet-opgeslagen wijzigingen. Bewaar deze voordat u publiceert.',
-      onPublishingBody: 'Weet u zeker dat u dit item wil publiceren?',
-      onUnpublishing: 'Weet u zeker dat u de publicatie voor dit item ongedaan wilt maken?',
       onDeleteWithUnsavedChangesBody:
         'Weet u zeker dat u dit gepubliceerde item en uw niet-opgeslagen wijzigingen uit de huidige sessie wilt verwijderen?',
       onDeletePublishedEntryBody: 'Weet u zeker dat u dit gepubliceerde item wilt verwijderen?',
@@ -113,30 +106,13 @@ const nl: LocalePhrasesRoot = {
       toggleScrollSync: 'Synchroniseer scrollen',
     },
     editorToolbar: {
-      publishing: 'Publiceren...',
       publish: 'Publiceer',
       published: 'Gepubliceerd',
-      unpublish: 'Publicatie terugtrekken',
       duplicate: 'Dupliceren',
-      unpublishing: 'Publicatie ongedaan maken...',
       publishAndCreateNew: 'Publiceer en maak nieuw item aan',
       publishAndDuplicate: 'Publiceer en dupliceer item',
       deleteEntry: 'Item verwijderen',
-      saving: 'Opslaan...',
-      save: 'Opslaan',
-      deleting: 'Verwijderen...',
-      updating: 'Bijwerken...',
-      status: 'Status: %{status}',
-      backCollection: ' Terug naar %{collectionLabel}',
-      unsavedChanges: 'Niet-opgeslagen wijzigingen',
-      changesSaved: 'Wijzigingen opgeslagen',
-      draft: 'Concept',
-      inReview: 'Wordt beoordeeld',
-      ready: 'Klaar',
       publishNow: 'Publiceer nu',
-      deployPreviewPendingButtonLabel: 'Controleer of voorvertoning geladen is',
-      deployPreviewButtonLabel: 'Bekijk voorvertoning',
-      deployButtonLabel: 'Bekijk Live',
     },
     editorWidgets: {
       markdown: {

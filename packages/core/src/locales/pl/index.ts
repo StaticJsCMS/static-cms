@@ -97,13 +97,6 @@ const pl: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Czy na pewno chcesz opuścić tę stronę?',
-      onUpdatingWithUnsavedChangesBody:
-        'Masz niezapisane zmiany, proszę zapisz je przed aktualizacją statusu.',
-      onPublishingNotReadyBody: 'Proszę zaktualizować status do "Gotowe" przed publikacją.',
-      onPublishingWithUnsavedChangesBody:
-        'Masz niezapisane zmiany, proszę zapisz je przed publikacją.',
-      onPublishingBody: 'Czy na pewno chcesz opublikować tę pozycję?',
-      onUnpublishing: 'Czy na pewno chcesz cofnąć publikację tej pozycji?',
       onDeleteWithUnsavedChangesBody:
         'Czy na pewno chcesz usunąć tę opublikowaną pozycję, a także niezapisane zmiany z bieżącej sesji?',
       onDeletePublishedEntryBody: 'Czy na pewno chcesz usunąć tę opublikowaną pozycję?',
@@ -115,34 +108,14 @@ const pl: LocalePhrasesRoot = {
       toggleScrollSync: 'Synchroniczne przesuwanie',
     },
     editorToolbar: {
-      publishing: 'Publikowanie...',
       publish: 'Opublikuj',
       published: 'Opublikowane',
       unpublish: 'Cofnij publikację',
       duplicate: 'Zduplikuj',
-      unpublishing: 'Cofanie publikacji...',
       publishAndCreateNew: 'Opublikuj i dodaj nowy',
       publishAndDuplicate: 'Opublikuj i zduplikuj',
       deleteEntry: 'Usuń pozycję',
-      saving: 'Zapisywanie...',
-      save: 'Zapisz',
-      statusInfoTooltipDraft:
-        'Dodano jako wersję roboczą. Aby zakończyć i oddać do recenzji zmień status na `Do recenzji`',
-      statusInfoTooltipInReview:
-        'Wpis jest w trakcie recenzji, żadne dodatkowe akcje nie są wymagane. Jeśli chcesz, możesz jeszcze nanieść zmiany.',
-      deleting: 'Usuwanie...',
-      updating: 'Uaktualnianie...',
-      status: 'Status: %{status}',
-      backCollection: ' Edycja treści w zbiorze %{collectionLabel}',
-      unsavedChanges: 'Niezapisane zmiany',
-      changesSaved: 'Zmiany zapisane',
-      draft: 'Wersja robocza',
-      inReview: 'W recenzji',
-      ready: 'Gotowe',
       publishNow: 'Opublikuj teraz',
-      deployPreviewPendingButtonLabel: 'Sprawdź, czy istnieje podgląd',
-      deployPreviewButtonLabel: 'Zobacz podgląd',
-      deployButtonLabel: 'Zobacz na żywo',
     },
     editorWidgets: {
       markdown: {

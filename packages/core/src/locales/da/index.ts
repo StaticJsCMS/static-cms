@@ -97,11 +97,6 @@ const da: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Er du sikker på at du vil forlade siden?',
-      onUpdatingWithUnsavedChangesBody:
-        'Du har ændringer der ikke er gemt, gem disse før status ændres.',
-      onPublishingNotReadyBody: 'Skift status til "Klar" inden publicering.',
-      onPublishingWithUnsavedChangesBody: 'Du har ændringer der ikke er gemt, gem inden publicing.',
-      onPublishingBody: 'Er du sikker på at du vil publicere dette dokument?',
       onDeleteWithUnsavedChangesBody:
         'Er du sikker på at du vil slette dette tidliere publiceret dokument, samt dine nuværende ugemte ændringer fra denne session?',
       onDeletePublishedEntryBody:
@@ -109,28 +104,13 @@ const da: LocalePhrasesRoot = {
       loadingEntry: 'Indlæser dokument...',
     },
     editorToolbar: {
-      publishing: 'Publicerer...',
       publish: 'Publicer',
       published: 'Publiceret',
       duplicate: 'Kopier',
       publishAndCreateNew: 'Publicer og opret ny',
       publishAndDuplicate: 'Publicer og kopier',
       deleteEntry: 'Slet dokument',
-      saving: 'Gemmer...',
-      save: 'Gem',
-      deleting: 'Sletter...',
-      updating: 'Updaterer...',
-      status: 'Status: %{status}',
-      backCollection: ' Skriver til %{collectionLabel} samlingen',
-      unsavedChanges: 'Ugemte ændringer',
-      changesSaved: 'Ændringer gemt',
-      draft: 'Kladder',
-      inReview: 'Til gennemsyn',
-      ready: 'Klar',
       publishNow: 'Publicer nu',
-      deployPreviewPendingButtonLabel: 'Lav preview',
-      deployPreviewButtonLabel: 'Vis preview',
-      deployButtonLabel: 'Vis live',
     },
     editorWidgets: {
       markdown: {

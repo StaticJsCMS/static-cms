@@ -97,13 +97,6 @@ const sv: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Är du säker på att du vill lämna sidan?',
-      onUpdatingWithUnsavedChangesBody:
-        'Du har osparade ändringar, vänligen spara dem innan du uppdaterar status.',
-      onPublishingNotReadyBody: 'Vänligen uppdatera status till "Redo" innan du publicerar.',
-      onPublishingWithUnsavedChangesBody:
-        'Du har osparade ändringar, vänligen spara innan du publicerar.',
-      onPublishingBody: 'Är du säker på att du vill publicera det här inlägget?',
-      onUnpublishing: 'Är du säker på att du vill avpublicera det här inlägget?',
       onDeleteWithUnsavedChangesBody:
         'Är du säker på att du vill radera det här publicerade inlägget, inklusive dina osparade ändringar från nuvarande session?',
       onDeletePublishedEntryBody: 'Är du säker på att du vill radera det här publicerade inlägget?',
@@ -115,30 +108,14 @@ const sv: LocalePhrasesRoot = {
       toggleScrollSync: 'Synka scrollning',
     },
     editorToolbar: {
-      publishing: 'Publicerar...',
       publish: 'Publicera',
       published: 'Publicerad',
       unpublish: 'Avpublicera',
       duplicate: 'Duplicera',
-      unpublishing: 'Avpublicerar...',
       publishAndCreateNew: 'Publicera och skapa ny',
       publishAndDuplicate: 'Publicera och duplicera',
       deleteEntry: 'Radera inlägg',
-      saving: 'Sparar...',
-      save: 'Spara',
-      deleting: 'Raderar...',
-      updating: 'Updaterar...',
-      status: 'Status: %{status}',
-      backCollection: ' Redigerar i samlingen %{collectionLabel}',
-      unsavedChanges: 'Osparade ändringar',
-      changesSaved: 'Ändringar sparade',
-      draft: 'Utkast',
-      inReview: 'Under granskning',
-      ready: 'Redo',
       publishNow: 'Publicera nu',
-      deployPreviewPendingButtonLabel: 'Kontrollera förhandsvisning',
-      deployPreviewButtonLabel: 'Visa förhandsvisning',
-      deployButtonLabel: 'Visa Live',
     },
     editorWidgets: {
       markdown: {
