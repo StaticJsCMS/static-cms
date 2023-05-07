@@ -98,13 +98,6 @@ const tr: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Bu sayfadan ayrılmak istediğinize emin misiniz?',
-      onUpdatingWithUnsavedChangesBody:
-        'Kaydedilmemiş değişiklikleriniz var, lütfen içeriği güncellemeden önce kaydedin.',
-      onPublishingNotReadyBody: 'Lütfen yayınlamadan önce içeriği "Hazır" olarak güncelleyin.',
-      onPublishingWithUnsavedChangesBody:
-        'Kaydedilmemiş değişiklikleriniz var, lütfen yayınlamadan önce kaydedin.',
-      onPublishingBody: 'Bu girdiyi yayınlamak istediğinize emin misiniz?',
-      onUnpublishing: 'Bu girdiyi yayından kaldırmak istediğinizden emin misiniz?',
       onDeleteWithUnsavedChangesBody:
         'Bu oturumda kaydedilmiş değişikliklerin yanı sıra geçerli oturumdaki kaydedilmemiş değişikliklerinizi silmek istediğinize emin misiniz?',
       onDeletePublishedEntryBody: 'Bu yayınlanmış girdiyi silmek istediğinize emin misiniz?',
@@ -116,34 +109,14 @@ const tr: LocalePhrasesRoot = {
       toggleScrollSync: 'Kaydırmayı senkronize et',
     },
     editorToolbar: {
-      publishing: 'Yayınlanıyor...',
       publish: 'Yayınla',
       published: 'Yayınlanan',
       unpublish: 'Yayından Kaldır',
       duplicate: 'Kopyala',
-      unpublishing: 'Yayından kaldırılıyor...',
       publishAndCreateNew: 'Yayınla ve yeni oluştur',
       publishAndDuplicate: 'Yayınla ve kopya oluştur',
       deleteEntry: 'Girdiyi sil',
-      saving: 'Kaydediliyor...',
-      save: 'Kaydet',
-      statusInfoTooltipDraft:
-        'Giriş durumu taslak olarak ayarlandı. Girişi bitirmek ve incelemeye göndermek için giriş durumunu ‘İncelemede’ olarak ayarlayın',
-      statusInfoTooltipInReview:
-        'Giriş gözden geçiriliyor, başka bir işlem yapılmasına gerek yok. Ancak, incelenirken yine de ek değişiklikler yapabilirsiniz.',
-      deleting: 'Siliniyor...',
-      updating: 'Güncelleniyor...',
-      status: 'Durumu: %{status}',
-      backCollection: ' %{collectionLabel} koleksiyonunda yazılı',
-      unsavedChanges: 'Kaydedilmemiş Değişiklikler',
-      changesSaved: 'Değişiklikler kaydedildi',
-      draft: 'Taslak',
-      inReview: 'İncelemede',
-      ready: 'Hazır',
       publishNow: 'Şimdi yayımla',
-      deployPreviewPendingButtonLabel: 'Önizlemeyi Denetle',
-      deployPreviewButtonLabel: 'Önizlemeyi Görüntüle',
-      deployButtonLabel: 'Canlı Görüntüle',
     },
     editorWidgets: {
       markdown: {

@@ -97,43 +97,20 @@ const ru: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Вы уверены, что хотите покинуть эту страницу?',
-      onUpdatingWithUnsavedChangesBody:
-        'У вас есть несохраненные изменения, сохраните их перед обновлением статуса.',
-      onPublishingNotReadyBody: 'Пожалуйста, измените статус на «Готов» перед публикацией.',
-      onPublishingWithUnsavedChangesBody:
-        'У вас есть несохраненные изменения, сохраните их перед публикацией.',
-      onPublishingBody: 'Вы уверены, что хотите опубликовать эту запись?',
-      onUnpublishing: 'Вы уверены, что хотите отменить публикацию этой записи?',
       onDeleteWithUnsavedChangesBody:
         'Вы уверены, что хотите удалить эту опубликованную запись, а также несохраненные изменения из текущего сеанса?',
       onDeletePublishedEntryBody: 'Вы уверены, что хотите удалить эту опубликованную запись?',
       loadingEntry: 'Загрузка записи…',
     },
     editorToolbar: {
-      publishing: 'Публикация…',
       publish: 'Опубликовать',
       published: 'Опубликовано',
       unpublish: 'Отменить публикацию',
       duplicate: 'Дублировать',
-      unpublishing: 'Отмена публикации…',
       publishAndCreateNew: 'Опубликовать и создать новую',
       publishAndDuplicate: 'Опубликовать и дублировать',
       deleteEntry: 'Удалить запись',
-      saving: 'Сохранение…',
-      save: 'Сохранить',
-      deleting: 'Удаление…',
-      updating: 'Обновление…',
-      status: 'Cтатус: %{status}',
-      backCollection: 'Запись в коллекцию %{collectionLabel}',
-      unsavedChanges: 'Несохраненные изменения',
-      changesSaved: 'Изменения сохранены',
-      draft: 'Черновик',
-      inReview: 'На рассмотрении',
-      ready: 'Одобрен',
       publishNow: 'Опубликовать сейчас',
-      deployPreviewPendingButtonLabel: 'Проверить предварительный просмотр',
-      deployPreviewButtonLabel: 'Предварительный просмотр',
-      deployButtonLabel: 'Просмотр',
     },
     editorWidgets: {
       markdown: {

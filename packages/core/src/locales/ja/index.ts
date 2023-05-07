@@ -97,12 +97,6 @@ const ja: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'このページから遷移しますか？',
-      onUpdatingWithUnsavedChangesBody:
-        '変更した項目があります。ステータスを更新する前に保存してください。',
-      onPublishingNotReadyBody: '公開する前に、ステータスを「準備完了」に更新してください。',
-      onPublishingWithUnsavedChangesBody: '変更した項目があります。公開する前に保存してください。',
-      onPublishingBody: 'このエントリを公開しますか？',
-      onUnpublishing: 'このエントリを未公開にしますか？',
       onDeleteWithUnsavedChangesBody:
         '保存されていない変更も削除されますが、この公開エントリを削除しますか？',
       onDeletePublishedEntryBody: 'この公開エントリを削除しますか？',
@@ -114,34 +108,14 @@ const ja: LocalePhrasesRoot = {
       toggleScrollSync: 'スクロール同期を切り替える',
     },
     editorToolbar: {
-      publishing: '公開しています...',
       publish: '公開',
       published: '公開済',
       unpublish: '未公開',
       duplicate: '複製',
-      unpublishing: '未公開にしています...',
       publishAndCreateNew: '公開して新規作成',
       publishAndDuplicate: '公開して複製する',
       deleteEntry: 'エントリを削除',
-      saving: '保存中...',
-      save: '保存',
-      statusInfoTooltipDraft:
-        'エントリのステータスは下書きに設定されています。最終決定してレビューに提出するには、ステータスを「レビュー中」に設定します。',
-      statusInfoTooltipInReview:
-        'エントリはレビュー中なので、それ以上のアクションは必要ありません。ただし、レビュー中でも追加の変更を行うことができます。',
-      deleting: '削除しています...',
-      updating: '更新しています...',
-      status: 'ステータス: %{status}',
-      backCollection: '%{collectionLabel}のエントリを作成中',
-      unsavedChanges: '未保存',
-      changesSaved: '保存済',
-      draft: '下書き',
-      inReview: 'レビュー中',
-      ready: '準備完了',
       publishNow: '公開する',
-      deployPreviewPendingButtonLabel: 'プレビューのチェック',
-      deployPreviewButtonLabel: 'プレビューを見る',
-      deployButtonLabel: 'ライブで見る',
     },
     editorWidgets: {
       markdown: {

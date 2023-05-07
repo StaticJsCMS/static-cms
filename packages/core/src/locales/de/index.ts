@@ -12,6 +12,8 @@ const de: LocalePhrasesRoot = {
     errors: {
       email: 'Stellen Sie sicher, Ihre E-Mail-Adresse einzugeben.',
       password: 'Bitte geben Sie Ihr Passwort ein.',
+      authBody: 'Fehler beim Anmelden',
+      netlifyIdentityNotFound: 'Das Netlify Identity Plugin wurde nicht gefunden',
       identitySettings:
         'Identity-Einstellungen konnten nicht abgerufen werden. Stellen Sie bei der Verwendung des Git-Gateway Backends sicher, den Identity Service und das Git Gateway zu aktivieren.',
     },
@@ -19,11 +21,13 @@ const de: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Inhalt',
+      media: 'Medien',
       quickAdd: 'Schnellerstellung',
     },
     app: {
       errorHeader: 'Fehler beim Laden der CMS-Konfiguration.',
       configErrors: 'Konfigurationsfehler',
+      configNotFound: 'KOnfiguration nicht gefunden',
       checkConfigYml: 'Überprüfen Sie die config.yml Konfigurationsdatei.',
       loadingConfig: 'Konfiguration laden...',
       waitingBackend: 'Auf Server warten...',
@@ -51,7 +55,7 @@ const de: LocalePhrasesRoot = {
       groupBy: 'Gruppieren nach',
     },
     entries: {
-      loadingEntries: 'Beiträge werden geladen....',
+      loadingEntries: 'Beiträge werden geladen...',
       cachingEntries: 'Beiträge werden zwischengespeichert...',
       longerLoading: 'Diese Aktion kann einige Minuten in Anspruch nehmen',
       noEntries: 'Keine Beiträge',
@@ -89,6 +93,8 @@ const de: LocalePhrasesRoot = {
         rangeMax: '%{fieldLabel} darf maximal %{maxCount} Element(e) enthalten.',
         invalidPath: `'%{path}' ist kein gültiger Pfad`,
         pathExists: `Pfad '%{path}' existiert bereits`,
+        invalidColor: `Farbe '%{color}' is ungültig`,
+        invalidHexCode: `Hex Codes müssen mit einem #-Zeichen anfangen`,
       },
       i18n: {
         writingInLocale: 'Aktuelle Sprache: %{locale}',
@@ -96,13 +102,6 @@ const de: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Möchten Sie diese Seite wirklich verlassen?',
-      onUpdatingWithUnsavedChangesBody:
-        'Es sind noch ungespeicherte Änderungen vorhanden. Bitte speichern Sie diese, bevor Sie den Status aktualisieren.',
-      onPublishingNotReadyBody:
-        'Bitte setzten die den Status vor dem Veröffentlichen auf "Abgeschlossen".',
-      onPublishingWithUnsavedChangesBody:
-        'Es sind noch ungespeicherte Änderungen vorhanden. Bitte speicheren Sie vor dem Veröffentlichen.',
-      onPublishingBody: 'Soll dieser Beitrag wirklich veröffentlicht werden?',
       onDeleteWithUnsavedChangesTitle: 'Veröffentlichten Beitrag löschen?',
       onDeleteWithUnsavedChangesBody:
         'Möchten Sie diesen veröffentlichten Beitrag, sowie Ihre nicht gespeicherten Änderungen löschen?',
@@ -111,37 +110,23 @@ const de: LocalePhrasesRoot = {
       loadingEntry: 'Beitrag laden...',
     },
     editorInterface: {
+      sideBySideI18n: 'Parallele Übersetzungen',
+      preview: 'Vorschau',
       toggleI18n: 'Übersetzungen',
       togglePreview: 'Vorschau',
       toggleScrollSync: 'Synchron scrollen',
     },
     editorToolbar: {
-      publishing: 'Veröffentlichen...',
       publish: 'Veröffentlichen',
       published: 'Veröffentlicht',
       duplicate: 'Duplizieren',
       publishAndCreateNew: 'Veröffentlichen und neuen Beitrag erstellen',
       publishAndDuplicate: 'Veröffentlichen und Beitrag duplizieren',
       deleteEntry: 'Lösche Beitrag',
-      saving: 'Speichern...',
-      save: 'Speichern',
-      statusInfoTooltipDraft:
-        'Beitrag ist im Entwurfsstatus. Um ihn fertigzustellen und zur Überprüfung freizugeben, setzen Sie den Status auf ‘Zur Überprüfung‘.',
-      statusInfoTooltipInReview:
-        'Beitrag wird überprüft, keine weitere Aktion erforderlich. Sie können weitere Änderungen vornehmen, während die Überprüfung läuft.',
-      deleting: 'Löschen...',
-      updating: 'Aktualisieren...',
-      status: 'Status: %{status}',
-      backCollection: 'Zurück zu allen %{collectionLabel}',
-      unsavedChanges: 'Ungespeicherte Änderungen',
-      changesSaved: 'Änderungen gespeichert',
-      draft: 'Entwurf',
-      inReview: 'Zur Überprüfung',
-      ready: 'Abgeschlossen',
       publishNow: 'Jetzt veröffentlichen',
-      deployPreviewPendingButtonLabel: 'Überprüfen ob eine Vorschau vorhanden ist',
-      deployPreviewButtonLabel: 'Vorschau anzeigen',
-      deployButtonLabel: 'Live ansehen',
+      discardChanges: 'Änderungen verwerfen',
+      discardChangesTitle: 'Änderungen verwerfen',
+      discardChangesBody: 'Sicher, dass Sie ungespeicherte Änderungen verwerfen wollen?',
     },
     editorWidgets: {
       markdown: {
@@ -160,27 +145,36 @@ const de: LocalePhrasesRoot = {
       },
       image: {
         choose: 'Bild wählen',
+        chooseMultiple: 'Bilder wählen',
         chooseUrl: 'Von URL hinzufügen',
         replaceUrl: 'Mit URL ersetzen',
         promptUrl: 'Bild-URL eingeben',
         chooseDifferent: 'Anderes Bild wählen',
+        addMore: 'Bilder hinzufügen',
         remove: 'Bild entfernen',
+        removeAll: 'Alle Bilder entfernen',
       },
       file: {
         choose: 'Datei wählen',
         chooseUrl: 'Von URL hinzufügen',
+        chooseMultiple: 'Dateien wählen',
         replaceUrl: 'Mit URL ersetzen',
         promptUrl: 'Datei-URL eingeben',
         chooseDifferent: 'Andere Datei wählen',
+        addMore: 'Dateien hinzufügen',
         remove: 'Datei entfernen',
+        removeAll: 'Alle Dateien entfernen',
       },
       folder: {
         choose: 'Ordner wählen',
         chooseUrl: 'Ordner-Pfad eingeben',
+        chooseMultiple: 'Ordner wählen',
         replaceUrl: 'Mit Pfad ersetzen',
         promptUrl: 'Ordner-Pfad eingeben',
         chooseDifferent: 'Anderen Ordner wählen',
+        addMore: 'Ordner hinzufügen',
         remove: 'Ordner entfernen',
+        removeAll: 'Alle Ordner entfernen',
       },
       unknownControl: {
         noControl: "Kein Bedienelement für Widget '%{widget}'.",
@@ -198,6 +192,8 @@ const de: LocalePhrasesRoot = {
       },
       datetime: {
         now: 'Jetzt',
+        invalitDateTitle: 'Ungültiges Datum',
+        invalidDateBody: 'Das eingegebene Datum ist ungültig.',
       },
       list: {
         add: '%{item} hinzufügen',
@@ -254,6 +250,9 @@ const de: LocalePhrasesRoot = {
     default: {
       goBackToSite: 'Zurück zur Seite',
     },
+    localBackup: {
+      hasLocalBackup: 'Lokales Backup verfügbar',
+    },
     errorBoundary: {
       title: 'Fehler',
       details: 'Ein Fehler ist aufgetreten - bitte ',
@@ -268,13 +267,15 @@ const de: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
+      darkMode: 'Dunkler Modus',
       logOut: 'Abmelden',
     },
     toast: {
       onFailToLoadEntries: 'Beitrag konnte nicht geladen werden: %{details}',
-      onFailToLoadDeployPreview: 'Vorschau konnte nicht geladen werden: %{details}',
       onFailToPersist: 'Beitrag speichern fehlgeschlagen: %{details}',
+      onFailToPersistMedia: 'Speichern des Meidums fehlgeschlagen: %{details}',
       onFailToDelete: 'Beitrag löschen fehlgeschlagen: %{details}',
+      onFailToDeleteMedia: 'Löschen des Mediums fehlgeschlagen: %{details}',
       onFailToUpdateStatus: 'Status aktualisieren fehlgeschlagen: %{details}',
       missingRequiredField: 'Oops, einige zwingend erforderliche Felder sind nicht ausgefüllt.',
       entrySaved: 'Beitrag gespeichert',

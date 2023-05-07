@@ -97,13 +97,6 @@ const pt: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Tem certeza que deseja sair desta página?',
-      onUpdatingWithUnsavedChangesBody:
-        'Há mudanças não salvas. Por favor, salve-as antes de atualizar o status.',
-      onPublishingNotReadyBody: 'Por favor, altere o status para "Pronto" antes de publicar.',
-      onPublishingWithUnsavedChangesBody:
-        'Há mudanças não salvas. Por favor, salve-as antes de publicar.',
-      onPublishingBody: 'Tem certeza que deseja publicar essa entrada?',
-      onUnpublishing: 'Tem certeza que deseja cancelar a publicação dessa entrada?',
       onDeleteWithUnsavedChangesBody:
         'Tem certeza de que deseja excluir esta entrada publicada, bem como as alterações não salvas da sessão atual?',
       onDeletePublishedEntryBody: 'Tem certeza de que deseja excluir esta entrada publicada?',
@@ -115,34 +108,14 @@ const pt: LocalePhrasesRoot = {
       toggleScrollSync: 'Sincronizar rolagem',
     },
     editorToolbar: {
-      publishing: 'Publicando...',
       publish: 'Publicar',
       published: 'Publicado',
       unpublish: 'Despublicar',
       duplicate: 'Duplicado',
-      unpublishing: 'Despublicando...',
       publishAndCreateNew: 'Publicar e criar novo(a)',
       publishAndDuplicate: 'Publicar e duplicar',
       deleteEntry: 'Excluir entrada',
-      saving: 'Salvando...',
-      save: 'Salvar',
-      statusInfoTooltipDraft:
-        "Entrada definida como rascunho. Para finalizar e enviá-la a revisão, mude seu estado para 'Em revisão'",
-      statusInfoTooltipInReview:
-        'Entrada está sendo revisada, nenhuma ação extra é requirida. Porém, você ainda pode fazer mudanças adicionais enquanto ela está sendo revisada.',
-      deleting: 'Excluindo...',
-      updating: 'Atualizando...',
-      status: 'Status: %{status}',
-      backCollection: ' Escrevendo na coleção %{collectionLabel}',
-      unsavedChanges: 'Alterações não salvas',
-      changesSaved: 'Alterações salvas',
-      draft: 'Rascunho',
-      inReview: 'Em revisão',
-      ready: 'Pronto',
       publishNow: 'Publicar agora',
-      deployPreviewPendingButtonLabel: 'Verificar se há Pré-visualização',
-      deployPreviewButtonLabel: 'Ver Pré-visualização',
-      deployButtonLabel: 'Ver em Produção',
     },
     editorWidgets: {
       markdown: {

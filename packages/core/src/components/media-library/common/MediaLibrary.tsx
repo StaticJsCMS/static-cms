@@ -232,26 +232,27 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
       event.stopPropagation();
       event.preventDefault();
       const files = [...Array.from(fileList)];
-      const file = files[0];
       const maxFileSize =
         typeof mediaConfig.max_file_size === 'number' ? mediaConfig.max_file_size : 512000;
 
-      if (maxFileSize && file.size > maxFileSize) {
-        alert({
-          title: 'mediaLibrary.mediaLibrary.fileTooLargeTitle',
-          body: {
-            key: 'mediaLibrary.mediaLibrary.fileTooLargeBody',
-            options: {
-              size: Math.floor(maxFileSize / 1000),
+      for (const file of files) {
+        if (maxFileSize && file.size > maxFileSize) {
+          alert({
+            title: 'mediaLibrary.mediaLibrary.fileTooLargeTitle',
+            body: {
+              key: 'mediaLibrary.mediaLibrary.fileTooLargeBody',
+              options: {
+                size: Math.floor(maxFileSize / 1000),
+              },
             },
-          },
-        });
-      } else {
-        await dispatch(persistMedia(file, { field }, currentFolder));
+          });
+        } else {
+          await dispatch(persistMedia(file, { field }, currentFolder));
 
-        setSelectedFile(files[0] as unknown as MediaFile);
+          setSelectedFile(files[0] as unknown as MediaFile);
 
-        scrollToTop();
+          scrollToTop();
+        }
       }
 
       if (!('dataTransfer' in event)) {

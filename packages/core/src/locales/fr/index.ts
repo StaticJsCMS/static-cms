@@ -98,13 +98,6 @@ const fr: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Voulez-vous vraiment quitter cette page ?',
-      onUpdatingWithUnsavedChangesBody:
-        'Veuillez enregistrer vos modifications avant de mettre à jour le statut.',
-      onPublishingNotReadyBody: 'Veuillez mettre à jour le statut à "Prêt" avant de publier.',
-      onPublishingWithUnsavedChangesBody:
-        'Veuillez enregistrer vos modifications avant de publier.',
-      onPublishingBody: 'Voulez-vous vraiment publier cette entrée ?',
-      onUnpublishing: 'Voulez-vous vraiment dépublier cette entrée ?',
       onDeleteWithUnsavedChangesBody:
         'Voulez-vous vraiment supprimer cette entrée publiée ainsi que vos modifications non enregistrées de cette session ?',
       onDeletePublishedEntryBody: 'Voulez-vous vraiment supprimer cette entrée publiée ?',
@@ -116,30 +109,14 @@ const fr: LocalePhrasesRoot = {
       toggleScrollSync: 'Défilement synchronisé',
     },
     editorToolbar: {
-      publishing: 'Publication...',
       publish: 'Publier',
       published: 'Publiée',
       unpublish: 'Dépublier',
       duplicate: 'Dupliquer',
-      unpublishing: 'Dépublication...',
       publishAndCreateNew: 'Publier et créer une nouvelle entrée',
       publishAndDuplicate: 'Publier et dupliquer',
       deleteEntry: "Supprimer l'entrée",
-      saving: 'Enregistrement...',
-      save: 'Enregistrer',
-      deleting: 'Suppression...',
-      updating: 'Mise à jour...',
-      status: 'Statut: %{status}',
-      backCollection: ' Écriture dans la collection %{collectionLabel}',
-      unsavedChanges: 'Modifications non enregistrées',
-      changesSaved: 'Modifications enregistrées',
-      draft: 'Brouillon',
-      inReview: 'En cours de révision',
-      ready: 'Prêt',
       publishNow: 'Publier maintenant',
-      deployPreviewPendingButtonLabel: "Vérifier l'aperçu",
-      deployPreviewButtonLabel: "Voir l'aperçu",
-      deployButtonLabel: 'Voir en direct',
     },
     editorWidgets: {
       markdown: {

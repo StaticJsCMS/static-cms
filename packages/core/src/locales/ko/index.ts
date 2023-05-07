@@ -89,43 +89,20 @@ const ko: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: '이 페이지를 떠나시겠습니까?',
-      onUpdatingWithUnsavedChangesBody:
-        '저장하지 않은 변경사항이 있습니다. 상태 업데이트 전 먼저 저장하세요.',
-      onPublishingNotReadyBody: '게시 하기 앞서 상태를 "준비됨" 으로 업데이트 하세요.',
-      onPublishingWithUnsavedChangesBody:
-        '저장하지 않은 변경사항이 있습니다, 게시하기 전 먼저 저장하세요.',
-      onPublishingBody: '이 항목을 게시하시곘습니까?',
-      onUnpublishing: '이 항목을 게시 철회 하시겠습니까?',
       onDeleteWithUnsavedChangesBody:
         '현재 세션에서의 저장되지 않은 변경사항과 이 게시된 항목을 삭제하시겠습니까?',
       onDeletePublishedEntryBody: '이 게시된 항목을 삭제하시겠습니까?',
       loadingEntry: '항목 불러오는 중...',
     },
     editorToolbar: {
-      publishing: '게시 중...',
       publish: '게시',
       published: '게시됨',
       unpublish: '게시 철회',
       duplicate: '복제',
-      unpublishing: '게시 철회 중...',
       publishAndCreateNew: '게시하고 새로 만들기',
       publishAndDuplicate: '게시하고 복제',
       deleteEntry: '항목 삭제',
-      saving: '저장 중...',
-      save: '저장',
-      deleting: '삭제 중...',
-      updating: '업데이트 중...',
-      status: '상태: %{status}',
-      backCollection: '%{collectionLabel} 컬랙션에 작성하는 중',
-      unsavedChanges: '변경사항 저장되지 않음',
-      changesSaved: '변경사항 저장됨',
-      draft: '초안',
-      inReview: '검토중',
-      ready: '준비됨',
       publishNow: '지금 게시',
-      deployPreviewPendingButtonLabel: '미리보기 확인',
-      deployPreviewButtonLabel: '미리보기 보기',
-      deployButtonLabel: '라이브 보기',
     },
     editorWidgets: {
       markdown: {

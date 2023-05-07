@@ -97,25 +97,16 @@ const hr: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Jeste li sigurni da želite napustiti stranicu?',
-      onUpdatingWithUnsavedChangesBody:
-        'Imate nespremljene promjene, molimo spremite prije ažuriranja statusa.',
-      onPublishingNotReadyBody: 'Molimo ažurirajte status na "Spremno" prije objavljivanja.',
-      onPublishingWithUnsavedChangesBody:
-        'Imate nespremljene promjene, molimo spremite prije objavljivanja.',
-      onPublishingBody: 'Jeste li sigurni da želite objaviti ovaj unos?',
-      onUnpublishing: 'Jeste li sigurni da želite maknuti objavu za ovaj unos?',
       onDeleteWithUnsavedChangesBody:
         'Jeste li sigurni da želite obrisati objavljeni unos, te nespremljene promjene u trenutnoj sesiji?',
       onDeletePublishedEntryBody: 'Jeste li sigurni da želite obrisati ovaj objavljeni unos?',
       loadingEntry: 'Učitavanje unosa...',
     },
     editorToolbar: {
-      publishing: 'Objavljivanje...',
       publish: 'Objavi',
       published: 'Objavljeno',
       unpublish: 'Obriši iz objava',
       duplicate: 'Dupliciraj',
-      unpublishing: 'Brisanje iz objava...',
       publishAndCreateNew: 'Objavi i kreiraj novo',
       publishAndDuplicate: 'Objavi i dupliciraj',
       deleteEntry: 'Obriši unos',
@@ -131,9 +122,6 @@ const hr: LocalePhrasesRoot = {
       inReview: 'Osvrt',
       ready: 'Spremno',
       publishNow: 'Objavi sad',
-      deployPreviewPendingButtonLabel: 'Provjeri za osvrt',
-      deployPreviewButtonLabel: 'Pogledaj osvrt',
-      deployButtonLabel: 'Pogledaj na produkciji',
     },
     editorWidgets: {
       markdown: {

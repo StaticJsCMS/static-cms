@@ -104,16 +104,6 @@ const en: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Are you sure you want to leave this page?',
-      onUpdatingWithUnsavedChangesTitle: 'Unsaved changes',
-      onUpdatingWithUnsavedChangesBody:
-        'You have unsaved changes, please save before updating status.',
-      onPublishingNotReadyTitle: 'Publishing unavailable',
-      onPublishingNotReadyBody: 'Please update status to "Ready" before publishing.',
-      onPublishingWithUnsavedChangesTitle: 'Unsaved changes',
-      onPublishingWithUnsavedChangesBody:
-        'You have unsaved changes, please save before publishing.',
-      onPublishingTitle: 'Publish this entry?',
-      onPublishingBody: 'Are you sure you want to publish this entry?',
       onDeleteWithUnsavedChangesTitle: 'Delete this published entry?',
       onDeleteWithUnsavedChangesBody:
         'Are you sure you want to delete this published entry, as well as your unsaved changes from the current session?',
@@ -129,28 +119,12 @@ const en: LocalePhrasesRoot = {
       toggleScrollSync: 'Sync scrolling',
     },
     editorToolbar: {
-      publishing: 'Publishing...',
       publish: 'Publish',
       published: 'Published',
       duplicate: 'Duplicate',
       publishAndCreateNew: 'Publish and create new',
       publishAndDuplicate: 'Publish and duplicate',
       deleteEntry: 'Delete entry',
-      saving: 'Saving...',
-      save: 'Save',
-      statusInfoTooltipDraft:
-        'Entry status is set to draft. To finalize and submit it for review, set the status to ‘In review’',
-      statusInfoTooltipInReview:
-        'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.',
-      deleting: 'Deleting...',
-      updating: 'Updating...',
-      status: 'Status: %{status}',
-      backCollection: ' Writing in %{collectionLabel} collection',
-      unsavedChanges: 'Unsaved Changes',
-      changesSaved: 'Changes saved',
-      draft: 'Draft',
-      inReview: 'In review',
-      ready: 'Ready',
       publishNow: 'Publish now',
       discardChanges: 'Discard changes',
       discardChangesTitle: 'Discard changes',

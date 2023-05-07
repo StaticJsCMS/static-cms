@@ -51,25 +51,16 @@ const hu: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Biztos hogy el akarod hagyni az oldalt?',
-      onUpdatingWithUnsavedChangesBody:
-        'Mentettlen változtatások vannak, kérjük, mentse az állapot frissítése előtt.',
-      onPublishingNotReadyBody: 'Változtasd az állapotot "Kész"-re publikálás előtt.',
-      onPublishingWithUnsavedChangesBody:
-        'Mentetlen változtatások vannak, kérjük, mentsen a publikálás előtt.',
-      onPublishingBody: 'Publikálod ezt a bejegyzést?',
-      onUnpublishing: 'Publikálás visszavonása erre a bejegyzésre?',
       onDeleteWithUnsavedChangesBody:
         'Töröljük ezt a publikált bejegyzést, a többi mentetlen modositással együtt?',
       onDeletePublishedEntryBody: 'Töröljük ezt a publikált bejegyzést?',
       loadingEntry: 'Bejegyzés betöltése...',
     },
     editorToolbar: {
-      publishing: 'Publikálás...',
       publish: 'Publikáció',
       published: 'Publikálás',
       unpublish: 'Publikálás visszavonása',
       duplicate: 'Duplikált',
-      unpublishing: 'Publikálás visszavonása...',
       publishAndCreateNew: 'Publikálás és új létrehozása',
       publishAndDuplicate: 'Publikálás és duplikál',
       deleteEntry: 'Bejegyzés törlése',
@@ -85,9 +76,6 @@ const hu: LocalePhrasesRoot = {
       inReview: 'Felülvizsgálat alatt',
       ready: 'Kész',
       publishNow: 'Publikálás most',
-      deployPreviewPendingButtonLabel: 'Előnézet ellenörzése',
-      deployPreviewButtonLabel: 'Előnézet megtekintése',
-      deployButtonLabel: 'Élő megtekintése',
     },
     editorWidgets: {
       image: {

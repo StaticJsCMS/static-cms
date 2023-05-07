@@ -97,12 +97,6 @@ const he: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'האם ברצונך לעבור לעמוד אחר ללא שמירה?',
-      onUpdatingWithUnsavedChangesBody:
-        'בוצעו שינויים שלא נשמרו. יש לבצע שמירה לפני עדכון מצב האייטם.',
-      onPublishingNotReadyBody: 'נא לשנות את מצב האייטם ל״מוכן לפרסום״ לפני הפרסום.',
-      onPublishingWithUnsavedChangesBody: 'בוצעו שינויים שלא נשמרו. יש לבצע שמירה לפני הפרסום.',
-      onPublishingBody: 'האם ברצונך לפרסם את האייטם?',
-      onUnpublishing: 'האם ברצונך לבטל את פרסום האייטם?',
       onDeleteWithUnsavedChangesBody:
         'האם ברצונך למחוק את האייטם הזה לפני פרסומו, וכן את השינויים שבוצעו כעת וטרם נשמרו?',
       onDeletePublishedEntryBody: 'האם ברצונך למחוק את האייטם הזה לאחר פרסומו?',
@@ -114,34 +108,14 @@ const he: LocalePhrasesRoot = {
       toggleScrollSync: 'סנכרון הגלילה',
     },
     editorToolbar: {
-      publishing: 'פרסום...',
       publish: 'פרסום',
       published: 'פורסם',
       unpublish: 'ביטול הפרסום',
       duplicate: 'שכפול',
-      unpublishing: 'ביטול הפרסום...',
       publishAndCreateNew: 'פרסום ויצירת אייטם חדש',
       publishAndDuplicate: 'פרסום ושכפול',
       deleteEntry: 'מחיקת האייטם',
-      saving: 'שמירה...',
-      save: 'שמירה',
-      statusInfoTooltipDraft:
-        'האייטם מוגדר כטיוטה. כדי להשלים את הפעולה ולהעביר אותו למצב ״ממתין לאישור״ יש להעביר אותו למצב ״ממתין לאישור״',
-      statusInfoTooltipInReview:
-        'האייטם ממתין לאישור - לא נדרשת פעולה נוספת. ניתן עדיין לבצע שינויים בעת שהאייטם ממתין לאישור.',
-      deleting: 'מחיקה...',
-      updating: 'עדכון...',
-      status: 'מצב: %{status}',
-      backCollection: 'כתיבה בקטגוריית %{collectionLabel}',
-      unsavedChanges: 'שינויים לא שמורים',
-      changesSaved: 'השינויים נשמרו',
-      draft: 'טיוטה',
-      inReview: 'ממתין לאישור',
-      ready: 'מוכן לפרסום',
       publishNow: 'פרסום מיידי',
-      deployPreviewPendingButtonLabel: 'בדיקת תצוגה מקדימה',
-      deployPreviewButtonLabel: 'צפייה בתצוגה מקדימה',
-      deployButtonLabel: 'צפייה באתר',
     },
     editorWidgets: {
       markdown: {

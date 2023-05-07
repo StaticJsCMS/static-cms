@@ -82,43 +82,20 @@ const es: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: '¿Estás seguro de que quieres dejar esta página?',
-      onUpdatingWithUnsavedChangesBody:
-        'Tiene cambios no guardados, por favor, guárdelos antes de actualizar el estado.',
-      onPublishingNotReadyBody: 'Por favor, actualice el estado a "Ready" antes de publicar.',
-      onPublishingWithUnsavedChangesBody:
-        'Tiene cambios no guardados, por favor guárdelos antes de publicarlos.',
-      onPublishingBody: '¿Estás seguro de que quieres publicar esta entrada?',
-      onUnpublishing: '¿Estás seguro de que quieres retirar esta entrada?',
       onDeleteWithUnsavedChangesBody:
         '¿Está seguro de que desea eliminar esta entrada publicada, así como los cambios no guardados de la sesión actual?',
       onDeletePublishedEntryBody: '¿Estás seguro de que quieres borrar esta entrada publicada?',
       loadingEntry: 'Cargando entrada...',
     },
     editorToolbar: {
-      publishing: 'Publicando...',
       publish: 'Publicar',
       published: 'Publicado',
       unpublish: 'Retirar',
       duplicate: 'Duplicar',
-      unpublishing: 'Retirando...',
       publishAndCreateNew: 'Publicar y crear nuevo',
       publishAndDuplicate: 'Publicar y duplicar',
       deleteEntry: 'Eliminar entrada',
-      saving: 'Guardando...',
-      save: 'Guardar',
-      deleting: 'Eliminando...',
-      updating: 'Actualizando...',
-      status: 'Estado: %{status}',
-      backCollection: ' Escribiendo en la colección %{collectionLabel}',
-      unsavedChanges: 'Cambios no guardados',
-      changesSaved: 'Cambios guardados',
-      draft: 'Borrador',
-      inReview: 'En revisión',
-      ready: 'Listo',
       publishNow: 'Publicar ahora',
-      deployPreviewPendingButtonLabel: 'Comprobar Vista Previa',
-      deployPreviewButtonLabel: 'Ver Vista Previa',
-      deployButtonLabel: 'Ver publicación',
     },
     editorWidgets: {
       markdown: {

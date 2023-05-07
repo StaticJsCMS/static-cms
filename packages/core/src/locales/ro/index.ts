@@ -97,13 +97,6 @@ const ro: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Ești sigur/ă că dorești să părăsești pagina?',
-      onUpdatingWithUnsavedChangesBody:
-        'Există modificări nesalvate! Te rugăm salvează înainte de a actualiza statusul.',
-      onPublishingNotReadyBody: 'Actualizează statusul la „Gata” înainte de publicare.',
-      onPublishingWithUnsavedChangesBody:
-        'Există modificări nesalvate, salvează-le înainte de publicare.',
-      onPublishingBody: 'Ești sigur/ă că dorești să publici acest articol?',
-      onUnpublishing: 'Ești sigur/ă că dorești să anulezi publicarea acestui articol?',
       onDeleteWithUnsavedChangesBody:
         'Ești sigur/ă că dorești să ștergi această publicare, dar și modificările nesalvate din sesiunea curentă?',
       onDeletePublishedEntryBody: 'Ești sigur/ă că dorești să ștergi această publicare?',
@@ -115,30 +108,14 @@ const ro: LocalePhrasesRoot = {
       toggleScrollSync: 'Sincronizează scroll-ul',
     },
     editorToolbar: {
-      publishing: 'Se publică...',
       publish: 'Publicare',
       published: 'Publicat',
       unpublish: 'Anulează publicarea',
       duplicate: 'Duplifică',
-      unpublishing: 'Se anulează publicarea...',
       publishAndCreateNew: 'Publicare apoi crează altul',
       publishAndDuplicate: 'Publicare apoi duplifică',
       deleteEntry: 'Șterge intrare',
-      saving: 'Se salvează...',
-      save: 'Salvează',
-      deleting: 'Se șterge...',
-      updating: 'Se actualizează...',
-      status: 'Status: %{status}',
-      backCollection: ' Scrii în colecția „%{collectionLabel}”',
-      unsavedChanges: 'Modificări nesalvate',
-      changesSaved: 'Modificări salvate',
-      draft: 'Ciornă',
-      inReview: 'În revizuire',
-      ready: 'Gata',
       publishNow: 'Publicare',
-      deployPreviewPendingButtonLabel: 'Verifică publicare',
-      deployPreviewButtonLabel: 'Previzualizare',
-      deployButtonLabel: 'Vezi publicarea',
     },
     editorWidgets: {
       markdown: {

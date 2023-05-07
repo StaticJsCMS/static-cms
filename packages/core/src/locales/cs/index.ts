@@ -98,12 +98,6 @@ const cs: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Chcete opravdu opustit tuto stránku?',
-      onUpdatingWithUnsavedChangesBody:
-        'Máte neuložené změny. Uložte je prosím před změnou statusu.',
-      onPublishingNotReadyBody: 'Změňte stav na „Připraveno“ před publikováním.',
-      onPublishingWithUnsavedChangesBody:
-        'Máte neuložené změny, prosím uložte je před publikováním.',
-      onPublishingBody: 'Chcete opravdu publikovat tento záznam?',
       onDeleteWithUnsavedChangesBody:
         'Chcete opravdu vymazat tento publikovaný záznam a všechny neuložené změny z této relace?',
       onDeletePublishedEntryBody: 'Chcete opravdu smazat tento publikovaný záznam?',
@@ -115,28 +109,13 @@ const cs: LocalePhrasesRoot = {
       toggleScrollSync: 'Sladit skrolování',
     },
     editorToolbar: {
-      publishing: 'Publikování…',
       publish: 'Publikovat',
       published: 'Publikovaný',
       duplicate: 'Duplikovat',
       publishAndCreateNew: 'Publikovat a vytvořit nový',
       publishAndDuplicate: 'Publikovat a duplikovat',
       deleteEntry: 'Vymazat záznam',
-      saving: 'Ukládání…',
-      save: 'Uložit',
-      deleting: 'Vymazávání…',
-      updating: 'Aktualizace…',
-      status: 'Status: %{status}',
-      backCollection: ' Píšete v kolekci %{collectionLabel}',
-      unsavedChanges: 'Neuložené změny',
-      changesSaved: 'Změny uloženy',
-      draft: 'Koncept',
-      inReview: 'V revizi',
-      ready: 'Připraveno',
       publishNow: 'Publikovat teď',
-      deployPreviewPendingButtonLabel: 'Zkontrolovat náhled',
-      deployPreviewButtonLabel: 'Zobrazit náhled',
-      deployButtonLabel: 'Zobrazit na webu',
     },
     editorWidgets: {
       markdown: {
