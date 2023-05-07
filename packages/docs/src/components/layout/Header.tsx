@@ -10,6 +10,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Link from 'next/link';
 import { useCallback, useMemo, useState } from 'react';
 
+import releases from '../../lib/releases';
 import Logo from './Logo';
 import NavigationDrawer from './mobile-drawer/NavigationDrawer';
 import Search from './search/Search';
@@ -121,7 +122,7 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
   const items: MenuItem[] = useMemo(
     () => [
       {
-        title: 'v2.0.0',
+        title: releases[0].version,
         url: '/releases',
       },
       {
