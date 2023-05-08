@@ -29,14 +29,15 @@ const MediaLibraryModal: FC = () => {
     >
       <IconButton
         className="
-            absolute
-            -top-3.5
-            -left-3.5
-            bg-white
-            hover:bg-gray-100
-            dark:bg-slate-800
-            dark:hover:bg-slate-900
-          "
+          absolute
+          -top-3.5
+          -left-3.5
+          bg-white
+          hover:bg-gray-100
+          dark:bg-slate-800
+          dark:hover:bg-slate-900
+          z-[1]
+        "
         variant="outlined"
         aria-label="add"
         onClick={handleClose}

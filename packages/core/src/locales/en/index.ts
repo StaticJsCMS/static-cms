@@ -234,6 +234,8 @@ const en: LocalePhrasesRoot = {
       deleting: 'Deleting...',
       deleteSelected: 'Delete selected',
       chooseSelected: 'Choose selected',
+      dropImages: 'Drop images to upload',
+      dropFiles: 'Drop files to upload',
     },
     folderSupport: {
       newFolder: 'New folder',

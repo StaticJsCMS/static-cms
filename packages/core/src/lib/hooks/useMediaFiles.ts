@@ -101,7 +101,7 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
         const draftFiles = entryFolderFiles.filter(
           file => file.draft == true && !files.find(f => f.id === file.id),
         );
-        files.unshift(...draftFiles);
+        files.push(...draftFiles);
       }
       return files.map(file => ({ key: file.id, ...file }));
     }
@@ -109,7 +109,32 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
   }, [collection, config, currentFolderMediaFiles, entry, field, mediaLibraryFiles, currentFolder]);
 
   return useMemo(
-    () => files.filter(file => file.name !== '.gitkeep' && (folderSupport || !file.isDirectory)),
+    () =>
+      files
+        .filter(file => file.name !== '.gitkeep' && (folderSupport || !file.isDirectory))
+        .sort((a, b) => {
+          const aIsDirectory = a.isDirectory ?? false;
+          const bIsDirectory = b.isDirectory ?? false;
+          if (aIsDirectory !== bIsDirectory) {
+            if (aIsDirectory) {
+              return -1;
+            }
+
+            return 1;
+          }
+
+          const aIsDraft = a.draft ?? false;
+          const bIsDraft = b.draft ?? false;
+          if (aIsDraft !== bIsDraft) {
+            if (aIsDraft) {
+              return -1;
+            }
+
+            return 1;
+          }
+
+          return a.name.localeCompare(b.name);
+        }),
     [files, folderSupport],
   );
 }
