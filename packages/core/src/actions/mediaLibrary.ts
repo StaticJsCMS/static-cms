@@ -215,11 +215,14 @@ export function persistMedia(
   currentFolder?: string,
 ) {
   const { field } = opts;
-  return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
+  return async (
+    dispatch: ThunkDispatch<RootState, {}, AnyAction>,
+    getState: () => RootState,
+  ): Promise<AssetProxy | null> => {
     const state = getState();
     const config = state.config.config;
     if (!config) {
-      return;
+      return null;
     }
 
     const backend = currentBackend(config);
@@ -246,7 +249,7 @@ export function persistMedia(
           color: 'error',
         }))
       ) {
-        return;
+        return null;
       } else {
         await dispatch(deleteMedia(existingFile));
       }
@@ -277,12 +280,14 @@ export function persistMedia(
           assetProxy,
           draft: Boolean(editingDraft),
         });
-        return dispatch(addDraftEntryMediaFile(mediaFile));
+        await dispatch(addDraftEntryMediaFile(mediaFile));
+        return assetProxy;
       } else {
         mediaFile = await backend.persistMedia(config, assetProxy);
       }
 
-      return dispatch(mediaPersisted(mediaFile, currentFolder));
+      await dispatch(mediaPersisted(mediaFile, currentFolder));
+      return assetProxy;
     } catch (error) {
       console.error(error);
       dispatch(
@@ -296,7 +301,8 @@ export function persistMedia(
           },
         }),
       );
-      return dispatch(mediaPersistFailed());
+      await dispatch(mediaPersistFailed());
+      return null;
     }
   };
 }

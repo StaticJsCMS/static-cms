@@ -9,6 +9,7 @@ import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import Button from '../../common/button/Button';
+import Checkbox from '../../common/checkbox/Checkbox';
 import Image from '../../common/image/Image';
 import Pill from '../../common/pill/Pill';
 import CopyToClipBoardButton from './CopyToClipBoardButton';
@@ -21,7 +22,7 @@ import type {
   TranslatedProps,
   UnknownField,
 } from '@staticcms/core/interface';
-import type { FC, KeyboardEvent } from 'react';
+import type { ChangeEvent, FC, KeyboardEvent } from 'react';
 
 interface MediaLibraryCardProps<T extends MediaField, EF extends BaseField = UnknownField> {
   isSelected?: boolean;
@@ -36,7 +37,9 @@ interface MediaLibraryCardProps<T extends MediaField, EF extends BaseField = Unk
   collection?: Collection<EF>;
   field?: T;
   currentFolder?: string;
-  onSelect: () => void;
+  hasSelection: boolean;
+  allowMultiple: boolean;
+  onSelect: (action: 'add' | 'remove' | 'replace') => void;
   onDirectoryOpen: () => void;
   loadDisplayURL: () => void;
   onDelete: () => void;
@@ -55,6 +58,8 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
   collection,
   field,
   currentFolder,
+  hasSelection,
+  allowMultiple,
   onSelect,
   onDirectoryOpen,
   loadDisplayURL,
@@ -100,9 +105,22 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
 
   const handleOnKeyUp = useCallback(
     (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        onSelect();
+      if (event.code === 'Enter' || event.code === 'Space') {
+        onSelect('replace');
       }
+    },
+    [onSelect],
+  );
+
+  const handleClick = useCallback(() => {
+    onSelect('replace');
+  }, [onSelect]);
+
+  const handleCheckboxChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      event.stopPropagation();
+      event.preventDefault();
+      onSelect(event.target.checked ? 'add' : 'remove');
     },
     [onSelect],
   );
@@ -117,7 +135,7 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
       tabIndex={-1}
     >
       <div
-        onClick={onSelect}
+        onClick={handleClick}
         onDoubleClick={isDirectory ? onDirectoryOpen : undefined}
         data-testid={`media-card-${displayURL.url}`}
         className="
@@ -181,12 +199,12 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
           {!isDirectory ? (
             <div
               className="
-              absolute
-              top-2
-              right-2
-              flex
-              gap-1
-            "
+                absolute
+                top-2
+                right-2
+                flex
+                gap-1
+              "
             >
               <CopyToClipBoardButton path={displayURL.url} name={text} draft={isDraft} />
               <Button
@@ -194,12 +212,12 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
                 onClick={handleDownload}
                 title={t('mediaLibrary.mediaLibraryModal.download')}
                 className="
-                text-white
-                dark:text-white
-                bg-gray-900/25
-                dark:hover:text-blue-100
-                dark:hover:bg-blue-800/80
-              "
+                  text-white
+                  dark:text-white
+                  bg-gray-900/25
+                  dark:hover:text-blue-100
+                  dark:hover:bg-blue-800/80
+                "
               >
                 <DownloadIcon className="w-5 h-5" />
               </Button>
@@ -209,13 +227,13 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
                 onClick={onDelete}
                 title={t('mediaLibrary.mediaLibraryModal.deleteSelected')}
                 className="
-                position: relative;
-                text-red-400
-                bg-gray-900/25
-                dark:hover:text-red-600
-                dark:hover:bg-red-800/40
-                z-30
-              "
+                  position: relative;
+                  text-red-400
+                  bg-gray-900/25
+                  dark:hover:text-red-600
+                  dark:hover:bg-red-800/40
+                  z-30
+                "
               >
                 <DeleteIcon className="w-5 h-5" />
               </Button>
@@ -223,11 +241,26 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
           ) : null}
         </div>
         <div className="relative">
-          {isDraft ? (
-            <Pill data-testid="draft-text" color="primary" className="absolute top-3 left-3 z-20">
-              {draftText}
-            </Pill>
-          ) : null}
+          <div
+            className="
+              absolute
+              top-3
+              left-3
+              flex
+              items-center
+              gap-1
+              z-20
+            "
+          >
+            {hasSelection && allowMultiple ? (
+              <Checkbox checked={isSelected} onChange={handleCheckboxChange} />
+            ) : null}
+            {isDraft ? (
+              <Pill data-testid="draft-text" color="primary" className="">
+                {draftText}
+              </Pill>
+            ) : null}
+          </div>
           {url && isViewableImage ? (
             <Image src={url} className="w-media-card h-media-card-image rounded-md" />
           ) : isDirectory ? (

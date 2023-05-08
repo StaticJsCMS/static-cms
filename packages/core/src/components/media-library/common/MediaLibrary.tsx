@@ -17,8 +17,10 @@ import {
   loadMediaDisplayURL,
   persistMedia,
 } from '@staticcms/core/actions/mediaLibrary';
+import useDragHandlers from '@staticcms/core/lib/hooks/useDragHandlers';
 import useFolderSupport from '@staticcms/core/lib/hooks/useFolderSupport';
 import useMediaFiles from '@staticcms/core/lib/hooks/useMediaFiles';
+import useMediaPersist from '@staticcms/core/lib/hooks/useMediaPersist';
 import { fileExtension } from '@staticcms/core/lib/util';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import MediaLibraryCloseEvent from '@staticcms/core/lib/util/events/MediaLibraryCloseEvent';
@@ -27,7 +29,6 @@ import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
 import { selectMediaLibraryState } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
-import alert from '../../common/alert/Alert';
 import Button from '../../common/button/Button';
 import IconButton from '../../common/button/IconButton';
 import confirm from '../../common/confirm/Confirm';
@@ -69,7 +70,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
   t,
 }) => {
   const [currentFolder, setCurrentFolder] = useState<string | undefined>(undefined);
-  const [selectedFile, setSelectedFile] = useState<MediaFile | null>(null);
+  const [selectedFile, setSelectedFile] = useState<string | string[] | null>(null);
   const [query, setQuery] = useState<string | undefined>(undefined);
 
   const config = useAppSelector(selectConfig);
@@ -184,19 +185,60 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
    * Toggle asset selection on click.
    */
   const handleAssetSelect = useCallback(
-    (asset: MediaFile) => {
-      if (
-        !canInsert ||
-        selectedFile?.key === asset.key ||
-        (!forFolder && asset.isDirectory) ||
-        (forFolder && !asset.isDirectory)
-      ) {
+    (asset: MediaFile, action: 'add' | 'remove' | 'replace') => {
+      if (!canInsert || (!forFolder && asset.isDirectory) || (forFolder && !asset.isDirectory)) {
         return;
       }
 
-      setSelectedFile(asset);
+      if (action === 'replace') {
+        if (selectedFile === asset.path) {
+          return;
+        }
+
+        setSelectedFile(field?.multiple ? [asset.path] : asset.path);
+        return;
+      }
+
+      if (action === 'add') {
+        if (!field?.multiple) {
+          return;
+        }
+
+        const newValue = Array.isArray(selectedFile)
+          ? selectedFile
+          : selectedFile
+          ? [selectedFile]
+          : [];
+        if (newValue.includes(asset.path)) {
+          return;
+        }
+
+        setSelectedFile([...newValue, asset.path]);
+        return;
+      }
+
+      if (action === 'remove') {
+        if (!field?.multiple) {
+          return;
+        }
+
+        const newValue = Array.isArray(selectedFile)
+          ? [...selectedFile]
+          : selectedFile
+          ? [selectedFile]
+          : [];
+
+        const index = newValue.indexOf(asset.path);
+        if (index < 0) {
+          return;
+        }
+
+        newValue.splice(index, 1);
+        setSelectedFile(newValue);
+        return;
+      }
     },
-    [canInsert, forFolder, selectedFile?.key],
+    [canInsert, field?.multiple, forFolder, selectedFile],
   );
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
@@ -209,58 +251,23 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
   /**
    * Upload a file.
    */
-  const handlePersist = useCallback(
-    async (event: ChangeEvent<HTMLInputElement> | DragEvent) => {
-      /**
-       * Stop the browser from automatically handling the file input click, and
-       * get the file for upload, and retain the synthetic event for access after
-       * the asynchronous persist operation.
-       */
-
-      let fileList: FileList | null;
-      if ('dataTransfer' in event) {
-        fileList = event.dataTransfer?.files ?? null;
-      } else {
-        event.persist();
-        fileList = event.target.files;
+  const handlePersist = useMediaPersist({
+    mediaConfig,
+    field,
+    currentFolder,
+    callback: (_files, assets) => {
+      if (assets.length === 1 && assets[0]) {
+        setSelectedFile(assets[0].path);
+      } else if (field?.multiple) {
+        setSelectedFile(assets.filter(f => f).map(f => f!.path));
       }
 
-      if (!fileList) {
-        return;
-      }
-
-      event.stopPropagation();
-      event.preventDefault();
-      const files = [...Array.from(fileList)];
-      const maxFileSize =
-        typeof mediaConfig.max_file_size === 'number' ? mediaConfig.max_file_size : 512000;
-
-      for (const file of files) {
-        if (maxFileSize && file.size > maxFileSize) {
-          alert({
-            title: 'mediaLibrary.mediaLibrary.fileTooLargeTitle',
-            body: {
-              key: 'mediaLibrary.mediaLibrary.fileTooLargeBody',
-              options: {
-                size: Math.floor(maxFileSize / 1000),
-              },
-            },
-          });
-        } else {
-          await dispatch(persistMedia(file, { field }, currentFolder));
-
-          setSelectedFile(files[0] as unknown as MediaFile);
-
-          scrollToTop();
-        }
-      }
-
-      if (!('dataTransfer' in event)) {
-        event.target.value = '';
-      }
+      scrollToTop();
     },
-    [mediaConfig.max_file_size, field, dispatch, currentFolder],
-  );
+  });
+
+  const { dragOverActive, handleDragEnter, handleDragLeave, handleDragOver, handleDrop } =
+    useDragHandlers(handlePersist);
 
   const handleURLChange = useCallback(
     (url: string) => {
@@ -272,14 +279,14 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
 
   const handleAltChange = useCallback(
     (alt: string) => {
-      if (!url && !selectedFile?.path) {
+      if (!url && !selectedFile) {
         return;
       }
 
       setAlt(alt);
-      dispatch(insertMedia((url ?? selectedFile?.path) as string, field, alt, currentFolder));
+      dispatch(insertMedia((url ?? selectedFile) as string, field, alt, currentFolder));
     },
-    [dispatch, field, selectedFile?.path, url, currentFolder],
+    [dispatch, field, selectedFile, url, currentFolder],
   );
 
   const handleOpenDirectory = useCallback(
@@ -375,13 +382,12 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
    * editor field that launched the media library can retrieve it.
    */
   const handleInsert = useCallback(() => {
-    if (!selectedFile?.path) {
+    if (!selectedFile) {
       return;
     }
 
-    const { path } = selectedFile;
-    setUrl(path);
-    dispatch(insertMedia(path, field, alt, currentFolder));
+    setUrl(selectedFile);
+    dispatch(insertMedia(selectedFile, field, alt, currentFolder));
 
     if (!insertOptions?.chooseUrl && !insertOptions?.showAlt) {
       handleClose();
@@ -478,147 +484,203 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
 
   return (
     <>
-      <div className="flex flex-col w-full h-full">
-        <CurrentMediaDetails
-          collection={collection}
-          field={field}
-          canInsert={canInsert}
-          url={url}
-          alt={alt}
-          insertOptions={insertOptions}
-          forImage={forImage}
-          replaceIndex={replaceIndex}
-          onUrlChange={handleURLChange}
-          onAltChange={handleAltChange}
-        />
+      <div
+        onDrop={handleDrop}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        className={classNames(
+          `
+            relative
+            border-2
+            transition-colors
+            w-full
+            h-full
+          `,
+          isDialog && 'rounded-lg',
+          dragOverActive ? 'border-blue-500' : 'border-transparent',
+        )}
+      >
         <div
-          className={classNames(
-            `
-              flex
-              items-center
-              px-5
-              pt-4
-            `,
-            folderSupport &&
-              `
-                pb-4
-                border-b
-                border-gray-200/75
-                dark:border-slate-500/75
-              `,
-          )}
+          className="
+            -m-0.5
+            w-full
+            h-full
+          "
         >
-          <div className="flex flex-grow gap-3 mr-8">
-            <h2
-              className="
-                text-xl
-                font-semibold
+          <div className="flex flex-col w-full h-full">
+            <CurrentMediaDetails
+              collection={collection}
+              field={field}
+              canInsert={canInsert}
+              url={url}
+              alt={alt}
+              insertOptions={insertOptions}
+              forImage={forImage}
+              replaceIndex={replaceIndex}
+              onUrlChange={handleURLChange}
+              onAltChange={handleAltChange}
+            />
+            <div
+              className={classNames(
+                `
+                  flex
+                  items-center
+                  px-5
+                  pt-4
+                `,
+                folderSupport &&
+                  `
+                    pb-4
+                    border-b
+                    border-gray-200/75
+                    dark:border-slate-500/75
+                  `,
+              )}
+            >
+              <div className="flex flex-grow gap-3 mr-8">
+                <h2
+                  className="
+                    text-xl
+                    font-semibold
+                    flex
+                    items-center
+                    gap-2
+                    text-gray-800
+                    dark:text-gray-300
+                  "
+                >
+                  <div className="flex items-center">
+                    <PhotoIcon className="w-5 h-5" />
+                  </div>
+                  {t('app.header.media')}
+                </h2>
+                <MediaLibrarySearch
+                  value={query}
+                  onChange={handleSearchChange}
+                  onKeyDown={handleSearchKeyDown}
+                  placeholder={t('mediaLibrary.mediaLibraryModal.search')}
+                  disabled={!dynamicSearchActive && !hasFilteredFiles}
+                />
+                {folderSupport ? (
+                  <div className="flex gap-1.5 items-center">
+                    <IconButton
+                      onClick={handleHome}
+                      title={t('mediaLibrary.folderSupport.home')}
+                      color="secondary"
+                      disabled={!currentFolder}
+                    >
+                      <HomeIcon className="h-5 w-5" />
+                    </IconButton>
+                    <IconButton
+                      onClick={handleGoBack}
+                      title={
+                        parentFolder
+                          ? t('mediaLibrary.folderSupport.upToFolder', { folder: parentFolder })
+                          : t('mediaLibrary.folderSupport.up')
+                      }
+                      color="secondary"
+                      disabled={!parentFolder}
+                    >
+                      <UpwardIcon className="h-5 w-5" />
+                    </IconButton>
+                    <IconButton
+                      onClick={handleCreateFolder}
+                      title={t('mediaLibrary.folderSupport.newFolder')}
+                      color="secondary"
+                    >
+                      <NewFolderIcon className="h-5 w-5"></NewFolderIcon>
+                    </IconButton>
+                  </div>
+                ) : null}
+              </div>
+              <div className="flex gap-3 items-center relative">
+                <FileUploadButton imagesOnly={forImage} onChange={handlePersist} />
+                {canInsert ? (
+                  <Button
+                    key="choose-selected"
+                    color="success"
+                    variant="contained"
+                    onClick={handleInsert}
+                    disabled={!hasSelection}
+                    data-testid="choose-selected"
+                  >
+                    {t('mediaLibrary.mediaLibraryModal.chooseSelected')}
+                  </Button>
+                ) : null}
+              </div>
+            </div>
+            {folderSupport ? (
+              <div
+                className="
+                  flex
+                  gap-2
+                  items-center
+                  px-5
+                  py-4
+                  font-bold
+                  text-xl
+                "
+              >
+                <FolderOpenIcon className="w-6 h-6" />
+                {currentFolder ?? mediaFolder}
+              </div>
+            ) : null}
+            {!hasMedia ? (
+              <EmptyMessage content={emptyMessage} />
+            ) : (
+              <MediaLibraryCardGrid
+                scrollContainerRef={scrollContainerRef}
+                mediaItems={tableData}
+                isSelectedFile={file =>
+                  Array.isArray(selectedFile) && field?.multiple
+                    ? selectedFile.includes(file.path)
+                    : selectedFile === file.path
+                }
+                onAssetSelect={handleAssetSelect}
+                canLoadMore={hasNextPage}
+                onLoadMore={handleLoadMore}
+                onDirectoryOpen={handleOpenDirectory}
+                currentFolder={currentFolder}
+                isPaginating={isPaginating}
+                paginatingMessage={t('mediaLibrary.mediaLibraryModal.loading')}
+                cardDraftText={t('mediaLibrary.mediaLibraryCard.draft')}
+                loadDisplayURL={loadDisplayURL}
+                displayURLs={displayURLs}
+                collection={collection}
+                field={field}
+                isDialog={isDialog}
+                onDelete={handleDelete}
+                hasSelection={
+                  Array.isArray(selectedFile) ? selectedFile.length > 0 : Boolean(selectedFile)
+                }
+                allowMultiple={replaceIndex === undefined && (field?.multiple ?? false)}
+              />
+            )}
+          </div>
+          <div
+            className={classNames(
+              `
+                absolute
+                inset-0
                 flex
                 items-center
-                gap-2
-                text-gray-800
-                dark:text-gray-300
-              "
-            >
-              <div className="flex items-center">
-                <PhotoIcon className="w-5 h-5" />
-              </div>
-              {t('app.header.media')}
-            </h2>
-            <MediaLibrarySearch
-              value={query}
-              onChange={handleSearchChange}
-              onKeyDown={handleSearchKeyDown}
-              placeholder={t('mediaLibrary.mediaLibraryModal.search')}
-              disabled={!dynamicSearchActive && !hasFilteredFiles}
-            />
-            {folderSupport ? (
-              <div className="flex gap-1.5 items-center">
-                <IconButton
-                  onClick={handleHome}
-                  title={t('mediaLibrary.folderSupport.home')}
-                  color="secondary"
-                  disabled={!currentFolder}
-                >
-                  <HomeIcon className="h-5 w-5" />
-                </IconButton>
-                <IconButton
-                  onClick={handleGoBack}
-                  title={
-                    parentFolder
-                      ? t('mediaLibrary.folderSupport.upToFolder', { folder: parentFolder })
-                      : t('mediaLibrary.folderSupport.up')
-                  }
-                  color="secondary"
-                  disabled={!parentFolder}
-                >
-                  <UpwardIcon className="h-5 w-5" />
-                </IconButton>
-                <IconButton
-                  onClick={handleCreateFolder}
-                  title={t('mediaLibrary.folderSupport.newFolder')}
-                  color="secondary"
-                >
-                  <NewFolderIcon className="h-5 w-5"></NewFolderIcon>
-                </IconButton>
-              </div>
-            ) : null}
-          </div>
-          <div className="flex gap-3 items-center relative z-20">
-            <FileUploadButton imagesOnly={forImage} onChange={handlePersist} />
-            {canInsert ? (
-              <Button
-                key="choose-selected"
-                color="success"
-                variant="contained"
-                onClick={handleInsert}
-                disabled={!hasSelection}
-                data-testid="choose-selected"
-              >
-                {t('mediaLibrary.mediaLibraryModal.chooseSelected')}
-              </Button>
-            ) : null}
+                justify-center
+                pointer-events-none
+                font-bold
+                text-blue-500
+                bg-white/75
+                dark:text-blue-400
+                dark:bg-slate-800/75
+                transition-opacity
+              `,
+              isDialog && 'rounded-lg',
+              dragOverActive ? 'opacity-100' : 'opacity-0',
+            )}
+          >
+            {t(`mediaLibrary.mediaLibraryModal.${forImage ? 'dropImages' : 'dropFiles'}`)}
           </div>
         </div>
-        {folderSupport ? (
-          <div
-            className="
-              flex
-              gap-2
-              items-center
-              px-5
-              py-4
-              font-bold
-              text-xl
-            "
-          >
-            <FolderOpenIcon className="w-6 h-6" />
-            {currentFolder ?? mediaFolder}
-          </div>
-        ) : null}
-        {!hasMedia ? (
-          <EmptyMessage content={emptyMessage} />
-        ) : (
-          <MediaLibraryCardGrid
-            scrollContainerRef={scrollContainerRef}
-            mediaItems={tableData}
-            isSelectedFile={file => selectedFile?.key === file.key}
-            onAssetSelect={handleAssetSelect}
-            canLoadMore={hasNextPage}
-            onLoadMore={handleLoadMore}
-            onDirectoryOpen={handleOpenDirectory}
-            currentFolder={currentFolder}
-            isPaginating={isPaginating}
-            paginatingMessage={t('mediaLibrary.mediaLibraryModal.loading')}
-            cardDraftText={t('mediaLibrary.mediaLibraryCard.draft')}
-            loadDisplayURL={loadDisplayURL}
-            displayURLs={displayURLs}
-            collection={collection}
-            field={field}
-            isDialog={isDialog}
-            onDelete={handleDelete}
-          />
-        )}
       </div>
       <FolderCreationDialog
         open={folderCreationOpen}

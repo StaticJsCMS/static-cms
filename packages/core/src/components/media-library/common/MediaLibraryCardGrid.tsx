@@ -42,7 +42,7 @@ export interface MediaLibraryCardGridProps {
   scrollContainerRef: React.MutableRefObject<HTMLDivElement | null>;
   mediaItems: MediaFile[];
   isSelectedFile: (file: MediaFile) => boolean;
-  onAssetSelect: (asset: MediaFile) => void;
+  onAssetSelect: (asset: MediaFile, action: 'add' | 'remove' | 'replace') => void;
   canLoadMore?: boolean;
   onLoadMore: () => void;
   onDirectoryOpen: (dir: string) => void;
@@ -57,6 +57,8 @@ export interface MediaLibraryCardGridProps {
   field?: MediaField;
   isDialog: boolean;
   onDelete: (file: MediaFile) => void;
+  hasSelection: boolean;
+  allowMultiple: boolean;
 }
 
 export type CardGridItemData = MediaLibraryCardGridProps & {
@@ -81,6 +83,8 @@ const CardWrapper = ({
     collection,
     field,
     onDelete,
+    hasSelection,
+    allowMultiple,
   },
 }: GridChildComponentProps<CardGridItemData>) => {
   const left = useMemo(
@@ -96,7 +100,7 @@ const CardWrapper = ({
   );
 
   const top = useMemo(
-    () => parseFloat(`${typeof style.top === 'number' ? style.top ?? 0 : style.top}`),
+    () => parseFloat(`${typeof style.top === 'number' ? style.top ?? 0 : style.top}`) + 4,
     [style.top],
   );
 
@@ -120,7 +124,7 @@ const CardWrapper = ({
         key={file.key}
         isSelected={isSelectedFile(file)}
         text={file.name}
-        onSelect={() => onAssetSelect(file)}
+        onSelect={action => onAssetSelect(file, action)}
         onDirectoryOpen={() => onDirectoryOpen(file.path)}
         currentFolder={currentFolder}
         isDraft={file.draft}
@@ -134,6 +138,8 @@ const CardWrapper = ({
         collection={collection}
         field={field}
         onDelete={() => onDelete(file)}
+        hasSelection={hasSelection}
+        allowMultiple={allowMultiple}
       />
     </div>
   );
