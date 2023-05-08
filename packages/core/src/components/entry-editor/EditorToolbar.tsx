@@ -10,13 +10,14 @@ import { Publish as PublishIcon } from '@styled-icons/material/Publish';
 import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
+import { deleteLocalBackup, loadEntry } from '@staticcms/core/actions/entries';
 import { selectAllowDeletion } from '@staticcms/core/lib/util/collection.util';
+import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
+import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
+import confirm from '../common/confirm/Confirm';
 import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
-import confirm from '../common/confirm/Confirm';
-import { useAppDispatch } from '@staticcms/core/store/hooks';
-import { deleteLocalBackup, loadEntry } from '@staticcms/core/actions/entries';
 
 import type { Collection, EditorPersistOptions, TranslatedProps } from '@staticcms/core/interface';
 import type { FC, MouseEventHandler } from 'react';
@@ -73,6 +74,7 @@ const EditorToolbar = ({
   );
   const canDelete = useMemo(() => selectAllowDeletion(collection), [collection]);
   const isPublished = useMemo(() => !isNewEntry && !hasChanged, [hasChanged, isNewEntry]);
+  const isLoading = useAppSelector(selectIsFetching);
 
   const dispatch = useAppDispatch();
 
@@ -185,7 +187,7 @@ const EditorToolbar = ({
                 <>
                   <MenuItemButton
                     onClick={togglePreview}
-                    disabled={i18nActive}
+                    disabled={isLoading || i18nActive}
                     startIcon={EyeIcon}
                     endIcon={previewActive && !i18nActive ? CheckIcon : undefined}
                   >
@@ -193,7 +195,7 @@ const EditorToolbar = ({
                   </MenuItemButton>
                   <MenuItemButton
                     onClick={toggleScrollSync}
-                    disabled={i18nActive || !previewActive}
+                    disabled={isLoading || i18nActive || !previewActive}
                     startIcon={HeightIcon}
                     endIcon={
                       scrollSyncActive && !(i18nActive || !previewActive) ? CheckIcon : undefined
@@ -218,7 +220,7 @@ const EditorToolbar = ({
             isPublished ? t('editor.editorToolbar.published') : t('editor.editorToolbar.publish')
           }
           color={isPublished ? 'success' : 'primary'}
-          disabled={menuItems.length == 1 && menuItems[0].length === 0}
+          disabled={isLoading || (menuItems.length == 1 && menuItems[0].length === 0)}
         >
           {menuItems.map((group, index) => (
             <MenuGroup key={`menu-group-${index}`}>{group}</MenuGroup>
@@ -229,14 +231,15 @@ const EditorToolbar = ({
     [
       showI18nToggle,
       showPreviewToggle,
+      canDelete,
       toggleI18n,
       i18nActive,
       t,
       togglePreview,
+      isLoading,
       previewActive,
       toggleScrollSync,
       scrollSyncActive,
-      canDelete,
       onDelete,
       isPublished,
       menuItems,

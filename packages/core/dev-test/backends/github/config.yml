@@ -5,12 +5,12 @@ backend:
 
 media_folder: assets/upload
 public_folder: /assets/upload
+media_library:
+  max_file_size: 100000000
 collections:
   - name: posts
     label: Posts
     label_singular: Post
-    media_folder: /assets/posts
-    public_folder: /assets/posts
     description: >
       The description is a great place for tone setting, high level information,
       and editing guidelines that are specific to a collection.

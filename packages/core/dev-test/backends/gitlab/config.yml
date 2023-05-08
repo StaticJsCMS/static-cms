@@ -3,10 +3,12 @@ backend:
   branch: main
   repo: static-cms/static-cms-gitlab
   auth_type: pkce
-  app_id: 91cc479ec663625098d456850c4dc4943fd8462064ebd9693b330e66f9d8f11a
+  app_id: 589ccb30ce31da8ba08e0b1e10b681a10be108e144508c2712573c6e4d60707e
 
 media_folder: assets/upload
 public_folder: /assets/upload
+media_library:
+  max_file_size: 100000000
 collections:
   - name: posts
     label: Posts

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { Waypoint } from 'react-waypoint';
 
@@ -6,6 +6,8 @@ import { selectFields, selectInferredField } from '@staticcms/core/lib/util/coll
 import { toTitleCaseFromKey } from '@staticcms/core/lib/util/string.util';
 import Table from '../../common/table/Table';
 import EntryCard from './EntryCard';
+import EntryRow from './EntryRow';
+import EntriesPagination from './EntriesPagination';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
 import type {
@@ -17,6 +19,8 @@ import type {
 } from '@staticcms/core/interface';
 import type Cursor from '@staticcms/core/lib/util/Cursor';
 import type { FC } from 'react';
+
+const DEFAULT_PAGE_SIZE = 20;
 
 export interface BaseEntryListingProps {
   entries: Entry[];
@@ -40,7 +44,6 @@ export type EntryListingProps =
 
 const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
   entries,
-  page,
   cursor,
   viewStyle,
   handleCursorActions,
@@ -93,20 +96,26 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
     [otherProps],
   );
 
-  const renderedCards = useMemo(() => {
+  const entryData: ({
+    collection: Collection;
+    imageFieldName: string | null | undefined;
+    viewStyle: ViewStyle;
+    entry: Entry;
+    key: string;
+    summaryFields: string[];
+    collectionLabel?: string;
+  } | null)[] = useMemo(() => {
     if ('collection' in otherProps) {
       const inferredFields = inferFields(otherProps.collection);
-      return entries.map(entry => (
-        <EntryCard
-          collection={otherProps.collection}
-          imageFieldName={inferredFields.imageField}
-          viewStyle={viewStyle}
-          entry={entry}
-          key={entry.slug}
-          summaryFields={summaryFields}
-          t={t}
-        />
-      ));
+
+      return entries.map(entry => ({
+        collection: otherProps.collection,
+        imageFieldName: inferredFields.imageField,
+        viewStyle,
+        entry,
+        key: entry.slug,
+        summaryFields,
+      }));
     }
 
     return entries.map(entry => {
@@ -117,20 +126,19 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
 
       const collectionLabel = !isSingleCollectionInList ? collection?.label : undefined;
       const inferredFields = inferFields(collection);
-      return collection ? (
-        <EntryCard
-          collection={collection}
-          entry={entry}
-          imageFieldName={inferredFields.imageField}
-          viewStyle={viewStyle}
-          collectionLabel={collectionLabel}
-          key={entry.slug}
-          summaryFields={summaryFields}
-          t={t}
-        />
-      ) : null;
+      return collection
+        ? {
+            collection,
+            entry,
+            imageFieldName: inferredFields.imageField,
+            viewStyle,
+            collectionLabel,
+            key: entry.slug,
+            summaryFields,
+          }
+        : null;
     });
-  }, [entries, inferFields, isSingleCollectionInList, otherProps, summaryFields, t, viewStyle]);
+  }, [entries, inferFields, isSingleCollectionInList, otherProps, summaryFields, viewStyle]);
 
   const summaryFieldHeaders = useMemo(() => {
     if ('collection' in otherProps) {
@@ -149,6 +157,13 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
     return [];
   }, [otherProps, summaryFields]);
 
+  const [page, setPage] = useState(1);
+  const totalPages = useMemo(() => Math.ceil(entries.length / DEFAULT_PAGE_SIZE), [entries.length]);
+
+  const handleUpdatePage = useCallback((newPage: number) => {
+    setPage(newPage);
+  }, []);
+
   if (viewStyle === 'VIEW_STYLE_LIST') {
     return (
       <>
@@ -159,16 +174,27 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
               : [...summaryFieldHeaders, '']
           }
         >
-          {renderedCards}
+          {entryData.map(data =>
+            data ? (
+              <EntryRow
+                key={data.key}
+                collection={data.collection}
+                entry={data.entry}
+                summaryFields={data.summaryFields}
+                t={t}
+              />
+            ) : null,
+          )}
         </Table>
-        {hasMore && handleLoadMore && <Waypoint key={page} onEnter={handleLoadMore} />}
+        <EntriesPagination page={page} total={totalPages} onChange={handleUpdatePage} />
       </>
     );
   }
 
   return (
-    <div
-      className="
+    <div className="w-full flex flex-col gap-4">
+      <div
+        className="
         grid
         gap-4
         sm:grid-cols-1
@@ -177,9 +203,20 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
         xl:grid-cols-3
         2xl:grid-cols-4
       "
-    >
-      {renderedCards}
-      {hasMore && handleLoadMore && <Waypoint key={page} onEnter={handleLoadMore} />}
+      >
+        {entryData.map(data =>
+          data ? (
+            <EntryCard
+              key={data.key}
+              collection={data.collection}
+              entry={data.entry}
+              imageFieldName={data.imageFieldName}
+              t={t}
+            />
+          ) : null,
+        )}
+      </div>
+      <EntriesPagination page={page} total={totalPages} onChange={handleUpdatePage} />
     </div>
   );
 };

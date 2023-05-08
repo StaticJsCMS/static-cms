@@ -17,6 +17,8 @@ const CardActionArea = ({ to, children }: CardActionAreaProps) => {
         w-full
         relative
         flex
+        flex-col
+        rounded-lg
         justify-start
         hover:bg-gray-200
         dark:hover:bg-slate-700/70

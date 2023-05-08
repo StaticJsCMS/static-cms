@@ -8,11 +8,13 @@ import { useAppSelector } from '@staticcms/core/store/hooks';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 
 import type { BaseField, Collection, MediaField, UnknownField } from '@staticcms/core/interface';
+import type { CSSProperties } from 'react';
 
 export interface ImageProps<EF extends BaseField> {
   src?: string;
   alt?: string;
   className?: string;
+  style?: CSSProperties;
   collection?: Collection<EF>;
   field?: MediaField;
   'data-testid'?: string;
@@ -22,6 +24,7 @@ const Image = <EF extends BaseField = UnknownField>({
   src,
   alt,
   className,
+  style,
   collection,
   field,
   'data-testid': dataTestId,
@@ -52,6 +55,7 @@ const Image = <EF extends BaseField = UnknownField>({
       alt={alt}
       data-testid={dataTestId ?? 'image'}
       className={classNames('object-cover max-w-full overflow-hidden', className)}
+      style={style}
     />
   );
 };
