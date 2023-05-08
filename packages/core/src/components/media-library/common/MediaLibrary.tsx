@@ -258,6 +258,8 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
     callback: (_files, assets) => {
       if (assets.length === 1 && assets[0]) {
         setSelectedFile(assets[0].path);
+      } else if (field?.multiple) {
+        setSelectedFile(assets.filter(f => f).map(f => f!.path));
       }
 
       scrollToTop();
