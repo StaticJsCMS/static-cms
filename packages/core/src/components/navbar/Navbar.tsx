@@ -4,7 +4,7 @@ import { translate } from 'react-polyglot';
 import { Link } from 'react-router-dom';
 
 import { checkBackendStatus } from '@staticcms/core/actions/status';
-import { selectDisplayUrl } from '@staticcms/core/reducers/selectors/config';
+import { selectConfig, selectDisplayUrl } from '@staticcms/core/reducers/selectors/config';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import Button from '../common/button/Button';
 import { StaticCmsIcon } from '../images/_index';
@@ -26,6 +26,7 @@ const Navbar = ({
   breadcrumbs = [],
 }: TranslatedProps<NavbarProps>) => {
   const dispatch = useAppDispatch();
+  const config = useAppSelector(selectConfig);
 
   const displayUrl = useAppSelector(selectDisplayUrl);
 
@@ -45,7 +46,14 @@ const Navbar = ({
         <div className="relative flex h-16 items-center justify-between">
           <div className="flex flex-1 items-center justify-center h-full sm:items-stretch sm:justify-start gap-4">
             <div className="flex flex-shrink-0 items-center justify-center bg-slate-500 dark:bg-slate-700 w-16">
-              <StaticCmsIcon className="inline-flex w-10 h-10" />
+              {config?.logo_url ? (
+                <div
+                  className="inline-flex h-10 w-10 bg-cover bg-no-repeat bg-center object-cover"
+                  style={{ backgroundImage: `url('${config.logo_url}')` }}
+                />
+              ) : (
+                <StaticCmsIcon className="inline-flex w-10 h-10" />
+              )}
             </div>
             <div className="flex h-full items-center text-xl font-semibold gap-1 text-gray-800 dark:text-white">
               {breadcrumbs.map((breadcrumb, index) =>

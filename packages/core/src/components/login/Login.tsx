@@ -32,7 +32,14 @@ const Login = ({
 
   return (
     <div className="flex flex-col h-screen items-center justify-center bg-slate-50 dark:bg-slate-900">
-      {config?.logo_url ? <img src={config.logo_url} /> : <StaticCmsLogo className="h-40 w-80" />}
+      {config?.logo_url ? (
+        <div
+          className="h-40 w-80 mb-4 bg-cover bg-no-repeat bg-center object-cover"
+          style={{ backgroundImage: `url('${config.logo_url}')` }}
+        />
+      ) : (
+        <StaticCmsLogo className="h-40 w-80" />
+      )}
       {error ? (
         <div
           className="flex px-4 py-3 mb-6 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"

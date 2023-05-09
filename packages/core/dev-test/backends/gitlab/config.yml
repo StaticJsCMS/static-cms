@@ -7,6 +7,7 @@ backend:
 
 media_folder: assets/upload
 public_folder: /assets/upload
+logo_url: http://localhost:8080/assets/uploads/lobby.jpg
 media_library:
   max_file_size: 100000000
 collections:
