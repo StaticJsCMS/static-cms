@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
 import Loader from '@staticcms/core/components/common/progress/Loader';
@@ -37,11 +37,14 @@ const Entries = ({
   page,
   ...otherProps
 }: TranslatedProps<EntriesProps>) => {
-  const loadingMessages = [
-    t('collection.entries.loadingEntries'),
-    t('collection.entries.cachingEntries'),
-    t('collection.entries.longerLoading'),
-  ];
+  const loadingMessages = useMemo(
+    () => [
+      t('collection.entries.loadingEntries'),
+      t('collection.entries.cachingEntries'),
+      t('collection.entries.longerLoading'),
+    ],
+    [t],
+  );
 
   if (isFetching && page === undefined) {
     return <Loader>{loadingMessages}</Loader>;
@@ -49,33 +52,28 @@ const Entries = ({
 
   const hasEntries = (entries && entries.length > 0) || cursor?.actions?.has('append_next');
   if (hasEntries) {
-    return (
-      <>
-        {'collection' in otherProps ? (
-          <EntryListing
-            key="collection-listing"
-            collection={otherProps.collection}
-            entries={entries}
-            viewStyle={viewStyle}
-            cursor={cursor}
-            handleCursorActions={handleCursorActions}
-            page={page}
-          />
-        ) : (
-          <EntryListing
-            key="search-listing"
-            collections={otherProps.collections}
-            entries={entries}
-            viewStyle={viewStyle}
-            cursor={cursor}
-            handleCursorActions={handleCursorActions}
-            page={page}
-          />
-        )}
-        {isFetching && page !== undefined && entries.length > 0 ? (
-          <div>{t('collection.entries.loadingEntries')}</div>
-        ) : null}
-      </>
+    return 'collection' in otherProps ? (
+      <EntryListing
+        key="collection-listing"
+        collection={otherProps.collection}
+        entries={entries}
+        viewStyle={viewStyle}
+        cursor={cursor}
+        handleCursorActions={handleCursorActions}
+        page={page}
+        isLoadingEntries={isFetching && page !== undefined && entries.length > 0}
+      />
+    ) : (
+      <EntryListing
+        key="search-listing"
+        collections={otherProps.collections}
+        entries={entries}
+        viewStyle={viewStyle}
+        cursor={cursor}
+        handleCursorActions={handleCursorActions}
+        page={page}
+        isLoadingEntries={isFetching && page !== undefined && entries.length > 0}
+      />
     );
   }
 

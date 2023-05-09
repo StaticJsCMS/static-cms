@@ -46,6 +46,7 @@ const MainView = ({
       <div className="flex bg-slate-50 dark:bg-slate-900">
         {showLeftNav ? <Sidebar /> : null}
         <div
+          id="main-view"
           className={classNames(
             showLeftNav ? 'w-main left-64' : 'w-full',
             !noMargin && 'px-5 py-4',

@@ -20,6 +20,8 @@ const Card = ({ children, className }: CardProps) => {
           shadow-md
           dark:bg-slate-800
           dark:border-gray-700/40
+          flex
+          flex-col
         `,
         className,
       )}

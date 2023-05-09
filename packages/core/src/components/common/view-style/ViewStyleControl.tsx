@@ -2,7 +2,7 @@ import { Grid as GridIcon } from '@styled-icons/bootstrap/Grid';
 import { TableRows as TableRowsIcon } from '@styled-icons/material-rounded/TableRows';
 import React from 'react';
 
-import { VIEW_STYLE_GRID, VIEW_STYLE_LIST } from '@staticcms/core/constants/views';
+import { VIEW_STYLE_GRID, VIEW_STYLE_TABLE } from '@staticcms/core/constants/views';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import IconButton from '../button/IconButton';
 
@@ -18,9 +18,9 @@ const ViewStyleControl = ({ viewStyle, onChangeViewStyle }: ViewStyleControlPros
     <div className="flex items-center gap-1.5 mr-1">
       <IconButton
         variant="text"
-        className={classNames(viewStyle === VIEW_STYLE_LIST && 'text-blue-500 dark:text-blue-500')}
+        className={classNames(viewStyle === VIEW_STYLE_TABLE && 'text-blue-500 dark:text-blue-500')}
         aria-label="table view"
-        onClick={() => onChangeViewStyle(VIEW_STYLE_LIST)}
+        onClick={() => onChangeViewStyle(VIEW_STYLE_TABLE)}
       >
         <TableRowsIcon className="h-5 w-5" />
       </IconButton>

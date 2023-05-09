@@ -11,12 +11,18 @@ interface TableCellProps {
 
 const TableCell = ({ columns, children }: TableCellProps) => {
   return (
-    <div className="relative overflow-x-auto shadow-md sm:rounded-lg border border-slate-200 dark:border-gray-700">
-      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-300 ">
-        <thead className="text-xs text-gray-700 bg-gray-100 dark:bg-slate-700 dark:text-gray-300">
+    <div className="shadow-md">
+      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-300">
+        <thead className="text-xs">
           <tr>
             {columns.map((column, index) => (
-              <TableHeaderCell key={index}>{column}</TableHeaderCell>
+              <TableHeaderCell
+                key={index}
+                isFirst={index === 0}
+                isLast={index + 1 === columns.length}
+              >
+                {column}
+              </TableHeaderCell>
             ))}
           </tr>
         </thead>

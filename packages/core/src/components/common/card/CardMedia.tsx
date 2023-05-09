@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Image from '../image/Image';
+
 interface CardMediaProps {
   image: string;
   width?: string | number;
@@ -9,7 +11,7 @@ interface CardMediaProps {
 
 const CardMedia = ({ image, width, height, alt = '' }: CardMediaProps) => {
   return (
-    <img
+    <Image
       className="rounded-t-lg bg-cover bg-no-repeat bg-center w-full object-cover"
       style={{
         width: width ? `${width}px` : undefined,

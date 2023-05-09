@@ -1,15 +1,16 @@
 import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
-import { Waypoint } from 'react-waypoint';
 
+import { VIEW_STYLE_TABLE } from '@staticcms/core/constants/views';
 import { selectFields, selectInferredField } from '@staticcms/core/lib/util/collection.util';
 import { toTitleCaseFromKey } from '@staticcms/core/lib/util/string.util';
-import Table from '../../common/table/Table';
-import EntryCard from './EntryCard';
+import EntryListingGrid from './EntryListingGrid';
+import EntryListingTable from './EntryListingTable';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
 import type {
   Collection,
+  CollectionEntryData,
   Collections,
   Entry,
   Field,
@@ -22,6 +23,7 @@ export interface BaseEntryListingProps {
   entries: Entry[];
   viewStyle: ViewStyle;
   cursor?: Cursor;
+  isLoadingEntries: boolean;
   handleCursorActions?: (action: string) => void;
   page?: number;
 }
@@ -40,9 +42,9 @@ export type EntryListingProps =
 
 const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
   entries,
-  page,
   cursor,
   viewStyle,
+  isLoadingEntries,
   handleCursorActions,
   t,
   ...otherProps
@@ -93,44 +95,43 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
     [otherProps],
   );
 
-  const renderedCards = useMemo(() => {
+  const entryData: CollectionEntryData[] = useMemo(() => {
     if ('collection' in otherProps) {
       const inferredFields = inferFields(otherProps.collection);
-      return entries.map(entry => (
-        <EntryCard
-          collection={otherProps.collection}
-          imageFieldName={inferredFields.imageField}
-          viewStyle={viewStyle}
-          entry={entry}
-          key={entry.slug}
-          summaryFields={summaryFields}
-          t={t}
-        />
-      ));
+
+      return entries.map(entry => ({
+        collection: otherProps.collection,
+        imageFieldName: inferredFields.imageField,
+        viewStyle,
+        entry,
+        key: entry.slug,
+        summaryFields,
+      }));
     }
 
-    return entries.map(entry => {
-      const collectionName = entry.collection;
-      const collection = Object.values(otherProps.collections).find(
-        coll => coll.name === collectionName,
-      );
+    return entries
+      .map(entry => {
+        const collectionName = entry.collection;
+        const collection = Object.values(otherProps.collections).find(
+          coll => coll.name === collectionName,
+        );
 
-      const collectionLabel = !isSingleCollectionInList ? collection?.label : undefined;
-      const inferredFields = inferFields(collection);
-      return collection ? (
-        <EntryCard
-          collection={collection}
-          entry={entry}
-          imageFieldName={inferredFields.imageField}
-          viewStyle={viewStyle}
-          collectionLabel={collectionLabel}
-          key={entry.slug}
-          summaryFields={summaryFields}
-          t={t}
-        />
-      ) : null;
-    });
-  }, [entries, inferFields, isSingleCollectionInList, otherProps, summaryFields, t, viewStyle]);
+        const collectionLabel = !isSingleCollectionInList ? collection?.label : undefined;
+        const inferredFields = inferFields(collection);
+        return collection
+          ? {
+              collection,
+              entry,
+              imageFieldName: inferredFields.imageField,
+              viewStyle,
+              collectionLabel,
+              key: entry.slug,
+              summaryFields,
+            }
+          : null;
+      })
+      .filter(e => e) as CollectionEntryData[];
+  }, [entries, inferFields, isSingleCollectionInList, otherProps, summaryFields, viewStyle]);
 
   const summaryFieldHeaders = useMemo(() => {
     if ('collection' in otherProps) {
@@ -149,38 +150,30 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
     return [];
   }, [otherProps, summaryFields]);
 
-  if (viewStyle === 'VIEW_STYLE_LIST') {
+  if (viewStyle === VIEW_STYLE_TABLE) {
     return (
-      <>
-        <Table
-          columns={
-            !isSingleCollectionInList
-              ? ['Collection', ...summaryFieldHeaders, '']
-              : [...summaryFieldHeaders, '']
-          }
-        >
-          {renderedCards}
-        </Table>
-        {hasMore && handleLoadMore && <Waypoint key={page} onEnter={handleLoadMore} />}
-      </>
+      <EntryListingTable
+        key="table"
+        entryData={entryData}
+        isSingleCollectionInList={isSingleCollectionInList}
+        summaryFieldHeaders={summaryFieldHeaders}
+        loadNext={handleLoadMore}
+        canLoadMore={Boolean(hasMore && handleLoadMore)}
+        isLoadingEntries={isLoadingEntries}
+        t={t}
+      />
     );
   }
 
   return (
-    <div
-      className="
-        grid
-        gap-4
-        sm:grid-cols-1
-        md:grid-cols-1
-        lg:grid-cols-2
-        xl:grid-cols-3
-        2xl:grid-cols-4
-      "
-    >
-      {renderedCards}
-      {hasMore && handleLoadMore && <Waypoint key={page} onEnter={handleLoadMore} />}
-    </div>
+    <EntryListingGrid
+      key="grid"
+      entryData={entryData}
+      onLoadMore={handleLoadMore}
+      canLoadMore={Boolean(hasMore && handleLoadMore)}
+      isLoadingEntries={isLoadingEntries}
+      t={t}
+    />
   );
 };
 

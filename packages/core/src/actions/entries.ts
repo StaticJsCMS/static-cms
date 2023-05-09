@@ -633,8 +633,7 @@ export async function tryLoadEntry(state: RootState, collection: Collection, slu
   }
 
   const backend = currentBackend(configState.config);
-  const loadedEntry = await backend.getEntry(state, collection, slug);
-  return loadedEntry;
+  return backend.getEntry(state, collection, slug);
 }
 
 interface AppendAction {
