@@ -196,7 +196,7 @@ const CollectionView = ({
   const collectionDescription = collection?.description;
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-full">
       <div className="flex items-center mb-4">
         {isSearchResults ? (
           <>
@@ -226,7 +226,7 @@ const CollectionView = ({
         )}
       </div>
       {collectionDescription ? (
-        <div className="flex flex-grow mb-4">
+        <div className="flex mb-4">
           <Card className="flex-grow px-3.5 py-2.5 text-sm">{collectionDescription}</Card>
         </div>
       ) : null}

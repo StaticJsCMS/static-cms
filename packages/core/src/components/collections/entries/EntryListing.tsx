@@ -1,13 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
-import { Waypoint } from 'react-waypoint';
 
 import { selectFields, selectInferredField } from '@staticcms/core/lib/util/collection.util';
 import { toTitleCaseFromKey } from '@staticcms/core/lib/util/string.util';
-import Table from '../../common/table/Table';
-import EntryCard from './EntryCard';
-import EntryRow from './EntryRow';
-import EntriesPagination from './EntriesPagination';
+import EntryListingTable from './EntryListingTable';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
 import type {
@@ -20,12 +16,11 @@ import type {
 import type Cursor from '@staticcms/core/lib/util/Cursor';
 import type { FC } from 'react';
 
-const DEFAULT_PAGE_SIZE = 20;
-
 export interface BaseEntryListingProps {
   entries: Entry[];
   viewStyle: ViewStyle;
   cursor?: Cursor;
+  isLoadingEntries: boolean;
   handleCursorActions?: (action: string) => void;
   page?: number;
 }
@@ -46,6 +41,7 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
   entries,
   cursor,
   viewStyle,
+  isLoadingEntries,
   handleCursorActions,
   t,
   ...otherProps
@@ -157,68 +153,48 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
     return [];
   }, [otherProps, summaryFields]);
 
-  const [page, setPage] = useState(1);
-  const totalPages = useMemo(() => Math.ceil(entries.length / DEFAULT_PAGE_SIZE), [entries.length]);
-
-  const handleUpdatePage = useCallback((newPage: number) => {
-    setPage(newPage);
-  }, []);
-
-  if (viewStyle === 'VIEW_STYLE_LIST') {
-    return (
-      <>
-        <Table
-          columns={
-            !isSingleCollectionInList
-              ? ['Collection', ...summaryFieldHeaders, '']
-              : [...summaryFieldHeaders, '']
-          }
-        >
-          {entryData.map(data =>
-            data ? (
-              <EntryRow
-                key={data.key}
-                collection={data.collection}
-                entry={data.entry}
-                summaryFields={data.summaryFields}
-                t={t}
-              />
-            ) : null,
-          )}
-        </Table>
-        <EntriesPagination page={page} total={totalPages} onChange={handleUpdatePage} />
-      </>
-    );
-  }
-
+  // if (viewStyle === VIEW_STYLE_TABLE) {
   return (
-    <div className="w-full flex flex-col gap-4">
-      <div
-        className="
-        grid
-        gap-4
-        sm:grid-cols-1
-        md:grid-cols-1
-        lg:grid-cols-2
-        xl:grid-cols-3
-        2xl:grid-cols-4
-      "
-      >
-        {entryData.map(data =>
-          data ? (
-            <EntryCard
-              key={data.key}
-              collection={data.collection}
-              entry={data.entry}
-              imageFieldName={data.imageFieldName}
-              t={t}
-            />
-          ) : null,
-        )}
-      </div>
-      <EntriesPagination page={page} total={totalPages} onChange={handleUpdatePage} />
-    </div>
+    <EntryListingTable
+      key="table"
+      entryData={entryData}
+      isSingleCollectionInList={isSingleCollectionInList}
+      summaryFieldHeaders={summaryFieldHeaders}
+      loadNext={handleLoadMore}
+      canLoadMore={Boolean(hasMore && handleLoadMore)}
+      isLoadingEntries={isLoadingEntries}
+      t={t}
+    />
   );
+  // }
+
+  // return (
+  //   <div className="w-full flex flex-col gap-4">
+  //     <div
+  //       className="
+  //       grid
+  //       gap-4
+  //       sm:grid-cols-1
+  //       md:grid-cols-1
+  //       lg:grid-cols-2
+  //       xl:grid-cols-3
+  //       2xl:grid-cols-4
+  //     "
+  //     >
+  //       {entryData.map(data =>
+  //         data ? (
+  //           <EntryCard
+  //             key={data.key}
+  //             collection={data.collection}
+  //             entry={data.entry}
+  //             imageFieldName={data.imageFieldName}
+  //             t={t}
+  //           />
+  //         ) : null,
+  //       )}
+  //     </div>
+  //   </div>
+  // );
 };
 
 export default translate()(EntryListing) as FC<EntryListingProps>;

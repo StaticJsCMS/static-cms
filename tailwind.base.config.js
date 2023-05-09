@@ -10,6 +10,7 @@ module.exports = {
         "media-card-image": "196px",
         "image-card": "120px",
         input: "24px",
+        "table-full": "calc(100% - 40px)"
       },
       minHeight: {
         8: "2rem",

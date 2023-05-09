@@ -37,6 +37,7 @@ import type {
   STRIKETHROUGH_TOOLBAR_BUTTON,
   UNORDERED_LIST_TOOLBAR_BUTTON,
 } from './constants/toolbar_buttons';
+import type { ViewStyle } from './constants/views';
 import type { formatExtensions } from './formats/formats';
 import type {
   I18N_FIELD_DUPLICATE,
@@ -1086,4 +1087,14 @@ export interface BackupEntry {
   path: string;
   mediaFiles: MediaFile[];
   i18n?: Record<string, { raw: string }>;
+}
+
+export interface CollectionEntryData {
+  collection: Collection;
+  imageFieldName: string | null | undefined;
+  viewStyle: ViewStyle;
+  entry: Entry;
+  key: string;
+  summaryFields: string[];
+  collectionLabel?: string;
 }

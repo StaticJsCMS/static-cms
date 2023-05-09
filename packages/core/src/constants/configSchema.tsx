@@ -1,13 +1,12 @@
 import AJV from 'ajv';
-import select from 'ajv-keywords/dist/keywords/select';
-import uniqueItemProperties from 'ajv-keywords/dist/keywords/uniqueItemProperties';
+import ajvErrors from 'ajv-errors';
 import instanceOf from 'ajv-keywords/dist/keywords/instanceof';
 import prohibited from 'ajv-keywords/dist/keywords/prohibited';
-import ajvErrors from 'ajv-errors';
+import select from 'ajv-keywords/dist/keywords/select';
+import uniqueItemProperties from 'ajv-keywords/dist/keywords/uniqueItemProperties';
 import { v4 as uuid } from 'uuid';
 
-import { formatExtensions, frontmatterFormats, extensionFormatters } from '../formats/formats';
-import { getWidgets } from '../lib/registry';
+import { extensionFormatters, formatExtensions, frontmatterFormats } from '../formats/formats';
 import {
   I18N_FIELD_DUPLICATE,
   I18N_FIELD_NONE,
@@ -16,6 +15,7 @@ import {
   I18N_STRUCTURE_MULTIPLE_FOLDERS,
   I18N_STRUCTURE_SINGLE_FILE,
 } from '../lib/i18n';
+import { getWidgets } from '../lib/registry';
 
 import type { ErrorObject } from 'ajv';
 import type { Config } from '../interface';

@@ -22,7 +22,7 @@ import {
   SORT_ENTRIES_REQUEST,
   SORT_ENTRIES_SUCCESS,
 } from '../constants';
-import { VIEW_STYLE_LIST } from '../constants/views';
+import { VIEW_STYLE_TABLE } from '../constants/views';
 import { set } from '../lib/util/object.util';
 
 import type { EntriesAction } from '../actions/entries';
@@ -97,8 +97,8 @@ const loadViewStyle = once(() => {
     return viewStyle;
   }
 
-  localStorage.setItem(viewStyleKey, VIEW_STYLE_LIST);
-  return VIEW_STYLE_LIST;
+  localStorage.setItem(viewStyleKey, VIEW_STYLE_TABLE);
+  return VIEW_STYLE_TABLE;
 });
 
 function clearViewStyle() {
