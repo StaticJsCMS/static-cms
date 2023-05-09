@@ -77,9 +77,9 @@ const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
   return (
     <TableRow
       className="
-          hover:bg-gray-200
-          dark:hover:bg-slate-700/70
-        "
+        hover:bg-gray-200
+        dark:hover:bg-slate-700/70
+      "
     >
       {collectionLabel ? (
         <TableCell key="collectionLabel" to={path}>

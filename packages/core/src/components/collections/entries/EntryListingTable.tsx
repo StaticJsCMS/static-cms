@@ -13,7 +13,7 @@ import type { t } from 'react-polyglot';
 
 export interface EntryListingTableProps {
   isSingleCollectionInList: boolean;
-  entryData: (CollectionEntryData | null)[];
+  entryData: CollectionEntryData[];
   summaryFieldHeaders: string[];
   canLoadMore: boolean;
   isLoadingEntries: boolean;
@@ -68,19 +68,6 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
     fetchMoreOnBottomReached(scrollHeight, scrollTop, clientHeight);
   }, [clientHeight, fetchMoreOnBottomReached, scrollHeight, scrollTop]);
 
-  console.log(
-    'Showing rows',
-    virtualRows[0].index,
-    '-',
-    virtualRows[virtualRows.length - 1].index,
-    'paddingTop',
-    paddingTop,
-    'paddingBottom',
-    paddingBottom,
-    'isLoadingEntries',
-    isLoadingEntries,
-  );
-
   return (
     <div className="relative h-full overflow-hidden">
       <div ref={tableContainerRef} className="relative h-full overflow-auto styled-scrollbars">
@@ -98,7 +85,7 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
           )}
           {virtualRows.map(virtualRow => {
             const data = entryData[virtualRow.index];
-            return data ? (
+            return (
               <EntryRow
                 key={virtualRow.index}
                 collection={data.collection}
@@ -106,7 +93,7 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
                 summaryFields={data.summaryFields}
                 t={t}
               />
-            ) : null;
+            );
           })}
           {paddingBottom > 0 && (
             <tr>

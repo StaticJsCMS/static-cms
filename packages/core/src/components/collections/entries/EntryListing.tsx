@@ -1,13 +1,16 @@
 import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
+import { VIEW_STYLE_TABLE } from '@staticcms/core/constants/views';
 import { selectFields, selectInferredField } from '@staticcms/core/lib/util/collection.util';
 import { toTitleCaseFromKey } from '@staticcms/core/lib/util/string.util';
+import EntryListingGrid from './EntryListingGrid';
 import EntryListingTable from './EntryListingTable';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
 import type {
   Collection,
+  CollectionEntryData,
   Collections,
   Entry,
   Field,
@@ -92,15 +95,7 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
     [otherProps],
   );
 
-  const entryData: ({
-    collection: Collection;
-    imageFieldName: string | null | undefined;
-    viewStyle: ViewStyle;
-    entry: Entry;
-    key: string;
-    summaryFields: string[];
-    collectionLabel?: string;
-  } | null)[] = useMemo(() => {
+  const entryData: CollectionEntryData[] = useMemo(() => {
     if ('collection' in otherProps) {
       const inferredFields = inferFields(otherProps.collection);
 
@@ -114,26 +109,28 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
       }));
     }
 
-    return entries.map(entry => {
-      const collectionName = entry.collection;
-      const collection = Object.values(otherProps.collections).find(
-        coll => coll.name === collectionName,
-      );
+    return entries
+      .map(entry => {
+        const collectionName = entry.collection;
+        const collection = Object.values(otherProps.collections).find(
+          coll => coll.name === collectionName,
+        );
 
-      const collectionLabel = !isSingleCollectionInList ? collection?.label : undefined;
-      const inferredFields = inferFields(collection);
-      return collection
-        ? {
-            collection,
-            entry,
-            imageFieldName: inferredFields.imageField,
-            viewStyle,
-            collectionLabel,
-            key: entry.slug,
-            summaryFields,
-          }
-        : null;
-    });
+        const collectionLabel = !isSingleCollectionInList ? collection?.label : undefined;
+        const inferredFields = inferFields(collection);
+        return collection
+          ? {
+              collection,
+              entry,
+              imageFieldName: inferredFields.imageField,
+              viewStyle,
+              collectionLabel,
+              key: entry.slug,
+              summaryFields,
+            }
+          : null;
+      })
+      .filter(e => e) as CollectionEntryData[];
   }, [entries, inferFields, isSingleCollectionInList, otherProps, summaryFields, viewStyle]);
 
   const summaryFieldHeaders = useMemo(() => {
@@ -153,48 +150,31 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
     return [];
   }, [otherProps, summaryFields]);
 
-  // if (viewStyle === VIEW_STYLE_TABLE) {
+  if (viewStyle === VIEW_STYLE_TABLE) {
+    return (
+      <EntryListingTable
+        key="table"
+        entryData={entryData}
+        isSingleCollectionInList={isSingleCollectionInList}
+        summaryFieldHeaders={summaryFieldHeaders}
+        loadNext={handleLoadMore}
+        canLoadMore={Boolean(hasMore && handleLoadMore)}
+        isLoadingEntries={isLoadingEntries}
+        t={t}
+      />
+    );
+  }
+
   return (
-    <EntryListingTable
-      key="table"
+    <EntryListingGrid
+      key="grid"
       entryData={entryData}
-      isSingleCollectionInList={isSingleCollectionInList}
-      summaryFieldHeaders={summaryFieldHeaders}
-      loadNext={handleLoadMore}
+      onLoadMore={handleLoadMore}
       canLoadMore={Boolean(hasMore && handleLoadMore)}
       isLoadingEntries={isLoadingEntries}
       t={t}
     />
   );
-  // }
-
-  // return (
-  //   <div className="w-full flex flex-col gap-4">
-  //     <div
-  //       className="
-  //       grid
-  //       gap-4
-  //       sm:grid-cols-1
-  //       md:grid-cols-1
-  //       lg:grid-cols-2
-  //       xl:grid-cols-3
-  //       2xl:grid-cols-4
-  //     "
-  //     >
-  //       {entryData.map(data =>
-  //         data ? (
-  //           <EntryCard
-  //             key={data.key}
-  //             collection={data.collection}
-  //             entry={data.entry}
-  //             imageFieldName={data.imageFieldName}
-  //             t={t}
-  //           />
-  //         ) : null,
-  //       )}
-  //     </div>
-  //   </div>
-  // );
 };
 
 export default translate()(EntryListing) as FC<EntryListingProps>;

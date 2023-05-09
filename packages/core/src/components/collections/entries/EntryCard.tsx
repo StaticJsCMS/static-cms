@@ -127,7 +127,7 @@ const EntryCard: FC<TranslatedProps<EntryCardProps>> = ({
   }
 
   return (
-    <Card>
+    <Card className="h-full">
       <CardActionArea to={path}>
         {image && imageField ? <CardMedia height="140" image={image} /> : null}
         <CardContent>

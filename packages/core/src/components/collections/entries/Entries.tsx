@@ -50,8 +50,6 @@ const Entries = ({
     return <Loader>{loadingMessages}</Loader>;
   }
 
-  console.log(isFetching, page !== undefined, entries.length > 0);
-
   const hasEntries = (entries && entries.length > 0) || cursor?.actions?.has('append_next');
   if (hasEntries) {
     return 'collection' in otherProps ? (
