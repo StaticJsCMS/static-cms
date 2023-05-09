@@ -275,12 +275,10 @@ export function selectFieldsWithMediaFolders<EF extends BaseField>(
   if ('folder' in collection) {
     const fields = collection.fields;
     return getFieldsWithMediaFolders(fields);
-  } else {
-    const fields = getFileFromSlug(collection, slug)?.fields || [];
-    return getFieldsWithMediaFolders(fields);
   }
 
-  return [];
+  const fields = getFileFromSlug(collection, slug)?.fields || [];
+  return getFieldsWithMediaFolders(fields);
 }
 
 export function selectMediaFolders<EF extends BaseField>(

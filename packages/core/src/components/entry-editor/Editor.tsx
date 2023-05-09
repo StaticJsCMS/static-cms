@@ -18,6 +18,7 @@ import {
   persistLocalBackup,
   retrieveLocalBackup,
 } from '@staticcms/core/actions/entries';
+import { loadMedia } from '@staticcms/core/actions/mediaLibrary';
 import { loadScroll, toggleScroll } from '@staticcms/core/actions/scroll';
 import { selectFields } from '@staticcms/core/lib/util/collection.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
@@ -113,7 +114,8 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
               navigate(`/collections/${collection.name}/new`, { replace: true });
             } else {
               setSubmitted(false);
-              setTimeout(() => {
+              setTimeout(async () => {
+                await dispatch(loadMedia());
                 dispatch(createEmptyDraft(collection, location.search));
                 setVersion(version + 1);
                 navigate(`/collections/${collection.name}/new`, { replace: true });
@@ -212,7 +214,8 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
   const [prevSlug, setPrevSlug] = useState<string | undefined | null>(null);
   useEffect(() => {
     if (newRecord && slug !== prevSlug) {
-      setTimeout(() => {
+      setTimeout(async () => {
+        await dispatch(loadMedia());
         dispatch(createEmptyDraft(collection, location.search));
       });
     } else if (!newRecord && slug && (prevCollection !== collection || prevSlug !== slug)) {

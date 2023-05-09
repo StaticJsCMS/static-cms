@@ -187,8 +187,7 @@ function mediaLibrary(
         dynamicSearch: Boolean(dynamicSearch),
         dynamicSearchQuery: dynamicSearchQuery ?? '',
         dynamicSearchActive: !!dynamicSearchQuery,
-        files:
-          page && page > 1 ? (state.files as MediaFile[]).concat(filesWithKeys) : filesWithKeys,
+        files: page && page > 1 ? (state.files ?? []).concat(filesWithKeys) : filesWithKeys,
       };
     }
 
