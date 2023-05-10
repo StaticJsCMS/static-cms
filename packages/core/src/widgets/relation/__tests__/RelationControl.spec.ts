@@ -223,7 +223,7 @@ describe(RelationControl.name, () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
   interface RenderRelationControlOptions {
@@ -653,7 +653,7 @@ describe(RelationControl.name, () => {
   });
 
   describe('parse options', () => {
-    fit('should default to valueField if displayFields is not set', async () => {
+    it('should default to valueField if displayFields is not set', async () => {
       const field: RelationField = {
         label: 'Relation',
         name: 'relation',

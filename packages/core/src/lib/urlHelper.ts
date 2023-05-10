@@ -1,11 +1,12 @@
-import url from 'url';
-import urlJoin from 'url-join';
 import diacritics from 'diacritics';
-import sanitizeFilename from 'sanitize-filename';
-import isString from 'lodash/isString';
 import escapeRegExp from 'lodash/escapeRegExp';
 import flow from 'lodash/flow';
+import isString from 'lodash/isString';
 import partialRight from 'lodash/partialRight';
+import trim from 'lodash/trim';
+import sanitizeFilename from 'sanitize-filename';
+import url from 'url';
+import urlJoin from 'url-join';
 
 import type { Slug } from '../interface';
 
@@ -124,5 +125,5 @@ export function sanitizeSlug(str: string, options?: Slug) {
 }
 
 export function joinUrlPath(base: string, ...path: string[]) {
-  return urlJoin(base, ...path);
+  return urlJoin(trim(base, '/'), ...path.map(p => trim(p, '/')));
 }

@@ -6,7 +6,7 @@ import type { Options } from '../API';
 
 describe('gitea API', () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
 
     global.fetch = jest.fn().mockRejectedValue(new Error('should not call fetch inside tests'));
   });
@@ -29,7 +29,7 @@ describe('gitea API', () => {
     });
 
     afterEach(() => {
-      jest.resetAllMocks();
+      jest.clearAllMocks();
     });
 
     it('should fetch url with authorization header', async () => {

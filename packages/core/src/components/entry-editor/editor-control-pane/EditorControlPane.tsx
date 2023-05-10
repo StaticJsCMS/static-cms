@@ -63,7 +63,7 @@ const EditorControlPane = ({
   const config = useAppSelector(selectConfig);
 
   const defaultNestedPath = useMemo(
-    () => getNestedSlug(collection, entry, slug, config),
+    () => getNestedSlug(collection, entry, slug, config?.slug),
     [collection, config, entry, slug],
   );
 

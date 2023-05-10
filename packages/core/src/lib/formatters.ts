@@ -5,6 +5,7 @@ import { sanitizeSlug } from './urlHelper';
 import { selectIdentifier, selectInferredField } from './util/collection.util';
 import { selectField } from './util/field.util';
 import { set } from './util/object.util';
+import { isEmpty } from './util/string.util';
 import {
   addFileTemplateFields,
   compileStringTemplate,
@@ -94,14 +95,19 @@ export function slugFormatter<EF extends BaseField = UnknownField>(
   collection: Collection<EF>,
   entryData: EntryData,
   slugConfig?: Slug,
-) {
+): string {
   const slugTemplate = collection.slug || '{{slug}}';
 
-  const identifier = get(entryData, keyToPathArray(selectIdentifier(collection)));
-  if (!identifier) {
+  const identifierField = selectIdentifier(collection);
+  if (!identifierField) {
     throw new Error(
       'Collection must have a field name that is a valid entry identifier, or must have `identifier_field` set',
     );
+  }
+
+  const identifier = get(entryData, keyToPathArray(identifierField));
+  if (isEmpty(identifier)) {
+    return '';
   }
 
   const processSegment = getProcessSegment(slugConfig);
@@ -122,10 +128,12 @@ export function summaryFormatter<EF extends BaseField>(
   summaryTemplate: string,
   entry: Entry,
   collection: Collection<EF>,
+  slugConfig?: Slug,
 ) {
+  const slug = slugFormatter(collection, entry.data, slugConfig);
+
   let entryData = entry.data;
   const date = parseDateFromEntry(entry, selectInferredField(collection, 'date')) || null;
-  const identifier = get(entryData, keyToPathArray(selectIdentifier(collection)));
 
   entryData =
     addFileTemplateFields(entry.path, entryData, 'folder' in collection ? collection.folder : '') ??
@@ -137,7 +145,7 @@ export function summaryFormatter<EF extends BaseField>(
   if (entry.updatedOn && !selectField(collection, COMMIT_DATE)) {
     entryData = set(entryData, COMMIT_DATE, entry.updatedOn);
   }
-  const summary = compileStringTemplate(summaryTemplate, date, identifier, entryData);
+  const summary = compileStringTemplate(summaryTemplate, date, slug, entryData);
   return summary;
 }
 
@@ -160,8 +168,10 @@ export function folderFormatter<EF extends BaseField>(
     'folder' in collection ? collection.folder : '',
   );
 
-  const date = parseDateFromEntry(entry, selectInferredField(collection, 'date')) || null;
   const slug = slugFormatter(collection, entry.data, slugConfig);
+
+  const date = parseDateFromEntry(entry, selectInferredField(collection, 'date')) || null;
+
   const processSegment = getProcessSegment(slugConfig, [defaultFolder, fields?.dirname as string]);
 
   const mediaFolder = compileStringTemplate(folderTemplate, date, slug, fields, processSegment);
