@@ -4,7 +4,7 @@ import trim from 'lodash/trim';
 import trimStart from 'lodash/trimStart';
 import yaml from 'yaml';
 
-import { resolveBackend } from '../backend';
+import { resolveBackend } from '@staticcms/core/backend';
 import { CONFIG_FAILURE, CONFIG_REQUEST, CONFIG_SUCCESS } from '../constants';
 import validateConfig from '../constants/configSchema';
 import {
@@ -124,7 +124,9 @@ function throwOnMissingDefaultLocale(i18n?: I18nInfo) {
   }
 }
 
-export function applyDefaults(originalConfig: Config) {
+export function applyDefaults<EF extends BaseField = UnknownField>(
+  originalConfig: Config<EF>,
+): Config<EF> {
   return produce(originalConfig, (config: Config) => {
     config.slug = config.slug || {};
     config.collections = config.collections || [];

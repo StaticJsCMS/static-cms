@@ -193,7 +193,7 @@ export function compileStringTemplate(
   data: ObjectValue | undefined | null = {},
   processor?: (value: string) => string,
 ) {
-  console.log('template', `"${template}"`, 'data', data);
+  console.log('template', `"${template}"`, 'data', data, 'identifier', identifier);
   if (template === '') {
     return '';
   }

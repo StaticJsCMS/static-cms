@@ -376,6 +376,7 @@ export function selectIdentifier<EF extends BaseField>(collection: Collection<EF
   const identifier = collection.identifier_field;
   const identifierFields = identifier ? [identifier, ...IDENTIFIER_FIELDS] : [...IDENTIFIER_FIELDS];
   const fieldNames = getFieldsNames('fields' in collection ? collection.fields ?? [] : []);
+  console.log('identifierFields', identifierFields);
   return identifierFields.find(id =>
     fieldNames.find(name => name.toLowerCase().trim() === id.toLowerCase().trim()),
   );
