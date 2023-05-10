@@ -5,7 +5,7 @@ global.fetch = jest.fn().mockRejectedValue(new Error('should not call fetch insi
 
 describe('GitLab API', () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
   afterAll(() => {

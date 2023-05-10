@@ -2,11 +2,11 @@ import trim from 'lodash/trim';
 import { basename, dirname, extname, join } from 'path';
 
 import { sanitizeSlug } from '../urlHelper';
+import { stringTemplate } from '../widgets';
 import { selectEntryCollectionTitle, selectFolderEntryExtension } from './collection.util';
 import { isEmpty, isNotEmpty } from './string.util';
-import { stringTemplate } from '../widgets';
 
-import type { BaseField, Collection, Config, Entry } from '@staticcms/core/interface';
+import type { BaseField, Collection, Entry, Slug } from '@staticcms/core/interface';
 
 const { addFileTemplateFields } = stringTemplate;
 
@@ -28,7 +28,7 @@ export function selectCustomPath(
   entry: Entry,
   collection: Collection,
   rootSlug: string | undefined,
-  config: Config | undefined,
+  slugConfig: Slug | undefined,
 ): string | undefined {
   if (!('nested' in collection) || !collection.nested?.path) {
     return undefined;
@@ -37,7 +37,7 @@ export function selectCustomPath(
   const indexFile = collection.nested.path.index_file;
   const extension = selectFolderEntryExtension(collection);
 
-  const slug = entry.meta?.path ?? getNestedSlug(collection, entry, rootSlug, config);
+  const slug = entry.meta?.path ?? getNestedSlug(collection, entry, rootSlug, slugConfig);
 
   const customPath = join(collection.folder, slug, `${indexFile}.${extension}`);
   return customPath;
@@ -72,7 +72,7 @@ export function getNestedSlug(
   collection: Collection,
   entry: Entry,
   slug: string | undefined,
-  config: Config | undefined,
+  slugConfig: Slug | undefined,
 ) {
   if ('nested' in collection && collection.nested?.path) {
     if (isNotEmpty(entry.slug)) {
@@ -85,7 +85,7 @@ export function getNestedSlug(
 
       return `${customPathFromSlug(collection, slug)}/${sanitizeSlug(
         summarySlug.toLowerCase(),
-        config?.slug,
+        slugConfig,
       )}`;
     }
   }

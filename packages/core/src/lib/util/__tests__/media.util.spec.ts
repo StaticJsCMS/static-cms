@@ -145,6 +145,44 @@ describe('media.util', () => {
               'path/to/entry/path/to/some/other/media/i-am-a-title-fish',
             );
           });
+
+          it('should not throw error when evaluating slug for new entry', () => {
+            const mockConfig = createMockConfig({
+              collections: [
+                createMockCollection<UnknownField>({
+                  folder: 'base/folder',
+                  media_folder: 'path/to/some/other/media/{{slug}}',
+                  slug: '{{fields.title}}-{{fields.name}}',
+                  fields: [
+                    {
+                      name: 'title',
+                      widget: 'string',
+                    },
+                    {
+                      name: 'name',
+                      widget: 'string',
+                    },
+                    mockBaseImageField,
+                  ],
+                }),
+              ],
+              media_folder: 'path/to/media/folder',
+            });
+
+            const mockCollection = mockConfig.collections[0];
+            const mockImageField = (mockConfig.collections[0] as FolderCollection)
+              .fields[3] as FileOrImageField;
+
+            const mockEntry = createMockEntry({
+              path: 'path/to/entry/index.md',
+              data: {},
+              newRecord: true,
+            });
+
+            expect(selectMediaFolder(mockConfig, mockCollection, mockEntry, mockImageField)).toBe(
+              'path/to/entry/path/to/some/other/media',
+            );
+          });
         });
       });
 
@@ -236,6 +274,44 @@ describe('media.util', () => {
 
             expect(selectMediaFolder(mockConfig, mockCollection, mockEntry, mockImageField)).toBe(
               'path/to/some/other/media/i-am-a-title-fish',
+            );
+          });
+
+          it('should not throw error when evaluating slug for new entry', () => {
+            const mockConfig = createMockConfig({
+              collections: [
+                createMockCollection<UnknownField>({
+                  folder: 'base/folder',
+                  media_folder: '/path/to/some/other/media/{{slug}}',
+                  slug: '{{fields.title}}-{{fields.name}}',
+                  fields: [
+                    {
+                      name: 'title',
+                      widget: 'string',
+                    },
+                    {
+                      name: 'name',
+                      widget: 'string',
+                    },
+                    mockBaseImageField,
+                  ],
+                }),
+              ],
+              media_folder: 'path/to/media/folder',
+            });
+
+            const mockCollection = mockConfig.collections[0];
+            const mockImageField = (mockConfig.collections[0] as FolderCollection)
+              .fields[3] as FileOrImageField;
+
+            const mockEntry = createMockEntry({
+              path: 'path/to/entry/index.md',
+              data: {},
+              newRecord: true,
+            });
+
+            expect(selectMediaFolder(mockConfig, mockCollection, mockEntry, mockImageField)).toBe(
+              'path/to/some/other/media',
             );
           });
         });
