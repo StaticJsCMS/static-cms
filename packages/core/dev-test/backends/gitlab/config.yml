@@ -502,3 +502,24 @@ collections:
       - label: Body
         name: body
         widget: markdown
+  - name: events
+    label: Events
+    label_singular: Event
+    folder: _events
+    fields:
+      - label: Title
+        name: title
+        widget: string
+      - label: Publish Date
+        name: publishDate
+        widget: datetime
+        date_format: 'LLLL d, yyyy'
+        time_format: 'h:mm bbb'
+        format: 'yyyy-MM-dd''T''HH:mm:ssXXX'
+      - label: Event Date
+        name: eventDate
+        widget: datetime
+        date_format: 'LLLL d, yyyy'
+        time_format: false
+        format: 'yyyy-MM-dd''T''HH:mm:ssXXX'
+
