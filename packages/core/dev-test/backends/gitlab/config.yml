@@ -71,7 +71,7 @@ collections:
     label: FAQ
     folder: _faqs
     create: true
-    media_folder: 'images/{{slug}}'
+    media_folder: '/_faqs_images/{{slug}}'
     fields:
       - label: Question
         name: title
@@ -484,7 +484,7 @@ collections:
     label_singular: 'Page'
     folder: _nested_pages
     create: true
-    media_folder: '/_nested_page_pictures/{{path}}/{{slug}}'
+    media_folder: '/_nested_page_pictures/{{slug}}'
     # adding a nested object will show the collection folder structure
     nested:
       depth: 100 # max depth to show in the collection tree
