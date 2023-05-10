@@ -1,3 +1,3 @@
-export default function cleanStack(parts: string[]) {
+export default function urlJoin(...parts: string[]) {
   return parts.join('/');
 }

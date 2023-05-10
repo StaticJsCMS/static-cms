@@ -10,6 +10,8 @@ import type {
   WidgetControlProps,
 } from '@staticcms/core';
 
+jest.mock('@staticcms/core/backend');
+
 export const createMockWidgetControlProps = <
   T extends ValueOrNestedValue,
   F extends BaseField = UnknownField,

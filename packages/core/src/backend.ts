@@ -133,7 +133,12 @@ export function extractSearchFields(searchFields: string[]) {
     }, '');
 }
 
-export function expandSearchEntries(entries: Entry[], searchFields: string[]) {
+export function expandSearchEntries(
+  entries: Entry[],
+  searchFields: string[],
+): (Entry & {
+  field: string;
+})[] {
   // expand the entries for the purpose of the search
   const expandedEntries = entries.reduce((acc, e) => {
     const expandedFields = searchFields.reduce((acc, f) => {
@@ -152,7 +157,7 @@ export function expandSearchEntries(entries: Entry[], searchFields: string[]) {
   return expandedEntries;
 }
 
-export function mergeExpandedEntries(entries: (Entry & { field: string })[]) {
+export function mergeExpandedEntries(entries: (Entry & { field: string })[]): Entry[] {
   // merge the search results by slug and only keep data that matched the search
   const fields = entries.map(f => f.field);
   const arrayPaths: Record<string, Set<string>> = {};

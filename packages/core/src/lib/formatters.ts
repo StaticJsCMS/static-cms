@@ -1,6 +1,4 @@
-import flow from 'lodash/flow';
 import get from 'lodash/get';
-import partialRight from 'lodash/partialRight';
 
 import { COMMIT_AUTHOR, COMMIT_DATE } from '../constants/commitProps';
 import { sanitizeSlug } from './urlHelper';
@@ -14,7 +12,15 @@ import {
   parseDateFromEntry,
 } from './widgets/stringTemplate';
 
-import type { BaseField, Collection, Config, Entry, EntryData, Slug } from '../interface';
+import type {
+  BaseField,
+  Collection,
+  Config,
+  Entry,
+  EntryData,
+  Slug,
+  UnknownField,
+} from '../interface';
 
 const commitMessageTemplates = {
   create: 'Create {{collection}} “{{slug}}”',
@@ -81,10 +87,14 @@ export function getProcessSegment(slugConfig?: Slug, ignoreValues?: string[]) {
   return (value: string) =>
     ignoreValues && ignoreValues.includes(value)
       ? value
-      : flow([value => String(value), prepareSlug, partialRight(sanitizeSlug, slugConfig)])(value);
+      : sanitizeSlug(prepareSlug(String(value)), slugConfig);
 }
 
-export function slugFormatter(collection: Collection, entryData: EntryData, slugConfig?: Slug) {
+export function slugFormatter<EF extends BaseField = UnknownField>(
+  collection: Collection<EF>,
+  entryData: EntryData,
+  slugConfig?: Slug,
+) {
   const slugTemplate = collection.slug || '{{slug}}';
 
   const identifier = get(entryData, keyToPathArray(selectIdentifier(collection)));
@@ -151,16 +161,10 @@ export function folderFormatter<EF extends BaseField>(
   );
 
   const date = parseDateFromEntry(entry, selectInferredField(collection, 'date')) || null;
-  const identifier = get(fields, keyToPathArray(selectIdentifier(collection)));
+  const slug = slugFormatter(collection, entry.data, slugConfig);
   const processSegment = getProcessSegment(slugConfig, [defaultFolder, fields?.dirname as string]);
 
-  const mediaFolder = compileStringTemplate(
-    folderTemplate,
-    date,
-    identifier,
-    fields,
-    processSegment,
-  );
+  const mediaFolder = compileStringTemplate(folderTemplate, date, slug, fields, processSegment);
 
   return mediaFolder;
 }

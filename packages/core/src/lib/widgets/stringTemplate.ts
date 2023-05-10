@@ -193,6 +193,10 @@ export function compileStringTemplate(
   data: ObjectValue | undefined | null = {},
   processor?: (value: string) => string,
 ) {
+  if (template === '') {
+    return '';
+  }
+
   let missingRequiredDate;
 
   // Turn off date processing (support for replacements like `{{year}}`), by passing in

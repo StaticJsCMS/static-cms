@@ -32,6 +32,8 @@ import type { MdEditor } from '@staticcms/markdown/plate/plateTypes';
 import type { TRange } from '@udecode/plate';
 import type { FC } from 'react';
 
+jest.mock('@staticcms/core/backend');
+
 interface BalloonToolbarWrapperProps {
   useMdx?: boolean;
 }

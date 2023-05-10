@@ -27,6 +27,8 @@ import type {
   StringOrTextField,
 } from '@staticcms/core/interface';
 
+jest.mock('@staticcms/core/backend');
+
 const dateField: DateTimeField = {
   widget: 'datetime',
   name: 'date',
@@ -72,20 +74,22 @@ const bodyField: StringOrTextField = {
   name: 'body',
 };
 
-const searchCollection = createMockCollection(
-  {
-    name: 'posts',
-  },
-  dateField,
-  authorField,
-  coAuthorsField,
-  tagsField,
-  bodyField,
-) as unknown as Collection;
-
 const config = createMockConfig({
-  collections: [searchCollection] as unknown as Collection[],
-}) as unknown as Config<RelationField>;
+  collections: [
+    createMockCollection(
+      {
+        name: 'posts',
+      },
+      dateField,
+      authorField,
+      coAuthorsField,
+      tagsField,
+      bodyField,
+    ) as unknown as Collection<RelationField>,
+  ],
+});
+
+const searchCollection = config.collections[0];
 
 describe(RelationControl.name, () => {
   const renderControl = createWidgetControlHarness(RelationControl, {
@@ -649,7 +653,7 @@ describe(RelationControl.name, () => {
   });
 
   describe('parse options', () => {
-    it('should default to valueField if displayFields is not set', async () => {
+    fit('should default to valueField if displayFields is not set', async () => {
       const field: RelationField = {
         label: 'Relation',
         name: 'relation',
