@@ -7,5 +7,8 @@ export const createMockConfig = <EF extends BaseField>(
   backend: {
     name: 'test-repo',
   },
+  slug: {
+    sanitize_replacement: '-',
+  },
   ...options,
 });

@@ -1,6 +1,4 @@
-import flow from 'lodash/flow';
 import get from 'lodash/get';
-import partialRight from 'lodash/partialRight';
 
 import { COMMIT_AUTHOR, COMMIT_DATE } from '../constants/commitProps';
 import { sanitizeSlug } from './urlHelper';
@@ -63,6 +61,18 @@ export function commitMessageFormatter<EF extends BaseField>(
 }
 
 export function prepareSlug(slug: string) {
+  console.log(
+    slug
+      .trim()
+      // Convert slug to lower-case
+      .toLocaleLowerCase()
+
+      // Remove single quotes.
+      .replace(/[']/g, '')
+
+      // Replace periods with dashes.
+      .replace(/[.]/g, '-'),
+  );
   return (
     slug
       .trim()
@@ -81,7 +91,7 @@ export function getProcessSegment(slugConfig?: Slug, ignoreValues?: string[]) {
   return (value: string) =>
     ignoreValues && ignoreValues.includes(value)
       ? value
-      : flow([value => String(value), prepareSlug, partialRight(sanitizeSlug, slugConfig)])(value);
+      : sanitizeSlug(prepareSlug(String(value)), slugConfig);
 }
 
 export function slugFormatter(collection: Collection, entryData: EntryData, slugConfig?: Slug) {
@@ -139,6 +149,7 @@ export function folderFormatter<EF extends BaseField>(
   folderKey: string,
   slugConfig?: Slug,
 ) {
+  console.log(folderTemplate, defaultFolder, folderKey, slugConfig);
   if (!entry || !entry.data) {
     return folderTemplate;
   }
@@ -161,6 +172,8 @@ export function folderFormatter<EF extends BaseField>(
     fields,
     processSegment,
   );
+
+  console.log('result', mediaFolder);
 
   return mediaFolder;
 }
