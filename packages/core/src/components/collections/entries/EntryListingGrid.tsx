@@ -58,7 +58,7 @@ const EntryListingGrid: FC<EntryListingGridProps> = ({
 
   return (
     <div className="relative h-full overflow-hidden">
-      <div ref={gridContainerRef} className="relative h-full overflow-auto styled-scrollbars">
+      <div ref={gridContainerRef} className="relative h-full overflow-y-auto styled-scrollbars">
         <EntryListingCardGrid
           key="grid"
           entryData={entryData}

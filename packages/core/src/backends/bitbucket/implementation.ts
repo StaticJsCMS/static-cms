@@ -150,15 +150,6 @@ export default class BitbucketBackend implements BackendClass {
     return AuthenticationPage;
   }
 
-  setUser(user: { token: string }) {
-    this.token = user.token;
-    this.api = new API({
-      requestFunction: this.apiRequestFunction,
-      branch: this.branch,
-      repo: this.repo,
-    });
-  }
-
   requestFunction = async (req: ApiRequest) => {
     const token = await this.getToken();
     const authorizedRequest = unsentRequest.withHeaders({ Authorization: `Bearer ${token}` }, req);
