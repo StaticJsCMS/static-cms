@@ -18,9 +18,9 @@ import { mockFileField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 import withFileControl from '../withFileControl';
 
-import type { Config, FileOrImageField, MediaFile } from '@staticcms/core/interface';
+import type { Config, MediaFile } from '@staticcms/core/interface';
 
-const FileControl = withFileControl();
+jest.mock('@staticcms/core/backend');
 
 jest.mock('@staticcms/core/lib/hooks/useMediaFiles', () => {
   const mockMediaFiles: MediaFile[] = [
@@ -54,10 +54,11 @@ jest.mock('@staticcms/core/actions/mediaLibrary', () => ({
 jest.mock('@staticcms/core/lib/hooks/useMediaAsset', () => (url: string) => url);
 
 describe('File Control', () => {
+  const FileControl = withFileControl();
   const collection = createMockCollection({}, mockFileField);
   const config = createMockConfig({
     collections: [collection],
-  }) as unknown as Config<FileOrImageField>;
+  });
 
   const mockInsertMedia = insertMedia as jest.Mock;
 

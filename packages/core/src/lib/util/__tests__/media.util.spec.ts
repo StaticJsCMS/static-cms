@@ -6,6 +6,8 @@ import { selectMediaFolder } from '../media.util';
 
 import type { FileOrImageField, FolderCollection, UnknownField } from '@staticcms/core/interface';
 
+jest.mock('@staticcms/core/backend');
+
 describe('media.util', () => {
   describe('selectMediaFolder', () => {
     const mockBaseCollection = createMockCollection<UnknownField>({
