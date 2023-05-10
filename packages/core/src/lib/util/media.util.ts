@@ -1,5 +1,5 @@
 import trim from 'lodash/trim';
-import { dirname, join } from 'path';
+import { dirname } from 'path';
 
 import { basename, isAbsolutePath } from '.';
 import { folderFormatter } from '../formatters';
@@ -243,12 +243,15 @@ export function selectMediaFolder<EF extends BaseField>(
   } else if (hasCustomFolder('media_folder', collection, entryMap?.slug, field)) {
     const folder = evaluateFolder('media_folder', config, collection!, entryMap, field);
     if (folder.startsWith('/')) {
-      mediaFolder = join(folder);
+      mediaFolder = folder.replace(/^[/]*/g, '');
     } else {
       const entryPath = entryMap?.path;
       mediaFolder = entryPath
-        ? join(dirname(entryPath), folder)
-        : join(collection && 'folder' in collection ? collection.folder : '', DRAFT_MEDIA_FILES);
+        ? joinUrlPath(dirname(entryPath), folder)
+        : joinUrlPath(
+            collection && 'folder' in collection ? collection.folder : '',
+            DRAFT_MEDIA_FILES,
+          );
     }
   }
 
@@ -289,7 +292,7 @@ export function selectMediaFilePublicPath<EF extends BaseField>(
     return joinUrlPath(selectedPublicFolder, basename(mediaPath));
   }
 
-  return join(selectedPublicFolder, basename(mediaPath));
+  return joinUrlPath(selectedPublicFolder, basename(mediaPath));
 }
 
 export function selectMediaFilePath(
@@ -331,5 +334,5 @@ export function selectMediaFilePath(
     }
   }
 
-  return join(mediaFolder, basename(mediaPath));
+  return joinUrlPath(mediaFolder, basename(mediaPath));
 }

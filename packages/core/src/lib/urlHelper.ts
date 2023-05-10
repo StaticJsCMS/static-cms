@@ -110,8 +110,6 @@ export function sanitizeSlug(str: string, options?: Slug) {
     partialRight(sanitizeFilename, { replacement }),
   ])(str);
 
-  console.log('sanitizedSlug', sanitizedSlug);
-
   // Remove any doubled or leading/trailing replacement characters (that were added in the sanitizers).
   const doubleReplacement = new RegExp(`(?:${escapeRegExp(replacement)})+`, 'g');
   const trailingReplacement = new RegExp(`${escapeRegExp(replacement)}$`);
@@ -121,7 +119,6 @@ export function sanitizeSlug(str: string, options?: Slug) {
     .replace(doubleReplacement, replacement)
     .replace(leadingReplacement, '')
     .replace(trailingReplacement, '');
-  console.log('normalizedSlug', normalizedSlug);
 
   return normalizedSlug;
 }

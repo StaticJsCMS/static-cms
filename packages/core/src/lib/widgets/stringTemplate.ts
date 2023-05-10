@@ -193,7 +193,6 @@ export function compileStringTemplate(
   data: ObjectValue | undefined | null = {},
   processor?: (value: string) => string,
 ) {
-  console.log('template', `"${template}"`, 'data', data, 'identifier', identifier);
   if (template === '') {
     return '';
   }
@@ -209,7 +208,6 @@ export function compileStringTemplate(
     (_full, key: string, _part, filter: string) => {
       let replacement;
       const explicitFieldReplacement = getExplicitFieldReplacement(key, data);
-      console.log('template var', key, data, explicitFieldReplacement)
 
       if (explicitFieldReplacement) {
         replacement = explicitFieldReplacement;
@@ -225,7 +223,6 @@ export function compileStringTemplate(
       }
 
       if (processor) {
-        console.log('processor!', replacement)
         return processor(replacement);
       } else {
         const filterFunction = getFilterFunction(filter);
@@ -234,7 +231,6 @@ export function compileStringTemplate(
         }
       }
 
-      console.log('final replacement', replacement)
       return replacement;
     },
   );

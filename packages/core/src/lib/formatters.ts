@@ -69,18 +69,6 @@ export function commitMessageFormatter<EF extends BaseField>(
 }
 
 export function prepareSlug(slug: string) {
-  console.log(
-    slug
-      .trim()
-      // Convert slug to lower-case
-      .toLocaleLowerCase()
-
-      // Remove single quotes.
-      .replace(/[']/g, '')
-
-      // Replace periods with dashes.
-      .replace(/[.]/g, '-'),
-  );
   return (
     slug
       .trim()
@@ -161,7 +149,6 @@ export function folderFormatter<EF extends BaseField>(
   folderKey: string,
   slugConfig?: Slug,
 ) {
-  console.log(folderTemplate, defaultFolder, folderKey, slugConfig);
   if (!entry || !entry.data) {
     return folderTemplate;
   }
@@ -177,15 +164,7 @@ export function folderFormatter<EF extends BaseField>(
   const slug = slugFormatter(collection, entry.data, slugConfig);
   const processSegment = getProcessSegment(slugConfig, [defaultFolder, fields?.dirname as string]);
 
-  const mediaFolder = compileStringTemplate(
-    folderTemplate,
-    date,
-    slug,
-    fields,
-    processSegment,
-  );
-
-  console.log('result', mediaFolder);
+  const mediaFolder = compileStringTemplate(folderTemplate, date, slug, fields, processSegment);
 
   return mediaFolder;
 }
