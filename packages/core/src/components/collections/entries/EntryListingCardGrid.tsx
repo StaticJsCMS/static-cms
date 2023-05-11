@@ -3,11 +3,11 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import { VariableSizeGrid as Grid } from 'react-window';
 
 import {
-  MEDIA_CARD_HEIGHT,
-  MEDIA_CARD_MARGIN,
-  MEDIA_CARD_WIDTH,
-  MEDIA_LIBRARY_PADDING,
-} from '@staticcms/core/constants/mediaLibrary';
+  COLLECTION_CARD_HEIGHT,
+  COLLECTION_CARD_IMAGE_HEIGHT,
+  COLLECTION_CARD_MARGIN,
+  COLLECTION_CARD_WIDTH,
+} from '@staticcms/core/constants/views';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import EntryCard from './EntryCard';
 
@@ -20,6 +20,7 @@ export interface EntryListingCardGridProps {
   scrollContainerRef: React.MutableRefObject<HTMLDivElement | null>;
   entryData: CollectionEntryData[];
   onScroll: () => void;
+  hasImage: boolean;
   t: t;
 }
 
@@ -40,7 +41,7 @@ const CardWrapper = ({
       parseFloat(
         `${
           typeof style.left === 'number'
-            ? style.left ?? MEDIA_CARD_MARGIN * columnIndex
+            ? style.left ?? COLLECTION_CARD_MARGIN * columnIndex
             : style.left
         }`,
       ),
@@ -66,8 +67,8 @@ const CardWrapper = ({
         top,
         width: style.width,
         height: style.height,
-        paddingRight: `${columnIndex + 1 === columnCount ? 0 : MEDIA_CARD_MARGIN}px`,
-        paddingBottom: `${MEDIA_CARD_MARGIN}px`,
+        paddingRight: `${columnIndex + 1 === columnCount ? 0 : COLLECTION_CARD_MARGIN}px`,
+        paddingBottom: `${COLLECTION_CARD_MARGIN}px`,
       }}
     >
       <EntryCard
@@ -85,6 +86,7 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
   entryData,
   scrollContainerRef,
   onScroll,
+  hasImage,
   t,
 }) => {
   const [version, setVersion] = useState(0);
@@ -97,10 +99,13 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
     <div className="relative w-full h-full">
       <AutoSizer onResize={handleResize}>
         {({ height = 0, width = 0 }) => {
-          const columnWidthWithGutter = MEDIA_CARD_WIDTH + MEDIA_CARD_MARGIN;
-          const rowHeightWithGutter = MEDIA_CARD_HEIGHT + MEDIA_CARD_MARGIN;
+          const columnWidthWithGutter = COLLECTION_CARD_WIDTH + COLLECTION_CARD_MARGIN;
+          const rowHeightWithGutter =
+            (hasImage
+              ? COLLECTION_CARD_HEIGHT
+              : COLLECTION_CARD_HEIGHT - COLLECTION_CARD_IMAGE_HEIGHT) + COLLECTION_CARD_MARGIN;
           const columnCount = Math.floor(width / columnWidthWithGutter);
-          const nonGutterSpace = (width - MEDIA_CARD_MARGIN * columnCount) / width;
+          const nonGutterSpace = (width - COLLECTION_CARD_MARGIN * columnCount) / width;
           const columnWidth = (1 / columnCount) * nonGutterSpace;
 
           const rowCount = Math.ceil(entryData.length / columnCount);
@@ -115,7 +120,7 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
               )}
               style={{
                 width,
-                height: height + 16,
+                height,
               }}
             >
               <Grid
@@ -123,12 +128,12 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
                 columnWidth={index =>
                   index + 1 === columnCount
                     ? width * columnWidth
-                    : width * columnWidth + MEDIA_CARD_MARGIN
+                    : width * columnWidth + COLLECTION_CARD_MARGIN
                 }
                 rowCount={rowCount}
                 rowHeight={() => rowHeightWithGutter}
                 width={width}
-                height={height + 16}
+                height={height}
                 itemData={
                   {
                     entryData,

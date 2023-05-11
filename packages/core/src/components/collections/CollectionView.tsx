@@ -196,7 +196,7 @@ const CollectionView = ({
   const collectionDescription = collection?.description;
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full px-5 pt-4">
       <div className="flex items-center mb-4">
         {isSearchResults ? (
           <>

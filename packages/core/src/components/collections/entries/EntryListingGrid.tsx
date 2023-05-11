@@ -13,6 +13,7 @@ export interface EntryListingGridProps {
   entryData: CollectionEntryData[];
   canLoadMore?: boolean;
   isLoadingEntries: boolean;
+  hasImage: boolean;
   onLoadMore: () => void;
   t: t;
 }
@@ -21,6 +22,7 @@ const EntryListingGrid: FC<EntryListingGridProps> = ({
   entryData,
   canLoadMore,
   isLoadingEntries,
+  hasImage,
   onLoadMore,
   t,
 }) => {
@@ -64,6 +66,7 @@ const EntryListingGrid: FC<EntryListingGridProps> = ({
           entryData={entryData}
           scrollContainerRef={gridContainerRef}
           onScroll={handleScroll}
+          hasImage={hasImage}
           t={t}
         />
       </div>
