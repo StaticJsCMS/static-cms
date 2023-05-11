@@ -10,4 +10,7 @@ export default defineConfig({
     force: true,
     include: ["@staticcms/core"],
   },
+  build: {
+    commonjsOptions: { include: [/core/, /node_modules/] },
+  },
 });
