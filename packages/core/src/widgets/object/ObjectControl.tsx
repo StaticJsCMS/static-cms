@@ -60,7 +60,6 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
             parentHidden={hidden}
             locale={locale}
             i18n={i18n}
-            forList={forList}
             forSingleList={forSingleList}
           />
         );

@@ -387,6 +387,28 @@ collections:
               - label: Description
                 name: description
                 widget: text
+          - name: list_with_object_child
+            label: List With Object Child
+            widget: list
+            fields:
+              - label: Name
+                name: name
+                widget: string
+                hint: First and Last
+              - label: Description
+                name: description
+                widget: text
+              - label: Object
+                name: object
+                widget: object
+                fields:
+                  - label: Name
+                    name: name
+                    widget: string
+                    hint: First and Last
+                  - label: Description
+                    name: description
+                    widget: text
           - name: string_list
             label: String List
             widget: list

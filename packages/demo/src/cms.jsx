@@ -1,5 +1,7 @@
 import cms, { useMediaAsset } from "@staticcms/core";
 
+import "@staticcms/core/dist/main.css";
+
 // Register all the things
 cms.init();
 
@@ -66,7 +68,6 @@ const PostPreviewCard = ({ entry, theme, hasLocalBackup }) => {
                 fontSize: "14px",
                 fontWeight: 700,
                 color: "rgb(107, 114, 128)",
-                fontSize: "14px",
                 lineHeight: "18px",
               }}
             >

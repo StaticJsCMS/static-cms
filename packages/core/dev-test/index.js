@@ -68,7 +68,6 @@ const PostPreviewCard = ({ entry, theme, hasLocalBackup, widgetFor }) => {
                 fontSize: '14px',
                 fontWeight: 700,
                 color: 'rgb(107, 114, 128)',
-                fontSize: '14px',
                 lineHeight: '18px',
               },
             },

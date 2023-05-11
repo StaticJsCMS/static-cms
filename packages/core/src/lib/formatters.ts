@@ -156,12 +156,12 @@ export function summaryFormatter<EF extends BaseField>(
 export function folderFormatter<EF extends BaseField>(
   folderTemplate: string,
   entry: Entry | null | undefined,
-  collection: Collection<EF>,
+  collection: Collection<EF> | undefined,
   defaultFolder: string,
   folderKey: string,
   slugConfig?: Slug,
 ) {
-  if (!entry || !entry.data) {
+  if (!entry || !entry.data || !collection) {
     return folderTemplate;
   }
 
