@@ -13,7 +13,6 @@ export interface EntryListingGridProps {
   entryData: CollectionEntryData[];
   canLoadMore?: boolean;
   isLoadingEntries: boolean;
-  hasImage: boolean;
   onLoadMore: () => void;
   t: t;
 }
@@ -22,7 +21,6 @@ const EntryListingGrid: FC<EntryListingGridProps> = ({
   entryData,
   canLoadMore,
   isLoadingEntries,
-  hasImage,
   onLoadMore,
   t,
 }) => {
@@ -60,13 +58,12 @@ const EntryListingGrid: FC<EntryListingGridProps> = ({
 
   return (
     <div className="relative h-full overflow-hidden">
-      <div ref={gridContainerRef} className="relative h-full overflow-y-auto styled-scrollbars">
+      <div ref={gridContainerRef} className="relative h-full overflow-hidden">
         <EntryListingCardGrid
           key="grid"
           entryData={entryData}
           scrollContainerRef={gridContainerRef}
           onScroll={handleScroll}
-          hasImage={hasImage}
           t={t}
         />
       </div>

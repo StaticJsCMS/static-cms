@@ -339,10 +339,11 @@ CMS.registerPreviewStyle('.main { color: blue; border: 1px solid gree; }', { raw
 
 ### Params
 
-| Param           | Type                                                                           | Description                                                                                                                                                                                                                          |
-| --------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| name            | string                                                                         | The name of the collection (or file for file collections) which this preview component will be used for<br /><ul><li>Folder collections: Use the name of the collection</li><li>File collections: Use the name of the file</li></ul> |
-| react_component | [React Function Component](https://reactjs.org/docs/components-and-props.html) | A React functional component that renders a preview card for a given entry in your collection                                                                                                                                        |
+| Param     | Type                                                                           | Description                                                                                                                                                                                                                          |
+| --------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| name      | string                                                                         | The name of the collection (or file for file collections) which this preview component will be used for<br /><ul><li>Folder collections: Use the name of the collection</li><li>File collections: Use the name of the file</li></ul> |
+| component | [React Function Component](https://reactjs.org/docs/components-and-props.html) | A React functional component that renders a preview card for a given entry in your collection                                                                                                                                        |
+| getHeight | function                                                                       | A function that returns the height for your cards. An object containing the current `collection` and `entry` are passed into the function at render                                                                                  |
 
 The following parameters will be passed to your `react_component` during render:
 
@@ -412,7 +413,7 @@ const PostPreviewCard = ({ entry, widgetFor }) => {
   );
 };
 
-CMS.registerPreviewCard('posts', PostPreviewCard);
+CMS.registerPreviewCard('posts', PostPreviewCard, () => 240);
 ```
 
 ```jsx
@@ -462,6 +463,8 @@ const PostPreviewCard = ({ entry, widgetFor }) => {
     </div>
   );
 };
+
+CMS.registerPreviewCard('posts', PostPreviewCard, () => 240);
 ```
 
 ```tsx
@@ -523,7 +526,7 @@ const PostPreviewCard = ({ entry, widgetFor }: TemplatePreviewCardProps<Post>) =
   );
 };
 
-CMS.registerPreviewTemplate('posts', PostPreview);
+CMS.registerPreviewCard('posts', PostPreviewCard, () => 240);
 ```
 
 </CodeTabs>

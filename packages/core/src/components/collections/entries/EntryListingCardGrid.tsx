@@ -1,14 +1,17 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { VariableSizeGrid as Grid } from 'react-window';
 
 import {
   COLLECTION_CARD_HEIGHT,
-  COLLECTION_CARD_IMAGE_HEIGHT,
+  COLLECTION_CARD_HEIGHT_WITHOUT_IMAGE,
   COLLECTION_CARD_MARGIN,
   COLLECTION_CARD_WIDTH,
 } from '@staticcms/core/constants/views';
+import { getPreviewCard } from '@staticcms/core/lib/registry';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { selectTemplateName } from '@staticcms/core/lib/util/collection.util';
+import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import EntryCard from './EntryCard';
 
 import type { CollectionEntryData } from '@staticcms/core/interface';
@@ -20,7 +23,6 @@ export interface EntryListingCardGridProps {
   scrollContainerRef: React.MutableRefObject<HTMLDivElement | null>;
   entryData: CollectionEntryData[];
   onScroll: () => void;
-  hasImage: boolean;
   t: t;
 }
 
@@ -86,7 +88,6 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
   entryData,
   scrollContainerRef,
   onScroll,
-  hasImage,
   t,
 }) => {
   const [version, setVersion] = useState(0);
@@ -95,15 +96,49 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
     setVersion(oldVersion => oldVersion + 1);
   }, []);
 
+  const getHeightFn = useCallback((data: CollectionEntryData) => {
+    const templateName = selectTemplateName(data.collection, data.entry.slug);
+
+    return getPreviewCard(templateName)?.getHeight ?? null;
+  }, []);
+
+  const getDefaultHeight = useCallback((data?: CollectionEntryData) => {
+    return isNotNullish(data?.imageFieldName)
+      ? COLLECTION_CARD_HEIGHT
+      : COLLECTION_CARD_HEIGHT_WITHOUT_IMAGE;
+  }, []);
+
+  const [prevCardHeights, setPrevCardHeight] = useState<number[]>([]);
+  const cardHeights: number[] = useMemo(() => {
+    const newCardHeights = [...prevCardHeights];
+    const startIndex = newCardHeights.length;
+    const endIndex = entryData.length;
+
+    for (let i = startIndex; i < endIndex; i++) {
+      const data = entryData[i];
+      const getHeight = getHeightFn(data);
+      if (getHeight) {
+        newCardHeights.push(getHeight({ collection: data.collection, entry: data.entry }));
+        continue;
+      }
+
+      newCardHeights.push(getDefaultHeight(data));
+    }
+
+    return newCardHeights;
+  }, [entryData, getDefaultHeight, getHeightFn, prevCardHeights]);
+
+  useEffect(() => {
+    if (cardHeights.length !== prevCardHeights.length) {
+      setPrevCardHeight(cardHeights);
+    }
+  }, [cardHeights, prevCardHeights.length]);
+
   return (
     <div className="relative w-full h-full">
       <AutoSizer onResize={handleResize}>
         {({ height = 0, width = 0 }) => {
           const columnWidthWithGutter = COLLECTION_CARD_WIDTH + COLLECTION_CARD_MARGIN;
-          const rowHeightWithGutter =
-            (hasImage
-              ? COLLECTION_CARD_HEIGHT
-              : COLLECTION_CARD_HEIGHT - COLLECTION_CARD_IMAGE_HEIGHT) + COLLECTION_CARD_MARGIN;
           const columnCount = Math.floor(width / columnWidthWithGutter);
           const nonGutterSpace = (width - COLLECTION_CARD_MARGIN * columnCount) / width;
           const columnWidth = (1 / columnCount) * nonGutterSpace;
@@ -131,7 +166,10 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
                     : width * columnWidth + COLLECTION_CARD_MARGIN
                 }
                 rowCount={rowCount}
-                rowHeight={() => rowHeightWithGutter}
+                rowHeight={index =>
+                  (cardHeights.length > index ? cardHeights[index] : getDefaultHeight()) +
+                  COLLECTION_CARD_MARGIN
+                }
                 width={width}
                 height={height}
                 itemData={
@@ -151,6 +189,7 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
                   `,
                 )}
                 style={{ position: 'unset' }}
+                overscanRowCount={5}
               >
                 {CardWrapper}
               </Grid>

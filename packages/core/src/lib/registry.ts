@@ -7,6 +7,7 @@ import type {
   BackendInitializer,
   BackendInitializerOptions,
   BaseField,
+  Collection,
   Config,
   CustomIcon,
   Entry,
@@ -49,10 +50,15 @@ const eventHandlers = allowedEvents.reduce((acc, e) => {
   return acc;
 }, {} as EventHandlerRegistry);
 
+interface CardPreviews {
+  component: TemplatePreviewCardComponent<ObjectValue>;
+  getHeight?: (data: { collection: Collection; entry: Entry }) => number;
+}
+
 interface Registry {
   backends: Record<string, BackendInitializer>;
   templates: Record<string, TemplatePreviewComponent<ObjectValue>>;
-  cards: Record<string, TemplatePreviewCardComponent<ObjectValue>>;
+  cards: Record<string, CardPreviews>;
   fieldPreviews: Record<string, Record<string, FieldPreviewComponent>>;
   widgets: Record<string, Widget>;
   icons: Record<string, CustomIcon>;
@@ -150,11 +156,15 @@ export function getPreviewTemplate(name: string): TemplatePreviewComponent<Objec
 export function registerPreviewCard<T, EF extends BaseField = UnknownField>(
   name: string,
   component: TemplatePreviewCardComponent<T, EF>,
+  getHeight?: () => number,
 ) {
-  registry.cards[name] = component as TemplatePreviewCardComponent<ObjectValue>;
+  registry.cards[name] = {
+    component: component as TemplatePreviewCardComponent<ObjectValue>,
+    getHeight,
+  };
 }
 
-export function getPreviewCard(name: string): TemplatePreviewCardComponent<ObjectValue> | null {
+export function getPreviewCard(name: string): CardPreviews | null {
   return registry.cards[name] ?? null;
 }
 

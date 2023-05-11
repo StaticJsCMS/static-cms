@@ -152,16 +152,18 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
 
   if (viewStyle === VIEW_STYLE_TABLE) {
     return (
-      <EntryListingTable
-        key="table"
-        entryData={entryData}
-        isSingleCollectionInList={isSingleCollectionInList}
-        summaryFieldHeaders={summaryFieldHeaders}
-        loadNext={handleLoadMore}
-        canLoadMore={Boolean(hasMore && handleLoadMore)}
-        isLoadingEntries={isLoadingEntries}
-        t={t}
-      />
+      <div className="pb-3 overflow-hidden">
+        <EntryListingTable
+          key="table"
+          entryData={entryData}
+          isSingleCollectionInList={isSingleCollectionInList}
+          summaryFieldHeaders={summaryFieldHeaders}
+          loadNext={handleLoadMore}
+          canLoadMore={Boolean(hasMore && handleLoadMore)}
+          isLoadingEntries={isLoadingEntries}
+          t={t}
+        />
+      </div>
     );
   }
 

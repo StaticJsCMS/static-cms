@@ -18,81 +18,112 @@ const PostPreview = ({ entry, widgetFor }) => {
   );
 };
 
-const PostPreviewCard = ({ entry, theme }) => {
+const PostPreviewCard = ({ entry, theme, hasLocalBackup }) => {
   const date = new Date(entry.data.date);
 
   const month = date.getMonth() + 1;
   const day = date.getDate();
 
-  return h(
-    'div',
-    { style: { width: '100%' } },
-    h(
-      'div',
-      { style: { padding: '16px', width: '100%' } },
-      h(
-        'div',
-        {
-          style: {
-            display: 'flex',
-            width: '100%',
-            justifyContent: 'space-between',
-            alignItems: 'start',
-            gap: '4px',
-            color: theme === 'dark' ? 'white' : 'inherit',
-          },
-        },
-        h(
-          'div',
-          {
-            style: {
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'baseline',
-              gap: '4px',
-            },
-          },
-          h(
-            'div',
-            {
-              style: {
-                fontSize: '14px',
+  const image = entry.data.image;
+
+  return (
+    <div style={{ width: "100%" }}>
+      <div
+        style={{
+          width: "100%",
+          borderTopLeftRadius: "8px",
+          borderTopRightRadius: "8px",
+          overflow: "hidden",
+          height: "140px",
+          backgroundSize: "cover",
+          backgroundRepat: "no-repeat",
+          backgroundPosition: "center",
+          objectFit: "cover",
+          backgroundImage: `url('${image}')`,
+        }}
+      />
+      <div style={{ padding: "16px", width: "100%" }}>
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "space-between",
+            alignItems: "start",
+            gap: "4px",
+            color: theme === "dark" ? "white" : "inherit",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "baseline",
+              gap: "4px",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "14px",
                 fontWeight: 700,
-                color: 'rgb(107, 114, 128)',
-                fontSize: '14px',
-                lineHeight: '18px',
-              },
-            },
-            entry.data.title,
-          ),
-          h(
-            'span',
-            { style: { fontSize: '14px' } },
-            `${date.getFullYear()}-${month < 10 ? `0${month}` : month}-${
+                color: "rgb(107, 114, 128)",
+                fontSize: "14px",
+                lineHeight: "18px",
+              }}
+            >
+              {entry.data.title}
+            </div>
+            <span style={{ fontSize: "14px" }}>{`${date.getFullYear()}-${month < 10 ? `0${month}` : month}-${
               day < 10 ? `0${day}` : day
-            }`,
-          ),
-        ),
-        h(
-          'div',
-          {
-            style: {
-              backgroundColor: entry.data.draft === true ? 'blue' : 'green',
-              color: 'white',
-              border: 'none',
-              padding: '2px 6px',
-              textAlign: 'center',
-              textDecoration: 'none',
-              display: 'inline-block',
-              cursor: 'pointer',
-              borderRadius: '4px',
-              fontSize: '14px',
-            },
-          },
-          entry.data.draft === true ? 'Draft' : 'Published',
-        ),
-      ),
-    ),
+            }`}</span>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              whiteSpace: "no-wrap",
+              gap: "8px",
+            }}
+          >
+            {hasLocalBackup ? (
+              <div
+                style={{
+                  border: "2px solid rgb(147, 197, 253)",
+                  borderRadius: "50%",
+                  color: "rgb(147, 197, 253)",
+                  height: "18px",
+                  width: "18px",
+                  fontWeight: "bold",
+                  fontSize: "11px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textAlign: "center",
+                }}
+                title="Has local backup"
+              >
+                i
+              </div>
+            ) : null}
+            <div
+              style={{
+                backgroundColor: entry.data.draft === true ? "rgb(37, 99, 235)" : "rgb(22, 163, 74)",
+                color: "white",
+                border: "none",
+                padding: "2px 6px",
+                textAlign: "center",
+                textDecoration: "none",
+                display: "inline-block",
+                cursor: "pointer",
+                borderRadius: "4px",
+                fontSize: "14px",
+              }}
+            >
+              {entry.data.draft === true ? "Draft" : "Published"}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -102,31 +133,29 @@ const PostDateFieldPreview = ({ value }) => {
   const month = date.getMonth() + 1;
   const day = date.getDate();
 
-  return h(
-    'div',
-    {},
-    `${date.getFullYear()}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}`,
-  );
+  return <div>{`${date.getFullYear()}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}`}</div>;
 };
 
 const PostDraftFieldPreview = ({ value }) => {
-  return h(
-    'div',
-    {
-      style: {
-        backgroundColor: value === true ? 'rgb(37 99 235)' : 'rgb(22 163 74)',
-        color: 'white',
-        border: 'none',
-        padding: '2px 6px',
-        textAlign: 'center',
-        textDecoration: 'none',
-        display: 'inline-block',
-        cursor: 'pointer',
-        borderRadius: '4px',
-        fontSize: '14px',
-      },
-    },
-    value === true ? 'Draft' : 'Published',
+  return (
+    <div
+      style={{
+        backgroundColor: value === true ? "rgb(37 99 235)" : "rgb(22 163 74)",
+        color: "white",
+        border: "none",
+        padding: "2px 6px",
+        textAlign: "center",
+        textDecoration: "none",
+        display: "inline-block",
+        cursor: "pointer",
+        borderRadius: "4px",
+        fontSize: "14px",
+        lineHeight: "16px",
+        height: "20px",
+      }}
+    >
+      {value === true ? "Draft" : "Published"}
+    </div>
   );
 };
 
@@ -199,9 +228,9 @@ const CustomPage = () => {
 };
 
 cms.registerPreviewTemplate("posts", PostPreview);
-CMS.registerPreviewCard("posts", PostPreviewCard);
-CMS.registerFieldPreview('posts', 'date', PostDateFieldPreview);
-CMS.registerFieldPreview('posts', 'draft', PostDraftFieldPreview);
+CMS.registerPreviewCard("posts", PostPreviewCard, () => 240);
+CMS.registerFieldPreview("posts", "date", PostDateFieldPreview);
+CMS.registerFieldPreview("posts", "draft", PostDraftFieldPreview);
 cms.registerPreviewTemplate("general", GeneralPreview);
 cms.registerPreviewTemplate("authors", AuthorsPreview);
 // Pass the name of a registered control to reuse with a new widget preview.

@@ -72,6 +72,7 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
     <div
       className="
         relative
+        max-h-full
         h-full
         overflow-hidden
         p-1.5
