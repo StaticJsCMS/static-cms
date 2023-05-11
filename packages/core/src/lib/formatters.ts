@@ -96,6 +96,10 @@ export function slugFormatter<EF extends BaseField = UnknownField>(
   entryData: EntryData,
   slugConfig?: Slug,
 ): string {
+  if (!('fields' in collection)) {
+    return '';
+  }
+
   const slugTemplate = collection.slug || '{{slug}}';
 
   const identifierField = selectIdentifier(collection);
