@@ -48,10 +48,6 @@ const TableCell = ({ children, emphasis = false, to, shrink = false }: TableCell
     >
       <div
         className="
-        bg-white
-        hover:bg-slate-50
-        dark:bg-slate-800
-        dark:hover:bg-slate-700
           h-[44px]
         "
       >

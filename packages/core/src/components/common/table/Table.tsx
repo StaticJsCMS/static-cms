@@ -14,11 +14,6 @@ const TableCell = ({ columns, children }: TableCellProps) => {
     <div
       className="
         shadow-md
-        rounded-lg
-        border-b
-        border-right
-        border-left
-        dark:border-gray-700
         z-[2]
       "
     >
@@ -26,13 +21,7 @@ const TableCell = ({ columns, children }: TableCellProps) => {
         <thead className="text-xs">
           <tr>
             {columns.map((column, index) => (
-              <TableHeaderCell
-                key={index}
-                isFirst={index === 0}
-                isLast={index + 1 === columns.length}
-              >
-                {column}
-              </TableHeaderCell>
+              <TableHeaderCell key={index}>{column}</TableHeaderCell>
             ))}
           </tr>
         </thead>

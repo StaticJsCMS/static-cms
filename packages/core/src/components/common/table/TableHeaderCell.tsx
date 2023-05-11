@@ -7,65 +7,36 @@ import type { ReactNode } from 'react';
 
 interface TableHeaderCellProps {
   children: ReactNode;
-  isFirst: boolean;
-  isLast: boolean;
 }
 
-const TableHeaderCell = ({ children, isFirst, isLast }: TableHeaderCellProps) => {
+const TableHeaderCell = ({ children }: TableHeaderCellProps) => {
   return (
     <th
       scope="col"
       className={classNames(
         `
-          text-gray-500
-          bg-slate-50
-          dark:text-gray-400
-          dark:bg-slate-900
+          font-bold
           sticky
           top-0
+          border-0
           p-0
         `,
-        isFirst &&
-          `
-            before:flex
-            before:absolute
-            before:content-['']
-            before:w-5
-            before:h-5
-            before:bg-slate-50
-            before:dark:bg-slate-900
-            before:z-[1]
-            before:-left-[1px]
-            before:-top-[1px]
-          `,
-        isLast &&
-          `
-            before:flex
-            before:absolute
-            before:content-['']
-            before:w-5
-            before:h-5
-            before:bg-slate-50
-            before:dark:bg-slate-900
-            before:z-[1]
-            before:-right-[1px]
-            before:-top-[1px]
-          `,
       )}
     >
       <div
-        className={classNames(
-          `
-            relative
-            bg-gray-100
-            dark:bg-slate-700
-            px-4
-            py-3
-            z-[2]
-          `,
-          isFirst && 'rounded-tl-[4px]',
-          isLast && 'rounded-tr-[4px]',
-        )}
+        className="
+          px-4
+          py-3
+          text-gray-900
+          border-gray-100
+          border-b
+          bg-white
+          dark:text-white
+          dark:border-gray-700
+          dark:bg-slate-800
+          shadow-sm
+          text-[14px]
+        "
       >
         {typeof children === 'string' && isEmpty(children) ? <>&nbsp;</> : children}
       </div>

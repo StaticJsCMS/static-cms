@@ -22,6 +22,7 @@ const Card = ({ children, className }: CardProps) => {
           dark:border-gray-700/40
           flex
           flex-col
+          h-full
         `,
         className,
       )}

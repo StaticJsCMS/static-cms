@@ -115,7 +115,7 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
               )}
               style={{
                 width,
-                height,
+                height: height + 16,
               }}
             >
               <Grid
@@ -128,7 +128,7 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
                 rowCount={rowCount}
                 rowHeight={() => rowHeightWithGutter}
                 width={width}
-                height={height - MEDIA_LIBRARY_PADDING}
+                height={height + 16}
                 itemData={
                   {
                     entryData,

@@ -360,7 +360,7 @@
 }
 
 .dark .styled-scrollbars.styled-scrollbars-secondary {
-  --scrollbar-foreground: rgba(47, 64, 93, 0.8);
+  --scrollbar-foreground: rgba(47, 64, 84, 0.8);
   --scrollbar-background: rgb(30 41 59);
 }
 
