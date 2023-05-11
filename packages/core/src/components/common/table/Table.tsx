@@ -11,7 +11,17 @@ interface TableCellProps {
 
 const TableCell = ({ columns, children }: TableCellProps) => {
   return (
-    <div className="shadow-md">
+    <div
+      className="
+        shadow-md
+        rounded-lg
+        border-b
+        border-right
+        border-left
+        dark:border-gray-700
+        z-[2]
+      "
+    >
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-300">
         <thead className="text-xs">
           <tr>

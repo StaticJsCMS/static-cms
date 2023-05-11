@@ -383,3 +383,28 @@
   /* Background */
   background: var(--scrollbar-background);
 }
+
+table {
+  tbody {
+    tr {
+      &:last-child {
+        border-bottom-right-radius: 8px;
+        border-bottom-left-radius: 8px;
+
+        td {
+          &:first-child {
+            & > div {
+              border-bottom-left-radius: 8px;
+            }
+          }
+
+          &:last-child {
+            & > div {
+              border-bottom-right-radius: 8px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

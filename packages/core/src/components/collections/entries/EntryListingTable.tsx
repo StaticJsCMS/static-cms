@@ -72,36 +72,8 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
     <div className="relative h-full overflow-hidden">
       <div
         ref={tableContainerRef}
-        className="relative h-full overflow-y-auto overflow-x-hidden styled-scrollbars
-        border-4
-        rounded-xl
-        border-slate-50
-        dark:border-slate-900"
+        className="relative h-full overflow-y-auto overflow-x-hidden styled-scrollbars"
       >
-        <div
-          className="
-            absolute
-            h-full
-            w-full
-            -top-1
-            -right-1
-            -left-1
-            -bottom-1
-          "
-        >
-          <div
-            className="
-              sticky
-              top-0
-              h-full
-              w-full
-              border-4
-              rounded-xl
-              border-slate-50
-              dark:border-slate-900
-            "
-          />
-        </div>
         <Table
           columns={
             !isSingleCollectionInList

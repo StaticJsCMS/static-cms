@@ -15,28 +15,56 @@ const TableHeaderCell = ({ children, isFirst, isLast }: TableHeaderCellProps) =>
   return (
     <th
       scope="col"
-      className="
-        text-gray-500
-        bg-slate-50
-        dark:text-gray-400
-        dark:bg-slate-900
-        sticky
-        top-0
-        p-0
-      "
+      className={classNames(
+        `
+          text-gray-500
+          bg-slate-50
+          dark:text-gray-400
+          dark:bg-slate-900
+          sticky
+          top-0
+          p-0
+        `,
+        isFirst &&
+          `
+            before:flex
+            before:absolute
+            before:content-['']
+            before:w-5
+            before:h-5
+            before:bg-slate-50
+            before:dark:bg-slate-900
+            before:z-[1]
+            before:-left-[1px]
+            before:-top-[1px]
+          `,
+        isLast &&
+          `
+            before:flex
+            before:absolute
+            before:content-['']
+            before:w-5
+            before:h-5
+            before:bg-slate-50
+            before:dark:bg-slate-900
+            before:z-[1]
+            before:-right-[1px]
+            before:-top-[1px]
+          `,
+      )}
     >
       <div
         className={classNames(
           `
+            relative
             bg-gray-100
-            border-slate-200
             dark:bg-slate-700
-            dark:border-gray-700
             px-4
             py-3
+            z-[2]
           `,
-          isFirst && 'rounded-tl-lg',
-          isLast && 'rounded-tr-lg',
+          isFirst && 'rounded-tl-[4px]',
+          isLast && 'rounded-tr-[4px]',
         )}
       >
         {typeof children === 'string' && isEmpty(children) ? <>&nbsp;</> : children}
