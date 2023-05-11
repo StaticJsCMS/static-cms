@@ -360,7 +360,7 @@
 }
 
 .dark .styled-scrollbars.styled-scrollbars-secondary {
-  --scrollbar-foreground: rgba(47, 64, 93, 0.8);
+  --scrollbar-foreground: rgba(47, 64, 84, 0.8);
   --scrollbar-background: rgb(30 41 59);
 }
 
@@ -382,4 +382,29 @@
 .styled-scrollbars::-webkit-scrollbar-track {
   /* Background */
   background: var(--scrollbar-background);
+}
+
+table {
+  tbody {
+    tr {
+      &:last-child {
+        border-bottom-right-radius: 8px;
+        border-bottom-left-radius: 8px;
+
+        td {
+          &:first-child {
+            & > div {
+              border-bottom-left-radius: 8px;
+            }
+          }
+
+          &:last-child {
+            & > div {
+              border-bottom-right-radius: 8px;
+            }
+          }
+        }
+      }
+    }
+  }
 }

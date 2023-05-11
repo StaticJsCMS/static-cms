@@ -184,16 +184,15 @@
         var slug = dateString + '-post-number-' + i + '.md';
 
         window.repoFiles._posts[slug] = {
-          content:
-            '---\ntitle: "This is post # ' +
-            i +
-            `\"\ndraft: ${i % 2 === 0}` +
-            '\nimage: /assets/uploads/lobby.jpg' +
-            '\ndate: ' +
-            dateString +
-            'T00:00:00.000Z\n---\n# The post is number ' +
-            i +
-            `\n\n![Static CMS](https://raw.githubusercontent.com/StaticJsCMS/static-cms/main/static-cms-logo.png)
+          content: `---
+title: "This is post # ${i}"
+draft: ${i % 2 === 0}
+image: /assets/uploads/lobby.jpg
+date: ${dateString}T00:00:00.000Z
+---
+# The post is number ${i}
+
+![Static CMS](https://raw.githubusercontent.com/StaticJsCMS/static-cms/main/static-cms-logo.png)
 
 # Awesome Editor!
 

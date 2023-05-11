@@ -79,7 +79,10 @@ const EntryCard: FC<TranslatedProps<EntryCardProps>> = ({
     [collection, entry.slug],
   );
 
-  const PreviewCardComponent = useMemo(() => getPreviewCard(templateName) ?? null, [templateName]);
+  const PreviewCardComponent = useMemo(
+    () => getPreviewCard(templateName)?.component ?? null,
+    [templateName],
+  );
 
   const theme = useAppSelector(selectTheme);
 

@@ -7,37 +7,36 @@ import type { ReactNode } from 'react';
 
 interface TableHeaderCellProps {
   children: ReactNode;
-  isFirst: boolean;
-  isLast: boolean;
 }
 
-const TableHeaderCell = ({ children, isFirst, isLast }: TableHeaderCellProps) => {
+const TableHeaderCell = ({ children }: TableHeaderCellProps) => {
   return (
     <th
       scope="col"
-      className="
-        text-gray-500
-        bg-slate-50
-        dark:text-gray-400
-        dark:bg-slate-900
-        sticky
-        top-0
-        p-0
-      "
+      className={classNames(
+        `
+          font-bold
+          sticky
+          top-0
+          border-0
+          p-0
+        `,
+      )}
     >
       <div
-        className={classNames(
-          `
-            bg-gray-100
-            border-slate-200
-            dark:bg-slate-700
-            dark:border-gray-700
-            px-4
-            py-3
-          `,
-          isFirst && 'rounded-tl-lg',
-          isLast && 'rounded-tr-lg',
-        )}
+        className="
+          px-4
+          py-3
+          text-gray-900
+          border-gray-100
+          border-b
+          bg-white
+          dark:text-white
+          dark:border-gray-700
+          dark:bg-slate-800
+          shadow-sm
+          text-[14px]
+        "
       >
         {typeof children === 'string' && isEmpty(children) ? <>&nbsp;</> : children}
       </div>

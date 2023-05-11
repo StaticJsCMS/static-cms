@@ -2,10 +2,12 @@ import { oneLine } from 'common-tags';
 
 import type {
   AdditionalLink,
+  AuthorData,
   BackendClass,
   BackendInitializer,
   BackendInitializerOptions,
   BaseField,
+  Collection,
   Config,
   CustomIcon,
   Entry,
@@ -14,6 +16,8 @@ import type {
   EventListener,
   FieldPreviewComponent,
   LocalePhrasesRoot,
+  LoginEventHandler,
+  LogoutEventHandler,
   MountedEventHandler,
   ObjectValue,
   PostSaveEventHandler,
@@ -30,13 +34,15 @@ import type {
   WidgetValueSerializer,
 } from '../interface';
 
-export const allowedEvents = ['mounted', 'preSave', 'postSave'] as const;
+export const allowedEvents = ['mounted', 'login', 'logout', 'preSave', 'postSave'] as const;
 export type AllowedEvent = (typeof allowedEvents)[number];
 
 type EventHandlerRegistry = {
   preSave: { handler: PreSaveEventHandler; options: Record<string, unknown> }[];
   postSave: { handler: PostSaveEventHandler; options: Record<string, unknown> }[];
   mounted: { handler: MountedEventHandler; options: Record<string, unknown> }[];
+  login: { handler: LoginEventHandler; options: Record<string, unknown> }[];
+  logout: { handler: LogoutEventHandler; options: Record<string, unknown> }[];
 };
 
 const eventHandlers = allowedEvents.reduce((acc, e) => {
@@ -44,10 +50,15 @@ const eventHandlers = allowedEvents.reduce((acc, e) => {
   return acc;
 }, {} as EventHandlerRegistry);
 
+interface CardPreviews {
+  component: TemplatePreviewCardComponent<ObjectValue>;
+  getHeight?: (data: { collection: Collection; entry: Entry }) => number;
+}
+
 interface Registry {
   backends: Record<string, BackendInitializer>;
   templates: Record<string, TemplatePreviewComponent<ObjectValue>>;
-  cards: Record<string, TemplatePreviewCardComponent<ObjectValue>>;
+  cards: Record<string, CardPreviews>;
   fieldPreviews: Record<string, Record<string, FieldPreviewComponent>>;
   widgets: Record<string, Widget>;
   icons: Record<string, CustomIcon>;
@@ -145,11 +156,15 @@ export function getPreviewTemplate(name: string): TemplatePreviewComponent<Objec
 export function registerPreviewCard<T, EF extends BaseField = UnknownField>(
   name: string,
   component: TemplatePreviewCardComponent<T, EF>,
+  getHeight?: () => number,
 ) {
-  registry.cards[name] = component as TemplatePreviewCardComponent<ObjectValue>;
+  registry.cards[name] = {
+    component: component as TemplatePreviewCardComponent<ObjectValue>,
+    getHeight,
+  };
 }
 
-export function getPreviewCard(name: string): TemplatePreviewCardComponent<ObjectValue> | null {
+export function getPreviewCard(name: string): CardPreviews | null {
   return registry.cards[name] ?? null;
 }
 
@@ -336,22 +351,40 @@ export function registerEventListener<
 >({ name, handler }: EventListener<E, O>, options?: O) {
   validateEventName(name);
   registry.eventHandlers[name].push({
-    handler: handler as MountedEventHandler & PreSaveEventHandler & PostSaveEventHandler,
+    handler: handler as MountedEventHandler &
+      LoginEventHandler &
+      PreSaveEventHandler &
+      PostSaveEventHandler,
     options: options ?? {},
   });
 }
 
+export async function invokeEvent(name: 'login', data: AuthorData): Promise<void>;
+export async function invokeEvent(name: 'logout'): Promise<void>;
 export async function invokeEvent(name: 'preSave', data: EventData): Promise<EntryData>;
 export async function invokeEvent(name: 'postSave', data: EventData): Promise<void>;
 export async function invokeEvent(name: 'mounted'): Promise<void>;
-export async function invokeEvent(name: AllowedEvent, data?: EventData): Promise<void | EntryData> {
+export async function invokeEvent(
+  name: AllowedEvent,
+  data?: EventData | AuthorData,
+): Promise<void | EntryData> {
   validateEventName(name);
 
-  if (name === 'mounted') {
-    console.info('[StaticCMS] Firing mounted event');
+  if (name === 'mounted' || name === 'logout') {
+    console.info(`[StaticCMS] Firing ${name} event`);
     const handlers = registry.eventHandlers[name];
     for (const { handler, options } of handlers) {
       handler(options);
+    }
+
+    return;
+  }
+
+  if (name === 'login') {
+    console.info('[StaticCMS] Firing login event', data);
+    const handlers = registry.eventHandlers[name];
+    for (const { handler, options } of handlers) {
+      handler(data as AuthorData, options);
     }
 
     return;
@@ -361,7 +394,7 @@ export async function invokeEvent(name: AllowedEvent, data?: EventData): Promise
     console.info(`[StaticCMS] Firing post save event`, data);
     const handlers = registry.eventHandlers[name];
     for (const { handler, options } of handlers) {
-      handler(data!, options);
+      handler(data as EventData, options);
     }
 
     return;
@@ -371,7 +404,7 @@ export async function invokeEvent(name: AllowedEvent, data?: EventData): Promise
 
   console.info(`[StaticCMS] Firing pre save event`, data);
 
-  let _data = { ...data! };
+  let _data = { ...(data as EventData) };
   for (const { handler, options } of handlers) {
     const result = await handler(_data, options);
     if (_data !== undefined && result !== undefined) {

@@ -96,6 +96,10 @@ export function slugFormatter<EF extends BaseField = UnknownField>(
   entryData: EntryData,
   slugConfig?: Slug,
 ): string {
+  if (!('fields' in collection)) {
+    return '';
+  }
+
   const slugTemplate = collection.slug || '{{slug}}';
 
   const identifierField = selectIdentifier(collection);
@@ -152,12 +156,12 @@ export function summaryFormatter<EF extends BaseField>(
 export function folderFormatter<EF extends BaseField>(
   folderTemplate: string,
   entry: Entry | null | undefined,
-  collection: Collection<EF>,
+  collection: Collection<EF> | undefined,
   defaultFolder: string,
   folderKey: string,
   slugConfig?: Slug,
 ) {
-  if (!entry || !entry.data) {
+  if (!entry || !entry.data || !collection) {
     return folderTemplate;
   }
 

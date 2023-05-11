@@ -887,9 +887,14 @@ export interface BackendInitializer<EF extends BaseField = UnknownField> {
   init: (config: Config<EF>, options: BackendInitializerOptions) => BackendClass;
 }
 
+export interface AuthorData {
+  login: string | undefined;
+  name: string;
+}
+
 export interface EventData {
   entry: Entry;
-  author: { login: string | undefined; name: string };
+  author: AuthorData;
 }
 
 export type PreSaveEventHandler<O extends Record<string, unknown> = Record<string, unknown>> = (
@@ -906,10 +911,21 @@ export type MountedEventHandler<O extends Record<string, unknown> = Record<strin
   options: O,
 ) => void | Promise<void>;
 
+export type LoginEventHandler<O extends Record<string, unknown> = Record<string, unknown>> = (
+  data: AuthorData,
+  options: O,
+) => void | Promise<void>;
+
+export type LogoutEventHandler<O extends Record<string, unknown> = Record<string, unknown>> = (
+  options: O,
+) => void | Promise<void>;
+
 export type EventHandlers<O extends Record<string, unknown> = Record<string, unknown>> = {
   preSave: PreSaveEventHandler<O>;
   postSave: PostSaveEventHandler<O>;
   mounted: MountedEventHandler<O>;
+  login: LoginEventHandler<O>;
+  logout: LogoutEventHandler<O>;
 };
 
 export interface EventListener<

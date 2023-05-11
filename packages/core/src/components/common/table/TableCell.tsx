@@ -38,12 +38,21 @@ const TableCell = ({ children, emphasis = false, to, shrink = false }: TableCell
     <td
       className={classNames(
         !to ? 'px-4 py-3' : 'p-0',
-        'text-gray-500 dark:text-gray-300',
+        `
+          text-gray-500
+          dark:text-gray-300
+        `,
         emphasis && 'font-medium text-gray-900 whitespace-nowrap dark:text-white',
         shrink && 'w-0',
       )}
     >
-      {content}
+      <div
+        className="
+          h-[44px]
+        "
+      >
+        {content}
+      </div>
     </td>
   );
 };

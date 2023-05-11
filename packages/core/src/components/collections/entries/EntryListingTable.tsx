@@ -69,8 +69,28 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
   }, [clientHeight, fetchMoreOnBottomReached, scrollHeight, scrollTop]);
 
   return (
-    <div className="relative h-full overflow-hidden">
-      <div ref={tableContainerRef} className="relative h-full overflow-auto styled-scrollbars">
+    <div
+      className="
+        relative
+        max-h-full
+        h-full
+        overflow-hidden
+        p-1.5
+        bg-white
+        dark:bg-slate-800
+        rounded-xl
+      "
+    >
+      <div
+        ref={tableContainerRef}
+        className="
+          relative
+          h-full
+          overflow-auto
+          styled-scrollbars
+          styled-scrollbars-secondary
+        "
+      >
         <Table
           columns={
             !isSingleCollectionInList

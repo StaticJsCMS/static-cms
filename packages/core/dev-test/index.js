@@ -11,15 +11,31 @@ const PostPreview = ({ entry, widgetFor }) => {
   );
 };
 
-const PostPreviewCard = ({ entry, theme, hasLocalBackup }) => {
+const PostPreviewCard = ({ entry, theme, hasLocalBackup, widgetFor }) => {
   const date = new Date(entry.data.date);
 
   const month = date.getMonth() + 1;
   const day = date.getDate();
 
+  const image = entry.data.image;
+
   return h(
     'div',
     { style: { width: '100%' } },
+    h('div', {
+      style: {
+        width: '100%',
+        borderTopLeftRadius: '8px',
+        borderTopRightRadius: '8px',
+        overflow: 'hidden',
+        height: '140px',
+        backgroundSize: 'cover',
+        backgroundRepat: 'no-repeat',
+        backgroundPosition: 'center',
+        objectFit: 'cover',
+        backgroundImage: `url('${image}')`,
+      },
+    }),
     h(
       'div',
       { style: { padding: '16px', width: '100%' } },
@@ -52,7 +68,6 @@ const PostPreviewCard = ({ entry, theme, hasLocalBackup }) => {
                 fontSize: '14px',
                 fontWeight: 700,
                 color: 'rgb(107, 114, 128)',
-                fontSize: '14px',
                 lineHeight: '18px',
               },
             },
@@ -93,7 +108,7 @@ const PostPreviewCard = ({ entry, theme, hasLocalBackup }) => {
                     justifyContent: 'center',
                     textAlign: 'center',
                   },
-                  title: 'Has local backup'
+                  title: 'Has local backup',
                 },
                 'i',
               )
@@ -151,6 +166,8 @@ const PostDraftFieldPreview = ({ value }) => {
         cursor: 'pointer',
         borderRadius: '4px',
         fontSize: '14px',
+        lineHeight: '16px',
+        height: '20px',
       },
     },
     value === true ? 'Draft' : 'Published',
@@ -226,7 +243,7 @@ const CustomPage = () => {
 };
 
 CMS.registerPreviewTemplate('posts', PostPreview);
-CMS.registerPreviewCard('posts', PostPreviewCard);
+CMS.registerPreviewCard('posts', PostPreviewCard, () => 240);
 CMS.registerFieldPreview('posts', 'date', PostDateFieldPreview);
 CMS.registerFieldPreview('posts', 'draft', PostDraftFieldPreview);
 CMS.registerPreviewTemplate('general', GeneralPreview);

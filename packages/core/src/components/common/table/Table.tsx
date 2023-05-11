@@ -11,18 +11,17 @@ interface TableCellProps {
 
 const TableCell = ({ columns, children }: TableCellProps) => {
   return (
-    <div className="shadow-md">
+    <div
+      className="
+        shadow-md
+        z-[2]
+      "
+    >
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-300">
         <thead className="text-xs">
           <tr>
             {columns.map((column, index) => (
-              <TableHeaderCell
-                key={index}
-                isFirst={index === 0}
-                isLast={index + 1 === columns.length}
-              >
-                {column}
-              </TableHeaderCell>
+              <TableHeaderCell key={index}>{column}</TableHeaderCell>
             ))}
           </tr>
         </thead>

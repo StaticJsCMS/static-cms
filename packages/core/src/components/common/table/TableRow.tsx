@@ -14,11 +14,14 @@ const TableRow = ({ children, className }: TableRowProps) => {
     <tr
       className={classNames(
         `
-          border-b
+          border-t
+          first:border-t-0
+          border-gray-100
+          dark:border-gray-700
           bg-white
           hover:bg-slate-50
           dark:bg-slate-800
-          dark:border-gray-700
+          dark:hover:bg-slate-700
         `,
         className,
       )}

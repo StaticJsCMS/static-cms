@@ -13,7 +13,7 @@ const MultiSearchCollectionPage: FC = () => {
   const filterTerm = params['*'];
 
   return (
-    <MainView breadcrumbs={[{ name: 'Search' }]} showQuickCreate showLeftNav>
+    <MainView breadcrumbs={[{ name: 'Search' }]} showQuickCreate showLeftNav noScroll noMargin>
       <CollectionView
         name={name}
         searchTerm={searchTerm}
@@ -42,7 +42,7 @@ const SingleCollectionPage: FC<SingleCollectionPageProps> = ({
   const breadcrumbs = useBreadcrumbs(collection, filterTerm);
 
   return (
-    <MainView breadcrumbs={breadcrumbs} showQuickCreate showLeftNav noScroll>
+    <MainView breadcrumbs={breadcrumbs} showQuickCreate showLeftNav noScroll noMargin>
       <CollectionView
         name={name}
         searchTerm={searchTerm}

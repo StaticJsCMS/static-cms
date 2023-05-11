@@ -1,5 +1,5 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import {
@@ -184,6 +184,17 @@ const App = ({
       dispatch(changeTheme('light'));
     }
   }, [dispatch]);
+
+  const [prevUser, setPrevUser] = useState(user);
+  useEffect(() => {
+    if (!prevUser && user) {
+      invokeEvent('login', {
+        login: user.login,
+        name: user.name ?? '',
+      });
+    }
+    setPrevUser(user);
+  }, [prevUser, user]);
 
   const content = useMemo(() => {
     if (!user) {
