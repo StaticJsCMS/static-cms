@@ -4,6 +4,8 @@ import {
   focusEditor,
   getSelectionText,
   insertLink,
+  replaceNodeChildren,
+  setNodes,
   someNode,
   upsertLink,
 } from '@udecode/plate';
@@ -11,7 +13,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
-import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
+import { isEmpty, isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 
@@ -40,7 +42,12 @@ const InsertLinkToolbarButton: FC<InsertLinkToolbarButtonProps> = ({
     ({ path: newUrl, alt: newText }: MediaPath<string>) => {
       if (isNotEmpty(newUrl) && selection) {
         focusEditor(editor, selection);
-        upsertLink(editor, { url: newUrl, text: newText });
+
+        upsertLink(editor, {
+          url: newUrl,
+          text: newText ?? newUrl,
+          insertNodesOptions: { at: selection },
+        });
       }
     },
     [editor, selection],
