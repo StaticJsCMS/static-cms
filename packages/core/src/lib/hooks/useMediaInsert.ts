@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { openMediaLibrary, removeInsertedMedia } from '@staticcms/core/actions/mediaLibrary';
@@ -39,17 +39,16 @@ export default function useMediaInsert<T extends string | string[], F extends Me
   const finalControlID = useMemo(() => controlID ?? uuid(), [controlID]);
   const mediaPathSelector = useMemo(() => selectMediaPath(finalControlID), [finalControlID]);
   const mediaPath = useAppSelector(mediaPathSelector);
-  const [selected, setSelected] = useState(false);
 
   useEffect(() => {
-    if (!selected && mediaPath && (mediaPath.path !== value.path || mediaPath.alt !== value.alt)) {
-      setSelected(true);
+    if (mediaPath && (mediaPath.path !== value.path || mediaPath.alt !== value.alt)) {
+      console.log('hello?', mediaPath);
       setTimeout(() => {
         callback(mediaPath as MediaPath<T>);
         dispatch(removeInsertedMedia(finalControlID));
       });
     }
-  }, [callback, finalControlID, dispatch, mediaPath, value, selected]);
+  }, [callback, finalControlID, dispatch, mediaPath, value]);
 
   const handleOpenMediaLibrary = useCallback(
     (e?: MouseEvent, { replaceIndex }: { replaceIndex?: number } = {}) => {
@@ -69,7 +68,6 @@ export default function useMediaInsert<T extends string | string[], F extends Me
           insertOptions,
         }),
       );
-      setSelected(false);
     },
     [
       dispatch,

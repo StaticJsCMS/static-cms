@@ -1,6 +1,13 @@
 import { Link as LinkIcon } from '@styled-icons/material/Link';
-import { ELEMENT_LINK, getSelectionText, insertLink, someNode } from '@udecode/plate';
-import React, { useCallback, useMemo } from 'react';
+import {
+  ELEMENT_LINK,
+  focusEditor,
+  getSelectionText,
+  insertLink,
+  someNode,
+  upsertLink,
+} from '@udecode/plate';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
@@ -10,6 +17,7 @@ import ToolbarButton from './common/ToolbarButton';
 
 import type { Collection, MarkdownField, MediaPath } from '@staticcms/core/interface';
 import type { FC } from 'react';
+import type { BaseSelection } from 'slate';
 
 export interface InsertLinkToolbarButtonProps {
   variant: 'button' | 'menu';
@@ -26,18 +34,16 @@ const InsertLinkToolbarButton: FC<InsertLinkToolbarButtonProps> = ({
   currentValue,
   disabled,
 }) => {
+  const [selection, setSelection] = useState<BaseSelection>();
   const editor = useMdPlateEditorState();
   const handleInsert = useCallback(
     ({ path: newUrl, alt: newText }: MediaPath<string>) => {
-      if (isNotEmpty(newUrl)) {
-        insertLink(
-          editor,
-          { url: newUrl, text: isNotEmpty(newText) ? newText : newUrl },
-          { at: editor.selection ?? editor.prevSelection! },
-        );
+      if (isNotEmpty(newUrl) && selection) {
+        focusEditor(editor, selection);
+        upsertLink(editor, { url: newUrl, text: newText });
       }
     },
-    [editor],
+    [editor, selection],
   );
 
   const chooseUrl = useMemo(() => field.choose_url ?? true, [field.choose_url]);
@@ -62,12 +68,17 @@ const InsertLinkToolbarButton: FC<InsertLinkToolbarButtonProps> = ({
     handleInsert,
   );
 
+  const handleOpenMediaLibrary = useCallback(() => {
+    setSelection(editor.selection);
+    openMediaLibrary();
+  }, [editor.selection, openMediaLibrary]);
+
   return (
     <ToolbarButton
       label="Link"
       tooltip="Insert link"
       icon={LinkIcon}
-      onClick={openMediaLibrary}
+      onClick={handleOpenMediaLibrary}
       active={isLink}
       disabled={disabled}
       variant={variant}
