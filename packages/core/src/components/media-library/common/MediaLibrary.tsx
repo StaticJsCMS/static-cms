@@ -272,7 +272,6 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
   const handleURLChange = useCallback(
     (url: string) => {
       setUrl(url);
-      console.log('HANDLE URL CHANGE', url);
       dispatch(insertMedia(url, field, alt, currentFolder));
     },
     [alt, dispatch, field, currentFolder],

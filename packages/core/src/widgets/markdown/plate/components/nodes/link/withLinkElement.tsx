@@ -38,7 +38,6 @@ const withLinkElement = ({ collection, field }: WithLinkElementProps) => {
 
     const { url } = useMemo(() => element, [element]);
     const alt = useMemo(() => getEditorString(editor, path), [editor, path]);
-    console.log('LINK', 'url', url, 'alt', alt);
     const [popoverHasFocus, setPopoverHasFocus] = useState(false);
     const debouncedPopoverHasFocus = useDebounce(popoverHasFocus, 100);
 
