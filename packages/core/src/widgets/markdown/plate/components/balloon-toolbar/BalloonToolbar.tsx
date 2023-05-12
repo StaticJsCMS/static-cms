@@ -249,42 +249,44 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
           left: `${selectionBoundingClientRect?.x}px`,
         }}
       />
-      <PopperUnstyled
-        open={Boolean(debouncedOpen && anchorEl.current)}
-        component="div"
-        placement="top"
-        anchorEl={anchorEl.current ?? null}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        tabIndex={0}
-        className="
-          absolute
-          max-h-60
-          overflow-auto
-          rounded-md
-          bg-white
-          p-1
-          text-base
-          shadow-lg
-          ring-1
-          ring-black
-          ring-opacity-5
-          focus:outline-none
-          sm:text-sm
-          z-40
-          dark:bg-slate-700
-        "
-      >
-        <div
-          data-testid="balloon-toolbar"
+      {groups.length > 0 || debouncedGroups.length > 0 ? (
+        <PopperUnstyled
+          open={Boolean(debouncedOpen && anchorEl.current)}
+          component="div"
+          placement="top"
+          anchorEl={anchorEl.current ?? null}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          tabIndex={0}
           className="
-            flex
-            gap-0.5
+            absolute
+            max-h-60
+            overflow-auto
+            rounded-md
+            bg-white
+            p-1
+            text-base
+            shadow-lg
+            ring-1
+            ring-black
+            ring-opacity-5
+            focus:outline-none
+            sm:text-sm
+            z-40
+            dark:bg-slate-700
           "
         >
-          {groups.length > 0 ? groups : debouncedGroups}
-        </div>
-      </PopperUnstyled>
+          <div
+            data-testid="balloon-toolbar"
+            className="
+              flex
+              gap-0.5
+            "
+          >
+            {groups.length > 0 ? groups : debouncedGroups}
+          </div>
+        </PopperUnstyled>
+      ) : null}
     </>
   );
 };

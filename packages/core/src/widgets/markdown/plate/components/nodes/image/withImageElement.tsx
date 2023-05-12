@@ -6,7 +6,7 @@ import {
   setSelection,
   usePlateSelection,
 } from '@udecode/plate';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFocused } from 'slate-react';
 
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
@@ -32,8 +32,7 @@ const withImageElement = ({ collection, entry, field }: WithImageElementProps) =
     editor,
     children,
   }) => {
-    const { url, alt } = element;
-    const [internalValue, setInternalValue] = useState<MediaPath<string>>({ path: url, alt });
+    const { url, alt } = useMemo(() => element, [element]);
     const [popoverHasFocus, setPopoverHasFocus] = useState(false);
     const debouncedPopoverHasFocus = useDebounce(popoverHasFocus, 100);
 
@@ -100,7 +99,6 @@ const withImageElement = ({ collection, entry, field }: WithImageElementProps) =
       (newValue: MediaPath<string>) => {
         handleChange(newValue.path, 'url');
         handleChange(newValue.alt ?? '', 'alt');
-        setInternalValue(newValue);
       },
       [handleChange],
     );
@@ -179,8 +177,8 @@ const withImageElement = ({ collection, entry, field }: WithImageElementProps) =
           anchorEl={anchorEl}
           collection={collection}
           field={field}
-          url={internalValue.path}
-          text={internalValue.alt}
+          url={url}
+          text={alt}
           onMediaChange={handleMediaChange}
           onRemove={handleRemove}
           forImage
