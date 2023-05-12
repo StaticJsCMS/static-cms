@@ -42,7 +42,6 @@ export default function useMediaInsert<T extends string | string[], F extends Me
 
   useEffect(() => {
     if (mediaPath && (mediaPath.path !== value.path || mediaPath.alt !== value.alt)) {
-      console.log('hello?', mediaPath);
       setTimeout(() => {
         callback(mediaPath as MediaPath<T>);
         dispatch(removeInsertedMedia(finalControlID));

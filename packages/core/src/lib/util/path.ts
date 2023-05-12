@@ -1,4 +1,4 @@
-const absolutePath = new RegExp('^(?:[a-z]+:)?//', 'i');
+const absolutePath = new RegExp('^(?:(?:[a-z]+:)?//)|(?:mailto:)|(?:tel:)', 'i');
 
 function normalizePath(path: string) {
   return path.replace(/[\\/]+/g, '/');

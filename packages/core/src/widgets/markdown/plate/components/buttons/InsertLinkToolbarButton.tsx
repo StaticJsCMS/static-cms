@@ -1,10 +1,11 @@
 import { Link as LinkIcon } from '@styled-icons/material/Link';
 import {
   ELEMENT_LINK,
-  getAboveNode,
+  getEditorString,
   getNode,
   getSelectionText,
   insertLink,
+  replaceNodeChildren,
   setNodes,
   someNode,
 } from '@udecode/plate';
@@ -18,8 +19,9 @@ import ToolbarButton from './common/ToolbarButton';
 
 import type { Collection, MarkdownField, MediaPath } from '@staticcms/core/interface';
 import type { MdLinkElement } from '@staticcms/markdown/plate/plateTypes';
+import type { TText } from '@udecode/plate';
 import type { FC } from 'react';
-import type { BaseSelection } from 'slate';
+import type { Path } from 'slate';
 
 export interface InsertLinkToolbarButtonProps {
   variant: 'button' | 'menu';
@@ -36,52 +38,31 @@ const InsertLinkToolbarButton: FC<InsertLinkToolbarButtonProps> = ({
   currentValue,
   disabled,
 }) => {
-  const [selection, setSelection] = useState<BaseSelection>();
+  const [selection, setSelection] = useState<Path>();
   const editor = useMdPlateEditorState();
   const handleInsert = useCallback(
     ({ path: newUrl, alt: newText }: MediaPath<string>) => {
-      if (isNotEmpty(newUrl)) {
+      if (isNotEmpty(newUrl) && selection) {
         const text = isNotEmpty(newText) ? newText : newUrl;
-        const link: MdLinkElement = {
-          type: ELEMENT_LINK,
-          url: newUrl,
-          children: [{ text }],
-        };
+        const linkAt = getNode<MdLinkElement>(editor, selection);
 
-        const linkAbove = getAboveNode<MdLinkElement>(editor, {
-          at: selection?.focus,
-          match: { type: ELEMENT_LINK },
-        });
+        if (linkAt && linkAt.type === ELEMENT_LINK) {
+          if (newUrl !== linkAt.url || text !== linkAt.children[0].text) {
+            setNodes<MdLinkElement>(
+              editor,
+              { url: newUrl, children: [{ text: newText }] },
+              { at: selection },
+            );
 
-        if (linkAbove) {
-          if (newUrl !== linkAbove[0]?.url || text !== linkAbove[0]?.children[0].text) {
-            setNodes<MdLinkElement>(editor, link, {
-              at: linkAbove[1],
-            });
-          }
-
-          return;
-        }
-
-        if (selection) {
-          const linkAt = getNode<MdLinkElement>(editor, selection.anchor.path);
-
-          if (linkAt && linkAt?.type === ELEMENT_LINK) {
-            if (newUrl !== linkAt.url || text !== linkAt.children[0].text) {
-              setNodes<MdLinkElement>(editor, link, {
+            if (text !== getEditorString(editor, selection)) {
+              replaceNodeChildren<TText>(editor, {
                 at: selection,
+                nodes: { text },
+                insertOptions: {
+                  select: true,
+                },
               });
             }
-
-            return;
-          }
-        }
-
-        if (linkAbove) {
-          if (newUrl !== linkAbove[0]?.url || text !== linkAbove[0]?.children[0].text) {
-            setNodes<MdLinkElement>(editor, link, {
-              at: linkAbove[1],
-            });
           }
 
           return;
@@ -91,9 +72,12 @@ const InsertLinkToolbarButton: FC<InsertLinkToolbarButtonProps> = ({
           editor,
           { url: newUrl, text },
           {
-            at: selection?.focus,
+            at: selection,
           },
         );
+        const newSelection = [...selection];
+        const lastIndex = newSelection.pop() ?? 0;
+        setSelection([...newSelection, lastIndex + 1]);
       }
     },
     [editor, selection],
@@ -122,7 +106,7 @@ const InsertLinkToolbarButton: FC<InsertLinkToolbarButtonProps> = ({
   );
 
   const handleOpenMediaLibrary = useCallback(() => {
-    setSelection(editor.selection);
+    setSelection(editor.selection?.focus.path);
     openMediaLibrary();
   }, [editor.selection, openMediaLibrary]);
 

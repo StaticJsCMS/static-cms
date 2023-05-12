@@ -8,7 +8,7 @@ import {
   unwrapLink,
   usePlateSelection,
 } from '@udecode/plate';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFocused } from 'slate-react';
 
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
@@ -34,13 +34,11 @@ const withLinkElement = ({ collection, field }: WithLinkElementProps) => {
   }) => {
     const urlRef = useRef<HTMLAnchorElement | null>(null);
 
-    const { url } = element;
     const path = findNodePath(editor, element);
 
-    const [internalValue, setInternalValue] = useState<MediaPath<string>>({
-      path: url,
-      alt: getEditorString(editor, path),
-    });
+    const { url } = useMemo(() => element, [element]);
+    const alt = useMemo(() => getEditorString(editor, path), [editor, path]);
+    console.log('LINK', 'url', url, 'alt', alt);
     const [popoverHasFocus, setPopoverHasFocus] = useState(false);
     const debouncedPopoverHasFocus = useDebounce(popoverHasFocus, 100);
 
@@ -114,7 +112,6 @@ const withLinkElement = ({ collection, field }: WithLinkElementProps) => {
     const handleMediaChange = useCallback(
       (newValue: MediaPath<string>) => {
         handleChange(newValue.path, newValue.alt ?? '');
-        setInternalValue(newValue);
       },
       [handleChange],
     );
@@ -217,8 +214,8 @@ const withLinkElement = ({ collection, field }: WithLinkElementProps) => {
           anchorEl={anchorEl}
           collection={collection}
           field={field}
-          url={internalValue.path}
-          text={internalValue.alt}
+          url={url}
+          text={alt}
           onMediaChange={handleMediaChange}
           onRemove={handleRemove}
           onFocus={handlePopoverFocus}
