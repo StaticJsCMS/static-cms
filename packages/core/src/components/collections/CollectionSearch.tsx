@@ -9,14 +9,14 @@ import type { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent } from 'react';
 interface CollectionSearchProps {
   collections: Collections;
   collection?: Collection;
-  searchTerm: string;
+  searchTerm: string | undefined;
   onSubmit: (query: string, collection?: string) => void;
 }
 
 const CollectionSearch = ({
   collections: collectionsMap,
   collection,
-  searchTerm,
+  searchTerm = '',
   onSubmit,
   t,
 }: TranslatedProps<CollectionSearchProps>) => {

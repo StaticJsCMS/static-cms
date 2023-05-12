@@ -28,6 +28,7 @@ export interface EntryListingCardGridProps {
 
 export interface CardGridItemData {
   columnCount: number;
+  cardHeights: number[];
   entryData: CollectionEntryData[];
   t: t;
 }
@@ -36,7 +37,7 @@ const CardWrapper = ({
   rowIndex,
   columnIndex,
   style,
-  data: { columnCount, entryData, t },
+  data: { columnCount, cardHeights, entryData, t },
 }: GridChildComponentProps<CardGridItemData>) => {
   const left = useMemo(
     () =>
@@ -60,6 +61,8 @@ const CardWrapper = ({
     return null;
   }
   const data = entryData[index];
+  const cardHeight =
+    index < cardHeights.length ? cardHeights[index] + COLLECTION_CARD_MARGIN : style.height;
 
   return (
     <div
@@ -68,7 +71,7 @@ const CardWrapper = ({
         left,
         top,
         width: style.width,
-        height: style.height,
+        height: cardHeight,
         paddingRight: `${columnIndex + 1 === columnCount ? 0 : COLLECTION_CARD_MARGIN}px`,
         paddingBottom: `${COLLECTION_CARD_MARGIN}px`,
       }}
@@ -103,6 +106,13 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
   }, []);
 
   const getDefaultHeight = useCallback((data?: CollectionEntryData) => {
+    console.log(
+      'DEFAULT HEIGHT',
+      data,
+      isNotNullish(data?.imageFieldName)
+        ? COLLECTION_CARD_HEIGHT
+        : COLLECTION_CARD_HEIGHT_WITHOUT_IMAGE,
+    );
     return isNotNullish(data?.imageFieldName)
       ? COLLECTION_CARD_HEIGHT
       : COLLECTION_CARD_HEIGHT_WITHOUT_IMAGE;
@@ -166,15 +176,41 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
                     : width * columnWidth + COLLECTION_CARD_MARGIN
                 }
                 rowCount={rowCount}
-                rowHeight={index =>
-                  (cardHeights.length > index ? cardHeights[index] : getDefaultHeight()) +
-                  COLLECTION_CARD_MARGIN
-                }
+                rowHeight={index => {
+                  const rowStart = index * columnCount;
+                  const rowEnd = (index + 1) * columnCount - 1;
+                  let rowHeight = 0;
+                  for (let i = rowStart; i <= rowEnd; i++) {
+                    if (cardHeights.length <= i) {
+                      break;
+                    }
+
+                    if (cardHeights[i] > rowHeight && cardHeights[i]) {
+                      rowHeight = cardHeights[i] + COLLECTION_CARD_MARGIN;
+
+                      console.log(
+                        'HEIGHT @index',
+                        i,
+                        cardHeights[i],
+                        cardHeights[i] + COLLECTION_CARD_MARGIN,
+                      );
+                    }
+                  }
+
+                  if (rowHeight === 0) {
+                    rowHeight = getDefaultHeight() + COLLECTION_CARD_MARGIN;
+                  }
+
+                  console.log('HEIGHT', index, rowHeight);
+
+                  return rowHeight;
+                }}
                 width={width}
                 height={height}
                 itemData={
                   {
                     entryData,
+                    cardHeights,
                     columnCount,
                     t,
                   } as CardGridItemData

@@ -24,6 +24,7 @@ export interface BaseEntryListingProps {
   viewStyle: ViewStyle;
   cursor?: Cursor;
   isLoadingEntries: boolean;
+  filterTerm: string;
   handleCursorActions?: (action: string) => void;
   page?: number;
 }
@@ -45,6 +46,7 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
   cursor,
   viewStyle,
   isLoadingEntries,
+  filterTerm,
   handleCursorActions,
   t,
   ...otherProps
@@ -169,7 +171,7 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
 
   return (
     <EntryListingGrid
-      key="grid"
+      key={'collection' in otherProps ? otherProps.collection.name : `search-grid-${filterTerm}`}
       entryData={entryData}
       onLoadMore={handleLoadMore}
       canLoadMore={Boolean(hasMore && handleLoadMore)}

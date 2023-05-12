@@ -132,6 +132,7 @@ const EntriesCollection = ({
                 cursor={cursor}
                 handleCursorActions={handleCursorActions}
                 page={page}
+                filterTerm={filterTerm}
               />
             </div>
           );
@@ -151,6 +152,7 @@ const EntriesCollection = ({
       cursor={cursor}
       handleCursorActions={handleCursorActions}
       page={page}
+      filterTerm={filterTerm}
     />
   );
 };

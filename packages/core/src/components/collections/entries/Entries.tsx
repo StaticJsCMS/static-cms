@@ -14,6 +14,7 @@ export interface BaseEntriesProps {
   isFetching: boolean;
   viewStyle: ViewStyle;
   cursor: Cursor;
+  filterTerm: string;
   handleCursorActions?: (action: string) => void;
 }
 
@@ -32,6 +33,7 @@ const Entries = ({
   isFetching,
   viewStyle,
   cursor,
+  filterTerm,
   handleCursorActions,
   t,
   page,
@@ -62,6 +64,7 @@ const Entries = ({
         handleCursorActions={handleCursorActions}
         page={page}
         isLoadingEntries={isFetching && page !== undefined && entries.length > 0}
+        filterTerm={filterTerm}
       />
     ) : (
       <EntryListing
@@ -73,6 +76,7 @@ const Entries = ({
         handleCursorActions={handleCursorActions}
         page={page}
         isLoadingEntries={isFetching && page !== undefined && entries.length > 0}
+        filterTerm={filterTerm}
       />
     );
   }
