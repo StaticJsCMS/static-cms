@@ -1,0 +1,98 @@
+const nextTick = function (fn: ItemFn) {
+  setTimeout(fn, 0);
+};
+
+type ItemFn = (fn: (n: number) => void) => any;
+
+interface Item {
+  task?: ItemFn;
+  n: number;
+}
+
+function semaphore(capacity: number) {
+  var semaphore = {
+    capacity: capacity || 1,
+    current: 0,
+    queue: [] as Item[],
+    firstHere: false,
+
+    take: function (arg1: ItemFn | number) {
+      let isFirst = 0;
+      if (semaphore.firstHere === false) {
+        semaphore.current++;
+        semaphore.firstHere = true;
+        isFirst = 1;
+      }
+      const item: Item = { n: 1 };
+
+      if (typeof arg1 == 'function') {
+        item.task = arg1;
+      } else {
+        item.n = arg1;
+      }
+
+      if (arguments.length >= 2) {
+        if (typeof arguments[1] == 'function') {
+          item.task = arguments[1];
+        } else {
+          item.n = arguments[1];
+        }
+      }
+
+      var task = item.task;
+      item.task = function () {
+        task?.(semaphore.leave);
+      };
+
+      if (semaphore.current + item.n - isFirst > semaphore.capacity) {
+        if (isFirst === 1) {
+          semaphore.current--;
+          semaphore.firstHere = false;
+        }
+        return semaphore.queue.push(item);
+      }
+
+      semaphore.current += item.n - isFirst;
+      item.task(semaphore.leave);
+      if (isFirst === 1) semaphore.firstHere = false;
+    },
+
+    leave: function (n?: number) {
+      n = n || 1;
+
+      semaphore.current -= n;
+
+      if (!semaphore.queue.length) {
+        if (semaphore.current < 0) {
+          throw new Error('leave called too many times.');
+        }
+
+        return;
+      }
+
+      var item = semaphore.queue[0];
+
+      if (item.n + semaphore.current > semaphore.capacity) {
+        return;
+      }
+
+      semaphore.queue.shift();
+      semaphore.current += item.n;
+
+      if (item.task) {
+        nextTick(item.task);
+      }
+    },
+
+    available: function (n: number) {
+      n = n || 1;
+      return semaphore.current + n <= semaphore.capacity;
+    },
+  };
+
+  return semaphore;
+}
+
+export type Semaphore = ReturnType<typeof semaphore>;
+
+export default semaphore;

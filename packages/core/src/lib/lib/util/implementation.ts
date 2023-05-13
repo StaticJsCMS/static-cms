@@ -4,7 +4,6 @@ import semaphore from 'semaphore';
 
 import { basename } from './path';
 
-import type { Semaphore } from 'semaphore';
 import type {
   DisplayURL,
   DisplayURLObject,
@@ -13,6 +12,7 @@ import type {
   ImplementationFile,
 } from '@staticcms/core/interface';
 import type { AsyncLock } from './asyncLock';
+import type { Semaphore } from './semaphore';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 
