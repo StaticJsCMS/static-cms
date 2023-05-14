@@ -19,15 +19,15 @@ import {
 
 import type { DataFile, PersistOptions } from '@staticcms/core/interface';
 import type { ApiRequest, FetchError } from '@staticcms/core/lib/util';
+import type { Semaphore } from '@staticcms/core/lib/util/semaphore';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
-import type { Semaphore } from 'semaphore';
 import type {
+  ContentsResponse,
   GitGetBlobResponse,
   GitGetTreeResponse,
   GiteaUser,
   ReposGetResponse,
   ReposListCommitsResponse,
-  ContentsResponse,
 } from './types';
 
 export const API_NAME = 'Gitea';

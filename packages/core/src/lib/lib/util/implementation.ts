@@ -1,7 +1,7 @@
 import sortBy from 'lodash/sortBy';
 import unionBy from 'lodash/unionBy';
-import semaphore from 'semaphore';
 
+import semaphore from '@staticcms/core/lib/util/semaphore';
 import { basename } from './path';
 
 import type {
@@ -11,8 +11,8 @@ import type {
   ImplementationEntry,
   ImplementationFile,
 } from '@staticcms/core/interface';
+import type { Semaphore } from '@staticcms/core/lib/util/semaphore';
 import type { AsyncLock } from './asyncLock';
-import type { Semaphore } from './semaphore';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 

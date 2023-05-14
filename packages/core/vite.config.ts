@@ -11,7 +11,7 @@ export default defineConfig({
   root: 'src',
   optimizeDeps: {
     force: true,
-    include: ['iarna-toml-esm', 'semaphore'],
+    include: ['iarna-toml-esm', '@codemirror'],
     esbuildOptions: {
       define: {
         global: 'globalThis',
@@ -25,7 +25,7 @@ export default defineConfig({
     },
   },
   build: {
-    commonjsOptions: { include: [/node_modules/, /semaphore/] },
+    commonjsOptions: { include: [/node_modules/, /@codemirror/] },
     outDir: 'dist',
     lib: {
       entry: resolve(__dirname, 'src/lib/index.ts'),
@@ -35,7 +35,7 @@ export default defineConfig({
     },
   },
   define: {
-    global: {},
+    global: '({})',
   },
   resolve: {
     alias: {

@@ -1,6 +1,5 @@
 import { stripIndent } from 'common-tags';
 import trimStart from 'lodash/trimStart';
-import semaphore from 'semaphore';
 
 import {
   asyncLock,
@@ -17,6 +16,7 @@ import {
   runWithLock,
   unsentRequest,
 } from '@staticcms/core/lib/util';
+import semaphore from '@staticcms/core/lib/util/semaphore';
 import API, { API_NAME } from './API';
 import AuthenticationPage from './AuthenticationPage';
 
@@ -31,8 +31,8 @@ import type {
   User,
 } from '@staticcms/core/interface';
 import type { AsyncLock } from '@staticcms/core/lib/util';
+import type { Semaphore } from '@staticcms/core/lib/util/semaphore';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
-import type { Semaphore } from 'semaphore';
 import type { GiteaUser } from './types';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;

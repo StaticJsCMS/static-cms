@@ -1,7 +1,6 @@
 import { stripIndent } from 'common-tags';
 import trim from 'lodash/trim';
 import trimStart from 'lodash/trimStart';
-import semaphore from 'semaphore';
 
 import {
   allEntriesByFolder,
@@ -18,21 +17,22 @@ import {
   localForage,
   runWithLock,
 } from '@staticcms/core/lib/util';
+import semaphore from '@staticcms/core/lib/util/semaphore';
 import API, { API_NAME } from './API';
 import AuthenticationPage from './AuthenticationPage';
 
-import type { Semaphore } from 'semaphore';
-import type { AsyncLock, Cursor } from '@staticcms/core/lib/util';
 import type {
+  BackendClass,
+  BackendEntry,
   Config,
   Credentials,
   DisplayURL,
-  BackendEntry,
-  BackendClass,
   ImplementationFile,
   PersistOptions,
   User,
 } from '@staticcms/core/interface';
+import type { AsyncLock, Cursor } from '@staticcms/core/lib/util';
+import type { Semaphore } from '@staticcms/core/lib/util/semaphore';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;

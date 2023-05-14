@@ -1,4 +1,4 @@
-import semaphore from 'semaphore';
+import semaphore from '@staticcms/core/lib/util/semaphore';
 
 export type AsyncLock = { release: () => void; acquire: () => Promise<boolean> };
 
