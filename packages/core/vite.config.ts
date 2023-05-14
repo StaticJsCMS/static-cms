@@ -31,7 +31,17 @@ export default defineConfig({
       entry: resolve(__dirname, 'src/lib/index.ts'),
       name: 'StaticCMSCore',
       fileName: format =>
-        format === 'umd' ? 'static_cms_core.js' : `static_cms_core.${format}.js`,
+        format === 'umd' ? 'static-cms-core.js' : `static-cms-core.${format}.js`,
+    },
+    rollupOptions: {
+      output: {
+        assetFileNames: assetInfo => {
+          if (assetInfo.name === 'style.css') {
+            return 'main.css';
+          }
+          return assetInfo.name!;
+        },
+      },
     },
   },
   define: {
