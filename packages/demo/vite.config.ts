@@ -6,12 +6,8 @@ import svgrPlugin from "vite-plugin-svgr";
 export default defineConfig({
   plugins: [react(), svgrPlugin()],
   assetsInclude: ["public/**/*"],
-  optimizeDeps: {
-    force: true,
-    include: ["@staticcms/core"],
-  },
   build: {
-    commonjsOptions: { include: [/core/, /node_modules/] },
+    commonjsOptions: { include: [/node_modules/] },
     outDir: "build",
   },
 });

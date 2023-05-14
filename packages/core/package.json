@@ -41,7 +41,7 @@
       "require": "./dist/static-cms-core.js"
     }
   },
-  "types": "./dist/index.d.ts",
+  "types": "./dist/lib/index.d.ts",
   "files": [
     "./dist/**/*"
   ],

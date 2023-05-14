@@ -11,7 +11,7 @@ export default defineConfig({
   root: 'src',
   optimizeDeps: {
     force: true,
-    include: ['iarna-toml-esm', '@codemirror'],
+    include: ['iarna-toml-esm', '@codemirror', 'ol'],
     esbuildOptions: {
       define: {
         global: 'globalThis',
@@ -25,8 +25,8 @@ export default defineConfig({
     },
   },
   build: {
-    commonjsOptions: { include: [/node_modules/, /@codemirror/] },
-    outDir: 'dist',
+    commonjsOptions: { include: [/node_modules/, /@codemirror/, /\/ol\//], exclude: [/@lezer/] },
+    outDir: '../dist',
     lib: {
       entry: resolve(__dirname, 'src/lib/index.ts'),
       name: 'StaticCMSCore',
@@ -35,7 +35,7 @@ export default defineConfig({
     },
   },
   define: {
-    global: '({})',
+    _global: '({})',
   },
   resolve: {
     alias: {
