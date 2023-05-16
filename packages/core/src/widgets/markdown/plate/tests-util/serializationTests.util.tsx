@@ -2601,7 +2601,7 @@ Text ahead [youtube|p6h-rYSVX90] and behind and another {{< twitter 917359331535
             type: 'h2',
             children: [
               {
-                text: 'Support',
+                text: 'Tasks',
               },
             ],
           },
@@ -2619,7 +2619,7 @@ Text ahead [youtube|p6h-rYSVX90] and behind and another {{< twitter 917359331535
                         type: 'lic',
                         children: [
                           {
-                            text: 'Supports remark plugins',
+                            text: 'List Item A',
                           },
                         ],
                       },
@@ -2633,7 +2633,7 @@ Text ahead [youtube|p6h-rYSVX90] and behind and another {{< twitter 917359331535
                         type: 'lic',
                         children: [
                           {
-                            text: 'Supports wrappers',
+                            text: 'List Item B',
                           },
                         ],
                       },
@@ -2648,7 +2648,7 @@ Text ahead [youtube|p6h-rYSVX90] and behind and another {{< twitter 917359331535
                                 type: 'lic',
                                 children: [
                                   {
-                                    text: 'React',
+                                    text: 'Task 1',
                                   },
                                 ],
                               },
@@ -2662,7 +2662,7 @@ Text ahead [youtube|p6h-rYSVX90] and behind and another {{< twitter 917359331535
                                 type: 'lic',
                                 children: [
                                   {
-                                    text: 'More coming soon',
+                                    text: 'Task 2',
                                   },
                                 ],
                               },
