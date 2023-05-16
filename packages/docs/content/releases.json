@@ -1,6 +1,11 @@
 {
   "releases": [
     {
+      "date": "2023-05-12T10:53:00.000Z",
+      "version": "v2.3.0",
+      "description": "File drag and drop support for File and Image widgets"
+    },
+    {
       "date": "2023-05-05T23:00:00.000Z",
       "version": "v2.2.0",
       "description": "Multi image support and markdown toolbar customization"
