@@ -1590,10 +1590,10 @@ Text ahead [youtube|p6h-rYSVX90] and behind and another {{< twitter 917359331535
 
 ## Tasks
 
-> * List Item A
-> * List Item B
+> - List Item A
+> - List Item B
 >    1. [x] Task 1
->    2. [ ] Task 2`,
+>    1. [ ] Task 2`,
         slate: [
           {
             type: 'h1',
