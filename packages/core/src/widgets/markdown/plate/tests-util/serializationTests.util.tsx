@@ -1588,12 +1588,12 @@ Only text before {{< twitter 917359331535966209 >}}
 
 Text ahead [youtube|p6h-rYSVX90] and behind and another {{< twitter 917359331535966209 >}} shortcode
 
-## Support
+## Tasks
 
-> - Supports remark plugins
-> - Supports wrappers
->    1. [x] React
->    1. [ ] More coming soon`,
+> * List Item A
+> * List Item B
+>    1. [x] Task 1
+>    2. [ ] Task 2`,
         slate: [
           {
             type: 'h1',
