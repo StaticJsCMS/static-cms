@@ -23,7 +23,7 @@ export default function useMediaInsert<T extends string | string[], F extends Me
     forFolder?: boolean;
     insertOptions?: MediaLibrarInsertOptions;
   },
-  callback: (newValue: MediaPath<T>) => void,
+  callback: (newValue: MediaPath<T>) => void | Promise<void>,
 ): (e?: MouseEvent, options?: { replaceIndex?: number }) => void {
   const dispatch = useAppDispatch();
 

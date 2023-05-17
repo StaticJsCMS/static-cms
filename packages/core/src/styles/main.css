@@ -7,9 +7,14 @@
 @tailwind utilities;
 
 @layer components {
+  html {
+    @apply overflow-hidden;
+  }
+
   body {
     @apply text-gray-900
-      dark:text-gray-100;
+      dark:text-gray-100
+      overflow-hidden;
   }
 
   /**
