@@ -13,6 +13,12 @@ import type {
 } from '@staticcms/core/interface';
 import type { MouseEvent } from 'react';
 
+export interface OpenMediaLibraryProps {
+  forImage?: boolean;
+  forFolder?: boolean;
+  replaceIndex?: number;
+}
+
 export default function useMediaInsert<T extends string | string[], F extends MediaField>(
   value: MediaPath<T> | undefined,
   options: {
@@ -24,7 +30,7 @@ export default function useMediaInsert<T extends string | string[], F extends Me
     insertOptions?: MediaLibrarInsertOptions;
   },
   callback: (newValue: MediaPath<T>) => void | Promise<void>,
-): (e?: MouseEvent, options?: { replaceIndex?: number }) => void {
+): (e?: MouseEvent, options?: OpenMediaLibraryProps) => void {
   const dispatch = useAppDispatch();
 
   const {
@@ -50,13 +56,20 @@ export default function useMediaInsert<T extends string | string[], F extends Me
   }, [callback, finalControlID, dispatch, mediaPath, value]);
 
   const handleOpenMediaLibrary = useCallback(
-    (e?: MouseEvent, { replaceIndex }: { replaceIndex?: number } = {}) => {
+    (
+      e?: MouseEvent,
+      {
+        replaceIndex,
+        forImage: forImageOverride,
+        forFolder: forFolderOverride,
+      }: OpenMediaLibraryProps = {},
+    ) => {
       e?.preventDefault();
       dispatch(
         openMediaLibrary({
           controlID: finalControlID,
-          forImage,
-          forFolder,
+          forImage: forImageOverride ?? forImage,
+          forFolder: forFolderOverride ?? forFolder,
           value: field.multiple
             ? value
               ? [...(Array.isArray(value.path) ? value.path : [value.path])]
