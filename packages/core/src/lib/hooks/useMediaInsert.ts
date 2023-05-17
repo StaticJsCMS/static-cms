@@ -14,7 +14,7 @@ import type {
 import type { MouseEvent } from 'react';
 
 export default function useMediaInsert<T extends string | string[], F extends MediaField>(
-  value: MediaPath<T>,
+  value: MediaPath<T> | undefined,
   options: {
     collection: Collection<F>;
     field: F;
@@ -41,7 +41,7 @@ export default function useMediaInsert<T extends string | string[], F extends Me
   const mediaPath = useAppSelector(mediaPathSelector);
 
   useEffect(() => {
-    if (mediaPath && (mediaPath.path !== value.path || mediaPath.alt !== value.alt)) {
+    if (mediaPath && (!value || mediaPath.path !== value.path || mediaPath.alt !== value.alt)) {
       setTimeout(() => {
         callback(mediaPath as MediaPath<T>);
         dispatch(removeInsertedMedia(finalControlID));
@@ -57,10 +57,13 @@ export default function useMediaInsert<T extends string | string[], F extends Me
           controlID: finalControlID,
           forImage,
           forFolder,
-          value: Array.isArray(value.path) ? [...value.path] : value.path,
-          alt: value.alt,
+          value: field.multiple
+            ? value
+              ? [...(Array.isArray(value.path) ? value.path : [value.path])]
+              : []
+            : value?.path,
+          alt: value?.alt,
           replaceIndex,
-          allowMultiple: false,
           config: field.media_library,
           collection,
           field,
@@ -68,17 +71,7 @@ export default function useMediaInsert<T extends string | string[], F extends Me
         }),
       );
     },
-    [
-      dispatch,
-      finalControlID,
-      forImage,
-      forFolder,
-      value.path,
-      value.alt,
-      collection,
-      field,
-      insertOptions,
-    ],
+    [dispatch, finalControlID, forImage, forFolder, value, collection, field, insertOptions],
   );
 
   return handleOpenMediaLibrary;
