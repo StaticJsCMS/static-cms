@@ -18,7 +18,7 @@ import {
   hasI18n,
 } from './lib/i18n';
 import { getBackend, invokeEvent } from './lib/registry';
-import { sanitizeChar } from './lib/urlHelper';
+import { joinUrlPath, sanitizeChar } from './lib/urlHelper';
 import {
   CURSOR_COMPATIBILITY_SYMBOL,
   Cursor,
@@ -39,7 +39,11 @@ import {
   selectInferredField,
   selectMediaFolders,
 } from './lib/util/collection.util';
-import { selectMediaFilePath, selectMediaFilePublicPath } from './lib/util/media.util';
+import {
+  DRAFT_MEDIA_FILES,
+  selectMediaFilePath,
+  selectMediaFilePublicPath,
+} from './lib/util/media.util';
 import { selectCustomPath, slugFromCustomPath } from './lib/util/nested.util';
 import { set } from './lib/util/object.util';
 import { dateParsers, expandPath, extractTemplateVars } from './lib/widgets/stringTemplate';
@@ -84,7 +88,19 @@ function updateAssetProxies(
     // update media files path based on entry path
     const oldPath = asset.path;
     entryDraft.entry.path = path;
-    const newPath = selectMediaFilePath(config, collection, entryDraft.entry, oldPath, asset.field);
+
+    const folderPath = joinUrlPath(
+      collection && 'folder' in collection ? collection.folder : '',
+      DRAFT_MEDIA_FILES,
+    );
+
+    const newPath = selectMediaFilePath(
+      config,
+      collection,
+      entryDraft.entry,
+      oldPath.replace(folderPath, ''),
+      asset.field,
+    );
     asset.path = newPath;
   });
 }

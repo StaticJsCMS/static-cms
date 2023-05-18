@@ -106,13 +106,6 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
   }, []);
 
   const getDefaultHeight = useCallback((data?: CollectionEntryData) => {
-    console.log(
-      'DEFAULT HEIGHT',
-      data,
-      isNotNullish(data?.imageFieldName)
-        ? COLLECTION_CARD_HEIGHT
-        : COLLECTION_CARD_HEIGHT_WITHOUT_IMAGE,
-    );
     return isNotNullish(data?.imageFieldName)
       ? COLLECTION_CARD_HEIGHT
       : COLLECTION_CARD_HEIGHT_WITHOUT_IMAGE;
@@ -187,21 +180,12 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
 
                     if (cardHeights[i] > rowHeight && cardHeights[i]) {
                       rowHeight = cardHeights[i] + COLLECTION_CARD_MARGIN;
-
-                      console.log(
-                        'HEIGHT @index',
-                        i,
-                        cardHeights[i],
-                        cardHeights[i] + COLLECTION_CARD_MARGIN,
-                      );
                     }
                   }
 
                   if (rowHeight === 0) {
                     rowHeight = getDefaultHeight() + COLLECTION_CARD_MARGIN;
                   }
-
-                  console.log('HEIGHT', index, rowHeight);
 
                   return rowHeight;
                 }}
