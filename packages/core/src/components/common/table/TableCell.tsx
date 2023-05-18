@@ -42,7 +42,7 @@ const TableCell = ({ children, emphasis = false, to, shrink = false }: TableCell
           text-gray-500
           dark:text-gray-300
         `,
-        emphasis && 'font-medium text-gray-900 whitespace-nowrap dark:text-white',
+        emphasis && 'font-medium text-gray-800 whitespace-nowrap dark:text-white',
         shrink && 'w-0',
       )}
     >

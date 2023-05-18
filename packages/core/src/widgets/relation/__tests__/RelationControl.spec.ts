@@ -425,12 +425,12 @@ describe(RelationControl.name, () => {
       const option5 = 'autocomplete-option-Post 5';
       const option6 = 'autocomplete-option-Post 6';
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId(option3)).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId(option4)).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId(option5)).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId(option6)).toHaveClass('text-gray-900'); // Not selected
+      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option3)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option4)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option5)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option6)).toHaveClass('text-gray-800'); // Not selected
 
       await act(async () => {
         await userEvent.type(input, 'ost body text for Post 3');
@@ -441,7 +441,7 @@ describe(RelationControl.name, () => {
 
       await waitFor(() => expect(queryByTestId(option1)).not.toBeInTheDocument());
       expect(queryByTestId(option2)).not.toBeInTheDocument();
-      expect(getByTestId(option3)).toHaveClass('text-gray-900'); // Not selected
+      expect(getByTestId(option3)).toHaveClass('text-gray-800'); // Not selected
       expect(queryByTestId(option4)).not.toBeInTheDocument();
       expect(queryByTestId(option5)).not.toBeInTheDocument();
       expect(queryByTestId(option6)).not.toBeInTheDocument();
@@ -469,11 +469,11 @@ describe(RelationControl.name, () => {
 
       expect(input).toHaveValue('P');
 
-      expect(getByTestId('autocomplete-option-Post 1')).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId('autocomplete-option-Post 2')).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId('autocomplete-option-Post 3')).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId('autocomplete-option-Post 4')).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId('autocomplete-option-Post 5')).toHaveClass('text-gray-900'); // Not selected
+      expect(getByTestId('autocomplete-option-Post 1')).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId('autocomplete-option-Post 2')).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId('autocomplete-option-Post 3')).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId('autocomplete-option-Post 4')).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId('autocomplete-option-Post 5')).toHaveClass('text-gray-800'); // Not selected
       expect(queryByTestId('autocomplete-option-Post 6')).not.toBeInTheDocument();
     });
 
@@ -504,12 +504,12 @@ describe(RelationControl.name, () => {
         await userEvent.type(input, 'P');
       });
 
-      expect(getByTestId('autocomplete-option-Post 1')).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId('autocomplete-option-Post 2')).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId('autocomplete-option-Post 3')).toHaveClass('text-gray-900'); // Not selected
-      expect(getByTestId('autocomplete-option-Post 4')).toHaveClass('text-gray-900'); // Not selected
+      expect(getByTestId('autocomplete-option-Post 1')).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId('autocomplete-option-Post 2')).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId('autocomplete-option-Post 3')).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId('autocomplete-option-Post 4')).toHaveClass('text-gray-800'); // Not selected
       expect(queryByTestId('autocomplete-option-Post 5')).not.toBeInTheDocument();
-      expect(getByTestId('autocomplete-option-Post 6')).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId('autocomplete-option-Post 6')).toHaveClass('bg-gray-100', 'text-gray-800'); // Selected
     });
 
     it('should call onChange when option is selected', async () => {
@@ -604,8 +604,8 @@ describe(RelationControl.name, () => {
       const option1 = 'autocomplete-option-Post 1';
       const option2 = 'autocomplete-option-Post 2';
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
+      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not Selected
+      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not Selected
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -619,8 +619,8 @@ describe(RelationControl.name, () => {
         await userEvent.type(input, 'o');
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-900'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not Selected
+      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-800'); // Selected
 
       await act(async () => {
         await userEvent.click(getByTestId(option1));
@@ -633,8 +633,8 @@ describe(RelationControl.name, () => {
         await userEvent.type(input, 's');
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
+      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-800'); // Selected
+      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-800'); // Selected
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -647,8 +647,8 @@ describe(RelationControl.name, () => {
         await userEvent.type(input, 't');
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-900'); // Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-900'); // Not Selected
+      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-800'); // Selected
+      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not Selected
     });
   });
 

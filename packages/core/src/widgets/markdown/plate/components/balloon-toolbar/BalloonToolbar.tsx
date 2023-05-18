@@ -266,7 +266,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
             bg-white
             p-1
             text-base
-            shadow-lg
+            shadow-md
             ring-1
             ring-black
             ring-opacity-5
@@ -274,6 +274,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
             sm:text-sm
             z-40
             dark:bg-slate-700
+            dark:shadow-lg
           "
         >
           <div

@@ -36,7 +36,7 @@ const MenuItemLink = ({
               px-4
               py-2
               text-sm
-              text-gray-700
+              text-gray-800
               dark:text-gray-300
               w-full
               text-left

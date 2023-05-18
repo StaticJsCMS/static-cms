@@ -13,13 +13,12 @@ const TableCell = ({ columns, children }: TableCellProps) => {
   return (
     <div
       className="
-        shadow-md
         z-[2]
       "
     >
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-300">
         <thead className="text-xs">
-          <tr>
+          <tr className="shadow-sm">
             {columns.map((column, index) => (
               <TableHeaderCell key={index}>{column}</TableHeaderCell>
             ))}

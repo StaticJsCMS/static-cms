@@ -86,7 +86,7 @@ const TextField: FC<TextFieldProps> = ({
               bg-transparent
               outline-none
               font-medium
-              text-gray-900
+              text-gray-800
               disabled:text-gray-300
               dark:text-gray-100
               dark:disabled:text-gray-500
@@ -96,7 +96,7 @@ const TextField: FC<TextFieldProps> = ({
               bg-gray-50
               border
               border-gray-300
-              text-gray-900
+              text-gray-800
               rounded-lg
               focus:ring-blue-500
               focus:border-blue-500

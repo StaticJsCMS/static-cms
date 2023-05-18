@@ -10,7 +10,7 @@ const UnknownControl = ({ field, t }: TranslatedProps<WidgetControlProps<unknown
         px-4
         py-2
         text-small
-        text-gray-900
+        text-gray-800
         dark:text-gray-100
       "
     >

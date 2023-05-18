@@ -56,7 +56,7 @@ const SnackbarAlert = forwardRef<HTMLDivElement, TranslatedProps<SnackbarAlertPr
           text-gray-500
           bg-white
           rounded-lg
-          shadow
+          shadow-md
           dark:text-gray-300
           dark:bg-gray-800
           dark:shadow-lg

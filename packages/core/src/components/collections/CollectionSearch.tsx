@@ -146,25 +146,25 @@ const CollectionSearch = ({
           type="text"
           id="first_name"
           className="
-          block
-          w-full
-          p-1.5
-          pl-10
-          text-sm
-          text-gray-900
-          border
-          border-gray-300
-          rounded-lg
-          bg-gray-50
-          focus-visible:outline-none
-          focus:ring-4
-          focus:ring-gray-200
-          dark:bg-gray-700
-          dark:border-gray-600
-          dark:placeholder-gray-400
-          dark:text-white
-          dark:focus:ring-slate-700
-        "
+            block
+            w-full
+            p-1.5
+            pl-10
+            text-sm
+            text-gray-800
+            border
+            border-gray-300
+            rounded-lg
+            bg-gray-50
+            focus-visible:outline-none
+            focus:ring-4
+            focus:ring-gray-200
+            dark:bg-gray-700
+            dark:border-gray-600
+            dark:placeholder-gray-400
+            dark:text-white
+            dark:focus:ring-slate-700
+          "
           placeholder={t('collection.sidebar.searchAll')}
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}
@@ -185,7 +185,7 @@ const CollectionSearch = ({
           rounded-md
           bg-white
           text-base
-          shadow-lg
+          shadow-md
           ring-1
           ring-black
           ring-opacity-5
@@ -193,6 +193,7 @@ const CollectionSearch = ({
           sm:text-sm
           z-40
           dark:bg-slate-700
+          dark:shadow-lg
         "
       >
         <div

@@ -40,7 +40,7 @@ const PreviewFrameContent: FC<PreviewFrameContentProps> = ({ previewComponent, p
             <div>
               <div
                 className="
-                  text-gray-900
+                  text-gray-800
                   dark:text-gray-100
                 "
               >

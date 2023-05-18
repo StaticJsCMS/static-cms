@@ -65,7 +65,7 @@ const FolderCreationDialog: FC<TranslatedProps<FolderCreationDialogProps>> = ({
           className="
             text-xl
             font-semibold
-            text-gray-900
+            text-gray-800
             dark:text-white
           "
         >

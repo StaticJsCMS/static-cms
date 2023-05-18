@@ -27,7 +27,7 @@ const MediaLibrarySearch = ({
     >
       <label
         htmlFor="default-search"
-        className="text-sm font-medium text-gray-900 sr-only dark:text-white"
+        className="text-sm font-medium text-gray-800 sr-only dark:text-white"
       >
         Search
       </label>
@@ -44,7 +44,7 @@ const MediaLibrarySearch = ({
             p-1.5
             pl-10
             text-sm
-            text-gray-900
+            text-gray-800
             border
             border-gray-300
             rounded-lg

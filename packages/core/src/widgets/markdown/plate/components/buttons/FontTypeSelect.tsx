@@ -151,7 +151,7 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
                     dark:text-gray-500
                   `
                 : `
-                    text-gray-900
+                    text-gray-800
                     border-gray-600
                     dark:border-gray-200
                     dark:text-gray-100
@@ -166,13 +166,14 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
               overflow-auto
               rounded-md
               bg-white
-              shadow-lg
+              shadow-md
               ring-1
               ring-black
               ring-opacity-5
               focus:outline-none
               sm:text-sm
               dark:bg-slate-800
+              dark:shadow-lg
             `,
           },
         }}

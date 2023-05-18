@@ -82,6 +82,7 @@ collections:
     create: true
     editor:
       frame: false
+      size: half
     fields:
       - label: Question
         name: title

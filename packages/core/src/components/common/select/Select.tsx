@@ -136,7 +136,7 @@ const Select = forwardRef(
                   px-4
                   py-1.5
                   w-full
-                  text-gray-900
+                  text-gray-800
                   dark:text-gray-100
                 `,
                 disabled &&
@@ -154,7 +154,7 @@ const Select = forwardRef(
                 bg-white
                 py-1
                 text-base
-                shadow-lg
+                shadow-md
                 ring-1
                 ring-black
                 ring-opacity-5
@@ -162,6 +162,7 @@ const Select = forwardRef(
                 sm:text-sm
                 z-50
                 dark:bg-slate-700
+                dark:shadow-lg
               `,
               style: { width },
               disablePortal: false,
