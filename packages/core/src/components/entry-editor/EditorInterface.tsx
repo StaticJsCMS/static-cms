@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
+import { EDITOR_SIZE_COMPACT } from '@staticcms/core/constants/views';
 import useBreadcrumbs from '@staticcms/core/lib/hooks/useBreadcrumbs';
 import { getI18nInfo, getPreviewEntry, hasI18n } from '@staticcms/core/lib/i18n';
 import classNames from '@staticcms/core/lib/util/classNames.util';
@@ -138,9 +139,10 @@ const EditorInterface = ({
     setSelectedLocale(locale);
   }, []);
 
-  const [showPreviewToggle, previewInFrame] = useMemo(() => {
+  const [showPreviewToggle, previewInFrame, editorSize] = useMemo(() => {
     let preview = collection.editor?.preview ?? true;
     let frame = collection.editor?.frame ?? true;
+    let size = collection.editor?.size ?? EDITOR_SIZE_COMPACT;
 
     if ('files' in collection) {
       const file = getFileFromSlug(collection, entry.slug);
@@ -151,9 +153,13 @@ const EditorInterface = ({
       if (file?.editor?.frame !== undefined) {
         frame = file.editor.frame;
       }
+
+      if (file?.editor?.size !== undefined) {
+        size = file.editor.size;
+      }
     }
 
-    return [preview, frame];
+    return [preview, frame, size];
   }, [collection, entry.slug]);
 
   const finalPreviewActive = useMemo(
@@ -226,13 +232,22 @@ const EditorInterface = ({
     : entry;
 
   const editorWithPreview = (
-    <div className="grid grid-cols-editor h-full">
+    <div
+      className={classNames(
+        `
+          grid
+          h-full
+        `,
+        editorSize === EDITOR_SIZE_COMPACT ? 'grid-cols-editor' : 'grid-cols-2',
+      )}
+    >
       <ScrollSyncPane>{editor}</ScrollSyncPane>
       <EditorPreviewPane
         collection={collection}
         previewInFrame={previewInFrame}
         entry={previewEntry}
         fields={fields}
+        editorSize={editorSize}
       />
     </div>
   );

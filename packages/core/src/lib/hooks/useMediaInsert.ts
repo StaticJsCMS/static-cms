@@ -13,8 +13,14 @@ import type {
 } from '@staticcms/core/interface';
 import type { MouseEvent } from 'react';
 
+export interface OpenMediaLibraryProps {
+  forImage?: boolean;
+  forFolder?: boolean;
+  replaceIndex?: number;
+}
+
 export default function useMediaInsert<T extends string | string[], F extends MediaField>(
-  value: MediaPath<T>,
+  value: MediaPath<T> | undefined,
   options: {
     collection: Collection<F>;
     field: F;
@@ -23,8 +29,8 @@ export default function useMediaInsert<T extends string | string[], F extends Me
     forFolder?: boolean;
     insertOptions?: MediaLibrarInsertOptions;
   },
-  callback: (newValue: MediaPath<T>) => void,
-): (e?: MouseEvent, options?: { replaceIndex?: number }) => void {
+  callback: (newValue: MediaPath<T>) => void | Promise<void>,
+): (e?: MouseEvent, options?: OpenMediaLibraryProps) => void {
   const dispatch = useAppDispatch();
 
   const {
@@ -41,7 +47,7 @@ export default function useMediaInsert<T extends string | string[], F extends Me
   const mediaPath = useAppSelector(mediaPathSelector);
 
   useEffect(() => {
-    if (mediaPath && (mediaPath.path !== value.path || mediaPath.alt !== value.alt)) {
+    if (mediaPath && (!value || mediaPath.path !== value.path || mediaPath.alt !== value.alt)) {
       setTimeout(() => {
         callback(mediaPath as MediaPath<T>);
         dispatch(removeInsertedMedia(finalControlID));
@@ -50,17 +56,27 @@ export default function useMediaInsert<T extends string | string[], F extends Me
   }, [callback, finalControlID, dispatch, mediaPath, value]);
 
   const handleOpenMediaLibrary = useCallback(
-    (e?: MouseEvent, { replaceIndex }: { replaceIndex?: number } = {}) => {
+    (
+      e?: MouseEvent,
+      {
+        replaceIndex,
+        forImage: forImageOverride,
+        forFolder: forFolderOverride,
+      }: OpenMediaLibraryProps = {},
+    ) => {
       e?.preventDefault();
       dispatch(
         openMediaLibrary({
           controlID: finalControlID,
-          forImage,
-          forFolder,
-          value: Array.isArray(value.path) ? [...value.path] : value.path,
-          alt: value.alt,
+          forImage: forImageOverride ?? forImage,
+          forFolder: forFolderOverride ?? forFolder,
+          value: field.multiple
+            ? value
+              ? [...(Array.isArray(value.path) ? value.path : [value.path])]
+              : []
+            : value?.path,
+          alt: value?.alt,
           replaceIndex,
-          allowMultiple: false,
           config: field.media_library,
           collection,
           field,
@@ -68,17 +84,7 @@ export default function useMediaInsert<T extends string | string[], F extends Me
         }),
       );
     },
-    [
-      dispatch,
-      finalControlID,
-      forImage,
-      forFolder,
-      value.path,
-      value.alt,
-      collection,
-      field,
-      insertOptions,
-    ],
+    [dispatch, finalControlID, forImage, forFolder, value, collection, field, insertOptions],
   );
 
   return handleOpenMediaLibrary;

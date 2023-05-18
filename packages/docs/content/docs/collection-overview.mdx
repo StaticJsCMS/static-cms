@@ -170,10 +170,11 @@ fields: [
 
 The `editor` setting changes options for the editor view of a collection or a file inside a files collection. It has the following options:
 
-| Name    | Type    | Default | Description                                                                                                  |
-| ------- | ------- | ------- | ------------------------------------------------------------------------------------------------------------ |
-| preview | boolean | `true`  | Set to `false` to disable the preview pane for this collection or file                                       |
-| frame   | boolean | `true`  | <ul><li>`true` - Previews render in a frame</li><li>`false` - Previews render directly in your app</li></ul> |
+| Name    | Type                    | Default   | Description                                                                                                  |
+| ------- | ----------------------- | --------- | ------------------------------------------------------------------------------------------------------------ |
+| preview | boolean                 | `true`    | Set to `false` to disable the preview pane for this collection or file                                       |
+| frame   | boolean                 | `true`    | <ul><li>`true` - Previews render in a frame</li><li>`false` - Previews render directly in your app</li></ul> |
+| size    | 'compact'<br />\|'half' | `compact` | The size of the editor:<ul><li>`compact` - `450px`</li><li>`half` - `50%` of the screen width </li></ul>     |
 
 <CodeTabs>
 ```yaml

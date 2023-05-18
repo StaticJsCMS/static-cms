@@ -37,7 +37,7 @@ import type {
   STRIKETHROUGH_TOOLBAR_BUTTON,
   UNORDERED_LIST_TOOLBAR_BUTTON,
 } from './constants/toolbar_buttons';
-import type { ViewStyle } from './constants/views';
+import type { EditorSize, ViewStyle } from './constants/views';
 import type { formatExtensions } from './formats/formats';
 import type {
   I18N_FIELD_DUPLICATE,
@@ -178,6 +178,7 @@ export interface FilterRule {
 export interface EditorConfig {
   preview?: boolean;
   frame?: boolean;
+  size?: EditorSize;
 }
 
 export interface CollectionFile<EF extends BaseField = UnknownField> {

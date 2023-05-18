@@ -77,7 +77,12 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
         overflow-hidden
         p-1.5
         bg-white
+        shadow-sm
+        border
+        border-gray-100
         dark:bg-slate-800
+        dark:border-gray-700/40
+        dark:shadow-md
         rounded-xl
       "
     >

@@ -140,7 +140,7 @@ const InlineEditTextField: FC<InlineEditTextFieldProps> = ({
             p-1.5
             -ml-1.5
             text-sm
-            text-gray-900
+            text-gray-800
             border
             border-gray-300
             rounded-md

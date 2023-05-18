@@ -70,7 +70,7 @@ const Autocomplete = function <T>(
               min-h-8
               p-0
               w-full
-              text-gray-900
+              text-gray-800
               dark:text-gray-100
             "
             data-testid="autocomplete-input-wrapper"
@@ -99,7 +99,7 @@ const Autocomplete = function <T>(
                       dark:text-gray-500
                     `
                   : `
-                      text-gray-900
+                      text-gray-800
                       dark:text-gray-100
                     `,
               )}
@@ -144,7 +144,7 @@ const Autocomplete = function <T>(
                 bg-white
                 py-1
                 text-base
-                shadow-lg
+                shadow-md
                 ring-1
                 ring-black
                 ring-opacity-5
@@ -152,10 +152,11 @@ const Autocomplete = function <T>(
                 sm:text-sm
                 z-30
                 dark:bg-slate-700
+                dark:shadow-lg
               `}
             >
               {options.length === 0 ? (
-                <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+                <div className="relative cursor-default select-none py-2 px-4 text-gray-800">
                   Nothing found.
                 </div>
               ) : (
@@ -179,7 +180,7 @@ const Autocomplete = function <T>(
                             pl-10
                             pr-4
                             cursor-pointer
-                            text-gray-900
+                            text-gray-800
                             dark:text-gray-100
                           `,
                           (selected || active) &&

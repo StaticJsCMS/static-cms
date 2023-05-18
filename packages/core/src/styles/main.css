@@ -7,9 +7,14 @@
 @tailwind utilities;
 
 @layer components {
+  html {
+    @apply overflow-hidden;
+  }
+
   body {
-    @apply text-gray-900
-      dark:text-gray-100;
+    @apply text-gray-800
+      dark:text-gray-100
+      overflow-hidden;
   }
 
   /**
@@ -73,7 +78,7 @@
   }
 
   .btn-outlined-primary {
-    @apply text-gray-900
+    @apply text-gray-800
       bg-transparent
       border
       border-gray-200
@@ -96,7 +101,7 @@
 
   .btn-text-primary {
     @apply bg-transparent
-      text-gray-700
+      text-gray-800
       hover:text-blue-700
       hover:bg-blue-100
       disabled:text-gray-300
@@ -115,7 +120,7 @@
       text-gray-600
       bg-white
       border-gray-200/75
-      hover:text-gray-700
+      hover:text-gray-800
       hover:bg-gray-100
       hover:border-gray-200/50
       disabled:text-gray-300/75
@@ -133,12 +138,12 @@
   }
 
   .btn-outlined-secondary {
-    @apply text-gray-900
+    @apply text-gray-800
       bg-transparent
       border
       border-gray-200
       hover:bg-gray-100
-      hover:text-gray-700
+      hover:text-gray-800
       hover:border-gray-200/50
       disabled:text-gray-300/75
       disabled:border-gray-200/40
@@ -156,8 +161,8 @@
 
   .btn-text-secondary {
     @apply bg-transparent
-      text-gray-900
-      hover:text-gray-700
+      text-gray-800
+      hover:text-gray-800
       hover:bg-gray-100
       disabled:text-gray-300/75
       disabled:hover:bg-transparent
@@ -406,5 +411,12 @@ table {
         }
       }
     }
+  }
+}
+
+.cms-icon {
+  & > * {
+    width: 24px;
+    height: 24px;
   }
 }

@@ -46,11 +46,11 @@ const MenuItemButton = ({
               items-center
               justify-between
               cursor-pointer
-              dark:disabled:text-gray-700
+              dark:disabled:text-gray-800
             `,
             color === 'default' &&
               `
-                text-gray-700
+                text-gray-800
                 dark:text-gray-300
                 hover:bg-gray-200
                 dark:hover:bg-slate-600

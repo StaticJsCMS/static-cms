@@ -14,12 +14,14 @@ const Card = ({ children, className }: CardProps) => {
     <div
       className={classNames(
         `
-          bg-white border
-          border-gray-200
+          bg-white
+          border
+          border-gray-100
           rounded-lg
-          shadow-md
+          shadow-sm
           dark:bg-slate-800
           dark:border-gray-700/40
+          dark:shadow-md
           flex
           flex-col
           h-full

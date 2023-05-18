@@ -4,17 +4,20 @@ import Frame from 'react-frame-component';
 import { translate } from 'react-polyglot';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
+import { EDITOR_SIZE_COMPACT } from '@staticcms/core/constants/views';
 import { getPreviewStyles, getPreviewTemplate } from '@staticcms/core/lib/registry';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectTemplateName } from '@staticcms/core/lib/util/collection.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
-import useWidgetsFor from '../../common/widget/useWidgetsFor';
 import ErrorBoundary from '../../ErrorBoundary';
+import useWidgetsFor from '../../common/widget/useWidgetsFor';
 import EditorPreview from './EditorPreview';
 import EditorPreviewContent from './EditorPreviewContent';
 import PreviewFrameContent from './PreviewFrameContent';
 
+import type { EditorSize } from '@staticcms/core/constants/views';
 import type {
   Collection,
   Entry,
@@ -51,7 +54,7 @@ const FrameGlobalStyles = `
     color: rgb(59 130 246);
   }
 
-  .text-gray-900 {
+  .text-gray-800 {
     color: rgb(17 24 39);
   }
 
@@ -103,10 +106,11 @@ export interface EditorPreviewPaneProps {
   fields: Field[];
   entry: Entry;
   previewInFrame: boolean;
+  editorSize: EditorSize;
 }
 
 const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
-  const { entry, collection, fields, previewInFrame, t } = props;
+  const { editorSize, entry, collection, fields, previewInFrame, t } = props;
 
   const config = useAppSelector(selectConfig);
 
@@ -168,7 +172,17 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
     }
 
     return createPortal(
-      <div className="w-preview h-main absolute top-16 right-0">
+      <div
+        className={classNames(
+          `
+            h-main
+            absolute
+            top-16
+            right-0
+          `,
+          editorSize === EDITOR_SIZE_COMPACT ? 'w-preview' : 'w-6/12',
+        )}
+      >
         {!entry || !entry.data ? null : (
           <ErrorBoundary config={config}>
             {previewInFrame ? (
@@ -191,7 +205,15 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
               </Frame>
             ) : (
               <ScrollSyncPane key="preview-wrapper-scroll-sync">
-                <div key="preview-wrapper" id="preview-pane">
+                <div
+                  key="preview-wrapper"
+                  id="preview-pane"
+                  className="
+                    overflow-y-auto
+                    styled-scrollbars
+                    h-full
+                  "
+                >
                   {!collection ? (
                     t('collection.notFound')
                   ) : (
@@ -216,6 +238,7 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
   }, [
     collection,
     config,
+    editorSize,
     element,
     entry,
     initialFrameContent,

@@ -40,7 +40,7 @@ const Option = function <T>({
               py-2
               px-4
               cursor-pointer
-              text-gray-900
+              text-gray-800
               hover:bg-blue-500
               dark:text-gray-100
             `,

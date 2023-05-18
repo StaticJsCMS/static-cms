@@ -27,14 +27,13 @@ const TableHeaderCell = ({ children }: TableHeaderCellProps) => {
         className="
           px-4
           py-3
-          text-gray-900
+          text-gray-800
           border-gray-100
           border-b
           bg-white
           dark:text-white
           dark:border-gray-700
           dark:bg-slate-800
-          shadow-sm
           text-[14px]
         "
       >

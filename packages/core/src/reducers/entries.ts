@@ -22,7 +22,7 @@ import {
   SORT_ENTRIES_REQUEST,
   SORT_ENTRIES_SUCCESS,
 } from '../constants';
-import { VIEW_STYLE_TABLE } from '../constants/views';
+import { VIEW_STYLES, VIEW_STYLE_TABLE } from '../constants/views';
 import { set } from '../lib/util/object.util';
 
 import type { EntriesAction } from '../actions/entries';
@@ -93,7 +93,7 @@ function persistSort(sort: Sort | undefined) {
 
 const loadViewStyle = once(() => {
   const viewStyle = localStorage.getItem(viewStyleKey) as ViewStyle;
-  if (viewStyle) {
+  if (viewStyle && VIEW_STYLES.includes(viewStyle)) {
     return viewStyle;
   }
 

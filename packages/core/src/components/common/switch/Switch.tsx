@@ -86,7 +86,7 @@ const Switch = forwardRef<HTMLInputElement | null, SwitchProps>(
               ml-3
               text-sm
               font-medium
-              text-gray-900
+              text-gray-800
               dark:text-gray-300
             "
           >

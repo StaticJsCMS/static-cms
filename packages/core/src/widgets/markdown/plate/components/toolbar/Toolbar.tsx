@@ -81,9 +81,10 @@ const Toolbar: FC<ToolbarProps> = ({ collection, field, disabled }) => {
         border-bottom-2
         border-gray-400
         gap-0.5
-        shadow-md
+        shadow-sm
         bg-slate-50
         dark:bg-slate-900
+        dark:shadow-md
         sticky
         top-0
         z-10

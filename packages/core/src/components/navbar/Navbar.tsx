@@ -41,7 +41,16 @@ const Navbar = ({
   }, [dispatch]);
 
   return (
-    <nav className="bg-white dark:bg-slate-800 drop-shadow-lg z-40 relative">
+    <nav
+      className="
+        z-40
+        relative
+        bg-white
+        drop-shadow-md
+        dark:bg-slate-800
+        dark:drop-shadow-lg
+      "
+    >
       <div key="nav" className="mx-auto pr-2 sm:pr-4 lg:pr-5">
         <div className="relative flex h-16 items-center justify-between">
           <div className="flex flex-1 items-center justify-center h-full sm:items-stretch sm:justify-start gap-4">

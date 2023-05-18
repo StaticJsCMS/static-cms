@@ -75,7 +75,7 @@ const TextArea = forwardRef<HTMLInputElement | null, TextAreaProps>(
               outline-none
               text-sm
               font-medium
-              text-gray-900
+              text-gray-800
               dark:text-gray-100
               disabled:text-gray-300
               dark:disabled:text-gray-500
