@@ -4,6 +4,7 @@ module.exports = {
     extend: {
       height: {
         main: "calc(100vh - 64px)",
+        "main-mobile": "calc(100vh - 128px)",
         "media-library-dialog": "80vh",
         "media-card": "240px",
         "media-preview-image": "104px",
@@ -32,6 +33,7 @@ module.exports = {
       },
       boxShadow: {
         sidebar: "0 10px 15px 18px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+        "bottom-navigation": "0 -10px 10px -5px rgb(0 0 0 / 0.15)",
       },
       gridTemplateColumns: {
         editor: "450px auto",

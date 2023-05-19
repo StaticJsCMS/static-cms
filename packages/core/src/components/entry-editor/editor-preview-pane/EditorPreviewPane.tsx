@@ -179,7 +179,8 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
       <div
         className={classNames(
           `
-            h-main
+            h-main-mobile
+            md:h-main
             absolute
             top-16
             right-0

@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';
 import { useParams } from 'react-router-dom';
-import { Add as AddIcon } from '@styled-icons/material/Add';
 
 import useEntries from '@staticcms/core/lib/hooks/useEntries';
 import useIcon from '@staticcms/core/lib/hooks/useIcon';
@@ -12,27 +11,25 @@ import {
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { addFileTemplateFields } from '@staticcms/core/lib/widgets/stringTemplate';
 import Button from '../common/button/Button';
-import IconButton from '../common/button/IconButton';
+import useNewEntryUrl from '@staticcms/core/lib/hooks/useNewEntryUrl';
 
 import type { Collection, Entry, TranslatedProps } from '@staticcms/core/interface';
+import type { FC } from 'react';
 
 interface CollectionHeaderProps {
   collection: Collection;
-  newEntryUrl?: string;
 }
 
-const CollectionHeader = ({
-  collection,
-  newEntryUrl,
-  t,
-}: TranslatedProps<CollectionHeaderProps>) => {
+const CollectionHeader: FC<TranslatedProps<CollectionHeaderProps>> = ({ collection, t }) => {
   const collectionLabel = collection.label;
   const collectionLabelSingular = collection.label_singular;
 
-  const icon = useIcon(collection.icon);
-
   const params = useParams();
   const filterTerm = useMemo(() => params['*'], [params]);
+  const newEntryUrl = useNewEntryUrl(collection, filterTerm);
+
+  const icon = useIcon(collection.icon);
+
   const entries = useEntries(collection);
 
   const pluralLabel = useMemo(() => {
@@ -83,20 +80,15 @@ const CollectionHeader = ({
           <div className="max-w-collection-title">{pluralLabel}</div>
         </h2>
         {newEntryUrl ? (
-          <>
-            <Button to={newEntryUrl} className="hidden xs:flex">
-              {t('collection.collectionTop.newButton', {
-                collectionLabel: collectionLabelSingular || pluralLabel,
-              })}
-            </Button>
-            <IconButton to={newEntryUrl} className="flex xs:hidden">
-              <AddIcon className="w-5 h-5" />
-            </IconButton>
-          </>
+          <Button to={newEntryUrl} className="hidden xs:flex">
+            {t('collection.collectionTop.newButton', {
+              collectionLabel: collectionLabelSingular || pluralLabel,
+            })}
+          </Button>
         ) : null}
       </div>
     </>
   );
 };
 
-export default translate()(CollectionHeader);
+export default translate()(CollectionHeader) as FC<CollectionHeaderProps>;

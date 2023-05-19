@@ -20,9 +20,9 @@ export interface MenuProps {
   buttonClassName?: string;
   children: ReactNode | ReactNode[];
   hideDropdownIcon?: boolean;
+  hideLabel?: boolean;
   keepMounted?: boolean;
   disabled?: boolean;
-  collapseOnMobile?: boolean;
   'data-testid'?: string;
 }
 
@@ -37,9 +37,9 @@ const Menu = ({
   buttonClassName,
   children,
   hideDropdownIcon = false,
+  hideLabel = false,
   keepMounted = false,
   disabled = false,
-  collapseOnMobile = false,
   'data-testid': dataTestId,
 }: MenuProps) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
@@ -82,13 +82,16 @@ const Menu = ({
         >
           {StartIcon ? (
             <StartIcon
-              className={classNames(`-ml-0.5 h-5 w-5`, collapseOnMobile ? 'sm:mr-1.5' : 'mr-1.5')}
+              className={classNames(
+                `-ml-0.5 h-5 w-5`,
+                (!hideLabel || !hideDropdownIcon) && 'mr-1.5',
+              )}
             />
           ) : null}
-          <div className={classNames(collapseOnMobile && 'hidden sm:block')}>{label}</div>
+          {!hideLabel ? <div>{label}</div> : null}
           {!hideDropdownIcon ? (
             <KeyboardArrowDownIcon
-              className={classNames(`-mr-0.5 h-5 w-5`, collapseOnMobile ? 'sm:ml-2' : 'ml-2')}
+              className={classNames(`-mr-0.5 h-5 w-5`, !hideLabel && 'ml-2')}
               aria-hidden="true"
             />
           ) : null}

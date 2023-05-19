@@ -136,6 +136,10 @@ const CollectionSearch = ({
     [submitSearch],
   );
 
+  const handleClick = useCallback((event: MouseEvent) => {
+    event.stopPropagation();
+  }, []);
+
   return (
     <div>
       <div className="relative">
@@ -171,6 +175,7 @@ const CollectionSearch = ({
           onFocus={handleFocus}
           value={query}
           onChange={handleQueryChange}
+          onClick={handleClick}
         />
       </div>
       <PopperUnstyled
@@ -191,7 +196,7 @@ const CollectionSearch = ({
           ring-opacity-5
           focus:outline-none
           sm:text-sm
-          z-40
+          z-[1300]
           dark:bg-slate-700
           dark:shadow-lg
         "

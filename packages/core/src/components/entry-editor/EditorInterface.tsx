@@ -181,7 +181,8 @@ const EditorInterface = ({
           `
             overflow-y-auto
             styled-scrollbars
-            h-main
+            h-main-mobile
+            md:h-main
           `,
       )}
     >
@@ -207,7 +208,8 @@ const EditorInterface = ({
           w-full
           overflow-y-auto
           styled-scrollbars
-          h-main
+          h-main-mobile
+          md:h-main
         "
       >
         <EditorControlPane
