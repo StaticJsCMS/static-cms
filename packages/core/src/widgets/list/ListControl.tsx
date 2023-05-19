@@ -360,7 +360,7 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
               <Menu
                 label={t('editor.editorWidgets.list.addType', { item: label })}
                 variant="outlined"
-                className="w-full z-20"
+                buttonClassName="w-full z-20"
                 data-testid="list-type-add"
                 disabled={disabled}
               >

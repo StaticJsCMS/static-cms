@@ -49,6 +49,10 @@ const TableCell = ({ children, emphasis = false, to, shrink = false }: TableCell
       <div
         className="
           h-[44px]
+          text-ellipsis
+          overflow-hidden
+          whitespace-nowrap
+          w-full
         "
       >
         {content}

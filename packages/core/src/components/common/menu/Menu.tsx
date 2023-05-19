@@ -16,11 +16,13 @@ export interface MenuProps {
   color?: BaseBaseProps['color'];
   size?: BaseBaseProps['size'];
   rounded?: boolean | 'no-padding';
-  className?: string;
+  rootClassName?: string;
+  buttonClassName?: string;
   children: ReactNode | ReactNode[];
   hideDropdownIcon?: boolean;
   keepMounted?: boolean;
   disabled?: boolean;
+  collapseOnMobile?: boolean;
   'data-testid'?: string;
 }
 
@@ -31,11 +33,13 @@ const Menu = ({
   color = 'primary',
   size = 'medium',
   rounded = false,
-  className,
+  rootClassName,
+  buttonClassName,
   children,
   hideDropdownIcon = false,
   keepMounted = false,
   disabled = false,
+  collapseOnMobile = false,
   'data-testid': dataTestId,
 }: MenuProps) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
@@ -56,16 +60,16 @@ const Menu = ({
     setAnchorEl(null);
   }, []);
 
-  const buttonClassName = useButtonClassNames(variant, color, size, rounded);
+  const calculatedButtonClassName = useButtonClassNames(variant, color, size, rounded);
 
   const menuButtonClassNames = useMemo(
-    () => classNames(className, buttonClassName),
-    [buttonClassName, className],
+    () => classNames(calculatedButtonClassName, buttonClassName, 'whitespace-nowrap'),
+    [calculatedButtonClassName, buttonClassName],
   );
 
   return (
     <ClickAwayListener mouseEvent="onMouseDown" touchEvent="onTouchStart" onClickAway={handleClose}>
-      <div className="flex">
+      <div className={classNames('flex', rootClassName)}>
         <button
           type="button"
           onClick={handleButtonClick}
@@ -76,10 +80,17 @@ const Menu = ({
           className={menuButtonClassNames}
           disabled={disabled}
         >
-          {StartIcon ? <StartIcon className="-ml-0.5 mr-1.5 h-5 w-5" /> : null}
-          {label}
+          {StartIcon ? (
+            <StartIcon
+              className={classNames(`-ml-0.5 h-5 w-5`, collapseOnMobile ? 'sm:mr-1.5' : 'mr-1.5')}
+            />
+          ) : null}
+          <div className={classNames(collapseOnMobile && 'hidden sm:block')}>{label}</div>
           {!hideDropdownIcon ? (
-            <KeyboardArrowDownIcon className="-mr-0.5 ml-2 h-5 w-5" aria-hidden="true" />
+            <KeyboardArrowDownIcon
+              className={classNames(`-mr-0.5 h-5 w-5`, collapseOnMobile ? 'sm:ml-2' : 'ml-2')}
+              aria-hidden="true"
+            />
           ) : null}
         </button>
         <MenuUnstyled

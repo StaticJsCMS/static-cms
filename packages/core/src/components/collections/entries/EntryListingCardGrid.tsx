@@ -142,7 +142,7 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
       <AutoSizer onResize={handleResize}>
         {({ height = 0, width = 0 }) => {
           const columnWidthWithGutter = COLLECTION_CARD_WIDTH + COLLECTION_CARD_MARGIN;
-          const columnCount = Math.floor(width / columnWidthWithGutter);
+          const columnCount = Math.max(Math.floor(width / columnWidthWithGutter), 1);
           const nonGutterSpace = (width - COLLECTION_CARD_MARGIN * columnCount) / width;
           const columnWidth = (1 / columnCount) * nonGutterSpace;
 

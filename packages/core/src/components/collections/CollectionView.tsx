@@ -197,7 +197,7 @@ const CollectionView = ({
 
   return (
     <div className="flex flex-col h-full px-5 pt-4">
-      <div className="flex items-center mb-4">
+      <div className="flex items-center mb-4 flex-col gap-4 sm:gap-0 sm:flex-row">
         {isSearchResults ? (
           <>
             <div className="flex-grow">

@@ -35,6 +35,7 @@ const FilterControl = ({
     <Menu
       label={t('collection.collectionTop.filterBy')}
       variant={anyActive ? 'contained' : 'outlined'}
+      rootClassName="hidden lg:block"
     >
       <MenuGroup>
         {viewFilters.map(viewFilter => {

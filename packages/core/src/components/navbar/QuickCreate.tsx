@@ -23,7 +23,12 @@ const QuickCreate = ({ t }: TranslateProps) => {
   );
 
   return (
-    <Menu label={t('app.header.quickAdd')} startIcon={AddIcon}>
+    <Menu
+      label={t('app.header.quickAdd')}
+      startIcon={AddIcon}
+      collapseOnMobile
+      rootClassName="hidden xs:block"
+    >
       <MenuGroup>
         {createableCollections.map(collection => (
           <MenuItemLink key={collection.name} href={getNewEntryUrl(collection.name)}>

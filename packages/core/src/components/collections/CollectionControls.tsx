@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import FilterControl from './FilterControl';
 import GroupControl from './GroupControl';
 import SortControl from './SortControl';
 import ViewStyleControl from '../common/view-style/ViewStyleControl';
+import MobileCollectionControls from './mobile/MobileCollectionControls';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
 import type {
@@ -45,29 +46,41 @@ const CollectionControls = ({
   filter,
   group,
 }: TranslatedProps<CollectionControlsProps>) => {
+  const showGroupControl = useMemo(
+    () => viewGroups && onGroupClick && group && viewGroups.length > 0,
+    [group, onGroupClick, viewGroups],
+  );
+
+  const showFilterControl = useMemo(
+    () => viewFilters && onFilterClick && filter && viewFilters.length > 0,
+    [filter, onFilterClick, viewFilters],
+  );
+
+  const showSortControl = useMemo(
+    () => sortableFields && onSortClick && sort && sortableFields.length > 0,
+    [onSortClick, sort, sortableFields],
+  );
+
   return (
-    <div className="flex gap-2 items-center relative z-20">
+    <div className="flex gap-2 items-center relative z-20 w-full justify-end sm:w-auto sm:justify-normal">
       <ViewStyleControl viewStyle={viewStyle} onChangeViewStyle={onChangeViewStyle} />
-      {viewGroups && onGroupClick && group
-        ? viewGroups.length > 0 && (
-            <GroupControl viewGroups={viewGroups} onGroupClick={onGroupClick} t={t} group={group} />
-          )
-        : null}
-      {viewFilters && onFilterClick && filter
-        ? viewFilters.length > 0 && (
-            <FilterControl
-              viewFilters={viewFilters}
-              onFilterClick={onFilterClick}
-              t={t}
-              filter={filter}
-            />
-          )
-        : null}
-      {sortableFields && onSortClick && sort
-        ? sortableFields.length > 0 && (
-            <SortControl fields={sortableFields} sort={sort} onSortClick={onSortClick} />
-          )
-        : null}
+      {showGroupControl || showFilterControl || showFilterControl ? (
+        <MobileCollectionControls />
+      ) : null}
+      {showGroupControl ? (
+        <GroupControl viewGroups={viewGroups} onGroupClick={onGroupClick} t={t} group={group} />
+      ) : null}
+      {showFilterControl ? (
+        <FilterControl
+          viewFilters={viewFilters}
+          onFilterClick={onFilterClick}
+          t={t}
+          filter={filter}
+        />
+      ) : null}
+      {showSortControl ? (
+        <SortControl fields={sortableFields} sort={sort} onSortClick={onSortClick} />
+      ) : null}
     </div>
   );
 };

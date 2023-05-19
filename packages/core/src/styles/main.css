@@ -8,13 +8,15 @@
 
 @layer components {
   html {
-    @apply overflow-hidden;
+    @apply overflow-hidden
+      w-screen;
   }
 
   body {
     @apply text-gray-800
       dark:text-gray-100
-      overflow-hidden;
+      overflow-hidden
+      w-screen;
   }
 
   /**
@@ -377,6 +379,10 @@
 .styled-scrollbars::-webkit-scrollbar {
   width: 10px; /* Mostly for vertical scrollbars */
   height: 10px; /* Mostly for horizontal scrollbars */
+}
+
+.styled-scrollbars::-webkit-scrollbar-corner {
+  background: rgba(0,0,0,0);
 }
 
 .styled-scrollbars::-webkit-scrollbar-thumb {

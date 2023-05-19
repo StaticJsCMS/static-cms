@@ -170,7 +170,7 @@ const EditorToolbar = ({
             key="extra-menu"
             label={<MoreVertIcon className="w-5 h-5" />}
             variant="text"
-            className="px-1.5"
+            buttonClassName="px-1.5"
             hideDropdownIcon
           >
             <MenuGroup>

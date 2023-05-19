@@ -90,6 +90,10 @@ const FrameGlobalStyles = `
     height: 10px; /* Mostly for horizontal scrollbars */
   }
 
+  .styled-scrollbars::-webkit-scrollbar-corner {
+    background: rgba(0,0,0,0);
+  }
+
   .styled-scrollbars::-webkit-scrollbar-thumb {
     /* Foreground */
     background: var(--scrollbar-foreground);

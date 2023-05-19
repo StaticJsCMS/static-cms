@@ -26,6 +26,7 @@ const GroupControl = ({
     <Menu
       label={t('collection.collectionTop.groupBy')}
       variant={activeGroup ? 'contained' : 'outlined'}
+      rootClassName="hidden lg:block"
     >
       <MenuGroup>
         {viewGroups.map(viewGroup => (

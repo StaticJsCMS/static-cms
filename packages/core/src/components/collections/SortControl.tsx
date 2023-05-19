@@ -54,6 +54,7 @@ const SortControl = ({ t, fields, onSortClick, sort }: TranslatedProps<SortContr
     <Menu
       label={t('collection.collectionTop.sortBy')}
       variant={selectedSort.key ? 'contained' : 'outlined'}
+      rootClassName="hidden lg:block"
     >
       <MenuGroup>
         {fields.map(field => {
