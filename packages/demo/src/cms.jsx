@@ -38,7 +38,7 @@ const PostPreviewCard = ({ entry, theme, hasLocalBackup }) => {
           overflow: "hidden",
           height: "140px",
           backgroundSize: "cover",
-          backgroundRepat: "no-repeat",
+          backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
           objectFit: "cover",
           backgroundImage: `url('${image}')`,
