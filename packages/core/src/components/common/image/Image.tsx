@@ -40,6 +40,7 @@ const Image = <EF extends BaseField = UnknownField>({
           p-10
           rounded-md
           border
+          max-w-full
           border-gray-200/75
           dark:border-slate-600/75
         "
