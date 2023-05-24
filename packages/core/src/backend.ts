@@ -1021,7 +1021,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return file.fields.map(f => f.name);
   }
 
-  filterEntries(collection: { entries: Entry[] }, filterRule: FilterRule) {
+  filterEntries(collection: { entries: Entry[] }, filterRule: FilterRule | FilterRule[]) {
     return filterEntries(collection.entries, filterRule);
   }
 }
