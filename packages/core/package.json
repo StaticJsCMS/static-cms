@@ -244,7 +244,7 @@
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-react": "7.32.2",
     "eslint-plugin-react-hooks": "4.6.0",
-    "eslint-plugin-unicorn": "46.0.0",
+    "eslint-plugin-unicorn": "46.0.1",
     "execa": "7.1.1",
     "fs-extra": "11.1.1",
     "gitlab": "14.2.2",
