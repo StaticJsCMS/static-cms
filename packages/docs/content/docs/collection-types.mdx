@@ -105,12 +105,20 @@ collections: [
 
 ### Filtered folder collections
 
-The entries for any folder collection can be filtered based on the value of a single field. By filtering a folder into different collections, you can manage files with different fields, options, extensions, etc. in the same folder.
+The entries for any folder collection can be filtered based on the values of the fields or on file names. By filtering a folder into different collections, you can manage files with different fields, options, extensions, etc. in the same folder.
 
-The `filter` option requires two fields:
+The `filter` option can take a single filter rule or a list of filter rules. There are two types of filter rules available: field and file.
 
-- `field`: The name of the collection field to filter on.
-- `value`: The desired field value.
+#### Field Filter Rule
+
+| Name     | Type                          | Default | Description                                                                                                                                                                                                                                                     |
+| -------- | ----------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| field    | string                        |         | The name of one of the fields in the collection's `fields`                                                                                                                                                                                                      |
+| value    | string<br />\|list of strings |         | _Optional_. The desired value or values to match. Required if no `pattern` provided. Ignored if `pattern` is provided                                                                                                                                           |
+| pattern  | regular expression            |         | _Optional_. A regex pattern to match against the field's value                                                                                                                                                                                                  |
+| matchAll | boolean                       | `false` | _Optional_. _Ignored if value is not a list of strings_<br /><ul><li>`true` - The field's values must include or match all of the filter rule's values</li><li>`false` - The field's value must include or match only one of the filter rule's values</li></ul> |
+
+##### Filtered by Language
 
 The example below creates two collections in the same folder, filtered by the `language` field. The first collection includes posts with `language: en`, and the second, with `language: es`.
 
@@ -129,6 +137,7 @@ collections:
         label: Language
         widget: select
         options: ['en', 'es']
+        default: 'en'
       - name: title
         label: Title
         widget: string
@@ -147,6 +156,7 @@ collections:
         label: Lenguaje
         widget: select
         options: ['en', 'es']
+        default: 'es'
       - name: title
         label: Titulo
         widget: string
@@ -162,11 +172,28 @@ collections: [
     label: 'Blog in English',
     folder: '_posts',
     create: true,
-    filter: { field: 'language', value: 'en' },
+    filter: {
+      field: 'language',
+      value: 'en',
+    },
     fields: [
-      { name: 'language', label: 'Language', widget: 'select', options: ['en', 'es'] },
-      { name: 'title', label: 'Title', widget: 'string' },
-      { name: 'body', label: 'Content', widget: 'markdown' },
+      {
+        name: 'language',
+        label: 'Language',
+        widget: 'select',
+        options: ['en', 'es'],
+        default: 'en',
+      },
+      {
+        name: 'title',
+        label: 'Title',
+        widget: 'string',
+      },
+      {
+        name: 'body',
+        label: 'Content',
+        widget: 'markdown',
+      },
     ],
   },
   {
@@ -174,11 +201,196 @@ collections: [
     label: 'Blog en Español',
     folder: '_posts',
     create: true,
-    filter: { field: 'language', value: 'es' },
+    filter: {
+      field: 'language',
+      value: 'es',
+    },
     fields: [
-      { name: 'language', label: 'Lenguaje', widget: 'select', options: ['en', 'es'] },
-      { name: 'title', label: 'Titulo', widget: 'string' },
-      { name: 'body', label: 'Contenido', widget: 'markdown' },
+      {
+        name: 'language',
+        label: 'Lenguaje',
+        widget: 'select',
+        options: ['en', 'es'],
+        default: 'es',
+      },
+      {
+        name: 'title',
+        label: 'Titulo',
+        widget: 'string',
+      },
+      {
+        name: 'body',
+        label: 'Contenido',
+        widget: 'markdown',
+      },
+    ],
+  },
+],
+```
+
+</CodeTabs>
+
+##### Filtered by Tags
+
+The example below creates two collections in the same folder, filtered by the `tags` field. The first collection includes posts with the `news` or `article` tags, and the second, with the `blog` tag.
+
+<CodeTabs>
+```yaml
+collections:
+  - name: 'news'
+    label: 'News'
+    folder: '_posts'
+    create: true
+    filter:
+      field: tags
+      value:
+        - news
+        - article
+    fields:
+      - name: tags
+        label: Tags
+        widget: list
+        default:
+          - news
+      - name: title
+        label: Title
+        widget: string
+      - name: body
+        label: Content
+        widget: markdown
+  - name: blogs
+    label: 'Blogs'
+    folder: _posts
+    create: true
+    filter:
+      field: tags
+      value: blog
+    fields:
+      - name: tags
+        label: Tags
+        widget: list
+        default:
+          - blog
+      - name: title
+        label: Title
+        widget: string
+      - name: body
+        label: Content
+        widget: markdown
+```
+
+```js
+collections: [
+  {
+    name: 'news',
+    label: 'News',
+    folder: '_posts',
+    create: true,
+    filter: {
+      field: 'tags',
+      value: ['news', 'article'],
+    },
+    fields: [
+      {
+        name: 'tags',
+        label: 'Tags',
+        widget: 'list',
+        default: ['news'],
+      },
+      {
+        name: 'title',
+        label: 'Title',
+        widget: 'string',
+      },
+      {
+        name: 'body',
+        label: 'Content',
+        widget: 'markdown',
+      },
+    ],
+  },
+  {
+    name: 'blogs',
+    label: 'Blogs',
+    folder: '_posts',
+    create: true,
+    filter: {
+      field: 'tags',
+      value: 'blog',
+    },
+    fields: [
+      {
+        name: 'tags',
+        label: 'Tags',
+        widget: 'list',
+        default: ['blog'],
+      },
+      {
+        name: 'title',
+        label: 'Title',
+        widget: 'string',
+      },
+      {
+        name: 'body',
+        label: 'Content',
+        widget: 'markdown',
+      },
+    ],
+  },
+],
+```
+
+</CodeTabs>
+
+#### File Name Filter Rule
+
+| Name    | Type               | Default | Description                                            |
+| ------- | ------------------ | ------- | ------------------------------------------------------ |
+| pattern | regular expression |         | A regex pattern to match against the entry's file name |
+
+##### Filtered by Tags
+
+The example below creates a collection containing only files named `index.md` exactly.
+
+<CodeTabs>
+```yaml
+collections:
+  - name: 'posts'
+    label: 'Posts'
+    folder: '_posts'
+    create: true
+    filter:
+      pattern: '^index.md$'
+    fields:
+      - name: title
+        label: Title
+        widget: string
+      - name: body
+        label: Content
+        widget: markdown
+```
+
+```js
+collections: [
+  {
+    name: 'posts',
+    label: 'Posts',
+    folder: '_posts',
+    create: true,
+    filter: {
+      pattern: '^index.md$',
+    },
+    fields: [
+      {
+        name: 'title',
+        label: 'Title',
+        widget: 'string',
+      },
+      {
+        name: 'body',
+        label: 'Content',
+        widget: 'markdown',
+      },
     ],
   },
 ],

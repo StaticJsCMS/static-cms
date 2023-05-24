@@ -39,6 +39,7 @@ import {
   selectInferredField,
   selectMediaFolders,
 } from './lib/util/collection.util';
+import filterEntries from './lib/util/filter.util';
 import {
   DRAFT_MEDIA_FILES,
   selectMediaFilePath,
@@ -1021,14 +1022,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
   }
 
   filterEntries(collection: { entries: Entry[] }, filterRule: FilterRule) {
-    return collection.entries.filter(entry => {
-      const fieldValue = entry.data?.[filterRule.field];
-      // TODO Investigate when the value could be a string array
-      // if (Array.isArray(fieldValue)) {
-      //   return fieldValue.includes(filterRule.value);
-      // }
-      return fieldValue === filterRule.value;
-    });
+    return filterEntries(collection.entries, filterRule);
   }
 }
 

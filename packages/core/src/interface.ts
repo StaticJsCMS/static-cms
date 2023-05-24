@@ -170,10 +170,26 @@ export interface EntryDraft {
   fieldsErrors: FieldsErrors;
 }
 
-export interface FilterRule {
-  value: string;
+export interface BaseFieldFilterRule {
   field: string;
 }
+
+export interface FieldPatternFilterRule extends BaseFieldFilterRule {
+  pattern: string;
+}
+
+export interface FieldValueFilterRule extends BaseFieldFilterRule {
+  value: string | string[];
+  matchAll?: boolean;
+}
+
+export type FieldFilterRule = FieldPatternFilterRule | FieldValueFilterRule;
+
+export interface FileNameFilterRule {
+  pattern: string;
+}
+
+export type FilterRule = FieldFilterRule | FileNameFilterRule;
 
 export interface EditorConfig {
   preview?: boolean;
@@ -224,7 +240,7 @@ export interface BaseCollection {
   isFetching?: boolean;
   summary?: string;
   summary_fields?: string[];
-  filter?: FilterRule;
+  filter?: FilterRule | FilterRule[];
   label_singular?: string;
   label: string;
   sortable_fields?: SortableFields;
