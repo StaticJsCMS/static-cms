@@ -1,6 +1,11 @@
 {
   "releases": [
     {
+      "date": "2023-05-24T11:00:00.000Z",
+      "version": "v2.4.0",
+      "description": "Delimiter separated lists and expanded folder filter support"
+    },
+    {
       "date": "2023-05-12T10:53:00.000Z",
       "version": "v2.3.0",
       "description": "File drag and drop support for File and Image widgets"
