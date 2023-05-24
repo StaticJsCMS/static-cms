@@ -75,7 +75,7 @@ interface ListItemProps
     | 'value'
     | 'i18n'
   > {
-  valueType: ListValueType;
+  valueType: ListValueType.MIXED | ListValueType.MULTIPLE;
   index: number;
   id: string;
   listeners: SyntheticListenerMap | undefined;
