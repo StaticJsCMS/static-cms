@@ -655,6 +655,7 @@ export interface ListField<EF extends BaseField = UnknownField> extends BaseFiel
   add_to_top?: boolean;
   types?: ObjectField<EF>[];
   type_key?: string;
+  delimiter?: string;
 }
 
 export interface MapField extends BaseField {

@@ -2,8 +2,8 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
+import { act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { act } from '@testing-library/react';
 
 import { mockStringField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
@@ -84,7 +84,12 @@ describe(StringControl.name, () => {
       await userEvent.type(input, 'I am some text');
     });
 
-    expect(onChange).toHaveBeenLastCalledWith('I am some text');
+    expect(onChange).toHaveBeenCalledTimes(0);
+
+    await waitFor(() => {
+      expect(onChange).toHaveBeenCalledTimes(1);
+      expect(onChange).toHaveBeenLastCalledWith('I am some text');
+    });
   });
 
   it('should show error', async () => {
