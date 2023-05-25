@@ -9,6 +9,8 @@ describe('filterEntries', () => {
     data: {
       language: 'en',
       tags: ['tag-1', 'tag-2', 'fish-catfish'],
+      draft: true,
+      numbers: [1, 5],
     },
   });
 
@@ -17,6 +19,8 @@ describe('filterEntries', () => {
     data: {
       language: 'fr',
       tags: ['tag-1', 'tag-4'],
+      draft: false,
+      numbers: [5, 6],
     },
   });
 
@@ -25,6 +29,8 @@ describe('filterEntries', () => {
     data: {
       language: 'gr',
       tags: ['tag-1', 'tag-4'],
+      draft: false,
+      numbers: [5, 6],
     },
   });
 
@@ -33,6 +39,8 @@ describe('filterEntries', () => {
     data: {
       language: 'gr',
       tags: ['tag-1', 'tag-3'],
+      draft: false,
+      numbers: [1],
     },
   });
 
@@ -41,6 +49,8 @@ describe('filterEntries', () => {
     data: {
       language: 'gr',
       tags: ['tag-3'],
+      draft: false,
+      numbers: [8],
     },
   });
 
@@ -49,6 +59,8 @@ describe('filterEntries', () => {
     data: {
       language: 'gr',
       tags: ['tag-1', 'tag-4', 'fish-pike'],
+      draft: true,
+      numbers: [4, 8],
     },
   });
 
@@ -73,6 +85,11 @@ describe('filterEntries', () => {
         mockIndexEntry,
         mockUnderscoreIndexEntry,
         mockRandomFileNameEntry,
+        mockTags1and4Entry,
+      ]);
+
+      expect(filterEntries(entries, { field: 'draft', value: 'true' })).toEqual([
+        mockEnglishEntry,
         mockTags1and4Entry,
       ]);
     });
@@ -101,13 +118,8 @@ describe('filterEntries', () => {
         mockIndexEntry,
         mockTags1and4Entry,
       ]);
-    });
 
-    it('should filter fields if field value is an array and multiple filter values are provided (must include only one)', () => {
-      expect(filterEntries(entries, { field: 'tags', value: ['tag-3', 'tag-4'] })).toEqual([
-        mockFrenchEntry,
-        mockIndexEntry,
-        mockUnderscoreIndexEntry,
+      expect(filterEntries(entries, { field: 'numbers', value: '8' })).toEqual([
         mockRandomFileNameEntry,
         mockTags1and4Entry,
       ]);
@@ -120,6 +132,12 @@ describe('filterEntries', () => {
         mockUnderscoreIndexEntry,
         mockRandomFileNameEntry,
         mockTags1and4Entry,
+      ]);
+
+      expect(filterEntries(entries, { field: 'numbers', value: ['5', '6'] })).toEqual([
+        mockEnglishEntry,
+        mockFrenchEntry,
+        mockIndexEntry,
       ]);
     });
 
@@ -127,6 +145,10 @@ describe('filterEntries', () => {
       expect(
         filterEntries(entries, { field: 'tags', value: ['tag-1', 'tag-4'], matchAll: true }),
       ).toEqual([mockFrenchEntry, mockIndexEntry, mockTags1and4Entry]);
+
+      expect(
+        filterEntries(entries, { field: 'numbers', value: ['5', '6'], matchAll: true }),
+      ).toEqual([mockFrenchEntry, mockIndexEntry]);
     });
 
     it('should filter fields based on pattern when value is an array', () => {
