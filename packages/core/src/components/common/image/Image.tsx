@@ -7,7 +7,13 @@ import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraf
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 
-import type { BaseField, Collection, MediaField, UnknownField } from '@staticcms/core/interface';
+import type {
+  BaseField,
+  Collection,
+  Entry,
+  MediaField,
+  UnknownField,
+} from '@staticcms/core/interface';
 import type { CSSProperties } from 'react';
 
 export interface ImageProps<EF extends BaseField> {
@@ -17,6 +23,7 @@ export interface ImageProps<EF extends BaseField> {
   style?: CSSProperties;
   collection?: Collection<EF>;
   field?: MediaField;
+  entry?: Entry;
   'data-testid'?: string;
 }
 
@@ -27,11 +34,12 @@ const Image = <EF extends BaseField = UnknownField>({
   style,
   collection,
   field,
+  entry,
   'data-testid': dataTestId,
 }: ImageProps<EF>) => {
-  const entry = useAppSelector(selectEditingDraft);
+  const editingDraft = useAppSelector(selectEditingDraft);
 
-  const assetSource = useMediaAsset(src, collection, field, entry);
+  const assetSource = useMediaAsset(src, collection, field, entry ?? editingDraft);
 
   if (isEmpty(src)) {
     return (
