@@ -66,7 +66,8 @@ export interface HomepageData {
 export interface Release {
   readonly date: string;
   readonly version: string;
-  readonly description: string;
+  readonly type: 'major' | 'minor' | 'patch';
+  readonly description?: string;
 }
 
 export interface DocsData {

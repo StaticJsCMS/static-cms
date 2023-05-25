@@ -3,6 +3,8 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import format from 'date-fns/format';
+import parseISO from 'date-fns/parseISO';
 import Link from 'next/link';
 
 import Container from '../components/layout/Container';
@@ -10,6 +12,7 @@ import Page from '../components/layout/Page';
 import config from '../lib/config';
 import { getDocsMenuStaticProps } from '../lib/docs';
 import releaseData from '../lib/releases';
+import { isNotEmpty } from '../util/string.util';
 
 import type { DocsMenuProps } from '../lib/docs';
 
@@ -105,7 +108,7 @@ const Releases = ({ docsGroups, searchablePages }: DocsMenuProps) => {
                 A complete release history for Static CMS is available on GitHub.
                 <br />
                 <br />
-                Changelogs for recent major releases can also be found below.
+                Changelogs for all releases can also be found below.
               </Typography>
             </StyledTitle>
           </Container>
@@ -126,24 +129,24 @@ const Releases = ({ docsGroups, searchablePages }: DocsMenuProps) => {
                 <StyledReleaseSection key={release.version}>
                   <Typography variant="h3" color="primary.main">
                     <strong>{release.version}</strong>
-                  </Typography>
-                  <Typography variant="body1" component="div" color="inherit">
-                    <Box
-                      component="ul"
-                      sx={{
-                        paddingLeft: '16px',
-                        margin: '4px 0',
-                      }}
-                    >
-                      <li>
-                        <StyledLink
-                          href={`${config.repo_url}/releases/tag/${release.version}`}
-                          target="_blank"
-                        >
-                          Changelog
-                        </StyledLink>
-                      </li>
+                    &nbsp;&nbsp;
+                    <Box component="small" sx={{ fontSize: '16px', opacity: 0.75 }}>
+                      {format(parseISO(release.date), 'MMM dd, yyyy')}
                     </Box>
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    component="div"
+                    color="inherit"
+                    sx={{ display: 'flex', flexDirection: 'column' }}
+                  >
+                    {isNotEmpty(release.description) ? release.description : null}
+                    <StyledLink
+                      href={`${config.repo_url}/releases/tag/${release.version}`}
+                      target="_blank"
+                    >
+                      Changelog
+                    </StyledLink>
                   </Typography>
                 </StyledReleaseSection>
               ))}
