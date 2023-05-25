@@ -24,6 +24,7 @@ const TableCell = ({ children, emphasis = false, to, shrink = false }: TableCell
             flex
             px-4
             py-3
+            whitespace-nowrap
           "
         >
           {children}

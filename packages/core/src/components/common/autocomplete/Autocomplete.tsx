@@ -156,7 +156,7 @@ const Autocomplete = function <T>(
               `}
             >
               {options.length === 0 ? (
-                <div className="relative cursor-default select-none py-2 px-4 text-gray-800">
+                <div className="relative cursor-default select-none py-2 px-4 text-gray-800 dark:text-gray-300">
                   Nothing found.
                 </div>
               ) : (
