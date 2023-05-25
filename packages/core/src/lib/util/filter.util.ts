@@ -15,24 +15,36 @@ function entryMatchesFieldRule(entry: Entry, filterRule: FieldFilterRule): boole
   if (Array.isArray(fieldValue)) {
     if (Array.isArray(filterRule.value)) {
       if (filterRule.matchAll) {
-        return Boolean(filterRule.value.every(ruleValue => fieldValue.includes(ruleValue)));
+        return Boolean(
+          filterRule.value.every(ruleValue =>
+            fieldValue.find(v => String(v) === String(ruleValue)),
+          ),
+        );
       }
 
-      return Boolean(fieldValue.find(v => filterRule.value.includes(String(v))));
+      return Boolean(
+        fieldValue.find(v =>
+          Boolean(
+            (filterRule.value as string[]).find(
+              filterRuleValue => String(filterRuleValue) === String(v),
+            ),
+          ),
+        ),
+      );
     }
 
-    return fieldValue.includes(filterRule.value);
+    return Boolean(fieldValue.find(v => String(v) === String(filterRule.value)));
   }
 
   if (Array.isArray(filterRule.value)) {
     if (filterRule.matchAll) {
-      return Boolean(filterRule.value.every(ruleValue => fieldValue === ruleValue));
+      return Boolean(filterRule.value.every(ruleValue => String(fieldValue) === String(ruleValue)));
     }
 
-    return filterRule.value.includes(String(fieldValue));
+    return Boolean(filterRule.value.find(v => String(v) === String(fieldValue)));
   }
 
-  return fieldValue === filterRule.value;
+  return String(fieldValue) === String(filterRule.value);
 }
 
 function entryMatchesRule(entry: Entry, filterRule: FilterRule) {
