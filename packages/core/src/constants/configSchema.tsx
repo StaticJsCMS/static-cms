@@ -59,6 +59,36 @@ const i18nField = {
   ],
 };
 
+const filterRule = {
+  type: 'object',
+  properties: {
+    field: { type: 'string' },
+    pattern: { type: 'string' },
+    matchAll: { type: 'boolean' },
+    value: {
+      oneOf: [
+        { type: 'string' },
+        {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+        },
+      ],
+    },
+  },
+};
+
+const filterRules = {
+  oneOf: [
+    {
+      type: 'array',
+      items: filterRule,
+    },
+    filterRule,
+  ],
+};
+
 /**
  * Config for fields in both file and folder collections.
  */
@@ -203,14 +233,7 @@ function getConfigSchema() {
                 type: 'string',
               },
             },
-            filter: {
-              type: 'object',
-              properties: {
-                value: { type: 'string' },
-                field: { type: 'string' },
-              },
-              required: ['value', 'field'],
-            },
+            filter: filterRules,
             label_singular: { type: 'string' },
             label: { type: 'string' },
             sortable_fields: {
