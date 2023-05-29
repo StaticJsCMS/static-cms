@@ -13,6 +13,7 @@ import useHasChildErrors from '@staticcms/core/lib/hooks/useHasChildErrors';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import ListFieldWrapper from './components/ListFieldWrapper';
 import ListItem from './components/ListItem';
+import DelimitedListControl from './DelimitedListControl';
 import { resolveFieldKeyType, TYPES_KEY } from './typedListHelpers';
 
 import type { DragEndEvent } from '@dnd-kit/core';
@@ -40,7 +41,7 @@ interface SortableItemProps {
   id: string;
   item: ValueOrNestedValue;
   index: number;
-  valueType: ListValueType;
+  valueType: ListValueType.MIXED | ListValueType.MULTIPLE;
   handleRemove: (index: number, event: MouseEvent) => void;
   entry: Entry<ObjectValue>;
   field: ListField;
@@ -125,6 +126,7 @@ const SortableItem: FC<SortableItemProps> = ({
 export enum ListValueType {
   MULTIPLE,
   MIXED,
+  DELIMITED,
 }
 
 function getFieldsDefault(
@@ -175,23 +177,25 @@ function getFieldsDefault(
   }, initialValue as ObjectValue);
 }
 
-const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
-  entry,
-  field,
-  fieldsErrors,
-  submitted,
-  disabled,
-  duplicate,
-  hidden,
-  locale,
-  path,
-  value,
-  i18n,
-  errors,
-  forSingleList,
-  onChange,
-  t,
-}) => {
+const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = props => {
+  const {
+    entry,
+    field,
+    fieldsErrors,
+    submitted,
+    disabled,
+    duplicate,
+    hidden,
+    locale,
+    path,
+    value,
+    i18n,
+    errors,
+    forSingleList,
+    onChange,
+    t,
+  } = props;
+
   const internalValue = useMemo(() => value ?? [], [value]);
   const [keys, setKeys] = useState(Array.from({ length: internalValue.length }, () => uuid()));
 
@@ -201,7 +205,7 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
     } else if ('types' in field) {
       return ListValueType.MIXED;
     } else {
-      return null;
+      return ListValueType.DELIMITED;
     }
   }, [field]);
 
@@ -295,15 +299,15 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
 
   const hasChildErrors = useHasChildErrors(path, fieldsErrors, i18n, false);
 
-  if (valueType === null) {
-    return null;
-  }
-
   const label = field.label ?? field.name;
   const labelSingular = field.label_singular ? field.label_singular : field.label ?? field.name;
   const listLabel = internalValue.length === 1 ? labelSingular : label;
 
   const types = field[TYPES_KEY];
+
+  if (valueType === ListValueType.DELIMITED) {
+    return <DelimitedListControl {...props} />;
+  }
 
   return (
     <div key="list-widget">

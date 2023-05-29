@@ -52,7 +52,11 @@ function getConfigUrl() {
     console.info(`[StaticCMS] Using config file path: "${configLinkEl.href}"`);
     return configLinkEl.href;
   }
-  return 'config.yml';
+
+  return `${window.location.origin}${window.location.pathname.slice(
+    0,
+    window.location.pathname.lastIndexOf('/'),
+  )}/config.yml`;
 }
 
 const setFieldDefaults =

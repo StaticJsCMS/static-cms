@@ -130,12 +130,20 @@ const EntryCard: FC<TranslatedProps<EntryCardProps>> = ({
   }
 
   return (
-    <Card className="h-full">
+    <Card className="h-full" title={summary}>
       <CardActionArea to={path}>
-        {image && imageField ? <CardMedia height="140" image={image} /> : null}
+        {image && imageField ? (
+          <CardMedia
+            height="140"
+            image={image}
+            collection={collection}
+            field={imageField}
+            entry={entry}
+          />
+        ) : null}
         <CardContent>
           <div className="flex w-full items-center justify-between">
-            <div>{summary}</div>
+            <div className="whitespace-nowrap overflow-hidden text-ellipsis">{summary}</div>
             {hasLocalBackup ? (
               <InfoIcon
                 className="

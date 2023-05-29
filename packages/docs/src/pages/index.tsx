@@ -3,10 +3,11 @@ import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
-import { styled, useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { styled, useTheme } from '@mui/material/styles';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useMemo } from 'react';
 
 import DateDisplay from '../components/DateDisplay';
 import Container from '../components/layout/Container';
@@ -250,6 +251,8 @@ const StyledFeatureText = styled('div')`
 const Home = ({ docsGroups, searchablePages }: DocsMenuProps) => {
   const theme = useTheme();
 
+  const majorMinorThemes = useMemo(() => releases.filter(r => r.type !== 'patch'), []);
+
   return (
     <Page url="/" docsGroups={docsGroups} searchablePages={searchablePages} fullWidth>
       <StyledHomagePageContent>
@@ -325,11 +328,11 @@ const Home = ({ docsGroups, searchablePages }: DocsMenuProps) => {
           <Container>
             <StyledReleasesSectionContent>
               {[...Array(3)].map((_, index) => {
-                if (index >= releases.length) {
+                if (index >= majorMinorThemes.length) {
                   return null;
                 }
 
-                const release = releases[index];
+                const release = majorMinorThemes[index];
                 return (
                   <CardActionArea
                     key={release.version}

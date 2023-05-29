@@ -174,6 +174,7 @@ function traverseFields<EF extends BaseField>(
     | ListField
     | ObjectField
     | undefined;
+
   if (matchedField && isMediaField(folderKey, matchedField)) {
     return folderFormatter(
       matchedField[folderKey] ? matchedField[folderKey]! : `{{${folderKey}}}`,
@@ -185,12 +186,7 @@ function traverseFields<EF extends BaseField>(
     );
   }
 
-  for (const f of fields) {
-    const childField: Field<EF> = { ...f };
-    if (isMediaField(folderKey, childField) && !childField[folderKey]) {
-      // add identity template if doesn't exist
-      childField[folderKey] = `{{${folderKey}}}`;
-    }
+  for (const childField of fields) {
     const folder = folderFormatter(
       isMediaField(folderKey, childField) ? childField[folderKey] ?? '' : '',
       entryMap,
@@ -206,7 +202,7 @@ function traverseFields<EF extends BaseField>(
         config,
         collection,
         entryMap,
-        childField,
+        field,
         childField.fields,
         folder,
       );
@@ -216,7 +212,7 @@ function traverseFields<EF extends BaseField>(
         config,
         collection,
         entryMap,
-        childField,
+        field,
         childField.types,
         folder,
       );

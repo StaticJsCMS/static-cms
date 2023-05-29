@@ -410,6 +410,16 @@ collections:
                   - label: Description
                     name: description
                     widget: text
+          - name: comma_separated_list
+            label: Comma Separated List
+            widget: list
+          - name: delimiter_separated_list
+            label: Custom Delimiter (Semicolon) Separated List
+            widget: list
+            delimiter: ';'
+            default:
+              - 'tag-1'
+              - 'tag-2'
           - name: string_list
             label: String List
             widget: list

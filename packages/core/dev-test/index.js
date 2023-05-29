@@ -11,13 +11,14 @@ const PostPreview = ({ entry, widgetFor }) => {
   );
 };
 
-const PostPreviewCard = ({ entry, theme, hasLocalBackup, widgetFor }) => {
+const PostPreviewCard = ({ entry, theme, hasLocalBackup, collection }) => {
   const date = new Date(entry.data.date);
 
   const month = date.getMonth() + 1;
   const day = date.getDate();
 
-  const image = entry.data.image;
+  const imageField = useMemo(() => collection.fields.find((f) => f.name === 'image'), []);
+  const image = useMediaAsset(entry.data.image, collection, imageField, entry);
 
   return h(
     'div',

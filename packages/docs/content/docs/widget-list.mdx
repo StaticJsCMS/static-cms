@@ -5,7 +5,7 @@ weight: 17
 ---
 
 - **Name:** `list`
-- **UI:** The list widget contains a repeatable child widget, with controls for adding, deleting, and re-ordering the repeated widgets.
+- **UI:** The list widget contains a repeatable child widget, with controls for adding, deleting, and re-ordering the repeated widgets. If no 'fields' or 'types' are provided, the list widget defaults to a text input for entering comma-separated values.
 - **Data type:** List of widget values
 
 The list widget allows you to create a repeatable item in the UI which saves as a list of widget values. You can choose any widget as a child of a list widget—even other lists.
@@ -14,19 +14,20 @@ The list widget allows you to create a repeatable item in the UI which saves as 
 
 For common options, see [Common widget options](/docs/widgets#common-widget-options).
 
-| Name           | Type                   | Default                               | Description                                                                                                                                                                              |
-| -------------- | ---------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| default        | string                 | `[ <default from the child fields> ]` | _Optional_. The default values for fields. Also accepts an array of items                                                                                                                |
-| allow_add      | boolean                | `true`                                | _Optional_. `false` - Hides the button to add additional items                                                                                                                           |
-| collapsed      | boolean                | `true`                                | _Optional_. `true` - The list and entries collapse by default.                                                                                                                           |
-| summary        | string                 |                                       | _Optional_. The label displayed on collapsed entries. _Ignored for single field lists._                                                                                                  |
-| label_singular | string                 | `label`                               | _Optional_. The text to show on the add button                                                                                                                                           |
-| fields         | list of widgets        | []                                    | _Optional_. A nested list of multiple widget fields to be included in each repeatable iteration                                                                                          |
-| min            | number                 |                                       | _Optional_. Minimum number of items in the list                                                                                                                                          |
-| max            | number                 |                                       | _Optional_. Maximum number of items in the list                                                                                                                                          |
-| add_to_top     | boolean                | `false`                               | _Optional_. <ul><li>`true` - New entries will be added to the top of the list</li><li>`false` - New entries will be added to the bottom of the list</li></ul>                            |
-| types          | list of object widgets |                                       | _Optional_. A nested list of object widgets representing the available types for items in the list. Takes priority over `fields`.                                                        |
-| type_key       | string                 | `'type'`                              | _Optional_. The name of the individual field that will be added to every item in list representing the name of the object widget that item belongs to. Ignored if `types` is not defined |
+| Name           | Type                   | Default                               | Description                                                                                                                                                                                                       |
+| -------------- | ---------------------- | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| default        | string                 | `[ <default from the child fields> ]` | _Optional_. The default values for fields. Also accepts an array of items                                                                                                                                         |
+| allow_add      | boolean                | `true`                                | _Optional_. `false` - Hides the button to add additional items. Ignored if both `fields` and `types` are not defined                                                                                              |
+| collapsed      | boolean                | `true`                                | _Optional_. `true` - The list and entries collapse by default. Ignored if both `fields` and `types` are not defined                                                                                               |
+| summary        | string                 |                                       | _Optional_. The label displayed on collapsed entries. _Ignored for single field lists._                                                                                                                           |
+| label_singular | string                 | `label`                               | _Optional_. The text to show on the add button                                                                                                                                                                    |
+| fields         | list of widgets        | []                                    | _Optional_. A nested list of multiple widget fields to be included in each repeatable iteration                                                                                                                   |
+| min            | number                 |                                       | _Optional_. Minimum number of items in the list                                                                                                                                                                   |
+| max            | number                 |                                       | _Optional_. Maximum number of items in the list                                                                                                                                                                   |
+| add_to_top     | boolean                | `false`                               | _Optional_. <ul><li>`true` - New entries will be added to the top of the list</li><li>`false` - New entries will be added to the bottom of the list</li></ul>Ignored if both `fields` and `types` are not defined |
+| types          | list of object widgets |                                       | _Optional_. A nested list of object widgets representing the available types for items in the list. Takes priority over `fields`.                                                                                 |
+| type_key       | string                 | `'type'`                              | _Optional_. The name of the individual field that will be added to every item in list representing the name of the object widget that item belongs to. Ignored if `types` is not defined                          |
+| delimiter      | string                 | `','`                                 | _Optional_. The delimiter to use when entering a delimiter separated list. Ignored if `fields` or `types` are defined                                                                                             |
 
 ## Examples
 
@@ -402,6 +403,32 @@ fields: [
     ],
   },
 ],
+```
+
+</CodeTabs>
+
+### Delimiter Separated List
+
+<CodeTabs>
+```yaml
+name: tags
+label: Tags
+widget: list
+delimiter: ';' # Default: ','
+default:
+  - 'tag-1'
+  - 'tag-2'
+```
+
+```js
+name: 'tags',
+label: 'Tags',
+widget: 'list',
+delimiter: ';', // Default: ','
+default: [
+  'tag-1',
+  'tag-2'
+]
 ```
 
 </CodeTabs>

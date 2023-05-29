@@ -7,9 +7,10 @@ import type { ReactNode } from 'react';
 interface CardProps {
   children: ReactNode | ReactNode[];
   className?: string;
+  title?: string;
 }
 
-const Card = ({ children, className }: CardProps) => {
+const Card = ({ children, className, title }: CardProps) => {
   return (
     <div
       className={classNames(
@@ -28,6 +29,7 @@ const Card = ({ children, className }: CardProps) => {
         `,
         className,
       )}
+      title={title}
     >
       {children}
     </div>

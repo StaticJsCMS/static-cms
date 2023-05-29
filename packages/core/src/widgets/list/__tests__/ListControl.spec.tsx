@@ -15,6 +15,11 @@ import type { ListField, ValueOrNestedValue } from '@staticcms/core/interface';
 
 jest.unmock('uuid');
 
+const delimitedListField: ListField = {
+  widget: 'list',
+  name: 'delimited',
+};
+
 const singletonListField: ListField = {
   widget: 'list',
   name: 'singleton',
@@ -438,6 +443,80 @@ describe(ListControl.name, () => {
       rerender({ value: ['value 1', 'value 2'] });
 
       expect(label.textContent).toBe('Things');
+    });
+  });
+
+  describe('delimited list', () => {
+    it('renders text input instead of normal list setup', async () => {
+      const { queryByTestId, getByTestId } = renderControl({
+        field: delimitedListField,
+        value: ['Value 1', 'Value 2'],
+      });
+
+      expect(queryByTestId('list-widget-children')).not.toBeInTheDocument();
+      expect(queryByTestId('list-expand-button')).not.toBeInTheDocument();
+      expect(queryByTestId('list-add')).not.toBeInTheDocument();
+
+      const itemOne = queryByTestId('object-control-0');
+      expect(itemOne).not.toBeInTheDocument();
+      const itemTwo = queryByTestId('object-control-1');
+      expect(itemTwo).not.toBeInTheDocument();
+
+      const inputWrapper = getByTestId('text-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
+      expect(input).toBeVisible();
+      expect(input).toHaveValue('Value 1,Value 2');
+    });
+
+    it('renders empty', async () => {
+      const { getByTestId } = await renderControl({
+        field: delimitedListField,
+        value: [],
+      });
+
+      const inputWrapper = getByTestId('text-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
+      expect(input).toBeVisible();
+      expect(input).toHaveValue('');
+    });
+
+    it('ignores collapsed value', async () => {
+      const { getByTestId } = await renderControl({
+        field: { ...delimitedListField, collapsed: true },
+        value: ['Value 1', 'Value 2'],
+      });
+
+      const inputWrapper = getByTestId('text-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
+      expect(input).toBeVisible();
+    });
+
+    it('trims input before outputting new value', async () => {
+      const {
+        getByTestId,
+        props: { onChange },
+      } = await renderControl({ field: delimitedListField, value: ['Value 1', 'Value 2'] });
+
+      const inputWrapper = getByTestId('text-input');
+      const input = inputWrapper.getElementsByTagName('input')[0];
+
+      await act(async () => {
+        await userEvent.type(input, ',   I am a new value with extra whitespace!              ');
+      });
+
+      expect(onChange).toHaveBeenCalledTimes(0);
+
+      await waitFor(() => {
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange).toHaveBeenCalledWith([
+          'Value 1',
+          'Value 2',
+          'I am a new value with extra whitespace!',
+        ]);
+        expect(input).toHaveValue(
+          'Value 1,Value 2,   I am a new value with extra whitespace!              ',
+        );
+      });
     });
   });
 

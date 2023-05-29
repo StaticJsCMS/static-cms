@@ -4,21 +4,24 @@ import Field from '@staticcms/core/components/common/field/Field';
 import TextField from '@staticcms/core/components/common/text-field/TextField';
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 
-import type { StringOrTextField, WidgetControlProps } from '@staticcms/core/interface';
+import type { ListField, ValueOrNestedValue, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC } from 'react';
 
-const StringControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
-  value,
-  label,
-  errors,
-  disabled,
+const DelimitedListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({
   field,
-  forSingleList,
+  label,
+  disabled,
   duplicate,
+  value,
+  errors,
+  forSingleList,
   controlled,
   onChange,
 }) => {
-  const rawValue = useMemo(() => value ?? '', [value]);
+  const delimiter = useMemo(() => field.delimiter ?? ',', [field.delimiter]);
+
+  const rawValue = useMemo(() => (value ?? []).join(delimiter), [delimiter, value]);
+
   const [internalRawValue, setInternalValue] = useState(rawValue);
   const internalValue = useMemo(
     () => (controlled || duplicate ? rawValue : internalRawValue),
@@ -29,7 +32,8 @@ const StringControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   const ref = useRef<HTMLInputElement | null>(null);
 
   const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setInternalValue(event.target.value);
+    const newRawValue = event.target.value;
+    setInternalValue(newRawValue);
   }, []);
 
   useEffect(() => {
@@ -37,8 +41,9 @@ const StringControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
       return;
     }
 
-    onChange(debouncedInternalValue);
-  }, [debouncedInternalValue, onChange, rawValue]);
+    const newValue = debouncedInternalValue.split(delimiter).map(v => v.trim());
+    onChange(newValue);
+  }, [debouncedInternalValue, delimiter, onChange, rawValue]);
 
   return (
     <Field
@@ -61,4 +66,4 @@ const StringControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   );
 };
 
-export default StringControl;
+export default DelimitedListControl;
