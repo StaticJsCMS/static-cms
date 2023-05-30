@@ -11,6 +11,7 @@ import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
 import { deleteLocalBackup, loadEntry } from '@staticcms/core/actions/entries';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectAllowDeletion } from '@staticcms/core/lib/util/collection.util';
 import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
@@ -44,6 +45,7 @@ export interface EditorToolbarProps {
   toggleScrollSync: MouseEventHandler;
   toggleI18n: MouseEventHandler;
   slug?: string | undefined;
+  className?: string;
 }
 
 const EditorToolbar = ({
@@ -67,6 +69,7 @@ const EditorToolbar = ({
   toggleScrollSync,
   toggleI18n,
   slug,
+  className,
 }: TranslatedProps<EditorToolbarProps>) => {
   const canCreate = useMemo(
     () => ('folder' in collection && collection.create) ?? false,
@@ -164,7 +167,15 @@ const EditorToolbar = ({
 
   return useMemo(
     () => (
-      <div className="flex gap-2">
+      <div
+        className={classNames(
+          `
+            flex
+            gap-2
+          `,
+          className,
+        )}
+      >
         {showI18nToggle || showPreviewToggle || canDelete ? (
           <Menu
             key="extra-menu"
@@ -229,6 +240,7 @@ const EditorToolbar = ({
       </div>
     ),
     [
+      className,
       showI18nToggle,
       showPreviewToggle,
       canDelete,

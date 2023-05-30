@@ -12,7 +12,7 @@ import QuickCreate from './QuickCreate';
 import SettingsDropdown from './SettingsDropdown';
 
 import type { Breadcrumb, TranslatedProps } from '@staticcms/core/interface';
-import type { ComponentType, ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
 export interface NavbarProps {
   breadcrumbs?: Breadcrumb[];
@@ -85,4 +85,4 @@ const Navbar = ({
   );
 };
 
-export default translate()(Navbar) as ComponentType<NavbarProps>;
+export default translate()(Navbar) as FC<NavbarProps>;

@@ -10,7 +10,20 @@ export interface BreadcrumbsProps {
 
 const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs }) => {
   return (
-    <div className="flex h-full items-center text-xl font-semibold gap-1 text-gray-800 dark:text-white">
+    <div
+      className="
+        flex
+        h-full
+        w-breadcrumb-title
+        md:w-full
+        items-center
+        text-xl
+        font-semibold
+        gap-1
+        text-gray-800
+        dark:text-white
+      "
+    >
       <div className="hidden md:flex">
         {breadcrumbs.map((breadcrumb, index) =>
           breadcrumb.name ? (
@@ -31,7 +44,16 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs }) => {
           ) : null,
         )}
       </div>
-      <div className="flex md:hidden">
+      <div
+        className="
+          block
+          md:hidden
+          overflow-hidden
+          whitespace-nowrap
+          text-ellipsis
+          w-full
+        "
+      >
         {breadcrumbs.length > 0 ? breadcrumbs[breadcrumbs.length - 1].name : ''}
       </div>
     </div>

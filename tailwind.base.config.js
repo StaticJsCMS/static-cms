@@ -28,6 +28,7 @@ module.exports = {
         "media-preview-image": "126px",
         "image-card": "120px",
         "card-grid": "calc(100% + 8px)",
+        "breadcrumb-title": "calc(100vw - 112px)",
       },
       maxWidth: {
         "media-search": "400px",

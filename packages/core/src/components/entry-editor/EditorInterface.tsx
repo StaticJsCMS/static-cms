@@ -298,6 +298,7 @@ const EditorInterface = ({
           toggleScrollSync={handleToggleScrollSync}
           toggleI18n={handleToggleI18n}
           slug={slug}
+          className="hidden md:flex"
         />
       }
     >
