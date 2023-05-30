@@ -15,7 +15,7 @@ interface ViewStyleControlPros {
 
 const ViewStyleControl = ({ viewStyle, onChangeViewStyle }: ViewStyleControlPros) => {
   return (
-    <div className="flex items-center gap-1.5 mr-1">
+    <div className="flex items-center gap-1.5 lg:mr-1">
       <IconButton
         variant="text"
         className={classNames(viewStyle === VIEW_STYLE_TABLE && 'text-blue-500 dark:text-blue-500')}

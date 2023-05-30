@@ -183,14 +183,14 @@ const CollectionView = ({
   const collectionDescription = collection?.description;
 
   return (
-    <div className="flex flex-col h-full px-5 pt-4">
-      <div className="flex items-center mb-4 flex-col gap-4 sm:gap-0 sm:flex-row">
+    <div className="flex flex-col h-full px-5 pt-4 overflow-y-auto styled-scrollbars">
+      <div className="flex items-center mb-4 flex-row gap-4 sm:gap-0">
         {isSearchResults ? (
           <>
             <div className="flex-grow">
               <div>{t(searchResultKey, { searchTerm, collection: collection?.label })}</div>
             </div>
-            <CollectionControls viewStyle={viewStyle} onChangeViewStyle={changeViewStyle} t={t} />
+            <CollectionControls viewStyle={viewStyle} onChangeViewStyle={changeViewStyle} />
           </>
         ) : (
           <>
@@ -203,7 +203,6 @@ const CollectionView = ({
               sort={sort}
               viewFilters={viewFilters ?? []}
               viewGroups={viewGroups ?? []}
-              t={t}
               onFilterClick={onFilterClick}
               onGroupClick={onGroupClick}
               filter={filter}

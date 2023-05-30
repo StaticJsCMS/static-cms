@@ -80,7 +80,7 @@ const CollectionHeader: FC<TranslatedProps<CollectionHeaderProps>> = ({ collecti
           <div className="max-w-collection-title">{pluralLabel}</div>
         </h2>
         {newEntryUrl ? (
-          <Button to={newEntryUrl} className="hidden xs:flex">
+          <Button to={newEntryUrl} className="hidden sm:flex">
             {t('collection.collectionTop.newButton', {
               collectionLabel: collectionLabelSingular || pluralLabel,
             })}

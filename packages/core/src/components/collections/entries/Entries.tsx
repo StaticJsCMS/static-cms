@@ -81,7 +81,20 @@ const Entries = ({
     );
   }
 
-  return <div>{t('collection.entries.noEntries')}</div>;
+  return (
+    <div
+      className="
+        py-2
+        px-3
+        rounded-md
+        bg-yellow-300/75
+        dark:bg-yellow-800/75
+        text-sm
+      "
+    >
+      {t('collection.entries.noEntries')}
+    </div>
+  );
 };
 
 export default translate()(Entries);

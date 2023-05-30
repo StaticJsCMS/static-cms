@@ -28,7 +28,6 @@ const BottomNavigation: FC<BottomNavigationProps> = ({ collection }) => {
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const toggleMobileMenu = useCallback(() => {
-    console.log('CLICK!');
     setMobileOpen(old => !old);
   }, []);
 
