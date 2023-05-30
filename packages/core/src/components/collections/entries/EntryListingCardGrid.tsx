@@ -47,7 +47,7 @@ const CardWrapper = ({
             ? style.left ?? COLLECTION_CARD_MARGIN * columnIndex
             : style.left
         }`,
-      ),
+      ) + 4,
     [columnIndex, style.left],
   );
 
@@ -138,12 +138,22 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
   }, [cardHeights, prevCardHeights.length]);
 
   return (
-    <div className="relative w-full h-full">
+    <div
+      className="
+        relative
+        w-card-grid
+        h-full
+        overflow-hidden
+        -ml-1
+      "
+    >
       <AutoSizer onResize={handleResize}>
         {({ height = 0, width = 0 }) => {
+          const calculatedWidth = width - 4;
           const columnWidthWithGutter = COLLECTION_CARD_WIDTH + COLLECTION_CARD_MARGIN;
-          const columnCount = Math.max(Math.floor(width / columnWidthWithGutter), 1);
-          const nonGutterSpace = (width - COLLECTION_CARD_MARGIN * columnCount) / width;
+          const columnCount = Math.max(Math.floor(calculatedWidth / columnWidthWithGutter), 1);
+          const nonGutterSpace =
+            (calculatedWidth - COLLECTION_CARD_MARGIN * columnCount) / calculatedWidth;
           const columnWidth = (1 / columnCount) * nonGutterSpace;
 
           const rowCount = Math.ceil(entryData.length / columnCount);
@@ -157,7 +167,7 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
                 `,
               )}
               style={{
-                width,
+                width: calculatedWidth,
                 height,
               }}
             >
@@ -165,8 +175,8 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
                 columnCount={columnCount}
                 columnWidth={index =>
                   index + 1 === columnCount
-                    ? width * columnWidth
-                    : width * columnWidth + COLLECTION_CARD_MARGIN
+                    ? calculatedWidth * columnWidth
+                    : calculatedWidth * columnWidth + COLLECTION_CARD_MARGIN
                 }
                 rowCount={rowCount}
                 rowHeight={index => {
@@ -189,7 +199,7 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
 
                   return rowHeight;
                 }}
-                width={width}
+                width={calculatedWidth}
                 height={height}
                 itemData={
                   {
@@ -203,7 +213,7 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
                 onScroll={onScroll}
                 className={classNames(
                   `
-                    overflow-hidden
+                    !overflow-x-hidden
                     overflow-y-auto
                     styled-scrollbars
                   `,

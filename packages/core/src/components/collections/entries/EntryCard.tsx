@@ -113,52 +113,64 @@ const EntryCard: FC<TranslatedProps<EntryCardProps>> = ({
 
   if (PreviewCardComponent) {
     return (
-      <Card>
-        <CardActionArea to={path}>
-          <PreviewCardComponent
-            collection={collection}
-            fields={fields}
-            entry={entry}
-            widgetFor={widgetFor}
-            widgetsFor={widgetsFor}
-            theme={theme}
-            hasLocalBackup={hasLocalBackup}
-          />
-        </CardActionArea>
-      </Card>
+      <div className="h-full w-full relative overflow-visible">
+        <div className="absolute -inset-1 pr-2">
+          <div className="p-1 h-full w-full">
+            <Card>
+              <CardActionArea to={path}>
+                <PreviewCardComponent
+                  collection={collection}
+                  fields={fields}
+                  entry={entry}
+                  widgetFor={widgetFor}
+                  widgetsFor={widgetsFor}
+                  theme={theme}
+                  hasLocalBackup={hasLocalBackup}
+                />
+              </CardActionArea>
+            </Card>
+          </div>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card className="h-full" title={summary}>
-      <CardActionArea to={path}>
-        {image && imageField ? (
-          <CardMedia
-            height="140"
-            image={image}
-            collection={collection}
-            field={imageField}
-            entry={entry}
-          />
-        ) : null}
-        <CardContent>
-          <div className="flex w-full items-center justify-between">
-            <div className="whitespace-nowrap overflow-hidden text-ellipsis">{summary}</div>
-            {hasLocalBackup ? (
-              <InfoIcon
-                className="
+    <div className="h-full w-full relative overflow-visible">
+      <div className="absolute -inset-1 pr-2">
+        <div className="p-1 h-full w-full">
+          <Card className="h-full" title={summary}>
+            <CardActionArea to={path}>
+              {image && imageField ? (
+                <CardMedia
+                  height="140"
+                  image={image}
+                  collection={collection}
+                  field={imageField}
+                  entry={entry}
+                />
+              ) : null}
+              <CardContent>
+                <div className="flex w-full items-center justify-between">
+                  <div className="whitespace-nowrap overflow-hidden text-ellipsis">{summary}</div>
+                  {hasLocalBackup ? (
+                    <InfoIcon
+                      className="
                   w-5
                   h-5
                   text-blue-600
                   dark:text-blue-300
                 "
-                title={t('ui.localBackup.hasLocalBackup')}
-              />
-            ) : null}
-          </div>
-        </CardContent>
-      </CardActionArea>
-    </Card>
+                      title={t('ui.localBackup.hasLocalBackup')}
+                    />
+                  ) : null}
+                </div>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </div>
+      </div>
+    </div>
   );
 };
 

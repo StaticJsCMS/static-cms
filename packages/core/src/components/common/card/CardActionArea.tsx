@@ -22,6 +22,10 @@ const CardActionArea = ({ to, children }: CardActionAreaProps) => {
         justify-start
         hover:bg-gray-200
         dark:hover:bg-slate-700/70
+        focus:outline-none
+        focus:ring-4
+        focus:ring-gray-200
+        dark:focus:ring-slate-700
       "
     >
       {children}

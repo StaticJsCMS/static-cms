@@ -183,7 +183,7 @@ const CollectionView = ({
   const collectionDescription = collection?.description;
 
   return (
-    <div className="flex flex-col h-full px-5 pt-4 overflow-y-auto styled-scrollbars">
+    <div className="flex flex-col h-full px-5 pt-4 overflow-hidden">
       <div className="flex items-center mb-4 flex-row gap-4 sm:gap-0">
         {isSearchResults ? (
           <>

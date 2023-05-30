@@ -6,10 +6,10 @@ import { loadEntries, traverseCollectionCursor } from '@staticcms/core/actions/e
 import useEntries from '@staticcms/core/lib/hooks/useEntries';
 import useGroups from '@staticcms/core/lib/hooks/useGroups';
 import { Cursor } from '@staticcms/core/lib/util';
-import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectCollectionEntriesCursor } from '@staticcms/core/reducers/selectors/cursors';
 import { selectEntriesLoaded, selectIsFetching } from '@staticcms/core/reducers/selectors/entries';
 import { useAppDispatch } from '@staticcms/core/store/hooks';
+import Button from '../../common/button/Button';
 import Entries from './Entries';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
@@ -104,39 +104,103 @@ const EntriesCollection = ({
     [collection, dispatch],
   );
 
+  const [selectedGroup, setSelectedGroup] = useState(0);
+  const handleGroupClick = useCallback(
+    (index: number) => () => {
+      setSelectedGroup(index);
+    },
+    [],
+  );
+
   if (groups && groups.length > 0) {
     return (
       <>
-        {groups.map((group, index) => {
-          const title = getGroupTitle(group, t);
-          return (
-            <div key={group.id} id={group.id}>
-              <h2
-                className={classNames(
-                  `
-                    px-2
-                    pt-4
-                    pb-2
-                  `,
-                  index === 0 && 'pt-0',
-                )}
-              >
-                {title}
-              </h2>
-              <Entries
-                collection={collection}
-                entries={getGroupEntries(filteredEntries, group.paths)}
-                isFetching={isFetching}
-                collectionName={collection.label}
-                viewStyle={viewStyle}
-                cursor={cursor}
-                handleCursorActions={handleCursorActions}
-                page={page}
-                filterTerm={filterTerm}
-              />
+        <div
+          className="
+            pb-3
+          "
+        >
+          <div
+            className="
+              -m-1
+            "
+          >
+            <div
+              className="
+                flex
+                gap-2
+                p-1
+                overflow-x-auto
+                hide-scrollbar
+              "
+            >
+              {groups.map((group, index) => {
+                const title = getGroupTitle(group, t);
+                return (
+                  <Button
+                    key={index}
+                    variant={index === selectedGroup ? 'contained' : 'text'}
+                    onClick={handleGroupClick(index)}
+                    className="whitespace-nowrap"
+                  >
+                    {title}
+                  </Button>
+                );
+              })}
+              {groups.map((group, index) => {
+                const title = getGroupTitle(group, t);
+                return (
+                  <Button
+                    key={index}
+                    variant={index === selectedGroup ? 'contained' : 'text'}
+                    onClick={handleGroupClick(index)}
+                    className="whitespace-nowrap"
+                  >
+                    {title}
+                  </Button>
+                );
+              })}
+              {groups.map((group, index) => {
+                const title = getGroupTitle(group, t);
+                return (
+                  <Button
+                    key={index}
+                    variant={index === selectedGroup ? 'contained' : 'text'}
+                    onClick={handleGroupClick(index)}
+                    className="whitespace-nowrap"
+                  >
+                    {title}
+                  </Button>
+                );
+              })}
+              {groups.map((group, index) => {
+                const title = getGroupTitle(group, t);
+                return (
+                  <Button
+                    key={index}
+                    variant={index === selectedGroup ? 'contained' : 'text'}
+                    onClick={handleGroupClick(index)}
+                    className="whitespace-nowrap"
+                  >
+                    {title}
+                  </Button>
+                );
+              })}
             </div>
-          );
-        })}
+          </div>
+        </div>
+        <Entries
+          key={`entries-with-group-${groups[selectedGroup].id}`}
+          collection={collection}
+          entries={getGroupEntries(filteredEntries, groups[selectedGroup].paths)}
+          isFetching={isFetching}
+          collectionName={collection.label}
+          viewStyle={viewStyle}
+          cursor={cursor}
+          handleCursorActions={handleCursorActions}
+          page={page}
+          filterTerm={filterTerm}
+        />
       </>
     );
   }
