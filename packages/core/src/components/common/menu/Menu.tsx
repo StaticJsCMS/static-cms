@@ -17,9 +17,12 @@ export interface MenuProps {
   size?: BaseBaseProps['size'];
   rounded?: boolean | 'no-padding';
   rootClassName?: string;
+  iconClassName?: string;
   buttonClassName?: string;
+  labelClassName?: string;
   children: ReactNode | ReactNode[];
   hideDropdownIcon?: boolean;
+  hideDropdownIconOnMobile?: boolean;
   hideLabel?: boolean;
   keepMounted?: boolean;
   disabled?: boolean;
@@ -34,9 +37,12 @@ const Menu = ({
   size = 'medium',
   rounded = false,
   rootClassName,
+  iconClassName,
   buttonClassName,
+  labelClassName,
   children,
   hideDropdownIcon = false,
+  hideDropdownIconOnMobile = false,
   hideLabel = false,
   keepMounted = false,
   disabled = false,
@@ -84,14 +90,20 @@ const Menu = ({
             <StartIcon
               className={classNames(
                 `-ml-0.5 h-5 w-5`,
-                (!hideLabel || !hideDropdownIcon) && 'mr-1.5',
+                !hideLabel && !hideDropdownIcon && 'mr-1.5',
+                hideDropdownIconOnMobile && 'mr-0 md:mr-1.5',
+                iconClassName,
               )}
             />
           ) : null}
-          {!hideLabel ? <div>{label}</div> : null}
+          {!hideLabel ? <div className={labelClassName}>{label}</div> : null}
           {!hideDropdownIcon ? (
             <KeyboardArrowDownIcon
-              className={classNames(`-mr-0.5 h-5 w-5`, !hideLabel && 'ml-2')}
+              className={classNames(
+                `-mr-0.5 h-5 w-5`,
+                !hideLabel && 'ml-2',
+                hideDropdownIconOnMobile && '!hidden !md:block',
+              )}
               aria-hidden="true"
             />
           ) : null}

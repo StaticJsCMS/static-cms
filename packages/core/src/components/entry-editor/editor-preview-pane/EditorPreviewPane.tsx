@@ -111,10 +111,11 @@ export interface EditorPreviewPaneProps {
   entry: Entry;
   previewInFrame: boolean;
   editorSize: EditorSize;
+  showMobilePreview: boolean;
 }
 
 const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
-  const { editorSize, entry, collection, fields, previewInFrame, t } = props;
+  const { editorSize, entry, collection, fields, previewInFrame, showMobilePreview, t } = props;
 
   const config = useAppSelector(selectConfig);
 
@@ -179,13 +180,21 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
       <div
         className={classNames(
           `
-            h-main-mobile
-            md:h-main
+            h-main-mobile-editor
+            md:h-main-tablet-editor
+            lg:h-main
             absolute
-            top-16
+            top-28
+            lg:top-16
             right-0
+            w-full
           `,
-          editorSize === EDITOR_SIZE_COMPACT ? 'w-preview' : 'w-6/12',
+          editorSize === EDITOR_SIZE_COMPACT ? 'lg:w-preview' : 'lg:w-6/12',
+          !showMobilePreview &&
+            `
+              hidden
+              lg:block
+            `,
         )}
       >
         {!entry || !entry.data ? null : (
@@ -251,6 +260,7 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
     previewInFrame,
     previewProps,
     previewStyles,
+    showMobilePreview,
     t,
   ]);
 };

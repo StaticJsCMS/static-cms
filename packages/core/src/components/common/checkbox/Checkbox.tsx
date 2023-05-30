@@ -52,7 +52,7 @@ const Checkbox: FC<CheckboxProps> = ({ checked, disabled = false, onChange }) =>
         ref={inputRef}
         type="checkbox"
         checked={checked}
-        className="sr-only peer"
+        className="sr-only peer hide-tap"
         disabled={disabled}
         onChange={onChange}
         onClick={handleNoop}

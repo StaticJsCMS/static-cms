@@ -5,6 +5,8 @@ module.exports = {
       height: {
         main: "calc(100vh - 64px)",
         "main-mobile": "calc(100vh - 128px)",
+        "main-mobile-editor": "calc(100vh - 176px)",
+        "main-tablet-editor": "calc(100vh - 103px)",
         "media-library-dialog": "80vh",
         "media-card": "240px",
         "media-preview-image": "104px",
@@ -28,7 +30,8 @@ module.exports = {
         "media-preview-image": "126px",
         "image-card": "120px",
         "card-grid": "calc(100% + 8px)",
-        "breadcrumb-title": "calc(100vw - 112px)",
+        "breadcrumb-title-small": "calc(100vw - 126px)",
+        "breadcrumb-title": "calc(100vw * .4)",
       },
       maxWidth: {
         "media-search": "400px",

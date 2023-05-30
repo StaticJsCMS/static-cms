@@ -52,7 +52,7 @@ const Navbar = ({
       "
     >
       <div key="nav" className="mx-auto pr-2 sm:pr-4 lg:pr-5">
-        <div className="relative flex h-16 items-center justify-between">
+        <div className="relative flex h-16 items-center justify-between gap-2">
           <div className="flex flex-1 h-full items-stretch justify-start gap-2 md:gap-4">
             <div className="flex flex-shrink-0 items-center justify-center w-16 bg-slate-500 dark:bg-slate-700">
               {config?.logo_url ? (
@@ -69,7 +69,7 @@ const Navbar = ({
           <div className="flex gap-3 items-center">
             {displayUrl ? (
               <Button variant="text" className="gap-2 hidden md:flex" href={displayUrl}>
-                <div>{displayUrl}</div>
+                <div className="hidden lg:flex">{displayUrl}</div>
                 <OpenInNewIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
               </Button>
             ) : null}

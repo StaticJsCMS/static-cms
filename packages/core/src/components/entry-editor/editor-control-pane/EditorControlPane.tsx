@@ -98,9 +98,9 @@ const EditorControlPane = ({
         `,
         !hideBorder &&
           `
-          border-r
-          border-slate-400
-        `,
+            lg:border-r
+            border-slate-400
+          `,
       )}
     >
       {i18n?.locales && locale ? (

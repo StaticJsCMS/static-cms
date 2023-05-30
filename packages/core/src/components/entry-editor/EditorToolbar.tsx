@@ -19,6 +19,7 @@ import confirm from '../common/confirm/Confirm';
 import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
+import IconButton from '../common/button/IconButton';
 
 import type { Collection, EditorPersistOptions, TranslatedProps } from '@staticcms/core/interface';
 import type { FC, MouseEventHandler } from 'react';
@@ -46,6 +47,8 @@ export interface EditorToolbarProps {
   toggleI18n: MouseEventHandler;
   slug?: string | undefined;
   className?: string;
+  showMobilePreview: boolean;
+  onMobilePreviewToggle: () => void;
 }
 
 const EditorToolbar = ({
@@ -70,6 +73,8 @@ const EditorToolbar = ({
   toggleI18n,
   slug,
   className,
+  showMobilePreview,
+  onMobilePreviewToggle,
 }: TranslatedProps<EditorToolbarProps>) => {
   const canCreate = useMemo(
     () => ('folder' in collection && collection.create) ?? false,
@@ -181,6 +186,7 @@ const EditorToolbar = ({
             key="extra-menu"
             label={<MoreVertIcon className="w-5 h-5" />}
             variant="text"
+            rootClassName="hidden lg:flex"
             buttonClassName="px-1.5"
             hideDropdownIcon
           >
@@ -226,12 +232,37 @@ const EditorToolbar = ({
             ) : null}
           </Menu>
         ) : null}
+        {showPreviewToggle ? (
+          <IconButton
+            key="show-preview-button"
+            title={t('editor.editorToolbar.preview')}
+            variant={showMobilePreview ? 'contained' : 'text'}
+            onClick={onMobilePreviewToggle}
+          >
+            <EyeIcon className="w-5 h-5" />
+          </IconButton>
+        ) : null}
+        {canDelete ? (
+          <IconButton
+            key="delete-button"
+            title={t('editor.editorToolbar.deleteEntry')}
+            color="error"
+            variant="text"
+            onClick={onDelete}
+          >
+            <TrashIcon className="w-5 h-5" />
+          </IconButton>
+        ) : null}
         <Menu
           label={
             isPublished ? t('editor.editorToolbar.published') : t('editor.editorToolbar.publish')
           }
           color={isPublished ? 'success' : 'primary'}
           disabled={isLoading || (menuItems.length == 1 && menuItems[0].length === 0)}
+          startIcon={PublishIcon}
+          iconClassName="flex !md:hidden"
+          labelClassName="hidden md:block"
+          hideDropdownIconOnMobile
         >
           {menuItems.map((group, index) => (
             <MenuGroup key={`menu-group-${index}`}>{group}</MenuGroup>
@@ -253,6 +284,8 @@ const EditorToolbar = ({
       toggleScrollSync,
       scrollSyncActive,
       onDelete,
+      showMobilePreview,
+      onMobilePreviewToggle,
       isPublished,
       menuItems,
     ],
