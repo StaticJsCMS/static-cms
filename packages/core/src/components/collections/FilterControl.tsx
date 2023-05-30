@@ -35,10 +35,10 @@ const FilterControl = ({
 
   if (variant === 'list') {
     return (
-      <div key="filter-by-list" className="py-3 px-4 flex flex-col gap-2">
+      <div key="filter-by-list" className="flex flex-col gap-2">
         <h3
           className="
-            text-md
+            text-lg
             font-bold
             text-gray-800
             dark:text-white
@@ -54,7 +54,6 @@ const FilterControl = ({
               key={viewFilter.id}
               className="
                 ml-1.5
-                text-sm
                 font-medium
                 flex
                 items-center
@@ -72,7 +71,7 @@ const FilterControl = ({
                 checked={checked}
                 readOnly
               />
-              <label className="ml-2 text-sm font-medium text-gray-800 dark:text-gray-300">
+              <label className="ml-2 text-md font-medium text-gray-800 dark:text-gray-300">
                 {viewFilter.label}
               </label>
             </div>

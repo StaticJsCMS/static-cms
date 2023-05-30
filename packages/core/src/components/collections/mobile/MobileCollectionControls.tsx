@@ -7,9 +7,15 @@ import MobileCollectionControlsDrawer from './MobileCollectionControlsDrawer';
 import type { FC } from 'react';
 import type { FilterControlProps } from '../FilterControl';
 import type { GroupControlProps } from '../GroupControl';
+import type { SortControlProps } from '../SortControl';
 
 export type MobileCollectionControlsProps = Omit<FilterControlProps, 'variant'> &
-  Omit<GroupControlProps, 'variant'>;
+  Omit<GroupControlProps, 'variant'> &
+  Omit<SortControlProps, 'variant'> & {
+    showGroupControl: boolean;
+    showFilterControl: boolean;
+    showSortControl: boolean;
+  };
 
 const MobileCollectionControls: FC<MobileCollectionControlsProps> = props => {
   const [mobileOpen, setMobileOpen] = useState(false);

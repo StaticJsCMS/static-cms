@@ -45,17 +45,17 @@ const CollectionControls = ({
   group,
 }: CollectionControlsProps) => {
   const showGroupControl = useMemo(
-    () => viewGroups && onGroupClick && group && viewGroups.length > 0,
+    () => Boolean(viewGroups && onGroupClick && group && viewGroups.length > 0),
     [group, onGroupClick, viewGroups],
   );
 
   const showFilterControl = useMemo(
-    () => viewFilters && onFilterClick && filter && viewFilters.length > 0,
+    () => Boolean(viewFilters && onFilterClick && filter && viewFilters.length > 0),
     [filter, onFilterClick, viewFilters],
   );
 
   const showSortControl = useMemo(
-    () => sortableFields && onSortClick && sort && sortableFields.length > 0,
+    () => Boolean(sortableFields && onSortClick && sort && sortableFields.length > 0),
     [onSortClick, sort, sortableFields],
   );
 
@@ -78,12 +78,18 @@ const CollectionControls = ({
         <ViewStyleControl viewStyle={viewStyle} onChangeViewStyle={onChangeViewStyle} />
         {showGroupControl || showFilterControl || showFilterControl ? (
           <MobileCollectionControls
+            showFilterControl={showFilterControl}
             viewFilters={viewFilters}
             onFilterClick={onFilterClick}
             filter={filter}
+            showGroupControl={showGroupControl}
             viewGroups={viewGroups}
             onGroupClick={onGroupClick}
             group={group}
+            showSortControl={showSortControl}
+            fields={sortableFields}
+            sort={sort}
+            onSortClick={onSortClick}
           />
         ) : null}
         {showGroupControl ? (

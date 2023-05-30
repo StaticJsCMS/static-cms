@@ -36,10 +36,10 @@ const GroupControl = ({
 
   if (variant === 'list') {
     return (
-      <div key="filter-by-list" className="py-3 px-4 flex flex-col gap-2">
+      <div key="filter-by-list" className="flex flex-col gap-2">
         <h3
           className="
-            text-md
+            text-lg
             font-bold
             text-gray-800
             dark:text-white
@@ -53,8 +53,7 @@ const GroupControl = ({
             <div
               key={viewGroup.id}
               className="
-                ml-1.5
-                text-sm
+                ml-0.5
                 font-medium
                 flex
                 items-center
@@ -63,13 +62,13 @@ const GroupControl = ({
               "
               onClick={handleGroupClick(viewGroup)}
             >
-              <label className="ml-2 text-sm font-medium text-gray-800 dark:text-gray-300">
+              <label className="ml-2 text-md font-medium text-gray-800 dark:text-gray-300">
                 {viewGroup.label}
               </label>
               {active ? (
-                <CheckIcon key="checkmark" className="ml-2 w-5 h-5 text-blue-500" />
+                <CheckIcon key="checkmark" className="ml-2 w-6 h-6 text-blue-500" />
               ) : (
-                <div key="not-checked" className="ml-2 w-5 h-5" />
+                <div key="not-checked" className="ml-2 w-6 h-6" />
               )}
             </div>
           );
