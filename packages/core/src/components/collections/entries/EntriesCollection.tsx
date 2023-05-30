@@ -147,45 +147,6 @@ const EntriesCollection = ({
                   </Button>
                 );
               })}
-              {groups.map((group, index) => {
-                const title = getGroupTitle(group, t);
-                return (
-                  <Button
-                    key={index}
-                    variant={index === selectedGroup ? 'contained' : 'text'}
-                    onClick={handleGroupClick(index)}
-                    className="whitespace-nowrap"
-                  >
-                    {title}
-                  </Button>
-                );
-              })}
-              {groups.map((group, index) => {
-                const title = getGroupTitle(group, t);
-                return (
-                  <Button
-                    key={index}
-                    variant={index === selectedGroup ? 'contained' : 'text'}
-                    onClick={handleGroupClick(index)}
-                    className="whitespace-nowrap"
-                  >
-                    {title}
-                  </Button>
-                );
-              })}
-              {groups.map((group, index) => {
-                const title = getGroupTitle(group, t);
-                return (
-                  <Button
-                    key={index}
-                    variant={index === selectedGroup ? 'contained' : 'text'}
-                    onClick={handleGroupClick(index)}
-                    className="whitespace-nowrap"
-                  >
-                    {title}
-                  </Button>
-                );
-              })}
             </div>
           </div>
         </div>

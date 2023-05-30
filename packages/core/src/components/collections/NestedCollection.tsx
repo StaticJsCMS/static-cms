@@ -35,8 +35,6 @@ const TreeNode = ({ collection, treeData, depth = 0, onToggle }: TreeNodeProps) 
       event?.stopPropagation();
       event?.preventDefault();
 
-      console.log('HHELLLO', expanded, event);
-
       if (event) {
         onToggle({ node, expanded });
       } else {
