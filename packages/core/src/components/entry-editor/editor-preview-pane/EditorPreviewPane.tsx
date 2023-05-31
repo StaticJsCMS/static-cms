@@ -117,7 +117,6 @@ export interface EditorPreviewPaneProps {
 const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
   const { editorSize, entry, collection, fields, previewInFrame, showMobilePreview, t } = props;
 
-  console.log(entry);
   const config = useAppSelector(selectConfig);
 
   const { widgetFor, widgetsFor } = useWidgetsFor(config, collection, fields, entry);
