@@ -35,9 +35,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) =>
         text-gray-800
         dark:text-white
         flex-grow
-        overflow-hidden
-        text-ellipsis
-        whitespace-nowrap
+        truncate
       "
     >
       <div
@@ -89,9 +87,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) =>
                     key={`text-${index}`}
                     className={classNames(
                       `
-                        overflow-hidden
-                        whitespace-nowrap
-                        text-ellipsis
+                        truncate
                       `,
                       index + 1 === breadcrumbs.length ? 'text-ellipsis' : 'flex-shrink-0',
                     )}
@@ -113,9 +109,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) =>
               md:hidden
               gap-2
               items-center
-              overflow-hidden
-              whitespace-nowrap
-              text-ellipsis
+              truncate
               w-full
               focus:outline-none
               focus:ring-4
@@ -133,9 +127,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) =>
             className="
               block
               md:hidden
-              overflow-hidden
-              whitespace-nowrap
-              text-ellipsis
+              truncate
               w-full
             "
           >

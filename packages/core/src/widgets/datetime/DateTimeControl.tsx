@@ -249,11 +249,7 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
               {...convertMuiTextFieldProps(props)}
               inputRef={ref}
               cursor="pointer"
-              inputClassName="
-                overflow-hidden
-                whitespace-nowrap
-                text-ellipsis
-              "
+              inputClassName="truncate"
             />
             <NowButton
               key="mobile-date-now"
@@ -287,7 +283,7 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
       forSingleList={forSingleList}
       cursor="pointer"
       disabled={disabled}
-      wrapperClassName="w-date-widget"
+      wrapperClassName="!w-date-widget"
     >
       <LocalizationProvider key="localization-provider" dateAdapter={AdapterDateFns}>
         {dateTimePicker}

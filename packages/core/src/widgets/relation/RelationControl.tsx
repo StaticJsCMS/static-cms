@@ -322,7 +322,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
         label={
           <>
             {Array.isArray(selectedValue) && selectedValue.length > 0 ? (
-              <div className="flex flex-wrap gap-2 w-full p-2 pr-0 max-w-fit">
+              <div className="flex flex-wrap gap-2 p-2 pr-0 w-relation-widget-label">
                 {selectedValue.map(selectValue => {
                   const option = uniqueOptionsByValue[selectValue];
                   return (

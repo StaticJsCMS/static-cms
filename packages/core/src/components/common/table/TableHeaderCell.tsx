@@ -35,9 +35,7 @@ const TableHeaderCell = ({ children }: TableHeaderCellProps) => {
           dark:border-gray-700
           dark:bg-slate-800
           text-[14px]
-          text-ellipsis
-          overflow-hidden
-          whitespace-nowrap
+          truncate
           w-full
         "
       >

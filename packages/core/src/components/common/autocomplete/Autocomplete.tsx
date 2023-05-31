@@ -63,7 +63,8 @@ const Autocomplete = function <T>(
           <div
             className="
               flex
-              items-center
+              flex-col
+              flex-start
               text-sm
               font-medium
               relative
@@ -90,8 +91,8 @@ const Autocomplete = function <T>(
                   leading-5
                   focus:ring-0
                   outline-none
-                  basis-60
                   flex-grow
+                  truncate
                 `,
                 disabled
                   ? `
@@ -194,7 +195,9 @@ const Autocomplete = function <T>(
                     >
                       <span
                         className={classNames(
-                          'block truncate',
+                          `
+                            block
+                          `,
                           selected ? 'font-medium' : 'font-normal',
                         )}
                       >

@@ -152,15 +152,15 @@ const EntryCard: FC<TranslatedProps<EntryCardProps>> = ({
               ) : null}
               <CardContent>
                 <div className="flex w-full items-center justify-between">
-                  <div className="whitespace-nowrap overflow-hidden text-ellipsis">{summary}</div>
+                  <div className="truncate">{summary}</div>
                   {hasLocalBackup ? (
                     <InfoIcon
                       className="
-                  w-5
-                  h-5
-                  text-blue-600
-                  dark:text-blue-300
-                "
+                        w-5
+                        h-5
+                        text-blue-600
+                        dark:text-blue-300
+                      "
                       title={t('ui.localBackup.hasLocalBackup')}
                     />
                   ) : null}

@@ -73,9 +73,7 @@ const CollectionHeader: FC<TranslatedProps<CollectionHeaderProps>> = ({ collecti
           xs:justify-between
           sm:justify-normal
           w-full
-          overflow-hidden
-          whitespace-nowrap
-          text-ellipsis
+          truncate
         "
       >
         <h2
@@ -98,9 +96,7 @@ const CollectionHeader: FC<TranslatedProps<CollectionHeaderProps>> = ({ collecti
             className="
               w-collection-header
               flex-grow
-              overflow-hidden
-              whitespace-nowrap
-              text-ellipsis
+              truncate
             "
           >
             {pluralLabel}
