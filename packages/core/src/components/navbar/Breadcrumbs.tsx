@@ -69,6 +69,10 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs }) => {
                         dark:hover:text-gray-400
                         overflow-hidden
                         whitespace-nowrap
+                        focus:outline-none
+                        focus:ring-4
+                        focus:ring-gray-200
+                        dark:focus:ring-slate-700
                       `,
                       index + 1 === breadcrumbs.length ? 'text-ellipsis' : 'flex-shrink-0',
                     )}
@@ -96,18 +100,42 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs }) => {
           )}
         </div>
       </div>
-      <div
-        className="
-          block
-          md:hidden
-          overflow-hidden
-          whitespace-nowrap
-          text-ellipsis
-          w-full
-        "
-      >
-        {finalNonEditorBreadcrumb?.name ?? ''}
-      </div>
+      {finalNonEditorBreadcrumb ? (
+        finalNonEditorBreadcrumb.to ? (
+          <Link
+            key="final-non-editor-breadcrumb-link"
+            className="
+              block
+              md:hidden
+              overflow-hidden
+              whitespace-nowrap
+              text-ellipsis
+              w-full
+              focus:outline-none
+              focus:ring-4
+              focus:ring-gray-200
+              dark:focus:ring-slate-700
+            "
+            to={finalNonEditorBreadcrumb.to}
+          >
+            {finalNonEditorBreadcrumb.name}
+          </Link>
+        ) : (
+          <div
+            key="final-non-editor-breadcrumb-text"
+            className="
+              block
+              md:hidden
+              overflow-hidden
+              whitespace-nowrap
+              text-ellipsis
+              w-full
+            "
+          >
+            {finalNonEditorBreadcrumb?.name ?? ''}
+          </div>
+        )
+      ) : null}
     </div>
   );
 };

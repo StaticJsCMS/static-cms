@@ -26,6 +26,7 @@ const TableCell = ({ children, emphasis = false, to, shrink = false }: TableCell
             py-3
             whitespace-nowrap
           "
+          tabIndex={-1}
         >
           {children}
         </Link>

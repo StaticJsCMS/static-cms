@@ -64,20 +64,45 @@ const CollectionHeader: FC<TranslatedProps<CollectionHeaderProps>> = ({ collecti
 
   return (
     <>
-      <div className="flex flex-grow gap-4 justify-normal xs:justify-between w-full sm:justify-normal">
+      <div
+        className="
+          flex
+          flex-grow
+          gap-4
+          justify-normal
+          xs:justify-between
+          w-full
+          sm:justify-normal
+          overflow-hidden
+          whitespace-nowrap
+          text-ellipsis
+        "
+      >
         <h2
           className="
             text-xl
             font-semibold
             flex
+            flex-grow
             items-center
             text-gray-800
             dark:text-gray-300
             gap-2
+            w-full
           "
         >
           <div className="flex items-center">{icon}</div>
-          <div className="max-w-collection-title">{pluralLabel}</div>
+          <div
+            className="
+              w-collection-header
+              flex-grow
+              overflow-hidden
+              whitespace-nowrap
+              text-ellipsis
+            "
+          >
+            {pluralLabel}
+          </div>
         </h2>
         {newEntryUrl ? (
           <Button to={newEntryUrl} className="hidden sm:flex">

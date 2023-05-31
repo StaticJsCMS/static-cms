@@ -32,6 +32,7 @@ module.exports = {
         "card-grid": "calc(100% + 8px)",
         "breadcrumb-title-small": "calc(100vw - 126px)",
         "breadcrumb-title": "calc(100vw * .4)",
+        "collection-header": "calc(100% - 32px)",
       },
       maxWidth: {
         "media-search": "400px",
