@@ -89,8 +89,10 @@ const Select = forwardRef(
         <SelectUnstyled<any>
           renderValue={() => {
             return (
-              <>
-                {label ?? placeholder}
+              <div className="w-full">
+                <div className="flex flex-start w-select-widget-label">
+                  <span className="truncate">{label ?? placeholder}</span>
+                </div>
                 <span
                   className="
                     pointer-events-none
@@ -118,7 +120,7 @@ const Select = forwardRef(
                     aria-hidden="true"
                   />
                 </span>
-              </>
+              </div>
             );
           }}
           slotProps={{
