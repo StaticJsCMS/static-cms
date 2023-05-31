@@ -30,6 +30,7 @@ export interface EditorControlPaneProps {
   hideBorder: boolean;
   slug?: string;
   onLocaleChange?: (locale: string) => void;
+  allowDefaultLocale?: boolean;
 }
 
 const EditorControlPane = ({
@@ -43,6 +44,7 @@ const EditorControlPane = ({
   hideBorder,
   slug,
   onLocaleChange,
+  allowDefaultLocale = false,
   t,
 }: TranslatedProps<EditorControlPaneProps>) => {
   const pathField = useMemo(
@@ -118,6 +120,7 @@ const EditorControlPane = ({
             })}
             canChangeLocale={canChangeLocale}
             onLocaleChange={onLocaleChange}
+            allowDefaultLocale={allowDefaultLocale}
           />
         </div>
       ) : null}

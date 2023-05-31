@@ -216,14 +216,13 @@ const EditorInterface = ({
       <div
         key={selectedLocale}
         className="
+          flex
           w-full
           overflow-y-auto
           styled-scrollbars
           h-main-mobile-editor
           md:h-main-tablet-editor
           lg:h-main
-          hidden
-          lg:flex
         "
       >
         <EditorControlPane
@@ -233,6 +232,38 @@ const EditorInterface = ({
           fieldsErrors={fieldsErrors}
           locale={selectedLocale}
           onLocaleChange={handleLocaleChange}
+          submitted={submitted}
+          canChangeLocale
+          hideBorder
+          t={t}
+        />
+      </div>
+    ),
+    [collection, entry, fields, fieldsErrors, handleLocaleChange, selectedLocale, submitted, t],
+  );
+
+  const mobileLocaleEditor = useMemo(
+    () => (
+      <div
+        key={selectedLocale}
+        className="
+          w-full
+          overflow-y-auto
+          styled-scrollbars
+          h-main-mobile-editor
+          md:h-main-tablet-editor
+          flex
+          lg:hidden
+        "
+      >
+        <EditorControlPane
+          collection={collection}
+          entry={entry}
+          fields={fields}
+          fieldsErrors={fieldsErrors}
+          locale={selectedLocale}
+          onLocaleChange={handleLocaleChange}
+          allowDefaultLocale
           submitted={submitted}
           canChangeLocale
           hideBorder
@@ -266,12 +297,15 @@ const EditorInterface = ({
   );
 
   const editorSideBySideLocale = (
-    <div className="grid grid-cols-2 h-full">
-      <ScrollSyncPane>{editor}</ScrollSyncPane>
-      <ScrollSyncPane>
-        <>{editorLocale}</>
-      </ScrollSyncPane>
-    </div>
+    <>
+      <div className="grid-cols-2 h-full hidden lg:grid">
+        <ScrollSyncPane>{editor}</ScrollSyncPane>
+        <ScrollSyncPane>
+          <>{editorLocale}</>
+        </ScrollSyncPane>
+      </div>
+      {mobileLocaleEditor}
+    </>
   );
 
   const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
