@@ -91,7 +91,7 @@ const Menu = ({
               className={classNames(
                 `-ml-0.5 h-5 w-5`,
                 !hideLabel && !hideDropdownIcon && 'mr-1.5',
-                hideDropdownIconOnMobile && 'mr-0 md:mr-1.5',
+                hideDropdownIconOnMobile && '!mr-0 md:!mr-1.5',
                 iconClassName,
               )}
             />
@@ -102,7 +102,7 @@ const Menu = ({
               className={classNames(
                 `-mr-0.5 h-5 w-5`,
                 !hideLabel && 'ml-2',
-                hideDropdownIconOnMobile && '!hidden !md:block',
+                hideDropdownIconOnMobile && '!hidden md:!block',
               )}
               aria-hidden="true"
             />

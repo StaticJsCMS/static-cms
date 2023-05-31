@@ -235,9 +235,10 @@ const EditorToolbar = ({
         {showPreviewToggle ? (
           <IconButton
             key="show-preview-button"
-            title={t('editor.editorToolbar.preview')}
+            title={t('editor.editorInterface.preview')}
             variant={showMobilePreview ? 'contained' : 'text'}
             onClick={onMobilePreviewToggle}
+            className="flex md:hidden"
           >
             <EyeIcon className="w-5 h-5" />
           </IconButton>
@@ -249,6 +250,7 @@ const EditorToolbar = ({
             color="error"
             variant="text"
             onClick={onDelete}
+            className="flex md:hidden"
           >
             <TrashIcon className="w-5 h-5" />
           </IconButton>
