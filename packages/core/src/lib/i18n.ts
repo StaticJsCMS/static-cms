@@ -69,8 +69,7 @@ export function getLocaleDataPath(locale: string) {
 }
 
 export function getDataPath(locale: string, defaultLocale: string) {
-  const dataPath = locale !== defaultLocale ? getLocaleDataPath(locale) : ['data'];
-  return dataPath;
+  return locale !== defaultLocale ? getLocaleDataPath(locale) : ['data'];
 }
 
 export function getFilePath(

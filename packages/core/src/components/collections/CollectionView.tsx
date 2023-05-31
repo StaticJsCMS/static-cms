@@ -9,13 +9,11 @@ import {
   sortByField as sortByFieldAction,
 } from '@staticcms/core/actions/entries';
 import { SORT_DIRECTION_ASCENDING } from '@staticcms/core/constants';
-import { getNewEntryUrl } from '@staticcms/core/lib/urlHelper';
 import {
   selectSortableFields,
   selectViewFilters,
   selectViewGroups,
 } from '@staticcms/core/lib/util/collection.util';
-import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import {
   selectEntriesFilter,
   selectEntriesGroup,
@@ -42,7 +40,6 @@ import type { ConnectedProps } from 'react-redux';
 const CollectionView = ({
   collection,
   collections,
-  collectionName,
   isSearchResults,
   isSingleSearchResult,
   searchTerm,
@@ -66,16 +63,6 @@ const CollectionView = ({
   useEffect(() => {
     setPrevCollection(collection);
   }, [collection]);
-
-  const newEntryUrl = useMemo(() => {
-    if (!collectionName || !collection) {
-      return undefined;
-    }
-
-    return 'fields' in collection && collection.create
-      ? `${getNewEntryUrl(collectionName)}${isNotEmpty(filterTerm) ? `/${filterTerm}` : ''}`
-      : '';
-  }, [collection, collectionName, filterTerm]);
 
   const searchResultKey = useMemo(
     () => `collection.collectionTop.searchResults${isSingleSearchResult ? 'InCollection' : ''}`,
@@ -196,18 +183,18 @@ const CollectionView = ({
   const collectionDescription = collection?.description;
 
   return (
-    <div className="flex flex-col h-full px-5 pt-4">
-      <div className="flex items-center mb-4">
+    <div className="flex flex-col h-full px-5 pt-4 overflow-hidden">
+      <div className="flex items-center mb-4 flex-row gap-4 sm:gap-0">
         {isSearchResults ? (
           <>
             <div className="flex-grow">
               <div>{t(searchResultKey, { searchTerm, collection: collection?.label })}</div>
             </div>
-            <CollectionControls viewStyle={viewStyle} onChangeViewStyle={changeViewStyle} t={t} />
+            <CollectionControls viewStyle={viewStyle} onChangeViewStyle={changeViewStyle} />
           </>
         ) : (
           <>
-            <CollectionHeader collection={collection} newEntryUrl={newEntryUrl} />
+            {collection ? <CollectionHeader collection={collection} /> : null}
             <CollectionControls
               viewStyle={viewStyle}
               onChangeViewStyle={changeViewStyle}
@@ -216,7 +203,6 @@ const CollectionView = ({
               sort={sort}
               viewFilters={viewFilters ?? []}
               viewGroups={viewGroups ?? []}
-              t={t}
               onFilterClick={onFilterClick}
               onGroupClick={onGroupClick}
               filter={filter}
@@ -270,7 +256,6 @@ function mapStateToProps(state: RootState, ownProps: TranslatedProps<CollectionV
     filterTerm,
     collection,
     collections,
-    collectionName: name,
     sort,
     sortableFields,
     viewFilters,

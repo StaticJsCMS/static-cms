@@ -19,6 +19,8 @@ export interface BaseTextFieldProps {
   placeholder?: string;
   endAdornment?: ReactNode;
   startAdornment?: ReactNode;
+  rootClassName?: string;
+  inputClassName?: string;
 }
 
 export interface NumberTextFieldProps extends BaseTextFieldProps {
@@ -49,6 +51,8 @@ const TextField: FC<TextFieldProps> = ({
   onClick,
   startAdornment,
   endAdornment,
+  rootClassName,
+  inputClassName,
   ...otherProps
 }) => {
   const finalCursor = useCursor(cursor, disabled);
@@ -67,10 +71,13 @@ const TextField: FC<TextFieldProps> = ({
       endAdornment={endAdornment}
       slotProps={{
         root: {
-          className: `
-            flex
-            w-full
-          `,
+          className: classNames(
+            `
+              flex
+              w-full
+            `,
+            rootClassName,
+          ),
         },
         input: {
           ref: inputRef,
@@ -79,6 +86,7 @@ const TextField: FC<TextFieldProps> = ({
               w-full
               text-sm
             `,
+            inputClassName,
             variant === 'borderless' &&
               `
               h-6

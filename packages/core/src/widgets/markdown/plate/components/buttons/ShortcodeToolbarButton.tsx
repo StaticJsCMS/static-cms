@@ -40,7 +40,7 @@ const ShortcodeToolbarButton: FC<ShortcodeToolbarButtonProps> = ({ disabled }) =
       keepMounted
       hideDropdownIcon
       variant="text"
-      className="
+      buttonClassName="
         py-0.5
         px-0.5
         h-6

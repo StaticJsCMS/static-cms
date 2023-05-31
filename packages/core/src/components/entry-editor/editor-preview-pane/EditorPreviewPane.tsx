@@ -90,6 +90,10 @@ const FrameGlobalStyles = `
     height: 10px; /* Mostly for horizontal scrollbars */
   }
 
+  .styled-scrollbars::-webkit-scrollbar-corner {
+    background: rgba(0,0,0,0);
+  }
+
   .styled-scrollbars::-webkit-scrollbar-thumb {
     /* Foreground */
     background: var(--scrollbar-foreground);
@@ -107,10 +111,11 @@ export interface EditorPreviewPaneProps {
   entry: Entry;
   previewInFrame: boolean;
   editorSize: EditorSize;
+  showMobilePreview: boolean;
 }
 
-const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
-  const { editorSize, entry, collection, fields, previewInFrame, t } = props;
+const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
+  const { editorSize, entry, collection, fields, previewInFrame, showMobilePreview, t } = props;
 
   const config = useAppSelector(selectConfig);
 
@@ -175,62 +180,67 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
       <div
         className={classNames(
           `
-            h-main
+            h-main-mobile
+            md:h-main
             absolute
             top-16
             right-0
+            w-full
           `,
-          editorSize === EDITOR_SIZE_COMPACT ? 'w-preview' : 'w-6/12',
+          editorSize === EDITOR_SIZE_COMPACT ? 'lg:w-preview' : 'lg:w-6/12',
+          !showMobilePreview &&
+            `
+              hidden
+              lg:block
+            `,
         )}
       >
-        {!entry || !entry.data ? null : (
-          <ErrorBoundary config={config}>
-            {previewInFrame ? (
-              <Frame
-                key="preview-frame"
+        <ErrorBoundary config={config}>
+          {previewInFrame ? (
+            <Frame
+              key="preview-frame"
+              id="preview-pane"
+              head={previewStyles}
+              initialContent={initialFrameContent}
+              className="w-full h-full"
+            >
+              {!collection ? (
+                t('collection.notFound')
+              ) : (
+                <PreviewFrameContent
+                  key="preview-frame-content"
+                  previewComponent={previewComponent}
+                  previewProps={{ ...previewProps }}
+                />
+              )}
+            </Frame>
+          ) : (
+            <ScrollSyncPane key="preview-wrapper-scroll-sync">
+              <div
+                key="preview-wrapper"
                 id="preview-pane"
-                head={previewStyles}
-                initialContent={initialFrameContent}
-                className="w-full h-full"
-              >
-                {!collection ? (
-                  t('collection.notFound')
-                ) : (
-                  <PreviewFrameContent
-                    key="preview-frame-content"
-                    previewComponent={previewComponent}
-                    previewProps={{ ...previewProps }}
-                  />
-                )}
-              </Frame>
-            ) : (
-              <ScrollSyncPane key="preview-wrapper-scroll-sync">
-                <div
-                  key="preview-wrapper"
-                  id="preview-pane"
-                  className="
+                className="
                     overflow-y-auto
                     styled-scrollbars
                     h-full
                   "
-                >
-                  {!collection ? (
-                    t('collection.notFound')
-                  ) : (
-                    <>
-                      {previewStyles}
-                      <EditorPreviewContent
-                        key="preview-wrapper-content"
-                        previewComponent={previewComponent}
-                        previewProps={{ ...previewProps, document, window }}
-                      />
-                    </>
-                  )}
-                </div>
-              </ScrollSyncPane>
-            )}
-          </ErrorBoundary>
-        )}
+              >
+                {!collection ? (
+                  t('collection.notFound')
+                ) : (
+                  <>
+                    {previewStyles}
+                    <EditorPreviewContent
+                      key="preview-wrapper-content"
+                      previewComponent={previewComponent}
+                      previewProps={{ ...previewProps, document, window }}
+                    />
+                  </>
+                )}
+              </div>
+            </ScrollSyncPane>
+          )}
+        </ErrorBoundary>
       </div>,
       element,
       'preview-content',
@@ -240,14 +250,14 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
     config,
     editorSize,
     element,
-    entry,
     initialFrameContent,
     previewComponent,
     previewInFrame,
     previewProps,
     previewStyles,
+    showMobilePreview,
     t,
   ]);
 };
 
-export default translate()(PreviewPane) as FC<EditorPreviewPaneProps>;
+export default translate()(EditorPreviewPane) as FC<EditorPreviewPaneProps>;

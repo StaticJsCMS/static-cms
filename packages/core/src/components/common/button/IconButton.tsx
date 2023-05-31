@@ -4,13 +4,13 @@ import Button from './Button';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 
 import type { FC } from 'react';
-import type { ButtonProps } from './Button';
+import type { ButtonLinkProps } from './Button';
 
-export type IconButtonProps = Omit<ButtonProps, 'children'> & {
+export type IconButtonProps = Omit<ButtonLinkProps, 'children'> & {
   children: FC<{ className?: string }>;
 };
 
-const IconButton = ({ children, size = 'medium', className, ...otherProps }: ButtonProps) => {
+const IconButton = ({ children, size = 'medium', className, ...otherProps }: ButtonLinkProps) => {
   return (
     <Button
       className={classNames(size === 'small' && 'px-0.5', size === 'medium' && 'px-1.5', className)}

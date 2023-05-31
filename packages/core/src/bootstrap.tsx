@@ -16,6 +16,7 @@ import addExtensions from './extensions';
 import { getPhrases } from './lib/phrases';
 import { selectLocale } from './reducers/selectors/config';
 import { store } from './store';
+import useMeta from './lib/hooks/useMeta';
 
 import type { AnyAction } from '@reduxjs/toolkit';
 import type { ConnectedProps } from 'react-redux';
@@ -45,6 +46,8 @@ import ReactDOM from 'react-dom';
 ReactDOM.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.usingClientEntryPoint = true;
 
 const TranslatedApp = ({ locale, config }: AppRootProps) => {
+  useMeta({ name: 'viewport', content: 'width=device-width, initial-scale=1.0' });
+
   if (!config) {
     return null;
   }

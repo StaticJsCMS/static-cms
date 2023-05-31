@@ -57,8 +57,8 @@ const EntryListingGrid: FC<EntryListingGridProps> = ({
   }, [handleScroll]);
 
   return (
-    <div className="relative h-full overflow-hidden">
-      <div ref={gridContainerRef} className="relative h-full overflow-hidden">
+    <div className="relative h-full flex-grow">
+      <div ref={gridContainerRef} className="relative h-full">
         <EntryListingCardGrid
           key="grid"
           entryData={entryData}
@@ -71,14 +71,14 @@ const EntryListingGrid: FC<EntryListingGridProps> = ({
         <div
           key="loading"
           className="
-          absolute
-          inset-0
-          flex
-          items-center
-          justify-center
-          bg-slate-50/50
-          dark:bg-slate-900/50
-        "
+            absolute
+            inset-0
+            flex
+            items-center
+            justify-center
+            bg-slate-50/50
+            dark:bg-slate-900/50
+          "
         >
           {t('collection.entries.loadingEntries')}
         </div>

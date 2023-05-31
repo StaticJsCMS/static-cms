@@ -350,7 +350,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
         if (Array.isArray(internalValue) ? internalValue.length === 0 : isEmpty(internalValue)) {
           return (
             <div key="selection" className="flex flex-col gap-2 px-3 pt-2 pb-4">
-              <div key="controls" className="flex gap-2">
+              <div key="controls" className="flex gap-2 flex-col xs:flex-row">
                 <Button
                   buttonRef={uploadButtonRef}
                   color="primary"
@@ -388,7 +388,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
             )}
           >
             {renderedImagesLinks}
-            <div key="controls" className="flex gap-2">
+            <div key="controls" className="flex gap-2 flex-col xs:flex-row">
               <Button
                 buttonRef={uploadButtonRef}
                 color="primary"

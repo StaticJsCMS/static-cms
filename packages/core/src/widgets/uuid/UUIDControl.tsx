@@ -87,7 +87,14 @@ const UUIDControl: FC<WidgetControlProps<string, UUIDField>> = ({
         ) : null
       }
     >
-      <TextField type="text" inputRef={ref} value={internalValue} disabled={disabled} readonly />
+      <TextField
+        type="text"
+        inputRef={ref}
+        value={internalValue}
+        disabled={disabled}
+        readonly
+        inputClassName="truncate"
+      />
     </Field>
   );
 };

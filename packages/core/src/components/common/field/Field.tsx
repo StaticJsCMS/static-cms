@@ -23,6 +23,8 @@ export interface FieldProps {
   disabled: boolean;
   disableClick?: boolean;
   endAdornment?: ReactNode;
+  rootClassName?: string;
+  wrapperClassName?: string;
 }
 
 const Field: FC<FieldProps> = ({
@@ -39,6 +41,8 @@ const Field: FC<FieldProps> = ({
   disabled,
   disableClick = false,
   endAdornment,
+  rootClassName,
+  wrapperClassName,
 }) => {
   const finalCursor = useCursor(cursor, disabled);
 
@@ -104,6 +108,7 @@ const Field: FC<FieldProps> = ({
           focus-within:border-blue-800
           dark:focus-within:border-blue-100
         `,
+        rootClassName,
         !noHightlight &&
           !disabled &&
           `
@@ -118,7 +123,7 @@ const Field: FC<FieldProps> = ({
         finalCursor === 'default' && 'cursor-default',
         !hasErrors && 'group/active',
       ),
-    [finalCursor, disabled, hasErrors, noHightlight, noPadding],
+    [rootClassName, noHightlight, disabled, noPadding, finalCursor, hasErrors],
   );
 
   const wrapperClassNames = useMemo(
@@ -129,9 +134,10 @@ const Field: FC<FieldProps> = ({
           flex-col
           w-full
         `,
+        wrapperClassName,
         forSingleList && 'mr-14',
       ),
-    [forSingleList],
+    [forSingleList, wrapperClassName],
   );
 
   if (variant === 'inline') {

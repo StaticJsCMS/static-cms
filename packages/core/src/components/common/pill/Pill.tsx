@@ -61,6 +61,7 @@ const Pill: FC<PillProps> = ({
           px-3
           py-1
           rounded-lg
+          truncate
         `,
         noWrap && 'whitespace-nowrap',
         colorClassNames,

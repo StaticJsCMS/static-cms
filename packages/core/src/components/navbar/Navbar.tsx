@@ -1,18 +1,19 @@
 import { OpenInNew as OpenInNewIcon } from '@styled-icons/material/OpenInNew';
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { translate } from 'react-polyglot';
-import { Link } from 'react-router-dom';
 
 import { checkBackendStatus } from '@staticcms/core/actions/status';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectConfig, selectDisplayUrl } from '@staticcms/core/reducers/selectors/config';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import Button from '../common/button/Button';
 import { StaticCmsIcon } from '../images/_index';
+import Breadcrumbs from './Breadcrumbs';
 import QuickCreate from './QuickCreate';
 import SettingsDropdown from './SettingsDropdown';
 
 import type { Breadcrumb, TranslatedProps } from '@staticcms/core/interface';
-import type { ComponentType, ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
 export interface NavbarProps {
   breadcrumbs?: Breadcrumb[];
@@ -40,6 +41,11 @@ const Navbar = ({
     };
   }, [dispatch]);
 
+  const inEditor = useMemo(
+    () => Boolean(breadcrumbs.length > 0 && breadcrumbs[breadcrumbs.length - 1].editor),
+    [breadcrumbs],
+  );
+
   return (
     <nav
       className="
@@ -52,49 +58,56 @@ const Navbar = ({
       "
     >
       <div key="nav" className="mx-auto pr-2 sm:pr-4 lg:pr-5">
-        <div className="relative flex h-16 items-center justify-between">
-          <div className="flex flex-1 items-center justify-center h-full sm:items-stretch sm:justify-start gap-4">
-            <div className="flex flex-shrink-0 items-center justify-center bg-slate-500 dark:bg-slate-700 w-16">
+        <div
+          className={classNames(
+            `
+              relative
+              flex
+              h-16
+              items-center
+              justify-between
+              gap-2
+            `,
+            inEditor && 'pl-3 md:pl-0',
+          )}
+        >
+          <div className="flex flex-1 h-full items-stretch justify-start gap-2 md:gap-4 truncate">
+            <div
+              className={classNames(
+                `
+                  flex-shrink-0
+                  items-center
+                  justify-center
+                  w-16
+                  bg-slate-500
+                  dark:bg-slate-700
+                `,
+                inEditor ? 'hidden md:flex' : 'flex',
+              )}
+            >
               {config?.logo_url ? (
                 <div
-                  className="inline-flex h-10 w-10 bg-cover bg-no-repeat bg-center object-cover"
+                  className="h-10 w-10 bg-cover bg-no-repeat bg-center object-cover"
                   style={{ backgroundImage: `url('${config.logo_url}')` }}
                 />
               ) : (
-                <StaticCmsIcon className="inline-flex w-10 h-10" />
+                <StaticCmsIcon className="w-10 h-10" />
               )}
             </div>
-            <div className="flex h-full items-center text-xl font-semibold gap-1 text-gray-800 dark:text-white">
-              {breadcrumbs.map((breadcrumb, index) =>
-                breadcrumb.name ? (
-                  <Fragment key={`breadcrumb-${index}`}>
-                    {index > 0 ? <span key={`separator-${index}`}>&#62;</span> : null}
-                    {breadcrumb.to ? (
-                      <Link
-                        key={`link-${index}`}
-                        className="hover:text-gray-400 dark:hover:text-gray-400"
-                        to={breadcrumb.to}
-                      >
-                        {breadcrumb.name}
-                      </Link>
-                    ) : (
-                      <span key={`text-${index}`}>{breadcrumb.name}</span>
-                    )}
-                  </Fragment>
-                ) : null,
-              )}
-            </div>
+            <Breadcrumbs breadcrumbs={breadcrumbs} inEditor={inEditor} />
           </div>
           <div className="flex gap-3 items-center">
             {displayUrl ? (
-              <Button variant="text" className="flex gap-2" href={displayUrl}>
-                {displayUrl}
+              <Button variant="text" className="gap-2 hidden lg:flex" href={displayUrl}>
+                <div className="hidden lg:flex">{displayUrl}</div>
                 <OpenInNewIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
               </Button>
             ) : null}
-            {showQuickCreate ? <QuickCreate key="quick-create" /> : null}
+            {showQuickCreate ? (
+              <QuickCreate key="quick-create" rootClassName="hidden md:block" />
+            ) : null}
             {navbarActions}
-            <SettingsDropdown />
+            <SettingsDropdown inEditor={inEditor} />
           </div>
         </div>
       </div>
@@ -102,4 +115,4 @@ const Navbar = ({
   );
 };
 
-export default translate()(Navbar) as ComponentType<NavbarProps>;
+export default translate()(Navbar) as FC<NavbarProps>;

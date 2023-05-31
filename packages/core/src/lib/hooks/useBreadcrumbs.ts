@@ -83,6 +83,7 @@ export default function useBreadcrumbs(
               collectionLabel: collection.label_singular || collection.label,
             })
           : summary,
+        editor: true,
       });
     }
 

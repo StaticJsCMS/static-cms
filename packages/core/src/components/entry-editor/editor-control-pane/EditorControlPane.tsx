@@ -30,6 +30,7 @@ export interface EditorControlPaneProps {
   hideBorder: boolean;
   slug?: string;
   onLocaleChange?: (locale: string) => void;
+  allowDefaultLocale?: boolean;
 }
 
 const EditorControlPane = ({
@@ -43,6 +44,7 @@ const EditorControlPane = ({
   hideBorder,
   slug,
   onLocaleChange,
+  allowDefaultLocale = false,
   t,
 }: TranslatedProps<EditorControlPaneProps>) => {
   const pathField = useMemo(
@@ -95,12 +97,13 @@ const EditorControlPane = ({
           flex
           flex-col
           min-h-full
+          w-full
         `,
         !hideBorder &&
           `
-          border-r
-          border-slate-400
-        `,
+            lg:border-r
+            border-slate-400
+          `,
       )}
     >
       {i18n?.locales && locale ? (
@@ -117,6 +120,7 @@ const EditorControlPane = ({
             })}
             canChangeLocale={canChangeLocale}
             onLocaleChange={onLocaleChange}
+            allowDefaultLocale={allowDefaultLocale}
           />
         </div>
       ) : null}

@@ -22,6 +22,7 @@ export default function useWidgetsFor(
   collection: Collection,
   fields: Field[],
   entry: Entry,
+  data: EntryData = entry.data,
 ): {
   widgetFor: WidgetFor;
   widgetsFor: WidgetsFor;
@@ -35,9 +36,19 @@ export default function useWidgetsFor(
       if (!config) {
         return null;
       }
-      return getWidgetFor(config, collection, name, fields, entry, theme, inferredFields);
+      return getWidgetFor(
+        config,
+        collection,
+        name,
+        fields,
+        entry,
+        theme,
+        inferredFields,
+        fields,
+        data,
+      );
     },
-    [collection, config, entry, fields, inferredFields, theme],
+    [collection, config, data, entry, fields, inferredFields, theme],
   );
 
   /**

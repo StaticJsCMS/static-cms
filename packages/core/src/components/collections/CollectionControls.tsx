@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
+import ViewStyleControl from '../common/view-style/ViewStyleControl';
 import FilterControl from './FilterControl';
 import GroupControl from './GroupControl';
+import MobileCollectionControls from './mobile/MobileCollectionControls';
 import SortControl from './SortControl';
-import ViewStyleControl from '../common/view-style/ViewStyleControl';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
 import type {
@@ -12,7 +13,6 @@ import type {
   SortableField,
   SortDirection,
   SortMap,
-  TranslatedProps,
   ViewFilter,
   ViewGroup,
 } from '@staticcms/core/interface';
@@ -41,34 +41,69 @@ const CollectionControls = ({
   viewGroups,
   onFilterClick,
   onGroupClick,
-  t,
   filter,
   group,
-}: TranslatedProps<CollectionControlsProps>) => {
+}: CollectionControlsProps) => {
+  const showGroupControl = useMemo(
+    () => Boolean(viewGroups && onGroupClick && group && viewGroups.length > 0),
+    [group, onGroupClick, viewGroups],
+  );
+
+  const showFilterControl = useMemo(
+    () => Boolean(viewFilters && onFilterClick && filter && viewFilters.length > 0),
+    [filter, onFilterClick, viewFilters],
+  );
+
+  const showSortControl = useMemo(
+    () => Boolean(sortableFields && onSortClick && sort && sortableFields.length > 0),
+    [onSortClick, sort, sortableFields],
+  );
+
   return (
-    <div className="flex gap-2 items-center relative z-20">
-      <ViewStyleControl viewStyle={viewStyle} onChangeViewStyle={onChangeViewStyle} />
-      {viewGroups && onGroupClick && group
-        ? viewGroups.length > 0 && (
-            <GroupControl viewGroups={viewGroups} onGroupClick={onGroupClick} t={t} group={group} />
-          )
-        : null}
-      {viewFilters && onFilterClick && filter
-        ? viewFilters.length > 0 && (
-            <FilterControl
-              viewFilters={viewFilters}
-              onFilterClick={onFilterClick}
-              t={t}
-              filter={filter}
-            />
-          )
-        : null}
-      {sortableFields && onSortClick && sort
-        ? sortableFields.length > 0 && (
-            <SortControl fields={sortableFields} sort={sort} onSortClick={onSortClick} />
-          )
-        : null}
-    </div>
+    <>
+      <div
+        className="
+          flex
+          items-center
+          relative
+          z-20
+          w-full
+          justify-end
+          gap-1.5
+          sm:w-auto
+          sm:justify-normal
+          lg:gap-2
+          flex-[1_0_0%]
+        "
+      >
+        <ViewStyleControl viewStyle={viewStyle} onChangeViewStyle={onChangeViewStyle} />
+        {showGroupControl || showFilterControl || showFilterControl ? (
+          <MobileCollectionControls
+            showFilterControl={showFilterControl}
+            viewFilters={viewFilters}
+            onFilterClick={onFilterClick}
+            filter={filter}
+            showGroupControl={showGroupControl}
+            viewGroups={viewGroups}
+            onGroupClick={onGroupClick}
+            group={group}
+            showSortControl={showSortControl}
+            fields={sortableFields}
+            sort={sort}
+            onSortClick={onSortClick}
+          />
+        ) : null}
+        {showGroupControl ? (
+          <GroupControl viewGroups={viewGroups} onGroupClick={onGroupClick} group={group} />
+        ) : null}
+        {showFilterControl ? (
+          <FilterControl viewFilters={viewFilters} onFilterClick={onFilterClick} filter={filter} />
+        ) : null}
+        {showSortControl ? (
+          <SortControl fields={sortableFields} sort={sort} onSortClick={onSortClick} />
+        ) : null}
+      </div>
+    </>
   );
 };
 

@@ -59,7 +59,6 @@ const Select = forwardRef(
       },
       [onOpenChange],
     );
-    const handleButtonClick = useCallback(() => handleOpenChange(!open), [handleOpenChange, open]);
 
     const handleChange = useCallback(
       (_event: MouseEvent | KeyboardEvent | FocusEvent | null, selectedValue: number | string) => {
@@ -89,8 +88,10 @@ const Select = forwardRef(
         <SelectUnstyled<any>
           renderValue={() => {
             return (
-              <>
-                {label ?? placeholder}
+              <div className="w-full">
+                <div className="flex flex-start w-select-widget-label">
+                  <span className="truncate">{label ?? placeholder}</span>
+                </div>
                 <span
                   className="
                     pointer-events-none
@@ -118,13 +119,12 @@ const Select = forwardRef(
                     aria-hidden="true"
                   />
                 </span>
-              </>
+              </div>
             );
           }}
           slotProps={{
             root: {
               ref,
-              onClick: handleButtonClick,
               className: classNames(
                 `
                   flex
@@ -160,11 +160,11 @@ const Select = forwardRef(
                 ring-opacity-5
                 focus:outline-none
                 sm:text-sm
-                z-50
+                z-[100]
                 dark:bg-slate-700
                 dark:shadow-lg
               `,
-              style: { width },
+              style: { width: ref ? width : 'auto' },
               disablePortal: false,
             },
           }}

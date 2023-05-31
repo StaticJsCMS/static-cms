@@ -42,7 +42,14 @@ const SingleCollectionPage: FC<SingleCollectionPageProps> = ({
   const breadcrumbs = useBreadcrumbs(collection, filterTerm);
 
   return (
-    <MainView breadcrumbs={breadcrumbs} showQuickCreate showLeftNav noScroll noMargin>
+    <MainView
+      breadcrumbs={breadcrumbs}
+      collection={collection}
+      showQuickCreate
+      showLeftNav
+      noScroll
+      noMargin
+    >
       <CollectionView
         name={name}
         searchTerm={searchTerm}

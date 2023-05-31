@@ -35,6 +35,8 @@ const TableHeaderCell = ({ children }: TableHeaderCellProps) => {
           dark:border-gray-700
           dark:bg-slate-800
           text-[14px]
+          truncate
+          w-full
         "
       >
         {typeof children === 'string' && isEmpty(children) ? <>&nbsp;</> : children}

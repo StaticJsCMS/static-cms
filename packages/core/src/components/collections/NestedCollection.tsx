@@ -11,6 +11,7 @@ import NavLink from '../navbar/NavLink';
 
 import type { Collection, Entry } from '@staticcms/core/interface';
 import type { TreeNodeData } from '@staticcms/core/lib/util/nested.util';
+import type { MouseEvent } from 'react';
 
 function getNodeTitle(node: TreeNodeData) {
   const title = node.isRoot
@@ -28,6 +29,20 @@ interface TreeNodeProps {
 
 const TreeNode = ({ collection, treeData, depth = 0, onToggle }: TreeNodeProps) => {
   const collectionName = collection.name;
+
+  const handleClick = useCallback(
+    (event: MouseEvent | undefined, node: TreeNodeData, expanded: boolean) => {
+      event?.stopPropagation();
+      event?.preventDefault();
+
+      if (event) {
+        onToggle({ node, expanded });
+      } else {
+        onToggle({ node, expanded: true });
+      }
+    },
+    [onToggle],
+  );
 
   const sortedData = sortBy(treeData, getNodeTitle);
   return (
@@ -50,7 +65,7 @@ const TreeNode = ({ collection, treeData, depth = 0, onToggle }: TreeNodeProps) 
             <div className={classNames(depth !== 0 && 'ml-8')}>
               <NavLink
                 to={to}
-                onClick={() => onToggle({ node, expanded: !node.expanded })}
+                onClick={() => handleClick(undefined, node, !node.expanded)}
                 data-testid={node.path}
                 icon={<ArticleIcon className={classNames(depth === 0 ? 'h-6 w-6' : 'h-5 w-5')} />}
               >
@@ -58,6 +73,7 @@ const TreeNode = ({ collection, treeData, depth = 0, onToggle }: TreeNodeProps) 
                   <div>{title}</div>
                   {hasChildren && (
                     <ChevronRightIcon
+                      onClick={event => handleClick(event, node, !node.expanded)}
                       className={classNames(
                         node.expanded && 'rotate-90 transform',
                         `
@@ -135,7 +151,6 @@ const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => 
   const entries = useEntries(collection);
 
   const [treeData, setTreeData] = useState<TreeNodeData[]>(getTreeData(collection, entries));
-  const [selected, setSelected] = useState<TreeNodeData | null>(null);
   const [useFilter, setUseFilter] = useState(true);
 
   const [prevCollection, setPrevCollection] = useState<Collection | null>(null);
@@ -186,22 +201,15 @@ const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => 
 
   const onToggle = useCallback(
     ({ node, expanded }: { node: TreeNodeData; expanded: boolean }) => {
-      if (!selected || selected.path === node.path || expanded) {
-        setTreeData(
-          updateNode(treeData, node, node => ({
-            ...node,
-            expanded,
-          })),
-        );
-        setSelected(node);
-        setUseFilter(false);
-      } else {
-        // don't collapse non selected nodes when clicked
-        setSelected(node);
-        setUseFilter(false);
-      }
+      setTreeData(
+        updateNode(treeData, node, node => ({
+          ...node,
+          expanded,
+        })),
+      );
+      setUseFilter(false);
     },
-    [selected, treeData],
+    [treeData],
   );
 
   return <TreeNode collection={collection} treeData={treeData} onToggle={onToggle} />;

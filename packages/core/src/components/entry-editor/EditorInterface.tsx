@@ -3,7 +3,7 @@ import { ScrollSyncPane } from 'react-scroll-sync';
 
 import { EDITOR_SIZE_COMPACT } from '@staticcms/core/constants/views';
 import useBreadcrumbs from '@staticcms/core/lib/hooks/useBreadcrumbs';
-import { getI18nInfo, getPreviewEntry, hasI18n } from '@staticcms/core/lib/i18n';
+import { getI18nInfo, hasI18n } from '@staticcms/core/lib/i18n';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import {
   getFileFromSlug,
@@ -169,6 +169,11 @@ const EditorInterface = ({
 
   const collectHasI18n = hasI18n(collection);
 
+  const [showMobilePreview, setShowMobilePreview] = useState(false);
+  const toggleMobilePreview = useCallback(() => {
+    setShowMobilePreview(old => !old);
+  }, []);
+
   const editor = (
     <div
       key={defaultLocale}
@@ -181,7 +186,13 @@ const EditorInterface = ({
           `
             overflow-y-auto
             styled-scrollbars
-            h-main
+            h-main-mobile
+            md:h-main
+          `,
+        showMobilePreview &&
+          `
+            hidden
+            lg:block
           `,
       )}
     >
@@ -204,10 +215,12 @@ const EditorInterface = ({
       <div
         key={selectedLocale}
         className="
+          flex
           w-full
           overflow-y-auto
           styled-scrollbars
-          h-main
+          h-main-mobile
+          md:h-main
         "
       >
         <EditorControlPane
@@ -227,9 +240,36 @@ const EditorInterface = ({
     [collection, entry, fields, fieldsErrors, handleLocaleChange, selectedLocale, submitted, t],
   );
 
-  const previewEntry = collectHasI18n
-    ? getPreviewEntry(entry, selectedLocale[0], defaultLocale)
-    : entry;
+  const mobileLocaleEditor = useMemo(
+    () => (
+      <div
+        key={selectedLocale}
+        className="
+          w-full
+          overflow-y-auto
+          styled-scrollbars
+          h-main-mobile
+          flex
+          md:hidden
+        "
+      >
+        <EditorControlPane
+          collection={collection}
+          entry={entry}
+          fields={fields}
+          fieldsErrors={fieldsErrors}
+          locale={selectedLocale}
+          onLocaleChange={handleLocaleChange}
+          allowDefaultLocale
+          submitted={submitted}
+          canChangeLocale
+          hideBorder
+          t={t}
+        />
+      </div>
+    ),
+    [collection, entry, fields, fieldsErrors, handleLocaleChange, selectedLocale, submitted, t],
+  );
 
   const editorWithPreview = (
     <div
@@ -238,27 +278,31 @@ const EditorInterface = ({
           grid
           h-full
         `,
-        editorSize === EDITOR_SIZE_COMPACT ? 'grid-cols-editor' : 'grid-cols-2',
+        editorSize === EDITOR_SIZE_COMPACT ? 'lg:grid-cols-editor' : 'lg:grid-cols-2',
       )}
     >
       <ScrollSyncPane>{editor}</ScrollSyncPane>
       <EditorPreviewPane
         collection={collection}
         previewInFrame={previewInFrame}
-        entry={previewEntry}
+        entry={entry}
         fields={fields}
         editorSize={editorSize}
+        showMobilePreview={showMobilePreview}
       />
     </div>
   );
 
   const editorSideBySideLocale = (
-    <div className="grid grid-cols-2 h-full">
-      <ScrollSyncPane>{editor}</ScrollSyncPane>
-      <ScrollSyncPane>
-        <>{editorLocale}</>
-      </ScrollSyncPane>
-    </div>
+    <>
+      <div className="grid-cols-2 h-full hidden lg:grid">
+        <ScrollSyncPane>{editor}</ScrollSyncPane>
+        <ScrollSyncPane>
+          <>{editorLocale}</>
+        </ScrollSyncPane>
+      </div>
+      {mobileLocaleEditor}
+    </>
   );
 
   const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
@@ -296,6 +340,9 @@ const EditorInterface = ({
           toggleScrollSync={handleToggleScrollSync}
           toggleI18n={handleToggleI18n}
           slug={slug}
+          showMobilePreview={showMobilePreview}
+          onMobilePreviewToggle={toggleMobilePreview}
+          className="flex"
         />
       }
     >

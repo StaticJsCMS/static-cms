@@ -2,11 +2,12 @@ import React from 'react';
 import TopBarProgress from 'react-topbar-progress-indicator';
 
 import classNames from '../lib/util/classNames.util';
+import BottomNavigation from './navbar/BottomNavigation';
 import Navbar from './navbar/Navbar';
 import Sidebar from './navbar/Sidebar';
 
 import type { ReactNode } from 'react';
-import type { Breadcrumb } from '../interface';
+import type { Breadcrumb, Collection } from '../interface';
 
 TopBarProgress.config({
   barColors: {
@@ -25,6 +26,7 @@ interface MainViewProps {
   noMargin?: boolean;
   noScroll?: boolean;
   children: ReactNode;
+  collection?: Collection;
 }
 
 const MainView = ({
@@ -35,6 +37,7 @@ const MainView = ({
   noMargin = false,
   noScroll = false,
   navbarActions,
+  collection,
 }: MainViewProps) => {
   return (
     <>
@@ -48,11 +51,12 @@ const MainView = ({
         <div
           id="main-view"
           className={classNames(
-            showLeftNav ? 'w-main left-64' : 'w-full',
+            showLeftNav ? ' w-full left-0 md:w-main' : 'w-full',
             !noMargin && 'px-5 py-4',
             noScroll ? 'overflow-hidden' : 'overflow-y-auto',
             `
-              h-main
+              h-main-mobile
+              md:h-main
               relative
               styled-scrollbars
             `,
@@ -61,6 +65,7 @@ const MainView = ({
           {children}
         </div>
       </div>
+      <BottomNavigation collection={collection} />
     </>
   );
 };

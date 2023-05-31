@@ -1103,6 +1103,7 @@ export interface SvgProps {
 export interface Breadcrumb {
   name?: string;
   to?: string;
+  editor?: boolean;
 }
 
 export interface MediaLibraryDisplayURL {

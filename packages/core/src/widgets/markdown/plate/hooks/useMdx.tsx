@@ -8,6 +8,7 @@ import { VFileMessage } from 'vfile-message';
 
 import useDebouncedCallback from '@staticcms/core/lib/hooks/useDebouncedCallback';
 import flattenListItemParagraphs from '../serialization/slate/flattenListItemParagraphs';
+import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 
 export interface UseMdxState {
   file: VFile | null;
@@ -49,10 +50,11 @@ export default function useMdx(
   );
 
   const setValue = useDebouncedCallback(setValueCallback, 100);
+  const debouncedState = useDebounce(state, 150);
 
   useEffect(() => {
     setValue(input);
   }, [input, setValue]);
 
-  return [state, setValue];
+  return [debouncedState, setValue];
 }

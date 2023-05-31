@@ -1,5 +1,5 @@
 import { MDXProvider } from '@mdx-js/react';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { VFileMessage } from 'vfile-message';
 
 import { withMdxImage } from '@staticcms/core/components/common/image/Image';
@@ -11,20 +11,33 @@ import { processShortcodeConfigToMdx } from './plate/serialization/slate/process
 
 import type { MarkdownField, WidgetPreviewProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
+import type { UseMdxState } from './plate/hooks/useMdx';
 
-interface FallbackComponentProps {
-  error: string;
+interface MdxComponentProps {
+  state: UseMdxState;
 }
 
-function FallbackComponent({ error }: FallbackComponentProps) {
-  const message = new VFileMessage(error);
-  message.fatal = true;
-  return (
-    <pre>
-      <code>{String(message)}</code>
-    </pre>
-  );
-}
+// Create a preview component that can handle errors with try-catch block; for catching invalid JS expressions errors that ErrorBoundary cannot catch.
+const MdxComponent: FC<MdxComponentProps> = ({ state }) => {
+  const Result = useMemo(() => state.file?.result as FC | undefined, [state]);
+
+  if (!Result) {
+    return null;
+  }
+
+  try {
+    return <Result key="result" />;
+  } catch (error) {
+    const message = new VFileMessage(String(error));
+    message.fatal = true;
+
+    return (
+      <pre key="error">
+        <code>{String(message)}</code>
+      </pre>
+    );
+  }
+};
 
 const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = previewProps => {
   const { value, collection, field } = previewProps;
@@ -40,7 +53,7 @@ const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = previewPr
   );
 
   const [state, setValue] = useMdx(`editor-${id}.mdx`, value ?? '');
-  const [prevValue, setPrevValue] = useState('');
+  const [prevValue, setPrevValue] = useState<string | null>(null);
   useEffect(() => {
     if (prevValue !== value) {
       const parsedValue = processShortcodeConfigToMdx(getShortcodes(), value ?? '');
@@ -49,35 +62,13 @@ const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = previewPr
     }
   }, [prevValue, setValue, value]);
 
-  // Create a preview component that can handle errors with try-catch block; for catching invalid JS expressions errors that ErrorBoundary cannot catch.
-  const MdxComponent = useCallback(() => {
-    if (!state.file) {
-      return null;
-    }
-
-    try {
-      return (state.file.result as FC)({});
-    } catch (error) {
-      return <FallbackComponent error={String(error)} />;
-    }
-  }, [state.file]);
-
-  return useMemo(() => {
-    if (!value) {
-      return null;
-    }
-
-    return (
-      <div>
-        {state.file && state.file.result ? (
-          <MDXProvider components={components}>
-            <MdxComponent />
-          </MDXProvider>
-        ) : null}
-      </div>
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [MdxComponent]);
+  return (
+    <div key="markdown-preview">
+      <MDXProvider components={components}>
+        <MdxComponent state={state} />{' '}
+      </MDXProvider>
+    </div>
+  );
 };
 
 export default MarkdownPreview;
