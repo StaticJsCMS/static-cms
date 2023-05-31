@@ -13,8 +13,8 @@ import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
 import Switch from '../common/switch/Switch';
 
-import type { ChangeEvent, MouseEvent } from 'react';
-import type { TranslateProps } from 'react-polyglot';
+import type { TranslatedProps } from '@staticcms/core/interface';
+import type { ChangeEvent, FC, MouseEvent } from 'react';
 
 interface AvatarImageProps {
   imageUrl: string | undefined;
@@ -28,7 +28,11 @@ const AvatarImage = ({ imageUrl }: AvatarImageProps) => {
   );
 };
 
-const SettingsDropdown = ({ t }: TranslateProps) => {
+export interface SettingsDropdownProps {
+  inEditor: boolean;
+}
+
+const SettingsDropdown: FC<TranslatedProps<SettingsDropdownProps>> = ({ inEditor, t }) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
   const [isDarkMode, setIsDarkMode] = useState(document.documentElement.classList.contains('dark'));
@@ -84,6 +88,7 @@ const SettingsDropdown = ({ t }: TranslateProps) => {
       variant="outlined"
       rounded={!user?.avatar_url || 'no-padding'}
       hideDropdownIcon
+      rootClassName={inEditor ? 'hidden md:flex' : ''}
     >
       <MenuGroup>
         <MenuItemButton key="dark-mode" onClick={handleToggleDarkMode} startIcon={MoonIcon}>
@@ -102,4 +107,4 @@ const SettingsDropdown = ({ t }: TranslateProps) => {
   );
 };
 
-export default translate()(SettingsDropdown);
+export default translate()(SettingsDropdown) as FC<SettingsDropdownProps>;

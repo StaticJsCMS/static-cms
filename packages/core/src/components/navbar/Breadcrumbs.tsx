@@ -1,3 +1,4 @@
+import { ArrowBack as ArrowBackIcon } from '@styled-icons/material/ArrowBack';
 import React, { Fragment, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -8,9 +9,10 @@ import type { FC } from 'react';
 
 export interface BreadcrumbsProps {
   breadcrumbs: Breadcrumb[];
+  inEditor?: boolean;
 }
 
-const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs }) => {
+const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) => {
   const finalNonEditorBreadcrumb = useMemo(() => {
     const nonEditorBreadcrumbs = breadcrumbs.filter(b => !b.editor);
     if (nonEditorBreadcrumbs.length === 0) {
@@ -25,7 +27,6 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs }) => {
       className="
         flex
         h-full
-        w-breadcrumb-title-small
         md:w-auto
         items-center
         text-xl
@@ -34,6 +35,9 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs }) => {
         text-gray-800
         dark:text-white
         flex-grow
+        overflow-hidden
+        text-ellipsis
+        whitespace-nowrap
       "
     >
       <div
@@ -105,8 +109,10 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs }) => {
           <Link
             key="final-non-editor-breadcrumb-link"
             className="
-              block
+              flex
               md:hidden
+              gap-2
+              items-center
               overflow-hidden
               whitespace-nowrap
               text-ellipsis
@@ -118,6 +124,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs }) => {
             "
             to={finalNonEditorBreadcrumb.to}
           >
+            {inEditor ? <ArrowBackIcon className="w-6 h-6" /> : null}
             {finalNonEditorBreadcrumb.name}
           </Link>
         ) : (

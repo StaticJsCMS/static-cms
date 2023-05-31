@@ -180,12 +180,10 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
       <div
         className={classNames(
           `
-            h-main-mobile-editor
-            md:h-main-tablet-editor
-            lg:h-main
+            h-main-mobile
+            md:h-main
             absolute
-            top-28
-            lg:top-16
+            top-16
             right-0
             w-full
           `,

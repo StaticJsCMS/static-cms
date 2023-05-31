@@ -186,9 +186,8 @@ const EditorInterface = ({
           `
             overflow-y-auto
             styled-scrollbars
-            h-main-mobile-editor
-            md:h-main-tablet-editor
-            lg:h-main
+            h-main-mobile
+            md:h-main
           `,
         showMobilePreview &&
           `
@@ -220,9 +219,8 @@ const EditorInterface = ({
           w-full
           overflow-y-auto
           styled-scrollbars
-          h-main-mobile-editor
-          md:h-main-tablet-editor
-          lg:h-main
+          h-main-mobile
+          md:h-main
         "
       >
         <EditorControlPane
@@ -250,10 +248,9 @@ const EditorInterface = ({
           w-full
           overflow-y-auto
           styled-scrollbars
-          h-main-mobile-editor
-          md:h-main-tablet-editor
+          h-main-mobile
           flex
-          lg:hidden
+          md:hidden
         "
       >
         <EditorControlPane
@@ -345,62 +342,10 @@ const EditorInterface = ({
           slug={slug}
           showMobilePreview={showMobilePreview}
           onMobilePreviewToggle={toggleMobilePreview}
-          className="hidden lg:flex"
+          className="flex"
         />
       }
     >
-      <div
-        className="
-          flex
-          h-12
-          bg-gray-100
-          dark:bg-slate-950
-          lg:hidden
-          px-3
-          py-2
-          font-bold
-          drop-shadow
-          dark:drop-shadow-md
-          justify-between
-          items-center
-        "
-      >
-        <div
-          className="
-            overflow-hidden
-            whitespace-nowrap
-            text-ellipsis
-          "
-        >
-          {breadcrumbs.length > 0 ? breadcrumbs[breadcrumbs.length - 1].name : ''}
-        </div>
-        <EditorToolbar
-          isPersisting={entry.isPersisting}
-          isDeleting={entry.isDeleting}
-          onPersist={handleOnPersist}
-          onPersistAndNew={() => handleOnPersist({ createNew: true })}
-          onPersistAndDuplicate={() => handleOnPersist({ createNew: true, duplicate: true })}
-          onDelete={onDelete}
-          onDuplicate={onDuplicate}
-          hasChanged={hasChanged}
-          displayUrl={displayUrl}
-          collection={collection}
-          isNewEntry={isNewEntry}
-          isModification={isModification}
-          showPreviewToggle={showPreviewToggle}
-          previewActive={finalPreviewActive}
-          scrollSyncActive={scrollSyncActive}
-          showI18nToggle={collectHasI18n}
-          i18nActive={i18nActive}
-          togglePreview={handleTogglePreview}
-          toggleScrollSync={handleToggleScrollSync}
-          toggleI18n={handleToggleI18n}
-          slug={slug}
-          showMobilePreview={showMobilePreview}
-          onMobilePreviewToggle={toggleMobilePreview}
-          className="flex"
-        />
-      </div>
       <EditorContent
         key={draftKey}
         i18nActive={i18nActive}

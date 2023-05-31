@@ -5,8 +5,6 @@ module.exports = {
       height: {
         main: "calc(100vh - 64px)",
         "main-mobile": "calc(100vh - 128px)",
-        "main-mobile-editor": "calc(100vh - 176px)",
-        "main-tablet-editor": "calc(100vh - 103px)",
         "media-library-dialog": "80vh",
         "media-card": "240px",
         "media-preview-image": "104px",
