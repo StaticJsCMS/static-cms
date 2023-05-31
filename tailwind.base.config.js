@@ -33,6 +33,7 @@ module.exports = {
         "breadcrumb-title-small": "calc(100vw - 126px)",
         "breadcrumb-title": "calc(100vw * .4)",
         "collection-header": "calc(100% - 32px)",
+        "date-widget": "calc(100% - 58px)",
       },
       maxWidth: {
         "media-search": "400px",
