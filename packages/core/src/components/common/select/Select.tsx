@@ -59,7 +59,6 @@ const Select = forwardRef(
       },
       [onOpenChange],
     );
-    const handleButtonClick = useCallback(() => handleOpenChange(!open), [handleOpenChange, open]);
 
     const handleChange = useCallback(
       (_event: MouseEvent | KeyboardEvent | FocusEvent | null, selectedValue: number | string) => {
@@ -126,7 +125,6 @@ const Select = forwardRef(
           slotProps={{
             root: {
               ref,
-              onClick: handleButtonClick,
               className: classNames(
                 `
                   flex
@@ -162,11 +160,11 @@ const Select = forwardRef(
                 ring-opacity-5
                 focus:outline-none
                 sm:text-sm
-                z-50
+                z-[100]
                 dark:bg-slate-700
                 dark:shadow-lg
               `,
-              style: { width },
+              style: { width: ref ? width : 'auto' },
               disablePortal: false,
             },
           }}
