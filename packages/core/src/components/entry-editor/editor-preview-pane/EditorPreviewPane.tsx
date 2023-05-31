@@ -114,9 +114,10 @@ export interface EditorPreviewPaneProps {
   showMobilePreview: boolean;
 }
 
-const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
+const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
   const { editorSize, entry, collection, fields, previewInFrame, showMobilePreview, t } = props;
 
+  console.log(entry);
   const config = useAppSelector(selectConfig);
 
   const { widgetFor, widgetsFor } = useWidgetsFor(config, collection, fields, entry);
@@ -197,54 +198,52 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
             `,
         )}
       >
-        {!entry || !entry.data ? null : (
-          <ErrorBoundary config={config}>
-            {previewInFrame ? (
-              <Frame
-                key="preview-frame"
+        <ErrorBoundary config={config}>
+          {previewInFrame ? (
+            <Frame
+              key="preview-frame"
+              id="preview-pane"
+              head={previewStyles}
+              initialContent={initialFrameContent}
+              className="w-full h-full"
+            >
+              {!collection ? (
+                t('collection.notFound')
+              ) : (
+                <PreviewFrameContent
+                  key="preview-frame-content"
+                  previewComponent={previewComponent}
+                  previewProps={{ ...previewProps }}
+                />
+              )}
+            </Frame>
+          ) : (
+            <ScrollSyncPane key="preview-wrapper-scroll-sync">
+              <div
+                key="preview-wrapper"
                 id="preview-pane"
-                head={previewStyles}
-                initialContent={initialFrameContent}
-                className="w-full h-full"
-              >
-                {!collection ? (
-                  t('collection.notFound')
-                ) : (
-                  <PreviewFrameContent
-                    key="preview-frame-content"
-                    previewComponent={previewComponent}
-                    previewProps={{ ...previewProps }}
-                  />
-                )}
-              </Frame>
-            ) : (
-              <ScrollSyncPane key="preview-wrapper-scroll-sync">
-                <div
-                  key="preview-wrapper"
-                  id="preview-pane"
-                  className="
+                className="
                     overflow-y-auto
                     styled-scrollbars
                     h-full
                   "
-                >
-                  {!collection ? (
-                    t('collection.notFound')
-                  ) : (
-                    <>
-                      {previewStyles}
-                      <EditorPreviewContent
-                        key="preview-wrapper-content"
-                        previewComponent={previewComponent}
-                        previewProps={{ ...previewProps, document, window }}
-                      />
-                    </>
-                  )}
-                </div>
-              </ScrollSyncPane>
-            )}
-          </ErrorBoundary>
-        )}
+              >
+                {!collection ? (
+                  t('collection.notFound')
+                ) : (
+                  <>
+                    {previewStyles}
+                    <EditorPreviewContent
+                      key="preview-wrapper-content"
+                      previewComponent={previewComponent}
+                      previewProps={{ ...previewProps, document, window }}
+                    />
+                  </>
+                )}
+              </div>
+            </ScrollSyncPane>
+          )}
+        </ErrorBoundary>
       </div>,
       element,
       'preview-content',
@@ -254,7 +253,6 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
     config,
     editorSize,
     element,
-    entry,
     initialFrameContent,
     previewComponent,
     previewInFrame,
@@ -265,4 +263,4 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
   ]);
 };
 
-export default translate()(PreviewPane) as FC<EditorPreviewPaneProps>;
+export default translate()(EditorPreviewPane) as FC<EditorPreviewPaneProps>;

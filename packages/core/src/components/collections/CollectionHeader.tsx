@@ -71,8 +71,8 @@ const CollectionHeader: FC<TranslatedProps<CollectionHeaderProps>> = ({ collecti
           gap-4
           justify-normal
           xs:justify-between
-          w-full
           sm:justify-normal
+          w-full
           overflow-hidden
           whitespace-nowrap
           text-ellipsis
@@ -83,12 +83,14 @@ const CollectionHeader: FC<TranslatedProps<CollectionHeaderProps>> = ({ collecti
             text-xl
             font-semibold
             flex
-            flex-grow
             items-center
             text-gray-800
             dark:text-gray-300
             gap-2
+            flex-grow
             w-full
+            md:grow-0
+            md:w-auto
           "
         >
           <div className="flex items-center">{icon}</div>
@@ -105,7 +107,7 @@ const CollectionHeader: FC<TranslatedProps<CollectionHeaderProps>> = ({ collecti
           </div>
         </h2>
         {newEntryUrl ? (
-          <Button to={newEntryUrl} className="hidden sm:flex">
+          <Button to={newEntryUrl} className="hidden md:flex">
             {t('collection.collectionTop.newButton', {
               collectionLabel: collectionLabelSingular || pluralLabel,
             })}

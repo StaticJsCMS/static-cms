@@ -69,8 +69,7 @@ export function getLocaleDataPath(locale: string) {
 }
 
 export function getDataPath(locale: string, defaultLocale: string) {
-  const dataPath = locale !== defaultLocale ? getLocaleDataPath(locale) : ['data'];
-  return dataPath;
+  return locale !== defaultLocale ? getLocaleDataPath(locale) : ['data'];
 }
 
 export function getFilePath(
@@ -182,6 +181,7 @@ export function getI18nFiles<EF extends BaseField>(
   const dataFiles = locales
     .map(locale => {
       const dataPath = getDataPath(locale, defaultLocale);
+      console.log('dataPath', dataPath);
       entryDraft.data = get(entryDraft, dataPath);
       return {
         path: getFilePath(structure, extension, path, slug, locale),
@@ -244,6 +244,7 @@ function mergeValues<EF extends BaseField>(
   values: { locale: string; value: Entry }[],
 ) {
   let defaultEntry = values.find(e => e.locale === defaultLocale);
+  console.log('defaultEntry', defaultEntry);
   if (!defaultEntry) {
     defaultEntry = values[0];
     console.warn(`[StaticCMS] Could not locale entry for default locale '${defaultLocale}'`);
@@ -264,6 +265,7 @@ function mergeValues<EF extends BaseField>(
     path,
     slug,
   };
+  console.log('entryValue', entryValue);
 
   return entryValue;
 }
@@ -293,6 +295,7 @@ export async function getI18nEntry<EF extends BaseField>(
   slug: string,
   getEntryValue: (path: string) => Promise<Entry>,
 ) {
+  console.log('HELLO2!');
   const {
     structure = I18N_STRUCTURE_SINGLE_FILE,
     locales,
@@ -307,6 +310,7 @@ export async function getI18nEntry<EF extends BaseField>(
       locales.map(async locale => {
         const entryPath = getFilePath(structure, extension, path, slug, locale);
         const value = await getEntryValue(entryPath).catch(() => null);
+        console.log('entryPath', entryPath, 'value', value);
         return { value, locale };
       }),
     );

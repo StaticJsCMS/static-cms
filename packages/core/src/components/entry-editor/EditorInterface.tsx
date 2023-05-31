@@ -3,7 +3,7 @@ import { ScrollSyncPane } from 'react-scroll-sync';
 
 import { EDITOR_SIZE_COMPACT } from '@staticcms/core/constants/views';
 import useBreadcrumbs from '@staticcms/core/lib/hooks/useBreadcrumbs';
-import { getI18nInfo, getPreviewEntry, hasI18n } from '@staticcms/core/lib/i18n';
+import { getI18nInfo, hasI18n } from '@staticcms/core/lib/i18n';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import {
   getFileFromSlug,
@@ -243,10 +243,6 @@ const EditorInterface = ({
     [collection, entry, fields, fieldsErrors, handleLocaleChange, selectedLocale, submitted, t],
   );
 
-  const previewEntry = collectHasI18n
-    ? getPreviewEntry(entry, selectedLocale[0], defaultLocale)
-    : entry;
-
   const editorWithPreview = (
     <div
       className={classNames(
@@ -261,7 +257,7 @@ const EditorInterface = ({
       <EditorPreviewPane
         collection={collection}
         previewInFrame={previewInFrame}
-        entry={previewEntry}
+        entry={entry}
         fields={fields}
         editorSize={editorSize}
         showMobilePreview={showMobilePreview}

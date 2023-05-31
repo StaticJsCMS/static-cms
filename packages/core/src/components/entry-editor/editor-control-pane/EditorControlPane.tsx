@@ -95,6 +95,7 @@ const EditorControlPane = ({
           flex
           flex-col
           min-h-full
+          w-full
         `,
         !hideBorder &&
           `
