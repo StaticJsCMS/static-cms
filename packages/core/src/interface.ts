@@ -570,7 +570,7 @@ export interface MediaLibraryConfig {
   folder_support?: boolean;
 }
 
-export type BackendType = 'git-gateway' | 'github' | 'gitlab' | 'bitbucket' | 'test-repo' | 'proxy';
+export type BackendType = 'git-gateway' | 'github' | 'gitlab' | 'gitea' | 'bitbucket' | 'test-repo' | 'proxy';
 
 export type MapWidgetType = 'Point' | 'LineString' | 'Polygon';
 

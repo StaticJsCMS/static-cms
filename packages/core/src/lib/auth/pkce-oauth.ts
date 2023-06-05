@@ -120,19 +120,21 @@ export default class PkceAuthenticator {
     if ('code' in params) {
       const code = params.code;
       const authURL = new URL(this.auth_token_url);
-      authURL.searchParams.set('client_id', this.appID);
-      authURL.searchParams.set('code', code ?? '');
-      authURL.searchParams.set('grant_type', 'authorization_code');
-      authURL.searchParams.set(
-        'redirect_uri',
-        document.location.origin + document.location.pathname,
-      );
-      authURL.searchParams.set('code_verifier', getCodeVerifier() ?? '');
+
+      const response = await fetch(authURL.href, { method: 'POST', body: JSON.stringify({
+        client_id: this.appID,
+        code: code ?? '',
+        grant_type: 'authorization_code',
+        redirect_uri: document.location.origin + document.location.pathname,
+        code_verifier: getCodeVerifier() ?? ''
+      }), headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      } });
+      const data = await response.json();
+
       //no need for verifier code so remove
       clearCodeVerifier();
 
-      const response = await fetch(authURL.href, { method: 'POST' });
-      const data = await response.json();
       cb(null, { token: data.access_token, ...data });
     }
   }
