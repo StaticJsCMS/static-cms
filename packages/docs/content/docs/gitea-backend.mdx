@@ -9,24 +9,23 @@ beta: true
 
 For repositories stored on Gitea, the `gitea` backend allows CMS users to log in directly with their Gitea account. Note that all users must have push access to your content repository for this to work.
 
-<Alert severity="warning">Because of the [lack](https://github.com/go-gitea/gitea/issues/14619) of a Gitea API endpoint for multifile commits, when using this backend, separate commits are created for every changed file. Please make sure this is handled correctly by your CI.</Alert>
+Please note that only Gitea **1.20** and upwards is supported due to API limitations in previous versions.
 
 ## Authentication
 
-Because Gitea requires a server for authentication and Netlify doesn't support Gitea, a custom OAuth provider needs to be used for basic Gitea authentication.
+With Gitea's PKCE authorization, users can authenticate with Gitea directly from the client. To do this:
 
-To enable basic Gitea authentication:
-
-1. Setup an own OAuth provider, for example with [Teabag](https://github.com/denyskon/teabag).
-2. Add the following lines to your Static CMS `config` file:
+1. Add your Static CMS instance as an OAuth application in your user/organization settings or through the admin panel of your Gitea instance. Please make sure to uncheck the **Confidential Client** checkbox. For the **Redirect URIs**, enter the addresses where you access Static CMS, for example, `https://www.mysite.com/admin/`.
+2. Gitea provides you with a **Client ID**. Copy it and insert it into your `config` file along with the other options:
 
 <CodeTabs>
 ```yaml
 backend:
   name: gitea
   repo: owner-name/repo-name # Path to your Gitea repository
-  base_url: https://oauth.example.com # URL of your OAuth provider
-  api_root: https://gitea.example.com/api/v1 # API url of your Gitea instance
+  app_id: your-client-id # The Client ID provided by Gitea
+  api_root: https://gitea.example.com/api/v1 # API URL of your Gitea instance
+  base_url: https://gitea.example.com # Root URL of your Gitea instance
   # optional, defaults to main
   # branch: main
 ```
@@ -35,8 +34,9 @@ backend:
 backend: {
   name: 'gitea',
   repo: 'owner-name/repo-name', // Path to your Gitea repository
-  base_url: 'https://oauth.example.com', // URL of your OAuth provider
-  api_root: 'https://gitea.example.com/api/v1' // API url of your Gitea instance
+  app_id: 'your-client-id', // The Client ID provided by Gitea
+  api_root: 'https://gitea.example.com/api/v1', // API URL of your Gitea instance
+  base_url: 'https://gitea.example.com', // Root URL of your Gitea instance
   // optional, defaults to main
   // branch: 'main'
 },
