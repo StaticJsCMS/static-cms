@@ -18,6 +18,7 @@ import type { ApiRequest, FetchError } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 import type { Semaphore } from 'semaphore';
 import type {
+  FilesResponse,
   GitGetBlobResponse,
   GitGetTreeResponse,
   GiteaUser,
@@ -372,14 +373,14 @@ export default class API {
   }
 
   async changeFiles(operations: ChangeFileOperation[], options: PersistOptions) {
-    await this.request(`${this.repoURL}/contents`, {
+    return (await this.request(`${this.repoURL}/contents`, {
       method: 'POST',
       body: JSON.stringify({
         branch: this.branch,
         files: operations,
         message: options.commitMessage,
       }),
-    });
+    })) as FilesResponse;
   }
 
   async getChangeFileOperations(files: { path: string; newPath?: string }[], branch: string) {

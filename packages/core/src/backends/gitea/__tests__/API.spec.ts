@@ -101,12 +101,24 @@ describe('gitea API', () => {
   });
 
   describe('persistFiles', () => {
-    it('should check if file exists and create a new file', async () => {
+    it('should create a new commit', async () => {
       const api = new API({ branch: 'master', repo: 'owner/repo' });
 
       const responses = {
-        '/repos/owner/repo/contents/content/posts/new-post.md': () => ({
+        '/repos/owner/repo/git/trees/master:content%2Fposts': () => {
+          return { tree: [{ path: 'update-post.md', sha: 'old-sha' }] };
+        },
+
+        '/repos/owner/repo/contents': () => ({
           commit: { sha: 'new-sha' },
+          files: [
+            {
+              path: 'content/posts/new-post.md',
+            },
+            {
+              path: 'content/posts/update-post.md',
+            },
+          ],
         }),
       };
       mockAPI(api, responses);
@@ -115,85 +127,142 @@ describe('gitea API', () => {
         dataFiles: [
           {
             slug: 'entry',
-            sha: 'abc',
             path: 'content/posts/new-post.md',
             raw: 'content',
           },
-        ],
-        assets: [],
-      };
-      await api.persistFiles(entry.dataFiles, entry.assets, {
-        commitMessage: 'commitMessage',
-        newEntry: true,
-      });
-
-      expect(api.request).toHaveBeenCalledTimes(2);
-
-      expect((api.request as jest.Mock).mock.calls[0]).toEqual([
-        '/repos/owner/repo/git/trees/master:content%2Fposts',
-      ]);
-
-      expect((api.request as jest.Mock).mock.calls[1]).toEqual([
-        '/repos/owner/repo/contents/content/posts/new-post.md',
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            branch: 'master',
-            content: Base64.encode(entry.dataFiles[0].raw),
-            message: 'commitMessage',
-            signoff: false,
-          }),
-        },
-      ]);
-    });
-    it('should get the file sha and update the file', async () => {
-      jest.clearAllMocks();
-      const api = new API({ branch: 'master', repo: 'owner/repo' });
-
-      const responses = {
-        '/repos/owner/repo/git/trees/master:content%2Fposts': () => {
-          return { tree: [{ path: 'update-post.md', sha: 'old-sha' }] };
-        },
-
-        '/repos/owner/repo/contents/content/posts/update-post.md': () => {
-          return { commit: { sha: 'updated-sha' } };
-        },
-      };
-      mockAPI(api, responses);
-
-      const entry = {
-        dataFiles: [
           {
             slug: 'entry',
-            sha: 'abc',
+            sha: 'old-sha',
             path: 'content/posts/update-post.md',
             raw: 'content',
           },
         ],
         assets: [],
       };
-
-      await api.persistFiles(entry.dataFiles, entry.assets, {
-        commitMessage: 'commitMessage',
-        newEntry: false,
+      await expect(
+        api.persistFiles(entry.dataFiles, entry.assets, {
+          commitMessage: 'commitMessage',
+          newEntry: true,
+        }),
+      ).resolves.toEqual({
+        commit: { sha: 'new-sha' },
+        files: [
+          {
+            path: 'content/posts/new-post.md',
+          },
+          {
+            path: 'content/posts/update-post.md',
+          },
+        ],
       });
 
-      expect(api.request).toHaveBeenCalledTimes(2);
+      expect(api.request).toHaveBeenCalledTimes(3);
 
       expect((api.request as jest.Mock).mock.calls[0]).toEqual([
         '/repos/owner/repo/git/trees/master:content%2Fposts',
       ]);
 
       expect((api.request as jest.Mock).mock.calls[1]).toEqual([
-        '/repos/owner/repo/contents/content/posts/update-post.md',
+        '/repos/owner/repo/git/trees/master:content%2Fposts',
+      ]);
+
+      expect((api.request as jest.Mock).mock.calls[2]).toEqual([
+        '/repos/owner/repo/contents',
         {
-          method: 'PUT',
+          method: 'POST',
           body: JSON.stringify({
             branch: 'master',
-            content: Base64.encode(entry.dataFiles[0].raw),
+            files: [
+              {
+                operation: 'create',
+                content: Base64.encode(entry.dataFiles[0].raw),
+                path: entry.dataFiles[0].path,
+              },
+              {
+                operation: 'update',
+                content: Base64.encode(entry.dataFiles[1].raw),
+                path: entry.dataFiles[1].path,
+                sha: entry.dataFiles[1].sha,
+              },
+            ],
             message: 'commitMessage',
-            sha: 'old-sha',
-            signoff: false,
+          }),
+        },
+      ]);
+    });
+  });
+
+  describe('deleteFiles', () => {
+    it('should check if files exist and delete them', async () => {
+      const api = new API({ branch: 'master', repo: 'owner/repo' });
+
+      const responses = {
+        '/repos/owner/repo/git/trees/master:content%2Fposts': () => {
+          return {
+            tree: [
+              { path: 'delete-post-1.md', sha: 'old-sha-1' },
+              { path: 'delete-post-2.md', sha: 'old-sha-2' },
+            ],
+          };
+        },
+
+        '/repos/owner/repo/contents': () => ({
+          commit: { sha: 'new-sha' },
+          files: [
+            {
+              path: 'content/posts/delete-post-1.md',
+            },
+            {
+              path: 'content/posts/delete-post-2.md',
+            },
+          ],
+        }),
+      };
+      mockAPI(api, responses);
+
+      const deleteFiles = ['content/posts/delete-post-1.md', 'content/posts/delete-post-2.md'];
+
+      await expect(api.deleteFiles(deleteFiles, 'commitMessage')).resolves.toEqual({
+        commit: { sha: 'new-sha' },
+        files: [
+          {
+            path: 'content/posts/delete-post-1.md',
+          },
+          {
+            path: 'content/posts/delete-post-2.md',
+          },
+        ],
+      });
+
+      expect(api.request).toHaveBeenCalledTimes(3);
+
+      expect((api.request as jest.Mock).mock.calls[0]).toEqual([
+        '/repos/owner/repo/git/trees/master:content%2Fposts',
+      ]);
+
+      expect((api.request as jest.Mock).mock.calls[1]).toEqual([
+        '/repos/owner/repo/git/trees/master:content%2Fposts',
+      ]);
+
+      expect((api.request as jest.Mock).mock.calls[2]).toEqual([
+        '/repos/owner/repo/contents',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            branch: 'master',
+            files: [
+              {
+                operation: 'delete',
+                path: deleteFiles[0],
+                sha: 'old-sha-1',
+              },
+              {
+                operation: 'delete',
+                path: deleteFiles[1],
+                sha: 'old-sha-2',
+              },
+            ],
+            message: 'commitMessage',
           }),
         },
       ]);
