@@ -216,32 +216,3 @@ export type GitGetTreeResponse = {
   truncated: boolean;
   url: string;
 };
-
-export type GiteaIdentity = {
-  email: string;
-  name: string;
-};
-
-type FileLinksResponse = {
-  git: string;
-  html: string;
-  self: string;
-};
-
-export type ContentsResponse = {
-  _links: FileLinksResponse;
-  content?: string | null;
-  download_url: string;
-  encoding?: string | null;
-  git_url: string;
-  html_url: string;
-  last_commit_sha: string;
-  name: string;
-  path: string;
-  sha: string;
-  size: number;
-  submodule_git_url?: string | null;
-  target?: string | null;
-  type: string;
-  url: string;
-};

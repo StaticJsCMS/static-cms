@@ -10,8 +10,6 @@ import type { MouseEvent } from 'react';
 const GiteaAuthenticationPage = ({
   inProgress = false,
   config,
-  base_url,
-  siteId,
   clearHash,
   onLogin,
   t,
@@ -19,10 +17,7 @@ const GiteaAuthenticationPage = ({
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const auth = useMemo(() => {
-    const {
-      base_url = 'https://try.gitea.io',
-      app_id = '',
-    } = config.backend;
+    const { base_url = 'https://try.gitea.io', app_id = '' } = config.backend;
 
     const clientSizeAuth = new PkceAuthenticator({
       base_url,

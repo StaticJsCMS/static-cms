@@ -176,7 +176,12 @@ export default class Gitea implements BackendClass {
     console.log(user);
 
     // Authorized user
-    return { name: user.full_name, login: user.login, avatar_url: user.avatar_url, token: state.token as string };
+    return {
+      name: user.full_name,
+      login: user.login,
+      avatar_url: user.avatar_url,
+      token: state.token as string,
+    };
   }
 
   logout() {
