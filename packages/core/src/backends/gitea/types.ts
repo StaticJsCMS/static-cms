@@ -46,13 +46,13 @@ export type GiteaOrganization = {
   website: string;
 };
 
-type ReposListCommitsResponseItemCommitUser = {
+type CommitUser = {
   date: string;
   email: string;
   name: string;
 };
 
-type ReposListCommitsResponseItemCommitMeta = {
+type CommitMeta = {
   created: string;
   sha: string;
   url: string;
@@ -73,10 +73,10 @@ type PayloadCommitVerification = {
 };
 
 type ReposListCommitsResponseItemCommit = {
-  author: ReposListCommitsResponseItemCommitUser;
-  committer: ReposListCommitsResponseItemCommitUser;
+  author: CommitUser;
+  committer: CommitUser;
   message: string;
-  tree: ReposListCommitsResponseItemCommitMeta;
+  tree: CommitMeta;
   url: string;
   verification: PayloadCommitVerification;
 };
@@ -183,7 +183,7 @@ type ReposListCommitsResponseItem = {
   created: string;
   files: Array<ReposListCommitsResponseItemCommitAffectedFiles>;
   html_url: string;
-  parents: Array<ReposListCommitsResponseItemCommitMeta>;
+  parents: Array<CommitMeta>;
   sha: string;
   stats: ReposListCommitsResponseItemCommitStats;
   url: string;
@@ -217,18 +217,13 @@ export type GitGetTreeResponse = {
   url: string;
 };
 
-export type GiteaIdentity = {
-  email: string;
-  name: string;
-};
-
 type FileLinksResponse = {
   git: string;
   html: string;
   self: string;
 };
 
-export type ContentsResponse = {
+type ContentsResponse = {
   _links: FileLinksResponse;
   content?: string | null;
   download_url: string;
@@ -244,4 +239,22 @@ export type ContentsResponse = {
   target?: string | null;
   type: string;
   url: string;
+};
+
+type FileCommitResponse = {
+  author: CommitUser;
+  committer: CommitUser;
+  created: string;
+  html_url: string;
+  message: string;
+  parents: Array<CommitMeta>;
+  sha: string;
+  tree: CommitMeta;
+  url: string;
+};
+
+export type FilesResponse = {
+  commit: FileCommitResponse;
+  content: Array<ContentsResponse>;
+  verification: PayloadCommitVerification;
 };

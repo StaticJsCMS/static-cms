@@ -77,7 +77,7 @@ export default class Gitea implements BackendClass {
     this.api = this.options.API || null;
     this.repo = this.originRepo = config.backend.repo || '';
     this.branch = config.backend.branch?.trim() || 'main';
-    this.apiRoot = config.backend.api_root || 'https://gitea.com/api/v1';
+    this.apiRoot = config.backend.api_root || 'https://try.gitea.io/api/v1';
     this.token = '';
     this.mediaFolder = config.media_folder;
     this.lock = asyncLock();
@@ -173,8 +173,15 @@ export default class Gitea implements BackendClass {
       throw new Error('Your Gitea user account does not have access to this repo.');
     }
 
+    console.log(user);
+
     // Authorized user
-    return { ...user, token: state.token as string };
+    return {
+      name: user.full_name,
+      login: user.login,
+      avatar_url: user.avatar_url,
+      token: state.token as string,
+    };
   }
 
   logout() {
