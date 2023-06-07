@@ -96,6 +96,10 @@ const EditorInterface = ({
   slug,
 }: TranslatedProps<EditorInterfaceProps>) => {
   const { locales, defaultLocale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
+  const translatedLocales = useMemo(
+    () => locales?.filter(locale => locale !== defaultLocale) ?? [],
+    [locales, defaultLocale],
+  );
 
   const [previewActive, setPreviewActive] = useState(
     localStorage.getItem(PREVIEW_VISIBLE) !== 'false',
@@ -108,7 +112,7 @@ const EditorInterface = ({
   );
 
   const [selectedLocale, setSelectedLocale] = useState<string>(
-    (i18nActive ? locales?.[1] : locales?.[0]) ?? 'en',
+    (i18nActive ? translatedLocales?.[0] : defaultLocale) ?? 'en',
   );
 
   useEffect(() => {
@@ -138,10 +142,10 @@ const EditorInterface = ({
     const newI18nActive = !i18nActive;
     setI18nActive(newI18nActive);
     setSelectedLocale(selectedLocale =>
-      newI18nActive && selectedLocale === locales?.[0] ? locales?.[1] : selectedLocale,
+      newI18nActive && selectedLocale === defaultLocale ? translatedLocales?.[0] : selectedLocale,
     );
     localStorage.setItem(I18N_VISIBLE, `${newI18nActive}`);
-  }, [i18nActive, setSelectedLocale, locales]);
+  }, [i18nActive, setSelectedLocale, translatedLocales, defaultLocale]);
 
   const handleLocaleChange = useCallback((locale: string) => {
     setSelectedLocale(locale);
