@@ -10,6 +10,7 @@ interface LocaleDropdownProps {
   dropdownText: string;
   canChangeLocale: boolean;
   onLocaleChange?: (locale: string) => void;
+  excludeLocales?: string[];
 }
 
 const LocaleDropdown = ({
@@ -18,6 +19,7 @@ const LocaleDropdown = ({
   dropdownText,
   canChangeLocale,
   onLocaleChange,
+  excludeLocales = [defaultLocale],
 }: LocaleDropdownProps) => {
   if (!canChangeLocale) {
     return (
@@ -39,7 +41,7 @@ const LocaleDropdown = ({
     <Menu label={dropdownText}>
       <MenuGroup>
         {locales
-          .filter(locale => locale !== defaultLocale)
+          .filter(locale => !excludeLocales.includes(locale))
           .map(locale => (
             <MenuItemButton key={locale} onClick={() => onLocaleChange?.(locale)}>
               {locale}
