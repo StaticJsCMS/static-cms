@@ -4,6 +4,7 @@ import flatten from 'lodash/flatten';
 import get from 'lodash/get';
 import isError from 'lodash/isError';
 import uniq from 'lodash/uniq';
+import { dirname } from 'path';
 
 import { resolveFormat } from './formats/formats';
 import { commitMessageFormatter, slugFormatter } from './lib/formatters';
@@ -40,12 +41,9 @@ import {
   selectMediaFolders,
 } from './lib/util/collection.util';
 import filterEntries from './lib/util/filter.util';
-import {
-  DRAFT_MEDIA_FILES,
-  selectMediaFilePath,
-  selectMediaFilePublicPath,
-} from './lib/util/media.util';
+import { DRAFT_MEDIA_FILES, selectMediaFilePublicPath } from './lib/util/media.util';
 import { selectCustomPath, slugFromCustomPath } from './lib/util/nested.util';
+import { isNullish } from './lib/util/null.util';
 import { set } from './lib/util/object.util';
 import { dateParsers, expandPath, extractTemplateVars } from './lib/widgets/stringTemplate';
 import createEntry from './valueObjects/createEntry';
@@ -63,46 +61,70 @@ import type {
   DisplayURL,
   Entry,
   EntryData,
-  EntryDraft,
   EventData,
   FilterRule,
   ImplementationEntry,
   MediaField,
+  ObjectValue,
   PersistArgs,
   SearchQueryResponse,
   SearchResponse,
   UnknownField,
   User,
+  ValueOrNestedValue,
 } from './interface';
 import type { AsyncLock } from './lib/util';
 import type { RootState } from './store';
 import type AssetProxy from './valueObjects/AssetProxy';
 
-function updateAssetProxies(
-  assetProxies: AssetProxy[],
-  config: Config,
-  collection: Collection,
-  entryDraft: EntryDraft,
-  path: string,
-) {
-  assetProxies.map(asset => {
-    // update media files path based on entry path
-    const oldPath = asset.path;
-    entryDraft.entry.path = path;
+function updatePath(entryPath: string, assetPath: string): string | null {
+  const pathDir = dirname(entryPath);
 
-    const folderPath = joinUrlPath(
-      collection && 'folder' in collection ? collection.folder : '',
-      DRAFT_MEDIA_FILES,
-    );
+  const pathParts = assetPath.split(DRAFT_MEDIA_FILES);
+  const restOfPath = pathParts.length > 1 ? pathParts[1] : null;
+  if (restOfPath === null) {
+    return null;
+  }
 
-    const newPath = selectMediaFilePath(
-      config,
-      collection,
-      entryDraft.entry,
-      oldPath.replace(folderPath, ''),
-      asset.field,
-    );
-    asset.path = newPath;
+  return joinUrlPath(pathDir, restOfPath).replace(/\/\//g, '');
+}
+
+function updateAssetFields(data: ValueOrNestedValue, path: string): ValueOrNestedValue {
+  if (
+    isNullish(data) ||
+    typeof data === 'number' ||
+    typeof data === 'boolean' ||
+    data instanceof Date
+  ) {
+    return data;
+  }
+
+  if (Array.isArray(data)) {
+    return data.map(child => updateAssetFields(child, path));
+  }
+
+  if (typeof data === 'object') {
+    return Object.keys(data).reduce((acc, key) => {
+      acc[key] = updateAssetFields(data[key], path);
+
+      return acc;
+    }, {} as ObjectValue);
+  }
+
+  const newPath = updatePath(path, data);
+  if (!newPath) {
+    return data;
+  }
+
+  return newPath;
+}
+
+function updateAssetProxies(assetProxies: AssetProxy[], path: string) {
+  assetProxies.forEach(asset => {
+    const newPath = updatePath(path, asset.path);
+    if (newPath) {
+      asset.path = newPath;
+    }
   });
 }
 
@@ -865,13 +887,16 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         customPath,
       );
       const path = customPath || (selectEntryPath(collection, slug) ?? '');
+
+      entryDraft.entry.path = path;
+      entryDraft.entry.data = updateAssetFields(entryDraft.entry.data, path) as ObjectValue;
+      updateAssetProxies(assetProxies, path);
+
       dataFile = {
         path,
         slug,
         raw: this.entryToRaw(collection, entryDraft.entry),
       };
-
-      updateAssetProxies(assetProxies, config, collection, entryDraft, path);
     } else {
       const slug = entryDraft.entry.slug;
       dataFile = {
