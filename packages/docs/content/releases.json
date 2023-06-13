@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "date": "2023-06-13T10:00:00.000Z",
+      "version": "v2.5.0",
+      "type": "minor",
+      "description": "Switch i18n locales while in preview mode"
+    },
+    {
       "date": "2023-05-29T10:00:00.000Z",
       "version": "v2.4.4",
       "type": "patch"
