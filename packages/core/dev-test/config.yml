@@ -87,14 +87,35 @@ collections:
       - label: Question
         name: title
         widget: string
+      - label: Type
+        name: type
+        widget: select
+        default: internal
+        options:
+          - label: Internal
+            value: internal
+          - label: External
+            value: external
+      - label: URL
+        name: url
+        widget: string
+        condition:
+          field: type
+          value: external
       - label: Answer
         name: body
         widget: markdown
+        condition:
+          field: type
+          value: internal
       - name: posts
         label: Posts
         label_singular: Post
         widget: list
         summary: "{{fields.post | split('|', '$1')}}"
+        condition:
+          field: type
+          value: internal
         fields:
           - label: Related Post
             name: post

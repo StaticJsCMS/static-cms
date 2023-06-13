@@ -1,7 +1,9 @@
 import get from 'lodash/get';
+import { useMemo } from 'react';
 
 import { getLocaleDataPath } from '../i18n';
 import { keyToPathArray } from '../widgets/stringTemplate';
+import { entryMatchesFieldRule } from './filter.util';
 
 import type {
   BaseField,
@@ -87,4 +89,24 @@ export function getFieldValue(
   }
 
   return entry.data?.[field.name];
+}
+
+export function isHidden(field: Field, entry: Entry | undefined): boolean {
+  if (field.condition) {
+    if (!entry) {
+      return false;
+    }
+
+    if (Array.isArray(field.condition)) {
+      return !field.condition.find(r => entryMatchesFieldRule(entry, r));
+    }
+
+    return !entryMatchesFieldRule(entry, field.condition);
+  }
+
+  return false;
+}
+
+export function useHidden(field: Field, entry: Entry | undefined): boolean {
+  return useMemo(() => isHidden(field, entry), [entry, field]);
 }

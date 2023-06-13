@@ -88,7 +88,7 @@ describe('filterEntries', () => {
         mockTags1and4Entry,
       ]);
 
-      expect(filterEntries(entries, { field: 'draft', value: 'true' })).toEqual([
+      expect(filterEntries(entries, { field: 'draft', value: true })).toEqual([
         mockEnglishEntry,
         mockTags1and4Entry,
       ]);
@@ -119,7 +119,7 @@ describe('filterEntries', () => {
         mockTags1and4Entry,
       ]);
 
-      expect(filterEntries(entries, { field: 'numbers', value: '8' })).toEqual([
+      expect(filterEntries(entries, { field: 'numbers', value: 8 })).toEqual([
         mockRandomFileNameEntry,
         mockTags1and4Entry,
       ]);

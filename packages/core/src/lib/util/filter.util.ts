@@ -2,7 +2,7 @@ import { parse } from 'path';
 
 import type { Entry, FieldFilterRule, FilterRule } from '@staticcms/core/interface';
 
-function entryMatchesFieldRule(entry: Entry, filterRule: FieldFilterRule): boolean {
+export function entryMatchesFieldRule(entry: Entry, filterRule: FieldFilterRule): boolean {
   const fieldValue = entry.data?.[filterRule.field];
   if ('pattern' in filterRule) {
     if (Array.isArray(fieldValue)) {

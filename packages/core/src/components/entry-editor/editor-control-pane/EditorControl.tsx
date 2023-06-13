@@ -17,8 +17,9 @@ import useMemoCompare from '@staticcms/core/lib/hooks/useMemoCompare';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { isFieldDuplicate, isFieldHidden } from '@staticcms/core/lib/i18n';
 import { resolveWidget } from '@staticcms/core/lib/registry';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { fileForEntry } from '@staticcms/core/lib/util/collection.util';
-import { getFieldLabel } from '@staticcms/core/lib/util/field.util';
+import { getFieldLabel, useHidden } from '@staticcms/core/lib/util/field.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { validate } from '@staticcms/core/lib/util/validation.util';
 import { selectFieldErrors } from '@staticcms/core/reducers/selectors/entryDraft';
@@ -95,13 +96,19 @@ const EditorControl = ({
     () => parentDuplicate || isFieldDuplicate(field, locale, i18n?.defaultLocale),
     [field, i18n?.defaultLocale, parentDuplicate, locale],
   );
-  const hidden = useMemo(
+  const i18nHidden = useMemo(
     () => parentHidden || isFieldHidden(field, locale, i18n?.defaultLocale),
     [field, i18n?.defaultLocale, parentHidden, locale],
   );
+  const hidden = useHidden(field, entry);
 
   useEffect(() => {
-    if ((!dirty && !submitted) || hidden || disabled) {
+    if (hidden) {
+      dispatch(changeDraftFieldValidation(path, [], i18n, isMeta));
+      return;
+    }
+
+    if ((!dirty && !submitted) || disabled) {
       return;
     }
 
@@ -157,7 +164,7 @@ const EditorControl = ({
     }
 
     return (
-      <div>
+      <div className={classNames(hidden && 'hidden')}>
         {createElement(widget.control, {
           key: `${id}-${version}`,
           collection,
@@ -167,9 +174,9 @@ const EditorControl = ({
           field: field as UnknownField,
           fieldsErrors,
           submitted,
-          disabled: disabled || duplicate || hidden,
+          disabled: disabled || duplicate || hidden || i18nHidden,
           duplicate,
-          hidden,
+          hidden: i18nHidden,
           label: getFieldLabel(field, t),
           locale,
           mediaPaths,

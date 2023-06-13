@@ -179,7 +179,7 @@ export interface FieldPatternFilterRule extends BaseFieldFilterRule {
 }
 
 export interface FieldValueFilterRule extends BaseFieldFilterRule {
-  value: string | string[];
+  value: string | number | boolean | (string | number | boolean)[];
   matchAll?: boolean;
 }
 
@@ -603,6 +603,7 @@ export interface BaseField {
   i18n?: boolean | 'translate' | 'duplicate' | 'none';
   comment?: string;
   widget: string;
+  condition?: FieldFilterRule | FieldFilterRule[];
 }
 
 export interface MediaField extends BaseField {
