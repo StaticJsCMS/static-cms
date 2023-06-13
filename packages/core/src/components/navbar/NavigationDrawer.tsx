@@ -1,4 +1,4 @@
-import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import Drawer from '@mui/material/Drawer';
 import React, { useMemo } from 'react';
 
 import SidebarContent from './SidebarContent';
@@ -11,24 +11,16 @@ interface NavigationDrawerProps {
 }
 
 const NavigationDrawer = ({ mobileOpen, onMobileOpenToggle }: NavigationDrawerProps) => {
-  const iOS = useMemo(
-    () => typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent),
-    [],
-  );
-
   const container = useMemo(
     () => (typeof window !== 'undefined' ? window.document.body : undefined),
     [],
   );
 
   return (
-    <SwipeableDrawer
-      disableBackdropTransition={!iOS}
-      disableDiscovery={iOS}
+    <Drawer
       container={container}
       variant="temporary"
       open={mobileOpen}
-      onOpen={onMobileOpenToggle}
       onClose={onMobileOpenToggle}
       ModalProps={{
         keepMounted: true, // Better open performance on mobile.
@@ -49,7 +41,7 @@ const NavigationDrawer = ({ mobileOpen, onMobileOpenToggle }: NavigationDrawerPr
       <div onClick={onMobileOpenToggle} className="w-full h-full">
         <SidebarContent />
       </div>
-    </SwipeableDrawer>
+    </Drawer>
   );
 };
 

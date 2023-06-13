@@ -1,4 +1,4 @@
-import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import Drawer from '@mui/material/Drawer';
 import React, { useMemo } from 'react';
 
 import FilterControl from '../FilterControl';
@@ -38,24 +38,16 @@ const MobileCollectionControlsDrawer = ({
   fields,
   onSortClick,
 }: MobileCollectionControlsDrawerProps) => {
-  const iOS = useMemo(
-    () => typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent),
-    [],
-  );
-
   const container = useMemo(
     () => (typeof window !== 'undefined' ? window.document.body : undefined),
     [],
   );
 
   return (
-    <SwipeableDrawer
-      disableBackdropTransition={!iOS}
-      disableDiscovery={iOS}
+    <Drawer
       container={container}
       variant="temporary"
       open={mobileOpen}
-      onOpen={onMobileOpenToggle}
       onClose={onMobileOpenToggle}
       anchor="right"
       ModalProps={{
@@ -110,7 +102,7 @@ const MobileCollectionControlsDrawer = ({
           />
         ) : null}
       </div>
-    </SwipeableDrawer>
+    </Drawer>
   );
 };
 

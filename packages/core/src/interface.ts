@@ -179,7 +179,7 @@ export interface FieldPatternFilterRule extends BaseFieldFilterRule {
 }
 
 export interface FieldValueFilterRule extends BaseFieldFilterRule {
-  value: string | string[];
+  value: string | number | boolean | (string | number | boolean)[];
   matchAll?: boolean;
 }
 
@@ -305,7 +305,6 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = 
   forSingleList: boolean;
   disabled: boolean;
   duplicate: boolean;
-  hidden: boolean;
   label: string;
   locale: string | undefined;
   // @deprecated Use useMediaInsert instead
@@ -603,6 +602,7 @@ export interface BaseField {
   i18n?: boolean | 'translate' | 'duplicate' | 'none';
   comment?: string;
   widget: string;
+  condition?: FieldFilterRule | FieldFilterRule[];
 }
 
 export interface MediaField extends BaseField {

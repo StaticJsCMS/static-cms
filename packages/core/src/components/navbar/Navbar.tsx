@@ -71,7 +71,7 @@ const Navbar = ({
             inEditor && 'pl-3 md:pl-0',
           )}
         >
-          <div className="flex flex-1 h-full items-stretch justify-start gap-2 md:gap-4 truncate">
+          <div className="flex flex-1 h-full items-stretch justify-start gap-2 md:gap-3 truncate">
             <div
               className={classNames(
                 `

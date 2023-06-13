@@ -1,0 +1,2 @@
+- gitea API config has changed.
+- hidden removed as widget parameter

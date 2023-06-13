@@ -16,7 +16,6 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
   forList,
   forSingleList,
   duplicate,
-  hidden,
   locale,
   path,
   i18n,
@@ -57,7 +56,6 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
             parentPath={parentPath}
             disabled={disabled || duplicate}
             parentDuplicate={duplicate}
-            parentHidden={hidden}
             locale={locale}
             i18n={i18n}
             forSingleList={forSingleList}
@@ -74,7 +72,6 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
     submitted,
     disabled,
     duplicate,
-    hidden,
     locale,
     i18n,
     forSingleList,

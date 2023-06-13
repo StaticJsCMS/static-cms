@@ -49,7 +49,6 @@ interface SortableItemProps {
   submitted: boolean;
   disabled: boolean;
   duplicate: boolean;
-  hidden: boolean;
   locale: string | undefined;
   path: string;
   value: Record<string, ObjectValue>;
@@ -68,7 +67,6 @@ const SortableItem: FC<SortableItemProps> = ({
   submitted,
   disabled,
   duplicate,
-  hidden,
   locale,
   path,
   i18n,
@@ -112,7 +110,6 @@ const SortableItem: FC<SortableItemProps> = ({
         submitted={submitted}
         disabled={disabled}
         duplicate={duplicate}
-        hidden={hidden}
         locale={locale}
         path={path}
         value={item}
@@ -185,7 +182,6 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = pro
     submitted,
     disabled,
     duplicate,
-    hidden,
     locale,
     path,
     value,
@@ -346,7 +342,6 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = pro
                       submitted={submitted}
                       disabled={disabled}
                       duplicate={duplicate}
-                      hidden={hidden}
                       locale={locale}
                       path={path}
                       value={item as Record<string, ObjectValue>}

@@ -56,6 +56,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) =>
             flex
             items-center
             gap-1
+            pl-1
           "
         >
           {breadcrumbs.map((breadcrumb, index) =>
@@ -73,6 +74,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) =>
                         whitespace-nowrap
                         focus:outline-none
                         focus:ring-4
+                        rounded-md
                         focus:ring-gray-200
                         dark:focus:ring-slate-700
                       `,
