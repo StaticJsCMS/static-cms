@@ -69,7 +69,6 @@ interface ListItemProps
     | 'submitted'
     | 'disabled'
     | 'duplicate'
-    | 'hidden'
     | 'locale'
     | 'path'
     | 'value'
@@ -91,7 +90,6 @@ const ListItem: FC<ListItemProps> = ({
   submitted,
   disabled,
   duplicate,
-  hidden,
   locale,
   path,
   valueType,
@@ -206,7 +204,6 @@ const ListItem: FC<ListItemProps> = ({
           parentPath={path}
           disabled={disabled || duplicate}
           parentDuplicate={duplicate}
-          parentHidden={hidden}
           locale={locale}
           i18n={i18n}
           forList={true}

@@ -50,7 +50,6 @@ const EditorControl = ({
   submitted,
   disabled = false,
   parentDuplicate = false,
-  parentHidden = false,
   locale,
   mediaPaths,
   openMediaLibrary,
@@ -96,9 +95,9 @@ const EditorControl = ({
     () => parentDuplicate || isFieldDuplicate(field, locale, i18n?.defaultLocale),
     [field, i18n?.defaultLocale, parentDuplicate, locale],
   );
-  const i18nHidden = useMemo(
-    () => parentHidden || isFieldHidden(field, locale, i18n?.defaultLocale),
-    [field, i18n?.defaultLocale, parentHidden, locale],
+  const i18nDisabled = useMemo(
+    () => isFieldHidden(field, locale, i18n?.defaultLocale),
+    [field, i18n?.defaultLocale, locale],
   );
   const hidden = useHidden(field, entry);
 
@@ -108,7 +107,7 @@ const EditorControl = ({
       return;
     }
 
-    if ((!dirty && !submitted) || disabled) {
+    if ((!dirty && !submitted) || disabled || i18nDisabled) {
       return;
     }
 
@@ -118,7 +117,21 @@ const EditorControl = ({
     };
 
     validateValue();
-  }, [dirty, dispatch, field, i18n, hidden, path, submitted, t, value, widget, disabled, isMeta]);
+  }, [
+    dirty,
+    dispatch,
+    field,
+    i18n,
+    hidden,
+    path,
+    submitted,
+    t,
+    value,
+    widget,
+    disabled,
+    isMeta,
+    i18nDisabled,
+  ]);
 
   const handleChangeDraftField = useCallback(
     (value: ValueOrNestedValue) => {
@@ -174,9 +187,8 @@ const EditorControl = ({
           field: field as UnknownField,
           fieldsErrors,
           submitted,
-          disabled: disabled || duplicate || hidden || i18nHidden,
+          disabled: disabled || duplicate || hidden || i18nDisabled,
           duplicate,
-          hidden: i18nHidden,
           label: getFieldLabel(field, t),
           locale,
           mediaPaths,
@@ -233,7 +245,6 @@ interface EditorControlOwnProps {
   submitted: boolean;
   disabled?: boolean;
   parentDuplicate?: boolean;
-  parentHidden?: boolean;
   locale?: string;
   parentPath: string;
   value: ValueOrNestedValue;

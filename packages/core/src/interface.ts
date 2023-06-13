@@ -305,7 +305,6 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = 
   forSingleList: boolean;
   disabled: boolean;
   duplicate: boolean;
-  hidden: boolean;
   label: string;
   locale: string | undefined;
   // @deprecated Use useMediaInsert instead
