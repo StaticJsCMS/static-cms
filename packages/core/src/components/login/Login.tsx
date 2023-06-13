@@ -34,7 +34,7 @@ const Login = ({
     <div className="flex flex-col h-screen items-center justify-center bg-slate-50 dark:bg-slate-900">
       {config?.logo_url ? (
         <div
-          className="h-40 w-80 mb-4 bg-cover bg-no-repeat bg-center object-cover"
+          className="h-40 w-80 mb-4 bg-contain bg-no-repeat bg-center object-cover"
           style={{ backgroundImage: `url('${config.logo_url}')` }}
         />
       ) : (

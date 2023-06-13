@@ -57,7 +57,7 @@ const Navbar = ({
             <div className="flex flex-shrink-0 items-center justify-center bg-slate-500 dark:bg-slate-700 w-16">
               {config?.logo_url ? (
                 <div
-                  className="inline-flex h-10 w-10 bg-cover bg-no-repeat bg-center object-cover"
+                  className="inline-flex h-10 w-10 bg-contain bg-no-repeat bg-center object-cover"
                   style={{ backgroundImage: `url('${config.logo_url}')` }}
                 />
               ) : (
