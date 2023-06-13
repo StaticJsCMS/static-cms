@@ -320,7 +320,6 @@ export function selectMediaFilePath(
   }
 
   let mediaFolder = selectMediaFolder(config, collection, entryMap, field, currentFolder);
-
   if (!currentFolder) {
     let publicFolder = trim(config['public_folder'] ?? mediaFolder, '/');
     let mediaPathDir = trim(dirname(mediaPath), '/');
@@ -341,10 +340,14 @@ export function selectMediaFilePath(
         collection,
         entryMap,
         field,
-        mediaPathDir.replace(publicFolder, mediaFolder),
+        publicFolder === '' && mediaPathDir.startsWith(mediaFolder)
+          ? mediaPathDir
+          : mediaPathDir.replace(publicFolder, mediaFolder),
       );
     }
   }
 
-  return joinUrlPath(mediaFolder, basename(mediaPath));
+  return mediaPath.startsWith(mediaFolder)
+    ? mediaPath
+    : joinUrlPath(mediaFolder, basename(mediaPath));
 }

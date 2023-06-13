@@ -280,6 +280,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
                     ...editableProps,
                     onFocus,
                     onBlur,
+                    className: 'outline-none',
                   }}
                 >
                   <div key="editor-inner-wrapper" ref={innerEditorContainerRef}>
