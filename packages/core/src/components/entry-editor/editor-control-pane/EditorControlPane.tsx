@@ -31,6 +31,7 @@ export interface EditorControlPaneProps {
   slug?: string;
   onLocaleChange?: (locale: string) => void;
   allowDefaultLocale?: boolean;
+  context?: 'default' | 'i18nSplit';
 }
 
 const EditorControlPane = ({
@@ -45,6 +46,7 @@ const EditorControlPane = ({
   slug,
   onLocaleChange,
   allowDefaultLocale = false,
+  context = 'default',
   t,
 }: TranslatedProps<EditorControlPaneProps>) => {
   const pathField = useMemo(
@@ -120,7 +122,9 @@ const EditorControlPane = ({
             })}
             canChangeLocale={canChangeLocale}
             onLocaleChange={onLocaleChange}
-            allowDefaultLocale={allowDefaultLocale}
+            excludeLocales={
+              !allowDefaultLocale && context === 'i18nSplit' ? [i18n.defaultLocale] : []
+            }
           />
         </div>
       ) : null}

@@ -87,7 +87,7 @@ const Navbar = ({
             >
               {config?.logo_url ? (
                 <div
-                  className="h-10 w-10 bg-cover bg-no-repeat bg-center object-cover"
+                  className="h-10 w-10 bg-contain bg-no-repeat bg-center object-cover"
                   style={{ backgroundImage: `url('${config.logo_url}')` }}
                 />
               ) : (

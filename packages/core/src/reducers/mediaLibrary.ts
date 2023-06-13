@@ -109,8 +109,17 @@ function mediaLibrary(
       return {
         ...state,
         isVisible: false,
-        insertOptions: undefined,
+        forImage: false,
+        forFolder: false,
+        controlID: undefined,
+        config: undefined,
+        collection: undefined,
+        collectionFile: undefined,
+        field: undefined,
+        value: undefined,
         alt: undefined,
+        replaceIndex: undefined,
+        insertOptions: undefined,
       };
 
     case MEDIA_INSERT: {

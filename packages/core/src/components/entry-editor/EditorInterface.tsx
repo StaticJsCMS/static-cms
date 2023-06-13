@@ -96,14 +96,23 @@ const EditorInterface = ({
   slug,
 }: TranslatedProps<EditorInterfaceProps>) => {
   const { locales, defaultLocale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
-  const [selectedLocale, setSelectedLocale] = useState<string>(locales?.[1] ?? 'en');
+  const translatedLocales = useMemo(
+    () => locales?.filter(locale => locale !== defaultLocale) ?? [],
+    [locales, defaultLocale],
+  );
 
   const [previewActive, setPreviewActive] = useState(
     localStorage.getItem(PREVIEW_VISIBLE) !== 'false',
   );
 
+  const i18nEnabled = useMemo(() => locales && locales.length > 0, [locales]);
+
   const [i18nActive, setI18nActive] = useState(
-    Boolean(localStorage.getItem(I18N_VISIBLE) !== 'false' && locales && locales.length > 0),
+    Boolean(localStorage.getItem(I18N_VISIBLE) !== 'false' && i18nEnabled),
+  );
+
+  const [selectedLocale, setSelectedLocale] = useState<string>(
+    (i18nActive ? translatedLocales?.[0] : defaultLocale) ?? 'en',
   );
 
   useEffect(() => {
@@ -132,8 +141,11 @@ const EditorInterface = ({
   const handleToggleI18n = useCallback(() => {
     const newI18nActive = !i18nActive;
     setI18nActive(newI18nActive);
+    setSelectedLocale(selectedLocale =>
+      newI18nActive && selectedLocale === defaultLocale ? translatedLocales?.[0] : selectedLocale,
+    );
     localStorage.setItem(I18N_VISIBLE, `${newI18nActive}`);
-  }, [i18nActive]);
+  }, [i18nActive, setSelectedLocale, translatedLocales, defaultLocale]);
 
   const handleLocaleChange = useCallback((locale: string) => {
     setSelectedLocale(locale);
@@ -174,40 +186,60 @@ const EditorInterface = ({
     setShowMobilePreview(old => !old);
   }, []);
 
-  const editor = (
-    <div
-      key={defaultLocale}
-      id="control-pane"
-      className={classNames(
-        `
-          w-full
-        `,
-        (finalPreviewActive || i18nActive) &&
+  const editor = useMemo(
+    () => (
+      <div
+        key={defaultLocale}
+        id="control-pane"
+        className={classNames(
           `
-            overflow-y-auto
-            styled-scrollbars
-            h-main-mobile
-            md:h-main
+            w-full
           `,
-        showMobilePreview &&
-          `
-            hidden
-            lg:block
-          `,
-      )}
-    >
-      <EditorControlPane
-        collection={collection}
-        entry={entry}
-        fields={fields}
-        fieldsErrors={fieldsErrors}
-        locale={defaultLocale}
-        submitted={submitted}
-        hideBorder={!finalPreviewActive && !i18nActive}
-        slug={slug}
-        t={t}
-      />
-    </div>
+          (finalPreviewActive || i18nActive) &&
+            `
+              overflow-y-auto
+              styled-scrollbars
+              h-main-mobile
+              md:h-main
+            `,
+          showMobilePreview &&
+            `
+              hidden
+              lg:block
+            `,
+        )}
+      >
+        <EditorControlPane
+          collection={collection}
+          entry={entry}
+          fields={fields}
+          fieldsErrors={fieldsErrors}
+          locale={i18nActive ? defaultLocale : selectedLocale}
+          submitted={submitted}
+          hideBorder={!finalPreviewActive && !i18nActive}
+          canChangeLocale={i18nEnabled && !i18nActive}
+          onLocaleChange={handleLocaleChange}
+          slug={slug}
+          t={t}
+        />
+      </div>
+    ),
+    [
+      defaultLocale,
+      finalPreviewActive,
+      i18nActive,
+      showMobilePreview,
+      collection,
+      entry,
+      fields,
+      fieldsErrors,
+      selectedLocale,
+      submitted,
+      i18nEnabled,
+      handleLocaleChange,
+      slug,
+      t,
+    ],
   );
 
   const editorLocale = useMemo(
@@ -232,6 +264,7 @@ const EditorInterface = ({
           onLocaleChange={handleLocaleChange}
           submitted={submitted}
           canChangeLocale
+          context="i18nSplit"
           hideBorder
           t={t}
         />
