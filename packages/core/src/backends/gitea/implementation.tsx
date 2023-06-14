@@ -173,8 +173,6 @@ export default class Gitea implements BackendClass {
       throw new Error('Your Gitea user account does not have access to this repo.');
     }
 
-    console.log(user);
-
     // Authorized user
     return {
       name: user.full_name,

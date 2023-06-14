@@ -451,7 +451,7 @@ export async function invokeEvent(
     }
 
     let _data = data as ValueOrNestedValue;
-    console.info('[StaticCMS] Firing change event for field', field, ', new value: ', data);
+    console.info(`[StaticCMS] Firing change event for field "${field}", new value:`, data);
     const handlers = registry.eventHandlers[name][field] ?? [];
     for (const { handler, options } of handlers) {
       const result = await handler(data as ValueOrNestedValue, {

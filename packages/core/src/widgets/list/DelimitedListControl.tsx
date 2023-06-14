@@ -27,7 +27,7 @@ const DelimitedListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListFiel
     () => (controlled || duplicate ? rawValue : internalRawValue),
     [controlled, duplicate, rawValue, internalRawValue],
   );
-  const debouncedInternalValue = useDebounce(internalValue, 200);
+  const debouncedInternalValue = useDebounce(internalValue, 250);
 
   const ref = useRef<HTMLInputElement | null>(null);
 
