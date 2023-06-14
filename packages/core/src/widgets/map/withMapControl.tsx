@@ -38,7 +38,6 @@ interface WithMapControlProps {
 
 const withMapControl = ({ getFormat, getMap }: WithMapControlProps = {}) => {
   const MapControl: FC<WidgetControlProps<string, MapField>> = ({
-    path,
     value,
     field,
     onChange,
@@ -84,7 +83,8 @@ const withMapControl = ({ getFormat, getMap }: WithMapControlProps = {}) => {
           onChange(format.writeGeometry(geometry, writeOptions));
         }
       });
-    }, [disabled, field, mapContainer, onChange, path, value]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
       <Field
