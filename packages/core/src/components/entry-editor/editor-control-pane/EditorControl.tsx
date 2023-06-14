@@ -17,12 +17,11 @@ import useDebouncedCallback from '@staticcms/core/lib/hooks/useDebouncedCallback
 import useMemoCompare from '@staticcms/core/lib/hooks/useMemoCompare';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { isFieldDuplicate, isFieldHidden } from '@staticcms/core/lib/i18n';
-import { invokeEvent, resolveWidget } from '@staticcms/core/lib/registry';
+import { resolveWidget } from '@staticcms/core/lib/registry';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { fileForEntry } from '@staticcms/core/lib/util/collection.util';
 import { getFieldLabel, useHidden } from '@staticcms/core/lib/util/field.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
-import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { validate } from '@staticcms/core/lib/util/validation.util';
 import { selectFieldErrors } from '@staticcms/core/reducers/selectors/entryDraft';
 import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
@@ -141,17 +140,12 @@ const EditorControl = ({
         oldDirty => oldDirty || !isEmpty(widget.getValidValue(value, field as UnknownField)),
       );
 
-      let newValue = value;
-      if (isNotNullish(value) || (typeof value === 'string' && isNotEmpty(value))) {
-        newValue = await invokeEvent('change', value, path);
-      }
-
-      changeDraftField({ path, field, value: newValue, i18n, isMeta });
+      changeDraftField({ path, field, value, i18n, isMeta });
     },
     [changeDraftField, field, i18n, isMeta, path, widget],
   );
 
-  const handleDebouncedChangeDraftField = useDebouncedCallback(handleChangeDraftField, 500);
+  const handleDebouncedChangeDraftField = useDebouncedCallback(handleChangeDraftField, 250);
 
   const config = useMemo(() => configState.config, [configState.config]);
 

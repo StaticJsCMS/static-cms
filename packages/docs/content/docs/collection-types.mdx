@@ -230,6 +230,79 @@ collections: [
 
 </CodeTabs>
 
+##### Filtered by Nested Field
+
+The example below creates a collection based on a nested field's value.
+
+<CodeTabs>
+```yaml
+collections:
+  - name: 'nested-field-filtered-collection'
+    label: 'Nested Field Filtered Collection'
+    folder: '_nested_field'
+    create: true
+    filter:
+      field: nested.object.field
+      value: yes
+    fields:
+      - name: nested
+        label: Nested
+        widget: object
+        fields:
+          - name: object
+            label: Object
+            widget: object
+            fields:
+              - name: field
+                label: Field
+                widget: select
+                options:
+                  - yes
+                  - no
+```
+
+```js
+collections: [
+  {
+    name: "nested-field-filtered-collection",
+    label: "Nested Field Filtered Collection",
+    folder: "_nested_field",
+    create: true,
+    filter: {
+      field: "nested.object.field",
+      value: "yes"
+    },
+    fields: [
+      {
+        name: "nested",
+        label: "Nested",
+        widget: "object",
+        fields: [
+          {
+            name: "object",
+            label: "Object",
+            widget: "object",
+            fields: [
+              {
+                name: "field",
+                label: "Field",
+                widget: "select",
+                options: [
+                  "yes",
+                  "no"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+],
+```
+
+</CodeTabs>
+
 ##### Filtered by Tags
 
 The example below creates two collections in the same folder, filtered by the `tags` field. The first collection includes posts with the `news` or `article` tags, and the second, with the `blog` tag.

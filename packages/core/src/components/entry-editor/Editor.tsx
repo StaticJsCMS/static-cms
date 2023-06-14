@@ -20,6 +20,7 @@ import {
 } from '@staticcms/core/actions/entries';
 import { loadMedia } from '@staticcms/core/actions/mediaLibrary';
 import { loadScroll, toggleScroll } from '@staticcms/core/actions/scroll';
+import useEntryCallback from '@staticcms/core/lib/hooks/useEntryCallback';
 import { selectFields } from '@staticcms/core/lib/util/collection.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
@@ -209,6 +210,15 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
       createBackup.flush();
     };
   }, [collection, createBackup, entryDraft.entry, hasChanged]);
+
+  useEntryCallback({
+    hasChanged,
+    collection,
+    slug,
+    callback: () => {
+      setVersion(version => version + 1);
+    },
+  });
 
   const [prevCollection, setPrevCollection] = useState<Collection | null>(null);
   const [prevSlug, setPrevSlug] = useState<string | undefined | null>(null);

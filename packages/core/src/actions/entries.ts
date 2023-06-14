@@ -4,6 +4,7 @@ import { currentBackend } from '../backend';
 import {
   ADD_DRAFT_ENTRY_MEDIA_FILE,
   CHANGE_VIEW_STYLE,
+  DRAFT_UPDATE,
   DRAFT_CHANGE_FIELD,
   DRAFT_CREATE_DUPLICATE_FROM_ENTRY,
   DRAFT_CREATE_EMPTY,
@@ -456,6 +457,13 @@ export function draftDuplicateEntry(entry: Entry) {
 
 export function discardDraft() {
   return { type: DRAFT_DISCARD } as const;
+}
+
+export function updateDraft({ data }: { data: EntryData }) {
+  return {
+    type: DRAFT_UPDATE,
+    payload: { data },
+  } as const;
 }
 
 export function changeDraftField({
@@ -1125,6 +1133,7 @@ export type EntriesAction = ReturnType<
   | typeof createDraftFromEntry
   | typeof draftDuplicateEntry
   | typeof discardDraft
+  | typeof updateDraft
   | typeof changeDraftField
   | typeof changeDraftFieldValidation
   | typeof localBackupRetrieved
