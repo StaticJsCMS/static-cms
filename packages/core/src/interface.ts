@@ -945,12 +945,23 @@ export type LogoutEventHandler<O extends Record<string, unknown> = Record<string
   options: O,
 ) => void | Promise<void>;
 
+export type ChangeEventHandler<O extends Record<string, unknown> = Record<string, unknown>> = (
+  value: ValueOrNestedValue,
+  options: O & { field: string },
+) =>
+  | ValueOrNestedValue
+  | undefined
+  | null
+  | void
+  | Promise<ValueOrNestedValue | undefined | null | void>;
+
 export type EventHandlers<O extends Record<string, unknown> = Record<string, unknown>> = {
   preSave: PreSaveEventHandler<O>;
   postSave: PostSaveEventHandler<O>;
   mounted: MountedEventHandler<O>;
   login: LoginEventHandler<O>;
   logout: LogoutEventHandler<O>;
+  change: ChangeEventHandler<O>;
 };
 
 export interface EventListener<

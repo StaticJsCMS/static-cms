@@ -16,7 +16,7 @@ import { query as queryAction } from '@staticcms/core/actions/search';
 import useMemoCompare from '@staticcms/core/lib/hooks/useMemoCompare';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { isFieldDuplicate, isFieldHidden } from '@staticcms/core/lib/i18n';
-import { resolveWidget } from '@staticcms/core/lib/registry';
+import { invokeEvent, resolveWidget } from '@staticcms/core/lib/registry';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { fileForEntry } from '@staticcms/core/lib/util/collection.util';
 import { getFieldLabel, useHidden } from '@staticcms/core/lib/util/field.util';
@@ -134,11 +134,14 @@ const EditorControl = ({
   ]);
 
   const handleChangeDraftField = useCallback(
-    (value: ValueOrNestedValue) => {
+    async (value: ValueOrNestedValue) => {
       setDirty(
         oldDirty => oldDirty || !isEmpty(widget.getValidValue(value, field as UnknownField)),
       );
-      changeDraftField({ path, field, value, i18n, isMeta });
+
+      const newValue = await invokeEvent('change', value, path);
+
+      changeDraftField({ path, field, value: newValue, i18n, isMeta });
     },
     [changeDraftField, field, i18n, isMeta, path, widget],
   );

@@ -7,6 +7,7 @@ import type {
   BackendInitializer,
   BackendInitializerOptions,
   BaseField,
+  ChangeEventHandler,
   Collection,
   Config,
   CustomIcon,
@@ -28,13 +29,21 @@ import type {
   TemplatePreviewCardComponent,
   TemplatePreviewComponent,
   UnknownField,
+  ValueOrNestedValue,
   Widget,
   WidgetOptions,
   WidgetParam,
   WidgetValueSerializer,
 } from '../interface';
 
-export const allowedEvents = ['mounted', 'login', 'logout', 'preSave', 'postSave'] as const;
+export const allowedEvents = [
+  'mounted',
+  'login',
+  'logout',
+  'preSave',
+  'postSave',
+  'change',
+] as const;
 export type AllowedEvent = (typeof allowedEvents)[number];
 
 type EventHandlerRegistry = {
@@ -43,10 +52,15 @@ type EventHandlerRegistry = {
   mounted: { handler: MountedEventHandler; options: Record<string, unknown> }[];
   login: { handler: LoginEventHandler; options: Record<string, unknown> }[];
   logout: { handler: LogoutEventHandler; options: Record<string, unknown> }[];
+  change: Record<string, { handler: ChangeEventHandler; options: Record<string, unknown> }[]>;
 };
 
 const eventHandlers = allowedEvents.reduce((acc, e) => {
-  acc[e] = [];
+  if (e === 'change') {
+    acc[e] = {};
+  } else {
+    acc[e] = [];
+  }
   return acc;
 }, {} as EventHandlerRegistry);
 
@@ -340,8 +354,17 @@ function validateEventName(name: AllowedEvent) {
   }
 }
 
-export function getEventListeners(name: AllowedEvent) {
+export function getEventListeners(name: AllowedEvent, field?: string) {
   validateEventName(name);
+
+  if (name === 'change') {
+    if (!field) {
+      return [];
+    }
+
+    return registry.eventHandlers[name][field] ?? [];
+  }
+
   return [...registry.eventHandlers[name]];
 }
 
@@ -350,11 +373,27 @@ export function registerEventListener<
   O extends Record<string, unknown> = Record<string, unknown>,
 >({ name, handler }: EventListener<E, O>, options?: O) {
   validateEventName(name);
-  registry.eventHandlers[name].push({
+
+  if (name === 'change') {
+    const field = options?.field;
+    if (typeof field !== 'string') {
+      return;
+    }
+
+    if (!(field in registry.eventHandlers[name])) {
+      registry.eventHandlers['change'][field] = [];
+    }
+
+    return registry.eventHandlers['change'][field] ?? [];
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (registry.eventHandlers as unknown as Record<string, any[]>)[name as string].push({
     handler: handler as MountedEventHandler &
       LoginEventHandler &
       PreSaveEventHandler &
-      PostSaveEventHandler,
+      PostSaveEventHandler &
+      ChangeEventHandler,
     options: options ?? {},
   });
 }
@@ -365,9 +404,15 @@ export async function invokeEvent(name: 'preSave', data: EventData): Promise<Ent
 export async function invokeEvent(name: 'postSave', data: EventData): Promise<void>;
 export async function invokeEvent(name: 'mounted'): Promise<void>;
 export async function invokeEvent(
+  name: 'change',
+  data: ValueOrNestedValue | undefined,
+  field: string,
+): Promise<ValueOrNestedValue>;
+export async function invokeEvent(
   name: AllowedEvent,
-  data?: EventData | AuthorData,
-): Promise<void | EntryData> {
+  data?: EventData | AuthorData | ValueOrNestedValue,
+  field?: string,
+): Promise<void | EntryData | ValueOrNestedValue> {
   validateEventName(name);
 
   if (name === 'mounted' || name === 'logout') {
@@ -391,7 +436,7 @@ export async function invokeEvent(
   }
 
   if (name === 'postSave') {
-    console.info(`[StaticCMS] Firing post save event`, data);
+    console.info('[StaticCMS] Firing post save event', data);
     const handlers = registry.eventHandlers[name];
     for (const { handler, options } of handlers) {
       handler(data as EventData, options);
@@ -400,11 +445,30 @@ export async function invokeEvent(
     return;
   }
 
-  const handlers = registry.eventHandlers[name];
+  if (name === 'change') {
+    if (!field || !data) {
+      return;
+    }
 
-  console.info(`[StaticCMS] Firing pre save event`, data);
+    let _data = data as ValueOrNestedValue;
+    console.info('[StaticCMS] Firing change event for field', field, ', new value: ', data);
+    const handlers = registry.eventHandlers[name][field] ?? [];
+    for (const { handler, options } of handlers) {
+      const result = await handler(data as ValueOrNestedValue, {
+        ...options,
+        field: field ?? '',
+      });
+      if (_data !== undefined && result) {
+        _data = result;
+      }
+    }
+
+    return _data;
+  }
 
   let _data = { ...(data as EventData) };
+  console.info(`[StaticCMS] Firing pre save event`, data);
+  const handlers = registry.eventHandlers[name];
   for (const { handler, options } of handlers) {
     const result = await handler(_data, options);
     if (_data !== undefined && result !== undefined) {
