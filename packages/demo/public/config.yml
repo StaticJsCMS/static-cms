@@ -586,6 +586,16 @@ collections:
             widget: map
             pattern: ['\[-([7-9][0-9]|1[0-2][0-9])\.', 'Must be between latitude -70 and -129']
             required: false
+          - name: line_string
+            label: Line String
+            type: LineString
+            widget: map
+            required: false
+          - name: polygon
+            label: Polygon
+            type: Polygon
+            widget: map
+            required: false
       - name: markdown
         label: Markdown
         file: _widgets/markdown.json
