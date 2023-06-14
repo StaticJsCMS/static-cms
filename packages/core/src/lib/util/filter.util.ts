@@ -1,9 +1,10 @@
 import { parse } from 'path';
+import get from 'lodash/get';
 
 import type { Entry, FieldFilterRule, FilterRule } from '@staticcms/core/interface';
 
 export function entryMatchesFieldRule(entry: Entry, filterRule: FieldFilterRule): boolean {
-  const fieldValue = entry.data?.[filterRule.field];
+  const fieldValue = get(entry.data, filterRule.field);
   if ('pattern' in filterRule) {
     if (Array.isArray(fieldValue)) {
       return Boolean(fieldValue.find(v => new RegExp(filterRule.pattern).test(String(v))));

@@ -64,6 +64,17 @@ describe('filterEntries', () => {
     },
   });
 
+  const mockNestedEntry = createMockEntry({
+    path: 'path/to/nested-object-field.md',
+    data: {
+      nested: {
+        object: {
+          field: 'yes',
+        },
+      },
+    },
+  });
+
   const entries: Entry[] = [
     mockEnglishEntry,
     mockFrenchEntry,
@@ -71,6 +82,7 @@ describe('filterEntries', () => {
     mockUnderscoreIndexEntry,
     mockRandomFileNameEntry,
     mockTags1and4Entry,
+    mockNestedEntry,
   ];
 
   describe('field rules', () => {
@@ -217,6 +229,14 @@ describe('filterEntries', () => {
       expect(
         filterEntries(entries, [{ pattern: 'index.md$' }, { field: 'tags', value: 'tag-3' }]),
       ).toEqual([mockUnderscoreIndexEntry]);
+    });
+  });
+
+  describe('nested fields', () => {
+    it('should filter based on multiple rules (must match all rules)', () => {
+      expect(filterEntries(entries, [{ field: 'nested.object.field', value: 'yes' }])).toEqual([
+        mockNestedEntry,
+      ]);
     });
   });
 });
