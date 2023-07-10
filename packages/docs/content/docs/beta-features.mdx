@@ -92,7 +92,11 @@ CMS.registerEventListener({
 });
 ```
 
-Supported events are `mounted`, `login`, `logout`, `preSave` and `postSave`. The `preSave` hook can be used to modify the entry data like so:
+Supported events are `mounted`, `login`, `logout`, `change`, `preSave` and `postSave`.
+
+### PreSave
+
+The `preSave` event handler can be used to modify the entry data like so:
 
 ```javascript
 CMS.registerEventListener({
@@ -107,6 +111,24 @@ CMS.registerEventListener({
     };
   },
 });
+```
+
+### Change
+
+The `change` event handler must provide a field name, and can be used to modify the entry data like so:
+
+```javascript
+CMS.registerEventListener(
+  {
+    name: 'change',
+    handler: ({ entry }, { field }) => {
+      return 'newFieldValue';
+    },
+  },
+  {
+    field: 'path.to.my.field',
+  },
+);
 ```
 
 ## i18n Support

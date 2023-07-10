@@ -11,6 +11,7 @@ import {
   DRAFT_DISCARD,
   DRAFT_LOCAL_BACKUP_DELETE,
   DRAFT_LOCAL_BACKUP_RETRIEVED,
+  DRAFT_UPDATE,
   DRAFT_VALIDATION_ERRORS,
   ENTRY_DELETE_SUCCESS,
   ENTRY_PERSIST_FAILURE,
@@ -145,6 +146,39 @@ function entryDraftReducer(
       const newState = { ...state };
       delete newState.localBackup;
       return newState;
+    }
+
+    case DRAFT_UPDATE: {
+      let newState = { ...state };
+      if (!newState.entry) {
+        return state;
+      }
+
+      const { data } = action.payload;
+
+      newState = {
+        ...newState,
+        entry: {
+          ...newState.entry,
+          data,
+        },
+      };
+
+      let hasChanged =
+        !isEqual(newState.entry?.meta, newState.original?.meta) ||
+        !isEqual(newState.entry?.data, newState.original?.data);
+
+      const i18nData = newState.entry?.i18n ?? {};
+      for (const locale in i18nData) {
+        hasChanged =
+          hasChanged ||
+          !isEqual(newState.entry?.i18n?.[locale]?.data, newState.original?.i18n?.[locale]?.data);
+      }
+
+      return {
+        ...newState,
+        hasChanged: !newState.original || hasChanged,
+      };
     }
 
     case DRAFT_CHANGE_FIELD: {

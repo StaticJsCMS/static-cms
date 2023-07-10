@@ -60,7 +60,8 @@ const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = previewPr
       setPrevValue(parsedValue);
       setValue(parsedValue);
     }
-  }, [prevValue, setValue, value]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
   return (
     <div key="markdown-preview">

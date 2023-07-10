@@ -188,9 +188,12 @@ const App = ({
   const [prevUser, setPrevUser] = useState(user);
   useEffect(() => {
     if (!prevUser && user) {
-      invokeEvent('login', {
-        login: user.login,
-        name: user.name ?? '',
+      invokeEvent({
+        name: 'login',
+        data: {
+          login: user.login,
+          name: user.name ?? '',
+        },
       });
     }
     setPrevUser(user);
@@ -243,7 +246,7 @@ const App = ({
 
   useEffect(() => {
     setTimeout(() => {
-      invokeEvent('mounted');
+      invokeEvent({ name: 'mounted' });
     });
   }, []);
 

@@ -47,7 +47,6 @@ import type {
   I18N_STRUCTURE_MULTIPLE_FOLDERS,
   I18N_STRUCTURE_SINGLE_FILE,
 } from './lib/i18n';
-import type { AllowedEvent } from './lib/registry';
 import type Cursor from './lib/util/Cursor';
 import type AssetProxy from './valueObjects/AssetProxy';
 
@@ -922,44 +921,59 @@ export interface EventData {
   author: AuthorData;
 }
 
-export type PreSaveEventHandler<O extends Record<string, unknown> = Record<string, unknown>> = (
-  data: EventData,
-  options: O,
-) => EntryData | undefined | null | void | Promise<EntryData | undefined | null | void>;
-
-export type PostSaveEventHandler<O extends Record<string, unknown> = Record<string, unknown>> = (
-  data: EventData,
-  options: O,
-) => void | Promise<void>;
-
-export type MountedEventHandler<O extends Record<string, unknown> = Record<string, unknown>> = (
-  options: O,
-) => void | Promise<void>;
-
-export type LoginEventHandler<O extends Record<string, unknown> = Record<string, unknown>> = (
-  data: AuthorData,
-  options: O,
-) => void | Promise<void>;
-
-export type LogoutEventHandler<O extends Record<string, unknown> = Record<string, unknown>> = (
-  options: O,
-) => void | Promise<void>;
-
-export type EventHandlers<O extends Record<string, unknown> = Record<string, unknown>> = {
-  preSave: PreSaveEventHandler<O>;
-  postSave: PostSaveEventHandler<O>;
-  mounted: MountedEventHandler<O>;
-  login: LoginEventHandler<O>;
-  logout: LogoutEventHandler<O>;
-};
-
-export interface EventListener<
-  E extends AllowedEvent = 'mounted',
-  O extends Record<string, unknown> = Record<string, unknown>,
-> {
-  name: E;
-  handler: EventHandlers<O>[E];
+export interface PreSaveEventListener {
+  name: 'preSave';
+  collection: string;
+  file?: string;
+  handler: (event: {
+    data: EventData;
+    collection: string;
+  }) => EntryData | undefined | null | void | Promise<EntryData | undefined | null | void>;
 }
+
+export interface PostSaveEventListener {
+  name: 'postSave';
+  collection: string;
+  file?: string;
+  handler: (event: { data: EventData; collection: string }) => void | Promise<void>;
+}
+
+export interface MountedEventListener {
+  name: 'mounted';
+  handler: () => void | Promise<void>;
+}
+
+export interface LoginEventListener {
+  name: 'login';
+  handler: (event: {
+    author: AuthorData;
+  }) => EntryData | undefined | null | void | Promise<EntryData | undefined | null | void>;
+}
+
+export interface LogoutEventListener {
+  name: 'logout';
+  handler: () => void | Promise<void>;
+}
+
+export interface ChangeEventListener {
+  name: 'change';
+  collection: string;
+  file?: string;
+  field: string;
+  handler: (event: {
+    data: EntryData;
+    collection: string;
+    field: string;
+  }) => EntryData | undefined | null | void | Promise<EntryData | undefined | null | void>;
+}
+
+export type EventListener =
+  | PreSaveEventListener
+  | PostSaveEventListener
+  | ChangeEventListener
+  | LoginEventListener
+  | LogoutEventListener
+  | MountedEventListener;
 
 export interface AdditionalLinkOptions {
   icon?: string;

@@ -1,5 +1,6 @@
 import { currentBackend } from '../backend';
 import { AUTH_FAILURE, AUTH_REQUEST, AUTH_REQUEST_DONE, AUTH_SUCCESS, LOGOUT } from '../constants';
+import { invokeEvent } from '../lib/registry';
 import { addSnackbar } from '../store/slices/snackbars';
 
 import type { AnyAction } from 'redux';
@@ -35,6 +36,8 @@ export function doneAuthenticating() {
 }
 
 export function logout() {
+  invokeEvent({ name: 'logout' });
+
   return {
     type: LOGOUT,
   } as const;

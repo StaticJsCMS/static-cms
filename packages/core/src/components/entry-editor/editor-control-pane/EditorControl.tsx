@@ -13,6 +13,7 @@ import {
   removeInsertedMedia as removeInsertedMediaAction,
 } from '@staticcms/core/actions/mediaLibrary';
 import { query as queryAction } from '@staticcms/core/actions/search';
+import useDebouncedCallback from '@staticcms/core/lib/hooks/useDebouncedCallback';
 import useMemoCompare from '@staticcms/core/lib/hooks/useMemoCompare';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { isFieldDuplicate, isFieldHidden } from '@staticcms/core/lib/i18n';
@@ -134,14 +135,17 @@ const EditorControl = ({
   ]);
 
   const handleChangeDraftField = useCallback(
-    (value: ValueOrNestedValue) => {
+    async (value: ValueOrNestedValue) => {
       setDirty(
         oldDirty => oldDirty || !isEmpty(widget.getValidValue(value, field as UnknownField)),
       );
+
       changeDraftField({ path, field, value, i18n, isMeta });
     },
     [changeDraftField, field, i18n, isMeta, path, widget],
   );
+
+  const handleDebouncedChangeDraftField = useDebouncedCallback(handleChangeDraftField, 250);
 
   const config = useMemo(() => configState.config, [configState.config]);
 
@@ -155,21 +159,23 @@ const EditorControl = ({
 
     if ('default' in field && isNotNullish(!field.default)) {
       if (widget.getDefaultValue) {
-        handleChangeDraftField(
+        handleDebouncedChangeDraftField(
           widget.getDefaultValue(field.default, field as unknown as UnknownField),
         );
       } else {
-        handleChangeDraftField(field.default);
+        handleDebouncedChangeDraftField(field.default);
       }
       setVersion(version => version + 1);
       return;
     }
 
     if (widget.getDefaultValue) {
-      handleChangeDraftField(widget.getDefaultValue(null, field as unknown as UnknownField));
+      handleDebouncedChangeDraftField(
+        widget.getDefaultValue(null, field as unknown as UnknownField),
+      );
       setVersion(version => version + 1);
     }
-  }, [field, finalValue, handleChangeDraftField, widget]);
+  }, [field, finalValue, handleDebouncedChangeDraftField, widget]);
 
   return useMemo(() => {
     if (!collection || !entry || !config || field.widget === 'hidden') {
@@ -192,7 +198,7 @@ const EditorControl = ({
           label: getFieldLabel(field, t),
           locale,
           mediaPaths,
-          onChange: handleChangeDraftField,
+          onChange: handleDebouncedChangeDraftField,
           openMediaLibrary,
           removeInsertedMedia,
           path,
@@ -225,7 +231,7 @@ const EditorControl = ({
     t,
     locale,
     mediaPaths,
-    handleChangeDraftField,
+    handleDebouncedChangeDraftField,
     openMediaLibrary,
     removeInsertedMedia,
     path,

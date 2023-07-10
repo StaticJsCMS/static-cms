@@ -24,7 +24,7 @@ const TextControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
     () => (duplicate ? rawValue : internalRawValue),
     [internalRawValue, duplicate, rawValue],
   );
-  const debouncedInternalValue = useDebounce(internalValue, 200);
+  const debouncedInternalValue = useDebounce(internalValue, 250);
 
   const ref = useRef<HTMLInputElement | null>(null);
 

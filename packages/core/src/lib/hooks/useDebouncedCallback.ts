@@ -1,25 +1,39 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const useDebouncedCallback = <T extends (...args: any) => any>(func: T, wait: number) => {
-  // Use a ref to store the timeout between renders
-  // and prevent changes to it from causing re-renders
-  const timeout = useRef<NodeJS.Timeout>();
+export default function useDebouncedCallback<A extends any[], T = void>(
+  callback: (...args: A) => T,
+  wait: number,
+) {
+  // track args & timeout handle between calls
+  const argsRef = useRef<A>();
+  const timeout = useRef<ReturnType<typeof setTimeout>>();
+
+  function cleanup() {
+    if (timeout.current) {
+      clearTimeout(timeout.current);
+    }
+  }
+
+  // make sure our timeout gets cleared if
+  // our consuming component gets unmounted
+  useEffect(() => cleanup, []);
 
   return useCallback(
-    (...args: Parameters<T>) => {
-      const later = () => {
-        clearTimeout(timeout.current);
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        func(...args);
-      };
+    function debouncedCallback(...args: A) {
+      // capture latest args
+      argsRef.current = args;
 
-      clearTimeout(timeout.current);
-      timeout.current = setTimeout(later, wait);
+      // clear debounce timer
+      cleanup();
+
+      // start waiting again
+      timeout.current = setTimeout(() => {
+        if (argsRef.current) {
+          callback(...argsRef.current);
+        }
+      }, wait);
     },
-    [func, wait],
+    [callback, wait],
   );
-};
-
-export default useDebouncedCallback;
+}

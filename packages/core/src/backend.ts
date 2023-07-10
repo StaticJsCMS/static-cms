@@ -859,7 +859,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     usedSlugs,
     status,
   }: PersistArgs) {
-    const modifiedData = await this.invokePreSaveEvent(draft.entry);
+    const modifiedData = await this.invokePreSaveEvent(draft.entry, collection);
     const entryDraft = modifiedData
       ? {
           ...draft,
@@ -950,7 +950,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       opts,
     );
 
-    await this.invokePostSaveEvent(entryDraft.entry);
+    await this.invokePostSaveEvent(entryDraft.entry, collection);
 
     return slug;
   }
@@ -960,14 +960,14 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return { entry, author: { login, name } };
   }
 
-  async invokePreSaveEvent(entry: Entry): Promise<EntryData> {
+  async invokePreSaveEvent(entry: Entry, collection: Collection): Promise<EntryData> {
     const eventData = await this.getEventData(entry);
-    return await invokeEvent('preSave', eventData);
+    return await invokeEvent({ name: 'preSave', collection: collection.name, data: eventData });
   }
 
-  async invokePostSaveEvent(entry: Entry): Promise<void> {
+  async invokePostSaveEvent(entry: Entry, collection: Collection): Promise<void> {
     const eventData = await this.getEventData(entry);
-    await invokeEvent('postSave', eventData);
+    await invokeEvent({ name: 'postSave', collection: collection.name, data: eventData });
   }
 
   async persistMedia(config: Config, file: AssetProxy) {

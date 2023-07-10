@@ -47,20 +47,7 @@ The following options are available on all fields:
 | i18n      | boolean<br />\| 'translate'<br />\| 'duplicate'<br />\| 'none' |            | _Optional_. <BetaImage /><ul><li>`translate` - Allows translation of the field</li><li>`duplicate` - Duplicates the value from the default locale</li><li>`true` - Accept parent values as default</li><li>`none` or `false` - Exclude field from translations</li></ul> |
 | condition | FilterRule<br />\| List of FilterRules                         |            | _Optional_. See [Field Conditions](#field-conditions)                                                                                                                                                                                                                    |
 
-## Field Conditions
-
-The fields can be shown conditionally based on the values of the other fields.
-
-The `condition` option can take a single filter rule or a list of filter rules.
-
-| Name     | Type                           | Default | Description                                                                                                                                                                                                                                                     |
-| -------- | ------------------------------ | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| field    | string                         |         | The name of one of the field.                                                                                                                                                                                                                                   |
-| value    | string<br />\| list of strings |         | _Optional_. The desired value or values to match. Required if no `pattern` provided. Ignored if `pattern` is provided                                                                                                                                           |
-| pattern  | regular expression             |         | _Optional_. A regex pattern to match against the field's value                                                                                                                                                                                                  |
-| matchAll | boolean                        | `false` | _Optional_. _Ignored if value is not a list of strings_<br /><ul><li>`true` - The field's values must include or match all of the filter rule's values</li><li>`false` - The field's value must include or match only one of the filter rule's values</li></ul> |
-
-## Example
+## Example Widget
 
 <CodeTabs>
 ```yaml
@@ -75,6 +62,182 @@ name: 'title',
 label: 'Title',
 widget: 'string',
 pattern: ['.{12,}', 'Must have at least 12 characters'],
+```
+
+</CodeTabs>
+
+## Field Conditions
+
+The fields can be shown conditionally based on the values of the other fields.
+
+The `condition` option can take a single filter rule or a list of filter rules.
+
+| Name     | Type                           | Default | Description                                                                                                                                                                                                                                                     |
+| -------- | ------------------------------ | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| field    | string                         |         | The name of one of the field.                                                                                                                                                                                                                                   |
+| value    | string<br />\| list of strings |         | _Optional_. The desired value or values to match. Required if no `pattern` provided. Ignored if `pattern` is provided                                                                                                                                           |
+| pattern  | regular expression             |         | _Optional_. A regex pattern to match against the field's value                                                                                                                                                                                                  |
+| matchAll | boolean                        | `false` | _Optional_. _Ignored if value is not a list of strings_<br /><ul><li>`true` - The field's values must include or match all of the filter rule's values</li><li>`false` - The field's value must include or match only one of the filter rule's values</li></ul> |
+
+### Example
+
+The example below creates a collection based on a nested field's value.
+
+<CodeTabs>
+```yaml
+collections:
+  - name: 'nested-field-filtered-collection'
+    label: 'Nested Field Filtered Collection'
+    folder: '_field_condition'
+    create: true
+    fields:
+      - name: type
+        label: Type
+        widget: select
+        options:
+          - value: type1
+            label: Type 1
+          - value: type2
+            label: Type 2
+      - name: value1
+        label: Value 1
+        widget: string
+        condition:
+          field: type
+          value: type1
+      - name: value2
+        label: Value 2
+        widget: text
+        condition:
+          field: type
+          value: type2
+```
+
+```js
+collections: [
+  {
+    name: "nested-field-filtered-collection",
+    label: "Nested Field Filtered Collection",
+    folder: "_field_condition",
+    create: true,
+    fields: [
+      {
+        name: "type",
+        label: "Type",
+        widget: "select",
+        options: [
+          {
+            value: "type1",
+            label: "Type 1"
+          },
+          {
+            value: "type2",
+            label: "Type 2"
+          }
+        ]
+      },
+      {
+        name: "value1",
+        label: "Value 1",
+        widget: "string",
+        condition: {
+          field: "type",
+          value: "type1"
+        }
+      },
+      {
+        name: "value2",
+        label: "Value 2",
+        widget: "text",
+        condition: {
+          field: "type",
+          value: "type2"
+        }
+      }
+    ]
+  }
+],
+```
+
+</CodeTabs>
+
+### Nested Field Example
+
+The example below creates a collection based on a nested field's value.
+
+<CodeTabs>
+```yaml
+collections:
+  - name: 'nested-field-filtered-collection'
+    label: 'Nested Field Filtered Collection'
+    folder: '_nested_field_condition'
+    create: true
+    fields:
+      - name: value
+        label: Value 1
+        widget: string
+        condition:
+          field: nested.object.field
+          value: yes
+      - name: nested
+        label: Nested
+        widget: object
+        fields:
+          - name: object
+            label: Object
+            widget: object
+            fields:
+              - name: field
+                label: Field
+                widget: select
+                options:
+                  - yes
+                  - no
+```
+
+```js
+collections: [
+  {
+    name: "nested-field-filtered-collection",
+    label: "Nested Field Filtered Collection",
+    folder: "_nested_field_condition",
+    create: true,
+    fields: [
+      {
+        name: "value",
+        label: "Value 1",
+        widget: "string",
+        condition: {
+          field: "nested.object.field",
+          value: "yes"
+        }
+      },
+      {
+        name: "nested",
+        label: "Nested",
+        widget: "object",
+        fields: [
+          {
+            name: "object",
+            label: "Object",
+            widget: "object",
+            fields: [
+              {
+                name: "field",
+                label: "Field",
+                widget: "select",
+                options: [
+                  "yes",
+                  "no"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+],
 ```
 
 </CodeTabs>
