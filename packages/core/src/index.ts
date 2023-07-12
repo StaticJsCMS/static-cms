@@ -10,6 +10,7 @@ import useEntries from './lib/hooks/useEntries';
 import useHasChildErrors from './lib/hooks/useHasChildErrors';
 import useMediaFiles from './lib/hooks/useMediaFiles';
 import useFolderSupport from './lib/hooks/useFolderSupport';
+import { currentBackend } from './backend';
 
 export * from './backends';
 export * from './interface';
@@ -20,6 +21,7 @@ export * from './widgets';
 const CMS = {
   ...Registry,
   init: bootstrap,
+  currentBackend,
 };
 
 if (typeof window !== 'undefined') {

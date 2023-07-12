@@ -583,8 +583,7 @@ export async function invokeEvent(event: {
     console.info(
       `[StaticCMS] Firing change event for field "${field}" for${
         event.file ? ` "${event.file}" file in` : ''
-      } "${collection}" collection, new value:`,
-      data,
+      } "${collection}" collection`,
     );
     const collectionHandlers = registry.eventHandlers[name][collection] ?? {};
 
@@ -790,7 +789,7 @@ export function getAdditionalLink(id: string): AdditionalLink | undefined {
  * Markdown editor shortcodes
  */
 export function registerShortcode<P = {}>(name: string, config: ShortcodeConfig<P>) {
-  if (registry.backends[name]) {
+  if (registry.shortcodes[name]) {
     console.error(`Shortcode [${name}] already registered. Please choose a different name.`);
     return;
   }
