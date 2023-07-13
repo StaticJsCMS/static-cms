@@ -1,16 +1,17 @@
 import { createElement, useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import { currentBackend } from './backend';
 import bootstrap from './bootstrap';
+import useEntries from './lib/hooks/useEntries';
+import useFolderSupport from './lib/hooks/useFolderSupport';
+import useHasChildErrors from './lib/hooks/useHasChildErrors';
 import useIsMediaAsset from './lib/hooks/useIsMediaAsset';
 import useMediaAsset from './lib/hooks/useMediaAsset';
+import useMediaFiles from './lib/hooks/useMediaFiles';
 import useMediaInsert from './lib/hooks/useMediaInsert';
 import useUUID from './lib/hooks/useUUID';
 import Registry from './lib/registry';
-import useEntries from './lib/hooks/useEntries';
-import useHasChildErrors from './lib/hooks/useHasChildErrors';
-import useMediaFiles from './lib/hooks/useMediaFiles';
-import useFolderSupport from './lib/hooks/useFolderSupport';
-import { currentBackend } from './backend';
 
 export * from './backends';
 export * from './interface';
@@ -40,6 +41,7 @@ if (typeof window !== 'undefined') {
   window.useMediaFiles = window.useMediaFiles || useMediaFiles;
   window.useMediaInsert = window.useMediaInsert || useMediaInsert;
   window.useUUID = window.useUUID || useUUID;
+  window.useNavigate = window.useNavigate || useNavigate;
 }
 
 export default CMS;
