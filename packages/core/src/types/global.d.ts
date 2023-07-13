@@ -3,6 +3,7 @@ export {};
 import type { Config } from '../interface';
 import type CmsAPI from '../index';
 import type { createElement, useEffect, useState, useMemo, useCallback } from 'react';
+import type { useNavigate } from 'react-router-dom';
 import type {
   useEntries,
   useFolderSupport,
@@ -33,5 +34,6 @@ declare global {
     useMediaFiles: useMediaFiles;
     useMediaInsert: useMediaInsert;
     useUUID: useUUID;
+    useNavigate: useNavigate;
   }
 }
