@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { isNotNullish } from '@staticcms/core/lib/util/null.util';
+import { isNullish } from '@staticcms/core/lib/util/null.util';
 
 import type { ListField, ValueOrNestedValue, WidgetPreviewProps } from '@staticcms/core/interface';
 import type { FC, ReactNode } from 'react';
@@ -8,6 +8,10 @@ import type { FC, ReactNode } from 'react';
 function renderNestedList(
   value: ValueOrNestedValue[] | ValueOrNestedValue | null | undefined,
 ): ReactNode {
+  if (isNullish(value)) {
+    return null;
+  }
+
   if (Array.isArray(value)) {
     return (
       <ul style={{ marginTop: 0 }}>
@@ -18,7 +22,7 @@ function renderNestedList(
     );
   }
 
-  if (isNotNullish(value) && typeof value === 'object') {
+  if (typeof value === 'object') {
     if (value instanceof Date) {
       return value.toISOString();
     }

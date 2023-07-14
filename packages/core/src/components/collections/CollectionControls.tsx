@@ -73,7 +73,6 @@ const CollectionControls = ({
           sm:w-auto
           sm:justify-normal
           lg:gap-2
-          flex-[1_0_0%]
         "
       >
         <ViewStyleControl viewStyle={viewStyle} onChangeViewStyle={onChangeViewStyle} />
