@@ -38,6 +38,10 @@ function renderNestedList(
 }
 
 const ListPreview: FC<WidgetPreviewProps<ValueOrNestedValue[], ListField>> = ({ field, value }) => {
+  if (!Array.isArray(value)) {
+    return null;
+  }
+
   return (
     <div style={{ marginTop: '12px' }}>
       <label>
