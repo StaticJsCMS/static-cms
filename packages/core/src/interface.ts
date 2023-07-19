@@ -190,11 +190,21 @@ export interface FileNameFilterRule {
 
 export type FilterRule = FieldFilterRule | FileNameFilterRule;
 
-export interface EditorConfig {
-  preview?: boolean;
-  frame?: boolean;
+export interface BaseEditorConfig {
   size?: EditorSize;
 }
+
+export interface DefaultEditorConfig extends BaseEditorConfig {
+  preview?: boolean;
+  frame?: boolean;
+  live_preview?: false;
+}
+
+export interface LiveEditorConfig extends BaseEditorConfig {
+  live_preview: string;
+}
+
+export type EditorConfig = DefaultEditorConfig | LiveEditorConfig;
 
 export interface CollectionFile<EF extends BaseField = UnknownField> {
   name: string;

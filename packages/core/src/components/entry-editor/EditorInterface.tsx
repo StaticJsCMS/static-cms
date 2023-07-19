@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
 import { EDITOR_SIZE_COMPACT } from '@staticcms/core/constants/views';
+import { summaryFormatter } from '@staticcms/core/lib/formatters';
 import useBreadcrumbs from '@staticcms/core/lib/hooks/useBreadcrumbs';
 import { getI18nInfo, hasI18n } from '@staticcms/core/lib/i18n';
 import classNames from '@staticcms/core/lib/util/classNames.util';
@@ -10,6 +11,8 @@ import {
   selectEntryCollectionTitle,
 } from '@staticcms/core/lib/util/collection.util';
 import { customPathFromSlug } from '@staticcms/core/lib/util/nested.util';
+import { selectConfig } from '@staticcms/core/reducers/selectors/config';
+import { useAppSelector } from '@staticcms/core/store/hooks';
 import MainView from '../MainView';
 import EditorToolbar from './EditorToolbar';
 import EditorControlPane from './editor-control-pane/EditorControlPane';
@@ -95,6 +98,8 @@ const EditorInterface = ({
   submitted,
   slug,
 }: TranslatedProps<EditorInterfaceProps>) => {
+  const config = useAppSelector(selectConfig);
+
   const { locales, defaultLocale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
   const translatedLocales = useMemo(
     () => locales?.filter(locale => locale !== defaultLocale) ?? [],
@@ -151,28 +156,55 @@ const EditorInterface = ({
     setSelectedLocale(locale);
   }, []);
 
-  const [showPreviewToggle, previewInFrame, editorSize] = useMemo(() => {
-    let preview = collection.editor?.preview ?? true;
-    let frame = collection.editor?.frame ?? true;
+  const { livePreviewUrlTemplate, showPreviewToggle, previewInFrame, editorSize } = useMemo(() => {
+    let livePreviewUrlTemplate =
+      typeof collection.editor?.live_preview === 'string' ? collection.editor.live_preview : false;
+
+    let preview = true;
+    let frame = true;
     let size = collection.editor?.size ?? EDITOR_SIZE_COMPACT;
 
-    if ('files' in collection) {
-      const file = getFileFromSlug(collection, entry.slug);
-      if (file?.editor?.preview !== undefined) {
-        preview = file.editor.preview;
+    if (collection.editor) {
+      if ('preview' in collection.editor) {
+        preview = collection.editor.preview ?? true;
       }
 
-      if (file?.editor?.frame !== undefined) {
-        frame = file.editor.frame;
-      }
-
-      if (file?.editor?.size !== undefined) {
-        size = file.editor.size;
+      if ('frame' in collection.editor) {
+        preview = collection.editor.frame ?? true;
       }
     }
 
-    return [preview, frame, size];
-  }, [collection, entry.slug]);
+    if ('files' in collection) {
+      const file = getFileFromSlug(collection, entry.slug);
+
+      if (file?.editor) {
+        if (typeof file.editor.live_preview === 'string') {
+          livePreviewUrlTemplate = file.editor.live_preview;
+        }
+
+        if ('preview' in file.editor && file.editor.preview !== undefined) {
+          preview = file.editor.preview;
+        }
+
+        if ('frame' in file.editor && file.editor.frame !== undefined) {
+          frame = file.editor.frame;
+        }
+
+        if (file?.editor?.size !== undefined) {
+          size = file.editor.size;
+        }
+      }
+    }
+
+    return {
+      livePreviewUrlTemplate: livePreviewUrlTemplate
+        ? summaryFormatter(livePreviewUrlTemplate, entry, collection, config?.slug)
+        : undefined,
+      showPreviewToggle: preview,
+      previewInFrame: frame,
+      editorSize: size,
+    };
+  }, [collection, config?.slug, entry]);
 
   const finalPreviewActive = useMemo(
     () => showPreviewToggle && previewActive,
@@ -318,6 +350,7 @@ const EditorInterface = ({
       <EditorPreviewPane
         collection={collection}
         previewInFrame={previewInFrame}
+        livePreviewUrlTemplate={livePreviewUrlTemplate}
         entry={entry}
         fields={fields}
         editorSize={editorSize}

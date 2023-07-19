@@ -173,7 +173,7 @@ export function applyDefaults<EF extends BaseField = UnknownField>(
       let collectionI18n = collection[I18N];
 
       if (config.editor && !collection.editor) {
-        collection.editor = { preview: config.editor.preview, frame: config.editor.frame };
+        collection.editor = config.editor;
       }
 
       collection.media_library = {
@@ -248,7 +248,7 @@ export function applyDefaults<EF extends BaseField = UnknownField>(
           }
 
           if (collection.editor && !file.editor) {
-            file.editor = { preview: collection.editor.preview, frame: collection.editor.frame };
+            file.editor = collection.editor;
           }
         }
       }

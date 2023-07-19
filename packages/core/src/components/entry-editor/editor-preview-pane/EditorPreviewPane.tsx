@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import Frame from 'react-frame-component';
 import { translate } from 'react-polyglot';
@@ -8,6 +8,7 @@ import { EDITOR_SIZE_COMPACT } from '@staticcms/core/constants/views';
 import { getPreviewStyles, getPreviewTemplate } from '@staticcms/core/lib/registry';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectTemplateName } from '@staticcms/core/lib/util/collection.util';
+import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
@@ -25,6 +26,7 @@ import type {
   TemplatePreviewProps,
   TranslatedProps,
 } from '@staticcms/core/interface';
+import type DataUpdateEvent from '@staticcms/core/lib/util/events/DataEvent';
 import type { FC } from 'react';
 
 const FrameGlobalStyles = `
@@ -110,12 +112,22 @@ export interface EditorPreviewPaneProps {
   fields: Field[];
   entry: Entry;
   previewInFrame: boolean;
+  livePreviewUrlTemplate: string | undefined;
   editorSize: EditorSize;
   showMobilePreview: boolean;
 }
 
 const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
-  const { editorSize, entry, collection, fields, previewInFrame, showMobilePreview, t } = props;
+  const {
+    editorSize,
+    entry,
+    collection,
+    fields,
+    previewInFrame,
+    livePreviewUrlTemplate,
+    showMobilePreview,
+    t,
+  } = props;
 
   const config = useAppSelector(selectConfig);
 
@@ -171,6 +183,15 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
     [props, theme, widgetFor, widgetsFor],
   );
 
+  const livePreviewIframe = useRef<HTMLIFrameElement>(null);
+  const passEventToIframe = useCallback((event: DataUpdateEvent) => {
+    if (livePreviewIframe.current) {
+      livePreviewIframe.current.contentWindow?.postMessage(event);
+    }
+  }, []);
+
+  useWindowEvent('data:update', passEventToIframe);
+
   return useMemo(() => {
     if (!element) {
       return null;
@@ -196,7 +217,13 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
         )}
       >
         <ErrorBoundary config={config}>
-          {previewInFrame ? (
+          {livePreviewUrlTemplate ? (
+            <iframe
+              ref={livePreviewIframe}
+              src={`${livePreviewUrlTemplate}?useCmsData=true`}
+              className="w-full h-full"
+            />
+          ) : previewInFrame ? (
             <Frame
               key="preview-frame"
               id="preview-pane"
@@ -251,6 +278,7 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
     editorSize,
     element,
     initialFrameContent,
+    livePreviewUrlTemplate,
     previewComponent,
     previewInFrame,
     previewProps,
