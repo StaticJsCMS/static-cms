@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { currentBackend } from './backend';
 import bootstrap from './bootstrap';
+import useData from './lib/hooks/useData';
 import useEntries from './lib/hooks/useEntries';
 import useFolderSupport from './lib/hooks/useFolderSupport';
 import useHasChildErrors from './lib/hooks/useHasChildErrors';
@@ -15,6 +16,7 @@ import Registry from './lib/registry';
 
 export * from './backends';
 export * from './interface';
+export * from './components';
 export * from './lib';
 export { default as locales } from './locales';
 export * from './widgets';
@@ -41,6 +43,7 @@ if (typeof window !== 'undefined') {
   window.useMediaFiles = window.useMediaFiles || useMediaFiles;
   window.useMediaInsert = window.useMediaInsert || useMediaInsert;
   window.useUUID = window.useUUID || useUUID;
+  window.useData = window.useData || useData;
   window.useNavigate = window.useNavigate || useNavigate;
 }
 

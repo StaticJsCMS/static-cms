@@ -13,6 +13,7 @@ import type {
   useMediaFiles,
   useMediaInsert,
   useUUID,
+  useData,
 } from '../lib/hooks';
 
 declare global {
@@ -34,6 +35,7 @@ declare global {
     useMediaFiles: useMediaFiles;
     useMediaInsert: useMediaInsert;
     useUUID: useUUID;
+    useData: useData;
     useNavigate: useNavigate;
   }
 }

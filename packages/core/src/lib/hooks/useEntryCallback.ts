@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import { invokeEvent } from '../registry';
 import { fileForEntry } from '../util/collection.util';
 import useDebouncedCallback from './useDebouncedCallback';
+import DataUpdateEvent from '../util/events/DataEvent';
 
 import type { Collection, EntryData, Field } from '@staticcms/core/interface';
 
@@ -25,7 +26,25 @@ async function handleChange(
   let newEntry = cloneDeep(entry);
 
   if (!isEqual(oldValue, newValue)) {
-    newEntry = await invokeEvent({ name: 'change', collection, field: field.name, data: newEntry });
+    const fieldPath = path.join('.');
+
+    newEntry = await invokeEvent({
+      name: 'change',
+      collection,
+      field: field.name,
+      fieldPath,
+      data: newEntry,
+    });
+
+    const updatedValue = get(newEntry, path);
+
+    window.dispatchEvent(
+      new DataUpdateEvent({
+        field: field.name,
+        fieldPath,
+        value: updatedValue,
+      }),
+    );
   }
 
   if ('fields' in field && field.fields) {

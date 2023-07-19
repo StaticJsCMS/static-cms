@@ -2,12 +2,14 @@ import { useEffect } from 'react';
 
 import type AlertEvent from './events/AlertEvent';
 import type ConfirmEvent from './events/ConfirmEvent';
+import type DataUpdateEvent from './events/DataEvent';
 import type MediaLibraryCloseEvent from './events/MediaLibraryCloseEvent';
 
 interface EventMap {
   alert: AlertEvent;
   confirm: ConfirmEvent;
   mediaLibraryClose: MediaLibraryCloseEvent;
+  'data:update': DataUpdateEvent;
 }
 
 export function useWindowEvent<K extends keyof WindowEventMap>(

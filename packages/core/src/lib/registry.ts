@@ -507,6 +507,7 @@ export async function invokeEvent(event: {
   collection: string;
   file?: string;
   field: string;
+  fieldPath: string;
 }): Promise<EntryData>;
 export async function invokeEvent(event: {
   name: AllowedEvent;
