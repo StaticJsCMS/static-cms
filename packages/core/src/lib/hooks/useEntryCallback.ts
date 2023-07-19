@@ -63,18 +63,12 @@ async function handleChange(
 }
 
 interface EntryCallbackProps {
-  hasChanged: boolean;
   collection: Collection;
   slug: string | undefined;
   callback: () => void;
 }
 
-export default function useEntryCallback({
-  hasChanged,
-  slug,
-  collection,
-  callback,
-}: EntryCallbackProps) {
+export default function useEntryCallback({ slug, collection, callback }: EntryCallbackProps) {
   const dispatch = useAppDispatch();
 
   const entry = useAppSelector(selectEditingDraft);
@@ -85,7 +79,7 @@ export default function useEntryCallback({
       return;
     }
 
-    if (hasChanged && entry) {
+    if (entry) {
       const file = fileForEntry(collection, slug);
       let updatedEntryData = entry.data;
 
@@ -121,9 +115,9 @@ export default function useEntryCallback({
       setLastEntryData(entry?.data);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entry, hasChanged]);
+  }, [entry]);
 
-  const debouncedRunUpdateCheck = useDebouncedCallback(runUpdateCheck, 500);
+  const debouncedRunUpdateCheck = useDebouncedCallback(runUpdateCheck, 200);
 
   useEffect(() => {
     debouncedRunUpdateCheck();

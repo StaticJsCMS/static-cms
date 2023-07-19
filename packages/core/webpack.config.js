@@ -12,8 +12,7 @@ function moduleNameToPath(libName) {
   return path.resolve(__dirname, '..', '..', 'node_modules', libName);
 }
 
-module.exports = {
-  entry: './src/index.ts',
+const config = {
   mode: isProduction ? 'production' : 'development',
   devtool: 'source-map',
   externals: isProduction
@@ -107,15 +106,6 @@ module.exports = {
       STATIC_CMS_CORE_VERSION: JSON.stringify(`${pkg.version}${isProduction ? '' : '-dev'}`),
     }),
   ].filter(Boolean),
-  output: {
-    publicPath: '',
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'static-cms-core.js',
-    library: {
-      name: 'StaticCmsCore',
-      type: 'umd',
-    },
-  },
   devServer: {
     static: {
       directory: './dev-test',
@@ -126,3 +116,33 @@ module.exports = {
     hot: true,
   },
 };
+
+const configLive = Object.assign({}, config, {
+  name: "configLive",
+  entry: './src/live/index.ts',
+  output: {
+    publicPath: '',
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'live.js',
+    library: {
+      name: 'StaticCmsCoreLive',
+      type: 'umd',
+    },
+  }
+});
+
+const configMain = Object.assign({}, config, {
+  name: "configMain",
+  entry: './src/index.ts',
+  output: {
+    publicPath: '',
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'static-cms-core.js',
+    library: {
+      name: 'StaticCmsCore',
+      type: 'umd',
+    },
+  }
+});
+
+module.exports = [configMain, configLive]

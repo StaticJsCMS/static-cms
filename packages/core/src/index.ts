@@ -16,7 +16,6 @@ import Registry from './lib/registry';
 
 export * from './backends';
 export * from './interface';
-export * from './components';
 export * from './lib';
 export { default as locales } from './locales';
 export * from './widgets';

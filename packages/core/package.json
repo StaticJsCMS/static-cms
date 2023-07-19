@@ -25,7 +25,7 @@
     "prepublishOnly": "yarn build ",
     "prepack": "cp ../../README.md ./",
     "postpack": "rm ./README.md",
-    "serve": "webpack serve",
+    "serve": "webpack serve --config-name configMain",
     "test": "cross-env NODE_ENV=test jest",
     "test:integration": "cross-env NODE_ENV=test jest -c jest.config.integration.js",
     "test:ci": "cross-env NODE_ENV=test jest --maxWorkers=2 --coverage",

@@ -212,7 +212,6 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
   }, [collection, createBackup, entryDraft.entry, hasChanged]);
 
   useEntryCallback({
-    hasChanged,
     collection,
     slug,
     callback: () => {

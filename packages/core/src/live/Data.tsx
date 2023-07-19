@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useData } from '@staticcms/core/lib';
+import useData from '@staticcms/core/lib/hooks/useData';
 
 import type { ValueOrNestedValue } from '@staticcms/core/interface';
 import type { FC } from 'react';
@@ -12,7 +12,6 @@ export interface DataProps {
 
 const Data: FC<DataProps> = ({ path, value }) => {
   const data = useData(value, path);
-
   return <>{data}</>;
 };
 

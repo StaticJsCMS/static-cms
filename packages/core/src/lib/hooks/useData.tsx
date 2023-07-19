@@ -1,23 +1,29 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { ValueOrNestedValue } from '@staticcms/core/interface';
-import type DataUpdateEvent from '../util/events/DataEvent';
 
 export default function useData(value: ValueOrNestedValue, path: string) {
   const [data, setData] = useState(value);
 
-  const [searchParams] = useSearchParams();
-  const isCms = searchParams.get('useCmsData') === 'true';
+  const isCms = useMemo(() => {
+    if (!window) {
+      return false;
+    }
+
+    const searchParams = new URLSearchParams(window.location.search);
+    return searchParams.get('useCmsData') === 'true';
+  }, []);
 
   const onDataChange = useCallback(
-    (event: DataUpdateEvent) => {
-      if (!isCms) {
+    (event: MessageEvent) => {
+      if (!isCms || event.data.message !== 'data:update') {
         return;
       }
 
-      if (event.detail.fieldPath === path) {
-        setData(event.detail.value);
+      const { fieldPath, value } = event.data.value;
+
+      if (fieldPath === path) {
+        setData(value);
       }
     },
     [isCms, path],
@@ -28,10 +34,10 @@ export default function useData(value: ValueOrNestedValue, path: string) {
       return;
     }
 
-    window.addEventListener('data:update', onDataChange);
+    window?.addEventListener('message', onDataChange);
 
     return () => {
-      window.removeEventListener('data:update', onDataChange);
+      window?.removeEventListener('message', onDataChange);
     };
   }, [isCms, onDataChange]);
 

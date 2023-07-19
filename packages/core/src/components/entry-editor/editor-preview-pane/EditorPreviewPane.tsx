@@ -186,7 +186,10 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
   const livePreviewIframe = useRef<HTMLIFrameElement>(null);
   const passEventToIframe = useCallback((event: DataUpdateEvent) => {
     if (livePreviewIframe.current) {
-      livePreviewIframe.current.contentWindow?.postMessage(event);
+      livePreviewIframe.current.contentWindow?.postMessage({
+        message: 'data:update',
+        value: { fieldPath: event.detail.fieldPath, value: event.detail.value },
+      });
     }
   }, []);
 
