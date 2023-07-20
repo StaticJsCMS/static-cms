@@ -8,6 +8,7 @@ import { EDITOR_SIZE_COMPACT } from '@staticcms/core/constants/views';
 import { getPreviewStyles, getPreviewTemplate } from '@staticcms/core/lib/registry';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectTemplateName } from '@staticcms/core/lib/util/collection.util';
+import LivePreviewLoadedEvent from '@staticcms/core/lib/util/events/LivePreviewLoadedEvent';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
@@ -195,6 +196,10 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
 
   useWindowEvent('data:update', passEventToIframe);
 
+  const handleLivePreviewIframeLoaded = useCallback(() => {
+    window.dispatchEvent(new LivePreviewLoadedEvent());
+  }, []);
+
   return useMemo(() => {
     if (!element) {
       return null;
@@ -222,9 +227,11 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
         <ErrorBoundary config={config}>
           {livePreviewUrlTemplate ? (
             <iframe
+              key="live-preview-frame"
               ref={livePreviewIframe}
               src={`${livePreviewUrlTemplate}?useCmsData=true`}
               className="w-full h-full"
+              onLoad={handleLivePreviewIframeLoaded}
             />
           ) : previewInFrame ? (
             <Frame
@@ -280,6 +287,7 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
     config,
     editorSize,
     element,
+    handleLivePreviewIframeLoaded,
     initialFrameContent,
     livePreviewUrlTemplate,
     previewComponent,

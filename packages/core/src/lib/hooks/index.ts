@@ -1,4 +1,4 @@
-export { default as useData } from './useData';
+export { default as useData } from '../../live/useData';
 export { default as useEntries } from './useEntries';
 export { default as useFolderSupport } from './useFolderSupport';
 export { default as useHasChildErrors } from './useHasChildErrors';

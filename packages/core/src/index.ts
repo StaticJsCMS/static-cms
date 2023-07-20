@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { currentBackend } from './backend';
 import bootstrap from './bootstrap';
-import useData from './lib/hooks/useData';
 import useEntries from './lib/hooks/useEntries';
 import useFolderSupport from './lib/hooks/useFolderSupport';
 import useHasChildErrors from './lib/hooks/useHasChildErrors';
@@ -13,6 +12,7 @@ import useMediaFiles from './lib/hooks/useMediaFiles';
 import useMediaInsert from './lib/hooks/useMediaInsert';
 import useUUID from './lib/hooks/useUUID';
 import Registry from './lib/registry';
+import useData from './live/useData';
 
 export * from './backends';
 export * from './interface';

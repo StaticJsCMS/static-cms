@@ -1,6 +1,6 @@
 import React from 'react';
 
-import useData from '@staticcms/core/lib/hooks/useData';
+import useData from './useData';
 
 import type { ValueOrNestedValue } from '@staticcms/core/interface';
 import type { FC } from 'react';

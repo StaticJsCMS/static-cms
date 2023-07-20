@@ -21,7 +21,7 @@ import {
 import { loadMedia } from '@staticcms/core/actions/mediaLibrary';
 import { loadScroll, toggleScroll } from '@staticcms/core/actions/scroll';
 import useEntryCallback from '@staticcms/core/lib/hooks/useEntryCallback';
-import { selectFields } from '@staticcms/core/lib/util/collection.util';
+import { getFileFromSlug, selectFields } from '@staticcms/core/lib/util/collection.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectEntry } from '@staticcms/core/reducers/selectors/entries';
@@ -211,7 +211,24 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
     };
   }, [collection, createBackup, entryDraft.entry, hasChanged]);
 
+  const hasLivePreview = useMemo(() => {
+    let livePreview = typeof collection.editor?.live_preview === 'string';
+
+    if ('files' in collection) {
+      if (entryDraft.entry) {
+        const file = getFileFromSlug(collection, entryDraft.entry.slug);
+
+        if (file?.editor) {
+          livePreview = livePreview || typeof file.editor.live_preview === 'string';
+        }
+      }
+    }
+
+    return livePreview;
+  }, [collection, entryDraft.entry]);
+
   useEntryCallback({
+    hasLivePreview,
     collection,
     slug,
     callback: () => {

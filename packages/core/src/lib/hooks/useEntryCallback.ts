@@ -8,8 +8,9 @@ import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraf
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import { invokeEvent } from '../registry';
 import { fileForEntry } from '../util/collection.util';
-import useDebouncedCallback from './useDebouncedCallback';
 import DataUpdateEvent from '../util/events/DataEvent';
+import { useWindowEvent } from '../util/window.util';
+import useDebouncedCallback from './useDebouncedCallback';
 
 import type { Collection, EntryData, Field } from '@staticcms/core/interface';
 
@@ -41,7 +42,7 @@ async function handleChange(
     window.dispatchEvent(
       new DataUpdateEvent({
         field: field.name,
-        fieldPath,
+        fieldPath: `${collection}.${fieldPath}`,
         value: updatedValue,
       }),
     );
@@ -63,19 +64,27 @@ async function handleChange(
 }
 
 interface EntryCallbackProps {
+  hasLivePreview: boolean;
   collection: Collection;
   slug: string | undefined;
   callback: () => void;
 }
 
-export default function useEntryCallback({ slug, collection, callback }: EntryCallbackProps) {
+export default function useEntryCallback({
+  hasLivePreview,
+  slug,
+  collection,
+  callback,
+}: EntryCallbackProps) {
   const dispatch = useAppDispatch();
+
+  const [livePreviewLoaded, setLivePreviewLoaded] = useState(false);
 
   const entry = useAppSelector(selectEditingDraft);
   const [lastEntryData, setLastEntryData] = useState<EntryData>(cloneDeep(entry?.data));
 
   const runUpdateCheck = useCallback(async () => {
-    if (isEqual(lastEntryData, entry?.data)) {
+    if ((hasLivePreview && !livePreviewLoaded) || isEqual(lastEntryData, entry?.data)) {
       return;
     }
 
@@ -115,11 +124,17 @@ export default function useEntryCallback({ slug, collection, callback }: EntryCa
       setLastEntryData(entry?.data);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entry]);
+  }, [entry, livePreviewLoaded]);
 
   const debouncedRunUpdateCheck = useDebouncedCallback(runUpdateCheck, 200);
 
   useEffect(() => {
     debouncedRunUpdateCheck();
   }, [debouncedRunUpdateCheck]);
+
+  const handleLivePreviewLoaded = useCallback(() => {
+    setLivePreviewLoaded(true);
+  }, []);
+
+  useWindowEvent('livePreviewLoaded', handleLivePreviewLoaded);
 }

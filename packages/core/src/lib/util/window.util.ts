@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import type AlertEvent from './events/AlertEvent';
 import type ConfirmEvent from './events/ConfirmEvent';
 import type DataUpdateEvent from './events/DataEvent';
+import type LivePreviewLoadedEvent from './events/LivePreviewLoadedEvent';
 import type MediaLibraryCloseEvent from './events/MediaLibraryCloseEvent';
 
 interface EventMap {
@@ -10,6 +11,7 @@ interface EventMap {
   confirm: ConfirmEvent;
   mediaLibraryClose: MediaLibraryCloseEvent;
   'data:update': DataUpdateEvent;
+  livePreviewLoaded: LivePreviewLoadedEvent;
 }
 
 export function useWindowEvent<K extends keyof WindowEventMap>(
