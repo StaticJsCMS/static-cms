@@ -8,10 +8,6 @@ import {
   changeDraftField as changeDraftFieldAction,
   changeDraftFieldValidation,
 } from '@staticcms/core/actions/entries';
-import {
-  openMediaLibrary as openMediaLibraryAction,
-  removeInsertedMedia as removeInsertedMediaAction,
-} from '@staticcms/core/actions/mediaLibrary';
 import { query as queryAction } from '@staticcms/core/actions/search';
 import useDebouncedCallback from '@staticcms/core/lib/hooks/useDebouncedCallback';
 import useMemoCompare from '@staticcms/core/lib/hooks/useMemoCompare';
@@ -52,11 +48,8 @@ const EditorControl = ({
   disabled = false,
   parentDuplicate = false,
   locale,
-  mediaPaths,
-  openMediaLibrary,
   parentPath,
   query,
-  removeInsertedMedia,
   t,
   value,
   forList = false,
@@ -197,10 +190,7 @@ const EditorControl = ({
           duplicate,
           label: getFieldLabel(field, t),
           locale,
-          mediaPaths,
           onChange: handleDebouncedChangeDraftField,
-          openMediaLibrary,
-          removeInsertedMedia,
           path,
           query,
           t,
@@ -230,10 +220,7 @@ const EditorControl = ({
     duplicate,
     t,
     locale,
-    mediaPaths,
     handleDebouncedChangeDraftField,
-    openMediaLibrary,
-    removeInsertedMedia,
     path,
     query,
     finalValue,
@@ -271,7 +258,6 @@ function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
 
   return {
     ...ownProps,
-    mediaPaths: state.mediaLibrary.controlMedia,
     config: state.config,
     entry,
     collection,
@@ -282,8 +268,6 @@ function mapStateToProps(state: RootState, ownProps: EditorControlOwnProps) {
 
 const mapDispatchToProps = {
   changeDraftField: changeDraftFieldAction,
-  openMediaLibrary: openMediaLibraryAction,
-  removeInsertedMedia: removeInsertedMediaAction,
   query: queryAction,
 };
 

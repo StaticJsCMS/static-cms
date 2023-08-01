@@ -81,34 +81,74 @@ Available transformations are `upper`, `lower`, `date('<format>')`, `default('de
 
 ## Registering to CMS Events
 
-You can execute a function when a specific CMS event occurs.
+You can execute a function when a specific CMS event occurs. Supported events are `mounted`, `login`, `logout`, `change`, `preSave` and `postSave`.
 
-Example usage:
+### Mounted
+
+The `mounted` event handler fires once the CMS is fully loaded.
 
 ```javascript
 CMS.registerEventListener({
-  name: 'postSave',
-  handler: ({ author, entry }) => console.info(JSON.stringify({ author, data: entry.data })),
+  name: 'mounted',
+  handler: () => {
+    // your code here
+  },
 });
 ```
 
-Supported events are `mounted`, `login`, `logout`, `change`, `preSave` and `postSave`.
+### Login
 
-### PreSave
+The `login` event handler fires when a user logs into the CMS.
 
-The `preSave` event handler can be used to modify the entry data like so:
+```javascript
+CMS.registerEventListener({
+  name: 'login',
+  handler: ({ author: { login, name } }) => {
+    // your code here
+  },
+});
+```
+
+### Logout
+
+The `logout` event handler fires when a user logs out of the CMS.
+
+```javascript
+CMS.registerEventListener({
+  name: 'logout',
+  handler: () => {
+    // your code here
+  },
+});
+```
+
+### Pre Save
+
+The `preSave` event handler fires before the changes have been saved to your git backend, and can be used to modify the entry data like so:
 
 ```javascript
 CMS.registerEventListener({
   name: 'preSave',
-  handler: ({ entry }) => {
+  collection: 'posts',
+  handler: ({ data: { entry } }) => {
     return {
-      ...entry,
-      data: {
-        ...entry.data,
-        title: 'new title',
-      },
+      ...entry.data,
+      title: 'new title',
     };
+  },
+});
+```
+
+### Post Save
+
+The `postSave` event handler fires after the changes have been saved to your git backend.
+
+```javascript
+CMS.registerEventListener({
+  name: 'postSave',
+  collection: 'posts',
+  handler: ({ data: { entry } }) => {
+    // your code here
   },
 });
 ```
@@ -118,17 +158,28 @@ CMS.registerEventListener({
 The `change` event handler must provide a field name, and can be used to modify the entry data like so:
 
 ```javascript
-CMS.registerEventListener(
-  {
-    name: 'change',
-    handler: ({ entry }, { field }) => {
-      return 'newFieldValue';
-    },
+CMS.registerEventListener({
+  name: 'change',
+  collection: 'posts',
+  field: 'path.to.my.field',
+  handler: ({ data, collection, field }) => {
+    const currentValue = data.path.to.my.field;
+
+    return {
+      ...data,
+      path: {
+        ...data.path,
+        to: {
+          ...data.path.to,
+          my: {
+            ...data.path.to.my,
+            field: `new${currentValue}`
+          }
+        }
+      }
+    };
   },
-  {
-    field: 'path.to.my.field',
-  },
-);
+});
 ```
 
 ## i18n Support
@@ -146,3 +197,9 @@ See [Gitea Backend](/docs/gitea-backend) for more information.
 Netlify Large Media allows you to store your media files outside of your git backend. This is helpful if you are trying to store large media files.
 
 See [Netlify Large Media](/docs/netlify-large-media) for more information.
+
+## Live Previews
+
+For react based projects, such as [NextJS](https://nestjs.com/), you can now utilize live preivews.
+
+See [Live Previews](/docs/live-previews) for more information.

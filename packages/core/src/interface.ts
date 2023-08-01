@@ -316,13 +316,7 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = 
   duplicate: boolean;
   label: string;
   locale: string | undefined;
-  // @deprecated Use useMediaInsert instead
-  mediaPaths: Record<string, MediaPath>;
   onChange: (value: T | null | undefined) => void;
-  // @deprecated Use useMediaInsert instead
-  openMediaLibrary: EditorControlProps['openMediaLibrary'];
-  // @deprecated Use useMediaInsert instead
-  removeInsertedMedia: EditorControlProps['removeInsertedMedia'];
   i18n: I18nSettings | undefined;
   hasErrors: boolean;
   errors: FieldError[];
