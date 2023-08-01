@@ -118,8 +118,8 @@ const Releases = ({ docsGroups, searchablePages }: DocsMenuProps) => {
                 <strong>Note</strong>
               </AlertTitle>
               <Typography variant="subtitle1" component="div" color="inherit">
-                <span>The current docs are for Static CMS v2. For Static CMS v1, see&nbsp;</span>
-                <StyledLink href="https://v1.staticcms.org">https://v1.staticcms.org</StyledLink>.
+                <span>The current docs are for Static CMS v3. For Static CMS v2, see&nbsp;</span>
+                <StyledLink href="https://v2.staticcms.org">https://v2.staticcms.org</StyledLink>.
               </Typography>
             </Alert>
           </Container>
