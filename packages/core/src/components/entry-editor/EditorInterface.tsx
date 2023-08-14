@@ -170,7 +170,7 @@ const EditorInterface = ({
       }
 
       if ('frame' in collection.editor) {
-        preview = collection.editor.frame ?? true;
+        frame = collection.editor.frame ?? true;
       }
     }
 
