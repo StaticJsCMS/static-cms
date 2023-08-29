@@ -45,6 +45,7 @@ import { DRAFT_MEDIA_FILES, selectMediaFilePublicPath } from './lib/util/media.u
 import { selectCustomPath, slugFromCustomPath } from './lib/util/nested.util';
 import { isNullish } from './lib/util/null.util';
 import { set } from './lib/util/object.util';
+import { fileSearch, sortByScore } from './lib/util/search.util';
 import { dateParsers, expandPath, extractTemplateVars } from './lib/widgets/stringTemplate';
 import createEntry from './valueObjects/createEntry';
 
@@ -249,18 +250,6 @@ export function mergeExpandedEntries(entries: (Entry & { field: string })[]): En
   });
 
   return Object.values(merged);
-}
-
-export function sortByScore(a: fuzzy.FilterResult<Entry>, b: fuzzy.FilterResult<Entry>) {
-  if (a.score > b.score) {
-    return -1;
-  }
-
-  if (a.score < b.score) {
-    return 1;
-  }
-
-  return 0;
 }
 
 interface AuthStore {
@@ -605,9 +594,18 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     file?: string,
     limit?: number,
   ): Promise<SearchQueryResponse> {
-    let entries = await this.listAllEntries(collection as Collection);
+    const entries = await this.listAllEntries(collection as Collection);
     if (file) {
-      entries = entries.filter(e => e.slug === file);
+      let hits = fileSearch(
+        entries.find(e => e.slug === file),
+        searchFields,
+        searchTerm,
+      );
+      if (limit !== undefined && limit > 0) {
+        hits = hits.slice(0, limit);
+      }
+
+      return { query: searchTerm, hits };
     }
 
     const expandedEntries = expandSearchEntries(entries, searchFields);
