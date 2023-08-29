@@ -8,13 +8,13 @@ import {
   expandSearchEntries,
   getEntryField,
   mergeExpandedEntries,
-  sortByScore,
 } from '@staticcms/core/backend';
 import Autocomplete from '@staticcms/core/components/common/autocomplete/Autocomplete';
 import Field from '@staticcms/core/components/common/field/Field';
 import Pill from '@staticcms/core/components/common/pill/Pill';
 import CircularProgress from '@staticcms/core/components/common/progress/CircularProgress';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
+import { fileSearch, sortByScore } from '@staticcms/core/lib/util/search.util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import {
   addFileTemplateFields,
@@ -28,6 +28,7 @@ import { useAppSelector } from '@staticcms/core/store/hooks';
 import type {
   Entry,
   EntryData,
+  ObjectValue,
   RelationField,
   WidgetControlProps,
 } from '@staticcms/core/interface';
@@ -189,18 +190,33 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
       }
 
       const searchFields = field.search_fields;
+      const file = field.file;
       const limit = field.options_length || DEFAULT_OPTIONS_LIMIT;
-      const expandedEntries = expandSearchEntries(entries, searchFields);
-      const hits = fuzzy
-        .filter(inputValue, expandedEntries, {
-          extract: entry => {
-            return getEntryField(entry.field, entry);
-          },
-        })
-        .sort(sortByScore)
-        .map(f => f.original);
 
-      let options = uniqBy(parseHitOptions(mergeExpandedEntries(hits)), o => o.value);
+      let hits: Entry<ObjectValue>[];
+
+      if (file) {
+        hits = fileSearch(
+          entries.find(e => e.slug === file),
+          searchFields,
+          inputValue,
+        );
+        console.log('file', file, 'hits', hits);
+      } else {
+        const expandedEntries = expandSearchEntries(entries, searchFields);
+        hits = mergeExpandedEntries(
+          fuzzy
+            .filter(inputValue, expandedEntries, {
+              extract: entry => {
+                return getEntryField(entry.field, entry);
+              },
+            })
+            .sort(sortByScore)
+            .map(f => f.original),
+        );
+      }
+
+      let options = uniqBy(parseHitOptions(hits), o => o.value);
 
       if (limit !== undefined && limit > 0) {
         options = options.slice(0, limit);
@@ -208,7 +224,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
 
       setOptions(options);
     },
-    [entries, field.options_length, field.search_fields, parseHitOptions],
+    [entries, field.file, field.options_length, field.search_fields, parseHitOptions],
   );
 
   useEffect(() => {
