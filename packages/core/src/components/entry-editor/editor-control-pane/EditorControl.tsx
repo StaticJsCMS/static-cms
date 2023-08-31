@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import {
   changeDraftField as changeDraftFieldAction,
   changeDraftFieldValidation,
+  clearDraftFieldChildValidation,
 } from '@staticcms/core/actions/entries';
 import { query as queryAction } from '@staticcms/core/actions/search';
 import useDebouncedCallback from '@staticcms/core/lib/hooks/useDebouncedCallback';
@@ -127,6 +128,10 @@ const EditorControl = ({
     i18nDisabled,
   ]);
 
+  const clearChildValidation = useCallback(() => {
+    dispatch(clearDraftFieldChildValidation(path, i18n, isMeta));
+  }, [dispatch, i18n, isMeta, path]);
+
   const handleChangeDraftField = useCallback(
     async (value: ValueOrNestedValue) => {
       setDirty(
@@ -191,6 +196,7 @@ const EditorControl = ({
           label: getFieldLabel(field, t),
           locale,
           onChange: handleDebouncedChangeDraftField,
+          clearChildValidation,
           path,
           query,
           t,

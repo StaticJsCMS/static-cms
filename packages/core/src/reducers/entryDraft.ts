@@ -4,6 +4,7 @@ import { v4 as uuid } from 'uuid';
 import {
   ADD_DRAFT_ENTRY_MEDIA_FILE,
   DRAFT_CHANGE_FIELD,
+  DRAFT_CLEAR_CHILD_VALIDATION,
   DRAFT_CREATE_DUPLICATE_FROM_ENTRY,
   DRAFT_CREATE_EMPTY,
   DRAFT_CREATE_FROM_ENTRY,
@@ -215,6 +216,33 @@ function entryDraftReducer(
       return {
         ...newState,
         hasChanged: !newState.original || hasChanged,
+      };
+    }
+
+    case DRAFT_CLEAR_CHILD_VALIDATION: {
+      const { path, i18n, isMeta } = action.payload;
+      const fieldsErrors = { ...state.fieldsErrors };
+
+      const dataPath = isMeta
+        ? ['meta']
+        : (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
+      const fullPath = `${dataPath.join('.')}.${path}`;
+
+      const pathsToDelete: string[] = [];
+
+      Object.keys(fieldsErrors).forEach(p => {
+        if (p === fullPath || p.startsWith(fullPath)) {
+          pathsToDelete.push(p);
+        }
+      });
+
+      pathsToDelete.forEach(p => {
+        delete fieldsErrors[p];
+      });
+
+      return {
+        ...state,
+        fieldsErrors,
       };
     }
 

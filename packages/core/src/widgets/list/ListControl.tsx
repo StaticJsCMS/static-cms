@@ -189,6 +189,7 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = pro
     errors,
     forSingleList,
     onChange,
+    clearChildValidation,
     t,
   } = props;
 
@@ -267,10 +268,12 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = pro
       newKeys.splice(index, 1);
       newValue.splice(index, 1);
 
+      clearChildValidation();
+
       setKeys(newKeys);
       onChange(newValue as string[] | ObjectValue[]);
     },
-    [onChange, internalValue, keys],
+    [keys, internalValue, clearChildValidation, onChange],
   );
 
   const handleDragEnd = useCallback(

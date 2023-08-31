@@ -4,8 +4,8 @@ import { currentBackend } from '../backend';
 import {
   ADD_DRAFT_ENTRY_MEDIA_FILE,
   CHANGE_VIEW_STYLE,
-  DRAFT_UPDATE,
   DRAFT_CHANGE_FIELD,
+  DRAFT_CLEAR_CHILD_VALIDATION,
   DRAFT_CREATE_DUPLICATE_FROM_ENTRY,
   DRAFT_CREATE_EMPTY,
   DRAFT_CREATE_FROM_ENTRY,
@@ -13,6 +13,7 @@ import {
   DRAFT_DISCARD,
   DRAFT_LOCAL_BACKUP_DELETE,
   DRAFT_LOCAL_BACKUP_RETRIEVED,
+  DRAFT_UPDATE,
   DRAFT_VALIDATION_ERRORS,
   ENTRIES_FAILURE,
   ENTRIES_REQUEST,
@@ -482,6 +483,17 @@ export function changeDraftField({
   return {
     type: DRAFT_CHANGE_FIELD,
     payload: { path, field, value, i18n, isMeta },
+  } as const;
+}
+
+export function clearDraftFieldChildValidation(
+  path: string,
+  i18n?: I18nSettings,
+  isMeta?: boolean,
+) {
+  return {
+    type: DRAFT_CLEAR_CHILD_VALIDATION,
+    payload: { path, i18n, isMeta },
   } as const;
 }
 
@@ -1135,6 +1147,7 @@ export type EntriesAction = ReturnType<
   | typeof discardDraft
   | typeof updateDraft
   | typeof changeDraftField
+  | typeof clearDraftFieldChildValidation
   | typeof changeDraftFieldValidation
   | typeof localBackupRetrieved
   | typeof loadLocalBackup

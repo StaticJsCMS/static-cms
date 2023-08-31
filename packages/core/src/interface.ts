@@ -317,6 +317,7 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = 
   label: string;
   locale: string | undefined;
   onChange: (value: T | null | undefined) => void;
+  clearChildValidation: () => void;
   i18n: I18nSettings | undefined;
   hasErrors: boolean;
   errors: FieldError[];
