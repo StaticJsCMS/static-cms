@@ -69,8 +69,8 @@ const Autocomplete = function <T>(
   );
 
   const clear = useCallback(() => {
-    onChange(undefined);
-  }, [onChange]);
+    onChange(Array.isArray(value) ? [] : undefined);
+  }, [onChange, value]);
 
   return (
     <div className="relative w-full">
@@ -142,7 +142,7 @@ const Autocomplete = function <T>(
                   aria-hidden="true"
                 />
               </Combobox.Button>
-              {!required && !Array.isArray(value) ? (
+              {!required ? (
                 <IconButton variant="text" disabled={disabled} onClick={clear}>
                   <CloseIcon
                     className={classNames(
