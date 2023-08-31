@@ -73,6 +73,7 @@ export const createMockWidgetControlProps = <
     controlled: false,
     theme: 'light',
     onChange: jest.fn(),
+    clearChildValidation: jest.fn(),
     query: jest.fn(),
     t: jest.fn(),
     ...extra,
