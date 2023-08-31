@@ -1,15 +1,14 @@
 /* eslint-disable import/prefer-default-export */
-
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { NodeTypes } from './ast-types';
 
 import type { BaseMdastNode, MdastNode } from './ast-types';
 
-export function autoLinkToSlate(nodes: BaseMdastNode[]) {
+export function autoLinkToSlate(nodes: BaseMdastNode[], isInLink: boolean) {
   const output: MdastNode[] = [];
 
   for (const node of nodes) {
-    if (node.type === 'text' && node.value) {
+    if (node.type === 'text' && node.value && !isInLink) {
       const regex =
         /([\w\W]*?)((?:http(?:s)?:\/\/.)?(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_+.~#?&//=]*))([\w\W]*)/g;
       let matches: RegExpExecArray | null;

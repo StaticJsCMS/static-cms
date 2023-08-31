@@ -16,7 +16,21 @@ describe('processShortcodeConfig', () => {
         },
       ];
 
-      expect(autoLinkToSlate(nodes)).toEqual(slate);
+      expect(autoLinkToSlate(nodes, false)).toEqual(slate);
+    });
+
+    it('does not convert url to anchor node if inside link', () => {
+      const nodes: MdastNode[] = [
+        { type: 'text', value: 'https://www.youtube.com/watch?v=p6h-rYSVX90' },
+      ];
+      const output: MdastNode[] = [
+        {
+          type: 'text',
+          value: 'https://www.youtube.com/watch?v=p6h-rYSVX90',
+        },
+      ];
+
+      expect(autoLinkToSlate(nodes, true)).toEqual(output);
     });
 
     it('does not convert url in shortcode node', () => {
@@ -43,7 +57,7 @@ describe('processShortcodeConfig', () => {
         },
       ];
 
-      expect(autoLinkToSlate(nodes)).toEqual(slate);
+      expect(autoLinkToSlate(nodes, false)).toEqual(slate);
     });
 
     it('converts url with text before', () => {
@@ -62,7 +76,7 @@ describe('processShortcodeConfig', () => {
         },
       ];
 
-      expect(autoLinkToSlate(nodes)).toEqual(slate);
+      expect(autoLinkToSlate(nodes, false)).toEqual(slate);
     });
 
     it('converts url with text after', () => {
@@ -81,7 +95,7 @@ describe('processShortcodeConfig', () => {
         },
       ];
 
-      expect(autoLinkToSlate(nodes)).toEqual(slate);
+      expect(autoLinkToSlate(nodes, false)).toEqual(slate);
     });
 
     it('converts url with text before and after', () => {
@@ -107,7 +121,7 @@ describe('processShortcodeConfig', () => {
         },
       ];
 
-      expect(autoLinkToSlate(nodes)).toEqual(slate);
+      expect(autoLinkToSlate(nodes, false)).toEqual(slate);
     });
 
     it('converts multiple urls', () => {
@@ -143,7 +157,7 @@ describe('processShortcodeConfig', () => {
         },
       ];
 
-      expect(autoLinkToSlate(nodes)).toEqual(slate);
+      expect(autoLinkToSlate(nodes, false)).toEqual(slate);
     });
 
     it('does not convert plain text', () => {
@@ -160,7 +174,7 @@ describe('processShortcodeConfig', () => {
         },
       ];
 
-      expect(autoLinkToSlate(nodes)).toEqual(slate);
+      expect(autoLinkToSlate(nodes, false)).toEqual(slate);
     });
   });
 });
