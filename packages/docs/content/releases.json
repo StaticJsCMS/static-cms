@@ -2,6 +2,11 @@
   "releases": [
     {
       "date": "2023-08-31T10:00:00.000Z",
+      "version": "v3.1.1",
+      "type": "patch"
+    },
+    {
+      "date": "2023-08-31T10:00:00.000Z",
       "version": "v3.1.0",
       "type": "minor",
       "description": "Add clear button to relation widget"
