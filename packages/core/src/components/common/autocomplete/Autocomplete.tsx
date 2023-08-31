@@ -1,9 +1,11 @@
 import { Combobox, Transition } from '@headlessui/react';
 import { Check as CheckIcon } from '@styled-icons/material/Check';
+import { Close as CloseIcon } from '@styled-icons/material/Close';
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@styled-icons/material/KeyboardArrowDown';
-import React, { forwardRef, Fragment, useCallback } from 'react';
+import React, { Fragment, forwardRef, useCallback } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import IconButton from '../button/IconButton';
 
 import type { ReactNode, Ref } from 'react';
 
@@ -27,13 +29,23 @@ export interface AutocompleteProps<T> {
   value: T | T[] | null;
   options: T[] | Option<T>[];
   disabled?: boolean;
+  required?: boolean;
   displayValue: (item: T | T[] | null) => string;
   onQuery: (query: string) => void;
-  onChange: AutocompleteChangeEventHandler<T>;
+  onChange: AutocompleteChangeEventHandler<T | undefined>;
 }
 
 const Autocomplete = function <T>(
-  { label, value, options, disabled, displayValue, onQuery, onChange }: AutocompleteProps<T>,
+  {
+    label,
+    value,
+    options,
+    disabled,
+    required,
+    displayValue,
+    onQuery,
+    onChange,
+  }: AutocompleteProps<T>,
   ref: Ref<HTMLInputElement>,
 ) {
   const handleChange = useCallback(
@@ -55,6 +67,10 @@ const Autocomplete = function <T>(
     },
     [onChange, value],
   );
+
+  const clear = useCallback(() => {
+    onChange(undefined);
+  }, [onChange]);
 
   return (
     <div className="relative w-full">
@@ -108,23 +124,44 @@ const Autocomplete = function <T>(
               displayValue={displayValue}
               onChange={event => onQuery(event.target.value)}
             />
-            <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-              <KeyboardArrowDownIcon
-                className={classNames(
-                  `
-                    h-5
-                    w-5
-                    text-gray-400
-                  `,
-                  disabled &&
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2 gap-1">
+              <Combobox.Button>
+                <KeyboardArrowDownIcon
+                  className={classNames(
                     `
+                      h-5
+                      w-5
+                      text-gray-400
+                    `,
+                    disabled &&
+                      `
                       text-gray-300/75
                       dark:text-gray-600/75
                     `,
-                )}
-                aria-hidden="true"
-              />
-            </Combobox.Button>
+                  )}
+                  aria-hidden="true"
+                />
+              </Combobox.Button>
+              {!required && !Array.isArray(value) ? (
+                <IconButton variant="text" disabled={disabled} onClick={clear}>
+                  <CloseIcon
+                    className={classNames(
+                      `
+                        h-5
+                        w-5
+                        text-gray-400
+                      `,
+                      disabled &&
+                        `
+                        text-gray-300/75
+                        dark:text-gray-600/75
+                      `,
+                    )}
+                    aria-hidden="true"
+                  />
+                </IconButton>
+              ) : null}
+            </div>
           </div>
           <Transition
             as={Fragment}

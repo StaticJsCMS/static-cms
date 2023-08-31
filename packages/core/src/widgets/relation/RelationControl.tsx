@@ -323,6 +323,10 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
     [onChange, uniqueOptionsByValue],
   );
 
+  const isRequired = useMemo(() => field.required ?? true, [field.required]);
+
+  console.log('field.required', field.required);
+
   return (
     <Field
       inputRef={ref}
@@ -363,6 +367,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
         value={selectedValue}
         options={uniqueOptions}
         disabled={disabled}
+        required={isRequired}
         displayValue={item => {
           if (!item || Array.isArray(item)) {
             return '';

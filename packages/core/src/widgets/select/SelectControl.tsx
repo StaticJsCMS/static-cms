@@ -77,7 +77,9 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
           ? !selectedValue?.length
           : isNullish(selectedValue);
 
-      if (field.required && isEmpty && isMultiple) {
+      const isRequired = field.required ?? true;
+
+      if (isRequired && isEmpty && isMultiple) {
         setInternalValue([]);
         onChange([]);
       } else if (isEmpty) {
