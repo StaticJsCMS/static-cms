@@ -1,6 +1,7 @@
 import { Link as LinkIcon } from '@styled-icons/material/Link';
 import {
   ELEMENT_LINK,
+  deleteText,
   getEditorString,
   getNode,
   getSelectionText,
@@ -9,7 +10,7 @@ import {
   setNodes,
   someNode,
 } from '@udecode/plate';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
@@ -21,7 +22,7 @@ import type { Collection, MarkdownField, MediaPath } from '@staticcms/core/inter
 import type { MdLinkElement } from '@staticcms/markdown/plate/plateTypes';
 import type { TText } from '@udecode/plate';
 import type { FC } from 'react';
-import type { Path } from 'slate';
+import type { Location } from 'slate';
 
 export interface InsertLinkToolbarButtonProps {
   variant: 'button' | 'menu';
@@ -38,25 +39,25 @@ const InsertLinkToolbarButton: FC<InsertLinkToolbarButtonProps> = ({
   currentValue,
   disabled,
 }) => {
-  const [selection, setSelection] = useState<Path>();
   const editor = useMdPlateEditorState();
   const handleInsert = useCallback(
     ({ path: newUrl, alt: newText }: MediaPath<string>) => {
-      if (isNotEmpty(newUrl) && selection) {
+      const selectionPoint = editor.selection?.focus.path;
+      if (isNotEmpty(newUrl) && selectionPoint) {
         const text = isNotEmpty(newText) ? newText : newUrl;
-        const linkAt = getNode<MdLinkElement>(editor, selection);
+        const linkAt = getNode<MdLinkElement>(editor, selectionPoint);
 
         if (linkAt && linkAt.type === ELEMENT_LINK) {
           if (newUrl !== linkAt.url || text !== linkAt.children[0].text) {
             setNodes<MdLinkElement>(
               editor,
               { url: newUrl, children: [{ text: newText }] },
-              { at: selection },
+              { at: selectionPoint },
             );
 
-            if (text !== getEditorString(editor, selection)) {
+            if (text !== getEditorString(editor, selectionPoint)) {
               replaceNodeChildren<TText>(editor, {
-                at: selection,
+                at: selectionPoint,
                 nodes: { text },
                 insertOptions: {
                   select: true,
@@ -68,32 +69,29 @@ const InsertLinkToolbarButton: FC<InsertLinkToolbarButtonProps> = ({
           return;
         }
 
+        console.log('editor.selection', editor.selection);
+
+        deleteText(editor, {
+          at: editor.selection as unknown as Location,
+        });
+
         insertLink(
           editor,
           { url: newUrl, text },
           {
-            at: selection,
+            at: editor.selection as unknown as Location,
           },
         );
-        const newSelection = [...selection];
-        const lastIndex = newSelection.pop() ?? 0;
-        setSelection([...newSelection, lastIndex + 1]);
       }
     },
-    [editor, selection],
+    [editor],
   );
 
   const chooseUrl = useMemo(() => field.choose_url ?? true, [field.choose_url]);
 
   const isLink = !!editor?.selection && someNode(editor, { match: { type: ELEMENT_LINK } });
 
-  const selectedText: string = useMemo(() => {
-    if (!editor.selection) {
-      return '';
-    }
-
-    return getSelectionText(editor);
-  }, [editor]);
+  const selectedText = !editor.selection ? '' : getSelectionText(editor);
 
   const controlID = useUUID();
   const openMediaLibrary = useMediaInsert(
@@ -106,21 +104,19 @@ const InsertLinkToolbarButton: FC<InsertLinkToolbarButtonProps> = ({
   );
 
   const handleOpenMediaLibrary = useCallback(() => {
-    setSelection(editor.selection?.focus.path);
     openMediaLibrary();
-  }, [editor.selection, openMediaLibrary]);
+  }, [openMediaLibrary]);
 
-  return (
+  return !isLink ? (
     <ToolbarButton
       label="Link"
       tooltip="Insert link"
       icon={LinkIcon}
       onClick={handleOpenMediaLibrary}
-      active={isLink}
       disabled={disabled}
       variant={variant}
     />
-  );
+  ) : null;
 };
 
 export default InsertLinkToolbarButton;

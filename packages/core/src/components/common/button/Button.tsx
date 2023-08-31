@@ -18,10 +18,10 @@ export interface BaseBaseProps {
   endIcon?: FC<{ className?: string }>;
   title?: string;
   'data-testid'?: string;
+  onClick?: MouseEventHandler;
 }
 
 export interface ButtonProps extends BaseBaseProps {
-  onClick?: MouseEventHandler;
   disabled?: boolean;
   buttonRef?: Ref<HTMLButtonElement>;
   'aria-label'?: string;
@@ -81,6 +81,7 @@ const Button: FC<ButtonLinkProps> = ({
         title={title}
         data-testid={dataTestId}
         className={buttonClassNames}
+        onClick={otherProps.onClick}
         style={style}
       >
         {content}
@@ -96,6 +97,7 @@ const Button: FC<ButtonLinkProps> = ({
         title={title}
         data-testid={dataTestId}
         className={buttonClassNames}
+        onClick={otherProps.onClick}
         style={style}
         target="_blank"
         rel="noreferrer"
