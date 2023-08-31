@@ -13,6 +13,7 @@ import type {
   MarkdownField,
   MediaPath,
 } from '@staticcms/core/interface';
+import type { MouseEvent } from 'react';
 
 export interface MediaPopoverProps<T extends FileOrImageField | MarkdownField> {
   anchorEl: HTMLElement | null;
@@ -69,6 +70,10 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
     handleMediaChange,
   );
 
+  const noop = useCallback((event: MouseEvent) => {
+    event.stopPropagation();
+  }, []);
+
   const open = Boolean(anchorEl);
   const id = open ? 'edit-popover' : undefined;
 
@@ -122,7 +127,7 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
           "
         />
         {!forImage ? (
-          <Button href={url} variant="text" size="small">
+          <Button href={url} variant="text" size="small" onClick={noop}>
             <OpenInNewIcon className="w-4 h-4" title="Open In New Tab" />
           </Button>
         ) : null}
