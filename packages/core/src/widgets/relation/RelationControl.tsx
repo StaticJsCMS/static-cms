@@ -296,7 +296,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
   const ref = useRef<HTMLButtonElement | null>(null);
 
   const handleChange = useCallback(
-    (newValue: string | string[] | null) => {
+    (newValue: string | string[] | undefined) => {
       if (!newValue) {
         setInternalValue(newValue);
         onChange(newValue);

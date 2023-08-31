@@ -32,7 +32,7 @@ export interface AutocompleteProps<T> {
   required?: boolean;
   displayValue: (item: T | T[] | null) => string;
   onQuery: (query: string) => void;
-  onChange: AutocompleteChangeEventHandler<T | undefined>;
+  onChange: (value: T | T[] | undefined) => void;
 }
 
 const Autocomplete = function <T>(
@@ -135,9 +135,9 @@ const Autocomplete = function <T>(
                     `,
                     disabled &&
                       `
-                      text-gray-300/75
-                      dark:text-gray-600/75
-                    `,
+                        text-gray-300/75
+                        dark:text-gray-600/75
+                      `,
                   )}
                   aria-hidden="true"
                 />
@@ -153,9 +153,9 @@ const Autocomplete = function <T>(
                       `,
                       disabled &&
                         `
-                        text-gray-300/75
-                        dark:text-gray-600/75
-                      `,
+                          text-gray-300/75
+                          dark:text-gray-600/75
+                        `,
                     )}
                     aria-hidden="true"
                   />
