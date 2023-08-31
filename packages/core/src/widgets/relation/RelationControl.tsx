@@ -201,7 +201,6 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
           searchFields,
           inputValue,
         );
-        console.log('file', file, 'hits', hits);
       } else {
         const expandedEntries = expandSearchEntries(entries, searchFields);
         hits = mergeExpandedEntries(
@@ -324,8 +323,6 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
   );
 
   const isRequired = useMemo(() => field.required ?? true, [field.required]);
-
-  console.log('field.required', field.required);
 
   return (
     <Field

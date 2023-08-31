@@ -90,6 +90,7 @@ function parseStyleAttribute(node: MdxTextMdastNode, allowedStyles: Record<strin
 
 export interface Options {
   isInTable?: boolean;
+  isInLink?: boolean;
   isInTableHeaderRow?: boolean;
   tableAlign?: (string | null)[];
   useMdx: boolean;
@@ -102,6 +103,7 @@ export default function deserializeMarkdown(node: MdastNode, options: Options) {
 
   const {
     isInTable = false,
+    isInLink = false,
     isInTableHeaderRow = false,
     tableAlign,
     useMdx,
@@ -110,6 +112,7 @@ export default function deserializeMarkdown(node: MdastNode, options: Options) {
   } = options ?? {};
 
   const selfIsTable = node.type === 'table';
+  const selfIsLink = node.type === 'link';
   const selfIsTableHeaderRow = node.type === 'tableRow' && index === 0;
 
   const nodeChildren = node.children;
@@ -123,6 +126,7 @@ export default function deserializeMarkdown(node: MdastNode, options: Options) {
           },
           {
             isInTable: selfIsTable || isInTable,
+            isInLink: selfIsLink || isInLink,
             isInTableHeaderRow: selfIsTableHeaderRow || isInTableHeaderRow,
             useMdx,
             shortcodeConfigs,
@@ -351,7 +355,10 @@ export default function deserializeMarkdown(node: MdastNode, options: Options) {
         return { text: '' };
       }
 
-      const nodes = autoLinkToSlate(processShortcodeConfigsToSlate(shortcodeConfigs, [node]));
+      const nodes = autoLinkToSlate(
+        processShortcodeConfigsToSlate(shortcodeConfigs, [node]),
+        isInLink,
+      );
 
       return nodes.map(node => (node.type === 'text' ? { text: node.value ?? '' } : node));
 
