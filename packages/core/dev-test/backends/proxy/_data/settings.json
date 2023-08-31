@@ -5,5 +5,23 @@
     "front_limit": 4,
     "author": "Bob",
     "thumb": "/backends/proxy/assets/upload/kanefreeman_2.jpg"
-  }
+  },
+  "icons": [
+    {
+      "name": "right",
+      "icon": "/src/icons/right.svg"
+    },
+    {
+      "name": "left",
+      "icon": "/src/icons/left.svg"
+    },
+    {
+      "name": "download",
+      "icon": "/src/icons/download.svg"
+    },
+    {
+      "name": "zoom",
+      "icon": "/src/icons/zoom.svg"
+    }
+  ]
 }

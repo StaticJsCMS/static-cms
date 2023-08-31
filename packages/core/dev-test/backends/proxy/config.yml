@@ -74,6 +74,16 @@ collections:
         name: image
         widget: image
         required: false
+      - name: icons
+        label: Icon
+        widget: relation
+        collection: settings
+        required: false
+        file: general
+        search_fields: ['icons.*.name']
+        display_fields: ['icons.*.name']
+        options_length: 200
+        value_field: icons.*.icon
       - label: Body
         name: body
         widget: markdown
@@ -139,6 +149,16 @@ collections:
                 name: thumb
                 widget: image
                 required: false
+          - label: Icons
+            name: icons
+            widget: list
+            fields:
+              - name: name
+                label: Name
+                widget: string
+              - name: icon
+                label: Icon
+                widget: string
       - name: authors
         label: Authors
         file: packages/core/dev-test/backends/proxy/_data/authors.yml
