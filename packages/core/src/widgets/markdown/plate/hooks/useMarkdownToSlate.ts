@@ -14,6 +14,7 @@ import type { MdValue } from '../plateTypes';
 export interface UseMarkdownToSlateOptions {
   shortcodeConfigs?: Record<string, ShortcodeConfig>;
   useMdx: boolean;
+  unload?: boolean;
 }
 
 export const markdownToSlate = async (
@@ -45,12 +46,17 @@ const useMarkdownToSlate = (
   const [slateValue, setSlateValue] = useState<MdValue>([]);
 
   useEffect(() => {
+    if (loaded && !options.unload) {
+      return;
+    }
+
     markdownToSlate(markdownValue, options).then(value => {
       setSlateValue(value);
+
       setLoaded(true);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [markdownValue]);
 
   return [
     slateValue.length > 0 ? slateValue : [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }],

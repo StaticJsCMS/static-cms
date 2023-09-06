@@ -1,13 +1,15 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
+import Button from '@staticcms/core/components/common/button/Button';
 import Field from '@staticcms/core/components/common/field/Field';
+import TextArea from '@staticcms/core/components/common/text-field/TextArea';
 import useDebounce from '../../lib/hooks/useDebounce';
-import useMarkdownToSlate from './plate/hooks/useMarkdownToSlate';
 import PlateEditor from './plate/PlateEditor';
+import useMarkdownToSlate from './plate/hooks/useMarkdownToSlate';
 import serializeMarkdown from './plate/serialization/serializeMarkdown';
 
 import type { MarkdownField, WidgetControlProps } from '@staticcms/core/interface';
-import type { FC } from 'react';
+import type { ChangeEvent, FC } from 'react';
 import type { MdValue } from './plate/plateTypes';
 
 export interface WithMarkdownControlProps {
@@ -28,6 +30,7 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
       errors,
       forSingleList,
       disabled,
+      t,
     } = controlProps;
 
     const [internalRawValue, setInternalValue] = useState(value ?? '');
@@ -37,6 +40,8 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
     );
     const [hasFocus, setHasFocus] = useState(false);
     const debouncedFocus = useDebounce(hasFocus, 150);
+
+    const [showRaw, setShowRaw] = useState(false);
 
     const handleOnFocus = useCallback(() => {
       setHasFocus(true);
@@ -57,37 +62,51 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
       [internalValue, onChange],
     );
 
+    const handleRawOnChange = useCallback(
+      (event: ChangeEvent<HTMLInputElement>) => {
+        const rawValue = event.target.value;
+        if (rawValue !== internalValue) {
+          setInternalValue(rawValue);
+          onChange(rawValue);
+        }
+      },
+      [internalValue, onChange],
+    );
+
     const handleLabelClick = useCallback(() => {
       // editorRef.current?.getInstance().focus();
     }, []);
 
-    const [slateValue, loaded] = useMarkdownToSlate(internalValue, { useMdx });
+    const handleShowRaw = useCallback(() => {
+      if (!field.show_raw) {
+        return;
+      }
 
-    return useMemo(
-      () => (
-        <Field
-          label={label}
-          errors={errors}
-          forSingleList={forSingleList}
-          hint={field.hint}
-          noHightlight
-          disabled={disabled}
-        >
-          {loaded ? (
-            <PlateEditor
-              initialValue={slateValue}
-              collection={collection}
-              entry={entry}
-              field={field}
-              useMdx={useMdx}
-              controlProps={controlProps}
-              onChange={handleOnChange}
-              onFocus={handleOnFocus}
-              onBlur={handleOnBlur}
-            />
-          ) : null}
-        </Field>
-      ),
+      setShowRaw(true);
+    }, [field.show_raw]);
+
+    const handleShowRich = useCallback(() => {
+      setShowRaw(false);
+    }, []);
+
+    const [slateValue, loaded] = useMarkdownToSlate(internalValue, { useMdx, unload: showRaw });
+
+    const richEditor = useMemo(
+      () =>
+        loaded ? (
+          <PlateEditor
+            key="plate-editor"
+            initialValue={slateValue}
+            collection={collection}
+            entry={entry}
+            field={field}
+            useMdx={useMdx}
+            controlProps={controlProps}
+            onChange={handleOnChange}
+            onFocus={handleOnFocus}
+            onBlur={handleOnBlur}
+          />
+        ) : null,
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [
         collection,
@@ -100,10 +119,56 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
         handleOnFocus,
         hasErrors,
         hasFocus,
-        label,
         loaded,
         slateValue,
+        showRaw,
       ],
+    );
+
+    return (
+      <Field
+        label={label}
+        errors={errors}
+        forSingleList={forSingleList}
+        hint={field.hint}
+        noHightlight
+        disabled={disabled}
+      >
+        {showRaw ? (
+          <TextArea
+            key="raw-editor"
+            value={internalValue}
+            disabled={disabled}
+            onChange={handleRawOnChange}
+            placeholder={t('editor.editorWidgets.markdown.type')}
+            className="mt-2"
+          />
+        ) : (
+          richEditor
+        )}
+        {field.show_raw ? (
+          <div className="px-3 mt-2 flex gap-2">
+            <Button
+              data-testid="rich-editor"
+              size="small"
+              variant={!showRaw ? 'contained' : 'outlined'}
+              onClick={handleShowRich}
+              disabled={disabled}
+            >
+              {t('editor.editorWidgets.markdown.richText')}
+            </Button>
+            <Button
+              data-testid="rich-editor"
+              size="small"
+              variant={showRaw ? 'contained' : 'outlined'}
+              onClick={handleShowRaw}
+              disabled={disabled}
+            >
+              {t('editor.editorWidgets.markdown.markdown')}
+            </Button>
+          </div>
+        ) : null}
+      </Field>
     );
   };
 

@@ -769,6 +769,7 @@ export interface MarkdownField extends MediaField {
   widget: 'markdown';
   toolbar_buttons?: MarkdownFieldToolbarButtons;
   default?: string;
+  show_raw?: string;
 }
 
 export interface NumberField extends BaseField {

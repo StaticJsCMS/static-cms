@@ -106,6 +106,7 @@ export default {
     public_folder: { type: 'string' },
     choose_url: { type: 'boolean' },
     multiple: { type: 'boolean' },
+    show_raw: { type: 'boolean' },
     toolbar_buttons: {
       type: 'object',
       properties: {

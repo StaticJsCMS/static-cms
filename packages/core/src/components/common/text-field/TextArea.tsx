@@ -6,6 +6,8 @@ import type { ChangeEventHandler, RefObject } from 'react';
 export interface TextAreaProps {
   value: string;
   disabled?: boolean;
+  placeholder?: string;
+  className?: string;
   'data-testid'?: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
 }
@@ -18,7 +20,7 @@ function getHeight(rawHeight: string): number {
 }
 
 const TextArea = forwardRef<HTMLInputElement | null, TextAreaProps>(
-  ({ value, disabled, 'data-testid': dataTestId, onChange }, ref) => {
+  ({ value, disabled, placeholder, className, 'data-testid': dataTestId, onChange }, ref) => {
     const [lastAutogrowHeight, setLastAutogrowHeight] = useState(MIN_TEXT_AREA_HEIGHT);
 
     const autoGrow = useCallback(() => {
@@ -63,10 +65,12 @@ const TextArea = forwardRef<HTMLInputElement | null, TextAreaProps>(
             className: `
               flex
               w-full
+              ${className}
             `,
           },
           input: {
             ref,
+            placeholder,
             className: `
               w-full
               min-h-[80px]

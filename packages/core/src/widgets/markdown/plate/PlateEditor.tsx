@@ -53,6 +53,7 @@ import { StyledLeaf } from '@udecode/plate-styled-components';
 import React, { useMemo, useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useTranslate } from 'react-polyglot';
 
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { CodeBlockElement, withShortcodeElement } from './components';
@@ -104,6 +105,7 @@ import type {
 } from '@staticcms/core/interface';
 import type { AnyObject, AutoformatPlugin, PlatePlugin } from '@udecode/plate';
 import type { FC } from 'react';
+import type { t as T } from 'react-polyglot';
 import type { MdEditor, MdValue } from './plateTypes';
 
 export interface PlateEditorProps {
@@ -129,6 +131,8 @@ const PlateEditor: FC<PlateEditorProps> = ({
   onFocus,
   onBlur,
 }) => {
+  const t = useTranslate() as T;
+
   const editorContainerRef = useRef<HTMLDivElement | null>(null);
   const innerEditorContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -278,6 +282,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
                   id={id}
                   editableProps={{
                     ...editableProps,
+                    placeholder: t('editor.editorWidgets.markdown.type'),
                     onFocus,
                     onBlur,
                     className: '!outline-none',
