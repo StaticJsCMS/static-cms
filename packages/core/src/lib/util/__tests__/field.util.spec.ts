@@ -97,7 +97,7 @@ describe('filterEntries', () => {
       expect(isHidden(mockBodyField, undefined, undefined)).toBeFalsy();
     });
 
-    fdescribe('inside list', () => {
+    describe('inside list', () => {
       const mockInsideListEntry = createMockEntry({
         path: 'path/to/file-1.md',
         data: {
