@@ -694,6 +694,10 @@ collections:
             label: Required With Default
             widget: markdown
             default: Default **markdown** value
+          - name: raw
+            label: Raw Editor
+            widget: markdown
+            show_raw: true
           - name: pattern
             label: Pattern Validation
             widget: markdown

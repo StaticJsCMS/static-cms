@@ -144,6 +144,7 @@ const en: LocalePhrasesRoot = {
         addComponent: 'Add Component',
         richText: 'Rich Text',
         markdown: 'Markdown',
+        type: 'Type...',
       },
       image: {
         choose: 'Choose an image',
