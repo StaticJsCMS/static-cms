@@ -91,22 +91,30 @@ export function getFieldValue(
   return entry.data?.[field.name];
 }
 
-export function isHidden(field: Field, entry: Entry | undefined): boolean {
+export function isHidden(
+  field: Field,
+  entry: Entry | undefined,
+  listItemPath: string | undefined,
+): boolean {
   if (field.condition) {
     if (!entry) {
       return false;
     }
 
     if (Array.isArray(field.condition)) {
-      return !field.condition.find(r => entryMatchesFieldRule(entry, r));
+      return !field.condition.find(r => entryMatchesFieldRule(entry, r, listItemPath));
     }
 
-    return !entryMatchesFieldRule(entry, field.condition);
+    return !entryMatchesFieldRule(entry, field.condition, listItemPath);
   }
 
   return false;
 }
 
-export function useHidden(field: Field, entry: Entry | undefined): boolean {
-  return useMemo(() => isHidden(field, entry), [entry, field]);
+export function useHidden(
+  field: Field,
+  entry: Entry | undefined,
+  listItemPath: string | undefined,
+): boolean {
+  return useMemo(() => isHidden(field, entry, listItemPath), [entry, field, listItemPath]);
 }

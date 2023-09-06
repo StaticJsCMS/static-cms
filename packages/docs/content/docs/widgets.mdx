@@ -81,7 +81,7 @@ The `condition` option can take a single filter rule or a list of filter rules.
 
 ### Example
 
-The example below creates a collection based on a nested field's value.
+The example below conditionally shows fields based on the values of other fields.
 
 <CodeTabs>
 ```yaml
@@ -163,7 +163,7 @@ collections: [
 
 ### Nested Field Example
 
-The example below creates a collection based on a nested field's value.
+The example below conditionally shows fields based on the values of other nested fields.
 
 <CodeTabs>
 ```yaml
@@ -229,6 +229,99 @@ collections: [
                 options: [
                   "yes",
                   "no"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+],
+```
+
+</CodeTabs>
+
+### List Field Example
+
+The example below conditionally shows fields inside a list based on the values of other fields in the same list item. This works with both `fields` or `types`.
+
+<CodeTabs>
+```yaml
+collections:
+  - name: list-field-filtered-collection
+    label: List Field Filtered Collection
+    folder: _list_field_condition
+    create: true
+    fields:
+      - name: list
+        label: List Field
+        widget: list
+        fields:
+          - name: value
+            label: Value 1
+            widget: string
+            condition:
+              field: nested.object.field
+              value: yes
+          - name: nested
+            label: Nested
+            widget: object
+            fields:
+              - name: object
+                label: Object
+                widget: object
+                fields:
+                  - name: field
+                    label: Field
+                    widget: select
+                    options:
+                      - yes
+                      - no
+
+```
+
+```js
+collections: [
+  {
+    name: "list-field-filtered-collection",
+    label: "List Field Filtered Collection",
+    folder: "_list_field_condition",
+    create: true,
+    fields: [
+      {
+        name: "list",
+        label: "List Field",
+        widget: "list",
+        fields: [
+          {
+            name: "value",
+            label: "Value 1",
+            widget: "string",
+            condition: {
+              field: "nested.object.field",
+              value: "yes"
+            }
+          },
+          {
+            name: "nested",
+            label: "Nested",
+            widget: "object",
+            fields: [
+              {
+                name: "object",
+                label: "Object",
+                widget: "object",
+                fields: [
+                  {
+                    name: "field",
+                    label: "Field",
+                    widget: "select",
+                    options: [
+                      "yes",
+                      "no"
+                    ]
+                  }
                 ]
               }
             ]

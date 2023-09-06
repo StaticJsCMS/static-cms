@@ -71,30 +71,86 @@ describe('filterEntries', () => {
 
   describe('isHidden', () => {
     it('should show field by default', () => {
-      expect(isHidden(mockTitleField, mockExternalEntry)).toBeFalsy();
+      expect(isHidden(mockTitleField, mockExternalEntry, undefined)).toBeFalsy();
     });
 
     it('should hide field if single condition is not met', () => {
-      expect(isHidden(mockUrlField, mockInternalEntry)).toBeTruthy();
+      expect(isHidden(mockUrlField, mockInternalEntry, undefined)).toBeTruthy();
     });
 
     it('should show field if single condition is met', () => {
-      expect(isHidden(mockUrlField, mockExternalEntry)).toBeFalsy();
+      expect(isHidden(mockUrlField, mockExternalEntry, undefined)).toBeFalsy();
     });
 
     it('should hide field if all multiple conditions are not met', () => {
-      expect(isHidden(mockBodyField, mockExternalEntry)).toBeTruthy();
+      expect(isHidden(mockBodyField, mockExternalEntry, undefined)).toBeTruthy();
     });
 
     it('should show field if single condition is met', () => {
-      expect(isHidden(mockBodyField, mockHasSummaryEntry)).toBeFalsy();
-      expect(isHidden(mockBodyField, mockInternalEntry)).toBeFalsy();
+      expect(isHidden(mockBodyField, mockHasSummaryEntry, undefined)).toBeFalsy();
+      expect(isHidden(mockBodyField, mockInternalEntry, undefined)).toBeFalsy();
     });
 
     it('should show field if entry is undefined', () => {
-      expect(isHidden(mockTitleField, undefined)).toBeFalsy();
-      expect(isHidden(mockUrlField, undefined)).toBeFalsy();
-      expect(isHidden(mockBodyField, undefined)).toBeFalsy();
+      expect(isHidden(mockTitleField, undefined, undefined)).toBeFalsy();
+      expect(isHidden(mockUrlField, undefined, undefined)).toBeFalsy();
+      expect(isHidden(mockBodyField, undefined, undefined)).toBeFalsy();
+    });
+
+    fdescribe('inside list', () => {
+      const mockInsideListEntry = createMockEntry({
+        path: 'path/to/file-1.md',
+        data: {
+          list: [
+            {
+              title: 'I am a title',
+              type: 'external',
+              url: 'http://example.com',
+              hasSummary: false,
+            },
+            {
+              title: 'I am a title',
+              type: 'internal',
+              body: 'I am the body of your post',
+              hasSummary: false,
+            },
+            {
+              title: 'I am a title',
+              type: 'external',
+              url: 'http://example.com',
+              body: 'I am the body of your post',
+              hasSummary: true,
+            },
+          ],
+        },
+      });
+
+      it('should show field by default', () => {
+        expect(isHidden(mockTitleField, mockInsideListEntry, 'list.0')).toBeFalsy();
+      });
+
+      it('should hide field if single condition is not met', () => {
+        expect(isHidden(mockUrlField, mockInsideListEntry, 'list.1')).toBeTruthy();
+      });
+
+      it('should show field if single condition is met', () => {
+        expect(isHidden(mockUrlField, mockInsideListEntry, 'list.0')).toBeFalsy();
+      });
+
+      it('should hide field if all multiple conditions are not met', () => {
+        expect(isHidden(mockBodyField, mockInsideListEntry, 'list.0')).toBeTruthy();
+      });
+
+      it('should show field if single condition is met', () => {
+        expect(isHidden(mockBodyField, mockInsideListEntry, 'list.2')).toBeFalsy();
+        expect(isHidden(mockBodyField, mockInsideListEntry, 'list.1')).toBeFalsy();
+      });
+
+      it('should show field if entry is undefined', () => {
+        expect(isHidden(mockTitleField, undefined, 'list.0')).toBeFalsy();
+        expect(isHidden(mockUrlField, undefined, 'list.0')).toBeFalsy();
+        expect(isHidden(mockBodyField, undefined, 'list.0')).toBeFalsy();
+      });
     });
   });
 });

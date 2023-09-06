@@ -1045,7 +1045,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
   }
 
   filterEntries(collection: { entries: Entry[] }, filterRule: FilterRule | FilterRule[]) {
-    return filterEntries(collection.entries, filterRule);
+    return filterEntries(collection.entries, filterRule, undefined);
   }
 }
 

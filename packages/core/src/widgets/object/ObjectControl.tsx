@@ -22,6 +22,7 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
   errors,
   disabled,
   value = {},
+  listItemPath,
 }) => {
   const objectLabel = useMemo(() => {
     const summary = field.summary;
@@ -59,6 +60,7 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
             locale={locale}
             i18n={i18n}
             forSingleList={forSingleList}
+            listItemPath={listItemPath}
           />
         );
       }) ?? null
@@ -75,6 +77,7 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
     locale,
     i18n,
     forSingleList,
+    listItemPath,
   ]);
 
   if (fields.length) {

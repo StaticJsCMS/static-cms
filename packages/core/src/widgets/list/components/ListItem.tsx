@@ -207,6 +207,7 @@ const ListItem: FC<ListItemProps> = ({
           locale={locale}
           i18n={i18n}
           forList={true}
+          listItemPath={`${path}.${objectField.name}`}
           forSingleList={isSingleList}
         />
       </ListItemWrapper>
