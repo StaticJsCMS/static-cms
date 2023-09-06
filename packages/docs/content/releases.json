@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "date": "2023-09-07T10:00:00.000Z",
+      "version": "v3.2.0",
+      "type": "minor",
+      "description": "Add key/value widget and raw markdown editor mode"
+    },
+    {
       "date": "2023-09-01T10:00:00.000Z",
       "version": "v3.1.2",
       "type": "patch"

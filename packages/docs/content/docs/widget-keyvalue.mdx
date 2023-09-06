@@ -1,0 +1,40 @@
+---
+group: Widgets
+title: Key Value
+weight: 16
+---
+
+- **Name:** `keyvalue`
+- **UI:** Pairs of text inputs
+- **Data type:** `object of key/value pairs`
+
+The key value widget allows editors to enter an arbitrary number of key/value pairs.
+
+## Widget Options
+
+For common options, see [Common widget options](/docs/widgets#common-widget-options).
+
+| Name        | Type   | Default      | Description                                                                       |
+| ----------- | ------ | ------------ | --------------------------------------------------------------------------------- |
+| default     | string | `{ '': '' }` | _Optional_. The default value for the field. Accepts an object of key/value pairs |
+| key_label   | string | `'Key'`      | _Optional_. The label for the `Key` column of inputs                              |
+| value_label | string | `'Value'`    | _Optional_. The label for the `Value` column of inputs                            |
+| min         | number |              | _Optional_. Minimum number of key/value pairs                                     |
+| max         | number |              | _Optional_. Maximum number of key/value pairs                                     |
+
+## Example
+
+<CodeTabs>
+```yaml
+name: environment_variables
+label: Environment Variables
+widget: keyvalue
+```
+
+```js
+name: 'environment_variables',
+label: 'Environment Variables',
+widget: 'keyvalue',
+```
+
+</CodeTabs>
