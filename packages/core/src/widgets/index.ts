@@ -10,6 +10,8 @@ export * from './file';
 export { default as FileWidget } from './file';
 export * from './image';
 export { default as ImageWidget } from './image';
+export * from './keyvalue';
+export { default as KeyValueWidget } from './keyvalue';
 export * from './list';
 export { default as ListWidget } from './list';
 export * from './map';

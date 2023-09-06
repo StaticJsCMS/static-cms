@@ -3,19 +3,11 @@ import { createMockCollection } from './collections.mock';
 import { createMockConfig } from './config.mock';
 import { createMockEntry } from './entry.mock';
 
-import type {
-  BaseField,
-  UnknownField,
-  ValueOrNestedValue,
-  WidgetControlProps,
-} from '@staticcms/core';
+import type { BaseField, UnknownField, WidgetControlProps } from '@staticcms/core';
 
 jest.mock('@staticcms/core/backend');
 
-export const createMockWidgetControlProps = <
-  T extends ValueOrNestedValue,
-  F extends BaseField = UnknownField,
->(
+export const createMockWidgetControlProps = <T, F extends BaseField = UnknownField>(
   options: Omit<
     Partial<WidgetControlProps<T, F>>,
     | 'field'

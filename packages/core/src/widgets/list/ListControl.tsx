@@ -324,7 +324,7 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = pro
         {internalValue.length > 0 ? (
           <DndContext key="dnd-context" id="dnd-context" onDragEnd={handleDragEnd}>
             <SortableContext items={keys}>
-              <div data-testid="list-widget-children">
+              <div data-testid="list-widget-children" className="overflow-hidden">
                 {internalValue.map((item, index) => {
                   const key = keys[index];
                   if (!key) {

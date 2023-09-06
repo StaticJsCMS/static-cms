@@ -164,6 +164,15 @@ export type FieldValidationMethod<T = unknown, F extends BaseField = UnknownFiel
   props: FieldValidationMethodProps<T, F>,
 ) => false | FieldError | Promise<false | FieldError>;
 
+export interface FieldStorageConverters<
+  T = unknown,
+  F extends BaseField = UnknownField,
+  S = ValueOrNestedValue,
+> {
+  deserialize(storageValue: S | null | undefined, field: F): T | null | undefined;
+  serialize(cmsValue: T | null | undefined, field: F): S | null | undefined;
+}
+
 export interface EntryDraft {
   entry: Entry;
   fieldsErrors: FieldsErrors;
@@ -400,17 +409,23 @@ export type FieldPreviewComponent<T = unknown, F extends BaseField = UnknownFiel
   FieldPreviewProps<T, F>
 >;
 
-export interface WidgetOptions<T = unknown, F extends BaseField = UnknownField> {
+export interface WidgetOptions<
+  T = unknown,
+  F extends BaseField = UnknownField,
+  S = ValueOrNestedValue,
+> {
   validator?: Widget<T, F>['validator'];
   getValidValue?: Widget<T, F>['getValidValue'];
+  converters?: Widget<T, F, S>['converters'];
   getDefaultValue?: Widget<T, F>['getDefaultValue'];
   schema?: Widget<T, F>['schema'];
 }
 
-export interface Widget<T = unknown, F extends BaseField = UnknownField> {
+export interface Widget<T = unknown, F extends BaseField = UnknownField, S = ValueOrNestedValue> {
   control: ComponentType<WidgetControlProps<T, F>>;
   preview?: WidgetPreviewComponent<T, F>;
   validator: FieldValidationMethod<T, F>;
+  converters: FieldStorageConverters<T, F, S>;
   getValidValue: FieldGetValidValueMethod<T, F>;
   getDefaultValue?: FieldGetDefaultMethod<T, F>;
   schema?: PropertiesSchema<unknown>;
@@ -667,6 +682,18 @@ export interface ObjectField<EF extends BaseField = UnknownField> extends BaseFi
   collapsed?: boolean;
   summary?: string;
   fields: Field<EF>[];
+}
+
+export interface KeyValueField extends BaseField {
+  widget: 'keyvalue';
+  default?: Record<string, string>;
+
+  label_singular?: string;
+  key_label?: string;
+  value_label?: string;
+
+  min?: number;
+  max?: number;
 }
 
 export interface ListField<EF extends BaseField = UnknownField> extends BaseField {
