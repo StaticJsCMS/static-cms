@@ -49,6 +49,7 @@ export interface EditorToolbarProps {
   className?: string;
   showMobilePreview: boolean;
   onMobilePreviewToggle: () => void;
+  onDiscardDraft: () => void;
 }
 
 const EditorToolbar = ({
@@ -75,6 +76,7 @@ const EditorToolbar = ({
   className,
   showMobilePreview,
   onMobilePreviewToggle,
+  onDiscardDraft,
 }: TranslatedProps<EditorToolbarProps>) => {
   const canCreate = useMemo(
     () => ('folder' in collection && collection.create) ?? false,
@@ -100,10 +102,11 @@ const EditorToolbar = ({
         color: 'warning',
       })
     ) {
-      dispatch(deleteLocalBackup(collection, slug));
-      dispatch(loadEntry(collection, slug));
+      await dispatch(deleteLocalBackup(collection, slug));
+      await dispatch(loadEntry(collection, slug));
+      onDiscardDraft();
     }
-  }, [collection, dispatch, slug]);
+  }, [collection, dispatch, onDiscardDraft, slug]);
 
   const menuItems: JSX.Element[][] = useMemo(() => {
     const items: JSX.Element[] = [];

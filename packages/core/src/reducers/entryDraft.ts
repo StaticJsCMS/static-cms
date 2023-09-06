@@ -21,6 +21,8 @@ import {
   REMOVE_DRAFT_ENTRY_MEDIA_FILE,
 } from '../constants';
 import { duplicateI18nFields, getDataPath } from '../lib/i18n';
+import { fileForEntry } from '../lib/util/collection.util';
+import { applyDefaultsToDraftData } from '../lib/util/entry.util';
 import { set } from '../lib/util/object.util';
 
 import type { EntriesAction } from '../actions/entries';
@@ -56,10 +58,18 @@ function entryDraftReducer(
         newRecord: false,
       };
 
+      const collection = action.payload.collection;
+
+      const file = fileForEntry(collection, entry.slug);
+      const fields = file ? file.fields : 'fields' in collection ? collection.fields : [];
+
       // Existing Entry
       return {
         ...newState,
-        entry,
+        entry: {
+          ...entry,
+          data: applyDefaultsToDraftData(fields, undefined, entry.data),
+        },
         original: entry,
         fieldsErrors: {},
         hasChanged: false,

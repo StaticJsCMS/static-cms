@@ -1,5 +1,3 @@
-import isEqual from 'lodash/isEqual';
-
 import { currentBackend } from '../backend';
 import {
   ADD_DRAFT_ENTRY_MEDIA_FILE,
@@ -40,16 +38,11 @@ import {
   SORT_ENTRIES_SUCCESS,
 } from '../constants';
 import ValidationErrorTypes from '../constants/validationErrorTypes';
-import {
-  I18N_FIELD_DUPLICATE,
-  I18N_FIELD_TRANSLATE,
-  duplicateDefaultI18nFields,
-  hasI18n,
-  serializeI18n,
-} from '../lib/i18n';
+import { hasI18n, serializeI18n } from '../lib/i18n';
 import { serializeValues } from '../lib/serializeEntryValues';
 import { Cursor } from '../lib/util';
 import { selectFields, updateFieldByKey } from '../lib/util/collection.util';
+import { createEmptyDraftData, createEmptyDraftI18nData } from '../lib/util/entry.util';
 import { selectCollectionEntriesCursor } from '../reducers/selectors/cursors';
 import {
   selectEntriesSortField,
@@ -77,7 +70,6 @@ import type {
   FieldError,
   I18nSettings,
   ImplementationMediaFile,
-  ObjectValue,
   SortDirection,
   ValueOrNestedValue,
   ViewFilter,
@@ -439,10 +431,10 @@ export function emptyDraftCreated(entry: Entry) {
 /*
  * Exported simple Action Creators
  */
-export function createDraftFromEntry(entry: Entry) {
+export function createDraftFromEntry(collection: Collection, entry: Entry) {
   return {
     type: DRAFT_CREATE_FROM_ENTRY,
-    payload: { entry },
+    payload: { collection, entry },
   } as const;
 }
 
@@ -625,7 +617,7 @@ export function loadEntry(collection: Collection, slug: string, silent = false) 
       await dispatch(loadMedia());
       const loadedEntry = await tryLoadEntry(getState(), collection, slug);
       dispatch(entryLoaded(collection, loadedEntry));
-      dispatch(createDraftFromEntry(loadedEntry));
+      dispatch(createDraftFromEntry(collection, loadedEntry));
     } catch (error: unknown) {
       console.error(error);
       if (error instanceof Error) {
@@ -876,64 +868,6 @@ export function createEmptyDraft(collection: Collection, search: string) {
     newEntry = await backend.processEntry(state, collection, newEntry);
     dispatch(emptyDraftCreated(newEntry));
   };
-}
-
-export function createEmptyDraftData(
-  fields: Field[],
-  skipField: (field: Field) => boolean = () => false,
-) {
-  const ddd = fields.reduce((acc, item) => {
-    if (skipField(item)) {
-      return acc;
-    }
-
-    const subfields = 'fields' in item && item.fields;
-    const list = item.widget === 'list';
-    const name = item.name;
-    const defaultValue = (('default' in item ? item.default : null) ?? null) as EntryData;
-
-    function isEmptyDefaultValue(val: EntryData | EntryData[]) {
-      return [[{}], {}].some(e => isEqual(val, e));
-    }
-
-    if (subfields) {
-      if (list && Array.isArray(defaultValue)) {
-        acc[name] = defaultValue;
-      } else {
-        const asList = Array.isArray(subfields) ? subfields : [subfields];
-
-        const subDefaultValue = list
-          ? [createEmptyDraftData(asList, skipField)]
-          : createEmptyDraftData(asList, skipField);
-
-        if (!isEmptyDefaultValue(subDefaultValue)) {
-          acc[name] = subDefaultValue;
-        }
-      }
-      return acc;
-    }
-
-    if (defaultValue !== null) {
-      acc[name] = defaultValue;
-    }
-
-    return acc;
-  }, {} as ObjectValue);
-
-  return ddd;
-}
-
-function createEmptyDraftI18nData(collection: Collection, dataFields: Field[]) {
-  if (!hasI18n(collection)) {
-    return {};
-  }
-
-  function skipField(field: Field) {
-    return field.i18n !== I18N_FIELD_DUPLICATE && field.i18n !== I18N_FIELD_TRANSLATE;
-  }
-
-  const i18nData = createEmptyDraftData(dataFields, skipField);
-  return duplicateDefaultI18nFields(collection, i18nData);
 }
 
 export function getMediaAssets({ entry }: { entry: Entry }) {
