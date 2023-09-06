@@ -69,8 +69,6 @@ const InsertLinkToolbarButton: FC<InsertLinkToolbarButtonProps> = ({
           return;
         }
 
-        console.log('editor.selection', editor.selection);
-
         deleteText(editor, {
           at: editor.selection as unknown as Location,
         });

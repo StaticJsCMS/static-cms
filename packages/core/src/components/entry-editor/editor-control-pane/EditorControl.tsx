@@ -54,6 +54,7 @@ const EditorControl = ({
   t,
   value,
   forList = false,
+  listItemPath,
   forSingleList = false,
   changeDraftField,
   i18n,
@@ -94,7 +95,7 @@ const EditorControl = ({
     () => isFieldHidden(field, locale, i18n?.defaultLocale),
     [field, i18n?.defaultLocale, locale],
   );
-  const hidden = useHidden(field, entry);
+  const hidden = useHidden(field, entry, listItemPath);
 
   useEffect(() => {
     if (hidden) {
@@ -202,6 +203,7 @@ const EditorControl = ({
           t,
           value: finalValue,
           forList,
+          listItemPath,
           forSingleList,
           i18n,
           hasErrors,
@@ -231,6 +233,7 @@ const EditorControl = ({
     query,
     finalValue,
     forList,
+    listItemPath,
     forSingleList,
     i18n,
     hasErrors,
@@ -248,6 +251,7 @@ interface EditorControlOwnProps {
   parentPath: string;
   value: ValueOrNestedValue;
   forList?: boolean;
+  listItemPath?: string;
   forSingleList?: boolean;
   i18n: I18nSettings | undefined;
   fieldName?: string;

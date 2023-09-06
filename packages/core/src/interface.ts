@@ -311,6 +311,7 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = 
   fieldsErrors: FieldsErrors;
   submitted: boolean;
   forList: boolean;
+  listItemPath: string | undefined;
   forSingleList: boolean;
   disabled: boolean;
   duplicate: boolean;

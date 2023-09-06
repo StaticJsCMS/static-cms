@@ -32,6 +32,7 @@ export interface EditorControlPaneProps {
   onLocaleChange?: (locale: string) => void;
   allowDefaultLocale?: boolean;
   context?: 'default' | 'i18nSplit';
+  listItemPath?: string;
 }
 
 const EditorControlPane = ({
@@ -47,6 +48,7 @@ const EditorControlPane = ({
   onLocaleChange,
   allowDefaultLocale = false,
   context = 'default',
+  listItemPath,
   t,
 }: TranslatedProps<EditorControlPaneProps>) => {
   const pathField = useMemo(
@@ -138,6 +140,7 @@ const EditorControlPane = ({
           locale={locale}
           parentPath=""
           i18n={i18n}
+          listItemPath={listItemPath}
           controlled
           isMeta
         />
@@ -156,6 +159,7 @@ const EditorControlPane = ({
             locale={locale}
             parentPath=""
             i18n={i18n}
+            listItemPath={listItemPath}
           />
         );
       })}

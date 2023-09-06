@@ -3,8 +3,15 @@ import get from 'lodash/get';
 
 import type { Entry, FieldFilterRule, FilterRule } from '@staticcms/core/interface';
 
-export function entryMatchesFieldRule(entry: Entry, filterRule: FieldFilterRule): boolean {
-  const fieldValue = get(entry.data, filterRule.field);
+export function entryMatchesFieldRule(
+  entry: Entry,
+  filterRule: FieldFilterRule,
+  listItemPath: string | undefined,
+): boolean {
+  const fieldValue = get(
+    entry.data,
+    listItemPath ? `${listItemPath}.${filterRule.field}` : filterRule.field,
+  );
   if ('pattern' in filterRule) {
     if (Array.isArray(fieldValue)) {
       return Boolean(fieldValue.find(v => new RegExp(filterRule.pattern).test(String(v))));
@@ -48,20 +55,24 @@ export function entryMatchesFieldRule(entry: Entry, filterRule: FieldFilterRule)
   return String(fieldValue) === String(filterRule.value);
 }
 
-function entryMatchesRule(entry: Entry, filterRule: FilterRule) {
+function entryMatchesRule(entry: Entry, filterRule: FilterRule, listItemPath: string | undefined) {
   if ('field' in filterRule) {
-    return entryMatchesFieldRule(entry, filterRule);
+    return entryMatchesFieldRule(entry, filterRule, listItemPath);
   }
 
   return new RegExp(filterRule.pattern).test(parse(entry.path).base);
 }
 
-export default function filterEntries(entries: Entry[], filterRule: FilterRule | FilterRule[]) {
+export default function filterEntries(
+  entries: Entry[],
+  filterRule: FilterRule | FilterRule[],
+  listItemPath: string | undefined,
+) {
   return entries.filter(entry => {
     if (Array.isArray(filterRule)) {
-      return filterRule.every(r => entryMatchesRule(entry, r));
+      return filterRule.every(r => entryMatchesRule(entry, r, listItemPath));
     }
 
-    return entryMatchesRule(entry, filterRule);
+    return entryMatchesRule(entry, filterRule, listItemPath);
   });
 }
