@@ -367,6 +367,34 @@ collections:
             widget: image
             media_library:
               folder_support: true
+      - name: keyvalue
+        label: Key Value
+        file: _widgets/keyvalue.yml
+        description: Key Value widget
+        fields:
+          - name: keyvalue
+            label: Required
+            widget: keyvalue
+          - name: with_default
+            label: Required With Default
+            widget: keyvalue
+            default:
+              key1: value1
+              key2: value2
+              key3: value3
+          - name: with_min
+            label: Required With Min (2)
+            widget: keyvalue
+            min: 2
+          - name: with_max
+            label: Required With Max (4)
+            widget: keyvalue
+            max: 4
+          - name: with_min_and_max
+            label: Required With Min (2) and Max (4)
+            widget: keyvalue
+            min: 2
+            max: 4
       - name: list
         label: List
         file: _widgets/list.yml

@@ -7,12 +7,7 @@ import { store } from '@staticcms/core/store';
 import { createMockWidgetControlProps } from '@staticcms/test/data/widgets.mock';
 import { renderWithProviders } from '@staticcms/test/test-utils';
 
-import type {
-  BaseField,
-  UnknownField,
-  ValueOrNestedValue,
-  WidgetControlProps,
-} from '@staticcms/core/interface';
+import type { BaseField, UnknownField, WidgetControlProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 export interface WidgetControlHarnessOptions {
@@ -20,10 +15,7 @@ export interface WidgetControlHarnessOptions {
   withMediaLibrary?: boolean;
 }
 
-export const createWidgetControlHarness = <
-  T extends ValueOrNestedValue,
-  F extends BaseField = UnknownField,
->(
+export const createWidgetControlHarness = <T, F extends BaseField = UnknownField>(
   Component: FC<WidgetControlProps<T, F>>,
   defaults: Omit<Partial<WidgetControlProps<T, F>>, 'field'> &
     Pick<WidgetControlProps<T, F>, 'field'>,
@@ -61,7 +53,7 @@ export const createWidgetControlHarness = <
       const finalRerenderProps = {
         ...props,
         ...rerenderProps,
-      };
+      } as WidgetControlProps<T, F>;
 
       result.rerender(
         <>

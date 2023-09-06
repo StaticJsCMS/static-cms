@@ -30,6 +30,7 @@ import type {
   TemplatePreviewCardComponent,
   TemplatePreviewComponent,
   UnknownField,
+  ValueOrNestedValue,
   Widget,
   WidgetOptions,
   WidgetParam,
@@ -240,6 +241,10 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
   {
     schema,
     validator = () => false,
+    converters = {
+      deserialize: (value: ValueOrNestedValue) => value as T | null | undefined,
+      serialize: (value: T | null | undefined) => value as ValueOrNestedValue,
+    },
     getValidValue = (value: T | null | undefined) => value,
     getDefaultValue,
   }: WidgetOptions<T, F> = {},
@@ -263,6 +268,7 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
         control: newControl,
         preview: preview as Widget['preview'],
         validator: validator as Widget['validator'],
+        converters: converters as Widget['converters'],
         getValidValue: getValidValue as Widget['getValidValue'],
         getDefaultValue: getDefaultValue as Widget['getDefaultValue'],
         schema,
@@ -275,6 +281,10 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
       previewComponent: preview,
       options: {
         validator = () => false,
+        converters = {
+          deserialize: (value: ValueOrNestedValue) => value as T | null | undefined,
+          serialize: (value: T | null | undefined) => value as ValueOrNestedValue,
+        },
         getValidValue = (value: T | undefined | null) => value,
         getDefaultValue,
         schema,
@@ -293,6 +303,7 @@ export function registerWidget<T = unknown, F extends BaseField = UnknownField>(
       control,
       preview,
       validator,
+      converters,
       getValidValue,
       getDefaultValue,
       schema,

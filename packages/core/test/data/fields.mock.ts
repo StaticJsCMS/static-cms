@@ -3,6 +3,7 @@ import type {
   ColorField,
   DateTimeField,
   FileOrImageField,
+  KeyValueField,
   MarkdownField,
   NumberField,
   RelationField,
@@ -53,6 +54,12 @@ export const mockImageField: FileOrImageField = {
   label: 'Image',
   name: 'mock_image',
   widget: 'image',
+};
+
+export const mockKeyValueField: KeyValueField = {
+  label: 'Key Value',
+  name: 'mock_key_value',
+  widget: 'keyvalue',
 };
 
 export const mockMarkdownField: MarkdownField = {

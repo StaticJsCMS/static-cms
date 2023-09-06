@@ -52,7 +52,7 @@ const EditorControl = ({
   parentPath,
   query,
   t,
-  value,
+  value: storageValue,
   forList = false,
   listItemPath,
   forSingleList = false,
@@ -67,7 +67,7 @@ const EditorControl = ({
   const id = useUUID();
 
   const widgetName = field.widget;
-  const widget = resolveWidget(widgetName) as Widget<ValueOrNestedValue>;
+  const widget = resolveWidget(widgetName) as Widget<ValueOrNestedValue, Field>;
 
   const theme = useAppSelector(selectTheme);
 
@@ -77,7 +77,15 @@ const EditorControl = ({
     [field.name, fieldName, parentPath],
   );
 
-  const [dirty, setDirty] = useState(!isEmpty(widget.getValidValue(value, field as UnknownField)));
+  const finalStorageValue = useMemoCompare(storageValue, isEqual);
+
+  const [internalValue, setInternalValue] = useState(
+    widget.converters.deserialize(finalStorageValue, field),
+  );
+
+  const [dirty, setDirty] = useState(
+    !isEmpty(widget.getValidValue(internalValue, field as UnknownField)),
+  );
 
   const fieldErrorsSelector = useMemo(
     () => selectFieldErrors(path, i18n, isMeta),
@@ -108,7 +116,7 @@ const EditorControl = ({
     }
 
     const validateValue = async () => {
-      const errors = await validate(field, value, widget, t);
+      const errors = await validate(field, internalValue, widget, t);
       dispatch(changeDraftFieldValidation(path, errors, i18n, isMeta));
     };
 
@@ -122,7 +130,7 @@ const EditorControl = ({
     path,
     submitted,
     t,
-    value,
+    internalValue,
     widget,
     disabled,
     isMeta,
@@ -139,7 +147,15 @@ const EditorControl = ({
         oldDirty => oldDirty || !isEmpty(widget.getValidValue(value, field as UnknownField)),
       );
 
-      changeDraftField({ path, field, value, i18n, isMeta });
+      setInternalValue(value);
+
+      changeDraftField({
+        path,
+        field,
+        value: widget.converters.serialize(value, field),
+        i18n,
+        isMeta,
+      });
     },
     [changeDraftField, field, i18n, isMeta, path, widget],
   );
@@ -148,11 +164,9 @@ const EditorControl = ({
 
   const config = useMemo(() => configState.config, [configState.config]);
 
-  const finalValue = useMemoCompare(value, isEqual);
-
   const [version, setVersion] = useState(0);
   useEffect(() => {
-    if (isNotNullish(finalValue)) {
+    if (isNotNullish(internalValue)) {
       return;
     }
 
@@ -174,7 +188,7 @@ const EditorControl = ({
       );
       setVersion(version => version + 1);
     }
-  }, [field, finalValue, handleDebouncedChangeDraftField, widget]);
+  }, [field, internalValue, handleDebouncedChangeDraftField, widget]);
 
   return useMemo(() => {
     if (!collection || !entry || !config || field.widget === 'hidden') {
@@ -201,7 +215,7 @@ const EditorControl = ({
           path,
           query,
           t,
-          value: finalValue,
+          value: internalValue,
           forList,
           listItemPath,
           forSingleList,
@@ -231,7 +245,7 @@ const EditorControl = ({
     handleDebouncedChangeDraftField,
     path,
     query,
-    finalValue,
+    internalValue,
     forList,
     listItemPath,
     forSingleList,

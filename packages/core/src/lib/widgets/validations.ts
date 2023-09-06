@@ -1,10 +1,10 @@
 /* eslint-disable import/prefer-default-export */
 import ValidationErrorTypes from '@staticcms/core/constants/validationErrorTypes';
 
-export function validateMinMax(
+export function validateMinMax<T = string | number>(
   t: (key: string, options: unknown) => string,
   fieldLabel: string,
-  value?: string | number | (string | number)[] | undefined | null,
+  value?: string | number | T[] | undefined | null,
   min?: number,
   max?: number,
 ) {

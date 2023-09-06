@@ -16,6 +16,7 @@ import type {
   ListField,
   RenderedField,
   ValueOrNestedValue,
+  Widget,
   WidgetPreviewComponent,
 } from '@staticcms/core/interface';
 import type { ReactFragment, ReactNode } from 'react';
@@ -237,12 +238,22 @@ function getWidget(
     return null;
   }
 
-  const widget = resolveWidget(field.widget);
+  const widget = resolveWidget(field.widget) as Widget<ValueOrNestedValue, Field>;
   const key = idx ? field.name + '_' + idx : field.name;
 
   if (field.widget === 'hidden' || !widget.preview) {
     return null;
   }
+
+  const finalValue =
+    isJsxElement(value) || isReactFragment(value)
+      ? value
+      : widget.converters.deserialize(
+          value && typeof value === 'object' && !Array.isArray(value) && field.name in value
+            ? (value as Record<string, ValueOrNestedValue>)[field.name]
+            : value,
+          field,
+        );
 
   /**
    * Use an HOC to provide conditional updates for all previews.
@@ -254,16 +265,7 @@ function getWidget(
       field={field as RenderedField}
       config={config}
       collection={collection}
-      value={
-        value &&
-        typeof value === 'object' &&
-        !Array.isArray(value) &&
-        field.name in value &&
-        !isJsxElement(value) &&
-        !isReactFragment(value)
-          ? (value as Record<string, unknown>)[field.name]
-          : value
-      }
+      value={finalValue}
       entry={entry}
       theme={theme}
     />
