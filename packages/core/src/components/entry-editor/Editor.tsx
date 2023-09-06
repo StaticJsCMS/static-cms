@@ -327,6 +327,10 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
     await dispatch(loadScroll());
   }, [dispatch]);
 
+  const handleDiscardDraft = useCallback(() => {
+    setVersion(version => version + 1);
+  }, []);
+
   if (entry && entry.error) {
     return (
       <div>
@@ -356,6 +360,7 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
         toggleScroll={handleToggleScroll}
         scrollSyncActive={scrollSyncActive}
         loadScroll={handleLoadScroll}
+        onDiscardDraft={handleDiscardDraft}
         submitted={submitted}
         slug={slug}
         t={t}

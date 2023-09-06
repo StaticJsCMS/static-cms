@@ -76,6 +76,7 @@ interface EditorInterfaceProps {
   loadScroll: () => void;
   submitted: boolean;
   slug: string | undefined;
+  onDiscardDraft: () => void;
 }
 
 const EditorInterface = ({
@@ -97,6 +98,7 @@ const EditorInterface = ({
   toggleScroll,
   submitted,
   slug,
+  onDiscardDraft,
 }: TranslatedProps<EditorInterfaceProps>) => {
   const config = useAppSelector(selectConfig);
 
@@ -413,6 +415,7 @@ const EditorInterface = ({
           showMobilePreview={showMobilePreview}
           onMobilePreviewToggle={toggleMobilePreview}
           className="flex"
+          onDiscardDraft={onDiscardDraft}
         />
       }
     >
