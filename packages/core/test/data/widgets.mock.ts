@@ -65,6 +65,7 @@ export const createMockWidgetControlProps = <
     hasErrors,
     submitted: false,
     forList: false,
+    listItemPath: undefined,
     forSingleList: false,
     disabled: false,
     locale: undefined,
