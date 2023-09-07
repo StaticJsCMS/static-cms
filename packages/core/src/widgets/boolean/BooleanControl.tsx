@@ -2,9 +2,12 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import Field from '@staticcms/core/components/common/field/Field';
 import Switch from '@staticcms/core/components/common/switch/Switch';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { BooleanField, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC } from 'react';
+
+const classes = generateClassNames('WidgetBoolean', ['root', 'input']);
 
 const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
   value,
@@ -41,8 +44,15 @@ const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
       hint={field.hint}
       forSingleList={forSingleList}
       disabled={disabled}
+      rootClassName={classes.root}
     >
-      <Switch ref={ref} value={internalValue} disabled={disabled} onChange={handleChange} />
+      <Switch
+        ref={ref}
+        value={internalValue}
+        disabled={disabled}
+        onChange={handleChange}
+        rootClassName={classes.input}
+      />
     </Field>
   );
 };
