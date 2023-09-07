@@ -554,6 +554,7 @@ export abstract class BackendClass {
     folder: string,
     extension: string,
     depth: number,
+    pathRegex?: RegExp,
   ): Promise<ImplementationEntry[]>;
   abstract traverseCursor(
     cursor: Cursor,
