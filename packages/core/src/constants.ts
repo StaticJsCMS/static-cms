@@ -110,6 +110,7 @@ export const QUERY_SUCCESS = 'QUERY_SUCCESS';
 export const QUERY_FAILURE = 'QUERY_FAILURE';
 
 export const SEARCH_CLEAR = 'SEARCH_CLEAR';
+export const CLEAR_REQUESTS = 'CLEAR_REQUESTS';
 
 // Status
 export const STATUS_REQUEST = 'STATUS_REQUEST';

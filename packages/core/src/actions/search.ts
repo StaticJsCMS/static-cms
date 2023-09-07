@@ -2,6 +2,7 @@ import isEqual from 'lodash/isEqual';
 
 import { currentBackend } from '../backend';
 import {
+  CLEAR_REQUESTS,
   QUERY_FAILURE,
   QUERY_REQUEST,
   QUERY_SUCCESS,
@@ -13,7 +14,7 @@ import {
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type { Entry, SearchQueryResponse } from '../interface';
+import type { Entry, SearchQueryRequest, SearchQueryResponse } from '../interface';
 import type { RootState } from '../store';
 
 /*
@@ -44,11 +45,12 @@ export function searchFailure(error: Error) {
   } as const;
 }
 
-export function querying(searchTerm: string) {
+export function querying(searchTerm: string, request?: SearchQueryRequest) {
   return {
     type: QUERY_REQUEST,
     payload: {
       searchTerm,
+      request,
     },
   } as const;
 }
@@ -76,6 +78,10 @@ export function queryFailure(error: Error) {
 
 export function clearSearch() {
   return { type: SEARCH_CLEAR } as const;
+}
+
+export function clearRequests() {
+  return { type: CLEAR_REQUESTS } as const;
 }
 
 /*
@@ -180,4 +186,5 @@ export type SearchAction = ReturnType<
   | typeof querySuccess
   | typeof queryFailure
   | typeof clearSearch
+  | typeof clearRequests
 >;
