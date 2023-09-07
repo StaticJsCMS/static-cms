@@ -4,6 +4,7 @@ import Field from '@staticcms/core/components/common/field/Field';
 import Pill from '@staticcms/core/components/common/pill/Pill';
 import Select from '@staticcms/core/components/common/select/Select';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type {
   SelectField,
@@ -11,6 +12,10 @@ import type {
   WidgetControlProps,
 } from '@staticcms/core/interface';
 import type { FC } from 'react';
+
+import './SelectControl.css';
+
+const classes = generateClassNames('WidgetSelect', ['root', 'input', 'values']);
 
 function convertToOption(
   raw: string | number | SelectWidgetOptionObject | undefined,
@@ -130,11 +135,12 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
       cursor="pointer"
       disabled={disabled}
       disableClick={open}
+      rootClassName={classes.root}
     >
       <Select
         label={
           Array.isArray(stringValue) ? (
-            <div className="flex wrap gap-2 max-w-fit">
+            <div className={classes.values}>
               {stringValue.map(selectValue => {
                 const label = optionsByValue[selectValue]?.label ?? selectValue;
                 return (
@@ -155,6 +161,7 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
         disabled={disabled}
         onChange={handleChange}
         onOpenChange={handleOpenChange}
+        rootClassName={classes.input}
       />
     </Field>
   );

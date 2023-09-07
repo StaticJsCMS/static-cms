@@ -3,6 +3,7 @@ import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@styled-icons/materi
 import React, { forwardRef, useCallback, useState } from 'react';
 
 import useElementSize from '@staticcms/core/lib/hooks/useElementSize';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import Option from './Option';
@@ -46,6 +47,7 @@ export interface SelectProps {
   options: (number | string)[] | Option[];
   required?: boolean;
   disabled?: boolean;
+  rootClassName?: string;
   onChange: SelectChangeEventHandler;
   onOpenChange?: (open: boolean) => void;
 }
@@ -59,6 +61,7 @@ const Select = forwardRef(
       options,
       required = false,
       disabled,
+      rootClassName,
       onChange,
       onOpenChange,
     }: SelectProps,
@@ -98,7 +101,7 @@ const Select = forwardRef(
     );
 
     return (
-      <div className={classes.root}>
+      <div className={classNames(classes.root, rootClassName)}>
         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <SelectUnstyled<any>
           renderValue={() => {
