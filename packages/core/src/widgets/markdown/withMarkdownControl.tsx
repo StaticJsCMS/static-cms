@@ -141,7 +141,7 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
             disabled={disabled}
             onChange={handleRawOnChange}
             placeholder={t('editor.editorWidgets.markdown.type')}
-            className="mt-2"
+            rootClassName="mt-2"
           />
         ) : (
           richEditor
