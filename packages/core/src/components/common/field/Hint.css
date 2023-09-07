@@ -1,0 +1,44 @@
+.CMS_Hint_root {
+  @apply w-full
+    flex
+    text-xs
+    italic;
+
+  &.CMS_Hint_cursor-pointer {
+    @apply cursor-pointer;
+  }
+
+  &.CMS_Hint_cursor-text {
+    @apply cursor-text;
+  }
+
+  &.CMS_Hint_cursor-default {
+    @apply cursor-default;
+  }
+
+  &.CMS_Hint_error {
+    @apply text-red-500;
+  }
+
+  &:not(.CMS_Hint_error) {
+    &.CMS_Hint_disabled {
+      @apply text-slate-300
+        dark:text-slate-600;
+    }
+
+    &:not(.CMS_Hint_disabled) {
+      @apply text-slate-500
+       dark:text-slate-400;
+    }
+  }
+
+  &:not(.CMS_Hint_disabled) {
+    @apply group-focus-within/active:text-blue-500
+      group-hover/active:text-blue-500;
+  }
+
+  &:not(.CMS_Hint_inline) {
+    @apply px-3
+      pt-1;
+  }
+}

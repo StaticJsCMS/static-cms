@@ -1,0 +1,51 @@
+.CMS_TextField_root {
+  @apply flex
+    w-full;
+}
+
+.CMS_TextField_input {
+  @apply w-full
+    text-sm;
+
+  &.CMS_TextField_borderless {
+    @apply h-6
+      px-3
+      bg-transparent
+      outline-none
+      font-medium
+      text-gray-800
+      disabled:text-gray-300
+      dark:text-gray-100
+      dark:disabled:text-gray-500;
+  }
+
+  &.CMS_TextField_contained {
+    @apply bg-gray-50
+      border
+      border-gray-300
+      text-gray-800
+      rounded-lg
+      focus:ring-blue-500
+      focus:border-blue-500
+      block
+      p-2.5
+      dark:bg-gray-700
+      dark:border-gray-600
+      dark:placeholder-gray-400
+      dark:text-white
+      dark:focus:ring-blue-500
+      dark:focus:border-blue-500;
+  }
+
+  &.CMS_TextField_cursor-pointer {
+    @apply cursor-pointer;
+  }
+
+  &.CMS_TextField_cursor-text {
+    @apply cursor-text;
+  }
+
+  &.CMS_TextField_cursor-default {
+    @apply cursor-default;
+  }
+}

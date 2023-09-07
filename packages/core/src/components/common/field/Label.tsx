@@ -2,8 +2,21 @@ import React from 'react';
 
 import useCursor from '@staticcms/core/lib/hooks/useCursor';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { FC } from 'react';
+
+import './Label.css';
+
+export const classes = generateClassNames('Label', [
+  'root',
+  'disabled',
+  'cursor-pointer',
+  'cursor-text',
+  'cursor-default',
+  'error',
+  'inline',
+]);
 
 export interface LabelProps {
   htmlFor?: string;
@@ -33,33 +46,13 @@ const Label: FC<LabelProps> = ({
       htmlFor={htmlFor}
       data-testid={dataTestId ?? 'label'}
       className={classNames(
-        `
-          w-full
-          flex
-          text-xs
-          font-bold
-          dark:font-semibold
-        `,
-        !disabled &&
-          `
-            group-focus-within/active:text-blue-500
-            group-hover/active:text-blue-500
-          `,
-        finalCursor === 'pointer' && 'cursor-pointer',
-        finalCursor === 'text' && 'cursor-text',
-        finalCursor === 'default' && 'cursor-default',
-        hasErrors
-          ? 'text-red-500'
-          : disabled
-          ? `
-              text-slate-300
-              dark:text-slate-600
-            `
-          : `
-            text-slate-500
-            dark:text-slate-400
-          `,
-        variant === 'default' && 'px-3 pt-3',
+        classes.root,
+        disabled && classes.disabled,
+        finalCursor === 'pointer' && classes['cursor-pointer'],
+        finalCursor === 'text' && classes['cursor-text'],
+        finalCursor === 'default' && classes['cursor-default'],
+        hasErrors && classes.error,
+        variant === 'inline' && classes.inline,
         className,
       )}
     >

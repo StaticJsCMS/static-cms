@@ -1,0 +1,18 @@
+.CMS_TextArea_root {
+  @apply flex
+    w-full;
+}
+
+.CMS_TextArea_input {
+  @apply w-full
+    min-h-[80px]
+    px-3
+    bg-transparent
+    outline-none
+    text-sm
+    font-medium
+    text-gray-800
+    dark:text-gray-100
+    disabled:text-gray-300
+    dark:disabled:text-gray-500;
+}

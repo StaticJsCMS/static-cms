@@ -1,13 +1,21 @@
 import InputUnstyled from '@mui/base/InputUnstyled';
 import React, { forwardRef, useCallback, useState } from 'react';
 
+import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
+
 import type { ChangeEventHandler, RefObject } from 'react';
+
+import './TextArea.css';
+
+export const classes = generateClassNames('TextArea', ['root', 'input']);
 
 export interface TextAreaProps {
   value: string;
   disabled?: boolean;
   placeholder?: string;
-  className?: string;
+  rootClassName?: string;
+  inputClassName?: string;
   'data-testid'?: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
 }
@@ -20,7 +28,18 @@ function getHeight(rawHeight: string): number {
 }
 
 const TextArea = forwardRef<HTMLInputElement | null, TextAreaProps>(
-  ({ value, disabled, placeholder, className, 'data-testid': dataTestId, onChange }, ref) => {
+  (
+    {
+      value,
+      disabled,
+      placeholder,
+      rootClassName,
+      inputClassName,
+      'data-testid': dataTestId,
+      onChange,
+    },
+    ref,
+  ) => {
     const [lastAutogrowHeight, setLastAutogrowHeight] = useState(MIN_TEXT_AREA_HEIGHT);
 
     const autoGrow = useCallback(() => {
@@ -62,28 +81,12 @@ const TextArea = forwardRef<HTMLInputElement | null, TextAreaProps>(
         data-testid={dataTestId ?? 'textarea-input'}
         slotProps={{
           root: {
-            className: `
-              flex
-              w-full
-              ${className}
-            `,
+            className: classNames(classes.root, rootClassName),
           },
           input: {
             ref,
             placeholder,
-            className: `
-              w-full
-              min-h-[80px]
-              px-3
-              bg-transparent
-              outline-none
-              text-sm
-              font-medium
-              text-gray-800
-              dark:text-gray-100
-              disabled:text-gray-300
-              dark:disabled:text-gray-500
-            `,
+            className: classNames(classes.input, inputClassName),
           },
         }}
       />

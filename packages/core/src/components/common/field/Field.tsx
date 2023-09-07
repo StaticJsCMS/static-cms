@@ -2,12 +2,32 @@ import React, { useMemo } from 'react';
 
 import useCursor from '@staticcms/core/lib/hooks/useCursor';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import ErrorMessage from './ErrorMessage';
 import Hint from './Hint';
 import Label from './Label';
 
 import type { FieldError } from '@staticcms/core/interface';
 import type { FC, MouseEvent, ReactNode } from 'react';
+
+import './Field.css';
+
+export const classes = generateClassNames('Field', [
+  'root',
+  'inline',
+  'wrapper',
+  'inline-wrapper',
+  'disabled',
+  'no-highlight',
+  'no-padding',
+  'cursor-pointer',
+  'cursor-text',
+  'cursor-default',
+  'error',
+  'valid',
+  'for-single-list',
+  'end-adornment',
+]);
 
 export interface FieldProps {
   label?: string;
@@ -98,53 +118,34 @@ const Field: FC<FieldProps> = ({
   const rootClassNames = useMemo(
     () =>
       classNames(
-        `
-          relative
-          flex
-          items-center
-          gap-2
-          border-b
-          border-slate-400
-          focus-within:border-blue-800
-          dark:focus-within:border-blue-100
-        `,
+        classes.root,
         rootClassName,
-        !noHightlight &&
-          !disabled &&
-          `
-            focus-within:bg-slate-100
-            dark:focus-within:bg-slate-800
-            hover:bg-slate-100
-            dark:hover:bg-slate-800
-          `,
-        !noPadding && 'pb-3',
-        finalCursor === 'pointer' && 'cursor-pointer',
-        finalCursor === 'text' && 'cursor-text',
-        finalCursor === 'default' && 'cursor-default',
-        !hasErrors && 'group/active',
+        disabled && classes.disabled,
+        noHightlight && classes['no-highlight'],
+        noPadding && classes['no-padding'],
+        finalCursor === 'pointer' && classes['cursor-pointer'],
+        finalCursor === 'text' && classes['cursor-text'],
+        finalCursor === 'default' && classes['cursor-default'],
+        hasErrors ? classes.error : `group/active`,
       ),
     [rootClassName, noHightlight, disabled, noPadding, finalCursor, hasErrors],
   );
 
   const wrapperClassNames = useMemo(
     () =>
-      classNames(
-        `
-          flex
-          flex-col
-          w-full
-        `,
-        wrapperClassName,
-        forSingleList && 'mr-14',
-      ),
+      classNames(classes.wrapper, wrapperClassName, forSingleList && classes['for-single-list']),
     [forSingleList, wrapperClassName],
   );
 
   if (variant === 'inline') {
     return (
-      <div data-testid="inline-field" className={rootClassNames} onClick={handleOnClick}>
+      <div
+        data-testid="inline-field"
+        className={`${rootClassNames} ${classes.inline}`}
+        onClick={handleOnClick}
+      >
         <div data-testid="inline-field-wrapper" className={wrapperClassNames}>
-          <div className="flex items-center justify-center p-3 pb-0">
+          <div className={classes['inline-wrapper']}>
             {renderedLabel}
             {renderedHint}
             {children}
@@ -163,18 +164,7 @@ const Field: FC<FieldProps> = ({
         {renderedHint}
         {renderedErrorMessage}
       </div>
-      {endAdornment ? (
-        <div
-          className={classNames(
-            `
-            pr-2
-          `,
-            !noPadding && '-mb-3',
-          )}
-        >
-          {endAdornment}
-        </div>
-      ) : null}
+      {endAdornment ? <div className={classes['end-adornment']}>{endAdornment}</div> : null}
     </div>
   );
 };
