@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
-import useButtonClassNames from './useButtonClassNames';
+import useButtonClassNames, { buttonClasses } from './useButtonClassNames';
 
 import type { CSSProperties, FC, MouseEventHandler, ReactNode, Ref } from 'react';
 
@@ -65,9 +65,9 @@ const Button: FC<ButtonLinkProps> = ({
   const content = useMemo(
     () => (
       <>
-        {StartIcon ? <StartIcon className="w-5 h-5 mr-2" /> : null}
+        {StartIcon ? <StartIcon className={buttonClasses['start-icon']} /> : null}
         {children}
-        {EndIcon ? <EndIcon className="w-5 h-5 ml-2" /> : null}
+        {EndIcon ? <EndIcon className={buttonClasses['end-icon']} /> : null}
       </>
     ),
     [EndIcon, StartIcon, children],

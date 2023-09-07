@@ -1,0 +1,9 @@
+.CMS_IconButton_root {
+  &.CMS_IconButton_sm {
+    @apply px-0.5;
+  }
+
+  &.CMS_IconButton_md {
+    @apply px-1.5;
+  }
+}

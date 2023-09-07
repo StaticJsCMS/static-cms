@@ -1,31 +1,58 @@
 import { useMemo } from 'react';
 
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
+
 import type { BaseBaseProps } from './Button';
+
+export const buttonClasses = generateClassNames('Button', [
+  'root-sm',
+  'root',
+  'root-rounded-no-padding',
+  'root-rounded-sm',
+  'root-rounded',
+  'contained-primary',
+  'contained-secondary',
+  'contained-success',
+  'contained-error',
+  'contained-warning',
+  'outlined-primary',
+  'outlined-secondary',
+  'outlined-success',
+  'outlined-error',
+  'outlined-warning',
+  'text-primary',
+  'text-secondary',
+  'text-success',
+  'text-error',
+  'text-warning',
+  'start-icon',
+  'end-icon',
+]);
 
 const classes: Record<
   Required<BaseBaseProps>['variant'],
   Record<Required<BaseBaseProps>['color'], string>
 > = {
   contained: {
-    primary: 'btn-contained-primary',
-    secondary: 'btn-contained-secondary',
-    success: 'btn-contained-success',
-    error: 'btn-contained-error',
-    warning: 'btn-contained-warning',
+    primary: buttonClasses['contained-primary'],
+    secondary: buttonClasses['contained-secondary'],
+    success: buttonClasses['contained-success'],
+    error: buttonClasses['contained-error'],
+    warning: buttonClasses['contained-warning'],
   },
   outlined: {
-    primary: 'btn-outlined-primary',
-    secondary: 'btn-outlined-secondary',
-    success: 'btn-outlined-success',
-    error: 'btn-outlined-error',
-    warning: 'btn-outlined-warning',
+    primary: buttonClasses['outlined-primary'],
+    secondary: buttonClasses['outlined-secondary'],
+    success: buttonClasses['outlined-success'],
+    error: buttonClasses['outlined-error'],
+    warning: buttonClasses['outlined-warning'],
   },
   text: {
-    primary: 'btn-text-primary',
-    secondary: 'btn-text-secondary',
-    success: 'btn-text-success',
-    error: 'btn-text-error',
-    warning: 'btn-text-warning',
+    primary: buttonClasses['text-primary'],
+    secondary: buttonClasses['text-secondary'],
+    success: buttonClasses['text-success'],
+    error: buttonClasses['text-error'],
+    warning: buttonClasses['text-warning'],
   },
 };
 
@@ -35,11 +62,11 @@ export default function useButtonClassNames(
   size: Required<BaseBaseProps>['size'],
   rounded: boolean | 'no-padding',
 ) {
-  let mainClass = size === 'small' ? 'btn-sm' : 'btn';
+  let mainClass = size === 'small' ? buttonClasses['root-sm'] : buttonClasses.root;
   if (rounded === 'no-padding') {
-    mainClass = 'btn-rounded-no-padding';
+    mainClass = buttonClasses['root-rounded-no-padding'];
   } else if (rounded) {
-    mainClass = size === 'small' ? 'btn-rounded-sm' : 'btn-rounded';
+    mainClass = size === 'small' ? buttonClasses['root-rounded-sm'] : buttonClasses['root-rounded'];
   }
 
   return useMemo(() => `${mainClass} ${classes[variant][color]}`, [color, mainClass, variant]);
