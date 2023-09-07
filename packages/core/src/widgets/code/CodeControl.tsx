@@ -10,11 +10,12 @@ import Label from '@staticcms/core/components/common/field/Label';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
-import languages from './data/languages';
 import SettingsButton from './SettingsButton';
 import SettingsPane from './SettingsPane';
+import languages from './data/languages';
 
 import type {
   CodeField,
@@ -23,6 +24,21 @@ import type {
 } from '@staticcms/core/interface';
 import type { LanguageName } from '@uiw/codemirror-extensions-langs';
 import type { FC, MouseEvent } from 'react';
+
+import './CodeControl.css';
+
+export const classes = generateClassNames('WidgetCode', [
+  'root',
+  'field-wrapper',
+  'expand-button',
+  'expand-button-icon',
+  'label',
+  'error-message',
+  'expanded',
+  'disabled',
+  'error',
+  'for-single-list',
+]);
 
 function valueToOption(val: string | { name: string; label?: string }): {
   value: string;
@@ -164,62 +180,23 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
     <div
       data-testid="list-field"
       className={classNames(
-        `
-          relative
-          flex
-          flex-col
-          border-b
-          border-slate-400
-          focus-within:border-blue-800
-          dark:focus-within:border-blue-100
-        `,
-        !hasErrors && 'group/active-list',
+        classes.root,
+        disabled && classes.disabled,
+        hasErrors && classes.error,
+        forSingleList && classes['for-single-list'],
+        open && classes.expanded,
       )}
     >
-      <div
-        data-testid="field-wrapper"
-        className={classNames(
-          `
-            relative
-            flex
-            flex-col
-            w-full
-          `,
-          forSingleList && 'mr-14',
-        )}
-      >
+      <div data-testid="field-wrapper" className={classes['field-wrapper']}>
         <button
           data-testid="list-expand-button"
-          className={classNames(
-            `
-              flex
-              w-full
-              justify-between
-              px-3
-              py-2
-              text-left
-              text-sm
-              font-medium
-              focus:outline-none
-              focus-visible:ring
-              gap-2
-              focus-visible:ring-opacity-75
-              items-center
-            `,
-            disabled && 'cursor-default',
-          )}
+          className={classes['expand-button']}
           onClick={handleOpenToggle}
         >
           <Label
             key="label"
             hasErrors={hasErrors}
-            className={classNames(
-              !disabled &&
-                `
-                  group-focus-within/active-list:text-blue-500
-                  group-hover/active-list:text-blue-500
-                `,
-            )}
+            className={classes.label}
             cursor="pointer"
             variant="inline"
             disabled={disabled}
@@ -229,25 +206,7 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
           {open && allowLanguageSelection ? (
             <SettingsButton onClick={toggleSettings} disabled={disabled} />
           ) : null}
-          <ChevronRightIcon
-            className={classNames(
-              open && 'rotate-90 transform',
-              `
-                transition-transform
-                h-5
-                w-5
-              `,
-              disabled
-                ? `
-                    text-slate-300
-                    dark:text-slate-600
-                  `
-                : `
-                    group-focus-within/active-list:text-blue-500
-                    group-hover/active-list:text-blue-500
-                  `,
-            )}
-          />
+          <ChevronRightIcon className={classes['expand-button-icon']} />
         </button>
         {open && allowLanguageSelection && settingsVisible ? (
           <SettingsPane
@@ -279,7 +238,7 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
             {field.hint}
           </Hint>
         ) : null}
-        <ErrorMessage errors={errors} className="pt-2 pb-3" />
+        <ErrorMessage errors={errors} className={classes['error-message']} />
       </div>
     </div>
   );

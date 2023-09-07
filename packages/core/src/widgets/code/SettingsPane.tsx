@@ -3,8 +3,13 @@ import React from 'react';
 
 import Label from '@staticcms/core/components/common/field/Label';
 import Select from '@staticcms/core/components/common/select/Select';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { FC } from 'react';
+
+import './SettingsPane.css';
+
+export const classes = generateClassNames('WidgetCodeSettings', ['root']);
 
 interface SettingsSelectProps {
   type: 'language';
@@ -76,28 +81,7 @@ const SettingsPane: FC<SettingsPaneProps> = ({
   onChangeLanguage,
 }) => {
   return (
-    <div
-      onKeyDown={e => isHotkey('esc', e) && hideSettings()}
-      className="
-        absolute
-        top-10
-        bottom-0
-        right-0
-        w-40
-        flex
-        flex-col
-        gap-2
-        z-10
-        shadow-sm
-        bg-gray-100
-        dark:bg-slate-800
-        border-l
-        border-l-slate-400
-        border-t
-        border-t-slate-300
-        dark:border-t-slate-700
-      "
-    >
+    <div onKeyDown={e => isHotkey('esc', e) && hideSettings()} className={classes.root}>
       <SettingsSelect
         type="language"
         label="Language"

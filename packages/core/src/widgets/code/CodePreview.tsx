@@ -1,8 +1,12 @@
 import isString from 'lodash/isString';
 import React from 'react';
 
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
+
 import type { CodeField, WidgetPreviewProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
+
+const classes = generateClassNames('WidgetCodePreview', ['root']);
 
 function toValue(value: string | Record<string, string> | undefined | null, field: CodeField) {
   if (isString(value)) {
@@ -21,7 +25,7 @@ const CodePreview: FC<WidgetPreviewProps<string | Record<string, string>, CodeFi
   field,
 }) => {
   return (
-    <pre>
+    <pre className={classes.root}>
       <code>{toValue(value, field)}</code>
     </pre>
   );
