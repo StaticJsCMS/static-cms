@@ -103,7 +103,7 @@ const SidebarContent: FC<TranslateProps> = ({ t }) => {
           overflow-y-auto
           bg-white
           dark:bg-slate-800
-          styled-scrollbars
+          CMS_Scrollbar_root
         "
     >
       <ul className="space-y-2">

@@ -4,6 +4,7 @@ import { getI18nInfo, hasI18n, isFieldTranslatable } from '@staticcms/core/lib/i
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { getFieldValue } from '@staticcms/core/lib/util/field.util';
 import { getNestedSlug } from '@staticcms/core/lib/util/nested.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import EditorControl from './EditorControl';
@@ -18,6 +19,14 @@ import type {
   StringOrTextField,
   TranslatedProps,
 } from '@staticcms/core/interface';
+
+import './EditorControlPane.css';
+
+export const classes = generateClassNames('EditorControlPane', [
+  'root',
+  'no-border',
+  'locale_dropdown_wrapper',
+]);
 
 export interface EditorControlPaneProps {
   collection: Collection;
@@ -95,27 +104,9 @@ const EditorControlPane = ({
   }
 
   return (
-    <div
-      className={classNames(
-        `
-          flex
-          flex-col
-          min-h-full
-          w-full
-        `,
-        !hideBorder &&
-          `
-            lg:border-r
-            border-slate-400
-          `,
-      )}
-    >
+    <div className={classNames(classes.root, hideBorder && classes['no-border'])}>
       {i18n?.locales && locale ? (
-        <div
-          className="
-            p-3
-          "
-        >
+        <div className={classes.locale_dropdown_wrapper}>
           <LocaleDropdown
             locales={i18n.locales}
             defaultLocale={i18n.defaultLocale}

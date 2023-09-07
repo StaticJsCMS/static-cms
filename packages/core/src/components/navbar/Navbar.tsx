@@ -4,6 +4,7 @@ import { translate } from 'react-polyglot';
 
 import { checkBackendStatus } from '@staticcms/core/actions/status';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectConfig, selectDisplayUrl } from '@staticcms/core/reducers/selectors/config';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import Button from '../common/button/Button';
@@ -14,6 +15,24 @@ import SettingsDropdown from './SettingsDropdown';
 
 import type { Breadcrumb, TranslatedProps } from '@staticcms/core/interface';
 import type { FC, ReactNode } from 'react';
+
+import './Navbar.css';
+
+export const classes = generateClassNames('Navbar', [
+  'root',
+  'in-editor',
+  'content-wrapper',
+  'content',
+  'breadcrumbs',
+  'logo-wrapper',
+  'logo',
+  'custom-logo',
+  'actions',
+  'site-url',
+  'site-url-label',
+  'site-url-icon',
+  'quick-create',
+]);
 
 export interface NavbarProps {
   breadcrumbs?: Breadcrumb[];
@@ -47,64 +66,31 @@ const Navbar = ({
   );
 
   return (
-    <nav
-      className="
-        z-40
-        relative
-        bg-white
-        drop-shadow-md
-        dark:bg-slate-800
-        dark:drop-shadow-lg
-      "
-    >
-      <div key="nav" className="mx-auto pr-2 sm:pr-4 lg:pr-5">
-        <div
-          className={classNames(
-            `
-              relative
-              flex
-              h-16
-              items-center
-              justify-between
-              gap-2
-            `,
-            inEditor && 'pl-3 md:pl-0',
-          )}
-        >
-          <div className="flex flex-1 h-full items-stretch justify-start gap-2 md:gap-3 truncate">
-            <div
-              className={classNames(
-                `
-                  flex-shrink-0
-                  items-center
-                  justify-center
-                  w-16
-                  bg-slate-500
-                  dark:bg-slate-700
-                `,
-                inEditor ? 'hidden md:flex' : 'flex',
-              )}
-            >
+    <nav className={classNames(classes.root, inEditor && classes['in-editor'])}>
+      <div key="nav" className={classes['content-wrapper']}>
+        <div className={classes.content}>
+          <div className={classes.breadcrumbs}>
+            <div className={classes['logo-wrapper']}>
               {config?.logo_url ? (
                 <div
-                  className="h-10 w-10 bg-contain bg-no-repeat bg-center object-cover"
+                  className={classNames(classes.logo, classes['custom-logo'])}
                   style={{ backgroundImage: `url('${config.logo_url}')` }}
                 />
               ) : (
-                <StaticCmsIcon className="w-10 h-10" />
+                <StaticCmsIcon className={classes.logo} />
               )}
             </div>
             <Breadcrumbs breadcrumbs={breadcrumbs} inEditor={inEditor} />
           </div>
-          <div className="flex gap-3 items-center">
+          <div className={classes.actions}>
             {displayUrl ? (
-              <Button variant="text" className="gap-2 hidden lg:flex" href={displayUrl}>
-                <div className="hidden lg:flex">{displayUrl}</div>
-                <OpenInNewIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+              <Button variant="text" className={classes['site-url']} href={displayUrl}>
+                <div className={classes['site-url-label']}>{displayUrl}</div>
+                <OpenInNewIcon className={classes['site-url-icon']} />
               </Button>
             ) : null}
             {showQuickCreate ? (
-              <QuickCreate key="quick-create" rootClassName="hidden md:block" />
+              <QuickCreate key="quick-create" rootClassName={classes['quick-create']} />
             ) : null}
             {navbarActions}
             <SettingsDropdown inEditor={inEditor} />

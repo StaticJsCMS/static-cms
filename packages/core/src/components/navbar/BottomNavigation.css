@@ -1,0 +1,49 @@
+.CMS_BottomNavigation_root {
+  @apply fixed
+    bottom-0
+    left-0
+    right-0
+    h-16
+    shadow-bottom-navigation
+    bg-gray-50
+    dark:bg-gray-800
+    flex
+    px-6
+    py-1
+    md:hidden;
+}
+
+.CMS_BottomNavigation_menu-button {
+  @apply flex-grow;
+
+  & .CMS_BottomNavigation_menu-button-icon {
+    @apply w-6
+      h-6;
+  }
+}
+
+.CMS_BottomNavigation_add-button {
+  @apply flex-grow;
+
+  & .CMS_BottomNavigation_add-button-icon {
+    @apply w-6
+      h-6;
+  }
+}
+
+.CMS_BottomNavigation_quick-create {
+  @apply flex-grow;
+
+  & .CMS_BottomNavigation_quick-create-button {
+    @apply w-full;
+  }
+}
+
+.CMS_BottomNavigation_site-url-button {
+  @apply flex-grow;
+
+  & .CMS_BottomNavigation_site-url-button-icon {
+    @apply w-6
+      h-6;
+  }
+}

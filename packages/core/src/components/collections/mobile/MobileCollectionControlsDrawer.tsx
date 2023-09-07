@@ -79,7 +79,7 @@ const MobileCollectionControlsDrawer = ({
           overflow-y-auto
           bg-white
           dark:bg-slate-800
-          styled-scrollbars
+          CMS_Scrollbar_root
         "
       >
         {showSortControl ? (

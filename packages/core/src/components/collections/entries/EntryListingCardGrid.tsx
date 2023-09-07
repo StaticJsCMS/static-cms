@@ -215,7 +215,7 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
                   `
                     !overflow-x-hidden
                     overflow-y-auto
-                    styled-scrollbars
+                    CMS_Scrollbar_root
                   `,
                 )}
                 style={{ position: 'unset' }}

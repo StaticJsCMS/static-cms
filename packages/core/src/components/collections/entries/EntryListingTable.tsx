@@ -92,8 +92,8 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
           relative
           h-full
           overflow-auto
-          styled-scrollbars
-          styled-scrollbars-secondary
+          CMS_Scrollbar_root
+          CMS_Scrollbar_secondary
         "
       >
         <Table

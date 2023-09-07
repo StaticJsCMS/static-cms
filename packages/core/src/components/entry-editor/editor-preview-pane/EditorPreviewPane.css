@@ -1,0 +1,33 @@
+.CMS_Preview_root {
+  @apply h-main-mobile
+    md:h-main
+    absolute
+    top-16
+    right-0
+    w-full
+    lg:w-6/12;
+
+  &.CMS_Preview_compact {
+    @apply lg:w-preview;
+  }
+
+  &.CMS_Preview_show-mobile-preview {
+    @apply hidden
+      lg:block;
+  }
+}
+
+.CMS_Preview_live-preview {
+  @apply w-full
+    h-full;
+}
+
+.CMS_Preview_frame {
+  @apply w-full
+    h-full;
+}
+
+.CMS_Preview_inline {
+  @apply overflow-y-auto
+    h-full;
+}

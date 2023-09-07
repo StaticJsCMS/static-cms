@@ -20,6 +20,7 @@ import { currentBackend } from '@staticcms/core/backend';
 import { changeTheme } from '../actions/globalUI';
 import { invokeEvent } from '../lib/registry';
 import { getDefaultPath } from '../lib/util/collection.util';
+import { generateClassNames } from '../lib/util/theming.util';
 import { selectTheme } from '../reducers/selectors/globalUI';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import CollectionRoute from './collections/CollectionRoute';
@@ -36,6 +37,10 @@ import type { Credentials, TranslatedProps } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
+
+import './App.css';
+
+export const classes = generateClassNames('App', ['root', 'content']);
 
 TopBarProgress.config({
   barColors: {
@@ -267,8 +272,8 @@ const App = ({
       <ScrollSync key="scroll-sync" enabled={scrollSyncEnabled}>
         <>
           <div key="back-to-top-anchor" id="back-to-top-anchor" />
-          <div key="cms-root" id="cms-root" className="h-full">
-            <div key="cms-wrapper" className="cms-wrapper">
+          <div key="cms-root" id="cms-root" className={classes.root}>
+            <div key="cms-wrapper" className={classes.content}>
               <Snackbars key="snackbars" />
               {content}
               <Alert key="alert" />

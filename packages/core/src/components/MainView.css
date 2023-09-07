@@ -1,0 +1,30 @@
+.CMS_MainView_root {
+  @apply flex
+    bg-slate-50
+    dark:bg-slate-900;
+}
+
+.CMS_MainView_body {
+  @apply h-main-mobile
+    md:h-main
+    relative
+    w-full;
+
+  &.CMS_MainView_show-left-nav {
+    @apply left-0
+      md:w-main;
+  }
+
+  &:not(.CMS_MainView_no-margin) {
+    @apply px-5
+      py-4;
+  }
+
+  &.CMS_MainView_no-scroll {
+    @apply overflow-hidden;
+  }
+
+  &:not(.CMS_MainView_no-scroll) {
+    @apply overflow-y-auto;
+  }
+}

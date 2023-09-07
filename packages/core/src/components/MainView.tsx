@@ -2,12 +2,23 @@ import React from 'react';
 import TopBarProgress from 'react-topbar-progress-indicator';
 
 import classNames from '../lib/util/classNames.util';
+import { generateClassNames } from '../lib/util/theming.util';
 import BottomNavigation from './navbar/BottomNavigation';
 import Navbar from './navbar/Navbar';
 import Sidebar from './navbar/Sidebar';
 
 import type { ReactNode } from 'react';
 import type { Breadcrumb, Collection } from '../interface';
+
+import './MainView.css';
+
+export const classes = generateClassNames('MainView', [
+  'root',
+  'body',
+  'show-left-nav',
+  'no-margin',
+  'no-scroll',
+]);
 
 TopBarProgress.config({
   barColors: {
@@ -46,20 +57,15 @@ const MainView = ({
         showQuickCreate={showQuickCreate}
         navbarActions={navbarActions}
       />
-      <div className="flex bg-slate-50 dark:bg-slate-900">
+      <div className={classes.root}>
         {showLeftNav ? <Sidebar /> : null}
         <div
           id="main-view"
           className={classNames(
-            showLeftNav ? ' w-full left-0 md:w-main' : 'w-full',
-            !noMargin && 'px-5 py-4',
-            noScroll ? 'overflow-hidden' : 'overflow-y-auto',
-            `
-              h-main-mobile
-              md:h-main
-              relative
-              styled-scrollbars
-            `,
+            classes.body,
+            showLeftNav && classes['show-left-nav'],
+            noMargin && classes['no-margin'],
+            noScroll && classes['no-scroll'],
           )}
         >
           {children}

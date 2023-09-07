@@ -343,46 +343,46 @@
   color: white;
 }
 
-.styled-scrollbars {
+.CMS_Scrollbar_root {
   --scrollbar-foreground: rgba(100, 116, 139, 0.25);
   --scrollbar-background: rgb(248 250 252);
 }
 
-.styled-scrollbars.styled-scrollbars-secondary {
+.CMS_Scrollbar_root.CMS_Scrollbar_secondary {
   --scrollbar-foreground: rgba(100, 116, 139, 0.25);
   --scrollbar-background: rgb(255 255 255);
 }
 
-.dark .styled-scrollbars {
+.dark .CMS_Scrollbar_root {
   --scrollbar-foreground: rgba(30, 41, 59, 0.8);
   --scrollbar-background: rgb(15 23 42);
 }
 
-.dark .styled-scrollbars.styled-scrollbars-secondary {
+.dark .CMS_Scrollbar_root.CMS_Scrollbar_secondary {
   --scrollbar-foreground: rgba(47, 64, 84, 0.8);
   --scrollbar-background: rgb(30 41 59);
 }
 
-.styled-scrollbars {
+.CMS_Scrollbar_root {
   /* Foreground, Background */
   scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
 }
 
-.styled-scrollbars::-webkit-scrollbar {
+.CMS_Scrollbar_root::-webkit-scrollbar {
   width: 10px; /* Mostly for vertical scrollbars */
   height: 10px; /* Mostly for horizontal scrollbars */
 }
 
-.styled-scrollbars::-webkit-scrollbar-corner {
+.CMS_Scrollbar_root::-webkit-scrollbar-corner {
   background: rgba(0, 0, 0, 0);
 }
 
-.styled-scrollbars::-webkit-scrollbar-thumb {
+.CMS_Scrollbar_root::-webkit-scrollbar-thumb {
   /* Foreground */
   background: var(--scrollbar-foreground);
 }
 
-.styled-scrollbars::-webkit-scrollbar-track {
+.CMS_Scrollbar_root::-webkit-scrollbar-track {
   /* Background */
   background: var(--scrollbar-background);
 }

@@ -215,9 +215,9 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
                     pb-2
                     overflow-hidden
                     overflow-y-auto
-                    styled-scrollbars
+                    CMS_Scrollbar_root
                   `,
-                  isDialog && 'styled-scrollbars-secondary',
+                  isDialog && 'CMS_Scrollbar_secondary',
                 )}
                 style={{ position: 'unset' }}
               >
