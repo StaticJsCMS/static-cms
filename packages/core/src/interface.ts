@@ -1037,6 +1037,12 @@ export interface SearchResponse {
   pagination: number;
 }
 
+export type SearchQueryRequest = {
+  id: string;
+  expires: Date;
+  queryResponse: Promise<SearchQueryResponse>;
+};
+
 export interface SearchQueryResponse {
   hits: Entry[];
   query: string;
