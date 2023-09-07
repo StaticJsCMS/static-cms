@@ -2,11 +2,23 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 
 import ConfirmEvent from '@staticcms/core/lib/util/events/ConfirmEvent';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 import Button from '../button/Button';
 import Modal from '../modal/Modal';
 
 import type { TranslateProps } from 'react-polyglot';
+
+import './Confirm.css';
+
+export const classes = generateClassNames('Confirm', [
+  'root',
+  'title',
+  'content',
+  'actions',
+  'confirm-button',
+  'cancel-button',
+]);
 
 interface ConfirmProps {
   title: string | { key: string; options?: Record<string, unknown> };
@@ -83,47 +95,27 @@ const ConfirmDialog = ({ t }: TranslateProps) => {
     <Modal
       open
       onClose={handleCancel}
-      className="
-        w-[50%]
-        min-w-[300px]
-        max-w-[600px]
-      "
+      className={classes.root}
       aria-labelledby="confirm-dialog-title"
       aria-describedby="confirm-dialog-description"
     >
-      <div
-        className="
-          px-6
-          py-4
-          text-xl
-          bold
-        "
-      >
-        {title}
-      </div>
-      <div
-        className="
-          px-6
-          pb-4
-          text-sm
-          text-slate-500
-          dark:text-slate-400
-        "
-      >
-        {body}
-      </div>
-      <div
-        className="
-          p-2
-          flex
-          justify-end
-          gap-2
-        "
-      >
-        <Button onClick={handleCancel} variant="text" color="secondary">
+      <div className={classes.title}>{title}</div>
+      <div className={classes.content}>{body}</div>
+      <div className={classes.actions}>
+        <Button
+          onClick={handleCancel}
+          variant="text"
+          color="secondary"
+          className={classes['cancel-button']}
+        >
           {cancel}
         </Button>
-        <Button onClick={handleConfirm} variant="contained" color={color}>
+        <Button
+          onClick={handleConfirm}
+          variant="contained"
+          color={color}
+          className={classes['confirm-button']}
+        >
           {confirm}
         </Button>
       </div>

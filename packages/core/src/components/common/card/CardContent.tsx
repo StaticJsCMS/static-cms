@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { cardClasses } from './Card.util';
+
 import type { ReactNode } from 'react';
 
 interface CardContentProps {
@@ -7,7 +9,7 @@ interface CardContentProps {
 }
 
 const CardContent = ({ children }: CardContentProps) => {
-  return <p className="w-full p-5 font-normal text-gray-800 dark:text-gray-300">{children}</p>;
+  return <p className={cardClasses.content}>{children}</p>;
 };
 
 export default CardContent;

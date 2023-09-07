@@ -1,0 +1,55 @@
+.CMS_Card_root {
+  @apply bg-white
+    border
+    border-gray-100
+    rounded-lg
+    shadow-sm
+    dark:bg-slate-800
+    dark:border-gray-700/40
+    dark:shadow-md
+    flex
+    flex-col
+    h-full;
+
+  & .CMS_Card_header {
+    @apply mb-2
+      text-2xl
+      font-bold
+      tracking-tight
+      text-gray-800
+      dark:text-white;
+  }
+
+  & .CMS_Card_content {
+    @apply w-full
+      p-5
+      font-normal
+      text-gray-800
+      dark:text-gray-300;
+  }
+
+  & .CMS_Card_media {
+    @apply rounded-t-lg
+      bg-cover
+      bg-no-repeat
+      bg-center
+      w-full
+      object-cover;
+  }
+
+  & .CMS_Card_actions {
+    @apply h-full
+      w-full
+      relative
+      flex
+      flex-col
+      rounded-lg
+      justify-start
+      hover:bg-gray-200
+      dark:hover:bg-slate-700/70
+      focus:outline-none
+      focus:ring-4
+      focus:ring-gray-200
+      dark:focus:ring-slate-700;
+  }
+}

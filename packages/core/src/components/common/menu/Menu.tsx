@@ -4,10 +4,25 @@ import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@styled-icons/materi
 import React, { useCallback, useMemo } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import useButtonClassNames from '../button/useButtonClassNames';
 
 import type { FC, ReactNode } from 'react';
 import type { BaseBaseProps } from '../button/Button';
+
+import './Menu.css';
+
+export const classes = generateClassNames('Menu', [
+  'root',
+  'hide-dropdown-icon',
+  'hide-label',
+  'hide-dropdown-icon-mobile',
+  'dropdown',
+  'dropdown-start-icon',
+  'dropdown-icon',
+  'label',
+  'menu',
+]);
 
 export interface MenuProps {
   label: ReactNode;
@@ -69,13 +84,21 @@ const Menu = ({
   const calculatedButtonClassName = useButtonClassNames(variant, color, size, rounded);
 
   const menuButtonClassNames = useMemo(
-    () => classNames(calculatedButtonClassName, buttonClassName, 'whitespace-nowrap'),
+    () => classNames(calculatedButtonClassName, buttonClassName, classes.dropdown),
     [calculatedButtonClassName, buttonClassName],
   );
 
   return (
     <ClickAwayListener mouseEvent="onMouseDown" touchEvent="onTouchStart" onClickAway={handleClose}>
-      <div className={classNames('flex', rootClassName)}>
+      <div
+        className={classNames(
+          classes.root,
+          hideLabel && classes['hide-label'],
+          hideDropdownIcon && classes['hide-dropdown-icon'],
+          hideDropdownIconOnMobile && classes['hide-dropdown-icon-mobile'],
+          rootClassName,
+        )}
+      >
         <button
           type="button"
           onClick={handleButtonClick}
@@ -87,25 +110,13 @@ const Menu = ({
           disabled={disabled}
         >
           {StartIcon ? (
-            <StartIcon
-              className={classNames(
-                `-ml-0.5 h-5 w-5`,
-                !hideLabel && !hideDropdownIcon && 'mr-1.5',
-                hideDropdownIconOnMobile && '!mr-0 md:!mr-1.5',
-                iconClassName,
-              )}
-            />
+            <StartIcon className={classNames(classes['dropdown-start-icon'], iconClassName)} />
           ) : null}
-          {!hideLabel ? <div className={labelClassName}>{label}</div> : null}
+          {!hideLabel ? (
+            <div className={classNames(classes.label, labelClassName)}>{label}</div>
+          ) : null}
           {!hideDropdownIcon ? (
-            <KeyboardArrowDownIcon
-              className={classNames(
-                `-mr-0.5 h-5 w-5`,
-                !hideLabel && 'ml-2',
-                hideDropdownIconOnMobile && '!hidden md:!block',
-              )}
-              aria-hidden="true"
-            />
+            <KeyboardArrowDownIcon className={classes['dropdown-icon']} aria-hidden="true" />
           ) : null}
         </button>
         <MenuUnstyled
@@ -114,25 +125,7 @@ const Menu = ({
           keepMounted={keepMounted}
           slotProps={{
             root: {
-              className: `
-                absolute
-                right-0
-                z-40
-                w-56
-                origin-top-right
-                rounded-md
-                bg-white
-                dark:bg-slate-800
-                shadow-md
-                border
-                border-gray-200
-                focus:outline-none
-                divide-y
-                divide-gray-100
-                dark:border-gray-700
-                dark:divide-gray-600
-                dark:shadow-lg
-              `,
+              className: classes.menu,
               onClick: handleClose,
             },
           }}
