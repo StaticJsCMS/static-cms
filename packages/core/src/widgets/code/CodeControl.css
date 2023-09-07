@@ -68,12 +68,12 @@
     gap-2
     focus-visible:ring-opacity-75
     items-center;
+}
 
-  & > .CMS_WidgetCode_expand-button-icon {
-    @apply transition-transform
-      h-5
-      w-5;
-  }
+.CMS_WidgetCode_expand-button-icon {
+  @apply transition-transform
+    h-5
+    w-5;
 }
 
 .CMS_WidgetCode_error-message {

@@ -2,25 +2,6 @@
   @apply w-full
     justify-start;
 
-  & .CMS_NavLink_external {
-    @apply flex
-    justify-between
-    w-full;
-
-    & .CMS_NavLink_external-content {
-      @apply flex
-      items-center
-      justify-start;
-    }
-
-    & .CMS_NavLink_external-icon {
-      @apply h-5
-      w-5
-      text-gray-400
-      dark:text-gray-500;
-    }
-  }
-
   &.CMS_NavLink_active {
     @apply bg-blue-200/75
       dark:bg-slate-700
@@ -31,17 +12,36 @@
   }
 }
 
+.CMS_NavLink_external {
+  @apply flex
+  justify-between
+  w-full;
+}
+
+.CMS_NavLink_external-content {
+  @apply flex
+  items-center
+  justify-start;
+}
+
+.CMS_NavLink_external-icon {
+  @apply h-5
+  w-5
+  text-gray-400
+  dark:text-gray-500;
+}
+
 .CMS_NavLink_content {
   @apply flex
     w-full
     gap-3
     items-center;
+}
 
-  & .CMS_NavLink_icon {
-    @apply w-6 h-6;
-  }
+.CMS_NavLink_icon {
+  @apply w-6 h-6;
+}
 
-  & .CMS_NavLink_label {
-    @apply flex-grow;
-  }
+.CMS_NavLink_label {
+  @apply flex-grow;
 }

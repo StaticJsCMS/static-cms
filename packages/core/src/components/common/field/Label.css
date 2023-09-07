@@ -5,22 +5,6 @@
     font-bold
     dark:font-semibold;
 
-  &.CMS_Label_cursor-pointer {
-    @apply cursor-pointer;
-  }
-
-  &.CMS_Label_cursor-text {
-    @apply cursor-text;
-  }
-
-  &.CMS_Label_cursor-default {
-    @apply cursor-default;
-  }
-
-  &.CMS_Label_error {
-    @apply text-red-500;
-  }
-
   &:not(.CMS_Label_error) {
     &.CMS_Label_disabled {
       @apply text-slate-300
@@ -42,4 +26,20 @@
     @apply px-3
       pt-3;
   }
+}
+
+.CMS_Label_cursor-pointer {
+  @apply cursor-pointer;
+}
+
+.CMS_Label_cursor-text {
+  @apply cursor-text;
+}
+
+.CMS_Label_cursor-default {
+  @apply cursor-default;
+}
+
+.CMS_Label_error {
+  @apply text-red-500;
 }

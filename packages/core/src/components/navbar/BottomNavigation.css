@@ -15,35 +15,35 @@
 
 .CMS_BottomNavigation_menu-button {
   @apply flex-grow;
+}
 
-  & .CMS_BottomNavigation_menu-button-icon {
-    @apply w-6
-      h-6;
-  }
+.CMS_BottomNavigation_menu-button-icon {
+  @apply w-6
+    h-6;
 }
 
 .CMS_BottomNavigation_add-button {
   @apply flex-grow;
+}
 
-  & .CMS_BottomNavigation_add-button-icon {
-    @apply w-6
-      h-6;
-  }
+.CMS_BottomNavigation_add-button-icon {
+  @apply w-6
+    h-6;
 }
 
 .CMS_BottomNavigation_quick-create {
   @apply flex-grow;
+}
 
-  & .CMS_BottomNavigation_quick-create-button {
-    @apply w-full;
-  }
+.CMS_BottomNavigation_quick-create-button {
+  @apply w-full;
 }
 
 .CMS_BottomNavigation_site-url-button {
   @apply flex-grow;
+}
 
-  & .CMS_BottomNavigation_site-url-button-icon {
-    @apply w-6
-      h-6;
-  }
+.CMS_BottomNavigation_site-url-button-icon {
+  @apply w-6
+    h-6;
 }

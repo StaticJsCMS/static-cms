@@ -1,0 +1,27 @@
+.CMS_SettingsDropdown_root {
+  &.CMS_SettingsDropdown_in-editor {
+    @apply hidden
+      md:flex;
+  }
+}
+
+.CMS_SettingsDropdown_avatar-image {
+  @apply w-9
+    h-9
+    rounded-full;
+}
+
+.CMS_SettingsDropdown_avatar-icon {
+  @apply w-6
+    h-6;
+}
+
+.CMS_SettingsDropdown_sr-label {
+  @apply sr-only;
+}
+
+.CMS_SettingsDropdown_theme-toggle {
+  @apply flex
+    justify-between
+    w-full;
+}

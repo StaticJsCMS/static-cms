@@ -21,9 +21,9 @@
       @apply font-normal;
     }
   }
+}
 
-  & .CMS_SelectOption_label {
-    @apply block
-      truncate;
-  }
+.CMS_SelectOption_label {
+  @apply block
+    truncate;
 }

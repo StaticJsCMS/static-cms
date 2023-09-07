@@ -8,18 +8,6 @@
     focus-within:border-blue-800
     dark:focus-within:border-blue-100;
 
-  &.CMS_Field_cursor-pointer {
-    @apply cursor-pointer;
-  }
-
-  &.CMS_Field_cursor-text {
-    @apply cursor-text;
-  }
-
-  &.CMS_Field_cursor-default {
-    @apply cursor-default;
-  }
-
   &:not(.CMS_Field_disabled):not(.CMS_Field_no-highlight) {
     @apply focus-within:bg-slate-100
       dark:focus-within:bg-slate-800
@@ -34,10 +22,18 @@
       @apply -mb-3;
     }
   }
+}
 
-  & > .CMS_Field_end-adornment {
-    @apply pr-2;
-  }
+.CMS_Field_cursor-pointer {
+  @apply cursor-pointer;
+}
+
+.CMS_Field_cursor-text {
+  @apply cursor-text;
+}
+
+.CMS_Field_cursor-default {
+  @apply cursor-default;
 }
 
 .CMS_Field_wrapper {
@@ -56,4 +52,8 @@
     justify-center
     p-3
     pb-0;
+}
+
+.CMS_Field_end-adornment {
+  @apply pr-2;
 }

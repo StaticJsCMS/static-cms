@@ -21,31 +21,31 @@
 
 .CMS_Select_value {
   @apply w-full;
+}
 
-  & .CMS_Select_label {
-    @apply flex
-      w-select-widget-label;
+.CMS_Select_label {
+  @apply flex
+    w-select-widget-label;
+}
 
-    & .CMS_Select_label-text {
-      @apply truncate;
-    }
-  }
+.CMS_Select_label-text {
+  @apply truncate;
+}
 
-  & .CMS_Select_dropdown {
-    @apply pointer-events-none
-      absolute
-      inset-y-0
-      right-0
-      flex
-      items-center
-      pr-2;
+.CMS_Select_dropdown {
+  @apply pointer-events-none
+    absolute
+    inset-y-0
+    right-0
+    flex
+    items-center
+    pr-2;
+}
 
-    & .CMS_Select_dropdown-icon {
-      @apply h-5
-        w-5
-        text-gray-400;
-    }
-  }
+.CMS_Select_dropdown-icon {
+  @apply h-5
+    w-5
+    text-gray-400;
 }
 
 .CMS_Select_input {

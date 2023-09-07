@@ -4,22 +4,6 @@
     text-xs
     italic;
 
-  &.CMS_Hint_cursor-pointer {
-    @apply cursor-pointer;
-  }
-
-  &.CMS_Hint_cursor-text {
-    @apply cursor-text;
-  }
-
-  &.CMS_Hint_cursor-default {
-    @apply cursor-default;
-  }
-
-  &.CMS_Hint_error {
-    @apply text-red-500;
-  }
-
   &:not(.CMS_Hint_error) {
     &.CMS_Hint_disabled {
       @apply text-slate-300
@@ -41,4 +25,20 @@
     @apply px-3
       pt-1;
   }
+}
+
+.CMS_Hint_cursor-pointer {
+  @apply cursor-pointer;
+}
+
+.CMS_Hint_cursor-text {
+  @apply cursor-text;
+}
+
+.CMS_Hint_cursor-default {
+  @apply cursor-default;
+}
+
+.CMS_Hint_error {
+  @apply text-red-500;
 }

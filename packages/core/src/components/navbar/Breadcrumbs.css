@@ -1,0 +1,102 @@
+.CMS_Breadcrumbs_root {
+  @apply flex
+    h-full
+    md:w-auto
+    items-center
+    text-xl
+    font-semibold
+    gap-1
+    text-gray-800
+    dark:text-white
+    flex-grow
+    truncate;
+}
+
+.CMS_Breadcrumbs_links-wrapper {
+  @apply hidden
+    md:flex
+    overflow-hidden
+    relative
+    flex-grow
+    h-full;
+}
+
+.CMS_Breadcrumbs_links {
+  @apply w-full
+    absolute
+    inset-0
+    flex
+    items-center
+    gap-1
+    pl-1;
+}
+
+.CMS_Breadcrumbs_breadcrumb-link {
+  @apply hover:text-gray-400
+    dark:hover:text-gray-400
+    overflow-hidden
+    whitespace-nowrap
+    focus:outline-none
+    focus:ring-4
+    rounded-md
+    focus:ring-gray-200
+    dark:focus:ring-slate-700;
+
+  &.CMS_Breadcrumbs_breadcrumb-truncated {
+    @apply text-ellipsis
+  }
+
+  &:not(.CMS_Breadcrumbs_breadcrumb-truncated) {
+    @apply flex-shrink-0
+  }
+}
+
+.CMS_Breadcrumbs_breadcrumb-text {
+  @apply truncate;
+
+  &.CMS_Breadcrumbs_breadcrumb-truncated {
+    @apply text-ellipsis
+  }
+
+  &:not(.CMS_Breadcrumbs_breadcrumb-truncated) {
+    @apply flex-shrink-0
+  }
+}
+
+.CMS_Breadcrumbs_last-non-editor-breadcrumb-link {
+  @apply flex
+    md:hidden
+    gap-2
+    items-center
+    truncate
+    w-full
+    focus:outline-none
+    focus:ring-4
+    focus:ring-gray-200
+    dark:focus:ring-slate-700;
+}
+
+.CMS_Breadcrumbs_mobile-current-breadcrumb-link {
+  @apply flex
+    md:hidden
+    gap-2
+    items-center
+    truncate
+    w-full
+    focus:outline-none
+    focus:ring-4
+    focus:ring-gray-200
+    dark:focus:ring-slate-700;
+}
+
+.CMS_Breadcrumbs_mobile-backlink {
+  @apply w-6
+    h-6;
+}
+
+.CMS_Breadcrumbs_mobile-current-breadcrumb-text {
+  @apply block
+    md:hidden
+    truncate
+    w-full;
+}

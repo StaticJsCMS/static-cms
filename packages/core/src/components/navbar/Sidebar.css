@@ -1,0 +1,26 @@
+.CMS_Sidebar_root {
+  @apply w-sidebar-expanded
+    h-main-mobile
+    md:h-main
+    hidden
+    md:block;
+}
+
+.CMS_Sidebar_content {
+  @apply px-3
+    py-4
+    h-full
+    w-full
+    overflow-y-auto
+    bg-white
+    dark:bg-slate-800;
+}
+
+.CMS_Sidebar_items {
+  @apply space-y-2;
+}
+
+.CMS_Sidebar_media-icon {
+  @apply h-6
+    w-6;
+}

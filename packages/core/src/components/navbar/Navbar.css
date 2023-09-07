@@ -76,27 +76,27 @@
   @apply flex
     gap-3
     items-center;
+}
 
-  & .CMS_Navbar_site-url {
-    @apply gap-2
-      hidden
-      lg:flex;
+.CMS_Navbar_site-url {
+  @apply gap-2
+    hidden
+    lg:flex;
+}
 
-    & .CMS_Navbar_site-url-label {
-      @apply hidden
-        lg:flex;
-    }
+.CMS_Navbar_site-url-label {
+  @apply hidden
+    lg:flex;
+}
 
-    & .CMS_Navbar_site-url-icon {
-      @apply h-5
-        w-5
-        text-gray-400
-        dark:text-gray-500;
-    }
-  }
+.CMS_Navbar_site-url-icon {
+  @apply h-5
+    w-5
+    text-gray-400
+    dark:text-gray-500;
+}
 
-  & .CMS_Navbar_quick-create {
-    @apply hidden
-      md:block;
-  }
+.CMS_Navbar_quick-create {
+  @apply hidden
+    md:block;
 }

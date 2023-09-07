@@ -40,21 +40,21 @@
       dark:hover:text-red-100
       dark:hover:bg-red-600;
   }
+}
 
-  & .CMS_MenuItemButton_content {
-    @apply flex
-      items-center
-      gap-2
-      flex-grow;
+.CMS_MenuItemButton_content {
+  @apply flex
+    items-center
+    gap-2
+    flex-grow;
+}
 
-    & .CMS_MenuItemButton_start-icon {
-      @apply h-5
-        w-5;
-    }
-  }
+.CMS_MenuItemButton_start-icon {
+  @apply h-5
+    w-5;
+}
 
-  & .CMS_MenuItemButton_end-icon {
-    @apply h-5
-      w-5;
-  }
+.CMS_MenuItemButton_end-icon {
+  @apply h-5
+    w-5;
 }

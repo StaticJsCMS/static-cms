@@ -30,22 +30,22 @@
       }
     }
   }
+}
 
-  & .CMS_Menu_dropdown {
-    @apply whitespace-nowrap;
+.CMS_Menu_dropdown {
+  @apply whitespace-nowrap;
+}
 
-    & .CMS_Menu_dropdown-start-icon {
-      @apply -ml-0.5
-        h-5
-        w-5;
-    }
+.CMS_Menu_dropdown-start-icon {
+  @apply -ml-0.5
+    h-5
+    w-5;
+}
 
-    & .CMS_Menu_dropdown-icon {
-      @apply -mr-0.5
-        h-5
-        w-5;
-    }
-  }
+.CMS_Menu_dropdown-icon {
+  @apply -mr-0.5
+    h-5
+    w-5;
 }
 
 .CMS_Menu_menu {
