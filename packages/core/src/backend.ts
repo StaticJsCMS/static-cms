@@ -15,6 +15,7 @@ import {
   getI18nEntry,
   getI18nFiles,
   getI18nFilesDepth,
+  getI18nInfo,
   groupEntries,
   hasI18n,
 } from './lib/i18n';
@@ -292,6 +293,21 @@ function collectionDepth<EF extends BaseField>(collection: Collection<EF>) {
   return depth;
 }
 
+function collectionRegex<EF extends BaseField>(collection: Collection<EF>): RegExp | undefined {
+  let ruleString = '';
+
+  if ('folder' in collection && collection.path) {
+    ruleString = `${collection.folder}/${collection.path}`.replace(/{{.*}}/gm, '(.*)');
+  }
+
+  if (hasI18n(collection)) {
+    const { defaultLocale } = getI18nInfo(collection);
+    ruleString += `\\.${defaultLocale}\\..*`;
+  }
+
+  return ruleString ? new RegExp(ruleString) : undefined;
+}
+
 export class Backend<EF extends BaseField = UnknownField, BC extends BackendClass = BackendClass> {
   implementation: BC;
   backendName: string;
@@ -513,7 +529,12 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       const depth = collectionDepth(collection);
       const extension = selectFolderEntryExtension(collection);
       return this.implementation
-        .allEntriesByFolder(collection.folder as string, extension, depth)
+        .allEntriesByFolder(
+          collection.folder as string,
+          extension,
+          depth,
+          collectionRegex(collection),
+        )
         .then(entries => this.processEntries(entries, collection));
     }
 

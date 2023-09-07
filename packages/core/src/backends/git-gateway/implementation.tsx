@@ -376,8 +376,8 @@ export default class GitGateway implements BackendClass {
   async entriesByFolder(folder: string, extension: string, depth: number) {
     return this.backend!.entriesByFolder(folder, extension, depth);
   }
-  allEntriesByFolder(folder: string, extension: string, depth: number) {
-    return this.backend!.allEntriesByFolder(folder, extension, depth);
+  allEntriesByFolder(folder: string, extension: string, depth: number, pathRegex?: RegExp) {
+    return this.backend!.allEntriesByFolder(folder, extension, depth, pathRegex);
   }
   entriesByFiles(files: ImplementationFile[]) {
     return this.backend!.entriesByFiles(files);
