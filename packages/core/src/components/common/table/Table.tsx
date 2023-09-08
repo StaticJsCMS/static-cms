@@ -1,8 +1,11 @@
 import React from 'react';
 
+import { tableClasses } from './Table.util';
 import TableHeaderCell from './TableHeaderCell';
 
 import type { ReactNode } from 'react';
+
+import './Table.css';
 
 interface TableCellProps {
   columns: ReactNode[];
@@ -11,20 +14,16 @@ interface TableCellProps {
 
 const TableCell = ({ columns, children }: TableCellProps) => {
   return (
-    <div
-      className="
-        z-[2]
-      "
-    >
-      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-300">
-        <thead className="text-xs">
-          <tr className="shadow-sm">
+    <div className={tableClasses.root}>
+      <table className={tableClasses.table}>
+        <thead className={tableClasses.header}>
+          <tr className={tableClasses['header-row']}>
             {columns.map((column, index) => (
               <TableHeaderCell key={index}>{column}</TableHeaderCell>
             ))}
           </tr>
         </thead>
-        <tbody>{children}</tbody>
+        <tbody className={tableClasses.body}>{children}</tbody>
       </table>
     </div>
   );
