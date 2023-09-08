@@ -835,6 +835,7 @@ export type Field<EF extends BaseField = UnknownField> =
   | ColorField
   | DateTimeField
   | FileOrImageField
+  | KeyValueField
   | ListField<EF>
   | MapField
   | MarkdownField
