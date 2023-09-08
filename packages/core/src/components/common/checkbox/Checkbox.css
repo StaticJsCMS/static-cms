@@ -1,0 +1,63 @@
+.CMS_Checkbox_root {
+  @apply relative
+    inline-flex
+    items-center
+    cursor-pointer;
+
+  &.CMS_Checkbox_disabled {
+    @apply cursor-default;
+
+    & .CMS_Checkbox_input {
+      & + .CMS_Checkbox_custom-input {
+        @apply bg-blue-600/25
+          after:border-gray-500/75;
+      }
+    }
+
+    & .CMS_Checkbox_custom-input {
+      @apply bg-gray-100/75
+        dark:bg-gray-700/75;
+    }
+  }
+}
+
+.CMS_Checkbox_input {
+  @apply sr-only;
+
+  &:focus + .CMS_Checkbox_custom-input {
+    @apply ring-4
+      ring-blue-300
+      dark:ring-blue-800;
+  }
+
+  &:checked + .CMS_Checkbox_custom-input {
+    @apply after:translate-x-full
+      bg-blue-600
+      after:border-white;
+  }
+}
+
+.CMS_Checkbox_custom-input {
+  @apply w-6
+    h-6
+    text-blue-600
+    border-gray-300
+    rounded
+    focus:ring-blue-500
+    dark:focus:ring-blue-600
+    dark:ring-offset-gray-800
+    focus:ring-2
+    dark:border-gray-600
+    select-none
+    flex
+    items-center
+    justify-center
+    bg-gray-100
+    dark:bg-gray-700;
+}
+
+.CMS_Checkbox_checkmark {
+  @apply w-5
+    h-5
+    text-white;
+}

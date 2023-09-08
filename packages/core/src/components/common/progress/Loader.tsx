@@ -1,6 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import CircularProgress from './CircularProgress';
+
+import './Loader.css';
+
+export const classes = generateClassNames('Loader', ['root']);
 
 export interface LoaderProps {
   children: string | string[] | undefined;
@@ -35,19 +40,7 @@ const Loader = ({ children }: LoaderProps) => {
   }, [children, currentItem]);
 
   return (
-    <div
-      className="
-        absolute
-        inset-0
-        flex
-        flex-col
-        gap-2
-        items-center
-        justify-center
-        bg-slate-50
-        dark:bg-slate-900
-      "
-    >
+    <div className={classes.root}>
       <CircularProgress />
       <div>{text}</div>
     </div>

@@ -69,11 +69,11 @@ const FrameGlobalStyles = `
     color: rgb(59 130 246);
   }
 
-  .text-gray-800 {
+  .CMS_PreviewFrameContent_content {
     color: rgb(17 24 39);
   }
 
-  .dark .dark\\:text-gray-100 {
+  .dark .CMS_PreviewFrameContent_content {
     color: rgb(243 244 246);
   }
 

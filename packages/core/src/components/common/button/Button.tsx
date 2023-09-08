@@ -6,6 +6,8 @@ import useButtonClassNames, { buttonClasses } from './useButtonClassNames';
 
 import type { CSSProperties, FC, MouseEventHandler, ReactNode, Ref } from 'react';
 
+import './Button.css';
+
 export interface BaseBaseProps {
   variant?: 'contained' | 'outlined' | 'text';
   color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning';

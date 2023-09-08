@@ -7,6 +7,8 @@ import Button from './Button';
 import type { FC } from 'react';
 import type { ButtonLinkProps } from './Button';
 
+import './IconButton.css';
+
 export const classes = generateClassNames('IconButton', ['root', 'sm', 'md']);
 
 export type IconButtonProps = Omit<ButtonLinkProps, 'children'> & {
