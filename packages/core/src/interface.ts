@@ -125,7 +125,7 @@ export interface Entry<T = ObjectValue> {
   error?: string;
   i18n?: {
     [locale: string]: {
-      data: EntryData;
+      data: Partial<T>;
     };
   };
   meta?: {
