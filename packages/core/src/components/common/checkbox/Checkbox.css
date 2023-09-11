@@ -24,6 +24,9 @@
 .CMS_Checkbox_input {
   @apply sr-only;
 
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
+
   &:focus + .CMS_Checkbox_custom-input {
     @apply ring-4
       ring-blue-300

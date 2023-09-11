@@ -387,18 +387,13 @@
   background: var(--scrollbar-background);
 }
 
-.hide-scrollbar {
+.CMS_Scrollbar_hide {
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none; /* Firefox */
 }
 
-.hide-scrollbar::-webkit-scrollbar {
+.CMS_Scrollbar_hide::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
-}
-
-.hide-tap {
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  -webkit-tap-highlight-color: transparent;
 }
 
 table {

@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
+import entriesClasses from './Entries.classes';
 import EntryListingCardGrid from './EntryListingCardGrid';
 
 import type { CollectionEntryData } from '@staticcms/core/interface';
@@ -57,8 +58,8 @@ const EntryListingGrid: FC<EntryListingGridProps> = ({
   }, [handleScroll]);
 
   return (
-    <div className="relative h-full flex-grow">
-      <div ref={gridContainerRef} className="relative h-full">
+    <div className={entriesClasses['entry-listing-grid']}>
+      <div ref={gridContainerRef} className={entriesClasses['entry-listing-grid-container']}>
         <EntryListingCardGrid
           key="grid"
           entryData={entryData}
@@ -68,18 +69,7 @@ const EntryListingGrid: FC<EntryListingGridProps> = ({
         />
       </div>
       {isLoadingEntries ? (
-        <div
-          key="loading"
-          className="
-            absolute
-            inset-0
-            flex
-            items-center
-            justify-center
-            bg-slate-50/50
-            dark:bg-slate-900/50
-          "
-        >
+        <div key="loading" className={entriesClasses['entry-listing-loading']}>
           {t('collection.entries.loadingEntries')}
         </div>
       ) : null}

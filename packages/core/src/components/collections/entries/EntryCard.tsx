@@ -9,6 +9,7 @@ import {
   selectTemplateName,
 } from '@staticcms/core/lib/util/collection.util';
 import localForage from '@staticcms/core/lib/util/localForage';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
@@ -26,6 +27,18 @@ import type {
   TranslatedProps,
 } from '@staticcms/core/interface';
 import type { FC } from 'react';
+
+import './EntryCard.css';
+
+export const classes = generateClassNames('EntryCard', [
+  'root',
+  'content-wrapper',
+  'content',
+  'card',
+  'card-content',
+  'card-summary',
+  'local-backup-icon',
+]);
 
 export interface EntryCardProps {
   entry: Entry;
@@ -113,9 +126,9 @@ const EntryCard: FC<TranslatedProps<EntryCardProps>> = ({
 
   if (PreviewCardComponent) {
     return (
-      <div className="h-full w-full relative overflow-visible">
-        <div className="absolute -inset-1 pr-2">
-          <div className="p-1 h-full w-full">
+      <div className={classes.root}>
+        <div className={classes['content-wrapper']}>
+          <div className={classes.content}>
             <Card>
               <CardActionArea to={path}>
                 <PreviewCardComponent
@@ -136,10 +149,10 @@ const EntryCard: FC<TranslatedProps<EntryCardProps>> = ({
   }
 
   return (
-    <div className="h-full w-full relative overflow-visible">
-      <div className="absolute -inset-1 pr-2">
-        <div className="p-1 h-full w-full">
-          <Card className="h-full" title={summary}>
+    <div className={classes.root}>
+      <div className={classes['content-wrapper']}>
+        <div className={classes.content}>
+          <Card className={classes.card} title={summary}>
             <CardActionArea to={path}>
               {image && imageField ? (
                 <CardMedia
@@ -151,16 +164,11 @@ const EntryCard: FC<TranslatedProps<EntryCardProps>> = ({
                 />
               ) : null}
               <CardContent>
-                <div className="flex w-full items-center justify-between">
-                  <div className="truncate">{summary}</div>
+                <div className={classes['card-content']}>
+                  <div className={classes['card-summary']}>{summary}</div>
                   {hasLocalBackup ? (
                     <InfoIcon
-                      className="
-                        w-5
-                        h-5
-                        text-blue-600
-                        dark:text-blue-300
-                      "
+                      className={classes['local-backup-icon']}
                       title={t('ui.localBackup.hasLocalBackup')}
                     />
                   ) : null}

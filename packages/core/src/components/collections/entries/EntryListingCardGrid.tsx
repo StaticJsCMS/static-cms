@@ -12,6 +12,7 @@ import { getPreviewCard } from '@staticcms/core/lib/registry';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectTemplateName } from '@staticcms/core/lib/util/collection.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
+import entriesClasses from './Entries.classes';
 import EntryCard from './EntryCard';
 
 import type { CollectionEntryData } from '@staticcms/core/interface';
@@ -138,15 +139,7 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
   }, [cardHeights, prevCardHeights.length]);
 
   return (
-    <div
-      className="
-        relative
-        w-card-grid
-        h-full
-        overflow-hidden
-        -ml-1
-      "
-    >
+    <div className={entriesClasses['entry-listing-cards']}>
       <AutoSizer onResize={handleResize}>
         {({ height = 0, width = 0 }) => {
           const calculatedWidth = width - 4;
@@ -161,11 +154,7 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
           return (
             <div
               key={version}
-              className={classNames(
-                `
-                  overflow-hidden
-                `,
-              )}
+              className={entriesClasses['entry-listing-cards-grid-wrapper']}
               style={{
                 width: calculatedWidth,
                 height,
@@ -212,11 +201,8 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
                 outerRef={scrollContainerRef}
                 onScroll={onScroll}
                 className={classNames(
-                  `
-                    !overflow-x-hidden
-                    overflow-y-auto
-                    CMS_Scrollbar_root
-                  `,
+                  entriesClasses['entry-listing-cards-grid'],
+                  'CMS_Scrollbar_root',
                 )}
                 style={{ position: 'unset' }}
                 overscanRowCount={5}
