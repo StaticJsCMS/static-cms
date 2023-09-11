@@ -25,6 +25,7 @@ export const classes = generateClassNames('NavLink', [
 export interface BaseNavLinkProps {
   icon?: ReactNode;
   children: ReactNode;
+  className?: string;
   onClick?: MouseEventHandler;
 }
 
@@ -40,7 +41,7 @@ export type NavLinkProps = NavExternalLinkProps | NavInternalLinkProps;
 
 const linkClassNames = `${buttonClasses.root} ${buttonClasses['text-primary']} ${classes.link}`;
 
-const NavLink = ({ icon, children, onClick, ...otherProps }: NavLinkProps) => {
+const NavLink = ({ icon, children, className, onClick, ...otherProps }: NavLinkProps) => {
   const content = useMemo(
     () => (
       <div className={classes.content}>
@@ -55,7 +56,7 @@ const NavLink = ({ icon, children, onClick, ...otherProps }: NavLinkProps) => {
 
   if ('href' in otherProps) {
     return (
-      <li className={classes.root}>
+      <li className={classNames(classes.root, className)}>
         <a
           href={otherProps.href}
           target="_blank"
@@ -73,7 +74,7 @@ const NavLink = ({ icon, children, onClick, ...otherProps }: NavLinkProps) => {
   }
 
   return (
-    <li className={classes.root}>
+    <li className={classNames(classes.root, className)}>
       <BaseNavLink
         to={otherProps.to}
         className={classNames(linkClassNames, pathname === otherProps.to && classes.active)}

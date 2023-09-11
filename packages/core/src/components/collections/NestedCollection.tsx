@@ -1,17 +1,34 @@
 import { Article as ArticleIcon } from '@styled-icons/material/Article';
 import { ChevronRight as ChevronRightIcon } from '@styled-icons/material/ChevronRight';
 import sortBy from 'lodash/sortBy';
-import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import useEntries from '@staticcms/core/lib/hooks/useEntries';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { getTreeData } from '@staticcms/core/lib/util/nested.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import NavLink from '../navbar/NavLink';
 
 import type { Collection, Entry } from '@staticcms/core/interface';
 import type { TreeNodeData } from '@staticcms/core/lib/util/nested.util';
 import type { MouseEvent } from 'react';
+
+import './NestedCollection.css';
+
+export const classes = generateClassNames('NestedCollection', [
+  'root',
+  'active',
+  'expanded',
+  'root-node',
+  'root-node-icon',
+  'link',
+  'node',
+  'node-icon',
+  'node-content',
+  'node-children-icon',
+  'node-children',
+]);
 
 function getNodeTitle(node: TreeNodeData) {
   const title = node.isRoot
@@ -23,28 +40,46 @@ function getNodeTitle(node: TreeNodeData) {
 interface TreeNodeProps {
   collection: Collection;
   treeData: TreeNodeData[];
+  rootIsActive: boolean;
+  path: string;
   depth?: number;
   onToggle: ({ node, expanded }: { node: TreeNodeData; expanded: boolean }) => void;
 }
 
-const TreeNode = ({ collection, treeData, depth = 0, onToggle }: TreeNodeProps) => {
+const TreeNode = ({
+  collection,
+  treeData,
+  rootIsActive,
+  path,
+  depth = 0,
+  onToggle,
+}: TreeNodeProps) => {
   const collectionName = collection.name;
 
   const handleClick = useCallback(
     (event: MouseEvent | undefined, node: TreeNodeData, expanded: boolean) => {
+      if (!rootIsActive) {
+        return;
+      }
+
       event?.stopPropagation();
       event?.preventDefault();
 
       if (event) {
         onToggle({ node, expanded });
       } else {
-        onToggle({ node, expanded: true });
+        onToggle({ node, expanded: path === node.path ? expanded : true });
       }
     },
-    [onToggle],
+    [onToggle, path, rootIsActive],
   );
 
   const sortedData = sortBy(treeData, getNodeTitle);
+
+  if (depth !== 0 && !rootIsActive) {
+    return null;
+  }
+
   return (
     <>
       {sortedData.map(node => {
@@ -62,36 +97,42 @@ const TreeNode = ({ collection, treeData, depth = 0, onToggle }: TreeNodeProps) 
 
         return (
           <Fragment key={node.path}>
-            <div className={classNames(depth !== 0 && 'ml-8')}>
+            <div
+              className={classNames(
+                depth === 0 ? classes['root-node'] : classes.node,
+                depth === 0 && rootIsActive && classes.active,
+                node.expanded && classes.expanded,
+              )}
+            >
               <NavLink
                 to={to}
                 onClick={() => handleClick(undefined, node, !node.expanded)}
                 data-testid={node.path}
-                icon={<ArticleIcon className={classNames(depth === 0 ? 'h-6 w-6' : 'h-5 w-5')} />}
+                className={classes.link}
+                icon={
+                  <ArticleIcon
+                    className={classNames(
+                      depth === 0 ? classes['root-node-icon'] : classes['node-icon'],
+                    )}
+                  />
+                }
               >
-                <div className="flex w-full gap-2 items-center justify-between">
+                <div className={classes['node-content']}>
                   <div>{title}</div>
                   {hasChildren && (
                     <ChevronRightIcon
                       onClick={event => handleClick(event, node, !node.expanded)}
-                      className={classNames(
-                        node.expanded && 'rotate-90 transform',
-                        `
-                          transition-transform
-                          h-5
-                          w-5
-                          group-focus-within/active-list:text-blue-500
-                          group-hover/active-list:text-blue-500
-                        `,
-                      )}
+                      className={classes['node-children-icon']}
                     />
                   )}
                 </div>
               </NavLink>
-              <div className="mt-2 space-y-1.5">
+              <div className={classes['node-children']}>
                 {node.expanded && (
                   <TreeNode
+                    rootIsActive={rootIsActive}
                     collection={collection}
+                    path={path}
                     depth={depth + 1}
                     treeData={node.children}
                     onToggle={onToggle}
@@ -153,30 +194,52 @@ const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => 
   const [treeData, setTreeData] = useState<TreeNodeData[]>(getTreeData(collection, entries));
   const [useFilter, setUseFilter] = useState(true);
 
+  const [prevRootIsActive, setPrevRootIsActive] = useState(false);
   const [prevCollection, setPrevCollection] = useState<Collection | null>(null);
   const [prevEntries, setPrevEntries] = useState<Entry[] | null>(null);
-  const [prevFilterTerm, setPrevFilterTerm] = useState<string | null>(null);
+  const [prevPath, setPrevPath] = useState<string | null>(null);
 
   const { pathname } = useLocation();
 
+  const rootIsActive = useMemo(
+    () => pathname.startsWith(`/collections/${collection.name}`),
+    [collection.name, pathname],
+  );
+
+  const path = useMemo(() => `/${filterTerm}`, [filterTerm]);
+
   useEffect(() => {
-    if (collection !== prevCollection || entries !== prevEntries || filterTerm !== prevFilterTerm) {
+    if (
+      rootIsActive !== prevRootIsActive ||
+      collection !== prevCollection ||
+      entries !== prevEntries ||
+      path !== prevPath
+    ) {
       const expanded: Record<string, boolean> = {};
       walk(treeData, node => {
+        if (!rootIsActive) {
+          expanded[node.path] = false;
+          return;
+        }
+
         if (node.expanded) {
           expanded[node.path] = true;
         }
       });
       const newTreeData = getTreeData(collection, entries);
 
-      const path = `/${filterTerm}`;
       walk(newTreeData, node => {
-        if (
-          expanded[node.path] ||
-          (useFilter &&
-            path.startsWith(node.path) &&
-            pathname.startsWith(`/collections/${collection.name}`))
-        ) {
+        if (!rootIsActive) {
+          node.expanded = false;
+          return;
+        }
+
+        if (node.isRoot) {
+          node.expanded = true;
+          return;
+        }
+
+        if (expanded[node.path] || (useFilter && path.startsWith(node.path))) {
           node.expanded = true;
         }
       });
@@ -184,17 +247,21 @@ const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => 
       setTreeData(newTreeData);
     }
 
+    setPrevRootIsActive(rootIsActive);
     setPrevCollection(collection);
     setPrevEntries(entries);
-    setPrevFilterTerm(filterTerm);
+    setPrevPath(path);
   }, [
     collection,
     entries,
     filterTerm,
+    path,
     pathname,
     prevCollection,
     prevEntries,
-    prevFilterTerm,
+    prevPath,
+    prevRootIsActive,
+    rootIsActive,
     treeData,
     useFilter,
   ]);
@@ -212,7 +279,15 @@ const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => 
     [treeData],
   );
 
-  return <TreeNode collection={collection} treeData={treeData} onToggle={onToggle} />;
+  return (
+    <TreeNode
+      collection={collection}
+      treeData={treeData}
+      onToggle={onToggle}
+      rootIsActive={rootIsActive}
+      path={path}
+    />
+  );
 };
 
 export default NestedCollection;
