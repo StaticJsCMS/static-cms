@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import useEntries from '@staticcms/core/lib/hooks/useEntries';
 import useIcon from '@staticcms/core/lib/hooks/useIcon';
+import useNewEntryUrl from '@staticcms/core/lib/hooks/useNewEntryUrl';
 import {
   selectEntryCollectionTitle,
   selectFolderEntryExtension,
@@ -11,7 +12,7 @@ import {
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { addFileTemplateFields } from '@staticcms/core/lib/widgets/stringTemplate';
 import Button from '../common/button/Button';
-import useNewEntryUrl from '@staticcms/core/lib/hooks/useNewEntryUrl';
+import collectionClasses from './Collection.classes';
 
 import type { Collection, Entry, TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
@@ -63,54 +64,19 @@ const CollectionHeader: FC<TranslatedProps<CollectionHeaderProps>> = ({ collecti
   }, [collection, collectionLabel, entries, filterTerm]);
 
   return (
-    <>
-      <div
-        className="
-          flex
-          flex-grow
-          gap-4
-          justify-normal
-          xs:justify-between
-          sm:justify-normal
-          w-full
-          truncate
-        "
-      >
-        <h2
-          className="
-            text-xl
-            font-semibold
-            flex
-            items-center
-            text-gray-800
-            dark:text-gray-300
-            gap-2
-            flex-grow
-            w-full
-            md:grow-0
-            md:w-auto
-          "
-        >
-          <div className="flex items-center">{icon}</div>
-          <div
-            className="
-              w-collection-header
-              flex-grow
-              truncate
-            "
-          >
-            {pluralLabel}
-          </div>
-        </h2>
-        {newEntryUrl ? (
-          <Button to={newEntryUrl} className="hidden md:flex">
-            {t('collection.collectionTop.newButton', {
-              collectionLabel: collectionLabelSingular || pluralLabel,
-            })}
-          </Button>
-        ) : null}
-      </div>
-    </>
+    <div className={collectionClasses['header-wrapper']}>
+      <h2 className={collectionClasses.header}>
+        <div className={collectionClasses['header-icon']}>{icon}</div>
+        <div className={collectionClasses['header-label']}>{pluralLabel}</div>
+      </h2>
+      {newEntryUrl ? (
+        <Button to={newEntryUrl} className={collectionClasses['new-entry-button']}>
+          {t('collection.collectionTop.newButton', {
+            collectionLabel: collectionLabelSingular || pluralLabel,
+          })}
+        </Button>
+      ) : null}
+    </div>
   );
 };
 

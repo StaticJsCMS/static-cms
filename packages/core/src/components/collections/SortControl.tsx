@@ -8,6 +8,7 @@ import {
   SORT_DIRECTION_DESCENDING,
   SORT_DIRECTION_NONE,
 } from '@staticcms/core/constants';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
@@ -19,6 +20,19 @@ import type {
   TranslatedProps,
 } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
+
+import './SortControl.css';
+
+export const classes = generateClassNames('SortControl', [
+  'root',
+  'option',
+  'list',
+  'list-label',
+  'list-option',
+  'list-option-label',
+  'list-option-sorted-icon',
+  'list-option-not-sorted',
+]);
 
 function nextSortDirection(direction: SortDirection) {
   switch (direction) {
@@ -69,44 +83,32 @@ const SortControl = ({
 
   if (variant === 'list') {
     return (
-      <div key="filter-by-list" className="flex flex-col gap-2">
-        <h3
-          className="
-            text-lg
-            font-bold
-            text-gray-800
-            dark:text-white
-          "
-        >
-          {t('collection.collectionTop.sortBy')}
-        </h3>
+      <div key="filter-by-list" className={classes.list}>
+        <h3 className={classes['list-label']}>{t('collection.collectionTop.sortBy')}</h3>
         {fields.map(field => {
           const sortDir = sort?.[field.name]?.direction ?? SORT_DIRECTION_NONE;
           const nextSortDir = nextSortDirection(sortDir);
           return (
             <div
               key={field.name}
-              className="
-                ml-0.5
-                font-medium
-                flex
-                items-center
-                text-gray-800
-                dark:text-gray-300
-              "
+              className={classes['list-option']}
               onClick={handleSortClick(field.name, nextSortDir)}
             >
-              <label className="ml-2 text-md font-medium text-gray-800 dark:text-gray-300">
-                {field.label ?? field.name}
-              </label>
+              <label className={classes['list-option-label']}>{field.label ?? field.name}</label>
               {field.name === selectedSort.key ? (
                 selectedSort.direction === SORT_DIRECTION_ASCENDING ? (
-                  <KeyboardArrowUpIcon key="checkmark" className="ml-2 w-6 h-6 text-blue-500" />
+                  <KeyboardArrowUpIcon
+                    key="checkmark"
+                    className={classes['list-option-sorted-icon']}
+                  />
                 ) : (
-                  <KeyboardArrowDownIcon key="checkmark" className="ml-2 w-6 h-6 text-blue-500" />
+                  <KeyboardArrowDownIcon
+                    key="checkmark"
+                    className={classes['list-option-sorted-icon']}
+                  />
                 )
               ) : (
-                <div key="not-checked" className="ml-2 w-6 h-6" />
+                <div key="not-checked" className={classes['list-option-not-sorted']} />
               )}
             </div>
           );
@@ -119,7 +121,7 @@ const SortControl = ({
     <Menu
       label={t('collection.collectionTop.sortBy')}
       variant={selectedSort.key ? 'contained' : 'outlined'}
-      rootClassName="hidden lg:block"
+      rootClassName={classes.root}
     >
       <MenuGroup>
         {fields.map(field => {
@@ -137,6 +139,7 @@ const SortControl = ({
                     : KeyboardArrowDownIcon
                   : undefined
               }
+              className={classes.option}
             >
               {field.label ?? field.name}
             </MenuItemButton>

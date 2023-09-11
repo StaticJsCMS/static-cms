@@ -1,0 +1,47 @@
+.CMS_GroupControl_root {
+  @apply hidden
+    lg:block;
+}
+
+.CMS_GroupControl_list {
+  @apply flex
+    flex-col
+    gap-2;
+}
+
+.CMS_GroupControl_list-label {
+  @apply text-lg
+    font-bold
+    text-gray-800
+    dark:text-white;
+}
+
+.CMS_GroupControl_list-option {
+  @apply ml-0.5
+    font-medium
+    flex
+    items-center
+    text-gray-800
+    dark:text-gray-300;
+}
+
+.CMS_GroupControl_list-option-label {
+  @apply ml-2
+    text-base
+    font-medium
+    text-gray-800
+    dark:text-gray-300;
+}
+
+.CMS_GroupControl_list-option-checked-icon {
+  @apply ml-2
+    w-6
+    h-6
+    text-blue-500;
+}
+
+.CMS_GroupControl_list-option-not-checked {
+  @apply ml-2
+    w-6
+    h-6;
+}

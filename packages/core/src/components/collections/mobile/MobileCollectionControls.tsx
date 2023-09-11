@@ -2,12 +2,15 @@ import { FilterList as FilterListIcon } from '@styled-icons/material/FilterList'
 import React, { useCallback, useState } from 'react';
 
 import IconButton from '../../common/button/IconButton';
+import mobileCollectionControlsClasses from './MobileCollectionControls.classes';
 import MobileCollectionControlsDrawer from './MobileCollectionControlsDrawer';
 
 import type { FC } from 'react';
 import type { FilterControlProps } from '../FilterControl';
 import type { GroupControlProps } from '../GroupControl';
 import type { SortControlProps } from '../SortControl';
+
+import './MobileCollectionControls.css';
 
 export type MobileCollectionControlsProps = Omit<FilterControlProps, 'variant'> &
   Omit<GroupControlProps, 'variant'> &
@@ -25,8 +28,12 @@ const MobileCollectionControls: FC<MobileCollectionControlsProps> = props => {
 
   return (
     <>
-      <IconButton className="flex lg:hidden" variant="text" onClick={toggleMobileMenu}>
-        <FilterListIcon className="w-5 h-5" />
+      <IconButton
+        className={mobileCollectionControlsClasses.toggle}
+        variant="text"
+        onClick={toggleMobileMenu}
+      >
+        <FilterListIcon className={mobileCollectionControlsClasses['toggle-icon']} />
       </IconButton>
       <MobileCollectionControlsDrawer
         {...props}

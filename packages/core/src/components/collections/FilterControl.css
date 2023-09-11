@@ -1,0 +1,42 @@
+.CMS_FilterControl_root {
+  @apply hidden
+    lg:block;
+}
+
+.CMS_FilterControl_filter-label {
+  @apply ml-2
+    text-sm
+    font-medium
+    text-gray-800
+    dark:text-gray-300;
+}
+
+.CMS_FilterControl_list-root {
+  @apply flex
+    flex-col
+    gap-2;
+}
+
+.CMS_FilterControl_list-label {
+  @apply text-lg
+    font-bold
+    text-gray-800
+    dark:text-white
+}
+
+.CMS_FilterControl_list-filter {
+  @apply ml-1.5
+    font-medium
+    flex
+    items-center
+    text-gray-800
+    dark:text-gray-300;
+}
+
+.CMS_FilterControl_list-filter-label {
+  @apply ml-2
+    text-base
+    font-medium
+    text-gray-800
+    dark:text-gray-300;
+}

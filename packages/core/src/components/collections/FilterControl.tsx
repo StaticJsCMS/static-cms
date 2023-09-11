@@ -1,12 +1,25 @@
 import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
 
 import type { FilterMap, TranslatedProps, ViewFilter } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
+
+import './FilterControl.css';
+
+export const classes = generateClassNames('FilterControl', [
+  'root',
+  'filter',
+  'filter-label',
+  'list-root',
+  'list-label',
+  'list-filter',
+  'list-filter-label',
+]);
 
 export interface FilterControlProps {
   filter: Record<string, FilterMap> | undefined;
@@ -35,31 +48,15 @@ const FilterControl = ({
 
   if (variant === 'list') {
     return (
-      <div key="filter-by-list" className="flex flex-col gap-2">
-        <h3
-          className="
-            text-lg
-            font-bold
-            text-gray-800
-            dark:text-white
-          "
-        >
-          {t('collection.collectionTop.filterBy')}
-        </h3>
+      <div key="filter-by-list" className={classes['list-root']}>
+        <h3 className={classes['list-label']}>{t('collection.collectionTop.filterBy')}</h3>
         {viewFilters.map(viewFilter => {
           const checked = Boolean(viewFilter.id && filter[viewFilter?.id]?.active) ?? false;
           const labelId = `filter-list-label-${viewFilter.label}`;
           return (
             <div
               key={viewFilter.id}
-              className="
-                ml-1.5
-                font-medium
-                flex
-                items-center
-                text-gray-800
-                dark:text-gray-300
-              "
+              className={classes['list-filter']}
               onClick={handleFilterClick(viewFilter)}
             >
               <input
@@ -67,13 +64,10 @@ const FilterControl = ({
                 id={labelId}
                 type="checkbox"
                 value=""
-                className=""
                 checked={checked}
                 readOnly
               />
-              <label className="ml-2 text-md font-medium text-gray-800 dark:text-gray-300">
-                {viewFilter.label}
-              </label>
+              <label className={classes['list-filter-label']}>{viewFilter.label}</label>
             </div>
           );
         })}
@@ -86,26 +80,27 @@ const FilterControl = ({
       key="filter-by-menu"
       label={t('collection.collectionTop.filterBy')}
       variant={anyActive ? 'contained' : 'outlined'}
-      rootClassName="hidden lg:block"
+      rootClassName={classes.root}
     >
       <MenuGroup>
         {viewFilters.map(viewFilter => {
           const checked = Boolean(viewFilter.id && filter[viewFilter?.id]?.active) ?? false;
           const labelId = `filter-list-label-${viewFilter.label}`;
           return (
-            <MenuItemButton key={viewFilter.id} onClick={handleFilterClick(viewFilter)}>
+            <MenuItemButton
+              key={viewFilter.id}
+              onClick={handleFilterClick(viewFilter)}
+              className={classes.filter}
+            >
               <input
                 key={`${labelId}-${checked}`}
                 id={labelId}
                 type="checkbox"
                 value=""
-                className=""
                 checked={checked}
                 readOnly
               />
-              <label className="ml-2 text-sm font-medium text-gray-800 dark:text-gray-300">
-                {viewFilter.label}
-              </label>
+              <label className={classes['filter-label']}>{viewFilter.label}</label>
             </MenuItemButton>
           );
         })}
