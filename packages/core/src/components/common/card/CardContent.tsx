@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { cardClasses } from './Card.util';
+import cardClasses from './Card.classes';
 
 import type { ReactNode } from 'react';
 

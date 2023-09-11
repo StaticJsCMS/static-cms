@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
-import { tableClasses } from './Table.util';
+import tableClasses from './Table.classes';
 
 import type { ReactNode } from 'react';
 

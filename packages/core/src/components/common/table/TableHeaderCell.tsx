@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
-import { tableClasses } from './Table.util';
+import tableClasses from './Table.classes';
 
 import type { ReactNode } from 'react';
 

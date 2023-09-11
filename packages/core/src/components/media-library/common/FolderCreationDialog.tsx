@@ -2,6 +2,7 @@ import { Close as CloseIcon } from '@styled-icons/material/Close';
 import React, { useCallback, useState } from 'react';
 
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import Button from '../../common/button/Button';
 import IconButton from '../../common/button/IconButton';
 import Modal from '../../common/modal/Modal';
@@ -9,6 +10,21 @@ import TextField from '../../common/text-field/TextField';
 
 import type { TranslatedProps } from '@staticcms/core/interface';
 import type { ChangeEventHandler, FC } from 'react';
+
+import './FolderCreationDialog.css';
+
+export const classes = generateClassNames('FolderCreationDialog', [
+  'root',
+  'header',
+  'title',
+  'close-button',
+  'close-button-icon',
+  'name-input-wrapper',
+  'name-input',
+  'actions',
+  'cancel-button',
+  'create-button',
+]);
 
 interface FolderCreationDialogProps {
   open: boolean;
@@ -42,45 +58,19 @@ const FolderCreationDialog: FC<TranslatedProps<FolderCreationDialogProps>> = ({
   }, [onClose]);
 
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      className="
-        w-[50%]
-        min-w-[300px]
-        max-w-[600px]
-      "
-    >
-      <div
-        className="
-          flex
-          items-start
-          justify-between
-          px-4
-          pt-4
-          pb-3
-        "
-      >
-        <h3
-          className="
-            text-xl
-            font-semibold
-            text-gray-800
-            dark:text-white
-          "
+    <Modal open={open} onClose={handleClose} className={classes.root}>
+      <div className={classes.header}>
+        <h3 className={classes.title}>{t('mediaLibrary.folderSupport.createNewFolder')}</h3>
+        <IconButton
+          variant="text"
+          aria-label="add"
+          onClick={handleClose}
+          className={classes['close-button']}
         >
-          {t('mediaLibrary.folderSupport.createNewFolder')}
-        </h3>
-        <IconButton variant="text" aria-label="add" onClick={handleClose}>
-          <CloseIcon className="w-5 h-5" />
+          <CloseIcon className={classes['close-button-icon']} />
         </IconButton>
       </div>
-      <div
-        className="
-        px-4
-        py-2
-      "
-      >
+      <div className={classes['name-input-wrapper']}>
         <TextField
           id="folder_name"
           type="text"
@@ -91,18 +81,16 @@ const FolderCreationDialog: FC<TranslatedProps<FolderCreationDialogProps>> = ({
           cursor="pointer"
           variant="contained"
           placeholder={t('mediaLibrary.folderSupport.enterFolderName')}
+          rootClassName={classes['name-input']}
         />
       </div>
-      <div
-        className="
-          flex
-          items-center
-          justify-end
-          p-4
-          space-x-2
-        "
-      >
-        <Button variant="text" aria-label="cancel" onClick={handleClose}>
+      <div className={classes.actions}>
+        <Button
+          variant="text"
+          aria-label="cancel"
+          onClick={handleClose}
+          className={classes['cancel-button']}
+        >
           Cancel
         </Button>
         <Button
@@ -110,6 +98,7 @@ const FolderCreationDialog: FC<TranslatedProps<FolderCreationDialogProps>> = ({
           aria-label="create"
           onClick={handleCreate}
           disabled={isEmpty(folderName)}
+          className={classes['create-button']}
         >
           Create
         </Button>

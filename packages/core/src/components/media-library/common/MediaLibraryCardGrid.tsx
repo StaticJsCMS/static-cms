@@ -13,6 +13,7 @@ import useFolderSupport from '@staticcms/core/lib/hooks/useFolderSupport';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { useAppSelector } from '@staticcms/core/store/hooks';
+import mediaLibraryClasses from './MediaLibrary.classes';
 import MediaLibraryCard from './MediaLibraryCard';
 
 import type {
@@ -168,7 +169,7 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
   }, []);
 
   return (
-    <div className="relative w-full h-full">
+    <div className={mediaLibraryClasses.files}>
       <AutoSizer onResize={handleResize}>
         {({ height = 0, width = 0 }) => {
           const columnWidthWithGutter = MEDIA_CARD_WIDTH + MEDIA_CARD_MARGIN;
@@ -181,13 +182,7 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
           return (
             <div
               key={version}
-              className={classNames(
-                `
-                  overflow-hidden
-                `,
-                isDialog && 'rounded-b-lg',
-                !folderSupport && 'pt-[20px]',
-              )}
+              className={mediaLibraryClasses['grid-wrapper']}
               style={{
                 width,
                 height,
@@ -210,13 +205,8 @@ const MediaLibraryCardGrid: FC<MediaLibraryCardGridProps> = props => {
                 }
                 outerRef={scrollContainerRef}
                 className={classNames(
-                  `
-                    px-5
-                    pb-2
-                    overflow-hidden
-                    overflow-y-auto
-                    CMS_Scrollbar_root
-                  `,
+                  mediaLibraryClasses.grid,
+                  'CMS_Scrollbar_root',
                   isDialog && 'CMS_Scrollbar_secondary',
                 )}
                 style={{ position: 'unset' }}

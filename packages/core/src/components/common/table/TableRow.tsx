@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
-import { tableClasses } from './Table.util';
+import tableClasses from './Table.classes';
 
 import type { KeyboardEvent, ReactNode } from 'react';
 

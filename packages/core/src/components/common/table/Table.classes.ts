@@ -1,7 +1,6 @@
-/* eslint-disable import/prefer-default-export */
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-export const tableClasses = generateClassNames('Table', [
+const tableClasses = generateClassNames('Table', [
   'root',
   'table',
   'header',
@@ -17,3 +16,5 @@ export const tableClasses = generateClassNames('Table', [
   'body-cell-content',
   'body-cell-link',
 ]);
+
+export default tableClasses;

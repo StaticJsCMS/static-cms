@@ -5,6 +5,7 @@ import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { isEmpty } from '../../../lib/util/string.util';
 import Image from '../../common/image/Image';
 import InlineEditTextField from './InlineEditTextField';
+import mediaLibraryClasses from './MediaLibrary.classes';
 
 import type { Collection, MediaField, MediaLibrarInsertOptions } from '@staticcms/core/interface';
 import type { FC } from 'react';
@@ -54,68 +55,17 @@ const CurrentMediaDetails: FC<CurrentMediaDetailsProps> = ({
   }
 
   return (
-    <div
-      className={classNames(
-        `
-          items-center
-          px-5
-          py-4
-          border-b
-          border-gray-200/75
-          dark:border-slate-500/75
-        `,
-        forImage
-          ? `
-            grid
-            grid-cols-media-preview
-          `
-          : `
-            flex
-            w-full
-          `,
-      )}
-    >
+    <div className={mediaLibraryClasses.preview}>
       {forImage ? (
         <Image
           key="image-preview"
           src={Array.isArray(url) ? url[replaceIndex!] : url}
           collection={collection}
           field={field}
-          className="
-            w-media-preview-image
-            h-media-preview-image
-            rounded-md
-            shadow-sm
-            overflow-hidden
-            group/media-card
-            border
-            bg-gray-50/75
-            border-gray-200/75
-            dark:bg-slate-800
-            dark:border-slate-600/75
-            object-cover
-          "
+          className={classNames(mediaLibraryClasses['preview-image'], 'group/media-card')}
         />
       ) : null}
-      <div
-        className={classNames(
-          `
-            flex
-            flex-col
-            h-full
-            p-0
-            gap-2
-          `,
-          forImage
-            ? `
-              pl-4
-            `
-            : `
-              w-full
-              pl-1.5
-            `,
-        )}
-      >
+      <div className={mediaLibraryClasses['preview-details']}>
         <InlineEditTextField
           label="URL"
           value={Array.isArray(url) ? url[replaceIndex!] : url}

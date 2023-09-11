@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { sidebarClasses } from './Sidebar.util';
+import sidebarClasses from './Sidebar.classes';
 import SidebarContent from './SidebarContent';
 
 import type { FC } from 'react';

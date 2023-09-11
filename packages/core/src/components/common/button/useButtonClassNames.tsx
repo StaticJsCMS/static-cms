@@ -34,25 +34,25 @@ const classes: Record<
   Record<Required<BaseBaseProps>['color'], string>
 > = {
   contained: {
-    primary: buttonClasses['contained-primary'],
-    secondary: buttonClasses['contained-secondary'],
-    success: buttonClasses['contained-success'],
-    error: buttonClasses['contained-error'],
-    warning: buttonClasses['contained-warning'],
+    primary: 'CMS_Button_contained-primary',
+    secondary: 'CMS_Button_contained-secondary',
+    success: 'CMS_Button_contained-success',
+    error: 'CMS_Button_contained-error',
+    warning: 'CMS_Button_contained-warning',
   },
   outlined: {
-    primary: buttonClasses['outlined-primary'],
-    secondary: buttonClasses['outlined-secondary'],
-    success: buttonClasses['outlined-success'],
-    error: buttonClasses['outlined-error'],
-    warning: buttonClasses['outlined-warning'],
+    primary: 'CMS_Button_outlined-primary',
+    secondary: 'CMS_Button_outlined-secondary',
+    success: 'CMS_Button_outlined-success',
+    error: 'CMS_Button_outlined-error',
+    warning: 'CMS_Button_outlined-warning',
   },
   text: {
-    primary: buttonClasses['text-primary'],
-    secondary: buttonClasses['text-secondary'],
-    success: buttonClasses['text-success'],
-    error: buttonClasses['text-error'],
-    warning: buttonClasses['text-warning'],
+    primary: 'CMS_Button_text-primary',
+    secondary: 'CMS_Button_text-secondary',
+    success: 'CMS_Button_text-success',
+    error: 'CMS_Button_text-error',
+    warning: 'CMS_Button_text-warning',
   },
 };
 
@@ -62,11 +62,11 @@ export default function useButtonClassNames(
   size: Required<BaseBaseProps>['size'],
   rounded: boolean | 'no-padding',
 ) {
-  let mainClass = size === 'small' ? buttonClasses['root-sm'] : buttonClasses.root;
+  let mainClass = size === 'small' ? 'CMS_Button_root-sm' : 'CMS_Button_root';
   if (rounded === 'no-padding') {
-    mainClass = buttonClasses['root-rounded-no-padding'];
+    mainClass = 'CMS_Button_root-rounded-no-padding';
   } else if (rounded) {
-    mainClass = size === 'small' ? buttonClasses['root-rounded-sm'] : buttonClasses['root-rounded'];
+    mainClass = size === 'small' ? 'CMS_Button_root-rounded-sm' : 'CMS_Button_root-rounded';
   }
 
   return useMemo(() => `${mainClass} ${classes[variant][color]}`, [color, mainClass, variant]);

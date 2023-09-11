@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import Backdrop from './Backdrop';
-import { modalClasses } from './Modal.util';
+import modalClasses from './Modal.classes';
 
 import type { FC, ReactNode } from 'react';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Image from '../image/Image';
-import { cardClasses } from './Card.util';
+import cardClasses from './Card.classes';
 
 import type {
   BaseField,

@@ -1,0 +1,39 @@
+.CMS_FolderCreationDialog_root {
+  @apply w-[50%]
+    min-w-[300px]
+    max-w-[600px];
+}
+
+.CMS_FolderCreationDialog_header {
+  @apply flex
+    items-start
+    justify-between
+    px-4
+    pt-4
+    pb-3;
+}
+
+.CMS_FolderCreationDialog_title {
+  @apply text-xl
+    font-semibold
+    text-gray-800
+    dark:text-white;
+}
+
+.CMS_FolderCreationDialog_close-button-icon {
+  @apply w-5
+    h-5;
+}
+
+.CMS_FolderCreationDialog_name-input-wrapper {
+  @apply px-4
+    py-2;
+}
+
+.CMS_FolderCreationDialog_actions {
+  @apply flex
+    items-center
+    justify-end
+    p-4
+    space-x-2;
+}

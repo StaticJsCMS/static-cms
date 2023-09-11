@@ -22,7 +22,7 @@
   /**
   * Buttons
   */
-  .btn-base {
+  .CMS_Button_base {
     @apply inline-flex
       items-center
       justify-center
@@ -36,33 +36,33 @@
   }
 
   .CMS_Button_root {
-    @apply btn-base
+    @apply CMS_Button_base
       rounded
       px-2.5
       py-1.5;
   }
 
   .CMS_Button_root-sm {
-    @apply btn-base
+    @apply CMS_Button_base
       rounded
       px-1.5
       py-0.5;
   }
 
   .CMS_Button_root-rounded {
-    @apply btn-base
+    @apply CMS_Button_base
       p-1.5
       rounded-full;
   }
 
   .CMS_Button_root-rounded-sm {
-    @apply btn-base
+    @apply CMS_Button_base
       p-0.5
       rounded-full;
   }
 
   .CMS_Button_root-rounded-no-padding {
-    @apply btn-base
+    @apply CMS_Button_base
       rounded-full;
   }
 

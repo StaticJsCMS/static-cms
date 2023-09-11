@@ -12,7 +12,7 @@ import { useAppSelector } from '@staticcms/core/store/hooks';
 import CollectionSearch from '../collections/CollectionSearch';
 import NestedCollection from '../collections/NestedCollection';
 import NavLink from './NavLink';
-import { sidebarClasses } from './Sidebar.util';
+import sidebarClasses from './Sidebar.classes';
 
 import type { Collection } from '@staticcms/core/interface';
 import type { FC } from 'react';

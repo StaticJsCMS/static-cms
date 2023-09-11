@@ -1,0 +1,20 @@
+.CMS_MediaLibraryModal_root {
+  @apply w-media-library-dialog
+    h-media-library-dialog;
+
+  & .CMS_MediaLibraryModal_close-button {
+    @apply absolute
+    -top-3.5
+    -left-3.5
+    bg-white
+    hover:bg-gray-100
+    dark:bg-slate-800
+    dark:hover:bg-slate-900
+    z-[1];
+  }
+}
+
+.CMS_MediaLibraryModal_close-button-icon {
+  @apply w-5
+    h-5;
+}

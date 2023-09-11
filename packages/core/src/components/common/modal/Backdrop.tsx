@@ -1,7 +1,7 @@
 import React from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
-import { modalClasses } from './Modal.util';
+import modalClasses from './Modal.classes';
 
 const Backdrop = React.forwardRef<
   HTMLDivElement,

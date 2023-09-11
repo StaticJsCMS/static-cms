@@ -36,11 +36,14 @@ import CurrentMediaDetails from './CurrentMediaDetails';
 import EmptyMessage from './EmptyMessage';
 import FileUploadButton from './FileUploadButton';
 import FolderCreationDialog from './FolderCreationDialog';
+import mediaLibraryClasses from './MediaLibrary.classes';
 import MediaLibraryCardGrid from './MediaLibraryCardGrid';
 import MediaLibrarySearch from './MediaLibrarySearch';
 
 import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
+
+import './MediaLibrary.css';
 
 /**
  * Extensions used to determine which files to show when the media library is
@@ -490,25 +493,15 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
         className={classNames(
-          `
-            relative
-            border-2
-            transition-colors
-            w-full
-            h-full
-          `,
-          isDialog && 'rounded-lg',
-          dragOverActive ? 'border-blue-500' : 'border-transparent',
+          mediaLibraryClasses.root,
+          isDialog && mediaLibraryClasses['is-dialog'],
+          dragOverActive && mediaLibraryClasses['drop-area-active'],
+          forImage && mediaLibraryClasses['for-image'],
+          folderSupport && mediaLibraryClasses['supports-folders'],
         )}
       >
-        <div
-          className="
-            -m-0.5
-            w-full
-            h-full
-          "
-        >
-          <div className="flex flex-col w-full h-full">
+        <div className={mediaLibraryClasses['content-wrapper']}>
+          <div className={mediaLibraryClasses.content}>
             <CurrentMediaDetails
               collection={collection}
               field={field}
@@ -521,37 +514,11 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
               onUrlChange={handleURLChange}
               onAltChange={handleAltChange}
             />
-            <div
-              className={classNames(
-                `
-                  flex
-                  items-center
-                  px-5
-                  pt-4
-                `,
-                folderSupport &&
-                  `
-                    pb-4
-                    border-b
-                    border-gray-200/75
-                    dark:border-slate-500/75
-                  `,
-              )}
-            >
-              <div className="flex flex-grow gap-3 mr-8">
-                <h2
-                  className="
-                    text-xl
-                    font-semibold
-                    flex
-                    items-center
-                    gap-2
-                    text-gray-800
-                    dark:text-gray-300
-                  "
-                >
-                  <div className="flex items-center">
-                    <PhotoIcon className="w-5 h-5" />
+            <div className={mediaLibraryClasses.controls}>
+              <div className={mediaLibraryClasses.header}>
+                <h2 className={mediaLibraryClasses.title}>
+                  <div className={mediaLibraryClasses['title-icon-wrapper']}>
+                    <PhotoIcon className={mediaLibraryClasses['title-icon']} />
                   </div>
                   {t('app.header.media')}
                 </h2>
@@ -563,14 +530,14 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
                   disabled={!dynamicSearchActive && !hasFilteredFiles}
                 />
                 {folderSupport ? (
-                  <div className="flex gap-1.5 items-center">
+                  <div className={mediaLibraryClasses['folder-controls']}>
                     <IconButton
                       onClick={handleHome}
                       title={t('mediaLibrary.folderSupport.home')}
                       color="secondary"
                       disabled={!currentFolder}
                     >
-                      <HomeIcon className="h-5 w-5" />
+                      <HomeIcon className={mediaLibraryClasses['folder-controls-icon']} />
                     </IconButton>
                     <IconButton
                       onClick={handleGoBack}
@@ -582,19 +549,21 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
                       color="secondary"
                       disabled={!parentFolder}
                     >
-                      <UpwardIcon className="h-5 w-5" />
+                      <UpwardIcon className={mediaLibraryClasses['folder-controls-icon']} />
                     </IconButton>
                     <IconButton
                       onClick={handleCreateFolder}
                       title={t('mediaLibrary.folderSupport.newFolder')}
                       color="secondary"
                     >
-                      <NewFolderIcon className="h-5 w-5"></NewFolderIcon>
+                      <NewFolderIcon
+                        className={mediaLibraryClasses['folder-controls-icon']}
+                      ></NewFolderIcon>
                     </IconButton>
                   </div>
                 ) : null}
               </div>
-              <div className="flex gap-3 items-center relative">
+              <div className={mediaLibraryClasses['upload-controls']}>
                 <FileUploadButton imagesOnly={forImage} onChange={handlePersist} />
                 {canInsert ? (
                   <Button
@@ -611,18 +580,8 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
               </div>
             </div>
             {folderSupport ? (
-              <div
-                className="
-                  flex
-                  gap-2
-                  items-center
-                  px-5
-                  py-4
-                  font-bold
-                  text-xl
-                "
-              >
-                <FolderOpenIcon className="w-6 h-6" />
+              <div className={mediaLibraryClasses.folder}>
+                <FolderOpenIcon className={mediaLibraryClasses['folder-icon']} />
                 {currentFolder ?? mediaFolder}
               </div>
             ) : null}
@@ -658,26 +617,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
               />
             )}
           </div>
-          <div
-            className={classNames(
-              `
-                absolute
-                inset-0
-                flex
-                items-center
-                justify-center
-                pointer-events-none
-                font-bold
-                text-blue-500
-                bg-white/75
-                dark:text-blue-400
-                dark:bg-slate-800/75
-                transition-opacity
-              `,
-              isDialog && 'rounded-lg',
-              dragOverActive ? 'opacity-100' : 'opacity-0',
-            )}
-          >
+          <div className={mediaLibraryClasses['drop-area']}>
             {t(`mediaLibrary.mediaLibraryModal.${forImage ? 'dropImages' : 'dropFiles'}`)}
           </div>
         </div>

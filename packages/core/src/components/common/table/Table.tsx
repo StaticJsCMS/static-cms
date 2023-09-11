@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { tableClasses } from './Table.util';
+import tableClasses from './Table.classes';
 import TableHeaderCell from './TableHeaderCell';
 
 import type { ReactNode } from 'react';

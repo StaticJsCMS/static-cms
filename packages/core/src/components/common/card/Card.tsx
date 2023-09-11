@@ -1,7 +1,7 @@
 import React from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
-import { cardClasses } from './Card.util';
+import cardClasses from './Card.classes';
 
 import type { ReactNode } from 'react';
 

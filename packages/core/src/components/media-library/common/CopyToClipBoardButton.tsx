@@ -5,6 +5,7 @@ import { translate } from 'react-polyglot';
 
 import { isAbsolutePath } from '@staticcms/core/lib/util';
 import Button from '../../common/button/Button';
+import mediaLibraryClasses from './MediaLibrary.classes';
 
 import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
@@ -72,15 +73,9 @@ const CopyToClipBoardButton: FC<TranslatedProps<CopyToClipBoardButtonProps>> = (
       variant="text"
       title={getTitle()}
       onClick={handleCopy}
-      className="
-        text-white
-        dark:text-white
-        bg-gray-900/25
-        dark:hover:text-white
-        dark:hover:bg-blue-800/80
-      "
+      className={mediaLibraryClasses['copy-to-clipboard-button']}
     >
-      <ContentCopyIcon className="w-5 h-5" />
+      <ContentCopyIcon className={mediaLibraryClasses['copy-to-clipboard-button-icon']} />
     </Button>
   );
 };
