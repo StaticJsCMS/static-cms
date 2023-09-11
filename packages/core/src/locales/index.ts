@@ -25,6 +25,7 @@ import vi from './vi';
 import zh_Hant from './zh_Hant';
 import ko from './ko';
 import hr from './hr';
+import sl from './sl';
 import bg from './bg';
 import zh_Hans from './zh_Hans';
 import he from './he';
@@ -59,6 +60,7 @@ const locales: Record<string, LocalePhrasesRoot> = {
   zh_Hant,
   ko,
   hr,
+  sl,
   bg,
   zh_Hans,
   he,

@@ -1,4 +1,5 @@
 import {
+  CLEAR_REQUESTS,
   QUERY_FAILURE,
   QUERY_REQUEST,
   QUERY_SUCCESS,
@@ -9,6 +10,7 @@ import {
 } from '../constants';
 
 import type { SearchAction } from '../actions/search';
+import type { SearchQueryRequest } from '../interface';
 
 export interface SearchState {
   isFetching: boolean;
@@ -17,6 +19,7 @@ export interface SearchState {
   page: number;
   entryIds: { collection: string; slug: string }[];
   error: Error | undefined;
+  requests: SearchQueryRequest[];
 }
 
 const defaultState: SearchState = {
@@ -26,6 +29,7 @@ const defaultState: SearchState = {
   page: 0,
   entryIds: [],
   error: undefined,
+  requests: [],
 };
 
 const search = (state: SearchState = defaultState, action: SearchAction): SearchState => {
@@ -66,12 +70,24 @@ const search = (state: SearchState = defaultState, action: SearchAction): Search
     }
 
     case QUERY_REQUEST: {
-      const { searchTerm } = action.payload;
+      const { searchTerm, request } = action.payload;
+
+      const requests = [...state.requests];
+      if (request) {
+        requests.push(request);
+      }
+
       return {
         ...state,
         isFetching: true,
         term: searchTerm,
+        requests,
       };
+    }
+
+    case CLEAR_REQUESTS: {
+      state.requests = state.requests.filter(req => req.expires >= new Date());
+      break;
     }
 
     case QUERY_SUCCESS: {

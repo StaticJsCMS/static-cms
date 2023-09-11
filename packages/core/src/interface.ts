@@ -125,7 +125,7 @@ export interface Entry<T = ObjectValue> {
   error?: string;
   i18n?: {
     [locale: string]: {
-      data: EntryData;
+      data: Partial<T>;
     };
   };
   meta?: {
@@ -835,6 +835,7 @@ export type Field<EF extends BaseField = UnknownField> =
   | ColorField
   | DateTimeField
   | FileOrImageField
+  | KeyValueField
   | ListField<EF>
   | MapField
   | MarkdownField
@@ -1036,6 +1037,12 @@ export interface SearchResponse {
   entries: Entry[];
   pagination: number;
 }
+
+export type SearchQueryRequest = {
+  id: string;
+  expires: Date;
+  queryResponse: Promise<SearchQueryResponse>;
+};
 
 export interface SearchQueryResponse {
   hits: Entry[];
