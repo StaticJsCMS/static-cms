@@ -1,0 +1,88 @@
+.CMS_WidgetObject_root {
+  @apply relative
+    flex
+    flex-col
+    border-b
+    border-slate-400
+    focus-within:border-blue-800
+    dark:focus-within:border-blue-100;
+
+  &.CMS_WidgetObject_error {
+    & .CMS_WidgetObject_fields {
+      @apply border-l-red-500;
+    }
+  }
+
+  &:not(.CMS_WidgetObject_error) {
+    &:not(.CMS_WidgetObject_disabled) {
+      & .CMS_WidgetObject_fields {
+        @apply border-l-blue-500;
+      }
+    }
+
+    &:focus-within {
+      & .CMS_WidgetObject_summary,
+      & .CMS_WidgetObject_expand-icon {
+        @apply text-blue-500;
+      }
+    }
+
+    &:hover {
+      & .CMS_WidgetObject_summary,
+      & .CMS_WidgetObject_expand-icon {
+        @apply text-blue-500;
+      }
+    }
+  }
+
+  &.CMS_WidgetObject_disabled {
+    & .CMS_WidgetObject_expand-icon {
+      @apply text-slate-300
+        dark:text-slate-600;
+    }
+  }
+
+  &.CMS_WidgetObject_open {
+    & .CMS_WidgetObject_expand-icon {
+      @apply rotate-90
+        transform;
+    }
+  }
+}
+
+.CMS_WidgetObject_expand {
+  @apply flex
+    w-full
+    justify-between
+    pl-2
+    pr-3
+    py-2
+    text-left
+    text-sm
+    font-medium
+    focus:outline-none
+    focus-visible:ring
+    gap-2
+    focus-visible:ring-opacity-75;
+}
+
+.CMS_WidgetObject_expand-icon {
+  @apply transition-transform
+    h-5
+    w-5;
+}
+
+.CMS_WidgetObject_fields {
+  @apply ml-4
+    text-sm
+    text-gray-500
+    border-l-2
+    border-solid
+    border-l-slate-400;
+}
+
+.CMS_WidgetObject_error-message {
+  @apply pl-4
+    pt-2
+    pb-3;
+}

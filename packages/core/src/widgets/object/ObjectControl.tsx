@@ -8,6 +8,8 @@ import ObjectFieldWrapper from './ObjectFieldWrapper';
 import type { ObjectField, ObjectValue, WidgetControlProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
+import './ObjectControl.css';
+
 const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
   label,
   field,
