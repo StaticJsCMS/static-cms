@@ -7,10 +7,28 @@ import IconButton from '@staticcms/core/components/common/button/IconButton';
 import Field from '@staticcms/core/components/common/field/Field';
 import TextField from '@staticcms/core/components/common/text-field/TextField';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { ColorField, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC, MouseEvent, MouseEventHandler } from 'react';
 import type { ColorResult } from 'react-color';
+
+import './ColorControl.css';
+
+export const classes = generateClassNames('WidgetColor', [
+  'root',
+  'disabled',
+  'allow-input',
+  'content',
+  'color-swatch-wrapper',
+  'color-swatch',
+  'color-picker-wrapper',
+  'color-picker-backdrop',
+  'color-picker',
+  'input',
+  'clear-button',
+  'clear-button-icon',
+]);
 
 const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
   field,
@@ -86,19 +104,14 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
       cursor={allowInput ? 'text' : 'pointer'}
       disabled={disabled}
       disableClick={showColorPicker}
+      rootClassName={classNames(
+        classes.root,
+        disabled && classes.disabled,
+        allowInput && classes['allow-input'],
+      )}
     >
-      <div
-        className={classNames(
-          `
-            flex
-            items-center
-            pt-2
-            px-3
-          `,
-          disabled ? 'cursor-default' : allowInput ? 'cursor-text' : 'cursor-pointer',
-        )}
-      >
-        <div>
+      <div className={classes.content}>
+        <div className={classes['color-swatch-wrapper']}>
           <div
             ref={swatchRef}
             key="color-swatch"
@@ -108,47 +121,24 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
               background: validateColor(internalValue) ? internalValue : '#fff',
               color: validateColor(internalValue) ? 'rgba(255, 255, 255, 0)' : 'rgb(150, 150, 150)',
             }}
-            className={classNames(
-              `
-                w-8
-                h-8
-                flex
-                items-center
-                justify-center
-              `,
-              disabled ? 'cursor-default' : 'cursor-pointer',
-            )}
+            className={classes['color-swatch']}
           >
             ?
           </div>
         </div>
         {showColorPicker && (
-          <div
-            key="color-swatch-wrapper"
-            className="
-              absolute
-              bottom-0
-            "
-          >
+          <div key="color-picker-wrapper" className={classes['color-picker-wrapper']}>
             <div
               key="click-outside"
               onClick={handleClose}
-              className="
-                fixed
-                inset-0
-                z-10
-              "
+              className={classes['color-picker-backdrop']}
             />
             <ChromePicker
               key="color-picker"
               color={internalValue}
               onChange={handlePickerChange}
               disableAlpha={!(field.enable_alpha ?? false)}
-              className="
-                absolute
-                z-20
-                -top-3
-              "
+              className={classes['color-picker']}
             />
           </div>
         )}
@@ -163,10 +153,16 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
           disabled={disabled}
           readonly={!allowInput}
           cursor={allowInput ? 'text' : 'pointer'}
+          rootClassName={classes.input}
         />
         {showClearButton ? (
-          <IconButton variant="text" onClick={handleClear} disabled={disabled}>
-            <CloseIcon className="w-5 h-5" />
+          <IconButton
+            variant="text"
+            onClick={handleClear}
+            disabled={disabled}
+            className={classes['clear-button']}
+          >
+            <CloseIcon className={classes['clear-button-icon']} />
           </IconButton>
         ) : null}
       </div>

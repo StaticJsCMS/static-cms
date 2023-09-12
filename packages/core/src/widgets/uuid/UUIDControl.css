@@ -1,0 +1,14 @@
+.CMS_UUID_root {
+}
+
+.CMS_UUID_refresh-button {
+}
+
+.CMS_UUID_refresh-button-icon {
+  @apply w-5
+    h-5;
+}
+
+.CMS_UUID_input {
+  @apply truncate;
+}
