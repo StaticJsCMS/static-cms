@@ -1,0 +1,51 @@
+.CMS_WidgetKeyValue_root {
+}
+
+.CMS_WidgetKeyValue_header {
+  @apply flex
+    gap-2
+    px-3
+    mt-2
+    w-full;
+}
+
+.CMS_WidgetKeyValue_header-cell {
+  @apply w-full
+    text-sm;
+}
+
+.CMS_WidgetKeyValue_header-action-cell {
+  @apply flex;
+}
+
+.CMS_WidgetKeyValue_header-action-cell-content {
+  @apply w-[24px];
+}
+
+.CMS_WidgetKeyValue_row {
+  @apply flex
+    gap-2
+    px-3
+    mt-2
+    w-full
+    items-center;
+}
+
+.CMS_WidgetKeyValue_delete-button {
+  @apply h-6
+    w-6;
+}
+
+.CMS_WidgetKeyValue_delete-button-icon {
+  @apply h-5
+    w-5;
+}
+
+.CMS_WidgetKeyValue_actions {
+  @apply px-3
+    mt-3;
+}
+
+.CMS_WidgetKeyValue_add-button {
+  @apply w-full;
+}

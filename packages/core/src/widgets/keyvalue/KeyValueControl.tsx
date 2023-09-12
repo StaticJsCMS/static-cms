@@ -6,11 +6,27 @@ import IconButton from '@staticcms/core/components/common/button/IconButton';
 import Field from '@staticcms/core/components/common/field/Field';
 import TextField from '@staticcms/core/components/common/text-field/TextField';
 import useDebouncedCallback from '@staticcms/core/lib/hooks/useDebouncedCallback';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { createEmptyPair } from './util';
 
 import type { KeyValueField, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC, MouseEvent } from 'react';
 import type { Pair } from './types';
+
+import './KeyValueControl.css';
+
+const classes = generateClassNames('WidgetKeyValue', [
+  'root',
+  'header',
+  'header-cell',
+  'header-action-cell',
+  'header-action-cell-content',
+  'row',
+  'delete-button',
+  'delete-button-icon',
+  'actions',
+  'add-button',
+]);
 
 const StringControl: FC<WidgetControlProps<Pair[], KeyValueField>> = ({
   value,
@@ -100,16 +116,17 @@ const StringControl: FC<WidgetControlProps<Pair[], KeyValueField>> = ({
       forSingleList={forSingleList}
       cursor="text"
       disabled={disabled}
+      rootClassName={classes.root}
     >
-      <div className="flex gap-2 px-3 mt-2 w-full">
-        <div className="w-full text-sm">{keyLabel}</div>
-        <div className="w-full text-sm">{valueLabel}</div>
-        <div className="flex">
-          <div className="w-[24px]"></div>
+      <div className={classes.header}>
+        <div className={classes['header-cell']}>{keyLabel}</div>
+        <div className={classes['header-cell']}>{valueLabel}</div>
+        <div className={classes['header-action-cell']}>
+          <div className={classes['header-action-cell-content']}></div>
         </div>
       </div>
       {internalValue.map((pair, index) => (
-        <div key={`keyvalue-${index}`} className="flex gap-2 px-3 mt-2 w-full items-center">
+        <div key={`keyvalue-${index}`} className={classes.row}>
           <TextField
             type="text"
             data-testid={`key-${index}`}
@@ -135,25 +152,17 @@ const StringControl: FC<WidgetControlProps<Pair[], KeyValueField>> = ({
             variant="text"
             onClick={handleRemove(index)}
             disabled={disabled}
-            className="
-              h-6
-              w-6
-            "
+            className={classes['delete-button']}
           >
-            <CloseIcon
-              className="
-                h-5
-                w-5
-              "
-            />
+            <CloseIcon className={classes['delete-button-icon']} />
           </IconButton>
         </div>
       ))}
-      <div className="px-3 mt-3">
+      <div className={classes.actions}>
         <Button
           variant="outlined"
           onClick={handleAdd}
-          className="w-full"
+          className={classes['add-button']}
           data-testid="key-value-add"
           disabled={disabled}
         >
