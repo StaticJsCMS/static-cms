@@ -16,6 +16,7 @@ import CircularProgress from '@staticcms/core/components/common/progress/Circula
 import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { fileSearch, sortByScore } from '@staticcms/core/lib/util/search.util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import {
   addFileTemplateFields,
   compileStringTemplate,
@@ -34,6 +35,10 @@ import type {
 } from '@staticcms/core/interface';
 import type { FC, ReactNode } from 'react';
 import type { ListChildComponentProps } from 'react-window';
+
+import './RelationControl.css';
+
+export const classes = generateClassNames('WidgetRelation', ['root', 'values', 'loading']);
 
 function Option({ index, style, data }: ListChildComponentProps<{ options: ReactNode[] }>) {
   return <div style={style}>{data.options[index]}</div>;
@@ -334,12 +339,13 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
       forSingleList={forSingleList}
       cursor="text"
       disabled={disabled}
+      rootClassName={classes.root}
     >
       <Autocomplete
         label={
           <>
             {Array.isArray(selectedValue) && selectedValue.length > 0 ? (
-              <div className="flex flex-wrap gap-2 p-2 pr-0 w-relation-widget-label">
+              <div className={classes.values}>
                 {selectedValue.map(selectValue => {
                   const option = uniqueOptionsByValue[selectValue];
                   return (
@@ -353,7 +359,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
             {loading ? (
               <CircularProgress
                 key="loading-indicator"
-                className="absolute inset-y-0 right-4 flex items-center pr-2"
+                className={classes.loading}
                 data-testid="relation-loading-indicator"
                 size="small"
               />
