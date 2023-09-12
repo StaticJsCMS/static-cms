@@ -1,0 +1,56 @@
+.CMS_Login_root {
+  @apply flex
+    flex-col
+    h-screen
+    items-center
+    justify-center
+    bg-slate-50
+    dark:bg-slate-900;
+}
+
+.CMS_Login_custom-logo {
+  @apply h-40
+    w-80
+    mb-4
+    bg-contain
+    bg-no-repeat
+    bg-center
+    object-cover;
+}
+
+.CMS_Login_static-cms-logo {
+  @apply h-40
+    w-80;
+}
+
+.CMS_Login_error {
+  @apply flex
+    px-4
+    py-3
+    mb-6
+    text-sm
+    text-red-800
+    border
+    border-red-300
+    rounded-lg
+    bg-red-50
+    dark:bg-gray-800
+    dark:text-red-400
+    dark:border-red-800;
+}
+
+.CMS_Login_error-icon {
+  @apply flex-shrink-0
+    inline
+    w-5
+    h-5
+    mr-3;
+}
+
+.CMS_Login_error-sr-label {
+  @apply sr-only;
+}
+
+.CMS_Login_button {
+  @apply mb-6;
+}

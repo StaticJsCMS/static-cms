@@ -6,9 +6,22 @@ import { translate } from 'react-polyglot';
 import yaml from 'yaml';
 
 import { localForage } from '@staticcms/core/lib/util';
+import { generateClassNames } from '../lib/util/theming.util';
 
 import type { Config, TranslatedProps } from '@staticcms/core/interface';
 import type { ComponentClass, ReactNode } from 'react';
+
+import './ErrorBoundary.css';
+
+export const classes = generateClassNames('ErrorBoundary', [
+  'root',
+  'header',
+  'title',
+  'report-link',
+  'content',
+  'details-title',
+  'error-line',
+]);
 
 const ISSUE_URL = 'https://github.com/StaticJsCMS/static-cms/issues/new?';
 
@@ -147,27 +160,9 @@ class ErrorBoundary extends Component<TranslatedProps<ErrorBoundaryProps>, Error
       return this.props.children;
     }
     return (
-      <div
-        key="error-boundary-container"
-        className="
-          flex
-          flex-col
-          bg-slate-50
-          dark:bg-slate-900
-          min-h-screen
-          gap-2
-        "
-      >
-        <div
-          className="
-            flex
-            flex-col
-            py-2
-            px-4
-            gap-2
-          "
-        >
-          <h1 className="text-2xl bold">{t('ui.errorBoundary.title')}</h1>
+      <div key="error-boundary-container" className={classes.root}>
+        <div className={classes.header}>
+          <h1 className={classes.title}>{t('ui.errorBoundary.title')}</h1>
           <p>
             <span>{t('ui.errorBoundary.details')}</span>
             <a
@@ -175,10 +170,7 @@ class ErrorBoundary extends Component<TranslatedProps<ErrorBoundaryProps>, Error
               target="_blank"
               rel="noopener noreferrer"
               data-testid="issue-url"
-              className="
-                text-blue-500
-                hover:underline
-              "
+              className={classes['report-link']}
             >
               {t('ui.errorBoundary.reportIt')}
             </a>
@@ -193,19 +185,11 @@ class ErrorBoundary extends Component<TranslatedProps<ErrorBoundaryProps>, Error
           </p>
         </div>
         <hr />
-        <div
-          className="
-            flex
-            flex-col
-            py-2
-            px-4
-            gap-2
-          "
-        >
-          <h2 className="text-xl bold">{t('ui.errorBoundary.detailsHeading')}</h2>
+        <div className={classes.content}>
+          <h2 className={classes['details-title']}>{t('ui.errorBoundary.detailsHeading')}</h2>
           <p>
             {errorMessage.split('\n').map((item, index) => [
-              <span key={`error-line-${index}`} className="whitespace-pre">
+              <span key={`error-line-${index}`} className={classes['error-line']}>
                 {item}
               </span>,
               <br key={`error-break-${index}`} />,

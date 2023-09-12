@@ -5,9 +5,11 @@
     lg:mr-1;
 }
 
-.CMS_ViewStyleControl_active {
-  @apply text-blue-500
-    dark:text-blue-500;
+.CMS_ViewStyleControl_button {
+  &.CMS_ViewStyleControl_active {
+    @apply text-blue-500
+      dark:text-blue-500;
+  }
 }
 
 .CMS_ViewStyleControl_icon {

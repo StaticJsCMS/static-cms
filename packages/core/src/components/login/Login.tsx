@@ -2,6 +2,7 @@ import React from 'react';
 import { translate } from 'react-polyglot';
 
 import Button from '@staticcms/core/components/common/button/Button';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import { StaticCmsLogo } from '../images/_index';
@@ -9,6 +10,18 @@ import GoBackButton from './GoBackButton';
 
 import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC, MouseEventHandler, ReactNode } from 'react';
+
+import './Login.css';
+
+export const classes = generateClassNames('Login', [
+  'root',
+  'custom-logo',
+  'static-cms-logo',
+  'error',
+  'error-icon',
+  'error-sr-label',
+  'button',
+]);
 
 export interface LoginProps {
   inProgress?: boolean;
@@ -31,23 +44,20 @@ const Login = ({
   const config = useAppSelector(selectConfig);
 
   return (
-    <div className="flex flex-col h-screen items-center justify-center bg-slate-50 dark:bg-slate-900">
+    <div className={classes.root}>
       {config?.logo_url ? (
         <div
-          className="h-40 w-80 mb-4 bg-contain bg-no-repeat bg-center object-cover"
+          className={classes['custom-logo']}
           style={{ backgroundImage: `url('${config.logo_url}')` }}
         />
       ) : (
-        <StaticCmsLogo className="h-40 w-80" />
+        <StaticCmsLogo className={classes['static-cms-logo']} />
       )}
       {error ? (
-        <div
-          className="flex px-4 py-3 mb-6 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
-          role="alert"
-        >
+        <div className={classes.error} role="alert">
           <svg
             aria-hidden="true"
-            className="flex-shrink-0 inline w-5 h-5 mr-3"
+            className={classes['error-icon']}
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -58,11 +68,16 @@ const Login = ({
               clipRule="evenodd"
             ></path>
           </svg>
-          <span className="sr-only">Info</span>
+          <span className={classes['error-sr-label']}>Info</span>
           <div>{error}</div>
         </div>
       ) : null}
-      <Button disabled={inProgress || disabled} onClick={login} className="mb-6" startIcon={icon}>
+      <Button
+        disabled={inProgress || disabled}
+        onClick={login}
+        className={classes.button}
+        startIcon={icon}
+      >
         {inProgress ? t('auth.loggingIn') : label ?? t('auth.login')}
       </Button>
       {config?.site_url && <GoBackButton href={config.site_url} t={t}></GoBackButton>}

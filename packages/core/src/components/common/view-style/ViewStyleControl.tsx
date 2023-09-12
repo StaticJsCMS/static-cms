@@ -11,7 +11,7 @@ import type { ViewStyle } from '@staticcms/core/constants/views';
 
 import './ViewStyleControl.css';
 
-export const classes = generateClassNames('ViewStyleControl', ['root', 'active', 'icon']);
+export const classes = generateClassNames('ViewStyleControl', ['root', 'button', 'active', 'icon']);
 
 interface ViewStyleControlPros {
   viewStyle: ViewStyle;
@@ -23,7 +23,7 @@ const ViewStyleControl = ({ viewStyle, onChangeViewStyle }: ViewStyleControlPros
     <div className={classes.root}>
       <IconButton
         variant="text"
-        className={classNames(viewStyle === VIEW_STYLE_TABLE && classes.active)}
+        className={classNames(classes.button, viewStyle === VIEW_STYLE_TABLE && classes.active)}
         aria-label="table view"
         onClick={() => onChangeViewStyle(VIEW_STYLE_TABLE)}
       >
@@ -31,7 +31,7 @@ const ViewStyleControl = ({ viewStyle, onChangeViewStyle }: ViewStyleControlPros
       </IconButton>
       <IconButton
         variant="text"
-        className={classNames(viewStyle === VIEW_STYLE_GRID && classes.active)}
+        className={classNames(classes.button, viewStyle === VIEW_STYLE_GRID && classes.active)}
         aria-label="grid view"
         onClick={() => onChangeViewStyle(VIEW_STYLE_GRID)}
       >

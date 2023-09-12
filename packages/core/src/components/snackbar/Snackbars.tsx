@@ -50,7 +50,6 @@ const Snackbars: FC<TranslateProps> = ({ t }) => {
       onClose={handleClose}
       TransitionProps={{ onExited: handleExited }}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-      className="test"
     >
       {messageInfo ? <SnackbarAlert data={messageInfo} onClose={handleClose} t={t} /> : undefined}
     </Snackbar>
