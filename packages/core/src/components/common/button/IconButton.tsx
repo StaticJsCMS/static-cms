@@ -19,10 +19,10 @@ const IconButton = ({ children, size = 'medium', className, ...otherProps }: But
   return (
     <Button
       className={classNames(
+        className,
         classes.root,
         size === 'small' && classes.sm,
         size === 'medium' && classes.md,
-        className,
       )}
       size={size}
       {...otherProps}

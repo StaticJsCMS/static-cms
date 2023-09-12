@@ -10,6 +10,7 @@ import './MenuItemButton.css';
 
 export const classes = generateClassNames('MenuItemButton', [
   'root',
+  'disabled',
   'active',
   'default',
   'warning',
@@ -49,6 +50,7 @@ const MenuItemButton = ({
           className: classNames(
             className,
             classes.root,
+            disabled && classes.disabled,
             active && classes.active,
             color === 'default' && classes.default,
             color === 'warning' && classes.warning,

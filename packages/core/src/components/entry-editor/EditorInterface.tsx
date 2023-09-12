@@ -153,12 +153,6 @@ const EditorInterface = ({
     [onPersist],
   );
 
-  const handleTogglePreview = useCallback(() => {
-    const newPreviewActive = !previewActive;
-    setPreviewActive(newPreviewActive);
-    localStorage.setItem(PREVIEW_VISIBLE, `${newPreviewActive}`);
-  }, [previewActive]);
-
   const handleToggleScrollSync = useCallback(() => {
     toggleScroll();
   }, [toggleScroll]);
@@ -171,6 +165,20 @@ const EditorInterface = ({
     );
     localStorage.setItem(I18N_VISIBLE, `${newI18nActive}`);
   }, [i18nActive, setSelectedLocale, translatedLocales, defaultLocale]);
+
+  const handleTogglePreview = useCallback(() => {
+    let newPreviewActive = true;
+    if (i18nActive) {
+      handleToggleI18n();
+    } else {
+      newPreviewActive = !previewActive;
+    }
+
+    setPreviewActive(newPreviewActive);
+    localStorage.setItem(PREVIEW_VISIBLE, `${newPreviewActive}`);
+  }, [handleToggleI18n, i18nActive, previewActive]);
+
+  console.log('i18nActive', i18nActive, 'previewActive', previewActive);
 
   const handleLocaleChange = useCallback((locale: string) => {
     setSelectedLocale(locale);
@@ -235,8 +243,12 @@ const EditorInterface = ({
 
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const toggleMobilePreview = useCallback(() => {
+    if (!previewActive) {
+      handleTogglePreview();
+    }
+
     setShowMobilePreview(old => !old);
-  }, []);
+  }, [handleTogglePreview, previewActive]);
 
   const editor = useMemo(
     () => (
@@ -303,9 +315,11 @@ const EditorInterface = ({
     [collection, entry, fields, fieldsErrors, handleLocaleChange, selectedLocale, submitted, t],
   );
 
-  const previewEntry = collectHasI18n
-    ? getPreviewEntry(entry, selectedLocale, defaultLocale)
-    : entry;
+  const previewEntry = useMemo(
+    () =>
+      collectHasI18n ? getPreviewEntry(collection, entry, selectedLocale, defaultLocale) : entry,
+    [collectHasI18n, collection, defaultLocale, entry, selectedLocale],
+  );
 
   const mobileLocaleEditor = useMemo(
     () => (
