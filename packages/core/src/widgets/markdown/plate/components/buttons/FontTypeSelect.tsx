@@ -1,5 +1,5 @@
-import OptionUnstyled from '@mui/base/OptionUnstyled';
-import SelectUnstyled from '@mui/base/SelectUnstyled';
+import { Option } from '@mui/base/Option';
+import { Select } from '@mui/base/Select';
 import { UnfoldMore as UnfoldMoreIcon } from '@styled-icons/material/UnfoldMore';
 import {
   ELEMENT_H1,
@@ -19,7 +19,7 @@ import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 
-import type { SelectUnstyledRootSlotProps } from '@mui/base/SelectUnstyled';
+import type { SelectRootSlotProps } from '@mui/base/Select';
 import type { FC, FocusEvent, KeyboardEvent, MouseEvent } from 'react';
 
 type Option = {
@@ -59,7 +59,7 @@ const types: Option[] = [
 ];
 
 const Button = React.forwardRef(function Button<TValue extends {}, Multiple extends boolean>(
-  props: SelectUnstyledRootSlotProps<TValue, Multiple>,
+  props: SelectRootSlotProps<TValue, Multiple>,
   ref: React.ForwardedRef<HTMLButtonElement>,
 ) {
   const { ownerState: _, children, ...other } = props;
@@ -119,7 +119,7 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
         mx-1
       "
     >
-      <SelectUnstyled
+      <Select
         value={value?.value ?? ELEMENT_PARAGRAPH}
         onChange={handleChange}
         disabled={disabled}
@@ -183,7 +183,7 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
           const selected = (value?.value ?? ELEMENT_PARAGRAPH) === type.value;
 
           return (
-            <OptionUnstyled
+            <Option
               key={type.value}
               value={type.value}
               slotProps={{
@@ -213,10 +213,10 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
               >
                 {type.label}
               </span>
-            </OptionUnstyled>
+            </Option>
           );
         })}
-      </SelectUnstyled>
+      </Select>
     </div>
   );
 };

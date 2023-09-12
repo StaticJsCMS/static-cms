@@ -1,4 +1,4 @@
-import ModalUnstyled from '@mui/base/ModalUnstyled';
+import { Modal as BaseModal } from '@mui/base/Modal';
 import React, { useCallback } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
@@ -22,7 +22,7 @@ const Modal: FC<ModalProps> = ({ open, children, className, onClose }) => {
   }, [onClose]);
 
   return (
-    <ModalUnstyled
+    <BaseModal
       open={open}
       onClose={handleClose}
       slots={{
@@ -35,7 +35,7 @@ const Modal: FC<ModalProps> = ({ open, children, className, onClose }) => {
       }}
     >
       <div className={classNames(modalClasses.content, className)}>{children}</div>
-    </ModalUnstyled>
+    </BaseModal>
   );
 };
 

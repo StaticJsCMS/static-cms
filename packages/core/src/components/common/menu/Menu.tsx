@@ -1,7 +1,8 @@
-import ClickAwayListener from '@mui/base/ClickAwayListener';
-import MenuUnstyled from '@mui/base/MenuUnstyled';
+import { Dropdown } from '@mui/base/Dropdown';
+import { Menu as BaseMenu } from '@mui/base/Menu';
+import { MenuButton } from '@mui/base/MenuButton';
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@styled-icons/material/KeyboardArrowDown';
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
@@ -39,7 +40,6 @@ export interface MenuProps {
   hideDropdownIcon?: boolean;
   hideDropdownIconOnMobile?: boolean;
   hideLabel?: boolean;
-  keepMounted?: boolean;
   disabled?: boolean;
   'data-testid'?: string;
 }
@@ -59,28 +59,9 @@ const Menu = ({
   hideDropdownIcon = false,
   hideDropdownIconOnMobile = false,
   hideLabel = false,
-  keepMounted = false,
   disabled = false,
   'data-testid': dataTestId,
 }: MenuProps) => {
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const isOpen = Boolean(anchorEl);
-
-  const handleButtonClick = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      if (isOpen) {
-        setAnchorEl(null);
-      } else {
-        setAnchorEl(event.currentTarget);
-      }
-    },
-    [isOpen],
-  );
-
-  const handleClose = useCallback(() => {
-    setAnchorEl(null);
-  }, []);
-
   const calculatedButtonClassName = useButtonClassNames(variant, color, size, rounded);
 
   const menuButtonClassNames = useMemo(
@@ -89,7 +70,7 @@ const Menu = ({
   );
 
   return (
-    <ClickAwayListener mouseEvent="onMouseDown" touchEvent="onTouchStart" onClickAway={handleClose}>
+    <Dropdown>
       <div
         className={classNames(
           classes.root,
@@ -99,11 +80,7 @@ const Menu = ({
           rootClassName,
         )}
       >
-        <button
-          type="button"
-          onClick={handleButtonClick}
-          aria-controls={isOpen ? 'simple-menu' : undefined}
-          aria-expanded={isOpen || undefined}
+        <MenuButton
           aria-haspopup="menu"
           data-testid={dataTestId}
           className={menuButtonClassNames}
@@ -118,22 +95,18 @@ const Menu = ({
           {!hideDropdownIcon ? (
             <KeyboardArrowDownIcon className={classes['dropdown-icon']} aria-hidden="true" />
           ) : null}
-        </button>
-        <MenuUnstyled
-          open={isOpen}
-          anchorEl={anchorEl}
-          keepMounted={keepMounted}
+        </MenuButton>
+        <BaseMenu
           slotProps={{
             root: {
               className: classes.menu,
-              onClick: handleClose,
             },
           }}
         >
           {children}
-        </MenuUnstyled>
+        </BaseMenu>
       </div>
-    </ClickAwayListener>
+    </Dropdown>
   );
 };
 

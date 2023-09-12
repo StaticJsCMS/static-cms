@@ -1,4 +1,4 @@
-import InputUnstyled from '@mui/base/InputUnstyled';
+import { Input } from '@mui/base/Input';
 import React from 'react';
 
 import useCursor from '@staticcms/core/lib/hooks/useCursor';
@@ -71,7 +71,7 @@ const TextField: FC<TextFieldProps> = ({
   const finalCursor = useCursor(cursor, disabled);
 
   return (
-    <InputUnstyled
+    <Input
       type={type}
       value={value}
       onChange={onChange}

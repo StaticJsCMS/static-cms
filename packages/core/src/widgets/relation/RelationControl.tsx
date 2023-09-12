@@ -292,7 +292,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
     return selected;
   }, [internalValue, isMultiple, uniqueOptions]);
 
-  const ref = useRef<HTMLButtonElement | null>(null);
+  const ref = useRef<HTMLInputElement | null>(null);
 
   const handleChange = useCallback(
     (newValue: string | string[] | undefined) => {
@@ -360,7 +360,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
             ) : null}
           </>
         }
-        ref={ref}
+        inputRef={ref}
         value={selectedValue}
         options={uniqueOptions}
         disabled={disabled}

@@ -1,4 +1,4 @@
-import OptionUnstyled from '@mui/base/OptionUnstyled';
+import { Option as BaseOption } from '@mui/base/Option';
 import React, { useMemo } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
@@ -33,7 +33,7 @@ const Option = function <T>({
   );
 
   return (
-    <OptionUnstyled
+    <BaseOption
       value={value}
       data-testid={dataTestId}
       slotProps={{
@@ -43,7 +43,7 @@ const Option = function <T>({
       }}
     >
       <span className={classes.label}>{children}</span>
-    </OptionUnstyled>
+    </BaseOption>
   );
 };
 

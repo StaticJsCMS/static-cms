@@ -1,4 +1,4 @@
-import SelectUnstyled from '@mui/base/SelectUnstyled';
+import { Select as BaseSelect } from '@mui/base/Select';
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@styled-icons/material/KeyboardArrowDown';
 import React, { forwardRef, useCallback, useState } from 'react';
 
@@ -103,7 +103,7 @@ const Select = forwardRef(
     return (
       <div className={classNames(classes.root, rootClassName)}>
         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        <SelectUnstyled<any>
+        <BaseSelect<any>
           renderValue={() => {
             return (
               <div className={classes.value}>
@@ -153,7 +153,7 @@ const Select = forwardRef(
               </Option>
             );
           })}
-        </SelectUnstyled>
+        </BaseSelect>
       </div>
     );
   },

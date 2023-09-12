@@ -1,4 +1,4 @@
-import PopperUnstyled from '@mui/base/PopperUnstyled';
+import { Popper } from '@mui/base/Popper';
 import {
   ELEMENT_LINK,
   ELEMENT_TD,
@@ -250,14 +250,14 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
         }}
       />
       {groups.length > 0 || debouncedGroups.length > 0 ? (
-        <PopperUnstyled
+        <Popper
           open={Boolean(debouncedOpen && anchorEl.current)}
-          component="div"
           placement="top"
           anchorEl={anchorEl.current ?? null}
           onFocus={handleFocus}
           onBlur={handleBlur}
           tabIndex={0}
+          slots={{ root: 'div' }}
           className="
             absolute
             max-h-60
@@ -286,7 +286,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
           >
             {groups.length > 0 ? groups : debouncedGroups}
           </div>
-        </PopperUnstyled>
+        </Popper>
       ) : null}
     </>
   );

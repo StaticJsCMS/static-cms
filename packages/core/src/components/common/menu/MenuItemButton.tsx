@@ -1,4 +1,4 @@
-import MenuItemUnstyled from '@mui/base/MenuItemUnstyled';
+import { MenuItem } from '@mui/base/MenuItem';
 import React from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
@@ -43,7 +43,7 @@ const MenuItemButton = ({
   'data-testid': dataTestId,
 }: MenuItemButtonProps) => {
   return (
-    <MenuItemUnstyled
+    <MenuItem
       slotProps={{
         root: {
           className: classNames(
@@ -65,7 +65,7 @@ const MenuItemButton = ({
         {children}
       </div>
       {EndIcon ? <EndIcon className={classes['end-icon']} /> : null}
-    </MenuItemUnstyled>
+    </MenuItem>
   );
 };
 

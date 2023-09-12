@@ -29,5 +29,7 @@
 
 .CMS_Preview_inline {
   @apply overflow-y-auto
-    h-full;
+    h-full
+    py-2
+    px-3;
 }

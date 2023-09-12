@@ -1,4 +1,4 @@
-import PopperUnstyled from '@mui/base/PopperUnstyled';
+import { Popper } from '@mui/base/Popper';
 import { DeleteForever as DeleteForeverIcon } from '@styled-icons/material/DeleteForever';
 import { OpenInNew as OpenInNewIcon } from '@styled-icons/material/OpenInNew';
 import React, { useCallback, useMemo } from 'react';
@@ -78,16 +78,16 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
   const id = open ? 'edit-popover' : undefined;
 
   return (
-    <PopperUnstyled
+    <Popper
       id={id}
       open={open}
-      component="div"
       placement="top"
       anchorEl={anchorEl}
       onFocus={handleFocus}
       onBlur={handleBlur}
       disablePortal
       tabIndex={0}
+      slots={{ root: 'div' }}
       className="
         absolute
         max-h-60
@@ -135,7 +135,7 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
           <DeleteForeverIcon className="w-4 h-4" title="Delete" />
         </Button>
       </div>
-    </PopperUnstyled>
+    </Popper>
   );
 };
 

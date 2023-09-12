@@ -1,4 +1,4 @@
-import PopperUnstyled from '@mui/base/PopperUnstyled';
+import { Popper as BasePopper } from '@mui/base/Popper';
 import { Search as SearchIcon } from '@styled-icons/material/Search';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { translate } from 'react-polyglot';
@@ -176,13 +176,15 @@ const CollectionSearch = ({
           onClick={handleClick}
         />
       </div>
-      <PopperUnstyled
+      <BasePopper
         open={open}
-        component="div"
         placement="top"
         anchorEl={anchorEl}
         tabIndex={0}
         className={classes['search-in']}
+        slots={{
+          root: 'div',
+        }}
       >
         <div key="edit-content" contentEditable={false} className={classes['search-in-content']}>
           <div className={classes['search-in-label']}>{t('collection.sidebar.searchIn')}</div>
@@ -204,7 +206,7 @@ const CollectionSearch = ({
             </div>
           ))}
         </div>
-      </PopperUnstyled>
+      </BasePopper>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import MenuItemUnstyled from '@mui/base/MenuItemUnstyled';
+import { MenuItem } from '@mui/base/MenuItem';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
@@ -35,21 +35,21 @@ const MenuItemLink = ({
   endIcon: EndIcon,
 }: MenuItemLinkProps) => {
   return (
-    <MenuItemUnstyled
-      component={NavLink}
-      to={href}
-      slotProps={{
-        root: {
-          className: classNames(className, classes.root, active && classes.active),
-        },
-      }}
-    >
-      <div className={classes.content}>
-        {StartIcon ? <StartIcon className={classes['start-icon']} /> : null}
-        {children}
-      </div>
-      {EndIcon ? <EndIcon className={classes['end-icon']} /> : null}
-    </MenuItemUnstyled>
+    <NavLink to={href}>
+      <MenuItem
+        slotProps={{
+          root: {
+            className: classNames(className, classes.root, active && classes.active),
+          },
+        }}
+      >
+        <div className={classes.content}>
+          {StartIcon ? <StartIcon className={classes['start-icon']} /> : null}
+          {children}
+        </div>
+        {EndIcon ? <EndIcon className={classes['end-icon']} /> : null}
+      </MenuItem>
+    </NavLink>
   );
 };
 

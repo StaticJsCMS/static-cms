@@ -1,4 +1,4 @@
-import InputUnstyled from '@mui/base/InputUnstyled';
+import { Input } from '@mui/base/Input';
 import React, { forwardRef, useCallback, useState } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
@@ -71,7 +71,7 @@ const TextArea = forwardRef<HTMLInputElement | null, TextAreaProps>(
     }, [lastAutogrowHeight, ref]);
 
     return (
-      <InputUnstyled
+      <Input
         multiline
         minRows={4}
         onInput={autoGrow}
