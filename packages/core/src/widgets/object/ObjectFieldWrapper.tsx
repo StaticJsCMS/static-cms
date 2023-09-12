@@ -20,6 +20,7 @@ export interface ObjectFieldWrapperProps {
   hasChildErrors: boolean;
   hint?: string;
   disabled: boolean;
+  forSingleList: boolean;
 }
 
 const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
@@ -31,6 +32,7 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
   hasChildErrors,
   hint,
   disabled,
+  forSingleList,
 }) => {
   const hasErrors = useMemo(() => errors.length > 0, [errors.length]);
 
@@ -48,6 +50,8 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
         disabled && widgetObjectClasses.disabled,
         (hasErrors || hasChildErrors) && widgetObjectClasses.error,
         open && widgetObjectClasses.open,
+        field.required !== false && widgetObjectClasses.required,
+        forSingleList && widgetObjectClasses['for-single-list'],
       )}
     >
       <button

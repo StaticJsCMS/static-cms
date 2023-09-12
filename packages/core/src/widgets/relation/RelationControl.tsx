@@ -13,6 +13,7 @@ import Autocomplete from '@staticcms/core/components/common/autocomplete/Autocom
 import Field from '@staticcms/core/components/common/field/Field';
 import Pill from '@staticcms/core/components/common/pill/Pill';
 import CircularProgress from '@staticcms/core/components/common/progress/CircularProgress';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { fileSearch, sortByScore } from '@staticcms/core/lib/util/search.util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
@@ -38,7 +39,15 @@ import type { ListChildComponentProps } from 'react-window';
 
 import './RelationControl.css';
 
-export const classes = generateClassNames('WidgetRelation', ['root', 'values', 'loading']);
+export const classes = generateClassNames('WidgetRelation', [
+  'root',
+  'error',
+  'required',
+  'disabled',
+  'for-single-list',
+  'values',
+  'loading',
+]);
 
 function Option({ index, style, data }: ListChildComponentProps<{ options: ReactNode[] }>) {
   return <div style={style}>{data.options[index]}</div>;
@@ -339,7 +348,13 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
       forSingleList={forSingleList}
       cursor="text"
       disabled={disabled}
-      rootClassName={classes.root}
+      rootClassName={classNames(
+        classes.root,
+        disabled && classes.disabled,
+        field.required !== false && classes.required,
+        hasErrors && classes.error,
+        forSingleList && classes['for-single-list'],
+      )}
     >
       <Autocomplete
         label={

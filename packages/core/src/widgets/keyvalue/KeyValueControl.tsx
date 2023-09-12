@@ -6,6 +6,7 @@ import IconButton from '@staticcms/core/components/common/button/IconButton';
 import Field from '@staticcms/core/components/common/field/Field';
 import TextField from '@staticcms/core/components/common/text-field/TextField';
 import useDebouncedCallback from '@staticcms/core/lib/hooks/useDebouncedCallback';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { createEmptyPair } from './util';
 
@@ -17,6 +18,10 @@ import './KeyValueControl.css';
 
 const classes = generateClassNames('WidgetKeyValue', [
   'root',
+  'error',
+  'required',
+  'disabled',
+  'for-single-list',
   'header',
   'header-cell',
   'header-action-cell',
@@ -32,6 +37,7 @@ const StringControl: FC<WidgetControlProps<Pair[], KeyValueField>> = ({
   value,
   label,
   errors,
+  hasErrors,
   disabled,
   field,
   forSingleList,
@@ -116,7 +122,13 @@ const StringControl: FC<WidgetControlProps<Pair[], KeyValueField>> = ({
       forSingleList={forSingleList}
       cursor="text"
       disabled={disabled}
-      rootClassName={classes.root}
+      rootClassName={classNames(
+        classes.root,
+        disabled && classes.disabled,
+        field.required !== false && classes.required,
+        hasErrors && classes.error,
+        forSingleList && classes['for-single-list'],
+      )}
     >
       <div className={classes.header}>
         <div className={classes['header-cell']}>{keyLabel}</div>

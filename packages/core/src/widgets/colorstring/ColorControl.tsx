@@ -17,7 +17,10 @@ import './ColorControl.css';
 
 export const classes = generateClassNames('WidgetColor', [
   'root',
+  'error',
+  'required',
   'disabled',
+  'for-single-list',
   'allow-input',
   'content',
   'color-swatch-wrapper',
@@ -36,6 +39,7 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
   onChange,
   value,
   errors,
+  hasErrors,
   label,
   forSingleList,
   disabled,
@@ -107,6 +111,9 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
       rootClassName={classNames(
         classes.root,
         disabled && classes.disabled,
+        field.required !== false && classes.required,
+        hasErrors && classes.error,
+        forSingleList && classes['for-single-list'],
         allowInput && classes['allow-input'],
       )}
     >

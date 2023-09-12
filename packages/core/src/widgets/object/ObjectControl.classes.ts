@@ -4,6 +4,8 @@ const widgetObjectClasses = generateClassNames('WidgetObject', [
   'root',
   'error',
   'disabled',
+  'required',
+  'for-single-list',
   'open',
   'expand',
   'expand-icon',

@@ -29,15 +29,16 @@ import './CodeControl.css';
 
 export const classes = generateClassNames('WidgetCode', [
   'root',
+  'error',
+  'required',
+  'disabled',
+  'for-single-list',
   'field-wrapper',
   'expand-button',
   'expand-button-icon',
   'label',
   'error-message',
   'expanded',
-  'disabled',
-  'error',
-  'for-single-list',
 ]);
 
 function valueToOption(val: string | { name: string; label?: string }): {
@@ -184,6 +185,7 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
         disabled && classes.disabled,
         hasErrors && classes.error,
         forSingleList && classes['for-single-list'],
+        field.required !== false && classes.required,
         open && classes.expanded,
       )}
     >

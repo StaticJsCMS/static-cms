@@ -10,6 +10,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import Field from '@staticcms/core/components/common/field/Field';
 import TextField from '@staticcms/core/components/common/text-field/TextField';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import NowButton from './components/NowButton';
@@ -30,6 +31,10 @@ import './DateTimeControl.css';
 
 export const classes = generateClassNames('WidgetDate', [
   'root',
+  'error',
+  'required',
+  'disabled',
+  'for-single-list',
   'wrapper',
   'date-input',
   'time-input',
@@ -60,6 +65,7 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
   disabled,
   duplicate,
   errors,
+  hasErrors,
   forSingleList,
   t,
   onChange,
@@ -296,7 +302,13 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
       forSingleList={forSingleList}
       cursor="pointer"
       disabled={disabled}
-      rootClassName={classes.root}
+      rootClassName={classNames(
+        classes.root,
+        disabled && classes.disabled,
+        field.required !== false && classes.required,
+        hasErrors && classes.error,
+        forSingleList && classes['for-single-list'],
+      )}
       wrapperClassName={classes.wrapper}
     >
       <LocalizationProvider key="localization-provider" dateAdapter={AdapterDateFns}>

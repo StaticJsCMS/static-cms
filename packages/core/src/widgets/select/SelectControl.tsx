@@ -3,6 +3,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import Field from '@staticcms/core/components/common/field/Field';
 import Pill from '@staticcms/core/components/common/pill/Pill';
 import Select from '@staticcms/core/components/common/select/Select';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
@@ -15,7 +16,15 @@ import type { FC } from 'react';
 
 import './SelectControl.css';
 
-const classes = generateClassNames('WidgetSelect', ['root', 'input', 'values']);
+const classes = generateClassNames('WidgetSelect', [
+  'root',
+  'error',
+  'required',
+  'disabled',
+  'for-single-list',
+  'input',
+  'values',
+]);
 
 function convertToOption(
   raw: string | number | SelectWidgetOptionObject | undefined,
@@ -135,7 +144,13 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
       cursor="pointer"
       disabled={disabled}
       disableClick={open}
-      rootClassName={classes.root}
+      rootClassName={classNames(
+        classes.root,
+        disabled && classes.disabled,
+        field.required !== false && classes.required,
+        hasErrors && classes.error,
+        forSingleList && classes['for-single-list'],
+      )}
     >
       <Select
         label={
