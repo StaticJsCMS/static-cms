@@ -2,9 +2,12 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import Field from '@staticcms/core/components/common/field/Field';
 import TextField from '@staticcms/core/components/common/text-field/TextField';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { NumberField, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC } from 'react';
+
+const classes = generateClassNames('WidgetNumberPreview', ['root', 'input']);
 
 const NumberControl: FC<WidgetControlProps<string | number, NumberField>> = ({
   field,
@@ -65,6 +68,7 @@ const NumberControl: FC<WidgetControlProps<string | number, NumberField>> = ({
       forSingleList={forSingleList}
       cursor="text"
       disabled={disabled}
+      rootClassName={classes.root}
     >
       <TextField
         type="number"
@@ -75,6 +79,7 @@ const NumberControl: FC<WidgetControlProps<string | number, NumberField>> = ({
         step={step}
         disabled={disabled}
         onChange={handleChange}
+        inputClassName={classes.input}
       />
     </Field>
   );
