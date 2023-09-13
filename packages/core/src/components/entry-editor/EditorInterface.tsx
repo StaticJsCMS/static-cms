@@ -178,8 +178,6 @@ const EditorInterface = ({
     localStorage.setItem(PREVIEW_VISIBLE, `${newPreviewActive}`);
   }, [handleToggleI18n, i18nActive, previewActive]);
 
-  console.log('i18nActive', i18nActive, 'previewActive', previewActive);
-
   const handleLocaleChange = useCallback((locale: string) => {
     setSelectedLocale(locale);
   }, []);
