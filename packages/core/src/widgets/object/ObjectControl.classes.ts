@@ -2,6 +2,7 @@ import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 const widgetObjectClasses = generateClassNames('WidgetObject', [
   'root',
+  'list-root',
   'error',
   'disabled',
   'required',

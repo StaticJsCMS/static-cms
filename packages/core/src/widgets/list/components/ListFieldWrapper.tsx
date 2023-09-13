@@ -6,6 +6,7 @@ import ErrorMessage from '@staticcms/core/components/common/field/ErrorMessage';
 import Hint from '@staticcms/core/components/common/field/Hint';
 import Label from '@staticcms/core/components/common/field/Label';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import widgetListClasses from '../ListControl.classes';
 
 import type { FieldError, ListField } from '@staticcms/core/interface';
 import type { FC, ReactNode } from 'react';
@@ -45,95 +46,34 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
     <div
       data-testid="list-field"
       className={classNames(
-        `
-          relative
-          flex
-          flex-col
-          border-b
-          border-slate-400
-          focus-within:border-blue-800
-          dark:focus-within:border-blue-100
-        `,
-        !(hasErrors || hasChildErrors) && 'group/active-list',
+        widgetListClasses.root,
+        disabled && widgetListClasses.disabled,
+        field.required !== false && widgetListClasses.required,
+        hasErrors && widgetListClasses.error,
+        forSingleList && widgetListClasses['for-single-list'],
+        open && widgetListClasses.open,
       )}
     >
-      <div
-        data-testid="field-wrapper"
-        className={classNames(
-          `
-            relative
-            flex
-            flex-col
-            w-full
-          `,
-          forSingleList && 'mr-14',
-        )}
-      >
+      <div data-testid="field-wrapper" className={widgetListClasses['field-wrapper']}>
         <button
           data-testid="list-expand-button"
-          className="
-            flex
-            w-full
-            justify-between
-            px-3
-            py-2
-            text-left
-            text-sm
-            font-medium
-            focus:outline-none
-            focus-visible:ring
-            gap-2
-            focus-visible:ring-opacity-75
-            items-center
-          "
+          className={widgetListClasses['expand-button']}
           onClick={handleOpenToggle}
         >
           <Label
             key="label"
             hasErrors={hasErrors || hasChildErrors}
-            className={classNames(
-              !disabled &&
-                `
-                  group-focus-within/active-list:text-blue-500
-                  group-hover/active-list:text-blue-500
-                `,
-            )}
+            className={widgetListClasses.summary}
             cursor="pointer"
             variant="inline"
             disabled={disabled}
           >
             {open ? openLabel : closedLabel}
           </Label>
-          <ChevronRightIcon
-            className={classNames(
-              open && 'rotate-90 transform',
-              `
-                transition-transform
-                h-5
-                w-5
-              `,
-              disabled
-                ? `
-                    text-slate-300
-                    dark:text-slate-600
-                  `
-                : `
-                    group-focus-within/active-list:text-blue-500
-                    group-hover/active-list:text-blue-500
-                  `,
-            )}
-          />
+          <ChevronRightIcon className={widgetListClasses['expand-button-icon']} />
         </button>
         <Collapse in={open} appear={false}>
-          <div
-            className={classNames(
-              `
-                text-sm
-                text-gray-500
-              `,
-              (hasErrors || hasChildErrors) && 'border-l-red-500',
-            )}
-          >
+          <div className={widgetListClasses.content}>
             <div data-testid="object-fields">{children}</div>
           </div>
         </Collapse>
@@ -142,7 +82,7 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
             {hint}
           </Hint>
         ) : null}
-        <ErrorMessage errors={errors} className="pb-3" />
+        <ErrorMessage errors={errors} className={widgetListClasses['error-message']} />
       </div>
     </div>
   );

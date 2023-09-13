@@ -1,0 +1,115 @@
+.CMS_WidgetList_root {
+  &.CMS_WidgetList_disabled {
+    & .CMS_WidgetList_expand-button-icon {
+      @apply text-slate-300
+        dark:text-slate-600;
+    }
+  }
+
+  &.CMS_WidgetList_error {
+    & .CMS_WidgetList_content {
+      @apply border-l-red-500;
+    }
+  }
+
+  &:not(.CMS_WidgetList_disabled) {
+    &:not(.CMS_WidgetList_error) {
+      &:hover,
+      &:focus-with {
+        & .CMS_WidgetList_summary,
+        & .CMS_WidgetList_expand-button-icon {
+          @apply text-blue-500;
+        }
+      }
+    }
+  }
+
+  &.CMS_WidgetList_for-single-list {
+    & .CMS_WidgetList_field {
+      @apply mr-14;
+    }
+  }
+
+  &.CMS_WidgetList_open {
+    & .CMS_WidgetList_expand-button-icon {
+      @apply rotate-90
+        transform;
+    }
+  }
+}
+
+.CMS_WidgetList_field-wrapper {
+  @apply relative
+    flex
+    flex-col
+    border-b
+    border-slate-400
+    focus-within:border-blue-800
+    dark:focus-within:border-blue-100;
+}
+
+.CMS_WidgetList_field {
+  @apply relative
+    flex
+    flex-col
+    w-full;
+}
+
+.CMS_WidgetList_expand-button {
+  @apply flex
+    w-full
+    justify-between
+    px-3
+    py-2
+    text-left
+    text-sm
+    font-medium
+    focus:outline-none
+    focus-visible:ring
+    gap-2
+    focus-visible:ring-opacity-75
+    items-center;
+}
+
+.CMS_WidgetList_expand-button-icon {
+  @apply transition-transform
+    h-5
+    w-5;
+}
+
+.CMS_WidgetList_content {
+  @apply text-sm
+    text-gray-500;
+}
+
+.CMS_WidgetList_error-message {
+  @apply pb-3;
+}
+
+.CMS_WidgetList_fields {
+  @apply overflow-hidden;
+}
+
+.CMS_WidgetList_actions {
+  @apply py-3
+    px-4
+    w-full;
+}
+
+.CMS_WidgetList_add-types-button {
+  @apply w-full
+    z-20;
+}
+
+.CMS_WidgetList_add-button {
+  @apply w-full;
+}
+
+.CMS_WidgetList_sortable-item {
+  @apply first:pt-0;
+}
+
+.CMS_WidgetList_multi-field-item {
+  @apply pt-1;
+}
+

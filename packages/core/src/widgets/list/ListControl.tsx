@@ -14,6 +14,7 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import ListFieldWrapper from './components/ListFieldWrapper';
 import ListItem from './components/ListItem';
 import DelimitedListControl from './DelimitedListControl';
+import widgetListClasses from './ListControl.classes';
 import { resolveFieldKeyType, TYPES_KEY } from './typedListHelpers';
 
 import type { DragEndEvent } from '@dnd-kit/core';
@@ -28,6 +29,8 @@ import type {
   WidgetControlProps,
 } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
+
+import './ListControl.css';
 
 function arrayMoveImmutable<T>(array: T[], oldIndex: number, newIndex: number): T[] {
   const newArray = [...array];
@@ -91,10 +94,8 @@ const SortableItem: FC<SortableItemProps> = ({
       style={style}
       {...(disabled ? {} : attributes)}
       className={classNames(
-        `
-          first:pt-0
-        `,
-        field.fields?.length !== 1 && 'pt-1',
+        widgetListClasses['sortable-item'],
+        field.fields?.length !== 1 && widgetListClasses['multi-field-item'],
       )}
     >
       <ListItem
@@ -309,92 +310,90 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = pro
   }
 
   return (
-    <div key="list-widget">
-      <ListFieldWrapper
-        key="list-control-wrapper"
-        field={field}
-        openLabel={label}
-        closedLabel={listLabel}
-        errors={errors}
-        hasChildErrors={hasChildErrors}
-        hint={field.hint}
-        forSingleList={forSingleList}
-        disabled={disabled}
-      >
-        {internalValue.length > 0 ? (
-          <DndContext key="dnd-context" id="dnd-context" onDragEnd={handleDragEnd}>
-            <SortableContext items={keys}>
-              <div data-testid="list-widget-children" className="overflow-hidden">
-                {internalValue.map((item, index) => {
-                  const key = keys[index];
-                  if (!key) {
-                    return null;
-                  }
+    <ListFieldWrapper
+      key="list-control-wrapper"
+      field={field}
+      openLabel={label}
+      closedLabel={listLabel}
+      errors={errors}
+      hasChildErrors={hasChildErrors}
+      hint={field.hint}
+      forSingleList={forSingleList}
+      disabled={disabled}
+    >
+      {internalValue.length > 0 ? (
+        <DndContext key="dnd-context" id="dnd-context" onDragEnd={handleDragEnd}>
+          <SortableContext items={keys}>
+            <div data-testid="list-widget-children" className={widgetListClasses.fields}>
+              {internalValue.map((item, index) => {
+                const key = keys[index];
+                if (!key) {
+                  return null;
+                }
 
-                  return (
-                    <SortableItem
-                      index={index}
-                      key={key}
-                      id={key}
-                      item={item}
-                      valueType={valueType}
-                      handleRemove={handleRemove}
-                      entry={entry}
-                      field={field}
-                      fieldsErrors={fieldsErrors}
-                      submitted={submitted}
-                      disabled={disabled}
-                      duplicate={duplicate}
-                      locale={locale}
-                      path={path}
-                      value={item as Record<string, ObjectValue>}
-                      i18n={i18n}
-                    />
-                  );
-                })}
-              </div>
-            </SortableContext>
-          </DndContext>
-        ) : null}
-        {field.allow_add !== false ? (
-          <div className="py-3 px-4 w-full">
-            {types && types.length ? (
-              <Menu
-                label={t('editor.editorWidgets.list.addType', { item: label })}
-                variant="outlined"
-                buttonClassName="w-full z-20"
-                data-testid="list-type-add"
-                disabled={disabled}
-              >
-                <MenuGroup>
-                  {types.map((type, idx) =>
-                    type ? (
-                      <MenuItemButton
-                        key={idx}
-                        onClick={() => handleAddType(type.name, resolveFieldKeyType(field))}
-                        data-testid={`list-type-add-item-${type.name}`}
-                      >
-                        {type.label ?? type.name}
-                      </MenuItemButton>
-                    ) : null,
-                  )}
-                </MenuGroup>
-              </Menu>
-            ) : (
-              <Button
-                variant="outlined"
-                onClick={handleAdd}
-                className="w-full"
-                data-testid="list-add"
-                disabled={disabled}
-              >
-                {t('editor.editorWidgets.list.add', { item: labelSingular })}
-              </Button>
-            )}
-          </div>
-        ) : null}
-      </ListFieldWrapper>
-    </div>
+                return (
+                  <SortableItem
+                    index={index}
+                    key={key}
+                    id={key}
+                    item={item}
+                    valueType={valueType}
+                    handleRemove={handleRemove}
+                    entry={entry}
+                    field={field}
+                    fieldsErrors={fieldsErrors}
+                    submitted={submitted}
+                    disabled={disabled}
+                    duplicate={duplicate}
+                    locale={locale}
+                    path={path}
+                    value={item as Record<string, ObjectValue>}
+                    i18n={i18n}
+                  />
+                );
+              })}
+            </div>
+          </SortableContext>
+        </DndContext>
+      ) : null}
+      {field.allow_add !== false ? (
+        <div className={widgetListClasses.actions}>
+          {types && types.length ? (
+            <Menu
+              label={t('editor.editorWidgets.list.addType', { item: label })}
+              variant="outlined"
+              buttonClassName={widgetListClasses['add-types-button']}
+              data-testid="list-type-add"
+              disabled={disabled}
+            >
+              <MenuGroup>
+                {types.map((type, idx) =>
+                  type ? (
+                    <MenuItemButton
+                      key={idx}
+                      onClick={() => handleAddType(type.name, resolveFieldKeyType(field))}
+                      data-testid={`list-type-add-item-${type.name}`}
+                    >
+                      {type.label ?? type.name}
+                    </MenuItemButton>
+                  ) : null,
+                )}
+              </MenuGroup>
+            </Menu>
+          ) : (
+            <Button
+              variant="outlined"
+              onClick={handleAdd}
+              className={widgetListClasses['add-button']}
+              data-testid="list-add"
+              disabled={disabled}
+            >
+              {t('editor.editorWidgets.list.add', { item: labelSingular })}
+            </Button>
+          )}
+        </div>
+      ) : null}
+    </ListFieldWrapper>
   );
 };
 

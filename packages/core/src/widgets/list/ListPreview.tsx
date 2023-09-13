@@ -1,9 +1,12 @@
 import React from 'react';
 
 import { isNullish } from '@staticcms/core/lib/util/null.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { ListField, ValueOrNestedValue, WidgetPreviewProps } from '@staticcms/core/interface';
 import type { FC, ReactNode } from 'react';
+
+const classes = generateClassNames('WidgetListPreview', ['root']);
 
 function renderNestedList(
   value: ValueOrNestedValue[] | ValueOrNestedValue | null | undefined,
@@ -43,7 +46,7 @@ const ListPreview: FC<WidgetPreviewProps<ValueOrNestedValue[], ListField>> = ({ 
   }
 
   return (
-    <div style={{ marginTop: '12px' }}>
+    <div style={{ marginTop: '12px' }} className={classes.root}>
       <label>
         <strong>{field.label ?? field.name}:</strong>
       </label>

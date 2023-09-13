@@ -1,3 +1,6 @@
+.CMS_WidgetObject_list-root {
+}
+
 .CMS_WidgetObject_root {
   @apply relative
     flex
