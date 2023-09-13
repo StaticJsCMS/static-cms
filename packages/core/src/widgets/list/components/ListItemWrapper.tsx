@@ -7,9 +7,33 @@ import React, { useCallback, useMemo, useState } from 'react';
 import IconButton from '@staticcms/core/components/common/button/IconButton';
 import Label from '@staticcms/core/components/common/field/Label';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import type { MouseEvent, ReactNode } from 'react';
+
+import './ListItemWrapper.css';
+
+const classes = generateClassNames('WidgetList_ListItem', [
+  'root',
+  'single-field-root',
+  'error',
+  'disabled',
+  'open',
+  'header',
+  'expand-button',
+  'expand-button-icon',
+  'summary',
+  'summary-label',
+  'controls',
+  'remove-button',
+  'button-icon',
+  'not-open-placeholder',
+  'content',
+  'single-field-controls',
+  'drag-handle',
+  'drag-handle-icon',
+]);
 
 export interface DragHandleProps {
   listeners: SyntheticListenerMap | undefined;
@@ -18,13 +42,12 @@ export interface DragHandleProps {
 
 const DragHandle = ({ listeners, disabled }: DragHandleProps) => {
   return (
-    <span data-testid="drag-handle" className="flex items-center" {...(disabled ? {} : listeners)}>
-      <MenuIcon
-        className="
-          h-3
-          w-3
-        "
-      />
+    <span
+      data-testid="drag-handle"
+      className={classes['drag-handle']}
+      {...(disabled ? {} : listeners)}
+    >
+      <MenuIcon className={classes['drag-handle-icon']} />
     </span>
   );
 };
@@ -61,7 +84,7 @@ const ListItemWrapper = ({
 
   const renderedControls = useMemo(
     () => (
-      <div className="flex gap-2 items-center">
+      <div className={classes.controls}>
         {onRemove ? (
           <IconButton
             data-testid="remove-button"
@@ -69,13 +92,9 @@ const ListItemWrapper = ({
             variant="text"
             onClick={onRemove}
             disabled={disabled}
+            className={classes['remove-button']}
           >
-            <CloseIcon
-              className="
-                h-5
-                w-5
-              "
-            />
+            <CloseIcon className={classes['button-icon']} />
           </IconButton>
         ) : null}
         {listeners ? <DragHandle listeners={listeners} disabled={disabled} /> : null}
@@ -89,34 +108,14 @@ const ListItemWrapper = ({
       <div
         data-testid="list-item-field"
         className={classNames(
-          `
-            relative
-            flex
-            flex-col
-          `,
-          !hasErrors && 'group/active-list-item',
+          classes['single-field-root'],
+          hasErrors && classes.error,
+          disabled && classes.disabled,
         )}
       >
-        <div
-          data-testid="list-item-objects"
-          className={classNames(
-            `
-              relative
-              ml-4
-              text-sm
-              text-gray-500
-              border-l-2
-              border-solid
-              border-l-slate-400
-            `,
-            !disabled && 'group-focus-within/active-list-item:border-l-blue-500',
-            hasErrors && 'border-l-red-500',
-          )}
-        >
+        <div data-testid="list-item-objects" className={classes.content}>
           {children}
-          <div className="absolute right-3 top-0 h-full flex items-center justify-end z-10">
-            {renderedControls}
-          </div>
+          <div className={classes['single-field-controls']}>{renderedControls}</div>
         </div>
       </div>
     );
@@ -126,73 +125,24 @@ const ListItemWrapper = ({
     <div
       data-testid="list-item-field"
       className={classNames(
-        `
-          relative
-          flex
-          flex-col
-        `,
-        !hasErrors && 'group/active-list-item',
+        classes.root,
+        hasErrors && classes.error,
+        disabled && classes.disabled,
+        open && classes.open,
       )}
     >
-      <div
-        className="
-          flex
-          w-full
-          pr-3
-          text-left
-          text-sm
-          gap-2
-          items-center
-        "
-      >
+      <div className={classes.header}>
         <button
           data-testid="list-item-expand-button"
-          className="
-            flex
-            w-full
-            pl-2
-            py-2
-            text-left
-            text-sm
-            font-medium
-            focus:outline-none
-            focus-visible:ring
-            gap-2
-            focus-visible:ring-opacity-75
-            items-center
-          "
+          className={classes['expand-button']}
           onClick={handleOpenToggle}
         >
-          <ChevronRightIcon
-            className={classNames(
-              open && 'rotate-90 transform',
-              `
-                transition-transform
-                h-5
-                w-5
-              `,
-              disabled
-                ? `
-                    text-slate-300
-                    dark:text-slate-600
-                  `
-                : `
-                    group-focus-within/active-list:text-blue-500
-                    group-hover/active-list:text-blue-500
-                  `,
-            )}
-          />
-          <div className="flex-grow">
+          <ChevronRightIcon className={classes['expand-button-icon']} />
+          <div className={classes.summary}>
             <Label
               key="label"
               hasErrors={hasErrors}
-              className={classNames(
-                !disabled &&
-                  `
-                    group-focus-within/active-list-item:text-blue-500
-                    group-hover/active-list-item:text-blue-500
-                  `,
-              )}
+              className={classes['summary-label']}
               cursor="pointer"
               variant="inline"
               data-testid="item-label"
@@ -205,34 +155,9 @@ const ListItemWrapper = ({
         </button>
         {renderedControls}
       </div>
-      {!open ? (
-        <div
-          className="
-            ml-8
-            border-b
-            border-slate-400
-            focus-within:border-blue-800
-            dark:focus-within:border-blue-100
-          "
-        ></div>
-      ) : null}
+      {!open ? <div className={classes['not-open-placeholder']}></div> : null}
       <Collapse in={open} appear={false}>
-        <div
-          className={classNames(
-            `
-              ml-4
-              text-sm
-              text-gray-500
-              border-l-2
-              border-solid
-              border-l-slate-400
-            `,
-            !disabled && 'group-focus-within/active-list-item:border-l-blue-500',
-            hasErrors && 'border-l-red-500',
-          )}
-        >
-          {children}
-        </div>
+        <div className={classes.content}>{children}</div>
       </Collapse>
     </div>
   );

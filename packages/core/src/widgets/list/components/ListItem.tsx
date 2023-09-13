@@ -1,8 +1,10 @@
 import partial from 'lodash/partial';
 import React, { useMemo } from 'react';
+import { useTranslate } from 'react-polyglot';
 
 import EditorControl from '@staticcms/core/components/entry-editor/editor-control-pane/EditorControl';
 import useHasChildErrors from '@staticcms/core/lib/hooks/useHasChildErrors';
+import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import {
   addFileTemplateFields,
   compileStringTemplate,
@@ -22,12 +24,14 @@ import type {
   WidgetControlProps,
 } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
+import type { t } from 'react-polyglot';
 
 function handleSummary(
   summary: string,
   entry: Entry,
   label: string,
   item: ValueOrNestedValue,
+  t: t,
 ): string {
   if (typeof item === 'object' && !(item instanceof Date) && !Array.isArray(item)) {
     const labeledItem: EntryData = {
@@ -40,7 +44,7 @@ function handleSummary(
     return compileStringTemplate(summary, null, '', data);
   }
 
-  return String(item);
+  return isNotNullish(item) ? String(item) : t('editor.editorWidgets.list.noValue');
 }
 
 function validateItem(field: ListField, item: ValueOrNestedValue) {
@@ -98,6 +102,8 @@ const ListItem: FC<ListItemProps> = ({
   listeners,
   handleRemove,
 }) => {
+  const t = useTranslate() as t;
+
   const [summary, objectField] = useMemo((): [string, ListField | ObjectField] => {
     const childObjectField: ObjectField = {
       name: `${index}`,
@@ -132,10 +138,10 @@ const ListItem: FC<ListItemProps> = ({
         const summary =
           'summary' in itemType && itemType.summary ? itemType.summary : field.summary;
         const labelReturn = summary
-          ? `${label} - ${handleSummary(summary, entry, label, mixedObjectValue)}`
+          ? `${label} - ${handleSummary(summary, entry, label, mixedObjectValue, t)}`
           : label;
 
-        return [labelReturn, itemType];
+        return [labelReturn ?? t('editor.editorWidgets.list.noValue'), itemType];
       }
       case ListValueType.MULTIPLE: {
         childObjectField.fields = field.fields ?? [];
@@ -159,13 +165,15 @@ const ListItem: FC<ListItemProps> = ({
 
         const summary = field.summary;
         const labelReturn = summary
-          ? handleSummary(summary, entry, String(labelFieldValue), objectValue)
-          : String(labelFieldValue);
+          ? handleSummary(summary, entry, String(labelFieldValue), objectValue, t)
+          : labelFieldValue
+          ? String(labelFieldValue)
+          : undefined;
 
-        return [labelReturn, childObjectField];
+        return [labelReturn ?? t('editor.editorWidgets.list.noValue'), childObjectField];
       }
     }
-  }, [entry, field, index, value, valueType]);
+  }, [entry, field, index, t, value, valueType]);
 
   const hasChildErrors = useHasChildErrors(path, fieldsErrors, i18n, false);
 

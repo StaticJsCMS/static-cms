@@ -80,7 +80,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) =>
             className={classes['mobile-current-breadcrumb-link']}
             to={finalNonEditorBreadcrumb.to}
           >
-            {inEditor ? <ArrowBackIcon className="w-6 h-6" /> : null}
+            {inEditor ? <ArrowBackIcon className={classes['mobile-backlink']} /> : null}
             {finalNonEditorBreadcrumb.name}
           </Link>
         ) : (

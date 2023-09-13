@@ -32,6 +32,8 @@ const classes = generateClassNames('WidgetMarkdown_FontTypeSelect', [
   'option',
   'option-selected',
   'option-label',
+  'more-button',
+  'more-button-icon',
 ]);
 
 type Option = {
@@ -76,9 +78,9 @@ const Button = React.forwardRef(function Button<TValue extends {}, Multiple exte
 ) {
   const { ownerState: _, children, ...other } = props;
   return (
-    <button type="button" {...other} ref={ref}>
+    <button type="button" {...other} ref={ref} className={classes['more-button']}>
       {children}
-      <UnfoldMoreIcon className="w-4 h-4 absolute right-0" />
+      <UnfoldMoreIcon className={classes['more-button-icon']} />
     </button>
   );
 });

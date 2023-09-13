@@ -73,3 +73,13 @@
     truncate
     font-normal;
 }
+
+.CMS_WidgetMarkdown_FontTypeSelect_more-button {
+}
+
+.CMS_WidgetMarkdown_FontTypeSelect_more-button-icon {
+  @apply w-4
+    h-4
+    absolute
+    right-0;
+}

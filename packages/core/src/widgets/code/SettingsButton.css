@@ -1,0 +1,8 @@
+.CMS_WidgetCode_SettingsButton_root {
+
+}
+
+.CMS_WidgetCode_SettingsButton_icon {
+  @apply w-5
+    h-5;
+}

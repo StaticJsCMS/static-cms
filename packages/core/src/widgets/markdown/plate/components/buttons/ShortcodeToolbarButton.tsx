@@ -14,7 +14,11 @@ import type { FC } from 'react';
 
 import './ShortcodeToolbarButton.css';
 
-const classes = generateClassNames('WidgetMarkdown_ShortcodeToolbarButton', ['root', 'button']);
+const classes = generateClassNames('WidgetMarkdown_ShortcodeToolbarButton', [
+  'root',
+  'label-icon',
+  'button',
+]);
 
 export interface ShortcodeToolbarButtonProps {
   disabled: boolean;
@@ -40,7 +44,7 @@ const ShortcodeToolbarButton: FC<ShortcodeToolbarButtonProps> = ({ disabled }) =
 
   return (
     <Menu
-      label={<DataArrayIcon className="h-5 w-5" aria-hidden="true" />}
+      label={<DataArrayIcon className={classes['label-icon']} aria-hidden="true" />}
       data-testid="toolbar-button-shortcode"
       keepMounted
       hideDropdownIcon

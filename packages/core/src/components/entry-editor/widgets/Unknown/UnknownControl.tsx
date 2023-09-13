@@ -1,19 +1,17 @@
 import React from 'react';
 import { translate } from 'react-polyglot';
 
-import type { WidgetControlProps, TranslatedProps } from '@staticcms/core/interface';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
+
+import type { TranslatedProps, WidgetControlProps } from '@staticcms/core/interface';
+
+import './UnknownControl.css';
+
+const classes = generateClassNames('WidgetUnknown', ['root']);
 
 const UnknownControl = ({ field, t }: TranslatedProps<WidgetControlProps<unknown>>) => {
   return (
-    <div
-      className="
-        px-4
-        py-2
-        text-small
-        text-gray-800
-        dark:text-gray-100
-      "
-    >
+    <div className={classes.root}>
       {t('editor.editorWidgets.unknownControl.noControl', { widget: field.widget })}
     </div>
   );

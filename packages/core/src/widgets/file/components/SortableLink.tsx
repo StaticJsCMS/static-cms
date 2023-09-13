@@ -1,12 +1,25 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { ModeEdit as ModeEditIcon } from '@styled-icons/material/ModeEdit';
 import { Delete as DeleteIcon } from '@styled-icons/material/Delete';
+import { ModeEdit as ModeEditIcon } from '@styled-icons/material/ModeEdit';
 import React, { useCallback, useMemo } from 'react';
 
 import IconButton from '@staticcms/core/components/common/button/IconButton';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { FC, MouseEventHandler } from 'react';
+
+import './SortableLink.css';
+
+const classes = generateClassNames('WidgetFileImage_SortableLink', [
+  'root',
+  'card',
+  'content',
+  'controls',
+  'replace-button',
+  'remove-button',
+  'button-icon',
+]);
 
 const MAX_DISPLAY_LENGTH = 100;
 
@@ -65,50 +78,22 @@ const SortableLink: FC<SortableLinkProps> = ({ id, itemValue, onRemove, onReplac
       style={style}
       {...attributes}
       {...listeners}
-      className="
-        relative
-        w-full
-      "
+      className={classes.root}
       tabIndex={-1}
       title={itemValue}
     >
-      <div
-        onClick={handleClick}
-        data-testid={`image-card-${itemValue}`}
-        className="
-          w-full
-          shadow-sm
-          overflow-hidden
-          group/image-card
-          cursor-pointer
-          border-l-2
-          border-b
-          border-solid
-          border-l-slate-400
-          p-2
-        "
-      >
-        <div className="relative flex items-center justify-between">
+      <div onClick={handleClick} data-testid={`image-card-${itemValue}`} className={classes.card}>
+        <div className={classes.content}>
           <span>{text}</span>
-          <div
-            className="
-              flex
-              gap-1
-            "
-          >
+          <div className={classes.controls}>
             {onReplace ? (
               <IconButton
                 key="replace"
                 variant="text"
                 onClick={handleReplace}
-                className="
-                  text-white
-                  dark:text-white
-                  dark:hover:text-blue-100
-                  dark:hover:bg-blue-800/80
-                "
+                className={classes['replace-button']}
               >
-                <ModeEditIcon className="w-5 h-5" />
+                <ModeEditIcon className={classes['button-icon']} />
               </IconButton>
             ) : null}
             {onRemove ? (
@@ -117,15 +102,9 @@ const SortableLink: FC<SortableLinkProps> = ({ id, itemValue, onRemove, onReplac
                 variant="text"
                 color="error"
                 onClick={handleRemove}
-                className="
-                  position: relative;
-                  text-red-400
-                  dark:hover:text-red-600
-                  dark:hover:bg-red-800/40
-                  z-30
-                "
+                className={classes['remove-button']}
               >
-                <DeleteIcon className="w-5 h-5" />
+                <DeleteIcon className={classes['button-icon']} />
               </IconButton>
             ) : null}
           </div>

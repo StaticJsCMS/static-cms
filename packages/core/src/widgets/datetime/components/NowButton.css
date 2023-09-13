@@ -1,0 +1,7 @@
+.CMS_WidgetDate_NowButton_root {
+  @apply absolute
+    inset-y-1
+    right-3
+    flex
+    items-center;
+}

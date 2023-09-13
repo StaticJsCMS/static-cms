@@ -1,0 +1,155 @@
+.CMS_WidgetList_ListItem_root {
+  @apply relative
+    flex
+    flex-col;
+
+  &.CMS_WidgetList_ListItem_error {
+    & .CMS_WidgetList_ListItem_content {
+      @apply border-l-red-500;
+    }
+  }
+
+  &:not(.CMS_WidgetList_ListItem_error) {
+    &:not(.CMS_WidgetList_ListItem_disabled) {
+      &:hover {
+        & .CMS_WidgetList_ListItem_summary-label,
+        & .CMS_WidgetList_ListItem_expand-button-icon {
+          @apply text-blue-500;
+        }
+      }
+
+      &:focus-within {
+        & .CMS_WidgetList_ListItem_summary-label,
+        & .CMS_WidgetList_ListItem_expand-button-icon {
+          @apply text-blue-500;
+        }
+
+        & .CMS_WidgetList_ListItem_content {
+          @apply border-l-blue-500;
+        }
+      }
+    }
+  }
+
+  &.CMS_WidgetList_ListItem_disabled {
+    & .CMS_WidgetList_ListItem_expand-button-icon {
+      @apply text-slate-300
+        dark:text-slate-600;
+    }
+  }
+
+  &.CMS_WidgetList_ListItem_open {
+    & .CMS_WidgetList_ListItem_expand-button-icon {
+      @apply rotate-90
+        transform;
+    }
+  }
+}
+
+.CMS_WidgetList_ListItem_single-field-root {
+  @apply relative
+    flex
+    flex-col;
+
+  &.CMS_WidgetList_ListItem_error {
+    & .CMS_WidgetList_ListItem_content {
+      @apply border-l-red-500;
+    }
+  }
+
+  &:not(.CMS_WidgetList_ListItem_error) {
+    &:not(.CMS_WidgetList_ListItem_disabled) {
+      &:focus-within {
+        & .CMS_WidgetList_ListItem_content {
+          @apply border-l-blue-500;
+        }
+      }
+    }
+  }
+}
+
+.CMS_WidgetList_ListItem_header {
+  @apply flex
+    w-full
+    pr-3
+    text-left
+    text-sm
+    gap-2
+    items-center;
+}
+
+.CMS_WidgetList_ListItem_expand-button {
+  @apply flex
+    w-full
+    pl-2
+    py-2
+    text-left
+    text-sm
+    font-medium
+    focus:outline-none
+    focus-visible:ring
+    gap-2
+    focus-visible:ring-opacity-75
+    items-center;
+}
+
+.CMS_WidgetList_ListItem_expand-button-icon {
+  @apply transition-transform
+    h-5
+    w-5;
+}
+
+.CMS_WidgetList_ListItem_summary {
+  @apply flex-grow;
+}
+
+.CMS_WidgetList_ListItem_controls {
+  @apply flex
+    gap-2
+    items-center;
+}
+
+.CMS_WidgetList_ListItem_remove-button {
+}
+
+.CMS_WidgetList_ListItem_button-icon {
+  @apply h-5
+    w-5;
+}
+
+.CMS_WidgetList_ListItem_not-open-placeholder {
+  @apply ml-8
+    border-b
+    border-slate-400;
+}
+
+.CMS_WidgetList_ListItem_content {
+  @apply relative
+    ml-4
+    text-sm
+    text-gray-500
+    border-l-2
+    border-solid
+    border-l-slate-400;
+}
+
+.CMS_WidgetList_ListItem_single-field-controls {
+  @apply absolute
+    right-3
+    top-0
+    h-full
+    flex
+    items-center
+    justify-end
+    z-10;
+}
+
+.CMS_WidgetList_ListItem_drag-handle {
+  @apply flex
+    items-center;
+}
+
+.CMS_WidgetList_ListItem_drag-handle-icon {
+  @apply h-3
+    w-3;
+}

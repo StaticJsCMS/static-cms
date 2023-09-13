@@ -1,0 +1,23 @@
+.CMS_WidgetMarkdown_ColorButton_root {
+  &.CMS_WidgetMarkdown_ColorButton_is-bright-color {
+    & .CMS_WidgetMarkdown_ColorButton_avatar {
+    border: 1px solid rgba(209, 213, 219, 1);
+    }
+
+    & .CMS_WidgetMarkdown_ColorButton_check-icon {
+      @apply text-black;
+    }
+  }
+}
+
+.CMS_WidgetMarkdown_ColorButton_avatar {
+  @apply w-8
+    h-8
+    border-transparent;
+}
+
+.CMS_WidgetMarkdown_ColorButton_check-icon {
+  @apply h-5
+    w-5
+    text-white;
+}
