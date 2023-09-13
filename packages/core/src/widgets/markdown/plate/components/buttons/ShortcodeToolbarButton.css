@@ -1,0 +1,6 @@
+.CMS_WidgetMarkdown_ShortcodeToolbarButton_button {
+  @apply py-0.5
+    px-0.5
+    h-6
+    w-6;
+}

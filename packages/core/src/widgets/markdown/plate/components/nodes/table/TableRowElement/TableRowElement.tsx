@@ -1,8 +1,10 @@
 import React from 'react';
 
+import widgetMarkdownTableClasses from '../Table.classes';
+
+import type { MdTableRowElement, MdValue } from '@staticcms/markdown';
 import type { PlateRenderElementProps } from '@udecode/plate';
 import type { FC } from 'react';
-import type { MdTableRowElement, MdValue } from '@staticcms/markdown';
 
 const TableRowElement: FC<PlateRenderElementProps<MdValue, MdTableRowElement>> = ({
   attributes,
@@ -10,16 +12,7 @@ const TableRowElement: FC<PlateRenderElementProps<MdValue, MdTableRowElement>> =
   nodeProps,
 }) => {
   return (
-    <tr
-      {...attributes}
-      {...nodeProps}
-      className="
-        border-b
-        border-gray-200
-        last:border-0
-        dark:border-gray-800
-      "
-    >
+    <tr {...attributes} {...nodeProps} className={widgetMarkdownTableClasses.row}>
       {children}
     </tr>
   );

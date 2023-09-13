@@ -4,6 +4,7 @@ import { VFileMessage } from 'vfile-message';
 
 import { withMdxImage } from '@staticcms/core/components/common/image/Image';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { getShortcodes } from '../../lib/registry';
 import withShortcodeMdxComponent from './mdx/withShortcodeMdxComponent';
 import useMdx from './plate/hooks/useMdx';
@@ -12,6 +13,8 @@ import { processShortcodeConfigToMdx } from './plate/serialization/slate/process
 import type { MarkdownField, WidgetPreviewProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 import type { UseMdxState } from './plate/hooks/useMdx';
+
+const classes = generateClassNames('WidgetUUIDPreview', ['root']);
 
 interface MdxComponentProps {
   state: UseMdxState;
@@ -64,7 +67,7 @@ const MarkdownPreview: FC<WidgetPreviewProps<string, MarkdownField>> = previewPr
   }, [value]);
 
   return (
-    <div key="markdown-preview">
+    <div key="markdown-preview" className={classes.root}>
       <MDXProvider components={components}>
         <MdxComponent state={state} />{' '}
       </MDXProvider>

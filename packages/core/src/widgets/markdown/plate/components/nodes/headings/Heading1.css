@@ -1,0 +1,6 @@
+.CMS_WidgetMarkdown_Heading1_root {
+  @apply text-[2em]
+    leading-[1.5em]
+    font-bold
+    my-[0.67em];
+}

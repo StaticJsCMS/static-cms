@@ -1,0 +1,4 @@
+.CMS_WidgetMarkdown_Paragraph_root {
+  @apply block
+    my-[1em];
+}

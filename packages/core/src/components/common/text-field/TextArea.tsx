@@ -1,5 +1,5 @@
 import { Input } from '@mui/base/Input';
-import React, { forwardRef, useCallback, useState } from 'react';
+import React, { forwardRef, useCallback, useLayoutEffect, useState } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
@@ -62,13 +62,19 @@ const TextArea = forwardRef<HTMLInputElement | null, TextAreaProps>(
         return;
       }
 
-      textarea.style.height = `${newHeight}px`;
-      setLastAutogrowHeight(newHeight);
-
       if (newHeight > MIN_TEXT_AREA_HEIGHT - MIN_BOTTOM_PADDING) {
         textarea.style.paddingBottom = `${MIN_BOTTOM_PADDING}px`;
+        newHeight += MIN_BOTTOM_PADDING;
       }
+
+      textarea.style.height = `${newHeight}px`;
+      setLastAutogrowHeight(newHeight);
     }, [lastAutogrowHeight, ref]);
+
+    useLayoutEffect(() => {
+      autoGrow();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
       <Input

@@ -1,0 +1,4 @@
+.CMS_WidgetMarkdown_UnorderedList_root {
+  @apply list-disc
+    pl-10;
+}

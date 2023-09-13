@@ -1,0 +1,51 @@
+.CMS_WidgetMarkdown_Table_root {
+  @apply border-collapse
+    border
+    border-gray-200
+    dark:border-slate-700
+    rounded-md
+    my-4;
+}
+
+.CMS_WidgetMarkdown_Table_header {
+  @apply border-r
+    border-b
+    bg-slate-300
+    border-gray-200
+    dark:bg-slate-700
+    dark:border-gray-800;
+}
+
+.CMS_WidgetMarkdown_Table_body {
+}
+
+.CMS_WidgetMarkdown_Table_row {
+  @apply border-b
+    border-gray-200
+    last:border-0
+    dark:border-gray-800;
+}
+
+.CMS_WidgetMarkdown_Table_header-cell {
+  @apply px-2
+    py-1
+    [&>div>p]:m-0
+    text-left
+    bg-slate-300
+    text-sm
+    border-r
+    border-gray-200
+    dark:bg-slate-700
+    dark:border-gray-800;
+}
+
+.CMS_WidgetMarkdown_Table_body-cell {
+  @apply px-2
+    py-1
+    [&>div>p]:m-0
+    border-r
+    border-gray-200
+    last:border-0
+    dark:border-gray-800
+    text-sm;
+}

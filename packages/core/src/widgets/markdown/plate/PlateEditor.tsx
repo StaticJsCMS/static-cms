@@ -56,6 +56,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useTranslate } from 'react-polyglot';
 
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
+import widgetMarkdownClasses from '../MarkdownControl.classes';
 import { CodeBlockElement, withShortcodeElement } from './components';
 import { BalloonToolbar } from './components/balloon-toolbar';
 import { BlockquoteElement } from './components/nodes/blockquote';
@@ -257,7 +258,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
 
   return useMemo(
     () => (
-      <div className="relative px-3 py-5 pb-0">
+      <div className={widgetMarkdownClasses['rich-editor']}>
         <DndProvider backend={HTML5Backend}>
           <PlateProvider<MdValue>
             id={id}
@@ -276,7 +277,11 @@ const PlateEditor: FC<PlateEditorProps> = ({
                 disabled={disabled}
               />
 
-              <div key="editor-wrapper" ref={editorContainerRef} className="w-full">
+              <div
+                key="editor-wrapper"
+                ref={editorContainerRef}
+                className={widgetMarkdownClasses['plate-editor-wrapper']}
+              >
                 <Plate
                   key="editor"
                   id={id}
@@ -285,7 +290,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
                     placeholder: t('editor.editorWidgets.markdown.type'),
                     onFocus,
                     onBlur,
-                    className: '!outline-none',
+                    className: widgetMarkdownClasses['plate-editor'],
                   }}
                 >
                   <div key="editor-inner-wrapper" ref={innerEditorContainerRef}>

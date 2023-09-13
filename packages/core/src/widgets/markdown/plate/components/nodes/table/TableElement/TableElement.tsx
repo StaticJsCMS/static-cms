@@ -1,9 +1,13 @@
 import { useSelectedCells } from '@udecode/plate';
 import React from 'react';
 
+import widgetMarkdownTableClasses from '../Table.classes';
+
 import type { MdTableElement, MdValue } from '@staticcms/markdown';
 import type { PlateRenderElementProps } from '@udecode/plate';
 import type { FC } from 'react';
+
+import '../Table.css';
 
 const TableElement: FC<PlateRenderElementProps<MdValue, MdTableElement>> = ({
   attributes,
@@ -13,34 +17,15 @@ const TableElement: FC<PlateRenderElementProps<MdValue, MdTableElement>> = ({
   useSelectedCells();
 
   return (
-    <table
-      {...attributes}
-      {...nodeProps}
-      className="
-        border-collapse
-        border
-        border-gray-200
-        dark:border-slate-700
-        rounded-md
-        my-4
-      "
-    >
+    <table {...attributes} {...nodeProps} className={widgetMarkdownTableClasses.root}>
       {children ? (
         <>
-          <thead
-            key="thead"
-            className="
-              border-r
-              border-b
-              bg-slate-300
-              border-gray-200
-              dark:bg-slate-700
-              dark:border-gray-800
-            "
-          >
+          <thead key="thead" className={widgetMarkdownTableClasses.header}>
             {children[0]}
           </thead>
-          <tbody key="tbody">{children.slice(1)}</tbody>
+          <tbody key="tbody" className={widgetMarkdownTableClasses.body}>
+            {children.slice(1)}
+          </tbody>
         </>
       ) : null}
     </table>

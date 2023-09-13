@@ -41,6 +41,7 @@ export interface MenuProps {
   hideDropdownIconOnMobile?: boolean;
   hideLabel?: boolean;
   disabled?: boolean;
+  keepMounted?: boolean;
   'data-testid'?: string;
 }
 
@@ -60,6 +61,7 @@ const Menu = ({
   hideDropdownIconOnMobile = false,
   hideLabel = false,
   disabled = false,
+  keepMounted = false,
   'data-testid': dataTestId,
 }: MenuProps) => {
   const calculatedButtonClassName = useButtonClassNames(variant, color, size, rounded);
@@ -100,6 +102,7 @@ const Menu = ({
           slotProps={{
             root: {
               className: classes.menu,
+              keepMounted,
             },
           }}
         >

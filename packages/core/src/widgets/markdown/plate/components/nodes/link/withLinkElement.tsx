@@ -12,12 +12,17 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useFocused } from 'slate-react';
 
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import MediaPopover from '../../common/MediaPopover';
 
 import type { Collection, MarkdownField, MediaPath } from '@staticcms/core/interface';
 import type { MdLinkElement, MdValue } from '@staticcms/markdown';
 import type { PlateRenderElementProps, TText } from '@udecode/plate';
 import type { FC, MouseEvent } from 'react';
+
+import './LinkElement.css';
+
+const classes = generateClassNames('WidgetMarkdown_Link', ['root']);
 
 export interface WithLinkElementProps {
   collection: Collection<MarkdownField>;
@@ -201,11 +206,7 @@ const withLinkElement = ({ collection, field }: WithLinkElementProps) => {
           href={url}
           {...nodeProps}
           onClick={handleClick}
-          className="
-            text-blue-500
-            cursor-pointer
-            hover:underline
-          "
+          className={classes.root}
         >
           {children}
         </a>

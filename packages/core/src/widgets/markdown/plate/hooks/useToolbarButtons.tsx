@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 
 import Menu from '@staticcms/core/components/common/menu/Menu';
 import MenuGroup from '@staticcms/core/components/common/menu/MenuGroup';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import BlockquoteToolbarButton from '../components/buttons/BlockquoteToolbarButton';
 import BoldToolbarButton from '../components/buttons/BoldToolbarButton';
 import CodeBlockToolbarButtons from '../components/buttons/CodeBlockToolbarButtons';
@@ -33,6 +34,10 @@ import type {
 } from '@staticcms/core/interface';
 import type { ReactNode } from 'react';
 
+import './useToolbarButtons.css';
+
+const classes = generateClassNames('WidgetMarkdown_MenuToolbar', ['root', 'button', 'label-icon']);
+
 export default function useToolbarButtons(
   toolbarButtons: MarkdownToolbarItem[],
   collection: Collection<MarkdownField>,
@@ -59,17 +64,13 @@ export function getToolbarButtons(
     return (
       <Menu
         key={`menu-${button.label}`}
-        label={<AddIcon className="h-5 w-5" aria-hidden="true" />}
+        label={<AddIcon className={classes['label-icon']} aria-hidden="true" />}
         data-testid={`toolbar-menu-${button.label.toLowerCase().replace(' ', '-')}`}
         keepMounted
         hideDropdownIcon
         variant="text"
-        buttonClassName="
-          py-0.5
-          px-0.5
-          h-6
-          w-6
-        "
+        rootClassName={classes.root}
+        buttonClassName={classes.button}
         disabled={disabled}
       >
         {button.groups.map((group, index) => {

@@ -1,0 +1,23 @@
+.CMS_WidgetMarkdown_Toolbar_root {
+  @apply flex
+    flex-wrap
+    items-center
+    select-none
+    min-h-markdown-toolbar
+    -mx-3
+    -my-5
+    px-2
+    pt-2
+    pb-1.5
+    mb-1.5
+    border-b
+    border-gray-400/10
+    gap-0.5
+    shadow-sm
+    bg-slate-50
+    dark:bg-slate-900
+    dark:shadow-md
+    sticky
+    top-0
+    z-10;
+}

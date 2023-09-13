@@ -1,0 +1,4 @@
+.CMS_WidgetMarkdown_OrderedList_root {
+  @apply list-decimal
+    pl-10;
+}

@@ -9,7 +9,6 @@ import {
   ELEMENT_H5,
   ELEMENT_H6,
   ELEMENT_PARAGRAPH,
-  focusEditor,
   someNode,
   toggleNodeType,
 } from '@udecode/plate';
@@ -17,10 +16,23 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 
 import type { SelectRootSlotProps } from '@mui/base/Select';
 import type { FC, FocusEvent, KeyboardEvent, MouseEvent } from 'react';
+
+import './FontTypeSelect.css';
+
+const classes = generateClassNames('WidgetMarkdown_FontTypeSelect', [
+  'root',
+  'disabled',
+  'select',
+  'popper',
+  'option',
+  'option-selected',
+  'option-label',
+]);
 
 type Option = {
   value: string;
@@ -103,22 +115,12 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
       });
 
       setVersion(oldVersion => oldVersion + 1);
-
-      setTimeout(() => {
-        focusEditor(editor);
-      });
     },
     [editor, value?.value],
   );
 
   return (
-    <div
-      className="
-        w-28
-        h-6
-        mx-1
-      "
-    >
+    <div className={classNames(classes.root, disabled && classes.disabled)}>
       <Select
         value={value?.value ?? ELEMENT_PARAGRAPH}
         onChange={handleChange}
@@ -128,53 +130,11 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
         }}
         slotProps={{
           root: {
-            className: classNames(
-              `
-                flex
-                items-center
-                justify-between
-                text-sm
-                font-medium
-                relative
-                px-1.5
-                py-0.5
-                w-full
-                h-6
-                border
-                rounded-sm
-              `,
-              disabled
-                ? `
-                    text-gray-300
-                    border-gray-200
-                    dark:border-gray-600
-                    dark:text-gray-500
-                  `
-                : `
-                    text-gray-800
-                    border-gray-600
-                    dark:border-gray-200
-                    dark:text-gray-100
-                  `,
-            ),
+            className: classes.select,
           },
           popper: {
             disablePortal: false,
-            className: `
-              max-h-40
-              w-50
-              overflow-auto
-              rounded-md
-              bg-white
-              shadow-md
-              ring-1
-              ring-black
-              ring-opacity-5
-              focus:outline-none
-              sm:text-sm
-              dark:bg-slate-800
-              dark:shadow-lg
-            `,
+            className: classNames(classes.popper, 'CMS_Scrollbar_root', 'CMS_Scrollbar_secondary'),
           },
         }}
         data-testid="font-type-select"
@@ -188,31 +148,11 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
               value={type.value}
               slotProps={{
                 root: {
-                  className: classNames(
-                    `
-                      relative
-                      select-none
-                      py-2
-                      px-4
-                      cursor-pointer
-                      hover:bg-blue-500
-                      hover:text-white
-                      dark:hover:bg-blue-500
-                    `,
-                    selected &&
-                      `
-                        bg-blue-500/25
-                        dark:bg-blue-700/20
-                      `,
-                  ),
+                  className: classNames(classes.option, selected && classes['option-selected']),
                 },
               }}
             >
-              <span
-                className={classNames('block truncate', selected ? 'font-medium' : 'font-normal')}
-              >
-                {type.label}
-              </span>
+              <span className={classes['option-label']}>{type.label}</span>
             </Option>
           );
         })}
