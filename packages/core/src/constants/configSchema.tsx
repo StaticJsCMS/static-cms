@@ -135,6 +135,7 @@ const viewFilters = {
   items: {
     type: 'object',
     properties: {
+      name: { type: 'string' },
       label: { type: 'string' },
       field: { type: 'string' },
       pattern: {
@@ -149,7 +150,7 @@ const viewFilters = {
         ],
       },
     },
-    required: ['label', 'field', 'pattern'],
+    required: ['name', 'label', 'field', 'pattern'],
   },
 };
 
@@ -159,11 +160,12 @@ const viewGroups = {
   items: {
     type: 'object',
     properties: {
+      name: { type: 'string' },
       label: { type: 'string' },
       field: { type: 'string' },
       pattern: { type: 'string' },
     },
-    required: ['label', 'field'],
+    required: ['name', 'label', 'field'],
   },
 };
 
@@ -260,8 +262,26 @@ function getConfigSchema() {
               },
               required: ['fields'],
             },
-            view_filters: viewFilters,
-            view_groups: viewGroups,
+            view_filters: {
+              type: 'object',
+              properties: {
+                default: {
+                  type: 'string',
+                },
+                filters: viewFilters,
+              },
+              required: ['filters'],
+            },
+            view_groups: {
+              type: 'object',
+              properties: {
+                default: {
+                  type: 'string',
+                },
+                groups: viewGroups,
+              },
+              required: ['groups'],
+            },
             i18n: i18nCollection,
             hide: { type: 'boolean' },
             editor: {

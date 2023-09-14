@@ -259,19 +259,25 @@ export function applyDefaults<EF extends BaseField = UnknownField>(
         };
       }
 
-      collection.view_filters = (view_filters || []).map(filter => {
-        return {
-          ...filter,
-          id: `${filter.field}__${filter.pattern}`,
-        };
-      });
+      collection.view_filters = {
+        default: collection.view_filters?.default,
+        filters: (view_filters?.filters ?? []).map(filter => {
+          return {
+            ...filter,
+            id: `${filter.field}__${filter.pattern}`,
+          };
+        }),
+      };
 
-      collection.view_groups = (view_groups || []).map(group => {
-        return {
-          ...group,
-          id: `${group.field}__${group.pattern}`,
-        };
-      });
+      collection.view_groups = {
+        default: collection.view_groups?.default,
+        groups: (view_groups?.groups ?? []).map(group => {
+          return {
+            ...group,
+            id: `${group.field}__${group.pattern}`,
+          };
+        }),
+      };
     }
   });
 }

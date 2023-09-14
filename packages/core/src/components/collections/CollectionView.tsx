@@ -155,7 +155,9 @@ const CollectionView = ({
     }
 
     const defaultSort = collection?.sortable_fields?.default;
-    if (!defaultSort || !defaultSort.field) {
+    const defaultViewGroupName = collection?.view_groups?.default;
+    const defaultViewFilterName = collection?.view_filters?.default;
+    if (!defaultViewGroupName && !defaultViewFilterName && (!defaultSort || !defaultSort.field)) {
       if (!readyToLoad) {
         setReadyToLoad(true);
       }
@@ -166,9 +168,27 @@ const CollectionView = ({
 
     let alive = true;
 
-    const sortEntries = () => {
+    const sortGroupFilterEntries = () => {
       setTimeout(async () => {
-        await onSortClick(defaultSort.field, defaultSort.direction ?? SORT_DIRECTION_ASCENDING);
+        if (defaultSort && defaultSort.field) {
+          await onSortClick(defaultSort.field, defaultSort.direction ?? SORT_DIRECTION_ASCENDING);
+        }
+
+        if (defaultViewGroupName) {
+          const defaultViewGroup = viewGroups?.groups.find(g => g.name === defaultViewGroupName);
+          if (defaultViewGroup) {
+            await onGroupClick(defaultViewGroup);
+          }
+        }
+
+        if (defaultViewFilterName) {
+          const defaultViewFilter = viewFilters?.filters.find(
+            f => f.name === defaultViewFilterName,
+          );
+          if (defaultViewFilter) {
+            await onFilterClick(defaultViewFilter);
+          }
+        }
 
         if (alive) {
           setReadyToLoad(true);
@@ -176,12 +196,22 @@ const CollectionView = ({
       });
     };
 
-    sortEntries();
+    sortGroupFilterEntries();
 
     return () => {
       alive = false;
     };
-  }, [collection, onSortClick, prevCollection, readyToLoad, sort]);
+  }, [
+    collection,
+    onFilterClick,
+    onGroupClick,
+    onSortClick,
+    prevCollection,
+    readyToLoad,
+    sort,
+    viewFilters?.filters,
+    viewGroups?.groups,
+  ]);
 
   const collectionDescription = collection?.description;
 
@@ -204,8 +234,8 @@ const CollectionView = ({
               sortableFields={sortableFields}
               onSortClick={onSortClick}
               sort={sort}
-              viewFilters={viewFilters ?? []}
-              viewGroups={viewGroups ?? []}
+              viewFilters={viewFilters?.filters ?? []}
+              viewGroups={viewGroups?.groups ?? []}
               onFilterClick={onFilterClick}
               onGroupClick={onGroupClick}
               filter={filter}

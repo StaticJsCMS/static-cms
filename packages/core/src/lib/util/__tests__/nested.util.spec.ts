@@ -20,8 +20,8 @@ const collection: Collection = {
   name: 'pages',
   nested: { depth: 100, summary: '{{title}}', path: { label: 'Path', index_file: 'index' } },
   sortable_fields: { fields: Array(1) },
-  view_filters: [],
-  view_groups: [],
+  view_filters: { filters: [] },
+  view_groups: { groups: [] },
 };
 
 const entries: Entry[] = [
