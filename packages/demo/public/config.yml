@@ -367,6 +367,34 @@ collections:
             widget: image
             media_library:
               folder_support: true
+      - name: keyvalue
+        label: Key Value
+        file: _widgets/keyvalue.yml
+        description: Key Value widget
+        fields:
+          - name: keyvalue
+            label: Required
+            widget: keyvalue
+          - name: with_default
+            label: Required With Default
+            widget: keyvalue
+            default:
+              key1: value1
+              key2: value2
+              key3: value3
+          - name: with_min
+            label: Required With Min (2)
+            widget: keyvalue
+            min: 2
+          - name: with_max
+            label: Required With Max (4)
+            widget: keyvalue
+            max: 4
+          - name: with_min_and_max
+            label: Required With Min (2) and Max (4)
+            widget: keyvalue
+            min: 2
+            max: 4
       - name: list
         label: List
         file: _widgets/list.yml
@@ -569,6 +597,64 @@ collections:
                   - label: File
                     name: file
                     widget: file
+          - name: typed_list_with_condition
+            label: Typed List With Condition
+            widget: list
+            types:
+              - label: Type 1 Object
+                name: type_1_object
+                widget: object
+                fields:
+                  - name: template
+                    label: template
+                    widget: select
+                    options:
+                      - column
+                      - row
+                      - banner
+                    default: column
+                  - label: String
+                    name: string
+                    widget: string
+                  - label: Boolean
+                    name: boolean
+                    widget: boolean
+                    condition:
+                      field: template
+                      value: banner
+                  - label: Text
+                    name: text
+                    widget: text
+              - label: Type 2 Object
+                name: type_2_object
+                widget: object
+                fields:
+                  - label: Number
+                    name: number
+                    widget: number
+                  - label: Select
+                    name: select
+                    widget: select
+                    options:
+                      - a
+                      - b
+                      - c
+                  - label: Datetime
+                    name: datetime
+                    widget: datetime
+                  - label: Markdown
+                    name: markdown
+                    widget: markdown
+              - label: Type 3 Object
+                name: type_3_object
+                widget: object
+                fields:
+                  - label: Image
+                    name: image
+                    widget: image
+                  - label: File
+                    name: file
+                    widget: file
       - name: map
         label: Map
         file: _widgets/map.json
@@ -608,6 +694,10 @@ collections:
             label: Required With Default
             widget: markdown
             default: Default **markdown** value
+          - name: raw
+            label: Raw Editor
+            widget: markdown
+            show_raw: true
           - name: pattern
             label: Pattern Validation
             widget: markdown

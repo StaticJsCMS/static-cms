@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "date": "2023-09-14T10:00:00.000Z",
+      "version": "v3.3.0",
+      "type": "minor",
+      "description": "Add standardized class names and Slovenian locale"
+    },
+    {
       "date": "2023-09-07T10:00:00.000Z",
       "version": "v3.2.0",
       "type": "minor",
