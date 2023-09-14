@@ -1,4 +1,4 @@
-import { findNodePath, setNodes } from '@udecode/plate';
+import { findNodePath, focusEditor, removeNodes, setNodes } from '@udecode/plate';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Frame from 'react-frame-component';
 
@@ -32,15 +32,24 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
     [editor, element],
   );
 
+  const handleDelete = useCallback(() => {
+    const path = findNodePath(editor, element);
+    path && removeNodes(editor, { at: path });
+    focusEditor(editor);
+  }, [editor, element]);
+
   const receiveMessage = useCallback(
     (event: MessageEvent) => {
       switch (event.data.message) {
         case `code_block_${id}_onChange`:
           handleChange(event.data.value);
           break;
+        case `code_block_${id}_delete`:
+          handleDelete();
+          break;
       }
     },
-    [handleChange, id],
+    [handleChange, handleDelete, id],
   );
 
   useWindowEvent('message', receiveMessage);

@@ -7,8 +7,9 @@ import React, { useCallback, useMemo } from 'react';
 import { useFrame } from 'react-frame-component';
 
 import languages from '@staticcms/code/data/languages';
+import { isEmpty } from '@staticcms/core/lib/util/string.util';
 
-import type { FC } from 'react';
+import type { FC, KeyboardEvent } from 'react';
 
 export interface CodeBlockFrameProps {
   id: string;
@@ -61,6 +62,15 @@ const CodeBlockFrame: FC<CodeBlockFrameProps> = ({ id, lang, code, theme }) => {
     window?.parent.postMessage({ message: `code_block_${id}_onBlur` });
   }, [id, window?.parent]);
 
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === 'Backspace' && isEmpty(code)) {
+        window?.parent.postMessage({ message: `code_block_${id}_delete` });
+      }
+    },
+    [code, id, window?.parent],
+  );
+
   return (
     <CodeMirror
       value={code}
@@ -68,6 +78,7 @@ const CodeBlockFrame: FC<CodeBlockFrameProps> = ({ id, lang, code, theme }) => {
       onFocus={handleFocus}
       onBlur={handleBlur}
       onChange={handleChange}
+      onKeyDown={handleKeyDown}
       extensions={extensions}
       theme={theme}
     />
