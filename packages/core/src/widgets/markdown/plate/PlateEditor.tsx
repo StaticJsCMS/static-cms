@@ -40,6 +40,7 @@ import {
   ELEMENT_TR,
   ELEMENT_UL,
   MARK_BOLD,
+  MARK_CODE,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
   MARK_SUBSCRIPT,
@@ -83,6 +84,7 @@ import {
   TableHeaderCellElement,
   TableRowElement,
 } from './components/nodes/table';
+import CodeElement from './components/nodes/code/Code';
 import { Toolbar } from './components/toolbar';
 import editableProps from './editableProps';
 import { createMdPlugins, ELEMENT_SHORTCODE } from './plateTypes';
@@ -171,6 +173,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
       [MARK_BOLD]: withProps(PlateLeaf, { as: 'strong' }),
       [MARK_ITALIC]: withProps(PlateLeaf, { as: 'em' }),
       [MARK_STRIKETHROUGH]: withProps(PlateLeaf, { as: 's' }),
+      [MARK_CODE]: CodeElement,
     };
 
     if (useMdx) {
