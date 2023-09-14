@@ -66,6 +66,7 @@ const MainView = ({
             showLeftNav && classes['show-left-nav'],
             noMargin && classes['no-margin'],
             noScroll && classes['no-scroll'],
+            'CMS_Scrollbar_root',
           )}
         >
           {children}
