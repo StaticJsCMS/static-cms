@@ -11,6 +11,7 @@ import {
 } from '@staticcms/core/lib/util/collection.util';
 import localForage from '@staticcms/core/lib/util/localForage';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
+import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import TableCell from '../../common/table/TableCell';
@@ -43,6 +44,8 @@ const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
 
   const fields = selectFields(collection, entry.slug);
 
+  const config = useAppSelector(selectConfig);
+
   const templateName = useMemo(
     () => selectTemplateName(collection, entry.slug),
     [collection, entry.slug],
@@ -52,6 +55,10 @@ const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
 
   const [hasLocalBackup, setHasLocalBackup] = useState(false);
   useEffect(() => {
+    if (config?.disable_local_backup) {
+      return;
+    }
+
     let alive = true;
 
     const checkLocalBackup = async () => {
@@ -73,7 +80,7 @@ const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
     return () => {
       alive = false;
     };
-  }, [collection.name, entry.slug]);
+  }, [collection.name, config?.disable_local_backup, entry.slug]);
 
   return (
     <TableRow className={entriesClasses['entry-listing-table-row']} to={path}>
