@@ -8,6 +8,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 const redirects = [
+  { source: '/docs', destination: '/docs/intro', permanent: true },
   { source: '/chat', destination: 'https://discord.gg/ZWJM9pBMjj', permanent: true },
 ];
 
