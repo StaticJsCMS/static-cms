@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import Frame from 'react-frame-component';
 import { translate } from 'react-polyglot';
 import { ScrollSyncPane } from 'react-scroll-sync';
@@ -62,7 +61,13 @@ const FrameGlobalStyles = `
   }
 
   .frame-content {
-    padding: 16px;
+    padding: 8px 12px 8px 0;
+  }
+
+  @media (max-width: 1024px) {
+    .frame-content {
+      padding: 8px 12px;
+    }
   }
 
   .text-blue-500 {
@@ -217,7 +222,7 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
       return null;
     }
 
-    return createPortal(
+    return (
       <div
         className={classNames(
           classes.root,
@@ -275,9 +280,7 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
             </ScrollSyncPane>
           )}
         </ErrorBoundary>
-      </div>,
-      element,
-      'preview-content',
+      </div>
     );
   }, [
     collection,

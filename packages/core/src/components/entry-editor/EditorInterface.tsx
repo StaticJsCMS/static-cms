@@ -1,4 +1,6 @@
+import { DragHandle as DragHandleIcon } from '@styled-icons/material/DragHandle';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
 import { EDITOR_SIZE_COMPACT } from '@staticcms/core/constants/views';
@@ -34,16 +36,23 @@ export const classes = generateClassNames('Editor', [
   'root',
   'default',
   'i18n',
-  'mobile-i18n',
+  'i18n-panel',
   'split-view',
-  'mobile-preview',
   'wrapper-preview',
   'wrapper-i18n-side-by-side',
   'compact',
   'toolbar',
   'content',
   'content-wrapper',
+  'resize-handle',
+  'resize-handle-icon',
+  'mobile-root',
+  'mobile-preview',
+  'mobile-preview-active',
 ]);
+
+const COMPACT_EDITOR_DEFAULT_WIDTH = 450;
+const MIN_PREVIEW_SIZE = 300;
 
 const PREVIEW_VISIBLE = 'cms.preview-visible';
 const I18N_VISIBLE = 'cms.i18n-visible';
@@ -256,7 +265,6 @@ const EditorInterface = ({
         className={classNames(
           classes.default,
           (finalPreviewActive || i18nActive) && `${classes['split-view']} CMS_Scrollbar_root`,
-          showMobilePreview && classes['mobile-preview'],
         )}
       >
         <EditorControlPane
@@ -278,7 +286,6 @@ const EditorInterface = ({
       defaultLocale,
       finalPreviewActive,
       i18nActive,
-      showMobilePreview,
       collection,
       entry,
       fields,
@@ -319,9 +326,23 @@ const EditorInterface = ({
     [collectHasI18n, collection, defaultLocale, entry, selectedLocale],
   );
 
+  const mobilePreview = (
+    <div className={classes['mobile-preview']}>
+      <EditorPreviewPane
+        collection={collection}
+        previewInFrame={previewInFrame}
+        livePreviewUrlTemplate={livePreviewUrlTemplate}
+        entry={previewEntry}
+        fields={fields}
+        editorSize={editorSize}
+        showMobilePreview={showMobilePreview}
+      />
+    </div>
+  );
+
   const mobileLocaleEditor = useMemo(
     () => (
-      <div key={selectedLocale} className={classes['mobile-i18n']}>
+      <div key={selectedLocale} className={classes.i18n}>
         <EditorControlPane
           collection={collection}
           entry={entry}
@@ -341,31 +362,73 @@ const EditorInterface = ({
   );
 
   const editorWithPreview = (
-    <div
-      className={classNames(classes.root, editorSize === EDITOR_SIZE_COMPACT && classes.compact)}
-    >
-      <ScrollSyncPane>{editor}</ScrollSyncPane>
-      <EditorPreviewPane
-        collection={collection}
-        previewInFrame={previewInFrame}
-        livePreviewUrlTemplate={livePreviewUrlTemplate}
-        entry={previewEntry}
-        fields={fields}
-        editorSize={editorSize}
-        showMobilePreview={showMobilePreview}
-      />
-    </div>
+    <>
+      <PanelGroup
+        key="editor-with-preview"
+        autoSaveId={`editor-with-preview-${collection.name}`}
+        direction="horizontal"
+        units="pixels"
+        className={classNames(classes.root, editorSize === EDITOR_SIZE_COMPACT && classes.compact)}
+      >
+        <Panel defaultSize={COMPACT_EDITOR_DEFAULT_WIDTH} minSize={COMPACT_EDITOR_DEFAULT_WIDTH}>
+          <ScrollSyncPane>{editor}</ScrollSyncPane>
+        </Panel>
+        <PanelResizeHandle className={classes['resize-handle']}>
+          <DragHandleIcon className={classes['resize-handle-icon']} />
+        </PanelResizeHandle>
+        <Panel minSize={MIN_PREVIEW_SIZE}>
+          <EditorPreviewPane
+            collection={collection}
+            previewInFrame={previewInFrame}
+            livePreviewUrlTemplate={livePreviewUrlTemplate}
+            entry={previewEntry}
+            fields={fields}
+            editorSize={editorSize}
+            showMobilePreview={showMobilePreview}
+          />
+        </Panel>
+      </PanelGroup>
+      <div
+        className={classNames(
+          classes['mobile-root'],
+          showMobilePreview && classes['mobile-preview-active'],
+        )}
+      >
+        {editor}
+        {mobilePreview}
+      </div>
+    </>
   );
 
   const editorSideBySideLocale = (
     <>
-      <div className={classNames(classes.root, classes['wrapper-i18n-side-by-side'])}>
-        <ScrollSyncPane>{editor}</ScrollSyncPane>
-        <ScrollSyncPane>
-          <>{editorLocale}</>
-        </ScrollSyncPane>
+      <PanelGroup
+        key="editor-side-by-side-locale"
+        autoSaveId={`editor-side-by-side-locale-${collection.name}`}
+        direction="horizontal"
+        className={classNames(classes.root, classes['wrapper-i18n-side-by-side'])}
+      >
+        <Panel defaultSize={50} minSize={30}>
+          <ScrollSyncPane>{editor}</ScrollSyncPane>
+        </Panel>
+        <PanelResizeHandle className={classes['resize-handle']}>
+          <DragHandleIcon className={classes['resize-handle-icon']} />
+        </PanelResizeHandle>
+        <Panel defaultSize={50} minSize={30} className={classes['i18n-panel']}>
+          <ScrollSyncPane>
+            <>{editorLocale}</>
+          </ScrollSyncPane>
+        </Panel>
+      </PanelGroup>
+      <div
+        className={classNames(
+          classes['mobile-root'],
+          showMobilePreview && classes['mobile-preview-active'],
+        )}
+      >
+        {mobileLocaleEditor}
+        {mobilePreview}
       </div>
-      {mobileLocaleEditor}
     </>
   );
 
