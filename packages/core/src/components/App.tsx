@@ -1,4 +1,4 @@
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
@@ -32,6 +32,7 @@ import MediaPage from './media-library/MediaPage';
 import NotFoundPage from './NotFoundPage';
 import Page from './page/Page';
 import Snackbars from './snackbar/Snackbars';
+import ThemeManager from './theme/ThemeManager';
 
 import type { Credentials, TranslatedProps } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
@@ -80,6 +81,7 @@ const App = ({
 
   const mode = useAppSelector(selectTheme);
 
+  // TODO FIX THIS!!!
   const theme = React.useMemo(
     () =>
       createTheme({
@@ -268,21 +270,23 @@ const App = ({
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <ScrollSync key="scroll-sync" enabled={scrollSyncEnabled}>
-        <>
-          <div key="back-to-top-anchor" id="back-to-top-anchor" />
-          <div key="cms-root" id="cms-root" className={classes.root}>
-            <div key="cms-wrapper" className={classes.content}>
-              <Snackbars key="snackbars" />
-              {content}
-              <Alert key="alert" />
-              <Confirm key="confirm" />
+    <ThemeManager>
+      <MuiThemeProvider theme={theme}>
+        <ScrollSync key="scroll-sync" enabled={scrollSyncEnabled}>
+          <>
+            <div key="back-to-top-anchor" id="back-to-top-anchor" />
+            <div key="cms-root" id="cms-root" className={classes.root}>
+              <div key="cms-wrapper" className={classes.content}>
+                <Snackbars key="snackbars" />
+                {content}
+                <Alert key="alert" />
+                <Confirm key="confirm" />
+              </div>
             </div>
-          </div>
-        </>
-      </ScrollSync>
-    </ThemeProvider>
+          </>
+        </ScrollSync>
+      </MuiThemeProvider>
+    </ThemeManager>
   );
 };
 

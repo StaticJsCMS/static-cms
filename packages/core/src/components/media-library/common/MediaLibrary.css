@@ -127,13 +127,13 @@
 }
 
 .CMS_MediaLibrary_title {
+  color: var(--text-primary);
+
   @apply text-xl
     font-semibold
     flex
     items-center
-    gap-2
-    text-gray-800
-    dark:text-gray-300;
+    gap-2;
 }
 
 .CMS_MediaLibrary_title-icon-wrapper {

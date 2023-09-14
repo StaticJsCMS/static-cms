@@ -17,8 +17,7 @@
   }
 
   &.CMS_MenuItemButton_default {
-    @apply text-gray-800
-      dark:text-gray-300;
+    color: var(--text-primary);
 
     &.CMS_MenuItemButton_disabled {
       @apply text-gray-500

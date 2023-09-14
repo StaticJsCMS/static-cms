@@ -945,6 +945,24 @@ export interface Config<EF extends BaseField = UnknownField> {
   disable_local_backup?: boolean;
   editor?: EditorConfig;
   search?: boolean;
+  theme?: Themes;
+}
+
+export interface Theme {
+  name: string;
+  text: {
+    primary: string;
+    emphasis: string;
+  };
+  primary: {
+    main: string;
+  };
+}
+
+export interface Themes {
+  defaultTheme?: string;
+  includeStandardThemes?: boolean;
+  themes?: Theme[];
 }
 
 export interface InitOptions<EF extends BaseField = UnknownField> {

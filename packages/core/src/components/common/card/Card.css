@@ -22,11 +22,11 @@
 }
 
 .CMS_Card_content {
+  color: var(--text-primary);
+
   @apply w-full
     p-5
-    font-normal
-    text-gray-800
-    dark:text-gray-300;
+    font-normal;
 }
 
 .CMS_Card_media {

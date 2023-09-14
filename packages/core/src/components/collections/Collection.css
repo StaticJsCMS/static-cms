@@ -60,12 +60,12 @@
 }
 
 .CMS_Collection_header {
+  color: var(--text-primary);
+
   @apply text-xl
     font-semibold
     flex
     items-center
-    text-gray-800
-    dark:text-gray-300
     gap-2
     md:w-auto;
 }

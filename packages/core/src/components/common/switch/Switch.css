@@ -57,9 +57,9 @@
 }
 
 .CMS_Switch_label {
+  color: var(--text-primary);
+
   @apply ml-3
     text-sm
-    font-medium
-    text-gray-800
-    dark:text-gray-300;
+    font-medium;
 }

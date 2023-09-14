@@ -65,13 +65,13 @@
 }
 
 .CMS_Editor_resize-handle-icon {
+  color: var(--text-primary);
+
   @apply w-4
     h-4
     rotate-90
     transition-opacity
-    opacity-20
-    text-gray-800
-    dark:text-gray-300;
+    opacity-20;
 }
 
 .CMS_Editor_mobile-root {

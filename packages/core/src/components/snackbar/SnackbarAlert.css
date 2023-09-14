@@ -1,4 +1,6 @@
 .CMS_SnackbarAlert_root {
+  color: var(--text-primary);
+
   @apply flex
     items-center
     w-full
@@ -10,8 +12,6 @@
     bg-white
     rounded-lg
     shadow-md
-    dark:text-gray-300
-    dark:bg-gray-800
     dark:shadow-lg;
 
   &.CMS_SnackbarAlert_error {

@@ -29,6 +29,7 @@ import type {
   ShortcodeConfig,
   TemplatePreviewCardComponent,
   TemplatePreviewComponent,
+  Theme,
   UnknownField,
   ValueOrNestedValue,
   Widget,
@@ -103,6 +104,9 @@ interface Registry {
 
   /** Markdown editor */
   shortcodes: Record<string, ShortcodeConfig>;
+
+  /** Themes */
+  themes: Theme[];
 }
 
 /**
@@ -121,6 +125,7 @@ const registry: Registry = {
   eventHandlers,
   previewStyles: [],
   shortcodes: {},
+  themes: [],
 };
 
 export default {
@@ -814,4 +819,15 @@ export function getShortcode(name: string): ShortcodeConfig {
 
 export function getShortcodes(): Record<string, ShortcodeConfig> {
   return registry.shortcodes;
+}
+
+/**
+ * Markdown editor shortcodes
+ */
+export function registerTheme(theme: Theme) {
+  registry.themes.push(theme);
+}
+
+export function getThemes(): Theme[] {
+  return registry.themes;
 }

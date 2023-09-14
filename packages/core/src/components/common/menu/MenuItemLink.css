@@ -1,9 +1,9 @@
 .CMS_MenuItemLink_root {
+  color: var(--text-primary);
+
   @apply px-4
     py-2
     text-sm
-    text-gray-800
-    dark:text-gray-300
     w-full
     text-left
     flex

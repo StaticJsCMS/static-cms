@@ -17,20 +17,20 @@
 }
 
 .CMS_GroupControl_list-option {
+  color: var(--text-primary);
+
   @apply ml-0.5
     font-medium
     flex
-    items-center
-    text-gray-800
-    dark:text-gray-300;
+    items-center;
 }
 
 .CMS_GroupControl_list-option-label {
+  color: var(--text-primary);
+
   @apply ml-2
     text-base
-    font-medium
-    text-gray-800
-    dark:text-gray-300;
+    font-medium;
 }
 
 .CMS_GroupControl_list-option-checked-icon {

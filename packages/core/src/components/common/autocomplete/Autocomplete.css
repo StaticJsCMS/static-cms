@@ -71,13 +71,13 @@
 }
 
 .CMS_Autocomplete_nothing {
+  color: var(--text-primary);
+
   @apply relative
     cursor-default
     select-none
     py-2
-    px-4
-    text-gray-800
-    dark:text-gray-300;
+    px-4;
 }
 
 .CMS_Autocomplete_option {

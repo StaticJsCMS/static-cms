@@ -3,11 +3,11 @@
 }
 
 .CMS_Table_table {
+  color: var(--text-primary);
+
   @apply w-full
     text-sm
-    text-left
-    text-gray-500
-    dark:text-gray-300;
+    text-left;
 }
 
 .CMS_Table_header {
@@ -56,8 +56,7 @@
 }
 
 .CMS_Table_body-cell {
-  @apply text-gray-500
-    dark:text-gray-300;
+  color: var(--text-primary);
 
   &.CMS_Table_body-cell-has-link {
     @apply p-0;
