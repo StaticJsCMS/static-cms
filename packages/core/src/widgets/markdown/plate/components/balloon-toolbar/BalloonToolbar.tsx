@@ -234,8 +234,10 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
   );
   const open = useMemo(
     () =>
-      selectionBoundingClientRect &&
-      (groups.length > 0 || debouncedGroups.length > 0 || isMediaLibraryOpen),
+      Boolean(
+        selectionBoundingClientRect &&
+          (groups.length > 0 || debouncedGroups.length > 0 || isMediaLibraryOpen),
+      ),
     [debouncedGroups.length, groups.length, isMediaLibraryOpen, selectionBoundingClientRect],
   );
   const debouncedOpen = useDebounce(
@@ -272,6 +274,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
           tabIndex={0}
           slots={{ root: 'div' }}
           className={classes.popper}
+          keepMounted
         >
           <div data-testid="balloon-toolbar" className={classes.content}>
             {groups.length > 0 ? groups : debouncedGroups}

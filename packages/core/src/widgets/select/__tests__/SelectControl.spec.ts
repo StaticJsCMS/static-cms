@@ -28,8 +28,8 @@ describe(SelectControl.name, () => {
     const option2 = 'select-option-Option 2';
 
     await waitFor(() => {
-      expect(queryByTestId(option1)).not.toBeInTheDocument();
-      expect(queryByTestId(option2)).not.toBeInTheDocument();
+      expect(queryByTestId(option1)).not.toBeVisible();
+      expect(queryByTestId(option2)).not.toBeVisible();
     });
 
     await act(async () => {
@@ -38,8 +38,8 @@ describe(SelectControl.name, () => {
     });
 
     await waitFor(() => {
-      expect(queryByTestId(option1)).toBeInTheDocument();
-      expect(queryByTestId(option2)).toBeInTheDocument();
+      expect(queryByTestId(option1)).toBeVisible();
+      expect(queryByTestId(option2)).toBeVisible();
     });
 
     await act(async () => {
@@ -48,8 +48,8 @@ describe(SelectControl.name, () => {
     });
 
     await waitFor(() => {
-      expect(queryByTestId(option1)).not.toBeInTheDocument();
-      expect(queryByTestId(option2)).not.toBeInTheDocument();
+      expect(queryByTestId(option1)).not.toBeVisible();
+      expect(queryByTestId(option2)).not.toBeVisible();
     });
   });
 
@@ -61,30 +61,12 @@ describe(SelectControl.name, () => {
 
       const label = getByTestId('label');
       expect(label.textContent).toBe('I am a label');
-      expect(label).toHaveClass('text-slate-500');
-
-      const field = getByTestId('field');
-      expect(field).toHaveClass('group/active');
-
-      const fieldWrapper = getByTestId('field-wrapper');
-      expect(fieldWrapper).not.toHaveClass('mr-14');
-
-      // Select Widget uses pointer cursor
-      expect(label).toHaveClass('cursor-pointer');
-      expect(field).toHaveClass('cursor-pointer');
-
-      // Select Widget uses default label layout, without bottom padding on field
-      expect(label).toHaveClass('px-3', 'pt-3');
-      expect(field).not.toHaveClass('pb-3');
     });
 
     it('should render as single list item', () => {
       const { getByTestId } = renderControl({ label: 'I am a label', forSingleList: true });
 
       expect(getByTestId('select-input')).toBeInTheDocument();
-
-      const fieldWrapper = getByTestId('field-wrapper');
-      expect(fieldWrapper).toHaveClass('mr-14');
     });
 
     it('should only use prop value as initial value', async () => {
@@ -132,8 +114,8 @@ describe(SelectControl.name, () => {
         expect(queryByTestId(option2)).toBeInTheDocument();
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -146,8 +128,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option1));
@@ -160,8 +142,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
     });
 
     it('should show error', async () => {
@@ -171,12 +153,6 @@ describe(SelectControl.name, () => {
 
       const error = getByTestId('error');
       expect(error.textContent).toBe('i am an error');
-
-      const field = getByTestId('field');
-      expect(field).not.toHaveClass('group/active');
-
-      const label = getByTestId('label');
-      expect(label).toHaveClass('text-red-500');
     });
   });
 
@@ -236,8 +212,8 @@ describe(SelectControl.name, () => {
         expect(queryByTestId(option2)).toBeInTheDocument();
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -250,8 +226,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option1));
@@ -264,8 +240,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
     });
   });
 
@@ -324,8 +300,8 @@ describe(SelectControl.name, () => {
         expect(queryByTestId(option2)).toBeInTheDocument();
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -338,8 +314,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option1));
@@ -352,8 +328,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
     });
   });
 
@@ -425,8 +401,8 @@ describe(SelectControl.name, () => {
         expect(queryByTestId(option2)).toBeInTheDocument();
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -439,8 +415,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option1));
@@ -453,8 +429,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
     });
   });
 
@@ -526,8 +502,8 @@ describe(SelectControl.name, () => {
         expect(queryByTestId(option2)).toBeInTheDocument();
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -540,8 +516,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option1));
@@ -554,8 +530,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
     });
   });
 
@@ -627,8 +603,8 @@ describe(SelectControl.name, () => {
         expect(queryByTestId(option2)).toBeInTheDocument();
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -641,8 +617,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option1));
@@ -655,8 +631,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
     });
   });
 
@@ -716,8 +692,8 @@ describe(SelectControl.name, () => {
         expect(queryByTestId(option2)).toBeInTheDocument();
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -730,8 +706,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option1));
@@ -744,8 +720,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -758,8 +734,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not Selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
     });
   });
 
@@ -819,8 +795,8 @@ describe(SelectControl.name, () => {
         expect(queryByTestId(option2)).toBeInTheDocument();
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -833,8 +809,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option1));
@@ -847,8 +823,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -861,8 +837,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not Selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
     });
   });
 
@@ -922,8 +898,8 @@ describe(SelectControl.name, () => {
         expect(queryByTestId(option2)).toBeInTheDocument();
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -936,8 +912,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option1));
@@ -950,8 +926,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -964,8 +940,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not Selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
     });
   });
 
@@ -1029,8 +1005,8 @@ describe(SelectControl.name, () => {
         expect(queryByTestId(option2)).toBeInTheDocument();
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -1043,8 +1019,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option1));
@@ -1057,8 +1033,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -1071,8 +1047,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not Selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
     });
   });
 
@@ -1136,8 +1112,8 @@ describe(SelectControl.name, () => {
         expect(queryByTestId(option2)).toBeInTheDocument();
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -1150,8 +1126,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option1));
@@ -1164,8 +1140,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -1178,8 +1154,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not Selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
     });
   });
 
@@ -1243,8 +1219,8 @@ describe(SelectControl.name, () => {
         expect(queryByTestId(option2)).toBeInTheDocument();
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -1257,8 +1233,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option1));
@@ -1271,8 +1247,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_SelectOption_selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
@@ -1285,8 +1261,8 @@ describe(SelectControl.name, () => {
         await userEvent.click(input);
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-blue-400/75', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not Selected
+      expect(getByTestId(option1)).toHaveClass('CMS_SelectOption_selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_SelectOption_selected');
     });
   });
 });

@@ -158,6 +158,7 @@ const Autocomplete = ({
     onInputChange: (_event, newQueryInput) => handleInputChange(newQueryInput),
     filterOptions: options => options,
     clearOnBlur: false,
+    clearOnEscape: false,
   });
 
   const ref = useRef<HTMLDivElement>();
@@ -184,9 +185,15 @@ const Autocomplete = ({
           focused && classes.focused,
           disabled && classes.disabled,
         )}
+        data-testid="autocomplete"
       >
         {label}
-        <input {...getInputProps()} ref={finalInputRef} className={classes.input} />
+        <input
+          {...getInputProps()}
+          ref={finalInputRef}
+          className={classes.input}
+          data-testid="autocomplete-input"
+        />
         <div className={classes['button-wrapper']}>
           <IconButton
             variant="text"
@@ -231,6 +238,7 @@ const Autocomplete = ({
                     key={index}
                     {...getOptionProps({ option: option as Option, index })}
                     className={classNames(classes.option, selected && classes['option-selected'])}
+                    data-testid={`autocomplete-option-${optionValue}`}
                   >
                     <span className={classes['option-label']}>{optionLabel}</span>
                     {selected ? (

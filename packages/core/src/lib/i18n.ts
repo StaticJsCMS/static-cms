@@ -14,6 +14,7 @@ import type {
   I18nInfo,
   I18nStructure,
   ObjectValue,
+  ValueOrNestedValue,
   i18nCollection,
 } from '../interface';
 import type { EntryDraftState } from '../reducers/entryDraft';
@@ -430,7 +431,7 @@ function mergeI18nData(
   field: Field,
   defaultData: ObjectValue | undefined | null,
   i18nData: Partial<ObjectValue> | undefined | null,
-) {
+): ValueOrNestedValue {
   if (field.widget === 'list') {
     if (field.i18n === true) {
       return i18nData;

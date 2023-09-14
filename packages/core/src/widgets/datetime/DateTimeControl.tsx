@@ -29,7 +29,7 @@ import type { FC } from 'react';
 
 import './DateTimeControl.css';
 
-export const classes = generateClassNames('WidgetDate', [
+export const classes = generateClassNames('WidgetDateTime', [
   'root',
   'error',
   'required',

@@ -24,30 +24,6 @@ describe(ColorControl.name, () => {
 
     const label = getByTestId('label');
     expect(label.textContent).toBe('I am a label');
-    expect(label).toHaveClass('text-slate-500');
-
-    const field = getByTestId('field');
-    expect(field).toHaveClass('group/active');
-
-    const fieldWrapper = getByTestId('field-wrapper');
-    expect(fieldWrapper).not.toHaveClass('mr-14');
-
-    // Color Widget uses pointer cursor
-    expect(label).toHaveClass('cursor-pointer');
-    expect(field).toHaveClass('cursor-pointer');
-
-    // Color Widget uses default label layout, with bottom padding on field
-    expect(label).toHaveClass('px-3', 'pt-3');
-    expect(field).toHaveClass('pb-3');
-  });
-
-  it('should render as single list item', () => {
-    const { getByTestId } = renderControl({ label: 'I am a label', forSingleList: true });
-
-    expect(getByTestId('text-input')).toBeInTheDocument();
-
-    const fieldWrapper = getByTestId('field-wrapper');
-    expect(fieldWrapper).toHaveClass('mr-14');
   });
 
   it('should only use prop value as initial value', async () => {
@@ -103,12 +79,6 @@ describe(ColorControl.name, () => {
 
     const error = getByTestId('error');
     expect(error.textContent).toBe('i am an error');
-
-    const field = getByTestId('field');
-    expect(field).not.toHaveClass('group/active');
-
-    const label = getByTestId('label');
-    expect(label).toHaveClass('text-red-500');
   });
 
   it('should disable input if disabled', async () => {

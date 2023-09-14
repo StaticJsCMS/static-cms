@@ -77,22 +77,8 @@ describe(ObjectControl.name, () => {
   it('should render', () => {
     const { getByTestId } = renderControl({ label: 'I am a label' });
 
-    const field = getByTestId('object-field');
-    expect(field).toHaveClass('group/active-object');
-
     const label = getByTestId('label');
     expect(label.textContent).toBe('I am a label');
-    expect(label).toHaveClass('text-slate-500');
-
-    // Object Widget uses pointer cursor
-    expect(label).toHaveClass('cursor-pointer');
-
-    // Object Widget uses inline label layout
-    expect(label).not.toHaveClass('px-3', 'pt-3');
-
-    // Should not render error state by default
-    const fieldsWrapper = getByTestId('object-fields');
-    expect(fieldsWrapper).not.toHaveClass('border-l-red-500');
   });
 
   it('renders all fields visible by default', () => {
@@ -174,34 +160,16 @@ describe(ObjectControl.name, () => {
 
     const error = getByTestId('error');
     expect(error.textContent).toBe('i am an error');
-
-    const field = getByTestId('object-field');
-    expect(field).not.toHaveClass('group/active-object');
-
-    const fieldsWrapper = getByTestId('object-fields');
-    expect(fieldsWrapper).toHaveClass('border-l-red-500');
-
-    const label = getByTestId('label');
-    expect(label).toHaveClass('text-red-500');
   });
 
   it('should highlight but show no errors when child error is present', async () => {
-    const { getByTestId, queryByTestId } = renderControl({
+    const { queryByTestId } = renderControl({
       fieldsErrors: {
         'data.object_field.string_input': [{ type: 'errorType', message: 'I am an error!' }],
       },
     });
 
     expect(queryByTestId('error')).not.toBeInTheDocument();
-
-    const field = getByTestId('object-field');
-    expect(field).not.toHaveClass('group/active-object');
-
-    const fieldsWrapper = getByTestId('object-fields');
-    expect(fieldsWrapper).toHaveClass('border-l-red-500');
-
-    const label = getByTestId('label');
-    expect(label).toHaveClass('text-red-500');
   });
 
   describe('for list', () => {

@@ -5,7 +5,7 @@ import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import type { DateTimeField, WidgetPreviewProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
-const classes = generateClassNames('WidgetDatePreview', ['root']);
+const classes = generateClassNames('WidgetDateTimePreview', ['root']);
 
 const DatePreview: FC<WidgetPreviewProps<string | Date, DateTimeField>> = ({ value }) => {
   return <div className={classes.root}>{value ? value.toString() : null}</div>;

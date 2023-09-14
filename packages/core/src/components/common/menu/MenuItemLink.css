@@ -14,7 +14,7 @@
 
   &.CMS_MenuItemLink_active {
     @apply bg-slate-100
-      dark:bg-slate-900
+      dark:bg-slate-900;
   }
 }
 

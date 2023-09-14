@@ -12,3 +12,5 @@ export const translate = () => (Component: FC) => {
     return React.createElement(Component, { t, ...props });
   };
 };
+
+export const useTranslate = () => (key: string, _options: unknown) => key;

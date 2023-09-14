@@ -43,11 +43,11 @@
     dark:focus:ring-slate-700;
 
   &.CMS_Breadcrumbs_breadcrumb-truncated {
-    @apply text-ellipsis
+    @apply text-ellipsis;
   }
 
   &:not(.CMS_Breadcrumbs_breadcrumb-truncated) {
-    @apply flex-shrink-0
+    @apply flex-shrink-0;
   }
 }
 
@@ -55,11 +55,11 @@
   @apply truncate;
 
   &.CMS_Breadcrumbs_breadcrumb-truncated {
-    @apply text-ellipsis
+    @apply text-ellipsis;
   }
 
   &:not(.CMS_Breadcrumbs_breadcrumb-truncated) {
-    @apply flex-shrink-0
+    @apply flex-shrink-0;
   }
 }
 

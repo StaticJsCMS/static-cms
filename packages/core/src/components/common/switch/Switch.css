@@ -17,9 +17,8 @@
 
   &:not(.CMS_Switch_disabled) {
     & .CMS_Switch_toggle {
-      @apply
-        after:bg-white
-        after:border-gray-300
+      @apply after:bg-white
+        after:border-gray-300;
     }
   }
 }

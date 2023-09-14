@@ -1,4 +1,5 @@
 import { Select as BaseSelect } from '@mui/base/Select';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@styled-icons/material/KeyboardArrowDown';
 import React, { forwardRef, useCallback, useState } from 'react';
 
@@ -100,61 +101,79 @@ const Select = forwardRef(
       [onChange, value],
     );
 
-    return (
-      <div className={classNames(classes.root, rootClassName)}>
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        <BaseSelect<any>
-          renderValue={() => {
-            return (
-              <div className={classes.value}>
-                <div className={classes.label}>
-                  <span className={classes['label-text']}>{label ?? placeholder}</span>
-                </div>
-                <span className={classes.dropdown}>
-                  <KeyboardArrowDownIcon className={classes['dropdown-icon']} aria-hidden="true" />
-                </span>
-              </div>
-            );
-          }}
-          slotProps={{
-            root: {
-              ref,
-              className: classes.input,
-            },
-            popper: {
-              className: classes.popper,
-              style: { width: ref ? width : 'auto' },
-              disablePortal: false,
-            },
-          }}
-          value={value}
-          disabled={disabled}
-          onChange={handleChange}
-          listboxOpen={open}
-          onListboxOpenChange={handleOpenChange}
-          data-testid="select-input"
-        >
-          {!Array.isArray(value) && !required ? (
-            <Option value="" selectedValue={value}>
-              <i>None</i>
-            </Option>
-          ) : null}
-          {options.map((option, index) => {
-            const { label: optionLabel, value: optionValue } = getOptionLabelAndValue(option);
+    const handleClick = useCallback(
+      (event: MouseEvent) => {
+        event.stopPropagation();
+        event.preventDefault();
+        handleOpenChange(!open);
+      },
+      [handleOpenChange, open],
+    );
 
-            return (
-              <Option
-                key={index}
-                value={optionValue}
-                selectedValue={value}
-                data-testid={`select-option-${optionValue}`}
-              >
-                {optionLabel}
+    const handleClickAway = useCallback(() => {
+      handleOpenChange(false);
+    }, [handleOpenChange]);
+
+    return (
+      <ClickAwayListener onClickAway={handleClickAway}>
+        <div className={classNames(classes.root, rootClassName)}>
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          <BaseSelect<any>
+            renderValue={() => {
+              return (
+                <div className={classes.value}>
+                  <div className={classes.label}>
+                    <span className={classes['label-text']}>{label ?? placeholder}</span>
+                  </div>
+                  <span className={classes.dropdown}>
+                    <KeyboardArrowDownIcon
+                      className={classes['dropdown-icon']}
+                      aria-hidden="true"
+                    />
+                  </span>
+                </div>
+              );
+            }}
+            ref={ref}
+            onClick={handleClick}
+            slotProps={{
+              root: {
+                className: classes.input,
+              },
+              popper: {
+                className: classes.popper,
+                style: { width: ref ? width : 'auto' },
+                disablePortal: false,
+              },
+            }}
+            value={value}
+            disabled={disabled}
+            onChange={handleChange}
+            listboxOpen={open}
+            data-testid="select-input"
+          >
+            {!Array.isArray(value) && !required ? (
+              <Option value="" selectedValue={value}>
+                <i>None</i>
               </Option>
-            );
-          })}
-        </BaseSelect>
-      </div>
+            ) : null}
+            {options.map((option, index) => {
+              const { label: optionLabel, value: optionValue } = getOptionLabelAndValue(option);
+
+              return (
+                <Option
+                  key={index}
+                  value={optionValue}
+                  selectedValue={value}
+                  data-testid={`select-option-${optionValue}`}
+                >
+                  {optionLabel}
+                </Option>
+              );
+            })}
+          </BaseSelect>
+        </div>
+      </ClickAwayListener>
     );
   },
 );

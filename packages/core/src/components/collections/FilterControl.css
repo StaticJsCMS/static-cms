@@ -21,7 +21,7 @@
   @apply text-lg
     font-bold
     text-gray-800
-    dark:text-white
+    dark:text-white;
 }
 
 .CMS_FilterControl_list-filter {

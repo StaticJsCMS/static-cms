@@ -1,16 +1,16 @@
-.CMS_WidgetDate_root {
+.CMS_WidgetDateTime_root {
 }
 
-.CMS_WidgetDate_wrapper {
+.CMS_WidgetDateTime_wrapper {
   @apply !w-date-widget;
 }
 
-.CMS_WidgetDate_date-input {
+.CMS_WidgetDateTime_date-input {
 }
 
-.CMS_WidgetDate_time-input {
+.CMS_WidgetDateTime_time-input {
 }
 
-.CMS_WidgetDate_datetime-input {
+.CMS_WidgetDateTime_datetime-input {
   @apply truncate;
 }

@@ -8,7 +8,7 @@ import type { FC, MouseEvent } from 'react';
 
 import './NowButton.css';
 
-const classes = generateClassNames('WidgetDate_NowButton', ['root', 'button']);
+const classes = generateClassNames('WidgetDateTime_NowButton', ['root', 'button']);
 
 export interface NowButtonProps {
   handleChange: (value: Date) => void;
