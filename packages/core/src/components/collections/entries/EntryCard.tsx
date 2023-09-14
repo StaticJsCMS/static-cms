@@ -101,6 +101,10 @@ const EntryCard: FC<TranslatedProps<EntryCardProps>> = ({
 
   const [hasLocalBackup, setHasLocalBackup] = useState(false);
   useEffect(() => {
+    if (config?.disable_local_backup) {
+      return;
+    }
+
     let alive = true;
 
     const checkLocalBackup = async () => {
@@ -122,7 +126,7 @@ const EntryCard: FC<TranslatedProps<EntryCardProps>> = ({
     return () => {
       alive = false;
     };
-  }, [collection.name, entry.slug]);
+  }, [collection.name, config?.disable_local_backup, entry.slug]);
 
   if (PreviewCardComponent) {
     return (
