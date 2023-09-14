@@ -30,7 +30,6 @@ import {
   SHORTCODE_TOOLBAR_BUTTON,
   STRIKETHROUGH_TOOLBAR_BUTTON,
 } from '@staticcms/core/constants/toolbar_buttons';
-import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectVisible } from '@staticcms/core/reducers/selectors/mediaLibrary';
@@ -43,8 +42,8 @@ import type {
   MarkdownField,
   MarkdownToolbarButtonType,
 } from '@staticcms/core/interface';
-import type { ClientRectObject } from '@udecode/plate';
 import type { FC, ReactNode } from 'react';
+import type { ClientRectObject } from '@udecode/plate';
 
 import './BalloonToolbar.css';
 
@@ -108,7 +107,6 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
   const editor = useMdPlateEditorState();
   const selection = usePlateSelection();
   const [hasFocus, setHasFocus] = useState(false);
-  const debouncedHasFocus = useDebounce(hasFocus, 150);
 
   const isMediaLibraryOpen = useAppSelector(selectVisible);
 
@@ -121,8 +119,20 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
   }, []);
 
   const anchorEl = useRef<HTMLDivElement | null>(null);
+
   const [selectionBoundingClientRect, setSelectionBoundingClientRect] =
     useState<ClientRectObject | null>(null);
+
+  const rect = getSelectionBoundingClientRect();
+
+  useEffect(() => {
+    if (rect.x === 0 && rect.y === 0) {
+      return;
+    }
+
+    setSelectionBoundingClientRect(rect);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rect.x, rect.y]);
 
   const [selectionExpanded, selectionText] = useMemo(() => {
     if (!editor) {
@@ -135,25 +145,11 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
 
   const node = getNode(editor, editor.selection?.anchor.path ?? []);
 
-  useEffect(() => {
-    if (!editor || !hasEditorFocus) {
-      setSelectionBoundingClientRect(null);
-      return;
-    }
-
-    setTimeout(() => {
-      setSelectionBoundingClientRect(getSelectionBoundingClientRect());
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selection, debouncedHasFocus]);
-
   const isInTableCell = useMemo(() => {
     return Boolean(
       selection && someNode(editor, { match: { type: ELEMENT_TD }, at: selection?.anchor }),
     );
   }, [editor, selection]);
-
-  const debouncedEditorFocus = useDebounce(hasEditorFocus, 150);
 
   const [groups, setGroups] = useState<ReactNode[]>([]);
 
@@ -162,7 +158,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
       return;
     }
 
-    if (!debouncedEditorFocus && !hasFocus && !debouncedHasFocus) {
+    if (!hasEditorFocus && !hasFocus) {
       setGroups([]);
       return;
     }
@@ -208,9 +204,8 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
     setGroups([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    debouncedEditorFocus,
     hasFocus,
-    debouncedHasFocus,
+    hasEditorFocus,
     selection,
     editor,
     selectionText,
@@ -224,30 +219,10 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
     isMediaLibraryOpen,
   ]);
 
-  const [prevSelectionBoundingClientRect, setPrevSelectionBoundingClientRect] = useState(
-    selectionBoundingClientRect,
-  );
-
-  const debouncedGroups = useDebounce(
-    groups,
-    prevSelectionBoundingClientRect !== selectionBoundingClientRect ? 0 : 150,
-  );
   const open = useMemo(
-    () =>
-      Boolean(
-        selectionBoundingClientRect &&
-          (groups.length > 0 || debouncedGroups.length > 0 || isMediaLibraryOpen),
-      ),
-    [debouncedGroups.length, groups.length, isMediaLibraryOpen, selectionBoundingClientRect],
+    () => Boolean(selectionBoundingClientRect && (groups.length > 0 || isMediaLibraryOpen)),
+    [groups.length, isMediaLibraryOpen, selectionBoundingClientRect],
   );
-  const debouncedOpen = useDebounce(
-    open,
-    prevSelectionBoundingClientRect !== selectionBoundingClientRect ? 0 : 50,
-  );
-
-  useEffect(() => {
-    setPrevSelectionBoundingClientRect(selectionBoundingClientRect);
-  }, [selectionBoundingClientRect]);
 
   return (
     <>
@@ -261,10 +236,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
           height: 1,
         }}
       />
-      {selectionBoundingClientRect &&
-      debouncedOpen &&
-      anchorEl.current &&
-      (groups.length > 0 || debouncedGroups.length > 0) ? (
+      {selectionBoundingClientRect && open && anchorEl.current && groups.length > 0 ? (
         <Popper
           open
           placement="top"
@@ -277,7 +249,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
           keepMounted
         >
           <div data-testid="balloon-toolbar" className={classes.content}>
-            {groups.length > 0 ? groups : debouncedGroups}
+            {groups}
           </div>
         </Popper>
       ) : null}

@@ -4,8 +4,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ColorInput from './ColorInput';
 import Colors from './Colors';
 
-import type { ColorType } from '@udecode/plate';
 import type { ChangeEvent, FC } from 'react';
+import type { ColorType } from './types';
 
 export type CustomColorsProps = {
   color?: string;

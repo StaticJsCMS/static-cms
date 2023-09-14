@@ -46,10 +46,10 @@ import {
   MARK_SUPERSCRIPT,
   MARK_UNDERLINE,
   Plate,
+  PlateLeaf,
   PlateProvider,
   withProps,
 } from '@udecode/plate';
-import { StyledLeaf } from '@udecode/plate-styled-components';
 import React, { useMemo, useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -168,18 +168,18 @@ const PlateEditor: FC<PlateEditorProps> = ({
       [ELEMENT_LI]: ListItemElement,
       [ELEMENT_LIC]: ListItemContentElement,
       [ELEMENT_SHORTCODE]: withShortcodeElement({ controlProps }),
-      [MARK_BOLD]: withProps(StyledLeaf, { as: 'strong' }),
-      [MARK_ITALIC]: withProps(StyledLeaf, { as: 'em' }),
-      [MARK_STRIKETHROUGH]: withProps(StyledLeaf, { as: 's' }),
+      [MARK_BOLD]: withProps(PlateLeaf, { as: 'strong' }),
+      [MARK_ITALIC]: withProps(PlateLeaf, { as: 'em' }),
+      [MARK_STRIKETHROUGH]: withProps(PlateLeaf, { as: 's' }),
     };
 
     if (useMdx) {
       // MDX Widget
       return {
         ...baseComponents,
-        [MARK_SUBSCRIPT]: withProps(StyledLeaf, { as: 'sub' }),
-        [MARK_SUPERSCRIPT]: withProps(StyledLeaf, { as: 'sup' }),
-        [MARK_UNDERLINE]: withProps(StyledLeaf, { as: 'u' }),
+        [MARK_SUBSCRIPT]: withProps(PlateLeaf, { as: 'sub' }),
+        [MARK_SUPERSCRIPT]: withProps(PlateLeaf, { as: 'sup' }),
+        [MARK_UNDERLINE]: withProps(PlateLeaf, { as: 'u' }),
       };
     }
 

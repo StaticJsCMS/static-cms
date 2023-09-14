@@ -28,7 +28,7 @@
     rounded-sm
     text-gray-800
     border-gray-600
-    dark:border-gray-200
+    dark:border-gray-400
     dark:text-gray-100;
 }
 
@@ -72,9 +72,6 @@
   @apply block
     truncate
     font-normal;
-}
-
-.CMS_WidgetMarkdown_FontTypeSelect_more-button {
 }
 
 .CMS_WidgetMarkdown_FontTypeSelect_more-button-icon {

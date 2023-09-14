@@ -78,7 +78,7 @@ const Button = React.forwardRef(function Button<TValue extends {}, Multiple exte
 ) {
   const { ownerState: _, children, ...other } = props;
   return (
-    <button type="button" {...other} ref={ref} className={classes['more-button']}>
+    <button type="button" {...other} ref={ref} className={classes.select}>
       {children}
       <UnfoldMoreIcon className={classes['more-button-icon']} />
     </button>
@@ -131,9 +131,6 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
           root: Button,
         }}
         slotProps={{
-          root: {
-            className: classes.select,
-          },
           popper: {
             disablePortal: false,
             className: classNames(classes.popper, 'CMS_Scrollbar_root', 'CMS_Scrollbar_secondary'),
