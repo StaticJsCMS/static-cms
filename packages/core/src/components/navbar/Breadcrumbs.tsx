@@ -3,9 +3,25 @@ import React, { Fragment, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { Breadcrumb } from '@staticcms/core/interface';
 import type { FC } from 'react';
+
+import './Breadcrumbs.css';
+
+export const classes = generateClassNames('Breadcrumbs', [
+  'root',
+  'links-wrapper',
+  'links',
+  'breadcrumb-link',
+  'breadcrumb-text',
+  'breadcrumb-truncated',
+  'last-non-editor-breadcrumb-link',
+  'mobile-current-breadcrumb-link',
+  'mobile-backlink',
+  'mobile-current-breadcrumb-text',
+]);
 
 export interface BreadcrumbsProps {
   breadcrumbs: Breadcrumb[];
@@ -23,42 +39,9 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) =>
   }, [breadcrumbs]);
 
   return (
-    <div
-      className="
-        flex
-        h-full
-        md:w-auto
-        items-center
-        text-xl
-        font-semibold
-        gap-1
-        text-gray-800
-        dark:text-white
-        flex-grow
-        truncate
-      "
-    >
-      <div
-        className="
-          hidden
-          md:flex
-          overflow-hidden
-          relative
-          flex-grow
-          h-full
-        "
-      >
-        <div
-          className="
-            w-full
-            absolute
-            inset-0
-            flex
-            items-center
-            gap-1
-            pl-1
-          "
-        >
+    <div className={classes.root}>
+      <div className={classes['links-wrapper']}>
+        <div className={classes.links}>
           {breadcrumbs.map((breadcrumb, index) =>
             breadcrumb.name ? (
               <Fragment key={`breadcrumb-${index}`}>
@@ -67,18 +50,8 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) =>
                   <Link
                     key={`link-${index}`}
                     className={classNames(
-                      `
-                        hover:text-gray-400
-                        dark:hover:text-gray-400
-                        overflow-hidden
-                        whitespace-nowrap
-                        focus:outline-none
-                        focus:ring-4
-                        rounded-md
-                        focus:ring-gray-200
-                        dark:focus:ring-slate-700
-                      `,
-                      index + 1 === breadcrumbs.length ? 'text-ellipsis' : 'flex-shrink-0',
+                      classes['breadcrumb-link'],
+                      index + 1 === breadcrumbs.length && classes['breadcrumb-truncated'],
                     )}
                     to={breadcrumb.to}
                   >
@@ -88,10 +61,8 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) =>
                   <span
                     key={`text-${index}`}
                     className={classNames(
-                      `
-                        truncate
-                      `,
-                      index + 1 === breadcrumbs.length ? 'text-ellipsis' : 'flex-shrink-0',
+                      classes['breadcrumb-text'],
+                      index + 1 === breadcrumbs.length && classes['breadcrumb-truncated'],
                     )}
                   >
                     {breadcrumb.name}
@@ -106,32 +77,16 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) =>
         finalNonEditorBreadcrumb.to ? (
           <Link
             key="final-non-editor-breadcrumb-link"
-            className="
-              flex
-              md:hidden
-              gap-2
-              items-center
-              truncate
-              w-full
-              focus:outline-none
-              focus:ring-4
-              focus:ring-gray-200
-              dark:focus:ring-slate-700
-            "
+            className={classes['mobile-current-breadcrumb-link']}
             to={finalNonEditorBreadcrumb.to}
           >
-            {inEditor ? <ArrowBackIcon className="w-6 h-6" /> : null}
+            {inEditor ? <ArrowBackIcon className={classes['mobile-backlink']} /> : null}
             {finalNonEditorBreadcrumb.name}
           </Link>
         ) : (
           <div
             key="final-non-editor-breadcrumb-text"
-            className="
-              block
-              md:hidden
-              truncate
-              w-full
-            "
+            className={classes['mobile-current-breadcrumb-text']}
           >
             {finalNonEditorBreadcrumb?.name ?? ''}
           </div>

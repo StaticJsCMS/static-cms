@@ -1,15 +1,15 @@
 import Drawer from '@mui/material/Drawer';
 import React, { useMemo } from 'react';
 
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import FilterControl from '../FilterControl';
 import GroupControl from '../GroupControl';
 import SortControl from '../SortControl';
+import mobileCollectionControlsClasses from './MobileCollectionControls.classes';
 
 import type { FilterControlProps } from '../FilterControl';
 import type { GroupControlProps } from '../GroupControl';
 import type { SortControlProps } from '../SortControl';
-
-const DRAWER_WIDTH = 240;
 
 export type MobileCollectionControlsDrawerProps = Omit<FilterControlProps, 'variant'> &
   Omit<GroupControlProps, 'variant'> &
@@ -53,34 +53,11 @@ const MobileCollectionControlsDrawer = ({
       ModalProps={{
         keepMounted: true, // Better open performance on mobile.
       }}
-      sx={{
-        width: '80%',
-        maxWidth: DRAWER_WIDTH,
-        '& .MuiBackdrop-root': {
-          width: '100%',
-        },
-        '& .MuiDrawer-paper': {
-          boxSizing: 'border-box',
-          width: '80%',
-          maxWidth: DRAWER_WIDTH,
-        },
-      }}
+      slotProps={{ root: { className: mobileCollectionControlsClasses.root } }}
     >
       <div
         onClick={onMobileOpenToggle}
-        className="
-          px-5
-          py-4
-          flex
-          flex-col
-          gap-6
-          h-full
-          w-full
-          overflow-y-auto
-          bg-white
-          dark:bg-slate-800
-          styled-scrollbars
-        "
+        className={classNames(mobileCollectionControlsClasses.content, 'CMS_Scrollbar_root')}
       >
         {showSortControl ? (
           <SortControl fields={fields} sort={sort} onSortClick={onSortClick} variant="list" />

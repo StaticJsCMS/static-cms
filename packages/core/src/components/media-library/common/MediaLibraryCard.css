@@ -1,0 +1,156 @@
+.CMS_MediaLibraryCard_root {
+  @apply relative
+    w-media-card
+    h-media-card;
+}
+
+.CMS_MediaLibraryCard_action {
+  @apply w-media-card
+    h-media-card
+    rounded-md
+    shadow-sm
+    overflow-hidden
+    cursor-pointer
+    border
+    bg-gray-50/75
+    border-gray-200/75
+    dark:bg-slate-800
+    dark:border-slate-600/75;
+
+  &:hover {
+    & .CMS_MediaLibraryCard_controls-overlay {
+      @apply visible
+        bg-blue-200/25
+        dark:bg-blue-400/60;
+    }
+  }
+}
+
+.CMS_MediaLibraryCard_handle {
+  @apply absolute
+    inset-0
+    rounded-md
+    z-20
+    overflow-visible
+    focus:ring-4
+    focus:ring-gray-200
+    dark:focus:ring-slate-700
+    focus-visible:outline-none;
+}
+
+.CMS_MediaLibraryCard_outline {
+  @apply absolute
+    inset-0
+    rounded-md
+    border-2
+    border-blue-500
+    z-20;
+}
+
+.CMS_MediaLibraryCard_text {
+  @apply p-3
+    w-full
+    flex
+    text-sm
+    font-bold
+    dark:font-semibold
+    text-slate-600
+    dark:text-gray-100
+    whitespace-nowrap
+    overflow-hidden;
+}
+
+.CMS_MediaLibraryCard_controls-overlay {
+  @apply absolute
+    inset-0
+    invisible
+    transition-all
+    rounded-md
+    group-hover/media-card:visible
+    group-hover/media-card:bg-blue-200/25
+    dark:group-hover/media-card:bg-blue-400/60
+    z-20;
+}
+
+.CMS_MediaLibraryCard_controls {
+  @apply absolute
+    top-2
+    right-2
+    flex
+    gap-1;
+}
+
+.CMS_MediaLibraryCard_control-icon {
+  @apply w-5
+    h-5;
+}
+
+.CMS_MediaLibraryCard_download-button {
+  @apply text-white
+    dark:text-white
+    bg-gray-900/25
+    dark:hover:text-blue-100
+    dark:hover:bg-blue-800/80;
+}
+
+.CMS_MediaLibraryCard_delete-button {
+  @apply relative
+    text-red-400
+    bg-gray-900/25
+    dark:hover:text-red-600
+    dark:hover:bg-red-800/40
+    z-30;
+}
+
+.CMS_MediaLibraryCard_details {
+  @apply relative;
+}
+
+.CMS_MediaLibraryCard_selection-overlay {
+  @apply absolute
+    top-3
+    left-3
+    flex
+    items-center
+    gap-1
+    z-20;
+}
+
+.CMS_MediaLibraryCard_image {
+  @apply w-media-card
+    h-media-card-image
+    rounded-md;
+}
+
+.CMS_MediaLibraryCard_folder {
+  @apply w-media-card
+    h-media-card-image
+    bg-gray-500
+    dark:bg-slate-700
+    text-gray-200
+    dark:text-slate-400
+    font-bold
+    flex
+    items-center
+    justify-center
+    text-5xl;
+}
+
+.CMS_MediaLibraryCard_folder-icon {
+  @apply w-24
+    h-24;
+}
+
+.CMS_MediaLibraryCard_file {
+  @apply w-media-card
+    h-media-card-image
+    bg-gray-500
+    dark:bg-slate-700
+    text-gray-200
+    dark:text-slate-400
+    font-bold
+    flex
+    items-center
+    justify-center
+    text-5xl;
+}

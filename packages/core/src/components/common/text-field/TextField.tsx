@@ -1,10 +1,23 @@
-import InputUnstyled from '@mui/base/InputUnstyled';
+import { Input } from '@mui/base/Input';
 import React from 'react';
 
 import useCursor from '@staticcms/core/lib/hooks/useCursor';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { ChangeEventHandler, FC, MouseEventHandler, ReactNode, Ref } from 'react';
+
+import './TextField.css';
+
+export const classes = generateClassNames('TextField', [
+  'root',
+  'input',
+  'borderless',
+  'contained',
+  'cursor-pointer',
+  'cursor-text',
+  'cursor-default',
+]);
 
 export interface BaseTextFieldProps {
   id?: string;
@@ -58,7 +71,7 @@ const TextField: FC<TextFieldProps> = ({
   const finalCursor = useCursor(cursor, disabled);
 
   return (
-    <InputUnstyled
+    <Input
       type={type}
       value={value}
       onChange={onChange}
@@ -71,55 +84,18 @@ const TextField: FC<TextFieldProps> = ({
       endAdornment={endAdornment}
       slotProps={{
         root: {
-          className: classNames(
-            `
-              flex
-              w-full
-            `,
-            rootClassName,
-          ),
+          className: classNames(classes.root, rootClassName),
         },
         input: {
           ref: inputRef,
           className: classNames(
-            `
-              w-full
-              text-sm
-            `,
+            classes.input,
             inputClassName,
-            variant === 'borderless' &&
-              `
-              h-6
-              px-3
-              bg-transparent
-              outline-none
-              font-medium
-              text-gray-800
-              disabled:text-gray-300
-              dark:text-gray-100
-              dark:disabled:text-gray-500
-            `,
-            variant === 'contained' &&
-              `
-              bg-gray-50
-              border
-              border-gray-300
-              text-gray-800
-              rounded-lg
-              focus:ring-blue-500
-              focus:border-blue-500
-              block
-              p-2.5
-              dark:bg-gray-700
-              dark:border-gray-600
-              dark:placeholder-gray-400
-              dark:text-white
-              dark:focus:ring-blue-500
-              dark:focus:border-blue-500
-            `,
-            finalCursor === 'pointer' && 'cursor-pointer',
-            finalCursor === 'text' && 'cursor-text',
-            finalCursor === 'default' && 'cursor-default',
+            variant === 'borderless' && classes.borderless,
+            variant === 'contained' && classes.contained,
+            finalCursor === 'pointer' && classes['cursor-pointer'],
+            finalCursor === 'text' && classes['cursor-text'],
+            finalCursor === 'default' && classes['cursor-default'],
           ),
           ...otherProps,
         },

@@ -1,0 +1,16 @@
+.CMS_Image_root {
+  &:not(.CMS_Image_empty) {
+    @apply object-cover
+      max-w-full
+      overflow-hidden;
+  }
+
+  &.CMS_Image_empty {
+    @apply p-10
+      rounded-md
+      border
+      max-w-full
+      border-gray-200/75
+      dark:border-slate-600/75;
+  }
+}

@@ -1,0 +1,36 @@
+.CMS_MenuItemLink_root {
+  @apply px-4
+    py-2
+    text-sm
+    text-gray-800
+    dark:text-gray-300
+    w-full
+    text-left
+    flex
+    items-center
+    justify-between
+    hover:bg-slate-100
+    dark:hover:bg-slate-900;
+
+  &.CMS_MenuItemLink_active {
+    @apply bg-slate-100
+      dark:bg-slate-900;
+  }
+}
+
+.CMS_MenuItemLink_content {
+  @apply flex
+    items-center
+    gap-2
+    flex-grow;
+}
+
+.CMS_MenuItemLink_start-icon {
+  @apply h-5
+    w-5;
+}
+
+.CMS_MenuItemLink_end-icon {
+  @apply h-5
+    w-5;
+}

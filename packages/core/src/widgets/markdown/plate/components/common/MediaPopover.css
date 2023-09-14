@@ -1,0 +1,35 @@
+.CMS_WidgetMarkdown_MediaPopover_root {
+  @apply absolute
+    max-h-60
+    overflow-auto
+    rounded-md
+    bg-white
+    p-1
+    text-base
+    shadow-md
+    ring-1
+    ring-black
+    ring-opacity-5
+    focus:outline-none
+    sm:text-sm
+    z-40
+    dark:bg-slate-700
+    dark:shadow-lg;
+}
+
+.CMS_WidgetMarkdown_MediaPopover_content {
+  @apply flex
+    gap-0.5;
+}
+
+.CMS_WidgetMarkdown_MediaPopover_icon {
+  @apply w-4
+    h-4;
+}
+
+.CMS_WidgetMarkdown_MediaPopover_divider {
+  @apply w-[1px]
+    border
+    border-gray-100
+    dark:border-slate-600;
+}

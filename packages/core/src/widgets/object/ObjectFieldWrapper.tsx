@@ -6,6 +6,7 @@ import ErrorMessage from '@staticcms/core/components/common/field/ErrorMessage';
 import Hint from '@staticcms/core/components/common/field/Hint';
 import Label from '@staticcms/core/components/common/field/Label';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import widgetObjectClasses from './ObjectControl.classes';
 
 import type { FieldError, ObjectField } from '@staticcms/core/interface';
 import type { FC, ReactNode } from 'react';
@@ -19,6 +20,7 @@ export interface ObjectFieldWrapperProps {
   hasChildErrors: boolean;
   hint?: string;
   disabled: boolean;
+  forSingleList: boolean;
 }
 
 const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
@@ -30,6 +32,7 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
   hasChildErrors,
   hint,
   disabled,
+  forSingleList,
 }) => {
   const hasErrors = useMemo(() => errors.length > 0, [errors.length]);
 
@@ -43,66 +46,24 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
     <div
       data-testid="object-field"
       className={classNames(
-        `
-          relative
-          flex
-          flex-col
-          border-b
-          border-slate-400
-          focus-within:border-blue-800
-          dark:focus-within:border-blue-100
-        `,
-        !(hasErrors || hasChildErrors) && 'group/active-object',
+        widgetObjectClasses.root,
+        disabled && widgetObjectClasses.disabled,
+        (hasErrors || hasChildErrors) && widgetObjectClasses.error,
+        open && widgetObjectClasses.open,
+        field.required !== false && widgetObjectClasses.required,
+        forSingleList && widgetObjectClasses['for-single-list'],
       )}
     >
       <button
         data-testid="expand-button"
-        className="
-          flex
-          w-full
-          justify-between
-          pl-2
-          pr-3
-          py-2
-          text-left
-          text-sm
-          font-medium
-          focus:outline-none
-          focus-visible:ring
-          gap-2
-          focus-visible:ring-opacity-75
-        "
+        className={widgetObjectClasses.expand}
         onClick={handleOpenToggle}
       >
-        <ChevronRightIcon
-          className={classNames(
-            open && 'rotate-90 transform',
-            `
-              transition-transform
-              h-5
-              w-5
-            `,
-            disabled
-              ? `
-                  text-slate-300
-                  dark:text-slate-600
-                `
-              : `
-                  group-focus-within/active-list:text-blue-500
-                  group-hover/active-list:text-blue-500
-                `,
-          )}
-        />
+        <ChevronRightIcon className={widgetObjectClasses['expand-icon']} />
         <Label
           key="label"
           hasErrors={hasErrors || hasChildErrors}
-          className={classNames(
-            !disabled &&
-              `
-                group-focus-within/active-object:text-blue-500
-                group-hover/active-object:text-blue-500
-              `,
-          )}
+          className={widgetObjectClasses.summary}
           cursor="pointer"
           variant="inline"
           disabled={disabled}
@@ -111,21 +72,7 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
         </Label>
       </button>
       <Collapse in={open} appear={false}>
-        <div
-          data-testid="object-fields"
-          className={classNames(
-            `
-              ml-4
-              text-sm
-              text-gray-500
-              border-l-2
-              border-solid
-              border-l-slate-400
-            `,
-            !disabled && 'group-focus-within/active-object:border-l-blue-500',
-            (hasErrors || hasChildErrors) && 'border-l-red-500',
-          )}
-        >
+        <div data-testid="object-fields" className={widgetObjectClasses.fields}>
           {children}
         </div>
       </Collapse>
@@ -134,7 +81,7 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
           {hint}
         </Hint>
       ) : null}
-      <ErrorMessage errors={errors} className="pl-4 pt-2 pb-3" />
+      <ErrorMessage errors={errors} className={widgetObjectClasses['error-message']} />
     </div>
   );
 };

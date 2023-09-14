@@ -5,8 +5,16 @@ import { Check as CheckIcon } from '@styled-icons/material/Check';
 import React, { useCallback } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { FC } from 'react';
+
+const classes = generateClassNames('WidgetMarkdown_ColorButton', [
+  'root',
+  'avatar',
+  'is-bright-color',
+  'check-icon',
+]);
 
 export type ColorButtonProps = {
   name: string;
@@ -29,23 +37,19 @@ const ColorButton: FC<ColorButtonProps> = ({
 
   return (
     <Tooltip title={name} disableInteractive>
-      <IconButton onClick={handleOnClick} sx={{ p: 0 }}>
+      <IconButton
+        onClick={handleOnClick}
+        sx={{ p: 0 }}
+        className={classNames(classes.root, isBrightColor && classes['is-bright-color'])}
+      >
         <Avatar
           alt={name}
+          className={classes.avatar}
           sx={{
             background: value,
-            width: 32,
-            height: 32,
-            border: isBrightColor ? '1px solid rgba(209,213,219, 1)' : 'transparent',
           }}
         >
-          {isSelected ? (
-            <CheckIcon
-              className={classNames('h-5 w-5', isBrightColor ? 'text-black' : 'text-white')}
-            />
-          ) : (
-            <>&nbsp;</>
-          )}
+          {isSelected ? <CheckIcon className={classes['check-icon']} /> : <>&nbsp;</>}
         </Avatar>
       </IconButton>
     </Tooltip>

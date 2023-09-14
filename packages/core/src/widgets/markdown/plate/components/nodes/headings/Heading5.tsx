@@ -1,8 +1,14 @@
 import React from 'react';
 
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
+
 import type { MdH5Element, MdValue } from '@staticcms/markdown';
 import type { PlateRenderElementProps } from '@udecode/plate';
 import type { FC } from 'react';
+
+import './Heading5.css';
+
+const classes = generateClassNames('WidgetMarkdown_Heading5', ['root']);
 
 const Heading5: FC<PlateRenderElementProps<MdValue, MdH5Element>> = ({
   attributes,
@@ -10,16 +16,7 @@ const Heading5: FC<PlateRenderElementProps<MdValue, MdH5Element>> = ({
   nodeProps,
 }) => {
   return (
-    <h5
-      {...attributes}
-      {...nodeProps}
-      className="
-        text-[0.83em]
-        leading-[1.25em]
-        font-bold
-        my-[1.67em]
-      "
-    >
+    <h5 {...attributes} {...nodeProps} className={classes.root}>
       {children}
     </h5>
   );

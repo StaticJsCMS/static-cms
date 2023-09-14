@@ -1,0 +1,40 @@
+.CMS_EntryCard_root {
+  @apply h-full
+    w-full
+    relative
+    overflow-visible;
+}
+
+.CMS_EntryCard_content-wrapper {
+  @apply absolute
+    -inset-1
+    pr-2;
+}
+
+.CMS_EntryCard_content {
+  @apply p-1
+    h-full
+    w-full;
+}
+
+.CMS_EntryCard_card {
+  @apply h-full;
+}
+
+.CMS_EntryCard_card-content {
+  @apply flex
+    w-full
+    items-center
+    justify-between;
+}
+
+.CMS_EntryCard_card-summary {
+  @apply truncate;
+}
+
+.CMS_EntryCard_local-backup-icon {
+  @apply w-5
+    h-5
+    text-blue-600
+    dark:text-blue-300;
+}

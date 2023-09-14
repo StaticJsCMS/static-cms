@@ -1,0 +1,104 @@
+.CMS_Entries_root {
+  @apply py-2
+    px-3
+    rounded-md
+    bg-yellow-300/75
+    dark:bg-yellow-800/75
+    text-sm;
+}
+
+.CMS_Entries_group {
+  @apply pb-3;
+}
+
+.CMS_Entries_group-content-wrapper {
+  @apply -m-1;
+}
+
+.CMS_Entries_group-content {
+  @apply flex
+    gap-2
+    p-1
+    overflow-x-auto;
+}
+
+.CMS_Entries_group-button {
+  @apply whitespace-nowrap;
+}
+
+.CMS_Entries_entry-listing {
+  @apply pb-3
+    overflow-hidden;
+}
+
+.CMS_Entries_entry-listing-loading {
+  @apply absolute
+    inset-0
+    flex
+    items-center
+    justify-center
+    bg-slate-50/50
+    dark:bg-slate-900/50;
+}
+
+.CMS_Entries_entry-listing-grid {
+  @apply relative
+    h-full
+    flex-grow;
+}
+
+.CMS_Entries_entry-listing-grid-container {
+  @apply relative
+    h-full;
+}
+
+.CMS_Entries_entry-listing-cards {
+  @apply relative
+    w-card-grid
+    h-full
+    overflow-hidden
+    -ml-1;
+}
+
+.CMS_Entries_entry-listing-cards-grid-wrapper {
+  @apply overflow-hidden;
+}
+
+.CMS_Entries_entry-listing-cards-grid {
+  @apply !overflow-x-hidden
+    overflow-y-auto;
+}
+
+.CMS_Entries_entry-listing-table {
+  @apply relative
+    max-h-full
+    h-full
+    overflow-hidden
+    p-1.5
+    bg-white
+    shadow-sm
+    border
+    border-gray-100
+    dark:bg-slate-800
+    dark:border-gray-700/40
+    dark:shadow-md
+    rounded-xl;
+}
+
+.CMS_Entries_entry-listing-table-content {
+  @apply relative
+    h-full
+    overflow-auto;
+}
+
+.CMS_Entries_entry-listing-table-row {
+  @apply hover:bg-gray-200
+    dark:hover:bg-slate-700/70;
+}
+
+.CMS_Entries_entry-listing-local-backup {
+  @apply w-5
+    h-5
+    text-blue-600
+    dark:text-blue-300;
+}

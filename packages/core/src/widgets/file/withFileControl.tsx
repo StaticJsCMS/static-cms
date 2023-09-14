@@ -23,6 +23,7 @@ import { KeyboardSensor, PointerSensor } from '@staticcms/core/lib/util/dnd.util
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { useAppSelector } from '@staticcms/core/store/hooks';
+import widgetFileImageClasses from './FileImageControl.classes';
 import SortableImage from './components/SortableImage';
 import SortableLink from './components/SortableLink';
 
@@ -30,6 +31,8 @@ import type { DragEndEvent } from '@dnd-kit/core';
 import type { FileOrImageField, MediaPath, WidgetControlProps } from '@staticcms/core/interface';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 import type { FC, MouseEvent } from 'react';
+
+import './FileImageControl.css';
 
 const MAX_DISPLAY_LENGTH = 50;
 
@@ -137,13 +140,12 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
       const handlePersistCallback = useCallback(
         (_files: File[], assetProxies: (AssetProxy | null)[]) => {
-          const newPath =
-            assetProxies.length > 1 && allowsMultiple
-              ? [
-                  ...(Array.isArray(internalValue) ? internalValue : [internalValue]),
-                  ...assetProxies.filter(f => f).map(f => f!.path),
-                ]
-              : assetProxies[0]?.path;
+          const newPath = allowsMultiple
+            ? [
+                ...(Array.isArray(internalValue) ? internalValue : [internalValue]),
+                ...assetProxies.filter(f => f).map(f => f!.path),
+              ]
+            : assetProxies[0]?.path;
 
           if ((Array.isArray(newPath) && newPath.length === 0) || !newPath) {
             return;
@@ -275,7 +277,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
                 onDragEnd={onSortEnd}
               >
                 <SortableContext items={keys} strategy={rectSortingStrategy}>
-                  <div className="grid grid-cols-images gap-2">
+                  <div className={widgetFileImageClasses['image-grid']}>
                     {internalValue.map((itemValue, index) => {
                       const key = keys[index];
                       return (
@@ -349,8 +351,8 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
 
         if (Array.isArray(internalValue) ? internalValue.length === 0 : isEmpty(internalValue)) {
           return (
-            <div key="selection" className="flex flex-col gap-2 px-3 pt-2 pb-4">
-              <div key="controls" className="flex gap-2 flex-col xs:flex-row">
+            <div key="selection" className={widgetFileImageClasses['empty-content']}>
+              <div key="controls" className={widgetFileImageClasses.actions}>
                 <Button
                   buttonRef={uploadButtonRef}
                   color="primary"
@@ -380,15 +382,9 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
         }
 
         return (
-          <div
-            key="selection"
-            className={classNames(
-              `flex flex-col gap-4 pl-3 pt-2 pb-4`,
-              (forImage || !allowsMultiple) && 'pr-3',
-            )}
-          >
+          <div key="selection" className={widgetFileImageClasses.content}>
             {renderedImagesLinks}
-            <div key="controls" className="flex gap-2 flex-col xs:flex-row">
+            <div key="controls" className={widgetFileImageClasses.actions}>
               <Button
                 buttonRef={uploadButtonRef}
                 color="primary"
@@ -463,15 +459,17 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
             onDragLeave={handleDragLeave}
             onDragOver={handleDragOver}
             className={classNames(
-              `
-                relative
-                border-2
-                transition-colors
-              `,
-              dragOverActive ? 'border-blue-500' : 'border-transparent',
+              widgetFileImageClasses.root,
+              disabled && widgetFileImageClasses.disabled,
+              field.required !== false && widgetFileImageClasses.required,
+              hasErrors && widgetFileImageClasses.error,
+              forSingleList && widgetFileImageClasses['for-single-list'],
+              dragOverActive && widgetFileImageClasses['drag-over-active'],
+              forImage && widgetFileImageClasses['for-image'],
+              isMultiple(value) && widgetFileImageClasses.multiple,
             )}
           >
-            <div className="-m-0.5">
+            <div className={widgetFileImageClasses.wrapper}>
               <Field
                 inputRef={allowsMultiple ? undefined : uploadButtonRef}
                 label={label}
@@ -484,25 +482,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
               >
                 {content}
               </Field>
-              <div
-                className={classNames(
-                  `
-                    absolute
-                    inset-0
-                    flex
-                    items-center
-                    justify-center
-                    pointer-events-none
-                    font-bold
-                    text-blue-500
-                    bg-white/75
-                    dark:text-blue-400
-                    dark:bg-slate-800/75
-                    transition-opacity
-                  `,
-                  dragOverActive ? 'opacity-100' : 'opacity-0',
-                )}
-              >
+              <div className={widgetFileImageClasses['drop-area']}>
                 {t(`mediaLibrary.mediaLibraryModal.${forImage ? 'dropImages' : 'dropFiles'}`)}
               </div>
             </div>
@@ -513,14 +493,16 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
           handleDragEnter,
           handleDragLeave,
           handleDragOver,
+          disabled,
+          field.required,
+          field.hint,
+          hasErrors,
+          forSingleList,
           dragOverActive,
+          value,
           allowsMultiple,
           label,
           errors,
-          hasErrors,
-          field.hint,
-          forSingleList,
-          disabled,
           content,
           t,
         ],

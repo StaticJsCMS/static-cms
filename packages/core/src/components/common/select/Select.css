@@ -1,0 +1,81 @@
+.CMS_Select_root {
+  @apply relative
+    w-full;
+
+  &.CMS_Select_disabled {
+    & .CMS_Select_input {
+      @apply text-gray-300/75
+        dark:text-gray-600/75;
+    }
+
+    & .CMS_Select_value {
+      & .CMS_Select_dropdown {
+        & .CMS_Select_dropdown-icon {
+          @apply text-gray-300/75
+            dark:text-gray-600/75;
+        }
+      }
+    }
+  }
+}
+
+.CMS_Select_value {
+  @apply w-full;
+}
+
+.CMS_Select_label {
+  @apply flex
+    w-select-widget-label;
+}
+
+.CMS_Select_label-text {
+  @apply truncate;
+}
+
+.CMS_Select_dropdown {
+  @apply pointer-events-none
+    absolute
+    inset-y-0
+    right-0
+    flex
+    items-center
+    pr-2;
+}
+
+.CMS_Select_dropdown-icon {
+  @apply h-5
+    w-5
+    text-gray-400;
+}
+
+.CMS_Select_input {
+  @apply flex
+    items-center
+    text-sm
+    font-medium
+    relative
+    min-h-8
+    px-4
+    py-1.5
+    w-full
+    text-gray-800
+    dark:text-gray-100;
+}
+
+.CMS_Select_popper {
+  @apply max-h-60
+    overflow-auto
+    rounded-md
+    bg-white
+    py-1
+    text-base
+    shadow-md
+    ring-1
+    ring-black
+    ring-opacity-5
+    focus:outline-none
+    sm:text-sm
+    z-[100]
+    dark:bg-slate-700
+    dark:shadow-lg;
+}

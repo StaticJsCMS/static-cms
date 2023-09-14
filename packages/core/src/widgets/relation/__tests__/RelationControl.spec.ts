@@ -243,8 +243,8 @@ describe(RelationControl.name, () => {
     const { expectedValue = '', expectedText } = relationOptions ?? {};
 
     if (isNotNullish(expectedText)) {
-      const inputWrapper = response.getByTestId('autocomplete-input-wrapper');
-      await waitFor(() => expect(inputWrapper.textContent).toBe(expectedText));
+      const autocomplete = response.getByTestId('autocomplete');
+      await waitFor(() => expect(autocomplete.textContent).toBe(expectedText));
     } else {
       const input = response.getByTestId('autocomplete-input');
       await waitFor(() => expect(input).toHaveValue(expectedValue));
@@ -260,21 +260,6 @@ describe(RelationControl.name, () => {
 
     const label = getByTestId('label');
     expect(label.textContent).toBe('I am a label');
-    expect(label).toHaveClass('text-slate-500');
-
-    const field = getByTestId('field');
-    expect(field).toHaveClass('group/active');
-
-    const fieldWrapper = getByTestId('field-wrapper');
-    expect(fieldWrapper).not.toHaveClass('mr-14');
-
-    // Relation Widget uses text cursor
-    expect(label).toHaveClass('cursor-text');
-    expect(field).toHaveClass('cursor-text');
-
-    // Relation Widget uses default label layout, without bottom padding on field
-    expect(label).toHaveClass('px-3', 'pt-3');
-    expect(field).not.toHaveClass('pb-3');
   });
 
   it('should render as single list item', async () => {
@@ -284,9 +269,6 @@ describe(RelationControl.name, () => {
     });
 
     expect(getByTestId('autocomplete-input')).toBeInTheDocument();
-
-    const fieldWrapper = getByTestId('field-wrapper');
-    expect(fieldWrapper).toHaveClass('mr-14');
   });
 
   it('should disable input if disabled', async () => {
@@ -350,12 +332,6 @@ describe(RelationControl.name, () => {
 
     const error = getByTestId('error');
     expect(error.textContent).toBe('i am an error');
-
-    const field = getByTestId('field');
-    expect(field).not.toHaveClass('group/active');
-
-    const label = getByTestId('label');
-    expect(label).toHaveClass('text-red-500');
   });
 
   it('should focus input on field click', async () => {
@@ -425,12 +401,12 @@ describe(RelationControl.name, () => {
       const option5 = 'autocomplete-option-Post 5';
       const option6 = 'autocomplete-option-Post 6';
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId(option3)).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId(option4)).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId(option5)).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId(option6)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option1)).toBeInTheDocument();
+      expect(getByTestId(option2)).toBeInTheDocument();
+      expect(getByTestId(option3)).toBeInTheDocument();
+      expect(getByTestId(option4)).toBeInTheDocument();
+      expect(getByTestId(option5)).toBeInTheDocument();
+      expect(getByTestId(option6)).toBeInTheDocument();
 
       await act(async () => {
         await userEvent.type(input, 'ost body text for Post 3');
@@ -441,7 +417,7 @@ describe(RelationControl.name, () => {
 
       await waitFor(() => expect(queryByTestId(option1)).not.toBeInTheDocument());
       expect(queryByTestId(option2)).not.toBeInTheDocument();
-      expect(getByTestId(option3)).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId(option3)).toBeInTheDocument();
       expect(queryByTestId(option4)).not.toBeInTheDocument();
       expect(queryByTestId(option5)).not.toBeInTheDocument();
       expect(queryByTestId(option6)).not.toBeInTheDocument();
@@ -469,11 +445,11 @@ describe(RelationControl.name, () => {
 
       expect(input).toHaveValue('P');
 
-      expect(getByTestId('autocomplete-option-Post 1')).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId('autocomplete-option-Post 2')).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId('autocomplete-option-Post 3')).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId('autocomplete-option-Post 4')).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId('autocomplete-option-Post 5')).toHaveClass('text-gray-800'); // Not selected
+      expect(getByTestId('autocomplete-option-Post 1')).toBeInTheDocument();
+      expect(getByTestId('autocomplete-option-Post 2')).toBeInTheDocument();
+      expect(getByTestId('autocomplete-option-Post 3')).toBeInTheDocument();
+      expect(getByTestId('autocomplete-option-Post 4')).toBeInTheDocument();
+      expect(getByTestId('autocomplete-option-Post 5')).toBeInTheDocument();
       expect(queryByTestId('autocomplete-option-Post 6')).not.toBeInTheDocument();
     });
 
@@ -497,19 +473,32 @@ describe(RelationControl.name, () => {
       const input = getByTestId('autocomplete-input');
 
       await act(async () => {
-        await userEvent.clear(input);
+        await userEvent.click(input);
+      });
+
+      await waitFor(() => {
+        expect(queryByTestId('autocomplete-option-Post 1')).not.toBeInTheDocument();
+        expect(queryByTestId('autocomplete-option-Post 2')).not.toBeInTheDocument();
+        expect(queryByTestId('autocomplete-option-Post 3')).not.toBeInTheDocument();
+        expect(queryByTestId('autocomplete-option-Post 4')).not.toBeInTheDocument();
+        expect(queryByTestId('autocomplete-option-Post 5')).not.toBeInTheDocument();
+        expect(queryByTestId('autocomplete-option-Post 6')).toBeInTheDocument();
+        expect(queryByTestId('autocomplete-option-Post 6')).toHaveClass(
+          'CMS_Autocomplete_option-selected',
+        );
       });
 
       await act(async () => {
-        await userEvent.type(input, 'P');
+        await userEvent.click(input);
+        await userEvent.type(input, 'BAD SEARCH VALUE');
       });
 
-      expect(getByTestId('autocomplete-option-Post 1')).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId('autocomplete-option-Post 2')).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId('autocomplete-option-Post 3')).toHaveClass('text-gray-800'); // Not selected
-      expect(getByTestId('autocomplete-option-Post 4')).toHaveClass('text-gray-800'); // Not selected
-      expect(queryByTestId('autocomplete-option-Post 5')).not.toBeInTheDocument();
-      expect(getByTestId('autocomplete-option-Post 6')).toHaveClass('bg-gray-100', 'text-gray-800'); // Selected
+      await waitFor(() => {
+        expect(queryByTestId('autocomplete-option-Post 6')).toBeInTheDocument();
+        expect(queryByTestId('autocomplete-option-Post 6')).toHaveClass(
+          'CMS_Autocomplete_option-selected',
+        );
+      });
     });
 
     it('should call onChange when option is selected', async () => {
@@ -564,8 +553,8 @@ describe(RelationControl.name, () => {
 
       expect(input).toHaveValue('');
 
-      const inputWrapper = getByTestId('autocomplete-input-wrapper');
-      expect(inputWrapper.textContent).toBe('Post 2 2023-02-03Post 3 2023-02-04');
+      const autocomplete = getByTestId('autocomplete');
+      expect(autocomplete.textContent).toBe('Post 2 2023-02-03Post 3 2023-02-04');
     });
 
     it('should use prop value exclusively if field is i18n duplicate', async () => {
@@ -585,8 +574,8 @@ describe(RelationControl.name, () => {
 
       expect(input).toHaveValue('');
 
-      const inputWrapper = getByTestId('autocomplete-input-wrapper');
-      expect(inputWrapper.textContent).toBe('Post 1 2023-02-01');
+      const autocomplete = getByTestId('autocomplete');
+      expect(autocomplete.textContent).toBe('Post 1 2023-02-01');
     });
 
     it('should call onChange when text input changes', async () => {
@@ -604,51 +593,51 @@ describe(RelationControl.name, () => {
       const option1 = 'autocomplete-option-Post 1';
       const option2 = 'autocomplete-option-Post 2';
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_Autocomplete_option-selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_Autocomplete_option-selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
       });
 
       expect(onChange).toHaveBeenLastCalledWith(['Post 2']);
-      const inputWrapper = getByTestId('autocomplete-input-wrapper');
-      expect(inputWrapper.textContent).toBe('Post 2 2023-02-03');
+      const autocomplete = getByTestId('autocomplete');
+      expect(autocomplete.textContent).toBe('Post 2 2023-02-03');
 
       await act(async () => {
         await userEvent.type(input, 'o');
       });
 
-      expect(getByTestId(option1)).toHaveClass('text-gray-800'); // Not Selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).not.toHaveClass('CMS_Autocomplete_option-selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_Autocomplete_option-selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option1));
       });
 
       expect(onChange).toHaveBeenLastCalledWith(['Post 2', 'Post 1']);
-      expect(inputWrapper.textContent).toBe('Post 2 2023-02-03Post 1 2023-02-01');
+      expect(autocomplete.textContent).toBe('Post 2 2023-02-03Post 1 2023-02-01');
 
       await act(async () => {
         await userEvent.type(input, 's');
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('bg-gray-100', 'text-gray-800'); // Selected
+      expect(getByTestId(option1)).toHaveClass('CMS_Autocomplete_option-selected');
+      expect(getByTestId(option2)).toHaveClass('CMS_Autocomplete_option-selected');
 
       await act(async () => {
         await userEvent.click(getByTestId(option2));
       });
 
       expect(onChange).toHaveBeenLastCalledWith(['Post 1']);
-      expect(inputWrapper.textContent).toBe('Post 1 2023-02-01');
+      expect(autocomplete.textContent).toBe('Post 1 2023-02-01');
 
       await act(async () => {
         await userEvent.type(input, 't');
       });
 
-      expect(getByTestId(option1)).toHaveClass('bg-gray-100', 'text-gray-800'); // Selected
-      expect(getByTestId(option2)).toHaveClass('text-gray-800'); // Not Selected
+      expect(getByTestId(option1)).toHaveClass('CMS_Autocomplete_option-selected');
+      expect(getByTestId(option2)).not.toHaveClass('CMS_Autocomplete_option-selected');
     });
   });
 

@@ -1,4 +1,4 @@
-import PopperUnstyled from '@mui/base/PopperUnstyled';
+import { Popper } from '@mui/base/Popper';
 import {
   ELEMENT_LINK,
   ELEMENT_TD,
@@ -15,12 +15,6 @@ import {
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFocused } from 'slate-react';
 
-import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
-import { isEmpty } from '@staticcms/core/lib/util/string.util';
-import { selectVisible } from '@staticcms/core/reducers/selectors/mediaLibrary';
-import { useAppSelector } from '@staticcms/core/store/hooks';
-import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
-import { getToolbarButtons } from '../../hooks/useToolbarButtons';
 import {
   BOLD_TOOLBAR_BUTTON,
   CODE_TOOLBAR_BUTTON,
@@ -36,14 +30,24 @@ import {
   SHORTCODE_TOOLBAR_BUTTON,
   STRIKETHROUGH_TOOLBAR_BUTTON,
 } from '@staticcms/core/constants/toolbar_buttons';
+import { isEmpty } from '@staticcms/core/lib/util/string.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
+import { selectVisible } from '@staticcms/core/reducers/selectors/mediaLibrary';
+import { useAppSelector } from '@staticcms/core/store/hooks';
+import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
+import { getToolbarButtons } from '../../hooks/useToolbarButtons';
 
 import type {
   Collection,
   MarkdownField,
   MarkdownToolbarButtonType,
 } from '@staticcms/core/interface';
-import type { ClientRectObject } from '@udecode/plate';
 import type { FC, ReactNode } from 'react';
+import type { ClientRectObject } from '@udecode/plate';
+
+import './BalloonToolbar.css';
+
+const classes = generateClassNames('WidgetMarkdown_BalloonToolbar', ['root', 'popper', 'content']);
 
 const DEFAULT_EMPTY_BUTTONS: MarkdownToolbarButtonType[] = [];
 
@@ -103,7 +107,6 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
   const editor = useMdPlateEditorState();
   const selection = usePlateSelection();
   const [hasFocus, setHasFocus] = useState(false);
-  const debouncedHasFocus = useDebounce(hasFocus, 150);
 
   const isMediaLibraryOpen = useAppSelector(selectVisible);
 
@@ -116,8 +119,20 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
   }, []);
 
   const anchorEl = useRef<HTMLDivElement | null>(null);
+
   const [selectionBoundingClientRect, setSelectionBoundingClientRect] =
     useState<ClientRectObject | null>(null);
+
+  const rect = getSelectionBoundingClientRect();
+
+  useEffect(() => {
+    if (rect.x === 0 && rect.y === 0) {
+      return;
+    }
+
+    setSelectionBoundingClientRect(rect);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rect.x, rect.y]);
 
   const [selectionExpanded, selectionText] = useMemo(() => {
     if (!editor) {
@@ -130,24 +145,11 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
 
   const node = getNode(editor, editor.selection?.anchor.path ?? []);
 
-  useEffect(() => {
-    if (!editor || !hasEditorFocus) {
-      return;
-    }
-
-    setTimeout(() => {
-      setSelectionBoundingClientRect(getSelectionBoundingClientRect());
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selection, debouncedHasFocus]);
-
   const isInTableCell = useMemo(() => {
     return Boolean(
       selection && someNode(editor, { match: { type: ELEMENT_TD }, at: selection?.anchor }),
     );
   }, [editor, selection]);
-
-  const debouncedEditorFocus = useDebounce(hasEditorFocus, 150);
 
   const [groups, setGroups] = useState<ReactNode[]>([]);
 
@@ -156,7 +158,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
       return;
     }
 
-    if (!debouncedEditorFocus && !hasFocus && !debouncedHasFocus) {
+    if (!hasEditorFocus && !hasFocus) {
       setGroups([]);
       return;
     }
@@ -202,9 +204,8 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
     setGroups([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    debouncedEditorFocus,
     hasFocus,
-    debouncedHasFocus,
+    hasEditorFocus,
     selection,
     editor,
     selectionText,
@@ -218,75 +219,39 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
     isMediaLibraryOpen,
   ]);
 
-  const [prevSelectionBoundingClientRect, setPrevSelectionBoundingClientRect] = useState(
-    selectionBoundingClientRect,
-  );
-
-  const debouncedGroups = useDebounce(
-    groups,
-    prevSelectionBoundingClientRect !== selectionBoundingClientRect ? 0 : 150,
-  );
   const open = useMemo(
-    () => groups.length > 0 || debouncedGroups.length > 0 || isMediaLibraryOpen,
-    [debouncedGroups.length, groups.length, isMediaLibraryOpen],
+    () => Boolean(selectionBoundingClientRect && (groups.length > 0 || isMediaLibraryOpen)),
+    [groups.length, isMediaLibraryOpen, selectionBoundingClientRect],
   );
-  const debouncedOpen = useDebounce(
-    open,
-    prevSelectionBoundingClientRect !== selectionBoundingClientRect ? 0 : 50,
-  );
-
-  useEffect(() => {
-    setPrevSelectionBoundingClientRect(selectionBoundingClientRect);
-  }, [selectionBoundingClientRect]);
 
   return (
     <>
       <div
         ref={anchorEl}
-        className="fixed"
+        className={classes.root}
         style={{
           top: `${selectionBoundingClientRect?.y ?? 0}px`,
-          left: `${selectionBoundingClientRect?.x}px`,
+          left: `${selectionBoundingClientRect?.x ?? 0}px`,
+          width: 1,
+          height: 1,
         }}
       />
-      {groups.length > 0 || debouncedGroups.length > 0 ? (
-        <PopperUnstyled
-          open={Boolean(debouncedOpen && anchorEl.current)}
-          component="div"
+      {selectionBoundingClientRect && open && anchorEl.current && groups.length > 0 ? (
+        <Popper
+          open
           placement="top"
           anchorEl={anchorEl.current ?? null}
           onFocus={handleFocus}
           onBlur={handleBlur}
           tabIndex={0}
-          className="
-            absolute
-            max-h-60
-            overflow-auto
-            rounded-md
-            bg-white
-            p-1
-            text-base
-            shadow-md
-            ring-1
-            ring-black
-            ring-opacity-5
-            focus:outline-none
-            sm:text-sm
-            z-40
-            dark:bg-slate-700
-            dark:shadow-lg
-          "
+          slots={{ root: 'div' }}
+          className={classes.popper}
+          keepMounted
         >
-          <div
-            data-testid="balloon-toolbar"
-            className="
-              flex
-              gap-0.5
-            "
-          >
-            {groups.length > 0 ? groups : debouncedGroups}
+          <div data-testid="balloon-toolbar" className={classes.content}>
+            {groups}
           </div>
-        </PopperUnstyled>
+        </Popper>
       ) : null}
     </>
   );

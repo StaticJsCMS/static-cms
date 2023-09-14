@@ -11,6 +11,7 @@ import {
   selectEntryCollectionTitle,
 } from '@staticcms/core/lib/util/collection.util';
 import { customPathFromSlug } from '@staticcms/core/lib/util/nested.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import MainView from '../MainView';
@@ -26,6 +27,23 @@ import type {
   FieldsErrors,
   TranslatedProps,
 } from '@staticcms/core/interface';
+
+import './EditorInterface.css';
+
+export const classes = generateClassNames('Editor', [
+  'root',
+  'default',
+  'i18n',
+  'mobile-i18n',
+  'split-view',
+  'mobile-preview',
+  'wrapper-preview',
+  'wrapper-i18n-side-by-side',
+  'compact',
+  'toolbar',
+  'content',
+  'content-wrapper',
+]);
 
 const PREVIEW_VISIBLE = 'cms.preview-visible';
 const I18N_VISIBLE = 'cms.i18n-visible';
@@ -51,8 +69,8 @@ const EditorContent = ({
     return editorWithPreview;
   } else {
     return (
-      <div className="flex justify-center">
-        <div className="w-editor-only max-w-full">{editor}</div>
+      <div className={classes['content-wrapper']}>
+        <div className={classes.content}>{editor}</div>
       </div>
     );
   }
@@ -135,12 +153,6 @@ const EditorInterface = ({
     [onPersist],
   );
 
-  const handleTogglePreview = useCallback(() => {
-    const newPreviewActive = !previewActive;
-    setPreviewActive(newPreviewActive);
-    localStorage.setItem(PREVIEW_VISIBLE, `${newPreviewActive}`);
-  }, [previewActive]);
-
   const handleToggleScrollSync = useCallback(() => {
     toggleScroll();
   }, [toggleScroll]);
@@ -153,6 +165,18 @@ const EditorInterface = ({
     );
     localStorage.setItem(I18N_VISIBLE, `${newI18nActive}`);
   }, [i18nActive, setSelectedLocale, translatedLocales, defaultLocale]);
+
+  const handleTogglePreview = useCallback(() => {
+    let newPreviewActive = true;
+    if (i18nActive) {
+      handleToggleI18n();
+    } else {
+      newPreviewActive = !previewActive;
+    }
+
+    setPreviewActive(newPreviewActive);
+    localStorage.setItem(PREVIEW_VISIBLE, `${newPreviewActive}`);
+  }, [handleToggleI18n, i18nActive, previewActive]);
 
   const handleLocaleChange = useCallback((locale: string) => {
     setSelectedLocale(locale);
@@ -217,8 +241,12 @@ const EditorInterface = ({
 
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const toggleMobilePreview = useCallback(() => {
+    if (!previewActive) {
+      handleTogglePreview();
+    }
+
     setShowMobilePreview(old => !old);
-  }, []);
+  }, [handleTogglePreview, previewActive]);
 
   const editor = useMemo(
     () => (
@@ -226,21 +254,9 @@ const EditorInterface = ({
         key={defaultLocale}
         id="control-pane"
         className={classNames(
-          `
-            w-full
-          `,
-          (finalPreviewActive || i18nActive) &&
-            `
-              overflow-y-auto
-              styled-scrollbars
-              h-main-mobile
-              md:h-main
-            `,
-          showMobilePreview &&
-            `
-              hidden
-              lg:block
-            `,
+          classes.default,
+          (finalPreviewActive || i18nActive) && `${classes['split-view']} CMS_Scrollbar_root`,
+          showMobilePreview && classes['mobile-preview'],
         )}
       >
         <EditorControlPane
@@ -278,17 +294,7 @@ const EditorInterface = ({
 
   const editorLocale = useMemo(
     () => (
-      <div
-        key={selectedLocale}
-        className="
-          flex
-          w-full
-          overflow-y-auto
-          styled-scrollbars
-          h-main-mobile
-          md:h-main
-        "
-      >
+      <div key={selectedLocale} className={classes.i18n}>
         <EditorControlPane
           collection={collection}
           entry={entry}
@@ -307,23 +313,15 @@ const EditorInterface = ({
     [collection, entry, fields, fieldsErrors, handleLocaleChange, selectedLocale, submitted, t],
   );
 
-  const previewEntry = collectHasI18n
-    ? getPreviewEntry(entry, selectedLocale, defaultLocale)
-    : entry;
+  const previewEntry = useMemo(
+    () =>
+      collectHasI18n ? getPreviewEntry(collection, entry, selectedLocale, defaultLocale) : entry,
+    [collectHasI18n, collection, defaultLocale, entry, selectedLocale],
+  );
 
   const mobileLocaleEditor = useMemo(
     () => (
-      <div
-        key={selectedLocale}
-        className="
-          w-full
-          overflow-y-auto
-          styled-scrollbars
-          h-main-mobile
-          flex
-          md:hidden
-        "
-      >
+      <div key={selectedLocale} className={classes['mobile-i18n']}>
         <EditorControlPane
           collection={collection}
           entry={entry}
@@ -344,13 +342,7 @@ const EditorInterface = ({
 
   const editorWithPreview = (
     <div
-      className={classNames(
-        `
-          grid
-          h-full
-        `,
-        editorSize === EDITOR_SIZE_COMPACT ? 'lg:grid-cols-editor' : 'lg:grid-cols-2',
-      )}
+      className={classNames(classes.root, editorSize === EDITOR_SIZE_COMPACT && classes.compact)}
     >
       <ScrollSyncPane>{editor}</ScrollSyncPane>
       <EditorPreviewPane
@@ -367,7 +359,7 @@ const EditorInterface = ({
 
   const editorSideBySideLocale = (
     <>
-      <div className="grid-cols-2 h-full hidden lg:grid">
+      <div className={classNames(classes.root, classes['wrapper-i18n-side-by-side'])}>
         <ScrollSyncPane>{editor}</ScrollSyncPane>
         <ScrollSyncPane>
           <>{editorLocale}</>
@@ -414,7 +406,7 @@ const EditorInterface = ({
           slug={slug}
           showMobilePreview={showMobilePreview}
           onMobilePreviewToggle={toggleMobilePreview}
-          className="flex"
+          className={classes.toolbar}
           onDiscardDraft={onDiscardDraft}
         />
       }

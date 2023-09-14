@@ -1,10 +1,13 @@
-import ModalUnstyled from '@mui/base/ModalUnstyled';
+import { Modal as BaseModal } from '@mui/base/Modal';
 import React, { useCallback } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import Backdrop from './Backdrop';
+import modalClasses from './Modal.classes';
 
 import type { FC, ReactNode } from 'react';
+
+import './Modal.css';
 
 interface ModalProps {
   open: boolean;
@@ -19,7 +22,7 @@ const Modal: FC<ModalProps> = ({ open, children, className, onClose }) => {
   }, [onClose]);
 
   return (
-    <ModalUnstyled
+    <BaseModal
       open={open}
       onClose={handleClose}
       slots={{
@@ -27,42 +30,12 @@ const Modal: FC<ModalProps> = ({ open, children, className, onClose }) => {
       }}
       slotProps={{
         root: {
-          className: `
-            fixed
-            inset-0
-            overflow-y-auto
-            z-50
-            flex
-            min-h-full
-            items-center
-            justify-center
-            text-center
-            styled-scrollbars
-          `,
+          className: modalClasses.root,
         },
       }}
     >
-      <div
-        className={classNames(
-          `
-            transform
-            overflow-visible
-            rounded-lg
-            text-left
-            align-middle
-            shadow-xl
-            transition-all
-            bg-white
-            dark:bg-slate-800
-            z-[51]
-            outline-none
-          `,
-          className,
-        )}
-      >
-        {children}
-      </div>
-    </ModalUnstyled>
+      <div className={classNames(modalClasses.content, className)}>{children}</div>
+    </BaseModal>
   );
 };
 

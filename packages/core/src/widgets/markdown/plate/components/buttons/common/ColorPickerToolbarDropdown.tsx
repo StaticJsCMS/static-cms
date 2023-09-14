@@ -1,23 +1,16 @@
-import {
-  DEFAULT_COLORS,
-  DEFAULT_CUSTOM_COLORS,
-  getMark,
-  getPluginType,
-  removeMark,
-  setMarks,
-  usePlateEditorRef,
-} from '@udecode/plate';
+import { getMark, getPluginType, removeMark, setMarks, usePlateEditorRef } from '@udecode/plate';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import ColorPicker from '../../color-picker/ColorPicker';
+import { DEFAULT_COLORS, DEFAULT_CUSTOM_COLORS } from '../../color-picker/constants';
 import ToolbarDropdown from './dropdown/ToolbarDropdown';
 
-import type { ColorType } from '@udecode/plate';
 import type { FC } from 'react';
 import type { BaseEditor } from 'slate';
+import type { ColorType } from '../../color-picker/types';
 import type { ToolbarButtonProps } from './ToolbarButton';
 
 export interface ColorPickerToolbarDropdownProps extends Omit<ToolbarButtonProps, 'onClick'> {

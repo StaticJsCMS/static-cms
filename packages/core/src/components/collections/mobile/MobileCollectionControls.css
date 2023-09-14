@@ -1,0 +1,37 @@
+.CMS_MobileCollectionControls_root {
+  @apply w-[80%]
+    max-w-[240px];
+
+  & .MuiBackdrop-root {
+    @apply w-full;
+  }
+
+  & .MuiDrawer-paper {
+    @apply box-border
+      w-[80%]
+      max-w-[240px];
+  }
+}
+
+.CMS_MobileCollectionControls_content {
+  @apply px-5
+    py-4
+    flex
+    flex-col
+    gap-6
+    h-full
+    w-full
+    overflow-y-auto
+    bg-white
+    dark:bg-slate-800;
+}
+
+.CMS_MobileCollectionControls_toggle {
+  @apply flex
+    lg:!hidden;
+}
+
+.CMS_MobileCollectionControls_toggle-icon {
+  @apply w-5
+    h-5;
+}

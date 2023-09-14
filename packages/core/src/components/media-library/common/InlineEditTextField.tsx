@@ -1,8 +1,19 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
+
+import './InlineEditTextField.css';
+
+export const classes = generateClassNames('InlineEditTextField', [
+  'root',
+  'editable',
+  'label',
+  'preview',
+  'input',
+]);
 
 interface InlineEditTextFieldProps {
   label: string;
@@ -66,64 +77,15 @@ const InlineEditTextField: FC<InlineEditTextFieldProps> = ({
   }, []);
 
   return (
-    <div
-      className="
-        flex
-        flex-col
-        gap-1
-        group/edit-field
-      "
-    >
-      <label
-        htmlFor={label}
-        className={classNames(
-          `
-            w-full
-            flex
-            text-xs
-            font-bold
-            dark:font-semibold
-          `,
-          onChange &&
-            `
-              group-focus-within/edit-field:text-blue-500
-              group-hover/edit-field:text-blue-500
-            `,
-        )}
-      >
+    <div className={classNames(classes.root, onChange && classes.editable)}>
+      <label htmlFor={label} className={classes.label}>
         {label}
       </label>
       {!editing || !onChange ? (
         <div
           key="value"
           tabIndex={0}
-          className={classNames(
-            `
-              flex
-              items-center
-              w-full
-              p-1.5
-              -ml-1.5
-              text-sm
-              whitespace-nowrap
-              overflow-hidden
-              h-input
-              rounded-md
-              border
-              text-slate-600
-              dark:text-gray-100
-            `,
-            onChange
-              ? `
-                cursor-pointer
-                border-gray-100
-                hover:border-gray-300
-                dark:border-slate-600
-              `
-              : `
-                border-transparent
-              `,
-          )}
+          className={classes.preview}
           onClick={handleValueClick}
           onFocus={handleValueClick}
         >
@@ -134,27 +96,7 @@ const InlineEditTextField: FC<InlineEditTextFieldProps> = ({
           key="input"
           id={label}
           ref={inputRef}
-          className="
-            block
-            w-full
-            p-1.5
-            -ml-1.5
-            text-sm
-            text-gray-800
-            border
-            border-gray-300
-            rounded-md
-            bg-gray-50
-            focus-visible:outline-none
-            focus:ring-4
-            focus:ring-gray-200
-            dark:bg-gray-700
-            dark:border-gray-600
-            dark:placeholder-gray-400
-            dark:text-white
-            dark:focus:ring-slate-700
-            h-input
-          "
+          className={classes.input}
           value={internalValue}
           placeholder={placeholder}
           onChange={handleInputChange}

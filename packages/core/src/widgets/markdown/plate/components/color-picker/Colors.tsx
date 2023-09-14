@@ -2,8 +2,8 @@ import React from 'react';
 
 import ColorButton from './ColorButton';
 
-import type { ColorType } from '@udecode/plate';
 import type { FC } from 'react';
+import type { ColorType } from './types';
 
 export type ColorsProps = {
   color?: string;

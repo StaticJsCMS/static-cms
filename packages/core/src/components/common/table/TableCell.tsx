@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import tableClasses from './Table.classes';
 
 import type { ReactNode } from 'react';
 
@@ -16,18 +17,7 @@ const TableCell = ({ children, emphasis = false, to, shrink = false }: TableCell
   const content = useMemo(() => {
     if (to) {
       return (
-        <Link
-          to={to}
-          className="
-            w-full
-            h-full
-            flex
-            px-4
-            py-3
-            whitespace-nowrap
-          "
-          tabIndex={-1}
-        >
+        <Link to={to} className={tableClasses['body-cell-link']} tabIndex={-1}>
           {children}
         </Link>
       );
@@ -39,24 +29,13 @@ const TableCell = ({ children, emphasis = false, to, shrink = false }: TableCell
   return (
     <td
       className={classNames(
-        !to ? 'px-4 py-3' : 'p-0',
-        `
-          text-gray-500
-          dark:text-gray-300
-        `,
-        emphasis && 'font-medium text-gray-800 whitespace-nowrap dark:text-white',
-        shrink && 'w-0',
+        tableClasses['body-cell'],
+        to && tableClasses['body-cell-has-link'],
+        emphasis && tableClasses['body-cell-emphasis'],
+        shrink && tableClasses['body-cell-shrink'],
       )}
     >
-      <div
-        className="
-          h-[44px]
-          truncate
-          w-full
-        "
-      >
-        {content}
-      </div>
+      <div className={tableClasses['body-cell-content']}>{content}</div>
     </td>
   );
 };

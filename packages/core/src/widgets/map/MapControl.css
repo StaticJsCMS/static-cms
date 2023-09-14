@@ -1,0 +1,8 @@
+.CMS_WidgetMap_root {
+}
+
+.CMS_WidgetMap_map {
+  @apply relative
+    w-full
+    mt-2;
+}

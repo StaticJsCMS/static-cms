@@ -5,15 +5,31 @@ import { v4 as uuid, validate } from 'uuid';
 import IconButton from '@staticcms/core/components/common/button/IconButton';
 import Field from '@staticcms/core/components/common/field/Field';
 import TextField from '@staticcms/core/components/common/text-field/TextField';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isEmpty, isNotEmpty } from '@staticcms/core/lib/util/string.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { UUIDField, WidgetControlProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
+
+import './UUIDControl.css';
+
+export const classes = generateClassNames('WidgetUUID', [
+  'root',
+  'error',
+  'required',
+  'disabled',
+  'for-single-list',
+  'refresh-button',
+  'refresh-button-icon',
+  'input',
+]);
 
 const UUIDControl: FC<WidgetControlProps<string, UUIDField>> = ({
   value,
   label,
   errors,
+  hasErrors,
   disabled,
   field,
   forSingleList,
@@ -81,11 +97,19 @@ const UUIDControl: FC<WidgetControlProps<string, UUIDField>> = ({
             aria-label="generate new uuid"
             onClick={generateUUID}
             variant="text"
+            className={classes['refresh-button']}
           >
-            <RefreshIcon className="w-5 h-5" />
+            <RefreshIcon className={classes['refresh-button-icon']} />
           </IconButton>
         ) : null
       }
+      rootClassName={classNames(
+        classes.root,
+        disabled && classes.disabled,
+        field.required !== false && classes.required,
+        hasErrors && classes.error,
+        forSingleList && classes['for-single-list'],
+      )}
     >
       <TextField
         type="text"
@@ -93,7 +117,7 @@ const UUIDControl: FC<WidgetControlProps<string, UUIDField>> = ({
         value={internalValue}
         disabled={disabled}
         readonly
-        inputClassName="truncate"
+        inputClassName={classes.input}
       />
     </Field>
   );

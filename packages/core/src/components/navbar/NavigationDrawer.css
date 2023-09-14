@@ -1,0 +1,9 @@
+.CMS_NavigationDrawer_root {
+  @apply w-[80%]
+    max-w-[320px];
+}
+
+.CMS_NavigationDrawer_content {
+  @apply w-full
+    h-full;
+}

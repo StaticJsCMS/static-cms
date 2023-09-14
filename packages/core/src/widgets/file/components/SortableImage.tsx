@@ -6,9 +6,25 @@ import React, { useCallback, useMemo } from 'react';
 
 import IconButton from '@staticcms/core/components/common/button/IconButton';
 import Image from '@staticcms/core/components/common/image/Image';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { Collection, FileOrImageField } from '@staticcms/core/interface';
 import type { FC, MouseEventHandler } from 'react';
+
+import './SortableImage.css';
+
+const classes = generateClassNames('WidgetFileImage_SortableImage', [
+  'root',
+  'card',
+  'handle',
+  'controls-wrapper',
+  'controls',
+  'replace-button',
+  'remove-button',
+  'button-icon',
+  'content',
+  'image',
+]);
 
 export interface SortableImageProps {
   id: string;
@@ -67,84 +83,27 @@ const SortableImage: FC<SortableImageProps> = ({
       style={style}
       {...attributes}
       {...listeners}
-      className="
-        relative
-        w-image-card
-        h-image-card
-      "
+      className={classes.root}
       tabIndex={-1}
       title={itemValue}
     >
-      <div
-        onClick={handleClick}
-        data-testid={`image-card-${itemValue}`}
-        className="
-          w-image-card
-          h-image-card
-          rounded-md
-          shadow-sm
-          overflow-hidden
-          group/image-card
-          cursor-pointer
-          border
-          bg-gray-50/75
-          border-gray-200/75
-          dark:bg-slate-800
-          dark:border-slate-600/75
-        "
-      >
+      <div onClick={handleClick} data-testid={`image-card-${itemValue}`} className={classes.card}>
         <div
           key="handle"
           data-testid={`image-card-handle-${itemValue}`}
           tabIndex={0}
-          className="
-            absolute
-            inset-0
-            rounded-md
-            z-20
-            overflow-visible
-            focus:ring-4
-            focus:ring-gray-200
-            dark:focus:ring-slate-700
-            focus-visible:outline-none
-          "
+          className={classes.handle}
         />
-        <div
-          className="
-            absolute
-            inset-0
-            invisible
-            transition-all
-            rounded-md
-            group-hover/image-card:visible
-            group-hover/image-card:bg-blue-200/25
-            dark:group-hover/image-card:bg-blue-400/60
-            z-20
-          "
-        >
-          <div
-            className="
-              absolute
-              top-2
-              right-2
-              flex
-              gap-1
-            "
-          >
+        <div className={classes['controls-wrapper']}>
+          <div className={classes.controls}>
             {onReplace ? (
               <IconButton
                 key="replace"
                 variant="text"
                 onClick={handleReplace}
-                className="
-                text-white
-                dark:text-white
-                bg-gray-900/25
-                dark:hover:text-blue-100
-                dark:hover:bg-blue-800/80
-              "
+                className={classes['replace-button']}
               >
-                <CameraAltIcon className="w-5 h-5" />
+                <CameraAltIcon className={classes['button-icon']} />
               </IconButton>
             ) : null}
             {onRemove ? (
@@ -153,27 +112,15 @@ const SortableImage: FC<SortableImageProps> = ({
                 variant="text"
                 color="error"
                 onClick={handleRemove}
-                className="
-                position: relative;
-                text-red-400
-                bg-gray-900/25
-                dark:hover:text-red-600
-                dark:hover:bg-red-800/40
-                z-30
-              "
+                className={classes['remove-button']}
               >
-                <DeleteIcon className="w-5 h-5" />
+                <DeleteIcon className={classes['button-icon']} />
               </IconButton>
             ) : null}
           </div>
         </div>
-        <div className="relative">
-          <Image
-            src={itemValue}
-            className="w-image-card h-image-card rounded-md"
-            collection={collection}
-            field={field}
-          />
+        <div className={classes.content}>
+          <Image src={itemValue} className={classes.image} collection={collection} field={field} />
         </div>
       </div>
     </div>

@@ -1,0 +1,18 @@
+.CMS_WidgetMarkdown_CodeBlock_root {
+  @apply my-2;
+}
+
+.CMS_WidgetMarkdown_CodeBlock_language-input {
+  @apply w-full
+    rounded-t-md
+    border
+    border-gray-100
+    border-b-white
+    px-2
+    py-1
+    h-6
+    dark:border-slate-700
+    dark:border-b-slate-800
+    dark:bg-slate-800
+    outline-none;
+}

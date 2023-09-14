@@ -1,8 +1,19 @@
 import React from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { FC } from 'react';
+
+import './CircularProgress.css';
+
+export const classes = generateClassNames('CircularProgress', [
+  'root',
+  'svg',
+  'md',
+  'sm',
+  'sr-label',
+]);
 
 export interface CircularProgressProps {
   className?: string;
@@ -16,27 +27,13 @@ const CircularProgress: FC<CircularProgressProps> = ({
   size = 'medium',
 }) => {
   return (
-    <div role="status" className={className} data-testid={dataTestId}>
+    <div role="status" className={classNames(classes.root, className)} data-testid={dataTestId}>
       <svg
         aria-hidden="true"
         className={classNames(
-          `
-            mr-2
-            text-gray-200
-            animate-spin
-            dark:text-gray-600
-            fill-blue-600
-          `,
-          size === 'medium' &&
-            `
-              w-8
-              h-8
-            `,
-          size === 'small' &&
-            `
-              w-5
-              h-5
-            `,
+          classes.svg,
+          size === 'medium' && classes.md,
+          size === 'small' && classes.sm,
         )}
         viewBox="0 0 100 101"
         fill="none"
@@ -51,7 +48,7 @@ const CircularProgress: FC<CircularProgressProps> = ({
           fill="currentFill"
         />
       </svg>
-      <span className="sr-only">Loading...</span>
+      <span className={classes['sr-label']}>Loading...</span>
     </div>
   );
 };

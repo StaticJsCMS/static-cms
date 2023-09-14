@@ -46,16 +46,17 @@ import {
   MARK_SUPERSCRIPT,
   MARK_UNDERLINE,
   Plate,
+  PlateLeaf,
   PlateProvider,
   withProps,
 } from '@udecode/plate';
-import { StyledLeaf } from '@udecode/plate-styled-components';
 import React, { useMemo, useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useTranslate } from 'react-polyglot';
 
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
+import widgetMarkdownClasses from '../MarkdownControl.classes';
 import { CodeBlockElement, withShortcodeElement } from './components';
 import { BalloonToolbar } from './components/balloon-toolbar';
 import { BlockquoteElement } from './components/nodes/blockquote';
@@ -167,18 +168,18 @@ const PlateEditor: FC<PlateEditorProps> = ({
       [ELEMENT_LI]: ListItemElement,
       [ELEMENT_LIC]: ListItemContentElement,
       [ELEMENT_SHORTCODE]: withShortcodeElement({ controlProps }),
-      [MARK_BOLD]: withProps(StyledLeaf, { as: 'strong' }),
-      [MARK_ITALIC]: withProps(StyledLeaf, { as: 'em' }),
-      [MARK_STRIKETHROUGH]: withProps(StyledLeaf, { as: 's' }),
+      [MARK_BOLD]: withProps(PlateLeaf, { as: 'strong' }),
+      [MARK_ITALIC]: withProps(PlateLeaf, { as: 'em' }),
+      [MARK_STRIKETHROUGH]: withProps(PlateLeaf, { as: 's' }),
     };
 
     if (useMdx) {
       // MDX Widget
       return {
         ...baseComponents,
-        [MARK_SUBSCRIPT]: withProps(StyledLeaf, { as: 'sub' }),
-        [MARK_SUPERSCRIPT]: withProps(StyledLeaf, { as: 'sup' }),
-        [MARK_UNDERLINE]: withProps(StyledLeaf, { as: 'u' }),
+        [MARK_SUBSCRIPT]: withProps(PlateLeaf, { as: 'sub' }),
+        [MARK_SUPERSCRIPT]: withProps(PlateLeaf, { as: 'sup' }),
+        [MARK_UNDERLINE]: withProps(PlateLeaf, { as: 'u' }),
       };
     }
 
@@ -257,7 +258,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
 
   return useMemo(
     () => (
-      <div className="relative px-3 py-5 pb-0">
+      <div className={widgetMarkdownClasses['rich-editor']}>
         <DndProvider backend={HTML5Backend}>
           <PlateProvider<MdValue>
             id={id}
@@ -276,7 +277,11 @@ const PlateEditor: FC<PlateEditorProps> = ({
                 disabled={disabled}
               />
 
-              <div key="editor-wrapper" ref={editorContainerRef} className="w-full">
+              <div
+                key="editor-wrapper"
+                ref={editorContainerRef}
+                className={widgetMarkdownClasses['plate-editor-wrapper']}
+              >
                 <Plate
                   key="editor"
                   id={id}
@@ -285,7 +290,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
                     placeholder: t('editor.editorWidgets.markdown.type'),
                     onFocus,
                     onBlur,
-                    className: '!outline-none',
+                    className: widgetMarkdownClasses['plate-editor'],
                   }}
                 >
                   <div key="editor-inner-wrapper" ref={innerEditorContainerRef}>

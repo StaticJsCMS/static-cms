@@ -2,7 +2,7 @@ import escapeRegExp from 'lodash/escapeRegExp';
 import get from 'lodash/get';
 import groupBy from 'lodash/groupBy';
 
-import { selectEntrySlug } from './util/collection.util';
+import { fileForEntry, selectEntrySlug } from './util/collection.util';
 import { set } from './util/object.util';
 
 import type {
@@ -13,6 +13,8 @@ import type {
   Field,
   I18nInfo,
   I18nStructure,
+  ObjectValue,
+  ValueOrNestedValue,
   i18nCollection,
 } from '../interface';
 import type { EntryDraftState } from '../reducers/entryDraft';
@@ -425,7 +427,46 @@ export function duplicateI18nFields(
   return entryDraft;
 }
 
+function mergeI18nData(
+  field: Field,
+  defaultData: ObjectValue | undefined | null,
+  i18nData: Partial<ObjectValue> | undefined | null,
+): ValueOrNestedValue {
+  if (field.widget === 'list') {
+    if (field.i18n === true) {
+      return i18nData;
+    }
+
+    return defaultData;
+  }
+
+  if (field.widget === 'object') {
+    const objectDefaultData = defaultData?.[field.name] ?? null;
+    const objectI18nData = i18nData?.[field.name] ?? null;
+
+    if (
+      !Array.isArray(objectDefaultData) &&
+      typeof objectDefaultData === 'object' &&
+      !(objectDefaultData instanceof Date) &&
+      !Array.isArray(objectI18nData) &&
+      typeof objectI18nData === 'object' &&
+      !(objectI18nData instanceof Date)
+    ) {
+      for (const childField of field.fields) {
+        return mergeI18nData(childField, objectDefaultData, objectI18nData);
+      }
+    }
+  }
+
+  if (field.i18n === 'translate') {
+    return i18nData?.[field.name];
+  }
+
+  return defaultData?.[field.name];
+}
+
 export function getPreviewEntry(
+  collection: Collection,
   entry: Entry,
   locale: string | undefined,
   defaultLocale: string | undefined,
@@ -433,9 +474,21 @@ export function getPreviewEntry(
   if (!locale || locale === defaultLocale) {
     return entry;
   }
+
+  let fields: Field[] = [];
+  const file = fileForEntry(collection, entry.slug);
+  if (file) {
+    fields = file.fields;
+  } else if ('fields' in collection) {
+    fields = collection.fields;
+  }
+
   return {
     ...entry,
-    data: entry.i18n?.[locale]?.data as EntryData,
+    data: fields.reduce((acc, f) => {
+      acc[f.name] = mergeI18nData(f, entry.data, entry.i18n?.[locale]?.data);
+      return acc;
+    }, {} as ObjectValue),
   };
 }
 

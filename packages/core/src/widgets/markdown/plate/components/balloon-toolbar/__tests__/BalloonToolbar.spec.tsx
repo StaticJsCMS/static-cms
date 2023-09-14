@@ -8,6 +8,7 @@ import {
   findNodePath,
   getNode,
   getParentNode,
+  getSelectionBoundingClientRect,
   getSelectionText,
   isElement,
   isElementEmpty,
@@ -73,6 +74,7 @@ describe(BalloonToolbar.name, () => {
   const mockGetParentNode = getParentNode as jest.Mock;
   const mockGetSelectionText = getSelectionText as jest.Mock;
   const mockIsSelectionExpanded = isSelectionExpanded as jest.Mock;
+  const mockGetSelectionBoundingClientRect = getSelectionBoundingClientRect as jest.Mock;
 
   beforeEach(() => {
     jest.useFakeTimers();
@@ -84,6 +86,13 @@ describe(BalloonToolbar.name, () => {
     } as unknown as MdEditor;
 
     mockUseEditor.mockReturnValue(mockEditor);
+
+    mockGetSelectionBoundingClientRect.mockReturnValue({
+      x: 1,
+      y: 1,
+      width: 1,
+      height: 1,
+    });
   });
 
   afterAll(() => {
@@ -221,7 +230,7 @@ describe(BalloonToolbar.name, () => {
   it('renders selected table node toolbar when text is selected in table', () => {
     emptyNodeToolbarSetup({ inTable: true, selectedText: 'Test Text' });
 
-    expect(screen.queryByTestId('balloon-toolbar')).toBeInTheDocument();
+    expect(screen.getByTestId('balloon-toolbar')).toBeInTheDocument();
 
     expect(screen.queryByTestId('toolbar-button-bold')).toBeInTheDocument();
     expect(screen.queryByTestId('toolbar-button-italic')).toBeInTheDocument();

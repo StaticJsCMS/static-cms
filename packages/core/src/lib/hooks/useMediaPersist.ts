@@ -67,7 +67,9 @@ export default function useMediaPersist({
         }
       }
 
-      callback?.(files, assetProxies);
+      if (assetProxies.length > 0) {
+        callback?.(files, assetProxies);
+      }
 
       if (!('dataTransfer' in event)) {
         event.target.value = '';

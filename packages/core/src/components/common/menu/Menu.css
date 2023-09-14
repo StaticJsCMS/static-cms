@@ -1,0 +1,69 @@
+.CMS_Menu_root {
+  @apply flex;
+
+  &:not(.CMS_Menu_hide-label) {
+    &:not(.CMS_Menu_hide-dropdown-icon) {
+      & .CMS_Menu_dropdown {
+        & .CMS_Menu_dropdown-start-icon {
+          @apply mr-1.5;
+        }
+      }
+    }
+
+    & .CMS_Menu_dropdown {
+      & .CMS_Menu_dropdown-icon {
+        @apply ml-2;
+      }
+    }
+  }
+
+  &.CMS_Menu_hide-dropdown-icon-mobile {
+    & .CMS_Menu_dropdown {
+      & .CMS_Menu_dropdown-start-icon {
+        @apply !mr-0
+          md:!mr-1.5;
+      }
+
+      & .CMS_Menu_dropdown-icon {
+        @apply !hidden
+          md:!block;
+      }
+    }
+  }
+}
+
+.CMS_Menu_dropdown {
+  @apply whitespace-nowrap;
+}
+
+.CMS_Menu_dropdown-start-icon {
+  @apply -ml-0.5
+    h-5
+    w-5;
+}
+
+.CMS_Menu_dropdown-icon {
+  @apply -mr-0.5
+    h-5
+    w-5;
+}
+
+.CMS_Menu_menu {
+  @apply absolute
+    right-0
+    z-40
+    w-56
+    origin-top-right
+    rounded-md
+    bg-white
+    dark:bg-slate-800
+    shadow-md
+    border
+    border-gray-200
+    focus:outline-none
+    divide-y
+    divide-gray-100
+    dark:border-gray-700
+    dark:divide-gray-600
+    dark:shadow-lg;
+}

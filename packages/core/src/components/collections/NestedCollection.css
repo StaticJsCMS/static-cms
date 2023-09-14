@@ -1,0 +1,62 @@
+.CMS_NestedCollection_root-node {
+  &.CMS_NestedCollection_active {
+    &.CMS_NestedCollection_expanded {
+      & > .CMS_NestedCollection_link {
+        & .CMS_NestedCollection_node-children-icon {
+          @apply rotate-90
+          transform;
+        }
+      }
+    }
+  }
+}
+
+.CMS_NestedCollection_active {
+}
+
+.CMS_NestedCollection_expanded {
+}
+
+.CMS_NestedCollection_root-node-icon {
+  @apply h-6
+    w-6;
+}
+
+.CMS_NestedCollection_node {
+  @apply ml-8;
+
+  &.CMS_NestedCollection_expanded {
+    & > .CMS_NestedCollection_link {
+      & .CMS_NestedCollection_node-children-icon {
+        @apply rotate-90
+        transform;
+      }
+    }
+  }
+}
+
+.CMS_NestedCollection_node-icon {
+  @apply h-5
+    w-5;
+}
+
+.CMS_NestedCollection_node-content {
+  @apply flex
+    w-full
+    gap-2
+    items-center
+    justify-between;
+}
+
+.CMS_NestedCollection_node-children-icon {
+  @apply transition-transform
+    h-5
+    w-5
+    group-focus-within/active-list:text-blue-500
+    group-hover/active-list:text-blue-500;
+}
+
+.CMS_NestedCollection_node-children {
+  @apply mt-2
+    space-y-1.5;
+}

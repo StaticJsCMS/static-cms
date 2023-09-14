@@ -1,0 +1,26 @@
+.CMS_Confirm_root {
+  @apply w-[50%]
+    min-w-[300px]
+    max-w-[600px];
+}
+
+.CMS_Confirm_title {
+  @apply px-6
+    py-4
+    text-xl;
+}
+
+.CMS_Confirm_content {
+  @apply px-6
+    pb-4
+    text-sm
+    text-slate-500
+    dark:text-slate-400;
+}
+
+.CMS_Confirm_actions {
+  @apply p-2
+    flex
+    justify-end
+    gap-2;
+}

@@ -4,8 +4,8 @@ import React, { memo } from 'react';
 import Colors from './Colors';
 import CustomColors from './CustomColors';
 
-import type { ColorType } from '@udecode/plate';
 import type { FC } from 'react';
+import type { ColorType } from './types';
 
 export type ColorPickerProps = {
   color?: string;

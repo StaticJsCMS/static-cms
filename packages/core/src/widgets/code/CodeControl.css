@@ -1,0 +1,82 @@
+.CMS_WidgetCode_root {
+  @apply relative
+    flex
+    flex-col
+    border-b
+    border-slate-400
+    focus-within:border-blue-800
+    dark:focus-within:border-blue-100;
+
+  &.CMS_WidgetCode_for-single-list {
+    & .CMS_WidgetCode_field-wrapper {
+      @apply mr-14;
+    }
+  }
+
+  &.CMS_WidgetCode_disabled {
+    & .CMS_WidgetCode_expand-button {
+      @apply cursor-default;
+    }
+
+    & .CMS_WidgetCode_expand-button-icon {
+      @apply text-slate-300
+        dark:text-slate-600;
+    }
+  }
+
+  &.CMS_WidgetCode_expanded {
+    & .CMS_WidgetCode_expand-button-icon {
+      @apply rotate-90
+        transform;
+    }
+  }
+
+  &:not(.CMS_WidgetCode_error) {
+    &:not(.CMS_WidgetCode_disabled) {
+      &:hover,
+      &:focus {
+        & .CMS_WidgetCode_label {
+          @apply text-blue-500;
+        }
+
+        & .CMS_WidgetCode_expand-button-icon {
+          @apply text-blue-500;
+        }
+      }
+    }
+  }
+}
+
+.CMS_WidgetCode_field-wrapper {
+  @apply relative
+    flex
+    flex-col
+    w-full;
+}
+
+.CMS_WidgetCode_expand-button {
+  @apply flex
+    w-full
+    justify-between
+    px-3
+    py-2
+    text-left
+    text-sm
+    font-medium
+    focus:outline-none
+    focus-visible:ring
+    gap-2
+    focus-visible:ring-opacity-75
+    items-center;
+}
+
+.CMS_WidgetCode_expand-button-icon {
+  @apply transition-transform
+    h-5
+    w-5;
+}
+
+.CMS_WidgetCode_error-message {
+  @apply pt-2
+    pb-3;
+}

@@ -1,0 +1,65 @@
+.CMS_WidgetColor_root {
+  &.CMS_WidgetColor_disabled {
+    & .CMS_WidgetColor_content {
+      @apply cursor-default;
+    }
+
+    & .CMS_WidgetColor_color-swatch {
+      @apply cursor-default;
+    }
+  }
+
+  &.CMS_WidgetColor_allow-input {
+    & .CMS_WidgetColor_content {
+      @apply cursor-text;
+    }
+  }
+}
+
+.CMS_WidgetColor_content {
+  @apply flex
+    items-center
+    pt-2
+    px-3
+    cursor-pointer;
+}
+
+.CMS_WidgetColor_color-swatch-wrapper {
+}
+
+.CMS_WidgetColor_color-swatch {
+  @apply w-8
+    h-8
+    flex
+    items-center
+    justify-center
+    cursor-pointer;
+}
+
+.CMS_WidgetColor_color-picker-wrapper {
+  @apply absolute
+    bottom-0;
+}
+
+.CMS_WidgetColor_color-picker-backdrop {
+  @apply fixed
+    inset-0
+    z-10;
+}
+
+.CMS_WidgetColor_color-picker {
+  @apply absolute
+    z-20
+    -top-3;
+}
+
+.CMS_WidgetColor_input {
+}
+
+.CMS_WidgetColor_clear-button {
+}
+
+.CMS_WidgetColor_clear-button-icon {
+  @apply w-5
+    h-5;
+}

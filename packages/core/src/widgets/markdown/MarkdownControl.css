@@ -1,0 +1,28 @@
+.CMS_WidgetMarkdown_root {
+}
+
+.CMS_WidgetMarkdown_raw-editor {
+  @apply mt-2;
+}
+
+.CMS_WidgetMarkdown_rich-editor {
+  @apply relative
+    px-3
+    py-5
+    pb-0;
+}
+
+.CMS_WidgetMarkdown_plate-editor-wrapper {
+  @apply w-full;
+}
+
+.CMS_WidgetMarkdown_plate-editor {
+  @apply !outline-none;
+}
+
+.CMS_WidgetMarkdown_controls {
+  @apply px-3
+    mt-2
+    flex
+    gap-2;
+}

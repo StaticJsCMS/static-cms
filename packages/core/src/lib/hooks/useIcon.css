@@ -1,0 +1,12 @@
+.CMS_Icon_root {
+  @apply h-6
+    w-6
+    flex
+    items-center
+    justify-center;
+}
+
+.CMS_Icon_icon {
+  @apply h-6
+    w-6;
+}

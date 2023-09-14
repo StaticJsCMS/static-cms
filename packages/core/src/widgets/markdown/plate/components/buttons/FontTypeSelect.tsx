@@ -1,5 +1,5 @@
-import OptionUnstyled from '@mui/base/OptionUnstyled';
-import SelectUnstyled from '@mui/base/SelectUnstyled';
+import { Option } from '@mui/base/Option';
+import { Select } from '@mui/base/Select';
 import { UnfoldMore as UnfoldMoreIcon } from '@styled-icons/material/UnfoldMore';
 import {
   ELEMENT_H1,
@@ -9,7 +9,6 @@ import {
   ELEMENT_H5,
   ELEMENT_H6,
   ELEMENT_PARAGRAPH,
-  focusEditor,
   someNode,
   toggleNodeType,
 } from '@udecode/plate';
@@ -17,10 +16,25 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 
-import type { SelectUnstyledRootSlotProps } from '@mui/base/SelectUnstyled';
+import type { SelectRootSlotProps } from '@mui/base/Select';
 import type { FC, FocusEvent, KeyboardEvent, MouseEvent } from 'react';
+
+import './FontTypeSelect.css';
+
+const classes = generateClassNames('WidgetMarkdown_FontTypeSelect', [
+  'root',
+  'disabled',
+  'select',
+  'popper',
+  'option',
+  'option-selected',
+  'option-label',
+  'more-button',
+  'more-button-icon',
+]);
 
 type Option = {
   value: string;
@@ -59,14 +73,14 @@ const types: Option[] = [
 ];
 
 const Button = React.forwardRef(function Button<TValue extends {}, Multiple extends boolean>(
-  props: SelectUnstyledRootSlotProps<TValue, Multiple>,
+  props: SelectRootSlotProps<TValue, Multiple>,
   ref: React.ForwardedRef<HTMLButtonElement>,
 ) {
   const { ownerState: _, children, ...other } = props;
   return (
-    <button type="button" {...other} ref={ref}>
+    <button type="button" {...other} ref={ref} className={classes.select}>
       {children}
-      <UnfoldMoreIcon className="w-4 h-4 absolute right-0" />
+      <UnfoldMoreIcon className={classes['more-button-icon']} />
     </button>
   );
 });
@@ -103,23 +117,13 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
       });
 
       setVersion(oldVersion => oldVersion + 1);
-
-      setTimeout(() => {
-        focusEditor(editor);
-      });
     },
     [editor, value?.value],
   );
 
   return (
-    <div
-      className="
-        w-28
-        h-6
-        mx-1
-      "
-    >
-      <SelectUnstyled
+    <div className={classNames(classes.root, disabled && classes.disabled)}>
+      <Select
         value={value?.value ?? ELEMENT_PARAGRAPH}
         onChange={handleChange}
         disabled={disabled}
@@ -127,54 +131,9 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
           root: Button,
         }}
         slotProps={{
-          root: {
-            className: classNames(
-              `
-                flex
-                items-center
-                justify-between
-                text-sm
-                font-medium
-                relative
-                px-1.5
-                py-0.5
-                w-full
-                h-6
-                border
-                rounded-sm
-              `,
-              disabled
-                ? `
-                    text-gray-300
-                    border-gray-200
-                    dark:border-gray-600
-                    dark:text-gray-500
-                  `
-                : `
-                    text-gray-800
-                    border-gray-600
-                    dark:border-gray-200
-                    dark:text-gray-100
-                  `,
-            ),
-          },
           popper: {
             disablePortal: false,
-            className: `
-              max-h-40
-              w-50
-              overflow-auto
-              rounded-md
-              bg-white
-              shadow-md
-              ring-1
-              ring-black
-              ring-opacity-5
-              focus:outline-none
-              sm:text-sm
-              dark:bg-slate-800
-              dark:shadow-lg
-            `,
+            className: classNames(classes.popper, 'CMS_Scrollbar_root', 'CMS_Scrollbar_secondary'),
           },
         }}
         data-testid="font-type-select"
@@ -183,40 +142,20 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
           const selected = (value?.value ?? ELEMENT_PARAGRAPH) === type.value;
 
           return (
-            <OptionUnstyled
+            <Option
               key={type.value}
               value={type.value}
               slotProps={{
                 root: {
-                  className: classNames(
-                    `
-                      relative
-                      select-none
-                      py-2
-                      px-4
-                      cursor-pointer
-                      hover:bg-blue-500
-                      hover:text-white
-                      dark:hover:bg-blue-500
-                    `,
-                    selected &&
-                      `
-                        bg-blue-500/25
-                        dark:bg-blue-700/20
-                      `,
-                  ),
+                  className: classNames(classes.option, selected && classes['option-selected']),
                 },
               }}
             >
-              <span
-                className={classNames('block truncate', selected ? 'font-medium' : 'font-normal')}
-              >
-                {type.label}
-              </span>
-            </OptionUnstyled>
+              <span className={classes['option-label']}>{type.label}</span>
+            </Option>
           );
         })}
-      </SelectUnstyled>
+      </Select>
     </div>
   );
 };

@@ -21,6 +21,7 @@ import {
   selectViewStyle,
 } from '@staticcms/core/reducers/selectors/entries';
 import Card from '../common/card/Card';
+import collectionClasses from './Collection.classes';
 import CollectionControls from './CollectionControls';
 import CollectionHeader from './CollectionHeader';
 import EntriesCollection from './entries/EntriesCollection';
@@ -36,6 +37,8 @@ import type {
 import type { RootState } from '@staticcms/core/store';
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
+
+import './Collection.css';
 
 const CollectionView = ({
   collection,
@@ -183,11 +186,11 @@ const CollectionView = ({
   const collectionDescription = collection?.description;
 
   return (
-    <div className="flex flex-col h-full px-5 pt-4 overflow-hidden">
-      <div className="flex items-center mb-4 flex-row gap-4 sm:gap-0">
+    <div className={collectionClasses.root}>
+      <div className={collectionClasses.content}>
         {isSearchResults ? (
           <>
-            <div className="flex-grow">
+            <div className={collectionClasses['search-query']}>
               <div>{t(searchResultKey, { searchTerm, collection: collection?.label })}</div>
             </div>
             <CollectionControls viewStyle={viewStyle} onChangeViewStyle={changeViewStyle} />
@@ -212,8 +215,8 @@ const CollectionView = ({
         )}
       </div>
       {collectionDescription ? (
-        <div className="flex mb-4">
-          <Card className="flex-grow px-3.5 py-2.5 text-sm">{collectionDescription}</Card>
+        <div className={collectionClasses.description}>
+          <Card className={collectionClasses['description-card']}>{collectionDescription}</Card>
         </div>
       ) : null}
       {entries}

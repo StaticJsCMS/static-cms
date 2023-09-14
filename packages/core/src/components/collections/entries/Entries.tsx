@@ -2,11 +2,14 @@ import React, { useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
 import Loader from '@staticcms/core/components/common/progress/Loader';
+import entriesClasses from './Entries.classes';
 import EntryListing from './EntryListing';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { Collection, Collections, Entry, TranslatedProps } from '@staticcms/core/interface';
 import type Cursor from '@staticcms/core/lib/util/Cursor';
+
+import './Entries.css';
 
 export interface BaseEntriesProps {
   entries: Entry[];
@@ -81,20 +84,7 @@ const Entries = ({
     );
   }
 
-  return (
-    <div
-      className="
-        py-2
-        px-3
-        rounded-md
-        bg-yellow-300/75
-        dark:bg-yellow-800/75
-        text-sm
-      "
-    >
-      {t('collection.entries.noEntries')}
-    </div>
-  );
+  return <div className={entriesClasses.root}>{t('collection.entries.noEntries')}</div>;
 };
 
 export default translate()(Entries);

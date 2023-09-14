@@ -3,6 +3,8 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Field from '@staticcms/core/components/common/field/Field';
 import TextField from '@staticcms/core/components/common/text-field/TextField';
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
+import classNames from '@staticcms/core/lib/util/classNames.util';
+import widgetListClasses from './ListControl.classes';
 
 import type { ListField, ValueOrNestedValue, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC } from 'react';
@@ -14,6 +16,7 @@ const DelimitedListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListFiel
   duplicate,
   value,
   errors,
+  hasErrors,
   forSingleList,
   controlled,
   onChange,
@@ -54,6 +57,14 @@ const DelimitedListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListFiel
       forSingleList={forSingleList}
       cursor="text"
       disabled={disabled}
+      rootClassName={classNames(
+        widgetListClasses.root,
+        widgetListClasses.delimited,
+        disabled && widgetListClasses.disabled,
+        field.required !== false && widgetListClasses.required,
+        hasErrors && widgetListClasses.error,
+        forSingleList && widgetListClasses['for-single-list'],
+      )}
     >
       <TextField
         type="text"
@@ -61,6 +72,7 @@ const DelimitedListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListFiel
         value={internalValue}
         disabled={disabled}
         onChange={handleChange}
+        inputClassName={widgetListClasses['delimited-input']}
       />
     </Field>
   );

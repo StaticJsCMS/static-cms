@@ -35,7 +35,7 @@ const withList = (
   };
 
   editor.deleteForward = unit => {
-    if (deleteForwardList(editor)) {
+    if (deleteForwardList(editor, deleteForward, unit)) {
       return;
     }
 

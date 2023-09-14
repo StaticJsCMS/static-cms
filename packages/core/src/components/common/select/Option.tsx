@@ -1,10 +1,15 @@
-import OptionUnstyled from '@mui/base/OptionUnstyled';
+import { Option as BaseOption } from '@mui/base/Option';
 import React, { useMemo } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { ReactNode } from 'react';
+
+import './Option.css';
+
+export const classes = generateClassNames('SelectOption', ['root', 'selected', 'label']);
 
 export interface OptionProps<T> {
   selectedValue: T | null | T[];
@@ -28,31 +33,17 @@ const Option = function <T>({
   );
 
   return (
-    <OptionUnstyled
+    <BaseOption
       value={value}
       data-testid={dataTestId}
       slotProps={{
         root: {
-          className: classNames(
-            `
-              relative
-              select-none
-              py-2
-              px-4
-              cursor-pointer
-              text-gray-800
-              hover:bg-blue-500
-              dark:text-gray-100
-            `,
-            selected ? 'bg-blue-400/75' : '',
-          ),
+          className: classNames(classes.root, selected && classes.selected),
         },
       }}
     >
-      <span className={classNames('block truncate', selected ? 'font-medium' : 'font-normal')}>
-        {children}
-      </span>
-    </OptionUnstyled>
+      <span className={classes.label}>{children}</span>
+    </BaseOption>
   );
 };
 

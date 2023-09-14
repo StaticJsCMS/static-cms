@@ -19,6 +19,7 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import { fileForEntry } from '@staticcms/core/lib/util/collection.util';
 import { getFieldLabel, useHidden } from '@staticcms/core/lib/util/field.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { validate } from '@staticcms/core/lib/util/validation.util';
 import { selectFieldErrors } from '@staticcms/core/reducers/selectors/entryDraft';
 import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
@@ -37,6 +38,10 @@ import type {
 import type { RootState } from '@staticcms/core/store';
 import type { ComponentType } from 'react';
 import type { ConnectedProps } from 'react-redux';
+
+import './EditorControl.css';
+
+export const classes = generateClassNames('EditorControl', ['root', 'hidden']);
 
 const EditorControl = ({
   collection,
@@ -196,7 +201,7 @@ const EditorControl = ({
     }
 
     return (
-      <div className={classNames(hidden && 'hidden')}>
+      <div className={classNames(classes.root, hidden && classes.hidden)}>
         {createElement(widget.control, {
           key: `${id}-${version}`,
           collection,

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import widgetMarkdownTableClasses from '../Table.classes';
+
 import type { MdTableCellElement, MdValue } from '@staticcms/markdown';
 import type { PlateRenderElementProps } from '@udecode/plate';
 import type { FC } from 'react';
@@ -10,20 +12,7 @@ const TableHeaderCellElement: FC<PlateRenderElementProps<MdValue, MdTableCellEle
   nodeProps,
 }) => {
   return (
-    <td
-      {...attributes}
-      {...nodeProps}
-      className="
-        px-2
-        py-1
-        [&>div>p]:m-0
-        border-r
-        border-gray-200
-        last:border-0
-        dark:border-gray-800
-        text-sm
-      "
-    >
+    <td {...attributes} {...nodeProps} className={widgetMarkdownTableClasses['body-cell']}>
       <div>{children}</div>
     </td>
   );

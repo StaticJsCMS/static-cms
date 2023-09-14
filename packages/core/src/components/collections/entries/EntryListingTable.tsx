@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useVirtual } from 'react-virtual';
 
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import Table from '../../common/table/Table';
+import entriesClasses from './Entries.classes';
 import EntryRow from './EntryRow';
 
 import type { CollectionEntryData } from '@staticcms/core/interface';
@@ -69,32 +71,14 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
   }, [clientHeight, fetchMoreOnBottomReached, scrollHeight, scrollTop]);
 
   return (
-    <div
-      className="
-        relative
-        max-h-full
-        h-full
-        overflow-hidden
-        p-1.5
-        bg-white
-        shadow-sm
-        border
-        border-gray-100
-        dark:bg-slate-800
-        dark:border-gray-700/40
-        dark:shadow-md
-        rounded-xl
-      "
-    >
+    <div className={entriesClasses['entry-listing-table']}>
       <div
         ref={tableContainerRef}
-        className="
-          relative
-          h-full
-          overflow-auto
-          styled-scrollbars
-          styled-scrollbars-secondary
-        "
+        className={classNames(
+          entriesClasses['entry-listing-table-content'],
+          'CMS_Scrollbar_root',
+          'CMS_Scrollbar_secondary',
+        )}
       >
         <Table
           columns={
@@ -128,18 +112,7 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
         </Table>
       </div>
       {isLoadingEntries ? (
-        <div
-          key="loading"
-          className="
-            absolute
-            inset-0
-            flex
-            items-center
-            justify-center
-            bg-slate-50/50
-            dark:bg-slate-900/50
-          "
-        >
+        <div key="loading" className={entriesClasses['entry-listing-loading']}>
           {t('collection.entries.loadingEntries')}
         </div>
       ) : null}

@@ -10,7 +10,9 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import Field from '@staticcms/core/components/common/field/Field';
 import TextField from '@staticcms/core/components/common/text-field/TextField';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import NowButton from './components/NowButton';
 import {
   DEFAULT_DATETIME_FORMAT,
@@ -24,6 +26,20 @@ import type { TextFieldProps as MuiTextFieldProps } from '@mui/material/TextFiel
 import type { TextFieldProps } from '@staticcms/core/components/common/text-field/TextField';
 import type { DateTimeField, WidgetControlProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
+
+import './DateTimeControl.css';
+
+export const classes = generateClassNames('WidgetDateTime', [
+  'root',
+  'error',
+  'required',
+  'disabled',
+  'for-single-list',
+  'wrapper',
+  'date-input',
+  'time-input',
+  'datetime-input',
+]);
 
 function convertMuiTextFieldProps({
   inputProps,
@@ -49,6 +65,7 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
   disabled,
   duplicate,
   errors,
+  hasErrors,
   forSingleList,
   t,
   onChange,
@@ -186,6 +203,7 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
                 {...convertMuiTextFieldProps(props)}
                 inputRef={ref}
                 cursor="pointer"
+                inputClassName={classes['date-input']}
               />
               <NowButton
                 key="mobile-date-now"
@@ -218,6 +236,7 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
                 {...convertMuiTextFieldProps(props)}
                 inputRef={ref}
                 cursor="pointer"
+                inputClassName={classes['time-input']}
               />
               <NowButton
                 key="mobile-date-now"
@@ -249,7 +268,7 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
               {...convertMuiTextFieldProps(props)}
               inputRef={ref}
               cursor="pointer"
-              inputClassName="truncate"
+              inputClassName={classes['datetime-input']}
             />
             <NowButton
               key="mobile-date-now"
@@ -283,7 +302,14 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
       forSingleList={forSingleList}
       cursor="pointer"
       disabled={disabled}
-      wrapperClassName="!w-date-widget"
+      rootClassName={classNames(
+        classes.root,
+        disabled && classes.disabled,
+        field.required !== false && classes.required,
+        hasErrors && classes.error,
+        forSingleList && classes['for-single-list'],
+      )}
+      wrapperClassName={classes.wrapper}
     >
       <LocalizationProvider key="localization-provider" dateAdapter={AdapterDateFns}>
         {dateTimePicker}

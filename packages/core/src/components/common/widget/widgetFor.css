@@ -1,0 +1,4 @@
+.CMS_WidgetPreview_label {
+  @apply text-slate-500
+    dark:text-slate-400;
+}

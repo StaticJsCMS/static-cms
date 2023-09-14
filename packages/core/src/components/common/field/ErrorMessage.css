@@ -1,0 +1,8 @@
+.CMS_ErrorMessage_root {
+  @apply flex
+    w-full
+    text-xs
+    text-red-500
+    px-3
+    pt-2;
+}

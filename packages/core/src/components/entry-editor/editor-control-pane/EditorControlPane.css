@@ -1,0 +1,15 @@
+.CMS_EditorControlPane_root {
+  @apply flex
+    flex-col
+    min-h-full
+    w-full;
+
+  &:not(.CMS_EditorControlPane_no-border) {
+    @apply lg:border-r
+      border-slate-400;
+  }
+}
+
+.CMS_EditorControlPane_locale_dropdown_wrapper {
+  @apply p-3;
+}

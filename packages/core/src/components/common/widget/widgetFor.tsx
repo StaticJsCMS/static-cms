@@ -3,6 +3,7 @@ import React, { Fragment, isValidElement } from 'react';
 import { resolveWidget } from '@staticcms/core/lib/registry';
 import { selectField } from '@staticcms/core/lib/util/field.util';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { getTypedFieldForValue } from '@staticcms/list/typedListHelpers';
 import PreviewHOC from './PreviewHOC';
 
@@ -20,6 +21,10 @@ import type {
   WidgetPreviewComponent,
 } from '@staticcms/core/interface';
 import type { ReactFragment, ReactNode } from 'react';
+
+import './widgetFor.css';
+
+export const classes = generateClassNames('WidgetPreview', ['label']);
 
 /**
  * Returns the widget component for a named field, and makes recursive calls
@@ -98,14 +103,7 @@ export default function getWidgetFor(
     renderedValue = (
       <div key={field.name}>
         <>
-          <strong
-            className="
-              text-slate-500
-              dark:text-slate-400
-            "
-          >
-            {field.label ?? field.name}:
-          </strong>
+          <strong className={classes.label}>{field.label ?? field.name}:</strong>
           {value}
         </>
       </div>

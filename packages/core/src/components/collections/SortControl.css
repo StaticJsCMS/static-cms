@@ -1,0 +1,50 @@
+.CMS_SortControl_root {
+  @apply hidden
+    lg:block;
+}
+
+.CMS_SortControl_option {
+}
+
+.CMS_SortControl_list {
+  @apply flex
+    flex-col
+    gap-2;
+}
+
+.CMS_SortControl_list-label {
+  @apply text-lg
+    font-bold
+    text-gray-800
+    dark:text-white;
+}
+
+.CMS_SortControl_list-option {
+  @apply ml-0.5
+    font-medium
+    flex
+    items-center
+    text-gray-800
+    dark:text-gray-300;
+}
+
+.CMS_SortControl_list-option-label {
+  @apply ml-2
+    text-base
+    font-medium
+    text-gray-800
+    dark:text-gray-300;
+}
+
+.CMS_SortControl_list-option-sorted-icon {
+  @apply ml-2
+    w-6
+    h-6
+    text-blue-500;
+}
+
+.CMS_SortControl_list-option-not-sorted {
+  @apply ml-2
+    w-6
+    h-6;
+}

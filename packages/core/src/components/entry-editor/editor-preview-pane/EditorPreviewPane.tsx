@@ -9,6 +9,7 @@ import { getPreviewStyles, getPreviewTemplate } from '@staticcms/core/lib/regist
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectTemplateName } from '@staticcms/core/lib/util/collection.util';
 import LivePreviewLoadedEvent from '@staticcms/core/lib/util/events/LivePreviewLoadedEvent';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
@@ -29,6 +30,17 @@ import type {
 } from '@staticcms/core/interface';
 import type DataUpdateEvent from '@staticcms/core/lib/util/events/DataEvent';
 import type { FC } from 'react';
+
+import './EditorPreviewPane.css';
+
+export const classes = generateClassNames('Preview', [
+  'root',
+  'compact',
+  'show-mobile-preview',
+  'live-preview',
+  'frame',
+  'inline',
+]);
 
 const FrameGlobalStyles = `
   body {
@@ -57,11 +69,11 @@ const FrameGlobalStyles = `
     color: rgb(59 130 246);
   }
 
-  .text-gray-800 {
+  .CMS_PreviewFrameContent_content {
     color: rgb(17 24 39);
   }
 
-  .dark .dark\\:text-gray-100 {
+  .dark .CMS_PreviewFrameContent_content {
     color: rgb(243 244 246);
   }
 
@@ -73,36 +85,36 @@ const FrameGlobalStyles = `
     color: rgb(148 163 184);
   }
 
-  .styled-scrollbars {
+  .CMS_Scrollbar_root {
     --scrollbar-foreground: rgba(100, 116, 139, 0.25);
     --scrollbar-background: rgb(248 250 252);
   }
 
-  .dark.styled-scrollbars {
+  .dark.CMS_Scrollbar_root {
     --scrollbar-foreground: rgba(30, 41, 59, 0.8);
     --scrollbar-background: rgb(15 23 42);
   }
 
-  .styled-scrollbars {
+  .CMS_Scrollbar_root {
     /* Foreground, Background */
     scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
   }
 
-  .styled-scrollbars::-webkit-scrollbar {
+  .CMS_Scrollbar_root::-webkit-scrollbar {
     width: 10px; /* Mostly for vertical scrollbars */
     height: 10px; /* Mostly for horizontal scrollbars */
   }
 
-  .styled-scrollbars::-webkit-scrollbar-corner {
+  .CMS_Scrollbar_root::-webkit-scrollbar-corner {
     background: rgba(0,0,0,0);
   }
 
-  .styled-scrollbars::-webkit-scrollbar-thumb {
+  .CMS_Scrollbar_root::-webkit-scrollbar-thumb {
     /* Foreground */
     background: var(--scrollbar-foreground);
   }
 
-  .styled-scrollbars::-webkit-scrollbar-track {
+  .CMS_Scrollbar_root::-webkit-scrollbar-track {
     /* Background */
     background: var(--scrollbar-background);
   }
@@ -161,7 +173,7 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
         <head>
           <base target="_blank"/>
         </head>
-        <body class="styled-scrollbars">
+        <body class="CMS_Scrollbar_root">
           <div></div>
         </body>
       </html>
@@ -208,20 +220,9 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
     return createPortal(
       <div
         className={classNames(
-          `
-            h-main-mobile
-            md:h-main
-            absolute
-            top-16
-            right-0
-            w-full
-          `,
-          editorSize === EDITOR_SIZE_COMPACT ? 'lg:w-preview' : 'lg:w-6/12',
-          !showMobilePreview &&
-            `
-              hidden
-              lg:block
-            `,
+          classes.root,
+          editorSize === EDITOR_SIZE_COMPACT && classes.compact,
+          !showMobilePreview && classes['show-mobile-preview'],
         )}
       >
         <ErrorBoundary config={config}>
@@ -230,7 +231,7 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
               key="live-preview-frame"
               ref={livePreviewIframe}
               src={`${livePreviewUrlTemplate}?useCmsData=true`}
-              className="w-full h-full"
+              className={classes['live-preview']}
               onLoad={handleLivePreviewIframeLoaded}
             />
           ) : previewInFrame ? (
@@ -239,7 +240,7 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
               id="preview-pane"
               head={previewStyles}
               initialContent={initialFrameContent}
-              className="w-full h-full"
+              className={classes.frame}
             >
               {!collection ? (
                 t('collection.notFound')
@@ -256,11 +257,7 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
               <div
                 key="preview-wrapper"
                 id="preview-pane"
-                className="
-                    overflow-y-auto
-                    styled-scrollbars
-                    h-full
-                  "
+                className={classNames(classes.inline, 'CMS_Scrollbar_root')}
               >
                 {!collection ? (
                   t('collection.notFound')

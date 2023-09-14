@@ -6,11 +6,13 @@ import { loadEntries, traverseCollectionCursor } from '@staticcms/core/actions/e
 import useEntries from '@staticcms/core/lib/hooks/useEntries';
 import useGroups from '@staticcms/core/lib/hooks/useGroups';
 import { Cursor } from '@staticcms/core/lib/util';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectCollectionEntriesCursor } from '@staticcms/core/reducers/selectors/cursors';
 import { selectEntriesLoaded, selectIsFetching } from '@staticcms/core/reducers/selectors/entries';
 import { useAppDispatch } from '@staticcms/core/store/hooks';
 import Button from '../../common/button/Button';
 import Entries from './Entries';
+import entriesClasses from './Entries.classes';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { Collection, Entry, GroupOfEntries, TranslatedProps } from '@staticcms/core/interface';
@@ -115,25 +117,9 @@ const EntriesCollection = ({
   if (groups && groups.length > 0) {
     return (
       <>
-        <div
-          className="
-            pb-3
-          "
-        >
-          <div
-            className="
-              -m-1
-            "
-          >
-            <div
-              className="
-                flex
-                gap-2
-                p-1
-                overflow-x-auto
-                hide-scrollbar
-              "
-            >
+        <div className={entriesClasses.group}>
+          <div className={entriesClasses['group-content-wrapper']}>
+            <div className={classNames(entriesClasses['group-content'], 'CMS_Scrollbar_hide')}>
               {groups.map((group, index) => {
                 const title = getGroupTitle(group, t);
                 return (
@@ -141,7 +127,7 @@ const EntriesCollection = ({
                     key={index}
                     variant={index === selectedGroup ? 'contained' : 'text'}
                     onClick={handleGroupClick(index)}
-                    className="whitespace-nowrap"
+                    className={entriesClasses['group-button']}
                   >
                     {title}
                   </Button>

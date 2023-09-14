@@ -1,0 +1,20 @@
+.CMS_WidgetRelation_root {
+}
+
+.CMS_WidgetRelation_values {
+  @apply flex
+    flex-wrap
+    gap-2
+    p-2
+    pr-0
+    w-relation-widget-label;
+}
+
+.CMS_WidgetRelation_loading {
+  @apply absolute
+    inset-y-0
+    right-4
+    flex
+    items-center
+    pr-2;
+}

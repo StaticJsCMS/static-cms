@@ -9,10 +9,23 @@ import View from 'ol/View.js';
 import React, { useLayoutEffect, useRef } from 'react';
 
 import Field from '@staticcms/core/components/common/field/Field';
+import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { MapField, WidgetControlProps } from '@staticcms/core/interface';
 import type { Geometry } from 'ol/geom';
 import type { FC } from 'react';
+
+import './MapControl.css';
+
+const classes = generateClassNames('WidgetMap', [
+  'root',
+  'error',
+  'required',
+  'disabled',
+  'for-single-list',
+  'map',
+]);
 
 const formatOptions = {
   dataProjection: 'EPSG:4326',
@@ -42,6 +55,7 @@ const withMapControl = ({ getFormat, getMap }: WithMapControlProps = {}) => {
     field,
     onChange,
     errors,
+    hasErrors,
     forSingleList,
     label,
     disabled,
@@ -94,16 +108,15 @@ const withMapControl = ({ getFormat, getMap }: WithMapControlProps = {}) => {
         forSingleList={forSingleList}
         noPadding
         disabled={disabled}
+        rootClassName={classNames(
+          classes.root,
+          disabled && classes.disabled,
+          field.required !== false && classes.required,
+          hasErrors && classes.error,
+          forSingleList && classes['for-single-list'],
+        )}
       >
-        <div
-          ref={mapContainer}
-          className="
-            relative
-            w-full
-            mt-2
-          "
-          style={{ height }}
-        />
+        <div ref={mapContainer} className={classes.map} style={{ height }} />
       </Field>
     );
   };

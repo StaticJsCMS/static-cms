@@ -4,6 +4,7 @@ import { translate } from 'react-polyglot';
 import { VIEW_STYLE_TABLE } from '@staticcms/core/constants/views';
 import { selectFields, selectInferredField } from '@staticcms/core/lib/util/collection.util';
 import { toTitleCaseFromKey } from '@staticcms/core/lib/util/string.util';
+import entriesClasses from './Entries.classes';
 import EntryListingGrid from './EntryListingGrid';
 import EntryListingTable from './EntryListingTable';
 
@@ -154,7 +155,7 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
 
   if (viewStyle === VIEW_STYLE_TABLE) {
     return (
-      <div className="pb-3 overflow-hidden">
+      <div className={entriesClasses['entry-listing']}>
         <EntryListingTable
           key="table"
           entryData={entryData}

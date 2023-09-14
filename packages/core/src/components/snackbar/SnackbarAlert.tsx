@@ -6,10 +6,27 @@ import { WarningAmber as WarningAmberIcon } from '@styled-icons/material/Warning
 import React, { forwardRef, useMemo } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import IconButton from '../common/button/IconButton';
 
 import type { TranslatedProps } from '@staticcms/core/interface';
 import type { SnackbarMessage } from '@staticcms/core/store/slices/snackbars';
+
+import './SnackbarAlert.css';
+
+export const classes = generateClassNames('SnackbarAlert', [
+  'root',
+  'error',
+  'success',
+  'warning',
+  'info',
+  'icon-wrapper',
+  'icon',
+  'message',
+  'close-button',
+  'close-button-sr-label',
+  'close-button-icon',
+]);
 
 interface SnackbarAlertProps {
   data: SnackbarMessage;
@@ -32,100 +49,40 @@ const SnackbarAlert = forwardRef<HTMLDivElement, TranslatedProps<SnackbarAlertPr
     const icon = useMemo(() => {
       switch (type) {
         case 'error':
-          return <ErrorOutlineIcon className="w-4 h-4" />;
+          return <ErrorOutlineIcon className={classes.icon} />;
         case 'success':
-          return <TaskAltIcon className="w-4 h-4" />;
+          return <TaskAltIcon className={classes.icon} />;
         case 'warning':
-          return <WarningAmberIcon className="w-4 h-4" />;
+          return <WarningAmberIcon className={classes.icon} />;
         default:
-          return <InfoIcon className="w-4 h-4" />;
+          return <InfoIcon className={classes.icon} />;
       }
     }, [type]);
 
     return (
       <div
         id="toast-default"
-        className="
-          flex
-          items-center
-          w-full
-          max-w-xs
-          gap-3
-          py-2
-          px-2.5
-          text-gray-500
-          bg-white
-          rounded-lg
-          shadow-md
-          dark:text-gray-300
-          dark:bg-gray-800
-          dark:shadow-lg
-        "
+        className={classNames(
+          classes.root,
+          type === 'error' && classes.error,
+          type === 'success' && classes.success,
+          type === 'warning' && classes.warning,
+          type === 'info' && classes.info,
+        )}
         role="alert"
         ref={ref}
       >
-        <div
-          className={classNames(
-            `
-              inline-flex
-              items-center
-              justify-center
-              flex-shrink-0
-              w-7
-              h-7
-              rounded-lg
-            `,
-            type === 'error' &&
-              `
-                bg-red-500
-                text-red-100
-                dark:bg-red-600
-                dark:text-red-200
-              `,
-            type === 'success' &&
-              `
-                bg-green-500
-                text-green-100
-                dark:bg-green-600
-                dark:text-green-200
-              `,
-            type === 'warning' &&
-              `
-                bg-yellow-500
-                text-yellow-100
-                dark:bg-yellow-600
-                dark:text-yellow-200
-              `,
-            type === 'info' &&
-              `
-                text-blue-500
-                bg-blue-100
-                dark:bg-blue-800
-                dark:text-blue-200
-              `,
-          )}
-        >
-          {icon}
-        </div>
-        <div
-          className="
-            text-sm
-            font-normal
-          "
-        >
-          {renderedMessage}
-        </div>
+        <div className={classes['icon-wrapper']}>{icon}</div>
+        <div className={classes.message}>{renderedMessage}</div>
         <IconButton
           aria-label="Close"
           variant="text"
           color="secondary"
           onClick={onClose}
-          className="
-            ml-2
-          "
+          className={classes['close-button']}
         >
-          <span className="sr-only">Close</span>
-          <CloseIcon className="w-4 h-4" />
+          <span className={classes['close-button-sr-label']}>Close</span>
+          <CloseIcon className={classes['close-button-icon']} />
         </IconButton>
       </div>
     );

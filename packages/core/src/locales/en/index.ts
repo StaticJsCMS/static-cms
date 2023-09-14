@@ -201,6 +201,7 @@ const en: LocalePhrasesRoot = {
       list: {
         add: 'Add %{item}',
         addType: 'Add %{item}',
+        noValue: 'No value',
       },
       keyvalue: {
         key: 'Key',

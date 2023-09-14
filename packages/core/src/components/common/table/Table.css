@@ -1,0 +1,96 @@
+.CMS_Table_root {
+  @apply z-[2];
+}
+
+.CMS_Table_table {
+  @apply w-full
+    text-sm
+    text-left
+    text-gray-500
+    dark:text-gray-300;
+}
+
+.CMS_Table_header {
+  @apply text-xs;
+}
+
+.CMS_Table_header-row {
+  @apply shadow-sm;
+}
+
+.CMS_Table_header-cell {
+  @apply font-bold
+    sticky
+    top-0
+    border-0
+    p-0;
+}
+
+.CMS_Table_header-cell-content {
+  @apply px-4
+    py-3
+    text-gray-800
+    border-gray-100
+    border-b
+    bg-white
+    dark:text-white
+    dark:border-gray-700
+    dark:bg-slate-800
+    text-[14px]
+    truncate
+    w-full;
+}
+
+.CMS_Table_body-row {
+  @apply border-t
+    first:border-t-0
+    border-gray-100
+    dark:border-gray-700
+    bg-white
+    hover:bg-slate-50
+    dark:bg-slate-800
+    dark:hover:bg-slate-700
+    focus:outline-none
+    focus:bg-gray-100
+    focus:dark:bg-slate-700;
+}
+
+.CMS_Table_body-cell {
+  @apply text-gray-500
+    dark:text-gray-300;
+
+  &.CMS_Table_body-cell-has-link {
+    @apply p-0;
+  }
+
+  &:not(.CMS_Table_body-cell-has-link) {
+    @apply px-4
+      py-3;
+  }
+
+  &.CMS_Table_body-cell-emphasis {
+    @apply font-medium
+      text-gray-800
+      whitespace-nowrap
+      dark:text-white;
+  }
+
+  &.CMS_Table_body-cell-shrink {
+    @apply w-0;
+  }
+}
+
+.CMS_Table_body-cell-content {
+  @apply h-[44px]
+    truncate
+    w-full;
+}
+
+.CMS_Table_body-cell-link {
+  @apply w-full
+    h-full
+    flex
+    px-4
+    py-3
+    whitespace-nowrap;
+}

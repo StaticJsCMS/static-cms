@@ -15,6 +15,7 @@ import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import TableCell from '../../common/table/TableCell';
 import TableRow from '../../common/table/TableRow';
+import entriesClasses from './Entries.classes';
 
 import type { BackupEntry, Collection, Entry, TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
@@ -75,13 +76,7 @@ const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
   }, [collection.name, entry.slug]);
 
   return (
-    <TableRow
-      className="
-        hover:bg-gray-200
-        dark:hover:bg-slate-700/70
-      "
-      to={path}
-    >
+    <TableRow className={entriesClasses['entry-listing-table-row']} to={path}>
       {collectionLabel ? (
         <TableCell key="collectionLabel" to={path}>
           {collectionLabel}
@@ -120,12 +115,7 @@ const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
       <TableCell key="unsavedChanges" to={path} shrink>
         {hasLocalBackup ? (
           <InfoIcon
-            className="
-                w-5
-                h-5
-                text-blue-600
-                dark:text-blue-300
-              "
+            className={entriesClasses['entry-listing-local-backup']}
             title={t('ui.localBackup.hasLocalBackup')}
           />
         ) : null}

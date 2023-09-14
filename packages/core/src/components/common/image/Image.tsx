@@ -1,11 +1,12 @@
-import React from 'react';
 import { Image as ImageIcon } from '@styled-icons/material-outlined/Image';
+import React from 'react';
 
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { isEmpty } from '@staticcms/core/lib/util/string.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
 import { useAppSelector } from '@staticcms/core/store/hooks';
-import { isEmpty } from '@staticcms/core/lib/util/string.util';
 
 import type {
   BaseField,
@@ -15,6 +16,10 @@ import type {
   UnknownField,
 } from '@staticcms/core/interface';
 import type { CSSProperties } from 'react';
+
+import './Image.css';
+
+export const classes = generateClassNames('Image', ['root', 'empty']);
 
 export interface ImageProps<EF extends BaseField> {
   src?: string;
@@ -42,18 +47,7 @@ const Image = <EF extends BaseField = UnknownField>({
   const assetSource = useMediaAsset(src, collection, field, entry ?? editingDraft);
 
   if (isEmpty(src)) {
-    return (
-      <ImageIcon
-        className="
-          p-10
-          rounded-md
-          border
-          max-w-full
-          border-gray-200/75
-          dark:border-slate-600/75
-        "
-      />
-    );
+    return <ImageIcon className={classNames(classes.root, classes.empty, className)} />;
   }
 
   return (
@@ -63,7 +57,7 @@ const Image = <EF extends BaseField = UnknownField>({
       src={assetSource}
       alt={alt}
       data-testid={dataTestId ?? 'image'}
-      className={classNames('object-cover max-w-full overflow-hidden', className)}
+      className={classNames(classes.root, className)}
       style={style}
     />
   );

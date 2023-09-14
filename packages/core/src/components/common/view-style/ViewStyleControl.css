@@ -1,0 +1,18 @@
+.CMS_ViewStyleControl_root {
+  @apply flex
+    items-center
+    gap-1.5
+    lg:mr-1;
+}
+
+.CMS_ViewStyleControl_button {
+  &.CMS_ViewStyleControl_active {
+    @apply text-blue-500
+      dark:text-blue-500;
+  }
+}
+
+.CMS_ViewStyleControl_icon {
+  @apply h-5
+    w-5;
+}

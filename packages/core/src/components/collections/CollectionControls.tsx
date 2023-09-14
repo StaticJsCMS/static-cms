@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 
 import ViewStyleControl from '../common/view-style/ViewStyleControl';
+import collectionClasses from './Collection.classes';
 import FilterControl from './FilterControl';
 import GroupControl from './GroupControl';
 import MobileCollectionControls from './mobile/MobileCollectionControls';
@@ -61,20 +62,7 @@ const CollectionControls = ({
 
   return (
     <>
-      <div
-        className="
-          flex
-          items-center
-          relative
-          z-20
-          w-full
-          justify-end
-          gap-1.5
-          sm:w-auto
-          sm:justify-normal
-          lg:gap-2
-        "
-      >
+      <div className={collectionClasses.controls}>
         <ViewStyleControl viewStyle={viewStyle} onChangeViewStyle={onChangeViewStyle} />
         {showGroupControl || showFilterControl || showFilterControl ? (
           <MobileCollectionControls

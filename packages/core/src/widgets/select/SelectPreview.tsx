@@ -1,7 +1,11 @@
 import React from 'react';
 
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
+
 import type { SelectField, WidgetPreviewProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
+
+const classes = generateClassNames('WidgetSelectPreview', ['root']);
 
 interface ListPreviewProps {
   values: (string | number)[];
@@ -25,7 +29,7 @@ const SelectPreview: FC<WidgetPreviewProps<string | number | (string | number)[]
   }
 
   return (
-    <div>
+    <div className={classes.root}>
       {typeof value === 'string' || typeof value === 'number' ? (
         value
       ) : (

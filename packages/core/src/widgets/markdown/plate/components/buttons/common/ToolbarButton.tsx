@@ -4,9 +4,19 @@ import React, { useCallback } from 'react';
 import Button from '@staticcms/core/components/common/button/Button';
 import MenuItemButton from '@staticcms/core/components/common/menu/MenuItemButton';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 
 import type { CSSProperties, FC, MouseEvent } from 'react';
+
+import './ToolbarButton.css';
+
+const classes = generateClassNames('WidgetMarkdown_ToolbarButton', [
+  'root',
+  'active',
+  'custom-active-color',
+  'icon',
+]);
 
 export interface ToolbarButtonProps {
   label?: string;
@@ -73,23 +83,14 @@ const ToolbarButton: FC<ToolbarButtonProps> = ({
       data-testid={`toolbar-button-${label ?? tooltip}`.replace(' ', '-').toLowerCase()}
       onClick={handleOnClick}
       className={classNames(
-        `
-          py-0.5
-          px-0.5
-        `,
-        active &&
-          !activeColor &&
-          `
-            text-blue-500
-            bg-gray-100
-            dark:text-blue-500
-            dark:bg-slate-800
-          `,
+        classes.root,
+        active && classes.active,
+        activeColor && classes['custom-active-color'],
       )}
       style={style}
       disabled={disabled}
     >
-      {<Icon className="w-5 h-5" />}
+      {<Icon className={classes.icon} />}
     </Button>
   );
 };

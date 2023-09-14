@@ -1,0 +1,4 @@
+.CMS_WidgetMarkdown_ListItem_checkbox {
+  @apply m-[5px]
+    mr-2;
+}

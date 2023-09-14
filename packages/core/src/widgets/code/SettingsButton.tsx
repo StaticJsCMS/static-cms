@@ -3,8 +3,13 @@ import { Settings as SettingsIcon } from '@styled-icons/material/Settings';
 import React from 'react';
 
 import IconButton from '@staticcms/core/components/common/button/IconButton';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { FC, MouseEvent } from 'react';
+
+import './SettingsButton.css';
+
+const classes = generateClassNames('WidgetCode_SettingsButton', ['root', 'icon']);
 
 export interface SettingsButtonProps {
   showClose?: boolean;
@@ -14,8 +19,18 @@ export interface SettingsButtonProps {
 
 const SettingsButton: FC<SettingsButtonProps> = ({ showClose = false, disabled, onClick }) => {
   return (
-    <IconButton onClick={onClick} size="small" variant="text" disabled={disabled}>
-      {showClose ? <CloseIcon className="w-5 h-5" /> : <SettingsIcon className="w-5 h-5" />}
+    <IconButton
+      onClick={onClick}
+      size="small"
+      variant="text"
+      disabled={disabled}
+      className={classes.root}
+    >
+      {showClose ? (
+        <CloseIcon className={classes.icon} />
+      ) : (
+        <SettingsIcon className={classes.icon} />
+      )}
     </IconButton>
   );
 };

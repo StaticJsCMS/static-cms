@@ -1,5 +1,7 @@
 import React from 'react';
 
+import cardClasses from './Card.classes';
+
 import type { ReactNode } from 'react';
 
 interface CardHeaderProps {
@@ -7,11 +9,7 @@ interface CardHeaderProps {
 }
 
 const CardHeader = ({ children }: CardHeaderProps) => {
-  return (
-    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-800 dark:text-white">
-      {children}
-    </h5>
-  );
+  return <h5 className={cardClasses.header}>{children}</h5>;
 };
 
 export default CardHeader;

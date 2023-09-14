@@ -1,0 +1,43 @@
+.CMS_ErrorBoundary_root {
+  @apply flex
+    flex-col
+    bg-slate-50
+    dark:bg-slate-900
+    min-h-screen
+    gap-2;
+}
+
+.CMS_ErrorBoundary_header {
+  @apply flex
+    flex-col
+    py-2
+    px-4
+    gap-2;
+}
+
+.CMS_ErrorBoundary_title {
+  @apply text-2xl
+    font-bold;
+}
+
+.CMS_ErrorBoundary_report-link {
+  @apply text-blue-500
+    hover:underline;
+}
+
+.CMS_ErrorBoundary_content {
+  @apply flex
+    flex-col
+    py-2
+    px-4
+    gap-2;
+}
+
+.CMS_ErrorBoundary_details-title {
+  @apply text-xl
+    font-bold;
+}
+
+.CMS_ErrorBoundary_error-line {
+  @apply whitespace-pre;
+}

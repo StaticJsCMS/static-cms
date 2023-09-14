@@ -6,6 +6,7 @@ import { translate } from 'react-polyglot';
 
 import { MAX_LINK_DISPLAY_LENGTH } from '@staticcms/core/constants/mediaLibrary';
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import Button from '../../common/button/Button';
@@ -23,6 +24,28 @@ import type {
   UnknownField,
 } from '@staticcms/core/interface';
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
+
+import './MediaLibraryCard.css';
+
+export const classes = generateClassNames('MediaLibraryCard', [
+  'root',
+  'action',
+  'handle',
+  'outline',
+  'text',
+  'controls-overlay',
+  'controls',
+  'control-icon',
+  'download-button',
+  'delete-button',
+  'details',
+  'selection-overlay',
+  'draft-pill',
+  'image',
+  'folder',
+  'folder-icon',
+  'file',
+]);
 
 interface MediaLibraryCardProps<T extends MediaField, EF extends BaseField = UnknownField> {
   isSelected?: boolean;
@@ -126,199 +149,69 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
   );
 
   return (
-    <div
-      className="
-        relative
-        w-media-card
-        h-media-card
-      "
-      tabIndex={-1}
-    >
+    <div className={classes.root} tabIndex={-1}>
       <div
         onClick={handleClick}
         onDoubleClick={isDirectory ? onDirectoryOpen : undefined}
         data-testid={`media-card-${displayURL.url}`}
-        className="
-          w-media-card
-          h-media-card
-          rounded-md
-          shadow-sm
-          overflow-hidden
-          group/media-card
-          cursor-pointer
-          border
-          bg-gray-50/75
-          border-gray-200/75
-          dark:bg-slate-800
-          dark:border-slate-600/75
-        "
+        className={classes.action}
       >
         <div
           key="handle"
           onKeyUp={handleOnKeyUp}
           data-testid={`media-card-handle-${displayURL.url}`}
           tabIndex={0}
-          className="
-            absolute
-            inset-0
-            rounded-md
-            z-20
-            overflow-visible
-            focus:ring-4
-            focus:ring-gray-200
-            dark:focus:ring-slate-700
-            focus-visible:outline-none
-          "
+          className={classes.handle}
         />
-        {isSelected ? (
-          <div
-            key="selected"
-            className="
-              absolute
-              inset-0
-              rounded-md
-              border-2
-              border-blue-500
-              z-20
-            "
-          />
-        ) : null}
-        <div
-          className="
-            absolute
-            inset-0
-            invisible
-            transition-all
-            rounded-md
-            group-hover/media-card:visible
-            group-hover/media-card:bg-blue-200/25
-            dark:group-hover/media-card:bg-blue-400/60
-            z-20
-          "
-        >
+        {isSelected ? <div key="selected" className={classes.outline} /> : null}
+        <div className={classes['controls-overlay']}>
           {!isDirectory ? (
-            <div
-              className="
-                absolute
-                top-2
-                right-2
-                flex
-                gap-1
-              "
-            >
+            <div className={classes.controls}>
               <CopyToClipBoardButton path={displayURL.url} name={text} draft={isDraft} />
               <Button
                 variant="text"
                 onClick={handleDownload}
                 title={t('mediaLibrary.mediaLibraryModal.download')}
-                className="
-                  text-white
-                  dark:text-white
-                  bg-gray-900/25
-                  dark:hover:text-blue-100
-                  dark:hover:bg-blue-800/80
-                "
+                className={classes['download-button']}
               >
-                <DownloadIcon className="w-5 h-5" />
+                <DownloadIcon className={classes['control-icon']} />
               </Button>
               <Button
                 variant="text"
                 color="error"
                 onClick={onDelete}
                 title={t('mediaLibrary.mediaLibraryModal.deleteSelected')}
-                className="
-                  position: relative;
-                  text-red-400
-                  bg-gray-900/25
-                  dark:hover:text-red-600
-                  dark:hover:bg-red-800/40
-                  z-30
-                "
+                className={classes['delete-button']}
               >
-                <DeleteIcon className="w-5 h-5" />
+                <DeleteIcon className={classes['control-icon']} />
               </Button>
             </div>
           ) : null}
         </div>
-        <div className="relative">
-          <div
-            className="
-              absolute
-              top-3
-              left-3
-              flex
-              items-center
-              gap-1
-              z-20
-            "
-          >
+        <div className={classes.details}>
+          <div className={classes['selection-overlay']}>
             {hasSelection && allowMultiple ? (
               <Checkbox checked={isSelected} onChange={handleCheckboxChange} />
             ) : null}
             {isDraft ? (
-              <Pill data-testid="draft-text" color="primary" className="">
+              <Pill data-testid="draft-text" color="primary" className={classes['draft-pill']}>
                 {draftText}
               </Pill>
             ) : null}
           </div>
           {url && isViewableImage ? (
-            <Image src={url} className="w-media-card h-media-card-image rounded-md" />
+            <Image src={url} className={classes.image} />
           ) : isDirectory ? (
-            <div
-              data-testid="card-file-icon"
-              className="
-                w-media-card
-                h-media-card-image
-                bg-gray-500
-                dark:bg-slate-700
-                text-gray-200
-                dark:text-slate-400
-                font-bold
-                flex
-                items-center
-                justify-center
-                text-5xl
-              "
-            >
-              <FolderOpenIcon className="w-24 h-24" />
+            <div data-testid="card-folder-icon" className={classes.folder}>
+              <FolderOpenIcon className={classes['folder-icon']} />
             </div>
           ) : (
-            <div
-              data-testid="card-file-icon"
-              className="
-                w-media-card
-                h-media-card-image
-                bg-gray-500
-                dark:bg-slate-700
-                text-gray-200
-                dark:text-slate-400
-                font-bold
-                flex
-                items-center
-                justify-center
-                text-5xl
-              "
-            >
+            <div data-testid="card-file-icon" className={classes.file}>
               <span>{type}</span>
             </div>
           )}
         </div>
-        <div
-          className="
-            p-3
-            w-full
-            flex
-            text-sm
-            font-bold
-            dark:font-semibold
-            text-slate-600
-            dark:text-gray-100
-            whitespace-nowrap
-            overflow-hidden
-          "
-        >
-          {shortenedText}
-        </div>
+        <div className={classes.text}>{shortenedText}</div>
       </div>
     </div>
   );

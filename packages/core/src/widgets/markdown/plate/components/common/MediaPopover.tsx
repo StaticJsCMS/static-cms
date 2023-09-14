@@ -1,10 +1,11 @@
-import PopperUnstyled from '@mui/base/PopperUnstyled';
+import { Popper } from '@mui/base/Popper';
 import { DeleteForever as DeleteForeverIcon } from '@styled-icons/material/DeleteForever';
 import { OpenInNew as OpenInNewIcon } from '@styled-icons/material/OpenInNew';
 import React, { useCallback, useMemo } from 'react';
 
 import Button from '@staticcms/core/components/common/button/Button';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 
 import type {
@@ -14,6 +15,15 @@ import type {
   MediaPath,
 } from '@staticcms/core/interface';
 import type { MouseEvent } from 'react';
+
+import './MediaPopover.css';
+
+const classes = generateClassNames('WidgetMarkdown_MediaPopover', [
+  'root',
+  'content',
+  'icon',
+  'divider',
+]);
 
 export interface MediaPopoverProps<T extends FileOrImageField | MarkdownField> {
   anchorEl: HTMLElement | null;
@@ -78,64 +88,33 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
   const id = open ? 'edit-popover' : undefined;
 
   return (
-    <PopperUnstyled
+    <Popper
       id={id}
       open={open}
-      component="div"
       placement="top"
       anchorEl={anchorEl}
       onFocus={handleFocus}
       onBlur={handleBlur}
       disablePortal
       tabIndex={0}
-      className="
-        absolute
-        max-h-60
-        overflow-auto
-        rounded-md
-        bg-white
-        p-1
-        text-base
-        shadow-md
-        ring-1
-        ring-black
-        ring-opacity-5
-        focus:outline-none
-        sm:text-sm
-        z-40
-        dark:bg-slate-700
-        dark:shadow-lg
-      "
+      slots={{ root: 'div' }}
+      className={classes.root}
     >
-      <div
-        key="edit-content"
-        contentEditable={false}
-        className="
-          flex
-          gap-0.5
-        "
-      >
+      <div key="edit-content" contentEditable={false} className={classes.content}>
         <Button onClick={handleOpenMediaLibrary} variant="text" size="small">
           {forImage ? 'Edit Image' : 'Edit Link'}
         </Button>
-        <div
-          className="
-            w-[1px]
-            border
-            border-gray-100
-            dark:border-slate-600
-          "
-        />
+        <div className={classes.divider} />
         {!forImage ? (
           <Button href={url} variant="text" size="small" onClick={noop}>
-            <OpenInNewIcon className="w-4 h-4" title="Open In New Tab" />
+            <OpenInNewIcon className={classes.icon} title="Open In New Tab" />
           </Button>
         ) : null}
         <Button onClick={onRemove} variant="text" size="small">
-          <DeleteForeverIcon className="w-4 h-4" title="Delete" />
+          <DeleteForeverIcon className={classes.icon} title="Delete" />
         </Button>
       </div>
-    </PopperUnstyled>
+    </Popper>
   );
 };
 

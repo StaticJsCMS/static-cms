@@ -5,12 +5,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { getIcon } from '@staticcms/core/lib/hooks/useIcon';
 import { getAdditionalLinks } from '@staticcms/core/lib/registry';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectCollections } from '@staticcms/core/reducers/selectors/collections';
 import { selectIsSearchEnabled } from '@staticcms/core/reducers/selectors/config';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import CollectionSearch from '../collections/CollectionSearch';
 import NestedCollection from '../collections/NestedCollection';
 import NavLink from './NavLink';
+import sidebarClasses from './Sidebar.classes';
 
 import type { Collection } from '@staticcms/core/interface';
 import type { FC } from 'react';
@@ -94,19 +96,8 @@ const SidebarContent: FC<TranslateProps> = ({ t }) => {
   );
 
   return (
-    <div
-      className="
-          px-3
-          py-4
-          h-full
-          w-full
-          overflow-y-auto
-          bg-white
-          dark:bg-slate-800
-          styled-scrollbars
-        "
-    >
-      <ul className="space-y-2">
+    <div className={classNames(sidebarClasses.content, 'CMS_Scrollbar_root')}>
+      <ul className={sidebarClasses.items}>
         {isSearchEnabled && (
           <CollectionSearch
             searchTerm={searchTerm}
@@ -117,7 +108,11 @@ const SidebarContent: FC<TranslateProps> = ({ t }) => {
         )}
         {collectionLinks}
         {links}
-        <NavLink key="Media" to="/media" icon={<PhotoIcon className="h-6 w-6" />}>
+        <NavLink
+          key="Media"
+          to="/media"
+          icon={<PhotoIcon className={sidebarClasses['media-icon']} />}
+        >
           {t('app.header.media')}
         </NavLink>
       </ul>

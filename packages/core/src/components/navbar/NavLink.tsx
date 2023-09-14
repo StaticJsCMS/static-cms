@@ -3,12 +3,29 @@ import React, { useMemo } from 'react';
 import { NavLink as BaseNavLink, useLocation } from 'react-router-dom';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
+import { buttonClasses } from '../common/button/useButtonClassNames';
 
 import type { MouseEventHandler, ReactNode } from 'react';
+
+import './NavLink.css';
+
+export const classes = generateClassNames('NavLink', [
+  'root',
+  'link',
+  'external',
+  'external-content',
+  'external-icon',
+  'active',
+  'content',
+  'icon',
+  'label',
+]);
 
 export interface BaseNavLinkProps {
   icon?: ReactNode;
   children: ReactNode;
+  className?: string;
   onClick?: MouseEventHandler;
 }
 
@@ -22,14 +39,14 @@ export interface NavInternalLinkProps extends BaseNavLinkProps {
 
 export type NavLinkProps = NavExternalLinkProps | NavInternalLinkProps;
 
-const linkClassNames = 'btn btn-text-primary w-full justify-start';
+const linkClassNames = `${buttonClasses.root} ${buttonClasses['text-primary']} ${classes.link}`;
 
-const NavLink = ({ icon, children, onClick, ...otherProps }: NavLinkProps) => {
+const NavLink = ({ icon, children, className, onClick, ...otherProps }: NavLinkProps) => {
   const content = useMemo(
     () => (
-      <div className="flex w-full gap-3 items-center">
-        <span className="w-6 h-6">{icon}</span>
-        <span className="flex-grow">{children}</span>
+      <div className={classes.content}>
+        <span className={classes.icon}>{icon}</span>
+        <span className={classes.label}>{children}</span>
       </div>
     ),
     [children, icon],
@@ -39,7 +56,7 @@ const NavLink = ({ icon, children, onClick, ...otherProps }: NavLinkProps) => {
 
   if ('href' in otherProps) {
     return (
-      <li>
+      <li className={classNames(classes.root, className)}>
         <a
           href={otherProps.href}
           target="_blank"
@@ -47,9 +64,9 @@ const NavLink = ({ icon, children, onClick, ...otherProps }: NavLinkProps) => {
           className={linkClassNames}
           onClick={onClick}
         >
-          <div className="flex justify-between w-full">
-            <div className="flex items-center justify-start">{content}</div>
-            <OpenInNewIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+          <div className={classes.external}>
+            <div className={classes['external-content']}>{content}</div>
+            <OpenInNewIcon className={classes['external-icon']} />
           </div>
         </a>
       </li>
@@ -57,21 +74,10 @@ const NavLink = ({ icon, children, onClick, ...otherProps }: NavLinkProps) => {
   }
 
   return (
-    <li>
+    <li className={classNames(classes.root, className)}>
       <BaseNavLink
         to={otherProps.to}
-        className={classNames(
-          linkClassNames,
-          pathname === otherProps.to &&
-            `
-              bg-blue-200/75
-              dark:bg-slate-700
-              hover:bg-slate-200
-              dark:hover:bg-slate-700/75
-              text-blue-700
-              dark:text-blue-400
-            `,
-        )}
+        className={classNames(linkClassNames, pathname === otherProps.to && classes.active)}
         onClick={onClick}
       >
         {content}

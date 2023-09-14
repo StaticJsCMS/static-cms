@@ -3,10 +3,13 @@ import React, { useMemo } from 'react';
 import EditorControl from '@staticcms/core/components/entry-editor/editor-control-pane/EditorControl';
 import useHasChildErrors from '@staticcms/core/lib/hooks/useHasChildErrors';
 import { compileStringTemplate } from '@staticcms/core/lib/widgets/stringTemplate';
+import widgetObjectClasses from './ObjectControl.classes';
 import ObjectFieldWrapper from './ObjectFieldWrapper';
 
 import type { ObjectField, ObjectValue, WidgetControlProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
+
+import './ObjectControl.css';
 
 const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
   label,
@@ -82,7 +85,7 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
 
   if (fields.length) {
     if (forList) {
-      return <>{renderedField}</>;
+      return <div className={widgetObjectClasses['list-root']}>{renderedField}</div>;
     }
 
     return (
@@ -95,6 +98,7 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
         hasChildErrors={hasChildErrors}
         hint={field.hint}
         disabled={disabled}
+        forSingleList={forSingleList}
       >
         {renderedField}
       </ObjectFieldWrapper>

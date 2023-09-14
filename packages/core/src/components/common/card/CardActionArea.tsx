@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import cardClasses from './Card.classes';
+
 import type { ReactNode } from 'react';
 
 interface CardActionAreaProps {
@@ -10,24 +12,7 @@ interface CardActionAreaProps {
 
 const CardActionArea = ({ to, children }: CardActionAreaProps) => {
   return (
-    <Link
-      to={to}
-      className="
-        h-full
-        w-full
-        relative
-        flex
-        flex-col
-        rounded-lg
-        justify-start
-        hover:bg-gray-200
-        dark:hover:bg-slate-700/70
-        focus:outline-none
-        focus:ring-4
-        focus:ring-gray-200
-        dark:focus:ring-slate-700
-      "
-    >
+    <Link to={to} className={cardClasses.actions}>
       {children}
     </Link>
   );

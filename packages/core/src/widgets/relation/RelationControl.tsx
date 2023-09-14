@@ -13,9 +13,11 @@ import Autocomplete from '@staticcms/core/components/common/autocomplete/Autocom
 import Field from '@staticcms/core/components/common/field/Field';
 import Pill from '@staticcms/core/components/common/pill/Pill';
 import CircularProgress from '@staticcms/core/components/common/progress/CircularProgress';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { fileSearch, sortByScore } from '@staticcms/core/lib/util/search.util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import {
   addFileTemplateFields,
   compileStringTemplate,
@@ -34,6 +36,18 @@ import type {
 } from '@staticcms/core/interface';
 import type { FC, ReactNode } from 'react';
 import type { ListChildComponentProps } from 'react-window';
+
+import './RelationControl.css';
+
+export const classes = generateClassNames('WidgetRelation', [
+  'root',
+  'error',
+  'required',
+  'disabled',
+  'for-single-list',
+  'values',
+  'loading',
+]);
 
 function Option({ index, style, data }: ListChildComponentProps<{ options: ReactNode[] }>) {
   return <div style={style}>{data.options[index]}</div>;
@@ -292,7 +306,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
     return selected;
   }, [internalValue, isMultiple, uniqueOptions]);
 
-  const ref = useRef<HTMLButtonElement | null>(null);
+  const ref = useRef<HTMLInputElement | null>(null);
 
   const handleChange = useCallback(
     (newValue: string | string[] | undefined) => {
@@ -334,12 +348,19 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
       forSingleList={forSingleList}
       cursor="text"
       disabled={disabled}
+      rootClassName={classNames(
+        classes.root,
+        disabled && classes.disabled,
+        field.required !== false && classes.required,
+        hasErrors && classes.error,
+        forSingleList && classes['for-single-list'],
+      )}
     >
       <Autocomplete
         label={
           <>
             {Array.isArray(selectedValue) && selectedValue.length > 0 ? (
-              <div className="flex flex-wrap gap-2 p-2 pr-0 w-relation-widget-label">
+              <div className={classes.values}>
                 {selectedValue.map(selectValue => {
                   const option = uniqueOptionsByValue[selectValue];
                   return (
@@ -353,14 +374,14 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
             {loading ? (
               <CircularProgress
                 key="loading-indicator"
-                className="absolute inset-y-0 right-4 flex items-center pr-2"
+                className={classes.loading}
                 data-testid="relation-loading-indicator"
                 size="small"
               />
             ) : null}
           </>
         }
-        ref={ref}
+        inputRef={ref}
         value={selectedValue}
         options={uniqueOptions}
         disabled={disabled}

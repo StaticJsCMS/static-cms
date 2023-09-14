@@ -6,6 +6,8 @@ import { translate } from 'react-polyglot';
 
 import { logoutUser } from '@staticcms/core/actions/auth';
 import { changeTheme } from '@staticcms/core/actions/globalUI';
+import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectUser } from '@staticcms/core/reducers/selectors/auth';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import Menu from '../common/menu/Menu';
@@ -16,15 +18,26 @@ import Switch from '../common/switch/Switch';
 import type { TranslatedProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC, MouseEvent } from 'react';
 
+import './SettingsDropdown.css';
+
+export const classes = generateClassNames('SettingsDropdown', [
+  'root',
+  'in-editor',
+  'avatar-image',
+  'avatar-icon',
+  'sr-label',
+  'theme-toggle',
+]);
+
 interface AvatarImageProps {
   imageUrl: string | undefined;
 }
 
 const AvatarImage = ({ imageUrl }: AvatarImageProps) => {
   return imageUrl ? (
-    <img className="w-9 h-9 rounded-full" src={imageUrl} />
+    <img className={classes['avatar-image']} src={imageUrl} />
   ) : (
-    <PersonIcon className="w-6 h-6" />
+    <PersonIcon className={classes['avatar-icon']} />
   );
 };
 
@@ -81,18 +94,18 @@ const SettingsDropdown: FC<TranslatedProps<SettingsDropdownProps>> = ({ inEditor
     <Menu
       label={
         <>
-          <span className="sr-only">Open user menu</span>
+          <span className={classes['sr-label']}>Open user menu</span>
           <AvatarImage imageUrl={user?.avatar_url} />
         </>
       }
       variant="outlined"
       rounded={!user?.avatar_url || 'no-padding'}
       hideDropdownIcon
-      rootClassName={inEditor ? 'hidden md:flex' : ''}
+      rootClassName={classNames(classes.root, inEditor && classes['in-editor'])}
     >
       <MenuGroup>
         <MenuItemButton key="dark-mode" onClick={handleToggleDarkMode} startIcon={MoonIcon}>
-          <div className="flex justify-between w-full">
+          <div className={classes['theme-toggle']}>
             {t('ui.settingsDropdown.darkMode')}
             <Switch value={isDarkMode} onChange={handleToggleDarkMode} />
           </div>

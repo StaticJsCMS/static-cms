@@ -1,7 +1,12 @@
 import Drawer from '@mui/material/Drawer';
 import React, { useMemo } from 'react';
 
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import SidebarContent from './SidebarContent';
+
+import './NavigationDrawer.css';
+
+export const classes = generateClassNames('NavigationDrawer', ['root', 'content']);
 
 const DRAWER_WIDTH = 320;
 
@@ -25,9 +30,12 @@ const NavigationDrawer = ({ mobileOpen, onMobileOpenToggle }: NavigationDrawerPr
       ModalProps={{
         keepMounted: true, // Better open performance on mobile.
       }}
+      slotProps={{
+        root: {
+          className: classes.root,
+        },
+      }}
       sx={{
-        width: '80%',
-        maxWidth: DRAWER_WIDTH,
         '& .MuiBackdrop-root': {
           width: '100%',
         },
@@ -38,7 +46,7 @@ const NavigationDrawer = ({ mobileOpen, onMobileOpenToggle }: NavigationDrawerPr
         },
       }}
     >
-      <div onClick={onMobileOpenToggle} className="w-full h-full">
+      <div onClick={onMobileOpenToggle} className={classes.content}>
         <SidebarContent />
       </div>
     </Drawer>

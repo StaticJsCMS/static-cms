@@ -1,0 +1,79 @@
+.CMS_WidgetFileImage_root {
+  @apply relative
+    border-2
+    transition-colors
+    border-transparent;
+
+  &.CMS_WidgetFileImage_drag-over-active {
+    @apply border-blue-500;
+
+    & .CMS_WidgetFileImage_drop-area {
+      @apply opacity-100;
+    }
+  }
+
+  &.CMS_WidgetFileImage_for-image {
+    & .CMS_WidgetFileImage_content {
+      @apply pr-3;
+    }
+  }
+
+  &:not(.CMS_WidgetFileImage_multiple) {
+    & .CMS_WidgetFileImage_content {
+      @apply pr-3;
+    }
+  }
+}
+.CMS_WidgetFileImage_wrapper {
+  @apply -m-0.5;
+}
+
+.CMS_WidgetFileImage_drop-area {
+  @apply absolute
+    inset-0
+    flex
+    items-center
+    justify-center
+    pointer-events-none
+    font-bold
+    text-blue-500
+    bg-white/75
+    dark:text-blue-400
+    dark:bg-slate-800/75
+    transition-opacity
+    opacity-0;
+}
+
+.CMS_WidgetFileImage_for-image {
+}
+
+.CMS_WidgetFileImage_image-grid {
+  @apply grid
+    grid-cols-images
+    gap-2;
+}
+
+.CMS_WidgetFileImage_empty-content {
+  @apply flex
+    flex-col
+    gap-2
+    px-3
+    pt-2
+    pb-4;
+}
+
+.CMS_WidgetFileImage_content {
+  @apply flex
+    flex-col
+    gap-4
+    pl-3
+    pt-2
+    pb-4;
+}
+
+.CMS_WidgetFileImage_actions {
+  @apply flex
+    gap-2
+    flex-col
+    xs:flex-row;
+}

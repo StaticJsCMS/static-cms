@@ -19,30 +19,6 @@ describe(BooleanControl.name, () => {
 
     const label = getByTestId('label');
     expect(label.textContent).toBe('I am a label');
-    expect(label).toHaveClass('text-slate-500');
-
-    const field = getByTestId('inline-field');
-    expect(field).toHaveClass('group/active');
-
-    const fieldWrapper = getByTestId('inline-field-wrapper');
-    expect(fieldWrapper).not.toHaveClass('mr-14');
-
-    // Boolean Widget uses pointer cursor
-    expect(label).toHaveClass('cursor-pointer');
-    expect(field).toHaveClass('cursor-pointer');
-
-    // Boolean Widget uses inline label layout, with bottom padding on field
-    expect(label).not.toHaveClass('px-3', 'pt-3');
-    expect(field).toHaveClass('pb-3');
-  });
-
-  it('should render as single list item', () => {
-    const { getByTestId } = renderControl({ label: 'I am a label', forSingleList: true });
-
-    expect(getByTestId('switch-input')).toBeInTheDocument();
-
-    const fieldWrapper = getByTestId('inline-field-wrapper');
-    expect(fieldWrapper).toHaveClass('mr-14');
   });
 
   it('should only use prop value as initial value', async () => {
@@ -101,12 +77,6 @@ describe(BooleanControl.name, () => {
 
     const error = getByTestId('error');
     expect(error.textContent).toBe('i am an error');
-
-    const field = getByTestId('inline-field');
-    expect(field).not.toHaveClass('group/active');
-
-    const label = getByTestId('label');
-    expect(label).toHaveClass('text-red-500');
   });
 
   it('should focus input on field click', async () => {

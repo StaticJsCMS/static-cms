@@ -2,14 +2,26 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import Field from '@staticcms/core/components/common/field/Field';
 import Switch from '@staticcms/core/components/common/switch/Switch';
+import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { BooleanField, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC } from 'react';
+
+const classes = generateClassNames('WidgetBoolean', [
+  'root',
+  'error',
+  'required',
+  'disabled',
+  'for-single-list',
+  'input',
+]);
 
 const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
   value,
   label,
   errors,
+  hasErrors,
   disabled,
   field,
   forSingleList,
@@ -41,8 +53,21 @@ const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
       hint={field.hint}
       forSingleList={forSingleList}
       disabled={disabled}
+      rootClassName={classNames(
+        classes.root,
+        disabled && classes.disabled,
+        field.required !== false && classes.required,
+        hasErrors && classes.error,
+        forSingleList && classes['for-single-list'],
+      )}
     >
-      <Switch ref={ref} value={internalValue} disabled={disabled} onChange={handleChange} />
+      <Switch
+        ref={ref}
+        value={internalValue}
+        disabled={disabled}
+        onChange={handleChange}
+        rootClassName={classes.input}
+      />
     </Field>
   );
 };

@@ -1,0 +1,9 @@
+.CMS_LocaleDropdown_root {
+}
+
+.CMS_LocaleDropdown_no-edit {
+  @apply border
+    border-transparent
+    text-slate-500
+    dark:text-slate-400;
+}

@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { FrameContextConsumer } from 'react-frame-component';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import EditorPreviewContent from './EditorPreviewContent';
 
 import type {
@@ -11,6 +12,10 @@ import type {
   UnknownField,
 } from '@staticcms/core/interface';
 import type { FC } from 'react';
+
+import './PreviewFrameContent.css';
+
+export const classes = generateClassNames('PreviewFrameContent', ['root', 'content']);
 
 interface PreviewFrameContentProps {
   previewComponent: TemplatePreviewComponent<ObjectValue, UnknownField>;
@@ -37,13 +42,8 @@ const PreviewFrameContent: FC<PreviewFrameContentProps> = ({ previewComponent, p
 
         return (
           <ScrollSyncPane key="preview-frame-scroll-sync" attachTo={ref}>
-            <div>
-              <div
-                className="
-                  text-gray-800
-                  dark:text-gray-100
-                "
-              >
+            <div className={classes.root}>
+              <div className={classes.content}>
                 <EditorPreviewContent
                   key="preview-frame-content"
                   previewComponent={previewComponent}

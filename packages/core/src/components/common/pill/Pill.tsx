@@ -1,8 +1,19 @@
 import React, { useMemo } from 'react';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { FC, ReactNode } from 'react';
+
+import './Pill.css';
+
+export const classes = generateClassNames('Pill', [
+  'root',
+  'no-wrap',
+  'primary',
+  'default',
+  'disabled',
+]);
 
 interface PillProps {
   children: ReactNode | ReactNode[];
@@ -22,48 +33,18 @@ const Pill: FC<PillProps> = ({
   const colorClassNames = useMemo(() => {
     switch (color) {
       case 'primary':
-        return disabled
-          ? `
-              bg-blue-300/75
-              text-gray-100/75
-              dark:bg-blue-700/25
-              dark:text-gray-500
-            `
-          : `
-              bg-blue-700
-              text-gray-100
-              dark:bg-blue-700
-              dark:text-gray-100
-            `;
+        return classes.primary;
       default:
-        return disabled
-          ? `
-              bg-gray-100
-              text-gray-400/75
-              dark:bg-gray-800/75
-              dark:text-gray-500
-            `
-          : `
-              bg-gray-200
-              text-gray-800
-              dark:bg-gray-700
-              dark:text-gray-100
-            `;
+        return classes.default;
     }
-  }, [color, disabled]);
+  }, [color]);
 
   return (
     <span
       className={classNames(
-        `
-          text-xs
-          font-medium
-          px-3
-          py-1
-          rounded-lg
-          truncate
-        `,
-        noWrap && 'whitespace-nowrap',
+        classes.root,
+        noWrap && classes['no-wrap'],
+        disabled && classes.disabled,
         colorClassNames,
         className,
       )}

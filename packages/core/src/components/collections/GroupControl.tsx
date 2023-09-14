@@ -2,12 +2,26 @@ import { Check as CheckIcon } from '@styled-icons/material/Check';
 import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
 
 import type { GroupMap, TranslatedProps, ViewGroup } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
+
+import './GroupControl.css';
+
+export const classes = generateClassNames('GroupControl', [
+  'root',
+  'option',
+  'list',
+  'list-label',
+  'list-option',
+  'list-option-label',
+  'list-option-checked-icon',
+  'list-option-not-checked',
+]);
 
 export interface GroupControlProps {
   group: Record<string, GroupMap> | undefined;
@@ -36,39 +50,21 @@ const GroupControl = ({
 
   if (variant === 'list') {
     return (
-      <div key="filter-by-list" className="flex flex-col gap-2">
-        <h3
-          className="
-            text-lg
-            font-bold
-            text-gray-800
-            dark:text-white
-          "
-        >
-          {t('collection.collectionTop.groupBy')}
-        </h3>
+      <div key="filter-by-list" className={classes.list}>
+        <h3 className={classes['list-label']}>{t('collection.collectionTop.groupBy')}</h3>
         {viewGroups.map(viewGroup => {
           const active = Boolean(viewGroup.id && group[viewGroup?.id]?.active) ?? false;
           return (
             <div
               key={viewGroup.id}
-              className="
-                ml-0.5
-                font-medium
-                flex
-                items-center
-                text-gray-800
-                dark:text-gray-300
-              "
+              className={classes['list-option']}
               onClick={handleGroupClick(viewGroup)}
             >
-              <label className="ml-2 text-md font-medium text-gray-800 dark:text-gray-300">
-                {viewGroup.label}
-              </label>
+              <label className={classes['list-option-label']}>{viewGroup.label}</label>
               {active ? (
-                <CheckIcon key="checkmark" className="ml-2 w-6 h-6 text-blue-500" />
+                <CheckIcon key="checkmark" className={classes['list-option-checked-icon']} />
               ) : (
-                <div key="not-checked" className="ml-2 w-6 h-6" />
+                <div key="not-checked" className={classes['list-option-not-checked']} />
               )}
             </div>
           );
@@ -81,7 +77,7 @@ const GroupControl = ({
     <Menu
       label={t('collection.collectionTop.groupBy')}
       variant={activeGroup ? 'contained' : 'outlined'}
-      rootClassName="hidden lg:block"
+      rootClassName={classes.root}
     >
       <MenuGroup>
         {viewGroups.map(viewGroup => (
@@ -89,6 +85,7 @@ const GroupControl = ({
             key={viewGroup.id}
             onClick={() => onGroupClick?.(viewGroup)}
             endIcon={viewGroup.id === activeGroup?.id ? CheckIcon : undefined}
+            className={classes.option}
           >
             {viewGroup.label}
           </MenuItemButton>

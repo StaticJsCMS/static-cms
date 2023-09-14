@@ -1,10 +1,14 @@
 import React from 'react';
 
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
+
 import type { RelationField, WidgetPreviewProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
+const classes = generateClassNames('WidgetRelationPreview', ['root']);
+
 const RelationPreview: FC<WidgetPreviewProps<string | string[], RelationField>> = ({ value }) => {
-  return <div>{value}</div>;
+  return <div className={classes.root}>{value}</div>;
 };
 
 export default RelationPreview;

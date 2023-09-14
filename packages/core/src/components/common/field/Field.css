@@ -1,0 +1,59 @@
+.CMS_Field_root {
+  @apply relative
+    flex
+    items-center
+    gap-2
+    border-b
+    border-slate-400
+    focus-within:border-blue-800
+    dark:focus-within:border-blue-100;
+
+  &:not(.CMS_Field_disabled):not(.CMS_Field_no-highlight) {
+    @apply focus-within:bg-slate-100
+      dark:focus-within:bg-slate-800
+      hover:bg-slate-100
+      dark:hover:bg-slate-800;
+  }
+
+  &:not(.CMS_Field_no-padding) {
+    @apply pb-3;
+
+    & > .CMS_Field_end-adornment {
+      @apply -mb-3;
+    }
+  }
+}
+
+.CMS_Field_cursor-pointer {
+  @apply cursor-pointer;
+}
+
+.CMS_Field_cursor-text {
+  @apply cursor-text;
+}
+
+.CMS_Field_cursor-default {
+  @apply cursor-default;
+}
+
+.CMS_Field_wrapper {
+  @apply flex
+    flex-col
+    w-full;
+
+  &.CMS_Field_for-single-list {
+    @apply mr-14;
+  }
+}
+
+.CMS_Field_inline-wrapper {
+  @apply flex
+    items-center
+    justify-center
+    p-3
+    pb-0;
+}
+
+.CMS_Field_end-adornment {
+  @apply pr-2;
+}

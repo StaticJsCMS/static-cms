@@ -1,0 +1,21 @@
+.CMS_CircularProgress_svg {
+  @apply mr-2
+    text-gray-200
+    animate-spin
+    dark:text-gray-600
+    fill-blue-600;
+
+  &.CMS_CircularProgress_md {
+    @apply w-8
+      h-8;
+  }
+
+  &.CMS_CircularProgress_sm {
+    @apply w-5
+      h-5;
+  }
+}
+
+.CMS_CircularProgress_sr-label {
+  @apply sr-only;
+}

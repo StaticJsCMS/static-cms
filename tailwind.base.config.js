@@ -37,6 +37,7 @@ module.exports = {
       },
       maxWidth: {
         "media-search": "400px",
+        "collection-header": "calc(100% - 32px)",
       },
       boxShadow: {
         sidebar: "0 10px 15px 18px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",

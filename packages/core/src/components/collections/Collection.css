@@ -1,0 +1,87 @@
+.CMS_Collection_root {
+  @apply flex
+    flex-col
+    h-full
+    px-5
+    pt-4
+    overflow-hidden;
+}
+
+.CMS_Collection_content {
+  @apply flex
+    items-center
+    mb-4
+    flex-row
+    gap-4
+    sm:gap-0
+    flex-wrap
+    md:flex-nowrap;
+}
+
+.CMS_Collection_search-query {
+  @apply flex-grow;
+}
+
+.CMS_Collection_description {
+  @apply flex
+    mb-4;
+}
+
+.CMS_Collection_description-card {
+  @apply flex-grow
+    px-3.5
+    py-2.5
+    text-sm;
+}
+
+.CMS_Collection_controls {
+  @apply flex
+    items-center
+    relative
+    z-20
+    md:flex-grow-0
+    flex-grow
+    justify-end
+    gap-1.5
+    sm:w-auto
+    lg:gap-2;
+}
+
+.CMS_Collection_header-wrapper {
+  @apply flex
+    gap-2
+    sm:gap-2
+    md:gap-4
+    md:w-full
+    justify-normal
+    xs:justify-between
+    sm:justify-normal
+    truncate;
+}
+
+.CMS_Collection_header {
+  @apply text-xl
+    font-semibold
+    flex
+    items-center
+    text-gray-800
+    dark:text-gray-300
+    gap-2
+    md:w-auto;
+}
+
+.CMS_Collection_header-icon {
+  @apply flex
+    items-center;
+}
+
+.CMS_Collection_header-label {
+  @apply max-w-collection-header
+    md:flex-grow
+    truncate;
+}
+
+.CMS_Collection_new-entry-button {
+  @apply hidden
+    md:flex;
+}

@@ -2,9 +2,11 @@ import { FileUpload as FileUploadIcon } from '@styled-icons/material/FileUpload'
 import React, { useCallback, useRef } from 'react';
 import { translate } from 'react-polyglot';
 
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectDeleting, selectPersisting } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import useButtonClassNames from '../../common/button/useButtonClassNames';
+import mediaLibraryClasses from './MediaLibrary.classes';
 
 import type { TranslatedProps } from '@staticcms/core/interface';
 import type { ChangeEventHandler, FC, KeyboardEvent } from 'react';
@@ -36,11 +38,11 @@ const FileUploadButton: FC<TranslatedProps<FileUploadButtonProps>> = ({
     <label
       ref={ref}
       role="button"
-      className={`${buttonClasses} cursor-pointer`}
+      className={classNames(mediaLibraryClasses['upload-button'], buttonClasses)}
       tabIndex={0}
       onKeyUp={handleOnKeyUp}
     >
-      <FileUploadIcon className="w-5 h-5 mr-2" />
+      <FileUploadIcon className={mediaLibraryClasses['upload-button-icon']} />
       {isPersisting
         ? t('mediaLibrary.mediaLibraryModal.uploading')
         : t('mediaLibrary.mediaLibraryModal.upload')}
@@ -51,6 +53,7 @@ const FileUploadButton: FC<TranslatedProps<FileUploadButtonProps>> = ({
         accept={imagesOnly ? 'image/*' : '*/*'}
         onChange={onChange}
         disabled={isDeleting || isPersisting}
+        className={mediaLibraryClasses['upload-button-input']}
       />
     </label>
   );

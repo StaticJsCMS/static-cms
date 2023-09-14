@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Frame from 'react-frame-component';
 
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
@@ -11,6 +12,10 @@ import CodeBlockFrame from './CodeBlockFrame';
 import type { MdCodeBlockElement, MdValue } from '@staticcms/markdown';
 import type { PlateRenderElementProps, TCodeBlockElement } from '@udecode/plate';
 import type { FC, MutableRefObject, RefObject } from 'react';
+
+import './CodeBlockElement.css';
+
+const classes = generateClassNames('WidgetMarkdown_CodeBlock', ['root', 'language-input']);
 
 const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>> = props => {
   const { attributes, nodeProps, element, editor, children } = props;
@@ -90,9 +95,7 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
         {...attributes}
         {...nodeProps}
         contentEditable={false}
-        className="
-          my-2
-        "
+        className={classes.root}
       >
         <input
           id={id}
@@ -102,20 +105,7 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
             const path = findNodePath(editor, element);
             path && setNodes<TCodeBlockElement>(editor, { lang: value }, { at: path });
           }}
-          className="
-            w-full
-            rounded-t-md
-            border
-            border-gray-100
-            border-b-white
-            px-2
-            py-1
-            h-6
-            dark:border-slate-700
-            dark:border-b-slate-800
-            dark:bg-slate-800
-            outline-none
-          "
+          className={classes['language-input']}
         />
         <div>
           <Frame

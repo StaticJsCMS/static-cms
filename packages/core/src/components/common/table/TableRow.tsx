@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import tableClasses from './Table.classes';
 
 import type { KeyboardEvent, ReactNode } from 'react';
 
@@ -28,22 +29,7 @@ const TableRow = ({ children, className, to }: TableRowProps) => {
 
   return (
     <tr
-      className={classNames(
-        `
-          border-t
-          first:border-t-0
-          border-gray-100
-          dark:border-gray-700
-          bg-white
-          hover:bg-slate-50
-          dark:bg-slate-800
-          dark:hover:bg-slate-700
-          focus:outline-none
-          focus:bg-gray-100
-          focus:dark:bg-slate-700
-        `,
-        className,
-      )}
+      className={classNames(tableClasses['body-row'], className)}
       tabIndex={to ? 0 : -1}
       onKeyDown={handleKeyDown}
     >

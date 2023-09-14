@@ -1,24 +1,15 @@
 import React from 'react';
 
+import mediaLibraryClasses from './MediaLibrary.classes';
+
 export interface EmptyMessageProps {
   content: string;
 }
 
 const EmptyMessage = ({ content }: EmptyMessageProps) => {
   return (
-    <div
-      className="
-        relative
-        flex-grow
-        p-5
-        pb-20
-        flex
-        items-center
-        justify-center
-        dark:text-gray-100
-      "
-    >
-      <h3 className="">{content}</h3>
+    <div className={mediaLibraryClasses.empty}>
+      <h3>{content}</h3>
     </div>
   );
 };

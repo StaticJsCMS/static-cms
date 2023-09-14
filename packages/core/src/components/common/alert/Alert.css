@@ -1,0 +1,26 @@
+.CMS_Alert_root {
+  @apply w-[50%]
+    min-w-[300px]
+    max-w-[600px];
+}
+
+.CMS_Alert_title {
+  @apply px-6
+    py-4
+    text-xl;
+}
+
+.CMS_Alert_content {
+  @apply px-6
+    pb-4
+    text-sm
+    text-slate-500
+    dark:text-slate-400;
+}
+
+.CMS_Alert_actions {
+  @apply p-2
+    flex
+    justify-end
+    gap-2;
+}

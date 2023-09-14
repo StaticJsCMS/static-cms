@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Image from '../image/Image';
+import cardClasses from './Card.classes';
 
 import type {
   BaseField,
@@ -31,7 +32,7 @@ const CardMedia = <EF extends BaseField = UnknownField>({
 }: CardMediaProps<EF>) => {
   return (
     <Image
-      className="rounded-t-lg bg-cover bg-no-repeat bg-center w-full object-cover"
+      className={cardClasses.media}
       style={{
         width: width ? `${width}px` : undefined,
         height: height ? `${height}px` : undefined,

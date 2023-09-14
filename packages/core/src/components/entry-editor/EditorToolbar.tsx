@@ -13,16 +13,33 @@ import { translate } from 'react-polyglot';
 import { deleteLocalBackup, loadEntry } from '@staticcms/core/actions/entries';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectAllowDeletion } from '@staticcms/core/lib/util/collection.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
+import IconButton from '../common/button/IconButton';
 import confirm from '../common/confirm/Confirm';
 import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
-import IconButton from '../common/button/IconButton';
 
 import type { Collection, EditorPersistOptions, TranslatedProps } from '@staticcms/core/interface';
 import type { FC, MouseEventHandler } from 'react';
+
+import './EditorToolbar.css';
+
+export const classes = generateClassNames('EditorToolbar', [
+  'root',
+  'more-menu',
+  'more-menu-button',
+  'more-menu-label-icon',
+  'preview-toggle',
+  'preview-toggle-icon',
+  'delete-button',
+  'delete-button-icon',
+  'publish-button',
+  'publish-button-icon',
+  'publish-button-label',
+]);
 
 export interface EditorToolbarProps {
   isPersisting?: boolean;
@@ -175,22 +192,14 @@ const EditorToolbar = ({
 
   return useMemo(
     () => (
-      <div
-        className={classNames(
-          `
-            flex
-            gap-2
-          `,
-          className,
-        )}
-      >
+      <div className={classNames(classes.root, className)}>
         {showI18nToggle || showPreviewToggle || canDelete ? (
           <Menu
             key="extra-menu"
-            label={<MoreVertIcon className="w-5 h-5" />}
+            label={<MoreVertIcon className={classes['more-menu-label-icon']} />}
             variant="text"
-            rootClassName="hidden lg:flex"
-            buttonClassName="px-1.5"
+            rootClassName={classes['more-menu']}
+            buttonClassName={classes['more-menu-button']}
             hideDropdownIcon
           >
             <MenuGroup>
@@ -207,7 +216,7 @@ const EditorToolbar = ({
                 <>
                   <MenuItemButton
                     onClick={togglePreview}
-                    disabled={isLoading || i18nActive}
+                    disabled={isLoading}
                     startIcon={EyeIcon}
                     endIcon={previewActive && !i18nActive ? CheckIcon : undefined}
                   >
@@ -241,9 +250,9 @@ const EditorToolbar = ({
             title={t('editor.editorInterface.preview')}
             variant={showMobilePreview ? 'contained' : 'text'}
             onClick={onMobilePreviewToggle}
-            className="flex lg:hidden"
+            className={classes['preview-toggle']}
           >
-            <EyeIcon className="w-5 h-5" />
+            <EyeIcon className={classes['preview-toggle-icon']} />
           </IconButton>
         ) : null}
         {canDelete ? (
@@ -253,9 +262,9 @@ const EditorToolbar = ({
             color="error"
             variant="text"
             onClick={onDelete}
-            className="flex lg:hidden"
+            className={classes['delete-button']}
           >
-            <TrashIcon className="w-5 h-5" />
+            <TrashIcon className={classes['delete-button-icon']} />
           </IconButton>
         ) : null}
         <Menu
@@ -265,8 +274,9 @@ const EditorToolbar = ({
           color={isPublished ? 'success' : 'primary'}
           disabled={isLoading || (menuItems.length == 1 && menuItems[0].length === 0)}
           startIcon={PublishIcon}
-          iconClassName="flex !md:hidden"
-          labelClassName="hidden md:block"
+          rootClassName={classes['publish-button']}
+          iconClassName={classes['publish-button-icon']}
+          labelClassName={classes['publish-button-label']}
           hideDropdownIconOnMobile
         >
           {menuItems.map((group, index) => (

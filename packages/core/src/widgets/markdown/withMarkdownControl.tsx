@@ -1,9 +1,11 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import Button from '@staticcms/core/components/common/button/Button';
 import Field from '@staticcms/core/components/common/field/Field';
 import TextArea from '@staticcms/core/components/common/text-field/TextArea';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import useDebounce from '../../lib/hooks/useDebounce';
+import widgetMarkdownClasses from './MarkdownControl.classes';
 import PlateEditor from './plate/PlateEditor';
 import useMarkdownToSlate from './plate/hooks/useMarkdownToSlate';
 import serializeMarkdown from './plate/serialization/serializeMarkdown';
@@ -11,6 +13,8 @@ import serializeMarkdown from './plate/serialization/serializeMarkdown';
 import type { MarkdownField, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC } from 'react';
 import type { MdValue } from './plate/plateTypes';
+
+import './MarkdownControl.css';
 
 export interface WithMarkdownControlProps {
   useMdx: boolean;
@@ -89,7 +93,10 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
       setShowRaw(false);
     }, []);
 
-    const [slateValue, loaded] = useMarkdownToSlate(internalValue, { useMdx, unload: showRaw });
+    const [slateValue, loaded] = useMarkdownToSlate(internalValue, {
+      useMdx,
+      mode: showRaw ? 'raw' : 'rich',
+    });
 
     const richEditor = useMemo(
       () =>
@@ -121,9 +128,12 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
         hasFocus,
         loaded,
         slateValue,
+        internalValue,
         showRaw,
       ],
     );
+
+    const textAreaRef = useRef<HTMLInputElement>(null);
 
     return (
       <Field
@@ -133,21 +143,29 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
         hint={field.hint}
         noHightlight
         disabled={disabled}
+        rootClassName={classNames(
+          widgetMarkdownClasses.root,
+          disabled && widgetMarkdownClasses.disabled,
+          field.required !== false && widgetMarkdownClasses.required,
+          hasErrors && widgetMarkdownClasses.error,
+          forSingleList && widgetMarkdownClasses['for-single-list'],
+        )}
       >
         {showRaw ? (
           <TextArea
             key="raw-editor"
+            ref={textAreaRef}
             value={internalValue}
             disabled={disabled}
             onChange={handleRawOnChange}
             placeholder={t('editor.editorWidgets.markdown.type')}
-            className="mt-2"
+            rootClassName={widgetMarkdownClasses['raw-editor']}
           />
         ) : (
           richEditor
         )}
         {field.show_raw ? (
-          <div className="px-3 mt-2 flex gap-2">
+          <div className={widgetMarkdownClasses.controls}>
             <Button
               data-testid="rich-editor"
               size="small"

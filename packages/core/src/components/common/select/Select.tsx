@@ -1,13 +1,30 @@
-import SelectUnstyled from '@mui/base/SelectUnstyled';
+import { Select as BaseSelect } from '@mui/base/Select';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@styled-icons/material/KeyboardArrowDown';
 import React, { forwardRef, useCallback, useState } from 'react';
 
 import useElementSize from '@staticcms/core/lib/hooks/useElementSize';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import Option from './Option';
 
 import type { FocusEvent, KeyboardEvent, MouseEvent, ReactNode, Ref } from 'react';
+
+import './Select.css';
+
+export const classes = generateClassNames('Select', [
+  'root',
+  'disabled',
+  'input',
+  'value',
+  'label',
+  'label-text',
+  'dropdown',
+  'dropdown-icon',
+  'input',
+  'popper',
+]);
 
 export interface Option {
   label: string;
@@ -31,6 +48,7 @@ export interface SelectProps {
   options: (number | string)[] | Option[];
   required?: boolean;
   disabled?: boolean;
+  rootClassName?: string;
   onChange: SelectChangeEventHandler;
   onOpenChange?: (open: boolean) => void;
 }
@@ -44,6 +62,7 @@ const Select = forwardRef(
       options,
       required = false,
       disabled,
+      rootClassName,
       onChange,
       onOpenChange,
     }: SelectProps,
@@ -82,120 +101,79 @@ const Select = forwardRef(
       [onChange, value],
     );
 
-    return (
-      <div className="relative w-full">
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        <SelectUnstyled<any>
-          renderValue={() => {
-            return (
-              <div className="w-full">
-                <div className="flex flex-start w-select-widget-label">
-                  <span className="truncate">{label ?? placeholder}</span>
-                </div>
-                <span
-                  className="
-                    pointer-events-none
-                    absolute
-                    inset-y-0
-                    right-0
-                    flex
-                    items-center
-                    pr-2
-                  "
-                >
-                  <KeyboardArrowDownIcon
-                    className={classNames(
-                      `
-                        h-5
-                        w-5
-                        text-gray-400
-                      `,
-                      disabled &&
-                        `
-                          text-gray-300/75
-                          dark:text-gray-600/75
-                        `,
-                    )}
-                    aria-hidden="true"
-                  />
-                </span>
-              </div>
-            );
-          }}
-          slotProps={{
-            root: {
-              ref,
-              className: classNames(
-                `
-                  flex
-                  items-center
-                  text-sm
-                  font-medium
-                  relative
-                  min-h-8
-                  px-4
-                  py-1.5
-                  w-full
-                  text-gray-800
-                  dark:text-gray-100
-                `,
-                disabled &&
-                  `
-                    text-gray-300/75
-                    dark:text-gray-600/75
-                  `,
-              ),
-            },
-            popper: {
-              className: `
-                max-h-60
-                overflow-auto
-                rounded-md
-                bg-white
-                py-1
-                text-base
-                shadow-md
-                ring-1
-                ring-black
-                ring-opacity-5
-                focus:outline-none
-                sm:text-sm
-                z-[100]
-                dark:bg-slate-700
-                dark:shadow-lg
-              `,
-              style: { width: ref ? width : 'auto' },
-              disablePortal: false,
-            },
-          }}
-          value={value}
-          disabled={disabled}
-          onChange={handleChange}
-          listboxOpen={open}
-          onListboxOpenChange={handleOpenChange}
-          data-testid="select-input"
-        >
-          {!Array.isArray(value) && !required ? (
-            <Option value="" selectedValue={value}>
-              <i>None</i>
-            </Option>
-          ) : null}
-          {options.map((option, index) => {
-            const { label: optionLabel, value: optionValue } = getOptionLabelAndValue(option);
+    const handleClick = useCallback(
+      (event: MouseEvent) => {
+        event.stopPropagation();
+        event.preventDefault();
+        handleOpenChange(!open);
+      },
+      [handleOpenChange, open],
+    );
 
-            return (
-              <Option
-                key={index}
-                value={optionValue}
-                selectedValue={value}
-                data-testid={`select-option-${optionValue}`}
-              >
-                {optionLabel}
+    const handleClickAway = useCallback(() => {
+      handleOpenChange(false);
+    }, [handleOpenChange]);
+
+    return (
+      <ClickAwayListener onClickAway={handleClickAway}>
+        <div className={classNames(classes.root, rootClassName)}>
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          <BaseSelect<any>
+            renderValue={() => {
+              return (
+                <div className={classes.value}>
+                  <div className={classes.label}>
+                    <span className={classes['label-text']}>{label ?? placeholder}</span>
+                  </div>
+                  <span className={classes.dropdown}>
+                    <KeyboardArrowDownIcon
+                      className={classes['dropdown-icon']}
+                      aria-hidden="true"
+                    />
+                  </span>
+                </div>
+              );
+            }}
+            ref={ref}
+            onClick={handleClick}
+            slotProps={{
+              root: {
+                className: classes.input,
+              },
+              popper: {
+                className: classes.popper,
+                style: { width: ref ? width : 'auto' },
+                disablePortal: false,
+              },
+            }}
+            value={value}
+            disabled={disabled}
+            onChange={handleChange}
+            listboxOpen={open}
+            data-testid="select-input"
+          >
+            {!Array.isArray(value) && !required ? (
+              <Option value="" selectedValue={value}>
+                <i>None</i>
               </Option>
-            );
-          })}
-        </SelectUnstyled>
-      </div>
+            ) : null}
+            {options.map((option, index) => {
+              const { label: optionLabel, value: optionValue } = getOptionLabelAndValue(option);
+
+              return (
+                <Option
+                  key={index}
+                  value={optionValue}
+                  selectedValue={value}
+                  data-testid={`select-option-${optionValue}`}
+                >
+                  {optionLabel}
+                </Option>
+              );
+            })}
+          </BaseSelect>
+        </div>
+      </ClickAwayListener>
     );
   },
 );
