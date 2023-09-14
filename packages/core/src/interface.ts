@@ -262,8 +262,8 @@ export interface BaseCollection {
   label_singular?: string;
   label: string;
   sortable_fields?: SortableFields;
-  view_filters?: ViewFilter[];
-  view_groups?: ViewGroup[];
+  view_filters?: ViewFilters;
+  view_groups?: ViewGroups;
   i18n?: boolean | I18nInfo;
   hide?: boolean;
   editor?: EditorConfig;
@@ -850,16 +850,28 @@ export type Field<EF extends BaseField = UnknownField> =
 
 export interface ViewFilter {
   id?: string;
+  name: string;
   label: string;
   field: string;
   pattern: string | boolean | number;
 }
 
+export interface ViewFilters {
+  default?: string;
+  filters: ViewFilter[];
+}
+
 export interface ViewGroup {
   id?: string;
+  name: string;
   label: string;
   field: string;
   pattern?: string;
+}
+
+export interface ViewGroups {
+  default?: string;
+  groups: ViewGroup[];
 }
 
 export type SortDirection =

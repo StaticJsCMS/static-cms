@@ -33,34 +33,44 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
         },
       },
       create: true,
-      view_filters: [
-        {
-          label: 'Posts With Index',
-          field: 'title',
-          pattern: 'This is post #',
-        },
-        {
-          label: 'Posts Without Index',
-          field: 'title',
-          pattern: 'front matter post',
-        },
-        {
-          label: 'Drafts',
-          field: 'draft',
-          pattern: true,
-        },
-      ],
-      view_groups: [
-        {
-          label: 'Year',
-          field: 'date',
-          pattern: '\\d{4}',
-        },
-        {
-          label: 'Drafts',
-          field: 'draft',
-        },
-      ],
+      view_filters: {
+        default: 'posts-without-index',
+        filters: [
+          {
+            name: 'posts-with-index',
+            label: 'Posts With Index',
+            field: 'title',
+            pattern: 'This is post #',
+          },
+          {
+            name: 'posts-without-index',
+            label: 'Posts Without Index',
+            field: 'title',
+            pattern: 'front matter post',
+          },
+          {
+            name: 'draft',
+            label: 'Drafts',
+            field: 'draft',
+            pattern: true,
+          },
+        ],
+      },
+      view_groups: {
+        groups: [
+          {
+            name: 'by-year',
+            label: 'Year',
+            field: 'date',
+            pattern: '\\d{4}',
+          },
+          {
+            name: 'draft',
+            label: 'Drafts',
+            field: 'draft',
+          },
+        ],
+      },
       fields: [
         {
           label: 'Title',

@@ -280,75 +280,91 @@ sortable_fields: {
 
 ## View Filters
 
-The `view_filters` setting is an optional list of predefined view filters to show in the UI.
-
-Defaults to an empty list.
+The `view_filters` setting is an optional property which takes a list of predefined view filters to show in the UI and an optional default view filter.
 
 <CodeTabs>
 ```yaml
 view_filters:
-  - label: "Alice's and Bob's Posts"
-    field: author
-    pattern: 'Alice|Bob'
-  - label: 'Posts published in 2020'
-    field: date
-    pattern: '2020'
-  - label: Drafts
-    field: draft
-    pattern: true
+  default: drafts
+  filters:
+    - name: alice-and-bob
+      label: "Alice's and Bob's Posts"
+      field: author
+      pattern: 'Alice|Bob'
+    - name: posts-2020
+      label: 'Posts published in 2020'
+      field: date
+      pattern: '2020'
+    - name: drafts
+      label: Drafts
+      field: draft
+      pattern: true
 ```
 
 ```js
-view_filters: [
-  {
-    label: "Alice's and Bob's Posts",
-    field: 'author',
-    pattern: 'Alice|Bob',
-  },
-  {
-    label: 'Posts published in 2020',
-    field: 'date',
-    pattern: '2020',
-  },
-  {
-    label: 'Drafts',
-    field: 'draft',
-    pattern: true,
-  },
-],
+view_filters: {
+  default: 'drafts',
+  filters: [
+    {
+      name: 'alice-and-bob',
+      label: "Alice's and Bob's Posts",
+      field: 'author',
+      pattern: 'Alice|Bob',
+    },
+    {
+      name: 'posts-2020',
+      label: 'Posts published in 2020',
+      field: 'date',
+      pattern: '2020',
+    },
+    {
+      name: 'drafts',
+      label: 'Drafts',
+      field: 'draft',
+      pattern: true,
+    },
+  ],
+},
 ```
 
 </CodeTabs>
 
 ## View Groups
 
-The `view_groups` setting is an optional list of predefined view groups to show in the UI.
-
-Defaults to an empty list.
+The `view_groups` setting is an optional property which takes a list of predefined view groups to show in the UI and an optional default view group.
 
 <CodeTabs>
 ```yaml
 view_groups:
-  - label: Year
-    field: date
-    # groups items based on the value matched by the pattern
-    pattern: \d{4}
-  - label: Drafts
-    field: draft
+  default: by-year
+  groups:
+    - name: by-year
+      label: Year
+      field: date
+      # groups items based on the value matched by the pattern
+      pattern: \d{4}
+    - name: drafts
+      label: Drafts
+      field: draft
 ```
 
 ```js
-view_groups: [
-  {
-    label: 'Year',
-    field: 'date',
-    pattern: '\\d{4}',
-  },
-  {
-    label: 'Drafts',
-    field: 'draft',
-  },
-],
+view_groups: {
+  default: by-year
+  groups: [
+    {
+      name: 'by-year',
+      label: 'Year',
+      field: 'date',
+      pattern: '\\d{4}',
+    },
+    {
+      name: 'drafts',
+      label: 'Drafts',
+      field: 'draft',
+    },
+  ],
+},
 ```
 
 </CodeTabs>
