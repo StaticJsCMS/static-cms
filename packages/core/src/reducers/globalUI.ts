@@ -4,12 +4,16 @@ import type { GlobalUIAction } from '../actions/globalUI';
 
 export type GlobalUIState = {
   isFetching: boolean;
-  theme: 'dark' | 'light';
+  theme: string;
 };
 
 const defaultState: GlobalUIState = {
   isFetching: false,
-  theme: 'light',
+  theme:
+    localStorage.getItem('color-theme') ??
+    (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      ? 'dark'
+      : 'light',
 };
 
 /**
@@ -31,6 +35,7 @@ const globalUI = (state: GlobalUIState = defaultState, action: GlobalUIAction): 
 
   switch (action.type) {
     case THEME_CHANGE:
+      localStorage.setItem('color-theme', action.payload);
       return {
         ...state,
         theme: action.payload,

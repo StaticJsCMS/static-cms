@@ -1,4 +1,4 @@
-import { DARK_THEME, LIGHT_THEME } from './defaultThemes';
+import { DARK_THEME, LIGHT_THEME } from '../defaultThemes';
 
 import type { DeepPartial, Theme } from '@staticcms/core/interface';
 
@@ -17,6 +17,9 @@ export default function createTheme(
     },
     primary: {
       main: overrides?.primary?.main ?? baseTheme.primary.main,
+    },
+    codemirror: {
+      theme: overrides?.codemirror?.theme ?? baseTheme.codemirror.theme,
     },
   };
 }

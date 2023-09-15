@@ -12,7 +12,6 @@ import {
 import localForage from '@staticcms/core/lib/util/localForage';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
-import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import TableCell from '../../common/table/TableCell';
 import TableRow from '../../common/table/TableRow';
@@ -50,8 +49,6 @@ const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
     () => selectTemplateName(collection, entry.slug),
     [collection, entry.slug],
   );
-
-  const theme = useAppSelector(selectTheme);
 
   const [hasLocalBackup, setHasLocalBackup] = useState(false);
   useEffect(() => {
@@ -105,12 +102,7 @@ const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
         return (
           <TableCell key={fieldName} to={path}>
             {field && FieldPreviewComponent ? (
-              <FieldPreviewComponent
-                collection={collection}
-                field={field}
-                value={value}
-                theme={theme}
-              />
+              <FieldPreviewComponent collection={collection} field={field} value={value} />
             ) : isNullish(value) ? (
               ''
             ) : (

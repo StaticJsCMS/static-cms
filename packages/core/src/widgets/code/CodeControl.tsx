@@ -7,12 +7,11 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ErrorMessage from '@staticcms/core/components/common/field/ErrorMessage';
 import Hint from '@staticcms/core/components/common/field/Hint';
 import Label from '@staticcms/core/components/common/field/Label';
+import useTheme from '@staticcms/core/components/theme/hooks/useTheme';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
-import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
-import { useAppSelector } from '@staticcms/core/store/hooks';
 import SettingsButton from './SettingsButton';
 import SettingsPane from './SettingsPane';
 import languages from './data/languages';
@@ -62,7 +61,7 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
   errors,
   disabled,
 }) => {
-  const theme = useAppSelector(selectTheme);
+  const theme = useTheme();
 
   const keys = useMemo(() => {
     const defaults = {
@@ -230,7 +229,7 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
               editable={true}
               onChange={handleChange}
               extensions={extensions}
-              theme={theme}
+              theme={theme.codemirror.theme}
               readOnly={disabled}
             />
           </div>

@@ -1,8 +1,6 @@
 import React, { useCallback } from 'react';
 
 import { useInferredFields } from '@staticcms/core/lib/util/collection.util';
-import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
-import { useAppSelector } from '@staticcms/core/store/hooks';
 import getWidgetFor from './widgetFor';
 
 import type {
@@ -29,26 +27,14 @@ export default function useWidgetsFor(
 } {
   const inferredFields = useInferredFields(collection);
 
-  const theme = useAppSelector(selectTheme);
-
   const widgetFor = useCallback(
     (name: string): ReturnType<WidgetFor<EntryData>> => {
       if (!config) {
         return null;
       }
-      return getWidgetFor(
-        config,
-        collection,
-        name,
-        fields,
-        entry,
-        theme,
-        inferredFields,
-        fields,
-        data,
-      );
+      return getWidgetFor(config, collection, name, fields, entry, inferredFields, fields, data);
     },
-    [collection, config, data, entry, fields, inferredFields, theme],
+    [collection, config, data, entry, fields, inferredFields],
   );
 
   /**
@@ -97,7 +83,6 @@ export default function useWidgetsFor(
                     field.name,
                     fields,
                     entry,
-                    theme,
                     inferredFields,
                     nestedFields,
                     val,
@@ -129,7 +114,6 @@ export default function useWidgetsFor(
                 field.name,
                 fields,
                 entry,
-                theme,
                 inferredFields,
                 nestedFields,
                 value,
@@ -141,7 +125,7 @@ export default function useWidgetsFor(
         }, {} as Record<string, ReactNode>),
       };
     },
-    [collection, config, entry, fields, inferredFields, theme],
+    [collection, config, entry, fields, inferredFields],
   );
 
   return {

@@ -279,7 +279,7 @@ const en: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: 'Dark Mode',
+      theme: 'Theme',
       logOut: 'Log Out',
     },
     toast: {

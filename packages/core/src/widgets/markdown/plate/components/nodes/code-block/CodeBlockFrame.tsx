@@ -7,6 +7,7 @@ import React, { useCallback, useMemo } from 'react';
 import { useFrame } from 'react-frame-component';
 
 import languages from '@staticcms/code/data/languages';
+import useTheme from '@staticcms/core/components/theme/hooks/useTheme';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 
 import type { FC, KeyboardEvent } from 'react';
@@ -15,11 +16,11 @@ export interface CodeBlockFrameProps {
   id: string;
   lang?: string;
   code: string;
-  theme: 'dark' | 'light';
 }
 
-const CodeBlockFrame: FC<CodeBlockFrameProps> = ({ id, lang, code, theme }) => {
+const CodeBlockFrame: FC<CodeBlockFrameProps> = ({ id, lang, code }) => {
   const { window } = useFrame();
+  const theme = useTheme();
 
   const loadedLangExtension = useMemo(() => {
     if (!lang) {
@@ -80,7 +81,7 @@ const CodeBlockFrame: FC<CodeBlockFrameProps> = ({ id, lang, code, theme }) => {
       onChange={handleChange}
       onKeyDown={handleKeyDown}
       extensions={extensions}
-      theme={theme}
+      theme={theme.codemirror.theme}
     />
   );
 };

@@ -9,6 +9,9 @@ export const DARK_THEME: Theme = {
   primary: {
     main: 'rgb(59, 130, 246)',
   },
+  codemirror: {
+    theme: 'dark',
+  },
 };
 
 export const LIGHT_THEME: Theme = {
@@ -19,6 +22,9 @@ export const LIGHT_THEME: Theme = {
   },
   primary: {
     main: 'rgb(59, 130, 246)',
+  },
+  codemirror: {
+    theme: 'light',
   },
 };
 

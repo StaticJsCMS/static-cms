@@ -1,0 +1,30 @@
+.CMS_ThemeSelectorDialog_root {
+  @apply py-3
+    px-4
+    w-[600px]
+    max-w-[80%];
+}
+
+.CMS_ThemeSelectorDialog_header {
+  @apply flex
+    justify-between
+    items-center
+    mb-2;
+}
+
+.CMS_ThemeSelectorDialog_title {
+  @apply text-lg
+    font-bold;
+}
+
+.CMS_ThemeSelectorDialog_grid {
+  @apply grid
+    grid-cols-1
+    md:grid-cols-2
+    gap-3;
+}
+
+.CMS_ThemeSelectorDialog_close-icon {
+  @apply w-5
+    h-5;
+}

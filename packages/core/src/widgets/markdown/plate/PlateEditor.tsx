@@ -54,13 +54,14 @@ import {
 import React, { useMemo, useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useTranslate } from 'react-polyglot';
 
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import widgetMarkdownClasses from '../MarkdownControl.classes';
 import { CodeBlockElement, withShortcodeElement } from './components';
 import { BalloonToolbar } from './components/balloon-toolbar';
 import { BlockquoteElement } from './components/nodes/blockquote';
+import CodeElement from './components/nodes/code/Code';
 import {
   Heading1,
   Heading2,
@@ -84,7 +85,6 @@ import {
   TableHeaderCellElement,
   TableRowElement,
 } from './components/nodes/table';
-import CodeElement from './components/nodes/code/Code';
 import { Toolbar } from './components/toolbar';
 import editableProps from './editableProps';
 import { createMdPlugins, ELEMENT_SHORTCODE } from './plateTypes';
@@ -108,7 +108,6 @@ import type {
 } from '@staticcms/core/interface';
 import type { AnyObject, AutoformatPlugin, PlatePlugin } from '@udecode/plate';
 import type { FC } from 'react';
-import type { t as T } from 'react-polyglot';
 import type { MdEditor, MdValue } from './plateTypes';
 
 export interface PlateEditorProps {
@@ -134,7 +133,7 @@ const PlateEditor: FC<PlateEditorProps> = ({
   onFocus,
   onBlur,
 }) => {
-  const t = useTranslate() as T;
+  const t = useTranslate();
 
   const editorContainerRef = useRef<HTMLDivElement | null>(null);
   const innerEditorContainerRef = useRef<HTMLDivElement | null>(null);

@@ -3,6 +3,7 @@ import { FrameContextConsumer } from 'react-frame-component';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
+import ThemeManager from '../../theme/ThemeManager';
 import EditorPreviewContent from './EditorPreviewContent';
 
 import type {
@@ -25,8 +26,6 @@ interface PreviewFrameContentProps {
 const PreviewFrameContent: FC<PreviewFrameContentProps> = ({ previewComponent, previewProps }) => {
   const ref = useRef<HTMLElement>();
 
-  const { theme } = previewProps;
-
   return (
     <FrameContextConsumer>
       {context => {
@@ -34,28 +33,24 @@ const PreviewFrameContent: FC<PreviewFrameContentProps> = ({ previewComponent, p
           ref.current = context.document?.scrollingElement as HTMLElement;
         }
 
-        if (theme === 'dark') {
-          context.document?.body.classList.add('dark');
-        } else {
-          context.document?.body.classList.remove('dark');
-        }
-
         return (
-          <ScrollSyncPane key="preview-frame-scroll-sync" attachTo={ref}>
-            <div className={classes.root}>
-              <div className={classes.content}>
-                <EditorPreviewContent
-                  key="preview-frame-content"
-                  previewComponent={previewComponent}
-                  previewProps={{
-                    ...previewProps,
-                    document: context.document,
-                    window: context.window,
-                  }}
-                />
+          <ThemeManager document={context.document}>
+            <ScrollSyncPane key="preview-frame-scroll-sync" attachTo={ref}>
+              <div className={classes.root}>
+                <div className={classes.content}>
+                  <EditorPreviewContent
+                    key="preview-frame-content"
+                    previewComponent={previewComponent}
+                    previewProps={{
+                      ...previewProps,
+                      document: context.document,
+                      window: context.window,
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-          </ScrollSyncPane>
+            </ScrollSyncPane>
+          </ThemeManager>
         );
       }}
     </FrameContextConsumer>

@@ -1,4 +1,3 @@
-import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
@@ -17,19 +16,17 @@ import TopBarProgress from 'react-topbar-progress-indicator';
 import { loginUser as loginUserAction } from '@staticcms/core/actions/auth';
 import { discardDraft } from '@staticcms/core/actions/entries';
 import { currentBackend } from '@staticcms/core/backend';
-import { changeTheme } from '../actions/globalUI';
 import { invokeEvent } from '../lib/registry';
 import { getDefaultPath } from '../lib/util/collection.util';
 import { generateClassNames } from '../lib/util/theming.util';
-import { selectTheme } from '../reducers/selectors/globalUI';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useAppDispatch } from '../store/hooks';
+import NotFoundPage from './NotFoundPage';
 import CollectionRoute from './collections/CollectionRoute';
 import { Alert } from './common/alert/Alert';
 import { Confirm } from './common/confirm/Confirm';
 import Loader from './common/progress/Loader';
 import EditorRoute from './entry-editor/EditorRoute';
 import MediaPage from './media-library/MediaPage';
-import NotFoundPage from './NotFoundPage';
 import Page from './page/Page';
 import Snackbars from './snackbar/Snackbars';
 import ThemeManager from './theme/ThemeManager';
@@ -79,26 +76,26 @@ const App = ({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const mode = useAppSelector(selectTheme);
+  // const mode = useAppSelector(selectTheme);
 
   // TODO FIX THIS!!!
-  const theme = React.useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
-          primary: {
-            main: 'rgb(37 99 235)',
-          },
-          ...(mode === 'dark' && {
-            background: {
-              paper: 'rgb(15 23 42)',
-            },
-          }),
-        },
-      }),
-    [mode],
-  );
+  // const theme = React.useMemo(
+  //   () =>
+  //     createTheme({
+  //       palette: {
+  //         mode,
+  //         primary: {
+  //           main: 'rgb(37 99 235)',
+  //         },
+  //         ...(mode === 'dark' && {
+  //           background: {
+  //             paper: 'rgb(15 23 42)',
+  //           },
+  //         }),
+  //       },
+  //     }),
+  //   [mode],
+  // );
 
   const configError = useCallback(
     (error?: string) => {
@@ -176,21 +173,6 @@ const App = ({
 
     dispatch(discardDraft());
   }, [dispatch, pathname, searchParams]);
-
-  useEffect(() => {
-    // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-    if (
-      localStorage.getItem('color-theme') === 'dark' ||
-      (!('color-theme' in localStorage) &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      document.documentElement.classList.add('dark');
-      dispatch(changeTheme('dark'));
-    } else {
-      document.documentElement.classList.remove('dark');
-      dispatch(changeTheme('light'));
-    }
-  }, [dispatch]);
 
   const [prevUser, setPrevUser] = useState(user);
   useEffect(() => {
@@ -271,21 +253,21 @@ const App = ({
 
   return (
     <ThemeManager>
-      <MuiThemeProvider theme={theme}>
-        <ScrollSync key="scroll-sync" enabled={scrollSyncEnabled}>
-          <>
-            <div key="back-to-top-anchor" id="back-to-top-anchor" />
-            <div key="cms-root" id="cms-root" className={classes.root}>
-              <div key="cms-wrapper" className={classes.content}>
-                <Snackbars key="snackbars" />
-                {content}
-                <Alert key="alert" />
-                <Confirm key="confirm" />
-              </div>
+      {/* <MuiThemeProvider theme={theme}> */}
+      <ScrollSync key="scroll-sync" enabled={scrollSyncEnabled}>
+        <>
+          <div key="back-to-top-anchor" id="back-to-top-anchor" />
+          <div key="cms-root" id="cms-root" className={classes.root}>
+            <div key="cms-wrapper" className={classes.content}>
+              <Snackbars key="snackbars" />
+              {content}
+              <Alert key="alert" />
+              <Confirm key="confirm" />
             </div>
-          </>
-        </ScrollSync>
-      </MuiThemeProvider>
+          </div>
+        </>
+      </ScrollSync>
+      {/* </MuiThemeProvider> */}
     </ThemeManager>
   );
 };

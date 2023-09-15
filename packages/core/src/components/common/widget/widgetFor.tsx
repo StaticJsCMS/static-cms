@@ -38,7 +38,6 @@ export default function getWidgetFor(
   name: string,
   fields: Field[],
   entry: Entry,
-  theme: 'dark' | 'light',
   inferredFields: Record<string, InferredField>,
   widgetFields: Field[] = fields,
   values: EntryData = entry.data,
@@ -62,7 +61,6 @@ export default function getWidgetFor(
         collection,
         fields,
         entry,
-        theme,
         inferredFields,
         field.fields,
         value as EntryData | EntryData[],
@@ -76,7 +74,6 @@ export default function getWidgetFor(
         collection,
         field,
         entry,
-        theme,
         inferredFields,
         value as EntryData[],
       ),
@@ -111,7 +108,7 @@ export default function getWidgetFor(
   }
 
   return renderedValue
-    ? getWidget(config, fieldWithWidgets, collection, renderedValue, entry, theme, idx)
+    ? getWidget(config, fieldWithWidgets, collection, renderedValue, entry, idx)
     : null;
 }
 
@@ -123,7 +120,6 @@ function getNestedWidgets(
   collection: Collection,
   fields: Field[],
   entry: Entry,
-  theme: 'dark' | 'light',
   inferredFields: Record<string, InferredField>,
   widgetFields: Field[],
   values: EntryData | EntryData[],
@@ -136,7 +132,6 @@ function getNestedWidgets(
         collection,
         fields,
         entry,
-        theme,
         inferredFields,
         widgetFields,
         value,
@@ -150,7 +145,6 @@ function getNestedWidgets(
     collection,
     fields,
     entry,
-    theme,
     inferredFields,
     widgetFields,
     values,
@@ -165,7 +159,6 @@ function getTypedNestedWidgets(
   collection: Collection,
   field: ListField,
   entry: Entry,
-  theme: 'dark' | 'light',
   inferredFields: Record<string, InferredField>,
   values: EntryData[],
 ) {
@@ -181,7 +174,6 @@ function getTypedNestedWidgets(
         collection,
         itemType.fields,
         entry,
-        theme,
         inferredFields,
         itemType.fields,
         value,
@@ -199,7 +191,6 @@ function widgetsForNestedFields(
   collection: Collection,
   fields: Field[],
   entry: Entry,
-  theme: 'dark' | 'light',
   inferredFields: Record<string, InferredField>,
   widgetFields: Field[],
   values: EntryData,
@@ -213,7 +204,6 @@ function widgetsForNestedFields(
         field.name,
         fields,
         entry,
-        theme,
         inferredFields,
         widgetFields,
         values,
@@ -229,7 +219,6 @@ function getWidget(
   collection: Collection,
   value: ValueOrNestedValue | ReactNode,
   entry: Entry,
-  theme: 'dark' | 'light',
   idx: number | null = null,
 ) {
   if (!field.widget) {
@@ -265,7 +254,6 @@ function getWidget(
       collection={collection}
       value={finalValue}
       entry={entry}
-      theme={theme}
     />
   );
 }

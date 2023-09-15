@@ -11,7 +11,6 @@ import {
 import localForage from '@staticcms/core/lib/util/localForage';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
-import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import Card from '../../common/card/Card';
 import CardActionArea from '../../common/card/CardActionArea';
@@ -97,8 +96,6 @@ const EntryCard: FC<TranslatedProps<EntryCardProps>> = ({
     [templateName],
   );
 
-  const theme = useAppSelector(selectTheme);
-
   const [hasLocalBackup, setHasLocalBackup] = useState(false);
   useEffect(() => {
     if (config?.disable_local_backup) {
@@ -141,7 +138,6 @@ const EntryCard: FC<TranslatedProps<EntryCardProps>> = ({
                   entry={entry}
                   widgetFor={widgetFor}
                   widgetsFor={widgetsFor}
-                  theme={theme}
                   hasLocalBackup={hasLocalBackup}
                 />
               </CardActionArea>

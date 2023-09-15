@@ -129,7 +129,7 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
             }}
             initialContent={initialFrameContent}
           >
-            <CodeBlockFrame id={id} code={code} lang={lang} theme={theme} />
+            <CodeBlockFrame id={id} code={code} lang={lang} />
           </Frame>
         </div>
         <div>{children}</div>

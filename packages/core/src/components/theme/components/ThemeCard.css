@@ -1,0 +1,64 @@
+.CMS_ThemeCard_root {
+  @apply w-full
+    rounded-lg;
+}
+
+.CMS_ThemeCard_button {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
+
+  @apply w-full
+    rounded-lg;
+}
+
+.CMS_ThemeCard_content {
+  @apply px-3
+    py-2
+    flex
+    justify-start
+    items-center;
+}
+
+.CMS_ThemeCard_preview {
+  background-color: var(--preview-text-primary);
+
+  @apply w-full
+    h-[128px]
+    rounded-t-lg;
+}
+
+.CMS_ThemeCard_preview-appbar {
+
+}
+
+.CMS_ThemeCard_preview-content {
+
+}
+
+.CMS_ThemeCard_preview-text {
+
+}
+
+.CMS_ThemeCard_preview-action {
+
+}
+
+.CMS_ThemeCard_preview-sidebar {
+
+}
+
+.CMS_ThemeCard_preview-main {
+
+}
+
+.CMS_ThemeCard_preview-card {
+
+}
+
+.CMS_ThemeCard_preview-collection-row {
+
+}
+
+.CMS_ThemeCard_preview-collection-highlight {
+
+}

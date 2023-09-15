@@ -267,7 +267,6 @@ const de: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: 'Dunkler Modus',
       logOut: 'Abmelden',
     },
     toast: {

@@ -1,9 +1,9 @@
 import partial from 'lodash/partial';
 import React, { useMemo } from 'react';
-import { useTranslate } from 'react-polyglot';
 
 import EditorControl from '@staticcms/core/components/entry-editor/editor-control-pane/EditorControl';
 import useHasChildErrors from '@staticcms/core/lib/hooks/useHasChildErrors';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import {
   addFileTemplateFields,
@@ -102,7 +102,7 @@ const ListItem: FC<ListItemProps> = ({
   listeners,
   handleRemove,
 }) => {
-  const t = useTranslate() as t;
+  const t = useTranslate();
 
   const [summary, objectField] = useMemo((): [string, ListField | ObjectField] => {
     const childObjectField: ObjectField = {
