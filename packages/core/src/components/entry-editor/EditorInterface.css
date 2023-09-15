@@ -22,8 +22,9 @@
 }
 
 .CMS_Editor_i18n-panel {
-  @apply border-l
-    border-slate-400;
+  border-color: var(--background-main);
+
+  @apply border-l;
 }
 
 .CMS_Editor_i18n {
@@ -53,11 +54,11 @@
     flex
     items-center
     rounded
-    transition-colors
-    hover:bg-slate-200
-    dark:hover:bg-gray-700;
+    transition-colors;
 
   &:hover {
+    background: color-mix(in srgb, var(--primary-main) 15%, transparent);
+
     & .CMS_Editor_resize-handle-icon {
       @apply opacity-100;
     }

@@ -15,8 +15,7 @@
     }
 
     & .CMS_Checkbox_custom-input {
-      @apply bg-gray-100/75
-        dark:bg-gray-700/75;
+      background: var(--button-disabled);
     }
   }
 }
@@ -41,9 +40,11 @@
 }
 
 .CMS_Checkbox_custom-input {
+  color: var(--primary-light);
+  background: color-mix(in srgb, var(--primary-contrast-color) 50%, transparent);
+
   @apply w-6
     h-6
-    text-blue-600
     border-gray-300
     rounded
     focus:ring-blue-500
@@ -54,13 +55,12 @@
     select-none
     flex
     items-center
-    justify-center
-    bg-gray-100
-    dark:bg-gray-700;
+    justify-center;
 }
 
 .CMS_Checkbox_checkmark {
+  color: var(--primary-contrast-color);
+
   @apply w-5
-    h-5
-    text-white;
+    h-5;
 }

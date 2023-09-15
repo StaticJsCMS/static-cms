@@ -33,8 +33,8 @@
 }
 
 .CMS_EntryCard_local-backup-icon {
+  color: var(--primary-light);
+
   @apply w-5
-    h-5
-    text-blue-600
-    dark:text-blue-300;
+    h-5;
 }

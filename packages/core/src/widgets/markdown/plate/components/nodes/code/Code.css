@@ -1,11 +1,11 @@
 .CMS_WidgetMarkdown_Code_root {
+  color: var(--text-primary);
+
   @apply py-[0.2em]
     px-[0.4em]
     m-0
     text-sm
     whitespace-break-spaces
-    text-gray-700
-    dark:text-gray-200
     bg-gray-200
     dark:bg-gray-700
     rounded-md

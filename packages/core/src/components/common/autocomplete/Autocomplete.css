@@ -4,18 +4,18 @@
 
   &.CMS_Autocomplete_disabled {
     & .CMS_Autocomplete_input {
-      @apply text-gray-300
-        dark:text-gray-500;
+      color: var(--text-secondary);
     }
 
     & .CMS_Autocomplete_button-icon {
-      @apply text-gray-300/75
-        dark:text-gray-600/75;
+      color: var(--text-secondary);
     }
   }
 }
 
 .CMS_Autocomplete_input {
+  color: var(--text-primary);
+
   @apply w-full
     bg-transparent
     border-none
@@ -27,9 +27,7 @@
     focus:ring-0
     outline-none
     flex-grow
-    truncate
-    text-gray-800
-    dark:text-gray-100;
+    truncate;
 }
 
 .CMS_Autocomplete_button-wrapper {
@@ -46,17 +44,19 @@
 }
 
 .CMS_Autocomplete_button-icon {
+  color: var(--text-secondary);
+
   @apply h-5
-    w-5
-    text-gray-400;
+    w-5;
 }
 
 .CMS_Autocomplete_options {
+  background: var(--background-main);
+
   @apply max-h-60
     w-full
     overflow-auto
     rounded-md
-    bg-white
     py-1
     text-base
     shadow-md
@@ -66,7 +66,6 @@
     focus:outline-none
     sm:text-sm
     z-30
-    dark:bg-slate-700
     dark:shadow-lg;
 }
 
@@ -81,19 +80,18 @@
 }
 
 .CMS_Autocomplete_option {
+  color: var(--text-primary);
+
   @apply relative
     select-none
     py-2
     pl-10
     pr-4
-    cursor-pointer
-    text-gray-800
-    dark:text-gray-100;
+    cursor-pointer;
 }
 
 .CMS_Autocomplete_option-selected {
-  @apply bg-gray-100
-    dark:bg-slate-600;
+  background: var(--background-dark);
 }
 
 .CMS_Autocomplete_option-selected {
@@ -108,13 +106,14 @@
 }
 
 .CMS_Autocomplete_checkmark {
+  color: var(--primary-main);
+
   @apply absolute
     inset-y-0
     left-0
     flex
     items-center
-    pl-3
-    text-blue-500;
+    pl-3;
 }
 
 .CMS_Autocomplete_checkmark-icon {

@@ -7,13 +7,13 @@
 }
 
 .CMS_Sidebar_content {
+  background: var(--background-main);
+
   @apply px-3
     py-4
     h-full
     w-full
-    overflow-y-auto
-    bg-white
-    dark:bg-slate-800;
+    overflow-y-auto;
 }
 
 .CMS_Sidebar_items {

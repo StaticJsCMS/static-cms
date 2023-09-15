@@ -169,6 +169,7 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
             <Button
               data-testid="rich-editor"
               size="small"
+              color={!showRaw ? 'primary' : 'secondary'}
               variant={!showRaw ? 'contained' : 'outlined'}
               onClick={handleShowRich}
               disabled={disabled}
@@ -178,6 +179,7 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
             <Button
               data-testid="rich-editor"
               size="small"
+              color={showRaw ? 'primary' : 'secondary'}
               variant={showRaw ? 'contained' : 'outlined'}
               onClick={handleShowRaw}
               disabled={disabled}

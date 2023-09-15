@@ -1,5 +1,6 @@
 .CMS_ThemeSelectorDialog_root {
-  @apply py-3
+  @apply pt-3
+    pb-5
     px-4
     w-[600px]
     max-w-[80%];
@@ -9,7 +10,8 @@
   @apply flex
     justify-between
     items-center
-    mb-2;
+    mb-2
+    ps-1;
 }
 
 .CMS_ThemeSelectorDialog_title {

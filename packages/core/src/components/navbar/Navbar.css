@@ -1,9 +1,9 @@
 .CMS_Navbar_root {
+  background: var(--background-main);
+
   @apply z-40
     relative
-    bg-white
     drop-shadow-md
-    dark:bg-slate-800
     dark:drop-shadow-lg;
 
   &.CMS_Navbar_in-editor {
@@ -50,13 +50,13 @@
     truncate;
 
   & .CMS_Navbar_logo-wrapper {
+    background: var(--background-light);
+
     @apply flex
       flex-shrink-0
       items-center
       justify-center
-      w-16
-      bg-slate-500
-      dark:bg-slate-700;
+      w-16;
 
     & .CMS_Navbar_logo {
       @apply w-10
@@ -90,10 +90,10 @@
 }
 
 .CMS_Navbar_site-url-icon {
+  color: var(--text-secondary);
+
   @apply h-5
-    w-5
-    text-gray-400
-    dark:text-gray-500;
+    w-5;
 }
 
 .CMS_Navbar_quick-create {

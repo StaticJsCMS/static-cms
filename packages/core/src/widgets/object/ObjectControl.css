@@ -26,22 +26,21 @@
     &:focus-within {
       & .CMS_WidgetObject_summary,
       & .CMS_WidgetObject_expand-icon {
-        @apply text-blue-500;
+        color: var(--primary-main);
       }
     }
 
     &:hover {
       & .CMS_WidgetObject_summary,
       & .CMS_WidgetObject_expand-icon {
-        @apply text-blue-500;
+        color: var(--primary-main);
       }
     }
   }
 
   &.CMS_WidgetObject_disabled {
     & .CMS_WidgetObject_expand-icon {
-      @apply text-slate-300
-        dark:text-slate-600;
+      color: var(--text-secondary);
     }
   }
 
@@ -76,9 +75,10 @@
 }
 
 .CMS_WidgetObject_fields {
+  color: var(--text-secondary);
+
   @apply ml-4
     text-sm
-    text-gray-500
     border-l-2
     border-solid
     border-l-slate-400;

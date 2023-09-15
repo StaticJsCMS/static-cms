@@ -20,7 +20,7 @@
 }
 
 .CMS_ThemeCard_preview {
-  background-color: var(--preview-text-primary);
+  background: var(--preview-text-primary);
 
   @apply w-full
     h-[128px]

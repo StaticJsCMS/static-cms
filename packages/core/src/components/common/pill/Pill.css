@@ -11,32 +11,24 @@
   }
 
   &.CMS_Pill_primary {
-    @apply bg-blue-700
-      text-gray-100
-      dark:bg-blue-700
-      dark:text-gray-100;
+    color: var(--primary-contrast-color);
+    background: var(--primary-main);
   }
 
   &.CMS_Pill_default {
-    @apply bg-gray-200
-      text-gray-800
-      dark:bg-gray-700
-      dark:text-gray-100;
+    color: var(--secondary-contrast-color);
+    background: var(--secondary-main);
   }
 
   &.CMS_Pill_disabled {
     &.CMS_Pill_primary {
-      @apply bg-blue-300/75
-        text-gray-100/75
-        dark:bg-blue-700/25
-        dark:text-gray-500;
+      color: var(--text-disabled);
+      background: var(--button-disabled);
     }
 
     &.CMS_Pill_default {
-      @apply bg-gray-100
-        text-gray-400/75
-        dark:bg-gray-800/75
-        dark:text-gray-500;
+      color: var(--text-disabled);
+      background: var(--button-disabled);
     }
   }
 }

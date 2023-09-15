@@ -20,6 +20,8 @@
 }
 
 .CMS_Modal_content {
+  background: var(--background-main);
+
   @apply transform
     overflow-visible
     rounded-lg
@@ -27,8 +29,6 @@
     align-middle
     shadow-xl
     transition-all
-    bg-white
-    dark:bg-slate-800
     z-[51]
     outline-none;
 }

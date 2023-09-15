@@ -42,7 +42,7 @@
   }
 
   &.CMS_MediaLIbrary_drop-area-active {
-    @apply border-blue-500;
+    border-color: var(--primary-main);
 
     & .CMS_MediaLibrary_drop-area {
       @apply opacity-100;
@@ -56,10 +56,10 @@
 
 .CMS_MediaLibrary_supports-folders {
   & .CMS_MediaLibrary_controls {
+    border-color: var(--background-light);
+
     @apply pb-4
-      border-b
-      border-gray-200/75
-      dark:border-slate-500/75;
+      border-b;
   }
 }
 
@@ -77,6 +77,9 @@
 }
 
 .CMS_MediaLibrary_drop-area {
+  color: var(--primary-light);
+  background: color-mix(in srgb, var(--background-main) 75%, transparent);
+
   @apply absolute
     inset-0
     flex
@@ -84,10 +87,6 @@
     justify-center
     pointer-events-none
     font-bold
-    text-blue-500
-    bg-white/75
-    dark:text-blue-400
-    dark:bg-slate-800/75
     transition-opacity
     opacity-0;
 }
@@ -172,39 +171,30 @@
     h-6;
 }
 
-.CMS_MediaLibrary_copy-to-clipboard-button {
-  @apply text-white
-    dark:text-white
-    bg-gray-900/25
-    dark:hover:text-white
-    dark:hover:bg-blue-800/80;
-}
-
 .CMS_MediaLibrary_copy-to-clipboard-button-icon {
   @apply w-5
     h-5;
 }
 
 .CMS_MediaLibrary_preview {
+  border-color: var(--background-light);
+
   @apply items-center
     px-5
     py-4
-    border-b
-    border-gray-200/75
-    dark:border-slate-500/75;
+    border-b;
 }
 
 .CMS_MediaLibrary_preview-image {
+  background: var(--background-dark);
+  border-color: var(--background-light);
+
   @apply w-media-preview-image
     h-media-preview-image
     rounded-md
     shadow-sm
     overflow-hidden
     border
-    bg-gray-50/75
-    border-gray-200/75
-    dark:bg-slate-800
-    dark:border-slate-600/75
     object-cover;
 }
 
@@ -217,14 +207,15 @@
 }
 
 .CMS_MediaLibrary_empty {
+  color: var(--text-secondary);
+
   @apply relative
     flex-grow
     p-5
     pb-20
     flex
     items-center
-    justify-center
-    dark:text-gray-100;
+    justify-center;
 }
 
 .CMS_MediaLibrary_files {
@@ -250,11 +241,11 @@
 }
 
 .CMS_MediaLibrary_search-label {
+  color: var(--text-primary);
+
   @apply text-sm
     font-medium
-    text-gray-800
-    sr-only
-    dark:text-white;
+    sr-only;
 }
 
 .CMS_MediaLibrary_search-wrapper {
@@ -272,19 +263,20 @@
 }
 
 .CMS_MediaLibrary_search-icon {
+  color: var(--text-secondary);
+
   @apply w-5
-    h-5
-    text-gray-500
-    dark:text-gray-400;
+    h-5;
 }
 
 .CMS_MediaLibrary_search-input {
+  color: var(--text-primary);
+
   @apply block
     w-full
     p-1.5
     pl-10
     text-sm
-    text-gray-800
     border
     border-gray-300
     rounded-lg
@@ -295,6 +287,5 @@
     dark:bg-gray-700
     dark:border-gray-600
     dark:placeholder-gray-400
-    dark:text-white
     dark:focus:ring-slate-700;
 }

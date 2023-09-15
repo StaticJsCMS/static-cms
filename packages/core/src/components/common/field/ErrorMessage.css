@@ -1,8 +1,9 @@
 .CMS_ErrorMessage_root {
+  color: var(--error-main);
+
   @apply flex
     w-full
     text-xs
-    text-red-500
     px-3
     pt-2;
 }

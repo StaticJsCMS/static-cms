@@ -70,6 +70,7 @@ const SettingsDropdown: FC<TranslatedProps<SettingsDropdownProps>> = ({ inEditor
             <AvatarImage imageUrl={user?.avatar_url} />
           </>
         }
+        color="secondary"
         variant="outlined"
         rounded={!user?.avatar_url || 'no-padding'}
         hideDropdownIcon

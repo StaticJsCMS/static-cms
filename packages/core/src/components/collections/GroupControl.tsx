@@ -76,6 +76,7 @@ const GroupControl = ({
   return (
     <Menu
       label={t('collection.collectionTop.groupBy')}
+      color={activeGroup ? 'primary' : 'secondary'}
       variant={activeGroup ? 'contained' : 'outlined'}
       rootClassName={classes.root}
     >

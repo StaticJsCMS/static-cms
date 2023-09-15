@@ -6,19 +6,17 @@
 
   &:not(.CMS_Hint_error) {
     &.CMS_Hint_disabled {
-      @apply text-slate-300
-        dark:text-slate-600;
+      color: var(--text-disabled);
     }
 
     &:not(.CMS_Hint_disabled) {
-      @apply text-slate-500
-       dark:text-slate-400;
-    }
-  }
+      color: var(--text-secondary);
 
-  &:not(.CMS_Hint_disabled) {
-    @apply group-focus-within/active:text-blue-500
-      group-hover/active:text-blue-500;
+      &:focus-within,
+      &:hover {
+        color: var(--primary-main);
+      }
+    }
   }
 
   &:not(.CMS_Hint_inline) {
@@ -40,5 +38,5 @@
 }
 
 .CMS_Hint_error {
-  @apply text-red-500;
+  color: var(--error-main);
 }

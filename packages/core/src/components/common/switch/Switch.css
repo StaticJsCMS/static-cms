@@ -8,17 +8,19 @@
     @apply cursor-default;
 
     & .CMS_Switch_toggle {
-      @apply peer-checked:bg-blue-600/25
-        after:bg-gray-500/75
-        after:border-gray-500/75
-        peer-checked:after:border-gray-500/75;
+      &:after {
+        background: var(--background-light);
+        border-color: var(--background-light);
+      }
     }
   }
 
   &:not(.CMS_Switch_disabled) {
     & .CMS_Switch_toggle {
-      @apply after:bg-white
-        after:border-gray-300;
+      &:after {
+        background: var(--primary-contrast-color);
+        border-color: var(--background-light);
+      }
     }
   }
 }
@@ -27,24 +29,28 @@
   @apply sr-only;
 
   &:focus + .CMS_Switch_toggle {
-    @apply ring-4
-      ring-blue-300
-      dark:ring-blue-800;
+    --tw-ring-color: rgb(147 197 253 / var(--primary-light));
+
+    @apply ring-4;
   }
 
   &:checked + .CMS_Switch_toggle {
-    @apply bg-blue-600
-      after:border-white
-      after:translate-x-full;
+    background: var(--primary-main);
+
+    &:after {
+      border-color: var(--primary-contrast-color);
+    }
+
+    @apply after:translate-x-full;
   }
 }
 
 .CMS_Switch_toggle {
+  background: var(--background-light);
+
   @apply w-11
     h-6
-    bg-slate-200
     rounded-full
-    dark:bg-slate-700
     after:content-['']
     after:absolute after:top-0.5
     after:left-[2px]
@@ -52,8 +58,7 @@
     after:rounded-full
     after:h-5
     after:w-5
-    after:transition-all
-    dark:border-gray-600;
+    after:transition-all;
 }
 
 .CMS_Switch_label {

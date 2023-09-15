@@ -1,11 +1,11 @@
 .CMS_Login_root {
+  background: var(--background-dark);
+
   @apply flex
     flex-col
     h-screen
     items-center
-    justify-center
-    bg-slate-50
-    dark:bg-slate-900;
+    justify-center;
 }
 
 .CMS_Login_custom-logo {
@@ -24,18 +24,18 @@
 }
 
 .CMS_Login_error {
+  color: var(--error-main);
+
   @apply flex
     px-4
     py-3
     mb-6
     text-sm
-    text-red-800
     border
     border-red-300
     rounded-lg
     bg-red-50
     dark:bg-gray-800
-    dark:text-red-400
     dark:border-red-800;
 }
 

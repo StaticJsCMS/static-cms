@@ -943,15 +943,34 @@ export interface Config<EF extends BaseField = UnknownField> {
   theme?: Themes;
 }
 
+export interface ThemeColor {
+  main: string;
+  light: string;
+  dark: string;
+  contrastColor: string;
+}
+
 export interface Theme {
   name: string;
   text: {
     primary: string;
-    emphasis: string;
+    secondary: string;
+    disabled: string;
   };
-  primary: {
+  background: {
     main: string;
+    light: string;
+    dark: string;
   };
+  button: {
+    disabled: string;
+  };
+  primary: ThemeColor;
+  secondary: ThemeColor;
+  error: ThemeColor;
+  warning: ThemeColor;
+  info: ThemeColor;
+  success: ThemeColor;
   codemirror: {
     theme: 'light' | 'dark';
   };

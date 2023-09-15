@@ -4,15 +4,13 @@
 
   &.CMS_Select_disabled {
     & .CMS_Select_input {
-      @apply text-gray-300/75
-        dark:text-gray-600/75;
+      color: var(--text-secondary);
     }
 
     & .CMS_Select_value {
       & .CMS_Select_dropdown {
         & .CMS_Select_dropdown-icon {
-          @apply text-gray-300/75
-            dark:text-gray-600/75;
+          color: var(--text-secondary);
         }
       }
     }
@@ -43,12 +41,15 @@
 }
 
 .CMS_Select_dropdown-icon {
+  color: var(--text-secondary);
+
   @apply h-5
-    w-5
-    text-gray-400;
+    w-5;
 }
 
 .CMS_Select_input {
+  color: var(--text-primary);
+
   @apply flex
     items-center
     text-sm
@@ -57,16 +58,15 @@
     min-h-8
     px-4
     py-1.5
-    w-full
-    text-gray-800
-    dark:text-gray-100;
+    w-full;
 }
 
 .CMS_Select_popper {
+  background: var(--background-main);
+
   @apply max-h-60
     overflow-auto
     rounded-md
-    bg-white
     py-1
     text-base
     shadow-md
@@ -76,6 +76,5 @@
     focus:outline-none
     sm:text-sm
     z-[100]
-    dark:bg-slate-700
     dark:shadow-lg;
 }

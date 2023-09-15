@@ -361,6 +361,7 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = pro
           {types && types.length ? (
             <Menu
               label={t('editor.editorWidgets.list.addType', { item: label })}
+              color="secondary"
               variant="outlined"
               buttonClassName={widgetListClasses['add-types-button']}
               data-testid="list-type-add"
@@ -382,6 +383,7 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = pro
             </Menu>
           ) : (
             <Button
+              color="secondary"
               variant="outlined"
               onClick={handleAdd}
               className={widgetListClasses['add-button']}

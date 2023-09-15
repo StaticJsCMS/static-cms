@@ -126,7 +126,7 @@ const Field: FC<FieldProps> = ({
         finalCursor === 'pointer' && classes['cursor-pointer'],
         finalCursor === 'text' && classes['cursor-text'],
         finalCursor === 'default' && classes['cursor-default'],
-        hasErrors ? classes.error : `group/active`,
+        hasErrors && classes.error,
       ),
     [rootClassName, noHightlight, disabled, noPadding, finalCursor, hasErrors],
   );

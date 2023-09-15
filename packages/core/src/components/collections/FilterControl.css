@@ -18,10 +18,10 @@
 }
 
 .CMS_FilterControl_list-label {
+  color: var(--text-primary);
+
   @apply text-lg
-    font-bold
-    text-gray-800
-    dark:text-white;
+    font-bold;
 }
 
 .CMS_FilterControl_list-filter {

@@ -79,6 +79,7 @@ const FilterControl = ({
     <Menu
       key="filter-by-menu"
       label={t('collection.collectionTop.filterBy')}
+      color={anyActive ? 'primary' : 'secondary'}
       variant={anyActive ? 'contained' : 'outlined'}
       rootClassName={classes.root}
     >

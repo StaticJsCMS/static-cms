@@ -1,9 +1,10 @@
-.CMS_Entries_root {
+.CMS_Entries_no-entries {
+  color: var(--warning-contrast-color);
+  background: var(--warning-main);
+
   @apply py-2
     px-3
     rounded-md
-    bg-yellow-300/75
-    dark:bg-yellow-800/75
     text-sm;
 }
 
@@ -32,13 +33,13 @@
 }
 
 .CMS_Entries_entry-listing-loading {
+  background: color-mix(in srgb, var(--background-dark) 50%, transparent);
+
   @apply absolute
     inset-0
     flex
     items-center
-    justify-center
-    bg-slate-50/50
-    dark:bg-slate-900/50;
+    justify-center;
 }
 
 .CMS_Entries_entry-listing-grid {
@@ -70,17 +71,16 @@
 }
 
 .CMS_Entries_entry-listing-table {
+  background: var(--background-main);
+  border-color: var(--background-light);
+
   @apply relative
     max-h-full
     h-full
     overflow-hidden
     p-1.5
-    bg-white
     shadow-sm
     border
-    border-gray-100
-    dark:bg-slate-800
-    dark:border-gray-700/40
     dark:shadow-md
     rounded-xl;
 }
@@ -91,14 +91,9 @@
     overflow-auto;
 }
 
-.CMS_Entries_entry-listing-table-row {
-  @apply hover:bg-gray-200
-    dark:hover:bg-slate-700/70;
-}
-
 .CMS_Entries_entry-listing-local-backup {
+  color: var(--primary-light);
+
   @apply w-5
-    h-5
-    text-blue-600
-    dark:text-blue-300;
+    h-5;
 }

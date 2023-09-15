@@ -1,7 +1,7 @@
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 const entriesClasses = generateClassNames('Entries', [
-  'root',
+  'no-entries',
   'group',
   'group-content-wrapper',
   'group-content',

@@ -1,9 +1,10 @@
 .CMS_WidgetMarkdown_MediaPopover_root {
+  background: var(--background-main);
+
   @apply absolute
     max-h-60
     overflow-auto
     rounded-md
-    bg-white
     p-1
     text-base
     shadow-md
@@ -13,7 +14,6 @@
     focus:outline-none
     sm:text-sm
     z-40
-    dark:bg-slate-700
     dark:shadow-lg;
 }
 

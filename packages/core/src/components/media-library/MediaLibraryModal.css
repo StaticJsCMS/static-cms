@@ -3,14 +3,17 @@
     h-media-library-dialog;
 
   & .CMS_MediaLibraryModal_close-button {
+    background: var(--background-main);
+    border-color: var(--background-light);
+
+    &:hover {
+      background: var(--background-light);
+    }
+
     @apply absolute
-    -top-3.5
-    -left-3.5
-    bg-white
-    hover:bg-gray-100
-    dark:bg-slate-800
-    dark:hover:bg-slate-900
-    z-[1];
+      -top-3.5
+      -left-3.5
+      z-[1];
   }
 }
 

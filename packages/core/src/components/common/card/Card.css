@@ -1,11 +1,10 @@
 .CMS_Card_root {
-  @apply bg-white
-    border
-    border-gray-100
+  background: var(--background-main);
+  border-color: var(--background-light);
+
+  @apply border
     rounded-lg
     shadow-sm
-    dark:bg-slate-800
-    dark:border-gray-700/40
     dark:shadow-md
     flex
     flex-col
@@ -13,12 +12,12 @@
 }
 
 .CMS_Card_header {
+  color: var(--text-primary);
+
   @apply mb-2
     text-2xl
     font-bold
-    tracking-tight
-    text-gray-800
-    dark:text-white;
+    tracking-tight;
 }
 
 .CMS_Card_content {
@@ -39,6 +38,10 @@
 }
 
 .CMS_Card_link-action {
+  &:hover {
+    background: color-mix(in srgb, var(--primary-main) 15%, transparent);
+  }
+
   @apply h-full
     w-full
     relative
@@ -46,8 +49,6 @@
     flex-col
     rounded-lg
     justify-start
-    hover:bg-gray-200
-    dark:hover:bg-slate-700/70
     focus:outline-none
     focus:ring-4
     focus:ring-gray-200
@@ -55,6 +56,10 @@
 }
 
 .CMS_Card_button-action {
+  &:hover {
+    background: color-mix(in srgb, var(--primary-main) 15%, transparent);
+  }
+
   @apply h-full
     w-full
     relative
@@ -62,8 +67,6 @@
     flex-col
     rounded-lg
     justify-start
-    hover:bg-gray-200
-    dark:hover:bg-slate-700/70
     focus:outline-none
     focus:ring-4
     focus:ring-gray-200

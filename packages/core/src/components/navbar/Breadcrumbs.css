@@ -1,4 +1,6 @@
 .CMS_Breadcrumbs_root {
+  color: var(--text-primary);
+
   @apply flex
     h-full
     md:w-auto
@@ -6,8 +8,6 @@
     text-xl
     font-semibold
     gap-1
-    text-gray-800
-    dark:text-white
     flex-grow
     truncate;
 }
@@ -32,9 +32,11 @@
 }
 
 .CMS_Breadcrumbs_breadcrumb-link {
-  @apply hover:text-gray-400
-    dark:hover:text-gray-400
-    overflow-hidden
+  &:hover {
+    color: var(--text-secondary);
+  }
+
+  @apply overflow-hidden
     whitespace-nowrap
     focus:outline-none
     focus:ring-4

@@ -10,10 +10,10 @@
 }
 
 .CMS_GroupControl_list-label {
+  color: var(--text-primary);
+
   @apply text-lg
-    font-bold
-    text-gray-800
-    dark:text-white;
+    font-bold;
 }
 
 .CMS_GroupControl_list-option {
@@ -34,10 +34,11 @@
 }
 
 .CMS_GroupControl_list-option-checked-icon {
+  color: var(--primary-main);
+
   @apply ml-2
     w-6
-    h-6
-    text-blue-500;
+    h-6;
 }
 
 .CMS_GroupControl_list-option-not-checked {

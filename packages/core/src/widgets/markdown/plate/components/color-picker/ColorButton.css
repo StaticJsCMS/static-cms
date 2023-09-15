@@ -5,7 +5,7 @@
     }
 
     & .CMS_WidgetMarkdown_ColorButton_check-icon {
-      @apply text-black;
+      color: var(--text-primary);
     }
   }
 }
@@ -17,7 +17,8 @@
 }
 
 .CMS_WidgetMarkdown_ColorButton_check-icon {
+  color: var(--primary-contrast-color);
+
   @apply h-5
-    w-5
-    text-white;
+    w-5;
 }

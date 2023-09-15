@@ -3,11 +3,12 @@
 }
 
 .CMS_WidgetMarkdown_BalloonToolbar_popper {
+  background: var(--background-main);
+
   @apply absolute
     max-h-60
     overflow-hidden
     rounded-md
-    bg-white
     p-1
     text-base
     shadow-md
@@ -17,7 +18,6 @@
     focus:outline-none
     sm:text-sm
     z-[100]
-    dark:bg-slate-700
     dark:shadow-lg;
 }
 

@@ -22,6 +22,7 @@ const SettingsButton: FC<SettingsButtonProps> = ({ showClose = false, disabled, 
     <IconButton
       onClick={onClick}
       size="small"
+      color="secondary"
       variant="text"
       disabled={disabled}
       className={classes.root}

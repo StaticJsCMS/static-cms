@@ -19,8 +19,7 @@
     }
 
     & .CMS_WidgetCode_expand-button-icon {
-      @apply text-slate-300
-        dark:text-slate-600;
+      color: var(--text-secondary);
     }
   }
 
@@ -36,11 +35,11 @@
       &:hover,
       &:focus {
         & .CMS_WidgetCode_label {
-          @apply text-blue-500;
+          color: var(--primary-main);
         }
 
         & .CMS_WidgetCode_expand-button-icon {
-          @apply text-blue-500;
+          color: var(--primary-main);
         }
       }
     }

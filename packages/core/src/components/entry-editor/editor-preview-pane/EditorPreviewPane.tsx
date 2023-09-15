@@ -52,7 +52,7 @@ const FrameGlobalStyles = `
   }
 
   a {
-    color: rgb(59 130 246);
+    color: var(--primary-main);
     text-decoration: none;
   }
 
@@ -70,24 +70,8 @@ const FrameGlobalStyles = `
     }
   }
 
-  .text-blue-500 {
-    color: rgb(59 130 246);
-  }
-
   .CMS_PreviewFrameContent_content {
-    color: rgb(17 24 39);
-  }
-
-  .dark .CMS_PreviewFrameContent_content {
-    color: rgb(243 244 246);
-  }
-
-  .text-slate-500 {
-    color: rgb(100 116 139);
-  }
-
-  .dark .dark\\:text-slate-400 {
-    color: rgb(148 163 184);
+    color: var(--text-primary);
   }
 
   .CMS_Scrollbar_root {

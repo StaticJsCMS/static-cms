@@ -172,6 +172,7 @@ const StringControl: FC<WidgetControlProps<Pair[], KeyValueField>> = ({
       ))}
       <div className={classes.actions}>
         <Button
+          color="secondary"
           variant="outlined"
           onClick={handleAdd}
           className={classes['add-button']}

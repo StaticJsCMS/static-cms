@@ -5,8 +5,9 @@
     w-full;
 
   &:not(.CMS_EditorControlPane_no-border) {
-    @apply lg:border-r
-      border-slate-400;
+    border-color: var(--background-main);
+
+    @apply lg:border-r;
   }
 }
 

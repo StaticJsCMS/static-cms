@@ -1,8 +1,7 @@
 .CMS_WidgetList_root {
   &.CMS_WidgetList_disabled {
     & .CMS_WidgetList_expand-button-icon {
-      @apply text-slate-300
-        dark:text-slate-600;
+      color: var(--text-secondary);
     }
   }
 
@@ -18,7 +17,7 @@
       &:focus-with {
         & .CMS_WidgetList_summary,
         & .CMS_WidgetList_expand-button-icon {
-          @apply text-blue-500;
+          color: var(--primary-main);
         }
       }
     }
@@ -78,8 +77,9 @@
 }
 
 .CMS_WidgetList_content {
-  @apply text-sm
-    text-gray-500;
+  color: var(--text-secondary);
+
+  @apply text-sm;
 }
 
 .CMS_WidgetList_error-message {

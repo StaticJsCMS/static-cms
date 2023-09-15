@@ -355,7 +355,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
               <div key="controls" className={widgetFileImageClasses.actions}>
                 <Button
                   buttonRef={uploadButtonRef}
-                  color="primary"
+                  color="secondary"
                   variant="outlined"
                   key="upload"
                   onClick={handleOpenMediaLibrary}
@@ -366,7 +366,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
                 </Button>
                 {chooseUrl ? (
                   <Button
-                    color="primary"
+                    color="secondary"
                     variant="outlined"
                     key="choose-url"
                     onClick={handleUrl(subject)}
@@ -387,7 +387,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
             <div key="controls" className={widgetFileImageClasses.actions}>
               <Button
                 buttonRef={uploadButtonRef}
-                color="primary"
+                color="secondary"
                 variant="outlined"
                 key="add-replace"
                 onClick={handleOpenMediaLibrary}
@@ -403,7 +403,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
               {chooseUrl ? (
                 allowsMultiple ? (
                   <Button
-                    color="primary"
+                    color="secondary"
                     variant="outlined"
                     key="choose-url"
                     onClick={handleUrl(subject)}
@@ -414,7 +414,7 @@ const withFileControl = ({ forImage = false }: WithFileControlProps = {}) => {
                   </Button>
                 ) : (
                   <Button
-                    color="primary"
+                    color="secondary"
                     variant="outlined"
                     key="replace-url"
                     onClick={handleUrl(subject)}

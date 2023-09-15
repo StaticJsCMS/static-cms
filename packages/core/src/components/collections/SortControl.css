@@ -13,10 +13,10 @@
 }
 
 .CMS_SortControl_list-label {
+  color: var(--text-primary);
+
   @apply text-lg
-    font-bold
-    text-gray-800
-    dark:text-white;
+    font-bold;
 }
 
 .CMS_SortControl_list-option {
@@ -37,10 +37,11 @@
 }
 
 .CMS_SortControl_list-option-sorted-icon {
+  color: var(--primary-main);
+
   @apply ml-2
     w-6
-    h-6
-    text-blue-500;
+    h-6;
 }
 
 .CMS_SortControl_list-option-not-sorted {

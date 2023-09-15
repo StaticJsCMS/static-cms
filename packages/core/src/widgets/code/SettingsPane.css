@@ -1,6 +1,8 @@
 .CMS_WidgetCodeSettings_root {
+  background: var(--background-light);
+
   @apply absolute
-    top-10
+    top-[41px]
     bottom-0
     right-0
     w-40
@@ -8,12 +10,5 @@
     flex-col
     gap-2
     z-10
-    shadow-sm
-    bg-gray-100
-    dark:bg-slate-800
-    border-l
-    border-l-slate-400
-    border-t
-    border-t-slate-300
-    dark:border-t-slate-700;
+    shadow-sm;
 }
