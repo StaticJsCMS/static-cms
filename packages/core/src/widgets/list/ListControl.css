@@ -7,14 +7,16 @@
 
   &.CMS_WidgetList_error {
     & .CMS_WidgetList_content {
-      @apply border-l-red-500;
+      border-color: var(--error-main);
+
+      @apply border-l;
     }
   }
 
   &:not(.CMS_WidgetList_disabled) {
     &:not(.CMS_WidgetList_error) {
       &:hover,
-      &:focus-with {
+      &:focus-within {
         & .CMS_WidgetList_summary,
         & .CMS_WidgetList_expand-button-icon {
           color: var(--primary-main);

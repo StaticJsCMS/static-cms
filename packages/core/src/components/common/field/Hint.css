@@ -8,15 +8,6 @@
     &.CMS_Hint_disabled {
       color: var(--text-disabled);
     }
-
-    &:not(.CMS_Hint_disabled) {
-      color: var(--text-secondary);
-
-      &:focus-within,
-      &:hover {
-        color: var(--primary-main);
-      }
-    }
   }
 
   &:not(.CMS_Hint_inline) {

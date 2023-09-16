@@ -5,7 +5,9 @@
 
   &.CMS_WidgetList_ListItem_error {
     & .CMS_WidgetList_ListItem_content {
-      @apply border-l-red-500;
+      border-color: var(--error-main);
+
+      @apply border-l;
     }
   }
 
@@ -25,7 +27,9 @@
         }
 
         & .CMS_WidgetList_ListItem_content {
-          @apply border-l-blue-500;
+          border-color: var(--primary-main);
+
+          @apply border-l;
         }
       }
     }
@@ -52,7 +56,9 @@
 
   &.CMS_WidgetList_ListItem_error {
     & .CMS_WidgetList_ListItem_content {
-      @apply border-l-red-500;
+      border-color: var(--error-main);
+
+      @apply border-l;
     }
   }
 
@@ -60,7 +66,9 @@
     &:not(.CMS_WidgetList_ListItem_disabled) {
       &:focus-within {
         & .CMS_WidgetList_ListItem_content {
-          @apply border-l-blue-500;
+          border-color: var(--primary-main);
+
+          @apply border-l;
         }
       }
     }
@@ -117,9 +125,10 @@
 }
 
 .CMS_WidgetList_ListItem_not-open-placeholder {
+  border-color: var(--background-light);
+
   @apply ml-8
-    border-b
-    border-slate-400;
+    border-b;
 }
 
 .CMS_WidgetList_ListItem_content {
