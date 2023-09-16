@@ -124,13 +124,13 @@
 
 .CMS_WidgetList_ListItem_content {
   color: var(--text-secondary);
+  border-color: var(--background-light);
 
   @apply relative
     ml-4
     text-sm
     border-l-2
-    border-solid
-    border-l-slate-400;
+    border-solid;
 }
 
 .CMS_WidgetList_ListItem_single-field-controls {

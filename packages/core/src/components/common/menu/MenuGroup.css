@@ -1,6 +1,6 @@
 .CMS_MenuGroup_root {
+  border: var(--background-light);
+
   @apply py-1
-    border-b
-    border-gray-200
-    dark:border-slate-700;
+    border-b;
 }
