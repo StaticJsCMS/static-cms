@@ -6,8 +6,6 @@
   &.CMS_WidgetList_ListItem_error {
     & .CMS_WidgetList_ListItem_content {
       border-color: var(--error-main);
-
-      @apply border-l;
     }
   }
 
@@ -28,8 +26,6 @@
 
         & .CMS_WidgetList_ListItem_content {
           border-color: var(--primary-main);
-
-          @apply border-l;
         }
       }
     }
@@ -57,8 +53,6 @@
   &.CMS_WidgetList_ListItem_error {
     & .CMS_WidgetList_ListItem_content {
       border-color: var(--error-main);
-
-      @apply border-l;
     }
   }
 
@@ -67,8 +61,6 @@
       &:focus-within {
         & .CMS_WidgetList_ListItem_content {
           border-color: var(--primary-main);
-
-          @apply border-l;
         }
       }
     }

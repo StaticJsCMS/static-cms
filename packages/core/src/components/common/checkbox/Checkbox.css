@@ -9,8 +9,7 @@
 
     & .CMS_Checkbox_input {
       & + .CMS_Checkbox_custom-input {
-        @apply bg-blue-600/25
-          after:border-gray-500/75;
+        background: var(--primary-main);
       }
     }
 
@@ -33,9 +32,9 @@
   }
 
   &:checked + .CMS_Checkbox_custom-input {
-    @apply after:translate-x-full
-      bg-blue-600
-      after:border-white;
+    background: var(--primary-main);
+
+    @apply after:translate-x-full;
   }
 }
 

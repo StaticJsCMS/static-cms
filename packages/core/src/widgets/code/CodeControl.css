@@ -1,10 +1,6 @@
 .CMS_WidgetCode_root {
   border-color: var(--background-light);
 
-  &:focus-within {
-    border-color: var(--primary-main);
-  }
-
   @apply relative
     flex
     flex-col
@@ -36,14 +32,24 @@
   &:not(.CMS_WidgetCode_error) {
     &:not(.CMS_WidgetCode_disabled) {
       &:hover,
-      &:focus {
+      &:focus-within {
+        border-color: var(--primary-main);
+
         & .CMS_WidgetCode_label {
           color: var(--primary-main);
         }
+      }
+    }
+  }
 
-        & .CMS_WidgetCode_expand-button-icon {
-          color: var(--primary-main);
-        }
+  &.CMS_WidgetCode_error {
+    &:not(.CMS_WidgetCode_disabled) {
+      & .CMS_WidgetCode_label {
+        color: var(--error-main);
+      }
+
+      &:focus-within {
+        border-color: var(--error-main);
       }
     }
   }

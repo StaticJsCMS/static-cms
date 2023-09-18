@@ -4,12 +4,6 @@
     text-xs
     italic;
 
-  &:not(.CMS_Hint_error) {
-    &.CMS_Hint_disabled {
-      color: var(--text-disabled);
-    }
-  }
-
   &:not(.CMS_Hint_inline) {
     @apply px-3
       pt-1;
@@ -26,8 +20,4 @@
 
 .CMS_Hint_cursor-default {
   @apply cursor-default;
-}
-
-.CMS_Hint_error {
-  color: var(--error-main);
 }

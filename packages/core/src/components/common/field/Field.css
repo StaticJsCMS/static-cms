@@ -14,8 +14,8 @@
       }
 
       &:focus-within {
-        & .CMS_Label_root,
-        & .CMS_Hint_root {
+        & .CMS_Field_label,
+        & .CMS_Field_hint {
           color: var(--primary-main);
         }
       }
@@ -25,11 +25,24 @@
         &:focus-within {
           background: var(--background-main);
 
-          & .CMS_Label_root,
-          & .CMS_Hint_root {
+          & .CMS_Field_label,
+          & .CMS_Field_hint {
             color: var(--primary-main);
           }
         }
+      }
+    }
+  }
+
+  &.CMS_Field_error {
+    & .CMS_Field_label,
+    & .CMS_Field_hint {
+      color: var(--error-main);
+    }
+
+    &:not(.CMS_Field_disabled) {
+      &:focus-within {
+        border-color: var(--error-main);
       }
     }
   }

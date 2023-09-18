@@ -271,6 +271,13 @@
 
 .CMS_MediaLibrary_search-input {
   color: var(--text-primary);
+  background: var(--background-main);
+  border-color: var(--background-light);
+
+  &:hover,
+  &:focus-within {
+    border-color: var(--primary-main);
+  }
 
   @apply block
     w-full
@@ -278,14 +285,7 @@
     pl-10
     text-sm
     border
-    border-gray-300
     rounded-lg
-    bg-gray-50
     focus-visible:outline-none
-    focus:ring-4
-    focus:ring-gray-200
-    dark:bg-gray-700
-    dark:border-gray-600
-    dark:placeholder-gray-400
-    dark:focus:ring-slate-700;
+    focus:ring-4;
 }

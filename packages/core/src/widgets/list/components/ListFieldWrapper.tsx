@@ -49,7 +49,7 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
         widgetListClasses.root,
         disabled && widgetListClasses.disabled,
         field.required !== false && widgetListClasses.required,
-        hasErrors && widgetListClasses.error,
+        (hasErrors || hasChildErrors) && widgetListClasses.error,
         forSingleList && widgetListClasses['for-single-list'],
         open && widgetListClasses.open,
       )}

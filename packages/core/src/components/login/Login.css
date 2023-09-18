@@ -24,7 +24,9 @@
 }
 
 .CMS_Login_error {
-  color: var(--error-main);
+  color: var(--error-contrast-color);
+  background: var(--error-light);
+  border-color: var(--error-main);
 
   @apply flex
     px-4
@@ -32,11 +34,7 @@
     mb-6
     text-sm
     border
-    border-red-300
-    rounded-lg
-    bg-red-50
-    dark:bg-gray-800
-    dark:border-red-800;
+    rounded-lg;
 }
 
 .CMS_Login_error-icon {

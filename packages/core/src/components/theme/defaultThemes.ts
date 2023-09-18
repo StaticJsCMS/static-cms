@@ -17,7 +17,7 @@ export const DARK_THEME: Theme = {
   },
   primary: {
     main: '#339ef4',
-    light: '#b7c1cf',
+    light: '#6bb9f7',
     dark: '#0c82e0',
     contrastColor: '#ffffff',
   },

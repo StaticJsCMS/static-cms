@@ -28,21 +28,8 @@
     gap-1;
 }
 
-.CMS_WidgetFileImage_SortableLink_replace-button {
-  color: var(--primary-contrast-color);
-
-  &:hover {
-    color: var(--primary-light);
-  }
-
-  @apply dark:hover:bg-blue-800/80;
-}
-
 .CMS_WidgetFileImage_SortableLink_remove-button {
-  color: var(--error-main);
-
   @apply relative
-    dark:hover:bg-red-800/40
     z-30;
 }
 

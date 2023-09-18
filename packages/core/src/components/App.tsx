@@ -76,27 +76,6 @@ const App = ({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // const mode = useAppSelector(selectTheme);
-
-  // TODO FIX THIS!!!
-  // const theme = React.useMemo(
-  //   () =>
-  //     createTheme({
-  //       palette: {
-  //         mode,
-  //         primary: {
-  //           main: 'rgb(37 99 235)',
-  //         },
-  //         ...(mode === 'dark' && {
-  //           background: {
-  //             paper: 'rgb(15 23 42)',
-  //           },
-  //         }),
-  //       },
-  //     }),
-  //   [mode],
-  // );
-
   const configError = useCallback(
     (error?: string) => {
       return (
@@ -253,7 +232,6 @@ const App = ({
 
   return (
     <ThemeManager>
-      {/* <MuiThemeProvider theme={theme}> */}
       <ScrollSync key="scroll-sync" enabled={scrollSyncEnabled}>
         <>
           <div key="back-to-top-anchor" id="back-to-top-anchor" />
@@ -267,7 +245,6 @@ const App = ({
           </div>
         </>
       </ScrollSync>
-      {/* </MuiThemeProvider> */}
     </ThemeManager>
   );
 };

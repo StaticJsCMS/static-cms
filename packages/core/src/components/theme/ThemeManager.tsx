@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
+import React, { useEffect, useMemo } from 'react';
 
 import useTheme from './hooks/useTheme';
 
@@ -77,7 +78,64 @@ const ThemeManager: FC<PropsWithChildren<ThemeManagerProps>> = ({
     );
   }, [providedDocument, theme]);
 
-  return <>{children}</>;
+  const muiTheme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          primary: {
+            main: theme.primary.main,
+            light: theme.primary.light,
+            dark: theme.primary.dark,
+            contrastText: theme.primary.contrastColor,
+          },
+          secondary: {
+            main: theme.secondary.main,
+            light: theme.secondary.light,
+            dark: theme.secondary.dark,
+            contrastText: theme.secondary.contrastColor,
+          },
+          text: {
+            primary: theme.text.primary,
+            secondary: theme.text.secondary,
+            disabled: theme.text.disabled,
+          },
+          action: {
+            active: theme.text.primary,
+          },
+          background: {
+            default: theme.background.dark,
+            paper: theme.background.main,
+          },
+          error: {
+            main: theme.error.main,
+            light: theme.error.light,
+            dark: theme.error.dark,
+            contrastText: theme.error.contrastColor,
+          },
+          warning: {
+            main: theme.warning.main,
+            light: theme.warning.light,
+            dark: theme.warning.dark,
+            contrastText: theme.warning.contrastColor,
+          },
+          info: {
+            main: theme.info.main,
+            light: theme.info.light,
+            dark: theme.info.dark,
+            contrastText: theme.info.contrastColor,
+          },
+          success: {
+            main: theme.success.main,
+            light: theme.success.light,
+            dark: theme.success.dark,
+            contrastText: theme.success.contrastColor,
+          },
+        },
+      }),
+    [theme],
+  );
+
+  return <MuiThemeProvider theme={muiTheme}>{children}</MuiThemeProvider>;
 };
 
 export default ThemeManager;

@@ -54,6 +54,13 @@
 
 .CMS_InlineEditTextField_input {
   color: var(--text-primary);
+  background: var(--background-main);
+  border-color: var(--background-light);
+
+  &:hover,
+  &:focus-within {
+    border-color: var(--primary-main);
+  }
 
   @apply block
     w-full
@@ -61,15 +68,8 @@
     -ml-1.5
     text-sm
     border
-    border-gray-300
     rounded-md
-    bg-gray-50
     focus-visible:outline-none
     focus:ring-4
-    focus:ring-gray-200
-    dark:bg-gray-700
-    dark:border-gray-600
-    dark:placeholder-gray-400
-    dark:focus:ring-slate-700
     h-input;
 }

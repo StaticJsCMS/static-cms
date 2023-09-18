@@ -51,19 +51,17 @@
 .CMS_WidgetMarkdown_FontTypeSelect_option {
   &:hover {
     color: var(--primary-contrast-color);
+    background: var(--primary-main);
   }
 
   @apply relative
     select-none
     py-2
     px-4
-    cursor-pointer
-    hover:bg-blue-500
-    dark:hover:bg-blue-500;
+    cursor-pointer;
 
   &.CMS_WidgetMarkdown_FontTypeSelect_option-selected {
-    @apply bg-blue-500/25
-      dark:bg-blue-700/20;
+    background: var(--primary-light);
 
     & .CMS_WidgetMarkdown_FontTypeSelect_option-label {
       @apply font-medium;

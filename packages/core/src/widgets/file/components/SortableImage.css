@@ -18,9 +18,9 @@
 
   &:hover {
     & .CMS_WidgetFileImage_SortableImage_controls-wrapper {
-      @apply visible
-        bg-blue-200/25
-        dark:bg-blue-400/60;
+      background: color-mix(in srgb, var(--primary-main) 25%, transparent);
+
+      @apply visible;
     }
   }
 }
@@ -47,30 +47,30 @@
 }
 
 .CMS_WidgetFileImage_SortableImage_controls {
+  background: color-mix(in srgb, var(--background-dark) 90%, transparent);
+
   @apply absolute
     top-2
     right-2
     flex
-    gap-1;
+    gap-1
+    rounded;
 }
 
 .CMS_WidgetFileImage_SortableImage_replace-button {
   color: var(--primary-contrast-color);
+  background: color-mix(in srgb, var(--primary-dark) 15%, transparent);
 
   &:hover {
     color: var(--primary-light);
   }
-
-  @apply bg-gray-900/25
-    dark:hover:bg-blue-800/80;
 }
 
 .CMS_WidgetFileImage_SortableImage_remove-button {
   color: var(--error-main);
+  background: color-mix(in srgb, var(--error-dark) 15%, transparent);
 
   @apply relative
-    bg-gray-900/25
-    dark:hover:bg-red-800/40
     z-30;
 }
 
