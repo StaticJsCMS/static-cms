@@ -1,7 +1,9 @@
 .CMS_WidgetMarkdown_ColorButton_root {
   &.CMS_WidgetMarkdown_ColorButton_is-bright-color {
     & .CMS_WidgetMarkdown_ColorButton_avatar {
-      border: 1px solid rgba(209, 213, 219, 1);
+      border-color: var(--background-light);
+
+      @apply border;
     }
 
     & .CMS_WidgetMarkdown_ColorButton_check-icon {

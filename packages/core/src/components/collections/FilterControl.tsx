@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { translate } from 'react-polyglot';
 
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
+import Checkbox from '../common/checkbox/Checkbox';
 import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
@@ -93,12 +94,11 @@ const FilterControl = ({
               onClick={handleFilterClick(viewFilter)}
               className={classes.filter}
             >
-              <input
+              <Checkbox
                 key={`${labelId}-${checked}`}
                 id={labelId}
-                type="checkbox"
-                value=""
                 checked={checked}
+                size="sm"
                 readOnly
               />
               <label className={classes['filter-label']}>{viewFilter.label}</label>

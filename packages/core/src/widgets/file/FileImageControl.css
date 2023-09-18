@@ -5,7 +5,7 @@
     border-transparent;
 
   &.CMS_WidgetFileImage_drag-over-active {
-    @apply border-blue-500;
+    border-color: var(--primary-main);
 
     & .CMS_WidgetFileImage_drop-area {
       @apply opacity-100;

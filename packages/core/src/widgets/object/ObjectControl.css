@@ -2,38 +2,47 @@
 }
 
 .CMS_WidgetObject_root {
+  border-color: var(--background-light);
+
   @apply relative
     flex
     flex-col
-    border-b
-    border-slate-400
-    focus-within:border-blue-800
-    dark:focus-within:border-blue-100;
+    border-b;
 
-  &.CMS_WidgetObject_error {
-    & .CMS_WidgetObject_fields {
-      @apply border-l-red-500;
-    }
-  }
+  &:not(.CMS_WidgetObject_disabled) {
+    &.CMS_WidgetObject_error {
+      &:focus-within {
+        border-color: var(--error-main);
+      }
 
-  &:not(.CMS_WidgetObject_error) {
-    &:not(.CMS_WidgetObject_disabled) {
       & .CMS_WidgetObject_fields {
-        @apply border-l-blue-500;
+        border-color: var(--error-main);
+      }
+
+      &:hover,
+      &:focus-within {
+        & .CMS_WidgetObject_summary,
+        & .CMS_WidgetObject_expand-icon {
+          color: var(--error-main);
+        }
       }
     }
 
-    &:focus-within {
-      & .CMS_WidgetObject_summary,
-      & .CMS_WidgetObject_expand-icon {
-        color: var(--primary-main);
-      }
-    }
+    &:not(.CMS_WidgetObject_error) {
+      &:focus-within {
+        border-color: var(--primary-main);
 
-    &:hover {
-      & .CMS_WidgetObject_summary,
-      & .CMS_WidgetObject_expand-icon {
-        color: var(--primary-main);
+        & .CMS_WidgetObject_fields {
+          border-color: var(--primary-main);
+        }
+      }
+
+      &:hover,
+      &:focus-within {
+        & .CMS_WidgetObject_summary,
+        & .CMS_WidgetObject_expand-icon {
+          color: var(--primary-main);
+        }
       }
     }
   }
@@ -64,8 +73,7 @@
     font-medium
     focus:outline-none
     focus-visible:ring
-    gap-2
-    focus-visible:ring-opacity-75;
+    gap-2;
 }
 
 .CMS_WidgetObject_expand-icon {
@@ -80,8 +88,7 @@
   @apply ml-4
     text-sm
     border-l-2
-    border-solid
-    border-l-slate-400;
+    border-solid;
 }
 
 .CMS_WidgetObject_error-message {

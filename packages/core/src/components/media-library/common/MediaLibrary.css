@@ -279,6 +279,8 @@
     border-color: var(--primary-main);
   }
 
+  --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
+
   @apply block
     w-full
     p-1.5

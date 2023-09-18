@@ -50,6 +50,11 @@
 
 .CMS_Menu_menu {
   background: var(--background-main);
+  border-color: var(--background-light);
+
+  & > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--background-light);
+  }
 
   @apply absolute
     right-0
@@ -59,11 +64,7 @@
     rounded-md
     shadow-md
     border
-    border-gray-200
     focus:outline-none
     divide-y
-    divide-gray-100
-    dark:border-gray-700
-    dark:divide-gray-600
     dark:shadow-lg;
 }

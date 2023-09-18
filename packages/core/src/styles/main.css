@@ -30,8 +30,6 @@
       font-medium
       focus:outline-none
       focus:ring-4
-      focus:ring-gray-200
-      dark:focus:ring-slate-600
       border;
   }
 
@@ -69,6 +67,7 @@
   .CMS_Button_contained-primary {
     color: var(--primary-contrast-color);
     background: var(--primary-main);
+    --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
 
     &:hover {
       background: var(--primary-dark);
@@ -85,6 +84,7 @@
   .CMS_Button_outlined-primary {
     color: var(--primary-main);
     border-color: var(--primary-main);
+    --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
 
     &:hover {
       color: var(--primary-dark);
@@ -105,6 +105,7 @@
 
   .CMS_Button_text-primary {
     color: var(--primary-main);
+    --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
 
     &:hover {
       color: var(--primary-dark);
@@ -124,6 +125,7 @@
   .CMS_Button_contained-secondary {
     color: var(--secondary-contrast-color);
     background: var(--secondary-main);
+    --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
 
     &:hover {
       background: var(--secondary-dark);
@@ -140,6 +142,7 @@
   .CMS_Button_outlined-secondary {
     color: var(--secondary-main);
     border-color: var(--secondary-main);
+    --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
 
     &:hover {
       color: var(--secondary-dark);
@@ -160,6 +163,7 @@
 
   .CMS_Button_text-secondary {
     color: var(--secondary-main);
+    --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
 
     &:hover {
       color: var(--secondary-dark);
@@ -179,6 +183,7 @@
   .CMS_Button_contained-success {
     color: var(--success-contrast-color);
     background: var(--success-main);
+    --tw-ring-color: color-mix(in srgb, var(--success-light) 50%, transparent);
 
     &:hover {
       background: var(--success-dark);
@@ -195,6 +200,7 @@
   .CMS_Button_outlined-success {
     color: var(--success-main);
     border-color: var(--success-main);
+    --tw-ring-color: color-mix(in srgb, var(--success-light) 50%, transparent);
 
     &:hover {
       color: var(--success-dark);
@@ -215,6 +221,7 @@
 
   .CMS_Button_text-success {
     color: var(--success-main);
+    --tw-ring-color: color-mix(in srgb, var(--success-light) 50%, transparent);
 
     &:hover {
       color: var(--success-dark);
@@ -234,6 +241,7 @@
   .CMS_Button_contained-error {
     color: var(--error-contrast-color);
     background: var(--error-main);
+    --tw-ring-color: color-mix(in srgb, var(--error-light) 50%, transparent);
 
     &:hover {
       background: var(--error-dark);
@@ -250,6 +258,7 @@
   .CMS_Button_outlined-error {
     color: var(--error-main);
     border-color: var(--error-main);
+    --tw-ring-color: color-mix(in srgb, var(--error-light) 50%, transparent);
 
     &:hover {
       color: var(--error-dark);
@@ -270,6 +279,7 @@
 
   .CMS_Button_text-error {
     color: var(--error-main);
+    --tw-ring-color: color-mix(in srgb, var(--error-light) 50%, transparent);
 
     &:hover {
       color: var(--error-dark);
@@ -289,6 +299,7 @@
   .CMS_Button_contained-warning {
     color: var(--warning-contrast-color);
     background: var(--warning-main);
+    --tw-ring-color: color-mix(in srgb, var(--warning-light) 50%, transparent);
 
     &:hover {
       background: var(--warning-dark);
@@ -305,6 +316,7 @@
   .CMS_Button_outlined-warning {
     color: var(--warning-main);
     border-color: var(--warning-main);
+    --tw-ring-color: color-mix(in srgb, var(--warning-light) 50%, transparent);
 
     &:hover {
       color: var(--warning-dark);
@@ -325,6 +337,7 @@
 
   .CMS_Button_text-warning {
     color: var(--warning-main);
+    --tw-ring-color: color-mix(in srgb, var(--warning-light) 50%, transparent);
 
     &:hover {
       color: var(--warning-dark);
@@ -344,6 +357,7 @@
   .CMS_Button_contained-info {
     color: var(--info-contrast-color);
     background: var(--info-main);
+    --tw-ring-color: color-mix(in srgb, var(--info-light) 50%, transparent);
 
     &:hover {
       background: var(--info-dark);
@@ -360,6 +374,7 @@
   .CMS_Button_outlined-info {
     color: var(--info-main);
     border-color: var(--info-main);
+    --tw-ring-color: color-mix(in srgb, var(--info-light) 50%, transparent);
 
     &:hover {
       color: var(--info-dark);
@@ -380,6 +395,7 @@
 
   .CMS_Button_text-info {
     color: var(--info-main);
+    --tw-ring-color: color-mix(in srgb, var(--info-light) 50%, transparent);
 
     &:hover {
       color: var(--info-dark);
@@ -407,10 +423,11 @@
       h-4
       rounded
       p-1.5
-      focus:ring-blue-500
-      dark:focus:ring-blue-600
-      dark:ring-offset-gray-800
       focus:ring-2;
+
+    &:focus {
+      --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
+    }
   }
 }
 
@@ -424,23 +441,13 @@
 }
 
 .CMS_Scrollbar_root {
-  --scrollbar-foreground: rgba(100, 116, 139, 0.25);
-  --scrollbar-background: rgb(248 250 252);
+  --scrollbar-foreground: var(--background-main);
+  --scrollbar-background: var(--background-dark);
 }
 
 .CMS_Scrollbar_root.CMS_Scrollbar_secondary {
-  --scrollbar-foreground: rgba(100, 116, 139, 0.25);
-  --scrollbar-background: rgb(255 255 255);
-}
-
-.dark .CMS_Scrollbar_root {
-  --scrollbar-foreground: rgba(30, 41, 59, 0.8);
-  --scrollbar-background: rgb(15 23 42);
-}
-
-.dark .CMS_Scrollbar_root.CMS_Scrollbar_secondary {
-  --scrollbar-foreground: rgba(47, 64, 84, 0.8);
-  --scrollbar-background: rgb(30 41 59);
+  --scrollbar-foreground: var(--background-light);
+  --scrollbar-background: var(--background-main);
 }
 
 .CMS_Scrollbar_root {

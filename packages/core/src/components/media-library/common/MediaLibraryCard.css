@@ -26,14 +26,14 @@
 }
 
 .CMS_MediaLibraryCard_handle {
+  --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
+
   @apply absolute
     inset-0
     rounded-md
     z-20
     overflow-visible
     focus:ring-4
-    focus:ring-gray-200
-    dark:focus:ring-slate-700
     focus-visible:outline-none;
 }
 

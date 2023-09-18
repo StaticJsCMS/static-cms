@@ -38,10 +38,6 @@
 }
 
 .CMS_Card_link-action {
-  &:hover {
-    background: color-mix(in srgb, var(--primary-main) 15%, transparent);
-  }
-
   @apply h-full
     w-full
     relative
@@ -50,16 +46,18 @@
     rounded-lg
     justify-start
     focus:outline-none
-    focus:ring-4
-    focus:ring-gray-200
-    dark:focus:ring-slate-700;
+    focus:ring-4;
+
+  &:hover {
+    background: color-mix(in srgb, var(--primary-main) 15%, transparent);
+  }
+
+  &:focus {
+    --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
+  }
 }
 
 .CMS_Card_button-action {
-  &:hover {
-    background: color-mix(in srgb, var(--primary-main) 15%, transparent);
-  }
-
   @apply h-full
     w-full
     relative
@@ -68,8 +66,14 @@
     rounded-lg
     justify-start
     focus:outline-none
-    focus:ring-4
-    focus:ring-gray-200
-    dark:focus:ring-slate-700;
+    focus:ring-4;
+
+  &:hover {
+    background: color-mix(in srgb, var(--primary-main) 15%, transparent);
+  }
+
+  &:focus {
+    --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
+  }
 }
 

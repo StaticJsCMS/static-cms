@@ -88,7 +88,6 @@
     focus:outline-none
     focus-visible:ring
     gap-2
-    focus-visible:ring-opacity-75
     items-center;
 }
 

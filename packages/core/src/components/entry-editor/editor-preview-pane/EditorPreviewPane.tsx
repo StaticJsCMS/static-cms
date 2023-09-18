@@ -75,13 +75,13 @@ const FrameGlobalStyles = `
   }
 
   .CMS_Scrollbar_root {
-    --scrollbar-foreground: rgba(100, 116, 139, 0.25);
-    --scrollbar-background: rgb(248 250 252);
+    --scrollbar-foreground: var(--background-main);
+    --scrollbar-background: var(--background-dark);
   }
 
-  .dark.CMS_Scrollbar_root {
-    --scrollbar-foreground: rgba(30, 41, 59, 0.8);
-    --scrollbar-background: rgb(15 23 42);
+  .CMS_Scrollbar_root.CMS_Scrollbar_secondary {
+    --scrollbar-foreground: var(--background-light);
+    --scrollbar-background: var(--background-main);
   }
 
   .CMS_Scrollbar_root {

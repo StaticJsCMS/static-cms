@@ -21,7 +21,8 @@
 
 .CMS_CollectionSearch_input {
   color: var(--text-primary);
-  background: var(--background-light);
+  background: color-mix(in srgb, var(--background-light) 50%, transparent);
+  border-color: var(--background-light);
 
   @apply block
     w-full
@@ -29,14 +30,17 @@
     pl-10
     text-sm
     border
-    border-gray-300
     rounded-lg
     focus-visible:outline-none
-    focus:ring-4
-    focus:ring-gray-200
-    dark:border-gray-600
-    dark:placeholder-gray-400
-    dark:focus:ring-slate-700;
+    focus:ring-4;
+
+  &:placeholder {
+    color: var(--text-disabled);
+  }
+
+  &:focus {
+    --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
+  }
 }
 
 .CMS_CollectionSearch_search-in {
@@ -47,9 +51,6 @@
     rounded-md
     text-base
     shadow-md
-    ring-1
-    ring-black
-    ring-opacity-5
     focus:outline-none
     sm:text-sm
     z-[1300]

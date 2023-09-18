@@ -6,15 +6,14 @@
   &.CMS_WidgetMarkdown_FontTypeSelect_disabled {
     & .CMS_WidgetMarkdown_FontTypeSelect_select {
       color: var(--text-secondary);
-
-      @apply border-gray-200
-        dark:border-gray-600;
+      border-color: var(--background-light);
     }
   }
 }
 
 .CMS_WidgetMarkdown_FontTypeSelect_select {
   color: var(--text-primary);
+  border-color: var(--background-light);
 
   @apply flex
     items-center
@@ -27,9 +26,7 @@
     w-full
     h-6
     border
-    rounded-sm
-    border-gray-600
-    dark:border-gray-400;
+    rounded-sm;
 }
 
 .CMS_WidgetMarkdown_FontTypeSelect_popper {
@@ -39,9 +36,6 @@
     overflow-auto
     rounded-md
     shadow-md
-    ring-1
-    ring-black
-    ring-opacity-5
     focus:outline-none
     sm:text-sm
     dark:shadow-lg

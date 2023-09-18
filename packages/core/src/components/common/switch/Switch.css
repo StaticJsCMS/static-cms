@@ -29,7 +29,7 @@
   @apply sr-only;
 
   &:focus + .CMS_Switch_toggle {
-    --tw-ring-color: rgb(147 197 253 / var(--primary-light));
+    --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
 
     @apply ring-4;
   }
