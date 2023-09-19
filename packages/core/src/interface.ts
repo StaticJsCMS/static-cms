@@ -633,6 +633,9 @@ export interface MediaField extends BaseField {
 export interface BooleanField extends BaseField {
   widget: 'boolean';
   default?: boolean;
+
+  prefix?: string;
+  suffix?: string;
 }
 
 export interface CodeField extends BaseField {
@@ -777,6 +780,9 @@ export interface NumberField extends BaseField {
   max?: number;
 
   step?: number;
+
+  prefix?: string;
+  suffix?: string;
 }
 
 export interface SelectField extends BaseField {
@@ -809,8 +815,15 @@ export interface HiddenField extends BaseField {
   default?: ValueOrNestedValue;
 }
 
-export interface StringOrTextField extends BaseField {
-  widget: 'string' | 'text';
+export interface StringField extends BaseField {
+  widget: 'string';
+  default?: string;
+  prefix?: string;
+  suffix?: string;
+}
+
+export interface TextField extends BaseField {
+  widget: 'text';
   default?: string;
 }
 
@@ -839,7 +852,8 @@ export type Field<EF extends BaseField = UnknownField> =
   | RelationField
   | SelectField
   | HiddenField
-  | StringOrTextField
+  | StringField
+  | TextField
   | UUIDField
   | EF;
 

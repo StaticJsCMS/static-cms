@@ -5,5 +5,7 @@ export default {
     min: { type: 'number' },
     max: { type: 'number' },
     default: { type: 'number' },
+    prefix: { type: 'string' },
+    suffix: { type: 'string' },
   },
 };

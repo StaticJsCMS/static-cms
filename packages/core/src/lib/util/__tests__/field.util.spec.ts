@@ -2,16 +2,16 @@ import { createMockEntry } from '@staticcms/test/data/entry.mock';
 import { isHidden } from '../field.util';
 import { I18N_FIELD_NONE } from '../../i18n';
 
-import type { StringOrTextField } from '@staticcms/core/interface';
+import type { StringField, TextField } from '@staticcms/core/interface';
 
 describe('filterEntries', () => {
-  const mockTitleField: StringOrTextField = {
+  const mockTitleField: StringField = {
     label: 'Title',
     name: 'title',
     widget: 'string',
   };
 
-  const mockUrlField: StringOrTextField = {
+  const mockUrlField: StringField = {
     label: 'URL',
     name: 'url',
     widget: 'string',
@@ -22,7 +22,7 @@ describe('filterEntries', () => {
     },
   };
 
-  const mockBodyField: StringOrTextField = {
+  const mockBodyField: TextField = {
     label: 'Body',
     name: 'body',
     widget: 'text',

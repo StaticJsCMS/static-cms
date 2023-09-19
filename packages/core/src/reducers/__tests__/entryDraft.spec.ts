@@ -2,7 +2,7 @@ import { DRAFT_CHANGE_FIELD, DRAFT_CREATE_EMPTY } from '@staticcms/core/constant
 import entryDraftReducer from '../entryDraft';
 import { createMockEntry } from '@staticcms/test/data/entry.mock';
 
-import type { I18nSettings, StringOrTextField } from '@staticcms/core/interface';
+import type { I18nSettings, StringField } from '@staticcms/core/interface';
 import type { EntryDraftState } from '../entryDraft';
 
 describe('entryDraft', () => {
@@ -145,7 +145,7 @@ describe('entryDraft', () => {
         });
 
         it('should duplicate values to other locales for singleton list', () => {
-          const field: StringOrTextField = {
+          const field: StringField = {
             widget: 'string',
             name: 'stringInput',
             i18n: 'duplicate',

@@ -156,6 +156,19 @@ collections:
             widget: boolean
             pattern: ['true', 'Must be true']
             required: false
+          - name: prefix
+            label: With Prefix
+            widget: boolean
+            prefix: "I'm a prefix"
+          - name: suffix
+            label: With Suffix
+            widget: boolean
+            suffix: "I'm a suffix"
+          - name: prefix_and_suffix
+            label: With Prefix and Suffix
+            widget: boolean
+            prefix: "I'm a prefix"
+            suffix: "I'm a suffix"
       - name: code
         label: Code
         file: _widgets/code.json
@@ -784,6 +797,19 @@ collections:
             widget: number
             pattern: ['[0-9]{3,}', 'Must be at least 3 digits']
             required: false
+          - name: prefix
+            label: With Prefix
+            widget: number
+            prefix: "$"
+          - name: suffix
+            label: With Suffix
+            widget: number
+            suffix: "%"
+          - name: prefix_and_suffix
+            label: With Prefix and Suffix
+            widget: number
+            prefix: "$"
+            suffix: "%"
       - name: object
         label: Object
         file: _widgets/object.json
@@ -1061,6 +1087,19 @@ collections:
             widget: string
             pattern: ['.{12,}', 'Must have at least 12 characters']
             required: false
+          - name: prefix
+            label: With Prefix
+            widget: string
+            prefix: "$"
+          - name: suffix
+            label: With Suffix
+            widget: string
+            suffix: "%"
+          - name: prefix_and_suffix
+            label: With Prefix and Suffix
+            widget: string
+            prefix: "$"
+            suffix: "%"
       - name: text
         label: Text
         file: _widgets/text.json

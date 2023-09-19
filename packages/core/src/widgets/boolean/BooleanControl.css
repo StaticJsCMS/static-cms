@@ -1,0 +1,23 @@
+.CMS_WidgetBoolean_content {
+  @apply flex
+    gap-2
+    items-center;
+}
+
+.CMS_WidgetBoolean_prefix {
+  color: var(--text-secondary);
+
+  @apply text-sm
+    whitespace-nowrap;
+
+  line-height: 100%;
+}
+
+.CMS_WidgetBoolean_suffix {
+  color: var(--text-secondary);
+
+  @apply text-sm
+    whitespace-nowrap;
+
+  line-height: 100%;
+}

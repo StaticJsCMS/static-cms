@@ -2,9 +2,9 @@ import schema from './schema';
 import controlComponent from './TextControl';
 import previewComponent from './TextPreview';
 
-import type { StringOrTextField, WidgetParam } from '@staticcms/core/interface';
+import type { TextField, WidgetParam } from '@staticcms/core/interface';
 
-const TextWidget = (): WidgetParam<string, StringOrTextField> => {
+const TextWidget = (): WidgetParam<string, TextField> => {
   return {
     name: 'text',
     controlComponent,
