@@ -25,7 +25,7 @@
     &:not(.CMS_MenuItemButton_disabled) {
       &:hover {
         color: var(--primary-contrast-color);
-        background: color-mix(in srgb, var(--primary-main) 50%, transparent);
+        background: var(--primary-main);
       }
     }
   }

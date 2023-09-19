@@ -15,6 +15,7 @@ import type {
   useUUID,
   useData,
 } from '../lib/hooks';
+import type useTheme from '../components/theme/hooks/useTheme';
 
 declare global {
   interface Window {
@@ -22,6 +23,7 @@ declare global {
     CMS_CONFIG?: Config;
     CMS_ENV?: string;
     h: createElement;
+
     useState: useState;
     useMemo: useMemo;
     useEffect: useEffect;
@@ -37,5 +39,6 @@ declare global {
     useUUID: useUUID;
     useData: useData;
     useNavigate: useNavigate;
+    useTheme: useTheme;
   }
 }

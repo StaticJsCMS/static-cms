@@ -26,12 +26,6 @@ export const DARK_THEME: Theme = {
     dark: '#0c82e0',
     contrastColor: '#ffffff',
   },
-  secondary: {
-    main: '#CED6DE',
-    light: '#f3e5f5',
-    dark: '#5ba7e5',
-    contrastColor: '#252C37',
-  },
   error: {
     main: '#f44336',
     light: '#e57373',
@@ -85,12 +79,6 @@ export const LIGHT_THEME: Theme = {
     main: '#1976d2',
     light: '#42a5f5',
     dark: '#1565c0',
-    contrastColor: '#ffffff',
-  },
-  secondary: {
-    main: '#6C7789',
-    light: '#8c95a4',
-    dark: '#276fb7',
     contrastColor: '#ffffff',
   },
   error: {

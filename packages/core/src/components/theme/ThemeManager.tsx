@@ -1,4 +1,4 @@
-import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider as MuiThemeProvider, createTheme, lighten } from '@mui/material/styles';
 import React, { useEffect, useMemo } from 'react';
 
 import type { Theme } from '@staticcms/core/interface';
@@ -34,11 +34,6 @@ const ThemeManager: FC<PropsWithChildren<ThemeManagerProps>> = ({ element, theme
     element.style.setProperty('--primary-dark', theme.primary.dark);
     element.style.setProperty('--primary-contrast-color', theme.primary.contrastColor);
 
-    element.style.setProperty('--secondary-main', theme.secondary.main);
-    element.style.setProperty('--secondary-light', theme.secondary.light);
-    element.style.setProperty('--secondary-dark', theme.secondary.dark);
-    element.style.setProperty('--secondary-contrast-color', theme.secondary.contrastColor);
-
     element.style.setProperty('--error-main', theme.error.main);
     element.style.setProperty('--error-light', theme.error.light);
     element.style.setProperty('--error-dark', theme.error.dark);
@@ -71,10 +66,10 @@ const ThemeManager: FC<PropsWithChildren<ThemeManagerProps>> = ({ element, theme
             contrastText: theme.primary.contrastColor,
           },
           secondary: {
-            main: theme.secondary.main,
-            light: theme.secondary.light,
-            dark: theme.secondary.dark,
-            contrastText: theme.secondary.contrastColor,
+            main: theme.button.disabled,
+            light: lighten(theme.button.disabled, 0.125),
+            dark: theme.primary.main,
+            contrastText: theme.text.primary,
           },
           text: {
             primary: theme.text.primary,

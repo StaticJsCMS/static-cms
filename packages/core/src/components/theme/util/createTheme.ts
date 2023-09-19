@@ -1,72 +1,84 @@
+import { darken, lighten } from '@mui/material/styles';
+
 import { DARK_THEME, LIGHT_THEME } from '../defaultThemes';
 
-import type { DeepPartial, Theme } from '@staticcms/core/interface';
+import type { PartialTheme, Theme, ThemeColor } from '@staticcms/core/interface';
 
-export default function createTheme(
-  name: string,
-  overrides: DeepPartial<Theme>,
-  extendFrom: 'dark' | 'light' = 'light',
-): Theme {
-  const baseTheme = extendFrom === 'light' ? LIGHT_THEME : DARK_THEME;
+function createDarkColor(
+  color: string | undefined,
+  main: string | undefined,
+  base: string,
+): string {
+  if (color) {
+    return color;
+  }
+
+  if (main) {
+    return darken(main, 0.125);
+  }
+
+  return base;
+}
+
+function createLightColor(
+  color: string | undefined,
+  main: string | undefined,
+  base: string,
+): string {
+  if (color) {
+    return color;
+  }
+
+  if (main) {
+    return lighten(main, 0.125);
+  }
+
+  return base;
+}
+
+function createThemeColor(overrides: Partial<ThemeColor> | undefined, base: ThemeColor) {
+  return {
+    main: overrides?.main ?? base.main,
+    light: createLightColor(overrides?.light, overrides?.main, base.light),
+    dark: createDarkColor(overrides?.dark, overrides?.main, base.dark),
+    contrastColor: overrides?.contrastColor ?? base.contrastColor,
+  };
+}
+
+export default function createTheme(overrides: PartialTheme): Theme {
+  const baseTheme = overrides.extends === 'light' ? LIGHT_THEME : DARK_THEME;
 
   return {
-    name,
+    name: overrides.name,
     text: {
-      primary: overrides?.text?.primary ?? baseTheme.text.primary,
-      secondary: overrides?.text?.secondary ?? baseTheme.text.secondary,
-      disabled: overrides?.text?.disabled ?? baseTheme.text.disabled,
+      primary: overrides.text?.primary ?? baseTheme.text.primary,
+      secondary: overrides.text?.secondary ?? baseTheme.text.secondary,
+      disabled: overrides.text?.disabled ?? baseTheme.text.disabled,
     },
     background: {
-      main: overrides?.background?.main ?? baseTheme.background.main,
-      light: overrides?.background?.light ?? baseTheme.background.light,
-      dark: overrides?.background?.dark ?? baseTheme.background.dark,
-      divider: overrides?.background?.divider ?? baseTheme.background.divider,
+      main: overrides.background?.main ?? baseTheme.background.main,
+      light: overrides.background?.light ?? baseTheme.background.light,
+      dark: createDarkColor(
+        overrides.background?.dark,
+        overrides.background?.main,
+        baseTheme.background.dark,
+      ),
+      divider: overrides.background?.divider ?? baseTheme.background.divider,
     },
     scrollbar: {
-      main: overrides?.scrollbar?.main ?? baseTheme.scrollbar.main,
-      light: overrides?.scrollbar?.light ?? baseTheme.scrollbar.light,
+      main: overrides.scrollbar?.main ?? baseTheme.scrollbar.main,
+      light: overrides.scrollbar?.light ?? baseTheme.scrollbar.light,
     },
     button: {
-      disabled: overrides?.button?.disabled ?? baseTheme.button.disabled,
+      disabled: overrides.button?.disabled ?? baseTheme.button.disabled,
     },
-    primary: {
-      main: overrides?.primary?.main ?? baseTheme.primary.main,
-      light: overrides?.primary?.light ?? baseTheme.primary.light,
-      dark: overrides?.primary?.dark ?? baseTheme.primary.dark,
-      contrastColor: overrides?.primary?.contrastColor ?? baseTheme.primary.contrastColor,
-    },
-    secondary: {
-      main: overrides?.secondary?.main ?? baseTheme.secondary.main,
-      light: overrides?.secondary?.light ?? baseTheme.secondary.light,
-      dark: overrides?.secondary?.dark ?? baseTheme.secondary.dark,
-      contrastColor: overrides?.secondary?.contrastColor ?? baseTheme.secondary.contrastColor,
-    },
-    error: {
-      main: overrides?.error?.main ?? baseTheme.error.main,
-      light: overrides?.error?.light ?? baseTheme.error.light,
-      dark: overrides?.error?.dark ?? baseTheme.error.dark,
-      contrastColor: overrides?.error?.contrastColor ?? baseTheme.error.contrastColor,
-    },
-    warning: {
-      main: overrides?.warning?.main ?? baseTheme.warning.main,
-      light: overrides?.warning?.light ?? baseTheme.warning.light,
-      dark: overrides?.warning?.dark ?? baseTheme.warning.dark,
-      contrastColor: overrides?.warning?.contrastColor ?? baseTheme.warning.contrastColor,
-    },
-    info: {
-      main: overrides?.info?.main ?? baseTheme.info.main,
-      light: overrides?.info?.light ?? baseTheme.info.light,
-      dark: overrides?.info?.dark ?? baseTheme.info.dark,
-      contrastColor: overrides?.info?.contrastColor ?? baseTheme.info.contrastColor,
-    },
-    success: {
-      main: overrides?.success?.main ?? baseTheme.success.main,
-      light: overrides?.success?.light ?? baseTheme.success.light,
-      dark: overrides?.success?.dark ?? baseTheme.success.dark,
-      contrastColor: overrides?.success?.contrastColor ?? baseTheme.success.contrastColor,
-    },
+    primary: createThemeColor(overrides.primary, baseTheme.primary),
+    error: createThemeColor(overrides.error, baseTheme.error),
+    warning: createThemeColor(overrides.warning, baseTheme.warning),
+    info: createThemeColor(overrides.info, baseTheme.info),
+    success: createThemeColor(overrides.success, baseTheme.success),
     codemirror: {
-      theme: overrides?.codemirror?.theme ?? baseTheme.codemirror.theme,
+      theme: overrides.codemirror?.theme ?? baseTheme.codemirror.theme,
     },
   };
 }

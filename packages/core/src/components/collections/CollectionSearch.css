@@ -22,7 +22,7 @@
 .CMS_CollectionSearch_input {
   color: var(--text-primary);
   background: color-mix(in srgb, var(--background-light) 50%, transparent);
-  border-color: var(--background-light);
+  border-color: color-mix(in srgb, var(--background-divider) 50%, transparent);
 
   @apply block
     w-full

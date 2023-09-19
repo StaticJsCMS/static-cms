@@ -4,7 +4,8 @@
   @apply w-full
     rounded-md
     border
-    drop-shadow-md;
+    drop-shadow-md
+    overflow-hidden;
 }
 
 .CMS_ThemeCard_active {
@@ -40,8 +41,6 @@
 
   @apply w-full
     h-[128px]
-    rounded-t-lg
-    overflow-hidden
     flex
     flex-col;
 }
@@ -105,7 +104,7 @@
 }
 
 .CMS_ThemeCard_preview-secondary-button {
-  background: var(--secondary-main);
+  background: var(--button-disabled);
 
   @apply w-8
     h-2
@@ -113,7 +112,7 @@
 }
 
 .CMS_ThemeCard_preview-avatar {
-  background: var(--secondary-main);
+  background: var(--button-disabled);
 
   @apply w-2.5
     h-2.5

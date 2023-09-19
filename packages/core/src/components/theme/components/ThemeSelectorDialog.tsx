@@ -37,7 +37,6 @@ const ThemeSelectorDialog: FC<ThemeSelectorDialogProps> = ({ open, onClose }) =>
 
   const handleThemeChange = useCallback(
     (newTheme: string) => {
-      console.log('new theme', newTheme);
       dispatch(changeTheme(newTheme));
     },
     [dispatch],

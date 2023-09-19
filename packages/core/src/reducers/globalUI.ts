@@ -1,4 +1,5 @@
 import { THEME_CHANGE } from '../constants';
+import { isNotNullish } from '../lib/util/null.util';
 
 import type { GlobalUIAction } from '../actions/globalUI';
 
@@ -7,13 +8,22 @@ export type GlobalUIState = {
   theme: string;
 };
 
+function loadColorTheme(): string {
+  const themeName = localStorage.getItem('color-theme');
+  if (isNotNullish(themeName)) {
+    return themeName;
+  }
+
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return 'dark';
+  }
+
+  return 'light';
+}
+
 const defaultState: GlobalUIState = {
   isFetching: false,
-  theme:
-    localStorage.getItem('color-theme') ??
-    (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-      ? 'dark'
-      : 'light',
+  theme: loadColorTheme(),
 };
 
 /**
@@ -35,10 +45,10 @@ const globalUI = (state: GlobalUIState = defaultState, action: GlobalUIAction): 
 
   switch (action.type) {
     case THEME_CHANGE:
-      localStorage.setItem('color-theme', action.payload);
+      localStorage.setItem('color-theme', action.payload.toLowerCase());
       return {
         ...state,
-        theme: action.payload,
+        theme: action.payload.toLowerCase(),
       };
     default:
       return state;

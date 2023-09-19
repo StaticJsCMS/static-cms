@@ -13,7 +13,7 @@ export default function useTheme(): Theme {
   const themeName = useAppSelector(selectTheme);
 
   return useMemo(
-    () => themes.find(t => t.name === themeName) ?? DEFAULT_THEMES[0],
+    () => themes.find(t => t.name.toLowerCase() === themeName) ?? DEFAULT_THEMES[0],
     [themes, themeName],
   );
 }

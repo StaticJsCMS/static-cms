@@ -16,8 +16,11 @@ import TopBarProgress from 'react-topbar-progress-indicator';
 import { loginUser as loginUserAction } from '@staticcms/core/actions/auth';
 import { discardDraft } from '@staticcms/core/actions/entries';
 import { currentBackend } from '@staticcms/core/backend';
+import { changeTheme } from '../actions/globalUI';
 import { invokeEvent } from '../lib/registry';
 import { getDefaultPath } from '../lib/util/collection.util';
+import { isNotNullish } from '../lib/util/null.util';
+import { isEmpty } from '../lib/util/string.util';
 import { generateClassNames } from '../lib/util/theming.util';
 import { useAppDispatch } from '../store/hooks';
 import NotFoundPage from './NotFoundPage';
@@ -220,6 +223,20 @@ const App = ({
       invokeEvent({ name: 'mounted' });
     });
   }, []);
+
+  useEffect(() => {
+    const defaultTheme = config.config?.theme?.default_theme;
+    if (isEmpty(defaultTheme)) {
+      return;
+    }
+
+    const themeName = localStorage.getItem('color-theme');
+    if (isNotNullish(themeName)) {
+      return;
+    }
+
+    dispatch(changeTheme(defaultTheme));
+  }, [config.config?.theme?.default_theme, dispatch]);
 
   if (!config.config) {
     return configError(t('app.app.configNotFound'));

@@ -12,7 +12,7 @@
   }
 
   &.CMS_SelectOption_selected {
-    background: var(--primary-light);
+    background: var(--primary-main);
 
     & .CMS_SelectOption_label {
       @apply font-medium;

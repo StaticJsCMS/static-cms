@@ -89,6 +89,90 @@ const filterRules = {
   ],
 };
 
+const themeColor = (required: boolean) => ({
+  type: 'object',
+  properties: {
+    main: { type: 'string' },
+    light: { type: 'string' },
+    dark: { type: 'string' },
+    contrastColor: { type: 'string' },
+  },
+  required: required ? ['main', 'light', 'dark', 'contrastColor'] : [],
+});
+
+const theme = (required: boolean) => ({
+  type: 'object',
+  properties: {
+    name: { type: 'string' },
+    ...(required ? {} : { extends: { type: 'string' } }),
+    text: {
+      type: 'object',
+      properties: {
+        primary: { type: 'string' },
+        secondary: { type: 'string' },
+        disabled: { type: 'string' },
+      },
+      required: required ? ['primary', 'secondary', 'disabled'] : [],
+    },
+    background: {
+      type: 'object',
+      properties: {
+        main: { type: 'string' },
+        light: { type: 'string' },
+        dark: { type: 'string' },
+        divider: { type: 'string' },
+      },
+      required: required ? ['main', 'light', 'dark', 'divider'] : [],
+    },
+    scrollbar: {
+      type: 'object',
+      properties: {
+        main: { type: 'string' },
+        light: { type: 'string' },
+      },
+      required: required ? ['main', 'light'] : [],
+    },
+    button: {
+      type: 'object',
+      properties: {
+        disabled: { type: 'string' },
+      },
+      required: required ? ['disabled'] : [],
+    },
+    primary: themeColor(required),
+    error: themeColor(required),
+    warning: themeColor(required),
+    info: themeColor(required),
+    success: themeColor(required),
+    codemirror: {
+      type: 'object',
+      properties: {
+        theme: {
+          type: 'string',
+          examples: ['light', 'dark'],
+          enum: ['light', 'dark'],
+        },
+      },
+      required: required ? ['theme'] : [],
+    },
+  },
+  required: required
+    ? [
+        'name',
+        'text',
+        'background',
+        'scrollbar',
+        'button',
+        'primary',
+        'error',
+        'warning',
+        'info',
+        'success',
+        'codemirror',
+      ]
+    : ['name', 'extends'],
+});
+
 /**
  * Config for fields in both file and folder collections.
  */
@@ -440,6 +524,17 @@ function getConfigSchema() {
         },
       },
       search: { type: 'string' },
+      theme: {
+        type: 'object',
+        properties: {
+          defaultTheme: { type: 'string' },
+          includeStandardThemes: { type: 'boolean' },
+          themes: {
+            type: 'array',
+            items: { oneOf: [theme(true), theme(false)] },
+          },
+        },
+      },
     },
     required: ['backend', 'collections', 'media_folder'],
   };

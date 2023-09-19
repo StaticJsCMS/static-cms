@@ -56,8 +56,6 @@ const ThemeCard: FC<ThemeCardProps> = ({ theme, onClick }) => {
   const ref = useRefWithCallback<HTMLDivElement>(setElement);
 
   const themeName = useAppSelector(selectTheme);
-  console.log('themeName', themeName, 'theme.name', theme.name);
-
   const config = useAppSelector(selectConfig);
 
   const handleClick = useCallback(() => {
@@ -66,7 +64,12 @@ const ThemeCard: FC<ThemeCardProps> = ({ theme, onClick }) => {
 
   return (
     <ThemeManager theme={theme} element={element}>
-      <Card className={classNames(classes.root, theme.name === themeName && classes.active)}>
+      <Card
+        className={classNames(
+          classes.root,
+          theme.name.toLowerCase() === themeName && classes.active,
+        )}
+      >
         <CardActionArea onClick={handleClick} className={classes.button}>
           <div ref={ref} className={classes.preview}>
             <div className={classes['preview-appbar']}>

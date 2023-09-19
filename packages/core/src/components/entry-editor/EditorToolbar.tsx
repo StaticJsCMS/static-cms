@@ -197,6 +197,7 @@ const EditorToolbar = ({
           <Menu
             key="extra-menu"
             label={<MoreVertIcon className={classes['more-menu-label-icon']} />}
+            color="secondary"
             variant="text"
             rootClassName={classes['more-menu']}
             buttonClassName={classes['more-menu-button']}

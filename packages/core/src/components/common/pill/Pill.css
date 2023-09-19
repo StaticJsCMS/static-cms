@@ -16,8 +16,8 @@
   }
 
   &.CMS_Pill_default {
-    color: var(--secondary-contrast-color);
-    background: var(--secondary-main);
+    color: var(--text-primary);
+    background: var(--button-disabled);
   }
 
   &.CMS_Pill_disabled {

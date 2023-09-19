@@ -17,7 +17,7 @@ const PostPreviewCard = ({ entry, theme, hasLocalBackup, collection }) => {
   const month = date.getMonth() + 1;
   const day = date.getDate();
 
-  const imageField = useMemo(() => collection.fields.find((f) => f.name === 'image'), []);
+  const imageField = useMemo(() => collection.fields.find(f => f.name === 'image'), []);
   const image = useMediaAsset(entry.data.image, collection, imageField, entry);
 
   return h(
@@ -266,6 +266,14 @@ CMS.registerAdditionalLink({
   options: {
     icon: 'page',
   },
+});
+
+CMS.registerTheme({
+  name: 'Red Orange',
+  extends: 'dark',
+  primary: {
+    main: '#ff4500',
+  }
 });
 
 CMS.registerShortcode('youtube', {

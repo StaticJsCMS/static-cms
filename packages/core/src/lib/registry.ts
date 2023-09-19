@@ -22,6 +22,7 @@ import type {
   LogoutEventListener,
   MountedEventListener,
   ObjectValue,
+  PartialTheme,
   PostSaveEventListener,
   PreSaveEventListener,
   PreviewStyle,
@@ -106,7 +107,7 @@ interface Registry {
   shortcodes: Record<string, ShortcodeConfig>;
 
   /** Themes */
-  themes: Theme[];
+  themes: (Theme | PartialTheme)[];
 }
 
 /**
@@ -158,6 +159,8 @@ export default {
   registerShortcode,
   getShortcode,
   getShortcodes,
+  registerTheme,
+  getThemes,
 };
 
 /**
@@ -824,10 +827,10 @@ export function getShortcodes(): Record<string, ShortcodeConfig> {
 /**
  * Markdown editor shortcodes
  */
-export function registerTheme(theme: Theme) {
+export function registerTheme(theme: Theme | PartialTheme) {
   registry.themes.push(theme);
 }
 
-export function getThemes(): Theme[] {
+export function getThemes(): (Theme | PartialTheme)[] {
   return registry.themes;
 }

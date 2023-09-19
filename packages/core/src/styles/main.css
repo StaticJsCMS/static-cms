@@ -120,36 +120,36 @@
   }
 
   .CMS_Button_contained-secondary {
-    color: var(--secondary-contrast-color);
-    background: var(--secondary-main);
+    color: var(--text-primary);
+    background: var(--button-disabled);
     --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
 
     &:hover {
-      background: var(--secondary-dark);
+      background: var(--primary-dark);
     }
 
     &:disabled {
       color: var(--text-disabled);
-      background: var(--button-disabled);
+      background: color-mix(in srgb, var(--button-disabled) 50%, transparent);
     }
 
     @apply border-transparent;
   }
 
   .CMS_Button_outlined-secondary {
-    color: var(--secondary-main);
-    border-color: var(--secondary-main);
+    color: var(--text-primary);
+    border-color: var(--button-disabled);
     --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
 
     &:hover {
-      color: var(--secondary-dark);
-      background: color-mix(in srgb, var(--secondary-dark) 8%, transparent);
-      border-color: var(--secondary-dark);
+      color: var(--primary-dark);
+      background: color-mix(in srgb, var(--primary-dark) 8%, transparent);
+      border-color: color-mix(in srgb, var(--primary-dark) 50%, transparent);
     }
 
     &:disabled {
       color: var(--text-disabled);
-      border-color: var(--button-disabled);
+      border-color: color-mix(in srgb, var(--button-disabled) 50%, transparent);
     }
 
     @apply bg-transparent
@@ -157,12 +157,12 @@
   }
 
   .CMS_Button_text-secondary {
-    color: var(--secondary-main);
+    color: var(--text-primary);
     --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
 
     &:hover {
-      color: var(--secondary-dark);
-      background: color-mix(in srgb, var(--secondary-dark) 8%, transparent);
+      color: var(--primary-dark);
+      background: color-mix(in srgb, var(--primary-dark) 8%, transparent);
     }
 
     &:disabled {

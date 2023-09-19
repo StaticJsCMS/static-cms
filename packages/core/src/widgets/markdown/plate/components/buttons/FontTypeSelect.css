@@ -54,7 +54,7 @@
     cursor-pointer;
 
   &.CMS_WidgetMarkdown_FontTypeSelect_option-selected {
-    background: var(--primary-light);
+    background: var(--primary-main);
 
     & .CMS_WidgetMarkdown_FontTypeSelect_option-label {
       @apply font-medium;

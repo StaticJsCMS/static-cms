@@ -971,7 +971,6 @@ export interface Theme {
     disabled: string;
   };
   primary: ThemeColor;
-  secondary: ThemeColor;
   error: ThemeColor;
   warning: ThemeColor;
   info: ThemeColor;
@@ -981,10 +980,15 @@ export interface Theme {
   };
 }
 
+export interface PartialTheme extends DeepPartial<Omit<Theme, 'name'>> {
+  name: string;
+  extends: 'light' | 'dark';
+}
+
 export interface Themes {
-  defaultTheme?: string;
-  includeStandardThemes?: boolean;
-  themes?: Theme[];
+  default_theme?: string;
+  include_standard_themes?: boolean;
+  themes?: (Theme | PartialTheme)[];
 }
 
 export interface InitOptions<EF extends BaseField = UnknownField> {
