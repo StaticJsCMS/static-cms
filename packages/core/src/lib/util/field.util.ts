@@ -64,7 +64,10 @@ function findField(field: Field | undefined, path: string[]): Field | null {
   );
 }
 
-export function getField(field: Field | Field[], path: string): Field | null {
+export function getField(
+  field: Field | Field[] | undefined,
+  path: string | undefined | null,
+): Field | null {
   return findField(
     Array.isArray(field)
       ? {
@@ -73,7 +76,7 @@ export function getField(field: Field | Field[], path: string): Field | null {
           fields: field,
         }
       : field,
-    path.split('.'),
+    (path ?? '').split('.'),
   );
 }
 

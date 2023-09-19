@@ -97,7 +97,6 @@ const config = {
     !isProduction && new ReactRefreshWebpackPlugin(),
     isProduction && new MiniCssExtractPlugin(),
     new webpack.IgnorePlugin({ resourceRegExp: /^esprima$/ }),
-    new webpack.IgnorePlugin({ resourceRegExp: /moment\/locale\// }),
     new webpack.ProvidePlugin({
       process: 'process/browser',
       Buffer: ['buffer', 'Buffer'],

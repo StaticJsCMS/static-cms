@@ -31,6 +31,7 @@ import {
 } from './lib/util';
 import { getEntryBackupKey } from './lib/util/backup.util';
 import {
+  getFields,
   selectAllowDeletion,
   selectAllowNewEntries,
   selectEntryPath,
@@ -427,7 +428,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   async generateUniqueSlug(
     collection: Collection,
-    entryData: EntryData,
+    entry: Entry,
     config: Config,
     usedSlugs: string[],
     customPath: string | undefined,
@@ -437,7 +438,8 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     if (customPath) {
       slug = slugFromCustomPath(collection, customPath);
     } else {
-      slug = slugFormatter(collection, entryData, slugConfig);
+      const collectionFields = getFields(collection, entry.slug);
+      slug = slugFormatter(collection, entry.data, slugConfig, collectionFields);
     }
     let i = 1;
     let uniqueSlug = slug;
@@ -900,7 +902,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       }
       const slug = await this.generateUniqueSlug(
         collection,
-        entryDraft.entry.data,
+        entryDraft.entry,
         config,
         usedSlugs,
         customPath,

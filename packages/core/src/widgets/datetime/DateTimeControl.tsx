@@ -14,12 +14,8 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import NowButton from './components/NowButton';
-import {
-  DEFAULT_DATETIME_FORMAT,
-  DEFAULT_DATE_FORMAT,
-  DEFAULT_TIMEZONE_FORMAT,
-  DEFAULT_TIME_FORMAT,
-} from './constants';
+import { DEFAULT_DATETIME_FORMAT, DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT } from './constants';
+import { useDatetimeFormats, useTimezoneExtra } from './datetime.util';
 import { localToUTC } from './utc.util';
 
 import type { TextFieldProps as MuiTextFieldProps } from '@mui/material/TextField';
@@ -80,32 +76,9 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
     setOpen(false);
   }, []);
 
-  const timezoneExtra = useMemo(
-    () => (field.picker_utc ? '' : DEFAULT_TIMEZONE_FORMAT),
-    [field.picker_utc],
-  );
+  const timezoneExtra = useTimezoneExtra(field);
 
-  const { format, dateFormat, timeFormat } = useMemo(() => {
-    // dateFormat and timeFormat are strictly for modifying input field with the date/time pickers
-    const dateFormat: string | boolean = field.date_format ?? true;
-    // show time-picker? false hides it, true shows it using default format
-    const timeFormat: string | boolean = field.time_format ?? true;
-
-    let finalFormat = field.format;
-    if (timeFormat === false) {
-      finalFormat = field.format ?? DEFAULT_DATE_FORMAT;
-    } else if (dateFormat === false) {
-      finalFormat = field.format ?? `${DEFAULT_TIME_FORMAT}${timezoneExtra}`;
-    } else {
-      finalFormat = field.format ?? `${DEFAULT_DATETIME_FORMAT}${timezoneExtra}`;
-    }
-
-    return {
-      format: finalFormat,
-      dateFormat,
-      timeFormat,
-    };
-  }, [field.date_format, field.format, field.time_format, timezoneExtra]);
+  const { format, dateFormat, timeFormat } = useDatetimeFormats(field, timezoneExtra);
 
   const inputFormat = useMemo(() => {
     if (typeof dateFormat === 'string' || typeof timeFormat === 'string') {

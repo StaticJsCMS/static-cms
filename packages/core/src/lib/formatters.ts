@@ -2,8 +2,8 @@ import get from 'lodash/get';
 
 import { COMMIT_AUTHOR, COMMIT_DATE } from '../constants/commitProps';
 import { sanitizeSlug } from './urlHelper';
-import { selectIdentifier, selectInferredField } from './util/collection.util';
-import { selectField } from './util/field.util';
+import { getFields, selectIdentifier, selectInferredField } from './util/collection.util';
+import { getField, selectField } from './util/field.util';
 import { set } from './util/object.util';
 import { isEmpty } from './util/string.util';
 import {
@@ -19,6 +19,7 @@ import type {
   Config,
   Entry,
   EntryData,
+  Field,
   Slug,
   UnknownField,
 } from '../interface';
@@ -94,7 +95,8 @@ export function getProcessSegment(slugConfig?: Slug, ignoreValues?: string[]) {
 export function slugFormatter<EF extends BaseField = UnknownField>(
   collection: Collection<EF>,
   entryData: EntryData,
-  slugConfig?: Slug,
+  slugConfig: Slug | undefined,
+  fields: Field[] | undefined,
 ): string {
   if (!('fields' in collection)) {
     return '';
@@ -116,13 +118,20 @@ export function slugFormatter<EF extends BaseField = UnknownField>(
 
   const processSegment = getProcessSegment(slugConfig);
   const date = new Date();
-  const slug = compileStringTemplate(slugTemplate, date, identifier, entryData, processSegment);
+  const slug = compileStringTemplate(
+    slugTemplate,
+    date,
+    identifier,
+    entryData,
+    fields,
+    processSegment,
+  );
 
   if (!('path' in collection)) {
     return slug;
   } else {
     const pathTemplate = prepareSlug(collection.path as string);
-    return compileStringTemplate(pathTemplate, date, slug, entryData, (value: string) =>
+    return compileStringTemplate(pathTemplate, date, slug, entryData, fields, (value: string) =>
       value === slug ? value : processSegment(value),
     );
   }
@@ -134,10 +143,15 @@ export function summaryFormatter<EF extends BaseField>(
   collection: Collection<EF>,
   slugConfig?: Slug,
 ) {
-  const slug = slugFormatter(collection, entry.data, slugConfig);
+  const collectionFields = getFields(collection, entry.slug);
+
+  const slug = slugFormatter(collection, entry.data, slugConfig, collectionFields);
 
   let entryData = entry.data;
-  const date = parseDateFromEntry(entry, selectInferredField(collection, 'date')) || null;
+
+  const dateFieldName = selectInferredField(collection, 'date');
+  const dateField = getField(collectionFields, dateFieldName);
+  const date = parseDateFromEntry(entry, dateFieldName, dateField) || null;
 
   entryData =
     addFileTemplateFields(entry.path, entryData, 'folder' in collection ? collection.folder : '') ??
@@ -149,8 +163,8 @@ export function summaryFormatter<EF extends BaseField>(
   if (entry.updatedOn && !selectField(collection, COMMIT_DATE)) {
     entryData = set(entryData, COMMIT_DATE, entry.updatedOn);
   }
-  const summary = compileStringTemplate(summaryTemplate, date, slug, entryData);
-  return summary;
+
+  return compileStringTemplate(summaryTemplate, date, slug, entryData, collectionFields);
 }
 
 export function folderFormatter<EF extends BaseField>(
@@ -172,13 +186,24 @@ export function folderFormatter<EF extends BaseField>(
     'folder' in collection ? collection.folder : '',
   );
 
-  const slug = slugFormatter(collection, entry.data, slugConfig);
+  const collectionFields = getFields(collection, entry.slug);
 
-  const date = parseDateFromEntry(entry, selectInferredField(collection, 'date')) || null;
+  const slug = slugFormatter(collection, entry.data, slugConfig, collectionFields);
+
+  const dateFieldName = selectInferredField(collection, 'date');
+  const dateField = getField(collectionFields, dateFieldName);
+  const date = parseDateFromEntry(entry, dateFieldName, dateField) || null;
 
   const processSegment = getProcessSegment(slugConfig, [defaultFolder, fields?.dirname as string]);
 
-  const mediaFolder = compileStringTemplate(folderTemplate, date, slug, fields, processSegment);
+  const mediaFolder = compileStringTemplate(
+    folderTemplate,
+    date,
+    slug,
+    fields,
+    collectionFields,
+    processSegment,
+  );
 
   return mediaFolder;
 }

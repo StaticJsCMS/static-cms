@@ -27,12 +27,14 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
   value = {},
   listItemPath,
 }) => {
+  const fields = useMemo(() => field.fields, [field.fields]);
+
   const objectLabel = useMemo(() => {
     const summary = field.summary;
-    return summary ? `${label} - ${compileStringTemplate(summary, null, '', value)}` : label;
+    return summary
+      ? `${label} - ${compileStringTemplate(summary, null, '', value, fields)}`
+      : label;
   }, [field.summary, label, value]);
-
-  const fields = useMemo(() => field.fields, [field.fields]);
 
   const hasChildErrors = useHasChildErrors(path, fieldsErrors, i18n, false);
 

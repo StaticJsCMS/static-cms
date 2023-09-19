@@ -17,6 +17,7 @@ import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import type {
   Entry,
   EntryData,
+  Field,
   ListField,
   ObjectField,
   ObjectValue,
@@ -31,8 +32,10 @@ function handleSummary(
   entry: Entry,
   label: string,
   item: ValueOrNestedValue,
+  fields: Field[],
   t: t,
 ): string {
+  console.log('SUMMARY', summary);
   if (typeof item === 'object' && !(item instanceof Date) && !Array.isArray(item)) {
     const labeledItem: EntryData = {
       ...item,
@@ -41,7 +44,8 @@ function handleSummary(
       },
     };
     const data = addFileTemplateFields(entry.path, labeledItem);
-    return compileStringTemplate(summary, null, '', data);
+    console.log('data', data, compileStringTemplate(summary, null, '', data, fields));
+    return compileStringTemplate(summary, null, '', data, fields);
   }
 
   return isNotNullish(item) ? String(item) : t('editor.editorWidgets.list.noValue');
@@ -138,7 +142,14 @@ const ListItem: FC<ListItemProps> = ({
         const summary =
           'summary' in itemType && itemType.summary ? itemType.summary : field.summary;
         const labelReturn = summary
-          ? `${label} - ${handleSummary(summary, entry, label, mixedObjectValue, t)}`
+          ? `${label} - ${handleSummary(
+              summary,
+              entry,
+              label,
+              mixedObjectValue,
+              itemType.fields,
+              t,
+            )}`
           : label;
 
         return [labelReturn ?? t('editor.editorWidgets.list.noValue'), itemType];
@@ -165,7 +176,7 @@ const ListItem: FC<ListItemProps> = ({
 
         const summary = field.summary;
         const labelReturn = summary
-          ? handleSummary(summary, entry, String(labelFieldValue), objectValue, t)
+          ? handleSummary(summary, entry, String(labelFieldValue), objectValue, multiFields, t)
           : labelFieldValue
           ? String(labelFieldValue)
           : undefined;

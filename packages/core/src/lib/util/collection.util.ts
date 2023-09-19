@@ -477,3 +477,19 @@ export function getDefaultPath(collections: Collections) {
 
   return `/collections/${options[0].name}`;
 }
+
+export function getFields<EF extends BaseField>(
+  collection: Collection<EF>,
+  slug?: string,
+): Field[] | undefined {
+  if ('fields' in collection) {
+    return collection.fields as Field[];
+  } else if (slug) {
+    const file = getFileFromSlug(collection, slug);
+    if (file) {
+      return file.fields as Field[];
+    }
+  }
+
+  return undefined;
+}
