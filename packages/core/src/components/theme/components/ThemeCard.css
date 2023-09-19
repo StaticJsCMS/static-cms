@@ -104,7 +104,7 @@
 }
 
 .CMS_ThemeCard_preview-secondary-button {
-  background: var(--button-disabled);
+  background: var(--common-gray);
 
   @apply w-8
     h-2
@@ -112,7 +112,7 @@
 }
 
 .CMS_ThemeCard_preview-avatar {
-  background: var(--button-disabled);
+  background: var(--common-gray);
 
   @apply w-2.5
     h-2.5

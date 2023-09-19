@@ -15,7 +15,7 @@ export default function useThemes(): Theme[] {
   return useMemo(() => {
     const customThemes: Theme[] = [];
 
-    if (customThemes.length === 0 || config?.theme?.include_standard_themes !== false) {
+    if (customThemes.length === 0 || config?.theme?.include_built_in_themes !== false) {
       customThemes.push(...DEFAULT_THEMES);
     }
 
@@ -41,5 +41,5 @@ export default function useThemes(): Theme[] {
     }
 
     return customThemes;
-  }, [config?.theme?.default_theme, config?.theme?.include_standard_themes, config?.theme?.themes]);
+  }, [config?.theme?.default_theme, config?.theme?.include_built_in_themes, config?.theme?.themes]);
 }

@@ -261,6 +261,14 @@ cms.registerAdditionalLink({
   },
 });
 
+CMS.registerTheme({
+  name: 'Custom Red Orange',
+  extends: 'dark',
+  primary: {
+    main: '#ff4500',
+  }
+});
+
 cms.registerShortcode("youtube", {
   label: "YouTube",
   openTag: "[",

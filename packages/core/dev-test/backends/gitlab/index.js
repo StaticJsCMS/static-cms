@@ -153,6 +153,8 @@ CMS.registerShortcode('youtube', {
     return [src];
   },
   control: ({ src, onChange, theme }) => {
+    const theme = useTheme();
+
     return h('span', {}, [
       h('input', {
         key: 'control-input',
@@ -162,8 +164,8 @@ CMS.registerShortcode('youtube', {
         },
         style: {
           width: '100%',
-          backgroundColor: theme === 'dark' ? 'rgb(30, 41, 59)' : 'white',
-          color: theme === 'dark' ? 'white' : 'black',
+          backgroundColor: theme.common.gray,
+          color: theme.text.primary,
           padding: '4px 8px',
         },
       }),

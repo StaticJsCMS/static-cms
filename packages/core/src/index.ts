@@ -20,6 +20,7 @@ export * from './interface';
 export * from './lib';
 export { default as locales } from './locales';
 export * from './widgets';
+export { useTheme };
 
 const CMS = {
   ...Registry,

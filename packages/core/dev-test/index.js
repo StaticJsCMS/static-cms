@@ -12,6 +12,7 @@ const PostPreview = ({ entry, widgetFor }) => {
 };
 
 const PostPreviewCard = ({ entry, theme, hasLocalBackup, collection }) => {
+  const theme = useTheme();
   const date = new Date(entry.data.date);
 
   const month = date.getMonth() + 1;
@@ -49,7 +50,7 @@ const PostPreviewCard = ({ entry, theme, hasLocalBackup, collection }) => {
             justifyContent: 'space-between',
             alignItems: 'start',
             gap: '4px',
-            color: theme === 'dark' ? 'white' : 'inherit',
+            color: theme.text.primary,
           },
         },
         h(
@@ -269,7 +270,7 @@ CMS.registerAdditionalLink({
 });
 
 CMS.registerTheme({
-  name: 'Red Orange',
+  name: 'Custom Red Orange',
   extends: 'dark',
   primary: {
     main: '#ff4500',
@@ -292,6 +293,8 @@ CMS.registerShortcode('youtube', {
     return [src];
   },
   control: ({ src, onChange, theme }) => {
+    const theme = useTheme();
+
     return h('span', {}, [
       h('input', {
         key: 'control-input',
@@ -301,8 +304,8 @@ CMS.registerShortcode('youtube', {
         },
         style: {
           width: '100%',
-          backgroundColor: theme === 'dark' ? 'rgb(30, 41, 59)' : 'white',
-          color: theme === 'dark' ? 'white' : 'black',
+          backgroundColor: theme.common.gray,
+          color: theme.text.primary,
           padding: '4px 8px',
         },
       }),

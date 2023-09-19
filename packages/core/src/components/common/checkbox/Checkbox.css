@@ -14,7 +14,7 @@
     }
 
     & .CMS_Checkbox_custom-input {
-      background: var(--button-disabled);
+      background: var(--common-gray);
     }
   }
 }

@@ -75,7 +75,7 @@
 
     &:disabled {
       color: var(--text-disabled);
-      background: var(--button-disabled);
+      background: var(--common-gray);
     }
 
     @apply border-transparent;
@@ -94,7 +94,7 @@
 
     &:disabled {
       color: var(--text-disabled);
-      border-color: var(--button-disabled);
+      border-color: var(--common-gray);
     }
 
     @apply bg-transparent
@@ -121,7 +121,7 @@
 
   .CMS_Button_contained-secondary {
     color: var(--text-primary);
-    background: var(--button-disabled);
+    background: var(--common-gray);
     --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
 
     &:hover {
@@ -130,7 +130,7 @@
 
     &:disabled {
       color: var(--text-disabled);
-      background: color-mix(in srgb, var(--button-disabled) 50%, transparent);
+      background: color-mix(in srgb, var(--common-gray) 50%, transparent);
     }
 
     @apply border-transparent;
@@ -138,7 +138,7 @@
 
   .CMS_Button_outlined-secondary {
     color: var(--text-primary);
-    border-color: var(--button-disabled);
+    border-color: var(--common-gray);
     --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
 
     &:hover {
@@ -149,7 +149,7 @@
 
     &:disabled {
       color: var(--text-disabled);
-      border-color: color-mix(in srgb, var(--button-disabled) 50%, transparent);
+      border-color: color-mix(in srgb, var(--common-gray) 50%, transparent);
     }
 
     @apply bg-transparent
@@ -185,7 +185,7 @@
 
     &:disabled {
       color: var(--text-disabled);
-      background: var(--button-disabled);
+      background: var(--common-gray);
     }
 
     @apply border-transparent;
@@ -204,7 +204,7 @@
 
     &:disabled {
       color: var(--text-disabled);
-      border-color: var(--button-disabled);
+      border-color: var(--common-gray);
     }
 
     @apply bg-transparent
@@ -240,7 +240,7 @@
 
     &:disabled {
       color: var(--text-disabled);
-      background: var(--button-disabled);
+      background: var(--common-gray);
     }
 
     @apply border-transparent;
@@ -259,7 +259,7 @@
 
     &:disabled {
       color: var(--text-disabled);
-      border-color: var(--button-disabled);
+      border-color: var(--common-gray);
     }
 
     @apply bg-transparent
@@ -295,7 +295,7 @@
 
     &:disabled {
       color: var(--text-disabled);
-      background: var(--button-disabled);
+      background: var(--common-gray);
     }
 
     @apply border-transparent;
@@ -314,7 +314,7 @@
 
     &:disabled {
       color: var(--text-disabled);
-      border-color: var(--button-disabled);
+      border-color: var(--common-gray);
     }
 
     @apply bg-transparent
@@ -350,7 +350,7 @@
 
     &:disabled {
       color: var(--text-disabled);
-      background: var(--button-disabled);
+      background: var(--common-gray);
     }
 
     @apply border-transparent;
@@ -369,7 +369,7 @@
 
     &:disabled {
       color: var(--text-disabled);
-      border-color: var(--button-disabled);
+      border-color: var(--common-gray);
     }
 
     @apply bg-transparent

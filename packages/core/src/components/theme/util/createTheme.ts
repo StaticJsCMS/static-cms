@@ -50,6 +50,9 @@ export default function createTheme(overrides: PartialTheme): Theme {
 
   return {
     name: overrides.name,
+    common: {
+      gray: overrides.common?.gray ?? baseTheme.common.gray,
+    },
     text: {
       primary: overrides.text?.primary ?? baseTheme.text.primary,
       secondary: overrides.text?.secondary ?? baseTheme.text.secondary,
@@ -57,7 +60,11 @@ export default function createTheme(overrides: PartialTheme): Theme {
     },
     background: {
       main: overrides.background?.main ?? baseTheme.background.main,
-      light: overrides.background?.light ?? baseTheme.background.light,
+      light: createLightColor(
+        overrides.background?.light,
+        overrides.background?.main,
+        baseTheme.background.light,
+      ),
       dark: createDarkColor(
         overrides.background?.dark,
         overrides.background?.main,
@@ -67,10 +74,11 @@ export default function createTheme(overrides: PartialTheme): Theme {
     },
     scrollbar: {
       main: overrides.scrollbar?.main ?? baseTheme.scrollbar.main,
-      light: overrides.scrollbar?.light ?? baseTheme.scrollbar.light,
-    },
-    button: {
-      disabled: overrides.button?.disabled ?? baseTheme.button.disabled,
+      light: createLightColor(
+        overrides.scrollbar?.light,
+        overrides.scrollbar?.main,
+        baseTheme.scrollbar.light,
+      ),
     },
     primary: createThemeColor(overrides.primary, baseTheme.primary),
     error: createThemeColor(overrides.error, baseTheme.error),

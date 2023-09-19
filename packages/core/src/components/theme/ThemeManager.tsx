@@ -27,7 +27,7 @@ const ThemeManager: FC<PropsWithChildren<ThemeManagerProps>> = ({ element, theme
     element.style.setProperty('--scrollbar-main', theme.scrollbar.main);
     element.style.setProperty('--scrollbar-light', theme.scrollbar.light);
 
-    element.style.setProperty('--button-disabled', theme.button.disabled);
+    element.style.setProperty('--common-gray', theme.common.gray);
 
     element.style.setProperty('--primary-main', theme.primary.main);
     element.style.setProperty('--primary-light', theme.primary.light);
@@ -66,8 +66,8 @@ const ThemeManager: FC<PropsWithChildren<ThemeManagerProps>> = ({ element, theme
             contrastText: theme.primary.contrastColor,
           },
           secondary: {
-            main: theme.button.disabled,
-            light: lighten(theme.button.disabled, 0.125),
+            main: theme.common.gray,
+            light: lighten(theme.common.gray, 0.125),
             dark: theme.primary.main,
             contrastText: theme.text.primary,
           },

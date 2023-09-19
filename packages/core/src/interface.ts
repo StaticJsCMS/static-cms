@@ -952,6 +952,9 @@ export interface ThemeColor {
 
 export interface Theme {
   name: string;
+  common: {
+    gray: string;
+  };
   text: {
     primary: string;
     secondary: string;
@@ -966,9 +969,6 @@ export interface Theme {
   scrollbar: {
     main: string;
     light: string;
-  };
-  button: {
-    disabled: string;
   };
   primary: ThemeColor;
   error: ThemeColor;
@@ -987,7 +987,7 @@ export interface PartialTheme extends DeepPartial<Omit<Theme, 'name'>> {
 
 export interface Themes {
   default_theme?: string;
-  include_standard_themes?: boolean;
+  include_built_in_themes?: boolean;
   themes?: (Theme | PartialTheme)[];
 }
 

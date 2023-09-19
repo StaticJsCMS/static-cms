@@ -2,6 +2,9 @@ import type { Theme } from '@staticcms/core/interface';
 
 export const DARK_THEME: Theme = {
   name: 'Dark',
+  common: {
+    gray: '#334155',
+  },
   text: {
     primary: '#fff',
     secondary: 'rgba(255, 255, 255, 0.7)',
@@ -16,9 +19,6 @@ export const DARK_THEME: Theme = {
   scrollbar: {
     main: '#1e293b',
     light: '#2c3b55',
-  },
-  button: {
-    disabled: '#334155',
   },
   primary: {
     main: '#339ef4',
@@ -57,6 +57,9 @@ export const DARK_THEME: Theme = {
 
 export const LIGHT_THEME: Theme = {
   name: 'Light',
+  common: {
+    gray: '#d1d5db',
+  },
   text: {
     primary: 'rgba(0, 0, 0, 0.87)',
     secondary: 'rgba(0, 0, 0, 0.6)',
@@ -71,9 +74,6 @@ export const LIGHT_THEME: Theme = {
   scrollbar: {
     main: 'rgba(100, 116, 139, .25)',
     light: 'rgba(100, 116, 139, .25)',
-  },
-  button: {
-    disabled: '#d1d5db',
   },
   primary: {
     main: '#1976d2',
