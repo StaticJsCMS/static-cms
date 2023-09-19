@@ -75,7 +75,7 @@ const SnackbarAlert = forwardRef<HTMLDivElement, TranslatedProps<SnackbarAlertPr
         <div className={classes['icon-wrapper']}>{icon}</div>
         <div className={classes.message}>{renderedMessage}</div>
         <IconButton
-          aria-label="Close"
+          aria-label="close"
           variant="text"
           color="secondary"
           onClick={onClose}

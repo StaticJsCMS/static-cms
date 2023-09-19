@@ -79,6 +79,7 @@ const GroupControl = ({
       color={activeGroup ? 'primary' : 'secondary'}
       variant={activeGroup ? 'contained' : 'outlined'}
       rootClassName={classes.root}
+      aria-label="group by options dropdown"
     >
       <MenuGroup>
         {viewGroups.map(viewGroup => (

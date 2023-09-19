@@ -366,6 +366,7 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = pro
               buttonClassName={widgetListClasses['add-types-button']}
               data-testid="list-type-add"
               disabled={disabled}
+              aria-label="add type options dropdown"
             >
               <MenuGroup>
                 {types.map((type, idx) =>

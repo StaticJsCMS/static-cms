@@ -46,7 +46,7 @@ const ThemeSelectorDialog: FC<ThemeSelectorDialogProps> = ({ open, onClose }) =>
     <Modal open={open} onClose={onClose} className={classes.root}>
       <div className={classes.header}>
         <h2 className={classes.title}>{t('ui.settingsDropdown.theme')}</h2>
-        <IconButton variant="text" onClick={onClose}>
+        <IconButton variant="text" onClick={onClose} aria-label="close">
           <CloseIcon className={classes['close-icon']} />
         </IconButton>
       </div>

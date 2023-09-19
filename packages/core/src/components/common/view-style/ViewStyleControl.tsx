@@ -24,7 +24,7 @@ const ViewStyleControl = ({ viewStyle, onChangeViewStyle }: ViewStyleControlPros
         color={viewStyle === VIEW_STYLE_TABLE ? 'primary' : 'secondary'}
         variant="text"
         className={classes.button}
-        aria-label="table view"
+        aria-label="table view option"
         onClick={() => onChangeViewStyle(VIEW_STYLE_TABLE)}
       >
         <TableRowsIcon className={classes.icon} />
@@ -33,7 +33,7 @@ const ViewStyleControl = ({ viewStyle, onChangeViewStyle }: ViewStyleControlPros
         color={viewStyle === VIEW_STYLE_GRID ? 'primary' : 'secondary'}
         variant="text"
         className={classes.button}
-        aria-label="grid view"
+        aria-label="grid view option"
         onClick={() => onChangeViewStyle(VIEW_STYLE_GRID)}
       >
         <GridIcon className={classes.icon} />

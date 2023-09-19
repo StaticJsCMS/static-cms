@@ -102,6 +102,7 @@ const SortableImage: FC<SortableImageProps> = ({
                 variant="text"
                 onClick={handleReplace}
                 className={classes['replace-button']}
+                aria-label="replace image"
               >
                 <CameraAltIcon className={classes['button-icon']} />
               </IconButton>
@@ -113,6 +114,7 @@ const SortableImage: FC<SortableImageProps> = ({
                 color="error"
                 onClick={handleRemove}
                 className={classes['remove-button']}
+                aria-label="remove image"
               >
                 <DeleteIcon className={classes['button-icon']} />
               </IconButton>

@@ -72,7 +72,7 @@ const CollectionHeader: FC<TranslatedProps<CollectionHeaderProps>> = ({ collecti
       {newEntryUrl ? (
         <Button to={newEntryUrl} className={collectionClasses['new-entry-button']}>
           {t('collection.collectionTop.newButton', {
-            collectionLabel: collectionLabelSingular || pluralLabel,
+            collectionLabel: collectionLabelSingular ?? pluralLabel,
           })}
         </Button>
       ) : null}

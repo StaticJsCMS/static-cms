@@ -49,11 +49,21 @@ const BottomNavigation: FC<BottomNavigationProps> = ({ collection }) => {
   return (
     <>
       <div className={classes.root}>
-        <IconButton variant="text" className={classes['menu-button']} onClick={toggleMobileMenu}>
+        <IconButton
+          variant="text"
+          className={classes['menu-button']}
+          onClick={toggleMobileMenu}
+          aria-label="toggle menu"
+        >
           <MenuIcon className={classes['menu-button-icon']} />
         </IconButton>
         {isNotEmpty(newEntryUrl) ? (
-          <IconButton to={newEntryUrl} variant="text" className={classes['add-button']}>
+          <IconButton
+            to={newEntryUrl}
+            variant="text"
+            className={classes['add-button']}
+            aria-label="create entry"
+          >
             <AddIcon className={classes['add-button-icon']} />
           </IconButton>
         ) : (
@@ -67,7 +77,12 @@ const BottomNavigation: FC<BottomNavigationProps> = ({ collection }) => {
           />
         )}
         {displayUrl ? (
-          <IconButton variant="text" className={classes['site-url-button']} href={displayUrl}>
+          <IconButton
+            variant="text"
+            className={classes['site-url-button']}
+            href={displayUrl}
+            aria-label="go to site"
+          >
             <OpenInNewIcon className={classes['site-url-button-icon']} />
           </IconButton>
         ) : null}

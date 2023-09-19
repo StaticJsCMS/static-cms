@@ -83,6 +83,7 @@ const FilterControl = ({
       color={anyActive ? 'primary' : 'secondary'}
       variant={anyActive ? 'contained' : 'outlined'}
       rootClassName={classes.root}
+      aria-label="filter options dropdown"
     >
       <MenuGroup>
         {viewFilters.map(viewFilter => {

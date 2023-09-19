@@ -33,7 +33,7 @@ const MediaLibraryModal: FC = () => {
         className={classes['close-button']}
         color="secondary"
         variant="outlined"
-        aria-label="add"
+        aria-label="close"
         onClick={handleClose}
         rounded
       >

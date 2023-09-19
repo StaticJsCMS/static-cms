@@ -202,6 +202,7 @@ const EditorToolbar = ({
             rootClassName={classes['more-menu']}
             buttonClassName={classes['more-menu-button']}
             hideDropdownIcon
+            aria-label="more options dropdown"
           >
             <MenuGroup>
               {showI18nToggle && (
@@ -252,6 +253,7 @@ const EditorToolbar = ({
             variant={showMobilePreview ? 'contained' : 'text'}
             onClick={onMobilePreviewToggle}
             className={classes['preview-toggle']}
+            aria-label="toggle preview"
           >
             <EyeIcon className={classes['preview-toggle-icon']} />
           </IconButton>
@@ -264,6 +266,7 @@ const EditorToolbar = ({
             variant="text"
             onClick={onDelete}
             className={classes['delete-button']}
+            aria-label="delete"
           >
             <TrashIcon className={classes['delete-button-icon']} />
           </IconButton>
@@ -279,6 +282,7 @@ const EditorToolbar = ({
           iconClassName={classes['publish-button-icon']}
           labelClassName={classes['publish-button-label']}
           hideDropdownIconOnMobile
+          aria-label="publish options dropdown"
         >
           {menuItems.map((group, index) => (
             <MenuGroup key={`menu-group-${index}`}>{group}</MenuGroup>

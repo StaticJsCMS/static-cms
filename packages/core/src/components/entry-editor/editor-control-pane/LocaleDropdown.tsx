@@ -36,7 +36,7 @@ const LocaleDropdown = ({
   }
 
   return (
-    <Menu label={dropdownText} rootClassName={classes.root}>
+    <Menu label={dropdownText} rootClassName={classes.root} aria-label="locale options dropdown">
       <MenuGroup>
         {locales
           .filter(locale => !excludeLocales.includes(locale))

@@ -201,6 +201,7 @@ const Autocomplete = ({
             disabled={disabled}
             className={classes.button}
             onClick={handleDropdownButtonClick}
+            aria-label="open options"
           >
             <KeyboardArrowDownIcon className={classes['button-icon']} aria-hidden="true" />
           </IconButton>
@@ -211,6 +212,7 @@ const Autocomplete = ({
               disabled={disabled}
               className={classes.button}
               onClick={clear}
+              aria-label="clear"
             >
               <CloseIcon className={classes['button-icon']} aria-hidden="true" />
             </IconButton>

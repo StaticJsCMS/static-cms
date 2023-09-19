@@ -93,6 +93,7 @@ const SortableLink: FC<SortableLinkProps> = ({ id, itemValue, onRemove, onReplac
                 variant="text"
                 onClick={handleReplace}
                 className={classes['replace-button']}
+                aria-label="replace link"
               >
                 <ModeEditIcon className={classes['button-icon']} />
               </IconButton>
@@ -104,6 +105,7 @@ const SortableLink: FC<SortableLinkProps> = ({ id, itemValue, onRemove, onReplac
                 color="error"
                 onClick={handleRemove}
                 className={classes['remove-button']}
+                aria-label="remove link"
               >
                 <DeleteIcon className={classes['button-icon']} />
               </IconButton>

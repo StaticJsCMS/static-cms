@@ -30,7 +30,12 @@ const QuickCreate: FC<TranslatedProps<QuickCreateProps>> = ({ t, ...menuProps })
   );
 
   return (
-    <Menu label={t('app.header.quickAdd')} startIcon={AddIcon} {...menuProps}>
+    <Menu
+      label={t('app.header.quickAdd')}
+      startIcon={AddIcon}
+      {...menuProps}
+      aria-label="create entry options dropdown"
+    >
       <MenuGroup>
         {createableCollections.map(collection => (
           <MenuItemLink key={collection.name} href={getNewEntryUrl(collection.name)}>

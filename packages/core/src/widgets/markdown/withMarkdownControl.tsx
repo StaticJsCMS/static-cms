@@ -173,6 +173,7 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
               variant={!showRaw ? 'contained' : 'outlined'}
               onClick={handleShowRich}
               disabled={disabled}
+              aria-label="toggle to rich text mode"
             >
               {t('editor.editorWidgets.markdown.richText')}
             </Button>
@@ -183,6 +184,7 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
               variant={showRaw ? 'contained' : 'outlined'}
               onClick={handleShowRaw}
               disabled={disabled}
+              aria-label="toggle to markdown mode"
             >
               {t('editor.editorWidgets.markdown.markdown')}
             </Button>
