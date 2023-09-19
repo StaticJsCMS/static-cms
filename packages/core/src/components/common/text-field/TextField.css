@@ -34,7 +34,7 @@
     @apply border
       rounded-lg
       block
-      p-2.5
+      p-2.5;
   }
 
   &.CMS_TextField_cursor-pointer {

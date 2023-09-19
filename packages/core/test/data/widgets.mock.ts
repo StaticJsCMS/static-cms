@@ -64,7 +64,6 @@ export const createMockWidgetControlProps = <T, F extends BaseField = UnknownFie
     i18n: undefined,
     duplicate: false,
     controlled: false,
-    theme: 'light',
     onChange: jest.fn(),
     clearChildValidation: jest.fn(),
     query: jest.fn(),

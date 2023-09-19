@@ -10,7 +10,16 @@ if (typeof window === 'undefined') {
     navigator: {
       platform: 'Win',
     },
+    matchMedia: () => ({
+      matches: false,
+    }),
   };
 }
 
 global.URL.createObjectURL = jest.fn();
+
+const mockMatchMedia = jest.fn().mockReturnValue({
+  matches: false,
+});
+
+Object.defineProperty(window, 'matchMedia', { value: mockMatchMedia });
