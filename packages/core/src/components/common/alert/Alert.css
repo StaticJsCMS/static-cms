@@ -11,11 +11,11 @@
 }
 
 .CMS_Alert_content {
+  color: var(--text-secondary);
+
   @apply px-6
     pb-4
-    text-sm
-    text-slate-500
-    dark:text-slate-400;
+    text-sm;
 }
 
 .CMS_Alert_actions {

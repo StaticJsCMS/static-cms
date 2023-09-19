@@ -1,34 +1,25 @@
 .CMS_NavLink_link {
   @apply w-full
     justify-start;
-
-  &.CMS_NavLink_active {
-    @apply bg-blue-200/75
-      dark:bg-slate-700
-      hover:bg-slate-200
-      dark:hover:bg-slate-700/75
-      text-blue-700
-      dark:text-blue-400;
-  }
 }
 
 .CMS_NavLink_external {
   @apply flex
-  justify-between
-  w-full;
+    justify-between
+    w-full;
 }
 
 .CMS_NavLink_external-content {
   @apply flex
-  items-center
-  justify-start;
+    items-center
+    justify-start;
 }
 
 .CMS_NavLink_external-icon {
+  color: var(--text-secondary);
+
   @apply h-5
-  w-5
-  text-gray-400
-  dark:text-gray-500;
+    w-5;
 }
 
 .CMS_NavLink_content {

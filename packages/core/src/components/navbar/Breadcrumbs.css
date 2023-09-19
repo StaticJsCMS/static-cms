@@ -1,4 +1,6 @@
 .CMS_Breadcrumbs_root {
+  color: var(--text-primary);
+
   @apply flex
     h-full
     md:w-auto
@@ -6,8 +8,6 @@
     text-xl
     font-semibold
     gap-1
-    text-gray-800
-    dark:text-white
     flex-grow
     truncate;
 }
@@ -32,15 +32,17 @@
 }
 
 .CMS_Breadcrumbs_breadcrumb-link {
-  @apply hover:text-gray-400
-    dark:hover:text-gray-400
-    overflow-hidden
+  &:hover {
+    color: var(--text-secondary);
+  }
+
+  --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
+
+  @apply overflow-hidden
     whitespace-nowrap
     focus:outline-none
     focus:ring-4
-    rounded-md
-    focus:ring-gray-200
-    dark:focus:ring-slate-700;
+    rounded-md;
 
   &.CMS_Breadcrumbs_breadcrumb-truncated {
     @apply text-ellipsis;
@@ -64,6 +66,8 @@
 }
 
 .CMS_Breadcrumbs_last-non-editor-breadcrumb-link {
+  --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
+
   @apply flex
     md:hidden
     gap-2
@@ -71,12 +75,12 @@
     truncate
     w-full
     focus:outline-none
-    focus:ring-4
-    focus:ring-gray-200
-    dark:focus:ring-slate-700;
+    focus:ring-4;
 }
 
 .CMS_Breadcrumbs_mobile-current-breadcrumb-link {
+  --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
+
   @apply flex
     md:hidden
     gap-2
@@ -84,9 +88,7 @@
     truncate
     w-full
     focus:outline-none
-    focus:ring-4
-    focus:ring-gray-200
-    dark:focus:ring-slate-700;
+    focus:ring-4;
 }
 
 .CMS_Breadcrumbs_mobile-backlink {

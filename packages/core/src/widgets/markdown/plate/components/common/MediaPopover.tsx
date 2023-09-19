@@ -101,16 +101,16 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
       className={classes.root}
     >
       <div key="edit-content" contentEditable={false} className={classes.content}>
-        <Button onClick={handleOpenMediaLibrary} variant="text" size="small">
+        <Button onClick={handleOpenMediaLibrary} color="secondary" variant="text" size="small">
           {forImage ? 'Edit Image' : 'Edit Link'}
         </Button>
         <div className={classes.divider} />
         {!forImage ? (
-          <Button href={url} variant="text" size="small" onClick={noop}>
+          <Button href={url} color="secondary" variant="text" size="small" onClick={noop}>
             <OpenInNewIcon className={classes.icon} title="Open In New Tab" />
           </Button>
         ) : null}
-        <Button onClick={onRemove} variant="text" size="small">
+        <Button onClick={onRemove} color="secondary" variant="text" size="small">
           <DeleteForeverIcon className={classes.icon} title="Delete" />
         </Button>
       </div>

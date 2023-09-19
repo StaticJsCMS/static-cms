@@ -22,6 +22,7 @@ import type {
   LogoutEventListener,
   MountedEventListener,
   ObjectValue,
+  PartialTheme,
   PostSaveEventListener,
   PreSaveEventListener,
   PreviewStyle,
@@ -29,6 +30,7 @@ import type {
   ShortcodeConfig,
   TemplatePreviewCardComponent,
   TemplatePreviewComponent,
+  Theme,
   UnknownField,
   ValueOrNestedValue,
   Widget,
@@ -103,6 +105,9 @@ interface Registry {
 
   /** Markdown editor */
   shortcodes: Record<string, ShortcodeConfig>;
+
+  /** Themes */
+  themes: (Theme | PartialTheme)[];
 }
 
 /**
@@ -121,6 +126,7 @@ const registry: Registry = {
   eventHandlers,
   previewStyles: [],
   shortcodes: {},
+  themes: [],
 };
 
 export default {
@@ -153,6 +159,8 @@ export default {
   registerShortcode,
   getShortcode,
   getShortcodes,
+  registerTheme,
+  getThemes,
 };
 
 /**
@@ -814,4 +822,15 @@ export function getShortcode(name: string): ShortcodeConfig {
 
 export function getShortcodes(): Record<string, ShortcodeConfig> {
   return registry.shortcodes;
+}
+
+/**
+ * Markdown editor shortcodes
+ */
+export function registerTheme(theme: Theme | PartialTheme) {
+  registry.themes.push(theme);
+}
+
+export function getThemes(): (Theme | PartialTheme)[] {
+  return registry.themes;
 }

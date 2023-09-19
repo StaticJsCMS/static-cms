@@ -5,7 +5,7 @@
 
   &.CMS_WidgetList_ListItem_error {
     & .CMS_WidgetList_ListItem_content {
-      @apply border-l-red-500;
+      border-color: var(--error-main);
     }
   }
 
@@ -14,18 +14,18 @@
       &:hover {
         & .CMS_WidgetList_ListItem_summary-label,
         & .CMS_WidgetList_ListItem_expand-button-icon {
-          @apply text-blue-500;
+          color: var(--primary-main);
         }
       }
 
       &:focus-within {
         & .CMS_WidgetList_ListItem_summary-label,
         & .CMS_WidgetList_ListItem_expand-button-icon {
-          @apply text-blue-500;
+          color: var(--primary-main);
         }
 
         & .CMS_WidgetList_ListItem_content {
-          @apply border-l-blue-500;
+          border-color: var(--primary-main);
         }
       }
     }
@@ -33,8 +33,7 @@
 
   &.CMS_WidgetList_ListItem_disabled {
     & .CMS_WidgetList_ListItem_expand-button-icon {
-      @apply text-slate-300
-        dark:text-slate-600;
+      color: var(--text-secondary);
     }
   }
 
@@ -53,7 +52,7 @@
 
   &.CMS_WidgetList_ListItem_error {
     & .CMS_WidgetList_ListItem_content {
-      @apply border-l-red-500;
+      border-color: var(--error-main);
     }
   }
 
@@ -61,7 +60,7 @@
     &:not(.CMS_WidgetList_ListItem_disabled) {
       &:focus-within {
         & .CMS_WidgetList_ListItem_content {
-          @apply border-l-blue-500;
+          border-color: var(--primary-main);
         }
       }
     }
@@ -89,7 +88,6 @@
     focus:outline-none
     focus-visible:ring
     gap-2
-    focus-visible:ring-opacity-75
     items-center;
 }
 
@@ -118,19 +116,21 @@
 }
 
 .CMS_WidgetList_ListItem_not-open-placeholder {
+  border-color: var(--background-light);
+
   @apply ml-8
-    border-b
-    border-slate-400;
+    border-b;
 }
 
 .CMS_WidgetList_ListItem_content {
+  color: var(--text-secondary);
+  border-color: var(--background-light);
+
   @apply relative
     ml-4
     text-sm
-    text-gray-500
     border-l-2
-    border-solid
-    border-l-slate-400;
+    border-solid;
 }
 
 .CMS_WidgetList_ListItem_single-field-controls {

@@ -89,6 +89,7 @@ const SortableLink: FC<SortableLinkProps> = ({ id, itemValue, onRemove, onReplac
             {onReplace ? (
               <IconButton
                 key="replace"
+                color="secondary"
                 variant="text"
                 onClick={handleReplace}
                 className={classes['replace-button']}

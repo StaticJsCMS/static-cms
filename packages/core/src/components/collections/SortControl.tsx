@@ -120,6 +120,7 @@ const SortControl = ({
   return (
     <Menu
       label={t('collection.collectionTop.sortBy')}
+      color={selectedSort.key ? 'primary' : 'secondary'}
       variant={selectedSort.key ? 'contained' : 'outlined'}
       rootClassName={classes.root}
     >

@@ -31,6 +31,7 @@ const MediaLibraryModal: FC = () => {
     <Modal open={isVisible} onClose={handleClose} className={classes.root}>
       <IconButton
         className={classes['close-button']}
+        color="secondary"
         variant="outlined"
         aria-label="add"
         onClick={handleClose}

@@ -84,7 +84,7 @@ const Entries = ({
     );
   }
 
-  return <div className={entriesClasses.root}>{t('collection.entries.noEntries')}</div>;
+  return <div className={entriesClasses['no-entries']}>{t('collection.entries.noEntries')}</div>;
 };
 
 export default translate()(Entries);

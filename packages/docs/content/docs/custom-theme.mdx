@@ -1,0 +1,471 @@
+---
+group: Customization
+title: Theming
+weight: 30
+---
+
+Static CMS comes with two default themes (`light` and `dark`), and you can add your own custom themes as well.
+
+Static CMS exposes a `window.CMS` global object that you can use to register custom themes via `registerTheme`. The same object is also the default export if you import Static CMS as an npm module.
+
+## Register Theme
+
+Register a custom theme.
+
+<CodeTabs>
+
+```js
+const theme = {
+  name: 'Custom Dark',
+  text: {
+    primary: '#fff',
+    secondary: 'rgba(255, 255, 255, 0.7)',
+    disabled: 'rgba(255, 255, 255, 0.5)',
+  },
+  background: {
+    main: '#1e293b',
+    light: '#2c3b55',
+    dark: '#0f172a',
+    divider: '#2c3b55',
+  },
+  scrollbar: {
+    main: '#1e293b',
+    light: '#2c3b55',
+  },
+  button: {
+    disabled: '#334155',
+  },
+  primary: {
+    main: '#339ef4',
+    light: '#6bb9f7',
+    dark: '#0c82e0',
+    contrastColor: '#ffffff',
+  },
+  error: {
+    main: '#f44336',
+    light: '#e57373',
+    dark: '#d32f2f',
+    contrastColor: '#ffffff',
+  },
+  warning: {
+    main: '#ffa726',
+    light: '#ffb74d',
+    dark: '#f57c00',
+    contrastColor: '#ffffff',
+  },
+  info: {
+    main: '#29b6f6',
+    light: '#4fc3f7',
+    dark: '#0288d1',
+    contrastColor: '#ffffff',
+  },
+  success: {
+    main: '#66bb6a',
+    light: '#81c784',
+    dark: '#388e3c',
+    contrastColor: '#ffffff',
+  },
+  codemirror: {
+    theme: 'dark',
+  },
+};
+
+// Using global window object
+CMS.registerTheme(theme);
+
+// Using npm module import
+import CMS from '@staticcms/core';
+
+CMS.registerTheme(theme);
+```
+
+```yaml
+theme:
+  themes:
+    - name: Custom Dark
+      text:
+        primary: '#fff'
+        secondary: 'rgba(255, 255, 255, 0.7)'
+        disabled: 'rgba(255, 255, 255, 0.5)'
+      background:
+        main: '#1e293b'
+        light: '#2c3b55'
+        dark: '#0f172a'
+        divider: '#2c3b55'
+      scrollbar:
+        main: '#1e293b'
+        light: '#2c3b55'
+      button:
+        disabled: '#334155'
+      primary:
+        main: '#339ef4'
+        light: '#6bb9f7'
+        dark: '#0c82e0'
+        contrastColor: '#ffffff'
+      error:
+        main: '#f44336'
+        light: '#e57373'
+        dark: '#d32f2f'
+        contrastColor: '#ffffff'
+      warning:
+        main: '#ffa726'
+        light: '#ffb74d'
+        dark: '#f57c00'
+        contrastColor: '#ffffff'
+      info:
+        main: '#29b6f6'
+        light: '#4fc3f7'
+        dark: '#0288d1'
+        contrastColor: '#ffffff'
+      success:
+        main: '#66bb6a'
+        light: '#81c784'
+        dark: '#388e3c'
+        contrastColor: '#ffffff'
+      codemirror:
+        theme: dark
+```
+
+</CodeTabs>
+
+## Extend Built-in Themes
+
+Extend either the `light` or `dark` themes.
+
+<CodeTabs>
+
+```js
+// Using global window object
+CMS.registerTheme({
+  name: 'Red Orange',
+  extends: 'dark',
+  primary: {
+    main: '#ff4500',
+  },
+});
+
+// Using npm module import
+import CMS from '@staticcms/core';
+
+CMS.registerTheme({
+  name: 'Red Orange',
+  extends: 'dark',
+  primary: {
+    main: '#ff4500',
+  },
+});
+```
+
+```yaml
+theme:
+  themes:
+    - name: Red Orange
+      extends: dark
+      primary:
+        main: '#ff4500'
+```
+
+</CodeTabs>
+
+## Set Default Theme
+
+By default `light` is the main theme (or `dark` if the user's system is set to dark mode). `default_theme` allows you to change that.
+
+```yaml
+theme:
+  default_theme: false
+  themes:
+    # Can also be registered via javascript
+    - name: Red Orange
+      extends: dark
+      primary:
+        main: '#ff4500'
+```
+
+## Hide Built-in themes
+
+By default both a `light` and `dark` them are available. However, if you provide at least one custom theme, `include_built_in_themes` allows you to disable the built-in themes.
+
+If `default_theme` is not provided, then the first custom theme is used (when `include_built_in_themes` is `false`).
+
+```yaml
+theme:
+  include_built_in_themes: false
+  themes:
+    # Can also be registered via javascript
+    - name: Red Orange
+      extends: dark
+      primary:
+        main: '#ff4500'
+```
+
+## useTheme Hook
+
+The `useTheme` hook can be utilized in customize widgets and previews to utilize values from the theme.
+
+### Example Preview Card
+
+<CodeTabs>
+
+```js
+const PostPreviewCard = ({ entry, widgetFor }) => {
+  const theme = useTheme();
+
+  return h(
+    'div',
+    { style: { width: '100%' } },
+    widgetFor('image'),
+    h(
+      'div',
+      { style: { padding: '16px', width: '100%' } },
+      h(
+        'div',
+        {
+          style: {
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'space-between',
+            alignItems: 'start',
+          },
+        },
+        h(
+          'div',
+          {
+            style: {
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'baseline',
+              gap: '8px',
+            },
+          },
+          h('strong', { style: { fontSize: '24px' } }, entry.data.title),
+          h('span', { style: { fontSize: '16px' } }, entry.data.date),
+        ),
+        h(
+          'div',
+          {
+            style: {
+              backgroundColor: entry.data.draft === true
+                ? theme.info.main
+                : theme.success.main,
+              color: 'white',
+              border: 'none',
+              padding: '4px 8px',
+              textAlign: 'center',
+              textDecoration: 'none',
+              display: 'inline-block',
+              cursor: 'pointer',
+              borderRadius: '4px',
+            },
+          },
+          entry.data.draft === true ? 'Draft' : 'Published',
+        ),
+      ),
+    ),
+  );
+};
+
+CMS.registerPreviewCard('posts', PostPreviewCard, () => 240);
+```
+
+```jsx
+import CMS from '@staticcms/core';
+
+const PostPreviewCard = ({ entry, widgetFor }) => {
+  const theme = useTheme();
+
+  return (
+    <div style={{ width: '100%' }}>
+      {widgetFor('image')}
+      <div style={{ padding: '16px', width: '100%' }}>
+        <div
+          style={{
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'space-between',
+            alignItems: 'start',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'baseline',
+              gap: '8px',
+            }}
+          >
+            <strong style={{ fontSize: '24px' }}>{entry.data.title}</strong>
+            <span style={{ fontSize: '16px' }}>{entry.data.date}</span>
+          </div>
+          <div
+            style={{
+              backgroundColor: entry.data.draft === true
+                ? theme.info.main
+                : theme.success.main,
+              color: 'white',
+              border: 'none',
+              padding: '4px 8px',
+              textAlign: 'center',
+              textDecoration: 'none',
+              display: 'inline-block',
+              cursor: 'pointer',
+              borderRadius: '4px',
+            }}
+          >
+            {entry.data.draft === true ? 'Draft' : 'Published'}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+CMS.registerPreviewCard('posts', PostPreviewCard, () => 240);
+```
+
+```tsx
+import CMS, { useTheme } from '@staticcms/core';
+
+import type { TemplatePreviewCardProps } from '@staticcms/core';
+
+/**
+ * The type for 'entry.data'
+ */
+interface Post {
+  image: string;
+  title: string;
+  date: string;
+  body: string;
+  draft: boolean;
+}
+
+const PostPreviewCard = ({ entry, widgetFor }: TemplatePreviewCardProps<Post>) => {
+  const theme = useTheme();
+
+  return (
+    <div style={{ width: '100%' }}>
+      {widgetFor('image')}
+      <div style={{ padding: '16px', width: '100%' }}>
+        <div
+          style={{
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'space-between',
+            alignItems: 'start',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'baseline',
+              gap: '8px',
+            }}
+          >
+            <strong style={{ fontSize: '24px' }}>{entry.data?.title}</strong>
+            <span style={{ fontSize: '16px' }}>{entry.data?.date}</span>
+          </div>
+          <div
+            style={{
+              backgroundColor: entry.data?.draft === true
+                ? theme.info.main
+                : theme.success.main,
+              color: 'white',
+              border: 'none',
+              padding: '4px 8px',
+              textAlign: 'center',
+              textDecoration: 'none',
+              display: 'inline-block',
+              cursor: 'pointer',
+              borderRadius: '4px',
+            }}
+          >
+            {entry.data?.draft === true ? 'Draft' : 'Published'}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+CMS.registerPreviewCard('posts', PostPreviewCard, () => 240);
+```
+
+</CodeTabs>
+
+## Theme
+
+The react component that renders the control. It receives the following props:
+
+| Param      | Type   | Description                                                                          |
+| ---------- | ------ | ------------------------------------------------------------------------------------ |
+| name       | string | The name of the theme                                                                |
+| extends    | string | _Optional if all other theme options are provided._<br />The default theme to extend |
+| common     | object | _Optional if `extends` is provided._ See [Common Colors](#common-colors)             |
+| text       | object | _Optional if `extends` is provided._ See [Text Colors](#text-colors)                 |
+| background | object | _Optional if `extends` is provided._ See [Background Colors](#background-colors)     |
+| scrollbar  | object | _Optional if `extends` is provided._ See [Scrollbar Colors](#scrollbar-colors)       |
+| primary    | object | _Optional if `extends` is provided._ See [Theme Color](#theme-color)                 |
+| error      | object | _Optional if `extends` is provided._ See [Theme Color](#theme-color)                 |
+| warning    | object | _Optional if `extends` is provided._ See [Theme Color](#theme-color)                 |
+| info       | object | _Optional if `extends` is provided._ See [Theme Color](#theme-color)                 |
+| success    | object | _Optional if `extends` is provided._ See [Theme Color](#theme-color)                 |
+| codemirror | object | _Optional if `extends` is provided._ See [Codemirror](#codemirror)                   |
+
+### Common Colors
+
+`common` allows you to change the common colors.
+
+| Param | Type   | Description                          |
+| ----- | ------ | ------------------------------------ |
+| gray  | string | _Optional if `extends` is provided._ |
+
+### Text Colors
+
+`text` allows you to change the text colors.
+
+| Param     | Type   | Description                          |
+| --------- | ------ | ------------------------------------ |
+| primary   | string | _Optional if `extends` is provided._ |
+| secondary | string | _Optional if `extends` is provided._ |
+| disabled  | string | _Optional if `extends` is provided._ |
+
+### Background Colors
+
+`background` allows you to change the background colors.
+
+| Param   | Type   | Description                                                                               |
+| ------- | ------ | ----------------------------------------------------------------------------------------- |
+| main    | string | _Optional if `extends` is provided._                                                      |
+| light   | string | _Optional if `extends` is provided._<br />Will be calculated from `main` if not provided. |
+| dark    | string | _Optional if `extends` is provided._<br />Will be calculated from `main` if not provided. |
+| divider | string | _Optional if `extends` is provided._                                                      |
+
+### Scrollbar Colors
+
+`scrollbar` allows you to change the scrollbar colors.
+
+| Param | Type   | Description                                                                               |
+| ----- | ------ | ----------------------------------------------------------------------------------------- |
+| main  | string | _Optional if `extends` is provided._                                                      |
+| light | string | _Optional if `extends` is provided._<br />Will be calculated from `main` if not provided. |
+
+### Theme Color
+
+`primary`, `error`, `warning`, `info` and `success` are theme colors and share the same options.
+
+| Param         | Type   | Description                                                                               |
+| ------------- | ------ | ----------------------------------------------------------------------------------------- |
+| main          | string | _Optional if `extends` is provided._                                                      |
+| light         | string | _Optional if `extends` is provided._<br />Will be calculated from `main` if not provided. |
+| dark          | string | _Optional if `extends` is provided._<br />Will be calculated from `main` if not provided. |
+| contrastColor | string | _Optional if `extends` is provided._                                                      |
+
+### Codemirror
+
+`codemirror` allows you to change the theme settings for Codemirror instances (used by the [code](/docs/widget-code) and [markdown](/docs/widget-markdown) widgets).
+
+| Param | Type   | Description                                                                               |
+| ----- | ------ | ----------------------------------------------------------------------------------------- |
+| main  | string | _Optional if `extends` is provided._                                                      |
+| light | string | _Optional if `extends` is provided._<br />Will be calculated from `main` if not provided. |

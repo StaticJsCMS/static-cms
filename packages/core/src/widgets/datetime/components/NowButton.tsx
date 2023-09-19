@@ -31,6 +31,7 @@ const NowButton: FC<TranslatedProps<NowButtonProps>> = ({ disabled, t, handleCha
         data-testid="datetime-now"
         onClick={handleClick}
         disabled={disabled}
+        color="secondary"
         variant="outlined"
         className={classes.button}
       >

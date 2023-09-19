@@ -9,15 +9,27 @@
 
     & .CMS_Checkbox_input {
       & + .CMS_Checkbox_custom-input {
-        @apply bg-blue-600/25
-          after:border-gray-500/75;
+        background: var(--primary-main);
       }
     }
 
     & .CMS_Checkbox_custom-input {
-      @apply bg-gray-100/75
-        dark:bg-gray-700/75;
+      background: var(--common-gray);
     }
+  }
+}
+
+.CMS_Checkbox_md {
+  & .CMS_Checkbox_custom-input {
+    @apply w-6
+      h-6;
+  }
+}
+
+.CMS_Checkbox_sm {
+  & .CMS_Checkbox_custom-input {
+    @apply w-4
+      h-4;
   }
 }
 
@@ -28,39 +40,38 @@
   -webkit-tap-highlight-color: transparent;
 
   &:focus + .CMS_Checkbox_custom-input {
-    @apply ring-4
-      ring-blue-300
-      dark:ring-blue-800;
+    --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
+
+    @apply ring-4;
   }
 
   &:checked + .CMS_Checkbox_custom-input {
-    @apply after:translate-x-full
-      bg-blue-600
-      after:border-white;
+    background: var(--primary-main);
+
+    @apply after:translate-x-full;
   }
 }
 
 .CMS_Checkbox_custom-input {
-  @apply w-6
-    h-6
-    text-blue-600
-    border-gray-300
-    rounded
-    focus:ring-blue-500
-    dark:focus:ring-blue-600
-    dark:ring-offset-gray-800
+  color: var(--primary-light);
+  background: color-mix(in srgb, var(--primary-contrast-color) 50%, transparent);
+  border-color: var(--background-light);
+
+  @apply rounded
     focus:ring-2
-    dark:border-gray-600
     select-none
     flex
     items-center
-    justify-center
-    bg-gray-100
-    dark:bg-gray-700;
+    justify-center;
+
+  &:focus {
+    --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
+  }
 }
 
 .CMS_Checkbox_checkmark {
+  color: var(--primary-contrast-color);
+
   @apply w-5
-    h-5
-    text-white;
+    h-5;
 }

@@ -39,7 +39,10 @@ function getOptionLabelAndValue(option: number | string | Option): Option {
   return { label: String(option), value: option };
 }
 
-export type SelectChangeEventHandler = (value: number | string | (number | string)[]) => void;
+export type SelectChangeEventHandler = (
+  value: number | string | (number | string)[],
+  event: MouseEvent | KeyboardEvent | FocusEvent | null,
+) => void;
 
 export interface SelectProps {
   label?: ReactNode | ReactNode[];
@@ -80,7 +83,7 @@ const Select = forwardRef(
     );
 
     const handleChange = useCallback(
-      (_event: MouseEvent | KeyboardEvent | FocusEvent | null, selectedValue: number | string) => {
+      (event: MouseEvent | KeyboardEvent | FocusEvent | null, selectedValue: number | string) => {
         if (Array.isArray(value)) {
           const newValue = [...value];
           const index = newValue.indexOf(selectedValue);
@@ -90,12 +93,12 @@ const Select = forwardRef(
             newValue.push(selectedValue);
           }
 
-          onChange(newValue);
+          onChange(newValue, event);
           setOpen(false);
           return;
         }
 
-        onChange(selectedValue);
+        onChange(selectedValue, event);
         setOpen(false);
       },
       [onChange, value],

@@ -52,7 +52,7 @@ const FrameGlobalStyles = `
   }
 
   a {
-    color: rgb(59 130 246);
+    color: var(--primary-main);
     text-decoration: none;
   }
 
@@ -70,34 +70,18 @@ const FrameGlobalStyles = `
     }
   }
 
-  .text-blue-500 {
-    color: rgb(59 130 246);
-  }
-
   .CMS_PreviewFrameContent_content {
-    color: rgb(17 24 39);
-  }
-
-  .dark .CMS_PreviewFrameContent_content {
-    color: rgb(243 244 246);
-  }
-
-  .text-slate-500 {
-    color: rgb(100 116 139);
-  }
-
-  .dark .dark\\:text-slate-400 {
-    color: rgb(148 163 184);
+    color: var(--text-primary);
   }
 
   .CMS_Scrollbar_root {
-    --scrollbar-foreground: rgba(100, 116, 139, 0.25);
-    --scrollbar-background: rgb(248 250 252);
+    --scrollbar-foreground: var(--scrollbar-main);
+    --scrollbar-background: var(--background-dark);
   }
 
-  .dark.CMS_Scrollbar_root {
-    --scrollbar-foreground: rgba(30, 41, 59, 0.8);
-    --scrollbar-background: rgb(15 23 42);
+  .CMS_Scrollbar_root.CMS_Scrollbar_secondary {
+    --scrollbar-foreground: var(--scrollbar-light);
+    --scrollbar-background: var(--background-main);
   }
 
   .CMS_Scrollbar_root {

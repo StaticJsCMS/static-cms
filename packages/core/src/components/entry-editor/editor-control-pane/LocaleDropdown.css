@@ -2,8 +2,8 @@
 }
 
 .CMS_LocaleDropdown_no-edit {
+  color: var(--text-secondary);
+
   @apply border
-    border-transparent
-    text-slate-500
-    dark:text-slate-400;
+    border-transparent;
 }

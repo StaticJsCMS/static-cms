@@ -1,4 +1,3 @@
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
@@ -20,18 +19,21 @@ import { currentBackend } from '@staticcms/core/backend';
 import { changeTheme } from '../actions/globalUI';
 import { invokeEvent } from '../lib/registry';
 import { getDefaultPath } from '../lib/util/collection.util';
+import { isNotNullish } from '../lib/util/null.util';
+import { isEmpty } from '../lib/util/string.util';
 import { generateClassNames } from '../lib/util/theming.util';
-import { selectTheme } from '../reducers/selectors/globalUI';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useAppDispatch } from '../store/hooks';
+import NotFoundPage from './NotFoundPage';
 import CollectionRoute from './collections/CollectionRoute';
 import { Alert } from './common/alert/Alert';
 import { Confirm } from './common/confirm/Confirm';
 import Loader from './common/progress/Loader';
 import EditorRoute from './entry-editor/EditorRoute';
 import MediaPage from './media-library/MediaPage';
-import NotFoundPage from './NotFoundPage';
 import Page from './page/Page';
 import Snackbars from './snackbar/Snackbars';
+import ThemeManager from './theme/ThemeManager';
+import useTheme from './theme/hooks/useTheme';
 
 import type { Credentials, TranslatedProps } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
@@ -78,25 +80,7 @@ const App = ({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const mode = useAppSelector(selectTheme);
-
-  const theme = React.useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
-          primary: {
-            main: 'rgb(37 99 235)',
-          },
-          ...(mode === 'dark' && {
-            background: {
-              paper: 'rgb(15 23 42)',
-            },
-          }),
-        },
-      }),
-    [mode],
-  );
+  const theme = useTheme();
 
   const configError = useCallback(
     (error?: string) => {
@@ -175,21 +159,6 @@ const App = ({
     dispatch(discardDraft());
   }, [dispatch, pathname, searchParams]);
 
-  useEffect(() => {
-    // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-    if (
-      localStorage.getItem('color-theme') === 'dark' ||
-      (!('color-theme' in localStorage) &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      document.documentElement.classList.add('dark');
-      dispatch(changeTheme('dark'));
-    } else {
-      document.documentElement.classList.remove('dark');
-      dispatch(changeTheme('light'));
-    }
-  }, [dispatch]);
-
   const [prevUser, setPrevUser] = useState(user);
   useEffect(() => {
     if (!prevUser && user) {
@@ -255,6 +224,20 @@ const App = ({
     });
   }, []);
 
+  useEffect(() => {
+    const defaultTheme = config.config?.theme?.default_theme;
+    if (isEmpty(defaultTheme)) {
+      return;
+    }
+
+    const themeName = localStorage.getItem('color-theme');
+    if (isNotNullish(themeName)) {
+      return;
+    }
+
+    dispatch(changeTheme(defaultTheme));
+  }, [config.config?.theme?.default_theme, dispatch]);
+
   if (!config.config) {
     return configError(t('app.app.configNotFound'));
   }
@@ -268,7 +251,7 @@ const App = ({
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeManager theme={theme} element={document.documentElement}>
       <ScrollSync key="scroll-sync" enabled={scrollSyncEnabled}>
         <>
           <div key="back-to-top-anchor" id="back-to-top-anchor" />
@@ -282,7 +265,7 @@ const App = ({
           </div>
         </>
       </ScrollSync>
-    </ThemeProvider>
+    </ThemeManager>
   );
 };
 

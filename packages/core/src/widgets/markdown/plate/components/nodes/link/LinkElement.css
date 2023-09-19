@@ -1,5 +1,6 @@
 .CMS_WidgetMarkdown_Link_root {
-  @apply text-blue-500
-    cursor-pointer
+  color: var(--primary-main);
+
+  @apply cursor-pointer
     hover:underline;
 }

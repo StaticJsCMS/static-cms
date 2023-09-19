@@ -6,20 +6,22 @@
   &.CMS_InlineEditTextField_editable {
     & .CMS_InlineEditTextField_preview {
       @apply cursor-pointer
-        border-gray-100
-        hover:border-gray-300
-        dark:border-slate-600;
+        border-transparent;
+
+      &:hover {
+        border-color: var(--primary-main);
+      }
     }
 
     &:focus {
       & .CMS_InlineEditTextField_label {
-        @apply text-blue-500;
+        color: var(--primary-main);
       }
     }
 
     &:hover {
       & .CMS_InlineEditTextField_label {
-        @apply text-blue-500;
+        color: var(--primary-main);
       }
     }
   }
@@ -29,11 +31,12 @@
   @apply w-full
     flex
     text-xs
-    font-bold
-    dark:font-semibold;
+    font-bold;
 }
 
 .CMS_InlineEditTextField_preview {
+  color: var(--text-secondary);
+
   @apply flex
     items-center
     w-full
@@ -45,29 +48,29 @@
     h-input
     rounded-md
     border
-    text-slate-600
-    dark:text-gray-100
     border-transparent;
 }
 
 .CMS_InlineEditTextField_input {
+  color: var(--text-primary);
+  background: var(--background-main);
+  border-color: var(--background-light);
+
+  &:hover,
+  &:focus-within {
+    border-color: var(--primary-main);
+  }
+
+  --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
+
   @apply block
     w-full
     p-1.5
     -ml-1.5
     text-sm
-    text-gray-800
     border
-    border-gray-300
     rounded-md
-    bg-gray-50
     focus-visible:outline-none
     focus:ring-4
-    focus:ring-gray-200
-    dark:bg-gray-700
-    dark:border-gray-600
-    dark:placeholder-gray-400
-    dark:text-white
-    dark:focus:ring-slate-700
     h-input;
 }

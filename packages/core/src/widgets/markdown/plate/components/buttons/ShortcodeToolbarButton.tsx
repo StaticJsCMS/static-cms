@@ -48,6 +48,7 @@ const ShortcodeToolbarButton: FC<ShortcodeToolbarButtonProps> = ({ disabled }) =
       data-testid="toolbar-button-shortcode"
       keepMounted
       hideDropdownIcon
+      color="secondary"
       variant="text"
       rootClassName={classes.root}
       buttonClassName={classes.button}

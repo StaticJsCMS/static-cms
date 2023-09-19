@@ -68,6 +68,7 @@ export function getToolbarButtons(
         data-testid={`toolbar-menu-${button.label.toLowerCase().replace(' ', '-')}`}
         keepMounted
         hideDropdownIcon
+        color="secondary"
         variant="text"
         rootClassName={classes.root}
         buttonClassName={classes.button}

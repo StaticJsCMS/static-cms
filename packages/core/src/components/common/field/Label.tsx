@@ -10,11 +10,9 @@ import './Label.css';
 
 export const classes = generateClassNames('Label', [
   'root',
-  'disabled',
   'cursor-pointer',
   'cursor-text',
   'cursor-default',
-  'error',
   'inline',
 ]);
 
@@ -32,7 +30,6 @@ export interface LabelProps {
 const Label: FC<LabelProps> = ({
   htmlFor,
   children,
-  hasErrors = false,
   variant = 'default',
   cursor = 'default',
   className,
@@ -47,11 +44,9 @@ const Label: FC<LabelProps> = ({
       data-testid={dataTestId ?? 'label'}
       className={classNames(
         classes.root,
-        disabled && classes.disabled,
         finalCursor === 'pointer' && classes['cursor-pointer'],
         finalCursor === 'text' && classes['cursor-text'],
         finalCursor === 'default' && classes['cursor-default'],
-        hasErrors && classes.error,
         variant === 'inline' && classes.inline,
         className,
       )}

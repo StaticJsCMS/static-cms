@@ -27,6 +27,8 @@ export const classes = generateClassNames('Field', [
   'valid',
   'for-single-list',
   'end-adornment',
+  'hint',
+  'label',
 ]);
 
 export interface FieldProps {
@@ -90,6 +92,7 @@ const Field: FC<FieldProps> = ({
           variant={variant}
           cursor={finalCursor}
           disabled={disabled}
+          className={classes.label}
         >
           {label}
         </Label>
@@ -106,6 +109,7 @@ const Field: FC<FieldProps> = ({
           variant={variant}
           cursor={finalCursor}
           disabled={disabled}
+          className={classes.hint}
         >
           {hint}
         </Hint>
@@ -126,7 +130,7 @@ const Field: FC<FieldProps> = ({
         finalCursor === 'pointer' && classes['cursor-pointer'],
         finalCursor === 'text' && classes['cursor-text'],
         finalCursor === 'default' && classes['cursor-default'],
-        hasErrors ? classes.error : `group/active`,
+        hasErrors && classes.error,
       ),
     [rootClassName, noHightlight, disabled, noPadding, finalCursor, hasErrors],
   );

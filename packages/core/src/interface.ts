@@ -335,7 +335,6 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = 
   query: EditorControlProps['query'];
   t: t;
   value: T | undefined | null;
-  theme: 'dark' | 'light';
   controlled: boolean;
 }
 
@@ -345,7 +344,6 @@ export interface WidgetPreviewProps<T = unknown, F extends BaseField = UnknownFi
   entry: Entry;
   field: RenderedField<F>;
   value: T | undefined | null;
-  theme: 'dark' | 'light';
 }
 
 export type WidgetPreviewComponent<T = unknown, F extends BaseField = UnknownField> =
@@ -375,7 +373,6 @@ export interface TemplatePreviewProps<T = ObjectValue, EF extends BaseField = Un
   window: Window | undefined | null;
   widgetFor: WidgetFor<T>;
   widgetsFor: WidgetsFor<T>;
-  theme: 'dark' | 'light';
 }
 
 export type TemplatePreviewComponent<
@@ -389,7 +386,6 @@ export interface TemplatePreviewCardProps<T = EntryData, EF extends BaseField = 
   entry: Entry<T>;
   widgetFor: WidgetFor<T>;
   widgetsFor: WidgetsFor<T>;
-  theme: 'dark' | 'light';
   hasLocalBackup: boolean;
 }
 
@@ -402,7 +398,6 @@ export interface FieldPreviewProps<T = unknown, F extends BaseField = UnknownFie
   collection: Collection<F>;
   field: Field<F>;
   value: T;
-  theme: 'dark' | 'light';
 }
 
 export type FieldPreviewComponent<T = unknown, F extends BaseField = UnknownField> = ComponentType<
@@ -945,6 +940,55 @@ export interface Config<EF extends BaseField = UnknownField> {
   disable_local_backup?: boolean;
   editor?: EditorConfig;
   search?: boolean;
+  theme?: Themes;
+}
+
+export interface ThemeColor {
+  main: string;
+  light: string;
+  dark: string;
+  contrastColor: string;
+}
+
+export interface Theme {
+  name: string;
+  common: {
+    gray: string;
+  };
+  text: {
+    primary: string;
+    secondary: string;
+    disabled: string;
+  };
+  background: {
+    main: string;
+    light: string;
+    dark: string;
+    divider: string;
+  };
+  scrollbar: {
+    main: string;
+    light: string;
+  };
+  primary: ThemeColor;
+  error: ThemeColor;
+  warning: ThemeColor;
+  info: ThemeColor;
+  success: ThemeColor;
+  codemirror: {
+    theme: 'light' | 'dark';
+  };
+}
+
+export interface PartialTheme extends DeepPartial<Omit<Theme, 'name'>> {
+  name: string;
+  extends: 'light' | 'dark';
+}
+
+export interface Themes {
+  default_theme?: string;
+  include_built_in_themes?: boolean;
+  themes?: (Theme | PartialTheme)[];
 }
 
 export interface InitOptions<EF extends BaseField = UnknownField> {
@@ -1133,7 +1177,6 @@ export interface MarkdownEditorOptions {
 export type ShortcodeControlProps<P = {}> = P & {
   onChange: (props: P) => void;
   controlProps: WidgetControlProps<string, MarkdownField>;
-  theme: 'dark' | 'light';
 };
 
 export type ShortcodePreviewProps<P = {}> = P & {

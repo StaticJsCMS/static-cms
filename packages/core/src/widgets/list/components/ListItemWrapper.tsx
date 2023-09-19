@@ -89,6 +89,7 @@ const ListItemWrapper = ({
           <IconButton
             data-testid="remove-button"
             size="small"
+            color="secondary"
             variant="text"
             onClick={onRemove}
             disabled={disabled}

@@ -16,7 +16,6 @@ export const classes = generateClassNames('NavLink', [
   'external',
   'external-content',
   'external-icon',
-  'active',
   'content',
   'icon',
   'label',
@@ -39,8 +38,6 @@ export interface NavInternalLinkProps extends BaseNavLinkProps {
 
 export type NavLinkProps = NavExternalLinkProps | NavInternalLinkProps;
 
-const linkClassNames = `${buttonClasses.root} ${buttonClasses['text-primary']} ${classes.link}`;
-
 const NavLink = ({ icon, children, className, onClick, ...otherProps }: NavLinkProps) => {
   const content = useMemo(
     () => (
@@ -61,7 +58,7 @@ const NavLink = ({ icon, children, className, onClick, ...otherProps }: NavLinkP
           href={otherProps.href}
           target="_blank"
           rel="noreferrer"
-          className={linkClassNames}
+          className={classNames(buttonClasses.root, buttonClasses['text-secondary'], classes.link)}
           onClick={onClick}
         >
           <div className={classes.external}>
@@ -77,7 +74,13 @@ const NavLink = ({ icon, children, className, onClick, ...otherProps }: NavLinkP
     <li className={classNames(classes.root, className)}>
       <BaseNavLink
         to={otherProps.to}
-        className={classNames(linkClassNames, pathname === otherProps.to && classes.active)}
+        className={classNames(
+          buttonClasses.root,
+          pathname === otherProps.to
+            ? buttonClasses['contained-primary']
+            : buttonClasses['text-secondary'],
+          classes.link,
+        )}
         onClick={onClick}
       >
         {content}
