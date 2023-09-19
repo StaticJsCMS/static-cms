@@ -55,7 +55,6 @@
     flex
     text-sm
     font-bold
-    dark:font-semibold
     whitespace-nowrap
     overflow-hidden;
 }

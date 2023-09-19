@@ -30,6 +30,7 @@ import MediaPage from './media-library/MediaPage';
 import Page from './page/Page';
 import Snackbars from './snackbar/Snackbars';
 import ThemeManager from './theme/ThemeManager';
+import useTheme from './theme/hooks/useTheme';
 
 import type { Credentials, TranslatedProps } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
@@ -75,6 +76,8 @@ const App = ({
 }: TranslatedProps<AppProps>) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const theme = useTheme();
 
   const configError = useCallback(
     (error?: string) => {
@@ -231,7 +234,7 @@ const App = ({
   }
 
   return (
-    <ThemeManager>
+    <ThemeManager theme={theme} element={document.documentElement}>
       <ScrollSync key="scroll-sync" enabled={scrollSyncEnabled}>
         <>
           <div key="back-to-top-anchor" id="back-to-top-anchor" />

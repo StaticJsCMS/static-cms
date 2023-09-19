@@ -41,7 +41,7 @@
 
 .CMS_Table_body-row {
   background: var(--background-main);
-  border-color: var(--background-light);
+  border-color: color-mix(in srgb, var(--background-divider) 25%, transparent);
 
   &:focus,
   &:hover {
@@ -50,7 +50,6 @@
   }
 
   @apply border-t
-    first:border-t-0
     focus:outline-none;
 }
 

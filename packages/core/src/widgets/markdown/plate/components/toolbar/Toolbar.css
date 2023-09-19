@@ -1,6 +1,6 @@
 .CMS_WidgetMarkdown_Toolbar_root {
   background: var(--background-dark);
-  border-color: color-mix(in srgb, var(--background-light) 35%, transparent);
+  border-color: color-mix(in srgb, var(--background-divider) 35%, transparent);
 
   @apply flex
     flex-wrap
@@ -16,7 +16,6 @@
     border-b
     gap-0.5
     shadow-sm
-    dark:shadow-md
     sticky
     top-0
     z-10;

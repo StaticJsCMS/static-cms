@@ -20,6 +20,11 @@ export default function createTheme(
       main: overrides?.background?.main ?? baseTheme.background.main,
       light: overrides?.background?.light ?? baseTheme.background.light,
       dark: overrides?.background?.dark ?? baseTheme.background.dark,
+      divider: overrides?.background?.divider ?? baseTheme.background.divider,
+    },
+    scrollbar: {
+      main: overrides?.scrollbar?.main ?? baseTheme.scrollbar.main,
+      light: overrides?.scrollbar?.light ?? baseTheme.scrollbar.light,
     },
     button: {
       disabled: overrides?.button?.disabled ?? baseTheme.button.disabled,

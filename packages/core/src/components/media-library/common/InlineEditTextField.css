@@ -31,8 +31,7 @@
   @apply w-full
     flex
     text-xs
-    font-bold
-    dark:font-semibold;
+    font-bold;
 }
 
 .CMS_InlineEditTextField_preview {

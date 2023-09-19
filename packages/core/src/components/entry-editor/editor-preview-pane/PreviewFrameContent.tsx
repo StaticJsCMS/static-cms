@@ -4,6 +4,7 @@ import { ScrollSyncPane } from 'react-scroll-sync';
 
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import ThemeManager from '../../theme/ThemeManager';
+import useTheme from '../../theme/hooks/useTheme';
 import EditorPreviewContent from './EditorPreviewContent';
 
 import type {
@@ -26,6 +27,8 @@ interface PreviewFrameContentProps {
 const PreviewFrameContent: FC<PreviewFrameContentProps> = ({ previewComponent, previewProps }) => {
   const ref = useRef<HTMLElement>();
 
+  const theme = useTheme();
+
   return (
     <FrameContextConsumer>
       {context => {
@@ -34,7 +37,7 @@ const PreviewFrameContent: FC<PreviewFrameContentProps> = ({ previewComponent, p
         }
 
         return (
-          <ThemeManager document={context.document}>
+          <ThemeManager theme={theme} element={context.document?.documentElement}>
             <ScrollSyncPane key="preview-frame-scroll-sync" attachTo={ref}>
               <div className={classes.root}>
                 <div className={classes.content}>

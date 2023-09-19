@@ -2,8 +2,7 @@
   @apply w-full
     flex
     text-xs
-    font-bold
-    dark:font-semibold;
+    font-bold;
 
   &:not(.CMS_Label_inline) {
     @apply px-3

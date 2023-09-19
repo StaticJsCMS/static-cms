@@ -10,8 +10,7 @@
     shadow-md
     focus:outline-none
     sm:text-sm
-    z-40
-    dark:shadow-lg;
+    z-40;
 }
 
 .CMS_WidgetMarkdown_MediaPopover_content {

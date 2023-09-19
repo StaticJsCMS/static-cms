@@ -1,82 +1,64 @@
 import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
 import React, { useEffect, useMemo } from 'react';
 
-import useTheme from './hooks/useTheme';
-
+import type { Theme } from '@staticcms/core/interface';
 import type { FC, PropsWithChildren } from 'react';
 
 export interface ThemeManagerProps {
-  document?: Document;
+  element: HTMLElement | undefined | null;
+  theme: Theme;
 }
 
-const ThemeManager: FC<PropsWithChildren<ThemeManagerProps>> = ({
-  document: providedDocument = document,
-  children,
-}) => {
-  const theme = useTheme();
-
+const ThemeManager: FC<PropsWithChildren<ThemeManagerProps>> = ({ element, theme, children }) => {
   useEffect(() => {
-    providedDocument.documentElement.style.setProperty('--text-primary', theme.text.primary);
-    providedDocument.documentElement.style.setProperty('--text-secondary', theme.text.secondary);
-    providedDocument.documentElement.style.setProperty('--text-disabled', theme.text.disabled);
+    if (!element) {
+      return;
+    }
 
-    providedDocument.documentElement.style.setProperty('--background-main', theme.background.main);
-    providedDocument.documentElement.style.setProperty(
-      '--background-light',
-      theme.background.light,
-    );
-    providedDocument.documentElement.style.setProperty('--background-dark', theme.background.dark);
+    element.style.setProperty('--text-primary', theme.text.primary);
+    element.style.setProperty('--text-secondary', theme.text.secondary);
+    element.style.setProperty('--text-disabled', theme.text.disabled);
 
-    providedDocument.documentElement.style.setProperty('--button-disabled', theme.button.disabled);
+    element.style.setProperty('--background-main', theme.background.main);
+    element.style.setProperty('--background-light', theme.background.light);
+    element.style.setProperty('--background-dark', theme.background.dark);
+    element.style.setProperty('--background-divider', theme.background.divider);
 
-    providedDocument.documentElement.style.setProperty('--primary-main', theme.primary.main);
-    providedDocument.documentElement.style.setProperty('--primary-light', theme.primary.light);
-    providedDocument.documentElement.style.setProperty('--primary-dark', theme.primary.dark);
-    providedDocument.documentElement.style.setProperty(
-      '--primary-contrast-color',
-      theme.primary.contrastColor,
-    );
+    element.style.setProperty('--scrollbar-main', theme.scrollbar.main);
+    element.style.setProperty('--scrollbar-light', theme.scrollbar.light);
 
-    providedDocument.documentElement.style.setProperty('--secondary-main', theme.secondary.main);
-    providedDocument.documentElement.style.setProperty('--secondary-light', theme.secondary.light);
-    providedDocument.documentElement.style.setProperty('--secondary-dark', theme.secondary.dark);
-    providedDocument.documentElement.style.setProperty(
-      '--secondary-contrast-color',
-      theme.secondary.contrastColor,
-    );
+    element.style.setProperty('--button-disabled', theme.button.disabled);
 
-    providedDocument.documentElement.style.setProperty('--error-main', theme.error.main);
-    providedDocument.documentElement.style.setProperty('--error-light', theme.error.light);
-    providedDocument.documentElement.style.setProperty('--error-dark', theme.error.dark);
-    providedDocument.documentElement.style.setProperty(
-      '--error-contrast-color',
-      theme.error.contrastColor,
-    );
+    element.style.setProperty('--primary-main', theme.primary.main);
+    element.style.setProperty('--primary-light', theme.primary.light);
+    element.style.setProperty('--primary-dark', theme.primary.dark);
+    element.style.setProperty('--primary-contrast-color', theme.primary.contrastColor);
 
-    providedDocument.documentElement.style.setProperty('--warning-main', theme.warning.main);
-    providedDocument.documentElement.style.setProperty('--warning-light', theme.warning.light);
-    providedDocument.documentElement.style.setProperty('--warning-dark', theme.warning.dark);
-    providedDocument.documentElement.style.setProperty(
-      '--warning-contrast-color',
-      theme.warning.contrastColor,
-    );
+    element.style.setProperty('--secondary-main', theme.secondary.main);
+    element.style.setProperty('--secondary-light', theme.secondary.light);
+    element.style.setProperty('--secondary-dark', theme.secondary.dark);
+    element.style.setProperty('--secondary-contrast-color', theme.secondary.contrastColor);
 
-    providedDocument.documentElement.style.setProperty('--info-main', theme.info.main);
-    providedDocument.documentElement.style.setProperty('--info-light', theme.info.light);
-    providedDocument.documentElement.style.setProperty('--info-dark', theme.info.dark);
-    providedDocument.documentElement.style.setProperty(
-      '--info-contrast-color',
-      theme.info.contrastColor,
-    );
+    element.style.setProperty('--error-main', theme.error.main);
+    element.style.setProperty('--error-light', theme.error.light);
+    element.style.setProperty('--error-dark', theme.error.dark);
+    element.style.setProperty('--error-contrast-color', theme.error.contrastColor);
 
-    providedDocument.documentElement.style.setProperty('--success-main', theme.success.main);
-    providedDocument.documentElement.style.setProperty('--success-light', theme.success.light);
-    providedDocument.documentElement.style.setProperty('--success-dark', theme.success.dark);
-    providedDocument.documentElement.style.setProperty(
-      '--success-contrast-color',
-      theme.success.contrastColor,
-    );
-  }, [providedDocument, theme]);
+    element.style.setProperty('--warning-main', theme.warning.main);
+    element.style.setProperty('--warning-light', theme.warning.light);
+    element.style.setProperty('--warning-dark', theme.warning.dark);
+    element.style.setProperty('--warning-contrast-color', theme.warning.contrastColor);
+
+    element.style.setProperty('--info-main', theme.info.main);
+    element.style.setProperty('--info-light', theme.info.light);
+    element.style.setProperty('--info-dark', theme.info.dark);
+    element.style.setProperty('--info-contrast-color', theme.info.contrastColor);
+
+    element.style.setProperty('--success-main', theme.success.main);
+    element.style.setProperty('--success-light', theme.success.light);
+    element.style.setProperty('--success-dark', theme.success.dark);
+    element.style.setProperty('--success-contrast-color', theme.success.contrastColor);
+  }, [element, theme]);
 
   const muiTheme = useMemo(
     () =>

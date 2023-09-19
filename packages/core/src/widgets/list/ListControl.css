@@ -39,7 +39,7 @@
 }
 
 .CMS_WidgetList_field-wrapper {
-  border-color: var(--background-light);
+  border-color: var(--background-divider);
 
   @apply relative
     flex

@@ -2,7 +2,7 @@
 }
 
 .CMS_WidgetObject_root {
-  border-color: var(--background-light);
+  border-color: var(--background-divider);
 
   @apply relative
     flex

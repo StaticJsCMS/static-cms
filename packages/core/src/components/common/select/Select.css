@@ -72,6 +72,5 @@
     shadow-md
     focus:outline-none
     sm:text-sm
-    z-[100]
-    dark:shadow-lg;
+    z-[100];
 }

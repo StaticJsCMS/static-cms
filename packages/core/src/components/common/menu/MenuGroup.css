@@ -1,5 +1,5 @@
 .CMS_MenuGroup_root {
-  border-color: var(--background-light);
+  border-color: var(--background-divider);
 
   @apply py-1
     border-b;

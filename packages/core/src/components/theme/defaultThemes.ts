@@ -11,6 +11,11 @@ export const DARK_THEME: Theme = {
     main: '#1e293b',
     light: '#2c3b55',
     dark: '#0f172a',
+    divider: '#2c3b55',
+  },
+  scrollbar: {
+    main: '#1e293b',
+    light: '#2c3b55',
   },
   button: {
     disabled: '#334155',
@@ -67,6 +72,11 @@ export const LIGHT_THEME: Theme = {
     main: '#ffffff',
     light: '#ffffff',
     dark: '#f8fafc',
+    divider: '#94a3b8',
+  },
+  scrollbar: {
+    main: 'rgba(100, 116, 139, .25)',
+    light: 'rgba(100, 116, 139, .25)',
   },
   button: {
     disabled: '#d1d5db',

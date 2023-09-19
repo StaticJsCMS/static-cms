@@ -98,9 +98,7 @@
     }
 
     @apply bg-transparent
-      disabled:hover:bg-transparent
-      dark:bg-transparent
-      dark:disabled:hover:bg-transparent;
+      disabled:hover:bg-transparent;
   }
 
   .CMS_Button_text-primary {
@@ -118,8 +116,7 @@
 
     @apply bg-transparent
       border-transparent
-      disabled:hover:bg-transparent
-      dark:disabled:hover:bg-transparent;
+      disabled:hover:bg-transparent;
   }
 
   .CMS_Button_contained-secondary {
@@ -156,9 +153,7 @@
     }
 
     @apply bg-transparent
-      disabled:hover:bg-transparent
-      dark:bg-transparent
-      dark:disabled:hover:bg-transparent;
+      disabled:hover:bg-transparent;
   }
 
   .CMS_Button_text-secondary {
@@ -176,8 +171,7 @@
 
     @apply bg-transparent
       border-transparent
-      disabled:hover:bg-transparent
-      dark:disabled:hover:bg-transparent;
+      disabled:hover:bg-transparent;
   }
 
   .CMS_Button_contained-success {
@@ -214,9 +208,7 @@
     }
 
     @apply bg-transparent
-      disabled:hover:bg-transparent
-      dark:bg-transparent
-      dark:disabled:hover:bg-transparent;
+      disabled:hover:bg-transparent;
   }
 
   .CMS_Button_text-success {
@@ -234,8 +226,7 @@
 
     @apply bg-transparent
       border-transparent
-      disabled:hover:bg-transparent
-      dark:disabled:hover:bg-transparent;
+      disabled:hover:bg-transparent;
   }
 
   .CMS_Button_contained-error {
@@ -272,9 +263,7 @@
     }
 
     @apply bg-transparent
-      disabled:hover:bg-transparent
-      dark:bg-transparent
-      dark:disabled:hover:bg-transparent;
+      disabled:hover:bg-transparent;
   }
 
   .CMS_Button_text-error {
@@ -292,8 +281,7 @@
 
     @apply bg-transparent
       border-transparent
-      disabled:hover:bg-transparent
-      dark:disabled:hover:bg-transparent;
+      disabled:hover:bg-transparent;
   }
 
   .CMS_Button_contained-warning {
@@ -330,9 +318,7 @@
     }
 
     @apply bg-transparent
-      disabled:hover:bg-transparent
-      dark:bg-transparent
-      dark:disabled:hover:bg-transparent;
+      disabled:hover:bg-transparent;
   }
 
   .CMS_Button_text-warning {
@@ -350,8 +336,7 @@
 
     @apply bg-transparent
       border-transparent
-      disabled:hover:bg-transparent
-      dark:disabled:hover:bg-transparent;
+      disabled:hover:bg-transparent;
   }
 
   .CMS_Button_contained-info {
@@ -388,9 +373,7 @@
     }
 
     @apply bg-transparent
-      disabled:hover:bg-transparent
-      dark:bg-transparent
-      dark:disabled:hover:bg-transparent;
+      disabled:hover:bg-transparent;
   }
 
   .CMS_Button_text-info {
@@ -408,8 +391,7 @@
 
     @apply bg-transparent
       border-transparent
-      disabled:hover:bg-transparent
-      dark:disabled:hover:bg-transparent;
+      disabled:hover:bg-transparent;
   }
 
   /**
@@ -441,12 +423,12 @@
 }
 
 .CMS_Scrollbar_root {
-  --scrollbar-foreground: var(--background-main);
+  --scrollbar-foreground: var(--scrollbar-main);
   --scrollbar-background: var(--background-dark);
 }
 
 .CMS_Scrollbar_root.CMS_Scrollbar_secondary {
-  --scrollbar-foreground: var(--background-light);
+  --scrollbar-foreground: var(--scrollbar-light);
   --scrollbar-background: var(--background-main);
 }
 

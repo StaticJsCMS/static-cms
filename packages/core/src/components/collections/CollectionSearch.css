@@ -53,8 +53,7 @@
     shadow-md
     focus:outline-none
     sm:text-sm
-    z-[1300]
-    dark:shadow-lg;
+    z-[1300];
 }
 
 .CMS_CollectionSearch_search-in-content {

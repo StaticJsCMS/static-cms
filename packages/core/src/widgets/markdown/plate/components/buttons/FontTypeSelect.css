@@ -38,7 +38,6 @@
     shadow-md
     focus:outline-none
     sm:text-sm
-    dark:shadow-lg
     z-[101];
 }
 

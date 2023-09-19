@@ -3,8 +3,7 @@
 
   @apply z-40
     relative
-    drop-shadow-md
-    dark:drop-shadow-lg;
+    drop-shadow-md;
 
   &.CMS_Navbar_in-editor {
     & .CMS_Navbar_content-wrapper {

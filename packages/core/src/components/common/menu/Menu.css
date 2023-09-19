@@ -53,7 +53,7 @@
   border-color: var(--background-light);
 
   & > :not([hidden]) ~ :not([hidden]) {
-    border-color: var(--background-light);
+    border-color: var(--background-divider);
   }
 
   @apply absolute
@@ -65,6 +65,5 @@
     shadow-md
     border
     focus:outline-none
-    divide-y
-    dark:shadow-lg;
+    divide-y;
 }

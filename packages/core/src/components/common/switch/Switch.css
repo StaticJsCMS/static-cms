@@ -9,8 +9,15 @@
 
     & .CMS_Switch_toggle {
       &:after {
-        background: var(--background-light);
-        border-color: var(--background-light);
+        background: var(--primary-contrast-color);
+        border-color: transparent;
+      }
+    }
+
+    &.CMS_Switch_input {
+      &:checked + .CMS_Switch_toggle {
+        background: var(--primary-contrast-color);
+        border-color: var(--primary-contrast-color);
       }
     }
   }
@@ -19,7 +26,7 @@
     & .CMS_Switch_toggle {
       &:after {
         background: var(--primary-contrast-color);
-        border-color: var(--background-light);
+        border-color: var(--background-dark);
       }
     }
   }
@@ -38,6 +45,7 @@
     background: var(--primary-main);
 
     &:after {
+      background: var(--primary-contrast-color);
       border-color: var(--primary-contrast-color);
     }
 
@@ -46,7 +54,7 @@
 }
 
 .CMS_Switch_toggle {
-  background: var(--background-light);
+  background: color-mix(in srgb, var(--text-disabled) 50%, transparent);
 
   @apply w-11
     h-6

@@ -75,12 +75,12 @@ const FrameGlobalStyles = `
   }
 
   .CMS_Scrollbar_root {
-    --scrollbar-foreground: var(--background-main);
+    --scrollbar-foreground: var(--scrollbar-main);
     --scrollbar-background: var(--background-dark);
   }
 
   .CMS_Scrollbar_root.CMS_Scrollbar_secondary {
-    --scrollbar-foreground: var(--background-light);
+    --scrollbar-foreground: var(--scrollbar-light);
     --scrollbar-background: var(--background-main);
   }
 

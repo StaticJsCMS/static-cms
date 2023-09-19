@@ -1,5 +1,5 @@
 .CMS_Field_root {
-  border-color: var(--background-light);
+  border-color: var(--background-divider);
 
   @apply relative
     flex

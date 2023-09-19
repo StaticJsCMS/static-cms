@@ -961,6 +961,11 @@ export interface Theme {
     main: string;
     light: string;
     dark: string;
+    divider: string;
+  };
+  scrollbar: {
+    main: string;
+    light: string;
   };
   button: {
     disabled: string;
