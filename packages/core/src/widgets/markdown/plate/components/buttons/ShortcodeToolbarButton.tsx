@@ -53,6 +53,7 @@ const ShortcodeToolbarButton: FC<ShortcodeToolbarButtonProps> = ({ disabled }) =
       rootClassName={classes.root}
       buttonClassName={classes.button}
       disabled={disabled}
+      aria-label="add shortcode"
     >
       <MenuGroup>
         {Object.keys(configs).map(name => {

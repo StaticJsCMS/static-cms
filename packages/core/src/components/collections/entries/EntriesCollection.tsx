@@ -128,6 +128,7 @@ const EntriesCollection = ({
                     variant={index === selectedGroup ? 'contained' : 'text'}
                     onClick={handleGroupClick(index)}
                     className={entriesClasses['group-button']}
+                    aria-label={`group by ${title}`}
                   >
                     {title}
                   </Button>

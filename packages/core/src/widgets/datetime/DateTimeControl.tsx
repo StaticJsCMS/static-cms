@@ -210,6 +210,7 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
                 t={t}
                 handleChange={v => handleChange(v)}
                 disabled={disabled}
+                field={field}
               />
             </>
           )}
@@ -243,6 +244,7 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
                 t={t}
                 handleChange={v => handleChange(v)}
                 disabled={disabled}
+                field={field}
               />
             </>
           )}
@@ -275,6 +277,7 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
               t={t}
               handleChange={v => handleChange(v)}
               disabled={disabled}
+              field={field}
             />
           </>
         )}
@@ -282,15 +285,16 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
     );
   }, [
     dateFormat,
-    dateValue,
-    handleChange,
-    handleClose,
-    handleOpen,
-    inputFormat,
-    disabled,
-    label,
-    t,
     timeFormat,
+    inputFormat,
+    label,
+    dateValue,
+    disabled,
+    handleChange,
+    handleOpen,
+    handleClose,
+    t,
+    field,
   ]);
 
   return (

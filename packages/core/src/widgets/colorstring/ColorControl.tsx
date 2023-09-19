@@ -168,6 +168,7 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
             onClick={handleClear}
             disabled={disabled}
             className={classes['clear-button']}
+            aria-label="clear"
           >
             <CloseIcon className={classes['clear-button-icon']} />
           </IconButton>

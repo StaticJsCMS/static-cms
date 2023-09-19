@@ -75,6 +75,7 @@ const SettingsDropdown: FC<TranslatedProps<SettingsDropdownProps>> = ({ inEditor
         rounded={!user?.avatar_url || 'no-padding'}
         hideDropdownIcon
         rootClassName={classNames(classes.root, inEditor && classes['in-editor'])}
+        aria-label="account options dropdown"
       >
         <MenuGroup>
           <MenuItemButton key="dark-mode" onClick={handleOpenThemeDialog} startIcon={PaletteIcon}>

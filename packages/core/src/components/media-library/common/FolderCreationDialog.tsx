@@ -63,7 +63,7 @@ const FolderCreationDialog: FC<TranslatedProps<FolderCreationDialogProps>> = ({
         <h3 className={classes.title}>{t('mediaLibrary.folderSupport.createNewFolder')}</h3>
         <IconButton
           variant="text"
-          aria-label="add"
+          aria-label="close"
           onClick={handleClose}
           className={classes['close-button']}
         >

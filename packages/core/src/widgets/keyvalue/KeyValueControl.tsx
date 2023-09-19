@@ -165,6 +165,7 @@ const StringControl: FC<WidgetControlProps<Pair[], KeyValueField>> = ({
             onClick={handleRemove(index)}
             disabled={disabled}
             className={classes['delete-button']}
+            aria-label="delete"
           >
             <CloseIcon className={classes['delete-button-icon']} />
           </IconButton>

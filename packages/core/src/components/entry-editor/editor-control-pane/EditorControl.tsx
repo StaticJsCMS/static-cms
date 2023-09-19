@@ -198,7 +198,10 @@ const EditorControl = ({
     }
 
     return (
-      <div className={classNames(classes.root, hidden && classes.hidden)}>
+      <div
+        className={classNames(classes.root, hidden && classes.hidden)}
+        aria-label={widgetName?.concat(' field')}
+      >
         {createElement(widget.control, {
           key: `${id}-${version}`,
           collection,

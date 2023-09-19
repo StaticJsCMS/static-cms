@@ -536,6 +536,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
                       title={t('mediaLibrary.folderSupport.home')}
                       color="secondary"
                       disabled={!currentFolder}
+                      aria-label="go to home"
                     >
                       <HomeIcon className={mediaLibraryClasses['folder-controls-icon']} />
                     </IconButton>
@@ -548,6 +549,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
                       }
                       color="secondary"
                       disabled={!parentFolder}
+                      aria-label="go to parent folder"
                     >
                       <UpwardIcon className={mediaLibraryClasses['folder-controls-icon']} />
                     </IconButton>
@@ -555,6 +557,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
                       onClick={handleCreateFolder}
                       title={t('mediaLibrary.folderSupport.newFolder')}
                       color="secondary"
+                      aria-label="create folder"
                     >
                       <NewFolderIcon
                         className={mediaLibraryClasses['folder-controls-icon']}

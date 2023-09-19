@@ -9,7 +9,7 @@ import './Sidebar.css';
 
 const Sidebar: FC = () => {
   return (
-    <aside className={sidebarClasses.root} aria-label="Sidebar">
+    <aside className={sidebarClasses.root} aria-label="sidebar">
       <SidebarContent />
     </aside>
   );

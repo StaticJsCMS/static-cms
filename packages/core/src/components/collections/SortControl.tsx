@@ -123,6 +123,7 @@ const SortControl = ({
       color={selectedSort.key ? 'primary' : 'secondary'}
       variant={selectedSort.key ? 'contained' : 'outlined'}
       rootClassName={classes.root}
+      aria-label="sort options dropdown"
     >
       <MenuGroup>
         {fields.map(field => {

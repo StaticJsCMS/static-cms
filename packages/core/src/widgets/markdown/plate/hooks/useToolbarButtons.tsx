@@ -73,6 +73,7 @@ export function getToolbarButtons(
         rootClassName={classes.root}
         buttonClassName={classes.button}
         disabled={disabled}
+        aria-label="additional toolbar options dropdown"
       >
         {button.groups.map((group, index) => {
           if (group.items.length === 0) {

@@ -94,6 +94,7 @@ const ListItemWrapper = ({
             onClick={onRemove}
             disabled={disabled}
             className={classes['remove-button']}
+            aria-label="remove"
           >
             <CloseIcon className={classes['button-icon']} />
           </IconButton>
@@ -137,6 +138,7 @@ const ListItemWrapper = ({
           data-testid="list-item-expand-button"
           className={classes['expand-button']}
           onClick={handleOpenToggle}
+          aria-label={!open ? 'expand' : 'collapse'}
         >
           <ChevronRightIcon className={classes['expand-button-icon']} />
           <div className={classes.summary}>

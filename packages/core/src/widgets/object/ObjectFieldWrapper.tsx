@@ -58,6 +58,7 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
         data-testid="expand-button"
         className={widgetObjectClasses.expand}
         onClick={handleOpenToggle}
+        aria-label={!open ? 'expand' : 'collapse'}
       >
         <ChevronRightIcon className={widgetObjectClasses['expand-icon']} />
         <Label

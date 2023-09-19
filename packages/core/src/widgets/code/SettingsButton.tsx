@@ -26,6 +26,7 @@ const SettingsButton: FC<SettingsButtonProps> = ({ showClose = false, disabled, 
       variant="text"
       disabled={disabled}
       className={classes.root}
+      aria-label="toggle settings"
     >
       {showClose ? (
         <CloseIcon className={classes.icon} />
