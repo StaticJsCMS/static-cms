@@ -8,7 +8,8 @@ import type {
   NumberField,
   RelationField,
   SelectField,
-  StringOrTextField,
+  StringField,
+  TextField,
   UUIDField,
 } from '@staticcms/core';
 
@@ -92,13 +93,13 @@ export const mockSelectField: SelectField = {
   options: ['Option 1', 'Option 2', 'Option 3'],
 };
 
-export const mockStringField: StringOrTextField = {
+export const mockStringField: StringField = {
   label: 'String',
   name: 'mock_string',
   widget: 'string',
 };
 
-export const mockTextField: StringOrTextField = {
+export const mockTextField: TextField = {
   label: 'Text',
   name: 'mock_text',
   widget: 'text',

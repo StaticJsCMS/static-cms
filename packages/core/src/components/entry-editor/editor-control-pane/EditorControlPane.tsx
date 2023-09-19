@@ -16,7 +16,7 @@ import type {
   Field,
   FieldsErrors,
   I18nSettings,
-  StringOrTextField,
+  StringField,
   TranslatedProps,
 } from '@staticcms/core/interface';
 
@@ -71,7 +71,7 @@ const EditorControlPane = ({
         widget: 'string',
         i18n: 'none',
         hint: ``,
-      } as StringOrTextField),
+      } as StringField),
     [collection],
   );
 

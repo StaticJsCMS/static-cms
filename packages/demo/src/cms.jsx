@@ -20,7 +20,8 @@ const PostPreview = ({ entry, widgetFor }) => {
   );
 };
 
-const PostPreviewCard = ({ entry, theme, hasLocalBackup }) => {
+const PostPreviewCard = ({ entry, hasLocalBackup }) => {
+  const theme = useTheme();
   const date = new Date(entry.data.date);
 
   const month = date.getMonth() + 1;
@@ -52,7 +53,7 @@ const PostPreviewCard = ({ entry, theme, hasLocalBackup }) => {
             justifyContent: "space-between",
             alignItems: "start",
             gap: "4px",
-            color: theme === "dark" ? "white" : "inherit",
+            color: theme.text.primary,
           }}
         >
           <div
@@ -262,11 +263,11 @@ cms.registerAdditionalLink({
 });
 
 CMS.registerTheme({
-  name: 'Custom Red Orange',
-  extends: 'dark',
+  name: "Custom Red Orange",
+  extends: "dark",
   primary: {
-    main: '#ff4500',
-  }
+    main: "#ff4500",
+  },
 });
 
 cms.registerShortcode("youtube", {
@@ -285,6 +286,8 @@ cms.registerShortcode("youtube", {
     return [src];
   },
   control: ({ src, onChange }) => {
+    const theme = useTheme();
+
     return (
       <span>
         <input
@@ -292,6 +295,12 @@ cms.registerShortcode("youtube", {
           value={src}
           onChange={(event) => {
             onChange({ src: event.target.value });
+          }}
+          style={{
+            width: "100%",
+            backgroundColor: theme.common.gray,
+            color: theme.text.primary,
+            padding: "4px 8px",
           }}
         />
         <iframe key="control-preview" width="420" height="315" src={`https://www.youtube.com/embed/${src}`} />

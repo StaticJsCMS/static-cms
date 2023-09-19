@@ -1,0 +1,35 @@
+.CMS_WidgetString_root {
+  & .CMS_WidgetString_input {
+    &.CMS_WidgetString_with-prefix {
+      @apply ps-0.5;
+    }
+
+    &.CMS_WidgetString_with-suffix {
+      @apply pe-0.5;
+    }
+  }
+}
+
+.CMS_WidgetString_prefix {
+  color: var(--text-secondary);
+
+  @apply ps-3
+    text-sm
+    flex
+    items-center
+    whitespace-nowrap;
+
+  line-height: 100%;
+}
+
+.CMS_WidgetString_suffix {
+  color: var(--text-secondary);
+
+  @apply pe-3
+    text-sm
+    flex
+    items-center
+    whitespace-nowrap;
+
+  line-height: 100%;
+}

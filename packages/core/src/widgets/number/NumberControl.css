@@ -1,0 +1,35 @@
+.CMS_WidgetNumber_root {
+  & .CMS_WidgetNumber_input {
+    &.CMS_WidgetNumber_with-prefix {
+      @apply ps-0.5;
+    }
+
+    &.CMS_WidgetNumber_with-suffix {
+      @apply pe-0.5;
+    }
+  }
+}
+
+.CMS_WidgetNumber_prefix {
+  color: var(--text-secondary);
+
+  @apply ps-3
+    text-sm
+    flex
+    items-center
+    whitespace-nowrap;
+
+  line-height: 100%;
+}
+
+.CMS_WidgetNumber_suffix {
+  color: var(--text-secondary);
+
+  @apply pe-3
+    text-sm
+    flex
+    items-center
+    whitespace-nowrap;
+
+  line-height: 100%;
+}

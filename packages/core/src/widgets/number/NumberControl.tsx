@@ -3,18 +3,25 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import Field from '@staticcms/core/components/common/field/Field';
 import TextField from '@staticcms/core/components/common/text-field/TextField';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { NumberField, WidgetControlProps } from '@staticcms/core/interface';
 import type { ChangeEvent, FC } from 'react';
 
-const classes = generateClassNames('WidgetNumberPreview', [
+import './NumberControl.css';
+
+const classes = generateClassNames('WidgetNumber', [
   'root',
   'error',
   'required',
   'disabled',
   'for-single-list',
   'input',
+  'with-prefix',
+  'with-suffix',
+  'prefix',
+  'suffix',
 ]);
 
 const NumberControl: FC<WidgetControlProps<string | number, NumberField>> = ({
@@ -68,6 +75,9 @@ const NumberControl: FC<WidgetControlProps<string | number, NumberField>> = ({
     return 1;
   }, [field.step, field.value_type]);
 
+  const prefix = useMemo(() => field.prefix ?? '', [field.prefix]);
+  const suffix = useMemo(() => field.suffix ?? '', [field.suffix]);
+
   return (
     <Field
       inputRef={ref}
@@ -94,7 +104,13 @@ const NumberControl: FC<WidgetControlProps<string | number, NumberField>> = ({
         step={step}
         disabled={disabled}
         onChange={handleChange}
-        inputClassName={classes.input}
+        inputClassName={classNames(
+          classes.input,
+          isNotEmpty(prefix) && classes['with-prefix'],
+          isNotEmpty(suffix) && classes['with-suffix'],
+        )}
+        startAdornment={isNotEmpty(prefix) ? <div className={classes.prefix}>{prefix}</div> : null}
+        endAdornment={isNotEmpty(suffix) ? <div className={classes.suffix}>{suffix}</div> : null}
       />
     </Field>
   );

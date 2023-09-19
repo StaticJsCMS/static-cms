@@ -24,7 +24,7 @@ import type {
   ListField,
   ObjectField,
   RelationField,
-  StringOrTextField,
+  TextField,
 } from '@staticcms/core/interface';
 
 jest.mock('@staticcms/core/backend');
@@ -69,7 +69,7 @@ const coAuthorsField: ListField = {
   ],
 };
 
-const bodyField: StringOrTextField = {
+const bodyField: TextField = {
   widget: 'text',
   name: 'body',
 };

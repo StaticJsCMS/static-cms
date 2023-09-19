@@ -11,7 +11,7 @@ const PostPreview = ({ entry, widgetFor }) => {
   );
 };
 
-const PostPreviewCard = ({ entry, theme, hasLocalBackup, collection }) => {
+const PostPreviewCard = ({ entry, hasLocalBackup, collection }) => {
   const theme = useTheme();
   const date = new Date(entry.data.date);
 
@@ -292,7 +292,7 @@ CMS.registerShortcode('youtube', {
   toArgs: ({ src }) => {
     return [src];
   },
-  control: ({ src, onChange, theme }) => {
+  control: ({ src, onChange }) => {
     const theme = useTheme();
 
     return h('span', {}, [
