@@ -33,6 +33,9 @@ const filters: StringTemplateFilter[] = [
       const { format: storageFormat } = getDatetimeFormats(field, timezoneExtra);
 
       const date = parse(str, storageFormat, new Date());
+      if (isNaN(date.getTime())) {
+        return str;
+      }
 
       console.log('date', date, match[1]);
 

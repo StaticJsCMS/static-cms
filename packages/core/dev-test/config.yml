@@ -590,7 +590,7 @@ collections:
               - label: Type 2 Object
                 name: type_2_object
                 widget: object
-                summary: "{{date | date('YYYY-MM-DD')}}"
+                summary: "{{datetime | date('yyyy-MM-dd')}}"
                 fields:
                   - label: Number
                     name: number

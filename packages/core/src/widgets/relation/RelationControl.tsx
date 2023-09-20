@@ -14,6 +14,7 @@ import Field from '@staticcms/core/components/common/field/Field';
 import Pill from '@staticcms/core/components/common/pill/Pill';
 import CircularProgress from '@staticcms/core/components/common/progress/CircularProgress';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { getFields } from '@staticcms/core/lib/util/collection.util';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { fileSearch, sortByScore } from '@staticcms/core/lib/util/search.util';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
@@ -125,6 +126,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
   disabled,
   forSingleList,
   onChange,
+  entry,
 }) => {
   const [internalRawValue, setInternalValue] = useState(value);
   const internalValue = useMemo(
@@ -138,6 +140,10 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
     [field.collection],
   );
   const searchCollection = useAppSelector(searchCollectionSelector);
+  const searchCollectionFields = useMemo(
+    () => getFields(searchCollection, entry.slug),
+    [entry.slug, searchCollection],
+  );
 
   const isMultiple = useMemo(() => {
     return field.multiple ?? false;
@@ -156,9 +162,9 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
         return get(hitData, field) as string;
       }
       const data = addFileTemplateFields(hit.path, hitData);
-      return compileStringTemplate(field, null, hit.slug, data);
+      return compileStringTemplate(field, null, hit.slug, data, searchCollectionFields);
     },
-    [locale],
+    [locale, searchCollectionFields],
   );
 
   const parseHitOptions = useCallback(
