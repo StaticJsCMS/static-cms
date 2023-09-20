@@ -186,16 +186,31 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
     } else if (!window.confirm(t('editor.editor.onDeleteUnpublishedChanges'))) {
       return;
     }
-    await dispatch(deleteUnpublishedEntry(collection.name, slug));
 
-    this.deleteBackup();
-
-    if (isModification) {
-      loadEntry(collection, slug);
-    } else {
+    if (!slug || newRecord) {
       return navigate(`/collections/${collection.name}`);
     }
-  }, []);
+
+    setTimeout(async () => {
+      await dispatch(deleteUnpublishedEntry(collection.name, slug));
+      deleteBackup();
+      if (isModification) {
+        loadEntry(collection, slug);
+      } else {
+        return navigate(`/collections/${collection.name}`);
+      }
+    }, 0);
+  }, [
+    collection,
+    deleteBackup,
+    dispatch,
+    entryDraft.hasChanged,
+    isModification,
+    navigate,
+    newRecord,
+    slug,
+    t,
+  ]);
 
   const [prevLocalBackup, setPrevLocalBackup] = useState<
     | {
