@@ -73,6 +73,7 @@ interface EditorInterfaceProps {
   loadScroll: () => void;
   submitted: boolean;
   slug: string | undefined;
+  showLeftNav: boolean;
 }
 
 const EditorInterface = ({
@@ -94,6 +95,7 @@ const EditorInterface = ({
   toggleScroll,
   submitted,
   slug,
+  showLeftNav,
 }: TranslatedProps<EditorInterfaceProps>) => {
   const { locales, defaultLocale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
   const translatedLocales = useMemo(
@@ -280,6 +282,7 @@ const EditorInterface = ({
         entry={previewEntry}
         fields={fields}
         editorSize={editorSize}
+        showLeftNav={showLeftNav}
       />
     </div>
   );
@@ -304,6 +307,7 @@ const EditorInterface = ({
     <MainView
       breadcrumbs={breadcrumbs}
       noMargin
+      showLeftNav={true}
       noScroll={finalPreviewActive || i18nActive}
       navbarActions={
         <EditorToolbar

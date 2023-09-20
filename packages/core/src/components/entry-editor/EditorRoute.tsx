@@ -28,7 +28,7 @@ const EditorRoute = ({ newRecord = false, collections }: EditorRouteProps) => {
     return <Navigate to={defaultPath} />;
   }
 
-  return <Editor name={name} slug={slug} newRecord={newRecord} />;
+  return <Editor name={name} slug={slug} newRecord={newRecord} showLeftNav/>;
 };
 
 export default EditorRoute;

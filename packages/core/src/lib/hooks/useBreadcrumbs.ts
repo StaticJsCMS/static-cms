@@ -5,6 +5,7 @@ import { useAppDispatch } from '@staticcms/core/store/hooks';
 import { selectEntryCollectionTitle, selectFolderEntryExtension } from '../util/collection.util';
 import { addFileTemplateFields } from '../widgets/stringTemplate';
 import useEntries from './useEntries';
+import {getTreeNodeIndexFile} from "@staticcms/core/lib/util/nested.util";
 
 import type { Breadcrumb, Collection, Entry } from '@staticcms/core/interface';
 import type { t } from 'react-polyglot';
@@ -65,9 +66,20 @@ export default function useBreadcrumbs(
             title = selectEntryCollectionTitle(collection, entry);
           }
 
+          const index = getTreeNodeIndexFile(collection, entry);
+
+          let to;
+          if (index) {
+            to = `/collections/${collection.name}/entries/${index.slug}`;
+          } else if (entry) {
+            to = `/collections/${collection.name}/entries/${entry.slug}`;
+          } else {
+            to = `/collections/${collection.name}/filter/${pathSoFar}`;
+          }
+
           crumbs.push({
             name: title,
-            to: `/collections/${collection.name}/filter/${pathSoFar}`,
+            to,
           });
         }
 

@@ -107,10 +107,11 @@ export interface EditorPreviewPaneProps {
   entry: Entry;
   previewInFrame: boolean;
   editorSize: EditorSize;
+  showLeftNav?: boolean;
 }
 
 const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
-  const { editorSize, entry, collection, fields, previewInFrame, t } = props;
+  const { editorSize, entry, collection, fields, previewInFrame, showLeftNav, t } = props;
 
   const config = useAppSelector(selectConfig);
 
@@ -171,6 +172,7 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
       return null;
     }
 
+    const editorCompact = editorSize === EDITOR_SIZE_COMPACT;
     return createPortal(
       <div
         className={classNames(
@@ -180,7 +182,7 @@ const PreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
             top-16
             right-0
           `,
-          editorSize === EDITOR_SIZE_COMPACT ? 'w-preview' : 'w-6/12',
+          showLeftNav ? (editorCompact ? 'w-preview-compact-sidebar' : 'w-preview-half-sidebar') : (editorCompact ? 'w-preview' : 'w-6/12'),
         )}
       >
         {!entry || !entry.data ? null : (

@@ -54,6 +54,7 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
   localBackup,
   scrollSyncActive,
   newRecord,
+  showLeftNav,
   t,
 }) => {
   const [version, setVersion] = useState(0);
@@ -307,7 +308,7 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
         <h3>{entry.error}</h3>
       </div>
     );
-  } else if (entryDraft == null || entryDraft.entry === undefined || (entry && entry.isFetching)) {
+  } else if (entryDraft == null || entryDraft?.entry === undefined || (entry && entry.isFetching)) {
     return <Loader>{t('editor.editor.loadingEntry')}</Loader>;
   }
 
@@ -332,6 +333,7 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
         loadScroll={handleLoadScroll}
         submitted={submitted}
         slug={slug}
+        showLeftNav={showLeftNav}
         t={t}
       />
       <MediaLibraryModal />
@@ -343,6 +345,7 @@ interface CollectionViewOwnProps {
   name: string;
   slug?: string;
   newRecord: boolean;
+  showLeftNav?: boolean;
 }
 
 function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
@@ -360,6 +363,7 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
   const draftKey = entryDraft.key;
   return {
     ...ownProps,
+    showLeftNav: !!ownProps.showLeftNav,
     collection,
     collections,
     entryDraft,

@@ -17,15 +17,20 @@ module.exports = {
         "markdown-toolbar": "40px",
       },
       width: {
-        main: "calc(100% - 256px)",
+        main: "calc(100% - 384px)",
         preview: "calc(100% - 450px)",
-        "sidebar-expanded": "256px",
+        "preview-compact-sidebar": "calc(100% - 450px - 384px)",
+        "preview-half-sidebar": "calc((100% - 384px) / 2)",
+        "sidebar-expanded": "384px",
         "sidebar-collapsed": "68px",
-        "editor-only": "640px",
+        "editor-only": "100%",
         "media-library-dialog": "80vw",
         "media-card": "240px",
         "media-preview-image": "126px",
         "image-card": "120px",
+      },
+      inset: {
+        "sidebar-expanded": "384px",
       },
       maxWidth: {
         "media-search": "400px",

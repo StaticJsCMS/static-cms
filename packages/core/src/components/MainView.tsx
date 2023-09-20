@@ -48,7 +48,7 @@ const MainView = ({
         <div
           id="main-view"
           className={classNames(
-            showLeftNav ? 'w-main left-64' : 'w-full',
+            showLeftNav ? 'w-main left-sidebar-expanded' : 'w-full',
             !noMargin && 'px-5 py-4',
             noScroll ? 'overflow-hidden' : 'overflow-y-auto',
             `
