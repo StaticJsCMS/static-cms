@@ -21,6 +21,7 @@ import confirm from '../common/confirm/Confirm';
 import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
+import { selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
 
 import type { Collection, EditorPersistOptions, TranslatedProps } from '@staticcms/core/interface';
 import type { FC, MouseEventHandler } from 'react';
@@ -102,6 +103,8 @@ const EditorToolbar = ({
   const canDelete = useMemo(() => selectAllowDeletion(collection), [collection]);
   const isPublished = useMemo(() => !isNewEntry && !hasChanged, [hasChanged, isNewEntry]);
   const isLoading = useAppSelector(selectIsFetching);
+
+  const useWorkflow = useAppSelector(selectUseWorkflow);
 
   const dispatch = useAppDispatch();
 

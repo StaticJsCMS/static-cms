@@ -30,6 +30,12 @@ import confirm from '../common/confirm/Confirm';
 import Loader from '../common/progress/Loader';
 import MediaLibraryModal from '../media-library/MediaLibraryModal';
 import EditorInterface from './EditorInterface';
+import {
+  updateUnpublishedEntryStatus,
+  publishUnpublishedEntry,
+  unpublishPublishedEntry,
+  deleteUnpublishedEntry,
+} from '../../actions/editorialWorkflow';
 
 import type {
   Collection,
@@ -170,6 +176,26 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
       return navigate(`/collections/${collection.name}`);
     }, 0);
   }, [collection, deleteBackup, dispatch, entryDraft.hasChanged, navigate, newRecord, slug]);
+
+  const handleDeleteUnpublishedChanges = useCallback(async () => {
+    if (
+      entryDraft.hasChanged &&
+      !window.confirm(t('editor.editor.onDeleteUnpublishedChangesWithUnsavedChanges'))
+    ) {
+      return;
+    } else if (!window.confirm(t('editor.editor.onDeleteUnpublishedChanges'))) {
+      return;
+    }
+    await dispatch(deleteUnpublishedEntry(collection.name, slug));
+
+    this.deleteBackup();
+
+    if (isModification) {
+      loadEntry(collection, slug);
+    } else {
+      return navigate(`/collections/${collection.name}`);
+    }
+  }, []);
 
   const [prevLocalBackup, setPrevLocalBackup] = useState<
     | {

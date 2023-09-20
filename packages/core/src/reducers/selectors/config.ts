@@ -19,6 +19,10 @@ export function selectDisplayUrl(state: RootState) {
   return state.config.config?.display_url;
 }
 
-export function selectUseWorkflow(config?: Config) {
+export function getUseWorkflow(config?: Config) {
   return config?.publish_mode === EDITORIAL_WORKFLOW;
+}
+
+export function selectUseWorkflow(state: RootState) {
+  return getUseWorkflow(state.config.config);
 }

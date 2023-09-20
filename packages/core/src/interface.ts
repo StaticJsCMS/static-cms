@@ -123,6 +123,8 @@ export interface Entry<T = ObjectValue> {
   isFetching?: boolean;
   isPersisting?: boolean;
   isDeleting?: boolean;
+  isPublishing?: boolean;
+  isUpdatingStatus?: boolean;
   error?: string;
   i18n?: {
     [locale: string]: {
@@ -289,6 +291,9 @@ export interface FolderCollection<EF extends BaseField = UnknownField> extends B
   create?: boolean;
   delete?: boolean;
   nested?: Nested;
+  meta?: {
+    path: string;
+  };
 }
 
 export type Collection<EF extends BaseField = UnknownField> =
@@ -455,6 +460,7 @@ export interface PersistArgs {
   assetProxies: AssetProxy[];
   usedSlugs: string[];
   status?: string;
+  unpublished?: boolean;
 }
 
 export interface ImplementationEntry {

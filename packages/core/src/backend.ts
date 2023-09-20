@@ -4,15 +4,16 @@ import flatten from 'lodash/flatten';
 import get from 'lodash/get';
 import isError from 'lodash/isError';
 import uniq from 'lodash/uniq';
-import { dirname } from 'path';
+import { dirname, extname } from 'path';
 
 import { STATUSES } from './constants/publishModes';
-import { resolveFormat } from './formats/formats';
+import { formatExtensions, resolveFormat } from './formats/formats';
 import { commitMessageFormatter, slugFormatter } from './lib/formatters';
 import {
   formatI18nBackup,
   getFilePaths,
   getI18nBackup,
+  getI18nDataFiles,
   getI18nEntry,
   getI18nFiles,
   getI18nFilesDepth,
@@ -51,7 +52,7 @@ import { isNullish } from './lib/util/null.util';
 import { set } from './lib/util/object.util';
 import { fileSearch, sortByScore } from './lib/util/search.util';
 import { dateParsers, expandPath, extractTemplateVars } from './lib/widgets/stringTemplate';
-import { selectUseWorkflow } from './reducers/selectors/config';
+import { getUseWorkflow } from './reducers/selectors/config';
 import createEntry from './valueObjects/createEntry';
 
 import type {
@@ -61,6 +62,7 @@ import type {
   BaseField,
   Collection,
   CollectionFile,
+  Collections,
   Config,
   Credentials,
   DataFile,
@@ -69,6 +71,7 @@ import type {
   EntryData,
   EventData,
   FilterRule,
+  FolderCollection,
   ImplementationEntry,
   MediaField,
   ObjectValue,
@@ -76,6 +79,8 @@ import type {
   SearchQueryResponse,
   SearchResponse,
   UnknownField,
+  UnpublishedEntry,
+  UnpublishedEntryDiff,
   User,
   ValueOrNestedValue,
 } from './interface';
@@ -285,6 +290,18 @@ export interface MediaFile {
   isDirectory?: boolean;
 }
 
+function selectHasMetaPath(collection: Collection): collection is FolderCollection {
+  return Boolean('folder' in collection && collection.meta?.path);
+}
+
+function prepareMetaPath(path: string, collection: Collection) {
+  if (!selectHasMetaPath(collection)) {
+    return path;
+  }
+  const dir = dirname(path);
+  return dir.slice(collection.folder!.length + 1) || '/';
+}
+
 function collectionDepth<EF extends BaseField>(collection: Collection<EF>) {
   let depth;
   depth =
@@ -328,7 +345,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     this.deleteAnonymousBackup();
     this.config = config;
     this.implementation = implementation.init(this.config, {
-      useWorkflow: selectUseWorkflow(this.config as Config),
+      useWorkflow: getUseWorkflow(this.config as Config),
       updateUserCredentials: this.updateUserCredentials,
       initialWorkflowStatus: STATUSES.DRAFT,
     }) as BC;
@@ -471,7 +488,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         collection,
         selectEntryPath(collection, uniqueSlug) as string,
         uniqueSlug,
-        selectUseWorkflow(config),
+        getUseWorkflow(config),
       ))
     ) {
       uniqueSlug = `${slug}${sanitizeChar(' ', slugConfig)}${i++}`;
@@ -903,6 +920,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     entryDraft: draft,
     assetProxies,
     usedSlugs,
+    unpublished = false,
     status,
   }: PersistArgs) {
     const modifiedData = await this.invokePreSaveEvent(draft.entry, collection);
@@ -918,7 +936,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
     const newEntry = entryDraft.entry.newRecord ?? false;
 
-    const useWorkflow = selectUseWorkflow(config);
+    const useWorkflow = getUseWorkflow(config);
 
     const customPath = selectCustomPath(draft.entry, collection, rootSlug, config.slug);
 
@@ -983,7 +1001,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
     const collectionName = collection.name;
 
-    const updatedOptions = { status };
+    const updatedOptions = { unpublished, status };
     const opts = {
       newEntry,
       commitMessage,
@@ -1116,6 +1134,136 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   filterEntries(collection: { entries: Entry[] }, filterRule: FilterRule | FilterRule[]) {
     return filterEntries(collection.entries, filterRule, undefined);
+  }
+
+  /**
+   * Editorial Workflows
+   */
+  async processUnpublishedEntry(
+    collection: Collection,
+    entryData: UnpublishedEntry,
+    withMediaFiles: boolean,
+  ) {
+    const { slug } = entryData;
+    let extension: string;
+    if ('files' in collection) {
+      const file = collection.files.find(f => f?.name === slug);
+      extension = file ? extname(file.file) : formatExtensions['json'];
+    } else {
+      extension = selectFolderEntryExtension(collection);
+    }
+
+    const mediaFiles: MediaFile[] = [];
+    if (withMediaFiles) {
+      const nonDataFiles = entryData.diffs.filter(d => !d.path.endsWith(extension));
+      const files = await Promise.all(
+        nonDataFiles.map(f =>
+          this.implementation!.unpublishedEntryMediaFile(collection.name, slug, f.path, f.id),
+        ),
+      );
+      mediaFiles.push(...files.map(f => ({ ...f, draft: true })));
+    }
+
+    const dataFiles = entryData.diffs.filter(d => d.path.endsWith(extension));
+    dataFiles.sort((a, b) => a.path.length - b.path.length);
+
+    const formatData = (data: string, path: string, newFile: boolean) => {
+      const entry = createEntry(collection.name, slug, path, {
+        raw: data,
+        isModification: !newFile,
+        label: collection && selectFileEntryLabel(collection, slug),
+        mediaFiles,
+        updatedOn: entryData.updatedAt,
+        author: entryData.pullRequestAuthor,
+        status: entryData.status,
+        meta: { path: prepareMetaPath(path, collection) },
+      });
+
+      const entryWithFormat = this.entryWithFormat(collection)(entry);
+      return entryWithFormat;
+    };
+
+    const readAndFormatDataFile = async (dataFile: UnpublishedEntryDiff) => {
+      const data = await this.implementation.unpublishedEntryDataFile(
+        collection.name,
+        entryData.slug,
+        dataFile.path,
+        dataFile.id,
+      );
+      const entryWithFormat = formatData(data, dataFile.path, dataFile.newFile);
+      return entryWithFormat;
+    };
+
+    // if the unpublished entry has no diffs, return the original
+    if (dataFiles.length <= 0) {
+      const loadedEntry = await this.implementation.getEntry(
+        selectEntryPath(collection, slug) as string,
+      );
+      return formatData(loadedEntry.data, loadedEntry.file.path, false);
+    } else if (hasI18n(collection)) {
+      // we need to read all locales files and not just the changes
+      const path = selectEntryPath(collection, slug) as string;
+      const i18nFiles = getI18nDataFiles(collection, extension, path, slug, dataFiles);
+      let entries = await Promise.all(
+        i18nFiles.map(dataFile => readAndFormatDataFile(dataFile).catch(() => null)),
+      );
+      entries = entries.filter(Boolean);
+      const grouped = await groupEntries(collection, extension, entries as Entry[]);
+      return grouped[0];
+    } else {
+      const entryWithFormat = await readAndFormatDataFile(dataFiles[0]);
+      return entryWithFormat;
+    }
+  }
+
+  async unpublishedEntries(collections: Collections) {
+    const ids = await this.implementation.unpublishedEntries();
+    const entries = (
+      await Promise.all(
+        ids.map(async id => {
+          const entryData = await this.implementation.unpublishedEntry({ id });
+          const collectionName = entryData.collection;
+          const collection = Object.values(collections).find(c => c.name === collectionName);
+          if (!collection) {
+            console.warn(`Missing collection '${collectionName}' for unpublished entry '${id}'`);
+            return null;
+          }
+          const entry = await this.processUnpublishedEntry(collection, entryData, false);
+          return entry;
+        }),
+      )
+    ).filter(Boolean) as Entry[];
+
+    return { pagination: 0, entries };
+  }
+
+  async unpublishedEntry(state: RootState, collection: Collection, slug: string) {
+    const entryData = await this.implementation.unpublishedEntry({
+      collection: collection.name,
+      slug,
+    });
+
+    let entry = await this.processUnpublishedEntry(collection, entryData, true);
+    entry = await this.processEntry(state, collection, entry);
+    return entry;
+  }
+
+  persistUnpublishedEntry(args: PersistArgs) {
+    return this.persistEntry({ ...args, unpublished: true });
+  }
+
+  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
+    return this.implementation.updateUnpublishedEntryStatus(collection, slug, newStatus);
+  }
+
+  deleteUnpublishedEntry(collection: string, slug: string) {
+    return this.implementation.deleteUnpublishedEntry(collection, slug);
+  }
+
+  async publishUnpublishedEntry(collection: Collection, entry: Entry) {
+    await this.invokePrePublishEvent(entry, collection);
+    await this.implementation.publishUnpublishedEntry(collection.name, entry.slug);
+    await this.invokePostPublishEvent(entry, collection);
   }
 }
 

@@ -14,6 +14,7 @@ interface Options {
   author?: string;
   updatedOn?: string;
   status?: string;
+  meta?: { path: string };
   i18n?: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [locale: string]: any;
@@ -40,6 +41,7 @@ export default function createEntry(
     updatedOn: options.updatedOn || '',
     status: options.status || '',
     i18n: options.i18n || {},
+    meta: options.meta || undefined,
   };
 
   return returnObj;
