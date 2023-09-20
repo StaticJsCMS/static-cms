@@ -35,7 +35,6 @@ function handleSummary(
   fields: Field[],
   t: t,
 ): string {
-  console.log('SUMMARY', summary);
   if (typeof item === 'object' && !(item instanceof Date) && !Array.isArray(item)) {
     const labeledItem: EntryData = {
       ...item,
@@ -44,7 +43,6 @@ function handleSummary(
       },
     };
     const data = addFileTemplateFields(entry.path, labeledItem);
-    console.log('data', data, compileStringTemplate(summary, null, '', data, fields));
     return compileStringTemplate(summary, null, '', data, fields);
   }
 

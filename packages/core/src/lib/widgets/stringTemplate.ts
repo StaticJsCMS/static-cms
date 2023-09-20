@@ -37,8 +37,6 @@ const filters: StringTemplateFilter[] = [
         return str;
       }
 
-      console.log('date', date, match[1]);
-
       return format(date, match[1]);
     },
   },
