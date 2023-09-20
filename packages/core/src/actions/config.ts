@@ -7,6 +7,7 @@ import yaml from 'yaml';
 import { resolveBackend } from '@staticcms/core/backend';
 import { CONFIG_FAILURE, CONFIG_REQUEST, CONFIG_SUCCESS } from '../constants';
 import validateConfig from '../constants/configSchema';
+import { SIMPLE as SIMPLE_PUBLISH_MODE } from '../constants/publishModes';
 import {
   I18N,
   I18N_FIELD_NONE,
@@ -17,6 +18,7 @@ import { selectDefaultSortableFields } from '../lib/util/collection.util';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
+import type { Workflow } from '../constants/publishModes';
 import type {
   BaseField,
   Collection,
@@ -84,15 +86,18 @@ function setI18nField<T extends BaseField = UnknownField>(field: T) {
   return field;
 }
 
-function getI18nDefaults(collectionOrFileI18n: boolean | I18nInfo, defaultI18n: I18nInfo) {
+function getI18nDefaults(
+  collectionOrFileI18n: boolean | Partial<I18nInfo>,
+  defaultI18n: Partial<I18nInfo>,
+) {
   if (typeof collectionOrFileI18n === 'boolean') {
     return defaultI18n;
   } else {
     const locales = collectionOrFileI18n.locales || defaultI18n.locales;
-    const defaultLocale = collectionOrFileI18n.defaultLocale || locales[0];
+    const defaultLocale = collectionOrFileI18n.default_locale || locales?.[0];
     const mergedI18n: I18nInfo = deepmerge(defaultI18n, collectionOrFileI18n);
-    mergedI18n.locales = locales;
-    mergedI18n.defaultLocale = defaultLocale;
+    mergedI18n.locales = locales ?? [];
+    mergedI18n.default_locale = defaultLocale;
     throwOnMissingDefaultLocale(mergedI18n);
     return mergedI18n;
   }
@@ -110,7 +115,7 @@ function setI18nDefaultsForFields(collectionOrFileFields: Field[], hasI18n: bool
   }
 }
 
-function throwOnInvalidFileCollectionStructure(i18n?: I18nInfo) {
+function throwOnInvalidFileCollectionStructure(i18n?: Partial<I18nInfo>) {
   if (i18n && i18n.structure !== I18N_STRUCTURE_SINGLE_FILE) {
     throw new Error(
       `i18n configuration for files collections is limited to ${I18N_STRUCTURE_SINGLE_FILE} structure`,
@@ -118,11 +123,11 @@ function throwOnInvalidFileCollectionStructure(i18n?: I18nInfo) {
   }
 }
 
-function throwOnMissingDefaultLocale(i18n?: I18nInfo) {
-  if (i18n && i18n.defaultLocale && !i18n.locales.includes(i18n.defaultLocale)) {
+function throwOnMissingDefaultLocale(i18n?: Partial<I18nInfo>) {
+  if (i18n && i18n.default_locale && !i18n.locales?.includes(i18n.default_locale)) {
     throw new Error(
-      `i18n locales '${i18n.locales.join(', ')}' are missing the default locale ${
-        i18n.defaultLocale
+      `i18n locales '${i18n.locales?.join(', ')}' are missing the default locale ${
+        i18n.default_locale
       }`,
     );
   }
@@ -132,6 +137,7 @@ export function applyDefaults<EF extends BaseField = UnknownField>(
   originalConfig: Config<EF>,
 ): Config<EF> {
   return produce(originalConfig, (config: Config) => {
+    config.publish_mode = config.publish_mode || SIMPLE_PUBLISH_MODE;
     config.slug = config.slug || {};
     config.collections = config.collections || [];
 
@@ -162,7 +168,7 @@ export function applyDefaults<EF extends BaseField = UnknownField>(
     const i18n = config[I18N];
 
     if (i18n) {
-      i18n.defaultLocale = i18n.defaultLocale || i18n.locales[0];
+      i18n.default_locale = i18n.default_locale ?? i18n.locales[0];
     }
 
     throwOnMissingDefaultLocale(i18n);
@@ -234,7 +240,11 @@ export function applyDefaults<EF extends BaseField = UnknownField>(
           let fileI18n = file[I18N];
 
           if (fileI18n && collectionI18n) {
-            fileI18n = getI18nDefaults(fileI18n, collectionI18n);
+            fileI18n = getI18nDefaults(fileI18n, {
+              locales: collectionI18n.locales ?? i18n?.locales,
+              default_locale: collectionI18n.default_locale ?? i18n?.default_locale,
+              structure: collectionI18n.structure ?? i18n?.structure,
+            });
             file[I18N] = fileI18n;
           } else {
             fileI18n = undefined;
@@ -356,15 +366,16 @@ export async function detectProxyServer(localBackend?: boolean | LocalBackend) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'info' }),
     });
-    const { repo, type } = (await res.json()) as {
+    const { repo, publish_modes, type } = (await res.json()) as {
       repo?: string;
+      publish_modes?: Workflow[];
       type?: string;
     };
-    if (typeof repo === 'string' && typeof type === 'string') {
+    if (typeof repo === 'string' && Array.isArray(publish_modes) && typeof type === 'string') {
       console.info(
         `[StaticCMS] Detected Static CMS Proxy Server at '${proxyUrl}' with repo: '${repo}'`,
       );
-      return { proxyUrl, type };
+      return { proxyUrl, publish_modes, type };
     } else {
       console.info(`[StaticCMS] Static CMS Proxy Server not detected at '${proxyUrl}'`);
       return {};
@@ -375,12 +386,28 @@ export async function detectProxyServer(localBackend?: boolean | LocalBackend) {
   }
 }
 
+function getPublishMode(config: Config, publishModes?: Workflow[], backendType?: string) {
+  if (config.publish_mode && publishModes && !publishModes.includes(config.publish_mode)) {
+    const newPublishMode = publishModes[0];
+    console.info(
+      `'${config.publish_mode}' is not supported by '${backendType}' backend, switching to '${newPublishMode}'`,
+    );
+    return newPublishMode;
+  }
+
+  return config.publish_mode;
+}
+
 export async function handleLocalBackend(originalConfig: Config) {
   if (!originalConfig.local_backend) {
     return originalConfig;
   }
 
-  const { proxyUrl } = await detectProxyServer(originalConfig.local_backend);
+  const {
+    proxyUrl,
+    publish_modes: publishModes,
+    type: backendType,
+  } = await detectProxyServer(originalConfig.local_backend);
 
   if (!proxyUrl) {
     return originalConfig;
@@ -389,6 +416,10 @@ export async function handleLocalBackend(originalConfig: Config) {
   return produce(originalConfig, config => {
     config.backend.name = 'proxy';
     config.backend.proxy_url = proxyUrl;
+
+    if (config.publish_mode) {
+      config.publish_mode = getPublishMode(config as Config, publishModes, backendType);
+    }
   });
 }
 
@@ -396,6 +427,7 @@ export function loadConfig(manualConfig: Config | undefined, onLoad: (config: Co
   if (window.CMS_CONFIG) {
     return configLoaded(window.CMS_CONFIG);
   }
+
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>) => {
     dispatch(configLoading());
 

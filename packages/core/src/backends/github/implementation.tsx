@@ -17,6 +17,9 @@ import {
   runWithLock,
   unsentRequest,
 } from '@staticcms/core/lib/util';
+import { getPreviewStatus } from '@staticcms/core/lib/util/API';
+import { branchFromContentKey, contentKeyFromBranch } from '@staticcms/core/lib/util/APIUtils';
+import { unpublishedEntries } from '@staticcms/core/lib/util/implementation';
 import API, { API_NAME } from './API';
 import AuthenticationPage from './AuthenticationPage';
 
@@ -28,6 +31,7 @@ import type {
   DisplayURL,
   ImplementationFile,
   PersistOptions,
+  UnpublishedEntryMediaFile,
   User,
 } from '@staticcms/core/interface';
 import type { AsyncLock } from '@staticcms/core/lib/util';
@@ -56,13 +60,21 @@ export default class GitHub implements BackendClass {
   options: {
     proxied: boolean;
     API: API | null;
+    useWorkflow?: boolean;
+    initialWorkflowStatus: string;
   };
   originRepo: string;
   repo?: string;
+  openAuthoringEnabled: boolean;
+  useOpenAuthoring?: boolean;
+  alwaysForkEnabled: boolean;
   branch: string;
   apiRoot: string;
   mediaFolder?: string;
+  previewContext: string;
   token: string | null;
+  squashMerges: boolean;
+  cmsLabelPrefix: string;
   _currentUserPromise?: Promise<GitHubUser>;
   _userIsOriginMaintainerPromises?: {
     [key: string]: Promise<boolean>;
@@ -73,6 +85,7 @@ export default class GitHub implements BackendClass {
     this.options = {
       proxied: false,
       API: null,
+      initialWorkflowStatus: '',
       ...options,
     };
 
@@ -84,11 +97,25 @@ export default class GitHub implements BackendClass {
     }
 
     this.api = this.options.API || null;
-    this.repo = this.originRepo = config.backend.repo || '';
+    this.openAuthoringEnabled = config.backend.open_authoring || false;
+    if (this.openAuthoringEnabled) {
+      if (!this.options.useWorkflow) {
+        throw new Error(
+          'backend.open_authoring is true but publish_mode is not set to editorial_workflow.',
+        );
+      }
+      this.originRepo = config.backend.repo || '';
+    } else {
+      this.repo = this.originRepo = config.backend.repo || '';
+    }
+    this.alwaysForkEnabled = config.backend.always_fork || false;
     this.branch = config.backend.branch?.trim() || 'main';
     this.apiRoot = config.backend.api_root || 'https://api.github.com';
     this.token = '';
+    this.squashMerges = config.backend.squash_merges || false;
+    this.cmsLabelPrefix = config.backend.cms_label_prefix || '';
     this.mediaFolder = config.media_folder;
+    this.previewContext = config.backend.preview_context || '';
     this.lock = asyncLock();
   }
 
@@ -181,6 +208,10 @@ export default class GitHub implements BackendClass {
       repo: this.repo,
       originRepo: this.originRepo,
       apiRoot: this.apiRoot,
+      squashMerges: this.squashMerges,
+      cmsLabelPrefix: this.cmsLabelPrefix,
+      useOpenAuthoring: this.useOpenAuthoring,
+      initialWorkflowStatus: this.options.initialWorkflowStatus,
     });
     const user = await this.api!.user();
     const isCollab = await this.api!.hasWriteAccess().catch(error => {
@@ -433,6 +464,121 @@ export default class GitHub implements BackendClass {
     return {
       entries,
       cursor: result.cursor,
+    };
+  }
+
+  /**
+   * Editorial Workflow
+   */
+  async unpublishedEntries() {
+    const listEntriesKeys = () =>
+      this.api!.listUnpublishedBranches().then(branches =>
+        branches.map(branch => contentKeyFromBranch(branch)),
+      );
+
+    const ids = await unpublishedEntries(listEntriesKeys);
+    return ids;
+  }
+
+  async unpublishedEntry({
+    id,
+    collection,
+    slug,
+  }: {
+    id?: string;
+    collection?: string;
+    slug?: string;
+  }) {
+    if (id) {
+      const data = await this.api!.retrieveUnpublishedEntryData(id);
+      return data;
+    } else if (collection && slug) {
+      const entryId = this.api!.generateContentKey(collection, slug);
+      const data = await this.api!.retrieveUnpublishedEntryData(entryId);
+      return data;
+    } else {
+      throw new Error('Missing unpublished entry id or collection and slug');
+    }
+  }
+
+  getBranch(collection: string, slug: string) {
+    const contentKey = this.api!.generateContentKey(collection, slug);
+    const branch = branchFromContentKey(contentKey);
+    return branch;
+  }
+
+  async unpublishedEntryDataFile(collection: string, slug: string, path: string, id: string) {
+    const branch = this.getBranch(collection, slug);
+    const data = (await this.api!.readFile(path, id, { branch })) as string;
+    return data;
+  }
+
+  async unpublishedEntryMediaFile(collection: string, slug: string, path: string, id: string) {
+    const branch = this.getBranch(collection, slug);
+    const mediaFile = await this.loadMediaFile(branch, { path, id });
+    return mediaFile;
+  }
+
+  async getDeployPreview(collection: string, slug: string) {
+    try {
+      const statuses = await this.api!.getStatuses(collection, slug);
+      const deployStatus = getPreviewStatus(statuses, this.previewContext);
+
+      if (deployStatus) {
+        const { target_url: url, state } = deployStatus;
+        return { url, status: state };
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
+    // updateUnpublishedEntryStatus is a transactional operation
+    return runWithLock(
+      this.lock,
+      () => this.api!.updateUnpublishedEntryStatus(collection, slug, newStatus),
+      'Failed to acquire update entry status lock',
+    );
+  }
+
+  deleteUnpublishedEntry(collection: string, slug: string) {
+    // deleteUnpublishedEntry is a transactional operation
+    return runWithLock(
+      this.lock,
+      () => this.api!.deleteUnpublishedEntry(collection, slug),
+      'Failed to acquire delete entry lock',
+    );
+  }
+
+  publishUnpublishedEntry(collection: string, slug: string) {
+    // publishUnpublishedEntry is a transactional operation
+    return runWithLock(
+      this.lock,
+      () => this.api!.publishUnpublishedEntry(collection, slug),
+      'Failed to acquire publish entry lock',
+    );
+  }
+
+  async loadMediaFile(branch: string, file: UnpublishedEntryMediaFile) {
+    const readFile = (
+      path: string,
+      id: string | null | undefined,
+      { parseText }: { parseText: boolean },
+    ) => this.api!.readFile(path, id, { branch, parseText });
+
+    const blob = await getMediaAsBlob(file.path, file.id, readFile);
+    const name = basename(file.path);
+    const fileObj = blobToFileObj(name, blob);
+    return {
+      id: file.id,
+      displayURL: URL.createObjectURL(fileObj),
+      path: file.path,
+      name,
+      size: fileObj.size,
+      file: fileObj,
     };
   }
 }

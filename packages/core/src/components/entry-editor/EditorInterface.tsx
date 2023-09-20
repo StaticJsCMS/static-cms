@@ -129,10 +129,10 @@ const EditorInterface = ({
 }: TranslatedProps<EditorInterfaceProps>) => {
   const config = useAppSelector(selectConfig);
 
-  const { locales, defaultLocale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
+  const { locales, default_locale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
   const translatedLocales = useMemo(
-    () => locales?.filter(locale => locale !== defaultLocale) ?? [],
-    [locales, defaultLocale],
+    () => locales?.filter(locale => locale !== default_locale) ?? [],
+    [locales, default_locale],
   );
 
   const [previewActive, setPreviewActive] = useState(
@@ -146,7 +146,7 @@ const EditorInterface = ({
   );
 
   const [selectedLocale, setSelectedLocale] = useState<string>(
-    (i18nActive ? translatedLocales?.[0] : defaultLocale) ?? 'en',
+    (i18nActive ? translatedLocales?.[0] : default_locale) ?? 'en',
   );
 
   useEffect(() => {
@@ -170,10 +170,10 @@ const EditorInterface = ({
     const newI18nActive = !i18nActive;
     setI18nActive(newI18nActive);
     setSelectedLocale(selectedLocale =>
-      newI18nActive && selectedLocale === defaultLocale ? translatedLocales?.[0] : selectedLocale,
+      newI18nActive && selectedLocale === default_locale ? translatedLocales?.[0] : selectedLocale,
     );
     localStorage.setItem(I18N_VISIBLE, `${newI18nActive}`);
-  }, [i18nActive, setSelectedLocale, translatedLocales, defaultLocale]);
+  }, [i18nActive, setSelectedLocale, translatedLocales, default_locale]);
 
   const handleTogglePreview = useCallback(() => {
     let newPreviewActive = true;
@@ -260,7 +260,7 @@ const EditorInterface = ({
   const editor = useMemo(
     () => (
       <div
-        key={defaultLocale}
+        key={default_locale}
         id="control-pane"
         className={classNames(
           classes.default,
@@ -272,7 +272,7 @@ const EditorInterface = ({
           entry={entry}
           fields={fields}
           fieldsErrors={fieldsErrors}
-          locale={i18nActive ? defaultLocale : selectedLocale}
+          locale={i18nActive ? default_locale : selectedLocale}
           submitted={submitted}
           hideBorder={!finalPreviewActive && !i18nActive}
           canChangeLocale={i18nEnabled && !i18nActive}
@@ -283,7 +283,7 @@ const EditorInterface = ({
       </div>
     ),
     [
-      defaultLocale,
+      default_locale,
       finalPreviewActive,
       i18nActive,
       collection,
@@ -322,8 +322,8 @@ const EditorInterface = ({
 
   const previewEntry = useMemo(
     () =>
-      collectHasI18n ? getPreviewEntry(collection, entry, selectedLocale, defaultLocale) : entry,
-    [collectHasI18n, collection, defaultLocale, entry, selectedLocale],
+      collectHasI18n ? getPreviewEntry(collection, entry, selectedLocale, default_locale) : entry,
+    [collectHasI18n, collection, default_locale, entry, selectedLocale],
   );
 
   const mobilePreview = (

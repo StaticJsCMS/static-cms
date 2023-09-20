@@ -6,6 +6,7 @@ import isError from 'lodash/isError';
 import uniq from 'lodash/uniq';
 import { dirname } from 'path';
 
+import { STATUSES } from './constants/publishModes';
 import { resolveFormat } from './formats/formats';
 import { commitMessageFormatter, slugFormatter } from './lib/formatters';
 import {
@@ -29,6 +30,7 @@ import {
   getPathDepth,
   localForage,
 } from './lib/util';
+import { EDITORIAL_WORKFLOW_ERROR } from './lib/util/EditorialWorkflowError';
 import { getEntryBackupKey } from './lib/util/backup.util';
 import {
   getFields,
@@ -49,6 +51,7 @@ import { isNullish } from './lib/util/null.util';
 import { set } from './lib/util/object.util';
 import { fileSearch, sortByScore } from './lib/util/search.util';
 import { dateParsers, expandPath, extractTemplateVars } from './lib/widgets/stringTemplate';
+import { selectUseWorkflow } from './reducers/selectors/config';
 import createEntry from './valueObjects/createEntry';
 
 import type {
@@ -302,8 +305,8 @@ function collectionRegex<EF extends BaseField>(collection: Collection<EF>): RegE
   }
 
   if (hasI18n(collection)) {
-    const { defaultLocale } = getI18nInfo(collection);
-    ruleString += `\\.${defaultLocale}\\..*`;
+    const { default_locale } = getI18nInfo(collection);
+    ruleString += `\\.${default_locale}\\..*`;
   }
 
   return ruleString ? new RegExp(ruleString) : undefined;
@@ -325,7 +328,9 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     this.deleteAnonymousBackup();
     this.config = config;
     this.implementation = implementation.init(this.config, {
+      useWorkflow: selectUseWorkflow(this.config as Config),
       updateUserCredentials: this.updateUserCredentials,
+      initialWorkflowStatus: STATUSES.DRAFT,
     }) as BC;
     this.backendName = backendName;
     this.authStore = authStore;
@@ -415,7 +420,22 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   getToken = () => this.implementation.getToken();
 
-  async entryExist(path: string) {
+  async entryExist(collection: Collection, path: string, slug: string, useWorkflow: boolean) {
+    const unpublishedEntry =
+      useWorkflow &&
+      (await this.implementation
+        .unpublishedEntry({ collection: collection.name, slug })
+        .catch(error => {
+          if (error.name === EDITORIAL_WORKFLOW_ERROR && error.notUnderEditorialWorkflow) {
+            return Promise.resolve(false);
+          }
+          return Promise.reject(error);
+        }));
+
+    if (unpublishedEntry) {
+      return unpublishedEntry;
+    }
+
     const publishedEntry = await this.implementation
       .getEntry(path)
       .then(({ data }) => data)
@@ -447,7 +467,12 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     // Check for duplicate slug in loaded entities store first before repo
     while (
       usedSlugs.includes(uniqueSlug) ||
-      (await this.entryExist(selectEntryPath(collection, uniqueSlug) as string))
+      (await this.entryExist(
+        collection,
+        selectEntryPath(collection, uniqueSlug) as string,
+        uniqueSlug,
+        selectUseWorkflow(config),
+      ))
     ) {
       uniqueSlug = `${slug}${sanitizeChar(' ', slugConfig)}${i++}`;
     }
@@ -893,6 +918,8 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
     const newEntry = entryDraft.entry.newRecord ?? false;
 
+    const useWorkflow = selectUseWorkflow(config);
+
     const customPath = selectCustomPath(draft.entry, collection, rootSlug, config.slug);
 
     let dataFile: DataFile;
@@ -922,7 +949,8 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       const slug = entryDraft.entry.slug;
       dataFile = {
         path: entryDraft.entry.path,
-        slug: customPath ? slugFromCustomPath(collection, customPath) : slug,
+        // for workflow entries we refresh the slug on publish
+        slug: customPath && !useWorkflow ? slugFromCustomPath(collection, customPath) : slug,
         raw: this.entryToRaw(collection, entryDraft.entry),
         newPath: customPath,
       };
@@ -960,8 +988,13 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       newEntry,
       commitMessage,
       collectionName,
+      useWorkflow,
       ...updatedOptions,
     };
+
+    if (!useWorkflow) {
+      await this.invokePrePublishEvent(entryDraft.entry, collection);
+    }
 
     await this.implementation.persistEntry(
       {
@@ -973,12 +1006,26 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
     await this.invokePostSaveEvent(entryDraft.entry, collection);
 
+    if (!useWorkflow) {
+      await this.invokePostPublishEvent(entryDraft.entry, collection);
+    }
+
     return slug;
   }
 
   async getEventData(entry: Entry): Promise<EventData> {
     const { login, name = '' } = (await this.currentUser()) as User;
     return { entry, author: { login, name } };
+  }
+
+  async invokePrePublishEvent(entry: Entry, collection: Collection) {
+    const eventData = await this.getEventData(entry);
+    return await invokeEvent({ name: 'prePublish', collection: collection.name, data: eventData });
+  }
+
+  async invokePostPublishEvent(entry: Entry, collection: Collection) {
+    const eventData = await this.getEventData(entry);
+    return await invokeEvent({ name: 'postPublish', collection: collection.name, data: eventData });
   }
 
   async invokePreSaveEvent(entry: Entry, collection: Collection): Promise<EntryData> {

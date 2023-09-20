@@ -14,7 +14,12 @@ describe('GitLab API', () => {
 
   describe('hasWriteAccess', () => {
     test('should return true on project access_level >= 30', async () => {
-      const api = new API({ repo: 'repo' });
+      const api = new API({
+        repo: 'repo',
+        squashMerges: false,
+        initialWorkflowStatus: '',
+        cmsLabelPrefix: '',
+      });
 
       api.requestJSON = jest
         .fn()
@@ -24,7 +29,12 @@ describe('GitLab API', () => {
     });
 
     test('should return false on project access_level < 30', async () => {
-      const api = new API({ repo: 'repo' });
+      const api = new API({
+        repo: 'repo',
+        squashMerges: false,
+        initialWorkflowStatus: '',
+        cmsLabelPrefix: '',
+      });
 
       api.requestJSON = jest
         .fn()
@@ -34,7 +44,12 @@ describe('GitLab API', () => {
     });
 
     test('should return true on group access_level >= 30', async () => {
-      const api = new API({ repo: 'repo' });
+      const api = new API({
+        repo: 'repo',
+        squashMerges: false,
+        initialWorkflowStatus: '',
+        cmsLabelPrefix: '',
+      });
 
       api.requestJSON = jest
         .fn()
@@ -44,7 +59,12 @@ describe('GitLab API', () => {
     });
 
     test('should return false on group access_level < 30', async () => {
-      const api = new API({ repo: 'repo' });
+      const api = new API({
+        repo: 'repo',
+        squashMerges: false,
+        initialWorkflowStatus: '',
+        cmsLabelPrefix: '',
+      });
 
       api.requestJSON = jest
         .fn()
@@ -54,7 +74,12 @@ describe('GitLab API', () => {
     });
 
     test('should return true on shared group access_level >= 40', async () => {
-      const api = new API({ repo: 'repo' });
+      const api = new API({
+        repo: 'repo',
+        squashMerges: false,
+        initialWorkflowStatus: '',
+        cmsLabelPrefix: '',
+      });
       api.requestJSON = jest.fn().mockResolvedValueOnce({
         permissions: { project_access: null, group_access: null },
         shared_with_groups: [{ group_access_level: 10 }, { group_access_level: 40 }],
@@ -66,7 +91,12 @@ describe('GitLab API', () => {
     });
 
     test('should return true on shared group access_level >= 30, developers can merge and push', async () => {
-      const api = new API({ repo: 'repo' });
+      const api = new API({
+        repo: 'repo',
+        squashMerges: false,
+        initialWorkflowStatus: '',
+        cmsLabelPrefix: '',
+      });
 
       const requestJSONMock = (api.requestJSON = jest.fn());
       requestJSONMock.mockResolvedValueOnce({
@@ -82,7 +112,12 @@ describe('GitLab API', () => {
     });
 
     test('should return false on shared group access_level < 30,', async () => {
-      const api = new API({ repo: 'repo' });
+      const api = new API({
+        repo: 'repo',
+        squashMerges: false,
+        initialWorkflowStatus: '',
+        cmsLabelPrefix: '',
+      });
 
       const requestJSONMock = (api.requestJSON = jest.fn());
       requestJSONMock.mockResolvedValueOnce({
@@ -98,7 +133,12 @@ describe('GitLab API', () => {
     });
 
     test("should return false on shared group access_level >= 30, developers can't merge", async () => {
-      const api = new API({ repo: 'repo' });
+      const api = new API({
+        repo: 'repo',
+        squashMerges: false,
+        initialWorkflowStatus: '',
+        cmsLabelPrefix: '',
+      });
 
       const requestJSONMock = (api.requestJSON = jest.fn());
       requestJSONMock.mockResolvedValueOnce({
@@ -114,7 +154,12 @@ describe('GitLab API', () => {
     });
 
     test("should return false on shared group access_level >= 30, developers can't push", async () => {
-      const api = new API({ repo: 'repo' });
+      const api = new API({
+        repo: 'repo',
+        squashMerges: false,
+        initialWorkflowStatus: '',
+        cmsLabelPrefix: '',
+      });
 
       const requestJSONMock = (api.requestJSON = jest.fn());
       requestJSONMock.mockResolvedValueOnce({
@@ -130,7 +175,12 @@ describe('GitLab API', () => {
     });
 
     test('should return false on shared group access_level >= 30, error getting branch', async () => {
-      const api = new API({ repo: 'repo' });
+      const api = new API({
+        repo: 'repo',
+        squashMerges: false,
+        initialWorkflowStatus: '',
+        cmsLabelPrefix: '',
+      });
 
       const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
 

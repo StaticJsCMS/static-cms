@@ -14,7 +14,7 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
   i18n: {
     structure: 'multiple_files',
     locales: ['en', 'de', 'fr'],
-    defaultLocale: 'en',
+    default_locale: 'en',
   },
   collections: [
     {

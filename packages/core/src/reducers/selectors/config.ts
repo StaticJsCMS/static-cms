@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
+import { EDITORIAL_WORKFLOW } from '@staticcms/core/constants/publishModes';
 
 import type { Config } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
@@ -17,4 +17,8 @@ export function selectIsSearchEnabled(state: RootState) {
 
 export function selectDisplayUrl(state: RootState) {
   return state.config.config?.display_url;
+}
+
+export function selectUseWorkflow(config?: Config) {
+  return config?.publish_mode === EDITORIAL_WORKFLOW;
 }

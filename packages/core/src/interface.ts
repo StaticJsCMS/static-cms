@@ -15,6 +15,7 @@ import type {
   SORT_DIRECTION_DESCENDING,
   SORT_DIRECTION_NONE,
 } from './constants';
+import type { Workflow } from './constants/publishModes';
 import type {
   BLOCKQUOTE_TOOLBAR_BUTTON,
   BOLD_TOOLBAR_BUTTON,
@@ -225,7 +226,7 @@ export interface CollectionFile<EF extends BaseField = UnknownField> {
   media_folder?: string;
   public_folder?: string;
   media_library?: MediaLibraryConfig;
-  i18n?: boolean | I18nInfo;
+  i18n?: boolean | Partial<I18nInfo>;
   editor?: EditorConfig;
 }
 
@@ -264,7 +265,7 @@ export interface BaseCollection {
   sortable_fields?: SortableFields;
   view_filters?: ViewFilters;
   view_groups?: ViewGroups;
-  i18n?: boolean | I18nInfo;
+  i18n?: boolean | Partial<I18nInfo>;
   hide?: boolean;
   editor?: EditorConfig;
   identifier_field?: string;
@@ -438,6 +439,12 @@ export interface PersistOptions {
   commitMessage: string;
   collectionName?: string;
   status?: string;
+
+  /**
+   * Editorial Workflow
+   */
+  useWorkflow?: boolean;
+  unpublished?: boolean;
 }
 
 export interface PersistArgs {
@@ -561,6 +568,39 @@ export abstract class BackendClass {
     auth: { status: boolean };
     api: { status: boolean; statusPage: string };
   }>;
+
+  /**
+   * Editorial Workflow
+   */
+  abstract unpublishedEntries: () => Promise<string[]>;
+  abstract unpublishedEntry: (args: {
+    id?: string;
+    collection?: string;
+    slug?: string;
+  }) => Promise<UnpublishedEntry>;
+  abstract unpublishedEntryDataFile: (
+    collection: string,
+    slug: string,
+    path: string,
+    id: string,
+  ) => Promise<string>;
+  abstract unpublishedEntryMediaFile: (
+    collection: string,
+    slug: string,
+    path: string,
+    id: string,
+  ) => Promise<ImplementationMediaFile>;
+  abstract updateUnpublishedEntryStatus: (
+    collection: string,
+    slug: string,
+    newStatus: string,
+  ) => Promise<void>;
+  abstract publishUnpublishedEntry: (collection: string, slug: string) => Promise<void>;
+  abstract deleteUnpublishedEntry: (collection: string, slug: string) => Promise<void>;
+  abstract getDeployPreview: (
+    collectionName: string,
+    slug: string,
+  ) => Promise<{ url: string; status: string } | null>;
 }
 
 export interface LocalePhrasesRoot {
@@ -922,6 +962,15 @@ export interface Backend {
     deleteMedia?: string;
   };
   use_large_media_transforms_in_media_library?: boolean;
+
+  /**
+   * Editorial Workflow
+   */
+  always_fork?: boolean;
+  open_authoring?: boolean;
+  squash_merges?: boolean;
+  cms_label_prefix?: string;
+  preview_context?: string;
 }
 
 export interface Slug {
@@ -948,6 +997,7 @@ export interface Config<EF extends BaseField = UnknownField> {
   public_folder?: string;
   media_folder_relative?: boolean;
   media_library?: MediaLibraryConfig;
+  publish_mode?: Workflow;
   slug?: Slug;
   i18n?: I18nInfo;
   local_backend?: boolean | LocalBackend;
@@ -1011,6 +1061,11 @@ export interface InitOptions<EF extends BaseField = UnknownField> {
 
 export interface BackendInitializerOptions {
   updateUserCredentials: (credentials: Credentials) => void;
+  /**
+   * Editorial Workflow
+   */
+  useWorkflow: boolean;
+  initialWorkflowStatus: string;
 }
 
 export interface BackendInitializer<EF extends BaseField = UnknownField> {
@@ -1025,6 +1080,20 @@ export interface AuthorData {
 export interface EventData {
   entry: Entry;
   author: AuthorData;
+}
+
+export interface PrePublishEventListener {
+  name: 'prePublish';
+  collection: string;
+  file?: string;
+  handler: (event: { data: EventData; collection: string }) => void | Promise<void>;
+}
+
+export interface PostPublishEventListener {
+  name: 'postPublish';
+  collection: string;
+  file?: string;
+  handler: (event: { data: EventData; collection: string }) => void | Promise<void>;
 }
 
 export interface PreSaveEventListener {
@@ -1136,8 +1205,8 @@ export type I18nField =
 
 export interface I18nInfo {
   locales: string[];
-  defaultLocale: string;
-  structure?: I18nStructure;
+  default_locale?: string;
+  structure: I18nStructure;
 }
 
 export interface ProcessedCodeLanguage {
@@ -1264,4 +1333,32 @@ export interface CollectionEntryData {
   key: string;
   summaryFields: string[];
   collectionLabel?: string;
+}
+
+/**
+ * Editorial Workflow
+ */
+export interface UnpublishedEntry {
+  pullRequestAuthor?: string;
+  slug: string;
+  collection: string;
+  status: string;
+  diffs: UnpublishedEntryDiff[];
+  updatedAt: string;
+}
+
+export interface UnpublishedEntryDiff {
+  id: string;
+  path: string;
+  newFile: boolean;
+}
+
+export interface UnpublishedEntryMediaFile {
+  id: string;
+  path: string;
+}
+
+export enum PreviewState {
+  Other = 'other',
+  Success = 'success',
 }

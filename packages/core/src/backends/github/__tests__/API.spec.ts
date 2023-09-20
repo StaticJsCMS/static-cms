@@ -24,7 +24,13 @@ describe('github API', () => {
 
   describe('updateTree', () => {
     it('should create tree with nested paths', async () => {
-      const api = new API({ branch: 'master', repo: 'owner/repo' });
+      const api = new API({
+        branch: 'master',
+        repo: 'owner/repo',
+        squashMerges: false,
+        initialWorkflowStatus: '',
+        cmsLabelPrefix: '',
+      });
 
       api.createTree = jest.fn().mockImplementation(() => Promise.resolve({ sha: 'newTreeSha' }));
 
@@ -69,7 +75,14 @@ describe('github API', () => {
     });
 
     it('should fetch url with authorization header', async () => {
-      const api = new API({ branch: 'gh-pages', repo: 'my-repo', token: 'token' });
+      const api = new API({
+        branch: 'gh-pages',
+        repo: 'my-repo',
+        token: 'token',
+        squashMerges: false,
+        initialWorkflowStatus: '',
+        cmsLabelPrefix: '',
+      });
 
       fetch.mockResolvedValue({
         text: jest.fn().mockResolvedValue('some response'),
@@ -90,7 +103,14 @@ describe('github API', () => {
     });
 
     it('should throw error on not ok response', async () => {
-      const api = new API({ branch: 'gh-pages', repo: 'my-repo', token: 'token' });
+      const api = new API({
+        branch: 'gh-pages',
+        repo: 'my-repo',
+        token: 'token',
+        squashMerges: false,
+        initialWorkflowStatus: '',
+        cmsLabelPrefix: '',
+      });
 
       fetch.mockResolvedValue({
         text: jest.fn().mockResolvedValue({ message: 'some error' }),
@@ -110,7 +130,14 @@ describe('github API', () => {
     });
 
     it('should allow overriding requestHeaders to return a promise ', async () => {
-      const api = new API({ branch: 'gh-pages', repo: 'my-repo', token: 'token' });
+      const api = new API({
+        branch: 'gh-pages',
+        repo: 'my-repo',
+        token: 'token',
+        squashMerges: false,
+        initialWorkflowStatus: '',
+        cmsLabelPrefix: '',
+      });
 
       api.requestHeaders = jest.fn().mockResolvedValue({
         Authorization: 'promise-token',
@@ -138,7 +165,13 @@ describe('github API', () => {
 
   describe('persistFiles', () => {
     it('should update tree, commit and patch branch when useWorkflow is false', async () => {
-      const api = new API({ branch: 'master', repo: 'owner/repo' });
+      const api = new API({
+        branch: 'master',
+        repo: 'owner/repo',
+        squashMerges: false,
+        initialWorkflowStatus: '',
+        cmsLabelPrefix: '',
+      });
 
       const responses = {
         // upload the file
@@ -226,6 +259,7 @@ describe('github API', () => {
         {
           body: JSON.stringify({
             sha: 'commit-sha',
+            force: false,
           }),
           method: 'PATCH',
         },
@@ -235,7 +269,13 @@ describe('github API', () => {
 
   describe('listFiles', () => {
     it('should get files by depth', async () => {
-      const api = new API({ branch: 'master', repo: 'owner/repo' });
+      const api = new API({
+        branch: 'master',
+        repo: 'owner/repo',
+        squashMerges: false,
+        initialWorkflowStatus: '',
+        cmsLabelPrefix: '',
+      });
 
       const tree = [
         {
@@ -315,7 +355,13 @@ describe('github API', () => {
       });
     });
     it('should get files and folders', async () => {
-      const api = new API({ branch: 'master', repo: 'owner/repo' });
+      const api = new API({
+        branch: 'master',
+        repo: 'owner/repo',
+        squashMerges: false,
+        initialWorkflowStatus: '',
+        cmsLabelPrefix: '',
+      });
 
       const tree = [
         {
