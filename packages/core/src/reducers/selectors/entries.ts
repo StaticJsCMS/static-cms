@@ -50,7 +50,11 @@ export function selectEntriesBySlugs(state: RootState) {
   return state.entries.entities;
 }
 
-export function selectEntry(state: RootState, collection: string, slug: string) {
+export function selectEntry(state: RootState, collection: string, slug: string | undefined) {
+  if (!slug) {
+    return null;
+  }
+
   return state.entries.entities[`${collection}.${slug}`];
 }
 

@@ -19,7 +19,7 @@ import {
   UNPUBLISHED_ENTRY_STATUS_CHANGE_SUCCESS,
   UNPUBLISHED_ENTRY_SUCCESS,
 } from '../constants';
-import { EDITORIAL_WORKFLOW, STATUSES } from '../constants/publishModes';
+import { EDITORIAL_WORKFLOW, WorkflowStatus } from '../constants/publishModes';
 import ValidationErrorTypes from '../constants/validationErrorTypes';
 import { EditorialWorkflowError } from '../lib';
 import { slugFromCustomPath } from '../lib/util/nested.util';
@@ -45,7 +45,6 @@ import { loadMedia } from './mediaLibrary';
 import type { NavigateFunction } from 'react-router-dom';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type { Status } from '../constants/publishModes';
 import type { Collection, Collections, Config, Entry, EntryDraft } from '../interface';
 import type { RootState } from '../store';
 
@@ -153,7 +152,7 @@ function unpublishedEntryStatusChangeRequest(collection: string, slug: string) {
 function unpublishedEntryStatusChangePersisted(
   collection: string,
   slug: string,
-  newStatus: Status,
+  newStatus: WorkflowStatus,
 ) {
   return {
     type: UNPUBLISHED_ENTRY_STATUS_CHANGE_SUCCESS,
@@ -325,7 +324,7 @@ export function persistUnpublishedEntry(
 
     const entryDraft = state.entryDraft;
     const fieldsErrors = entryDraft.fieldsErrors;
-    const unpublishedSlugs = selectUnpublishedSlugs(state.editorialWorkflow, collection.name);
+    const unpublishedSlugs = selectUnpublishedSlugs(state, collection.name);
     const publishedSlugs = selectPublishedSlugs(collection.name)(state);
     const usedSlugs = publishedSlugs.concat(unpublishedSlugs);
     const entriesLoaded = state.editorialWorkflow.ids;
@@ -416,8 +415,8 @@ export function persistUnpublishedEntry(
 export function updateUnpublishedEntryStatus(
   collection: string,
   slug: string,
-  oldStatus: Status,
-  newStatus: Status,
+  oldStatus: WorkflowStatus,
+  newStatus: WorkflowStatus,
 ) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     if (oldStatus === newStatus) {
@@ -513,7 +512,11 @@ export function publishUnpublishedEntry(
 
     const collections = state.collections;
     const backend = currentBackend(state.config.config);
-    const entry = selectUnpublishedEntry(state.editorialWorkflow, collectionName, slug);
+    const entry = selectUnpublishedEntry(state, collectionName, slug);
+    if (!entry) {
+      return;
+    }
+
     dispatch(unpublishedEntryPublishRequest(collectionName, slug));
     try {
       const collection = collections[collectionName];
@@ -555,7 +558,7 @@ export function publishUnpublishedEntry(
   };
 }
 
-export function unpublishPublishedEntry(collection: Collection, rootSlug: string, slug: string) {
+export function unpublishPublishedEntry(collection: Collection, slug: string) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     if (!state.config.config) {
@@ -564,6 +567,10 @@ export function unpublishPublishedEntry(collection: Collection, rootSlug: string
 
     const backend = currentBackend(state.config.config);
     const entry = selectEntry(state, collection.name, slug);
+    if (!entry) {
+      return;
+    }
+
     const entryDraft: EntryDraft = { entry, fieldsErrors: {} };
     dispatch(unpublishedEntryPersisting(collection, slug));
     return backend
@@ -575,8 +582,8 @@ export function unpublishPublishedEntry(collection: Collection, rootSlug: string
           entryDraft,
           assetProxies: [],
           usedSlugs: [],
-          rootSlug,
-          status: STATUSES.PENDING_PUBLISH,
+          rootSlug: slug,
+          status: WorkflowStatus.PENDING_PUBLISH,
         }),
       )
       .then(() => {

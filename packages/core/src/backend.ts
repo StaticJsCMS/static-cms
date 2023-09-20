@@ -6,7 +6,7 @@ import isError from 'lodash/isError';
 import uniq from 'lodash/uniq';
 import { dirname, extname } from 'path';
 
-import { STATUSES } from './constants/publishModes';
+import { WorkflowStatus } from './constants/publishModes';
 import { formatExtensions, resolveFormat } from './formats/formats';
 import { commitMessageFormatter, slugFormatter } from './lib/formatters';
 import {
@@ -347,7 +347,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     this.implementation = implementation.init(this.config, {
       useWorkflow: getUseWorkflow(this.config as Config),
       updateUserCredentials: this.updateUserCredentials,
-      initialWorkflowStatus: STATUSES.DRAFT,
+      initialWorkflowStatus: WorkflowStatus.DRAFT,
     }) as BC;
     this.backendName = backendName;
     this.authStore = authStore;
@@ -1252,7 +1252,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return this.persistEntry({ ...args, unpublished: true });
   }
 
-  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
+  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: WorkflowStatus) {
     return this.implementation.updateUnpublishedEntryStatus(collection, slug, newStatus);
   }
 

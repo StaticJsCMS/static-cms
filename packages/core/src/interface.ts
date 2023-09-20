@@ -15,7 +15,7 @@ import type {
   SORT_DIRECTION_DESCENDING,
   SORT_DIRECTION_NONE,
 } from './constants';
-import type { Workflow } from './constants/publishModes';
+import type { Workflow, WorkflowStatus } from './constants/publishModes';
 import type {
   BLOCKQUOTE_TOOLBAR_BUTTON,
   BOLD_TOOLBAR_BUTTON,
@@ -118,7 +118,7 @@ export interface Entry<T = ObjectValue> {
   mediaFiles: MediaFile[];
   author: string;
   updatedOn: string;
-  status?: string;
+  status?: WorkflowStatus;
   newRecord?: boolean;
   isFetching?: boolean;
   isPersisting?: boolean;
