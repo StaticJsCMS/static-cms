@@ -1,7 +1,10 @@
 import { isNotNullish, isNullish } from './null.util';
 
-export function isEmpty(value: string | null | undefined): value is null | undefined {
-  return isNullish(value) || value === '';
+export function isEmpty(
+  value: string | null | undefined,
+  ignoreWhitespace?: boolean,
+): value is null | undefined {
+  return isNullish(value) || (ignoreWhitespace ? value.trim() === '' : value === '');
 }
 
 export function isNotEmpty(value: string | null | undefined): value is string {

@@ -108,33 +108,60 @@ function serializeMarkdownNode(
           childrenHasLink = chunk.children.some(f => !isLeafNode(f) && f.type === NodeTypes.link);
         }
 
-        return serializeMarkdownNode(
-          { ...c, parentType: type },
-          {
-            // WOAH.
-            // what we're doing here is pretty tricky, it relates to the block below where
-            // we check for ignoreParagraphNewline and set type to paragraph.
-            // We want to strip out empty paragraphs sometimes, but other times we don't.
-            // If we're the descendant of a list, we know we don't want a bunch
-            // of whitespace. If we're parallel to a link we also don't want
-            // to respect neighboring paragraphs
-            ignoreParagraphNewline:
-              (ignoreParagraphNewline || isList || selfIsList || childrenHasLink || isInTable) &&
-              // if we have c.break, never ignore empty paragraph new line
-              !(c as MdBlockType).break,
+        return {
+          type: 'type' in c ? c.type : undefined,
+          response: serializeMarkdownNode(
+            { ...c, parentType: type },
+            {
+              // WOAH.
+              // what we're doing here is pretty tricky, it relates to the block below where
+              // we check for ignoreParagraphNewline and set type to paragraph.
+              // We want to strip out empty paragraphs sometimes, but other times we don't.
+              // If we're the descendant of a list, we know we don't want a bunch
+              // of whitespace. If we're parallel to a link we also don't want
+              // to respect neighboring paragraphs
+              ignoreParagraphNewline:
+                (ignoreParagraphNewline || isList || selfIsList || childrenHasLink || isInTable) &&
+                // if we have c.break, never ignore empty paragraph new line
+                !(c as MdBlockType).break,
 
-            // track depth of nested lists so we can add proper spacing
-            listDepth: selfIsList ? listDepth + 1 : listDepth,
-            isInTable: selfIsTable || isInTable,
-            isInCode: selfIsCode || isInCode,
-            blockquoteDepth: selfIsBlockquote ? blockquoteDepth + 1 : blockquoteDepth,
-            useMdx,
-            index: childIndex,
-            shortcodeConfigs,
-          },
-        );
+              // track depth of nested lists so we can add proper spacing
+              listDepth: selfIsList ? listDepth + 1 : listDepth,
+              isInTable: selfIsTable || isInTable,
+              isInCode: selfIsCode || isInCode,
+              blockquoteDepth: selfIsBlockquote ? blockquoteDepth + 1 : blockquoteDepth,
+              useMdx,
+              index: childIndex,
+              shortcodeConfigs,
+            },
+          ),
+        };
       })
-      .join(separator);
+      .map(({ response, type }) => {
+        if (selfIsBlockquote) {
+          let serializedChild = response;
+
+          if (listDepth === 0) {
+            serializedChild = serializedChild.replace(
+              /(?<!(?:[ ]*(?:-|1.) [^\n]*)|[\n])[\n]{1}([^\n])/g,
+              '  \n$1',
+            );
+          }
+
+          return { response: serializedChild, type };
+        }
+
+        return { response, type };
+      })
+      .reduce((acc, { response, type }, index) => {
+        if (selfIsBlockquote) {
+          if (type === NodeTypes.block_quote) {
+            return index === 0 ? response : `${acc}${separator}\n${response}`;
+          }
+        }
+
+        return index === 0 ? response : `${acc}${separator}${response}`;
+      }, '');
   }
 
   // This is pretty fragile code, check the long comment where we iterate over children
@@ -152,7 +179,7 @@ function serializeMarkdownNode(
   }
 
   if (children === '' && !VOID_ELEMENTS.find(k => NodeTypes[k] === type)) {
-    return;
+    return '\n';
   }
 
   // Never allow decorating break tags with rich text formatting,
@@ -237,10 +264,11 @@ function serializeMarkdownNode(
       return `###### ${handleInBlockNewline(children)}\n`;
 
     case NodeTypes.block_quote:
-      return `${selfIsBlockquote && blockquoteDepth > 0 ? '\n' : ''}> ${children
-        .replace(/^[\n]*|[\n]*$/gm, '')
+      return `> ${children
+        .replace(/[\n]+$/g, '')
         .split('\n')
-        .join('\n> ')}\n`;
+        .join('\n> ')
+        .replace(/\n>[ \t]*\n/g, '\n>\n')}${selfIsBlockquote && blockquoteDepth === 0 ? '\n' : ''}`;
 
     case NodeTypes.code_block:
       const codeBlock = chunk as MdCodeBlockElement;
@@ -319,7 +347,9 @@ ${bodyRows.join('\n')}`;
 
     case NodeTypes.tableHeaderCell:
     case NodeTypes.tableCell:
-      return isEmpty(children) ? ' ' : children.replace(/\|/g, '\\|').replace(/\n/g, BREAK_TAG);
+      return isEmpty(children, true)
+        ? ' '
+        : children.replace(/\|/g, '\\|').replace(/\n/g, BREAK_TAG);
 
     case NodeTypes.shortcode:
       const shortcodeNode = chunk as MdShortcodeElement;

@@ -3,5 +3,6 @@
 
   @apply border-l-2
     ml-2
-    pl-2;
+    pl-2
+    my-2;
 }
