@@ -19,6 +19,7 @@ const hr: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Sadržaj',
+      workflow: 'Tijek rada',
       media: 'Mediji',
       quickAdd: 'Dodaj',
     },
@@ -97,18 +98,34 @@ const hr: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Jeste li sigurni da želite napustiti stranicu?',
+      onUpdatingWithUnsavedChanges:
+        'Imate nespremljene promjene, molimo spremite prije ažuriranja statusa.',
+      onPublishingNotReady: 'Molimo ažurirajte status na "Spremno" prije objavljivanja.',
+      onPublishingWithUnsavedChanges:
+        'Imate nespremljene promjene, molimo spremite prije objavljivanja.',
+      onPublishing: 'Jeste li sigurni da želite objaviti ovaj unos?',
+      onUnpublishing: 'Jeste li sigurni da želite maknuti objavu za ovaj unos?',
       onDeleteWithUnsavedChangesBody:
         'Jeste li sigurni da želite obrisati objavljeni unos, te nespremljene promjene u trenutnoj sesiji?',
       onDeletePublishedEntryBody: 'Jeste li sigurni da želite obrisati ovaj objavljeni unos?',
+      onDeleteUnpublishedChangesWithUnsavedChanges:
+        'Obrisat ćete sve neobjavljene promjene na ovom unosu, te sve nespremljene promjene u trenutnoj sesiji. Želite li i dalje obrisati?',
+      onDeleteUnpublishedChanges:
+        'Sve nespremljene promjene na ovom unosu će biti obrisane. Želite li i dalje obrisati?',
       loadingEntry: 'Učitavanje unosa...',
     },
     editorToolbar: {
+      publishing: 'Objavljivanje...',
       publish: 'Objavi',
       published: 'Objavljeno',
       unpublish: 'Obriši iz objava',
       duplicate: 'Dupliciraj',
+      unpublishing: 'Brisanje iz objava...',
       publishAndCreateNew: 'Objavi i kreiraj novo',
       publishAndDuplicate: 'Objavi i dupliciraj',
+      deleteUnpublishedChanges: 'Obriši neobjavljene promjene',
+      deleteUnpublishedEntry: 'Obriši neobjavljene unose',
+      deletePublishedEntry: 'Obriši objavljeni unos',
       deleteEntry: 'Obriši unos',
       saving: 'Spremanje...',
       save: 'Spremi',
@@ -122,6 +139,9 @@ const hr: LocalePhrasesRoot = {
       inReview: 'Osvrt',
       ready: 'Spremno',
       publishNow: 'Objavi sad',
+      deployPreviewPendingButtonLabel: 'Provjeri za osvrt',
+      deployPreviewButtonLabel: 'Pogledaj osvrt',
+      deployButtonLabel: 'Pogledaj na produkciji',
     },
     editorWidgets: {
       markdown: {
@@ -181,6 +201,7 @@ const hr: LocalePhrasesRoot = {
       noResults: 'Nema rezultata.',
       noAssetsFound: 'Sredstva nisu pronađena.',
       noImagesFound: 'Slike nisu pronađene.',
+      private: 'Privatno ',
       images: 'Slike',
       mediaAssets: 'Medijska sredstva',
       search: 'Pretraži...',
@@ -221,12 +242,43 @@ const hr: LocalePhrasesRoot = {
       missingRequiredField: 'Uups, preskočili ste obvezno polje. Molimo popunite prije spremanja.',
       entrySaved: 'Unos spremljen',
       entryPublished: 'Unos objavljen',
+      entryUnpublished: 'Unos obrisan',
       onFailToPublishEntry: 'Neuspjelo objavljivanje unosa: %{details}',
       onFailToUnpublishEntry: 'Neuspjelo brisanje unosa: %{details}',
       entryUpdated: 'Status unosa ažuriran',
+      onDeleteUnpublishedChanges: 'Otkrivene neobjavljene objave',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Odjavljeni ste, molimo spremite sve podatke i prijavite se ponovno',
       onBackendDown: 'Backend servis ima prekid rada. Pogledaj %{details} za više informacija',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'Učitavanje unosa uredničkog tijeka rada',
+      workflowHeading: 'Urednički tijek rada',
+      newPost: 'Nova objava',
+      description:
+        '%{smart_count} unos čeka pregled, %{readyCount} unos spreman za produkciju. |||| %{smart_count} unosa čeka pregled, %{readyCount} unosa spremno za produkciju. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} od strane %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'od strane %{author}',
+      deleteChanges: 'Obriši promjene',
+      deleteNewEntry: 'Obriši novi unos',
+      publishChanges: 'Objavi promjene',
+      publishNewEntry: 'Objavi novi unos',
+    },
+    workflowList: {
+      onDeleteEntry: 'Jeste li sigurni da želite obrisati unos?',
+      onPublishingNotReadyEntry:
+        'Samo promjene sa statusom "Spremno" mogu biti objavljene. Molimo povucite karticu u kolumnu "Spremno" prije objavljivanja.',
+      onPublishEntry: 'Jeste li sigurni da želite objaviti unos?',
+      draftHeader: 'Skice',
+      inReviewHeader: 'U osvrtu',
+      readyHeader: 'Spremno',
+      currentEntries: '%{smart_count} unos |||| %{smart_count} unosa',
     },
   },
 };

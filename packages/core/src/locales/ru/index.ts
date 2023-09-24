@@ -19,6 +19,7 @@ const ru: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Записи',
+      workflow: 'Рабочая область',
       media: 'Медиафайлы',
       quickAdd: 'Быстрое добавление',
     },
@@ -66,7 +67,7 @@ const ru: LocalePhrasesRoot = {
         label: 'Автор',
       },
       updatedOn: {
-        label: 'Обновлено',
+        label: 'Дате обновления',
       },
     },
   },
@@ -93,24 +94,66 @@ const ru: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Пишем на %{locale}',
+        copyFromLocale: 'Заполнить из другого региона',
+        copyFromLocaleConfirm:
+          'Вы хотите заполнять данные используя %{locale} локализацию?\nВесь существующий контент будет перезаписан.',
       },
     },
     editor: {
       onLeavePage: 'Вы уверены, что хотите покинуть эту страницу?',
+      onUpdatingWithUnsavedChanges:
+        'У вас есть несохраненные изменения, сохраните их перед обновлением статуса.',
+      onPublishingNotReady: 'Пожалуйста, измените статус на «Готов» перед публикацией.',
+      onPublishingWithUnsavedChanges:
+        'У вас есть несохраненные изменения, сохраните их перед публикацией.',
+      onPublishing: 'Вы уверены, что хотите опубликовать эту запись?',
+      onUnpublishing: 'Вы уверены, что хотите отменить публикацию этой записи?',
       onDeleteWithUnsavedChangesBody:
         'Вы уверены, что хотите удалить эту опубликованную запись, а также несохраненные изменения из текущего сеанса?',
       onDeletePublishedEntryBody: 'Вы уверены, что хотите удалить эту опубликованную запись?',
+      onDeleteUnpublishedChangesWithUnsavedChanges:
+        'Это удалит все неопубликованные изменения в этой записи, а также ваши несохраненные изменения из текущего сеанса. Вы все еще хотите удалить?',
+      onDeleteUnpublishedChanges:
+        'Все неопубликованные изменения в этой записи будут удалены. Вы все еще хотите удалить?',
       loadingEntry: 'Загрузка записи…',
     },
+    editorInterface: {
+      toggleI18n: 'Переключиться на i18n',
+      togglePreview: 'Переключиться на предварительный просмотр',
+      toggleScrollSync: 'Синхронизация прокрутки',
+    },
     editorToolbar: {
+      publishing: 'Публикация…',
       publish: 'Опубликовать',
       published: 'Опубликовано',
       unpublish: 'Отменить публикацию',
       duplicate: 'Дублировать',
+      unpublishing: 'Отмена публикации…',
       publishAndCreateNew: 'Опубликовать и создать новую',
       publishAndDuplicate: 'Опубликовать и дублировать',
+      deleteUnpublishedChanges: 'Удалить неопубликованные изменения',
+      deleteUnpublishedEntry: 'Удалить неопубликованную запись',
+      deletePublishedEntry: 'Удалить опубликованную запись',
       deleteEntry: 'Удалить запись',
+      saving: 'Сохранение…',
+      save: 'Сохранить',
+      deleting: 'Удаление…',
+      updating: 'Обновление…',
+      status: 'Cтатус: %{status}',
+      backCollection: 'Запись в коллекцию %{collectionLabel}',
+      unsavedChanges: 'Несохраненные изменения',
+      changesSaved: 'Изменения сохранены',
+      draft: 'Черновик',
+      inReview: 'На рассмотрении',
+      ready: 'Одобрен',
       publishNow: 'Опубликовать сейчас',
+      deployPreviewPendingButtonLabel: 'Проверить предварительный просмотр',
+      deployPreviewButtonLabel: 'Предварительный просмотр',
+      deployButtonLabel: 'Просмотр',
+      statusInfoTooltipDraft:
+        'Статус записи установлен на черновик. Чтобы доработать и отправить его на рассмотрение, установите статус «На рассмотрении».',
+      statusInfoTooltipInReview:
+        'Запись находится на рассмотрении, дальнейших действий не требуется. Тем не менее, вы все еще можете внести дополнительные изменения, пока она находится на рассмотрении.',
     },
     editorWidgets: {
       markdown: {
@@ -129,19 +172,25 @@ const ru: LocalePhrasesRoot = {
       },
       image: {
         choose: 'Выберите изображение',
+        chooseMultiple: 'Выберите изображения',
         chooseUrl: 'Вставить из URL',
         replaceUrl: 'Заменить на URL',
         promptUrl: 'Введите URL изображения',
         chooseDifferent: 'Выберите другое изображение',
+        addMore: 'Добавьте еще изображений',
         remove: 'Удалить изображение',
+        removeAll: 'Удалить все изображения',
       },
       file: {
         choose: 'Выберите файл',
         chooseUrl: 'Вставить из URL',
+        chooseMultiple: 'Выбрать файлы',
         replaceUrl: 'Заменить на URL',
         promptUrl: 'Введите URL файла',
         chooseDifferent: 'Выберите другой файл',
+        addMore: 'Добавить больше файлов',
         remove: 'Удалить файл',
+        removeAll: 'Удалить все файлы',
       },
       unknownControl: {
         noControl: "Нет контрола для виджета '%{widget}'.",
@@ -159,6 +208,10 @@ const ru: LocalePhrasesRoot = {
       },
       datetime: {
         now: 'Сейчас',
+      },
+      list: {
+        add: 'Добавить %{item}',
+        addType: 'Добавить %{item}',
       },
     },
   },
@@ -181,6 +234,7 @@ const ru: LocalePhrasesRoot = {
       noResults: 'Нет результатов.',
       noAssetsFound: 'Ресурсы не найдены.',
       noImagesFound: 'Изображения не найдены.',
+      private: 'Приватные ',
       images: 'Изображения',
       mediaAssets: 'Медиаресурсы',
       search: 'Идёт поиск…',
@@ -222,11 +276,43 @@ const ru: LocalePhrasesRoot = {
         'К сожалению, вы пропустили обязательное поле. Пожалуйста, заполните перед сохранением.',
       entrySaved: 'Запись сохранена',
       entryPublished: 'Запись опубликована',
+      entryUnpublished: 'Публикация записи отменена',
       onFailToPublishEntry: 'Не удалось опубликовать запись: %{details}',
+      onFailToUnpublishEntry: 'Не удалось отменить публикацию записи: %{details}',
       entryUpdated: 'Статус записи обновлен',
+      onDeleteUnpublishedChanges: 'Неопубликованные изменения удалены',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Вы вышли. Пожалуйста, сохраните все данные и войдите снова',
       onBackendDown: 'Происходят перебои в работе бекенда. См. %{details}',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'Загрузка записей в рабочей области',
+      workflowHeading: 'Рабочая область',
+      newPost: 'Новая запись',
+      description:
+        'Число записей, ожидающих проверки — %{smart_count}, готовых к публикации — %{readyCount}. |||| Число записей, ожидающих проверки — %{smart_count}, готовых к публикации — %{readyCount}. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date}, %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: '%{author}',
+      deleteChanges: 'Удалить изменения',
+      deleteNewEntry: 'Удалить новую запись',
+      publishChanges: 'Опубликовать изменения',
+      publishNewEntry: 'Опубликовать новую запись',
+    },
+    workflowList: {
+      onDeleteEntry: 'Вы уверены, что хотите удалить эту запись?',
+      onPublishingNotReadyEntry:
+        'Только элементы со статусом «Готов» могут быть опубликованы. Перетащите карточку в столбец «Одобренные», чтобы разрешить публикацию.',
+      onPublishEntry: 'Вы уверены, что хотите опубликовать эту запись?',
+      draftHeader: 'Черновики',
+      inReviewHeader: 'На рассмотрении',
+      readyHeader: 'Одобренные',
+      currentEntries: '%{smart_count} entry |||| %{smart_count} entries',
     },
   },
 };

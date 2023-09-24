@@ -12,7 +12,7 @@ import { translate } from 'react-polyglot';
 
 import { deleteLocalBackup, loadEntry } from '@staticcms/core/actions/entries';
 import classNames from '@staticcms/core/lib/util/classNames.util';
-import { selectAllowDeletion } from '@staticcms/core/lib/util/collection.util';
+import { selectAllowDeletion, selectAllowPublish } from '@staticcms/core/lib/util/collection.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
@@ -27,6 +27,7 @@ import type { Collection, EditorPersistOptions, TranslatedProps } from '@staticc
 import type { FC, MouseEventHandler } from 'react';
 
 import './EditorToolbar.css';
+import Button from '../common/button/Button';
 
 export const classes = generateClassNames('EditorToolbar', [
   'root',
@@ -75,7 +76,7 @@ const EditorToolbar = ({
   // TODO displayUrl,
   collection,
   onDuplicate,
-  // TODO isPersisting,
+  isPersisting,
   onPersist,
   onPersistAndDuplicate,
   onPersistAndNew,
@@ -101,6 +102,7 @@ const EditorToolbar = ({
     [collection],
   );
   const canDelete = useMemo(() => selectAllowDeletion(collection), [collection]);
+  const canPublish = useMemo(() => selectAllowPublish(collection, slug), [collection, slug]);
   const isPublished = useMemo(() => !isNewEntry && !hasChanged, [hasChanged, isNewEntry]);
   const isLoading = useAppSelector(selectIsFetching);
 
@@ -131,7 +133,7 @@ const EditorToolbar = ({
   const menuItems: JSX.Element[][] = useMemo(() => {
     const items: JSX.Element[] = [];
 
-    if (!isPublished) {
+    if (!isPublished && (!useWorkflow || canPublish)) {
       items.push(
         <MenuItemButton key="publishNow" onClick={() => onPersist()} startIcon={PublishIcon}>
           {t('editor.editorToolbar.publishNow')}
@@ -183,6 +185,7 @@ const EditorToolbar = ({
     return [items];
   }, [
     canCreate,
+    canPublish,
     handleDiscardDraft,
     hasChanged,
     isPublished,
@@ -191,6 +194,7 @@ const EditorToolbar = ({
     onPersistAndDuplicate,
     onPersistAndNew,
     t,
+    useWorkflow,
   ]);
 
   return useMemo(
@@ -273,6 +277,11 @@ const EditorToolbar = ({
           >
             <TrashIcon className={classes['delete-button-icon']} />
           </IconButton>
+        ) : null}
+        {useWorkflow ? (
+          <Button disabled={!hasChanged}>
+            {isPersisting ? t('editor.editorToolbar.saving') : t('editor.editorToolbar.save')}
+          </Button>
         ) : null}
         <Menu
           label={

@@ -19,6 +19,7 @@ const ro: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Conținut',
+      workflow: 'Workflow',
       media: 'Fișiere',
       quickAdd: 'Adaugă',
     },
@@ -97,9 +98,20 @@ const ro: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Ești sigur/ă că dorești să părăsești pagina?',
+      onUpdatingWithUnsavedChanges:
+        'Există modificări nesalvate! Te rugăm salvează înainte de a actualiza statusul.',
+      onPublishingNotReady: 'Actualizează statusul la „Gata” înainte de publicare.',
+      onPublishingWithUnsavedChanges:
+        'Există modificări nesalvate, salvează-le înainte de publicare.',
+      onPublishing: 'Ești sigur/ă că dorești să publici acest articol?',
+      onUnpublishing: 'Ești sigur/ă că dorești să anulezi publicarea acestui articol?',
       onDeleteWithUnsavedChangesBody:
         'Ești sigur/ă că dorești să ștergi această publicare, dar și modificările nesalvate din sesiunea curentă?',
       onDeletePublishedEntryBody: 'Ești sigur/ă că dorești să ștergi această publicare?',
+      onDeleteUnpublishedChangesWithUnsavedChanges:
+        'Se vor șterge toate modificările nepublicate din aceast articol și modificările nesalvate din sesiunea curentă. Continui cu ștergerea?',
+      onDeleteUnpublishedChanges:
+        'Toate modificările nepublicate din acest articol vor fi șterse. Continui cu ștergerea?',
       loadingEntry: 'Se încarcă...',
     },
     editorInterface: {
@@ -108,14 +120,33 @@ const ro: LocalePhrasesRoot = {
       toggleScrollSync: 'Sincronizează scroll-ul',
     },
     editorToolbar: {
+      publishing: 'Se publică...',
       publish: 'Publicare',
       published: 'Publicat',
       unpublish: 'Anulează publicarea',
       duplicate: 'Duplifică',
+      unpublishing: 'Se anulează publicarea...',
       publishAndCreateNew: 'Publicare apoi crează altul',
       publishAndDuplicate: 'Publicare apoi duplifică',
+      deleteUnpublishedChanges: 'Șterge modificări nepublicate',
+      deleteUnpublishedEntry: 'Șterge intrarea nepublicată',
+      deletePublishedEntry: 'Șterge intrarea publicată',
       deleteEntry: 'Șterge intrare',
+      saving: 'Se salvează...',
+      save: 'Salvează',
+      deleting: 'Se șterge...',
+      updating: 'Se actualizează...',
+      status: 'Status: %{status}',
+      backCollection: ' Scrii în colecția „%{collectionLabel}”',
+      unsavedChanges: 'Modificări nesalvate',
+      changesSaved: 'Modificări salvate',
+      draft: 'Ciornă',
+      inReview: 'În revizuire',
+      ready: 'Gata',
       publishNow: 'Publicare',
+      deployPreviewPendingButtonLabel: 'Verifică publicare',
+      deployPreviewButtonLabel: 'Previzualizare',
+      deployButtonLabel: 'Vezi publicarea',
     },
     editorWidgets: {
       markdown: {
@@ -186,6 +217,7 @@ const ro: LocalePhrasesRoot = {
       noResults: 'Nu sunt rezultate.',
       noAssetsFound: 'Nu s-au găsit fișiere.',
       noImagesFound: 'Nu s-au găsit imagini.',
+      private: 'Privat ',
       images: 'Imagini',
       mediaAssets: 'Fișiere media',
       search: 'Caută...',
@@ -226,11 +258,43 @@ const ro: LocalePhrasesRoot = {
       missingRequiredField: 'Oops, ai ratat un câmp obligatoriu. Completează-l pentru a salva.',
       entrySaved: 'Intrare salvată',
       entryPublished: 'Intrare publicată',
+      entryUnpublished: 'Publicare anulată',
       onFailToPublishEntry: 'A eșuat publicarea: %{details}',
+      onFailToUnpublishEntry: 'A eșuat anularea publicării: %{details}',
       entryUpdated: 'S-a actualizat status-ul intrării',
+      onDeleteUnpublishedChanges: 'Modificări nepublicate șterse',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Ai fost delogat, te rugăm salvează orice date și autentifică-te din nou.',
       onBackendDown: 'Există probleme la server. Vezi %{details} pentru mai multe informații.',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'Se încarcă intrările din Workflow-ul Editorial',
+      workflowHeading: 'Workflow Editorial',
+      newPost: 'Postare nouă',
+      description:
+        '%{smart_count} pregătite de revizuire, %{readyCount} gata de publicare. |||| %{smart_count} pregătite de revizuire, %{readyCount} gata de publicare. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} de %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'de %{author}',
+      deleteChanges: 'Modificări șterse',
+      deleteNewEntry: 'Șterge intrarea nouă',
+      publishChanges: 'Publicare modificări',
+      publishNewEntry: 'Publicare intrare nouă',
+    },
+    workflowList: {
+      onDeleteEntry: 'Ești sigur/ă că dorești ștergerea intrării?',
+      onPublishingNotReadyEntry:
+        'Numai intrări cu status-ul „Gata” pot fi publicate. Trage un card în coloana „Gata” pentru a putea publica.',
+      onPublishEntry: 'Ești sigur/ă că dorești să faci publicarea?',
+      draftHeader: 'Ciorne',
+      inReviewHeader: 'În revizuire',
+      readyHeader: 'Gata',
+      currentEntries: '%{smart_count} intrări |||| %{smart_count} intrări',
     },
   },
 };

@@ -1,4 +1,6 @@
-const sl = {
+import type { LocalePhrasesRoot } from '@staticcms/core/interface';
+
+const sl: LocalePhrasesRoot = {
   auth: {
     login: 'Vpiši se',
     loggingIn: 'Prijavljanje...',

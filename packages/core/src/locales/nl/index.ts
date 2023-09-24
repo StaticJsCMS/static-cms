@@ -19,6 +19,7 @@ const nl: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Inhoud',
+      workflow: 'Workflow',
       media: 'Media',
       quickAdd: 'Snel toevoegen',
     },
@@ -95,9 +96,20 @@ const nl: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Weet je zeker dat je deze pagina wilt verlaten?',
+      onUpdatingWithUnsavedChanges:
+        'Er zijn nog niet-opgeslagen wijzigingen. Bewaar ze voordat u de status bijwerkt.',
+      onPublishingNotReady: 'Stel de status in op "Voltooid" voordat u publiceert.',
+      onPublishingWithUnsavedChanges:
+        'Er zijn nog niet-opgeslagen wijzigingen. Bewaar deze voordat u publiceert.',
+      onPublishing: 'Weet u zeker dat u dit item wil publiceren?',
+      onUnpublishing: 'Weet u zeker dat u de publicatie voor dit item ongedaan wilt maken?',
       onDeleteWithUnsavedChangesBody:
         'Weet u zeker dat u dit gepubliceerde item en uw niet-opgeslagen wijzigingen uit de huidige sessie wilt verwijderen?',
       onDeletePublishedEntryBody: 'Weet u zeker dat u dit gepubliceerde item wilt verwijderen?',
+      onDeleteUnpublishedChangesWithUnsavedChanges:
+        'Alle niet-gepubliceerde wijzigingen in dit item worden verwijderd, evenals uw niet-opgeslagen wijzigingen uit de huidige sessie. Wilt u nog steeds verwijderen?',
+      onDeleteUnpublishedChanges:
+        'Alle niet-gepubliceerde wijzigingen in dit item worden verwijderd. Wilt u nog steeds verwijderen?',
       loadingEntry: 'Item laden...',
     },
     editorInterface: {
@@ -106,13 +118,33 @@ const nl: LocalePhrasesRoot = {
       toggleScrollSync: 'Synchroniseer scrollen',
     },
     editorToolbar: {
+      publishing: 'Publiceren...',
       publish: 'Publiceer',
       published: 'Gepubliceerd',
+      unpublish: 'Publicatie terugtrekken',
       duplicate: 'Dupliceren',
+      unpublishing: 'Publicatie ongedaan maken...',
       publishAndCreateNew: 'Publiceer en maak nieuw item aan',
       publishAndDuplicate: 'Publiceer en dupliceer item',
+      deleteUnpublishedChanges: 'Verwijder niet-gepubliceerde wijzigingen',
+      deleteUnpublishedEntry: 'Niet-gepubliceerd item verwijderen',
+      deletePublishedEntry: 'Gepubliceerd item verwijderen',
       deleteEntry: 'Item verwijderen',
+      saving: 'Opslaan...',
+      save: 'Opslaan',
+      deleting: 'Verwijderen...',
+      updating: 'Bijwerken...',
+      status: 'Status: %{status}',
+      backCollection: ' Terug naar %{collectionLabel}',
+      unsavedChanges: 'Niet-opgeslagen wijzigingen',
+      changesSaved: 'Wijzigingen opgeslagen',
+      draft: 'Concept',
+      inReview: 'Wordt beoordeeld',
+      ready: 'Klaar',
       publishNow: 'Publiceer nu',
+      deployPreviewPendingButtonLabel: 'Controleer of voorvertoning geladen is',
+      deployPreviewButtonLabel: 'Bekijk voorvertoning',
+      deployButtonLabel: 'Bekijk Live',
     },
     editorWidgets: {
       markdown: {
@@ -186,6 +218,7 @@ const nl: LocalePhrasesRoot = {
       noResults: 'Geen resultaten.',
       noAssetsFound: 'Geen media gevonden.',
       noImagesFound: 'Geen afbeeldingen gevonden.',
+      private: 'Privé',
       images: 'Afbeeldingen',
       mediaAssets: 'Media',
       search: 'Zoeken...',
@@ -226,12 +259,44 @@ const nl: LocalePhrasesRoot = {
       missingRequiredField: 'Oeps, sommige verplichte velden zijn niet ingevuld.',
       entrySaved: 'Item opgeslagen',
       entryPublished: 'Item gepubliceerd',
+      entryUnpublished: 'Publicatie teruggetrokken',
       onFailToPublishEntry: 'Kan item niet publiceren: %{details}',
+      onFailToUnpublishEntry: 'Kan item niet terugtrekken: %{details}',
       entryUpdated: 'Status van item geüpdatet',
+      onDeleteUnpublishedChanges: 'Niet-gepubliceerde wijzigingen verwijderd',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Je bent uitgelogd, back-up alstublieft uw data log daarna in',
       onBackendDown:
         'De backend-service ondervindt een storing. Zie% {details} voor meer informatie',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'Redactionele Workflow items laden',
+      workflowHeading: 'Redactionele Workflow',
+      newPost: 'Nieuw bericht',
+      description:
+        '%{smart_count} item wacht op beoordeling, %{readyCount} klaar om live te gaan. |||| %{smart_count} items wachten op beoordeling, %{readyCount} klaar om live te gaan. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} door %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'door %{author}',
+      deleteChanges: 'Verwijder wijzigingen',
+      deleteNewEntry: 'Verwijder nieuw item',
+      publishChanges: 'Publiceer wijzigingen',
+      publishNewEntry: 'Publiceer nieuw item',
+    },
+    workflowList: {
+      onDeleteEntry: 'Weet u zeker dat u dit item wilt verwijderen?',
+      onPublishingNotReadyEntry:
+        'Alleen items met de status "Gereed" kunnen worden gepubliceerd. Sleep de kaart naar de kolom "Gereed" om publiceren mogelijk te maken.',
+      onPublishEntry: 'Weet u zeker dat u dit item wilt publiceren?',
+      draftHeader: 'Concepten',
+      inReviewHeader: 'Wordt beoordeeld',
+      readyHeader: 'Klaar',
+      currentEntries: '%{smart_count} item |||| %{smart_count} items',
     },
   },
 };

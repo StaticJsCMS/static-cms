@@ -4,6 +4,7 @@ const hu: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Tartalom',
+      workflow: 'Munkafolyamat',
       media: 'Média',
       quickAdd: 'Gyors hozzáadás',
     },
@@ -51,18 +52,34 @@ const hu: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Biztos hogy el akarod hagyni az oldalt?',
+      onUpdatingWithUnsavedChanges:
+        'Mentettlen változtatások vannak, kérjük, mentse az állapot frissítése előtt.',
+      onPublishingNotReady: 'Változtasd az állapotot "Kész"-re publikálás előtt.',
+      onPublishingWithUnsavedChanges:
+        'Mentetlen változtatások vannak, kérjük, mentsen a publikálás előtt.',
+      onPublishing: 'Publikálod ezt a bejegyzést?',
+      onUnpublishing: 'Publikálás visszavonása erre a bejegyzésre?',
       onDeleteWithUnsavedChangesBody:
         'Töröljük ezt a publikált bejegyzést, a többi mentetlen modositással együtt?',
       onDeletePublishedEntryBody: 'Töröljük ezt a publikált bejegyzést?',
+      onDeleteUnpublishedChangesWithUnsavedChanges:
+        'Ezzel törli a bejegyzés összes nem közzétett módosítását, valamint az aktuális munkamenetből nem mentett módosításokat. Még mindig törli?',
+      onDeleteUnpublishedChanges:
+        'A bejegyzés összes, nem közzétett módosítása törlődik. Még mindig törli?',
       loadingEntry: 'Bejegyzés betöltése...',
     },
     editorToolbar: {
+      publishing: 'Publikálás...',
       publish: 'Publikáció',
       published: 'Publikálás',
       unpublish: 'Publikálás visszavonása',
       duplicate: 'Duplikált',
+      unpublishing: 'Publikálás visszavonása...',
       publishAndCreateNew: 'Publikálás és új létrehozása',
       publishAndDuplicate: 'Publikálás és duplikál',
+      deleteUnpublishedChanges: 'Nempublikált változtatások törlése',
+      deleteUnpublishedEntry: 'Nempublikált bejegyzés törlése',
+      deletePublishedEntry: 'Publikált bejegyzés törlése',
       deleteEntry: 'Bejegyzés törlése',
       saving: 'Mentés...',
       save: 'Mentés',
@@ -76,6 +93,9 @@ const hu: LocalePhrasesRoot = {
       inReview: 'Felülvizsgálat alatt',
       ready: 'Kész',
       publishNow: 'Publikálás most',
+      deployPreviewPendingButtonLabel: 'Előnézet ellenörzése',
+      deployPreviewButtonLabel: 'Előnézet megtekintése',
+      deployButtonLabel: 'Élő megtekintése',
     },
     editorWidgets: {
       image: {
@@ -120,6 +140,7 @@ const hu: LocalePhrasesRoot = {
       noResults: 'Nincs találat.',
       noAssetsFound: 'Nem található tartalom.',
       noImagesFound: 'Nem található kép.',
+      private: 'Privát ',
       images: 'Képek',
       mediaAssets: 'Média tartalmak',
       search: 'Keresés...',
@@ -154,9 +175,41 @@ const hu: LocalePhrasesRoot = {
       missingRequiredField: 'Hoppá, kihagytál egy kötelező mezőt. Mentés előtt töltsd ki.',
       entrySaved: 'Bejegyzés elmentve',
       entryPublished: 'Bejegyzés publikálva',
+      entryUnpublished: 'Bejegyzés publikálása visszavonva',
       onFailToPublishEntry: 'Bejegyzés publikálása sikertelen: %{details}',
+      onFailToUnpublishEntry: 'Bejegyzés publikálásának visszavonása sikertelen: %{details}',
       entryUpdated: 'Bejegyzés állapota frissült',
+      onDeleteUnpublishedChanges: 'Unpublished changes deleted',
       onFailToAuth: '%{details}',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'A szerkesztési munkafolyamat-bejegyzések betöltése',
+      workflowHeading: 'Szerkesztői Folyamat',
+      newPost: 'New Post',
+      description:
+        '%{smart_count} bejegyzés felülvizsgálatra vár, %{readyCount} élesítésre vár. |||| %{smart_count} bejegyzés felülvizsgálatra vár, %{readyCount} élesítésre vár. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date}, írta %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: '%{author}',
+      deleteChanges: 'Változtatások törlése',
+      deleteNewEntry: 'Új bejegyzés törlése',
+      publishChanges: 'Változtatások publikálása',
+      publishNewEntry: 'Új bejegyzés publikálása',
+    },
+    workflowList: {
+      onDeleteEntry: 'Biztosan törli ezt a bejegyzést?',
+      onPublishingNotReadyEntry:
+        'Csak a "Kész" állapotú tételek tehetők közzé. A közzététel engedélyezéséhez húzza a kártyát a „Kész” oszlopba.',
+      onPublishEntry: 'Biztosan közzéteszi ezt a bejegyzést?',
+      draftHeader: 'Piszkozat',
+      inReviewHeader: 'Vizsgálat alatt',
+      readyHeader: 'Kész',
+      currentEntries: '%{smart_count} bejegyzés |||| %{smart_count} bejegyzések',
     },
   },
 };

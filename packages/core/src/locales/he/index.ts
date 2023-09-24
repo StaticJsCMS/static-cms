@@ -19,6 +19,7 @@ const he: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'תוכן',
+      workflow: 'ניהול אייטמים לפני הפרסום',
       media: 'מדיה',
       quickAdd: 'הוספה מהירה',
     },
@@ -97,9 +98,18 @@ const he: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'האם ברצונך לעבור לעמוד אחר ללא שמירה?',
+      onUpdatingWithUnsavedChanges: 'בוצעו שינויים שלא נשמרו. יש לבצע שמירה לפני עדכון מצב האייטם.',
+      onPublishingNotReady: 'נא לשנות את מצב האייטם ל״מוכן לפרסום״ לפני הפרסום.',
+      onPublishingWithUnsavedChanges: 'בוצעו שינויים שלא נשמרו. יש לבצע שמירה לפני הפרסום.',
+      onPublishing: 'האם ברצונך לפרסם את האייטם?',
+      onUnpublishing: 'האם ברצונך לבטל את פרסום האייטם?',
       onDeleteWithUnsavedChangesBody:
         'האם ברצונך למחוק את האייטם הזה לפני פרסומו, וכן את השינויים שבוצעו כעת וטרם נשמרו?',
       onDeletePublishedEntryBody: 'האם ברצונך למחוק את האייטם הזה לאחר פרסומו?',
+      onDeleteUnpublishedChangesWithUnsavedChanges:
+        'פעולה זו תמחק את כל השינויים שבוצעו באייטם זה ולא פורסמו, וכן את השינויים שבוצעו כעת וטרם נשמרו. האם ברצונך למחוק?',
+      onDeleteUnpublishedChanges:
+        'כל השינויים שבוצעו באייטם זה ולא פורסמו יימחקו. האם ברצונך למחוק אותו?',
       loadingEntry: 'טעינת אייטם...',
     },
     editorInterface: {
@@ -108,14 +118,37 @@ const he: LocalePhrasesRoot = {
       toggleScrollSync: 'סנכרון הגלילה',
     },
     editorToolbar: {
+      publishing: 'פרסום...',
       publish: 'פרסום',
       published: 'פורסם',
       unpublish: 'ביטול הפרסום',
       duplicate: 'שכפול',
+      unpublishing: 'ביטול הפרסום...',
       publishAndCreateNew: 'פרסום ויצירת אייטם חדש',
       publishAndDuplicate: 'פרסום ושכפול',
+      deleteUnpublishedChanges: 'מחיקת השינויים שלא פורסמו',
+      deleteUnpublishedEntry: 'מחיקת אייטם שטרם פורסם',
+      deletePublishedEntry: 'מחיקת אייטם שפורסם',
       deleteEntry: 'מחיקת האייטם',
+      saving: 'שמירה...',
+      save: 'שמירה',
+      statusInfoTooltipDraft:
+        'האייטם מוגדר כטיוטה. כדי להשלים את הפעולה ולהעביר אותו למצב ״ממתין לאישור״ יש להעביר אותו למצב ״ממתין לאישור״',
+      statusInfoTooltipInReview:
+        'האייטם ממתין לאישור - לא נדרשת פעולה נוספת. ניתן עדיין לבצע שינויים בעת שהאייטם ממתין לאישור.',
+      deleting: 'מחיקה...',
+      updating: 'עדכון...',
+      status: 'מצב: %{status}',
+      backCollection: 'כתיבה בקטגוריית %{collectionLabel}',
+      unsavedChanges: 'שינויים לא שמורים',
+      changesSaved: 'השינויים נשמרו',
+      draft: 'טיוטה',
+      inReview: 'ממתין לאישור',
+      ready: 'מוכן לפרסום',
       publishNow: 'פרסום מיידי',
+      deployPreviewPendingButtonLabel: 'בדיקת תצוגה מקדימה',
+      deployPreviewButtonLabel: 'צפייה בתצוגה מקדימה',
+      deployButtonLabel: 'צפייה באתר',
     },
     editorWidgets: {
       markdown: {
@@ -189,6 +222,7 @@ const he: LocalePhrasesRoot = {
       noResults: 'לא נמצאו תוצאות.',
       noAssetsFound: 'לא נמצאו קבצים.',
       noImagesFound: 'לא נמצאו תמונות.',
+      private: 'פרטי ',
       images: 'תמונות',
       mediaAssets: 'קבצי מדיה',
       search: 'חיפוש...',
@@ -229,12 +263,43 @@ const he: LocalePhrasesRoot = {
       missingRequiredField: 'אופס, שכחת למלא שדה חובה. נא להשלים את המידע החסר לפני השמירה',
       entrySaved: 'האייטם נשמר',
       entryPublished: 'האייטם פורסם',
+      entryUnpublished: 'האייטם הועבר לטיוטות',
       onFailToPublishEntry: 'פרסום האייטם %{details} נכשל',
       onFailToUnpublishEntry: 'ביטול פרסום האייטם %{details} נכשל',
       entryUpdated: 'מצב האייטם עודכן',
+      onDeleteUnpublishedChanges: 'השינויים שלא פורסמו נמחקו',
       onFailToAuth: '%{details}',
       onLoggedOut: 'נותקת מהמערכת. יש לגבות מידע לא שמור ולהתחבר שוב',
       onBackendDown: 'ה-backend המוגדר אינו זמין. ראו %{details} למידע נוסף',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'טעינת אייטמים',
+      workflowHeading: 'ניהול אייטמים לפני הפרסום',
+      newPost: 'אייטם חדש',
+      description:
+        '%אייטם {smart_count} ממתין לאישור, אייטם %{readyCount} מוכן לפרסום |||| %{smart_count} אייטמים ממתינים לאישור, %{readyCount} מוכנים לפרסום',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} מאת %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'מאת %{author}',
+      deleteChanges: 'למחוק את השינויים',
+      deleteNewEntry: 'למחוק אייטם חדש',
+      publishChanges: 'פרסום השינויים',
+      publishNewEntry: 'פרסום אייטם חדש',
+    },
+    workflowList: {
+      onDeleteEntry: 'האם ברצונך למחוק אייטם זה?',
+      onPublishingNotReadyEntry:
+        'ניתן לפרסם רק אייטמים שנמצאים במצב ״מוכן לפרסום״. נא לגרור את האייטם לטור ״מוכן לפרסום״ כדי לפרסם.',
+      onPublishEntry: 'האם ברצונך לפרסם אייטם זה?',
+      draftHeader: 'טיוטות',
+      inReviewHeader: 'ממתין לאישור',
+      readyHeader: 'מוכן לפרסום',
+      currentEntries: 'אייטם %{smart_count} |||| %{smart_count} אייטמים',
     },
   },
 };

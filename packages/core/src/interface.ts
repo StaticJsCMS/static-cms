@@ -230,6 +230,7 @@ export interface CollectionFile<EF extends BaseField = UnknownField> {
   media_library?: MediaLibraryConfig;
   i18n?: boolean | Partial<I18nInfo>;
   editor?: EditorConfig;
+  publish?: boolean;
 }
 
 interface Nested {
@@ -289,6 +290,7 @@ export interface FolderCollection<EF extends BaseField = UnknownField> extends B
   folder: string;
   fields: Field<EF>[];
   create?: boolean;
+  publish?: boolean;
   delete?: boolean;
   nested?: Nested;
   meta?: {

@@ -123,6 +123,18 @@ export function selectAllowDeletion<EF extends BaseField>(collection: Collection
   return false;
 }
 
+export function selectAllowPublish<EF extends BaseField>(
+  collection: Collection<EF>,
+  slug: string | undefined,
+) {
+  const file = fileForEntry(collection, slug);
+  if (file) {
+    return file.publish;
+  }
+
+  return 'publish' in collection ? collection.publish ?? true : true;
+}
+
 export function selectTemplateName<EF extends BaseField>(collection: Collection<EF>, slug: string) {
   if ('fields' in collection) {
     return collection.name;

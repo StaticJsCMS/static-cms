@@ -19,6 +19,7 @@ const pl: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Treść',
+      workflow: 'Przebieg redakcyjny',
       media: 'Multimedia',
       quickAdd: 'Szybkie dodawanie',
     },
@@ -97,9 +98,19 @@ const pl: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Czy na pewno chcesz opuścić tę stronę?',
+      onUpdatingWithUnsavedChanges:
+        'Masz niezapisane zmiany, proszę zapisz je przed aktualizacją statusu.',
+      onPublishingNotReady: 'Proszę zaktualizować status do "Gotowe" przed publikacją.',
+      onPublishingWithUnsavedChanges: 'Masz niezapisane zmiany, proszę zapisz je przed publikacją.',
+      onPublishing: 'Czy na pewno chcesz opublikować tę pozycję?',
+      onUnpublishing: 'Czy na pewno chcesz cofnąć publikację tej pozycji?',
       onDeleteWithUnsavedChangesBody:
         'Czy na pewno chcesz usunąć tę opublikowaną pozycję, a także niezapisane zmiany z bieżącej sesji?',
       onDeletePublishedEntryBody: 'Czy na pewno chcesz usunąć tę opublikowaną pozycję?',
+      onDeleteUnpublishedChangesWithUnsavedChanges:
+        'Spowoduje to usunięcie wszystkich nieopublikowanych zmian tej pozycji, a także niezapisanych zmian z bieżącej sesji. Czy nadal chcesz usunąć?',
+      onDeleteUnpublishedChanges:
+        'Wszystkie nieopublikowane zmiany tej pozycji zostaną usunięte. Czy nadal chcesz usunąć?',
       loadingEntry: 'Ładowanie pozycji...',
     },
     editorInterface: {
@@ -108,14 +119,37 @@ const pl: LocalePhrasesRoot = {
       toggleScrollSync: 'Synchroniczne przesuwanie',
     },
     editorToolbar: {
+      publishing: 'Publikowanie...',
       publish: 'Opublikuj',
       published: 'Opublikowane',
       unpublish: 'Cofnij publikację',
       duplicate: 'Zduplikuj',
+      unpublishing: 'Cofanie publikacji...',
       publishAndCreateNew: 'Opublikuj i dodaj nowy',
       publishAndDuplicate: 'Opublikuj i zduplikuj',
+      deleteUnpublishedChanges: 'Usuń nieopublikowane zmiany',
+      deleteUnpublishedEntry: 'Usuń nieopublikowaną pozycję',
+      deletePublishedEntry: 'Usuń opublikowaną pozycję',
       deleteEntry: 'Usuń pozycję',
+      saving: 'Zapisywanie...',
+      save: 'Zapisz',
+      statusInfoTooltipDraft:
+        'Dodano jako wersję roboczą. Aby zakończyć i oddać do recenzji zmień status na `Do recenzji`',
+      statusInfoTooltipInReview:
+        'Wpis jest w trakcie recenzji, żadne dodatkowe akcje nie są wymagane. Jeśli chcesz, możesz jeszcze nanieść zmiany.',
+      deleting: 'Usuwanie...',
+      updating: 'Uaktualnianie...',
+      status: 'Status: %{status}',
+      backCollection: ' Edycja treści w zbiorze %{collectionLabel}',
+      unsavedChanges: 'Niezapisane zmiany',
+      changesSaved: 'Zmiany zapisane',
+      draft: 'Wersja robocza',
+      inReview: 'W recenzji',
+      ready: 'Gotowe',
       publishNow: 'Opublikuj teraz',
+      deployPreviewPendingButtonLabel: 'Sprawdź, czy istnieje podgląd',
+      deployPreviewButtonLabel: 'Zobacz podgląd',
+      deployButtonLabel: 'Zobacz na żywo',
     },
     editorWidgets: {
       markdown: {
@@ -189,6 +223,7 @@ const pl: LocalePhrasesRoot = {
       noResults: 'Brak wyników.',
       noAssetsFound: 'Nie znaleziono żadnych zasobów.',
       noImagesFound: 'Nie znaleziono żadnych obrazów.',
+      private: 'Prywatne ',
       images: 'Obrazy',
       mediaAssets: 'Zasoby multimedialne',
       search: 'Szukaj...',
@@ -229,11 +264,44 @@ const pl: LocalePhrasesRoot = {
       missingRequiredField: 'Ups, przegapiłeś wymagane pole. Proszę uzupełnij przed zapisaniem.',
       entrySaved: 'Pozycja zapisana',
       entryPublished: 'Pozycja opublikowana',
+      entryUnpublished: 'Cofnięto publikację pozycji',
       onFailToPublishEntry: 'Nie udało się opublikować: %{details}',
+      onFailToUnpublishEntry: 'Nie udało się cofnąć publikacji pozycji: %{details}',
       entryUpdated: 'Zaktualizowano status pozycji',
+      onDeleteUnpublishedChanges: 'Nieopublikowane zmiany zostały usunięte',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Zostałeś wylogowany, utwórz kopię zapasową danych i zaloguj się ponownie.',
       onBackendDown: 'Usługa backendu uległa awarii. Zobacz więcej informacji: %{details}',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'Ładowanie pozycji przebiegu redakcyjnego',
+      workflowHeading: 'Przebieg redakcyjny',
+      newPost: 'Nowa pozycja',
+      description:
+        '%{smart_count} pozycja oczekuje na recenzję, %{readyCount} oczekuje na publikacje. |||| %{smart_count} pozycje oczekują na recenzję, %{readyCount} oczekuje na publikacje. |||| %{smart_count} pozycji oczekuje na recenzje, %{readyCount} oczekuje na publikacje. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} przez %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'przez %{author}',
+      deleteChanges: 'Usuń zmiany',
+      deleteNewEntry: 'Usuń nową pozycję',
+      publishChanges: 'Opublikuj zmiany',
+      publishNewEntry: 'Opublikuj nową pozycję',
+    },
+    workflowList: {
+      onDeleteEntry: 'Czy na pewno chcesz usunąć tę pozycję?',
+      onPublishingNotReadyEntry:
+        'Tylko pozycje o statusie „Gotowe” mogą być publikowane. Przeciągnij proszę kartę do kolumny „Gotowe do publikacji”, aby umożliwić publikowanie.',
+      onPublishEntry: 'Czy na pewno chcesz opublikować tę pozycję?',
+      draftHeader: 'Wersje robocze',
+      inReviewHeader: 'W recenzji',
+      readyHeader: 'Gotowe do publikacji',
+      currentEntries:
+        '%{smart_count} pozycja |||| %{smart_count} pozycje |||| %{smart_count} pozycji',
     },
   },
 };

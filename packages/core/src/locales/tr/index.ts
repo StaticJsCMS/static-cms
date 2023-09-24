@@ -19,6 +19,7 @@ const tr: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'İçerikler',
+      workflow: 'İş Akışı',
       media: 'Medya',
       quickAdd: 'Hızlı ekle',
     },
@@ -94,13 +95,27 @@ const tr: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: '%{locale} için yazılıyor',
+        copyFromLocale: 'Başka bir dilden doldurun',
+        copyFromLocaleConfirm:
+          'Verileri %{locale} dilinden mi doldurmak istiyorsun?\nVarolan bütün verilerin üzerine yazılacak.',
       },
     },
     editor: {
       onLeavePage: 'Bu sayfadan ayrılmak istediğinize emin misiniz?',
+      onUpdatingWithUnsavedChanges:
+        'Kaydedilmemiş değişiklikleriniz var, lütfen içeriği güncellemeden önce kaydedin.',
+      onPublishingNotReady: 'Lütfen yayınlamadan önce içeriği "Hazır" olarak güncelleyin.',
+      onPublishingWithUnsavedChanges:
+        'Kaydedilmemiş değişiklikleriniz var, lütfen yayınlamadan önce kaydedin.',
+      onPublishing: 'Bu girdiyi yayınlamak istediğinize emin misiniz?',
+      onUnpublishing: 'Bu girdiyi yayından kaldırmak istediğinizden emin misiniz?',
       onDeleteWithUnsavedChangesBody:
         'Bu oturumda kaydedilmiş değişikliklerin yanı sıra geçerli oturumdaki kaydedilmemiş değişikliklerinizi silmek istediğinize emin misiniz?',
       onDeletePublishedEntryBody: 'Bu yayınlanmış girdiyi silmek istediğinize emin misiniz?',
+      onDeleteUnpublishedChangesWithUnsavedChanges:
+        'Bu girdide yayınlanmamış tüm değişiklikleri ve geçerli oturumdaki kaydedilmemiş değişikliklerinizi siler. Hala silmek istiyor musun?',
+      onDeleteUnpublishedChanges:
+        'Bu girdide yayınlanmamış tüm değişiklikler silinecek. Hala silmek istiyor musun?',
       loadingEntry: 'Girdiler yükleniyor...',
     },
     editorInterface: {
@@ -109,14 +124,37 @@ const tr: LocalePhrasesRoot = {
       toggleScrollSync: 'Kaydırmayı senkronize et',
     },
     editorToolbar: {
+      publishing: 'Yayınlanıyor...',
       publish: 'Yayınla',
       published: 'Yayınlanan',
       unpublish: 'Yayından Kaldır',
       duplicate: 'Kopyala',
+      unpublishing: 'Yayından kaldırılıyor...',
       publishAndCreateNew: 'Yayınla ve yeni oluştur',
       publishAndDuplicate: 'Yayınla ve kopya oluştur',
+      deleteUnpublishedChanges: 'Yayımlanmamış değişiklikleri sil',
+      deleteUnpublishedEntry: 'Yayımlanmamış girdiyi sil',
+      deletePublishedEntry: 'Yayınlanan girdiyi sil',
       deleteEntry: 'Girdiyi sil',
+      saving: 'Kaydediliyor...',
+      save: 'Kaydet',
+      statusInfoTooltipDraft:
+        'Giriş durumu taslak olarak ayarlandı. Girişi bitirmek ve incelemeye göndermek için giriş durumunu ‘İncelemede’ olarak ayarlayın',
+      statusInfoTooltipInReview:
+        'Giriş gözden geçiriliyor, başka bir işlem yapılmasına gerek yok. Ancak, incelenirken yine de ek değişiklikler yapabilirsiniz.',
+      deleting: 'Siliniyor...',
+      updating: 'Güncelleniyor...',
+      status: 'Durumu: %{status}',
+      backCollection: ' %{collectionLabel} koleksiyonunda yazılı',
+      unsavedChanges: 'Kaydedilmemiş Değişiklikler',
+      changesSaved: 'Değişiklikler kaydedildi',
+      draft: 'Taslak',
+      inReview: 'İncelemede',
+      ready: 'Hazır',
       publishNow: 'Şimdi yayımla',
+      deployPreviewPendingButtonLabel: 'Önizlemeyi Denetle',
+      deployPreviewButtonLabel: 'Önizlemeyi Görüntüle',
+      deployButtonLabel: 'Canlı Görüntüle',
     },
     editorWidgets: {
       markdown: {
@@ -191,6 +229,7 @@ const tr: LocalePhrasesRoot = {
       noResults: 'Sonuç yok.',
       noAssetsFound: 'Hiçbir dosya bulunamadı.',
       noImagesFound: 'Resim bulunamadı.',
+      private: 'Özel ',
       images: 'Görseller',
       mediaAssets: 'Medya dosyaları',
       search: 'Ara...',
@@ -231,12 +270,44 @@ const tr: LocalePhrasesRoot = {
       missingRequiredField: 'Gerekli bir alan eksik. Lütfen kaydetmeden önce tamamlayın.',
       entrySaved: 'Girdi kaydedildi',
       entryPublished: 'Girdi yayınlandı',
+      entryUnpublished: 'Girdi yayınlanmamış',
       onFailToPublishEntry: 'Yayınlanamadı: %{details}',
+      onFailToUnpublishEntry: 'Girdi yayından kaldırılamadı: %{details}',
       entryUpdated: 'Girdi durumu güncellendi',
+      onDeleteUnpublishedChanges: 'Yayımlanmamış değişiklikler silindi',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Çıkış yaptınız, lütfen tüm verileri yedekleyin ve tekrar giriş yapın',
       onBackendDown:
         'Arka uç hizmetinde bir kesinti yaşanıyor. Daha fazla bilgi için %{details} gör',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'İş Akışı Girdileri Yükleniyor',
+      workflowHeading: 'Editoryal İş Akışı',
+      newPost: 'Yeni Mesaj',
+      description:
+        '%{smart_count} girdi incelemeyi bekliyor, %{readyCount} yayına hazır. |||| %{smart_count} girdi incelemeyi bekliyor, %{readyCount} yayınlanmaya hazır. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} tarafından %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: '%{author} tarafından',
+      deleteChanges: 'Değişiklikleri sil',
+      deleteNewEntry: 'Yeni girdiyi sil',
+      publishChanges: 'Değişiklikleri yayınla',
+      publishNewEntry: 'Yeni girdi yayınla',
+    },
+    workflowList: {
+      onDeleteEntry: 'Bu girdiyi silmek istediğinize emin misiniz?',
+      onPublishingNotReadyEntry:
+        'Yalnızca "Hazır" durumu olan öğeler yayınlanabilir. Lütfen yayınlamayı etkinleştirmek için kartı "Hazır" sütununa sürükleyin.',
+      onPublishEntry: 'Bu girdiyi yayınlamak istediğinize emin misiniz?',
+      draftHeader: 'Taslaklar',
+      inReviewHeader: 'İncelemede',
+      readyHeader: 'Hazır',
+      currentEntries: '%{smart_count} girdi |||| %{smart_count} girdiler',
     },
   },
 };

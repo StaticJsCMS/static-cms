@@ -22,6 +22,7 @@ const en: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Contents',
+      workflow: 'Workflow',
       media: 'Media',
       quickAdd: 'Quick add',
     },
@@ -100,15 +101,27 @@ const en: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Writing in %{locale}',
+        copyFromLocale: 'Fill in from another locale',
+        copyFromLocaleConfirm:
+          'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.',
       },
     },
     editor: {
       onLeavePage: 'Are you sure you want to leave this page?',
+      onUpdatingWithUnsavedChanges: 'You have unsaved changes, please save before updating status.',
+      onPublishingNotReady: 'Please update status to "Ready" before publishing.',
+      onPublishingWithUnsavedChanges: 'You have unsaved changes, please save before publishing.',
+      onPublishing: 'Are you sure you want to publish this entry?',
+      onUnpublishing: 'Are you sure you want to unpublish this entry?',
       onDeleteWithUnsavedChangesTitle: 'Delete this published entry?',
       onDeleteWithUnsavedChangesBody:
         'Are you sure you want to delete this published entry, as well as your unsaved changes from the current session?',
       onDeletePublishedEntryTitle: 'Delete this published entry?',
       onDeletePublishedEntryBody: 'Are you sure you want to delete this published entry?',
+      onDeleteUnpublishedChangesWithUnsavedChanges:
+        'This will delete all unpublished changes to this entry, as well as your unsaved changes from the current session. Do you still want to delete?',
+      onDeleteUnpublishedChanges:
+        'All unpublished changes to this entry will be deleted. Do you still want to delete?',
       loadingEntry: 'Loading entry...',
     },
     editorInterface: {
@@ -119,13 +132,37 @@ const en: LocalePhrasesRoot = {
       toggleScrollSync: 'Sync scrolling',
     },
     editorToolbar: {
+      publishing: 'Publishing...',
       publish: 'Publish',
       published: 'Published',
+      unpublish: 'Unpublish',
       duplicate: 'Duplicate',
+      unpublishing: 'Unpublishing...',
       publishAndCreateNew: 'Publish and create new',
       publishAndDuplicate: 'Publish and duplicate',
+      deleteUnpublishedChanges: 'Delete unpublished changes',
+      deleteUnpublishedEntry: 'Delete unpublished entry',
+      deletePublishedEntry: 'Delete published entry',
       deleteEntry: 'Delete entry',
+      saving: 'Saving...',
+      save: 'Save',
+      statusInfoTooltipDraft:
+        'Entry status is set to draft. To finalize and submit it for review, set the status to ‘In review’',
+      statusInfoTooltipInReview:
+        'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.',
+      deleting: 'Deleting...',
+      updating: 'Updating...',
+      status: 'Status: %{status}',
+      backCollection: ' Writing in %{collectionLabel} collection',
+      unsavedChanges: 'Unsaved Changes',
+      changesSaved: 'Changes saved',
+      draft: 'Draft',
+      inReview: 'In review',
+      ready: 'Ready',
       publishNow: 'Publish now',
+      deployPreviewPendingButtonLabel: 'Check for Preview',
+      deployPreviewButtonLabel: 'View Preview',
+      deployButtonLabel: 'View Live',
       discardChanges: 'Discard changes',
       discardChangesTitle: 'Discard changes',
       discardChangesBody: 'Are you sure you want to discard the unsaved changed?',
@@ -232,6 +269,7 @@ const en: LocalePhrasesRoot = {
       noResults: 'No results.',
       noAssetsFound: 'No assets found.',
       noImagesFound: 'No images found.',
+      private: 'Private ',
       images: 'Images',
       mediaAssets: 'Media assets',
       search: 'Search...',
@@ -284,6 +322,7 @@ const en: LocalePhrasesRoot = {
     },
     toast: {
       onFailToLoadEntries: 'Failed to load entry: %{details}',
+      onFailToLoadDeployPreview: 'Failed to load preview: %{details}',
       onFailToPersist: 'Failed to persist entry: %{details}',
       onFailToPersistMedia: 'Failed to persist media: %{details}',
       onFailToDelete: 'Failed to delete entry: %{details}',
@@ -292,12 +331,44 @@ const en: LocalePhrasesRoot = {
       missingRequiredField: "Oops, you've missed a required field. Please complete before saving.",
       entrySaved: 'Entry saved',
       entryPublished: 'Entry published',
+      entryUnpublished: 'Entry unpublished',
       onFailToPublishEntry: 'Failed to publish: %{details}',
+      onFailToUnpublishEntry: 'Failed to unpublish entry: %{details}',
       entryUpdated: 'Entry status updated',
+      onDeleteUnpublishedChanges: 'Unpublished changes deleted',
       onFailToAuth: '%{details}',
       onLoggedOut: 'You have been logged out, please back up any data and login again',
       onBackendDown:
         'The backend service is experiencing an outage. See %{details} for more information',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'Loading Editorial Workflow Entries',
+      workflowHeading: 'Editorial Workflow',
+      newPost: 'New Post',
+      description:
+        '%{smart_count} entry waiting for review, %{readyCount} ready to go live. |||| %{smart_count} entries waiting for review, %{readyCount} ready to go live. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} by %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'by %{author}',
+      deleteChanges: 'Delete changes',
+      deleteNewEntry: 'Delete new entry',
+      publishChanges: 'Publish changes',
+      publishNewEntry: 'Publish new entry',
+    },
+    workflowList: {
+      onDeleteEntry: 'Are you sure you want to delete this entry?',
+      onPublishingNotReadyEntry:
+        'Only items with a "Ready" status can be published. Please drag the card to the "Ready" column to enable publishing.',
+      onPublishEntry: 'Are you sure you want to publish this entry?',
+      draftHeader: 'Drafts',
+      inReviewHeader: 'In Review',
+      readyHeader: 'Ready',
+      currentEntries: '%{smart_count} entry |||| %{smart_count} entries',
     },
   },
 };
