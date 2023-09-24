@@ -2,5 +2,6 @@
   @apply border-l-2
     border-gray-400
     ml-2
-    pl-2;
+    pl-2
+    my-2;
 }
