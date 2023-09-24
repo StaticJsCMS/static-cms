@@ -14,6 +14,9 @@ function moduleNameToPath(libName) {
 
 const config = {
   mode: isProduction ? 'production' : 'development',
+  optimization: {
+    minimize: false,
+  },
   devtool: 'source-map',
   externals: isProduction
     ? {

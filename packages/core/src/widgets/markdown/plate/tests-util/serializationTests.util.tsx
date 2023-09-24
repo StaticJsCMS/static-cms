@@ -75,14 +75,13 @@ const serializationTestData: SerializationTests = {
       },
 
       'paragraph with line break': {
-        markdown: `A line of text
-With another in the same paragraph`,
+        markdown: `A line of text with another in the same paragraph`,
         slate: [
           {
             type: ELEMENT_PARAGRAPH,
             children: [
               {
-                text: 'A line of text\nWith another in the same paragraph',
+                text: 'A line of text with another in the same paragraph',
               },
             ],
           },
@@ -234,20 +233,6 @@ And a completely new paragraph`,
         ],
       },
 
-      'multiline blockquote': {
-        markdown: '> I am a block quote\n> And another line',
-        slate: [
-          {
-            type: ELEMENT_BLOCKQUOTE,
-            children: [
-              {
-                text: 'I am a block quote\nAnd another line',
-              },
-            ],
-          },
-        ],
-      },
-
       'nested blockquote': {
         markdown: '> I am a block quote\n> > And another line',
         slate: [
@@ -268,6 +253,116 @@ And a completely new paragraph`,
             ],
           },
         ] as MdValue,
+      },
+
+      'multiline blockquote (double space and carrot each line)': {
+        markdown: '> One line  \n> Another line',
+        slate: [
+          {
+            type: ELEMENT_BLOCKQUOTE,
+            children: [
+              {
+                text: 'One line\nAnother line',
+              },
+            ],
+          },
+        ] as MdValue,
+      },
+
+      'multiline blockquote (empty line carrot)': {
+        markdown: '> One line\n>\n> Another line',
+        slate: [
+          {
+            type: ELEMENT_BLOCKQUOTE,
+            children: [
+              {
+                text: 'One line\n\nAnother line',
+              },
+            ],
+          },
+        ] as MdValue,
+      },
+
+      'sequential blockquote': {
+        markdown: `> I am a block quote
+
+> And another block quote`,
+        slate: [
+          {
+            type: ELEMENT_BLOCKQUOTE,
+            children: [
+              {
+                text: 'I am a block quote',
+              },
+            ],
+          },
+          {
+            type: ELEMENT_BLOCKQUOTE,
+            children: [
+              {
+                text: 'And another block quote',
+              },
+            ],
+          },
+        ] as MdValue,
+      },
+
+      'blockquote with link': {
+        // First line has double space
+        markdown: `> I am a [block quote](https://example.com/). Another line
+>
+> Final Line`,
+        slate: [
+          {
+            type: ELEMENT_BLOCKQUOTE,
+            children: [
+              {
+                text: 'I am a ',
+              },
+              {
+                type: ELEMENT_LINK,
+                url: 'https://example.com/',
+                children: [
+                  {
+                    text: 'block quote',
+                  },
+                ],
+              },
+              {
+                text: '. Another line\n\nFinal Line',
+              },
+            ],
+          },
+        ],
+      },
+
+      'blockquote with link (no punctuation)': {
+        // First line has double space
+        markdown: `> I am a [block quote](https://example.com/) and another line
+>
+> Final Line`,
+        slate: [
+          {
+            type: ELEMENT_BLOCKQUOTE,
+            children: [
+              {
+                text: 'I am a ',
+              },
+              {
+                type: ELEMENT_LINK,
+                url: 'https://example.com/',
+                children: [
+                  {
+                    text: 'block quote',
+                  },
+                ],
+              },
+              {
+                text: ' and another line\n\nFinal Line',
+              },
+            ],
+          },
+        ],
       },
     },
   },
@@ -1543,8 +1638,7 @@ label: 'Blog post content',
 widget: 'markdown',
 \`\`\`
 
-> See the table below for default options
-> More API information can be found in the document
+> See the table below for default options  \n> More API information can be found in the document
 
 |Name|Type|Default|Description|
 |---|---|---|---|
@@ -2683,8 +2777,86 @@ Text ahead [youtube|p6h-rYSVX90] and behind and another {{< twitter 917359331535
 };
 
 export const deserializationOnlyTestData: SerializationTests = {
+  blcokquote: {
+    both: {
+      'blockquote with link': {
+        // First line has double space
+        markdown: `> I am a [block quote](https://example.com/).
+> Another line
+>
+> Final Line`,
+        slate: [
+          {
+            type: ELEMENT_BLOCKQUOTE,
+            children: [
+              {
+                text: 'I am a ',
+              },
+              {
+                type: ELEMENT_LINK,
+                url: 'https://example.com/',
+                children: [
+                  {
+                    text: 'block quote',
+                  },
+                ],
+              },
+              {
+                text: '. Another line\n\nFinal Line',
+              },
+            ],
+          },
+        ],
+      },
+
+      'multiline blockquote (carrot each line)': {
+        markdown: `> One line
+> Another line`,
+        slate: [
+          {
+            type: ELEMENT_BLOCKQUOTE,
+            children: [
+              {
+                text: 'One line Another line',
+              },
+            ],
+          },
+        ] as MdValue,
+      },
+
+      'multiline blockquote (double space)': {
+        markdown: '> One line  \nAnother line',
+        slate: [
+          {
+            type: ELEMENT_BLOCKQUOTE,
+            children: [
+              {
+                text: 'One line\nAnother line',
+              },
+            ],
+          },
+        ] as MdValue,
+      },
+    },
+  },
+
   paragraph: {
     markdown: {
+      'paragraph with line break': {
+        markdown: `A line of text
+With another in the same paragraph`,
+        slate: [
+          {
+            type: ELEMENT_PARAGRAPH,
+            children: [
+              {
+                text: 'A line of text With another in the same paragraph',
+              },
+            ],
+          },
+        ],
+      },
+
       'paragraph with link': {
         markdown:
           'A line of text with a link https://www.youtube.com/watch?v=p6h-rYSVX90 and some more text',

@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "date": "2023-09-24T10:00:00.000Z",
+      "version": "v3.3.3",
+      "type": "patch"
+    },
+    {
+      "date": "2023-09-21T10:00:00.000Z",
+      "version": "v3.3.2",
+      "type": "patch"
+    },
+    {
       "date": "2023-09-14T10:00:00.000Z",
       "version": "v3.3.1",
       "type": "patch"

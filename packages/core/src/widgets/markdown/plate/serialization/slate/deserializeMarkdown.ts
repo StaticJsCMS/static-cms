@@ -92,6 +92,8 @@ export interface Options {
   isInTable?: boolean;
   isInLink?: boolean;
   isInTableHeaderRow?: boolean;
+  isInBlockquote?: boolean;
+  isInList?: boolean;
   tableAlign?: (string | null)[];
   useMdx: boolean;
   shortcodeConfigs: Record<string, ShortcodeConfig>;
@@ -105,6 +107,8 @@ export default function deserializeMarkdown(node: MdastNode, options: Options) {
     isInTable = false,
     isInLink = false,
     isInTableHeaderRow = false,
+    isInBlockquote = false,
+    isInList = false,
     tableAlign,
     useMdx,
     shortcodeConfigs,
@@ -114,6 +118,8 @@ export default function deserializeMarkdown(node: MdastNode, options: Options) {
   const selfIsTable = node.type === 'table';
   const selfIsLink = node.type === 'link';
   const selfIsTableHeaderRow = node.type === 'tableRow' && index === 0;
+  const selfIsBlockquote = node.type === 'blockquote';
+  const selfIsList = node.type === 'list';
 
   const nodeChildren = node.children;
   if (nodeChildren && Array.isArray(nodeChildren) && nodeChildren.length > 0) {
@@ -128,6 +134,8 @@ export default function deserializeMarkdown(node: MdastNode, options: Options) {
             isInTable: selfIsTable || isInTable,
             isInLink: selfIsLink || isInLink,
             isInTableHeaderRow: selfIsTableHeaderRow || isInTableHeaderRow,
+            isInBlockquote: selfIsBlockquote || isInBlockquote,
+            isInList: selfIsList || isInList,
             useMdx,
             shortcodeConfigs,
             index: childIndex,
@@ -181,7 +189,25 @@ export default function deserializeMarkdown(node: MdastNode, options: Options) {
       } as ListItemNode;
 
     case 'paragraph':
-      if ('ordered' in node) {
+      if (isInBlockquote || isInList) {
+        if (isInBlockquote && index > 0) {
+          if (children.length > 0) {
+            let firstChild = children[0];
+            if ('text' in firstChild) {
+              firstChild = { text: `\n\n${firstChild.text}` };
+            }
+
+            if (children.length > 1) {
+              const [_, ...rest] = children;
+              return [firstChild, ...rest];
+            }
+
+            return [firstChild];
+          }
+
+          return children;
+        }
+
         return children;
       }
 
@@ -212,7 +238,20 @@ export default function deserializeMarkdown(node: MdastNode, options: Options) {
       } as ImageNode;
 
     case 'blockquote':
-      return { type: NodeTypes.block_quote, children } as BlockQuoteNode;
+      const blockquoteChildren = children.reduce((acc, n) => {
+        const lastNode = acc.length > 0 ? acc[acc.length - 1] : null;
+        if (lastNode && 'text' in lastNode && lastNode.text && 'text' in n && n.text) {
+          acc[acc.length - 1] = {
+            text: `${lastNode.text}${n.text}`,
+          };
+        } else {
+          acc.push(n);
+        }
+
+        return acc;
+      }, [] as DeserializedNode[]);
+
+      return { type: NodeTypes.block_quote, children: blockquoteChildren } as BlockQuoteNode;
 
     case 'code':
       return {
@@ -230,7 +269,7 @@ export default function deserializeMarkdown(node: MdastNode, options: Options) {
           children: [{ text: node.value?.replace(/<br>/g, '') || '' }],
         } as ParagraphNode;
       }
-      return { type: 'p', children: [{ text: node.value || '' }] };
+      return { type: 'p', children: [{ text: node.value ?? '' }] };
 
     case 'emphasis':
       return {
@@ -285,7 +324,7 @@ export default function deserializeMarkdown(node: MdastNode, options: Options) {
         }
       }
 
-      return { text: node.value || '' };
+      return { text: node.value ?? '' };
 
     case 'mdxJsxTextElement':
       if ('name' in node && node.type === 'mdxJsxTextElement') {
@@ -344,26 +383,37 @@ export default function deserializeMarkdown(node: MdastNode, options: Options) {
         }
       }
 
-      return { text: node.value || '' };
+      return { text: node.value ?? '' };
+
+    case 'break':
+      return { text: '\n' };
 
     case 'text':
       if (useMdx) {
-        return { text: node.value || '' };
+        return { text: (node.value ?? '').replace(/(?<![\n]|[ ]{2})[\n]{1}([^\n])/g, ' $1') };
       }
 
       if (!node.value) {
         return { text: '' };
       }
 
-      const nodes = autoLinkToSlate(
+      let nodes = autoLinkToSlate(
         processShortcodeConfigsToSlate(shortcodeConfigs, [node]),
         isInLink,
       );
 
-      return nodes.map(node => (node.type === 'text' ? { text: node.value ?? '' } : node));
+      nodes = nodes.map(n => {
+        if (n.type !== 'text') {
+          return n;
+        }
+
+        return { text: (n.value ?? '').replace(/(?<![\n]|[ ]{2})[\n]{1}([^\n])/g, ' $1') };
+      });
+
+      return nodes;
 
     default:
       console.warn('[StaticCMS] Unrecognized mdast node, proceeding as text', node);
-      return { text: node.value || '' };
+      return { text: node.value ?? '' };
   }
 }
