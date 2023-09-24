@@ -6,7 +6,6 @@ import type { MdPlatePlugin } from '@staticcms/markdown';
 const softBreakPlugin: Partial<MdPlatePlugin<SoftBreakPlugin>> = {
   options: {
     rules: [
-      { hotkey: 'shift+enter' },
       {
         hotkey: 'enter',
         query: {
