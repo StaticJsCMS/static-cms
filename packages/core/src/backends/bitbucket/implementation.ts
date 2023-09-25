@@ -2,6 +2,7 @@ import { stripIndent } from 'common-tags';
 import trimStart from 'lodash/trimStart';
 import semaphore from 'semaphore';
 
+import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import { NetlifyAuthenticator } from '@staticcms/core/lib/auth';
 import {
   AccessTokenError,
@@ -68,7 +69,7 @@ export default class BitbucketBackend implements BackendClass {
     proxied: boolean;
     API: API | null;
     updateUserCredentials: (args: { token: string; refresh_token: string }) => Promise<null>;
-    initialWorkflowStatus: string;
+    initialWorkflowStatus: WorkflowStatus;
   };
   repo: string;
   branch: string;
@@ -93,7 +94,7 @@ export default class BitbucketBackend implements BackendClass {
       proxied: false,
       API: null,
       updateUserCredentials: async () => null,
-      initialWorkflowStatus: '',
+      initialWorkflowStatus: WorkflowStatus.DRAFT,
       ...options,
     };
 
@@ -606,7 +607,7 @@ export default class BitbucketBackend implements BackendClass {
     return mediaFile;
   }
 
-  async updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
+  async updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: WorkflowStatus) {
     // updateUnpublishedEntryStatus is a transactional operation
     return runWithLock(
       this.lock,

@@ -937,6 +937,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     const newEntry = entryDraft.entry.newRecord ?? false;
 
     const useWorkflow = getUseWorkflow(config);
+    console.log('useWorkflow', useWorkflow);
 
     const customPath = selectCustomPath(draft.entry, collection, rootSlug, config.slug);
 

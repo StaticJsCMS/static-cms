@@ -30,6 +30,7 @@ import {
   statusToLabel,
 } from '@staticcms/core/lib/util/APIUtils';
 
+import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import type { DataFile, PersistOptions } from '@staticcms/core/interface';
 import type { ApiRequest, FetchError } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
@@ -42,7 +43,7 @@ export interface Config {
   branch?: string;
   repo?: string;
   squashMerges: boolean;
-  initialWorkflowStatus: string;
+  initialWorkflowStatus: WorkflowStatus;
   cmsLabelPrefix: string;
 }
 
@@ -192,7 +193,7 @@ export default class API {
   repoURL: string;
   commitAuthor?: CommitAuthor;
   squashMerges: boolean;
-  initialWorkflowStatus: string;
+  initialWorkflowStatus: WorkflowStatus;
   cmsLabelPrefix: string;
 
   constructor(config: Config) {
@@ -699,7 +700,7 @@ export default class API {
     });
   }
 
-  async updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
+  async updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: WorkflowStatus) {
     const contentKey = generateContentKey(collection, slug);
     const branch = branchFromContentKey(contentKey);
     const mergeRequest = await this.getBranchMergeRequest(branch);
@@ -778,7 +779,7 @@ export default class API {
     }));
   }
 
-  async createMergeRequest(branch: string, commitMessage: string, status: string) {
+  async createMergeRequest(branch: string, commitMessage: string, status: WorkflowStatus) {
     await this.requestJSON({
       method: 'POST',
       url: `${this.repoURL}/merge_requests`,

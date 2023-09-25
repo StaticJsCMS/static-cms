@@ -31,6 +31,7 @@ import {
   statusToLabel,
 } from '@staticcms/core/lib/util/APIUtils';
 
+import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import type { DataFile, PersistOptions } from '@staticcms/core/interface';
 import type { ApiRequest, FetchError } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
@@ -43,7 +44,7 @@ interface Config {
   requestFunction?: (req: ApiRequest) => Promise<Response>;
   hasWriteAccess?: () => Promise<boolean>;
   squashMerges: boolean;
-  initialWorkflowStatus: string;
+  initialWorkflowStatus: WorkflowStatus;
   cmsLabelPrefix: string;
 }
 
@@ -207,7 +208,7 @@ export default class API {
   repoURL: string;
   commitAuthor?: CommitAuthor;
   mergeStrategy: string;
-  initialWorkflowStatus: string;
+  initialWorkflowStatus: WorkflowStatus;
   cmsLabelPrefix: string;
 
   constructor(config: Config) {
@@ -680,7 +681,7 @@ export default class API {
     });
   }
 
-  async updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
+  async updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: WorkflowStatus) {
     const contentKey = generateContentKey(collection, slug);
     const branch = branchFromContentKey(contentKey);
     const pullRequest = await this.getBranchPullRequest(branch);
@@ -759,7 +760,7 @@ export default class API {
     }));
   }
 
-  async createPullRequest(branch: string, commitMessage: string, status: string) {
+  async createPullRequest(branch: string, commitMessage: string, status: WorkflowStatus) {
     const pullRequest: BitBucketPullRequest = await this.requestJSON({
       method: 'POST',
       url: `${this.repoURL}/pullrequests`,

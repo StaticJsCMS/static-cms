@@ -3,6 +3,7 @@ import trim from 'lodash/trim';
 import trimStart from 'lodash/trimStart';
 import semaphore from 'semaphore';
 
+import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import {
   allEntriesByFolder,
   asyncLock,
@@ -51,7 +52,7 @@ export default class GitLab implements BackendClass {
   options: {
     proxied: boolean;
     API: API | null;
-    initialWorkflowStatus: string;
+    initialWorkflowStatus: WorkflowStatus;
   };
   repo: string;
   branch: string;
@@ -68,7 +69,7 @@ export default class GitLab implements BackendClass {
     this.options = {
       proxied: false,
       API: null,
-      initialWorkflowStatus: '',
+      initialWorkflowStatus: WorkflowStatus.DRAFT,
       ...options,
     };
 
@@ -385,7 +386,7 @@ export default class GitLab implements BackendClass {
     return mediaFile;
   }
 
-  async updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
+  async updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: WorkflowStatus) {
     // updateUnpublishedEntryStatus is a transactional operation
     return runWithLock(
       this.lock,

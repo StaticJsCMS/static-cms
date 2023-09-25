@@ -446,7 +446,7 @@ export interface PersistOptions {
   newEntry?: boolean;
   commitMessage: string;
   collectionName?: string;
-  status?: string;
+  status?: WorkflowStatus;
 
   /**
    * Editorial Workflow
@@ -462,7 +462,7 @@ export interface PersistArgs {
   entryDraft: EntryDraft;
   assetProxies: AssetProxy[];
   usedSlugs: string[];
-  status?: string;
+  status?: WorkflowStatus;
   unpublished?: boolean;
 }
 
@@ -602,7 +602,7 @@ export abstract class BackendClass {
   abstract updateUnpublishedEntryStatus: (
     collection: string,
     slug: string,
-    newStatus: string,
+    newStatus: WorkflowStatus,
   ) => Promise<void>;
   abstract publishUnpublishedEntry: (collection: string, slug: string) => Promise<void>;
   abstract deleteUnpublishedEntry: (collection: string, slug: string) => Promise<void>;
@@ -1074,7 +1074,7 @@ export interface BackendInitializerOptions {
    * Editorial Workflow
    */
   useWorkflow: boolean;
-  initialWorkflowStatus: string;
+  initialWorkflowStatus: WorkflowStatus;
 }
 
 export interface BackendInitializer<EF extends BaseField = UnknownField> {
@@ -1351,7 +1351,7 @@ export interface UnpublishedEntry {
   pullRequestAuthor?: string;
   slug: string;
   collection: string;
-  status: string;
+  status: WorkflowStatus;
   diffs: UnpublishedEntryDiff[];
   updatedAt: string;
 }

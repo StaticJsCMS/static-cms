@@ -15,6 +15,7 @@ import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 import AuthenticationPage from './AuthenticationPage';
 
+import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import type {
   BackendClass,
   BackendEntry,
@@ -43,7 +44,7 @@ type Diff = {
 type UnpublishedRepoEntry = {
   slug: string;
   collection: string;
-  status: string;
+  status: WorkflowStatus;
   diffs: Diff[];
   updatedAt: string;
 };
@@ -253,8 +254,7 @@ export default class TestBackend implements BackendClass {
       const slug = entry.dataFiles[0].slug;
       const key = `${options.collectionName}/${slug}`;
       const currentEntry = window.repoFilesUnpublished[key];
-      const status =
-        currentEntry?.status || options.status || (this.options.initialWorkflowStatus as string);
+      const status = currentEntry?.status || options.status || this.options.initialWorkflowStatus;
 
       this.addOrUpdateUnpublishedEntry(
         key,
@@ -422,8 +422,9 @@ export default class TestBackend implements BackendClass {
     assetProxies: AssetProxy[],
     slug: string,
     collection: string,
-    status: string,
+    status: WorkflowStatus,
   ) {
+    console.log('addOrUpdateUnpublishedEntry', key, dataFiles, slug, status);
     const diffs: Diff[] = [];
     dataFiles.forEach(dataFile => {
       const { path, newPath, raw } = dataFile;
@@ -457,7 +458,7 @@ export default class TestBackend implements BackendClass {
     };
   }
 
-  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
+  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: WorkflowStatus) {
     window.repoFilesUnpublished[`${collection}/${slug}`].status = newStatus;
     return Promise.resolve();
   }

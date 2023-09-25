@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import API, { getMaxAccess } from '../API';
 
 global.fetch = jest.fn().mockRejectedValue(new Error('should not call fetch inside tests'));
@@ -17,7 +18,7 @@ describe('GitLab API', () => {
       const api = new API({
         repo: 'repo',
         squashMerges: false,
-        initialWorkflowStatus: '',
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
         cmsLabelPrefix: '',
       });
 
@@ -32,7 +33,7 @@ describe('GitLab API', () => {
       const api = new API({
         repo: 'repo',
         squashMerges: false,
-        initialWorkflowStatus: '',
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
         cmsLabelPrefix: '',
       });
 
@@ -47,7 +48,7 @@ describe('GitLab API', () => {
       const api = new API({
         repo: 'repo',
         squashMerges: false,
-        initialWorkflowStatus: '',
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
         cmsLabelPrefix: '',
       });
 
@@ -62,7 +63,7 @@ describe('GitLab API', () => {
       const api = new API({
         repo: 'repo',
         squashMerges: false,
-        initialWorkflowStatus: '',
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
         cmsLabelPrefix: '',
       });
 
@@ -77,7 +78,7 @@ describe('GitLab API', () => {
       const api = new API({
         repo: 'repo',
         squashMerges: false,
-        initialWorkflowStatus: '',
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
         cmsLabelPrefix: '',
       });
       api.requestJSON = jest.fn().mockResolvedValueOnce({
@@ -94,7 +95,7 @@ describe('GitLab API', () => {
       const api = new API({
         repo: 'repo',
         squashMerges: false,
-        initialWorkflowStatus: '',
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
         cmsLabelPrefix: '',
       });
 
@@ -115,7 +116,7 @@ describe('GitLab API', () => {
       const api = new API({
         repo: 'repo',
         squashMerges: false,
-        initialWorkflowStatus: '',
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
         cmsLabelPrefix: '',
       });
 
@@ -136,7 +137,7 @@ describe('GitLab API', () => {
       const api = new API({
         repo: 'repo',
         squashMerges: false,
-        initialWorkflowStatus: '',
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
         cmsLabelPrefix: '',
       });
 
@@ -157,7 +158,7 @@ describe('GitLab API', () => {
       const api = new API({
         repo: 'repo',
         squashMerges: false,
-        initialWorkflowStatus: '',
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
         cmsLabelPrefix: '',
       });
 
@@ -178,7 +179,7 @@ describe('GitLab API', () => {
       const api = new API({
         repo: 'repo',
         squashMerges: false,
-        initialWorkflowStatus: '',
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
         cmsLabelPrefix: '',
       });
 

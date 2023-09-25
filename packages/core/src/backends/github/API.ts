@@ -7,6 +7,7 @@ import trim from 'lodash/trim';
 import trimStart from 'lodash/trimStart';
 import { dirname } from 'path';
 
+import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import { PreviewState } from '@staticcms/core/interface';
 import {
   APIError,
@@ -79,7 +80,7 @@ export interface Config {
   repo?: string;
   originRepo?: string;
   squashMerges: boolean;
-  initialWorkflowStatus: string;
+  initialWorkflowStatus: WorkflowStatus;
   cmsLabelPrefix: string;
 }
 
@@ -168,7 +169,7 @@ export default class API {
   repoURL: string;
   originRepoURL: string;
   mergeMethod: string;
-  initialWorkflowStatus: string;
+  initialWorkflowStatus: WorkflowStatus;
   cmsLabelPrefix: string;
 
   _userPromise?: Promise<GitHubUser>;
@@ -779,7 +780,7 @@ export default class API {
       const cmsLabel =
         pullRequest.state === PullRequestState.Closed
           ? { name: statusToLabel(this.initialWorkflowStatus, this.cmsLabelPrefix) }
-          : { name: statusToLabel('pending_review', this.cmsLabelPrefix) };
+          : { name: statusToLabel(WorkflowStatus.PENDING_REVIEW, this.cmsLabelPrefix) };
 
       pullRequest.labels.push(cmsLabel as PullsGetResponseLabelsItem);
       return pullRequest;
@@ -945,7 +946,7 @@ export default class API {
     });
   }
 
-  async setPullRequestStatus(pullRequest: GitHubPull, newStatus: string) {
+  async setPullRequestStatus(pullRequest: GitHubPull, newStatus: WorkflowStatus) {
     const labels = [
       ...pullRequest.labels
         .filter(label => !isCMSLabel(label.name, this.cmsLabelPrefix))
@@ -983,7 +984,11 @@ export default class API {
     return result;
   }
 
-  async updateUnpublishedEntryStatus(collectionName: string, slug: string, newStatus: string) {
+  async updateUnpublishedEntryStatus(
+    collectionName: string,
+    slug: string,
+    newStatus: WorkflowStatus,
+  ) {
     const contentKey = this.generateContentKey(collectionName, slug);
     const branch = branchFromContentKey(contentKey);
     const pullRequest = await this.getBranchPullRequest(branch);

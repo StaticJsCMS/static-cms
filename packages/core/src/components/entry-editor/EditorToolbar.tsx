@@ -7,6 +7,7 @@ import { Height as HeightIcon } from '@styled-icons/material-rounded/Height';
 import { Check as CheckIcon } from '@styled-icons/material/Check';
 import { MoreVert as MoreVertIcon } from '@styled-icons/material/MoreVert';
 import { Publish as PublishIcon } from '@styled-icons/material/Publish';
+import { Unpublished as UnpublishedIcon } from '@styled-icons/material/Unpublished';
 import React, { useCallback, useMemo } from 'react';
 
 import { deleteLocalBackup, loadEntry } from '@staticcms/core/actions/entries';
@@ -72,6 +73,12 @@ export interface EditorToolbarProps {
   isUpdatingStatus: boolean;
   onChangeStatus: (status: WorkflowStatus) => void;
   hasUnpublishedChanges: boolean;
+  isPublishing: boolean;
+  onPublish: (opts?: EditorPersistOptions) => Promise<void>;
+  onUnPublish: () => Promise<void>;
+  onDeleteUnpublishedChanges: () => Promise<void>;
+  onPublishAndNew: () => Promise<void>;
+  onPublishAndDuplicate: () => Promise<void>;
 }
 
 const EditorToolbar: FC<EditorToolbarProps> = ({
@@ -83,6 +90,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
   onPersistAndDuplicate,
   onPersistAndNew,
   isNewEntry,
+  isModification,
   onDelete,
   showPreviewToggle,
   previewActive,
@@ -101,6 +109,12 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
   isUpdatingStatus,
   onChangeStatus,
   hasUnpublishedChanges,
+  isPublishing,
+  onPublish,
+  onUnPublish,
+  onDeleteUnpublishedChanges,
+  onPublishAndNew,
+  onPublishAndDuplicate,
 }) => {
   const t = useTranslate();
 
@@ -137,12 +151,39 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
     }
   }, [collection, dispatch, onDiscardDraft, slug]);
 
+  const handlePublishClick = useCallback(() => {
+    if (useWorkflow) {
+      onPublish();
+      return;
+    }
+
+    onPersist();
+  }, [onPersist, onPublish, useWorkflow]);
+
+  const handlePublishAndNew = useCallback(() => {
+    if (useWorkflow) {
+      onPublishAndNew();
+      return;
+    }
+
+    onPersistAndNew();
+  }, [onPersistAndNew, onPublishAndNew, useWorkflow]);
+
+  const handlePublishAndDuplicate = useCallback(() => {
+    if (useWorkflow) {
+      onPublishAndDuplicate();
+      return;
+    }
+
+    onPersistAndDuplicate();
+  }, [onPersistAndDuplicate, onPublishAndDuplicate, useWorkflow]);
+
   const menuItems: JSX.Element[][] = useMemo(() => {
     const items: JSX.Element[] = [];
 
-    if (!isPublished && (!useWorkflow || canPublish)) {
+    if (!isPublished && (!useWorkflow || hasUnpublishedChanges)) {
       items.push(
-        <MenuItemButton key="publishNow" onClick={() => onPersist()} startIcon={PublishIcon}>
+        <MenuItemButton key="publishNow" onClick={handlePublishClick} startIcon={PublishIcon}>
           {t('editor.editorToolbar.publishNow')}
         </MenuItemButton>,
       );
@@ -151,14 +192,14 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
         items.push(
           <MenuItemButton
             key="publishAndCreateNew"
-            onClick={onPersistAndNew}
+            onClick={handlePublishAndNew}
             startIcon={DocumentAddIcon}
           >
             {t('editor.editorToolbar.publishAndCreateNew')}
           </MenuItemButton>,
           <MenuItemButton
             key="publishAndDuplicate"
-            onClick={onPersistAndDuplicate}
+            onClick={handlePublishAndDuplicate}
             startIcon={DocumentDuplicateIcon}
           >
             {t('editor.editorToolbar.publishAndDuplicate')}
@@ -173,36 +214,81 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
       );
     }
 
-    if (hasChanged) {
-      return [
-        items,
-        [
-          <MenuItemButton
-            key="discardChanges"
-            onClick={handleDiscardDraft}
-            startIcon={TrashIcon}
-            color="warning"
-          >
-            {t('editor.editorToolbar.discardChanges')}
-          </MenuItemButton>,
-        ],
-      ];
+    const groups = [items];
+
+    if (useWorkflow && canCreate && canPublish && canDelete) {
+      groups.unshift([
+        <MenuItemButton key="unpublish" onClick={onUnPublish} startIcon={UnpublishedIcon}>
+          {t('editor.editorToolbar.unpublish')}
+        </MenuItemButton>,
+      ]);
     }
 
-    return [items];
+    return groups;
   }, [
     canCreate,
+    canDelete,
     canPublish,
-    handleDiscardDraft,
-    hasChanged,
+    handlePublishAndDuplicate,
+    handlePublishAndNew,
+    handlePublishClick,
+    hasUnpublishedChanges,
     isPublished,
     onDuplicate,
-    onPersist,
-    onPersistAndDuplicate,
-    onPersistAndNew,
+    onUnPublish,
     t,
     useWorkflow,
   ]);
+
+  const workflowDeleteLabel = useMemo(() => {
+    if (hasUnpublishedChanges) {
+      if (isModification) {
+        return 'editor.editorToolbar.deleteUnpublishedChanges';
+      }
+
+      if (isNewEntry || !isModification) {
+        return 'editor.editorToolbar.deleteUnpublishedEntry';
+      }
+
+      return;
+    }
+
+    if (isNewEntry) {
+      return;
+    }
+
+    if (!isModification) {
+      return 'editor.editorToolbar.deletePublishedEntry';
+    }
+  }, [hasUnpublishedChanges, isModification, isNewEntry]);
+
+  const publishLabel = useMemo(() => {
+    if (useWorkflow) {
+      if (isPublishing) {
+        return 'editor.editorToolbar.publishing';
+      }
+
+      if (hasUnpublishedChanges) {
+        return 'editor.editorToolbar.publish';
+      }
+
+      if (!isNewEntry) {
+        return 'editor.editorToolbar.published';
+      }
+
+      return;
+    }
+
+    if (isPersisting) {
+      return 'editor.editorToolbar.publishing';
+    }
+
+    if (isPublished) {
+      return 'editor.editorToolbar.published';
+    }
+
+    return 'editor.editorToolbar.publish';
+  }, [hasUnpublishedChanges, isNewEntry, isPersisting, isPublished, isPublishing, useWorkflow]);
 
   return (
     <div className={classNames(classes.root, className)}>
@@ -250,10 +336,30 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
               </>
             )}
           </MenuGroup>
-          {canDelete ? (
+          {hasChanged ? (
+            <MenuGroup key="discard-button">
+              <MenuItemButton
+                key="discardChanges"
+                onClick={handleDiscardDraft}
+                startIcon={TrashIcon}
+                color="warning"
+              >
+                {t('editor.editorToolbar.discardChanges')}
+              </MenuItemButton>
+            </MenuGroup>
+          ) : null}
+          {canDelete && (!useWorkflow || workflowDeleteLabel) ? (
             <MenuGroup key="delete-button">
-              <MenuItemButton onClick={onDelete} startIcon={TrashIcon} color="error">
-                {t('editor.editorToolbar.deleteEntry')}
+              <MenuItemButton
+                onClick={
+                  workflowDeleteLabel === 'editor.editorToolbar.deleteUnpublishedChanges'
+                    ? onDeleteUnpublishedChanges
+                    : onDelete
+                }
+                startIcon={TrashIcon}
+                color="error"
+              >
+                {useWorkflow ? t(workflowDeleteLabel!) : t('editor.editorToolbar.deleteEntry')}
               </MenuItemButton>
             </MenuGroup>
           ) : null}
@@ -294,27 +400,28 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
           />
         </div>
       ) : null}
-      <Menu
-        label={
-          isPublished ? t('editor.editorToolbar.published') : t('editor.editorToolbar.publish')
-        }
-        color={isPublished ? 'success' : 'primary'}
-        disabled={
-          isLoading ||
-          (menuItems.length == 1 && menuItems[0].length === 0) ||
-          (useWorkflow && (!hasUnpublishedChanges || hasChanged))
-        }
-        startIcon={PublishIcon}
-        rootClassName={classes['publish-button']}
-        iconClassName={classes['publish-button-icon']}
-        labelClassName={classes['publish-button-label']}
-        hideDropdownIconOnMobile
-        aria-label="publish options dropdown"
-      >
-        {menuItems.map((group, index) => (
-          <MenuGroup key={`menu-group-${index}`}>{group}</MenuGroup>
-        ))}
-      </Menu>
+      {publishLabel ? (
+        <Menu
+          label={t(publishLabel)}
+          color={publishLabel === 'editor.editorToolbar.published' ? 'success' : 'primary'}
+          disabled={
+            isLoading ||
+            (menuItems.length == 1 && menuItems[0].length === 0) ||
+            isPersisting ||
+            isPublishing
+          }
+          startIcon={PublishIcon}
+          rootClassName={classes['publish-button']}
+          iconClassName={classes['publish-button-icon']}
+          labelClassName={classes['publish-button-label']}
+          hideDropdownIconOnMobile
+          aria-label="publish options dropdown"
+        >
+          {menuItems.map((group, index) => (
+            <MenuGroup key={`menu-group-${index}`}>{group}</MenuGroup>
+          ))}
+        </Menu>
+      ) : null}
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { Base64 } from 'js-base64';
 import API from '../API';
 
 import type { Options } from '../API';
+import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 
 describe('github API', () => {
   beforeEach(() => {
@@ -28,7 +29,7 @@ describe('github API', () => {
         branch: 'master',
         repo: 'owner/repo',
         squashMerges: false,
-        initialWorkflowStatus: '',
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
         cmsLabelPrefix: '',
       });
 
@@ -80,7 +81,7 @@ describe('github API', () => {
         repo: 'my-repo',
         token: 'token',
         squashMerges: false,
-        initialWorkflowStatus: '',
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
         cmsLabelPrefix: '',
       });
 
@@ -108,7 +109,7 @@ describe('github API', () => {
         repo: 'my-repo',
         token: 'token',
         squashMerges: false,
-        initialWorkflowStatus: '',
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
         cmsLabelPrefix: '',
       });
 
@@ -135,7 +136,7 @@ describe('github API', () => {
         repo: 'my-repo',
         token: 'token',
         squashMerges: false,
-        initialWorkflowStatus: '',
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
         cmsLabelPrefix: '',
       });
 
@@ -169,7 +170,7 @@ describe('github API', () => {
         branch: 'master',
         repo: 'owner/repo',
         squashMerges: false,
-        initialWorkflowStatus: '',
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
         cmsLabelPrefix: '',
       });
 
@@ -273,7 +274,7 @@ describe('github API', () => {
         branch: 'master',
         repo: 'owner/repo',
         squashMerges: false,
-        initialWorkflowStatus: '',
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
         cmsLabelPrefix: '',
       });
 
@@ -359,7 +360,7 @@ describe('github API', () => {
         branch: 'master',
         repo: 'owner/repo',
         squashMerges: false,
-        initialWorkflowStatus: '',
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
         cmsLabelPrefix: '',
       });
 

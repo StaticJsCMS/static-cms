@@ -108,6 +108,10 @@ interface EditorInterfaceProps {
   isUpdatingStatus: boolean;
   onChangeStatus: (status: WorkflowStatus) => void;
   hasUnpublishedChanges: boolean;
+  isPublishing: boolean;
+  onPublish: (opts?: EditorPersistOptions) => Promise<void>;
+  onUnPublish: () => Promise<void>;
+  onDeleteUnpublishedChanges: () => Promise<void>;
 }
 
 const EditorInterface: FC<EditorInterfaceProps> = ({
@@ -132,6 +136,10 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
   isUpdatingStatus,
   onChangeStatus,
   hasUnpublishedChanges,
+  isPublishing,
+  onPublish,
+  onUnPublish,
+  onDeleteUnpublishedChanges,
 }) => {
   const config = useAppSelector(selectConfig);
 
@@ -162,10 +170,17 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
   const handleOnPersist = useCallback(
     async (opts: EditorPersistOptions = {}) => {
       const { createNew = false, duplicate = false } = opts;
-      // await switchToDefaultLocale();
       onPersist({ createNew, duplicate });
     },
     [onPersist],
+  );
+
+  const handleOnPublish = useCallback(
+    async (opts: EditorPersistOptions = {}) => {
+      const { createNew = false, duplicate = false } = opts;
+      onPublish({ createNew, duplicate });
+    },
+    [onPublish],
   );
 
   const handleToggleScrollSync = useCallback(() => {
@@ -476,6 +491,12 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
           isUpdatingStatus={isUpdatingStatus}
           onChangeStatus={onChangeStatus}
           hasUnpublishedChanges={hasUnpublishedChanges}
+          isPublishing={isPublishing}
+          onDeleteUnpublishedChanges={onDeleteUnpublishedChanges}
+          onPublish={onPublish}
+          onUnPublish={onUnPublish}
+          onPublishAndNew={() => handleOnPublish({ createNew: true })}
+          onPublishAndDuplicate={() => handleOnPublish({ createNew: true, duplicate: true })}
         />
       }
     >

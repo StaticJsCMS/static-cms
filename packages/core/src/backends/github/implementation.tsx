@@ -2,6 +2,7 @@ import { stripIndent } from 'common-tags';
 import trimStart from 'lodash/trimStart';
 import semaphore from 'semaphore';
 
+import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import {
   asyncLock,
   basename,
@@ -61,7 +62,7 @@ export default class GitHub implements BackendClass {
     proxied: boolean;
     API: API | null;
     useWorkflow?: boolean;
-    initialWorkflowStatus: string;
+    initialWorkflowStatus: WorkflowStatus;
   };
   originRepo: string;
   repo?: string;
@@ -85,7 +86,7 @@ export default class GitHub implements BackendClass {
     this.options = {
       proxied: false,
       API: null,
-      initialWorkflowStatus: '',
+      initialWorkflowStatus: WorkflowStatus.DRAFT,
       ...options,
     };
 
@@ -535,7 +536,7 @@ export default class GitHub implements BackendClass {
     }
   }
 
-  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
+  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: WorkflowStatus) {
     // updateUnpublishedEntryStatus is a transactional operation
     return runWithLock(
       this.lock,

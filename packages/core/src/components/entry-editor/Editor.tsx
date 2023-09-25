@@ -24,12 +24,14 @@ import useEntryCallback from '@staticcms/core/lib/hooks/useEntryCallback';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getFileFromSlug, selectFields } from '@staticcms/core/lib/util/collection.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
-import { selectConfig } from '@staticcms/core/reducers/selectors/config';
+import { selectConfig, selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
 import { selectUnpublishedEntry } from '@staticcms/core/reducers/selectors/editorialWorkflow';
 import { selectEntry } from '@staticcms/core/reducers/selectors/entries';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import {
   deleteUnpublishedEntry,
+  loadUnpublishedEntry,
+  persistUnpublishedEntry,
   publishUnpublishedEntry,
   unpublishPublishedEntry,
   updateUnpublishedEntryStatus,
@@ -59,7 +61,8 @@ const Editor: FC<EditorProps> = ({
   scrollSyncActive,
   newRecord,
   currentStatus,
-  unPublishedEntry,
+  hasUnpublishedEntry,
+  useWorkflow,
 }) => {
   const t = useTranslate();
 
@@ -110,7 +113,13 @@ const Editor: FC<EditorProps> = ({
 
       setTimeout(async () => {
         try {
-          await dispatch(persistEntry(collection, slug, navigate));
+          if (useWorkflow) {
+            await dispatch(
+              persistUnpublishedEntry(collection, slug, hasUnpublishedEntry, navigate),
+            );
+          } else {
+            await dispatch(persistEntry(collection, slug, navigate));
+          }
           setVersion(version + 1);
 
           deleteBackup();
@@ -133,7 +142,17 @@ const Editor: FC<EditorProps> = ({
         } catch (e) {}
       }, 100);
     },
-    [collection, deleteBackup, dispatch, entryDraft.entry, navigate, slug, version],
+    [
+      collection,
+      deleteBackup,
+      dispatch,
+      entryDraft.entry,
+      hasUnpublishedEntry,
+      navigate,
+      slug,
+      useWorkflow,
+      version,
+    ],
   );
 
   const handleChangeStatus = useCallback(
@@ -394,7 +413,12 @@ const Editor: FC<EditorProps> = ({
         if (!config?.disable_local_backup) {
           dispatch(retrieveLocalBackup(collection, slug));
         }
-        dispatch(loadEntry(collection, slug));
+
+        if (useWorkflow) {
+          dispatch(loadUnpublishedEntry(collection, slug));
+        } else {
+          dispatch(loadEntry(collection, slug));
+        }
       });
     }
 
@@ -409,6 +433,7 @@ const Editor: FC<EditorProps> = ({
     dispatch,
     newRecord,
     config?.disable_local_backup,
+    useWorkflow,
   ]);
 
   const leaveMessage = useMemo(() => t('editor.editor.onLeavePage'), [t]);
@@ -510,7 +535,11 @@ const Editor: FC<EditorProps> = ({
         currentStatus={currentStatus}
         isUpdatingStatus={Boolean(entry?.isUpdatingStatus)}
         onChangeStatus={handleChangeStatus}
-        hasUnpublishedChanges={Boolean(unPublishedEntry)}
+        onPublish={handlePublishEntry}
+        onUnPublish={handleUnpublishEntry}
+        onDeleteUnpublishedChanges={handleDeleteUnpublishedChanges}
+        hasUnpublishedChanges={hasUnpublishedEntry}
+        isPublishing={Boolean(entry?.isPublishing)}
       />
       <MediaLibraryModal />
     </>
@@ -521,6 +550,7 @@ interface CollectionViewOwnProps {
   name: string;
   slug?: string;
   newRecord: boolean;
+  unpublishedEntry: boolean;
 }
 
 function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
@@ -529,12 +559,17 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
   const collection = collections[name];
   const collectionName = collection.name;
   const fields = selectFields(collection, slug);
-  const entry = selectEntry(state, collectionName, slug);
   const hasChanged = entryDraft.hasChanged;
   const isModification = entryDraft.entry?.isModification ?? false;
   const collectionEntriesLoaded = Boolean(entries.pages[collectionName]);
+
+  const useWorkflow = selectUseWorkflow(state);
   const unPublishedEntry = selectUnpublishedEntry(state, collectionName, slug);
   const publishedEntry = selectEntry(state, collectionName, slug);
+
+  const hasUnpublishedEntry = Boolean(useWorkflow && unPublishedEntry);
+  const entry = hasUnpublishedEntry ? selectEntry(state, collectionName, slug) : publishedEntry;
+  console.log('publishedEntry', publishedEntry, '\nunPublishedEntry', unPublishedEntry);
   const currentStatus = unPublishedEntry && unPublishedEntry.status;
   const localBackup = entryDraft.localBackup;
   const draftKey = entryDraft.key;
@@ -552,8 +587,9 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
     draftKey,
     scrollSyncActive: scroll.isScrolling,
     publishedEntry,
-    unPublishedEntry,
+    hasUnpublishedEntry,
     currentStatus,
+    useWorkflow,
   };
 }
 

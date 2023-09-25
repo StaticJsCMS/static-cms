@@ -5,6 +5,7 @@ import intersection from 'lodash/intersection';
 import pick from 'lodash/pick';
 import React, { useCallback } from 'react';
 
+import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import { PreviewState } from '@staticcms/core/interface';
 import {
   AccessTokenError,
@@ -140,13 +141,13 @@ export default class GitGateway implements BackendClass {
   options: {
     proxied: boolean;
     API: GitHubAPI | GitLabAPI | BitBucketAPI | null;
-    initialWorkflowStatus: string;
+    initialWorkflowStatus: WorkflowStatus;
   };
   constructor(config: Config, options = {}) {
     this.options = {
       proxied: true,
       API: null,
-      initialWorkflowStatus: '',
+      initialWorkflowStatus: WorkflowStatus.DRAFT,
       ...options,
     };
     this.config = config;
@@ -570,7 +571,7 @@ export default class GitGateway implements BackendClass {
     return this.backend!.unpublishedEntry({ id, collection, slug });
   }
 
-  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
+  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: WorkflowStatus) {
     return this.backend!.updateUnpublishedEntryStatus(collection, slug, newStatus);
   }
 

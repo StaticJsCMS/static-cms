@@ -2,5 +2,6 @@
   border-color: var(--background-divider);
 
   @apply py-1
-    border-b;
+    border-b
+    last:border-0;
 }
