@@ -124,9 +124,6 @@ const de: LocalePhrasesRoot = {
       onDeleteUnpublishedChanges:
         'Alle unveröffentlichten Änderungen werden gelöscht. Möchten Sie wirklich löschen?',
       loadingEntry: 'Beitrag laden...',
-      confirmLoadBackup:
-        'Für diesen Beitrag ist ein lokales Backup vorhanden. Möchten Sie dieses benutzen?',
-      loadingEntry: 'Beitrag laden...',
     },
     editorInterface: {
       sideBySideI18n: 'Parallele Übersetzungen',

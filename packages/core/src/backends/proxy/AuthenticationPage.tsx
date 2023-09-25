@@ -2,13 +2,10 @@ import React, { useCallback } from 'react';
 
 import Login from '@staticcms/core/components/login/Login';
 
-import type { AuthenticationPageProps, TranslatedProps } from '@staticcms/core/interface';
-import type { MouseEvent } from 'react';
+import type { AuthenticationPageProps } from '@staticcms/core/interface';
+import type { FC, MouseEvent } from 'react';
 
-const AuthenticationPage = ({
-  inProgress = false,
-  onLogin,
-}: TranslatedProps<AuthenticationPageProps>) => {
+const AuthenticationPage: FC<AuthenticationPageProps> = ({ inProgress = false, onLogin }) => {
   const handleLogin = useCallback(
     (e: MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();

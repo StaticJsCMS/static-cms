@@ -21,14 +21,15 @@ import EditorToolbar from './EditorToolbar';
 import EditorControlPane from './editor-control-pane/EditorControlPane';
 import EditorPreviewPane from './editor-preview-pane/EditorPreviewPane';
 
+import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import type {
   Collection,
   EditorPersistOptions,
   Entry,
   Field,
   FieldsErrors,
-  TranslatedProps,
 } from '@staticcms/core/interface';
+import type { FC } from 'react';
 
 import './EditorInterface.css';
 
@@ -65,13 +66,13 @@ interface EditorContentProps {
   editorWithPreview: JSX.Element;
 }
 
-const EditorContent = ({
+const EditorContent: FC<EditorContentProps> = ({
   i18nActive,
   previewActive,
   editor,
   editorSideBySideLocale,
   editorWithPreview,
-}: EditorContentProps) => {
+}) => {
   if (i18nActive) {
     return editorSideBySideLocale;
   } else if (previewActive) {
@@ -95,7 +96,6 @@ interface EditorInterfaceProps {
   onDelete: () => Promise<void>;
   onDuplicate: () => void;
   hasChanged: boolean;
-  displayUrl: string | undefined;
   isNewEntry: boolean;
   isModification: boolean;
   toggleScroll: () => Promise<void>;
@@ -104,9 +104,13 @@ interface EditorInterfaceProps {
   submitted: boolean;
   slug: string | undefined;
   onDiscardDraft: () => void;
+  currentStatus: WorkflowStatus | undefined;
+  isUpdatingStatus: boolean;
+  onChangeStatus: (status: WorkflowStatus) => void;
+  hasUnpublishedChanges: boolean;
 }
 
-const EditorInterface = ({
+const EditorInterface: FC<EditorInterfaceProps> = ({
   collection,
   entry,
   fields = [],
@@ -115,18 +119,20 @@ const EditorInterface = ({
   onDuplicate,
   onPersist,
   hasChanged,
-  displayUrl,
   isNewEntry,
   isModification,
   draftKey,
   scrollSyncActive,
-  t,
   loadScroll,
   toggleScroll,
   submitted,
   slug,
   onDiscardDraft,
-}: TranslatedProps<EditorInterfaceProps>) => {
+  currentStatus,
+  isUpdatingStatus,
+  onChangeStatus,
+  hasUnpublishedChanges,
+}) => {
   const config = useAppSelector(selectConfig);
 
   const { locales, default_locale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
@@ -278,7 +284,6 @@ const EditorInterface = ({
           canChangeLocale={i18nEnabled && !i18nActive}
           onLocaleChange={handleLocaleChange}
           slug={slug}
-          t={t}
         />
       </div>
     ),
@@ -295,7 +300,6 @@ const EditorInterface = ({
       i18nEnabled,
       handleLocaleChange,
       slug,
-      t,
     ],
   );
 
@@ -313,11 +317,10 @@ const EditorInterface = ({
           canChangeLocale
           context="i18nSplit"
           hideBorder
-          t={t}
         />
       </div>
     ),
-    [collection, entry, fields, fieldsErrors, handleLocaleChange, selectedLocale, submitted, t],
+    [collection, entry, fields, fieldsErrors, handleLocaleChange, selectedLocale, submitted],
   );
 
   const previewEntry = useMemo(
@@ -354,11 +357,10 @@ const EditorInterface = ({
           submitted={submitted}
           canChangeLocale
           hideBorder
-          t={t}
         />
       </div>
     ),
-    [collection, entry, fields, fieldsErrors, handleLocaleChange, selectedLocale, submitted, t],
+    [collection, entry, fields, fieldsErrors, handleLocaleChange, selectedLocale, submitted],
   );
 
   const editorWithPreview = (
@@ -437,7 +439,7 @@ const EditorInterface = ({
     () => customPathFromSlug(collection, entry.slug),
     [collection, entry.slug],
   );
-  const breadcrumbs = useBreadcrumbs(collection, nestedFieldPath, { isNewEntry, summary, t });
+  const breadcrumbs = useBreadcrumbs(collection, nestedFieldPath, { isNewEntry, summary });
 
   return (
     <MainView
@@ -454,7 +456,6 @@ const EditorInterface = ({
           onDelete={onDelete}
           onDuplicate={onDuplicate}
           hasChanged={hasChanged}
-          displayUrl={displayUrl}
           collection={collection}
           isNewEntry={isNewEntry}
           isModification={isModification}
@@ -471,6 +472,10 @@ const EditorInterface = ({
           onMobilePreviewToggle={toggleMobilePreview}
           className={classes.toolbar}
           onDiscardDraft={onDiscardDraft}
+          currentStatus={currentStatus}
+          isUpdatingStatus={isUpdatingStatus}
+          onChangeStatus={onChangeStatus}
+          hasUnpublishedChanges={hasUnpublishedChanges}
         />
       }
     >

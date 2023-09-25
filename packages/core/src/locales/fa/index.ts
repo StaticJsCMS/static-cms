@@ -103,8 +103,6 @@ const fa: LocalePhrasesRoot = {
       onDeleteUnpublishedChanges:
         'همه تغییرات منتشر نشده در این ورودی حذف خواهند شد. آیا هنوز می خواهید حذف کنید؟',
       loadingEntry: 'در حال بارگیری ورودی...',
-      confirmLoadBackup:
-        'یک نسخه پشتیبان محلی برای این ورودی بازیابی شد، آیا می خواهید از آن استفاده کنید؟',
     },
     editorInterface: {
       toggleI18n: 'i18n را تغییر دهید',

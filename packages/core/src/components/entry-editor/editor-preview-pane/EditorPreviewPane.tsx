@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import Frame from 'react-frame-component';
-import { translate } from 'react-polyglot';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
 import { EDITOR_SIZE_COMPACT } from '@staticcms/core/constants/views';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getPreviewStyles, getPreviewTemplate } from '@staticcms/core/lib/registry';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectTemplateName } from '@staticcms/core/lib/util/collection.util';
@@ -20,13 +20,7 @@ import EditorPreviewContent from './EditorPreviewContent';
 import PreviewFrameContent from './PreviewFrameContent';
 
 import type { EditorSize } from '@staticcms/core/constants/views';
-import type {
-  Collection,
-  Entry,
-  Field,
-  TemplatePreviewProps,
-  TranslatedProps,
-} from '@staticcms/core/interface';
+import type { Collection, Entry, Field, TemplatePreviewProps } from '@staticcms/core/interface';
 import type DataUpdateEvent from '@staticcms/core/lib/util/events/DataEvent';
 import type { FC } from 'react';
 
@@ -119,7 +113,9 @@ export interface EditorPreviewPaneProps {
   showMobilePreview: boolean;
 }
 
-const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
+const EditorPreviewPane: FC<EditorPreviewPaneProps> = props => {
+  const t = useTranslate();
+
   const {
     editorSize,
     entry,
@@ -128,7 +124,6 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
     previewInFrame,
     livePreviewUrlTemplate,
     showMobilePreview,
-    t,
   } = props;
 
   const config = useAppSelector(selectConfig);
@@ -214,7 +209,7 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
           !showMobilePreview && classes['show-mobile-preview'],
         )}
       >
-        <ErrorBoundary config={config}>
+        <ErrorBoundary config={config} t={t}>
           {livePreviewUrlTemplate ? (
             <iframe
               key="live-preview-frame"
@@ -283,4 +278,4 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
   ]);
 };
 
-export default translate()(EditorPreviewPane) as FC<EditorPreviewPaneProps>;
+export default EditorPreviewPane;

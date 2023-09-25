@@ -114,8 +114,6 @@ const sl: LocalePhrasesRoot = {
       onDeleteUnpublishedChanges:
         'Vse neobjavljene spremembe tega vnosa bodo izbrisane. Ali še vedno želiš izbrisati?',
       loadingEntry: 'Nalaganje vnosa ...',
-      confirmLoadBackup:
-        'Za ta vnos je bila povrnjena lokalna varnostna kopija, ali bi jo radi uporabili?',
     },
     editorInterface: {
       toggleI18n: 'Preklopi i18n',

@@ -32,8 +32,3 @@
   @apply relative
     z-30;
 }
-
-.CMS_WidgetFileImage_SortableLink_button-icon {
-  @apply w-5
-    h-5;
-}

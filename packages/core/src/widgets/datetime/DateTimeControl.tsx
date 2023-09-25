@@ -63,7 +63,6 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
   errors,
   hasErrors,
   forSingleList,
-  t,
   onChange,
 }) => {
   const ref = useRef<HTMLInputElement | null>(null);
@@ -180,7 +179,6 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
               />
               <NowButton
                 key="mobile-date-now"
-                t={t}
                 handleChange={v => handleChange(v)}
                 disabled={disabled}
                 field={field}
@@ -214,7 +212,6 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
               />
               <NowButton
                 key="mobile-date-now"
-                t={t}
                 handleChange={v => handleChange(v)}
                 disabled={disabled}
                 field={field}
@@ -247,7 +244,6 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
             />
             <NowButton
               key="mobile-date-now"
-              t={t}
               handleChange={v => handleChange(v)}
               disabled={disabled}
               field={field}
@@ -266,7 +262,6 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
     handleChange,
     handleOpen,
     handleClose,
-    t,
     field,
   ]);
 

@@ -1,6 +1,7 @@
 import { Info as InfoIcon } from '@styled-icons/material-outlined/Info';
 import React, { useEffect, useMemo, useState } from 'react';
 
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getPreviewCard } from '@staticcms/core/lib/registry';
 import { getEntryBackupKey } from '@staticcms/core/lib/util/backup.util';
 import {
@@ -18,13 +19,7 @@ import CardContent from '../../common/card/CardContent';
 import CardMedia from '../../common/card/CardMedia';
 import useWidgetsFor from '../../common/widget/useWidgetsFor';
 
-import type {
-  BackupEntry,
-  Collection,
-  Entry,
-  FileOrImageField,
-  TranslatedProps,
-} from '@staticcms/core/interface';
+import type { BackupEntry, Collection, Entry, FileOrImageField } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 import './EntryCard.css';
@@ -45,12 +40,9 @@ export interface EntryCardProps {
   collection: Collection;
 }
 
-const EntryCard: FC<TranslatedProps<EntryCardProps>> = ({
-  collection,
-  entry,
-  imageFieldName,
-  t,
-}) => {
+const EntryCard: FC<EntryCardProps> = ({ collection, entry, imageFieldName }) => {
+  const t = useTranslate();
+
   const entryData = entry.data;
 
   const path = useMemo(

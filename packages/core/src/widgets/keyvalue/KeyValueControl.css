@@ -36,11 +36,6 @@
     w-6;
 }
 
-.CMS_WidgetKeyValue_delete-button-icon {
-  @apply h-5
-    w-5;
-}
-
 .CMS_WidgetKeyValue_actions {
   @apply px-3
     mt-3;

@@ -2,7 +2,6 @@ import { createHashHistory } from 'history';
 import debounce from 'lodash/debounce';
 import isEqual from 'lodash/isEqual';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,6 +21,7 @@ import { loadMedia } from '@staticcms/core/actions/mediaLibrary';
 import { loadScroll, toggleScroll } from '@staticcms/core/actions/scroll';
 import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import useEntryCallback from '@staticcms/core/lib/hooks/useEntryCallback';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getFileFromSlug, selectFields } from '@staticcms/core/lib/util/collection.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
@@ -40,24 +40,18 @@ import Loader from '../common/progress/Loader';
 import MediaLibraryModal from '../media-library/MediaLibraryModal';
 import EditorInterface from './EditorInterface';
 
-import type {
-  Collection,
-  EditorPersistOptions,
-  Entry,
-  TranslatedProps,
-} from '@staticcms/core/interface';
+import type { Collection, EditorPersistOptions, Entry } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 import type { Blocker } from 'history';
-import type { ComponentType, FC } from 'react';
+import type { FC } from 'react';
 import type { ConnectedProps } from 'react-redux';
 
-const Editor: FC<TranslatedProps<EditorProps>> = ({
+const Editor: FC<EditorProps> = ({
   entry,
   entryDraft,
   fields,
   collection,
   hasChanged,
-  displayUrl,
   isModification,
   draftKey,
   slug,
@@ -65,8 +59,10 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
   scrollSyncActive,
   newRecord,
   currentStatus,
-  t,
+  unPublishedEntry,
 }) => {
+  const t = useTranslate();
+
   const [version, setVersion] = useState(0);
 
   const history = createHashHistory();
@@ -503,7 +499,6 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
         onDelete={handleDeleteEntry}
         onDuplicate={handleDuplicateEntry}
         hasChanged={hasChanged}
-        displayUrl={displayUrl}
         isNewEntry={newRecord}
         isModification={isModification}
         toggleScroll={handleToggleScroll}
@@ -512,7 +507,10 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
         onDiscardDraft={handleDiscardDraft}
         submitted={submitted}
         slug={slug}
-        t={t}
+        currentStatus={currentStatus}
+        isUpdatingStatus={Boolean(entry?.isUpdatingStatus)}
+        onChangeStatus={handleChangeStatus}
+        hasUnpublishedChanges={Boolean(unPublishedEntry)}
       />
       <MediaLibraryModal />
     </>
@@ -526,14 +524,13 @@ interface CollectionViewOwnProps {
 }
 
 function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
-  const { collections, entryDraft, config, entries, scroll } = state;
+  const { collections, entryDraft, entries, scroll } = state;
   const { name, slug } = ownProps;
   const collection = collections[name];
   const collectionName = collection.name;
   const fields = selectFields(collection, slug);
   const entry = selectEntry(state, collectionName, slug);
   const hasChanged = entryDraft.hasChanged;
-  const displayUrl = config.config?.display_url;
   const isModification = entryDraft.entry?.isModification ?? false;
   const collectionEntriesLoaded = Boolean(entries.pages[collectionName]);
   const unPublishedEntry = selectUnpublishedEntry(state, collectionName, slug);
@@ -549,7 +546,6 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
     fields,
     entry,
     hasChanged,
-    displayUrl,
     isModification,
     collectionEntriesLoaded,
     localBackup,
@@ -564,4 +560,4 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
 const connector = connect(mapStateToProps);
 export type EditorProps = ConnectedProps<typeof connector>;
 
-export default connector(translate()(Editor) as ComponentType<EditorProps>);
+export default connector(Editor);

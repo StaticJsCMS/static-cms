@@ -3,13 +3,13 @@ import React from 'react';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import tableClasses from './Table.classes';
 
-import type { ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
 interface TableHeaderCellProps {
   children: ReactNode;
 }
 
-const TableHeaderCell = ({ children }: TableHeaderCellProps) => {
+const TableHeaderCell: FC<TableHeaderCellProps> = ({ children }) => {
   return (
     <th scope="col" className={tableClasses['header-cell']}>
       <div className={tableClasses['header-cell-content']}>

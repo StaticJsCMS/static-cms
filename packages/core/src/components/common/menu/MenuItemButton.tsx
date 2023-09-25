@@ -32,7 +32,7 @@ export interface MenuItemButtonProps {
   'data-testid'?: string;
 }
 
-const MenuItemButton = ({
+const MenuItemButton: FC<MenuItemButtonProps> = ({
   active = false,
   onClick,
   children,
@@ -42,7 +42,7 @@ const MenuItemButton = ({
   endIcon: EndIcon,
   color = 'default',
   'data-testid': dataTestId,
-}: MenuItemButtonProps) => {
+}) => {
   return (
     <MenuItem
       slotProps={{

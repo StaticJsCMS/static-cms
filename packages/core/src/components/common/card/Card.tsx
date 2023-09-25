@@ -3,7 +3,7 @@ import React from 'react';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import cardClasses from './Card.classes';
 
-import type { ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
 import './Card.css';
 
@@ -13,7 +13,7 @@ interface CardProps {
   title?: string;
 }
 
-const Card = ({ children, className, title }: CardProps) => {
+const Card: FC<CardProps> = ({ children, className, title }) => {
   return (
     <div className={classNames(cardClasses.root, className)} title={title}>
       {children}

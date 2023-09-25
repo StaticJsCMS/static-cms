@@ -1,9 +1,9 @@
 import { Photo as PhotoIcon } from '@styled-icons/material/Photo';
 import React, { useCallback, useMemo } from 'react';
-import { translate } from 'react-polyglot';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { getIcon } from '@staticcms/core/lib/hooks/useIcon';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getAdditionalLinks } from '@staticcms/core/lib/registry';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectCollections } from '@staticcms/core/reducers/selectors/collections';
@@ -16,9 +16,10 @@ import sidebarClasses from './Sidebar.classes';
 
 import type { Collection } from '@staticcms/core/interface';
 import type { FC } from 'react';
-import type { TranslateProps } from 'react-polyglot';
 
-const SidebarContent: FC<TranslateProps> = ({ t }) => {
+const SidebarContent: FC = () => {
+  const t = useTranslate();
+
   const { name, searchTerm, ...params } = useParams();
   const filterTerm = useMemo(() => params['*'] ?? '', [params]);
 
@@ -120,4 +121,4 @@ const SidebarContent: FC<TranslateProps> = ({ t }) => {
   );
 };
 
-export default translate()(SidebarContent) as FC;
+export default SidebarContent;

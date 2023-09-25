@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
 import { loadEntries, traverseCollectionCursor } from '@staticcms/core/actions/entries';
 import useEntries from '@staticcms/core/lib/hooks/useEntries';
 import useGroups from '@staticcms/core/lib/hooks/useGroups';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { Cursor } from '@staticcms/core/lib/util';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectCollectionEntriesCursor } from '@staticcms/core/reducers/selectors/cursors';
@@ -15,9 +15,9 @@ import Entries from './Entries';
 import entriesClasses from './Entries.classes';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
-import type { Collection, Entry, GroupOfEntries, TranslatedProps } from '@staticcms/core/interface';
+import type { Collection, Entry, GroupOfEntries } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
-import type { ComponentType } from 'react';
+import type { FC } from 'react';
 import type { t } from 'react-polyglot';
 import type { ConnectedProps } from 'react-redux';
 
@@ -56,17 +56,18 @@ export function filterNestedEntries(path: string, collectionFolder: string, entr
   return filtered;
 }
 
-const EntriesCollection = ({
+const EntriesCollection: FC<EntriesCollectionProps> = ({
   collection,
   filterTerm,
   isFetching,
   viewStyle,
   cursor,
   page,
-  t,
   entriesLoaded,
   readyToLoad,
-}: TranslatedProps<EntriesCollectionProps>) => {
+}) => {
+  const t = useTranslate();
+
   const dispatch = useAppDispatch();
 
   const [prevReadyToLoad, setPrevReadyToLoad] = useState(false);
@@ -142,7 +143,6 @@ const EntriesCollection = ({
           collection={collection}
           entries={getGroupEntries(filteredEntries, groups[selectedGroup].paths)}
           isFetching={isFetching}
-          collectionName={collection.label}
           viewStyle={viewStyle}
           cursor={cursor}
           handleCursorActions={handleCursorActions}
@@ -159,7 +159,6 @@ const EntriesCollection = ({
       collection={collection}
       entries={filteredEntries}
       isFetching={isFetching}
-      collectionName={collection.label}
       viewStyle={viewStyle}
       cursor={cursor}
       handleCursorActions={handleCursorActions}
@@ -194,4 +193,4 @@ const mapDispatchToProps = {};
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export type EntriesCollectionProps = ConnectedProps<typeof connector>;
 
-export default connector(translate()(EntriesCollection) as ComponentType<EntriesCollectionProps>);
+export default connector(EntriesCollection);

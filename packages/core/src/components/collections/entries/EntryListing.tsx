@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo } from 'react';
-import { translate } from 'react-polyglot';
 
 import { VIEW_STYLE_TABLE } from '@staticcms/core/constants/views';
 import { selectFields, selectInferredField } from '@staticcms/core/lib/util/collection.util';
@@ -15,7 +14,6 @@ import type {
   Collections,
   Entry,
   Field,
-  TranslatedProps,
 } from '@staticcms/core/interface';
 import type Cursor from '@staticcms/core/lib/util/Cursor';
 import type { FC } from 'react';
@@ -42,14 +40,13 @@ export type EntryListingProps =
   | SingleCollectionEntryListingProps
   | MultipleCollectionEntryListingProps;
 
-const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
+const EntryListing: FC<EntryListingProps> = ({
   entries,
   cursor,
   viewStyle,
   isLoadingEntries,
   filterTerm,
   handleCursorActions,
-  t,
   ...otherProps
 }) => {
   const hasMore = useMemo(() => cursor?.actions?.has('append_next'), [cursor?.actions]);
@@ -164,7 +161,6 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
           loadNext={handleLoadMore}
           canLoadMore={Boolean(hasMore && handleLoadMore)}
           isLoadingEntries={isLoadingEntries}
-          t={t}
         />
       </div>
     );
@@ -177,9 +173,8 @@ const EntryListing: FC<TranslatedProps<EntryListingProps>> = ({
       onLoadMore={handleLoadMore}
       canLoadMore={Boolean(hasMore && handleLoadMore)}
       isLoadingEntries={isLoadingEntries}
-      t={t}
     />
   );
 };
 
-export default translate()(EntryListing) as FC<EntryListingProps>;
+export default EntryListing;

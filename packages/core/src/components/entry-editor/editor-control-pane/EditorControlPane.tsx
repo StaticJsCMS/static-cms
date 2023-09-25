@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getI18nInfo, hasI18n, isFieldTranslatable } from '@staticcms/core/lib/i18n';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { getFieldValue } from '@staticcms/core/lib/util/field.util';
@@ -17,8 +18,8 @@ import type {
   FieldsErrors,
   I18nSettings,
   StringField,
-  TranslatedProps,
 } from '@staticcms/core/interface';
+import type { FC } from 'react';
 
 import './EditorControlPane.css';
 
@@ -44,7 +45,7 @@ export interface EditorControlPaneProps {
   listItemPath?: string;
 }
 
-const EditorControlPane = ({
+const EditorControlPane: FC<EditorControlPaneProps> = ({
   collection,
   entry,
   fields,
@@ -58,8 +59,9 @@ const EditorControlPane = ({
   allowDefaultLocale = false,
   context = 'default',
   listItemPath,
-  t,
-}: TranslatedProps<EditorControlPaneProps>) => {
+}) => {
+  const t = useTranslate();
+
   const pathField = useMemo(
     () =>
       ({

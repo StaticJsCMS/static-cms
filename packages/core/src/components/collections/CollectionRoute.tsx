@@ -9,12 +9,14 @@ import { useAppSelector } from '@staticcms/core/store/hooks';
 import { getDefaultPath } from '../../lib/util/collection.util';
 import CollectionPage from './CollectionPage';
 
+import type { FC } from 'react';
+
 interface CollectionRouteProps {
   isSearchResults?: boolean;
   isSingleSearchResult?: boolean;
 }
 
-const CollectionRoute = ({ isSearchResults, isSingleSearchResult }: CollectionRouteProps) => {
+const CollectionRoute: FC<CollectionRouteProps> = ({ isSearchResults, isSingleSearchResult }) => {
   const { name, searchTerm } = useParams();
   const [searchParams] = useSearchParams();
   const noRedirect = searchParams.has('noredirect');

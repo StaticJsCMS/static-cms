@@ -91,9 +91,6 @@
 
 .CMS_Navbar_site-url-icon {
   color: var(--text-secondary);
-
-  @apply h-5
-    w-5;
 }
 
 .CMS_Navbar_quick-create {

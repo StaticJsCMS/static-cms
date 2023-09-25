@@ -1,6 +1,5 @@
 import { OpenInNew as OpenInNewIcon } from '@styled-icons/material/OpenInNew';
 import React, { useEffect, useMemo } from 'react';
-import { translate } from 'react-polyglot';
 
 import { checkBackendStatus } from '@staticcms/core/actions/status';
 import classNames from '@staticcms/core/lib/util/classNames.util';
@@ -14,7 +13,7 @@ import Breadcrumbs from './Breadcrumbs';
 import QuickCreate from './QuickCreate';
 import SettingsDropdown from './SettingsDropdown';
 
-import type { Breadcrumb, TranslatedProps } from '@staticcms/core/interface';
+import type { Breadcrumb } from '@staticcms/core/interface';
 import type { FC, ReactNode } from 'react';
 
 import './Navbar.css';
@@ -42,11 +41,11 @@ export interface NavbarProps {
   navbarActions?: ReactNode;
 }
 
-const Navbar = ({
+const Navbar: FC<NavbarProps> = ({
   showQuickCreate = false,
   navbarActions = null,
   breadcrumbs = [],
-}: TranslatedProps<NavbarProps>) => {
+}) => {
   const dispatch = useAppDispatch();
   const config = useAppSelector(selectConfig);
 
@@ -92,13 +91,14 @@ const Navbar = ({
                   <OpenInNewIcon className={classes['site-url-icon']} />
                 </Button>
                 <IconButton
+                  icon={OpenInNewIcon}
                   variant="text"
-                  className={classes['site-url-mobile']}
                   href={displayUrl}
                   title={displayUrl}
-                >
-                  <OpenInNewIcon className={classes['site-url-icon']} />
-                </IconButton>
+                  rootClassName={classes['site-url-mobile']}
+                  iconClassName={classes['site-url-icon']}
+                  aria-label="go to site"
+                />
               </>
             ) : null}
             {showQuickCreate ? (
@@ -113,4 +113,4 @@ const Navbar = ({
   );
 };
 
-export default translate()(Navbar) as FC<NavbarProps>;
+export default Navbar;

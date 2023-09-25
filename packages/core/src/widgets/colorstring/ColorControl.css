@@ -59,8 +59,3 @@
 
 .CMS_WidgetColor_clear-button {
 }
-
-.CMS_WidgetColor_clear-button-icon {
-  @apply w-5
-    h-5;
-}

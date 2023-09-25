@@ -65,12 +65,3 @@
 .CMS_SnackbarAlert_close-button {
   @apply ml-2;
 }
-
-.CMS_SnackbarAlert_close-button-sr-label {
-  @apply sr-only;
-}
-
-.CMS_SnackbarAlert_close-button-icon {
-  @apply w-4
-    h-4;
-}

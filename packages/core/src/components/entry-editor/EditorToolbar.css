@@ -22,19 +22,9 @@
     lg:!hidden;
 }
 
-.CMS_EditorToolbar_preview-toggle-icon {
-  @apply w-5
-    h-5;
-}
-
 .CMS_EditorToolbar_delete-button {
   @apply flex
     lg:!hidden;
-}
-
-.CMS_EditorToolbar_delete-button-icon {
-  @apply w-5
-    h-5;
 }
 
 .CMS_EditorToolbar_publish-button {

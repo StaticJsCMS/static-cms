@@ -29,13 +29,12 @@ const MobileCollectionControls: FC<MobileCollectionControlsProps> = props => {
   return (
     <>
       <IconButton
-        className={mobileCollectionControlsClasses.toggle}
+        icon={FilterListIcon}
         variant="text"
         onClick={toggleMobileMenu}
+        rootClassName={mobileCollectionControlsClasses.toggle}
         aria-label="toggle menu"
-      >
-        <FilterListIcon className={mobileCollectionControlsClasses['toggle-icon']} />
-      </IconButton>
+      />
       <MobileCollectionControlsDrawer
         {...props}
         mobileOpen={mobileOpen}

@@ -1,13 +1,12 @@
 import { ContentCopy as ContentCopyIcon } from '@styled-icons/material/ContentCopy';
 import copyToClipboard from 'copy-text-to-clipboard';
 import React, { useCallback, useEffect, useState } from 'react';
-import { translate } from 'react-polyglot';
 
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { isAbsolutePath } from '@staticcms/core/lib/util';
 import Button from '../../common/button/Button';
 import mediaLibraryClasses from './MediaLibrary.classes';
 
-import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 export interface CopyToClipBoardButtonProps {
@@ -16,12 +15,9 @@ export interface CopyToClipBoardButtonProps {
   name?: string;
 }
 
-const CopyToClipBoardButton: FC<TranslatedProps<CopyToClipBoardButtonProps>> = ({
-  draft,
-  path,
-  name,
-  t,
-}) => {
+const CopyToClipBoardButton: FC<CopyToClipBoardButtonProps> = ({ draft, path, name }) => {
+  const t = useTranslate();
+
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -80,4 +76,4 @@ const CopyToClipBoardButton: FC<TranslatedProps<CopyToClipBoardButtonProps>> = (
   );
 };
 
-export default translate()(CopyToClipBoardButton) as FC<CopyToClipBoardButtonProps>;
+export default CopyToClipBoardButton;

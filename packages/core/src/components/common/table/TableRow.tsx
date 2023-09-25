@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import tableClasses from './Table.classes';
 
-import type { KeyboardEvent, ReactNode } from 'react';
+import type { FC, KeyboardEvent, ReactNode } from 'react';
 
 interface TableRowProps {
   children: ReactNode;
@@ -12,7 +12,7 @@ interface TableRowProps {
   to?: string;
 }
 
-const TableRow = ({ children, className, to }: TableRowProps) => {
+const TableRow: FC<TableRowProps> = ({ children, className, to }) => {
   const navigate = useNavigate();
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {

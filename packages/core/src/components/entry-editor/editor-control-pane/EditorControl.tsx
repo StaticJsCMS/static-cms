@@ -1,7 +1,6 @@
 import { isEqual } from 'lodash';
 import isEmpty from 'lodash/isEmpty';
 import React, { createElement, useCallback, useEffect, useMemo, useState } from 'react';
-import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
 import {
@@ -12,6 +11,7 @@ import {
 import { query as queryAction } from '@staticcms/core/actions/search';
 import useDebouncedCallback from '@staticcms/core/lib/hooks/useDebouncedCallback';
 import useMemoCompare from '@staticcms/core/lib/hooks/useMemoCompare';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { isFieldDuplicate, isFieldHidden } from '@staticcms/core/lib/i18n';
 import { resolveWidget } from '@staticcms/core/lib/registry';
@@ -29,20 +29,19 @@ import type {
   Field,
   FieldsErrors,
   I18nSettings,
-  TranslatedProps,
   UnknownField,
   ValueOrNestedValue,
   Widget,
 } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
-import type { ComponentType } from 'react';
+import type { FC } from 'react';
 import type { ConnectedProps } from 'react-redux';
 
 import './EditorControl.css';
 
 export const classes = generateClassNames('EditorControl', ['root', 'hidden']);
 
-const EditorControl = ({
+const EditorControl: FC<EditorControlProps> = ({
   collection,
   collectionFile,
   config: configState,
@@ -55,7 +54,6 @@ const EditorControl = ({
   locale,
   parentPath,
   query,
-  t,
   value: storageValue,
   forList = false,
   listItemPath,
@@ -65,7 +63,9 @@ const EditorControl = ({
   fieldName,
   isMeta = false,
   controlled = false,
-}: TranslatedProps<EditorControlProps>) => {
+}) => {
+  const t = useTranslate();
+
   const dispatch = useAppDispatch();
 
   const id = useUUID();
@@ -302,4 +302,4 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export type EditorControlProps = ConnectedProps<typeof connector>;
 
-export default connector(translate()(EditorControl) as ComponentType<EditorControlProps>);
+export default connector(EditorControl);

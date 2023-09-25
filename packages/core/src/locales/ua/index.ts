@@ -113,8 +113,6 @@ const ua: LocalePhrasesRoot = {
       onDeleteUnpublishedChanges:
         'Всі неопубліковані зміни в цій записі будуть видалені. Ви все ще хочете видалити?',
       loadingEntry: 'Завантаження запису ...',
-      confirmLoadBackup:
-        'Для цієї запису була відновлена локальна резервна копія, хочете використовувати її?',
     },
     editorToolbar: {
       publishing: 'Публікація...',

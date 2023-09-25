@@ -1,6 +1,5 @@
 import Snackbar from '@mui/material/Snackbar';
 import React, { useCallback, useEffect, useState } from 'react';
-import { translate } from 'react-polyglot';
 
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import { removeSnackbarById, selectSnackbars } from '@staticcms/core/store/slices/snackbars';
@@ -8,9 +7,8 @@ import SnackbarAlert from './SnackbarAlert';
 
 import type { SnackbarMessage } from '@staticcms/core/store/slices/snackbars';
 import type { FC, SyntheticEvent } from 'react';
-import type { TranslateProps } from 'react-polyglot';
 
-const Snackbars: FC<TranslateProps> = ({ t }) => {
+const Snackbars: FC = () => {
   const [open, setOpen] = useState(false);
   const [messageInfo, setMessageInfo] = useState<SnackbarMessage | undefined>(undefined);
 
@@ -51,9 +49,9 @@ const Snackbars: FC<TranslateProps> = ({ t }) => {
       TransitionProps={{ onExited: handleExited }}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
     >
-      {messageInfo ? <SnackbarAlert data={messageInfo} onClose={handleClose} t={t} /> : undefined}
+      {messageInfo ? <SnackbarAlert data={messageInfo} onClose={handleClose} /> : undefined}
     </Snackbar>
   );
 };
 
-export default translate()(Snackbars);
+export default Snackbars;

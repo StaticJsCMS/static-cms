@@ -46,7 +46,7 @@ export interface MenuProps {
   'aria-label': string;
 }
 
-const Menu = ({
+const Menu: FC<MenuProps> = ({
   label,
   startIcon: StartIcon,
   variant = 'contained',
@@ -65,7 +65,7 @@ const Menu = ({
   keepMounted = false,
   'data-testid': dataTestId,
   'aria-label': ariaLabel,
-}: MenuProps) => {
+}) => {
   const calculatedButtonClassName = useButtonClassNames(variant, color, size, rounded);
 
   const menuButtonClassNames = useMemo(

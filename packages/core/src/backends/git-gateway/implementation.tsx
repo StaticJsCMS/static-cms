@@ -35,11 +35,11 @@ import type {
   DisplayURLObject,
   ImplementationFile,
   PersistOptions,
-  TranslatedProps,
   User,
 } from '@staticcms/core/interface';
 import type { ApiRequest, Cursor } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
+import type { FC } from 'react';
 import type { Client } from './netlify-lfs-client';
 
 const STATUS_PAGE = 'https://www.netlifystatus.com';
@@ -349,7 +349,7 @@ export default class GitGateway implements BackendClass {
   }
 
   authComponent() {
-    const WrappedAuthenticationPage = (props: TranslatedProps<AuthenticationPageProps>) => {
+    const WrappedAuthenticationPage: FC<AuthenticationPageProps> = props => {
       const handleAuth = useCallback(
         async (email: string, password: string): Promise<User | string> => {
           try {

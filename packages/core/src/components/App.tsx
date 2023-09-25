@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import {
   Navigate,
@@ -17,6 +16,7 @@ import { loginUser as loginUserAction } from '@staticcms/core/actions/auth';
 import { discardDraft } from '@staticcms/core/actions/entries';
 import { currentBackend } from '@staticcms/core/backend';
 import { changeTheme } from '../actions/globalUI';
+import useTranslate from '../lib/hooks/useTranslate';
 import { invokeEvent } from '../lib/registry';
 import { getDefaultPath } from '../lib/util/collection.util';
 import { isNotNullish } from '../lib/util/null.util';
@@ -35,9 +35,9 @@ import Snackbars from './snackbar/Snackbars';
 import ThemeManager from './theme/ThemeManager';
 import useTheme from './theme/hooks/useTheme';
 
-import type { Credentials, TranslatedProps } from '@staticcms/core/interface';
+import type { Credentials } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
-import type { ComponentType } from 'react';
+import type { FC } from 'react';
 import type { ConnectedProps } from 'react-redux';
 
 import './App.css';
@@ -67,16 +67,17 @@ function EditEntityRedirect() {
   return <Navigate to={`/collections/${name}/entries/${params['*']}`} />;
 }
 
-const App = ({
+const App: FC<AppProps> = ({
   auth,
   user,
   config,
   collections,
   loginUser,
   isFetching,
-  t,
   scrollSyncEnabled,
-}: TranslatedProps<AppProps>) => {
+}) => {
+  const t = useTranslate();
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -138,7 +139,6 @@ const App = ({
         authEndpoint={config.config.backend.auth_endpoint}
         config={config.config}
         clearHash={() => navigate('/', { replace: true })}
-        t={t}
       />
     );
   }, [AuthComponent, auth.error, auth.isFetching, config.config, handleLogin, navigate, t]);
@@ -291,4 +291,4 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export type AppProps = ConnectedProps<typeof connector>;
 
-export default connector(translate()(App) as ComponentType<AppProps>);
+export default connector(App);

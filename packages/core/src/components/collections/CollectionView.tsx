@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
 import {
@@ -9,6 +8,7 @@ import {
   sortByField as sortByFieldAction,
 } from '@staticcms/core/actions/entries';
 import { SORT_DIRECTION_ASCENDING } from '@staticcms/core/constants';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import {
   selectSortableFields,
   selectViewFilters,
@@ -35,12 +35,12 @@ import type {
   ViewGroup,
 } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
-import type { ComponentType } from 'react';
+import type { FC } from 'react';
 import type { ConnectedProps } from 'react-redux';
 
 import './Collection.css';
 
-const CollectionView = ({
+const CollectionView: FC<CollectionViewProps> = ({
   collection,
   collections,
   isSearchResults,
@@ -52,14 +52,15 @@ const CollectionView = ({
   viewFilters,
   viewGroups,
   filterTerm,
-  t,
   filterByField,
   groupByField,
   filter,
   group,
   changeViewStyle,
   viewStyle,
-}: TranslatedProps<CollectionViewProps>) => {
+}) => {
+  const t = useTranslate();
+
   const [readyToLoad, setReadyToLoad] = useState(false);
   const [prevCollection, setPrevCollection] = useState<Collection | null>();
 
@@ -89,6 +90,7 @@ const CollectionView = ({
           key="search"
           collections={searchCollections}
           searchTerm={searchTerm}
+          filterTerm={filterTerm}
           viewStyle={viewStyle}
         />
       );
@@ -309,4 +311,4 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export type CollectionViewProps = ConnectedProps<typeof connector>;
 
-export default translate()(connector(CollectionView)) as ComponentType<CollectionViewOwnProps>;
+export default connector(CollectionView);

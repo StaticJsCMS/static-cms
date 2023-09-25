@@ -1,7 +1,7 @@
 import { Add as AddIcon } from '@styled-icons/material/Add';
 import React, { useMemo } from 'react';
-import { translate } from 'react-polyglot';
 
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getNewEntryUrl } from '@staticcms/core/lib/urlHelper';
 import { selectCollections } from '@staticcms/core/reducers/selectors/collections';
 import { useAppSelector } from '@staticcms/core/store/hooks';
@@ -9,7 +9,6 @@ import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemLink from '../common/menu/MenuItemLink';
 
-import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 import type { MenuProps } from '../common/menu/Menu';
 
@@ -18,7 +17,9 @@ export type QuickCreateProps = Pick<
   'rootClassName' | 'buttonClassName' | 'hideDropdownIcon' | 'hideLabel' | 'variant'
 >;
 
-const QuickCreate: FC<TranslatedProps<QuickCreateProps>> = ({ t, ...menuProps }) => {
+const QuickCreate: FC<QuickCreateProps> = menuProps => {
+  const t = useTranslate();
+
   const collections = useAppSelector(selectCollections);
 
   const createableCollections = useMemo(
@@ -47,4 +48,4 @@ const QuickCreate: FC<TranslatedProps<QuickCreateProps>> = ({ t, ...menuProps })
   );
 };
 
-export default translate()(QuickCreate) as FC<QuickCreateProps>;
+export default QuickCreate;

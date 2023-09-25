@@ -45,9 +45,6 @@
 
 .CMS_Autocomplete_button-icon {
   color: var(--text-secondary);
-
-  @apply h-5
-    w-5;
 }
 
 .CMS_Autocomplete_options {

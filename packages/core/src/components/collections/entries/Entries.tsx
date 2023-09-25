@@ -1,13 +1,14 @@
 import React, { useMemo } from 'react';
-import { translate } from 'react-polyglot';
 
 import Loader from '@staticcms/core/components/common/progress/Loader';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import entriesClasses from './Entries.classes';
 import EntryListing from './EntryListing';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
-import type { Collection, Collections, Entry, TranslatedProps } from '@staticcms/core/interface';
+import type { Collection, Collections, Entry } from '@staticcms/core/interface';
 import type Cursor from '@staticcms/core/lib/util/Cursor';
+import type { FC } from 'react';
 
 import './Entries.css';
 
@@ -31,17 +32,18 @@ export interface MultipleCollectionEntriesProps extends BaseEntriesProps {
 
 export type EntriesProps = SingleCollectionEntriesProps | MultipleCollectionEntriesProps;
 
-const Entries = ({
+const Entries: FC<EntriesProps> = ({
   entries,
   isFetching,
   viewStyle,
   cursor,
   filterTerm,
   handleCursorActions,
-  t,
   page,
   ...otherProps
-}: TranslatedProps<EntriesProps>) => {
+}) => {
+  const t = useTranslate();
+
   const loadingMessages = useMemo(
     () => [
       t('collection.entries.loadingEntries'),
@@ -87,4 +89,4 @@ const Entries = ({
   return <div className={entriesClasses['no-entries']}>{t('collection.entries.noEntries')}</div>;
 };
 
-export default translate()(Entries);
+export default Entries;

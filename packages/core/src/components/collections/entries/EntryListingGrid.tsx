@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
@@ -8,14 +9,12 @@ import EntryListingCardGrid from './EntryListingCardGrid';
 
 import type { CollectionEntryData } from '@staticcms/core/interface';
 import type { FC } from 'react';
-import type { t } from 'react-polyglot';
 
 export interface EntryListingGridProps {
   entryData: CollectionEntryData[];
   canLoadMore?: boolean;
   isLoadingEntries: boolean;
   onLoadMore: () => void;
-  t: t;
 }
 
 const EntryListingGrid: FC<EntryListingGridProps> = ({
@@ -23,8 +22,9 @@ const EntryListingGrid: FC<EntryListingGridProps> = ({
   canLoadMore,
   isLoadingEntries,
   onLoadMore,
-  t,
 }) => {
+  const t = useTranslate();
+
   const gridContainerRef = useRef<HTMLDivElement | null>(null);
 
   const isFetching = useAppSelector(selectIsFetching);
@@ -65,7 +65,6 @@ const EntryListingGrid: FC<EntryListingGridProps> = ({
           entryData={entryData}
           scrollContainerRef={gridContainerRef}
           onScroll={handleScroll}
-          t={t}
         />
       </div>
       {isLoadingEntries ? (

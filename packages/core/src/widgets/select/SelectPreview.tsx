@@ -11,7 +11,7 @@ interface ListPreviewProps {
   values: (string | number)[];
 }
 
-const ListPreview = ({ values }: ListPreviewProps) => {
+const ListPreview: FC<ListPreviewProps> = ({ values }) => {
   return (
     <ul>
       {values.map((value, idx) => (

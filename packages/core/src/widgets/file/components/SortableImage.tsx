@@ -21,7 +21,6 @@ const classes = generateClassNames('WidgetFileImage_SortableImage', [
   'controls',
   'replace-button',
   'remove-button',
-  'button-icon',
   'content',
   'image',
 ]);
@@ -98,26 +97,24 @@ const SortableImage: FC<SortableImageProps> = ({
           <div className={classes.controls}>
             {onReplace ? (
               <IconButton
+                icon={CameraAltIcon}
                 key="replace"
                 variant="text"
                 onClick={handleReplace}
-                className={classes['replace-button']}
+                rootClassName={classes['replace-button']}
                 aria-label="replace image"
-              >
-                <CameraAltIcon className={classes['button-icon']} />
-              </IconButton>
+              />
             ) : null}
             {onRemove ? (
               <IconButton
+                icon={DeleteIcon}
                 key="remove"
                 variant="text"
                 color="error"
                 onClick={handleRemove}
-                className={classes['remove-button']}
+                rootClassName={classes['remove-button']}
                 aria-label="remove image"
-              >
-                <DeleteIcon className={classes['button-icon']} />
-              </IconButton>
+              />
             ) : null}
           </div>
         </div>

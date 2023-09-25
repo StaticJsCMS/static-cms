@@ -26,14 +26,14 @@ export interface MenuItemLinkProps {
   endIcon?: FC<{ className?: string }>;
 }
 
-const MenuItemLink = ({
+const MenuItemLink: FC<MenuItemLinkProps> = ({
   href,
   children,
   className,
   active = false,
   startIcon: StartIcon,
   endIcon: EndIcon,
-}: MenuItemLinkProps) => {
+}) => {
   return (
     <NavLink to={href}>
       <MenuItem

@@ -4,8 +4,3 @@
     gap-1.5
     lg:mr-1;
 }
-
-.CMS_ViewStyleControl_icon {
-  @apply h-5
-    w-5;
-}

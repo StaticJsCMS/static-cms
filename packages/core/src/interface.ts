@@ -2,6 +2,7 @@ import type { LanguageName } from '@uiw/codemirror-extensions-langs';
 import type { PropertiesSchema } from 'ajv/dist/types/json-schema';
 import type {
   ComponentType,
+  FC,
   FunctionComponent,
   JSXElementConstructor,
   ReactElement,
@@ -533,7 +534,7 @@ export abstract class BackendClass {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor(_config: Config, _options: BackendInitializerOptions) {}
 
-  abstract authComponent(): (props: TranslatedProps<AuthenticationPageProps>) => JSX.Element;
+  abstract authComponent(): FC<AuthenticationPageProps>;
   abstract restoreUser(user: User): Promise<User>;
 
   abstract authenticate(credentials: Credentials): Promise<User>;

@@ -1,17 +1,18 @@
 import React, { useMemo } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
-import Editor from './Editor';
 import { getDefaultPath } from '../../lib/util/collection.util';
+import Editor from './Editor';
 
 import type { Collections } from '@staticcms/core/interface';
+import type { FC } from 'react';
 
 interface EditorRouteProps {
   newRecord?: boolean;
   collections: Collections;
 }
 
-const EditorRoute = ({ newRecord = false, collections }: EditorRouteProps) => {
+const EditorRoute: FC<EditorRouteProps> = ({ newRecord = false, collections }) => {
   const { name, ...params } = useParams();
   const slug = params['*'];
 

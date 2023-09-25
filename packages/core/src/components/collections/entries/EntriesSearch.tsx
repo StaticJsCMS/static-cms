@@ -13,18 +13,20 @@ import Entries from './Entries';
 import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { Collections } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
+import type { FC } from 'react';
 import type { ConnectedProps } from 'react-redux';
 
-const EntriesSearch = ({
+const EntriesSearch: FC<EntriesSearchProps> = ({
   collections,
   entries,
   isFetching,
   page,
   searchTerm,
+  filterTerm,
   viewStyle,
   searchEntries,
   clearSearch,
-}: EntriesSearchProps) => {
+}) => {
   const collectionNames = useMemo(() => Object.keys(collections), [collections]);
 
   const getCursor = useCallback(() => {
@@ -64,23 +66,25 @@ const EntriesSearch = ({
       entries={entries}
       isFetching={isFetching}
       viewStyle={viewStyle}
+      filterTerm={filterTerm}
     />
   );
 };
 
 interface EntriesSearchOwnProps {
   searchTerm: string;
+  filterTerm: string;
   collections: Collections;
   viewStyle: ViewStyle;
 }
 
 function mapStateToProps(state: RootState, ownProps: EntriesSearchOwnProps) {
-  const { searchTerm, collections, viewStyle } = ownProps;
+  const { searchTerm, filterTerm, collections, viewStyle } = ownProps;
   const collectionNames = Object.keys(collections);
   const isFetching = state.search.isFetching;
   const page = state.search.page;
   const entries = selectSearchedEntries(state, collectionNames);
-  return { isFetching, page, collections, viewStyle, entries, searchTerm };
+  return { isFetching, page, collections, viewStyle, entries, searchTerm, filterTerm };
 }
 
 const mapDispatchToProps = {

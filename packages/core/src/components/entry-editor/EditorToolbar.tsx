@@ -8,9 +8,9 @@ import { Check as CheckIcon } from '@styled-icons/material/Check';
 import { MoreVert as MoreVertIcon } from '@styled-icons/material/MoreVert';
 import { Publish as PublishIcon } from '@styled-icons/material/Publish';
 import React, { useCallback, useMemo } from 'react';
-import { translate } from 'react-polyglot';
 
 import { deleteLocalBackup, loadEntry } from '@staticcms/core/actions/entries';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectAllowDeletion, selectAllowPublish } from '@staticcms/core/lib/util/collection.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
@@ -25,7 +25,7 @@ import MenuItemButton from '../common/menu/MenuItemButton';
 import EditorWorkflowToolbarButtons from './EditorWorkflowToolbarButtons';
 
 import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
-import type { Collection, EditorPersistOptions, TranslatedProps } from '@staticcms/core/interface';
+import type { Collection, EditorPersistOptions } from '@staticcms/core/interface';
 import type { FC, MouseEventHandler } from 'react';
 
 import './EditorToolbar.css';
@@ -36,9 +36,7 @@ export const classes = generateClassNames('EditorToolbar', [
   'more-menu-button',
   'more-menu-label-icon',
   'preview-toggle',
-  'preview-toggle-icon',
   'delete-button',
-  'delete-button-icon',
   'publish-button',
   'publish-button-icon',
   'publish-button-label',
@@ -76,7 +74,7 @@ export interface EditorToolbarProps {
   hasUnpublishedChanges: boolean;
 }
 
-const EditorToolbar = ({
+const EditorToolbar: FC<EditorToolbarProps> = ({
   hasChanged,
   collection,
   onDuplicate,
@@ -86,7 +84,6 @@ const EditorToolbar = ({
   onPersistAndNew,
   isNewEntry,
   onDelete,
-  t,
   showPreviewToggle,
   previewActive,
   scrollSyncActive,
@@ -104,7 +101,9 @@ const EditorToolbar = ({
   isUpdatingStatus,
   onChangeStatus,
   hasUnpublishedChanges,
-}: TranslatedProps<EditorToolbarProps>) => {
+}) => {
+  const t = useTranslate();
+
   const canCreate = useMemo(
     () => ('folder' in collection && collection.create) ?? false,
     [collection],
@@ -262,28 +261,26 @@ const EditorToolbar = ({
       ) : null}
       {showPreviewToggle ? (
         <IconButton
+          icon={EyeIcon}
           key="show-preview-button"
           title={t('editor.editorInterface.preview')}
           variant={showMobilePreview ? 'contained' : 'text'}
           onClick={onMobilePreviewToggle}
-          className={classes['preview-toggle']}
+          rootClassName={classes['preview-toggle']}
           aria-label="toggle preview"
-        >
-          <EyeIcon className={classes['preview-toggle-icon']} />
-        </IconButton>
+        />
       ) : null}
       {canDelete ? (
         <IconButton
+          icon={TrashIcon}
           key="delete-button"
           title={t('editor.editorToolbar.deleteEntry')}
           color="error"
           variant="text"
           onClick={onDelete}
-          className={classes['delete-button']}
+          rootClassName={classes['delete-button']}
           aria-label="delete"
-        >
-          <TrashIcon className={classes['delete-button-icon']} />
-        </IconButton>
+        />
       ) : null}
       {useWorkflow ? (
         <div className={classes['workflow-controls']}>
@@ -322,4 +319,4 @@ const EditorToolbar = ({
   );
 };
 
-export default translate()(EditorToolbar) as FC<EditorToolbarProps>;
+export default EditorToolbar;

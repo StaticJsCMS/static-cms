@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useVirtual } from 'react-virtual';
 
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
@@ -11,7 +12,6 @@ import EntryRow from './EntryRow';
 
 import type { CollectionEntryData } from '@staticcms/core/interface';
 import type { FC } from 'react';
-import type { t } from 'react-polyglot';
 
 export interface EntryListingTableProps {
   isSingleCollectionInList: boolean;
@@ -20,7 +20,6 @@ export interface EntryListingTableProps {
   canLoadMore: boolean;
   isLoadingEntries: boolean;
   loadNext: () => void;
-  t: t;
 }
 
 const EntryListingTable: FC<EntryListingTableProps> = ({
@@ -30,8 +29,9 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
   canLoadMore,
   isLoadingEntries,
   loadNext,
-  t,
 }) => {
+  const t = useTranslate();
+
   const isFetching = useAppSelector(selectIsFetching);
 
   const tableContainerRef = useRef<HTMLDivElement | null>(null);
@@ -100,7 +100,6 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
                 collection={data.collection}
                 entry={data.entry}
                 summaryFields={data.summaryFields}
-                t={t}
               />
             );
           })}

@@ -1,10 +1,12 @@
 import React from 'react';
-import { translate } from 'react-polyglot';
 
-import type { ComponentType } from 'react';
-import type { TranslateProps } from 'react-polyglot';
+import useTranslate from '../lib/hooks/useTranslate';
 
-const NotFoundPage = ({ t }: TranslateProps) => {
+import type { FC } from 'react';
+
+const NotFoundPage: FC = () => {
+  const t = useTranslate();
+
   return (
     <div>
       <h2>{t('app.notFoundPage.header')}</h2>
@@ -12,4 +14,4 @@ const NotFoundPage = ({ t }: TranslateProps) => {
   );
 };
 
-export default translate()(NotFoundPage) as ComponentType<{}>;
+export default NotFoundPage;

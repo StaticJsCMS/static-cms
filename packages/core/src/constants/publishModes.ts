@@ -15,3 +15,16 @@ export const STATUS_DESCRIPTIONS: Record<WorkflowStatus, string> = {
   [WorkflowStatus.PENDING_REVIEW]: 'Waiting for Review',
   [WorkflowStatus.PENDING_PUBLISH]: 'Waiting to go live',
 };
+
+export function workflowStatusFromString(status: string) {
+  switch (status.toLowerCase()) {
+    case 'draft':
+      return WorkflowStatus.DRAFT;
+    case 'pending_review':
+      return WorkflowStatus.PENDING_REVIEW;
+    case 'pending_publish':
+      return WorkflowStatus.PENDING_PUBLISH;
+    default:
+      return undefined;
+  }
+}

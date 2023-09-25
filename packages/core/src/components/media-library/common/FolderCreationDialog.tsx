@@ -1,6 +1,7 @@
 import { Close as CloseIcon } from '@styled-icons/material/Close';
 import React, { useCallback, useState } from 'react';
 
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import Button from '../../common/button/Button';
@@ -8,7 +9,6 @@ import IconButton from '../../common/button/IconButton';
 import Modal from '../../common/modal/Modal';
 import TextField from '../../common/text-field/TextField';
 
-import type { TranslatedProps } from '@staticcms/core/interface';
 import type { ChangeEventHandler, FC } from 'react';
 
 import './FolderCreationDialog.css';
@@ -32,12 +32,9 @@ interface FolderCreationDialogProps {
   onCreate: (folderName: string) => void;
 }
 
-const FolderCreationDialog: FC<TranslatedProps<FolderCreationDialogProps>> = ({
-  open,
-  onClose,
-  onCreate,
-  t,
-}) => {
+const FolderCreationDialog: FC<FolderCreationDialogProps> = ({ open, onClose, onCreate }) => {
+  const t = useTranslate();
+
   const [folderName, setFolderName] = useState('');
   const handleFolderNameChange: ChangeEventHandler<HTMLInputElement> = useCallback(event => {
     setFolderName(event.target.value);
@@ -62,13 +59,13 @@ const FolderCreationDialog: FC<TranslatedProps<FolderCreationDialogProps>> = ({
       <div className={classes.header}>
         <h3 className={classes.title}>{t('mediaLibrary.folderSupport.createNewFolder')}</h3>
         <IconButton
+          icon={CloseIcon}
           variant="text"
           aria-label="close"
           onClick={handleClose}
-          className={classes['close-button']}
-        >
-          <CloseIcon className={classes['close-button-icon']} />
-        </IconButton>
+          rootClassName={classes['close-button']}
+          iconClassName={classes['close-button-icon']}
+        />
       </div>
       <div className={classes['name-input-wrapper']}>
         <TextField

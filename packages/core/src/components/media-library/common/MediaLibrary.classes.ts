@@ -20,7 +20,6 @@ const mediaLibraryClasses = generateClassNames('MediaLibrary', [
   'title-icon-wrapper',
   'title-icon',
   'folder-controls',
-  'folder-controls-icon',
   'folder',
   'folder-icon',
   'copy-to-clipboard-button',

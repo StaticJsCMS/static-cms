@@ -5,6 +5,7 @@ import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraf
 import { useAppSelector } from '@staticcms/core/store/hooks';
 
 import type { Collection, MediaField } from '@staticcms/core/interface';
+import type { FC } from 'react';
 
 export interface LinkProps<F extends MediaField> {
   href: string | undefined | null;
@@ -36,7 +37,7 @@ export const withMdxLink = <F extends MediaField>({
   collection,
   field,
 }: Pick<LinkProps<F>, 'collection' | 'field'>) => {
-  const MdxLink = ({ children, ...props }: Omit<LinkProps<F>, 'collection' | 'field'>) => (
+  const MdxLink: FC<Omit<LinkProps<F>, 'collection' | 'field'>> = ({ children, ...props }) => (
     <Link {...props} collection={collection} field={field}>
       {children}
     </Link>

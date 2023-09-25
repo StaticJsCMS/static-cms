@@ -67,7 +67,7 @@ export type CardGridItemData = MediaLibraryCardGridProps & {
   gutter: number;
 };
 
-const CardWrapper = ({
+const CardWrapper: FC<GridChildComponentProps<CardGridItemData>> = ({
   rowIndex,
   columnIndex,
   style,
@@ -87,7 +87,7 @@ const CardWrapper = ({
     hasSelection,
     allowMultiple,
   },
-}: GridChildComponentProps<CardGridItemData>) => {
+}) => {
   const left = useMemo(
     () =>
       parseFloat(

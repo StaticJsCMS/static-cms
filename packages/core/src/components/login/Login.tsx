@@ -1,14 +1,13 @@
 import React from 'react';
-import { translate } from 'react-polyglot';
 
 import Button from '@staticcms/core/components/common/button/Button';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import { StaticCmsLogo } from '../images/_index';
 import GoBackButton from './GoBackButton';
 
-import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC, MouseEventHandler, ReactNode } from 'react';
 
 import './Login.css';
@@ -32,15 +31,16 @@ export interface LoginProps {
   disabled?: boolean;
 }
 
-const Login = ({
+const Login: FC<LoginProps> = ({
   inProgress = false,
   login,
   icon,
   label,
   error,
   disabled = false,
-  t,
-}: TranslatedProps<LoginProps>) => {
+}) => {
+  const t = useTranslate();
+
   const config = useAppSelector(selectConfig);
 
   return (
@@ -80,9 +80,9 @@ const Login = ({
       >
         {inProgress ? t('auth.loggingIn') : label ?? t('auth.login')}
       </Button>
-      {config?.site_url && <GoBackButton href={config.site_url} t={t}></GoBackButton>}
+      {config?.site_url && <GoBackButton href={config.site_url} />}
     </div>
   );
 };
 
-export default translate()(Login) as FC<LoginProps>;
+export default Login;

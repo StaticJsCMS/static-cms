@@ -6,7 +6,7 @@ import isError from 'lodash/isError';
 import uniq from 'lodash/uniq';
 import { dirname, extname } from 'path';
 
-import { WorkflowStatus } from './constants/publishModes';
+import { WorkflowStatus, workflowStatusFromString } from './constants/publishModes';
 import { formatExtensions, resolveFormat } from './formats/formats';
 import { commitMessageFormatter, slugFormatter } from './lib/formatters';
 import {
@@ -1175,7 +1175,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         mediaFiles,
         updatedOn: entryData.updatedAt,
         author: entryData.pullRequestAuthor,
-        status: entryData.status,
+        status: workflowStatusFromString(entryData.status),
         meta: { path: prepareMetaPath(path, collection) },
       });
 

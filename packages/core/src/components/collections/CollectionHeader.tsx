@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
-import { translate } from 'react-polyglot';
 import { useParams } from 'react-router-dom';
 
 import useEntries from '@staticcms/core/lib/hooks/useEntries';
 import useIcon from '@staticcms/core/lib/hooks/useIcon';
 import useNewEntryUrl from '@staticcms/core/lib/hooks/useNewEntryUrl';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import {
   selectEntryCollectionTitle,
   selectFolderEntryExtension,
@@ -14,14 +14,16 @@ import { addFileTemplateFields } from '@staticcms/core/lib/widgets/stringTemplat
 import Button from '../common/button/Button';
 import collectionClasses from './Collection.classes';
 
-import type { Collection, Entry, TranslatedProps } from '@staticcms/core/interface';
+import type { Collection, Entry } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 interface CollectionHeaderProps {
   collection: Collection;
 }
 
-const CollectionHeader: FC<TranslatedProps<CollectionHeaderProps>> = ({ collection, t }) => {
+const CollectionHeader: FC<CollectionHeaderProps> = ({ collection }) => {
+  const t = useTranslate();
+
   const collectionLabel = collection.label;
   const collectionLabelSingular = collection.label_singular;
 
@@ -80,4 +82,4 @@ const CollectionHeader: FC<TranslatedProps<CollectionHeaderProps>> = ({ collecti
   );
 };
 
-export default translate()(CollectionHeader) as FC<CollectionHeaderProps>;
+export default CollectionHeader;

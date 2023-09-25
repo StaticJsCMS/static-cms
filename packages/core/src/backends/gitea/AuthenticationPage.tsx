@@ -3,17 +3,19 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import Login from '@staticcms/core/components/login/Login';
 import { PkceAuthenticator } from '@staticcms/core/lib/auth';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 
-import type { AuthenticationPageProps, TranslatedProps } from '@staticcms/core/interface';
-import type { MouseEvent } from 'react';
+import type { AuthenticationPageProps } from '@staticcms/core/interface';
+import type { FC, MouseEvent } from 'react';
 
-const GiteaAuthenticationPage = ({
+const GiteaAuthenticationPage: FC<AuthenticationPageProps> = ({
   inProgress = false,
   config,
   clearHash,
   onLogin,
-  t,
-}: TranslatedProps<AuthenticationPageProps>) => {
+}) => {
+  const t = useTranslate();
+
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const auth = useMemo(() => {
