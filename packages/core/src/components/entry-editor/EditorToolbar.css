@@ -49,3 +49,11 @@
   @apply hidden
     md:block;
 }
+
+.CMS_EditorToolbar_workflow-controls {
+  @apply hidden
+    md:flex
+    gap-2
+    px-2;
+}
+

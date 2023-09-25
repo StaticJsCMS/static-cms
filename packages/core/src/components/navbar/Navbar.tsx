@@ -8,6 +8,7 @@ import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectConfig, selectDisplayUrl } from '@staticcms/core/reducers/selectors/config';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import Button from '../common/button/Button';
+import IconButton from '../common/button/IconButton';
 import { StaticCmsIcon } from '../images/_index';
 import Breadcrumbs from './Breadcrumbs';
 import QuickCreate from './QuickCreate';
@@ -29,6 +30,7 @@ export const classes = generateClassNames('Navbar', [
   'custom-logo',
   'actions',
   'site-url',
+  'site-url-mobile',
   'site-url-label',
   'site-url-icon',
   'quick-create',
@@ -84,10 +86,20 @@ const Navbar = ({
           </div>
           <div className={classes.actions}>
             {displayUrl ? (
-              <Button variant="text" className={classes['site-url']} href={displayUrl}>
-                <div className={classes['site-url-label']}>{displayUrl}</div>
-                <OpenInNewIcon className={classes['site-url-icon']} />
-              </Button>
+              <>
+                <Button variant="text" className={classes['site-url']} href={displayUrl}>
+                  <div className={classes['site-url-label']}>{displayUrl}</div>
+                  <OpenInNewIcon className={classes['site-url-icon']} />
+                </Button>
+                <IconButton
+                  variant="text"
+                  className={classes['site-url-mobile']}
+                  href={displayUrl}
+                  title={displayUrl}
+                >
+                  <OpenInNewIcon className={classes['site-url-icon']} />
+                </IconButton>
+              </>
             ) : null}
             {showQuickCreate ? (
               <QuickCreate key="quick-create" rootClassName={classes['quick-create']} />

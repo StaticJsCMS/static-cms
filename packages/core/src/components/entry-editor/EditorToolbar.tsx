@@ -14,6 +14,7 @@ import { deleteLocalBackup, loadEntry } from '@staticcms/core/actions/entries';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectAllowDeletion, selectAllowPublish } from '@staticcms/core/lib/util/collection.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
+import { selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
 import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import IconButton from '../common/button/IconButton';
@@ -21,13 +22,13 @@ import confirm from '../common/confirm/Confirm';
 import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
-import { selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
+import EditorWorkflowToolbarButtons from './EditorWorkflowToolbarButtons';
 
+import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import type { Collection, EditorPersistOptions, TranslatedProps } from '@staticcms/core/interface';
 import type { FC, MouseEventHandler } from 'react';
 
 import './EditorToolbar.css';
-import Button from '../common/button/Button';
 
 export const classes = generateClassNames('EditorToolbar', [
   'root',
@@ -41,6 +42,7 @@ export const classes = generateClassNames('EditorToolbar', [
   'publish-button',
   'publish-button-icon',
   'publish-button-label',
+  'workflow-controls',
 ]);
 
 export interface EditorToolbarProps {
@@ -52,7 +54,6 @@ export interface EditorToolbarProps {
   onDelete: () => Promise<void>;
   onDuplicate: () => void;
   hasChanged: boolean;
-  displayUrl: string | undefined;
   collection: Collection;
   isNewEntry: boolean;
   isModification?: boolean;
@@ -69,14 +70,17 @@ export interface EditorToolbarProps {
   showMobilePreview: boolean;
   onMobilePreviewToggle: () => void;
   onDiscardDraft: () => void;
+  currentStatus: WorkflowStatus | undefined;
+  isUpdatingStatus: boolean;
+  onChangeStatus: (status: WorkflowStatus) => void;
+  hasUnpublishedChanges: boolean;
 }
 
 const EditorToolbar = ({
   hasChanged,
-  // TODO displayUrl,
   collection,
   onDuplicate,
-  isPersisting,
+  isPersisting = false,
   onPersist,
   onPersistAndDuplicate,
   onPersistAndNew,
@@ -96,6 +100,10 @@ const EditorToolbar = ({
   showMobilePreview,
   onMobilePreviewToggle,
   onDiscardDraft,
+  currentStatus,
+  isUpdatingStatus,
+  onChangeStatus,
+  hasUnpublishedChanges,
 }: TranslatedProps<EditorToolbarProps>) => {
   const canCreate = useMemo(
     () => ('folder' in collection && collection.create) ?? false,
@@ -197,130 +205,120 @@ const EditorToolbar = ({
     useWorkflow,
   ]);
 
-  return useMemo(
-    () => (
-      <div className={classNames(classes.root, className)}>
-        {showI18nToggle || showPreviewToggle || canDelete ? (
-          <Menu
-            key="extra-menu"
-            label={<MoreVertIcon className={classes['more-menu-label-icon']} />}
-            color="secondary"
-            variant="text"
-            rootClassName={classes['more-menu']}
-            buttonClassName={classes['more-menu-button']}
-            hideDropdownIcon
-            aria-label="more options dropdown"
-          >
-            <MenuGroup>
-              {showI18nToggle && (
-                <MenuItemButton
-                  onClick={toggleI18n}
-                  startIcon={GlobeAltIcon}
-                  endIcon={i18nActive ? CheckIcon : undefined}
-                >
-                  {t('editor.editorInterface.sideBySideI18n')}
-                </MenuItemButton>
-              )}
-              {showPreviewToggle && (
-                <>
-                  <MenuItemButton
-                    onClick={togglePreview}
-                    disabled={isLoading}
-                    startIcon={EyeIcon}
-                    endIcon={previewActive && !i18nActive ? CheckIcon : undefined}
-                  >
-                    {t('editor.editorInterface.preview')}
-                  </MenuItemButton>
-                  <MenuItemButton
-                    onClick={toggleScrollSync}
-                    disabled={isLoading || i18nActive || !previewActive}
-                    startIcon={HeightIcon}
-                    endIcon={
-                      scrollSyncActive && !(i18nActive || !previewActive) ? CheckIcon : undefined
-                    }
-                  >
-                    {t('editor.editorInterface.toggleScrollSync')}
-                  </MenuItemButton>
-                </>
-              )}
-            </MenuGroup>
-            {canDelete ? (
-              <MenuGroup key="delete-button">
-                <MenuItemButton onClick={onDelete} startIcon={TrashIcon} color="error">
-                  {t('editor.editorToolbar.deleteEntry')}
-                </MenuItemButton>
-              </MenuGroup>
-            ) : null}
-          </Menu>
-        ) : null}
-        {showPreviewToggle ? (
-          <IconButton
-            key="show-preview-button"
-            title={t('editor.editorInterface.preview')}
-            variant={showMobilePreview ? 'contained' : 'text'}
-            onClick={onMobilePreviewToggle}
-            className={classes['preview-toggle']}
-            aria-label="toggle preview"
-          >
-            <EyeIcon className={classes['preview-toggle-icon']} />
-          </IconButton>
-        ) : null}
-        {canDelete ? (
-          <IconButton
-            key="delete-button"
-            title={t('editor.editorToolbar.deleteEntry')}
-            color="error"
-            variant="text"
-            onClick={onDelete}
-            className={classes['delete-button']}
-            aria-label="delete"
-          >
-            <TrashIcon className={classes['delete-button-icon']} />
-          </IconButton>
-        ) : null}
-        {useWorkflow ? (
-          <Button disabled={!hasChanged}>
-            {isPersisting ? t('editor.editorToolbar.saving') : t('editor.editorToolbar.save')}
-          </Button>
-        ) : null}
+  return (
+    <div className={classNames(classes.root, className)}>
+      {showI18nToggle || showPreviewToggle || canDelete ? (
         <Menu
-          label={
-            isPublished ? t('editor.editorToolbar.published') : t('editor.editorToolbar.publish')
-          }
-          color={isPublished ? 'success' : 'primary'}
-          disabled={isLoading || (menuItems.length == 1 && menuItems[0].length === 0)}
-          startIcon={PublishIcon}
-          rootClassName={classes['publish-button']}
-          iconClassName={classes['publish-button-icon']}
-          labelClassName={classes['publish-button-label']}
-          hideDropdownIconOnMobile
-          aria-label="publish options dropdown"
+          key="extra-menu"
+          label={<MoreVertIcon className={classes['more-menu-label-icon']} />}
+          color="secondary"
+          variant="text"
+          rootClassName={classes['more-menu']}
+          buttonClassName={classes['more-menu-button']}
+          hideDropdownIcon
+          aria-label="more options dropdown"
         >
-          {menuItems.map((group, index) => (
-            <MenuGroup key={`menu-group-${index}`}>{group}</MenuGroup>
-          ))}
+          <MenuGroup>
+            {showI18nToggle && (
+              <MenuItemButton
+                onClick={toggleI18n}
+                startIcon={GlobeAltIcon}
+                endIcon={i18nActive ? CheckIcon : undefined}
+              >
+                {t('editor.editorInterface.sideBySideI18n')}
+              </MenuItemButton>
+            )}
+            {showPreviewToggle && (
+              <>
+                <MenuItemButton
+                  onClick={togglePreview}
+                  disabled={isLoading}
+                  startIcon={EyeIcon}
+                  endIcon={previewActive && !i18nActive ? CheckIcon : undefined}
+                >
+                  {t('editor.editorInterface.preview')}
+                </MenuItemButton>
+                <MenuItemButton
+                  onClick={toggleScrollSync}
+                  disabled={isLoading || i18nActive || !previewActive}
+                  startIcon={HeightIcon}
+                  endIcon={
+                    scrollSyncActive && !(i18nActive || !previewActive) ? CheckIcon : undefined
+                  }
+                >
+                  {t('editor.editorInterface.toggleScrollSync')}
+                </MenuItemButton>
+              </>
+            )}
+          </MenuGroup>
+          {canDelete ? (
+            <MenuGroup key="delete-button">
+              <MenuItemButton onClick={onDelete} startIcon={TrashIcon} color="error">
+                {t('editor.editorToolbar.deleteEntry')}
+              </MenuItemButton>
+            </MenuGroup>
+          ) : null}
         </Menu>
-      </div>
-    ),
-    [
-      className,
-      showI18nToggle,
-      showPreviewToggle,
-      canDelete,
-      toggleI18n,
-      i18nActive,
-      t,
-      togglePreview,
-      isLoading,
-      previewActive,
-      toggleScrollSync,
-      scrollSyncActive,
-      onDelete,
-      showMobilePreview,
-      onMobilePreviewToggle,
-      isPublished,
-      menuItems,
-    ],
+      ) : null}
+      {showPreviewToggle ? (
+        <IconButton
+          key="show-preview-button"
+          title={t('editor.editorInterface.preview')}
+          variant={showMobilePreview ? 'contained' : 'text'}
+          onClick={onMobilePreviewToggle}
+          className={classes['preview-toggle']}
+          aria-label="toggle preview"
+        >
+          <EyeIcon className={classes['preview-toggle-icon']} />
+        </IconButton>
+      ) : null}
+      {canDelete ? (
+        <IconButton
+          key="delete-button"
+          title={t('editor.editorToolbar.deleteEntry')}
+          color="error"
+          variant="text"
+          onClick={onDelete}
+          className={classes['delete-button']}
+          aria-label="delete"
+        >
+          <TrashIcon className={classes['delete-button-icon']} />
+        </IconButton>
+      ) : null}
+      {useWorkflow ? (
+        <div className={classes['workflow-controls']}>
+          <EditorWorkflowToolbarButtons
+            hasChanged={hasChanged}
+            isPersisting={isPersisting}
+            onPersist={onPersist}
+            currentStatus={currentStatus}
+            isUpdatingStatus={isUpdatingStatus}
+            onChangeStatus={onChangeStatus}
+          />
+        </div>
+      ) : null}
+      <Menu
+        label={
+          isPublished ? t('editor.editorToolbar.published') : t('editor.editorToolbar.publish')
+        }
+        color={isPublished ? 'success' : 'primary'}
+        disabled={
+          isLoading ||
+          (menuItems.length == 1 && menuItems[0].length === 0) ||
+          (useWorkflow && (!hasUnpublishedChanges || hasChanged))
+        }
+        startIcon={PublishIcon}
+        rootClassName={classes['publish-button']}
+        iconClassName={classes['publish-button-icon']}
+        labelClassName={classes['publish-button-label']}
+        hideDropdownIconOnMobile
+        aria-label="publish options dropdown"
+      >
+        {menuItems.map((group, index) => (
+          <MenuGroup key={`menu-group-${index}`}>{group}</MenuGroup>
+        ))}
+      </Menu>
+    </div>
   );
 };
 
