@@ -137,7 +137,7 @@ const SortControl: FC<SortControlProps> = ({
                     : KeyboardArrowDownIcon
                   : undefined
               }
-              className={classes.option}
+              rootClassName={classes.option}
             >
               {field.label ?? field.name}
             </MenuItemButton>

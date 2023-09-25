@@ -88,7 +88,7 @@ const GroupControl: FC<GroupControlProps> = ({
             key={viewGroup.id}
             onClick={() => onGroupClick?.(viewGroup)}
             endIcon={viewGroup.id === activeGroup?.id ? CheckIcon : undefined}
-            className={classes.option}
+            rootClassName={classes.option}
           >
             {viewGroup.label}
           </MenuItemButton>

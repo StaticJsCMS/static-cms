@@ -94,7 +94,7 @@ const FilterControl: FC<FilterControlProps> = ({
             <MenuItemButton
               key={viewFilter.id}
               onClick={handleFilterClick(viewFilter)}
-              className={classes.filter}
+              rootClassName={classes.filter}
             >
               <Checkbox
                 key={`${labelId}-${checked}`}

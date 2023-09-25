@@ -550,7 +550,6 @@ interface CollectionViewOwnProps {
   name: string;
   slug?: string;
   newRecord: boolean;
-  unpublishedEntry: boolean;
 }
 
 function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {

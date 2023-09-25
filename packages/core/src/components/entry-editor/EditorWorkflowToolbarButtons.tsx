@@ -7,8 +7,13 @@ import Button from '../common/button/Button';
 import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { FC } from 'react';
+
+import './EditorWorkflowToolbarButtons.css';
+
+const classes = generateClassNames('EditorWorkflowToolbarButtons', ['not-checked']);
 
 export interface EditorWorkflowToolbarButtonsProps {
   hasChanged: boolean;
@@ -63,18 +68,27 @@ const EditorWorkflowToolbarButtons: FC<EditorWorkflowToolbarButtonsProps> = ({
             <MenuItemButton
               onClick={() => onChangeStatus(WorkflowStatus.DRAFT)}
               startIcon={currentStatus === WorkflowStatus.DRAFT ? CheckIcon : undefined}
+              contentClassName={
+                currentStatus !== WorkflowStatus.DRAFT ? classes['not-checked'] : ''
+              }
             >
               {statusToTranslation[WorkflowStatus.DRAFT]}
             </MenuItemButton>
             <MenuItemButton
               onClick={() => onChangeStatus(WorkflowStatus.PENDING_REVIEW)}
               startIcon={currentStatus === WorkflowStatus.PENDING_REVIEW ? CheckIcon : undefined}
+              contentClassName={
+                currentStatus !== WorkflowStatus.PENDING_REVIEW ? classes['not-checked'] : ''
+              }
             >
               {statusToTranslation[WorkflowStatus.PENDING_REVIEW]}
             </MenuItemButton>
             <MenuItemButton
               onClick={() => onChangeStatus(WorkflowStatus.PENDING_PUBLISH)}
               startIcon={currentStatus === WorkflowStatus.PENDING_PUBLISH ? CheckIcon : undefined}
+              contentClassName={
+                currentStatus !== WorkflowStatus.PENDING_PUBLISH ? classes['not-checked'] : ''
+              }
             >
               {statusToTranslation[WorkflowStatus.PENDING_PUBLISH]}
             </MenuItemButton>
