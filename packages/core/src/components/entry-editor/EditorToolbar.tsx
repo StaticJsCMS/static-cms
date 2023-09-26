@@ -181,7 +181,9 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
   const menuItems: JSX.Element[][] = useMemo(() => {
     const items: JSX.Element[] = [];
 
-    if (!isPublished && (!useWorkflow || hasUnpublishedChanges)) {
+    console.log('[hasUnpublishedChanges]', hasUnpublishedChanges, 'isPublished', isPublished);
+
+    if ((!useWorkflow && !isPublished) || (useWorkflow && hasUnpublishedChanges)) {
       items.push(
         <MenuItemButton key="publishNow" onClick={handlePublishClick} startIcon={PublishIcon}>
           {t('editor.editorToolbar.publishNow')}
@@ -217,8 +219,13 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
     const groups = [items];
 
     if (useWorkflow && canCreate && canPublish && canDelete) {
-      groups.unshift([
-        <MenuItemButton key="unpublish" onClick={onUnPublish} startIcon={UnpublishedIcon}>
+      groups.push([
+        <MenuItemButton
+          key="unpublish"
+          onClick={onUnPublish}
+          startIcon={UnpublishedIcon}
+          color="warning"
+        >
           {t('editor.editorToolbar.unpublish')}
         </MenuItemButton>,
       ]);
@@ -352,7 +359,9 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
             <MenuGroup key="delete-button">
               <MenuItemButton
                 onClick={
-                  workflowDeleteLabel === 'editor.editorToolbar.deleteUnpublishedChanges'
+                  useWorkflow &&
+                  workflowDeleteLabel &&
+                  workflowDeleteLabel !== 'editor.editorToolbar.deletePublishedEntry'
                     ? onDeleteUnpublishedChanges
                     : onDelete
                 }

@@ -99,17 +99,19 @@ const cs: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Chcete opravdu opustit tuto stránku?',
-      onUpdatingWithUnsavedChanges: 'Máte neuložené změny. Uložte je prosím před změnou statusu.',
-      onPublishingNotReady: 'Změňte stav na „Připraveno“ před publikováním.',
-      onPublishingWithUnsavedChanges: 'Máte neuložené změny, prosím uložte je před publikováním.',
-      onPublishing: 'Chcete opravdu publikovat tento záznam?',
-      onUnpublishing: 'Chcete opravdu zrušit publikování tohoto záznamu?',
+      onUpdatingWithUnsavedChangesBody:
+        'Máte neuložené změny. Uložte je prosím před změnou statusu.',
+      onPublishingNotReadyBody: 'Změňte stav na „Připraveno“ před publikováním.',
+      onPublishingWithUnsavedChangesBody:
+        'Máte neuložené změny, prosím uložte je před publikováním.',
+      onPublishingBody: 'Chcete opravdu publikovat tento záznam?',
+      onUnpublishingBody: 'Chcete opravdu zrušit publikování tohoto záznamu?',
       onDeleteWithUnsavedChangesBody:
         'Chcete opravdu vymazat tento publikovaný záznam a všechny neuložené změny z této relace?',
       onDeletePublishedEntryBody: 'Chcete opravdu smazat tento publikovaný záznam?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Tato akce vymaže všechny nepublikované změny v tomto záznamu a také všechny neuložené změny z této relace. Chcete záznam skutečně vymazat?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Všechny nepublivkoané změny v tomto záznamu budou vymazány. Chcete ho skuteně vymazat?',
       loadingEntry: 'Načítání záznamu…',
     },
@@ -260,7 +262,7 @@ const cs: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Chyba při publikování záznamu: %{details}',
       onFailToUnpublishEntry: 'Chyba při rušení publikování záznamu: %{details}',
       entryUpdated: 'Stav záznamu byl změněn',
-      onDeleteUnpublishedChanges: 'Nepublikované změny byly smazány',
+      onDeleteUnpublishedChangesBody: 'Nepublikované změny byly smazány',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Byli jste odhlášeni, prosím zálohujte všechna data a znova se přihlašte',
       onBackendDown: 'Backend zaznamenal výpadek. Podívejte se do %{details} pro více informací.',

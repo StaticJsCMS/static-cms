@@ -3,6 +3,8 @@ import toml from '@iarna/toml';
 import FileFormatter from './FileFormatter';
 
 class TomlFormatter extends FileFormatter {
+  name = 'toml';
+
   fromFile(content: string) {
     return toml.parse(content) as object;
   }

@@ -98,19 +98,19 @@ const hr: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Jeste li sigurni da želite napustiti stranicu?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Imate nespremljene promjene, molimo spremite prije ažuriranja statusa.',
-      onPublishingNotReady: 'Molimo ažurirajte status na "Spremno" prije objavljivanja.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Molimo ažurirajte status na "Spremno" prije objavljivanja.',
+      onPublishingWithUnsavedChangesBody:
         'Imate nespremljene promjene, molimo spremite prije objavljivanja.',
-      onPublishing: 'Jeste li sigurni da želite objaviti ovaj unos?',
-      onUnpublishing: 'Jeste li sigurni da želite maknuti objavu za ovaj unos?',
+      onPublishingBody: 'Jeste li sigurni da želite objaviti ovaj unos?',
+      onUnpublishingBody: 'Jeste li sigurni da želite maknuti objavu za ovaj unos?',
       onDeleteWithUnsavedChangesBody:
         'Jeste li sigurni da želite obrisati objavljeni unos, te nespremljene promjene u trenutnoj sesiji?',
       onDeletePublishedEntryBody: 'Jeste li sigurni da želite obrisati ovaj objavljeni unos?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Obrisat ćete sve neobjavljene promjene na ovom unosu, te sve nespremljene promjene u trenutnoj sesiji. Želite li i dalje obrisati?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Sve nespremljene promjene na ovom unosu će biti obrisane. Želite li i dalje obrisati?',
       loadingEntry: 'Učitavanje unosa...',
     },
@@ -246,7 +246,7 @@ const hr: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Neuspjelo objavljivanje unosa: %{details}',
       onFailToUnpublishEntry: 'Neuspjelo brisanje unosa: %{details}',
       entryUpdated: 'Status unosa ažuriran',
-      onDeleteUnpublishedChanges: 'Otkrivene neobjavljene objave',
+      onDeleteUnpublishedChangesBody: 'Otkrivene neobjavljene objave',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Odjavljeni ste, molimo spremite sve podatke i prijavite se ponovno',
       onBackendDown: 'Backend servis ima prekid rada. Pogledaj %{details} za više informacija',

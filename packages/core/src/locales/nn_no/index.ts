@@ -83,17 +83,17 @@ const nn_no: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Er du sikker på at du vil navigere bort frå denne sida?',
-      onUpdatingWithUnsavedChanges: 'Du må lagra endringane dine før du endrar status',
-      onPublishingNotReady: 'Du må endre status til "Klar" før du publiserer',
-      onPublishingWithUnsavedChanges: 'Du må laga endringane dine før du kan publisere.',
-      onPublishing: 'Er du sikker på at vil publisere?',
-      onUnpublishing: 'Er du sikker på at du vil avpublisere innlegget?',
+      onUpdatingWithUnsavedChangesBody: 'Du må lagra endringane dine før du endrar status',
+      onPublishingNotReadyBody: 'Du må endre status til "Klar" før du publiserer',
+      onPublishingWithUnsavedChangesBody: 'Du må laga endringane dine før du kan publisere.',
+      onPublishingBody: 'Er du sikker på at vil publisere?',
+      onUnpublishingBody: 'Er du sikker på at du vil avpublisere innlegget?',
       onDeleteWithUnsavedChangesBody:
         'Er du sikkert på at du vil slette eit publisert innlegg med tilhøyrande ulagra endringar?',
       onDeletePublishedEntryBody: 'Er du sikker på at du vil slette dette publiserte innlegget?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Handlinga slettar endringar som ikkje er publisert eller lagra. Vil du halde fram?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Alle endringar som ikkje er publisert vil gå tapt. Vil du halde fram?',
       loadingEntry: 'Lastar innlegg...',
     },
@@ -219,7 +219,7 @@ const nn_no: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Kunne ikkje publisere: %{details}',
       onFailToUnpublishEntry: 'Kunne ikkje avpublisere: %{details}',
       entryUpdated: 'Innleggsstatus oppdatert',
-      onDeleteUnpublishedChanges: 'Avpubliserte endringar sletta',
+      onDeleteUnpublishedChangesBody: 'Avpubliserte endringar sletta',
       onFailToAuth: '%{details}',
     },
   },

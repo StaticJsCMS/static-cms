@@ -98,19 +98,19 @@ const ro: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Ești sigur/ă că dorești să părăsești pagina?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Există modificări nesalvate! Te rugăm salvează înainte de a actualiza statusul.',
-      onPublishingNotReady: 'Actualizează statusul la „Gata” înainte de publicare.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Actualizează statusul la „Gata” înainte de publicare.',
+      onPublishingWithUnsavedChangesBody:
         'Există modificări nesalvate, salvează-le înainte de publicare.',
-      onPublishing: 'Ești sigur/ă că dorești să publici acest articol?',
-      onUnpublishing: 'Ești sigur/ă că dorești să anulezi publicarea acestui articol?',
+      onPublishingBody: 'Ești sigur/ă că dorești să publici acest articol?',
+      onUnpublishingBody: 'Ești sigur/ă că dorești să anulezi publicarea acestui articol?',
       onDeleteWithUnsavedChangesBody:
         'Ești sigur/ă că dorești să ștergi această publicare, dar și modificările nesalvate din sesiunea curentă?',
       onDeletePublishedEntryBody: 'Ești sigur/ă că dorești să ștergi această publicare?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Se vor șterge toate modificările nepublicate din aceast articol și modificările nesalvate din sesiunea curentă. Continui cu ștergerea?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Toate modificările nepublicate din acest articol vor fi șterse. Continui cu ștergerea?',
       loadingEntry: 'Se încarcă...',
     },
@@ -262,7 +262,7 @@ const ro: LocalePhrasesRoot = {
       onFailToPublishEntry: 'A eșuat publicarea: %{details}',
       onFailToUnpublishEntry: 'A eșuat anularea publicării: %{details}',
       entryUpdated: 'S-a actualizat status-ul intrării',
-      onDeleteUnpublishedChanges: 'Modificări nepublicate șterse',
+      onDeleteUnpublishedChangesBody: 'Modificări nepublicate șterse',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Ai fost delogat, te rugăm salvează orice date și autentifică-te din nou.',
       onBackendDown: 'Există probleme la server. Vezi %{details} pentru mai multe informații.',

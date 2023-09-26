@@ -101,17 +101,18 @@ const sl: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Ste prepričani, da želite zapustiti to stran?',
-      onUpdatingWithUnsavedChanges: 'Imaš neshranjene spremembe. Shrani pred posodobitvijo stanja.',
-      onPublishingNotReady: 'Pred objavo posodobi status na "pripravljen".',
-      onPublishingWithUnsavedChanges: 'Imaš neshranjene spremembe. Shrani pred objavo.',
-      onPublishing: 'Ste prepričani, da želite objaviti ta vnos?',
-      onUnpublishing: 'Ste prepričani, da želite preklicati objavo tega vnosa?',
+      onUpdatingWithUnsavedChangesBody:
+        'Imaš neshranjene spremembe. Shrani pred posodobitvijo stanja.',
+      onPublishingNotReadyBody: 'Pred objavo posodobi status na "pripravljen".',
+      onPublishingWithUnsavedChangesBody: 'Imaš neshranjene spremembe. Shrani pred objavo.',
+      onPublishingBody: 'Ste prepričani, da želite objaviti ta vnos?',
+      onUnpublishingBody: 'Ste prepričani, da želite preklicati objavo tega vnosa?',
       onDeleteWithUnsavedChangesBody:
         'Ste prepričani, da želite izbrisati ta objavljen vnos, pa tudi neshrannjene spremembe iz trenutne seje?',
       onDeletePublishedEntryBody: 'Ste prepričani, da želite izbrisati ta objavljeni vnos?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'To bo izbrisalo vse neobjavljene spremembe tega vnosa, pa tudi neshranjene spremembe iz trenutne seje. Ali še vedno želiš izbrisati?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Vse neobjavljene spremembe tega vnosa bodo izbrisane. Ali še vedno želiš izbrisati?',
       loadingEntry: 'Nalaganje vnosa ...',
     },
@@ -276,7 +277,7 @@ const sl: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Vnosa ni uspelo objaviti: %{details}',
       onFailToUnpublishEntry: 'Preklicanje objave vnosa ni uspelo: %{details}',
       entryUpdated: 'Status vnosa posodobljen',
-      onDeleteUnpublishedChanges: 'Neobjavljene spremembe izbrisane',
+      onDeleteUnpublishedChangesBody: 'Neobjavljene spremembe izbrisane',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Bili ste odjavljeni, varnostno kopirate vse podatke in se ponovno prijavite',
       onBackendDown: 'Zaledna storitev doživlja izpad. Glejte %{details} za več informacij',

@@ -101,19 +101,19 @@ const ko: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: '이 페이지를 떠나시겠습니까?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         '저장하지 않은 변경사항이 있습니다. 상태 업데이트 전 먼저 저장하세요.',
-      onPublishingNotReady: '게시 하기 앞서 상태를 "준비됨" 으로 업데이트 하세요.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: '게시 하기 앞서 상태를 "준비됨" 으로 업데이트 하세요.',
+      onPublishingWithUnsavedChangesBody:
         '저장하지 않은 변경사항이 있습니다, 게시하기 전 먼저 저장하세요.',
-      onPublishing: '이 항목을 게시하시곘습니까?',
-      onUnpublishing: '이 항목을 게시 철회 하시겠습니까?',
+      onPublishingBody: '이 항목을 게시하시곘습니까?',
+      onUnpublishingBody: '이 항목을 게시 철회 하시겠습니까?',
       onDeleteWithUnsavedChangesBody:
         '현재 세션에서의 저장되지 않은 변경사항과 이 게시된 항목을 삭제하시겠습니까?',
       onDeletePublishedEntryBody: '이 게시된 항목을 삭제하시겠습니까?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         '이 항목의 게시되지 않은 모든 변경사항과 현재 세션의 저장되지 않은 변경사항이 삭제됩니다. 정말로 삭제하시겠습니까?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         '이 항목에 대해 게시되지 않은 변경사항이 삭제됩니다. 정말로 삭제하시겠습니까?',
       loadingEntry: '항목 불러오는 중...',
     },
@@ -275,7 +275,7 @@ const ko: LocalePhrasesRoot = {
       onFailToPublishEntry: '게시 실패: %{details}',
       onFailToUnpublishEntry: '항목 게시 철회 실해: %{details}',
       entryUpdated: '항목 상태 업데이트됨',
-      onDeleteUnpublishedChanges: '게시되지 않은 변경사항 삭제됨',
+      onDeleteUnpublishedChangesBody: '게시되지 않은 변경사항 삭제됨',
       onFailToAuth: '%{details}',
       onLoggedOut: '로그아웃 하셨습니다, 데티어를 백업하시고 다시 로그인 하세요.',
       onBackendDown:

@@ -98,19 +98,19 @@ const sv: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Är du säker på att du vill lämna sidan?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Du har osparade ändringar, vänligen spara dem innan du uppdaterar status.',
-      onPublishingNotReady: 'Vänligen uppdatera status till "Redo" innan du publicerar.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Vänligen uppdatera status till "Redo" innan du publicerar.',
+      onPublishingWithUnsavedChangesBody:
         'Du har osparade ändringar, vänligen spara innan du publicerar.',
-      onPublishing: 'Är du säker på att du vill publicera det här inlägget?',
-      onUnpublishing: 'Är du säker på att du vill avpublicera det här inlägget?',
+      onPublishingBody: 'Är du säker på att du vill publicera det här inlägget?',
+      onUnpublishingBody: 'Är du säker på att du vill avpublicera det här inlägget?',
       onDeleteWithUnsavedChangesBody:
         'Är du säker på att du vill radera det här publicerade inlägget, inklusive dina osparade ändringar från nuvarande session?',
       onDeletePublishedEntryBody: 'Är du säker på att du vill radera det här publicerade inlägget?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Du är på väg att radera alla opublicerade ändringar för det här inlägget, inklusive dina osparade ändringar från nuvarande session. Vill du fortfarande radera?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Alla opublicerade ändringar kommer raderas. Vill du fortfarande radera?',
       loadingEntry: 'Hämtar inlägg...',
     },
@@ -263,7 +263,7 @@ const sv: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Kunde inte publicera: %{details}',
       onFailToUnpublishEntry: 'Kunde inte avpublicera inlägg: %{details}',
       entryUpdated: 'Inläggsstatus uppdaterad',
-      onDeleteUnpublishedChanges: 'Opublicerade ändringar raderade',
+      onDeleteUnpublishedChangesBody: 'Opublicerade ändringar raderade',
       onFailToAuth: '%{details}',
       onLoggedOut:
         'Du har blivit utloggad, vänligen spara en kopia av eventuella ändringar och logga in på nytt',

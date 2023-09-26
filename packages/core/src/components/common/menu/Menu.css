@@ -59,7 +59,8 @@
   @apply absolute
     right-0
     z-40
-    w-56
+    min-w-[224px]
+    max-w-[80%]
     origin-top-right
     rounded-md
     shadow-md

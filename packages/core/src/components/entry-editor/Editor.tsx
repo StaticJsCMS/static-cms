@@ -28,6 +28,7 @@ import { selectConfig, selectUseWorkflow } from '@staticcms/core/reducers/select
 import { selectUnpublishedEntry } from '@staticcms/core/reducers/selectors/editorialWorkflow';
 import { selectEntry } from '@staticcms/core/reducers/selectors/entries';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
+import { addSnackbar } from '@staticcms/core/store/slices/snackbars';
 import {
   deleteUnpublishedEntry,
   loadUnpublishedEntry,
@@ -155,8 +156,17 @@ const Editor: FC<EditorProps> = ({
     ],
   );
 
+  console.log('[handleChangeStatus] currentStatus', currentStatus);
   const handleChangeStatus = useCallback(
     (newStatus: WorkflowStatus) => {
+      console.log(
+        '[handleChangeStatus] slug: ',
+        slug,
+        'currentStatus',
+        currentStatus,
+        'newStatus',
+        newStatus,
+      );
       if (!slug || !currentStatus) {
         return;
       }
@@ -170,9 +180,9 @@ const Editor: FC<EditorProps> = ({
         });
         return;
       }
-      updateUnpublishedEntryStatus(collection.name, slug, currentStatus, newStatus);
+      dispatch(updateUnpublishedEntryStatus(collection.name, slug, currentStatus, newStatus));
     },
-    [collection.name, currentStatus, entryDraft.hasChanged, slug],
+    [collection.name, currentStatus, dispatch, entryDraft.hasChanged, slug],
   );
 
   const handlePublishEntry = useCallback(
@@ -183,7 +193,7 @@ const Editor: FC<EditorProps> = ({
 
       const { createNew = false, duplicate = false } = opts;
 
-      if (currentStatus !== WorkflowStatus.PENDING_REVIEW) {
+      if (currentStatus !== WorkflowStatus.PENDING_PUBLISH) {
         alert({
           title: 'editor.editor.onPublishingNotReadyTitle',
           body: {
@@ -212,7 +222,7 @@ const Editor: FC<EditorProps> = ({
         return;
       }
 
-      await publishUnpublishedEntry(collection.name, slug, navigate);
+      await dispatch(publishUnpublishedEntry(collection.name, slug, navigate));
 
       deleteBackup();
 
@@ -254,10 +264,10 @@ const Editor: FC<EditorProps> = ({
       return;
     }
 
-    await unpublishPublishedEntry(collection, slug);
+    await dispatch(unpublishPublishedEntry(collection, slug));
 
     return navigate(`/collections/${collection.name}?noredirect`);
-  }, [collection, navigate, slug]);
+  }, [collection, dispatch, navigate, slug]);
 
   const handleDuplicateEntry = useCallback(() => {
     if (!entryDraft.entry) {
@@ -296,19 +306,60 @@ const Editor: FC<EditorProps> = ({
     setTimeout(async () => {
       await dispatch(deleteEntry(collection, slug));
       deleteBackup();
+      dispatch(
+        addSnackbar({
+          type: 'success',
+          message: {
+            key: `ui.toast.${useWorkflow ? 'onDeletePublishedEntry' : 'entryDeleted'}`,
+          },
+        }),
+      );
       return navigate(`/collections/${collection.name}?noredirect`);
     }, 0);
-  }, [collection, deleteBackup, dispatch, entryDraft.hasChanged, navigate, newRecord, slug]);
+  }, [
+    collection,
+    deleteBackup,
+    dispatch,
+    entryDraft.hasChanged,
+    navigate,
+    newRecord,
+    slug,
+    useWorkflow,
+  ]);
 
   const handleDeleteUnpublishedChanges = useCallback(async () => {
-    if (
-      entryDraft.hasChanged &&
-      !window.confirm(t('editor.editor.onDeleteUnpublishedChangesWithUnsavedChanges'))
+    if (entryDraft.hasChanged) {
+      if (
+        entryDraft.hasChanged &&
+        !(await confirm({
+          title: 'editor.editor.onDeleteUnpublishedChangesWithUnsavedChangesTitle',
+          body: 'editor.editor.onDeleteUnpublishedChangesWithUnsavedChangesBody',
+          color: 'error',
+        }))
+      ) {
+        return;
+      }
+    } else if (
+      !(await confirm({
+        title: 'editor.editor.onDeleteUnpublishedChangesTitle',
+        body: 'editor.editor.onDeleteUnpublishedChangesBody',
+        color: 'error',
+      }))
     ) {
       return;
-    } else if (!window.confirm(t('editor.editor.onDeleteUnpublishedChanges'))) {
-      return;
     }
+
+    console.log(
+      'deleteUnpublishedEntry!',
+      'collection.name',
+      collection.name,
+      'slug',
+      slug,
+      'newRecord',
+      newRecord,
+      'isModification',
+      isModification,
+    );
 
     if (!slug || newRecord) {
       return navigate(`/collections/${collection.name}?noredirect`);
@@ -317,8 +368,16 @@ const Editor: FC<EditorProps> = ({
     setTimeout(async () => {
       await dispatch(deleteUnpublishedEntry(collection.name, slug));
       deleteBackup();
+      dispatch(
+        addSnackbar({
+          type: 'success',
+          message: {
+            key: 'ui.toast.onDeleteUnpublishedChanges',
+          },
+        }),
+      );
       if (isModification) {
-        loadEntry(collection, slug);
+        dispatch(loadEntry(collection, slug));
       } else {
         return navigate(`/collections/${collection.name}?noredirect`);
       }
@@ -332,7 +391,6 @@ const Editor: FC<EditorProps> = ({
     navigate,
     newRecord,
     slug,
-    t,
   ]);
 
   const [prevLocalBackup, setPrevLocalBackup] = useState<

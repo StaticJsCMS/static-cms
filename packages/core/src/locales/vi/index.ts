@@ -90,18 +90,18 @@ const vi: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Bạn có chắc rằng bạn muốn rời khỏi trang này?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Bạn chưa lưu những thay đổi, hãy lưu trước khi thay đổi trạng thái.',
-      onPublishingNotReady: 'Hãy thay đổi trạng thái thành "Sẵn sàng" trước khi công bố.',
-      onPublishingWithUnsavedChanges: 'Bạn có thay đổi chưa lưu, hãy lưu trước khi công bố.',
-      onPublishing: 'Bạn có chắc rằng bạn muốn công bố mục này?',
-      onUnpublishing: 'Bạn có chắc rằng bạn muốn ngừng công bố mục này?',
+      onPublishingNotReadyBody: 'Hãy thay đổi trạng thái thành "Sẵn sàng" trước khi công bố.',
+      onPublishingWithUnsavedChangesBody: 'Bạn có thay đổi chưa lưu, hãy lưu trước khi công bố.',
+      onPublishingBody: 'Bạn có chắc rằng bạn muốn công bố mục này?',
+      onUnpublishingBody: 'Bạn có chắc rằng bạn muốn ngừng công bố mục này?',
       onDeleteWithUnsavedChangesBody:
         'Bạn có chắc rằng bạn muốn xoá mục đã được công bố này, cũng như là những thay đổi chưa lưu của bạn trong phiên làm việc này?',
       onDeletePublishedEntryBody: 'Bạn có chắc rằng bạn muốn xoá mục đã được công bố này?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Điều này sẽ xoá tất cả những thay đổi chưa được lưu trong mục này, cũng như là những thay đổi chưa được lưu của bạn trong phiên làm việc này. Bạn vẫn muốn xoá chứ?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Tất cả những thay đổi chưa được lưu trong mục này sẽ bị xoá. Bạn vẫn muốn xoá chứ?',
       loadingEntry: 'Đang tải...',
     },
@@ -227,7 +227,7 @@ const vi: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Không thể công bố: %{details}',
       onFailToUnpublishEntry: 'Không thể ngừng công bố mục: %{details}',
       entryUpdated: 'Trạng thái của mục đã được cập nhật',
-      onDeleteUnpublishedChanges: 'Những thay đổi chưa được công bố đã được xoá',
+      onDeleteUnpublishedChangesBody: 'Những thay đổi chưa được công bố đã được xoá',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Bạn đã đăng xuất, hãy sao lưu dữ liệu và đăng nhập lại',
       onBackendDown: 'Dịch vụ backend đang gặp trục trặc. Hãy xem {details} để biết thêm thông tin',

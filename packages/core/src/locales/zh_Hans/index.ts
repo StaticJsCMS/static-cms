@@ -98,16 +98,16 @@ const zh_Hans: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: '你确定要离开此页面吗？',
-      onUpdatingWithUnsavedChanges: '你有尚未保存的修改，请在更新状态前进行保存',
-      onPublishingNotReady: '请在发布之前将状态更新为“就绪”',
-      onPublishingWithUnsavedChanges: '你有尚未保存的修改，请在发布前进行保存',
-      onPublishing: '你确定要发布此内容吗？',
-      onUnpublishing: '你确定要撤销发布此内容吗？',
+      onUpdatingWithUnsavedChangesBody: '你有尚未保存的修改，请在更新状态前进行保存',
+      onPublishingNotReadyBody: '请在发布之前将状态更新为“就绪”',
+      onPublishingWithUnsavedChangesBody: '你有尚未保存的修改，请在发布前进行保存',
+      onPublishingBody: '你确定要发布此内容吗？',
+      onUnpublishingBody: '你确定要撤销发布此内容吗？',
       onDeleteWithUnsavedChangesBody: '你确定要删除这个已经发布的内容，以及当前尚未保存的修改吗？',
       onDeletePublishedEntryBody: '你确定要删除这个已经发布的内容吗？',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         '此内容所有未被发布的修改，以及当前尚未保存的修改都将被删除，你确定吗？',
-      onDeleteUnpublishedChanges: '此内容所有未被发布的修改都将被删除，你确定吗？',
+      onDeleteUnpublishedChangesBody: '此内容所有未被发布的修改都将被删除，你确定吗？',
       loadingEntry: '正在加载内容...',
     },
     editorInterface: {
@@ -257,7 +257,7 @@ const zh_Hans: LocalePhrasesRoot = {
       onFailToPublishEntry: '发布失败: %{details}',
       onFailToUnpublishEntry: '撤销发布失败: %{details}',
       entryUpdated: '内容状态已更新',
-      onDeleteUnpublishedChanges: '未发布的修改已删除',
+      onDeleteUnpublishedChangesBody: '未发布的修改已删除',
       onFailToAuth: '%{details}',
       onLoggedOut: '你已注销，请先保存好数据然后再次登录',
       onBackendDown: 'Backend 服务已中断，欲知详情请查看：%{details}',

@@ -357,6 +357,8 @@ export function persistUnpublishedEntry(
       return;
     }
 
+    entry.status = WorkflowStatus.DRAFT;
+
     const assetProxies = getMediaAssets({
       entry,
     });
@@ -390,9 +392,9 @@ export function persistUnpublishedEntry(
         }),
       );
       dispatch(unpublishedEntryPersisted(collection, serializedEntry));
+      dispatch(loadUnpublishedEntry(collection, newSlug));
 
       if (entry.slug !== newSlug) {
-        dispatch(loadUnpublishedEntry(collection, newSlug));
         navigate(`/collections/${collection.name}/entries/${newSlug}`);
       }
     } catch (error) {
@@ -419,6 +421,13 @@ export function updateUnpublishedEntryStatus(
   newStatus: WorkflowStatus,
 ) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
+    console.log(
+      '[handleChangeStatus][updateUnpublishedEntryStatus]',
+      'oldStatus',
+      oldStatus,
+      'newStatus',
+      newStatus,
+    );
     if (oldStatus === newStatus) {
       return;
     }

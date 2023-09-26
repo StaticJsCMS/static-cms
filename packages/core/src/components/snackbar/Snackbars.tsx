@@ -1,6 +1,8 @@
 import Snackbar from '@mui/material/Snackbar';
 import React, { useCallback, useEffect, useState } from 'react';
 
+import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
+import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import { removeSnackbarById, selectSnackbars } from '@staticcms/core/store/slices/snackbars';
 import SnackbarAlert from './SnackbarAlert';
@@ -27,6 +29,20 @@ const Snackbars: FC = () => {
       setOpen(false);
     }
   }, [snackbars, messageInfo, open, dispatch]);
+
+  const idToClose = useDebounce(messageInfo?.id, 5000);
+
+  useEffect(() => {
+    if (isNullish(idToClose)) {
+      return;
+    }
+
+    if (idToClose !== messageInfo?.id) {
+      return;
+    }
+
+    setOpen(false);
+  }, [idToClose, messageInfo?.id]);
 
   const handleClose = useCallback((_event?: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {

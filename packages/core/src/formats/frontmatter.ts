@@ -91,6 +91,7 @@ export function getFormatOpts(format?: Language, customDelimiter?: Delimiter) {
 }
 
 export class FrontmatterFormatter extends FileFormatter {
+  name = 'formatter';
   format?: Format;
 
   constructor(format?: Language, customDelimiter?: Delimiter) {

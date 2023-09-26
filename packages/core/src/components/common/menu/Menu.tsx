@@ -74,7 +74,7 @@ const Menu: FC<MenuProps> = ({
   );
 
   return (
-    <Dropdown open>
+    <Dropdown>
       <div
         className={classNames(
           classes.root,

@@ -1191,6 +1191,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         dataFile.path,
         dataFile.id,
       );
+      console.log('readAndFormatDataFile', data, dataFile.path, dataFile.newFile);
       const entryWithFormat = formatData(data, dataFile.path, dataFile.newFile);
       return entryWithFormat;
     };

@@ -106,22 +106,23 @@ const de: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Möchten Sie diese Seite wirklich verlassen?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Es sind noch ungespeicherte Änderungen vorhanden. Bitte speichern Sie diese, bevor Sie den Status aktualisieren.',
-      onPublishingNotReady:
+      onPublishingNotReadyBody:
         'Bitte setzten die den Status vor dem Veröffentlichen auf "Abgeschlossen".',
-      onPublishingWithUnsavedChanges:
+      onPublishingWithUnsavedChangesBody:
         'Es sind noch ungespeicherte Änderungen vorhanden. Bitte speicheren Sie vor dem Veröffentlichen.',
-      onPublishing: 'Soll dieser Beitrag wirklich veröffentlicht werden?',
-      onUnpublishing: 'Soll die Veröffentlichung dieses Beitrags wirklich zurückgezogen werden?',
+      onPublishingBody: 'Soll dieser Beitrag wirklich veröffentlicht werden?',
+      onUnpublishingBody:
+        'Soll die Veröffentlichung dieses Beitrags wirklich zurückgezogen werden?',
       onDeleteWithUnsavedChangesTitle: 'Veröffentlichten Beitrag löschen?',
       onDeleteWithUnsavedChangesBody:
         'Möchten Sie diesen veröffentlichten Beitrag, sowie Ihre nicht gespeicherten Änderungen löschen?',
       onDeletePublishedEntryTitle: 'Veröffentlichten Beitrag löschen?',
       onDeletePublishedEntryBody: 'Soll dieser veröffentlichte Beitrag wirklich gelöscht werden?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Möchten Sie diesen unveröffentlichten Beitrag, sowie Ihre nicht gespeicherten Änderungen löschen?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Alle unveröffentlichten Änderungen werden gelöscht. Möchten Sie wirklich löschen?',
       loadingEntry: 'Beitrag laden...',
     },
@@ -326,7 +327,7 @@ const de: LocalePhrasesRoot = {
       onFailToUnpublishEntry:
         'Veröffentlichung des Beitrags konnte nicht rückgängig gemacht werden: %{details}',
       entryUpdated: 'Beitragsstatus aktualisiert',
-      onDeleteUnpublishedChanges: 'Unveröffentlichte Änderungen verworfen',
+      onDeleteUnpublishedChangesBody: 'Unveröffentlichte Änderungen verworfen',
       onFailToAuth: '%{details}',
       onLoggedOut:
         'Sie wurden ausgeloggt. Bitte sichern Sie Ihre Daten und melden Sie sich erneut an.',

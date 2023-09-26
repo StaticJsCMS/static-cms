@@ -88,19 +88,19 @@ const fa: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'آیا مطمئن هستید که می خواهید این صفحه را ترک کنید؟',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'شما تغییرات ذخیره نشده ای دارید، لطفا قبل از به روز رسانی وضعیت را ذخیره کنید.',
-      onPublishingNotReady: 'لطفاً قبل از انتشار وضعیت را به "آماده" به روز کنید.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'لطفاً قبل از انتشار وضعیت را به "آماده" به روز کنید.',
+      onPublishingWithUnsavedChangesBody:
         'شما تغییرات ذخیره نشده ای دارید، لطفاً قبل از انتشار ذخیره کنید.',
-      onPublishing: 'آیا شما مطمئن هستید که می خواهید این مطلب را منتشر کنید؟',
-      onUnpublishing: 'آیا مطمئن هستید که می خواهید این ورودی را لغو انتشار کنید؟',
-      onDeleteWithUnsavedChanges:
+      onPublishingBody: 'آیا شما مطمئن هستید که می خواهید این مطلب را منتشر کنید؟',
+      onUnpublishingBody: 'آیا مطمئن هستید که می خواهید این ورودی را لغو انتشار کنید؟',
+      onDeleteWithUnsavedChangesBody:
         'آیا مطمئن هستید که می خواهید این ورودی منتشر شده و همچنین تغییرات ذخیره نشده خود را از جلسه فعلی حذف کنید؟',
-      onDeletePublishedEntry: 'آیا مطمئنید که می خواهید این ورودی منتشر شده را حذف کنید؟',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeletePublishedEntryBody: 'آیا مطمئنید که می خواهید این ورودی منتشر شده را حذف کنید؟',
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'با این کار همه تغییرات منتشر نشده در این ورودی و همچنین تغییرات ذخیره نشده شما از جلسه فعلی حذف می شود. آیا هنوز می خواهید حذف کنید؟',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'همه تغییرات منتشر نشده در این ورودی حذف خواهند شد. آیا هنوز می خواهید حذف کنید؟',
       loadingEntry: 'در حال بارگیری ورودی...',
     },
@@ -210,8 +210,8 @@ const fa: LocalePhrasesRoot = {
       copied: 'کپی شده است',
     },
     mediaLibrary: {
-      onDelete: 'آیا مطمئن هستید که می خواهید رسانه انتخابی را حذف کنید؟',
-      fileTooLarge:
+      onDeleteBody: 'آیا مطمئن هستید که می خواهید رسانه انتخابی را حذف کنید؟',
+      fileTooLargeBody:
         'فایل خیلی بزرگ است.\nپیکربندی شده است تا فایل های بزرگتر از %{size} کیلوبایت مجاز نباشد.',
     },
     mediaLibraryModal: {
@@ -261,7 +261,7 @@ const fa: LocalePhrasesRoot = {
       onFailToPublishEntry: 'منتشر نشد: %{details}',
       onFailToUnpublishEntry: 'لغو انتشار ورودی انجام نشد: %{details}',
       entryUpdated: 'وضعیت ورودی به روز شد',
-      onDeleteUnpublishedChanges: 'تغییرات منتشر نشده حذف شد',
+      onDeleteUnpublishedChangesBody: 'تغییرات منتشر نشده حذف شد',
       onFailToAuth: '%{details}',
       onLoggedOut:
         'شما از سیستم خارج شده اید، لطفاً از داده ها نسخه پشتیبان تهیه کنید و دوباره وارد شوید',

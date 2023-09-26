@@ -98,19 +98,19 @@ const pt: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Tem certeza que deseja sair desta página?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Há mudanças não salvas. Por favor, salve-as antes de atualizar o status.',
-      onPublishingNotReady: 'Por favor, altere o status para "Pronto" antes de publicar.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Por favor, altere o status para "Pronto" antes de publicar.',
+      onPublishingWithUnsavedChangesBody:
         'Há mudanças não salvas. Por favor, salve-as antes de publicar.',
-      onPublishing: 'Tem certeza que deseja publicar essa entrada?',
-      onUnpublishing: 'Tem certeza que deseja cancelar a publicação dessa entrada?',
+      onPublishingBody: 'Tem certeza que deseja publicar essa entrada?',
+      onUnpublishingBody: 'Tem certeza que deseja cancelar a publicação dessa entrada?',
       onDeleteWithUnsavedChangesBody:
         'Tem certeza de que deseja excluir esta entrada publicada, bem como as alterações não salvas da sessão atual?',
       onDeletePublishedEntryBody: 'Tem certeza de que deseja excluir esta entrada publicada?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Isso excluirá todas as alterações não publicadas nesta entrada, bem como as alterações não salvas da sessão atual. Você ainda deseja excluir?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Todas as alterações não publicadas nesta entrada serão excluídas. Você ainda deseja excluir?',
       loadingEntry: 'Carregando entrada...',
     },
@@ -271,7 +271,7 @@ const pt: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Falha ao publicar: %{details}',
       onFailToUnpublishEntry: 'Falha ao cancelar a publicação da entrada: %{details}',
       entryUpdated: 'Status da entrada atualizado',
-      onDeleteUnpublishedChanges: 'Alterações não publicadas excluídas',
+      onDeleteUnpublishedChangesBody: 'Alterações não publicadas excluídas',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Você foi desconectado. Por favor, salve as alterações e entre novamente',
       onBackendDown: 'O serviço de back-end está fora do ar. Veja %{details} para mais informações',

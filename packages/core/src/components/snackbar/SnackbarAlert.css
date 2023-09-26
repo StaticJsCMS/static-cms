@@ -1,6 +1,7 @@
 .CMS_SnackbarAlert_root {
   color: var(--text-primary);
-  background: var(--background-main);
+  border-color: color-mix(in srgb, var(--background-divider) 75%, transparent);
+  background: var(--background-light);
 
   @apply flex
     items-center
@@ -10,7 +11,9 @@
     py-2
     px-2.5
     rounded-lg
-    shadow-md;
+    shadow-lg
+    drop-shadow-xl
+    border;
 
   &.CMS_SnackbarAlert_error {
     & .CMS_SnackbarAlert_icon-wrapper {

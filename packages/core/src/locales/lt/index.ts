@@ -99,19 +99,19 @@ const lt: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Ar tikrai norite uždaryti šį puslapį?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Turite neišsaugotų pakeitimų! Prašome išsaugoti prieš pakeičiant statusą.',
-      onPublishingNotReady: 'Prieš publikuojant, privalote pakeisti statusą į „Paruošta“.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Prieš publikuojant, privalote pakeisti statusą į „Paruošta“.',
+      onPublishingWithUnsavedChangesBody:
         'Yra neišsaugotų pakeitimų, prašome išsaugoti juos prieš publikuojant.',
-      onPublishing: 'Ae tikrai norite publikuoti šį įrašą?',
-      onUnpublishing: 'Tikrai norite panaikinti publikavimo statusą?',
+      onPublishingBody: 'Ae tikrai norite publikuoti šį įrašą?',
+      onUnpublishingBody: 'Tikrai norite panaikinti publikavimo statusą?',
       onDeleteWithUnsavedChangesBody:
         'Tikrai norite panaikinti publikuotą įrašą ir Jūsų pakeiitmus iš dabartinės sesijos?',
       onDeletePublishedEntryBody: 'Tikrai norite ištrinti šį publikuotą įrašą?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Tai ištrins visus nepublikuotus pakeitimus įraše, taip pat neišsaugotus pakeitimus per dabartinę sesiją. Vis tiek norite trinti?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Visi Jūsų pakeitimai įraše bus panaikinti. Ar tikrai norite trinti jį?',
       loadingEntry: 'Kraunamas įrašas...',
     },
@@ -248,7 +248,7 @@ const lt: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Nepavyko publikuoti: %{details}',
       onFailToUnpublishEntry: 'Nepavyko panaikinti publikavimą: %{details}',
       entryUpdated: 'Įrašo statusas pakeistas',
-      onDeleteUnpublishedChanges: 'Nepublikuoti pakeitimai ištrinti',
+      onDeleteUnpublishedChangesBody: 'Nepublikuoti pakeitimai ištrinti',
       onFailToAuth: 'Nepavyko prisijungti: %{details}',
       onLoggedOut:
         'Mes jus atjungėme. Jeigu yra poreikis, sukurkite duomenų atsarginę kopiją. Galite tiesiog iš naujo prisijungti.',

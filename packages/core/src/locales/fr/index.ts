@@ -99,18 +99,19 @@ const fr: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Voulez-vous vraiment quitter cette page ?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Veuillez enregistrer vos modifications avant de mettre à jour le statut.',
-      onPublishingNotReady: 'Veuillez mettre à jour le statut à "Prêt" avant de publier.',
-      onPublishingWithUnsavedChanges: 'Veuillez enregistrer vos modifications avant de publier.',
-      onPublishing: 'Voulez-vous vraiment publier cette entrée ?',
-      onUnpublishing: 'Voulez-vous vraiment dépublier cette entrée ?',
+      onPublishingNotReadyBody: 'Veuillez mettre à jour le statut à "Prêt" avant de publier.',
+      onPublishingWithUnsavedChangesBody:
+        'Veuillez enregistrer vos modifications avant de publier.',
+      onPublishingBody: 'Voulez-vous vraiment publier cette entrée ?',
+      onUnpublishingBody: 'Voulez-vous vraiment dépublier cette entrée ?',
       onDeleteWithUnsavedChangesBody:
         'Voulez-vous vraiment supprimer cette entrée publiée ainsi que vos modifications non enregistrées de cette session ?',
       onDeletePublishedEntryBody: 'Voulez-vous vraiment supprimer cette entrée publiée ?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Ceci supprimera toutes les modifications non publiées de cette entrée ainsi que vos modifications non enregistrées de cette session. Voulez-vous toujours supprimer ?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Toutes les modifications non publiées de cette entrée seront supprimées. Voulez-vous toujours supprimer ?',
       loadingEntry: "Chargement de l'entrée...",
     },
@@ -267,7 +268,7 @@ const fr: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Échec de la publication : %{details}',
       onFailToUnpublishEntry: "Impossible de dépublier l'entrée : %{details}",
       entryUpdated: "Statut de l'entrée mis à jour",
-      onDeleteUnpublishedChanges: 'Modifications non publiées supprimées',
+      onDeleteUnpublishedChangesBody: 'Modifications non publiées supprimées',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Vous avez été déconnecté, merci de sauvegarder les données et vous reconnecter',
       onBackendDown:

@@ -98,18 +98,18 @@ const ja: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'このページから遷移しますか？',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         '変更した項目があります。ステータスを更新する前に保存してください。',
-      onPublishingNotReady: '公開する前に、ステータスを「準備完了」に更新してください。',
-      onPublishingWithUnsavedChanges: '変更した項目があります。公開する前に保存してください。',
-      onPublishing: 'このエントリを公開しますか？',
-      onUnpublishing: 'このエントリを未公開にしますか？',
+      onPublishingNotReadyBody: '公開する前に、ステータスを「準備完了」に更新してください。',
+      onPublishingWithUnsavedChangesBody: '変更した項目があります。公開する前に保存してください。',
+      onPublishingBody: 'このエントリを公開しますか？',
+      onUnpublishingBody: 'このエントリを未公開にしますか？',
       onDeleteWithUnsavedChangesBody:
         '保存されていない変更も削除されますが、この公開エントリを削除しますか？',
       onDeletePublishedEntryBody: 'この公開エントリを削除しますか？',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         '保存されていない変更も削除されますが、このエントリの未公開の変更を削除しますか？',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         '公開されていない変更も削除されますが、このエントリを削除しますか？',
       loadingEntry: 'エントリの読込中...',
     },
@@ -264,7 +264,7 @@ const ja: LocalePhrasesRoot = {
       onFailToPublishEntry: 'エントリの公開に失敗しました。%{details}',
       onFailToUnpublishEntry: 'エントリを未公開にするのに失敗しました。%{details}',
       entryUpdated: 'エントリのステータスを更新しました。',
-      onDeleteUnpublishedChanges: '未公開の変更を削除しました。',
+      onDeleteUnpublishedChangesBody: '未公開の変更を削除しました。',
       onFailToAuth: '%{details}',
       onLoggedOut: 'ログアウトされています。データをバックアップし、再度ログインしてください。',
       onBackendDown: 'バックエンドのシステムが停止しています。%{details}',

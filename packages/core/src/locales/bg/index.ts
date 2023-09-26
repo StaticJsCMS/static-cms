@@ -98,18 +98,20 @@ const bg: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Наистина ли искате да напуснете тази страница?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Имате незапазени промени, моля, запазете преди актуализиране на състоянието.',
-      onPublishingNotReady: 'Моля, актуализирайте състоянието на „Готово“, преди да публикувате',
-      onPublishingWithUnsavedChanges: 'Имате незапазени промени, моля, запазете преди публикуване.',
-      onPublishing: 'Наистина ли искате да публикувате този запис?',
-      onUnpublishing: 'Наистина ли искате да прекратите публикуването на този запис?',
+      onPublishingNotReadyBody:
+        'Моля, актуализирайте състоянието на „Готово“, преди да публикувате',
+      onPublishingWithUnsavedChangesBody:
+        'Имате незапазени промени, моля, запазете преди публикуване.',
+      onPublishingBody: 'Наистина ли искате да публикувате този запис?',
+      onUnpublishingBody: 'Наистина ли искате да прекратите публикуването на този запис?',
       onDeleteWithUnsavedChangesBody:
         'Наистина ли искате да изтриете този публикуван запис, както и незаписаните промени от текущата сесия?',
       onDeletePublishedEntryBody: 'Наистина ли искате да изтриете този публикуван запис?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Това ще изтрие всички непубликувани промени в този запис, както и незаписаните ви промени от текущата сесия. Все още ли искате да изтриете?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Всички непубликувани промени в този запис ще бъдат изтрити. Все още ли искате да изтриете?',
       loadingEntry: 'Зареждане на запис...',
     },
@@ -262,7 +264,7 @@ const bg: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Неуспешно публикуване на запис: %{details}',
       onFailToUnpublishEntry: 'Неуспешно премахване на публикацията на записа: %{details}',
       entryUpdated: 'Статусът на записа е актуализиран',
-      onDeleteUnpublishedChanges: 'Непубликуваните промени са изтрити',
+      onDeleteUnpublishedChangesBody: 'Непубликуваните промени са изтрити',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Излезли сте. Моля, запазете всички данни и влезте отново',
       onBackendDown: 'Има прекъсване в работата на бекенда. Виж детайлите %{details}',

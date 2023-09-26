@@ -98,19 +98,19 @@ const ca: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Estàs segur que vols deixar aquesta pàgina?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         "Tens canvis no guardats, si us plau, guarda'ls abans d'actualitzar l'estat.",
-      onPublishingNotReady: 'Si us plau, actualitza l\'estat a "Llest" abans de publicar.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Si us plau, actualitza l\'estat a "Llest" abans de publicar.',
+      onPublishingWithUnsavedChangesBody:
         "Tens canvis no guardats, si us plau, guarda'ls abans de publicar-los.",
-      onPublishing: 'Estàs segur que vols publicar aquesta entrada?',
-      onUnpublishing: 'Estàs segur que vols esborrar aquesta entrada?',
+      onPublishingBody: 'Estàs segur que vols publicar aquesta entrada?',
+      onUnpublishingBody: 'Estàs segur que vols esborrar aquesta entrada?',
       onDeleteWithUnsavedChangesBody:
         'Està segur que vol eliminar aquesta entrada publicada, així com els canvis no guardats de la sessió actual?',
       onDeletePublishedEntryBody: 'Està segur que vol eliminar aquesta entrada publicada?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         "Això eliminarà tots els canvis no publicats d'aquesta entrada així com els canvis no guardats de la sessió actual. Encara vol procedir?",
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Tots els canvis no publicats en aquesta entrada seràn esborrats. Encara els vol eliminar?',
       loadingEntry: 'Carregant entrada...',
     },
@@ -260,7 +260,7 @@ const ca: LocalePhrasesRoot = {
       onFailToPublishEntry: "No s'ha pogut publicar: %{details}",
       onFailToUnpublishEntry: "No s'ha pogut despublicar l'entrada: %{details}",
       entryUpdated: "Estat de l'entrada actualitzat",
-      onDeleteUnpublishedChanges: 'Canvis no publicats eliminats',
+      onDeleteUnpublishedChangesBody: 'Canvis no publicats eliminats',
       onFailToAuth: '%{details}',
       onLoggedOut: 'La teva sessió ha estat tancada. Si us plau, torna a iniciar-la',
       onBackendDown: 'El servidor està patint problemes. Consulta %{details} per a més informació',

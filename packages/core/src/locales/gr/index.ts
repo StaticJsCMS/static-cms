@@ -67,21 +67,21 @@ const gr: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Είστε βέβαιοι ότι θέλετε να αφήσετε αυτήν τη σελίδα;',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Έχετε μη αποθηκευμένες αλλαγές, αποθηκεύστε πριν να ενημερώσετε την κατάσταση.',
-      onPublishingNotReady: 'Ενημερώστε την κατάσταση σε "έτοιμο" πριν από τη δημοσίευση.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Ενημερώστε την κατάσταση σε "έτοιμο" πριν από τη δημοσίευση.',
+      onPublishingWithUnsavedChangesBody:
         'Έχετε μη αποθηκευμένες αλλαγές, αποθηκεύστε πριν από τη δημοσίευση.',
-      onPublishing: 'Είστε βέβαιοι ότι θέλετε να δημοσιεύσετε αυτήν την καταχώρηση;',
-      onUnpublishing:
+      onPublishingBody: 'Είστε βέβαιοι ότι θέλετε να δημοσιεύσετε αυτήν την καταχώρηση;',
+      onUnpublishingBody:
         'Είστε βέβαιοι ότι θέλετε να καταργήσετε τη δημοσίευση αυτής της καταχώρησης;',
       onDeleteWithUnsavedChangesBody:
         'Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν τη δημοσιευμένη καταχώρηση, καθώς και τις αλλαγές που δεν αποθηκεύσατε από την τρέχουσα περίοδο λειτουργίας;',
       onDeletePublishedEntryBody:
         'Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν τη δημοσιευμένη καταχώρηση;',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Αυτό θα διαγράψει όλες τις μη δημοσιευμένες αλλαγές σε αυτήν την καταχώρηση, καθώς και τις αλλαγές που δεν έχετε αποθηκεύσει από την τρέχουσα περίοδο λειτουργίας. Θέλετε ακόμα να διαγράψετε;',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Όλες οι μη δημοσιευμένες αλλαγές σε αυτήν την καταχώρηση θα διαγραφούν. Θέλετε ακόμα να διαγράψετε;',
       loadingEntry: 'Φόρτωση εισόδου...',
     },
@@ -195,7 +195,7 @@ const gr: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Η δημοσίευση απέτυχε: %{details}',
       onFailToUnpublishEntry: 'Απέτυχε η κατάργηση δημοσίευσης καταχώρησης: %{details}',
       entryUpdated: 'Η κατάσταση εισόδου ενημερώθηκε',
-      onDeleteUnpublishedChanges: 'Οι μη δημοσιευμένες αλλαγές διαγράφηκαν',
+      onDeleteUnpublishedChangesBody: 'Οι μη δημοσιευμένες αλλαγές διαγράφηκαν',
       onFailToAuth: '%{details}',
     },
   },

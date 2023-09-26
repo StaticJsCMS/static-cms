@@ -98,19 +98,19 @@ const ua: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Ви впевнені, що хочете залишити цю сторінку?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'У вас є незбережені зміни, будь ласка, збережіть їх перед оновленням статусу.',
-      onPublishingNotReady: 'Будь ласка, змініть статус на «Готово» перед публікацією.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Будь ласка, змініть статус на «Готово» перед публікацією.',
+      onPublishingWithUnsavedChangesBody:
         'У вас є незбережені зміни, будь ласка, збережіть їх перед публікацією.',
-      onPublishing: 'Ви впевнені, що хочете опублікувати цей запис?',
-      onUnpublishing: 'Ви впевнені, що хочете скасувати публікацію цієї записи?',
-      onDeleteWithUnsavedChanges:
+      onPublishingBody: 'Ви впевнені, що хочете опублікувати цей запис?',
+      onUnpublishingBody: 'Ви впевнені, що хочете скасувати публікацію цієї записи?',
+      onDeleteWithUnsavedChangesBody:
         'Ви впевнені, що хочете видалити цю опубліковану запис, а також незбережені зміни з поточного сеансу?',
-      onDeletePublishedEntry: 'Ви впевнені, що хочете видалити цю опубліковану запис?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeletePublishedEntryBody: 'Ви впевнені, що хочете видалити цю опубліковану запис?',
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Це видалить всі неопубліковані зміни в цій записі, а також ваші незбережені зміни з поточного сеансу. Ви все ще хочете видалити?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Всі неопубліковані зміни в цій записі будуть видалені. Ви все ще хочете видалити?',
       loadingEntry: 'Завантаження запису ...',
     },
@@ -203,8 +203,8 @@ const ua: LocalePhrasesRoot = {
       copied: 'Скопійовано',
     },
     mediaLibrary: {
-      onDelete: 'Ви впевнені, що хочете видалити вибраний медіафайл?',
-      fileTooLarge:
+      onDeleteBody: 'Ви впевнені, що хочете видалити вибраний медіафайл?',
+      fileTooLargeBody:
         'Файл занадто великий.\nНалаштування не дозволяють зберігати файли більше %{size} kB.',
     },
     mediaLibraryModal: {
@@ -259,7 +259,7 @@ const ua: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Не вдалося опублікувати запис: %{details}',
       onFailToUnpublishEntry: 'Не вдалося скасувати публікацію запису: %{details}',
       entryUpdated: 'Статус запису оновлено',
-      onDeleteUnpublishedChanges: 'Неопубліковані зміни видалені',
+      onDeleteUnpublishedChangesBody: 'Неопубліковані зміни видалені',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Ви вийшли. Будь ласка, збережіть усі дані та увійдіть знову',
       onBackendDown: 'Трапилися збої в роботі бекенду. Див. %{details}',

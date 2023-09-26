@@ -101,19 +101,19 @@ const ru: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Вы уверены, что хотите покинуть эту страницу?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'У вас есть несохраненные изменения, сохраните их перед обновлением статуса.',
-      onPublishingNotReady: 'Пожалуйста, измените статус на «Готов» перед публикацией.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Пожалуйста, измените статус на «Готов» перед публикацией.',
+      onPublishingWithUnsavedChangesBody:
         'У вас есть несохраненные изменения, сохраните их перед публикацией.',
-      onPublishing: 'Вы уверены, что хотите опубликовать эту запись?',
-      onUnpublishing: 'Вы уверены, что хотите отменить публикацию этой записи?',
+      onPublishingBody: 'Вы уверены, что хотите опубликовать эту запись?',
+      onUnpublishingBody: 'Вы уверены, что хотите отменить публикацию этой записи?',
       onDeleteWithUnsavedChangesBody:
         'Вы уверены, что хотите удалить эту опубликованную запись, а также несохраненные изменения из текущего сеанса?',
       onDeletePublishedEntryBody: 'Вы уверены, что хотите удалить эту опубликованную запись?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Это удалит все неопубликованные изменения в этой записи, а также ваши несохраненные изменения из текущего сеанса. Вы все еще хотите удалить?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Все неопубликованные изменения в этой записи будут удалены. Вы все еще хотите удалить?',
       loadingEntry: 'Загрузка записи…',
     },
@@ -280,7 +280,7 @@ const ru: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Не удалось опубликовать запись: %{details}',
       onFailToUnpublishEntry: 'Не удалось отменить публикацию записи: %{details}',
       entryUpdated: 'Статус записи обновлен',
-      onDeleteUnpublishedChanges: 'Неопубликованные изменения удалены',
+      onDeleteUnpublishedChangesBody: 'Неопубликованные изменения удалены',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Вы вышли. Пожалуйста, сохраните все данные и войдите снова',
       onBackendDown: 'Происходят перебои в работе бекенда. См. %{details}',

@@ -52,19 +52,19 @@ const hu: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Biztos hogy el akarod hagyni az oldalt?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Mentettlen változtatások vannak, kérjük, mentse az állapot frissítése előtt.',
-      onPublishingNotReady: 'Változtasd az állapotot "Kész"-re publikálás előtt.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Változtasd az állapotot "Kész"-re publikálás előtt.',
+      onPublishingWithUnsavedChangesBody:
         'Mentetlen változtatások vannak, kérjük, mentsen a publikálás előtt.',
-      onPublishing: 'Publikálod ezt a bejegyzést?',
-      onUnpublishing: 'Publikálás visszavonása erre a bejegyzésre?',
+      onPublishingBody: 'Publikálod ezt a bejegyzést?',
+      onUnpublishingBody: 'Publikálás visszavonása erre a bejegyzésre?',
       onDeleteWithUnsavedChangesBody:
         'Töröljük ezt a publikált bejegyzést, a többi mentetlen modositással együtt?',
       onDeletePublishedEntryBody: 'Töröljük ezt a publikált bejegyzést?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Ezzel törli a bejegyzés összes nem közzétett módosítását, valamint az aktuális munkamenetből nem mentett módosításokat. Még mindig törli?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'A bejegyzés összes, nem közzétett módosítása törlődik. Még mindig törli?',
       loadingEntry: 'Bejegyzés betöltése...',
     },
@@ -179,7 +179,7 @@ const hu: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Bejegyzés publikálása sikertelen: %{details}',
       onFailToUnpublishEntry: 'Bejegyzés publikálásának visszavonása sikertelen: %{details}',
       entryUpdated: 'Bejegyzés állapota frissült',
-      onDeleteUnpublishedChanges: 'Unpublished changes deleted',
+      onDeleteUnpublishedChangesBody: 'Unpublished changes deleted',
       onFailToAuth: '%{details}',
     },
   },

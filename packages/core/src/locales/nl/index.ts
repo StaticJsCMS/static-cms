@@ -96,19 +96,19 @@ const nl: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Weet je zeker dat je deze pagina wilt verlaten?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Er zijn nog niet-opgeslagen wijzigingen. Bewaar ze voordat u de status bijwerkt.',
-      onPublishingNotReady: 'Stel de status in op "Voltooid" voordat u publiceert.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Stel de status in op "Voltooid" voordat u publiceert.',
+      onPublishingWithUnsavedChangesBody:
         'Er zijn nog niet-opgeslagen wijzigingen. Bewaar deze voordat u publiceert.',
-      onPublishing: 'Weet u zeker dat u dit item wil publiceren?',
-      onUnpublishing: 'Weet u zeker dat u de publicatie voor dit item ongedaan wilt maken?',
+      onPublishingBody: 'Weet u zeker dat u dit item wil publiceren?',
+      onUnpublishingBody: 'Weet u zeker dat u de publicatie voor dit item ongedaan wilt maken?',
       onDeleteWithUnsavedChangesBody:
         'Weet u zeker dat u dit gepubliceerde item en uw niet-opgeslagen wijzigingen uit de huidige sessie wilt verwijderen?',
       onDeletePublishedEntryBody: 'Weet u zeker dat u dit gepubliceerde item wilt verwijderen?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Alle niet-gepubliceerde wijzigingen in dit item worden verwijderd, evenals uw niet-opgeslagen wijzigingen uit de huidige sessie. Wilt u nog steeds verwijderen?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Alle niet-gepubliceerde wijzigingen in dit item worden verwijderd. Wilt u nog steeds verwijderen?',
       loadingEntry: 'Item laden...',
     },
@@ -263,7 +263,7 @@ const nl: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Kan item niet publiceren: %{details}',
       onFailToUnpublishEntry: 'Kan item niet terugtrekken: %{details}',
       entryUpdated: 'Status van item geüpdatet',
-      onDeleteUnpublishedChanges: 'Niet-gepubliceerde wijzigingen verwijderd',
+      onDeleteUnpublishedChangesBody: 'Niet-gepubliceerde wijzigingen verwijderd',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Je bent uitgelogd, back-up alstublieft uw data log daarna in',
       onBackendDown:

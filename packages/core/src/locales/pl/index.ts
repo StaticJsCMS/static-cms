@@ -98,18 +98,19 @@ const pl: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Czy na pewno chcesz opuścić tę stronę?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Masz niezapisane zmiany, proszę zapisz je przed aktualizacją statusu.',
-      onPublishingNotReady: 'Proszę zaktualizować status do "Gotowe" przed publikacją.',
-      onPublishingWithUnsavedChanges: 'Masz niezapisane zmiany, proszę zapisz je przed publikacją.',
-      onPublishing: 'Czy na pewno chcesz opublikować tę pozycję?',
-      onUnpublishing: 'Czy na pewno chcesz cofnąć publikację tej pozycji?',
+      onPublishingNotReadyBody: 'Proszę zaktualizować status do "Gotowe" przed publikacją.',
+      onPublishingWithUnsavedChangesBody:
+        'Masz niezapisane zmiany, proszę zapisz je przed publikacją.',
+      onPublishingBody: 'Czy na pewno chcesz opublikować tę pozycję?',
+      onUnpublishingBody: 'Czy na pewno chcesz cofnąć publikację tej pozycji?',
       onDeleteWithUnsavedChangesBody:
         'Czy na pewno chcesz usunąć tę opublikowaną pozycję, a także niezapisane zmiany z bieżącej sesji?',
       onDeletePublishedEntryBody: 'Czy na pewno chcesz usunąć tę opublikowaną pozycję?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Spowoduje to usunięcie wszystkich nieopublikowanych zmian tej pozycji, a także niezapisanych zmian z bieżącej sesji. Czy nadal chcesz usunąć?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Wszystkie nieopublikowane zmiany tej pozycji zostaną usunięte. Czy nadal chcesz usunąć?',
       loadingEntry: 'Ładowanie pozycji...',
     },
@@ -268,7 +269,7 @@ const pl: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Nie udało się opublikować: %{details}',
       onFailToUnpublishEntry: 'Nie udało się cofnąć publikacji pozycji: %{details}',
       entryUpdated: 'Zaktualizowano status pozycji',
-      onDeleteUnpublishedChanges: 'Nieopublikowane zmiany zostały usunięte',
+      onDeleteUnpublishedChangesBody: 'Nieopublikowane zmiany zostały usunięte',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Zostałeś wylogowany, utwórz kopię zapasową danych i zaloguj się ponownie.',
       onBackendDown: 'Usługa backendu uległa awarii. Zobacz więcej informacji: %{details}',

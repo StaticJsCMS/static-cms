@@ -101,19 +101,19 @@ const da: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Er du sikker på at du vil forlade siden?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Du har ændringer der ikke er gemt, gem disse før status ændres.',
-      onPublishingNotReady: 'Skift status til "Klar" inden publicering.',
-      onPublishingWithUnsavedChanges: 'Du har ændringer der ikke er gemt, gem inden publicing.',
-      onPublishing: 'Er du sikker på at du vil publicere dette dokument?',
-      onUnpublishing: 'Er du sikker på at du vil afpublicere dette dokument?',
+      onPublishingNotReadyBody: 'Skift status til "Klar" inden publicering.',
+      onPublishingWithUnsavedChangesBody: 'Du har ændringer der ikke er gemt, gem inden publicing.',
+      onPublishingBody: 'Er du sikker på at du vil publicere dette dokument?',
+      onUnpublishingBody: 'Er du sikker på at du vil afpublicere dette dokument?',
       onDeleteWithUnsavedChangesBody:
         'Er du sikker på at du vil slette dette tidliere publiceret dokument, samt dine nuværende ugemte ændringer fra denne session?',
       onDeletePublishedEntryBody:
         'Er du sikker på at du vil slette dette tidliere publiceret dokument?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Alle ikke publicerede ændringer til dette dokument vil blive slettet ligesom dine nuværende ugemte ændringer fra denne session. Er du sikker på at du vil slette?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Alle ikke publicerede ændringer til dette dokument vil blive slettet. Er du sikker på at du vil slette?',
       loadingEntry: 'Indlæser dokument...',
     },
@@ -275,7 +275,7 @@ const da: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Kunne ikke publicere på grund af en fejl: %{details}',
       onFailToUnpublishEntry: 'Kunne ikke afpublicere på grund af en fejl: %{details}',
       entryUpdated: 'Dokumentstatus er opdateret',
-      onDeleteUnpublishedChanges: 'Upublicerede ændringer blev slettet',
+      onDeleteUnpublishedChangesBody: 'Upublicerede ændringer blev slettet',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Du er blevet logget ind, gem venligst evt. ændringer og log på igen',
       onBackendDown:

@@ -102,19 +102,19 @@ const tr: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Bu sayfadan ayrılmak istediğinize emin misiniz?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Kaydedilmemiş değişiklikleriniz var, lütfen içeriği güncellemeden önce kaydedin.',
-      onPublishingNotReady: 'Lütfen yayınlamadan önce içeriği "Hazır" olarak güncelleyin.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Lütfen yayınlamadan önce içeriği "Hazır" olarak güncelleyin.',
+      onPublishingWithUnsavedChangesBody:
         'Kaydedilmemiş değişiklikleriniz var, lütfen yayınlamadan önce kaydedin.',
-      onPublishing: 'Bu girdiyi yayınlamak istediğinize emin misiniz?',
-      onUnpublishing: 'Bu girdiyi yayından kaldırmak istediğinizden emin misiniz?',
+      onPublishingBody: 'Bu girdiyi yayınlamak istediğinize emin misiniz?',
+      onUnpublishingBody: 'Bu girdiyi yayından kaldırmak istediğinizden emin misiniz?',
       onDeleteWithUnsavedChangesBody:
         'Bu oturumda kaydedilmiş değişikliklerin yanı sıra geçerli oturumdaki kaydedilmemiş değişikliklerinizi silmek istediğinize emin misiniz?',
       onDeletePublishedEntryBody: 'Bu yayınlanmış girdiyi silmek istediğinize emin misiniz?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Bu girdide yayınlanmamış tüm değişiklikleri ve geçerli oturumdaki kaydedilmemiş değişikliklerinizi siler. Hala silmek istiyor musun?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Bu girdide yayınlanmamış tüm değişiklikler silinecek. Hala silmek istiyor musun?',
       loadingEntry: 'Girdiler yükleniyor...',
     },
@@ -274,7 +274,7 @@ const tr: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Yayınlanamadı: %{details}',
       onFailToUnpublishEntry: 'Girdi yayından kaldırılamadı: %{details}',
       entryUpdated: 'Girdi durumu güncellendi',
-      onDeleteUnpublishedChanges: 'Yayımlanmamış değişiklikler silindi',
+      onDeleteUnpublishedChangesBody: 'Yayımlanmamış değişiklikler silindi',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Çıkış yaptınız, lütfen tüm verileri yedekleyin ve tekrar giriş yapın',
       onBackendDown:

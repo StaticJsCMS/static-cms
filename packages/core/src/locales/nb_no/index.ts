@@ -83,17 +83,17 @@ const nb_no: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Er du sikker på du vil navigere bort fra denne siden?',
-      onUpdatingWithUnsavedChanges: 'Du må lagre endringene dine før du oppdaterer status.',
-      onPublishingNotReady: 'Du må endre status til "Klar" før du publiserer.',
-      onPublishingWithUnsavedChanges: 'Du må lagre endringene dine før du kan publisere.',
-      onPublishing: 'Er du sikker på at du vil publisere?',
-      onUnpublishing: 'Er du sikker på at du vil avpublisere innlegget?',
+      onUpdatingWithUnsavedChangesBody: 'Du må lagre endringene dine før du oppdaterer status.',
+      onPublishingNotReadyBody: 'Du må endre status til "Klar" før du publiserer.',
+      onPublishingWithUnsavedChangesBody: 'Du må lagre endringene dine før du kan publisere.',
+      onPublishingBody: 'Er du sikker på at du vil publisere?',
+      onUnpublishingBody: 'Er du sikker på at du vil avpublisere innlegget?',
       onDeleteWithUnsavedChangesBody:
         'Er du sikker på at du vil slette et publisert innlegg med tilhørende ulagrede endringer?',
       onDeletePublishedEntryBody: 'Er du sikker på at du vil slette dette publiserte innlegget?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Handlingen sletter endringer som ikke er publisert eller lagret enda. Er du sikker på du vil fortsette?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Alle endringer som ikke er publisert i dette innlegget vil gå tapt. Vil du fortsette?',
       loadingEntry: 'Laster innlegg...',
     },
@@ -219,7 +219,7 @@ const nb_no: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Kunne ikke publisere: %{details}',
       onFailToUnpublishEntry: 'Kunne ikke avpublisere: %{details}',
       entryUpdated: 'Innleggsstatus oppdatert',
-      onDeleteUnpublishedChanges: 'Avpubliserte endringer slettet',
+      onDeleteUnpublishedChangesBody: 'Avpubliserte endringer slettet',
       onFailToAuth: '%{details}',
     },
   },

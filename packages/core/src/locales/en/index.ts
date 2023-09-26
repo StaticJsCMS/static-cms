@@ -108,19 +108,27 @@ const en: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Are you sure you want to leave this page?',
-      onUpdatingWithUnsavedChanges: 'You have unsaved changes, please save before updating status.',
-      onPublishingNotReady: 'Please update status to "Ready" before publishing.',
-      onPublishingWithUnsavedChanges: 'You have unsaved changes, please save before publishing.',
-      onPublishing: 'Are you sure you want to publish this entry?',
-      onUnpublishing: 'Are you sure you want to unpublish this entry?',
+      onUpdatingWithUnsavedChangesTitle: 'Unsaved changes',
+      onUpdatingWithUnsavedChangesBody:
+        'You have unsaved changes, please save before updating status.',
+      onPublishingNotReadyTitle: 'Not ready to publish',
+      onPublishingNotReadyBody: 'Please update status to "Ready" before publishing.',
+      onPublishingWithUnsavedChangesTitle: 'Unsaved changes',
+      onPublishingWithUnsavedChangesBody:
+        'You have unsaved changes, please save before publishing.',
+      onPublishingTitle: 'Publish entry?',
+      onPublishingBody: 'Are you sure you want to publish this entry?',
+      onUnpublishingBody: 'Are you sure you want to unpublish this entry?',
       onDeleteWithUnsavedChangesTitle: 'Delete this published entry?',
       onDeleteWithUnsavedChangesBody:
         'Are you sure you want to delete this published entry, as well as your unsaved changes from the current session?',
       onDeletePublishedEntryTitle: 'Delete this published entry?',
       onDeletePublishedEntryBody: 'Are you sure you want to delete this published entry?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: 'Delete unpublished changes?',
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'This will delete all unpublished changes to this entry, as well as your unsaved changes from the current session. Do you still want to delete?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesTitle: 'Delete unpublished changes?',
+      onDeleteUnpublishedChangesBody:
         'All unpublished changes to this entry will be deleted. Do you still want to delete?',
       loadingEntry: 'Loading entry...',
     },
@@ -147,7 +155,7 @@ const en: LocalePhrasesRoot = {
       saving: 'Saving...',
       save: 'Save',
       statusInfoTooltipDraft:
-        'Entry status is set to draft. To finalize and submit it for review, set the status to ‘In review’',
+        'Entry status is set to draft. To finalize and submit it for review, set the status to ï¿½In reviewï¿½',
       statusInfoTooltipInReview:
         'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.',
       deleting: 'Deleting...',
@@ -330,11 +338,13 @@ const en: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'Failed to update status: %{details}',
       missingRequiredField: "Oops, you've missed a required field. Please complete before saving.",
       entrySaved: 'Entry saved',
+      entryDeleted: 'Entry delete',
       entryPublished: 'Entry published',
       entryUnpublished: 'Entry unpublished',
       onFailToPublishEntry: 'Failed to publish: %{details}',
       onFailToUnpublishEntry: 'Failed to unpublish entry: %{details}',
       entryUpdated: 'Entry status updated',
+      onDeletePublishedEntry: 'Published entry deleted',
       onDeleteUnpublishedChanges: 'Unpublished changes deleted',
       onFailToAuth: '%{details}',
       onLoggedOut: 'You have been logged out, please back up any data and login again',

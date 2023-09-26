@@ -67,19 +67,19 @@ const it: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Sei sicuro di voler lasciare questa pagina?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Hai delle modifiche non salvate, salvale prima di aggiornare lo status.',
-      onPublishingNotReady: 'Aggiorna lo status a "Pronto" prima di pubblicare.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Aggiorna lo status a "Pronto" prima di pubblicare.',
+      onPublishingWithUnsavedChangesBody:
         'Hai delle modifiche non salvate, salvale prima di pubblicare.',
-      onPublishing: 'Sei sicuro di voler pubblicare questa voce?',
-      onUnpublishing: 'Sei sicuro di voler nascondere questa voce?',
+      onPublishingBody: 'Sei sicuro di voler pubblicare questa voce?',
+      onUnpublishingBody: 'Sei sicuro di voler nascondere questa voce?',
       onDeleteWithUnsavedChangesBody:
         'Sei sicuro di voler cancellare questa voce pubblicata e tutte le modifiche non salvate della tua sessione corrente?',
       onDeletePublishedEntryBody: 'Sei sicuro di voler cancellare questa voce pubblicata?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Questo cancellerà tutte le modifiche non pubblicate di questa voce, come anche tutte le modifiche non salvate della sessione corrente. Vuoi ancora cancellarle?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Tutte le modifiche non pubblicate a questa voce saranno cancellate. Vuoi ancora cancellarle?',
       loadingEntry: 'Caricando la voce...',
     },
@@ -193,7 +193,7 @@ const it: LocalePhrasesRoot = {
       onFailToPublishEntry: 'Pubblicazione fallita: %{details}',
       onFailToUnpublishEntry: 'Rimozione della pubblicazione fallita: %{details}',
       entryUpdated: 'Status della voce aggiornato',
-      onDeleteUnpublishedChanges: 'Modifiche non pubblicate cancellate',
+      onDeleteUnpublishedChangesBody: 'Modifiche non pubblicate cancellate',
       onFailToAuth: '%{details}',
     },
   },

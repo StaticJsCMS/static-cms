@@ -23,6 +23,8 @@ function addComments(items: Array<Pair>, comments: Record<string, string>, prefi
 }
 
 class YamlFormatter extends FileFormatter {
+  name = 'yaml';
+
   fromFile(content: string) {
     if (content && content.trim().endsWith('---')) {
       content = content.trim().slice(0, -3);

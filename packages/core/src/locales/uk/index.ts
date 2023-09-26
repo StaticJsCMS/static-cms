@@ -61,9 +61,9 @@ const uk: LocalePhrasesRoot = {
       onDeleteWithUnsavedChangesBody:
         'Ви дійсно бажаєте видалити опублікований запис, як і всі незбережені зміни під час поточної сесії?',
       onDeletePublishedEntryBody: 'Ви дійсно бажаєте видалити опублікований запис?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Видаляться всі неопубліковані зміни до цього запису, а також всі незбережені зміни під час поточної сесії. Бажаєте продовжити?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Всі незбережені зміни до цього запису буде видалено. Бажаєте продовжити?',
       loadingEntry: 'Завантаження...',
     },
@@ -169,7 +169,7 @@ const uk: LocalePhrasesRoot = {
       entryPublished: 'Опубліковано',
       onFailToPublishEntry: 'Помилка публікації: %{details}',
       entryUpdated: 'Статус оновлено',
-      onDeleteUnpublishedChanges: 'Видалено неопубліковані зміни',
+      onDeleteUnpublishedChangesBody: 'Видалено неопубліковані зміни',
       onFailToAuth: '%{details}',
     },
   },

@@ -83,19 +83,19 @@ const es: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: '¿Estás seguro de que quieres dejar esta página?',
-      onUpdatingWithUnsavedChanges:
+      onUpdatingWithUnsavedChangesBody:
         'Tiene cambios no guardados, por favor, guárdelos antes de actualizar el estado.',
-      onPublishingNotReady: 'Por favor, actualice el estado a "Ready" antes de publicar.',
-      onPublishingWithUnsavedChanges:
+      onPublishingNotReadyBody: 'Por favor, actualice el estado a "Ready" antes de publicar.',
+      onPublishingWithUnsavedChangesBody:
         'Tiene cambios no guardados, por favor guárdelos antes de publicarlos.',
-      onPublishing: '¿Estás seguro de que quieres publicar esta entrada?',
-      onUnpublishing: '¿Estás seguro de que quieres retirar esta entrada?',
+      onPublishingBody: '¿Estás seguro de que quieres publicar esta entrada?',
+      onUnpublishingBody: '¿Estás seguro de que quieres retirar esta entrada?',
       onDeleteWithUnsavedChangesBody:
         '¿Está seguro de que desea eliminar esta entrada publicada, así como los cambios no guardados de la sesión actual?',
       onDeletePublishedEntryBody: '¿Estás seguro de que quieres borrar esta entrada publicada?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Esto eliminará todos los cambios no publicados de esta entrada, así como los cambios no guardados de la sesión actual. ¿Todavía quieres borrar?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Todos los cambios no publicados en esta entrada serán eliminados. ¿Todavía quieres borrar?',
       loadingEntry: 'Cargando entrada...',
     },
@@ -222,7 +222,7 @@ const es: LocalePhrasesRoot = {
       onFailToPublishEntry: 'No se ha podido publicar: %{details}',
       onFailToUnpublishEntry: 'No se ha podido retirar la entrada: %{details}',
       entryUpdated: 'Estado de entrada actualizado',
-      onDeleteUnpublishedChanges: 'Cambios no publicados eliminados',
+      onDeleteUnpublishedChangesBody: 'Cambios no publicados eliminados',
       onFailToAuth: '%{details}',
     },
   },
