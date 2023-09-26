@@ -937,7 +937,6 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     const newEntry = entryDraft.entry.newRecord ?? false;
 
     const useWorkflow = getUseWorkflow(config);
-    console.log('useWorkflow', useWorkflow);
 
     const customPath = selectCustomPath(draft.entry, collection, rootSlug, config.slug);
 
@@ -1002,13 +1001,13 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
     const collectionName = collection.name;
 
-    const updatedOptions = { unpublished, status };
     const opts = {
       newEntry,
       commitMessage,
       collectionName,
       useWorkflow,
-      ...updatedOptions,
+      unpublished,
+      status,
     };
 
     if (!useWorkflow) {
@@ -1191,7 +1190,6 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         dataFile.path,
         dataFile.id,
       );
-      console.log('readAndFormatDataFile', data, dataFile.path, dataFile.newFile);
       const entryWithFormat = formatData(data, dataFile.path, dataFile.newFile);
       return entryWithFormat;
     };

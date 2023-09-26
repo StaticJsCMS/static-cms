@@ -983,6 +983,7 @@ export function persistEntry(
         entryDraft: newEntryDraft,
         assetProxies,
         usedSlugs,
+        status: entry.status,
       })
       .then(async (newSlug: string) => {
         dispatch(

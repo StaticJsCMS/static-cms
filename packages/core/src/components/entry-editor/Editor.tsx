@@ -156,17 +156,8 @@ const Editor: FC<EditorProps> = ({
     ],
   );
 
-  console.log('[handleChangeStatus] currentStatus', currentStatus);
   const handleChangeStatus = useCallback(
     (newStatus: WorkflowStatus) => {
-      console.log(
-        '[handleChangeStatus] slug: ',
-        slug,
-        'currentStatus',
-        currentStatus,
-        'newStatus',
-        newStatus,
-      );
       if (!slug || !currentStatus) {
         return;
       }
@@ -348,18 +339,6 @@ const Editor: FC<EditorProps> = ({
     ) {
       return;
     }
-
-    console.log(
-      'deleteUnpublishedEntry!',
-      'collection.name',
-      collection.name,
-      'slug',
-      slug,
-      'newRecord',
-      newRecord,
-      'isModification',
-      isModification,
-    );
 
     if (!slug || newRecord) {
       return navigate(`/collections/${collection.name}?noredirect`);

@@ -424,7 +424,6 @@ export default class TestBackend implements BackendClass {
     collection: string,
     status: WorkflowStatus,
   ) {
-    console.log('addOrUpdateUnpublishedEntry', key, dataFiles, slug, status);
     const diffs: Diff[] = [];
     dataFiles.forEach(dataFile => {
       const { path, newPath, raw } = dataFile;

@@ -181,8 +181,6 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
   const menuItems: JSX.Element[][] = useMemo(() => {
     const items: JSX.Element[] = [];
 
-    console.log('[hasUnpublishedChanges]', hasUnpublishedChanges, 'isPublished', isPublished);
-
     if ((!useWorkflow && !isPublished) || (useWorkflow && hasUnpublishedChanges)) {
       items.push(
         <MenuItemButton key="publishNow" onClick={handlePublishClick} startIcon={PublishIcon}>
@@ -310,39 +308,41 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
           hideDropdownIcon
           aria-label="more options dropdown"
         >
-          <MenuGroup>
-            {showI18nToggle && (
-              <MenuItemButton
-                onClick={toggleI18n}
-                startIcon={GlobeAltIcon}
-                endIcon={i18nActive ? CheckIcon : undefined}
-              >
-                {t('editor.editorInterface.sideBySideI18n')}
-              </MenuItemButton>
-            )}
-            {showPreviewToggle && (
-              <>
+          {showI18nToggle || showPreviewToggle ? (
+            <MenuGroup>
+              {showI18nToggle && (
                 <MenuItemButton
-                  onClick={togglePreview}
-                  disabled={isLoading}
-                  startIcon={EyeIcon}
-                  endIcon={previewActive && !i18nActive ? CheckIcon : undefined}
+                  onClick={toggleI18n}
+                  startIcon={GlobeAltIcon}
+                  endIcon={i18nActive ? CheckIcon : undefined}
                 >
-                  {t('editor.editorInterface.preview')}
+                  {t('editor.editorInterface.sideBySideI18n')}
                 </MenuItemButton>
-                <MenuItemButton
-                  onClick={toggleScrollSync}
-                  disabled={isLoading || i18nActive || !previewActive}
-                  startIcon={HeightIcon}
-                  endIcon={
-                    scrollSyncActive && !(i18nActive || !previewActive) ? CheckIcon : undefined
-                  }
-                >
-                  {t('editor.editorInterface.toggleScrollSync')}
-                </MenuItemButton>
-              </>
-            )}
-          </MenuGroup>
+              )}
+              {showPreviewToggle && (
+                <>
+                  <MenuItemButton
+                    onClick={togglePreview}
+                    disabled={isLoading}
+                    startIcon={EyeIcon}
+                    endIcon={previewActive && !i18nActive ? CheckIcon : undefined}
+                  >
+                    {t('editor.editorInterface.preview')}
+                  </MenuItemButton>
+                  <MenuItemButton
+                    onClick={toggleScrollSync}
+                    disabled={isLoading || i18nActive || !previewActive}
+                    startIcon={HeightIcon}
+                    endIcon={
+                      scrollSyncActive && !(i18nActive || !previewActive) ? CheckIcon : undefined
+                    }
+                  >
+                    {t('editor.editorInterface.toggleScrollSync')}
+                  </MenuItemButton>
+                </>
+              )}
+            </MenuGroup>
+          ) : null}
           {hasChanged ? (
             <MenuGroup key="discard-button">
               <MenuItemButton

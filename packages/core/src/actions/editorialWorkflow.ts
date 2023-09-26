@@ -382,6 +382,7 @@ export function persistUnpublishedEntry(
         assetProxies,
         rootSlug,
         usedSlugs,
+        status: WorkflowStatus.DRAFT,
       });
       dispatch(
         addSnackbar({
@@ -421,13 +422,6 @@ export function updateUnpublishedEntryStatus(
   newStatus: WorkflowStatus,
 ) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
-    console.log(
-      '[handleChangeStatus][updateUnpublishedEntryStatus]',
-      'oldStatus',
-      oldStatus,
-      'newStatus',
-      newStatus,
-    );
     if (oldStatus === newStatus) {
       return;
     }

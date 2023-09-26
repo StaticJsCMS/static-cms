@@ -108,7 +108,7 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
       >
         <input
           id={id}
-          value={lang}
+          value={lang ?? ''}
           onChange={event => {
             const value = event.target.value;
             const path = findNodePath(editor, element);
