@@ -24,6 +24,7 @@ const pt: LocalePhrasesRoot = {
       quickAdd: 'Adição rápida',
     },
     app: {
+      loading: 'Carregando...',
       errorHeader: 'Erro ao carregar a configuração do CMS',
       configErrors: 'Erros de configuração',
       checkConfigYml: 'Verifique o arquivo config.yml.',
@@ -221,7 +222,6 @@ const pt: LocalePhrasesRoot = {
         'Arquivo muito grande.\nConfigurado para não permitir arquivos maiores que %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Carregando...',
       noResults: 'Nenhum resultado.',
       noAssetsFound: 'Nenhum recurso encontrado.',
       noImagesFound: 'Nenhuma imagem encontrada.',

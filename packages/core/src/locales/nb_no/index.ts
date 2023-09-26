@@ -24,6 +24,7 @@ const nb_no: LocalePhrasesRoot = {
       quickAdd: 'Hurtiginnlegg',
     },
     app: {
+      loading: 'Laster...',
       errorHeader: 'Det oppstod en feil under lastingen av CMS konfigurasjonen',
       configErrors: 'Konfigurasjonsfeil',
       checkConfigYml: 'Sjekk config.yml filen.',
@@ -169,7 +170,6 @@ const nb_no: LocalePhrasesRoot = {
       fileTooLargeBody: 'Filen er for stor.\nMaksimal konfiguert filstørrelse er %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Laster...',
       noResults: 'Ingen resultater.',
       noAssetsFound: 'Ingen elementer funnet.',
       noImagesFound: 'Ingen bilder funnet.',

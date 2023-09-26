@@ -9,6 +9,7 @@ const hu: LocalePhrasesRoot = {
       quickAdd: 'Gyors hozzáadás',
     },
     app: {
+      loading: 'Betöltés...',
       errorHeader: 'Hiba történt a CMS konfiguráció betöltése közben',
       configErrors: 'Configurációs hibák',
       checkConfigYml: 'Ellenőrizd a config.yml filet.',
@@ -136,7 +137,6 @@ const hu: LocalePhrasesRoot = {
       onDeleteBody: 'Biztos törli a kiválasztott média tartalmat?',
     },
     mediaLibraryModal: {
-      loading: 'Betöltés...',
       noResults: 'Nincs találat.',
       noAssetsFound: 'Nem található tartalom.',
       noImagesFound: 'Nem található kép.',

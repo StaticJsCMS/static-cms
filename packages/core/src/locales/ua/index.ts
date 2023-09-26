@@ -24,6 +24,7 @@ const ua: LocalePhrasesRoot = {
       quickAdd: 'Швидке додавання',
     },
     app: {
+      loading: 'Завантаження медіафайлів…',
       errorHeader: 'Помилка завантаження конфігурації CMS',
       configErrors: 'Помилки конфігурації',
       checkConfigYml: 'Перевірте свій config.yml файл.',
@@ -208,7 +209,6 @@ const ua: LocalePhrasesRoot = {
         'Файл занадто великий.\nНалаштування не дозволяють зберігати файли більше %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Завантаження медіафайлів…',
       noResults: 'Немає результатів.',
       noAssetsFound: 'Ресурси не знайдені.',
       noImagesFound: 'Зображення не знайдені.',

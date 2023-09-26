@@ -24,6 +24,7 @@ const zh_Hant: LocalePhrasesRoot = {
       quickAdd: '快速新增',
     },
     app: {
+      loading: '載入中...',
       errorHeader: '載入 CMS 設定時發生錯誤',
       configErrors: '設定錯誤',
       checkConfigYml: '請確認你的 config.yml 設定檔的內容是否正確',
@@ -187,7 +188,6 @@ const zh_Hant: LocalePhrasesRoot = {
       fileTooLargeBody: '檔案太大。\n已設定不允許大於 %{size} kB 的檔案。',
     },
     mediaLibraryModal: {
-      loading: '載入中...',
       noResults: '沒有結果',
       noAssetsFound: '沒有發現媒體資產。',
       noImagesFound: '沒有發現影像。',

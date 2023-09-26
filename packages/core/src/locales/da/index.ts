@@ -24,6 +24,7 @@ const da: LocalePhrasesRoot = {
       quickAdd: 'Hurtig opret',
     },
     app: {
+      loading: 'Indlæser...',
       errorHeader: 'Fejl ved indlæsning af CMS opsætningen',
       configErrors: 'Opsætningsfejl',
       checkConfigYml: 'Kontroller din config.yml fil.',
@@ -225,7 +226,6 @@ const da: LocalePhrasesRoot = {
         'Filen er for stor.\nOpsætningen tillader ikke filer større end %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Indlæser...',
       noResults: 'Ingen resultater.',
       noAssetsFound: 'Ingen elementer fundet.',
       noImagesFound: 'Ingen billeder fundet.',

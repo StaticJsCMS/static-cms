@@ -24,6 +24,7 @@ const ru: LocalePhrasesRoot = {
       quickAdd: 'Быстрое добавление',
     },
     app: {
+      loading: 'Загрузка медифайлов…',
       errorHeader: 'Ошибка загрузки конфигурации CMS',
       configErrors: 'Ошибки конфигурации',
       checkConfigYml: 'Проверьте свой config.yml файл.',
@@ -230,7 +231,6 @@ const ru: LocalePhrasesRoot = {
         'Файл слишком большой.\nНастройки не позволяют сохранять файлы более %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Загрузка медифайлов…',
       noResults: 'Нет результатов.',
       noAssetsFound: 'Ресурсы не найдены.',
       noImagesFound: 'Изображения не найдены.',

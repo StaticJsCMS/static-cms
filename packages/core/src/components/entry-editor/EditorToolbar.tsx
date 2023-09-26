@@ -295,6 +295,22 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
     return 'editor.editorToolbar.publish';
   }, [hasUnpublishedChanges, isNewEntry, isPersisting, isPublished, isPublishing, useWorkflow]);
 
+  console.log(
+    'isLoading',
+    isLoading,
+    'isPersisting',
+    isPersisting,
+    'isPublished',
+    isPublishing,
+    'isUpdatingStatus',
+    isUpdatingStatus,
+  );
+
+  const disabled = useMemo(
+    () => isLoading || isPersisting || isPublishing || isUpdatingStatus,
+    [isLoading, isPersisting, isPublishing, isUpdatingStatus],
+  );
+
   return (
     <div className={classNames(classes.root, className)}>
       {showI18nToggle || showPreviewToggle || canDelete ? (
@@ -307,6 +323,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
           buttonClassName={classes['more-menu-button']}
           hideDropdownIcon
           aria-label="more options dropdown"
+          disabled={disabled}
         >
           {showI18nToggle || showPreviewToggle ? (
             <MenuGroup>
@@ -383,6 +400,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
           onClick={onMobilePreviewToggle}
           rootClassName={classes['preview-toggle']}
           aria-label="toggle preview"
+          disabled={disabled}
         />
       ) : null}
       {canDelete ? (
@@ -395,6 +413,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
           onClick={onDelete}
           rootClassName={classes['delete-button']}
           aria-label="delete"
+          disabled={disabled}
         />
       ) : null}
       {useWorkflow ? (
@@ -405,7 +424,9 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
             onPersist={onPersist}
             currentStatus={currentStatus}
             isUpdatingStatus={isUpdatingStatus}
+            disabled={disabled}
             onChangeStatus={onChangeStatus}
+            isLoading={isLoading}
           />
         </div>
       ) : null}
@@ -413,12 +434,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
         <Menu
           label={t(publishLabel)}
           color={publishLabel === 'editor.editorToolbar.published' ? 'success' : 'primary'}
-          disabled={
-            isLoading ||
-            (menuItems.length == 1 && menuItems[0].length === 0) ||
-            isPersisting ||
-            isPublishing
-          }
+          disabled={disabled || (menuItems.length == 1 && menuItems[0].length === 0)}
           startIcon={PublishIcon}
           rootClassName={classes['publish-button']}
           iconClassName={classes['publish-button-icon']}

@@ -25,6 +25,7 @@ const cs: LocalePhrasesRoot = {
       quickAdd: 'Přidat',
     },
     app: {
+      loading: 'Načítání…',
       errorHeader: 'Chyba při načítání CMS konfigurace',
       configErrors: 'Chyba konfigurace',
       checkConfigYml: 'Zkontrolujte soubor config.yml.',
@@ -213,7 +214,6 @@ const cs: LocalePhrasesRoot = {
       fileTooLargeBody: 'Soubor je příliš velký.\nSoubor musí být menší než %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Načítání…',
       noResults: 'Nic nenalezeno.',
       noAssetsFound: 'Média nenalezena.',
       noImagesFound: 'Obrázky nenalezeny.',

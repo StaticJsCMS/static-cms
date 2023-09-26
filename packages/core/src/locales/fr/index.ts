@@ -24,6 +24,7 @@ const fr: LocalePhrasesRoot = {
       quickAdd: 'Ajout rapide',
     },
     app: {
+      loading: 'Chargement...',
       errorHeader: 'Erreur au chargement de la configuration du CMS',
       configErrors: 'Erreurs de configuration',
       checkConfigYml: 'Vérifiez votre fichier config.yml.',
@@ -218,7 +219,6 @@ const fr: LocalePhrasesRoot = {
         "Le fichier est trop volumineux.\nL'instance est configurée pour bloquer les envois de plus de %{size} kB.",
     },
     mediaLibraryModal: {
-      loading: 'Chargement...',
       noResults: 'Aucun résultat.',
       noAssetsFound: 'Aucune ressource trouvée.',
       noImagesFound: 'Aucune image trouvée.',

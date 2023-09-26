@@ -24,6 +24,7 @@ const sv: LocalePhrasesRoot = {
       quickAdd: 'Snabbt tillägg',
     },
     app: {
+      loading: 'Hämtar...',
       errorHeader: 'Ett fel uppstod vid hämtning av CMS-konfigurationen',
       configErrors: 'Konfigurationsfel',
       checkConfigYml: 'Kontrollera din config.yml-fil.',
@@ -213,7 +214,6 @@ const sv: LocalePhrasesRoot = {
         'Maximal filstorlek överskriden.\nKonfigurerad att inte tillåta filer större än %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Hämtar...',
       noResults: 'Inga resultat.',
       noAssetsFound: 'Hittade inga mediaobjekt.',
       noImagesFound: 'Hittade inga bilder.',

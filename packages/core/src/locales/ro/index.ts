@@ -24,6 +24,7 @@ const ro: LocalePhrasesRoot = {
       quickAdd: 'Adaugă',
     },
     app: {
+      loading: 'Se încarcă...',
       errorHeader: 'A apărut o eroare cu configurarea CMS-ului.',
       configErrors: 'Au apărut erori de configurare.',
       checkConfigYml: 'Verifică fișierul de configurare (config.yml).',
@@ -213,7 +214,6 @@ const ro: LocalePhrasesRoot = {
         'Fișier prea mare.\nConfigurarea nu permite fișiere mai mari de %{size} KB.',
     },
     mediaLibraryModal: {
-      loading: 'Se încarcă...',
       noResults: 'Nu sunt rezultate.',
       noAssetsFound: 'Nu s-au găsit fișiere.',
       noImagesFound: 'Nu s-au găsit imagini.',

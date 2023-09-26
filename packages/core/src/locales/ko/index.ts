@@ -24,6 +24,7 @@ const ko: LocalePhrasesRoot = {
       quickAdd: '빠른 추가',
     },
     app: {
+      loading: '불러오는 중...',
       errorHeader: 'CMS 구성을 불러오는 중 오류가 발생했습니다.',
       configErrors: '구성 오류',
       checkConfigYml: 'config.yml 파일을 확인하세요.',
@@ -226,7 +227,6 @@ const ko: LocalePhrasesRoot = {
         '파일이 너무 큽니다.\n%{size} kB 보다 큰 파일을 허용하지 않도록 구성되어 있습니다.',
     },
     mediaLibraryModal: {
-      loading: '불러오는 중...',
       noResults: '일치 항목 없음.',
       noAssetsFound: '발견된 에셋 없음.',
       noImagesFound: '발견된 이미지 없음.',

@@ -24,6 +24,7 @@ const vi: LocalePhrasesRoot = {
       quickAdd: 'Tạo nhanh',
     },
     app: {
+      loading: 'Đang tải...',
       errorHeader: 'Xảy ra lỗi khi tải cấu hình CMS',
       configErrors: 'Lỗi cấu hình',
       checkConfigYml: 'Kiểm tra lại file config.yml của bạn.',
@@ -178,7 +179,6 @@ const vi: LocalePhrasesRoot = {
         'Tập tin quá lớn.\nCấu hình không cho phép những tập tin lớn hơn %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Đang tải...',
       noResults: 'Không có kết quả.',
       noAssetsFound: 'Không tìm thấy tập tin nào.',
       noImagesFound: 'Không tìm thấy hình nào.',

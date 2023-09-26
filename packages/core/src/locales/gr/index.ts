@@ -24,6 +24,7 @@ const gr: LocalePhrasesRoot = {
       quickAdd: 'Γρήγορη προσθήκη',
     },
     app: {
+      loading: 'Φόρτωση...',
       errorHeader: 'Σφάλμα κατά τη φόρτωση της ρύθμισης παραμέτρων CMS',
       configErrors: 'Σφάλματα ρύθμισης παραμέτρων',
       checkConfigYml: 'Ελέγξτε το αρχείο config.yml.',
@@ -151,7 +152,6 @@ const gr: LocalePhrasesRoot = {
         'Το αρχείο είναι πολύ μεγάλο.\nΔεν επιτρέπονται αρχεία μεγαλύτερα από %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Φόρτωση...',
       noResults: 'Χωρίς αποτελέσματα.',
       noAssetsFound: 'Δεν βρέθηκαν αρχεία.',
       noImagesFound: 'Δεν βρέθηκαν εικόνες.',

@@ -9,6 +9,7 @@ const uk: LocalePhrasesRoot = {
       quickAdd: 'Додати',
     },
     app: {
+      loading: 'Завантаження...',
       errorHeader: 'Помилка завантаження конфігурації',
       configErrors: 'Помилка конфігурації',
       checkConfigYml: 'Перевірте config.yml файл.',
@@ -127,7 +128,6 @@ const uk: LocalePhrasesRoot = {
       onDeleteBody: 'Ви дійсно бажаєте видалити обрані матеріали?',
     },
     mediaLibraryModal: {
-      loading: 'Завантаження...',
       noResults: 'Результати відсутні.',
       noAssetsFound: 'Матеріали відсутні.',
       noImagesFound: 'Зображення відсутні.',

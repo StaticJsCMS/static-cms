@@ -24,6 +24,7 @@ const ca: LocalePhrasesRoot = {
       quickAdd: 'Afegir',
     },
     app: {
+      loading: 'Carregant...',
       errorHeader: 'Error al carregar la configuració del CMS',
       configErrors: 'Errors de configuració',
       checkConfigYml: "Comprovi l'arxiu config.yml.",
@@ -211,7 +212,6 @@ const ca: LocalePhrasesRoot = {
         'El fitxer és massa gran.\nLa configuració no permet fitxers més grans de %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Carregant...',
       noResults: 'Sense resultats.',
       noAssetsFound: 'Arxius no trobats.',
       noImagesFound: 'Imatges no trobades.',

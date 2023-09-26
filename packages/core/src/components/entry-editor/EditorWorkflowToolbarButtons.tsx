@@ -3,11 +3,11 @@ import React, { useCallback, useMemo } from 'react';
 
 import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import Button from '../common/button/Button';
 import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
-import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { FC } from 'react';
 
@@ -22,6 +22,8 @@ export interface EditorWorkflowToolbarButtonsProps {
   currentStatus: WorkflowStatus | undefined;
   isUpdatingStatus: boolean;
   onChangeStatus: (status: WorkflowStatus) => void;
+  disabled: boolean;
+  isLoading: boolean;
 }
 
 const EditorWorkflowToolbarButtons: FC<EditorWorkflowToolbarButtonsProps> = ({
@@ -31,6 +33,8 @@ const EditorWorkflowToolbarButtons: FC<EditorWorkflowToolbarButtonsProps> = ({
   currentStatus,
   isUpdatingStatus,
   onChangeStatus,
+  disabled,
+  isLoading,
 }) => {
   const t = useTranslate();
 
@@ -58,10 +62,12 @@ const EditorWorkflowToolbarButtons: FC<EditorWorkflowToolbarButtonsProps> = ({
           label={
             isUpdatingStatus
               ? t('editor.editorToolbar.updating')
+              : isLoading
+              ? t('app.app.loading')
               : t('editor.editorToolbar.status', { status: statusToTranslation[currentStatus] })
           }
           color="secondary"
-          disabled={isUpdatingStatus}
+          disabled={disabled}
           aria-label="change status options dropdown"
         >
           <MenuGroup>
@@ -96,10 +102,11 @@ const EditorWorkflowToolbarButtons: FC<EditorWorkflowToolbarButtonsProps> = ({
         </Menu>
       ) : null}
       <Button
-        disabled={!hasChanged}
+        disabled={!hasChanged || disabled}
         onClick={handleSave}
         color={hasChanged ? 'primary' : 'secondary'}
         variant={hasChanged ? 'contained' : 'outlined'}
+        aria-label="save unpublished entry"
       >
         {isPersisting ? t('editor.editorToolbar.saving') : t('editor.editorToolbar.save')}
       </Button>

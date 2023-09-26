@@ -24,6 +24,7 @@ const th: LocalePhrasesRoot = {
       quickAdd: 'เพิ่มเนื้อหา อย่างเร็ว',
     },
     app: {
+      loading: 'กำลังโหลด...',
       errorHeader: 'เกิดข้อผิดพลาดในการโหลดการตั้งค่า CMS',
       configErrors: 'คอนฟิกมีข้อผิดพลาด',
       checkConfigYml: 'กรุณาตรวจสอบไฟล์ config.yml ของคุณ',
@@ -181,7 +182,6 @@ const th: LocalePhrasesRoot = {
       fileTooLargeBody: 'ไฟล์ใหญ่เกินไป\n ค่าที่ตั้งไว้ไม่ยอมรับไฟล์ที่ใหญ่กว่า %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'กำลังโหลด...',
       noResults: 'ไม่มีผลลัพธ์',
       noAssetsFound: 'ไม่พบข้อมูล',
       noImagesFound: 'ไม่พบรูปภาพ',

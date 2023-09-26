@@ -24,6 +24,7 @@ const ja: LocalePhrasesRoot = {
       quickAdd: '新規作成',
     },
     app: {
+      loading: '読込中...',
       errorHeader: 'CMS設定の読み込みエラー',
       configErrors: '設定エラー',
       checkConfigYml: 'config.ymlを確認してください。',
@@ -215,7 +216,6 @@ const ja: LocalePhrasesRoot = {
       fileTooLargeBody: 'ファイルサイズが大きすぎます。\n%{size} kB 以下にしてください。',
     },
     mediaLibraryModal: {
-      loading: '読込中...',
       noResults: 'データがありません。',
       noAssetsFound: 'データがありません。',
       noImagesFound: 'データがありません。',

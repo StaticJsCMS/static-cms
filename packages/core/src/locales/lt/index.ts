@@ -24,6 +24,7 @@ const lt: LocalePhrasesRoot = {
       quickAdd: 'Sukurti naują',
     },
     app: {
+      loading: 'Kraunama...',
       errorHeader: 'Klaida, neišėjo užkrauti/pasiekti CMS konfigūracijos failą',
       configErrors: 'Konfigūracijos (nustatymų) klaidos',
       checkConfigYml: 'Patikrinkite config.yml balsą.',
@@ -198,7 +199,6 @@ const lt: LocalePhrasesRoot = {
         'Failas per didelis.\nNustatymuose (konfigūracijoje) nurodyta, kad failai negali viršyti %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Kraunama...',
       noResults: 'Nėra rezultatų.',
       noAssetsFound: 'Turinio nerasta.',
       noImagesFound: 'Vaizdų nerasta.',

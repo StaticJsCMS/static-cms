@@ -24,6 +24,7 @@ const nl: LocalePhrasesRoot = {
       quickAdd: 'Snel toevoegen',
     },
     app: {
+      loading: 'Laden...',
       errorHeader: 'Fout bij het laden van de CMS configuratie',
       configErrors: 'configuratiefouten',
       checkConfigYml: 'Controleer je config.yml bestand',
@@ -214,7 +215,6 @@ const nl: LocalePhrasesRoot = {
         'Het bestand is te groot.\n De instellingen staan geen bestanden toe groter dan %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Laden...',
       noResults: 'Geen resultaten.',
       noAssetsFound: 'Geen media gevonden.',
       noImagesFound: 'Geen afbeeldingen gevonden.',

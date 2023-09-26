@@ -24,6 +24,7 @@ const he: LocalePhrasesRoot = {
       quickAdd: 'הוספה מהירה',
     },
     app: {
+      loading: 'טעינה...',
       errorHeader: 'אירעה שגיאה בטעינת הגדרות מערכת ניהול התוכן',
       configErrors: 'שגיאות בהגדרות',
       checkConfigYml: 'יש לבדוק את הקובץ config.yml.',
@@ -219,7 +220,6 @@ const he: LocalePhrasesRoot = {
       fileTooLargeBody: 'הקובץ גדול מדי.\nמוגדר לא לאפשר העלאת קבצים גדולים מ-%{size} קילובייט.',
     },
     mediaLibraryModal: {
-      loading: 'טעינה...',
       noResults: 'לא נמצאו תוצאות.',
       noAssetsFound: 'לא נמצאו קבצים.',
       noImagesFound: 'לא נמצאו תמונות.',

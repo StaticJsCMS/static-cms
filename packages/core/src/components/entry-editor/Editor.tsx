@@ -64,6 +64,8 @@ const Editor: FC<EditorProps> = ({
   currentStatus,
   hasUnpublishedEntry,
   useWorkflow,
+  isUpdatingStatus,
+  isPublishing,
 }) => {
   const t = useTranslate();
 
@@ -570,13 +572,13 @@ const Editor: FC<EditorProps> = ({
         submitted={submitted}
         slug={slug}
         currentStatus={currentStatus}
-        isUpdatingStatus={Boolean(entry?.isUpdatingStatus)}
+        isUpdatingStatus={isUpdatingStatus}
         onChangeStatus={handleChangeStatus}
         onPublish={handlePublishEntry}
         onUnPublish={handleUnpublishEntry}
         onDeleteUnpublishedChanges={handleDeleteUnpublishedChanges}
         hasUnpublishedChanges={hasUnpublishedEntry}
-        isPublishing={Boolean(entry?.isPublishing)}
+        isPublishing={isPublishing}
       />
       <MediaLibraryModal />
     </>
@@ -601,11 +603,9 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
 
   const useWorkflow = selectUseWorkflow(state);
   const unPublishedEntry = selectUnpublishedEntry(state, collectionName, slug);
-  const publishedEntry = selectEntry(state, collectionName, slug);
+  const draftEntry = selectEntry(state, collectionName, slug);
 
   const hasUnpublishedEntry = Boolean(useWorkflow && unPublishedEntry);
-  const entry = hasUnpublishedEntry ? selectEntry(state, collectionName, slug) : publishedEntry;
-  console.log('publishedEntry', publishedEntry, '\nunPublishedEntry', unPublishedEntry);
   const currentStatus = unPublishedEntry && unPublishedEntry.status;
   const localBackup = entryDraft.localBackup;
   const draftKey = entryDraft.key;
@@ -615,17 +615,19 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
     collections,
     entryDraft,
     fields,
-    entry,
+    entry: draftEntry,
     hasChanged,
     isModification,
     collectionEntriesLoaded,
     localBackup,
     draftKey,
     scrollSyncActive: scroll.isScrolling,
-    publishedEntry,
+    publishedEntry: draftEntry,
     hasUnpublishedEntry,
     currentStatus,
     useWorkflow,
+    isUpdatingStatus: Boolean(entryDraft.entry?.isUpdatingStatus),
+    isPublishing: Boolean(entryDraft.entry?.isPublishing),
   };
 }
 

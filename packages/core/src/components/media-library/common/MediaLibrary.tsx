@@ -472,7 +472,7 @@ const MediaLibrary: FC<MediaLibraryProps> = ({ canInsert = false, isDialog = fal
   const hasSearchResults = queriedFiles && !!queriedFiles.length;
   const hasMedia = hasSearchResults;
   const emptyMessage =
-    (isLoading && !hasMedia && t('mediaLibrary.mediaLibraryModal.loading')) ||
+    (isLoading && !hasMedia && t('app.app.loading')) ||
     (dynamicSearchActive && t('mediaLibrary.mediaLibraryModal.noResults')) ||
     (!hasFiles && t('mediaLibrary.mediaLibraryModal.noAssetsFound')) ||
     (!hasFilteredFiles && t('mediaLibrary.mediaLibraryModal.noImagesFound')) ||
@@ -598,7 +598,7 @@ const MediaLibrary: FC<MediaLibraryProps> = ({ canInsert = false, isDialog = fal
                 onDirectoryOpen={handleOpenDirectory}
                 currentFolder={currentFolder}
                 isPaginating={isPaginating}
-                paginatingMessage={t('mediaLibrary.mediaLibraryModal.loading')}
+                paginatingMessage={t('app.app.loading')}
                 cardDraftText={t('mediaLibrary.mediaLibraryCard.draft')}
                 loadDisplayURL={loadDisplayURL}
                 displayURLs={displayURLs}

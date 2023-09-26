@@ -24,6 +24,7 @@ const hr: LocalePhrasesRoot = {
       quickAdd: 'Dodaj',
     },
     app: {
+      loading: 'Učitavanje...',
       errorHeader: 'Greška pri učitavanju CMS konfiguracije',
       configErrors: 'Greška u konfiguraciji',
       checkConfigYml: 'Provjeri config.yml datoteku.',
@@ -197,7 +198,6 @@ const hr: LocalePhrasesRoot = {
         'Datoteka prevelika.\nKonfigurirano da ne podržava datoteke veće od %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Učitavanje...',
       noResults: 'Nema rezultata.',
       noAssetsFound: 'Sredstva nisu pronađena.',
       noImagesFound: 'Slike nisu pronađene.',

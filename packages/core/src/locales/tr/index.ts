@@ -24,6 +24,7 @@ const tr: LocalePhrasesRoot = {
       quickAdd: 'Hızlı ekle',
     },
     app: {
+      loading: 'Yükleniyor...',
       errorHeader: 'CMS yapılandırması yüklenirken hata oluştu',
       configErrors: 'Yapılandırma Hataları',
       checkConfigYml: 'config.yml dosyanızı kontrol edin.',
@@ -225,7 +226,6 @@ const tr: LocalePhrasesRoot = {
         'Dosya çok büyük.\n%{size} kilobaytdan daha büyük dosyaların yüklenmemesi için ayarlanmış.',
     },
     mediaLibraryModal: {
-      loading: 'Yükleniyor...',
       noResults: 'Sonuç yok.',
       noAssetsFound: 'Hiçbir dosya bulunamadı.',
       noImagesFound: 'Resim bulunamadı.',

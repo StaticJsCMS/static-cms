@@ -27,6 +27,7 @@ const en: LocalePhrasesRoot = {
       quickAdd: 'Quick add',
     },
     app: {
+      loading: 'Loading...',
       errorHeader: 'Error loading the CMS configuration',
       configErrors: 'Config Errors',
       configNotFound: 'Config not found',
@@ -273,7 +274,6 @@ const en: LocalePhrasesRoot = {
       alreadyExistsBody: `%{filename} already exists. Do you want to replace it?`,
     },
     mediaLibraryModal: {
-      loading: 'Loading...',
       noResults: 'No results.',
       noAssetsFound: 'No assets found.',
       noImagesFound: 'No images found.',

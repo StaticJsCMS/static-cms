@@ -24,6 +24,7 @@ const sl: LocalePhrasesRoot = {
       quickAdd: 'Hitro dodajanje',
     },
     app: {
+      loading: 'Nalaganje...',
       errorHeader: 'Napaka pri nalaganju CMS konfiguracije',
       configErrors: 'Konfiguracijske napake',
       checkConfigYml: 'Preverite svojo datoteko config.yml.',
@@ -228,7 +229,6 @@ const sl: LocalePhrasesRoot = {
       fileTooLargeBody: 'Datoteka je prevelika.\n Ne sme biti večja od %{size} kb.',
     },
     mediaLibraryModal: {
-      loading: 'Nalaganje...',
       noResults: 'Ni rezultatov.',
       noAssetsFound: 'Ni najdenih sredstev.',
       noImagesFound: 'Ni najdenih slik.',

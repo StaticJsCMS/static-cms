@@ -24,6 +24,7 @@ const fa: LocalePhrasesRoot = {
       quickAdd: 'اضافه کردن سریع',
     },
     app: {
+      loading: 'بارگذاری...',
       errorHeader: 'خطا در بارگیری پیکربندی CMS',
       configErrors: 'خطاهای پیکربندی',
       checkConfigYml: 'فایل config.yml خود را بررسی کنید.',
@@ -215,7 +216,6 @@ const fa: LocalePhrasesRoot = {
         'فایل خیلی بزرگ است.\nپیکربندی شده است تا فایل های بزرگتر از %{size} کیلوبایت مجاز نباشد.',
     },
     mediaLibraryModal: {
-      loading: 'بارگذاری...',
       noResults: 'هیچ نتیجه ای.',
       noAssetsFound: 'هیچ دارایی یافت نشد.',
       noImagesFound: 'هیچ تصویری یافت نشد',

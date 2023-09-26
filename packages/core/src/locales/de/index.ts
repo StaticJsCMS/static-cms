@@ -26,6 +26,7 @@ const de: LocalePhrasesRoot = {
       quickAdd: 'Schnellerstellung',
     },
     app: {
+      loading: 'Laden...',
       errorHeader: 'Fehler beim Laden der CMS-Konfiguration.',
       configErrors: 'Konfigurationsfehler',
       configNotFound: 'KOnfiguration nicht gefunden',
@@ -260,7 +261,6 @@ const de: LocalePhrasesRoot = {
       alreadyExistsBody: '%{filename} existiert bereits. Soll sie überschrieben werden?',
     },
     mediaLibraryModal: {
-      loading: 'Laden...',
       noResults: 'Keine Egebnisse.',
       noAssetsFound: 'Keine Medien gefunden.',
       noImagesFound: 'Keine Bilder gefunden.',

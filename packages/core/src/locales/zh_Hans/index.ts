@@ -24,6 +24,7 @@ const zh_Hans: LocalePhrasesRoot = {
       quickAdd: '快速新建',
     },
     app: {
+      loading: '正在加载...',
       errorHeader: '加载 CMS 配置时发生错误',
       configErrors: '配置错误',
       checkConfigYml: '请检查 config.yml 文件是否配置正确',
@@ -208,7 +209,6 @@ const zh_Hans: LocalePhrasesRoot = {
       fileTooLargeBody: '文件体积过大\n目前的配置中不允许文件体积超过 %{size} kB',
     },
     mediaLibraryModal: {
-      loading: '正在加载...',
       noResults: '暂无结果',
       noAssetsFound: '未找到资源',
       noImagesFound: '未找到图片',
