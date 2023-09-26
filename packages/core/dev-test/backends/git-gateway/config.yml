@@ -1,9 +1,11 @@
 backend:
   name: git-gateway
-  branch: master
+  branch: main
 
-media_folder: static/media
-public_folder: /media
+media_folder: assets/upload
+public_folder: /assets/upload
+media_library:
+  max_file_size: 100000000
 collections:
   - name: posts
     label: Posts
@@ -62,6 +64,8 @@ collections:
         name: image
         widget: image
         required: false
+        media_library:
+          folder_support: true
       - label: Body
         name: body
         widget: markdown

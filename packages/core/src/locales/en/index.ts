@@ -119,6 +119,7 @@ const en: LocalePhrasesRoot = {
         'You have unsaved changes, please save before publishing.',
       onPublishingTitle: 'Publish entry?',
       onPublishingBody: 'Are you sure you want to publish this entry?',
+      onUnpublishingTitle: 'Unpublish entry?',
       onUnpublishingBody: 'Are you sure you want to unpublish this entry?',
       onDeleteWithUnsavedChangesTitle: 'Delete this published entry?',
       onDeleteWithUnsavedChangesBody:

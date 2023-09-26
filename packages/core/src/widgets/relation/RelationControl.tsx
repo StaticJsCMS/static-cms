@@ -251,36 +251,45 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
       return;
     }
 
+    let alive = true;
+
     const getOptions = async () => {
       const backend = currentBackend(config);
 
       const options = await backend.listAllEntries(searchCollection);
-      setEntries(options);
 
-      const hitOptions = parseHitOptions(options);
+      if (alive) {
+        setEntries(options);
 
-      if (value) {
-        const byValue = hitOptions.reduce((acc, option) => {
-          acc[option.value] = option;
-          return acc;
-        }, {} as Record<string, HitOption>);
+        const hitOptions = parseHitOptions(options);
 
-        const newFilteredValue =
-          typeof value === 'string'
-            ? value in byValue
-              ? [value]
-              : []
-            : value.filter(v => v && v in byValue);
+        if (value) {
+          const byValue = hitOptions.reduce((acc, option) => {
+            acc[option.value] = option;
+            return acc;
+          }, {} as Record<string, HitOption>);
 
-        const newInitialOptions = newFilteredValue.map(v => byValue[v]);
+          const newFilteredValue =
+            typeof value === 'string'
+              ? value in byValue
+                ? [value]
+                : []
+              : value.filter(v => v && v in byValue);
 
-        setInitialOptions(newInitialOptions);
+          const newInitialOptions = newFilteredValue.map(v => byValue[v]);
+
+          setInitialOptions(newInitialOptions);
+        }
+
+        setOptions(hitOptions);
       }
-
-      setOptions(hitOptions);
     };
 
     getOptions();
+
+    return () => {
+      alive = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchCollection, config, loading, parseHitOptions]);
 

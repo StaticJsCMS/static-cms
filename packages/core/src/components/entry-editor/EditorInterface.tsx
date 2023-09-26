@@ -15,6 +15,7 @@ import {
 import { customPathFromSlug } from '@staticcms/core/lib/util/nested.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
+import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import MainView from '../MainView';
 import EditorToolbar from './EditorToolbar';
@@ -142,6 +143,15 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
   onDeleteUnpublishedChanges,
 }) => {
   const config = useAppSelector(selectConfig);
+
+  const isLoading = useAppSelector(selectIsFetching);
+  const disabled = useMemo(
+    () =>
+      Boolean(
+        isLoading || entry.isPersisting || isPublishing || isUpdatingStatus || entry.isDeleting,
+      ),
+    [entry.isDeleting, entry.isPersisting, isLoading, isPublishing, isUpdatingStatus],
+  );
 
   const { locales, default_locale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
   const translatedLocales = useMemo(
@@ -299,6 +309,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
           canChangeLocale={i18nEnabled && !i18nActive}
           onLocaleChange={handleLocaleChange}
           slug={slug}
+          disabled={disabled}
         />
       </div>
     ),
@@ -315,6 +326,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
       i18nEnabled,
       handleLocaleChange,
       slug,
+      disabled,
     ],
   );
 
@@ -332,10 +344,20 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
           canChangeLocale
           context="i18nSplit"
           hideBorder
+          disabled={disabled}
         />
       </div>
     ),
-    [collection, entry, fields, fieldsErrors, handleLocaleChange, selectedLocale, submitted],
+    [
+      collection,
+      disabled,
+      entry,
+      fields,
+      fieldsErrors,
+      handleLocaleChange,
+      selectedLocale,
+      submitted,
+    ],
   );
 
   const previewEntry = useMemo(
@@ -372,10 +394,20 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
           submitted={submitted}
           canChangeLocale
           hideBorder
+          disabled={disabled}
         />
       </div>
     ),
-    [collection, entry, fields, fieldsErrors, handleLocaleChange, selectedLocale, submitted],
+    [
+      collection,
+      disabled,
+      entry,
+      fields,
+      fieldsErrors,
+      handleLocaleChange,
+      selectedLocale,
+      submitted,
+    ],
   );
 
   const editorWithPreview = (
@@ -497,6 +529,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
           onUnPublish={onUnPublish}
           onPublishAndNew={() => handleOnPublish({ createNew: true })}
           onPublishAndDuplicate={() => handleOnPublish({ createNew: true, duplicate: true })}
+          disabled={disabled}
         />
       }
     >

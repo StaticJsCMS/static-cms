@@ -43,6 +43,7 @@ export interface EditorControlPaneProps {
   allowDefaultLocale?: boolean;
   context?: 'default' | 'i18nSplit';
   listItemPath?: string;
+  disabled: boolean;
 }
 
 const EditorControlPane: FC<EditorControlPaneProps> = ({
@@ -59,6 +60,7 @@ const EditorControlPane: FC<EditorControlPaneProps> = ({
   allowDefaultLocale = false,
   context = 'default',
   listItemPath,
+  disabled,
 }) => {
   const t = useTranslate();
 
@@ -136,6 +138,7 @@ const EditorControlPane: FC<EditorControlPaneProps> = ({
           listItemPath={listItemPath}
           controlled
           isMeta
+          disabled={disabled}
         />
       ) : null}
       {fields.map(field => {
@@ -153,6 +156,7 @@ const EditorControlPane: FC<EditorControlPaneProps> = ({
             parentPath=""
             i18n={i18n}
             listItemPath={listItemPath}
+            disabled={disabled}
           />
         );
       })}

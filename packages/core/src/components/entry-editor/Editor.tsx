@@ -392,12 +392,8 @@ const Editor: FC<EditorProps> = ({
       (!isEqual(localBackup.entry.data, entryDraft.entry?.data) ||
         !isEqual(localBackup.entry.meta, entryDraft.entry?.meta))
     ) {
-      const updateLocalBackup = async () => {
-        dispatch(loadLocalBackup());
-        setVersion(version + 1);
-      };
-
-      updateLocalBackup();
+      dispatch(loadLocalBackup());
+      setVersion(version + 1);
     }
 
     setPrevLocalBackup(localBackup);
@@ -445,18 +441,18 @@ const Editor: FC<EditorProps> = ({
     if (newRecord && slug !== prevSlug) {
       setTimeout(async () => {
         await dispatch(loadMedia());
-        dispatch(createEmptyDraft(collection, location.search));
+        await dispatch(createEmptyDraft(collection, location.search));
       });
     } else if (!newRecord && slug && (prevCollection !== collection || prevSlug !== slug)) {
-      setTimeout(() => {
-        if (!config?.disable_local_backup) {
-          dispatch(retrieveLocalBackup(collection, slug));
+      setTimeout(async () => {
+        if (useWorkflow) {
+          await dispatch(loadUnpublishedEntry(collection, slug));
+        } else {
+          await dispatch(loadEntry(collection, slug));
         }
 
-        if (useWorkflow) {
-          dispatch(loadUnpublishedEntry(collection, slug));
-        } else {
-          dispatch(loadEntry(collection, slug));
+        if (!config?.disable_local_backup) {
+          await dispatch(retrieveLocalBackup(collection, slug));
         }
       });
     }
@@ -603,7 +599,7 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
 
   const useWorkflow = selectUseWorkflow(state);
   const unPublishedEntry = selectUnpublishedEntry(state, collectionName, slug);
-  const draftEntry = selectEntry(state, collectionName, slug);
+  const publishedEntry = selectEntry(state, collectionName, slug);
 
   const hasUnpublishedEntry = Boolean(useWorkflow && unPublishedEntry);
   const currentStatus = unPublishedEntry && unPublishedEntry.status;
@@ -615,14 +611,14 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
     collections,
     entryDraft,
     fields,
-    entry: draftEntry,
+    entry: entryDraft.entry,
     hasChanged,
     isModification,
     collectionEntriesLoaded,
     localBackup,
     draftKey,
     scrollSyncActive: scroll.isScrolling,
-    publishedEntry: draftEntry,
+    publishedEntry,
     hasUnpublishedEntry,
     currentStatus,
     useWorkflow,

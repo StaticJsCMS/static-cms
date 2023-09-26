@@ -543,14 +543,17 @@ export default class API {
   };
 
   async getFileId(path: string, branch: string) {
-    const request = await this.request({
+    const response = await this.request({
       method: 'HEAD',
       url: `${this.repoURL}/repository/files/${encodeURIComponent(path)}`,
       params: { ref: branch },
     });
 
-    const blobId = request.headers.get('X - Gitlab - Blob - Id') as string;
-    return blobId;
+    try {
+      return response.headers.get('X - Gitlab - Blob - Id') as string;
+    } catch {
+      return '';
+    }
   }
 
   async isFileExists(path: string, branch: string) {

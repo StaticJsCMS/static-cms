@@ -7,9 +7,10 @@ import useGroups from '@staticcms/core/lib/hooks/useGroups';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { Cursor } from '@staticcms/core/lib/util';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
 import { selectCollectionEntriesCursor } from '@staticcms/core/reducers/selectors/cursors';
 import { selectEntriesLoaded, selectIsFetching } from '@staticcms/core/reducers/selectors/entries';
-import { useAppDispatch } from '@staticcms/core/store/hooks';
+import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import Button from '../../common/button/Button';
 import Entries from './Entries';
 import entriesClasses from './Entries.classes';
@@ -76,6 +77,7 @@ const EntriesCollection: FC<EntriesCollectionProps> = ({
   const groups = useGroups(collection.name);
 
   const entries = useEntries(collection);
+  const useWorkflow = useAppSelector(selectUseWorkflow);
 
   const filteredEntries = useMemo(() => {
     if ('nested' in collection) {
@@ -98,7 +100,15 @@ const EntriesCollection: FC<EntriesCollectionProps> = ({
 
     setPrevReadyToLoad(readyToLoad);
     setPrevCollection(collection);
-  }, [collection, dispatch, entriesLoaded, prevCollection, prevReadyToLoad, readyToLoad]);
+  }, [
+    collection,
+    dispatch,
+    entriesLoaded,
+    prevCollection,
+    prevReadyToLoad,
+    readyToLoad,
+    useWorkflow,
+  ]);
 
   const handleCursorActions = useCallback(
     (action: string) => {

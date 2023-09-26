@@ -49,7 +49,7 @@ const EditorControl: FC<EditorControlProps> = ({
   field,
   fieldsErrors,
   submitted,
-  disabled = false,
+  disabled,
   parentDuplicate = false,
   locale,
   parentPath,
@@ -263,7 +263,7 @@ interface EditorControlOwnProps {
   field: Field;
   fieldsErrors: FieldsErrors;
   submitted: boolean;
-  disabled?: boolean;
+  disabled: boolean;
   parentDuplicate?: boolean;
   locale?: string;
   parentPath: string;

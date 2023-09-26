@@ -79,6 +79,7 @@ export interface EditorToolbarProps {
   onDeleteUnpublishedChanges: () => Promise<void>;
   onPublishAndNew: () => Promise<void>;
   onPublishAndDuplicate: () => Promise<void>;
+  disabled: boolean;
 }
 
 const EditorToolbar: FC<EditorToolbarProps> = ({
@@ -115,6 +116,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
   onDeleteUnpublishedChanges,
   onPublishAndNew,
   onPublishAndDuplicate,
+  disabled,
 }) => {
   const t = useTranslate();
 
@@ -294,22 +296,6 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
 
     return 'editor.editorToolbar.publish';
   }, [hasUnpublishedChanges, isNewEntry, isPersisting, isPublished, isPublishing, useWorkflow]);
-
-  console.log(
-    'isLoading',
-    isLoading,
-    'isPersisting',
-    isPersisting,
-    'isPublished',
-    isPublishing,
-    'isUpdatingStatus',
-    isUpdatingStatus,
-  );
-
-  const disabled = useMemo(
-    () => isLoading || isPersisting || isPublishing || isUpdatingStatus,
-    [isLoading, isPersisting, isPublishing, isUpdatingStatus],
-  );
 
   return (
     <div className={classNames(classes.root, className)}>

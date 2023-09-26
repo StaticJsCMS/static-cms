@@ -35,6 +35,8 @@ export function useGetMediaAsset<T extends MediaField, EF extends BaseField = Un
       if (asset !== emptyAsset) {
         return asset?.toString() ?? '';
       }
+
+      return '';
     },
     [collection, currentFolder, dispatch, entry, field, isDirectory],
   );
@@ -62,16 +64,23 @@ export default function useMediaAsset<T extends MediaField, EF extends BaseField
       return;
     }
 
+    let alive = true;
+
     const fetchMedia = async () => {
       const asset = await dispatch(
         getAsset<T, EF>(collection, entry, debouncedUrl, field, currentFolder),
       );
-      if (asset !== emptyAsset) {
+
+      if (alive) {
         setAssetSource(asset?.toString() ?? '');
       }
     };
 
     fetchMedia();
+
+    return () => {
+      alive = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedUrl]);
 

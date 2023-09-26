@@ -258,6 +258,7 @@ export function loadUnpublishedEntry(collection: Collection, slug: string) {
         dispatch(unpublishedEntryRedirected(collection, slug));
         dispatch(loadEntry(collection, slug));
       } else {
+        console.error(error);
         dispatch(
           addSnackbar({
             type: 'error',
@@ -282,9 +283,8 @@ export function loadUnpublishedEntries(collections: Collections) {
     }
 
     const backend = currentBackend(state.config.config);
-    const entriesLoaded = state.editorialWorkflow.ids;
 
-    if (state.config.config.publish_mode !== EDITORIAL_WORKFLOW || entriesLoaded) {
+    if (state.config.config.publish_mode !== EDITORIAL_WORKFLOW) {
       return;
     }
 
@@ -293,6 +293,7 @@ export function loadUnpublishedEntries(collections: Collections) {
       .unpublishedEntries(collections)
       .then(response => dispatch(unpublishedEntriesLoaded(response.entries, response.pagination)))
       .catch((error: Error) => {
+        console.error(error);
         dispatch(
           addSnackbar({
             type: 'error',
@@ -363,7 +364,11 @@ export function persistUnpublishedEntry(
       entry,
     });
 
-    const serializedEntry = getSerializedEntry(collection, entry);
+    let serializedEntry = getSerializedEntry(collection, entry);
+    serializedEntry = {
+      ...serializedEntry,
+      raw: backend.entryToRaw(collection, serializedEntry),
+    };
     const serializedEntryDraft: EntryDraft = {
       ...(entryDraft as EntryDraft),
       entry: serializedEntry,
@@ -393,10 +398,10 @@ export function persistUnpublishedEntry(
         }),
       );
       dispatch(unpublishedEntryPersisted(collection, serializedEntry));
-      dispatch(loadUnpublishedEntry(collection, newSlug));
 
       if (entry.slug !== newSlug) {
         navigate(`/collections/${collection.name}/entries/${newSlug}`);
+        return;
       }
     } catch (error) {
       dispatch(
@@ -589,10 +594,10 @@ export function unpublishPublishedEntry(collection: Collection, slug: string) {
           status: WorkflowStatus.PENDING_PUBLISH,
         }),
       )
-      .then(() => {
+      .then(async () => {
         dispatch(unpublishedEntryPersisted(collection, entry));
         dispatch(entryDeleted(collection, slug));
-        dispatch(loadUnpublishedEntry(collection, slug));
+        await dispatch(loadUnpublishedEntry(collection, slug));
         dispatch(
           addSnackbar({
             type: 'success',
