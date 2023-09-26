@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
-import { getDefaultPath } from '../../lib/util/collection.util';
+import useDefaultPath from '@staticcms/core/lib/hooks/useDefaultPath';
 import Editor from './Editor';
 
 import type { Collections } from '@staticcms/core/interface';
@@ -23,7 +23,7 @@ const EditorRoute: FC<EditorRouteProps> = ({ newRecord = false, collections }) =
     return !collections[name];
   }, [collections, name]);
 
-  const defaultPath = useMemo(() => getDefaultPath(collections), [collections]);
+  const defaultPath = useDefaultPath(collections);
 
   if (shouldRedirect || !name || (!newRecord && !slug)) {
     return <Navigate to={defaultPath} />;

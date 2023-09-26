@@ -394,9 +394,13 @@ export function selectIdentifier<EF extends BaseField>(collection: Collection<EF
 }
 
 export function selectInferredField<EF extends BaseField>(
-  collection: Collection<EF>,
+  collection: Collection<EF> | undefined,
   fieldName: string,
 ) {
+  if (!collection) {
+    return;
+  }
+
   if (fieldName === 'title' && collection.identifier_field) {
     return selectIdentifier(collection);
   }
@@ -473,7 +477,11 @@ export function useInferredFields(collection: Collection) {
   }, [collection]);
 }
 
-export function getDefaultPath(collections: Collections) {
+export function getDefaultPath(collections: Collections, useWorkflow: boolean) {
+  if (useWorkflow) {
+    return '/dashboard';
+  }
+
   if (Object.keys(collections).length === 0) {
     throw new Error('No collections found');
   }

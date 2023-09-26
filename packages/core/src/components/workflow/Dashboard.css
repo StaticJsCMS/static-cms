@@ -1,0 +1,92 @@
+.CMS_Dashboard_root {
+  @apply flex
+    flex-col
+    h-full;
+}
+
+.CMS_Dashboard_header-wrapper {
+  @apply flex
+    flex-col
+    gap-2
+    truncate;
+}
+
+.CMS_Dashboard_header {
+  color: var(--text-primary);
+
+  @apply text-xl
+    font-semibold
+    flex
+    items-center
+    gap-2
+    md:w-auto;
+}
+
+.CMS_Dashboard_header-icon-wrapper {
+  @apply flex
+    items-center;
+}
+
+.CMS_Dashboard_header-icon {
+  @apply w-6
+    h-6;
+}
+
+.CMS_Dashboard_header-label {
+  @apply w-full
+    truncate;
+}
+
+.CMS_Dashboard_header-description {
+  color: var(--text-secondary);
+
+  @apply w-full
+    text-sm;
+}
+
+.CMS_Dashboard_columns {
+  @apply w-full
+    flex
+    flex-grow
+    gap-5
+    mt-4;
+}
+
+.CMS_Dashboard_column-wrapper {
+  @apply flex
+    flex-col
+    flex-grow
+    gap-2.5;
+}
+
+.CMS_Dashboard_column {
+  background: color-mix(in srgb, var(--background-main) 50%, transparent);
+
+  @apply h-full
+    flex
+    flex-col
+    flex-grow
+    rounded;
+}
+
+.CMS_Dashboard_column-header {
+  @apply text-lg
+    rounded
+    px-3
+    py-1;
+
+  &.CMS_Dashboard_column-header-draft {
+    background: color-mix(in srgb, var(--info-main) 75%, transparent);
+    color: var(--info-contrast-color);
+  }
+
+  &.CMS_Dashboard_column-header-in-review {
+    background: color-mix(in srgb, var(--warning-main) 75%, transparent);
+    color: var(--warning-contrast-color);
+  }
+
+  &.CMS_Dashboard_column-header-ready {
+    background: color-mix(in srgb, var(--success-main) 75%, transparent);
+    color: var(--success-contrast-color);
+  }
+}

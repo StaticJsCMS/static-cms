@@ -13,9 +13,9 @@ export function selectUnpublishedEntry(
   return state && state.editorialWorkflow.entities[`${collection}.${slug}`];
 }
 
-export function selectUnpublishedEntriesByStatus(state: RootState, status: string) {
+export const selectUnpublishedEntriesByStatus = (status: string) => (state: RootState) => {
   return Object.values(state.editorialWorkflow.entities).filter(entry => entry.status === status);
-}
+};
 
 export function selectUnpublishedSlugs(state: RootState, collection: string) {
   return Object.entries(state.editorialWorkflow.entities)

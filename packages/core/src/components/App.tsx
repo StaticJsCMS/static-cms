@@ -16,13 +16,14 @@ import { loginUser as loginUserAction } from '@staticcms/core/actions/auth';
 import { discardDraft } from '@staticcms/core/actions/entries';
 import { currentBackend } from '@staticcms/core/backend';
 import { changeTheme } from '../actions/globalUI';
+import useDefaultPath from '../lib/hooks/useDefaultPath';
 import useTranslate from '../lib/hooks/useTranslate';
 import { invokeEvent } from '../lib/registry';
-import { getDefaultPath } from '../lib/util/collection.util';
 import { isNotNullish } from '../lib/util/null.util';
 import { isEmpty } from '../lib/util/string.util';
 import { generateClassNames } from '../lib/util/theming.util';
-import { useAppDispatch } from '../store/hooks';
+import { selectUseWorkflow } from '../reducers/selectors/config';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import NotFoundPage from './NotFoundPage';
 import CollectionRoute from './collections/CollectionRoute';
 import { Alert } from './common/alert/Alert';
@@ -34,6 +35,7 @@ import Page from './page/Page';
 import Snackbars from './snackbar/Snackbars';
 import ThemeManager from './theme/ThemeManager';
 import useTheme from './theme/hooks/useTheme';
+import Dashboard from './workflow/Dashboard';
 
 import type { Credentials } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
@@ -143,7 +145,8 @@ const App: FC<AppProps> = ({
     );
   }, [AuthComponent, auth.error, auth.isFetching, config.config, handleLogin, navigate, t]);
 
-  const defaultPath = useMemo(() => getDefaultPath(collections), [collections]);
+  const useWorkflow = useAppSelector(selectUseWorkflow);
+  const defaultPath = useDefaultPath(collections);
 
   const { pathname } = useLocation();
   const [searchParams] = useSearchParams();
@@ -183,6 +186,7 @@ const App: FC<AppProps> = ({
         {isFetching && <TopBarProgress />}
         <Routes>
           <Route path="/" element={<Navigate to={defaultPath} />} />
+          {useWorkflow ? <Route path="/dashboard" element={<Dashboard />} /> : null}
           <Route path="/search" element={<Navigate to={defaultPath} />} />
           <Route path="/collections/:name/search/" element={<CollectionSearchRedirect />} />
           <Route
@@ -216,7 +220,7 @@ const App: FC<AppProps> = ({
         </Routes>
       </>
     );
-  }, [authenticationPage, collections, defaultPath, isFetching, user]);
+  }, [authenticationPage, collections, defaultPath, isFetching, useWorkflow, user]);
 
   useEffect(() => {
     setTimeout(() => {

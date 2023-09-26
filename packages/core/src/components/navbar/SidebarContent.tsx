@@ -1,3 +1,4 @@
+import { Dashboard as DashboardIcon } from '@styled-icons/material/Dashboard';
 import { Photo as PhotoIcon } from '@styled-icons/material/Photo';
 import React, { useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -107,13 +108,16 @@ const SidebarContent: FC = () => {
             onSubmit={(query: string, collection?: string) => searchCollections(query, collection)}
           />
         )}
+        <NavLink
+          key="Dashboard"
+          to="/dashboard"
+          icon={<DashboardIcon className={sidebarClasses['icon']} />}
+        >
+          Dashboard
+        </NavLink>
         {collectionLinks}
         {links}
-        <NavLink
-          key="Media"
-          to="/media"
-          icon={<PhotoIcon className={sidebarClasses['media-icon']} />}
-        >
+        <NavLink key="Media" to="/media" icon={<PhotoIcon className={sidebarClasses['icon']} />}>
           {t('app.header.media')}
         </NavLink>
       </ul>
