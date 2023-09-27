@@ -5,7 +5,8 @@
     gap-2.5
     basis-full
     md:basis-2/6
-    snap-center;
+    snap-center
+    flex-shrink-0;
 
   &.CMS_WorkflowColumn_over {
     & .CMS_WorkflowColumn_content {

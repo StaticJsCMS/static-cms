@@ -37,7 +37,6 @@ export default function useWorkflowBoardSections() {
   );
 
   useEffect(() => {
-    console.log('updating board sections!!!');
     setBoardSections(
       Object.values(rawEntries).reduce(
         (acc, entry) => {
@@ -55,6 +54,5 @@ export default function useWorkflowBoardSections() {
     );
   }, [rawEntries]);
 
-  console.log('returning board sections');
   return { boardSections, entriesById, setBoardSections };
 }

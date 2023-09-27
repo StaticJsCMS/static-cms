@@ -11,6 +11,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { updateUnpublishedEntryStatus } from '@staticcms/core/actions/editorialWorkflow';
 import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import { PointerSensor } from '@staticcms/core/lib/util/dnd.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useAppDispatch } from '@staticcms/core/store/hooks';
@@ -28,13 +29,13 @@ import './Dashboard.css';
 
 const classes = generateClassNames('Dashboard', [
   'root',
+  'dragging',
   'header-wrapper',
   'header',
   'header-icon-wrapper',
   'header-icon',
   'header-label',
   'header-description',
-  'board-wrapper',
   'board',
   'columns',
 ]);
@@ -73,14 +74,6 @@ const Dashboard: FC = () => {
       // Find the indexes for the items
       const activeIndex = activeItems.findIndex(entry => getEntryId(entry) === active.id);
 
-      console.log('new board sections!', activeStatus, overStatus, activeStatus === overStatus, {
-        ...boardSection,
-        [activeStatus]: [
-          ...boardSection[activeStatus].filter(entry => getEntryId(entry) !== active.id),
-        ],
-        [overStatus]: [boardSections[activeStatus][activeIndex], ...boardSection[overStatus]],
-      });
-
       return {
         ...boardSection,
         [activeStatus]: [
@@ -105,10 +98,8 @@ const Dashboard: FC = () => {
         );
       }
 
-      console.log(over);
       setIsDragging(false);
       setActiveTaskId(null);
-      console.log('activeEntry', active.id, over?.id);
     },
     [dispatch, entriesById],
   );
@@ -133,7 +124,7 @@ const Dashboard: FC = () => {
 
   return (
     <MainView breadcrumbs={[{ name: 'Dashboard' }]} showQuickCreate showLeftNav noMargin>
-      <div className={classes.root}>
+      <div className={classNames(classes.root, isDragging && classes.dragging)}>
         <div className={classes['header-wrapper']}>
           <h2 className={classes.header}>
             <div className={classes['header-icon-wrapper']}>
@@ -148,29 +139,27 @@ const Dashboard: FC = () => {
             })}
           </div>
         </div>
-        <div className={classes['board-wrapper']}>
-          <DndContext
-            onDragStart={handleOnDragStart}
-            onDragEnd={handleOnDragEnd}
-            onDragOver={handleDragOver}
-            onDragCancel={handleOnDragCancel}
-            sensors={sensors}
-          >
-            <div className={classes.board}>
-              {(Object.keys(boardSections) as WorkflowStatus[]).map(status => (
-                <WorkflowColumn
-                  key={status}
-                  entries={boardSections[status]}
-                  status={status}
-                  dragging={isDragging}
-                />
-              ))}
-            </div>
-            <DragOverlay dropAnimation={defaultDropAnimation}>
-              {activeEntry ? <ActiveWorkflowCard entry={activeEntry} /> : null}
-            </DragOverlay>
-          </DndContext>
-        </div>
+        <DndContext
+          onDragStart={handleOnDragStart}
+          onDragEnd={handleOnDragEnd}
+          onDragOver={handleDragOver}
+          onDragCancel={handleOnDragCancel}
+          sensors={sensors}
+        >
+          <div className={classes.board}>
+            {(Object.keys(boardSections) as WorkflowStatus[]).map(status => (
+              <WorkflowColumn
+                key={status}
+                entries={boardSections[status]}
+                status={status}
+                dragging={isDragging}
+              />
+            ))}
+          </div>
+          <DragOverlay dropAnimation={defaultDropAnimation}>
+            {activeEntry ? <ActiveWorkflowCard entry={activeEntry} /> : null}
+          </DragOverlay>
+        </DndContext>
       </div>
     </MainView>
   );

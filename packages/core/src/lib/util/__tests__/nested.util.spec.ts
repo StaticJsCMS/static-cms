@@ -38,7 +38,6 @@ const entries: Entry[] = [
     path: '_nested_pages/authors/author-1/index.md',
     raw: '---\ntitle: An Author\n---\nAuthor details go here!.\n',
     slug: 'authors/author-1/index',
-    status: '',
     updatedOn: '',
   },
   {
@@ -54,7 +53,6 @@ const entries: Entry[] = [
     path: '_nested_pages/authors/index.md',
     raw: '---\ntitle: Authors\n---\n',
     slug: 'authors/index',
-    status: '',
     updatedOn: '',
   },
   {
@@ -73,7 +71,6 @@ const entries: Entry[] = [
     path: '_nested_pages/posts/hello-world/index.md',
     raw: '---\ntitle: Hello World\n---\nCoffee is a small tree or shrub that grows in the forest understory in its wild form, and traditionally was grown commercially under other trees that provided shade. The forest-like structure of shade coffee farms provides habitat for a great number of migratory and resident species.\n',
     slug: 'posts/hello-world/index',
-    status: '',
     updatedOn: '',
   },
   {
@@ -89,7 +86,6 @@ const entries: Entry[] = [
     path: '_nested_pages/posts/index.md',
     raw: '---\ntitle: Posts\n---\n',
     slug: 'posts/index',
-    status: '',
     updatedOn: '',
   },
   {
@@ -108,7 +104,6 @@ const entries: Entry[] = [
     path: '_nested_pages/posts/news/hello-world-news/index.md',
     raw: '---\ntitle: Hello World News\n---\nCoffee is a small tree or shrub that grows in the forest understory in its wild form, and traditionally was grown commercially under other trees that provided shade. The forest-like structure of shade coffee farms provides habitat for a great number of migratory and resident species.\n',
     slug: 'posts/news/hello-world-news/index',
-    status: '',
     updatedOn: '',
   },
   {
@@ -124,7 +119,6 @@ const entries: Entry[] = [
     path: '_nested_pages/posts/news/index.md',
     raw: '---\ntitle: News Articles\n---\n',
     slug: 'posts/news/index',
-    status: '',
     updatedOn: '',
   },
   {
@@ -140,7 +134,6 @@ const entries: Entry[] = [
     path: '_nested_pages/index.md',
     raw: '---\ntitle: Pages\n---\n',
     slug: 'index',
-    status: '',
     updatedOn: '',
   },
 ];

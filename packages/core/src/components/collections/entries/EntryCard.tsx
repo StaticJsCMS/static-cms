@@ -41,16 +41,24 @@ export interface EntryCardProps {
   imageFieldName?: string | null | undefined;
   collection: Collection;
   noMargin?: boolean;
+  backTo?: string;
 }
 
-const EntryCard: FC<EntryCardProps> = ({ collection, entry, imageFieldName, noMargin = false }) => {
+const EntryCard: FC<EntryCardProps> = ({
+  collection,
+  entry,
+  imageFieldName,
+  noMargin = false,
+  backTo,
+}) => {
   const t = useTranslate();
 
   const entryData = entry.data;
 
   const path = useMemo(
-    () => `/collections/${collection.name}/entries/${entry.slug}`,
-    [collection.name, entry.slug],
+    () =>
+      `/collections/${collection.name}/entries/${entry.slug}${backTo ? `?backTo=${backTo}` : ''}`,
+    [backTo, collection.name, entry.slug],
   );
 
   const imageField = useMemo(

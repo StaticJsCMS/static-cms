@@ -1,9 +1,9 @@
 import { Base64 } from 'js-base64';
 
 import API from '../API';
+import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 
 import type { Options } from '../API';
-import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 
 describe('github API', () => {
   beforeEach(() => {

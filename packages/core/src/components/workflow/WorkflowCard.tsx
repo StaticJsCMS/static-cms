@@ -61,7 +61,13 @@ const WorkflowCard: FC<WorkflowCardProps> = ({ entry }) => {
       }}
       {...listeners}
     >
-      <EntryCard entry={entry} imageFieldName={imageFieldName} collection={collection} noMargin />
+      <EntryCard
+        entry={entry}
+        imageFieldName={imageFieldName}
+        collection={collection}
+        backTo="/dashboard"
+        noMargin
+      />
     </div>
   ) : null;
 };

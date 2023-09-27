@@ -2,6 +2,12 @@
   @apply flex
     flex-col
     min-h-full;
+
+  &.CMS_Dashboard_dragging {
+    & .CMS_Dashboard_board {
+      @apply snap-none;
+    }
+  }
 }
 
 .CMS_Dashboard_header-wrapper {
@@ -52,22 +58,14 @@
     text-sm;
 }
 
-.CMS_Dashboard_board-wrapper {
-  @apply relative
-    flex-grow
-    flex
-    w-full
-    pt-3
-    px-4
-    pb-4;
-}
-
 .CMS_Dashboard_board {
   @apply relative
     flex-grow
     flex
-    w-[300%]
     md:w-full
+    pt-3
+    px-4
+    pb-4
     snap-x
     snap-mandatory
     overflow-x-auto
