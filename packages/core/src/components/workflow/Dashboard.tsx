@@ -11,7 +11,6 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { updateUnpublishedEntryStatus } from '@staticcms/core/actions/editorialWorkflow';
 import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
-import classNames from '@staticcms/core/lib/util/classNames.util';
 import { PointerSensor } from '@staticcms/core/lib/util/dnd.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useAppDispatch } from '@staticcms/core/store/hooks';
@@ -35,16 +34,9 @@ const classes = generateClassNames('Dashboard', [
   'header-icon',
   'header-label',
   'header-description',
+  'board-wrapper',
   'board',
   'columns',
-  'columns-headers',
-  'column-wrapper',
-  'column',
-  'column-header',
-  'column-header-draft',
-  'column-header-in-review',
-  'column-header-ready',
-  'divider',
 ]);
 
 const Dashboard: FC = () => {
@@ -156,41 +148,15 @@ const Dashboard: FC = () => {
             })}
           </div>
         </div>
-        <DndContext
-          onDragStart={handleOnDragStart}
-          onDragEnd={handleOnDragEnd}
-          onDragOver={handleDragOver}
-          onDragCancel={handleOnDragCancel}
-          sensors={sensors}
-        >
-          <div className={classes.board}>
-            <div className={classes['columns-headers']}>
-              <div className={classes['column-wrapper']}>
-                <div
-                  className={classNames(classes['column-header'], classes['column-header-draft'])}
-                >
-                  {t('workflow.workflowList.draftHeader')}
-                </div>
-              </div>
-              <div className={classes['column-wrapper']}>
-                <div
-                  className={classNames(
-                    classes['column-header'],
-                    classes['column-header-in-review'],
-                  )}
-                >
-                  {t('workflow.workflowList.inReviewHeader')}
-                </div>
-              </div>
-              <div className={classes['column-wrapper']}>
-                <div
-                  className={classNames(classes['column-header'], classes['column-header-ready'])}
-                >
-                  {t('workflow.workflowList.readyHeader')}
-                </div>
-              </div>
-            </div>
-            <div className={classes.columns}>
+        <div className={classes['board-wrapper']}>
+          <DndContext
+            onDragStart={handleOnDragStart}
+            onDragEnd={handleOnDragEnd}
+            onDragOver={handleDragOver}
+            onDragCancel={handleOnDragCancel}
+            sensors={sensors}
+          >
+            <div className={classes.board}>
               {(Object.keys(boardSections) as WorkflowStatus[]).map(status => (
                 <WorkflowColumn
                   key={status}
@@ -200,11 +166,11 @@ const Dashboard: FC = () => {
                 />
               ))}
             </div>
-          </div>
-          <DragOverlay dropAnimation={defaultDropAnimation}>
-            {activeEntry ? <ActiveWorkflowCard entry={activeEntry} /> : null}
-          </DragOverlay>
-        </DndContext>
+            <DragOverlay dropAnimation={defaultDropAnimation}>
+              {activeEntry ? <ActiveWorkflowCard entry={activeEntry} /> : null}
+            </DragOverlay>
+          </DndContext>
+        </div>
       </div>
     </MainView>
   );

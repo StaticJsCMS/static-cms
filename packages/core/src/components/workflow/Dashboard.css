@@ -52,63 +52,24 @@
     text-sm;
 }
 
-.CMS_Dashboard_board {
+.CMS_Dashboard_board-wrapper {
   @apply relative
     flex-grow
     flex
-    flex-col;
-}
-
-.CMS_Dashboard_columns {
-  @apply w-full
-    flex
-    flex-grow
-    gap-5
-    pt-2
+    w-full
+    pt-3
     px-4
     pb-4;
 }
 
-.CMS_Dashboard_columns-headers {
-  background: var(--background-dark);
-
-  @apply w-full
-    flex
-    gap-5
-    pt-4
-    px-4
-    pb-2
-    sticky
-    top-[88.67px]
-    z-[100];
-}
-
-.CMS_Dashboard_column-wrapper {
-  @apply flex
-    flex-col
+.CMS_Dashboard_board {
+  @apply relative
     flex-grow
-    gap-2.5
-    basis-2/6;
-}
-
-.CMS_Dashboard_column-header {
-  @apply text-lg
-    rounded
-    px-3
-    py-1;
-
-  &.CMS_Dashboard_column-header-draft {
-    background: color-mix(in srgb, var(--info-main) 75%, transparent);
-    color: var(--info-contrast-color);
-  }
-
-  &.CMS_Dashboard_column-header-in-review {
-    background: color-mix(in srgb, var(--warning-main) 75%, transparent);
-    color: var(--warning-contrast-color);
-  }
-
-  &.CMS_Dashboard_column-header-ready {
-    background: color-mix(in srgb, var(--success-main) 75%, transparent);
-    color: var(--success-contrast-color);
-  }
+    flex
+    w-[300%]
+    md:w-full
+    snap-x
+    snap-mandatory
+    overflow-x-auto
+    gap-4;
 }

@@ -14,13 +14,14 @@ import {
 } from '@staticcms/core/lib/util/collection.util';
 import { customPathFromSlug } from '@staticcms/core/lib/util/nested.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
-import { selectConfig } from '@staticcms/core/reducers/selectors/config';
+import { selectConfig, selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
 import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import MainView from '../MainView';
 import EditorToolbar from './EditorToolbar';
 import EditorControlPane from './editor-control-pane/EditorControlPane';
 import EditorPreviewPane from './editor-preview-pane/EditorPreviewPane';
+import EditorWorkflowToolbarButtons from './EditorWorkflowToolbarButtons';
 
 import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import type {
@@ -49,8 +50,10 @@ export const classes = generateClassNames('Editor', [
   'resize-handle',
   'resize-handle-icon',
   'mobile-root',
+  'workflow',
   'mobile-preview',
   'mobile-preview-active',
+  'mobile-workflow-controls',
 ]);
 
 const COMPACT_EDITOR_DEFAULT_WIDTH = 450;
@@ -143,6 +146,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
   onDeleteUnpublishedChanges,
 }) => {
   const config = useAppSelector(selectConfig);
+  const useWorkflow = useAppSelector(selectUseWorkflow);
 
   const isLoading = useAppSelector(selectIsFetching);
   const disabled = useMemo(
@@ -441,6 +445,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
         className={classNames(
           classes['mobile-root'],
           showMobilePreview && classes['mobile-preview-active'],
+          useWorkflow && classes.workflow,
         )}
       >
         {editor}
@@ -473,6 +478,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
         className={classNames(
           classes['mobile-root'],
           showMobilePreview && classes['mobile-preview-active'],
+          useWorkflow && classes.workflow,
         )}
       >
         {mobileLocaleEditor}
@@ -488,6 +494,8 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
   );
   const breadcrumbs = useBreadcrumbs(collection, nestedFieldPath, { isNewEntry, summary });
 
+  const isPersisting = useMemo(() => Boolean(entry.isPersisting), [entry.isPersisting]);
+
   return (
     <MainView
       breadcrumbs={breadcrumbs}
@@ -495,7 +503,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
       noScroll={finalPreviewActive || i18nActive}
       navbarActions={
         <EditorToolbar
-          isPersisting={entry.isPersisting}
+          isPersisting={isPersisting}
           isDeleting={entry.isDeleting}
           onPersist={handleOnPersist}
           onPersistAndNew={() => handleOnPersist({ createNew: true })}
@@ -533,6 +541,21 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
         />
       }
     >
+      {useWorkflow ? (
+        <div className={classes['mobile-workflow-controls']}>
+          <EditorWorkflowToolbarButtons
+            hasChanged={hasChanged}
+            isPersisting={isPersisting}
+            onPersist={onPersist}
+            currentStatus={currentStatus}
+            isUpdatingStatus={isUpdatingStatus}
+            disabled={disabled}
+            onChangeStatus={onChangeStatus}
+            isLoading={isLoading}
+            mobile
+          />
+        </div>
+      ) : null}
       <EditorContent
         key={draftKey}
         i18nActive={i18nActive}

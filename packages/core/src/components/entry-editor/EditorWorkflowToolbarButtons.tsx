@@ -24,6 +24,7 @@ export interface EditorWorkflowToolbarButtonsProps {
   onChangeStatus: (status: WorkflowStatus) => void;
   disabled: boolean;
   isLoading: boolean;
+  mobile?: boolean;
 }
 
 const EditorWorkflowToolbarButtons: FC<EditorWorkflowToolbarButtonsProps> = ({
@@ -35,6 +36,7 @@ const EditorWorkflowToolbarButtons: FC<EditorWorkflowToolbarButtonsProps> = ({
   onChangeStatus,
   disabled,
   isLoading,
+  mobile,
 }) => {
   const t = useTranslate();
 
@@ -100,6 +102,8 @@ const EditorWorkflowToolbarButtons: FC<EditorWorkflowToolbarButtonsProps> = ({
             </MenuItemButton>
           </MenuGroup>
         </Menu>
+      ) : mobile ? (
+        <div />
       ) : null}
       <Button
         disabled={!hasChanged || disabled}
