@@ -1,15 +1,28 @@
+import {
+  DndContext,
+  DragOverlay,
+  defaultDropAnimation,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 import { Dashboard as DashboardIcon } from '@styled-icons/material/Dashboard';
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
+import { updateUnpublishedEntryStatus } from '@staticcms/core/actions/editorialWorkflow';
 import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { PointerSensor } from '@staticcms/core/lib/util/dnd.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
-import { selectUnpublishedEntriesByStatus } from '@staticcms/core/reducers/selectors/editorialWorkflow';
-import { useAppSelector } from '@staticcms/core/store/hooks';
+import { useAppDispatch } from '@staticcms/core/store/hooks';
 import MainView from '../MainView';
-import WorkflowCard from './WorkflowCard';
+import ActiveWorkflowCard from './ActiveWorkflowCard';
+import WorkflowColumn from './WorkflowColumn';
+import useWorkflowBoardSections from './hooks/useWorkflowBoardSections';
+import useWorkflowEntriesByCollection from './hooks/useWorkflowEntriesByCollection';
+import { getEntryId } from './util/workflow.util';
 
+import type { DragEndEvent, DragOverEvent, DragStartEvent } from '@dnd-kit/core';
 import type { FC } from 'react';
 
 import './Dashboard.css';
@@ -22,7 +35,9 @@ const classes = generateClassNames('Dashboard', [
   'header-icon',
   'header-label',
   'header-description',
+  'board',
   'columns',
+  'columns-headers',
   'column-wrapper',
   'column',
   'column-header',
@@ -35,16 +50,97 @@ const classes = generateClassNames('Dashboard', [
 const Dashboard: FC = () => {
   const t = useTranslate();
 
-  const draftEntries = useAppSelector(selectUnpublishedEntriesByStatus(WorkflowStatus.DRAFT));
-  const reviewEntries = useAppSelector(
-    selectUnpublishedEntriesByStatus(WorkflowStatus.PENDING_REVIEW),
+  const dispatch = useAppDispatch();
+
+  const { boardSections, entriesById, setBoardSections } = useWorkflowBoardSections();
+
+  const inReviewEntries = useWorkflowEntriesByCollection(WorkflowStatus.PENDING_REVIEW);
+  const readyEntries = useWorkflowEntriesByCollection(WorkflowStatus.PENDING_PUBLISH);
+
+  const [isDragging, setIsDragging] = useState(false);
+  const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
+
+  const handleOnDragStart = useCallback(({ active }: DragStartEvent) => {
+    setIsDragging(true);
+    setActiveTaskId(active.id as string);
+  }, []);
+
+  const handleDragOver = ({ active, over }: DragOverEvent) => {
+    // Find the containers
+    const activeEntry = entriesById[active.id as string];
+    const activeStatus = activeEntry.boardStatus;
+    const overStatus = over?.id as WorkflowStatus;
+
+    if (!activeStatus || !overStatus || activeStatus === overStatus) {
+      return;
+    }
+
+    setBoardSections(boardSection => {
+      const activeItems = boardSection[activeStatus];
+
+      // Find the indexes for the items
+      const activeIndex = activeItems.findIndex(entry => getEntryId(entry) === active.id);
+
+      console.log('new board sections!', activeStatus, overStatus, activeStatus === overStatus, {
+        ...boardSection,
+        [activeStatus]: [
+          ...boardSection[activeStatus].filter(entry => getEntryId(entry) !== active.id),
+        ],
+        [overStatus]: [boardSections[activeStatus][activeIndex], ...boardSection[overStatus]],
+      });
+
+      return {
+        ...boardSection,
+        [activeStatus]: [
+          ...boardSection[activeStatus].filter(entry => getEntryId(entry) !== active.id),
+        ],
+        [overStatus]: [boardSections[activeStatus][activeIndex], ...boardSection[overStatus]],
+      };
+    });
+  };
+
+  const handleOnDragEnd = useCallback(
+    ({ over, active }: DragEndEvent) => {
+      const entry = entriesById[active.id];
+      if (entry && entry.status && over) {
+        dispatch(
+          updateUnpublishedEntryStatus(
+            entry.collection,
+            entry.slug,
+            entry.status,
+            over.id as WorkflowStatus,
+          ),
+        );
+      }
+
+      console.log(over);
+      setIsDragging(false);
+      setActiveTaskId(null);
+      console.log('activeEntry', active.id, over?.id);
+    },
+    [dispatch, entriesById],
   );
-  const readyEntries = useAppSelector(
-    selectUnpublishedEntriesByStatus(WorkflowStatus.PENDING_PUBLISH),
+
+  const handleOnDragCancel = useCallback(() => {
+    setIsDragging(false);
+    setActiveTaskId(null);
+  }, []);
+
+  const activeEntry = useMemo(
+    () => (activeTaskId ? entriesById[activeTaskId] : null),
+    [activeTaskId, entriesById],
+  );
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
   );
 
   return (
-    <MainView breadcrumbs={[{ name: 'Dashboard' }]} showQuickCreate showLeftNav>
+    <MainView breadcrumbs={[{ name: 'Dashboard' }]} showQuickCreate showLeftNav noMargin>
       <div className={classes.root}>
         <div className={classes['header-wrapper']}>
           <h2 className={classes.header}>
@@ -55,45 +151,60 @@ const Dashboard: FC = () => {
           </h2>
           <div className={classes['header-description']}>
             {t('workflow.workflow.description', {
-              smart_count: reviewEntries.length,
+              smart_count: inReviewEntries.length,
               readyCount: readyEntries.length,
             })}
           </div>
         </div>
-        <div className={classes.columns}>
-          <div className={classes['column-wrapper']}>
-            <div className={classNames(classes['column-header'], classes['column-header-draft'])}>
-              {t('workflow.workflowList.draftHeader')}
+        <DndContext
+          onDragStart={handleOnDragStart}
+          onDragEnd={handleOnDragEnd}
+          onDragOver={handleDragOver}
+          onDragCancel={handleOnDragCancel}
+          sensors={sensors}
+        >
+          <div className={classes.board}>
+            <div className={classes['columns-headers']}>
+              <div className={classes['column-wrapper']}>
+                <div
+                  className={classNames(classes['column-header'], classes['column-header-draft'])}
+                >
+                  {t('workflow.workflowList.draftHeader')}
+                </div>
+              </div>
+              <div className={classes['column-wrapper']}>
+                <div
+                  className={classNames(
+                    classes['column-header'],
+                    classes['column-header-in-review'],
+                  )}
+                >
+                  {t('workflow.workflowList.inReviewHeader')}
+                </div>
+              </div>
+              <div className={classes['column-wrapper']}>
+                <div
+                  className={classNames(classes['column-header'], classes['column-header-ready'])}
+                >
+                  {t('workflow.workflowList.readyHeader')}
+                </div>
+              </div>
             </div>
-            <div className={classes.column}>
-              {draftEntries.map(e => (
-                <WorkflowCard key={`${e.collection}|${e.slug}`} entry={e} />
+            <div className={classes.columns}>
+              {(Object.keys(boardSections) as WorkflowStatus[]).map(status => (
+                <WorkflowColumn
+                  key={status}
+                  entries={boardSections[status]}
+                  status={status}
+                  dragging={isDragging}
+                />
               ))}
             </div>
           </div>
-          <div className={classes['column-wrapper']}>
-            <div
-              className={classNames(classes['column-header'], classes['column-header-in-review'])}
-            >
-              {t('workflow.workflowList.inReviewHeader')}
-            </div>
-            <div className={classes.column}>
-              {reviewEntries.map(e => (
-                <WorkflowCard key={`${e.collection}|${e.slug}`} entry={e} />
-              ))}
-            </div>
-          </div>
-          <div className={classes['column-wrapper']}>
-            <div className={classNames(classes['column-header'], classes['column-header-ready'])}>
-              {t('workflow.workflowList.readyHeader')}
-            </div>
-            <div className={classes.column}>
-              {readyEntries.map(e => (
-                <WorkflowCard key={`${e.collection}|${e.slug}`} entry={e} />
-              ))}
-            </div>
-          </div>
-        </div>
+          <DragOverlay dropAnimation={defaultDropAnimation}>
+            {activeEntry ? <ActiveWorkflowCard entry={activeEntry} /> : null}
+          </DragOverlay>
+        </DndContext>
       </div>
     </MainView>
   );

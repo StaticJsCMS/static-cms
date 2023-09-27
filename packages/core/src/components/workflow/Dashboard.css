@@ -1,14 +1,22 @@
 .CMS_Dashboard_root {
   @apply flex
     flex-col
-    h-full;
+    min-h-full;
 }
 
 .CMS_Dashboard_header-wrapper {
+  background: var(--background-dark);
+  border-color: var(--background-main);
+
   @apply flex
     flex-col
     gap-2
-    truncate;
+    p-4
+    drop-shadow-md
+    border-b
+    sticky
+    top-0
+    z-[100];
 }
 
 .CMS_Dashboard_header {
@@ -44,29 +52,43 @@
     text-sm;
 }
 
+.CMS_Dashboard_board {
+  @apply relative
+    flex-grow
+    flex
+    flex-col;
+}
+
 .CMS_Dashboard_columns {
   @apply w-full
     flex
     flex-grow
     gap-5
-    mt-4;
+    pt-2
+    px-4
+    pb-4;
+}
+
+.CMS_Dashboard_columns-headers {
+  background: var(--background-dark);
+
+  @apply w-full
+    flex
+    gap-5
+    pt-4
+    px-4
+    pb-2
+    sticky
+    top-[88.67px]
+    z-[100];
 }
 
 .CMS_Dashboard_column-wrapper {
   @apply flex
     flex-col
     flex-grow
-    gap-2.5;
-}
-
-.CMS_Dashboard_column {
-  background: color-mix(in srgb, var(--background-main) 50%, transparent);
-
-  @apply h-full
-    flex
-    flex-col
-    flex-grow
-    rounded;
+    gap-2.5
+    basis-2/6;
 }
 
 .CMS_Dashboard_column-header {

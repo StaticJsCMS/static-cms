@@ -1,0 +1,25 @@
+.CMS_WorkflowColumn_root {
+  @apply flex
+    flex-col
+    flex-grow
+    gap-2.5
+    basis-full
+    md:basis-2/6;
+
+  &.CMS_WorkflowColumn_over {
+    & .CMS_WorkflowColumn_content {
+      background: color-mix(in srgb, var(--background-light) 50%, transparent);
+    }
+  }
+}
+
+.CMS_WorkflowColumn_content {
+  background: color-mix(in srgb, var(--background-main) 50%, transparent);
+
+  @apply h-full
+    flex
+    flex-col
+    flex-grow
+    rounded-lg
+    p-1;
+}

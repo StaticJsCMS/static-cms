@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getPreviewCard } from '@staticcms/core/lib/registry';
 import { getEntryBackupKey } from '@staticcms/core/lib/util/backup.util';
+import classNames from '@staticcms/core/lib/util/classNames.util';
 import {
   selectEntryCollectionTitle,
   selectFields,
@@ -26,6 +27,7 @@ import './EntryCard.css';
 
 export const classes = generateClassNames('EntryCard', [
   'root',
+  'no-margin',
   'content-wrapper',
   'content',
   'card',
@@ -38,9 +40,10 @@ export interface EntryCardProps {
   entry: Entry;
   imageFieldName?: string | null | undefined;
   collection: Collection;
+  noMargin?: boolean;
 }
 
-const EntryCard: FC<EntryCardProps> = ({ collection, entry, imageFieldName }) => {
+const EntryCard: FC<EntryCardProps> = ({ collection, entry, imageFieldName, noMargin = false }) => {
   const t = useTranslate();
 
   const entryData = entry.data;
@@ -119,7 +122,7 @@ const EntryCard: FC<EntryCardProps> = ({ collection, entry, imageFieldName }) =>
 
   if (PreviewCardComponent) {
     return (
-      <div className={classes.root}>
+      <div className={classNames(classes.root, noMargin && classes['no-margin'])}>
         <div className={classes['content-wrapper']}>
           <div className={classes.content}>
             <Card>

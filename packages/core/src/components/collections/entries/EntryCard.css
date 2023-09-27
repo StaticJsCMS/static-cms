@@ -3,6 +3,13 @@
     w-full
     relative
     overflow-visible;
+
+  &.CMS_EntryCard_no-margin {
+    & .CMS_EntryCard_content-wrapper {
+      @apply inset-0
+        p-0;
+    }
+  }
 }
 
 .CMS_EntryCard_content-wrapper {

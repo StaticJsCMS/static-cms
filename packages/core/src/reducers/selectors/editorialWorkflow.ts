@@ -1,3 +1,4 @@
+import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import type { Entry } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 
@@ -13,8 +14,12 @@ export function selectUnpublishedEntry(
   return state && state.editorialWorkflow.entities[`${collection}.${slug}`];
 }
 
-export const selectUnpublishedEntriesByStatus = (status: string) => (state: RootState) => {
+export const selectUnpublishedEntriesByStatus = (status: WorkflowStatus) => (state: RootState) => {
   return Object.values(state.editorialWorkflow.entities).filter(entry => entry.status === status);
+};
+
+export const selectUnpublishedEntries = (state: RootState) => {
+  return state.editorialWorkflow.entities;
 };
 
 export function selectUnpublishedSlugs(state: RootState, collection: string) {
