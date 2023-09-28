@@ -26,6 +26,7 @@ export const classes = generateClassNames('Autocomplete', [
   'button-icon',
   'options',
   'nothing',
+  'popper',
   'option',
   'option-selected',
   'option-label',
@@ -220,7 +221,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
         </div>
       </div>
       {anchorEl && (
-        <Popper open={popupOpen} anchorEl={anchorEl} style={{ width }}>
+        <Popper open={popupOpen} anchorEl={anchorEl} style={{ width }} className={classes.popper}>
           <ul
             {...getListboxProps()}
             className={classNames(classes.options, 'CMS_Scrollbar_root', 'CMS_Scrollbar_secondary')}

@@ -1,3 +1,14 @@
 .CMS_WorkflowCard_root {
   @apply w-full;
 }
+
+.CMS_WorkflowCard_actions {
+  @apply p-2
+    w-full
+    flex
+    gap-2;
+}
+
+.CMS_WorkflowCard_action-button {
+  @apply flex-grow;
+}

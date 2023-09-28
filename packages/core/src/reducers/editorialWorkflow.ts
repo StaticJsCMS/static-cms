@@ -16,6 +16,7 @@ import {
   UNPUBLISHED_ENTRY_STATUS_CHANGE_SUCCESS,
   UNPUBLISHED_ENTRY_SUCCESS,
 } from '../constants';
+import { isEmpty } from '../lib/util/string.util';
 
 import type { EditorialWorkflowAction } from '../actions/editorialWorkflow';
 import type { Entities } from '../interface';
@@ -103,6 +104,10 @@ function unpublishedEntries(
       };
     }
     case UNPUBLISHED_ENTRY_PERSIST_REQUEST: {
+      if (isEmpty(action.payload.slug)) {
+        return state;
+      }
+
       return {
         ...state,
         entities: {
@@ -115,6 +120,10 @@ function unpublishedEntries(
       };
     }
     case UNPUBLISHED_ENTRY_PERSIST_SUCCESS: {
+      if (isEmpty(action.payload.slug)) {
+        return state;
+      }
+
       const newIds = [...state.ids];
       if (!newIds.includes(action.payload.entry.slug)) {
         newIds.push(action.payload.entry.slug);
@@ -134,6 +143,10 @@ function unpublishedEntries(
       };
     }
     case UNPUBLISHED_ENTRY_PERSIST_FAILURE: {
+      if (isEmpty(action.payload.slug)) {
+        return state;
+      }
+
       return {
         ...state,
         entities: {

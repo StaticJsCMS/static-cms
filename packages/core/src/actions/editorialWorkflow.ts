@@ -510,7 +510,7 @@ export function deleteUnpublishedEntry(collection: string, slug: string) {
 export function publishUnpublishedEntry(
   collectionName: string,
   slug: string,
-  navigate: NavigateFunction,
+  navigate?: NavigateFunction,
 ) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
@@ -549,7 +549,7 @@ export function publishUnpublishedEntry(
         const newSlug = slugFromCustomPath(collection, entry.path);
         loadEntry(collection, newSlug);
         if (slug !== newSlug && selectEditingDraft(state)) {
-          navigate(`/collections/${collection.name}/entries/${newSlug}`);
+          navigate?.(`/collections/${collection.name}/entries/${newSlug}`);
         }
       } else {
         return dispatch(loadEntry(collection, slug));

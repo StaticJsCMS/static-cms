@@ -335,7 +335,7 @@ export default class TestBackend implements BackendClass {
       path: assetProxy.path,
       url,
       displayURL: url,
-      fileObj,
+      file: fileObj,
     };
 
     return normalizedAsset;

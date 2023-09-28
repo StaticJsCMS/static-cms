@@ -21,7 +21,7 @@ import CardMedia from '../../common/card/CardMedia';
 import useWidgetsFor from '../../common/widget/useWidgetsFor';
 
 import type { BackupEntry, Collection, Entry, FileOrImageField } from '@staticcms/core/interface';
-import type { FC } from 'react';
+import type { FC, ReactNode } from 'react';
 
 import './EntryCard.css';
 
@@ -42,6 +42,7 @@ export interface EntryCardProps {
   collection: Collection;
   noMargin?: boolean;
   backTo?: string;
+  children?: ReactNode;
 }
 
 const EntryCard: FC<EntryCardProps> = ({
@@ -50,6 +51,7 @@ const EntryCard: FC<EntryCardProps> = ({
   imageFieldName,
   noMargin = false,
   backTo,
+  children,
 }) => {
   const t = useTranslate();
 
@@ -144,6 +146,7 @@ const EntryCard: FC<EntryCardProps> = ({
                   hasLocalBackup={hasLocalBackup}
                 />
               </CardActionArea>
+              {children}
             </Card>
           </div>
         </div>
@@ -152,7 +155,7 @@ const EntryCard: FC<EntryCardProps> = ({
   }
 
   return (
-    <div className={classes.root}>
+    <div className={classNames(classes.root, noMargin && classes['no-margin'])}>
       <div className={classes['content-wrapper']}>
         <div className={classes.content}>
           <Card className={classes.card} title={summary}>
@@ -178,6 +181,7 @@ const EntryCard: FC<EntryCardProps> = ({
                 </div>
               </CardContent>
             </CardActionArea>
+            {children}
           </Card>
         </div>
       </div>

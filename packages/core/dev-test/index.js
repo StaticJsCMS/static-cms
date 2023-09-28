@@ -18,8 +18,21 @@ const PostPreviewCard = ({ entry, hasLocalBackup, collection }) => {
   const month = date.getMonth() + 1;
   const day = date.getDate();
 
-  const imageField = useMemo(() => collection.fields.find(f => f.name === 'image'), []);
+  const imageField = useMemo(() => collection.fields.find(f => f.name === 'image'), [collection]);
   const image = useMediaAsset(entry.data.image, collection, imageField, entry);
+
+  const [label, color] = useMemo(() => {
+    switch (entry.status) {
+      case 'draft':
+        return ['Draft', theme.info.main];
+      case 'pending_review':
+        return ['In Review', theme.warning.main];
+      case 'pending_publish':
+        return ['Ready', theme.success.main];
+      default:
+        return ['Published', theme.common.gray];
+    }
+  }, [entry.status]);
 
   return h(
     'div',
@@ -115,6 +128,25 @@ const PostPreviewCard = ({ entry, hasLocalBackup, collection }) => {
                 'i',
               )
             : null,
+            h(
+              'div',
+              {
+                style: {
+                  backgroundColor: color,
+                  color: 'white',
+                  border: 'none',
+                  padding: '2px 6px',
+                  textAlign: 'center',
+                  textDecoration: 'none',
+                  display: 'inline-block',
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  fontSize: '14px',
+                  whiteSpace: 'nowrap'
+                },
+              },
+              label,
+            ),
         ),
       ),
     ),

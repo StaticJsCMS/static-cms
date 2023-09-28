@@ -6,8 +6,10 @@
 
   &.CMS_EntryCard_no-margin {
     & .CMS_EntryCard_content-wrapper {
-      @apply inset-0
-        p-0;
+      inset: unset;
+
+      @apply p-0
+        w-full;
     }
   }
 }

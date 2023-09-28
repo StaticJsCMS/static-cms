@@ -1,6 +1,5 @@
 import { createHashHistory } from 'history';
 import debounce from 'lodash/debounce';
-import isEqual from 'lodash/isEqual';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -11,8 +10,8 @@ import {
   deleteDraftLocalBackup,
   deleteEntry,
   deleteLocalBackup,
+  loadBackup,
   loadEntry,
-  loadLocalBackup,
   persistEntry,
   persistLocalBackup,
   retrieveLocalBackup,
@@ -20,6 +19,7 @@ import {
 import { loadMedia } from '@staticcms/core/actions/mediaLibrary';
 import { loadScroll, toggleScroll } from '@staticcms/core/actions/scroll';
 import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
+import useDebouncedCallback from '@staticcms/core/lib/hooks/useDebouncedCallback';
 import useEntryCallback from '@staticcms/core/lib/hooks/useEntryCallback';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getFileFromSlug, selectFields } from '@staticcms/core/lib/util/collection.util';
@@ -58,7 +58,6 @@ const Editor: FC<EditorProps> = ({
   isModification,
   draftKey,
   slug,
-  localBackup,
   scrollSyncActive,
   newRecord,
   currentStatus,
@@ -81,7 +80,7 @@ const Editor: FC<EditorProps> = ({
   const createBackup = useMemo(
     () =>
       debounce(function (entry: Entry, collection: Collection) {
-        if (config?.disable_local_backup) {
+        if (config?.disable_local_backup || !slug) {
           return;
         }
 
@@ -116,6 +115,8 @@ const Editor: FC<EditorProps> = ({
 
       setTimeout(async () => {
         try {
+          deleteBackup();
+
           if (useWorkflow) {
             await dispatch(
               persistUnpublishedEntry(collection, slug, hasUnpublishedEntry, navigate),
@@ -124,8 +125,6 @@ const Editor: FC<EditorProps> = ({
             await dispatch(persistEntry(collection, slug, navigate));
           }
           setVersion(version + 1);
-
-          deleteBackup();
 
           if (createNew) {
             if (duplicate && entryDraft.entry) {
@@ -157,6 +156,8 @@ const Editor: FC<EditorProps> = ({
       version,
     ],
   );
+
+  const debouncedHandlePersistEntry = useDebouncedCallback(handlePersistEntry, 250);
 
   const handleChangeStatus = useCallback(
     (newStatus: WorkflowStatus) => {
@@ -374,33 +375,11 @@ const Editor: FC<EditorProps> = ({
     slug,
   ]);
 
-  const [prevLocalBackup, setPrevLocalBackup] = useState<
-    | {
-        entry: Entry;
-      }
-    | undefined
-  >();
-
   useEffect(() => {
-    if (config?.disable_local_backup) {
+    if (submitted) {
       return;
     }
 
-    if (
-      !prevLocalBackup &&
-      localBackup &&
-      (!isEqual(localBackup.entry.data, entryDraft.entry?.data) ||
-        !isEqual(localBackup.entry.meta, entryDraft.entry?.meta))
-    ) {
-      dispatch(loadLocalBackup());
-      setVersion(version + 1);
-    }
-
-    setPrevLocalBackup(localBackup);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config?.disable_local_backup, deleteBackup, dispatch, localBackup, prevLocalBackup, version]);
-
-  useEffect(() => {
     if (hasChanged && entryDraft.entry) {
       createBackup(entryDraft.entry, collection);
     }
@@ -408,7 +387,7 @@ const Editor: FC<EditorProps> = ({
     return () => {
       createBackup.flush();
     };
-  }, [collection, createBackup, entryDraft.entry, hasChanged]);
+  }, [collection, createBackup, entryDraft.entry, hasChanged, submitted]);
 
   const hasLivePreview = useMemo(() => {
     let livePreview = typeof collection.editor?.live_preview === 'string';
@@ -454,6 +433,12 @@ const Editor: FC<EditorProps> = ({
         if (!config?.disable_local_backup) {
           await dispatch(retrieveLocalBackup(collection, slug));
         }
+        if (submitted && config?.disable_local_backup) {
+          return;
+        }
+
+        dispatch(loadBackup());
+        setVersion(version + 1);
       });
     }
 
@@ -469,6 +454,8 @@ const Editor: FC<EditorProps> = ({
     newRecord,
     config?.disable_local_backup,
     useWorkflow,
+    submitted,
+    version,
   ]);
 
   const leaveMessage = useMemo(() => t('editor.editor.onLeavePage'), [t]);
@@ -555,7 +542,7 @@ const Editor: FC<EditorProps> = ({
         collection={collection}
         fields={fields}
         fieldsErrors={entryDraft.fieldsErrors}
-        onPersist={handlePersistEntry}
+        onPersist={debouncedHandlePersistEntry}
         onDelete={handleDeleteEntry}
         onDuplicate={handleDuplicateEntry}
         hasChanged={hasChanged}

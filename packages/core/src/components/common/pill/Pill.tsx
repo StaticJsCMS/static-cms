@@ -12,15 +12,19 @@ export const classes = generateClassNames('Pill', [
   'no-wrap',
   'primary',
   'default',
+  'info',
+  'warning',
+  'error',
+  'success',
   'disabled',
 ]);
 
-interface PillProps {
+export interface PillProps {
   children: ReactNode | ReactNode[];
   noWrap?: boolean;
   className?: string;
   disabled?: boolean;
-  color?: 'default' | 'primary';
+  color?: 'default' | 'primary' | 'info' | 'warning' | 'error' | 'success';
 }
 
 const Pill: FC<PillProps> = ({
@@ -30,23 +34,14 @@ const Pill: FC<PillProps> = ({
   disabled = false,
   color = 'default',
 }) => {
-  const colorClassNames = useMemo(() => {
-    switch (color) {
-      case 'primary':
-        return classes.primary;
-      default:
-        return classes.default;
-    }
-  }, [color]);
-
   return (
     <span
       className={classNames(
+        className,
         classes.root,
         noWrap && classes['no-wrap'],
         disabled && classes.disabled,
-        colorClassNames,
-        className,
+        classes[color],
       )}
     >
       {children}

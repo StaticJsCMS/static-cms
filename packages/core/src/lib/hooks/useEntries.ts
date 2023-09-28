@@ -14,7 +14,14 @@ import type { Collection } from '@staticcms/core/interface';
 
 export default function useEntries(collection: Collection) {
   const publishedEntries = usePublishedEntries(collection.name);
-  const unpublishedEntries = useUnpublishedEntries(collection.name, true);
+  const unpublishedEntries = useUnpublishedEntries(collection.name);
+
+  console.log('unpublishedEntries', unpublishedEntries);
+
+  const filteredPublishedEntries = useMemo(
+    () => publishedEntries.filter(entry => !unpublishedEntries.find(e => e.slug === entry.slug)),
+    [publishedEntries, unpublishedEntries],
+  );
 
   const entriesSortFieldSelector = useMemo(
     () => selectEntriesSortField(collection.name),
@@ -25,7 +32,7 @@ export default function useEntries(collection: Collection) {
   const filters = useFilters(collection.name);
 
   return useMemo(() => {
-    let finalEntries = [...publishedEntries, ...unpublishedEntries];
+    let finalEntries = [...unpublishedEntries, ...filteredPublishedEntries];
 
     if (sortField) {
       const key = selectSortDataPath(collection, sortField.key);
@@ -49,5 +56,5 @@ export default function useEntries(collection: Collection) {
     }
 
     return finalEntries;
-  }, [collection, filters, publishedEntries, sortField, unpublishedEntries]);
+  }, [collection, filters, filteredPublishedEntries, sortField, unpublishedEntries]);
 }

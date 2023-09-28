@@ -4,7 +4,9 @@
     px-3
     py-1
     rounded-lg
-    truncate;
+    truncate
+    flex
+    items-center;
 
   &.CMS_Pill_no-wrap {
     @apply whitespace-nowrap;
@@ -20,13 +22,33 @@
     background: var(--common-gray);
   }
 
-  &.CMS_Pill_disabled {
-    &.CMS_Pill_primary {
-      color: var(--text-disabled);
-      background: var(--common-gray);
-    }
+  &.CMS_Pill_info {
+    color: var(--info-contrast-color);
+    background: var(--info-main);
+  }
 
-    &.CMS_Pill_default {
+  &.CMS_Pill_warning {
+    color: var(--warning-contrast-color);
+    background: var(--warning-main);
+  }
+
+  &.CMS_Pill_error {
+    color: var(--error-contrast-color);
+    background: var(--error-main);
+  }
+
+  &.CMS_Pill_success {
+    color: var(--success-contrast-color);
+    background: var(--success-main);
+  }
+
+  &.CMS_Pill_disabled {
+    &.CMS_Pill_primary,
+    &.CMS_Pill_default,
+    &.CMS_Pill_info,
+    &.CMS_Pill_warning,
+    &.CMS_Pill_error,
+    &.CMS_Pill_success {
       color: var(--text-disabled);
       background: var(--common-gray);
     }

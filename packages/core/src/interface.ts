@@ -393,6 +393,7 @@ export interface TemplatePreviewCardProps<T = EntryData, EF extends BaseField = 
   collection: Collection<EF>;
   fields: Field<EF>[];
   entry: Entry<T>;
+  status?: WorkflowStatus | 'published';
   widgetFor: WidgetFor<T>;
   widgetsFor: WidgetsFor<T>;
   hasLocalBackup: boolean;

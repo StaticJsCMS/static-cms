@@ -12,11 +12,12 @@ import {
 } from '@staticcms/core/lib/util/collection.util';
 import localForage from '@staticcms/core/lib/util/localForage';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
-import { selectConfig } from '@staticcms/core/reducers/selectors/config';
+import { selectConfig, selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import TableCell from '../../common/table/TableCell';
 import TableRow from '../../common/table/TableRow';
 import entriesClasses from './Entries.classes';
+import WorkflowStatusPill from '../../workflow/WorkflowStatusPill';
 
 import type { BackupEntry, Collection, Entry } from '@staticcms/core/interface';
 import type { FC } from 'react';
@@ -41,6 +42,7 @@ const EntryRow: FC<EntryRowProps> = ({ collection, entry, collectionLabel, summa
   const fields = selectFields(collection, entry.slug);
 
   const config = useAppSelector(selectConfig);
+  const useWorkflow = useAppSelector(selectUseWorkflow);
 
   const templateName = useMemo(
     () => selectTemplateName(collection, entry.slug),
@@ -116,6 +118,11 @@ const EntryRow: FC<EntryRowProps> = ({ collection, entry, collectionLabel, summa
           />
         ) : null}
       </TableCell>
+      {useWorkflow ? (
+        <TableCell key="status" to={path} shrink>
+          <WorkflowStatusPill status={entry.status} />
+        </TableCell>
+      ) : null}
     </TableRow>
   );
 };

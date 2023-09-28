@@ -4,6 +4,7 @@ import { useVirtual } from 'react-virtual';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
+import { selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
 import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import Table from '../../common/table/Table';
@@ -70,6 +71,17 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
     fetchMoreOnBottomReached(scrollHeight, scrollTop, clientHeight);
   }, [clientHeight, fetchMoreOnBottomReached, scrollHeight, scrollTop]);
 
+  const useWorkflow = useAppSelector(selectUseWorkflow);
+  const baseColumns = useMemo(() => {
+    const cols = [...summaryFieldHeaders, ''];
+
+    if (useWorkflow) {
+      cols.push('');
+    }
+
+    return cols;
+  }, [summaryFieldHeaders, useWorkflow]);
+
   return (
     <div className={entriesClasses['entry-listing-table']}>
       <div
@@ -80,13 +92,7 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
           'CMS_Scrollbar_secondary',
         )}
       >
-        <Table
-          columns={
-            !isSingleCollectionInList
-              ? ['Collection', ...summaryFieldHeaders, '']
-              : [...summaryFieldHeaders, '']
-          }
-        >
+        <Table columns={!isSingleCollectionInList ? ['Collection', ...baseColumns] : baseColumns}>
           {paddingTop > 0 && (
             <tr>
               <td style={{ height: `${paddingTop}px` }} />
