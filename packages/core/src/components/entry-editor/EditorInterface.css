@@ -116,5 +116,6 @@
     flex
     items-center
     justify-between
-    drop-shadow-lg;
+    drop-shadow-lg
+    md:hidden;
 }

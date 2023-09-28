@@ -289,9 +289,9 @@ const ca: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Només es poden publicar elements amb estat "Llest". Si us plau, arrossegui la targeta fins la columna "Llest" per a permetre\'n la publicació',
       onPublishEntry: 'Està segur que vol publicar aquesta entrada?',
-      draftHeader: 'Esborranys',
-      inReviewHeader: 'En revisió',
-      readyHeader: 'Llest',
+      draft: 'Esborranys',
+      pending_review: 'En revisió',
+      pending_publish: 'Llest',
       currentEntries: '%{smart_count} entrada |||| %{smart_count} entrades',
     },
   },

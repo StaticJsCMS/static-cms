@@ -8,11 +8,13 @@ import { useAppSelector } from '@staticcms/core/store/hooks';
 import { selectSortDataPath } from '../util/sort.util';
 import useFilters from './useFilters';
 import usePublishedEntries from './usePublishedEntries';
+import useUnpublishedEntries from './useUnpublishedEntries';
 
 import type { Collection } from '@staticcms/core/interface';
 
 export default function useEntries(collection: Collection) {
-  const entries = usePublishedEntries(collection.name);
+  const publishedEntries = usePublishedEntries(collection.name);
+  const unpublishedEntries = useUnpublishedEntries(collection.name, true);
 
   const entriesSortFieldSelector = useMemo(
     () => selectEntriesSortField(collection.name),
@@ -23,7 +25,7 @@ export default function useEntries(collection: Collection) {
   const filters = useFilters(collection.name);
 
   return useMemo(() => {
-    let finalEntries = [...entries];
+    let finalEntries = [...publishedEntries, ...unpublishedEntries];
 
     if (sortField) {
       const key = selectSortDataPath(collection, sortField.key);
@@ -36,7 +38,7 @@ export default function useEntries(collection: Collection) {
         const allMatched = filters.every(f => {
           const pattern = f.pattern;
           const field = f.field;
-          const data = e!.data || {};
+          const data = e.data || {};
           const toMatch = get(data, field);
           const matched =
             toMatch !== undefined && new RegExp(String(pattern)).test(String(toMatch));
@@ -47,5 +49,5 @@ export default function useEntries(collection: Collection) {
     }
 
     return finalEntries;
-  }, [collection, entries, filters, sortField]);
+  }, [collection, filters, publishedEntries, sortField, unpublishedEntries]);
 }

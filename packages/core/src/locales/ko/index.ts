@@ -305,9 +305,9 @@ const ko: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         '"준비됨" 상태의 항목만 게시할 수 있습니다. 게시를 활성화 하려면 카드를 "준비됨" 열에 끌어 놓으세요.',
       onPublishEntry: '이 항목을 게시하시곘습니까?',
-      draftHeader: '초안',
-      inReviewHeader: '검토 진행중',
-      readyHeader: '준비됨',
+      draft: '초안',
+      pending_review: '검토 진행중',
+      pending_publish: '준비됨',
       currentEntries: '%{smart_count}개 항목 |||| %{smart_count}개 항목',
     },
   },

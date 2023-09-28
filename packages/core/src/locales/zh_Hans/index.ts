@@ -286,9 +286,9 @@ const zh_Hans: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         '只有状态为“就绪”的项目才能被发布。需要先将卡片拖动到“就绪”一列才能发布',
       onPublishEntry: '你确定要发布此内容吗？',
-      draftHeader: '草稿',
-      inReviewHeader: '审查中',
-      readyHeader: '就绪',
+      draft: '草稿',
+      pending_review: '审查中',
+      pending_publish: '就绪',
       currentEntries: '%{smart_count} 个内容 |||| %{smart_count} 个内容',
     },
   },

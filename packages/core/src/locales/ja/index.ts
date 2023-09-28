@@ -292,9 +292,9 @@ const ja: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         '「準備完了」のエントリのみを公開できます。「準備完了」列にカードを移動し、ステータスを更新してください。',
       onPublishEntry: 'このエントリを公開しますか？',
-      draftHeader: '下書き',
-      inReviewHeader: 'レビュー中',
-      readyHeader: '準備完了',
+      draft: '下書き',
+      pending_review: 'レビュー中',
+      pending_publish: '準備完了',
       currentEntries: '%{smart_count}件のエントリ',
     },
   },

@@ -309,9 +309,9 @@ const ru: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Только элементы со статусом «Готов» могут быть опубликованы. Перетащите карточку в столбец «Одобренные», чтобы разрешить публикацию.',
       onPublishEntry: 'Вы уверены, что хотите опубликовать эту запись?',
-      draftHeader: 'Черновики',
-      inReviewHeader: 'На рассмотрении',
-      readyHeader: 'Одобренные',
+      draft: 'Черновики',
+      pending_review: 'На рассмотрении',
+      pending_publish: 'Одобренные',
       currentEntries: '%{smart_count} entry |||| %{smart_count} entries',
     },
   },

@@ -279,9 +279,9 @@ const lt: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Tik įrašai su statusu „Paruošta“ gali būti patvirtinti. Prašome pajudinti įrašo kortelę link „Paruošta“ stulpelio, kad galėtumėte publikuoti įrašą.',
       onPublishEntry: 'Ar jūs tikrai norite publikuoti šį įrašą?',
-      draftHeader: 'Juodraščiai',
-      inReviewHeader: 'Peržiūrima redakcijoje',
-      readyHeader: 'Paruošta',
+      draft: 'Juodraščiai',
+      pending_review: 'Peržiūrima redakcijoje',
+      pending_publish: 'Paruošta',
       currentEntries: '%{smart_count} įrašas |||| %{smart_count} įrašai',
     },
   },

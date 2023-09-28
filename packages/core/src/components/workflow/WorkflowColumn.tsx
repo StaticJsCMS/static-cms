@@ -43,7 +43,7 @@ const WorkflowColumn: FC<WorkflowColumnProps> = ({ entries, status, dragging }) 
       aria-label="droppable region draft"
     >
       <div className={classNames(classes.header, classes[status])}>
-        {t('workflow.workflowList.draftHeader')}
+        {t(`workflow.workflowList.${status}`)}
       </div>
       <div className={classes.content}>
         {entries.map(e => (

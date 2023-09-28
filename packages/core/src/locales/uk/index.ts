@@ -195,9 +195,9 @@ const uk: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Тільки елементи з статусом "Готово" можуть бути опубліковані. Будь ласка перемістіть картку в колонку "Готово" для публікації.',
       onPublishEntry: 'Дійсно бажаєте опублікувати запис?',
-      draftHeader: 'В роботі',
-      inReviewHeader: 'На розгляді',
-      readyHeader: 'Готово',
+      draft: 'В роботі',
+      pending_review: 'На розгляді',
+      pending_publish: 'Готово',
       currentEntries: '%{smart_count} запис |||| %{smart_count} записів',
     },
   },

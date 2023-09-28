@@ -293,9 +293,9 @@ const sv: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Bara inlägg med statusen "Redo" kan publiceras. Vänligen dra kortet till "Redo"-kolumnen för att möjliggöra publicering',
       onPublishEntry: 'Är du säker på att du vill publicera det här inlägget?',
-      draftHeader: 'Utkast',
-      inReviewHeader: 'Under granskning',
-      readyHeader: 'Redo',
+      draft: 'Utkast',
+      pending_review: 'Under granskning',
+      pending_publish: 'Redo',
       currentEntries: '%{smart_count} inlägg |||| %{smart_count} inlägg',
     },
   },

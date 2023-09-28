@@ -291,9 +291,9 @@ const ro: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Numai intrări cu status-ul „Gata” pot fi publicate. Trage un card în coloana „Gata” pentru a putea publica.',
       onPublishEntry: 'Ești sigur/ă că dorești să faci publicarea?',
-      draftHeader: 'Ciorne',
-      inReviewHeader: 'În revizuire',
-      readyHeader: 'Gata',
+      draft: 'Ciorne',
+      pending_review: 'În revizuire',
+      pending_publish: 'Gata',
       currentEntries: '%{smart_count} intrări |||| %{smart_count} intrări',
     },
   },

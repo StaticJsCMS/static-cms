@@ -222,9 +222,9 @@ const gr: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Μόνο τα στοιχεία με κατάσταση "Ready" μπορούν να δημοσιευτούν. Σύρετε την κάρτα στη στήλη "έτοιμο" για να ενεργοποιήσετε τη δημοσίευση.',
       onPublishEntry: 'Είστε βέβαιοι ότι θέλετε να δημοσιεύσετε αυτήν την καταχώρηση;',
-      draftHeader: 'Προσχέδια',
-      inReviewHeader: 'Σε ανασκόπηση',
-      readyHeader: 'Έτοιμα',
+      draft: 'Προσχέδια',
+      pending_review: 'Σε ανασκόπηση',
+      pending_publish: 'Έτοιμα',
       currentEntries: '%{smart_count} καταχωρηση |||| %{smart_count} καταχωρησεις',
     },
   },

@@ -265,9 +265,9 @@ const zh_Hant: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         '只有狀態為 預備發布 的內容可以被發布，請將本內容的狀態設定為 預備發布 來進行發布前的準備',
       onPublishEntry: '你確定要發表這篇內容嗎？',
-      draftHeader: '草稿',
-      inReviewHeader: '正在預覽',
-      readyHeader: '準備完成',
+      draft: '草稿',
+      pending_review: '正在預覽',
+      pending_publish: '準備完成',
       currentEntries: '%{smart_count} 篇內容 |||| %{smart_count} 篇內容',
     },
   },

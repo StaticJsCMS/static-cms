@@ -206,9 +206,9 @@ const hu: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Csak a "Kész" állapotú tételek tehetők közzé. A közzététel engedélyezéséhez húzza a kártyát a „Kész” oszlopba.',
       onPublishEntry: 'Biztosan közzéteszi ezt a bejegyzést?',
-      draftHeader: 'Piszkozat',
-      inReviewHeader: 'Vizsgálat alatt',
-      readyHeader: 'Kész',
+      draft: 'Piszkozat',
+      pending_review: 'Vizsgálat alatt',
+      pending_publish: 'Kész',
       currentEntries: '%{smart_count} bejegyzés |||| %{smart_count} bejegyzések',
     },
   },

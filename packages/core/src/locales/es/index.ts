@@ -249,9 +249,9 @@ const es: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Sólo se pueden publicar los elementos con el estado "Listo". Por favor, arrastre la tarjeta hasta la columna "Listo" para permitir la publicación.',
       onPublishEntry: '¿Estás seguro de que quieres publicar esta entrada?',
-      draftHeader: 'Borradores',
-      inReviewHeader: 'En revisión',
-      readyHeader: 'Listo',
+      draft: 'Borradores',
+      pending_review: 'En revisión',
+      pending_publish: 'Listo',
       currentEntries: '%{smart_count} entrada |||| %{smart_count} entradas',
     },
   },

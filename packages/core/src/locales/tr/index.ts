@@ -304,9 +304,9 @@ const tr: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Yalnızca "Hazır" durumu olan öğeler yayınlanabilir. Lütfen yayınlamayı etkinleştirmek için kartı "Hazır" sütununa sürükleyin.',
       onPublishEntry: 'Bu girdiyi yayınlamak istediğinize emin misiniz?',
-      draftHeader: 'Taslaklar',
-      inReviewHeader: 'İncelemede',
-      readyHeader: 'Hazır',
+      draft: 'Taslaklar',
+      pending_review: 'İncelemede',
+      pending_publish: 'Hazır',
       currentEntries: '%{smart_count} girdi |||| %{smart_count} girdiler',
     },
   },

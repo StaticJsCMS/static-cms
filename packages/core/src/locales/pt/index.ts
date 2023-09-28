@@ -300,9 +300,9 @@ const pt: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Somente itens com o status "Pronto" podem ser publicados. Arraste o cartão para a coluna "Pronto" para poder publicar.',
       onPublishEntry: 'Tem certeza de que quer publicar esta entrada?',
-      draftHeader: 'Rascunhos',
-      inReviewHeader: 'Em Revisão',
-      readyHeader: 'Prontos',
+      draft: 'Rascunhos',
+      pending_review: 'Em Revisão',
+      pending_publish: 'Prontos',
       currentEntries: '%{smart_count} entrada |||| %{smart_count} entradas',
     },
   },

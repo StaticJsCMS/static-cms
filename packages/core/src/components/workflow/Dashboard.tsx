@@ -146,7 +146,7 @@ const Dashboard: FC = () => {
           onDragCancel={handleOnDragCancel}
           sensors={sensors}
         >
-          <div className={classes.board}>
+          <div className={classNames(classes.board, 'CMS_Scrollbar_root')}>
             {(Object.keys(boardSections) as WorkflowStatus[]).map(status => (
               <WorkflowColumn
                 key={status}

@@ -358,9 +358,9 @@ const de: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Nur Beiträge im Status "Abgeschlossen" können veröffentlicht werden. Bitte ziehen Sie den Beitrag in die "Abgeschlossen" Spalte um die Veröffentlichung zu aktivieren.',
       onPublishEntry: 'Soll dieser Beitrag wirklich veröffentlicht werden soll?',
-      draftHeader: 'Entwurf',
-      inReviewHeader: 'In Prüfung',
-      readyHeader: 'Abgeschlossen',
+      draft: 'Entwurf',
+      pending_review: 'In Prüfung',
+      pending_publish: 'Abgeschlossen',
       currentEntries: '%{smart_count} Beitrag |||| %{smart_count} Beiträge',
     },
   },

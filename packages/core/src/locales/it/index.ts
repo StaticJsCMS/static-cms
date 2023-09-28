@@ -220,9 +220,9 @@ const it: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Solo gli oggetti con lo status "Pronto" possono essere pubblicati. Sposta la Card nella colonna "Pronto" per abilitare la pubblicazione.',
       onPublishEntry: 'Sei sicuro di voler pubblicare questa voce?',
-      draftHeader: 'Bozze',
-      inReviewHeader: 'In Revisione',
-      readyHeader: 'Pronto',
+      draft: 'Bozze',
+      pending_review: 'In Revisione',
+      pending_publish: 'Pronto',
       currentEntries: '%{smart_count} voce |||| %{smart_count} voci',
     },
   },

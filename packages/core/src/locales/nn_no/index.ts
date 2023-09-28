@@ -246,9 +246,9 @@ const nn_no: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Du kan berre publisere innlegg i "Klar" kolonna. Dra kortet til riktig stad for å halde fram.',
       onPublishEntry: 'Er du sikker på du vil publisere innlegget?',
-      draftHeader: 'Kladd',
-      inReviewHeader: 'Gjennomgås',
-      readyHeader: 'Klar',
+      draft: 'Kladd',
+      pending_review: 'Gjennomgås',
+      pending_publish: 'Klar',
       currentEntries: '%{smart_count} innlegg |||| %{smart_count} innlegg',
     },
   },

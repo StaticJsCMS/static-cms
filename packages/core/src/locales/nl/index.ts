@@ -293,9 +293,9 @@ const nl: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Alleen items met de status "Gereed" kunnen worden gepubliceerd. Sleep de kaart naar de kolom "Gereed" om publiceren mogelijk te maken.',
       onPublishEntry: 'Weet u zeker dat u dit item wilt publiceren?',
-      draftHeader: 'Concepten',
-      inReviewHeader: 'Wordt beoordeeld',
-      readyHeader: 'Klaar',
+      draft: 'Concepten',
+      pending_review: 'Wordt beoordeeld',
+      pending_publish: 'Klaar',
       currentEntries: '%{smart_count} item |||| %{smart_count} items',
     },
   },

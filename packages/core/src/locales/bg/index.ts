@@ -293,9 +293,9 @@ const bg: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Могат да се публикуват само елементи със статус "Готов". Плъзенете картата в колоната "Готов" за да активирате публикуването.',
       onPublishEntry: 'Наистина ли искате да публикувате този запис?',
-      draftHeader: 'Чернови',
-      inReviewHeader: 'В Ревю',
-      readyHeader: 'Готов',
+      draft: 'Чернови',
+      pending_review: 'В Ревю',
+      pending_publish: 'Готов',
       currentEntries: '%{smart_count} запис |||| %{smart_count} записи',
     },
   },

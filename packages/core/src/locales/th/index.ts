@@ -258,9 +258,9 @@ const th: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'เฉพาะรายการที่มีสถานะ "พร้อม" สามารถทำการเผยแพร่ โปรดลากเนื้อหาไปยังช่อง "พร้อม" เพื่อจะทำการเผยแพร่.',
       onPublishEntry: 'คุณแน่ใจหรือว่าจะต้องการเผยแพร่เนื้อหานี้?',
-      draftHeader: 'ร่าง',
-      inReviewHeader: 'อยู่ในการตรวจสอบ',
-      readyHeader: 'พร้อม',
+      draft: 'ร่าง',
+      pending_review: 'อยู่ในการตรวจสอบ',
+      pending_publish: 'พร้อม',
       currentEntries: '%{smart_count} เนื้อหา',
     },
   },

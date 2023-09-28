@@ -6,7 +6,8 @@
     basis-full
     md:basis-2/6
     snap-center
-    flex-shrink-0;
+    flex-shrink-0
+    md:flex-shrink;
 
   &.CMS_WorkflowColumn_over {
     & .CMS_WorkflowColumn_content {

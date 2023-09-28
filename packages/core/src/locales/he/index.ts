@@ -297,9 +297,9 @@ const he: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'ניתן לפרסם רק אייטמים שנמצאים במצב ״מוכן לפרסום״. נא לגרור את האייטם לטור ״מוכן לפרסום״ כדי לפרסם.',
       onPublishEntry: 'האם ברצונך לפרסם אייטם זה?',
-      draftHeader: 'טיוטות',
-      inReviewHeader: 'ממתין לאישור',
-      readyHeader: 'מוכן לפרסום',
+      draft: 'טיוטות',
+      pending_review: 'ממתין לאישור',
+      pending_publish: 'מוכן לפרסום',
       currentEntries: 'אייטם %{smart_count} |||| %{smart_count} אייטמים',
     },
   },

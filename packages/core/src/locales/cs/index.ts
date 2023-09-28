@@ -291,9 +291,9 @@ const cs: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Pouze položky se statusem "Připraveno" mohou být publikováno. Pro umožnění publikace musíte přetáhnout kartu do sloupce "Připraveno"',
       onPublishEntry: 'Opravdu chcete publikovat tento záznam?',
-      draftHeader: 'Koncepty',
-      inReviewHeader: 'V revizi',
-      readyHeader: 'Připraveno',
+      draft: 'Koncepty',
+      pending_review: 'V revizi',
+      pending_publish: 'Připraveno',
       currentEntries: '%{smart_count} záznam |||| %{smart_count} záznamů',
     },
   },

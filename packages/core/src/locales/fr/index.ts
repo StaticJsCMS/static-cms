@@ -298,9 +298,9 @@ const fr: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Seuls les éléments ayant le statut "Prêt" peuvent être publiés. Veuillez glisser/déposer la carte dans la colonne "Prêt" pour activer la publication',
       onPublishEntry: 'Voulez-vous vraiment publier cette entrée ?',
-      draftHeader: 'Brouillons',
-      inReviewHeader: 'En cours de révision',
-      readyHeader: 'Prêt',
+      draft: 'Brouillons',
+      pending_review: 'En cours de révision',
+      pending_publish: 'Prêt',
       currentEntries: '%{smart_count} entrée |||| %{smart_count} entrées',
     },
   },

@@ -291,9 +291,9 @@ const fa: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'فقط مواردی با وضعیت "آماده" قابل انتشار هستند. لطفاً کارت را به ستون "آماده" بکشید تا انتشار فعال شود.',
       onPublishEntry: 'آیا شما مطمئن هستید که می خواهید این مطلب را منتشر کنید؟',
-      draftHeader: 'پیش نویس',
-      inReviewHeader: 'در بررسی',
-      readyHeader: 'آماده',
+      draft: 'پیش نویس',
+      pending_review: 'در بررسی',
+      pending_publish: 'آماده',
       currentEntries: '%{smart_count} ورودی |||| %{smart_count} ورودی',
     },
   },

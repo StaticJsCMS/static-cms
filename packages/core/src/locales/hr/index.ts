@@ -275,9 +275,9 @@ const hr: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Samo promjene sa statusom "Spremno" mogu biti objavljene. Molimo povucite karticu u kolumnu "Spremno" prije objavljivanja.',
       onPublishEntry: 'Jeste li sigurni da želite objaviti unos?',
-      draftHeader: 'Skice',
-      inReviewHeader: 'U osvrtu',
-      readyHeader: 'Spremno',
+      draft: 'Skice',
+      pending_review: 'U osvrtu',
+      pending_publish: 'Spremno',
       currentEntries: '%{smart_count} unos |||| %{smart_count} unosa',
     },
   },

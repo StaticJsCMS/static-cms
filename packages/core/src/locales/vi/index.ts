@@ -256,9 +256,9 @@ const vi: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Chỉ những bài với trạng thái "Sẵn sàng" mới có thể được công bố. Hãy kéo thẻ vào cột "Sẵn sàng" để cho phép công bố.',
       onPublishEntry: 'Bạn có chắc rằng bạn muốn công khai bài này?',
-      draftHeader: 'Bản nháp',
-      inReviewHeader: 'Đang xét duyệt',
-      readyHeader: 'Sẵn sàng',
+      draft: 'Bản nháp',
+      pending_review: 'Đang xét duyệt',
+      pending_publish: 'Sẵn sàng',
       currentEntries: '%{smart_count} bài |||| %{smart_count} bài',
     },
   },

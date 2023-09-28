@@ -305,9 +305,9 @@ const da: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Kun dokumenter med "Klar" status kan publiceres. Træk kortet til "Klar" kolonnen for at tillade publicering.',
       onPublishEntry: 'Er du sikker på at du vil publicere dokumentet?',
-      draftHeader: 'Kladder',
-      inReviewHeader: 'Til gennemsyn',
-      readyHeader: 'Klar',
+      draft: 'Kladder',
+      pending_review: 'Til gennemsyn',
+      pending_publish: 'Klar',
       currentEntries: '%{smart_count} dokument |||| %{smart_count} dokumenter',
     },
   },

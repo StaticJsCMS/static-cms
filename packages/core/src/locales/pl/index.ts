@@ -298,9 +298,9 @@ const pl: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Tylko pozycje o statusie „Gotowe” mogą być publikowane. Przeciągnij proszę kartę do kolumny „Gotowe do publikacji”, aby umożliwić publikowanie.',
       onPublishEntry: 'Czy na pewno chcesz opublikować tę pozycję?',
-      draftHeader: 'Wersje robocze',
-      inReviewHeader: 'W recenzji',
-      readyHeader: 'Gotowe do publikacji',
+      draft: 'Wersje robocze',
+      pending_review: 'W recenzji',
+      pending_publish: 'Gotowe do publikacji',
       currentEntries:
         '%{smart_count} pozycja |||| %{smart_count} pozycje |||| %{smart_count} pozycji',
     },

@@ -288,9 +288,9 @@ const ua: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Лише елементи зі статусом "Готово" можуть бути опубліковані. Перетягніть картку в стовпчик "Схвалено", щоб дозволити публікацію.',
       onPublishEntry: 'Ви впевнені, що хочете опублікувати цей запис?',
-      draftHeader: 'Чернетки',
-      inReviewHeader: 'На розгляді',
-      readyHeader: 'Схвалено',
+      draft: 'Чернетки',
+      pending_review: 'На розгляді',
+      pending_publish: 'Схвалено',
       currentEntries: '%{smart_count} запис |||| %{smart_count} записів',
     },
   },

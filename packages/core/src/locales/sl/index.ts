@@ -306,9 +306,9 @@ const sl: LocalePhrasesRoot = {
       onPublishingNotReadyEntry:
         'Objavijo se lahko samo elementi s statusom "pripravljen". Prosimo, povlecite kartico v stolpec "pripravljen", da omogočite objavo.',
       onPublishEntry: 'Ste prepričani, da želite objaviti ta vnos?',
-      draftHeader: 'Osnutki',
-      inReviewHeader: 'V pregledu',
-      readyHeader: 'Pripravljen',
+      draft: 'Osnutki',
+      pending_review: 'V pregledu',
+      pending_publish: 'Pripravljen',
       currentEntries: '%{smart_count} vnos |||| %{smart_count} vnosov',
     },
   },
