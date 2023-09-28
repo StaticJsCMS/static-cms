@@ -106,22 +106,6 @@ const PostPreviewCard = ({ entry, hasLocalBackup }) => {
                 i
               </div>
             ) : null}
-            <div
-              style={{
-                backgroundColor: entry.data.draft === true ? "rgb(37, 99, 235)" : "rgb(22, 163, 74)",
-                color: "white",
-                border: "none",
-                padding: "2px 6px",
-                textAlign: "center",
-                textDecoration: "none",
-                display: "inline-block",
-                cursor: "pointer",
-                borderRadius: "4px",
-                fontSize: "14px",
-              }}
-            >
-              {entry.data.draft === true ? "Draft" : "Published"}
-            </div>
           </div>
         </div>
       </div>
@@ -202,29 +186,6 @@ const AuthorsPreview = ({ widgetsFor }) => {
   );
 };
 
-const RelationKitchenSinkPostPreview = ({ fieldsMetaData }) => {
-  // When a post is selected from the relation field, all of it's data
-  // will be available in the field's metadata nested under the collection
-  // name, and then further nested under the value specified in `value_field`.
-  // In this case, the post would be nested under "posts" and then under
-  // the title of the selected post, since our `value_field` in the config
-  // is "title".
-  const post = fieldsMetaData && fieldsMetaData.posts.value;
-
-  if (!post) {
-    return null;
-  }
-
-  return (
-    <div style={{ border: "2px solid #ccc", borderRadius: "8px", padding: "20px" }}>
-      <h2>Related Post</h2>
-      <h3>{post.title}</h3>
-      <img src={post.image} />
-      <p>{(post.body ?? "").slice(0, 100) + "..."}</p>
-    </div>
-  );
-};
-
 const CustomPage = () => {
   return <div>I am a custom page!</div>;
 };
@@ -232,11 +193,10 @@ const CustomPage = () => {
 cms.registerPreviewTemplate("posts", PostPreview);
 CMS.registerPreviewCard("posts", PostPreviewCard, () => 240);
 CMS.registerFieldPreview("posts", "date", PostDateFieldPreview);
-CMS.registerFieldPreview("posts", "draft", PostDraftFieldPreview);
 cms.registerPreviewTemplate("general", GeneralPreview);
 cms.registerPreviewTemplate("authors", AuthorsPreview);
 // Pass the name of a registered control to reuse with a new widget preview.
-cms.registerWidget("relationKitchenSinkPost", "relation", RelationKitchenSinkPostPreview);
+cms.registerWidget("relationKitchenSinkPost", "relation");
 cms.registerAdditionalLink({
   id: "docs",
   title: "Static CMS Docs",
