@@ -23,7 +23,8 @@
 .CMS_EntryCard_content {
   @apply p-1
     h-full
-    w-full;
+    w-full
+    relative;
 }
 
 .CMS_EntryCard_card {

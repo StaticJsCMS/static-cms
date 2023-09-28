@@ -1,12 +1,24 @@
 .CMS_WorkflowCard_root {
-  @apply w-full;
+  @apply w-full
+    min-h-[100px];
+
+  &:hover {
+    & .CMS_WorkflowCard_actions {
+      @apply flex;
+    }
+  }
 }
 
 .CMS_WorkflowCard_actions {
-  @apply p-2
-    w-full
-    flex
-    gap-2;
+  background: var(--background-main);
+
+  @apply p-0
+    gap-2
+    absolute
+    bottom-3
+    right-3
+    left-3
+    hidden;
 }
 
 .CMS_WorkflowCard_action-button {
