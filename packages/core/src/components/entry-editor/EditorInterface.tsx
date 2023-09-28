@@ -6,6 +6,7 @@ import { ScrollSyncPane } from 'react-scroll-sync';
 import { EDITOR_SIZE_COMPACT } from '@staticcms/core/constants/views';
 import { summaryFormatter } from '@staticcms/core/lib/formatters';
 import useBreadcrumbs from '@staticcms/core/lib/hooks/useBreadcrumbs';
+import useIsMobile from '@staticcms/core/lib/hooks/useIsMobile';
 import { getI18nInfo, getPreviewEntry, hasI18n } from '@staticcms/core/lib/i18n';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import {
@@ -19,9 +20,9 @@ import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import MainView from '../MainView';
 import EditorToolbar from './EditorToolbar';
+import EditorWorkflowToolbarButtons from './EditorWorkflowToolbarButtons';
 import EditorControlPane from './editor-control-pane/EditorControlPane';
 import EditorPreviewPane from './editor-preview-pane/EditorPreviewPane';
-import EditorWorkflowToolbarButtons from './EditorWorkflowToolbarButtons';
 
 import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import type {
@@ -147,6 +148,8 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
 }) => {
   const config = useAppSelector(selectConfig);
   const useWorkflow = useAppSelector(selectUseWorkflow);
+
+  const isMobile = useIsMobile();
 
   const isLoading = useAppSelector(selectIsFetching);
   const disabled = useMemo(
@@ -416,74 +419,83 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
 
   const editorWithPreview = (
     <>
-      <PanelGroup
-        key="editor-with-preview"
-        autoSaveId={`editor-with-preview-${collection.name}`}
-        direction="horizontal"
-        units="pixels"
-        className={classNames(classes.root, editorSize === EDITOR_SIZE_COMPACT && classes.compact)}
-      >
-        <Panel defaultSize={COMPACT_EDITOR_DEFAULT_WIDTH} minSize={COMPACT_EDITOR_DEFAULT_WIDTH}>
-          <ScrollSyncPane>{editor}</ScrollSyncPane>
-        </Panel>
-        <PanelResizeHandle className={classes['resize-handle']}>
-          <DragHandleIcon className={classes['resize-handle-icon']} />
-        </PanelResizeHandle>
-        <Panel minSize={MIN_PREVIEW_SIZE}>
-          <EditorPreviewPane
-            collection={collection}
-            previewInFrame={previewInFrame}
-            livePreviewUrlTemplate={livePreviewUrlTemplate}
-            entry={previewEntry}
-            fields={fields}
-            editorSize={editorSize}
-            showMobilePreview={showMobilePreview}
-          />
-        </Panel>
-      </PanelGroup>
-      <div
-        className={classNames(
-          classes['mobile-root'],
-          showMobilePreview && classes['mobile-preview-active'],
-          useWorkflow && classes.workflow,
-        )}
-      >
-        {editor}
-        {mobilePreview}
-      </div>
+      {!isMobile ? (
+        <PanelGroup
+          key="editor-with-preview"
+          autoSaveId={`editor-with-preview-${collection.name}`}
+          direction="horizontal"
+          units="pixels"
+          className={classNames(
+            classes.root,
+            editorSize === EDITOR_SIZE_COMPACT && classes.compact,
+          )}
+        >
+          <Panel defaultSize={COMPACT_EDITOR_DEFAULT_WIDTH} minSize={COMPACT_EDITOR_DEFAULT_WIDTH}>
+            <ScrollSyncPane>{editor}</ScrollSyncPane>
+          </Panel>
+          <PanelResizeHandle className={classes['resize-handle']}>
+            <DragHandleIcon className={classes['resize-handle-icon']} />
+          </PanelResizeHandle>
+          <Panel minSize={MIN_PREVIEW_SIZE}>
+            <EditorPreviewPane
+              collection={collection}
+              previewInFrame={previewInFrame}
+              livePreviewUrlTemplate={livePreviewUrlTemplate}
+              entry={previewEntry}
+              fields={fields}
+              editorSize={editorSize}
+              showMobilePreview={showMobilePreview}
+            />
+          </Panel>
+        </PanelGroup>
+      ) : (
+        <div
+          className={classNames(
+            classes['mobile-root'],
+            showMobilePreview && classes['mobile-preview-active'],
+            useWorkflow && classes.workflow,
+          )}
+        >
+          {editor}
+          {mobilePreview}
+        </div>
+      )}
     </>
   );
 
   const editorSideBySideLocale = (
     <>
-      <PanelGroup
-        key="editor-side-by-side-locale"
-        autoSaveId={`editor-side-by-side-locale-${collection.name}`}
-        direction="horizontal"
-        className={classNames(classes.root, classes['wrapper-i18n-side-by-side'])}
-      >
-        <Panel defaultSize={50} minSize={30}>
-          <ScrollSyncPane>{editor}</ScrollSyncPane>
-        </Panel>
-        <PanelResizeHandle className={classes['resize-handle']}>
-          <DragHandleIcon className={classes['resize-handle-icon']} />
-        </PanelResizeHandle>
-        <Panel defaultSize={50} minSize={30} className={classes['i18n-panel']}>
-          <ScrollSyncPane>
-            <>{editorLocale}</>
-          </ScrollSyncPane>
-        </Panel>
-      </PanelGroup>
-      <div
-        className={classNames(
-          classes['mobile-root'],
-          showMobilePreview && classes['mobile-preview-active'],
-          useWorkflow && classes.workflow,
-        )}
-      >
-        {mobileLocaleEditor}
-        {mobilePreview}
-      </div>
+      {!isMobile ? (
+        <PanelGroup
+          key="editor-side-by-side-locale"
+          autoSaveId={`editor-side-by-side-locale-${collection.name}`}
+          direction="horizontal"
+          className={classNames(classes.root, classes['wrapper-i18n-side-by-side'])}
+        >
+          <Panel defaultSize={50} minSize={30}>
+            <ScrollSyncPane>{editor}</ScrollSyncPane>
+          </Panel>
+          <PanelResizeHandle className={classes['resize-handle']}>
+            <DragHandleIcon className={classes['resize-handle-icon']} />
+          </PanelResizeHandle>
+          <Panel defaultSize={50} minSize={30} className={classes['i18n-panel']}>
+            <ScrollSyncPane>
+              <>{editorLocale}</>
+            </ScrollSyncPane>
+          </Panel>
+        </PanelGroup>
+      ) : (
+        <div
+          className={classNames(
+            classes['mobile-root'],
+            showMobilePreview && classes['mobile-preview-active'],
+            useWorkflow && classes.workflow,
+          )}
+        >
+          {mobileLocaleEditor}
+          {mobilePreview}
+        </div>
+      )}
     </>
   );
 

@@ -597,6 +597,8 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
   const isModification = entryDraft.entry?.isModification ?? false;
   const collectionEntriesLoaded = Boolean(entries.pages[collectionName]);
 
+  const entry = !slug ? null : selectEntry(state, collectionName, slug);
+
   const useWorkflow = selectUseWorkflow(state);
   const unPublishedEntry = selectUnpublishedEntry(state, collectionName, slug);
   const publishedEntry = selectEntry(state, collectionName, slug);
@@ -611,7 +613,7 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
     collections,
     entryDraft,
     fields,
-    entry: entryDraft.entry,
+    entry,
     hasChanged,
     isModification,
     collectionEntriesLoaded,

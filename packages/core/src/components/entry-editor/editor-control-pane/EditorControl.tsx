@@ -81,7 +81,7 @@ const EditorControl: FC<EditorControlProps> = ({
 
   const finalStorageValue = useMemoCompare(storageValue, isEqual);
 
-  const [internalValue, setInternalValue] = useState(
+  const [internalValue, setInternalValue] = useState(() =>
     widget.converters.deserialize(finalStorageValue, field),
   );
 

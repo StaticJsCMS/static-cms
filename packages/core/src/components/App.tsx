@@ -186,7 +186,10 @@ const App: FC<AppProps> = ({
         {isFetching && <TopBarProgress />}
         <Routes>
           <Route path="/" element={<Navigate to={defaultPath} />} />
-          {useWorkflow ? <Route path="/dashboard" element={<Dashboard />} /> : null}
+          <Route
+            path="/dashboard"
+            element={useWorkflow ? <Dashboard /> : <Navigate to={defaultPath} />}
+          />
           <Route path="/search" element={<Navigate to={defaultPath} />} />
           <Route path="/collections/:name/search/" element={<CollectionSearchRedirect />} />
           <Route
