@@ -183,7 +183,7 @@ export interface BaseFieldFilterRule {
 }
 
 export interface FieldPatternFilterRule extends BaseFieldFilterRule {
-  pattern: string;
+  pattern: string | RegExp;
 }
 
 export interface FieldValueFilterRule extends BaseFieldFilterRule {
@@ -194,7 +194,7 @@ export interface FieldValueFilterRule extends BaseFieldFilterRule {
 export type FieldFilterRule = FieldPatternFilterRule | FieldValueFilterRule;
 
 export interface FileNameFilterRule {
-  pattern: string;
+  pattern: string | RegExp;
 }
 
 export type FilterRule = FieldFilterRule | FileNameFilterRule;
