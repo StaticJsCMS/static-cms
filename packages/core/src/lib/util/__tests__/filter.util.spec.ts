@@ -126,13 +126,13 @@ describe('filterEntries', () => {
     });
 
     it('should filter fields if field value is an array (must include value)', () => {
-      expect(filterEntries(entries, { field: 'tags', value: 'tag-4' }, undefined)).toEqual([
+      expect(filterEntries(entries, { field: 'tags.*', value: 'tag-4' }, undefined)).toEqual([
         mockFrenchEntry,
         mockIndexEntry,
         mockTags1and4Entry,
       ]);
 
-      expect(filterEntries(entries, { field: 'numbers', value: 8 }, undefined)).toEqual([
+      expect(filterEntries(entries, { field: 'numbers.*', value: 8 }, undefined)).toEqual([
         mockRandomFileNameEntry,
         mockTags1and4Entry,
       ]);
@@ -140,7 +140,7 @@ describe('filterEntries', () => {
 
     it('should filter fields if field value is an array and multiple filter values are provided (must include only one)', () => {
       expect(
-        filterEntries(entries, { field: 'tags', value: ['tag-3', 'tag-4'] }, undefined),
+        filterEntries(entries, { field: 'tags.*', value: ['tag-3', 'tag-4'] }, undefined),
       ).toEqual([
         mockFrenchEntry,
         mockIndexEntry,
@@ -149,7 +149,7 @@ describe('filterEntries', () => {
         mockTags1and4Entry,
       ]);
 
-      expect(filterEntries(entries, { field: 'numbers', value: ['5', '6'] }, undefined)).toEqual([
+      expect(filterEntries(entries, { field: 'numbers.*', value: ['5', '6'] }, undefined)).toEqual([
         mockEnglishEntry,
         mockFrenchEntry,
         mockIndexEntry,
@@ -160,13 +160,17 @@ describe('filterEntries', () => {
       expect(
         filterEntries(
           entries,
-          { field: 'tags', value: ['tag-1', 'tag-4'], matchAll: true },
+          { field: 'tags.*', value: ['tag-1', 'tag-4'], matchAll: true },
           undefined,
         ),
       ).toEqual([mockFrenchEntry, mockIndexEntry, mockTags1and4Entry]);
 
       expect(
-        filterEntries(entries, { field: 'numbers', value: ['5', '6'], matchAll: true }, undefined),
+        filterEntries(
+          entries,
+          { field: 'numbers.*', value: ['5', '6'], matchAll: true },
+          undefined,
+        ),
       ).toEqual([mockFrenchEntry, mockIndexEntry]);
     });
 
@@ -183,7 +187,7 @@ describe('filterEntries', () => {
         filterEntries(
           entries,
           [
-            { field: 'tags', value: ['tag-3', 'tag-4'] },
+            { field: 'tags.*', value: ['tag-3', 'tag-4'] },
             { field: 'language', value: 'gr' },
           ],
           undefined,
@@ -201,7 +205,7 @@ describe('filterEntries', () => {
         filterEntries(
           entries,
           [
-            { field: 'tags', value: ['tag-1', 'tag-4'], matchAll: true },
+            { field: 'tags.*', value: ['tag-1', 'tag-4'], matchAll: true },
             { field: 'language', value: 'gr' },
           ],
           undefined,
@@ -246,7 +250,7 @@ describe('filterEntries', () => {
       expect(
         filterEntries(
           entries,
-          [{ pattern: 'index.md$' }, { field: 'tags', value: 'tag-3' }],
+          [{ pattern: 'index.md$' }, { field: 'tags.*', value: 'tag-3' }],
           undefined,
         ),
       ).toEqual([mockUnderscoreIndexEntry]);
