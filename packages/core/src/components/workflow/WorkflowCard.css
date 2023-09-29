@@ -4,23 +4,25 @@
 
   &:hover {
     & .CMS_WorkflowCard_actions {
-      @apply flex;
+      @apply visible;
     }
   }
 }
 
 .CMS_WorkflowCard_actions {
-  background: var(--background-main);
+  background: color-mix(in srgb, var(--background-dark) 95%, transparent);
 
-  @apply p-0
+  @apply py-1
+    px-2
     gap-2
     absolute
-    bottom-3
+    top-3
     right-3
-    left-3
-    hidden;
+    flex
+    transition-all
+    rounded-md
+    invisible;
 }
 
 .CMS_WorkflowCard_action-button {
-  @apply flex-grow;
 }

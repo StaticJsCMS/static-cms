@@ -1,4 +1,6 @@
 import { useDraggable } from '@dnd-kit/core';
+import { Delete as DeleteIcon } from '@styled-icons/material/Delete';
+import { Publish as PublishIcon } from '@styled-icons/material/Publish';
 import React, { useCallback, useMemo } from 'react';
 
 import {
@@ -20,7 +22,7 @@ import { selectCollection } from '@staticcms/core/reducers/selectors/collections
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import { useDatetimeFormats } from '@staticcms/datetime/datetime.util';
 import EntryCard from '../collections/entries/EntryCard';
-import Button from '../common/button/Button';
+import IconButton from '../common/button/IconButton';
 import confirm from '../common/confirm/Confirm';
 
 import type { DateTimeField, Entry } from '@staticcms/core/interface';
@@ -149,23 +151,25 @@ const WorkflowCard: FC<WorkflowCardProps> = ({ entry }) => {
         noMargin
       >
         <div className={classes.actions}>
-          <Button
-            variant="outlined"
+          <IconButton
+            icon={DeleteIcon}
+            variant="text"
             color="error"
-            className={classes['action-button']}
+            rootClassName={classes['action-button']}
             onClick={handleDeleteChanges}
-          >
-            {t('workflow.workflowCard.deleteChanges')}
-          </Button>
+            title={t('workflow.workflowCard.deleteChanges')}
+            aria-label="delete unpublished changes"
+          />
           {entry.status === WorkflowStatus.PENDING_PUBLISH ? (
-            <Button
-              variant="contained"
+            <IconButton
+              icon={PublishIcon}
+              variant="text"
               color="secondary"
-              className={classes['action-button']}
+              rootClassName={classes['action-button']}
               onClick={handlePublishEntry}
-            >
-              {t('workflow.workflowCard.publishChanges')}
-            </Button>
+              title={t('workflow.workflowCard.publishChanges')}
+              aria-label="publish changes"
+            />
           ) : null}
         </div>
       </EntryCard>
