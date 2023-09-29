@@ -16,8 +16,6 @@ export default function useEntries(collection: Collection) {
   const publishedEntries = usePublishedEntries(collection.name);
   const unpublishedEntries = useUnpublishedEntries(collection.name);
 
-  console.log('unpublishedEntries', unpublishedEntries);
-
   const filteredPublishedEntries = useMemo(
     () => publishedEntries.filter(entry => !unpublishedEntries.find(e => e.slug === entry.slug)),
     [publishedEntries, unpublishedEntries],

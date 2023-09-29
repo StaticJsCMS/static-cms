@@ -870,6 +870,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         if (isError(data)) {
           console.error(data);
         }
+
         return Object.assign(entry, { data: isError(data) ? {} : data });
       }
 
