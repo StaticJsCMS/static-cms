@@ -1,3 +1,5 @@
+import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
+import { CMS_BRANCH_PREFIX } from '@staticcms/core/lib/util/APIUtils';
 import API from '../API';
 
 global.fetch = jest.fn().mockRejectedValue(new Error('should not call fetch inside tests'));
@@ -8,7 +10,11 @@ describe('bitbucket API', () => {
   });
 
   test('should get preview statuses', async () => {
-    const api = new API({});
+    const api = new API({
+      squashMerges: false,
+      initialWorkflowStatus: WorkflowStatus.DRAFT,
+      cmsLabelPrefix: CMS_BRANCH_PREFIX,
+    });
 
     const pr = { id: 1 };
     const statuses = [
@@ -16,8 +22,10 @@ describe('bitbucket API', () => {
       { key: 'build', state: 'FAILED' },
     ];
 
-    api.getBranchPullRequest = jest.fn(() => Promise.resolve(pr));
-    api.getPullRequestStatuses = jest.fn(() => Promise.resolve(statuses));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (api as any).getBranchPullRequest = jest.fn(() => Promise.resolve(pr));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (api as any).getPullRequestStatuses = jest.fn(() => Promise.resolve(statuses));
 
     const collectionName = 'posts';
     const slug = 'title';

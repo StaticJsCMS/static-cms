@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import API, { getMaxAccess } from '../API';
+import { CMS_BRANCH_PREFIX } from '@staticcms/core/lib/util/APIUtils';
 
 global.fetch = jest.fn().mockRejectedValue(new Error('should not call fetch inside tests'));
 
@@ -205,7 +206,12 @@ describe('GitLab API', () => {
 
   describe('getStatuses', () => {
     test('should get preview statuses', async () => {
-      const api = new API({ repo: 'repo' });
+      const api = new API({
+        repo: 'repo',
+        squashMerges: true,
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
+        cmsLabelPrefix: CMS_BRANCH_PREFIX,
+      });
 
       const mr = { sha: 'sha' };
       const statuses = [
@@ -213,8 +219,10 @@ describe('GitLab API', () => {
         { name: 'build', status: 'pending' },
       ];
 
-      api.getBranchMergeRequest = jest.fn(() => Promise.resolve(mr));
-      api.getMergeRequestStatues = jest.fn(() => Promise.resolve(statuses));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (api as any).getBranchMergeRequest = jest.fn(() => Promise.resolve(mr));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (api as any).getMergeRequestStatues = jest.fn(() => Promise.resolve(statuses));
 
       const collectionName = 'posts';
       const slug = 'title';

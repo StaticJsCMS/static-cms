@@ -107,14 +107,11 @@ describe('github backend implementation', () => {
     const mockAPI = {
       generateContentKey,
       retrieveUnpublishedEntryData,
-    };
+    } as unknown as API;
 
     it('should return unpublished entry data', async () => {
       const gitHubImplementation = new GitHubImplementation(config);
       gitHubImplementation.api = mockAPI;
-      gitHubImplementation.loadEntryMediaFiles = jest
-        .fn()
-        .mockResolvedValue([{ path: 'image.png', id: 'sha' }]);
 
       generateContentKey.mockReturnValue('contentKey');
 
