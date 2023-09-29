@@ -13,6 +13,8 @@ import { getPreviewCard } from '@staticcms/core/lib/registry';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectTemplateName } from '@staticcms/core/lib/util/collection.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
+import { selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
+import { useAppSelector } from '@staticcms/core/store/hooks';
 import entriesClasses from './Entries.classes';
 import EntryCard from './EntryCard';
 
@@ -30,13 +32,14 @@ export interface CardGridItemData {
   columnCount: number;
   cardHeights: number[];
   entryData: CollectionEntryData[];
+  useWorkflow: boolean;
 }
 
 const CardWrapper: FC<GridChildComponentProps<CardGridItemData>> = ({
   rowIndex,
   columnIndex,
   style,
-  data: { columnCount, cardHeights, entryData },
+  data: { columnCount, cardHeights, entryData, useWorkflow },
 }) => {
   const left = useMemo(
     () =>
@@ -80,6 +83,10 @@ const CardWrapper: FC<GridChildComponentProps<CardGridItemData>> = ({
         collection={data.collection}
         entry={data.entry}
         imageFieldName={data.imageFieldName}
+        descriptionFieldName={data.descriptionFieldName}
+        dateFieldName={data.dateFieldName}
+        dateFormats={data.dateFormats}
+        useWorkflow={useWorkflow}
       />
     </div>
   );
@@ -91,6 +98,8 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
   onScroll,
 }) => {
   const t = useTranslate();
+
+  const useWorkflow = useAppSelector(selectUseWorkflow);
 
   const [version, setVersion] = useState(0);
 
@@ -193,6 +202,7 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
                     entryData,
                     cardHeights,
                     columnCount,
+                    useWorkflow,
                     t,
                   } as CardGridItemData
                 }

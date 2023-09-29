@@ -6,7 +6,8 @@
     rounded-lg
     truncate
     flex
-    items-center;
+    items-center
+    flex-shrink-0;
 
   &.CMS_Pill_no-wrap {
     @apply whitespace-nowrap;

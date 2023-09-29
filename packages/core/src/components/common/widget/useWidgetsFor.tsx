@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 
-import { useInferredFields } from '@staticcms/core/lib/util/collection.util';
+import { useInferredFieldsByName } from '@staticcms/core/lib/util/collection.util';
 import getWidgetFor from './widgetFor';
 
 import type {
@@ -25,7 +25,7 @@ export default function useWidgetsFor(
   widgetFor: WidgetFor;
   widgetsFor: WidgetsFor;
 } {
-  const inferredFields = useInferredFields(collection);
+  const inferredFields = useInferredFieldsByName(collection);
 
   const widgetFor = useCallback(
     (name: string): ReturnType<WidgetFor<EntryData>> => {

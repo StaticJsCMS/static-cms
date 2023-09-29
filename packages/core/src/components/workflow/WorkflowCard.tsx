@@ -13,16 +13,17 @@ import {
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getPreviewCard } from '@staticcms/core/lib/registry';
 import classNames from '@staticcms/core/lib/util/classNames.util';
-import { selectInferredField, selectTemplateName } from '@staticcms/core/lib/util/collection.util';
+import { selectTemplateName, useInferredFields } from '@staticcms/core/lib/util/collection.util';
 import { isNotNullish, isNullish } from '@staticcms/core/lib/util/null.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectCollection } from '@staticcms/core/reducers/selectors/collections';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
+import { useDatetimeFormats } from '@staticcms/datetime/datetime.util';
 import EntryCard from '../collections/entries/EntryCard';
 import Button from '../common/button/Button';
 import confirm from '../common/confirm/Confirm';
 
-import type { Entry } from '@staticcms/core/interface';
+import type { DateTimeField, Entry } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
 
 import './WorkflowCard.css';
@@ -47,7 +48,19 @@ const WorkflowCard: FC<WorkflowCardProps> = ({ entry }) => {
   });
 
   const collection = useAppSelector(selectCollection(entry.collection));
-  const imageFieldName = selectInferredField(collection, 'image');
+  const inferredFields = useInferredFields(collection);
+
+  const dateField = useMemo(
+    () =>
+      collection && 'fields' in collection
+        ? (collection.fields?.find(
+            f => f.name === inferredFields.date && f.widget === 'datetime',
+          ) as DateTimeField)
+        : undefined,
+    [collection, inferredFields.date],
+  );
+
+  const formats = useDatetimeFormats(dateField);
 
   const height = useMemo(() => {
     let result = null;
@@ -59,13 +72,13 @@ const WorkflowCard: FC<WorkflowCardProps> = ({ entry }) => {
     }
 
     if (isNullish(result)) {
-      result = isNotNullish(imageFieldName)
+      result = isNotNullish(inferredFields.image)
         ? COLLECTION_CARD_HEIGHT
         : COLLECTION_CARD_HEIGHT_WITHOUT_IMAGE;
     }
 
     return result;
-  }, [collection, entry, imageFieldName]);
+  }, [collection, entry, inferredFields.image]);
 
   const handleDeleteChanges = useCallback(
     async (event: MouseEvent) => {
@@ -126,9 +139,13 @@ const WorkflowCard: FC<WorkflowCardProps> = ({ entry }) => {
     >
       <EntryCard
         entry={entry}
-        imageFieldName={imageFieldName}
+        imageFieldName={inferredFields.image}
+        descriptionFieldName={inferredFields.description}
+        dateFieldName={inferredFields.date}
+        dateFormats={formats}
         collection={collection}
         backTo="/dashboard"
+        useWorkflow
         noMargin
       >
         <div className={classes.actions}>

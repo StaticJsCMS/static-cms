@@ -11,11 +11,10 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import Field from '@staticcms/core/components/common/field/Field';
 import TextField from '@staticcms/core/components/common/text-field/TextField';
 import classNames from '@staticcms/core/lib/util/classNames.util';
-import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import NowButton from './components/NowButton';
-import { DEFAULT_DATETIME_FORMAT, DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT } from './constants';
-import { useDatetimeFormats, useTimezoneExtra } from './datetime.util';
+import { DEFAULT_DATETIME_FORMAT } from './constants';
+import { useDatetimeFormats } from './datetime.util';
 import { localToUTC } from './utc.util';
 
 import type { TextFieldProps as MuiTextFieldProps } from '@mui/material/TextField';
@@ -75,49 +74,16 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
     setOpen(false);
   }, []);
 
-  const timezoneExtra = useTimezoneExtra(field);
-
-  const { format, dateFormat, timeFormat } = useDatetimeFormats(field, timezoneExtra);
-
-  const inputFormat = useMemo(() => {
-    if (typeof dateFormat === 'string' || typeof timeFormat === 'string') {
-      const formatParts: string[] = [];
-      if (typeof dateFormat === 'string' && isNotEmpty(dateFormat)) {
-        formatParts.push(dateFormat);
-      } else if (dateFormat !== false) {
-        formatParts.push(DEFAULT_DATE_FORMAT);
-      }
-
-      if (typeof timeFormat === 'string' && isNotEmpty(timeFormat)) {
-        formatParts.push(timeFormat);
-      } else if (timeFormat !== false) {
-        formatParts.push(`${DEFAULT_TIME_FORMAT}${timezoneExtra}`);
-      }
-
-      if (formatParts.length > 0) {
-        return formatParts.join(' ');
-      }
-    }
-
-    if (timeFormat === false) {
-      return format ?? DEFAULT_DATE_FORMAT;
-    }
-
-    if (dateFormat === false) {
-      return format ?? `${DEFAULT_TIME_FORMAT}${timezoneExtra}`;
-    }
-
-    return format ?? `${DEFAULT_DATETIME_FORMAT}${timezoneExtra}`;
-  }, [dateFormat, format, timeFormat, timezoneExtra]);
+  const { storageFormat, dateFormat, timeFormat, displayFormat } = useDatetimeFormats(field);
 
   const defaultValue = useMemo(() => {
     const today = field.picker_utc ? localToUTC(new Date()) : new Date();
     return field.default === undefined
-      ? format
-        ? formatDate(today, format)
+      ? storageFormat
+        ? formatDate(today, storageFormat)
         : formatDate(today, DEFAULT_DATETIME_FORMAT)
       : field.default;
-  }, [field.default, field.picker_utc, format]);
+  }, [field.default, field.picker_utc, storageFormat]);
 
   const [internalRawValue, setInternalValue] = useState(value);
   const internalValue = useMemo(
@@ -135,8 +101,8 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
       return valueToParse;
     }
 
-    return format ? parse(valueToParse, format, new Date()) : parseISO(valueToParse);
-  }, [defaultValue, format, internalValue]);
+    return storageFormat ? parse(valueToParse, storageFormat, new Date()) : parseISO(valueToParse);
+  }, [defaultValue, storageFormat, internalValue]);
 
   const handleChange = useCallback(
     (datetime: Date | null) => {
@@ -148,11 +114,11 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
 
       const adjustedValue = field.picker_utc ? localToUTC(datetime) : datetime;
 
-      const formattedValue = formatDate(adjustedValue, format);
+      const formattedValue = formatDate(adjustedValue, storageFormat);
       setInternalValue(formattedValue);
       onChange(formattedValue);
     },
-    [defaultValue, field.picker_utc, format, onChange],
+    [defaultValue, field.picker_utc, storageFormat, onChange],
   );
 
   const dateTimePicker = useMemo(() => {
@@ -160,7 +126,7 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
       return (
         <MobileDatePicker
           key="mobile-date-picker"
-          inputFormat={inputFormat}
+          inputFormat={displayFormat}
           label={label}
           value={dateValue}
           disabled={disabled}
@@ -194,7 +160,7 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
         <MobileTimePicker
           key="time-picker"
           label={label}
-          inputFormat={inputFormat}
+          inputFormat={displayFormat}
           value={dateValue}
           disabled={disabled}
           onChange={handleChange}
@@ -225,7 +191,7 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
     return (
       <MobileDateTimePicker
         key="mobile-date-time-picker"
-        inputFormat={inputFormat}
+        inputFormat={displayFormat}
         label={label}
         value={dateValue}
         disabled={disabled}
@@ -255,7 +221,7 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
   }, [
     dateFormat,
     timeFormat,
-    inputFormat,
+    displayFormat,
     label,
     dateValue,
     disabled,

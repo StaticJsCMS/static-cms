@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { VIEW_STYLE_TABLE } from '@staticcms/core/constants/views';
-import { selectFields, selectInferredField } from '@staticcms/core/lib/util/collection.util';
+import { getInferredFields, selectFields } from '@staticcms/core/lib/util/collection.util';
 import { toTitleCaseFromKey } from '@staticcms/core/lib/util/string.util';
+import { getDatetimeFormats } from '@staticcms/datetime/datetime.util';
 import entriesClasses from './Entries.classes';
 import EntryListingGrid from './EntryListingGrid';
 import EntryListingTable from './EntryListingTable';
@@ -12,6 +13,7 @@ import type {
   Collection,
   CollectionEntryData,
   Collections,
+  DateTimeField,
   Entry,
   Field,
 } from '@staticcms/core/interface';
@@ -57,29 +59,7 @@ const EntryListing: FC<EntryListingProps> = ({
     }
   }, [handleCursorActions, hasMore]);
 
-  const inferFields = useCallback(
-    (
-      collection?: Collection,
-    ): {
-      titleField?: string | null;
-      descriptionField?: string | null;
-      imageField?: string | null;
-      remainingFields?: Field[];
-    } => {
-      if (!collection) {
-        return {};
-      }
-
-      const titleField = selectInferredField(collection, 'title');
-      const descriptionField = selectInferredField(collection, 'description');
-      const imageField = selectInferredField(collection, 'image');
-      const fields = selectFields(collection);
-      const inferredFields = [titleField, descriptionField, imageField];
-      const remainingFields = fields && fields.filter(f => inferredFields.indexOf(f.name) === -1);
-      return { titleField, descriptionField, imageField, remainingFields };
-    },
-    [],
-  );
+  const inferFields = useCallback((collection?: Collection) => getInferredFields(collection), []);
 
   const summaryFields = useMemo(() => {
     let fields: string[] | undefined;
@@ -99,9 +79,21 @@ const EntryListing: FC<EntryListingProps> = ({
     if ('collection' in otherProps) {
       const inferredFields = inferFields(otherProps.collection);
 
+      const dateField =
+        'fields' in otherProps.collection
+          ? (otherProps.collection.fields?.find(
+              f => f.name === inferredFields.date && f.widget === 'datetime',
+            ) as DateTimeField)
+          : undefined;
+
+      const formats = getDatetimeFormats(dateField);
+
       return entries.map(entry => ({
         collection: otherProps.collection,
-        imageFieldName: inferredFields.imageField,
+        imageFieldName: inferredFields.image,
+        descriptionFieldName: inferredFields.description,
+        dateFieldName: inferredFields.date,
+        dateFormats: formats,
         viewStyle,
         entry,
         key: entry.slug,
@@ -116,13 +108,26 @@ const EntryListing: FC<EntryListingProps> = ({
           coll => coll.name === collectionName,
         );
 
-        const collectionLabel = !isSingleCollectionInList ? collection?.label : undefined;
         const inferredFields = inferFields(collection);
+
+        const dateField =
+          collection && 'fields' in collection
+            ? (collection.fields?.find(
+                f => f.name === inferredFields.date && f.widget === 'datetime',
+              ) as DateTimeField)
+            : undefined;
+
+        const formats = getDatetimeFormats(dateField);
+
+        const collectionLabel = !isSingleCollectionInList ? collection?.label : undefined;
         return collection
           ? {
               collection,
               entry,
-              imageFieldName: inferredFields.imageField,
+              imageFieldName: inferredFields.image,
+              descriptionFieldName: inferredFields.description,
+              dateFieldName: inferredFields.date,
+              dateFormats: formats,
               viewStyle,
               collectionLabel,
               key: entry.slug,

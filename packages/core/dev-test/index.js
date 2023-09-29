@@ -237,7 +237,7 @@ const CustomPage = () => {
 };
 
 CMS.registerPreviewTemplate('posts', PostPreview);
-CMS.registerPreviewCard('posts', PostPreviewCard, () => 240);
+// CMS.registerPreviewCard('posts', PostPreviewCard, () => 240);
 CMS.registerFieldPreview('posts', 'date', PostDateFieldPreview);
 CMS.registerPreviewTemplate('general', GeneralPreview);
 CMS.registerPreviewTemplate('authors', AuthorsPreview);

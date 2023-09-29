@@ -1,4 +1,6 @@
 import { Info as InfoIcon } from '@styled-icons/material-outlined/Info';
+import format from 'date-fns/format';
+import parse from 'date-fns/parse';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
@@ -19,8 +21,15 @@ import CardActionArea from '../../common/card/CardActionArea';
 import CardContent from '../../common/card/CardContent';
 import CardMedia from '../../common/card/CardMedia';
 import useWidgetsFor from '../../common/widget/useWidgetsFor';
+import WorkflowStatusPill from '../../workflow/WorkflowStatusPill';
 
-import type { BackupEntry, Collection, Entry, FileOrImageField } from '@staticcms/core/interface';
+import type {
+  BackupEntry,
+  Collection,
+  DateTimeFormats,
+  Entry,
+  FileOrImageField,
+} from '@staticcms/core/interface';
 import type { FC, ReactNode } from 'react';
 
 import './EntryCard.css';
@@ -32,26 +41,38 @@ export const classes = generateClassNames('EntryCard', [
   'content',
   'card',
   'card-content',
-  'card-summary',
+  'summary-wrapper',
+  'summary',
+  'description',
+  'date',
   'local-backup-icon',
+  'workflow-status',
 ]);
 
 export interface EntryCardProps {
   entry: Entry;
-  imageFieldName?: string | null | undefined;
+  imageFieldName: string | null | undefined;
+  descriptionFieldName: string | null | undefined;
+  dateFieldName: string | null | undefined;
+  dateFormats: DateTimeFormats | undefined;
   collection: Collection;
   noMargin?: boolean;
   backTo?: string;
   children?: ReactNode;
+  useWorkflow: boolean;
 }
 
 const EntryCard: FC<EntryCardProps> = ({
   collection,
   entry,
   imageFieldName,
+  descriptionFieldName,
+  dateFieldName,
+  dateFormats,
   noMargin = false,
   backTo,
   children,
+  useWorkflow,
 }) => {
   const t = useTranslate();
 
@@ -82,6 +103,31 @@ const EntryCard: FC<EntryCardProps> = ({
 
     return i;
   }, [entryData, imageFieldName]);
+
+  const description = useMemo(() => {
+    let d = descriptionFieldName
+      ? (entryData?.[descriptionFieldName] as string | undefined)
+      : undefined;
+
+    if (d) {
+      d = encodeURI(d.trim());
+    }
+
+    return d;
+  }, [entryData, descriptionFieldName]);
+
+  const date = useMemo(() => {
+    let d = dateFieldName ? (entryData?.[dateFieldName] as string | undefined) : undefined;
+
+    if (d && dateFormats) {
+      const date = parse(d, dateFormats.storageFormat, new Date());
+      if (!isNaN(date.getTime())) {
+        d = format(date, dateFormats.displayFormat);
+      }
+    }
+
+    return d;
+  }, [dateFieldName, entryData, dateFormats]);
 
   const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
 
@@ -171,13 +217,23 @@ const EntryCard: FC<EntryCardProps> = ({
               ) : null}
               <CardContent>
                 <div className={classes['card-content']}>
-                  <div className={classes['card-summary']}>{summary}</div>
-                  {hasLocalBackup ? (
-                    <InfoIcon
-                      className={classes['local-backup-icon']}
-                      title={t('ui.localBackup.hasLocalBackup')}
-                    />
-                  ) : null}
+                  <div className={classes['summary-wrapper']}>
+                    <div className={classes['summary']}>{summary}</div>
+                    {hasLocalBackup ? (
+                      <InfoIcon
+                        className={classes['local-backup-icon']}
+                        title={t('ui.localBackup.hasLocalBackup')}
+                      />
+                    ) : null}
+                    {useWorkflow ? (
+                      <WorkflowStatusPill
+                        status={entry.status}
+                        className={classes['workflow-status']}
+                      />
+                    ) : null}
+                  </div>
+                  {description ? <div className={classes.description}>{description}</div> : null}
+                  {date ? <div className={classes.date}>{String(date)}</div> : null}
                 </div>
               </CardContent>
             </CardActionArea>

@@ -5,7 +5,7 @@ import trimEnd from 'lodash/trimEnd';
 import truncate from 'lodash/truncate';
 import { basename, dirname, extname } from 'path';
 
-import { getDatetimeFormats, getTimezoneExtra } from '@staticcms/datetime/datetime.util';
+import { getDatetimeFormats } from '@staticcms/datetime/datetime.util';
 import { getField } from '../util/field.util';
 
 import type { Entry, EntryData, Field, ObjectValue } from '@staticcms/core/interface';
@@ -28,9 +28,7 @@ const filters: StringTemplateFilter[] = [
         return str;
       }
 
-      const timezoneExtra = getTimezoneExtra(field);
-
-      const { format: storageFormat } = getDatetimeFormats(field, timezoneExtra);
+      const { storageFormat } = getDatetimeFormats(field);
 
       const date = parse(str, storageFormat, new Date());
       if (isNaN(date.getTime())) {
@@ -119,9 +117,7 @@ export function parseDateFromEntry(
     return undefined;
   }
 
-  const timezoneExtra = getTimezoneExtra(dateField);
-
-  const { format: storageFormat } = getDatetimeFormats(dateField, timezoneExtra);
+  const { storageFormat } = getDatetimeFormats(dateField);
 
   return parse(dateValue, storageFormat, new Date());
 }

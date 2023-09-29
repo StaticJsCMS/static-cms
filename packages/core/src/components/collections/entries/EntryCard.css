@@ -33,18 +33,47 @@
 
 .CMS_EntryCard_card-content {
   @apply flex
-    w-full
-    items-center
-    justify-between;
+    flex-col
+    w-full;
 }
 
-.CMS_EntryCard_card-summary {
-  @apply truncate;
+.CMS_EntryCard_summary-wrapper {
+  @apply flex
+    gap-1
+    w-full
+    flex-nowrap
+    items-center;
+}
+
+.CMS_EntryCard_summary {
+  color: var(--text-primary);
+
+  @apply truncate
+    flex-grow
+    font-bold;
+}
+
+.CMS_EntryCard_description {
+  color: var(--text-primary);
+
+  @apply truncate
+    text-sm;
+}
+
+.CMS_EntryCard_date {
+  color: var(--text-secondary);
+
+  @apply truncate
+    text-sm;
 }
 
 .CMS_EntryCard_local-backup-icon {
   color: var(--primary-light);
 
   @apply w-5
-    h-5;
+    h-5
+    flex-shrink-0;
+}
+
+.CMS_EntryCard_workflow-status {
 }

@@ -1338,11 +1338,22 @@ export interface BackupEntry {
 export interface CollectionEntryData {
   collection: Collection;
   imageFieldName: string | null | undefined;
+  descriptionFieldName: string | null | undefined;
+  dateFieldName: string | null | undefined;
+  dateFormats: DateTimeFormats | undefined;
   viewStyle: ViewStyle;
   entry: Entry;
   key: string;
   summaryFields: string[];
   collectionLabel?: string;
+}
+
+export interface DateTimeFormats {
+  storageFormat: string;
+  dateFormat: string | boolean;
+  timeFormat: string | boolean;
+  displayFormat: string;
+  timezoneExtra: string;
 }
 
 /**

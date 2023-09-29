@@ -9,9 +9,10 @@ import type { PillProps } from '../common/pill/Pill';
 
 export interface WorkflowStatusPillProps {
   status: WorkflowStatus | undefined;
+  className?: string;
 }
 
-const WorkflowStatusPill: FC<WorkflowStatusPillProps> = ({ status }) => {
+const WorkflowStatusPill: FC<WorkflowStatusPillProps> = ({ status, className }) => {
   const t = useTranslate();
 
   const [label, color]: [string, PillProps['color']] = useMemo(() => {
@@ -27,7 +28,11 @@ const WorkflowStatusPill: FC<WorkflowStatusPillProps> = ({ status }) => {
     }
   }, [status, t]);
 
-  return <Pill color={color}>{label}</Pill>;
+  return (
+    <Pill color={color} className={className}>
+      {label}
+    </Pill>
+  );
 };
 
 export default WorkflowStatusPill;

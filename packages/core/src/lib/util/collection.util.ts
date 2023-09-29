@@ -15,6 +15,7 @@ import { selectField } from './field.util';
 import { selectMediaFolder } from './media.util';
 
 import type { Backend } from '@staticcms/core/backend';
+import type { InferrableField } from '@staticcms/core/constants/fieldInference';
 import type {
   BaseField,
   Collection,
@@ -178,7 +179,7 @@ export function selectDefaultSortableFields<EF extends BaseField>(
   collection: Collection<EF>,
   backend: Backend<EF>,
 ) {
-  let defaultSortable = SORTABLE_FIELDS.map((type: string) => {
+  let defaultSortable = SORTABLE_FIELDS.map(type => {
     const field = selectInferredField(collection, type);
     if (backend.isGitBackend() && type === 'author' && !field) {
       // default to commit author if not author field is found
@@ -395,7 +396,7 @@ export function selectIdentifier<EF extends BaseField>(collection: Collection<EF
 
 export function selectInferredField<EF extends BaseField>(
   collection: Collection<EF> | undefined,
-  fieldName: string,
+  fieldName: InferrableField,
 ) {
   if (!collection) {
     return;
@@ -404,18 +405,7 @@ export function selectInferredField<EF extends BaseField>(
   if (fieldName === 'title' && collection.identifier_field) {
     return selectIdentifier(collection);
   }
-  const inferableField = (
-    INFERABLE_FIELDS as Record<
-      string,
-      {
-        type: string;
-        synonyms: string[];
-        secondaryTypes: string[];
-        fallbackToFirstField: boolean;
-        showError: boolean;
-      }
-    >
-  )[fieldName];
+  const inferableField = INFERABLE_FIELDS[fieldName];
   const fields = 'fields' in collection ? collection.fields ?? [] : undefined;
   let field;
 
@@ -457,7 +447,55 @@ export function selectInferredField<EF extends BaseField>(
   return null;
 }
 
-export function useInferredFields(collection: Collection) {
+export function getInferredFields(
+  collection: Collection | undefined,
+): Partial<Record<InferrableField, string>> {
+  if (!collection) {
+    return {};
+  }
+
+  const iFields: Partial<Record<InferrableField, string>> = {};
+
+  const titleField = selectInferredField(collection, 'title');
+  if (titleField) {
+    iFields.title = titleField;
+  }
+
+  const shortTitleField = selectInferredField(collection, 'shortTitle');
+  if (shortTitleField) {
+    iFields.shortTitle = shortTitleField;
+  }
+
+  const authorField = selectInferredField(collection, 'author');
+  if (authorField) {
+    iFields.author = authorField;
+  }
+
+  const dateField = selectInferredField(collection, 'date');
+  if (dateField) {
+    iFields.date = dateField;
+  }
+
+  const descriptionField = selectInferredField(collection, 'description');
+  if (descriptionField) {
+    iFields.description = descriptionField;
+  }
+
+  const imageField = selectInferredField(collection, 'image');
+  if (imageField) {
+    iFields.image = imageField;
+  }
+
+  return iFields;
+}
+
+export function useInferredFields(
+  collection: Collection | undefined,
+): Partial<Record<InferrableField, string>> {
+  return useMemo(() => getInferredFields(collection), [collection]);
+}
+
+export function useInferredFieldsByName(collection: Collection) {
   return useMemo(() => {
     const titleField = selectInferredField(collection, 'title');
     const shortTitleField = selectInferredField(collection, 'shortTitle');
