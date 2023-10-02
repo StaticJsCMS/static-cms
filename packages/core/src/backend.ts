@@ -2,6 +2,7 @@ import * as fuzzy from 'fuzzy';
 import attempt from 'lodash/attempt';
 import flatten from 'lodash/flatten';
 import get from 'lodash/get';
+import set from 'lodash/set';
 import isError from 'lodash/isError';
 import uniq from 'lodash/uniq';
 import { dirname, extname } from 'path';
@@ -48,8 +49,7 @@ import {
 import filterEntries from './lib/util/filter.util';
 import { DRAFT_MEDIA_FILES, selectMediaFilePublicPath } from './lib/util/media.util';
 import { selectCustomPath, slugFromCustomPath } from './lib/util/nested.util';
-import { isNullish } from './lib/util/null.util';
-import { set } from './lib/util/object.util';
+import { isNotNullish, isNullish } from './lib/util/null.util';
 import { fileSearch, sortByScore } from './lib/util/search.util';
 import { dateParsers, expandPath, extractTemplateVars } from './lib/widgets/stringTemplate';
 import { getUseWorkflow } from './reducers/selectors/config';
@@ -214,20 +214,20 @@ export function mergeExpandedEntries(entries: (Entry & { field: string })[]): En
 
   const merged = entries.reduce((acc, e) => {
     if (!acc[e.slug]) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { field, ...rest } = e;
+      const { field: _field, ...rest } = e;
       acc[e.slug] = rest;
       arrayPaths[e.slug] = new Set();
     }
 
     const nestedFields = e.field.split('.');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let value = acc[e.slug].data as any;
+    let value: ValueOrNestedValue = acc[e.slug].data;
     for (let i = 0; i < nestedFields.length; i++) {
-      value = value[nestedFields[i]];
-      if (Array.isArray(value)) {
-        const path = nestedFields.slice(0, i + 1).join('.');
-        arrayPaths[e.slug] = arrayPaths[e.slug].add(path);
+      if (isNotNullish(value)) {
+        value = value[nestedFields[i]];
+        if (Array.isArray(value)) {
+          const path = nestedFields.slice(0, i + 1).join('.');
+          arrayPaths[e.slug] = arrayPaths[e.slug].add(path);
+        }
       }
     }
 
@@ -593,6 +593,10 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return entries;
   }
 
+  printError(error: Error) {
+    return `\n\n${error.stack}`;
+  }
+
   async search(collections: Collection[], searchTerm: string): Promise<SearchResponse> {
     // Perform a local search by requesting all entries. For each
     // collection, load it, search, and call onCollectionResults with
@@ -640,9 +644,9 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     const entries = await Promise.all(collectionEntriesRequests).then(arrays => flatten(arrays));
 
     if (errors.length > 0) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      throw new Error({ message: 'Errors occurred while searching entries locally!', errors });
+      throw new Error(
+        `Errors occurred while searching entries locally!${errors.map(this.printError)}`,
+      );
     }
 
     const hits = entries

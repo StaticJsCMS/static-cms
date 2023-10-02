@@ -1,9 +1,9 @@
 import escapeRegExp from 'lodash/escapeRegExp';
 import get from 'lodash/get';
 import groupBy from 'lodash/groupBy';
+import set from 'lodash/set';
 
 import { fileForEntry, selectEntrySlug } from './util/collection.util';
-import { set } from './util/object.util';
 
 import type {
   BaseField,

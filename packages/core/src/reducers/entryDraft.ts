@@ -1,16 +1,9 @@
 import isEqual from 'lodash/isEqual';
+import set from 'lodash/set';
 import { v4 as uuid } from 'uuid';
 
+import {} from '../actions/editorialWorkflow';
 import {
-  UNPUBLISHED_ENTRY_PERSIST_REQUEST,
-  UNPUBLISHED_ENTRY_PERSIST_SUCCESS,
-  UNPUBLISHED_ENTRY_PERSIST_FAILURE,
-  UNPUBLISHED_ENTRY_STATUS_CHANGE_REQUEST,
-  UNPUBLISHED_ENTRY_STATUS_CHANGE_SUCCESS,
-  UNPUBLISHED_ENTRY_STATUS_CHANGE_FAILURE,
-  UNPUBLISHED_ENTRY_PUBLISH_REQUEST,
-  UNPUBLISHED_ENTRY_PUBLISH_SUCCESS,
-  UNPUBLISHED_ENTRY_PUBLISH_FAILURE,
   ADD_DRAFT_ENTRY_MEDIA_FILE,
   DRAFT_CHANGE_FIELD,
   DRAFT_CLEAR_CHILD_VALIDATION,
@@ -28,15 +21,22 @@ import {
   ENTRY_PERSIST_REQUEST,
   ENTRY_PERSIST_SUCCESS,
   REMOVE_DRAFT_ENTRY_MEDIA_FILE,
+  UNPUBLISHED_ENTRY_PERSIST_FAILURE,
+  UNPUBLISHED_ENTRY_PERSIST_REQUEST,
+  UNPUBLISHED_ENTRY_PERSIST_SUCCESS,
+  UNPUBLISHED_ENTRY_PUBLISH_FAILURE,
+  UNPUBLISHED_ENTRY_PUBLISH_REQUEST,
+  UNPUBLISHED_ENTRY_PUBLISH_SUCCESS,
+  UNPUBLISHED_ENTRY_STATUS_CHANGE_FAILURE,
+  UNPUBLISHED_ENTRY_STATUS_CHANGE_REQUEST,
+  UNPUBLISHED_ENTRY_STATUS_CHANGE_SUCCESS,
 } from '../constants';
-import {} from '../actions/editorialWorkflow';
 import { duplicateI18nFields, getDataPath } from '../lib/i18n';
 import { fileForEntry } from '../lib/util/collection.util';
 import { applyDefaultsToDraftData } from '../lib/util/entry.util';
-import { set } from '../lib/util/object.util';
 
-import type { EntriesAction } from '../actions/entries';
 import type { EditorialWorkflowAction } from '../actions/editorialWorkflow';
+import type { EntriesAction } from '../actions/entries';
 import type { Entry, FieldsErrors } from '../interface';
 
 export interface EntryDraftState {
