@@ -1,6 +1,11 @@
+import { createMockConfig } from '@staticcms/test/data/config.mock';
 import TestBackend, { getFolderFiles } from '../implementation';
 
+import type { Config } from '@staticcms/core/interface';
+
 describe('test backend implementation', () => {
+  const config = createMockConfig({ collections: [] }) as Config;
+
   beforeEach(() => {
     jest.resetModules();
   });
@@ -10,12 +15,13 @@ describe('test backend implementation', () => {
       window.repoFiles = {
         posts: {
           'some-post.md': {
+            path: 'path/to/some-post.md',
             content: 'post content',
           },
         },
       };
 
-      const backend = new TestBackend({});
+      const backend = new TestBackend(config);
 
       await expect(backend.getEntry('posts/some-post.md')).resolves.toEqual({
         file: { path: 'posts/some-post.md', id: null },
@@ -29,6 +35,7 @@ describe('test backend implementation', () => {
           dir1: {
             dir2: {
               'some-post.md': {
+                path: 'path/to/some-post.md',
                 content: 'post content',
               },
             },
@@ -36,7 +43,7 @@ describe('test backend implementation', () => {
         },
       };
 
-      const backend = new TestBackend({});
+      const backend = new TestBackend(config);
 
       await expect(backend.getEntry('posts/dir1/dir2/some-post.md')).resolves.toEqual({
         file: { path: 'posts/dir1/dir2/some-post.md', id: null },
@@ -49,13 +56,13 @@ describe('test backend implementation', () => {
     it('should persist entry', async () => {
       window.repoFiles = {};
 
-      const backend = new TestBackend({});
+      const backend = new TestBackend(config);
 
       const entry = {
         dataFiles: [{ path: 'posts/some-post.md', raw: 'content', slug: 'some-post.md' }],
         assets: [],
       };
-      await backend.persistEntry(entry, { newEntry: true });
+      await backend.persistEntry(entry, { newEntry: true, commitMessage: 'Persist file' });
 
       expect(window.repoFiles).toEqual({
         posts: {
@@ -71,23 +78,25 @@ describe('test backend implementation', () => {
       window.repoFiles = {
         pages: {
           'other-page.md': {
+            path: 'path/to/some-post.md',
             content: 'content',
           },
         },
         posts: {
           'other-post.md': {
+            path: 'path/to/some-post.md',
             content: 'content',
           },
         },
       };
 
-      const backend = new TestBackend({});
+      const backend = new TestBackend(config);
 
       const entry = {
         dataFiles: [{ path: 'posts/new-post.md', raw: 'content', slug: 'new-post.md' }],
         assets: [],
       };
-      await backend.persistEntry(entry, { newEntry: true });
+      await backend.persistEntry(entry, { newEntry: true, commitMessage: 'Persist file' });
 
       expect(window.repoFiles).toEqual({
         pages: {
@@ -110,12 +119,12 @@ describe('test backend implementation', () => {
     it('should persist nested entry', async () => {
       window.repoFiles = {};
 
-      const backend = new TestBackend({});
+      const backend = new TestBackend(config);
 
       const slug = 'dir1/dir2/some-post.md';
       const path = `posts/${slug}`;
       const entry = { dataFiles: [{ path, raw: 'content', slug }], assets: [] };
-      await backend.persistEntry(entry, { newEntry: true });
+      await backend.persistEntry(entry, { newEntry: true, commitMessage: 'Persist file' });
 
       expect(window.repoFiles).toEqual({
         posts: {
@@ -137,7 +146,8 @@ describe('test backend implementation', () => {
           dir1: {
             dir2: {
               'some-post.md': {
-                mediaFiles: ['file1'],
+                path: 'path/to/some-post.md',
+                mediaFiles: { file1: { path: 'path/to/media/file1.txt', content: 'file1' } },
                 content: 'content',
               },
             },
@@ -145,12 +155,12 @@ describe('test backend implementation', () => {
         },
       };
 
-      const backend = new TestBackend({});
+      const backend = new TestBackend(config);
 
       const slug = 'dir1/dir2/some-post.md';
       const path = `posts/${slug}`;
       const entry = { dataFiles: [{ path, raw: 'new content', slug }], assets: [] };
-      await backend.persistEntry(entry, { newEntry: false });
+      await backend.persistEntry(entry, { newEntry: false, commitMessage: 'Persist file' });
 
       expect(window.repoFiles).toEqual({
         posts: {
@@ -172,12 +182,13 @@ describe('test backend implementation', () => {
       window.repoFiles = {
         posts: {
           'some-post.md': {
+            path: 'path/to/some-post.md',
             content: 'post content',
           },
         },
       };
 
-      const backend = new TestBackend({});
+      const backend = new TestBackend(config);
 
       await backend.deleteFiles(['posts/some-post.md']);
       expect(window.repoFiles).toEqual({
@@ -191,6 +202,7 @@ describe('test backend implementation', () => {
           dir1: {
             dir2: {
               'some-post.md': {
+                path: 'path/to/some-post.md',
                 content: 'post content',
               },
             },
@@ -198,7 +210,7 @@ describe('test backend implementation', () => {
         },
       };
 
-      const backend = new TestBackend({});
+      const backend = new TestBackend(config);
 
       await backend.deleteFiles(['posts/dir1/dir2/some-post.md']);
       expect(window.repoFiles).toEqual({
@@ -216,14 +228,17 @@ describe('test backend implementation', () => {
       const tree = {
         pages: {
           'root-page.md': {
+            path: 'pages/root-page.md',
             content: 'root page content',
           },
           dir1: {
             'nested-page-1.md': {
+              path: 'pages/dir1/nested-page-1.md',
               content: 'nested page 1 content',
             },
             dir2: {
               'nested-page-2.md': {
+                path: 'pages/dir1/dir2/nested-page-2.md',
                 content: 'nested page 2 content',
               },
             },
