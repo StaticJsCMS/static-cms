@@ -22,7 +22,7 @@ import { useFocused } from 'slate-react';
 
 import { configLoaded } from '@staticcms/core/actions/config';
 import { store } from '@staticcms/core/store';
-import { createMockCollection } from '@staticcms/test/data/collections.mock';
+import { createMockFolderCollection } from '@staticcms/test/data/collections.mock';
 import { createMockConfig } from '@staticcms/test/data/config.mock';
 import { mockMarkdownField } from '@staticcms/test/data/fields.mock';
 import { renderWithProviders } from '@staticcms/test/test-utils';
@@ -48,7 +48,7 @@ const BalloonToolbarWrapper: FC<BalloonToolbarWrapperProps> = ({ useMdx = false 
         key="balloon-toolbar"
         useMdx={useMdx}
         containerRef={ref.current}
-        collection={createMockCollection({}, mockMarkdownField)}
+        collection={createMockFolderCollection({}, mockMarkdownField)}
         field={mockMarkdownField}
         disabled={false}
       />

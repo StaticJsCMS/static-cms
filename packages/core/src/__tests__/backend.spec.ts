@@ -1,4 +1,4 @@
-import { createMockCollection } from '@staticcms/test/data/collections.mock';
+import { createMockFolderCollection } from '@staticcms/test/data/collections.mock';
 import { createMockConfig } from '@staticcms/test/data/config.mock';
 import {
   createMockEntry,
@@ -37,7 +37,7 @@ describe('Backend', () => {
         init: jest.fn(),
       });
 
-      collection = createMockCollection();
+      collection = createMockFolderCollection();
 
       backend = resolveBackend(
         createMockConfig({
@@ -154,7 +154,7 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockCollection({
+      const collection = createMockFolderCollection({
         name: 'posts',
       }) as Collection;
 
@@ -183,7 +183,7 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockCollection({
+      const collection = createMockFolderCollection({
         name: 'posts',
       }) as Collection;
 
@@ -212,7 +212,7 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockCollection({
+      const collection = createMockFolderCollection({
         name: 'posts',
         format: 'json-frontmatter',
       }) as Collection;
@@ -261,7 +261,7 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockCollection({
+      const collection = createMockFolderCollection({
         name: 'posts',
         format: 'json-frontmatter',
       }) as Collection;
@@ -317,7 +317,7 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockCollection({
+      const collection = createMockFolderCollection({
         name: 'posts',
         format: 'json-frontmatter',
       }) as Collection;
@@ -354,7 +354,7 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockCollection({
+      const collection = createMockFolderCollection({
         name: 'posts',
         format: 'json-frontmatter',
       }) as Collection;
@@ -405,7 +405,7 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockCollection({
+      const collection = createMockFolderCollection({
         name: 'posts',
       }) as Collection;
 
@@ -448,7 +448,7 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockCollection({
+      const collection = createMockFolderCollection({
         name: 'posts',
         folder: 'src/posts',
         fields: [],
@@ -507,7 +507,7 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockCollection({
+      const collection = createMockFolderCollection({
         name: 'posts',
         fields: [
           {
@@ -554,7 +554,7 @@ describe('Backend', () => {
 
       (implementation.getEntry as jest.Mock).mockResolvedValueOnce({ data: 'data' });
 
-      const collection = createMockCollection({
+      const collection = createMockFolderCollection({
         name: 'posts',
         fields: [
           {
@@ -615,7 +615,7 @@ describe('Backend', () => {
 
   describe('search/query', () => {
     const collections = [
-      createMockCollection({
+      createMockFolderCollection({
         name: 'posts',
         folder: 'posts',
         fields: [
@@ -626,7 +626,7 @@ describe('Backend', () => {
           { name: 'nested', widget: 'object', fields: [{ name: 'title', widget: 'string' }] },
         ],
       }),
-      createMockCollection({
+      createMockFolderCollection({
         name: 'pages',
         folder: 'pages',
         fields: [
@@ -760,7 +760,7 @@ describe('Backend', () => {
 
     it('should search in file collection using top level fields', async () => {
       const collections = [
-        createMockCollection({
+        createMockFolderCollection({
           name: 'files',
           files: [
             {

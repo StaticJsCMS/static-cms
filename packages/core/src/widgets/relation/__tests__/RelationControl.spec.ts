@@ -9,7 +9,7 @@ import { configLoaded } from '@staticcms/core/actions/config';
 import * as backend from '@staticcms/core/backend';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { store } from '@staticcms/core/store';
-import { createMockCollection } from '@staticcms/test/data/collections.mock';
+import { createMockFolderCollection } from '@staticcms/test/data/collections.mock';
 import { createMockConfig } from '@staticcms/test/data/config.mock';
 import { createMockEntry } from '@staticcms/test/data/entry.mock';
 import { mockRelationField } from '@staticcms/test/data/fields.mock';
@@ -76,7 +76,7 @@ const bodyField: TextField = {
 
 const config = createMockConfig({
   collections: [
-    createMockCollection(
+    createMockFolderCollection(
       {
         name: 'posts',
       },

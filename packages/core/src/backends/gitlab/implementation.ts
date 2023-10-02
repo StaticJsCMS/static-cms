@@ -130,6 +130,7 @@ export default class GitLab implements BackendClass {
       initialWorkflowStatus: this.options.initialWorkflowStatus,
     });
     const user = await this.api.user();
+
     const isCollab = await this.api.hasWriteAccess().catch((error: Error) => {
       error.message = stripIndent`
         Repo "${this.repo}" not found.

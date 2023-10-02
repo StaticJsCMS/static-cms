@@ -12,7 +12,7 @@ import {
   mediaInserted,
 } from '@staticcms/core/actions/mediaLibrary';
 import { store } from '@staticcms/core/store';
-import { createMockCollection } from '@staticcms/test/data/collections.mock';
+import { createMockFolderCollection } from '@staticcms/test/data/collections.mock';
 import { createMockConfig } from '@staticcms/test/data/config.mock';
 import { mockFileField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
@@ -55,7 +55,7 @@ jest.mock('@staticcms/core/lib/hooks/useMediaAsset', () => (url: string) => url)
 
 describe('File Control', () => {
   const FileControl = withFileControl();
-  const collection = createMockCollection({}, mockFileField);
+  const collection = createMockFolderCollection({}, mockFileField);
   const config = createMockConfig({
     collections: [collection],
   });
