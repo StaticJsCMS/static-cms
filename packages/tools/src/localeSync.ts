@@ -1,24 +1,27 @@
 import { join } from 'path';
-import get from "lodash/get";
-import prettier from "prettier";
+import get from 'lodash/get';
+import prettier from 'prettier';
 
-import locales from "@staticcms/core/locales";
-import baseLocale from "@staticcms/core/locales/en";
+import locales from '@staticcms/core/locales';
+import baseLocale from '@staticcms/core/locales/en';
 
-import type { BaseLocalePhrases, LocalePhrases, LocalePhrasesRoot } from "@staticcms/core/locales";
-import { readFileSync, writeFileSync } from "fs";
+import type { BaseLocalePhrases, LocalePhrases, LocalePhrasesRoot } from '@staticcms/core/locales';
+import { readFileSync, writeFileSync } from 'fs';
 
 // const localesDir = "../core/src/locales";
 
-function processLocaleSection(baseSection: BaseLocalePhrases, localeSection: LocalePhrases): LocalePhrases {
-  if (typeof baseSection === "string") {
+function processLocaleSection(
+  baseSection: BaseLocalePhrases,
+  localeSection: LocalePhrases,
+): LocalePhrases {
+  if (typeof baseSection === 'string') {
     return localeSection ?? undefined;
   }
 
   return Object.keys(baseSection).reduce((acc, section) => {
     acc[section] = processLocaleSection(
       baseSection[section],
-      typeof localeSection === "string" ? undefined : localeSection?.[section]
+      typeof localeSection === 'string' ? undefined : localeSection?.[section],
     );
 
     return acc;
@@ -35,24 +38,30 @@ function processLocale(name: string, locale: LocalePhrasesRoot) {
   const path = join(__dirname, '../../core/src/locales', name, `/index.ts`);
 
   const formattedCode = prettier.format(
-    `import type { BaseLocalePhrasesRoot } from '../types';
+    `import type { LocalePhrasesRoot } from '../types';
 
-const en: BaseLocalePhrasesRoot = ${JSON.stringify(
+const ${name}: LocalePhrasesRoot = ${JSON.stringify(
       newLocale,
       function (_k, v) {
         return v === undefined ? null : v;
       },
-      2
+      2,
     )};
 
-export default en;
+export default ${name};
 `,
-    { parser: "typescript", arrowParens: "avoid", trailingComma: "all", singleQuote: true, printWidth: 100 }
+    {
+      parser: 'typescript',
+      arrowParens: 'avoid',
+      trailingComma: 'all',
+      singleQuote: true,
+      printWidth: 100,
+    },
   );
 
   writeFileSync(path, formattedCode);
 
-  const lines = readFileSync(path, "utf-8").split("\n");
+  const lines = readFileSync(path, 'utf-8').split('\n');
 
   const outputLines: string[] = [];
   const parentPath: string[] = [];
@@ -77,8 +86,8 @@ export default en;
       outputLines.push(
         `${emptyLine[1]}${emptyLine[2]}: undefined, // English translation: '${get(
           baseLocale,
-          [...parentPath, emptyLine[2]].join(".")
-        )}'`
+          [...parentPath, emptyLine[2]].join('.'),
+        )}'`,
       );
       continue;
     }
@@ -86,11 +95,15 @@ export default en;
     outputLines.push(line);
   }
 
-  writeFileSync(path, outputLines.join("\n"));
+  writeFileSync(path, outputLines.join('\n'));
 }
 
 (async function () {
-  Object.keys(locales).forEach((locale) => {
+  Object.keys(locales).forEach(locale => {
+    if (locale === 'en') {
+      return;
+    }
+
     processLocale(locale, locales[locale]);
   });
 })();
