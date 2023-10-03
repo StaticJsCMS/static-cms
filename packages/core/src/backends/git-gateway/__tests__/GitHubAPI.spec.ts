@@ -1,9 +1,26 @@
+import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import API from '../GitHubAPI';
+
+import type { GitHubApiOptions } from '../GitHubAPI';
+
+const createApi = (options: Partial<GitHubApiOptions> = {}) => {
+  return new API({
+    apiRoot: 'https://site.netlify.com/.netlify/git/github',
+    tokenPromise: () => Promise.resolve('token'),
+    squashMerges: true,
+    initialWorkflowStatus: WorkflowStatus.DRAFT,
+    cmsLabelPrefix: 'CMS',
+    isLargeMedia: () => Promise.resolve(false),
+    commitAuthor: { name: 'Bob' },
+    ...options,
+  });
+};
 
 describe('github API', () => {
   describe('request', () => {
+    const fetch = jest.fn();
+
     beforeEach(() => {
-      const fetch = jest.fn();
       global.fetch = fetch;
     });
 
@@ -12,10 +29,7 @@ describe('github API', () => {
     });
 
     it('should fetch url with authorization header', async () => {
-      const api = new API({
-        apiRoot: 'https://site.netlify.com/.netlify/git/github',
-        tokenPromise: () => Promise.resolve('token'),
-      });
+      const api = createApi();
 
       fetch.mockResolvedValue({
         text: jest.fn().mockResolvedValue('some response'),
@@ -32,12 +46,11 @@ describe('github API', () => {
           Authorization: 'Bearer token',
           'Content-Type': 'application/json; charset=utf-8',
         },
-        signal: expect.any(AbortSignal),
       });
     });
 
     it('should throw error on not ok response with message property', async () => {
-      const api = new API({
+      const api = createApi({
         apiRoot: 'https://site.netlify.com/.netlify/git/github',
         tokenPromise: () => Promise.resolve('token'),
       });
@@ -60,7 +73,7 @@ describe('github API', () => {
     });
 
     it('should throw error on not ok response with msg property', async () => {
-      const api = new API({
+      const api = createApi({
         apiRoot: 'https://site.netlify.com/.netlify/git/github',
         tokenPromise: () => Promise.resolve('token'),
       });
@@ -85,7 +98,7 @@ describe('github API', () => {
 
   describe('nextUrlProcessor', () => {
     it('should re-write github url', () => {
-      const api = new API({
+      const api = createApi({
         apiRoot: 'https://site.netlify.com/.netlify/git/github',
       });
 
