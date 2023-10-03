@@ -54,7 +54,7 @@ const Login: FC<LoginProps> = ({
         <StaticCmsLogo className={classes['static-cms-logo']} />
       )}
       {error ? (
-        <div className={classes.error} role="alert">
+        <div className={classes.error} data-testid="login-error" role="alert">
           <svg
             aria-hidden="true"
             className={classes['error-icon']}
@@ -77,6 +77,7 @@ const Login: FC<LoginProps> = ({
         onClick={login}
         className={classes.button}
         startIcon={icon}
+        data-testid="login-button"
       >
         {inProgress ? t('auth.loggingIn') : label ?? t('auth.login')}
       </Button>
