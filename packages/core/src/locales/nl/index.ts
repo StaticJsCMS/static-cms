@@ -1,4 +1,4 @@
-import type { LocalePhrasesRoot } from '@staticcms/core/interface';
+import type { LocalePhrasesRoot } from '../types';
 
 const nl: LocalePhrasesRoot = {
   auth: {
@@ -12,6 +12,9 @@ const nl: LocalePhrasesRoot = {
     errors: {
       email: 'Voer uw email in.',
       password: 'Voer uw wachtwoord in.',
+      authTitle: undefined, // English translation: 'Error logging in'
+      authBody: '%{details}',
+      netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         'Netlify Identity instellingen niet gevonden. Wanneer u git-gateway als backend gebruikt moet u de Identity service en Git Gateway activeren in uw Netlify instellingen.',
     },
@@ -25,6 +28,7 @@ const nl: LocalePhrasesRoot = {
     app: {
       errorHeader: 'Fout bij het laden van de CMS configuratie',
       configErrors: 'configuratiefouten',
+      configNotFound: undefined, // English translation: 'Config not found'
       checkConfigYml: 'Controleer je config.yml bestand',
       loadingConfig: 'Configuatie laden...',
       waitingBackend: 'Wachten op server...',
@@ -61,6 +65,10 @@ const nl: LocalePhrasesRoot = {
       other: 'Anders',
       negateLabel: 'Geen %{label}',
     },
+    table: {
+      summary: undefined, // English translation: 'Summary'
+      collection: undefined, // English translation: 'Collection'
+    },
     defaultFields: {
       author: {
         label: 'Auteur',
@@ -69,6 +77,7 @@ const nl: LocalePhrasesRoot = {
         label: 'Bijgewerkt op',
       },
     },
+    notFound: undefined, // English translation: 'Collection not found'
   },
   editor: {
     editorControl: {
@@ -88,6 +97,10 @@ const nl: LocalePhrasesRoot = {
         rangeCountExact: '%{fieldLabel} moet exact %{count} item(s) bevatten.',
         rangeMin: '%{fieldLabel} moet tenminste %{minCount} item(s) bevatten.',
         rangeMax: '%{fieldLabel} moet hoogstens %{maxCount} item(s) bevatten.',
+        invalidPath: undefined, // English translation: ''%{path}' is not a valid path.'
+        pathExists: undefined, // English translation: 'Path '%{path}' already exists.'
+        invalidColor: undefined, // English translation: 'Color '%{color}' is invalid.'
+        invalidHexCode: undefined, // English translation: 'Hex codes must start with a # sign.'
       },
       i18n: {
         writingInLocale: '%{locale} aan het bewerken',
@@ -95,12 +108,16 @@ const nl: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Weet je zeker dat je deze pagina wilt verlaten?',
+      onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Weet u zeker dat u dit gepubliceerde item en uw niet-opgeslagen wijzigingen uit de huidige sessie wilt verwijderen?',
+      onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Weet u zeker dat u dit gepubliceerde item wilt verwijderen?',
       loadingEntry: 'Item laden...',
     },
     editorInterface: {
+      sideBySideI18n: undefined, // English translation: 'I18n Side by Side'
+      preview: undefined, // English translation: 'Preview'
       toggleI18n: 'Wissel i18n',
       togglePreview: 'Wissel voorvertoning',
       toggleScrollSync: 'Synchroniseer scrollen',
@@ -113,6 +130,9 @@ const nl: LocalePhrasesRoot = {
       publishAndDuplicate: 'Publiceer en dupliceer item',
       deleteEntry: 'Item verwijderen',
       publishNow: 'Publiceer nu',
+      discardChanges: undefined, // English translation: 'Discard changes'
+      discardChangesTitle: undefined, // English translation: 'Discard changes'
+      discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
     },
     editorWidgets: {
       markdown: {
@@ -128,22 +148,40 @@ const nl: LocalePhrasesRoot = {
         addComponent: 'Voeg component toe',
         richText: 'Rijke tekst',
         markdown: 'Markdown',
+        type: undefined, // English translation: 'Type...'
       },
       image: {
         choose: 'Kies een afbeelding',
+        chooseMultiple: undefined, // English translation: 'Choose images'
         chooseUrl: 'Voeg toe via URL',
         replaceUrl: 'Vervang met URL',
         promptUrl: 'Voer de URL van de afbeelding in',
         chooseDifferent: 'Kies een andere afbeelding',
+        addMore: undefined, // English translation: 'Add more images'
         remove: 'Verwijder afbeelding',
+        removeAll: undefined, // English translation: 'Remove all images'
       },
       file: {
         choose: 'Kies een bestand',
         chooseUrl: 'Voeg toe via URL',
+        chooseMultiple: undefined, // English translation: 'Choose files'
         replaceUrl: 'Vervang met URL',
         promptUrl: 'Voer de URL van het bestand in',
         chooseDifferent: 'Kies een ander bestand',
+        addMore: undefined, // English translation: 'Add more files'
         remove: 'Verwijder bestand',
+        removeAll: undefined, // English translation: 'Remove all files'
+      },
+      folder: {
+        choose: undefined, // English translation: 'Choose a folder'
+        chooseUrl: undefined, // English translation: 'Insert folder path'
+        chooseMultiple: undefined, // English translation: 'Choose folders'
+        replaceUrl: undefined, // English translation: 'Replace with path'
+        promptUrl: undefined, // English translation: 'Enter path of the folder'
+        chooseDifferent: undefined, // English translation: 'Choose different folder'
+        addMore: undefined, // English translation: 'Add more folders'
+        remove: undefined, // English translation: 'Remove folder'
+        removeAll: undefined, // English translation: 'Remove all folders'
       },
       unknownControl: {
         noControl: "Geen control voor widget '%{widget}'.",
@@ -161,9 +199,18 @@ const nl: LocalePhrasesRoot = {
       },
       datetime: {
         now: 'Nu',
+        invalidDateTitle: undefined, // English translation: 'Invalid date'
+        invalidDateBody: undefined, // English translation: 'The date you entered is invalid.'
       },
       list: {
         add: 'Voeg %{item} toe',
+        addType: undefined, // English translation: 'Add %{item}'
+        noValue: undefined, // English translation: 'No value'
+      },
+      keyvalue: {
+        key: undefined, // English translation: 'Key'
+        value: undefined, // English translation: 'Value'
+        uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
     },
   },
@@ -177,9 +224,13 @@ const nl: LocalePhrasesRoot = {
       copied: 'Gekopieerd',
     },
     mediaLibrary: {
+      onDeleteTitle: undefined, // English translation: 'Delete selected media?'
       onDeleteBody: 'Weet u zeker dat u de geselecteerde media wilt verwijderen?',
+      fileTooLargeTitle: undefined, // English translation: 'File too large'
       fileTooLargeBody:
         'Het bestand is te groot.\n De instellingen staan geen bestanden toe groter dan %{size} kB.',
+      alreadyExistsTitle: undefined, // English translation: 'File already exists'
+      alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
       loading: 'Laden...',
@@ -195,11 +246,29 @@ const nl: LocalePhrasesRoot = {
       deleting: 'Verwijderen...',
       deleteSelected: 'Verwijder selectie',
       chooseSelected: 'Gebruik selectie',
+      dropImages: undefined, // English translation: 'Drop images to upload'
+      dropFiles: undefined, // English translation: 'Drop files to upload'
+    },
+    folderSupport: {
+      newFolder: undefined, // English translation: 'New folder'
+      createNewFolder: undefined, // English translation: 'Create new folder'
+      enterFolderName: undefined, // English translation: 'Enter folder name...'
+      home: undefined, // English translation: 'Home'
+      up: undefined, // English translation: 'Up'
+      upToFolder: undefined, // English translation: 'Up to %{folder}'
     },
   },
   ui: {
+    common: {
+      yes: undefined, // English translation: 'Yes'
+      no: undefined, // English translation: 'No'
+      okay: undefined, // English translation: 'OK'
+    },
     default: {
       goBackToSite: 'Ga terug naar site',
+    },
+    localBackup: {
+      hasLocalBackup: undefined, // English translation: 'Has local backup'
     },
     errorBoundary: {
       title: 'Fout',
@@ -215,13 +284,15 @@ const nl: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
+      darkMode: undefined, // English translation: 'Dark Mode'
       logOut: 'Uitloggen',
     },
     toast: {
       onFailToLoadEntries: 'Kan item niet laden: %{details}',
-      onFailToLoadDeployPreview: 'Kan voorvertoning niet laden: %{details}',
       onFailToPersist: 'Kan item niet opslaan: %{details}',
+      onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'Kan item niet verwijderen: %{details}',
+      onFailToDeleteMedia: undefined, // English translation: 'Failed to delete media: %{details}'
       onFailToUpdateStatus: 'Kan status niet updaten: %{details}',
       missingRequiredField: 'Oeps, sommige verplichte velden zijn niet ingevuld.',
       entrySaved: 'Item opgeslagen',

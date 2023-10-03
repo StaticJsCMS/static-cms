@@ -1,4 +1,4 @@
-import type { LocalePhrasesRoot } from '@staticcms/core/interface';
+import type { LocalePhrasesRoot } from '../types';
 
 const hr: LocalePhrasesRoot = {
   auth: {
@@ -12,6 +12,9 @@ const hr: LocalePhrasesRoot = {
     errors: {
       email: 'Unesite email.',
       password: 'Molimo unisite lozinku.',
+      authTitle: undefined, // English translation: 'Error logging in'
+      authBody: '%{details}',
+      netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         'Nemoguće pristupiti postavkama identita. Kod korištenja git-gateway backenda morate uključiti "Identity service" te "Git Gateway"',
     },
@@ -25,6 +28,7 @@ const hr: LocalePhrasesRoot = {
     app: {
       errorHeader: 'Greška pri učitavanju CMS konfiguracije',
       configErrors: 'Greška u konfiguraciji',
+      configNotFound: undefined, // English translation: 'Config not found'
       checkConfigYml: 'Provjeri config.yml datoteku.',
       loadingConfig: 'Učitavanje konfiguracije...',
       waitingBackend: 'Čekanje na backend...',
@@ -61,6 +65,10 @@ const hr: LocalePhrasesRoot = {
       other: 'Ostalo',
       negateLabel: 'Nije %{label}',
     },
+    table: {
+      summary: undefined, // English translation: 'Summary'
+      collection: undefined, // English translation: 'Collection'
+    },
     defaultFields: {
       author: {
         label: 'Autor',
@@ -69,6 +77,7 @@ const hr: LocalePhrasesRoot = {
         label: 'Ažurirano na',
       },
     },
+    notFound: undefined, // English translation: 'Collection not found'
   },
   editor: {
     editorControl: {
@@ -88,8 +97,10 @@ const hr: LocalePhrasesRoot = {
         rangeCountExact: '%{fieldLabel} mora imati točno %{count} predmeta.',
         rangeMin: '%{fieldLabel} mora imati najmanje %{minCount} predmet(a).',
         rangeMax: '%{fieldLabel} mora imate %{maxCount} ili manje predmeta.',
-        invalidPath: `'%{path}' nije valjana putanja`,
-        pathExists: `Putanja '%{path}' već postoji`,
+        invalidPath: "'%{path}' nije valjana putanja",
+        pathExists: "Putanja '%{path}' već postoji",
+        invalidColor: undefined, // English translation: 'Color '%{color}' is invalid.'
+        invalidHexCode: undefined, // English translation: 'Hex codes must start with a # sign.'
       },
       i18n: {
         writingInLocale: 'Pisanje na %{locale}',
@@ -97,31 +108,31 @@ const hr: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Jeste li sigurni da želite napustiti stranicu?',
+      onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Jeste li sigurni da želite obrisati objavljeni unos, te nespremljene promjene u trenutnoj sesiji?',
+      onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Jeste li sigurni da želite obrisati ovaj objavljeni unos?',
       loadingEntry: 'Učitavanje unosa...',
+    },
+    editorInterface: {
+      sideBySideI18n: undefined, // English translation: 'I18n Side by Side'
+      preview: undefined, // English translation: 'Preview'
+      toggleI18n: undefined, // English translation: 'Toggle i18n'
+      togglePreview: undefined, // English translation: 'Toggle preview'
+      toggleScrollSync: undefined, // English translation: 'Sync scrolling'
     },
     editorToolbar: {
       publish: 'Objavi',
       published: 'Objavljeno',
-      unpublish: 'Obriši iz objava',
       duplicate: 'Dupliciraj',
       publishAndCreateNew: 'Objavi i kreiraj novo',
       publishAndDuplicate: 'Objavi i dupliciraj',
       deleteEntry: 'Obriši unos',
-      saving: 'Spremanje...',
-      save: 'Spremi',
-      deleting: 'Brisanje...',
-      updating: 'Ažuriranje...',
-      status: 'Status: %{status}',
-      backCollection: 'Pisanje u %{collectionLabel} zbirci',
-      unsavedChanges: 'Nespremljene promjene',
-      changesSaved: 'Promjene spremljene',
-      draft: 'Skica',
-      inReview: 'Osvrt',
-      ready: 'Spremno',
       publishNow: 'Objavi sad',
+      discardChanges: undefined, // English translation: 'Discard changes'
+      discardChangesTitle: undefined, // English translation: 'Discard changes'
+      discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
     },
     editorWidgets: {
       markdown: {
@@ -137,16 +148,40 @@ const hr: LocalePhrasesRoot = {
         addComponent: 'Dodaj komponentu',
         richText: 'Bogati tekst',
         markdown: 'Markdown',
+        type: undefined, // English translation: 'Type...'
       },
       image: {
         choose: 'Odaberi sliku',
+        chooseMultiple: undefined, // English translation: 'Choose images'
+        chooseUrl: undefined, // English translation: 'Insert from URL'
+        replaceUrl: undefined, // English translation: 'Replace with URL'
+        promptUrl: undefined, // English translation: 'Enter the URL of the image'
         chooseDifferent: 'Odaberi drugu sliku',
+        addMore: undefined, // English translation: 'Add more images'
         remove: 'Izbriši sliku',
+        removeAll: undefined, // English translation: 'Remove all images'
       },
       file: {
         choose: 'Odaberi datoteku',
+        chooseUrl: undefined, // English translation: 'Insert from URL'
+        chooseMultiple: undefined, // English translation: 'Choose files'
+        replaceUrl: undefined, // English translation: 'Replace with URL'
+        promptUrl: undefined, // English translation: 'Enter the URL of the file'
         chooseDifferent: 'Odaberi drugu datoteku',
+        addMore: undefined, // English translation: 'Add more files'
         remove: 'Obriši datoteku',
+        removeAll: undefined, // English translation: 'Remove all files'
+      },
+      folder: {
+        choose: undefined, // English translation: 'Choose a folder'
+        chooseUrl: undefined, // English translation: 'Insert folder path'
+        chooseMultiple: undefined, // English translation: 'Choose folders'
+        replaceUrl: undefined, // English translation: 'Replace with path'
+        promptUrl: undefined, // English translation: 'Enter path of the folder'
+        chooseDifferent: undefined, // English translation: 'Choose different folder'
+        addMore: undefined, // English translation: 'Add more folders'
+        remove: undefined, // English translation: 'Remove folder'
+        removeAll: undefined, // English translation: 'Remove all folders'
       },
       unknownControl: {
         noControl: "Kontrola nije pronađena za widget '%{widget}'.",
@@ -164,17 +199,38 @@ const hr: LocalePhrasesRoot = {
       },
       datetime: {
         now: 'Sad',
+        invalidDateTitle: undefined, // English translation: 'Invalid date'
+        invalidDateBody: undefined, // English translation: 'The date you entered is invalid.'
+      },
+      list: {
+        add: undefined, // English translation: 'Add %{item}'
+        addType: undefined, // English translation: 'Add %{item}'
+        noValue: undefined, // English translation: 'No value'
+      },
+      keyvalue: {
+        key: undefined, // English translation: 'Key'
+        value: undefined, // English translation: 'Value'
+        uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
     },
   },
   mediaLibrary: {
     mediaLibraryCard: {
       draft: 'Skica',
+      copy: undefined, // English translation: 'Copy'
+      copyUrl: undefined, // English translation: 'Copy URL'
+      copyPath: undefined, // English translation: 'Copy Path'
+      copyName: undefined, // English translation: 'Copy Name'
+      copied: undefined, // English translation: 'Copied'
     },
     mediaLibrary: {
+      onDeleteTitle: undefined, // English translation: 'Delete selected media?'
       onDeleteBody: 'Jeste li sigurni da želite obrisati odabrane medijske datoteke?',
+      fileTooLargeTitle: undefined, // English translation: 'File too large'
       fileTooLargeBody:
         'Datoteka prevelika.\nKonfigurirano da ne podržava datoteke veće od %{size} kB.',
+      alreadyExistsTitle: undefined, // English translation: 'File already exists'
+      alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
       loading: 'Učitavanje...',
@@ -190,11 +246,29 @@ const hr: LocalePhrasesRoot = {
       deleting: 'Brisanje...',
       deleteSelected: 'Obriši označeno',
       chooseSelected: 'Odaberi označeno',
+      dropImages: undefined, // English translation: 'Drop images to upload'
+      dropFiles: undefined, // English translation: 'Drop files to upload'
+    },
+    folderSupport: {
+      newFolder: undefined, // English translation: 'New folder'
+      createNewFolder: undefined, // English translation: 'Create new folder'
+      enterFolderName: undefined, // English translation: 'Enter folder name...'
+      home: undefined, // English translation: 'Home'
+      up: undefined, // English translation: 'Up'
+      upToFolder: undefined, // English translation: 'Up to %{folder}'
     },
   },
   ui: {
+    common: {
+      yes: undefined, // English translation: 'Yes'
+      no: undefined, // English translation: 'No'
+      okay: undefined, // English translation: 'OK'
+    },
     default: {
       goBackToSite: 'Povratak na stranicu',
+    },
+    localBackup: {
+      hasLocalBackup: undefined, // English translation: 'Has local backup'
     },
     errorBoundary: {
       title: 'Greška',
@@ -210,19 +284,20 @@ const hr: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
+      darkMode: undefined, // English translation: 'Dark Mode'
       logOut: 'Odjava',
     },
     toast: {
       onFailToLoadEntries: 'Neuspjelo dohvaćanje unosa: %{details}',
-      onFailToLoadDeployPreview: 'Neuspjelo dohvaćanje pregleda: %{details}',
       onFailToPersist: 'Neuspjelo spremanje unosa: %{details}',
+      onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'Neuspjelo brisanje unosa: %{details}',
+      onFailToDeleteMedia: undefined, // English translation: 'Failed to delete media: %{details}'
       onFailToUpdateStatus: 'Neuspjelo ažuriranje statusa: %{details}',
       missingRequiredField: 'Uups, preskočili ste obvezno polje. Molimo popunite prije spremanja.',
       entrySaved: 'Unos spremljen',
       entryPublished: 'Unos objavljen',
       onFailToPublishEntry: 'Neuspjelo objavljivanje unosa: %{details}',
-      onFailToUnpublishEntry: 'Neuspjelo brisanje unosa: %{details}',
       entryUpdated: 'Status unosa ažuriran',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Odjavljeni ste, molimo spremite sve podatke i prijavite se ponovno',

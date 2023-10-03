@@ -1,4 +1,4 @@
-import type { LocalePhrasesRoot } from '@staticcms/core/interface';
+import type { LocalePhrasesRoot } from '../types';
 
 const pt: LocalePhrasesRoot = {
   auth: {
@@ -12,6 +12,9 @@ const pt: LocalePhrasesRoot = {
     errors: {
       email: 'Certifique-se de inserir seu e-mail.',
       password: 'Por favor, insira sua senha.',
+      authTitle: undefined, // English translation: 'Error logging in'
+      authBody: '%{details}',
+      netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         'Não foi possível acessar as configurações de identidade. Ao usar o back-end git-gateway, certifique-se de habilitar o serviço Identity e o Git Gateway.',
     },
@@ -25,6 +28,7 @@ const pt: LocalePhrasesRoot = {
     app: {
       errorHeader: 'Erro ao carregar a configuração do CMS',
       configErrors: 'Erros de configuração',
+      configNotFound: undefined, // English translation: 'Config not found'
       checkConfigYml: 'Verifique o arquivo config.yml.',
       loadingConfig: 'Carregando configuração...',
       waitingBackend: 'Aguardando o back-end...',
@@ -61,6 +65,10 @@ const pt: LocalePhrasesRoot = {
       other: 'Outro',
       negateLabel: 'Não %{label}',
     },
+    table: {
+      summary: undefined, // English translation: 'Summary'
+      collection: undefined, // English translation: 'Collection'
+    },
     defaultFields: {
       author: {
         label: 'Autor',
@@ -69,6 +77,7 @@ const pt: LocalePhrasesRoot = {
         label: 'Atualizado em',
       },
     },
+    notFound: undefined, // English translation: 'Collection not found'
   },
   editor: {
     editorControl: {
@@ -88,8 +97,10 @@ const pt: LocalePhrasesRoot = {
         rangeCountExact: '%{fieldLabel} deve ser exatamente %{count}.',
         rangeMin: '%{fieldLabel} deve ter, pelo menos, %{minCount}.',
         rangeMax: '%{fieldLabel} deve ter %{maxCount} ou menos.',
-        invalidPath: `'%{path}' não é um caminho válido`,
-        pathExists: `O caminho '%{path}' já existe`,
+        invalidPath: "'%{path}' não é um caminho válido",
+        pathExists: "O caminho '%{path}' já existe",
+        invalidColor: undefined, // English translation: 'Color '%{color}' is invalid.'
+        invalidHexCode: undefined, // English translation: 'Hex codes must start with a # sign.'
       },
       i18n: {
         writingInLocale: 'Escrevendo em %{locale}',
@@ -97,12 +108,16 @@ const pt: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Tem certeza que deseja sair desta página?',
+      onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Tem certeza de que deseja excluir esta entrada publicada, bem como as alterações não salvas da sessão atual?',
+      onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Tem certeza de que deseja excluir esta entrada publicada?',
       loadingEntry: 'Carregando entrada...',
     },
     editorInterface: {
+      sideBySideI18n: undefined, // English translation: 'I18n Side by Side'
+      preview: undefined, // English translation: 'Preview'
       toggleI18n: 'Mudar i18n',
       togglePreview: 'Mudar pré-visualização',
       toggleScrollSync: 'Sincronizar rolagem',
@@ -110,12 +125,14 @@ const pt: LocalePhrasesRoot = {
     editorToolbar: {
       publish: 'Publicar',
       published: 'Publicado',
-      unpublish: 'Despublicar',
       duplicate: 'Duplicado',
       publishAndCreateNew: 'Publicar e criar novo(a)',
       publishAndDuplicate: 'Publicar e duplicar',
       deleteEntry: 'Excluir entrada',
       publishNow: 'Publicar agora',
+      discardChanges: undefined, // English translation: 'Discard changes'
+      discardChangesTitle: undefined, // English translation: 'Discard changes'
+      discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
     },
     editorWidgets: {
       markdown: {
@@ -131,22 +148,40 @@ const pt: LocalePhrasesRoot = {
         addComponent: 'Adicionar Componente',
         richText: 'Rich Text',
         markdown: 'Markdown',
+        type: undefined, // English translation: 'Type...'
       },
       image: {
         choose: 'Escolha uma imagem',
+        chooseMultiple: undefined, // English translation: 'Choose images'
         chooseUrl: 'Inserir de uma URL',
         replaceUrl: 'Substituir com uma URL',
         promptUrl: 'Insira a URL da imagem',
         chooseDifferent: 'Escolha uma imagem diferente',
+        addMore: undefined, // English translation: 'Add more images'
         remove: 'Remover imagem',
+        removeAll: undefined, // English translation: 'Remove all images'
       },
       file: {
         choose: 'Escolha um arquivo',
         chooseUrl: 'Inserir de uma URL',
+        chooseMultiple: undefined, // English translation: 'Choose files'
         replaceUrl: 'Substituir com uma URL',
         promptUrl: 'Insira a URL do arquivo',
         chooseDifferent: 'Escolha um arquivo diferente',
+        addMore: undefined, // English translation: 'Add more files'
         remove: 'Remover arquivo',
+        removeAll: undefined, // English translation: 'Remove all files'
+      },
+      folder: {
+        choose: undefined, // English translation: 'Choose a folder'
+        chooseUrl: undefined, // English translation: 'Insert folder path'
+        chooseMultiple: undefined, // English translation: 'Choose folders'
+        replaceUrl: undefined, // English translation: 'Replace with path'
+        promptUrl: undefined, // English translation: 'Enter path of the folder'
+        chooseDifferent: undefined, // English translation: 'Choose different folder'
+        addMore: undefined, // English translation: 'Add more folders'
+        remove: undefined, // English translation: 'Remove folder'
+        removeAll: undefined, // English translation: 'Remove all folders'
       },
       unknownControl: {
         noControl: "Nenhum controle para o widget '%{widget}'.",
@@ -164,10 +199,18 @@ const pt: LocalePhrasesRoot = {
       },
       datetime: {
         now: 'Agora',
+        invalidDateTitle: undefined, // English translation: 'Invalid date'
+        invalidDateBody: undefined, // English translation: 'The date you entered is invalid.'
       },
       list: {
         add: 'Adicionar %{item}',
         addType: 'Adicionar %{item} item',
+        noValue: undefined, // English translation: 'No value'
+      },
+      keyvalue: {
+        key: undefined, // English translation: 'Key'
+        value: undefined, // English translation: 'Value'
+        uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
     },
   },
@@ -181,9 +224,13 @@ const pt: LocalePhrasesRoot = {
       copied: 'Copiado',
     },
     mediaLibrary: {
+      onDeleteTitle: undefined, // English translation: 'Delete selected media?'
       onDeleteBody: 'Tem certeza de que deseja excluir a mídia selecionada?',
+      fileTooLargeTitle: undefined, // English translation: 'File too large'
       fileTooLargeBody:
         'Arquivo muito grande.\nConfigurado para não permitir arquivos maiores que %{size} kB.',
+      alreadyExistsTitle: undefined, // English translation: 'File already exists'
+      alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
       loading: 'Carregando...',
@@ -199,11 +246,29 @@ const pt: LocalePhrasesRoot = {
       deleting: 'Excluindo...',
       deleteSelected: 'Excluir selecionado',
       chooseSelected: 'Escolher selecionado',
+      dropImages: undefined, // English translation: 'Drop images to upload'
+      dropFiles: undefined, // English translation: 'Drop files to upload'
+    },
+    folderSupport: {
+      newFolder: undefined, // English translation: 'New folder'
+      createNewFolder: undefined, // English translation: 'Create new folder'
+      enterFolderName: undefined, // English translation: 'Enter folder name...'
+      home: undefined, // English translation: 'Home'
+      up: undefined, // English translation: 'Up'
+      upToFolder: undefined, // English translation: 'Up to %{folder}'
     },
   },
   ui: {
+    common: {
+      yes: undefined, // English translation: 'Yes'
+      no: undefined, // English translation: 'No'
+      okay: undefined, // English translation: 'OK'
+    },
     default: {
       goBackToSite: 'Voltar ao site',
+    },
+    localBackup: {
+      hasLocalBackup: undefined, // English translation: 'Has local backup'
     },
     errorBoundary: {
       title: 'Erro',
@@ -219,13 +284,15 @@ const pt: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
+      darkMode: undefined, // English translation: 'Dark Mode'
       logOut: 'Sair',
     },
     toast: {
       onFailToLoadEntries: 'Falha ao carregar a entrada: %{details}',
-      onFailToLoadDeployPreview: 'Falha ao carregar a pré-visualização: %{details}',
       onFailToPersist: 'Falha ao persistir na entrada: %{details}',
+      onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'Falha ao excluir a entrada: %{details}',
+      onFailToDeleteMedia: undefined, // English translation: 'Failed to delete media: %{details}'
       onFailToUpdateStatus: 'Falha ao atualizar status: %{details}',
       missingRequiredField:
         'Ops, você perdeu um campo obrigatório. Por favor, preencha antes de salvar.',

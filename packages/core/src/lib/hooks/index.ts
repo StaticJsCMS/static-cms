@@ -8,3 +8,4 @@ export { default as useMediaFiles } from './useMediaFiles';
 export { default as useMediaInsert } from './useMediaInsert';
 export { default as useMediaPersist } from './useMediaPersist';
 export { default as useUUID } from './useUUID';
+export { default as useTranslate } from './useTranslate';

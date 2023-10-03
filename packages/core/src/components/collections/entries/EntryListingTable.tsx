@@ -16,7 +16,10 @@ import type { t } from 'react-polyglot';
 export interface EntryListingTableProps {
   isSingleCollectionInList: boolean;
   entryData: CollectionEntryData[];
-  summaryFieldHeaders: string[];
+  summaryFields: {
+    name: string;
+    label: string;
+  }[];
   canLoadMore: boolean;
   isLoadingEntries: boolean;
   loadNext: () => void;
@@ -26,7 +29,7 @@ export interface EntryListingTableProps {
 const EntryListingTable: FC<EntryListingTableProps> = ({
   isSingleCollectionInList,
   entryData,
-  summaryFieldHeaders,
+  summaryFields,
   canLoadMore,
   isLoadingEntries,
   loadNext,
@@ -70,6 +73,18 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
     fetchMoreOnBottomReached(scrollHeight, scrollTop, clientHeight);
   }, [clientHeight, fetchMoreOnBottomReached, scrollHeight, scrollTop]);
 
+  const baseColumnHeaders = useMemo(() => {
+    const cols = [...summaryFields.map(f => f.label), ''];
+
+    if (!isSingleCollectionInList) {
+      cols.unshift(t('collection.table.collection'));
+    }
+
+    return cols;
+  }, [isSingleCollectionInList, summaryFields, t]);
+
+  const columnFields = useMemo(() => [...summaryFields.map(f => f.name)], [summaryFields]);
+
   return (
     <div className={entriesClasses['entry-listing-table']}>
       <div
@@ -80,13 +95,7 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
           'CMS_Scrollbar_secondary',
         )}
       >
-        <Table
-          columns={
-            !isSingleCollectionInList
-              ? ['Collection', ...summaryFieldHeaders, '']
-              : [...summaryFieldHeaders, '']
-          }
-        >
+        <Table columns={baseColumnHeaders}>
           {paddingTop > 0 && (
             <tr>
               <td style={{ height: `${paddingTop}px` }} />
@@ -98,8 +107,9 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
               <EntryRow
                 key={virtualRow.index}
                 collection={data.collection}
+                collectionLabel={data.collectionLabel}
                 entry={data.entry}
-                summaryFields={data.summaryFields}
+                columnFields={columnFields}
                 t={t}
               />
             );

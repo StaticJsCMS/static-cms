@@ -30,7 +30,9 @@ import bg from './bg';
 import zh_Hans from './zh_Hans';
 import he from './he';
 
-import type { LocalePhrasesRoot } from '../interface';
+import type { LocalePhrasesRoot } from './types';
+
+export * from './types';
 
 const locales: Record<string, LocalePhrasesRoot> = {
   cs,

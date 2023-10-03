@@ -17,7 +17,6 @@ import type {
   EventData,
   EventListener,
   FieldPreviewComponent,
-  LocalePhrasesRoot,
   LoginEventListener,
   LogoutEventListener,
   MountedEventListener,
@@ -36,6 +35,7 @@ import type {
   WidgetParam,
   WidgetValueSerializer,
 } from '../interface';
+import type { LocalePhrasesRoot } from '../locales/types';
 
 export const allowedEvents = [
   'mounted',
