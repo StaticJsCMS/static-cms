@@ -12,12 +12,12 @@ describe('DateTime getDefaultValue', () => {
 
   describe('datetime', () => {
     it("should use today's date", () => {
-      expect(getDefaultValue(undefined, mockDateTimeField)).toEqual('2023-02-12T10:15:35.000');
+      expect(getDefaultValue(undefined, mockDateTimeField)).toEqual('2023-02-12T10:15:35');
     });
 
     it('should use provided default', () => {
-      expect(getDefaultValue('2022-06-18T14:30:01.000', mockDateTimeField)).toEqual(
-        '2022-06-18T14:30:01.000',
+      expect(getDefaultValue('2022-06-18T14:30:01', mockDateTimeField)).toEqual(
+        '2022-06-18T14:30:01',
       );
     });
   });
@@ -34,11 +34,11 @@ describe('DateTime getDefaultValue', () => {
 
   describe('time', () => {
     it("should use today's date", () => {
-      expect(getDefaultValue(undefined, mockTimeField)).toEqual('10:15:35.000');
+      expect(getDefaultValue(undefined, mockTimeField)).toEqual('10:15:35');
     });
 
     it('should use provided default', () => {
-      expect(getDefaultValue('14:30:01.000', mockTimeField)).toEqual('14:30:01.000');
+      expect(getDefaultValue('14:30:01', mockTimeField)).toEqual('14:30:01');
     });
   });
 });

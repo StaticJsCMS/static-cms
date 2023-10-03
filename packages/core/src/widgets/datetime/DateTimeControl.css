@@ -2,15 +2,45 @@
 }
 
 .CMS_WidgetDateTime_wrapper {
-  @apply !w-date-widget;
 }
 
-.CMS_WidgetDateTime_date-input {
+.CMS_WidgetDateTime_date {
+  @apply flex-grow;
 }
 
-.CMS_WidgetDateTime_time-input {
+.CMS_WidgetDateTime_time {
+  @apply flex-grow;
 }
 
-.CMS_WidgetDateTime_datetime-input {
-  @apply truncate;
+.CMS_WidgetDateTime_datetime {
+}
+
+.CMS_WidgetDateTime_inputs {
+  @apply flex
+    items-center
+    w-full
+    ps-1.5
+    pe-2.5
+    gap-2;
+
+  & .CMS_WidgetDateTime_input-wrapper {
+    @apply flex-grow;
+
+    & .CMS_WidgetDateTime_input {
+      @apply py-1
+        pl-2;
+    }
+
+    & .MuiOutlinedInput-root {
+      & .MuiOutlinedInput-notchedOutline {
+        @apply border-0;
+      }
+
+      &.Mui-focused {
+        & .MuiOutlinedInput-notchedOutline {
+          @apply border-0;
+        }
+      }
+    }
+  }
 }
