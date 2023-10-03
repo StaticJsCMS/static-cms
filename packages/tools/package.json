@@ -4,6 +4,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "format": "prettier \"src/**/*.{js,jsx,ts,tsx,css}\" --write",
+    "lint": "prettier \"src/**/*.{js,jsx,ts,tsx,css}\" --list-different",
     "sync-locales": "ts-node -r tsconfig-paths/register src/localeSync.ts",
     "type-check": "tsc --watch"
   },
