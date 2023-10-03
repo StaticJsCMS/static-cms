@@ -568,11 +568,6 @@ export abstract class BackendClass {
   }>;
 }
 
-export interface LocalePhrasesRoot {
-  [property: string]: LocalePhrases;
-}
-export type LocalePhrases = string | { [property: string]: LocalePhrases };
-
 export type CustomIcon = FunctionComponent;
 
 export type WidgetValueSerializer = {

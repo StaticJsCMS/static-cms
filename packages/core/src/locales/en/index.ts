@@ -1,6 +1,6 @@
-import type { LocalePhrasesRoot } from '@staticcms/core/interface';
+import type { BaseLocalePhrasesRoot } from '../types';
 
-const en: LocalePhrasesRoot = {
+const en: BaseLocalePhrasesRoot = {
   auth: {
     login: 'Login',
     loggingIn: 'Logging in...',

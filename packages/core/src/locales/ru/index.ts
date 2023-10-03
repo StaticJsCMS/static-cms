@@ -1,4 +1,4 @@
-import type { LocalePhrasesRoot } from '@staticcms/core/interface';
+import type { LocalePhrasesRoot } from '../types';
 
 const ru: LocalePhrasesRoot = {
   auth: {
