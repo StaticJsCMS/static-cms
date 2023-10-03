@@ -427,31 +427,37 @@
   --scrollbar-background: var(--background-dark);
 }
 
-.CMS_Scrollbar_root.CMS_Scrollbar_secondary {
+.CMS_Scrollbar_root.CMS_Scrollbar_secondary,
+.MuiMultiSectionDigitalClock-root {
   --scrollbar-foreground: var(--scrollbar-light);
   --scrollbar-background: var(--background-main);
 }
 
-.CMS_Scrollbar_root {
+.CMS_Scrollbar_root,
+.MuiMultiSectionDigitalClock-root {
   /* Foreground, Background */
   scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
 }
 
-.CMS_Scrollbar_root::-webkit-scrollbar {
+.CMS_Scrollbar_root::-webkit-scrollbar,
+.MuiMultiSectionDigitalClock-root::-webkit-scrollbar {
   width: 10px; /* Mostly for vertical scrollbars */
   height: 10px; /* Mostly for horizontal scrollbars */
 }
 
-.CMS_Scrollbar_root::-webkit-scrollbar-corner {
+.CMS_Scrollbar_root::-webkit-scrollbar-corner,
+.MuiMultiSectionDigitalClock-root::-webkit-scrollbar-corner {
   background: rgba(0, 0, 0, 0);
 }
 
-.CMS_Scrollbar_root::-webkit-scrollbar-thumb {
+.CMS_Scrollbar_root::-webkit-scrollbar-thumb,
+.MuiMultiSectionDigitalClock-root::-webkit-scrollbar-thumb {
   /* Foreground */
   background: var(--scrollbar-foreground);
 }
 
-.CMS_Scrollbar_root::-webkit-scrollbar-track {
+.CMS_Scrollbar_root::-webkit-scrollbar-track,
+.MuiMultiSectionDigitalClock-root::-webkit-scrollbar-track {
   /* Background */
   background: var(--scrollbar-background);
 }

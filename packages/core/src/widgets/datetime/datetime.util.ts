@@ -14,7 +14,6 @@ function getDisplayFormat(
   dateFormat: string | boolean,
   timeFormat: string | boolean,
   storageFormat: string,
-  timezoneExtra: string,
 ) {
   if (typeof dateFormat === 'string' || typeof timeFormat === 'string') {
     const formatParts: string[] = [];
@@ -27,7 +26,7 @@ function getDisplayFormat(
     if (typeof timeFormat === 'string' && isNotEmpty(timeFormat)) {
       formatParts.push(timeFormat);
     } else if (timeFormat !== false) {
-      formatParts.push(`${DEFAULT_TIME_FORMAT}${timezoneExtra}`);
+      formatParts.push(`${DEFAULT_TIME_FORMAT}`);
     }
 
     if (formatParts.length > 0) {
@@ -40,10 +39,10 @@ function getDisplayFormat(
   }
 
   if (dateFormat === false) {
-    return storageFormat ?? `${DEFAULT_TIME_FORMAT}${timezoneExtra}`;
+    return storageFormat ?? `${DEFAULT_TIME_FORMAT}`;
   }
 
-  return storageFormat ?? `${DEFAULT_DATETIME_FORMAT}${timezoneExtra}`;
+  return storageFormat ?? `${DEFAULT_DATETIME_FORMAT}`;
 }
 
 export function getDatetimeFormats(field: DateTimeField): DateTimeFormats;
@@ -61,18 +60,21 @@ export function getDatetimeFormats(field: DateTimeField | undefined) {
   const timeFormat: string | boolean = field.time_format ?? true;
 
   let storageFormat = field.format;
+  let shouldAddTimezoneExtra = false;
   if (timeFormat === false) {
     storageFormat = field.format ?? DEFAULT_DATE_FORMAT;
   } else if (dateFormat === false) {
-    storageFormat = field.format ?? `${DEFAULT_TIME_FORMAT}${timezoneExtra}`;
+    storageFormat = field.format ?? DEFAULT_TIME_FORMAT;
+    shouldAddTimezoneExtra = !field.format;
   } else {
-    storageFormat = field.format ?? `${DEFAULT_DATETIME_FORMAT}${timezoneExtra}`;
+    storageFormat = field.format ?? DEFAULT_DATETIME_FORMAT;
+    shouldAddTimezoneExtra = !field.format;
   }
 
-  const displayFormat = getDisplayFormat(dateFormat, timeFormat, storageFormat, timezoneExtra);
+  const displayFormat = getDisplayFormat(dateFormat, timeFormat, storageFormat);
 
   return {
-    storageFormat,
+    storageFormat: `${storageFormat}${shouldAddTimezoneExtra ? timezoneExtra : ''}`,
     dateFormat,
     timeFormat,
     displayFormat,
