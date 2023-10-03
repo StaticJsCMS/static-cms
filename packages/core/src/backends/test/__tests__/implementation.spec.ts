@@ -1,12 +1,17 @@
 import { createMockConfig } from '@staticcms/test/data/config.mock';
 import TestBackend, { getFolderFiles } from '../implementation';
+import { resolveBackend } from '@staticcms/core/backend';
 
-import type { Config } from '@staticcms/core/interface';
+jest.mock('@staticcms/core/backend');
 
 describe('test backend implementation', () => {
-  const config = createMockConfig({ collections: [] }) as Config;
+  let backend: TestBackend;
 
   beforeEach(() => {
+    backend = new TestBackend(createMockConfig({ collections: [] }));
+
+    (resolveBackend as jest.Mock).mockResolvedValue(null);
+
     jest.resetModules();
   });
 
@@ -20,8 +25,6 @@ describe('test backend implementation', () => {
           },
         },
       };
-
-      const backend = new TestBackend(config);
 
       await expect(backend.getEntry('posts/some-post.md')).resolves.toEqual({
         file: { path: 'posts/some-post.md', id: null },
@@ -43,8 +46,6 @@ describe('test backend implementation', () => {
         },
       };
 
-      const backend = new TestBackend(config);
-
       await expect(backend.getEntry('posts/dir1/dir2/some-post.md')).resolves.toEqual({
         file: { path: 'posts/dir1/dir2/some-post.md', id: null },
         data: 'post content',
@@ -55,8 +56,6 @@ describe('test backend implementation', () => {
   describe('persistEntry', () => {
     it('should persist entry', async () => {
       window.repoFiles = {};
-
-      const backend = new TestBackend(config);
 
       const entry = {
         dataFiles: [{ path: 'posts/some-post.md', raw: 'content', slug: 'some-post.md' }],
@@ -78,19 +77,17 @@ describe('test backend implementation', () => {
       window.repoFiles = {
         pages: {
           'other-page.md': {
-            path: 'path/to/some-post.md',
+            path: 'path/to/other-page.md',
             content: 'content',
           },
         },
         posts: {
           'other-post.md': {
-            path: 'path/to/some-post.md',
+            path: 'path/to/other-post.md',
             content: 'content',
           },
         },
       };
-
-      const backend = new TestBackend(config);
 
       const entry = {
         dataFiles: [{ path: 'posts/new-post.md', raw: 'content', slug: 'new-post.md' }],
@@ -101,15 +98,17 @@ describe('test backend implementation', () => {
       expect(window.repoFiles).toEqual({
         pages: {
           'other-page.md': {
+            path: 'path/to/other-page.md',
             content: 'content',
           },
         },
         posts: {
           'new-post.md': {
-            content: 'content',
             path: 'posts/new-post.md',
+            content: 'content',
           },
           'other-post.md': {
+            path: 'path/to/other-post.md',
             content: 'content',
           },
         },
@@ -118,8 +117,6 @@ describe('test backend implementation', () => {
 
     it('should persist nested entry', async () => {
       window.repoFiles = {};
-
-      const backend = new TestBackend(config);
 
       const slug = 'dir1/dir2/some-post.md';
       const path = `posts/${slug}`;
@@ -155,8 +152,6 @@ describe('test backend implementation', () => {
         },
       };
 
-      const backend = new TestBackend(config);
-
       const slug = 'dir1/dir2/some-post.md';
       const path = `posts/${slug}`;
       const entry = { dataFiles: [{ path, raw: 'new content', slug }], assets: [] };
@@ -188,8 +183,6 @@ describe('test backend implementation', () => {
         },
       };
 
-      const backend = new TestBackend(config);
-
       await backend.deleteFiles(['posts/some-post.md']);
       expect(window.repoFiles).toEqual({
         posts: {},
@@ -209,8 +202,6 @@ describe('test backend implementation', () => {
           },
         },
       };
-
-      const backend = new TestBackend(config);
 
       await backend.deleteFiles(['posts/dir1/dir2/some-post.md']);
       expect(window.repoFiles).toEqual({
