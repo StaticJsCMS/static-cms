@@ -1193,6 +1193,5 @@ export interface CollectionEntryData {
   viewStyle: ViewStyle;
   entry: Entry;
   key: string;
-  summaryFields: string[];
   collectionLabel?: string;
 }

@@ -25,14 +25,14 @@ export interface EntryRowProps {
   entry: Entry;
   collection: Collection;
   collectionLabel?: string;
-  summaryFields: string[];
+  columnFields: string[];
 }
 
 const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
   collection,
   entry,
   collectionLabel,
-  summaryFields,
+  columnFields,
   t,
 }) => {
   const path = useMemo(
@@ -89,7 +89,7 @@ const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
           {collectionLabel}
         </TableCell>
       ) : null}
-      {summaryFields.map(fieldName => {
+      {columnFields.map(fieldName => {
         if (fieldName === 'summary') {
           return (
             <TableCell key={fieldName} to={path}>

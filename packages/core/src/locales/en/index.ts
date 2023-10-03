@@ -65,6 +65,10 @@ const en: LocalePhrasesRoot = {
       other: 'Other',
       negateLabel: 'Not %{label}',
     },
+    table: {
+      summary: 'Summary',
+      collection: 'Collection',
+    },
     defaultFields: {
       author: {
         label: 'Author',
