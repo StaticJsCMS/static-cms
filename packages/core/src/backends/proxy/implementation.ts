@@ -1,4 +1,10 @@
-import { APIError, basename, blobToFileObj, unsentRequest } from '@staticcms/core/lib/util';
+import {
+  APIError,
+  EditorialWorkflowError,
+  basename,
+  blobToFileObj,
+  unsentRequest,
+} from '@staticcms/core/lib/util';
 import AuthenticationPage from './AuthenticationPage';
 
 import type {
@@ -11,6 +17,7 @@ import type {
   PersistOptions,
   User,
   ImplementationMediaFile,
+  UnpublishedEntry,
 } from '@staticcms/core/interface';
 import type { Cursor } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
@@ -51,6 +58,7 @@ export default class ProxyBackend implements BackendClass {
   publicFolder?: string;
   options: {};
   branch: string;
+  cmsLabelPrefix?: string;
 
   constructor(config: Config, options = {}) {
     if (!config.backend.proxy_url) {
@@ -62,6 +70,7 @@ export default class ProxyBackend implements BackendClass {
     this.mediaFolder = config.media_folder;
     this.publicFolder = config.public_folder;
     this.options = options;
+    this.cmsLabelPrefix = config.backend.cms_label_prefix;
   }
 
   isGitBackend() {
@@ -212,5 +221,87 @@ export default class ProxyBackend implements BackendClass {
     depth: number,
   ): Promise<ImplementationEntry[]> {
     return this.entriesByFolder(folder, extension, depth);
+  }
+
+  unpublishedEntries(): Promise<string[]> {
+    return this.request({
+      action: 'unpublishedEntries',
+      params: { branch: this.branch },
+    });
+  }
+
+  async unpublishedEntry({
+    id,
+    collection,
+    slug,
+  }: {
+    id?: string;
+    collection?: string;
+    slug?: string;
+  }) {
+    try {
+      const entry: UnpublishedEntry = await this.request({
+        action: 'unpublishedEntry',
+        params: { branch: this.branch, id, collection, slug, cmsLabelPrefix: this.cmsLabelPrefix },
+      });
+
+      return entry;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      if (e.status === 404) {
+        throw new EditorialWorkflowError('content is not under editorial workflow', true);
+      }
+      throw e;
+    }
+  }
+
+  async unpublishedEntryDataFile(collection: string, slug: string, path: string, id: string) {
+    const { data } = await this.request<{ data: string }>({
+      action: 'unpublishedEntryDataFile',
+      params: { branch: this.branch, collection, slug, path, id },
+    });
+    return data;
+  }
+
+  async unpublishedEntryMediaFile(collection: string, slug: string, path: string, id: string) {
+    const file = await this.request<MediaFile>({
+      action: 'unpublishedEntryMediaFile',
+      params: { branch: this.branch, collection, slug, path, id },
+    });
+    return deserializeMediaFile(file);
+  }
+
+  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: string) {
+    return this.request<void>({
+      action: 'updateUnpublishedEntryStatus',
+      params: {
+        branch: this.branch,
+        collection,
+        slug,
+        newStatus,
+        cmsLabelPrefix: this.cmsLabelPrefix,
+      },
+    });
+  }
+
+  publishUnpublishedEntry(collection: string, slug: string) {
+    return this.request<void>({
+      action: 'publishUnpublishedEntry',
+      params: { branch: this.branch, collection, slug },
+    });
+  }
+
+  deleteUnpublishedEntry(collection: string, slug: string) {
+    return this.request<void>({
+      action: 'deleteUnpublishedEntry',
+      params: { branch: this.branch, collection, slug },
+    });
+  }
+
+  getDeployPreview(collection: string, slug: string) {
+    return this.request<{ url: string; status: string } | null>({
+      action: 'getDeployPreview',
+      params: { branch: this.branch, collection, slug },
+    });
   }
 }

@@ -9,7 +9,7 @@ import type { FC, MouseEvent } from 'react';
 
 import './SettingsButton.css';
 
-const classes = generateClassNames('WidgetCode_SettingsButton', ['root', 'icon']);
+const classes = generateClassNames('WidgetCode_SettingsButton', ['root']);
 
 export interface SettingsButtonProps {
   showClose?: boolean;
@@ -20,20 +20,15 @@ export interface SettingsButtonProps {
 const SettingsButton: FC<SettingsButtonProps> = ({ showClose = false, disabled, onClick }) => {
   return (
     <IconButton
+      icon={showClose ? CloseIcon : SettingsIcon}
       onClick={onClick}
       size="small"
       color="secondary"
       variant="text"
       disabled={disabled}
-      className={classes.root}
+      rootClassName={classes.root}
       aria-label="toggle settings"
-    >
-      {showClose ? (
-        <CloseIcon className={classes.icon} />
-      ) : (
-        <SettingsIcon className={classes.icon} />
-      )}
-    </IconButton>
+    />
   );
 };
 

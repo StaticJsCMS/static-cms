@@ -2,6 +2,7 @@ import { stripIndent } from 'common-tags';
 import trimStart from 'lodash/trimStart';
 import semaphore from 'semaphore';
 
+import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import { NetlifyAuthenticator } from '@staticcms/core/lib/auth';
 import {
   AccessTokenError,
@@ -23,14 +24,20 @@ import {
   runWithLock,
   unsentRequest,
 } from '@staticcms/core/lib/util';
+import { getPreviewStatus } from '@staticcms/core/lib/util/API';
+import {
+  branchFromContentKey,
+  contentKeyFromBranch,
+  generateContentKey,
+} from '@staticcms/core/lib/util/APIUtils';
+import { unpublishedEntries } from '@staticcms/core/lib/util/implementation';
 import API, { API_NAME } from './API';
 import AuthenticationPage from './AuthenticationPage';
 import GitLfsClient from './git-lfs-client';
 
-import type { Semaphore } from 'semaphore';
 import type {
-  BackendEntry,
   BackendClass,
+  BackendEntry,
   Config,
   Credentials,
   DisplayURL,
@@ -40,6 +47,7 @@ import type {
 } from '@staticcms/core/interface';
 import type { ApiRequest, AsyncLock, Cursor, FetchError } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
+import type { Semaphore } from 'semaphore';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 
@@ -61,6 +69,7 @@ export default class BitbucketBackend implements BackendClass {
     proxied: boolean;
     API: API | null;
     updateUserCredentials: (args: { token: string; refresh_token: string }) => Promise<null>;
+    initialWorkflowStatus: WorkflowStatus;
   };
   repo: string;
   branch: string;
@@ -73,6 +82,9 @@ export default class BitbucketBackend implements BackendClass {
   refreshedTokenPromise?: Promise<string>;
   authenticator?: NetlifyAuthenticator;
   _mediaDisplayURLSem?: Semaphore;
+  squashMerges: boolean;
+  cmsLabelPrefix: string;
+  previewContext: string;
   largeMediaURL: string;
   _largeMediaClientPromise?: Promise<GitLfsClient>;
   authType: string;
@@ -82,6 +94,7 @@ export default class BitbucketBackend implements BackendClass {
       proxied: false,
       API: null,
       updateUserCredentials: async () => null,
+      initialWorkflowStatus: WorkflowStatus.DRAFT,
       ...options,
     };
 
@@ -105,6 +118,9 @@ export default class BitbucketBackend implements BackendClass {
       config.backend.large_media_url || `https://bitbucket.org/${config.backend.repo}/info/lfs`;
     this.token = '';
     this.mediaFolder = config.media_folder;
+    this.squashMerges = config.backend.squash_merges || false;
+    this.cmsLabelPrefix = config.backend.cms_label_prefix || '';
+    this.previewContext = config.backend.preview_context || '';
     this.lock = asyncLock();
     this.authType = config.backend.auth_type || '';
   }
@@ -168,6 +184,9 @@ export default class BitbucketBackend implements BackendClass {
       branch: this.branch,
       repo: this.repo,
       apiRoot: this.apiRoot,
+      squashMerges: this.squashMerges,
+      cmsLabelPrefix: this.cmsLabelPrefix,
+      initialWorkflowStatus: this.options.initialWorkflowStatus,
     });
 
     const isCollab = await this.api.hasWriteAccess().catch(error => {
@@ -534,5 +553,100 @@ export default class BitbucketBackend implements BackendClass {
       size: fileObj.size,
       file: fileObj,
     };
+  }
+
+  /**
+   * Editorial Workflow
+   */
+  async unpublishedEntries() {
+    const listEntriesKeys = () =>
+      this.api!.listUnpublishedBranches().then(branches =>
+        branches.map(branch => contentKeyFromBranch(branch)),
+      );
+
+    const ids = await unpublishedEntries(listEntriesKeys);
+    return ids;
+  }
+
+  async unpublishedEntry({
+    id,
+    collection,
+    slug,
+  }: {
+    id?: string;
+    collection?: string;
+    slug?: string;
+  }) {
+    if (id) {
+      const data = await this.api!.retrieveUnpublishedEntryData(id);
+      return data;
+    } else if (collection && slug) {
+      const entryId = generateContentKey(collection, slug);
+      const data = await this.api!.retrieveUnpublishedEntryData(entryId);
+      return data;
+    } else {
+      throw new Error('Missing unpublished entry id or collection and slug');
+    }
+  }
+
+  getBranch(collection: string, slug: string) {
+    const contentKey = generateContentKey(collection, slug);
+    const branch = branchFromContentKey(contentKey);
+    return branch;
+  }
+
+  async unpublishedEntryDataFile(collection: string, slug: string, path: string, id: string) {
+    const branch = this.getBranch(collection, slug);
+    const data = (await this.api!.readFile(path, id, { branch })) as string;
+    return data;
+  }
+
+  async unpublishedEntryMediaFile(collection: string, slug: string, path: string, id: string) {
+    const branch = this.getBranch(collection, slug);
+    const mediaFile = await this.loadMediaFile(path, id, { branch });
+    return mediaFile;
+  }
+
+  async updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: WorkflowStatus) {
+    // updateUnpublishedEntryStatus is a transactional operation
+    return runWithLock(
+      this.lock,
+      () => this.api!.updateUnpublishedEntryStatus(collection, slug, newStatus),
+      'Failed to acquire update entry status lock',
+    );
+  }
+
+  async deleteUnpublishedEntry(collection: string, slug: string) {
+    // deleteUnpublishedEntry is a transactional operation
+    return runWithLock(
+      this.lock,
+      () => this.api!.deleteUnpublishedEntry(collection, slug),
+      'Failed to acquire delete entry lock',
+    );
+  }
+
+  async publishUnpublishedEntry(collection: string, slug: string) {
+    // publishUnpublishedEntry is a transactional operation
+    return runWithLock(
+      this.lock,
+      () => this.api!.publishUnpublishedEntry(collection, slug),
+      'Failed to acquire publish entry lock',
+    );
+  }
+
+  async getDeployPreview(collection: string, slug: string) {
+    try {
+      const statuses = await this.api!.getStatuses(collection, slug);
+      const deployStatus = getPreviewStatus(statuses, this.previewContext);
+
+      if (deployStatus) {
+        const { target_url: url, state } = deployStatus;
+        return { url, status: state };
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
   }
 }

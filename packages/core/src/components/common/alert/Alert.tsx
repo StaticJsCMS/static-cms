@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { translate } from 'react-polyglot';
 
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import AlertEvent from '@staticcms/core/lib/util/events/AlertEvent';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 import Button from '../button/Button';
 import Modal from '../modal/Modal';
 
-import type { TranslateProps } from 'react-polyglot';
+import type { FC } from 'react';
 
 import './Alert.css';
 
@@ -30,7 +30,9 @@ export interface AlertDialogProps extends AlertProps {
   resolve: () => void;
 }
 
-const AlertDialog = ({ t }: TranslateProps) => {
+const AlertDialog: FC = () => {
+  const t = useTranslate();
+
   const [detail, setDetail] = useState<AlertDialogProps | null>(null);
   const {
     resolve,
@@ -98,7 +100,7 @@ const AlertDialog = ({ t }: TranslateProps) => {
   );
 };
 
-export const Alert = translate()(AlertDialog);
+export const Alert = AlertDialog;
 
 const alert = (props: AlertProps) => {
   return new Promise<void>(resolve => {

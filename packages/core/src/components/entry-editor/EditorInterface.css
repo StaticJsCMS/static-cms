@@ -82,6 +82,10 @@
     overflow-y-auto
     h-main-mobile;
 
+  &.CMS_Editor_workflow {
+    @apply h-main-mobile-workflow;
+  }
+
   &:not(.CMS_Editor_mobile-preview-active) {
     & .CMS_Editor_mobile-preview {
       @apply hidden;
@@ -101,4 +105,17 @@
     w-full
     overflow-y-auto
     h-main-mobile;
+}
+
+.CMS_Editor_mobile-workflow-controls {
+  background: color-mix(in srgb, var(--background-main) 75%, transparent);
+
+  @apply px-2
+    py-2.5
+    h-[50px]
+    flex
+    items-center
+    justify-between
+    drop-shadow-lg
+    md:hidden;
 }

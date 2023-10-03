@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useVirtual } from 'react-virtual';
 
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
+import { selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
 import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import Table from '../../common/table/Table';
@@ -11,7 +13,6 @@ import EntryRow from './EntryRow';
 
 import type { CollectionEntryData } from '@staticcms/core/interface';
 import type { FC } from 'react';
-import type { t } from 'react-polyglot';
 
 export interface EntryListingTableProps {
   isSingleCollectionInList: boolean;
@@ -20,7 +21,6 @@ export interface EntryListingTableProps {
   canLoadMore: boolean;
   isLoadingEntries: boolean;
   loadNext: () => void;
-  t: t;
 }
 
 const EntryListingTable: FC<EntryListingTableProps> = ({
@@ -30,8 +30,9 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
   canLoadMore,
   isLoadingEntries,
   loadNext,
-  t,
 }) => {
+  const t = useTranslate();
+
   const isFetching = useAppSelector(selectIsFetching);
 
   const tableContainerRef = useRef<HTMLDivElement | null>(null);
@@ -70,6 +71,17 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
     fetchMoreOnBottomReached(scrollHeight, scrollTop, clientHeight);
   }, [clientHeight, fetchMoreOnBottomReached, scrollHeight, scrollTop]);
 
+  const useWorkflow = useAppSelector(selectUseWorkflow);
+  const baseColumns = useMemo(() => {
+    const cols = [...summaryFieldHeaders, ''];
+
+    if (useWorkflow) {
+      cols.push('');
+    }
+
+    return cols;
+  }, [summaryFieldHeaders, useWorkflow]);
+
   return (
     <div className={entriesClasses['entry-listing-table']}>
       <div
@@ -80,13 +92,7 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
           'CMS_Scrollbar_secondary',
         )}
       >
-        <Table
-          columns={
-            !isSingleCollectionInList
-              ? ['Collection', ...summaryFieldHeaders, '']
-              : [...summaryFieldHeaders, '']
-          }
-        >
+        <Table columns={!isSingleCollectionInList ? ['Collection', ...baseColumns] : baseColumns}>
           {paddingTop > 0 && (
             <tr>
               <td style={{ height: `${paddingTop}px` }} />
@@ -100,7 +106,6 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
                 collection={data.collection}
                 entry={data.entry}
                 summaryFields={data.summaryFields}
-                t={t}
               />
             );
           })}

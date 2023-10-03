@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { createMockCollection } from './collections.mock';
+import { createMockFolderCollection } from './collections.mock';
 import { createMockConfig } from './config.mock';
 import { createMockEntry } from './entry.mock';
 
@@ -34,7 +34,7 @@ export const createMockWidgetControlProps = <T, F extends BaseField = UnknownFie
 
   const value = rawValue ?? null;
 
-  const collection = rawCollection ?? createMockCollection({}, options.field);
+  const collection = rawCollection ?? createMockFolderCollection({}, options.field);
   const config = rawConfig ?? createMockConfig({ collections: [collection] });
   const entry = rawEntry ?? createMockEntry({ data: { [options.field.name]: value } });
 

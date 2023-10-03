@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import useBreadcrumbs from '@staticcms/core/lib/hooks/useBreadcrumbs';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import MainView from '../MainView';
 import CollectionView from './CollectionView';
 
@@ -9,6 +10,8 @@ import type { Collection } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 const MultiSearchCollectionPage: FC = () => {
+  const t = useTranslate();
+
   const { name, searchTerm, ...params } = useParams();
   const filterTerm = params['*'];
 
@@ -20,6 +23,7 @@ const MultiSearchCollectionPage: FC = () => {
         filterTerm={filterTerm}
         isSearchResults
         isSingleSearchResult={false}
+        t={t}
       />
     </MainView>
   );
@@ -36,6 +40,8 @@ const SingleCollectionPage: FC<SingleCollectionPageProps> = ({
   isSearchResults,
   isSingleSearchResult,
 }) => {
+  const t = useTranslate();
+
   const { name, searchTerm, ...params } = useParams();
   const filterTerm = params['*'];
 
@@ -56,6 +62,7 @@ const SingleCollectionPage: FC<SingleCollectionPageProps> = ({
         filterTerm={filterTerm}
         isSearchResults={isSearchResults}
         isSingleSearchResult={isSingleSearchResult}
+        t={t}
       />
     </MainView>
   );

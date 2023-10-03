@@ -13,12 +13,14 @@ import App from './components/App';
 import './components/entry-editor/widgets';
 import ErrorBoundary from './components/ErrorBoundary';
 import addExtensions from './extensions';
+import useMeta from './lib/hooks/useMeta';
+import useTranslate from './lib/hooks/useTranslate';
 import { getPhrases } from './lib/phrases';
 import { selectLocale } from './reducers/selectors/config';
 import { store } from './store';
-import useMeta from './lib/hooks/useMeta';
 
 import type { AnyAction } from '@reduxjs/toolkit';
+import type { FC } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import type { BaseField, Config, UnknownField } from './interface';
 import type { RootState } from './store';
@@ -42,7 +44,9 @@ import ReactDOM from 'react-dom';
 // @ts-ignore
 ReactDOM.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.usingClientEntryPoint = true;
 
-const TranslatedApp = ({ locale, config }: AppRootProps) => {
+const TranslatedApp: FC<AppRootProps> = ({ locale, config }) => {
+  const t = useTranslate();
+
   useMeta({ name: 'viewport', content: 'width=device-width, initial-scale=1.0' });
 
   if (!config) {
@@ -51,7 +55,7 @@ const TranslatedApp = ({ locale, config }: AppRootProps) => {
 
   return (
     <I18n locale={locale} messages={getPhrases(locale)}>
-      <ErrorBoundary showBackup config={config}>
+      <ErrorBoundary showBackup config={config} t={t}>
         <Router>
           <App />
         </Router>

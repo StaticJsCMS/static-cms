@@ -1,6 +1,7 @@
 import get from 'lodash/get';
 
 import { SORT_DIRECTION_NONE } from '@staticcms/core/constants';
+import { filterNullish } from '@staticcms/core/lib/util/null.util';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { Entry, Group, GroupMap, Sort } from '@staticcms/core/interface';
@@ -50,7 +51,11 @@ export function selectEntriesBySlugs(state: RootState) {
   return state.entries.entities;
 }
 
-export function selectEntry(state: RootState, collection: string, slug: string) {
+export function selectEntry(state: RootState, collection: string, slug: string | undefined) {
+  if (!slug) {
+    return null;
+  }
+
   return state.entries.entities[`${collection}.${slug}`];
 }
 
@@ -121,9 +126,11 @@ export function selectIsFetching(state: RootState, collection: string) {
   return state.entries.pages[collection]?.isFetching ?? false;
 }
 
-export function selectSearchedEntries(state: RootState, availableCollections: string[]) {
+export function selectSearchedEntries(state: RootState, availableCollections: string[]): Entry[] {
   // only return search results for actually available collections
-  return state.search.entryIds
-    .filter(entryId => availableCollections.indexOf(entryId!.collection) !== -1)
-    .map(entryId => selectEntry(state, entryId!.collection, entryId!.slug));
+  return filterNullish(
+    state.search.entryIds
+      .filter(entryId => availableCollections.indexOf(entryId!.collection) !== -1)
+      .map(entryId => selectEntry(state, entryId!.collection, entryId!.slug)),
+  );
 }

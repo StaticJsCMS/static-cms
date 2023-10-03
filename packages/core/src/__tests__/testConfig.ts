@@ -14,7 +14,7 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
   i18n: {
     structure: 'multiple_files',
     locales: ['en', 'de', 'fr'],
-    defaultLocale: 'en',
+    default_locale: 'en',
   },
   collections: [
     {
@@ -25,7 +25,7 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
         'The description is a great place for tone setting, high level information, and editing guidelines that are specific to a collection.',
       folder: '_posts',
       slug: '{{year}}-{{month}}-{{day}}-{{slug}}',
-      summary_fields: ['title', 'date', 'draft'],
+      summary_fields: ['title', 'date'],
       sortable_fields: {
         fields: ['title', 'date'],
         default: {
@@ -48,12 +48,6 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
             field: 'title',
             pattern: 'front matter post',
           },
-          {
-            name: 'draft',
-            label: 'Drafts',
-            field: 'draft',
-            pattern: true,
-          },
         ],
       },
       view_groups: {
@@ -64,11 +58,6 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
             field: 'date',
             pattern: '\\d{4}',
           },
-          {
-            name: 'draft',
-            label: 'Drafts',
-            field: 'draft',
-          },
         ],
       },
       fields: [
@@ -76,12 +65,6 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
           label: 'Title',
           name: 'title',
           widget: 'string',
-        },
-        {
-          label: 'Draft',
-          name: 'draft',
-          widget: 'boolean',
-          default: false,
         },
         {
           label: 'Publish Date',

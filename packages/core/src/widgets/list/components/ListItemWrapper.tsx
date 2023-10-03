@@ -10,7 +10,7 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
-import type { MouseEvent, ReactNode } from 'react';
+import type { FC, MouseEvent, ReactNode } from 'react';
 
 import './ListItemWrapper.css';
 
@@ -40,7 +40,7 @@ export interface DragHandleProps {
   disabled: boolean;
 }
 
-const DragHandle = ({ listeners, disabled }: DragHandleProps) => {
+const DragHandle: FC<DragHandleProps> = ({ listeners, disabled }) => {
   return (
     <span
       data-testid="drag-handle"
@@ -65,7 +65,7 @@ export interface ListItemWrapperProps {
   disabled: boolean;
 }
 
-const ListItemWrapper = ({
+const ListItemWrapper: FC<ListItemWrapperProps> = ({
   label,
   summary,
   collapsed = false,
@@ -75,7 +75,7 @@ const ListItemWrapper = ({
   children,
   isSingleField,
   disabled,
-}: ListItemWrapperProps) => {
+}) => {
   const [open, setOpen] = useState(!collapsed);
 
   const handleOpenToggle = useCallback(() => {
@@ -87,17 +87,17 @@ const ListItemWrapper = ({
       <div className={classes.controls}>
         {onRemove ? (
           <IconButton
+            icon={CloseIcon}
             data-testid="remove-button"
             size="small"
             color="secondary"
             variant="text"
             onClick={onRemove}
             disabled={disabled}
-            className={classes['remove-button']}
+            rootClassName={classes['remove-button']}
+            iconClassName={classes['button-icon']}
             aria-label="remove"
-          >
-            <CloseIcon className={classes['button-icon']} />
-          </IconButton>
+          />
         ) : null}
         {listeners ? <DragHandle listeners={listeners} disabled={disabled} /> : null}
       </div>

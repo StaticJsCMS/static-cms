@@ -7,7 +7,8 @@
     flex
     items-center
     justify-between
-    cursor-pointer;
+    cursor-pointer
+    whitespace-nowrap;
 
   &:not(.CMS_MenuItemButton_disabled) {
     &.CMS_MenuItemButton_active {

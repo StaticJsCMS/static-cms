@@ -78,6 +78,18 @@ export async function entriesByFiles(
   return fetchFiles(files, readFile, readFileMetadata, apiName);
 }
 
+export async function unpublishedEntries(listEntriesKeys: () => Promise<string[]>) {
+  try {
+    const keys = await listEntriesKeys();
+    return keys;
+  } catch (error) {
+    if (error instanceof Error && error.message === 'Not Found') {
+      return Promise.resolve([]);
+    }
+    throw error;
+  }
+}
+
 export function blobToFileObj(name: string, blob: Blob) {
   const options = name.match(/.svg$/) ? { type: 'image/svg+xml' } : {};
   return new File([blob], name, options);

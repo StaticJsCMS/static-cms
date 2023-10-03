@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import Login from '@staticcms/core/components/login/Login';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 
-import type { AuthenticationPageProps, TranslatedProps, User } from '@staticcms/core/interface';
+import type { AuthenticationPageProps, User } from '@staticcms/core/interface';
+import type { FC } from 'react';
 
 function useNetlifyIdentifyEvent(eventName: 'login', callback: (login: User) => void): void;
 function useNetlifyIdentifyEvent(eventName: 'logout', callback: () => void): void;
@@ -17,12 +19,13 @@ function useNetlifyIdentifyEvent(
   }, [callback, eventName]);
 }
 
-export interface GitGatewayAuthenticationPageProps
-  extends TranslatedProps<AuthenticationPageProps> {
+export interface GitGatewayAuthenticationPageProps extends AuthenticationPageProps {
   handleAuth: (email: string, password: string) => Promise<User | string>;
 }
 
-const GitGatewayAuthenticationPage = ({ onLogin, t }: GitGatewayAuthenticationPageProps) => {
+const GitGatewayAuthenticationPage: FC<GitGatewayAuthenticationPageProps> = ({ onLogin }) => {
+  const t = useTranslate();
+
   const [loggingIn, setLoggingIn] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [errors, setErrors] = useState<{

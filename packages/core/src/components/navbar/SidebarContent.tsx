@@ -1,9 +1,10 @@
+import { Dashboard as DashboardIcon } from '@styled-icons/material/Dashboard';
 import { Photo as PhotoIcon } from '@styled-icons/material/Photo';
 import React, { useCallback, useMemo } from 'react';
-import { translate } from 'react-polyglot';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { getIcon } from '@staticcms/core/lib/hooks/useIcon';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getAdditionalLinks } from '@staticcms/core/lib/registry';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectCollections } from '@staticcms/core/reducers/selectors/collections';
@@ -16,9 +17,10 @@ import sidebarClasses from './Sidebar.classes';
 
 import type { Collection } from '@staticcms/core/interface';
 import type { FC } from 'react';
-import type { TranslateProps } from 'react-polyglot';
 
-const SidebarContent: FC<TranslateProps> = ({ t }) => {
+const SidebarContent: FC = () => {
+  const t = useTranslate();
+
   const { name, searchTerm, ...params } = useParams();
   const filterTerm = useMemo(() => params['*'] ?? '', [params]);
 
@@ -106,13 +108,16 @@ const SidebarContent: FC<TranslateProps> = ({ t }) => {
             onSubmit={(query: string, collection?: string) => searchCollections(query, collection)}
           />
         )}
+        <NavLink
+          key="Dashboard"
+          to="/dashboard"
+          icon={<DashboardIcon className={sidebarClasses['icon']} />}
+        >
+          Dashboard
+        </NavLink>
         {collectionLinks}
         {links}
-        <NavLink
-          key="Media"
-          to="/media"
-          icon={<PhotoIcon className={sidebarClasses['media-icon']} />}
-        >
+        <NavLink key="Media" to="/media" icon={<PhotoIcon className={sidebarClasses['icon']} />}>
           {t('app.header.media')}
         </NavLink>
       </ul>
@@ -120,4 +125,4 @@ const SidebarContent: FC<TranslateProps> = ({ t }) => {
   );
 };
 
-export default translate()(SidebarContent) as FC;
+export default SidebarContent;

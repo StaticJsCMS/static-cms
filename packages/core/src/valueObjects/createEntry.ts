@@ -1,6 +1,7 @@
 import isBoolean from 'lodash/isBoolean';
 
 import type { MediaFile } from '../backend';
+import type { WorkflowStatus } from '../constants/publishModes';
 import type { Entry } from '../interface';
 
 interface Options {
@@ -13,7 +14,8 @@ interface Options {
   mediaFiles?: MediaFile[] | null;
   author?: string;
   updatedOn?: string;
-  status?: string;
+  status?: WorkflowStatus;
+  meta?: { path: string };
   i18n?: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [locale: string]: any;
@@ -38,8 +40,9 @@ export default function createEntry(
     mediaFiles: options.mediaFiles || [],
     author: options.author || '',
     updatedOn: options.updatedOn || '',
-    status: options.status || '',
+    status: options.status || undefined,
     i18n: options.i18n || {},
+    meta: options.meta || undefined,
   };
 
   return returnObj;

@@ -74,11 +74,6 @@
     z-30;
 }
 
-.CMS_WidgetFileImage_SortableImage_button-icon {
-  @apply w-5
-    h-5;
-}
-
 .CMS_WidgetFileImage_SortableImage_content {
   @apply relative;
 }

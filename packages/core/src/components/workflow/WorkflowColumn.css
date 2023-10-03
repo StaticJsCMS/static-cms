@@ -1,0 +1,50 @@
+.CMS_WorkflowColumn_root {
+  @apply flex
+    flex-col
+    flex-grow
+    gap-2.5
+    basis-full
+    md:basis-2/6
+    snap-center
+    flex-shrink-0
+    md:flex-shrink;
+
+  &.CMS_WorkflowColumn_over {
+    & .CMS_WorkflowColumn_content {
+      background: color-mix(in srgb, var(--background-light) 50%, transparent);
+    }
+  }
+}
+
+.CMS_WorkflowColumn_content {
+  background: color-mix(in srgb, var(--background-main) 50%, transparent);
+
+  @apply h-full
+    flex
+    flex-col
+    flex-grow
+    rounded-lg
+    p-1;
+}
+
+.CMS_WorkflowColumn_header {
+  @apply text-lg
+    rounded
+    px-3
+    py-1;
+
+  &.CMS_WorkflowColumn_draft {
+    background: color-mix(in srgb, var(--info-main) 75%, transparent);
+    color: var(--info-contrast-color);
+  }
+
+  &.CMS_WorkflowColumn_pending_review {
+    background: color-mix(in srgb, var(--warning-main) 75%, transparent);
+    color: var(--warning-contrast-color);
+  }
+
+  &.CMS_WorkflowColumn_pending_publish {
+    background: color-mix(in srgb, var(--success-main) 75%, transparent);
+    color: var(--success-contrast-color);
+  }
+}

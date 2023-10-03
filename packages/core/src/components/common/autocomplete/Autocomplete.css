@@ -45,9 +45,11 @@
 
 .CMS_Autocomplete_button-icon {
   color: var(--text-secondary);
+}
 
-  @apply h-5
-    w-5;
+.CMS_Autocomplete_popper {
+  @apply z-[11]
+    after:-z-[1];
 }
 
 .CMS_Autocomplete_options {
@@ -62,7 +64,7 @@
     shadow-md
     focus:outline-none
     sm:text-sm
-    z-30;
+    relative;
 }
 
 .CMS_Autocomplete_nothing {

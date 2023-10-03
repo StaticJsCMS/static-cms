@@ -3,6 +3,7 @@ import trim from 'lodash/trim';
 import trimStart from 'lodash/trimStart';
 import semaphore from 'semaphore';
 
+import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import {
   allEntriesByFolder,
   asyncLock,
@@ -18,22 +19,30 @@ import {
   localForage,
   runWithLock,
 } from '@staticcms/core/lib/util';
+import { getPreviewStatus } from '@staticcms/core/lib/util/API';
+import {
+  branchFromContentKey,
+  contentKeyFromBranch,
+  generateContentKey,
+} from '@staticcms/core/lib/util/APIUtils';
+import { unpublishedEntries } from '@staticcms/core/lib/util/implementation';
 import API, { API_NAME } from './API';
 import AuthenticationPage from './AuthenticationPage';
 
-import type { Semaphore } from 'semaphore';
-import type { AsyncLock, Cursor } from '@staticcms/core/lib/util';
 import type {
+  BackendClass,
+  BackendEntry,
   Config,
   Credentials,
   DisplayURL,
-  BackendEntry,
-  BackendClass,
   ImplementationFile,
   PersistOptions,
+  UnpublishedEntryMediaFile,
   User,
 } from '@staticcms/core/interface';
+import type { AsyncLock, Cursor } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
+import type { Semaphore } from 'semaphore';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
 
@@ -43,12 +52,16 @@ export default class GitLab implements BackendClass {
   options: {
     proxied: boolean;
     API: API | null;
+    initialWorkflowStatus: WorkflowStatus;
   };
   repo: string;
   branch: string;
   apiRoot: string;
   token: string | null;
+  squashMerges: boolean;
+  cmsLabelPrefix: string;
   mediaFolder?: string;
+  previewContext: string;
 
   _mediaDisplayURLSem?: Semaphore;
 
@@ -56,6 +69,7 @@ export default class GitLab implements BackendClass {
     this.options = {
       proxied: false,
       API: null,
+      initialWorkflowStatus: WorkflowStatus.DRAFT,
       ...options,
     };
 
@@ -72,7 +86,10 @@ export default class GitLab implements BackendClass {
     this.branch = config.backend.branch || 'main';
     this.apiRoot = config.backend.api_root || 'https://gitlab.com/api/v4';
     this.token = '';
+    this.squashMerges = config.backend.squash_merges || false;
+    this.cmsLabelPrefix = config.backend.cms_label_prefix || '';
     this.mediaFolder = config.media_folder;
+    this.previewContext = config.backend.preview_context || '';
     this.lock = asyncLock();
   }
 
@@ -108,8 +125,12 @@ export default class GitLab implements BackendClass {
       branch: this.branch,
       repo: this.repo,
       apiRoot: this.apiRoot,
+      squashMerges: this.squashMerges,
+      cmsLabelPrefix: this.cmsLabelPrefix,
+      initialWorkflowStatus: this.options.initialWorkflowStatus,
     });
     const user = await this.api.user();
+
     const isCollab = await this.api.hasWriteAccess().catch((error: Error) => {
       error.message = stripIndent`
         Repo "${this.repo}" not found.
@@ -310,6 +331,122 @@ export default class GitLab implements BackendClass {
       return {
         entries: entriesWithData,
         cursor: newCursor,
+      };
+    });
+  }
+
+  /**
+   * Editorial Workflow
+   */
+  async unpublishedEntries() {
+    const listEntriesKeys = () =>
+      this.api!.listUnpublishedBranches().then(branches =>
+        branches.map(branch => contentKeyFromBranch(branch)),
+      );
+
+    const ids = await unpublishedEntries(listEntriesKeys);
+    return ids;
+  }
+
+  async unpublishedEntry({
+    id,
+    collection,
+    slug,
+  }: {
+    id?: string;
+    collection?: string;
+    slug?: string;
+  }) {
+    if (id) {
+      const data = await this.api!.retrieveUnpublishedEntryData(id);
+      return data;
+    } else if (collection && slug) {
+      const entryId = generateContentKey(collection, slug);
+      const data = await this.api!.retrieveUnpublishedEntryData(entryId);
+      return data;
+    } else {
+      throw new Error('Missing unpublished entry id or collection and slug');
+    }
+  }
+
+  getBranch(collection: string, slug: string) {
+    const contentKey = generateContentKey(collection, slug);
+    const branch = branchFromContentKey(contentKey);
+    return branch;
+  }
+
+  async unpublishedEntryDataFile(collection: string, slug: string, path: string, id: string) {
+    const branch = this.getBranch(collection, slug);
+    const data = (await this.api!.readFile(path, id, { branch })) as string;
+    return data;
+  }
+
+  async unpublishedEntryMediaFile(collection: string, slug: string, path: string, id: string) {
+    const branch = this.getBranch(collection, slug);
+    const mediaFile = await this.loadMediaFile(branch, { path, id });
+    return mediaFile;
+  }
+
+  async updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: WorkflowStatus) {
+    // updateUnpublishedEntryStatus is a transactional operation
+    return runWithLock(
+      this.lock,
+      () => this.api!.updateUnpublishedEntryStatus(collection, slug, newStatus),
+      'Failed to acquire update entry status lock',
+    );
+  }
+
+  async deleteUnpublishedEntry(collection: string, slug: string) {
+    // deleteUnpublishedEntry is a transactional operation
+    return runWithLock(
+      this.lock,
+      () => this.api!.deleteUnpublishedEntry(collection, slug),
+      'Failed to acquire delete entry lock',
+    );
+  }
+
+  async publishUnpublishedEntry(collection: string, slug: string) {
+    // publishUnpublishedEntry is a transactional operation
+    return runWithLock(
+      this.lock,
+      () => this.api!.publishUnpublishedEntry(collection, slug),
+      'Failed to acquire publish entry lock',
+    );
+  }
+
+  async getDeployPreview(collection: string, slug: string) {
+    try {
+      const statuses = await this.api!.getStatuses(collection, slug);
+      const deployStatus = getPreviewStatus(statuses, this.previewContext);
+
+      if (deployStatus) {
+        const { target_url: url, state } = deployStatus;
+        return { url, status: state };
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  loadMediaFile(branch: string, file: UnpublishedEntryMediaFile) {
+    const readFile = (
+      path: string,
+      id: string | null | undefined,
+      { parseText }: { parseText: boolean },
+    ) => this.api!.readFile(path, id, { branch, parseText });
+
+    return getMediaAsBlob(file.path, null, readFile).then(blob => {
+      const name = basename(file.path);
+      const fileObj = blobToFileObj(name, blob);
+      return {
+        id: file.path,
+        displayURL: URL.createObjectURL(fileObj),
+        path: file.path,
+        name,
+        size: fileObj.size,
+        file: fileObj,
       };
     });
   }

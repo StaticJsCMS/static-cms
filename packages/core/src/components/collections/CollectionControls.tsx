@@ -17,6 +17,7 @@ import type {
   ViewFilter,
   ViewGroup,
 } from '@staticcms/core/interface';
+import type { FC } from 'react';
 
 interface CollectionControlsProps {
   viewStyle: ViewStyle;
@@ -32,7 +33,7 @@ interface CollectionControlsProps {
   onGroupClick?: (filter: ViewGroup) => void;
 }
 
-const CollectionControls = ({
+const CollectionControls: FC<CollectionControlsProps> = ({
   viewStyle,
   onChangeViewStyle,
   sortableFields,
@@ -44,7 +45,7 @@ const CollectionControls = ({
   onGroupClick,
   filter,
   group,
-}: CollectionControlsProps) => {
+}) => {
   const showGroupControl = useMemo(
     () => Boolean(viewGroups && onGroupClick && group && viewGroups.length > 0),
     [group, onGroupClick, viewGroups],

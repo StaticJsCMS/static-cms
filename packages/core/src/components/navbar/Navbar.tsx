@@ -1,6 +1,5 @@
 import { OpenInNew as OpenInNewIcon } from '@styled-icons/material/OpenInNew';
 import React, { useEffect, useMemo } from 'react';
-import { translate } from 'react-polyglot';
 
 import { checkBackendStatus } from '@staticcms/core/actions/status';
 import classNames from '@staticcms/core/lib/util/classNames.util';
@@ -8,12 +7,13 @@ import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectConfig, selectDisplayUrl } from '@staticcms/core/reducers/selectors/config';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import Button from '../common/button/Button';
+import IconButton from '../common/button/IconButton';
 import { StaticCmsIcon } from '../images/_index';
 import Breadcrumbs from './Breadcrumbs';
 import QuickCreate from './QuickCreate';
 import SettingsDropdown from './SettingsDropdown';
 
-import type { Breadcrumb, TranslatedProps } from '@staticcms/core/interface';
+import type { Breadcrumb } from '@staticcms/core/interface';
 import type { FC, ReactNode } from 'react';
 
 import './Navbar.css';
@@ -29,6 +29,7 @@ export const classes = generateClassNames('Navbar', [
   'custom-logo',
   'actions',
   'site-url',
+  'site-url-mobile',
   'site-url-label',
   'site-url-icon',
   'quick-create',
@@ -40,11 +41,11 @@ export interface NavbarProps {
   navbarActions?: ReactNode;
 }
 
-const Navbar = ({
+const Navbar: FC<NavbarProps> = ({
   showQuickCreate = false,
   navbarActions = null,
   breadcrumbs = [],
-}: TranslatedProps<NavbarProps>) => {
+}) => {
   const dispatch = useAppDispatch();
   const config = useAppSelector(selectConfig);
 
@@ -84,10 +85,21 @@ const Navbar = ({
           </div>
           <div className={classes.actions}>
             {displayUrl ? (
-              <Button variant="text" className={classes['site-url']} href={displayUrl}>
-                <div className={classes['site-url-label']}>{displayUrl}</div>
-                <OpenInNewIcon className={classes['site-url-icon']} />
-              </Button>
+              <>
+                <Button variant="text" className={classes['site-url']} href={displayUrl}>
+                  <div className={classes['site-url-label']}>{displayUrl}</div>
+                  <OpenInNewIcon className={classes['site-url-icon']} />
+                </Button>
+                <IconButton
+                  icon={OpenInNewIcon}
+                  variant="text"
+                  href={displayUrl}
+                  title={displayUrl}
+                  rootClassName={classes['site-url-mobile']}
+                  iconClassName={classes['site-url-icon']}
+                  aria-label="go to site"
+                />
+              </>
             ) : null}
             {showQuickCreate ? (
               <QuickCreate key="quick-create" rootClassName={classes['quick-create']} />
@@ -101,4 +113,4 @@ const Navbar = ({
   );
 };
 
-export default translate()(Navbar) as FC<NavbarProps>;
+export default Navbar;

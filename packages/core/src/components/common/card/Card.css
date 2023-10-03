@@ -23,7 +23,7 @@
   color: var(--text-primary);
 
   @apply w-full
-    p-5
+    p-4
     font-normal;
 }
 

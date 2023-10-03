@@ -50,22 +50,22 @@ const BottomNavigation: FC<BottomNavigationProps> = ({ collection }) => {
     <>
       <div className={classes.root}>
         <IconButton
+          icon={MenuIcon}
           variant="text"
-          className={classes['menu-button']}
           onClick={toggleMobileMenu}
+          rootClassName={classes['menu-button']}
+          iconClassName={classes['menu-button-icon']}
           aria-label="toggle menu"
-        >
-          <MenuIcon className={classes['menu-button-icon']} />
-        </IconButton>
+        />
         {isNotEmpty(newEntryUrl) ? (
           <IconButton
+            icon={AddIcon}
             to={newEntryUrl}
             variant="text"
-            className={classes['add-button']}
+            rootClassName={classes['add-button']}
+            iconClassName={classes['add-button-icon']}
             aria-label="create entry"
-          >
-            <AddIcon className={classes['add-button-icon']} />
-          </IconButton>
+          />
         ) : (
           <QuickCreate
             key="quick-create"
@@ -78,13 +78,13 @@ const BottomNavigation: FC<BottomNavigationProps> = ({ collection }) => {
         )}
         {displayUrl ? (
           <IconButton
+            icon={OpenInNewIcon}
             variant="text"
-            className={classes['site-url-button']}
             href={displayUrl}
+            rootClassName={classes['site-url-button']}
+            iconClassName={classes['site-url-button-icon']}
             aria-label="go to site"
-          >
-            <OpenInNewIcon className={classes['site-url-button-icon']} />
-          </IconButton>
+          />
         ) : null}
       </div>
       <NavigationDrawer mobileOpen={mobileOpen} onMobileOpenToggle={toggleMobileMenu} />

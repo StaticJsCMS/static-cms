@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import cardClasses from './Card.classes';
 
-import type { MouseEvent, ReactNode } from 'react';
+import type { FC, MouseEvent, ReactNode } from 'react';
 
 interface BaseCardActionAreaProps {
   children: ReactNode;
@@ -21,7 +21,7 @@ interface CardActionAreaPropsButton extends BaseCardActionAreaProps {
 
 export type CardActionAreaProps = CardActionAreaPropsLink | CardActionAreaPropsButton;
 
-const CardActionArea = ({ children, className, ...otherProps }: CardActionAreaProps) => {
+const CardActionArea: FC<CardActionAreaProps> = ({ children, className, ...otherProps }) => {
   if ('onClick' in otherProps) {
     return (
       <button

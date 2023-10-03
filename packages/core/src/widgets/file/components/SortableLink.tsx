@@ -18,7 +18,6 @@ const classes = generateClassNames('WidgetFileImage_SortableLink', [
   'controls',
   'replace-button',
   'remove-button',
-  'button-icon',
 ]);
 
 const MAX_DISPLAY_LENGTH = 100;
@@ -88,27 +87,25 @@ const SortableLink: FC<SortableLinkProps> = ({ id, itemValue, onRemove, onReplac
           <div className={classes.controls}>
             {onReplace ? (
               <IconButton
+                icon={ModeEditIcon}
                 key="replace"
                 color="secondary"
                 variant="text"
                 onClick={handleReplace}
-                className={classes['replace-button']}
+                rootClassName={classes['replace-button']}
                 aria-label="replace link"
-              >
-                <ModeEditIcon className={classes['button-icon']} />
-              </IconButton>
+              />
             ) : null}
             {onRemove ? (
               <IconButton
+                icon={DeleteIcon}
                 key="remove"
                 variant="text"
                 color="error"
                 onClick={handleRemove}
-                className={classes['remove-button']}
+                rootClassName={classes['remove-button']}
                 aria-label="remove link"
-              >
-                <DeleteIcon className={classes['button-icon']} />
-              </IconButton>
+              />
             ) : null}
           </div>
         </div>

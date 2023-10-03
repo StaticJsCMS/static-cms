@@ -8,38 +8,39 @@ import {
   COLLECTION_CARD_MARGIN,
   COLLECTION_CARD_WIDTH,
 } from '@staticcms/core/constants/views';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getPreviewCard } from '@staticcms/core/lib/registry';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectTemplateName } from '@staticcms/core/lib/util/collection.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
+import { selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
+import { useAppSelector } from '@staticcms/core/store/hooks';
 import entriesClasses from './Entries.classes';
 import EntryCard from './EntryCard';
 
 import type { CollectionEntryData } from '@staticcms/core/interface';
 import type { FC } from 'react';
-import type { t } from 'react-polyglot';
 import type { GridChildComponentProps } from 'react-window';
 
 export interface EntryListingCardGridProps {
   scrollContainerRef: React.MutableRefObject<HTMLDivElement | null>;
   entryData: CollectionEntryData[];
   onScroll: () => void;
-  t: t;
 }
 
 export interface CardGridItemData {
   columnCount: number;
   cardHeights: number[];
   entryData: CollectionEntryData[];
-  t: t;
+  useWorkflow: boolean;
 }
 
-const CardWrapper = ({
+const CardWrapper: FC<GridChildComponentProps<CardGridItemData>> = ({
   rowIndex,
   columnIndex,
   style,
-  data: { columnCount, cardHeights, entryData, t },
-}: GridChildComponentProps<CardGridItemData>) => {
+  data: { columnCount, cardHeights, entryData, useWorkflow },
+}) => {
   const left = useMemo(
     () =>
       parseFloat(
@@ -82,7 +83,10 @@ const CardWrapper = ({
         collection={data.collection}
         entry={data.entry}
         imageFieldName={data.imageFieldName}
-        t={t}
+        descriptionFieldName={data.descriptionFieldName}
+        dateFieldName={data.dateFieldName}
+        dateFormats={data.dateFormats}
+        useWorkflow={useWorkflow}
       />
     </div>
   );
@@ -92,8 +96,11 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
   entryData,
   scrollContainerRef,
   onScroll,
-  t,
 }) => {
+  const t = useTranslate();
+
+  const useWorkflow = useAppSelector(selectUseWorkflow);
+
   const [version, setVersion] = useState(0);
 
   const handleResize = useCallback(() => {
@@ -195,6 +202,7 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
                     entryData,
                     cardHeights,
                     columnCount,
+                    useWorkflow,
                     t,
                   } as CardGridItemData
                 }

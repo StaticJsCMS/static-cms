@@ -16,8 +16,3 @@
       z-[1];
   }
 }
-
-.CMS_MediaLibraryModal_close-button-icon {
-  @apply w-5
-    h-5;
-}

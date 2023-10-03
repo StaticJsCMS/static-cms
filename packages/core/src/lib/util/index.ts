@@ -1,7 +1,9 @@
-export { default as AccessTokenError } from './AccessTokenError';
 export { readFile, readFileMetadata, requestWithBackoff, throwOnConflictingBranches } from './API';
 export { default as APIError } from './APIError';
 export { generateContentKey, parseContentKey } from './APIUtils';
+export { default as AccessTokenError } from './AccessTokenError';
+export { CURSOR_COMPATIBILITY_SYMBOL, default as Cursor } from './Cursor';
+export { default as EditorialWorkflowError } from './EditorialWorkflowError';
 export { asyncLock } from './asyncLock';
 export {
   filterByExtension,
@@ -11,7 +13,6 @@ export {
   parseResponse,
   responseParser,
 } from './backendUtil';
-export { default as Cursor, CURSOR_COMPATIBILITY_SYMBOL } from './Cursor';
 export { default as getBlobSHA } from './getBlobSHA';
 export {
   createPointerFile,

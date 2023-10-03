@@ -1,16 +1,16 @@
 import Snackbar from '@mui/material/Snackbar';
 import React, { useCallback, useEffect, useState } from 'react';
-import { translate } from 'react-polyglot';
 
+import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
+import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import { removeSnackbarById, selectSnackbars } from '@staticcms/core/store/slices/snackbars';
 import SnackbarAlert from './SnackbarAlert';
 
 import type { SnackbarMessage } from '@staticcms/core/store/slices/snackbars';
 import type { FC, SyntheticEvent } from 'react';
-import type { TranslateProps } from 'react-polyglot';
 
-const Snackbars: FC<TranslateProps> = ({ t }) => {
+const Snackbars: FC = () => {
   const [open, setOpen] = useState(false);
   const [messageInfo, setMessageInfo] = useState<SnackbarMessage | undefined>(undefined);
 
@@ -29,6 +29,20 @@ const Snackbars: FC<TranslateProps> = ({ t }) => {
       setOpen(false);
     }
   }, [snackbars, messageInfo, open, dispatch]);
+
+  const idToClose = useDebounce(messageInfo?.id, 5000);
+
+  useEffect(() => {
+    if (isNullish(idToClose)) {
+      return;
+    }
+
+    if (idToClose !== messageInfo?.id) {
+      return;
+    }
+
+    setOpen(false);
+  }, [idToClose, messageInfo?.id]);
 
   const handleClose = useCallback((_event?: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -51,9 +65,9 @@ const Snackbars: FC<TranslateProps> = ({ t }) => {
       TransitionProps={{ onExited: handleExited }}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
     >
-      {messageInfo ? <SnackbarAlert data={messageInfo} onClose={handleClose} t={t} /> : undefined}
+      {messageInfo ? <SnackbarAlert data={messageInfo} onClose={handleClose} /> : undefined}
     </Snackbar>
   );
 };
 
-export default translate()(Snackbars);
+export default Snackbars;

@@ -1,14 +1,13 @@
 import { FileUpload as FileUploadIcon } from '@styled-icons/material/FileUpload';
 import React, { useCallback, useRef } from 'react';
-import { translate } from 'react-polyglot';
 
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectDeleting, selectPersisting } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import useButtonClassNames from '../../common/button/useButtonClassNames';
 import mediaLibraryClasses from './MediaLibrary.classes';
 
-import type { TranslatedProps } from '@staticcms/core/interface';
 import type { ChangeEventHandler, FC, KeyboardEvent } from 'react';
 
 export interface FileUploadButtonProps {
@@ -16,11 +15,9 @@ export interface FileUploadButtonProps {
   onChange: ChangeEventHandler<HTMLInputElement>;
 }
 
-const FileUploadButton: FC<TranslatedProps<FileUploadButtonProps>> = ({
-  imagesOnly,
-  onChange,
-  t,
-}) => {
+const FileUploadButton: FC<FileUploadButtonProps> = ({ imagesOnly, onChange }) => {
+  const t = useTranslate();
+
   const ref = useRef<HTMLLabelElement | null>(null);
 
   const isPersisting = useAppSelector(selectPersisting);
@@ -59,4 +56,4 @@ const FileUploadButton: FC<TranslatedProps<FileUploadButtonProps>> = ({
   );
 };
 
-export default translate()(FileUploadButton) as FC<FileUploadButtonProps>;
+export default FileUploadButton;

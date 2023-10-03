@@ -19,10 +19,12 @@ const sv: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Innehåll',
+      workflow: 'Arbetsflöde',
       media: 'Media',
       quickAdd: 'Snabbt tillägg',
     },
     app: {
+      loading: 'Hämtar...',
       errorHeader: 'Ett fel uppstod vid hämtning av CMS-konfigurationen',
       configErrors: 'Konfigurationsfel',
       checkConfigYml: 'Kontrollera din config.yml-fil.',
@@ -97,9 +99,20 @@ const sv: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Är du säker på att du vill lämna sidan?',
+      onUpdatingWithUnsavedChangesBody:
+        'Du har osparade ändringar, vänligen spara dem innan du uppdaterar status.',
+      onPublishingNotReadyBody: 'Vänligen uppdatera status till "Redo" innan du publicerar.',
+      onPublishingWithUnsavedChangesBody:
+        'Du har osparade ändringar, vänligen spara innan du publicerar.',
+      onPublishingBody: 'Är du säker på att du vill publicera det här inlägget?',
+      onUnpublishingBody: 'Är du säker på att du vill avpublicera det här inlägget?',
       onDeleteWithUnsavedChangesBody:
         'Är du säker på att du vill radera det här publicerade inlägget, inklusive dina osparade ändringar från nuvarande session?',
       onDeletePublishedEntryBody: 'Är du säker på att du vill radera det här publicerade inlägget?',
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Du är på väg att radera alla opublicerade ändringar för det här inlägget, inklusive dina osparade ändringar från nuvarande session. Vill du fortfarande radera?',
+      onDeleteUnpublishedChangesBody:
+        'Alla opublicerade ändringar kommer raderas. Vill du fortfarande radera?',
       loadingEntry: 'Hämtar inlägg...',
     },
     editorInterface: {
@@ -108,14 +121,33 @@ const sv: LocalePhrasesRoot = {
       toggleScrollSync: 'Synka scrollning',
     },
     editorToolbar: {
+      publishing: 'Publicerar...',
       publish: 'Publicera',
       published: 'Publicerad',
       unpublish: 'Avpublicera',
       duplicate: 'Duplicera',
+      unpublishing: 'Avpublicerar...',
       publishAndCreateNew: 'Publicera och skapa ny',
       publishAndDuplicate: 'Publicera och duplicera',
+      deleteUnpublishedChanges: 'Radera opublicerade ändringar',
+      deleteUnpublishedEntry: 'Radera opublicerat inlägg',
+      deletePublishedEntry: 'Radera publicerat inlägg',
       deleteEntry: 'Radera inlägg',
+      saving: 'Sparar...',
+      save: 'Spara',
+      deleting: 'Raderar...',
+      updating: 'Updaterar...',
+      status: 'Status: %{status}',
+      backCollection: ' Redigerar i samlingen %{collectionLabel}',
+      unsavedChanges: 'Osparade ändringar',
+      changesSaved: 'Ändringar sparade',
+      draft: 'Utkast',
+      inReview: 'Under granskning',
+      ready: 'Redo',
       publishNow: 'Publicera nu',
+      deployPreviewPendingButtonLabel: 'Kontrollera förhandsvisning',
+      deployPreviewButtonLabel: 'Visa förhandsvisning',
+      deployButtonLabel: 'Visa Live',
     },
     editorWidgets: {
       markdown: {
@@ -182,10 +214,10 @@ const sv: LocalePhrasesRoot = {
         'Maximal filstorlek överskriden.\nKonfigurerad att inte tillåta filer större än %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Hämtar...',
       noResults: 'Inga resultat.',
       noAssetsFound: 'Hittade inga mediaobjekt.',
       noImagesFound: 'Hittade inga bilder.',
+      private: 'Privat ',
       images: 'Bilder',
       mediaAssets: 'Mediaobjekt',
       search: 'Sök...',
@@ -227,12 +259,44 @@ const sv: LocalePhrasesRoot = {
         'Oops, du har missat ett obligatoriskt fält. Vänligen fyll i det innan du sparar.',
       entrySaved: 'Inlägg sparat',
       entryPublished: 'Inlägg publicerat',
+      entryUnpublished: 'Inlägg avpublicerat',
       onFailToPublishEntry: 'Kunde inte publicera: %{details}',
+      onFailToUnpublishEntry: 'Kunde inte avpublicera inlägg: %{details}',
       entryUpdated: 'Inläggsstatus uppdaterad',
+      onDeleteUnpublishedChangesBody: 'Opublicerade ändringar raderade',
       onFailToAuth: '%{details}',
       onLoggedOut:
         'Du har blivit utloggad, vänligen spara en kopia av eventuella ändringar och logga in på nytt',
       onBackendDown: 'Tjänsten är drabbad av en störning. Se %{details} för mer information',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'Hämtar inlägg för redaktionellt arbetsflöde',
+      workflowHeading: 'Redaktionellt arbetsflöde',
+      newPost: 'Nytt inlägg',
+      description:
+        '%{smart_count} inlägg väntar på granskning, %{readyCount} redo att publiceras. |||| %{smart_count} inlägg väntar på granskning, %{readyCount} redo att publiceras. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} av %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'av %{author}',
+      deleteChanges: 'Radera ändringar',
+      deleteNewEntry: 'Radera nytt inlägg',
+      publishChanges: 'Publicera ändringar',
+      publishNewEntry: 'Publicera nytt inlägg',
+    },
+    workflowList: {
+      onDeleteEntry: 'Är du säker på att du vill radera det här inlägget?',
+      onPublishingNotReadyEntry:
+        'Bara inlägg med statusen "Redo" kan publiceras. Vänligen dra kortet till "Redo"-kolumnen för att möjliggöra publicering',
+      onPublishEntry: 'Är du säker på att du vill publicera det här inlägget?',
+      draft: 'Utkast',
+      pending_review: 'Under granskning',
+      pending_publish: 'Redo',
+      currentEntries: '%{smart_count} inlägg |||| %{smart_count} inlägg',
     },
   },
 };

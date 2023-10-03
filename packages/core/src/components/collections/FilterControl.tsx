@@ -1,14 +1,14 @@
 import React, { useCallback, useMemo } from 'react';
-import { translate } from 'react-polyglot';
 
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import Checkbox from '../common/checkbox/Checkbox';
 import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
 
-import type { FilterMap, TranslatedProps, ViewFilter } from '@staticcms/core/interface';
-import type { FC, MouseEvent } from 'react';
+import type { FilterMap, ViewFilter } from '@staticcms/core/interface';
+import type { MouseEvent, FC } from 'react';
 
 import './FilterControl.css';
 
@@ -29,13 +29,14 @@ export interface FilterControlProps {
   onFilterClick: ((viewFilter: ViewFilter) => void) | undefined;
 }
 
-const FilterControl = ({
+const FilterControl: FC<FilterControlProps> = ({
   filter = {},
   viewFilters = [],
   variant = 'menu',
   onFilterClick,
-  t,
-}: TranslatedProps<FilterControlProps>) => {
+}) => {
+  const t = useTranslate();
+
   const anyActive = useMemo(() => Object.keys(filter).some(key => filter[key]?.active), [filter]);
 
   const handleFilterClick = useCallback(
@@ -93,7 +94,7 @@ const FilterControl = ({
             <MenuItemButton
               key={viewFilter.id}
               onClick={handleFilterClick(viewFilter)}
-              className={classes.filter}
+              rootClassName={classes.filter}
             >
               <Checkbox
                 key={`${labelId}-${checked}`}
@@ -111,4 +112,4 @@ const FilterControl = ({
   );
 };
 
-export default translate()(FilterControl) as FC<FilterControlProps>;
+export default FilterControl;

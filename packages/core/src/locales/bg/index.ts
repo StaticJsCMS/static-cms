@@ -19,6 +19,7 @@ const bg: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Съдържание',
+      workflow: 'Работен процес',
       media: 'Мултимедийни файлове',
       quickAdd: 'Бързо добавяне',
     },
@@ -97,9 +98,21 @@ const bg: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Наистина ли искате да напуснете тази страница?',
+      onUpdatingWithUnsavedChangesBody:
+        'Имате незапазени промени, моля, запазете преди актуализиране на състоянието.',
+      onPublishingNotReadyBody:
+        'Моля, актуализирайте състоянието на „Готово“, преди да публикувате',
+      onPublishingWithUnsavedChangesBody:
+        'Имате незапазени промени, моля, запазете преди публикуване.',
+      onPublishingBody: 'Наистина ли искате да публикувате този запис?',
+      onUnpublishingBody: 'Наистина ли искате да прекратите публикуването на този запис?',
       onDeleteWithUnsavedChangesBody:
         'Наистина ли искате да изтриете този публикуван запис, както и незаписаните промени от текущата сесия?',
       onDeletePublishedEntryBody: 'Наистина ли искате да изтриете този публикуван запис?',
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Това ще изтрие всички непубликувани промени в този запис, както и незаписаните ви промени от текущата сесия. Все още ли искате да изтриете?',
+      onDeleteUnpublishedChangesBody:
+        'Всички непубликувани промени в този запис ще бъдат изтрити. Все още ли искате да изтриете?',
       loadingEntry: 'Зареждане на запис...',
     },
     editorInterface: {
@@ -108,13 +121,33 @@ const bg: LocalePhrasesRoot = {
       toggleScrollSync: 'Синхронизирай превъртане',
     },
     editorToolbar: {
+      publishing: 'Публикуване...',
       publish: 'Публикувай',
       published: 'Публикуван',
+      unpublish: 'Непубликувай',
       duplicate: 'Дублирай',
+      unpublishing: 'Непубликуване...',
       publishAndCreateNew: 'Публикувай и създай нов',
       publishAndDuplicate: 'Публикувай и дублирай',
+      deleteUnpublishedChanges: 'Изтриване на непубликувани промени',
+      deleteUnpublishedEntry: 'Изтрий непубликувани записи',
+      deletePublishedEntry: 'Изтрий публикувани записи',
       deleteEntry: 'Изтрий запис',
+      saving: 'Запазване...',
+      save: 'Запази',
+      deleting: 'Изтриване...',
+      updating: 'Актуализиране...',
+      status: 'Cъстояние: %{status}',
+      backCollection: 'Записване в %{collectionLabel} колекция',
+      unsavedChanges: 'Незапазени Промени',
+      changesSaved: 'Запазени промени',
+      draft: 'Чернова',
+      inReview: 'В ревю',
+      ready: 'Готово',
       publishNow: 'Публикувай сега',
+      deployPreviewPendingButtonLabel: 'Проверете  визуализацията',
+      deployPreviewButtonLabel: 'Визуализация',
+      deployButtonLabel: 'Изглед',
     },
     editorWidgets: {
       markdown: {
@@ -185,6 +218,7 @@ const bg: LocalePhrasesRoot = {
       noResults: 'Няма резултати.',
       noAssetsFound: 'Няма намерени ресурси.',
       noImagesFound: 'Няма намерени изображения.',
+      private: 'Частен ',
       images: 'Изображения',
       mediaAssets: 'Медийни ресурси',
       search: 'Търсене...',
@@ -226,11 +260,43 @@ const bg: LocalePhrasesRoot = {
         'Извинете, пропуснахте задължително поле. Моля, попълнете преди запазване.',
       entrySaved: 'Записът е запазен',
       entryPublished: 'Записът е публикуван',
+      entryUnpublished: 'Записът е непубликуван',
       onFailToPublishEntry: 'Неуспешно публикуване на запис: %{details}',
+      onFailToUnpublishEntry: 'Неуспешно премахване на публикацията на записа: %{details}',
       entryUpdated: 'Статусът на записа е актуализиран',
+      onDeleteUnpublishedChangesBody: 'Непубликуваните промени са изтрити',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Излезли сте. Моля, запазете всички данни и влезте отново',
       onBackendDown: 'Има прекъсване в работата на бекенда. Виж детайлите %{details}',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'Зареждане на редакционни записи',
+      workflowHeading: 'Редакционен работен процес',
+      newPost: 'Нова публикация',
+      description:
+        'Броят на записите, които очакват проверка -% {smart_count}, готови за публикуване -% {readyCount}. |||| Броят на записите, които очакват проверка -% {smart_count}, готови за публикуване -% {readyCount}. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date}, %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: '%{author}',
+      deleteChanges: 'Изтриване на промените',
+      deleteNewEntry: 'Изтриване на нов запис',
+      pubChanges: 'Публикуване на промени',
+      objavNewEntry: 'Публикуване на нов запис',
+    },
+    workflowList: {
+      onDeleteEntry: 'Наистина ли искате да изтриете този запис?',
+      onPublishingNotReadyEntry:
+        'Могат да се публикуват само елементи със статус "Готов". Плъзенете картата в колоната "Готов" за да активирате публикуването.',
+      onPublishEntry: 'Наистина ли искате да публикувате този запис?',
+      draft: 'Чернови',
+      pending_review: 'В Ревю',
+      pending_publish: 'Готов',
+      currentEntries: '%{smart_count} запис |||| %{smart_count} записи',
     },
   },
 };

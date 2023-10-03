@@ -19,10 +19,12 @@ const fr: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Contenus',
+      workflow: 'Flux',
       media: 'Media',
       quickAdd: 'Ajout rapide',
     },
     app: {
+      loading: 'Chargement...',
       errorHeader: 'Erreur au chargement de la configuration du CMS',
       configErrors: 'Erreurs de configuration',
       checkConfigYml: 'Vérifiez votre fichier config.yml.',
@@ -98,9 +100,20 @@ const fr: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Voulez-vous vraiment quitter cette page ?',
+      onUpdatingWithUnsavedChangesBody:
+        'Veuillez enregistrer vos modifications avant de mettre à jour le statut.',
+      onPublishingNotReadyBody: 'Veuillez mettre à jour le statut à "Prêt" avant de publier.',
+      onPublishingWithUnsavedChangesBody:
+        'Veuillez enregistrer vos modifications avant de publier.',
+      onPublishingBody: 'Voulez-vous vraiment publier cette entrée ?',
+      onUnpublishingBody: 'Voulez-vous vraiment dépublier cette entrée ?',
       onDeleteWithUnsavedChangesBody:
         'Voulez-vous vraiment supprimer cette entrée publiée ainsi que vos modifications non enregistrées de cette session ?',
       onDeletePublishedEntryBody: 'Voulez-vous vraiment supprimer cette entrée publiée ?',
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Ceci supprimera toutes les modifications non publiées de cette entrée ainsi que vos modifications non enregistrées de cette session. Voulez-vous toujours supprimer ?',
+      onDeleteUnpublishedChangesBody:
+        'Toutes les modifications non publiées de cette entrée seront supprimées. Voulez-vous toujours supprimer ?',
       loadingEntry: "Chargement de l'entrée...",
     },
     editorInterface: {
@@ -109,14 +122,33 @@ const fr: LocalePhrasesRoot = {
       toggleScrollSync: 'Défilement synchronisé',
     },
     editorToolbar: {
+      publishing: 'Publication...',
       publish: 'Publier',
       published: 'Publiée',
       unpublish: 'Dépublier',
       duplicate: 'Dupliquer',
+      unpublishing: 'Dépublication...',
       publishAndCreateNew: 'Publier et créer une nouvelle entrée',
       publishAndDuplicate: 'Publier et dupliquer',
+      deleteUnpublishedChanges: 'Supprimer les modications non publiées',
+      deleteUnpublishedEntry: "Supprimer l'entrée non publiée",
+      deletePublishedEntry: "Supprimer l'entrée publiée",
       deleteEntry: "Supprimer l'entrée",
+      saving: 'Enregistrement...',
+      save: 'Enregistrer',
+      deleting: 'Suppression...',
+      updating: 'Mise à jour...',
+      status: 'Statut: %{status}',
+      backCollection: ' Écriture dans la collection %{collectionLabel}',
+      unsavedChanges: 'Modifications non enregistrées',
+      changesSaved: 'Modifications enregistrées',
+      draft: 'Brouillon',
+      inReview: 'En cours de révision',
+      ready: 'Prêt',
       publishNow: 'Publier maintenant',
+      deployPreviewPendingButtonLabel: "Vérifier l'aperçu",
+      deployPreviewButtonLabel: "Voir l'aperçu",
+      deployButtonLabel: 'Voir en direct',
     },
     editorWidgets: {
       markdown: {
@@ -187,10 +219,10 @@ const fr: LocalePhrasesRoot = {
         "Le fichier est trop volumineux.\nL'instance est configurée pour bloquer les envois de plus de %{size} kB.",
     },
     mediaLibraryModal: {
-      loading: 'Chargement...',
       noResults: 'Aucun résultat.',
       noAssetsFound: 'Aucune ressource trouvée.',
       noImagesFound: 'Aucune image trouvée.',
+      private: 'Privé ',
       images: 'Images',
       mediaAssets: 'Ressources',
       search: 'Recherche...',
@@ -232,12 +264,44 @@ const fr: LocalePhrasesRoot = {
         'Oops, il manque un champ requis. Veuillez le renseigner avant de soumettre.',
       entrySaved: 'Entrée enregistrée',
       entryPublished: 'Entrée publiée',
+      entryUnpublished: 'Entrée dépubliée',
       onFailToPublishEntry: 'Échec de la publication : %{details}',
+      onFailToUnpublishEntry: "Impossible de dépublier l'entrée : %{details}",
       entryUpdated: "Statut de l'entrée mis à jour",
+      onDeleteUnpublishedChangesBody: 'Modifications non publiées supprimées',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Vous avez été déconnecté, merci de sauvegarder les données et vous reconnecter',
       onBackendDown:
         "Le serveur est actuellement hors-service. Pour plus d'informations : %{details}",
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'Chargement des entrées du flux éditorial',
+      workflowHeading: 'Flux éditorial',
+      newPost: 'Nouvel article',
+      description:
+        '%{smart_count} entrée(s) en attente de revue, %{readyCount} prête(s) à être publiée(s). |||| %{smart_count} entrée(s) en attente de revue, %{readyCount} prête(s) à être publiée(s). ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} par %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'par %{author}',
+      deleteChanges: 'Supprimer les mofications',
+      deleteNewEntry: 'Supprimer la nouvelle entrée',
+      publishChanges: 'Publier les modifications',
+      publishNewEntry: 'Publier la nouvelle entrée',
+    },
+    workflowList: {
+      onDeleteEntry: 'Voulez-vous vraiment supprimer cette entrée ?',
+      onPublishingNotReadyEntry:
+        'Seuls les éléments ayant le statut "Prêt" peuvent être publiés. Veuillez glisser/déposer la carte dans la colonne "Prêt" pour activer la publication',
+      onPublishEntry: 'Voulez-vous vraiment publier cette entrée ?',
+      draft: 'Brouillons',
+      pending_review: 'En cours de révision',
+      pending_publish: 'Prêt',
+      currentEntries: '%{smart_count} entrée |||| %{smart_count} entrées',
     },
   },
 };

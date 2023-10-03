@@ -27,7 +27,9 @@ import type {
   Credentials,
   DisplayURL,
   ImplementationFile,
+  ImplementationMediaFile,
   PersistOptions,
+  UnpublishedEntry,
   User,
 } from '@staticcms/core/interface';
 import type { AsyncLock } from '@staticcms/core/lib/util';
@@ -404,5 +406,37 @@ export default class Gitea implements BackendClass {
       entries,
       cursor: result.cursor,
     };
+  }
+
+  async unpublishedEntries(): Promise<string[]> {
+    throw new Error('Editorial workflow is not yet available for Gitea');
+  }
+
+  async unpublishedEntry(): Promise<UnpublishedEntry> {
+    throw new Error('Editorial workflow is not yet available for Gitea');
+  }
+
+  async unpublishedEntryDataFile(): Promise<string> {
+    throw new Error('Editorial workflow is not yet available for Gitea');
+  }
+
+  async unpublishedEntryMediaFile(): Promise<ImplementationMediaFile> {
+    throw new Error('Editorial workflow is not yet available for Gitea');
+  }
+
+  async updateUnpublishedEntryStatus(): Promise<void> {
+    throw new Error('Editorial workflow is not yet available for Gitea');
+  }
+
+  async publishUnpublishedEntry(): Promise<void> {
+    throw new Error('Editorial workflow is not yet available for Gitea');
+  }
+
+  async deleteUnpublishedEntry(): Promise<void> {
+    throw new Error('Editorial workflow is not yet available for Gitea');
+  }
+
+  async getDeployPreview(): Promise<{ url: string; status: string } | null> {
+    throw new Error('Editorial workflow is not yet available for Gitea');
   }
 }

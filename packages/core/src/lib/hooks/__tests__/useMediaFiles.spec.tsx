@@ -11,7 +11,7 @@ import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
 import { selectMediaLibraryFiles } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppSelector } from '@staticcms/core/store/hooks';
-import { createMockCollection } from '@staticcms/test/data/collections.mock';
+import { createMockFolderCollection } from '@staticcms/test/data/collections.mock';
 import { createMockConfig } from '@staticcms/test/data/config.mock';
 import { createMockEntry } from '@staticcms/test/data/entry.mock';
 import useMediaFiles from '../useMediaFiles';
@@ -132,7 +132,7 @@ describe('useMediaFiles', () => {
 
   const mockGetMedia = jest.fn();
 
-  const mockCollection = createMockCollection();
+  const mockCollection = createMockFolderCollection();
 
   const createMockComponent = async (props: MockWidgetProps = {}) => {
     const { rerender, ...result } = render(<MockWidget {...props} />);

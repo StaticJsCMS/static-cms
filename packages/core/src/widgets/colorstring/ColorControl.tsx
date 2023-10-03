@@ -30,7 +30,6 @@ export const classes = generateClassNames('WidgetColor', [
   'color-picker',
   'input',
   'clear-button',
-  'clear-button-icon',
 ]);
 
 const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
@@ -164,14 +163,13 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
         />
         {showClearButton ? (
           <IconButton
+            icon={CloseIcon}
             variant="text"
             onClick={handleClear}
             disabled={disabled}
-            className={classes['clear-button']}
+            rootClassName={classes['clear-button']}
             aria-label="clear"
-          >
-            <CloseIcon className={classes['clear-button-icon']} />
-          </IconButton>
+          />
         ) : null}
       </div>
     </Field>

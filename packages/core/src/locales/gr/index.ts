@@ -19,10 +19,12 @@ const gr: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Περιεχόμενα',
+      workflow: 'Ροής εργασίας',
       media: 'Πολυμέσα',
       quickAdd: 'Γρήγορη προσθήκη',
     },
     app: {
+      loading: 'Φόρτωση...',
       errorHeader: 'Σφάλμα κατά τη φόρτωση της ρύθμισης παραμέτρων CMS',
       configErrors: 'Σφάλματα ρύθμισης παραμέτρων',
       checkConfigYml: 'Ελέγξτε το αρχείο config.yml.',
@@ -66,21 +68,52 @@ const gr: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Είστε βέβαιοι ότι θέλετε να αφήσετε αυτήν τη σελίδα;',
+      onUpdatingWithUnsavedChangesBody:
+        'Έχετε μη αποθηκευμένες αλλαγές, αποθηκεύστε πριν να ενημερώσετε την κατάσταση.',
+      onPublishingNotReadyBody: 'Ενημερώστε την κατάσταση σε "έτοιμο" πριν από τη δημοσίευση.',
+      onPublishingWithUnsavedChangesBody:
+        'Έχετε μη αποθηκευμένες αλλαγές, αποθηκεύστε πριν από τη δημοσίευση.',
+      onPublishingBody: 'Είστε βέβαιοι ότι θέλετε να δημοσιεύσετε αυτήν την καταχώρηση;',
+      onUnpublishingBody:
+        'Είστε βέβαιοι ότι θέλετε να καταργήσετε τη δημοσίευση αυτής της καταχώρησης;',
       onDeleteWithUnsavedChangesBody:
         'Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν τη δημοσιευμένη καταχώρηση, καθώς και τις αλλαγές που δεν αποθηκεύσατε από την τρέχουσα περίοδο λειτουργίας;',
       onDeletePublishedEntryBody:
         'Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν τη δημοσιευμένη καταχώρηση;',
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Αυτό θα διαγράψει όλες τις μη δημοσιευμένες αλλαγές σε αυτήν την καταχώρηση, καθώς και τις αλλαγές που δεν έχετε αποθηκεύσει από την τρέχουσα περίοδο λειτουργίας. Θέλετε ακόμα να διαγράψετε;',
+      onDeleteUnpublishedChangesBody:
+        'Όλες οι μη δημοσιευμένες αλλαγές σε αυτήν την καταχώρηση θα διαγραφούν. Θέλετε ακόμα να διαγράψετε;',
       loadingEntry: 'Φόρτωση εισόδου...',
     },
     editorToolbar: {
+      publishing: 'Δημοσίευση...',
       publish: 'Δημοσίευση',
       published: 'Δημοσιεύθηκε',
       unpublish: 'Κατάργηση δημοσίευσης',
       duplicate: 'Διπλότυπο',
+      unpublishing: 'Κατάργηση δημοσίευσης...',
       publishAndCreateNew: 'Δημοσίευση και δημιουργία νέων',
       publishAndDuplicate: 'Δημοσίευση και αντίγραφο',
+      deleteUnpublishedChanges: 'Διαγραφή μη δημοσιευμένων αλλαγών',
+      deleteUnpublishedEntry: 'Διαγραφή μη δημοσιευμένης καταχώρησης',
+      deletePublishedEntry: 'Διαγραφή δημοσιευμένης καταχώρησης',
       deleteEntry: 'Διαγραφή καταχώρησης',
+      saving: 'Εξοικονόμηση...',
+      save: 'Αποθήκευση',
+      deleting: 'Διαγραφή...',
+      updating: 'Ενημέρωση...',
+      status: 'Κατάστασης: %{status}',
+      backCollection: ' Εγγραφή στη συλλογή %{collectionLabel}',
+      unsavedChanges: 'Μη αποθηκευμένες αλλαγές',
+      changesSaved: 'Αλλαγές που αποθηκεύτηκαν',
+      draft: 'Σχέδιο',
+      inReview: 'Σε επανεξέταση',
+      ready: 'Έτοιμα',
       publishNow: 'Δημοσίευση τώρα',
+      deployPreviewPendingButtonLabel: 'Έλεγχος για προεπισκόπηση',
+      deployPreviewButtonLabel: 'Προβολή προεπισκόπησης',
+      deployButtonLabel: 'Προβολή Live',
     },
     editorWidgets: {
       image: {
@@ -119,10 +152,10 @@ const gr: LocalePhrasesRoot = {
         'Το αρχείο είναι πολύ μεγάλο.\nΔεν επιτρέπονται αρχεία μεγαλύτερα από %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Φόρτωση...',
       noResults: 'Χωρίς αποτελέσματα.',
       noAssetsFound: 'Δεν βρέθηκαν αρχεία.',
       noImagesFound: 'Δεν βρέθηκαν εικόνες.',
+      private: 'Ιδιωτικό',
       images: 'Εικόνες',
       mediaAssets: 'Αρχεία πολυμέσων',
       search: 'Αναζήτηση...',
@@ -158,9 +191,41 @@ const gr: LocalePhrasesRoot = {
         'Ουπς, ξεχάσατε ένα απαιτούμενο πεδίο. Συμπληρώστε το πριν από την αποθήκευση.',
       entrySaved: 'Η καταχώρηση Αποθηκεύτηκε',
       entryPublished: 'Η καταχώρηση δημοσιεύτηκε',
+      entryUnpublished: 'Μη δημοσιευμένη καταχώρηση',
       onFailToPublishEntry: 'Η δημοσίευση απέτυχε: %{details}',
+      onFailToUnpublishEntry: 'Απέτυχε η κατάργηση δημοσίευσης καταχώρησης: %{details}',
       entryUpdated: 'Η κατάσταση εισόδου ενημερώθηκε',
+      onDeleteUnpublishedChangesBody: 'Οι μη δημοσιευμένες αλλαγές διαγράφηκαν',
       onFailToAuth: '%{details}',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'Φόρτωση καταχωρήσεων ροής εργασίας σύνταξης',
+      workflowHeading: 'Ροή εργασιών',
+      newPost: 'Νέα δημοσίευση',
+      description:
+        '%{smart_count} καταχώρησεις σε αναμονή για αναθεώρηση, %{readyCount} έτοιμες για Live μετάβαση. |||| %{smart_count} καταχωρήσεις σε αναμονή για αναθεώρηση, %{readyCount} έτοιμες για Live μετάβαση. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} από %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'από %{author}',
+      deleteChanges: 'Διαγραφή αλλαγών',
+      deleteNewEntry: 'Διαγραφή νέας καταχώρησης',
+      publishChanges: 'Δημοσίευση αλλαγών',
+      publishNewEntry: 'Δημοσίευση νέας καταχώρησης',
+    },
+    workflowList: {
+      onDeleteEntry: 'Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν την καταχώρηση;',
+      onPublishingNotReadyEntry:
+        'Μόνο τα στοιχεία με κατάσταση "Ready" μπορούν να δημοσιευτούν. Σύρετε την κάρτα στη στήλη "έτοιμο" για να ενεργοποιήσετε τη δημοσίευση.',
+      onPublishEntry: 'Είστε βέβαιοι ότι θέλετε να δημοσιεύσετε αυτήν την καταχώρηση;',
+      draft: 'Προσχέδια',
+      pending_review: 'Σε ανασκόπηση',
+      pending_publish: 'Έτοιμα',
+      currentEntries: '%{smart_count} καταχωρηση |||| %{smart_count} καταχωρησεις',
     },
   },
 };

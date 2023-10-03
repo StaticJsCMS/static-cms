@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import {
   DEFAULT_DATETIME_FORMAT,
   DEFAULT_DATE_FORMAT,
@@ -7,38 +8,80 @@ import {
   DEFAULT_TIME_FORMAT,
 } from './constants';
 
-import type { DateTimeField } from '@staticcms/core/interface';
+import type { DateTimeField, DateTimeFormats } from '@staticcms/core/interface';
 
-export function getTimezoneExtra(field: DateTimeField) {
-  return field.picker_utc ? '' : DEFAULT_TIMEZONE_FORMAT;
+function getDisplayFormat(
+  dateFormat: string | boolean,
+  timeFormat: string | boolean,
+  storageFormat: string,
+  timezoneExtra: string,
+) {
+  if (typeof dateFormat === 'string' || typeof timeFormat === 'string') {
+    const formatParts: string[] = [];
+    if (typeof dateFormat === 'string' && isNotEmpty(dateFormat)) {
+      formatParts.push(dateFormat);
+    } else if (dateFormat !== false) {
+      formatParts.push(DEFAULT_DATE_FORMAT);
+    }
+
+    if (typeof timeFormat === 'string' && isNotEmpty(timeFormat)) {
+      formatParts.push(timeFormat);
+    } else if (timeFormat !== false) {
+      formatParts.push(`${DEFAULT_TIME_FORMAT}${timezoneExtra}`);
+    }
+
+    if (formatParts.length > 0) {
+      return formatParts.join(' ');
+    }
+  }
+
+  if (timeFormat === false) {
+    return storageFormat ?? DEFAULT_DATE_FORMAT;
+  }
+
+  if (dateFormat === false) {
+    return storageFormat ?? `${DEFAULT_TIME_FORMAT}${timezoneExtra}`;
+  }
+
+  return storageFormat ?? `${DEFAULT_DATETIME_FORMAT}${timezoneExtra}`;
 }
 
-export function useTimezoneExtra(field: DateTimeField) {
-  return useMemo(() => getTimezoneExtra(field), [field]);
-}
+export function getDatetimeFormats(field: DateTimeField): DateTimeFormats;
+export function getDatetimeFormats(field: DateTimeField | undefined): DateTimeFormats | undefined;
+export function getDatetimeFormats(field: DateTimeField | undefined) {
+  if (!field) {
+    return undefined;
+  }
 
-export function getDatetimeFormats(field: DateTimeField, timezoneExtra: string) {
+  const timezoneExtra = field.picker_utc ? '' : DEFAULT_TIMEZONE_FORMAT;
+
   // dateFormat and timeFormat are strictly for modifying input field with the date/time pickers
   const dateFormat: string | boolean = field.date_format ?? true;
   // show time-picker? false hides it, true shows it using default format
   const timeFormat: string | boolean = field.time_format ?? true;
 
-  let finalFormat = field.format;
+  let storageFormat = field.format;
   if (timeFormat === false) {
-    finalFormat = field.format ?? DEFAULT_DATE_FORMAT;
+    storageFormat = field.format ?? DEFAULT_DATE_FORMAT;
   } else if (dateFormat === false) {
-    finalFormat = field.format ?? `${DEFAULT_TIME_FORMAT}${timezoneExtra}`;
+    storageFormat = field.format ?? `${DEFAULT_TIME_FORMAT}${timezoneExtra}`;
   } else {
-    finalFormat = field.format ?? `${DEFAULT_DATETIME_FORMAT}${timezoneExtra}`;
+    storageFormat = field.format ?? `${DEFAULT_DATETIME_FORMAT}${timezoneExtra}`;
   }
 
+  const displayFormat = getDisplayFormat(dateFormat, timeFormat, storageFormat, timezoneExtra);
+
   return {
-    format: finalFormat,
+    storageFormat,
     dateFormat,
     timeFormat,
+    displayFormat,
+    timezoneExtra,
   };
 }
 
-export function useDatetimeFormats(field: DateTimeField, timezoneExtra: string) {
-  return useMemo(() => getDatetimeFormats(field, timezoneExtra), [field, timezoneExtra]);
+export function useDatetimeFormats(field: DateTimeField): DateTimeFormats;
+export function useDatetimeFormats(field: DateTimeField | undefined): DateTimeFormats | undefined;
+export function useDatetimeFormats(field: DateTimeField | undefined): DateTimeFormats | undefined {
+  return useMemo(() => getDatetimeFormats(field), [field]);
 }

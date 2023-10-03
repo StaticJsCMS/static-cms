@@ -29,17 +29,27 @@ export default function useIsMediaAsset<T extends MediaField, EF extends BaseFie
       return;
     }
 
+    let alive = true;
+
     const checkMediaExistence = async () => {
       const asset = await dispatch(
         getAsset<T, EF>(collection, entry, debouncedUrl, field, currentFolder),
       );
-      setExists(
-        Boolean(asset && asset !== emptyAsset && isNotEmpty(asset.toString()) && asset.fileObj),
-      );
+
+      if (alive) {
+        setExists(
+          Boolean(asset && asset !== emptyAsset && isNotEmpty(asset.toString()) && asset.fileObj),
+        );
+      }
     };
 
     checkMediaExistence();
-  }, [collection, dispatch, entry, field, debouncedUrl, currentFolder]);
+
+    return () => {
+      alive = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedUrl]);
 
   return exists;
 }

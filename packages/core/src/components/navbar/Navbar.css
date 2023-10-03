@@ -73,26 +73,24 @@
 
 .CMS_Navbar_actions {
   @apply flex
-    gap-3
+    gap-2
+    lg:gap-3
     items-center;
 }
 
 .CMS_Navbar_site-url {
   @apply gap-2
-    hidden
-    lg:flex;
+    !hidden
+    lg:!flex;
 }
 
-.CMS_Navbar_site-url-label {
-  @apply hidden
-    lg:flex;
+.CMS_Navbar_site-url-mobile {
+  @apply !flex
+    lg:!hidden;
 }
 
 .CMS_Navbar_site-url-icon {
   color: var(--text-secondary);
-
-  @apply h-5
-    w-5;
 }
 
 .CMS_Navbar_quick-create {

@@ -1,4 +1,6 @@
-const sl = {
+import type { LocalePhrasesRoot } from '@staticcms/core/interface';
+
+const sl: LocalePhrasesRoot = {
   auth: {
     login: 'Vpiši se',
     loggingIn: 'Prijavljanje...',
@@ -22,6 +24,7 @@ const sl = {
       quickAdd: 'Hitro dodajanje',
     },
     app: {
+      loading: 'Nalaganje...',
       errorHeader: 'Napaka pri nalaganju CMS konfiguracije',
       configErrors: 'Konfiguracijske napake',
       checkConfigYml: 'Preverite svojo datoteko config.yml.',
@@ -99,21 +102,20 @@ const sl = {
     },
     editor: {
       onLeavePage: 'Ste prepričani, da želite zapustiti to stran?',
-      onUpdatingWithUnsavedChanges: 'Imaš neshranjene spremembe. Shrani pred posodobitvijo stanja.',
-      onPublishingNotReady: 'Pred objavo posodobi status na "pripravljen".',
-      onPublishingWithUnsavedChanges: 'Imaš neshranjene spremembe. Shrani pred objavo.',
-      onPublishing: 'Ste prepričani, da želite objaviti ta vnos?',
-      onUnpublishing: 'Ste prepričani, da želite preklicati objavo tega vnosa?',
+      onUpdatingWithUnsavedChangesBody:
+        'Imaš neshranjene spremembe. Shrani pred posodobitvijo stanja.',
+      onPublishingNotReadyBody: 'Pred objavo posodobi status na "pripravljen".',
+      onPublishingWithUnsavedChangesBody: 'Imaš neshranjene spremembe. Shrani pred objavo.',
+      onPublishingBody: 'Ste prepričani, da želite objaviti ta vnos?',
+      onUnpublishingBody: 'Ste prepričani, da želite preklicati objavo tega vnosa?',
       onDeleteWithUnsavedChangesBody:
         'Ste prepričani, da želite izbrisati ta objavljen vnos, pa tudi neshrannjene spremembe iz trenutne seje?',
       onDeletePublishedEntryBody: 'Ste prepričani, da želite izbrisati ta objavljeni vnos?',
-      onDeleteUnpublishedChangesWithUnsavedChanges:
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'To bo izbrisalo vse neobjavljene spremembe tega vnosa, pa tudi neshranjene spremembe iz trenutne seje. Ali še vedno želiš izbrisati?',
-      onDeleteUnpublishedChanges:
+      onDeleteUnpublishedChangesBody:
         'Vse neobjavljene spremembe tega vnosa bodo izbrisane. Ali še vedno želiš izbrisati?',
       loadingEntry: 'Nalaganje vnosa ...',
-      confirmLoadBackup:
-        'Za ta vnos je bila povrnjena lokalna varnostna kopija, ali bi jo radi uporabili?',
     },
     editorInterface: {
       toggleI18n: 'Preklopi i18n',
@@ -227,7 +229,6 @@ const sl = {
       fileTooLargeBody: 'Datoteka je prevelika.\n Ne sme biti večja od %{size} kb.',
     },
     mediaLibraryModal: {
-      loading: 'Nalaganje...',
       noResults: 'Ni rezultatov.',
       noAssetsFound: 'Ni najdenih sredstev.',
       noImagesFound: 'Ni najdenih slik.',
@@ -276,7 +277,7 @@ const sl = {
       onFailToPublishEntry: 'Vnosa ni uspelo objaviti: %{details}',
       onFailToUnpublishEntry: 'Preklicanje objave vnosa ni uspelo: %{details}',
       entryUpdated: 'Status vnosa posodobljen',
-      onDeleteUnpublishedChanges: 'Neobjavljene spremembe izbrisane',
+      onDeleteUnpublishedChangesBody: 'Neobjavljene spremembe izbrisane',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Bili ste odjavljeni, varnostno kopirate vse podatke in se ponovno prijavite',
       onBackendDown: 'Zaledna storitev doživlja izpad. Glejte %{details} za več informacij',
@@ -305,9 +306,9 @@ const sl = {
       onPublishingNotReadyEntry:
         'Objavijo se lahko samo elementi s statusom "pripravljen". Prosimo, povlecite kartico v stolpec "pripravljen", da omogočite objavo.',
       onPublishEntry: 'Ste prepričani, da želite objaviti ta vnos?',
-      draftHeader: 'Osnutki',
-      inReviewHeader: 'V pregledu',
-      readyHeader: 'Pripravljen',
+      draft: 'Osnutki',
+      pending_review: 'V pregledu',
+      pending_publish: 'Pripravljen',
       currentEntries: '%{smart_count} vnos |||| %{smart_count} vnosov',
     },
   },

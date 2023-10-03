@@ -1,6 +1,5 @@
 ---
 title: Test
-draft: false
 date: 2022-11-01 14:28
 image: kittens.jpg
 ---

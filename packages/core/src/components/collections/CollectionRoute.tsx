@@ -1,20 +1,22 @@
 import React, { useMemo } from 'react';
 import { Navigate, useParams, useSearchParams } from 'react-router-dom';
 
+import useDefaultPath from '@staticcms/core/lib/hooks/useDefaultPath';
 import {
   selectCollection,
   selectCollections,
 } from '@staticcms/core/reducers/selectors/collections';
 import { useAppSelector } from '@staticcms/core/store/hooks';
-import { getDefaultPath } from '../../lib/util/collection.util';
 import CollectionPage from './CollectionPage';
+
+import type { FC } from 'react';
 
 interface CollectionRouteProps {
   isSearchResults?: boolean;
   isSingleSearchResult?: boolean;
 }
 
-const CollectionRoute = ({ isSearchResults, isSingleSearchResult }: CollectionRouteProps) => {
+const CollectionRoute: FC<CollectionRouteProps> = ({ isSearchResults, isSingleSearchResult }) => {
   const { name, searchTerm } = useParams();
   const [searchParams] = useSearchParams();
   const noRedirect = searchParams.has('noredirect');
@@ -23,7 +25,7 @@ const CollectionRoute = ({ isSearchResults, isSingleSearchResult }: CollectionRo
   const collection = useAppSelector(collectionSelector);
   const collections = useAppSelector(selectCollections);
 
-  const defaultPath = useMemo(() => getDefaultPath(collections), [collections]);
+  const defaultPath = useDefaultPath(collections);
 
   if (!searchTerm && (!name || !collection)) {
     return <Navigate to={defaultPath} />;

@@ -20,10 +20,12 @@ const cs: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Obsah',
+      workflow: 'Workflow',
       media: 'Média',
       quickAdd: 'Přidat',
     },
     app: {
+      loading: 'Načítání…',
       errorHeader: 'Chyba při načítání CMS konfigurace',
       configErrors: 'Chyba konfigurace',
       checkConfigYml: 'Zkontrolujte soubor config.yml.',
@@ -98,9 +100,20 @@ const cs: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Chcete opravdu opustit tuto stránku?',
+      onUpdatingWithUnsavedChangesBody:
+        'Máte neuložené změny. Uložte je prosím před změnou statusu.',
+      onPublishingNotReadyBody: 'Změňte stav na „Připraveno“ před publikováním.',
+      onPublishingWithUnsavedChangesBody:
+        'Máte neuložené změny, prosím uložte je před publikováním.',
+      onPublishingBody: 'Chcete opravdu publikovat tento záznam?',
+      onUnpublishingBody: 'Chcete opravdu zrušit publikování tohoto záznamu?',
       onDeleteWithUnsavedChangesBody:
         'Chcete opravdu vymazat tento publikovaný záznam a všechny neuložené změny z této relace?',
       onDeletePublishedEntryBody: 'Chcete opravdu smazat tento publikovaný záznam?',
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Tato akce vymaže všechny nepublikované změny v tomto záznamu a také všechny neuložené změny z této relace. Chcete záznam skutečně vymazat?',
+      onDeleteUnpublishedChangesBody:
+        'Všechny nepublivkoané změny v tomto záznamu budou vymazány. Chcete ho skuteně vymazat?',
       loadingEntry: 'Načítání záznamu…',
     },
     editorInterface: {
@@ -109,13 +122,33 @@ const cs: LocalePhrasesRoot = {
       toggleScrollSync: 'Sladit skrolování',
     },
     editorToolbar: {
+      publishing: 'Publikování…',
       publish: 'Publikovat',
       published: 'Publikovaný',
+      unpublish: 'Zrušit publikování',
       duplicate: 'Duplikovat',
+      unpublishing: 'Rušení publikování…',
       publishAndCreateNew: 'Publikovat a vytvořit nový',
       publishAndDuplicate: 'Publikovat a duplikovat',
+      deleteUnpublishedChanges: 'Vymazat nepublikované změny',
+      deleteUnpublishedEntry: 'Vymazat nepublikovaný záznam',
+      deletePublishedEntry: 'Vymazat publikovaný záznam',
       deleteEntry: 'Vymazat záznam',
+      saving: 'Ukládání…',
+      save: 'Uložit',
+      deleting: 'Vymazávání…',
+      updating: 'Aktualizace…',
+      status: 'Status: %{status}',
+      backCollection: ' Píšete v kolekci %{collectionLabel}',
+      unsavedChanges: 'Neuložené změny',
+      changesSaved: 'Změny uloženy',
+      draft: 'Koncept',
+      inReview: 'V revizi',
+      ready: 'Připraveno',
       publishNow: 'Publikovat teď',
+      deployPreviewPendingButtonLabel: 'Zkontrolovat náhled',
+      deployPreviewButtonLabel: 'Zobrazit náhled',
+      deployButtonLabel: 'Zobrazit na webu',
     },
     editorWidgets: {
       markdown: {
@@ -181,10 +214,10 @@ const cs: LocalePhrasesRoot = {
       fileTooLargeBody: 'Soubor je příliš velký.\nSoubor musí být menší než %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Načítání…',
       noResults: 'Nic nenalezeno.',
       noAssetsFound: 'Média nenalezena.',
       noImagesFound: 'Obrázky nenalezeny.',
+      private: 'Soukromé ',
       images: 'Obrázky',
       mediaAssets: 'Média',
       search: 'Hledat…',
@@ -225,11 +258,43 @@ const cs: LocalePhrasesRoot = {
       missingRequiredField: 'Vynechali jste povinné pole. Prosím vyplňte ho.',
       entrySaved: 'Záznam uložen',
       entryPublished: 'Záznam publikován',
+      entryUnpublished: 'Publikování záznamu zrušeno',
       onFailToPublishEntry: 'Chyba při publikování záznamu: %{details}',
+      onFailToUnpublishEntry: 'Chyba při rušení publikování záznamu: %{details}',
       entryUpdated: 'Stav záznamu byl změněn',
+      onDeleteUnpublishedChangesBody: 'Nepublikované změny byly smazány',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Byli jste odhlášeni, prosím zálohujte všechna data a znova se přihlašte',
       onBackendDown: 'Backend zaznamenal výpadek. Podívejte se do %{details} pro více informací.',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'Načítání workflow záznamů',
+      workflowHeading: 'Schvalovací Workflow',
+      newPost: 'Nový post',
+      description:
+        '%{smart_count} záznam čeká na schválení, %{readyCount} připraven k publikaci. |||| %{smart_count} čeká na schválení, %{readyCount} připraveno k publikaci. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} (%{author})',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: '%{author}',
+      deleteChanges: 'Vymazat změny',
+      deleteNewEntry: 'Vymazat nový záznam',
+      publishChanges: 'Publikovat změny',
+      publishNewEntry: 'Publikovat nový záznam',
+    },
+    workflowList: {
+      onDeleteEntry: 'Opravdu chcete smazat tento záznam?',
+      onPublishingNotReadyEntry:
+        'Pouze položky se statusem "Připraveno" mohou být publikováno. Pro umožnění publikace musíte přetáhnout kartu do sloupce "Připraveno"',
+      onPublishEntry: 'Opravdu chcete publikovat tento záznam?',
+      draft: 'Koncepty',
+      pending_review: 'V revizi',
+      pending_publish: 'Připraveno',
+      currentEntries: '%{smart_count} záznam |||| %{smart_count} záznamů',
     },
   },
 };

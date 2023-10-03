@@ -2,6 +2,7 @@ import { Info as InfoIcon } from '@styled-icons/material-outlined/Info';
 import get from 'lodash/get';
 import React, { useEffect, useMemo, useState } from 'react';
 
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getFieldPreview } from '@staticcms/core/lib/registry';
 import { getEntryBackupKey } from '@staticcms/core/lib/util/backup.util';
 import {
@@ -11,13 +12,14 @@ import {
 } from '@staticcms/core/lib/util/collection.util';
 import localForage from '@staticcms/core/lib/util/localForage';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
-import { selectConfig } from '@staticcms/core/reducers/selectors/config';
+import { selectConfig, selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import TableCell from '../../common/table/TableCell';
 import TableRow from '../../common/table/TableRow';
 import entriesClasses from './Entries.classes';
+import WorkflowStatusPill from '../../workflow/WorkflowStatusPill';
 
-import type { BackupEntry, Collection, Entry, TranslatedProps } from '@staticcms/core/interface';
+import type { BackupEntry, Collection, Entry } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 export interface EntryRowProps {
@@ -27,13 +29,9 @@ export interface EntryRowProps {
   summaryFields: string[];
 }
 
-const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
-  collection,
-  entry,
-  collectionLabel,
-  summaryFields,
-  t,
-}) => {
+const EntryRow: FC<EntryRowProps> = ({ collection, entry, collectionLabel, summaryFields }) => {
+  const t = useTranslate();
+
   const path = useMemo(
     () => `/collections/${collection.name}/entries/${entry.slug}`,
     [collection.name, entry.slug],
@@ -44,6 +42,7 @@ const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
   const fields = selectFields(collection, entry.slug);
 
   const config = useAppSelector(selectConfig);
+  const useWorkflow = useAppSelector(selectUseWorkflow);
 
   const templateName = useMemo(
     () => selectTemplateName(collection, entry.slug),
@@ -119,6 +118,11 @@ const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
           />
         ) : null}
       </TableCell>
+      {useWorkflow ? (
+        <TableCell key="status" to={path} shrink>
+          <WorkflowStatusPill status={entry.status} />
+        </TableCell>
+      ) : null}
     </TableRow>
   );
 };

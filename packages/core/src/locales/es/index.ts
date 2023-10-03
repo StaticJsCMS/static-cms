@@ -19,10 +19,12 @@ const es: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Contenido',
+      workflow: 'Flujo Editorial',
       media: 'Medios',
       quickAdd: 'Añadir rápido',
     },
     app: {
+      loading: 'Cargando...',
       errorHeader: 'Error al cargar la configuración del CMS',
       configErrors: 'Errores de configuración',
       checkConfigYml: 'Compruebe el archivo config.yml.',
@@ -82,20 +84,50 @@ const es: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: '¿Estás seguro de que quieres dejar esta página?',
+      onUpdatingWithUnsavedChangesBody:
+        'Tiene cambios no guardados, por favor, guárdelos antes de actualizar el estado.',
+      onPublishingNotReadyBody: 'Por favor, actualice el estado a "Ready" antes de publicar.',
+      onPublishingWithUnsavedChangesBody:
+        'Tiene cambios no guardados, por favor guárdelos antes de publicarlos.',
+      onPublishingBody: '¿Estás seguro de que quieres publicar esta entrada?',
+      onUnpublishingBody: '¿Estás seguro de que quieres retirar esta entrada?',
       onDeleteWithUnsavedChangesBody:
         '¿Está seguro de que desea eliminar esta entrada publicada, así como los cambios no guardados de la sesión actual?',
       onDeletePublishedEntryBody: '¿Estás seguro de que quieres borrar esta entrada publicada?',
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Esto eliminará todos los cambios no publicados de esta entrada, así como los cambios no guardados de la sesión actual. ¿Todavía quieres borrar?',
+      onDeleteUnpublishedChangesBody:
+        'Todos los cambios no publicados en esta entrada serán eliminados. ¿Todavía quieres borrar?',
       loadingEntry: 'Cargando entrada...',
     },
     editorToolbar: {
+      publishing: 'Publicando...',
       publish: 'Publicar',
       published: 'Publicado',
       unpublish: 'Retirar',
       duplicate: 'Duplicar',
+      unpublishing: 'Retirando...',
       publishAndCreateNew: 'Publicar y crear nuevo',
       publishAndDuplicate: 'Publicar y duplicar',
+      deleteUnpublishedChanges: 'Eliminar cambios no publicados',
+      deleteUnpublishedEntry: 'Eliminar entrada no publicada',
+      deletePublishedEntry: 'Eliminar entrada publicada',
       deleteEntry: 'Eliminar entrada',
+      saving: 'Guardando...',
+      save: 'Guardar',
+      deleting: 'Eliminando...',
+      updating: 'Actualizando...',
+      status: 'Estado: %{status}',
+      backCollection: ' Escribiendo en la colección %{collectionLabel}',
+      unsavedChanges: 'Cambios no guardados',
+      changesSaved: 'Cambios guardados',
+      draft: 'Borrador',
+      inReview: 'En revisión',
+      ready: 'Listo',
       publishNow: 'Publicar ahora',
+      deployPreviewPendingButtonLabel: 'Comprobar Vista Previa',
+      deployPreviewButtonLabel: 'Ver Vista Previa',
+      deployButtonLabel: 'Ver publicación',
     },
     editorWidgets: {
       markdown: {
@@ -141,10 +173,10 @@ const es: LocalePhrasesRoot = {
         'Archivo muy pesado.\nConfigurado para no permitir archivos más pesados que %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Cargando...',
       noResults: 'Sin resultados.',
       noAssetsFound: 'Archivos no encontrados.',
       noImagesFound: 'Imágenes no encontradas.',
+      private: 'Privado ',
       images: 'Imágenes',
       mediaAssets: 'Archivos multimedia',
       search: 'Buscar...',
@@ -186,9 +218,41 @@ const es: LocalePhrasesRoot = {
         'Oops, no ha rellenado un campo obligatorio. Por favor, rellénelo antes de guardar.',
       entrySaved: 'Entrada guardada',
       entryPublished: 'Entrada publicada',
+      entryUnpublished: 'Entrada retirada',
       onFailToPublishEntry: 'No se ha podido publicar: %{details}',
+      onFailToUnpublishEntry: 'No se ha podido retirar la entrada: %{details}',
       entryUpdated: 'Estado de entrada actualizado',
+      onDeleteUnpublishedChangesBody: 'Cambios no publicados eliminados',
       onFailToAuth: '%{details}',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'Cargando Entradas del Flujo Editorial',
+      workflowHeading: 'Flujo Editorial',
+      newPost: 'Nuevo artículo',
+      description:
+        '%{smart_count} entrada esperando revisión, %{readyCount} lista para publicar |||| %{smart_count} entradas esperando revisión, %{readyCount} listas para publicar. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} por %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'por %{author}',
+      deleteChanges: 'Eliminar cambios',
+      deleteNewEntry: 'Eliminar nueva entrada',
+      publishChanges: 'Publicar cambios',
+      publishNewEntry: 'Publicar nueva entrada',
+    },
+    workflowList: {
+      onDeleteEntry: '¿Está seguro de que quiere borrar esta entrada?',
+      onPublishingNotReadyEntry:
+        'Sólo se pueden publicar los elementos con el estado "Listo". Por favor, arrastre la tarjeta hasta la columna "Listo" para permitir la publicación.',
+      onPublishEntry: '¿Estás seguro de que quieres publicar esta entrada?',
+      draft: 'Borradores',
+      pending_review: 'En revisión',
+      pending_publish: 'Listo',
+      currentEntries: '%{smart_count} entrada |||| %{smart_count} entradas',
     },
   },
 };

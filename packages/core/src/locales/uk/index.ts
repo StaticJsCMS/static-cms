@@ -4,10 +4,12 @@ const uk: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Зміст',
+      workflow: 'Робочий процес',
       media: 'Медіа',
       quickAdd: 'Додати',
     },
     app: {
+      loading: 'Завантаження...',
       errorHeader: 'Помилка завантаження конфігурації',
       configErrors: 'Помилка конфігурації',
       checkConfigYml: 'Перевірте config.yml файл.',
@@ -60,14 +62,36 @@ const uk: LocalePhrasesRoot = {
       onDeleteWithUnsavedChangesBody:
         'Ви дійсно бажаєте видалити опублікований запис, як і всі незбережені зміни під час поточної сесії?',
       onDeletePublishedEntryBody: 'Ви дійсно бажаєте видалити опублікований запис?',
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Видаляться всі неопубліковані зміни до цього запису, а також всі незбережені зміни під час поточної сесії. Бажаєте продовжити?',
+      onDeleteUnpublishedChangesBody:
+        'Всі незбережені зміни до цього запису буде видалено. Бажаєте продовжити?',
       loadingEntry: 'Завантаження...',
     },
     editorToolbar: {
+      publishing: 'Публікація...',
       publish: 'Опублікувати',
       published: 'Опубліковано',
       publishAndCreateNew: 'Опублікувати і створити нову',
+      deleteUnpublishedChanges: 'Видалити неопубліковані зміни',
+      deleteUnpublishedEntry: 'Видалити неопубліковану сторінку',
+      deletePublishedEntry: 'Видалити опубліковану сторінку',
       deleteEntry: 'Видалити',
+      saving: 'Збереження...',
+      save: 'Зберегти',
+      deleting: 'Видалення...',
+      updating: 'Оновлення...',
+      status: 'Cтан: %{status}',
+      backCollection: ' Робота над %{collectionLabel} колекцією',
+      unsavedChanges: 'Незбережені зміни',
+      changesSaved: 'Зміни збережено',
+      draft: 'В роботі',
+      inReview: 'На розгляді',
+      ready: 'Готово',
       publishNow: 'Опублікувати',
+      deployPreviewPendingButtonLabel: 'Перевірити оновлення',
+      deployPreviewButtonLabel: 'Попередній перегляд',
+      deployButtonLabel: 'Переглянути наживо',
     },
     editorWidgets: {
       image: {
@@ -104,10 +128,10 @@ const uk: LocalePhrasesRoot = {
       onDeleteBody: 'Ви дійсно бажаєте видалити обрані матеріали?',
     },
     mediaLibraryModal: {
-      loading: 'Завантаження...',
       noResults: 'Результати відсутні.',
       noAssetsFound: 'Матеріали відсутні.',
       noImagesFound: 'Зображення відсутні.',
+      private: 'Private ',
       images: 'Зображення',
       mediaAssets: 'Медіа матеріали',
       search: 'Пошук...',
@@ -145,7 +169,36 @@ const uk: LocalePhrasesRoot = {
       entryPublished: 'Опубліковано',
       onFailToPublishEntry: 'Помилка публікації: %{details}',
       entryUpdated: 'Статус оновлено',
+      onDeleteUnpublishedChangesBody: 'Видалено неопубліковані зміни',
       onFailToAuth: '%{details}',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'Завантаження редакційних матеріалів',
+      workflowHeading: 'Редакція',
+      newPost: 'Новий запис',
+      description: '%{smart_count} записів очікують розгляду, %{readyCount} готові до публікації. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} від %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'від %{author}',
+      deleteChanges: 'Видалити зміни',
+      deleteNewEntry: 'Видалити новий запис',
+      publishChanges: 'Опублікувати всі зміни',
+      publishNewEntry: 'Опублікувати новий запис',
+    },
+    workflowList: {
+      onDeleteEntry: 'Ви дійсно бажаєте видалити запис?',
+      onPublishingNotReadyEntry:
+        'Тільки елементи з статусом "Готово" можуть бути опубліковані. Будь ласка перемістіть картку в колонку "Готово" для публікації.',
+      onPublishEntry: 'Дійсно бажаєте опублікувати запис?',
+      draft: 'В роботі',
+      pending_review: 'На розгляді',
+      pending_publish: 'Готово',
+      currentEntries: '%{smart_count} запис |||| %{smart_count} записів',
     },
   },
 };

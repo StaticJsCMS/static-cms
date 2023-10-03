@@ -6,7 +6,7 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { buttonClasses } from '../common/button/useButtonClassNames';
 
-import type { MouseEventHandler, ReactNode } from 'react';
+import type { FC, MouseEventHandler, ReactNode } from 'react';
 
 import './NavLink.css';
 
@@ -38,7 +38,7 @@ export interface NavInternalLinkProps extends BaseNavLinkProps {
 
 export type NavLinkProps = NavExternalLinkProps | NavInternalLinkProps;
 
-const NavLink = ({ icon, children, className, onClick, ...otherProps }: NavLinkProps) => {
+const NavLink: FC<NavLinkProps> = ({ icon, children, className, onClick, ...otherProps }) => {
   const content = useMemo(
     () => (
       <div className={classes.content}>

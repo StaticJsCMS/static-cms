@@ -3,28 +3,26 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import Login from '@staticcms/core/components/login/Login';
 import { NetlifyAuthenticator, PkceAuthenticator } from '@staticcms/core/lib/auth';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 
-import type {
-  AuthenticationPageProps,
-  AuthenticatorConfig,
-  TranslatedProps,
-} from '@staticcms/core/interface';
-import type { MouseEvent } from 'react';
+import type { AuthenticationPageProps, AuthenticatorConfig } from '@staticcms/core/interface';
+import type { FC, MouseEvent } from 'react';
 
 const clientSideAuthenticators = {
   pkce: (config: AuthenticatorConfig) => new PkceAuthenticator(config),
 } as const;
 
-const GitLabAuthenticationPage = ({
+const GitLabAuthenticationPage: FC<AuthenticationPageProps> = ({
   inProgress = false,
   config,
   siteId,
   authEndpoint,
   clearHash,
   onLogin,
-  t,
-}: TranslatedProps<AuthenticationPageProps>) => {
+}) => {
+  const t = useTranslate();
+
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const auth = useMemo(() => {

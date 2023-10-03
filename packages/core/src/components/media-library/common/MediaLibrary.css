@@ -151,11 +151,6 @@
     items-center;
 }
 
-.CMS_MediaLibrary_folder-controls-icon {
-  @apply h-5
-    w-5;
-}
-
 .CMS_MediaLibrary_folder {
   @apply flex
     gap-2

@@ -19,10 +19,12 @@ const pt: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Conteúdos',
+      workflow: 'Fluxo de Trabalho',
       media: 'Mídia',
       quickAdd: 'Adição rápida',
     },
     app: {
+      loading: 'Carregando...',
       errorHeader: 'Erro ao carregar a configuração do CMS',
       configErrors: 'Erros de configuração',
       checkConfigYml: 'Verifique o arquivo config.yml.',
@@ -97,9 +99,20 @@ const pt: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Tem certeza que deseja sair desta página?',
+      onUpdatingWithUnsavedChangesBody:
+        'Há mudanças não salvas. Por favor, salve-as antes de atualizar o status.',
+      onPublishingNotReadyBody: 'Por favor, altere o status para "Pronto" antes de publicar.',
+      onPublishingWithUnsavedChangesBody:
+        'Há mudanças não salvas. Por favor, salve-as antes de publicar.',
+      onPublishingBody: 'Tem certeza que deseja publicar essa entrada?',
+      onUnpublishingBody: 'Tem certeza que deseja cancelar a publicação dessa entrada?',
       onDeleteWithUnsavedChangesBody:
         'Tem certeza de que deseja excluir esta entrada publicada, bem como as alterações não salvas da sessão atual?',
       onDeletePublishedEntryBody: 'Tem certeza de que deseja excluir esta entrada publicada?',
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Isso excluirá todas as alterações não publicadas nesta entrada, bem como as alterações não salvas da sessão atual. Você ainda deseja excluir?',
+      onDeleteUnpublishedChangesBody:
+        'Todas as alterações não publicadas nesta entrada serão excluídas. Você ainda deseja excluir?',
       loadingEntry: 'Carregando entrada...',
     },
     editorInterface: {
@@ -108,14 +121,37 @@ const pt: LocalePhrasesRoot = {
       toggleScrollSync: 'Sincronizar rolagem',
     },
     editorToolbar: {
+      publishing: 'Publicando...',
       publish: 'Publicar',
       published: 'Publicado',
       unpublish: 'Despublicar',
       duplicate: 'Duplicado',
+      unpublishing: 'Despublicando...',
       publishAndCreateNew: 'Publicar e criar novo(a)',
       publishAndDuplicate: 'Publicar e duplicar',
+      deleteUnpublishedChanges: 'Excluir alterações não publicadas',
+      deleteUnpublishedEntry: 'Excluir entrada não publicada',
+      deletePublishedEntry: 'Excluir entrada publicada',
       deleteEntry: 'Excluir entrada',
+      saving: 'Salvando...',
+      save: 'Salvar',
+      statusInfoTooltipDraft:
+        "Entrada definida como rascunho. Para finalizar e enviá-la a revisão, mude seu estado para 'Em revisão'",
+      statusInfoTooltipInReview:
+        'Entrada está sendo revisada, nenhuma ação extra é requirida. Porém, você ainda pode fazer mudanças adicionais enquanto ela está sendo revisada.',
+      deleting: 'Excluindo...',
+      updating: 'Atualizando...',
+      status: 'Status: %{status}',
+      backCollection: ' Escrevendo na coleção %{collectionLabel}',
+      unsavedChanges: 'Alterações não salvas',
+      changesSaved: 'Alterações salvas',
+      draft: 'Rascunho',
+      inReview: 'Em revisão',
+      ready: 'Pronto',
       publishNow: 'Publicar agora',
+      deployPreviewPendingButtonLabel: 'Verificar se há Pré-visualização',
+      deployPreviewButtonLabel: 'Ver Pré-visualização',
+      deployButtonLabel: 'Ver em Produção',
     },
     editorWidgets: {
       markdown: {
@@ -186,10 +222,10 @@ const pt: LocalePhrasesRoot = {
         'Arquivo muito grande.\nConfigurado para não permitir arquivos maiores que %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Carregando...',
       noResults: 'Nenhum resultado.',
       noAssetsFound: 'Nenhum recurso encontrado.',
       noImagesFound: 'Nenhuma imagem encontrada.',
+      private: 'Privado ',
       images: 'Imagens',
       mediaAssets: 'Recursos de mídia',
       search: 'Pesquisar...',
@@ -231,11 +267,43 @@ const pt: LocalePhrasesRoot = {
         'Ops, você perdeu um campo obrigatório. Por favor, preencha antes de salvar.',
       entrySaved: 'Entrada salva',
       entryPublished: 'Entrada publicada',
+      entryUnpublished: 'Entrada despublicada',
       onFailToPublishEntry: 'Falha ao publicar: %{details}',
+      onFailToUnpublishEntry: 'Falha ao cancelar a publicação da entrada: %{details}',
       entryUpdated: 'Status da entrada atualizado',
+      onDeleteUnpublishedChangesBody: 'Alterações não publicadas excluídas',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Você foi desconectado. Por favor, salve as alterações e entre novamente',
       onBackendDown: 'O serviço de back-end está fora do ar. Veja %{details} para mais informações',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'Carregando entradas do Fluxo de Trabalho Editorial',
+      workflowHeading: 'Fluxo de Trabalho Editorial',
+      newPost: 'Nova Publicação',
+      description:
+        '%{smart_count} entrada aguardando revisão, %{readyCount} pronta para publicação. |||| %{smart_count} entradas aguardando revisão, %{readyCount} pronta para publicação.',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} por %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'por %{author}',
+      deleteChanges: 'Excluir alterações',
+      deleteNewEntry: 'Excluir nova entrada',
+      publishChanges: 'Publicar alterações',
+      publishNewEntry: 'Publicar nova entrada',
+    },
+    workflowList: {
+      onDeleteEntry: 'Tem certeza de que deseja excluir esta entrada?',
+      onPublishingNotReadyEntry:
+        'Somente itens com o status "Pronto" podem ser publicados. Arraste o cartão para a coluna "Pronto" para poder publicar.',
+      onPublishEntry: 'Tem certeza de que quer publicar esta entrada?',
+      draft: 'Rascunhos',
+      pending_review: 'Em Revisão',
+      pending_publish: 'Prontos',
+      currentEntries: '%{smart_count} entrada |||| %{smart_count} entradas',
     },
   },
 };

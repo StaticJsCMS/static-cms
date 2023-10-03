@@ -6,6 +6,8 @@ import Menu from '../../common/menu/Menu';
 import MenuGroup from '../../common/menu/MenuGroup';
 import MenuItemButton from '../../common/menu/MenuItemButton';
 
+import type { FC } from 'react';
+
 import './LocaleDropdown.css';
 
 export const classes = generateClassNames('LocaleDropdown', ['root', 'no-edit']);
@@ -19,14 +21,14 @@ interface LocaleDropdownProps {
   excludeLocales?: string[];
 }
 
-const LocaleDropdown = ({
+const LocaleDropdown: FC<LocaleDropdownProps> = ({
   locales,
   defaultLocale,
   dropdownText,
   canChangeLocale,
   onLocaleChange,
   excludeLocales = [defaultLocale],
-}: LocaleDropdownProps) => {
+}) => {
   if (!canChangeLocale) {
     return (
       <div className={classNames(classes.root, 'CMS_Button_root', classes['no-edit'])}>

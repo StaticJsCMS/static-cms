@@ -100,6 +100,44 @@ describe('github backend implementation', () => {
     });
   });
 
+  describe('unpublishedEntry', () => {
+    const generateContentKey = jest.fn();
+    const retrieveUnpublishedEntryData = jest.fn();
+
+    const mockAPI = {
+      generateContentKey,
+      retrieveUnpublishedEntryData,
+    } as unknown as API;
+
+    it('should return unpublished entry data', async () => {
+      const gitHubImplementation = new GitHubImplementation(config);
+      gitHubImplementation.api = mockAPI;
+
+      generateContentKey.mockReturnValue('contentKey');
+
+      const data = {
+        collection: 'collection',
+        slug: 'slug',
+        status: 'draft',
+        diffs: [],
+        updatedAt: 'updatedAt',
+      };
+      retrieveUnpublishedEntryData.mockResolvedValue(data);
+
+      const collection = 'posts';
+      const slug = 'slug';
+      await expect(gitHubImplementation.unpublishedEntry({ collection, slug })).resolves.toEqual(
+        data,
+      );
+
+      expect(generateContentKey).toHaveBeenCalledTimes(1);
+      expect(generateContentKey).toHaveBeenCalledWith('posts', 'slug');
+
+      expect(retrieveUnpublishedEntryData).toHaveBeenCalledTimes(1);
+      expect(retrieveUnpublishedEntryData).toHaveBeenCalledWith('contentKey');
+    });
+  });
+
   describe('entriesByFolder', () => {
     const listFiles = jest.fn();
     const readFile = jest.fn();

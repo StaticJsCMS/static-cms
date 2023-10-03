@@ -19,10 +19,12 @@ const th: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'เนื้อหา',
+      workflow: 'ขั้นตอนการทำงาน',
       media: 'มีเดีย',
       quickAdd: 'เพิ่มเนื้อหา อย่างเร็ว',
     },
     app: {
+      loading: 'กำลังโหลด...',
       errorHeader: 'เกิดข้อผิดพลาดในการโหลดการตั้งค่า CMS',
       configErrors: 'คอนฟิกมีข้อผิดพลาด',
       checkConfigYml: 'กรุณาตรวจสอบไฟล์ config.yml ของคุณ',
@@ -92,20 +94,50 @@ const th: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'คุณแน่ใจหรือว่าจะออกจากหน้านี้?',
+      onUpdatingWithUnsavedChangesBody:
+        'คุณมีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก โปรดบันทึกก่อนอัปเดตสถานะ',
+      onPublishingNotReadyBody: 'โปรดอัปเดตสถานะเป็น "พร้อม" ก่อนจะเผยแพร่',
+      onPublishingWithUnsavedChangesBody:
+        'คุณมีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก โปรดบันทึกก่อนจะเผยแพร่',
+      onPublishingBody: 'คุณแน่ใจหรือว่าจะเผยแพร่เนื้อหานี้?',
+      onUnpublishingBody: 'คุณแน่ใจหรือว่าจะไม่ต้องการเผยแพร่เนื้อหานี้?',
       onDeleteWithUnsavedChangesBody:
         'คุณแน่ใจหรือว่าจะต้องการลบการเผยแพร่เนื้อหานี้ รวมถึงการเปลี่ยนแปลงที่ยังไม่ได้บันทึก?',
       onDeletePublishedEntryBody: 'คุณแน่ใจหรือว่าจะต้องการลบการเผยแพร่เนื้อหานี้?',
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'คุณแน่ใจหรือว่าจะต้องการลบเนื้อหาที่ยังไม่ได้เผยแพร่ทั้งหมดนี้ รวมถึงการเปลี่ยนแปลงที่ยังไม่ได้บันทึก?',
+      onDeleteUnpublishedChangesBody:
+        'คุณแน่ใจหรือว่าจะต้องการลบเนื้อหาที่ยังไม่ได้เผยแพร่ทั้งหมดนี้?',
       loadingEntry: 'กำลังโหลดเนื้อหา...',
     },
     editorToolbar: {
+      publishing: 'กำลังเผยแพร่...',
       publish: 'เผยแพร่',
       published: 'เผยแพร่แล้ว',
       unpublish: 'ไม่ได้เผยแพร่',
       duplicate: 'ทำซ้ำ',
+      unpublishing: 'ไม่ทำการเผยแพร่...',
       publishAndCreateNew: 'เผยแพร่ และ สร้างใหม่',
       publishAndDuplicate: 'เผยแพร่ และ ทำซ้ำ',
+      deleteUnpublishedChanges: 'ลบการเปลี่ยแปลงเนื้อหาที่ยังไม่ได้เผยแพร่',
+      deleteUnpublishedEntry: 'ลบเนื้อหาที่ยังไม่ได้เผยแพร่',
+      deletePublishedEntry: 'ลบเนื้อหาที่เผยแพร่',
       deleteEntry: 'ลบเนื้อหา',
+      saving: 'กำลังบันทึก...',
+      save: 'บันทึก',
+      deleting: 'กำลังลบ...',
+      updating: 'กำลังอัปเดต...',
+      status: 'สถานะ: %{status}',
+      backCollection: ' เขียนในกลุ่ม %{collectionLabel}',
+      unsavedChanges: 'การเปลี่ยนแปลงยังไม่ได้บันทึก',
+      changesSaved: 'การเปลี่ยนเปลงถูกบันทึกแล้ว',
+      draft: 'ร่าง',
+      inReview: 'อยู่ระหว่างการตรวจสอบ',
+      ready: 'พร้อม',
       publishNow: 'เผยแพร่ตอนนี้',
+      deployPreviewPendingButtonLabel: 'ตรวจสอบตัวอย่าง',
+      deployPreviewButtonLabel: 'ดูตัวอย่าง',
+      deployButtonLabel: 'ดูตัวอย่างจากหน้าจริง',
     },
     editorWidgets: {
       markdown: {
@@ -150,10 +182,10 @@ const th: LocalePhrasesRoot = {
       fileTooLargeBody: 'ไฟล์ใหญ่เกินไป\n ค่าที่ตั้งไว้ไม่ยอมรับไฟล์ที่ใหญ่กว่า %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'กำลังโหลด...',
       noResults: 'ไม่มีผลลัพธ์',
       noAssetsFound: 'ไม่พบข้อมูล',
       noImagesFound: 'ไม่พบรูปภาพ',
+      private: 'ส่วนตัว ',
       images: 'รูปภาพ',
       mediaAssets: 'ข้อมูลมีเดีย',
       search: 'ค้นหา...',
@@ -194,12 +226,42 @@ const th: LocalePhrasesRoot = {
       missingRequiredField: 'คุณไม่ได้ใส่ข้อมูลในช่องที่ต้องการ กรุณาใส่ข้อมูลก่อนบันทึก',
       entrySaved: 'เนื้อหาถูกบันทึก',
       entryPublished: 'เนื้อหาถูกเผยแพร่',
+      entryUnpublished: 'เนื้อหาไม่ได้ถูกเผยแพร่',
       onFailToPublishEntry: 'ล้มเหลวในการเผยแพร่เนื้อหา: %{details}',
       onFailToUnpublishEntry: 'ล้มเหลวในการไม่เผยแพร่เนื้อหา: %{details}',
       entryUpdated: 'สถานะเนื้อหาถูกอัปเดต',
+      onDeleteUnpublishedChangesBody: 'การเปลี่ยนแปลงเนื้อหาไม่ถูกเผยแพร่ได้ถูกลบ',
       onFailToAuth: '%{details}',
       onLoggedOut: 'คุณได้ออกจากระบบ โปรดสำรองข้อมูลแล้วเข้าสู่ระบบอีกครั้ง',
       onBackendDown: 'บริการแบ็กเอนด์เกิดการขัดข้อง ดู %{details} สำหรับข้อมูลเพิ่มเติม',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'กำลังโหลดเนื้อหาขั้นตอนการทำงานของบรรณาธิการ',
+      workflowHeading: 'ขั้นตอนการทำงานของบรรณาธิการ',
+      newPost: 'สร้างโพสต์ใหม่',
+      description: '%{smart_count} เนื้อหารอการตรวจสอบ, %{readyCount} พร้อมที่จะเผยแพร่ ่',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} โดย %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'โดย %{author}',
+      deleteChanges: 'ลบการเปลี่ยนแปลง',
+      deleteNewEntry: 'ลบเนื้อหาใหม่',
+      publishChanges: 'เผยแพร่การเปลี่ยนแปลง',
+      publishNewEntry: 'เผยแพร่เนื้อหาใหม่',
+    },
+    workflowList: {
+      onDeleteEntry: 'คุณแน่ใจหรือว่าจะต้องการลบเนื้อหานี้?',
+      onPublishingNotReadyEntry:
+        'เฉพาะรายการที่มีสถานะ "พร้อม" สามารถทำการเผยแพร่ โปรดลากเนื้อหาไปยังช่อง "พร้อม" เพื่อจะทำการเผยแพร่.',
+      onPublishEntry: 'คุณแน่ใจหรือว่าจะต้องการเผยแพร่เนื้อหานี้?',
+      draft: 'ร่าง',
+      pending_review: 'อยู่ในการตรวจสอบ',
+      pending_publish: 'พร้อม',
+      currentEntries: '%{smart_count} เนื้อหา',
     },
   },
 };

@@ -12,7 +12,7 @@ import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import IconButton from '../button/IconButton';
 
-import type { MouseEvent, ReactNode, Ref } from 'react';
+import type { FC, MouseEvent, ReactNode, Ref } from 'react';
 
 import './Autocomplete.css';
 
@@ -26,6 +26,7 @@ export const classes = generateClassNames('Autocomplete', [
   'button-icon',
   'options',
   'nothing',
+  'popper',
   'option',
   'option-selected',
   'option-label',
@@ -60,7 +61,7 @@ export interface AutocompleteProps {
   onChange: (value: string | string[] | undefined) => void;
 }
 
-const Autocomplete = ({
+const Autocomplete: FC<AutocompleteProps> = ({
   label,
   value,
   options,
@@ -69,7 +70,7 @@ const Autocomplete = ({
   required,
   onChange,
   onQuery,
-}: AutocompleteProps) => {
+}) => {
   const [inputValue, setInputValue] = useState('');
 
   const debouncedOnQuery = useDebouncedCallback(onQuery, 200);
@@ -196,31 +197,31 @@ const Autocomplete = ({
         />
         <div className={classes['button-wrapper']}>
           <IconButton
+            icon={KeyboardArrowDownIcon}
             variant="text"
             size="small"
             disabled={disabled}
-            className={classes.button}
             onClick={handleDropdownButtonClick}
+            rootClassName={classes.button}
+            iconClassName={classes['button-icon']}
             aria-label="open options"
-          >
-            <KeyboardArrowDownIcon className={classes['button-icon']} aria-hidden="true" />
-          </IconButton>
+          />
           {!required ? (
             <IconButton
+              icon={CloseIcon}
               variant="text"
               size="small"
               disabled={disabled}
-              className={classes.button}
               onClick={clear}
+              rootClassName={classes.button}
+              iconClassName={classes['button-icon']}
               aria-label="clear"
-            >
-              <CloseIcon className={classes['button-icon']} aria-hidden="true" />
-            </IconButton>
+            />
           ) : null}
         </div>
       </div>
       {anchorEl && (
-        <Popper open={popupOpen} anchorEl={anchorEl} style={{ width }}>
+        <Popper open={popupOpen} anchorEl={anchorEl} style={{ width }} className={classes.popper}>
           <ul
             {...getListboxProps()}
             className={classNames(classes.options, 'CMS_Scrollbar_root', 'CMS_Scrollbar_secondary')}

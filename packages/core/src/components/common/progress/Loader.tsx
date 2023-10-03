@@ -3,6 +3,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import CircularProgress from './CircularProgress';
 
+import type { FC } from 'react';
+
 import './Loader.css';
 
 export const classes = generateClassNames('Loader', ['root']);
@@ -11,7 +13,7 @@ export interface LoaderProps {
   children: string | string[] | undefined;
 }
 
-const Loader = ({ children }: LoaderProps) => {
+const Loader: FC<LoaderProps> = ({ children }) => {
   const [currentItem, setCurrentItem] = useState(0);
 
   const text = useMemo(() => {

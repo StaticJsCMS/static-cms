@@ -3,19 +3,21 @@ import React, { useCallback, useState } from 'react';
 
 import Login from '@staticcms/core/components/login/Login';
 import { NetlifyAuthenticator } from '@staticcms/core/lib/auth';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 
-import type { AuthenticationPageProps, TranslatedProps } from '@staticcms/core/interface';
-import type { MouseEvent } from 'react';
+import type { AuthenticationPageProps } from '@staticcms/core/interface';
+import type { FC, MouseEvent } from 'react';
 
-const GitHubAuthenticationPage = ({
+const GitHubAuthenticationPage: FC<AuthenticationPageProps> = ({
   inProgress = false,
   config,
   base_url,
   siteId,
   authEndpoint,
   onLogin,
-  t,
-}: TranslatedProps<AuthenticationPageProps>) => {
+}) => {
+  const t = useTranslate();
+
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const handleLogin = useCallback(

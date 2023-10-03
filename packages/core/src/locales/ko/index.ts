@@ -19,10 +19,12 @@ const ko: LocalePhrasesRoot = {
   app: {
     header: {
       content: '콘텐츠',
+      workflow: '워크플로우',
       media: '미디어',
       quickAdd: '빠른 추가',
     },
     app: {
+      loading: '불러오는 중...',
       errorHeader: 'CMS 구성을 불러오는 중 오류가 발생했습니다.',
       configErrors: '구성 오류',
       checkConfigYml: 'config.yml 파일을 확인하세요.',
@@ -49,12 +51,17 @@ const ko: LocalePhrasesRoot = {
       searchResults: '"%{searchTerm}"에 대한 검색결과',
       searchResultsInCollection: '%{collection} 컬랙션에서 "%{searchTerm}"에 대한 검색결과',
       filterBy: '필터 기준',
+      groupBy: '그룹화 기준',
     },
     entries: {
       loadingEntries: '항목 불러오는 중...',
       cachingEntries: '항목 캐시 중...',
       longerLoading: '몇 분 정도 걸릴 수 있습니다.',
       noEntries: '항목 없음',
+    },
+    groups: {
+      other: '다른 그룹',
+      negateLabel: '%{label} 제외',
     },
     defaultFields: {
       author: {
@@ -86,41 +93,104 @@ const ko: LocalePhrasesRoot = {
         invalidPath: `'%{path}' 은(는) 올바른 경로가 아닙니다.`,
         pathExists: `'%{path}' 경로가 이미 존재합니다.`,
       },
+      i18n: {
+        writingInLocale: '%{locale}로 작성 중',
+        copyFromLocale: '다른 로케일로부터 채우기',
+        copyFromLocaleConfirm:
+          '%{locale} 로케일로부터 데이터를 채우시겠습니까?\n모든 기존 내용을 덮어쓰기 합니다.',
+      },
     },
     editor: {
       onLeavePage: '이 페이지를 떠나시겠습니까?',
+      onUpdatingWithUnsavedChangesBody:
+        '저장하지 않은 변경사항이 있습니다. 상태 업데이트 전 먼저 저장하세요.',
+      onPublishingNotReadyBody: '게시 하기 앞서 상태를 "준비됨" 으로 업데이트 하세요.',
+      onPublishingWithUnsavedChangesBody:
+        '저장하지 않은 변경사항이 있습니다, 게시하기 전 먼저 저장하세요.',
+      onPublishingBody: '이 항목을 게시하시곘습니까?',
+      onUnpublishingBody: '이 항목을 게시 철회 하시겠습니까?',
       onDeleteWithUnsavedChangesBody:
         '현재 세션에서의 저장되지 않은 변경사항과 이 게시된 항목을 삭제하시겠습니까?',
       onDeletePublishedEntryBody: '이 게시된 항목을 삭제하시겠습니까?',
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        '이 항목의 게시되지 않은 모든 변경사항과 현재 세션의 저장되지 않은 변경사항이 삭제됩니다. 정말로 삭제하시겠습니까?',
+      onDeleteUnpublishedChangesBody:
+        '이 항목에 대해 게시되지 않은 변경사항이 삭제됩니다. 정말로 삭제하시겠습니까?',
       loadingEntry: '항목 불러오는 중...',
     },
+    editorInterface: {
+      toggleI18n: '국제화(i18n) 토글',
+      togglePreview: '미리보기 토글',
+      toggleScrollSync: '스크롤 동기화',
+    },
     editorToolbar: {
+      publishing: '게시 중...',
       publish: '게시',
       published: '게시됨',
       unpublish: '게시 철회',
       duplicate: '복제',
+      unpublishing: '게시 철회 중...',
       publishAndCreateNew: '게시하고 새로 만들기',
       publishAndDuplicate: '게시하고 복제',
+      deleteUnpublishedChanges: '게시 안된 변경사항 삭제',
+      deleteUnpublishedEntry: '게시 안된 항목 삭제',
+      deletePublishedEntry: '게시된 항목 삭제',
       deleteEntry: '항목 삭제',
+      saving: '저장 중...',
+      save: '저장',
+      deleting: '삭제 중...',
+      updating: '업데이트 중...',
+      status: '상태: %{status}',
+      backCollection: '%{collectionLabel} 컬랙션에 작성하는 중',
+      unsavedChanges: '변경사항 저장되지 않음',
+      changesSaved: '변경사항 저장됨',
+      draft: '초안',
+      inReview: '검토중',
+      ready: '준비됨',
       publishNow: '지금 게시',
+      deployPreviewPendingButtonLabel: '미리보기 확인',
+      deployPreviewButtonLabel: '미리보기 보기',
+      deployButtonLabel: '라이브 보기',
     },
     editorWidgets: {
       markdown: {
+        bold: '굵은체',
+        italic: '기울임체',
+        code: '코드',
+        link: '링크',
+        linkPrompt: '링크의 URL을 입력하세요',
+        headings: '제목',
+        quote: '인용',
+        bulletedList: '글머리 기호 목록',
+        numberedList: '번호 매기기 목록',
+        addComponent: '구성요소 추가',
         richText: '리치 텍스트',
         markdown: '마크다운',
       },
       image: {
         choose: '이미지 선택',
+        chooseMultiple: '이미지 여러개 선택',
+        chooseUrl: 'URL에서 삽입',
+        replaceUrl: 'URL 변경',
+        promptUrl: '이미지 URL을 입력하세요',
         chooseDifferent: '다른 이미지 선택',
+        addMore: '더 많은 이미지 추가',
         remove: '이미지 삭제',
+        removeAll: '모든 이미지 삭제',
       },
       file: {
         choose: '파일 선택',
+        chooseUrl: 'URL에서 삽입',
+        chooseMultiple: '파일 여러개 선택',
+        replaceUrl: 'URL 변경',
+        promptUrl: '파일 URL을 입력하세요',
         chooseDifferent: '다른 파일 선택',
+        addMore: '더 많은 파일 추가',
         remove: '파일 삭제',
+        removeAll: '모든 파일 삭제',
       },
       unknownControl: {
-        noControl: "'%{widget}' 위젝에 대한 컨트롤이 없습니다.",
+        noControl: "'%{widget}' 위젯에 대한 컨트롤이 없습니다.",
       },
       unknownPreview: {
         noPreview: "'%{widget}' 위젯에 대한 미리보기가 없습니다.",
@@ -136,11 +206,20 @@ const ko: LocalePhrasesRoot = {
       datetime: {
         now: '현재시각',
       },
+      list: {
+        add: '%{item} 추가',
+        addType: '%{item} 추가',
+      },
     },
   },
   mediaLibrary: {
     mediaLibraryCard: {
       draft: '초안',
+      copy: '복사',
+      copyUrl: 'URL 복사',
+      copyPath: '경로 복사',
+      copyName: '이름 복사',
+      copied: '복사됨',
     },
     mediaLibrary: {
       onDeleteBody: '선택하신 미디어를 삭제하시겠습니까?',
@@ -148,10 +227,10 @@ const ko: LocalePhrasesRoot = {
         '파일이 너무 큽니다.\n%{size} kB 보다 큰 파일을 허용하지 않도록 구성되어 있습니다.',
     },
     mediaLibraryModal: {
-      loading: '불러오는 중...',
       noResults: '일치 항목 없음.',
       noAssetsFound: '발견된 에셋 없음.',
       noImagesFound: '발견된 이미지 없음.',
+      private: '개인 ',
       images: '이미지',
       mediaAssets: '미디어 에셋',
       search: '검색...',
@@ -192,12 +271,44 @@ const ko: LocalePhrasesRoot = {
       missingRequiredField: '이런! 필수 필드를 놓치셨습니다. 저장하기 전에 먼저 채우세요.',
       entrySaved: '항목 저장됨',
       entryPublished: '항목 게시됨',
+      entryUnpublished: '항목 게시 철회됨',
       onFailToPublishEntry: '게시 실패: %{details}',
+      onFailToUnpublishEntry: '항목 게시 철회 실해: %{details}',
       entryUpdated: '항목 상태 업데이트됨',
+      onDeleteUnpublishedChangesBody: '게시되지 않은 변경사항 삭제됨',
       onFailToAuth: '%{details}',
       onLoggedOut: '로그아웃 하셨습니다, 데티어를 백업하시고 다시 로그인 하세요.',
       onBackendDown:
         '백엔드 서비스가 장애를 겪고 있습니다. 자세한 사항은 %{details} 을(를) 참고하세요.',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: '편집 워크플로우의 항목을 불러오는 중',
+      workflowHeading: '편집 워크플로우',
+      newPost: '새 게시물',
+      description:
+        '%{smart_count}개 항목 검토 대기중, %{readyCount}개 항목 게시 준비 완료됨. |||| %{smart_count}개 항목 검토 대기중, %{readyCount}개 항목 게시 준비 완료됨. ',
+      dateFormat: 'M월 D일',
+    },
+    workflowCard: {
+      lastChange: '%{date} by %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'by %{author}',
+      deleteChanges: '변경사항 삭제',
+      deleteNewEntry: '새 항목 삭제',
+      publishChanges: '변경사항 게시',
+      publishNewEntry: '새 항목 게시',
+    },
+    workflowList: {
+      onDeleteEntry: '정말로 이 항목을 삭제하시겠습니까?',
+      onPublishingNotReadyEntry:
+        '"준비됨" 상태의 항목만 게시할 수 있습니다. 게시를 활성화 하려면 카드를 "준비됨" 열에 끌어 놓으세요.',
+      onPublishEntry: '이 항목을 게시하시곘습니까?',
+      draft: '초안',
+      pending_review: '검토 진행중',
+      pending_publish: '준비됨',
+      currentEntries: '%{smart_count}개 항목 |||| %{smart_count}개 항목',
     },
   },
 };

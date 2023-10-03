@@ -19,10 +19,12 @@ const da: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Indhold',
+      workflow: 'Arbejdsgang',
       media: 'Medier',
       quickAdd: 'Hurtig opret',
     },
     app: {
+      loading: 'Indlæser...',
       errorHeader: 'Fejl ved indlæsning af CMS opsætningen',
       configErrors: 'Opsætningsfejl',
       checkConfigYml: 'Kontroller din config.yml fil.',
@@ -93,24 +95,61 @@ const da: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Skriver på %{locale}',
+        copyFromLocale: 'Kopier fra et andet sprog',
+        copyFromLocaleConfirm:
+          'Vil du indsætte data fra sproget %{locale}?\nAlt eksisterende indhold vil blive overskrevet.',
       },
     },
     editor: {
       onLeavePage: 'Er du sikker på at du vil forlade siden?',
+      onUpdatingWithUnsavedChangesBody:
+        'Du har ændringer der ikke er gemt, gem disse før status ændres.',
+      onPublishingNotReadyBody: 'Skift status til "Klar" inden publicering.',
+      onPublishingWithUnsavedChangesBody: 'Du har ændringer der ikke er gemt, gem inden publicing.',
+      onPublishingBody: 'Er du sikker på at du vil publicere dette dokument?',
+      onUnpublishingBody: 'Er du sikker på at du vil afpublicere dette dokument?',
       onDeleteWithUnsavedChangesBody:
         'Er du sikker på at du vil slette dette tidliere publiceret dokument, samt dine nuværende ugemte ændringer fra denne session?',
       onDeletePublishedEntryBody:
         'Er du sikker på at du vil slette dette tidliere publiceret dokument?',
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Alle ikke publicerede ændringer til dette dokument vil blive slettet ligesom dine nuværende ugemte ændringer fra denne session. Er du sikker på at du vil slette?',
+      onDeleteUnpublishedChangesBody:
+        'Alle ikke publicerede ændringer til dette dokument vil blive slettet. Er du sikker på at du vil slette?',
       loadingEntry: 'Indlæser dokument...',
     },
     editorToolbar: {
+      publishing: 'Publicerer...',
       publish: 'Publicer',
       published: 'Publiceret',
+      unpublish: 'Afpublicer',
       duplicate: 'Kopier',
+      unpublishing: 'Afpublicerer...',
       publishAndCreateNew: 'Publicer og opret ny',
       publishAndDuplicate: 'Publicer og kopier',
+      deleteUnpublishedChanges: 'Slet upublicerede ændringer',
+      deleteUnpublishedEntry: 'Slet upubliceret dokument',
+      deletePublishedEntry: 'Slet publiceret dokument',
       deleteEntry: 'Slet dokument',
+      saving: 'Gemmer...',
+      save: 'Gem',
+      statusInfoTooltipDraft:
+        'Status for elementet er kladde. For at afslutte og sende til gennemsyn, skift status til ‘Til gennemsyn’',
+      statusInfoTooltipInReview:
+        'Elementet er til gennemsyn, det er ikke nødvendigt med yderligere handlinger. Du kan dog stadig lave yderligere ændringer mens det er til gennemsyn.',
+      deleting: 'Sletter...',
+      updating: 'Opdaterer...',
+      status: 'Status: %{status}',
+      backCollection: ' Skriver til %{collectionLabel} samlingen',
+      unsavedChanges: 'Ugemte ændringer',
+      changesSaved: 'Ændringer gemt',
+      draft: 'Kladder',
+      inReview: 'Til gennemsyn',
+      ready: 'Klar',
       publishNow: 'Publicer nu',
+      deployPreviewPendingButtonLabel: 'Lav preview',
+      deployPreviewButtonLabel: 'Vis preview',
+      deployButtonLabel: 'Vis live',
     },
     editorWidgets: {
       markdown: {
@@ -129,16 +168,28 @@ const da: LocalePhrasesRoot = {
       },
       image: {
         choose: 'Vælg et billede',
+        chooseMultiple: 'Vælg billeder',
+        chooseUrl: 'Indsæt fra URL',
+        replaceUrl: 'Erstat med URL',
+        promptUrl: 'Indtast URL for billeder',
         chooseDifferent: 'Vælg et andet billede',
+        addMore: 'Tilføj flere billeder',
         remove: 'Fjern billede',
+        removeAll: 'Fjern alle billeder',
       },
       file: {
         choose: 'Vælg fil',
+        chooseUrl: 'Indsæt fra URL',
+        chooseMultiple: 'Vælg filer',
+        replaceUrl: 'Erstat med URL',
+        promptUrl: 'Indtast URL for filen',
         chooseDifferent: 'Vælg en anden fil',
+        addMore: 'Tilføj flere filer',
         remove: 'Fjern fil',
+        removeAll: 'Fjern alle filer',
       },
       unknownControl: {
-        noControl: "Ingen kontrol finden for '%{widget}'.",
+        noControl: "Ingen kontrol for '%{widget}'.",
       },
       unknownPreview: {
         noPreview: "Ingen preview for '%{widget}'.",
@@ -154,11 +205,20 @@ const da: LocalePhrasesRoot = {
       datetime: {
         now: 'Nu',
       },
+      list: {
+        add: 'Tilføj %{item}',
+        addType: 'Tilføj %{item}',
+      },
     },
   },
   mediaLibrary: {
     mediaLibraryCard: {
       draft: 'Kladde',
+      copy: 'Kopier',
+      copyUrl: 'Kopier URL',
+      copyPath: 'Kopier sti',
+      copyName: 'Kopier navn',
+      copied: 'Kopieret',
     },
     mediaLibrary: {
       onDeleteBody: 'Er du sikker på at du vil slette det valgte medie?',
@@ -166,10 +226,10 @@ const da: LocalePhrasesRoot = {
         'Filen er for stor.\nOpsætningen tillader ikke filer større end %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Indlæser...',
       noResults: 'Ingen resultater.',
       noAssetsFound: 'Ingen elementer fundet.',
       noImagesFound: 'Ingen billeder fundet.',
+      private: 'Privat ',
       images: 'Billeder',
       mediaAssets: 'Medie elementer',
       search: 'Søg...',
@@ -211,12 +271,44 @@ const da: LocalePhrasesRoot = {
         'Ups, du mangler et påkrævet felt. Udfyld de påkrævede felter før dokumentet gemmes.',
       entrySaved: 'Dokumentet er gemt',
       entryPublished: 'Dokumentet er publiceret ',
+      entryUnpublished: 'Dokumentet er afpubliceret',
       onFailToPublishEntry: 'Kunne ikke publicere på grund af en fejl: %{details}',
+      onFailToUnpublishEntry: 'Kunne ikke afpublicere på grund af en fejl: %{details}',
       entryUpdated: 'Dokumentstatus er opdateret',
+      onDeleteUnpublishedChangesBody: 'Upublicerede ændringer blev slettet',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Du er blevet logget ind, gem venligst evt. ændringer og log på igen',
       onBackendDown:
         'Den bagvedliggende service er ikke tilgængelig i øjeblikket. Se %{details} for mere information',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'Indlæser dokumenter i redaktionel arbejdsgang',
+      workflowHeading: 'Redaktionel arbejdsgang',
+      newPost: 'Nyt indlæg',
+      description:
+        '%{smart_count} dokumenter afventer gennemsyn, %{readyCount} er klar til live. |||| %{smart_count} dokumenter afventer gennemsyn, %{readyCount} klar til go live. ',
+      dateFormat: 'D. MMMM',
+    },
+    workflowCard: {
+      lastChange: '%{date} af %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'af %{author}',
+      deleteChanges: 'Slet ændringer',
+      deleteNewEntry: 'Slet nye dokumenter',
+      publishChanges: 'Publicer ændringer',
+      publishNewEntry: 'Publicer nye dokumenter',
+    },
+    workflowList: {
+      onDeleteEntry: 'Er du sikker på at du vil slette dette dokument?',
+      onPublishingNotReadyEntry:
+        'Kun dokumenter med "Klar" status kan publiceres. Træk kortet til "Klar" kolonnen for at tillade publicering.',
+      onPublishEntry: 'Er du sikker på at du vil publicere dokumentet?',
+      draft: 'Kladder',
+      pending_review: 'Til gennemsyn',
+      pending_publish: 'Klar',
+      currentEntries: '%{smart_count} dokument |||| %{smart_count} dokumenter',
     },
   },
 };

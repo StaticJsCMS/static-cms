@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
 
 import Button from '@staticcms/core/components/common/button/Button';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { DateTimeField, TranslatedProps } from '@staticcms/core/interface';
+import type { DateTimeField } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
 
 import './NowButton.css';
@@ -16,7 +17,9 @@ export interface NowButtonProps {
   disabled: boolean;
 }
 
-const NowButton: FC<TranslatedProps<NowButtonProps>> = ({ disabled, field, t, handleChange }) => {
+const NowButton: FC<NowButtonProps> = ({ disabled, field, handleChange }) => {
+  const t = useTranslate();
+
   const handleClick = useCallback(
     (event: MouseEvent) => {
       event.stopPropagation();

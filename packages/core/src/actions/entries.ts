@@ -528,6 +528,17 @@ export function removeDraftEntryMediaFile({ id }: { id: string }) {
   return { type: REMOVE_DRAFT_ENTRY_MEDIA_FILE, payload: { id } } as const;
 }
 
+export function loadBackup() {
+  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
+    const state = getState();
+    if (!state.entryDraft.localBackup) {
+      return;
+    }
+
+    dispatch(loadLocalBackup());
+  };
+}
+
 export function persistLocalBackup(entry: Entry, collection: Collection) {
   return (_dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
@@ -983,6 +994,7 @@ export function persistEntry(
         entryDraft: newEntryDraft,
         assetProxies,
         usedSlugs,
+        status: entry.status,
       })
       .then(async (newSlug: string) => {
         dispatch(

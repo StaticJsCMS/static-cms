@@ -23,7 +23,9 @@ import type {
   MountedEventListener,
   ObjectValue,
   PartialTheme,
+  PostPublishEventListener,
   PostSaveEventListener,
+  PrePublishEventListener,
   PreSaveEventListener,
   PreviewStyle,
   PreviewStyleOptions,
@@ -43,6 +45,8 @@ export const allowedEvents = [
   'mounted',
   'login',
   'logout',
+  'prePublish',
+  'postPublish',
   'preSave',
   'postSave',
   'change',
@@ -50,6 +54,14 @@ export const allowedEvents = [
 export type AllowedEvent = (typeof allowedEvents)[number];
 
 type EventHandlerRegistry = {
+  prePublish: Record<
+    string,
+    PrePublishEventListener['handler'][] | Record<string, PrePublishEventListener['handler'][]>
+  >;
+  postPublish: Record<
+    string,
+    PostPublishEventListener['handler'][] | Record<string, PostPublishEventListener['handler'][]>
+  >;
   preSave: Record<
     string,
     PreSaveEventListener['handler'][] | Record<string, PreSaveEventListener['handler'][]>
@@ -72,6 +84,8 @@ type EventHandlerRegistry = {
 
 const eventHandlers = allowedEvents.reduce((acc, e) => {
   switch (e) {
+    case 'prePublish':
+    case 'postPublish':
     case 'preSave':
     case 'postSave':
     case 'change':
@@ -408,7 +422,12 @@ export function getEventListeners(options: {
     return (registry.eventHandlers[name][options.collection] ?? {})[options.field] ?? [];
   }
 
-  if (name === 'preSave' || name === 'postSave') {
+  if (
+    name === 'prePublish' ||
+    name === 'postPublish' ||
+    name === 'preSave' ||
+    name === 'postSave'
+  ) {
     if (!options.collection) {
       return [];
     }
@@ -507,6 +526,18 @@ export function registerEventListener(listener: EventListener) {
 
 export async function invokeEvent(event: { name: 'login'; data: AuthorData }): Promise<void>;
 export async function invokeEvent(event: { name: 'logout' }): Promise<void>;
+export async function invokeEvent(event: {
+  name: 'prePublish';
+  data: EventData;
+  collection: string;
+  file?: string;
+}): Promise<void>;
+export async function invokeEvent(event: {
+  name: 'postPublish';
+  data: EventData;
+  collection: string;
+  file?: string;
+}): Promise<void>;
 export async function invokeEvent(event: {
   name: 'preSave';
   data: EventData;

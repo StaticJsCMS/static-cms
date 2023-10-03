@@ -1,0 +1,73 @@
+.CMS_Dashboard_root {
+  @apply flex
+    flex-col
+    min-h-full;
+
+  &.CMS_Dashboard_dragging {
+    & .CMS_Dashboard_board {
+      @apply snap-none;
+    }
+  }
+}
+
+.CMS_Dashboard_header-wrapper {
+  background: var(--background-dark);
+  border-color: var(--background-main);
+
+  @apply flex
+    flex-col
+    gap-2
+    p-4
+    drop-shadow-md
+    border-b
+    sticky
+    top-0
+    z-[100];
+}
+
+.CMS_Dashboard_header {
+  color: var(--text-primary);
+
+  @apply text-xl
+    font-semibold
+    flex
+    items-center
+    gap-2
+    md:w-auto;
+}
+
+.CMS_Dashboard_header-icon-wrapper {
+  @apply flex
+    items-center;
+}
+
+.CMS_Dashboard_header-icon {
+  @apply w-6
+    h-6;
+}
+
+.CMS_Dashboard_header-label {
+  @apply w-full
+    truncate;
+}
+
+.CMS_Dashboard_header-description {
+  color: var(--text-secondary);
+
+  @apply w-full
+    text-sm;
+}
+
+.CMS_Dashboard_board {
+  @apply relative
+    flex-grow
+    flex
+    md:w-full
+    pt-3
+    px-4
+    pb-4
+    snap-x
+    snap-mandatory
+    overflow-x-auto
+    gap-4;
+}

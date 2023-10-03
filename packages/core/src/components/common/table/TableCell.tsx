@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import tableClasses from './Table.classes';
 
-import type { ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
 interface TableCellProps {
   children: ReactNode;
@@ -13,7 +13,7 @@ interface TableCellProps {
   shrink?: boolean;
 }
 
-const TableCell = ({ children, emphasis = false, to, shrink = false }: TableCellProps) => {
+const TableCell: FC<TableCellProps> = ({ children, emphasis = false, to, shrink = false }) => {
   const content = useMemo(() => {
     if (to) {
       return (

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
 import './MenuGroup.css';
 
@@ -12,7 +12,7 @@ export interface MenuGroupProps {
   children: ReactNode | ReactNode[];
 }
 
-const MenuGroup = ({ children }: MenuGroupProps) => {
+const MenuGroup: FC<MenuGroupProps> = ({ children }) => {
   return <div className={classes.root}>{children}</div>;
 };
 

@@ -19,10 +19,12 @@ const ca: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Contingut',
+      workflow: 'Flux Editorial',
       media: 'Multimèdia',
       quickAdd: 'Afegir',
     },
     app: {
+      loading: 'Carregant...',
       errorHeader: 'Error al carregar la configuració del CMS',
       configErrors: 'Errors de configuració',
       checkConfigYml: "Comprovi l'arxiu config.yml.",
@@ -97,9 +99,20 @@ const ca: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Estàs segur que vols deixar aquesta pàgina?',
+      onUpdatingWithUnsavedChangesBody:
+        "Tens canvis no guardats, si us plau, guarda'ls abans d'actualitzar l'estat.",
+      onPublishingNotReadyBody: 'Si us plau, actualitza l\'estat a "Llest" abans de publicar.',
+      onPublishingWithUnsavedChangesBody:
+        "Tens canvis no guardats, si us plau, guarda'ls abans de publicar-los.",
+      onPublishingBody: 'Estàs segur que vols publicar aquesta entrada?',
+      onUnpublishingBody: 'Estàs segur que vols esborrar aquesta entrada?',
       onDeleteWithUnsavedChangesBody:
         'Està segur que vol eliminar aquesta entrada publicada, així com els canvis no guardats de la sessió actual?',
       onDeletePublishedEntryBody: 'Està segur que vol eliminar aquesta entrada publicada?',
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        "Això eliminarà tots els canvis no publicats d'aquesta entrada així com els canvis no guardats de la sessió actual. Encara vol procedir?",
+      onDeleteUnpublishedChangesBody:
+        'Tots els canvis no publicats en aquesta entrada seràn esborrats. Encara els vol eliminar?',
       loadingEntry: 'Carregant entrada...',
     },
     editorInterface: {
@@ -107,13 +120,33 @@ const ca: LocalePhrasesRoot = {
       togglePreview: 'Mostrar/Amagar previsualització',
     },
     editorToolbar: {
+      publishing: 'Publicant...',
       publish: 'Publicar',
       published: 'Publicat',
+      unpublish: 'Despublicar',
       duplicate: 'Duplicar',
+      unpublishing: 'Despublicant...',
       publishAndCreateNew: 'Publicar i crear de nou',
       publishAndDuplicate: 'Publica i duplica',
+      deleteUnpublishedChanges: 'Eliminar canvis no publicats',
+      deleteUnpublishedEntry: 'Eliminar entrada no publicada',
+      deletePublishedEntry: 'Eliminar entrada publicada',
       deleteEntry: 'Eliminar entrada',
+      saving: 'Guardant...',
+      save: 'Guardar',
+      deleting: 'Eliminant...',
+      updating: 'Actualizant...',
+      status: 'Estat: %{status}',
+      backCollection: 'Escrivint a la colecció %{collectionLabel}',
+      unsavedChanges: 'Canvis no guardats',
+      changesSaved: 'Canvis guardats',
+      draft: 'Esborrany',
+      inReview: 'En revisió',
+      ready: 'Llest',
       publishNow: 'Publicar ara',
+      deployPreviewPendingButtonLabel: 'Comprovar Vista Prèvia',
+      deployPreviewButtonLabel: 'Veure Vista Prèvia',
+      deployButtonLabel: 'Veure publicació',
     },
     editorWidgets: {
       markdown: {
@@ -179,10 +212,10 @@ const ca: LocalePhrasesRoot = {
         'El fitxer és massa gran.\nLa configuració no permet fitxers més grans de %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Carregant...',
       noResults: 'Sense resultats.',
       noAssetsFound: 'Arxius no trobats.',
       noImagesFound: 'Imatges no trobades.',
+      private: 'Privat',
       images: 'Imatges',
       mediaAssets: 'Arxius multimèdia',
       search: 'Buscar...',
@@ -223,11 +256,43 @@ const ca: LocalePhrasesRoot = {
         "Ups, no ha omplert un camp obligatori. Si us plau,  ompli'l abans de guardar.",
       entrySaved: 'Entrada guardada',
       entryPublished: 'Entrada publicada',
+      entryUnpublished: 'Entrada despublicada',
       onFailToPublishEntry: "No s'ha pogut publicar: %{details}",
+      onFailToUnpublishEntry: "No s'ha pogut despublicar l'entrada: %{details}",
       entryUpdated: "Estat de l'entrada actualitzat",
+      onDeleteUnpublishedChangesBody: 'Canvis no publicats eliminats',
       onFailToAuth: '%{details}',
       onLoggedOut: 'La teva sessió ha estat tancada. Si us plau, torna a iniciar-la',
       onBackendDown: 'El servidor està patint problemes. Consulta %{details} per a més informació',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'Carregant Entradas del Flux Editorial',
+      workflowHeading: 'Flux Editorial',
+      newPost: 'Nou article',
+      description:
+        '%{smart_count} entrada esperant revisió, %{readyCount} llesta per a publicar |||| %{smart_count} entrades esperant revisió, %{readyCount} llestes per a publicar. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} per %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'per %{author}',
+      deleteChanges: 'Eliminar canvis',
+      deleteNewEntry: 'Eliminar nova entrada',
+      publishChanges: 'Publicar canvis',
+      publishNewEntry: 'Publicar nova entrada',
+    },
+    workflowList: {
+      onDeleteEntry: 'Està segur que vol borrar aquesta entrada?',
+      onPublishingNotReadyEntry:
+        'Només es poden publicar elements amb estat "Llest". Si us plau, arrossegui la targeta fins la columna "Llest" per a permetre\'n la publicació',
+      onPublishEntry: 'Està segur que vol publicar aquesta entrada?',
+      draft: 'Esborranys',
+      pending_review: 'En revisió',
+      pending_publish: 'Llest',
+      currentEntries: '%{smart_count} entrada |||| %{smart_count} entrades',
     },
   },
 };

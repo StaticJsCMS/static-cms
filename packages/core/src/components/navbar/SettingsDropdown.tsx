@@ -2,9 +2,9 @@ import { Logout as LogoutIcon } from '@styled-icons/material/Logout';
 import { Palette as PaletteIcon } from '@styled-icons/material/Palette';
 import { Person as PersonIcon } from '@styled-icons/material/Person';
 import React, { useCallback, useState } from 'react';
-import { translate } from 'react-polyglot';
 
 import { logoutUser } from '@staticcms/core/actions/auth';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectUser } from '@staticcms/core/reducers/selectors/auth';
@@ -14,7 +14,6 @@ import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
 import ThemeSelectorDialog from '../theme/components/ThemeSelectorDialog';
 
-import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 import './SettingsDropdown.css';
@@ -31,7 +30,7 @@ interface AvatarImageProps {
   imageUrl: string | undefined;
 }
 
-const AvatarImage = ({ imageUrl }: AvatarImageProps) => {
+const AvatarImage: FC<AvatarImageProps> = ({ imageUrl }) => {
   return imageUrl ? (
     <img className={classes['avatar-image']} src={imageUrl} />
   ) : (
@@ -43,7 +42,9 @@ export interface SettingsDropdownProps {
   inEditor: boolean;
 }
 
-const SettingsDropdown: FC<TranslatedProps<SettingsDropdownProps>> = ({ inEditor, t }) => {
+const SettingsDropdown: FC<SettingsDropdownProps> = ({ inEditor }) => {
+  const t = useTranslate();
+
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
 
@@ -93,4 +94,4 @@ const SettingsDropdown: FC<TranslatedProps<SettingsDropdownProps>> = ({ inEditor
   );
 };
 
-export default translate()(SettingsDropdown) as FC<SettingsDropdownProps>;
+export default SettingsDropdown;

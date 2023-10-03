@@ -1,8 +1,6 @@
 import { createHashHistory } from 'history';
 import debounce from 'lodash/debounce';
-import isEqual from 'lodash/isEqual';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,51 +10,64 @@ import {
   deleteDraftLocalBackup,
   deleteEntry,
   deleteLocalBackup,
+  loadBackup,
   loadEntry,
-  loadLocalBackup,
   persistEntry,
   persistLocalBackup,
   retrieveLocalBackup,
 } from '@staticcms/core/actions/entries';
 import { loadMedia } from '@staticcms/core/actions/mediaLibrary';
 import { loadScroll, toggleScroll } from '@staticcms/core/actions/scroll';
+import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
+import useDebouncedCallback from '@staticcms/core/lib/hooks/useDebouncedCallback';
 import useEntryCallback from '@staticcms/core/lib/hooks/useEntryCallback';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getFileFromSlug, selectFields } from '@staticcms/core/lib/util/collection.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
-import { selectConfig } from '@staticcms/core/reducers/selectors/config';
+import { selectConfig, selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
+import { selectUnpublishedEntry } from '@staticcms/core/reducers/selectors/editorialWorkflow';
 import { selectEntry } from '@staticcms/core/reducers/selectors/entries';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
+import { addSnackbar } from '@staticcms/core/store/slices/snackbars';
+import {
+  deleteUnpublishedEntry,
+  loadUnpublishedEntry,
+  persistUnpublishedEntry,
+  publishUnpublishedEntry,
+  unpublishPublishedEntry,
+  updateUnpublishedEntryStatus,
+} from '../../actions/editorialWorkflow';
+import alert from '../common/alert/Alert';
 import confirm from '../common/confirm/Confirm';
 import Loader from '../common/progress/Loader';
 import MediaLibraryModal from '../media-library/MediaLibraryModal';
 import EditorInterface from './EditorInterface';
 
-import type {
-  Collection,
-  EditorPersistOptions,
-  Entry,
-  TranslatedProps,
-} from '@staticcms/core/interface';
+import type { Collection, EditorPersistOptions, Entry } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 import type { Blocker } from 'history';
-import type { ComponentType, FC } from 'react';
+import type { FC } from 'react';
 import type { ConnectedProps } from 'react-redux';
 
-const Editor: FC<TranslatedProps<EditorProps>> = ({
+const Editor: FC<EditorProps> = ({
   entry,
   entryDraft,
   fields,
   collection,
   hasChanged,
-  displayUrl,
   isModification,
   draftKey,
   slug,
-  localBackup,
   scrollSyncActive,
   newRecord,
-  t,
+  currentStatus,
+  hasUnpublishedEntry,
+  useWorkflow,
+  isUpdatingStatus,
+  isPublishing,
 }) => {
+  const t = useTranslate();
+
   const [version, setVersion] = useState(0);
 
   const history = createHashHistory();
@@ -69,7 +80,7 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
   const createBackup = useMemo(
     () =>
       debounce(function (entry: Entry, collection: Collection) {
-        if (config?.disable_local_backup) {
+        if (config?.disable_local_backup || !slug) {
           return;
         }
 
@@ -104,10 +115,16 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
 
       setTimeout(async () => {
         try {
-          await dispatch(persistEntry(collection, slug, navigate));
-          setVersion(version + 1);
-
           deleteBackup();
+
+          if (useWorkflow) {
+            await dispatch(
+              persistUnpublishedEntry(collection, slug, hasUnpublishedEntry, navigate),
+            );
+          } else {
+            await dispatch(persistEntry(collection, slug, navigate));
+          }
+          setVersion(version + 1);
 
           if (createNew) {
             if (duplicate && entryDraft.entry) {
@@ -127,8 +144,124 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
         } catch (e) {}
       }, 100);
     },
-    [collection, deleteBackup, dispatch, entryDraft.entry, navigate, slug, version],
+    [
+      collection,
+      deleteBackup,
+      dispatch,
+      entryDraft.entry,
+      hasUnpublishedEntry,
+      navigate,
+      slug,
+      useWorkflow,
+      version,
+    ],
   );
+
+  const debouncedHandlePersistEntry = useDebouncedCallback(handlePersistEntry, 250);
+
+  const handleChangeStatus = useCallback(
+    (newStatus: WorkflowStatus) => {
+      if (!slug || !currentStatus) {
+        return;
+      }
+
+      if (entryDraft.hasChanged) {
+        alert({
+          title: 'editor.editor.onUpdatingWithUnsavedChangesTitle',
+          body: {
+            key: 'editor.editor.onUpdatingWithUnsavedChangesBody',
+          },
+        });
+        return;
+      }
+      dispatch(updateUnpublishedEntryStatus(collection.name, slug, currentStatus, newStatus));
+    },
+    [collection.name, currentStatus, dispatch, entryDraft.hasChanged, slug],
+  );
+
+  const handlePublishEntry = useCallback(
+    async (opts: { createNew?: boolean; duplicate?: boolean } = {}) => {
+      if (!slug || !entryDraft.entry) {
+        return;
+      }
+
+      const { createNew = false, duplicate = false } = opts;
+
+      if (currentStatus !== WorkflowStatus.PENDING_PUBLISH) {
+        alert({
+          title: 'editor.editor.onPublishingNotReadyTitle',
+          body: {
+            key: 'editor.editor.onPublishingNotReadyBody',
+          },
+        });
+        return;
+      }
+
+      if (entryDraft.hasChanged) {
+        alert({
+          title: 'editor.editor.onPublishingWithUnsavedChangesTitle',
+          body: {
+            key: 'editor.editor.onPublishingWithUnsavedChangesBody',
+          },
+        });
+        return;
+      }
+
+      if (
+        !(await confirm({
+          title: 'editor.editor.onPublishingTitle',
+          body: 'editor.editor.onPublishingBody',
+        }))
+      ) {
+        return;
+      }
+
+      await dispatch(publishUnpublishedEntry(collection.name, slug, navigate));
+
+      deleteBackup();
+
+      if (createNew) {
+        navigate(`/collections/${collection.name}/new?duplicate=true`, { replace: true });
+        return;
+      }
+
+      if (duplicate) {
+        dispatch(createDraftDuplicateFromEntry(entryDraft.entry));
+        navigate(`/collections/${collection.name}/new?duplicate=true`, { replace: true });
+        return;
+      }
+    },
+    [
+      collection.name,
+      currentStatus,
+      deleteBackup,
+      dispatch,
+      entryDraft.entry,
+      entryDraft.hasChanged,
+      navigate,
+      slug,
+    ],
+  );
+
+  const handleUnpublishEntry = useCallback(async () => {
+    if (!slug) {
+      return;
+    }
+
+    if (
+      !(await confirm({
+        title: 'editor.editor.onUnpublishingTitle',
+        body: 'editor.editor.onUnpublishingBody',
+        color: 'error',
+      }))
+    ) {
+      return;
+    }
+
+    await dispatch(unpublishPublishedEntry(collection, slug));
+
+    return navigate(`/collections/${collection.name}?noredirect`);
+  }, [collection, dispatch, navigate, slug]);
 
   const handleDuplicateEntry = useCallback(() => {
     if (!entryDraft.entry) {
@@ -161,47 +294,92 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
     }
 
     if (!slug || newRecord) {
-      return navigate(`/collections/${collection.name}`);
+      return navigate(`/collections/${collection.name}?noredirect`);
     }
 
     setTimeout(async () => {
       await dispatch(deleteEntry(collection, slug));
       deleteBackup();
-      return navigate(`/collections/${collection.name}`);
+      dispatch(
+        addSnackbar({
+          type: 'success',
+          message: {
+            key: `ui.toast.${useWorkflow ? 'onDeletePublishedEntry' : 'entryDeleted'}`,
+          },
+        }),
+      );
+      return navigate(`/collections/${collection.name}?noredirect`);
     }, 0);
-  }, [collection, deleteBackup, dispatch, entryDraft.hasChanged, navigate, newRecord, slug]);
+  }, [
+    collection,
+    deleteBackup,
+    dispatch,
+    entryDraft.hasChanged,
+    navigate,
+    newRecord,
+    slug,
+    useWorkflow,
+  ]);
 
-  const [prevLocalBackup, setPrevLocalBackup] = useState<
-    | {
-        entry: Entry;
+  const handleDeleteUnpublishedChanges = useCallback(async () => {
+    if (entryDraft.hasChanged) {
+      if (
+        entryDraft.hasChanged &&
+        !(await confirm({
+          title: 'editor.editor.onDeleteUnpublishedChangesWithUnsavedChangesTitle',
+          body: 'editor.editor.onDeleteUnpublishedChangesWithUnsavedChangesBody',
+          color: 'error',
+        }))
+      ) {
+        return;
       }
-    | undefined
-  >();
-
-  useEffect(() => {
-    if (config?.disable_local_backup) {
+    } else if (
+      !(await confirm({
+        title: 'editor.editor.onDeleteUnpublishedChangesTitle',
+        body: 'editor.editor.onDeleteUnpublishedChangesBody',
+        color: 'error',
+      }))
+    ) {
       return;
     }
 
-    if (
-      !prevLocalBackup &&
-      localBackup &&
-      (!isEqual(localBackup.entry.data, entryDraft.entry?.data) ||
-        !isEqual(localBackup.entry.meta, entryDraft.entry?.meta))
-    ) {
-      const updateLocalBackup = async () => {
-        dispatch(loadLocalBackup());
-        setVersion(version + 1);
-      };
-
-      updateLocalBackup();
+    if (!slug || newRecord) {
+      return navigate(`/collections/${collection.name}?noredirect`);
     }
 
-    setPrevLocalBackup(localBackup);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config?.disable_local_backup, deleteBackup, dispatch, localBackup, prevLocalBackup, version]);
+    setTimeout(async () => {
+      await dispatch(deleteUnpublishedEntry(collection.name, slug));
+      deleteBackup();
+      dispatch(
+        addSnackbar({
+          type: 'success',
+          message: {
+            key: 'ui.toast.onDeleteUnpublishedChanges',
+          },
+        }),
+      );
+      if (isModification) {
+        dispatch(loadEntry(collection, slug));
+      } else {
+        return navigate(`/collections/${collection.name}?noredirect`);
+      }
+    }, 0);
+  }, [
+    collection,
+    deleteBackup,
+    dispatch,
+    entryDraft.hasChanged,
+    isModification,
+    navigate,
+    newRecord,
+    slug,
+  ]);
 
   useEffect(() => {
+    if (submitted) {
+      return;
+    }
+
     if (hasChanged && entryDraft.entry) {
       createBackup(entryDraft.entry, collection);
     }
@@ -209,7 +387,7 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
     return () => {
       createBackup.flush();
     };
-  }, [collection, createBackup, entryDraft.entry, hasChanged]);
+  }, [collection, createBackup, entryDraft.entry, hasChanged, submitted]);
 
   const hasLivePreview = useMemo(() => {
     let livePreview = typeof collection.editor?.live_preview === 'string';
@@ -242,14 +420,25 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
     if (newRecord && slug !== prevSlug) {
       setTimeout(async () => {
         await dispatch(loadMedia());
-        dispatch(createEmptyDraft(collection, location.search));
+        await dispatch(createEmptyDraft(collection, location.search));
       });
     } else if (!newRecord && slug && (prevCollection !== collection || prevSlug !== slug)) {
-      setTimeout(() => {
-        if (!config?.disable_local_backup) {
-          dispatch(retrieveLocalBackup(collection, slug));
+      setTimeout(async () => {
+        if (useWorkflow) {
+          await dispatch(loadUnpublishedEntry(collection, slug));
+        } else {
+          await dispatch(loadEntry(collection, slug));
         }
-        dispatch(loadEntry(collection, slug));
+
+        if (!config?.disable_local_backup) {
+          await dispatch(retrieveLocalBackup(collection, slug));
+        }
+        if (submitted && config?.disable_local_backup) {
+          return;
+        }
+
+        dispatch(loadBackup());
+        setVersion(version + 1);
       });
     }
 
@@ -264,6 +453,9 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
     dispatch,
     newRecord,
     config?.disable_local_backup,
+    useWorkflow,
+    submitted,
+    version,
   ]);
 
   const leaveMessage = useMemo(() => t('editor.editor.onLeavePage'), [t]);
@@ -350,11 +542,10 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
         collection={collection}
         fields={fields}
         fieldsErrors={entryDraft.fieldsErrors}
-        onPersist={handlePersistEntry}
+        onPersist={debouncedHandlePersistEntry}
         onDelete={handleDeleteEntry}
         onDuplicate={handleDuplicateEntry}
         hasChanged={hasChanged}
-        displayUrl={displayUrl}
         isNewEntry={newRecord}
         isModification={isModification}
         toggleScroll={handleToggleScroll}
@@ -363,7 +554,14 @@ const Editor: FC<TranslatedProps<EditorProps>> = ({
         onDiscardDraft={handleDiscardDraft}
         submitted={submitted}
         slug={slug}
-        t={t}
+        currentStatus={currentStatus}
+        isUpdatingStatus={isUpdatingStatus}
+        onChangeStatus={handleChangeStatus}
+        onPublish={handlePublishEntry}
+        onUnPublish={handleUnpublishEntry}
+        onDeleteUnpublishedChanges={handleDeleteUnpublishedChanges}
+        hasUnpublishedChanges={hasUnpublishedEntry}
+        isPublishing={isPublishing}
       />
       <MediaLibraryModal />
     </>
@@ -377,16 +575,23 @@ interface CollectionViewOwnProps {
 }
 
 function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
-  const { collections, entryDraft, config, entries, scroll } = state;
+  const { collections, entryDraft, entries, scroll } = state;
   const { name, slug } = ownProps;
   const collection = collections[name];
   const collectionName = collection.name;
   const fields = selectFields(collection, slug);
-  const entry = !slug ? null : selectEntry(state, collectionName, slug);
   const hasChanged = entryDraft.hasChanged;
-  const displayUrl = config.config?.display_url;
   const isModification = entryDraft.entry?.isModification ?? false;
   const collectionEntriesLoaded = Boolean(entries.pages[collectionName]);
+
+  const entry = !slug ? null : selectEntry(state, collectionName, slug);
+
+  const useWorkflow = selectUseWorkflow(state);
+  const unPublishedEntry = selectUnpublishedEntry(state, collectionName, slug);
+  const publishedEntry = selectEntry(state, collectionName, slug);
+
+  const hasUnpublishedEntry = Boolean(useWorkflow && unPublishedEntry);
+  const currentStatus = unPublishedEntry && unPublishedEntry.status;
   const localBackup = entryDraft.localBackup;
   const draftKey = entryDraft.key;
   return {
@@ -397,16 +602,21 @@ function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
     fields,
     entry,
     hasChanged,
-    displayUrl,
     isModification,
     collectionEntriesLoaded,
     localBackup,
     draftKey,
     scrollSyncActive: scroll.isScrolling,
+    publishedEntry,
+    hasUnpublishedEntry,
+    currentStatus,
+    useWorkflow,
+    isUpdatingStatus: Boolean(entryDraft.entry?.isUpdatingStatus),
+    isPublishing: Boolean(entryDraft.entry?.isPublishing),
   };
 }
 
 const connector = connect(mapStateToProps);
 export type EditorProps = ConnectedProps<typeof connector>;
 
-export default connector(translate()(Editor) as ComponentType<EditorProps>);
+export default connector(Editor);

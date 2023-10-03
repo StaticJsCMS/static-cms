@@ -19,10 +19,12 @@ const lt: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Turinys',
+      workflow: 'Darbo eiga',
       media: 'Medija',
       quickAdd: 'Sukurti naują',
     },
     app: {
+      loading: 'Kraunama...',
       errorHeader: 'Klaida, neišėjo užkrauti/pasiekti CMS konfigūracijos failą',
       configErrors: 'Konfigūracijos (nustatymų) klaidos',
       checkConfigYml: 'Patikrinkite config.yml balsą.',
@@ -98,20 +100,50 @@ const lt: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Ar tikrai norite uždaryti šį puslapį?',
+      onUpdatingWithUnsavedChangesBody:
+        'Turite neišsaugotų pakeitimų! Prašome išsaugoti prieš pakeičiant statusą.',
+      onPublishingNotReadyBody: 'Prieš publikuojant, privalote pakeisti statusą į „Paruošta“.',
+      onPublishingWithUnsavedChangesBody:
+        'Yra neišsaugotų pakeitimų, prašome išsaugoti juos prieš publikuojant.',
+      onPublishingBody: 'Ae tikrai norite publikuoti šį įrašą?',
+      onUnpublishingBody: 'Tikrai norite panaikinti publikavimo statusą?',
       onDeleteWithUnsavedChangesBody:
         'Tikrai norite panaikinti publikuotą įrašą ir Jūsų pakeiitmus iš dabartinės sesijos?',
       onDeletePublishedEntryBody: 'Tikrai norite ištrinti šį publikuotą įrašą?',
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Tai ištrins visus nepublikuotus pakeitimus įraše, taip pat neišsaugotus pakeitimus per dabartinę sesiją. Vis tiek norite trinti?',
+      onDeleteUnpublishedChangesBody:
+        'Visi Jūsų pakeitimai įraše bus panaikinti. Ar tikrai norite trinti jį?',
       loadingEntry: 'Kraunamas įrašas...',
     },
     editorToolbar: {
+      publishing: 'Publikuojama...',
       publish: 'Publikuoti',
       published: 'Jau publikuota',
       unpublish: 'Atšaukti paskelbimą',
       duplicate: 'Daryti dublį',
+      unpublishing: 'Nebeskelbiama...',
       publishAndCreateNew: 'Publikuoti šitą, po to kurti kažką naujo',
       publishAndDuplicate: 'Publikuoti šitą, po to kurti šito dublį',
+      deleteUnpublishedChanges: 'Ištrinti publikuotus pakeitimus',
+      deleteUnpublishedEntry: 'Ištrinti nepaskelbtą įrašą',
+      deletePublishedEntry: 'Ištrinti paskelbtą įrašą',
       deleteEntry: 'Panaikinti įrašą',
+      saving: 'Išsaugojama...',
+      save: 'Išsaugoti',
+      deleting: 'Trinama...',
+      updating: 'Atnaujinama...',
+      status: 'Statusą: %{status}',
+      backCollection: ' Rašoma %{collectionLabel} kolekcijoje',
+      unsavedChanges: 'Neišsaugoti pakeitimai',
+      changesSaved: 'Pakeitimai išsauogti',
+      draft: 'Juodraštis',
+      inReview: 'Peržiūrima redakcijoje',
+      ready: 'Paruošta',
       publishNow: 'Skelbti naują',
+      deployPreviewPendingButtonLabel: 'Tikrinti, ar yra demonstracija',
+      deployPreviewButtonLabel: 'Žiūrėti demonstraciją (netiesiogiai)',
+      deployButtonLabel: 'Žiūrėti tiesiogiai tinklalapyje',
     },
     editorWidgets: {
       markdown: {
@@ -167,10 +199,10 @@ const lt: LocalePhrasesRoot = {
         'Failas per didelis.\nNustatymuose (konfigūracijoje) nurodyta, kad failai negali viršyti %{size} kB.',
     },
     mediaLibraryModal: {
-      loading: 'Kraunama...',
       noResults: 'Nėra rezultatų.',
       noAssetsFound: 'Turinio nerasta.',
       noImagesFound: 'Vaizdų nerasta.',
+      private: 'Privatu ',
       images: 'Vaizdai',
       mediaAssets: 'Medijos turinys',
       search: 'Paieška...',
@@ -212,13 +244,45 @@ const lt: LocalePhrasesRoot = {
         'Pasitikrinkite — kažkurio (ar kelių) laukelių neužpildėte. Tai padarius galėsite išsaugoti įrašą.',
       entrySaved: 'Įrašas išsaugotos',
       entryPublished: 'Įrašas publikuotas',
+      entryUnpublished: 'Įrašas nepublikuotas',
       onFailToPublishEntry: 'Nepavyko publikuoti: %{details}',
+      onFailToUnpublishEntry: 'Nepavyko panaikinti publikavimą: %{details}',
       entryUpdated: 'Įrašo statusas pakeistas',
+      onDeleteUnpublishedChangesBody: 'Nepublikuoti pakeitimai ištrinti',
       onFailToAuth: 'Nepavyko prisijungti: %{details}',
       onLoggedOut:
         'Mes jus atjungėme. Jeigu yra poreikis, sukurkite duomenų atsarginę kopiją. Galite tiesiog iš naujo prisijungti.',
       onBackendDown:
         'Deja, serveris šiuo metu neveikia. Bandykite iš naujo dar sykį arba šiek tiek vėliau. Detalės: %{details}',
+    },
+  },
+  workflow: {
+    workflow: {
+      loading: 'Kraunamas turinys',
+      workflowHeading: 'Redakcijos darbo eiga',
+      newPost: 'Naujas įrašas',
+      description:
+        '%{smart_count} įrašas laukia Jūsų peržiūrėjimo, %{readyCount} jau gali būti publikuojamas. |||| %{smart_count} elementai laukia Jūsų peržiūrėjimo, %{readyCount} jau gali būti publikuojami. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} pagal %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'oagal %{author}',
+      deleteChanges: 'Trinti keitimus',
+      deleteNewEntry: 'Trinti naują įrašą',
+      publishChanges: 'Publikuoti keitimus',
+      publishNewEntry: 'Kurti naują įrašą',
+    },
+    workflowList: {
+      onDeleteEntry: 'Ar tikrai norite ištrinti šį įrašą?',
+      onPublishingNotReadyEntry:
+        'Tik įrašai su statusu „Paruošta“ gali būti patvirtinti. Prašome pajudinti įrašo kortelę link „Paruošta“ stulpelio, kad galėtumėte publikuoti įrašą.',
+      onPublishEntry: 'Ar jūs tikrai norite publikuoti šį įrašą?',
+      draft: 'Juodraščiai',
+      pending_review: 'Peržiūrima redakcijoje',
+      pending_publish: 'Paruošta',
+      currentEntries: '%{smart_count} įrašas |||| %{smart_count} įrašai',
     },
   },
 };

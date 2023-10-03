@@ -2,16 +2,19 @@ import * as fuzzy from 'fuzzy';
 import attempt from 'lodash/attempt';
 import flatten from 'lodash/flatten';
 import get from 'lodash/get';
+import set from 'lodash/set';
 import isError from 'lodash/isError';
 import uniq from 'lodash/uniq';
-import { dirname } from 'path';
+import { dirname, extname } from 'path';
 
-import { resolveFormat } from './formats/formats';
+import { WorkflowStatus, workflowStatusFromString } from './constants/publishModes';
+import { formatExtensions, resolveFormat } from './formats/formats';
 import { commitMessageFormatter, slugFormatter } from './lib/formatters';
 import {
   formatI18nBackup,
   getFilePaths,
   getI18nBackup,
+  getI18nDataFiles,
   getI18nEntry,
   getI18nFiles,
   getI18nFilesDepth,
@@ -29,6 +32,7 @@ import {
   getPathDepth,
   localForage,
 } from './lib/util';
+import { EDITORIAL_WORKFLOW_ERROR } from './lib/util/EditorialWorkflowError';
 import { getEntryBackupKey } from './lib/util/backup.util';
 import {
   getFields,
@@ -45,10 +49,10 @@ import {
 import filterEntries from './lib/util/filter.util';
 import { DRAFT_MEDIA_FILES, selectMediaFilePublicPath } from './lib/util/media.util';
 import { selectCustomPath, slugFromCustomPath } from './lib/util/nested.util';
-import { isNullish } from './lib/util/null.util';
-import { set } from './lib/util/object.util';
+import { isNotNullish, isNullish } from './lib/util/null.util';
 import { fileSearch, sortByScore } from './lib/util/search.util';
 import { dateParsers, expandPath, extractTemplateVars } from './lib/widgets/stringTemplate';
+import { getUseWorkflow } from './reducers/selectors/config';
 import createEntry from './valueObjects/createEntry';
 
 import type {
@@ -58,6 +62,7 @@ import type {
   BaseField,
   Collection,
   CollectionFile,
+  Collections,
   Config,
   Credentials,
   DataFile,
@@ -66,6 +71,7 @@ import type {
   EntryData,
   EventData,
   FilterRule,
+  FolderCollection,
   ImplementationEntry,
   MediaField,
   ObjectValue,
@@ -73,6 +79,8 @@ import type {
   SearchQueryResponse,
   SearchResponse,
   UnknownField,
+  UnpublishedEntry,
+  UnpublishedEntryDiff,
   User,
   ValueOrNestedValue,
 } from './interface';
@@ -206,20 +214,20 @@ export function mergeExpandedEntries(entries: (Entry & { field: string })[]): En
 
   const merged = entries.reduce((acc, e) => {
     if (!acc[e.slug]) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { field, ...rest } = e;
+      const { field: _field, ...rest } = e;
       acc[e.slug] = rest;
       arrayPaths[e.slug] = new Set();
     }
 
     const nestedFields = e.field.split('.');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let value = acc[e.slug].data as any;
+    let value: ValueOrNestedValue = acc[e.slug].data;
     for (let i = 0; i < nestedFields.length; i++) {
-      value = value[nestedFields[i]];
-      if (Array.isArray(value)) {
-        const path = nestedFields.slice(0, i + 1).join('.');
-        arrayPaths[e.slug] = arrayPaths[e.slug].add(path);
+      if (isNotNullish(value)) {
+        value = value[nestedFields[i]];
+        if (Array.isArray(value)) {
+          const path = nestedFields.slice(0, i + 1).join('.');
+          arrayPaths[e.slug] = arrayPaths[e.slug].add(path);
+        }
       }
     }
 
@@ -282,6 +290,18 @@ export interface MediaFile {
   isDirectory?: boolean;
 }
 
+function selectHasMetaPath(collection: Collection): collection is FolderCollection {
+  return Boolean('folder' in collection && collection.meta?.path);
+}
+
+function prepareMetaPath(path: string, collection: Collection) {
+  if (!selectHasMetaPath(collection)) {
+    return path;
+  }
+  const dir = dirname(path);
+  return dir.slice(collection.folder!.length + 1) || '/';
+}
+
 function collectionDepth<EF extends BaseField>(collection: Collection<EF>) {
   let depth;
   depth =
@@ -302,8 +322,8 @@ function collectionRegex<EF extends BaseField>(collection: Collection<EF>): RegE
   }
 
   if (hasI18n(collection)) {
-    const { defaultLocale } = getI18nInfo(collection);
-    ruleString += `\\.${defaultLocale}\\..*`;
+    const { default_locale } = getI18nInfo(collection);
+    ruleString += `\\.${default_locale}\\..*`;
   }
 
   return ruleString ? new RegExp(ruleString) : undefined;
@@ -325,7 +345,9 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     this.deleteAnonymousBackup();
     this.config = config;
     this.implementation = implementation.init(this.config, {
+      useWorkflow: getUseWorkflow(this.config as Config),
       updateUserCredentials: this.updateUserCredentials,
+      initialWorkflowStatus: WorkflowStatus.DRAFT,
     }) as BC;
     this.backendName = backendName;
     this.authStore = authStore;
@@ -415,7 +437,22 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   getToken = () => this.implementation.getToken();
 
-  async entryExist(path: string) {
+  async entryExist(collection: Collection, path: string, slug: string, useWorkflow: boolean) {
+    const unpublishedEntry =
+      useWorkflow &&
+      (await this.implementation
+        .unpublishedEntry({ collection: collection.name, slug })
+        .catch(error => {
+          if (error.name === EDITORIAL_WORKFLOW_ERROR && error.notUnderEditorialWorkflow) {
+            return Promise.resolve(false);
+          }
+          return Promise.reject(error);
+        }));
+
+    if (unpublishedEntry) {
+      return unpublishedEntry;
+    }
+
     const publishedEntry = await this.implementation
       .getEntry(path)
       .then(({ data }) => data)
@@ -447,7 +484,12 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     // Check for duplicate slug in loaded entities store first before repo
     while (
       usedSlugs.includes(uniqueSlug) ||
-      (await this.entryExist(selectEntryPath(collection, uniqueSlug) as string))
+      (await this.entryExist(
+        collection,
+        selectEntryPath(collection, uniqueSlug) as string,
+        uniqueSlug,
+        getUseWorkflow(config),
+      ))
     ) {
       uniqueSlug = `${slug}${sanitizeChar(' ', slugConfig)}${i++}`;
     }
@@ -551,6 +593,10 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return entries;
   }
 
+  printError(error: Error) {
+    return `\n\n${error.stack}`;
+  }
+
   async search(collections: Collection[], searchTerm: string): Promise<SearchResponse> {
     // Perform a local search by requesting all entries. For each
     // collection, load it, search, and call onCollectionResults with
@@ -598,9 +644,9 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     const entries = await Promise.all(collectionEntriesRequests).then(arrays => flatten(arrays));
 
     if (errors.length > 0) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      throw new Error({ message: 'Errors occurred while searching entries locally!', errors });
+      throw new Error(
+        `Errors occurred while searching entries locally!${errors.map(this.printError)}`,
+      );
     }
 
     const hits = entries
@@ -828,6 +874,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         if (isError(data)) {
           console.error(data);
         }
+
         return Object.assign(entry, { data: isError(data) ? {} : data });
       }
 
@@ -878,6 +925,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     entryDraft: draft,
     assetProxies,
     usedSlugs,
+    unpublished = false,
     status,
   }: PersistArgs) {
     const modifiedData = await this.invokePreSaveEvent(draft.entry, collection);
@@ -892,6 +940,8 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       : draft;
 
     const newEntry = entryDraft.entry.newRecord ?? false;
+
+    const useWorkflow = getUseWorkflow(config);
 
     const customPath = selectCustomPath(draft.entry, collection, rootSlug, config.slug);
 
@@ -922,7 +972,8 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       const slug = entryDraft.entry.slug;
       dataFile = {
         path: entryDraft.entry.path,
-        slug: customPath ? slugFromCustomPath(collection, customPath) : slug,
+        // for workflow entries we refresh the slug on publish
+        slug: customPath && !useWorkflow ? slugFromCustomPath(collection, customPath) : slug,
         raw: this.entryToRaw(collection, entryDraft.entry),
         newPath: customPath,
       };
@@ -955,13 +1006,18 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
     const collectionName = collection.name;
 
-    const updatedOptions = { status };
     const opts = {
       newEntry,
       commitMessage,
       collectionName,
-      ...updatedOptions,
+      useWorkflow,
+      unpublished,
+      status,
     };
+
+    if (!useWorkflow) {
+      await this.invokePrePublishEvent(entryDraft.entry, collection);
+    }
 
     await this.implementation.persistEntry(
       {
@@ -973,12 +1029,26 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
     await this.invokePostSaveEvent(entryDraft.entry, collection);
 
+    if (!useWorkflow) {
+      await this.invokePostPublishEvent(entryDraft.entry, collection);
+    }
+
     return slug;
   }
 
   async getEventData(entry: Entry): Promise<EventData> {
     const { login, name = '' } = (await this.currentUser()) as User;
     return { entry, author: { login, name } };
+  }
+
+  async invokePrePublishEvent(entry: Entry, collection: Collection) {
+    const eventData = await this.getEventData(entry);
+    return await invokeEvent({ name: 'prePublish', collection: collection.name, data: eventData });
+  }
+
+  async invokePostPublishEvent(entry: Entry, collection: Collection) {
+    const eventData = await this.getEventData(entry);
+    return await invokeEvent({ name: 'postPublish', collection: collection.name, data: eventData });
   }
 
   async invokePreSaveEvent(entry: Entry, collection: Collection): Promise<EntryData> {
@@ -1069,6 +1139,136 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   filterEntries(collection: { entries: Entry[] }, filterRule: FilterRule | FilterRule[]) {
     return filterEntries(collection.entries, filterRule, undefined);
+  }
+
+  /**
+   * Editorial Workflows
+   */
+  async processUnpublishedEntry(
+    collection: Collection,
+    entryData: UnpublishedEntry,
+    withMediaFiles: boolean,
+  ) {
+    const { slug } = entryData;
+    let extension: string;
+    if ('files' in collection) {
+      const file = collection.files.find(f => f?.name === slug);
+      extension = file ? extname(file.file) : formatExtensions['json'];
+    } else {
+      extension = selectFolderEntryExtension(collection);
+    }
+
+    const mediaFiles: MediaFile[] = [];
+    if (withMediaFiles) {
+      const nonDataFiles = entryData.diffs.filter(d => !d.path.endsWith(extension));
+      const files = await Promise.all(
+        nonDataFiles.map(f =>
+          this.implementation!.unpublishedEntryMediaFile(collection.name, slug, f.path, f.id),
+        ),
+      );
+      mediaFiles.push(...files.map(f => ({ ...f, draft: true })));
+    }
+
+    const dataFiles = entryData.diffs.filter(d => d.path.endsWith(extension));
+    dataFiles.sort((a, b) => a.path.length - b.path.length);
+
+    const formatData = (data: string, path: string, newFile: boolean) => {
+      const entry = createEntry(collection.name, slug, path, {
+        raw: data,
+        isModification: !newFile,
+        label: collection && selectFileEntryLabel(collection, slug),
+        mediaFiles,
+        updatedOn: entryData.updatedAt,
+        author: entryData.pullRequestAuthor,
+        status: workflowStatusFromString(entryData.status),
+        meta: { path: prepareMetaPath(path, collection) },
+      });
+
+      const entryWithFormat = this.entryWithFormat(collection)(entry);
+      return entryWithFormat;
+    };
+
+    const readAndFormatDataFile = async (dataFile: UnpublishedEntryDiff) => {
+      const data = await this.implementation.unpublishedEntryDataFile(
+        collection.name,
+        entryData.slug,
+        dataFile.path,
+        dataFile.id,
+      );
+      const entryWithFormat = formatData(data, dataFile.path, dataFile.newFile);
+      return entryWithFormat;
+    };
+
+    // if the unpublished entry has no diffs, return the original
+    if (dataFiles.length <= 0) {
+      const loadedEntry = await this.implementation.getEntry(
+        selectEntryPath(collection, slug) as string,
+      );
+      return formatData(loadedEntry.data, loadedEntry.file.path, false);
+    } else if (hasI18n(collection)) {
+      // we need to read all locales files and not just the changes
+      const path = selectEntryPath(collection, slug) as string;
+      const i18nFiles = getI18nDataFiles(collection, extension, path, slug, dataFiles);
+      let entries = await Promise.all(
+        i18nFiles.map(dataFile => readAndFormatDataFile(dataFile).catch(() => null)),
+      );
+      entries = entries.filter(Boolean);
+      const grouped = await groupEntries(collection, extension, entries as Entry[]);
+      return grouped[0];
+    } else {
+      const entryWithFormat = await readAndFormatDataFile(dataFiles[0]);
+      return entryWithFormat;
+    }
+  }
+
+  async unpublishedEntries(collections: Collections) {
+    const ids = await this.implementation.unpublishedEntries();
+    const entries = (
+      await Promise.all(
+        ids.map(async id => {
+          const entryData = await this.implementation.unpublishedEntry({ id });
+          const collectionName = entryData.collection;
+          const collection = Object.values(collections).find(c => c.name === collectionName);
+          if (!collection) {
+            console.warn(`Missing collection '${collectionName}' for unpublished entry '${id}'`);
+            return null;
+          }
+          const entry = await this.processUnpublishedEntry(collection, entryData, false);
+          return entry;
+        }),
+      )
+    ).filter(Boolean) as Entry[];
+
+    return { pagination: 0, entries };
+  }
+
+  async unpublishedEntry(state: RootState, collection: Collection, slug: string) {
+    const entryData = await this.implementation.unpublishedEntry({
+      collection: collection.name,
+      slug,
+    });
+
+    let entry = await this.processUnpublishedEntry(collection, entryData, true);
+    entry = await this.processEntry(state, collection, entry);
+    return entry;
+  }
+
+  persistUnpublishedEntry(args: PersistArgs) {
+    return this.persistEntry({ ...args, unpublished: true });
+  }
+
+  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: WorkflowStatus) {
+    return this.implementation.updateUnpublishedEntryStatus(collection, slug, newStatus);
+  }
+
+  deleteUnpublishedEntry(collection: string, slug: string) {
+    return this.implementation.deleteUnpublishedEntry(collection, slug);
+  }
+
+  async publishUnpublishedEntry(collection: Collection, entry: Entry) {
+    await this.invokePrePublishEvent(entry, collection);
+    await this.implementation.publishUnpublishedEntry(collection.name, entry.slug);
+    await this.invokePostPublishEvent(entry, collection);
   }
 }
 

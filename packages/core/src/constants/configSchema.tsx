@@ -39,7 +39,7 @@ const i18n = {
       items: localeType,
       uniqueItems: true,
     },
-    defaultLocale: localeType,
+    default_locale: localeType,
   },
 };
 
@@ -299,6 +299,13 @@ function getConfigSchema() {
             },
           },
           use_large_media_transforms_in_media_library: { type: 'boolean' },
+          /**
+           * Editorial Workflow
+           */
+          always_fork: { type: 'boolean' },
+          open_authoring: { type: 'boolean' },
+          squash_merges: { type: 'boolean' },
+          cms_label_prefix: { type: 'string' },
         },
         required: ['name'],
       },
@@ -490,6 +497,11 @@ function getConfigSchema() {
           max_file_size: { type: 'number' },
           folder_support: { type: 'boolean' },
         },
+      },
+      publish_mode: {
+        type: 'string',
+        enum: ['simple', 'editorial_workflow'],
+        examples: ['editorial_workflow'],
       },
       slug: {
         type: 'object',

@@ -1,24 +1,19 @@
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@styled-icons/material/KeyboardArrowDown';
 import { KeyboardArrowUp as KeyboardArrowUpIcon } from '@styled-icons/material/KeyboardArrowUp';
 import React, { useCallback, useMemo } from 'react';
-import { translate } from 'react-polyglot';
 
 import {
   SORT_DIRECTION_ASCENDING,
   SORT_DIRECTION_DESCENDING,
   SORT_DIRECTION_NONE,
 } from '@staticcms/core/constants';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
 
-import type {
-  SortableField,
-  SortDirection,
-  SortMap,
-  TranslatedProps,
-} from '@staticcms/core/interface';
+import type { SortableField, SortDirection, SortMap } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
 
 import './SortControl.css';
@@ -52,13 +47,14 @@ export interface SortControlProps {
   onSortClick: ((key: string, direction?: SortDirection) => Promise<void>) | undefined;
 }
 
-const SortControl = ({
+const SortControl: FC<SortControlProps> = ({
   fields = [],
   sort = {},
   variant = 'menu',
   onSortClick,
-  t,
-}: TranslatedProps<SortControlProps>) => {
+}) => {
+  const t = useTranslate();
+
   const selectedSort = useMemo(() => {
     if (!sort) {
       return { key: undefined, direction: undefined };
@@ -141,7 +137,7 @@ const SortControl = ({
                     : KeyboardArrowDownIcon
                   : undefined
               }
-              className={classes.option}
+              rootClassName={classes.option}
             >
               {field.label ?? field.name}
             </MenuItemButton>
@@ -152,4 +148,4 @@ const SortControl = ({
   );
 };
 
-export default translate()(SortControl) as FC<SortControlProps>;
+export default SortControl;

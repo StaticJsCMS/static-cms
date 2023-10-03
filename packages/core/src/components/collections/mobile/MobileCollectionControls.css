@@ -30,8 +30,3 @@
   @apply flex
     lg:!hidden;
 }
-
-.CMS_MobileCollectionControls_toggle-icon {
-  @apply w-5
-    h-5;
-}
