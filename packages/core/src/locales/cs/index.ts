@@ -13,7 +13,7 @@ const cs: LocalePhrasesRoot = {
       email: 'Vyplňte e-mailovou adresu.',
       password: 'Vyplňte heslo.',
       authTitle: undefined, // English translation: 'Error logging in'
-      authBody: undefined, // English translation: '%{details}'
+      authBody: '%{details}',
       netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         'Nastavení identity nenalezeno. Používáte-li git-gateway server nezapomeňte aktivovat službu Identity a Git Gateway.',

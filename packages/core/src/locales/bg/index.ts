@@ -13,7 +13,7 @@ const bg: LocalePhrasesRoot = {
       email: 'Въведете вашия имейл.',
       password: 'Въведете паролата.',
       authTitle: undefined, // English translation: 'Error logging in'
-      authBody: undefined, // English translation: '%{details}'
+      authBody: '%{details}',
       netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         'Няма достъп до настройките. Ако използвате git-gateway, не забравяйте да активирате услугата Identity и Git Gateway.',

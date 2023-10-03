@@ -13,7 +13,7 @@ const ko: LocalePhrasesRoot = {
       email: '반드시 이메일을 입력해 주세요.',
       password: '암호를 입력해 주세요.',
       authTitle: undefined, // English translation: 'Error logging in'
-      authBody: undefined, // English translation: '%{details}'
+      authBody: '%{details}',
       netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         '설정에 접근할 수 없습니다. git-gateway 백엔드 사용시 Identity service와 Git Gateway를 활성화 해야 합니다.',

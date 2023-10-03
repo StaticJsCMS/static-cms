@@ -13,7 +13,7 @@ const he: LocalePhrasesRoot = {
       email: 'נא  לא לשכוח להקליד את כתובת המייל',
       password: 'נא להקליד את הסיסמה.',
       authTitle: undefined, // English translation: 'Error logging in'
-      authBody: undefined, // English translation: '%{details}'
+      authBody: '%{details}',
       netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         'הגדרות אימות הזהות אינן נגישות. כאשר משתמשים ב-git-gateway כשירות ה-backend יש לוודא ששירות אימות הזהות ו-Git Gateway הופעלו.',

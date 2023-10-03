@@ -13,7 +13,7 @@ const th: LocalePhrasesRoot = {
       email: 'ตรวจสอบให้แน่ใจว่าได้ใส่อีเมลล์แล้ว',
       password: 'โปรดใส่รหัสผ่านของคุณ',
       authTitle: undefined, // English translation: 'Error logging in'
-      authBody: undefined, // English translation: '%{details}'
+      authBody: '%{details}',
       netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         'ไม่สามารถเข้าถึงการตั้งค่าส่วนตัว เมื่อใช้ git-gateway backend ตรวจสอบให้แน่ใจว่าได้เปิดใช้งานระบบยืนยันตัวตนและ Git Gateway.',

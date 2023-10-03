@@ -13,7 +13,7 @@ const ro: LocalePhrasesRoot = {
       email: 'Asigură-te că ai introdus email-ul.',
       password: 'Te rugăm introdu parola.',
       authTitle: undefined, // English translation: 'Error logging in'
-      authBody: undefined, // English translation: '%{details}'
+      authBody: '%{details}',
       netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         'Nu s-a putut accesa serviciul de autentificare. Dacă folosești git-gateway, asigură-te că ai activat serviciul Identity și Git-Gateway.',

@@ -13,7 +13,7 @@ const ja: LocalePhrasesRoot = {
       email: 'メールアドレスを確認してください。',
       password: 'パスワードを入力してください。',
       authTitle: undefined, // English translation: 'Error logging in'
-      authBody: undefined, // English translation: '%{details}'
+      authBody: '%{details}',
       netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         '認証情報にアクセスできませんでした。git-gateway backend を利用している場合は、認証サービスと Git Gateway が有効になっているかを確認してください。',

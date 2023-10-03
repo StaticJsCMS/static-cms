@@ -13,7 +13,7 @@ const fr: LocalePhrasesRoot = {
       email: "Assurez-vous d'avoir entré votre email.",
       password: 'Merci de saisir votre mot de passe.',
       authTitle: undefined, // English translation: 'Error logging in'
-      authBody: undefined, // English translation: '%{details}'
+      authBody: '%{details}',
       netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         "Impsosible d'accéder aux paramètres d'identité. Si vous utilisez le backend git-gateway, merci de vous assurer que vous avez bien activé le service Identity et la passerelle Git.",

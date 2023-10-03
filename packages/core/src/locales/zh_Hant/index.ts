@@ -13,7 +13,7 @@ const zh_Hant: LocalePhrasesRoot = {
       email: '請確認你已經輸入你的電子郵件。',
       password: '請輸入你的密碼。',
       authTitle: undefined, // English translation: 'Error logging in'
-      authBody: undefined, // English translation: '%{details}'
+      authBody: '%{details}',
       netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         '無法連接認證系統！當使用 git-gateway 作為後端資料庫時，請確認您已開啟認證服務及 Git Gateway。',

@@ -13,7 +13,7 @@ const gr: LocalePhrasesRoot = {
       email: 'Βεβαιωθείτε ότι έχετε εισαγάγει το email σας.',
       password: 'Παρακαλώ εισάγετε τον κωδικό πρόσβασής σας.',
       authTitle: undefined, // English translation: 'Error logging in'
-      authBody: undefined, // English translation: '%{details}'
+      authBody: '%{details}',
       netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         'Δεν είναι δυνατή η πρόσβαση στις ρυθμίσεις ταυτότητας. Όταν χρησιμοποιείτε το παρασκήνιο του git Gateway, φροντίστε να ενεργοποιήσετε την υπηρεσία Identity και το git Gateway.',

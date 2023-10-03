@@ -13,7 +13,7 @@ const tr: LocalePhrasesRoot = {
       email: 'E-postanızı girdiğinizden emin olun.',
       password: 'Lütfen şifrenizi girin.',
       authTitle: undefined, // English translation: 'Error logging in'
-      authBody: undefined, // English translation: '%{details}'
+      authBody: '%{details}',
       netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         "Identity ayarlarına erişilemiyor. Git-gateway sunucusunu kullanmak için Identity servisi ve Git Gateway'in etkin olduğundan emin olun.",

@@ -13,7 +13,7 @@ const vi: LocalePhrasesRoot = {
       email: 'Hãy nhập email của bạn.',
       password: 'Hãy nhập mật khẩu của bạn.',
       authTitle: undefined, // English translation: 'Error logging in'
-      authBody: undefined, // English translation: '%{details}'
+      authBody: '%{details}',
       netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         'Không thể truy cập thiêt lập danh tính. Hãy chắc chắn rằng bạn đã bật dịch vụ Identity và Git Gateway khi sử dụng git-gateway.',

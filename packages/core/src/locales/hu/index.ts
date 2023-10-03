@@ -13,7 +13,7 @@ const hu: LocalePhrasesRoot = {
       email: undefined, // English translation: 'Make sure to enter your email.'
       password: undefined, // English translation: 'Please enter your password.'
       authTitle: undefined, // English translation: 'Error logging in'
-      authBody: undefined, // English translation: '%{details}'
+      authBody: '%{details}',
       netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings: undefined, // English translation: 'Unable to access identity settings. When using git-gateway backend make sure to enable Identity service and Git Gateway.'
     },

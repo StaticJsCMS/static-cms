@@ -13,7 +13,7 @@ const lt: LocalePhrasesRoot = {
       email: 'Įveskite savo elektroninį paštą.',
       password: 'Įveskite savo slaptažodį.',
       authTitle: undefined, // English translation: 'Error logging in'
-      authBody: undefined, // English translation: '%{details}'
+      authBody: '%{details}',
       netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         'Deja, nepavyksta pasiekti Identity paslaugos nustatymus. Kai naudojate git-gateway backend metodą, įjunkite „Identity service“ ir „Git Gateway“.',

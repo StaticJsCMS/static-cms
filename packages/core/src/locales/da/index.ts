@@ -13,7 +13,7 @@ const da: LocalePhrasesRoot = {
       email: 'Vær sikker på du har indtastet din e-mail.',
       password: 'Indtast dit kodeord.',
       authTitle: undefined, // English translation: 'Error logging in'
-      authBody: undefined, // English translation: '%{details}'
+      authBody: '%{details}',
       netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         'Kunne ikke tilgå identity opsætning. Ved brug af git-gateway som bagvedliggende service, sørg for at aktivere Identity service og Git Gateway.',

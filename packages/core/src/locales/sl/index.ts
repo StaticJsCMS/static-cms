@@ -13,7 +13,7 @@ const sl: LocalePhrasesRoot = {
       email: 'Vnesi svoj pravi e-poštni naslov.',
       password: 'Vnesi svoje geslo.',
       authTitle: undefined, // English translation: 'Error logging in'
-      authBody: undefined, // English translation: '%{details}'
+      authBody: '%{details}',
       netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         'Ni mogoče dostopati do nastavitev identitete. Ko uporabljate Git-Gateway zaledje, se prepričajte, da omogočite Identity Service in Git Gateway.',
