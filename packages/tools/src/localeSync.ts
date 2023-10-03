@@ -83,11 +83,13 @@ export default ${name};
 
     const emptyLine = /([ ]*)([a-zA-Z0-9_]+): null,/.exec(line);
     if (emptyLine && emptyLine.length === 3) {
+      const englishTranslation = String(get(
+        baseLocale,
+        [...parentPath, emptyLine[2]].join('.'),
+      )).replace(/\n/g, '\\n');
+
       outputLines.push(
-        `${emptyLine[1]}${emptyLine[2]}: undefined, // English translation: '${get(
-          baseLocale,
-          [...parentPath, emptyLine[2]].join('.'),
-        )}'`,
+        `${emptyLine[1]}${emptyLine[2]}: undefined, // English translation: '${englishTranslation}'`,
       );
       continue;
     }

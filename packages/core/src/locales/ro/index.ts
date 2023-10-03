@@ -12,6 +12,9 @@ const ro: LocalePhrasesRoot = {
     errors: {
       email: 'Asigură-te că ai introdus email-ul.',
       password: 'Te rugăm introdu parola.',
+      authTitle: undefined, // English translation: 'Error logging in'
+      authBody: undefined, // English translation: '%{details}'
+      netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         'Nu s-a putut accesa serviciul de autentificare. Dacă folosești git-gateway, asigură-te că ai activat serviciul Identity și Git-Gateway.',
     },
@@ -25,6 +28,7 @@ const ro: LocalePhrasesRoot = {
     app: {
       errorHeader: 'A apărut o eroare cu configurarea CMS-ului.',
       configErrors: 'Au apărut erori de configurare.',
+      configNotFound: undefined, // English translation: 'Config not found'
       checkConfigYml: 'Verifică fișierul de configurare (config.yml).',
       loadingConfig: 'Se încarcă configurările...',
       waitingBackend: 'Așteptăm după backend...',
@@ -61,6 +65,10 @@ const ro: LocalePhrasesRoot = {
       other: 'Altul',
       negateLabel: 'Nu %{label}',
     },
+    table: {
+      summary: undefined, // English translation: 'Summary'
+      collection: undefined, // English translation: 'Collection'
+    },
     defaultFields: {
       author: {
         label: 'Autor',
@@ -69,6 +77,7 @@ const ro: LocalePhrasesRoot = {
         label: 'Actualizat la',
       },
     },
+    notFound: undefined, // English translation: 'Collection not found'
   },
   editor: {
     editorControl: {
@@ -86,10 +95,12 @@ const ro: LocalePhrasesRoot = {
         max: '%{fieldLabel} poate fi mai mic sau egal cu %{maxValue}.',
         rangeCount: '%{fieldLabel} poate avea între %{minCount} și %{maxCount} intrări.',
         rangeCountExact: '%{fieldLabel} trebuie să conțină exact %{count} intrări.',
-        minCount: '%{fieldLabel} trebuie să conțină cel puțin %{minCount} intrări.',
-        maxCount: '%{fieldLabel} trebuie să conțină cel mult %{maxCount} intrări.',
-        invalidPath: `'%{path}' nu este o cale validă.`,
-        pathExists: `Calea '%{path}' există deja.`,
+        rangeMin: undefined, // English translation: '%{fieldLabel} must have at least %{minCount} item(s).'
+        rangeMax: undefined, // English translation: '%{fieldLabel} must have %{maxCount} or less item(s).'
+        invalidPath: "'%{path}' nu este o cale validă.",
+        pathExists: "Calea '%{path}' există deja.",
+        invalidColor: undefined, // English translation: 'Color '%{color}' is invalid.'
+        invalidHexCode: undefined, // English translation: 'Hex codes must start with a # sign.'
       },
       i18n: {
         writingInLocale: 'Scrii în limba %{locale}',
@@ -97,12 +108,16 @@ const ro: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Ești sigur/ă că dorești să părăsești pagina?',
+      onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Ești sigur/ă că dorești să ștergi această publicare, dar și modificările nesalvate din sesiunea curentă?',
+      onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Ești sigur/ă că dorești să ștergi această publicare?',
       loadingEntry: 'Se încarcă...',
     },
     editorInterface: {
+      sideBySideI18n: undefined, // English translation: 'I18n Side by Side'
+      preview: undefined, // English translation: 'Preview'
       toggleI18n: 'Comută limba',
       togglePreview: 'Comută previzualizarea',
       toggleScrollSync: 'Sincronizează scroll-ul',
@@ -110,12 +125,14 @@ const ro: LocalePhrasesRoot = {
     editorToolbar: {
       publish: 'Publicare',
       published: 'Publicat',
-      unpublish: 'Anulează publicarea',
       duplicate: 'Duplifică',
       publishAndCreateNew: 'Publicare apoi crează altul',
       publishAndDuplicate: 'Publicare apoi duplifică',
       deleteEntry: 'Șterge intrare',
       publishNow: 'Publicare',
+      discardChanges: undefined, // English translation: 'Discard changes'
+      discardChangesTitle: undefined, // English translation: 'Discard changes'
+      discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
     },
     editorWidgets: {
       markdown: {
@@ -131,22 +148,40 @@ const ro: LocalePhrasesRoot = {
         addComponent: 'Adaugă componentă',
         richText: 'Rich Text',
         markdown: 'Markdown',
+        type: undefined, // English translation: 'Type...'
       },
       image: {
         choose: 'Alege o imagine',
+        chooseMultiple: undefined, // English translation: 'Choose images'
         chooseUrl: 'Inserează din URL',
         replaceUrl: 'Schimbă cu URL',
         promptUrl: 'Introdu URL-ul imaginii',
         chooseDifferent: 'Alege altă imagine',
+        addMore: undefined, // English translation: 'Add more images'
         remove: 'Șterge imaginea',
+        removeAll: undefined, // English translation: 'Remove all images'
       },
       file: {
         choose: 'Alege un fișier',
         chooseUrl: 'Inserează din URL',
+        chooseMultiple: undefined, // English translation: 'Choose files'
         replaceUrl: 'Schimbă cu URL',
         promptUrl: 'Introdu URL-ul fișierului',
         chooseDifferent: 'Alege alt fișier',
+        addMore: undefined, // English translation: 'Add more files'
         remove: 'Șterge fișier',
+        removeAll: undefined, // English translation: 'Remove all files'
+      },
+      folder: {
+        choose: undefined, // English translation: 'Choose a folder'
+        chooseUrl: undefined, // English translation: 'Insert folder path'
+        chooseMultiple: undefined, // English translation: 'Choose folders'
+        replaceUrl: undefined, // English translation: 'Replace with path'
+        promptUrl: undefined, // English translation: 'Enter path of the folder'
+        chooseDifferent: undefined, // English translation: 'Choose different folder'
+        addMore: undefined, // English translation: 'Add more folders'
+        remove: undefined, // English translation: 'Remove folder'
+        removeAll: undefined, // English translation: 'Remove all folders'
       },
       unknownControl: {
         noControl: 'Widget-ul „%{widget}” nu are configurări valabile.',
@@ -164,6 +199,18 @@ const ro: LocalePhrasesRoot = {
       },
       datetime: {
         now: 'Acum',
+        invalidDateTitle: undefined, // English translation: 'Invalid date'
+        invalidDateBody: undefined, // English translation: 'The date you entered is invalid.'
+      },
+      list: {
+        add: undefined, // English translation: 'Add %{item}'
+        addType: undefined, // English translation: 'Add %{item}'
+        noValue: undefined, // English translation: 'No value'
+      },
+      keyvalue: {
+        key: undefined, // English translation: 'Key'
+        value: undefined, // English translation: 'Value'
+        uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
     },
   },
@@ -177,9 +224,13 @@ const ro: LocalePhrasesRoot = {
       copied: 'Copiat',
     },
     mediaLibrary: {
+      onDeleteTitle: undefined, // English translation: 'Delete selected media?'
       onDeleteBody: 'Ești sigur/ă că dorești să ștergi fișierul selectat?',
+      fileTooLargeTitle: undefined, // English translation: 'File too large'
       fileTooLargeBody:
         'Fișier prea mare.\nConfigurarea nu permite fișiere mai mari de %{size} KB.',
+      alreadyExistsTitle: undefined, // English translation: 'File already exists'
+      alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
       loading: 'Se încarcă...',
@@ -195,11 +246,29 @@ const ro: LocalePhrasesRoot = {
       deleting: 'Se șterge...',
       deleteSelected: 'Șterge fișierele selectate',
       chooseSelected: 'Alege fișierele selectate',
+      dropImages: undefined, // English translation: 'Drop images to upload'
+      dropFiles: undefined, // English translation: 'Drop files to upload'
+    },
+    folderSupport: {
+      newFolder: undefined, // English translation: 'New folder'
+      createNewFolder: undefined, // English translation: 'Create new folder'
+      enterFolderName: undefined, // English translation: 'Enter folder name...'
+      home: undefined, // English translation: 'Home'
+      up: undefined, // English translation: 'Up'
+      upToFolder: undefined, // English translation: 'Up to %{folder}'
     },
   },
   ui: {
+    common: {
+      yes: undefined, // English translation: 'Yes'
+      no: undefined, // English translation: 'No'
+      okay: undefined, // English translation: 'OK'
+    },
     default: {
       goBackToSite: 'Înapoi la site',
+    },
+    localBackup: {
+      hasLocalBackup: undefined, // English translation: 'Has local backup'
     },
     errorBoundary: {
       title: 'Eroare',
@@ -215,13 +284,15 @@ const ro: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
+      darkMode: undefined, // English translation: 'Dark Mode'
       logOut: 'Ieșire din cont',
     },
     toast: {
       onFailToLoadEntries: 'A eșuat încărcarea intrării: %{details}',
-      onFailToLoadDeployPreview: 'A eșuat încărcarea previzualizării: %{details}',
       onFailToPersist: 'A eșuat persistarea intrării: %{details}',
+      onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'A eșuat ștergerea intrării: %{details}',
+      onFailToDeleteMedia: undefined, // English translation: 'Failed to delete media: %{details}'
       onFailToUpdateStatus: 'A eșuat actualizarea status-ului: %{details}',
       missingRequiredField: 'Oops, ai ratat un câmp obligatoriu. Completează-l pentru a salva.',
       entrySaved: 'Intrare salvată',
