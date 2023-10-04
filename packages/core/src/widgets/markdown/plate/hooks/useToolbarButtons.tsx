@@ -33,7 +33,6 @@ import type {
   MarkdownToolbarItem,
 } from '@staticcms/core/interface';
 import type { ReactNode } from 'react';
-import type { t } from 'react-polyglot';
 
 import './useToolbarButtons.css';
 
@@ -83,9 +82,7 @@ export function getToolbarButtons(
 
           return (
             <MenuGroup key={`group-${index}`}>
-              {group.items.map(item =>
-                getToolbarButton(item, collection, field, disabled, 'menu'),
-              )}
+              {group.items.map(item => getToolbarButton(item, collection, field, disabled, 'menu'))}
             </MenuGroup>
           );
         })}
@@ -129,28 +126,18 @@ function getToolbarButton(
       return <CodeBlockToolbarButtons key="code" disabled={disabled} variant={variant} />;
 
     case 'decrease-indent':
-      return (
-        <DecreaseIndentButton key="decrease-indent" disabled={disabled} variant={variant} />
-      );
+      return <DecreaseIndentButton key="decrease-indent" disabled={disabled} variant={variant} />;
 
     case 'delete-column':
       return (
-        <DeleteColumnToolbarButton
-          key="delete-column"
-          disabled={disabled}
-          variant={variant}
-        />
+        <DeleteColumnToolbarButton key="delete-column" disabled={disabled} variant={variant} />
       );
 
     case 'delete-row':
-      return (
-        <DeleteRowToolbarButton key="delete-row" disabled={disabled} variant={variant} />
-      );
+      return <DeleteRowToolbarButton key="delete-row" disabled={disabled} variant={variant} />;
 
     case 'delete-table':
-      return (
-        <DeleteTableToolbarButton key="delete-table" disabled={disabled} variant={variant} />
-      );
+      return <DeleteTableToolbarButton key="delete-table" disabled={disabled} variant={variant} />;
 
     case 'font':
       if (variant === 'menu') {
@@ -160,17 +147,11 @@ function getToolbarButton(
       return <FontTypeSelect key="font" disabled={disabled} />;
 
     case 'increase-indent':
-      return (
-        <IncreaseIndentButton key="increase-indent" disabled={disabled} variant={variant} />
-      );
+      return <IncreaseIndentButton key="increase-indent" disabled={disabled} variant={variant} />;
 
     case 'insert-column':
       return (
-        <InsertColumnToolbarButton
-          key="insert-column"
-          disabled={disabled}
-          variant={variant}
-        />
+        <InsertColumnToolbarButton key="insert-column" disabled={disabled} variant={variant} />
       );
 
     case 'image':
@@ -196,14 +177,10 @@ function getToolbarButton(
       );
 
     case 'insert-row':
-      return (
-        <InsertRowToolbarButton key="insert-row" disabled={disabled} variant={variant} />
-      );
+      return <InsertRowToolbarButton key="insert-row" disabled={disabled} variant={variant} />;
 
     case 'insert-table':
-      return (
-        <InsertTableToolbarButton key="insert-table" disabled={disabled} variant={variant} />
-      );
+      return <InsertTableToolbarButton key="insert-table" disabled={disabled} variant={variant} />;
 
     case 'italic':
       return <ItalicToolbarButton key="italic" disabled={disabled} variant={variant} />;
@@ -220,17 +197,11 @@ function getToolbarButton(
 
     case 'strikethrough':
       return (
-        <StrikethroughToolbarButton
-          key="strikethrough"
-          disabled={disabled}
-          variant={variant}
-        />
+        <StrikethroughToolbarButton key="strikethrough" disabled={disabled} variant={variant} />
       );
 
     case 'unordered-list':
-      return (
-        <UnorderedListButton key="unordered-list" disabled={disabled} variant={variant} />
-      );
+      return <UnorderedListButton key="unordered-list" disabled={disabled} variant={variant} />;
 
     default:
       return null;
