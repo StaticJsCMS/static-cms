@@ -553,10 +553,13 @@ function getConfigSchema() {
 }
 
 function getWidgetSchemas() {
-  const schemas = getWidgets().reduce((acc, widget) => {
-    acc[widget.name] = widget.schema ?? {};
-    return acc;
-  }, {} as Record<string, unknown>);
+  const schemas = getWidgets().reduce(
+    (acc, widget) => {
+      acc[widget.name] = widget.schema ?? {};
+      return acc;
+    },
+    {} as Record<string, unknown>,
+  );
   return { ...schemas };
 }
 

@@ -55,9 +55,7 @@ const ListPreview: FC<WidgetPreviewProps<ValueOrNestedValue[], ListField>> = ({ 
         !['object', 'list'].includes(field.fields[0].widget)) ||
       (!field.fields && !field.types) ? (
         <ul style={{ marginTop: 0 }}>
-          {value?.map((item, index) => (
-            <li key={index}>{String(item)}</li>
-          ))}
+          {value?.map((item, index) => <li key={index}>{String(item)}</li>)}
         </ul>
       ) : (
         renderNestedList(value)

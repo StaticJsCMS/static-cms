@@ -121,11 +121,14 @@ const Autocomplete: FC<AutocompleteProps> = ({
   const finalOptions = useMemo(() => options.map(getOptionLabelAndValue), [options]);
   const optionsByValue = useMemo(
     () =>
-      finalOptions.reduce((acc, option) => {
-        acc[option.value] = option;
+      finalOptions.reduce(
+        (acc, option) => {
+          acc[option.value] = option;
 
-        return acc;
-      }, {} as Record<string, Option>),
+          return acc;
+        },
+        {} as Record<string, Option>,
+      ),
     [finalOptions],
   );
 

@@ -101,15 +101,18 @@ export function getTreeData<EF extends BaseField>(
   const rootFolder = '/';
   const entriesObj = entries.map(e => ({ ...e, path: e.path.slice(collectionFolder.length) }));
 
-  const dirs = entriesObj.reduce((acc, entry) => {
-    let dir: string | undefined = dirname(entry.path);
-    while (dir && !acc[dir] && dir !== rootFolder) {
-      const parts: string[] = dir.split('/');
-      acc[dir] = parts.pop();
-      dir = parts.length ? parts.join('/') : undefined;
-    }
-    return acc;
-  }, {} as Record<string, string | undefined>);
+  const dirs = entriesObj.reduce(
+    (acc, entry) => {
+      let dir: string | undefined = dirname(entry.path);
+      while (dir && !acc[dir] && dir !== rootFolder) {
+        const parts: string[] = dir.split('/');
+        acc[dir] = parts.pop();
+        dir = parts.length ? parts.join('/') : undefined;
+      }
+      return acc;
+    },
+    {} as Record<string, string | undefined>,
+  );
 
   if ('nested' in collection && collection.nested?.summary) {
     collection = {
@@ -152,15 +155,18 @@ export function getTreeData<EF extends BaseField>(
     }),
   ];
 
-  const parentsToChildren = flatData.reduce((acc, node) => {
-    const parent = node.path === rootFolder ? '' : dirname(node.path);
-    if (acc[parent]) {
-      acc[parent].push(node);
-    } else {
-      acc[parent] = [node];
-    }
-    return acc;
-  }, {} as Record<string, BaseTreeNodeData[]>);
+  const parentsToChildren = flatData.reduce(
+    (acc, node) => {
+      const parent = node.path === rootFolder ? '' : dirname(node.path);
+      if (acc[parent]) {
+        acc[parent].push(node);
+      } else {
+        acc[parent] = [node];
+      }
+      return acc;
+    },
+    {} as Record<string, BaseTreeNodeData[]>,
+  );
 
   function reducer(acc: TreeNodeData[], value: BaseTreeNodeData) {
     const node = value;

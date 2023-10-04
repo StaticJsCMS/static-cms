@@ -67,10 +67,13 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
 
   const optionsByValue = useMemo(
     () =>
-      options.reduce((acc, option) => {
-        acc[`${option.value}`] = option;
-        return acc;
-      }, {} as Record<string, SelectWidgetOptionObject>),
+      options.reduce(
+        (acc, option) => {
+          acc[`${option.value}`] = option;
+          return acc;
+        },
+        {} as Record<string, SelectWidgetOptionObject>,
+      ),
     [options],
   );
 

@@ -218,22 +218,25 @@ export function getI18nBackup(
 
   const i18nBackup = locales
     .filter(l => l !== default_locale)
-    .reduce((acc, locale) => {
-      const dataPath = getDataPath(locale, default_locale);
-      const data = get(entry, dataPath);
-      if (!data) {
-        return acc;
-      }
-      return {
-        ...acc,
-        [locale]: {
-          raw: entryToRaw({
-            ...entry,
-            data,
-          }),
-        },
-      };
-    }, {} as Record<string, { raw: string }>);
+    .reduce(
+      (acc, locale) => {
+        const dataPath = getDataPath(locale, default_locale);
+        const data = get(entry, dataPath);
+        if (!data) {
+          return acc;
+        }
+        return {
+          ...acc,
+          [locale]: {
+            raw: entryToRaw({
+              ...entry,
+              data,
+            }),
+          },
+        };
+      },
+      {} as Record<string, { raw: string }>,
+    );
 
   return i18nBackup;
 }
@@ -383,14 +386,17 @@ export function getI18nDataFiles(
     return diffFiles;
   }
   const paths = getFilePaths(collection, extension, path, slug);
-  const dataFiles = paths.reduce((acc, path) => {
-    const dataFile = diffFiles.find(file => file.path === path);
-    if (dataFile) {
-      return [...acc, dataFile];
-    } else {
-      return [...acc, { path, id: '', newFile: false }];
-    }
-  }, [] as { path: string; id: string; newFile: boolean }[]);
+  const dataFiles = paths.reduce(
+    (acc, path) => {
+      const dataFile = diffFiles.find(file => file.path === path);
+      if (dataFile) {
+        return [...acc, dataFile];
+      } else {
+        return [...acc, { path, id: '', newFile: false }];
+      }
+    },
+    [] as { path: string; id: string; newFile: boolean }[],
+  );
 
   return dataFiles;
 }

@@ -13,10 +13,13 @@ const converters: FieldStorageConverters<Pair[], KeyValueField, Record<string, s
       : [createEmptyPair()];
   },
   serialize(cmsValue) {
-    return cmsValue?.reduce((acc, pair) => {
-      acc[pair.key] = pair.value;
-      return acc;
-    }, {} as Record<string, string>);
+    return cmsValue?.reduce(
+      (acc, pair) => {
+        acc[pair.key] = pair.value;
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
   },
 };
 

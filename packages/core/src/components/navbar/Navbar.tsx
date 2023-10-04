@@ -52,9 +52,12 @@ const Navbar: FC<NavbarProps> = ({
   const displayUrl = useAppSelector(selectDisplayUrl);
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      dispatch(checkBackendStatus());
-    }, 5 * 60 * 1000);
+    const intervalId = setInterval(
+      () => {
+        dispatch(checkBackendStatus());
+      },
+      5 * 60 * 1000,
+    );
 
     return () => {
       clearInterval(intervalId);

@@ -34,7 +34,7 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
     return summary
       ? `${label} - ${compileStringTemplate(summary, null, '', value, fields)}`
       : label;
-  }, [field.summary, label, value]);
+  }, [field.summary, fields, label, value]);
 
   const hasChildErrors = useHasChildErrors(path, fieldsErrors, i18n, false);
 
