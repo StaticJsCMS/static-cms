@@ -34,9 +34,6 @@ module.exports = {
       },
     ],
     'no-duplicate-imports': 'error',
-    '@emotion/no-vanilla': 'off',
-    '@emotion/import-from-emotion': 'error',
-    '@emotion/styled-import': 'error',
     'require-atomic-updates': [0],
     'object-shorthand': ['error', 'always'],
     'prefer-const': [
