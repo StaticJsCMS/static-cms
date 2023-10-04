@@ -20,12 +20,7 @@ import {
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import useToolbarButtons from '../../hooks/useToolbarButtons';
 
-import type {
-  Collection,
-  MarkdownField,
-  MarkdownToolbarItem,
-  TranslatedProps,
-} from '@staticcms/core/interface';
+import type { Collection, MarkdownField, MarkdownToolbarItem } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 import './Toolbar.css';

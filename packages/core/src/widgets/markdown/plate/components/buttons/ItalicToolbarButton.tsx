@@ -12,10 +12,7 @@ export interface ItalicToolbarButtonsProp {
   variant: 'button' | 'menu';
 }
 
-const ItalicToolbarButton: FC<ItalicToolbarButtonsProp> = ({
-  disabled,
-  variant,
-}) => {
+const ItalicToolbarButton: FC<ItalicToolbarButtonsProp> = ({ disabled, variant }) => {
   const t = useTranslate();
 
   return (

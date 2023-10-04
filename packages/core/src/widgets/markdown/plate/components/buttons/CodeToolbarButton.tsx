@@ -12,10 +12,7 @@ export interface CodeToolbarButtonProps {
   variant: 'button' | 'menu';
 }
 
-const CodeToolbarButton: FC<CodeToolbarButtonProps> = ({
-  disabled,
-  variant,
-}) => {
+const CodeToolbarButton: FC<CodeToolbarButtonProps> = ({ disabled, variant }) => {
   const t = useTranslate();
 
   return (

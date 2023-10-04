@@ -12,10 +12,7 @@ export interface BoldToolbarButtonProps {
   variant: 'button' | 'menu';
 }
 
-const BoldToolbarButton: FC<BoldToolbarButtonProps> = ({
-  disabled,
-  variant,
-}) => {
+const BoldToolbarButton: FC<BoldToolbarButtonProps> = ({ disabled, variant }) => {
   const t = useTranslate();
 
   return (

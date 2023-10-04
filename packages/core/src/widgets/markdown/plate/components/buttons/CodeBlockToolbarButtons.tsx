@@ -13,10 +13,7 @@ export interface CodeBlockToolbarButtonsProps {
   variant: 'button' | 'menu';
 }
 
-const CodeBlockToolbarButtons: FC<CodeBlockToolbarButtonsProps> = ({
-  disabled,
-  variant,
-}) => {
+const CodeBlockToolbarButtons: FC<CodeBlockToolbarButtonsProps> = ({ disabled, variant }) => {
   const t = useTranslate();
 
   const editor = useMdPlateEditorState();

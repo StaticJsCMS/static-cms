@@ -13,10 +13,7 @@ export interface InsertRowToolbarButtonProps {
   variant: 'button' | 'menu';
 }
 
-const InsertRowToolbarButton: FC<InsertRowToolbarButtonProps> = ({
-  disabled,
-  variant,
-}) => {
+const InsertRowToolbarButton: FC<InsertRowToolbarButtonProps> = ({ disabled, variant }) => {
   const t = useTranslate();
 
   const editor = useMdPlateEditorState();

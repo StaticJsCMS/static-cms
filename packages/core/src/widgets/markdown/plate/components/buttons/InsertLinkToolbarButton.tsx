@@ -19,11 +19,7 @@ import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 import { useTranslate } from '@staticcms/core/lib';
 
-import type {
-  Collection,
-  MarkdownField,
-  MediaPath,
-} from '@staticcms/core/interface';
+import type { Collection, MarkdownField, MediaPath } from '@staticcms/core/interface';
 import type { MdLinkElement } from '@staticcms/markdown/plate/plateTypes';
 import type { TText } from '@udecode/plate';
 import type { FC } from 'react';

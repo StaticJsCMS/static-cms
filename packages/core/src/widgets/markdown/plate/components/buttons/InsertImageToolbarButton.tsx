@@ -8,11 +8,7 @@ import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 import { useTranslate } from '@staticcms/core/lib';
 
-import type {
-  Collection,
-  MarkdownField,
-  MediaPath,
-} from '@staticcms/core/interface';
+import type { Collection, MarkdownField, MediaPath } from '@staticcms/core/interface';
 import type { MdImageElement } from '@staticcms/markdown/plate/plateTypes';
 import type { FC } from 'react';
 import type { BaseSelection } from 'slate';

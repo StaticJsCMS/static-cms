@@ -12,10 +12,7 @@ export interface BlockquoteToolbarButtonProps {
   variant: 'button' | 'menu';
 }
 
-const BlockquoteToolbarButton: FC<BlockquoteToolbarButtonProps> = ({
-  disabled,
-  variant,
-}) => {
+const BlockquoteToolbarButton: FC<BlockquoteToolbarButtonProps> = ({ disabled, variant }) => {
   const t = useTranslate();
 
   return (

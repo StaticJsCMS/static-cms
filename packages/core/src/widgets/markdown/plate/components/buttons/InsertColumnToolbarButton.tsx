@@ -13,10 +13,7 @@ export interface InsertColumnToolbarButtonProps {
   variant: 'button' | 'menu';
 }
 
-const InsertColumnToolbarButton: FC<InsertColumnToolbarButtonProps> = ({
-  disabled,
-  variant,
-}) => {
+const InsertColumnToolbarButton: FC<InsertColumnToolbarButtonProps> = ({ disabled, variant }) => {
   const t = useTranslate();
 
   const editor = useMdPlateEditorState();

@@ -13,10 +13,7 @@ export interface DeleteColumnToolbarButtonProps {
   variant: 'button' | 'menu';
 }
 
-const DeleteColumnToolbarButton: FC<DeleteColumnToolbarButtonProps> = ({
-  disabled,
-  variant,
-}) => {
+const DeleteColumnToolbarButton: FC<DeleteColumnToolbarButtonProps> = ({ disabled, variant }) => {
   const t = useTranslate();
 
   const editor = useMdPlateEditorState();

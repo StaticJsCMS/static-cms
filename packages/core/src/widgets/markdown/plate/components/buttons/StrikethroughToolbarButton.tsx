@@ -12,10 +12,7 @@ export interface StrikethroughToolbarButtonProps {
   variant: 'button' | 'menu';
 }
 
-const StrikethroughToolbarButton: FC<StrikethroughToolbarButtonProps> = ({
-  disabled,
-  variant,
-}) => {
+const StrikethroughToolbarButton: FC<StrikethroughToolbarButtonProps> = ({ disabled, variant }) => {
   const t = useTranslate();
 
   return (

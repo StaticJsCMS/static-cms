@@ -12,10 +12,7 @@ export interface UnorderedListToolbarButtonProps {
   variant: 'button' | 'menu';
 }
 
-const UnorderedListToolbarButton: FC<UnorderedListToolbarButtonProps> = ({
-  disabled,
-  variant,
-}) => {
+const UnorderedListToolbarButton: FC<UnorderedListToolbarButtonProps> = ({ disabled, variant }) => {
   const t = useTranslate();
 
   return (
