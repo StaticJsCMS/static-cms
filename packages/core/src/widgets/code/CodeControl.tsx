@@ -51,7 +51,9 @@ function valueToOption(val: string | { name: string; label?: string }): {
   return { value: val.name, label: val.label || val.name };
 }
 
-const CodeControl: FC<TranslatedProps<WidgetControlProps<string | { [key: string]: string }, CodeField>>> = ({
+const CodeControl: FC<
+  TranslatedProps<WidgetControlProps<string | { [key: string]: string }, CodeField>>
+> = ({
   label,
   field,
   duplicate,

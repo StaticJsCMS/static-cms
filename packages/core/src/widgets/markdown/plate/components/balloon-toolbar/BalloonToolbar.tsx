@@ -103,7 +103,7 @@ const BalloonToolbar: FC<TranslatedProps<BalloonToolbarProps>> = ({
   collection,
   field,
   disabled,
-  t
+  t,
 }) => {
   const hasEditorFocus = useFocused();
   const editor = useMdPlateEditorState();
@@ -180,7 +180,7 @@ const BalloonToolbar: FC<TranslatedProps<BalloonToolbarProps>> = ({
           collection,
           field,
           disabled,
-          t
+          t,
         ),
       );
       return;
@@ -199,7 +199,7 @@ const BalloonToolbar: FC<TranslatedProps<BalloonToolbarProps>> = ({
           collection,
           field,
           disabled,
-          t
+          t,
         ),
       );
       return;

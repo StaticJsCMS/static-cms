@@ -19,11 +19,11 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 
+import type { TranslatedProps } from '@staticcms/core/interface';
 import type { SelectRootSlotProps } from '@mui/base/Select';
 import type { FC, FocusEvent, KeyboardEvent, MouseEvent } from 'react';
 
 import './FontTypeSelect.css';
-import { TranslatedProps } from '@staticcms/core/interface';
 
 const classes = generateClassNames('WidgetMarkdown_FontTypeSelect', [
   'root',
@@ -45,31 +45,31 @@ type Option = {
 const types: Option[] = [
   {
     value: ELEMENT_H1,
-    label: 'editor.editorWidgets.headingOptions.headingOne'
+    label: 'editor.editorWidgets.headingOptions.headingOne',
   },
   {
     value: ELEMENT_H2,
-    label: 'editor.editorWidgets.headingOptions.headingTwo'
+    label: 'editor.editorWidgets.headingOptions.headingTwo',
   },
   {
     value: ELEMENT_H3,
-    label: 'editor.editorWidgets.headingOptions.headingThree'
+    label: 'editor.editorWidgets.headingOptions.headingThree',
   },
   {
     value: ELEMENT_H4,
-    label: 'editor.editorWidgets.headingOptions.headingFour'
+    label: 'editor.editorWidgets.headingOptions.headingFour',
   },
   {
     value: ELEMENT_H5,
-    label: 'editor.editorWidgets.headingOptions.headingFive'
+    label: 'editor.editorWidgets.headingOptions.headingFive',
   },
   {
     value: ELEMENT_H6,
-    label: 'editor.editorWidgets.headingOptions.headingSix'
+    label: 'editor.editorWidgets.headingOptions.headingSix',
   },
   {
     value: ELEMENT_PARAGRAPH,
-    label: 'editor.editorWidgets.markdown.paragraph'
+    label: 'editor.editorWidgets.markdown.paragraph',
   },
 ];
 

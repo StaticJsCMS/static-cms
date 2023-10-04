@@ -215,7 +215,7 @@ const de: LocalePhrasesRoot = {
           insertColumn: 'Spalte einfügen',
           insertRow: 'Zeile einfügen',
           insertTable: 'Tabelle einfügen',
-        }
+        },
       },
       image: {
         choose: 'Bild wählen',
@@ -282,7 +282,7 @@ const de: LocalePhrasesRoot = {
       code: {
         language: 'Programmiersprache',
         selectLanguage: 'Programmiersprache wählen',
-      }
+      },
     },
   },
   mediaLibrary: {

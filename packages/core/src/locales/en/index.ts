@@ -214,7 +214,7 @@ const en: BaseLocalePhrasesRoot = {
           insertColumn: 'Insert column',
           insertRow: 'Insert row',
           insertTable: 'Insert table',
-        }
+        },
       },
       image: {
         choose: 'Choose an image',
@@ -281,7 +281,7 @@ const en: BaseLocalePhrasesRoot = {
       code: {
         language: 'Language',
         selectLanguage: 'Select language',
-      }
+      },
     },
   },
   mediaLibrary: {

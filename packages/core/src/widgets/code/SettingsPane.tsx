@@ -6,9 +6,9 @@ import Select from '@staticcms/core/components/common/select/Select';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { FC } from 'react';
+import type { TranslatedProps } from '@staticcms/core/interface';
 
 import './SettingsPane.css';
-import { TranslatedProps } from '@staticcms/core/interface';
 
 export const classes = generateClassNames('WidgetCodeSettings', ['root']);
 

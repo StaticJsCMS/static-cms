@@ -4,15 +4,19 @@ import React from 'react';
 
 import BlockToolbarButton from './common/BlockToolbarButton';
 
+import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
-import { TranslatedProps } from '@staticcms/core/interface';
 
 export interface BlockquoteToolbarButtonProps {
   disabled: boolean;
   variant: 'button' | 'menu';
 }
 
-const BlockquoteToolbarButton: FC<TranslatedProps<BlockquoteToolbarButtonProps>> = ({ disabled, variant, t }) => {
+const BlockquoteToolbarButton: FC<TranslatedProps<BlockquoteToolbarButtonProps>> = ({
+  disabled,
+  variant,
+  t,
+}) => {
   return (
     <BlockToolbarButton
       label={t('editor.editorWidgets.markdown.quote')}

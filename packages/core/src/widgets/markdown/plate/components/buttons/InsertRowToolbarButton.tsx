@@ -5,15 +5,19 @@ import React, { useCallback } from 'react';
 import { useMdPlateEditorState } from '../../plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 
+import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
-import { TranslatedProps } from '@staticcms/core/interface';
 
 export interface InsertRowToolbarButtonProps {
   disabled: boolean;
   variant: 'button' | 'menu';
 }
 
-const InsertRowToolbarButton: FC<TranslatedProps<InsertRowToolbarButtonProps>> = ({ disabled, variant, t }) => {
+const InsertRowToolbarButton: FC<TranslatedProps<InsertRowToolbarButtonProps>> = ({
+  disabled,
+  variant,
+  t,
+}) => {
   const editor = useMdPlateEditorState();
 
   const handleInsertTableRow = useCallback(() => {

@@ -4,15 +4,19 @@ import React from 'react';
 
 import MarkToolbarButton from './common/MarkToolbarButton';
 
+import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
-import { TranslatedProps } from '@staticcms/core/interface';
 
 export interface ItalicToolbarButtonsProp {
   disabled: boolean;
   variant: 'button' | 'menu';
 }
 
-const ItalicToolbarButton: FC<TranslatedProps<ItalicToolbarButtonsProp>> = ({ disabled, variant, t }) => {
+const ItalicToolbarButton: FC<TranslatedProps<ItalicToolbarButtonsProp>> = ({
+  disabled,
+  variant,
+  t,
+}) => {
   return (
     <MarkToolbarButton
       tooltip={t('editor.editorWidgets.markdown.italic')}

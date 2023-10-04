@@ -5,8 +5,8 @@ import React, { useCallback } from 'react';
 import { useMdPlateEditorState } from '../../plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 
+import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
-import { TranslatedProps } from '@staticcms/core/interface';
 
 export interface IncreaseIndentToolbarButtonProps {
   disabled: boolean;

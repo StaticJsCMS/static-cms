@@ -5,15 +5,19 @@ import React, { useCallback } from 'react';
 import { useMdPlateEditorState } from '../../plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 
+import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
-import { TranslatedProps } from '@staticcms/core/interface';
 
 export interface DeleteRowToolbarButtonProps {
   disabled: boolean;
   variant: 'button' | 'menu';
 }
 
-const DeleteRowToolbarButton: FC<TranslatedProps<DeleteRowToolbarButtonProps>> = ({ disabled, variant, t }) => {
+const DeleteRowToolbarButton: FC<TranslatedProps<DeleteRowToolbarButtonProps>> = ({
+  disabled,
+  variant,
+  t,
+}) => {
   const editor = useMdPlateEditorState();
 
   const handleDeleteRow = useCallback(() => {

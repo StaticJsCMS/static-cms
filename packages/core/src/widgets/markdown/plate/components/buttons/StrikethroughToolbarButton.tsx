@@ -4,15 +4,19 @@ import React from 'react';
 
 import MarkToolbarButton from './common/MarkToolbarButton';
 
+import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
-import { TranslatedProps } from '@staticcms/core/interface';
 
 export interface StrikethroughToolbarButtonProps {
   disabled: boolean;
   variant: 'button' | 'menu';
 }
 
-const StrikethroughToolbarButton: FC<TranslatedProps<StrikethroughToolbarButtonProps>> = ({ disabled, variant, t }) => {
+const StrikethroughToolbarButton: FC<TranslatedProps<StrikethroughToolbarButtonProps>> = ({
+  disabled,
+  variant,
+  t,
+}) => {
   return (
     <MarkToolbarButton
       tooltip={t('editor.editorWidgets.markdown.strikethrough')}
