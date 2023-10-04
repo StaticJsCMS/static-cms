@@ -18,6 +18,7 @@ import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
+import { useTranslate } from '@staticcms/core/lib';
 
 import type { SelectRootSlotProps } from '@mui/base/Select';
 import type { FC, FocusEvent, KeyboardEvent, MouseEvent } from 'react';
@@ -44,31 +45,31 @@ type Option = {
 const types: Option[] = [
   {
     value: ELEMENT_H1,
-    label: 'Heading 1',
+    label: 'editor.editorWidgets.headingOptions.headingOne',
   },
   {
     value: ELEMENT_H2,
-    label: 'Heading 2',
+    label: 'editor.editorWidgets.headingOptions.headingTwo',
   },
   {
     value: ELEMENT_H3,
-    label: 'Heading 3',
+    label: 'editor.editorWidgets.headingOptions.headingThree',
   },
   {
     value: ELEMENT_H4,
-    label: 'Heading 4',
+    label: 'editor.editorWidgets.headingOptions.headingFour',
   },
   {
     value: ELEMENT_H5,
-    label: 'Heading 5',
+    label: 'editor.editorWidgets.headingOptions.headingFive',
   },
   {
     value: ELEMENT_H6,
-    label: 'Heading 6',
+    label: 'editor.editorWidgets.headingOptions.headingSix',
   },
   {
     value: ELEMENT_PARAGRAPH,
-    label: 'Paragraph',
+    label: 'editor.editorWidgets.markdown.paragraph',
   },
 ];
 
@@ -93,6 +94,8 @@ export interface FontTypeSelectProps {
  * Toolbar button to toggle the type of elements in selection.
  */
 const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
+  const t = useTranslate();
+
   const editor = useMdPlateEditorState();
   const [version, setVersion] = useState(0);
 
@@ -151,7 +154,7 @@ const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
                 },
               }}
             >
-              <span className={classes['option-label']}>{type.label}</span>
+              <span className={classes['option-label']}>{t(type.label)}</span>
             </Option>
           );
         })}

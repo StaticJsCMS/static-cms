@@ -88,7 +88,7 @@ const FolderCreationDialog: FC<FolderCreationDialogProps> = ({ open, onClose, on
           onClick={handleClose}
           className={classes['cancel-button']}
         >
-          Cancel
+          {t('ui.common.cancel')}
         </Button>
         <Button
           variant="contained"
@@ -97,7 +97,7 @@ const FolderCreationDialog: FC<FolderCreationDialogProps> = ({ open, onClose, on
           disabled={isEmpty(folderName)}
           className={classes['create-button']}
         >
-          Create
+          {t('mediaLibrary.folderSupport.create')}
         </Button>
       </div>
     </Modal>

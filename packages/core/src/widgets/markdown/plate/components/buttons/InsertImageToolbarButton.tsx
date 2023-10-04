@@ -6,6 +6,7 @@ import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import ToolbarButton from './common/ToolbarButton';
+import { useTranslate } from '@staticcms/core/lib';
 
 import type { Collection, MarkdownField, MediaPath } from '@staticcms/core/interface';
 import type { MdImageElement } from '@staticcms/markdown/plate/plateTypes';
@@ -27,6 +28,8 @@ const InsertImageToolbarButton: FC<InsertImageToolbarButtonProps> = ({
   currentValue,
   disabled,
 }) => {
+  const t = useTranslate();
+
   const [selection, setSelection] = useState<BaseSelection>();
   const editor = useMdPlateEditorState();
   const handleInsert = useCallback(
@@ -83,8 +86,8 @@ const InsertImageToolbarButton: FC<InsertImageToolbarButtonProps> = ({
 
   return (
     <ToolbarButton
-      label="Image"
-      tooltip="Insert image"
+      label={t('editor.editorWidgets.markdown.image')}
+      tooltip={t('editor.editorWidgets.markdown.insertImage')}
       icon={ImageIcon}
       onClick={handleOpenMediaLibrary}
       disabled={disabled}

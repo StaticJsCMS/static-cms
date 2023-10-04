@@ -3,6 +3,7 @@ import { MARK_STRIKETHROUGH } from '@udecode/plate';
 import React from 'react';
 
 import MarkToolbarButton from './common/MarkToolbarButton';
+import { useTranslate } from '@staticcms/core/lib';
 
 import type { FC } from 'react';
 
@@ -12,9 +13,11 @@ export interface StrikethroughToolbarButtonProps {
 }
 
 const StrikethroughToolbarButton: FC<StrikethroughToolbarButtonProps> = ({ disabled, variant }) => {
+  const t = useTranslate();
+
   return (
     <MarkToolbarButton
-      tooltip="Strikethrough"
+      tooltip={t('editor.editorWidgets.markdown.strikethrough')}
       type={MARK_STRIKETHROUGH}
       variant={variant}
       icon={FormatStrikethroughIcon}
