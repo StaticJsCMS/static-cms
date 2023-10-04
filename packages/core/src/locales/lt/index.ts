@@ -183,17 +183,36 @@ const lt: LocalePhrasesRoot = {
       markdown: {
         bold: 'Paryškinta',
         italic: 'Pasvariu tekstu (italic)',
+        strikethrough: undefined, // English translation: 'Strikethrough'
         code: 'Kodo šriftas',
+        codeBlock: undefined, // English translation: 'Code block'
+        insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Nuoroda (adresas)',
+        insertLink: undefined, // English translation: 'Insert link'
         linkPrompt: 'Įveskite adresą čia',
+        paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Antraštės',
         quote: 'Citata',
+        insertQuote: undefined, // English translation: 'Insert blockquote'
         bulletedList: 'Sąrašas su ženkleliais',
         numberedList: 'Sąrašas su numeriais',
         addComponent: 'Pridėti komponentą',
         richText: 'Normali peržiūra',
         markdown: 'Rodyti be formatavimo (Markdown)',
         type: undefined, // English translation: 'Type...'
+        decreaseIndent: undefined, // English translation: 'Decrease indent'
+        increaseIndent: undefined, // English translation: 'Increase indent'
+        image: undefined, // English translation: 'Image'
+        insertImage: undefined, // English translation: 'Insert image'
+        table: {
+          table: undefined, // English translation: 'Table'
+          deleteColumn: undefined, // English translation: 'Delete column'
+          deleteRow: undefined, // English translation: 'Delete row'
+          deleteTable: undefined, // English translation: 'Delete table'
+          insertColumn: undefined, // English translation: 'Insert column'
+          insertRow: undefined, // English translation: 'Insert row'
+          insertTable: undefined, // English translation: 'Insert table'
+        },
       },
       image: {
         choose: 'Pasirinkti vaizdą',
@@ -257,6 +276,10 @@ const lt: LocalePhrasesRoot = {
         value: undefined, // English translation: 'Value'
         uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
+      code: {
+        language: undefined, // English translation: 'Language'
+        selectLanguage: undefined, // English translation: 'Select language'
+      },
     },
   },
   mediaLibrary: {
@@ -298,6 +321,7 @@ const lt: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -308,6 +332,7 @@ const lt: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: 'Grįžti atgal į tinklalapį',

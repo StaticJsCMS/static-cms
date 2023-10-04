@@ -183,17 +183,36 @@ const ja: LocalePhrasesRoot = {
       markdown: {
         bold: '太字',
         italic: '斜体',
+        strikethrough: undefined, // English translation: 'Strikethrough'
         code: 'コード',
+        codeBlock: undefined, // English translation: 'Code block'
+        insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'リンク',
+        insertLink: undefined, // English translation: 'Insert link'
         linkPrompt: 'リンクのURLを入力してください',
+        paragraph: undefined, // English translation: 'Paragraph'
         headings: '見出し',
         quote: '引用',
+        insertQuote: undefined, // English translation: 'Insert blockquote'
         bulletedList: '箇条書き',
         numberedList: '番号付きリスト',
         addComponent: 'コンポーネント追加',
         richText: 'リッチテキスト',
         markdown: 'マークダウン',
         type: undefined, // English translation: 'Type...'
+        decreaseIndent: undefined, // English translation: 'Decrease indent'
+        increaseIndent: undefined, // English translation: 'Increase indent'
+        image: undefined, // English translation: 'Image'
+        insertImage: undefined, // English translation: 'Insert image'
+        table: {
+          table: undefined, // English translation: 'Table'
+          deleteColumn: undefined, // English translation: 'Delete column'
+          deleteRow: undefined, // English translation: 'Delete row'
+          deleteTable: undefined, // English translation: 'Delete table'
+          insertColumn: undefined, // English translation: 'Insert column'
+          insertRow: undefined, // English translation: 'Insert row'
+          insertTable: undefined, // English translation: 'Insert table'
+        },
       },
       image: {
         choose: '画像を選択',
@@ -257,6 +276,10 @@ const ja: LocalePhrasesRoot = {
         value: undefined, // English translation: 'Value'
         uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
+      code: {
+        language: undefined, // English translation: 'Language'
+        selectLanguage: undefined, // English translation: 'Select language'
+      },
     },
   },
   mediaLibrary: {
@@ -297,6 +320,7 @@ const ja: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -307,6 +331,7 @@ const ja: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: 'サイトに戻る',

@@ -183,17 +183,36 @@ const ko: LocalePhrasesRoot = {
       markdown: {
         bold: '굵은체',
         italic: '기울임체',
+        strikethrough: undefined, // English translation: 'Strikethrough'
         code: '코드',
+        codeBlock: undefined, // English translation: 'Code block'
+        insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: '링크',
+        insertLink: undefined, // English translation: 'Insert link'
         linkPrompt: '링크의 URL을 입력하세요',
+        paragraph: undefined, // English translation: 'Paragraph'
         headings: '제목',
         quote: '인용',
+        insertQuote: undefined, // English translation: 'Insert blockquote'
         bulletedList: '글머리 기호 목록',
         numberedList: '번호 매기기 목록',
         addComponent: '구성요소 추가',
         richText: '리치 텍스트',
         markdown: '마크다운',
         type: undefined, // English translation: 'Type...'
+        decreaseIndent: undefined, // English translation: 'Decrease indent'
+        increaseIndent: undefined, // English translation: 'Increase indent'
+        image: undefined, // English translation: 'Image'
+        insertImage: undefined, // English translation: 'Insert image'
+        table: {
+          table: undefined, // English translation: 'Table'
+          deleteColumn: undefined, // English translation: 'Delete column'
+          deleteRow: undefined, // English translation: 'Delete row'
+          deleteTable: undefined, // English translation: 'Delete table'
+          insertColumn: undefined, // English translation: 'Insert column'
+          insertRow: undefined, // English translation: 'Insert row'
+          insertTable: undefined, // English translation: 'Insert table'
+        },
       },
       image: {
         choose: '이미지 선택',
@@ -257,6 +276,10 @@ const ko: LocalePhrasesRoot = {
         value: undefined, // English translation: 'Value'
         uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
+      code: {
+        language: undefined, // English translation: 'Language'
+        selectLanguage: undefined, // English translation: 'Select language'
+      },
     },
   },
   mediaLibrary: {
@@ -298,6 +321,7 @@ const ko: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -308,6 +332,7 @@ const ko: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: '사이트로 돌아가기',

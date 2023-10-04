@@ -186,17 +186,36 @@ const tr: LocalePhrasesRoot = {
       markdown: {
         bold: 'Kalın',
         italic: 'İtalik',
+        strikethrough: undefined, // English translation: 'undefined'
         code: 'Kod',
+        codeBlock: undefined, // English translation: 'undefined'
+        insertCodeBlock: undefined, // English translation: 'undefined'
         link: 'Bağlantı',
+        insertLink: undefined, // English translation: 'undefined'
         linkPrompt: "Bağlantının URL'sini girin",
+        paragraph: undefined, // English translation: 'undefined'
         headings: 'Başlıklar',
         quote: 'Alıntı',
+        insertQuote: undefined, // English translation: 'undefined'
         bulletedList: 'Maddeli Liste',
         numberedList: 'Numaralı Liste',
         addComponent: 'Bileşen Ekle',
         richText: 'Zengin Metin',
         markdown: 'Markdown',
         type: undefined, // English translation: 'undefined'
+        decreaseIndent: undefined, // English translation: 'undefined'
+        increaseIndent: undefined, // English translation: 'undefined'
+        image: undefined, // English translation: 'undefined'
+        insertImage: undefined, // English translation: 'undefined'
+        table: {
+          table: undefined, // English translation: 'undefined'
+          deleteColumn: undefined, // English translation: 'undefined'
+          deleteRow: undefined, // English translation: 'undefined'
+          deleteTable: undefined, // English translation: 'undefined'
+          insertColumn: undefined, // English translation: 'undefined'
+          insertRow: undefined, // English translation: 'undefined'
+          insertTable: undefined, // English translation: 'undefined'
+        },
       },
       image: {
         choose: 'Bir resim seçin',
@@ -260,6 +279,10 @@ const tr: LocalePhrasesRoot = {
         value: undefined, // English translation: 'undefined'
         uniqueKeys: undefined, // English translation: 'undefined'
       },
+      code: {
+        language: undefined, // English translation: 'undefined'
+        selectLanguage: undefined, // English translation: 'undefined'
+      },
     },
   },
   mediaLibrary: {
@@ -301,6 +324,7 @@ const tr: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -311,6 +335,7 @@ const tr: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: 'Siteye geri git',

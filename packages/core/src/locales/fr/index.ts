@@ -183,17 +183,36 @@ const fr: LocalePhrasesRoot = {
       markdown: {
         bold: 'Gras',
         italic: 'Italique',
+        strikethrough: undefined, // English translation: 'Strikethrough'
         code: 'Code',
+        codeBlock: undefined, // English translation: 'Code block'
+        insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Lien',
+        insertLink: undefined, // English translation: 'Insert link'
         linkPrompt: "Entrer l'adresse web du lien",
+        paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Titres',
         quote: 'Citation',
+        insertQuote: undefined, // English translation: 'Insert blockquote'
         bulletedList: 'Liste à puces',
         numberedList: 'Liste numérotée',
         addComponent: 'Ajouter un composant',
         richText: 'Texte enrichi',
         markdown: 'Markdown',
         type: undefined, // English translation: 'Type...'
+        decreaseIndent: undefined, // English translation: 'Decrease indent'
+        increaseIndent: undefined, // English translation: 'Increase indent'
+        image: undefined, // English translation: 'Image'
+        insertImage: undefined, // English translation: 'Insert image'
+        table: {
+          table: undefined, // English translation: 'Table'
+          deleteColumn: undefined, // English translation: 'Delete column'
+          deleteRow: undefined, // English translation: 'Delete row'
+          deleteTable: undefined, // English translation: 'Delete table'
+          insertColumn: undefined, // English translation: 'Insert column'
+          insertRow: undefined, // English translation: 'Insert row'
+          insertTable: undefined, // English translation: 'Insert table'
+        },
       },
       image: {
         choose: 'Choisir une image',
@@ -257,6 +276,10 @@ const fr: LocalePhrasesRoot = {
         value: undefined, // English translation: 'Value'
         uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
+      code: {
+        language: undefined, // English translation: 'Language'
+        selectLanguage: undefined, // English translation: 'Select language'
+      },
     },
   },
   mediaLibrary: {
@@ -298,6 +321,7 @@ const fr: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -308,6 +332,7 @@ const fr: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: 'Retourner sur le site',
