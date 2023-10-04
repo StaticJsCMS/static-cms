@@ -3,8 +3,8 @@ import { MARK_BOLD } from '@udecode/plate';
 import React from 'react';
 
 import MarkToolbarButton from './common/MarkToolbarButton';
+import { useTranslate } from '@staticcms/core/lib';
 
-import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 export interface BoldToolbarButtonProps {
@@ -12,11 +12,12 @@ export interface BoldToolbarButtonProps {
   variant: 'button' | 'menu';
 }
 
-const BoldToolbarButton: FC<TranslatedProps<BoldToolbarButtonProps>> = ({
+const BoldToolbarButton: FC<BoldToolbarButtonProps> = ({
   disabled,
   variant,
-  t,
 }) => {
+  const t = useTranslate();
+
   return (
     <MarkToolbarButton
       tooltip={t('editor.editorWidgets.markdown.bold')}

@@ -4,8 +4,8 @@ import React, { useCallback } from 'react';
 
 import { useMdPlateEditorState } from '../../plateTypes';
 import ToolbarButton from './common/ToolbarButton';
+import { useTranslate } from '@staticcms/core/lib';
 
-import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 export interface DeleteColumnToolbarButtonProps {
@@ -13,11 +13,12 @@ export interface DeleteColumnToolbarButtonProps {
   variant: 'button' | 'menu';
 }
 
-const DeleteColumnToolbarButton: FC<TranslatedProps<DeleteColumnToolbarButtonProps>> = ({
+const DeleteColumnToolbarButton: FC<DeleteColumnToolbarButtonProps> = ({
   disabled,
   variant,
-  t,
 }) => {
+  const t = useTranslate();
+
   const editor = useMdPlateEditorState();
 
   const handleDeleteColumn = useCallback(() => {

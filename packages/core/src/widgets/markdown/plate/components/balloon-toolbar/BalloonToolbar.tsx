@@ -41,7 +41,6 @@ import type {
   Collection,
   MarkdownField,
   MarkdownToolbarButtonType,
-  TranslatedProps,
 } from '@staticcms/core/interface';
 import type { FC, ReactNode } from 'react';
 import type { ClientRectObject } from '@udecode/plate';
@@ -97,7 +96,7 @@ export interface BalloonToolbarProps {
   disabled: boolean;
 }
 
-const BalloonToolbar: FC<TranslatedProps<BalloonToolbarProps>> = ({
+const BalloonToolbar: FC<BalloonToolbarProps> = ({
   useMdx,
   containerRef,
   collection,
@@ -179,7 +178,6 @@ const BalloonToolbar: FC<TranslatedProps<BalloonToolbarProps>> = ({
           collection,
           field,
           disabled,
-          t,
         ),
       );
       return;

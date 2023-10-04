@@ -66,13 +66,12 @@ export interface ToolbarProps {
   disabled: boolean;
 }
 
-const Toolbar: FC<TranslatedProps<ToolbarProps>> = ({ collection, field, disabled, t }) => {
+const Toolbar: FC<ToolbarProps> = ({ collection, field, disabled }) => {
   const buttons = useToolbarButtons(
     field.toolbar_buttons?.main ?? DEFAULT_TOOLBAR_BUTTONS,
     collection,
     field,
     disabled,
-    t,
   );
 
   return <div className={classes.root}>{buttons}</div>;

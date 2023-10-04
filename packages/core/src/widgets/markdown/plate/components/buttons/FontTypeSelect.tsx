@@ -18,8 +18,8 @@ import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
+import { useTranslate } from '@staticcms/core/lib';
 
-import type { TranslatedProps } from '@staticcms/core/interface';
 import type { SelectRootSlotProps } from '@mui/base/Select';
 import type { FC, FocusEvent, KeyboardEvent, MouseEvent } from 'react';
 
@@ -93,7 +93,9 @@ export interface FontTypeSelectProps {
 /**
  * Toolbar button to toggle the type of elements in selection.
  */
-const FontTypeSelect: FC<TranslatedProps<FontTypeSelectProps>> = ({ disabled = false, t }) => {
+const FontTypeSelect: FC<FontTypeSelectProps> = ({ disabled = false }) => {
+  const t = useTranslate();
+
   const editor = useMdPlateEditorState();
   const [version, setVersion] = useState(0);
 

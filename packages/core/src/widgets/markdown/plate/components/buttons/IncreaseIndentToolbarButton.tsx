@@ -4,8 +4,8 @@ import React, { useCallback } from 'react';
 
 import { useMdPlateEditorState } from '../../plateTypes';
 import ToolbarButton from './common/ToolbarButton';
+import { useTranslate } from '@staticcms/core/lib';
 
-import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 export interface IncreaseIndentToolbarButtonProps {
@@ -13,11 +13,12 @@ export interface IncreaseIndentToolbarButtonProps {
   variant: 'button' | 'menu';
 }
 
-const IncreaseIndentToolbarButton: FC<TranslatedProps<IncreaseIndentToolbarButtonProps>> = ({
+const IncreaseIndentToolbarButton: FC<IncreaseIndentToolbarButtonProps> = ({
   disabled,
   variant,
-  t,
 }) => {
+  const t = useTranslate();
+
   const editor = useMdPlateEditorState();
 
   const handleIndent = useCallback(() => {

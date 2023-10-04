@@ -3,8 +3,8 @@ import { ELEMENT_BLOCKQUOTE } from '@udecode/plate';
 import React from 'react';
 
 import BlockToolbarButton from './common/BlockToolbarButton';
+import { useTranslate } from '@staticcms/core/lib';
 
-import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 export interface BlockquoteToolbarButtonProps {
@@ -12,11 +12,12 @@ export interface BlockquoteToolbarButtonProps {
   variant: 'button' | 'menu';
 }
 
-const BlockquoteToolbarButton: FC<TranslatedProps<BlockquoteToolbarButtonProps>> = ({
+const BlockquoteToolbarButton: FC<BlockquoteToolbarButtonProps> = ({
   disabled,
   variant,
-  t,
 }) => {
+  const t = useTranslate();
+
   return (
     <BlockToolbarButton
       label={t('editor.editorWidgets.markdown.quote')}

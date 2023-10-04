@@ -1,12 +1,13 @@
+
 import isHotkey from 'is-hotkey';
 import React from 'react';
 
+import { useTranslate } from '@staticcms/core/lib';
 import Label from '@staticcms/core/components/common/field/Label';
 import Select from '@staticcms/core/components/common/select/Select';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { FC } from 'react';
-import type { TranslatedProps } from '@staticcms/core/interface';
 
 import './SettingsPane.css';
 
@@ -74,14 +75,15 @@ export interface SettingsPaneProps {
   onChangeLanguage: (lang: string) => void;
 }
 
-const SettingsPane: FC<TranslatedProps<SettingsPaneProps>> = ({
+const SettingsPane: FC<SettingsPaneProps> = ({
   hideSettings,
   uniqueId,
   languages,
   language,
   onChangeLanguage,
-  t,
 }) => {
+  const t = useTranslate();
+
   return (
     <div onKeyDown={e => isHotkey('esc', e) && hideSettings()} className={classes.root}>
       <SettingsSelect

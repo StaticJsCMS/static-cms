@@ -62,7 +62,6 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
   forSingleList,
   errors,
   disabled,
-  t,
 }) => {
   const theme = useTheme();
 
@@ -220,7 +219,6 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
             allowLanguageSelection={allowLanguageSelection}
             onChangeLanguage={handleSetLanguage}
             hideSettings={hideSettings}
-            t={t}
           />
         ) : null}
         <Collapse in={open} appear={false}>

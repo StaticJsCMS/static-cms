@@ -3,8 +3,8 @@ import { MARK_CODE } from '@udecode/plate';
 import React from 'react';
 
 import MarkToolbarButton from './common/MarkToolbarButton';
+import { useTranslate } from '@staticcms/core/lib';
 
-import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 export interface CodeToolbarButtonProps {
@@ -12,11 +12,12 @@ export interface CodeToolbarButtonProps {
   variant: 'button' | 'menu';
 }
 
-const CodeToolbarButton: FC<TranslatedProps<CodeToolbarButtonProps>> = ({
+const CodeToolbarButton: FC<CodeToolbarButtonProps> = ({
   disabled,
   variant,
-  t,
 }) => {
+  const t = useTranslate();
+
   return (
     <MarkToolbarButton
       tooltip={t('editor.editorWidgets.markdown.code')}

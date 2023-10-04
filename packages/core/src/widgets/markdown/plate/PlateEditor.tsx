@@ -277,7 +277,6 @@ const PlateEditor: FC<PlateEditorProps> = ({
                 collection={collection}
                 field={field}
                 disabled={disabled}
-                t={t}
               />
 
               <div
@@ -304,7 +303,6 @@ const PlateEditor: FC<PlateEditorProps> = ({
                       collection={collection}
                       field={field}
                       disabled={disabled}
-                      t={t}
                     />
                     <CursorOverlayContainer containerRef={editorContainerRef} />
                   </div>
