@@ -19,7 +19,6 @@ import languages from './data/languages';
 import type {
   CodeField,
   ProcessedCodeLanguage,
-  TranslatedProps,
   WidgetControlProps,
 } from '@staticcms/core/interface';
 import type { LanguageName } from '@uiw/codemirror-extensions-langs';
@@ -51,8 +50,7 @@ function valueToOption(val: string | { name: string; label?: string }): {
   return { value: val.name, label: val.label || val.name };
 }
 
-const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, CodeField>
-> = ({
+const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, CodeField>> = ({
   label,
   field,
   duplicate,
