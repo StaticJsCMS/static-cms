@@ -250,11 +250,14 @@ describe('gitlab backend', () => {
     if (!query) {
       return {};
     }
-    return query.split('&').reduce((acc, q) => {
-      const [key, value] = q.split('=');
-      acc[key] = value;
-      return acc;
-    }, {} as Record<string, string>);
+    return query.split('&').reduce(
+      (acc, q) => {
+        const [key, value] = q.split('=');
+        acc[key] = value;
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
   }
 
   interface CreateHeadersOptions {

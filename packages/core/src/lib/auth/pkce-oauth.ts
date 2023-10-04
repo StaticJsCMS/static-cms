@@ -95,10 +95,13 @@ export default class PkceAuthenticator {
   async completeAuth(cb: (error: Error | NetlifyError | null, data?: User) => void) {
     const searchParams = new URLSearchParams(document.location.search);
 
-    const params = [...searchParams.entries()].reduce((acc, [key, value]) => {
-      acc[key] = value;
-      return acc;
-    }, {} as Record<string, string>);
+    const params = [...searchParams.entries()].reduce(
+      (acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
 
     // Remove code from url
     window.history.replaceState(null, '', document.location.pathname);

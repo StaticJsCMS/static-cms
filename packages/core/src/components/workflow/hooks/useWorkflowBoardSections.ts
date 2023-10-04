@@ -29,10 +29,13 @@ export default function useWorkflowBoardSections() {
           );
           return acc;
         }, [] as BoardEntry[])
-        .reduce((acc, entry) => {
-          acc[`${entry.collection}|${entry.slug}`] = entry;
-          return acc;
-        }, {} as Record<string, BoardEntry>),
+        .reduce(
+          (acc, entry) => {
+            acc[`${entry.collection}|${entry.slug}`] = entry;
+            return acc;
+          },
+          {} as Record<string, BoardEntry>,
+        ),
     [boardSections],
   );
 

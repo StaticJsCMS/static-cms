@@ -99,7 +99,6 @@ module.exports = {
         '@typescript-eslint/consistent-type-imports': 'error',
         '@typescript-eslint/explicit-function-return-type': [0],
         '@typescript-eslint/explicit-module-boundary-types': [0],
-        '@typescript-eslint/no-duplicate-imports': 'error',
         '@typescript-eslint/no-use-before-define': [
           'error',
           { functions: false, classes: true, variables: true },

@@ -264,10 +264,13 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
         const hitOptions = parseHitOptions(options);
 
         if (value) {
-          const byValue = hitOptions.reduce((acc, option) => {
-            acc[option.value] = option;
-            return acc;
-          }, {} as Record<string, HitOption>);
+          const byValue = hitOptions.reduce(
+            (acc, option) => {
+              acc[option.value] = option;
+              return acc;
+            },
+            {} as Record<string, HitOption>,
+          );
 
           const newFilteredValue =
             typeof value === 'string'
@@ -306,10 +309,13 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
 
   const uniqueOptionsByValue = useMemo(
     () =>
-      uniqueOptions.reduce((acc, option) => {
-        acc[option.value] = option;
-        return acc;
-      }, {} as Record<string, HitOption>),
+      uniqueOptions.reduce(
+        (acc, option) => {
+          acc[option.value] = option;
+          return acc;
+        },
+        {} as Record<string, HitOption>,
+      ),
     [uniqueOptions],
   );
 

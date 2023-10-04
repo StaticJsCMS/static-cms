@@ -74,24 +74,27 @@ export default function useWidgetsFor(
         return finalValue
           .filter((val: unknown) => typeof val === 'object')
           .map((val: ObjectValue) => {
-            const widgets = nestedFields.reduce((acc, field, index) => {
-              acc[field.name] = (
-                <div key={index}>
-                  {getWidgetFor(
-                    config,
-                    collection,
-                    field.name,
-                    fields,
-                    entry,
-                    inferredFields,
-                    nestedFields,
-                    val,
-                    index,
-                  )}
-                </div>
-              );
-              return acc;
-            }, {} as Record<string, ReactNode>);
+            const widgets = nestedFields.reduce(
+              (acc, field, index) => {
+                acc[field.name] = (
+                  <div key={index}>
+                    {getWidgetFor(
+                      config,
+                      collection,
+                      field.name,
+                      fields,
+                      entry,
+                      inferredFields,
+                      nestedFields,
+                      val,
+                      index,
+                    )}
+                  </div>
+                );
+                return acc;
+              },
+              {} as Record<string, ReactNode>,
+            );
             return { data: val, widgets };
           });
       }
@@ -105,24 +108,27 @@ export default function useWidgetsFor(
 
       return {
         data: value,
-        widgets: nestedFields.reduce((acc, field, index) => {
-          acc[field.name] = (
-            <div key={index}>
-              {getWidgetFor(
-                config,
-                collection,
-                field.name,
-                fields,
-                entry,
-                inferredFields,
-                nestedFields,
-                value,
-                index,
-              )}
-            </div>
-          );
-          return acc;
-        }, {} as Record<string, ReactNode>),
+        widgets: nestedFields.reduce(
+          (acc, field, index) => {
+            acc[field.name] = (
+              <div key={index}>
+                {getWidgetFor(
+                  config,
+                  collection,
+                  field.name,
+                  fields,
+                  entry,
+                  inferredFields,
+                  nestedFields,
+                  value,
+                  index,
+                )}
+              </div>
+            );
+            return acc;
+          },
+          {} as Record<string, ReactNode>,
+        ),
       };
     },
     [collection, config, entry, fields, inferredFields],

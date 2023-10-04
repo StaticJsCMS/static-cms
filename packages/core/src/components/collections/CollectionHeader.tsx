@@ -37,10 +37,13 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({ collection }) => {
 
   const pluralLabel = useMemo(() => {
     if ('nested' in collection && collection.nested?.path && filterTerm) {
-      const entriesByPath = entries.reduce((acc, entry) => {
-        acc[entry.path] = entry;
-        return acc;
-      }, {} as Record<string, Entry>);
+      const entriesByPath = entries.reduce(
+        (acc, entry) => {
+          acc[entry.path] = entry;
+          return acc;
+        },
+        {} as Record<string, Entry>,
+      );
 
       if (isNotEmpty(filterTerm)) {
         const extension = selectFolderEntryExtension(collection);

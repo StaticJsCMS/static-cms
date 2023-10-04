@@ -37,10 +37,13 @@ function decodeParams(paramsString: string): Record<string, string> {
   return paramsString
     .split('&')
     .map(s => s.split('='))
-    .reduce((acc, [key, value]) => {
-      acc[key] = decodeURIComponent(value);
-      return acc;
-    }, {} as Record<string, string>);
+    .reduce(
+      (acc, [key, value]) => {
+        acc[key] = decodeURIComponent(value);
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
 }
 
 function fromURL(wholeURL: string): ApiRequestURL {

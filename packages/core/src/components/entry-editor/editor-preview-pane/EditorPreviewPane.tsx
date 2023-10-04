@@ -176,7 +176,7 @@ const EditorPreviewPane: FC<EditorPreviewPaneProps> = props => {
         theme,
         widgetFor,
         widgetsFor,
-      } as Omit<TemplatePreviewProps, 'document' | 'window'>),
+      }) as Omit<TemplatePreviewProps, 'document' | 'window'>,
     [props, theme, widgetFor, widgetsFor],
   );
 

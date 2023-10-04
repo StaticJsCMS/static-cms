@@ -27,9 +27,8 @@ const CodeBlockFrame: FC<CodeBlockFrameProps> = ({ id, lang, code }) => {
       return null;
     }
 
-    const languageName = languages.find(language =>
-      language.identifiers.includes(lang),
-    )?.codemirror_mode;
+    const languageName = languages.find(language => language.identifiers.includes(lang))
+      ?.codemirror_mode;
 
     if (!languageName) {
       return null;

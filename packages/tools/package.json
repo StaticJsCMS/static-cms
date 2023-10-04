@@ -10,11 +10,11 @@
     "type-check": "tsc --watch"
   },
   "dependencies": {
-    "@staticcms/core": "^3.3.3",
+    "@staticcms/core": "^3.3.4",
     "lodash": "4.17.21",
-    "prettier": "2.8.8",
+    "prettier": "3.0.3",
     "ts-node": "10.9.1",
-    "typescript": "5.0.4"
+    "typescript": "5.2.2"
   },
   "devDependencies": {
     "@types/common-tags": "1.8.1",

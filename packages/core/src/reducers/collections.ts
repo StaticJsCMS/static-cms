@@ -14,10 +14,13 @@ function collections(
   switch (action.type) {
     case CONFIG_SUCCESS: {
       const collections = action.payload.collections;
-      return collections.reduce((acc, collection) => {
-        acc[collection.name] = collection as Collection;
-        return acc;
-      }, {} as Record<string, Collection>);
+      return collections.reduce(
+        (acc, collection) => {
+          acc[collection.name] = collection as Collection;
+          return acc;
+        },
+        {} as Record<string, Collection>,
+      );
     }
     default:
       return state;

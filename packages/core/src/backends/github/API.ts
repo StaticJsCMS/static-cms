@@ -129,21 +129,24 @@ function withCmsLabel(pr: GitHubPull, cmsLabelPrefix: string) {
 }
 
 function getTreeFiles(files: GitHubCompareFiles) {
-  const treeFiles = files.reduce((arr, file) => {
-    if (file.status === 'removed') {
-      // delete the file
-      arr.push({ sha: null, path: file.filename });
-    } else if (file.status === 'renamed') {
-      // delete the previous file
-      arr.push({ sha: null, path: file.previous_filename as string });
-      // add the renamed file
-      arr.push({ sha: file.sha, path: file.filename });
-    } else {
-      // add the  file
-      arr.push({ sha: file.sha, path: file.filename });
-    }
-    return arr;
-  }, [] as { sha: string | null; path: string }[]);
+  const treeFiles = files.reduce(
+    (arr, file) => {
+      if (file.status === 'removed') {
+        // delete the file
+        arr.push({ sha: null, path: file.filename });
+      } else if (file.status === 'renamed') {
+        // delete the previous file
+        arr.push({ sha: null, path: file.previous_filename as string });
+        // add the renamed file
+        arr.push({ sha: file.sha, path: file.filename });
+      } else {
+        // add the  file
+        arr.push({ sha: file.sha, path: file.filename });
+      }
+      return arr;
+    },
+    [] as { sha: string | null; path: string }[],
+  );
 
   return treeFiles;
 }

@@ -90,10 +90,13 @@ const EntryListing: FC<EntryListingProps> = ({
     }
 
     const fieldNames = otherProps.collection.summary_fields;
-    const collectionFields = selectFields(otherProps.collection).reduce((acc, f) => {
-      acc[f.name] = f;
-      return acc;
-    }, {} as Record<string, Field>);
+    const collectionFields = selectFields(otherProps.collection).reduce(
+      (acc, f) => {
+        acc[f.name] = f;
+        return acc;
+      },
+      {} as Record<string, Field>,
+    );
 
     return fieldNames.map(summaryField => {
       const field = collectionFields[summaryField];
