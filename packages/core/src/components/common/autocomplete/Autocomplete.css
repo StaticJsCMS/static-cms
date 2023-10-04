@@ -1,6 +1,10 @@
 .CMS_Autocomplete_root {
   @apply relative
-    w-full;
+    w-full
+    flex
+    items-center
+    gap-2
+    pr-2;
 
   &.CMS_Autocomplete_disabled {
     & .CMS_Autocomplete_input {
@@ -15,13 +19,19 @@
   }
 }
 
+.CMS_Autocomplete_input-wrapper {
+  @apply flex-grow
+    flex
+    flex-wrap
+    min-w-0;
+}
+
 .CMS_Autocomplete_input {
   @apply w-full
     bg-transparent
     border-none
     py-2
     pl-3
-    pr-10
     text-sm
     leading-5
     focus:ring-0
@@ -33,13 +43,10 @@
 }
 
 .CMS_Autocomplete_button-wrapper {
-  @apply absolute
-    inset-y-0
-    right-0
-    flex
+  @apply flex
     items-center
-    pr-2
-    gap-1;
+    gap-1
+    flex-shrink-0;
 }
 
 .CMS_Autocomplete_button {

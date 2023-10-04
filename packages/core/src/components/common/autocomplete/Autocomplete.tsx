@@ -20,6 +20,7 @@ export const classes = generateClassNames('Autocomplete', [
   'root',
   'focused',
   'disabled',
+  'input-wrapper',
   'input',
   'button-wrapper',
   'button',
@@ -55,6 +56,7 @@ export interface AutocompleteProps {
   disabled?: boolean;
   required?: boolean;
   inputRef?: Ref<HTMLInputElement>;
+  endAdornment?: ReactNode;
   displayValue: (item: string | string[] | null) => string;
   onQuery: (query: string) => void;
   onChange: (value: string | string[] | undefined) => void;
@@ -64,9 +66,10 @@ const Autocomplete = ({
   label,
   value,
   options,
-  inputRef,
   disabled,
   required,
+  inputRef,
+  endAdornment,
   onChange,
   onQuery,
 }: AutocompleteProps) => {
@@ -187,14 +190,17 @@ const Autocomplete = ({
         )}
         data-testid="autocomplete"
       >
-        {label}
-        <input
-          {...getInputProps()}
-          ref={finalInputRef}
-          className={classes.input}
-          data-testid="autocomplete-input"
-        />
+        <div className={classes['input-wrapper']}>
+          {label}
+          <input
+            {...getInputProps()}
+            ref={finalInputRef}
+            className={classes.input}
+            data-testid="autocomplete-input"
+          />
+        </div>
         <div className={classes['button-wrapper']}>
+          {endAdornment}
           <IconButton
             variant="text"
             size="small"

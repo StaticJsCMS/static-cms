@@ -32,7 +32,6 @@ module.exports = {
         "breadcrumb-title": "calc(100vw * .4)",
         "collection-header": "calc(100% - 32px)",
         "date-widget": "calc(100% - 58px)",
-        "relation-widget-label": "calc(100% - 32px)",
         "select-widget-label": "calc(100% - 12px)",
       },
       maxWidth: {
