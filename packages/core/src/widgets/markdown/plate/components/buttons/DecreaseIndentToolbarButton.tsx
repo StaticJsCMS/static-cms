@@ -27,6 +27,7 @@ const DecreaseIndentToolbarButton: FC<DecreaseIndentToolbarButtonProps> = ({
 
   return (
     <ToolbarButton
+      id="decrease-ident"
       tooltip={t('editor.editorWidgets.markdown.decreaseIndent')}
       onClick={handleOutdent}
       icon={FormatIndentDecreaseIcon}

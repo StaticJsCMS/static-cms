@@ -17,6 +17,7 @@ const CodeToolbarButton: FC<CodeToolbarButtonProps> = ({ disabled, variant }) =>
 
   return (
     <MarkToolbarButton
+      id="code"
       tooltip={t('editor.editorWidgets.markdown.code')}
       type={MARK_CODE}
       icon={CodeIcon}

@@ -17,6 +17,7 @@ const UnorderedListToolbarButton: FC<UnorderedListToolbarButtonProps> = ({ disab
 
   return (
     <ListToolbarButton
+      id="bulleted-list"
       tooltip={t('editor.editorWidgets.markdown.bulletedList')}
       type={ELEMENT_UL}
       icon={FormatListBulletedIcon}

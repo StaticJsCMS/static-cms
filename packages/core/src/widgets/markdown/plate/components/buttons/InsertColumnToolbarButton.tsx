@@ -24,6 +24,7 @@ const InsertColumnToolbarButton: FC<InsertColumnToolbarButtonProps> = ({ disable
 
   return (
     <ToolbarButton
+      id="insert-column"
       tooltip={t('editor.editorWidgets.markdown.table.insertColumn')}
       icon={TableInsertColumn}
       onClick={handleInsertTableColumn}

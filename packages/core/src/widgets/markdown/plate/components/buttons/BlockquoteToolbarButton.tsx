@@ -17,6 +17,7 @@ const BlockquoteToolbarButton: FC<BlockquoteToolbarButtonProps> = ({ disabled, v
 
   return (
     <BlockToolbarButton
+      id="blockquote"
       label={t('editor.editorWidgets.markdown.quote')}
       tooltip={t('editor.editorWidgets.markdown.insertQuote')}
       icon={FormatQuoteIcon}

@@ -86,6 +86,7 @@ const InsertImageToolbarButton: FC<InsertImageToolbarButtonProps> = ({
 
   return (
     <ToolbarButton
+      id="image"
       label={t('editor.editorWidgets.markdown.image')}
       tooltip={t('editor.editorWidgets.markdown.insertImage')}
       icon={ImageIcon}

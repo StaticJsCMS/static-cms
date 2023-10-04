@@ -24,6 +24,7 @@ const InsertRowToolbarButton: FC<InsertRowToolbarButtonProps> = ({ disabled, var
 
   return (
     <ToolbarButton
+      id="insert-row"
       tooltip={t('editor.editorWidgets.markdown.table.insertRow')}
       icon={TableInsertRow}
       onClick={handleInsertTableRow}

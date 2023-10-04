@@ -17,6 +17,7 @@ const StrikethroughToolbarButton: FC<StrikethroughToolbarButtonProps> = ({ disab
 
   return (
     <MarkToolbarButton
+      id="strikethrough"
       tooltip={t('editor.editorWidgets.markdown.strikethrough')}
       type={MARK_STRIKETHROUGH}
       variant={variant}

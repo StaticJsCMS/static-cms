@@ -17,6 +17,7 @@ const OrderedListToolbarButton: FC<OrderedListToolbarButtonProps> = ({ disabled,
 
   return (
     <ListToolbarButton
+      id="numbered-list"
       tooltip={t('editor.editorWidgets.markdown.numberedList')}
       type={ELEMENT_OL}
       icon={FormatListNumberedIcon}

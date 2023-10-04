@@ -17,6 +17,7 @@ const BoldToolbarButton: FC<BoldToolbarButtonProps> = ({ disabled, variant }) =>
 
   return (
     <MarkToolbarButton
+      id="bold"
       tooltip={t('editor.editorWidgets.markdown.bold')}
       type={MARK_BOLD}
       variant={variant}

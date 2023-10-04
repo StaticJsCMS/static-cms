@@ -24,6 +24,7 @@ const DeleteTableToolbarButton: FC<DeleteTableToolbarButtonProps> = ({ disabled,
 
   return (
     <ToolbarButton
+      id="delete-table"
       tooltip={t('editor.editorWidgets.markdown.table.deleteTable')}
       icon={TableDismiss}
       onClick={handleDeleteTable}

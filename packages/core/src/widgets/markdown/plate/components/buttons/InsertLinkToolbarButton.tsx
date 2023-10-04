@@ -110,6 +110,7 @@ const InsertLinkToolbarButton: FC<InsertLinkToolbarButtonProps> = ({
 
   return !isLink ? (
     <ToolbarButton
+      id="link"
       label={t('editor.editorWidgets.markdown.link')}
       tooltip={t('editor.editorWidgets.markdown.insertLink')}
       icon={LinkIcon}

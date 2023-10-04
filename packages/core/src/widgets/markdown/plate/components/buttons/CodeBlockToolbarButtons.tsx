@@ -26,6 +26,7 @@ const CodeBlockToolbarButtons: FC<CodeBlockToolbarButtonsProps> = ({ disabled, v
 
   return (
     <ToolbarButton
+      id="code-block"
       label={t('editor.editorWidgets.markdown.codeBlock')}
       tooltip={t('editor.editorWidgets.markdown.insertCodeBlock')}
       icon={CodeIcon}

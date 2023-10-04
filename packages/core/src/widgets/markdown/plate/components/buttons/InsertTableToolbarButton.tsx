@@ -30,6 +30,7 @@ const InsertTableToolbarButton: FC<InsertTableToolbarButtonProps> = ({
 
   return (
     <ToolbarButton
+      id="insert-table"
       label={t('editor.editorWidgets.markdown.table.table')}
       tooltip={t('editor.editorWidgets.markdown.table.insertTable')}
       icon={TableAdd}

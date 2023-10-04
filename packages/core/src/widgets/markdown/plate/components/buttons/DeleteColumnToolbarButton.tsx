@@ -24,6 +24,7 @@ const DeleteColumnToolbarButton: FC<DeleteColumnToolbarButtonProps> = ({ disable
 
   return (
     <ToolbarButton
+      id="delete-column"
       tooltip={t('editor.editorWidgets.markdown.table.deleteColumn')}
       icon={TableDeleteColumn}
       onClick={handleDeleteColumn}

@@ -17,6 +17,7 @@ const ItalicToolbarButton: FC<ItalicToolbarButtonsProp> = ({ disabled, variant }
 
   return (
     <MarkToolbarButton
+      id="italic"
       tooltip={t('editor.editorWidgets.markdown.italic')}
       type={MARK_ITALIC}
       variant={variant}

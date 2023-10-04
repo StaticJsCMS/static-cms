@@ -27,6 +27,7 @@ const IncreaseIndentToolbarButton: FC<IncreaseIndentToolbarButtonProps> = ({
 
   return (
     <ToolbarButton
+      id="increase-ident"
       tooltip={t('editor.editorWidgets.markdown.increaseIndent')}
       onClick={handleIndent}
       icon={FormatIndentIncreaseIcon}
