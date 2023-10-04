@@ -55,6 +55,6 @@
       "@staticcms/core": ["./src"],
       "@staticcms/core/*": ["./src/*"]
     },
-    "types": ["@emotion/react/types/css-prop", "@types/jest", "@testing-library/jest-dom"]
+    "types": ["@types/jest", "@testing-library/jest-dom"]
   }
 }
