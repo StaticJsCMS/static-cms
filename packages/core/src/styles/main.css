@@ -502,3 +502,12 @@ table {
     height: 24px;
   }
 }
+
+::-moz-focus-inner,
+:focus-visible {
+  @apply outline-none;
+}
+
+.MuiPopper-root {
+  @apply z-[100];
+}

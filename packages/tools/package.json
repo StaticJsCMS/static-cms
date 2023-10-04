@@ -1,0 +1,40 @@
+{
+  "name": "@staticcms/tools",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "format": "prettier \"src/**/*.{js,jsx,ts,tsx,css}\" --write",
+    "lint": "prettier \"src/**/*.{js,jsx,ts,tsx,css}\" --list-different",
+    "sync-locales": "ts-node -r tsconfig-paths/register src/localeSync.ts",
+    "type-check": "tsc --watch"
+  },
+  "dependencies": {
+    "@staticcms/core": "^3.3.3",
+    "lodash": "4.17.21",
+    "prettier": "2.8.8",
+    "ts-node": "10.9.1",
+    "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "@types/common-tags": "1.8.1",
+    "@types/create-react-class": "15.6.3",
+    "@types/fs-extra": "11.0.1",
+    "@types/is-hotkey": "0.1.7",
+    "@types/jest": "29.5.1",
+    "@types/js-yaml": "4.0.5",
+    "@types/jwt-decode": "2.2.1",
+    "@types/lodash": "4.14.194",
+    "@types/minimatch": "5.1.2",
+    "@types/node": "18.16.14",
+    "@types/node-fetch": "2.6.4",
+    "@types/react": "18.2.0",
+    "@types/react-color": "3.0.6",
+    "@types/react-dom": "18.2.1",
+    "@types/react-virtualized-auto-sizer": "1.0.1",
+    "@types/react-window": "1.8.5",
+    "@types/styled-components": "5.1.26",
+    "@types/url-join": "4.0.1",
+    "@types/uuid": "9.0.1"
+  }
+}

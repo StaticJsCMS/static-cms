@@ -7,14 +7,12 @@
     gap-2
     p-2
     pr-0
-    w-relation-widget-label;
+    min-w-0;
 }
 
 .CMS_WidgetRelation_loading {
-  @apply absolute
-    inset-y-0
-    right-4
-    flex
+  @apply flex
     items-center
-    pr-2;
+    w-6
+    h-6;
 }

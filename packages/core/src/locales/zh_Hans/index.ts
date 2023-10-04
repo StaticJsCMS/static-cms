@@ -1,4 +1,4 @@
-import type { LocalePhrasesRoot } from '@staticcms/core/interface';
+import type { LocalePhrasesRoot } from '../types';
 
 const zh_Hans: LocalePhrasesRoot = {
   auth: {
@@ -12,6 +12,9 @@ const zh_Hans: LocalePhrasesRoot = {
     errors: {
       email: '请输入电子邮箱',
       password: '请输入密码',
+      authTitle: undefined, // English translation: 'Error logging in'
+      authBody: '%{details}',
+      netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         '无法连接账户认证系统（如果正在使用 git-gateway 作为 backend，请确保已经开启 Netlify Identity 服务以及 Git Gateway）',
     },
@@ -27,6 +30,7 @@ const zh_Hans: LocalePhrasesRoot = {
       loading: '正在加载...',
       errorHeader: '加载 CMS 配置时发生错误',
       configErrors: '配置错误',
+      configNotFound: undefined, // English translation: 'Config not found'
       checkConfigYml: '请检查 config.yml 文件是否配置正确',
       loadingConfig: '正在加载配置...',
       waitingBackend: '等待 backend 数据...',
@@ -63,6 +67,10 @@ const zh_Hans: LocalePhrasesRoot = {
       other: '其他',
       negateLabel: '非%{label}',
     },
+    table: {
+      summary: undefined, // English translation: 'Summary'
+      collection: undefined, // English translation: 'Collection'
+    },
     defaultFields: {
       author: {
         label: '作者',
@@ -71,6 +79,7 @@ const zh_Hans: LocalePhrasesRoot = {
         label: '更新于',
       },
     },
+    notFound: undefined, // English translation: 'Collection not found'
   },
   editor: {
     editorControl: {
@@ -88,10 +97,12 @@ const zh_Hans: LocalePhrasesRoot = {
         max: '“%{fieldLabel}”必须小于等于 %{maxValue}',
         rangeCount: '“%{fieldLabel}”必须包含 %{minCount} 到 %{maxCount} 个项目',
         rangeCountExact: '“%{fieldLabel}”必须且只能包含 %{count} 个项目',
-        minCount: '“%{fieldLabel}”必须为至少 %{minCount} 个项目',
-        maxCount: '“%{fieldLabel}”必须为小于等于 %{maxCount} 个项目',
-        invalidPath: `“%{path}”为无效路径`,
-        pathExists: `路径“%{path}”已经存在`,
+        rangeMin: '“%{fieldLabel}”必须为至少 %{minCount} 个项目',
+        rangeMax: '“%{fieldLabel}”必须为小于等于 %{maxCount} 个项目',
+        invalidPath: '“%{path}”为无效路径',
+        pathExists: '路径“%{path}”已经存在',
+        invalidColor: undefined, // English translation: 'Color '%{color}' is invalid.'
+        invalidHexCode: undefined, // English translation: 'Hex codes must start with a # sign.'
       },
       i18n: {
         writingInLocale: '正在使用%{locale}撰写',
@@ -104,7 +115,9 @@ const zh_Hans: LocalePhrasesRoot = {
       onPublishingWithUnsavedChangesBody: '你有尚未保存的修改，请在发布前进行保存',
       onPublishingBody: '你确定要发布此内容吗？',
       onUnpublishingBody: '你确定要撤销发布此内容吗？',
+      onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody: '你确定要删除这个已经发布的内容，以及当前尚未保存的修改吗？',
+      onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: '你确定要删除这个已经发布的内容吗？',
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         '此内容所有未被发布的修改，以及当前尚未保存的修改都将被删除，你确定吗？',
@@ -112,6 +125,8 @@ const zh_Hans: LocalePhrasesRoot = {
       loadingEntry: '正在加载内容...',
     },
     editorInterface: {
+      sideBySideI18n: undefined, // English translation: 'I18n Side by Side'
+      preview: undefined, // English translation: 'Preview'
       toggleI18n: '打开/关闭国际化',
       togglePreview: '打开/关闭预览',
       toggleScrollSync: '同步滚动',
@@ -144,6 +159,9 @@ const zh_Hans: LocalePhrasesRoot = {
       deployPreviewPendingButtonLabel: '点击以预览',
       deployPreviewButtonLabel: '查看预览',
       deployButtonLabel: '查看发布',
+      discardChanges: undefined, // English translation: 'Discard changes'
+      discardChangesTitle: undefined, // English translation: 'Discard changes'
+      discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
     },
     editorWidgets: {
       markdown: {
@@ -159,22 +177,40 @@ const zh_Hans: LocalePhrasesRoot = {
         addComponent: '添加组件',
         richText: '富文本',
         markdown: 'Markdown',
+        type: undefined, // English translation: 'Type...'
       },
       image: {
         choose: '选择图片',
+        chooseMultiple: undefined, // English translation: 'Choose images'
         chooseUrl: '从 URL 插入',
         replaceUrl: '用 URL 替代',
         promptUrl: '输入图片的 URL',
         chooseDifferent: '选择其他图片',
+        addMore: undefined, // English translation: 'Add more images'
         remove: '移除图片',
+        removeAll: undefined, // English translation: 'Remove all images'
       },
       file: {
         choose: '选择文件',
         chooseUrl: '从 URL 插入',
+        chooseMultiple: undefined, // English translation: 'Choose files'
         replaceUrl: '用 URL 替代',
         promptUrl: '输入文件的 URL',
         chooseDifferent: '选择其他文件',
+        addMore: undefined, // English translation: 'Add more files'
         remove: '移除文件',
+        removeAll: undefined, // English translation: 'Remove all files'
+      },
+      folder: {
+        choose: undefined, // English translation: 'Choose a folder'
+        chooseUrl: undefined, // English translation: 'Insert folder path'
+        chooseMultiple: undefined, // English translation: 'Choose folders'
+        replaceUrl: undefined, // English translation: 'Replace with path'
+        promptUrl: undefined, // English translation: 'Enter path of the folder'
+        chooseDifferent: undefined, // English translation: 'Choose different folder'
+        addMore: undefined, // English translation: 'Add more folders'
+        remove: undefined, // English translation: 'Remove folder'
+        removeAll: undefined, // English translation: 'Remove all folders'
       },
       unknownControl: {
         noControl: "'%{widget}'的控件不存在",
@@ -192,6 +228,18 @@ const zh_Hans: LocalePhrasesRoot = {
       },
       datetime: {
         now: '现在',
+        invalidDateTitle: undefined, // English translation: 'Invalid date'
+        invalidDateBody: undefined, // English translation: 'The date you entered is invalid.'
+      },
+      list: {
+        add: undefined, // English translation: 'Add %{item}'
+        addType: undefined, // English translation: 'Add %{item}'
+        noValue: undefined, // English translation: 'No value'
+      },
+      keyvalue: {
+        key: undefined, // English translation: 'Key'
+        value: undefined, // English translation: 'Value'
+        uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
     },
   },
@@ -205,8 +253,12 @@ const zh_Hans: LocalePhrasesRoot = {
       copied: '已复制',
     },
     mediaLibrary: {
+      onDeleteTitle: undefined, // English translation: 'Delete selected media?'
       onDeleteBody: '你确定要删除此媒体项目吗？',
+      fileTooLargeTitle: undefined, // English translation: 'File too large'
       fileTooLargeBody: '文件体积过大\n目前的配置中不允许文件体积超过 %{size} kB',
+      alreadyExistsTitle: undefined, // English translation: 'File already exists'
+      alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
       noResults: '暂无结果',
@@ -222,11 +274,29 @@ const zh_Hans: LocalePhrasesRoot = {
       deleting: '正在下载...',
       deleteSelected: '删除已选中项目',
       chooseSelected: '选用已选中项目',
+      dropImages: undefined, // English translation: 'Drop images to upload'
+      dropFiles: undefined, // English translation: 'Drop files to upload'
+    },
+    folderSupport: {
+      newFolder: undefined, // English translation: 'New folder'
+      createNewFolder: undefined, // English translation: 'Create new folder'
+      enterFolderName: undefined, // English translation: 'Enter folder name...'
+      home: undefined, // English translation: 'Home'
+      up: undefined, // English translation: 'Up'
+      upToFolder: undefined, // English translation: 'Up to %{folder}'
     },
   },
   ui: {
+    common: {
+      yes: undefined, // English translation: 'Yes'
+      no: undefined, // English translation: 'No'
+      okay: undefined, // English translation: 'OK'
+    },
     default: {
       goBackToSite: '返回主页',
+    },
+    localBackup: {
+      hasLocalBackup: undefined, // English translation: 'Has local backup'
     },
     errorBoundary: {
       title: '错误',
@@ -242,13 +312,16 @@ const zh_Hans: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
+      darkMode: undefined, // English translation: 'Dark Mode'
       logOut: '注销',
     },
     toast: {
       onFailToLoadEntries: '加载内容失败: %{details}',
       onFailToLoadDeployPreview: '加载预览失败: %{details}',
       onFailToPersist: '保存内容失败: %{details}',
+      onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: '删除内容失败: %{details}',
+      onFailToDeleteMedia: undefined, // English translation: 'Failed to delete media: %{details}'
       onFailToUpdateStatus: '更新状态失败: %{details}',
       missingRequiredField: '你漏掉了一个必填项，请在保存之前将它填写好',
       entrySaved: '内容已保存',

@@ -1,4 +1,4 @@
-import type { LocalePhrasesRoot } from '@staticcms/core/interface';
+import type { LocalePhrasesRoot } from '../types';
 
 const ru: LocalePhrasesRoot = {
   auth: {
@@ -12,6 +12,9 @@ const ru: LocalePhrasesRoot = {
     errors: {
       email: 'Введите ваш email.',
       password: 'Введите пароль.',
+      authTitle: undefined, // English translation: 'Error logging in'
+      authBody: '%{details}',
+      netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         'Нет доступа к настройкам. Если используете git-gateway, убедитесь, что включили Identity service и Git Gateway.',
     },
@@ -27,6 +30,7 @@ const ru: LocalePhrasesRoot = {
       loading: 'Загрузка медифайлов…',
       errorHeader: 'Ошибка загрузки конфигурации CMS',
       configErrors: 'Ошибки конфигурации',
+      configNotFound: undefined, // English translation: 'Config not found'
       checkConfigYml: 'Проверьте свой config.yml файл.',
       loadingConfig: 'Загрузка конфигурации…',
       waitingBackend: 'Ожидание ответа от бэкенда…',
@@ -63,6 +67,10 @@ const ru: LocalePhrasesRoot = {
       other: 'Другая',
       negateLabel: 'Не %{label}',
     },
+    table: {
+      summary: undefined, // English translation: 'Summary'
+      collection: undefined, // English translation: 'Collection'
+    },
     defaultFields: {
       author: {
         label: 'Автор',
@@ -71,6 +79,7 @@ const ru: LocalePhrasesRoot = {
         label: 'Дате обновления',
       },
     },
+    notFound: undefined, // English translation: 'Collection not found'
   },
   editor: {
     editorControl: {
@@ -90,8 +99,10 @@ const ru: LocalePhrasesRoot = {
         rangeCountExact: '%{fieldLabel} должно содержать строго %{count} элементов.',
         rangeMin: '%{fieldLabel} должно содержать не менее %{minCount} элементов.',
         rangeMax: '%{fieldLabel} должно содержать %{maxCount} или менее элементов.',
-        invalidPath: `Путь '%{path}' содежрит ошибки`,
-        pathExists: `Путь '%{path}' уже существует`,
+        invalidPath: "Путь '%{path}' содежрит ошибки",
+        pathExists: "Путь '%{path}' уже существует",
+        invalidColor: undefined, // English translation: 'Color '%{color}' is invalid.'
+        invalidHexCode: undefined, // English translation: 'Hex codes must start with a # sign.'
       },
       i18n: {
         writingInLocale: 'Пишем на %{locale}',
@@ -109,8 +120,10 @@ const ru: LocalePhrasesRoot = {
         'У вас есть несохраненные изменения, сохраните их перед публикацией.',
       onPublishingBody: 'Вы уверены, что хотите опубликовать эту запись?',
       onUnpublishingBody: 'Вы уверены, что хотите отменить публикацию этой записи?',
+      onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Вы уверены, что хотите удалить эту опубликованную запись, а также несохраненные изменения из текущего сеанса?',
+      onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Вы уверены, что хотите удалить эту опубликованную запись?',
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Это удалит все неопубликованные изменения в этой записи, а также ваши несохраненные изменения из текущего сеанса. Вы все еще хотите удалить?',
@@ -155,6 +168,9 @@ const ru: LocalePhrasesRoot = {
         'Статус записи установлен на черновик. Чтобы доработать и отправить его на рассмотрение, установите статус «На рассмотрении».',
       statusInfoTooltipInReview:
         'Запись находится на рассмотрении, дальнейших действий не требуется. Тем не менее, вы все еще можете внести дополнительные изменения, пока она находится на рассмотрении.',
+      discardChanges: undefined, // English translation: 'Discard changes'
+      discardChangesTitle: undefined, // English translation: 'Discard changes'
+      discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
     },
     editorWidgets: {
       markdown: {
@@ -170,6 +186,7 @@ const ru: LocalePhrasesRoot = {
         addComponent: 'Добавить компонент',
         richText: 'Форматированный текст',
         markdown: 'Markdown',
+        type: undefined, // English translation: 'Type...'
       },
       image: {
         choose: 'Выберите изображение',
@@ -209,10 +226,17 @@ const ru: LocalePhrasesRoot = {
       },
       datetime: {
         now: 'Сейчас',
+        invalidDateTitle: undefined, // English translation: 'Invalid date'
+        invalidDateBody: undefined, // English translation: 'The date you entered is invalid.'
       },
       list: {
         add: 'Добавить %{item}',
         addType: 'Добавить %{item}',
+      },
+      keyvalue: {
+        key: undefined, // English translation: 'Key'
+        value: undefined, // English translation: 'Value'
+        uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
     },
   },
@@ -226,9 +250,13 @@ const ru: LocalePhrasesRoot = {
       copied: 'Скопировано',
     },
     mediaLibrary: {
+      onDeleteTitle: undefined, // English translation: 'Delete selected media?'
       onDeleteBody: 'Вы уверены, что хотите удалить выбранный медиафайл?',
+      fileTooLargeTitle: undefined, // English translation: 'File too large'
       fileTooLargeBody:
         'Файл слишком большой.\nНастройки не позволяют сохранять файлы более %{size} kB.',
+      alreadyExistsTitle: undefined, // English translation: 'File already exists'
+      alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
       noResults: 'Нет результатов.',
@@ -244,11 +272,29 @@ const ru: LocalePhrasesRoot = {
       deleting: 'Удаление…',
       deleteSelected: 'Удалить помеченные',
       chooseSelected: 'Выбрать помеченные',
+      dropImages: undefined, // English translation: 'Drop images to upload'
+      dropFiles: undefined, // English translation: 'Drop files to upload'
+    },
+    folderSupport: {
+      newFolder: undefined, // English translation: 'New folder'
+      createNewFolder: undefined, // English translation: 'Create new folder'
+      enterFolderName: undefined, // English translation: 'Enter folder name...'
+      home: undefined, // English translation: 'Home'
+      up: undefined, // English translation: 'Up'
+      upToFolder: undefined, // English translation: 'Up to %{folder}'
     },
   },
   ui: {
+    common: {
+      yes: undefined, // English translation: 'Yes'
+      no: undefined, // English translation: 'No'
+      okay: undefined, // English translation: 'OK'
+    },
     default: {
       goBackToSite: 'Вернуться на сайт',
+    },
+    localBackup: {
+      hasLocalBackup: undefined, // English translation: 'Has local backup'
     },
     errorBoundary: {
       title: 'Ошибка',
@@ -264,13 +310,16 @@ const ru: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
+      darkMode: undefined, // English translation: 'Dark Mode'
       logOut: 'Выйти',
     },
     toast: {
       onFailToLoadEntries: 'Не удалось загрузить запись: %{details}',
       onFailToLoadDeployPreview: 'Не удалось загрузить превью: %{details}',
       onFailToPersist: 'Не удалось сохранить запись: %{details}',
+      onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'Не удалось удалить запись: %{details}',
+      onFailToDeleteMedia: undefined, // English translation: 'Failed to delete media: %{details}'
       onFailToUpdateStatus: 'Не удалось обновить статус: %{details}',
       missingRequiredField:
         'К сожалению, вы пропустили обязательное поле. Пожалуйста, заполните перед сохранением.',

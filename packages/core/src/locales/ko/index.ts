@@ -1,4 +1,4 @@
-import type { LocalePhrasesRoot } from '@staticcms/core/interface';
+import type { LocalePhrasesRoot } from '../types';
 
 const ko: LocalePhrasesRoot = {
   auth: {
@@ -12,6 +12,9 @@ const ko: LocalePhrasesRoot = {
     errors: {
       email: '반드시 이메일을 입력해 주세요.',
       password: '암호를 입력해 주세요.',
+      authTitle: undefined, // English translation: 'Error logging in'
+      authBody: '%{details}',
+      netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         '설정에 접근할 수 없습니다. git-gateway 백엔드 사용시 Identity service와 Git Gateway를 활성화 해야 합니다.',
     },
@@ -27,6 +30,7 @@ const ko: LocalePhrasesRoot = {
       loading: '불러오는 중...',
       errorHeader: 'CMS 구성을 불러오는 중 오류가 발생했습니다.',
       configErrors: '구성 오류',
+      configNotFound: undefined, // English translation: 'Config not found'
       checkConfigYml: 'config.yml 파일을 확인하세요.',
       loadingConfig: '구성 불러오는 중...',
       waitingBackend: '백엔드 기다리는 중...',
@@ -71,6 +75,7 @@ const ko: LocalePhrasesRoot = {
         label: '업데이트 시각',
       },
     },
+    notFound: undefined, // English translation: 'Collection not found'
   },
   editor: {
     editorControl: {
@@ -90,8 +95,10 @@ const ko: LocalePhrasesRoot = {
         rangeCountExact: '%{fieldLabel} 개수는 정확히 %{count} 개 여야 합니다.',
         rangeMin: '%{fieldLabel} 개수는 적어도 %{minCount} 개 이상 이여야 합니다.',
         rangeMax: '%{fieldLabel} 개수는 최대 %{maxCount} 개 여야 합니다.',
-        invalidPath: `'%{path}' 은(는) 올바른 경로가 아닙니다.`,
-        pathExists: `'%{path}' 경로가 이미 존재합니다.`,
+        invalidPath: "'%{path}' 은(는) 올바른 경로가 아닙니다.",
+        pathExists: "'%{path}' 경로가 이미 존재합니다.",
+        invalidColor: undefined, // English translation: 'Color '%{color}' is invalid.'
+        invalidHexCode: undefined, // English translation: 'Hex codes must start with a # sign.'
       },
       i18n: {
         writingInLocale: '%{locale}로 작성 중',
@@ -109,8 +116,10 @@ const ko: LocalePhrasesRoot = {
         '저장하지 않은 변경사항이 있습니다, 게시하기 전 먼저 저장하세요.',
       onPublishingBody: '이 항목을 게시하시곘습니까?',
       onUnpublishingBody: '이 항목을 게시 철회 하시겠습니까?',
+      onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         '현재 세션에서의 저장되지 않은 변경사항과 이 게시된 항목을 삭제하시겠습니까?',
+      onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: '이 게시된 항목을 삭제하시겠습니까?',
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         '이 항목의 게시되지 않은 모든 변경사항과 현재 세션의 저장되지 않은 변경사항이 삭제됩니다. 정말로 삭제하시겠습니까?',
@@ -166,6 +175,7 @@ const ko: LocalePhrasesRoot = {
         addComponent: '구성요소 추가',
         richText: '리치 텍스트',
         markdown: '마크다운',
+        type: undefined, // English translation: 'Type...'
       },
       image: {
         choose: '이미지 선택',
@@ -205,10 +215,17 @@ const ko: LocalePhrasesRoot = {
       },
       datetime: {
         now: '현재시각',
+        invalidDateTitle: undefined, // English translation: 'Invalid date'
+        invalidDateBody: undefined, // English translation: 'The date you entered is invalid.'
       },
       list: {
         add: '%{item} 추가',
         addType: '%{item} 추가',
+      },
+      keyvalue: {
+        key: undefined, // English translation: 'Key'
+        value: undefined, // English translation: 'Value'
+        uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
     },
   },
@@ -222,9 +239,13 @@ const ko: LocalePhrasesRoot = {
       copied: '복사됨',
     },
     mediaLibrary: {
+      onDeleteTitle: undefined, // English translation: 'Delete selected media?'
       onDeleteBody: '선택하신 미디어를 삭제하시겠습니까?',
+      fileTooLargeTitle: undefined, // English translation: 'File too large'
       fileTooLargeBody:
         '파일이 너무 큽니다.\n%{size} kB 보다 큰 파일을 허용하지 않도록 구성되어 있습니다.',
+      alreadyExistsTitle: undefined, // English translation: 'File already exists'
+      alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
       noResults: '일치 항목 없음.',
@@ -240,11 +261,29 @@ const ko: LocalePhrasesRoot = {
       deleting: '삭제 중...',
       deleteSelected: '선택항목 삭제',
       chooseSelected: '선택한 것으로 결정',
+      dropImages: undefined, // English translation: 'Drop images to upload'
+      dropFiles: undefined, // English translation: 'Drop files to upload'
+    },
+    folderSupport: {
+      newFolder: undefined, // English translation: 'New folder'
+      createNewFolder: undefined, // English translation: 'Create new folder'
+      enterFolderName: undefined, // English translation: 'Enter folder name...'
+      home: undefined, // English translation: 'Home'
+      up: undefined, // English translation: 'Up'
+      upToFolder: undefined, // English translation: 'Up to %{folder}'
     },
   },
   ui: {
+    common: {
+      yes: undefined, // English translation: 'Yes'
+      no: undefined, // English translation: 'No'
+      okay: undefined, // English translation: 'OK'
+    },
     default: {
       goBackToSite: '사이트로 돌아가기',
+    },
+    localBackup: {
+      hasLocalBackup: undefined, // English translation: 'Has local backup'
     },
     errorBoundary: {
       title: '오류',
@@ -260,13 +299,16 @@ const ko: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
+      darkMode: undefined, // English translation: 'Dark Mode'
       logOut: '로그아웃',
     },
     toast: {
       onFailToLoadEntries: '항목 불러오기 실패: %{details}',
       onFailToLoadDeployPreview: '미리보기 불러오기 실패: %{details}',
       onFailToPersist: '항목 저장 실패: %{details}',
+      onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: '항목 삭제 실패: %{details}',
+      onFailToDeleteMedia: undefined, // English translation: 'Failed to delete media: %{details}'
       onFailToUpdateStatus: '상태 업데이트 실패: %{details}',
       missingRequiredField: '이런! 필수 필드를 놓치셨습니다. 저장하기 전에 먼저 채우세요.',
       entrySaved: '항목 저장됨',

@@ -1,4 +1,4 @@
-import type { LocalePhrasesRoot } from '@staticcms/core/interface';
+import type { LocalePhrasesRoot } from '../types';
 
 const da: LocalePhrasesRoot = {
   auth: {
@@ -12,6 +12,9 @@ const da: LocalePhrasesRoot = {
     errors: {
       email: 'Vær sikker på du har indtastet din e-mail.',
       password: 'Indtast dit kodeord.',
+      authTitle: undefined, // English translation: 'Error logging in'
+      authBody: '%{details}',
+      netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         'Kunne ikke tilgå identity opsætning. Ved brug af git-gateway som bagvedliggende service, sørg for at aktivere Identity service og Git Gateway.',
     },
@@ -27,6 +30,7 @@ const da: LocalePhrasesRoot = {
       loading: 'Indlæser...',
       errorHeader: 'Fejl ved indlæsning af CMS opsætningen',
       configErrors: 'Opsætningsfejl',
+      configNotFound: undefined, // English translation: 'Config not found'
       checkConfigYml: 'Kontroller din config.yml fil.',
       loadingConfig: 'Indlæser opsætning...',
       waitingBackend: 'Venter på bagvedliggende service...',
@@ -63,6 +67,10 @@ const da: LocalePhrasesRoot = {
       other: 'Anden',
       negateLabel: 'Ikke %{label}',
     },
+    table: {
+      summary: undefined, // English translation: 'Summary'
+      collection: undefined, // English translation: 'Collection'
+    },
     defaultFields: {
       author: {
         label: 'Forfatter',
@@ -71,6 +79,7 @@ const da: LocalePhrasesRoot = {
         label: 'Opdateret ',
       },
     },
+    notFound: undefined, // English translation: 'Collection not found'
   },
   editor: {
     editorControl: {
@@ -90,8 +99,10 @@ const da: LocalePhrasesRoot = {
         rangeCountExact: '%{fieldLabel} skal have præcis %{count} element(er).',
         rangeMin: '%{fieldLabel} skal have mindst %{minCount} element(er).',
         rangeMax: '%{fieldLabel} skal have %{maxCount} eller færre element(er).',
-        invalidPath: `'%{path}' er ikke en gyldig sti`,
-        pathExists: `Stien '%{path}' findes allerede`,
+        invalidPath: "'%{path}' er ikke en gyldig sti",
+        pathExists: "Stien '%{path}' findes allerede",
+        invalidColor: undefined, // English translation: 'Color '%{color}' is invalid.'
+        invalidHexCode: undefined, // English translation: 'Hex codes must start with a # sign.'
       },
       i18n: {
         writingInLocale: 'Skriver på %{locale}',
@@ -108,8 +119,10 @@ const da: LocalePhrasesRoot = {
       onPublishingWithUnsavedChangesBody: 'Du har ændringer der ikke er gemt, gem inden publicing.',
       onPublishingBody: 'Er du sikker på at du vil publicere dette dokument?',
       onUnpublishingBody: 'Er du sikker på at du vil afpublicere dette dokument?',
+      onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Er du sikker på at du vil slette dette tidliere publiceret dokument, samt dine nuværende ugemte ændringer fra denne session?',
+      onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody:
         'Er du sikker på at du vil slette dette tidliere publiceret dokument?',
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
@@ -117,6 +130,13 @@ const da: LocalePhrasesRoot = {
       onDeleteUnpublishedChangesBody:
         'Alle ikke publicerede ændringer til dette dokument vil blive slettet. Er du sikker på at du vil slette?',
       loadingEntry: 'Indlæser dokument...',
+    },
+    editorInterface: {
+      sideBySideI18n: undefined, // English translation: 'I18n Side by Side'
+      preview: undefined, // English translation: 'Preview'
+      toggleI18n: undefined, // English translation: 'Toggle i18n'
+      togglePreview: undefined, // English translation: 'Toggle preview'
+      toggleScrollSync: undefined, // English translation: 'Sync scrolling'
     },
     editorToolbar: {
       publishing: 'Publicerer...',
@@ -150,6 +170,9 @@ const da: LocalePhrasesRoot = {
       deployPreviewPendingButtonLabel: 'Lav preview',
       deployPreviewButtonLabel: 'Vis preview',
       deployButtonLabel: 'Vis live',
+      discardChanges: undefined, // English translation: 'Discard changes'
+      discardChangesTitle: undefined, // English translation: 'Discard changes'
+      discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
     },
     editorWidgets: {
       markdown: {
@@ -165,6 +188,7 @@ const da: LocalePhrasesRoot = {
         addComponent: 'Tilføj komponent',
         richText: 'Formatteret tekst',
         markdown: 'Markdown',
+        type: undefined, // English translation: 'Type...'
       },
       image: {
         choose: 'Vælg et billede',
@@ -204,10 +228,17 @@ const da: LocalePhrasesRoot = {
       },
       datetime: {
         now: 'Nu',
+        invalidDateTitle: undefined, // English translation: 'Invalid date'
+        invalidDateBody: undefined, // English translation: 'The date you entered is invalid.'
       },
       list: {
         add: 'Tilføj %{item}',
         addType: 'Tilføj %{item}',
+      },
+      keyvalue: {
+        key: undefined, // English translation: 'Key'
+        value: undefined, // English translation: 'Value'
+        uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
     },
   },
@@ -221,9 +252,13 @@ const da: LocalePhrasesRoot = {
       copied: 'Kopieret',
     },
     mediaLibrary: {
+      onDeleteTitle: undefined, // English translation: 'Delete selected media?'
       onDeleteBody: 'Er du sikker på at du vil slette det valgte medie?',
+      fileTooLargeTitle: undefined, // English translation: 'File too large'
       fileTooLargeBody:
         'Filen er for stor.\nOpsætningen tillader ikke filer større end %{size} kB.',
+      alreadyExistsTitle: undefined, // English translation: 'File already exists'
+      alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
       noResults: 'Ingen resultater.',
@@ -239,11 +274,29 @@ const da: LocalePhrasesRoot = {
       deleting: 'Slet...',
       deleteSelected: 'Slet valgte',
       chooseSelected: 'Anvend valgte',
+      dropImages: undefined, // English translation: 'Drop images to upload'
+      dropFiles: undefined, // English translation: 'Drop files to upload'
+    },
+    folderSupport: {
+      newFolder: undefined, // English translation: 'New folder'
+      createNewFolder: undefined, // English translation: 'Create new folder'
+      enterFolderName: undefined, // English translation: 'Enter folder name...'
+      home: undefined, // English translation: 'Home'
+      up: undefined, // English translation: 'Up'
+      upToFolder: undefined, // English translation: 'Up to %{folder}'
     },
   },
   ui: {
+    common: {
+      yes: undefined, // English translation: 'Yes'
+      no: undefined, // English translation: 'No'
+      okay: undefined, // English translation: 'OK'
+    },
     default: {
       goBackToSite: 'Tilbage til hjemmesiden',
+    },
+    localBackup: {
+      hasLocalBackup: undefined, // English translation: 'Has local backup'
     },
     errorBoundary: {
       title: 'Fejl',
@@ -259,13 +312,16 @@ const da: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
+      darkMode: undefined, // English translation: 'Dark Mode'
       logOut: 'Log af',
     },
     toast: {
       onFailToLoadEntries: 'Fejl ved indlæsning af dokumenter: %{details}',
       onFailToLoadDeployPreview: 'Preview kunne ikke indlæses: %{details}',
       onFailToPersist: 'Dokumentet kunne ikke gemmes: %{details}',
+      onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'Dokumentet kunne ikke slettes: %{details}',
+      onFailToDeleteMedia: undefined, // English translation: 'Failed to delete media: %{details}'
       onFailToUpdateStatus: 'Status kunne ikke opdateres: %{details}',
       missingRequiredField:
         'Ups, du mangler et påkrævet felt. Udfyld de påkrævede felter før dokumentet gemmes.',

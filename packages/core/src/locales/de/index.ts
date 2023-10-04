@@ -1,4 +1,4 @@
-import type { LocalePhrasesRoot } from '@staticcms/core/interface';
+import type { LocalePhrasesRoot } from '../types';
 
 const de: LocalePhrasesRoot = {
   auth: {
@@ -12,6 +12,7 @@ const de: LocalePhrasesRoot = {
     errors: {
       email: 'Stellen Sie sicher, Ihre E-Mail-Adresse einzugeben.',
       password: 'Bitte geben Sie Ihr Passwort ein.',
+      authTitle: undefined, // English translation: 'Error logging in'
       authBody: 'Fehler beim Anmelden',
       netlifyIdentityNotFound: 'Das Netlify Identity Plugin wurde nicht gefunden',
       identitySettings:
@@ -66,6 +67,10 @@ const de: LocalePhrasesRoot = {
       other: 'Andere',
       negateLabel: 'Nicht %{label}',
     },
+    table: {
+      summary: undefined, // English translation: 'Summary'
+      collection: undefined, // English translation: 'Collection'
+    },
     defaultFields: {
       author: {
         label: 'Autor',
@@ -74,6 +79,7 @@ const de: LocalePhrasesRoot = {
         label: 'Änderungsdatum',
       },
     },
+    notFound: undefined, // English translation: 'Collection not found'
   },
   editor: {
     editorControl: {
@@ -93,10 +99,10 @@ const de: LocalePhrasesRoot = {
         rangeCountExact: '%{fieldLabel} muss exakt %{count} Element(e) enthalten.',
         rangeMin: '%{fieldLabel} muss mindestens %{minCount} Element(e) enthalten.',
         rangeMax: '%{fieldLabel} darf maximal %{maxCount} Element(e) enthalten.',
-        invalidPath: `'%{path}' ist kein gültiger Pfad`,
-        pathExists: `Pfad '%{path}' existiert bereits`,
-        invalidColor: `Farbe '%{color}' is ungültig`,
-        invalidHexCode: `Hex Codes müssen mit einem #-Zeichen anfangen`,
+        invalidPath: "'%{path}' ist kein gültiger Pfad",
+        pathExists: "Pfad '%{path}' existiert bereits",
+        invalidColor: "Farbe '%{color}' is ungültig",
+        invalidHexCode: 'Hex Codes müssen mit einem #-Zeichen anfangen',
       },
       i18n: {
         writingInLocale: 'Aktuelle Sprache: %{locale}',
@@ -184,6 +190,7 @@ const de: LocalePhrasesRoot = {
         addComponent: 'Komponente hinzufügen',
         richText: 'Rich Text',
         markdown: 'Markdown',
+        type: undefined, // English translation: 'Type...'
       },
       image: {
         choose: 'Bild wählen',
@@ -240,6 +247,12 @@ const de: LocalePhrasesRoot = {
       list: {
         add: '%{item} hinzufügen',
         addType: '%{item} hinzufügen',
+        noValue: undefined, // English translation: 'No value'
+      },
+      keyvalue: {
+        key: undefined, // English translation: 'Key'
+        value: undefined, // English translation: 'Value'
+        uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
     },
   },
@@ -274,6 +287,8 @@ const de: LocalePhrasesRoot = {
       deleting: 'Löschen...',
       deleteSelected: 'Ausgewähltes Element löschen',
       chooseSelected: 'Ausgewähltes Element verwenden',
+      dropImages: undefined, // English translation: 'Drop images to upload'
+      dropFiles: undefined, // English translation: 'Drop files to upload'
     },
     folderSupport: {
       newFolder: 'Neuer Ordner',
@@ -288,6 +303,7 @@ const de: LocalePhrasesRoot = {
     common: {
       yes: 'Ja',
       no: 'Nein',
+      okay: undefined, // English translation: 'OK'
     },
     default: {
       goBackToSite: 'Zurück zur Seite',

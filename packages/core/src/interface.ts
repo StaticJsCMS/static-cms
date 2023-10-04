@@ -613,11 +613,6 @@ export abstract class BackendClass {
   ) => Promise<{ url: string; status: string } | null>;
 }
 
-export interface LocalePhrasesRoot {
-  [property: string]: LocalePhrases;
-}
-export type LocalePhrases = string | { [property: string]: LocalePhrases };
-
 export type CustomIcon = FunctionComponent;
 
 export type WidgetValueSerializer = {
@@ -1344,7 +1339,6 @@ export interface CollectionEntryData {
   viewStyle: ViewStyle;
   entry: Entry;
   key: string;
-  summaryFields: string[];
   collectionLabel?: string;
 }
 

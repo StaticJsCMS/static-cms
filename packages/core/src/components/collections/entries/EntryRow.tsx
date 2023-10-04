@@ -2,7 +2,6 @@ import { Info as InfoIcon } from '@styled-icons/material-outlined/Info';
 import get from 'lodash/get';
 import React, { useEffect, useMemo, useState } from 'react';
 
-import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getFieldPreview } from '@staticcms/core/lib/registry';
 import { getEntryBackupKey } from '@staticcms/core/lib/util/backup.util';
 import {
@@ -16,22 +15,26 @@ import { selectConfig, selectUseWorkflow } from '@staticcms/core/reducers/select
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import TableCell from '../../common/table/TableCell';
 import TableRow from '../../common/table/TableRow';
-import entriesClasses from './Entries.classes';
 import WorkflowStatusPill from '../../workflow/WorkflowStatusPill';
+import entriesClasses from './Entries.classes';
 
-import type { BackupEntry, Collection, Entry } from '@staticcms/core/interface';
+import type { BackupEntry, Collection, Entry, TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 export interface EntryRowProps {
   entry: Entry;
   collection: Collection;
   collectionLabel?: string;
-  summaryFields: string[];
+  columnFields: string[];
 }
 
-const EntryRow: FC<EntryRowProps> = ({ collection, entry, collectionLabel, summaryFields }) => {
-  const t = useTranslate();
-
+const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
+  collection,
+  entry,
+  collectionLabel,
+  columnFields,
+  t,
+}) => {
   const path = useMemo(
     () => `/collections/${collection.name}/entries/${entry.slug}`,
     [collection.name, entry.slug],
@@ -85,7 +88,7 @@ const EntryRow: FC<EntryRowProps> = ({ collection, entry, collectionLabel, summa
           {collectionLabel}
         </TableCell>
       ) : null}
-      {summaryFields.map(fieldName => {
+      {columnFields.map(fieldName => {
         if (fieldName === 'summary') {
           return (
             <TableCell key={fieldName} to={path}>

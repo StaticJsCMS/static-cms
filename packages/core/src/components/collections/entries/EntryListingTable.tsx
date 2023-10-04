@@ -17,7 +17,10 @@ import type { FC } from 'react';
 export interface EntryListingTableProps {
   isSingleCollectionInList: boolean;
   entryData: CollectionEntryData[];
-  summaryFieldHeaders: string[];
+  summaryFields: {
+    name: string;
+    label: string;
+  }[];
   canLoadMore: boolean;
   isLoadingEntries: boolean;
   loadNext: () => void;
@@ -26,7 +29,7 @@ export interface EntryListingTableProps {
 const EntryListingTable: FC<EntryListingTableProps> = ({
   isSingleCollectionInList,
   entryData,
-  summaryFieldHeaders,
+  summaryFields,
   canLoadMore,
   isLoadingEntries,
   loadNext,
@@ -72,15 +75,22 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
   }, [clientHeight, fetchMoreOnBottomReached, scrollHeight, scrollTop]);
 
   const useWorkflow = useAppSelector(selectUseWorkflow);
-  const baseColumns = useMemo(() => {
-    const cols = [...summaryFieldHeaders, ''];
+
+  const baseColumnHeaders = useMemo(() => {
+    const cols = [...summaryFields.map(f => f.label), ''];
+
+    if (!isSingleCollectionInList) {
+      cols.unshift(t('collection.table.collection'));
+    }
 
     if (useWorkflow) {
       cols.push('');
     }
 
     return cols;
-  }, [summaryFieldHeaders, useWorkflow]);
+  }, [isSingleCollectionInList, summaryFields, t, useWorkflow]);
+
+  const columnFields = useMemo(() => [...summaryFields.map(f => f.name)], [summaryFields]);
 
   return (
     <div className={entriesClasses['entry-listing-table']}>
@@ -92,7 +102,7 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
           'CMS_Scrollbar_secondary',
         )}
       >
-        <Table columns={!isSingleCollectionInList ? ['Collection', ...baseColumns] : baseColumns}>
+        <Table columns={baseColumnHeaders}>
           {paddingTop > 0 && (
             <tr>
               <td style={{ height: `${paddingTop}px` }} />
@@ -104,8 +114,10 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
               <EntryRow
                 key={virtualRow.index}
                 collection={data.collection}
+                collectionLabel={data.collectionLabel}
                 entry={data.entry}
-                summaryFields={data.summaryFields}
+                columnFields={columnFields}
+                t={t}
               />
             );
           })}

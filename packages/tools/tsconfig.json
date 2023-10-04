@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "declaration": true,
+    "declarationDir": "dist",
+    "emitDeclarationOnly": true,
+    "jsx": "react",
+    "target": "ES2017",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "preserveSymlinks": true,
+    "noEmit": false,
+    "strict": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "allowJs": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "allowImportingTsExtensions": true,
+    "baseUrl": "./",
+    "lib": ["DOM", "es6", "ES2015", "ES2020"],
+    "paths": {
+      "@staticcms/core/locales": ["../core/src/locales"],
+      "@staticcms/core/locales/*": ["../core/src/locales/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "../../node_modules"]
+}

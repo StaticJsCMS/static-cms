@@ -1,4 +1,4 @@
-import type { LocalePhrasesRoot } from '@staticcms/core/interface';
+import type { LocalePhrasesRoot } from '../types';
 
 const sv: LocalePhrasesRoot = {
   auth: {
@@ -12,6 +12,9 @@ const sv: LocalePhrasesRoot = {
     errors: {
       email: 'Fyll i din epostadress.',
       password: 'Vänligen skriv ditt lösenord.',
+      authTitle: undefined, // English translation: 'Error logging in'
+      authBody: '%{details}',
+      netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         'Kan inte hämta inställningar för Identity. Vid användade av git-gateway backend, kontrollera att Identity service och Git Gateway är aktiverade.',
     },
@@ -27,6 +30,7 @@ const sv: LocalePhrasesRoot = {
       loading: 'Hämtar...',
       errorHeader: 'Ett fel uppstod vid hämtning av CMS-konfigurationen',
       configErrors: 'Konfigurationsfel',
+      configNotFound: undefined, // English translation: 'Config not found'
       checkConfigYml: 'Kontrollera din config.yml-fil.',
       loadingConfig: 'Hämtar konfiguration...',
       waitingBackend: 'Väntar på backend...',
@@ -63,6 +67,10 @@ const sv: LocalePhrasesRoot = {
       other: 'Annat',
       negateLabel: 'Inte %{label}',
     },
+    table: {
+      summary: undefined, // English translation: 'Summary'
+      collection: undefined, // English translation: 'Collection'
+    },
     defaultFields: {
       author: {
         label: 'Författare',
@@ -71,6 +79,7 @@ const sv: LocalePhrasesRoot = {
         label: 'Uppdaterad vid',
       },
     },
+    notFound: undefined, // English translation: 'Collection not found'
   },
   editor: {
     editorControl: {
@@ -90,8 +99,10 @@ const sv: LocalePhrasesRoot = {
         rangeCountExact: '%{fieldLabel} måste ha exakt %{count} element.',
         rangeMin: '%{fieldLabel} måste ha åtminstone %{minCount} element.',
         rangeMax: '%{fieldLabel} måste ha %{maxCount} eller färre element.',
-        invalidPath: `'%{path}' är inte en giltig sökväg`,
-        pathExists: `Sökvägen '%{path}' existerar redan`,
+        invalidPath: "'%{path}' är inte en giltig sökväg",
+        pathExists: "Sökvägen '%{path}' existerar redan",
+        invalidColor: undefined, // English translation: 'Color '%{color}' is invalid.'
+        invalidHexCode: undefined, // English translation: 'Hex codes must start with a # sign.'
       },
       i18n: {
         writingInLocale: 'Skriver i %{locale}',
@@ -106,8 +117,10 @@ const sv: LocalePhrasesRoot = {
         'Du har osparade ändringar, vänligen spara innan du publicerar.',
       onPublishingBody: 'Är du säker på att du vill publicera det här inlägget?',
       onUnpublishingBody: 'Är du säker på att du vill avpublicera det här inlägget?',
+      onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Är du säker på att du vill radera det här publicerade inlägget, inklusive dina osparade ändringar från nuvarande session?',
+      onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Är du säker på att du vill radera det här publicerade inlägget?',
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Du är på väg att radera alla opublicerade ändringar för det här inlägget, inklusive dina osparade ändringar från nuvarande session. Vill du fortfarande radera?',
@@ -116,6 +129,8 @@ const sv: LocalePhrasesRoot = {
       loadingEntry: 'Hämtar inlägg...',
     },
     editorInterface: {
+      sideBySideI18n: undefined, // English translation: 'I18n Side by Side'
+      preview: undefined, // English translation: 'Preview'
       toggleI18n: 'Slå på/av i18n',
       togglePreview: 'Visa/Dölj förhandsvisning',
       toggleScrollSync: 'Synka scrollning',
@@ -148,6 +163,9 @@ const sv: LocalePhrasesRoot = {
       deployPreviewPendingButtonLabel: 'Kontrollera förhandsvisning',
       deployPreviewButtonLabel: 'Visa förhandsvisning',
       deployButtonLabel: 'Visa Live',
+      discardChanges: undefined, // English translation: 'Discard changes'
+      discardChangesTitle: undefined, // English translation: 'Discard changes'
+      discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
     },
     editorWidgets: {
       markdown: {
@@ -163,22 +181,40 @@ const sv: LocalePhrasesRoot = {
         addComponent: 'Lägg till komponent',
         richText: 'Rich Text',
         markdown: 'Markdown',
+        type: undefined, // English translation: 'Type...'
       },
       image: {
         choose: 'Välj en bild',
+        chooseMultiple: undefined, // English translation: 'Choose images'
         chooseUrl: 'Infoga från URL',
         replaceUrl: 'Ersätt med URL',
         promptUrl: 'Ange en URL för bilden',
         chooseDifferent: 'Välj en annan bild',
+        addMore: undefined, // English translation: 'Add more images'
         remove: 'Ta bort bild',
+        removeAll: undefined, // English translation: 'Remove all images'
       },
       file: {
         choose: 'Välj en fil',
         chooseUrl: 'Infoga från URL',
+        chooseMultiple: undefined, // English translation: 'Choose files'
         replaceUrl: 'Ersätt med URL',
         promptUrl: 'Ange en URL för filen',
         chooseDifferent: 'Välj en annan fil',
+        addMore: undefined, // English translation: 'Add more files'
         remove: 'Ta bort fil',
+        removeAll: undefined, // English translation: 'Remove all files'
+      },
+      folder: {
+        choose: undefined, // English translation: 'Choose a folder'
+        chooseUrl: undefined, // English translation: 'Insert folder path'
+        chooseMultiple: undefined, // English translation: 'Choose folders'
+        replaceUrl: undefined, // English translation: 'Replace with path'
+        promptUrl: undefined, // English translation: 'Enter path of the folder'
+        chooseDifferent: undefined, // English translation: 'Choose different folder'
+        addMore: undefined, // English translation: 'Add more folders'
+        remove: undefined, // English translation: 'Remove folder'
+        removeAll: undefined, // English translation: 'Remove all folders'
       },
       unknownControl: {
         noControl: "Inget reglage för widget '%{widget}'.",
@@ -196,6 +232,18 @@ const sv: LocalePhrasesRoot = {
       },
       datetime: {
         now: 'Nu',
+        invalidDateTitle: undefined, // English translation: 'Invalid date'
+        invalidDateBody: undefined, // English translation: 'The date you entered is invalid.'
+      },
+      list: {
+        add: undefined, // English translation: 'Add %{item}'
+        addType: undefined, // English translation: 'Add %{item}'
+        noValue: undefined, // English translation: 'No value'
+      },
+      keyvalue: {
+        key: undefined, // English translation: 'Key'
+        value: undefined, // English translation: 'Value'
+        uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
     },
   },
@@ -209,9 +257,13 @@ const sv: LocalePhrasesRoot = {
       copied: 'Kopierad',
     },
     mediaLibrary: {
+      onDeleteTitle: undefined, // English translation: 'Delete selected media?'
       onDeleteBody: 'Är du säker på att du vill radera valt mediaobjekt?',
+      fileTooLargeTitle: undefined, // English translation: 'File too large'
       fileTooLargeBody:
         'Maximal filstorlek överskriden.\nKonfigurerad att inte tillåta filer större än %{size} kB.',
+      alreadyExistsTitle: undefined, // English translation: 'File already exists'
+      alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
       noResults: 'Inga resultat.',
@@ -227,11 +279,29 @@ const sv: LocalePhrasesRoot = {
       deleting: 'Raderar...',
       deleteSelected: 'Radera markerad',
       chooseSelected: 'Välj markerad',
+      dropImages: undefined, // English translation: 'Drop images to upload'
+      dropFiles: undefined, // English translation: 'Drop files to upload'
+    },
+    folderSupport: {
+      newFolder: undefined, // English translation: 'New folder'
+      createNewFolder: undefined, // English translation: 'Create new folder'
+      enterFolderName: undefined, // English translation: 'Enter folder name...'
+      home: undefined, // English translation: 'Home'
+      up: undefined, // English translation: 'Up'
+      upToFolder: undefined, // English translation: 'Up to %{folder}'
     },
   },
   ui: {
+    common: {
+      yes: undefined, // English translation: 'Yes'
+      no: undefined, // English translation: 'No'
+      okay: undefined, // English translation: 'OK'
+    },
     default: {
       goBackToSite: 'Tillbaka till sida',
+    },
+    localBackup: {
+      hasLocalBackup: undefined, // English translation: 'Has local backup'
     },
     errorBoundary: {
       title: 'Fel',
@@ -247,13 +317,16 @@ const sv: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
+      darkMode: undefined, // English translation: 'Dark Mode'
       logOut: 'Logga ut',
     },
     toast: {
       onFailToLoadEntries: 'Kunde inte hämta inlägg: %{details}',
       onFailToLoadDeployPreview: 'Kunde inte ladda förhandsvisning: %{details}',
       onFailToPersist: 'Kunde inte spara inlägg: %{details}',
+      onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'Kunde inte radera inlägg: %{details}',
+      onFailToDeleteMedia: undefined, // English translation: 'Failed to delete media: %{details}'
       onFailToUpdateStatus: 'Kunde inte uppdatera status: %{details}',
       missingRequiredField:
         'Oops, du har missat ett obligatoriskt fält. Vänligen fyll i det innan du sparar.',

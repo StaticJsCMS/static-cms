@@ -373,28 +373,18 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
     >
       <Autocomplete
         label={
-          <>
-            {Array.isArray(selectedValue) && selectedValue.length > 0 ? (
-              <div className={classes.values}>
-                {selectedValue.map(selectValue => {
-                  const option = uniqueOptionsByValue[selectValue];
-                  return (
-                    <Pill key={selectValue} noWrap disabled={disabled}>
-                      {option?.label ?? selectValue}
-                    </Pill>
-                  );
-                })}
-              </div>
-            ) : null}
-            {loading ? (
-              <CircularProgress
-                key="loading-indicator"
-                className={classes.loading}
-                data-testid="relation-loading-indicator"
-                size="small"
-              />
-            ) : null}
-          </>
+          Array.isArray(selectedValue) && selectedValue.length > 0 ? (
+            <div className={classes.values}>
+              {selectedValue.map(selectValue => {
+                const option = uniqueOptionsByValue[selectValue];
+                return (
+                  <Pill key={selectValue} noWrap disabled={disabled}>
+                    {option?.label ?? selectValue}
+                  </Pill>
+                );
+              })}
+            </div>
+          ) : null
         }
         inputRef={ref}
         value={selectedValue}
@@ -413,6 +403,16 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
 
           return option.label;
         }}
+        endAdornment={
+          loading ? (
+            <CircularProgress
+              key="loading-indicator"
+              className={classes.loading}
+              data-testid="relation-loading-indicator"
+              size="small"
+            />
+          ) : null
+        }
         onQuery={filterOptions}
         onChange={handleChange}
       />

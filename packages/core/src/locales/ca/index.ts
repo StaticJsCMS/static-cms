@@ -1,4 +1,4 @@
-import type { LocalePhrasesRoot } from '@staticcms/core/interface';
+import type { LocalePhrasesRoot } from '../types';
 
 const ca: LocalePhrasesRoot = {
   auth: {
@@ -12,6 +12,9 @@ const ca: LocalePhrasesRoot = {
     errors: {
       email: 'Comprova que has escrit el teu email.',
       password: 'Si us plau escriu la teva contrasenya.',
+      authTitle: undefined, // English translation: 'Error logging in'
+      authBody: '%{details}',
+      netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         "No s'ha pogut obtenir accés a les configuracions d'identitat. Quan feu servir backend de git-gateway, assegureu-vos que activeu el servei d’identitat i la passarel·la de Git.",
     },
@@ -27,6 +30,7 @@ const ca: LocalePhrasesRoot = {
       loading: 'Carregant...',
       errorHeader: 'Error al carregar la configuració del CMS',
       configErrors: 'Errors de configuració',
+      configNotFound: undefined, // English translation: 'Config not found'
       checkConfigYml: "Comprovi l'arxiu config.yml.",
       loadingConfig: 'Carregant configuració....',
       waitingBackend: 'Esperant al servidor...',
@@ -63,6 +67,10 @@ const ca: LocalePhrasesRoot = {
       other: 'Altre',
       negateLabel: 'No %{label}',
     },
+    table: {
+      summary: undefined, // English translation: 'Summary'
+      collection: undefined, // English translation: 'Collection'
+    },
     defaultFields: {
       author: {
         label: 'Autor',
@@ -71,6 +79,7 @@ const ca: LocalePhrasesRoot = {
         label: 'Actualitzat el',
       },
     },
+    notFound: undefined, // English translation: 'Collection not found'
   },
   editor: {
     editorControl: {
@@ -90,8 +99,10 @@ const ca: LocalePhrasesRoot = {
         rangeCountExact: '%{fieldLabel} ha de tenir exactament %{count} element(s).',
         rangeMin: "%{fieldLabel} ha de tenir com a mínim %{minCount} d'element(s).",
         rangeMax: '%{fieldLabel} ha de ser %{maxCount} o inferior.',
-        invalidPath: `'%{path}' no és una ruta valida`,
-        pathExists: `'%{path}' ja existeix`,
+        invalidPath: "'%{path}' no és una ruta valida",
+        pathExists: "'%{path}' ja existeix",
+        invalidColor: undefined, // English translation: 'Color '%{color}' is invalid.'
+        invalidHexCode: undefined, // English translation: 'Hex codes must start with a # sign.'
       },
       i18n: {
         writingInLocale: 'Escriure en %{locale}',
@@ -106,8 +117,10 @@ const ca: LocalePhrasesRoot = {
         "Tens canvis no guardats, si us plau, guarda'ls abans de publicar-los.",
       onPublishingBody: 'Estàs segur que vols publicar aquesta entrada?',
       onUnpublishingBody: 'Estàs segur que vols esborrar aquesta entrada?',
+      onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Està segur que vol eliminar aquesta entrada publicada, així com els canvis no guardats de la sessió actual?',
+      onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Està segur que vol eliminar aquesta entrada publicada?',
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         "Això eliminarà tots els canvis no publicats d'aquesta entrada així com els canvis no guardats de la sessió actual. Encara vol procedir?",
@@ -116,8 +129,11 @@ const ca: LocalePhrasesRoot = {
       loadingEntry: 'Carregant entrada...',
     },
     editorInterface: {
+      sideBySideI18n: undefined, // English translation: 'I18n Side by Side'
+      preview: undefined, // English translation: 'Preview'
       toggleI18n: 'Mostrar/Amagar traduccions',
       togglePreview: 'Mostrar/Amagar previsualització',
+      toggleScrollSync: undefined, // English translation: 'Sync scrolling'
     },
     editorToolbar: {
       publishing: 'Publicant...',
@@ -147,6 +163,9 @@ const ca: LocalePhrasesRoot = {
       deployPreviewPendingButtonLabel: 'Comprovar Vista Prèvia',
       deployPreviewButtonLabel: 'Veure Vista Prèvia',
       deployButtonLabel: 'Veure publicació',
+      discardChanges: undefined, // English translation: 'Discard changes'
+      discardChangesTitle: undefined, // English translation: 'Discard changes'
+      discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
     },
     editorWidgets: {
       markdown: {
@@ -156,27 +175,46 @@ const ca: LocalePhrasesRoot = {
         link: 'Enllaç',
         linkPrompt: "Introdueix l'URL de l'enllaç",
         headings: 'Encapçalaments',
+        quote: undefined, // English translation: 'Quote'
         bulletedList: 'Llista',
         numberedList: 'Llista numèrica',
         addComponent: 'Afegir component',
         richText: 'Text enriquit',
         markdown: 'Markdown',
+        type: undefined, // English translation: 'Type...'
       },
       image: {
         choose: 'Escull una imatge',
+        chooseMultiple: undefined, // English translation: 'Choose images'
         chooseUrl: 'Introdueix una URL',
         replaceUrl: 'Substitueix per una URL',
         promptUrl: "Introdueix l'URL de la imatge",
         chooseDifferent: 'Escull una imatge diferent',
+        addMore: undefined, // English translation: 'Add more images'
         remove: 'Treu la imatge',
+        removeAll: undefined, // English translation: 'Remove all images'
       },
       file: {
         choose: 'Escull un arxiu',
         chooseUrl: 'Introdueix una URL',
+        chooseMultiple: undefined, // English translation: 'Choose files'
         replaceUrl: 'Substitueix per una URL',
         promptUrl: "Introdueix l'URL de l'arxiu",
         chooseDifferent: 'Escull un arxiu diferent',
+        addMore: undefined, // English translation: 'Add more files'
         remove: 'Esborrar arxiu',
+        removeAll: undefined, // English translation: 'Remove all files'
+      },
+      folder: {
+        choose: undefined, // English translation: 'Choose a folder'
+        chooseUrl: undefined, // English translation: 'Insert folder path'
+        chooseMultiple: undefined, // English translation: 'Choose folders'
+        replaceUrl: undefined, // English translation: 'Replace with path'
+        promptUrl: undefined, // English translation: 'Enter path of the folder'
+        chooseDifferent: undefined, // English translation: 'Choose different folder'
+        addMore: undefined, // English translation: 'Add more folders'
+        remove: undefined, // English translation: 'Remove folder'
+        removeAll: undefined, // English translation: 'Remove all folders'
       },
       unknownControl: {
         noControl: "No existeix un control per al widget '%{widget}'.",
@@ -194,6 +232,18 @@ const ca: LocalePhrasesRoot = {
       },
       datetime: {
         now: 'Ara',
+        invalidDateTitle: undefined, // English translation: 'Invalid date'
+        invalidDateBody: undefined, // English translation: 'The date you entered is invalid.'
+      },
+      list: {
+        add: undefined, // English translation: 'Add %{item}'
+        addType: undefined, // English translation: 'Add %{item}'
+        noValue: undefined, // English translation: 'No value'
+      },
+      keyvalue: {
+        key: undefined, // English translation: 'Key'
+        value: undefined, // English translation: 'Value'
+        uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
     },
   },
@@ -207,9 +257,13 @@ const ca: LocalePhrasesRoot = {
       copied: 'Copiat',
     },
     mediaLibrary: {
+      onDeleteTitle: undefined, // English translation: 'Delete selected media?'
       onDeleteBody: 'Està segur de que vol eliminar el mitjà seleccionat?',
+      fileTooLargeTitle: undefined, // English translation: 'File too large'
       fileTooLargeBody:
         'El fitxer és massa gran.\nLa configuració no permet fitxers més grans de %{size} kB.',
+      alreadyExistsTitle: undefined, // English translation: 'File already exists'
+      alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
       noResults: 'Sense resultats.',
@@ -225,17 +279,36 @@ const ca: LocalePhrasesRoot = {
       deleting: 'Eliminant...',
       deleteSelected: 'Eliminar selecció',
       chooseSelected: 'Confirmar selecció',
+      dropImages: undefined, // English translation: 'Drop images to upload'
+      dropFiles: undefined, // English translation: 'Drop files to upload'
+    },
+    folderSupport: {
+      newFolder: undefined, // English translation: 'New folder'
+      createNewFolder: undefined, // English translation: 'Create new folder'
+      enterFolderName: undefined, // English translation: 'Enter folder name...'
+      home: undefined, // English translation: 'Home'
+      up: undefined, // English translation: 'Up'
+      upToFolder: undefined, // English translation: 'Up to %{folder}'
     },
   },
   ui: {
+    common: {
+      yes: undefined, // English translation: 'Yes'
+      no: undefined, // English translation: 'No'
+      okay: undefined, // English translation: 'OK'
+    },
     default: {
       goBackToSite: 'Torna enrere al lloc',
+    },
+    localBackup: {
+      hasLocalBackup: undefined, // English translation: 'Has local backup'
     },
     errorBoundary: {
       title: 'Error',
       details: "S'ha produït un error - si us plau ",
       reportIt: "Informa'ns d'això a GitHub.",
       detailsHeading: 'Detalls',
+      privacyWarning: undefined, // English translation: 'Opening an issue pre-populates it with the error message and debugging data.\nPlease verify the information is correct and remove sensitive data if exists.'
       recoveredEntry: {
         heading: 'Document recuperat',
         warning:
@@ -244,13 +317,16 @@ const ca: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
+      darkMode: undefined, // English translation: 'Dark Mode'
       logOut: 'Tancar sessió',
     },
     toast: {
       onFailToLoadEntries: "No s'ha ha pogut carregar l'entrada: %{details}",
       onFailToLoadDeployPreview: "No s'ha pogut carregar la vista prèvia: %{details}",
       onFailToPersist: "No s'ha pogut guardar l'entrada: %{details}",
+      onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: "No s'ha pogut eliminar l'entrada: %{details}",
+      onFailToDeleteMedia: undefined, // English translation: 'Failed to delete media: %{details}'
       onFailToUpdateStatus: "No s'ha pogut actualitzar l'estat: %{details}",
       missingRequiredField:
         "Ups, no ha omplert un camp obligatori. Si us plau,  ompli'l abans de guardar.",

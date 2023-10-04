@@ -1,4 +1,4 @@
-import type { LocalePhrasesRoot } from '@staticcms/core/interface';
+import type { LocalePhrasesRoot } from '../types';
 
 const tr: LocalePhrasesRoot = {
   auth: {
@@ -12,6 +12,9 @@ const tr: LocalePhrasesRoot = {
     errors: {
       email: 'E-postanızı girdiğinizden emin olun.',
       password: 'Lütfen şifrenizi girin.',
+      authTitle: undefined, // English translation: 'Error logging in'
+      authBody: '%{details}',
+      netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
       identitySettings:
         "Identity ayarlarına erişilemiyor. Git-gateway sunucusunu kullanmak için Identity servisi ve Git Gateway'in etkin olduğundan emin olun.",
     },
@@ -27,6 +30,7 @@ const tr: LocalePhrasesRoot = {
       loading: 'Yükleniyor...',
       errorHeader: 'CMS yapılandırması yüklenirken hata oluştu',
       configErrors: 'Yapılandırma Hataları',
+      configNotFound: undefined, // English translation: 'Config not found'
       checkConfigYml: 'config.yml dosyanızı kontrol edin.',
       loadingConfig: 'Yapılandırma yükleniyor...',
       waitingBackend: 'Arka uç bekleniyor...',
@@ -64,6 +68,10 @@ const tr: LocalePhrasesRoot = {
       other: 'Diğer',
       negateLabel: '%{label} hariç',
     },
+    table: {
+      summary: undefined, // English translation: 'Summary'
+      collection: undefined, // English translation: 'Collection'
+    },
     defaultFields: {
       author: {
         label: 'Yazar',
@@ -72,6 +80,7 @@ const tr: LocalePhrasesRoot = {
         label: 'Güncellenme Tarihi',
       },
     },
+    notFound: undefined, // English translation: 'Collection not found'
   },
   editor: {
     editorControl: {
@@ -91,8 +100,10 @@ const tr: LocalePhrasesRoot = {
         rangeCountExact: '%{fieldLabel}, %{count} öğe olmalıdır.',
         rangeMin: '%{fieldLabel}, en az %{minCount} öğe olmalıdır.',
         rangeMax: '%{fieldLabel}, %{maxCount} veya daha az öğe olmalıdır.',
-        invalidPath: `'%{path}' geçerli bir yol değil`,
-        pathExists: `'%{path}' yolu zaten var`,
+        invalidPath: "'%{path}' geçerli bir yol değil",
+        pathExists: "'%{path}' yolu zaten var",
+        invalidColor: undefined, // English translation: 'undefined'
+        invalidHexCode: undefined, // English translation: 'undefined'
       },
       i18n: {
         writingInLocale: '%{locale} için yazılıyor',
@@ -110,8 +121,10 @@ const tr: LocalePhrasesRoot = {
         'Kaydedilmemiş değişiklikleriniz var, lütfen yayınlamadan önce kaydedin.',
       onPublishingBody: 'Bu girdiyi yayınlamak istediğinize emin misiniz?',
       onUnpublishingBody: 'Bu girdiyi yayından kaldırmak istediğinizden emin misiniz?',
+      onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'undefined'
       onDeleteWithUnsavedChangesBody:
         'Bu oturumda kaydedilmiş değişikliklerin yanı sıra geçerli oturumdaki kaydedilmemiş değişikliklerinizi silmek istediğinize emin misiniz?',
+      onDeletePublishedEntryTitle: undefined, // English translation: 'undefined'
       onDeletePublishedEntryBody: 'Bu yayınlanmış girdiyi silmek istediğinize emin misiniz?',
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Bu girdide yayınlanmamış tüm değişiklikleri ve geçerli oturumdaki kaydedilmemiş değişikliklerinizi siler. Hala silmek istiyor musun?',
@@ -120,6 +133,8 @@ const tr: LocalePhrasesRoot = {
       loadingEntry: 'Girdiler yükleniyor...',
     },
     editorInterface: {
+      sideBySideI18n: undefined, // English translation: 'undefined'
+      preview: undefined, // English translation: 'undefined'
       toggleI18n: 'i18n değiştir',
       togglePreview: 'Önizlemeyi değiştir',
       toggleScrollSync: 'Kaydırmayı senkronize et',
@@ -156,6 +171,9 @@ const tr: LocalePhrasesRoot = {
       deployPreviewPendingButtonLabel: 'Önizlemeyi Denetle',
       deployPreviewButtonLabel: 'Önizlemeyi Görüntüle',
       deployButtonLabel: 'Canlı Görüntüle',
+      discardChanges: undefined, // English translation: 'undefined'
+      discardChangesTitle: undefined, // English translation: 'undefined'
+      discardChangesBody: undefined, // English translation: 'undefined'
     },
     editorWidgets: {
       markdown: {
@@ -171,22 +189,40 @@ const tr: LocalePhrasesRoot = {
         addComponent: 'Bileşen Ekle',
         richText: 'Zengin Metin',
         markdown: 'Markdown',
+        type: undefined, // English translation: 'undefined'
       },
       image: {
         choose: 'Bir resim seçin',
+        chooseMultiple: undefined, // English translation: 'undefined'
         chooseUrl: "URL'den ekle",
         replaceUrl: 'URL ile değiştir',
         promptUrl: "Resmin URL'sini girin",
         chooseDifferent: 'Farklı bir resim seçin',
+        addMore: undefined, // English translation: 'undefined'
         remove: 'Resmi kaldır',
+        removeAll: undefined, // English translation: 'undefined'
       },
       file: {
         choose: 'Bir dosya seçin',
         chooseUrl: "URL'den ekle",
+        chooseMultiple: undefined, // English translation: 'undefined'
         replaceUrl: 'URL ile değiştir',
         promptUrl: "Dosyanın URL'sini girin",
         chooseDifferent: 'Farklı bir dosya seçin',
+        addMore: undefined, // English translation: 'undefined'
         remove: 'Dosyayı kaldır',
+        removeAll: undefined, // English translation: 'undefined'
+      },
+      folder: {
+        choose: undefined, // English translation: 'undefined'
+        chooseUrl: undefined, // English translation: 'undefined'
+        chooseMultiple: undefined, // English translation: 'undefined'
+        replaceUrl: undefined, // English translation: 'undefined'
+        promptUrl: undefined, // English translation: 'undefined'
+        chooseDifferent: undefined, // English translation: 'undefined'
+        addMore: undefined, // English translation: 'undefined'
+        remove: undefined, // English translation: 'undefined'
+        removeAll: undefined, // English translation: 'undefined'
       },
       unknownControl: {
         noControl: "'%{widget}' bileşeni için kontrol yok.",
@@ -204,10 +240,18 @@ const tr: LocalePhrasesRoot = {
       },
       datetime: {
         now: 'Şimdi',
+        invalidDateTitle: undefined, // English translation: 'undefined'
+        invalidDateBody: undefined, // English translation: 'undefined'
       },
       list: {
         add: '%{item} Ekle',
         addType: '%{item} Ekle',
+        noValue: undefined, // English translation: 'undefined'
+      },
+      keyvalue: {
+        key: undefined, // English translation: 'undefined'
+        value: undefined, // English translation: 'undefined'
+        uniqueKeys: undefined, // English translation: 'undefined'
       },
     },
   },
@@ -221,9 +265,13 @@ const tr: LocalePhrasesRoot = {
       copied: 'Kopyalandı',
     },
     mediaLibrary: {
+      onDeleteTitle: undefined, // English translation: 'Delete selected media?'
       onDeleteBody: 'Seçilen medyayı silmek istediğinize emin misiniz?',
+      fileTooLargeTitle: undefined, // English translation: 'File too large'
       fileTooLargeBody:
         'Dosya çok büyük.\n%{size} kilobaytdan daha büyük dosyaların yüklenmemesi için ayarlanmış.',
+      alreadyExistsTitle: undefined, // English translation: 'File already exists'
+      alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
       noResults: 'Sonuç yok.',
@@ -239,11 +287,29 @@ const tr: LocalePhrasesRoot = {
       deleting: 'Siliniyor...',
       deleteSelected: 'Seçileni sil',
       chooseSelected: 'Seçileni kullan',
+      dropImages: undefined, // English translation: 'Drop images to upload'
+      dropFiles: undefined, // English translation: 'Drop files to upload'
+    },
+    folderSupport: {
+      newFolder: undefined, // English translation: 'New folder'
+      createNewFolder: undefined, // English translation: 'Create new folder'
+      enterFolderName: undefined, // English translation: 'Enter folder name...'
+      home: undefined, // English translation: 'Home'
+      up: undefined, // English translation: 'Up'
+      upToFolder: undefined, // English translation: 'Up to %{folder}'
     },
   },
   ui: {
+    common: {
+      yes: undefined, // English translation: 'Yes'
+      no: undefined, // English translation: 'No'
+      okay: undefined, // English translation: 'OK'
+    },
     default: {
       goBackToSite: 'Siteye geri git',
+    },
+    localBackup: {
+      hasLocalBackup: undefined, // English translation: 'Has local backup'
     },
     errorBoundary: {
       title: 'Hata',
@@ -259,13 +325,16 @@ const tr: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
+      darkMode: undefined, // English translation: 'Dark Mode'
       logOut: 'Çıkış Yap',
     },
     toast: {
       onFailToLoadEntries: 'Girdi yüklenemedi: %{details}',
       onFailToLoadDeployPreview: 'Önizleme yüklenemedi: %{details}',
       onFailToPersist: 'Girdi devam ettirilemedi: %{details}',
+      onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'Girdi silinemedi: %{details}',
+      onFailToDeleteMedia: undefined, // English translation: 'Failed to delete media: %{details}'
       onFailToUpdateStatus: 'Durum güncellenemedi: %{details}',
       missingRequiredField: 'Gerekli bir alan eksik. Lütfen kaydetmeden önce tamamlayın.',
       entrySaved: 'Girdi kaydedildi',

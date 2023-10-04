@@ -1,7 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { VIEW_STYLE_TABLE } from '@staticcms/core/constants/views';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getInferredFields, selectFields } from '@staticcms/core/lib/util/collection.util';
+import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { toTitleCaseFromKey } from '@staticcms/core/lib/util/string.util';
 import { getDatetimeFormats } from '@staticcms/datetime/datetime.util';
 import entriesClasses from './Entries.classes';
@@ -51,6 +53,8 @@ const EntryListing: FC<EntryListingProps> = ({
   handleCursorActions,
   ...otherProps
 }) => {
+  const t = useTranslate();
+
   const hasMore = useMemo(() => cursor?.actions?.has('append_next'), [cursor?.actions]);
 
   const handleLoadMore = useCallback(() => {
@@ -61,19 +65,46 @@ const EntryListing: FC<EntryListingProps> = ({
 
   const inferFields = useCallback((collection?: Collection) => getInferredFields(collection), []);
 
-  const summaryFields = useMemo(() => {
-    let fields: string[] | undefined;
-    if ('collection' in otherProps) {
-      fields = otherProps.collection.summary_fields;
-    }
-
-    return fields ?? ['summary'];
-  }, [otherProps]);
-
   const isSingleCollectionInList = useMemo(
     () => !('collections' in otherProps) || Object.keys(otherProps.collections).length === 1,
     [otherProps],
   );
+
+  const summaryFields: {
+    name: string;
+    label: string;
+  }[] = useMemo(() => {
+    const summaryField = [
+      {
+        name: 'summary',
+        label: t('collection.table.summary'),
+      },
+    ];
+
+    if (!isSingleCollectionInList) {
+      return summaryField;
+    }
+
+    if (!('collection' in otherProps) || isNullish(otherProps.collection.summary_fields)) {
+      return summaryField;
+    }
+
+    const fieldNames = otherProps.collection.summary_fields;
+    const collectionFields = selectFields(otherProps.collection).reduce((acc, f) => {
+      acc[f.name] = f;
+      return acc;
+    }, {} as Record<string, Field>);
+
+    return fieldNames.map(summaryField => {
+      const field = collectionFields[summaryField];
+      return {
+        name: summaryField,
+        label: !field
+          ? toTitleCaseFromKey(summaryField)
+          : field.label ?? toTitleCaseFromKey(field.name),
+      };
+    });
+  }, [isSingleCollectionInList, otherProps, t]);
 
   const entryData: CollectionEntryData[] = useMemo(() => {
     if ('collection' in otherProps) {
@@ -97,7 +128,6 @@ const EntryListing: FC<EntryListingProps> = ({
         viewStyle,
         entry,
         key: entry.slug,
-        summaryFields,
       }));
     }
 
@@ -131,29 +161,11 @@ const EntryListing: FC<EntryListingProps> = ({
               viewStyle,
               collectionLabel,
               key: entry.slug,
-              summaryFields,
             }
           : null;
       })
       .filter(e => e) as CollectionEntryData[];
-  }, [entries, inferFields, isSingleCollectionInList, otherProps, summaryFields, viewStyle]);
-
-  const summaryFieldHeaders = useMemo(() => {
-    if ('collection' in otherProps) {
-      const collectionFields = selectFields(otherProps.collection).reduce((acc, f) => {
-        acc[f.name] = f;
-        return acc;
-      }, {} as Record<string, Field>);
-      return summaryFields.map(summaryField => {
-        const field = collectionFields[summaryField];
-        return !field
-          ? toTitleCaseFromKey(summaryField)
-          : field.label ?? toTitleCaseFromKey(field.name);
-      });
-    }
-
-    return [];
-  }, [otherProps, summaryFields]);
+  }, [entries, inferFields, isSingleCollectionInList, otherProps, viewStyle]);
 
   if (viewStyle === VIEW_STYLE_TABLE) {
     return (
@@ -162,7 +174,7 @@ const EntryListing: FC<EntryListingProps> = ({
           key="table"
           entryData={entryData}
           isSingleCollectionInList={isSingleCollectionInList}
-          summaryFieldHeaders={summaryFieldHeaders}
+          summaryFields={summaryFields}
           loadNext={handleLoadMore}
           canLoadMore={Boolean(hasMore && handleLoadMore)}
           isLoadingEntries={isLoadingEntries}

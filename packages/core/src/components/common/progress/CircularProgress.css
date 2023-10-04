@@ -2,8 +2,7 @@
   color: var(--text-secondary);
   fill: var(--primary-main);
 
-  @apply mr-2
-    animate-spin;
+  @apply animate-spin;
 
   &.CMS_CircularProgress_md {
     @apply w-8
