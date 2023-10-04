@@ -33,7 +33,7 @@
     "yaml": "2.2.2"
   },
   "devDependencies": {
-    "@babel/core": "7.21.4",
+    "@babel/core": "7.23.0",
     "@babel/eslint-parser": "7.22.15",
     "@emotion/eslint-plugin": "11.11.0",
     "@next/bundle-analyzer": "13.2.4",
