@@ -24,10 +24,10 @@
     "type-check": "lerna run type-check --scope @staticcms/core"
   },
   "devDependencies": {
-    "all-contributors-cli": "6.24.0",
+    "all-contributors-cli": "6.26.1",
     "husky": "8.0.3",
-    "lerna": "6.6.1",
-    "lint-staged": "13.2.1",
+    "lerna": "7.3.0",
+    "lint-staged": "14.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
