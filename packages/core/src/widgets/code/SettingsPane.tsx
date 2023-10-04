@@ -1,4 +1,3 @@
-
 import isHotkey from 'is-hotkey';
 import React from 'react';
 
