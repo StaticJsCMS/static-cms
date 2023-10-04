@@ -6,13 +6,14 @@ import { useMdPlateEditorState } from '../../plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 
 import type { FC } from 'react';
+import { TranslatedProps } from '@staticcms/core/interface';
 
 export interface CodeBlockToolbarButtonsProps {
   disabled: boolean;
   variant: 'button' | 'menu';
 }
 
-const CodeBlockToolbarButtons: FC<CodeBlockToolbarButtonsProps> = ({ disabled, variant }) => {
+const CodeBlockToolbarButtons: FC<TranslatedProps<CodeBlockToolbarButtonsProps>> = ({ disabled, variant, t }) => {
   const editor = useMdPlateEditorState();
 
   const handleCodeBlockOnClick = useCallback(() => {
@@ -23,8 +24,8 @@ const CodeBlockToolbarButtons: FC<CodeBlockToolbarButtonsProps> = ({ disabled, v
 
   return (
     <ToolbarButton
-      label="Code block"
-      tooltip="Insert code block"
+      label={t('editor.editorWidgets.markdown.codeBlock')}
+      tooltip={t('editor.editorWidgets.markdown.insertCodeBlock')}
       icon={CodeIcon}
       onClick={handleCodeBlockOnClick}
       disabled={disabled}

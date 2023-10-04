@@ -6,15 +6,17 @@ import { useMdPlateEditorState } from '../../plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 
 import type { FC } from 'react';
+import { TranslatedProps } from '@staticcms/core/interface';
 
 export interface DecreaseIndentToolbarButtonProps {
   disabled: boolean;
   variant: 'button' | 'menu';
 }
 
-const DecreaseIndentToolbarButton: FC<DecreaseIndentToolbarButtonProps> = ({
+const DecreaseIndentToolbarButton: FC<TranslatedProps<DecreaseIndentToolbarButtonProps>> = ({
   disabled,
   variant,
+  t,
 }) => {
   const editor = useMdPlateEditorState();
 
@@ -24,7 +26,7 @@ const DecreaseIndentToolbarButton: FC<DecreaseIndentToolbarButtonProps> = ({
 
   return (
     <ToolbarButton
-      tooltip="Decrease indent"
+      tooltip={t('editor.editorWidgets.markdown.decreaseIndent')}
       onClick={handleOutdent}
       icon={FormatIndentDecreaseIcon}
       disabled={disabled}

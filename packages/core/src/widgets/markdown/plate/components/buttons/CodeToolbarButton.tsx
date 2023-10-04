@@ -5,16 +5,17 @@ import React from 'react';
 import MarkToolbarButton from './common/MarkToolbarButton';
 
 import type { FC } from 'react';
+import { TranslatedProps } from '@staticcms/core/interface';
 
 export interface CodeToolbarButtonProps {
   disabled: boolean;
   variant: 'button' | 'menu';
 }
 
-const CodeToolbarButton: FC<CodeToolbarButtonProps> = ({ disabled, variant }) => {
+const CodeToolbarButton: FC<TranslatedProps<CodeToolbarButtonProps>> = ({ disabled, variant, t }) => {
   return (
     <MarkToolbarButton
-      tooltip="Code"
+      tooltip={t('editor.editorWidgets.markdown.code')}
       type={MARK_CODE}
       icon={CodeIcon}
       disabled={disabled}

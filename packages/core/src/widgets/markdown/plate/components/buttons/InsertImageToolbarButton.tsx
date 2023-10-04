@@ -7,7 +7,7 @@ import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 
-import type { Collection, MarkdownField, MediaPath } from '@staticcms/core/interface';
+import type { Collection, MarkdownField, MediaPath, TranslatedProps } from '@staticcms/core/interface';
 import type { MdImageElement } from '@staticcms/markdown/plate/plateTypes';
 import type { FC } from 'react';
 import type { BaseSelection } from 'slate';
@@ -20,12 +20,13 @@ export interface InsertImageToolbarButtonProps {
   disabled: boolean;
 }
 
-const InsertImageToolbarButton: FC<InsertImageToolbarButtonProps> = ({
+const InsertImageToolbarButton: FC<TranslatedProps<InsertImageToolbarButtonProps>> = ({
   variant,
   field,
   collection,
   currentValue,
   disabled,
+  t,
 }) => {
   const [selection, setSelection] = useState<BaseSelection>();
   const editor = useMdPlateEditorState();
@@ -83,8 +84,8 @@ const InsertImageToolbarButton: FC<InsertImageToolbarButtonProps> = ({
 
   return (
     <ToolbarButton
-      label="Image"
-      tooltip="Insert image"
+      label={t('editor.editorWidgets.markdown.image')}
+      tooltip={t('editor.editorWidgets.markdown.insertImage')}
       icon={ImageIcon}
       onClick={handleOpenMediaLibrary}
       disabled={disabled}

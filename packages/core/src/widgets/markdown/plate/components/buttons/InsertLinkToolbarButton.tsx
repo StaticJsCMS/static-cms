@@ -18,7 +18,7 @@ import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 
-import type { Collection, MarkdownField, MediaPath } from '@staticcms/core/interface';
+import type { Collection, MarkdownField, MediaPath, TranslatedProps } from '@staticcms/core/interface';
 import type { MdLinkElement } from '@staticcms/markdown/plate/plateTypes';
 import type { TText } from '@udecode/plate';
 import type { FC } from 'react';
@@ -32,12 +32,13 @@ export interface InsertLinkToolbarButtonProps {
   disabled: boolean;
 }
 
-const InsertLinkToolbarButton: FC<InsertLinkToolbarButtonProps> = ({
+const InsertLinkToolbarButton: FC<TranslatedProps<InsertLinkToolbarButtonProps>> = ({
   variant,
   field,
   collection,
   currentValue,
   disabled,
+  t,
 }) => {
   const editor = useMdPlateEditorState();
   const handleInsert = useCallback(
@@ -107,8 +108,8 @@ const InsertLinkToolbarButton: FC<InsertLinkToolbarButtonProps> = ({
 
   return !isLink ? (
     <ToolbarButton
-      label="Link"
-      tooltip="Insert link"
+      label={t('editor.editorWidgets.markdown.link')}
+      tooltip={t('editor.editorWidgets.markdown.insertLink')}
       icon={LinkIcon}
       onClick={handleOpenMediaLibrary}
       disabled={disabled}

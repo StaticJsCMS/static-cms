@@ -5,17 +5,18 @@ import React from 'react';
 import BlockToolbarButton from './common/BlockToolbarButton';
 
 import type { FC } from 'react';
+import { TranslatedProps } from '@staticcms/core/interface';
 
 export interface BlockquoteToolbarButtonProps {
   disabled: boolean;
   variant: 'button' | 'menu';
 }
 
-const BlockquoteToolbarButton: FC<BlockquoteToolbarButtonProps> = ({ disabled, variant }) => {
+const BlockquoteToolbarButton: FC<TranslatedProps<BlockquoteToolbarButtonProps>> = ({ disabled, variant, t }) => {
   return (
     <BlockToolbarButton
-      label="Blockquote"
-      tooltip="Insert blockquote"
+      label={t('editor.editorWidgets.markdown.quote')}
+      tooltip={t('editor.editorWidgets.markdown.insertQuote')}
       icon={FormatQuoteIcon}
       type={ELEMENT_BLOCKQUOTE}
       disabled={disabled}

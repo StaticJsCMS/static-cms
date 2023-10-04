@@ -19,6 +19,7 @@ import languages from './data/languages';
 import type {
   CodeField,
   ProcessedCodeLanguage,
+  TranslatedProps,
   WidgetControlProps,
 } from '@staticcms/core/interface';
 import type { LanguageName } from '@uiw/codemirror-extensions-langs';
@@ -50,7 +51,7 @@ function valueToOption(val: string | { name: string; label?: string }): {
   return { value: val.name, label: val.label || val.name };
 }
 
-const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, CodeField>> = ({
+const CodeControl: FC<TranslatedProps<WidgetControlProps<string | { [key: string]: string }, CodeField>>> = ({
   label,
   field,
   duplicate,
@@ -60,6 +61,7 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
   forSingleList,
   errors,
   disabled,
+  t,
 }) => {
   const theme = useTheme();
 
@@ -217,6 +219,7 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
             allowLanguageSelection={allowLanguageSelection}
             onChangeLanguage={handleSetLanguage}
             hideSettings={hideSettings}
+            t={t}
           />
         ) : null}
         <Collapse in={open} appear={false}>

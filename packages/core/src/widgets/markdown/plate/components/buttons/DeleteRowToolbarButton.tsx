@@ -6,13 +6,14 @@ import { useMdPlateEditorState } from '../../plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 
 import type { FC } from 'react';
+import { TranslatedProps } from '@staticcms/core/interface';
 
 export interface DeleteRowToolbarButtonProps {
   disabled: boolean;
   variant: 'button' | 'menu';
 }
 
-const DeleteRowToolbarButton: FC<DeleteRowToolbarButtonProps> = ({ disabled, variant }) => {
+const DeleteRowToolbarButton: FC<TranslatedProps<DeleteRowToolbarButtonProps>> = ({ disabled, variant, t }) => {
   const editor = useMdPlateEditorState();
 
   const handleDeleteRow = useCallback(() => {
@@ -21,7 +22,7 @@ const DeleteRowToolbarButton: FC<DeleteRowToolbarButtonProps> = ({ disabled, var
 
   return (
     <ToolbarButton
-      tooltip="Delete row"
+      tooltip={t('editor.editorWidgets.markdown.table.deleteRow')}
       icon={TableDeleteRow}
       onClick={handleDeleteRow}
       disabled={disabled}

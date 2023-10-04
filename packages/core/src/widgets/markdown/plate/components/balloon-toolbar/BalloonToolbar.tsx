@@ -41,6 +41,7 @@ import type {
   Collection,
   MarkdownField,
   MarkdownToolbarButtonType,
+  TranslatedProps,
 } from '@staticcms/core/interface';
 import type { FC, ReactNode } from 'react';
 import type { ClientRectObject } from '@udecode/plate';
@@ -96,12 +97,13 @@ export interface BalloonToolbarProps {
   disabled: boolean;
 }
 
-const BalloonToolbar: FC<BalloonToolbarProps> = ({
+const BalloonToolbar: FC<TranslatedProps<BalloonToolbarProps>> = ({
   useMdx,
   containerRef,
   collection,
   field,
   disabled,
+  t
 }) => {
   const hasEditorFocus = useFocused();
   const editor = useMdPlateEditorState();
@@ -178,6 +180,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
           collection,
           field,
           disabled,
+          t
         ),
       );
       return;
@@ -196,6 +199,7 @@ const BalloonToolbar: FC<BalloonToolbarProps> = ({
           collection,
           field,
           disabled,
+          t
         ),
       );
       return;

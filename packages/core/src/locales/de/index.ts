@@ -12,8 +12,8 @@ const de: LocalePhrasesRoot = {
     errors: {
       email: 'Stellen Sie sicher, Ihre E-Mail-Adresse einzugeben.',
       password: 'Bitte geben Sie Ihr Passwort ein.',
-      authTitle: undefined, // English translation: 'Error logging in'
-      authBody: 'Fehler beim Anmelden',
+      authTitle: 'Fehler beim Anmelden',
+      authBody: '%{details}',
       netlifyIdentityNotFound: 'Das Netlify Identity Plugin wurde nicht gefunden',
       identitySettings:
         'Identity-Einstellungen konnten nicht abgerufen werden. Stellen Sie bei der Verwendung des Git-Gateway Backends sicher, den Identity Service und das Git Gateway zu aktivieren.',
@@ -68,8 +68,8 @@ const de: LocalePhrasesRoot = {
       negateLabel: 'Nicht %{label}',
     },
     table: {
-      summary: undefined, // English translation: 'Summary'
-      collection: undefined, // English translation: 'Collection'
+      summary: 'Zusammenfassung',
+      collection: 'Bereich',
     },
     defaultFields: {
       author: {
@@ -79,7 +79,7 @@ const de: LocalePhrasesRoot = {
         label: 'Änderungsdatum',
       },
     },
-    notFound: undefined, // English translation: 'Collection not found'
+    notFound: 'Bereich nicht gefunden',
   },
   editor: {
     editorControl: {
@@ -187,17 +187,35 @@ const de: LocalePhrasesRoot = {
       markdown: {
         bold: 'Fett',
         italic: 'Kursiv',
+        strikethrough: 'Durchgestrichen',
         code: 'Code',
+        codeBlock: 'Codeblock',
+        insertCodeBlock: 'Codeblock einfügen',
         link: 'Link',
-        linkPrompt: 'Link-URL eingeben',
+        insertLink: 'Link einfügen',
+        paragraph: 'Paragraph',
         headings: 'Überschriften',
         quote: 'Zitat',
+        insertQuote: 'Zitat einfügen',
         bulletedList: 'Aufzählungsliste',
         numberedList: 'Nummerierte Liste',
         addComponent: 'Komponente hinzufügen',
         richText: 'Rich Text',
         markdown: 'Markdown',
-        type: undefined, // English translation: 'Type...'
+        type: 'Tippen...',
+        decreaseIndent: 'Weniger einrücken',
+        increaseIndent: 'Einrücken',
+        image: 'Bild',
+        insertImage: 'Bild einfügen',
+        table: {
+          table: 'Tabelle',
+          deleteColumn: 'Spalte entfernen',
+          deleteRow: 'Zeile entfernen',
+          deleteTable: 'Tabelle entfernen',
+          insertColumn: 'Spalte einfügen',
+          insertRow: 'Zeile einfügen',
+          insertTable: 'Tabelle einfügen',
+        }
       },
       image: {
         choose: 'Bild wählen',
@@ -254,13 +272,17 @@ const de: LocalePhrasesRoot = {
       list: {
         add: '%{item} hinzufügen',
         addType: '%{item} hinzufügen',
-        noValue: undefined, // English translation: 'No value'
+        noValue: 'Kein Wert',
       },
       keyvalue: {
-        key: undefined, // English translation: 'Key'
-        value: undefined, // English translation: 'Value'
-        uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
+        key: 'Variable',
+        value: 'Wert',
+        uniqueKeys: '%{keyLabel} muss einmalig sein',
       },
+      code: {
+        language: 'Programmiersprache',
+        selectLanguage: 'Programmiersprache wählen',
+      }
     },
   },
   mediaLibrary: {
@@ -294,13 +316,14 @@ const de: LocalePhrasesRoot = {
       deleting: 'Löschen...',
       deleteSelected: 'Ausgewähltes Element löschen',
       chooseSelected: 'Ausgewähltes Element verwenden',
-      dropImages: undefined, // English translation: 'Drop images to upload'
-      dropFiles: undefined, // English translation: 'Drop files to upload'
+      dropImages: 'Zum Hochladen Bilder hierher ziehen',
+      dropFiles: 'Zum Hochladen Dateien hierher ziehen',
     },
     folderSupport: {
       newFolder: 'Neuer Ordner',
       createNewFolder: 'Neuen Ordner erstellen',
       enterFolderName: 'Ordnernamen eingeben...',
+      create: 'Erstellen',
       home: 'Start',
       up: 'Zurück',
       upToFolder: 'Zurück zu %{folder}',
@@ -310,7 +333,8 @@ const de: LocalePhrasesRoot = {
     common: {
       yes: 'Ja',
       no: 'Nein',
-      okay: undefined, // English translation: 'OK'
+      okay: 'OK',
+      cancel: 'Abbrechen',
     },
     default: {
       goBackToSite: 'Zurück zur Seite',

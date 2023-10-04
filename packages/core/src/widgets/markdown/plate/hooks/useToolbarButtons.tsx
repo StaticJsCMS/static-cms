@@ -33,6 +33,7 @@ import type {
   MarkdownToolbarItem,
 } from '@staticcms/core/interface';
 import type { ReactNode } from 'react';
+import type { t } from 'react-polyglot';
 
 import './useToolbarButtons.css';
 
@@ -43,9 +44,10 @@ export default function useToolbarButtons(
   collection: Collection<MarkdownField>,
   field: MarkdownField,
   disabled: boolean,
+  t: t,
 ): ReactNode[] {
   return useMemo(
-    () => getToolbarButtons(toolbarButtons, collection, field, disabled),
+    () => getToolbarButtons(toolbarButtons, collection, field, disabled, t),
     [collection, disabled, field, toolbarButtons],
   );
 }
@@ -55,10 +57,11 @@ export function getToolbarButtons(
   collection: Collection<MarkdownField>,
   field: MarkdownField,
   disabled: boolean,
+  t: t,
 ): ReactNode[] {
   return toolbarButtons.map(button => {
     if (typeof button === 'string') {
-      return getToolbarButton(button, collection, field, disabled, 'button');
+      return getToolbarButton(button, collection, field, disabled, 'button', t);
     }
 
     return (
@@ -82,7 +85,7 @@ export function getToolbarButtons(
 
           return (
             <MenuGroup key={`group-${index}`}>
-              {group.items.map(item => getToolbarButton(item, collection, field, disabled, 'menu'))}
+              {group.items.map(item => getToolbarButton(item, collection, field, disabled, 'menu', t))}
             </MenuGroup>
           );
         })}
@@ -97,6 +100,7 @@ function getToolbarButton(
   field: MarkdownField,
   disabled: boolean,
   variant: 'button',
+  t: t,
 ): ReactNode;
 function getToolbarButton(
   name: LowLevelMarkdownToolbarButtonType,
@@ -104,6 +108,7 @@ function getToolbarButton(
   field: MarkdownField,
   disabled: boolean,
   variant: 'menu',
+  t: t,
 ): ReactNode;
 function getToolbarButton(
   name: MarkdownToolbarButtonType | LowLevelMarkdownToolbarButtonType,
@@ -111,47 +116,48 @@ function getToolbarButton(
   field: MarkdownField,
   disabled: boolean,
   variant: 'button' | 'menu',
+  t: t,
 ): ReactNode {
   switch (name) {
     case 'blockquote':
-      return <BlockquoteToolbarButton key="bold" disabled={disabled} variant={variant} />;
+      return <BlockquoteToolbarButton key="bold" disabled={disabled} variant={variant} t={t} />;
 
     case 'bold':
-      return <BoldToolbarButton key="bold" disabled={disabled} variant={variant} />;
+      return <BoldToolbarButton key="bold" disabled={disabled} variant={variant} t={t} />;
 
     case 'code':
-      return <CodeToolbarButton key="code" disabled={disabled} variant={variant} />;
+      return <CodeToolbarButton key="code" disabled={disabled} variant={variant} t={t} />;
 
     case 'code-block':
-      return <CodeBlockToolbarButtons key="code" disabled={disabled} variant={variant} />;
+      return <CodeBlockToolbarButtons key="code" disabled={disabled} variant={variant} t={t} />;
 
     case 'decrease-indent':
-      return <DecreaseIndentButton key="decrease-indent" disabled={disabled} variant={variant} />;
+      return <DecreaseIndentButton key="decrease-indent" disabled={disabled} variant={variant} t={t} />;
 
     case 'delete-column':
       return (
-        <DeleteColumnToolbarButton key="delete-column" disabled={disabled} variant={variant} />
+        <DeleteColumnToolbarButton key="delete-column" disabled={disabled} variant={variant} t={t} />
       );
 
     case 'delete-row':
-      return <DeleteRowToolbarButton key="delete-row" disabled={disabled} variant={variant} />;
+      return <DeleteRowToolbarButton key="delete-row" disabled={disabled} variant={variant} t={t} />;
 
     case 'delete-table':
-      return <DeleteTableToolbarButton key="delete-table" disabled={disabled} variant={variant} />;
+      return <DeleteTableToolbarButton key="delete-table" disabled={disabled} variant={variant} t={t} />;
 
     case 'font':
       if (variant === 'menu') {
         return null;
       }
 
-      return <FontTypeSelect key="font" disabled={disabled} />;
+      return <FontTypeSelect key="font" disabled={disabled} t={t} />;
 
     case 'increase-indent':
-      return <IncreaseIndentButton key="increase-indent" disabled={disabled} variant={variant} />;
+      return <IncreaseIndentButton key="increase-indent" disabled={disabled} variant={variant} t={t} />;
 
     case 'insert-column':
       return (
-        <InsertColumnToolbarButton key="insert-column" disabled={disabled} variant={variant} />
+        <InsertColumnToolbarButton key="insert-column" disabled={disabled} variant={variant} t={t} />
       );
 
     case 'image':
@@ -162,6 +168,7 @@ function getToolbarButton(
           variant={variant}
           collection={collection}
           field={field}
+          t={t}
         />
       );
 
@@ -173,20 +180,21 @@ function getToolbarButton(
           variant={variant}
           collection={collection}
           field={field}
+          t={t}
         />
       );
 
     case 'insert-row':
-      return <InsertRowToolbarButton key="insert-row" disabled={disabled} variant={variant} />;
+      return <InsertRowToolbarButton key="insert-row" disabled={disabled} variant={variant} t={t} />;
 
     case 'insert-table':
-      return <InsertTableToolbarButton key="insert-table" disabled={disabled} variant={variant} />;
+      return <InsertTableToolbarButton key="insert-table" disabled={disabled} variant={variant} t={t} />;
 
     case 'italic':
-      return <ItalicToolbarButton key="italic" disabled={disabled} variant={variant} />;
+      return <ItalicToolbarButton key="italic" disabled={disabled} variant={variant} t={t} />;
 
     case 'ordered-list':
-      return <OrderedListButton key="ordered-list" disabled={disabled} variant={variant} />;
+      return <OrderedListButton key="ordered-list" disabled={disabled} variant={variant} t={t} />;
 
     case 'shortcode':
       if (variant === 'menu') {
@@ -197,11 +205,11 @@ function getToolbarButton(
 
     case 'strikethrough':
       return (
-        <StrikethroughToolbarButton key="strikethrough" disabled={disabled} variant={variant} />
+        <StrikethroughToolbarButton key="strikethrough" disabled={disabled} variant={variant} t={t} />
       );
 
     case 'unordered-list':
-      return <UnorderedListButton key="unordered-list" disabled={disabled} variant={variant} />;
+      return <UnorderedListButton key="unordered-list" disabled={disabled} variant={variant} t={t} />;
 
     default:
       return null;

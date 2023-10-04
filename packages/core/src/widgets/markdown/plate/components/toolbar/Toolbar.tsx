@@ -20,7 +20,7 @@ import {
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import useToolbarButtons from '../../hooks/useToolbarButtons';
 
-import type { Collection, MarkdownField, MarkdownToolbarItem } from '@staticcms/core/interface';
+import type { Collection, MarkdownField, MarkdownToolbarItem, TranslatedProps } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 import './Toolbar.css';
@@ -61,12 +61,13 @@ export interface ToolbarProps {
   disabled: boolean;
 }
 
-const Toolbar: FC<ToolbarProps> = ({ collection, field, disabled }) => {
+const Toolbar: FC<TranslatedProps<ToolbarProps>> = ({ collection, field, disabled, t }) => {
   const buttons = useToolbarButtons(
     field.toolbar_buttons?.main ?? DEFAULT_TOOLBAR_BUTTONS,
     collection,
     field,
     disabled,
+    t
   );
 
   return <div className={classes.root}>{buttons}</div>;

@@ -8,6 +8,7 @@ import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import type { FC } from 'react';
 
 import './SettingsPane.css';
+import { TranslatedProps } from '@staticcms/core/interface';
 
 export const classes = generateClassNames('WidgetCodeSettings', ['root']);
 
@@ -73,19 +74,20 @@ export interface SettingsPaneProps {
   onChangeLanguage: (lang: string) => void;
 }
 
-const SettingsPane: FC<SettingsPaneProps> = ({
+const SettingsPane: FC<TranslatedProps<SettingsPaneProps>> = ({
   hideSettings,
   uniqueId,
   languages,
   language,
   onChangeLanguage,
+  t,
 }) => {
   return (
     <div onKeyDown={e => isHotkey('esc', e) && hideSettings()} className={classes.root}>
       <SettingsSelect
         type="language"
-        label="Language"
-        placeholder="Select language"
+        label={t('editor.editorWidgets.code.language')}
+        placeholder={t('editor.editorWidgets.code.selectLanguage')}
         uniqueId={uniqueId}
         value={language}
         options={languages}

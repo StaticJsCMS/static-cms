@@ -6,13 +6,14 @@ import { useMdPlateEditorState } from '../../plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 
 import type { FC } from 'react';
+import { TranslatedProps } from '@staticcms/core/interface';
 
 export interface InsertRowToolbarButtonProps {
   disabled: boolean;
   variant: 'button' | 'menu';
 }
 
-const InsertRowToolbarButton: FC<InsertRowToolbarButtonProps> = ({ disabled, variant }) => {
+const InsertRowToolbarButton: FC<TranslatedProps<InsertRowToolbarButtonProps>> = ({ disabled, variant, t }) => {
   const editor = useMdPlateEditorState();
 
   const handleInsertTableRow = useCallback(() => {
@@ -21,7 +22,7 @@ const InsertRowToolbarButton: FC<InsertRowToolbarButtonProps> = ({ disabled, var
 
   return (
     <ToolbarButton
-      tooltip="Insert row"
+      tooltip={t('editor.editorWidgets.markdown.table.insertRow')}
       icon={TableInsertRow}
       onClick={handleInsertTableRow}
       disabled={disabled}

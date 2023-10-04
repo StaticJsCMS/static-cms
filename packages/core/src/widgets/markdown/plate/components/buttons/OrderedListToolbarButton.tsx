@@ -5,16 +5,17 @@ import React from 'react';
 import ListToolbarButton from './common/ListToolbarButton';
 
 import type { FC } from 'react';
+import { TranslatedProps } from '@staticcms/core/interface';
 
 export interface OrderedListToolbarButtonProps {
   disabled: boolean;
   variant: 'button' | 'menu';
 }
 
-const OrderedListToolbarButton: FC<OrderedListToolbarButtonProps> = ({ disabled, variant }) => {
+const OrderedListToolbarButton: FC<TranslatedProps<OrderedListToolbarButtonProps>> = ({ disabled, variant, t }) => {
   return (
     <ListToolbarButton
-      tooltip="Numbered list"
+      tooltip={t('editor.editorWidgets.markdown.numberedList')}
       type={ELEMENT_OL}
       icon={FormatListNumberedIcon}
       disabled={disabled}
