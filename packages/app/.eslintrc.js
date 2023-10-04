@@ -57,7 +57,7 @@ module.exports = {
     ],
     'import/prefer-default-export': 'error',
   },
-  plugins: ['babel', '@emotion', 'cypress', 'unicorn', 'react-hooks'],
+  plugins: ['babel', 'cypress', 'unicorn', 'react-hooks'],
   settings: {
     react: {
       version: 'detect',
