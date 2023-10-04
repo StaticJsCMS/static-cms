@@ -113,25 +113,34 @@ const ru: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Вы уверены, что хотите покинуть эту страницу?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'У вас есть несохраненные изменения, сохраните их перед обновлением статуса.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Пожалуйста, измените статус на «Готов» перед публикацией.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody:
         'У вас есть несохраненные изменения, сохраните их перед публикацией.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Вы уверены, что хотите опубликовать эту запись?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'Вы уверены, что хотите отменить публикацию этой записи?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Вы уверены, что хотите удалить эту опубликованную запись, а также несохраненные изменения из текущего сеанса?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Вы уверены, что хотите удалить эту опубликованную запись?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Это удалит все неопубликованные изменения в этой записи, а также ваши несохраненные изменения из текущего сеанса. Вы все еще хотите удалить?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Все неопубликованные изменения в этой записи будут удалены. Вы все еще хотите удалить?',
       loadingEntry: 'Загрузка записи…',
     },
     editorInterface: {
+      sideBySideI18n: undefined, // English translation: 'I18n Side by Side'
+      preview: undefined, // English translation: 'Preview'
       toggleI18n: 'Переключиться на i18n',
       togglePreview: 'Переключиться на предварительный просмотр',
       toggleScrollSync: 'Синхронизация прокрутки',
@@ -151,6 +160,10 @@ const ru: LocalePhrasesRoot = {
       deleteEntry: 'Удалить запись',
       saving: 'Сохранение…',
       save: 'Сохранить',
+      statusInfoTooltipDraft:
+        'Статус записи установлен на черновик. Чтобы доработать и отправить его на рассмотрение, установите статус «На рассмотрении».',
+      statusInfoTooltipInReview:
+        'Запись находится на рассмотрении, дальнейших действий не требуется. Тем не менее, вы все еще можете внести дополнительные изменения, пока она находится на рассмотрении.',
       deleting: 'Удаление…',
       updating: 'Обновление…',
       status: 'Cтатус: %{status}',
@@ -164,10 +177,6 @@ const ru: LocalePhrasesRoot = {
       deployPreviewPendingButtonLabel: 'Проверить предварительный просмотр',
       deployPreviewButtonLabel: 'Предварительный просмотр',
       deployButtonLabel: 'Просмотр',
-      statusInfoTooltipDraft:
-        'Статус записи установлен на черновик. Чтобы доработать и отправить его на рассмотрение, установите статус «На рассмотрении».',
-      statusInfoTooltipInReview:
-        'Запись находится на рассмотрении, дальнейших действий не требуется. Тем не менее, вы все еще можете внести дополнительные изменения, пока она находится на рассмотрении.',
       discardChanges: undefined, // English translation: 'Discard changes'
       discardChangesTitle: undefined, // English translation: 'Discard changes'
       discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
@@ -210,6 +219,17 @@ const ru: LocalePhrasesRoot = {
         remove: 'Удалить файл',
         removeAll: 'Удалить все файлы',
       },
+      folder: {
+        choose: undefined, // English translation: 'Choose a folder'
+        chooseUrl: undefined, // English translation: 'Insert folder path'
+        chooseMultiple: undefined, // English translation: 'Choose folders'
+        replaceUrl: undefined, // English translation: 'Replace with path'
+        promptUrl: undefined, // English translation: 'Enter path of the folder'
+        chooseDifferent: undefined, // English translation: 'Choose different folder'
+        addMore: undefined, // English translation: 'Add more folders'
+        remove: undefined, // English translation: 'Remove folder'
+        removeAll: undefined, // English translation: 'Remove all folders'
+      },
       unknownControl: {
         noControl: "Нет контрола для виджета '%{widget}'.",
       },
@@ -232,6 +252,7 @@ const ru: LocalePhrasesRoot = {
       list: {
         add: 'Добавить %{item}',
         addType: 'Добавить %{item}',
+        noValue: undefined, // English translation: 'No value'
       },
       keyvalue: {
         key: undefined, // English translation: 'Key'
@@ -310,7 +331,7 @@ const ru: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Выйти',
     },
     toast: {
@@ -324,12 +345,14 @@ const ru: LocalePhrasesRoot = {
       missingRequiredField:
         'К сожалению, вы пропустили обязательное поле. Пожалуйста, заполните перед сохранением.',
       entrySaved: 'Запись сохранена',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Запись опубликована',
       entryUnpublished: 'Публикация записи отменена',
       onFailToPublishEntry: 'Не удалось опубликовать запись: %{details}',
       onFailToUnpublishEntry: 'Не удалось отменить публикацию записи: %{details}',
       entryUpdated: 'Статус записи обновлен',
-      onDeleteUnpublishedChangesBody: 'Неопубликованные изменения удалены',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Неопубликованные изменения удалены',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Вы вышли. Пожалуйста, сохраните все данные и войдите снова',
       onBackendDown: 'Происходят перебои в работе бекенда. См. %{details}',

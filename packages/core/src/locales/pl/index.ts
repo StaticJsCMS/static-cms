@@ -106,24 +106,33 @@ const pl: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Pisz w języku %{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Czy na pewno chcesz opuścić tę stronę?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'Masz niezapisane zmiany, proszę zapisz je przed aktualizacją statusu.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Proszę zaktualizować status do "Gotowe" przed publikacją.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody:
         'Masz niezapisane zmiany, proszę zapisz je przed publikacją.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Czy na pewno chcesz opublikować tę pozycję?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'Czy na pewno chcesz cofnąć publikację tej pozycji?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Czy na pewno chcesz usunąć tę opublikowaną pozycję, a także niezapisane zmiany z bieżącej sesji?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Czy na pewno chcesz usunąć tę opublikowaną pozycję?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Spowoduje to usunięcie wszystkich nieopublikowanych zmian tej pozycji, a także niezapisanych zmian z bieżącej sesji. Czy nadal chcesz usunąć?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Wszystkie nieopublikowane zmiany tej pozycji zostaną usunięte. Czy nadal chcesz usunąć?',
       loadingEntry: 'Ładowanie pozycji...',
@@ -320,7 +329,7 @@ const pl: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Wyloguj się',
     },
     toast: {
@@ -333,12 +342,14 @@ const pl: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'Nie udało się zaktualizować statusu: %{details}',
       missingRequiredField: 'Ups, przegapiłeś wymagane pole. Proszę uzupełnij przed zapisaniem.',
       entrySaved: 'Pozycja zapisana',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Pozycja opublikowana',
       entryUnpublished: 'Cofnięto publikację pozycji',
       onFailToPublishEntry: 'Nie udało się opublikować: %{details}',
       onFailToUnpublishEntry: 'Nie udało się cofnąć publikacji pozycji: %{details}',
       entryUpdated: 'Zaktualizowano status pozycji',
-      onDeleteUnpublishedChangesBody: 'Nieopublikowane zmiany zostały usunięte',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Nieopublikowane zmiany zostały usunięte',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Zostałeś wylogowany, utwórz kopię zapasową danych i zaloguj się ponownie.',
       onBackendDown: 'Usługa backendu uległa awarii. Zobacz więcej informacji: %{details}',

@@ -106,24 +106,33 @@ const ro: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Scrii în limba %{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Ești sigur/ă că dorești să părăsești pagina?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'Există modificări nesalvate! Te rugăm salvează înainte de a actualiza statusul.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Actualizează statusul la „Gata” înainte de publicare.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody:
         'Există modificări nesalvate, salvează-le înainte de publicare.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Ești sigur/ă că dorești să publici acest articol?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'Ești sigur/ă că dorești să anulezi publicarea acestui articol?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Ești sigur/ă că dorești să ștergi această publicare, dar și modificările nesalvate din sesiunea curentă?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Ești sigur/ă că dorești să ștergi această publicare?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Se vor șterge toate modificările nepublicate din aceast articol și modificările nesalvate din sesiunea curentă. Continui cu ștergerea?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Toate modificările nepublicate din acest articol vor fi șterse. Continui cu ștergerea?',
       loadingEntry: 'Se încarcă...',
@@ -150,6 +159,8 @@ const ro: LocalePhrasesRoot = {
       deleteEntry: 'Șterge intrare',
       saving: 'Se salvează...',
       save: 'Salvează',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: 'Se șterge...',
       updating: 'Se actualizează...',
       status: 'Status: %{status}',
@@ -317,7 +328,7 @@ const ro: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Ieșire din cont',
     },
     toast: {
@@ -330,12 +341,14 @@ const ro: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'A eșuat actualizarea status-ului: %{details}',
       missingRequiredField: 'Oops, ai ratat un câmp obligatoriu. Completează-l pentru a salva.',
       entrySaved: 'Intrare salvată',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Intrare publicată',
       entryUnpublished: 'Publicare anulată',
       onFailToPublishEntry: 'A eșuat publicarea: %{details}',
       onFailToUnpublishEntry: 'A eșuat anularea publicării: %{details}',
       entryUpdated: 'S-a actualizat status-ul intrării',
-      onDeleteUnpublishedChangesBody: 'Modificări nepublicate șterse',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Modificări nepublicate șterse',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Ai fost delogat, te rugăm salvează orice date și autentifică-te din nou.',
       onBackendDown: 'Există probleme la server. Vezi %{details} pentru mai multe informații.',

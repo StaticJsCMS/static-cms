@@ -67,6 +67,10 @@ const ko: LocalePhrasesRoot = {
       other: '다른 그룹',
       negateLabel: '%{label} 제외',
     },
+    table: {
+      summary: undefined, // English translation: 'Summary'
+      collection: undefined, // English translation: 'Collection'
+    },
     defaultFields: {
       author: {
         label: '저자',
@@ -109,25 +113,34 @@ const ko: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: '이 페이지를 떠나시겠습니까?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         '저장하지 않은 변경사항이 있습니다. 상태 업데이트 전 먼저 저장하세요.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: '게시 하기 앞서 상태를 "준비됨" 으로 업데이트 하세요.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody:
         '저장하지 않은 변경사항이 있습니다, 게시하기 전 먼저 저장하세요.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: '이 항목을 게시하시곘습니까?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: '이 항목을 게시 철회 하시겠습니까?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         '현재 세션에서의 저장되지 않은 변경사항과 이 게시된 항목을 삭제하시겠습니까?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: '이 게시된 항목을 삭제하시겠습니까?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         '이 항목의 게시되지 않은 모든 변경사항과 현재 세션의 저장되지 않은 변경사항이 삭제됩니다. 정말로 삭제하시겠습니까?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         '이 항목에 대해 게시되지 않은 변경사항이 삭제됩니다. 정말로 삭제하시겠습니까?',
       loadingEntry: '항목 불러오는 중...',
     },
     editorInterface: {
+      sideBySideI18n: undefined, // English translation: 'I18n Side by Side'
+      preview: undefined, // English translation: 'Preview'
       toggleI18n: '국제화(i18n) 토글',
       togglePreview: '미리보기 토글',
       toggleScrollSync: '스크롤 동기화',
@@ -147,6 +160,8 @@ const ko: LocalePhrasesRoot = {
       deleteEntry: '항목 삭제',
       saving: '저장 중...',
       save: '저장',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: '삭제 중...',
       updating: '업데이트 중...',
       status: '상태: %{status}',
@@ -160,6 +175,9 @@ const ko: LocalePhrasesRoot = {
       deployPreviewPendingButtonLabel: '미리보기 확인',
       deployPreviewButtonLabel: '미리보기 보기',
       deployButtonLabel: '라이브 보기',
+      discardChanges: undefined, // English translation: 'Discard changes'
+      discardChangesTitle: undefined, // English translation: 'Discard changes'
+      discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
     },
     editorWidgets: {
       markdown: {
@@ -199,6 +217,17 @@ const ko: LocalePhrasesRoot = {
         remove: '파일 삭제',
         removeAll: '모든 파일 삭제',
       },
+      folder: {
+        choose: undefined, // English translation: 'Choose a folder'
+        chooseUrl: undefined, // English translation: 'Insert folder path'
+        chooseMultiple: undefined, // English translation: 'Choose folders'
+        replaceUrl: undefined, // English translation: 'Replace with path'
+        promptUrl: undefined, // English translation: 'Enter path of the folder'
+        chooseDifferent: undefined, // English translation: 'Choose different folder'
+        addMore: undefined, // English translation: 'Add more folders'
+        remove: undefined, // English translation: 'Remove folder'
+        removeAll: undefined, // English translation: 'Remove all folders'
+      },
       unknownControl: {
         noControl: "'%{widget}' 위젯에 대한 컨트롤이 없습니다.",
       },
@@ -221,6 +250,7 @@ const ko: LocalePhrasesRoot = {
       list: {
         add: '%{item} 추가',
         addType: '%{item} 추가',
+        noValue: undefined, // English translation: 'No value'
       },
       keyvalue: {
         key: undefined, // English translation: 'Key'
@@ -299,7 +329,7 @@ const ko: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: '로그아웃',
     },
     toast: {
@@ -312,12 +342,14 @@ const ko: LocalePhrasesRoot = {
       onFailToUpdateStatus: '상태 업데이트 실패: %{details}',
       missingRequiredField: '이런! 필수 필드를 놓치셨습니다. 저장하기 전에 먼저 채우세요.',
       entrySaved: '항목 저장됨',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: '항목 게시됨',
       entryUnpublished: '항목 게시 철회됨',
       onFailToPublishEntry: '게시 실패: %{details}',
       onFailToUnpublishEntry: '항목 게시 철회 실해: %{details}',
       entryUpdated: '항목 상태 업데이트됨',
-      onDeleteUnpublishedChangesBody: '게시되지 않은 변경사항 삭제됨',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: '게시되지 않은 변경사항 삭제됨',
       onFailToAuth: '%{details}',
       onLoggedOut: '로그아웃 하셨습니다, 데티어를 백업하시고 다시 로그인 하세요.',
       onBackendDown:

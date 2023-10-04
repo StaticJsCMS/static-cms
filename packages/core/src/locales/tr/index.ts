@@ -114,20 +114,27 @@ const tr: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Bu sayfadan ayrılmak istediğinize emin misiniz?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'undefined'
       onUpdatingWithUnsavedChangesBody:
         'Kaydedilmemiş değişiklikleriniz var, lütfen içeriği güncellemeden önce kaydedin.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'undefined'
       onPublishingNotReadyBody: 'Lütfen yayınlamadan önce içeriği "Hazır" olarak güncelleyin.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'undefined'
       onPublishingWithUnsavedChangesBody:
         'Kaydedilmemiş değişiklikleriniz var, lütfen yayınlamadan önce kaydedin.',
+      onPublishingTitle: undefined, // English translation: 'undefined'
       onPublishingBody: 'Bu girdiyi yayınlamak istediğinize emin misiniz?',
+      onUnpublishingTitle: undefined, // English translation: 'undefined'
       onUnpublishingBody: 'Bu girdiyi yayından kaldırmak istediğinizden emin misiniz?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'undefined'
       onDeleteWithUnsavedChangesBody:
         'Bu oturumda kaydedilmiş değişikliklerin yanı sıra geçerli oturumdaki kaydedilmemiş değişikliklerinizi silmek istediğinize emin misiniz?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'undefined'
       onDeletePublishedEntryBody: 'Bu yayınlanmış girdiyi silmek istediğinize emin misiniz?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'undefined'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Bu girdide yayınlanmamış tüm değişiklikleri ve geçerli oturumdaki kaydedilmemiş değişikliklerinizi siler. Hala silmek istiyor musun?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'undefined'
       onDeleteUnpublishedChangesBody:
         'Bu girdide yayınlanmamış tüm değişiklikler silinecek. Hala silmek istiyor musun?',
       loadingEntry: 'Girdiler yükleniyor...',
@@ -325,7 +332,7 @@ const tr: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Çıkış Yap',
     },
     toast: {
@@ -338,12 +345,14 @@ const tr: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'Durum güncellenemedi: %{details}',
       missingRequiredField: 'Gerekli bir alan eksik. Lütfen kaydetmeden önce tamamlayın.',
       entrySaved: 'Girdi kaydedildi',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Girdi yayınlandı',
       entryUnpublished: 'Girdi yayınlanmamış',
       onFailToPublishEntry: 'Yayınlanamadı: %{details}',
       onFailToUnpublishEntry: 'Girdi yayından kaldırılamadı: %{details}',
       entryUpdated: 'Girdi durumu güncellendi',
-      onDeleteUnpublishedChangesBody: 'Yayımlanmamış değişiklikler silindi',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Yayımlanmamış değişiklikler silindi',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Çıkış yaptınız, lütfen tüm verileri yedekleyin ve tekrar giriş yapın',
       onBackendDown:

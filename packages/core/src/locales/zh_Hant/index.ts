@@ -106,21 +106,30 @@ const zh_Hant: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: '以 %{locale} 書寫',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: '您確定要離開這頁嗎？',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody: '您有未儲存的變更，在更新狀態前請先進行儲存。',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: '在發布前，請先將狀態設定為：預備發布。',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody: '您有未儲存的變更，在發布前請先進行儲存。',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: '你確定要發表此內容嗎？',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: '你確定要取消發表此內容嗎？',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody: '你確定要刪除這篇已發布的內容以及你尚未儲存的變更？',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: '你確定要刪除這篇已發布的內容？',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         '這將會刪除此內容所有未發布的變更，以及未儲存的變更。你確定還是要刪除？',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody: '此內容所有未發布的變更都將會被刪除。你確定還是要刪除？',
       loadingEntry: '載入內容中...',
     },
@@ -146,6 +155,8 @@ const zh_Hant: LocalePhrasesRoot = {
       deleteEntry: '刪除內容',
       saving: '儲存中...',
       save: '儲存',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: '刪除中...',
       updating: '更新中...',
       status: '狀態: %{status}',
@@ -312,7 +323,7 @@ const zh_Hant: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: '登出',
     },
     toast: {
@@ -325,12 +336,14 @@ const zh_Hant: LocalePhrasesRoot = {
       onFailToUpdateStatus: '無法更新狀態： %{details}',
       missingRequiredField: '糟了！你漏填了一個必須填入的欄位，在儲存前請先填完所有內容',
       entrySaved: '已儲存內容',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: '已發布內容',
       entryUnpublished: '已取消發布內容',
       onFailToPublishEntry: '無法發布： %{details}',
       onFailToUnpublishEntry: '無法取消發布： %{details}',
       entryUpdated: '內容狀態已更新',
-      onDeleteUnpublishedChangesBody: '已刪除未發布的變更',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: '已刪除未發布的變更',
       onFailToAuth: '%{details}',
       onLoggedOut: '你已經登出，請備份任何資料然後重新登入',
       onBackendDown: '後端服務發生中斷。看 %{details} 取得更多資訊',

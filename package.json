@@ -16,6 +16,7 @@
     "release": "lerna publish --no-private",
     "release-dev": "lerna publish --no-private --no-push --no-git-tag-version --dist-tag dev",
     "release-next": "lerna publish --no-private --dist-tag next",
+    "sync-locales": "lerna run sync-locales --scope @staticcms/tools",
     "test:ci": "lerna run test:ci",
     "test:integration:ci": "lerna run test:integration:ci",
     "test:integration": "lerna run test:integration",

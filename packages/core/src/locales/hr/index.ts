@@ -106,24 +106,33 @@ const hr: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Pisanje na %{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Jeste li sigurni da želite napustiti stranicu?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'Imate nespremljene promjene, molimo spremite prije ažuriranja statusa.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Molimo ažurirajte status na "Spremno" prije objavljivanja.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody:
         'Imate nespremljene promjene, molimo spremite prije objavljivanja.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Jeste li sigurni da želite objaviti ovaj unos?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'Jeste li sigurni da želite maknuti objavu za ovaj unos?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Jeste li sigurni da želite obrisati objavljeni unos, te nespremljene promjene u trenutnoj sesiji?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Jeste li sigurni da želite obrisati ovaj objavljeni unos?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Obrisat ćete sve neobjavljene promjene na ovom unosu, te sve nespremljene promjene u trenutnoj sesiji. Želite li i dalje obrisati?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Sve nespremljene promjene na ovom unosu će biti obrisane. Želite li i dalje obrisati?',
       loadingEntry: 'Učitavanje unosa...',
@@ -150,6 +159,8 @@ const hr: LocalePhrasesRoot = {
       deleteEntry: 'Obriši unos',
       saving: 'Spremanje...',
       save: 'Spremi',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: 'Brisanje...',
       updating: 'Ažuriranje...',
       status: 'Status: %{status}',
@@ -317,7 +328,7 @@ const hr: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Odjava',
     },
     toast: {
@@ -330,12 +341,14 @@ const hr: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'Neuspjelo ažuriranje statusa: %{details}',
       missingRequiredField: 'Uups, preskočili ste obvezno polje. Molimo popunite prije spremanja.',
       entrySaved: 'Unos spremljen',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Unos objavljen',
       entryUnpublished: 'Unos obrisan',
       onFailToPublishEntry: 'Neuspjelo objavljivanje unosa: %{details}',
       onFailToUnpublishEntry: 'Neuspjelo brisanje unosa: %{details}',
       entryUpdated: 'Status unosa ažuriran',
-      onDeleteUnpublishedChangesBody: 'Otkrivene neobjavljene objave',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Otkrivene neobjavljene objave',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Odjavljeni ste, molimo spremite sve podatke i prijavite se ponovno',
       onBackendDown: 'Backend servis ima prekid rada. Pogledaj %{details} za više informacija',

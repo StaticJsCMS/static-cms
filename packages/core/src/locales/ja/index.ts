@@ -106,23 +106,32 @@ const ja: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: '言語: %{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'このページから遷移しますか？',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         '変更した項目があります。ステータスを更新する前に保存してください。',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: '公開する前に、ステータスを「準備完了」に更新してください。',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody: '変更した項目があります。公開する前に保存してください。',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'このエントリを公開しますか？',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'このエントリを未公開にしますか？',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         '保存されていない変更も削除されますが、この公開エントリを削除しますか？',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'この公開エントリを削除しますか？',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         '保存されていない変更も削除されますが、このエントリの未公開の変更を削除しますか？',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         '公開されていない変更も削除されますが、このエントリを削除しますか？',
       loadingEntry: 'エントリの読込中...',
@@ -319,7 +328,7 @@ const ja: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'ログアウト',
     },
     toast: {
@@ -332,12 +341,14 @@ const ja: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'エントリのステータス更新に失敗しました。%{details}',
       missingRequiredField: 'すべての必須項目を入力してください。',
       entrySaved: '保存しました。',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: '公開しました。',
       entryUnpublished: '未公開にしました。',
       onFailToPublishEntry: 'エントリの公開に失敗しました。%{details}',
       onFailToUnpublishEntry: 'エントリを未公開にするのに失敗しました。%{details}',
       entryUpdated: 'エントリのステータスを更新しました。',
-      onDeleteUnpublishedChangesBody: '未公開の変更を削除しました。',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: '未公開の変更を削除しました。',
       onFailToAuth: '%{details}',
       onLoggedOut: 'ログアウトされています。データをバックアップし、再度ログインしてください。',
       onBackendDown: 'バックエンドのシステムが停止しています。%{details}',

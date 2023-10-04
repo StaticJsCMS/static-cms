@@ -106,22 +106,31 @@ const nn_no: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: undefined, // English translation: 'Writing in %{locale}'
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Er du sikker på at du vil navigere bort frå denne sida?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody: 'Du må lagra endringane dine før du endrar status',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Du må endre status til "Klar" før du publiserer',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody: 'Du må laga endringane dine før du kan publisere.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Er du sikker på at vil publisere?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'Er du sikker på at du vil avpublisere innlegget?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Er du sikkert på at du vil slette eit publisert innlegg med tilhøyrande ulagra endringar?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Er du sikker på at du vil slette dette publiserte innlegget?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Handlinga slettar endringar som ikkje er publisert eller lagra. Vil du halde fram?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Alle endringar som ikkje er publisert vil gå tapt. Vil du halde fram?',
       loadingEntry: 'Lastar innlegg...',
@@ -148,6 +157,8 @@ const nn_no: LocalePhrasesRoot = {
       deleteEntry: 'Slettar innlegg',
       saving: 'Lagrar...',
       save: 'Lagre',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: 'Slettar...',
       updating: 'Oppdaterer...',
       status: 'Status: %{status}',
@@ -314,7 +325,7 @@ const nn_no: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Logg ut',
     },
     toast: {
@@ -328,12 +339,14 @@ const nn_no: LocalePhrasesRoot = {
       missingRequiredField:
         'Oisann, gløymte du noko? Alle påkrevde felt må fyllast ut før du kan halde fram',
       entrySaved: 'Innlegg lagra',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Innlegg publisert',
       entryUnpublished: 'Innlegg avpublisert',
       onFailToPublishEntry: 'Kunne ikkje publisere: %{details}',
       onFailToUnpublishEntry: 'Kunne ikkje avpublisere: %{details}',
       entryUpdated: 'Innleggsstatus oppdatert',
-      onDeleteUnpublishedChangesBody: 'Avpubliserte endringar sletta',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Avpubliserte endringar sletta',
       onFailToAuth: '%{details}',
       onLoggedOut: undefined, // English translation: 'You have been logged out, please back up any data and login again'
       onBackendDown: undefined, // English translation: 'The backend service is experiencing an outage. See %{details} for more information'

@@ -106,24 +106,33 @@ const ca: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Escriure en %{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Estàs segur que vols deixar aquesta pàgina?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         "Tens canvis no guardats, si us plau, guarda'ls abans d'actualitzar l'estat.",
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Si us plau, actualitza l\'estat a "Llest" abans de publicar.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody:
         "Tens canvis no guardats, si us plau, guarda'ls abans de publicar-los.",
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Estàs segur que vols publicar aquesta entrada?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'Estàs segur que vols esborrar aquesta entrada?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Està segur que vol eliminar aquesta entrada publicada, així com els canvis no guardats de la sessió actual?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Està segur que vol eliminar aquesta entrada publicada?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         "Això eliminarà tots els canvis no publicats d'aquesta entrada així com els canvis no guardats de la sessió actual. Encara vol procedir?",
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Tots els canvis no publicats en aquesta entrada seràn esborrats. Encara els vol eliminar?',
       loadingEntry: 'Carregant entrada...',
@@ -150,6 +159,8 @@ const ca: LocalePhrasesRoot = {
       deleteEntry: 'Eliminar entrada',
       saving: 'Guardant...',
       save: 'Guardar',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: 'Eliminant...',
       updating: 'Actualizant...',
       status: 'Estat: %{status}',
@@ -317,7 +328,7 @@ const ca: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Tancar sessió',
     },
     toast: {
@@ -331,12 +342,14 @@ const ca: LocalePhrasesRoot = {
       missingRequiredField:
         "Ups, no ha omplert un camp obligatori. Si us plau,  ompli'l abans de guardar.",
       entrySaved: 'Entrada guardada',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Entrada publicada',
       entryUnpublished: 'Entrada despublicada',
       onFailToPublishEntry: "No s'ha pogut publicar: %{details}",
       onFailToUnpublishEntry: "No s'ha pogut despublicar l'entrada: %{details}",
       entryUpdated: "Estat de l'entrada actualitzat",
-      onDeleteUnpublishedChangesBody: 'Canvis no publicats eliminats',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Canvis no publicats eliminats',
       onFailToAuth: '%{details}',
       onLoggedOut: 'La teva sessió ha estat tancada. Si us plau, torna a iniciar-la',
       onBackendDown: 'El servidor està patint problemes. Consulta %{details} per a més informació',

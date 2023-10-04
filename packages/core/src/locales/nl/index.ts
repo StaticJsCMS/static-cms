@@ -106,24 +106,33 @@ const nl: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: '%{locale} aan het bewerken',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Weet je zeker dat je deze pagina wilt verlaten?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'Er zijn nog niet-opgeslagen wijzigingen. Bewaar ze voordat u de status bijwerkt.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Stel de status in op "Voltooid" voordat u publiceert.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody:
         'Er zijn nog niet-opgeslagen wijzigingen. Bewaar deze voordat u publiceert.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Weet u zeker dat u dit item wil publiceren?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'Weet u zeker dat u de publicatie voor dit item ongedaan wilt maken?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Weet u zeker dat u dit gepubliceerde item en uw niet-opgeslagen wijzigingen uit de huidige sessie wilt verwijderen?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Weet u zeker dat u dit gepubliceerde item wilt verwijderen?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Alle niet-gepubliceerde wijzigingen in dit item worden verwijderd, evenals uw niet-opgeslagen wijzigingen uit de huidige sessie. Wilt u nog steeds verwijderen?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Alle niet-gepubliceerde wijzigingen in dit item worden verwijderd. Wilt u nog steeds verwijderen?',
       loadingEntry: 'Item laden...',
@@ -150,6 +159,8 @@ const nl: LocalePhrasesRoot = {
       deleteEntry: 'Item verwijderen',
       saving: 'Opslaan...',
       save: 'Opslaan',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: 'Verwijderen...',
       updating: 'Bijwerken...',
       status: 'Status: %{status}',
@@ -317,7 +328,7 @@ const nl: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Uitloggen',
     },
     toast: {
@@ -330,12 +341,14 @@ const nl: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'Kan status niet updaten: %{details}',
       missingRequiredField: 'Oeps, sommige verplichte velden zijn niet ingevuld.',
       entrySaved: 'Item opgeslagen',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Item gepubliceerd',
       entryUnpublished: 'Publicatie teruggetrokken',
       onFailToPublishEntry: 'Kan item niet publiceren: %{details}',
       onFailToUnpublishEntry: 'Kan item niet terugtrekken: %{details}',
       entryUpdated: 'Status van item geüpdatet',
-      onDeleteUnpublishedChangesBody: 'Niet-gepubliceerde wijzigingen verwijderd',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Niet-gepubliceerde wijzigingen verwijderd',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Je bent uitgelogd, back-up alstublieft uw data log daarna in',
       onBackendDown:

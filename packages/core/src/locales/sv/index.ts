@@ -106,24 +106,33 @@ const sv: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Skriver i %{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Är du säker på att du vill lämna sidan?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'Du har osparade ändringar, vänligen spara dem innan du uppdaterar status.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Vänligen uppdatera status till "Redo" innan du publicerar.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody:
         'Du har osparade ändringar, vänligen spara innan du publicerar.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Är du säker på att du vill publicera det här inlägget?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'Är du säker på att du vill avpublicera det här inlägget?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Är du säker på att du vill radera det här publicerade inlägget, inklusive dina osparade ändringar från nuvarande session?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Är du säker på att du vill radera det här publicerade inlägget?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Du är på väg att radera alla opublicerade ändringar för det här inlägget, inklusive dina osparade ändringar från nuvarande session. Vill du fortfarande radera?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Alla opublicerade ändringar kommer raderas. Vill du fortfarande radera?',
       loadingEntry: 'Hämtar inlägg...',
@@ -150,6 +159,8 @@ const sv: LocalePhrasesRoot = {
       deleteEntry: 'Radera inlägg',
       saving: 'Sparar...',
       save: 'Spara',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: 'Raderar...',
       updating: 'Updaterar...',
       status: 'Status: %{status}',
@@ -317,7 +328,7 @@ const sv: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Logga ut',
     },
     toast: {
@@ -331,12 +342,14 @@ const sv: LocalePhrasesRoot = {
       missingRequiredField:
         'Oops, du har missat ett obligatoriskt fält. Vänligen fyll i det innan du sparar.',
       entrySaved: 'Inlägg sparat',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Inlägg publicerat',
       entryUnpublished: 'Inlägg avpublicerat',
       onFailToPublishEntry: 'Kunde inte publicera: %{details}',
       onFailToUnpublishEntry: 'Kunde inte avpublicera inlägg: %{details}',
       entryUpdated: 'Inläggsstatus uppdaterad',
-      onDeleteUnpublishedChangesBody: 'Opublicerade ändringar raderade',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Opublicerade ändringar raderade',
       onFailToAuth: '%{details}',
       onLoggedOut:
         'Du har blivit utloggad, vänligen spara en kopia av eventuella ändringar och logga in på nytt',

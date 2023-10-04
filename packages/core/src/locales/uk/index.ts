@@ -105,23 +105,33 @@ const uk: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: undefined, // English translation: 'Writing in %{locale}'
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Ви дійсно бажаєте залишити сторінку?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'Присутні незбережені зміни, будь ласка збережіть перед зміною статусу.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Будь ласка, встановіть статус "Готово" перед публікацією.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody:
         'Присутні незбережені зміни, будь ласка збережіть їх перед публікацією.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Ви дійсно бажаєте опублікувати запис?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
+      onUnpublishingBody: undefined, // English translation: 'Are you sure you want to unpublish this entry?'
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Ви дійсно бажаєте видалити опублікований запис, як і всі незбережені зміни під час поточної сесії?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Ви дійсно бажаєте видалити опублікований запис?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Видаляться всі неопубліковані зміни до цього запису, а також всі незбережені зміни під час поточної сесії. Бажаєте продовжити?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Всі незбережені зміни до цього запису буде видалено. Бажаєте продовжити?',
       loadingEntry: 'Завантаження...',
@@ -137,15 +147,19 @@ const uk: LocalePhrasesRoot = {
       publishing: 'Публікація...',
       publish: 'Опублікувати',
       published: 'Опубліковано',
+      unpublish: undefined, // English translation: 'Unpublish'
       duplicate: undefined, // English translation: 'Duplicate'
+      unpublishing: undefined, // English translation: 'Unpublishing...'
       publishAndCreateNew: 'Опублікувати і створити нову',
+      publishAndDuplicate: undefined, // English translation: 'Publish and duplicate'
       deleteUnpublishedChanges: 'Видалити неопубліковані зміни',
       deleteUnpublishedEntry: 'Видалити неопубліковану сторінку',
       deletePublishedEntry: 'Видалити опубліковану сторінку',
-      publishAndDuplicate: undefined, // English translation: 'Publish and duplicate'
       deleteEntry: 'Видалити',
       saving: 'Збереження...',
       save: 'Зберегти',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: 'Видалення...',
       updating: 'Оновлення...',
       status: 'Cтан: %{status}',
@@ -311,7 +325,7 @@ const uk: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Вихід',
     },
     toast: {
@@ -325,10 +339,14 @@ const uk: LocalePhrasesRoot = {
       missingRequiredField:
         "Йой, здається пропущено обов'язкове поле. Будь ласка, заповніть перед збереженням.",
       entrySaved: 'Збережено',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Опубліковано',
+      entryUnpublished: undefined, // English translation: 'Entry unpublished'
       onFailToPublishEntry: 'Помилка публікації: %{details}',
+      onFailToUnpublishEntry: undefined, // English translation: 'Failed to unpublish entry: %{details}'
       entryUpdated: 'Статус оновлено',
-      onDeleteUnpublishedChangesBody: 'Видалено неопубліковані зміни',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Видалено неопубліковані зміни',
       onFailToAuth: '%{details}',
       onLoggedOut: undefined, // English translation: 'You have been logged out, please back up any data and login again'
       onBackendDown: undefined, // English translation: 'The backend service is experiencing an outage. See %{details} for more information'

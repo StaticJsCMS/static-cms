@@ -107,24 +107,33 @@ const lt: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Rašome %{locale} kalboje',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Ar tikrai norite uždaryti šį puslapį?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'Turite neišsaugotų pakeitimų! Prašome išsaugoti prieš pakeičiant statusą.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Prieš publikuojant, privalote pakeisti statusą į „Paruošta“.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody:
         'Yra neišsaugotų pakeitimų, prašome išsaugoti juos prieš publikuojant.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Ae tikrai norite publikuoti šį įrašą?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'Tikrai norite panaikinti publikavimo statusą?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Tikrai norite panaikinti publikuotą įrašą ir Jūsų pakeiitmus iš dabartinės sesijos?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Tikrai norite ištrinti šį publikuotą įrašą?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Tai ištrins visus nepublikuotus pakeitimus įraše, taip pat neišsaugotus pakeitimus per dabartinę sesiją. Vis tiek norite trinti?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Visi Jūsų pakeitimai įraše bus panaikinti. Ar tikrai norite trinti jį?',
       loadingEntry: 'Kraunamas įrašas...',
@@ -151,6 +160,8 @@ const lt: LocalePhrasesRoot = {
       deleteEntry: 'Panaikinti įrašą',
       saving: 'Išsaugojama...',
       save: 'Išsaugoti',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: 'Trinama...',
       updating: 'Atnaujinama...',
       status: 'Statusą: %{status}',
@@ -318,7 +329,7 @@ const lt: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Atsijungti',
     },
     toast: {
@@ -332,12 +343,14 @@ const lt: LocalePhrasesRoot = {
       missingRequiredField:
         'Pasitikrinkite — kažkurio (ar kelių) laukelių neužpildėte. Tai padarius galėsite išsaugoti įrašą.',
       entrySaved: 'Įrašas išsaugotos',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Įrašas publikuotas',
       entryUnpublished: 'Įrašas nepublikuotas',
       onFailToPublishEntry: 'Nepavyko publikuoti: %{details}',
       onFailToUnpublishEntry: 'Nepavyko panaikinti publikavimą: %{details}',
       entryUpdated: 'Įrašo statusas pakeistas',
-      onDeleteUnpublishedChangesBody: 'Nepublikuoti pakeitimai ištrinti',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Nepublikuoti pakeitimai ištrinti',
       onFailToAuth: 'Nepavyko prisijungti: %{details}',
       onLoggedOut:
         'Mes jus atjungėme. Jeigu yra poreikis, sukurkite duomenų atsarginę kopiją. Galite tiesiog iš naujo prisijungti.',

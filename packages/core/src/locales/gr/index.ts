@@ -106,16 +106,23 @@ const gr: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: undefined, // English translation: 'Writing in %{locale}'
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Είστε βέβαιοι ότι θέλετε να αφήσετε αυτήν τη σελίδα;',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'Έχετε μη αποθηκευμένες αλλαγές, αποθηκεύστε πριν να ενημερώσετε την κατάσταση.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Ενημερώστε την κατάσταση σε "έτοιμο" πριν από τη δημοσίευση.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody:
         'Έχετε μη αποθηκευμένες αλλαγές, αποθηκεύστε πριν από τη δημοσίευση.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Είστε βέβαιοι ότι θέλετε να δημοσιεύσετε αυτήν την καταχώρηση;',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody:
         'Είστε βέβαιοι ότι θέλετε να καταργήσετε τη δημοσίευση αυτής της καταχώρησης;',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
@@ -124,8 +131,10 @@ const gr: LocalePhrasesRoot = {
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody:
         'Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν τη δημοσιευμένη καταχώρηση;',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Αυτό θα διαγράψει όλες τις μη δημοσιευμένες αλλαγές σε αυτήν την καταχώρηση, καθώς και τις αλλαγές που δεν έχετε αποθηκεύσει από την τρέχουσα περίοδο λειτουργίας. Θέλετε ακόμα να διαγράψετε;',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Όλες οι μη δημοσιευμένες αλλαγές σε αυτήν την καταχώρηση θα διαγραφούν. Θέλετε ακόμα να διαγράψετε;',
       loadingEntry: 'Φόρτωση εισόδου...',
@@ -152,6 +161,8 @@ const gr: LocalePhrasesRoot = {
       deleteEntry: 'Διαγραφή καταχώρησης',
       saving: 'Εξοικονόμηση...',
       save: 'Αποθήκευση',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: 'Διαγραφή...',
       updating: 'Ενημέρωση...',
       status: 'Κατάστασης: %{status}',
@@ -318,7 +329,7 @@ const gr: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Αποσύνδεση',
     },
     toast: {
@@ -332,12 +343,14 @@ const gr: LocalePhrasesRoot = {
       missingRequiredField:
         'Ουπς, ξεχάσατε ένα απαιτούμενο πεδίο. Συμπληρώστε το πριν από την αποθήκευση.',
       entrySaved: 'Η καταχώρηση Αποθηκεύτηκε',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Η καταχώρηση δημοσιεύτηκε',
       entryUnpublished: 'Μη δημοσιευμένη καταχώρηση',
       onFailToPublishEntry: 'Η δημοσίευση απέτυχε: %{details}',
       onFailToUnpublishEntry: 'Απέτυχε η κατάργηση δημοσίευσης καταχώρησης: %{details}',
       entryUpdated: 'Η κατάσταση εισόδου ενημερώθηκε',
-      onDeleteUnpublishedChangesBody: 'Οι μη δημοσιευμένες αλλαγές διαγράφηκαν',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Οι μη δημοσιευμένες αλλαγές διαγράφηκαν',
       onFailToAuth: '%{details}',
       onLoggedOut: undefined, // English translation: 'You have been logged out, please back up any data and login again'
       onBackendDown: undefined, // English translation: 'The backend service is experiencing an outage. See %{details} for more information'

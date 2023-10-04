@@ -113,11 +113,16 @@ const da: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Er du sikker på at du vil forlade siden?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'Du har ændringer der ikke er gemt, gem disse før status ændres.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Skift status til "Klar" inden publicering.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody: 'Du har ændringer der ikke er gemt, gem inden publicing.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Er du sikker på at du vil publicere dette dokument?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'Er du sikker på at du vil afpublicere dette dokument?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
@@ -125,8 +130,10 @@ const da: LocalePhrasesRoot = {
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody:
         'Er du sikker på at du vil slette dette tidliere publiceret dokument?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Alle ikke publicerede ændringer til dette dokument vil blive slettet ligesom dine nuværende ugemte ændringer fra denne session. Er du sikker på at du vil slette?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Alle ikke publicerede ændringer til dette dokument vil blive slettet. Er du sikker på at du vil slette?',
       loadingEntry: 'Indlæser dokument...',
@@ -212,6 +219,17 @@ const da: LocalePhrasesRoot = {
         remove: 'Fjern fil',
         removeAll: 'Fjern alle filer',
       },
+      folder: {
+        choose: undefined, // English translation: 'Choose a folder'
+        chooseUrl: undefined, // English translation: 'Insert folder path'
+        chooseMultiple: undefined, // English translation: 'Choose folders'
+        replaceUrl: undefined, // English translation: 'Replace with path'
+        promptUrl: undefined, // English translation: 'Enter path of the folder'
+        chooseDifferent: undefined, // English translation: 'Choose different folder'
+        addMore: undefined, // English translation: 'Add more folders'
+        remove: undefined, // English translation: 'Remove folder'
+        removeAll: undefined, // English translation: 'Remove all folders'
+      },
       unknownControl: {
         noControl: "Ingen kontrol for '%{widget}'.",
       },
@@ -234,6 +252,7 @@ const da: LocalePhrasesRoot = {
       list: {
         add: 'Tilføj %{item}',
         addType: 'Tilføj %{item}',
+        noValue: undefined, // English translation: 'No value'
       },
       keyvalue: {
         key: undefined, // English translation: 'Key'
@@ -312,7 +331,7 @@ const da: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Log af',
     },
     toast: {
@@ -326,12 +345,14 @@ const da: LocalePhrasesRoot = {
       missingRequiredField:
         'Ups, du mangler et påkrævet felt. Udfyld de påkrævede felter før dokumentet gemmes.',
       entrySaved: 'Dokumentet er gemt',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Dokumentet er publiceret ',
       entryUnpublished: 'Dokumentet er afpubliceret',
       onFailToPublishEntry: 'Kunne ikke publicere på grund af en fejl: %{details}',
       onFailToUnpublishEntry: 'Kunne ikke afpublicere på grund af en fejl: %{details}',
       entryUpdated: 'Dokumentstatus er opdateret',
-      onDeleteUnpublishedChangesBody: 'Upublicerede ændringer blev slettet',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Upublicerede ændringer blev slettet',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Du er blevet logget ind, gem venligst evt. ændringer og log på igen',
       onBackendDown:

@@ -113,13 +113,18 @@ const de: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Möchten Sie diese Seite wirklich verlassen?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'Es sind noch ungespeicherte Änderungen vorhanden. Bitte speichern Sie diese, bevor Sie den Status aktualisieren.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody:
         'Bitte setzten die den Status vor dem Veröffentlichen auf "Abgeschlossen".',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody:
         'Es sind noch ungespeicherte Änderungen vorhanden. Bitte speicheren Sie vor dem Veröffentlichen.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Soll dieser Beitrag wirklich veröffentlicht werden?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody:
         'Soll die Veröffentlichung dieses Beitrags wirklich zurückgezogen werden?',
       onDeleteWithUnsavedChangesTitle: 'Veröffentlichten Beitrag löschen?',
@@ -127,8 +132,10 @@ const de: LocalePhrasesRoot = {
         'Möchten Sie diesen veröffentlichten Beitrag, sowie Ihre nicht gespeicherten Änderungen löschen?',
       onDeletePublishedEntryTitle: 'Veröffentlichten Beitrag löschen?',
       onDeletePublishedEntryBody: 'Soll dieser veröffentlichte Beitrag wirklich gelöscht werden?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Möchten Sie diesen unveröffentlichten Beitrag, sowie Ihre nicht gespeicherten Änderungen löschen?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Alle unveröffentlichten Änderungen werden gelöscht. Möchten Sie wirklich löschen?',
       loadingEntry: 'Beitrag laden...',
@@ -241,7 +248,7 @@ const de: LocalePhrasesRoot = {
       },
       datetime: {
         now: 'Jetzt',
-        invalitDateTitle: 'Ungültiges Datum',
+        invalidDateTitle: 'Ungültiges Datum',
         invalidDateBody: 'Das eingegebene Datum ist ungültig.',
       },
       list: {
@@ -325,6 +332,7 @@ const de: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Abmelden',
     },
     toast: {
@@ -337,13 +345,15 @@ const de: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'Status aktualisieren fehlgeschlagen: %{details}',
       missingRequiredField: 'Oops, einige zwingend erforderliche Felder sind nicht ausgefüllt.',
       entrySaved: 'Beitrag gespeichert',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Beitrag veröffentlicht',
       entryUnpublished: 'Beitrag nicht mehr öffentlich',
       onFailToPublishEntry: 'Veröffentlichen fehlgeschlagen: %{details}',
       onFailToUnpublishEntry:
         'Veröffentlichung des Beitrags konnte nicht rückgängig gemacht werden: %{details}',
       entryUpdated: 'Beitragsstatus aktualisiert',
-      onDeleteUnpublishedChangesBody: 'Unveröffentlichte Änderungen verworfen',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Unveröffentlichte Änderungen verworfen',
       onFailToAuth: '%{details}',
       onLoggedOut:
         'Sie wurden ausgeloggt. Bitte sichern Sie Ihre Daten und melden Sie sich erneut an.',

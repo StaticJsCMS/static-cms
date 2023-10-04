@@ -106,24 +106,33 @@ const cs: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Psát v %{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Chcete opravdu opustit tuto stránku?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'Máte neuložené změny. Uložte je prosím před změnou statusu.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Změňte stav na „Připraveno“ před publikováním.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody:
         'Máte neuložené změny, prosím uložte je před publikováním.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Chcete opravdu publikovat tento záznam?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'Chcete opravdu zrušit publikování tohoto záznamu?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Chcete opravdu vymazat tento publikovaný záznam a všechny neuložené změny z této relace?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Chcete opravdu smazat tento publikovaný záznam?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Tato akce vymaže všechny nepublikované změny v tomto záznamu a také všechny neuložené změny z této relace. Chcete záznam skutečně vymazat?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Všechny nepublivkoané změny v tomto záznamu budou vymazány. Chcete ho skuteně vymazat?',
       loadingEntry: 'Načítání záznamu…',
@@ -150,6 +159,8 @@ const cs: LocalePhrasesRoot = {
       deleteEntry: 'Vymazat záznam',
       saving: 'Ukládání…',
       save: 'Uložit',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: 'Vymazávání…',
       updating: 'Aktualizace…',
       status: 'Status: %{status}',
@@ -316,7 +327,7 @@ const cs: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Odhlásit',
     },
     toast: {
@@ -329,12 +340,14 @@ const cs: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'Chyba při změně stavu záznamu: %{details}',
       missingRequiredField: 'Vynechali jste povinné pole. Prosím vyplňte ho.',
       entrySaved: 'Záznam uložen',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Záznam publikován',
       entryUnpublished: 'Publikování záznamu zrušeno',
       onFailToPublishEntry: 'Chyba při publikování záznamu: %{details}',
       onFailToUnpublishEntry: 'Chyba při rušení publikování záznamu: %{details}',
       entryUpdated: 'Stav záznamu byl změněn',
-      onDeleteUnpublishedChangesBody: 'Nepublikované změny byly smazány',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Nepublikované změny byly smazány',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Byli jste odhlášeni, prosím zálohujte všechna data a znova se přihlašte',
       onBackendDown: 'Backend zaznamenal výpadek. Podívejte se do %{details} pro více informací.',

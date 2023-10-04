@@ -5,7 +5,6 @@ const sl: LocalePhrasesRoot = {
     login: 'Vpiši se',
     loggingIn: 'Prijavljanje...',
     loginWithNetlifyIdentity: 'Prijavi se z Netlify Identity',
-    loginWithAzure: 'Prijavi se z Azure računom',
     loginWithBitbucket: 'Prijavi se z BitBucket računom',
     loginWithGitHub: 'Prijavi se z GitHub računom',
     loginWithGitLab: 'Prijavi se z Gitlab računom',
@@ -114,19 +113,26 @@ const sl: LocalePhrasesRoot = {
     },
     editor: {
       onLeavePage: 'Ste prepričani, da želite zapustiti to stran?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'Imaš neshranjene spremembe. Shrani pred posodobitvijo stanja.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Pred objavo posodobi status na "pripravljen".',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody: 'Imaš neshranjene spremembe. Shrani pred objavo.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Ste prepričani, da želite objaviti ta vnos?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'Ste prepričani, da želite preklicati objavo tega vnosa?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Ste prepričani, da želite izbrisati ta objavljen vnos, pa tudi neshrannjene spremembe iz trenutne seje?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Ste prepričani, da želite izbrisati ta objavljeni vnos?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'To bo izbrisalo vse neobjavljene spremembe tega vnosa, pa tudi neshranjene spremembe iz trenutne seje. Ali še vedno želiš izbrisati?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Vse neobjavljene spremembe tega vnosa bodo izbrisane. Ali še vedno želiš izbrisati?',
       loadingEntry: 'Nalaganje vnosa ...',
@@ -323,7 +329,7 @@ const sl: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Odjava',
     },
     toast: {
@@ -336,12 +342,14 @@ const sl: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'Ni uspelo posodobiti stanja: %{details}',
       missingRequiredField: 'Ups, zgrešili ste obvezno polje. Pred shranjevanjem izpolnite.',
       entrySaved: 'Vnos shranjen',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Vnos objavljen',
       entryUnpublished: 'Objava vnosa preklicana',
       onFailToPublishEntry: 'Vnosa ni uspelo objaviti: %{details}',
       onFailToUnpublishEntry: 'Preklicanje objave vnosa ni uspelo: %{details}',
       entryUpdated: 'Status vnosa posodobljen',
-      onDeleteUnpublishedChangesBody: 'Neobjavljene spremembe izbrisane',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Neobjavljene spremembe izbrisane',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Bili ste odjavljeni, varnostno kopirate vse podatke in se ponovno prijavite',
       onBackendDown: 'Zaledna storitev doživlja izpad. Glejte %{details} za več informacij',

@@ -105,24 +105,33 @@ const hu: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: undefined, // English translation: 'undefined'
+        copyFromLocale: undefined, // English translation: 'undefined'
+        copyFromLocaleConfirm: undefined, // English translation: 'undefined'
       },
     },
     editor: {
       onLeavePage: 'Biztos hogy el akarod hagyni az oldalt?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'undefined'
       onUpdatingWithUnsavedChangesBody:
         'Mentettlen változtatások vannak, kérjük, mentse az állapot frissítése előtt.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'undefined'
       onPublishingNotReadyBody: 'Változtasd az állapotot "Kész"-re publikálás előtt.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'undefined'
       onPublishingWithUnsavedChangesBody:
         'Mentetlen változtatások vannak, kérjük, mentsen a publikálás előtt.',
+      onPublishingTitle: undefined, // English translation: 'undefined'
       onPublishingBody: 'Publikálod ezt a bejegyzést?',
+      onUnpublishingTitle: undefined, // English translation: 'undefined'
       onUnpublishingBody: 'Publikálás visszavonása erre a bejegyzésre?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'undefined'
       onDeleteWithUnsavedChangesBody:
         'Töröljük ezt a publikált bejegyzést, a többi mentetlen modositással együtt?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'undefined'
       onDeletePublishedEntryBody: 'Töröljük ezt a publikált bejegyzést?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'undefined'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Ezzel törli a bejegyzés összes nem közzétett módosítását, valamint az aktuális munkamenetből nem mentett módosításokat. Még mindig törli?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'undefined'
       onDeleteUnpublishedChangesBody:
         'A bejegyzés összes, nem közzétett módosítása törlődik. Még mindig törli?',
       loadingEntry: 'Bejegyzés betöltése...',
@@ -149,6 +158,8 @@ const hu: LocalePhrasesRoot = {
       deleteEntry: 'Bejegyzés törlése',
       saving: 'Mentés...',
       save: 'Mentés',
+      statusInfoTooltipDraft: undefined, // English translation: 'undefined'
+      statusInfoTooltipInReview: undefined, // English translation: 'undefined'
       deleting: 'Törlés...',
       updating: 'Frissítés...',
       status: 'Beállitása: %{status}',
@@ -314,7 +325,7 @@ const hu: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Kijelentkezés',
     },
     toast: {
@@ -327,12 +338,14 @@ const hu: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'Az állapot frissítése nem sikerült: %{details}',
       missingRequiredField: 'Hoppá, kihagytál egy kötelező mezőt. Mentés előtt töltsd ki.',
       entrySaved: 'Bejegyzés elmentve',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Bejegyzés publikálva',
       entryUnpublished: 'Bejegyzés publikálása visszavonva',
       onFailToPublishEntry: 'Bejegyzés publikálása sikertelen: %{details}',
       onFailToUnpublishEntry: 'Bejegyzés publikálásának visszavonása sikertelen: %{details}',
       entryUpdated: 'Bejegyzés állapota frissült',
-      onDeleteUnpublishedChangesBody: 'Unpublished changes deleted',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Unpublished changes deleted',
       onFailToAuth: '%{details}',
       onLoggedOut: undefined, // English translation: 'You have been logged out, please back up any data and login again'
       onBackendDown: undefined, // English translation: 'The backend service is experiencing an outage. See %{details} for more information'

@@ -106,24 +106,33 @@ const it: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: undefined, // English translation: 'Writing in %{locale}'
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Sei sicuro di voler lasciare questa pagina?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'Hai delle modifiche non salvate, salvale prima di aggiornare lo status.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Aggiorna lo status a "Pronto" prima di pubblicare.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody:
         'Hai delle modifiche non salvate, salvale prima di pubblicare.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Sei sicuro di voler pubblicare questa voce?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'Sei sicuro di voler nascondere questa voce?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Sei sicuro di voler cancellare questa voce pubblicata e tutte le modifiche non salvate della tua sessione corrente?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Sei sicuro di voler cancellare questa voce pubblicata?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Questo cancellerà tutte le modifiche non pubblicate di questa voce, come anche tutte le modifiche non salvate della sessione corrente. Vuoi ancora cancellarle?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Tutte le modifiche non pubblicate a questa voce saranno cancellate. Vuoi ancora cancellarle?',
       loadingEntry: 'Caricando la voce...',
@@ -150,6 +159,8 @@ const it: LocalePhrasesRoot = {
       deleteEntry: 'Cancella voce',
       saving: 'Salvando...',
       save: 'Salva',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: 'Cancellando...',
       updating: 'Aggiornando...',
       status: 'Status: %{status}',
@@ -316,7 +327,7 @@ const it: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Esci',
     },
     toast: {
@@ -330,12 +341,14 @@ const it: LocalePhrasesRoot = {
       missingRequiredField:
         'Oops, ti sei perso un campo obbligatorio. Per favore completalo prima di salvare.',
       entrySaved: 'Voce salvata',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Voce pubblicata',
       entryUnpublished: 'Voce rimossa dalla pubblicazione',
       onFailToPublishEntry: 'Pubblicazione fallita: %{details}',
       onFailToUnpublishEntry: 'Rimozione della pubblicazione fallita: %{details}',
       entryUpdated: 'Status della voce aggiornato',
-      onDeleteUnpublishedChangesBody: 'Modifiche non pubblicate cancellate',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Modifiche non pubblicate cancellate',
       onFailToAuth: '%{details}',
       onLoggedOut: undefined, // English translation: 'You have been logged out, please back up any data and login again'
       onBackendDown: undefined, // English translation: 'The backend service is experiencing an outage. See %{details} for more information'

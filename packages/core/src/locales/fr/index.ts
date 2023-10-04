@@ -107,24 +107,33 @@ const fr: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Écrire en %{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Voulez-vous vraiment quitter cette page ?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'Veuillez enregistrer vos modifications avant de mettre à jour le statut.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Veuillez mettre à jour le statut à "Prêt" avant de publier.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody:
         'Veuillez enregistrer vos modifications avant de publier.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Voulez-vous vraiment publier cette entrée ?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'Voulez-vous vraiment dépublier cette entrée ?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Voulez-vous vraiment supprimer cette entrée publiée ainsi que vos modifications non enregistrées de cette session ?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Voulez-vous vraiment supprimer cette entrée publiée ?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Ceci supprimera toutes les modifications non publiées de cette entrée ainsi que vos modifications non enregistrées de cette session. Voulez-vous toujours supprimer ?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Toutes les modifications non publiées de cette entrée seront supprimées. Voulez-vous toujours supprimer ?',
       loadingEntry: "Chargement de l'entrée...",
@@ -151,6 +160,8 @@ const fr: LocalePhrasesRoot = {
       deleteEntry: "Supprimer l'entrée",
       saving: 'Enregistrement...',
       save: 'Enregistrer',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: 'Suppression...',
       updating: 'Mise à jour...',
       status: 'Statut: %{status}',
@@ -318,7 +329,7 @@ const fr: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Déconnexion',
     },
     toast: {
@@ -332,12 +343,14 @@ const fr: LocalePhrasesRoot = {
       missingRequiredField:
         'Oops, il manque un champ requis. Veuillez le renseigner avant de soumettre.',
       entrySaved: 'Entrée enregistrée',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Entrée publiée',
       entryUnpublished: 'Entrée dépubliée',
       onFailToPublishEntry: 'Échec de la publication : %{details}',
       onFailToUnpublishEntry: "Impossible de dépublier l'entrée : %{details}",
       entryUpdated: "Statut de l'entrée mis à jour",
-      onDeleteUnpublishedChangesBody: 'Modifications non publiées supprimées',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Modifications non publiées supprimées',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Vous avez été déconnecté, merci de sauvegarder les données et vous reconnecter',
       onBackendDown:

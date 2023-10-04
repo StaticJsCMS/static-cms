@@ -106,21 +106,30 @@ const zh_Hans: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: '正在使用%{locale}撰写',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: '你确定要离开此页面吗？',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody: '你有尚未保存的修改，请在更新状态前进行保存',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: '请在发布之前将状态更新为“就绪”',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody: '你有尚未保存的修改，请在发布前进行保存',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: '你确定要发布此内容吗？',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: '你确定要撤销发布此内容吗？',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody: '你确定要删除这个已经发布的内容，以及当前尚未保存的修改吗？',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: '你确定要删除这个已经发布的内容吗？',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         '此内容所有未被发布的修改，以及当前尚未保存的修改都将被删除，你确定吗？',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody: '此内容所有未被发布的修改都将被删除，你确定吗？',
       loadingEntry: '正在加载内容...',
     },
@@ -146,6 +155,8 @@ const zh_Hans: LocalePhrasesRoot = {
       deleteEntry: '删除内容',
       saving: '正在保存...',
       save: '保存',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: '正在删除...',
       updating: '正在更新...',
       status: '状态: %{status}',
@@ -312,7 +323,7 @@ const zh_Hans: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: '注销',
     },
     toast: {
@@ -325,12 +336,14 @@ const zh_Hans: LocalePhrasesRoot = {
       onFailToUpdateStatus: '更新状态失败: %{details}',
       missingRequiredField: '你漏掉了一个必填项，请在保存之前将它填写好',
       entrySaved: '内容已保存',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: '内容已发布',
       entryUnpublished: '内容已撤销发布',
       onFailToPublishEntry: '发布失败: %{details}',
       onFailToUnpublishEntry: '撤销发布失败: %{details}',
       entryUpdated: '内容状态已更新',
-      onDeleteUnpublishedChangesBody: '未发布的修改已删除',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: '未发布的修改已删除',
       onFailToAuth: '%{details}',
       onLoggedOut: '你已注销，请先保存好数据然后再次登录',
       onBackendDown: 'Backend 服务已中断，欲知详情请查看：%{details}',

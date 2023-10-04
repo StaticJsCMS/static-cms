@@ -106,23 +106,32 @@ const he: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'כתיבה בשפה ה%{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'האם ברצונך לעבור לעמוד אחר ללא שמירה?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'בוצעו שינויים שלא נשמרו. יש לבצע שמירה לפני עדכון מצב האייטם.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'נא לשנות את מצב האייטם ל״מוכן לפרסום״ לפני הפרסום.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody: 'בוצעו שינויים שלא נשמרו. יש לבצע שמירה לפני הפרסום.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'האם ברצונך לפרסם את האייטם?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'האם ברצונך לבטל את פרסום האייטם?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'האם ברצונך למחוק את האייטם הזה לפני פרסומו, וכן את השינויים שבוצעו כעת וטרם נשמרו?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'האם ברצונך למחוק את האייטם הזה לאחר פרסומו?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'פעולה זו תמחק את כל השינויים שבוצעו באייטם זה ולא פורסמו, וכן את השינויים שבוצעו כעת וטרם נשמרו. האם ברצונך למחוק?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'כל השינויים שבוצעו באייטם זה ולא פורסמו יימחקו. האם ברצונך למחוק אותו?',
       loadingEntry: 'טעינת אייטם...',
@@ -319,7 +328,7 @@ const he: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'התנתקות',
     },
     toast: {
@@ -332,12 +341,14 @@ const he: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'עדכון מצב האייטם %{details} נכשל',
       missingRequiredField: 'אופס, שכחת למלא שדה חובה. נא להשלים את המידע החסר לפני השמירה',
       entrySaved: 'האייטם נשמר',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'האייטם פורסם',
       entryUnpublished: 'האייטם הועבר לטיוטות',
       onFailToPublishEntry: 'פרסום האייטם %{details} נכשל',
       onFailToUnpublishEntry: 'ביטול פרסום האייטם %{details} נכשל',
       entryUpdated: 'מצב האייטם עודכן',
-      onDeleteUnpublishedChangesBody: 'השינויים שלא פורסמו נמחקו',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'השינויים שלא פורסמו נמחקו',
       onFailToAuth: '%{details}',
       onLoggedOut: 'נותקת מהמערכת. יש לגבות מידע לא שמור ולהתחבר שוב',
       onBackendDown: 'ה-backend המוגדר אינו זמין. ראו %{details} למידע נוסף',

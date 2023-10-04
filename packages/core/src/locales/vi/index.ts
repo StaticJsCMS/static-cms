@@ -106,23 +106,32 @@ const vi: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: undefined, // English translation: 'Writing in %{locale}'
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Bạn có chắc rằng bạn muốn rời khỏi trang này?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'Bạn chưa lưu những thay đổi, hãy lưu trước khi thay đổi trạng thái.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Hãy thay đổi trạng thái thành "Sẵn sàng" trước khi công bố.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody: 'Bạn có thay đổi chưa lưu, hãy lưu trước khi công bố.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Bạn có chắc rằng bạn muốn công bố mục này?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'Bạn có chắc rằng bạn muốn ngừng công bố mục này?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Bạn có chắc rằng bạn muốn xoá mục đã được công bố này, cũng như là những thay đổi chưa lưu của bạn trong phiên làm việc này?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Bạn có chắc rằng bạn muốn xoá mục đã được công bố này?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Điều này sẽ xoá tất cả những thay đổi chưa được lưu trong mục này, cũng như là những thay đổi chưa được lưu của bạn trong phiên làm việc này. Bạn vẫn muốn xoá chứ?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Tất cả những thay đổi chưa được lưu trong mục này sẽ bị xoá. Bạn vẫn muốn xoá chứ?',
       loadingEntry: 'Đang tải...',
@@ -149,6 +158,8 @@ const vi: LocalePhrasesRoot = {
       deleteEntry: 'Xoá mục này',
       saving: 'Đang lưu...',
       save: 'Lưu',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: 'Đang xoá...',
       updating: 'Đang cập nhật...',
       status: 'Trạng: %{status}',
@@ -316,7 +327,7 @@ const vi: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Đăng xuất',
     },
     toast: {
@@ -329,12 +340,14 @@ const vi: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'Không thể cập nhật trạng thái: %{details}',
       missingRequiredField: 'Bạn còn thiếu vài thông tin bắt buộc. Hãy hoàn thành trước khi lưu.',
       entrySaved: 'Mục đã được lưu',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Mục đã được công bố',
       entryUnpublished: 'Mục đã ngừng công bố',
       onFailToPublishEntry: 'Không thể công bố: %{details}',
       onFailToUnpublishEntry: 'Không thể ngừng công bố mục: %{details}',
       entryUpdated: 'Trạng thái của mục đã được cập nhật',
-      onDeleteUnpublishedChangesBody: 'Những thay đổi chưa được công bố đã được xoá',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Những thay đổi chưa được công bố đã được xoá',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Bạn đã đăng xuất, hãy sao lưu dữ liệu và đăng nhập lại',
       onBackendDown: 'Dịch vụ backend đang gặp trục trặc. Hãy xem {details} để biết thêm thông tin',

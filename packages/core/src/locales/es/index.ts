@@ -106,24 +106,33 @@ const es: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: undefined, // English translation: 'Writing in %{locale}'
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: '¿Estás seguro de que quieres dejar esta página?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'Tiene cambios no guardados, por favor, guárdelos antes de actualizar el estado.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody: 'Por favor, actualice el estado a "Ready" antes de publicar.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody:
         'Tiene cambios no guardados, por favor guárdelos antes de publicarlos.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: '¿Estás seguro de que quieres publicar esta entrada?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: '¿Estás seguro de que quieres retirar esta entrada?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         '¿Está seguro de que desea eliminar esta entrada publicada, así como los cambios no guardados de la sesión actual?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: '¿Estás seguro de que quieres borrar esta entrada publicada?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Esto eliminará todos los cambios no publicados de esta entrada, así como los cambios no guardados de la sesión actual. ¿Todavía quieres borrar?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Todos los cambios no publicados en esta entrada serán eliminados. ¿Todavía quieres borrar?',
       loadingEntry: 'Cargando entrada...',
@@ -150,6 +159,8 @@ const es: LocalePhrasesRoot = {
       deleteEntry: 'Eliminar entrada',
       saving: 'Guardando...',
       save: 'Guardar',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: 'Eliminando...',
       updating: 'Actualizando...',
       status: 'Estado: %{status}',
@@ -317,7 +328,7 @@ const es: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Cerrar sesión',
     },
     toast: {
@@ -331,12 +342,14 @@ const es: LocalePhrasesRoot = {
       missingRequiredField:
         'Oops, no ha rellenado un campo obligatorio. Por favor, rellénelo antes de guardar.',
       entrySaved: 'Entrada guardada',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Entrada publicada',
       entryUnpublished: 'Entrada retirada',
       onFailToPublishEntry: 'No se ha podido publicar: %{details}',
       onFailToUnpublishEntry: 'No se ha podido retirar la entrada: %{details}',
       entryUpdated: 'Estado de entrada actualizado',
-      onDeleteUnpublishedChangesBody: 'Cambios no publicados eliminados',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Cambios no publicados eliminados',
       onFailToAuth: '%{details}',
       onLoggedOut: undefined, // English translation: 'You have been logged out, please back up any data and login again'
       onBackendDown: undefined, // English translation: 'The backend service is experiencing an outage. See %{details} for more information'

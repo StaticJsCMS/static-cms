@@ -27,6 +27,7 @@ const bg: LocalePhrasesRoot = {
       quickAdd: 'Бързо добавяне',
     },
     app: {
+      loading: undefined, // English translation: 'Loading...'
       errorHeader: 'Грешка при зареждането на конфигурацията на CMS',
       configErrors: 'Грешки в конфигурацията',
       configNotFound: undefined, // English translation: 'Config not found'
@@ -105,25 +106,34 @@ const bg: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Писане на %{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Наистина ли искате да напуснете тази страница?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onUpdatingWithUnsavedChangesBody:
         'Имате незапазени промени, моля, запазете преди актуализиране на състоянието.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
       onPublishingNotReadyBody:
         'Моля, актуализирайте състоянието на „Готово“, преди да публикувате',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
       onPublishingWithUnsavedChangesBody:
         'Имате незапазени промени, моля, запазете преди публикуване.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
       onPublishingBody: 'Наистина ли искате да публикувате този запис?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'Наистина ли искате да прекратите публикуването на този запис?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Наистина ли искате да изтриете този публикуван запис, както и незаписаните промени от текущата сесия?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Наистина ли искате да изтриете този публикуван запис?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Това ще изтрие всички непубликувани промени в този запис, както и незаписаните ви промени от текущата сесия. Все още ли искате да изтриете?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesBody:
         'Всички непубликувани промени в този запис ще бъдат изтрити. Все още ли искате да изтриете?',
       loadingEntry: 'Зареждане на запис...',
@@ -150,6 +160,8 @@ const bg: LocalePhrasesRoot = {
       deleteEntry: 'Изтрий запис',
       saving: 'Запазване...',
       save: 'Запази',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
       deleting: 'Изтриване...',
       updating: 'Актуализиране...',
       status: 'Cъстояние: %{status}',
@@ -266,7 +278,6 @@ const bg: LocalePhrasesRoot = {
       alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
-      loading: 'Зареждане...',
       noResults: 'Няма резултати.',
       noAssetsFound: 'Няма намерени ресурси.',
       noImagesFound: 'Няма намерени изображения.',
@@ -318,7 +329,7 @@ const bg: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Изход',
     },
     toast: {
@@ -332,12 +343,14 @@ const bg: LocalePhrasesRoot = {
       missingRequiredField:
         'Извинете, пропуснахте задължително поле. Моля, попълнете преди запазване.',
       entrySaved: 'Записът е запазен',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Записът е публикуван',
       entryUnpublished: 'Записът е непубликуван',
       onFailToPublishEntry: 'Неуспешно публикуване на запис: %{details}',
       onFailToUnpublishEntry: 'Неуспешно премахване на публикацията на записа: %{details}',
       entryUpdated: 'Статусът на записа е актуализиран',
-      onDeleteUnpublishedChangesBody: 'Непубликуваните промени са изтрити',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Непубликуваните промени са изтрити',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Излезли сте. Моля, запазете всички данни и влезте отново',
       onBackendDown: 'Има прекъсване в работата на бекенда. Виж детайлите %{details}',
@@ -358,8 +371,8 @@ const bg: LocalePhrasesRoot = {
       lastChangeNoDate: '%{author}',
       deleteChanges: 'Изтриване на промените',
       deleteNewEntry: 'Изтриване на нов запис',
-      pubChanges: 'Публикуване на промени',
-      objavNewEntry: 'Публикуване на нов запис',
+      publishChanges: 'Публикуване на промени',
+      publishNewEntry: 'Публикуване на нов запис',
     },
     workflowList: {
       onDeleteEntry: 'Наистина ли искате да изтриете този запис?',
