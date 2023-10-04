@@ -190,7 +190,6 @@ const pl: LocalePhrasesRoot = {
         insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Link',
         insertLink: undefined, // English translation: 'Insert link'
-        linkPrompt: 'Dodaj adres URL',
         paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Nagłówki',
         quote: 'Cytat',

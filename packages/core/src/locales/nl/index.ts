@@ -188,7 +188,6 @@ const nl: LocalePhrasesRoot = {
         insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Link',
         insertLink: undefined, // English translation: 'Insert link'
-        linkPrompt: 'Voer de URL in',
         paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Hoofdtekst',
         quote: 'Quote',

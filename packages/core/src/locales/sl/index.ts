@@ -190,7 +190,6 @@ const sl: LocalePhrasesRoot = {
         insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Povezava',
         insertLink: undefined, // English translation: 'Insert link'
-        linkPrompt: 'Vnesite URL povezave',
         paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Naslovi',
         quote: 'Citat',

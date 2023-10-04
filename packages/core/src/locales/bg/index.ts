@@ -189,7 +189,6 @@ const bg: LocalePhrasesRoot = {
         insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Връзка',
         insertLink: undefined, // English translation: 'Insert link'
-        linkPrompt: 'Моля, въведете URL на връзката',
         paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Заглавия',
         quote: 'Цитат',

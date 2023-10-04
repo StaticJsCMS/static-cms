@@ -192,7 +192,6 @@ const tr: LocalePhrasesRoot = {
         insertCodeBlock: undefined, // English translation: 'undefined'
         link: 'Bağlantı',
         insertLink: undefined, // English translation: 'undefined'
-        linkPrompt: "Bağlantının URL'sini girin",
         paragraph: undefined, // English translation: 'undefined'
         headings: 'Başlıklar',
         quote: 'Alıntı',

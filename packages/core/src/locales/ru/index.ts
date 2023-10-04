@@ -191,7 +191,6 @@ const ru: LocalePhrasesRoot = {
         insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Ссылка',
         insertLink: undefined, // English translation: 'Insert link'
-        linkPrompt: 'Укажите URL ссылки',
         paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Заголовки',
         quote: 'Цитата',

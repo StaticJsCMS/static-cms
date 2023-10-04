@@ -191,7 +191,6 @@ const en: BaseLocalePhrasesRoot = {
         insertCodeBlock: 'Insert code block',
         link: 'Link',
         insertLink: 'Insert link',
-        linkPrompt: 'Enter the URL of the link',
         paragraph: 'Paragraph',
         headings: 'Headings',
         quote: 'Quote',

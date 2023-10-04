@@ -189,7 +189,6 @@ const ja: LocalePhrasesRoot = {
         insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'リンク',
         insertLink: undefined, // English translation: 'Insert link'
-        linkPrompt: 'リンクのURLを入力してください',
         paragraph: undefined, // English translation: 'Paragraph'
         headings: '見出し',
         quote: '引用',

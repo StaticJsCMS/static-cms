@@ -189,7 +189,6 @@ const he: LocalePhrasesRoot = {
         insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'קישור',
         insertLink: undefined, // English translation: 'Insert link'
-        linkPrompt: 'נא להקליד את הכתובת לקישור',
         paragraph: undefined, // English translation: 'Paragraph'
         headings: 'כותרת',
         quote: 'ציטוט',

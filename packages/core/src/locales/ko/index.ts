@@ -189,7 +189,6 @@ const ko: LocalePhrasesRoot = {
         insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: '링크',
         insertLink: undefined, // English translation: 'Insert link'
-        linkPrompt: '링크의 URL을 입력하세요',
         paragraph: undefined, // English translation: 'Paragraph'
         headings: '제목',
         quote: '인용',

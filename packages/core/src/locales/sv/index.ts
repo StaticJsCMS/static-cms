@@ -188,7 +188,6 @@ const sv: LocalePhrasesRoot = {
         insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Länk',
         insertLink: undefined, // English translation: 'Insert link'
-        linkPrompt: 'Ange en URL för länken',
         paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Rubriker',
         quote: 'Citat',

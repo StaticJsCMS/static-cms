@@ -188,7 +188,6 @@ const ca: LocalePhrasesRoot = {
         insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Enllaç',
         insertLink: undefined, // English translation: 'Insert link'
-        linkPrompt: "Introdueix l'URL de l'enllaç",
         paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Encapçalaments',
         quote: undefined, // English translation: 'Quote'

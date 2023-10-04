@@ -191,7 +191,6 @@ const da: LocalePhrasesRoot = {
         insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Link',
         insertLink: undefined, // English translation: 'Insert link'
-        linkPrompt: 'Indtast URL for link',
         paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Overskrifter',
         quote: 'Citat',

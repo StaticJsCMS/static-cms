@@ -184,7 +184,6 @@ const zh_Hant: LocalePhrasesRoot = {
         insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: '連結',
         insertLink: undefined, // English translation: 'Insert link'
-        linkPrompt: '輸入連結網址',
         paragraph: undefined, // English translation: 'Paragraph'
         headings: '標題',
         quote: '引言',

@@ -189,7 +189,6 @@ const lt: LocalePhrasesRoot = {
         insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Nuoroda (adresas)',
         insertLink: undefined, // English translation: 'Insert link'
-        linkPrompt: 'Įveskite adresą čia',
         paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Antraštės',
         quote: 'Citata',

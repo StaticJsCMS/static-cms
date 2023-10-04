@@ -189,7 +189,6 @@ const fr: LocalePhrasesRoot = {
         insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Lien',
         insertLink: undefined, // English translation: 'Insert link'
-        linkPrompt: "Entrer l'adresse web du lien",
         paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Titres',
         quote: 'Citation',

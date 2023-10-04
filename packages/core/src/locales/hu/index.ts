@@ -187,7 +187,6 @@ const hu: LocalePhrasesRoot = {
         insertCodeBlock: undefined, // English translation: 'undefined'
         link: undefined, // English translation: 'undefined'
         insertLink: undefined, // English translation: 'undefined'
-        linkPrompt: undefined, // English translation: 'undefined'
         paragraph: undefined, // English translation: 'undefined'
         headings: undefined, // English translation: 'undefined'
         quote: undefined, // English translation: 'undefined'
