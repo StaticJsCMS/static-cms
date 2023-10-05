@@ -6,7 +6,6 @@ import { I18n } from 'react-polyglot';
 import { connect, Provider } from 'react-redux';
 import { HashRouter as Router } from 'react-router-dom';
 
-import 'what-input';
 import { authenticateUser } from './actions/auth';
 import { loadConfig } from './actions/config';
 import App from './components/App';
