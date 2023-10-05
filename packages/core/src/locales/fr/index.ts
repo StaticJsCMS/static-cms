@@ -12,11 +12,11 @@ const fr: LocalePhrasesRoot = {
     errors: {
       email: "Assurez-vous d'avoir entré votre email.",
       password: 'Merci de saisir votre mot de passe.',
-      authTitle: undefined, // English translation: 'Error logging in'
+      authTitle: 'Erreur de connexion',
       authBody: '%{details}',
-      netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
+      netlifyIdentityNotFound: 'plugin Netlify Identity non trouvé',
       identitySettings:
-        "Impsosible d'accéder aux paramètres d'identité. Si vous utilisez le backend git-gateway, merci de vous assurer que vous avez bien activé le service Identity et la passerelle Git.",
+        "Impossible d'accéder aux paramètres d'identité. Si vous utilisez le backend git-gateway, merci de vous assurer que vous avez bien activé le service Identity et la passerelle Git.",
     },
   },
   app: {
@@ -30,7 +30,7 @@ const fr: LocalePhrasesRoot = {
       loading: 'Chargement...',
       errorHeader: 'Erreur au chargement de la configuration du CMS',
       configErrors: 'Erreurs de configuration',
-      configNotFound: undefined, // English translation: 'Config not found'
+      configNotFound: 'Configuration non trouvée',
       checkConfigYml: 'Vérifiez votre fichier config.yml.',
       loadingConfig: 'Chargement de la configuration...',
       waitingBackend: 'En attente du serveur...',
@@ -69,8 +69,8 @@ const fr: LocalePhrasesRoot = {
       negateLabel: 'Non %{label}',
     },
     table: {
-      summary: undefined, // English translation: 'Summary'
-      collection: undefined, // English translation: 'Collection'
+      summary: 'Résumé',
+      collection: 'Collection',
     },
     defaultFields: {
       author: {
@@ -80,7 +80,7 @@ const fr: LocalePhrasesRoot = {
         label: 'Mis à jour le',
       },
     },
-    notFound: undefined, // English translation: 'Collection not found'
+    notFound: 'Collection non trouvée',
   },
   editor: {
     editorControl: {
@@ -102,8 +102,8 @@ const fr: LocalePhrasesRoot = {
         rangeMax: '%{fieldLabel} doit avoir %{maxCount} éléments(s) ou moins.',
         invalidPath: "'%{path}' n'est pas un chemin valide",
         pathExists: "Le chemin '%{path}' existe déjà",
-        invalidColor: undefined, // English translation: 'Color '%{color}' is invalid.'
-        invalidHexCode: undefined, // English translation: 'Hex codes must start with a # sign.'
+        invalidColor: "La couleur '%{color}' n'est pas valide.",
+        invalidHexCode: 'Les codes hexadécimaux doivent être préfixés par un signe #.',
       },
       i18n: {
         writingInLocale: 'Écrire en %{locale}',
@@ -125,10 +125,10 @@ const fr: LocalePhrasesRoot = {
       onPublishingBody: 'Voulez-vous vraiment publier cette entrée ?',
       onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
       onUnpublishingBody: 'Voulez-vous vraiment dépublier cette entrée ?',
-      onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
+      onDeleteWithUnsavedChangesTitle: 'Supprimer cette entrée publiée ?',
       onDeleteWithUnsavedChangesBody:
         'Voulez-vous vraiment supprimer cette entrée publiée ainsi que vos modifications non enregistrées de cette session ?',
-      onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
+      onDeletePublishedEntryTitle: 'Supprimer cette entrée publiée ?',
       onDeletePublishedEntryBody: 'Voulez-vous vraiment supprimer cette entrée publiée ?',
       onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
@@ -139,8 +139,8 @@ const fr: LocalePhrasesRoot = {
       loadingEntry: "Chargement de l'entrée...",
     },
     editorInterface: {
-      sideBySideI18n: undefined, // English translation: 'I18n Side by Side'
-      preview: undefined, // English translation: 'Preview'
+      sideBySideI18n: 'I18n Côte à Côte',
+      preview: 'Aperçu',
       toggleI18n: 'Édition multilingue',
       togglePreview: 'Aperçu',
       toggleScrollSync: 'Défilement synchronisé',
@@ -175,9 +175,9 @@ const fr: LocalePhrasesRoot = {
       deployPreviewPendingButtonLabel: "Vérifier l'aperçu",
       deployPreviewButtonLabel: "Voir l'aperçu",
       deployButtonLabel: 'Voir en direct',
-      discardChanges: undefined, // English translation: 'Discard changes'
-      discardChangesTitle: undefined, // English translation: 'Discard changes'
-      discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
+      discardChanges: 'Abandonner les modifications',
+      discardChangesTitle: 'Abandonner les modifications',
+      discardChangesBody: 'Voulez-vous vraiment supprimer vos modifications non enregistrées ?',
     },
     editorWidgets: {
       markdown: {
@@ -215,36 +215,36 @@ const fr: LocalePhrasesRoot = {
       },
       image: {
         choose: 'Choisir une image',
-        chooseMultiple: undefined, // English translation: 'Choose images'
+        chooseMultiple: 'Choisir des images',
         chooseUrl: 'Insérer depuis une adresse web',
         replaceUrl: 'Remplacer depuis une adresse web',
         promptUrl: "Entrer l'adresse web de l'image",
         chooseDifferent: 'Choisir une image différente',
-        addMore: undefined, // English translation: 'Add more images'
+        addMore: "Ajouter plus d'images",
         remove: "Supprimer l'image",
-        removeAll: undefined, // English translation: 'Remove all images'
+        removeAll: 'Supprimer toutes les images',
       },
       file: {
         choose: 'Choisir un fichier',
         chooseUrl: 'Insérer depuis une adresse web',
-        chooseMultiple: undefined, // English translation: 'Choose files'
+        chooseMultiple: 'Choisir des fichiers',
         replaceUrl: 'Remplacer depuis une adresse web',
         promptUrl: "Entrer l'adresse web du fichier",
         chooseDifferent: 'Choisir un fichier différent',
-        addMore: undefined, // English translation: 'Add more files'
+        addMore: 'Ajouter plus de fichiers',
         remove: 'Effacer le fichier',
-        removeAll: undefined, // English translation: 'Remove all files'
+        removeAll: 'Effacer tous les fichiers',
       },
       folder: {
-        choose: undefined, // English translation: 'Choose a folder'
-        chooseUrl: undefined, // English translation: 'Insert folder path'
-        chooseMultiple: undefined, // English translation: 'Choose folders'
-        replaceUrl: undefined, // English translation: 'Replace with path'
-        promptUrl: undefined, // English translation: 'Enter path of the folder'
-        chooseDifferent: undefined, // English translation: 'Choose different folder'
-        addMore: undefined, // English translation: 'Add more folders'
-        remove: undefined, // English translation: 'Remove folder'
-        removeAll: undefined, // English translation: 'Remove all folders'
+        choose: 'Choisir un dossier',
+        chooseUrl: 'Insérer le chemin du dossier',
+        chooseMultiple: 'Choisir des dossiers',
+        replaceUrl: 'Remplacer par un chemin',
+        promptUrl: 'Entrer le chemin du dossier',
+        chooseDifferent: 'Choisir un dossier différent',
+        addMore: 'Ajouter plus de dossiers',
+        remove: 'Supprimer le dossier',
+        removeAll: 'Supprimer tous les dossiers',
       },
       unknownControl: {
         noControl: "Pas de contrôle pour le gadget '%{widget}'.",
@@ -262,18 +262,18 @@ const fr: LocalePhrasesRoot = {
       },
       datetime: {
         now: 'Maintenant',
-        invalidDateTitle: undefined, // English translation: 'Invalid date'
-        invalidDateBody: undefined, // English translation: 'The date you entered is invalid.'
+        invalidDateTitle: 'Date invalide',
+        invalidDateBody: 'La date que vous avez saisi est invalide.',
       },
       list: {
         add: 'Ajouter %{item}',
         addType: 'Ajouter une entrée de type %{item}',
-        noValue: undefined, // English translation: 'No value'
+        noValue: 'Pas de valeur',
       },
       keyvalue: {
-        key: undefined, // English translation: 'Key'
-        value: undefined, // English translation: 'Value'
-        uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
+        key: 'Clé',
+        value: 'Valeur',
+        uniqueKeys: '%{keyLabel} doit être unique',
       },
       code: {
         language: undefined, // English translation: 'Language'
@@ -291,13 +291,13 @@ const fr: LocalePhrasesRoot = {
       copied: 'Copié',
     },
     mediaLibrary: {
-      onDeleteTitle: undefined, // English translation: 'Delete selected media?'
+      onDeleteTitle: 'Supprimer la ressource sélectionné ?',
       onDeleteBody: 'Voulez-vous vraiment supprimer la ressource sélectionné ?',
-      fileTooLargeTitle: undefined, // English translation: 'File too large'
+      fileTooLargeTitle: 'Fichier trop volumineux',
       fileTooLargeBody:
         "Le fichier est trop volumineux.\nL'instance est configurée pour bloquer les envois de plus de %{size} kB.",
-      alreadyExistsTitle: undefined, // English translation: 'File already exists'
-      alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
+      alreadyExistsTitle: 'Fichier déjà existant',
+      alreadyExistsBody: '%{filename} existe déjà. Voulez-vous le remplacer ?',
     },
     mediaLibraryModal: {
       noResults: 'Aucun résultat.',
@@ -313,31 +313,31 @@ const fr: LocalePhrasesRoot = {
       deleting: 'Suppression...',
       deleteSelected: 'Supprimer les éléments sélectionnés',
       chooseSelected: 'Choisir les éléments sélectionnés',
-      dropImages: undefined, // English translation: 'Drop images to upload'
-      dropFiles: undefined, // English translation: 'Drop files to upload'
+      dropImages: 'Déposer les images à téléverser',
+      dropFiles: 'Déposer les fichiers à téléverser',
     },
     folderSupport: {
-      newFolder: undefined, // English translation: 'New folder'
-      createNewFolder: undefined, // English translation: 'Create new folder'
-      enterFolderName: undefined, // English translation: 'Enter folder name...'
+      newFolder: 'Nouveau dossier',
+      createNewFolder: 'Créer un nouveau dossier',
+      enterFolderName: 'Entrer le nom du dossier',
       create: undefined, // English translation: 'Create'
-      home: undefined, // English translation: 'Home'
-      up: undefined, // English translation: 'Up'
-      upToFolder: undefined, // English translation: 'Up to %{folder}'
+      home: 'Accueil',
+      up: 'Remonter',
+      upToFolder: 'Remonter vers %{folder}',
     },
   },
   ui: {
     common: {
-      yes: undefined, // English translation: 'Yes'
-      no: undefined, // English translation: 'No'
-      okay: undefined, // English translation: 'OK'
+      yes: 'Oui',
+      no: 'Non',
+      okay: 'OK',
       cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: 'Retourner sur le site',
     },
     localBackup: {
-      hasLocalBackup: undefined, // English translation: 'Has local backup'
+      hasLocalBackup: 'A une sauvegarde locale',
     },
     errorBoundary: {
       title: 'Erreur',
@@ -360,9 +360,9 @@ const fr: LocalePhrasesRoot = {
       onFailToLoadEntries: "Échec du chargement de l'entrée : %{details}",
       onFailToLoadDeployPreview: "Échec du chargement de l'aperçu : %{details}",
       onFailToPersist: "Échec de l'enregistrement de l'entrée : %{details}",
-      onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
+      onFailToPersistMedia: "Échec de l'enregistrement de la ressource : %{details}",
       onFailToDelete: "Échec de la suppression de l'entrée : %{details}",
-      onFailToDeleteMedia: undefined, // English translation: 'Failed to delete media: %{details}'
+      onFailToDeleteMedia: 'Échec de la suppression de la ressource : %{details}',
       onFailToUpdateStatus: 'Échec de la mise à jour du statut : %{details}',
       missingRequiredField:
         'Oops, il manque un champ requis. Veuillez le renseigner avant de soumettre.',
