@@ -1,4 +1,5 @@
 import isEqual from 'lodash/isEqual';
+import set from 'lodash/set';
 import { v4 as uuid } from 'uuid';
 
 import {
@@ -23,7 +24,6 @@ import {
 import { duplicateI18nFields, getDataPath } from '../lib/i18n';
 import { fileForEntry } from '../lib/util/collection.util';
 import { applyDefaultsToDraftData } from '../lib/util/entry.util';
-import { set } from '../lib/util/object.util';
 
 import type { EntriesAction } from '../actions/entries';
 import type { Entry, FieldsErrors } from '../interface';
