@@ -220,7 +220,10 @@ const EditorControl = ({
           path,
           query,
           t,
-          value: internalValue,
+          value:
+            field.widget === 'list' || field.widget === 'object'
+              ? finalStorageValue
+              : internalValue,
           forList,
           listItemPath,
           forSingleList,
