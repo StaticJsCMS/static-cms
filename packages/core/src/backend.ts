@@ -3,6 +3,7 @@ import attempt from 'lodash/attempt';
 import flatten from 'lodash/flatten';
 import get from 'lodash/get';
 import isError from 'lodash/isError';
+import set from 'lodash/set';
 import uniq from 'lodash/uniq';
 import { dirname } from 'path';
 
@@ -45,7 +46,6 @@ import filterEntries from './lib/util/filter.util';
 import { DRAFT_MEDIA_FILES, selectMediaFilePublicPath } from './lib/util/media.util';
 import { selectCustomPath, slugFromCustomPath } from './lib/util/nested.util';
 import { isNullish } from './lib/util/null.util';
-import { set } from './lib/util/object.util';
 import { fileSearch, sortByScore } from './lib/util/search.util';
 import { dateParsers, expandPath, extractTemplateVars } from './lib/widgets/stringTemplate';
 import createEntry from './valueObjects/createEntry';
