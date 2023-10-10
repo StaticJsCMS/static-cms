@@ -1,3 +1,4 @@
+import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
 import set from 'lodash/set';
 import { v4 as uuid } from 'uuid';
@@ -81,7 +82,7 @@ function entryDraftReducer(
           ...entry,
           data: applyDefaultsToDraftData(fields, undefined, entry.data),
         },
-        original: entry,
+        original: cloneDeep(entry),
         fieldsErrors: {},
         hasChanged: false,
         key: uuid(),
@@ -100,7 +101,7 @@ function entryDraftReducer(
       return {
         ...newState,
         entry,
-        original: entry,
+        original: cloneDeep(entry),
         fieldsErrors: {},
         hasChanged: false,
         key: uuid(),
@@ -126,7 +127,7 @@ function entryDraftReducer(
       return {
         ...state,
         entry,
-        original: entry,
+        original: cloneDeep(entry),
         fieldsErrors: {},
         hasChanged: true,
         key: uuid(),
@@ -146,7 +147,7 @@ function entryDraftReducer(
       return {
         ...newState,
         entry,
-        original: entry,
+        original: cloneDeep(entry),
         fieldsErrors: {},
         hasChanged: true,
       };
@@ -214,9 +215,11 @@ function entryDraftReducer(
         ? ['meta']
         : (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
 
+      const newEntry = cloneDeep(newState.entry);
+
       newState = {
         ...newState,
-        entry: set(newState.entry, `${dataPath.join('.')}.${path}`, value),
+        entry: set(newEntry, `${dataPath.join('.')}.${path}`, value),
       };
 
       if (i18n) {
@@ -224,14 +227,14 @@ function entryDraftReducer(
       }
 
       let hasChanged =
-        !isEqual(newState.entry?.meta, newState.original?.meta) ||
-        !isEqual(newState.entry?.data, newState.original?.data);
+        !isEqual(newEntry?.meta, newState.original?.meta) ||
+        !isEqual(newEntry?.data, newState.original?.data);
 
-      const i18nData = newState.entry?.i18n ?? {};
+      const i18nData = newEntry?.i18n ?? {};
       for (const locale in i18nData) {
         hasChanged =
           hasChanged ||
-          !isEqual(newState.entry?.i18n?.[locale]?.data, newState.original?.i18n?.[locale]?.data);
+          !isEqual(newEntry?.i18n?.[locale]?.data, newState.original?.i18n?.[locale]?.data);
       }
 
       return {
@@ -390,7 +393,7 @@ function entryDraftReducer(
         ...newState,
         hasChanged: false,
         entry,
-        original: entry,
+        original: cloneDeep(entry),
       };
     }
 
@@ -411,7 +414,7 @@ function entryDraftReducer(
         ...newState,
         hasChanged: false,
         entry,
-        original: entry,
+        original: cloneDeep(entry),
       };
     }
 

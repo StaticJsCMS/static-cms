@@ -108,6 +108,15 @@ const EditorControl: FC<EditorControlProps> = ({
   const hidden = useHidden(field, entry, listItemPath);
 
   useEffect(() => {
+    if (!['list', 'object'].includes(field.widget)) {
+      return;
+    }
+
+    setInternalValue(finalStorageValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [finalStorageValue]);
+
+  useEffect(() => {
     if (hidden) {
       dispatch(changeDraftFieldValidation(path, [], i18n, isMeta));
       return;
