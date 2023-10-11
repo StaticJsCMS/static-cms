@@ -10,6 +10,7 @@ import { dirname } from 'path';
 import { resolveFormat } from './formats/formats';
 import { commitMessageFormatter, slugFormatter } from './lib/formatters';
 import {
+  I18N_STRUCTURE_MULTIPLE_FOLDERS,
   formatI18nBackup,
   getFilePaths,
   getI18nBackup,
@@ -65,6 +66,7 @@ import type {
   EntryData,
   EventData,
   FilterRule,
+  I18nInfo,
   ImplementationEntry,
   MediaField,
   ObjectValue,
@@ -293,6 +295,14 @@ function collectionDepth<EF extends BaseField>(collection: Collection<EF>) {
   return depth;
 }
 
+function i18nRulestring(ruleString: string, { defaultLocale, structure }: I18nInfo): string {
+  if (structure === I18N_STRUCTURE_MULTIPLE_FOLDERS) {
+    return `${defaultLocale}\\/${ruleString}`;
+  }
+
+  return `${ruleString}\\.${defaultLocale}\\..*`;
+}
+
 function collectionRegex<EF extends BaseField>(collection: Collection<EF>): RegExp | undefined {
   let ruleString = '';
 
@@ -301,8 +311,7 @@ function collectionRegex<EF extends BaseField>(collection: Collection<EF>): RegE
   }
 
   if (hasI18n(collection)) {
-    const { defaultLocale } = getI18nInfo(collection);
-    ruleString += `\\.${defaultLocale}\\..*`;
+    ruleString = i18nRulestring(ruleString, getI18nInfo(collection));
   }
 
   return ruleString ? new RegExp(ruleString) : undefined;
