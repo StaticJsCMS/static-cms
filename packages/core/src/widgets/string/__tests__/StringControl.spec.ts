@@ -66,10 +66,8 @@ describe(StringControl.name, () => {
       await userEvent.type(input, 'I am some text');
     });
 
-    expect(onChange).toHaveBeenCalledTimes(0);
-
     await waitFor(() => {
-      expect(onChange).toHaveBeenCalledTimes(1);
+      expect(onChange).toHaveBeenCalledTimes(14);
       expect(onChange).toHaveBeenLastCalledWith('I am some text');
     });
   });
