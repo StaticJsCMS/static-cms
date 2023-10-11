@@ -36,21 +36,16 @@ const StringControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
     () => (controlled || duplicate ? rawValue : internalRawValue),
     [controlled, duplicate, rawValue, internalRawValue],
   );
-  const debouncedInternalValue = useDebounce(internalValue, 250);
 
   const ref = useRef<HTMLInputElement | null>(null);
 
-  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setInternalValue(event.target.value);
-  }, []);
-
-  useEffect(() => {
-    if (rawValue === debouncedInternalValue) {
-      return;
-    }
-
-    onChange(debouncedInternalValue);
-  }, [debouncedInternalValue, onChange, rawValue]);
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      onChange(event.target.value);
+      setInternalValue(event.target.value);
+    },
+    [onChange],
+  );
 
   return (
     <Field

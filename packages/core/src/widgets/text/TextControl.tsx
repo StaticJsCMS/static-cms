@@ -27,29 +27,25 @@ const TextControl: FC<WidgetControlProps<string, StringOrTextField>> = ({
   disabled,
   field,
   forSingleList,
+  controlled,
   onChange,
 }) => {
   const rawValue = useMemo(() => value ?? '', [value]);
   const [internalRawValue, setInternalValue] = useState(rawValue);
   const internalValue = useMemo(
-    () => (duplicate ? rawValue : internalRawValue),
-    [internalRawValue, duplicate, rawValue],
+    () => (controlled || duplicate ? rawValue : internalRawValue),
+    [controlled, duplicate, rawValue, internalRawValue],
   );
-  const debouncedInternalValue = useDebounce(internalValue, 250);
 
   const ref = useRef<HTMLInputElement | null>(null);
 
-  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setInternalValue(event.target.value);
-  }, []);
-
-  useEffect(() => {
-    if (rawValue === debouncedInternalValue) {
-      return;
-    }
-
-    onChange(debouncedInternalValue);
-  }, [debouncedInternalValue, onChange, rawValue]);
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      onChange(event.target.value);
+      setInternalValue(event.target.value);
+    },
+    [onChange],
+  );
 
   return (
     <Field
