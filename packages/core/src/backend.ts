@@ -296,7 +296,7 @@ function collectionDepth<EF extends BaseField>(collection: Collection<EF>) {
   return depth;
 }
 
-function i18nRulestring(ruleString: string, { defaultLocale, structure }: I18nInfo): string {
+function i18nRuleString(ruleString: string, { defaultLocale, structure }: I18nInfo): string {
   if (structure === I18N_STRUCTURE_MULTIPLE_FOLDERS) {
     return `${defaultLocale}\\/${ruleString}`;
   }
@@ -316,7 +316,7 @@ function collectionRegex<EF extends BaseField>(collection: Collection<EF>): RegE
   }
 
   if (hasI18n(collection)) {
-    ruleString = i18nRulestring(ruleString, getI18nInfo(collection));
+    ruleString = i18nRuleString(ruleString, getI18nInfo(collection));
   }
 
   return ruleString ? new RegExp(ruleString) : undefined;
