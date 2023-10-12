@@ -102,13 +102,15 @@ const EditorControl: FC<EditorControlProps> = ({
     [field, i18n?.defaultLocale, parentDuplicate, locale],
   );
   const i18nDisabled = useMemo(
-    () => isFieldHidden(field, locale, i18n?.defaultLocale),
+    () =>
+      isFieldHidden(field, locale, i18n?.defaultLocale) ||
+      isFieldDuplicate(field, locale, i18n?.defaultLocale),
     [field, i18n?.defaultLocale, locale],
   );
   const hidden = useHidden(field, entry, listItemPath);
 
   useEffect(() => {
-    if (!['list', 'object'].includes(field.widget)) {
+    if (!['list', 'object'].includes(field.widget) && !i18nDisabled) {
       return;
     }
 
@@ -220,7 +222,7 @@ const EditorControl: FC<EditorControlProps> = ({
           field: field as UnknownField,
           fieldsErrors,
           submitted,
-          disabled: disabled || duplicate || hidden || i18nDisabled,
+          disabled: disabled || duplicate || controlled || i18nDisabled,
           duplicate,
           label: getFieldLabel(field, t),
           locale,
@@ -236,7 +238,7 @@ const EditorControl: FC<EditorControlProps> = ({
           i18n,
           hasErrors,
           errors,
-          controlled,
+          controlled: controlled || i18nDisabled,
         })}
       </div>
     );

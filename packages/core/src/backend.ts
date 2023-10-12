@@ -11,6 +11,7 @@ import { WorkflowStatus, workflowStatusFromString } from './constants/publishMod
 import { formatExtensions, resolveFormat } from './formats/formats';
 import { commitMessageFormatter, slugFormatter } from './lib/formatters';
 import {
+  I18N_STRUCTURE_MULTIPLE_FOLDERS,
   formatI18nBackup,
   getFilePaths,
   getI18nBackup,
@@ -72,6 +73,7 @@ import type {
   EventData,
   FilterRule,
   FolderCollection,
+  I18nInfo,
   ImplementationEntry,
   MediaField,
   ObjectValue,
@@ -190,19 +192,22 @@ export function expandSearchEntries(
   field: string;
 })[] {
   // expand the entries for the purpose of the search
-  const expandedEntries = entries.reduce((acc, e) => {
-    const expandedFields = searchFields.reduce((acc, f) => {
-      const fields = expandPath({ data: e.data, path: f });
-      acc.push(...fields);
+  const expandedEntries = entries.reduce(
+    (acc, e) => {
+      const expandedFields = searchFields.reduce((acc, f) => {
+        const fields = expandPath({ data: e.data, path: f });
+        acc.push(...fields);
+        return acc;
+      }, [] as string[]);
+
+      for (let i = 0; i < expandedFields.length; i++) {
+        acc.push({ ...e, field: expandedFields[i] });
+      }
+
       return acc;
-    }, [] as string[]);
-
-    for (let i = 0; i < expandedFields.length; i++) {
-      acc.push({ ...e, field: expandedFields[i] });
-    }
-
-    return acc;
-  }, [] as (Entry & { field: string })[]);
+    },
+    [] as (Entry & { field: string })[],
+  );
 
   return expandedEntries;
 }
@@ -212,27 +217,30 @@ export function mergeExpandedEntries(entries: (Entry & { field: string })[]): En
   const fields = entries.map(f => f.field);
   const arrayPaths: Record<string, Set<string>> = {};
 
-  const merged = entries.reduce((acc, e) => {
-    if (!acc[e.slug]) {
-      const { field: _field, ...rest } = e;
-      acc[e.slug] = rest;
-      arrayPaths[e.slug] = new Set();
-    }
+  const merged = entries.reduce(
+    (acc, e) => {
+      if (!acc[e.slug]) {
+        const { field: _field, ...rest } = e;
+        acc[e.slug] = rest;
+        arrayPaths[e.slug] = new Set();
+      }
 
-    const nestedFields = e.field.split('.');
-    let value: ValueOrNestedValue = acc[e.slug].data;
-    for (let i = 0; i < nestedFields.length; i++) {
-      if (isNotNullish(value)) {
-        value = value[nestedFields[i]];
-        if (Array.isArray(value)) {
-          const path = nestedFields.slice(0, i + 1).join('.');
-          arrayPaths[e.slug] = arrayPaths[e.slug].add(path);
+      const nestedFields = e.field.split('.');
+      let value: ValueOrNestedValue = acc[e.slug].data;
+      for (let i = 0; i < nestedFields.length; i++) {
+        if (isNotNullish(value)) {
+          value = value[nestedFields[i]];
+          if (Array.isArray(value)) {
+            const path = nestedFields.slice(0, i + 1).join('.');
+            arrayPaths[e.slug] = arrayPaths[e.slug].add(path);
+          }
         }
       }
-    }
 
-    return acc;
-  }, {} as Record<string, Entry>);
+      return acc;
+    },
+    {} as Record<string, Entry>,
+  );
 
   // this keeps the search score sorting order designated by the order in entries
   // and filters non matching items
@@ -314,6 +322,14 @@ function collectionDepth<EF extends BaseField>(collection: Collection<EF>) {
   return depth;
 }
 
+function i18nRulestring(ruleString: string, { default_locale, structure }: I18nInfo): string {
+  if (structure === I18N_STRUCTURE_MULTIPLE_FOLDERS) {
+    return `${default_locale}\\/${ruleString}`;
+  }
+
+  return `${ruleString}\\.${default_locale}\\..*`;
+}
+
 function collectionRegex<EF extends BaseField>(collection: Collection<EF>): RegExp | undefined {
   let ruleString = '';
 
@@ -322,8 +338,7 @@ function collectionRegex<EF extends BaseField>(collection: Collection<EF>): RegE
   }
 
   if (hasI18n(collection)) {
-    const { default_locale } = getI18nInfo(collection);
-    ruleString += `\\.${default_locale}\\..*`;
+    ruleString = i18nRulestring(ruleString, getI18nInfo(collection));
   }
 
   return ruleString ? new RegExp(ruleString) : undefined;

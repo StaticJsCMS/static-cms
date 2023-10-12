@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import Field from '@staticcms/core/components/common/field/Field';
 import TextField from '@staticcms/core/components/common/text-field/TextField';
-import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
@@ -43,21 +42,16 @@ const StringControl: FC<WidgetControlProps<string, StringField>> = ({
     () => (controlled || duplicate ? rawValue : internalRawValue),
     [controlled, duplicate, rawValue, internalRawValue],
   );
-  const debouncedInternalValue = useDebounce(internalValue, 250);
 
   const ref = useRef<HTMLInputElement | null>(null);
 
-  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setInternalValue(event.target.value);
-  }, []);
-
-  useEffect(() => {
-    if (rawValue === debouncedInternalValue) {
-      return;
-    }
-
-    onChange(debouncedInternalValue);
-  }, [debouncedInternalValue, onChange, rawValue]);
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      onChange(event.target.value);
+      setInternalValue(event.target.value);
+    },
+    [onChange],
+  );
 
   const prefix = useMemo(() => field.prefix ?? '', [field.prefix]);
   const suffix = useMemo(() => field.suffix ?? '', [field.suffix]);
