@@ -269,7 +269,7 @@ export interface BaseCollection {
   sortable_fields?: SortableFields;
   view_filters?: ViewFilters;
   view_groups?: ViewGroups;
-  i18n?: boolean | Partial<I18nInfo>;
+  i18n?: boolean | I18nInfo;
   hide?: boolean;
   editor?: EditorConfig;
   identifier_field?: string;

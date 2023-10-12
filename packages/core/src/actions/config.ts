@@ -88,8 +88,8 @@ function setI18nField<T extends BaseField = UnknownField>(field: T) {
 
 function getI18nDefaults(
   collectionOrFileI18n: boolean | Partial<I18nInfo>,
-  defaultI18n: Partial<I18nInfo>,
-) {
+  defaultI18n: I18nInfo,
+): I18nInfo {
   if (typeof collectionOrFileI18n === 'boolean') {
     return defaultI18n;
   } else {
