@@ -10,6 +10,7 @@ import { dirname } from 'path';
 import { resolveFormat } from './formats/formats';
 import { commitMessageFormatter, slugFormatter } from './lib/formatters';
 import {
+  I18N_STRUCTURE_MULTIPLE_FILES,
   I18N_STRUCTURE_MULTIPLE_FOLDERS,
   formatI18nBackup,
   getFilePaths,
@@ -300,7 +301,11 @@ function i18nRulestring(ruleString: string, { defaultLocale, structure }: I18nIn
     return `${defaultLocale}\\/${ruleString}`;
   }
 
-  return `${ruleString}\\.${defaultLocale}\\..*`;
+  if (structure === I18N_STRUCTURE_MULTIPLE_FILES) {
+    return `${ruleString}\\.${defaultLocale}\\..*`;
+  }
+
+  return ruleString;
 }
 
 function collectionRegex<EF extends BaseField>(collection: Collection<EF>): RegExp | undefined {
