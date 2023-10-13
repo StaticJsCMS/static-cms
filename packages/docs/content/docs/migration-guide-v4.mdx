@@ -1,0 +1,41 @@
+---
+group: Migration
+title: How to Upgrade to v4
+weight: 101
+---
+
+<Alert severity="error">This page is a work in progress! Do not use!</Alert>
+
+Static CMS v4 introduces:
+
+- [Custom themes](/docs/custom-theme)
+- [Editorial Workflow](/docs/editorial-workflow) <BetaImage />
+- [Open Authoring](/docs/open-authoring) (Github backend only) <BetaImage />
+
+In this guide, we will walk you through the steps for upgrading to Static CMS v4.
+
+Please [report any issues](https://github.com/StaticJsCMS/static-cms/issues/new) you encounter while upgrading to Static CMS v4.
+
+## Installing
+
+To install the latest version of Static CMS:
+
+```bash
+npm install @staticcms/core@^4.0.0
+```
+
+Or if you are using yarn:
+
+```bash
+yarn add @staticcms/core@^4.0.0
+```
+
+If you are using a CDN to load Static CMS, simply change your URLs:
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/@staticcms/app@^4.0.0/dist/main.css" />
+```
+
+```html
+<script src="https://unpkg.com/@staticcms/app@^4.0.0/dist/static-cms-app.js"></script>
+```
