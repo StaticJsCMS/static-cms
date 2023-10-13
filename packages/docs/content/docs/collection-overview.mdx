@@ -220,6 +220,55 @@ summary: 'Version: {{version}} - {{title}}',
 
 </CodeTabs>
 
+### Template Transformations
+
+You can apply transformations on fields in a summary string template using filter notation syntax.
+
+Example config:
+
+<CodeTabs>
+```yaml
+collections:
+  - name: 'posts'
+    label: 'Posts'
+    folder: '_posts'
+    summary: "{{title | upper}} - {{date | date('yyyy-MM-dd')}} - {{body | truncate(20, '***')}}"
+    fields:
+      - { label: 'Title', name: 'title', widget: 'string' }
+      - { label: 'Publish Date', name: 'date', widget: 'datetime' }
+      - { label: 'Body', name: 'body', widget: 'markdown' }
+```
+
+```js
+collections: [
+  {
+    name: 'posts',
+    label: 'Posts',
+    folder: '_posts',
+    summary: "{{title | upper}} - {{date | date('yyyy-MM-dd')}} - {{body | truncate(20, '***')}}",
+    fields: [
+      { label: 'Title', name: 'title', widget: 'string' },
+      { label: 'Publish Date', name: 'date', widget: 'datetime' },
+      { label: 'Body', name: 'body', widget: 'markdown' },
+    ],
+  },
+],
+```
+
+</CodeTabs>
+
+The above config will transform the title field to uppercase and format the date field using `yyyy-MM-dd` format.
+Available transformations are:
+
+| Name     | Format                                                     | Description                                                                                                                     |
+| -------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| upper    | `upper`                                                    | Transforms the value to uppercase                                                                                               |
+| lower    | `lower`                                                    | Transforms the value to lowercase                                                                                               |
+| date     | `date('<format>')`                                         | Formats a date string in the provided format. Accepts [date-fns tokens](https://date-fns.org/docs/format)                       |
+| default  | `default('defaultValue')`                                  | Provides default value if no field value                                                                                        |
+| ternary  | `ternary('valueForTrue','valueForFalse')`                  | <ul><li>If field has value, show `valueForTrue`</li><li>If field does not have a value, show `valueForFalse`</li></ul>          |
+| truncate | `truncate(<number>)`<br />`truncate(<number>, '<string>')` | Truncates text to a specified length. An optional replacement string for the omitted text can be provided as a second parameter |
+
 ## Sortable Fields
 
 The `sortable_fields` setting is an optional object with the following options:
