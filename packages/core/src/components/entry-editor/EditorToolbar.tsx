@@ -16,7 +16,10 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectAllowDeletion, selectAllowPublish } from '@staticcms/core/lib/util/collection.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
-import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
+import {
+  selectIsFetching,
+  selectUseOpenAuthoring,
+} from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import IconButton from '../common/button/IconButton';
 import confirm from '../common/confirm/Confirm';
@@ -46,13 +49,13 @@ export const classes = generateClassNames('EditorToolbar', [
 
 export interface EditorToolbarProps {
   isPersisting?: boolean;
-  isDeleting?: boolean;
   onPersist: (opts?: EditorPersistOptions) => Promise<void>;
   onPersistAndNew: () => Promise<void>;
   onPersistAndDuplicate: () => Promise<void>;
   onDelete: () => Promise<void>;
   onDuplicate: () => void;
   hasChanged: boolean;
+  hasUnpublishedChanges: boolean;
   collection: Collection;
   isNewEntry: boolean;
   isModification?: boolean;
@@ -72,7 +75,6 @@ export interface EditorToolbarProps {
   currentStatus: WorkflowStatus | undefined;
   isUpdatingStatus: boolean;
   onChangeStatus: (status: WorkflowStatus) => void;
-  hasUnpublishedChanges: boolean;
   isPublishing: boolean;
   onPublish: (opts?: EditorPersistOptions) => Promise<void>;
   onUnPublish: () => Promise<void>;
@@ -120,12 +122,17 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
 }) => {
   const t = useTranslate();
 
+  const useOpenAuthoring = useAppSelector(selectUseOpenAuthoring);
+
   const canCreate = useMemo(
     () => ('folder' in collection && collection.create) ?? false,
     [collection],
   );
   const canDelete = useMemo(() => selectAllowDeletion(collection), [collection]);
-  const canPublish = useMemo(() => selectAllowPublish(collection, slug), [collection, slug]);
+  const canPublish = useMemo(
+    () => selectAllowPublish(collection, slug) && !useOpenAuthoring,
+    [collection, slug, useOpenAuthoring],
+  );
   const isPublished = useMemo(() => !isNewEntry && !hasChanged, [hasChanged, isNewEntry]);
   const isLoading = useAppSelector(selectIsFetching);
 
@@ -358,7 +365,9 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
               </MenuItemButton>
             </MenuGroup>
           ) : null}
-          {canDelete && (!useWorkflow || workflowDeleteLabel) ? (
+          {canDelete &&
+          (!useOpenAuthoring || hasUnpublishedChanges) &&
+          (!useWorkflow || workflowDeleteLabel) ? (
             <MenuGroup key="delete-button">
               <MenuItemButton
                 onClick={
@@ -413,10 +422,11 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
             disabled={disabled}
             onChangeStatus={onChangeStatus}
             isLoading={isLoading}
+            useOpenAuthoring={useOpenAuthoring}
           />
         </div>
       ) : null}
-      {publishLabel ? (
+      {!useOpenAuthoring && publishLabel ? (
         <Menu
           label={t(publishLabel)}
           color={publishLabel === 'editor.editorToolbar.published' ? 'success' : 'primary'}

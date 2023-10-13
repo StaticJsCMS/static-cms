@@ -9,191 +9,22 @@ weight: 200
   fix the features as well as update the docs. Use at your own risk.
 </Alert>
 
-Static CMS runs new functionality in an open beta format from time to time. That means that this functionality is totally available for use, an it might be ready for primetime, but it could break or change without notice.
+Static CMS runs new functionality in an open beta format from time to time. That means that this functionality is fully available for use, and it might be ready for primetime, but it could break or change without notice.
 
 **Use these features at your own risk.**
 
-## Folder Collections Path
+## Editorial Workflow
 
-By default Static CMS stores folder collection content under the folder specified in the collection setting. You can now specify an additional `path` template (similar to the `slug` template) to control the content destination.
+By default, all entries created or edited in Static CMS are committed directly into the main repository branch.
 
-This allows saving content in subfolders, e.g. configuring `path: '{{year}}/{{slug}}'` will save the content under `posts/2019/post-title.md`.
+The publish_mode option allows you to enable "Editorial Workflow" mode for more control over the content publishing phases. All unpublished entries will be arranged in a board according to their status, and they can be further reviewed and edited before going live.
 
-See [Folder Collections Path](/docs/collection-types#folder-collections-path) for more information.
+See [Editorial Workflow](/docs/editorial-workflow) for more information.
 
-## Nested Collections
+## Open Authoring
 
-Nested collections is a beta feature that allows a folder collection to show a nested structure of entries and edit the locations of the entries. This feature is useful when you have a complex folder structure and may not want to create separate collections for every directory.
+When using the [GitHub backend](/docs/github-backend), you can use Static CMS to accept contributions from GitHub users without giving them access to your repository. When they make changes in the CMS, the CMS forks your repository for them behind the scenes, and all the changes are made to the fork. When the contributor is ready to submit their changes, they can set their draft as ready for review in the CMS. This triggers a pull request to your repository, which you can merge using the GitHub UI.
 
-See [Nested Collections](/docs/collection-types#nested-collections) for more information.
+At the same time, any contributors who _do_ have write access to the repository can continue to use Static CMS normally.
 
-## Image widget file size limit
-
-You can set a limit to as what the maximum file size of a file is that users can upload directly into a image field.
-
-See [Media Library](/docs/configuration-options#media-library) for more information.
-
-## Media Library Folders
-
-Adds support for viewing subfolders and creating new subfolders in the media library, under your configured `media_folder`.
-
-See [Media Library](/docs/configuration-options#media-library) for more information.
-
-## Summary string template transformations
-
-You can apply transformations on fields in a summary string template using filter notation syntax.
-
-Example config:
-
-<CodeTabs>
-```yaml
-collections:
-  - name: 'posts'
-    label: 'Posts'
-    folder: '_posts'
-    summary: "{{title | upper}} - {{date | date('YYYY-MM-DD')}} - {{body | truncate(20, '***')}}"
-    fields:
-      - { label: 'Title', name: 'title', widget: 'string' }
-      - { label: 'Publish Date', name: 'date', widget: 'datetime' }
-      - { label: 'Body', name: 'body', widget: 'markdown' }
-```
-
-```js
-collections: [
-  {
-    name: 'posts',
-    label: 'Posts',
-    folder: '_posts',
-    summary: "{{title | upper}} - {{date | date('YYYY-MM-DD')}} - {{body | truncate(20, '***')}}",
-    fields: [
-      { label: 'Title', name: 'title', widget: 'string' },
-      { label: 'Publish Date', name: 'date', widget: 'datetime' },
-      { label: 'Body', name: 'body', widget: 'markdown' },
-    ],
-  },
-],
-```
-
-</CodeTabs>
-
-The above config will transform the title field to uppercase and format the date field using `YYYY-MM-DD` format.
-Available transformations are `upper`, `lower`, `date('<format>')`, `default('defaultValue')`, `ternary('valueForTrue','valueForFalse')` and `truncate(<number>)`/`truncate(<number>, '<string>')`
-
-## Registering to CMS Events
-
-You can execute a function when a specific CMS event occurs. Supported events are `mounted`, `login`, `logout`, `change`, `preSave` and `postSave`.
-
-### Mounted
-
-The `mounted` event handler fires once the CMS is fully loaded.
-
-```javascript
-CMS.registerEventListener({
-  name: 'mounted',
-  handler: () => {
-    // your code here
-  },
-});
-```
-
-### Login
-
-The `login` event handler fires when a user logs into the CMS.
-
-```javascript
-CMS.registerEventListener({
-  name: 'login',
-  handler: ({ author: { login, name } }) => {
-    // your code here
-  },
-});
-```
-
-### Logout
-
-The `logout` event handler fires when a user logs out of the CMS.
-
-```javascript
-CMS.registerEventListener({
-  name: 'logout',
-  handler: () => {
-    // your code here
-  },
-});
-```
-
-### Pre Save
-
-The `preSave` event handler fires before the changes have been saved to your git backend, and can be used to modify the entry data like so:
-
-```javascript
-CMS.registerEventListener({
-  name: 'preSave',
-  collection: 'posts',
-  handler: ({ data: { entry } }) => {
-    return {
-      ...entry.data,
-      title: 'new title',
-    };
-  },
-});
-```
-
-### Post Save
-
-The `postSave` event handler fires after the changes have been saved to your git backend.
-
-```javascript
-CMS.registerEventListener({
-  name: 'postSave',
-  collection: 'posts',
-  handler: ({ data: { entry } }) => {
-    // your code here
-  },
-});
-```
-
-### Change
-
-The `change` event handler must provide a field name, and can be used to modify the entry data like so:
-
-```javascript
-CMS.registerEventListener({
-  name: 'change',
-  collection: 'posts',
-  field: 'path.to.my.field',
-  handler: ({ data, collection, field }) => {
-    const currentValue = data.path.to.my.field;
-
-    return {
-      ...data,
-      path: {
-        ...data.path,
-        to: {
-          ...data.path.to,
-          my: {
-            ...data.path.to.my,
-            field: `new${currentValue}`
-          }
-        }
-      }
-    };
-  },
-});
-```
-
-## i18n Support
-
-Static CMS can provide a side by side interface for authoring content in multiple languages. Configuring Static CMS for i18n support requires top level configuration, collection level configuration and field level configuration.
-
-## Gitea Backend
-
-For repositories stored on Gitea, the gitea backend allows CMS users to log in directly with their Gitea account. Note that all users must have push access to your content repository for this to work.
-
-See [Gitea Backend](/docs/gitea-backend) for more information.
-
-## Large Media Support
-
-Netlify Large Media allows you to store your media files outside of your git backend. This is helpful if you are trying to store large media files.
-
-See [Netlify Large Media](/docs/netlify-large-media) for more information.
+See [Open Authoring](/docs/open-authoring) for more information.

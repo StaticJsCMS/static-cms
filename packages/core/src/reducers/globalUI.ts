@@ -1,10 +1,11 @@
-import { THEME_CHANGE } from '../constants';
+import { THEME_CHANGE, USE_OPEN_AUTHORING } from '../constants';
 import { isNotNullish } from '../lib/util/null.util';
 
 import type { GlobalUIAction } from '../actions/globalUI';
 
 export type GlobalUIState = {
   isFetching: boolean;
+  useOpenAuthoring: boolean;
   theme: string;
 };
 
@@ -23,6 +24,7 @@ function loadColorTheme(): string {
 
 const defaultState: GlobalUIState = {
   isFetching: false,
+  useOpenAuthoring: false,
   theme: loadColorTheme(),
 };
 
@@ -44,6 +46,11 @@ const globalUI = (state: GlobalUIState = defaultState, action: GlobalUIAction): 
   }
 
   switch (action.type) {
+    case USE_OPEN_AUTHORING:
+      return {
+        ...state,
+        useOpenAuthoring: true,
+      };
     case THEME_CHANGE:
       localStorage.setItem('color-theme', action.payload.toLowerCase());
       return {

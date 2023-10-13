@@ -39,14 +39,16 @@ const classes = generateClassNames('WorkflowCard', [
 
 export interface WorkflowCardProps {
   entry: Entry;
+  useOpenAuthoring: boolean;
 }
 
-const WorkflowCard: FC<WorkflowCardProps> = ({ entry }) => {
+const WorkflowCard: FC<WorkflowCardProps> = ({ entry, useOpenAuthoring }) => {
   const t = useTranslate();
   const dispatch = useAppDispatch();
 
   const { isDragging, setNodeRef, listeners } = useDraggable({
     id: `${entry.collection}|${entry.slug}`,
+    disabled: useOpenAuthoring,
   });
 
   const collection = useAppSelector(selectCollection(entry.collection));

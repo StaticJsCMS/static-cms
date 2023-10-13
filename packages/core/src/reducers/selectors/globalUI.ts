@@ -7,3 +7,7 @@ export function selectIsFetching(state: RootState) {
 export function selectTheme(state: RootState) {
   return state.globalUI.theme;
 }
+
+export function selectUseOpenAuthoring(state: RootState) {
+  return state.globalUI.useOpenAuthoring;
+}

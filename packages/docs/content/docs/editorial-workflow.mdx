@@ -1,0 +1,23 @@
+---
+group: Workflow
+weight: 10
+title: Editorial Workflow
+beta: true
+---
+
+By default, all entries created or edited in Static CMS are committed directly into the main repository branch.
+
+The `publish_mode` option allows you to enable "Editorial Workflow" mode for more control over the content publishing phases. All unpublished entries will be arranged in a board according to their status, and they can be further reviewed and edited before going live.
+
+You can enable the Editorial Workflow with the following line in your `config.yml` file:
+
+<CodeTabs>
+```yaml
+publish_mode: editorial_workflow
+```
+
+```js
+publish_mode: 'editorial_workflow';
+```
+
+</CodeTabs>

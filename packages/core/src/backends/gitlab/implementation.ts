@@ -56,6 +56,7 @@ export default class GitLab implements BackendClass {
   };
   repo: string;
   branch: string;
+  useOpenAuthoring?: boolean;
   apiRoot: string;
   token: string | null;
   squashMerges: boolean;

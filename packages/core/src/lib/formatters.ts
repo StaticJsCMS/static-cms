@@ -30,6 +30,7 @@ const commitMessageTemplates = {
   delete: 'Delete {{collection}} “{{slug}}”',
   uploadMedia: 'Upload “{{path}}”',
   deleteMedia: 'Delete “{{path}}”',
+  openAuthoring: '{{message}}',
 } as const;
 
 const variableRegex = /\{\{([^}]+)\}\}/g;
@@ -46,10 +47,11 @@ export function commitMessageFormatter<EF extends BaseField>(
   type: keyof typeof commitMessageTemplates,
   config: Config<EF>,
   { slug, path, collection, authorLogin, authorName }: Options<EF>,
+  isOpenAuthoring?: boolean,
 ) {
   const templates = { ...commitMessageTemplates, ...(config.backend.commit_messages || {}) };
 
-  return templates[type].replace(variableRegex, (_, variable) => {
+  const commitMessage = templates[type].replace(variableRegex, (_, variable) => {
     switch (variable) {
       case 'slug':
         return slug || '';
@@ -68,6 +70,26 @@ export function commitMessageFormatter<EF extends BaseField>(
         return '';
     }
   });
+
+  if (!isOpenAuthoring) {
+    return commitMessage;
+  }
+
+  const message = templates.openAuthoring?.replace(variableRegex, (_, variable: string) => {
+    switch (variable) {
+      case 'message':
+        return commitMessage;
+      case 'author-login':
+        return authorLogin || '';
+      case 'author-name':
+        return authorName || '';
+      default:
+        console.warn(`Ignoring unknown variable “${variable}” in open authoring message template.`);
+        return '';
+    }
+  });
+
+  return message;
 }
 
 export function prepareSlug(slug: string) {

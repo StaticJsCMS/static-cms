@@ -1,0 +1,119 @@
+---
+group: Customization
+title: Events Hooks
+weight: 110
+---
+
+You can execute a function when a specific event occurs within Static CMSD.
+
+Supported events are:
+
+| Name        | Description                                                                                                             |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------- |
+| mounted     | Event fires once Static CMS is fully loaded                                                                             |
+| login       | Event fires when a user logs into Static CMS                                                                            |
+| logout      | Event fires when a user logs out of Static CMS                                                                          |
+| change      | Event fires when a user changes the value of a field in the editor                                                      |
+| preSave     | Event fires before the changes have been saved to your git backend                                                      |
+| postSave    | Event fires after the changes have been saved to your git backend                                                       |
+| prePublish  | _**Editorial Workflow ONLY**_. Event fires before the entry is "published", before the PR is merged into default branch |
+| postPublish | _**Editorial Workflow ONLY**_. Event fires after the entry is "published", after the PR is merged into default branch   |
+
+## Mounted Event
+
+The `mounted` event handler fires once Static CMS is fully loaded.
+
+```javascript
+CMS.registerEventListener({
+  name: 'mounted',
+  handler: () => {
+    // your code here
+  },
+});
+```
+
+## Login Event
+
+The `login` event handler fires when a user logs into Static CMS.
+
+```javascript
+CMS.registerEventListener({
+  name: 'login',
+  handler: ({ author: { login, name } }) => {
+    // your code here
+  },
+});
+```
+
+## Logout Event
+
+The `logout` event handler fires when a user logs out of Static CMS.
+
+```javascript
+CMS.registerEventListener({
+  name: 'logout',
+  handler: () => {
+    // your code here
+  },
+});
+```
+
+## Change Event
+
+The `change` event handler fires when a user changes the value of a field in the editor. Event listeners for `change` must provide a field name, and can be used to modify the entry data like so:
+
+```javascript
+CMS.registerEventListener({
+  name: 'change',
+  collection: 'posts',
+  field: 'path.to.my.field',
+  handler: ({ data, collection, field }) => {
+    const currentValue = data.path.to.my.field;
+
+    return {
+      ...data,
+      path: {
+        ...data.path,
+        to: {
+          ...data.path.to,
+          my: {
+            ...data.path.to.my,
+            field: `new${currentValue}`,
+          },
+        },
+      },
+    };
+  },
+});
+```
+
+## Pre Save Event
+
+The `preSave` event handler fires before the changes have been saved to your git backend, and can be used to modify the entry data like so:
+
+```javascript
+CMS.registerEventListener({
+  name: 'preSave',
+  collection: 'posts',
+  handler: ({ data: { entry } }) => {
+    return {
+      ...entry.data,
+      title: 'new title',
+    };
+  },
+});
+```
+
+## Post Save Event
+
+The `postSave` event handler fires after the changes have been saved to your git backend.
+
+```javascript
+CMS.registerEventListener({
+  name: 'postSave',
+  collection: 'posts',
+  handler: ({ data: { entry } }) => {
+    // your code here
+  },
+});
+```

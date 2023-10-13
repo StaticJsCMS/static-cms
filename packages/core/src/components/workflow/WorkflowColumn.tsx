@@ -27,13 +27,20 @@ interface WorkflowColumnProps {
   entries: Entry[];
   status: WorkflowStatus;
   dragging: boolean;
+  useOpenAuthoring: boolean;
 }
 
-const WorkflowColumn: FC<WorkflowColumnProps> = ({ entries, status, dragging }) => {
+const WorkflowColumn: FC<WorkflowColumnProps> = ({
+  entries,
+  status,
+  dragging,
+  useOpenAuthoring,
+}) => {
   const t = useTranslate();
 
   const { isOver, setNodeRef } = useDroppable({
     id: status,
+    disabled: useOpenAuthoring,
   });
 
   return (
@@ -47,7 +54,11 @@ const WorkflowColumn: FC<WorkflowColumnProps> = ({ entries, status, dragging }) 
       </div>
       <div className={classes.content}>
         {entries.map(e => (
-          <WorkflowCard key={`${e.collection}|${e.slug}`} entry={e} />
+          <WorkflowCard
+            key={`${e.collection}|${e.slug}`}
+            entry={e}
+            useOpenAuthoring={useOpenAuthoring}
+          />
         ))}
       </div>
     </div>

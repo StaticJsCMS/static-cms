@@ -337,10 +337,19 @@ export default class API {
   }
 
   generateContentKey(collectionName: string, slug: string) {
-    return generateContentKey(collectionName, slug);
+    const contentKey = generateContentKey(collectionName, slug);
+    if (this.useOpenAuthoring) {
+      return `${this.repo}/${contentKey}`;
+    }
+
+    return contentKey;
   }
 
   parseContentKey(contentKey: string) {
+    if (this.useOpenAuthoring) {
+      return parseContentKey(contentKey.slice(this.repo.length + 1));
+    }
+
     return parseContentKey(contentKey);
   }
 
@@ -497,6 +506,10 @@ export default class API {
   }
 
   async deleteFiles(paths: string[], message: string) {
+    if (this.useOpenAuthoring) {
+      return Promise.reject('Cannot delete published entries as an Open Authoring user!');
+    }
+
     const branchData = await this.getDefaultBranch();
     const files = paths.map(path => ({ path, sha: null }));
     const changeTree = await this.updateTree(branchData.commit.sha, files);

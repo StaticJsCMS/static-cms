@@ -14,7 +14,8 @@ import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { PointerSensor } from '@staticcms/core/lib/util/dnd.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
-import { useAppDispatch } from '@staticcms/core/store/hooks';
+import { selectUseOpenAuthoring } from '@staticcms/core/reducers/selectors/globalUI';
+import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import MainView from '../MainView';
 import ActiveWorkflowCard from './ActiveWorkflowCard';
 import WorkflowColumn from './WorkflowColumn';
@@ -44,6 +45,8 @@ const Dashboard: FC = () => {
   const t = useTranslate();
 
   const dispatch = useAppDispatch();
+
+  const useOpenAuthoring = useAppSelector(selectUseOpenAuthoring);
 
   const { boardSections, entriesById, setBoardSections } = useWorkflowBoardSections();
 
@@ -153,6 +156,7 @@ const Dashboard: FC = () => {
                 entries={boardSections[status]}
                 status={status}
                 dragging={isDragging}
+                useOpenAuthoring={useOpenAuthoring}
               />
             ))}
           </div>

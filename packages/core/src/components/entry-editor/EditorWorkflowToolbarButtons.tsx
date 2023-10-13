@@ -25,6 +25,7 @@ export interface EditorWorkflowToolbarButtonsProps {
   disabled: boolean;
   isLoading: boolean;
   mobile?: boolean;
+  useOpenAuthoring: boolean;
 }
 
 const EditorWorkflowToolbarButtons: FC<EditorWorkflowToolbarButtonsProps> = ({
@@ -37,6 +38,7 @@ const EditorWorkflowToolbarButtons: FC<EditorWorkflowToolbarButtonsProps> = ({
   disabled,
   isLoading,
   mobile,
+  useOpenAuthoring,
 }) => {
   const t = useTranslate();
 
@@ -60,48 +62,52 @@ const EditorWorkflowToolbarButtons: FC<EditorWorkflowToolbarButtonsProps> = ({
   return (
     <>
       {currentStatus ? (
-        <Menu
-          label={
-            isUpdatingStatus
-              ? t('editor.editorToolbar.updating')
-              : isLoading
-              ? t('app.app.loading')
-              : t('editor.editorToolbar.status', { status: statusToTranslation[currentStatus] })
-          }
-          color="secondary"
-          disabled={disabled}
-          aria-label="change status options dropdown"
-        >
-          <MenuGroup>
-            <MenuItemButton
-              onClick={() => onChangeStatus(WorkflowStatus.DRAFT)}
-              startIcon={currentStatus === WorkflowStatus.DRAFT ? CheckIcon : undefined}
-              contentClassName={
-                currentStatus !== WorkflowStatus.DRAFT ? classes['not-checked'] : ''
-              }
-            >
-              {statusToTranslation[WorkflowStatus.DRAFT]}
-            </MenuItemButton>
-            <MenuItemButton
-              onClick={() => onChangeStatus(WorkflowStatus.PENDING_REVIEW)}
-              startIcon={currentStatus === WorkflowStatus.PENDING_REVIEW ? CheckIcon : undefined}
-              contentClassName={
-                currentStatus !== WorkflowStatus.PENDING_REVIEW ? classes['not-checked'] : ''
-              }
-            >
-              {statusToTranslation[WorkflowStatus.PENDING_REVIEW]}
-            </MenuItemButton>
-            <MenuItemButton
-              onClick={() => onChangeStatus(WorkflowStatus.PENDING_PUBLISH)}
-              startIcon={currentStatus === WorkflowStatus.PENDING_PUBLISH ? CheckIcon : undefined}
-              contentClassName={
-                currentStatus !== WorkflowStatus.PENDING_PUBLISH ? classes['not-checked'] : ''
-              }
-            >
-              {statusToTranslation[WorkflowStatus.PENDING_PUBLISH]}
-            </MenuItemButton>
-          </MenuGroup>
-        </Menu>
+        useOpenAuthoring ? (
+          <div>{currentStatus}</div>
+        ) : (
+          <Menu
+            label={
+              isUpdatingStatus
+                ? t('editor.editorToolbar.updating')
+                : isLoading
+                ? t('app.app.loading')
+                : t('editor.editorToolbar.status', { status: statusToTranslation[currentStatus] })
+            }
+            color="secondary"
+            disabled={disabled}
+            aria-label="change status options dropdown"
+          >
+            <MenuGroup>
+              <MenuItemButton
+                onClick={() => onChangeStatus(WorkflowStatus.DRAFT)}
+                startIcon={currentStatus === WorkflowStatus.DRAFT ? CheckIcon : undefined}
+                contentClassName={
+                  currentStatus !== WorkflowStatus.DRAFT ? classes['not-checked'] : ''
+                }
+              >
+                {statusToTranslation[WorkflowStatus.DRAFT]}
+              </MenuItemButton>
+              <MenuItemButton
+                onClick={() => onChangeStatus(WorkflowStatus.PENDING_REVIEW)}
+                startIcon={currentStatus === WorkflowStatus.PENDING_REVIEW ? CheckIcon : undefined}
+                contentClassName={
+                  currentStatus !== WorkflowStatus.PENDING_REVIEW ? classes['not-checked'] : ''
+                }
+              >
+                {statusToTranslation[WorkflowStatus.PENDING_REVIEW]}
+              </MenuItemButton>
+              <MenuItemButton
+                onClick={() => onChangeStatus(WorkflowStatus.PENDING_PUBLISH)}
+                startIcon={currentStatus === WorkflowStatus.PENDING_PUBLISH ? CheckIcon : undefined}
+                contentClassName={
+                  currentStatus !== WorkflowStatus.PENDING_PUBLISH ? classes['not-checked'] : ''
+                }
+              >
+                {statusToTranslation[WorkflowStatus.PENDING_PUBLISH]}
+              </MenuItemButton>
+            </MenuGroup>
+          </Menu>
+        )
       ) : mobile ? (
         <div />
       ) : null}
