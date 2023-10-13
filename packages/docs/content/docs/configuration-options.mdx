@@ -88,28 +88,9 @@ Template tags produce the following output:
 
 By default, all entries created or edited in Static CMS are committed directly into the main repository branch.
 
-The `publish_mode` option allows you to enable "Editorial Workflow" mode for more control over the content publishing phases. All unpublished entries will be arranged in a board according to their status, and they can be further reviewed and edited before going live.
+The `publish_mode` option allows you to enable "Editorial Workflow" mode for more control over the content publishing phases. All unpublished entries will be arranged on a dashboard according to their status, and they can be further reviewed and edited before going live.
 
-You can enable the Editorial Workflow with the following line in your `config.yml` file:
-
-<CodeTabs>
-```yaml
-publish_mode: editorial_workflow
-```
-
-```js
-publish_mode: 'editorial_workflow';
-```
-
-</CodeTabs>
-
-From a technical perspective, the workflow translates editor UI actions into common Git commands:
-
-| Actions in Netlify UI     | Perform these Git actions                                                                                         |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Save draft                | Commits to a new branch (named according to the pattern `cms/collectionName/entrySlug`), and opens a pull request |
-| Edit draft                | Pushes another commit to the draft branch/pull request                                                            |
-| Approve and publish draft | Merges pull request and deletes branch                                                                            |
+See [Editorial Workflow](/docs/editorial-workflow) for more information.
 
 ## Media and Public Folders
 
@@ -157,8 +138,8 @@ The `media_library` settings allows customization of the media library.
 
 ### Options
 
-| Name           | Type    | Default  | Description                                                                                          |
-| -------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| Name           | Type    | Default  | Description                                                                            |
+| -------------- | ------- | -------- | -------------------------------------------------------------------------------------- |
 | max_file_size  | number  | `512000` | _Optional_. The max size, in bytes, of files that can be uploaded to the media library |
 | folder_support | boolean | `false`  | _Optional_. Enables directory navigation and folder creation in your media library     |
 
